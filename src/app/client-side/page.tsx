@@ -19,7 +19,5 @@ interface IProduct {
 
 export default function ClientSide() {
   const { loading, error, data } = useSubscription(COMMENTS_SUBSCRIPTION);
-  console.log(loading, error, data);
-
   return <ListUsers />;
 }
