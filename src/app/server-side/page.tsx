@@ -1,8 +1,6 @@
 import { gql } from "@apollo/client";
 import { getClient } from "../../lib/client";
 
-export const dynamic = "force-dynamic";
-
 const query = gql`
   query {
     products(limit: 10) {

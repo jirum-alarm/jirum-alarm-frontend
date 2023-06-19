@@ -1,7 +1,7 @@
 "use client";
 import { gql, useSubscription } from "@apollo/client";
 
-import ListUsers from "./listusers";
+import ListUsers from "../../components/listusers";
 
 export const dynamic = "force-dynamic";
 

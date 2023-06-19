@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/lib/apollo-wrapper.js"
+    "src/lib/apollo-wrapper.js",
+    "src/components"
   ],
   "exclude": ["node_modules"]
 }
