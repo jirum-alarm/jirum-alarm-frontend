@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import Head from "next/head";
 import { getClient } from "../lib/client";
 
 const query = gql`
@@ -22,6 +23,9 @@ export default async function Home() {
 
   return (
     <main>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <div className="min-w-min max-w-screen-md mx-auto">
         <div className="mt-10">
           <h1 className="text-center text-4xl font-medium">지름알림🔔</h1>
