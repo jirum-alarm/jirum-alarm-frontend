@@ -1,19 +1,28 @@
-import { gql } from '@apollo/client';
-import Head from 'next/head';
-import { getClient } from '../lib/client';
-import { PiBellSimpleBold } from 'react-icons/pi';
+import { gql } from "@apollo/client";
+import Head from "next/head";
+import { PiBellSimpleBold } from "react-icons/pi";
+import { getClient } from "../lib/client";
+
 const query = gql`
   query {
     products(limit: 100) {
       id
       title
       url
+      provider {
+        nameKr
+      }
     }
   }
 `;
 
 interface Response {
-  products: { id: number; title: string; url: string }[];
+  products: {
+    id: number;
+    title: string;
+    url: string;
+    provider: { nameKr: string };
+  }[];
 }
 
 export const revalidate = 60 * 5;
@@ -33,7 +42,9 @@ export default async function Home() {
       <div className="font-mono min-w-min max-w-screen-lg mx-auto ">
         <div className="p-10 flex justify-center ">
           <div className="flex content-center ">
-            <h1 className="text-center flex center text-4xl font-medium">지름알림</h1>
+            <h1 className="text-center flex center text-4xl font-medium">
+              지름알림
+            </h1>
             <PiBellSimpleBold className="ml-1 w-10 h-10 text-yellow-500" />
           </div>
         </div>
@@ -46,8 +57,12 @@ export default async function Home() {
                 className="h-full rounded-md border border-gray-300 shadow h-100"
               >
                 <a href={product.url} target="_blank">
-                  <h2 className="bg-blue-300 mb-5 px-5 py-3 ">hello</h2>
-                  <h3 className="h-full px-5 my-8 flex content-center">{product.title}</h3>
+                  <h2 className="bg-blue-300 mb-5 px-5 py-3 ">
+                    {product.provider.nameKr}
+                  </h2>
+                  <h3 className="h-full px-5 my-8 flex content-center">
+                    {product.title}
+                  </h3>
                 </a>
                 {/* <div className="bg-blue-300">hello</div> */}
               </div>
