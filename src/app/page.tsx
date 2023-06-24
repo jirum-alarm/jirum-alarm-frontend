@@ -9,6 +9,7 @@ const query = gql`
       id
       title
       url
+      category
       provider {
         nameKr
       }
@@ -21,6 +22,7 @@ interface Response {
     id: number;
     title: string;
     url: string;
+    category?: string;
     provider: { nameKr: string };
   }[];
 }
@@ -57,12 +59,15 @@ export default async function Home() {
                 className="h-full rounded-md border border-gray-300 shadow h-100"
               >
                 <a href={product.url} target="_blank">
-                  <h2 className="bg-blue-300 mb-5 px-5 py-3 ">
-                    {product.provider.nameKr}
-                  </h2>
-                  <h3 className="h-full px-5 my-8 flex content-center">
-                    {product.title}
-                  </h3>
+                  <div className="flex bg-blue-300 mb-5 px-5 py-3 justify-between">
+                    <h2 className="font-bold">{product.provider.nameKr}</h2>
+                    <h2>{product.category}</h2>
+                  </div>
+                  <div>
+                    <h3 className="h-full px-5 my-8 flex content-center">
+                      {product.title}
+                    </h3>
+                  </div>
                 </a>
                 {/* <div className="bg-blue-300">hello</div> */}
               </div>
