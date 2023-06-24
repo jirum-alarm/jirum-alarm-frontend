@@ -16,10 +16,14 @@ interface Response {
   products: { id: number; title: string; url: string }[];
 }
 
+export const revalidate = 60 * 5;
+
+async function getProducts() {
+  return getClient().query<Response>({ query });
+}
+
 export default async function Home() {
-  const data = await getClient().query<Response>({
-    query,
-  });
+  const data = await getProducts();
 
   return (
     <main>
