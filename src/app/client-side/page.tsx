@@ -1,5 +1,5 @@
 "use client";
-import { gql, useSubscription } from "@apollo/client";
+import { gql } from "@apollo/client";
 
 import ListUsers from "../../components/listusers";
 
@@ -18,6 +18,6 @@ interface IProduct {
 }
 
 export default function ClientSide() {
-  const { loading, error, data } = useSubscription(COMMENTS_SUBSCRIPTION);
+  // const { loading, error, data } = useSubscription(COMMENTS_SUBSCRIPTION);
   return <ListUsers />;
 }

@@ -8,9 +8,9 @@
   integrity sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==
 
 "@apollo/client@^3.8.0-beta.3":
-  version "3.8.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.8.0-beta.3.tgz#dc774f20cd7c67edbc7a2e68aad55ee4fb0ee6d8"
-  integrity sha512-Ic0JPmqnN1E0lHJmyAxoBgFBpfpfQGTld/+YrSCgXvUiVU0wLVxao621LdTQBdjVD5T0V7tc15o+OoQMsGNwSQ==
+  version "3.8.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.8.0-beta.4.tgz#85250a3f645ec6cd9d74009e29cdfce53ba7e780"
+  integrity sha512-UtRjX1PXjHl/Sg+cVAyyiCR8y33knGu2PC3AwJo1AUCnfgFix5R6lG5LOH418qaLE/HtNjsrn28yd1LSYdVrQg==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     "@wry/context" "^0.7.3"
@@ -2859,6 +2859,11 @@ react-icons@^4.10.1:
   version "4.10.1"
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.10.1.tgz#3f3b5eec1f63c1796f6a26174a1091ca6437a500"
   integrity sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==
+
+react-intersection-observer@^9.5.1:
+  version "9.5.1"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-9.5.1.tgz#63a6d7c45f7251610ad2f5a5abb85204ee0926ac"
+  integrity sha512-YwcNF/4WsMAG1rLVDQHSbpdEW9vDaIl4QW88d+vqeXNUewFV4AJDQB14oHpAJ3rRCnKRmwu3nqfwwYe6wioNIg==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"

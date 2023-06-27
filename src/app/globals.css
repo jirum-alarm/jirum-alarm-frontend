@@ -108,3 +108,14 @@ a {
     color-scheme: dark;
   }
 } */
+
+.inview-block {
+  display: flex;
+  min-height: 25vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: #148bb4;
+  color: azure;
+}

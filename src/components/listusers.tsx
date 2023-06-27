@@ -2,46 +2,66 @@
 
 import { gql } from "@apollo/client";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 
 const query = gql`
-  query {
-    products(limit: 10) {
+  query QueryProducts($limit: Int!, $searchAfter: [String!]) {
+    products(limit: $limit, searchAfter: $searchAfter) {
       id
       title
       mallId
       providerId
+      searchAfter
     }
   }
 `;
 
+interface IProduct {
+  id: number;
+  title: string;
+  searchAfter?: string[];
+}
+
 interface Response {
-  products: { id: number; title: string }[];
+  products: IProduct[];
 }
 
 export default function ListUsers() {
-  const [count, setCount] = React.useState(0);
-  const { data, error } = useSuspenseQuery<Response>(query);
+  const limit = 100;
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [hasNext, setHasNext] = useState<boolean>(true);
+  const { ref, inView } = useInView({ threshold: 1 });
+
+  const { data, error, fetchMore } = useSuspenseQuery<Response>(query, {
+    variables: { limit },
+  });
+
+  const fetch = useCallback(async () => {
+    if (hasNext) {
+      const lastProduct = products.at(-1);
+      const searchAfter = lastProduct?.searchAfter;
+      const newProducts = await fetchMore({
+        variables: { limit, searchAfter },
+      });
+      setHasNext(newProducts.data.products.length === limit);
+      setProducts([...products, ...newProducts.data.products]);
+    }
+  }, [fetchMore, products, hasNext]);
+
+  useEffect(() => {
+    if (inView && hasNext) {
+      fetch();
+    }
+  }, [inView, hasNext]);
 
   return (
     <main style={{ maxWidth: 1200, marginInline: "auto", padding: 20 }}>
-      <div style={{ marginBottom: "4rem", textAlign: "center" }}>
-        <h4 style={{ marginBottom: 16 }}>{count}</h4>
-        <button onClick={() => setCount((prev) => prev + 1)}>increment</button>
-        <button
-          onClick={() => setCount((prev) => prev - 1)}
-          style={{ marginInline: 16 }}
-        >
-          decrement
-        </button>
-        <button onClick={() => setCount(0)}>reset</button>
-      </div>
-
       {error ? (
         <p>Oh no, there was an error</p>
       ) : !data ? (
         <p>Loading...</p>
-      ) : data ? (
+      ) : (
         <div
           style={{
             display: "grid",
@@ -49,7 +69,7 @@ export default function ListUsers() {
             gap: 20,
           }}
         >
-          {data?.products.map((product) => (
+          {products.map((product) => (
             <div
               key={product.id}
               style={{ border: "1px solid #ccc", textAlign: "center" }}
@@ -58,7 +78,11 @@ export default function ListUsers() {
             </div>
           ))}
         </div>
-      ) : null}
+      )}
+      <div ref={ref} className="h-96 w-full" />
     </main>
   );
+}
+function sleep(arg0: number) {
+  throw new Error("Function not implemented.");
 }
