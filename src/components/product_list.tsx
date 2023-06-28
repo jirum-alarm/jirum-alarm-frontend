@@ -4,7 +4,7 @@ import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import SwipeableViews from "react-swipeable-views";
-import { Tab, Tabs } from "react-tabs";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { QueryProducts } from "../graphql";
 import { IProduct, IProductOutput } from "../interface";
@@ -57,76 +57,85 @@ export default function ProductList() {
         <div>
           <div>
             <Tabs selectedIndex={activeTab} onSelect={handleTabChange}>
-              <Tab>
-                <button
-                  className="inline-block p-4 border-b-2 rounded-t-lg"
-                  id="profile-tab"
-                  data-tabs-target="#profile"
-                  type="button"
-                  role="tab"
-                  aria-controls="profile"
-                  aria-selected="false"
-                >
-                  전체
-                </button>
-              </Tab>
-              <Tab>
-                <button
-                  className="inline-block p-4 border-b-2 rounded-t-lg"
-                  id="profile-tab"
-                  data-tabs-target="#profile"
-                  type="button"
-                  role="tab"
-                  aria-controls="profile"
-                  aria-selected="false"
-                >
-                  PC
-                </button>
-              </Tab>
-              <Tab>
-                <button
-                  className="inline-block p-4 border-b-2 rounded-t-lg"
-                  id="profile-tab"
-                  data-tabs-target="#profile"
-                  type="button"
-                  role="tab"
-                  aria-controls="profile"
-                  aria-selected="false"
-                >
-                  디지털
-                </button>
-              </Tab>
+              <TabList>
+                <Tab>
+                  <button
+                    className="inline-block p-4 border-b-2 rounded-t-lg"
+                    id="profile-tab"
+                    data-tabs-target="#profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="profile"
+                    aria-selected="false"
+                  >
+                    전체
+                  </button>
+                </Tab>
+                <Tab>
+                  <button
+                    className="inline-block p-4 border-b-2 rounded-t-lg"
+                    id="profile-tab"
+                    data-tabs-target="#profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="profile"
+                    aria-selected="false"
+                  >
+                    PC
+                  </button>
+                </Tab>
+                <Tab>
+                  <button
+                    className="inline-block p-4 border-b-2 rounded-t-lg"
+                    id="profile-tab"
+                    data-tabs-target="#profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="profile"
+                    aria-selected="false"
+                  >
+                    디지털
+                  </button>
+                </Tab>
+              </TabList>
+
+              <SwipeableViews
+                index={activeTab}
+                onChangeIndex={handleTabChange}
+                animateTransitions={!isMobile}
+              >
+                <TabPanel>
+                  <div className="flex">
+                    <div>tab1</div>
+                    <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
+                      {products.map((product) => (
+                        <Product key={product.id} product={product}></Product>
+                      ))}
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <div className="flex">
+                    <div>tab2</div>
+                    <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
+                      {products.map((product) => (
+                        <Product key={product.id} product={product}></Product>
+                      ))}
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <div className="flex">
+                    <div>tab3</div>
+                    <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
+                      {products.map((product) => (
+                        <Product key={product.id} product={product}></Product>
+                      ))}
+                    </div>
+                  </div>
+                </TabPanel>
+              </SwipeableViews>
             </Tabs>
-            <SwipeableViews
-              index={activeTab}
-              onChangeIndex={handleTabChange}
-              animateTransitions={!isMobile}
-            >
-              <div className="flex">
-                <div>tab1</div>
-                <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
-                  {products.map((product) => (
-                    <Product key={product.id} product={product}></Product>
-                  ))}
-                </div>
-              </div>
-              <div className="flex">
-                <div>tab2</div>
-                <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
-                  {products.map((product) => (
-                    <Product key={product.id} product={product}></Product>
-                  ))}
-                </div>
-              </div>
-              <div className="flex">
-                <div>tab3</div>
-                <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
-                  {products.map((product) => (
-                    <Product key={product.id} product={product}></Product>
-                  ))}
-                </div>
-              </div>
-            </SwipeableViews>
           </div>
         </div>
       )}
