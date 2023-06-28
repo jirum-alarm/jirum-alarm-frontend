@@ -61,18 +61,28 @@ export default function ProductList() {
               <Tab>Tab 3</Tab>
             </Tabs>
             <SwipeableViews index={activeTab} onChangeIndex={handleTabChange}>
-              <div>Content for Tab 1</div>
-              <div>Content for Tab 2</div>
-              <div>Content for Tab 3</div>
+              <div className="flex">
+                <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
+                  {products.map((product) => (
+                    <Product key={product.id} product={product}></Product>
+                  ))}
+                </div>
+              </div>
+              <div className="flex">
+                <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
+                  {products.map((product) => (
+                    <Product key={product.id} product={product}></Product>
+                  ))}
+                </div>
+              </div>
+              <div className="flex">
+                <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
+                  {products.map((product) => (
+                    <Product key={product.id} product={product}></Product>
+                  ))}
+                </div>
+              </div>
             </SwipeableViews>
-          </div>
-
-          <div className="flex">
-            <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
-              {products.map((product) => (
-                <Product key={product.id} product={product}></Product>
-              ))}
-            </div>
           </div>
         </div>
       )}
