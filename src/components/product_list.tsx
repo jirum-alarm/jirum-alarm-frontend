@@ -4,7 +4,8 @@ import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import SwipeableViews from "react-swipeable-views";
-
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 import { QueryProducts } from "../graphql";
 import { IProduct, IProductOutput } from "../interface";
 import Product from "./product";
@@ -47,7 +48,23 @@ export default function ProductList() {
       ) : !data ? (
         <p>로딩중....</p>
       ) : (
-        <SwipeableViews>
+        <div>
+          <Tabs>
+            <TabList>
+              <Tab>Title 1</Tab>
+              <Tab>Title 2</Tab>
+            </TabList>
+
+            <SwipeableViews>
+              <TabPanel>
+                <h2>Any content 1</h2>
+              </TabPanel>
+              <TabPanel>
+                <h2>Any content 2</h2>
+              </TabPanel>
+            </SwipeableViews>
+          </Tabs>
+
           <div className="flex">
             <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
               {products.map((product) => (
@@ -55,21 +72,7 @@ export default function ProductList() {
               ))}
             </div>
           </div>
-          <div className="flex">
-            <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
-              {products.map((product) => (
-                <Product key={product.id} product={product}></Product>
-              ))}
-            </div>
-          </div>
-          <div className="flex">
-            <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
-              {products.map((product) => (
-                <Product key={product.id} product={product}></Product>
-              ))}
-            </div>
-          </div>
-        </SwipeableViews>
+        </div>
       )}
       <div ref={ref} className="h-48 w-full" />
     </main>
