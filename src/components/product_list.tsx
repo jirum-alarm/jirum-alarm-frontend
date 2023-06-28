@@ -6,12 +6,13 @@ import { useInView } from "react-intersection-observer";
 
 import { QueryProducts } from "../graphql";
 import { IProduct, IProductOutput } from "../interface";
+import Product from "./product";
 
-export default function ListUsers() {
-  const limit = 100;
+export default function ProductList() {
+  const limit = 20;
   const [products, setProducts] = useState<IProduct[]>([]);
   const [hasNext, setHasNext] = useState<boolean>(true);
-  const { ref, inView } = useInView({ threshold: 1 });
+  const { ref, inView } = useInView({ threshold: 0 });
 
   const { data, error, fetchMore } = useSuspenseQuery<IProductOutput>(
     QueryProducts,
@@ -39,27 +40,18 @@ export default function ListUsers() {
   }, [inView, hasNext]);
 
   return (
-    <main style={{ maxWidth: 1200, marginInline: "auto", padding: 20 }}>
+    <main>
       {error ? (
-        <p>Oh no, there was an error</p>
+        <p>게시글을 불러오지 못했습니다.</p>
       ) : !data ? (
-        <p>Loading...</p>
+        <p>로딩중...</p>
       ) : (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr 1fr",
-            gap: 20,
-          }}
-        >
-          {products.map((product) => (
-            <div
-              key={product.id}
-              style={{ border: "1px solid #ccc", textAlign: "center" }}
-            >
-              <h3>{product.title}</h3>
-            </div>
-          ))}
+        <div className="flex">
+          <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
+            {products.map((product) => (
+              <Product key={product.id} product={product}></Product>
+            ))}
+          </div>
         </div>
       )}
       <div ref={ref} className="h-96 w-full" />
