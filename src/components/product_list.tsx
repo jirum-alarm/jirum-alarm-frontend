@@ -118,8 +118,8 @@ export default function ProductList() {
                 animateTransitions={isMobile}
               >
                 <TabPanel>
+                  <div>tab1</div>
                   <div className="flex">
-                    <div>tab1</div>
                     <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
                       {products.map((product) => (
                         <Product key={product.id} product={product}></Product>
@@ -128,8 +128,8 @@ export default function ProductList() {
                   </div>
                 </TabPanel>
                 <TabPanel>
+                  <div>tab2</div>
                   <div className="flex">
-                    <div>tab2</div>
                     <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
                       {products.map((product) => (
                         <Product key={product.id} product={product}></Product>
@@ -138,8 +138,8 @@ export default function ProductList() {
                   </div>
                 </TabPanel>
                 <TabPanel>
+                  <div>tab3</div>
                   <div className="flex">
-                    <div>tab3</div>
                     <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
                       {products.map((product) => (
                         <Product key={product.id} product={product}></Product>
