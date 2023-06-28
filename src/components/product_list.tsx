@@ -4,7 +4,7 @@ import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import SwipeableViews from "react-swipeable-views";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { Tab, Tabs } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { QueryProducts } from "../graphql";
 import { IProduct, IProductOutput } from "../interface";
@@ -15,6 +15,11 @@ export default function ProductList() {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [hasNext, setHasNext] = useState<boolean>(true);
   const { ref, inView } = useInView({ threshold: 0 });
+  const [activeTab, setActiveTab] = useState(0);
+
+  const handleTabChange = useCallback((index: number) => {
+    setActiveTab(index);
+  }, []);
 
   const { data, error, fetchMore } = useSuspenseQuery<IProductOutput>(
     QueryProducts,
@@ -49,21 +54,18 @@ export default function ProductList() {
         <p>로딩중....</p>
       ) : (
         <div>
-          <Tabs>
-            <TabList>
-              <Tab>Title 1</Tab>
-              <Tab>Title 2</Tab>
-            </TabList>
-
-            <SwipeableViews>
-              <TabPanel>
-                <h2>Any content 1</h2>
-              </TabPanel>
-              <TabPanel>
-                <h2>Any content 2</h2>
-              </TabPanel>
+          <div>
+            <Tabs selectedIndex={activeTab} onSelect={handleTabChange}>
+              <Tab>Tab 1</Tab>
+              <Tab>Tab 2</Tab>
+              <Tab>Tab 3</Tab>
+            </Tabs>
+            <SwipeableViews index={activeTab} onChangeIndex={handleTabChange}>
+              <div>Content for Tab 1</div>
+              <div>Content for Tab 2</div>
+              <div>Content for Tab 3</div>
             </SwipeableViews>
-          </Tabs>
+          </div>
 
           <div className="flex">
             <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
