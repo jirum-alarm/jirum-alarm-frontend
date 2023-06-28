@@ -8,13 +8,13 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 import { QueryProducts } from "../graphql";
 import { IProduct, IProductOutput } from "../interface";
-import isMobile from "../lib/is-mobile";
 import Product from "./product";
 
 import "react-tabs/style/react-tabs.css";
 
 export default function ProductList() {
   const limit = 20;
+  const [isMobile, setIsMobile] = useState(false);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [hasNext, setHasNext] = useState<boolean>(true);
   const { ref, inView } = useInView({ threshold: 0 });
@@ -31,6 +31,16 @@ export default function ProductList() {
     },
   );
 
+  const isMobileDevice = useCallback(() => {
+    const userAgent = window.navigator.userAgent;
+    const isMobileDevice = Boolean(
+      userAgent.match(
+        /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i,
+      ),
+    );
+    return isMobileDevice;
+  }, []);
+
   const fetch = useCallback(async () => {
     if (hasNext) {
       const lastProduct = products.at(-1);
@@ -44,6 +54,7 @@ export default function ProductList() {
   }, [fetchMore, products, hasNext]);
 
   useEffect(() => {
+    setIsMobile(isMobileDevice());
     if (inView && hasNext) {
       fetch();
     }
@@ -104,7 +115,7 @@ export default function ProductList() {
               <SwipeableViews
                 index={activeTab}
                 onChangeIndex={handleTabChange}
-                disabled={!isMobile}
+                animateTransitions={isMobile}
               >
                 <TabPanel>
                   <div className="flex">
