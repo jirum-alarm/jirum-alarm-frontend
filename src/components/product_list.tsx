@@ -5,11 +5,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import SwipeableViews from "react-swipeable-views";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
+
 import { QueryProducts } from "../graphql";
 import { IProduct, IProductOutput } from "../interface";
 import isMobile from "../lib/is-mobile";
 import Product from "./product";
+
+import "react-tabs/style/react-tabs.css";
 
 export default function ProductList() {
   const limit = 20;
@@ -102,7 +104,7 @@ export default function ProductList() {
               <SwipeableViews
                 index={activeTab}
                 onChangeIndex={handleTabChange}
-                animateTransitions={!isMobile}
+                disabled={!isMobile}
               >
                 <TabPanel>
                   <div className="flex">
