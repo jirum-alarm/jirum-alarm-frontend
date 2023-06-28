@@ -54,7 +54,7 @@ export default function ProductList() {
           </div>
         </div>
       )}
-      <div ref={ref} className="h-96 w-full" />
+      <div ref={ref} className="h-48 w-full" />
     </main>
   );
 }
