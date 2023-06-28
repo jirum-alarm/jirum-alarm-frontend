@@ -15,12 +15,10 @@ import { QueryCategories } from "../graphql/category";
 import { ICategoryOutput } from "../graphql/interface/category";
 
 export default function ProductList() {
-  const limit = 100;
+  const limit = 20;
   const [isMobile, setIsMobile] = useState(false);
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [categoryProducts, setCategoryProducts] = useState<
-    Record<string, IProduct[]>
-  >({});
+  const [searchAfter, setSearchAfter] = useState<string[] | undefined>([]);
   const [hasNext, setHasNext] = useState<boolean>(true);
   const { ref, inView } = useInView({ threshold: 0 });
   const [activeTab, setActiveTab] = useState(0);
@@ -51,15 +49,35 @@ export default function ProductList() {
 
   const fetch = useCallback(async () => {
     if (hasNext) {
-      const lastProduct = products.at(-1);
-      const searchAfter = lastProduct?.searchAfter;
+      if (data.products.length && products.length === 0) {
+        setSearchAfter(data.products.at(-1)?.searchAfter);
+        setProducts(data.products);
+      }
+
+      const categoryId =
+        activeTab === 0
+          ? undefined
+          : +categoriesData.categories[activeTab - 1].id;
+
       const newProducts = await fetchMore({
-        variables: { limit, searchAfter },
+        variables: { limit, searchAfter, categoryId },
       });
-      setHasNext(newProducts.data.products.length !== 0);
+
+      // if (products.some((product) => product.categoryId !== categoryId)) {
+
+      //   setHasNext(true);
+      //   setProducts(newProducts.data.products);
+      //   const lastProduct = newProducts.data.products.at(-1);
+      //   setSearchAfter(lastProduct?.searchAfter);
+      //   return;
+      // }
+
+      setHasNext(newProducts.data.products.length === limit);
       setProducts([...products, ...newProducts.data.products]);
+      const lastProduct1 = newProducts.data.products.at(-1);
+      setSearchAfter(lastProduct1?.searchAfter);
     }
-  }, [fetchMore, products, hasNext]);
+  }, [hasNext, inView, activeTab]);
 
   useEffect(() => {
     setIsMobile(isMobileDevice());
@@ -67,7 +85,7 @@ export default function ProductList() {
     if (inView && hasNext) {
       fetch();
     }
-  }, [inView]);
+  }, [inView, hasNext, activeTab]);
 
   return (
     <main>
@@ -129,16 +147,9 @@ export default function ProductList() {
                   <TabPanel key={category.id}>
                     <div className="flex">
                       <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
-                        {products
-                          .filter(
-                            (product) => product.categoryId === +category.id,
-                          )
-                          .map((product) => (
-                            <Product
-                              key={product.id}
-                              product={product}
-                            ></Product>
-                          ))}
+                        {products.map((product) => (
+                          <Product key={product.id} product={product}></Product>
+                        ))}
                       </div>
                     </div>
                   </TabPanel>
