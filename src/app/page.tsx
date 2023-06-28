@@ -1,36 +1,13 @@
-import { gql } from "@apollo/client";
 import Head from "next/head";
 import { PiBellSimpleBold } from "react-icons/pi";
+import { QueryProducts } from "../graphql";
+import { IProductOutput } from "../interface";
 import { getClient } from "../lib/client";
-
-const query = gql`
-  query {
-    products(limit: 100) {
-      id
-      title
-      url
-      category
-      provider {
-        nameKr
-      }
-    }
-  }
-`;
-
-interface Response {
-  products: {
-    id: number;
-    title: string;
-    url: string;
-    category?: string;
-    provider: { nameKr: string };
-  }[];
-}
 
 export const revalidate = 60 * 5;
 
 async function getProducts() {
-  return getClient().query<Response>({ query });
+  return getClient().query<IProductOutput>({ query: QueryProducts });
 }
 
 export default async function Home() {

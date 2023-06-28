@@ -1,31 +1,11 @@
 "use client";
 
-import { gql } from "@apollo/client";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
-const query = gql`
-  query QueryProducts($limit: Int!, $searchAfter: [String!]) {
-    products(limit: $limit, searchAfter: $searchAfter) {
-      id
-      title
-      mallId
-      providerId
-      searchAfter
-    }
-  }
-`;
-
-interface IProduct {
-  id: number;
-  title: string;
-  searchAfter?: string[];
-}
-
-interface Response {
-  products: IProduct[];
-}
+import { QueryProducts } from "../graphql";
+import { IProduct, IProductOutput } from "../interface";
 
 export default function ListUsers() {
   const limit = 100;
@@ -33,9 +13,12 @@ export default function ListUsers() {
   const [hasNext, setHasNext] = useState<boolean>(true);
   const { ref, inView } = useInView({ threshold: 1 });
 
-  const { data, error, fetchMore } = useSuspenseQuery<Response>(query, {
-    variables: { limit },
-  });
+  const { data, error, fetchMore } = useSuspenseQuery<IProductOutput>(
+    QueryProducts,
+    {
+      variables: { limit },
+    },
+  );
 
   const fetch = useCallback(async () => {
     if (hasNext) {
