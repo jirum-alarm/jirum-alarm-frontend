@@ -45,7 +45,7 @@ export default function ProductList() {
       {error ? (
         <p>게시글을 불러오지 못했습니다.</p>
       ) : !data ? (
-        <p>로딩중...</p>
+        <p>로딩중....</p>
       ) : (
         <SwipeableViews>
           <div className="flex">
