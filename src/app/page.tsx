@@ -2,7 +2,7 @@ import Head from "next/head";
 import { PiBellSimpleBold } from "react-icons/pi";
 import ProductList from "../components/product_list";
 import { QueryProducts } from "../graphql";
-import { IProductOutput } from "../interface";
+import { IProductOutput } from "../graphql/interface";
 import { getClient } from "../lib/client";
 
 export const revalidate = 60 * 5;

@@ -7,15 +7,20 @@ import SwipeableViews from "react-swipeable-views";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 import { QueryProducts } from "../graphql";
-import { IProduct, IProductOutput } from "../interface";
+import { IProduct, IProductOutput } from "../graphql/interface";
 import Product from "./product";
 
 import "react-tabs/style/react-tabs.css";
+import { QueryCategories } from "../graphql/category";
+import { ICategoryOutput } from "../graphql/interface/category";
 
 export default function ProductList() {
-  const limit = 20;
+  const limit = 100;
   const [isMobile, setIsMobile] = useState(false);
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [categoryProducts, setCategoryProducts] = useState<
+    Record<string, IProduct[]>
+  >({});
   const [hasNext, setHasNext] = useState<boolean>(true);
   const { ref, inView } = useInView({ threshold: 0 });
   const [activeTab, setActiveTab] = useState(0);
@@ -30,6 +35,9 @@ export default function ProductList() {
       variables: { limit },
     },
   );
+
+  const { data: categoriesData } =
+    useSuspenseQuery<ICategoryOutput>(QueryCategories);
 
   const isMobileDevice = useCallback(() => {
     const userAgent = window.navigator.userAgent;
@@ -48,17 +56,18 @@ export default function ProductList() {
       const newProducts = await fetchMore({
         variables: { limit, searchAfter },
       });
-      setHasNext(newProducts.data.products.length === limit);
+      setHasNext(newProducts.data.products.length !== 0);
       setProducts([...products, ...newProducts.data.products]);
     }
   }, [fetchMore, products, hasNext]);
 
   useEffect(() => {
     setIsMobile(isMobileDevice());
+
     if (inView && hasNext) {
       fetch();
     }
-  }, [inView, hasNext]);
+  }, [inView]);
 
   return (
     <main>
@@ -84,32 +93,22 @@ export default function ProductList() {
                     전체
                   </button>
                 </Tab>
-                <Tab>
-                  <button
-                    className="inline-block p-4 border-b-2 rounded-t-lg"
-                    id="profile-tab"
-                    data-tabs-target="#profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="profile"
-                    aria-selected="false"
-                  >
-                    PC
-                  </button>
-                </Tab>
-                <Tab>
-                  <button
-                    className="inline-block p-4 border-b-2 rounded-t-lg"
-                    id="profile-tab"
-                    data-tabs-target="#profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="profile"
-                    aria-selected="false"
-                  >
-                    디지털
-                  </button>
-                </Tab>
+
+                {categoriesData.categories.map((category) => (
+                  <Tab key={category.id}>
+                    <button
+                      className="inline-block p-4 border-b-2 rounded-t-lg"
+                      id="profile-tab"
+                      data-tabs-target="#profile"
+                      type="button"
+                      role="tab"
+                      aria-controls="profile"
+                      aria-selected="false"
+                    >
+                      {category.name}
+                    </button>
+                  </Tab>
+                ))}
               </TabList>
 
               <SwipeableViews
@@ -118,7 +117,6 @@ export default function ProductList() {
                 animateTransitions={isMobile}
               >
                 <TabPanel>
-                  <div>tab1</div>
                   <div className="flex">
                     <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
                       {products.map((product) => (
@@ -127,26 +125,24 @@ export default function ProductList() {
                     </div>
                   </div>
                 </TabPanel>
-                <TabPanel>
-                  <div>tab2</div>
-                  <div className="flex">
-                    <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
-                      {products.map((product) => (
-                        <Product key={product.id} product={product}></Product>
-                      ))}
+                {categoriesData.categories.map((category) => (
+                  <TabPanel key={category.id}>
+                    <div className="flex">
+                      <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
+                        {products
+                          .filter(
+                            (product) => product.categoryId === +category.id,
+                          )
+                          .map((product) => (
+                            <Product
+                              key={product.id}
+                              product={product}
+                            ></Product>
+                          ))}
+                      </div>
                     </div>
-                  </div>
-                </TabPanel>
-                <TabPanel>
-                  <div>tab3</div>
-                  <div className="flex">
-                    <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
-                      {products.map((product) => (
-                        <Product key={product.id} product={product}></Product>
-                      ))}
-                    </div>
-                  </div>
-                </TabPanel>
+                  </TabPanel>
+                ))}
               </SwipeableViews>
             </Tabs>
           </div>

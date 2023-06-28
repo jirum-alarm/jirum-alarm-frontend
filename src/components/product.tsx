@@ -1,4 +1,4 @@
-import { IProduct } from "../interface";
+import { IProduct } from "../graphql/interface";
 
 interface IProps {
   product: IProduct;

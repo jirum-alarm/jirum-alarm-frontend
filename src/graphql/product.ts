@@ -8,6 +8,7 @@ export const QueryProducts = gql`
       mallId
       url
       providerId
+      categoryId
       category
       provider {
         nameKr

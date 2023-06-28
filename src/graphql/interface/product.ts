@@ -8,6 +8,7 @@ export interface IProduct {
   url: string;
   providerId: number;
   category?: string;
+  categoryId?: number;
   searchAfter?: string[];
 }
 
