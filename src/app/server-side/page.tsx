@@ -5,6 +5,7 @@ import { getClient } from "../../lib/client";
 export default async function ServerSide() {
   const data = await getClient().query<IProductOutput>({
     query: QueryProducts,
+    variables: { limit: 100 },
   });
 
   return (

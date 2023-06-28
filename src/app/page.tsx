@@ -7,7 +7,10 @@ import { getClient } from "../lib/client";
 export const revalidate = 60 * 5;
 
 async function getProducts() {
-  return getClient().query<IProductOutput>({ query: QueryProducts });
+  return getClient().query<IProductOutput>({
+    query: QueryProducts,
+    variables: { limit: 100 },
+  });
 }
 
 export default async function Home() {
