@@ -3,6 +3,7 @@
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import SwipeableViews from "react-swipeable-views";
 
 import { QueryProducts } from "../graphql";
 import { IProduct, IProductOutput } from "../interface";
@@ -46,18 +47,31 @@ export default function ProductList() {
       ) : !data ? (
         <p>로딩중...</p>
       ) : (
-        <div className="flex">
-          <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
-            {products.map((product) => (
-              <Product key={product.id} product={product}></Product>
-            ))}
+        <SwipeableViews>
+          <div className="flex">
+            <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
+              {products.map((product) => (
+                <Product key={product.id} product={product}></Product>
+              ))}
+            </div>
           </div>
-        </div>
+          <div className="flex">
+            <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
+              {products.map((product) => (
+                <Product key={product.id} product={product}></Product>
+              ))}
+            </div>
+          </div>
+          <div className="flex">
+            <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
+              {products.map((product) => (
+                <Product key={product.id} product={product}></Product>
+              ))}
+            </div>
+          </div>
+        </SwipeableViews>
       )}
       <div ref={ref} className="h-48 w-full" />
     </main>
   );
-}
-function sleep(arg0: number) {
-  throw new Error("Function not implemented.");
 }
