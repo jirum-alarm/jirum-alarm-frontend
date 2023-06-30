@@ -8,7 +8,7 @@
 
 .react-tabs__tab--selected {
   border-bottom: 2px solid cornflowerblue;
-  color: black;
+  color: black !important;
 }
 
 .react-tabs__tab {
@@ -22,8 +22,9 @@
 }
 
 .react-tabs__tab:hover {
-  border-bottom: 2px solid cornflowerblue;
-  color: black;
+  border-bottom: 2px solid rgb(161, 191, 247);
+  transition: border-bottom-color 0.2s;
+  color: rgb(114, 114, 114);
   transition: color 0.5s;
 }
 .react-tabs__tab-list {
