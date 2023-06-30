@@ -88,11 +88,11 @@ export default function ProductList() {
       ) : (
         <div>
           <div>
-            <Tabs selectedIndex={activeTab} onSelect={handleTabChange}>
+            <Tabs forceRenderTabPanel={true} selectedIndex={activeTab} onSelect={handleTabChange}>
               <TabList>
                 <Tab>
                   <button
-                    className="inline-block p-4 "
+                    className="inline-block p-4 font-color-black"
                     id="profile-tab"
                     data-tabs-target="#profile"
                     type="button"
