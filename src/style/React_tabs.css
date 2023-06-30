@@ -1,0 +1,35 @@
+/* 
+.react-tabs__tab-list: 탭 목록을 담고 있는 컨테이너
+.react-tabs__tab: 각각의 탭
+.react-tabs__tab--selected: 선택된 탭
+.react-tabs__tab-panel: 각각의 탭 패널
+.react-tabs__tab-panel--selected: 활성화된 탭 패널 
+*/
+
+.react-tabs__tab--selected {
+  border-bottom: 2px solid cornflowerblue;
+  color: black;
+}
+
+.react-tabs__tab {
+  display: inline-box;
+  border: none;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom-color 0.2s;
+  margin: 4px;
+  padding: 4px;
+  color: gainsboro;
+}
+
+.react-tabs__tab:hover {
+  border-bottom: 2px solid cornflowerblue;
+  color: black;
+  transition: color 0.5s;
+}
+.react-tabs__tab-list {
+  border: none;
+  margin-bottom: 70px;
+}
+.react-tabs__tab-panel {
+  border-bottom: 2px solid cornflowerblue;
+}

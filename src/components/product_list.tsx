@@ -1,18 +1,19 @@
-"use client";
+'use client';
 
-import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { useCallback, useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
-import SwipeableViews from "react-swipeable-views";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useCallback, useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import SwipeableViews from 'react-swipeable-views';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 
-import { QueryProducts } from "../graphql";
-import { IProduct, IProductOutput } from "../graphql/interface";
-import Product from "./product";
+import { QueryProducts } from '../graphql';
+import { IProduct, IProductOutput } from '../graphql/interface';
+import Product from './product';
 
-import "react-tabs/style/react-tabs.css";
-import { QueryCategories } from "../graphql/category";
-import { ICategoryOutput } from "../graphql/interface/category";
+import 'react-tabs/style/react-tabs.css';
+import '../style/React_tabs.css';
+import { QueryCategories } from '../graphql/category';
+import { ICategoryOutput } from '../graphql/interface/category';
 
 export default function ProductList() {
   const limit = 20;
@@ -27,22 +28,16 @@ export default function ProductList() {
     setActiveTab(index);
   }, []);
 
-  const { data, error, fetchMore } = useSuspenseQuery<IProductOutput>(
-    QueryProducts,
-    {
-      variables: { limit },
-    },
-  );
+  const { data, error, fetchMore } = useSuspenseQuery<IProductOutput>(QueryProducts, {
+    variables: { limit },
+  });
 
-  const { data: categoriesData } =
-    useSuspenseQuery<ICategoryOutput>(QueryCategories);
+  const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
 
   const isMobileDevice = useCallback(() => {
     const userAgent = window.navigator.userAgent;
     const isMobileDevice = Boolean(
-      userAgent.match(
-        /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i,
-      ),
+      userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i)
     );
     return isMobileDevice;
   }, []);
@@ -54,10 +49,7 @@ export default function ProductList() {
         setProducts(data.products);
       }
 
-      const categoryId =
-        activeTab === 0
-          ? undefined
-          : +categoriesData.categories[activeTab - 1].id;
+      const categoryId = activeTab === 0 ? undefined : +categoriesData.categories[activeTab - 1].id;
 
       const newProducts = await fetchMore({
         variables: { limit, searchAfter, categoryId },
@@ -100,7 +92,7 @@ export default function ProductList() {
               <TabList>
                 <Tab>
                   <button
-                    className="inline-block p-4 border-b-2 rounded-t-lg"
+                    className="inline-block p-4 "
                     id="profile-tab"
                     data-tabs-target="#profile"
                     type="button"
@@ -115,7 +107,7 @@ export default function ProductList() {
                 {categoriesData.categories.map((category) => (
                   <Tab key={category.id}>
                     <button
-                      className="inline-block p-4 border-b-2 rounded-t-lg"
+                      className="inline-block p-4 "
                       id="profile-tab"
                       data-tabs-target="#profile"
                       type="button"
