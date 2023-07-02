@@ -1,5 +1,7 @@
 'use client';
 
+import 'react-tabs/style/react-tabs.css';
+import '../style/React_tabs.css';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -9,9 +11,6 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { QueryProducts } from '../graphql';
 import { IProduct, IProductOutput } from '../graphql/interface';
 import Product from './product';
-
-import 'react-tabs/style/react-tabs.css';
-import '../style/React_tabs.css';
 import { QueryCategories } from '../graphql/category';
 import { ICategoryOutput } from '../graphql/interface/category';
 
@@ -88,11 +87,29 @@ export default function ProductList() {
       ) : (
         <div>
           <div>
-            <Tabs forceRenderTabPanel={true} selectedIndex={activeTab} onSelect={handleTabChange}>
+            <Tabs
+              className="react-tabs__tab-list"
+              forceRenderTabPanel={true}
+              selectedIndex={activeTab}
+              onSelect={handleTabChange}
+            >
               <TabList>
-                <Tab>
-                  <button
-                    className="inline-block p-4 font-color-black"
+                <Tab
+                  className="inline-block p-4 text-zinc-400	b-0 "
+                  id="profile-tab"
+                  data-tabs-target="#profile"
+                  type="button"
+                  role="tab"
+                  aria-controls="profile"
+                  aria-selected="false"
+                >
+                  전체
+                </Tab>
+
+                {categoriesData.categories.map((category) => (
+                  <Tab
+                    key={category.id}
+                    className="inline-block p-4 text-zinc-400 	"
                     id="profile-tab"
                     data-tabs-target="#profile"
                     type="button"
@@ -100,23 +117,7 @@ export default function ProductList() {
                     aria-controls="profile"
                     aria-selected="false"
                   >
-                    전체
-                  </button>
-                </Tab>
-
-                {categoriesData.categories.map((category) => (
-                  <Tab key={category.id}>
-                    <button
-                      className="inline-block p-4 "
-                      id="profile-tab"
-                      data-tabs-target="#profile"
-                      type="button"
-                      role="tab"
-                      aria-controls="profile"
-                      aria-selected="false"
-                    >
-                      {category.name}
-                    </button>
+                    <button>{category.name}</button>
                   </Tab>
                 ))}
               </TabList>

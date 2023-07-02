@@ -6,28 +6,29 @@
 .react-tabs__tab-panel--selected: 활성화된 탭 패널 
 */
 
+.react-tabs__tab-panel--selected:focus {
+  color: aliceblue;
+  border-bottom: 2px solid cornflowerblue;
+  transition: border-bottom-color, color 0.1s;
+}
+.react-tabs__tab--selected {
+  color: rgb(0, 0, 0);
+  border-bottom: 2px solid cornflowerblue;
+  transition: border-bottom, color 0.1s, 0.1s;
+}
 .react-tabs__tab {
-  display: inline-box;
   border: none;
   border-bottom: 2px solid transparent;
   margin: 4px;
   padding: 4px;
   color: gainsboro;
 }
-
-.react-tabs__tab--selected {
-  color: black;
-  border-bottom: 2px solid cornflowerblue;
-}
 .react-tabs__tab:hover {
   border-bottom: 2px solid cornflowerblue;
+  transition: border-bottom-color 0.1s;
   color: rgb(114, 114, 114);
 }
 .react-tabs__tab-list {
   border: none;
   margin-bottom: 70px;
-}
-.react-tabs__tab-panel--selected {
-  border-bottom: 2px solid cornflowerblue;
-  color: black;
 }
