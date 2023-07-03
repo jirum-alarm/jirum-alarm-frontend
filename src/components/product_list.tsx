@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { useCallback, useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
-import SwipeableViews from "react-swipeable-views";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
-import "../style/React_tabs.css";
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useCallback, useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import SwipeableViews from 'react-swipeable-views';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import '../style/React_tabs.css';
 
-import { QueryProducts } from "../graphql";
-import { QueryCategories } from "../graphql/category";
-import { IProduct, IProductOutput } from "../graphql/interface";
-import { ICategoryOutput } from "../graphql/interface/category";
-import Product from "./product";
+import { QueryProducts } from '../graphql';
+import { QueryCategories } from '../graphql/category';
+import { IProduct, IProductOutput } from '../graphql/interface';
+import { ICategoryOutput } from '../graphql/interface/category';
+import Product from './product';
 
 export default function ProductList() {
   const limit = 20;
@@ -27,22 +27,16 @@ export default function ProductList() {
     setActiveTab(index);
   }, []);
 
-  const { data, error, fetchMore } = useSuspenseQuery<IProductOutput>(
-    QueryProducts,
-    {
-      variables: { limit },
-    },
-  );
+  const { data, error, fetchMore } = useSuspenseQuery<IProductOutput>(QueryProducts, {
+    variables: { limit },
+  });
 
-  const { data: categoriesData } =
-    useSuspenseQuery<ICategoryOutput>(QueryCategories);
+  const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
 
   const isMobileDevice = useCallback(() => {
     const userAgent = window.navigator.userAgent;
     const isMobileDevice = Boolean(
-      userAgent.match(
-        /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i,
-      ),
+      userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i)
     );
     return isMobileDevice;
   }, []);
@@ -53,10 +47,7 @@ export default function ProductList() {
       const lastProduct = products.at(-1);
       const searchAfter = lastProduct?.searchAfter;
 
-      const categoryId =
-        activeTab === 0
-          ? undefined
-          : +categoriesData.categories[activeTab - 1].id;
+      const categoryId = activeTab === 0 ? undefined : +categoriesData.categories[activeTab - 1].id;
 
       const newProducts = await fetchMore({
         variables: { limit, searchAfter, categoryId },
@@ -67,10 +58,7 @@ export default function ProductList() {
       return;
     }
 
-    const categoryId =
-      activeTab === 0
-        ? undefined
-        : +categoriesData.categories[activeTab - 1].id;
+    const categoryId = activeTab === 0 ? undefined : +categoriesData.categories[activeTab - 1].id;
 
     const newProducts = await fetchMore({
       variables: { limit, categoryId },
