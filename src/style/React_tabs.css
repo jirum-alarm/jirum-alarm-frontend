@@ -42,3 +42,7 @@
   overflow: scroll;
   white-space: nowrap;
 }
+
+.react-tabs__tab-list ul::-webkit-scrollbar {
+  display: none;
+}
