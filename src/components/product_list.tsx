@@ -104,7 +104,6 @@ export default function ProductList() {
       ) : (
         <Tabs
           className="react-tabs__tab-list"
-          forceRenderTabPanel={true}
           selectedIndex={activeTab}
           onSelect={handleTabChange}
         >
@@ -125,12 +124,11 @@ export default function ProductList() {
               <Tab
                 key={category.id}
                 className="inline-block p-4 text-zinc-400	b-0"
-                id="profile-tab"
-                data-tabs-target="#profile"
+                id={`profile-tab-${category.id}`}
+                data-tabs-target={`#profile-${category.id}`}
                 type="button"
                 role="tab"
-                aria-controls="profile"
-                aria-selected="false"
+                aria-controls={`profile-${category.id}`}
               >
                 <button>{category.name}</button>
               </Tab>
