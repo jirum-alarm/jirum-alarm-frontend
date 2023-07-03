@@ -106,6 +106,7 @@ export default function ProductList() {
           className="react-tabs__tab-list"
           selectedIndex={activeTab}
           onSelect={handleTabChange}
+          defaultFocus
         >
           <TabList>
             <Tab
