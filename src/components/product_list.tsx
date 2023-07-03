@@ -116,7 +116,7 @@ export default function ProductList() {
               type="button"
               role="tab"
               aria-controls="profile"
-              aria-selected="false"
+              aria-selected="true"
             >
               전체
             </Tab>
