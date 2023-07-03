@@ -46,3 +46,7 @@
 .react-tabs__tab-list ul::-webkit-scrollbar {
   display: none;
 }
+.react-tabs__tab-list > ul li:focus {
+  outline: none;
+  box-shadow: none;
+}
