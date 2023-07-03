@@ -31,4 +31,9 @@
 .react-tabs__tab-list {
   border: none;
   margin-bottom: 70px;
+  width: fit-content;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: auto;
+  height: fit-content;
 }
