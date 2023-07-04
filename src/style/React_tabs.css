@@ -31,16 +31,7 @@
 }
 .react-tabs__tab-list {
   border: none;
-  margin-bottom: 45px;
-  margin-top: 0;
-  margin-left: auto;
-  margin-right: auto;
   height: fit-content;
-}
-
-.react-tabs__tab-list ul {
-  overflow: scroll;
-  white-space: nowrap;
 }
 
 .react-tabs__tab-list ul::-webkit-scrollbar {

@@ -1,4 +1,4 @@
-import { IProduct } from '../graphql/interface';
+import { IProduct } from "../graphql/interface";
 
 interface IProps {
   product: IProduct;
@@ -9,7 +9,7 @@ export default function Product(props: IProps) {
   return (
     <>
       {
-        <div className="rounded-md border border-gray-300 shadow 	">
+        <div className="rounded-md border border-gray-300 shadow">
           <a href={product.url} target="_blank" rel="noopener noreferrer">
             <div className="flex bg-blue-300 px-5 py-3 justify-between">
               <h2 className="font-bold">{product.provider.nameKr}</h2>

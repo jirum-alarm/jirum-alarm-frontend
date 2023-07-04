@@ -16,6 +16,7 @@ import Product from "./product";
 
 export default function ProductList() {
   const limit = 20;
+  const allCategory = { id: 0, name: "전체" };
   const [isMobile, setIsMobile] = useState(false);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [hasNext, setHasNext] = useState<boolean>(true);
@@ -48,15 +49,14 @@ export default function ProductList() {
   }, []);
 
   const fetch = useCallback(async () => {
+    const categories = [allCategory, ...categoriesData.categories];
+    const categoryId =
+      activeTab === 0 ? undefined : Number(categories[activeTab].id);
+
     const modifiedTab = previousActiveTab !== activeTab;
     if (!modifiedTab) {
       const lastProduct = products.at(-1);
       const searchAfter = lastProduct?.searchAfter;
-
-      const categoryId =
-        activeTab === 0
-          ? undefined
-          : +categoriesData.categories[activeTab - 1].id;
 
       const newProducts = await fetchMore({
         variables: { limit, searchAfter, categoryId },
@@ -66,11 +66,6 @@ export default function ProductList() {
       setProducts([...products, ...newProducts.data.products]);
       return;
     }
-
-    const categoryId =
-      activeTab === 0
-        ? undefined
-        : +categoriesData.categories[activeTab - 1].id;
 
     const newProducts = await fetchMore({
       variables: { limit, categoryId },
@@ -108,23 +103,11 @@ export default function ProductList() {
           onSelect={handleTabChange}
           defaultFocus
         >
-          <TabList className="will-change-transform">
-            <Tab
-              className="inline-block p-4 text-zinc-400	b-0"
-              id="profile-tab"
-              data-tabs-target="#profile"
-              type="button"
-              role="tab"
-              aria-controls="profile"
-              aria-selected="true"
-            >
-              전체
-            </Tab>
-
-            {categoriesData.categories.map((category) => (
+          <TabList className="will-change-transform scroll-smooth overflow-scroll whitespace-nowrap">
+            {[allCategory, ...categoriesData.categories].map((category) => (
               <Tab
                 key={category.id}
-                className="inline-block p-4 text-zinc-400	b-0"
+                className="inline-block p-2 text-zinc-400	b-0"
                 id={`profile-tab-${category.id}`}
                 data-tabs-target={`#profile-${category.id}`}
                 type="button"
@@ -139,19 +122,10 @@ export default function ProductList() {
           <SwipeableViews
             index={activeTab}
             onChangeIndex={handleTabChange}
-            animateTransitions={false}
-            className="will-change-transform"
+            animateTransitions={isMobile}
+            className="will-change-transform my-6"
           >
-            <TabPanel>
-              <div className="flex">
-                <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
-                  {products.map((product) => (
-                    <Product key={product.id} product={product}></Product>
-                  ))}
-                </div>
-              </div>
-            </TabPanel>
-            {categoriesData.categories.map((category) => (
+            {[allCategory, ...categoriesData.categories].map((category) => (
               <TabPanel key={category.id}>
                 <div className="flex">
                   <div className="item-center mx-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
