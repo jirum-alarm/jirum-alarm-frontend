@@ -17,6 +17,7 @@ import Product from "./product";
 export default function ProductList() {
   const limit = 20;
   const allCategory = { id: 0, name: "전체" };
+  const [showSearchBox, setShowSearchBox] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState(false);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [hasNext, setHasNext] = useState<boolean>(true);
@@ -92,6 +93,58 @@ export default function ProductList() {
 
   return (
     <main>
+      <div
+        className={`mb-8 transition-shadow ${
+          showSearchBox ? "block" : "hidden"
+        }`}
+      >
+        <div className="relative flex items-center w-full h-14 rounded-lg shadow focus-within:shadow-md bg-white overflow-hidden">
+          <div className="grid place-items-center h-full w-14 text-gray-300">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+
+          <input
+            className="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
+            type="text"
+            id="search"
+            placeholder="최근에 구매하고 싶은 제품이 있으셨나요?"
+          />
+
+          <div
+            className="grid place-items-center h-full w-14 text-gray-300 cursor-pointer"
+            onClick={() => setShowSearchBox(false)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+
       {error ? (
         <p>게시글을 불러오지 못했습니다.</p>
       ) : !data ? (
