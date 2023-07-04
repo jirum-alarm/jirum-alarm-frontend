@@ -139,7 +139,7 @@ export default function ProductList() {
           <SwipeableViews
             index={activeTab}
             onChangeIndex={handleTabChange}
-            animateTransitions={isMobile}
+            animateTransitions={false}
             className="will-change-transform"
           >
             <TabPanel>
