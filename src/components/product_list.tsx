@@ -104,7 +104,11 @@ export default function ProductList() {
           onSelect={handleTabChange}
           defaultFocus
         >
-          <TabList className="will-change-transform scroll-smooth overflow-scroll whitespace-nowrap">
+          <TabList
+            className={`will-change-transform scroll-smooth overflow-x-scroll ${
+              isMobileDevice() ? "whitespace-nowrap" : ""
+            }`}
+          >
             {[allCategory, ...categoriesData.categories].map((category) => (
               <Tab
                 key={category.id}
