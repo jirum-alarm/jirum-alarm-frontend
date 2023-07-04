@@ -106,7 +106,7 @@ export default function ProductList() {
         >
           <TabList
             className={`will-change-transform scroll-smooth overflow-x-scroll ${
-              isMobileDevice() ? "whitespace-nowrap" : ""
+              isMobile ? "whitespace-nowrap" : ""
             }`}
           >
             {[allCategory, ...categoriesData.categories].map((category) => (
