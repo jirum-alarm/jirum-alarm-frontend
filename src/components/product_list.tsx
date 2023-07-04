@@ -94,9 +94,7 @@ export default function ProductList() {
   return (
     <main>
       <div
-        className={`mb-8 transition-shadow ${
-          showSearchBox ? "block" : "hidden"
-        }`}
+        className={`mb-8 drop-shadow-md ${showSearchBox ? "block" : "hidden"}`}
       >
         <div className="relative flex items-center w-full h-14 rounded-lg shadow focus-within:shadow-md bg-white overflow-hidden">
           <div className="grid place-items-center h-full w-14 text-gray-300">
@@ -108,9 +106,9 @@ export default function ProductList() {
               stroke="currentColor"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>

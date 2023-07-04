@@ -12,6 +12,7 @@
   transition: border-bottom-color, color 0.1s;
 }
 .react-tabs__tab--selected {
+  background-color: inherit;
   box-sizing: border-box;
   color: rgb(0, 0, 0);
   border-bottom: 2px solid cornflowerblue;
