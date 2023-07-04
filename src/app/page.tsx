@@ -20,7 +20,10 @@ export default async function Home() {
   return (
     <main>
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1 " />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
       </Head>
       <div className="font-mono max-w-screen-lg mx-auto">
         <div className="p-8 flex justify-center ">
