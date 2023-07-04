@@ -8,7 +8,7 @@ export default async function Home() {
       <Head>
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+          content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
         />
       </Head>
       <div className="font-mono max-w-screen-lg mx-auto">
