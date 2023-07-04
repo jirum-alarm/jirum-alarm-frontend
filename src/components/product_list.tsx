@@ -103,6 +103,7 @@ export default function ProductList() {
           selectedIndex={activeTab}
           onSelect={handleTabChange}
           defaultFocus
+          disableUpDownKeys
         >
           <TabList
             className={`will-change-transform scroll-smooth overflow-x-scroll ${
