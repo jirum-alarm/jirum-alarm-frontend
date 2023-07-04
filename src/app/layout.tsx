@@ -1,6 +1,5 @@
 import "./globals.css";
 
-import { BottomNavigation } from "../components/bottom-navigation";
 import { ApolloWrapper } from "../lib/apollo-wrapper";
 
 export const metadata = {
@@ -26,7 +25,6 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <ApolloWrapper>{children}</ApolloWrapper>
-        <BottomNavigation></BottomNavigation>
       </body>
     </html>
   );
