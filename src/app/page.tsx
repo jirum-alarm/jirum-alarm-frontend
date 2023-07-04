@@ -5,12 +5,7 @@ import ProductList from "../components/product_list";
 export default async function Home() {
   return (
     <main>
-      <Head>
-        <meta
-          name="viewport"
-          content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
-        />
-      </Head>
+      <Head></Head>
       <div className="font-mono max-w-screen-lg mx-auto">
         <div className="px-4">
           <div className="p-8 flex justify-center">

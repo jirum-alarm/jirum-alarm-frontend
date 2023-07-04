@@ -1,19 +1,21 @@
 import "./globals.css";
 
+import { Metadata } from "next";
 import { ApolloWrapper } from "../lib/apollo-wrapper";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "지름알림: 핫딜 정보 모아보기",
   description: "지름 정보를 알려드려요!",
   openGraph: {
     title: "지름알림: 핫딜 정보 모아보기",
-    author: "지름알림",
     description: "핫딜 정보를 알려드려요!",
     images: "./opengraph-image.png",
   },
   icons: {
     icon: "/icon.png",
   },
+  viewport:
+    "initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width",
 };
 
 export default function RootLayout({
