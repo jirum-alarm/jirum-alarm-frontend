@@ -108,7 +108,7 @@ export default function ProductList() {
           onSelect={handleTabChange}
           defaultFocus
         >
-          <TabList>
+          <TabList className="will-change-transform">
             <Tab
               className="inline-block p-4 text-zinc-400	b-0"
               id="profile-tab"
@@ -140,6 +140,7 @@ export default function ProductList() {
             index={activeTab}
             onChangeIndex={handleTabChange}
             animateTransitions={isMobile}
+            className="will-change-transform"
           >
             <TabPanel>
               <div className="flex">
