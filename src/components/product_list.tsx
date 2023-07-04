@@ -99,6 +99,7 @@ export default function ProductList() {
       ) : (
         <Tabs
           className="react-tabs__tab-list"
+          forceRenderTabPanel
           selectedIndex={activeTab}
           onSelect={handleTabChange}
           defaultFocus
