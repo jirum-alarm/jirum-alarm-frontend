@@ -1,11 +1,9 @@
-import Head from "next/head";
 import { PiBellSimpleBold } from "react-icons/pi";
 import ProductList from "../components/product_list";
 
 export default async function Home() {
   return (
     <main>
-      <Head></Head>
       <div className="font-mono max-w-screen-lg mx-auto">
         <div className="px-4">
           <div className="p-8 flex justify-center">
