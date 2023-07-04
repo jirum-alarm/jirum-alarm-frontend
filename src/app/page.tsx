@@ -10,7 +10,6 @@ export default async function Home() {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
       <div className="font-mono max-w-screen-lg mx-auto">
         <div className="p-8 flex justify-center ">
