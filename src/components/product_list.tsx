@@ -63,110 +63,79 @@ export default function ProductList() {
     return isMobileDevice;
   }, []);
 
+  const fetchByKeyword = useCallback(async () => {
+    const modifiedKeyword = previousKeyword !== keyword && keyword !== "";
+    const lastProduct = products[products.length - 1];
+    const searchAfter = lastProduct?.searchAfter;
+
+    const initItemVariables = { limit, keyword };
+    const addItemVariables = { limit, searchAfter, keyword };
+    const variables = modifiedKeyword ? initItemVariables : addItemVariables;
+
+    const newProducts = await fetchMore({ variables });
+
+    const addProducts = [...products, ...newProducts.data.products];
+    const productList = modifiedKeyword
+      ? newProducts.data.products
+      : addProducts;
+
+    setHasNext(newProducts.data.products.length === limit);
+    setProducts(productList);
+  }, [inView, hasNext, keyword]);
+
   const fetch = useCallback(async () => {
-    if (keyword) {
-      const modifiedKeyword = previousKeyword !== keyword && keyword !== "";
-      if (modifiedKeyword) {
-        const newProducts = await fetchMore({
-          variables: { limit, keyword },
-        });
-
-        setHasNext(newProducts.data.products.length === limit);
-        setProducts(newProducts.data.products);
-        return;
-      }
-
-      const lastProduct = products.at(-1);
-      const searchAfter = lastProduct?.searchAfter;
-      const newProducts = await fetchMore({
-        variables: { limit, searchAfter, keyword },
-      });
-
-      setHasNext(newProducts.data.products.length === limit);
-      setProducts([...products, ...newProducts.data.products]);
-      return;
-    }
-
     const categories = [allCategory, ...categoriesData.categories];
     const categoryId =
       activeTab === 0 ? undefined : Number(categories[activeTab].id);
-
     const modifiedTab = previousActiveTab !== activeTab;
-    if (!modifiedTab) {
-      const isRemovedKeyword = previousKeyword !== keyword && keyword === "";
-      const lastProduct = products.at(-1);
-      const searchAfter = lastProduct?.searchAfter;
+    const isRemovedKeyword = previousKeyword !== keyword && keyword === "";
+    const isModified = modifiedTab || isRemovedKeyword;
 
-      let newProducts;
+    const initItemVariables = { limit, categoryId };
+    const addItemVariables = {
+      limit,
+      categoryId,
+      searchAfter: products[products.length - 1]?.searchAfter,
+    };
 
-      if (isRemovedKeyword) {
-        newProducts = await fetchMore({
-          variables: { limit, categoryId },
-        });
-      } else {
-        newProducts = await fetchMore({
-          variables: { limit, searchAfter, categoryId },
-        });
-      }
+    const variables = isModified ? initItemVariables : addItemVariables;
+    const newProducts = await fetchMore({ variables });
 
-      if (isRemovedKeyword) {
-        setHasNext(newProducts.data.products.length === limit);
-        setProducts(newProducts.data.products);
-        return;
-      }
-
-      setHasNext(newProducts.data.products.length === limit);
-      setProducts([...products, ...newProducts.data.products]);
-      return;
-    }
-
-    const newProducts = await fetchMore({
-      variables: { limit, categoryId },
-    });
+    const initProducts = newProducts.data.products;
+    const addProducts = [...products, ...newProducts.data.products];
+    const productList = isModified ? initProducts : addProducts;
 
     setHasNext(newProducts.data.products.length === limit);
-    setProducts(newProducts.data.products);
-  }, [hasNext, inView, activeTab, keyword]);
+    setProducts(productList);
+  }, [inView, hasNext, activeTab]);
 
   useEffect(() => {
     setIsMobile(isMobileDevice());
 
     const modifiedTab = previousActiveTab !== activeTab;
-
-    if (modifiedTab) {
+    const isRemovedKeyword = previousKeyword !== keyword && keyword === "";
+    if (isRemovedKeyword || modifiedTab) {
+      setProducts([]);
+      setHasNext(true);
       setKeyword("");
       setPreviousKeyword("");
     }
 
     if (keyword) {
+      fetchByKeyword();
+      setPreviousKeyword(keyword);
+    } else if (isRemovedKeyword || modifiedTab) {
       fetch();
-      setPreviousKeyword(() => keyword);
-      return;
-    }
-
-    const isRemovedKeyword = previousKeyword !== keyword && keyword === "";
-    if (isRemovedKeyword) {
-      setProducts([]);
-      setHasNext(true);
-    }
-
-    if (isRemovedKeyword || modifiedTab) {
-      fetch();
-      setPreviousActiveTab(() => activeTab);
-      setPreviousKeyword(() => keyword);
-      return;
-    }
-
-    if (inView && hasNext) {
+      setPreviousActiveTab(activeTab);
+      setPreviousKeyword(keyword);
+    } else if (inView && hasNext) {
       fetch();
     }
   }, [inView, hasNext, activeTab, keyword]);
 
   return (
     <main>
-      <div
-        className={`mb-8 drop-shadow-md ${showSearchBox ? "block" : "hidden"}`}
-      >
+      <div className="mb-8 drop-shadow-md">
         <div className="relative flex items-center w-full h-14 rounded-lg shadow focus-within:shadow-md bg-white overflow-hidden">
           <div className="grid place-items-center h-full w-14 text-gray-300">
             <svg
@@ -179,7 +148,7 @@ export default function ProductList() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth={2}
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
@@ -208,7 +177,7 @@ export default function ProductList() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth={2}
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
@@ -237,7 +206,7 @@ export default function ProductList() {
             {[allCategory, ...categoriesData.categories].map((category) => (
               <Tab
                 key={category.id}
-                className="inline-block p-2 text-zinc-400	font-bold b-0"
+                className="inline-block p-2 text-zinc-400 font-bold b-0"
                 id={`profile-tab-${category.id}`}
                 data-tabs-target={`#profile-${category.id}`}
                 type="button"
@@ -260,7 +229,7 @@ export default function ProductList() {
                 <div className="flex">
                   <div className="item-center grid grid-cols-1 gap-8 sm:grid-cols-2">
                     {products.map((product) => (
-                      <Product key={product.id} product={product}></Product>
+                      <Product key={product.id} product={product} />
                     ))}
                   </div>
                 </div>
