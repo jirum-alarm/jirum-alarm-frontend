@@ -126,6 +126,13 @@ export default function ProductList() {
   useEffect(() => {
     setIsMobile(isMobileDevice());
 
+    const modifiedTab = previousActiveTab !== activeTab;
+    console.log("modifiedTab");
+    if (modifiedTab) {
+      setKeyword("");
+      setPreviousKeyword("");
+    }
+
     if (keyword) {
       console.log("-키워드로 검색-");
       fetch();
@@ -139,7 +146,6 @@ export default function ProductList() {
       setHasNext(true);
     }
 
-    const modifiedTab = previousActiveTab !== activeTab;
     if (isRemovedKeyword || modifiedTab) {
       console.log("-탭으로 검색-");
       fetch();
