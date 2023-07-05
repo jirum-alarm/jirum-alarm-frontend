@@ -18,7 +18,9 @@ export default function ProductList() {
   const limit = 20;
   const allCategory = { id: 0, name: "전체" };
   const [showSearchBox, setShowSearchBox] = useState<boolean>(true);
-  const [isMobile, setIsMobile] = useState(false);
+  const [previousKeyword, setPreviousKeyword] = useState<string>("");
+  const [keyword, setKeyword] = useState<string>("");
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [hasNext, setHasNext] = useState<boolean>(true);
   const [previousActiveTab, setPreviousActiveTab] = useState<number>(0);
@@ -36,6 +38,13 @@ export default function ProductList() {
     },
   );
 
+  const handleKeyword = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setKeyword(event.target.value);
+    },
+    [],
+  );
+
   const { data: categoriesData } =
     useSuspenseQuery<ICategoryOutput>(QueryCategories);
 
@@ -50,18 +59,56 @@ export default function ProductList() {
   }, []);
 
   const fetch = useCallback(async () => {
+    if (keyword) {
+      const modifiedKeyword = previousKeyword !== keyword && keyword !== "";
+      if (modifiedKeyword) {
+        const newProducts = await fetchMore({
+          variables: { limit, keyword },
+        });
+
+        setHasNext(newProducts.data.products.length === limit);
+        setProducts(newProducts.data.products);
+        return;
+      }
+
+      const lastProduct = products.at(-1);
+      const searchAfter = lastProduct?.searchAfter;
+      const newProducts = await fetchMore({
+        variables: { limit, searchAfter, keyword },
+      });
+
+      setHasNext(newProducts.data.products.length === limit);
+      setProducts([...products, ...newProducts.data.products]);
+      return;
+    }
+
     const categories = [allCategory, ...categoriesData.categories];
     const categoryId =
       activeTab === 0 ? undefined : Number(categories[activeTab].id);
 
     const modifiedTab = previousActiveTab !== activeTab;
     if (!modifiedTab) {
+      const isRemovedKeyword = previousKeyword !== keyword && keyword === "";
       const lastProduct = products.at(-1);
       const searchAfter = lastProduct?.searchAfter;
 
-      const newProducts = await fetchMore({
-        variables: { limit, searchAfter, categoryId },
-      });
+      let newProducts;
+
+      if (isRemovedKeyword) {
+        newProducts = await fetchMore({
+          variables: { limit, categoryId },
+        });
+      } else {
+        newProducts = await fetchMore({
+          variables: { limit, searchAfter, categoryId },
+        });
+      }
+
+      if (isRemovedKeyword) {
+        setHasNext(newProducts.data.products.length === limit);
+        setProducts(newProducts.data.products);
+        return;
+      }
 
       setHasNext(newProducts.data.products.length === limit);
       setProducts([...products, ...newProducts.data.products]);
@@ -74,22 +121,38 @@ export default function ProductList() {
 
     setHasNext(newProducts.data.products.length === limit);
     setProducts(newProducts.data.products);
-  }, [hasNext, inView, activeTab]);
+  }, [hasNext, inView, activeTab, keyword]);
 
   useEffect(() => {
     setIsMobile(isMobileDevice());
 
+    if (keyword) {
+      console.log("-키워드로 검색-");
+      fetch();
+      setPreviousKeyword(() => keyword);
+      return;
+    }
+
+    const isRemovedKeyword = previousKeyword !== keyword && keyword === "";
+    if (isRemovedKeyword) {
+      setProducts([]);
+      setHasNext(true);
+    }
+
     const modifiedTab = previousActiveTab !== activeTab;
-    if (modifiedTab) {
+    if (isRemovedKeyword || modifiedTab) {
+      console.log("-탭으로 검색-");
       fetch();
       setPreviousActiveTab(() => activeTab);
+      setPreviousKeyword(() => keyword);
       return;
     }
 
     if (inView && hasNext) {
+      console.log("-추가 로딩-");
       fetch();
     }
-  }, [inView, hasNext, activeTab]);
+  }, [inView, hasNext, activeTab, keyword]);
 
   return (
     <main>
@@ -119,6 +182,7 @@ export default function ProductList() {
             type="text"
             id="search"
             placeholder="최근에 구매하고 싶은 제품이 있으셨나요?"
+            onChange={handleKeyword}
           />
 
           <div

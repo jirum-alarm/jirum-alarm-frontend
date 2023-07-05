@@ -1,11 +1,17 @@
 import { gql } from "@apollo/client";
 
 export const QueryProducts = gql`
-  query QueryProducts($limit: Int!, $searchAfter: [String!], $categoryId: Int) {
+  query QueryProducts(
+    $limit: Int!
+    $searchAfter: [String!]
+    $categoryId: Int
+    $keyword: String
+  ) {
     products(
       limit: $limit
       searchAfter: $searchAfter
       categoryId: $categoryId
+      keyword: $keyword
     ) {
       id
       title
