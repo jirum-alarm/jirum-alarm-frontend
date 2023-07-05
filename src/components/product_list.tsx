@@ -45,6 +45,11 @@ export default function ProductList() {
     [],
   );
 
+  const handleClose = useCallback(() => {
+    // setShowSearchBox(false);
+    setKeyword("");
+  }, []);
+
   const { data: categoriesData } =
     useSuspenseQuery<ICategoryOutput>(QueryCategories);
 
@@ -127,14 +132,13 @@ export default function ProductList() {
     setIsMobile(isMobileDevice());
 
     const modifiedTab = previousActiveTab !== activeTab;
-    console.log("modifiedTab");
+
     if (modifiedTab) {
       setKeyword("");
       setPreviousKeyword("");
     }
 
     if (keyword) {
-      console.log("-키워드로 검색-");
       fetch();
       setPreviousKeyword(() => keyword);
       return;
@@ -147,7 +151,6 @@ export default function ProductList() {
     }
 
     if (isRemovedKeyword || modifiedTab) {
-      console.log("-탭으로 검색-");
       fetch();
       setPreviousActiveTab(() => activeTab);
       setPreviousKeyword(() => keyword);
@@ -155,7 +158,6 @@ export default function ProductList() {
     }
 
     if (inView && hasNext) {
-      console.log("-추가 로딩-");
       fetch();
     }
   }, [inView, hasNext, activeTab, keyword]);
@@ -189,11 +191,12 @@ export default function ProductList() {
             id="search"
             placeholder="최근에 구매하고 싶은 제품이 있으셨나요?"
             onChange={handleKeyword}
+            value={keyword}
           />
 
           <div
             className="grid place-items-center h-full w-14 text-gray-300 cursor-pointer"
-            onClick={() => setShowSearchBox(false)}
+            onClick={handleClose}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
