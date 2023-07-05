@@ -13,6 +13,7 @@ import { QueryCategories } from "../graphql/category";
 import { IProduct, IProductOutput } from "../graphql/interface";
 import { ICategoryOutput } from "../graphql/interface/category";
 import Product from "./product";
+import { TopButton } from "./top_button";
 
 export default function ProductList() {
   const limit = 20;
@@ -236,6 +237,7 @@ export default function ProductList() {
               </TabPanel>
             ))}
           </SwipeableViews>
+          <TopButton />
           <div ref={ref} className="h-48 w-full" />
         </Tabs>
       )}
