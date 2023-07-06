@@ -47,8 +47,7 @@ export default function ProductList() {
   );
 
   const handleClose = useCallback(() => {
-    // setShowSearchBox(false);
-    setKeyword("");
+    setKeyword(() => "");
   }, []);
 
   const { data: categoriesData } =
@@ -108,7 +107,7 @@ export default function ProductList() {
 
     setHasNext(newProducts.data.products.length === limit);
     setProducts(productList);
-  }, [inView, hasNext, activeTab]);
+  }, [inView, hasNext, activeTab, keyword]);
 
   useEffect(() => {
     setIsMobile(isMobileDevice());
@@ -119,7 +118,6 @@ export default function ProductList() {
       setProducts([]);
       setHasNext(true);
       setKeyword("");
-      setPreviousKeyword("");
     }
 
     if (keyword) {
