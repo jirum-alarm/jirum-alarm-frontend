@@ -205,7 +205,7 @@ export default function ProductList() {
             {[allCategory, ...categoriesData.categories].map((category) => (
               <Tab
                 key={category.id}
-                className="inline-block p-2 text-zinc-400  b-0"
+                className="inline-block p-2 text-zinc-400 font-bold b-0"
                 id={`profile-tab-${category.id}`}
                 data-tabs-target={`#profile-${category.id}`}
                 type="button"
@@ -225,8 +225,8 @@ export default function ProductList() {
           >
             {[allCategory, ...categoriesData.categories].map((category) => (
               <TabPanel key={category.id}>
-                <div className="flex m-auto w-fit">
-                  <div className="item-center grid grid-cols-2 gap-4">
+                <div className="flex">
+                  <div className="item-center grid grid-cols-1 gap-8 sm:grid-cols-2">
                     {products.map((product) => (
                       <Product key={product.id} product={product} />
                     ))}

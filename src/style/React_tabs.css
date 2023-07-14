@@ -9,14 +9,13 @@
 .react-tabs__tab-panel--selected:focus {
   color: aliceblue;
   border-bottom: 2px solid cornflowerblue;
-  transition: border-bottom-color, color 0.2s;
+  transition: border-bottom-color, color 0.1s;
 }
 .react-tabs__tab--selected {
   background-color: inherit;
   box-sizing: border-box;
   color: rgb(0, 0, 0);
   border-bottom: 2px solid cornflowerblue;
-  transition: border-bottom, color 0.2s, 0.2s;
 }
 .react-tabs__tab {
   box-sizing: border-box;
@@ -26,7 +25,11 @@
   padding: 4px;
   color: gainsboro;
 }
-
+.react-tabs__tab:hover {
+  border-bottom: 2px solid cornflowerblue;
+  transition: border-bottom-color 0.1s;
+  color: rgb(114, 114, 114);
+}
 .react-tabs__tab-list {
   border: none;
   height: fit-content;
