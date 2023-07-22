@@ -3,3 +3,4 @@ export const GRAPHQL_ENDPOINT =
 export const GRAPHQL_SUBSCRIPTIONS_ENDPOINT =
   process.env.SUBSCRIPTIONS_GRAPHQL_ENDPOINT ||
   "wss://jirum-api.kyojs.com/graphql";
+export const GA_TRACKING_ID = "G-RSNF3S1B10";
