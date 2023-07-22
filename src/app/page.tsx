@@ -1,7 +1,7 @@
 import { PiBellSimpleBold } from "react-icons/pi";
 import { GA_TRACKING_ID } from "../common/constant";
 import ProductList from "../components/product_list";
-import GoogleAnalytics from "./googleAnalitics";
+import GoogleAnalytics from "./GoogleAnalitics";
 
 export default async function Home() {
   return (
