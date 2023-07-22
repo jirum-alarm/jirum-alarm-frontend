@@ -226,7 +226,7 @@ export default function ProductList() {
             {[allCategory, ...categoriesData.categories].map((category) => (
               <TabPanel key={category.id}>
                 <div className="flex">
-                  <div className="item-center grid grid-cols-1 gap-8 sm:grid-cols-2">
+                  <div className="item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
                     {products.map((product) => (
                       <Product key={product.id} product={product} />
                     ))}

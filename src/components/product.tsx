@@ -11,7 +11,7 @@ export default function Product(props: IProps) {
       {
         <div className="rounded-md border border-gray-300 shadow">
           <a href={product.url} target="_blank" rel="noopener noreferrer">
-            <div className="flex bg-blue-300 px-5 py-3 justify-between">
+            <div className="flex bg-blue-300 px-5 py-2 text-sm justify-between">
               <h2 className="font-bold">{product.provider.nameKr}</h2>
               <h2>{product.category}</h2>
             </div>
