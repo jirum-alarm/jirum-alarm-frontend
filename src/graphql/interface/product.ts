@@ -7,9 +7,11 @@ export interface IProduct {
   mallId?: number;
   url: string;
   providerId: number;
+  thumbnail?: string;
   category?: string;
   categoryId?: number;
   searchAfter?: string[];
+  postedAt: Date;
 }
 
 export interface IProductOutput {

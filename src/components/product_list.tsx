@@ -18,7 +18,6 @@ import { TopButton } from "./top_button";
 export default function ProductList() {
   const limit = 20;
   const allCategory = { id: 0, name: "전체" };
-  const [showSearchBox, setShowSearchBox] = useState<boolean>(true);
   const [previousKeyword, setPreviousKeyword] = useState<string>("");
   const [keyword, setKeyword] = useState<string>("");
   const [isMobile, setIsMobile] = useState<boolean>(false);

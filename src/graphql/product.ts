@@ -20,10 +20,12 @@ export const QueryProducts = gql`
       providerId
       categoryId
       category
+      thumbnail
       provider {
         nameKr
       }
       searchAfter
+      postedAt
     }
   }
 `;
