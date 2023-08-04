@@ -1,6 +1,7 @@
 import "./globals.css";
 
 import { Metadata } from "next";
+import { ThemeProvider } from "../components/material";
 import { ApolloWrapper } from "../lib/apollo-wrapper";
 
 export const metadata: Metadata = {
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <ApolloWrapper>{children}</ApolloWrapper>
+        <ThemeProvider>
+          <ApolloWrapper>{children}</ApolloWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );
