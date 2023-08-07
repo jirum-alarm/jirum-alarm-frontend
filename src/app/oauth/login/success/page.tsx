@@ -11,5 +11,5 @@ export default function OauthLoginSuccess() {
     return;
   }, []);
 
-  return "Loading...";
+  return "로그인 진행중...";
 }
