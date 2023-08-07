@@ -37,6 +37,7 @@ export default async function Home() {
                   <button
                     type="button"
                     className="h-12 transition duration-200 border border-gray-200 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold relative"
+                    style={{ backgroundColor: "#ffe900" }}
                   >
                     <svg
                       width="32"
@@ -72,6 +73,7 @@ export default async function Home() {
                   <button
                     type="button"
                     className="h-12 transition duration-200 border border-gray-200 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold relative"
+                    style={{ backgroundColor: "#00b600", color: "#efefef" }}
                   >
                     <span>
                       <svg
