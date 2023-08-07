@@ -11,7 +11,7 @@ export default function Product(props: IProps) {
   const timestamp = useTimeAgo(new Date(props.product.postedAt));
   const product = props.product;
   return (
-    <div className="rounded-md border border-gray-300 shadow">
+    <div className="transition duration-200 border hover:shadow-md rounded-md border border-gray-300 shadow">
       <a href={product.url} target="_blank" rel="noopener noreferrer">
         <div className="h-full">
           <div className="flex bg-blue-300 px-5 py-2 text-sm justify-between">

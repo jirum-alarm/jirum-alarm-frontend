@@ -134,7 +134,7 @@ export default function ProductList() {
   return (
     <main>
       <div className="mb-6 drop-shadow-md">
-        <div className="relative flex items-center w-full h-14 rounded-lg shadow focus-within:shadow-md bg-white overflow-hidden">
+        <div className="relative flex items-center w-full h-14 rounded-lg shadow hover:shadow-md bg-white overflow-hidden">
           <div className="grid place-items-center h-full w-14 text-gray-300">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -204,7 +204,7 @@ export default function ProductList() {
             {[allCategory, ...categoriesData.categories].map((category) => (
               <Tab
                 key={category.id}
-                className="inline-block p-2 text-zinc-400 font-bold b-0"
+                className="hover:text-zinc-700 transition duration-200 inline-block p-2 text-zinc-400 font-bold b-0"
                 id={`profile-tab-${category.id}`}
                 data-tabs-target={`#profile-${category.id}`}
                 type="button"
