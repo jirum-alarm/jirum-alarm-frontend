@@ -116,13 +116,13 @@ export default async function Home() {
             <div className="px-2 py-2">
               <div className="grid grid-cols-2 gap-1">
                 <div className="text-center whitespace-nowrap">
-                  <button className="text-sm transition duration-200 px-5 py-2 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
+                  <button className="leading-2 text-sm transition duration-200 px-5 py-2 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      className="w-4 h-4 inline-block align-text-top"
+                      className="w-4 h-4 inline-block"
                     >
                       <path
                         stroke-linecap="round"
@@ -131,18 +131,18 @@ export default async function Home() {
                         d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
                       />
                     </svg>
-                    <span className="inline-block ml-1">
+                    <span className="inline ml-1">
                       비밀번호를 잊어버리셨나요?
                     </span>
                   </button>
                 </div>
-                <div className="text-center whitespace-nowrap">
+                <div className="leading-2 text-center whitespace-nowrap">
                   <button className="text-sm transition duration-200 px-5 py-2 cursor-pointer font-normal rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
                     <LiaUserCircle
                       size="18"
-                      className="inline-block align-text-top"
+                      className="inline-block"
                     ></LiaUserCircle>
-                    <span className="inline-block ml-1">회원가입</span>
+                    <span className="ml-1">회원가입</span>
                   </button>
                 </div>
               </div>
