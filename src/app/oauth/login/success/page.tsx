@@ -7,8 +7,9 @@ export default function OauthLoginSuccess() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(`/`);
+    router.push("/dashboard");
+    return;
   }, []);
 
-  return <>login success</>;
+  return "Loading...";
 }
