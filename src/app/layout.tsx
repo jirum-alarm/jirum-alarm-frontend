@@ -1,7 +1,10 @@
 import "./globals.css";
 
 import { Metadata } from "next";
+import { GA_TRACKING_ID } from "../common/constant";
+import NavBar from "../components/Navbar";
 import { ApolloWrapper } from "../lib/apollo-wrapper";
+import GoogleAnalytics from "./GoogleAnalitics";
 
 export const metadata: Metadata = {
   title: "지름알림: 핫딜 정보 모아보기",
@@ -25,8 +28,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
+      <GoogleAnalytics GA_TRACKING_ID={GA_TRACKING_ID} />
       <body>
-        <ApolloWrapper>{children}</ApolloWrapper>
+        <div className="font-mono max-w-screen-lg mx-auto">
+          <NavBar></NavBar>
+          <ApolloWrapper>{children}</ApolloWrapper>
+        </div>
       </body>
     </html>
   );

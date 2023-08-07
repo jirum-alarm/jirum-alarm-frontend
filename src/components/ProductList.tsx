@@ -12,8 +12,8 @@ import { QueryProducts } from "../graphql";
 import { QueryCategories } from "../graphql/category";
 import { IProduct, IProductOutput } from "../graphql/interface";
 import { ICategoryOutput } from "../graphql/interface/category";
-import Product from "./product";
-import { TopButton } from "./top_button";
+import Product from "./Product";
+import { TopButton } from "./TopButton";
 
 export default function ProductList() {
   const limit = 20;
@@ -133,7 +133,7 @@ export default function ProductList() {
 
   return (
     <main>
-      <div className="mb-8 drop-shadow-md">
+      <div className="mb-6 drop-shadow-md">
         <div className="relative flex items-center w-full h-14 rounded-lg shadow focus-within:shadow-md bg-white overflow-hidden">
           <div className="grid place-items-center h-full w-14 text-gray-300">
             <svg
