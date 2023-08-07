@@ -31,7 +31,7 @@ export default async function Home() {
                 <span className="inline-block">로그인</span>
               </button>
             </div>
-            <div className="p-2">
+            <div className="p-4">
               <div className="grid gap-2">
                 <a href="https://jirum-api.kyojs.com/login/kakao">
                   <button
