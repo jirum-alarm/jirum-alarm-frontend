@@ -7,7 +7,7 @@ export default async function Home() {
     <>
       <div className="min-h-screen flex flex-col justify-center md:pt-8">
         <div className="px-2 mx-auto md:w-full md:max-w-sm">
-          <div className="bg-white shadow w-full rounded-lg divide-y divide-gray-200">
+          <div className="shadow-gray-200 shadow-md w-full rounded-lg divide-y divide-gray-200">
             <div className="px-5 py-5">
               <h1 className="font-bold text-center text-2xl mb-4">로그인</h1>
               <label className="font-semibold text-sm text-gray-600 block">
