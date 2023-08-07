@@ -4,7 +4,7 @@ import { PiBellSimpleBold } from "react-icons/pi";
 export default function NavBar() {
   return (
     <>
-      <div className="p-8">
+      <div className="pt-8 px-4">
         <div className="flex items-center justify-between">
           <div className="w-3/12"></div>
           <Link href="/">
