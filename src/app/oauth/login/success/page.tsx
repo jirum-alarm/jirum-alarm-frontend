@@ -7,7 +7,7 @@ export default function OauthLoginSuccess() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/dashboard");
+    router.push("/");
     return;
   }, []);
 
