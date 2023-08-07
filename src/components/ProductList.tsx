@@ -12,7 +12,7 @@ import { QueryProducts } from "../graphql";
 import { QueryCategories } from "../graphql/category";
 import { IProduct, IProductOutput } from "../graphql/interface";
 import { ICategoryOutput } from "../graphql/interface/category";
-import Product from "./Product";
+import Product from "./ProductItem";
 import { TopButton } from "./TopButton";
 
 export default function ProductList() {
