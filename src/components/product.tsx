@@ -1,4 +1,5 @@
 "use client";
+
 import { IProduct } from "../graphql/interface";
 import useTimeAgo from "../lib/use-time-stamp";
 
