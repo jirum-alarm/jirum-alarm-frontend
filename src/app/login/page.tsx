@@ -5,7 +5,7 @@ import { LiaUserCircle } from "react-icons/lia";
 export default async function Home() {
   return (
     <>
-      <div className="min-h-screen flex flex-col justify-center md:pt-12">
+      <div className="min-h-screen flex flex-col justify-center pt-8 md:pt-12">
         <div className="px-2 mx-auto md:w-full md:max-w-sm">
           <div className="shadow-gray-200 shadow-md w-full rounded-lg divide-y divide-gray-200">
             <div className="px-5 py-5">
