@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation } from "@apollo/client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { LiaUserCircle } from "react-icons/lia";
@@ -13,6 +14,8 @@ import { errorModalSelector } from "../state/common";
 export default function Login() {
   const [id, setId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const reouter = useRouter();
 
   const showErrorModal = useSetRecoilState(errorModalSelector);
   const [mutate] = useMutation<ILoginOutput, ILoginVariable>(MutationLogin, {
@@ -30,6 +33,8 @@ export default function Login() {
         } else {
           localStorage.removeItem(StorageTokenKey.REFRESH_TOKEN);
         }
+
+        reouter.push("/");
       }
     },
     onError: (err) => {
