@@ -47,8 +47,6 @@ export default function Login() {
       return;
     }
 
-    console.log("hello");
-
     mutate({
       variables: { email: id, password: password },
     });
@@ -69,6 +67,7 @@ export default function Login() {
                   type="text"
                   id="id"
                   placeholder="이메일"
+                  autoComplete="true"
                   className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
@@ -81,6 +80,7 @@ export default function Login() {
                   id="password"
                   name="password"
                   placeholder="비밀번호"
+                  autoComplete="true"
                   className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
