@@ -1,35 +1,99 @@
-import Link from "next/link";
+"use client";
+
+import { useMutation } from "@apollo/client";
+import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { LiaUserCircle } from "react-icons/lia";
+import { useSetRecoilState } from "recoil";
+import { MutationLogin } from "../../graphql/auth";
+import { StorageTokenKey } from "../../type/enum/auth";
+import { ILoginOutput, ILoginVariable } from "../../type/login";
+import { errorModalSelector } from "../state/common";
 
-export default async function Home() {
+export default function Login() {
+  const [id, setId] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const showErrorModal = useSetRecoilState(errorModalSelector);
+  const [mutate] = useMutation<ILoginOutput, ILoginVariable>(MutationLogin, {
+    onCompleted: (data) => {
+      if (data) {
+        localStorage.setItem(
+          StorageTokenKey.ACCESS_TOKEN,
+          data.login.accessToken,
+        );
+        if (data.login.refreshToken) {
+          localStorage.setItem(
+            StorageTokenKey.REFRESH_TOKEN,
+            data.login.refreshToken,
+          );
+        } else {
+          localStorage.removeItem(StorageTokenKey.REFRESH_TOKEN);
+        }
+      }
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+
+  const onSubmitLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!id || !password) {
+      showErrorModal("아이디와 비밀번호를 정확히 입력해주세요!");
+      return;
+    }
+
+    console.log("hello");
+
+    mutate({
+      variables: { email: id, password: password },
+    });
+  };
+
+  // if (isAdmin()) {
+  //   return <Redirect to={{ pathname: "/" }} />;
+  // }
+
   return (
     <>
       <div className="min-h-screen flex flex-col justify-center pt-8 md:pt-12">
         <div className="px-2 mx-auto md:w-full md:max-w-sm">
           <div className="shadow-gray-200 shadow-md w-full rounded-lg divide-y divide-gray-200">
             <div className="px-5 py-5">
-              {/* <h1 className="font-bold text-center text-2xl mb-4">로그인</h1> */}
-              <label className="font-semibold text-sm text-gray-600 block">
-                이메일
-              </label>
-              <input
-                type="text"
-                className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-              />
-              <label className="font-semibold text-sm text-gray-600 block">
-                비밀번호
-              </label>
-              <input
-                type="text"
-                className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-              />
-              <button
-                type="button"
-                className="transition duration-200 bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block"
-              >
-                <span className="inline-block">로그인</span>
-              </button>
+              <form onSubmit={onSubmitLogin}>
+                {/* <h1 className="font-bold text-center text-2xl mb-4">로그인</h1> */}
+                <label className="font-semibold text-sm text-gray-600 block">
+                  이메일
+                </label>
+                <input
+                  type="text"
+                  id="id"
+                  placeholder="이메일"
+                  className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                />
+                <label className="font-semibold text-sm text-gray-600 block">
+                  비밀번호
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="비밀번호"
+                  className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  className="transition duration-200 bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block"
+                >
+                  <span className="inline-block">로그인</span>
+                </button>
+              </form>
             </div>
             <div className="p-4">
               <div className="grid gap-2">
@@ -49,14 +113,14 @@ export default async function Home() {
                       className="absolute top-2 left-2"
                     >
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M29.85 0h4.3c7.517 0 12.376 1.202 16.598 3.46 4.221 2.258 7.534 5.57 9.792 9.792C62.798 17.474 64 22.332 64 29.85v4.3c0 7.517-1.202 12.376-3.46 16.598-2.258 4.221-5.57 7.534-9.792 9.792C46.526 62.798 41.668 64 34.15 64h-4.3c-7.517 0-12.376-1.202-16.598-3.46-4.221-2.258-7.534-5.57-9.792-9.792C1.202 46.526 0 41.668 0 34.15v-4.3c0-7.517 1.202-12.376 3.46-16.598 2.258-4.221 5.57-7.534 9.792-9.792C17.474 1.202 22.332 0 29.85 0z"
                         fill="#FFE900"
                       ></path>
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M32 15c-9.941 0-18 6.455-18 14.418 0 5.149 3.37 9.666 8.437 12.217-.276.966-1.772 6.214-1.831 6.627 0 0-.036.31.161.428.198.118.43.026.43.026.567-.08 6.567-4.363 7.606-5.106a22.45 22.45 0 003.197.227c9.941 0 18-6.456 18-14.419S41.941 15 32 15z"
                         fill="#000"
                       ></path>
@@ -86,14 +150,14 @@ export default async function Home() {
                         className="absolute top-2 left-2"
                       >
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M29.85 0h4.3c7.517 0 12.376 1.202 16.598 3.46 4.221 2.258 7.534 5.57 9.792 9.792C62.798 17.474 64 22.332 64 29.85v4.3c0 7.517-1.202 12.376-3.46 16.598-2.258 4.221-5.57 7.534-9.792 9.792C46.526 62.798 41.668 64 34.15 64h-4.3c-7.517 0-12.376-1.202-16.598-3.46-4.221-2.258-7.534-5.57-9.792-9.792C1.202 46.526 0 41.668 0 34.15v-4.3c0-7.517 1.202-12.376 3.46-16.598 2.258-4.221 5.57-7.534 9.792-9.792C17.474 1.202 22.332 0 29.85 0z"
                           fill="#00B600"
                         ></path>
                         <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           d="M36.45 18v13.658L27.584 18H18v27.07h9.552V31.412l8.866 13.658H46V18h-9.55z"
                           fill="#fff"
                         ></path>
@@ -132,9 +196,9 @@ export default async function Home() {
                       className="w-4 h-4 inline-block"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
                       />
                     </svg>
@@ -158,17 +222,17 @@ export default async function Home() {
                     className="w-4 h-4 inline-block align-text-top"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M10 19l-7-7m0 0l7-7m-7 7h18"
                     />
                   </svg>
-                  <Link href="/">
+                  <a href="/">
                     <span className="inline-block ml-1">
                       지름알림으로 되돌아가기
                     </span>
-                  </Link>
+                  </a>
                 </button>
               </div>
             </div>
