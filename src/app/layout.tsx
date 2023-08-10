@@ -30,10 +30,8 @@ export default function RootLayout({
     <html lang="ko">
       <GoogleAnalytics GA_TRACKING_ID={GA_TRACKING_ID} />
       <body>
-        <div className="font-mono max-w-screen-lg mx-auto">
-          <NavBar></NavBar>
-          <ApolloWrapper>{children}</ApolloWrapper>
-        </div>
+        <NavBar></NavBar>
+        <ApolloWrapper>{children}</ApolloWrapper>
       </body>
     </html>
   );

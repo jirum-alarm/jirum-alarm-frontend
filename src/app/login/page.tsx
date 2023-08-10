@@ -15,7 +15,7 @@ export default function Login() {
   const [id, setId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const reouter = useRouter();
+  const router = useRouter();
 
   const showErrorModal = useSetRecoilState(errorModalSelector);
   const [mutate] = useMutation<ILoginOutput, ILoginVariable>(MutationLogin, {
@@ -34,11 +34,8 @@ export default function Login() {
           localStorage.removeItem(StorageTokenKey.REFRESH_TOKEN);
         }
 
-        reouter.push("/");
+        router.push("/");
       }
-    },
-    onError: (err) => {
-      console.log(err);
     },
   });
 
@@ -56,10 +53,6 @@ export default function Login() {
       variables: { email: id, password: password },
     });
   };
-
-  // if (isAdmin()) {
-  //   return <Redirect to={{ pathname: "/" }} />;
-  // }
 
   return (
     <>
