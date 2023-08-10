@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const MutationLogin = gql`
   mutation MutationLogin($email: String!, $password: String!) {
@@ -7,24 +7,22 @@ export const MutationLogin = gql`
       refreshToken
     }
   }
-`;
+`
 
 export const QueryLogout = gql`
   query QueryLogout {
     logout
   }
-`;
+`
 
-export const QueryAdminMe = gql`
-  query QueryAdminMe {
-    adminMe {
+export const QueryMe = gql`
+  query QueryMe {
+    me {
       id
       email
-      name
-      createdAt
     }
   }
-`;
+`
 
 export const QueryLoginByRefreshToken = gql`
   query QueryLoginByRefreshToken {
@@ -33,4 +31,4 @@ export const QueryLoginByRefreshToken = gql`
       refreshToken
     }
   }
-`;
+`

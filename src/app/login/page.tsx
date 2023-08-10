@@ -1,56 +1,63 @@
-"use client";
+'use client'
 
-import { useMutation } from "@apollo/client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { LiaUserCircle } from "react-icons/lia";
-import { useSetRecoilState } from "recoil";
-import { MutationLogin } from "../../graphql/auth";
-import { StorageTokenKey } from "../../type/enum/auth";
-import { ILoginOutput, ILoginVariable } from "../../type/login";
-import { errorModalSelector } from "../state/common";
+import { useLazyQuery, useMutation } from '@apollo/client'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { FcGoogle } from 'react-icons/fc'
+import { LiaUserCircle } from 'react-icons/lia'
+import { useSetRecoilState } from 'recoil'
+import { MutationLogin, QueryMe } from '../../graphql/auth'
+import { userState } from '../../state/user'
+import { StorageTokenKey } from '../../type/enum/auth'
+import { ILoginOutput, ILoginVariable } from '../../type/login'
+import { User } from '../../type/user'
+import { errorModalSelector } from '../state/common'
 
 export default function Login() {
-  const [id, setId] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [id, setId] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const setUser = useSetRecoilState(userState)
 
-  const router = useRouter();
+  const [getQuery] = useLazyQuery<{ me: User }>(QueryMe)
 
-  const showErrorModal = useSetRecoilState(errorModalSelector);
+  const router = useRouter()
+
+  const showErrorModal = useSetRecoilState(errorModalSelector)
   const [mutate] = useMutation<ILoginOutput, ILoginVariable>(MutationLogin, {
     onCompleted: (data) => {
       if (data) {
-        localStorage.setItem(
-          StorageTokenKey.ACCESS_TOKEN,
-          data.login.accessToken,
-        );
+        localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, data.login.accessToken)
+
         if (data.login.refreshToken) {
-          localStorage.setItem(
-            StorageTokenKey.REFRESH_TOKEN,
-            data.login.refreshToken,
-          );
+          localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.login.refreshToken)
         } else {
-          localStorage.removeItem(StorageTokenKey.REFRESH_TOKEN);
+          localStorage.removeItem(StorageTokenKey.REFRESH_TOKEN)
         }
 
-        router.push("/");
+        getQuery().then((data) => {
+          console.log(data)
+          if (data.data) {
+            setUser(data.data.me)
+          }
+        })
+
+        // router.push('/')
       }
     },
-  });
+  })
 
   const onSubmitLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!id || !password) {
-      showErrorModal("아이디와 비밀번호를 정확히 입력해주세요!");
-      return;
+      showErrorModal('아이디와 비밀번호를 정확히 입력해주세요!')
+      return
     }
 
     mutate({
       variables: { email: id, password: password },
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -60,9 +67,7 @@ export default function Login() {
             <div className="px-5 py-5">
               <form onSubmit={onSubmitLogin}>
                 {/* <h1 className="font-bold text-center text-2xl mb-4">로그인</h1> */}
-                <label className="font-semibold text-sm text-gray-600 block">
-                  이메일
-                </label>
+                <label className="font-semibold text-sm text-gray-600 block">이메일</label>
                 <input
                   type="text"
                   id="id"
@@ -72,9 +77,7 @@ export default function Login() {
                   value={id}
                   onChange={(e) => setId(e.target.value)}
                 />
-                <label className="font-semibold text-sm text-gray-600 block">
-                  비밀번호
-                </label>
+                <label className="font-semibold text-sm text-gray-600 block">비밀번호</label>
                 <input
                   type="password"
                   id="password"
@@ -99,7 +102,7 @@ export default function Login() {
                   <button
                     type="button"
                     className="h-12 transition duration-200 border border-gray-200 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold relative"
-                    style={{ backgroundColor: "#ffe900" }}
+                    style={{ backgroundColor: '#ffe900' }}
                   >
                     <svg
                       width="32"
@@ -135,7 +138,7 @@ export default function Login() {
                   <button
                     type="button"
                     className="h-12 transition duration-200 border border-gray-200 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold relative"
-                    style={{ backgroundColor: "#00b600", color: "#efefef" }}
+                    style={{ backgroundColor: '#00b600', color: '#efefef' }}
                   >
                     <span>
                       <svg
@@ -179,10 +182,7 @@ export default function Login() {
               <div className="grid grid-cols-2 gap-1">
                 <div className="text-center whitespace-nowrap">
                   <button className="px-8 leading-2 text-center whitespace-nowrap text-sm transition duration-200 px-5 py-2 cursor-pointer font-normal rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
-                    <LiaUserCircle
-                      size="18"
-                      className="inline-block"
-                    ></LiaUserCircle>
+                    <LiaUserCircle size="18" className="inline-block"></LiaUserCircle>
                     <span className="ml-1">회원가입</span>
                   </button>
                   <button className="leading-2 text-sm transition duration-200 px-5 py-2 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
@@ -200,9 +200,7 @@ export default function Login() {
                         d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
                       />
                     </svg>
-                    <span className="inline ml-1">
-                      비밀번호를 잊어버리셨나요?
-                    </span>
+                    <span className="inline ml-1">비밀번호를 잊어버리셨나요?</span>
                   </button>
                 </div>
               </div>
@@ -227,9 +225,7 @@ export default function Login() {
                     />
                   </svg>
                   <a href="/">
-                    <span className="inline-block ml-1">
-                      지름알림으로 되돌아가기
-                    </span>
+                    <span className="inline-block ml-1">지름알림으로 되돌아가기</span>
                   </a>
                 </button>
               </div>
@@ -238,5 +234,5 @@ export default function Login() {
         </div>
       </div>
     </>
-  );
+  )
 }
