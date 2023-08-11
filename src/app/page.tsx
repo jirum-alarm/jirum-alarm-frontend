@@ -4,10 +4,10 @@ import ProductList from '../components/ProductList'
 export default async function Home() {
   return (
     <>
-      <NavBar></NavBar>
       <main>
         <div className="font-mono max-w-screen-lg mx-auto">
           <div className="px-4">
+            <NavBar></NavBar>
             <ProductList />
           </div>
         </div>
