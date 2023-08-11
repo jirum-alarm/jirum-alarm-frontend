@@ -1,28 +1,39 @@
-"use client";
+'use client'
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { StorageTokenKey } from "../../../../type/enum/auth";
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
+import { useSetRecoilState } from 'recoil'
+import { QueryMe } from '../../../../graphql/auth'
+import { userState } from '../../../../state/user'
+import { StorageTokenKey } from '../../../../type/enum/auth'
+import { User } from '../../../../type/user'
 
 export default function OauthLoginSuccess() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const accessToken = searchParams.get("accessToken");
-  const refreshToken = searchParams.get("refreshToken");
+  const setUser = useSetRecoilState(userState)
+
+  const accessToken = searchParams.get('accessToken')
+  const refreshToken = searchParams.get('refreshToken')
+
+  const { data } = useSuspenseQuery<{ me: User }>(QueryMe)
 
   if (accessToken) {
-    localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, accessToken);
+    localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, accessToken)
   }
 
   if (refreshToken) {
-    localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, refreshToken);
+    localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, refreshToken)
   }
 
   useEffect(() => {
-    router.push("/");
-    return;
-  }, []);
+    if (data) {
+      setUser(data.me)
+    }
 
-  return "로그인 진행중...";
+    router.push('/')
+    return
+  }, [])
 }
