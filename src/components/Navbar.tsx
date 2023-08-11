@@ -1,7 +1,17 @@
-import Link from "next/link";
-import { PiBellSimpleBold } from "react-icons/pi";
+'use client'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { PiBellSimpleBold } from 'react-icons/pi'
+import { useRecoilValue } from 'recoil'
+import { userState } from '../state/user'
+import { User } from '../type/user'
 
 export default function NavBar() {
+  const pathname = usePathname()
+  const isLoginPage = pathname === '/login'
+
+  const user = useRecoilValue<User | null>(userState)
+  console.log('user', user)
   return (
     <>
       <div className="pt-8 px-4">
@@ -15,12 +25,20 @@ export default function NavBar() {
           </Link>
 
           <div className="w-3/12 flex justify-end">
-            <Link href="/login">
-              <span className="font-semibold">로그인</span>
-            </Link>
+            {user ? (
+              <>
+                <span className="font-semibold">반갑습니다.</span>
+              </>
+            ) : (
+              !isLoginPage && (
+                <Link href="/login">
+                  <span className="font-semibold">로그인</span>
+                </Link>
+              )
+            )}
           </div>
         </div>
       </div>
     </>
-  );
+  )
 }
