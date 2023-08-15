@@ -184,7 +184,7 @@ export default function Login() {
                     <LiaUserCircle size="18" className="inline-block"></LiaUserCircle>
                     <span className="ml-1">회원가입</span>
                   </button>
-                  <button className="leading-2 text-sm transition duration-200 px-5 py-2 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
+                  {/* <button className="leading-2 text-sm transition duration-200 px-5 py-2 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -200,7 +200,7 @@ export default function Login() {
                       />
                     </svg>
                     <span className="inline ml-1">비밀번호를 잊어버리셨나요?</span>
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
