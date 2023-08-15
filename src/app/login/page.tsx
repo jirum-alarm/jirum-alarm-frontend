@@ -1,12 +1,13 @@
 'use client'
 
-import { useLazyQuery, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { LiaUserCircle } from 'react-icons/lia'
 import { useSetRecoilState } from 'recoil'
 import { MutationLogin, QueryMe } from '../../graphql/auth'
+import { useLazyApiQuery } from '../../hook/useGql'
 import { userState } from '../../state/user'
 import { StorageTokenKey } from '../../type/enum/auth'
 import { ILoginOutput, ILoginVariable } from '../../type/login'
@@ -18,7 +19,7 @@ export default function Login() {
   const [password, setPassword] = useState<string>('')
   const setUser = useSetRecoilState(userState)
 
-  const [getQuery] = useLazyQuery<{ me: User }>(QueryMe)
+  const { getQuery } = useLazyApiQuery<{ me: User }>(QueryMe)
 
   const router = useRouter()
 

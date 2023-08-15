@@ -5,6 +5,7 @@ import { PiBellSimpleBold } from 'react-icons/pi'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../state/user'
 import { User } from '../type/user'
+import LoadState from './LoadState'
 
 export default function NavBar() {
   const pathname = usePathname()
@@ -14,7 +15,7 @@ export default function NavBar() {
 
   return (
     <>
-      {/* <LoadState></LoadState> */}
+      <LoadState></LoadState>
       <div className="pt-8 px-4">
         <div className="flex items-center justify-between">
           <div className="w-3/12"></div>
