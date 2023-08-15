@@ -113,7 +113,10 @@ const Error = (
   return checkError
 }
 
-const useQueryHook = <T, F>(gql: DocumentNode, options: IQueryHookOptions<T, F>) => {
+const useQueryHook = <T, F extends OperationVariables>(
+  gql: DocumentNode,
+  options: IQueryHookOptions<T, F>,
+) => {
   const { error, loading, data, refetch } = useQuery<T, F>(gql, options)
   const checkError = Error(
     options.errorMessage,
@@ -135,7 +138,10 @@ const useQueryHook = <T, F>(gql: DocumentNode, options: IQueryHookOptions<T, F>)
   return { error, loading, data, refetch }
 }
 
-const useLazyQueryHook = <T, F>(gql: DocumentNode, options: ILazyQueryHookOptions<T, F>) => {
+const useLazyQueryHook = <T, F extends OperationVariables>(
+  gql: DocumentNode,
+  options: ILazyQueryHookOptions<T, F>,
+) => {
   const [getQuery, { error, loading, data }] = useLazyQuery<T, F>(gql, options)
 
   const checkError = Error(
@@ -183,7 +189,7 @@ const useMutationHook = <T, F>(gql: DocumentNode, options: IMutationHookOptions<
   return { mutate, data, loading, error }
 }
 
-export const useApiQuery = <T, F = OperationVariables>(
+export const useApiQuery = <T, F extends OperationVariables = OperationVariables>(
   gql: DocumentNode,
   options?: IQueryHookOptions<T, F>,
 ) => {
@@ -194,7 +200,7 @@ export const useApiQuery = <T, F = OperationVariables>(
   })
 }
 
-export const useLazyApiQuery = <T, F = OperationVariables>(
+export const useLazyApiQuery = <T, F extends OperationVariables = OperationVariables>(
   gql: DocumentNode,
   options?: ILazyQueryHookOptions<T, F>,
 ) => {
