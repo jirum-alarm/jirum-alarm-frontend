@@ -33,9 +33,10 @@ export default function Login() {
           localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.login.refreshToken)
         }
 
-        getQuery().then((data) => {
-          if (data.data) {
-            setUser(data.data.me)
+        getQuery().then((result) => {
+          if (result.data) {
+            setUser(result.data.me)
+            localStorage.setItem('me', JSON.stringify(result.data.me))
           }
         })
 
