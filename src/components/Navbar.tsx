@@ -1,11 +1,13 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 import { PiBellSimpleBold } from 'react-icons/pi'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { QueryMe } from '../graphql/auth'
-import { useApiQuery } from '../hook/useGql'
+import { useLazyApiQuery } from '../hook/useGql'
 import { userState } from '../state/user'
+import { StorageTokenKey } from '../type/enum/auth'
 import { User } from '../type/user'
 import LoadState from './LoadState'
 
@@ -15,14 +17,21 @@ export default function NavBar() {
 
   const setUser = useSetRecoilState(userState)
 
-  const { data } = useApiQuery<{ me: User }>(QueryMe)
-
-  if (data) {
-    setUser(data.me)
-    localStorage.setItem('me', JSON.stringify(data.me))
-  }
-
   const user = useRecoilValue<User | null>(userState)
+
+  const { getQuery } = useLazyApiQuery<{ me: User }>(QueryMe)
+
+  useEffect(() => {
+    const token = localStorage.getItem(StorageTokenKey.ACCESS_TOKEN)
+    if (token) {
+      getQuery().then((response) => {
+        if (response.data) {
+          setUser(response.data?.me)
+          localStorage.setItem('me', JSON.stringify(response.data.me))
+        }
+      })
+    }
+  }, [])
 
   return (
     <>
