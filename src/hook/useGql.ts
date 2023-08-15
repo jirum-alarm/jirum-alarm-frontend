@@ -39,11 +39,11 @@ interface IAdditionalArgs {
   isLoading?: boolean
 }
 
-interface IQueryHookOptions<T, F = OperationVariables>
+interface IQueryHookOptions<T, F extends OperationVariables = OperationVariables>
   extends QueryHookOptions<T, F>,
     IAdditionalArgs {}
 
-interface ILazyQueryHookOptions<T, F = OperationVariables>
+interface ILazyQueryHookOptions<T, F extends OperationVariables = OperationVariables>
   extends LazyQueryHookOptions<T, F>,
     IAdditionalArgs {}
 
