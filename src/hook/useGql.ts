@@ -90,8 +90,8 @@ const Error = (
           return
         }
 
-        if (extensions?.response?.message) {
-          message = extensions?.response?.message
+        if (extensions?.response) {
+          message = JSON.stringify(extensions?.response)
         }
 
         if (!message) {
