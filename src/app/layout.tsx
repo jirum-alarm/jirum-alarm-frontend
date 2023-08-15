@@ -28,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ApolloWrapper>{children}</ApolloWrapper>
         </Recoil>
       </body>
+
       <GoogleAnalytics GA_TRACKING_ID={GA_TRACKING_ID} />
     </html>
   )

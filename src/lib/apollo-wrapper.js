@@ -31,10 +31,8 @@ function makeClient() {
   // } else
 
   if (typeof window !== 'undefined') {
-    console.log('여기서 실행..?')
     const authLink = setContext((_, { headers }) => {
       const token = localStorage.getItem(StorageTokenKey.ACCESS_TOKEN)
-      console.log(token)
       return {
         headers: {
           ...headers,

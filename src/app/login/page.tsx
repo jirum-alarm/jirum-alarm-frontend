@@ -30,12 +30,9 @@ export default function Login() {
 
         if (data.login.refreshToken) {
           localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.login.refreshToken)
-        } else {
-          localStorage.removeItem(StorageTokenKey.REFRESH_TOKEN)
         }
 
         getQuery().then((data) => {
-          console.log(data)
           if (data.data) {
             setUser(data.data.me)
           }

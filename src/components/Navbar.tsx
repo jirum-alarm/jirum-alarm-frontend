@@ -11,9 +11,10 @@ export default function NavBar() {
   const isLoginPage = pathname === '/login'
 
   const user = useRecoilValue<User | null>(userState)
-  console.log('user', user)
+
   return (
     <>
+      {/* <LoadState></LoadState> */}
       <div className="pt-8 px-4">
         <div className="flex items-center justify-between">
           <div className="w-3/12"></div>
