@@ -40,7 +40,9 @@ export default function NavBar() {
           <div className="w-3/12 flex justify-end">
             {user ? (
               <>
-                <span className="font-semibold">반갑습니다.</span>
+                <Link href="/logout">
+                  <span className="font-semibold">로그아웃</span>
+                </Link>
               </>
             ) : (
               !isLoginPage && (

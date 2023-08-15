@@ -35,7 +35,6 @@ export default function Login() {
 
         getQuery().then((result) => {
           if (result.data) {
-            console.log('me', JSON.stringify(result.data.me))
             setUser(result.data.me)
             localStorage.setItem('me', JSON.stringify(result.data.me))
           }
