@@ -14,6 +14,7 @@ export default function LoadState() {
 
   useEffect(() => {
     if (data) {
+      console.log(data.me)
       setUser(data.me)
       localStorage.setItem('me', JSON.stringify(data.me))
     }
