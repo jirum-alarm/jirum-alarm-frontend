@@ -2,7 +2,9 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { PiBellSimpleBold } from 'react-icons/pi'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { QueryMe } from '../graphql/auth'
+import { useApiQuery } from '../hook/useGql'
 import { userState } from '../state/user'
 import { User } from '../type/user'
 import LoadState from './LoadState'
@@ -10,6 +12,15 @@ import LoadState from './LoadState'
 export default function NavBar() {
   const pathname = usePathname()
   const isLoginPage = pathname === '/login'
+
+  const setUser = useSetRecoilState(userState)
+
+  const { data } = useApiQuery<{ me: User }>(QueryMe)
+
+  if (data) {
+    setUser(data.me)
+    localStorage.setItem('me', JSON.stringify(data.me))
+  }
 
   const user = useRecoilValue<User | null>(userState)
 
