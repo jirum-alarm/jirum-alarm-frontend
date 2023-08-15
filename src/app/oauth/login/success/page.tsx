@@ -29,6 +29,7 @@ export default function OauthLoginSuccess() {
   }
 
   useEffect(() => {
+    console.log(data)
     if (data) {
       setUser(data.me)
     }
