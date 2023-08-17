@@ -1,0 +1,27 @@
+{
+  "theme_color": "#0056b3",
+  "background_color": "#0056b3",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "지름알림",
+  "short_name": "지름알림",
+  "icons": [
+    {
+      "src": "/images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
