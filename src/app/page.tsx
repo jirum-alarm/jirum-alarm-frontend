@@ -7,7 +7,6 @@ export default async function Home() {
       <main>
         <div className="font-mono max-w-screen-lg mx-auto">
           <div className="px-4">
-            환경: {process.env.ENV}
             <NavBar></NavBar>
             <ProductList />
           </div>
