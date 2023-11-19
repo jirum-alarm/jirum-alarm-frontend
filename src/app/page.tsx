@@ -1,5 +1,5 @@
+import ProductList from '@/components/main/productList/ProductList'
 import NavBar from '../components/Navbar'
-import ProductList from '../components/ProductList'
 
 export default async function Home() {
   return (
