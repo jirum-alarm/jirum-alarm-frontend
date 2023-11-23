@@ -7,20 +7,21 @@ import { useSuspenseQuery } from '@apollo/client'
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useRouter, useSearchParams } from 'next/navigation'
-import CategoryTab from './categoryTab/CategoryTab'
+import CategoryTab from './CategoryTab'
 import { TopButton } from '@/components/TopButton'
 import dynamic from 'next/dynamic'
-const ProductCard = dynamic(() => import('./productCard/ProductCard'), { ssr: false })
+import { IProductsFilterParam } from '@/type/main'
+
+const ProductCard = dynamic(() => import('./ProductCard'), { ssr: false })
 const ProductList = () => {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const limit = 20
   const allCategory = { id: 0, name: '전체' }
   const [inputData, setInputData] = useState<string>('')
   const [keyword, setKeyword] = useState<string>('')
-  const [isMobile, setIsMobile] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState(0)
   const [hasNextData, setHasNextData] = useState(true)
-  const searchParams = useSearchParams()
 
   const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories)
   const {
@@ -30,10 +31,11 @@ const ProductList = () => {
   } = useSuspenseQuery<IProductOutput>(QueryProducts, {
     variables: { limit },
   })
+
   const { ref } = useInView({
     onChange(inView) {
       if (inView && hasNextData) {
-        loadFunc()
+        fetchMoreProducts()
       }
     },
   })
@@ -54,54 +56,41 @@ const ProductList = () => {
     }
     setKeyword(inputData)
   }
+  const handleClose = useCallback(() => {
+    setKeyword(() => '')
+    setInputData(() => '')
+  }, [])
 
-  const loadFunc = () => {
-    const searchAfter = products.products[products.products.length - 1]?.searchAfter
-    // 데이터가 있을 떄만 fetchMore 해준다.
-    if (!products) return
+  const fetchMoreProducts = () => {
+    const searchAfter = products.products.at(-1)?.searchAfter
+    if (!products) {
+      return
+    }
     fetchMore({
       variables: {
         searchAfter,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!prev.products) {
-          return {
-            products: [],
-          }
-        }
-        if (fetchMoreResult.products.length === 0) {
-          return {
-            products: [...prev.products],
-          }
-        }
-        if (fetchMoreResult.products.length < limit) {
+          return { products: [] }
+        } else if (fetchMoreResult.products.length === 0) {
+          return { products: [...prev.products] }
+        } else if (fetchMoreResult.products.length < limit) {
           setHasNextData(false)
         }
-        return {
-          products: [...prev.products, ...fetchMoreResult.products],
-        }
+        return { products: [...prev.products, ...fetchMoreResult.products] }
       },
     })
   }
 
-  const handleClose = useCallback(() => {
-    setKeyword(() => '')
-    setInputData(() => '')
-  }, [])
-
-  const isMobileDevice = () => {
-    const userAgent = window.navigator.userAgent
-    const isMobileDevice = Boolean(
-      userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i),
-    )
-    return isMobileDevice
-  }
   useEffect(() => {
-    setIsMobile(isMobileDevice)
     const categoryParam = searchParams.get('category')
     const keywordParam = searchParams.get('keyword')
-    if (categoriesData) setActiveTab(Number(categoryParam))
-    else setActiveTab(0)
+    if (categoriesData) {
+      setActiveTab(Number(categoryParam))
+    } else {
+      setActiveTab(0)
+    }
     if (keywordParam) {
       setKeyword(keywordParam)
       setInputData(keywordParam)
@@ -115,34 +104,26 @@ const ProductList = () => {
       setHasNextData(false)
     }
   }, [products])
+
   useEffect(() => {
     setHasNextData(true)
-    const params: {
-      keyword?: string
-      categoryId?: number
-      limit: number
-      searchAfter?: undefined
-    } = {
+
+    const params: IProductsFilterParam = {
       limit,
+      keyword: keyword || undefined,
+      categoryId: activeTab || undefined,
+      searchAfter: undefined,
     }
-    if (keyword) {
-      params.keyword = keyword
-    }
-    if (!keyword) {
-      params.keyword = undefined
-    }
-    if (activeTab) {
-      params.categoryId = activeTab
-    }
-    if (!activeTab) {
-      params.categoryId = undefined
-    }
-    params.searchAfter = undefined
-    refetch({ ...params })
-    if (!keyword && !activeTab) router.replace('/')
-    else if (!keyword && activeTab) router.replace(`?category=${activeTab}`)
-    else if (keyword && !activeTab) router.replace(`?keyword=${keyword}`)
-    else router.replace(`?keyword=${keyword}&category=${activeTab}`)
+
+    refetch(params)
+
+    const filteredParams = Object.fromEntries(
+      Object.entries(params).filter(([key, value]) => value !== undefined && key !== 'limit'),
+    )
+    const queryString = new URLSearchParams(filteredParams).toString()
+
+    const route = queryString ? `?${queryString}` : '/'
+    router.replace(route)
   }, [keyword, activeTab])
 
   return (
