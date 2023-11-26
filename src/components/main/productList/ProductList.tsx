@@ -29,7 +29,7 @@ const ProductList = () => {
 
   const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories)
   const {
-    data: products,
+    data: { products },
     refetch,
     fetchMore,
   } = useSuspenseQuery<IProductOutput>(QueryProducts, {
@@ -69,7 +69,7 @@ const ProductList = () => {
   }, [])
 
   const fetchMoreProducts = () => {
-    const searchAfter = products.products.at(-1)?.searchAfter
+    const searchAfter = products.at(-1)?.searchAfter
     if (!products) {
       return
     }
@@ -107,7 +107,7 @@ const ProductList = () => {
   }, [])
 
   useEffect(() => {
-    if (products && products.products.length % limit !== 0) {
+    if (products && products.length % limit !== 0) {
       setHasNextData(false)
     }
   }, [products])
@@ -191,7 +191,7 @@ const ProductList = () => {
       />
 
       <div className="flex mt-11">
-        {products.products.length === 0 ? (
+        {products.length === 0 ? (
           <p>게시글이 없습니다.</p>
         ) : (
           <SwipeableViews
@@ -204,7 +204,7 @@ const ProductList = () => {
                 key={nanoid()}
                 className="item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2"
               >
-                {products.products.map((product) => (
+                {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>

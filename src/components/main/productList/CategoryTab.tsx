@@ -1,15 +1,12 @@
-import { useDevice } from '@/hook/useDevice'
 import { nanoid } from 'nanoid'
 import React from 'react'
-import { Tab, TabList } from 'react-tabs'
 
 interface ICategoryTab {
-  tabData: any
+  tabData: { id: number; name: string }[]
   activeTab: number
   setTab: React.Dispatch<React.SetStateAction<number>>
 }
 const CategoryTab = ({ tabData, activeTab, setTab }: ICategoryTab) => {
-  const { isMobile } = useDevice()
   const handleTabChange = (index: number) => {
     setTab(index)
   }

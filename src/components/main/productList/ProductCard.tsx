@@ -2,6 +2,7 @@
 
 import { IProduct } from '@/graphql/interface'
 import useTimeAgo from '@/lib/use-time-stamp'
+import { useEffect } from 'react'
 
 interface IProductCard {
   product: IProduct
