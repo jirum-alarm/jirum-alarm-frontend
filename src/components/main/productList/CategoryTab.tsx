@@ -12,10 +12,10 @@ const CategoryTab = ({ tabData, activeTab, setTab }: ICategoryTab) => {
     setTab(index)
   }
   return (
-    <TabList className="flex flex-wrap">
+    <div className="flex flex-wrap">
       {tabData.map((item: any) => {
         return (
-          <Tab
+          <div
             key={nanoid()}
             className={
               'flex items-center justify-center p-2 hover:cursor-pointer font-bold hover:font-extrabold' +
@@ -26,10 +26,10 @@ const CategoryTab = ({ tabData, activeTab, setTab }: ICategoryTab) => {
             onClick={() => handleTabChange(Number(item.id))}
           >
             {item.name}
-          </Tab>
+          </div>
         )
       })}
-    </TabList>
+    </div>
   )
 }
 
