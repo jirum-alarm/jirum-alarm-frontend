@@ -7,13 +7,14 @@ import { useSuspenseQuery } from '@apollo/client'
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useRouter, useSearchParams } from 'next/navigation'
-import CategoryTab from './CategoryTab'
 import { TopButton } from '@/components/TopButton'
 import dynamic from 'next/dynamic'
 import { IProductsFilterParam } from '@/type/main'
 import SwipeableViews from 'react-swipeable-views'
 import { useDevice } from '@/hook/useDevice'
-import { nanoid } from 'nanoid'
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+import 'react-tabs/style/react-tabs.css'
+import '../../../style/React_tabs.css'
 
 const ProductCard = dynamic(() => import('./ProductCard'), { ssr: false })
 const ProductList = () => {
@@ -183,37 +184,61 @@ const ProductList = () => {
           </div>
         </div>
       </div>
+      <Tabs
+        className="react-tabs__tab-list"
+        forceRenderTabPanel
+        selectedIndex={activeTab}
+        onSelect={handleTabChange}
+        defaultFocus
+        disableUpDownKeys
+      >
+        <TabList
+          className={`will-change-transform scroll-smooth overflow-x-scroll ${
+            isMobile ? 'whitespace-nowrap' : ''
+          }`}
+        >
+          {[allCategory, ...categoriesData.categories].map((category) => (
+            <Tab
+              key={category.id}
+              className="hover:text-zinc-700 transition duration-200 inline-block p-2 text-zinc-400 font-bold b-0"
+              id={`profile-tab-${category.id}`}
+              data-tabs-target={`#profile-${category.id}`}
+              type="button"
+              role="tab"
+              aria-controls={`profile-${category.id}`}
+            >
+              <button>{category.name}</button>
+            </Tab>
+          ))}
+        </TabList>
 
-      <CategoryTab
-        tabData={[allCategory, ...categoriesData.categories]}
-        activeTab={activeTab}
-        setTab={setActiveTab}
-      />
-
-      <div className="flex mt-11">
-        {products.length === 0 ? (
-          <p>게시글이 없습니다.</p>
-        ) : (
-          <SwipeableViews
-            index={activeTab}
-            onChangeIndex={handleTabChange}
-            animateTransitions={isMobile}
-          >
-            {[allCategory, ...categoriesData.categories].map((category) => (
-              <div
-                key={category.id}
-                className="item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2"
-              >
-                {products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            ))}
-          </SwipeableViews>
-        )}
-      </div>
-      <TopButton />
-      {hasNextData && <div ref={ref} className="h-48 w-full" />}
+        <div className="flex">
+          {products.length === 0 ? (
+            <p>게시글이 없습니다.</p>
+          ) : (
+            <SwipeableViews
+              index={activeTab}
+              onChangeIndex={handleTabChange}
+              animateTransitions={isMobile}
+              className="will-change-transform my-6"
+            >
+              {[allCategory, ...categoriesData.categories].map((category) => (
+                <TabPanel key={category.id}>
+                  <div className="flex">
+                    <div className="item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
+                      {products.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                      ))}
+                    </div>
+                  </div>
+                </TabPanel>
+              ))}
+            </SwipeableViews>
+          )}
+        </div>
+        <TopButton />
+        {hasNextData && <div ref={ref} className="h-48 w-full" />}
+      </Tabs>
     </main>
   )
 }
