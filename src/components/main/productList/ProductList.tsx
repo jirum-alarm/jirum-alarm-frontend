@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic'
 import { IProductsFilterParam } from '@/type/main'
 import SwipeableViews from 'react-swipeable-views'
 import { useDevice } from '@/hook/useDevice'
+import { nanoid } from 'nanoid'
 
 const ProductCard = dynamic(() => import('./ProductCard'), { ssr: false })
 const ProductList = () => {
@@ -198,11 +199,16 @@ const ProductList = () => {
             onChangeIndex={handleTabChange}
             animateTransitions={isMobile}
           >
-            <div className="item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
-              {products.products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            {[allCategory, ...categoriesData.categories].map(() => (
+              <div
+                key={nanoid()}
+                className="item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2"
+              >
+                {products.products.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            ))}
           </SwipeableViews>
         )}
       </div>
