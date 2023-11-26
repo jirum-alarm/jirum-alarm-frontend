@@ -47,7 +47,7 @@ export default function NavBar() {
           </Link>
 
           <div className="w-3/12 flex justify-end">
-            {user ? (
+            {/* {user ? (
               <>
                 <Link href="/logout">
                   <span className="font-semibold">로그아웃</span>
@@ -59,7 +59,7 @@ export default function NavBar() {
                   <span className="font-semibold">로그인</span>
                 </Link>
               )
-            )}
+            )} */}
           </div>
         </div>
       </div>
