@@ -199,9 +199,9 @@ const ProductList = () => {
             onChangeIndex={handleTabChange}
             animateTransitions={isMobile}
           >
-            {[allCategory, ...categoriesData.categories].map(() => (
+            {[allCategory, ...categoriesData.categories].map((category) => (
               <div
-                key={nanoid()}
+                key={category.id}
                 className="item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2"
               >
                 {products.map((product) => (
