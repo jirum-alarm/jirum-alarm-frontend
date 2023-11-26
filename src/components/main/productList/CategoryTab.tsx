@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid'
 import React from 'react'
+import { Tab, TabList } from 'react-tabs'
 
 interface ICategoryTab {
   tabData: any
@@ -11,10 +12,10 @@ const CategoryTab = ({ tabData, activeTab, setTab }: ICategoryTab) => {
     setTab(index)
   }
   return (
-    <div className="flex flex-wrap">
+    <TabList className="flex flex-wrap">
       {tabData.map((item: any) => {
         return (
-          <div
+          <Tab
             key={nanoid()}
             className={
               'flex items-center justify-center p-2 hover:cursor-pointer font-bold hover:font-extrabold' +
@@ -25,10 +26,10 @@ const CategoryTab = ({ tabData, activeTab, setTab }: ICategoryTab) => {
             onClick={() => handleTabChange(Number(item.id))}
           >
             {item.name}
-          </div>
+          </Tab>
         )
       })}
-    </div>
+    </TabList>
   )
 }
 

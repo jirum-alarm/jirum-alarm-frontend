@@ -11,6 +11,8 @@ import CategoryTab from './CategoryTab'
 import { TopButton } from '@/components/TopButton'
 import dynamic from 'next/dynamic'
 import { IProductsFilterParam } from '@/type/main'
+import SwipeableViews from 'react-swipeable-views'
+import { useDevice } from '@/hook/useDevice'
 
 const ProductCard = dynamic(() => import('./ProductCard'), { ssr: false })
 const ProductList = () => {
@@ -22,6 +24,7 @@ const ProductList = () => {
   const [keyword, setKeyword] = useState<string>('')
   const [activeTab, setActiveTab] = useState(0)
   const [hasNextData, setHasNextData] = useState(true)
+  const { isMobile } = useDevice()
 
   const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories)
   const {
@@ -40,6 +43,9 @@ const ProductList = () => {
     },
   })
 
+  const handleTabChange = useCallback((index: number) => {
+    setActiveTab(index)
+  }, [])
   const keywordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputData(event.target.value)
   }
@@ -176,6 +182,7 @@ const ProductList = () => {
           </div>
         </div>
       </div>
+
       <CategoryTab
         tabData={[allCategory, ...categoriesData.categories]}
         activeTab={activeTab}
@@ -186,11 +193,17 @@ const ProductList = () => {
         {products.products.length === 0 ? (
           <p>게시글이 없습니다.</p>
         ) : (
-          <div className="item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
-            {products.products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <SwipeableViews
+            index={activeTab}
+            onChangeIndex={handleTabChange}
+            animateTransitions={isMobile}
+          >
+            <div className="item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
+              {products.products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </SwipeableViews>
         )}
       </div>
       <TopButton />
