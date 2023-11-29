@@ -15,6 +15,7 @@ import { useDevice } from '@/hook/useDevice'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 import '../../../style/React_tabs.css'
+import Default from './Default'
 
 const ProductCard = dynamic(() => import('./ProductCard'), { ssr: false })
 const ProductList = () => {
@@ -59,9 +60,6 @@ const ProductList = () => {
   }
 
   const searchHandler = () => {
-    if (!inputData) {
-      return
-    }
     setKeyword(inputData)
   }
   const handleClose = useCallback(() => {
@@ -213,17 +211,19 @@ const ProductList = () => {
         </TabList>
 
         <div className="flex">
-          {products.length === 0 ? (
-            <p>게시글이 없습니다.</p>
-          ) : (
-            <SwipeableViews
-              index={activeTab}
-              onChangeIndex={handleTabChange}
-              animateTransitions={isMobile}
-              className="will-change-transform my-6"
-            >
-              {[allCategory, ...categoriesData.categories].map((category) => (
-                <TabPanel key={category.id}>
+          <SwipeableViews
+            index={activeTab}
+            onChangeIndex={handleTabChange}
+            animateTransitions={isMobile}
+            className="will-change-transform my-6"
+          >
+            {[allCategory, ...categoriesData.categories].map((category) => (
+              <TabPanel key={category.id}>
+                {products.length === 0 ? (
+                  <div className="flex">
+                    <Default />
+                  </div>
+                ) : (
                   <div className="flex">
                     <div className="item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
                       {products.map((product) => (
@@ -231,13 +231,13 @@ const ProductList = () => {
                       ))}
                     </div>
                   </div>
-                </TabPanel>
-              ))}
-            </SwipeableViews>
-          )}
+                )}
+              </TabPanel>
+            ))}
+          </SwipeableViews>
         </div>
         <TopButton />
-        {hasNextData && <div ref={ref} className="h-48 w-full" />}
+        {hasNextData && <div ref={ref} className="h-[48px] w-full" />}
       </Tabs>
     </main>
   )
