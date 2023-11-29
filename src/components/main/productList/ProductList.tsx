@@ -15,7 +15,7 @@ import { useDevice } from '@/hook/useDevice'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 import '../../../style/React_tabs.css'
-import Default from './Default'
+import ProductNotFound from './ProductNotFound'
 
 const ProductCard = dynamic(() => import('./ProductCard'), { ssr: false })
 const ProductList = () => {
@@ -221,7 +221,7 @@ const ProductList = () => {
               <TabPanel key={category.id}>
                 {products.length === 0 ? (
                   <div className="flex">
-                    <Default />
+                    <ProductNotFound />
                   </div>
                 ) : (
                   <div className="flex">
