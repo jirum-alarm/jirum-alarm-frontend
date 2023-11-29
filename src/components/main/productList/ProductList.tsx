@@ -90,7 +90,7 @@ const ProductList = () => {
   }
 
   useEffect(() => {
-    const categoryParam = searchParams.get('category')
+    const categoryParam = searchParams.get('categoryId')
     const keywordParam = searchParams.get('keyword')
     if (categoriesData) {
       setActiveTab(Number(categoryParam))
@@ -158,7 +158,7 @@ const ProductList = () => {
             onChange={keywordHandler}
             value={inputData}
             spellCheck={false}
-            placeholder="키워드 검색"
+            placeholder="최근에 구매하고 싶은 제품이 있으셨나요?"
           />
 
           <div
