@@ -14,7 +14,8 @@ const AppProvider = ({ children }: PropsWithChildren) => {
         <StyledComponentsRegistry>
           <ThemeProvider theme={theme}>
             <S.Root id="root">
-              <S.App id="app">{children}</S.App>
+              {children}
+              {/* <S.App id="app">{children}</S.App> */}
             </S.Root>
           </ThemeProvider>
         </StyledComponentsRegistry>
