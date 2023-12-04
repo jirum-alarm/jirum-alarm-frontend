@@ -33,8 +33,14 @@ export const CloseBtn = styled.button`
   right: 18px;
 `
 export const PolicyIndex = styled.section`
-  ${({ theme }) => theme.fonts.Regular_14}
-  color: ${({ theme }) => theme.colors.gray_600}
+  ${({ theme }) => theme.fonts.Regular_14};
+  color: ${({ theme }) => theme.colors.gray_600};
+  > ol {
+    width: fit-content;
+  }
+  > ol > a {
+    width: fit-content;
+  }
 `
 export const PolicyContent = styled.section`
   display: flex;

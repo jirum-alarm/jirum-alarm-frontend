@@ -5,14 +5,13 @@ import { Link } from 'react-scroll'
 import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/constant/policy'
 import { nanoid } from 'nanoid'
 import * as S from './Policy.styled'
-import { useRouter } from 'next/navigation'
+import { goBackHandler } from '@/util/common'
 const PrivacyPolicy = () => {
-  const router = useRouter()
   return (
     <S.PolicyWrapper>
       <S.PolicyHeader>
         <h1>개인정보 처리방침</h1>
-        <S.CloseBtn onClick={() => router.back()}>
+        <S.CloseBtn onClick={goBackHandler}>
           <CloseIcon />
         </S.CloseBtn>
       </S.PolicyHeader>
