@@ -39,6 +39,7 @@ export const PolicyIndex = styled.section`
     width: fit-content;
   }
   > ol > a {
+    cursor: pointer;
     width: fit-content;
   }
 `
