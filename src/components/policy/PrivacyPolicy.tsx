@@ -25,7 +25,7 @@ const PrivacyPolicy = () => {
           <ol>
             {PRIVACY_INDEX_DATA.map((data) => (
               <Link to={String(data.idx)} spy={true} smooth={true} key={nanoid()}>
-                <li style={{ textDecoration: 'underline', cursor: 'pointer' }}>{data.text}</li>
+                <S.PolicyList>{data.text}</S.PolicyList>
               </Link>
             ))}
           </ol>

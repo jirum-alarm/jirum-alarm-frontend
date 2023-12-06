@@ -1,6 +1,6 @@
-import { css } from 'styled-components';
+import { css } from 'styled-components'
 
-export const fonts = {
+export const font = {
   s_Bold_24: () => css`
     font-family: 'Pretendard-SemiBold';
     font-size: 24px;
@@ -44,6 +44,6 @@ export const fonts = {
     font-weight: 400;
     line-height: 16px;
   `,
-} as const;
+} as const
 
-export type FontType = typeof fonts;
+export type FontType = typeof font

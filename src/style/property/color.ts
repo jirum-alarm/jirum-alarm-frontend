@@ -1,4 +1,4 @@
-export const colors = {
+export const color = {
   white: '#FFFFFF',
   black: '#000000',
   error: '#FF0000',
@@ -27,6 +27,6 @@ export const colors = {
   main_50: '#F5FDEA',
 
   dim: 'rgba(0,0,0,0.6)',
-} as const;
+} as const
 
-export type ColorType = typeof colors;
+export type ColorType = typeof color
