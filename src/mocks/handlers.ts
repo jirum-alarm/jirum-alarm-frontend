@@ -7,7 +7,7 @@ const QueryProducts = graphql.query('QueryProducts', ({ query }) => {
     mallid: null,
     url: 'https://coolenjoy.net/bbs/jirum/2573340',
     providerid: 2,
-    provider: { namekr: '쿨앤조이' },
+    provider: { nameKr: '쿨앤조이' },
     searchafter: ['39004'],
     postedAt: '2023-12-11t15:58:25.000z',
   }
