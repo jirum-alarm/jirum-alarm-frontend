@@ -8,7 +8,21 @@ const withPWA = require('next-pwa')({
 })
 
 const nextConfig = withPWA({
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'msw/browser': false,
+      }
+    }
+
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'msw/node': false,
+      }
+    }
+
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],

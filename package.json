@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:mock": "API_MOCKING='enable' next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -47,6 +48,7 @@
     "@types/react-swipeable-views": "^0.13.2",
     "@types/react-tabs": "^5.0.5",
     "autoprefixer": "^10.4.14",
+    "msw": "^2.0.11",
     "next-pwa": "^5.6.0",
     "postcss": "^8.4.24",
     "prettier": "3.0.1",
@@ -55,5 +57,8 @@
   "engines": {
     "node": "18.17.0"
   },
-  "packageManager": "^pnpm@8.12.0"
+  "packageManager": "^pnpm@8.12.0",
+  "msw": {
+    "workerDirectory": "public"
+  }
 }
