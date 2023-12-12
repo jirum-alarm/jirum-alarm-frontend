@@ -2,9 +2,9 @@ import './globals.css'
 
 import { Metadata } from 'next'
 import { GA_TRACKING_ID } from '../common/constant'
-import Recoil from '../components/Recoil'
-import { ApolloWrapper } from '../lib/apollo-wrapper'
 import GoogleAnalytics from './GoogleAnalitics'
+import Script from 'next/script'
+import AppProvider from '@/lib/provider/appProvier'
 
 export const metadata: Metadata = {
   title: '지름알림: 핫딜 정보 모아보기',
@@ -25,11 +25,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko">
       <head>
         <link rel="manifest" href="/manifest.json" />
+        <Script
+          src="https://t1.kakaocdn.net/kakao_js_sdk/2.4.0/kakao.min.js"
+          integrity="sha384-mXVrIX2T/Kszp6Z0aEWaA8Nm7J6/ZeWXbL8UpGRjKwWe56Srd/iyNmWMBhcItAjH"
+          crossOrigin="anonymous"
+        ></Script>
       </head>
       <body>
-        <Recoil>
-          <ApolloWrapper>{children}</ApolloWrapper>
-        </Recoil>
+        <AppProvider>{children}</AppProvider>
       </body>
 
       <GoogleAnalytics GA_TRACKING_ID={GA_TRACKING_ID} />
