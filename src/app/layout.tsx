@@ -1,8 +1,8 @@
-import './globals.css'
+import '../styles/globals.css'
 
 import { Metadata } from 'next'
-import { GA_TRACKING_ID } from '../common/constant'
-import GoogleAnalytics from './GoogleAnalitics'
+import { GA_TRACKING_ID } from '@/constants/ga'
+import GoogleAnalytics from '../components/GoogleAnalitics'
 import Script from 'next/script'
 import AppProvider from '@/lib/provider/appProvier'
 

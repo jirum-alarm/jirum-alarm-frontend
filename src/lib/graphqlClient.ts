@@ -2,10 +2,10 @@ import { ApolloClient, createHttpLink, from, fromPromise, InMemoryCache } from '
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 
-import { GRAPHQL_ENDPOINT } from '../common/constant'
+import { GRAPHQL_ENDPOINT } from '../constants/graphql'
 
-import { StorageTokenKey } from '../type/enum/auth'
-import { ApiType } from '../type/enum/common'
+import { StorageTokenKey } from '../types/enum/auth'
+import { ApiType } from '../types/enum/common'
 import { getAccessToken, isAccessTokenExpired, isRefreshTokenExpired } from './auth'
 
 const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {

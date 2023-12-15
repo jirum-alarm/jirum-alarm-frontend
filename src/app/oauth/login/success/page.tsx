@@ -4,10 +4,10 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { QueryMe } from '../../../../graphql/auth'
-import { useApiQuery } from '../../../../hook/useGql'
+import { useApiQuery } from '../../../../hooks/useGql'
 import { userState } from '../../../../state/user'
-import { StorageTokenKey } from '../../../../type/enum/auth'
-import { User } from '../../../../type/user'
+import { StorageTokenKey } from '../../../../types/enum/auth'
+import { User } from '../../../../types/user'
 
 export default function OauthLoginSuccess() {
   const router = useRouter()
