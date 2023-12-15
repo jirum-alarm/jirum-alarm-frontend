@@ -1,3 +1,4 @@
+import { warn } from 'console'
 import { HttpResponse, graphql } from 'msw'
 
 const QueryProducts = graphql.query('QueryProducts', () => {
@@ -96,7 +97,7 @@ const QueryMe = graphql.query('QueryMe', () => {
 
 // This funciton should be add handlers to last, if not can't mock apis
 const Operation = graphql.operation(({ query, variables }) => {
-  console.warn('[MSW] unhandled api found', query, variables)
+  console.warn('[MSW] unhandled api found ', query, variables)
 
   return HttpResponse.json({ errors: [{ message: 'Request failed' }] })
 })
