@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { userState } from '../../state/user'
-import { StorageTokenKey } from '../../type/enum/auth'
+import { StorageTokenKey } from '../../types/enum/auth'
 
 export default function Logout() {
   const router = useRouter()

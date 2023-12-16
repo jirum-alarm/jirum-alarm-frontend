@@ -2,10 +2,10 @@ import * as jwt from 'jsonwebtoken'
 
 import { QueryLoginByRefreshToken } from '../graphql/auth'
 
-import { IRefreshToken, IToken } from '../type/auth'
-import { StorageTokenKey } from '../type/enum/auth'
-import { ApiType } from '../type/enum/common'
-import { ILoginByRefreshTokenOutput } from '../type/login'
+import { IRefreshToken, IToken } from '../types/auth'
+import { StorageTokenKey } from '../types/enum/auth'
+import { ApiType } from '../types/enum/common'
+import { ILoginByRefreshTokenOutput } from '../types/login'
 import { client } from './graphqlClient'
 
 export const isAdmin = () => {

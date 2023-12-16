@@ -5,10 +5,10 @@ import { useEffect } from 'react'
 import { PiBellSimpleBold } from 'react-icons/pi'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { QueryMe } from '../graphql/auth'
-import { useLazyApiQuery } from '../hook/useGql'
+import { useLazyApiQuery } from '../hooks/useGql'
 import { userState } from '../state/user'
-import { StorageTokenKey } from '../type/enum/auth'
-import { User } from '../type/user'
+import { StorageTokenKey } from '../types/enum/auth'
+import { User } from '../types/user'
 import LoadState from './LoadState'
 
 export default function NavBar() {

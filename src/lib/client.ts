@@ -3,8 +3,8 @@
 import { ApolloClient, InMemoryCache, createHttpLink, from } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { registerApolloClient } from '@apollo/experimental-nextjs-app-support/rsc'
-import { GRAPHQL_ENDPOINT } from '../common/constant'
-import { StorageTokenKey } from '../type/enum/auth'
+import { GRAPHQL_ENDPOINT } from '../constants/graphql'
+import { StorageTokenKey } from '../types/enum/auth'
 
 export const { getClient } = registerApolloClient(() => {
   const authLink = setContext((_, { headers }) => {
