@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:mock": "API_MOCKING='enable' next dev",
+    "dev:mock": "NEXT_PUBLIC_API_MOCKING=enable next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
