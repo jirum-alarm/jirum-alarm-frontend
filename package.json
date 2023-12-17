@@ -43,6 +43,7 @@
     "typescript": "5.1.3"
   },
   "devDependencies": {
+    "@svgr/cli": "^8.1.0",
     "@types/gtag.js": "^0.0.12",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/react-swipeable-views": "^0.13.2",
