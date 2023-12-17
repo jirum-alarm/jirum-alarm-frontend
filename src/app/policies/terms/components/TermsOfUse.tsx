@@ -1,5 +1,5 @@
 'use client'
-import { CloseIcon } from '@/assets'
+import { Close } from '@/components/common/icons'
 import React from 'react'
 import * as S from '../../styles/Policy.styled'
 import { Link } from 'react-scroll'
@@ -13,7 +13,7 @@ const TermsOfUse = () => {
       <S.PolicyHeader>
         <h1>서비스 이용약관</h1>
         <S.CloseBtn onClick={goBackHandler}>
-          <CloseIcon />
+          <Close />
         </S.CloseBtn>
       </S.PolicyHeader>
       <S.PolicyBody>

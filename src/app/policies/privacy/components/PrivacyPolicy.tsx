@@ -1,5 +1,5 @@
 'use client'
-import { CloseIcon } from '@/assets'
+import { Close } from '@/components/common/icons'
 import React from 'react'
 import { Link } from 'react-scroll'
 import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/constants/policy'
@@ -12,7 +12,7 @@ const PrivacyPolicy = () => {
       <S.PolicyHeader>
         <h1>개인정보 처리방침</h1>
         <S.CloseBtn onClick={goBackHandler}>
-          <CloseIcon />
+          <Close />
         </S.CloseBtn>
       </S.PolicyHeader>
       <S.PolicyBody>

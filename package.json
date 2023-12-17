@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:mock": "NEXT_PUBLIC_API_MOCKING=enable next dev",
+    "generate:svg-component": "npx @svgr/cli --out-dir src/components/common/icons --typescript  -- public/assets",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
