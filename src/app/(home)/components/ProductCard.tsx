@@ -14,7 +14,7 @@ export const ProductCard = (props: IProductCard) => {
     <div className="transition duration-200 border hover:shadow-md rounded-md border border-gray-300 shadow">
       <a href={product.url} target="_blank" rel="noopener noreferrer">
         <div className="h-full">
-          <div className="flex bg-blue-300 px-5 py-2 text-sm justify-between">
+          <div className="flex bg-primary-100 px-5 py-2 text-sm justify-between">
             <h2 className="font-bold">{product.provider.nameKr}</h2>
             <h4>{product.category}</h4>
           </div>
