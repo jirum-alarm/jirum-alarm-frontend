@@ -215,7 +215,7 @@ const ProductList = () => {
                 isMobile ? 'whitespace-nowrap' : ''
               }`}
             >
-              {[allCategory, ...categoriesData.categories].map((category) => (
+              {[allCategory].concat(categoriesData.categories).map((category) => (
                 <Tab
                   key={category.id}
                   className="hover:text-zinc-700 transition duration-200 inline-block p-2 text-zinc-400 font-bold b-0"
@@ -237,7 +237,7 @@ const ProductList = () => {
                 animateTransitions={isMobile}
                 className="will-change-transform my-6"
               >
-                {[allCategory, ...categoriesData.categories].map((category) => (
+                {[allCategory].concat(categoriesData.categories).map((category) => (
                   <TabPanel key={category.id}>
                     {products.length === 0 ? (
                       <div className="flex min-h-[500px]">
