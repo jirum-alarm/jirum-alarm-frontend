@@ -22,7 +22,7 @@ const PrivacyPolicy = () => {
         <S.PolicyIndex>
           <p>목차</p>
           <ol>
-            {PRIVACY_INDEX_DATA.map((data, i) => (
+            {PRIVACY_INDEX_DATA.map((data) => (
               <Link to={String(data.idx)} spy={true} smooth={true} key={data.idx}>
                 <li style={{ textDecoration: 'underline', cursor: 'pointer' }}>{data.text}</li>
               </Link>
