@@ -32,7 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         ></Script>
       </head>
       <body>
-        <AppProvider>{children}</AppProvider>
+        <AppProvider>
+          <div className="min-w-[320px] bg-white relative">{children}</div>
+        </AppProvider>
       </body>
 
       <GoogleAnalytics GA_TRACKING_ID={GA_TRACKING_ID} />
