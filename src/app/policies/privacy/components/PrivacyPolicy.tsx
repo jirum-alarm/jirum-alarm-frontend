@@ -3,7 +3,6 @@ import { Close } from '@/components/common/icons'
 import React from 'react'
 import { Link } from 'react-scroll'
 import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/constants/policy'
-import { nanoid } from 'nanoid'
 import * as S from '../../styles/Policy.styled'
 import { goBackHandler } from '@/util/common'
 const PrivacyPolicy = () => {
@@ -23,8 +22,8 @@ const PrivacyPolicy = () => {
         <S.PolicyIndex>
           <p>목차</p>
           <ol>
-            {PRIVACY_INDEX_DATA.map((data) => (
-              <Link to={String(data.idx)} spy={true} smooth={true} key={nanoid()}>
+            {PRIVACY_INDEX_DATA.map((data, i) => (
+              <Link to={String(data.idx)} spy={true} smooth={true} key={data.idx}>
                 <li style={{ textDecoration: 'underline', cursor: 'pointer' }}>{data.text}</li>
               </Link>
             ))}
@@ -32,12 +31,12 @@ const PrivacyPolicy = () => {
         </S.PolicyIndex>
         <S.PolicyContent>
           {PRIVACY_CONTENT_DATA.map((data) => (
-            <S.PolicyContentItem key={nanoid()} id={String(data.idx)}>
+            <S.PolicyContentItem key={data.idx} id={String(data.idx)}>
               <h2>{data.title}</h2>
               <div>
                 {data.content.map((content) => (
                   <p
-                    key={nanoid()}
+                    key={data.idx}
                     dangerouslySetInnerHTML={{ __html: content.text.replace(/\n/g, '<br/>') }}
                   ></p>
                 ))}
