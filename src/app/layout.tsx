@@ -5,6 +5,7 @@ import { GA_TRACKING_ID } from '@/constants/ga'
 import GoogleAnalytics from '../components/GoogleAnalitics'
 import Script from 'next/script'
 import AppProvider from '@/lib/provider/appProvier'
+import { pretendard } from '@/lib/fonts'
 
 export const metadata: Metadata = {
   title: '지름알림: 핫딜 정보 모아보기',
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={pretendard.className}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <Script
