@@ -4,11 +4,12 @@ import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import { PiBellSimpleBold } from 'react-icons/pi'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { Logo } from '@/components/common/icons'
 import { QueryMe } from '../graphql/auth'
-import { useLazyApiQuery } from '../hook/useGql'
+import { useLazyApiQuery } from '../hooks/useGql'
 import { userState } from '../state/user'
-import { StorageTokenKey } from '../type/enum/auth'
-import { User } from '../type/user'
+import { StorageTokenKey } from '../types/enum/auth'
+import { User } from '../types/user'
 import LoadState from './LoadState'
 
 export default function NavBar() {
@@ -38,12 +39,12 @@ export default function NavBar() {
       <LoadState></LoadState>
       <div className="pt-8 px-4">
         <div className="flex items-center justify-between">
-          <div className="w-3/12"></div>
+          <div className="w-3/12" />
           <Link href="/">
-            <h1 className="text-center flex center text-3xl">
-              지름알림
-              <PiBellSimpleBold className="w-8 h-8 text-yellow-500" />
-            </h1>
+            <div className="grid grid-flow-col gap-x-3 items-center">
+              <Logo />
+              <h1 className="text-center flex center text-3xl">지름알림</h1>
+            </div>
           </Link>
 
           <div className="w-3/12 flex justify-end">

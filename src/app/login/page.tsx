@@ -7,12 +7,12 @@ import { FcGoogle } from 'react-icons/fc'
 import { LiaUserCircle } from 'react-icons/lia'
 import { useSetRecoilState } from 'recoil'
 import { MutationLogin, QueryMe } from '../../graphql/auth'
-import { useLazyApiQuery } from '../../hook/useGql'
+import { useLazyApiQuery } from '../../hooks/useGql'
 import { userState } from '../../state/user'
-import { StorageTokenKey } from '../../type/enum/auth'
-import { ILoginOutput, ILoginVariable } from '../../type/login'
-import { User } from '../../type/user'
-import { errorModalSelector } from '../state/common'
+import { StorageTokenKey } from '../../types/enum/auth'
+import { ILoginOutput, ILoginVariable } from '../../types/login'
+import { User } from '../../types/user'
+import { errorModalSelector } from '../../state/common'
 
 export default function Login() {
   const [id, setId] = useState<string>('')

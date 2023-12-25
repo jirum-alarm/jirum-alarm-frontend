@@ -6,8 +6,13 @@ import { ThemeProvider } from 'styled-components'
 import { theme } from '@/style/theme'
 import { ApolloSetting } from './apollo'
 import RecoilSetting from './recoil'
+import initMocks from '@/mocks'
 
 const AppProvider = ({ children }: PropsWithChildren) => {
+  if (process.env.NEXT_PUBLIC_API_MOCKING === 'enable') {
+    initMocks()
+  }
+
   return (
     <RecoilSetting>
       <ApolloSetting>

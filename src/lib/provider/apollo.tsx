@@ -6,8 +6,8 @@ import {
   NextSSRInMemoryCache,
 } from '@apollo/experimental-nextjs-app-support/ssr'
 
-import { GRAPHQL_ENDPOINT } from '@/common/constant'
-import { StorageTokenKey } from '@/type/enum/auth'
+import { GRAPHQL_ENDPOINT } from '@/constants/graphql'
+import { StorageTokenKey } from '@/types/enum/auth'
 import { ReactNode } from 'react'
 
 function makeClient() {

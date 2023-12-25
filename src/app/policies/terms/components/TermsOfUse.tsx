@@ -1,18 +1,19 @@
 'use client'
-import { CloseIcon } from '@/assets'
+import { Close } from '@/components/common/icons'
 import React from 'react'
+import * as S from '../../styles/Policy.styled'
 import { Link } from 'react-scroll'
-import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/constant/policy'
+import { TERMS_CONTENT_DATA, TERMS_INDEX_DATA } from '@/constants/policy'
 import { nanoid } from 'nanoid'
-import * as S from './Policy.styled'
 import { goBackHandler } from '@/util/common'
-const PrivacyPolicy = () => {
+
+const TermsOfUse = () => {
   return (
     <S.PolicyWrapper>
       <S.PolicyHeader>
-        <h1>개인정보 처리방침</h1>
+        <h1>서비스 이용약관</h1>
         <S.CloseBtn onClick={goBackHandler}>
-          <CloseIcon />
+          <Close />
         </S.CloseBtn>
       </S.PolicyHeader>
       <S.PolicyBody>
@@ -23,7 +24,7 @@ const PrivacyPolicy = () => {
         <S.PolicyIndex>
           <p>목차</p>
           <ol>
-            {PRIVACY_INDEX_DATA.map((data) => (
+            {TERMS_INDEX_DATA.map((data) => (
               <Link to={String(data.idx)} spy={true} smooth={true} key={nanoid()}>
                 <S.PolicyList>{data.text}</S.PolicyList>
               </Link>
@@ -31,7 +32,7 @@ const PrivacyPolicy = () => {
           </ol>
         </S.PolicyIndex>
         <S.PolicyContent>
-          {PRIVACY_CONTENT_DATA.map((data) => (
+          {TERMS_CONTENT_DATA.map((data) => (
             <S.PolicyContentItem key={nanoid()} id={String(data.idx)}>
               <h2>{data.title}</h2>
               <div>
@@ -50,4 +51,4 @@ const PrivacyPolicy = () => {
   )
 }
 
-export default PrivacyPolicy
+export default TermsOfUse

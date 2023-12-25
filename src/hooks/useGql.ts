@@ -16,10 +16,10 @@ import {
 import { MutationFetchPolicy } from '@apollo/client/core/watchQueryOptions'
 import { useSetRecoilState } from 'recoil'
 
-import { errorModalSelector, loadingAtom } from '../app/state/common'
+import { errorModalSelector, loadingAtom } from '../state/common'
 
 import { isAccessTokenExpired } from '../lib/auth'
-import { ApiType } from '../type/enum/common'
+import { ApiType } from '../types/enum/common'
 
 interface IQueryDefaultOption {
   fetchPolicy: FetchPolicy

@@ -3,9 +3,9 @@
 import { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { QueryMe } from '../graphql/auth'
-import { useApiQuery } from '../hook/useGql'
+import { useApiQuery } from '../hooks/useGql'
 import { userState } from '../state/user'
-import { User } from '../type/user'
+import { User } from '../types/user'
 
 export default function LoadState() {
   const setUser = useSetRecoilState(userState)
