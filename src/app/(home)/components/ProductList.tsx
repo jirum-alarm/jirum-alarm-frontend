@@ -14,7 +14,7 @@ import SwipeableViews from 'react-swipeable-views'
 import { useDevice } from '@/hooks/useDevice'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
-import '../../../styles/React_tabs.css'
+import '../../../style/React_tabs.css'
 import ProductNotFound from './ProductNotFound'
 import ProductLoading from './ProductLoading'
 

@@ -18,7 +18,7 @@ export const PolicyHeader = styled.div`
   top: 0px;
   background-color: white;
   > h1 {
-    ${({ theme }) => theme.fonts.s_Bold_16}
+    ${({ theme }) => theme.font.s_Bold_16}
   }
 `
 export const PolicyBody = styled.div`
@@ -33,8 +33,8 @@ export const CloseBtn = styled.button`
   right: 18px;
 `
 export const PolicyIndex = styled.section`
-  ${({ theme }) => theme.fonts.Regular_14};
-  color: ${({ theme }) => theme.colors.gray_600};
+  ${({ theme }) => theme.font.Regular_14};
+  color: ${({ theme }) => theme.color.gray_600};
   > ol {
     width: fit-content;
   }
@@ -49,10 +49,10 @@ export const PolicyContent = styled.section`
   gap: 24px;
 `
 export const PolicyContentItem = styled.div`
-  color: ${({ theme }) => theme.colors.gray_900};
+  color: ${({ theme }) => theme.color.gray_900};
   > h2 {
     margin-bottom: 12px;
-    ${({ theme }) => theme.fonts.s_Bold_16}
+    ${({ theme }) => theme.font.s_Bold_16}
   }
   > div {
     display: flex;
@@ -60,7 +60,7 @@ export const PolicyContentItem = styled.div`
     gap: 20px;
   }
   > p {
-    ${({ theme }) => theme.fonts.Regular_14}
+    ${({ theme }) => theme.font.Regular_14}
   }
 `
 export const PolicyDate = styled.div`
@@ -68,6 +68,10 @@ export const PolicyDate = styled.div`
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  ${({ theme }) => theme.fonts.Regular_13}
-  color: ${({ theme }) => theme.colors.gray_500}
+  ${({ theme }) => theme.font.Regular_13};
+  color: ${({ theme }) => theme.color.gray_500};
+`
+export const PolicyList = styled.li`
+  text-decoration: underline;
+  cursor: pointer;
 `
