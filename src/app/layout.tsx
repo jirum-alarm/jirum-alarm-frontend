@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import '@/style/globals.css'
 
 import { Metadata } from 'next'
 import { GA_TRACKING_ID } from '@/constants/ga'
