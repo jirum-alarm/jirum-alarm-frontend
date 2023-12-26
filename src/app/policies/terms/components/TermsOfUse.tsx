@@ -4,7 +4,6 @@ import React from 'react'
 import * as S from '../../styles/Policy.styled'
 import { Link } from 'react-scroll'
 import { TERMS_CONTENT_DATA, TERMS_INDEX_DATA } from '@/constants/policy'
-import { nanoid } from 'nanoid'
 import { goBackHandler } from '@/util/common'
 
 const TermsOfUse = () => {
@@ -25,20 +24,20 @@ const TermsOfUse = () => {
           <p>목차</p>
           <ol>
             {TERMS_INDEX_DATA.map((data) => (
-              <Link to={String(data.idx)} spy={true} smooth={true} key={nanoid()}>
-                <S.PolicyList>{data.text}</S.PolicyList>
+              <Link to={String(data.idx)} spy={true} smooth={true} key={data.idx}>
+                <li style={{ textDecoration: 'underline' }}>{data.text}</li>
               </Link>
             ))}
           </ol>
         </S.PolicyIndex>
         <S.PolicyContent>
           {TERMS_CONTENT_DATA.map((data) => (
-            <S.PolicyContentItem key={nanoid()} id={String(data.idx)}>
+            <S.PolicyContentItem key={data.idx} id={String(data.idx)}>
               <h2>{data.title}</h2>
               <div>
                 {data.content.map((content) => (
                   <p
-                    key={nanoid()}
+                    key={data.idx}
                     dangerouslySetInnerHTML={{ __html: content.text.replace(/\n/g, '<br/>') }}
                   ></p>
                 ))}
