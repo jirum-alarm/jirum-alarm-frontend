@@ -105,11 +105,7 @@ export const InputExperimental = React.forwardRef<HTMLInputElement, InputExperim
         <input
           {...rest}
           ref={ref}
-          className={cn(
-            inputVariant({ variant, size, color }),
-
-            icon && 'pr-10',
-          )}
+          className={cn(inputVariant({ variant, size, color }), icon && 'pr-10')}
         />
         {error && <span className={cn(errorVariant({ size, error: !!error }))}>{error}</span>}
       </div>
