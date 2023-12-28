@@ -7,7 +7,7 @@ module.exports = {
       colors: {
         white: '#FFFFFF',
         black: '#000000',
-        error: '#FF0000',
+        error: '#EB001C',
         link: '#587DFF',
         primary: {
           50: '#F5FDEA',
