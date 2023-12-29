@@ -1,4 +1,6 @@
+export { default as ArrowDown } from './ArrowDown'
 export { default as ArrowLeft } from './ArrowLeft'
+export { default as ArrowUp } from './ArrowUp'
 export { default as Cancel } from './Cancel'
-export { default as Close } from './Close'
 export { default as Logo } from './Logo'
+export { default as Close } from './Close'

@@ -34,6 +34,23 @@ module.exports = {
           900: '#101828',
         },
       },
+      boxShadow: {
+        small: '0px 2px 12px 0px rgba(0, 0, 0, 0.08)',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
+        fadeOut: {
+          '0%': { opacity: 1 },
+          '100%': { opacity: 0 },
+        },
+      },
+      animation: {
+        'fade-in': 'fadeIn .3s ease-in-out',
+        'fade-out': 'fadeOut .3s ease-in-out',
+      },
     },
     minHeight: {
       0: '0',
