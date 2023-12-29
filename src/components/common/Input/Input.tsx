@@ -1,7 +1,7 @@
 import React from 'react'
 import { input } from './theme/input'
 import { clsx } from 'clsx'
-import { objectsToString } from '../../../util/object'
+import { objectsToString } from '@/util/object'
 
 interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   variant?: 'standard'
@@ -64,3 +64,5 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     )
   },
 )
+
+Input.displayName = 'Input'
