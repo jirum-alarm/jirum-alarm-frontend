@@ -49,6 +49,7 @@ export const inputVariant = cva(
         black: ['text-gray-900', 'border-gray-400', 'focus:border-gray-900'],
       },
     },
+
     defaultVariants: {
       variant: 'standard',
       size: 'md',
