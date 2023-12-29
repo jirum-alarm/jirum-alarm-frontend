@@ -13,7 +13,7 @@ interface SelectProps
     VariantProps<typeof selectButtonVaraint> {
   children: React.ReactNode
   placeholder: string
-  value?: string
+  defaultValue?: string
   onChange?: (value: string) => void
 }
 
@@ -27,7 +27,7 @@ export const Select = ({
   children,
   placeholder,
   onChange,
-  value,
+  defaultValue,
 }: SelectProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -65,7 +65,7 @@ export const Select = ({
     () =>
       React.Children.map(children, (child, index) => {
         if (isValidElement(child)) {
-          if (child.props.value && child.props.value === value) {
+          if (child.props.value && child.props.value === defaultValue) {
             setSelectedIndex(index + 1)
           }
           return React.cloneElement(child, {
@@ -74,7 +74,7 @@ export const Select = ({
           })
         }
       }),
-    [children, value],
+    [children, defaultValue],
   )
 
   return (

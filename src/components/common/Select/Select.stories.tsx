@@ -33,7 +33,7 @@ export const Placeholder: Story = {
 export const DefaultValue: Story = {
   render: () => {
     return (
-      <Select placeholder="출생년도" value="1">
+      <Select placeholder="출생년도" defaultValue="1">
         <Select.Option value={'1'}>2000</Select.Option>
         <Select.Option value={'2'}>1999</Select.Option>
         <Select.Option value={'3'}>1998</Select.Option>
@@ -53,7 +53,7 @@ export const DefaultValue: Story = {
 export const ChangeEvent: Story = {
   render: () => {
     return (
-      <Select placeholder="출생년도" value="4" onChange={(value) => console.log(value)}>
+      <Select placeholder="출생년도" defaultValue="4" onChange={(value) => console.log(value)}>
         <Select.Option value={'1'}>2000</Select.Option>
         <Select.Option value={'2'}>1999</Select.Option>
         <Select.Option value={'3'}>1998</Select.Option>
