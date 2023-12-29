@@ -1,10 +1,9 @@
-import React, { ReactElement, ReactNode, isValidElement, useEffect, useMemo, useState } from 'react'
+import React, { isValidElement, useMemo, useState } from 'react'
 import { selectButtonVaraint, selectListContainerVariant } from './variant/select'
 import { type VariantProps } from 'class-variance-authority'
 import { ArrowDown } from '../icons'
 import { cn } from '@/lib/cn'
 import { SelectContext } from './context/SelectContext'
-import exp from 'constants'
 
 interface SelectProps
   extends Omit<
