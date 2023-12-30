@@ -25,6 +25,8 @@ export const Option = ({ size, color, children, index, value, className }: Optio
 
   return (
     <li
+      role="option"
+      aria-selected={index === selectedIndex}
       className={cn(optionVaraint({ size, color, active: index === selectedIndex }), className)}
       onClick={handleOptionClick}
     >
