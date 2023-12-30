@@ -1,9 +1,10 @@
-import React, { isValidElement, useId, useMemo, useState } from 'react'
+import React, { isValidElement, useId, useMemo, useRef, useState } from 'react'
 import { selectButtonVaraint, selectListContainerVariant } from './variant/select'
 import { type VariantProps } from 'class-variance-authority'
 import { ArrowDown } from '../icons'
 import { cn } from '@/lib/cn'
 import { SelectContext } from './context/SelectContext'
+import useOutsideClick from '@/hooks/useOutsideClick'
 
 interface SelectProps
   extends Omit<
@@ -29,6 +30,12 @@ export const Select = ({
   const [isExpanded, setIsExpanded] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const selectId = useId()
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useOutsideClick(containerRef, () => {
+    onCloseOptionList()
+  })
+
   const toggleOptionList = () => {
     setIsExpanded((expanded) => !expanded)
   }
@@ -76,7 +83,7 @@ export const Select = ({
 
   return (
     <SelectContext.Provider value={selectcontextValue}>
-      <div className="relative w-full">
+      <div className="relative w-full" ref={containerRef}>
         <button
           type="button"
           role="combobox"
