@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority'
 export const optionVaraint = cva(['w-full', 'cursor-pointer'], {
   variants: {
     size: {
-      md: ['py-[12px]', 'px-[20px]', 'text-base', 'h-full'],
+      md: ['py-3', 'px-5', 'text-base', 'h-full'],
     },
     color: {
       black: ['text-gray-900', 'hover:bg-gray-100'],

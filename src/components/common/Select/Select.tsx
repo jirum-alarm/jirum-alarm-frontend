@@ -1,4 +1,4 @@
-import React, { isValidElement, useMemo, useState } from 'react'
+import React, { isValidElement, useId, useMemo, useState } from 'react'
 import { selectButtonVaraint, selectListContainerVariant } from './variant/select'
 import { type VariantProps } from 'class-variance-authority'
 import { ArrowDown } from '../icons'
@@ -17,9 +17,6 @@ interface SelectProps
   onChange?: (value: string) => void
 }
 
-/**
- * TODO: aria-controls제대로 작명하기
- */
 export const Select = ({
   size,
   color,
@@ -31,6 +28,7 @@ export const Select = ({
 }: SelectProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const selectId = useId()
   const toggleOptionList = () => {
     setIsExpanded((expanded) => !expanded)
   }
@@ -64,15 +62,14 @@ export const Select = ({
   const SelectOptions = useMemo(
     () =>
       React.Children.map(children, (child, index) => {
-        if (isValidElement(child)) {
-          if (child.props.value && child.props.value === defaultValue) {
-            setSelectedIndex(index + 1)
-          }
-          return React.cloneElement(child, {
-            ...child?.props,
-            index: child.props?.index || index + 1,
-          })
+        if (!isValidElement(child)) return
+        if (child.props.value && child.props.value === defaultValue) {
+          setSelectedIndex(index + 1)
         }
+        return React.cloneElement(child, {
+          ...child?.props,
+          index: child.props?.index || index + 1,
+        })
       }),
     [children, defaultValue],
   )
@@ -83,7 +80,7 @@ export const Select = ({
         <button
           type="button"
           role="combobox"
-          aria-controls="select-option-:s1:"
+          aria-controls={`select-option-${selectId}`}
           aria-expanded={isExpanded}
           aria-haspopup="listbox"
           className={cn(selectButtonVaraint({ size, color }), className)}
@@ -95,7 +92,7 @@ export const Select = ({
         {isExpanded && (
           <ul
             role="listbox"
-            id="select-option-:s1:"
+            id={`select-option-${selectId}`}
             className={selectListContainerVariant({ size, expanded: isExpanded })}
           >
             {SelectOptions}
