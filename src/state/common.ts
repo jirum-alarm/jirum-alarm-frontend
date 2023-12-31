@@ -7,7 +7,8 @@ import { ModalStateType } from '../types/enum/common'
 
 // Toast
 export const toastAtom = atom<IToast[] | []>({
-  key: 'toastAtom',
+  // @TODO: refs: duplicated './toast.ts' fix it
+  key: '#toastAtom',
   default: [],
 })
 
