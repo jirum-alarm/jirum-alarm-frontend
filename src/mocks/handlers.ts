@@ -90,6 +90,7 @@ const QueryMe = graphql.query('QueryMe', () => {
       me: {
         id: 1,
         email: 'jirumalarm@gmail.com',
+        nickname: '지름알림',
       },
     },
   })
