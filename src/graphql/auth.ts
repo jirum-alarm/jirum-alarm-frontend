@@ -1,5 +1,26 @@
 import { gql } from '@apollo/client'
 
+enum Gender {
+  FEMALE = 'FEMALE',
+  MALE = 'MALE',
+}
+
+enum OauthProvider {
+  APPLE = 'APPLE',
+  GOOGLE = 'GOOGLE',
+  KAKAO = 'KAKAO',
+  NAVER = 'NAVER',
+}
+
+interface User {
+  id: number
+  email: string
+  birthYear: number
+  gender: Gender
+  favoriteCategories: number[]
+  linkedSocialProviders: OauthProvider[]
+}
+
 export const MutationLogin = gql`
   mutation MutationLogin($email: String!, $password: String!) {
     login(email: $email, password: $password) {
