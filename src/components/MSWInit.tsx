@@ -1,6 +1,9 @@
 'use client'
+
+import { IS_API_MOCKING } from '@/constants/env'
+
 const MSWInit = () => {
-  if (process.env.NEXT_PUBLIC_API_MOCKING === 'enable' && typeof window !== 'undefined') {
+  if (IS_API_MOCKING && typeof window !== 'undefined') {
     ;(async () => {
       const { worker } = await import('../mocks/browser')
       worker.start()

@@ -103,12 +103,4 @@ const Operation = graphql.operation(({ query, variables }) => {
   return HttpResponse.json({ errors: [{ message: 'Request failed' }] })
 })
 
-export const handlers = [
-  QueryProducts,
-  QueryCategories,
-  QueryMe,
-  Operation,
-  // http.get('/api.example.com/user', () => {
-  //   return HttpResponse.json({ name: 'John Maverick' })
-  // }),
-]
+export const handlers = [QueryProducts, QueryCategories, QueryMe, Operation]
