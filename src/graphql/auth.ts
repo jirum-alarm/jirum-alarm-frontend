@@ -20,6 +20,7 @@ export const QueryMe = gql`
     me {
       id
       email
+      nickname
     }
   }
 `

@@ -1,5 +1,5 @@
 import { warn } from 'console'
-import { HttpResponse, graphql } from 'msw'
+import { HttpResponse, graphql, http } from 'msw'
 
 const QueryProducts = graphql.query('QueryProducts', () => {
   const product = (productId: number) => {
@@ -90,6 +90,7 @@ const QueryMe = graphql.query('QueryMe', () => {
       me: {
         id: 1,
         email: 'jirumalarm@gmail.com',
+        nickname: '지름알림',
       },
     },
   })

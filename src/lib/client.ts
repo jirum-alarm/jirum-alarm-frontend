@@ -1,29 +1,13 @@
-'use client'
-
-import { ApolloClient, InMemoryCache, createHttpLink, from } from '@apollo/client'
-import { setContext } from '@apollo/client/link/context'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import { registerApolloClient } from '@apollo/experimental-nextjs-app-support/rsc'
 import { GRAPHQL_ENDPOINT } from '../constants/graphql'
-import { StorageTokenKey } from '../types/enum/auth'
+import { IS_API_MOCKING } from '@/constants/env'
 
 export const { getClient } = registerApolloClient(() => {
-  const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem(StorageTokenKey.ACCESS_TOKEN)
-
-    return {
-      headers: {
-        ...headers,
-        authorization: headers?.authorization ?? `Bearer ${token}`,
-      },
-    }
-  })
-
-  const apiServerLink = createHttpLink({
-    uri: GRAPHQL_ENDPOINT,
-  })
-
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: from([authLink.split((operation) => true, apiServerLink)]),
+    link: new HttpLink({
+      uri: IS_API_MOCKING ? 'http://localhost:9090/graphql' : GRAPHQL_ENDPOINT,
+    }),
   })
 })

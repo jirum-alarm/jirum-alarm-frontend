@@ -1,3 +1,5 @@
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M15 22L5 12L15 2L16.775 3.775L8.55 12L16.775 20.225L15 22Z" fill="#212121"/>
+<g id="arrow_left">
+<path id="Vector" d="M15.5288 19.9773L7.56152 12.01L15.5288 4.02344L16.4384 4.93304L9.38076 12.01L16.4384 19.0677L15.5288 19.9773Z" fill="#101828"/>
+</g>
 </svg>

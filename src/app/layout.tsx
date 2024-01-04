@@ -6,6 +6,7 @@ import GoogleAnalytics from '../components/GoogleAnalitics'
 import Script from 'next/script'
 import AppProvider from '@/lib/provider/appProvier'
 import { pretendard } from '@/lib/fonts'
+import MSWInit from '@/components/MSWInit'
 
 export const metadata: Metadata = {
   title: '지름알림: 핫딜 정보 모아보기',
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         ></Script>
       </head>
       <body>
+        <MSWInit />
         <AppProvider>
           <div className="min-w-[320px] bg-white relative">{children}</div>
         </AppProvider>
