@@ -6,7 +6,10 @@ export const { getClient } = registerApolloClient(() => {
   return new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({
-      uri: GRAPHQL_ENDPOINT,
+      uri:
+        process.env.NEXT_PUBLIC_API_MOCKING === 'enable'
+          ? 'http://localhost:9090/graphql'
+          : GRAPHQL_ENDPOINT,
     }),
   })
 })

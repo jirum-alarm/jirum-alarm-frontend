@@ -1,5 +1,5 @@
 import { warn } from 'console'
-import { HttpResponse, graphql } from 'msw'
+import { HttpResponse, graphql, http } from 'msw'
 
 const QueryProducts = graphql.query('QueryProducts', () => {
   const product = (productId: number) => {
@@ -103,4 +103,12 @@ const Operation = graphql.operation(({ query, variables }) => {
   return HttpResponse.json({ errors: [{ message: 'Request failed' }] })
 })
 
-export const handlers = [QueryProducts, QueryCategories, QueryMe, Operation]
+export const handlers = [
+  QueryProducts,
+  QueryCategories,
+  QueryMe,
+  Operation,
+  // http.get('/api.example.com/user', () => {
+  //   return HttpResponse.json({ name: 'John Maverick' })
+  // }),
+]
