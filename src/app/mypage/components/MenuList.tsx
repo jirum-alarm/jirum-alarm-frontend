@@ -6,6 +6,7 @@ const mypageMenuListMap = [
   {
     icon: Filter,
     title: '관심 카테고리',
+    url: '/',
   },
   // {
   //   icon: Alert,
@@ -14,10 +15,12 @@ const mypageMenuListMap = [
   {
     icon: Description,
     title: '약관 및 정책',
+    url: '/',
   },
   {
     icon: Headset,
     title: '고객센터',
+    url: '/',
   },
 ] as const
 
@@ -28,7 +31,7 @@ const MenuList = () => {
         <ul>
           {mypageMenuListMap.map((menu, i) => (
             <li key={i}>
-              <Link href="/">
+              <Link href={menu.url}>
                 <div className="py-3 flex gap-3 items-center">
                   {createElement(menu.icon)}
                   <span className="text-gray-900">{menu.title}</span>
