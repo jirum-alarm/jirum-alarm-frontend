@@ -1,21 +1,16 @@
+import { User } from '@/types/user'
+
 export type ISignupOutput = {
   signup: {
     accessToken: string
     refreshToken: string
-    user: SignupUser
+    user: User
   }
 }
 
-export type ISignupVariable = Omit<SignupUser, 'id' | 'linkedSocialProviders'> & {
+export type ISignupVariable = Pick<
+  User,
+  'email' | 'nickname' | 'birthYear' | 'gender' | 'favoriteCategories'
+> & {
   password: string
-}
-
-type SignupUser = {
-  id: string
-  email: string
-  nickname: string
-  birthYear: number
-  gender: 'MALE' | 'FEMALE'
-  favoriteCategories: number[]
-  linkedSocialProviders: 'APPLE' | 'GOOLE' | 'KAKAO' | 'NAVER'
 }
