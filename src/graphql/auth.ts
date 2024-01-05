@@ -9,6 +9,38 @@ export const MutationLogin = gql`
   }
 `
 
+export const MutationSignup = gql`
+  mutation MutationSignup(
+    $email: String!
+    $password: String!
+    $nickname: String!
+    $birthYear: Float!
+    $gender: Gender!
+    $favoriteCategories: [Int!]!
+  ) {
+    signup(
+      email: $email
+      password: $password
+      nickname: $nickname
+      birthYear: $birthYear
+      gender: $gender
+      favoriteCategories: $favoriteCategories
+    ) {
+      accessToken
+      refreshToken
+      user {
+        id
+        email
+        nickname
+        birthYear
+        gender
+        favoriteCategories
+        linkedSocialProviders
+      }
+    }
+  }
+`
+
 export const QueryLogout = gql`
   query QueryLogout {
     logout
