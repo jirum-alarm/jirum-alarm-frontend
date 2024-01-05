@@ -13,7 +13,7 @@ import { StorageTokenKey } from '@/types/enum/auth'
 
 type Step = 'register' | 'termsOfService' | 'nickname' | 'complete'
 
-export type Registration = {
+export interface Registration {
   email: string
   password: string
   nickname: string

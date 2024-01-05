@@ -1,6 +1,6 @@
 import { User } from '@/types/user'
 
-export type ISignupOutput = {
+export interface ISignupOutput {
   signup: {
     accessToken: string
     refreshToken: string

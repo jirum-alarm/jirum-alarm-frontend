@@ -3,7 +3,7 @@ import Input from '@/components/common/Input'
 import { useState } from 'react'
 import { Registration } from '../page'
 
-type EmailAndPassword = {
+interface EmailAndPassword {
   email: Registration['email']
   password: Registration['password']
 }
