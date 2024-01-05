@@ -11,7 +11,7 @@ import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth'
 import Completed from './components/Completed'
 import { StorageTokenKey } from '@/types/enum/auth'
 
-type Step = 'register' | 'termsOfService' | 'nickname' | 'complete'
+type Step = 'emailAndPassword' | 'termsOfService' | 'nickname' | 'complete'
 
 export interface Registration {
   email: string
@@ -20,7 +20,7 @@ export interface Registration {
 }
 
 const Signup = () => {
-  const [steps, setSteps] = useState<Step>('termsOfService')
+  const [steps, setSteps] = useState<Step>('emailAndPassword')
   const [userRegistraion, setUserRegistration] = useState({ email: '', password: '', nickname: '' })
 
   const [signup] = useMutation<ISignupOutput, ISignupVariable>(MutationSignup, {
@@ -66,14 +66,14 @@ const Signup = () => {
   return (
     <BasicLayout hasBackButton={steps !== 'complete'}>
       <div className="h-[90vh] py-9 px-5">
-        {steps === 'termsOfService' && (
-          <AgreeTermsOfService moveNextStep={() => moveNextStep('register')} />
-        )}
-        {steps === 'register' && (
+        {steps === 'emailAndPassword' && (
           <RegisterByEmail
             handleUserRegistration={handleUserRegistration}
-            moveNextStep={() => moveNextStep('nickname')}
+            moveNextStep={() => moveNextStep('termsOfService')}
           />
+        )}
+        {steps === 'termsOfService' && (
+          <AgreeTermsOfService moveNextStep={() => moveNextStep('nickname')} />
         )}
         {steps === 'nickname' && <SetupNickname completeRegistration={completeRegistration} />}
         {steps === 'complete' && <Completed />}

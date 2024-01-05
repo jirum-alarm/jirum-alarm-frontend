@@ -98,16 +98,18 @@ const QueryMe = graphql.query('QueryMe', () => {
 const MutationSignup = graphql.mutation('MutationSignup', () => {
   return HttpResponse.json({
     data: {
-      accessToken: 'AYjcyMzY3ZDhiNmJkNTY',
-      refreshToken: 'RjY2NjM5NzA2OWJjuE7c',
-      user: {
-        id: '1',
-        email: 'jirumalarm@gmail.com',
-        nickname: '지름알림',
-        birthYear: 20020202.0,
-        gender: 'female',
-        favoriteCategories: [1, 2, 3],
-        linkedSocialProviders: ['google'],
+      signup: {
+        accessToken: 'AYjcyMzY3ZDhiNmJkNTY',
+        refreshToken: 'RjY2NjM5NzA2OWJjuE7c',
+        user: {
+          id: '1',
+          email: 'jirumalarm@gmail.com',
+          nickname: '지름알림',
+          birthYear: 20020202.0,
+          gender: 'female',
+          favoriteCategories: [1, 2, 3],
+          linkedSocialProviders: ['google'],
+        },
       },
     },
   })
