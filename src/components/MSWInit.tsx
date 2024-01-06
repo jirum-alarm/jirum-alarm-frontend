@@ -10,7 +10,7 @@ interface MSWInitProps {
 const MSWInit = ({ children }: MSWInitProps) => {
   const [enableMocking, setEnableMocking] = useState(false)
   if (!IS_API_MOCKING) return <>{children}</>
-  if (typeof window !== 'undefined') {
+  if (typeof window !== 'undefined' && !enableMocking) {
     ;(async () => {
       const { worker } = await import('../mocks/browser')
       await worker.start()
