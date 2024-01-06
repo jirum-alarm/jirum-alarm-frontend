@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   viewport: 'initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className={pretendard.className}>
       <head>
@@ -34,12 +34,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         ></Script>
       </head>
       <body>
-        <MSWInit />
-        <AppProvider>
-          <div className="min-w-[320px] bg-white relative">{children}</div>
-        </AppProvider>
+        <MSWInit>
+          <AppProvider>
+            <div className="min-w-[320px] bg-white relative">{children}</div>
+          </AppProvider>
+        </MSWInit>
       </body>
-
       <GoogleAnalytics GA_TRACKING_ID={GA_TRACKING_ID} />
     </html>
   )
