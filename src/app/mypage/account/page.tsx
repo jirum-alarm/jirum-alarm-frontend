@@ -4,6 +4,8 @@ import MovePage from './components/MovePage'
 import { getClient } from '@/lib/client'
 import { User } from '@/types/user'
 import { QueryMe } from '@/graphql/auth'
+import { useLogout } from '@/hooks/useLogout'
+import AccountManagement from './components/AccountManagement'
 
 const AccountPage = async () => {
   const { data } = await getClient().query<{ me: User }>({ query: QueryMe })
@@ -23,11 +25,7 @@ const AccountPage = async () => {
           </div>
           <div className="flex-1 flex flex-col justify-end">
             <div className="flex justify-center">
-              <div className="flex items-center">
-                <button className="px-6 py-3 text-[13px] text-gray-500">로그아웃</button>
-                <div className="w-px h-3 bg-gray-200" />
-                <button className="px-6 py-3 text-[13px] text-gray-500">회원탈퇴</button>
-              </div>
+              <AccountManagement />
             </div>
           </div>
         </div>
