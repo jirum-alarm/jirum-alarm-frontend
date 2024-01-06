@@ -53,11 +53,9 @@ const SetupNickname = ({
               placeholder="닉네임을 입력해주세요."
               value={nickname.value}
               icon={nickname.value ? <Cancel onClick={resetNickname} /> : ''}
+              error={nickname.error && '공백없이 5~20자로 입력해주세요.'}
               onChange={handleInputChange}
             />
-            {nickname.error && (
-              <p className="text-error pt-1 text-xs">공백없이 5~20자로 입력해주세요.</p>
-            )}
           </div>
         </div>
       </div>
