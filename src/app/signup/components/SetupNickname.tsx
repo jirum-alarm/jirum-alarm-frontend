@@ -29,15 +29,15 @@ const SetupNickname = ({
     const value = e.target.value
     const error = isValidNickname(value) ? false : true
 
-    handleRegistration((prev) => ({ ...prev, nickname: { ...prev.nickname, value, error } }))
+    handleRegistration((prev) => ({ nickname: { ...prev.nickname, value, error } }))
   }
 
   const handleInputFocus = () => {
-    handleRegistration((prev) => ({ ...prev, nickname: { ...prev.nickname, focus: true } }))
+    handleRegistration((prev) => ({ nickname: { ...prev.nickname, focus: true } }))
   }
 
   const handleInputBlur = () => {
-    handleRegistration((prev) => ({ ...prev, nickname: { ...prev.nickname, focus: false } }))
+    handleRegistration((prev) => ({ nickname: { ...prev.nickname, focus: false } }))
   }
 
   const resetNickname = () => {

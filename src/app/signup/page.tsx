@@ -63,22 +63,11 @@ const Signup = () => {
   const handleRegistration = (
     _registraion: Partial<Registration> | ((registration: Registration) => Partial<Registration>),
   ) => {
-    if (typeof _registraion === 'function') {
-      const next = _registraion(registraion)
-      setRegistration((prev) => ({
-        ...prev,
-        ...next,
-        nickname: { ...prev.nickname, ...next.nickname },
-      }))
-    }
-
-    if (typeof _registraion !== 'function') {
-      setRegistration((prev) => ({
-        ...prev,
-        ..._registraion,
-        nickname: { ...prev.nickname, ..._registraion.nickname },
-      }))
-    }
+    const next = typeof _registraion === 'function' ? _registraion(registraion) : _registraion
+    setRegistration((prev) => ({
+      ...prev,
+      ...next,
+    }))
   }
 
   const completeRegistration = async () => {
