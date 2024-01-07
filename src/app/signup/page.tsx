@@ -16,15 +16,18 @@ type Steps = (typeof STEPS)[number]
 
 const INITIAL_STEP = 'emailAndPassword'
 
+interface Input {
+  value: string
+  error: boolean
+  focus: boolean
+}
+
 export interface Registration {
   email: string
   password: string
   termsOfService: boolean
   privacyPolicy: boolean
-  nickname: {
-    value: string
-    error: boolean
-  }
+  nickname: Input
 }
 
 const Signup = () => {
@@ -34,7 +37,7 @@ const Signup = () => {
     password: '',
     termsOfService: false,
     privacyPolicy: false,
-    nickname: { value: '', error: false },
+    nickname: { value: '', error: false, focus: false },
   })
 
   const router = useRouter()
@@ -57,23 +60,36 @@ const Signup = () => {
     router.push(`?steps=${steps}`)
   }
 
-  const handleRegistration = (registraion: Partial<Registration>) => {
-    setRegistration((prev) => ({
-      ...prev,
-      ...registraion,
-    }))
+  const handleRegistration = (
+    _registraion: Partial<Registration> | ((registration: Registration) => Partial<Registration>),
+  ) => {
+    if (typeof _registraion === 'function') {
+      const next = _registraion(registraion)
+      setRegistration((prev) => ({
+        ...prev,
+        ...next,
+        nickname: { ...prev.nickname, ...next.nickname },
+      }))
+    }
+
+    if (typeof _registraion !== 'function') {
+      setRegistration((prev) => ({
+        ...prev,
+        ..._registraion,
+        nickname: { ...prev.nickname, ..._registraion.nickname },
+      }))
+    }
   }
 
-  // 회원가입 완료하는 페이지에서 가져오는 데이터는 직접 받아와야 함
-  const completeRegistration = async (nickname: Registration['nickname']['value']) => {
-    const { email, password } = registraion
+  const completeRegistration = async () => {
+    const { email, password, nickname } = registraion
 
     // @TODO: brithYear, gender, favoriteCategories 실제 데이터로 교체
     await signup({
       variables: {
         email,
         password,
-        nickname,
+        nickname: nickname.value,
         birthYear: 20020202.0,
         gender: 'FEMALE',
         favoriteCategories: [1],
@@ -88,12 +104,6 @@ const Signup = () => {
 
   useEffect(() => {
     const steps = searchParams.get('steps') as Steps
-
-    const isValidStep = steps && STEPS.includes(steps)
-
-    if (!isValidStep) {
-      return
-    }
 
     setSteps(steps)
   }, [searchParams])

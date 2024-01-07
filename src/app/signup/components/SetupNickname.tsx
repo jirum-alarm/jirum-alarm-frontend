@@ -1,7 +1,6 @@
 import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
 import { Cancel } from '@/components/common/icons'
-import { useState } from 'react'
 import { Registration } from '../page'
 
 const MIN_NICKNAME_LENGTH = 5
@@ -15,15 +14,9 @@ const SetupNickname = ({
   completeRegistration,
 }: {
   registration: Registration
-  handleRegistration: (nickname: Pick<Registration, 'nickname'>) => void
-  completeRegistration: (nickname: Nickname) => void
+  handleRegistration: (nickname: (registration: Registration) => Partial<Registration>) => void
+  completeRegistration: () => void
 }) => {
-  const [nickname, setNickname] = useState({
-    value: registration.nickname.value,
-    error: registration.nickname.error,
-    focus: false,
-  })
-
   const isValidLength = (nickname: Nickname) =>
     nickname.length >= MIN_NICKNAME_LENGTH && nickname.length <= MAX_NICKNAME_LENGTH
 
@@ -33,29 +26,26 @@ const SetupNickname = ({
     isValidLength(nickname) && isValidNoBlank(nickname)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('change')
     const value = e.target.value
     const error = isValidNickname(value) ? false : true
 
-    setNickname((prev) => ({ ...prev, value, error }))
-
-    handleRegistration({ nickname: { value, error } })
+    handleRegistration((prev) => ({ ...prev, nickname: { ...prev.nickname, value, error } }))
   }
 
   const handleInputFocus = () => {
-    setNickname((prev) => ({ ...prev, focus: true }))
+    handleRegistration((prev) => ({ ...prev, nickname: { ...prev.nickname, focus: true } }))
   }
 
   const handleInputBlur = () => {
-    setNickname((prev) => ({ ...prev, focus: false }))
+    handleRegistration((prev) => ({ ...prev, nickname: { ...prev.nickname, focus: false } }))
   }
 
   const resetNickname = () => {
-    setNickname({ value: '', error: false, focus: false })
+    handleRegistration(() => ({ nickname: { value: '', error: false, focus: false } }))
   }
 
   const handleCTAButton = () => {
-    completeRegistration(nickname.value)
+    completeRegistration()
   }
 
   return (
@@ -72,9 +62,15 @@ const SetupNickname = ({
               type="text"
               id="nickname"
               placeholder="닉네임을 입력해주세요."
-              value={nickname.value}
-              icon={nickname.focus ? <Cancel id="cancel" onMouseDown={resetNickname} /> : ''}
-              error={nickname.error && '공백없이 5~20자로 입력해주세요.'}
+              value={registration.nickname.value}
+              icon={
+                registration.nickname.focus ? (
+                  <Cancel id="cancel" onMouseDown={resetNickname} />
+                ) : (
+                  ''
+                )
+              }
+              error={registration.nickname.error && '공백없이 5~20자로 입력해주세요.'}
               onChange={handleInputChange}
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}
@@ -85,7 +81,7 @@ const SetupNickname = ({
       {/** @TODO: 관심사, 성별 페이지 추가 후 버튼명 변경 */}
       <Button
         onClick={handleCTAButton}
-        disabled={!isValidNickname(nickname.value)}
+        disabled={!isValidNickname(registration.nickname.value)}
         className="self-end"
       >
         가입완료
