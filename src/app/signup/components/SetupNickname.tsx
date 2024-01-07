@@ -21,6 +21,7 @@ const SetupNickname = ({
   const [nickname, setNickname] = useState({
     value: registration.nickname.value,
     error: registration.nickname.error,
+    focus: false,
   })
 
   const isValidLength = (nickname: Nickname) =>
@@ -32,15 +33,25 @@ const SetupNickname = ({
     isValidLength(nickname) && isValidNoBlank(nickname)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('change')
     const value = e.target.value
     const error = isValidNickname(value) ? false : true
 
-    setNickname({ value, error })
+    setNickname((prev) => ({ ...prev, value, error }))
+
     handleRegistration({ nickname: { value, error } })
   }
 
+  const handleInputFocus = () => {
+    setNickname((prev) => ({ ...prev, focus: true }))
+  }
+
+  const handleInputBlur = () => {
+    setNickname((prev) => ({ ...prev, focus: false }))
+  }
+
   const resetNickname = () => {
-    setNickname({ value: '', error: false })
+    setNickname({ value: '', error: false, focus: false })
   }
 
   const handleCTAButton = () => {
@@ -59,11 +70,14 @@ const SetupNickname = ({
           <div>
             <Input
               type="text"
+              id="nickname"
               placeholder="닉네임을 입력해주세요."
               value={nickname.value}
-              icon={nickname.value ? <Cancel onClick={resetNickname} /> : ''}
+              icon={nickname.focus ? <Cancel id="cancel" onMouseDown={resetNickname} /> : ''}
               error={nickname.error && '공백없이 5~20자로 입력해주세요.'}
               onChange={handleInputChange}
+              onFocus={handleInputFocus}
+              onBlur={handleInputBlur}
             />
           </div>
         </div>
