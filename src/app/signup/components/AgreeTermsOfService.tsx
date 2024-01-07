@@ -1,45 +1,39 @@
-import { useState } from 'react'
 import Link from 'next/link'
 import Button from '@/components/common/Button'
 import { CheckDefault, CheckboxSelected } from '@/components/common/icons'
+import { Registration } from '../page'
 
-const CONSENT = {
-  all: '모두 동의',
+const CONSENT_ALL = '모두 동의'
+const CONSENT_REQUIRED = {
   termsOfService: '[필수] 서비스 이용약관 동의',
   privacyPolicy: '[필수] 개인정보 처리방침 동의',
 } as const
 
-type Consent = (typeof CONSENT)[keyof typeof CONSENT]
+type ConsentRequiredKey = keyof typeof CONSENT_REQUIRED
+type ConsentRequired = (typeof CONSENT_REQUIRED)[ConsentRequiredKey]
 
-const AgreeTermsOfService = ({ moveNextStep }: { moveNextStep: () => void }) => {
-  const [consented, setConsented] = useState<Consent[]>([])
+const AgreeTermsOfService = ({
+  registration,
+  handleRegistration,
+  moveNextStep,
+}: {
+  registration: Registration
+  handleRegistration: (consent: Partial<Pick<Registration, ConsentRequiredKey>>) => void
+  moveNextStep: () => void
+}) => {
+  const isAllConsented = registration.termsOfService && registration.privacyPolicy
+  const isConsentIncludes = (id: ConsentRequiredKey) => registration[id]
 
   const toggleConsentAll = () => {
-    const isAllConsented = consented.length === Object.keys(CONSENT).length - 1
-
-    if (isAllConsented) {
-      setConsented([])
-      return
-    }
-
-    if (!isAllConsented) {
-      setConsented([CONSENT.termsOfService, CONSENT.privacyPolicy])
-      return
-    }
+    handleRegistration({ termsOfService: !isAllConsented, privacyPolicy: !isAllConsented })
   }
 
-  const toggleConsent = (consent: Consent) => {
-    const isConsentIncludes = consented.includes(consent)
+  const toggleConsent = (id: ConsentRequiredKey) => {
+    handleRegistration({ [id]: !isConsentIncludes(id) })
+  }
 
-    if (isConsentIncludes) {
-      setConsented((prev) => prev.filter((item) => item !== consent))
-      return
-    }
-
-    if (!isConsentIncludes) {
-      setConsented((prev) => [...prev, consent])
-      return
-    }
+  const handleCTAButton = () => {
+    moveNextStep()
   }
 
   return (
@@ -51,17 +45,17 @@ const AgreeTermsOfService = ({ moveNextStep }: { moveNextStep: () => void }) => 
           동의해주세요.
         </p>
         <div className="pt-[88px] select-none">
-          <ConsentAll consented={consented} toggleConsentAll={toggleConsentAll} />
+          <ConsentAll isAllConsented={isAllConsented} toggleConsentAll={toggleConsentAll} />
           <div className="grid items-center pt-6 gap-y-4">
             <ConsentRequired
-              consent={CONSENT.termsOfService}
-              consented={consented}
+              id="termsOfService"
+              registration={registration}
               link={'https://seonkyo.notion.site/8edd5934ff8d4ec68d75bd136e6a3052'}
               toggleConsent={toggleConsent}
             />
             <ConsentRequired
-              consent={CONSENT.privacyPolicy}
-              consented={consented}
+              id="privacyPolicy"
+              registration={registration}
               link={'https://seonkyo.notion.site/389d4f8ea8f741aca2ec5448fb86ac1f'}
               toggleConsent={toggleConsent}
             />
@@ -69,10 +63,8 @@ const AgreeTermsOfService = ({ moveNextStep }: { moveNextStep: () => void }) => 
         </div>
       </div>
       <Button
-        onClick={moveNextStep}
-        disabled={
-          !(consented.includes(CONSENT.termsOfService) && consented.includes(CONSENT.privacyPolicy))
-        }
+        onClick={handleCTAButton}
+        disabled={!(registration.termsOfService && registration.privacyPolicy)}
         className="self-end"
       >
         다음
@@ -84,10 +76,10 @@ const AgreeTermsOfService = ({ moveNextStep }: { moveNextStep: () => void }) => 
 export default AgreeTermsOfService
 
 const ConsentAll = ({
-  consented,
+  isAllConsented,
   toggleConsentAll,
 }: {
-  consented: Consent[]
+  isAllConsented: boolean
   toggleConsentAll: () => void
 }) => {
   return (
@@ -96,41 +88,41 @@ const ConsentAll = ({
       className="flex gap-x-2 items-center font-semibold cursor-pointer"
     >
       <input type="checkbox" className="hidden" />
-      {consented.includes(CONSENT.termsOfService) && consented.includes(CONSENT.privacyPolicy) ? (
+      {isAllConsented ? (
         <CheckboxSelected className="text-primary-600" />
       ) : (
         <CheckboxSelected className="text-gray-300" />
       )}
-      {CONSENT.all}
+      {CONSENT_ALL}
     </label>
   )
 }
 
 const ConsentRequired = ({
-  consent,
-  consented,
+  id,
+  registration,
   link,
   toggleConsent,
 }: {
-  consent: Consent
-  consented: Consent[]
+  id: ConsentRequiredKey
+  registration: Registration
   link: string
-  toggleConsent: (consent: Consent) => void
+  toggleConsent: (consent: ConsentRequiredKey) => void
 }) => {
   const handleCheckboxChange = () => {
-    toggleConsent(consent)
+    toggleConsent(id)
   }
 
   return (
     <div className="grid grid-flow-col">
       <label onChange={handleCheckboxChange} className="flex gap-x-2 items-center cursor-pointer">
-        <input type="checkbox" name="terms-of-service" className="hidden" />
-        {consented.includes(consent) ? (
+        <input type="checkbox" id={id} className="hidden" />
+        {registration[id] ? (
           <CheckDefault className="text-primary-600" />
         ) : (
           <CheckDefault className="text-gray-300" />
         )}
-        {consent}
+        {CONSENT_REQUIRED[id]}
       </label>
       <div className="justify-self-end">
         <Link href={link} className="text-link underline">

@@ -7,14 +7,21 @@ import { Registration } from '../page'
 const MIN_NICKNAME_LENGTH = 5
 const MAX_NICKNAME_LENGTH = 20
 
-type Nickname = Registration['nickname']
+type Nickname = Registration['nickname']['value']
 
 const SetupNickname = ({
+  registration,
+  handleRegistration,
   completeRegistration,
 }: {
+  registration: Registration
+  handleRegistration: (nickname: Pick<Registration, 'nickname'>) => void
   completeRegistration: (nickname: Nickname) => void
 }) => {
-  const [nickname, setNickname] = useState({ value: '', error: false })
+  const [nickname, setNickname] = useState({
+    value: registration.nickname.value,
+    error: registration.nickname.error,
+  })
 
   const isValidLength = (nickname: Nickname) =>
     nickname.length >= MIN_NICKNAME_LENGTH && nickname.length <= MAX_NICKNAME_LENGTH
@@ -26,8 +33,10 @@ const SetupNickname = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
+    const error = isValidNickname(value) ? false : true
 
-    setNickname({ value, error: isValidNickname(value) ? false : true })
+    setNickname({ value, error })
+    handleRegistration({ nickname: { value, error } })
   }
 
   const resetNickname = () => {

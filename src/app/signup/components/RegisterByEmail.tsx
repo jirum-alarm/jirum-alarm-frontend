@@ -1,31 +1,26 @@
 import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
-import { useState } from 'react'
 import { Registration } from '../page'
 
-interface EmailAndPassword {
-  email: Registration['email']
-  password: Registration['password']
-}
-
 const RegisterByEmail = ({
-  handleUserRegistration,
+  registration,
+  handleRegistration,
   moveNextStep,
 }: {
-  handleUserRegistration: (emailAndPassword: Partial<Registration>) => void
+  registration: Registration
+  handleRegistration: (emailAndPassword: Partial<Pick<Registration, 'email' | 'password'>>) => void
   moveNextStep: () => void
 }) => {
-  const [emailAndPassword, setEmailAndPassword] = useState<EmailAndPassword>({
-    email: '',
-    password: '',
-  })
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmailAndPassword((prev) => ({ ...prev, [e.target.id]: e.target.value }))
+    const id = e.target.id
+    const value = e.target.value
+
+    if (id === 'email' || id === 'password') {
+      handleRegistration({ [id]: value })
+    }
   }
 
   const handleCTAButton = () => {
-    handleUserRegistration(emailAndPassword)
     moveNextStep()
   }
 
@@ -40,6 +35,7 @@ const RegisterByEmail = ({
               id="email"
               autoComplete="email"
               placeholder="이메일"
+              value={registration.email}
               required
               onChange={handleInputChange}
             />
@@ -50,7 +46,7 @@ const RegisterByEmail = ({
               id="password"
               autoComplete="current-password"
               placeholder="비밀번호"
-              min={8}
+              value={registration.password}
               required
               onChange={handleInputChange}
             />
@@ -59,7 +55,7 @@ const RegisterByEmail = ({
       </div>
       <Button
         onClick={handleCTAButton}
-        disabled={!(emailAndPassword.email && emailAndPassword.password)}
+        disabled={!(registration.email && registration.password)}
         className="self-end"
       >
         다음

@@ -1,32 +1,38 @@
+'use client'
+
 import Button from '@/components/common/Button'
+import BasicLayout from '@/components/layout/BasicLayout'
 import { useRouter } from 'next/navigation'
 
 const Completed = () => {
   const router = useRouter()
-
   const handleCTAButton = () => {
     router.replace('/')
   }
 
   return (
-    <div className="grid h-full text-center">
-      <div>
-        <div className="grid justify-center pb-10">
-          <Illust />
-        </div>
-        <div>
-          <p className="font-semibold text-2xl pb-3">가입을 축하합니다!</p>
-          <p>
-            실시간으로 올라오는 핫딜 정보를 확인하고
-            <br />
-            키워드를 등록해 관심있는 정보를 얻어보세요
-          </p>
+    <BasicLayout>
+      <div className="h-[85vh] py-9 px-5">
+        <div className="grid h-full text-center">
+          <div>
+            <div className="grid justify-center pb-10">
+              <Illust />
+            </div>
+            <div>
+              <p className="font-semibold text-2xl pb-3">가입을 축하합니다!</p>
+              <p>
+                실시간으로 올라오는 핫딜 정보를 확인하고
+                <br />
+                키워드를 등록해 관심있는 정보를 얻어보세요
+              </p>
+            </div>
+          </div>
+          <Button onClick={handleCTAButton} className="self-end">
+            핫딜 보러가기
+          </Button>
         </div>
       </div>
-      <Button onClick={handleCTAButton} className="self-end">
-        핫딜 보러가기
-      </Button>
-    </div>
+    </BasicLayout>
   )
 }
 
