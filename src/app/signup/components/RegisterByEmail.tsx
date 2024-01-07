@@ -20,8 +20,7 @@ const RegisterByEmail = ({
     e: React.ChangeEvent<HTMLInputElement>,
     validate: (value: string) => boolean,
   ) => {
-    const id = e.target.id
-    const value = e.target.value
+    const { id, value } = e.target
     const error = validate(value) ? false : true
 
     if (id === 'email' || id === 'password') {
