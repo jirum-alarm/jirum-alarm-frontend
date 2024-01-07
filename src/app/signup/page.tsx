@@ -23,8 +23,8 @@ interface Input {
 }
 
 export interface Registration {
-  email: string
-  password: string
+  email: Input
+  password: Input
   termsOfService: boolean
   privacyPolicy: boolean
   nickname: Input
@@ -33,8 +33,8 @@ export interface Registration {
 const Signup = () => {
   const [steps, setSteps] = useState<Steps>('emailAndPassword')
   const [registraion, setRegistration] = useState<Registration>({
-    email: '',
-    password: '',
+    email: { value: '', error: false, focus: false },
+    password: { value: '', error: false, focus: false },
     termsOfService: false,
     privacyPolicy: false,
     nickname: { value: '', error: false, focus: false },
@@ -64,6 +64,7 @@ const Signup = () => {
     _registraion: Partial<Registration> | ((registration: Registration) => Partial<Registration>),
   ) => {
     const next = typeof _registraion === 'function' ? _registraion(registraion) : _registraion
+
     setRegistration((prev) => ({
       ...prev,
       ...next,
@@ -76,8 +77,8 @@ const Signup = () => {
     // @TODO: brithYear, gender, favoriteCategories 실제 데이터로 교체
     await signup({
       variables: {
-        email,
-        password,
+        email: email.value,
+        password: password.value,
         nickname: nickname.value,
         birthYear: 20020202.0,
         gender: 'FEMALE',
@@ -99,7 +100,7 @@ const Signup = () => {
 
   return (
     <BasicLayout hasBackButton>
-      <div className="h-[90vh] py-9 px-5">
+      <div className="h-[85vh] py-9 px-5">
         {steps === 'emailAndPassword' && (
           <RegisterByEmail
             registration={registraion}
