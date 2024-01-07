@@ -37,12 +37,12 @@ const RegisterByEmail = ({
     handleRegistration((prev) => ({ [id]: { ...prev[id], focus: false } }))
   }
 
-  const handleCTAButton = () => {
-    moveNextStep()
-  }
-
   const reset = (id: 'email' | 'password') => {
     handleRegistration(() => ({ [id]: { value: '', error: false, focus: false } }))
+  }
+
+  const handleCTAButton = () => {
+    moveNextStep()
   }
 
   const isValidInput = !!(
@@ -131,7 +131,7 @@ const Email = ({
         placeholder="이메일을 입력해주세요."
         required
         value={registration.email.value}
-        icon={registration.email.focus ? <Cancel onClick={() => reset(id)} /> : ''}
+        icon={registration.email.focus ? <Cancel onMouseDown={() => reset(id)} /> : ''}
         error={registration.email.error && '올바른 이메일 형식으로 입력해주세요.'}
         onChange={(e) => handleInputChange(e, validate)}
         onFocus={() => handleInputFocus(id)}
@@ -187,7 +187,7 @@ const Password = ({
         placeholder="비밀번호를 입력해주세요."
         required
         value={registration.password.value}
-        icon={registration.password.focus ? <Cancel onClick={() => reset(id)} /> : ''}
+        icon={registration.password.focus ? <Cancel onMouseDown={() => reset(id)} /> : ''}
         error={registration.password.error && '영문, 숫자, 특수문자 중 2개 이상 조합해주세요.'}
         onChange={(e) => handleInputChange(e, validate)}
         onFocus={() => handleInputFocus(id)}
