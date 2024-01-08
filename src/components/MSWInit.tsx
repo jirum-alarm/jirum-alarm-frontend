@@ -1,15 +1,23 @@
 'use client'
 
 import { IS_API_MOCKING } from '@/constants/env'
+import { useState } from 'react'
 
-const MSWInit = () => {
-  if (IS_API_MOCKING && typeof window !== 'undefined') {
+interface MSWInitProps {
+  children: React.ReactNode
+}
+
+const MSWInit = ({ children }: MSWInitProps) => {
+  const [enableMocking, setEnableMocking] = useState(false)
+  if (!IS_API_MOCKING) return <>{children}</>
+  if (typeof window !== 'undefined' && !enableMocking) {
     ;(async () => {
       const { worker } = await import('../mocks/browser')
-      worker.start()
+      await worker.start()
+      setEnableMocking(true)
     })()
   }
-  return null
+  return enableMocking ? <>{children}</> : null
 }
 
 export default MSWInit

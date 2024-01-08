@@ -9,7 +9,7 @@ const MyProfileSection = async () => {
   return (
     <div className="px-5">
       <div className="py-8 border-b-2 border-gray-600">
-        <Link href={'/'}>
+        <Link href={'/mypage/account'}>
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-lg font-bold">{data?.me.nickname}</h2>

@@ -9,12 +9,12 @@ interface Props {
 
 const BasicLayout = ({ children, title, hasBackButton }: Props) => {
   return (
-    <div className="max-w-[480px] mx-auto bg-white h-full">
-      <header className="h-14 relative flex items-center justify-center bg-white text-black">
+    <div className="relative min-h-screen grid max-w-[480px] mx-auto bg-white">
+      <header className="h-14 fixed top-0 z-50 max-w-[480px] w-full flex items-center justify-center bg-white text-black">
         {hasBackButton && <div className="absolute left-0">{<BackButton />}</div>}
         {title && <h1 className="text-base font-semibold text-black">{title}</h1>}
       </header>
-      <div>{children}</div>
+      <div className="pt-14 h-full">{children}</div>
     </div>
   )
 }
