@@ -4,8 +4,8 @@ import { onError } from '@apollo/client/link/error'
 
 import { GRAPHQL_ENDPOINT } from '../constants/graphql'
 
-import { StorageTokenKey } from '../types/enum/auth'
-import { ApiType } from '../types/enum/common'
+import { StorageTokenKey } from '@/types/enum/auth'
+import { ApiType } from '@/types/enum/common'
 import { getAccessToken, isAccessTokenExpired, isRefreshTokenExpired } from './auth'
 
 const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
