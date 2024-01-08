@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" className={`${pretendard.className} h-full`}>
+    <html lang="ko" className={pretendard.className}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <Script
@@ -33,10 +33,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           crossOrigin="anonymous"
         ></Script>
       </head>
-      <body className="h-full">
+      <body>
         <MSWInit>
           <AppProvider>
-            <div className="h-full min-w-[320px] bg-white relative">{children}</div>
+            <div className="min-w-[320px] bg-white relative">{children}</div>
           </AppProvider>
         </MSWInit>
       </body>
