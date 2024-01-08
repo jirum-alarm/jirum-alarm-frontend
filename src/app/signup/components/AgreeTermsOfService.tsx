@@ -21,15 +21,14 @@ const AgreeTermsOfService = ({
   handleRegistration: (consent: Partial<Pick<Registration, ConsentRequiredKey>>) => void
   moveNextStep: () => void
 }) => {
-  const isAllConsented = registration.termsOfService && registration.privacyPolicy
-  const isConsentIncludes = (id: ConsentRequiredKey) => registration[id]
-
-  const toggleConsentAll = () => {
+  const toggleConsentAll = (isAllConsented: boolean) => {
     handleRegistration({ termsOfService: !isAllConsented, privacyPolicy: !isAllConsented })
   }
 
   const toggleConsent = (id: ConsentRequiredKey) => {
-    handleRegistration({ [id]: !isConsentIncludes(id) })
+    const isConsentIncludes = registration[id]
+
+    handleRegistration({ [id]: !isConsentIncludes })
   }
 
   const handleCTAButton = () => {
@@ -39,13 +38,9 @@ const AgreeTermsOfService = ({
   return (
     <div className="grid h-full">
       <div>
-        <p className="font-semibold text-2xl">
-          지름알림 서비스 이용약관에
-          <br />
-          동의해주세요.
-        </p>
+        <Description />
         <div className="pt-[88px] select-none">
-          <ConsentAll isAllConsented={isAllConsented} toggleConsentAll={toggleConsentAll} />
+          <ConsentAll registration={registration} toggleConsentAll={toggleConsentAll} />
           <div className="grid items-center pt-6 gap-y-4">
             <ConsentRequired
               id="termsOfService"
@@ -75,16 +70,32 @@ const AgreeTermsOfService = ({
 
 export default AgreeTermsOfService
 
+const Description = () => {
+  return (
+    <p className="font-semibold text-2xl">
+      지름알림 서비스 이용약관에
+      <br />
+      동의해주세요.
+    </p>
+  )
+}
+
 const ConsentAll = ({
-  isAllConsented,
+  registration,
   toggleConsentAll,
 }: {
-  isAllConsented: boolean
-  toggleConsentAll: () => void
+  registration: Registration
+  toggleConsentAll: (isAllConsented: boolean) => void
 }) => {
+  const isAllConsented = registration.termsOfService && registration.privacyPolicy
+
+  const handleCheckboxChange = () => {
+    toggleConsentAll(isAllConsented)
+  }
+
   return (
     <label
-      onChange={toggleConsentAll}
+      onChange={handleCheckboxChange}
       className="flex gap-x-2 items-center font-semibold cursor-pointer"
     >
       <input type="checkbox" className="hidden" />

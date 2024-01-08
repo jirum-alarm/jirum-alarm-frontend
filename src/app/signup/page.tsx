@@ -15,6 +15,7 @@ const STEPS = ['emailAndPassword', 'termsOfService', 'nickname'] as const
 type Steps = (typeof STEPS)[number]
 
 const INITIAL_STEP = 'emailAndPassword'
+const QUERY_PARM_PREFIX = 'steps'
 
 interface Input {
   value: string
@@ -31,7 +32,6 @@ export interface Registration {
 }
 
 const Signup = () => {
-  const [steps, setSteps] = useState<Steps>('emailAndPassword')
   const [registraion, setRegistration] = useState<Registration>({
     email: { value: '', error: false, focus: false },
     password: { value: '', error: false, focus: false },
@@ -42,6 +42,8 @@ const Signup = () => {
 
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  const steps = searchParams.get(QUERY_PARM_PREFIX) as Steps
 
   const [signup] = useMutation<ISignupOutput, ISignupVariable>(MutationSignup, {
     onCompleted: (data) => {
@@ -56,8 +58,7 @@ const Signup = () => {
   })
 
   const moveNextStep = (steps: Steps) => {
-    setSteps(steps)
-    router.push(`?steps=${steps}`)
+    router.push(`?${QUERY_PARM_PREFIX}=${steps}`)
   }
 
   const handleRegistration = (
@@ -88,15 +89,8 @@ const Signup = () => {
   }
 
   useEffect(() => {
-    router.replace(`?steps=${INITIAL_STEP}`)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    const steps = searchParams.get('steps') as Steps
-
-    setSteps(steps)
-  }, [searchParams])
+    router.replace(`?${QUERY_PARM_PREFIX}=${INITIAL_STEP}`)
+  }, [router])
 
   return (
     <BasicLayout hasBackButton>

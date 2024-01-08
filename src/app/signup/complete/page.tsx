@@ -4,10 +4,12 @@ import Button from '@/components/common/Button'
 import BasicLayout from '@/components/layout/BasicLayout'
 import { useRouter } from 'next/navigation'
 
+const HOME_ROUTE = '/'
+
 const Completed = () => {
   const router = useRouter()
   const handleCTAButton = () => {
-    router.replace('/')
+    router.replace(HOME_ROUTE)
   }
 
   return (
@@ -38,7 +40,6 @@ const Completed = () => {
 
 export default Completed
 
-// @TODO: svg 파일 어디서 관리할지 논의
 const Illust = () => {
   return (
     <svg
