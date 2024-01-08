@@ -5,7 +5,10 @@ import { User } from '@/types/user'
 import Link from 'next/link'
 
 const MyProfileSection = async () => {
-  const { data } = await getClient().query<{ me: User }>({ query: QueryMe })
+  const { data } = await getClient().query<{ me: User }>({
+    query: QueryMe,
+  })
+
   return (
     <div className="px-5">
       <div className="py-8 border-b-2 border-gray-600">

@@ -6,11 +6,11 @@ settings:
 
 dependencies:
   '@apollo/client':
-    specifier: ^3.8.0
+    specifier: ^3.8.8
     version: 3.8.8(graphql-ws@5.14.2)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
   '@apollo/experimental-nextjs-app-support':
-    specifier: ^0.2.1
-    version: 0.2.2(@apollo/client@3.8.8)(next@13.5.6)(react@18.2.0)
+    specifier: ^0.6.0
+    version: 0.6.0(@apollo/client@3.8.8)(next@13.5.6)(react@18.2.0)
   '@types/lodash':
     specifier: 4.14.201
     version: 4.14.201
@@ -246,16 +246,17 @@ packages:
       zen-observable-ts: 1.2.5
     dev: false
 
-  /@apollo/experimental-nextjs-app-support@0.2.2(@apollo/client@3.8.8)(next@13.5.6)(react@18.2.0):
-    resolution: {integrity: sha512-C7qaBktQptVq5+E9BU+weilkB+abtTMU8E6Zima5sZRqydjsr0PrRwn3P13ibu4yyW0FiPEAx1zgy4oHSutsjQ==}
+  /@apollo/experimental-nextjs-app-support@0.6.0(@apollo/client@3.8.8)(next@13.5.6)(react@18.2.0):
+    resolution: {integrity: sha512-mtkbskOfzasBlqe5mLTu79pd1YuJ2fNuWHE+j5v4P//ZAHG30D2L+l0D/zuZISPFVEfFOdgSkIzR0U60uQ2GSg==}
     peerDependencies:
-      '@apollo/client': '>=3.8.0-beta.2'
-      next: ^13.4.1
+      '@apollo/client': '>=3.8.0-rc || ^3.8.0 || >=3.9.0-alpha || >=3.9.0-beta || >=3.9.0-rc'
+      next: ^13.4.1 || ^14.0.0
       react: ^18
     dependencies:
       '@apollo/client': 3.8.8(graphql-ws@5.14.2)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       next: 13.5.6(@babel/core@7.23.6)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
+      server-only: 0.0.1
       superjson: 1.13.3
       ts-invariant: 0.10.3
     dev: false
@@ -11330,6 +11331,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /server-only@0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
+    dev: false
 
   /set-function-length@1.1.1:
     resolution: {integrity: sha512-VoaqjbBJKiWtg4yRcKBQ7g7wnGnLV3M8oLvVWwOk2PdYY6PEFegR1vezXR0tw6fZGF9csVakIRjrJiy2veSBFQ==}
