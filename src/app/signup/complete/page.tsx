@@ -14,7 +14,7 @@ const Completed = () => {
 
   return (
     <BasicLayout>
-      <div className="h-[85vh] py-9 px-5">
+      <div className="h-full py-9 px-5">
         <div className="grid h-full text-center">
           <div>
             <div className="grid justify-center pb-10">
