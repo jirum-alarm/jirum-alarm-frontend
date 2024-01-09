@@ -1,5 +1,6 @@
 import React from 'react'
 import BackButton from './BackButton'
+import ToastArea from './ToastArea'
 
 interface Props {
   children: React.ReactNode
@@ -15,6 +16,7 @@ const BasicLayout = ({ children, title, hasBackButton }: Props) => {
         {title && <h1 className="text-base font-semibold text-black">{title}</h1>}
       </header>
       <div className="pt-14 h-full">{children}</div>
+      {/* <ToastArea /> */}
     </div>
   )
 }

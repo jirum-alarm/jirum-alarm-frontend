@@ -41,6 +41,12 @@ export const MutationSignup = gql`
   }
 `
 
+export const MutationUpdateUserNickname = gql`
+  mutation MutationUpdateUserNickname($nickname: String) {
+    updateUserProfile(nickname: $nickname)
+  }
+`
+
 export const QueryLogout = gql`
   query QueryLogout {
     logout
