@@ -1,13 +1,13 @@
 import { useToast } from '@/components/common/Toast'
 import { MutationUpdateUserProfile, QueryMe } from '@/graphql/auth'
 import useGoBack from '@/hooks/useGoBack'
-import { useApiQuery } from '@/hooks/useGql'
 import { User } from '@/types/user'
 import { useMutation } from '@apollo/client'
+import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import { useEffect, useState } from 'react'
 
 const useInput = () => {
-  const { data } = useApiQuery<{ me: Omit<User, 'favoriteCategories' | 'linkedSocialProviders'> }>(
+  const { data } = useQuery<{ me: Omit<User, 'favoriteCategories' | 'linkedSocialProviders'> }>(
     QueryMe,
   )
   const [nickname, setNickname] = useState(() => ({

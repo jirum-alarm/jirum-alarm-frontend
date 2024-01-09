@@ -1,4 +1,4 @@
-import { HttpResponse, graphql, http } from 'msw'
+import { HttpResponse, delay, graphql, http } from 'msw'
 
 const QueryProducts = graphql.query('QueryProducts', () => {
   const product = (productId: number) => {
@@ -83,7 +83,8 @@ const QueryCategories = graphql.query('QueryCategories', () => {
   })
 })
 
-const QueryMe = graphql.query('QueryMe', () => {
+const QueryMe = graphql.query('QueryMe', async () => {
+  await delay(3000)
   return HttpResponse.json({
     data: {
       me: {
