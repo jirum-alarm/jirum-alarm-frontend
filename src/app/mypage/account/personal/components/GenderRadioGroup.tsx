@@ -19,7 +19,10 @@ const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) 
             checked={'FEMALE' === gender}
             handleRadioChange={handleRadioChange}
           >
-            👩
+            <div className="flex flex-col gap-2">
+              <span className="text-2xl">👩</span>
+              <span className="text-sm text-gray-700">여자</span>
+            </div>
           </Radio>
         </li>
         <li>
@@ -29,7 +32,10 @@ const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) 
             checked={'MALE' === gender}
             handleRadioChange={handleRadioChange}
           >
-            👨
+            <div className="flex flex-col gap-2">
+              <span className="text-2xl">👨</span>
+              <span className="text-sm text-gray-700">남자</span>
+            </div>
           </Radio>
         </li>
       </ul>
