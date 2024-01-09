@@ -90,6 +90,8 @@ const QueryMe = graphql.query('QueryMe', () => {
         id: 1,
         email: 'jirumalarm@gmail.com',
         nickname: '지름알림',
+        birthYear: 1997,
+        gender: 'MALE',
       },
     },
   })
@@ -106,7 +108,7 @@ const MutationSignup = graphql.mutation('MutationSignup', () => {
           email: 'jirumalarm@gmail.com',
           nickname: '지름알림',
           birthYear: 20020202.0,
-          gender: 'female',
+          gender: 'FEMALE',
           favoriteCategories: [1, 2, 3],
           linkedSocialProviders: ['google'],
         },
@@ -115,7 +117,7 @@ const MutationSignup = graphql.mutation('MutationSignup', () => {
   })
 })
 
-const MutationUpdateUserNickname = graphql.mutation('MutationUpdateUserNickname', () => {
+const MutationUpdateUserProfile = graphql.mutation('MutationUpdateUserProfile', () => {
   return HttpResponse.json({
     data: {
       updateUserProfile: true,
@@ -135,6 +137,6 @@ export const handlers = [
   QueryCategories,
   QueryMe,
   MutationSignup,
-  MutationUpdateUserNickname,
+  MutationUpdateUserProfile,
   Operation,
 ]

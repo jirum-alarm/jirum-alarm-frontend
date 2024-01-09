@@ -41,9 +41,9 @@ export const MutationSignup = gql`
   }
 `
 
-export const MutationUpdateUserNickname = gql`
-  mutation MutationUpdateUserNickname($nickname: String) {
-    updateUserProfile(nickname: $nickname)
+export const MutationUpdateUserProfile = gql`
+  mutation MutationUpdateUserProfile($nickname: String, $birthYear: Float, $gender: Gender) {
+    updateUserProfile(nickname: $nickname, birthYear: $birthYear, gender: $gender)
   }
 `
 
@@ -59,6 +59,8 @@ export const QueryMe = gql`
       id
       email
       nickname
+      birthYear
+      gender
     }
   }
 `
