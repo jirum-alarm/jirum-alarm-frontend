@@ -19,11 +19,11 @@ const usePersonalInfoFormViewModel = () => {
     { birthYear: number; gender: User['gender'] }
   >(MutationUpdateUserProfile, {
     onCompleted: () => {
-      showToast('개인정보가 저장됐어요')
-      // goBack()
+      // showToast('개인정보가 저장됐어요')
+      goBack()
     },
     onError: () => {
-      showToast('개인정보 저장중 에러가 발생했어요')
+      // showToast('개인정보 저장중 에러가 발생했어요')
     },
   })
   useEffect(() => {

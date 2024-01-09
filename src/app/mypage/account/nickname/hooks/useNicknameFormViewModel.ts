@@ -20,11 +20,11 @@ const useInput = () => {
     MutationUpdateUserProfile,
     {
       onCompleted: () => {
-        showToast('닉네임이 저장됐어요')
-        // goBack()
+        // showToast('닉네임이 저장됐어요')
+        goBack()
       },
       onError: () => {
-        showToast('닉네임이 저장중 에러가 발생했어요')
+        // showToast('닉네임이 저장중 에러가 발생했어요')
       },
     },
   )
