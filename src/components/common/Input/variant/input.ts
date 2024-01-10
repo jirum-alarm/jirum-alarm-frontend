@@ -71,3 +71,14 @@ export const errorVariant = cva('', {
     size: 'md',
   },
 })
+
+export const helperVariant = cva('', {
+  variants: {
+    size: {
+      md: ['text-xs', 'text-gray-400'],
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+})

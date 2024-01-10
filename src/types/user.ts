@@ -2,9 +2,9 @@ export type User = {
   id: number
   email: string
   nickname: string
-  birthYear: number
-  gender: 'MALE' | 'FEMALE'
-  favoriteCategories: number[]
+  birthYear?: number
+  gender?: 'MALE' | 'FEMALE'
+  favoriteCategories?: number[]
   linkedSocialProviders: 'APPLE' | 'GOOLE' | 'KAKAO' | 'NAVER'
 }
 

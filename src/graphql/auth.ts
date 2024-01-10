@@ -41,6 +41,12 @@ export const MutationSignup = gql`
   }
 `
 
+export const MutationUpdateUserProfile = gql`
+  mutation MutationUpdateUserProfile($nickname: String, $birthYear: Float, $gender: Gender) {
+    updateUserProfile(nickname: $nickname, birthYear: $birthYear, gender: $gender)
+  }
+`
+
 export const QueryLogout = gql`
   query QueryLogout {
     logout
@@ -53,6 +59,8 @@ export const QueryMe = gql`
       id
       email
       nickname
+      birthYear
+      gender
     }
   }
 `
