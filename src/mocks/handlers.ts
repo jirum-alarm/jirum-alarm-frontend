@@ -1,4 +1,4 @@
-import { HttpResponse, graphql, http } from 'msw'
+import { HttpResponse, delay, graphql, http } from 'msw'
 
 const QueryProducts = graphql.query('QueryProducts', () => {
   const product = (productId: number) => {
@@ -83,13 +83,16 @@ const QueryCategories = graphql.query('QueryCategories', () => {
   })
 })
 
-const QueryMe = graphql.query('QueryMe', () => {
+const QueryMe = graphql.query('QueryMe', async () => {
+  await delay(3000)
   return HttpResponse.json({
     data: {
       me: {
         id: 1,
         email: 'jirumalarm@gmail.com',
         nickname: '지름알림',
+        birthYear: 1997,
+        gender: 'MALE',
       },
     },
   })
@@ -106,11 +109,19 @@ const MutationSignup = graphql.mutation('MutationSignup', () => {
           email: 'jirumalarm@gmail.com',
           nickname: '지름알림',
           birthYear: 20020202.0,
-          gender: 'female',
+          gender: 'FEMALE',
           favoriteCategories: [1, 2, 3],
           linkedSocialProviders: ['google'],
         },
       },
+    },
+  })
+})
+
+const MutationUpdateUserProfile = graphql.mutation('MutationUpdateUserProfile', () => {
+  return HttpResponse.json({
+    data: {
+      updateUserProfile: true,
     },
   })
 })
@@ -122,4 +133,11 @@ const Operation = graphql.operation(({ query, variables }) => {
   return HttpResponse.json({ errors: [{ message: 'Request failed' }] })
 })
 
-export const handlers = [QueryProducts, QueryCategories, QueryMe, MutationSignup, Operation]
+export const handlers = [
+  QueryProducts,
+  QueryCategories,
+  QueryMe,
+  MutationSignup,
+  MutationUpdateUserProfile,
+  Operation,
+]
