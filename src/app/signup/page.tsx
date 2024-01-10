@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import BasicLayout from '@/components/layout/BasicLayout'
-import RegisterByEmail from './components/RegisterByEmail'
+import Email from './components/Email'
+import Password from './components/Password'
 import AgreeTermsOfService from './components/AgreeTermsOfService'
 import SetupNickname from './components/SetupNickname'
 import { useMutation } from '@apollo/client'
@@ -11,10 +12,10 @@ import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth'
 import { StorageTokenKey } from '@/types/enum/auth'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-const STEPS = ['emailAndPassword', 'termsOfService', 'nickname'] as const
+const STEPS = ['termsOfService', 'email', 'password', 'nickname'] as const
 type Steps = (typeof STEPS)[number]
 
-const INITIAL_STEP = 'emailAndPassword'
+const INITIAL_STEP = 'termsOfService'
 const QUERY_PARM_PREFIX = 'steps'
 
 interface Input {
@@ -94,16 +95,23 @@ const Signup = () => {
 
   return (
     <BasicLayout hasBackButton>
-      <div className="h-[85vh] py-9 px-5">
-        {steps === 'emailAndPassword' && (
-          <RegisterByEmail
-            registration={registraion}
-            handleRegistration={handleRegistration}
-            moveNextStep={() => moveNextStep('termsOfService')}
-          />
-        )}
+      <div className="h-full py-9 px-5">
         {steps === 'termsOfService' && (
           <AgreeTermsOfService
+            registration={registraion}
+            handleRegistration={handleRegistration}
+            moveNextStep={() => moveNextStep('email')}
+          />
+        )}
+        {steps === 'email' && (
+          <Email
+            registration={registraion}
+            handleRegistration={handleRegistration}
+            moveNextStep={() => moveNextStep('password')}
+          />
+        )}
+        {steps === 'password' && (
+          <Password
             registration={registraion}
             handleRegistration={handleRegistration}
             moveNextStep={() => moveNextStep('nickname')}
