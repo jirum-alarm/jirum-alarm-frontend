@@ -131,7 +131,7 @@ const ProductList = () => {
     const params: IProductsFilterParam = {
       limit,
       keyword: keyword || undefined,
-      categoryId: activeTab || undefined,
+      categoryId: activeTab - 1 > -1 ? activeTab - 1 : undefined,
       searchAfter: undefined,
     }
 
