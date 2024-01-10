@@ -1,4 +1,4 @@
-import React, { isValidElement, useId, useMemo, useRef, useState } from 'react'
+import React, { isValidElement, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { selectButtonVaraint, selectListContainerVariant } from './variant/select'
 import { type VariantProps } from 'class-variance-authority'
 import { ArrowDown } from '../icons'
@@ -29,8 +29,10 @@ export const Select = ({
 }: SelectProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [selectedOffsetTop, setSelectedOffsetTop] = useState(0)
   const selectId = useId()
   const containerRef = useRef<HTMLDivElement>(null)
+  const ulRef = useRef<HTMLUListElement>(null)
 
   useOutsideClick(containerRef, () => {
     onCloseOptionList()
@@ -44,6 +46,10 @@ export const Select = ({
     setSelectedIndex(index)
   }
 
+  const onSetSelectedOffsetTop = (top: number) => {
+    setSelectedOffsetTop(top)
+  }
+
   const onCloseOptionList = () => {
     setIsExpanded(false)
   }
@@ -54,8 +60,10 @@ export const Select = ({
       setSelectedIndex: onSetSelectedIndex,
       onChange: onChange ?? (() => {}),
       onClose: onCloseOptionList,
+      selectedOffsetTop,
+      setSelectedOffsetTop: onSetSelectedOffsetTop,
     }),
-    [onChange, selectedIndex],
+    [onChange, selectedIndex, selectedOffsetTop],
   )
 
   const buttonTextRenderer = () => {
@@ -81,13 +89,22 @@ export const Select = ({
     [children, defaultValue],
   )
 
+  useEffect(() => {
+    if (!isExpanded) return
+    const ul = ulRef.current
+    if (ul) {
+      const halfHeight = ul.offsetHeight / 2
+      ul.scrollTop = selectedOffsetTop - halfHeight
+    }
+  }, [isExpanded, selectId, selectedOffsetTop])
+
   return (
     <SelectContext.Provider value={selectcontextValue}>
       <div className="relative w-full" ref={containerRef}>
         <button
           type="button"
           role="combobox"
-          aria-controls={`select-option-${selectId}`}
+          aria-controls={selectId}
           aria-expanded={isExpanded}
           aria-haspopup="listbox"
           className={cn(selectButtonVaraint({ size, color }), className)}
@@ -98,8 +115,9 @@ export const Select = ({
         </button>
         {isExpanded && (
           <ul
+            ref={ulRef}
             role="listbox"
-            id={`select-option-${selectId}`}
+            id={selectId}
             className={selectListContainerVariant({ size, expanded: isExpanded })}
           >
             {SelectOptions}

@@ -5,6 +5,8 @@ export type SelectContextProps = {
   setSelectedIndex: (index: number) => void
   onChange: (value: string) => void
   onClose: () => void
+  selectedOffsetTop: number
+  setSelectedOffsetTop: (top: number) => void
 }
 
 export const SelectContext = createContext<SelectContextProps | null>(null)
