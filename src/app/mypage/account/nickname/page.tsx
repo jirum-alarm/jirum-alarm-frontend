@@ -1,5 +1,5 @@
 import BasicLayout from '@/components/layout/BasicLayout'
-import NicknameForm from './components/NicknameForm'
+import NicknameForm from './components/NickNameForm'
 
 const NickNamePage = () => {
   return (
