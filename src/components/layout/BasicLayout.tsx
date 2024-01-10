@@ -18,7 +18,6 @@ const BasicLayout = ({ children, title, hasBackButton, noScroll }: Props) => {
       <header
         className={`h-[${headerHeight}] fixed top-0 z-50 max-w-[480px] w-full flex items-center justify-center bg-white text-black`}
       >
-        {' '}
         {hasBackButton && <div className="absolute left-0">{<BackButton />}</div>}
         {title && <h1 className="text-base font-semibold text-black">{title}</h1>}
       </header>
