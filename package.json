@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:mock": "concurrently --kill-others  \"NEXT_PUBLIC_API_MOCKING=enable next dev\" \"npx tsx watch ./src/mocks/http.ts\"",
-    "generate:svg-component": "npx @svgr/cli --jsx-runtime=automatic --out-dir src/components/common/icons --typescript -- src/assets/icons",
+    "generate:svg-component": "npx @svgr/cli --ignore-existing --jsx-runtime=automatic --out-dir src/components/common/icons --typescript -- src/assets/icons",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

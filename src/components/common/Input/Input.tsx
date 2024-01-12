@@ -14,8 +14,8 @@ interface InputProps
     VariantProps<typeof inputVariant> {
   variant?: 'standard'
   size?: 'md'
-  helperText?: string
-  error?: string | boolean
+  helperText?: string | React.ReactNode
+  error?: string | boolean | React.ReactNode
   color?: 'black'
   icon?: React.ReactNode
 }

@@ -26,7 +26,7 @@ interface Input {
 
 export interface Registration {
   email: Input
-  password: Input
+  password: Input & { invalidType: boolean; invalidLength: boolean }
   termsOfService: boolean
   privacyPolicy: boolean
   nickname: Input
@@ -35,7 +35,7 @@ export interface Registration {
 const Signup = () => {
   const [registraion, setRegistration] = useState<Registration>({
     email: { value: '', error: false, focus: false },
-    password: { value: '', error: false, focus: false },
+    password: { value: '', error: false, invalidType: false, invalidLength: false, focus: false },
     termsOfService: false,
     privacyPolicy: false,
     nickname: { value: '', error: false, focus: false },

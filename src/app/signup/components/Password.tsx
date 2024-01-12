@@ -1,7 +1,8 @@
 import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
 import { Registration } from '../page'
-import { Cancel } from '@/components/common/icons'
+import { Eye, EyeOff } from '@/components/common/icons'
+import { useState } from 'react'
 
 const Password = ({
   registration,
@@ -14,26 +15,16 @@ const Password = ({
 }) => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    validate: (value: string) => boolean,
+    validate: (value: string) => { error: boolean; invalidType: boolean; invalidLength: boolean },
   ) => {
     const { id, value } = e.target
-    const error = validate(value) ? false : true
+    const error = validate(value)
 
     if (id === 'password') {
-      handleRegistration((prev) => ({ [id]: { ...prev[id], value, error } }))
+      handleRegistration((prev) => ({
+        [id]: { ...prev[id], value, ...error },
+      }))
     }
-  }
-
-  const handleInputFocus = () => {
-    handleRegistration((prev) => ({ password: { ...prev['password'], focus: true } }))
-  }
-
-  const handleInputBlur = () => {
-    handleRegistration((prev) => ({ password: { ...prev['password'], focus: false } }))
-  }
-
-  const reset = () => {
-    handleRegistration(() => ({ password: { value: '', error: false, focus: false } }))
   }
 
   const handleCTAButton = () => {
@@ -50,10 +41,8 @@ const Password = ({
           <form className="grid gap-y-8 pt-[88px]">
             <PasswordInput
               registration={registration}
+              isValidInput={isValidInput}
               handleInputChange={handleInputChange}
-              handleInputFocus={handleInputFocus}
-              handleInputBlur={handleInputBlur}
-              reset={reset}
             />
           </form>
         </div>
@@ -79,55 +68,95 @@ const Description = () => {
 
 const PasswordInput = ({
   registration,
+  isValidInput,
   handleInputChange,
-  handleInputFocus,
-  handleInputBlur,
-  reset,
 }: {
   registration: Registration
+  isValidInput: boolean
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement>,
-    validate: (value: string) => boolean,
+    validate: (value: string) => { error: boolean; invalidType: boolean; invalidLength: boolean },
   ) => void
-  handleInputFocus: () => void
-  handleInputBlur: () => void
-  reset: () => void
 }) => {
+  const [masking, setMasking] = useState(true)
+
+  const toggleMasking = () => {
+    setMasking((prev) => !prev)
+  }
+
   const validate = (value: string) => {
     if (value === '') {
-      return true
+      return { error: false, invalidType: false, invalidLength: false }
     }
 
-    const alphabetRegex = /[a-zA-Z]/
-    const numberRegex = /\d/
-    const specialCharacterRegex = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/
+    const isAlphabet = /[a-zA-Z]/.test(value)
+    const isNumber = /\d/.test(value)
+    const isSpecialCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(value)
 
-    const containsAlphabet = alphabetRegex.test(value)
-    const containsNumber = numberRegex.test(value)
-    const containsSpecialCharacter = specialCharacterRegex.test(value)
+    const isValidType = [isAlphabet, isNumber, isSpecialCharacter].filter(Boolean).length >= 2
+    const isValidLength = /^(.{8,30})$/.test(value)
 
-    const conditionsMet = [containsAlphabet, containsNumber, containsSpecialCharacter].filter(
-      Boolean,
-    ).length
-
-    return conditionsMet >= 2
+    return {
+      error: !isValidType || !isValidLength,
+      invalidType: !isValidType,
+      invalidLength: !isValidLength,
+    }
   }
 
   return (
     <label>
       <Input
-        type="password"
+        type={masking ? 'password' : 'text'}
         id="password"
-        autoComplete="current-password"
+        autoComplete="new-password"
         placeholder="비밀번호를 입력해주세요."
         required
         value={registration.password.value}
-        icon={registration.password.focus ? <Cancel onMouseDown={reset} /> : ''}
-        error={registration.password.error && '영문, 숫자, 특수문자 중 2개 이상 조합해주세요.'}
+        icon={masking ? <EyeOff onClick={toggleMasking} /> : <Eye onClick={toggleMasking} />}
+        error={
+          registration.password.error && (
+            <p className="pt-2">
+              <ErrorText registration={registration} />
+            </p>
+          )
+        }
+        helperText={
+          !isValidInput && (
+            <p className="pt-2">
+              <HelperText />
+            </p>
+          )
+        }
         onChange={(e) => handleInputChange(e, validate)}
-        onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
       />
     </label>
+  )
+}
+
+function ErrorText({ registration }: { registration: Registration }) {
+  if (registration.password.invalidType && registration.password.invalidLength) {
+    return (
+      <>
+        영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.
+        <br /> 8자 이상 30자 이하로 사용해주세요.
+      </>
+    )
+  }
+
+  if (registration.password.invalidType) {
+    return <>영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.</>
+  }
+
+  if (registration.password.invalidLength) {
+    return <>8자 이상 30자 이하로 사용해주세요.</>
+  }
+}
+
+function HelperText() {
+  return (
+    <>
+      영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.
+      <br /> 8자 이상 30자 이하로 사용해주세요.
+    </>
   )
 }
