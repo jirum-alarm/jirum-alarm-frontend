@@ -2,7 +2,7 @@ import BasicLayout from '@/components/layout/BasicLayout';
 import React from 'react';
 import CategoriesForm from './components/CategoriesForm';
 
-const page = () => {
+const CategoriesPage = () => {
   return (
     <BasicLayout hasBackButton title="관심카테고리 수정">
       <div className="h-full px-5 pt-6 pb-8">
@@ -20,4 +20,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default CategoriesPage;
