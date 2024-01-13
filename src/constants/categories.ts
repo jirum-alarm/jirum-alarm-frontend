@@ -17,37 +17,37 @@ export const CATEGORIES = [
   {
     icon: '📗',
     text: '도서',
-    value: 4,
+    value: 5,
   },
   {
     icon: '🛏',
     text: '가전/가구',
-    value: 5,
+    value: 6,
   },
   {
     icon: '🧗‍♀️',
     text: '등산/레저',
-    value: 6,
+    value: 7,
   },
   {
     icon: '🎮',
     text: '디지털',
-    value: 7,
+    value: 9,
   },
   {
     icon: '🍼',
     text: '육아',
-    value: 8,
+    value: 10,
   },
   {
     icon: '💸',
     text: '상품권',
-    value: 9,
+    value: 8,
   },
   {
     icon: '👕',
     text: '의류/잡화',
-    value: 10,
+    value: 4,
   },
   {
     icon: '🔍',
