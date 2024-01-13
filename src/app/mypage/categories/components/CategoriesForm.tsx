@@ -1,7 +1,7 @@
 'use client';
 import Button from '@/components/common/Button';
-import CategoriesCheckboxGroup from './CategoriesCheckboxGroup';
 import { useCategoriesFormViewModel } from '../hooks/useCategoriesFormViewModel';
+import CategoriesCheckboxGroup from '@/features/categories/components/CategoriesCheckboxGroup';
 
 const CategoriesForm = () => {
   const { handleSubmit, handleCheckChange, categories, canSubmit } = useCategoriesFormViewModel();

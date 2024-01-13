@@ -1,18 +1,12 @@
 import { useEffect, useState } from 'react';
 import { CATEGORIES, MAX_SELECTION_COUNT } from '@/constants/categories';
-import { type User } from '@/types/user';
 import { MutationUpdateUserProfile, QueryMe } from '@/graphql/auth';
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useToast } from '@/components/common/Toast';
 import useGoBack from '@/hooks/useGoBack';
 import { useMutation } from '@apollo/client';
-
-export interface ICategoryForm {
-  icon: string;
-  text: string;
-  value: number;
-  isChecked: boolean;
-}
+import { type User } from '@/types/user';
+import { type ICategoryForm } from '@/features/categories/types';
 
 export const useCategoriesFormViewModel = () => {
   const { data } = useQuery<{ me: Pick<User, 'favoriteCategories'> }>(QueryMe);

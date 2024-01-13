@@ -1,5 +1,5 @@
 import React, { useId } from 'react';
-import { type ICategoryForm } from '../hooks/useCategoriesFormViewModel';
+import { type ICategoryForm } from '../types';
 
 interface CategoriesCheckboxGroupProps {
   handleCheckChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
