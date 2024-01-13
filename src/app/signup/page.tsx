@@ -82,9 +82,6 @@ const Signup = () => {
         email: email.value,
         password: password.value,
         nickname: nickname.value,
-        birthYear: 20020202.0,
-        gender: 'FEMALE',
-        favoriteCategories: [1],
       },
     });
   };

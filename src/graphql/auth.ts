@@ -14,9 +14,9 @@ export const MutationSignup = gql`
     $email: String!
     $password: String!
     $nickname: String!
-    $birthYear: Float!
-    $gender: Gender!
-    $favoriteCategories: [Int!]!
+    $birthYear: Float
+    $gender: Gender
+    $favoriteCategories: [Int!]
   ) {
     signup(
       email: $email

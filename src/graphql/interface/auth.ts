@@ -3,7 +3,7 @@ import { User } from '@/types/user';
 export interface ISignupOutput {
   signup: {
     accessToken: string;
-    refreshToken: string;
+    refreshToken?: string;
     user: User;
   };
 }
