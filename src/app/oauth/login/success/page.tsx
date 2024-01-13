@@ -1,40 +1,40 @@
-'use client'
+'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
-import { useSetRecoilState } from 'recoil'
-import { QueryMe } from '../../../../graphql/auth'
-import { useApiQuery } from '../../../../hooks/useGql'
-import { userState } from '../../../../state/user'
-import { StorageTokenKey } from '../../../../types/enum/auth'
-import { User } from '../../../../types/user'
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { QueryMe } from '../../../../graphql/auth';
+import { useApiQuery } from '../../../../hooks/useGql';
+import { userState } from '../../../../state/user';
+import { StorageTokenKey } from '../../../../types/enum/auth';
+import { User } from '../../../../types/user';
 
 export default function OauthLoginSuccess() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const setUser = useSetRecoilState(userState)
+  const setUser = useSetRecoilState(userState);
 
-  const accessToken = searchParams.get('accessToken')
-  const refreshToken = searchParams.get('refreshToken')
+  const accessToken = searchParams.get('accessToken');
+  const refreshToken = searchParams.get('refreshToken');
 
-  const { data } = useApiQuery<{ me: User }>(QueryMe)
+  const { data } = useApiQuery<{ me: User }>(QueryMe);
 
   if (accessToken) {
-    localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, accessToken)
+    localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, accessToken);
   }
 
   if (refreshToken) {
-    localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, refreshToken)
+    localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, refreshToken);
   }
 
   useEffect(() => {
-    console.log(data)
+    console.log(data);
     if (data) {
-      setUser(data.me)
+      setUser(data.me);
     }
 
-    router.push('/')
-    return
-  }, [])
+    router.push('/');
+    return;
+  }, []);
 }

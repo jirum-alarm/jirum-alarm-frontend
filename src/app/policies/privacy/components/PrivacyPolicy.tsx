@@ -1,9 +1,9 @@
-'use client'
-import { Close } from '@/components/common/icons'
-import React from 'react'
-import { Link } from 'react-scroll'
-import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/constants/policy'
-import { goBackHandler } from '@/util/common'
+'use client';
+import { Close } from '@/components/common/icons';
+import React from 'react';
+import { Link } from 'react-scroll';
+import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/constants/policy';
+import { goBackHandler } from '@/util/common';
 const PrivacyPolicy = () => {
   return (
     <div className="flex flex-col items-center w-full pt-[44px]">
@@ -52,7 +52,7 @@ const PrivacyPolicy = () => {
         </section>
       </article>
     </div>
-  )
-}
+  );
+};
 
-export default PrivacyPolicy
+export default PrivacyPolicy;

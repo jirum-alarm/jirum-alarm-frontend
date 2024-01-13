@@ -62,4 +62,4 @@ module.exports = {
       pattern: /(bg|text|border)-(primary)/,
     },
   ],
-}
+};

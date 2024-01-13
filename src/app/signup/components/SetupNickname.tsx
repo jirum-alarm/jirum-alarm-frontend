@@ -1,49 +1,49 @@
-import Button from '@/components/common/Button'
-import Input from '@/components/common/Input'
-import { Cancel } from '@/components/common/icons'
-import { Registration } from '../page'
+import Button from '@/components/common/Button';
+import Input from '@/components/common/Input';
+import { Cancel } from '@/components/common/icons';
+import { Registration } from '../page';
 
-const MIN_NICKNAME_LENGTH = 5
-const MAX_NICKNAME_LENGTH = 20
+const MIN_NICKNAME_LENGTH = 5;
+const MAX_NICKNAME_LENGTH = 20;
 
-type Nickname = Registration['nickname']['value']
+type Nickname = Registration['nickname']['value'];
 
 const SetupNickname = ({
   registration,
   handleRegistration,
   completeRegistration,
 }: {
-  registration: Registration
-  handleRegistration: (nickname: (registration: Registration) => Partial<Registration>) => void
-  completeRegistration: () => void
+  registration: Registration;
+  handleRegistration: (nickname: (registration: Registration) => Partial<Registration>) => void;
+  completeRegistration: () => void;
 }) => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     validate: (value: string) => boolean,
   ) => {
-    const { value } = e.target
-    const error = validate(value) ? false : true
+    const { value } = e.target;
+    const error = validate(value) ? false : true;
 
-    handleRegistration((prev) => ({ nickname: { ...prev.nickname, value, error } }))
-  }
+    handleRegistration((prev) => ({ nickname: { ...prev.nickname, value, error } }));
+  };
 
   const handleInputFocus = () => {
-    handleRegistration((prev) => ({ nickname: { ...prev.nickname, focus: true } }))
-  }
+    handleRegistration((prev) => ({ nickname: { ...prev.nickname, focus: true } }));
+  };
 
   const handleInputBlur = () => {
-    handleRegistration((prev) => ({ nickname: { ...prev.nickname, focus: false } }))
-  }
+    handleRegistration((prev) => ({ nickname: { ...prev.nickname, focus: false } }));
+  };
 
   const reset = () => {
-    handleRegistration(() => ({ nickname: { value: '', error: false, focus: false } }))
-  }
+    handleRegistration(() => ({ nickname: { value: '', error: false, focus: false } }));
+  };
 
   const handleCTAButton = () => {
-    completeRegistration()
-  }
+    completeRegistration();
+  };
 
-  const isValidInput = registration.nickname.value && !registration.nickname.error
+  const isValidInput = registration.nickname.value && !registration.nickname.error;
 
   return (
     <div className="grid h-full">
@@ -66,10 +66,10 @@ const SetupNickname = ({
         가입완료
       </Button>
     </div>
-  )
-}
+  );
+};
 
-export default SetupNickname
+export default SetupNickname;
 
 const Description = () => {
   return (
@@ -78,8 +78,8 @@ const Description = () => {
       <br />
       입력해주세요.
     </p>
-  )
-}
+  );
+};
 
 const Nickname = ({
   registration,
@@ -88,22 +88,22 @@ const Nickname = ({
   handleInputBlur,
   reset,
 }: {
-  registration: Registration
+  registration: Registration;
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement>,
     validate: (value: string) => boolean,
-  ) => void
-  handleInputFocus: () => void
-  handleInputBlur: () => void
-  reset: () => void
+  ) => void;
+  handleInputFocus: () => void;
+  handleInputBlur: () => void;
+  reset: () => void;
 }) => {
   const isValidLength = (nickname: Nickname) =>
-    nickname.length >= MIN_NICKNAME_LENGTH && nickname.length <= MAX_NICKNAME_LENGTH
+    nickname.length >= MIN_NICKNAME_LENGTH && nickname.length <= MAX_NICKNAME_LENGTH;
 
-  const isValidNoBlank = (nickname: Nickname) => !nickname.includes(' ')
+  const isValidNoBlank = (nickname: Nickname) => !nickname.includes(' ');
 
   const isValidNickname = (nickname: Nickname) =>
-    isValidLength(nickname) && isValidNoBlank(nickname)
+    isValidLength(nickname) && isValidNoBlank(nickname);
 
   return (
     <Input
@@ -117,5 +117,5 @@ const Nickname = ({
       onFocus={handleInputFocus}
       onBlur={handleInputBlur}
     />
-  )
-}
+  );
+};

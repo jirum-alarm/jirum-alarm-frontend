@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { IProduct } from '@/graphql/interface'
-import useTimeAgo from '@/lib/use-time-stamp'
+import { IProduct } from '@/graphql/interface';
+import useTimeAgo from '@/lib/use-time-stamp';
 
 interface IProductCard {
-  product: IProduct
+  product: IProduct;
 }
 
 export const ProductCard = (props: IProductCard) => {
-  const timestamp = useTimeAgo(new Date(props.product.postedAt))
-  const product = props.product
+  const timestamp = useTimeAgo(new Date(props.product.postedAt));
+  const product = props.product;
   return (
     <div className="transition duration-200 border hover:shadow-md rounded-md border border-gray-300 shadow">
       <a href={product.url} target="_blank" rel="noopener noreferrer">
@@ -25,6 +25,6 @@ export const ProductCard = (props: IProductCard) => {
         </div>
       </a>
     </div>
-  )
-}
-export default ProductCard
+  );
+};
+export default ProductCard;

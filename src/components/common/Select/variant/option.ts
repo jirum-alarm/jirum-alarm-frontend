@@ -1,4 +1,4 @@
-import { cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority';
 
 export const optionVaraint = cva(['w-full', 'cursor-pointer'], {
   variants: {
@@ -23,4 +23,4 @@ export const optionVaraint = cva(['w-full', 'cursor-pointer'], {
     color: 'black',
     size: 'md',
   },
-})
+});

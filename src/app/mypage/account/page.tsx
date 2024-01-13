@@ -1,20 +1,20 @@
-'use client'
-import BasicLayout from '@/components/layout/BasicLayout'
-import React from 'react'
-import MovePage from './components/MovePage'
-import { getClient } from '@/lib/client'
-import { User } from '@/types/user'
-import { QueryMe } from '@/graphql/auth'
-import { useLogout } from '@/hooks/useLogout'
-import AccountManagement from './components/AccountManagement'
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+'use client';
+import BasicLayout from '@/components/layout/BasicLayout';
+import React from 'react';
+import MovePage from './components/MovePage';
+import { getClient } from '@/lib/client';
+import { User } from '@/types/user';
+import { QueryMe } from '@/graphql/auth';
+import { useLogout } from '@/hooks/useLogout';
+import AccountManagement from './components/AccountManagement';
+import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
 const AccountPage = () => {
   // const { data } = await getClient().query<{ me: User }>({ query: QueryMe })
   const { data } = useQuery<{ me: Omit<User, 'favoriteCategories' | 'linkedSocialProviders'> }>(
     QueryMe,
-  )
-  console.log('data : ', data)
+  );
+  console.log('data : ', data);
   return (
     <BasicLayout hasBackButton title="가입 정보">
       <div className="h-full px-5 pb-8 flex flex-col">
@@ -37,7 +37,7 @@ const AccountPage = () => {
         </div>
       </div>
     </BasicLayout>
-  )
-}
+  );
+};
 
-export default AccountPage
+export default AccountPage;

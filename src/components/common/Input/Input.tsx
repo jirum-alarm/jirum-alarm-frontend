@@ -1,23 +1,23 @@
-import React from 'react'
-import { type VariantProps, cva } from 'class-variance-authority'
-import { cn } from '@/lib/cn'
+import React from 'react';
+import { type VariantProps, cva } from 'class-variance-authority';
+import { cn } from '@/lib/cn';
 import {
   inputVariant,
   containerVaraint,
   iconVaraint,
   errorVariant,
   helperVariant,
-} from './variant/input'
+} from './variant/input';
 
 interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
     VariantProps<typeof inputVariant> {
-  variant?: 'standard'
-  size?: 'md'
-  helperText?: string | React.ReactNode
-  error?: string | boolean | React.ReactNode
-  color?: 'black'
-  icon?: React.ReactNode
+  variant?: 'standard';
+  size?: 'md';
+  helperText?: string | React.ReactNode;
+  error?: string | boolean | React.ReactNode;
+  color?: 'black';
+  icon?: React.ReactNode;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -44,8 +44,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {!error && helperText && <span className={helperVariant({ size })}>{helperText}</span>}
         {error && <span className={errorVariant({ size, error: !!error })}>{error}</span>}
       </div>
-    )
+    );
   },
-)
+);
 
-Input.displayName = 'Input'
+Input.displayName = 'Input';

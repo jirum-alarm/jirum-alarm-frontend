@@ -1,9 +1,9 @@
-import { User } from '@/types/user'
-import { useId } from 'react'
+import { User } from '@/types/user';
+import { useId } from 'react';
 
 interface GenderRadioGroupProps {
-  handleRadioChange: (value: React.ChangeEvent<HTMLInputElement>) => void
-  gender?: User['gender']
+  handleRadioChange: (value: React.ChangeEvent<HTMLInputElement>) => void;
+  gender?: User['gender'];
 }
 
 const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) => {
@@ -40,10 +40,10 @@ const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) 
         </li>
       </ul>
     </fieldset>
-  )
-}
+  );
+};
 
-export default GenderRadioGroup
+export default GenderRadioGroup;
 
 const Radio = ({
   value,
@@ -52,13 +52,13 @@ const Radio = ({
   handleRadioChange,
   children,
 }: {
-  value: User['gender']
-  name: string
-  checked: boolean
-  children: React.ReactNode
-  handleRadioChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  value: User['gender'];
+  name: string;
+  checked: boolean;
+  children: React.ReactNode;
+  handleRadioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
-  const id = useId()
+  const id = useId();
   return (
     <>
       <input
@@ -77,5 +77,5 @@ const Radio = ({
         {children}
       </label>
     </>
-  )
-}
+  );
+};

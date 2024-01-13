@@ -1,4 +1,4 @@
-import type { SVGProps } from 'react'
+import type { SVGProps } from 'react';
 const SvgArrowDown = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" {...props}>
     <path
@@ -8,5 +8,5 @@ const SvgArrowDown = (props: SVGProps<SVGSVGElement>) => (
       clipRule="evenodd"
     />
   </svg>
-)
-export default SvgArrowDown
+);
+export default SvgArrowDown;

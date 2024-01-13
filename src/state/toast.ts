@@ -1,4 +1,4 @@
-import { atomFamily } from 'recoil'
+import { atomFamily } from 'recoil';
 
 export const toastAtom = atomFamily({
   key: 'toastAtom',
@@ -6,4 +6,4 @@ export const toastAtom = atomFamily({
     show: false,
     message: '',
   },
-})
+});

@@ -6,7 +6,7 @@ export const PRIVACY_INDEX_DATA = [
   { idx: 5, text: '5. 자동수집 장치의 설치, 운용 및 그 거부에 관한 사항' },
   { idx: 6, text: '6. 개인정보의 파기' },
   { idx: 7, text: '7. 회원의 권리와 의무' },
-]
+];
 
 export const PRIVACY_CONTENT_DATA = [
   {
@@ -111,7 +111,7 @@ export const PRIVACY_CONTENT_DATA = [
       },
     ],
   },
-]
+];
 
 export const TERMS_INDEX_DATA = [
   { idx: 1, text: '제1조. 목적' },
@@ -131,7 +131,7 @@ export const TERMS_INDEX_DATA = [
   { idx: 15, text: '제15조. 서비스 이용의 중지 및 해지' },
   { idx: 16, text: '제16조. 책임제한' },
   { idx: 17, text: '제17조. 준거법 및 재판관할' },
-]
+];
 
 export const TERMS_CONTENT_DATA = [
   {
@@ -476,4 +476,4 @@ export const TERMS_CONTENT_DATA = [
       },
     ],
   },
-]
+];

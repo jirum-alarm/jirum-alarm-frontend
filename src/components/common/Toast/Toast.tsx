@@ -1,12 +1,12 @@
-import React from 'react'
-import { VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/cn'
-import { toastLayoutVariant, toastVariant } from './variant/toast'
+import React from 'react';
+import { VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/cn';
+import { toastLayoutVariant, toastVariant } from './variant/toast';
 
 interface ToastProps extends React.ComponentProps<'div'>, VariantProps<typeof toastVariant> {
-  variant?: 'default'
-  show?: boolean
-  children?: React.ReactNode
+  variant?: 'default';
+  show?: boolean;
+  children?: React.ReactNode;
 }
 
 export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
@@ -19,8 +19,8 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
           </div>
         </div>
       )
-    )
+    );
   },
-)
+);
 
-Toast.displayName = 'Toast'
+Toast.displayName = 'Toast';

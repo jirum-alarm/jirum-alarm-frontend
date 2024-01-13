@@ -1,4 +1,4 @@
-import { ModalStateType, ToastState } from "./enum/common";
+import { ModalStateType, ToastState } from './enum/common';
 
 export interface IToast {
   state: ToastState;

@@ -1,8 +1,8 @@
-'use client'
-import Button from '@/components/common/Button'
-import GenderRadioGroup from './GenderRadioGroup'
-import BirthYearSelect from './BirthYearSelect'
-import usePersonalInfoFormViewModel from '../hooks/usePersonalInfoFormViewModel'
+'use client';
+import Button from '@/components/common/Button';
+import GenderRadioGroup from './GenderRadioGroup';
+import BirthYearSelect from './BirthYearSelect';
+import usePersonalInfoFormViewModel from '../hooks/usePersonalInfoFormViewModel';
 
 const PersonalInfoForm = () => {
   const {
@@ -12,7 +12,7 @@ const PersonalInfoForm = () => {
     handleSelectChange,
     handleRadioChange,
     isValidPersonalInfoInput,
-  } = usePersonalInfoFormViewModel()
+  } = usePersonalInfoFormViewModel();
   return (
     <form className="flex-1 flex flex-col justify-between pt-[88px]" onSubmit={handleSubmit}>
       <div>
@@ -24,7 +24,7 @@ const PersonalInfoForm = () => {
         저장
       </Button>
     </form>
-  )
-}
+  );
+};
 
-export default PersonalInfoForm
+export default PersonalInfoForm;

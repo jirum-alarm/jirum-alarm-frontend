@@ -1,5 +1,5 @@
-'use client'
-import Script from 'next/script'
+'use client';
+import Script from 'next/script';
 
 const GoogleAnalytics = ({ GA_TRACKING_ID }: { GA_TRACKING_ID: string }) => {
   return (
@@ -18,7 +18,7 @@ const GoogleAnalytics = ({ GA_TRACKING_ID }: { GA_TRACKING_ID: string }) => {
         `}
       </Script>
     </>
-  )
-}
+  );
+};
 
-export default GoogleAnalytics
+export default GoogleAnalytics;

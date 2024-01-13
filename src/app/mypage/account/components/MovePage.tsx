@@ -1,11 +1,11 @@
-import { ArrowRight } from '@/components/common/icons'
-import Link from 'next/link'
-import React from 'react'
+import { ArrowRight } from '@/components/common/icons';
+import Link from 'next/link';
+import React from 'react';
 
 interface MovePageProps {
-  to: string
-  title: string
-  subtitle?: string
+  to: string;
+  title: string;
+  subtitle?: string;
 }
 
 const MovePage = ({ to, title, subtitle }: MovePageProps) => {
@@ -21,7 +21,7 @@ const MovePage = ({ to, title, subtitle }: MovePageProps) => {
         </div>
       </div>
     </Link>
-  )
-}
+  );
+};
 
-export default MovePage
+export default MovePage;

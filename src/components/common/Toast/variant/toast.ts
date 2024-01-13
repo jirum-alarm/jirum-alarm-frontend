@@ -1,4 +1,4 @@
-import { cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority';
 
 export const toastLayoutVariant = cva('', {
   variants: {
@@ -9,7 +9,7 @@ export const toastLayoutVariant = cva('', {
   defaultVariants: {
     variant: 'default',
   },
-})
+});
 
 export const toastVariant = cva('', {
   variants: {
@@ -21,4 +21,4 @@ export const toastVariant = cva('', {
   defaultVariants: {
     variant: 'default',
   },
-})
+});

@@ -1,6 +1,6 @@
-import { Alert, Description, Filter, Headset } from '@/components/common/icons'
-import Link from 'next/link'
-import { createElement } from 'react'
+import { Alert, Description, Filter, Headset } from '@/components/common/icons';
+import Link from 'next/link';
+import { createElement } from 'react';
 
 const mypageMenuListMap = [
   {
@@ -22,7 +22,7 @@ const mypageMenuListMap = [
     title: '고객센터',
     url: '/',
   },
-] as const
+] as const;
 
 const MenuList = () => {
   return (
@@ -42,7 +42,7 @@ const MenuList = () => {
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MenuList
+export default MenuList;

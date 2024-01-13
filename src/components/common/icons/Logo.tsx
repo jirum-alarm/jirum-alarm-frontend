@@ -1,4 +1,4 @@
-import type { SVGProps } from 'react'
+import type { SVGProps } from 'react';
 const SvgLogo = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={28} height={28} fill="none" {...props}>
     <path fill="#fff" d="M0 0h28v28H0z" />
@@ -31,5 +31,5 @@ const SvgLogo = (props: SVGProps<SVGSVGElement>) => (
       d="M13.194 21.12c-1.201 0-1.932-.889-2.174-1.457a.487.487 0 1 1 .895-.385c.052.124.56 1.169 1.82.777a.486.486 0 0 1 .615.32.492.492 0 0 1-.32.614c-.3.091-.581.137-.842.137z"
     />
   </svg>
-)
-export default SvgLogo
+);
+export default SvgLogo;

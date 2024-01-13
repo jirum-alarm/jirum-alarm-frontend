@@ -1,10 +1,10 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { toastAtom } from '@/state/toast'
-import { Toast } from './Toast'
-import { useCallback, useId } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { toastAtom } from '@/state/toast';
+import { Toast } from './Toast';
+import { useCallback, useId } from 'react';
 
 interface Options {
-  duration: number
+  duration: number;
 }
 
 /**
@@ -26,36 +26,36 @@ interface Options {
  * @param {number} options.duration - time that remain toast
  * */
 export const useToast = (options: Options = { duration: 1500 }) => {
-  const { duration } = options
-  const id = useId()
+  const { duration } = options;
+  const id = useId();
 
-  const setToast = useSetRecoilState(toastAtom(id))
+  const setToast = useSetRecoilState(toastAtom(id));
 
   const showToast = (() => {
-    let timeoutId: ReturnType<typeof setTimeout>
+    let timeoutId: ReturnType<typeof setTimeout>;
     return (message: string) => {
       if (timeoutId) {
-        clearTimeout(timeoutId)
-        setToast({ show: false, message })
+        clearTimeout(timeoutId);
+        setToast({ show: false, message });
       }
-      setToast({ show: true, message })
+      setToast({ show: true, message });
 
       timeoutId = setTimeout(() => {
-        setToast({ show: false, message: '' })
-      }, duration)
-    }
-  })()
+        setToast({ show: false, message: '' });
+      }, duration);
+    };
+  })();
 
-  const toastContainer = useCallback(() => <ToastContainer id={id} />, [id])
+  const toastContainer = useCallback(() => <ToastContainer id={id} />, [id]);
 
   return {
     ToastContainer: toastContainer,
     showToast,
-  }
-}
+  };
+};
 
 export const ToastContainer = ({ id }: { id: string }) => {
-  const toast = useRecoilValue(toastAtom(id))
+  const toast = useRecoilValue(toastAtom(id));
 
-  return <Toast show={toast.show}>{toast.message}</Toast>
-}
+  return <Toast show={toast.show}>{toast.message}</Toast>;
+};

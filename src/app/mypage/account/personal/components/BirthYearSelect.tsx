@@ -1,10 +1,10 @@
-import React from 'react'
-import Select from '@/components/common/Select'
-import { BIRTH_YEAR } from '@/constants/birthYear'
+import React from 'react';
+import Select from '@/components/common/Select';
+import { BIRTH_YEAR } from '@/constants/birthYear';
 
 interface BirthYearSelectProps {
-  handleSelectChange: (value: string) => void
-  birthYear?: string
+  handleSelectChange: (value: string) => void;
+  birthYear?: string;
 }
 
 const BirthYearSelect = ({ handleSelectChange, birthYear }: BirthYearSelectProps) => {
@@ -19,7 +19,7 @@ const BirthYearSelect = ({ handleSelectChange, birthYear }: BirthYearSelectProps
         ))}
       </Select>
     </fieldset>
-  )
-}
+  );
+};
 
-export default BirthYearSelect
+export default BirthYearSelect;

@@ -1,4 +1,4 @@
-const runtimeCaching = require('next-pwa/cache')
+const runtimeCaching = require('next-pwa/cache');
 
 const withPWA = require('next-pwa')({
   dest: 'public',
@@ -6,7 +6,7 @@ const withPWA = require('next-pwa')({
   skipWaiting: true,
   runtimeCaching,
   buildExcludes: [/middleware-manifest.json$/],
-})
+});
 
 const nextConfig = withPWA({
   async rewrites() {
@@ -15,7 +15,7 @@ const nextConfig = withPWA({
         destination: 'https://jirum-api.kyojs.com/:path*',
         source: '/:path*',
       },
-    ]
+    ];
   },
   async headers() {
     return [
@@ -28,8 +28,8 @@ const nextConfig = withPWA({
           },
         ],
       },
-    ]
+    ];
   },
-})
+});
 
-module.exports = nextConfig
+module.exports = nextConfig;

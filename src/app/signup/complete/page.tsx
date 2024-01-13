@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import Button from '@/components/common/Button'
-import BasicLayout from '@/components/layout/BasicLayout'
-import { useRouter } from 'next/navigation'
+import Button from '@/components/common/Button';
+import BasicLayout from '@/components/layout/BasicLayout';
+import { useRouter } from 'next/navigation';
 
-const HOME_ROUTE = '/'
+const HOME_ROUTE = '/';
 
 const Completed = () => {
-  const router = useRouter()
+  const router = useRouter();
   const handleCTAButton = () => {
-    router.replace(HOME_ROUTE)
-  }
+    router.replace(HOME_ROUTE);
+  };
 
   return (
     <BasicLayout>
@@ -35,10 +35,10 @@ const Completed = () => {
         </div>
       </div>
     </BasicLayout>
-  )
-}
+  );
+};
 
-export default Completed
+export default Completed;
 
 const Illust = () => {
   return (
@@ -83,5 +83,5 @@ const Illust = () => {
         fill="black"
       />
     </svg>
-  )
-}
+  );
+};

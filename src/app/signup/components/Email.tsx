@@ -1,46 +1,46 @@
-import Button from '@/components/common/Button'
-import Input from '@/components/common/Input'
-import { Registration } from '../page'
-import { Cancel } from '@/components/common/icons'
+import Button from '@/components/common/Button';
+import Input from '@/components/common/Input';
+import { Registration } from '../page';
+import { Cancel } from '@/components/common/icons';
 
 const Email = ({
   registration,
   handleRegistration,
   moveNextStep,
 }: {
-  registration: Registration
-  handleRegistration: (email: (registration: Registration) => Partial<Registration>) => void
-  moveNextStep: () => void
+  registration: Registration;
+  handleRegistration: (email: (registration: Registration) => Partial<Registration>) => void;
+  moveNextStep: () => void;
 }) => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     validate: (value: string) => boolean,
   ) => {
-    const { id, value } = e.target
-    const error = validate(value) ? false : true
+    const { id, value } = e.target;
+    const error = validate(value) ? false : true;
 
     if (id === 'email') {
-      handleRegistration((prev) => ({ [id]: { ...prev[id], value, error } }))
+      handleRegistration((prev) => ({ [id]: { ...prev[id], value, error } }));
     }
-  }
+  };
 
   const handleInputFocus = () => {
-    handleRegistration((prev) => ({ email: { ...prev['email'], focus: true } }))
-  }
+    handleRegistration((prev) => ({ email: { ...prev['email'], focus: true } }));
+  };
 
   const handleInputBlur = () => {
-    handleRegistration((prev) => ({ email: { ...prev['email'], focus: false } }))
-  }
+    handleRegistration((prev) => ({ email: { ...prev['email'], focus: false } }));
+  };
 
   const reset = () => {
-    handleRegistration(() => ({ email: { value: '', error: false, focus: false } }))
-  }
+    handleRegistration(() => ({ email: { value: '', error: false, focus: false } }));
+  };
 
   const handleCTAButton = () => {
-    moveNextStep()
-  }
+    moveNextStep();
+  };
 
-  const isValidInput = !!(registration.email.value && !registration.email.error)
+  const isValidInput = !!(registration.email.value && !registration.email.error);
 
   return (
     <div className="grid h-full">
@@ -62,10 +62,10 @@ const Email = ({
         다음
       </Button>
     </div>
-  )
-}
+  );
+};
 
-export default Email
+export default Email;
 
 const Description = () => {
   return (
@@ -74,8 +74,8 @@ const Description = () => {
       <br />
       입력해주세요.
     </p>
-  )
-}
+  );
+};
 
 const EmailInput = ({
   registration,
@@ -84,24 +84,24 @@ const EmailInput = ({
   handleInputBlur,
   reset,
 }: {
-  registration: Registration
+  registration: Registration;
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement>,
     validate: (value: string) => boolean,
-  ) => void
-  handleInputFocus: () => void
-  handleInputBlur: () => void
-  reset: () => void
+  ) => void;
+  handleInputFocus: () => void;
+  handleInputBlur: () => void;
+  reset: () => void;
 }) => {
   const validate = (value: string) => {
     if (value === '') {
-      return true
+      return true;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    return emailRegex.test(value)
-  }
+    return emailRegex.test(value);
+  };
 
   return (
     <label>
@@ -119,5 +119,5 @@ const EmailInput = ({
         onBlur={handleInputBlur}
       />
     </label>
-  )
-}
+  );
+};

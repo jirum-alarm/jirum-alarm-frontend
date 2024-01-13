@@ -1,4 +1,4 @@
-import { cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority';
 
 export const buttonVaraint = cva('w-full', {
   variants: {
@@ -31,4 +31,4 @@ export const buttonVaraint = cva('w-full', {
     variant: 'filled',
     color: 'green',
   },
-})
+});

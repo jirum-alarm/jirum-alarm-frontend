@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import Select from '.'
+import type { Meta, StoryObj } from '@storybook/react';
+import Select from '.';
 
 const meta: Meta<typeof Select> = {
   title: 'components/Select',
   component: Select,
-}
+};
 
-export default meta
-type Story = StoryObj<typeof Select>
+export default meta;
+type Story = StoryObj<typeof Select>;
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Placeholder: Story = {
@@ -26,9 +26,9 @@ export const Placeholder: Story = {
         <Select.Option>1991</Select.Option>
         <Select.Option>1990</Select.Option>
       </Select>
-    )
+    );
   },
-}
+};
 
 export const DefaultValue: Story = {
   render: () => {
@@ -46,9 +46,9 @@ export const DefaultValue: Story = {
         <Select.Option value={'10'}>1991</Select.Option>
         <Select.Option value={'11'}>1990</Select.Option>
       </Select>
-    )
+    );
   },
-}
+};
 
 export const ChangeEvent: Story = {
   render: () => {
@@ -66,6 +66,6 @@ export const ChangeEvent: Story = {
         <Select.Option value={'10'}>1991</Select.Option>
         <Select.Option value={'11'}>1990</Select.Option>
       </Select>
-    )
+    );
   },
-}
+};

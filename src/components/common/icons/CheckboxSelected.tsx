@@ -1,9 +1,9 @@
-import type { SVGProps } from 'react'
+import type { SVGProps } from 'react';
 /** @example
  *  <CheckboxSelected className="text-primary-600" />
  * */
 const SvgCheckboxSelected = (props: SVGProps<SVGSVGElement>) => {
-  const { className, ...others } = props
+  const { className, ...others } = props;
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -19,6 +19,6 @@ const SvgCheckboxSelected = (props: SVGProps<SVGSVGElement>) => {
         clipRule="evenodd"
       />
     </svg>
-  )
-}
-export default SvgCheckboxSelected
+  );
+};
+export default SvgCheckboxSelected;

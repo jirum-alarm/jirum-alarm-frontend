@@ -1,4 +1,4 @@
-import { IProvider } from "./provider";
+import { IProvider } from './provider';
 
 export interface IProduct {
   id: number;

@@ -1,8 +1,8 @@
-import { HttpResponse, delay, graphql, http } from 'msw'
+import { HttpResponse, delay, graphql, http } from 'msw';
 
 const QueryProducts = graphql.query('QueryProducts', () => {
   const product = (productId: number) => {
-    const id = productId.toString()
+    const id = productId.toString();
 
     return {
       id,
@@ -16,17 +16,17 @@ const QueryProducts = graphql.query('QueryProducts', () => {
       searchAfter: [id],
       thumbnail: null,
       postedAt: '2023-12-11t15:58:25.000z',
-    }
-  }
+    };
+  };
 
-  const products = Array.from({ length: 20 }, (_, index) => product(Date.now() + index))
+  const products = Array.from({ length: 20 }, (_, index) => product(Date.now() + index));
 
   return HttpResponse.json({
     data: {
       products,
     },
-  })
-})
+  });
+});
 
 const QueryCategories = graphql.query('QueryCategories', () => {
   const categories = [
@@ -74,17 +74,17 @@ const QueryCategories = graphql.query('QueryCategories', () => {
       id: '11',
       name: '기타',
     },
-  ]
+  ];
 
   return HttpResponse.json({
     data: {
       categories,
     },
-  })
-})
+  });
+});
 
 const QueryMe = graphql.query('QueryMe', async () => {
-  await delay(3000)
+  await delay(3000);
   return HttpResponse.json({
     data: {
       me: {
@@ -95,8 +95,8 @@ const QueryMe = graphql.query('QueryMe', async () => {
         gender: 'MALE',
       },
     },
-  })
-})
+  });
+});
 
 const MutationSignup = graphql.mutation('MutationSignup', () => {
   return HttpResponse.json({
@@ -115,23 +115,23 @@ const MutationSignup = graphql.mutation('MutationSignup', () => {
         },
       },
     },
-  })
-})
+  });
+});
 
 const MutationUpdateUserProfile = graphql.mutation('MutationUpdateUserProfile', () => {
   return HttpResponse.json({
     data: {
       updateUserProfile: true,
     },
-  })
-})
+  });
+});
 
 // This funciton should be add handlers to last, if not can't mock apis
 const Operation = graphql.operation(({ query, variables }) => {
-  console.warn('[MSW] unhandled api found ', query, variables)
+  console.warn('[MSW] unhandled api found ', query, variables);
 
-  return HttpResponse.json({ errors: [{ message: 'Request failed' }] })
-})
+  return HttpResponse.json({ errors: [{ message: 'Request failed' }] });
+});
 
 export const handlers = [
   QueryProducts,
@@ -140,4 +140,4 @@ export const handlers = [
   MutationSignup,
   MutationUpdateUserProfile,
   Operation,
-]
+];

@@ -1,5 +1,5 @@
-import BasicLayout from '@/components/layout/BasicLayout'
-import NicknameForm from './components/NickNameForm'
+import BasicLayout from '@/components/layout/BasicLayout';
+import NicknameForm from './components/NickNameForm';
 
 const NickNamePage = () => {
   return (
@@ -13,7 +13,7 @@ const NickNamePage = () => {
         <NicknameForm />
       </div>
     </BasicLayout>
-  )
-}
+  );
+};
 
-export default NickNamePage
+export default NickNamePage;

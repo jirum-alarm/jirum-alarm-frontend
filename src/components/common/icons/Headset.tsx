@@ -1,4 +1,4 @@
-import type { SVGProps } from 'react'
+import type { SVGProps } from 'react';
 const SvgHeadset = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={28} height={28} fill="none" {...props}>
     <path
@@ -8,5 +8,5 @@ const SvgHeadset = (props: SVGProps<SVGSVGElement>) => (
       clipRule="evenodd"
     />
   </svg>
-)
-export default SvgHeadset
+);
+export default SvgHeadset;
