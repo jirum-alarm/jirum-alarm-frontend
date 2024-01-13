@@ -2,7 +2,7 @@ import { User } from '@/types/user';
 import { useId } from 'react';
 
 interface GenderRadioGroupProps {
-  handleRadioChange: (value: React.ChangeEvent<HTMLInputElement>) => void;
+  handleRadioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   gender?: User['gender'];
 }
 

@@ -42,8 +42,18 @@ export const MutationSignup = gql`
 `;
 
 export const MutationUpdateUserProfile = gql`
-  mutation MutationUpdateUserProfile($nickname: String, $birthYear: Float, $gender: Gender) {
-    updateUserProfile(nickname: $nickname, birthYear: $birthYear, gender: $gender)
+  mutation MutationUpdateUserProfile(
+    $nickname: String
+    $birthYear: Float
+    $gender: Gender
+    $favoriteCategories: [Int!]
+  ) {
+    updateUserProfile(
+      nickname: $nickname
+      birthYear: $birthYear
+      gender: $gender
+      favoriteCategories: $favoriteCategories
+    )
   }
 `;
 
@@ -61,6 +71,7 @@ export const QueryMe = gql`
       nickname
       birthYear
       gender
+      favoriteCategories
     }
   }
 `;

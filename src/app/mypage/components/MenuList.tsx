@@ -6,7 +6,7 @@ const mypageMenuListMap = [
   {
     icon: Filter,
     title: '관심 카테고리',
-    url: '/',
+    url: '/mypage/categories',
   },
   // {
   //   icon: Alert,
