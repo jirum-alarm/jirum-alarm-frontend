@@ -84,7 +84,6 @@ const QueryCategories = graphql.query('QueryCategories', () => {
 });
 
 const QueryMe = graphql.query('QueryMe', async () => {
-  await delay(3000);
   return HttpResponse.json({
     data: {
       me: {
@@ -93,6 +92,7 @@ const QueryMe = graphql.query('QueryMe', async () => {
         nickname: '지름알림',
         birthYear: 1997,
         gender: 'MALE',
+        favoriteCategories: [1, 2, 3],
       },
     },
   });
