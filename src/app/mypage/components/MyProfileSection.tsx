@@ -1,13 +1,13 @@
-import { ArrowRight } from '@/components/common/icons'
-import { QueryMe } from '@/graphql/auth'
-import { getClient } from '@/lib/client'
-import { User } from '@/types/user'
-import Link from 'next/link'
+import { ArrowRight } from '@/components/common/icons';
+import { QueryMe } from '@/graphql/auth';
+import { getClient } from '@/lib/client';
+import { User } from '@/types/user';
+import Link from 'next/link';
 
 const MyProfileSection = async () => {
   const { data } = await getClient().query<{ me: User }>({
     query: QueryMe,
-  })
+  });
 
   return (
     <div className="px-5">
@@ -25,7 +25,7 @@ const MyProfileSection = async () => {
         </Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MyProfileSection
+export default MyProfileSection;

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react';
 
 import {
   ApolloError,
@@ -12,31 +12,31 @@ import {
   useLazyQuery,
   useMutation,
   useQuery,
-} from '@apollo/client'
-import { MutationFetchPolicy } from '@apollo/client/core/watchQueryOptions'
-import { useSetRecoilState } from 'recoil'
+} from '@apollo/client';
+import { MutationFetchPolicy } from '@apollo/client/core/watchQueryOptions';
+import { useSetRecoilState } from 'recoil';
 
-import { errorModalSelector, loadingAtom } from '../state/common'
+import { errorModalSelector, loadingAtom } from '../state/common';
 
-import { isAccessTokenExpired } from '../lib/auth'
-import { ApiType } from '../types/enum/common'
+import { isAccessTokenExpired } from '../lib/auth';
+import { ApiType } from '../types/enum/common';
 
 interface IQueryDefaultOption {
-  fetchPolicy: FetchPolicy
-  context: DefaultContext
+  fetchPolicy: FetchPolicy;
+  context: DefaultContext;
 }
 
 interface IMutateDefaultOption {
-  fetchPolicy: MutationFetchPolicy
-  context: DefaultContext
-  'cache-first'?: any
+  fetchPolicy: MutationFetchPolicy;
+  context: DefaultContext;
+  'cache-first'?: any;
 }
 
 interface IAdditionalArgs {
-  errorMessage?: string
-  openEventHandler?: () => void
-  closeEventHandler?: () => void
-  isLoading?: boolean
+  errorMessage?: string;
+  openEventHandler?: () => void;
+  closeEventHandler?: () => void;
+  isLoading?: boolean;
 }
 
 interface IQueryHookOptions<T, F extends OperationVariables = OperationVariables>
@@ -54,140 +54,140 @@ interface IMutationHookOptions<T, F = OperationVariables>
 const apiQueryOptions: IQueryDefaultOption = {
   fetchPolicy: 'network-only',
   context: { clientName: ApiType.API },
-}
+};
 
 const apiMutateOptions: IMutateDefaultOption = {
   fetchPolicy: 'network-only',
   context: { clientName: ApiType.API },
-}
+};
 
 const Error = (
   customMessage?: string,
   openEventHandler?: () => void,
   closeEventHandler?: () => void,
 ) => {
-  const showErrorModal = useSetRecoilState(errorModalSelector)
+  const showErrorModal = useSetRecoilState(errorModalSelector);
 
   const checkError = useCallback(
     (error: ApolloError | undefined) => {
       try {
         if (!error) {
-          return
+          return;
         }
 
-        let message = customMessage ?? error.graphQLErrors[0]?.message
-        const extensions = error.graphQLErrors[0]?.extensions
+        let message = customMessage ?? error.graphQLErrors[0]?.message;
+        const extensions = error.graphQLErrors[0]?.extensions;
 
         if (
           extensions?.code === 'FORBIDDEN' &&
           error.message === 'Forbidden resource' &&
           isAccessTokenExpired()
         ) {
-          return
+          return;
         }
 
         if (extensions?.code === 'UNAUTHENTICATED') {
-          return
+          return;
         }
 
         if (extensions?.response) {
-          message = JSON.stringify(extensions?.response)
+          message = JSON.stringify(extensions?.response);
         }
 
         if (!message) {
-          return
+          return;
         }
 
         showErrorModal({
           message,
           openEventHandler: openEventHandler,
           closeEventHandler: closeEventHandler,
-        })
+        });
       } catch (e) {
-        showErrorModal({ message: `error: ${e}` })
+        showErrorModal({ message: `error: ${e}` });
       }
     },
     [closeEventHandler, customMessage, openEventHandler, showErrorModal],
-  )
+  );
 
-  return checkError
-}
+  return checkError;
+};
 
 const useQueryHook = <T, F extends OperationVariables>(
   gql: DocumentNode,
   options: IQueryHookOptions<T, F>,
 ) => {
-  const { error, loading, data, refetch } = useQuery<T, F>(gql, options)
+  const { error, loading, data, refetch } = useQuery<T, F>(gql, options);
   const checkError = Error(
     options.errorMessage,
     options.openEventHandler,
     options.closeEventHandler,
-  )
-  const setLoading = useSetRecoilState(loadingAtom)
+  );
+  const setLoading = useSetRecoilState(loadingAtom);
 
   useEffect(() => {
     if (!options.isLoading) {
-      return
+      return;
     }
-    setLoading(loading)
-  }, [loading, options.isLoading, setLoading])
+    setLoading(loading);
+  }, [loading, options.isLoading, setLoading]);
   useEffect(() => {
-    checkError(error)
-  }, [checkError, error])
+    checkError(error);
+  }, [checkError, error]);
 
-  return { error, loading, data, refetch }
-}
+  return { error, loading, data, refetch };
+};
 
 const useLazyQueryHook = <T, F extends OperationVariables>(
   gql: DocumentNode,
   options: ILazyQueryHookOptions<T, F>,
 ) => {
-  const [getQuery, { error, loading, data }] = useLazyQuery<T, F>(gql, options)
+  const [getQuery, { error, loading, data }] = useLazyQuery<T, F>(gql, options);
 
   const checkError = Error(
     options.errorMessage,
     options.openEventHandler,
     options.closeEventHandler,
-  )
-  const setLoading = useSetRecoilState(loadingAtom)
+  );
+  const setLoading = useSetRecoilState(loadingAtom);
 
   useEffect(() => {
     if (!options.isLoading) {
-      return
+      return;
     }
-    setLoading(loading)
-  }, [loading, options.isLoading, setLoading])
+    setLoading(loading);
+  }, [loading, options.isLoading, setLoading]);
 
   useEffect(() => {
-    checkError(error)
-  }, [checkError, error])
+    checkError(error);
+  }, [checkError, error]);
 
-  return { getQuery, error, loading, data }
-}
+  return { getQuery, error, loading, data };
+};
 
 const useMutationHook = <T, F>(gql: DocumentNode, options: IMutationHookOptions<T, F>) => {
-  const [mutate, { data, loading, error }] = useMutation<T, F>(gql, options)
+  const [mutate, { data, loading, error }] = useMutation<T, F>(gql, options);
 
   const checkError = Error(
     options.errorMessage,
     options.openEventHandler,
     options.closeEventHandler,
-  )
-  const setLoading = useSetRecoilState(loadingAtom)
+  );
+  const setLoading = useSetRecoilState(loadingAtom);
 
   useEffect(() => {
     if (!options.isLoading) {
-      return
+      return;
     }
-    setLoading(loading)
-  }, [loading, options.isLoading, setLoading])
+    setLoading(loading);
+  }, [loading, options.isLoading, setLoading]);
 
   useEffect(() => {
-    checkError(error)
-  }, [checkError, error])
+    checkError(error);
+  }, [checkError, error]);
 
-  return { mutate, data, loading, error }
-}
+  return { mutate, data, loading, error };
+};
 
 export const useApiQuery = <T, F extends OperationVariables = OperationVariables>(
   gql: DocumentNode,
@@ -197,8 +197,8 @@ export const useApiQuery = <T, F extends OperationVariables = OperationVariables
     ...apiQueryOptions,
     ...options,
     isLoading: options?.isLoading ?? true,
-  })
-}
+  });
+};
 
 export const useLazyApiQuery = <T, F extends OperationVariables = OperationVariables>(
   gql: DocumentNode,
@@ -208,8 +208,8 @@ export const useLazyApiQuery = <T, F extends OperationVariables = OperationVaria
     ...apiQueryOptions,
     ...options,
     isLoading: options?.isLoading ?? true,
-  })
-}
+  });
+};
 
 export const useApiMutation = <T, F = OperationVariables>(
   gql: DocumentNode,
@@ -219,5 +219,5 @@ export const useApiMutation = <T, F = OperationVariables>(
     ...apiMutateOptions,
     ...options,
     isLoading: options?.isLoading ?? true,
-  })
-}
+  });
+};

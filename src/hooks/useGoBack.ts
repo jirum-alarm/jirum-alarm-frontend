@@ -1,12 +1,12 @@
-import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 
 const useGoBack = () => {
-  const router = useRouter()
+  const router = useRouter();
   const goBack = useCallback(() => {
-    router.back()
-  }, [router])
-  return goBack
-}
+    router.back();
+  }, [router]);
+  return goBack;
+};
 
-export default useGoBack
+export default useGoBack;

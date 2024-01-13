@@ -1,39 +1,39 @@
-import Link from 'next/link'
-import Button from '@/components/common/Button'
-import { CheckDefault, CheckboxSelected } from '@/components/common/icons'
-import { Registration } from '../page'
+import Link from 'next/link';
+import Button from '@/components/common/Button';
+import { CheckDefault, CheckboxSelected } from '@/components/common/icons';
+import { Registration } from '../page';
 
-const CONSENT_ALL = '모두 동의'
+const CONSENT_ALL = '모두 동의';
 const CONSENT_REQUIRED = {
   termsOfService: '[필수] 서비스 이용약관 동의',
   privacyPolicy: '[필수] 개인정보 처리방침 동의',
-} as const
+} as const;
 
-type ConsentRequiredKey = keyof typeof CONSENT_REQUIRED
-type ConsentRequired = (typeof CONSENT_REQUIRED)[ConsentRequiredKey]
+type ConsentRequiredKey = keyof typeof CONSENT_REQUIRED;
+type ConsentRequired = (typeof CONSENT_REQUIRED)[ConsentRequiredKey];
 
 const AgreeTermsOfService = ({
   registration,
   handleRegistration,
   moveNextStep,
 }: {
-  registration: Registration
-  handleRegistration: (consent: Partial<Pick<Registration, ConsentRequiredKey>>) => void
-  moveNextStep: () => void
+  registration: Registration;
+  handleRegistration: (consent: Partial<Pick<Registration, ConsentRequiredKey>>) => void;
+  moveNextStep: () => void;
 }) => {
   const toggleConsentAll = (isAllConsented: boolean) => {
-    handleRegistration({ termsOfService: !isAllConsented, privacyPolicy: !isAllConsented })
-  }
+    handleRegistration({ termsOfService: !isAllConsented, privacyPolicy: !isAllConsented });
+  };
 
   const toggleConsent = (id: ConsentRequiredKey) => {
-    const isConsentIncludes = registration[id]
+    const isConsentIncludes = registration[id];
 
-    handleRegistration({ [id]: !isConsentIncludes })
-  }
+    handleRegistration({ [id]: !isConsentIncludes });
+  };
 
   const handleCTAButton = () => {
-    moveNextStep()
-  }
+    moveNextStep();
+  };
 
   return (
     <div className="grid h-full">
@@ -65,10 +65,10 @@ const AgreeTermsOfService = ({
         다음
       </Button>
     </div>
-  )
-}
+  );
+};
 
-export default AgreeTermsOfService
+export default AgreeTermsOfService;
 
 const Description = () => {
   return (
@@ -77,21 +77,21 @@ const Description = () => {
       <br />
       동의해주세요.
     </p>
-  )
-}
+  );
+};
 
 const ConsentAll = ({
   registration,
   toggleConsentAll,
 }: {
-  registration: Registration
-  toggleConsentAll: (isAllConsented: boolean) => void
+  registration: Registration;
+  toggleConsentAll: (isAllConsented: boolean) => void;
 }) => {
-  const isAllConsented = registration.termsOfService && registration.privacyPolicy
+  const isAllConsented = registration.termsOfService && registration.privacyPolicy;
 
   const handleCheckboxChange = () => {
-    toggleConsentAll(isAllConsented)
-  }
+    toggleConsentAll(isAllConsented);
+  };
 
   return (
     <label
@@ -106,8 +106,8 @@ const ConsentAll = ({
       )}
       {CONSENT_ALL}
     </label>
-  )
-}
+  );
+};
 
 const ConsentRequired = ({
   id,
@@ -115,14 +115,14 @@ const ConsentRequired = ({
   link,
   toggleConsent,
 }: {
-  id: ConsentRequiredKey
-  registration: Registration
-  link: string
-  toggleConsent: (consent: ConsentRequiredKey) => void
+  id: ConsentRequiredKey;
+  registration: Registration;
+  link: string;
+  toggleConsent: (consent: ConsentRequiredKey) => void;
 }) => {
   const handleCheckboxChange = () => {
-    toggleConsent(id)
-  }
+    toggleConsent(id);
+  };
 
   return (
     <div className="grid grid-flow-col">
@@ -141,5 +141,5 @@ const ConsentRequired = ({
         </Link>
       </div>
     </div>
-  )
-}
+  );
+};

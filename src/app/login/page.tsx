@@ -1,62 +1,62 @@
-'use client'
+'use client';
 
-import { useMutation } from '@apollo/client'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { FcGoogle } from 'react-icons/fc'
-import { LiaUserCircle } from 'react-icons/lia'
-import { useSetRecoilState } from 'recoil'
-import { MutationLogin, QueryMe } from '../../graphql/auth'
-import { useLazyApiQuery } from '../../hooks/useGql'
-import { userState } from '../../state/user'
-import { StorageTokenKey } from '../../types/enum/auth'
-import { ILoginOutput, ILoginVariable } from '../../types/login'
-import { User } from '../../types/user'
-import { errorModalSelector } from '../../state/common'
+import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { FcGoogle } from 'react-icons/fc';
+import { LiaUserCircle } from 'react-icons/lia';
+import { useSetRecoilState } from 'recoil';
+import { MutationLogin, QueryMe } from '../../graphql/auth';
+import { useLazyApiQuery } from '../../hooks/useGql';
+import { userState } from '../../state/user';
+import { StorageTokenKey } from '../../types/enum/auth';
+import { ILoginOutput, ILoginVariable } from '../../types/login';
+import { User } from '../../types/user';
+import { errorModalSelector } from '../../state/common';
 
 export default function Login() {
-  const [id, setId] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const setUser = useSetRecoilState(userState)
+  const [id, setId] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const setUser = useSetRecoilState(userState);
 
-  const { getQuery } = useLazyApiQuery<{ me: User }>(QueryMe)
+  const { getQuery } = useLazyApiQuery<{ me: User }>(QueryMe);
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const showErrorModal = useSetRecoilState(errorModalSelector)
+  const showErrorModal = useSetRecoilState(errorModalSelector);
   const [mutate] = useMutation<ILoginOutput, ILoginVariable>(MutationLogin, {
     onCompleted: (data) => {
       if (data) {
-        localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, data.login.accessToken)
+        localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, data.login.accessToken);
 
         if (data.login.refreshToken) {
-          localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.login.refreshToken)
+          localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.login.refreshToken);
         }
 
         getQuery().then((result) => {
           if (result.data) {
-            setUser(result.data.me)
-            localStorage.setItem('me', JSON.stringify(result.data.me))
+            setUser(result.data.me);
+            localStorage.setItem('me', JSON.stringify(result.data.me));
           }
-        })
+        });
 
-        router.push('/')
+        router.push('/');
       }
     },
-  })
+  });
 
   const onSubmitLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!id || !password) {
-      showErrorModal('아이디와 비밀번호를 정확히 입력해주세요!')
-      return
+      showErrorModal('아이디와 비밀번호를 정확히 입력해주세요!');
+      return;
     }
 
     mutate({
       variables: { email: id, password: password },
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -233,5 +233,5 @@ export default function Login() {
         </div>
       </div>
     </>
-  )
+  );
 }

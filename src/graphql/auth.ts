@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client';
 
 export const MutationLogin = gql`
   mutation MutationLogin($email: String!, $password: String!) {
@@ -7,7 +7,7 @@ export const MutationLogin = gql`
       refreshToken
     }
   }
-`
+`;
 
 export const MutationSignup = gql`
   mutation MutationSignup(
@@ -39,19 +39,19 @@ export const MutationSignup = gql`
       }
     }
   }
-`
+`;
 
 export const MutationUpdateUserProfile = gql`
   mutation MutationUpdateUserProfile($nickname: String, $birthYear: Float, $gender: Gender) {
     updateUserProfile(nickname: $nickname, birthYear: $birthYear, gender: $gender)
   }
-`
+`;
 
 export const QueryLogout = gql`
   query QueryLogout {
     logout
   }
-`
+`;
 
 export const QueryMe = gql`
   query QueryMe {
@@ -63,7 +63,7 @@ export const QueryMe = gql`
       gender
     }
   }
-`
+`;
 
 export const QueryLoginByRefreshToken = gql`
   query QueryLoginByRefreshToken {
@@ -72,4 +72,4 @@ export const QueryLoginByRefreshToken = gql`
       refreshToken
     }
   }
-`
+`;

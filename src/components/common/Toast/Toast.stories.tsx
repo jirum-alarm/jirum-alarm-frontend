@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { Toast } from './Toast'
+import type { Meta, StoryObj } from '@storybook/react';
+import { Toast } from './Toast';
 
 const meta = {
   title: 'components/Toast',
@@ -10,10 +10,10 @@ const meta = {
   },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
-} satisfies Meta<typeof Toast>
+} satisfies Meta<typeof Toast>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Default: Story = {
@@ -22,4 +22,4 @@ export const Default: Story = {
       <Toast show>확인되었습니다</Toast>
     </div>
   ),
-}
+};

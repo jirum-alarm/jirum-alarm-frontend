@@ -1,12 +1,12 @@
-'use client'
-import Input from '@/components/common/Input'
-import useNicknameFormViewModel from '../hooks/useNicknameFormViewModel'
-import { Cancel } from '@/components/common/icons'
-import Button from '@/components/common/Button'
+'use client';
+import Input from '@/components/common/Input';
+import useNicknameFormViewModel from '../hooks/useNicknameFormViewModel';
+import { Cancel } from '@/components/common/icons';
+import Button from '@/components/common/Button';
 
 const NickNameForm = () => {
   const { nickname, handleSubmit, handleInputChange, reset, isValidInput } =
-    useNicknameFormViewModel()
+    useNicknameFormViewModel();
   return (
     <form className="flex-1 flex flex-col justify-between pt-[88px]" onSubmit={handleSubmit}>
       <Input
@@ -30,7 +30,7 @@ const NickNameForm = () => {
         저장
       </Button>
     </form>
-  )
-}
+  );
+};
 
-export default NickNameForm
+export default NickNameForm;

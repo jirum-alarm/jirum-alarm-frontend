@@ -1,8 +1,8 @@
-import TermsOfUse from '@/app/policies/terms/components/TermsOfUse'
-import React from 'react'
+import TermsOfUse from '@/app/policies/terms/components/TermsOfUse';
+import React from 'react';
 
 const TermsOfUsePage = () => {
-  return <TermsOfUse />
-}
+  return <TermsOfUse />;
+};
 
-export default TermsOfUsePage
+export default TermsOfUsePage;

@@ -1,12 +1,12 @@
-import { type VariantProps } from 'class-variance-authority'
-import { buttonVaraint } from './variant/button'
-import React from 'react'
-import { cn } from '@/lib/cn'
+import { type VariantProps } from 'class-variance-authority';
+import { buttonVaraint } from './variant/button';
+import React from 'react';
+import { cn } from '@/lib/cn';
 
 interface ButtonProps
   extends Omit<React.ComponentProps<'button'>, 'color'>,
     VariantProps<typeof buttonVaraint> {
-  children?: React.ReactNode
+  children?: React.ReactNode;
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -20,8 +20,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {children}
       </button>
-    )
+    );
   },
-)
+);
 
-Button.displayName = 'Button'
+Button.displayName = 'Button';

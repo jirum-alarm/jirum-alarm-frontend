@@ -1,35 +1,35 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import BasicLayout from '@/components/layout/BasicLayout'
-import Email from './components/Email'
-import Password from './components/Password'
-import AgreeTermsOfService from './components/AgreeTermsOfService'
-import SetupNickname from './components/SetupNickname'
-import { useMutation } from '@apollo/client'
-import { MutationSignup } from '@/graphql/auth'
-import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth'
-import { StorageTokenKey } from '@/types/enum/auth'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react';
+import BasicLayout from '@/components/layout/BasicLayout';
+import Email from './components/Email';
+import Password from './components/Password';
+import AgreeTermsOfService from './components/AgreeTermsOfService';
+import SetupNickname from './components/SetupNickname';
+import { useMutation } from '@apollo/client';
+import { MutationSignup } from '@/graphql/auth';
+import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth';
+import { StorageTokenKey } from '@/types/enum/auth';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-const STEPS = ['termsOfService', 'email', 'password', 'nickname'] as const
-type Steps = (typeof STEPS)[number]
+const STEPS = ['termsOfService', 'email', 'password', 'nickname'] as const;
+type Steps = (typeof STEPS)[number];
 
-const INITIAL_STEP = 'termsOfService'
-const QUERY_PARM_PREFIX = 'steps'
+const INITIAL_STEP = 'termsOfService';
+const QUERY_PARM_PREFIX = 'steps';
 
 interface Input {
-  value: string
-  error: boolean
-  focus: boolean
+  value: string;
+  error: boolean;
+  focus: boolean;
 }
 
 export interface Registration {
-  email: Input
-  password: Input & { invalidType: boolean; invalidLength: boolean }
-  termsOfService: boolean
-  privacyPolicy: boolean
-  nickname: Input
+  email: Input;
+  password: Input & { invalidType: boolean; invalidLength: boolean };
+  termsOfService: boolean;
+  privacyPolicy: boolean;
+  nickname: Input;
 }
 
 const Signup = () => {
@@ -39,42 +39,42 @@ const Signup = () => {
     termsOfService: false,
     privacyPolicy: false,
     nickname: { value: '', error: false, focus: false },
-  })
+  });
 
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const steps = searchParams.get(QUERY_PARM_PREFIX) as Steps
+  const steps = searchParams.get(QUERY_PARM_PREFIX) as Steps;
 
   const [signup] = useMutation<ISignupOutput, ISignupVariable>(MutationSignup, {
     onCompleted: (data) => {
-      localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, data.signup.accessToken)
+      localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, data.signup.accessToken);
 
       if (data.signup.refreshToken) {
-        localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.signup.refreshToken)
+        localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.signup.refreshToken);
       }
 
-      router.push('signup/complete')
+      router.push('signup/complete');
     },
-  })
+  });
 
   const moveNextStep = (steps: Steps) => {
-    router.push(`?${QUERY_PARM_PREFIX}=${steps}`)
-  }
+    router.push(`?${QUERY_PARM_PREFIX}=${steps}`);
+  };
 
   const handleRegistration = (
     _registraion: Partial<Registration> | ((registration: Registration) => Partial<Registration>),
   ) => {
-    const next = typeof _registraion === 'function' ? _registraion(registraion) : _registraion
+    const next = typeof _registraion === 'function' ? _registraion(registraion) : _registraion;
 
     setRegistration((prev) => ({
       ...prev,
       ...next,
-    }))
-  }
+    }));
+  };
 
   const completeRegistration = async () => {
-    const { email, password, nickname } = registraion
+    const { email, password, nickname } = registraion;
 
     // @TODO: brithYear, gender, favoriteCategories 실제 데이터로 교체
     await signup({
@@ -86,12 +86,12 @@ const Signup = () => {
         gender: 'FEMALE',
         favoriteCategories: [1],
       },
-    })
-  }
+    });
+  };
 
   useEffect(() => {
-    router.replace(`?${QUERY_PARM_PREFIX}=${INITIAL_STEP}`)
-  }, [router])
+    router.replace(`?${QUERY_PARM_PREFIX}=${INITIAL_STEP}`);
+  }, [router]);
 
   return (
     <BasicLayout hasBackButton>
@@ -126,7 +126,7 @@ const Signup = () => {
         )}
       </div>
     </BasicLayout>
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;

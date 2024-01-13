@@ -1,4 +1,4 @@
-import { cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority';
 
 export const containerVaraint = cva(['relative', 'w-full', 'min-w-[200px]'], {
   variants: {
@@ -9,7 +9,7 @@ export const containerVaraint = cva(['relative', 'w-full', 'min-w-[200px]'], {
   defaultVariants: {
     size: 'md',
   },
-})
+});
 
 export const iconVaraint = cva(['absolute'], {
   variants: {
@@ -24,7 +24,7 @@ export const iconVaraint = cva(['absolute'], {
     variant: 'standard',
     size: 'md',
   },
-})
+});
 
 export const inputVariant = cva(
   [
@@ -56,7 +56,7 @@ export const inputVariant = cva(
       color: 'black',
     },
   },
-)
+);
 
 export const errorVariant = cva('', {
   variants: {
@@ -70,7 +70,7 @@ export const errorVariant = cva('', {
   defaultVariants: {
     size: 'md',
   },
-})
+});
 
 export const helperVariant = cva('', {
   variants: {
@@ -81,4 +81,4 @@ export const helperVariant = cva('', {
   defaultVariants: {
     size: 'md',
   },
-})
+});

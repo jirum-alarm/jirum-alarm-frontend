@@ -1,38 +1,38 @@
-'use client'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useEffect } from 'react'
-import { PiBellSimpleBold } from 'react-icons/pi'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { Logo } from '@/components/common/icons'
-import { QueryMe } from '../graphql/auth'
-import { useLazyApiQuery } from '../hooks/useGql'
-import { userState } from '../state/user'
-import { StorageTokenKey } from '../types/enum/auth'
-import { User } from '../types/user'
-import LoadState from './LoadState'
+'use client';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
+import { PiBellSimpleBold } from 'react-icons/pi';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { Logo } from '@/components/common/icons';
+import { QueryMe } from '../graphql/auth';
+import { useLazyApiQuery } from '../hooks/useGql';
+import { userState } from '../state/user';
+import { StorageTokenKey } from '../types/enum/auth';
+import { User } from '../types/user';
+import LoadState from './LoadState';
 
 export default function NavBar() {
-  const pathname = usePathname()
-  const isLoginPage = pathname === '/login'
+  const pathname = usePathname();
+  const isLoginPage = pathname === '/login';
 
-  const setUser = useSetRecoilState(userState)
+  const setUser = useSetRecoilState(userState);
 
-  const user = useRecoilValue<User | null>(userState)
+  const user = useRecoilValue<User | null>(userState);
 
-  const { getQuery } = useLazyApiQuery<{ me: User }>(QueryMe)
+  const { getQuery } = useLazyApiQuery<{ me: User }>(QueryMe);
 
   useEffect(() => {
-    const token = localStorage.getItem(StorageTokenKey.ACCESS_TOKEN)
+    const token = localStorage.getItem(StorageTokenKey.ACCESS_TOKEN);
     if (token) {
       getQuery().then((response) => {
         if (response.data) {
-          setUser(response.data?.me)
-          localStorage.setItem('me', JSON.stringify(response.data.me))
+          setUser(response.data?.me);
+          localStorage.setItem('me', JSON.stringify(response.data.me));
         }
-      })
+      });
     }
-  }, [])
+  }, []);
 
   return (
     <>
@@ -65,5 +65,5 @@ export default function NavBar() {
         </div>
       </div>
     </>
-  )
+  );
 }

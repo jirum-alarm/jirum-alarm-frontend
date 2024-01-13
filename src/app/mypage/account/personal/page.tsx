@@ -1,5 +1,5 @@
-import BasicLayout from '@/components/layout/BasicLayout'
-import PersonalInfoForm from './components/PersonalInfoForm'
+import BasicLayout from '@/components/layout/BasicLayout';
+import PersonalInfoForm from './components/PersonalInfoForm';
 
 const PersonalPage = () => {
   return (
@@ -13,7 +13,7 @@ const PersonalPage = () => {
         <PersonalInfoForm />
       </div>
     </BasicLayout>
-  )
-}
+  );
+};
 
-export default PersonalPage
+export default PersonalPage;

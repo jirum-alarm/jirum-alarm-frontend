@@ -1,39 +1,39 @@
-'use client'
-import { QueryProducts } from '@/graphql'
-import { QueryCategories } from '@/graphql/category'
-import { IProductOutput } from '@/graphql/interface'
-import { ICategoryOutput } from '@/graphql/interface/category'
-import { useSuspenseQuery } from '@apollo/client'
-import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react'
-import { useInView } from 'react-intersection-observer'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { TopButton } from '@/components/TopButton'
-import dynamic from 'next/dynamic'
-import { IProductsFilterParam } from '@/types/main'
-import SwipeableViews from 'react-swipeable-views'
-import { useDevice } from '@/hooks/useDevice'
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
-import 'react-tabs/style/react-tabs.css'
-import '../../../style/React_tabs.css'
-import ProductNotFound from './ProductNotFound'
-import ProductLoading from './ProductLoading'
+'use client';
+import { QueryProducts } from '@/graphql';
+import { QueryCategories } from '@/graphql/category';
+import { IProductOutput } from '@/graphql/interface';
+import { ICategoryOutput } from '@/graphql/interface/category';
+import { useSuspenseQuery } from '@apollo/client';
+import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { TopButton } from '@/components/TopButton';
+import dynamic from 'next/dynamic';
+import { IProductsFilterParam } from '@/types/main';
+import SwipeableViews from 'react-swipeable-views';
+import { useDevice } from '@/hooks/useDevice';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import '../../../style/React_tabs.css';
+import ProductNotFound from './ProductNotFound';
+import ProductLoading from './ProductLoading';
 
-const ProductCard = dynamic(() => import('./ProductCard'), { ssr: false })
+const ProductCard = dynamic(() => import('./ProductCard'), { ssr: false });
 const ProductList = () => {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const limit = 20
-  const allCategory = { id: 0, name: '전체' }
-  const [inputData, setInputData] = useState<string>('')
-  const [keyword, setKeyword] = useState<string>('')
-  const [activeTab, setActiveTab] = useState(0)
-  const [hasNextData, setHasNextData] = useState(true)
-  const [isLoading, setIsLoading] = useState(true)
-  const { isMobile } = useDevice()
-  const categoryParam = searchParams.get('categoryId')
-  const keywordParam = searchParams.get('keyword')
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const limit = 20;
+  const allCategory = { id: 0, name: '전체' };
+  const [inputData, setInputData] = useState<string>('');
+  const [keyword, setKeyword] = useState<string>('');
+  const [activeTab, setActiveTab] = useState(0);
+  const [hasNextData, setHasNextData] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const { isMobile } = useDevice();
+  const categoryParam = searchParams.get('categoryId');
+  const keywordParam = searchParams.get('keyword');
 
-  const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories)
+  const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
 
   const {
     data: { products },
@@ -45,42 +45,42 @@ const ProductList = () => {
       keyword: keywordParam || undefined,
       categoryId: categoryParam ? Number(categoryParam) : undefined,
     },
-  })
+  });
 
   const { ref } = useInView({
     onChange(inView) {
       if (inView && hasNextData) {
-        fetchMoreProducts()
+        fetchMoreProducts();
       }
     },
-  })
+  });
 
   const handleTabChange = useCallback((index: number) => {
-    setActiveTab(index)
-  }, [])
+    setActiveTab(index);
+  }, []);
 
   const keywordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputData(event.target.value)
-  }
+    setInputData(event.target.value);
+  };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      searchHandler()
+      searchHandler();
     }
-  }
+  };
 
   const searchHandler = () => {
-    setKeyword(inputData)
-  }
+    setKeyword(inputData);
+  };
   const handleClose = useCallback(() => {
-    setKeyword(() => '')
-    setInputData(() => '')
-  }, [])
+    setKeyword(() => '');
+    setInputData(() => '');
+  }, []);
 
   const fetchMoreProducts = () => {
-    const searchAfter = products.at(-1)?.searchAfter
+    const searchAfter = products.at(-1)?.searchAfter;
     if (!products) {
-      return
+      return;
     }
     fetchMore({
       variables: {
@@ -88,63 +88,63 @@ const ProductList = () => {
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!prev.products) {
-          return { products: [] }
+          return { products: [] };
         } else if (fetchMoreResult.products.length === 0) {
-          return { products: [...prev.products] }
+          return { products: [...prev.products] };
         } else if (fetchMoreResult.products.length < limit) {
-          setHasNextData(false)
+          setHasNextData(false);
         }
-        return { products: [...prev.products, ...fetchMoreResult.products] }
+        return { products: [...prev.products, ...fetchMoreResult.products] };
       },
-    })
-  }
+    });
+  };
 
   useEffect(() => {
-    const categoryParam = searchParams.get('categoryId')
-    const keywordParam = searchParams.get('keyword')
+    const categoryParam = searchParams.get('categoryId');
+    const keywordParam = searchParams.get('keyword');
     if (!categoryParam && !keywordParam) {
-      setIsLoading(false)
-      setActiveTab(0)
-      setKeyword('')
-      setInputData('')
-      return
+      setIsLoading(false);
+      setActiveTab(0);
+      setKeyword('');
+      setInputData('');
+      return;
     }
     if (categoryParam) {
-      setActiveTab(Number(categoryParam))
+      setActiveTab(Number(categoryParam));
     }
     if (keywordParam) {
-      setKeyword(keywordParam)
-      setInputData(keywordParam)
+      setKeyword(keywordParam);
+      setInputData(keywordParam);
     }
-    setIsLoading(false)
-  }, [])
+    setIsLoading(false);
+  }, []);
 
   useEffect(() => {
     if (products && products.length % limit !== 0) {
-      setHasNextData(false)
+      setHasNextData(false);
     }
-  }, [products])
+  }, [products]);
 
   useEffect(() => {
-    setHasNextData(true)
+    setHasNextData(true);
 
     const params: IProductsFilterParam = {
       limit,
       keyword: keyword || undefined,
       categoryId: activeTab - 1 > -1 ? activeTab - 1 : undefined,
       searchAfter: undefined,
-    }
+    };
 
-    refetch(params)
+    refetch(params);
 
     const filteredParams = Object.fromEntries(
       Object.entries(params).filter(([key, value]) => value !== undefined && key !== 'limit'),
-    )
-    const queryString = new URLSearchParams(filteredParams).toString()
+    );
+    const queryString = new URLSearchParams(filteredParams).toString();
 
-    const route = queryString ? `?${queryString}` : '/'
-    router.replace(route)
-  }, [keyword, activeTab])
+    const route = queryString ? `?${queryString}` : '/';
+    router.replace(route);
+  }, [keyword, activeTab]);
 
   return (
     <main>
@@ -262,7 +262,7 @@ const ProductList = () => {
         </>
       )}
     </main>
-  )
-}
+  );
+};
 
-export default ProductList
+export default ProductList;

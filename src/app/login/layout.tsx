@@ -1,4 +1,4 @@
-import NavBar from '../../components/Navbar'
+import NavBar from '../../components/Navbar';
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -6,5 +6,5 @@ export default function LoginLayout({ children }: { children: React.ReactNode })
       <NavBar></NavBar>
       {children}
     </>
-  )
+  );
 }

@@ -1,63 +1,63 @@
-import { useToast } from '@/components/common/Toast'
-import { MutationUpdateUserProfile, QueryMe } from '@/graphql/auth'
-import useGoBack from '@/hooks/useGoBack'
-import { User } from '@/types/user'
-import { useMutation } from '@apollo/client'
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
-import { useEffect, useState } from 'react'
+import { useToast } from '@/components/common/Toast';
+import { MutationUpdateUserProfile, QueryMe } from '@/graphql/auth';
+import useGoBack from '@/hooks/useGoBack';
+import { User } from '@/types/user';
+import { useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useEffect, useState } from 'react';
 
 const useInput = () => {
   const { data } = useQuery<{ me: Omit<User, 'favoriteCategories' | 'linkedSocialProviders'> }>(
     QueryMe,
-  )
+  );
   const [nickname, setNickname] = useState(() => ({
     value: '',
     error: false,
-  }))
-  const { showToast } = useToast()
-  const goBack = useGoBack()
+  }));
+  const { showToast } = useToast();
+  const goBack = useGoBack();
   const [updateProfile] = useMutation<{ updateUserProfile: boolean }, { nickname: string }>(
     MutationUpdateUserProfile,
     {
       onCompleted: () => {
         // showToast('닉네임이 저장됐어요')
-        goBack()
+        goBack();
       },
       onError: () => {
         // showToast('닉네임이 저장중 에러가 발생했어요')
       },
     },
-  )
+  );
 
   useEffect(() => {
     if (data?.me) {
-      setNickname((prev) => ({ ...prev, value: data.me.nickname }))
+      setNickname((prev) => ({ ...prev, value: data.me.nickname }));
     }
-  }, [data])
+  }, [data]);
 
   const isValidNickname = (value: string) => {
-    if (value === '') return true
-    const nicknameRegex = /^\S{2,12}$/
-    return nicknameRegex.test(value)
-  }
+    if (value === '') return true;
+    const nicknameRegex = /^\S{2,12}$/;
+    return nicknameRegex.test(value);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget
-    const error = !isValidNickname(value)
+    const { value } = e.currentTarget;
+    const error = !isValidNickname(value);
 
-    setNickname(() => ({ value, error }))
-  }
+    setNickname(() => ({ value, error }));
+  };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    updateProfile({ variables: { nickname: nickname.value } })
-  }
+    e.preventDefault();
+    updateProfile({ variables: { nickname: nickname.value } });
+  };
 
   const reset = () => {
-    setNickname(() => ({ value: '', error: false }))
-  }
+    setNickname(() => ({ value: '', error: false }));
+  };
 
-  const isValidInput = !!nickname.value && !nickname.error
-  return { nickname, handleSubmit, handleInputChange, reset, isValidInput }
-}
+  const isValidInput = !!nickname.value && !nickname.error;
+  return { nickname, handleSubmit, handleInputChange, reset, isValidInput };
+};
 
-export default useInput
+export default useInput;

@@ -1,4 +1,4 @@
-import { cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority';
 
 export const selectButtonVaraint = cva(['w-full', 'min-w-[220px]', 'flex', 'justify-between'], {
   variants: {
@@ -18,7 +18,7 @@ export const selectButtonVaraint = cva(['w-full', 'min-w-[220px]', 'flex', 'just
     size: 'md',
     variant: 'outlined',
   },
-})
+});
 
 export const selectListContainerVariant = cva(
   ['z-[999]', 'absolute', 'w-full', 'bg-white', 'shadow-small'],
@@ -36,4 +36,4 @@ export const selectListContainerVariant = cva(
       size: 'md',
     },
   },
-)
+);

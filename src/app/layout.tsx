@@ -1,12 +1,12 @@
-import '@/style/globals.css'
+import '@/style/globals.css';
 
-import { Metadata } from 'next'
-import { GA_TRACKING_ID } from '@/constants/ga'
-import GoogleAnalytics from '../components/GoogleAnalitics'
-import Script from 'next/script'
-import AppProvider from '@/lib/provider/appProvier'
-import { pretendard } from '@/lib/fonts'
-import MSWInit from '@/components/MSWInit'
+import { Metadata } from 'next';
+import { GA_TRACKING_ID } from '@/constants/ga';
+import GoogleAnalytics from '../components/GoogleAnalitics';
+import Script from 'next/script';
+import AppProvider from '@/lib/provider/appProvier';
+import { pretendard } from '@/lib/fonts';
+import MSWInit from '@/components/MSWInit';
 
 export const metadata: Metadata = {
   title: '지름알림: 핫딜 정보 모아보기',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     icon: '/icon.png',
   },
   viewport: 'initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width',
-}
+};
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -42,5 +42,5 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </body>
       <GoogleAnalytics GA_TRACKING_ID={GA_TRACKING_ID} />
     </html>
-  )
+  );
 }

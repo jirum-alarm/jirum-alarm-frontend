@@ -1,37 +1,37 @@
-import Button from '@/components/common/Button'
-import Input from '@/components/common/Input'
-import { Registration } from '../page'
-import { Eye, EyeOff } from '@/components/common/icons'
-import { useState } from 'react'
+import Button from '@/components/common/Button';
+import Input from '@/components/common/Input';
+import { Registration } from '../page';
+import { Eye, EyeOff } from '@/components/common/icons';
+import { useState } from 'react';
 
 const Password = ({
   registration,
   handleRegistration,
   moveNextStep,
 }: {
-  registration: Registration
-  handleRegistration: (password: (registration: Registration) => Partial<Registration>) => void
-  moveNextStep: () => void
+  registration: Registration;
+  handleRegistration: (password: (registration: Registration) => Partial<Registration>) => void;
+  moveNextStep: () => void;
 }) => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     validate: (value: string) => { error: boolean; invalidType: boolean; invalidLength: boolean },
   ) => {
-    const { id, value } = e.target
-    const error = validate(value)
+    const { id, value } = e.target;
+    const error = validate(value);
 
     if (id === 'password') {
       handleRegistration((prev) => ({
         [id]: { ...prev[id], value, ...error },
-      }))
+      }));
     }
-  }
+  };
 
   const handleCTAButton = () => {
-    moveNextStep()
-  }
+    moveNextStep();
+  };
 
-  const isValidInput = !!(registration.password.value && !registration.password.error)
+  const isValidInput = !!(registration.password.value && !registration.password.error);
 
   return (
     <div className="grid h-full">
@@ -51,10 +51,10 @@ const Password = ({
         다음
       </Button>
     </div>
-  )
-}
+  );
+};
 
-export default Password
+export default Password;
 
 const Description = () => {
   return (
@@ -63,45 +63,45 @@ const Description = () => {
       <br />
       입력해주세요.
     </p>
-  )
-}
+  );
+};
 
 const PasswordInput = ({
   registration,
   isValidInput,
   handleInputChange,
 }: {
-  registration: Registration
-  isValidInput: boolean
+  registration: Registration;
+  isValidInput: boolean;
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement>,
     validate: (value: string) => { error: boolean; invalidType: boolean; invalidLength: boolean },
-  ) => void
+  ) => void;
 }) => {
-  const [masking, setMasking] = useState(true)
+  const [masking, setMasking] = useState(true);
 
   const toggleMasking = () => {
-    setMasking((prev) => !prev)
-  }
+    setMasking((prev) => !prev);
+  };
 
   const validate = (value: string) => {
     if (value === '') {
-      return { error: false, invalidType: false, invalidLength: false }
+      return { error: false, invalidType: false, invalidLength: false };
     }
 
-    const isAlphabet = /[a-zA-Z]/.test(value)
-    const isNumber = /\d/.test(value)
-    const isSpecialCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(value)
+    const isAlphabet = /[a-zA-Z]/.test(value);
+    const isNumber = /\d/.test(value);
+    const isSpecialCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(value);
 
-    const isValidType = [isAlphabet, isNumber, isSpecialCharacter].filter(Boolean).length >= 2
-    const isValidLength = /^(.{8,30})$/.test(value)
+    const isValidType = [isAlphabet, isNumber, isSpecialCharacter].filter(Boolean).length >= 2;
+    const isValidLength = /^(.{8,30})$/.test(value);
 
     return {
       error: !isValidType || !isValidLength,
       invalidType: !isValidType,
       invalidLength: !isValidLength,
-    }
-  }
+    };
+  };
 
   return (
     <label>
@@ -130,8 +130,8 @@ const PasswordInput = ({
         onChange={(e) => handleInputChange(e, validate)}
       />
     </label>
-  )
-}
+  );
+};
 
 function ErrorText({ registration }: { registration: Registration }) {
   if (registration.password.invalidType && registration.password.invalidLength) {
@@ -140,15 +140,15 @@ function ErrorText({ registration }: { registration: Registration }) {
         영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.
         <br /> 8자 이상 30자 이하로 사용해주세요.
       </>
-    )
+    );
   }
 
   if (registration.password.invalidType) {
-    return <>영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.</>
+    return <>영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.</>;
   }
 
   if (registration.password.invalidLength) {
-    return <>8자 이상 30자 이하로 사용해주세요.</>
+    return <>8자 이상 30자 이하로 사용해주세요.</>;
   }
 }
 
@@ -158,5 +158,5 @@ function HelperText() {
       영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.
       <br /> 8자 이상 30자 이하로 사용해주세요.
     </>
-  )
+  );
 }

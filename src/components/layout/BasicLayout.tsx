@@ -1,10 +1,10 @@
-import React from 'react'
-import BackButton from './BackButton'
+import React from 'react';
+import BackButton from './BackButton';
 
 interface Props {
-  children: React.ReactNode
-  title?: string
-  hasBackButton?: boolean
+  children: React.ReactNode;
+  title?: string;
+  hasBackButton?: boolean;
 }
 
 const BasicLayout = ({ children, title, hasBackButton }: Props) => {
@@ -16,7 +16,7 @@ const BasicLayout = ({ children, title, hasBackButton }: Props) => {
       </header>
       <div className="pt-14 h-full">{children}</div>
     </div>
-  )
-}
+  );
+};
 
-export default BasicLayout
+export default BasicLayout;
