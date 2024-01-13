@@ -17,11 +17,13 @@ import 'react-tabs/style/react-tabs.css';
 import '../../../style/React_tabs.css';
 import ProductNotFound from './ProductNotFound';
 import ProductLoading from './ProductLoading';
+import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
 const ProductCard = dynamic(() => import('./ProductCard'), { ssr: false });
 const ProductList = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const limit = 20;
   const allCategory = { id: 0, name: '전체' };
   const [inputData, setInputData] = useState<string>('');
@@ -36,10 +38,10 @@ const ProductList = () => {
   const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
 
   const {
-    data: { products },
+    data: { products } = {},
     refetch,
     fetchMore,
-  } = useSuspenseQuery<IProductOutput>(QueryProducts, {
+  } = useQuery<IProductOutput>(QueryProducts, {
     variables: {
       limit,
       keyword: keywordParam || undefined,
@@ -56,7 +58,11 @@ const ProductList = () => {
   });
 
   const handleTabChange = useCallback((index: number) => {
-    setActiveTab(index);
+    if (index > 0) {
+      router.push(`/?categoryId=${index - 1}`);
+    } else {
+      router.push('/');
+    }
   }, []);
 
   const keywordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,23 +84,16 @@ const ProductList = () => {
   }, []);
 
   const fetchMoreProducts = () => {
-    const searchAfter = products.at(-1)?.searchAfter;
-    if (!products) {
-      return;
-    }
+    const searchAfter = products?.at(-1)?.searchAfter;
     fetchMore({
       variables: {
         searchAfter,
       },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!prev.products) {
-          return { products: [] };
-        } else if (fetchMoreResult.products.length === 0) {
-          return { products: [...prev.products] };
-        } else if (fetchMoreResult.products.length < limit) {
+      updateQuery: ({ products }, { fetchMoreResult }) => {
+        if (fetchMoreResult.products.length < limit) {
           setHasNextData(false);
         }
-        return { products: [...prev.products, ...fetchMoreResult.products] };
+        return { products: [...products, ...fetchMoreResult.products] };
       },
     });
   };
@@ -126,6 +125,15 @@ const ProductList = () => {
   }, [products]);
 
   useEffect(() => {
+    const categoryId = searchParams.get('categoryId');
+    if (categoryId) {
+      setActiveTab(Number(categoryId) + 1);
+    } else {
+      setActiveTab(0);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
     setHasNextData(true);
 
     const params: IProductsFilterParam = {
@@ -136,14 +144,6 @@ const ProductList = () => {
     };
 
     refetch(params);
-
-    const filteredParams = Object.fromEntries(
-      Object.entries(params).filter(([key, value]) => value !== undefined && key !== 'limit'),
-    );
-    const queryString = new URLSearchParams(filteredParams).toString();
-
-    const route = queryString ? `?${queryString}` : '/';
-    router.replace(route);
   }, [keyword, activeTab]);
 
   return (
@@ -239,14 +239,14 @@ const ProductList = () => {
               >
                 {[allCategory].concat(categoriesData.categories).map((category) => (
                   <TabPanel key={category.id}>
-                    {products.length === 0 ? (
+                    {products?.length === 0 ? (
                       <div className="flex min-h-[500px]">
                         <ProductNotFound />
                       </div>
                     ) : (
                       <div className="fex min-h-[500px]">
                         <div className=" item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
-                          {products.map((product) => (
+                          {products?.map((product) => (
                             <ProductCard key={product.id} product={product} />
                           ))}
                         </div>
