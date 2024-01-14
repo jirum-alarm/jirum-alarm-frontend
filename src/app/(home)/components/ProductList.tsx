@@ -6,9 +6,8 @@ import { ICategoryOutput } from '@/graphql/interface/category';
 import { useSuspenseQuery } from '@apollo/client';
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { type ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { TopButton } from '@/components/TopButton';
-import dynamic from 'next/dynamic';
 import { IProductsFilterParam } from '@/types/main';
 import SwipeableViews from 'react-swipeable-views';
 import { useDevice } from '@/hooks/useDevice';
@@ -18,29 +17,27 @@ import '../../../style/React_tabs.css';
 import ProductNotFound from './ProductNotFound';
 import ProductLoading from './ProductLoading';
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import ProductCard from './ProductCard';
 
-const ProductCard = dynamic(() => import('./ProductCard'), { ssr: false });
+const limit = 20;
+const allCategory = { id: 0, name: '전체' };
+
 const ProductList = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const limit = 20;
-  const allCategory = { id: 0, name: '전체' };
   const [inputData, setInputData] = useState<string>('');
-  const [keyword, setKeyword] = useState<string>('');
-  const [activeTab, setActiveTab] = useState(0);
   const [hasNextData, setHasNextData] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
   const { isMobile } = useDevice();
   const categoryParam = searchParams.get('categoryId');
   const keywordParam = searchParams.get('keyword');
+  const activeTab = categoryParam ? Number(categoryParam) + 1 : 0;
 
   const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
 
   const {
     data: { products } = {},
-    refetch,
     fetchMore,
+    loading,
   } = useQuery<IProductOutput>(QueryProducts, {
     variables: {
       limit,
@@ -58,11 +55,15 @@ const ProductList = () => {
   });
 
   const handleTabChange = useCallback((index: number) => {
+    const current = new URLSearchParams(Array.from(searchParams.entries()));
     if (index > 0) {
-      router.push(`/?categoryId=${index - 1}`);
+      current.set('categoryId', String(index - 1));
     } else {
-      router.push('/');
+      current.delete('categoryId');
     }
+    const search = current.toString();
+    console.log('search : ', search);
+    router.push(`/?${search}`);
   }, []);
 
   const keywordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,15 +72,14 @@ const ProductList = () => {
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      searchHandler();
+      const current = new URLSearchParams(Array.from(searchParams.entries()));
+      current.set('keyword', inputData);
+      const search = current.toString();
+      router.push(`/?${search}`);
     }
   };
 
-  const searchHandler = () => {
-    setKeyword(inputData);
-  };
-  const handleClose = useCallback(() => {
-    setKeyword(() => '');
+  const handleReset = useCallback(() => {
     setInputData(() => '');
   }, []);
 
@@ -99,56 +99,18 @@ const ProductList = () => {
   };
 
   useEffect(() => {
-    const categoryParam = searchParams.get('categoryId');
-    const keywordParam = searchParams.get('keyword');
-    if (!categoryParam && !keywordParam) {
-      setIsLoading(false);
-      setActiveTab(0);
-      setKeyword('');
-      setInputData('');
-      return;
-    }
-    if (categoryParam) {
-      setActiveTab(Number(categoryParam));
-    }
-    if (keywordParam) {
-      setKeyword(keywordParam);
-      setInputData(keywordParam);
-    }
-    setIsLoading(false);
-  }, []);
-
-  useEffect(() => {
     if (products && products.length % limit !== 0) {
       setHasNextData(false);
     }
   }, [products]);
 
   useEffect(() => {
-    const categoryId = searchParams.get('categoryId');
-    if (categoryId) {
-      setActiveTab(Number(categoryId) + 1);
-    } else {
-      setActiveTab(0);
-    }
-  }, [searchParams]);
-
-  useEffect(() => {
     setHasNextData(true);
-
-    const params: IProductsFilterParam = {
-      limit,
-      keyword: keyword || undefined,
-      categoryId: activeTab - 1 > -1 ? activeTab - 1 : undefined,
-      searchAfter: undefined,
-    };
-
-    refetch(params);
-  }, [keyword, activeTab]);
+  }, [keywordParam, categoryParam]);
 
   return (
     <main>
-      {isLoading ? (
+      {loading ? (
         <div>
           <ProductLoading />
         </div>
@@ -183,7 +145,7 @@ const ProductList = () => {
 
               <div
                 className="grid place-items-center h-full w-14 text-gray-300 cursor-pointer"
-                onClick={handleClose}
+                onClick={handleReset}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -216,17 +178,18 @@ const ProductList = () => {
               }`}
             >
               {[allCategory].concat(categoriesData.categories).map((category) => (
-                <Tab
-                  key={category.id}
-                  className="hover:text-zinc-700 transition duration-200 inline-block p-2 text-zinc-400 font-bold b-0"
-                  id={`profile-tab-${category.id}`}
-                  data-tabs-target={`#profile-${category.id}`}
-                  type="button"
-                  role="tab"
-                  aria-controls={`profile-${category.id}`}
-                >
-                  <button>{category.name}</button>
-                </Tab>
+                <React.Fragment key={category.name}>
+                  <Tab
+                    className="hover:text-zinc-700 transition duration-200 inline-block p-2 text-zinc-400 font-bold b-0"
+                    id={`profile-tab-${category.id}`}
+                    data-tabs-target={`#profile-${category.id}`}
+                    type="button"
+                    role="tab"
+                    aria-controls={`profile-${category.id}`}
+                  >
+                    <button>{category.name}</button>
+                  </Tab>
+                </React.Fragment>
               ))}
             </TabList>
 
@@ -237,22 +200,24 @@ const ProductList = () => {
                 animateTransitions={isMobile}
                 className="will-change-transform my-6"
               >
-                {[allCategory].concat(categoriesData.categories).map((category) => (
-                  <TabPanel key={category.id}>
-                    {products?.length === 0 ? (
-                      <div className="flex min-h-[500px]">
-                        <ProductNotFound />
-                      </div>
-                    ) : (
-                      <div className="fex min-h-[500px]">
-                        <div className=" item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
-                          {products?.map((product) => (
-                            <ProductCard key={product.id} product={product} />
-                          ))}
+                {[allCategory].concat(categoriesData.categories).map((category, i) => (
+                  <React.Fragment key={`${category.id}_${i}`}>
+                    <TabPanel>
+                      {products?.length === 0 ? (
+                        <div className="flex min-h-[500px]">
+                          <ProductNotFound />
                         </div>
-                      </div>
-                    )}
-                  </TabPanel>
+                      ) : (
+                        <div className="fex min-h-[500px]">
+                          <div className=" item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
+                            {products?.map((product, i) => (
+                              <ProductCard key={i} product={product} />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </TabPanel>
+                  </React.Fragment>
                 ))}
               </SwipeableViews>
             </div>
