@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Button from '@/components/common/Button';
 import { CheckDefault, CheckboxSelected } from '@/components/common/icons';
 import { Registration } from '../page';
-import useAgreeTermsOfServiceViewModel from '../hooks/useAgreeOfTermsOfServiceViewModel';
+import useAgreeTermsOfServiceViewModel from '../hooks/useAgreeTermsOfServiceViewModel';
 
 const CONSENT_ALL = '모두 동의';
 const CONSENT_REQUIRED = {
@@ -57,7 +57,7 @@ const AgreeTermsOfServiceForm = ({
           />
         </div>
       </div>
-      <Button type="submit" disabled={isValidInput}>
+      <Button type="submit" disabled={!isValidInput}>
         다음
       </Button>
     </form>
