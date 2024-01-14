@@ -1,7 +1,7 @@
-import { Registration } from '../page';
-import AgreeTermsOfServiceForm, { ConsentRequiredKey } from './AgreeTermsOfServiceForm';
+import { Registration } from '../../page';
+import TermsOfServiceForm, { ConsentRequiredKey } from './TermsOfServiceForm';
 
-const AgreeTermsOfService = ({
+const TermsOfService = ({
   registration,
   handleRegistration,
   moveNextStep,
@@ -13,7 +13,7 @@ const AgreeTermsOfService = ({
   return (
     <div className="flex flex-col h-full">
       <Description />
-      <AgreeTermsOfServiceForm
+      <TermsOfServiceForm
         registration={registration}
         handleRegistration={handleRegistration}
         moveNextStep={moveNextStep}
@@ -22,7 +22,7 @@ const AgreeTermsOfService = ({
   );
 };
 
-export default AgreeTermsOfService;
+export default TermsOfService;
 
 const Description = () => {
   return (

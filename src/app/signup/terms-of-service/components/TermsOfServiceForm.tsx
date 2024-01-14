@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import Button from '@/components/common/Button';
 import { CheckDefault, CheckboxSelected } from '@/components/common/icons';
-import { Registration } from '../page';
-import useAgreeTermsOfServiceViewModel from '../hooks/useAgreeTermsOfServiceViewModel';
+import { Registration } from '../../page';
+import useTermsOfServiceViewModel from '../hooks/useTermsOfServiceViewModel';
 
 const CONSENT_ALL = '모두 동의';
 const CONSENT_REQUIRED = {
@@ -13,7 +13,7 @@ const CONSENT_REQUIRED = {
 export type ConsentRequiredKey = keyof typeof CONSENT_REQUIRED;
 type ConsentRequired = (typeof CONSENT_REQUIRED)[ConsentRequiredKey];
 
-const AgreeTermsOfServiceForm = ({
+const TermsOfServiceForm = ({
   registration,
   handleRegistration,
   moveNextStep,
@@ -29,7 +29,7 @@ const AgreeTermsOfServiceForm = ({
     handleConsentAllChange,
     handleConsentRequiredChange,
     handleSubmit,
-  } = useAgreeTermsOfServiceViewModel({
+  } = useTermsOfServiceViewModel({
     registration,
     handleRegistration,
     moveNextStep,
@@ -64,7 +64,7 @@ const AgreeTermsOfServiceForm = ({
   );
 };
 
-export default AgreeTermsOfServiceForm;
+export default TermsOfServiceForm;
 
 const ConsentAll = ({
   isAllConsented,

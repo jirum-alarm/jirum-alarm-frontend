@@ -1,5 +1,5 @@
-import { ConsentRequiredKey } from '../components/AgreeTermsOfServiceForm';
-import { Registration } from '../page';
+import { ConsentRequiredKey } from '../components/TermsOfServiceForm';
+import { Registration } from '../../page';
 
 const useInput = ({
   registration,
