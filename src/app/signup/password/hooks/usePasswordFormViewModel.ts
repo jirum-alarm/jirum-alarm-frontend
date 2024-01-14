@@ -31,7 +31,6 @@ const useInput = ({
   };
 
   const value = password.value;
-  const error = password.error;
 
   const isInvalidType = password.invalidType;
   const isInvalidLength = password.invalidLength;
@@ -55,7 +54,6 @@ const useInput = ({
 
   return {
     value,
-    error,
     isInvalidType,
     isInvalidLength,
     isValidInput,

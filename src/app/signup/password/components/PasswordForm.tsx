@@ -15,28 +15,19 @@ const PasswordForm = ({
   handleRegistration: (password: (registration: Registration) => Partial<Registration>) => void;
   moveNextStep: () => void;
 }) => {
-  const {
-    value,
-    error,
-    isInvalidType,
-    isInvalidLength,
-    isValidInput,
-    handleInputChange,
-    handleSubmit,
-  } = usePasswordFormViewModel({
-    registration,
-    handleRegistration,
-    moveNextStep,
-  });
+  const { value, isInvalidType, isInvalidLength, isValidInput, handleInputChange, handleSubmit } =
+    usePasswordFormViewModel({
+      registration,
+      handleRegistration,
+      moveNextStep,
+    });
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col flex-1 justify-between pt-[88px]">
       <PasswordInput
         value={value}
-        error={error}
         isInvalidType={isInvalidType}
         isInvalidLength={isInvalidLength}
-        isValidInput={isValidInput}
         handleInputChange={handleInputChange}
       />
       <Button type="submit" disabled={!isValidInput}>
@@ -50,17 +41,13 @@ export default PasswordForm;
 
 const PasswordInput = ({
   value,
-  error,
   isInvalidType,
   isInvalidLength,
-  isValidInput,
   handleInputChange,
 }: {
   value: string;
-  error: boolean;
   isInvalidType: boolean;
   isInvalidLength: boolean;
-  isValidInput: boolean;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const [masking, setMasking] = useState(true);
@@ -85,11 +72,13 @@ const PasswordInput = ({
             <EyeOff onClick={toggleMasking} className="cursor-pointer" />
           )
         }
+        /** @MEMO 헬퍼 텍스트에서 조건에 맞거나 틀린 경우 색을 바꾸는 형태라 errorText를 의도적으로 사용하지 않았음
+         * */
         helperText={
           <HelperText
+            value={value}
             isInvalidType={isInvalidType}
             isInvalidLength={isInvalidLength}
-            isValidInput={isValidInput}
           />
         }
         onChange={handleInputChange}
@@ -98,31 +87,30 @@ const PasswordInput = ({
   );
 };
 
-function HelperText({
+const HelperText = ({
+  value,
   isInvalidType,
   isInvalidLength,
-  isValidInput,
 }: {
+  value: string;
   isInvalidType: boolean;
   isInvalidLength: boolean;
-
-  isValidInput: boolean;
-}) {
+}) => {
   return (
     <ul className="list-disc pl-8 pt-2">
       <li
         className={cn(
           'transition-colors',
-          isValidInput && 'text-primary-600',
+          value && !isInvalidLength && 'text-primary-600',
           isInvalidLength && 'text-error',
         )}
       >
-        8자 이상 입력
+        8자 이상 30자 이하 입력
       </li>
       <li
         className={cn(
           'transition-colors',
-          isValidInput && 'text-primary-600',
+          value && !isInvalidType && 'text-primary-600',
           isInvalidType && 'text-error',
         )}
       >
@@ -130,4 +118,4 @@ function HelperText({
       </li>
     </ul>
   );
-}
+};
