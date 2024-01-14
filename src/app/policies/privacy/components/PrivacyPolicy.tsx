@@ -3,13 +3,14 @@ import { Close } from '@/components/common/icons';
 import React from 'react';
 import { Link } from 'react-scroll';
 import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/constants/policy';
-import { goBackHandler } from '@/util/common';
+import useGoBack from '@/hooks/useGoBack';
 const PrivacyPolicy = () => {
+  const goBack = useGoBack();
   return (
     <div className="flex flex-col items-center w-full pt-[44px]">
       <header className="fixed top-0 bg-white w-full h-[44px] flex items-center justify-center py-[10px] px-[20px] font-semibold">
         <h1>개인정보 처리방침</h1>
-        <button className="p-2 absolute right-[18px]" onClick={goBackHandler}>
+        <button className="p-2 absolute right-[18px]" onClick={goBack}>
           <Close />
         </button>
       </header>

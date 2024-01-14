@@ -15,7 +15,7 @@ const mypageMenuListMap = [
   {
     icon: Description,
     title: '약관 및 정책',
-    url: '/',
+    url: '/mypage/terms-policies',
   },
   {
     icon: Headset,
