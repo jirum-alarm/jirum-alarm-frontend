@@ -25,42 +25,41 @@ const ProductList = () => {
   } = useProductListViewModel();
   return (
     <main>
-      {loading ? (
-        <div>
-          <ProductLoading />
-        </div>
-      ) : (
-        <>
-          <SearchInput />
-          <Tabs
-            className="react-tabs__tab-list"
-            forceRenderTabPanel
-            selectedIndex={activeTab}
-            onSelect={handleTabChange}
-            defaultFocus
-            disableUpDownKeys
+      <>
+        <SearchInput />
+        <Tabs
+          className="react-tabs__tab-list"
+          forceRenderTabPanel
+          selectedIndex={activeTab}
+          onSelect={handleTabChange}
+          defaultFocus
+          disableUpDownKeys
+        >
+          <TabList
+            className={`will-change-transform scroll-smooth overflow-x-scroll ${
+              isMobile ? 'whitespace-nowrap' : ''
+            }`}
           >
-            <TabList
-              className={`will-change-transform scroll-smooth overflow-x-scroll ${
-                isMobile ? 'whitespace-nowrap' : ''
-              }`}
-            >
-              {[allCategory].concat(categoriesData.categories).map((category) => (
-                <React.Fragment key={category.name}>
-                  <Tab
-                    className="hover:text-zinc-700 transition duration-200 inline-block p-2 text-zinc-400 font-bold b-0"
-                    id={`profile-tab-${category.id}`}
-                    data-tabs-target={`#profile-${category.id}`}
-                    type="button"
-                    role="tab"
-                    aria-controls={`profile-${category.id}`}
-                  >
-                    <button>{category.name}</button>
-                  </Tab>
-                </React.Fragment>
-              ))}
-            </TabList>
-
+            {[allCategory].concat(categoriesData.categories).map((category) => (
+              <React.Fragment key={category.name}>
+                <Tab
+                  className="hover:text-zinc-700 transition duration-200 inline-block p-2 text-zinc-400 font-bold b-0"
+                  id={`profile-tab-${category.id}`}
+                  data-tabs-target={`#profile-${category.id}`}
+                  type="button"
+                  role="tab"
+                  aria-controls={`profile-${category.id}`}
+                >
+                  <button>{category.name}</button>
+                </Tab>
+              </React.Fragment>
+            ))}
+          </TabList>
+          {loading ? (
+            <div>
+              <ProductLoading />
+            </div>
+          ) : (
             <div className="flex">
               <SwipeableViews
                 index={activeTab}
@@ -89,11 +88,12 @@ const ProductList = () => {
                 ))}
               </SwipeableViews>
             </div>
-            <TopButton />
-            {hasNextData && <div ref={ref} className="h-[48px] w-full" />}
-          </Tabs>
-        </>
-      )}
+          )}
+
+          <TopButton />
+          {hasNextData && <div ref={ref} className="h-[48px] w-full" />}
+        </Tabs>
+      </>
     </main>
   );
 };
