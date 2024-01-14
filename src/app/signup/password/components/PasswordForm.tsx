@@ -104,8 +104,10 @@ function ErrorText({
 }) {
   return (
     <ul className="list-disc pl-8 pt-2">
-      <li className={cn(!isInvalidLength && 'text-primary-600')}>8자 이상 입력</li>
-      <li className={cn(!isInvalidType && 'text-primary-600')}>
+      <li className={cn('transition-colors', !isInvalidLength && 'text-primary-600')}>
+        8자 이상 입력
+      </li>
+      <li className={cn('transition-colors', !isInvalidType && 'text-primary-600')}>
         영어, 숫자, 특수문자 중 2가지 이상 조합
       </li>
     </ul>
