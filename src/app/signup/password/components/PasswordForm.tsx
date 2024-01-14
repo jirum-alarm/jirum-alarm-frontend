@@ -79,10 +79,10 @@ const PasswordInput = ({
         required
         value={value}
         icon={
-          !masking ? (
-            <EyeOff onClick={toggleMasking} className="cursor-pointer" />
-          ) : (
+          masking ? (
             <Eye onClick={toggleMasking} className="cursor-pointer" />
+          ) : (
+            <EyeOff onClick={toggleMasking} className="cursor-pointer" />
           )
         }
         error={
