@@ -42,7 +42,8 @@ const useInput = ({
     handleRegistration(() => ({ email: { value: '', error: false, focus: false } }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     moveNextStep();
   };
 

@@ -35,7 +35,9 @@ const EmailForm = ({
         handleInputBlur={handleInputBlur}
         reset={reset}
       />
-      <Button disabled={!isValidInput}>다음</Button>
+      <Button type="submit" disabled={!isValidInput}>
+        다음
+      </Button>
     </form>
   );
 };
