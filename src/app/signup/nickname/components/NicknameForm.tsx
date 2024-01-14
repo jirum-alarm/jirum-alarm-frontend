@@ -35,7 +35,9 @@ const NickNameForm = ({
         handleInputBlur={handleInputBlur}
         reset={reset}
       />
-      <Button disabled={!isValidInput}>가입완료</Button>
+      <Button type="submit" disabled={!isValidInput}>
+        가입완료
+      </Button>
     </form>
   );
 };
