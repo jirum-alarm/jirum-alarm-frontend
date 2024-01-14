@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import BasicLayout from '@/components/layout/BasicLayout';
-import Email from './components/Email';
+import Email from './email/components/Email';
 import Password from './components/Password';
 import TermsOfService from './terms-of-service/components/TermsOfService';
 import SetupNickname from './components/SetupNickname';
