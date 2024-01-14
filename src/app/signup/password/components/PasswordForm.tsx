@@ -85,40 +85,47 @@ const PasswordInput = ({
             <EyeOff onClick={toggleMasking} className="cursor-pointer" />
           )
         }
-        error={
-          error && <ErrorText isInvalidType={isInvalidType} isInvalidLength={isInvalidLength} />
+        helperText={
+          <HelperText
+            isInvalidType={isInvalidType}
+            isInvalidLength={isInvalidLength}
+            isValidInput={isValidInput}
+          />
         }
-        helperText={<HelperText isValidInput={isValidInput} />}
         onChange={handleInputChange}
       />
     </label>
   );
 };
 
-function ErrorText({
+function HelperText({
   isInvalidType,
   isInvalidLength,
+  isValidInput,
 }: {
   isInvalidType: boolean;
   isInvalidLength: boolean;
+
+  isValidInput: boolean;
 }) {
   return (
     <ul className="list-disc pl-8 pt-2">
-      <li className={cn('transition-colors', !isInvalidLength && 'text-primary-600')}>
+      <li
+        className={cn(
+          'transition-colors',
+          isValidInput && 'text-primary-600',
+          isInvalidLength && 'text-error',
+        )}
+      >
         8자 이상 입력
       </li>
-      <li className={cn('transition-colors', !isInvalidType && 'text-primary-600')}>
-        영어, 숫자, 특수문자 중 2가지 이상 조합
-      </li>
-    </ul>
-  );
-}
-
-function HelperText({ isValidInput }: { isValidInput: boolean }) {
-  return (
-    <ul className="list-disc pl-8 pt-2">
-      <li className={cn(isValidInput && 'text-primary-600')}>8자 이상 입력</li>
-      <li className={cn(isValidInput && 'text-primary-600')}>
+      <li
+        className={cn(
+          'transition-colors',
+          isValidInput && 'text-primary-600',
+          isInvalidType && 'text-error',
+        )}
+      >
         영어, 숫자, 특수문자 중 2가지 이상 조합
       </li>
     </ul>
