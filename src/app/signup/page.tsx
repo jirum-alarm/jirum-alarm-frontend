@@ -76,7 +76,6 @@ const Signup = () => {
   const completeRegistration = async () => {
     const { email, password, nickname } = registraion;
 
-    // @TODO: brithYear, gender, favoriteCategories 실제 데이터로 교체
     await signup({
       variables: {
         email: email.value,
