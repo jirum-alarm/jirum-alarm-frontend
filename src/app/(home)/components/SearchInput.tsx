@@ -1,33 +1,7 @@
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchInputViewModel } from '../hooks/useSearchInputViewModel';
 
 const SearchInput = () => {
-  const searchParams = useSearchParams();
-  const keywordParam = searchParams.get('keyword');
-  const inputRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
-
-  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (!inputRef.current) return;
-    if (event.key === 'Enter') {
-      const current = new URLSearchParams(Array.from(searchParams.entries()));
-      current.set('keyword', inputRef.current.value);
-      const search = current.toString();
-      router.push(`/?${search}`);
-    }
-  };
-  const handleReset = useCallback(() => {
-    const current = new URLSearchParams(Array.from(searchParams.entries()));
-    current.delete('keyword');
-    const search = current.toString();
-    router.push(`/?${search}`);
-  }, []);
-
-  useEffect(() => {
-    if (!inputRef.current) return;
-    inputRef.current.value = keywordParam ?? '';
-  }, [keywordParam, searchParams]);
-
+  const { inputRef, onKeyDown, handleReset } = useSearchInputViewModel();
   return (
     <div className="mb-6 drop-shadow-md">
       <div className="mt-6 relative flex items-center w-full h-14 rounded-lg shadow hover:shadow-md bg-white overflow-hidden">
