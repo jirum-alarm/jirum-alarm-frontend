@@ -45,13 +45,13 @@ const AgreeTermsOfService = ({
             <ConsentRequired
               id="termsOfService"
               registration={registration}
-              link={'https://seonkyo.notion.site/8edd5934ff8d4ec68d75bd136e6a3052'}
+              link={'policies/terms/'}
               toggleConsent={toggleConsent}
             />
             <ConsentRequired
               id="privacyPolicy"
               registration={registration}
-              link={'https://seonkyo.notion.site/389d4f8ea8f741aca2ec5448fb86ac1f'}
+              link={'policies/privacy'}
               toggleConsent={toggleConsent}
             />
           </div>
