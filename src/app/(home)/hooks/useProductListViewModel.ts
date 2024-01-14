@@ -5,7 +5,7 @@ import { ICategoryOutput } from '@/graphql/interface/category';
 import { useDevice } from '@/hooks/useDevice';
 import { useQuery, useSuspenseQuery } from '@apollo/client';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 const limit = 20;
