@@ -4,6 +4,7 @@ import Input from '@/components/common/Input';
 import { Eye, EyeOff } from '@/components/common/icons';
 import { Registration } from '../../page';
 import usePasswordFormViewModel from '../hooks/usePasswordFormViewModel';
+import { cn } from '@/lib/cn';
 
 const PasswordForm = ({
   registration,
@@ -14,7 +15,15 @@ const PasswordForm = ({
   handleRegistration: (password: (registration: Registration) => Partial<Registration>) => void;
   moveNextStep: () => void;
 }) => {
-  const { isValidInput, handleInputChange, handleSubmit } = usePasswordFormViewModel({
+  const {
+    value,
+    error,
+    isInvalidType,
+    isInvalidLength,
+    isValidInput,
+    handleInputChange,
+    handleSubmit,
+  } = usePasswordFormViewModel({
     registration,
     handleRegistration,
     moveNextStep,
@@ -23,7 +32,10 @@ const PasswordForm = ({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col flex-1 justify-between pt-[88px]">
       <PasswordInput
-        registration={registration}
+        value={value}
+        error={error}
+        isInvalidType={isInvalidType}
+        isInvalidLength={isInvalidLength}
         isValidInput={isValidInput}
         handleInputChange={handleInputChange}
       />
@@ -37,11 +49,17 @@ const PasswordForm = ({
 export default PasswordForm;
 
 const PasswordInput = ({
-  registration,
+  value,
+  error,
+  isInvalidType,
+  isInvalidLength,
   isValidInput,
   handleInputChange,
 }: {
-  registration: Registration;
+  value: string;
+  error: boolean;
+  isInvalidType: boolean;
+  isInvalidLength: boolean;
   isValidInput: boolean;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
@@ -59,52 +77,48 @@ const PasswordInput = ({
         autoComplete="new-password"
         placeholder="비밀번호를 입력해주세요."
         required
-        value={registration.password.value}
-        icon={masking ? <EyeOff onClick={toggleMasking} /> : <Eye onClick={toggleMasking} />}
+        value={value}
+        icon={
+          !masking ? (
+            <EyeOff onClick={toggleMasking} className="cursor-pointer" />
+          ) : (
+            <Eye onClick={toggleMasking} className="cursor-pointer" />
+          )
+        }
         error={
-          registration.password.error && (
-            <p className="pt-2">
-              <ErrorText registration={registration} />
-            </p>
-          )
+          error && <ErrorText isInvalidType={isInvalidType} isInvalidLength={isInvalidLength} />
         }
-        helperText={
-          !isValidInput && (
-            <p className="pt-2">
-              <HelperText />
-            </p>
-          )
-        }
+        helperText={<HelperText isValidInput={isValidInput} />}
         onChange={handleInputChange}
       />
     </label>
   );
 };
 
-function ErrorText({ registration }: { registration: Registration }) {
-  if (registration.password.invalidType && registration.password.invalidLength) {
-    return (
-      <>
-        영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.
-        <br /> 8자 이상 30자 이하로 사용해주세요.
-      </>
-    );
-  }
-
-  if (registration.password.invalidType) {
-    return <>영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.</>;
-  }
-
-  if (registration.password.invalidLength) {
-    return <>8자 이상 30자 이하로 사용해주세요.</>;
-  }
+function ErrorText({
+  isInvalidType,
+  isInvalidLength,
+}: {
+  isInvalidType: boolean;
+  isInvalidLength: boolean;
+}) {
+  return (
+    <ul className="list-disc pl-8 pt-2">
+      <li className={cn(!isInvalidLength && 'text-primary-600')}>8자 이상 입력</li>
+      <li className={cn(!isInvalidType && 'text-primary-600')}>
+        영어, 숫자, 특수문자 중 2가지 이상 조합
+      </li>
+    </ul>
+  );
 }
 
-function HelperText() {
+function HelperText({ isValidInput }: { isValidInput: boolean }) {
   return (
-    <>
-      영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.
-      <br /> 8자 이상 30자 이하로 사용해주세요.
-    </>
+    <ul className="list-disc pl-8 pt-2">
+      <li className={cn(isValidInput && 'text-primary-600')}>8자 이상 입력</li>
+      <li className={cn(isValidInput && 'text-primary-600')}>
+        영어, 숫자, 특수문자 중 2가지 이상 조합
+      </li>
+    </ul>
   );
 }

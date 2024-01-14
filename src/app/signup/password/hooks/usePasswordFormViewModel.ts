@@ -9,6 +9,8 @@ const useInput = ({
   handleRegistration: (password: (registration: Registration) => Partial<Registration>) => void;
   moveNextStep: () => void;
 }) => {
+  const password = registration.password;
+
   const validate = (value: string) => {
     if (value === '') {
       return { error: false, invalidType: false, invalidLength: false };
@@ -28,7 +30,12 @@ const useInput = ({
     };
   };
 
-  const isValidInput = !!(registration.password.value && !registration.password.error);
+  const value = password.value;
+  const error = password.error;
+
+  const isInvalidType = password.invalidType;
+  const isInvalidLength = password.invalidLength;
+  const isValidInput = !!(password.value && !password.error);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -47,6 +54,10 @@ const useInput = ({
   };
 
   return {
+    value,
+    error,
+    isInvalidType,
+    isInvalidLength,
     isValidInput,
     handleInputChange,
     handleSubmit,
