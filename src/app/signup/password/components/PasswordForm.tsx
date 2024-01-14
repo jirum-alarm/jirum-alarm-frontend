@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import Button from '@/components/common/Button';
 import Input from '@/components/common/Input';
-import { Registration } from '../page';
 import { Eye, EyeOff } from '@/components/common/icons';
-import { useState } from 'react';
+import { Registration } from '../../page';
+import usePasswordFormViewModel from '../hooks/usePasswordFormViewModel';
 
-const Password = ({
+const PasswordForm = ({
   registration,
   handleRegistration,
   moveNextStep,
@@ -13,58 +14,27 @@ const Password = ({
   handleRegistration: (password: (registration: Registration) => Partial<Registration>) => void;
   moveNextStep: () => void;
 }) => {
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    validate: (value: string) => { error: boolean; invalidType: boolean; invalidLength: boolean },
-  ) => {
-    const { id, value } = e.target;
-    const error = validate(value);
-
-    if (id === 'password') {
-      handleRegistration((prev) => ({
-        [id]: { ...prev[id], value, ...error },
-      }));
-    }
-  };
-
-  const handleCTAButton = () => {
-    moveNextStep();
-  };
-
-  const isValidInput = !!(registration.password.value && !registration.password.error);
+  const { isValidInput, handleInputChange, handleSubmit } = usePasswordFormViewModel({
+    registration,
+    handleRegistration,
+    moveNextStep,
+  });
 
   return (
-    <div className="grid h-full">
-      <div>
-        <Description />
-        <div className="grid items-end">
-          <form className="grid gap-y-8 pt-[88px]">
-            <PasswordInput
-              registration={registration}
-              isValidInput={isValidInput}
-              handleInputChange={handleInputChange}
-            />
-          </form>
-        </div>
-      </div>
-      <Button onClick={handleCTAButton} disabled={!isValidInput} className="self-end">
+    <form onSubmit={handleSubmit} className="flex flex-col flex-1 justify-between pt-[88px]">
+      <PasswordInput
+        registration={registration}
+        isValidInput={isValidInput}
+        handleInputChange={handleInputChange}
+      />
+      <Button type="submit" disabled={!isValidInput}>
         다음
       </Button>
-    </div>
+    </form>
   );
 };
 
-export default Password;
-
-const Description = () => {
-  return (
-    <p className="font-semibold text-2xl">
-      비밀번호를
-      <br />
-      입력해주세요.
-    </p>
-  );
-};
+export default PasswordForm;
 
 const PasswordInput = ({
   registration,
@@ -73,34 +43,12 @@ const PasswordInput = ({
 }: {
   registration: Registration;
   isValidInput: boolean;
-  handleInputChange: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    validate: (value: string) => { error: boolean; invalidType: boolean; invalidLength: boolean },
-  ) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const [masking, setMasking] = useState(true);
 
   const toggleMasking = () => {
     setMasking((prev) => !prev);
-  };
-
-  const validate = (value: string) => {
-    if (value === '') {
-      return { error: false, invalidType: false, invalidLength: false };
-    }
-
-    const isAlphabet = /[a-zA-Z]/.test(value);
-    const isNumber = /\d/.test(value);
-    const isSpecialCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(value);
-
-    const isValidType = [isAlphabet, isNumber, isSpecialCharacter].filter(Boolean).length >= 2;
-    const isValidLength = /^(.{8,30})$/.test(value);
-
-    return {
-      error: !isValidType || !isValidLength,
-      invalidType: !isValidType,
-      invalidLength: !isValidLength,
-    };
   };
 
   return (
@@ -127,7 +75,7 @@ const PasswordInput = ({
             </p>
           )
         }
-        onChange={(e) => handleInputChange(e, validate)}
+        onChange={handleInputChange}
       />
     </label>
   );
