@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Button from '@/components/common/Button';
 import { CheckDefault, CheckboxSelected } from '@/components/common/icons';
 import { Registration } from '../../page';
-import useTermsOfServiceViewModel from '../hooks/useTermsOfServiceViewModel';
+import useTermsOfServiceFormViewModel from '../hooks/useTermsOfServiceFormViewModel';
 
 const CONSENT_ALL = '모두 동의';
 const CONSENT_REQUIRED = {
@@ -29,7 +29,7 @@ const TermsOfServiceForm = ({
     handleConsentAllChange,
     handleConsentRequiredChange,
     handleSubmit,
-  } = useTermsOfServiceViewModel({
+  } = useTermsOfServiceFormViewModel({
     registration,
     handleRegistration,
     moveNextStep,
