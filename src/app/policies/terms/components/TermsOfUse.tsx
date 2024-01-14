@@ -3,14 +3,15 @@ import { Close } from '@/components/common/icons';
 import React from 'react';
 import { Link } from 'react-scroll';
 import { TERMS_CONTENT_DATA, TERMS_INDEX_DATA } from '@/constants/policy';
-import { goBackHandler } from '@/util/common';
+import useGoBack from '@/hooks/useGoBack';
 
 const TermsOfUse = () => {
+  const goBack = useGoBack();
   return (
     <div className="flex flex-col items-center w-full pt-[44px]">
       <header className="fixed top-0 bg-white w-full h-[44px] flex items-center justify-center py-[10px] px-[20px] font-semibold">
         <h1>서비스 이용약관</h1>
-        <button className="p-2 absolute right-[18px]" onClick={goBackHandler}>
+        <button className="p-2 absolute right-[18px]" onClick={goBack}>
           <Close />
         </button>
       </header>
