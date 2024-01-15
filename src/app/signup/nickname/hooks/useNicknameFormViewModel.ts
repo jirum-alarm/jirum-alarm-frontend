@@ -1,7 +1,7 @@
 import { Registration } from '../../page';
 
-const MIN_NICKNAME_LENGTH = 5;
-const MAX_NICKNAME_LENGTH = 20;
+const MIN_NICKNAME_LENGTH = 2;
+const MAX_NICKNAME_LENGTH = 12;
 
 type NicknameValue = Registration['nickname']['value'];
 
