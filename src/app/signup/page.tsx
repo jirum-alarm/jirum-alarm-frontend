@@ -5,7 +5,7 @@ import BasicLayout from '@/components/layout/BasicLayout';
 import Email from './email/components/Email';
 import Password from './password/components/Password';
 import TermsOfService from './terms-of-service/components/TermsOfService';
-import SetupNickname from './components/SetupNickname';
+import Nickname from './nickname/components/Nickname';
 import { useMutation } from '@apollo/client';
 import { MutationSignup } from '@/graphql/auth';
 import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth';
@@ -114,7 +114,7 @@ const Signup = () => {
           />
         )}
         {steps === 'nickname' && (
-          <SetupNickname
+          <Nickname
             registration={registraion}
             handleRegistration={handleRegistration}
             completeRegistration={completeRegistration}
