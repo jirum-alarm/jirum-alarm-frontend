@@ -116,9 +116,9 @@ const Signup = () => {
   };
 
   const handleRegistration = (
-    _registraion: Partial<Registration> | ((registration: Registration) => Partial<Registration>),
+    _registration: Partial<Registration> | ((registration: Registration) => Partial<Registration>),
   ) => {
-    const next = typeof _registraion === 'function' ? _registraion(registration) : _registraion;
+    const next = typeof _registration === 'function' ? _registration(registration) : _registration;
 
     setRegistration((prev) => ({
       ...prev,
