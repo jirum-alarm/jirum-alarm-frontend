@@ -4,6 +4,7 @@ import Input from '@/components/common/Input';
 import { Eye, EyeOff } from '@/components/common/icons';
 import { Registration } from '../../page';
 import usePasswordFormViewModel from '../hooks/usePasswordFormViewModel';
+import { cn } from '@/lib/cn';
 
 const PasswordForm = ({
   registration,
@@ -14,17 +15,19 @@ const PasswordForm = ({
   handleRegistration: (password: (registration: Registration) => Partial<Registration>) => void;
   moveNextStep: () => void;
 }) => {
-  const { isValidInput, handleInputChange, handleSubmit } = usePasswordFormViewModel({
-    registration,
-    handleRegistration,
-    moveNextStep,
-  });
+  const { value, isInvalidType, isInvalidLength, isValidInput, handleInputChange, handleSubmit } =
+    usePasswordFormViewModel({
+      registration,
+      handleRegistration,
+      moveNextStep,
+    });
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col flex-1 justify-between pt-[88px]">
       <PasswordInput
-        registration={registration}
-        isValidInput={isValidInput}
+        value={value}
+        isInvalidType={isInvalidType}
+        isInvalidLength={isInvalidLength}
         handleInputChange={handleInputChange}
       />
       <Button type="submit" disabled={!isValidInput}>
@@ -37,12 +40,14 @@ const PasswordForm = ({
 export default PasswordForm;
 
 const PasswordInput = ({
-  registration,
-  isValidInput,
+  value,
+  isInvalidType,
+  isInvalidLength,
   handleInputChange,
 }: {
-  registration: Registration;
-  isValidInput: boolean;
+  value: string;
+  isInvalidType: boolean;
+  isInvalidLength: boolean;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const [masking, setMasking] = useState(true);
@@ -59,21 +64,22 @@ const PasswordInput = ({
         autoComplete="new-password"
         placeholder="비밀번호를 입력해주세요."
         required
-        value={registration.password.value}
-        icon={masking ? <EyeOff onClick={toggleMasking} /> : <Eye onClick={toggleMasking} />}
-        error={
-          registration.password.error && (
-            <p className="pt-2">
-              <ErrorText registration={registration} />
-            </p>
+        value={value}
+        icon={
+          masking ? (
+            <Eye onClick={toggleMasking} className="cursor-pointer" />
+          ) : (
+            <EyeOff onClick={toggleMasking} className="cursor-pointer" />
           )
         }
+        /** @MEMO 헬퍼 텍스트에서 조건에 맞거나 틀린 경우 색을 바꾸는 형태라 errorText를 의도적으로 사용하지 않았음
+         * */
         helperText={
-          !isValidInput && (
-            <p className="pt-2">
-              <HelperText />
-            </p>
-          )
+          <HelperText
+            value={value}
+            isInvalidType={isInvalidType}
+            isInvalidLength={isInvalidLength}
+          />
         }
         onChange={handleInputChange}
       />
@@ -81,30 +87,35 @@ const PasswordInput = ({
   );
 };
 
-function ErrorText({ registration }: { registration: Registration }) {
-  if (registration.password.invalidType && registration.password.invalidLength) {
-    return (
-      <>
-        영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.
-        <br /> 8자 이상 30자 이하로 사용해주세요.
-      </>
-    );
-  }
-
-  if (registration.password.invalidType) {
-    return <>영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.</>;
-  }
-
-  if (registration.password.invalidLength) {
-    return <>8자 이상 30자 이하로 사용해주세요.</>;
-  }
-}
-
-function HelperText() {
+const HelperText = ({
+  value,
+  isInvalidType,
+  isInvalidLength,
+}: {
+  value: string;
+  isInvalidType: boolean;
+  isInvalidLength: boolean;
+}) => {
   return (
-    <>
-      영어, 숫자, 특수문자 중에서 2가지 이상 사용해주세요.
-      <br /> 8자 이상 30자 이하로 사용해주세요.
-    </>
+    <ul className="list-disc pl-8 pt-2">
+      <li
+        className={cn(
+          'transition-colors',
+          value && !isInvalidLength && 'text-primary-600',
+          isInvalidLength && 'text-error',
+        )}
+      >
+        8자 이상 30자 이하 입력
+      </li>
+      <li
+        className={cn(
+          'transition-colors',
+          value && !isInvalidType && 'text-primary-600',
+          isInvalidType && 'text-error',
+        )}
+      >
+        영어, 숫자, 특수문자 중 2가지 이상 조합
+      </li>
+    </ul>
   );
-}
+};
