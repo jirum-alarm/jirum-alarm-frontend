@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import BasicLayout from '@/components/layout/BasicLayout';
 import Email from './email/components/Email';
-import Password from './components/Password';
+import Password from './password/components/Password';
 import TermsOfService from './terms-of-service/components/TermsOfService';
 import SetupNickname from './components/SetupNickname';
 import { useMutation } from '@apollo/client';
