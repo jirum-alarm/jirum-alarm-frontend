@@ -13,8 +13,7 @@ import { StorageTokenKey } from '@/types/enum/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Categories from './categories/components/Categories';
 import { ICategoryForm } from '@/features/categories/types';
-import { CATEGORIES, MAX_SELECTION_COUNT } from '@/constants/categories';
-import BirthYear from './personal/components/Personal';
+import { CATEGORIES } from '@/constants/categories';
 import Personal from './personal/components/Personal';
 import { User } from '@/types/user';
 
@@ -26,13 +25,12 @@ const STEPS = [
   'password',
   'nickname',
   'categories',
-  'gender',
   'personal',
   'complete',
 ] as const;
 type Steps = (typeof STEPS)[number];
 
-const INITIAL_STEP: Steps = 'personal';
+const INITIAL_STEP: Steps = 'termsOfService';
 const LAST_STEP = STEPS[STEPS.length - 1];
 const QUERY_PARM_PREFIX = 'steps';
 
