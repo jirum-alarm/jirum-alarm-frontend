@@ -12,12 +12,14 @@ const Categories = ({
 }) => {
   return (
     <div className="flex flex-col h-full">
-      <Description />
-      <CategoriesForm
-        registration={registration}
-        handleRegistration={handleRegistration}
-        moveNextStep={moveNextStep}
-      />
+      <fieldset>
+        <Description />
+        <CategoriesForm
+          registration={registration}
+          handleRegistration={handleRegistration}
+          moveNextStep={moveNextStep}
+        />
+      </fieldset>
     </div>
   );
 };
@@ -26,7 +28,7 @@ export default Categories;
 
 const Description = () => {
   return (
-    <div>
+    <legend>
       <p className="font-semibold text-2xl">
         관심사를 알려주세요.<span className="text-gray-500 text-base pl-2">(선택)</span>
       </p>
@@ -34,6 +36,6 @@ const Description = () => {
         관심분야 핫딜이 올라오면
         <br /> 알림으로 알려드려요.
       </p>
-    </div>
+    </legend>
   );
 };
