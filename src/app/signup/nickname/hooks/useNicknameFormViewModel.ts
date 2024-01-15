@@ -15,8 +15,8 @@ const useInput = ({
   completeRegistration: () => void;
 }) => {
   const validate = (value: NicknameValue) => {
-    const isValidLength =
-      value.length >= MIN_NICKNAME_LENGTH && value.length <= MAX_NICKNAME_LENGTH;
+    const valueLength = [...new Intl.Segmenter().segment(value)].length;
+    const isValidLength = valueLength >= MIN_NICKNAME_LENGTH && valueLength <= MAX_NICKNAME_LENGTH;
     const isValidNoBlank = !value.includes(' ');
 
     return isValidLength && isValidNoBlank;
