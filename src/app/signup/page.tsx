@@ -11,11 +11,26 @@ import { MutationSignup } from '@/graphql/auth';
 import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth';
 import { StorageTokenKey } from '@/types/enum/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Categories from './categories/components/Categories';
+import { ICategoryForm } from '@/features/categories/types';
+import { CATEGORIES, MAX_SELECTION_COUNT } from '@/constants/categories';
 
-const STEPS = ['termsOfService', 'email', 'password', 'nickname'] as const;
+const COMPLETE_ROUTE = 'signup/complete';
+
+const STEPS = [
+  'termsOfService',
+  'email',
+  'password',
+  'nickname',
+  'categories',
+  'gender',
+  'personal',
+  'complete',
+] as const;
 type Steps = (typeof STEPS)[number];
 
-const INITIAL_STEP = 'termsOfService';
+const INITIAL_STEP: Steps = 'categories';
+const LAST_STEP = STEPS[STEPS.length - 1];
 const QUERY_PARM_PREFIX = 'steps';
 
 interface Input {
@@ -30,15 +45,17 @@ export interface Registration {
   termsOfService: boolean;
   privacyPolicy: boolean;
   nickname: Input;
+  categories: ICategoryForm[];
 }
 
 const Signup = () => {
-  const [registraion, setRegistration] = useState<Registration>({
+  const [registration, setRegistration] = useState<Registration>({
     email: { value: '', error: false, focus: false },
     password: { value: '', error: false, invalidType: false, invalidLength: false, focus: false },
     termsOfService: false,
     privacyPolicy: false,
     nickname: { value: '', error: false, focus: false },
+    categories: CATEGORIES.map((category) => ({ ...category, isChecked: false })),
   });
 
   const router = useRouter();
@@ -54,27 +71,21 @@ const Signup = () => {
         localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.signup.refreshToken);
       }
 
-      router.push('signup/complete');
+      router.push(COMPLETE_ROUTE);
     },
   });
 
   const moveNextStep = (steps: Steps) => {
+    if (LAST_STEP === steps) {
+      completeRegistration();
+      return;
+    }
+
     router.push(`?${QUERY_PARM_PREFIX}=${steps}`);
   };
 
-  const handleRegistration = (
-    _registraion: Partial<Registration> | ((registration: Registration) => Partial<Registration>),
-  ) => {
-    const next = typeof _registraion === 'function' ? _registraion(registraion) : _registraion;
-
-    setRegistration((prev) => ({
-      ...prev,
-      ...next,
-    }));
-  };
-
   const completeRegistration = async () => {
-    const { email, password, nickname } = registraion;
+    const { email, password, nickname } = registration;
 
     await signup({
       variables: {
@@ -83,6 +94,17 @@ const Signup = () => {
         nickname: nickname.value,
       },
     });
+  };
+
+  const handleRegistration = (
+    _registraion: Partial<Registration> | ((registration: Registration) => Partial<Registration>),
+  ) => {
+    const next = typeof _registraion === 'function' ? _registraion(registration) : _registraion;
+
+    setRegistration((prev) => ({
+      ...prev,
+      ...next,
+    }));
   };
 
   useEffect(() => {
@@ -94,30 +116,37 @@ const Signup = () => {
       <div className="h-full py-9 px-5">
         {steps === 'termsOfService' && (
           <TermsOfService
-            registration={registraion}
+            registration={registration}
             handleRegistration={handleRegistration}
             moveNextStep={() => moveNextStep('email')}
           />
         )}
         {steps === 'email' && (
           <Email
-            registration={registraion}
+            registration={registration}
             handleRegistration={handleRegistration}
             moveNextStep={() => moveNextStep('password')}
           />
         )}
         {steps === 'password' && (
           <Password
-            registration={registraion}
+            registration={registration}
             handleRegistration={handleRegistration}
             moveNextStep={() => moveNextStep('nickname')}
           />
         )}
         {steps === 'nickname' && (
           <Nickname
-            registration={registraion}
+            registration={registration}
             handleRegistration={handleRegistration}
-            completeRegistration={completeRegistration}
+            moveNextStep={() => moveNextStep('categories')}
+          />
+        )}
+        {steps === 'categories' && (
+          <Categories
+            registration={registration}
+            handleRegistration={handleRegistration}
+            moveNextStep={() => moveNextStep('personal')}
           />
         )}
       </div>
