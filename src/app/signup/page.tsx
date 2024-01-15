@@ -14,6 +14,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Categories from './categories/components/Categories';
 import { ICategoryForm } from '@/features/categories/types';
 import { CATEGORIES, MAX_SELECTION_COUNT } from '@/constants/categories';
+import BirthYear from './personal/components/Personal';
+import Personal from './personal/components/Personal';
+import { User } from '@/types/user';
 
 const COMPLETE_ROUTE = 'signup/complete';
 
@@ -29,7 +32,7 @@ const STEPS = [
 ] as const;
 type Steps = (typeof STEPS)[number];
 
-const INITIAL_STEP: Steps = 'categories';
+const INITIAL_STEP: Steps = 'personal';
 const LAST_STEP = STEPS[STEPS.length - 1];
 const QUERY_PARM_PREFIX = 'steps';
 
@@ -39,6 +42,11 @@ interface Input {
   focus: boolean;
 }
 
+interface Personal {
+  birthYear: string;
+  gender: User['gender'];
+}
+
 export interface Registration {
   email: Input;
   password: Input & { invalidType: boolean; invalidLength: boolean };
@@ -46,6 +54,7 @@ export interface Registration {
   privacyPolicy: boolean;
   nickname: Input;
   categories: ICategoryForm[];
+  personal: Personal;
 }
 
 const Signup = () => {
@@ -56,6 +65,7 @@ const Signup = () => {
     privacyPolicy: false,
     nickname: { value: '', error: false, focus: false },
     categories: CATEGORIES.map((category) => ({ ...category, isChecked: false })),
+    personal: { birthYear: '', gender: undefined },
   });
 
   const router = useRouter();
@@ -85,13 +95,24 @@ const Signup = () => {
   };
 
   const completeRegistration = async () => {
-    const { email, password, nickname } = registration;
+    const { email, password, nickname, personal, categories } = registration;
+    const { birthYear, gender } = personal;
+
+    const favoriteCategories = categories.reduce<number[]>((cur, acc) => {
+      if (acc.isChecked) {
+        cur.push(acc.value);
+      }
+      return cur;
+    }, []);
 
     await signup({
       variables: {
         email: email.value,
         password: password.value,
         nickname: nickname.value,
+        birthYear: Number(birthYear),
+        gender,
+        favoriteCategories,
       },
     });
   };
@@ -147,6 +168,13 @@ const Signup = () => {
             registration={registration}
             handleRegistration={handleRegistration}
             moveNextStep={() => moveNextStep('personal')}
+          />
+        )}
+        {steps === 'personal' && (
+          <Personal
+            registration={registration}
+            handleRegistration={handleRegistration}
+            moveNextStep={() => moveNextStep('complete')}
           />
         )}
       </div>
