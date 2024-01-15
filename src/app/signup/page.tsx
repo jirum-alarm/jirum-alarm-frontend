@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import BasicLayout from '@/components/layout/BasicLayout';
 import Email from './components/Email';
 import Password from './components/Password';
-import AgreeTermsOfService from './components/AgreeTermsOfService';
+import TermsOfService from './terms-of-service/components/TermsOfService';
 import SetupNickname from './components/SetupNickname';
 import { useMutation } from '@apollo/client';
 import { MutationSignup } from '@/graphql/auth';
@@ -76,7 +76,6 @@ const Signup = () => {
   const completeRegistration = async () => {
     const { email, password, nickname } = registraion;
 
-    // @TODO: brithYear, gender, favoriteCategories 실제 데이터로 교체
     await signup({
       variables: {
         email: email.value,
@@ -94,7 +93,7 @@ const Signup = () => {
     <BasicLayout hasBackButton>
       <div className="h-full py-9 px-5">
         {steps === 'termsOfService' && (
-          <AgreeTermsOfService
+          <TermsOfService
             registration={registraion}
             handleRegistration={handleRegistration}
             moveNextStep={() => moveNextStep('email')}
