@@ -1,8 +1,8 @@
 import Button from '@/components/common/Button';
 import usePersonalInfoFormViewModel from '../hooks/usePersonalInfoFormViewModel';
 import { Registration } from '../../page';
-import BirthYearSelect from '@/app/mypage/account/personal/components/BirthYearSelect';
-import GenderRadioGroup from '@/app/mypage/account/personal/components/GenderRadioGroup';
+import BirthYearSelect from '@/features/personal/components/BirthYearSelect';
+import GenderRadioGroup from '@/features/personal/components/GenderRadioGroup';
 
 const PersonalForm = ({
   registration,
