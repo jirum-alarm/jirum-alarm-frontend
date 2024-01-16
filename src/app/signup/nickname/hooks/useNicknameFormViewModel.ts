@@ -8,11 +8,11 @@ type NicknameValue = Registration['nickname']['value'];
 const useInput = ({
   registration,
   handleRegistration,
-  completeRegistration,
+  moveNextStep,
 }: {
   registration: Registration;
   handleRegistration: (nickname: (registration: Registration) => Partial<Registration>) => void;
-  completeRegistration: () => void;
+  moveNextStep: () => void;
 }) => {
   const validate = (value: NicknameValue) => {
     const valueLength = [...new Intl.Segmenter().segment(value)].length;
@@ -45,7 +45,7 @@ const useInput = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    completeRegistration();
+    moveNextStep();
   };
 
   return {

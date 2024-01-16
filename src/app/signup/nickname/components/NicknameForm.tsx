@@ -7,11 +7,11 @@ import useNicknameFormViewModel from '../hooks/useNicknameFormViewModel';
 const NickNameForm = ({
   registration,
   handleRegistration,
-  completeRegistration,
+  moveNextStep,
 }: {
   registration: Registration;
   handleRegistration: (nickname: (registration: Registration) => Partial<Registration>) => void;
-  completeRegistration: () => void;
+  moveNextStep: () => void;
 }) => {
   const {
     isValidInput,
@@ -23,7 +23,7 @@ const NickNameForm = ({
   } = useNicknameFormViewModel({
     registration,
     handleRegistration,
-    completeRegistration,
+    moveNextStep,
   });
 
   return (
@@ -36,7 +36,7 @@ const NickNameForm = ({
         reset={reset}
       />
       <Button type="submit" disabled={!isValidInput}>
-        가입완료
+        다음
       </Button>
     </form>
   );
