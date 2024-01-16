@@ -19,11 +19,13 @@ const CategoriesForm = ({
   });
 
   return (
-    <form className="flex-1 flex flex-col justify-between pt-10" onSubmit={handleSubmit}>
-      <CategoriesCheckboxGroup categories={categories} handleCheckChange={handleCheckChange} />
-      <Description />
-      <Button type="submit">다음</Button>
-    </form>
+    <fieldset>
+      <form className="flex-1 flex flex-col justify-between pt-10" onSubmit={handleSubmit}>
+        <CategoriesCheckboxGroup categories={categories} handleCheckChange={handleCheckChange} />
+        <Description />
+        <Button type="submit">다음</Button>
+      </form>
+    </fieldset>
   );
 };
 
