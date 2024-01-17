@@ -8,15 +8,15 @@ import useGoBack from '@/hooks/useGoBack';
 const TermsOfUse = () => {
   const goBack = useGoBack();
   return (
-    <div className="flex flex-col items-center w-full pt-[44px]">
-      <header className="fixed top-0 bg-white w-full h-[44px] flex items-center justify-center py-[10px] px-[20px] font-semibold">
+    <div className="flex w-full flex-col items-center pt-[44px]">
+      <header className="fixed top-0 flex h-[44px] w-full items-center justify-center bg-white px-[20px] py-[10px] font-semibold">
         <h1>서비스 이용약관</h1>
-        <button className="p-2 absolute right-[18px]" onClick={goBack}>
+        <button className="absolute right-[18px] p-2" onClick={goBack}>
           <Close />
         </button>
       </header>
-      <article className="flex flex-col gap-[24px] p-[20px] w-full">
-        <div className="flex flex-col gap-[8px] w-full text-[13px] text-gray-500">
+      <article className="flex w-full flex-col gap-[24px] p-[20px]">
+        <div className="flex w-full flex-col gap-[8px] text-[13px] text-gray-500">
           <p>공고일자 : 2023년 12월 01일</p>
           <p>시행일자 : 2023년 12월 01일</p>
         </div>
@@ -39,7 +39,7 @@ const TermsOfUse = () => {
         <section className="flex flex-col gap-[24px]">
           {TERMS_CONTENT_DATA.map((data) => (
             <div className="text-gray-900" key={data.idx} id={String(data.idx)}>
-              <h2 className="font-bold mb-[12px]">{data.title}</h2>
+              <h2 className="mb-[12px] font-bold">{data.title}</h2>
               <div className="flex flex-col gap-[20px]">
                 {data.content.map((content) => (
                   <p

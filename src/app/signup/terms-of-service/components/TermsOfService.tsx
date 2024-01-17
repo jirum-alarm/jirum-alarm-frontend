@@ -11,7 +11,7 @@ const TermsOfService = ({
   moveNextStep: () => void;
 }) => {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       <Description />
       <TermsOfServiceForm
         registration={registration}
@@ -26,7 +26,7 @@ export default TermsOfService;
 
 const Description = () => {
   return (
-    <p className="font-semibold text-2xl">
+    <p className="text-2xl font-semibold">
       지름알림 서비스 이용약관에
       <br />
       동의해주세요.

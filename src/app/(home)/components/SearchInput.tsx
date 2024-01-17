@@ -4,8 +4,8 @@ const SearchInput = () => {
   const { inputRef, onKeyDown, handleReset } = useSearchInputViewModel();
   return (
     <div className="mb-6 drop-shadow-md">
-      <div className="mt-6 relative flex items-center w-full h-14 rounded-lg shadow hover:shadow-md bg-white overflow-hidden">
-        <div className="grid place-items-center h-full w-14 text-gray-300">
+      <div className="relative mt-6 flex h-14 w-full items-center overflow-hidden rounded-lg bg-white shadow hover:shadow-md">
+        <div className="grid h-full w-14 place-items-center text-gray-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
@@ -23,14 +23,14 @@ const SearchInput = () => {
         </div>
         <input
           ref={inputRef}
-          className="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
+          className="peer h-full w-full pr-2 text-sm text-gray-700 outline-none"
           onKeyDown={onKeyDown}
           spellCheck={false}
           placeholder="최근에 구매하고 싶은 제품이 있으셨나요?"
         />
 
         <div
-          className="grid place-items-center h-full w-14 text-gray-300 cursor-pointer"
+          className="grid h-full w-14 cursor-pointer place-items-center text-gray-300"
           onClick={handleReset}
         >
           <svg

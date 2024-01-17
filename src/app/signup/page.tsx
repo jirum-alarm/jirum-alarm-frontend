@@ -132,7 +132,7 @@ const Signup = () => {
 
   return (
     <BasicLayout hasBackButton>
-      <div className="h-full py-9 px-5">
+      <div className="h-full px-5 py-9">
         {steps === 'termsOfService' && (
           <TermsOfService
             registration={registration}

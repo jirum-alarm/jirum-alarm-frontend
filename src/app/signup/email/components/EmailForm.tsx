@@ -27,7 +27,7 @@ const EmailForm = ({
   });
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col flex-1 justify-between pt-[88px]">
+    <form onSubmit={handleSubmit} className="flex flex-1 flex-col justify-between pt-[88px]">
       <EmailInput
         registration={registration}
         handleInputChange={handleInputChange}

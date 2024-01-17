@@ -37,17 +37,17 @@ export default function NavBar() {
   return (
     <>
       <LoadState></LoadState>
-      <div className="pt-8 px-4">
+      <div className="px-4 pt-8">
         <div className="flex items-center justify-between">
           <div className="w-3/12" />
           <Link href="/">
-            <div className="grid grid-flow-col gap-x-3 items-center">
+            <div className="grid grid-flow-col items-center gap-x-3">
               <Logo />
-              <h1 className="text-center flex center text-3xl">지름알림</h1>
+              <h1 className="center flex text-center text-3xl">지름알림</h1>
             </div>
           </Link>
 
-          <div className="w-3/12 flex justify-end">
+          <div className="flex w-3/12 justify-end">
             {/* {user ? (
               <>
                 <Link href="/logout">

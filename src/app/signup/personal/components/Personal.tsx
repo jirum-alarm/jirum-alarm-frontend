@@ -11,7 +11,7 @@ const Personal = ({
   moveNextStep: () => void;
 }) => {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       <Description />
       <PersonalForm
         registration={registration}
@@ -27,12 +27,12 @@ export default Personal;
 const Description = () => {
   return (
     <div>
-      <p className="font-semibold text-2xl">
+      <p className="text-2xl font-semibold">
         출생년도와 성별을
         <br />
-        알려주세요.<span className="text-gray-500 text-base pl-2">(선택)</span>
+        알려주세요.<span className="pl-2 text-base text-gray-500">(선택)</span>
       </p>
-      <p className="text-gray-700 pt-4 text-sm">
+      <p className="pt-4 text-sm text-gray-700">
         나와 비슷한 사람들이 좋아하는
         <br />
         물건들을 추천해줘요

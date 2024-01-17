@@ -5,7 +5,7 @@ export default async function Home() {
   return (
     <>
       <main>
-        <div className="max-w-screen-lg mx-auto">
+        <div className="mx-auto max-w-screen-lg">
           <div className="px-4">
             <NavBar></NavBar>
             <ProductList />

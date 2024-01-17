@@ -60,36 +60,36 @@ export default function Login() {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col justify-center pt-8 md:pt-12">
-        <div className="px-2 mx-auto md:w-full md:max-w-sm">
-          <div className="shadow-gray-200 shadow-md w-full rounded-lg divide-y divide-gray-200">
+      <div className="flex min-h-screen flex-col justify-center pt-8 md:pt-12">
+        <div className="mx-auto px-2 md:w-full md:max-w-sm">
+          <div className="w-full divide-y divide-gray-200 rounded-lg shadow-md shadow-gray-200">
             <div className="px-5 py-5">
               <form onSubmit={onSubmitLogin}>
                 {/* <h1 className="font-bold text-center text-2xl mb-4">로그인</h1> */}
-                <label className="font-semibold text-sm text-gray-600 block">이메일</label>
+                <label className="block text-sm font-semibold text-gray-600">이메일</label>
                 <input
                   type="text"
                   id="id"
                   placeholder="이메일"
                   autoComplete="true"
-                  className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
+                  className="mb-5 mt-1 w-full rounded-lg border px-3 py-2 text-sm"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
                 />
-                <label className="font-semibold text-sm text-gray-600 block">비밀번호</label>
+                <label className="block text-sm font-semibold text-gray-600">비밀번호</label>
                 <input
                   type="password"
                   id="password"
                   name="password"
                   placeholder="비밀번호"
                   autoComplete="true"
-                  className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
+                  className="mb-5 mt-1 w-full rounded-lg border px-3 py-2 text-sm"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="submit"
-                  className="transition duration-200 bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block"
+                  className="inline-block w-full rounded-lg bg-blue-500 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition duration-200 hover:bg-blue-600 hover:shadow-md focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
                 >
                   <span className="inline-block">로그인</span>
                 </button>
@@ -100,7 +100,7 @@ export default function Login() {
                 <a href="https://jirum-api.kyojs.com/login/kakao">
                   <button
                     type="button"
-                    className="h-12 transition duration-200 border border-gray-200 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold relative"
+                    className="relative h-12 w-full rounded-lg border border-gray-200 py-2.5 text-sm font-semibold shadow-sm transition duration-200 hover:shadow-md"
                     style={{ backgroundColor: '#ffe900' }}
                   >
                     <svg
@@ -110,7 +110,7 @@ export default function Login() {
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 64 64"
                       preserveAspectRatio="none"
-                      className="absolute top-2 left-2"
+                      className="absolute left-2 top-2"
                     >
                       <path
                         fillRule="evenodd"
@@ -136,7 +136,7 @@ export default function Login() {
                 <a href="https://jirum-api.kyojs.com/login/naver">
                   <button
                     type="button"
-                    className="h-12 transition duration-200 border border-gray-200 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold relative"
+                    className="relative h-12 w-full rounded-lg border border-gray-200 py-2.5 text-sm font-semibold shadow-sm transition duration-200 hover:shadow-md"
                     style={{ backgroundColor: '#00b600', color: '#efefef' }}
                   >
                     <span>
@@ -147,7 +147,7 @@ export default function Login() {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 64 64"
                         preserveAspectRatio="none"
-                        className="absolute top-2 left-2"
+                        className="absolute left-2 top-2"
                       >
                         <path
                           fillRule="evenodd"
@@ -169,9 +169,9 @@ export default function Login() {
                 <a href="https://jirum-api.kyojs.com/login/google">
                   <button
                     type="button"
-                    className="h-12 relative transition duration-200 border border-gray-200 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block"
+                    className="relative inline-block h-12 w-full rounded-lg border border-gray-200 py-2.5 text-center text-sm font-semibold shadow-sm transition duration-200 hover:shadow-md"
                   >
-                    <FcGoogle className="absolute text-3xl top-2 left-2"></FcGoogle>
+                    <FcGoogle className="absolute left-2 top-2 text-3xl"></FcGoogle>
                     구글로 로그인
                   </button>
                 </a>
@@ -179,8 +179,8 @@ export default function Login() {
             </div>
             <div className="px-2 py-2">
               <div className="grid grid-cols-2 gap-1">
-                <div className="text-center whitespace-nowrap">
-                  <button className="px-8 leading-2 text-center whitespace-nowrap text-sm transition duration-200 px-5 py-2 cursor-pointer font-normal rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
+                <div className="whitespace-nowrap text-center">
+                  <button className="leading-2 cursor-pointer whitespace-nowrap rounded-lg px-5 px-8 py-2 text-center text-sm font-normal text-gray-500 ring-inset transition duration-200 hover:bg-gray-100 focus:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
                     <LiaUserCircle size="18" className="inline-block"></LiaUserCircle>
                     <span className="ml-1">회원가입</span>
                   </button>
@@ -207,14 +207,14 @@ export default function Login() {
           </div>
           <div className="py-2">
             <div className="grid grid-cols-2 gap-1">
-              <div className="text-center sm:text-left whitespace-nowrap">
-                <button className="transition duration-200 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-200 focus:outline-none focus:bg-gray-300 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
+              <div className="whitespace-nowrap text-center sm:text-left">
+                <button className="cursor-pointer rounded-lg px-5 py-4 text-sm font-normal text-gray-500 ring-inset transition duration-200 hover:bg-gray-200 focus:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    className="w-4 h-4 inline-block align-text-top"
+                    className="inline-block h-4 w-4 align-text-top"
                   >
                     <path
                       strokeLinecap="round"
@@ -224,7 +224,7 @@ export default function Login() {
                     />
                   </svg>
                   <a href="/">
-                    <span className="inline-block ml-1">지름알림으로 되돌아가기</span>
+                    <span className="ml-1 inline-block">지름알림으로 되돌아가기</span>
                   </a>
                 </button>
               </div>

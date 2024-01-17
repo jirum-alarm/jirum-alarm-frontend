@@ -11,7 +11,7 @@ const Nickname = ({
   moveNextStep: () => void;
 }) => {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       <Description />
       <NickNameForm
         registration={registration}
@@ -26,7 +26,7 @@ export default Nickname;
 
 const Description = () => {
   return (
-    <p className="font-semibold text-2xl">
+    <p className="text-2xl font-semibold">
       닉네임을
       <br />
       입력해주세요.
