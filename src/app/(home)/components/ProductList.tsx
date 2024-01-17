@@ -36,14 +36,14 @@ const ProductList = () => {
           disableUpDownKeys
         >
           <TabList
-            className={`will-change-transform scroll-smooth overflow-x-scroll ${
+            className={`overflow-x-scroll scroll-smooth will-change-transform ${
               isMobile ? 'whitespace-nowrap' : ''
             }`}
           >
             {[allCategory].concat(categoriesData.categories).map((category) => (
               <React.Fragment key={category.name}>
                 <Tab
-                  className="hover:text-zinc-700 transition duration-200 inline-block p-2 text-zinc-400 font-bold b-0"
+                  className="b-0 inline-block p-2 font-bold text-zinc-400 transition duration-200 hover:text-zinc-700"
                   id={`profile-tab-${category.id}`}
                   data-tabs-target={`#profile-${category.id}`}
                   type="button"
@@ -65,7 +65,7 @@ const ProductList = () => {
                 index={activeTab}
                 onChangeIndex={handleTabChange}
                 animateTransitions={isMobile}
-                className="will-change-transform my-6"
+                className="my-6 will-change-transform"
               >
                 {[allCategory].concat(categoriesData.categories).map((category, i) => (
                   <React.Fragment key={`${category.id}_${i}`}>
@@ -76,7 +76,7 @@ const ProductList = () => {
                         </div>
                       ) : (
                         <div className="fex min-h-[500px]">
-                          <div className=" item-center grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
+                          <div className=" item-center grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                             {products?.map((product, i) => (
                               <ProductCard key={i} product={product} />
                             ))}

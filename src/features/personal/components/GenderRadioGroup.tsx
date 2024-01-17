@@ -63,7 +63,7 @@ const Radio = ({
     <>
       <input
         id={`${name}-${id}`}
-        className="hidden peer"
+        className="peer hidden"
         type="radio"
         name={name}
         value={value}
@@ -72,7 +72,7 @@ const Radio = ({
       />
       <label
         htmlFor={`${name}-${id}`}
-        className="w-full inline-flex items-center justify-center border border-gray-300 h-[88px] rounded-lg peer-checked:border-primary-500 peer-checked:bg-primary-50"
+        className="inline-flex h-[88px] w-full items-center justify-center rounded-lg border border-gray-300 peer-checked:border-primary-500 peer-checked:bg-primary-50"
       >
         {children}
       </label>

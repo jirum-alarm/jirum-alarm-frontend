@@ -14,14 +14,14 @@ const Completed = () => {
 
   return (
     <BasicLayout>
-      <div className="h-full py-9 px-5">
+      <div className="h-full px-5 py-9">
         <div className="grid h-full text-center">
           <div>
             <div className="grid justify-center pb-10">
               <Illust />
             </div>
             <div>
-              <p className="font-semibold text-2xl pb-3">가입을 축하합니다!</p>
+              <p className="pb-3 text-2xl font-semibold">가입을 축하합니다!</p>
               <p>
                 실시간으로 올라오는 핫딜 정보를 확인하고
                 <br />

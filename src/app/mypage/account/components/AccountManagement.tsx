@@ -9,7 +9,7 @@ const AccountManagement = () => {
       <button className="px-6 py-3 text-[13px] text-gray-500" onClick={logout}>
         로그아웃
       </button>
-      <div className="w-px h-3 bg-gray-200" />
+      <div className="h-3 w-px bg-gray-200" />
       <button className="px-6 py-3 text-[13px] text-gray-500">회원탈퇴</button>
     </div>
   );

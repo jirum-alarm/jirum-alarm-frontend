@@ -4,7 +4,7 @@ import Link from 'next/link';
 const TermsPoliciesPage = () => {
   return (
     <BasicLayout hasBackButton title="약관 및 정책">
-      <div className="py-6 h-full">
+      <div className="h-full py-6">
         <Link href={'/policies/terms'}>
           <div className="px-5 py-4">서비스 이용약관</div>
         </Link>

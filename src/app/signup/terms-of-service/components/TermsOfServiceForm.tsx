@@ -36,13 +36,13 @@ const TermsOfServiceForm = ({
   });
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col flex-1 justify-between pt-[88px]">
+    <form onSubmit={handleSubmit} className="flex flex-1 flex-col justify-between pt-[88px]">
       <div>
         <ConsentAll
           isAllConsented={isAllConsented}
           handleConsetAllChange={handleConsentAllChange}
         />
-        <div className="grid items-center pt-6 gap-y-4">
+        <div className="grid items-center gap-y-4 pt-6">
           <ConsentRequired
             id="termsOfService"
             link={'policies/terms/'}
@@ -76,7 +76,7 @@ const ConsentAll = ({
   return (
     <label
       onChange={handleConsetAllChange}
-      className="flex gap-x-2 items-center font-semibold cursor-pointer"
+      className="flex cursor-pointer items-center gap-x-2 font-semibold"
     >
       <input type="checkbox" className="hidden" />
       {isAllConsented ? (
@@ -106,7 +106,7 @@ const ConsentRequired = ({
 
   return (
     <div className="grid grid-flow-col">
-      <label onChange={handleChange} className="flex gap-x-2 items-center cursor-pointer">
+      <label onChange={handleChange} className="flex cursor-pointer items-center gap-x-2">
         <input type="checkbox" id={id} className="hidden" />
         {isRequiredConsented(id) ? (
           <CheckDefault className="text-primary-600" />

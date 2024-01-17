@@ -27,12 +27,12 @@ const mypageMenuListMap = [
 const MenuList = () => {
   return (
     <div className="px-5">
-      <div className="py-4 border-b border-gray-300">
+      <div className="border-b border-gray-300 py-4">
         <ul>
           {mypageMenuListMap.map((menu, i) => (
             <li key={i}>
               <Link href={menu.url}>
-                <div className="py-3 flex gap-3 items-center">
+                <div className="flex items-center gap-3 py-3">
                   {createElement(menu.icon)}
                   <span className="text-gray-900">{menu.title}</span>
                 </div>

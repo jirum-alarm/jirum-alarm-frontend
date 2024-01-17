@@ -19,7 +19,7 @@ const CategoriesCheckboxGroup = ({
             checked={category.isChecked}
             handleCheckChange={handleCheckChange}
           >
-            <div className="flex flex-col gap-2 items-center">
+            <div className="flex flex-col items-center gap-2">
               <span className="text-2xl">{category.icon}</span>
               <span className="text-sm text-gray-700">{category.text}</span>
             </div>
@@ -50,7 +50,7 @@ const Checkbox = ({
     <>
       <input
         id={`${name}-${id}`}
-        className="hidden peer"
+        className="peer hidden"
         type="checkbox"
         checked={checked}
         name={name}
@@ -59,7 +59,7 @@ const Checkbox = ({
       />
       <label
         htmlFor={`${name}-${id}`}
-        className="w-full inline-flex items-center justify-center border border-gray-300 h-[88px] rounded-lg peer-checked:border-primary-500 peer-checked:bg-primary-50"
+        className="inline-flex h-[88px] w-full items-center justify-center rounded-lg border border-gray-300 peer-checked:border-primary-500 peer-checked:bg-primary-50"
       >
         {children}
       </label>

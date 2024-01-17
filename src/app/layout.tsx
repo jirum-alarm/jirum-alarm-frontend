@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <MSWInit>
           <AppProvider>
-            <div className="min-w-[320px] bg-white relative">{children}</div>
+            <div className="relative min-w-[320px] bg-white">{children}</div>
           </AppProvider>
         </MSWInit>
       </body>

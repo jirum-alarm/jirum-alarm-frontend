@@ -36,7 +36,7 @@ export const TopButton = () => {
         type="button"
         onClick={scrollToTop}
         className={classNames(
-          'bg-blue-500 hover:bg-blue-600 focus:ring-blue-400 inline-flex items-center rounded-full p-3 text-white shadow-sm transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2',
+          'inline-flex items-center rounded-full bg-blue-500 p-3 text-white shadow-sm transition-opacity hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2',
         )}
       >
         <AiOutlineArrowUp className="h-6 w-6" aria-hidden="true" />
