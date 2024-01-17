@@ -23,7 +23,7 @@ const PasswordForm = ({
     });
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-1 flex-col justify-between pt-[88px]">
+    <form onSubmit={handleSubmit} className="flex flex-1 flex-col justify-between pt-22">
       <PasswordInput
         value={value}
         isInvalidType={isInvalidType}
