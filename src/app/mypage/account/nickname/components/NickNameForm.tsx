@@ -8,7 +8,7 @@ const NickNameForm = () => {
   const { nickname, handleSubmit, handleInputChange, reset, isValidInput } =
     useNicknameFormViewModel();
   return (
-    <form className="flex flex-1 flex-col justify-between pt-[88px]" onSubmit={handleSubmit}>
+    <form className="flex flex-1 flex-col justify-between pt-22" onSubmit={handleSubmit}>
       <Input
         type="text"
         name="nickname"
