@@ -9,7 +9,7 @@ const CategoriesForm = () => {
   return (
     <form className="flex flex-1 flex-col justify-between" onSubmit={handleSubmit}>
       <CategoriesCheckboxGroup categories={categories} handleCheckChange={handleCheckChange} />
-      <Button type="submit" disabled={!canSubmit}>
+      <Button type="submit" disabled={!canSubmit()}>
         저장
       </Button>
     </form>

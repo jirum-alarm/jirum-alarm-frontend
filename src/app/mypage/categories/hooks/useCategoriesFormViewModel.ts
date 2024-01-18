@@ -7,6 +7,9 @@ import useGoBack from '@/hooks/useGoBack';
 import { useMutation } from '@apollo/client';
 import { type User } from '@/types/user';
 import { type ICategoryForm } from '@/features/categories/types';
+import { shallowArrayEqual } from '@/util/object';
+
+const FAVORITE_CATEGORIES = CATEGORIES.map((category) => ({ ...category, isChecked: false }));
 
 export const useCategoriesFormViewModel = () => {
   const { data } = useQuery<{ me: Pick<User, 'favoriteCategories'> }>(QueryMe);
@@ -25,27 +28,29 @@ export const useCategoriesFormViewModel = () => {
     },
   });
 
-  const [categories, setCategories] = useState<ICategoryForm[]>(
-    CATEGORIES.map((category) => ({ ...category, isChecked: false })),
-  );
+  const [categories, setCategories] = useState<ICategoryForm[]>(FAVORITE_CATEGORIES);
+  const [originalCategory, setOriginalCategory] = useState<ICategoryForm[]>(FAVORITE_CATEGORIES);
 
   useEffect(() => {
     const favoriteCategories = data?.me.favoriteCategories;
     if (!favoriteCategories) return;
-    setCategories((prev) =>
-      prev.map((category) => ({
-        ...category,
-        isChecked:
-          !!favoriteCategories &&
-          favoriteCategories.some((categoryNumber) => Number(categoryNumber) === category.value),
-      })),
-    );
+
+    const _FAVORITE_CATEGORIES = FAVORITE_CATEGORIES.map((category) => ({
+      ...category,
+      isChecked:
+        !!favoriteCategories &&
+        favoriteCategories.some((categoryNumber) => Number(categoryNumber) === category.value),
+    }));
+    setCategories(_FAVORITE_CATEGORIES);
+    setOriginalCategory(_FAVORITE_CATEGORIES);
   }, [data?.me.favoriteCategories]);
 
   const isMaxSelection = () =>
     MAX_SELECTION_COUNT >= categories.filter((category) => category.isChecked).length + 1;
 
-  const canSubmit = categories.filter((category) => category.isChecked).length > 0;
+  const canSubmit = () => {
+    return !shallowArrayEqual(originalCategory, categories);
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
