@@ -64,7 +64,7 @@ const Radio = ({
       <input
         id={`${name}-${id}`}
         className="peer hidden"
-        type="radio"
+        type="checkbox"
         name={name}
         value={value}
         checked={checked}

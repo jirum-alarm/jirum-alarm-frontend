@@ -20,7 +20,7 @@ const PersonalInfoForm = () => {
         <div className="h-10" />
         <GenderRadioGroup handleRadioChange={handleRadioChange} gender={gender} />
       </div>
-      <Button type="submit" disabled={!isValidPersonalInfoInput}>
+      <Button type="submit" disabled={isValidPersonalInfoInput()}>
         저장
       </Button>
     </form>
