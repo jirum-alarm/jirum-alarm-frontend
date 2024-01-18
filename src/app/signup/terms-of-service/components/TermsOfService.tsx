@@ -11,7 +11,7 @@ const TermsOfService = ({
   moveNextStep: () => void;
 }) => {
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex flex-col">
       <Description />
       <TermsOfServiceForm
         registration={registration}

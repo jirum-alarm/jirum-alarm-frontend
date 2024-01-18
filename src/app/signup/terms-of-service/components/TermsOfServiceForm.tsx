@@ -57,9 +57,11 @@ const TermsOfServiceForm = ({
           />
         </div>
       </div>
-      <Button type="submit" disabled={!isValidInput}>
-        다음
-      </Button>
+      <div className="fixed bottom-0 right-0 w-full px-5 pb-9">
+        <Button type="submit" disabled={!isValidInput}>
+          다음
+        </Button>
+      </div>
     </form>
   );
 };

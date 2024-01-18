@@ -13,7 +13,7 @@ const Completed = () => {
   };
 
   return (
-    <BasicLayout>
+    <BasicLayout fullScreen={false}>
       <div className="h-full px-5 py-9">
         <div className="grid h-full text-center">
           <div>
@@ -29,9 +29,11 @@ const Completed = () => {
               </p>
             </div>
           </div>
-          <Button onClick={handleCTAButton} className="self-end">
-            핫딜 보러가기
-          </Button>
+          <div className="fixed bottom-0 right-0 w-full px-5 pb-9">
+            <Button onClick={handleCTAButton} className="self-end">
+              핫딜 보러가기
+            </Button>
+          </div>
         </div>
       </div>
     </BasicLayout>
