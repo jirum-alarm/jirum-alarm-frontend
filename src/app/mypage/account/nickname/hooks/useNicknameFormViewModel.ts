@@ -6,6 +6,9 @@ import { useMutation } from '@apollo/client';
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useEffect, useState } from 'react';
 
+const MIN_NICKNAME_LENGTH = 2;
+const MAX_NICKNAME_LENGTH = 12;
+
 const useInput = () => {
   const { data } = useQuery<{ me: Omit<User, 'favoriteCategories' | 'linkedSocialProviders'> }>(
     QueryMe,
@@ -36,9 +39,11 @@ const useInput = () => {
   }, [data]);
 
   const isValidNickname = (value: string) => {
-    if (value === '') return true;
-    const nicknameRegex = /^\S{2,12}$/;
-    return nicknameRegex.test(value);
+    const valueLength = [...new Intl.Segmenter().segment(value)].length;
+    const isValidLength = valueLength >= MIN_NICKNAME_LENGTH && valueLength <= MAX_NICKNAME_LENGTH;
+    const isValidNoBlank = !value.includes(' ');
+
+    return isValidLength && isValidNoBlank;
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
