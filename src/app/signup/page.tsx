@@ -131,8 +131,8 @@ const Signup = () => {
   }, [router]);
 
   return (
-    <BasicLayout hasBackButton>
-      <div className="h-full px-5 py-9">
+    <BasicLayout hasBackButton fullScreen={false}>
+      <div className="px-5 py-9">
         {steps === 'termsOfService' && (
           <TermsOfService
             registration={registration}
