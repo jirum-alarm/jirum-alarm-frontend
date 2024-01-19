@@ -17,18 +17,18 @@ const useInput = () => {
     value: '',
     error: false,
   }));
-  const { showToast } = useToast();
+  const { toast } = useToast();
   const goBack = useGoBack();
   const [updateProfile] = useMutation<{ updateUserProfile: boolean }, { nickname: string }>(
     MutationUpdateUserProfile,
     {
       refetchQueries: [{ query: QueryMe }],
       onCompleted: () => {
-        // showToast('닉네임이 저장됐어요')
+        toast('닉네임이 저장됐어요');
         goBack();
       },
       onError: () => {
-        // showToast('닉네임이 저장중 에러가 발생했어요')
+        toast('닉네임이 저장중 에러가 발생했어요');
       },
     },
   );

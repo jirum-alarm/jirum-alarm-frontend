@@ -1,61 +1,63 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { toastAtom } from '@/state/toast';
 import { Toast } from './Toast';
-import { useCallback, useId } from 'react';
+import { useEffect, useState } from 'react';
 
-interface Options {
-  duration: number;
+const TOAST_LIMIT = 1;
+const TOAST_REMOVE_DELAY = 3000;
+
+interface Toast {
+  id: string;
+  message: string;
+  show: boolean;
 }
 
-/**
- * @description
- * Pass unique key to `useToast` and add `TestContaier` component.
- * Show toast by using `showToast` with message.
- *
- * @example
- * ```tsx
- * const { ToastContainer, showToast } = useToast(useId())
- *
- * <>
- *   <Button onClick={() => showToast('저장이 완료되었습니다')}>저장</Button>
- *   <ToastContainer />
- * </>
- * ```
- *
- * @default 1500
- * @param {number} options.duration - time that remain toast
- * */
-export const useToast = (options: Options = { duration: 1500 }) => {
-  const { duration } = options;
-  const id = useId();
+let toasts: Toast[] = [];
+let count = 0;
 
-  const setToast = useSetRecoilState(toastAtom(id));
-
-  const showToast = (() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-    return (message: string) => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-        setToast({ show: false, message });
-      }
-      setToast({ show: true, message });
-
-      timeoutId = setTimeout(() => {
-        setToast({ show: false, message: '' });
-      }, duration);
-    };
-  })();
-
-  const toastContainer = useCallback(() => <ToastContainer id={id} />, [id]);
-
-  return {
-    ToastContainer: toastContainer,
-    showToast,
-  };
+const genId = () => {
+  count = (count + 1) % Number.MAX_SAFE_INTEGER;
+  return count.toString();
 };
 
-export const ToastContainer = ({ id }: { id: string }) => {
-  const toast = useRecoilValue(toastAtom(id));
+const listeners: Array<(toasts: Toast[]) => void> = [];
+const timeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
-  return <Toast show={toast.show}>{toast.message}</Toast>;
+const toast = (message: string) => {
+  const id = genId();
+
+  let toast = { id, message };
+
+  toasts = [{ ...toast, show: true }, ...toasts].slice(0, TOAST_LIMIT);
+
+  listeners.forEach((listener) => {
+    listener(toasts);
+
+    timeouts.forEach((t) => clearTimeout(t));
+
+    const timeout = setTimeout(() => {
+      toasts = [{ ...toast, show: false }, ...toasts].slice(0, TOAST_LIMIT);
+      listener(toasts);
+      timeouts.clear();
+    }, TOAST_REMOVE_DELAY);
+
+    timeouts.set(id, timeout);
+  });
+};
+
+export const useToast = () => {
+  const [state, setState] = useState(toasts);
+
+  useEffect(() => {
+    listeners.push(setState);
+    return () => {
+      const index = listeners.indexOf(setState);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
+    };
+  }, [state]);
+
+  return {
+    toast,
+    toasts: state,
+  };
 };
