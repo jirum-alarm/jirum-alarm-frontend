@@ -1,6 +1,5 @@
 'use client';
-import { ApolloClient, ApolloLink, from, HttpLink } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+import { ApolloLink, concat, HttpLink } from '@apollo/client';
 
 import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
 import { StorageTokenKey } from '@/types/enum/auth';
@@ -12,9 +11,19 @@ import {
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr';
 
-function makeClient() {
-  const httpLink = new HttpLink({ uri: GRAPHQL_ENDPOINT, fetchOptions: { cache: 'no-store' } });
+const httpLink = new HttpLink({ uri: GRAPHQL_ENDPOINT });
 
+const authMiddleware = new ApolloLink((operation, forward) => {
+  const token = localStorage.getItem(StorageTokenKey.ACCESS_TOKEN);
+  operation.setContext({
+    headers: {
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  });
+  return forward(operation);
+});
+
+function makeClient() {
   return new NextSSRApolloClient({
     // use the `NextSSRInMemoryCache`, not the normal `InMemoryCache`
     cache: new NextSSRInMemoryCache(),
@@ -29,7 +38,7 @@ function makeClient() {
             }),
             httpLink,
           ])
-        : httpLink,
+        : concat(authMiddleware, httpLink),
   });
 }
 

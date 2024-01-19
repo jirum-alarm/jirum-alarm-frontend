@@ -10,11 +10,9 @@ import AccountManagement from './components/AccountManagement';
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
 const AccountPage = () => {
-  // const { data } = await getClient().query<{ me: User }>({ query: QueryMe })
   const { data } = useQuery<{ me: Omit<User, 'favoriteCategories' | 'linkedSocialProviders'> }>(
     QueryMe,
   );
-  console.log('data : ', data);
   return (
     <BasicLayout hasBackButton title="가입 정보">
       <div className="flex h-full flex-col px-5 pb-8">
