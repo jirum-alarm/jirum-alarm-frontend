@@ -76,8 +76,8 @@ export const QueryMe = gql`
   }
 `;
 
-export const QueryLoginByRefreshToken = gql`
-  query QueryLoginByRefreshToken {
+export const MutationLoginByRefreshToken = gql`
+  mutation QueryLoginByRefreshToken {
     loginByRefreshToken {
       accessToken
       refreshToken

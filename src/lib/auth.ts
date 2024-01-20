@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 
-import { QueryLoginByRefreshToken } from '../graphql/auth';
+import { MutationLoginByRefreshToken } from '../graphql/auth';
 
 import { IRefreshToken, IToken } from '../types/auth';
 import { StorageTokenKey } from '../types/enum/auth';
@@ -60,7 +60,7 @@ export const getAccessToken = async () => {
   }
   return client
     .query<ILoginByRefreshTokenOutput>({
-      query: QueryLoginByRefreshToken,
+      query: MutationLoginByRefreshToken,
       context: { clientName: ApiType.API, headers: { authorization: `Bearer ${refreshToken}` } },
       fetchPolicy: 'no-cache',
     })
