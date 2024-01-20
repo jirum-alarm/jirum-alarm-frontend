@@ -1,22 +1,25 @@
 import React from 'react';
 import Select from '@/components/common/Select';
-import { BIRTH_YEAR } from '@/constants/birthYear';
 
 interface BirthYearSelectProps {
-  handleSelectChange: (value: string) => void;
-  birthYear?: string;
+  handleSelectChange: (value?: string | null) => void;
+  birthYear?: string | null;
+  birthYearOptions: Array<{ text: string; value: string | null }>;
 }
 
-const BIRTH_YEAR_OPTIONS = ['선택안함', ...BIRTH_YEAR];
-
-const BirthYearSelect = ({ handleSelectChange, birthYear }: BirthYearSelectProps) => {
+const BirthYearSelect = ({
+  handleSelectChange,
+  birthYear,
+  birthYearOptions,
+}: BirthYearSelectProps) => {
+  console.log('defaultValue', birthYear);
   return (
     <fieldset>
       <legend className="pb-2 text-sm text-gray-500">출생년도</legend>
       <Select placeholder="출생년도" onChange={handleSelectChange} defaultValue={birthYear}>
-        {BIRTH_YEAR_OPTIONS.map((year) => (
-          <Select.Option key={year} value={String(year)}>
-            {year}
+        {birthYearOptions.map((option) => (
+          <Select.Option key={option.value} value={option.value}>
+            {option.text}
           </Select.Option>
         ))}
       </Select>

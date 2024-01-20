@@ -41,7 +41,7 @@ interface Input {
 }
 
 interface Personal {
-  birthYear: string;
+  birthYear?: string | null;
   gender: User['gender'];
 }
 
@@ -103,12 +103,14 @@ const Signup = () => {
       return cur;
     }, []);
 
+    const _birthYear = birthYear ? Number(birthYear) : null;
+
     await signup({
       variables: {
         email: email.value,
         password: password.value,
         nickname: nickname.value,
-        birthYear: Number(birthYear),
+        birthYear: _birthYear,
         gender,
         favoriteCategories,
       },

@@ -3,7 +3,7 @@ import React, { createContext } from 'react';
 export type SelectContextProps = {
   selectedIndex: number;
   setSelectedIndex: (index: number) => void;
-  onChange: (value: string) => void;
+  onChange: (value?: string | null) => void;
   onClose: () => void;
   selectedOffsetTop: number;
   setSelectedOffsetTop: (top: number) => void;
