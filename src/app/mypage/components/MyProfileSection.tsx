@@ -1,13 +1,12 @@
+'use client';
 import { ArrowRight } from '@/components/common/icons';
 import { QueryMe } from '@/graphql/auth';
-import { getClient } from '@/lib/client';
 import { User } from '@/types/user';
+import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import Link from 'next/link';
 
-const MyProfileSection = async () => {
-  const { data } = await getClient().query<{ me: User }>({
-    query: QueryMe,
-  });
+const MyProfileSection = () => {
+  const { data } = useQuery<{ me: User }>(QueryMe);
 
   return (
     <div className="px-5">

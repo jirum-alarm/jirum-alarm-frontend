@@ -3,7 +3,7 @@ import MenuList from './components/MenuList';
 import MyProfileSection from './components/MyProfileSection';
 import MyVersion from './components/MyVersion';
 
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
 
 const MyPage = () => {
   return (
