@@ -22,6 +22,7 @@ const useInput = () => {
   const [updateProfile] = useMutation<{ updateUserProfile: boolean }, { nickname: string }>(
     MutationUpdateUserProfile,
     {
+      refetchQueries: [{ query: QueryMe }],
       onCompleted: () => {
         // showToast('닉네임이 저장됐어요')
         goBack();

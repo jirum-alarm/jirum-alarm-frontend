@@ -19,6 +19,7 @@ export const useCategoriesFormViewModel = () => {
     { updateUserProfile: boolean },
     { favoriteCategories: number[] }
   >(MutationUpdateUserProfile, {
+    refetchQueries: [{ query: QueryMe }],
     onCompleted: () => {
       // showToast('관심 카테고리가 저장됐어요')
       goBack();

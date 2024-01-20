@@ -24,6 +24,7 @@ const usePersonalInfoFormViewModel = () => {
     { updateUserProfile: boolean },
     { birthYear: number | undefined; gender: User['gender'] }
   >(MutationUpdateUserProfile, {
+    refetchQueries: [{ query: QueryMe }],
     onCompleted: () => {
       // showToast('개인정보가 저장됐어요')
       goBack();
