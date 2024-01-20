@@ -25,18 +25,24 @@ const toast = (message: string) => {
   const id = genId();
 
   let toast = { id, message };
-
   toasts = [{ ...toast, show: true }, ...toasts].slice(0, TOAST_LIMIT);
 
+  timeouts.forEach(clearTimeout);
   listeners.forEach((listener) => {
     listener(toasts);
 
-    timeouts.forEach((t) => clearTimeout(t));
-
     const timeout = setTimeout(() => {
-      toasts = [{ ...toast, show: false }, ...toasts].slice(0, TOAST_LIMIT);
-      listener(toasts);
-      timeouts.clear();
+      if (timeouts.size === 0) {
+        toasts = [{ ...toast, show: false }, ...toasts].slice(0, TOAST_LIMIT);
+        listener(toasts);
+        return;
+      }
+
+      const maxTimeoutId = [...timeouts.entries()]?.reduce((a, b) => (b[1] > a[1] ? b : a))[0];
+
+      if (maxTimeoutId === id) {
+        timeouts.clear();
+      }
     }, TOAST_REMOVE_DELAY);
 
     timeouts.set(id, timeout);
@@ -54,7 +60,7 @@ export const useToast = () => {
         listeners.splice(index, 1);
       }
     };
-  }, [state]);
+  }, []);
 
   return {
     toast,
