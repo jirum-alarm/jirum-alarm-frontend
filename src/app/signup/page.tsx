@@ -16,6 +16,7 @@ import { ICategoryForm } from '@/features/categories/types';
 import { CATEGORIES } from '@/constants/categories';
 import Personal from './personal/components/Personal';
 import { User } from '@/types/user';
+import { useToast } from '@/components/common/Toast';
 
 const COMPLETE_ROUTE = 'signup/complete';
 
@@ -68,6 +69,7 @@ const Signup = () => {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { toast } = useToast();
 
   const steps = searchParams.get(QUERY_PARM_PREFIX) as Steps;
 
@@ -80,6 +82,9 @@ const Signup = () => {
       }
 
       router.push(COMPLETE_ROUTE);
+    },
+    onError: () => {
+      toast('회원가입에 실패했어요');
     },
   });
 
