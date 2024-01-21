@@ -1,4 +1,6 @@
+'use client';
 import { Alert, Description, Filter, Headset } from '@/components/common/icons';
+import channelService from '@/features/channeltalk/lib/channel-service';
 import Link from 'next/link';
 import { createElement } from 'react';
 
@@ -17,28 +19,36 @@ const mypageMenuListMap = [
     title: '약관 및 정책',
     url: '/mypage/terms-policies',
   },
-  {
-    icon: Headset,
-    title: '고객센터',
-    url: '/',
-  },
 ] as const;
 
 const MenuList = () => {
+  const handleShowChannelTalkClick = () => {
+    channelService.showMessenger();
+  };
   return (
     <div className="px-5">
       <div className="border-b border-gray-300 py-4">
         <ul>
           {mypageMenuListMap.map((menu, i) => (
-            <li key={i}>
-              <Link href={menu.url}>
-                <div className="flex items-center gap-3 py-3">
-                  {createElement(menu.icon)}
-                  <span className="text-gray-900">{menu.title}</span>
-                </div>
-              </Link>
-            </li>
+            <>
+              <li key={i}>
+                <Link href={menu.url}>
+                  <div className="flex items-center gap-3 py-3">
+                    {createElement(menu.icon)}
+                    <span className="text-gray-900">{menu.title}</span>
+                  </div>
+                </Link>
+              </li>
+            </>
           ))}
+          <li>
+            <button className="w-full">
+              <div className="flex items-center gap-3 py-3" onClick={handleShowChannelTalkClick}>
+                {<Headset />}
+                <span className="text-gray-900">고객센터</span>
+              </div>
+            </button>
+          </li>
         </ul>
       </div>
     </div>
