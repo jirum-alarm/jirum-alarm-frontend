@@ -22,7 +22,7 @@ const usePersonalInfoFormViewModel = () => {
   const { data } = useQuery<{ me: Omit<User, 'favoriteCategories' | 'linkedSocialProviders'> }>(
     QueryMe,
   );
-  const { showToast } = useToast();
+  const { toast } = useToast();
   const goBack = useGoBack();
   const [updateProfile] = useMutation<
     { updateUserProfile: boolean },
@@ -30,11 +30,11 @@ const usePersonalInfoFormViewModel = () => {
   >(MutationUpdateUserProfile, {
     refetchQueries: [{ query: QueryMe }],
     onCompleted: () => {
-      // showToast('개인정보가 저장됐어요')
+      toast('개인정보가 저장됐어요');
       goBack();
     },
     onError: () => {
-      // showToast('개인정보 저장중 에러가 발생했어요')
+      toast('개인정보 저장중 에러가 발생했어요');
     },
   });
 

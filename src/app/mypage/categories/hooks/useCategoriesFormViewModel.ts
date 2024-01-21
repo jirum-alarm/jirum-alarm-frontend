@@ -13,7 +13,7 @@ const FAVORITE_CATEGORIES = CATEGORIES.map((category) => ({ ...category, isCheck
 
 export const useCategoriesFormViewModel = () => {
   const { data } = useQuery<{ me: Pick<User, 'favoriteCategories'> }>(QueryMe);
-  const { showToast } = useToast();
+  const { toast } = useToast();
   const goBack = useGoBack();
   const [updateProfile] = useMutation<
     { updateUserProfile: boolean },
@@ -21,11 +21,11 @@ export const useCategoriesFormViewModel = () => {
   >(MutationUpdateUserProfile, {
     refetchQueries: [{ query: QueryMe }],
     onCompleted: () => {
-      // showToast('관심 카테고리가 저장됐어요')
+      toast('관심 카테고리가 저장됐어요');
       goBack();
     },
     onError: () => {
-      // showToast('관심 카테고리 저장중 에러가 발생했어요')
+      toast('관심 카테고리 저장중 에러가 발생했어요');
     },
   });
 
