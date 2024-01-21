@@ -9,13 +9,13 @@ import useOutsideClick from '@/hooks/useOutsideClick';
 interface SelectProps
   extends Omit<
       React.SelectHTMLAttributes<HTMLSelectElement>,
-      'size' | 'color' | 'onChange' | 'value'
+      'size' | 'color' | 'onChange' | 'value' | 'defaultValue'
     >,
     VariantProps<typeof selectButtonVaraint> {
   children: React.ReactNode;
   placeholder: string;
-  defaultValue?: string;
-  onChange?: (value: string) => void;
+  defaultValue?: string | null;
+  onChange?: (value?: string | null) => void;
 }
 
 export const Select = ({
@@ -78,7 +78,8 @@ export const Select = ({
     () =>
       React.Children.map(children, (child, index) => {
         if (!isValidElement(child)) return;
-        if (child.props.value && child.props.value === defaultValue) {
+
+        if (child.props.value === defaultValue) {
           setSelectedIndex(index + 1);
         }
         return React.cloneElement(child, {

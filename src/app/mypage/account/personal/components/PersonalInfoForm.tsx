@@ -12,11 +12,16 @@ const PersonalInfoForm = () => {
     handleSelectChange,
     handleRadioChange,
     isValidPersonalInfoInput,
+    birthYearOptions,
   } = usePersonalInfoFormViewModel();
   return (
     <form className="flex flex-1 flex-col justify-between pt-22" onSubmit={handleSubmit}>
       <div>
-        <BirthYearSelect handleSelectChange={handleSelectChange} birthYear={birthYear} />
+        <BirthYearSelect
+          handleSelectChange={handleSelectChange}
+          birthYear={birthYear}
+          birthYearOptions={birthYearOptions}
+        />
         <div className="h-10" />
         <GenderRadioGroup handleRadioChange={handleRadioChange} gender={gender} />
       </div>

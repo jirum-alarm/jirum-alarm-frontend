@@ -12,7 +12,7 @@ interface OptionProps
     VariantProps<typeof optionVaraint> {
   children: React.ReactNode;
   index?: number;
-  value?: string;
+  value?: string | null;
 }
 
 export const Option = ({ size, color, children, index = -1, value, className }: OptionProps) => {
@@ -21,7 +21,7 @@ export const Option = ({ size, color, children, index = -1, value, className }: 
   const listRef = useRef<HTMLLIElement>(null);
   const handleOptionClick = () => {
     index && setSelectedIndex(index);
-    value && onChange(value);
+    onChange(value);
     onClose();
   };
 

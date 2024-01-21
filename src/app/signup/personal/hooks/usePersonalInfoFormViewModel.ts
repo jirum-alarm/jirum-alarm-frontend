@@ -1,5 +1,9 @@
 import { User } from '@/types/user';
 import { Registration } from '../../page';
+import { BIRTH_YEAR } from '@/constants/birthYear';
+
+const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({ text: String(year), value: String(year) }));
+const birthYearOptions = [{ text: '선택안함', value: null }, ..._BIRTH_YEAR];
 
 const usePersonalInfoFormViewModel = ({
   registration,
@@ -17,7 +21,7 @@ const usePersonalInfoFormViewModel = ({
     moveNextStep();
   };
 
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value?: string | null) => {
     handleRegistration((prev) => ({
       personal: {
         ...prev.personal,
@@ -43,6 +47,7 @@ const usePersonalInfoFormViewModel = ({
     handleSubmit,
     handleSelectChange,
     handleRadioChange,
+    birthYearOptions,
   };
 };
 
