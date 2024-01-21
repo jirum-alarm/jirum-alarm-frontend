@@ -1,29 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useToast } from './useToast';
 import Button from '../Button';
-import RecoilSetting from '@/lib/provider/recoil';
 import Toaster from './Toaster';
 
 const ToastStoryDisplay = ({ message }: { message?: string } = { message: '' }) => {
   return (
-    <RecoilSetting>
-      <div className="grid gap-y-4">
-        <ToastStory message={message || '저장되었습니다'} buttonText="저장" />
-        <ToastStory message={message || '확인되었습니다'} buttonText="확인" />
-      </div>
-    </RecoilSetting>
+    <div className="grid gap-y-4">
+      <ToastStory message={message || '저장되었습니다'} buttonText="저장" />
+      <ToastStory message={message || '확인되었습니다'} buttonText="확인" />
+      <Toaster />
+    </div>
   );
 };
 
 const ToastStory = ({ message, buttonText }: { message: string; buttonText: string }) => {
   const { toast } = useToast();
 
-  return (
-    <>
-      <Button onClick={() => toast(message)}>{buttonText}</Button>
-      <Toaster />
-    </>
-  );
+  return <Button onClick={() => toast(message)}>{buttonText}</Button>;
 };
 
 const meta = {

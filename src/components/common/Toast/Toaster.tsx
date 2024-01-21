@@ -13,7 +13,7 @@ const Toaster = () => {
     <>
       {toasts.map((toast) => {
         return (
-          <Toast key={toast.id} show={toast.show} data-state={toast.show ? 'open' : 'closed'}>
+          <Toast key={toast.id} show={toast.show}>
             {toast.message}
           </Toast>
         );
