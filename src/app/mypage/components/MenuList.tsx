@@ -1,6 +1,6 @@
 'use client';
 import { Alert, Description, Filter, Headset } from '@/components/common/icons';
-import channelService from '@/features/channeltalk/lib/channel-service';
+import customerService from '@/lib/customerservice/customer-service';
 import Link from 'next/link';
 import { createElement } from 'react';
 
@@ -23,7 +23,7 @@ const mypageMenuListMap = [
 
 const MenuList = () => {
   const handleShowChannelTalkClick = () => {
-    channelService.showMessenger();
+    customerService.onShowMessenger();
   };
   return (
     <div className="px-5">
