@@ -43,7 +43,7 @@ interface Input {
 
 interface Personal {
   birthYear?: string | null;
-  gender: User['gender'];
+  gender: User['gender'] | null;
 }
 
 export interface Registration {

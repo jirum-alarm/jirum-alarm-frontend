@@ -36,7 +36,7 @@ const usePersonalInfoFormViewModel = ({
     handleRegistration((prev) => ({
       personal: {
         ...prev.personal,
-        gender: value as User['gender'],
+        gender: gender === value ? null : (value as User['gender']),
       },
     }));
   };

@@ -52,7 +52,7 @@ const Radio = ({
   handleRadioChange,
   children,
 }: {
-  value: User['gender'];
+  value: NonNullable<User['gender']>;
   name: string;
   checked: boolean;
   children: React.ReactNode;
