@@ -34,15 +34,17 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     ref,
   ) => {
     return (
-      <div className={containerVaraint({ size })}>
-        {icon && <div className={iconVaraint({ variant, size })}>{icon}</div>}
-        <input
-          {...rest}
-          ref={ref}
-          className={cn(inputVariant({ variant, size, color }), icon && 'pr-10')}
-        />
-        {!error && helperText && <span className={helperVariant({ size })}>{helperText}</span>}
-        {error && <span className={errorVariant({ size, error: !!error })}>{error}</span>}
+      <div>
+        <div className={containerVaraint({ size })}>
+          {icon && <div className={iconVaraint({ variant, size })}>{icon}</div>}
+          <input
+            {...rest}
+            ref={ref}
+            className={cn(inputVariant({ variant, size, color }), icon && 'pr-10')}
+          />
+        </div>
+        {!error && helperText && <div className={helperVariant({ size })}>{helperText}</div>}
+        {error && <div className={errorVariant({ size, error: !!error })}>{error}</div>}
       </div>
     );
   },

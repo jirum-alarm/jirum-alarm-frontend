@@ -1,0 +1,52 @@
+'use client';
+import Input from '@/components/common/Input';
+import { Eye, EyeOff } from '@/components/common/icons';
+import { useState } from 'react';
+interface PasswordInputProps {
+  value: string;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  helperText?: React.ReactNode;
+  labelText: string;
+  placeholder: string;
+  id?: string;
+}
+
+const PasswordInput = ({
+  value,
+  handleInputChange,
+  helperText,
+  labelText,
+  placeholder,
+  id = 'password',
+}: PasswordInputProps) => {
+  const [masking, setMasking] = useState(true);
+
+  const toggleMasking = () => {
+    setMasking((prev) => !prev);
+  };
+
+  return (
+    <label>
+      <span className="text-sm text-gray-500">{labelText}</span>
+      <Input
+        type={masking ? 'password' : 'text'}
+        id={id}
+        autoComplete="new-password"
+        placeholder={placeholder}
+        required
+        value={value}
+        icon={
+          masking ? (
+            <Eye onClick={toggleMasking} className="cursor-pointer" />
+          ) : (
+            <EyeOff onClick={toggleMasking} className="cursor-pointer" />
+          )
+        }
+        helperText={helperText}
+        onChange={handleInputChange}
+      />
+    </label>
+  );
+};
+
+export default PasswordInput;
