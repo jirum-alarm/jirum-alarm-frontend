@@ -12,3 +12,4 @@ export { default as EyeOff } from './EyeOff';
 export { default as Filter } from './Filter';
 export { default as Headset } from './Headset';
 export { default as Logo } from './Logo';
+export { default as My } from './My';

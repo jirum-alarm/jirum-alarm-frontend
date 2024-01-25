@@ -55,7 +55,7 @@ const linkOnError = onError(({ graphQLErrors, networkError, operation, forward }
         case 'FORBIDDEN':
           const refresh = fromPromise(
             getNewAccessToken().catch((error) => {
-              return;
+              throw error;
             }),
           );
 
