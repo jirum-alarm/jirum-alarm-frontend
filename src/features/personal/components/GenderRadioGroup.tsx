@@ -72,7 +72,7 @@ const Radio = ({
       />
       <label
         htmlFor={`${name}-${id}`}
-        className="inline-flex h-22 w-full items-center justify-center rounded-lg border border-gray-300 peer-checked:border-primary-500 peer-checked:bg-primary-50"
+        className="inline-flex h-22 w-full cursor-pointer items-center justify-center rounded-lg border border-gray-300 peer-checked:border-primary-500 peer-checked:bg-primary-50"
       >
         {children}
       </label>
