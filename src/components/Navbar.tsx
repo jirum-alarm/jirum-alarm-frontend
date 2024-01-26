@@ -1,42 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Logo, My } from '@/components/common/icons';
 import { QueryMe } from '../graphql/auth';
-import { useLazyApiQuery } from '../hooks/useGql';
-import { userState } from '../state/user';
-import { StorageTokenKey } from '../types/enum/auth';
 import { User } from '../types/user';
+import { useQuery } from '@apollo/client';
 
 const LOGIN_PATH = '/login';
 const MYPAGE_PATH = '/mypage';
 
 export default function NavBar() {
-  const setUser = useSetRecoilState(userState);
-
-  const user = useRecoilValue<User | null>(userState);
-
-  const { getQuery } = useLazyApiQuery<{ me: User }>(QueryMe);
-
-  useEffect(() => {
-    const token = localStorage.getItem(StorageTokenKey.ACCESS_TOKEN);
-    if (token) {
-      getQuery().then((response) => {
-        if (response?.data?.me) {
-          setUser(response.data.me);
-          return;
-        }
-
-        setUser(null);
-      });
-    }
-
-    if (!token) {
-      setUser(null);
-    }
-  }, [getQuery, setUser]);
+  const { data: me, loading } = useQuery<{ me: User }>(QueryMe);
 
   return (
     <>
@@ -50,17 +24,15 @@ export default function NavBar() {
             </div>
           </Link>
           <div className="flex w-3/12 justify-end">
-            {user ? (
-              <>
-                <Link href={MYPAGE_PATH}>
-                  <My />
-                </Link>
-              </>
-            ) : user === null ? (
+            {loading ? undefined : me ? (
+              <Link href={MYPAGE_PATH}>
+                <My />
+              </Link>
+            ) : (
               <Link href={LOGIN_PATH}>
                 <span>로그인</span>
               </Link>
-            ) : undefined}
+            )}
           </div>
         </div>
       </div>
