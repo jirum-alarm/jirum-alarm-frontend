@@ -40,7 +40,7 @@ export const inputVariant = cva(
   {
     variants: {
       variant: {
-        standard: ['border-b', 'placeholder:text-gray-400'],
+        standard: ['border-b', 'placeholder:text-gray-400', 'rounded-none'],
       },
       size: {
         md: ['text-base', 'px-2', 'py-3'],
