@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link from '@/features/Link';
 import { Logo, My } from '@/components/common/icons';
 import { QueryMe } from '../graphql/auth';
 import { User } from '../types/user';
