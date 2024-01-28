@@ -1,5 +1,3 @@
-// components/Link.tsx
-
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
 import NextLink, { type LinkProps as NextLinkProps } from 'next/link';
 
