@@ -3,7 +3,7 @@
 import Button from '@/components/common/Button';
 import Illust from '@/components/common/Illust';
 import BasicLayout from '@/components/layout/BasicLayout';
-import Link from 'next/link';
+import Link from '@/features/Link';
 import { useRouter } from 'next/navigation';
 
 const SIGNUP_PATH = '/signup';

@@ -1,5 +1,5 @@
 import { ArrowRight } from '@/components/common/icons';
-import Link from 'next/link';
+import Link from '@/features/Link';
 import React from 'react';
 
 interface MovePageProps {
