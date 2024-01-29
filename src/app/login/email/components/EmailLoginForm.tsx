@@ -14,7 +14,8 @@ const EmailLoginForm = () => {
     <form onSubmit={handleSubmit} className="flex flex-1 flex-col justify-between pt-11">
       <EmailInput email={email} />
       <PasswordInput password={password} />
-      <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] px-5 pb-9">
+      <div className="h-32" />
+      <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] bg-white px-5 pb-9 pt-3">
         {error && (
           <p className="pb-4 text-center text-sm text-error">
             이메일 혹은 비밀번호가 올바르지 않아요.
