@@ -1,7 +1,7 @@
 'use client';
 import { Alert, Description, Filter, Headset } from '@/components/common/icons';
 import customerService from '@/lib/customerservice/customer-service';
-import Link from 'next/link';
+import Link from '@/features/Link';
 import { createElement } from 'react';
 
 const mypageMenuListMap = [

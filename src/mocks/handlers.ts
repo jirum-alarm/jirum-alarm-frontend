@@ -98,6 +98,17 @@ const QueryMe = graphql.query('QueryMe', async () => {
   });
 });
 
+const MutationLogin = graphql.mutation('MutationLogin', () => {
+  return HttpResponse.json({
+    data: {
+      login: {
+        accessToken: 'AYjcyMzY3ZDhiNmJkNTY',
+        refreshToken: 'RjY2NjM5NzA2OWJjuE7c',
+      },
+    },
+  });
+});
+
 const MutationSignup = graphql.mutation('MutationSignup', () => {
   return HttpResponse.json({
     data: {
@@ -137,6 +148,7 @@ export const handlers = [
   QueryProducts,
   QueryCategories,
   QueryMe,
+  MutationLogin,
   MutationSignup,
   MutationUpdateUserProfile,
   Operation,

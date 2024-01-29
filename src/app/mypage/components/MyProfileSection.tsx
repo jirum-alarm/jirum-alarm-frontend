@@ -3,7 +3,7 @@ import { ArrowRight } from '@/components/common/icons';
 import { QueryMe } from '@/graphql/auth';
 import { User } from '@/types/user';
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import Link from 'next/link';
+import Link from '@/features/Link';
 
 const MyProfileSection = () => {
   const { data } = useQuery<{ me: User }>(QueryMe);

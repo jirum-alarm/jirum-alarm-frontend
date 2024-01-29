@@ -1,5 +1,5 @@
 import BasicLayout from '@/components/layout/BasicLayout';
-import Link from 'next/link';
+import Link from '@/features/Link';
 
 const TermsPoliciesPage = () => {
   return (

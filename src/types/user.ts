@@ -3,7 +3,7 @@ export type User = {
   email: string;
   nickname: string;
   birthYear?: number | null;
-  gender?: 'MALE' | 'FEMALE';
+  gender?: 'MALE' | 'FEMALE' | null;
   favoriteCategories?: number[];
   linkedSocialProviders: 'APPLE' | 'GOOLE' | 'KAKAO' | 'NAVER';
 };
