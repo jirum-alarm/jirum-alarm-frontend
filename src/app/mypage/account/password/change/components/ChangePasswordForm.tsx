@@ -1,74 +1,10 @@
-import { useState } from 'react';
-import PasswordInput from './PasswordInput';
+import PasswordInput from '../../components/PasswordInput';
 import Button from '@/components/common/Button';
 import { cn } from '@/lib/cn';
-import { useMutation } from '@apollo/client';
-import { MutationUpdatePassword } from '@/graphql/auth';
-import { useToast } from '@/components/common/Toast';
-import { useRouter } from 'next/navigation';
-
-const COMPLETE_ROUTE = '/mypage/account';
-
-const validate = (value: string) => {
-  if (value === '') {
-    return { error: false, invalidType: false, invalidLength: false };
-  }
-
-  const isAlphabet = /[a-zA-Z]/.test(value);
-  const isNumber = /\d/.test(value);
-  const isSpecialCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(value);
-
-  const isValidType = [isAlphabet, isNumber, isSpecialCharacter].filter(Boolean).length >= 2;
-  const isValidLength = /^(.{8,30})$/.test(value);
-
-  return {
-    error: !isValidType || !isValidLength,
-    invalidType: !isValidType,
-    invalidLength: !isValidLength,
-  };
-};
+import useChangePasswordFormViewModel from '../hooks/useChangePasswordFormViewModel';
 
 const ChangePasswordForm = () => {
-  const { toast } = useToast();
-  const router = useRouter();
-  const [updatePassword] = useMutation<unknown, { password: string }>(MutationUpdatePassword, {
-    onCompleted: () => {
-      toast('비밀번호 변경이 완료됐어요.');
-      router.push(COMPLETE_ROUTE);
-    },
-    onError: () => {
-      toast('비밀번호 변경중 에러가 발생했어요.');
-    },
-  });
-  const [input, setInput] = useState({
-    password: { value: '', error: false, invalidType: false, invalidLength: false },
-    confirmPassword: { value: '', error: false },
-  });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.currentTarget;
-    const error = validate(value);
-    setInput((input) => ({
-      ...input,
-      [id]: { value, ...(id === 'password' ? error : { error: false }) },
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const { password, confirmPassword } = input;
-
-    if (password.value === confirmPassword.value) {
-      updatePassword({ variables: { password: input.password.value } });
-    } else {
-      setInput((input) => ({
-        ...input,
-        confirmPassword: { value: input.confirmPassword.value, error: true },
-      }));
-    }
-  };
-
+  const { handleInputChange, handleSubmit, input } = useChangePasswordFormViewModel();
   return (
     <form className="flex h-full flex-col justify-between px-5 py-6" onSubmit={handleSubmit}>
       <div>
