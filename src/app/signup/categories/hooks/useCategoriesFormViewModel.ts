@@ -12,8 +12,9 @@ export const useCategoriesFormViewModel = ({
 }) => {
   const categories = registration.categories;
 
-  const isMaxSelection = () =>
-    MAX_SELECTION_COUNT >= categories.filter((category) => category.isChecked).length + 1;
+  const SELECTION_COUNT = categories.filter((category) => category.isChecked).length;
+
+  const isMaxSelection = () => MAX_SELECTION_COUNT > SELECTION_COUNT;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,5 +35,5 @@ export const useCategoriesFormViewModel = ({
     }));
   };
 
-  return { handleSubmit, handleCheckChange, categories };
+  return { handleSubmit, handleCheckChange, categories, SELECTION_COUNT };
 };
