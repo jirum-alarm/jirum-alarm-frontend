@@ -11,6 +11,7 @@ const useCurrentPasswordFormViewModel = ({ nextStep }: { nextStep: () => void })
   });
 
   const { data: { me } = {} } = useQuery<{ me: User }>(QueryMe);
+  // @FIXME: change to password check api
   const [login] = useMutation<unknown, ILoginVariable>(MutationLogin, {
     onCompleted: () => {
       nextStep();
