@@ -30,11 +30,11 @@ const usePersonalInfoFormViewModel = () => {
   >(MutationUpdateUserProfile, {
     refetchQueries: [{ query: QueryMe }],
     onCompleted: () => {
-      toast('개인정보가 저장됐어요');
+      toast('개인정보가 저장됐어요.');
       goBack();
     },
     onError: () => {
-      toast('개인정보 저장중 에러가 발생했어요');
+      toast('개인정보 저장중 에러가 발생했어요.');
     },
   });
 

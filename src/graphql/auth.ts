@@ -84,3 +84,9 @@ export const MutationLoginByRefreshToken = gql`
     }
   }
 `;
+
+export const MutationUpdatePassword = gql`
+  mutation MutationUpdatePassword($password: String!) {
+    updatePassword(password: $password)
+  }
+`;

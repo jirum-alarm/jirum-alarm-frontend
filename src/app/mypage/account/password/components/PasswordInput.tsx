@@ -3,6 +3,7 @@ import Input from '@/components/common/Input';
 import { Eye, EyeOff } from '@/components/common/icons';
 import { useState } from 'react';
 interface PasswordInputProps {
+  autoFocus?: boolean;
   value: string;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   helperText?: React.ReactNode;
@@ -12,6 +13,7 @@ interface PasswordInputProps {
 }
 
 const PasswordInput = ({
+  autoFocus = false,
   value,
   handleInputChange,
   helperText,
@@ -31,6 +33,7 @@ const PasswordInput = ({
       <Input
         type={masking ? 'password' : 'text'}
         id={id}
+        autoFocus={autoFocus}
         autoComplete="new-password"
         placeholder={placeholder}
         required

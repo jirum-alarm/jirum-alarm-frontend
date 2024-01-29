@@ -2,14 +2,12 @@
 import PasswordInput from './PasswordInput';
 import { useState } from 'react';
 import Button from '@/components/common/Button';
-import { useRouter } from 'next/navigation';
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { User } from '@/types/user';
 import { MutationLogin, QueryMe } from '@/graphql/auth';
 import { useMutation } from '@apollo/client';
-import { ILoginOutput, ILoginVariable } from '@/types/login';
+import { ILoginVariable } from '@/types/login';
 
-const STEPS = [''];
 interface CurrentPasswordFormProps {
   nextStep: () => void;
 }
@@ -21,8 +19,8 @@ const CurrentPasswordForm = ({ nextStep }: CurrentPasswordFormProps) => {
   });
 
   const { data: { me } = {} } = useQuery<{ me: User }>(QueryMe);
-  const [login] = useMutation<ILoginOutput, ILoginVariable>(MutationLogin, {
-    onCompleted: (data) => {
+  const [login] = useMutation<unknown, ILoginVariable>(MutationLogin, {
+    onCompleted: () => {
       nextStep();
     },
     onError: () => {
@@ -53,6 +51,7 @@ const CurrentPasswordForm = ({ nextStep }: CurrentPasswordFormProps) => {
       </p>
       <form className="flex flex-1 flex-col justify-between pt-22" onSubmit={handleSubmit}>
         <PasswordInput
+          autoFocus
           labelText="현재 비밀번호"
           placeholder="비밀번호를 입력해주세요."
           value={currentPassword.value}
