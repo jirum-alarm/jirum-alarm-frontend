@@ -4,9 +4,6 @@ import CurrentPasswordForm from './components/CurrentPasswordForm';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import ChangePasswordForm from './components/ChangePasswordForm';
-import { useMutation, useQuery } from '@apollo/client';
-import { User } from '@/types/user';
-import { QueryMe } from '@/graphql/auth';
 
 const QUERY_PARAM_PREFIX = 'step';
 const INITIAL_STEP = 'current';
@@ -14,8 +11,6 @@ const STEPS = ['current', 'change'] as const;
 type Steps = (typeof STEPS)[number];
 
 const PasswordPage = () => {
-  const { data: { me } = {} } = useQuery<{ me: User }>(QueryMe);
-
   const router = useRouter();
   const searchParams = useSearchParams();
   const steps = searchParams.get(QUERY_PARAM_PREFIX) as Steps;
