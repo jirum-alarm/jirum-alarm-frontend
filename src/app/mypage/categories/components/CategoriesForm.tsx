@@ -7,7 +7,6 @@ import { MAX_SELECTION_COUNT } from '@/constants/categories';
 const CategoriesForm = () => {
   const { handleSubmit, handleCheckChange, categories, canSubmit, SELECTION_COUNT } =
     useCategoriesFormViewModel();
-  console.log('categories.length', categories);
   return (
     <form className="flex flex-1 flex-col justify-between" onSubmit={handleSubmit}>
       <CategoriesCheckboxGroup categories={categories} handleCheckChange={handleCheckChange} />
