@@ -12,7 +12,6 @@ const BirthYearSelect = ({
   birthYear,
   birthYearOptions,
 }: BirthYearSelectProps) => {
-  console.log('defaultValue', birthYear);
   return (
     <fieldset>
       <legend className="pb-2 text-sm text-gray-500">출생년도</legend>

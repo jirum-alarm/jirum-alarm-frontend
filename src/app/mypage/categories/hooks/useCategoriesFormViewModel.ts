@@ -46,8 +46,9 @@ export const useCategoriesFormViewModel = () => {
     setOriginalCategory(_FAVORITE_CATEGORIES);
   }, [data?.me.favoriteCategories]);
 
-  const isMaxSelection = () =>
-    MAX_SELECTION_COUNT >= categories.filter((category) => category.isChecked).length + 1;
+  const SELECTION_COUNT = categories.filter((category) => category.isChecked).length;
+
+  const isMaxSelection = () => MAX_SELECTION_COUNT > SELECTION_COUNT;
 
   const canSubmit = () => {
     return !shallowArrayEqual(originalCategory, categories);
@@ -80,5 +81,5 @@ export const useCategoriesFormViewModel = () => {
     );
   };
 
-  return { handleSubmit, handleCheckChange, categories, canSubmit };
+  return { handleSubmit, handleCheckChange, categories, canSubmit, SELECTION_COUNT };
 };

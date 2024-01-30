@@ -2,6 +2,7 @@ import Button from '@/components/common/Button';
 import { useCategoriesFormViewModel } from '../hooks/useCategoriesFormViewModel';
 import CategoriesCheckboxGroup from '@/features/categories/components/CategoriesCheckboxGroup';
 import { Registration } from '../../page';
+import { MAX_SELECTION_COUNT } from '@/constants/categories';
 
 const CategoriesForm = ({
   registration,
@@ -12,18 +13,19 @@ const CategoriesForm = ({
   handleRegistration: (nickname: (registration: Registration) => Partial<Registration>) => void;
   moveNextStep: () => void;
 }) => {
-  const { handleSubmit, handleCheckChange, categories } = useCategoriesFormViewModel({
-    registration,
-    handleRegistration,
-    moveNextStep,
-  });
+  const { handleSubmit, handleCheckChange, categories, SELECTION_COUNT } =
+    useCategoriesFormViewModel({
+      registration,
+      handleRegistration,
+      moveNextStep,
+    });
 
   return (
     <fieldset>
       <form className="flex flex-1 flex-col justify-between pt-10" onSubmit={handleSubmit}>
         <CategoriesCheckboxGroup categories={categories} handleCheckChange={handleCheckChange} />
         <Description />
-        <Button type="submit">다음</Button>
+        <Button type="submit">{`다음 (${SELECTION_COUNT}/${MAX_SELECTION_COUNT})`}</Button>
       </form>
     </fieldset>
   );

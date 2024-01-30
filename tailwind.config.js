@@ -4,6 +4,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      screens: {
+        'mouse-hover': { raw: '(hover: hover)' },
+      },
       spacing: {
         22: '5.5rem',
       },
