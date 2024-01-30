@@ -61,7 +61,7 @@ export const inputVariant = cva(
 export const errorVariant = cva('', {
   variants: {
     size: {
-      md: ['text-xs'],
+      md: ['pt-2', 'text-xs'],
     },
     error: {
       true: ['text-error'],
@@ -75,7 +75,7 @@ export const errorVariant = cva('', {
 export const helperVariant = cva('', {
   variants: {
     size: {
-      md: ['text-xs', 'text-gray-400'],
+      md: ['pt-2', 'text-xs', 'text-gray-400'],
     },
   },
   defaultVariants: {

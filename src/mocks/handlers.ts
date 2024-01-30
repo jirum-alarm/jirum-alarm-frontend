@@ -137,6 +137,14 @@ const MutationUpdateUserProfile = graphql.mutation('MutationUpdateUserProfile', 
   });
 });
 
+const MutationUpdatePassword = graphql.mutation('MutationUpdatePassword', () => {
+  return HttpResponse.json({
+    data: {
+      updatePassword: true,
+    },
+  });
+});
+
 // This funciton should be add handlers to last, if not can't mock apis
 const Operation = graphql.operation(({ query, variables }) => {
   console.warn('[MSW] unhandled api found ', query, variables);
@@ -151,5 +159,6 @@ export const handlers = [
   MutationLogin,
   MutationSignup,
   MutationUpdateUserProfile,
+  MutationUpdatePassword,
   Operation,
 ];
