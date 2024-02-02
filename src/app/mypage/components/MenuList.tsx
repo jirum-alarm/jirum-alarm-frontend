@@ -2,24 +2,29 @@
 import { Alert, Description, Filter, Headset } from '@/components/common/icons';
 import customerService from '@/lib/customerservice/customer-service';
 import Link from '@/features/Link';
-import { createElement } from 'react';
+import { SVGProps, createElement } from 'react';
 
-const mypageMenuListMap = [
+const MENU_LIST: Array<{
+  icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+  title: string;
+  url: string;
+}> = [
   {
     icon: Filter,
     title: '관심 카테고리',
     url: '/mypage/categories',
   },
-  // {
-  //   icon: Alert,
-  //   title: '알림 설정',
-  // },
+  {
+    icon: Alert,
+    title: '키워드 알림',
+    url: '/mypage/keyword',
+  },
   {
     icon: Description,
     title: '약관 및 정책',
     url: '/mypage/terms-policies',
   },
-] as const;
+];
 
 const MenuList = () => {
   const handleShowChannelTalkClick = () => {
@@ -29,7 +34,7 @@ const MenuList = () => {
     <div className="px-5">
       <div className="border-b border-gray-300 py-4">
         <ul>
-          {mypageMenuListMap.map((menu, i) => (
+          {MENU_LIST.map((menu, i) => (
             <>
               <li key={i}>
                 <Link href={menu.url}>
