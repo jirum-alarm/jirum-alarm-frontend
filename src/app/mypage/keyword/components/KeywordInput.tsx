@@ -9,6 +9,7 @@ const KeywordInput = () => {
   return (
     <form onSubmit={handleSubmit}>
       <Input
+        autoFocus
         type="text"
         placeholder="키워드를 입력해주세요."
         error={keyword.error && '키워드는 최대 20자까지만 입력할 수 있어요.'}

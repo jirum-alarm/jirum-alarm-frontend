@@ -40,6 +40,7 @@ export const useKeywordInput = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     addNotificationKeyword({ variables: { keyword: keyword.value } });
+    reset();
   };
   return { handleInputChange, keyword, reset, handleSubmit, canSubmit };
 };
