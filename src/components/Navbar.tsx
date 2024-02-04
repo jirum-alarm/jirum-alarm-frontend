@@ -10,7 +10,7 @@ const LOGIN_PATH = '/login';
 const MYPAGE_PATH = '/mypage';
 
 export default function NavBar() {
-  const { data, loading } = useQuery<{ me: User }>(QueryMe);
+  const { data } = useQuery<{ me: User }>(QueryMe);
 
   return (
     <>
@@ -24,15 +24,9 @@ export default function NavBar() {
             </div>
           </Link>
           <div className="flex w-3/12 justify-end">
-            {loading ? undefined : data?.me ? (
-              <Link href={MYPAGE_PATH}>
-                <My />
-              </Link>
-            ) : (
-              <Link href={LOGIN_PATH}>
-                <span>로그인</span>
-              </Link>
-            )}
+            <Link href={data?.me ? MYPAGE_PATH : LOGIN_PATH}>
+              <My />
+            </Link>
           </div>
         </div>
       </div>
