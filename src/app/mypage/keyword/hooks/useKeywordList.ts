@@ -12,7 +12,7 @@ export const useKeywordList = () => {
   });
   const { toast } = useToast();
   const [removeNotificationKeyword] = useMutation<
-    { addNotificationKeyword: boolean },
+    { removeNotificationKeyword: boolean },
     { id: number }
   >(MutationRemoveNotificationKeyword, {
     refetchQueries: [{ query: QueryMypageKeyword, variables: { limit: 20 } }],
