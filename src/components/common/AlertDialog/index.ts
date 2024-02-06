@@ -1,8 +1,6 @@
 import {
   AlertDialog,
-  Portal,
   Trigger,
-  Overlay,
   Content,
   Header,
   Footer,
@@ -13,9 +11,7 @@ import {
 } from './AlertDialog';
 
 export default Object.assign(AlertDialog, {
-  Portal,
   Trigger,
-  Overlay,
   Content,
   Header,
   Footer,

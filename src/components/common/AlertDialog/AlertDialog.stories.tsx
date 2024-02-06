@@ -21,7 +21,18 @@ export const Default: Story = {
         <AlertDialog.Trigger asChild>
           <button>열기</button>
         </AlertDialog.Trigger>
-        <AlertDialog.Content>content</AlertDialog.Content>
+        <AlertDialog.Content>
+          <AlertDialog.Header>
+            <AlertDialog.Title>로그아웃</AlertDialog.Title>
+            <AlertDialog.Description>
+              <p>
+                로그아웃 시 알림을 받을 수 없어요.
+                <br />
+                지름알림에서 <span className="font-bold">로그아웃</span>할까요?
+              </p>
+            </AlertDialog.Description>
+          </AlertDialog.Header>
+        </AlertDialog.Content>
       </AlertDialog>
     );
   },

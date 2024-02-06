@@ -36,20 +36,27 @@ const AlertDialog = (props: DialogProps) => {
  * AlertDialogPortal
  * -----------------------------------------------------------------------------------------------*/
 
-interface PortalProps {}
-const Portal = () => {
-  return <div>sdf</div>;
+interface PortalProps {
+  container?: HTMLElement | null;
+  children: React.ReactNode;
+}
+const Portal = (props: PortalProps) => {
+  const { container = globalThis?.document?.body, children } = props;
+  return container ? createPortal(children, container) : null;
 };
 
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogTrigger
  * -----------------------------------------------------------------------------------------------*/
-const Trigger = (props: React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }) => {
+const Trigger = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
+>((props, ref) => {
   const { children, asChild, ...others } = props;
   const { onOpenToggle } = useAlertDialogContext();
   if (!asChild)
     return (
-      <button {...others} onClick={composeEventHandlers(others.onClick, onOpenToggle)}>
+      <button ref={ref} {...others} onClick={composeEventHandlers(others.onClick, onOpenToggle)}>
         {children}
       </button>
     );
@@ -58,38 +65,58 @@ const Trigger = (props: React.ButtonHTMLAttributes<HTMLButtonElement> & { asChil
   const Compo = React.cloneElement(children, {
     ...children?.props,
     type: 'button',
+    ref: ref,
     onClick: composeEventHandlers(others.onClick, onOpenToggle),
   });
   return <>{Compo}</>;
-};
+});
+Trigger.displayName = 'Trigger';
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogOverlay
  * -----------------------------------------------------------------------------------------------*/
-const Overlay = () => {
-  return <div>Overlay</div>;
+const Overlay = (props: React.HTMLAttributes<HTMLDivElement>) => {
+  const { className, ...others } = props;
+  return <div {...others} className={cn('fixed inset-0 z-50 bg-black/40', className)} />;
 };
+
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogContent
  * -----------------------------------------------------------------------------------------------*/
-const Content = ({ children }: any) => {
-  const { open } = useAlertDialogContext();
-  console.log('open:', open);
-  return <div>{children}</div>;
-};
+const Content = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => {
+    const { children, className, ...others } = props;
+    const { open } = useAlertDialogContext();
+    return (
+      <Portal>
+        {open && <Overlay />}
+        {open && (
+          <div
+            ref={ref}
+            className={cn(
+              'fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg border bg-white p-6 shadow-lg',
+              className,
+            )}
+            {...others}
+          >
+            {children}
+          </div>
+        )}
+      </Portal>
+    );
+  },
+);
+Content.displayName = 'Content';
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogHeader
  * -----------------------------------------------------------------------------------------------*/
 const Header = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex flex-col space-y-2 text-center sm:text-left', className)} {...props} />
+  <div className={cn('flex flex-col gap-2 text-center', className)} {...props} />
 );
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogFooter
  * -----------------------------------------------------------------------------------------------*/
 const Footer = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)}
-    {...props}
-  />
+  <div className={className} {...props} />
 );
 Footer.displayName = 'Footer';
 /* -------------------------------------------------------------------------------------------------
@@ -117,16 +144,4 @@ const Cancel = ({ children }: any) => {
   return <div>{children}</div>;
 };
 
-export {
-  AlertDialog,
-  Portal,
-  Trigger,
-  Overlay,
-  Content,
-  Header,
-  Footer,
-  Title,
-  Description,
-  Action,
-  Cancel,
-};
+export { AlertDialog, Trigger, Content, Header, Footer, Title, Description, Action, Cancel };
