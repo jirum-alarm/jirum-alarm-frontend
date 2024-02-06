@@ -104,7 +104,7 @@ const Content = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEle
           <div
             ref={ref}
             className={cn(
-              'fixed left-1/2 top-1/2 z-50 grid w-full max-w-md -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg border bg-white p-6 shadow-lg',
+              'fixed left-1/2 top-1/2 z-50 grid w-full max-w-[335px] -translate-x-1/2 -translate-y-1/2 gap-8 rounded-lg border bg-white px-4 py-5 shadow-lg',
               className,
             )}
             {...others}
@@ -122,7 +122,7 @@ Content.displayName = 'Content';
  * -----------------------------------------------------------------------------------------------*/
 const Header = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...others }, ref) => (
-    <div ref={ref} className={cn('flex flex-col gap-2 text-center', className)} {...others} />
+    <div ref={ref} className={cn('flex flex-col gap-3 text-center', className)} {...others} />
   ),
 );
 Header.displayName = 'Header';

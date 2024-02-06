@@ -13,7 +13,19 @@ module.exports = {
       colors: {
         white: '#FFFFFF',
         black: '#000000',
-        error: '#EB001C',
+        // error: '#EB001C',
+        error: {
+          50: '#FFE1E5',
+          100: '#FBCCD2',
+          200: '#F799A4',
+          300: '#F36677',
+          400: '#EF334A',
+          500: '#EB001C',
+          600: '#BC0017',
+          700: '#8D0011',
+          800: '#5E000B',
+          900: '#2F0006',
+        },
         link: '#587DFF',
         primary: {
           50: '#F5FDEA',

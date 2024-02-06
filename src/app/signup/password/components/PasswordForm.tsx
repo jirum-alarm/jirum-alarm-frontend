@@ -105,7 +105,7 @@ const HelperText = ({
         className={cn(
           'transition-colors',
           value && !isInvalidLength && 'text-primary-600',
-          isInvalidLength && 'text-error',
+          isInvalidLength && 'text-error-500',
         )}
       >
         8자 이상 30자 이하 입력
@@ -114,7 +114,7 @@ const HelperText = ({
         className={cn(
           'transition-colors',
           value && !isInvalidType && 'text-primary-600',
-          isInvalidType && 'text-error',
+          isInvalidType && 'text-error-500',
         )}
       >
         영어, 숫자, 특수문자 중 2가지 이상 조합
