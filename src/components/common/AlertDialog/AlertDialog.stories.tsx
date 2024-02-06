@@ -32,6 +32,14 @@ export const Default: Story = {
               </p>
             </AlertDialog.Description>
           </AlertDialog.Header>
+          <AlertDialog.Footer>
+            <AlertDialog.Action asChild onClick={() => console.log('액션')}>
+              <Button onClick={() => console.log('확인')}>확인</Button>
+            </AlertDialog.Action>
+            <AlertDialog.Cancel asChild>
+              <Button>취소</Button>
+            </AlertDialog.Cancel>
+          </AlertDialog.Footer>
         </AlertDialog.Content>
       </AlertDialog>
     );

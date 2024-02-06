@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn';
 import { createPortal } from 'react-dom';
 import { AlertDialogContext, useAlertDialogContext } from './context/AlertDialogContext';
-import React, { useId, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { composeEventHandlers } from '@/util/event';
 
 interface DialogProps {
@@ -13,17 +13,21 @@ interface DialogProps {
  * AlertDialog
  * -----------------------------------------------------------------------------------------------*/
 const AlertDialog = (props: DialogProps) => {
-  const { children, defaultOpen = false, onOpenChange = () => {} } = props;
+  const { children, defaultOpen = false, onOpenChange } = props;
 
   const [open, setOpen] = useState(defaultOpen);
+
+  useEffect(() => {
+    onOpenChange?.(open);
+  }, [onOpenChange, open]);
 
   const alertDialogContextValue = React.useMemo(
     () => ({
       open,
-      onOpenChange,
+      onOpenChange: (open: boolean) => setOpen(open),
       onOpenToggle: () => setOpen((prev) => !prev),
     }),
-    [onOpenChange, open],
+    [open],
   );
   return (
     <AlertDialogContext.Provider value={alertDialogContextValue}>
@@ -62,11 +66,18 @@ const Trigger = React.forwardRef<
     );
   if (!React.isValidElement(children)) return null;
 
+  function handler(childHanlder?: (e: React.MouseEvent<HTMLButtonElement>) => void) {
+    return (e: React.MouseEvent<HTMLButtonElement>) => {
+      childHanlder?.(e);
+      others.onClick?.(e);
+    };
+  }
+
   const Compo = React.cloneElement(children, {
-    ...children?.props,
+    ...{ ...others, ...children?.props },
     type: 'button',
     ref: ref,
-    onClick: composeEventHandlers(others.onClick, onOpenToggle),
+    onClick: composeEventHandlers(handler(children?.props?.onClick), onOpenToggle),
   });
   return <>{Compo}</>;
 });
@@ -93,7 +104,7 @@ const Content = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEle
           <div
             ref={ref}
             className={cn(
-              'fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg border bg-white p-6 shadow-lg',
+              'fixed left-1/2 top-1/2 z-50 grid w-full max-w-md -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg border bg-white p-6 shadow-lg',
               className,
             )}
             {...others}
@@ -109,39 +120,103 @@ Content.displayName = 'Content';
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogHeader
  * -----------------------------------------------------------------------------------------------*/
-const Header = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex flex-col gap-2 text-center', className)} {...props} />
+const Header = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...others }, ref) => (
+    <div ref={ref} className={cn('flex flex-col gap-2 text-center', className)} {...others} />
+  ),
 );
-/* -------------------------------------------------------------------------------------------------
- * AlertDialogFooter
- * -----------------------------------------------------------------------------------------------*/
-const Footer = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={className} {...props} />
-);
-Footer.displayName = 'Footer';
+Header.displayName = 'Header';
+
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogTitle
  * -----------------------------------------------------------------------------------------------*/
-const Title = ({ children }: any) => {
-  return <div>{children}</div>;
-};
+const Title = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => {
+    return <div ref={ref} {...props} />;
+  },
+);
+Title.displayName = 'Title';
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogDescription
  * -----------------------------------------------------------------------------------------------*/
-const Description = ({ children }: any) => {
-  return <div>{children}</div>;
-};
+const Description = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => {
+    return <div ref={ref} {...props} />;
+  },
+);
+Description.displayName = 'Description';
+
+/* -------------------------------------------------------------------------------------------------
+ * AlertDialogClose
+ * -----------------------------------------------------------------------------------------------*/
+
+const Close = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
+>((props, ref) => {
+  const { children, asChild, ...others } = props;
+  const { onOpenChange } = useAlertDialogContext();
+
+  if (!asChild)
+    return (
+      <button
+        ref={ref}
+        {...others}
+        onClick={composeEventHandlers(others.onClick, () => onOpenChange(false))}
+      >
+        {children}
+      </button>
+    );
+  if (!React.isValidElement(children)) return null;
+
+  function handler(childHanlder?: (e: React.MouseEvent<HTMLButtonElement>) => void) {
+    return (e: React.MouseEvent<HTMLButtonElement>) => {
+      childHanlder?.(e);
+      others.onClick?.(e);
+    };
+  }
+
+  const Compo = React.cloneElement(children, {
+    ...{ ...others, ...children?.props },
+    type: 'button',
+    ref: ref,
+    onClick: composeEventHandlers(handler(children?.props?.onClick), () => onOpenChange(false)),
+  });
+  return <>{Compo}</>;
+});
+Close.displayName = 'Close';
+
+/* -------------------------------------------------------------------------------------------------
+ * AlertDialogFooter
+ * -----------------------------------------------------------------------------------------------*/
+
+const Footer = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => {
+    const { className, ...others } = props;
+    return <div ref={ref} className={cn('flex justify-end gap-2', className)} {...others} />;
+  },
+);
+Footer.displayName = 'Footer';
+
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogAction
  * -----------------------------------------------------------------------------------------------*/
-const Action = ({ children }: any) => {
-  return <div>{children}</div>;
-};
+const Action = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
+>((props, ref) => {
+  return <Close ref={ref} {...props} />;
+});
+Action.displayName = 'Action';
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogCancel
  * -----------------------------------------------------------------------------------------------*/
-const Cancel = ({ children }: any) => {
-  return <div>{children}</div>;
-};
+const Cancel = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
+>((props, ref) => {
+  return <Close ref={ref} {...props} />;
+});
+Cancel.displayName = 'Cancel';
 
 export { AlertDialog, Trigger, Content, Header, Footer, Title, Description, Action, Cancel };
