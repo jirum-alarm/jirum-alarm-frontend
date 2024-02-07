@@ -1,8 +1,13 @@
 import { cn } from '@/lib/cn';
 import { createPortal } from 'react-dom';
 import { AlertDialogContext, useAlertDialogContext } from './context/AlertDialogContext';
-import React, { useEffect, useId, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { composeEventHandlers } from '@/util/event';
+import { Presence } from '@/components/headless/Presence';
+
+const getState = (open: boolean) => {
+  return open ? 'open' : 'closed';
+};
 
 interface DialogProps {
   children?: React.ReactNode;
@@ -57,10 +62,15 @@ const Trigger = React.forwardRef<
   React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
 >((props, ref) => {
   const { children, asChild, ...others } = props;
-  const { onOpenToggle } = useAlertDialogContext();
+  const { onOpenToggle, open } = useAlertDialogContext();
   if (!asChild)
     return (
-      <button ref={ref} {...others} onClick={composeEventHandlers(others.onClick, onOpenToggle)}>
+      <button
+        ref={ref}
+        {...others}
+        data-state={getState(open)}
+        onClick={composeEventHandlers(others.onClick, onOpenToggle)}
+      >
         {children}
       </button>
     );
@@ -76,6 +86,7 @@ const Trigger = React.forwardRef<
   const Compo = React.cloneElement(children, {
     ...{ ...others, ...children?.props },
     type: 'button',
+    'data-state': getState(open),
     ref: ref,
     onClick: composeEventHandlers(handler(children?.props?.onClick), onOpenToggle),
   });
@@ -87,31 +98,54 @@ Trigger.displayName = 'Trigger';
  * -----------------------------------------------------------------------------------------------*/
 const Overlay = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { className, ...others } = props;
-  return <div {...others} className={cn('fixed inset-0 z-50 bg-black/40', className)} />;
+  const { open } = useAlertDialogContext();
+  return (
+    <Presence present={open}>
+      <div
+        data-state={getState(open)}
+        className={cn(
+          'fixed inset-0 z-50 bg-black/80',
+          'data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in',
+          className,
+        )}
+        {...others}
+      />
+    </Presence>
+  );
 };
+
+const ContentImpl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => {
+    const { className, ...others } = props;
+    const { open } = useAlertDialogContext();
+    return (
+      <Presence present={open}>
+        <div
+          ref={ref}
+          data-state={getState(open)}
+          className={cn(
+            'fixed left-1/2 top-1/2 z-50 grid w-full max-w-[335px] -translate-x-1/2 -translate-y-1/2 gap-8 rounded-lg border bg-white px-4 py-5 shadow-lg',
+            'data-[state=closed]:animate-modal-zoom-out data-[state=open]:animate-modal-zoom-in',
+            className,
+          )}
+          {...others}
+        />
+      </Presence>
+    );
+  },
+);
+
+ContentImpl.displayName = 'ContentImpl';
 
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogContent
  * -----------------------------------------------------------------------------------------------*/
 const Content = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   (props, ref) => {
-    const { children, className, ...others } = props;
-    const { open } = useAlertDialogContext();
     return (
       <Portal>
-        {open && <Overlay />}
-        {open && (
-          <div
-            ref={ref}
-            className={cn(
-              'fixed left-1/2 top-1/2 z-50 grid w-full max-w-[335px] -translate-x-1/2 -translate-y-1/2 gap-8 rounded-lg border bg-white px-4 py-5 shadow-lg',
-              className,
-            )}
-            {...others}
-          >
-            {children}
-          </div>
-        )}
+        <Overlay />
+        <ContentImpl {...props} ref={ref} />
       </Portal>
     );
   },

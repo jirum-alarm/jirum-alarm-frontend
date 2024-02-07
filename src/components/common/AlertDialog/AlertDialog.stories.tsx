@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import AlertDialog from '.';
 import Button from '../Button';
+import { useEffect, useRef } from 'react';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -19,7 +20,7 @@ export const Default: Story = {
     return (
       <AlertDialog>
         <AlertDialog.Trigger asChild>
-          <button className="text-white">열기</button>
+          <button>열기</button>
         </AlertDialog.Trigger>
         <AlertDialog.Content>
           <AlertDialog.Header>
@@ -35,12 +36,12 @@ export const Default: Story = {
             </AlertDialog.Description>
           </AlertDialog.Header>
           <AlertDialog.Footer>
-            <AlertDialog.Cancel asChild>
-              <Button color="error">취소</Button>
+            <AlertDialog.Cancel asChild onClick={() => console.log('취소')}>
+              <Button color="secondary">취소</Button>
             </AlertDialog.Cancel>
-            <AlertDialog.Action asChild onClick={() => console.log('액션')}>
-              <Button color="secondary" onClick={() => console.log('확인')}>
-                확인
+            <AlertDialog.Action asChild onClick={() => console.log('2.로그아웃')}>
+              <Button color="error" onClick={() => console.log('1.로그아웃')}>
+                로그아웃
               </Button>
             </AlertDialog.Action>
           </AlertDialog.Footer>

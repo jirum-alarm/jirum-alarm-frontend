@@ -64,10 +64,20 @@ module.exports = {
           '0%': { opacity: 1 },
           '100%': { opacity: 0 },
         },
+        modalZoomIn: {
+          '0%': { transform: 'translateY(-50%) translateX(-50%) scale(0.75)', opacity: 0 },
+          '100%': { transform: 'translateY(-50%) translateX(-50%) scale(1)', opacity: 1 },
+        },
+        modalZoomOut: {
+          '0%': { transform: 'translateY(-50%) translateX(-50%) scale(1)', opacity: 1 },
+          '100%': { transform: 'translateY(-50%) translateX(-50%) scale(0.75)', opacity: 0 },
+        },
       },
       animation: {
-        'fade-in': 'fadeIn .3s ease-in-out',
-        'fade-out': 'fadeOut .3s ease-in-out',
+        'fade-in': 'fadeIn .2s ease-in-out',
+        'fade-out': 'fadeOut .2s ease-in-out',
+        'modal-zoom-in': 'modalZoomIn .15s ease-in-out',
+        'modal-zoom-out': 'modalZoomOut .15s ease-in-out',
       },
     },
   },
