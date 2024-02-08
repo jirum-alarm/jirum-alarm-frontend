@@ -1,4 +1,5 @@
-import { HttpResponse, delay, graphql, http } from 'msw';
+import { INotification, Role } from '@/graphql/interface';
+import { HttpResponse, graphql } from 'msw';
 import * as keyword from './keyword';
 const keywordHandlers = Object.values(keyword);
 
@@ -85,6 +86,66 @@ const QueryCategories = graphql.query('QueryCategories', () => {
   });
 });
 
+const QueryNotifications = graphql.query('QueryNotifications', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  if (urlParams.get('status') === 'no-alarm') {
+    return HttpResponse.json({ data: { notifications: [] } });
+  }
+
+  const notifications = Array.from({ length: 10 }).flatMap((_, i) => [
+    {
+      id: (i * 3 + 1).toString(),
+      groupId: 1,
+      receiverId: 1,
+      senderId: 2,
+      senderType: Role.ADMIN,
+      target: '1',
+      targetId: '1',
+      title: '[스파오공홈] 스파오 플리스 웜테크 경량자켓등 (24,900원~/무료)',
+      message: '[스파오공홈] 스파오 플리스 (24,900원~/무료)',
+      url: 'https://spao.com/category/%ED%94%8C%EB%A6%AC%EC%8A%A4%EB%8D%A4%EB%B8%94/219/',
+      category: '1',
+      createdAt: new Date(Date.now() - (i * 3 + 1) * 60 * 1000),
+      readAt: new Date('2024-01-02'),
+    },
+    {
+      id: (i * 3 + 2).toString(),
+      groupId: 2,
+      receiverId: 1,
+      senderId: 2,
+      senderType: Role.USER,
+      target: '1',
+      targetId: '1',
+      title: '[G마켓] 하이샤파 기차모양 연필깎이 (19,490원/무배)',
+      message: '[G마켓] 하이샤파 (19,490원/무배)',
+      url: 'https://item.gmarket.co.kr/Item?goodscode=2175600050',
+      category: '2',
+      createdAt: new Date(Date.now() - (i * 3 + 2) * 60 * 1000),
+      readAt: new Date('2024-01-02'),
+    },
+    {
+      id: (i * 3 + 3).toString(),
+      groupId: 2,
+      receiverId: 1,
+      senderId: 3,
+      senderType: Role.USER,
+      target: '1',
+      targetId: '1',
+      title: '[티몬] 삼성전자 갤럭시탭 S9 울트라 WIFI/5G (1,209,000원) (무료)',
+      message: '[티몬] 삼성전자 갤럭시탭 (1,209,000원) (무료)',
+      url: 'https://www.tmon.co.kr/deal/5481693990',
+      category: '3',
+      createdAt: new Date(Date.now() - (i * 3 + 3) * 60 * 1000),
+      readAt: new Date(),
+    },
+  ]);
+
+  return HttpResponse.json<{ data: { notifications: INotification[] } }>({
+    data: { notifications },
+  });
+});
+
 const QueryMe = graphql.query('QueryMe', async () => {
   return HttpResponse.json({
     data: {
@@ -157,6 +218,7 @@ const Operation = graphql.operation(({ query, variables }) => {
 export const handlers = [
   QueryProducts,
   QueryCategories,
+  QueryNotifications,
   QueryMe,
   MutationLogin,
   MutationSignup,

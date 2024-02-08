@@ -3,7 +3,8 @@ import { cva } from 'class-variance-authority';
 export const buttonVaraint = cva('w-full', {
   variants: {
     size: {
-      md: ['h-12 px-3 rounded-[8px] text-base'],
+      lg: ['h-12 px-3 rounded-[8px] text-base'],
+      md: ['rounded-[8px]'],
     },
     variant: {
       outlined: ['border'],
@@ -29,6 +30,12 @@ export const buttonVaraint = cva('w-full', {
     },
     {
       variant: 'filled',
+      color: 'primary',
+      size: 'md',
+      class: 'font-semibold bg-gray-800 text-primary-500 w-auto px-5 py-1.5 h-auto',
+    },
+    {
+      variant: 'filled',
       color: 'secondary',
       class: 'font-semibold bg-gray-100 text-gray-700',
     },
@@ -39,7 +46,7 @@ export const buttonVaraint = cva('w-full', {
     },
   ],
   defaultVariants: {
-    size: 'md',
+    size: 'lg',
     variant: 'filled',
     color: 'primary',
   },
