@@ -47,10 +47,6 @@ function usePresence(present: boolean) {
   const prevAnimationNameRef = React.useRef<string>('none');
   const initialState = present ? 'mounted' : 'unmounted';
 
-  // 유한상태머신 사용
-  // mounted -> unmounted , unmountSuspended
-  // unmountSuspended -> mounted ,unmounted
-  // unmounted -> mounted
   const [state, send] = useStateMachine(initialState, {
     mounted: {
       UNMOUNT: 'unmounted',
@@ -65,12 +61,6 @@ function usePresence(present: boolean) {
     },
   });
 
-  // state 가 변경될 때 마다 animation name을 저장 함
-  React.useEffect(() => {
-    const currentAnimationName = getAnimationName(stylesRef.current);
-    prevAnimationNameRef.current = state === 'mounted' ? currentAnimationName : 'none';
-  }, [state]);
-
   React.useLayoutEffect(() => {
     const styles = stylesRef.current;
     const prevAnimationName = prevAnimationNameRef.current;
@@ -82,13 +72,6 @@ function usePresence(present: boolean) {
     } else if (currentAnimationName === 'none' || styles?.display === 'none') {
       send('UNMOUNT');
     } else {
-      /**
-       * prevAnimationName과 currentAnimationName이 다르다는 것은 애니메이션이 정상적으로 실행중이라는 뜻이다.
-       *
-       * state가 mounted상태가 됐을 때
-       * prevAnimationName에 애니메이션이 실행 될 때의 이름을 저장한 상태
-       * currentAnimationName엔 닫기 버튼을 누를 경우 실행되는 애니메이션 이름이 저장이 된 상태
-       */
       const isAnimating = prevAnimationName !== currentAnimationName;
 
       if (isAnimating) {
@@ -120,18 +103,15 @@ function usePresence(present: boolean) {
   );
 
   React.useLayoutEffect(() => {
-    if (node) {
-      node.addEventListener('animationstart', handleAnimationStart);
-      node.addEventListener('animationcancel', handleAnimationEnd);
-      node.addEventListener('animationend', handleAnimationEnd);
-      return () => {
-        node.removeEventListener('animationstart', handleAnimationStart);
-        node.removeEventListener('animationcancel', handleAnimationEnd);
-        node.removeEventListener('animationend', handleAnimationEnd);
-      };
-    } else {
-      send('ANIMATION_END');
-    }
+    if (!node) return;
+    node.addEventListener('animationstart', handleAnimationStart);
+    node.addEventListener('animationcancel', handleAnimationEnd);
+    node.addEventListener('animationend', handleAnimationEnd);
+    return () => {
+      node.removeEventListener('animationstart', handleAnimationStart);
+      node.removeEventListener('animationcancel', handleAnimationEnd);
+      node.removeEventListener('animationend', handleAnimationEnd);
+    };
   }, [handleAnimationEnd, handleAnimationStart, node, send]);
 
   return {
