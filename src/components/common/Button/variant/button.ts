@@ -6,11 +6,13 @@ export const buttonVaraint = cva('w-full', {
       md: ['h-12 px-3 rounded-[8px] text-base'],
     },
     variant: {
+      primary: ['border-none'],
       outlined: ['border'],
       filled: ['border-none'],
     },
     color: {
       green: '',
+      black: 'text-primary-500',
     },
   },
   compoundVariants: [
@@ -24,6 +26,12 @@ export const buttonVaraint = cva('w-full', {
       variant: 'filled',
       color: 'green',
       class: 'font-semibold bg-primary-500 text-gray-900 disabled:bg-gray-300 disabled:text-white',
+    },
+    {
+      variant: 'primary',
+      size: 'md',
+      color: 'black',
+      class: 'font-semibold bg-gray-800 w-auto px-5 py-1.5 h-auto',
     },
   ],
   defaultVariants: {

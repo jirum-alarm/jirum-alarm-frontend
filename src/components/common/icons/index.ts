@@ -1,3 +1,4 @@
+export { default as AlarmIllustError } from './AlarmIllustError';
 export { default as Alert } from './Alert';
 export { default as ArrowDown } from './ArrowDown';
 export { default as ArrowLeft } from './ArrowLeft';
@@ -11,5 +12,6 @@ export { default as Eye } from './Eye';
 export { default as EyeOff } from './EyeOff';
 export { default as Filter } from './Filter';
 export { default as Headset } from './Headset';
+export { default as Hotdeal } from './Hotdeal';
 export { default as Logo } from './Logo';
 export { default as My } from './My';
