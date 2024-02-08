@@ -3,17 +3,17 @@ import { useToast } from './useToast';
 import Button from '../Button';
 import Toaster from './Toaster';
 
-const ToastStoryDisplay = ({ message }: { message?: string } = { message: '' }) => {
+const ToastStoryDisplay = ({ message }: { message?: React.ReactNode } = { message: '' }) => {
   return (
     <div className="grid gap-y-4">
-      <ToastStory message={message || '저장되었습니다'} buttonText="저장" />
-      <ToastStory message={message || '확인되었습니다'} buttonText="확인" />
+      <ToastStory message={message || '개인정보가 저장됐어요.'} buttonText="저장" />
+      <ToastStory message={message || '확인되었습니다.'} buttonText="확인" />
       <Toaster />
     </div>
   );
 };
 
-const ToastStory = ({ message, buttonText }: { message: string; buttonText: string }) => {
+const ToastStory = ({ message, buttonText }: { message: React.ReactNode; buttonText: string }) => {
   const { toast } = useToast();
 
   return <Button onClick={() => toast(message)}>{buttonText}</Button>;
@@ -39,7 +39,12 @@ export const Default: Story = {
 
 export const LongMessage: Story = {
   args: {
-    message:
-      '변경 하신 내용이 저장되었습니다. 변경 후의 내용을 확인해주세요. 자세한 사항은 아래의 링크를 참조해주세요. ',
+    message: (
+      <>
+        인터넷이 연결되어 있지 않아요.
+        <br />
+        잠시 후 다시 시도해주세요.
+      </>
+    ),
   },
 };
