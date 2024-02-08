@@ -5,7 +5,7 @@ const TOAST_REMOVE_DELAY = 3000;
 
 interface Toast {
   id: string;
-  message: string;
+  message: string | React.ReactNode;
   show: boolean;
 }
 
@@ -20,7 +20,7 @@ const genId = () => {
 const timeouts = new Map<string, ReturnType<typeof setTimeout>>();
 const listeners: Array<(toasts: Toast[]) => void> = [];
 
-const toast = (message: string) => {
+const toast = (message: string | React.ReactNode) => {
   const id = genId();
 
   listeners.forEach((listener) => {

@@ -21,11 +21,11 @@ export const useCategoriesFormViewModel = () => {
   >(MutationUpdateUserProfile, {
     refetchQueries: [{ query: QueryMe }],
     onCompleted: () => {
-      toast('관심 카테고리가 저장됐어요');
+      toast('관심 카테고리가 저장됐어요.');
       goBack();
     },
     onError: () => {
-      toast('관심 카테고리 저장중 에러가 발생했어요');
+      toast('관심 카테고리 저장중 에러가 발생했어요.');
     },
   });
 

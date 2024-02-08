@@ -24,11 +24,11 @@ const useInput = () => {
     {
       refetchQueries: [{ query: QueryMe }],
       onCompleted: () => {
-        toast('닉네임이 저장됐어요');
+        toast('닉네임이 저장됐어요.');
         goBack();
       },
       onError: () => {
-        toast('닉네임이 저장중 에러가 발생했어요');
+        toast('닉네임이 저장중 에러가 발생했어요.');
       },
     },
   );

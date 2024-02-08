@@ -4,7 +4,7 @@ export const toastVariant = cva('', {
   variants: {
     variant: {
       default:
-        'fixed grid justify-center rounded-3xl bg-gray-500 text-white py-[10px] w-60 bottom-8 left-1/2 -translate-x-1/2 px-3',
+        'fixed grid justify-center text-center text-sm font-medium rounded-[8px] bg-gray-500 text-white py-[10px] w-[280px] bottom-8 left-1/2 -translate-x-1/2 px-3',
     },
   },
   defaultVariants: {
