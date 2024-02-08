@@ -1,6 +1,6 @@
 import { QueryProducts } from '@/graphql';
 import { QueryCategories } from '@/graphql/category';
-import { IProductOutput } from '@/graphql/interface';
+import { IProductOutput } from '@/graphql/interface/product';
 import { ICategoryOutput } from '@/graphql/interface/category';
 import { useDevice } from '@/hooks/useDevice';
 import { useQuery, useSuspenseQuery } from '@apollo/client';

@@ -11,9 +11,7 @@ const NoAlerts = () => {
         <p className="text-gray-500">키워드를 등록하고 알림을 받아보세요.</p>
       </div>
       <Link href="/mypage/keyword">
-        <Button variant="primary" color="black">
-          키워드 등록
-        </Button>
+        <Button size="md">키워드 등록</Button>
       </Link>
     </div>
   );

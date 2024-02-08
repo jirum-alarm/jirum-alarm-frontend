@@ -17,7 +17,7 @@ const EmailLoginForm = () => {
       <div className="h-32" />
       <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] bg-white px-5 pb-9 pt-3">
         {error && (
-          <p className="pb-4 text-center text-sm text-error">
+          <p className="pb-4 text-center text-sm text-error-500">
             이메일 혹은 비밀번호가 올바르지 않아요.
           </p>
         )}
@@ -118,7 +118,7 @@ const HelperText = ({
         className={cn(
           'transition-colors',
           value && !isInvalidLength && 'text-primary-600',
-          isInvalidLength && 'text-error',
+          isInvalidLength && 'text-error-500',
         )}
       >
         8자 이상 30자 이하 입력
@@ -127,7 +127,7 @@ const HelperText = ({
         className={cn(
           'transition-colors',
           value && !isInvalidType && 'text-primary-600',
-          isInvalidType && 'text-error',
+          isInvalidType && 'text-error-500',
         )}
       >
         영어, 숫자, 특수문자 중 2가지 이상 조합

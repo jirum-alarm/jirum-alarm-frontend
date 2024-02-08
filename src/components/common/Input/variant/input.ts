@@ -64,7 +64,7 @@ export const errorVariant = cva('', {
       md: ['pt-2', 'text-xs'],
     },
     error: {
-      true: ['text-error'],
+      true: ['text-error-500'],
     },
   },
   defaultVariants: {

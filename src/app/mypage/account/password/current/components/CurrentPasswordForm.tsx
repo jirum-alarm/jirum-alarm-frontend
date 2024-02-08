@@ -28,5 +28,7 @@ const CurrentPasswordForm = ({ nextStep }: CurrentPasswordFormProps) => {
 export default CurrentPasswordForm;
 
 const HelperText = ({ value, isInValid }: { value: string; isInValid: boolean }) => {
-  return <>{value && isInValid && <p className="text-error">올바른 비밀번호를 입력해주세요.</p>}</>;
+  return (
+    <>{value && isInValid && <p className="text-error-500">올바른 비밀번호를 입력해주세요.</p>}</>
+  );
 };

@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import { createContext, useContext } from 'react';
 
 export type SelectContextProps = {
   selectedIndex: number;
@@ -13,7 +13,7 @@ export const SelectContext = createContext<SelectContextProps | null>(null);
 SelectContext.displayName = 'SelectContext';
 
 export const useSelectContext = () => {
-  const context = React.useContext(SelectContext);
+  const context = useContext(SelectContext);
 
   if (context === null) {
     throw new Error('useSelectContext must be used within a <Select />');

@@ -1,5 +1,7 @@
 import { INotification, Role } from '@/graphql/interface';
 import { HttpResponse, graphql } from 'msw';
+import * as keyword from './keyword';
+const keywordHandlers = Object.values(keyword);
 
 const QueryProducts = graphql.query('QueryProducts', () => {
   const product = (productId: number) => {
@@ -222,5 +224,6 @@ export const handlers = [
   MutationSignup,
   MutationUpdateUserProfile,
   MutationUpdatePassword,
+  ...keywordHandlers,
   Operation,
 ];
