@@ -84,7 +84,13 @@ const QueryCategories = graphql.query('QueryCategories', () => {
   });
 });
 
-const QueryNotifications = graphql.query('QueryNotifications', async () => {
+const QueryNotifications = graphql.query('QueryNotifications', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  if (urlParams.get('status') === 'no-alarm') {
+    return HttpResponse.json({ data: { notifications: [] } });
+  }
+
   const notifications = Array.from({ length: 10 }).flatMap((_, i) => [
     {
       id: (i * 3 + 1).toString(),
