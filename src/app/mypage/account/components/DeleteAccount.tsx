@@ -1,10 +1,25 @@
 import AlertDialog from '@/components/common/AlertDialog';
 import Button from '@/components/common/Button';
+import { useToast } from '@/components/common/Toast';
+import { MutationWithdraw } from '@/graphql/auth';
+import { StorageTokenKey } from '@/types/enum/auth';
+import { useMutation } from '@apollo/client';
 import React from 'react';
 
 const DeleteAccount = () => {
+  const { toast } = useToast();
+  const [deleteAccount] = useMutation<unknown, { password: string }>(MutationWithdraw, {
+    onCompleted: () => {
+      localStorage.removeItem(StorageTokenKey.ACCESS_TOKEN);
+      localStorage.removeItem(StorageTokenKey.REFRESH_TOKEN);
+      window.location.href = '/';
+    },
+    onError: () => {
+      toast('서버에서 에러가 발생했습니다.');
+    },
+  });
   const onDeleteAccount = () => {
-    console.log('delete');
+    deleteAccount();
   };
   return (
     <AlertDialog>

@@ -90,3 +90,9 @@ export const MutationUpdatePassword = gql`
     updatePassword(password: $password)
   }
 `;
+
+export const MutationWithdraw = gql`
+  mutation MutationWithdraw {
+    withdraw
+  }
+`;
