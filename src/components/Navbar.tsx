@@ -14,15 +14,15 @@ export default function NavBar() {
 
   return (
     <>
-      <div className="px-4 pt-8">
+      <div className="pt-8">
         <div className="flex items-center justify-between">
-          <div className="w-3/12" />
           <Link href="/">
             <div className="grid grid-flow-col items-center gap-x-3">
               <Logo />
-              <h1 className="center flex text-center text-3xl">지름알림</h1>
+              <h1 className="font-semibold">지름알림</h1>
             </div>
           </Link>
+          <div className="w-3/12" />
           <div className="flex w-3/12 justify-end">
             <Link href={data?.me ? MYPAGE_PATH : LOGIN_PATH}>
               <My />
