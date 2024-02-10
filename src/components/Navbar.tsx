@@ -17,7 +17,7 @@ export default function NavBar() {
   const { data } = useQuery<{ me: User }>(QueryMe);
   const unreadNotificationsCount = useQuery<{ unreadNotificationsCount: UnreadNotificationsCount }>(
     QueryUnreadNotificationsCount,
-    { skip: !IS_DEV },
+    { skip: !IS_DEV || !data?.me },
   );
 
   return (
@@ -32,7 +32,7 @@ export default function NavBar() {
           </Link>
           <div className="w-3/12" />
           <div className="flex w-3/12 justify-end gap-x-3">
-            {IS_DEV && (
+            {IS_DEV && data?.me && (
               <Link href={ALARM_PATH} className="relative">
                 {unreadNotificationsCount.data?.unreadNotificationsCount ? (
                   <div className="absolute left-[15.5px] top-[4.6px] h-1.5 w-1.5 animate-fade-in rounded-full bg-error-500"></div>

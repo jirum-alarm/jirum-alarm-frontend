@@ -161,6 +161,12 @@ const QueryUnreadNotificationsCount = graphql.query('QueryUnreadNotificationsCou
 });
 
 const QueryMe = graphql.query('QueryMe', async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  if (urlParams.get('me-status') === 'no-login') {
+    return HttpResponse.json({ data: undefined });
+  }
+
   return HttpResponse.json({
     data: {
       me: {
