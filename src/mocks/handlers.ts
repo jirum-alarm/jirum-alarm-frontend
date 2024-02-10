@@ -146,7 +146,27 @@ const QueryNotifications = graphql.query('QueryNotifications', () => {
   });
 });
 
+const QueryUnreadNotificationsCount = graphql.query('QueryUnreadNotificationsCount', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  if (urlParams.get('alarm-status') === 'no-alarm') {
+    return HttpResponse.json({ data: { unreadNotificationsCount: 0 } });
+  }
+
+  return HttpResponse.json({
+    data: {
+      unreadNotificationsCount: 3,
+    },
+  });
+});
+
 const QueryMe = graphql.query('QueryMe', async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  if (urlParams.get('me-status') === 'no-login') {
+    return HttpResponse.json({ data: undefined });
+  }
+
   return HttpResponse.json({
     data: {
       me: {
@@ -219,6 +239,7 @@ export const handlers = [
   QueryProducts,
   QueryCategories,
   QueryNotifications,
+  QueryUnreadNotificationsCount,
   QueryMe,
   MutationLogin,
   MutationSignup,

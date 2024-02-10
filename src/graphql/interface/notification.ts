@@ -18,3 +18,5 @@ export enum Role {
   USER,
   ADMIN,
 }
+
+export type UnreadNotificationsCount = number;

@@ -19,3 +19,9 @@ export const QueryNotifications = gql`
     }
   }
 `;
+
+export const QueryUnreadNotificationsCount = gql`
+  query QueryUnreadNotificationsCount {
+    unreadNotificationsCount
+  }
+`;
