@@ -15,7 +15,7 @@ const DeleteAccount = () => {
       window.location.href = '/';
     },
     onError: () => {
-      toast('서버에서 에러가 발생했습니다.');
+      toast('회원탈퇴가 실패했어요. 다시 시도해주세요.');
     },
   });
   const onDeleteAccount = () => {
