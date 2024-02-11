@@ -15,9 +15,9 @@ const AccountPage = () => {
     <BasicLayout hasBackButton title="가입 정보">
       <div className="flex h-full flex-col px-5 pb-8">
         <div className="border-b border-b-gray-300 pb-8 pt-6">
-          <MovePage to="/mypage/account/nickname" title="닉네임 " subtitle={data?.me.nickname} />
-          <MovePage to="/mypage/account/personal" title="개인정보 " />
-          <MovePage to="/mypage/account/password" title="비밀번호 " />
+          <MovePage to="/mypage/account/nickname" title="닉네임" subtitle={data?.me.nickname} />
+          <MovePage to="/mypage/account/personal" title="개인정보" />
+          <MovePage to="/mypage/account/password" title="비밀번호" />
         </div>
         <div className="flex flex-1 flex-col pt-8">
           <div className="pb-[22px]">

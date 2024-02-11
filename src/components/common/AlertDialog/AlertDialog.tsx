@@ -98,7 +98,7 @@ Trigger.displayName = 'Trigger';
  * -----------------------------------------------------------------------------------------------*/
 const Overlay = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { className, ...others } = props;
-  const { open } = useAlertDialogContext();
+  const { open, onOpenChange } = useAlertDialogContext();
   return (
     <Presence present={open}>
       <div
@@ -108,6 +108,7 @@ const Overlay = (props: React.HTMLAttributes<HTMLDivElement>) => {
           'data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in',
           className,
         )}
+        onClick={composeEventHandlers(others.onClick, () => onOpenChange(false))}
         {...others}
       />
     </Presence>

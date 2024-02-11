@@ -1,16 +1,14 @@
 'use client';
-import { useLogout } from '@/hooks/useLogout';
 import React from 'react';
+import Logout from './Logout';
+import DeleteAccount from './DeleteAccount';
 
 const AccountManagement = () => {
-  const logout = useLogout();
   return (
     <div className="flex items-center">
-      <button className="px-6 py-3 text-[13px] text-gray-500" onClick={logout}>
-        로그아웃
-      </button>
+      <Logout />
       <div className="h-3 w-px bg-gray-200" />
-      <button className="px-6 py-3 text-[13px] text-gray-500">회원탈퇴</button>
+      <DeleteAccount />
     </div>
   );
 };
