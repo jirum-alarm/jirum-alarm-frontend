@@ -52,7 +52,6 @@ const linkOnError = onError(({ graphQLErrors, networkError, operation, forward }
         // Apollo Server sets code to UNAUTHENTICATED
         // when an AuthenticationError is thrown in a resolver
         case 'UNAUTHENTICATED':
-        case 'FORBIDDEN':
           const refresh = fromPromise(
             getNewAccessToken().catch((error) => {
               throw error;
