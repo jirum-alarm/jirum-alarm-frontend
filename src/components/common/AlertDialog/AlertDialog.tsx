@@ -4,6 +4,7 @@ import { AlertDialogContext, useAlertDialogContext } from './context/AlertDialog
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { composeEventHandlers } from '@/util/event';
 import { Presence } from '@/components/headless/Presence';
+import ScrollLock from '@/components/headless/ScrollLock';
 
 const getState = (open: boolean) => {
   return open ? 'open' : 'closed';
@@ -101,16 +102,18 @@ const Overlay = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { open, onOpenChange } = useAlertDialogContext();
   return (
     <Presence present={open}>
-      <div
-        data-state={getState(open)}
-        className={cn(
-          'fixed inset-0 z-50 bg-black/80',
-          'data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in',
-          className,
-        )}
-        onClick={composeEventHandlers(others.onClick, () => onOpenChange(false))}
-        {...others}
-      />
+      <ScrollLock>
+        <div
+          data-state={getState(open)}
+          className={cn(
+            'fixed inset-0 z-50 bg-black/80',
+            'data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in',
+            className,
+          )}
+          onClick={composeEventHandlers(others.onClick, () => onOpenChange(false))}
+          {...others}
+        />
+      </ScrollLock>
     </Presence>
   );
 };
