@@ -9,6 +9,13 @@ const meta = {
   component: AlertDialog,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <div style={{ height: '150vh' }}>
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof AlertDialog>;
 
 export default meta;
