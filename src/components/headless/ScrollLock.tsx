@@ -14,7 +14,7 @@ const ScrollLock = ({ children }: ScrollLockProps) => {
     document.addEventListener('wheel', preventScroll, nonPassive);
     document.addEventListener('touchmove', preventScroll, nonPassive);
     return () => {
-      document.body.removeAttribute('style');
+      document.body.style.removeProperty('overflow');
       document.removeEventListener('wheel', preventScroll);
       document.removeEventListener('touchmove', preventScroll);
     };
