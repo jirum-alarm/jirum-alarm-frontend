@@ -5,6 +5,7 @@ interface ScrollLockProps {
 }
 
 const ScrollLock = ({ children }: ScrollLockProps) => {
+  console.log('scrollLock!');
   useEffect(() => {
     const nonPassive = { passive: false };
     const preventScroll = (e: Event) => {
@@ -19,7 +20,9 @@ const ScrollLock = ({ children }: ScrollLockProps) => {
       document.removeEventListener('touchmove', preventScroll);
     };
   }, []);
-  return <>{children}</>;
+  return React.isValidElement(children)
+    ? React.cloneElement(children, { ...children.props })
+    : null;
 };
 
 export default ScrollLock;
