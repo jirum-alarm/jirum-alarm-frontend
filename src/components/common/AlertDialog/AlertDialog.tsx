@@ -101,7 +101,7 @@ const Overlay = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { open } = useAlertDialogContext();
   return (
     <Presence present={open}>
-      <OverlayImpl data-state={getState(open)} {...props} />
+      <OverlayImpl {...props} />
     </Presence>
   );
 };
@@ -109,11 +109,12 @@ const Overlay = (props: React.HTMLAttributes<HTMLDivElement>) => {
 const OverlayImpl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   (props: React.HTMLAttributes<HTMLDivElement>, ref) => {
     const { className, onClick, ...others } = props;
-    const { onOpenChange } = useAlertDialogContext();
+    const { onOpenChange, open } = useAlertDialogContext();
     return (
       <ScrollLock>
         <div
           ref={ref}
+          data-state={getState(open)}
           className={cn(
             'fixed inset-0 z-50 bg-black/80',
             'data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in',
