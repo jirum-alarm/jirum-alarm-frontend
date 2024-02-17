@@ -5,7 +5,6 @@ interface ScrollLockProps {
 }
 
 const ScrollLock = ({ children }: ScrollLockProps) => {
-  console.log('scrollLock!');
   useEffect(() => {
     const nonPassive = { passive: false };
     const preventScroll = (e: Event) => {
