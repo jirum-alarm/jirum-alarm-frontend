@@ -98,25 +98,36 @@ Trigger.displayName = 'Trigger';
  * AlertDialogOverlay
  * -----------------------------------------------------------------------------------------------*/
 const Overlay = (props: React.HTMLAttributes<HTMLDivElement>) => {
-  const { className, ...others } = props;
-  const { open, onOpenChange } = useAlertDialogContext();
+  const { open } = useAlertDialogContext();
   return (
     <Presence present={open}>
+      <OverlayImpl {...props} />
+    </Presence>
+  );
+};
+
+const OverlayImpl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props: React.HTMLAttributes<HTMLDivElement>, ref) => {
+    const { className, onClick, ...others } = props;
+    const { onOpenChange, open } = useAlertDialogContext();
+    return (
       <ScrollLock>
         <div
+          ref={ref}
           data-state={getState(open)}
           className={cn(
             'fixed inset-0 z-50 bg-black/80',
             'data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in',
             className,
           )}
-          onClick={composeEventHandlers(others.onClick, () => onOpenChange(false))}
+          onClick={composeEventHandlers(onClick, () => onOpenChange(false))}
           {...others}
         />
       </ScrollLock>
-    </Presence>
-  );
-};
+    );
+  },
+);
+OverlayImpl.displayName = 'OverlayImpl';
 
 const ContentImpl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   (props, ref) => {

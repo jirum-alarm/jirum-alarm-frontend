@@ -32,7 +32,7 @@ const Presence: React.FC<PresenceProps> = (props) => {
       (child as any).ref.current = node;
     }
   };
-  return presence.isPresent ? React.cloneElement(children, { ref: composeRef }) : null;
+  return presence.isPresent ? React.cloneElement(child, { ref: composeRef }) : null;
 };
 
 Presence.displayName = 'Presence';
@@ -40,7 +40,6 @@ Presence.displayName = 'Presence';
 /* -------------------------------------------------------------------------------------------------
  * usePresence
  * -----------------------------------------------------------------------------------------------*/
-
 function usePresence(present: boolean) {
   const [node, setNode] = React.useState<HTMLElement>();
   const stylesRef = React.useRef<CSSStyleDeclaration>({} as any);
