@@ -70,7 +70,8 @@ const EmailInput = ({
         required
         value={registration.email.value}
         icon={registration.email.focus ? <Cancel onMouseDown={reset} /> : ''}
-        error={registration.email.error && '올바른 이메일 형식으로 입력해주세요.'}
+        error={registration.email.error}
+        helperText={registration.email.error && '올바른 이메일 형식으로 입력해주세요.'}
         onChange={handleInputChange}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}

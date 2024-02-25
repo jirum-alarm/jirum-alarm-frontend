@@ -25,8 +25,8 @@ export const Placeholder: Story = {
 };
 export const Error: Story = {
   args: {
-    error: '올바른 이메일 주소를 입력해주세요',
-    helperText: '공백없이 2~12자로 입력해주세요.',
+    error: true,
+    helperText: '올바른 이메일 주소를 입력해주세요',
     value: 'useremail |',
   },
 };
