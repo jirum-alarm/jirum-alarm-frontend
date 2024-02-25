@@ -97,10 +97,6 @@ class ChannelService implements ICustomerService {
   showMessenger() {
     window.ChannelIO?.('showMessenger');
   }
-
-  hideChannelButton() {
-    window.ChannelIO?.('hideChannelButton');
-  }
 }
 
 export default ChannelService;
