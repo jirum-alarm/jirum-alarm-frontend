@@ -67,7 +67,8 @@ const NicknameInput = ({
       placeholder="닉네임을 입력해주세요."
       value={registration.nickname.value}
       icon={registration.nickname.focus ? <Cancel id="cancel" onMouseDown={reset} /> : ''}
-      error={registration.nickname.error && '공백없이 2~12자로 입력해주세요.'}
+      error={registration.nickname.error}
+      helperText={registration.nickname.error && '공백없이 2~12자로 입력해주세요.'}
       onChange={handleInputChange}
       onFocus={handleInputFocus}
       onBlur={handleInputBlur}

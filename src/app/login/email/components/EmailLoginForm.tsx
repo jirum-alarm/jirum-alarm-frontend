@@ -49,7 +49,8 @@ const EmailInput = ({
         required
         value={email.value}
         icon={email.focus ? <Cancel onMouseDown={email.reset} /> : ''}
-        error={email.error && '올바른 이메일 형식으로 입력해주세요.'}
+        error={email.error}
+        helperText={email.error && '올바른 이메일 형식으로 입력해주세요.'}
         onChange={email.handleInputChange}
         onFocus={email.handleInputFocus}
         onBlur={email.handleInputBlur}

@@ -15,7 +15,7 @@ interface InputProps
   variant?: 'standard';
   size?: 'md';
   helperText?: string | React.ReactNode;
-  error?: string | boolean | React.ReactNode;
+  error?: boolean;
   color?: 'black';
   icon?: React.ReactNode;
 }
@@ -43,8 +43,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(inputVariant({ variant, size, color }), icon && 'pr-10')}
           />
         </div>
-        {!error && helperText && <div className={helperVariant({ size })}>{helperText}</div>}
-        {error && <div className={errorVariant({ size, error: !!error })}>{error}</div>}
+        {helperText && <div className={helperVariant({ size, error })}>{helperText}</div>}
       </div>
     );
   },

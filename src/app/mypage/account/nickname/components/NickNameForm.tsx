@@ -23,7 +23,7 @@ const NickNameForm = () => {
             </button>
           )
         }
-        error={nickname.error && '공백없이 2~12자로 입력해주세요.'}
+        error={nickname.error}
         helperText="공백없이 2~12자로 입력해주세요."
       />
       <Button type="submit" disabled={!isValidInput}>
