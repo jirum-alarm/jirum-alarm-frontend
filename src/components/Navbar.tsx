@@ -40,7 +40,7 @@ export default function NavBar() {
                 <Alert />
               </Link>
             )}
-            <Link href={data?.me ? MYPAGE_PATH : LOGIN_PATH} prefetch={true}>
+            <Link href={data?.me ? MYPAGE_PATH : LOGIN_PATH}>
               <My />
             </Link>
           </div>
