@@ -1,6 +1,6 @@
 import '@/style/globals.css';
 
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 import { GA_TRACKING_ID } from '@/constants/ga';
 import GoogleAnalytics from '../components/GoogleAnalitics';
 import Script from 'next/script';
@@ -8,6 +8,7 @@ import AppProvider from '@/lib/provider/appProvier';
 import { pretendard } from '@/lib/fonts';
 import MSWInit from '@/components/MSWInit';
 import Toaster from '@/components/common/Toast/Toaster';
+import { SERVICE_URL } from '@/constants/env';
 
 export const metadata: Metadata = {
   title: '지름알림: 핫딜 정보 모아보기',
@@ -20,7 +21,14 @@ export const metadata: Metadata = {
   icons: {
     icon: '/icon.png',
   },
-  viewport: 'initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width',
+  metadataBase: new URL(SERVICE_URL),
+};
+
+export const viewport: Viewport = {
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  width: 'device-width',
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
