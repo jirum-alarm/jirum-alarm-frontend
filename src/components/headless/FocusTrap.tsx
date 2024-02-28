@@ -37,6 +37,11 @@ const getFocusableElements = (
 
 interface FocusTrapProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactElement;
+  /**
+   * escape key down시 실행되는 함수
+   * 모달 같은 곳에서 사용시에 FocusTrap컴포넌트를 트리거한 요소로 포커스를 이동시키고
+   * FocusTrap컴포넌트를 unmount시켜야 합니다.
+   */
   onEscapeFocusTrap: () => void;
 }
 

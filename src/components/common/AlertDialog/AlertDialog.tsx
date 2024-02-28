@@ -21,7 +21,7 @@ interface DialogProps {
  * -----------------------------------------------------------------------------------------------*/
 const AlertDialog = (props: DialogProps) => {
   const { children, defaultOpen = false, onOpenChange } = props;
-
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(defaultOpen);
 
   useEffect(() => {
@@ -31,6 +31,7 @@ const AlertDialog = (props: DialogProps) => {
   const alertDialogContextValue = React.useMemo(
     () => ({
       open,
+      triggerRef,
       onOpenChange: (open: boolean) => setOpen(open),
       onOpenToggle: () => setOpen((prev) => !prev),
     }),
@@ -62,13 +63,28 @@ const Portal = (props: PortalProps) => {
 const Trigger = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
->((props, ref) => {
+>((props, forwardRef) => {
   const { children, asChild, ...others } = props;
-  const { onOpenToggle, open } = useAlertDialogContext();
+  const { onOpenToggle, open, triggerRef } = useAlertDialogContext();
+
+  const composeRef = (
+    triggerRef: React.RefObject<HTMLButtonElement>,
+    forwardRef?: React.ForwardedRef<HTMLButtonElement>,
+  ) => {
+    return (node: HTMLButtonElement) => {
+      if (typeof forwardRef === 'function') {
+        forwardRef(node);
+      } else if (forwardRef) {
+        forwardRef.current = node;
+      }
+      (triggerRef as React.MutableRefObject<HTMLButtonElement>).current = node;
+    };
+  };
+
   if (!asChild)
     return (
       <button
-        ref={ref}
+        ref={composeRef(triggerRef, forwardRef)}
         {...others}
         data-state={getState(open)}
         onClick={composeEventHandlers(others.onClick, onOpenToggle)}
@@ -89,7 +105,7 @@ const Trigger = React.forwardRef<
     ...{ ...others, ...children?.props },
     type: 'button',
     'data-state': getState(open),
-    ref: ref,
+    ref: composeRef(triggerRef, forwardRef),
     onClick: composeEventHandlers(handler(children?.props?.onClick), onOpenToggle),
   });
   return <>{Compo}</>;
@@ -133,10 +149,15 @@ OverlayImpl.displayName = 'OverlayImpl';
 const ContentImpl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   (props, ref) => {
     const { className, ...others } = props;
-    const { open, onOpenChange } = useAlertDialogContext();
+    const { open, onOpenChange, triggerRef } = useAlertDialogContext();
     return (
       <Presence present={open}>
-        <FocusTrap onEscapeFocusTrap={() => onOpenChange(false)}>
+        <FocusTrap
+          onEscapeFocusTrap={() => {
+            onOpenChange(false);
+            triggerRef.current?.focus();
+          }}
+        >
           <div
             ref={ref}
             data-state={getState(open)}
