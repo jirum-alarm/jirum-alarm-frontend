@@ -5,7 +5,6 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 import { composeEventHandlers } from '@/util/event';
 import { Presence } from '@/components/headless/Presence';
 import ScrollLock from '@/components/headless/ScrollLock';
-import FocusTrap from '@/components/headless/FocusTrap';
 
 const getState = (open: boolean) => {
   return open ? 'open' : 'closed';
@@ -133,21 +132,19 @@ OverlayImpl.displayName = 'OverlayImpl';
 const ContentImpl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   (props, ref) => {
     const { className, ...others } = props;
-    const { open, onOpenChange } = useAlertDialogContext();
+    const { open } = useAlertDialogContext();
     return (
       <Presence present={open}>
-        <FocusTrap onEscapeFocusTrap={() => onOpenChange(false)}>
-          <div
-            ref={ref}
-            data-state={getState(open)}
-            className={cn(
-              'fixed left-1/2 top-1/2 z-50 grid w-full max-w-[335px] -translate-x-1/2 -translate-y-1/2 gap-8 rounded-lg border bg-white px-4 py-5 shadow-lg',
-              'data-[state=closed]:animate-modal-zoom-out data-[state=open]:animate-modal-zoom-in',
-              className,
-            )}
-            {...others}
-          />
-        </FocusTrap>
+        <div
+          ref={ref}
+          data-state={getState(open)}
+          className={cn(
+            'fixed left-1/2 top-1/2 z-50 grid w-full max-w-[335px] -translate-x-1/2 -translate-y-1/2 gap-8 rounded-lg border bg-white px-4 py-5 shadow-lg',
+            'data-[state=closed]:animate-modal-zoom-out data-[state=open]:animate-modal-zoom-in',
+            className,
+          )}
+          {...others}
+        />
       </Presence>
     );
   },
