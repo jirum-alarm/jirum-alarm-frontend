@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react';
 
 export type AlertDialogContextValue = {
   open: boolean;
+  triggerRef: React.RefObject<HTMLButtonElement>;
   onOpenChange: (open: boolean) => void;
   onOpenToggle: () => void;
 };
