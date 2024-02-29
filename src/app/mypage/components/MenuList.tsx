@@ -3,6 +3,7 @@ import { Alert, Description, Filter, Headset } from '@/components/common/icons';
 import customerService from '@/lib/customerservice/customer-service';
 import Link from '@/features/Link';
 import { SVGProps, createElement } from 'react';
+import { IS_VERCEL_PRD } from '@/constants/env';
 
 const MENU_LIST: Array<{
   icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
@@ -34,8 +35,12 @@ const MenuList = () => {
     <div className="px-5">
       <div className="border-b border-gray-300 py-4">
         <ul>
-          {MENU_LIST.map((menu, i) => (
-            <>
+          {MENU_LIST.map((menu, i) => {
+            if (IS_VERCEL_PRD && menu.url === '/mypage/keyword') {
+              return;
+            }
+
+            return (
               <li key={i}>
                 <Link href={menu.url}>
                   <div className="flex items-center gap-3 py-3">
@@ -44,8 +49,8 @@ const MenuList = () => {
                   </div>
                 </Link>
               </li>
-            </>
-          ))}
+            );
+          })}
           <li>
             <button className="w-full">
               <div className="flex items-center gap-3 py-3" onClick={handleShowChannelTalkClick}>
