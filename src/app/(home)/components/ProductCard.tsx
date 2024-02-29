@@ -19,7 +19,7 @@ export const ProductCard = (props: IProductCard) => {
             <h4>{product.category}</h4>
           </div>
           <div className="flex justify-between">
-            <h3 className="my-2 pl-4 pr-2">{product.title}</h3>
+            <h3 className="my-2 break-all pl-4 pr-2">{product.title}</h3>
             <h4 className="my-2 whitespace-nowrap pl-2 pr-4 text-xs">{timestamp}</h4>
           </div>
         </div>
