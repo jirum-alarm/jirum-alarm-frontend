@@ -4,7 +4,7 @@ import { IProductOutput } from '@/graphql/interface/product';
 import { ICategoryOutput } from '@/graphql/interface/category';
 import { useDevice } from '@/hooks/useDevice';
 import { useQuery, useSuspenseQuery } from '@apollo/client';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -12,7 +12,6 @@ const limit = 20;
 const allCategory = { id: 0, name: '전체' };
 
 export const useProductListViewModel = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const [hasNextData, setHasNextData] = useState(true);
@@ -51,7 +50,7 @@ export const useProductListViewModel = () => {
       current.delete('categoryId');
     }
     const search = current.toString();
-    router.push(`/?${search}`);
+    history.pushState({}, '', '?' + search);
   };
 
   const fetchMoreProducts = () => {
