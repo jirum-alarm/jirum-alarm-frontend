@@ -17,6 +17,8 @@ import { CATEGORIES } from '@/constants/categories';
 import Personal from './personal/components/Personal';
 import { User } from '@/types/user';
 import { useToast } from '@/components/common/Toast';
+import { addPushTokenVariable } from '@/graphql/interface';
+import { MutationAddPushToken } from '@/graphql/notification';
 
 const COMPLETE_ROUTE = 'signup/complete';
 
@@ -73,6 +75,12 @@ const Signup = () => {
 
   const steps = searchParams.get(QUERY_PARM_PREFIX) as Steps;
 
+  const [addPushToken] = useMutation<unknown, addPushTokenVariable>(MutationAddPushToken, {
+    onError: (e) => {
+      console.error(e);
+    },
+  });
+
   const [signup] = useMutation<ISignupOutput, ISignupVariable>(MutationSignup, {
     onCompleted: (data) => {
       localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, data.signup.accessToken);
@@ -80,6 +88,13 @@ const Signup = () => {
       if (data.signup.refreshToken) {
         localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.signup.refreshToken);
       }
+
+      // addPushToken({
+      //   variables: {
+      //     token: '',
+      //     tokenType: '',
+      //   },
+      // });
 
       router.push(COMPLETE_ROUTE);
     },
