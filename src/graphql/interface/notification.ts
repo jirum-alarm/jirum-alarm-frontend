@@ -20,3 +20,13 @@ export enum Role {
 }
 
 export type UnreadNotificationsCount = number;
+
+export enum TokenType {
+  FCM = 'FCM',
+  APNS = 'APNS',
+}
+
+export type addPushTokenVariable = {
+  token: string;
+  tokenType: TokenType;
+};

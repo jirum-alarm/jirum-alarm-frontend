@@ -25,3 +25,9 @@ export const QueryUnreadNotificationsCount = gql`
     unreadNotificationsCount
   }
 `;
+
+export const MutationAddPushToken = gql`
+  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {
+    addPushToken(token: $token, tokenType: $tokenType)
+  }
+`;

@@ -1,15 +1,17 @@
 'use client';
 import { PropsWithChildren } from 'react';
 import { ApolloSetting } from './apollo';
-import RecoilSetting from './recoil';
 import CustomerServiceBoot from '../customerservice/CustomerServiceBoot';
+import FCMConfig from '../firebase/FCMConfig';
+import { RecoilRoot } from 'recoil';
 
 const AppProvider = ({ children }: PropsWithChildren) => {
   return (
-    <RecoilSetting>
+    <RecoilRoot>
       <ApolloSetting>{children}</ApolloSetting>
       <CustomerServiceBoot />
-    </RecoilSetting>
+      <FCMConfig />
+    </RecoilRoot>
   );
 };
 
