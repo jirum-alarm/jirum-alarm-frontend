@@ -22,8 +22,8 @@ export enum Role {
 export type UnreadNotificationsCount = number;
 
 export enum TokenType {
-  FCM,
-  APNS,
+  FCM = 'FCM',
+  APNS = 'APNS',
 }
 
 export type addPushTokenVariable = {

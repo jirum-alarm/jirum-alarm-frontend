@@ -2,9 +2,12 @@ import { useEffect } from 'react';
 import { Unsubscribe, getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from '@/constants/firebase';
+import { useSetRecoilState } from 'recoil';
+import { fcmTokenAtom } from '@/state/fcmToken';
 const firebaseApp = initializeApp(firebaseConfig);
 
-const FirebaseConfig = () => {
+const FCMConfig = () => {
+  const setFcmToken = useSetRecoilState(fcmTokenAtom);
   useEffect(() => {
     let unsubscribe: Unsubscribe;
     const retrieveToken = async () => {
@@ -19,7 +22,7 @@ const FirebaseConfig = () => {
         })
           .then((currentToken) => {
             if (currentToken) {
-              console.log('currentToken:', currentToken);
+              setFcmToken(currentToken);
             } else {
               // Show permission request UI
               console.log('No registration token available. Request permission to generate one.');
@@ -40,4 +43,4 @@ const FirebaseConfig = () => {
   return null;
 };
 
-export default FirebaseConfig;
+export default FCMConfig;
