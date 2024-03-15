@@ -19,7 +19,6 @@ import { User } from '@/types/user';
 import { useToast } from '@/components/common/Toast';
 import { addPushTokenVariable } from '@/graphql/interface';
 import { MutationAddPushToken } from '@/graphql/notification';
-import { firebaseConfig } from '@/constants/env';
 
 const COMPLETE_ROUTE = 'signup/complete';
 
