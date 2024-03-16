@@ -23,15 +23,7 @@ const ProductList = () => {
     hasNextData,
     ref,
   } = useProductListViewModel();
-  useEffect(() => {
-    const fetchSentry = async () => {
-      const res = await fetch('/api/sentry-example-api');
-      if (!res.ok) {
-        throw new Error('Sentry Example Frontend Error');
-      }
-    };
-    fetchSentry();
-  });
+
   return (
     <main>
       <>
