@@ -1,7 +1,7 @@
 'use client';
 
 import * as Sentry from '@sentry/nextjs';
-import Error from 'next/error';
+import NextError from 'next/error';
 import { useEffect } from 'react';
 
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
@@ -12,7 +12,8 @@ export default function GlobalError({ error }: { error: Error & { digest?: strin
   return (
     <html>
       <body>
-        <Error statusCode={500} />
+        {/* This is the default Next.js error component but it doesn't allow omitting the statusCode property yet. */}
+        <NextError statusCode={undefined as any} />
       </body>
     </html>
   );

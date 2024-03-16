@@ -2,7 +2,7 @@ import ProductList from '@/app/(home)/components/ProductList';
 import NavBar from '@/components/Navbar';
 import AddFCMToken from './components/AddFCMToken';
 
-export default async function Home() {
+export default function Home() {
   return (
     <>
       <AddFCMToken />
