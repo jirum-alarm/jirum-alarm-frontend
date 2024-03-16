@@ -9,7 +9,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 const FCMConfig = () => {
   const setFcmToken = useSetRecoilState(fcmTokenAtom);
   useEffect(() => {
-    let unsubscribe: Unsubscribe;
+    let unsubscribe: Unsubscribe | null = null;
     const retrieveToken = async () => {
       if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
         // Retrieve the notification permission status
@@ -37,7 +37,7 @@ const FCMConfig = () => {
       }
     };
     retrieveToken();
-    return () => unsubscribe();
+    return () => unsubscribe?.();
   }, []);
 
   return null;
