@@ -6,7 +6,7 @@ import { ApolloError } from '@apollo/client';
 import ApiError from '@/lib/api-error';
 import { SentryLevel } from '@/lib/sentry';
 
-export default function CustomError({
+export default function Error({
   error,
   reset,
 }: {
