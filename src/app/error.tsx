@@ -2,16 +2,30 @@
 
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/nextjs';
+import { ApolloError } from '@apollo/client';
+import ApiError from '@/lib/api-error';
+import { SentryLevel } from '@/lib/sentry';
 
-export default function Error({
+export default function CustomError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string };
+  error: (Error & { digest?: string }) | ApolloError;
   reset: () => void;
 }) {
   useEffect(() => {
-    Sentry.captureException(error);
+    if (error instanceof ApolloError) {
+      const apiError = new ApiError(error);
+      const errorLevel =
+        apiError.name === 'ApiInternalServerError' ? SentryLevel.Fatal : SentryLevel.Error;
+      Sentry.withScope((scope) => {
+        scope.setLevel(errorLevel);
+        scope.setTag('api', apiError.name);
+        Sentry.captureException(apiError);
+      });
+    } else {
+      Sentry.captureException(error);
+    }
   }, [error]);
 
   return (
