@@ -23,6 +23,7 @@ const ProductList = () => {
     hasNextData,
     ref,
   } = useProductListViewModel();
+
   return (
     <main>
       <>

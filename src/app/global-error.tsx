@@ -1,18 +1,13 @@
-'use client'; // Error components must be Client Components
+'use client';
 
-import { useEffect } from 'react';
-import * as Sentry from '@sentry/nextjs';
-import { ApolloError } from '@apollo/client';
 import ApiError from '@/lib/api-error';
 import { SentryLevel } from '@/lib/sentry';
+import { ApolloError } from '@apollo/client';
+import * as Sentry from '@sentry/nextjs';
+import NextError from 'next/error';
+import { useEffect } from 'react';
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: (Error & { digest?: string }) | ApolloError;
-  reset: () => void;
-}) {
+export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
   useEffect(() => {
     if (error instanceof ApolloError) {
       const apiError = new ApiError(error);
@@ -29,16 +24,11 @@ export default function Error({
   }, [error]);
 
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
-        Try again
-      </button>
-    </div>
+    <html>
+      <body>
+        {/* This is the default Next.js error component but it doesn't allow omitting the statusCode property yet. */}
+        <NextError statusCode={undefined as any} />
+      </body>
+    </html>
   );
 }
