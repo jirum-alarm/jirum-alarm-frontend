@@ -9,7 +9,7 @@ import ProductLoading from './ProductLoading';
 import ProductCard from './ProductCard';
 import SearchInput from './SearchInput';
 import { useProductListViewModel } from '../hooks/useProductListViewModel';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 const ProductList = () => {
   const {
