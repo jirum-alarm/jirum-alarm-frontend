@@ -1,28 +1,30 @@
 'use client';
 
-import { QueryNotifications } from '@/graphql/notification';
-import { useQuery } from '@apollo/client';
 import AlarmItem from './AlarmItem';
-import { INotification } from '@/graphql/interface';
 import NoAlerts from './NoAlerts';
+import { useNotificationsViewModel } from '../hooks/useNotificationsViewModel';
 
 const AlarmList = () => {
-  const { data, loading } = useQuery<{ notifications: INotification[] }>(QueryNotifications);
-  const notifications = data?.notifications;
+  const { notifications, loading, noData, hasNextData, ref } = useNotificationsViewModel();
 
   if (loading) {
     return;
   }
 
-  if (!notifications?.length) {
+  if (noData) {
     return <NoAlerts />;
   }
+
   return (
-    <ul>
-      {notifications.map((notification) => (
-        <AlarmItem key={notification.id} notification={notification} />
-      ))}
-    </ul>
+    <>
+      <ul>
+        {notifications.map((notification) => (
+          <AlarmItem key={notification.id} notification={notification} />
+        ))}
+      </ul>
+
+      {hasNextData && <div ref={ref} className="h-[48px] w-full" />}
+    </>
   );
 };
 
