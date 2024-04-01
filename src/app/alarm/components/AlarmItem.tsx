@@ -10,7 +10,7 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
         <Hotdeal />
       </div>
       <Link href={notification.url ?? ''}>
-        <p className="text-sm">{notification.title}</p>
+        <p className="text-sm">{notification.message}</p>
         <span className="text-xs text-gray-400">{displayTime(notification.createdAt)}</span>
       </Link>
     </li>
