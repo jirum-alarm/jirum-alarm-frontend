@@ -44,11 +44,20 @@ const EmailInput = ({
       <Input
         type="email"
         id="email"
-        autoComplete="email"
+        autoComplete="off"
         placeholder="이메일을 입력해주세요."
         required
         value={email.value}
-        icon={email.focus ? <Cancel onMouseDown={email.reset} /> : ''}
+        icon={
+          email.focus && (
+            <div
+              onMouseDown={email.reset}
+              className="absolute left-[-5px] top-[-5px] cursor-pointer p-2"
+            >
+              <Cancel />
+            </div>
+          )
+        }
         error={email.error}
         helperText={email.error && '올바른 이메일 형식으로 입력해주세요.'}
         onChange={email.handleInputChange}
