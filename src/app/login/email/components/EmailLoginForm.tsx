@@ -50,12 +50,13 @@ const EmailInput = ({
         value={email.value}
         icon={
           email.focus && (
-            <div
+            <button
+              type="button"
               onMouseDown={email.reset}
               className="absolute left-[-5px] top-[-5px] cursor-pointer p-2"
             >
               <Cancel />
-            </div>
+            </button>
           )
         }
         error={email.error}
