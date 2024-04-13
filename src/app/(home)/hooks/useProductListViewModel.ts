@@ -36,7 +36,7 @@ export const useProductListViewModel = () => {
 
   const { ref } = useInView({
     onChange(inView) {
-      if (inView && hasNextData) {
+      if (inView && products && hasNextData) {
         fetchMoreProducts();
       }
     },
