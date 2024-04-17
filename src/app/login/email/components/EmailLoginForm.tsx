@@ -5,17 +5,65 @@ import { cn } from '@/lib/cn';
 import Input from '@/components/common/Input';
 import { Cancel, Eye, EyeOff } from '@/components/common/icons';
 import useEmailLoginFormViewModel from '../hooks/useEmailLoginFormViewModel';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { isIOSFlutterWeb } from '@/util/ua';
 
 const EmailLoginForm = () => {
   const { email, password, error, handleSubmit } = useEmailLoginFormViewModel();
+
+  const buttonRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleFocusIn = (e: FocusEvent) => {
+      if (!isIOSFlutterWeb()) {
+        return;
+      }
+
+      if (buttonRef.current === null || e.target === null) {
+        return;
+      }
+
+      const target = e.target as HTMLElement;
+
+      if (target.tagName === 'INPUT') {
+        buttonRef.current.style.display = 'none';
+      }
+    };
+
+    const handleFocusOut = (e: FocusEvent) => {
+      if (!isIOSFlutterWeb()) {
+        return;
+      }
+
+      if (buttonRef.current === null || e.target === null) {
+        return;
+      }
+
+      const target = e.target as HTMLElement;
+
+      if (target.tagName === 'INPUT') {
+        buttonRef.current.style.display = 'block';
+      }
+    };
+
+    document.addEventListener('focusin', handleFocusIn);
+    document.addEventListener('focusout', handleFocusOut);
+
+    return () => {
+      document.removeEventListener('focusin', handleFocusIn);
+      document.removeEventListener('focusout', handleFocusOut);
+    };
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-1 flex-col justify-between pt-11">
       <EmailInput email={email} />
       <PasswordInput password={password} />
-      <div className="h-32" />
-      <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] bg-white px-5 pb-9 pt-3">
+      <div className="h-96" />
+      <div
+        ref={buttonRef}
+        className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] bg-white px-5 pb-9 pt-3"
+      >
         {error && (
           <p className="pb-4 text-center text-sm text-error-500">
             이메일 혹은 비밀번호가 올바르지 않아요.
