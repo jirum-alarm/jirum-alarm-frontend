@@ -6,7 +6,7 @@ export const useDevice = () => {
   useEffect(() => {
     const userAgent = window.navigator.userAgent;
     const isMobileDevice = Boolean(
-      userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i),
+      userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|Mobile/i),
     );
     setIsMobile(isMobileDevice);
   }, []);
