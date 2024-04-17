@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/client';
 import { IS_VERCEL_PRD } from '@/constants/env';
 import { QueryUnreadNotificationsCount } from '@/graphql/notification';
 import { UnreadNotificationsCount } from '@/graphql/interface';
+import { isIOSFlutterWeb } from '@/util/ua';
 
 const LOGIN_PATH = '/login';
 const MYPAGE_PATH = '/mypage';
@@ -20,9 +21,11 @@ export default function NavBar() {
     { skip: IS_VERCEL_PRD || !data?.me },
   );
 
+  const layoutPaddingTop = isIOSFlutterWeb() ? 'pt-4' : 'pt-8';
+
   return (
     <>
-      <div className="pt-8">
+      <div className={`${layoutPaddingTop}`}>
         <div className="flex items-center justify-between">
           <Link href="/">
             <div className="grid grid-flow-col items-center gap-x-3">
