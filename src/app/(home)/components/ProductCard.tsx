@@ -18,7 +18,14 @@ export const ProductCard = (props: IProductCard) => {
             <h2 className="font-bold">{product.provider.nameKr}</h2>
             <h4>{product.category}</h4>
           </div>
-          <div className="flex justify-between">
+          <div className="max-h-18 flex justify-between">
+            {product.thumbnail?.startsWith(
+              'https://s3.ap-northeast-2.amazonaws.com/file.jirum-alarm.com',
+            ) && (
+              <div className="x-12 m-2 h-12">
+                <img className="h-full w-full rounded-md" src={product.thumbnail} alt="" />
+              </div>
+            )}
             <h3 className="my-2 break-all pl-4 pr-2">{product.title}</h3>
             <h4 className="my-2 whitespace-nowrap pl-2 pr-4 text-xs">{timestamp}</h4>
           </div>
