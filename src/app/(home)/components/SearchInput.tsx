@@ -3,8 +3,8 @@ import { useSearchInputViewModel } from '../hooks/useSearchInputViewModel';
 const SearchInput = () => {
   const { inputRef, onKeyDown, handleReset } = useSearchInputViewModel();
   return (
-    <div className="mb-6 drop-shadow-md">
-      <div className="relative mt-6 flex h-14 w-full items-center overflow-hidden rounded-lg bg-white shadow hover:shadow-md">
+    <div className="mb-4 drop-shadow-md">
+      <div className="relative mt-4 flex h-14 w-full items-center overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md">
         <div className="grid h-full w-14 place-items-center text-gray-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -16,11 +16,11 @@ const Login = () => {
   };
 
   return (
-    <BasicLayout hasBackButton fullScreen={false}>
-      <div className="h-full px-5 py-9">
-        <div className="grid h-full text-center">
+    <BasicLayout hasBackButton fullScreen={true}>
+      <div className="h-full py-32">
+        <div className="grid text-center">
           <div>
-            <div className="grid justify-center pb-5">
+            <div className="grid justify-center">
               <Illust size="sm" />
             </div>
             <div>
