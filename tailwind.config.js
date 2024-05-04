@@ -5,6 +5,8 @@ module.exports = {
   theme: {
     extend: {
       screens: {
+        txs: '320px',
+        xs: '375px',
         'mouse-hover': { raw: '(hover: hover)' },
       },
       spacing: {

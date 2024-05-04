@@ -34,6 +34,13 @@ export const useProductListViewModel = () => {
     },
   });
 
+  const { data: { products: hotDeals } = {} } = useQuery<IProductOutput>(QueryProducts, {
+    variables: {
+      limit: 5,
+      categoryId: 0,
+    },
+  });
+
   const { ref } = useInView({
     onChange(inView) {
       if (inView && products && hasNextData) {
@@ -85,6 +92,7 @@ export const useProductListViewModel = () => {
     isMobile,
     allCategory,
     products,
+    hotDeals,
     categoriesData,
     hasNextData,
     ref,

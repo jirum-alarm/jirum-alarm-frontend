@@ -74,6 +74,14 @@ const nextConfig = withPWA({
     ];
   },
   sentry: sentryBuildTimeConfigOptions,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'file.jirum-alarm.com',
+      },
+    ],
+  },
 });
 
 module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions);

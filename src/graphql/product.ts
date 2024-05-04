@@ -7,6 +7,10 @@ export const QueryProducts = gql`
       title
       mallId
       url
+      isHot
+      isEnd
+      ship
+      price
       providerId
       categoryId
       category
