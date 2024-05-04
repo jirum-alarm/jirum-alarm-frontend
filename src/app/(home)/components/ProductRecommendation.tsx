@@ -27,7 +27,15 @@ export default function ProductRecommendation({
         <span className=" text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
       </div>
       {hotDeals && (
-        <div className="pb-11">
+        <div
+          className="pb-11"
+          onTouchStartCapture={(e) => {
+            e.stopPropagation();
+          }}
+          onTouchMoveCapture={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <Swiper
             spaceBetween={12}
             slidesPerView={3}

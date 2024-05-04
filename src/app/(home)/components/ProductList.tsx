@@ -28,93 +28,91 @@ const ProductList = () => {
 
   return (
     <main>
-      <>
-        <SearchInput />
-        <Tabs
-          className="react-tabs__tab-list"
-          forceRenderTabPanel
-          selectedIndex={activeTab}
-          onSelect={handleTabChange}
-          defaultFocus
-          disableUpDownKeys
+      <SearchInput />
+      <Tabs
+        className="react-tabs__tab-list"
+        forceRenderTabPanel
+        selectedIndex={activeTab}
+        onSelect={handleTabChange}
+        defaultFocus
+        disableUpDownKeys
+      >
+        <TabList
+          className={`overflow-x-scroll scroll-smooth will-change-transform ${
+            isMobile ? 'whitespace-nowrap' : ''
+          }`}
         >
-          <TabList
-            className={`overflow-x-scroll scroll-smooth will-change-transform ${
-              isMobile ? 'whitespace-nowrap' : ''
-            }`}
-          >
-            {[allCategory].concat(categoriesData.categories).map((category) => (
-              <React.Fragment key={category.name}>
-                <Tab
-                  className="b-0 inline-block p-2 font-bold text-zinc-400 transition duration-200 hover:text-zinc-700"
-                  id={`profile-tab-${category.id}`}
-                  data-tabs-target={`#profile-${category.id}`}
-                  type="button"
-                  role="tab"
-                  aria-controls={`profile-${category.id}`}
-                >
-                  <button>{category.name}</button>
-                </Tab>
-              </React.Fragment>
-            ))}
-          </TabList>
-          {loading ? (
-            <div>
-              <ProductLoading />
-            </div>
-          ) : (
-            <div className="flex justify-center">
-              <SwipeableViews
-                index={activeTab}
-                onChangeIndex={handleTabChange}
-                animateTransitions={isMobile}
-                className="my-6 will-change-transform"
+          {[allCategory].concat(categoriesData.categories).map((category) => (
+            <React.Fragment key={category.name}>
+              <Tab
+                className="b-0 inline-block p-2 font-bold text-zinc-400 transition duration-200 hover:text-zinc-700"
+                id={`profile-tab-${category.id}`}
+                data-tabs-target={`#profile-${category.id}`}
+                type="button"
+                role="tab"
+                aria-controls={`profile-${category.id}`}
               >
-                {[allCategory].concat(categoriesData.categories).map((category, i) => {
-                  const key = `${category.id}_${i}`;
+                <button>{category.name}</button>
+              </Tab>
+            </React.Fragment>
+          ))}
+        </TabList>
+        {loading ? (
+          <div>
+            <ProductLoading />
+          </div>
+        ) : (
+          <div className="flex justify-center">
+            <SwipeableViews
+              index={activeTab}
+              onChangeIndex={handleTabChange}
+              animateTransitions={isMobile}
+              className="my-6 will-change-transform"
+            >
+              {[allCategory].concat(categoriesData.categories).map((category, i) => {
+                const key = `${category.id}_${i}`;
 
-                  if (category.id === 0) {
-                    return (
-                      <TabPanel key={key}>
-                        {products?.length === 0 || !products ? (
-                          <div className="flex min-h-[500px]">
-                            <ProductNotFound />
-                          </div>
-                        ) : (
-                          <ProductRecommendation products={products} hotDeals={hotDeals} />
-                        )}
-                      </TabPanel>
-                    );
-                  }
-
+                if (category.id === 0) {
                   return (
-                    <React.Fragment key={key}>
-                      <TabPanel>
-                        {products?.length === 0 ? (
-                          <div className="flex min-h-[500px]">
-                            <ProductNotFound />
-                          </div>
-                        ) : (
-                          <div className="min-h-[500px]">
-                            <div className="item-center grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-                              {products?.map((product, i) => (
-                                <ProductCard key={i} product={product} />
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </TabPanel>
-                    </React.Fragment>
+                    <TabPanel key={key}>
+                      {products?.length === 0 || !products ? (
+                        <div className="flex min-h-[500px]">
+                          <ProductNotFound />
+                        </div>
+                      ) : (
+                        <ProductRecommendation products={products} hotDeals={hotDeals} />
+                      )}
+                    </TabPanel>
                   );
-                })}
-              </SwipeableViews>
-            </div>
-          )}
+                }
 
-          <TopButton />
-          {hasNextData && <div ref={ref} className="h-[48px] w-full" />}
-        </Tabs>
-      </>
+                return (
+                  <React.Fragment key={key}>
+                    <TabPanel>
+                      {products?.length === 0 ? (
+                        <div className="flex min-h-[500px]">
+                          <ProductNotFound />
+                        </div>
+                      ) : (
+                        <div className="min-h-[500px]">
+                          <div className="item-center grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                            {products?.map((product, i) => (
+                              <ProductCard key={i} product={product} />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </TabPanel>
+                  </React.Fragment>
+                );
+              })}
+            </SwipeableViews>
+          </div>
+        )}
+
+        <TopButton />
+        {hasNextData && <div ref={ref} className="h-[48px] w-full" />}
+      </Tabs>
     </main>
   );
 };
