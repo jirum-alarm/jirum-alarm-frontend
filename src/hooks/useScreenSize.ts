@@ -18,7 +18,7 @@ const breakpoints: { [key in keyof ScreenSizes]: string } = {
 };
 
 /**
- * @description tailiwndcss breakpoints를 따르는 화면 사이즈 확인 훅
+ * @description tailiwindcss breakpoints를 따르는 화면 사이즈 확인 훅
  * @example const { sm, md, lg, xl, txl } = useScreen();
  * */
 function useScreen(): ScreenSizes {
