@@ -40,9 +40,9 @@ const PasswordInput = ({
         value={value}
         icon={
           masking ? (
-            <Eye onClick={toggleMasking} className="cursor-pointer" />
-          ) : (
             <EyeOff onClick={toggleMasking} className="cursor-pointer" />
+          ) : (
+            <Eye onClick={toggleMasking} className="cursor-pointer" />
           )
         }
         helperText={helperText}

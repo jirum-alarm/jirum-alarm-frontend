@@ -21,7 +21,7 @@ export default function NavBar() {
     { skip: IS_VERCEL_PRD || !data?.me },
   );
 
-  const layoutPaddingTop = isIOSFlutterWeb() ? 'pt-4' : 'pt-8';
+  const layoutPaddingTop = isIOSFlutterWeb() ? 'pt-4' : 'pt-6';
 
   return (
     <>

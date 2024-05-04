@@ -1,7 +1,7 @@
 import { Toast } from './Toast';
 import { useEffect, useState } from 'react';
 
-const TOAST_REMOVE_DELAY = 3000;
+const TOAST_REMOVE_DELAY = 2000;
 
 interface Toast {
   id: string;

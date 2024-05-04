@@ -70,9 +70,9 @@ const PasswordInput = ({
         value={value}
         icon={
           masking ? (
-            <Eye onClick={toggleMasking} className="cursor-pointer" />
-          ) : (
             <EyeOff onClick={toggleMasking} className="cursor-pointer" />
+          ) : (
+            <Eye onClick={toggleMasking} className="cursor-pointer" />
           )
         }
         /** @MEMO 헬퍼 텍스트에서 조건에 맞거나 틀린 경우 색을 바꾸는 형태라 errorText를 의도적으로 사용하지 않았음

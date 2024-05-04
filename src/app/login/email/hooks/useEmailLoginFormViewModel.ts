@@ -4,6 +4,7 @@ import { ILoginOutput, ILoginVariable } from '@/types/login';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useToast } from '../../../../components/common/Toast';
 
 const HOME_PATH = '/';
 
@@ -20,6 +21,8 @@ interface Login {
 }
 
 const useEmailLoginFormViewModel = () => {
+  const { toast } = useToast();
+
   const [loginForm, setLoginForm] = useState<Login>({
     email: {
       value: '',
@@ -46,6 +49,7 @@ const useEmailLoginFormViewModel = () => {
         localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.login.refreshToken);
       }
 
+      toast('로그인에 성공했어요.');
       router.replace(HOME_PATH);
     },
     onError: () => {

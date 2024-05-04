@@ -43,7 +43,7 @@ export const inputVariant = cva(
         standard: ['border-b', 'placeholder:text-gray-400', 'rounded-none'],
       },
       size: {
-        md: ['text-base', 'px-2', 'py-3'],
+        md: ['text-base', 'px-1', 'py-3'],
       },
       color: {
         black: ['text-gray-900', 'border-gray-400', 'focus:border-gray-900'],
