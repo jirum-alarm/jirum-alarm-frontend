@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 
 type ScreenSizes = {
+  // 2xs
+  txs: boolean;
+  xs: boolean;
   sm: boolean;
   md: boolean;
   lg: boolean;
@@ -10,6 +13,8 @@ type ScreenSizes = {
 };
 
 const breakpoints: { [key in keyof ScreenSizes]: string } = {
+  txs: '(min-width: 320px)',
+  xs: '(min-width: 375px)',
   sm: '(min-width: 640px)',
   md: '(min-width: 768px)',
   lg: '(min-width: 1024px)',
@@ -23,6 +28,8 @@ const breakpoints: { [key in keyof ScreenSizes]: string } = {
  * */
 function useScreen(): ScreenSizes {
   const [screenSizes, setScreenSizes] = useState<ScreenSizes>({
+    txs: false,
+    xs: false,
     sm: false,
     md: false,
     lg: false,
@@ -32,6 +39,8 @@ function useScreen(): ScreenSizes {
 
   useEffect(() => {
     const mediaQueries: { [key in keyof ScreenSizes]: MediaQueryList } = {
+      txs: window.matchMedia(breakpoints.txs),
+      xs: window.matchMedia(breakpoints.xs),
       sm: window.matchMedia(breakpoints.sm),
       md: window.matchMedia(breakpoints.md),
       lg: window.matchMedia(breakpoints.lg),
@@ -41,6 +50,8 @@ function useScreen(): ScreenSizes {
 
     function updateMatch(): void {
       setScreenSizes({
+        txs: mediaQueries.txs.matches,
+        xs: mediaQueries.xs.matches,
         sm: mediaQueries.sm.matches,
         md: mediaQueries.md.matches,
         lg: mediaQueries.lg.matches,

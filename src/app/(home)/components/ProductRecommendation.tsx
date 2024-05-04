@@ -72,7 +72,7 @@ function ProductImageCard({
     <a
       href={product.url}
       className={cn({
-        'w-[162px]': type === 'product',
+        'w-[162px] txs:w-[140px]': type === 'product',
         'w-[120px]': type === 'hotDeal',
       })}
       target="_blank"
@@ -81,7 +81,7 @@ function ProductImageCard({
       <div
         className={cn({
           'relative overflow-hidden rounded-lg': true,
-          'h-[162px]': type === 'product',
+          'h-[162px] txs:h-[140px]': type === 'product',
           'h-[120px]': type === 'hotDeal',
         })}
       >
