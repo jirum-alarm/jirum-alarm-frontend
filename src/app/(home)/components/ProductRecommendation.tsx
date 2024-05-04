@@ -110,8 +110,15 @@ function ProductImageCard({
         )}
       </div>
       <div className="flex flex-col">
-        <span className="pt-2 text-sm text-gray-700">{product.title}</span>
-        <span className="align-center flex h-8 pt-1 text-lg font-semibold text-gray-900">
+        <span
+          className={cn({
+            'pt-2 text-sm text-gray-700': true,
+            'line-clamp-2': type === 'hotDeal',
+          })}
+        >
+          {product.title}
+        </span>
+        <span className="align-center line-clamp-1 flex h-8 pt-1 text-lg font-semibold text-gray-900">
           {product?.price ?? ''}
         </span>
       </div>
