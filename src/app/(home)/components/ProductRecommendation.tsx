@@ -102,7 +102,7 @@ function ProductImageCard({
       <div className="flex flex-col">
         <span
           className={cn({
-            'pt-2 text-sm text-gray-700': true,
+            'break-words pt-2 text-sm text-gray-700': true,
             'line-clamp-2': type === 'hotDeal',
           })}
         >
