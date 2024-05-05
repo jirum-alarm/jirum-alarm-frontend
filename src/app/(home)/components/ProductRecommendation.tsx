@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -97,17 +97,7 @@ function ProductImageCard({
             {product.isHot ? '핫딜' : product.isEnd ? '판매종료' : ''}
           </div>
         )}
-        {product?.thumbnail ? (
-          <Image src={product?.thumbnail} width={162} height={162} alt={product.title} />
-        ) : (
-          <div className="flex h-full items-center justify-center bg-gray-100">
-            <span className="text-center text-sm text-gray-300">
-              상품 이미지
-              <br />
-              준비중입니다
-            </span>
-          </div>
-        )}
+        <ImageWithFallback src={product?.thumbnail} title={product.title} />
       </div>
       <div className="flex flex-col">
         <span
@@ -123,5 +113,27 @@ function ProductImageCard({
         </span>
       </div>
     </a>
+  );
+}
+
+function ImageWithFallback({ src, title }: { src: string | undefined; title: string }) {
+  const [error, setError] = useState(false);
+
+  return error || !src ? (
+    <NoImage />
+  ) : (
+    <Image src={src} width={162} height={162} alt={title} onError={() => setError(true)} />
+  );
+}
+
+function NoImage() {
+  return (
+    <div className="flex h-full items-center justify-center bg-gray-100">
+      <span className="text-center text-sm text-gray-300">
+        상품 이미지
+        <br />
+        준비중입니다
+      </span>
+    </div>
   );
 }
