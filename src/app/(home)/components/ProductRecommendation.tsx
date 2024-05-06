@@ -15,10 +15,11 @@ export default function ProductRecommendation({
 }) {
   const { lg, md, sm } = useScreenSize();
   const firstRenderingCount = lg ? 15 : md ? 12 : sm ? 9 : 6;
+  const hotDealCount = lg ? 10 : md ? 8 : sm ? 6 : 5;
 
   return (
     <>
-      <div className="grid w-[90vw] grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
+      <div className="grid w-[90vw] grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:w-full md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
         {products
           ?.slice(0, firstRenderingCount)
           .map((product, i) => <ProductImageCard key={i} product={product} />)}
@@ -41,11 +42,11 @@ export default function ProductRecommendation({
               spaceBetween={12}
               slidesPerView={3}
               breakpoints={{
-                768: { slidesPerView: 4 },
-                1024: { slidesPerView: 5 },
+                640: { slidesPerView: 4 },
+                1024: { slidesPerView: 6 },
               }}
             >
-              {hotDeals.map((hotDeal, i) => (
+              {hotDeals.slice(0, hotDealCount).map((hotDeal, i) => (
                 <SwiperSlide key={i}>
                   <ProductImageCard product={hotDeal} type="hotDeal" />
                 </SwiperSlide>

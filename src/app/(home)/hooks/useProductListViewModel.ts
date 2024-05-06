@@ -36,7 +36,7 @@ export const useProductListViewModel = () => {
 
   const { data: { products: hotDeals } = {} } = useQuery<IProductOutput>(QueryProducts, {
     variables: {
-      limit: 5,
+      limit: 10,
       categoryId: 0,
     },
   });
