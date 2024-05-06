@@ -3,7 +3,6 @@ import { Alert, Description, Filter, Headset } from '@/components/common/icons';
 import customerService from '@/lib/customerservice/customer-service';
 import Link from '@/features/Link';
 import { SVGProps, createElement } from 'react';
-import { IS_VERCEL_PRD } from '@/constants/env';
 
 const MENU_LIST: Array<{
   icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
@@ -36,7 +35,7 @@ const MenuList = () => {
       <div className="border-b border-gray-300 py-4">
         <ul>
           {MENU_LIST.map((menu, i) => {
-            if (IS_VERCEL_PRD && menu.url === '/mypage/keyword') {
+            if (menu.url === '/mypage/keyword') {
               return;
             }
 

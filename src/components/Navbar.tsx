@@ -5,7 +5,6 @@ import { Alert, Logo, My } from '@/components/common/icons';
 import { QueryMe } from '../graphql/auth';
 import { User } from '../types/user';
 import { useQuery } from '@apollo/client';
-import { IS_VERCEL_PRD } from '@/constants/env';
 import { QueryUnreadNotificationsCount } from '@/graphql/notification';
 import { UnreadNotificationsCount } from '@/graphql/interface';
 import { isIOSFlutterWeb } from '@/util/ua';
