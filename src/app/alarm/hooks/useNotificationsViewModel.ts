@@ -4,10 +4,10 @@ import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-const offset = 0;
 const limit = 20;
 
 export const useNotificationsViewModel = () => {
+  const [page, setPage] = useState(1);
   const [hasNextData, setHasNextData] = useState(true);
 
   const {
@@ -15,7 +15,7 @@ export const useNotificationsViewModel = () => {
     loading,
     fetchMore,
   } = useQuery<{ notifications: INotification[] }>(QueryNotifications, {
-    variables: { offset, limit },
+    variables: { offset: 0, limit },
   });
 
   const noData = !loading && notifications.length === 0;
@@ -24,9 +24,9 @@ export const useNotificationsViewModel = () => {
     onChange(inView) {
       if (inView && hasNextData) {
         fetchMore({
-          // @TODO: 추가 api 요청에 필요한 offset을 variables에 넘겨줘여함
-          // 백엔드 api에 맞게 차후 수정 필요
-          variables: {},
+          variables: {
+            offset: page * limit,
+          },
           updateQuery: ({ notifications }, { fetchMoreResult }) => {
             if (fetchMoreResult.notifications.length < limit) {
               setHasNextData(false);
@@ -37,6 +37,8 @@ export const useNotificationsViewModel = () => {
           },
         });
       }
+
+      setPage(page + 1);
     },
   });
 
