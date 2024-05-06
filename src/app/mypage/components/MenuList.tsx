@@ -35,10 +35,6 @@ const MenuList = () => {
       <div className="border-b border-gray-300 py-4">
         <ul>
           {MENU_LIST.map((menu, i) => {
-            if (menu.url === '/mypage/keyword') {
-              return;
-            }
-
             return (
               <li key={i}>
                 <Link href={menu.url}>
