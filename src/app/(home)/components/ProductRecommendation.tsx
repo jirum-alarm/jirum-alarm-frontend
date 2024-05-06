@@ -122,15 +122,8 @@ function ImageWithFallback({ src, title }: { src: string | undefined; title: str
   return error || !src ? (
     <NoImage />
   ) : (
-    <Image
-      src={src}
-      width={162}
-      height={162}
-      alt={title}
-      onError={() => setError(true)}
-      placeholder="blur"
-      blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-    />
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} width={162} height={162} alt={title} onError={() => setError(true)} />
   );
 }
 
