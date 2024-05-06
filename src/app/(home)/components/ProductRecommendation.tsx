@@ -19,7 +19,7 @@ export default function ProductRecommendation({
 
   return (
     <>
-      <div className="grid w-[90vw] grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:w-full md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
+      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
         {products
           ?.slice(0, firstRenderingCount)
           .map((product, i) => <ProductImageCard key={i} product={product} />)}
@@ -76,7 +76,7 @@ function ProductImageCard({
     <a
       href={product.url}
       className={cn({
-        'w-[162px] txs:w-[140px]': type === 'product',
+        'txs:w-[140px] xs:w-[162px]': type === 'product',
         'w-[120px]': type === 'hotDeal',
       })}
       target="_blank"
@@ -85,7 +85,7 @@ function ProductImageCard({
       <div
         className={cn({
           'relative overflow-hidden rounded-lg': true,
-          'h-[162px] txs:h-[140px]': type === 'product',
+          'txs:h-[140px] xs:h-[162px]': type === 'product',
           'h-[120px]': type === 'hotDeal',
         })}
       >
