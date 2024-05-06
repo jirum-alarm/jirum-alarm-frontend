@@ -38,6 +38,7 @@
     "react-swipeable-views": "^0.14.0",
     "react-tabs": "^6.0.2",
     "recoil": "^0.7.7",
+    "sharp": "^0.33.3",
     "swiper": "^11.1.1",
     "tailwind-merge": "^2.2.1",
     "tailwind-scrollbar-hide": "^1.1.7",
