@@ -18,40 +18,43 @@ export default function ProductRecommendation({
 
   return (
     <>
-      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
+      <div className="grid w-[90vw] grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
         {products
           ?.slice(0, firstRenderingCount)
           .map((product, i) => <ProductImageCard key={i} product={product} />)}
       </div>
-      <div className="pb-4 pt-9">
-        <span className=" text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
-      </div>
+
       {hotDeals && (
-        <div
-          className="pb-11"
-          onTouchStartCapture={(e) => {
-            e.stopPropagation();
-          }}
-          onTouchMoveCapture={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <Swiper
-            spaceBetween={12}
-            slidesPerView={3}
-            breakpoints={{
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 5 },
+        <div className="py-11">
+          <div className="pb-4">
+            <span className=" text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
+          </div>
+          <div
+            onTouchStartCapture={(e) => {
+              e.stopPropagation();
+            }}
+            onTouchMoveCapture={(e) => {
+              e.stopPropagation();
             }}
           >
-            {hotDeals.map((hotDeal, i) => (
-              <SwiperSlide key={i}>
-                <ProductImageCard product={hotDeal} type="hotDeal" />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+            <Swiper
+              spaceBetween={12}
+              slidesPerView={3}
+              breakpoints={{
+                768: { slidesPerView: 4 },
+                1024: { slidesPerView: 5 },
+              }}
+            >
+              {hotDeals.map((hotDeal, i) => (
+                <SwiperSlide key={i}>
+                  <ProductImageCard product={hotDeal} type="hotDeal" />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
         </div>
       )}
+
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
         {products
           ?.slice(firstRenderingCount)
@@ -102,8 +105,7 @@ function ProductImageCard({
       <div className="flex flex-col">
         <span
           className={cn({
-            'break-words pt-2 text-sm text-gray-700': true,
-            'line-clamp-2': type === 'hotDeal',
+            'line-clamp-2 break-words pt-2 text-sm text-gray-700': true,
           })}
         >
           {product.title}
@@ -122,8 +124,15 @@ function ImageWithFallback({ src, title }: { src: string | undefined; title: str
   return error || !src ? (
     <NoImage />
   ) : (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={src} width={162} height={162} alt={title} onError={() => setError(true)} />
+    <Image
+      src={src}
+      width={162}
+      height={162}
+      alt={title}
+      onError={() => setError(true)}
+      placeholder="blur"
+      blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+    />
   );
 }
 

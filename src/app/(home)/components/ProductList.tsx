@@ -6,7 +6,6 @@ import 'react-tabs/style/react-tabs.css';
 import '../../../style/React_tabs.css';
 import ProductNotFound from './ProductNotFound';
 import ProductLoading from './ProductLoading';
-import ProductCard from './ProductCard';
 import SearchInput from './SearchInput';
 import { useProductListViewModel } from '../hooks/useProductListViewModel';
 import React from 'react';
@@ -57,6 +56,7 @@ const ProductList = () => {
             </React.Fragment>
           ))}
         </TabList>
+
         {loading ? (
           <div>
             <ProductLoading />
@@ -72,38 +72,19 @@ const ProductList = () => {
               {[allCategory].concat(categoriesData.categories).map((category, i) => {
                 const key = `${category.id}_${i}`;
 
-                if (category.id === 0) {
-                  return (
-                    <TabPanel key={key}>
-                      {products?.length === 0 || !products ? (
-                        <div className="flex min-h-[500px]">
-                          <ProductNotFound />
-                        </div>
-                      ) : (
-                        <ProductRecommendation products={products} hotDeals={hotDeals} />
-                      )}
-                    </TabPanel>
-                  );
-                }
-
                 return (
-                  <React.Fragment key={key}>
-                    <TabPanel>
-                      {products?.length === 0 ? (
-                        <div className="flex min-h-[500px]">
-                          <ProductNotFound />
-                        </div>
-                      ) : (
-                        <div className="min-h-[500px]">
-                          <div className="item-center grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-                            {products?.map((product, i) => (
-                              <ProductCard key={i} product={product} />
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </TabPanel>
-                  </React.Fragment>
+                  <TabPanel key={key}>
+                    {products?.length === 0 || !products ? (
+                      <div className="flex min-h-[500px]">
+                        <ProductNotFound />
+                      </div>
+                    ) : (
+                      <ProductRecommendation
+                        products={products}
+                        hotDeals={category.id === 0 ? hotDeals : undefined}
+                      />
+                    )}
+                  </TabPanel>
                 );
               })}
             </SwipeableViews>
