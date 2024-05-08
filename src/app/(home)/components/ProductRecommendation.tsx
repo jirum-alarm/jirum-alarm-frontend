@@ -132,6 +132,7 @@ function ImageWithFallback({ src, title }: { src: string | undefined; title: str
       alt={title}
       onError={() => setError(true)}
       priority
+      unoptimized
       placeholder="blur"
       blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
     />
