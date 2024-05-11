@@ -94,11 +94,11 @@ function ProductImageCard({
             className={cn({
               'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
                 true,
-              'bg-error-500 px-3 text-white ': product.isHot,
               'border border-gray-400 bg-white px-2 text-gray-500': product.isEnd,
+              'bg-error-500 px-3 text-white ': !product.isEnd && product.isHot,
             })}
           >
-            {product.isHot ? '핫딜' : product.isEnd ? '판매종료' : ''}
+            {product.isEnd ? '판매종료' : product.isHot ? '핫딜' : ''}
           </div>
         )}
         <ImageWithFallback src={product?.thumbnail} title={product.title} />
