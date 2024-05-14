@@ -9,6 +9,7 @@ import { pretendard } from '@/lib/fonts';
 import MSWInit from '@/components/MSWInit';
 import Toaster from '@/components/common/Toast/Toaster';
 import { SERVICE_URL } from '@/constants/env';
+import { InitMixpanel } from '@/lib/mixpanel';
 
 export const metadata: Metadata = {
   title: '지름알림: 핫딜 정보 모아보기',
@@ -45,6 +46,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <MSWInit>
           <AppProvider>
+            <InitMixpanel />
             <div className="relative min-w-[320px] bg-white">{children}</div>
             <Toaster />
           </AppProvider>
