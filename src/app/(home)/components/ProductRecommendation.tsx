@@ -5,6 +5,7 @@ import 'swiper/css';
 import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import useScreenSize from '@/hooks/useScreenSize';
+import { mp } from '@/lib/mixpanel';
 
 export default function ProductRecommendation({
   products,
@@ -72,6 +73,12 @@ function ProductImageCard({
   product: IProduct;
   type?: 'product' | 'hotDeal';
 }) {
+  const handleClick = () => {
+    mp.track('Product Click', {
+      product,
+    });
+  };
+
   return (
     <a
       href={product.url}
@@ -81,6 +88,7 @@ function ProductImageCard({
       })}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={handleClick}
     >
       <div
         className={cn({

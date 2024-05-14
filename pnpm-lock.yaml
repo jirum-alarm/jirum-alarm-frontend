@@ -38,6 +38,9 @@ dependencies:
   lottie-react:
     specifier: 2.4.0
     version: 2.4.0(react-dom@18.2.0)(react@18.2.0)
+  mixpanel-browser:
+    specifier: ^2.50.0
+    version: 2.50.0
   next:
     specifier: ^14.1.0
     version: 14.1.0(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)
@@ -127,6 +130,9 @@ devDependencies:
   '@types/lodash':
     specifier: ^4.14.202
     version: 4.14.202
+  '@types/mixpanel-browser':
+    specifier: ^2.49.0
+    version: 2.49.0
   '@types/node':
     specifier: ^20.11.20
     version: 20.11.20
@@ -3644,6 +3650,12 @@ packages:
       rollup: 2.78.0
     dev: false
 
+  /@rrweb/types@2.0.0-alpha.13:
+    resolution: {integrity: sha512-ytq+MeVm/vP2ybw+gTAN3Xvt7HN2yS+wlbfnwHpQMftxrwzq0kEZHdw+Jp5WUvvpONWzXriNAUU9dW0qLGkzNg==}
+    dependencies:
+      rrweb-snapshot: 2.0.0-alpha.13
+    dev: false
+
   /@rushstack/eslint-patch@1.7.2:
     resolution: {integrity: sha512-RbhOOTCNoCrbfkRyoXODZp75MlpiHMgbE5MEBZAnnnLyQNgrigEj4p0lzsMDyc1zVsJDLrivB58tgg3emX0eEA==}
     dev: true
@@ -5154,6 +5166,10 @@ packages:
       '@types/node': 20.11.20
     dev: true
 
+  /@types/css-font-loading-module@0.0.7:
+    resolution: {integrity: sha512-nl09VhutdjINdWyXxHWN/w9zlNCfr60JUqJbd24YXUuCwgeL0TpFSdElCwb6cxfB6ybE19Gjj4g0jsgkXxKv1Q==}
+    dev: false
+
   /@types/detect-port@1.3.5:
     resolution: {integrity: sha512-Rf3/lB9WkDfIL9eEKaSYKc+1L/rNVYBjThk22JTqQw0YozXarX8YljFAz+HCoC6h4B4KwCMsBPZHaFezwT4BNA==}
     dev: true
@@ -5299,6 +5315,10 @@ packages:
 
   /@types/minimatch@5.1.2:
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
+    dev: true
+
+  /@types/mixpanel-browser@2.49.0:
+    resolution: {integrity: sha512-StmgUnS58d44DmIAEX9Kk8qwisAYCl6E2qulIjYyHXUPuJCPOuyUMTTKBp+aU2F2do+kxAzCxiBtsB4fnBT9Fg==}
     dev: true
 
   /@types/mute-stream@0.0.4:
@@ -5717,6 +5737,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       tslib: 2.6.2
+    dev: false
+
+  /@xstate/fsm@1.6.5:
+    resolution: {integrity: sha512-b5o1I6aLNeYlU/3CPlj/Z91ybk1gUsKT+5NAJI+2W4UjvS5KLG28K9v5UvNoFVjHV8PajVZ00RH3vnjyQO7ZAw==}
     dev: false
 
   /@xtuc/ieee754@1.2.0:
@@ -6307,6 +6331,11 @@ packages:
       bare-os: 2.2.0
     dev: true
     optional: true
+
+  /base64-arraybuffer@1.0.2:
+    resolution: {integrity: sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==}
+    engines: {node: '>= 0.6.0'}
+    dev: false
 
   /base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
@@ -8327,6 +8356,10 @@ packages:
     resolution: {integrity: sha512-3yurQZ2hD9VISAhJJP9bpYFNQrHHBXE2JxxjY5aLEcDi46RmAzJE2OC9FAde0yis5ElW0jTTzs0zfg/Cca4XqQ==}
     dev: true
 
+  /fflate@0.4.8:
+    resolution: {integrity: sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==}
+    dev: false
+
   /figures@3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
     engines: {node: '>=8'}
@@ -10290,6 +10323,16 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /mitt@3.0.1:
+    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
+    dev: false
+
+  /mixpanel-browser@2.50.0:
+    resolution: {integrity: sha512-iP4sbSRMemjWbnH+KQZRxZ360bcXtFpoQuUiWjjdw9AsURn0MrR9/2RnPOJ8J8tt1dMm7kTKwOjGV8pkbWbmAA==}
+    dependencies:
+      rrweb: 2.0.0-alpha.4
+    dev: false
+
   /mkdirp-classic@0.5.3:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
     dev: true
@@ -12121,6 +12164,33 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
+
+  /rrdom@0.1.7:
+    resolution: {integrity: sha512-ZLd8f14z9pUy2Hk9y636cNv5Y2BMnNEY99wxzW9tD2BLDfe1xFxtLjB4q/xCBYo6HRe0wofzKzjm4JojmpBfFw==}
+    dependencies:
+      rrweb-snapshot: 2.0.0-alpha.4
+    dev: false
+
+  /rrweb-snapshot@2.0.0-alpha.13:
+    resolution: {integrity: sha512-slbhNBCYjxLGCeH95a67ECCy5a22nloXp1F5wF7DCzUNw80FN7tF9Lef1sRGLNo32g3mNqTc2sWLATlKejMxYw==}
+    dev: false
+
+  /rrweb-snapshot@2.0.0-alpha.4:
+    resolution: {integrity: sha512-KQ2OtPpXO5jLYqg1OnXS/Hf+EzqnZyP5A+XPqBCjYpj3XIje/Od4gdUwjbFo3cVuWq5Cw5Y1d3/xwgIS7/XpQQ==}
+    dev: false
+
+  /rrweb@2.0.0-alpha.4:
+    resolution: {integrity: sha512-wEHUILbxDPcNwkM3m4qgPgXAiBJyqCbbOHyVoNEVBJzHszWEFYyTbrZqUdeb1EfmTRC2PsumCIkVcomJ/xcOzA==}
+    dependencies:
+      '@rrweb/types': 2.0.0-alpha.13
+      '@types/css-font-loading-module': 0.0.7
+      '@xstate/fsm': 1.6.5
+      base64-arraybuffer: 1.0.2
+      fflate: 0.4.8
+      mitt: 3.0.1
+      rrdom: 0.1.7
+      rrweb-snapshot: 2.0.0-alpha.4
+    dev: false
 
   /run-async@3.0.0:
     resolution: {integrity: sha512-540WwVDOMxA6dN6We19EcT9sc3hkXPw5mzRNGM3FkdN/vtE9NFvj5lFAPNwUDmJjXidm3v7TC1cTE7t17Ulm1Q==}
