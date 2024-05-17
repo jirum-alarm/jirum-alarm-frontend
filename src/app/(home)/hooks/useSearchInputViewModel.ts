@@ -1,3 +1,4 @@
+import { mp } from '@/lib/mixpanel';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
@@ -14,6 +15,10 @@ export const useSearchInputViewModel = () => {
       current.set('keyword', inputRef.current.value);
       const search = current.toString();
       router.replace(`/?${search}`);
+
+      mp.track('Product Search', {
+        keyword: current.get('keyword'),
+      });
     }
   };
   const handleReset = () => {
