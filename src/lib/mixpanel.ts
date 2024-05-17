@@ -18,6 +18,12 @@ class MixpanelService {
         ignore_dnt: true,
       });
       MixpanelService.instance = mixpanel;
+    } else {
+      // mock when not prd
+      MixpanelService.instance = {} as any;
+      MixpanelService.instance.track = (event: string, props?: any) => {
+        console.info('Mixpanel track:', event, props);
+      };
     }
 
     return MixpanelService.instance;
