@@ -1,7 +1,7 @@
 import { QueryProducts } from '@/graphql';
 import { QueryCategories } from '@/graphql/category';
 import { IProductOutput } from '@/graphql/interface/product';
-import { ICategoryOutput } from '@/graphql/interface/category';
+import { ICategory, ICategoryOutput } from '@/graphql/interface/category';
 import { useDevice } from '@/hooks/useDevice';
 import { useQuery, useSuspenseQuery } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
@@ -14,13 +14,22 @@ const allCategory = { id: '0', name: '전체' };
 export const useProductListViewModel = () => {
   const searchParams = useSearchParams();
 
+  const [allCategories, setAllCategories] = useState<ICategory[]>([allCategory]);
   const [hasNextData, setHasNextData] = useState(true);
   const { isMobile } = useDevice();
-  const categoryParam = searchParams.get('categoryId');
+  const tabIndexParam = searchParams.get('tab-index');
+  const categoryParam = searchParams.get('category-id');
   const keywordParam = searchParams.get('keyword');
-  const activeTab = categoryParam ? Number(categoryParam) + 1 : 0;
+  const activeTab = +(tabIndexParam || 0);
 
   const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
+
+  const { data: { products: initialProducts } = {} } = useQuery<IProductOutput>(QueryProducts, {
+    variables: {
+      limit,
+      keyword: keywordParam || undefined,
+    },
+  });
 
   const {
     data: { products } = {},
@@ -30,7 +39,7 @@ export const useProductListViewModel = () => {
     variables: {
       limit,
       keyword: keywordParam || undefined,
-      categoryId: categoryParam ? Number(categoryParam) : undefined,
+      categoryId: categoryParam === '0' ? undefined : Number(categoryParam),
     },
   });
 
@@ -49,19 +58,23 @@ export const useProductListViewModel = () => {
     },
   });
 
-  const handleTabChange = (index: number) => {
+  const handleTabChange = (_index: number, _last?: number, event?: Event) => {
+    const target = event?.target as HTMLElement;
+    const tabIndex = target?.dataset['tabIndex'];
+    const categoryId = target?.dataset['categoryId'];
+
     const current = new URLSearchParams(Array.from(searchParams.entries()));
-    if (index > 0) {
-      current.set('categoryId', String(index - 1));
-    } else {
-      current.delete('categoryId');
-    }
+    tabIndex && current.set('tab-index', tabIndex);
+    categoryId && current.set('category-id', categoryId);
+
     const search = current.toString();
+
     history.pushState({}, '', '?' + search);
   };
 
   const fetchMoreProducts = () => {
     const searchAfter = products?.at(-1)?.searchAfter;
+
     fetchMore({
       variables: {
         searchAfter,
@@ -85,16 +98,30 @@ export const useProductListViewModel = () => {
     setHasNextData(true);
   }, [keywordParam, categoryParam]);
 
+  useEffect(() => {
+    const allExistCategories = [allCategory].concat(
+      categoriesData.categories.filter((category) =>
+        Array.from(
+          new Set(initialProducts?.map((product) => product.categoryId?.toString())),
+        ).includes(category.id),
+      ),
+    );
+    setAllCategories(allExistCategories);
+  }, [categoriesData.categories, initialProducts, keywordParam, products]);
+
   return {
     loading,
     activeTab,
     handleTabChange,
     isMobile,
     allCategory,
+    initialProducts,
     products,
     hotDeals,
     categoriesData,
+    allCategories,
     hasNextData,
-    ref,
+    nextDataRef: ref,
+    keyword: keywordParam,
   };
 };
