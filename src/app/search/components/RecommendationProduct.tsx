@@ -55,6 +55,7 @@ function ProductImageCard({
   const handleClick = () => {
     mp.track('Product Click', {
       product,
+      page: 'Search',
     });
   };
 

@@ -2,6 +2,7 @@
 
 import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
+import { mp } from '@/lib/mixpanel';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
@@ -41,6 +42,12 @@ function Chip({ keyword }: { keyword: string }) {
 
   const handleClick = () => {
     router.push(`/search?keyword=${keyword}&tab-index=0&category-id=0`);
+
+    mp.track('Keyword Click', {
+      keyword,
+      type: 'Recent',
+      page: 'Serach',
+    });
   };
 
   return (

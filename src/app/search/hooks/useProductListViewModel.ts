@@ -7,6 +7,7 @@ import { useQuery, useSuspenseQuery } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { mp } from '@/lib/mixpanel';
 
 const limit = 20;
 const allCategory = { id: '0', name: '전체' };
@@ -62,14 +63,19 @@ export const useProductListViewModel = () => {
     const target = event?.target as HTMLElement;
     const tabIndex = target?.dataset['tabIndex'];
     const categoryId = target?.dataset['categoryId'];
-
     const current = new URLSearchParams(Array.from(searchParams.entries()));
+
     tabIndex && current.set('tab-index', tabIndex);
     categoryId && current.set('category-id', categoryId);
 
     const search = current.toString();
 
     history.pushState({}, '', '?' + search);
+
+    mp.track('Category Check', {
+      category: categoriesData.categories.find((category) => category.id === categoryId),
+      page: 'Search',
+    });
   };
 
   const fetchMoreProducts = () => {
