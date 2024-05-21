@@ -7,12 +7,16 @@ import { cn } from '@/lib/cn';
 import useScreenSize from '@/hooks/useScreenSize';
 import { mp } from '@/lib/mixpanel';
 
+type Page = 'Home' | 'Search';
+
 export default function ProductRecommendation({
   products,
   hotDeals,
+  page,
 }: {
   products: IProduct[];
   hotDeals: IProduct[] | undefined;
+  page: Page;
 }) {
   const { lg, md, sm } = useScreenSize();
   const firstRenderingCount = lg ? 15 : md ? 12 : sm ? 9 : 6;
@@ -23,7 +27,7 @@ export default function ProductRecommendation({
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
         {products
           ?.slice(0, firstRenderingCount)
-          .map((product, i) => <ProductImageCard key={i} product={product} />)}
+          .map((product, i) => <ProductImageCard key={i} product={product} page={page} />)}
       </div>
 
       {hotDeals && (
@@ -49,7 +53,7 @@ export default function ProductRecommendation({
             >
               {hotDeals.slice(0, hotDealCount).map((hotDeal, i) => (
                 <SwiperSlide key={i}>
-                  <ProductImageCard product={hotDeal} type="hotDeal" />
+                  <ProductImageCard product={hotDeal} type="hotDeal" page={page} />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -60,7 +64,7 @@ export default function ProductRecommendation({
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
         {products
           ?.slice(firstRenderingCount)
-          .map((product, i) => <ProductImageCard key={i} product={product} />)}
+          .map((product, i) => <ProductImageCard key={i} product={product} page={page} />)}
       </div>
     </>
   );
@@ -68,14 +72,17 @@ export default function ProductRecommendation({
 
 function ProductImageCard({
   product,
+  page,
   type = 'product',
 }: {
   product: IProduct;
+  page: Page;
   type?: 'product' | 'hotDeal';
 }) {
   const handleClick = () => {
     mp.track('Product Click', {
       product,
+      page,
     });
   };
 

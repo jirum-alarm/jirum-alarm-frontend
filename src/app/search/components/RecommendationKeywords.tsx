@@ -1,5 +1,6 @@
 'use client';
 
+import { mp } from '@/lib/mixpanel';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -49,6 +50,12 @@ function Chip({ keyword }: { keyword: string }) {
 
   const handleClick = () => {
     router.push(`/search?keyword=${keyword}&tab-index=0&category-id=0`);
+
+    mp.track('Keyword Click', {
+      keyword,
+      type: 'Recommendation',
+      page: 'Serach',
+    });
   };
 
   return (

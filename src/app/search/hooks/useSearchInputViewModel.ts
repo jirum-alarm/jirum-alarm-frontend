@@ -27,6 +27,7 @@ export const useSearchInputViewModel = () => {
 
       mp.track('Product Search', {
         keyword,
+        page: 'Search',
       });
 
       const recentKeywords = JSON.parse(

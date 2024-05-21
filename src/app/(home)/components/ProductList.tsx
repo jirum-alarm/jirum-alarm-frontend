@@ -74,7 +74,7 @@ const ProductList = () => {
 
                 return (
                   <TabPanel key={key}>
-                    {!products || products.length === 0  ? (
+                    {!products || products.length === 0 ? (
                       <div className="flex min-h-[500px]">
                         <ProductNotFound />
                       </div>
@@ -82,6 +82,7 @@ const ProductList = () => {
                       <ProductRecommendation
                         products={products}
                         hotDeals={category.id === '0' ? hotDeals : undefined}
+                        page="Home"
                       />
                     )}
                   </TabPanel>
