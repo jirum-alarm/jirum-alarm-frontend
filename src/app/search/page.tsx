@@ -2,7 +2,7 @@
 
 import { TopButton } from '@/components/TopButton';
 import { IProductOutput } from '@/graphql/interface';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ProductLoading from '../(home)/components/ProductLoading';
 import ProductNotFound from '../(home)/components/ProductNotFound';
 import RecentKeywords from './components/RecentKeywords';
@@ -14,14 +14,31 @@ import { useQuery } from '@apollo/client';
 import { QueryProducts } from '@/graphql';
 import ProductList from './components/ProductList';
 import { cn } from '@/lib/cn';
+import { throttle } from 'lodash';
 
 export default function Search() {
+  const [showSearchBar, setShowSearchBar] = useState(true);
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+
   const productViewModel = useProductListViewModel();
+
+  const handleScroll = useCallback(() => {
+    throttle(() => {
+      const currentScrollPos = window.scrollY;
+      setShowSearchBar(prevScrollPos > currentScrollPos || currentScrollPos < 10);
+      setPrevScrollPos(currentScrollPos);
+    }, 300)();
+  }, [prevScrollPos]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   return (
     <div className="mx-auto max-w-screen-lg px-5">
       <header>
-        <SearchInput />
+        <SearchInput show={showSearchBar} />
       </header>
       <main>
         <InitialResult show={!productViewModel.keyword} />

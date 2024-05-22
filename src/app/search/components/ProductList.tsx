@@ -4,6 +4,7 @@ import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { EVENT } from '@/constants/mixpanel';
+import React from 'react';
 
 export default function ProductList({ products }: { products: IProduct[] }) {
   return (
@@ -77,7 +78,13 @@ function ProductImageCard({
   );
 }
 
-function ImageWithFallback({ src, title }: { src: string | undefined; title: string }) {
+const ImageWithFallback = React.memo(function ImageWithFallback({
+  src,
+  title,
+}: {
+  src: string | undefined;
+  title: string;
+}) {
   const [error, setError] = useState(false);
 
   return error || !src ? (
@@ -95,7 +102,7 @@ function ImageWithFallback({ src, title }: { src: string | undefined; title: str
       blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
     />
   );
-}
+});
 
 function NoImage() {
   return (
