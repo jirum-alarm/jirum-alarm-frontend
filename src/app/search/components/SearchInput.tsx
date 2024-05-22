@@ -11,10 +11,10 @@ const SearchInput = ({ show }: { show: boolean }) => {
   const { keyword, inputRef, onKeyDown, handleChange, handleReset } = useSearchInputViewModel();
 
   return (
-    <div>
+    <>
       <div
         className={cn(
-          'fixed z-50 flex w-[90vw] max-w-screen-lg items-center justify-between gap-x-3 rounded bg-white py-2',
+          'fixed z-50 flex w-[calc(100vw-2.5rem)] max-w-screen-lg items-center justify-between gap-x-3 rounded bg-white py-4',
           show
             ? 'flex opacity-100 transition-opacity duration-150'
             : 'opacity-0 transition-opacity duration-150',
@@ -38,7 +38,7 @@ const SearchInput = ({ show }: { show: boolean }) => {
         </Link>
       </div>
       <div className="h-14"></div>
-    </div>
+    </>
   );
 };
 
