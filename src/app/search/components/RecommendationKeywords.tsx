@@ -1,5 +1,6 @@
 'use client';
 
+import { EVENT } from '@/constants/mixpanel';
 import { mp } from '@/lib/mixpanel';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -25,6 +26,11 @@ const KEYWORDS = [
   '키보드',
   '닭가슴살',
   '사이다',
+  '맥북',
+  '갤럭시',
+  '아이폰',
+  '콜라',
+  '치킨',
 ];
 
 export default function RecommendationKeywords() {
@@ -49,12 +55,12 @@ function Chip({ keyword }: { keyword: string }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/search?keyword=${keyword}&tab-index=0&category-id=0`);
+    router.push(`/search?keyword=${keyword}`);
 
-    mp.track('Keyword Click', {
+    mp.track(EVENT.productSearch.name, {
       keyword,
-      type: 'Recommendation',
-      page: 'Serach',
+      type: EVENT.productSearch.type.recommendation,
+      page: EVENT.page.search,
     });
   };
 

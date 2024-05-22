@@ -1,15 +1,22 @@
+import { EVENT } from '@/constants/mixpanel';
 import { mp } from '@/lib/mixpanel';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const RECENT_KEYWORDS_KEY = 'gr-recent-keywords';
 const RECENT_KEYWORDS_LIMIT = 10;
 
 export const useSearchInputViewModel = () => {
+  const [isKeywordExist, setIsKeywordExsit] = useState(false);
+
   const searchParams = useSearchParams();
   const keyword = searchParams.get('keyword') ?? '';
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.currentTarget.value ? setIsKeywordExsit(true) : setIsKeywordExsit(false);
+  };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const keyword = event.currentTarget.value;
@@ -25,9 +32,10 @@ export const useSearchInputViewModel = () => {
 
       router.replace(`/search?${search}`);
 
-      mp.track('Product Search', {
+      mp.track(EVENT.productSearch.name, {
         keyword,
-        page: 'Search',
+        type: EVENT.productSearch.type.input,
+        page: EVENT.page.search,
       });
 
       const recentKeywords = JSON.parse(
@@ -47,6 +55,11 @@ export const useSearchInputViewModel = () => {
     }
   };
   const handleReset = () => {
+    if (inputRef.current?.value) {
+      inputRef.current.value = '';
+    }
+
+    setIsKeywordExsit(false);
     router.push(`/search`);
   };
 
@@ -58,5 +71,5 @@ export const useSearchInputViewModel = () => {
     inputRef.current.value = keyword ?? '';
   }, [keyword]);
 
-  return { inputRef, onKeyDown, handleReset };
+  return { inputRef, isKeywordExist, onKeyDown, handleChange, handleReset };
 };

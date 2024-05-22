@@ -1,47 +1,17 @@
-'use client';
-
+import { useState } from 'react';
 import Image from 'next/image';
 import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
-import { useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import useScreenSize from '@/hooks/useScreenSize';
 import { EVENT } from '@/constants/mixpanel';
+import React from 'react';
 
-export default function RecommendationProduct({ hotDeals }: { hotDeals: IProduct[] }) {
-  const { lg, md, sm } = useScreenSize();
-  const hotDealCount = lg ? 10 : md ? 8 : sm ? 6 : 5;
-
+export default function ProductList({ products }: { products: IProduct[] }) {
   return (
-    <div className="py-11">
-      <h2 className="py-4">
-        <span className=" text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
-      </h2>
-      <div
-        onTouchStartCapture={(e) => {
-          e.stopPropagation();
-        }}
-        onTouchMoveCapture={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <Swiper
-          spaceBetween={12}
-          slidesPerView={3}
-          breakpoints={{
-            640: { slidesPerView: 4 },
-            1024: { slidesPerView: 6 },
-          }}
-        >
-          {hotDeals.slice(0, hotDealCount).map((hotDeal, i) => (
-            <SwiperSlide key={i}>
-              <ProductImageCard product={hotDeal} type="hotDeal" />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+    <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
+      {products.map((product, i) => (
+        <ProductImageCard key={i} product={product} />
+      ))}
     </div>
   );
 }
@@ -108,7 +78,13 @@ function ProductImageCard({
   );
 }
 
-function ImageWithFallback({ src, title }: { src: string | undefined; title: string }) {
+const ImageWithFallback = React.memo(function ImageWithFallback({
+  src,
+  title,
+}: {
+  src: string | undefined;
+  title: string;
+}) {
   const [error, setError] = useState(false);
 
   return error || !src ? (
@@ -126,7 +102,7 @@ function ImageWithFallback({ src, title }: { src: string | undefined; title: str
       blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
     />
   );
-}
+});
 
 function NoImage() {
   return (

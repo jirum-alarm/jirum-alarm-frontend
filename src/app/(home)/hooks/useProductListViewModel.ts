@@ -8,6 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { mp } from '@/lib/mixpanel';
+import { EVENT } from '@/constants/mixpanel';
 
 const limit = 20;
 const allCategory = { id: '0', name: '전체' };
@@ -60,9 +61,9 @@ export const useProductListViewModel = () => {
     const search = current.toString();
     history.pushState({}, '', '?' + search);
 
-    mp.track('Category Check', {
+    mp.track(EVENT.categoryCheck.name, {
       category: categoriesData.categories.find((category) => category.id === String(index)),
-      page: 'Home',
+      page: EVENT.page.home,
     });
   };
 

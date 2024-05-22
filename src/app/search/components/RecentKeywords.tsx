@@ -1,5 +1,6 @@
 'use client';
 
+import { EVENT } from '@/constants/mixpanel';
 import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
@@ -18,22 +19,26 @@ export default function RecentKeywords() {
   }, []);
 
   return (
-    <section>
-      <h2 className="py-4">최근 검색어</h2>
-      <div className={cn(isMobile && 'no-scrollbar h-[42px] overflow-x-scroll')}>
-        {loading ? (
-          <div className="flex items-center text-sm">최근 검색어를 불러오는 중입니다...</div>
-        ) : (
-          <div className={cn('flex gap-2', !isMobile && 'flex-wrap')}>
-            {keywords.length !== 0 ? (
-              keywords.map((keyword, i) => <Chip key={i} keyword={keyword} />)
+    <>
+      {keywords.length > 0 && (
+        <section>
+          <h2 className="py-4">최근 검색어</h2>
+          <div className={cn(isMobile && 'no-scrollbar h-[42px] overflow-x-scroll')}>
+            {loading ? (
+              <div className="flex items-center text-sm">최근 검색어를 불러오는 중입니다...</div>
             ) : (
-              <span className="text-gray-400">검색 내역이 없어요.</span>
+              <div className={cn('flex gap-2', !isMobile && 'flex-wrap')}>
+                {keywords.length !== 0 ? (
+                  keywords.map((keyword, i) => <Chip key={i} keyword={keyword} />)
+                ) : (
+                  <span className="text-gray-400">검색 내역이 없어요.</span>
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
-    </section>
+        </section>
+      )}
+    </>
   );
 }
 
@@ -41,12 +46,12 @@ function Chip({ keyword }: { keyword: string }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/search?keyword=${keyword}&tab-index=0&category-id=0`);
+    router.push(`/search?keyword=${keyword}`);
 
-    mp.track('Keyword Click', {
+    mp.track(EVENT.productSearch.name, {
       keyword,
-      type: 'Recent',
-      page: 'Serach',
+      type: EVENT.productSearch.type.recent,
+      page: EVENT.page.search,
     });
   };
 
