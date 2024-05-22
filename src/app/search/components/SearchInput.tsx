@@ -6,7 +6,8 @@ import { Cancel, Home } from '@/components/common/icons';
 const HOME_PATH = '/';
 
 const SearchInput = () => {
-  const { inputRef, onKeyDown, handleReset } = useSearchInputViewModel();
+  const { inputRef, isKeywordExist, onKeyDown, handleChange, handleReset } =
+    useSearchInputViewModel();
 
   return (
     <div className="flex items-center justify-between gap-x-3 py-2">
@@ -14,12 +15,13 @@ const SearchInput = () => {
         <input
           className="h-10 w-full bg-gray-50 px-3 text-sm  outline-none"
           onKeyDown={onKeyDown}
+          onChange={handleChange}
           spellCheck={false}
           autoFocus
           placeholder="&nbsp;&nbsp;핫딜 제품을 검색해 주세요"
           ref={inputRef}
         />
-        <ResetButton handleReset={handleReset} />
+        {isKeywordExist && <ResetButton handleReset={handleReset} />}
       </div>
       <a href={HOME_PATH}>
         <Home />
