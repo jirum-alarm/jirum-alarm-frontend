@@ -1,6 +1,8 @@
+import Link from '@/features/Link';
+
 const SearchInput = () => {
   return (
-    <a href="/search">
+    <Link href="/search">
       <div className="mb-4 rounded bg-gray-50 ">
         <div className="relative mt-4 flex w-full items-center overflow-hidden">
           <div className="grid h-10 w-14 place-items-center text-gray-600">
@@ -24,7 +26,7 @@ const SearchInput = () => {
           </div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 };
 

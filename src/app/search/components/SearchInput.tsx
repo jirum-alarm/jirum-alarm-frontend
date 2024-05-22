@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useSearchInputViewModel } from '../hooks/useSearchInputViewModel';
 import { Cancel, Home } from '@/components/common/icons';
 
@@ -23,9 +24,9 @@ const SearchInput = () => {
         />
         {isKeywordExist && <ResetButton handleReset={handleReset} />}
       </div>
-      <a href={HOME_PATH}>
+      <Link href={HOME_PATH}>
         <Home />
-      </a>
+      </Link>
     </div>
   );
 };
