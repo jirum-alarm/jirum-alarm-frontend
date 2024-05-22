@@ -11,7 +11,6 @@ export const useProductListViewModel = () => {
   const searchParams = useSearchParams();
 
   const [hasNextData, setHasNextData] = useState(true);
-  const categoryParam = searchParams.get('category-id');
   const keywordParam = searchParams.get('keyword');
 
   const {
@@ -22,7 +21,6 @@ export const useProductListViewModel = () => {
     variables: {
       limit,
       keyword: keywordParam || undefined,
-      categoryId: categoryParam === '0' ? undefined : Number(categoryParam),
     },
   });
 
@@ -58,7 +56,7 @@ export const useProductListViewModel = () => {
 
   useEffect(() => {
     setHasNextData(true);
-  }, [keywordParam, categoryParam]);
+  }, [keywordParam]);
 
   return {
     loading,
