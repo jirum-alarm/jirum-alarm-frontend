@@ -82,7 +82,6 @@ const ProductList = () => {
                       <ProductRecommendation
                         products={products}
                         hotDeals={category.id === '0' ? hotDeals : undefined}
-                        page="Home"
                       />
                     )}
                   </TabPanel>
