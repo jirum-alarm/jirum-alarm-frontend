@@ -7,15 +7,22 @@ const RECENT_KEYWORDS_KEY = 'gr-recent-keywords';
 const RECENT_KEYWORDS_LIMIT = 10;
 
 export const useSearchInputViewModel = () => {
-  const [isKeywordExist, setIsKeywordExsit] = useState(false);
-
   const searchParams = useSearchParams();
-  const keyword = searchParams.get('keyword') ?? '';
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
+  const keywordParam = searchParams.get('keyword');
+
+  const [keyword, setKeyword] = useState(keywordParam);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.currentTarget.value ? setIsKeywordExsit(true) : setIsKeywordExsit(false);
+    const value = event?.currentTarget.value;
+
+    setKeyword(value);
+
+    if (value === '') {
+      router.push('/search');
+    }
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -55,21 +62,20 @@ export const useSearchInputViewModel = () => {
     }
   };
   const handleReset = () => {
-    if (inputRef.current?.value) {
-      inputRef.current.value = '';
-    }
+    setKeyword('');
 
-    setIsKeywordExsit(false);
     router.push(`/search`);
   };
 
   useEffect(() => {
-    if (!inputRef.current) {
-      return;
-    }
+    setKeyword(searchParams.get('keyword'));
+  }, [searchParams]);
 
-    inputRef.current.value = keyword ?? '';
-  }, [keyword]);
-
-  return { inputRef, isKeywordExist, onKeyDown, handleChange, handleReset };
+  return {
+    keyword,
+    inputRef,
+    onKeyDown,
+    handleChange,
+    handleReset,
+  };
 };

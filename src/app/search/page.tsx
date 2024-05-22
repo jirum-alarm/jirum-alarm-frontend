@@ -15,12 +15,14 @@ import { QueryProducts } from '@/graphql';
 import ProductList from './components/ProductList';
 import { cn } from '@/lib/cn';
 import { throttle } from 'lodash';
+import { useSearchInputViewModel } from './hooks/useSearchInputViewModel';
 
 export default function Search() {
   const [showSearchBar, setShowSearchBar] = useState(true);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
 
   const productViewModel = useProductListViewModel();
+  const searchProductViewModel = useSearchInputViewModel();
 
   const handleScroll = useCallback(() => {
     throttle(() => {
@@ -38,11 +40,11 @@ export default function Search() {
   return (
     <div className="mx-auto max-w-screen-lg px-5">
       <header>
-        <SearchInput show={showSearchBar} />
+        <SearchInput show={showSearchBar} {...searchProductViewModel} />
       </header>
       <main>
-        <InitialResult show={!productViewModel.keyword} />
-        <SearchResult show={!!productViewModel.keyword} {...productViewModel} />
+        <InitialResult show={!searchProductViewModel.keyword} />
+        <SearchResult show={!!searchProductViewModel.keyword} {...productViewModel} />
       </main>
     </div>
   );
