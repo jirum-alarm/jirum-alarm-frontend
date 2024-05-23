@@ -22,6 +22,7 @@ export const useProductListViewModel = () => {
       limit,
       keyword: keywordParam || undefined,
     },
+    skip: !keywordParam,
   });
 
   const { ref } = useInView({
