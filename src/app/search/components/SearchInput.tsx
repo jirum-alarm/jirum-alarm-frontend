@@ -14,7 +14,7 @@ const SearchInput = ({ show }: { show: boolean }) => {
     <>
       <div
         className={cn(
-          'fixed z-50 flex w-[calc(100vw-2.5rem)] max-w-screen-lg items-center justify-between gap-x-3 rounded bg-white py-4',
+          'fixed z-50  ml-[-20px] flex w-full  max-w-screen-lg items-center justify-between gap-x-3 rounded bg-white px-5 py-4',
           show
             ? 'flex opacity-100 transition-opacity duration-150'
             : 'opacity-0 transition-opacity duration-150',
