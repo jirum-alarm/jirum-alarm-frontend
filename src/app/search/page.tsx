@@ -93,7 +93,7 @@ function SearchResult({
           <ProductLoading />
         </div>
       ) : (
-        <div className="flex justify-center pt-5">
+        <div className="flex justify-center pb-10 pt-5">
           {products?.length === 0 || !products ? (
             <div className="flex min-h-[500px]">
               <ProductNotFound />
