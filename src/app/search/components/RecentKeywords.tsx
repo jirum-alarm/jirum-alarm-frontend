@@ -4,7 +4,7 @@ import { EVENT } from '@/constants/mixpanel';
 import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 export default function RecentKeywords() {
@@ -13,10 +13,12 @@ export default function RecentKeywords() {
 
   const { isMobile } = useDevice();
 
+  const searchParams = useSearchParams();
+
   useEffect(() => {
     setKeywords(JSON.parse(localStorage.getItem('gr-recent-keywords') ?? '[]'));
     setLoading(false);
-  }, []);
+  }, [searchParams]);
 
   return (
     <>
