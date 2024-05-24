@@ -45,20 +45,7 @@ export const useSearchInputViewModel = () => {
         page: EVENT.page.search,
       });
 
-      const recentKeywords = JSON.parse(
-        localStorage.getItem(RECENT_KEYWORDS_KEY) ?? '[]',
-      ) as unknown as string[];
-
-      if (recentKeywords.includes(keyword)) {
-        return;
-      }
-
-      recentKeywords.unshift(keyword);
-
-      localStorage.setItem(
-        RECENT_KEYWORDS_KEY,
-        JSON.stringify(recentKeywords.slice(0, RECENT_KEYWORDS_LIMIT)),
-      );
+      setRecentKeyord(keyword);
     }
   };
   const handleReset = () => {
@@ -68,7 +55,10 @@ export const useSearchInputViewModel = () => {
   };
 
   useEffect(() => {
-    setKeyword(searchParams.get('keyword'));
+    const keyword = searchParams.get('keyword');
+
+    setKeyword(keyword);
+    setRecentKeyord(keyword ? keyword : '');
   }, [searchParams]);
 
   return {
@@ -79,3 +69,25 @@ export const useSearchInputViewModel = () => {
     handleReset,
   };
 };
+
+function setRecentKeyord(keyword: string) {
+  if (!keyword.trim()) {
+    return;
+  }
+
+  const recentKeywords = JSON.parse(
+    localStorage.getItem(RECENT_KEYWORDS_KEY) ?? '[]',
+  ) as unknown as string[];
+
+  if (recentKeywords.includes(keyword)) {
+    const existKeywordIndex = recentKeywords.indexOf(keyword);
+    recentKeywords.splice(existKeywordIndex, 1);
+  }
+
+  recentKeywords.unshift(keyword);
+
+  localStorage.setItem(
+    RECENT_KEYWORDS_KEY,
+    JSON.stringify(recentKeywords.slice(0, RECENT_KEYWORDS_LIMIT)),
+  );
+}

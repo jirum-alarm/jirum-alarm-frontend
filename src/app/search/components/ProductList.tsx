@@ -65,7 +65,7 @@ function ProductImageCard({
       <div className="flex flex-col">
         <span
           className={cn({
-            'line-clamp-2 break-words pt-2 text-sm text-gray-700': true,
+            'line-clamp-2 h-12 break-words pt-2 text-sm text-gray-700': true,
           })}
         >
           {product.title}
