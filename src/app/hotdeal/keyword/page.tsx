@@ -1,19 +1,16 @@
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import React from 'react';
 import KeywordInputChip from './components/KeywordInputChip';
+import KeywordResult from './components/KeywordResult';
 
 const KeywordPage = () => {
   return (
     <DefaultLayout>
-      <KeywordInputChip />
-      <div className="my-6">
-        <h1 className="mb-2 text-black">매칭된 댓글 목록 결과</h1>
-        <div className="h-40 w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input">
-          덕분에 잘 샀어요 <br />
-          바로 샀네요 <br />
-          삿어요
-        </div>
+      <div className="flex flex-col gap-2">
+        <KeywordInputChip />
+        <KeywordResult />
       </div>
+
       <div>
         <h1 className="text-black">1.부정적인지 긍정적인지 선택</h1>
         <button className="mr-3 inline-flex items-center justify-center bg-black px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">

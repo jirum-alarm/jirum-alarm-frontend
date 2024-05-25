@@ -8,6 +8,18 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   darkMode: 'class',
+  // Tailwind가 사용자 정의 유틸리티 클래스를 인식하도록 설정
+  addUtilities: () => ({
+    '.no-scrollbar': {
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      '&::-webkit-scrollbar': {
+        display: 'none',
+      },
+      /* Hide scrollbar for IE, Edge and Firefox */
+      '-ms-overflow-style': 'none' /* IE and Edge */,
+      'scrollbar-width': 'none' /* Firefox */,
+    },
+  }),
   theme: {
     fontFamily: {
       satoshi: ['Satoshi', 'sans-serif'],
@@ -309,6 +321,10 @@ const config: Config = {
           '0%, 100%': { transform: 'translateY(100%)' },
           '50%': { transform: 'translateY(0)' },
         },
+        blink: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0' },
+        },
       },
       animation: {
         linspin: 'linspin 1568.2353ms linear infinite',
@@ -325,6 +341,7 @@ const config: Config = {
         line1: 'line 10s infinite linear',
         line2: 'line-revert 8s infinite linear',
         line3: 'line 7s infinite linear',
+        blink: 'blink 1s infinite',
       },
     },
   },

@@ -3,6 +3,7 @@ import Chip from '@/components/Chip';
 
 import { useState } from 'react';
 import useKeywordManager from '../hooks/useKeywordManager';
+import Card from './Card';
 
 const KeywordInputChip = () => {
   const { keywords, addKeyword, removeKeyword } = useKeywordManager();
@@ -25,8 +26,8 @@ const KeywordInputChip = () => {
   };
 
   return (
-    <div className="rounded-lg bg-white p-5">
-      <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+    <Card>
+      <label className="mb-3 block text-base font-medium text-black dark:text-white">
         키워드 입력
       </label>
       <input
@@ -44,7 +45,7 @@ const KeywordInputChip = () => {
           </Chip>
         ))}
       </div>
-    </div>
+    </Card>
   );
 };
 
