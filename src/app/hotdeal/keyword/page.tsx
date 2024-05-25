@@ -1,31 +1,11 @@
-'use client';
-import Chip from '@/components/Chip';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import React from 'react';
+import KeywordInputChip from './components/KeywordInputChip';
 
 const KeywordPage = () => {
   return (
     <DefaultLayout>
-      <div className="rounded-lg bg-white p-5">
-        <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-          키워드 입력
-        </label>
-        <div className="mb-2 flex gap-2">
-          <Chip
-            onClick={() => console.log('click')}
-            onDelete={() => console.log('delete')}
-            closable
-          >
-            태그
-          </Chip>
-          <Chip>태그</Chip>
-        </div>
-        <input
-          type="text"
-          placeholder="추가할 키워드를 입력해주세요"
-          className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-        />
-      </div>
+      <KeywordInputChip />
       <div className="my-6">
         <h1 className="mb-2 text-black">매칭된 댓글 목록 결과</h1>
         <div className="h-40 w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input">

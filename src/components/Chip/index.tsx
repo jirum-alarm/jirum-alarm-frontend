@@ -1,11 +1,10 @@
 interface Props {
   children: React.ReactNode;
-  closable?: boolean;
   onClick?: () => void;
   onDelete?: () => void;
 }
 
-const Chip = ({ children, closable, onClick, onDelete }: Props) => {
+const Chip = ({ children, onClick, onDelete }: Props) => {
   return (
     <button
       tabIndex={0}
@@ -13,7 +12,7 @@ const Chip = ({ children, closable, onClick, onDelete }: Props) => {
       onClick={onClick}
     >
       <span className=" px-3 text-[13px] text-zinc-800">{children}</span>
-      {closable && (
+      {onDelete && (
         <svg
           onClick={(e) => {
             e.stopPropagation();
