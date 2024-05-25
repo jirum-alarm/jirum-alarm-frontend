@@ -27,9 +27,7 @@ const KeywordInputChip = () => {
 
   return (
     <Card>
-      <label className="mb-3 block text-base font-medium text-black dark:text-white">
-        키워드 입력
-      </label>
+      <h2 className=" mb-3 block text-xl font-medium text-black dark:text-white">키워드 입력</h2>
       <input
         type="text"
         placeholder="추가할 키워드를 입력해주세요"

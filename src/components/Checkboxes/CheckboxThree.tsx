@@ -1,14 +1,11 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const CheckboxThree = () => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   return (
     <div>
-      <label
-        htmlFor="checkboxLabelThree"
-        className="flex cursor-pointer select-none items-center"
-      >
+      <label htmlFor="checkboxLabelThree" className="flex cursor-pointer select-none items-center">
         <div className="relative">
           <input
             type="checkbox"
@@ -20,14 +17,10 @@ const CheckboxThree = () => {
           />
           <div
             className={`box mr-4 flex h-5 w-5 items-center justify-center rounded border ${
-              isChecked && "border-primary bg-gray dark:bg-transparent"
+              isChecked && 'border-primary bg-gray dark:bg-transparent'
             }`}
           >
-            <span
-              className={`text-primary opacity-0 ${
-                isChecked && "!opacity-100"
-              }`}
-            >
+            <span className={`text-primary opacity-0 ${isChecked && '!opacity-100'}`}>
               <svg
                 className="h-3.5 w-3.5 stroke-current"
                 fill="none"
