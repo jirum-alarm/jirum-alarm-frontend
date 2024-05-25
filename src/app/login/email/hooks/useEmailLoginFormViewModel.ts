@@ -5,6 +5,10 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useToast } from '../../../../components/common/Toast';
+import { TokenType, addPushTokenVariable } from '@/graphql/interface';
+import { MutationAddPushToken } from '@/graphql/notification';
+import { useRecoilValue } from 'recoil';
+import { fcmTokenAtom } from '@/state/fcmToken';
 
 const HOME_PATH = '/';
 
@@ -40,6 +44,13 @@ const useEmailLoginFormViewModel = () => {
   });
 
   const router = useRouter();
+  const fcmToken = useRecoilValue(fcmTokenAtom);
+
+  const [addPushToken] = useMutation<unknown, addPushTokenVariable>(MutationAddPushToken, {
+    onError: (e) => {
+      console.error(e);
+    },
+  });
 
   const [login] = useMutation<ILoginOutput, ILoginVariable>(MutationLogin, {
     onCompleted: (data) => {
@@ -51,6 +62,13 @@ const useEmailLoginFormViewModel = () => {
 
       toast('로그인에 성공했어요.');
       router.replace(HOME_PATH);
+
+      if (!fcmToken) {
+        console.error('fcmToken is not exist');
+        return;
+      }
+
+      addPushToken({ variables: { token: fcmToken, tokenType: TokenType.FCM } });
     },
     onError: () => {
       setLoginForm((prev) => ({ ...prev, error: true }));

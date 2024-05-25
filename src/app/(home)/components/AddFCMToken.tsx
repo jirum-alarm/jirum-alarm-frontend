@@ -5,11 +5,11 @@ import { fcmTokenAtom } from '@/state/fcmToken';
 import { useMutation } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 const AddFCMToken = () => {
   const searchParams = useSearchParams();
-  const fcmWebToken = useRecoilValue(fcmTokenAtom);
+  const [fcmToken, setFcmToken] = useRecoilState(fcmTokenAtom);
 
   const [addPushToken] = useMutation<unknown, addPushTokenVariable>(MutationAddPushToken, {
     onError: (e) => {
@@ -28,14 +28,15 @@ const AddFCMToken = () => {
 
   useEffect(() => {
     const fcmAppToken = searchParams.get('token');
+    setFcmToken(fcmAppToken);
     if (!fcmAppToken) return;
     addTokenToServer(fcmAppToken);
-  }, [addTokenToServer, searchParams]);
+  }, [addTokenToServer, searchParams, setFcmToken]);
 
   useEffect(() => {
-    if (!fcmWebToken) return;
-    addTokenToServer(fcmWebToken);
-  }, [addTokenToServer, fcmWebToken]);
+    if (!fcmToken) return;
+    addTokenToServer(fcmToken);
+  }, [addTokenToServer, fcmToken]);
 
   return null;
 };
