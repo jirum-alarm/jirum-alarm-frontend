@@ -1,4 +1,4 @@
-import Card from './Card';
+import Card from '../../../../components/Card';
 import RadioButton from './RadioButton';
 
 const SynonymRegister = () => {
@@ -7,12 +7,14 @@ const SynonymRegister = () => {
       <h2 className="mb-3 block text-xl font-medium text-black dark:text-white">유의어 등록</h2>
       <div className="flex flex-col gap-4">
         <div>
-          <h2 className="text-black">1.부정적인지 긍정적인지 선택</h2>
-          <RadioButton text="부정" />
-          <RadioButton text="긍정" />
+          <h2 className="mb-2 text-black">유형</h2>
+          <div>
+            <RadioButton text="부정" />
+            <RadioButton text="긍정" />
+          </div>
         </div>
         <div>
-          <h2 className="text-black">2. 대표 키워드를 입력해주세요</h2>
+          <h2 className="mb-2 text-black">대표 키워드</h2>
           <div className="flex h-10">
             <button className="inline-flex h-full w-12 items-center justify-center rounded-l-lg bg-black text-center font-medium text-white hover:bg-opacity-90">
               <svg
@@ -35,7 +37,7 @@ const SynonymRegister = () => {
           </div>
         </div>
         <div>
-          <h2 className="text-black">3.추가할 유의어를 등록해주세요</h2>
+          <h2 className="mb-2 text-black">추가할 유의어</h2>
           <div className="h-10">
             <input
               type="text"
@@ -45,11 +47,11 @@ const SynonymRegister = () => {
           </div>
         </div>
         <div>
-          <h2 className="text-black">4.제외할 유의어를 등록해주세요</h2>
+          <h2 className="mb-2 text-black">제외할 유의어</h2>
           <div className="h-10">
             <input
               type="text"
-              placeholder="유의어 제외"
+              placeholder="쉼표로 구분해서 등록"
               className="h-full w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
             />
           </div>

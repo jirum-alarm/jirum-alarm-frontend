@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import Card from './Card';
+import Card from '../../../../components/Card';
 import TypingEffectContainer from './TypingEffectContainer';
 
 const texte = `덕분에 잘 샀어요 \n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가`;

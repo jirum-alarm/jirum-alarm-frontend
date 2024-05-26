@@ -320,9 +320,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           </li>
                           <li>
                             <Link
-                              href="/hotdeal/keyword-list"
+                              href="/hotdeal/primary-keywords"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/hotdeal/keyword-list' && 'text-white'
+                                pathname === '/hotdeal/primary-keywords' && 'text-white'
                               }`}
                             >
                               키워드 목록

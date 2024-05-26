@@ -3,7 +3,7 @@ import Chip from '@/components/Chip';
 
 import { useState } from 'react';
 import useKeywordManager from '../hooks/useKeywordManager';
-import Card from './Card';
+import Card from '../../../../components/Card';
 
 const KeywordInputChip = () => {
   const { keywords, addKeyword, removeKeyword } = useKeywordManager();
