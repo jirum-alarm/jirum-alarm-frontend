@@ -5,6 +5,7 @@ import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { EVENT } from '@/constants/mixpanel';
 import React from 'react';
+import { IllustStanding } from '@/components/common/icons';
 
 export default function ProductList({ products }: { products: IProduct[] }) {
   return (
@@ -106,12 +107,8 @@ const ImageWithFallback = React.memo(function ImageWithFallback({
 
 function NoImage() {
   return (
-    <div className="flex h-full items-center justify-center bg-gray-100">
-      <span className="text-center text-sm text-gray-300">
-        상품 이미지
-        <br />
-        준비중입니다
-      </span>
+    <div className="flex h-full items-center justify-center bg-gray-50">
+      <IllustStanding />
     </div>
   );
 }

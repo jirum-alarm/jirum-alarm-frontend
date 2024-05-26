@@ -7,6 +7,7 @@ import { cn } from '@/lib/cn';
 import useScreenSize from '@/hooks/useScreenSize';
 import { mp } from '@/lib/mixpanel';
 import { EVENT } from '@/constants/mixpanel';
+import { IllustStanding, IllustStandingSmall } from '@/components/common/icons';
 
 export default function ProductRecommendation({
   products,
@@ -111,7 +112,7 @@ function ProductImageCard({
             {product.isEnd ? '판매종료' : product.isHot ? '핫딜' : ''}
           </div>
         )}
-        <ImageWithFallback src={product?.thumbnail} title={product.title} />
+        <ImageWithFallback src={product?.thumbnail} title={product.title} type={type} />
       </div>
       <div className="flex flex-col">
         <span
@@ -129,11 +130,19 @@ function ProductImageCard({
   );
 }
 
-function ImageWithFallback({ src, title }: { src: string | undefined; title: string }) {
+function ImageWithFallback({
+  src,
+  title,
+  type,
+}: {
+  src: string | undefined;
+  title: string;
+  type: 'product' | 'hotDeal';
+}) {
   const [error, setError] = useState(false);
 
   return error || !src ? (
-    <NoImage />
+    <NoImage type={type} />
   ) : (
     <Image
       src={src}
@@ -149,14 +158,10 @@ function ImageWithFallback({ src, title }: { src: string | undefined; title: str
   );
 }
 
-function NoImage() {
+function NoImage({ type }: { type: 'product' | 'hotDeal' }) {
   return (
-    <div className="flex h-full items-center justify-center bg-gray-100">
-      <span className="text-center text-sm text-gray-300">
-        상품 이미지
-        <br />
-        준비중입니다
-      </span>
+    <div className="flex h-full items-center justify-center bg-gray-50">
+      {type === 'hotDeal' ? <IllustStandingSmall /> : <IllustStanding />}
     </div>
   );
 }
