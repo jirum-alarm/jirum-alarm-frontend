@@ -63,8 +63,13 @@ function AppDownloadGuid() {
   return (
     <div className="flex h-full flex-col px-5 pb-8 pt-9">
       <p className="pb-7 text-2xl font-semibold">
-        <span className="font-extrabold">지름알림</span> 앱 다운받고
-        <br /> 핫딜을 알림 으로 받아보세요!
+        <span className="inline-block w-[85px] font-extrabold shadow-[inset_0-12px_0] shadow-primary-500">
+          지름알림
+        </span>{' '}
+        앱 다운받고
+        <br /> 핫딜을 알림
+        <span className="inline-block h-2 w-2 rounded-full bg-primary-500 align-text-top"> </span>
+        으로 받아보세요!
       </p>
       <div className="flex justify-center">
         <Image src={appDownloadGuide} alt="download app guide" width={335} height={400} />
