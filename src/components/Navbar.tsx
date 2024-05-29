@@ -29,7 +29,7 @@ export default function NavBar() {
           <Link href="/">
             <div className="grid grid-flow-col items-center gap-x-3">
               <Logo />
-              <h1 className="font-semibold">지름알림</h1>
+              <h1 className="text-lg font-semibold">지름알림</h1>
             </div>
           </Link>
           <div className="w-3/12" />
