@@ -13,8 +13,16 @@ export const EVENT = {
   categoryCheck: {
     name: 'Category Check',
   },
+  appDownloadLinkClick: {
+    name: 'App Download Link Click',
+    platform: {
+      ios: 'iOS',
+      android: 'Android',
+    },
+  },
   page: {
     home: 'Home',
     search: 'Search',
+    alarm: 'Alarm',
   },
 };

@@ -12,6 +12,8 @@ import Illust from '@/components/common/Illust';
 import Button from '@/components/common/Button';
 import Link from '@/features/Link';
 import { useRouter } from 'next/navigation';
+import { mp } from '@/lib/mixpanel';
+import { EVENT } from '@/constants/mixpanel';
 
 const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
@@ -101,8 +103,19 @@ function AppDownloadGuid({ platform }: { platform: 'ios' | 'android' | 'non-mobi
 }
 
 function AndroidDownloadButton() {
+  const handleClick = () => {
+    mp.track(EVENT.appDownloadLinkClick.name, {
+      platform: EVENT.appDownloadLinkClick.platform.android,
+      page: EVENT.page.alarm,
+    });
+  };
+
   return (
-    <a href="https://play.google.com/store/apps/details?id=com.solcode.jirmalam" className="w-full">
+    <a
+      href="https://play.google.com/store/apps/details?id=com.solcode.jirmalam"
+      onClick={handleClick}
+      className="w-full"
+    >
       <button className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-primary-500 py-3 font-semibold text-gray-900">
         <Google />
         Google Play
@@ -112,9 +125,17 @@ function AndroidDownloadButton() {
 }
 
 function IosDownloadButton() {
+  const handleClick = () => {
+    mp.track(EVENT.appDownloadLinkClick.name, {
+      platform: EVENT.appDownloadLinkClick.platform.ios,
+      page: EVENT.page.alarm,
+    });
+  };
+
   return (
     <a
       href="https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420"
+      onClick={handleClick}
       className="w-full"
     >
       <button className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-primary-500 py-3 font-semibold text-gray-900">
