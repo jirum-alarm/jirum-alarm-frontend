@@ -17,7 +17,7 @@ const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
 
 const AlarmList = () => {
-  const { isMobile } = useDevice();
+  const { isIos, isAndroid, isJirumAlarmApp } = useDevice();
 
   const { notifications, loading, isNotLogin, noData, hasNextData, ref } =
     useNotificationsViewModel();
@@ -26,11 +26,11 @@ const AlarmList = () => {
     return;
   }
 
-  if (isNotLogin && !isMobile) {
-    return <AppDownloadGuid />;
+  if (isNotLogin && !isJirumAlarmApp) {
+    return <AppDownloadGuid platform={isIos ? 'ios' : isAndroid ? 'android' : 'non-mobile'} />;
   }
 
-  if (isNotLogin && isMobile) {
+  if (isNotLogin && isJirumAlarmApp) {
     return <LoginGuide />;
   }
 
@@ -53,7 +53,7 @@ const AlarmList = () => {
 
 export default AlarmList;
 
-function AppDownloadGuid() {
+function AppDownloadGuid({ platform }: { platform: 'ios' | 'android' | 'non-mobile' }) {
   const ctaButtonContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -84,27 +84,44 @@ function AppDownloadGuid() {
           <ArrowDown color="#D0D5DD" className="animate-bounce" />
         </div>
         <div ref={ctaButtonContainerRef} className="flex gap-x-2">
-          <a
-            href="https://play.google.com/store/apps/details?id=com.solcode.jirmalam"
-            className="w-full"
-          >
-            <button className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-primary-500 py-3 font-semibold text-gray-900">
-              <Google />
-              Google Play
-            </button>
-          </a>
-          <a
-            href="https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420"
-            className="w-full"
-          >
-            <button className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-primary-500 py-3 font-semibold text-gray-900">
-              <Apple />
-              App Store
-            </button>
-          </a>
+          {platform === 'non-mobile' && (
+            <>
+              <AndroidDownloadButton />
+              <IosDownloadButton />
+            </>
+          )}
+
+          {platform === 'android' && <AndroidDownloadButton />}
+
+          {platform === 'ios' && <IosDownloadButton />}
         </div>
       </div>
     </div>
+  );
+}
+
+function AndroidDownloadButton() {
+  return (
+    <a href="https://play.google.com/store/apps/details?id=com.solcode.jirmalam" className="w-full">
+      <button className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-primary-500 py-3 font-semibold text-gray-900">
+        <Google />
+        Google Play
+      </button>
+    </a>
+  );
+}
+
+function IosDownloadButton() {
+  return (
+    <a
+      href="https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420"
+      className="w-full"
+    >
+      <button className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-primary-500 py-3 font-semibold text-gray-900">
+        <Apple />
+        App Store
+      </button>
+    </a>
   );
 }
 
