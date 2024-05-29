@@ -71,7 +71,10 @@ function InitialResult({ show }: { show: boolean }) {
               <ProductNotFound />
             </div>
           ) : (
-            <RecommendationProduct hotDeals={hotDeals} />
+            <section>
+              <h2 className="py-4">추천 핫딜</h2>
+              <RecommendationProduct hotDeals={hotDeals} />
+            </section>
           )}
         </div>
       )}
@@ -86,25 +89,21 @@ function SearchResult({
   hasNextData,
   nextDataRef,
 }: ReturnType<typeof useProductListViewModel> & { show: boolean }) {
+  const isProductEmpty = !products || products.length === 0;
+
   return (
-    <div className={cn(show ? 'block' : 'hidden')}>
+    <div className={cn({ hidden: !show })}>
       {loading ? (
         <div>
           <ProductLoading />
         </div>
       ) : (
         <div className="flex justify-center pb-10 pt-5">
-          {products?.length === 0 || !products ? (
-            <div className="flex min-h-[500px]">
-              <ProductNotFound />
-            </div>
-          ) : (
-            <ProductList products={products} />
-          )}
+          {isProductEmpty ? <ProductNotFound /> : <ProductList products={products} />}
         </div>
       )}
 
-      <TopButton />
+      {!isProductEmpty && <TopButton />}
       {hasNextData && <div ref={nextDataRef} className="h-[48px] w-full" />}
     </div>
   );
