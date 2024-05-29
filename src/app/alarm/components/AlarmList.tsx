@@ -115,7 +115,7 @@ function LoginGuide() {
   };
 
   return (
-    <div className="flex h-full flex-col text-center">
+    <div className="flex min-h-[calc(100dvh-56px)] flex-col pt-14 text-center">
       <div className="flex h-full flex-1 flex-col items-center justify-center">
         <div className="pb-4">
           <Illust size="sm" />
