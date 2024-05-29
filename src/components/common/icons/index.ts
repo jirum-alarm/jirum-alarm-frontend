@@ -1,3 +1,5 @@
+export { default as Apple } from './Apple';
+export { default as Google } from './Google';
 export { default as AlarmIllustError } from './AlarmIllustError';
 export { default as Alert } from './Alert';
 export { default as ArrowDown } from './ArrowDown';

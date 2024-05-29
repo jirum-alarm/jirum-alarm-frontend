@@ -13,6 +13,7 @@ export const useNotificationsViewModel = () => {
   const {
     data: { notifications } = { notifications: [] },
     loading,
+    error,
     fetchMore,
   } = useQuery<{ notifications: INotification[] }>(QueryNotifications, {
     variables: { offset: 0, limit },
@@ -51,6 +52,7 @@ export const useNotificationsViewModel = () => {
   return {
     notifications,
     loading,
+    isNotLogin: error?.graphQLErrors[0]?.extensions.code === 'FORBIDDEN',
     noData,
     hasNextData,
     ref,
