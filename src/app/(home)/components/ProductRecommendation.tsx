@@ -95,7 +95,7 @@ function ProductImageCard({
     >
       <div
         className={cn({
-          'relative overflow-hidden rounded-lg': true,
+          'relative overflow-hidden rounded-lg border border-gray-200': true,
           'txs:h-[140px] xs:h-[162px]': type === 'product',
           'h-[120px]': type === 'hotDeal',
         })}
@@ -141,20 +141,24 @@ function ImageWithFallback({
 }) {
   const [error, setError] = useState(false);
 
-  return error || !src ? (
-    <NoImage type={type} />
-  ) : (
-    <Image
-      src={src}
-      width={162}
-      height={162}
-      alt={title}
-      onError={() => setError(true)}
-      priority
-      unoptimized
-      placeholder="blur"
-      blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-    />
+  return (
+    <>
+      {error || !src ? (
+        <NoImage type={type} />
+      ) : (
+        <Image
+          src={src}
+          width={162}
+          height={162}
+          alt={title}
+          onError={() => setError(true)}
+          priority
+          unoptimized
+          placeholder="blur"
+          blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+        />
+      )}
+    </>
   );
 }
 

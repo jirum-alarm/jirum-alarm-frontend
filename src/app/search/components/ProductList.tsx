@@ -44,7 +44,7 @@ function ProductImageCard({
     >
       <div
         className={cn({
-          'relative overflow-hidden rounded-lg': true,
+          'relative overflow-hidden rounded-lg border border-gray-200': true,
           'txs:h-[140px] xs:h-[162px]': type === 'product',
           'h-[120px]': type === 'hotDeal',
         })}
