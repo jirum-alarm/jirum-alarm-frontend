@@ -71,7 +71,7 @@ function AppDownloadGuid() {
         <span className="inline-block h-2 w-2 rounded-full bg-primary-500 align-text-top"> </span>
         으로 받아보세요!
       </p>
-      <div className="flex justify-center">
+      <div className="flex justify-center rounded-md bg-gray-100">
         <Image src={appDownloadGuide} alt="download app guide" width={335} height={400} />
       </div>
       <div className="flex-1 content-end pt-4">
