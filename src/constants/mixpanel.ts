@@ -20,9 +20,17 @@ export const EVENT = {
       android: 'Android',
     },
   },
+  addKeywordClick: {
+    name: 'Add Keyword Click',
+  },
+  showMoreHotDealsClick: {
+    name: 'Show More Hot Deals Click',
+  },
   page: {
     home: 'Home',
     search: 'Search',
+    searchResult: 'Search Result',
+    searchNotFound: 'Search Not Found',
     alarm: 'Alarm',
   },
 };

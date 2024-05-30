@@ -1,15 +1,29 @@
 import RecommendationProduct from '@/app/search/components/RecommendationProduct';
 import { IllustError } from '@/components/common/icons';
+import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 import { useHotDeals } from '@/features/products';
 import { useMe } from '@/features/users';
+import { mp } from '@/lib/mixpanel';
 import React from 'react';
 
 const ProductNotFound = () => {
   const userResult = useMe();
   const hotDealsResult = useHotDeals();
   const hotDeals = hotDealsResult.data?.products;
+
+  const handleAddKeywordClick = () => {
+    mp.track(EVENT.addKeywordClick.name, {
+      page: EVENT.page.searchNotFound,
+    });
+  };
+
+  const handleShowMoreClick = () => {
+    mp.track(EVENT.showMoreHotDealsClick.name, {
+      page: EVENT.page.searchNotFound,
+    });
+  };
 
   if (userResult.loading) {
     return <></>;
@@ -30,7 +44,10 @@ const ProductNotFound = () => {
       </div>
       {userResult.data?.me && (
         <div className="w-full pb-16 text-center">
-          <button className="rounded-lg bg-gray-800 px-5 py-1.5 font-semibold text-primary-500">
+          <button
+            onClick={handleAddKeywordClick}
+            className="rounded-lg bg-gray-800 px-5 py-1.5 font-semibold text-primary-500"
+          >
             <Link href="/mypage/keyword">키워드 등록</Link>
           </button>
         </div>
@@ -40,7 +57,9 @@ const ProductNotFound = () => {
         <div className="flex w-full items-center justify-between">
           <span className="text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
           <span className="text-sm text-gray-500">
-            <Link href={PAGE.HOME + '/?categoryId=0'}>더보기</Link>
+            <Link onClick={handleShowMoreClick} href={PAGE.HOME + '/?categoryId=0'}>
+              더보기
+            </Link>
           </span>
         </div>
       </div>
