@@ -10,18 +10,12 @@ const PositiveKeywords = () => {
     >
       <ul className="bg-white text-black">
         <li className="border-b border-b-slate-200">
-          <Link
-            className="block h-full w-full px-4 py-2 hover:bg-slate-50"
-            href="/hotdeal/primary-keywords/1"
-          >
+          <Link className="block h-full w-full px-4 py-2 hover:bg-slate-50" href="">
             사다
           </Link>
         </li>
         <li className="border-b border-b-slate-200 last:border-b-0">
-          <Link
-            className="block h-full w-full px-4 py-2 hover:bg-slate-50"
-            href="/hotdeal/primary-keywords/1"
-          >
+          <Link className="block h-full w-full px-4 py-2 hover:bg-slate-50" href="">
             구매
           </Link>
         </li>

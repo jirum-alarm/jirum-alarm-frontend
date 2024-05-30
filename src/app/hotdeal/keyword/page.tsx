@@ -1,16 +1,20 @@
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import React from 'react';
-import KeywordInputChip from './components/KeywordInputChip';
-import KeywordResult from './components/KeywordResult';
-import SynonymRegister from './components/SynonymRegister';
+import SynonymInputResult from './components/SynonymInputResult';
+import PrimaryKeyword from './components/PrimaryKeyword';
+import WeightSetter from './components/WeightSetter';
+import KeywordSearch from './components/KeywordSearch';
 
 const KeywordPage = () => {
   return (
     <DefaultLayout>
       <div className="flex flex-col gap-4">
-        <KeywordInputChip />
-        <KeywordResult />
-        <SynonymRegister />
+        <WeightSetter />
+        <PrimaryKeyword />
+        <div className="flex gap-3">
+          <SynonymInputResult />
+          <KeywordSearch />
+        </div>
       </div>
     </DefaultLayout>
   );

@@ -5,7 +5,7 @@ interface Props {
   text: string;
   speed?: number;
 }
-const TypingEffect = ({ text, speed = 50 }: Props) => {
+const TypingEffectContainer = ({ text, speed = 50 }: Props) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isFinished, setIsFinished] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -50,10 +50,10 @@ const TypingEffect = ({ text, speed = 50 }: Props) => {
   );
 };
 
-export default TypingEffect;
+export default TypingEffectContainer;
 
 const Cursor = () => {
   return (
-    <div className=" animate-blink ml-1 inline-block h-4 w-[2px] translate-y-[2px] bg-black" />
+    <div className=" ml-1 inline-block h-4 w-[2px] translate-y-[2px] animate-blink bg-black" />
   );
 };

@@ -2,16 +2,29 @@ interface Props {
   children: React.ReactNode;
   onClick?: () => void;
   onDelete?: () => void;
+  isChecked?: boolean;
+  isActive?: boolean;
 }
 
-const Chip = ({ children, onClick, onDelete }: Props) => {
+const Chip = ({ children, onClick, onDelete, isChecked, isActive }: Props) => {
   return (
     <button
       tabIndex={0}
-      className="flex h-8 items-center justify-center gap-1 rounded-full border border-zinc-300 transition-[background-color] hover:bg-zinc-200"
+      className={`flex h-8 items-center justify-center gap-1 rounded-full border border-zinc-300 transition-[background-color] hover:bg-zinc-200 ${isActive ? 'border-lime-600' : ''}`}
       onClick={onClick}
     >
+      {isChecked && (
+        <svg
+          className="ml-2 h-5 w-5 fill-current text-lg text-lime-600"
+          focusable="false"
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+        >
+          <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"></path>
+        </svg>
+      )}
       <span className=" px-3 text-[13px] text-zinc-800">{children}</span>
+
       {onDelete && (
         <svg
           onClick={(e) => {
