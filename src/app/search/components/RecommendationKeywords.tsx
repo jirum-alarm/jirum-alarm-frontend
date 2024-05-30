@@ -57,10 +57,10 @@ function Chip({ keyword }: { keyword: string }) {
   const handleClick = () => {
     router.push(`/search?keyword=${keyword}`);
 
-    mp.track(EVENT.productSearch.name, {
+    mp.track(EVENT.PRODUCT_SEARCH.NAME, {
       keyword,
-      type: EVENT.productSearch.type.recommendation,
-      page: EVENT.page.search,
+      type: EVENT.PRODUCT_SEARCH.TYPE.RECOMMENDATION,
+      page: EVENT.PAGE.SEARCH,
     });
   };
 

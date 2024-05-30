@@ -104,9 +104,9 @@ function AppDownloadGuid({ platform }: { platform: 'apple' | 'android' | 'non-mo
 
 function AndroidDownloadButton() {
   const handleClick = () => {
-    mp.track(EVENT.appDownloadLinkClick.name, {
-      platform: EVENT.appDownloadLinkClick.platform.android,
-      page: EVENT.page.alarm,
+    mp.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
+      type: EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.ANDROID,
+      page: EVENT.PAGE.ALARM,
     });
   };
 
@@ -126,9 +126,9 @@ function AndroidDownloadButton() {
 
 function IosDownloadButton() {
   const handleClick = () => {
-    mp.track(EVENT.appDownloadLinkClick.name, {
-      platform: EVENT.appDownloadLinkClick.platform.ios,
-      page: EVENT.page.alarm,
+    mp.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
+      type: EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.IOS,
+      page: EVENT.PAGE.ALARM,
     });
   };
 

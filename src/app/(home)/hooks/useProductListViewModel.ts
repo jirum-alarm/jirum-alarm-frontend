@@ -61,9 +61,9 @@ export const useProductListViewModel = () => {
     const search = current.toString();
     history.pushState({}, '', '?' + search);
 
-    mp.track(EVENT.categoryCheck.name, {
+    mp.track(EVENT.CATEGORY_CHECK.NAME, {
       category: categoriesData.categories.find((category) => category.id === String(index)),
-      page: EVENT.page.home,
+      page: EVENT.PAGE.HOME,
     });
   };
 

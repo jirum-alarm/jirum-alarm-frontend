@@ -14,14 +14,14 @@ const ProductNotFound = () => {
   const hotDeals = hotDealsResult.data?.products;
 
   const handleAddKeywordClick = () => {
-    mp.track(EVENT.addKeywordClick.name, {
-      page: EVENT.page.searchNotFound,
+    mp.track(EVENT.ADD_KEYWORD_CLICK.NAME, {
+      page: EVENT.PAGE.SEARCH_NOT_FOUND,
     });
   };
 
   const handleShowMoreClick = () => {
-    mp.track(EVENT.showMoreHotDealsClick.name, {
-      page: EVENT.page.searchNotFound,
+    mp.track(EVENT.SHOW_MORE_HOT_DEALS_CLICK.NAME, {
+      page: EVENT.PAGE.SEARCH_NOT_FOUND,
     });
   };
 

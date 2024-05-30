@@ -76,9 +76,9 @@ function ProductImageCard({
   type?: 'product' | 'hotDeal';
 }) {
   const handleClick = () => {
-    mp.track(EVENT.productClick.name, {
+    mp.track(EVENT.PRODUCT_CLICK.NAME, {
       product,
-      page: EVENT.page.home,
+      page: EVENT.PAGE.HOME,
     });
   };
 

@@ -1,36 +1,36 @@
 export const EVENT = {
-  productClick: {
-    name: 'Product Click',
+  PRODUCT_CLICK: {
+    NAME: 'Product Click',
   },
-  productSearch: {
-    name: 'Product Search',
-    type: {
-      input: 'Input',
-      recent: 'Recent',
-      recommendation: 'Recommendation',
+  PRODUCT_SEARCH: {
+    NAME: 'Product Search',
+    TYPE: {
+      INPUT: 'Input',
+      RECENT: 'Recent',
+      RECOMMENDATION: 'Recommendation',
     },
   },
-  categoryCheck: {
-    name: 'Category Check',
+  CATEGORY_CHECK: {
+    NAME: 'Category Check',
   },
-  appDownloadLinkClick: {
-    name: 'App Download Link Click',
-    platform: {
-      ios: 'iOS',
-      android: 'Android',
+  APP_DOWNLOAD_LINK_CLICK: {
+    NAME: 'App Download Link Click',
+    TYPE: {
+      IOS: 'iOS',
+      ANDROID: 'Android',
     },
   },
-  addKeywordClick: {
-    name: 'Add Keyword Click',
+  ADD_KEYWORD_CLICK: {
+    NAME: 'Add Keyword Click',
   },
-  showMoreHotDealsClick: {
-    name: 'Show More Hot Deals Click',
+  SHOW_MORE_HOT_DEALS_CLICK: {
+    NAME: 'Show More Hot Deals Click',
   },
-  page: {
-    home: 'Home',
-    search: 'Search',
-    searchResult: 'Search Result',
-    searchNotFound: 'Search Not Found',
-    alarm: 'Alarm',
+  PAGE: {
+    HOME: 'Home',
+    SEARCH: 'Search',
+    SEARCH_RESULT: 'Search Result',
+    SEARCH_NOT_FOUND: 'Search Not Found',
+    ALARM: 'Alarm',
   },
 };

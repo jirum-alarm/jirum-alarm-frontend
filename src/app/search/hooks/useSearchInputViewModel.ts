@@ -39,10 +39,10 @@ export const useSearchInputViewModel = () => {
 
       router.replace(`/search?${search}`);
 
-      mp.track(EVENT.productSearch.name, {
+      mp.track(EVENT.PRODUCT_SEARCH.NAME, {
         keyword,
-        type: EVENT.productSearch.type.input,
-        page: EVENT.page.search,
+        type: EVENT.PRODUCT_SEARCH.TYPE.INPUT,
+        page: EVENT.PAGE.SEARCH,
       });
 
       setRecentKeyord(keyword);
