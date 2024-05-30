@@ -4,7 +4,7 @@ import { TopButton } from '@/components/TopButton';
 import { IProductOutput } from '@/graphql/interface';
 import React, { useCallback, useEffect, useState } from 'react';
 import ProductLoading from '../(home)/components/ProductLoading';
-import ProductNotFound from '../(home)/components/ProductNotFound';
+import ProductNotFound from './components/ProductNotFound';
 import RecentKeywords from './components/RecentKeywords';
 import RecommendationKeywords from './components/RecommendationKeywords';
 import RecommendationProduct from './components/RecommendationProduct';

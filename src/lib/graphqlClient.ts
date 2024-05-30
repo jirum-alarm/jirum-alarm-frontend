@@ -7,6 +7,7 @@ import { GRAPHQL_ENDPOINT } from '../constants/graphql';
 import { StorageTokenKey } from '@/types/enum/auth';
 import { ApiType } from '@/types/enum/common';
 import { getAccessToken, isAccessTokenExpired, isRefreshTokenExpired } from './auth';
+import { PAGE } from '@/constants/page';
 
 const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
   if (networkError) {
@@ -23,7 +24,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
   if (isRefreshTokenExpired()) {
     localStorage.removeItem(StorageTokenKey.ACCESS_TOKEN);
     localStorage.removeItem(StorageTokenKey.REFRESH_TOKEN);
-    window.location.href = '/login';
+    window.location.replace(PAGE.LOGIN);
     return;
   }
 

@@ -4,7 +4,6 @@ import SwipeableViews from 'react-swipeable-views';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import '@/style/React_tabs.css';
-import ProductNotFound from './ProductNotFound';
 import ProductLoading from './ProductLoading';
 import SearchInput from './SearchInput';
 import { useProductListViewModel } from '../hooks/useProductListViewModel';
@@ -75,9 +74,7 @@ const ProductList = () => {
                 return (
                   <TabPanel key={key}>
                     {!products || products.length === 0 ? (
-                      <div className="flex min-h-[500px]">
-                        <ProductNotFound />
-                      </div>
+                      <></>
                     ) : (
                       <ProductRecommendation
                         products={products}

@@ -33,9 +33,7 @@ const ProductNotFound = () => {
       </div>
       <div className="w-full pt-4">
         {!hotDeals || hotDeals?.length === 0 ? (
-          <div className="flex min-h-[500px]">
-            <ProductNotFound />
-          </div>
+          <></>
         ) : (
           <RecommendationProduct hotDeals={hotDeals} />
         )}
