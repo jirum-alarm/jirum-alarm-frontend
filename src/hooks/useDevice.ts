@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 export const useDevice = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isApple, setIsApple] = useState<boolean>(false);
   const [isIos, setIsIos] = useState<boolean>(false);
   const [isAndroid, setIsAndroid] = useState<boolean>(false);
   const [isJirumAlarmIOSApp, setIsJirumAlarmIOSApp] = useState<boolean | 'ios' | 'android'>(false);
@@ -16,6 +17,7 @@ export const useDevice = () => {
     );
     setIsMobile(isMobileDevice);
 
+    setIsApple(Boolean(userAgent.match(/iPhone|iPad|iPod|Mac/i)));
     setIsIos(Boolean(userAgent.match(/iPhone|iPad|iPod/i)));
     setIsAndroid(Boolean(userAgent.match(/Android/i)));
     setIsJirumAlarmIOSApp(Boolean(userAgent.match(/IOS Flutter Webview Jirum Alarm/i)));
@@ -24,6 +26,7 @@ export const useDevice = () => {
 
   return {
     isMobile,
+    isApple,
     isIos,
     isAndroid,
     isJirumAlarmIOSApp,
