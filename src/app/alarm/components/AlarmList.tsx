@@ -19,7 +19,7 @@ const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
 
 const AlarmList = () => {
-  const { isIos, isAndroid, isJirumAlarmApp } = useDevice();
+  const { isApple, isAndroid, isJirumAlarmApp } = useDevice();
 
   const { notifications, loading, isNotLogin, noData, hasNextData, ref } =
     useNotificationsViewModel();
@@ -29,7 +29,7 @@ const AlarmList = () => {
   }
 
   if (isNotLogin && !isJirumAlarmApp) {
-    return <AppDownloadGuid platform={isIos ? 'ios' : isAndroid ? 'android' : 'non-mobile'} />;
+    return <AppDownloadGuid platform={isApple ? 'apple' : isAndroid ? 'android' : 'non-mobile'} />;
   }
 
   if (isNotLogin && isJirumAlarmApp) {
@@ -55,7 +55,7 @@ const AlarmList = () => {
 
 export default AlarmList;
 
-function AppDownloadGuid({ platform }: { platform: 'ios' | 'android' | 'non-mobile' }) {
+function AppDownloadGuid({ platform }: { platform: 'apple' | 'android' | 'non-mobile' }) {
   const ctaButtonContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -95,7 +95,7 @@ function AppDownloadGuid({ platform }: { platform: 'ios' | 'android' | 'non-mobi
 
           {platform === 'android' && <AndroidDownloadButton />}
 
-          {platform === 'ios' && <IosDownloadButton />}
+          {platform === 'apple' && <IosDownloadButton />}
         </div>
       </div>
     </div>
