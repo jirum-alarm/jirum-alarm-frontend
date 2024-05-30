@@ -2,19 +2,18 @@
 
 import Link from '@/features/Link';
 import { Alert, Logo, My } from '@/components/common/icons';
-import { QueryMe } from '../graphql/auth';
-import { User } from '../types/user';
 import { useQuery } from '@apollo/client';
 import { QueryUnreadNotificationsCount } from '@/graphql/notification';
 import { UnreadNotificationsCount } from '@/graphql/interface';
 import { isIOSFlutterWeb } from '@/util/ua';
+import { useMe } from '@/features/users';
 
 const LOGIN_PATH = '/login';
 const MYPAGE_PATH = '/mypage';
 const ALARM_PATH = '/alarm';
 
 export default function NavBar() {
-  const { data } = useQuery<{ me: User }>(QueryMe);
+  const { data } = useMe();
   const unreadNotificationsCount = useQuery<{ unreadNotificationsCount: UnreadNotificationsCount }>(
     QueryUnreadNotificationsCount,
     { skip: !data?.me },
