@@ -18,7 +18,7 @@ const Login = () => {
   return (
     <BasicLayout hasBackButton fullScreen={true}>
       <div className="h-full py-32">
-        <div className="grid text-center">
+        <div className="grid pb-4 text-center">
           <div>
             <div className="grid justify-center">
               <Illust size="sm" />
@@ -32,7 +32,7 @@ const Login = () => {
               </p>
             </div>
           </div>
-          <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] px-5 pb-9">
+          <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] bg-white px-5 pb-9">
             <Button onClick={handleCTAButton} className="self-end">
               이메일로 시작하기
             </Button>
