@@ -1,7 +1,7 @@
 'use client';
 
 import { TopButton } from '@/components/TopButton';
-import { IProductOutput } from '@/graphql/interface';
+import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
 import React, { useCallback, useEffect, useState } from 'react';
 import ProductLoading from '../(home)/components/ProductLoading';
 import ProductNotFound from './components/ProductNotFound';
@@ -50,11 +50,18 @@ export default function Search() {
   );
 }
 
+const now = new Date();
+const kstDate = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+const twoDaysAgo = new Date(kstDate.getTime() - 2 * 24 * 60 * 60 * 1000);
+const startDate = twoDaysAgo.toISOString();
+
 function InitialResult({ show }: { show: boolean }) {
   const { data: { products: hotDeals } = {}, loading } = useQuery<IProductOutput>(QueryProducts, {
     variables: {
       limit: 10,
       categoryId: 0,
+      startDate,
+      orderBy: ProductOrderType.COMMUNITY_RANKING_RANDOM,
     },
   });
 

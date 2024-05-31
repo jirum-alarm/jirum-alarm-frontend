@@ -52,24 +52,24 @@ const ProductNotFound = () => {
           </button>
         </div>
       )}
-      <hr className="w-full border-gray-300" />
-      <div className="w-full pt-10">
-        <div className="flex w-full items-center justify-between">
-          <span className="text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
-          <span className="text-sm text-gray-500">
-            <Link onClick={handleShowMoreClick} href={PAGE.HOME + '/?categoryId=0'}>
-              더보기
-            </Link>
-          </span>
-        </div>
-      </div>
-      <div className="w-full pt-4">
-        {!hotDeals || hotDeals?.length === 0 ? (
-          <></>
-        ) : (
-          <RecommendationProduct hotDeals={hotDeals} />
-        )}
-      </div>
+      {hotDeals?.length ? (
+        <>
+          <hr className="w-full border-gray-300" />
+          <div className="w-full pt-10">
+            <div className="flex w-full items-center justify-between">
+              <span className="text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
+              <span className="text-sm text-gray-500">
+                <Link onClick={handleShowMoreClick} href={PAGE.HOME + '/?categoryId=0'}>
+                  더보기
+                </Link>
+              </span>
+            </div>
+          </div>
+          <div className="w-full pt-4">
+            <RecommendationProduct hotDeals={hotDeals} />
+          </div>
+        </>
+      ) : undefined}
     </div>
   );
 };
