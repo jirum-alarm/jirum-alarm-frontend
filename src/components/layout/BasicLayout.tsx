@@ -18,7 +18,7 @@ const BasicLayout = ({ children, title, hasBackButton, fullScreen = true }: Prop
         {hasBackButton && <div className="absolute left-0">{<BackButton />}</div>}
         {title && <h1 className="text-base font-semibold text-black">{title}</h1>}
       </header>
-      <div className="h-full pt-14">{children}</div>
+      <div className="h-full pt-11">{children}</div>
     </div>
   );
 };
