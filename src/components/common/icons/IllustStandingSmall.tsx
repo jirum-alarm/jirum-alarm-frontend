@@ -1,12 +1,6 @@
-import type { SVGProps } from "react";
+import type { SVGProps } from 'react';
 const SvgIllustStandingSmall = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={80}
-    height={80}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={80} height={80} fill="none" {...props}>
     <path
       fill="#E4E7EC"
       d="M54.42 72.175a.92.92 0 0 1-.912 1.038h-10.9a.91.91 0 0 1-.913-.913V61.75h.338c.825 0 1.675-.013 2.55-.05.112 0 .225-.013.325-.025l.775 6.313a.594.594 0 0 0 .587.512h4.45s3.188 0 3.7 3.675M39.508 61.688V72.3a.91.91 0 0 1-.913.913h-10.9a.91.91 0 0 1-.9-1.038c.5-3.675 3.7-3.675 3.7-3.675h4.438c.3 0 .55-.225.587-.513l.813-6.55a36 36 0 0 0 3.175.25"
@@ -23,10 +17,7 @@ const SvgIllustStandingSmall = (props: SVGProps<SVGSVGElement>) => (
       <path fill="#fff" d="M41.307 33.675h4v4h-4z" />
       <path d="M43.432 36.925a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25" />
     </mask>
-    <path
-      fill="#E4E7EC"
-      d="M43.432 36.925a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25"
-    />
+    <path fill="#E4E7EC" d="M43.432 36.925a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25" />
     <path
       stroke="#E4E7EC"
       strokeWidth={0.4}
@@ -45,10 +36,7 @@ const SvgIllustStandingSmall = (props: SVGProps<SVGSVGElement>) => (
       <path fill="#fff" d="M36.333 33.675h4v4h-4z" />
       <path d="M38.458 36.925a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25" />
     </mask>
-    <path
-      fill="#E4E7EC"
-      d="M38.458 36.925a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25"
-    />
+    <path fill="#E4E7EC" d="M38.458 36.925a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25" />
     <path
       stroke="#E4E7EC"
       strokeWidth={0.4}

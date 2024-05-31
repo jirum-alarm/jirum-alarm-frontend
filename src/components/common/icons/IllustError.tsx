@@ -1,12 +1,6 @@
-import type { SVGProps } from "react";
+import type { SVGProps } from 'react';
 const SvgIllustError = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={121}
-    height={120}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={121} height={120} fill="none" {...props}>
     <path fill="#fff" d="M.5 0h120v120H.5z" />
     <path
       fill="#E4E7EC"
