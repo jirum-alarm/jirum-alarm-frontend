@@ -70,15 +70,16 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
       <div className="flex animate-fade-in justify-center rounded-md bg-gray-100">
         <Image src={appDownloadGuide} alt="download app guide" width={335} height={400} />
       </div>
-      <div className="flex flex-col items-center pb-[72px] pt-4">
-        <p className="pb-3 text-center text-sm text-gray-400">
-          키워드 알림으로
-          <br />
-          누구보다 빠르게 핫딜 받기
-        </p>
-        <ArrowDown color="#D0D5DD" />
-      </div>
+
       <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] bg-white px-5 pb-8 pt-4">
+        <div className="flex flex-col items-center pb-6">
+          <p className="pb-3 text-center text-sm text-gray-400">
+            키워드 알림으로
+            <br />
+            누구보다 빠르게 핫딜 받기
+          </p>
+          <ArrowDown color="#D0D5DD" />
+        </div>
         <div className="flex gap-x-2">
           {platform === 'non-mobile' && (
             <>
