@@ -8,6 +8,8 @@ import useScreenSize from '@/hooks/useScreenSize';
 import { mp } from '@/lib/mixpanel';
 import { EVENT } from '@/constants/mixpanel';
 import { IllustStanding, IllustStandingSmall } from '@/components/common/icons';
+import Link from '@/features/Link';
+import { PAGE } from '@/constants/page';
 
 export default function ProductRecommendation({
   products,
@@ -20,6 +22,12 @@ export default function ProductRecommendation({
   const firstRenderingCount = lg ? 15 : md ? 12 : sm ? 9 : 6;
   const hotDealCount = lg ? 10 : md ? 8 : sm ? 6 : 5;
 
+  const handleShowMoreClick = () => {
+    mp.track(EVENT.SHOW_MORE_HOT_DEALS_CLICK.NAME, {
+      page: EVENT.PAGE.HOME,
+    });
+  };
+
   return (
     <>
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
@@ -30,8 +38,13 @@ export default function ProductRecommendation({
 
       {hotDeals && (
         <div className="py-11">
-          <div className="pb-4">
+          <div className="flex w-full items-center justify-between pb-4 ">
             <span className=" text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
+            <span className="text-sm text-gray-500">
+              <Link onClick={handleShowMoreClick} href={PAGE.HOME + '/?categoryId=0'}>
+                더보기
+              </Link>
+            </span>
           </div>
           <div
             onTouchStartCapture={(e) => {
