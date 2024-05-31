@@ -1,7 +1,6 @@
 'use client';
 
 import { TopButton } from '@/components/TopButton';
-import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
 import React, { useCallback, useEffect, useState } from 'react';
 import ProductLoading from '../(home)/components/ProductLoading';
 import ProductNotFound from './components/ProductNotFound';
@@ -10,12 +9,11 @@ import RecommendationKeywords from './components/RecommendationKeywords';
 import RecommendationProduct from './components/RecommendationProduct';
 import SearchInput from './components/SearchInput';
 import { useProductListViewModel } from './hooks/useProductListViewModel';
-import { useQuery } from '@apollo/client';
-import { QueryProducts } from '@/graphql';
 import ProductList from './components/ProductList';
 import { cn } from '@/lib/cn';
 import { throttle } from 'lodash';
 import { useSearchInputViewModel } from './hooks/useSearchInputViewModel';
+import { useHotDealsRandom } from '@/features/products';
 
 export default function Search() {
   const [showSearchBar, setShowSearchBar] = useState(true);
@@ -50,20 +48,8 @@ export default function Search() {
   );
 }
 
-const now = new Date();
-const kstDate = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-const twoDaysAgo = new Date(kstDate.getTime() - 2 * 24 * 60 * 60 * 1000);
-const startDate = twoDaysAgo.toISOString();
-
 function InitialResult({ show }: { show: boolean }) {
-  const { data: { products: hotDeals } = {}, loading } = useQuery<IProductOutput>(QueryProducts, {
-    variables: {
-      limit: 10,
-      categoryId: 0,
-      startDate,
-      orderBy: ProductOrderType.COMMUNITY_RANKING_RANDOM,
-    },
-  });
+  const { loading, data: { products: hotDeals } = {} } = useHotDealsRandom();
 
   return (
     <div className={cn(show ? 'block' : 'hidden')}>

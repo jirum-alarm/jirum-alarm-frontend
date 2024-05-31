@@ -10,8 +10,7 @@ import React from 'react';
 
 const ProductNotFound = () => {
   const userResult = useMe();
-  const hotDealsResult = useHotDeals();
-  const hotDeals = hotDealsResult.data?.products;
+  const { data: { products: hotDeals } = {} } = useHotDeals();
 
   const handleAddKeywordClick = () => {
     mp.track(EVENT.ADD_KEYWORD_CLICK.NAME, {

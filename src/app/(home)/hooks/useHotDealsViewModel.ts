@@ -1,16 +1,9 @@
-import { QueryProducts } from '@/graphql';
-import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface/product';
-import { useQuery } from '@apollo/client';
+import { useHotDeals } from '@/features/products';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-const limit = 20;
-
-const now = new Date();
-const kstDate = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-const twoDaysAgo = new Date(kstDate.getTime() - 2 * 24 * 60 * 60 * 1000);
-const startDate = twoDaysAgo.toISOString();
+const LIMIT = 20;
 
 export const useHotDealsViewModel = () => {
   const searchParams = useSearchParams();
@@ -18,19 +11,7 @@ export const useHotDealsViewModel = () => {
   const [hasNextData, setHasNextData] = useState(true);
   const categoryParam = searchParams.get('categoryId');
 
-  const {
-    data: { products: hotDeals } = {},
-    fetchMore,
-    loading,
-  } = useQuery<IProductOutput>(QueryProducts, {
-    variables: {
-      limit,
-      categoryId: 0,
-      startDate,
-      orderBy: ProductOrderType.COMMUNITY_RANKING,
-      orderByOption: OrderOptionType.DESC,
-    },
-  });
+  const { data: { products: hotDeals } = {}, fetchMore, loading } = useHotDeals({ limit: LIMIT });
 
   const { ref } = useInView({
     onChange(inView) {
@@ -47,7 +28,7 @@ export const useHotDealsViewModel = () => {
         searchAfter,
       },
       updateQuery: ({ products }, { fetchMoreResult }) => {
-        if (fetchMoreResult.products.length < limit) {
+        if (fetchMoreResult.products.length < LIMIT) {
           setHasNextData(false);
         }
         return { products: [...products, ...fetchMoreResult.products] };
@@ -56,7 +37,7 @@ export const useHotDealsViewModel = () => {
   };
 
   useEffect(() => {
-    if (hotDeals && hotDeals.length % limit !== 0) {
+    if (hotDeals && hotDeals.length % LIMIT !== 0) {
       setHasNextData(false);
     }
   }, [hotDeals]);
