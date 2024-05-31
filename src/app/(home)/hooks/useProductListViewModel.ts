@@ -1,6 +1,6 @@
 import { QueryProducts } from '@/graphql';
 import { QueryCategories } from '@/graphql/category';
-import { IProductOutput } from '@/graphql/interface/product';
+import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface/product';
 import { ICategoryOutput } from '@/graphql/interface/category';
 import { useDevice } from '@/hooks/useDevice';
 import { useQuery, useSuspenseQuery } from '@apollo/client';
@@ -15,12 +15,13 @@ const allCategory = { id: '0', name: '전체' };
 
 export const useProductListViewModel = () => {
   const searchParams = useSearchParams();
+  const { isMobile } = useDevice();
 
   const [hasNextData, setHasNextData] = useState(true);
-  const { isMobile } = useDevice();
   const categoryParam = searchParams.get('categoryId');
-  const keywordParam = searchParams.get('keyword');
   const activeTab = categoryParam ? Number(categoryParam) + 1 : 0;
+  const categoryId = categoryParam ? Number(categoryParam) : undefined;
+  const isHotDeal = categoryId === 0;
 
   const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
 
@@ -31,16 +32,11 @@ export const useProductListViewModel = () => {
   } = useQuery<IProductOutput>(QueryProducts, {
     variables: {
       limit,
-      keyword: keywordParam || undefined,
-      categoryId: categoryParam ? Number(categoryParam) : undefined,
+      categoryId,
+      orderBy: ProductOrderType.ID,
+      orderByOption: OrderOptionType.DESC,
     },
-  });
-
-  const { data: { products: hotDeals } = {} } = useQuery<IProductOutput>(QueryProducts, {
-    variables: {
-      limit: 10,
-      categoryId: 0,
-    },
+    skip: isHotDeal,
   });
 
   const { ref } = useInView({
@@ -90,7 +86,7 @@ export const useProductListViewModel = () => {
 
   useEffect(() => {
     setHasNextData(true);
-  }, [keywordParam, categoryParam]);
+  }, [categoryParam]);
 
   return {
     loading,
@@ -99,7 +95,6 @@ export const useProductListViewModel = () => {
     isMobile,
     allCategory,
     products,
-    hotDeals,
     categoriesData,
     hasNextData,
     ref,

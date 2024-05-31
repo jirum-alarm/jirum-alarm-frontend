@@ -15,7 +15,7 @@ export default function ProductRecommendation({
   products,
   hotDeals,
 }: {
-  products: IProduct[];
+  products: IProduct[] | undefined;
   hotDeals: IProduct[] | undefined;
 }) {
   const { lg, md, sm } = useScreenSize();

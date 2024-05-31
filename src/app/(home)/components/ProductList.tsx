@@ -9,6 +9,8 @@ import SearchInput from './SearchInput';
 import { useProductListViewModel } from '../hooks/useProductListViewModel';
 import React from 'react';
 import ProductRecommendation from './ProductRecommendation';
+import { useHotDealsViewModel } from '../hooks/useHotDealsViewModel';
+import { mergeRefs } from '@/util/mergeRefs';
 
 const ProductList = () => {
   const {
@@ -18,11 +20,17 @@ const ProductList = () => {
     isMobile,
     allCategory,
     products,
-    hotDeals,
     categoriesData,
     hasNextData,
     ref,
   } = useProductListViewModel();
+
+  const {
+    hotDeals,
+    loading: hotDealsLoading,
+    hasNextData: hotDealsHasNextData,
+    ref: hotDealsRef,
+  } = useHotDealsViewModel();
 
   return (
     <main>
@@ -56,7 +64,7 @@ const ProductList = () => {
           ))}
         </TabList>
 
-        {loading ? (
+        {loading || hotDealsLoading ? (
           <div>
             <ProductLoading />
           </div>
@@ -70,15 +78,19 @@ const ProductList = () => {
             >
               {[allCategory].concat(categoriesData.categories).map((category, i) => {
                 const key = `${category.id}_${i}`;
+                const isAllCategory = i === 0;
+                const isHotDeal = i === 1;
 
                 return (
                   <TabPanel key={key}>
-                    {!products || products.length === 0 ? (
+                    {loading ? (
                       <></>
+                    ) : (!products?.length && i !== 1) || !hotDeals?.length ? (
+                      <>해당하는 상품이 없어요.</>
                     ) : (
                       <ProductRecommendation
-                        products={products}
-                        hotDeals={i === 0 ? hotDeals : undefined}
+                        products={isHotDeal ? hotDeals : products}
+                        hotDeals={isAllCategory ? hotDeals : undefined}
                       />
                     )}
                   </TabPanel>
@@ -89,7 +101,9 @@ const ProductList = () => {
         )}
 
         <TopButton />
-        {hasNextData && <div ref={ref} className="h-[48px] w-full" />}
+        {(hasNextData || hotDealsHasNextData) && (
+          <div ref={mergeRefs(ref, hotDealsRef)} className="h-[48px] w-full" />
+        )}
       </Tabs>
     </main>
   );
