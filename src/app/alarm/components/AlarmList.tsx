@@ -29,7 +29,7 @@ const AlarmList = () => {
   }
 
   if (isNotLogin && !isJirumAlarmApp) {
-    return <AppDownloadGuid platform={isApple ? 'apple' : isAndroid ? 'android' : 'non-mobile'} />;
+    return <AppDownloadGuide platform={isApple ? 'apple' : isAndroid ? 'android' : 'non-mobile'} />;
   }
 
   if (isNotLogin && isJirumAlarmApp) {
@@ -55,7 +55,7 @@ const AlarmList = () => {
 
 export default AlarmList;
 
-function AppDownloadGuid({ platform }: { platform: 'apple' | 'android' | 'non-mobile' }) {
+function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-mobile' }) {
   const ctaButtonContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -70,15 +70,18 @@ function AppDownloadGuid({ platform }: { platform: 'apple' | 'android' | 'non-mo
         </span>{' '}
         앱 다운받고
         <br /> 핫딜을 알림
-        <span className="inline-block h-2 w-2 rounded-full bg-primary-500 align-text-top"> </span>
+        <span className="relative inline-flex h-2 w-2">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-primary-500 align-text-top"></span>{' '}
+        </span>
         으로 받아보세요!
       </p>
-      <div className="flex justify-center rounded-md bg-gray-100">
+      <div className="flex animate-fade-in justify-center rounded-md bg-gray-100">
         <Image src={appDownloadGuide} alt="download app guide" width={335} height={400} />
       </div>
       <div className="flex-1 content-end pt-4">
         <div className="flex flex-col items-center pb-3 text-center">
-          <p className=" pb-3 text-sm text-gray-400">
+          <p className="pb-3 text-sm text-gray-400">
             키워드 알림으로
             <br />
             누구보다 빠르게 핫딜 받기
