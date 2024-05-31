@@ -70,9 +70,9 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
         </span>{' '}
         앱 다운받고
         <br /> 핫딜을 알림
-        <span className="relative inline-flex h-2 w-2">
+        <span className="relative inline-flex h-2 w-2 align-text-top">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-primary-500 align-text-top"></span>{' '}
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-primary-500"></span>{' '}
         </span>
         으로 받아보세요!
       </p>
