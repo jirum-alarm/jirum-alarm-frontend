@@ -31,6 +31,6 @@ export const useDevice = () => {
     isAndroid,
     isJirumAlarmIOSApp,
     isJirumAlarmAndroidApp,
-    isJirumAlarmApp: isJirumAlarmIOSApp || isJirumAlarmAndroidApp,
+    isJirumAlarmApp: !!(isJirumAlarmIOSApp || isJirumAlarmAndroidApp),
   };
 };
