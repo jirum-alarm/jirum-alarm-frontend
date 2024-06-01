@@ -56,10 +56,10 @@ export default function ProductRecommendation({
           >
             <Swiper
               spaceBetween={12}
-              slidesPerView={3}
+              slidesPerView={2.5}
               breakpoints={{
-                640: { slidesPerView: 4 },
-                1024: { slidesPerView: 6 },
+                640: { slidesPerView: 3.5 },
+                1024: { slidesPerView: 5.5 },
               }}
             >
               {hotDeals.slice(0, hotDealCount).map((hotDeal, i) => (

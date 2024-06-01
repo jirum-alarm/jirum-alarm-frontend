@@ -15,7 +15,7 @@ const allCategory = { id: '0', name: '전체' };
 
 export const useProductListViewModel = () => {
   const searchParams = useSearchParams();
-  const { isMobile } = useDevice();
+  const { isMobile, isJirumAlarmApp } = useDevice();
 
   const [hasNextData, setHasNextData] = useState(true);
   const categoryParam = searchParams.get('categoryId');
@@ -92,7 +92,7 @@ export const useProductListViewModel = () => {
     loading,
     activeTab,
     handleTabChange,
-    isMobile,
+    isMobile: isMobile || isJirumAlarmApp,
     allCategory,
     products,
     categoriesData,
