@@ -41,10 +41,10 @@ const TypingEffectContainer = ({ text, speed = 50 }: Props) => {
       {!text ? (
         <Cursor />
       ) : (
-        <p className=" whitespace-pre">
+        <div className=" whitespace-pre">
           {displayedText}
           {!isFinished && <Cursor />}
-        </p>
+        </div>
       )}
     </div>
   );

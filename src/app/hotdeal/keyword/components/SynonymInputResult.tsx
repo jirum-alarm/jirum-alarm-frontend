@@ -5,10 +5,20 @@ import useSynonymManager from '../hooks/useSynonymManager';
 import Card from '../../../../components/Card';
 import TypingEffectContainer from './TypingEffectContainer';
 import { handleKeydownEnter } from '@/utils/event';
+import { useQuery } from '@apollo/client';
+import { QueryCommentsByAdmin } from '@/graphql/comments';
 
 const text = `덕분에 잘 샀어요 \n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가`;
 
-const KeywordInputChip = () => {
+const SynonymInputResult = () => {
+  const { data } = useQuery(QueryCommentsByAdmin, {
+    variables: {
+      hotDealKeywordId: 1,
+      synonyms: ['삿', '샀'],
+      excludes: ['안삿'],
+    },
+  });
+  console.log('data', data);
   const {
     synonyms,
     onAddSynonym,
@@ -93,4 +103,4 @@ const KeywordInputChip = () => {
   );
 };
 
-export default KeywordInputChip;
+export default SynonymInputResult;
