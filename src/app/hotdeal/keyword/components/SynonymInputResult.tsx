@@ -15,13 +15,13 @@ const KeywordInputChip = () => {
     handleRemoveSynonym,
     handleToggleSynonymActive,
     filteredSynonyms,
-  } = useSynonymManager();
+  } = useSynonymManager('synonym');
   const {
     synonyms: excludeSynonyms,
     onAddSynonym: onAddExcludeSynonym,
     handleRemoveSynonym: handleRemoveExcludeSynonym,
     filteredSynonyms: filteredExcludeSynonyms,
-  } = useSynonymManager();
+  } = useSynonymManager('exclude-synonym');
   const synonymInputRef = useRef<HTMLInputElement>(null);
   const excludeSynonymInputRef = useRef<HTMLInputElement>(null);
 

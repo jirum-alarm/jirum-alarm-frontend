@@ -1,14 +1,15 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 
 type SynonymChips = {
   text: string;
   isActive: boolean;
 };
 
-const SYNONYM = 'synonym';
+type SynonymType = 'synonym' | 'exclude-synonym';
 
-const useSynonymManager = () => {
+const useSynonymManager = (type: SynonymType) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -24,15 +25,23 @@ const useSynonymManager = () => {
     }
   }, [synonyms]);
 
-  // useEffect(() => {
-  // const querysynonyms = searchParams.getAll(SYNONYM);
-  // setSynonyms(querysynonyms);
-  // }, [searchParams]);
+  useEffect(() => {
+    const querysynonyms = searchParams.getAll(type);
+    setSynonyms(querysynonyms.map((synonym) => ({ text: synonym, isActive: false })));
+  }, [searchParams]);
 
-  const updateSearchParams = (synonyms: SynonymChips[]) => {
-    // const params = new URLSearchParams();
-    // synonyms.forEach((k) => params.append(SYNONYM, k));
-    // router.push(`${pathname}/?${params.toString()}`);
+  const updateQueryString = (text: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.append(type, text);
+    router.push(`${pathname}/?${params.toString()}`);
+  };
+
+  const deleteQueryString = (text: string) => {
+    const params = new URLSearchParams(searchParams);
+    const values = params.getAll(type);
+    params.delete(type);
+    values.filter((val) => val !== text).forEach((val) => params.append(type, val));
+    router.push(`${pathname}/?${params.toString()}`);
   };
 
   const onAddSynonym = (text: string) => {
@@ -40,14 +49,14 @@ const useSynonymManager = () => {
       console.log('해당 키워드가 존재합니다.');
       return;
     }
+    updateQueryString(text);
     const _synonyms = synonyms.concat({ text: text, isActive: false });
-    // updateSearchParams(_synonyms);
     setSynonyms(_synonyms);
   };
 
   const handleRemoveSynonym = (text: string) => {
+    deleteQueryString(text);
     const remainingSynonyms = synonyms.filter((synonym) => synonym.text !== text);
-    // updateSearchParams(filteredsynonyms);
     setSynonyms(remainingSynonyms);
   };
 
