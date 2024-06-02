@@ -72,7 +72,7 @@ const ProductList = () => {
             <SwipeableViews
               index={activeTab}
               onChangeIndex={handleTabChange}
-              animateTransitions={isMobile}
+              animateTransitions={false}
               className="my-6 will-change-transform"
             >
               {[allCategory].concat(categoriesData.categories).map((category, i) => {
