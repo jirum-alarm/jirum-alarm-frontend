@@ -7,14 +7,12 @@ import { mp } from '@/lib/mixpanel';
 import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import useScreenSize from '@/hooks/useScreenSize';
 import { EVENT } from '@/constants/mixpanel';
 import { IllustStandingSmall } from '@/components/common/icons';
 import React from 'react';
 
 export default function RecommendationProduct({ hotDeals }: { hotDeals: IProduct[] }) {
-  const { lg, md, sm } = useScreenSize();
-  const hotDealCount = lg ? 10 : md ? 8 : sm ? 6 : 5;
+  const hotDealCount = 10;
 
   return (
     <div
