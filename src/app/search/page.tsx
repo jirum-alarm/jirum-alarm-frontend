@@ -59,9 +59,9 @@ function InitialResult({ show }: { show: boolean }) {
         <div className="flex flex-col gap-y-5">
           <RecentKeywords />
           <RecommendationKeywords />
-          {!hotDeals || hotDeals?.length === 0 ? (
+          {!hotDeals?.length ? (
             <div className="flex min-h-[500px]">
-              <ProductNotFound />
+              <></>
             </div>
           ) : (
             <section>
