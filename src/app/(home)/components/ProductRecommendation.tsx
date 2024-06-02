@@ -12,13 +12,13 @@ import Link from '@/features/Link';
 import { PAGE } from '@/constants/page';
 
 export default function ProductRecommendation({
+  showRandomHotDeals,
   products,
   hotDeals,
-  hotDealsRandom,
 }: {
+  showRandomHotDeals: boolean;
   products: IProduct[] | undefined;
   hotDeals: IProduct[] | undefined;
-  hotDealsRandom: IProduct[] | undefined;
 }) {
   const { lg, md, sm } = useScreenSize();
   const firstRenderingCount = lg ? 15 : md ? 12 : sm ? 9 : 6;
@@ -38,7 +38,7 @@ export default function ProductRecommendation({
           .map((product, i) => <ProductImageCard key={i} product={product} />)}
       </div>
 
-      {hotDealsRandom && (
+      {showRandomHotDeals && hotDeals && (
         <div className="py-11">
           <div className="flex w-full items-center justify-between pb-4 ">
             <span className=" text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
@@ -64,7 +64,7 @@ export default function ProductRecommendation({
                 1024: { slidesPerView: 5.5 },
               }}
             >
-              {hotDealsRandom.slice(0, hotDealCount).map((hotDeal, i) => (
+              {hotDeals.slice(0, hotDealCount).map((hotDeal, i) => (
                 <SwiperSlide key={i}>
                   <ProductImageCard product={hotDeal} type="hotDeal" />
                 </SwiperSlide>
