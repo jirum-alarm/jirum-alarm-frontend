@@ -1,9 +1,7 @@
 import { QueryProducts } from '@/graphql';
-import { QueryCategories } from '@/graphql/category';
 import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface/product';
-import { ICategoryOutput } from '@/graphql/interface/category';
 import { useDevice } from '@/hooks/useDevice';
-import { useQuery, useSuspenseQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -12,6 +10,23 @@ import { EVENT } from '@/constants/mixpanel';
 
 const limit = 20;
 const allCategory = { id: '0', name: '전체' };
+
+const categoriesData = {
+  categories: [
+    { id: '0', name: 'HOT🔥' },
+    { id: '1', name: '컴퓨터' },
+    { id: '2', name: '생활/식품' },
+    { id: '3', name: '화장품' },
+    { id: '4', name: '의류/잡화' },
+    { id: '5', name: '도서' },
+    { id: '6', name: '가전/가구' },
+    { id: '7', name: '등산/레저' },
+    { id: '8', name: '상품권' },
+    { id: '9', name: '디지털' },
+    { id: '10', name: '육아' },
+    { id: '11', name: '기타' },
+  ],
+};
 
 export const useProductListViewModel = () => {
   const searchParams = useSearchParams();
@@ -23,7 +38,10 @@ export const useProductListViewModel = () => {
   const categoryId = categoryParam ? Number(categoryParam) : undefined;
   const isHotDeal = categoryId === 0;
 
-  const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
+  /*
+   * use local storage to cache
+   * */
+  // const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
 
   const {
     data: { products } = {},
