@@ -4,11 +4,16 @@ import Link from 'next/link';
 import { useSearchInputViewModel } from '../hooks/useSearchInputViewModel';
 import { Cancel, Home } from '@/components/common/icons';
 import { cn } from '@/lib/cn';
+import { useEffect } from 'react';
 
 const HOME_PATH = '/';
 
 const SearchInput = ({ show }: { show: boolean }) => {
   const { keyword, inputRef, onKeyDown, handleChange, handleReset } = useSearchInputViewModel();
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [inputRef]);
 
   return (
     <>
