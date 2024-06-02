@@ -10,6 +10,7 @@ import React from 'react';
 import ProductRecommendation from './ProductRecommendation';
 import { useHotDealsViewModel } from '../hooks/useHotDealsViewModel';
 import { mergeRefs } from '@/util/mergeRefs';
+import ProductLoading from './ProductLoading';
 
 const ProductList = () => {
   const {
@@ -78,7 +79,7 @@ const ProductList = () => {
               return (
                 <TabPanel key={key}>
                   {loading || hotDealsLoading ? (
-                    <></>
+                    <ProductLoading />
                   ) : (!products?.length && i !== 1) || !hotDeals?.length ? (
                     <>해당하는 상품이 없어요.</>
                   ) : (
