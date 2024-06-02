@@ -9,6 +9,7 @@ export const QueryProducts = gql`
     $orderOption: OrderOptionType
     $categoryId: Int
     $keyword: String
+    $isHot: Boolean
     $isApp: Boolean
     $isReward: Boolean
     $isGame: Boolean
@@ -21,6 +22,7 @@ export const QueryProducts = gql`
       orderOption: $orderOption
       categoryId: $categoryId
       keyword: $keyword
+      isHot: $isHot
       isApp: $isApp
       isReward: $isReward
       isGame: $isGame

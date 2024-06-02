@@ -7,8 +7,6 @@ import {
 } from '@/graphql/interface';
 import { useQuery } from '@apollo/client';
 
-const HOT_DEAL_CATEGORY_ID = 0;
-
 export const HOT_DEAL_LIMIT = 20;
 const HOT_DEAL_LIMIT_RANDOM = 10;
 
@@ -16,8 +14,8 @@ export const useHotDeals = ({ limit = HOT_DEAL_LIMIT }: { limit?: number } = {})
   const result = useQuery<IProductOutput>(QueryProducts, {
     variables: {
       limit,
-      categoryId: HOT_DEAL_CATEGORY_ID,
-      orderBy: ProductOrderType.ID,
+      isHot: true,
+      orderBy: ProductOrderType.POSTED_AT,
       orderByOption: OrderOptionType.DESC,
     },
   });
