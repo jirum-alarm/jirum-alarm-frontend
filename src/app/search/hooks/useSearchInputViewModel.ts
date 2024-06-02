@@ -8,7 +8,6 @@ const RECENT_KEYWORDS_LIMIT = 10;
 
 export const useSearchInputViewModel = () => {
   const searchParams = useSearchParams();
-  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const keywordParam = searchParams.get('keyword');
@@ -63,7 +62,6 @@ export const useSearchInputViewModel = () => {
 
   return {
     keyword,
-    inputRef,
     onKeyDown,
     handleChange,
     handleReset,
