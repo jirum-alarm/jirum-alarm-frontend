@@ -76,6 +76,7 @@ const nextConfig = withPWA({
   },
   sentry: sentryBuildTimeConfigOptions,
   images: {
+    unoptimized: true,
     // 1year
     minimumCacheTTL: 31536000,
     remotePatterns: [
