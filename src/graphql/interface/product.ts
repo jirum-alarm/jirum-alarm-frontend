@@ -22,6 +22,10 @@ export interface IProductOutput {
   products: IProduct[];
 }
 
+export interface CommunityRandomRankingProductsOutPut {
+  communityRandomRankingProducts: IProduct[];
+}
+
 export enum ProductOrderType {
   ID = 'ID',
   POSTED_AT = 'POSTED_AT',

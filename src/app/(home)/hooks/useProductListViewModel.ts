@@ -35,6 +35,9 @@ export const useProductListViewModel = () => {
       categoryId,
       orderBy: ProductOrderType.ID,
       orderByOption: OrderOptionType.DESC,
+      isApp: false,
+      isReward: false,
+      isGame: false,
     },
     skip: isHotDeal,
   });

@@ -12,7 +12,7 @@ export const useHotDealsViewModel = () => {
   const categoryParam = searchParams.get('categoryId');
 
   const { data: { products: hotDeals } = {}, fetchMore, loading } = useHotDeals({ limit: LIMIT });
-  const { data: { products: hotDealsRandom } = {} } = useHotDealsRandom();
+  const { data: { communityRandomRankingProducts: hotDealsRandom } = {} } = useHotDealsRandom();
 
   const { ref } = useInView({
     onChange(inView) {

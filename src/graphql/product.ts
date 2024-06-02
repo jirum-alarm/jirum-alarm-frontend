@@ -9,6 +9,9 @@ export const QueryProducts = gql`
     $orderOption: OrderOptionType
     $categoryId: Int
     $keyword: String
+    $isApp: Boolean
+    $isReward: Boolean
+    $isGame: Boolean
   ) {
     products(
       limit: $limit
@@ -18,6 +21,45 @@ export const QueryProducts = gql`
       orderOption: $orderOption
       categoryId: $categoryId
       keyword: $keyword
+      isApp: $isApp
+      isReward: $isReward
+      isGame: $isGame
+    ) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      ship
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
+    }
+  }
+`;
+
+export const QueryCommunityRandomRankingProducts = gql`
+  query QueryCommunityRandomRankingProducts(
+    $count: Int!
+    $limit: Int!
+    $isApp: Boolean
+    $isReward: Boolean
+    $isGame: Boolean
+  ) {
+    communityRandomRankingProducts(
+      count: $count
+      limit: $limit
+      isApp: $isApp
+      isReward: $isReward
+      isGame: $isGame
     ) {
       id
       title

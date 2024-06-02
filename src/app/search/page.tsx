@@ -49,7 +49,7 @@ export default function Search() {
 }
 
 function InitialResult({ show }: { show: boolean }) {
-  const { loading, data: { products: hotDeals } = {} } = useHotDealsRandom();
+  const { loading, data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
 
   return (
     <div className={cn(show ? 'block' : 'hidden')}>
