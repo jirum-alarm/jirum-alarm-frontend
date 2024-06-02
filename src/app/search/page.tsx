@@ -54,7 +54,7 @@ function InitialResult({ show }: { show: boolean }) {
   return (
     <div className={cn(show ? 'block' : 'hidden')}>
       {loading ? (
-        <>{/* empty loading */}</>
+        <></>
       ) : (
         <div className="flex flex-col gap-y-5">
           <RecentKeywords />
@@ -87,7 +87,7 @@ function SearchResult({
   return (
     <div className={cn({ hidden: !show })}>
       {loading ? (
-        <div>
+        <div className="pt-56">
           <ProductLoading />
         </div>
       ) : (

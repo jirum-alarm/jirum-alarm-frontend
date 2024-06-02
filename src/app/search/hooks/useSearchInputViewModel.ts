@@ -1,7 +1,7 @@
 import { EVENT } from '@/constants/mixpanel';
 import { mp } from '@/lib/mixpanel';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const RECENT_KEYWORDS_KEY = 'gr-recent-keywords';
 const RECENT_KEYWORDS_LIMIT = 10;
