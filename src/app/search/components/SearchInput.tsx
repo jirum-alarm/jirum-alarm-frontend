@@ -32,7 +32,6 @@ const SearchInput = ({ show }: { show: boolean }) => {
             onKeyDown={onKeyDown}
             onChange={handleChange}
             spellCheck={false}
-            autoFocus
             placeholder="&nbsp;&nbsp;핫딜 제품을 검색해 주세요"
             ref={inputRef}
           />
