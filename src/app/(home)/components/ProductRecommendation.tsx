@@ -22,7 +22,7 @@ export default function ProductRecommendation({
 }) {
   const { lg, md, sm } = useScreenSize();
   const firstRenderingCount = lg ? 15 : md ? 12 : sm ? 9 : 6;
-  const hotDealCount = lg ? 10 : md ? 8 : sm ? 6 : 5;
+  const hotDealCount = 10;
 
   const handleShowMoreClick = () => {
     mp.track(EVENT.SHOW_MORE_HOT_DEALS_CLICK.NAME, {
