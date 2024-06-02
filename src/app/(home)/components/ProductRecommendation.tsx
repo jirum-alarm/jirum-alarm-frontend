@@ -145,7 +145,7 @@ function ProductImageCard({
   );
 }
 
-function ImageWithFallback({
+const ImageWithFallback = React.memo(function ImageWithFallback({
   src,
   title,
   type,
@@ -175,7 +175,7 @@ function ImageWithFallback({
       )}
     </>
   );
-}
+});
 
 function NoImage({ type }: { type: 'product' | 'hotDeal' }) {
   return (
