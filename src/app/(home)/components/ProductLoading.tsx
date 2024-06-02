@@ -1,6 +1,6 @@
 import React from 'react';
-import Lottie from 'lottie-react';
-import loading from '../../../../public/looties/loading.json';
+// import Lottie from 'lottie-react';
+// import loading from '../../../../public/looties/loading.json';
 
 const ProductLoading = () => {
   return (
