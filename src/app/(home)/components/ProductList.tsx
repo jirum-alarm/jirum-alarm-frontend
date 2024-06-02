@@ -11,6 +11,7 @@ import React from 'react';
 import ProductRecommendation from './ProductRecommendation';
 import { useHotDealsViewModel } from '../hooks/useHotDealsViewModel';
 import { mergeRefs } from '@/util/mergeRefs';
+import { useHotDealsRandom } from '@/features/products';
 
 const ProductList = () => {
   const {
@@ -27,6 +28,7 @@ const ProductList = () => {
 
   const {
     hotDeals,
+    hotDealsRandom,
     loading: hotDealsLoading,
     hasNextData: hotDealsHasNextData,
     ref: hotDealsRef,
@@ -91,6 +93,7 @@ const ProductList = () => {
                       <ProductRecommendation
                         products={isHotDeal ? hotDeals : products}
                         hotDeals={isAllCategory ? hotDeals : undefined}
+                        hotDealsRandom={hotDealsRandom}
                       />
                     )}
                   </TabPanel>

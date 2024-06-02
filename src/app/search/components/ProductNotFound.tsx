@@ -3,14 +3,14 @@ import { IllustError } from '@/components/common/icons';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
-import { useHotDeals } from '@/features/products';
+import { useHotDealsRandom } from '@/features/products';
 import { useMe } from '@/features/users';
 import { mp } from '@/lib/mixpanel';
 import React from 'react';
 
 const ProductNotFound = () => {
   const userResult = useMe();
-  const { data: { products: hotDeals } = {} } = useHotDeals();
+  const { data: { products: hotDeals } = {} } = useHotDealsRandom();
 
   const handleAddKeywordClick = () => {
     mp.track(EVENT.ADD_KEYWORD_CLICK.NAME, {

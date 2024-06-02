@@ -1,4 +1,4 @@
-import { useHotDeals } from '@/features/products';
+import { useHotDeals, useHotDealsRandom } from '@/features/products';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -12,6 +12,7 @@ export const useHotDealsViewModel = () => {
   const categoryParam = searchParams.get('categoryId');
 
   const { data: { products: hotDeals } = {}, fetchMore, loading } = useHotDeals({ limit: LIMIT });
+  const { data: { products: hotDealsRandom } = {} } = useHotDealsRandom();
 
   const { ref } = useInView({
     onChange(inView) {
@@ -49,6 +50,7 @@ export const useHotDealsViewModel = () => {
   return {
     loading,
     hotDeals,
+    hotDealsRandom,
     hasNextData,
     ref,
   };

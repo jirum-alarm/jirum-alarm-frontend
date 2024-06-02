@@ -17,8 +17,7 @@ export const useHotDeals = ({ limit = HOT_DEAL_LIMIT }: { limit?: number } = {})
     variables: {
       limit,
       categoryId: HOT_DEAL_CATEGORY_ID,
-      startDate,
-      orderBy: ProductOrderType.COMMUNITY_RANKING,
+      orderBy: ProductOrderType.ID,
       orderByOption: OrderOptionType.DESC,
     },
   });
