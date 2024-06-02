@@ -33,7 +33,7 @@ export const useProductListViewModel = () => {
     variables: {
       limit,
       categoryId,
-      orderBy: ProductOrderType.ID,
+      orderBy: ProductOrderType.POSTED_AT,
       orderByOption: OrderOptionType.DESC,
       isApp: false,
       isReward: false,
