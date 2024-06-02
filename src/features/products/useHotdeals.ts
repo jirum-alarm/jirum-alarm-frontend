@@ -14,9 +14,12 @@ export const useHotDeals = ({ limit = HOT_DEAL_LIMIT }: { limit?: number } = {})
   const result = useQuery<IProductOutput>(QueryProducts, {
     variables: {
       limit,
-      isHot: true,
       orderBy: ProductOrderType.POSTED_AT,
       orderByOption: OrderOptionType.DESC,
+      isHot: true,
+      isApp: false,
+      isReward: false,
+      isGame: false,
     },
   });
 
