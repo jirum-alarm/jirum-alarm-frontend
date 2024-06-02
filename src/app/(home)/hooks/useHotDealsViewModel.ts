@@ -10,8 +10,14 @@ export const useHotDealsViewModel = () => {
 
   const [hasNextData, setHasNextData] = useState(true);
   const categoryParam = searchParams.get('categoryId');
+  const categoryId = categoryParam ? Number(categoryParam) : undefined;
+  const isHotDeal = categoryId === 0;
 
-  const { data: { products: hotDeals } = {}, fetchMore, loading } = useHotDeals({ limit: LIMIT });
+  const {
+    data: { products: hotDeals } = {},
+    fetchMore,
+    loading,
+  } = useHotDeals({ limit: LIMIT, skip: !isHotDeal });
   const { data: { communityRandomRankingProducts: hotDealsRandom } = {} } = useHotDealsRandom();
 
   const { ref } = useInView({

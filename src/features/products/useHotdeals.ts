@@ -10,7 +10,10 @@ import { useQuery } from '@apollo/client';
 export const HOT_DEAL_LIMIT = 20;
 const HOT_DEAL_LIMIT_RANDOM = 10;
 
-export const useHotDeals = ({ limit = HOT_DEAL_LIMIT }: { limit?: number } = {}) => {
+export const useHotDeals = ({
+  limit = HOT_DEAL_LIMIT,
+  skip = false,
+}: { limit?: number; skip?: boolean } = {}) => {
   const result = useQuery<IProductOutput>(QueryProducts, {
     variables: {
       limit,
@@ -21,6 +24,7 @@ export const useHotDeals = ({ limit = HOT_DEAL_LIMIT }: { limit?: number } = {})
       isReward: false,
       isGame: false,
     },
+    skip,
   });
 
   return result;

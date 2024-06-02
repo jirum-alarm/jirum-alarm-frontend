@@ -80,7 +80,7 @@ const ProductList = () => {
                 <TabPanel key={key}>
                   {loading || hotDealsLoading ? (
                     <ProductLoading />
-                  ) : (!products?.length && i !== 1) || !hotDeals?.length ? (
+                  ) : (!products?.length && !isHotDeal) || (!hotDeals?.length && isHotDeal) ? (
                     <>해당하는 상품이 없어요.</>
                   ) : (
                     <ProductRecommendation
