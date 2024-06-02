@@ -1,6 +1,7 @@
 import '@/style/globals.css';
 
 import { Metadata, Viewport } from 'next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GA_TRACKING_ID } from '@/constants/ga';
 import GoogleAnalytics from '../components/GoogleAnalitics';
 import Script from 'next/script';
@@ -49,6 +50,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <InitMixpanel />
             <div className="relative min-w-[320px] bg-white">{children}</div>
             <Toaster />
+            <SpeedInsights />
           </AppProvider>
         </MSWInit>
       </body>
