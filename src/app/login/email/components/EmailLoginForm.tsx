@@ -5,8 +5,7 @@ import { cn } from '@/lib/cn';
 import Input from '@/components/common/Input';
 import { Cancel, Eye, EyeOff } from '@/components/common/icons';
 import useEmailLoginFormViewModel from '../hooks/useEmailLoginFormViewModel';
-import { useEffect, useRef, useState } from 'react';
-import { isIOSFlutterWeb } from '@/util/ua';
+import { useState } from 'react';
 
 const EmailLoginForm = () => {
   const { email, password, error, handleSubmit } = useEmailLoginFormViewModel();
