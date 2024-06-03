@@ -27,12 +27,25 @@ const useSynonymManager = (type: SynonymType) => {
 
   useEffect(() => {
     const querysynonyms = searchParams.getAll(type);
-    setSynonyms(querysynonyms.map((synonym) => ({ text: synonym, isActive: false })));
-  }, [searchParams]);
+    const parsedSynonyms = querysynonyms.map((synonym) => {
+      const [text, isActive] = synonym.split(':');
+      return { text, isActive: isActive === 'true' };
+    });
+    setSynonyms(parsedSynonyms);
+  }, [searchParams, type]);
 
-  const updateQueryString = (text: string) => {
+  const addQueryString = (text: string, isActive: boolean) => {
     const params = new URLSearchParams(searchParams);
-    params.append(type, text);
+    params.append(type, `${text}:${isActive}`);
+    router.push(`${pathname}/?${params.toString()}`);
+  };
+
+  const updateQueryString = (text: string, isActive: boolean) => {
+    const params = new URLSearchParams(searchParams);
+    const values = params.getAll(type);
+    params.delete(type);
+    values.filter((val) => !val.startsWith(`${text}:`)).forEach((val) => params.append(type, val));
+    params.append(type, `${text}:${isActive}`);
     router.push(`${pathname}/?${params.toString()}`);
   };
 
@@ -40,7 +53,7 @@ const useSynonymManager = (type: SynonymType) => {
     const params = new URLSearchParams(searchParams);
     const values = params.getAll(type);
     params.delete(type);
-    values.filter((val) => val !== text).forEach((val) => params.append(type, val));
+    values.filter((val) => !val.startsWith(`${text}:`)).forEach((val) => params.append(type, val));
     router.push(`${pathname}/?${params.toString()}`);
   };
 
@@ -49,7 +62,7 @@ const useSynonymManager = (type: SynonymType) => {
       console.log('해당 키워드가 존재합니다.');
       return;
     }
-    updateQueryString(text);
+    addQueryString(text, false);
     const _synonyms = synonyms.concat({ text: text, isActive: false });
     setSynonyms(_synonyms);
   };
@@ -61,10 +74,16 @@ const useSynonymManager = (type: SynonymType) => {
   };
 
   const handleToggleSynonymActive = (text: string) => {
-    const _synonyms = synonyms.map((synonym) => ({
-      text: synonym.text,
-      isActive: synonym.text === text ? !synonym.isActive : synonym.isActive,
-    }));
+    const _synonyms = synonyms.map((synonym) => {
+      const isActive = synonym.text === text ? !synonym.isActive : synonym.isActive;
+      if (synonym.text === text) {
+        updateQueryString(synonym.text, isActive);
+      }
+      return {
+        text: synonym.text,
+        isActive,
+      };
+    });
     setSynonyms(_synonyms);
   };
 

@@ -29,6 +29,7 @@ const SynonymInputResult = () => {
     synonyms: excludeSynonyms,
     onAddSynonym: onAddExcludeSynonym,
     handleRemoveSynonym: handleRemoveExcludeSynonym,
+    handleToggleSynonymActive: handleToggleExcludeSynonymActive,
     filteredSynonyms: filteredExcludeSynonyms,
   } = useSynonymManager('exclude-synonym');
   const synonymInputRef = useRef<HTMLInputElement>(null);
@@ -90,6 +91,7 @@ const SynonymInputResult = () => {
             onDelete={() => handleRemoveExcludeSynonym(synonym.text)}
             isChecked={synonym.isActive}
             isActive
+            onClick={() => handleToggleExcludeSynonymActive(synonym.text)}
           >
             {synonym.text}
           </Chip>
