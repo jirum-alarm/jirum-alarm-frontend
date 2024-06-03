@@ -10,9 +10,12 @@ import 'swiper/css';
 import { EVENT } from '@/constants/mixpanel';
 import { IllustStandingSmall } from '@/components/common/icons';
 import React from 'react';
+import { useCollectProduct } from '@/features/products';
 
 export default function RecommendationProduct({ hotDeals }: { hotDeals: IProduct[] }) {
   const hotDealCount = 10;
+
+  const [collectProduct] = useCollectProduct();
 
   return (
     <div
@@ -33,7 +36,7 @@ export default function RecommendationProduct({ hotDeals }: { hotDeals: IProduct
       >
         {hotDeals.slice(0, hotDealCount).map((hotDeal, i) => (
           <SwiperSlide key={i}>
-            <ProductImageCard product={hotDeal} type="hotDeal" />
+            <ProductImageCard product={hotDeal} type="hotDeal" collectProduct={collectProduct} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -43,9 +46,12 @@ export default function RecommendationProduct({ hotDeals }: { hotDeals: IProduct
 
 function ProductImageCard({
   product,
+
+  collectProduct,
   type = 'product',
 }: {
   product: IProduct;
+  collectProduct: ReturnType<typeof useCollectProduct>[0];
   type?: 'product' | 'hotDeal';
 }) {
   const handleClick = () => {
@@ -53,6 +59,8 @@ function ProductImageCard({
       product,
       page: EVENT.PAGE.SEARCH,
     });
+
+    collectProduct({ variables: { productId: +product.id } });
   };
 
   return (

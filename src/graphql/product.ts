@@ -83,3 +83,9 @@ export const QueryCommunityRandomRankingProducts = gql`
     }
   }
 `;
+
+export const MutationCollectProduct = gql`
+  mutation MutationCollectProduct($productId: Int!) {
+    collectProduct(productId: $productId)
+  }
+`;
