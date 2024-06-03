@@ -1,20 +1,25 @@
+'use client';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
-import React from 'react';
-import SynonymInputResult from './components/SynonymInputResult';
-import PrimaryKeyword from './components/PrimaryKeyword';
-import WeightSetter from './components/WeightSetter';
-import KeywordSearch from './components/KeywordSearch';
+import { useRouter } from 'next/navigation';
+import TableThree from './components/TableThree';
 
 const KeywordPage = () => {
+  const router = useRouter();
+  const moveKeywordRegister = () => {
+    router.push('/hotdeal/keyword/register');
+  };
   return (
     <DefaultLayout>
-      <div className="flex flex-col gap-4">
-        <WeightSetter />
-        <PrimaryKeyword />
-        <div className="flex gap-3">
-          <SynonymInputResult />
-          <KeywordSearch />
-        </div>
+      <div className="flex w-full justify-end">
+        <button
+          className="mb-2 rounded-xl bg-lime-400 p-2 text-white"
+          onClick={moveKeywordRegister}
+        >
+          추가
+        </button>
+      </div>
+      <div className="flex gap-3">
+        <TableThree />
       </div>
     </DefaultLayout>
   );

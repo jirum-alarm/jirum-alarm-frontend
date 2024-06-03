@@ -35,7 +35,7 @@ const TypingEffectContainer = ({ text, speed = 50 }: Props) => {
 
   return (
     <div
-      className="no-scrollbar h-65 w-full overflow-scroll rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input"
+      className="no-scrollbar h-full w-full overflow-scroll rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input"
       ref={containerRef}
     >
       {!text ? (

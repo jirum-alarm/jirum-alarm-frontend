@@ -176,20 +176,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <Link
                               href="/hotdeal/keyword"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/hotdeal/keyword' && 'text-white'
+                                pathname.includes('/hotdeal/keyword') && 'text-white'
                               }`}
                             >
-                              키워드 등록
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/hotdeal/primary-keywords"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/hotdeal/primary-keywords' && 'text-white'
-                              }`}
-                            >
-                              키워드 목록
+                              키워드
                             </Link>
                           </li>
                         </ul>

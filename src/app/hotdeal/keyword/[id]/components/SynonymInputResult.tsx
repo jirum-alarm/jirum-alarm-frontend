@@ -1,12 +1,12 @@
 'use client';
 import { useRef } from 'react';
 import Chip from '@/components/Chip';
-import useSynonymManager from '../hooks/useSynonymManager';
-import Card from '../../../../components/Card';
 import TypingEffectContainer from './TypingEffectContainer';
 import { handleKeydownEnter } from '@/utils/event';
 import { useQuery } from '@apollo/client';
 import { QueryCommentsByAdmin } from '@/graphql/comments';
+import useSynonymManager from '../hooks/useSynonymManager';
+import Card from '@/components/Card';
 
 const text = `덕분에 잘 샀어요 \n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가`;
 
@@ -18,7 +18,6 @@ const SynonymInputResult = () => {
       excludes: ['안삿'],
     },
   });
-  console.log('data', data);
   const {
     synonyms,
     onAddSynonym,

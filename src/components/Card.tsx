@@ -4,15 +4,15 @@ const Card = ({
   children,
   title,
   disablePadding = false,
-  bgColor = 'bg-white',
+  className,
 }: {
   children: React.ReactNode;
   title?: React.ReactNode;
   disablePadding?: boolean;
-  bgColor?: string;
+  className?: string;
 }) => {
   return (
-    <div className={`w-full overflow-hidden rounded-lg ${bgColor}`}>
+    <div className={`w-full overflow-hidden rounded-lg bg-white ${className}`}>
       {title}
       <div className={disablePadding ? 'p-0' : 'p-5'}>{children}</div>
     </div>

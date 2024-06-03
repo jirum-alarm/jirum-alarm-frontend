@@ -1,7 +1,6 @@
 'use client';
 import Card from '@/components/Card';
 import React, { useState } from 'react';
-import useKeywordManager from '../hooks/useSynonymManager';
 import TypingEffectContainer from './TypingEffectContainer';
 import { handleKeydownEnter } from '@/utils/event';
 
@@ -22,7 +21,7 @@ const KeywordSearch = () => {
   };
 
   return (
-    <Card>
+    <Card className="h-full">
       <h2 className=" mb-3 block text-xl font-medium text-black dark:text-white">검색</h2>
       <input
         type="text"
@@ -32,7 +31,7 @@ const KeywordSearch = () => {
         onKeyDown={handleKeydownEnter(searchKeyword)}
         className="mb-3 w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
       />
-      <div className="mt-3">
+      <div className="mt-3 h-full">
         <TypingEffectContainer text={text} />
       </div>
     </Card>
