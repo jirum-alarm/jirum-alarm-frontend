@@ -76,7 +76,7 @@ const ProductList = () => {
             return (
               <TabPanel key={key}>
                 {loading || hotDealsLoading ? (
-                  <div className="pt-36">
+                  <div className="flex h-[60vh] items-center">
                     <ProductLoading />
                   </div>
                 ) : (!products?.length && !isHotDeal) || (!hotDeals?.length && isHotDeal) ? (

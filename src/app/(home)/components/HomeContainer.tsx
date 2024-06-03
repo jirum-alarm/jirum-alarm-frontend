@@ -101,7 +101,7 @@ function SearchResult({
   return (
     <div className={cn({ hidden: !show })}>
       {loading ? (
-        <div className="pt-56">
+        <div className="flex h-[90vh] items-center justify-center">
           <ProductLoading />
         </div>
       ) : (
