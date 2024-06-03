@@ -26,11 +26,6 @@ const SearchInput = ({ show }: { show: boolean }) => {
             spellCheck={false}
             placeholder="&nbsp;&nbsp;핫딜 제품을 검색해 주세요"
             autoFocus
-            ref={function (ref) {
-              if (ref !== null) {
-                ref.focus();
-              }
-            }}
           />
 
           {keyword && <ResetButton handleReset={handleReset} />}

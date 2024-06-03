@@ -17,25 +17,39 @@ import RecommendationProduct from './(search)/RecommendationProduct';
 import ProductNotFound from './(search)/ProductNotFound';
 import { useInputHideOnScroll } from '../hooks/(search)/useInputHideOnScroll';
 import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function HomeContainer() {
   const searchParams = useSearchParams();
 
+  const [showSearchPage, setShowSearchPage] = useState(false);
+
   const isSearchPage = searchParams.has('search');
+
+  const goSearchPage = () => {
+    history.pushState({}, '', '/?search');
+    setShowSearchPage(true);
+  };
+
+  useEffect(() => {
+    if (isSearchPage) {
+      setShowSearchPage(false);
+    }
+  }, [isSearchPage]);
 
   return (
     <div className="mx-auto max-w-screen-lg px-5">
-      {isSearchPage ? <SearchPage /> : <HomePage />}
+      {isSearchPage || showSearchPage ? <SearchPage /> : <HomePage goSearchPage={goSearchPage} />}
     </div>
   );
 }
 
-function HomePage() {
+function HomePage({ goSearchPage }: { goSearchPage: () => void }) {
   return (
     <>
       <header>
         <NavBar />
-        <SearchInput />
+        <SearchInput goSearchPage={goSearchPage} />
       </header>
       <main>
         <ProductList />

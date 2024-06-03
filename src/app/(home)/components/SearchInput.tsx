@@ -1,12 +1,4 @@
-import { useRouter } from 'next/navigation';
-
-const SearchInput = () => {
-  const router = useRouter();
-
-  const goSearchPage = () => {
-    router.push('/?search');
-  };
-
+const SearchInput = ({ goSearchPage }: { goSearchPage: () => void }) => {
   return (
     <div onClick={goSearchPage} className="mb-4 cursor-pointer rounded bg-gray-50">
       <div className="relative mt-4 flex w-full items-center overflow-hidden">
