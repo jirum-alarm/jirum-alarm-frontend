@@ -9,7 +9,7 @@ import React from 'react';
 import ProductRecommendation from './ProductRecommendation';
 import { useHotDealsViewModel } from '../hooks/useHotDealsViewModel';
 import { mergeRefs } from '@/util/mergeRefs';
-import ProductLoading from './ProductLoading';
+import { ProductLoading } from '@/features/products';
 
 const ProductList = () => {
   const {

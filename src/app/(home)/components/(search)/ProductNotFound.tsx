@@ -69,7 +69,7 @@ const ProductNotFound = () => {
             </div>
           </div>
           <div className="w-full pt-4">
-            <RecommendationProduct hotDeals={hotDeals} />
+            <RecommendationProduct hotDeals={hotDeals} logging={{ page: 'SEARCH_NOT_FOUND' }} />
           </div>
         </>
       ) : undefined}

@@ -4,5 +4,9 @@ import { useMutation } from '@apollo/client';
 export const useCollectProduct = () => {
   const result = useMutation<unknown, { productId: number }>(MutationCollectProduct);
 
-  return result;
+  const handleCollectProduct = (productId: number) => {
+    result[0]({ variables: { productId } });
+  };
+
+  return handleCollectProduct;
 };

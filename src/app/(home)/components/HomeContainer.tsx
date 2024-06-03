@@ -5,7 +5,6 @@ import ProductList from './ProductList';
 import { TopButton } from '@/components/TopButton';
 import { useHotDealsRandom } from '@/features/products';
 import { cn } from '@/lib/cn';
-import ProductLoading from './ProductLoading';
 import SearchInput from './SearchInput';
 import { useProductListViewModel } from '../hooks/(search)/useProductListViewModel';
 import { useSearchInputViewModel } from '../hooks/(search)/useSearchInputViewModel';
@@ -18,6 +17,7 @@ import ProductNotFound from './(search)/ProductNotFound';
 import { useInputHideOnScroll } from '../hooks/(search)/useInputHideOnScroll';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { ProductLoading } from '@/features/products';
 
 export default function HomeContainer() {
   const searchParams = useSearchParams();
@@ -94,7 +94,7 @@ function InitialResult({ show }: { show: boolean }) {
           ) : (
             <section>
               <h2 className="py-4">추천 핫딜</h2>
-              <RecommendationProduct hotDeals={hotDeals} />
+              <RecommendationProduct hotDeals={hotDeals} logging={{ page: 'SEARCH' }} />
             </section>
           )}
         </div>
