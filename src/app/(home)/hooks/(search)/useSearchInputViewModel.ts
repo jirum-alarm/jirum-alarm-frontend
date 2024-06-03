@@ -20,7 +20,7 @@ export const useSearchInputViewModel = () => {
     setKeyword(value);
 
     if (value === '') {
-      router.push('/search');
+      router.push('/?search');
     }
   };
 
@@ -32,11 +32,7 @@ export const useSearchInputViewModel = () => {
     }
 
     if (event.key === 'Enter') {
-      const urlSearchParams = new URLSearchParams(Array.from(searchParams.entries()));
-      urlSearchParams.set('keyword', keyword);
-      const search = urlSearchParams.toString();
-
-      router.replace(`/search?${search}`);
+      router.push(`/?search&keyword=${keyword}`);
 
       mp.track(EVENT.PRODUCT_SEARCH.NAME, {
         keyword,
@@ -50,7 +46,11 @@ export const useSearchInputViewModel = () => {
   const handleReset = () => {
     setKeyword('');
 
-    router.push(`/search`);
+    router.push(`/?search`);
+  };
+
+  const handleGoHome = () => {
+    router.replace(`/`);
   };
 
   useEffect(() => {
@@ -65,6 +65,7 @@ export const useSearchInputViewModel = () => {
     onKeyDown,
     handleChange,
     handleReset,
+    handleGoHome,
   };
 };
 

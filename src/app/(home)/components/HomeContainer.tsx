@@ -1,50 +1,64 @@
 'use client';
 
+import NavBar from '@/components/Navbar';
+import ProductList from './ProductList';
 import { TopButton } from '@/components/TopButton';
-import React, { useCallback, useEffect, useState } from 'react';
-import ProductLoading from '../(home)/components/ProductLoading';
-import ProductNotFound from './components/ProductNotFound';
-import RecentKeywords from './components/RecentKeywords';
-import RecommendationKeywords from './components/RecommendationKeywords';
-import RecommendationProduct from './components/RecommendationProduct';
-import SearchInput from './components/SearchInput';
-import { useProductListViewModel } from './hooks/useProductListViewModel';
-import ProductList from './components/ProductList';
-import { cn } from '@/lib/cn';
-import { throttle } from 'lodash';
-import { useSearchInputViewModel } from './hooks/useSearchInputViewModel';
 import { useHotDealsRandom } from '@/features/products';
+import { cn } from '@/lib/cn';
+import ProductLoading from './ProductLoading';
+import SearchInput from './SearchInput';
+import { useProductListViewModel } from '../hooks/(search)/useProductListViewModel';
+import { useSearchInputViewModel } from '../hooks/(search)/useSearchInputViewModel';
+import SearchPageInput from './(search)/SearchInput';
+import SearchPageProductList from './(search)/ProductList';
+import RecentKeywords from './(search)/RecentKeywords';
+import RecommendationKeywords from './(search)/RecommendationKeywords';
+import RecommendationProduct from './(search)/RecommendationProduct';
+import ProductNotFound from './(search)/ProductNotFound';
+import { useInputHideOnScroll } from '../hooks/(search)/useInputHideOnScroll';
+import { useSearchParams } from 'next/navigation';
 
-export default function Search() {
-  const [showSearchBar, setShowSearchBar] = useState(true);
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
+export default function HomeContainer() {
+  const searchParams = useSearchParams();
 
-  const productViewModel = useProductListViewModel();
-  const searchProductViewModel = useSearchInputViewModel();
-
-  const handleScroll = useCallback(() => {
-    throttle(() => {
-      const currentScrollPos = window.scrollY;
-      setShowSearchBar(prevScrollPos > currentScrollPos || currentScrollPos < 10);
-      setPrevScrollPos(currentScrollPos);
-    }, 300)();
-  }, [prevScrollPos]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
+  const isSearchPage = searchParams.has('search');
 
   return (
     <div className="mx-auto max-w-screen-lg px-5">
+      {isSearchPage ? <SearchPage /> : <HomePage />}
+    </div>
+  );
+}
+
+function HomePage() {
+  return (
+    <>
       <header>
-        <SearchInput show={showSearchBar} {...searchProductViewModel} />
+        <NavBar />
+        <SearchInput />
+      </header>
+      <main>
+        <ProductList />
+      </main>
+    </>
+  );
+}
+
+function SearchPage() {
+  const productViewModel = useProductListViewModel();
+  const searchProductViewModel = useSearchInputViewModel();
+  const showSearchBar = useInputHideOnScroll();
+
+  return (
+    <>
+      <header>
+        <SearchPageInput show={showSearchBar} {...searchProductViewModel} />
       </header>
       <main>
         <InitialResult show={!searchProductViewModel.keyword} />
         <SearchResult show={!!searchProductViewModel.keyword} {...productViewModel} />
       </main>
-    </div>
+    </>
   );
 }
 
@@ -92,7 +106,7 @@ function SearchResult({
         </div>
       ) : (
         <div className="flex justify-center pb-10 pt-5">
-          {isProductEmpty ? <ProductNotFound /> : <ProductList products={products} />}
+          {isProductEmpty ? <ProductNotFound /> : <SearchPageProductList products={products} />}
         </div>
       )}
 

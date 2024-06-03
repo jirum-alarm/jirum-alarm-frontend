@@ -1,14 +1,11 @@
 'use client';
 
-import Link from 'next/link';
-import { useSearchInputViewModel } from '../hooks/useSearchInputViewModel';
+import { useSearchInputViewModel } from '../../hooks/(search)/useSearchInputViewModel';
 import { Cancel, Home } from '@/components/common/icons';
 import { cn } from '@/lib/cn';
 
-const HOME_PATH = '/';
-
 const SearchInput = ({ show }: { show: boolean }) => {
-  const { keyword, onKeyDown, handleChange, handleReset } = useSearchInputViewModel();
+  const { keyword, onKeyDown, handleChange, handleReset, handleGoHome } = useSearchInputViewModel();
 
   return (
     <>
@@ -21,28 +18,26 @@ const SearchInput = ({ show }: { show: boolean }) => {
         )}
       >
         <div className={cn('flex w-full items-center  overflow-hidden rounded bg-gray-50')}>
-          <form>
-            <input
-              value={keyword ?? ''}
-              className="h-10 w-full bg-gray-50 px-3 text-sm  outline-none"
-              onKeyDown={onKeyDown}
-              onChange={handleChange}
-              spellCheck={false}
-              placeholder="&nbsp;&nbsp;핫딜 제품을 검색해 주세요"
-              autoFocus
-              ref={function (ref) {
-                if (ref !== null) {
-                  ref.focus();
-                }
-              }}
-            />
-          </form>
+          <input
+            value={keyword ?? ''}
+            className="h-10 w-full bg-gray-50 px-3 text-sm  outline-none"
+            onKeyDown={onKeyDown}
+            onChange={handleChange}
+            spellCheck={false}
+            placeholder="&nbsp;&nbsp;핫딜 제품을 검색해 주세요"
+            autoFocus
+            ref={function (ref) {
+              if (ref !== null) {
+                ref.focus();
+              }
+            }}
+          />
 
           {keyword && <ResetButton handleReset={handleReset} />}
         </div>
-        <Link href={HOME_PATH}>
+        <div onClick={handleGoHome} className="cursor-pointer">
           <Home />
-        </Link>
+        </div>
       </div>
       <div className="h-14"></div>
     </>

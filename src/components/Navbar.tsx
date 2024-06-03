@@ -5,7 +5,6 @@ import { Alert, Logo, My } from '@/components/common/icons';
 import { useQuery } from '@apollo/client';
 import { QueryUnreadNotificationsCount } from '@/graphql/notification';
 import { UnreadNotificationsCount } from '@/graphql/interface';
-import { isIOSFlutterWeb } from '@/util/ua';
 import { useMe } from '@/features/users';
 
 const LOGIN_PATH = '/login';
@@ -19,32 +18,26 @@ export default function NavBar() {
     { skip: !data?.me },
   );
 
-  const layoutPaddingTop = isIOSFlutterWeb() ? 'pt-4' : 'pt-6';
-
   return (
-    <>
-      <div className={`${layoutPaddingTop}`}>
-        <div className="flex items-center justify-between">
-          <Link href="/">
-            <div className="grid grid-flow-col items-center gap-x-3">
-              <Logo />
-              <h1 className="text-lg font-semibold">지름알림</h1>
-            </div>
-          </Link>
-          <div className="w-3/12" />
-          <div className="flex w-3/12 justify-end gap-x-3">
-            <Link href={ALARM_PATH} className="relative">
-              {unreadNotificationsCount.data?.unreadNotificationsCount ? (
-                <div className="absolute left-[15.5px] top-[4.6px] h-1.5 w-1.5 animate-fade-in rounded-full bg-error-500"></div>
-              ) : undefined}
-              <Alert />
-            </Link>
-            <Link href={data?.me ? MYPAGE_PATH : LOGIN_PATH}>
-              <My />
-            </Link>
-          </div>
+    <div className="flex items-center justify-between pt-6">
+      <Link href="/">
+        <div className="grid grid-flow-col items-center gap-x-3">
+          <Logo />
+          <h1 className="text-lg font-semibold">지름알림</h1>
         </div>
+      </Link>
+      <div className="w-3/12" />
+      <div className="flex w-3/12 justify-end gap-x-3">
+        <Link href={ALARM_PATH} className="relative">
+          {unreadNotificationsCount.data?.unreadNotificationsCount ? (
+            <div className="absolute left-[15.5px] top-[4.6px] h-1.5 w-1.5 animate-fade-in rounded-full bg-error-500"></div>
+          ) : undefined}
+          <Alert />
+        </Link>
+        <Link href={data?.me ? MYPAGE_PATH : LOGIN_PATH}>
+          <My />
+        </Link>
       </div>
-    </>
+    </div>
   );
 }

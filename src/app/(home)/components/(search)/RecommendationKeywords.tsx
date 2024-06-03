@@ -55,7 +55,7 @@ function Chip({ keyword }: { keyword: string }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/search?keyword=${keyword}`);
+    router.push(`/?search&keyword=${keyword}`);
 
     mp.track(EVENT.PRODUCT_SEARCH.NAME, {
       keyword,
