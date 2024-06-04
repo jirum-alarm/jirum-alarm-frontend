@@ -17,6 +17,7 @@ const useSynonymManager = (type: SynonymType) => {
   const [filteredSynonyms, setFilteredSynonyms] = useState<SynonymChips[]>();
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const activeSynonym = synonyms.filter((chip) => chip.isActive);
     if (activeSynonym.length === 0) {
       setFilteredSynonyms(synonyms);
@@ -26,6 +27,7 @@ const useSynonymManager = (type: SynonymType) => {
   }, [synonyms]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const querysynonyms = searchParams.getAll(type);
     const parsedSynonyms = querysynonyms.map((synonym) => {
       const [text, isActive] = synonym.split(':');
