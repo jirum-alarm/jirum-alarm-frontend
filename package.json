@@ -3,15 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "dev": "turbo dev",
     "prepare": "husky",
     "lint-staged": "lint-staged"
   },
   "devDependencies": {
     "husky": "^9.0.11",
-    "lint-staged": "^15.2.2"
+    "lint-staged": "^15.2.2",
+    "turbo": "^2.0.1"
   },
   "engines": {
-    "node": "v20.14.0"
+    "node": ">=v20.x.x"
   },
   "packageManager": "pnpm@9.2.0"
 }

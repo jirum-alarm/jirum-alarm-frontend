@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "prettier-fix": "prettier --write \"./**/*.{js,ts,tsx}\" --ignore-path .gitignore --ignore-path .prettierignore ",
-    "ts-check": "tsc --noEmit",
+    "check-types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
