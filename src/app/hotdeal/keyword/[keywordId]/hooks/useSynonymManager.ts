@@ -3,10 +3,14 @@ import { useEffect, useState } from 'react';
 
 type SynonymChips = {
   text: string;
-  isActive: boolean;
+  isChecked: boolean;
+  isSaved: boolean;
 };
 
 type SynonymType = 'synonym' | 'exclude-synonym';
+
+// ['삿','샀']
+// ['안삿']
 
 const useSynonymManager = (type: SynonymType) => {
   const router = useRouter();
@@ -17,7 +21,7 @@ const useSynonymManager = (type: SynonymType) => {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const activeSynonym = synonyms.filter((chip) => chip.isActive);
+    const activeSynonym = synonyms.filter((chip) => chip.isChecked);
     if (activeSynonym.length === 0) {
       setFilteredSynonyms(synonyms.map((synonym) => synonym.text));
     } else {
@@ -29,24 +33,24 @@ const useSynonymManager = (type: SynonymType) => {
     if (typeof window === 'undefined') return;
     const querysynonyms = searchParams.getAll(type);
     const parsedSynonyms = querysynonyms.map((synonym) => {
-      const [text, isActive] = synonym.split(':');
-      return { text, isActive: isActive === 'true' };
+      const [text, isChecked] = synonym.split(':');
+      return { text, isChecked: isChecked === 'true', isSaved: false };
     });
     setSynonyms(parsedSynonyms);
   }, [searchParams, type]);
 
-  const addQueryString = (text: string, isActive: boolean) => {
+  const addQueryString = (text: string, isChecked: boolean) => {
     const params = new URLSearchParams(searchParams);
-    params.append(type, `${text}:${isActive}`);
+    params.append(type, `${text}:${isChecked}`);
     router.replace(`${pathname}/?${params.toString()}`);
   };
 
-  const updateQueryString = (text: string, isActive: boolean) => {
+  const updateQueryString = (text: string, isChecked: boolean) => {
     const params = new URLSearchParams(searchParams);
     const values = params.getAll(type);
     params.delete(type);
     values.filter((val) => !val.startsWith(`${text}:`)).forEach((val) => params.append(type, val));
-    params.append(type, `${text}:${isActive}`);
+    params.append(type, `${text}:${isChecked}`);
     router.replace(`${pathname}/?${params.toString()}`);
   };
 
@@ -64,7 +68,7 @@ const useSynonymManager = (type: SynonymType) => {
       return;
     }
     addQueryString(text, false);
-    const _synonyms = synonyms.concat({ text: text, isActive: false });
+    const _synonyms = synonyms.concat({ text: text, isChecked: false, isSaved: false });
     setSynonyms(_synonyms);
   };
 
@@ -76,13 +80,14 @@ const useSynonymManager = (type: SynonymType) => {
 
   const handleToggleSynonymActive = (text: string) => {
     const _synonyms = synonyms.map((synonym) => {
-      const isActive = synonym.text === text ? !synonym.isActive : synonym.isActive;
+      const isChecked = synonym.text === text ? !synonym.isChecked : synonym.isChecked;
       if (synonym.text === text) {
-        updateQueryString(synonym.text, isActive);
+        updateQueryString(synonym.text, isChecked);
       }
       return {
         text: synonym.text,
-        isActive,
+        isChecked,
+        isSaved: synonym.isSaved,
       };
     });
     setSynonyms(_synonyms);

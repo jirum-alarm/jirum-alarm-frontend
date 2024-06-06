@@ -83,7 +83,7 @@ const SynonymInputResult = ({ keywordId }: Props) => {
 
   const highlightedComments = useMemo(() => {
     if (!comments) return '';
-    let _comments = comments.commentsByAdmin.join('\n');
+    let _comments = comments.commentsByAdmin.join('\n\n');
     filteredSynonyms?.forEach((synonym) => {
       const regex = new RegExp(synonym, 'g');
       _comments = _comments.replace(regex, `<span class="bg-green-300">${synonym}</span>`);
@@ -115,7 +115,7 @@ const SynonymInputResult = ({ keywordId }: Props) => {
           <Chip
             key={synonym.text}
             onDelete={() => handleRemoveSynonym(synonym.text)}
-            isChecked={synonym.isActive}
+            isChecked={synonym.isChecked}
             isActive
             onClick={() => handleToggleSynonymActive(synonym.text)}
           >
@@ -138,7 +138,7 @@ const SynonymInputResult = ({ keywordId }: Props) => {
           <Chip
             key={synonym.text}
             onDelete={() => handleRemoveExcludeSynonym(synonym.text)}
-            isChecked={synonym.isActive}
+            isChecked={synonym.isChecked}
             isActive
             onClick={() => handleToggleExcludeSynonymActive(synonym.text)}
           >
