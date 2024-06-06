@@ -1,6 +1,7 @@
 import Card from '@/components/Card';
 import React from 'react';
 import RadioButton from './RadioButton';
+import { useAddHotDealKeyword } from '@/hooks/graphql/keyword';
 
 const PrimaryKeyword = () => {
   return (
