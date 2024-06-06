@@ -11,7 +11,7 @@ interface GetCommentsVariables {
   excludes?: string[];
 }
 
-const useGetComments = (queryOptions: QueryHookOptions<any, GetCommentsVariables>) => {
+export const useGetComments = (queryOptions: QueryHookOptions<any, GetCommentsVariables>) => {
   const { variables, ...rest } = queryOptions;
   return useQuery<GetCommentsData, GetCommentsVariables>(QueryCommentsByAdmin, {
     ...rest,
@@ -22,5 +22,3 @@ const useGetComments = (queryOptions: QueryHookOptions<any, GetCommentsVariables
     },
   });
 };
-
-export { useGetComments };

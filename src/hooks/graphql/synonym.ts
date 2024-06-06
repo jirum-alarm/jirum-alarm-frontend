@@ -9,7 +9,7 @@ interface AddHotDealKeywordSynonymByAdminVariable {
   keyword: string;
 }
 
-const useAddHotDealKeywordSynonymByAdmin = (
+export const useAddHotDealKeywordSynonymByAdmin = (
   options?: MutationHookOptions<any, AddHotDealKeywordSynonymByAdminVariable>,
 ) => {
   return useMutation<
@@ -25,7 +25,7 @@ interface AddHotDealExcludeKeywordByAdminVariable {
   excludeKeyword: string;
 }
 
-const useAddHotDealExcludeKeywordByAdmin = (
+export const useAddHotDealExcludeKeywordByAdmin = (
   options?: MutationHookOptions<any, AddHotDealExcludeKeywordByAdminVariable>,
 ) => {
   return useMutation<
@@ -35,5 +35,3 @@ const useAddHotDealExcludeKeywordByAdmin = (
     ...options,
   });
 };
-
-export { useAddHotDealKeywordSynonymByAdmin, useAddHotDealExcludeKeywordByAdmin };
