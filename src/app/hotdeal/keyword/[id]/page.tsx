@@ -10,7 +10,7 @@ const KeywordDetailPage = () => {
         <div className="flex w-full justify-end">
           <button className="rounded-xl bg-lime-400 p-2 text-white">저장</button>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-col gap-3">
           <SynonymInputResult />
           <KeywordSearch />
         </div>

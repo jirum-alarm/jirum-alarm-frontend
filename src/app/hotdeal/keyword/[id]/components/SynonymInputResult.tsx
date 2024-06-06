@@ -1,23 +1,13 @@
 'use client';
-import { useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Chip from '@/components/Chip';
 import TypingEffectContainer from './TypingEffectContainer';
 import { handleKeydownEnter } from '@/utils/event';
-import { useQuery } from '@apollo/client';
-import { QueryCommentsByAdmin } from '@/graphql/comments';
 import useSynonymManager from '../hooks/useSynonymManager';
 import Card from '@/components/Card';
-
-const text = `덕분에 잘 샀어요 \n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가`;
+import { useGetComments } from '@/hooks/graphql/comments';
 
 const SynonymInputResult = () => {
-  const { data } = useQuery(QueryCommentsByAdmin, {
-    variables: {
-      hotDealKeywordId: 1,
-      synonyms: ['삿', '샀'],
-      excludes: ['안삿'],
-    },
-  });
   const {
     synonyms,
     onAddSynonym,
@@ -32,6 +22,17 @@ const SynonymInputResult = () => {
     handleToggleSynonymActive: handleToggleExcludeSynonymActive,
     filteredSynonyms: filteredExcludeSynonyms,
   } = useSynonymManager('exclude-synonym');
+
+  console.log('re-render');
+
+  const { data: comments } = useGetComments({
+    variables: {
+      hotDealKeywordId: 1,
+      synonyms: filteredSynonyms,
+      excludes: filteredExcludeSynonyms,
+    },
+  });
+
   const synonymInputRef = useRef<HTMLInputElement>(null);
   const excludeSynonymInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,9 +52,23 @@ const SynonymInputResult = () => {
     excludeSynonymInputRef.current.value = '';
   };
 
+  const highlightedComments = useMemo(() => {
+    if (!comments) return '';
+    let _comments = comments.commentsByAdmin.join('\n');
+    filteredSynonyms?.forEach((synonym) => {
+      const regex = new RegExp(synonym, 'g');
+      _comments = _comments.replace(regex, `<span class="bg-green-300">${synonym}</span>`);
+    });
+    filteredExcludeSynonyms?.forEach((synonym) => {
+      const regex = new RegExp(synonym, 'g');
+      _comments = _comments.replace(regex, `<span class="bg-rose-300">${synonym}</span>`);
+    });
+    return _comments;
+  }, [comments, filteredSynonyms, filteredExcludeSynonyms]);
+
   return (
     <Card>
-      <h2 className=" mb-3 block text-xl font-medium text-black dark:text-white">유의어 검색</h2>
+      <h2 className=" mb-3 block text-xl font-medium text-black dark:text-white ">유의어 검색</h2>
       <input
         ref={synonymInputRef}
         type="text"
@@ -98,7 +113,7 @@ const SynonymInputResult = () => {
         ))}
       </div>
       <div className="mt-3">
-        <TypingEffectContainer text={text} />
+        <TypingEffectContainer text={highlightedComments} />
       </div>
     </Card>
   );

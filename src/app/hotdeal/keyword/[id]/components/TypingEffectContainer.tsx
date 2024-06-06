@@ -6,46 +6,51 @@ interface Props {
   speed?: number;
 }
 const TypingEffectContainer = ({ text, speed = 50 }: Props) => {
-  const [displayedText, setDisplayedText] = useState('');
-  const [isFinished, setIsFinished] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  // const [displayedText, setDisplayedText] = useState('');
+  // const [isFinished, setIsFinished] = useState(false);
+  // const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!text) return;
-    let index = 0;
-    setDisplayedText('');
-    setIsFinished(false);
-    const intervalId = setInterval(() => {
-      setDisplayedText((prev) => prev + text.charAt(index));
-      index += 1;
-      if (index >= text.length) {
-        clearInterval(intervalId);
-        setIsFinished(true);
-      }
-    }, speed);
+  // useEffect(() => {
+  //   if (!text) return;
+  //   let index = 0;
+  //   setDisplayedText('');
+  //   setIsFinished(false);
+  //   const intervalId = setInterval(() => {
+  //     setDisplayedText((prev) => prev + text.charAt(index));
+  //     index += 1;
+  //     if (index >= text.length) {
+  //       clearInterval(intervalId);
+  //       setIsFinished(true);
+  //     }
+  //   }, speed);
 
-    return () => clearInterval(intervalId);
-  }, [text, speed]);
+  //   return () => clearInterval(intervalId);
+  // }, [text, speed]);
 
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
-    }
-  }, [displayedText]);
+  // useEffect(() => {
+  //   if (containerRef.current) {
+  //     containerRef.current.scrollTop = containerRef.current.scrollHeight;
+  //   }
+  // }, [displayedText]);
 
+  // return (
+  //   <div
+  //     className="no-scrollbar h-96 w-full overflow-scroll rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input"
+  //     ref={containerRef}
+  //   >
+  //     {!text ? (
+  //       <Cursor />
+  //     ) : (
+  //       <div className=" whitespace-pre">
+  //         {displayedText}
+  //         {!isFinished && <Cursor />}
+  //       </div>
+  //     )}
+  //   </div>
+  // );
   return (
-    <div
-      className="no-scrollbar h-96 w-full overflow-scroll rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input"
-      ref={containerRef}
-    >
-      {!text ? (
-        <Cursor />
-      ) : (
-        <div className=" whitespace-pre">
-          {displayedText}
-          {!isFinished && <Cursor />}
-        </div>
-      )}
+    <div className="h-96 w-full overflow-scroll rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input">
+      <div className="whitespace-pre leading-7" dangerouslySetInnerHTML={{ __html: text }}></div>
     </div>
   );
 };

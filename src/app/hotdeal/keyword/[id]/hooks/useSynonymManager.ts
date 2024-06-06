@@ -14,15 +14,15 @@ const useSynonymManager = (type: SynonymType) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [synonyms, setSynonyms] = useState<SynonymChips[]>([]);
-  const [filteredSynonyms, setFilteredSynonyms] = useState<SynonymChips[]>();
+  const [filteredSynonyms, setFilteredSynonyms] = useState<string[]>();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const activeSynonym = synonyms.filter((chip) => chip.isActive);
     if (activeSynonym.length === 0) {
-      setFilteredSynonyms(synonyms);
+      setFilteredSynonyms(synonyms.map((synonym) => synonym.text));
     } else {
-      setFilteredSynonyms(activeSynonym);
+      setFilteredSynonyms(activeSynonym.map((synonym) => synonym.text));
     }
   }, [synonyms]);
 
