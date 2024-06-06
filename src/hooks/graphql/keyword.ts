@@ -19,6 +19,16 @@ export const useAddHotDealKeyword = (
   return useMutation<{ data: { addHotDealKeywordByAdmin: boolean } }, AddHotDealKeywordVariable>(
     MutationAddHotDealKeywordByAdmin,
     {
+      refetchQueries: [
+        {
+          query: QueryHotDealKeywordByAdmin,
+          variables: {
+            orderBy: HotDealKeywordOrderType.ID,
+            orderOption: OrderOptionType.ASC,
+            limit: 10,
+          },
+        },
+      ],
       ...options,
     },
   );
