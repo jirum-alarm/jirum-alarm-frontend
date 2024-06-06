@@ -1,10 +1,11 @@
 'use client';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import { useRouter } from 'next/navigation';
-import TableThree from './components/TableThree';
+import HotdealKeywordsTable from './components/HotdealKeywordsTable';
 
 const KeywordPage = () => {
   const router = useRouter();
+
   const moveKeywordRegister = () => {
     router.push('/hotdeal/keyword/register');
   };
@@ -19,7 +20,7 @@ const KeywordPage = () => {
         </button>
       </div>
       <div className="flex gap-3">
-        <TableThree />
+        <HotdealKeywordsTable />
       </div>
     </DefaultLayout>
   );

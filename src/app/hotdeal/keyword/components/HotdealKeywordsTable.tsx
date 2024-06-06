@@ -1,35 +1,20 @@
 'use client';
 import SwitcherOne from '@/components/Switchers/SwitcherOne';
+import { useGetHotDealKeywords } from '@/hooks/graphql/keyword';
+import { HotDealKeywordType } from '@/types/keyword';
 import { Package } from '@/types/package';
 import { useRouter } from 'next/navigation';
 
-const packageData = [
-  {
-    name: '사다',
-    weight: 1,
-    status: 'Paid',
-  },
-  {
-    name: '구매',
-    weight: 3,
-    status: 'Paid',
-  },
-  {
-    name: '별로',
-    weight: 1,
-    status: 'Unpaid',
-  },
-  {
-    name: '비싸',
-    weight: 2,
-    status: 'Pending',
-  },
-];
+const HotDealKeywordTypeMap = {
+  POSITIVE: '긍정',
+  NEGATIVE: '부정',
+};
 
-const TableThree = () => {
+const HotdealKeywordsTable = () => {
   const router = useRouter();
-  const moveKeywordDetail = () => {
-    router.push('/hotdeal/keyword/1');
+  const { data } = useGetHotDealKeywords();
+  const moveKeywordDetail = (keywordId: number) => {
+    router.push(`/hotdeal/keyword/${keywordId}`);
   };
   return (
     <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -55,29 +40,29 @@ const TableThree = () => {
             </tr>
           </thead>
           <tbody>
-            {packageData.map((packageItem, key) => (
+            {data?.hotDealKeywordsByAdmin.map((hotdeal, key) => (
               <tr
-                key={key}
+                key={hotdeal.id}
                 className="cursor-pointer hover:bg-slate-100"
-                onClick={moveKeywordDetail}
+                onClick={() => moveKeywordDetail(hotdeal.id)}
               >
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">{packageItem.name}</h5>
+                  <h5 className="font-medium text-black dark:text-white">{hotdeal.keyword}</h5>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">{packageItem.weight}</p>
+                  <p className="text-black dark:text-white">{hotdeal.weight}</p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
-                      packageItem.status === 'Paid'
+                      hotdeal.type === HotDealKeywordType.POSITIVE
                         ? 'bg-success text-success'
-                        : packageItem.status === 'Unpaid'
+                        : hotdeal.type === HotDealKeywordType.NEGATIVE
                           ? 'bg-danger text-danger'
-                          : 'bg-warning text-warning'
+                          : ''
                     }`}
                   >
-                    {packageItem.status}
+                    {HotDealKeywordTypeMap[hotdeal.type]}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -139,4 +124,4 @@ const TableThree = () => {
   );
 };
 
-export default TableThree;
+export default HotdealKeywordsTable;

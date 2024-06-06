@@ -1,6 +1,5 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { flushSync } from 'react-dom';
 
 type SynonymChips = {
   text: string;
