@@ -7,7 +7,11 @@ import useSynonymManager from '../hooks/useSynonymManager';
 import Card from '@/components/Card';
 import { useGetComments } from '@/hooks/graphql/comments';
 
-const SynonymInputResult = () => {
+interface Props {
+  keywordId: string;
+}
+
+const SynonymInputResult = ({ keywordId }: Props) => {
   const {
     synonyms,
     onAddSynonym,
@@ -23,11 +27,9 @@ const SynonymInputResult = () => {
     filteredSynonyms: filteredExcludeSynonyms,
   } = useSynonymManager('exclude-synonym');
 
-  console.log('re-render');
-
   const { data: comments } = useGetComments({
     variables: {
-      hotDealKeywordId: 1,
+      hotDealKeywordId: Number(keywordId),
       synonyms: filteredSynonyms,
       excludes: filteredExcludeSynonyms,
     },

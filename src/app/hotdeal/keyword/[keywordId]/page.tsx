@@ -3,7 +3,7 @@ import React from 'react';
 import KeywordSearch from './components/KeywordSearch';
 import SynonymInputResult from './components/SynonymInputResult';
 
-const KeywordDetailPage = () => {
+const KeywordDetailPage = ({ params }: { params: { keywordId: string } }) => {
   return (
     <DefaultLayout>
       <div className="flex flex-col gap-4">
@@ -11,7 +11,7 @@ const KeywordDetailPage = () => {
           <button className="rounded-xl bg-lime-400 p-2 text-white">저장</button>
         </div>
         <div className="flex flex-col gap-3">
-          <SynonymInputResult />
+          <SynonymInputResult keywordId={params.keywordId} />
           <KeywordSearch />
         </div>
       </div>
