@@ -8,7 +8,7 @@ import { MutationHookOptions, useMutation } from '@apollo/client';
 
 interface AddHotDealKeywordSynonymByAdminVariable {
   hotDealKeywordId: number;
-  keyword: string[];
+  keywords: string[];
 }
 
 export const useAddHotDealKeywordSynonymByAdmin = (
@@ -24,7 +24,7 @@ export const useAddHotDealKeywordSynonymByAdmin = (
 
 interface AddHotDealExcludeKeywordByAdminVariable {
   hotDealKeywordId: number;
-  excludeKeyword: string[];
+  excludeKeywords: string[];
 }
 
 export const useAddHotDealExcludeKeywordByAdmin = (

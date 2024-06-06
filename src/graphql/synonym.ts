@@ -1,18 +1,18 @@
 import { gql } from '@apollo/client';
 
 export const MutationAddHotDealKeywordSynonymByAdmin = gql`
-  mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keyword: [String!]!) {
-    addHotDealKeywordSynonymByAdmin(hotDealKeywordId: $hotDealKeywordId, keyword: $keyword)
+  mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keywords: [String!]!) {
+    addHotDealKeywordSynonymByAdmin(hotDealKeywordId: $hotDealKeywordId, keywords: $keywords)
   }
 `;
 export const MutationAddHotDealExcludeKeywordByAdmin = gql`
   mutation MutationAddHotDealExcludeKeywordByAdmin(
     $hotDealKeywordId: Int!
-    $excludeKeyword: [String!]!
+    $excludeKeywords: [String!]!
   ) {
     addHotDealExcludeKeywordByAdmin(
       hotDealKeywordId: $hotDealKeywordId
-      excludeKeyword: $excludeKeyword
+      excludeKeywords: $excludeKeywords
     )
   }
 `;
