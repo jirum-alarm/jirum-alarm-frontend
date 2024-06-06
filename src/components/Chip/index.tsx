@@ -10,7 +10,7 @@ const Chip = ({ children, onClick, onDelete, isChecked, isActive }: Props) => {
   return (
     <button
       tabIndex={0}
-      className={`flex h-8 items-center justify-center gap-1 rounded-full border border-zinc-300 transition-[background-color] hover:bg-zinc-200 ${isActive ? 'border-lime-600' : ''}`}
+      className={`flex h-8 items-center justify-center gap-1 rounded-full border transition-[background-color] hover:bg-zinc-200 ${isActive ? 'border-lime-600' : 'border-zinc-300'}`}
       onClick={onClick}
     >
       {isChecked && (

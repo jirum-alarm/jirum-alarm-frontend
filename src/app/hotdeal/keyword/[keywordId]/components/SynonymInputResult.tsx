@@ -10,27 +10,41 @@ import {
   useAddHotDealExcludeKeywordByAdmin,
   useAddHotDealKeywordSynonymByAdmin,
 } from '@/hooks/graphql/synonym';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface Props {
   keywordId: string;
+  synonymList: Array<{ id: number; hotDealKeywordId: number; keyword: string }>;
+  excludeKeywordList: Array<{ id: number; hotDealKeywordId: number; excludeKeyword: string }>;
 }
 
-const SynonymInputResult = ({ keywordId }: Props) => {
+const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Props) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const hotDealKeywordId = Number(keywordId);
+
   const {
     synonyms,
+    syncSavedSynonymsToState,
     onAddSynonym,
     handleRemoveSynonym,
     handleToggleSynonymActive,
     filteredSynonyms,
+    onReset,
   } = useSynonymManager('synonym');
   const {
     synonyms: excludeSynonyms,
+    syncSavedSynonymsToState: syncSavedExcludeSynonymsToState,
     onAddSynonym: onAddExcludeSynonym,
     handleRemoveSynonym: handleRemoveExcludeSynonym,
     handleToggleSynonymActive: handleToggleExcludeSynonymActive,
     filteredSynonyms: filteredExcludeSynonyms,
   } = useSynonymManager('exclude-synonym');
+
+  useEffect(() => {
+    syncSavedSynonymsToState(synonymList.map((synonym) => synonym.keyword));
+    syncSavedExcludeSynonymsToState(excludeKeywordList.map((synonym) => synonym.excludeKeyword));
+  }, [synonymList, excludeKeywordList]);
 
   const [saveSynonym] = useAddHotDealKeywordSynonymByAdmin();
   const [saveExcludeSynonym] = useAddHotDealExcludeKeywordByAdmin();
@@ -63,22 +77,8 @@ const SynonymInputResult = ({ keywordId }: Props) => {
   };
 
   const handleSaveSynonym = () => {
-    filteredSynonyms?.forEach((synonym) => {
-      saveSynonym({
-        variables: {
-          hotDealKeywordId: hotDealKeywordId,
-          keyword: synonym,
-        },
-      });
-    });
-    filteredExcludeSynonyms?.forEach((excludeSynonym) => {
-      saveExcludeSynonym({
-        variables: {
-          hotDealKeywordId: hotDealKeywordId,
-          excludeKeyword: excludeSynonym,
-        },
-      });
-    });
+    onReset();
+    return;
   };
 
   const highlightedComments = useMemo(() => {
@@ -116,7 +116,7 @@ const SynonymInputResult = ({ keywordId }: Props) => {
             key={synonym.text}
             onDelete={() => handleRemoveSynonym(synonym.text)}
             isChecked={synonym.isChecked}
-            isActive
+            isActive={synonym.isSaved}
             onClick={() => handleToggleSynonymActive(synonym.text)}
           >
             {synonym.text}
@@ -139,7 +139,7 @@ const SynonymInputResult = ({ keywordId }: Props) => {
             key={synonym.text}
             onDelete={() => handleRemoveExcludeSynonym(synonym.text)}
             isChecked={synonym.isChecked}
-            isActive
+            isActive={synonym.isSaved}
             onClick={() => handleToggleExcludeSynonymActive(synonym.text)}
           >
             {synonym.text}

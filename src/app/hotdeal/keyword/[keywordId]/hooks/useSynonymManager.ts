@@ -9,9 +9,6 @@ type SynonymChips = {
 
 type SynonymType = 'synonym' | 'exclude-synonym';
 
-// ['삿','샀']
-// ['안삿']
-
 const useSynonymManager = (type: SynonymType) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,14 +27,18 @@ const useSynonymManager = (type: SynonymType) => {
   }, [synonyms]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const querysynonyms = searchParams.getAll(type);
-    const parsedSynonyms = querysynonyms.map((synonym) => {
-      const [text, isChecked] = synonym.split(':');
-      return { text, isChecked: isChecked === 'true', isSaved: false };
-    });
-    setSynonyms(parsedSynonyms);
+    // if (typeof window === 'undefined') return;
+    // const querysynonyms = searchParams.getAll(type);
+    // const parsedSynonyms = querysynonyms.map((synonym) => {
+    //   const [text, isChecked] = synonym.split(':');
+    //   return { text, isChecked: isChecked === 'true', isSaved: false };
+    // });
+    // setSynonyms(parsedSynonyms);
   }, [searchParams, type]);
+
+  const syncSavedSynonymsToState = (textList: string[]) => {
+    setSynonyms(textList.map((text) => ({ text, isChecked: false, isSaved: true })));
+  };
 
   const addQueryString = (text: string, isChecked: boolean) => {
     const params = new URLSearchParams(searchParams);
@@ -67,13 +68,13 @@ const useSynonymManager = (type: SynonymType) => {
       console.log('해당 키워드가 존재합니다.');
       return;
     }
-    addQueryString(text, false);
+    // addQueryString(text, false);
     const _synonyms = synonyms.concat({ text: text, isChecked: false, isSaved: false });
     setSynonyms(_synonyms);
   };
 
   const handleRemoveSynonym = (text: string) => {
-    deleteQueryString(text);
+    // deleteQueryString(text);
     const remainingSynonyms = synonyms.filter((synonym) => synonym.text !== text);
     setSynonyms(remainingSynonyms);
   };
@@ -81,9 +82,9 @@ const useSynonymManager = (type: SynonymType) => {
   const handleToggleSynonymActive = (text: string) => {
     const _synonyms = synonyms.map((synonym) => {
       const isChecked = synonym.text === text ? !synonym.isChecked : synonym.isChecked;
-      if (synonym.text === text) {
-        updateQueryString(synonym.text, isChecked);
-      }
+      // if (synonym.text === text) {
+      //   updateQueryString(synonym.text, isChecked);
+      // }
       return {
         text: synonym.text,
         isChecked,
@@ -93,12 +94,18 @@ const useSynonymManager = (type: SynonymType) => {
     setSynonyms(_synonyms);
   };
 
+  const onReset = () => {
+    router.replace(pathname);
+  };
+
   return {
     synonyms,
+    syncSavedSynonymsToState,
     onAddSynonym,
     handleRemoveSynonym,
     handleToggleSynonymActive,
     filteredSynonyms,
+    onReset,
   };
 };
 

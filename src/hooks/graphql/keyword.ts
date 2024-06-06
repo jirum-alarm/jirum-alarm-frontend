@@ -64,8 +64,8 @@ interface GetHotDealKeywordData {
   keyword: string;
   weight: number;
   isMajor: boolean;
-  synonyms: Array<{ id: number; hotDealKeywordId: number; keyword: string[] }>;
-  excludeKeywords: Array<{ id: number; hotDealKeywordId: number; excludeKeyword: string[] }>;
+  synonyms: Array<{ id: number; hotDealKeywordId: number; keyword: string }>;
+  excludeKeywords: Array<{ id: number; hotDealKeywordId: number; excludeKeyword: string }>;
 }
 
 interface GetHotDealKeywordVariables {

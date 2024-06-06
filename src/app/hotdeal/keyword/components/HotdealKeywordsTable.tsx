@@ -1,14 +1,12 @@
 'use client';
 import SwitcherOne from '@/components/Switchers/SwitcherOne';
+import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords } from '@/hooks/graphql/keyword';
 import { HotDealKeywordType } from '@/types/keyword';
 import { Package } from '@/types/package';
 import { useRouter } from 'next/navigation';
 
-const HotDealKeywordTypeMap = {
-  POSITIVE: '긍정',
-  NEGATIVE: '부정',
-};
+
 
 const HotdealKeywordsTable = () => {
   const router = useRouter();
