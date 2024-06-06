@@ -9,7 +9,7 @@ interface AddHotDealKeywordVariable {
   isMajor: boolean;
 }
 
-const useAddHotDealKeyword = (options: MutationHookOptions<any, AddHotDealKeywordVariable>) => {
+const useAddHotDealKeyword = (options?: MutationHookOptions<any, AddHotDealKeywordVariable>) => {
   return useMutation<{ data: { addHotDealKeywordByAdmin: boolean } }, AddHotDealKeywordVariable>(
     MutationAddHotDealKeywordByAdmin,
     {

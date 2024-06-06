@@ -7,9 +7,6 @@ const KeywordDetailPage = ({ params }: { params: { keywordId: string } }) => {
   return (
     <DefaultLayout>
       <div className="flex flex-col gap-4">
-        <div className="flex w-full justify-end">
-          <button className="rounded-xl bg-lime-400 p-2 text-white">저장</button>
-        </div>
         <div className="flex flex-col gap-3">
           <SynonymInputResult keywordId={params.keywordId} />
           <KeywordSearch />

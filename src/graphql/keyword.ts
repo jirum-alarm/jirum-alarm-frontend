@@ -32,3 +32,4 @@ export const MutationAddHotDealKeywordByAdmin = gql`
     addHotDealKeywordByAdmin(type: $type, keyword: $keyword, weight: $weight, isMajor: $isMajor)
   }
 `;
+
