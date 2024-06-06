@@ -9,6 +9,8 @@ import { useGetComments } from '@/hooks/graphql/comments';
 import {
   useAddHotDealExcludeKeywordByAdmin,
   useAddHotDealKeywordSynonymByAdmin,
+  useRemoveHotDealExcludeKeyword,
+  useRemoveHotDealKeywordSynonym,
 } from '@/hooks/graphql/synonym';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -19,6 +21,8 @@ interface Props {
 }
 
 const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Props) => {
+  console.log('excludeKeywordList : ', excludeKeywordList);
+  console.log('synonymList : ', synonymList);
   const router = useRouter();
   const pathname = usePathname();
   const hotDealKeywordId = Number(keywordId);
@@ -41,6 +45,9 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
     filteredSynonyms: filteredExcludeSynonyms,
   } = useSynonymManager('exclude-synonym');
 
+  const [removeSynonym] = useRemoveHotDealKeywordSynonym();
+  const [removeExcludeSynonym] = useRemoveHotDealExcludeKeyword();
+
   useEffect(() => {
     syncSavedSynonymsToState(synonymList.map((synonym) => synonym.keyword));
     syncSavedExcludeSynonymsToState(excludeKeywordList.map((synonym) => synonym.excludeKeyword));
@@ -49,13 +56,13 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
   const [saveSynonym] = useAddHotDealKeywordSynonymByAdmin();
   const [saveExcludeSynonym] = useAddHotDealExcludeKeywordByAdmin();
 
-  const { data: comments } = useGetComments({
-    variables: {
-      hotDealKeywordId: hotDealKeywordId,
-      synonyms: filteredSynonyms,
-      excludes: filteredExcludeSynonyms,
-    },
-  });
+  // const { data: comments } = useGetComments({
+  //   variables: {
+  //     hotDealKeywordId: hotDealKeywordId,
+  //     synonyms: filteredSynonyms,
+  //     excludes: filteredExcludeSynonyms,
+  //   },
+  // });
 
   const synonymInputRef = useRef<HTMLInputElement>(null);
   const excludeSynonymInputRef = useRef<HTMLInputElement>(null);
@@ -77,23 +84,34 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
   };
 
   const handleSaveSynonym = () => {
-    onReset();
-    return;
+    // saveSynonym()
+    // saveExcludeSynonym()
+    // removeSynonym({
+    //   variables: {
+    //     ids: [20, 21],
+    //   },
+    // });
+    // removeExcludeSynonym({
+    //   variables: {
+    //     ids: [1],
+    //   },
+    // });
+    // onReset();
   };
 
-  const highlightedComments = useMemo(() => {
-    if (!comments) return '';
-    let _comments = comments.commentsByAdmin.join('\n\n');
-    filteredSynonyms?.forEach((synonym) => {
-      const regex = new RegExp(synonym, 'g');
-      _comments = _comments.replace(regex, `<span class="bg-green-300">${synonym}</span>`);
-    });
-    filteredExcludeSynonyms?.forEach((synonym) => {
-      const regex = new RegExp(synonym, 'g');
-      _comments = _comments.replace(regex, `<span class="bg-rose-300">${synonym}</span>`);
-    });
-    return _comments;
-  }, [comments, filteredSynonyms, filteredExcludeSynonyms]);
+  // const highlightedComments = useMemo(() => {
+  //   if (!comments) return '';
+  //   let _comments = comments.commentsByAdmin.join('\n\n');
+  //   filteredSynonyms?.forEach((synonym) => {
+  //     const regex = new RegExp(synonym, 'g');
+  //     _comments = _comments.replace(regex, `<span class="bg-green-300">${synonym}</span>`);
+  //   });
+  //   filteredExcludeSynonyms?.forEach((synonym) => {
+  //     const regex = new RegExp(synonym, 'g');
+  //     _comments = _comments.replace(regex, `<span class="bg-rose-300">${synonym}</span>`);
+  //   });
+  //   return _comments;
+  // }, [comments, filteredSynonyms, filteredExcludeSynonyms]);
 
   return (
     <Card>
@@ -146,9 +164,7 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
           </Chip>
         ))}
       </div>
-      <div className="mt-3">
-        <TypingEffectContainer text={highlightedComments} />
-      </div>
+      <div className="mt-3">{/* <TypingEffectContainer text={highlightedComments} /> */}</div>
     </Card>
   );
 };
