@@ -7,7 +7,7 @@ env:
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
+      - "v[0-9]+.[0-9]+.[0-9]+*"
 
 jobs:
   job_deploy_production:
@@ -17,17 +17,19 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v2
         with:
-          version: 8
-      - name: Use Node.js ${{ matrix.node-version }}
+          version: 9
+
+      - name: Use Node.js 20
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          node-version: 20
+          cache: "pnpm"
 
       - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+        run: pnpm install --global vercel@latest
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}

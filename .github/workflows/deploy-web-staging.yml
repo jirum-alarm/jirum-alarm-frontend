@@ -7,7 +7,7 @@ env:
 on:
   push:
     branches:
-      - '**'
+      - "**"
 
 jobs:
   job_deploy_staging:
@@ -20,13 +20,13 @@ jobs:
 
       - uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 9
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 20
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          node-version: 20
+          cache: "pnpm"
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
