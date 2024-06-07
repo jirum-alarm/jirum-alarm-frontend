@@ -8,6 +8,8 @@ import {
 import { useQuery } from '@apollo/client';
 
 export const HOT_DEAL_LIMIT = 20;
+
+const HOT_DEAL_COUNT_RANDOM = 20;
 const HOT_DEAL_LIMIT_RANDOM = 10;
 
 export const useHotDeals = ({
@@ -30,12 +32,15 @@ export const useHotDeals = ({
   return result;
 };
 
-export const useHotDealsRandom = ({ limit = HOT_DEAL_LIMIT_RANDOM }: { limit?: number } = {}) => {
+export const useHotDealsRandom = ({
+  count = HOT_DEAL_COUNT_RANDOM,
+  limit = HOT_DEAL_LIMIT_RANDOM,
+}: { count?: number; limit?: number } = {}) => {
   const result = useQuery<CommunityRandomRankingProductsOutPut>(
     QueryCommunityRandomRankingProducts,
     {
       variables: {
-        count: 10,
+        count,
         limit,
         isApp: false,
         isReward: false,
