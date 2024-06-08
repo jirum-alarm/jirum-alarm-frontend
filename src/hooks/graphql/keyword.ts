@@ -1,5 +1,6 @@
 import {
   MutationAddHotDealKeywordByAdmin,
+  MutationRemoveHotDealKeywordByAdmin,
   QueryHotDealKeywordByAdmin,
   QueryHotDealKeywordsByAdmin,
 } from '@/graphql/keyword';
@@ -21,7 +22,7 @@ export const useAddHotDealKeyword = (
     {
       refetchQueries: [
         {
-          query: QueryHotDealKeywordByAdmin,
+          query: QueryHotDealKeywordsByAdmin,
           variables: {
             orderBy: HotDealKeywordOrderType.ID,
             orderOption: OrderOptionType.ASC,
@@ -32,6 +33,31 @@ export const useAddHotDealKeyword = (
       ...options,
     },
   );
+};
+
+interface removeHotDealKeywordVariables {
+  id: number;
+}
+
+export const useRemoveHotDealKeyword = (
+  options?: MutationHookOptions<any, removeHotDealKeywordVariables>,
+) => {
+  return useMutation<
+    { data: { removeHotDealKeywordByAdmin: boolean } },
+    removeHotDealKeywordVariables
+  >(MutationRemoveHotDealKeywordByAdmin, {
+    refetchQueries: [
+      {
+        query: QueryHotDealKeywordsByAdmin,
+        variables: {
+          orderBy: HotDealKeywordOrderType.ID,
+          orderOption: OrderOptionType.ASC,
+          limit: 10,
+        },
+      },
+    ],
+    ...options,
+  });
 };
 
 interface GetHotDealKeywordsData {

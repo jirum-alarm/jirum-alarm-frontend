@@ -33,6 +33,12 @@ export const MutationAddHotDealKeywordByAdmin = gql`
   }
 `;
 
+export const MutationRemoveHotDealKeywordByAdmin = gql`
+  mutation MutationRemoveHotDealKeywordByAdmin($id: Int!) {
+    removeHotDealKeywordByAdmin(id: $id)
+  }
+`;
+
 export const QueryHotDealKeywordByAdmin = gql`
   query QueryHotDealKeywordByAdmin($id: Int!) {
     hotDealKeywordByAdmin(id: $id) {

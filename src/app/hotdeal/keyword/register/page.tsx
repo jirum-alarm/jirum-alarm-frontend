@@ -68,7 +68,7 @@ const KeywordRegister = () => {
         </Card>
         <div>
           <button className="rounded bg-slate-600 p-2 text-white" onClick={handleKeywordRegister}>
-            저장
+            추가
           </button>
         </div>
       </div>
