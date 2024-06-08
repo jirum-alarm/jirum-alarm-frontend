@@ -40,14 +40,14 @@ const KeywordSearch = ({ keywordId }: Props) => {
   };
 
   const highlightedComments = useMemo(() => {
-    if (!comments) return '';
-    let _comments = comments.commentsByAdmin.join('\n\n');
+    if (!comments) return [];
+    let _comments = comments.commentsByAdmin.join('\n');
     filteredSynonyms?.forEach((synonym) => {
       const regex = new RegExp(synonym, 'g');
       _comments = _comments.replace(regex, `<span class="bg-green-300">${synonym}</span>`);
     });
 
-    return _comments;
+    return _comments.split('\n');
   }, [comments, filteredSynonyms]);
 
   return (
@@ -74,7 +74,7 @@ const KeywordSearch = ({ keywordId }: Props) => {
         ))}
       </div>
       <div className="mt-3 h-full">
-        <TypingEffectContainer text={highlightedComments} />
+        <TypingEffectContainer comments={highlightedComments} />
       </div>
     </Card>
   );
