@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import Chip from '@/components/Chip';
 import TypingEffectContainer from './TypingEffectContainer';
 import { handleKeydownEnter } from '@/utils/event';
@@ -134,8 +134,8 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
   };
 
   const highlightedComments = useMemo(() => {
-    if (!comments) return '';
-    let _comments = comments.commentsByAdmin.join('\n\n');
+    if (!comments) return [];
+    let _comments = comments.commentsByAdmin.join('\n');
     filteredSynonyms?.forEach((synonym) => {
       const regex = new RegExp(synonym, 'g');
       _comments = _comments.replace(regex, `<span class="bg-green-300">${synonym}</span>`);
@@ -144,7 +144,7 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
       const regex = new RegExp(synonym, 'g');
       _comments = _comments.replace(regex, `<span class="bg-rose-300">${synonym}</span>`);
     });
-    return _comments;
+    return _comments.split('\n');
   }, [comments, filteredSynonyms, filteredExcludeSynonyms]);
 
   return (
@@ -199,7 +199,7 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
         ))}
       </div>
       <div className="mt-3">
-        <TypingEffectContainer text={highlightedComments} />
+        <TypingEffectContainer comments={highlightedComments} />
       </div>
     </Card>
   );
