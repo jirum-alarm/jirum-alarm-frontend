@@ -1,5 +1,5 @@
 'use client';
-import Switcher from '@/components/Switchers/Switcher';
+import Switcher from '@/components/Switchers/SwitcherOne';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
 import { HotDealKeywordType } from '@/types/keyword';
