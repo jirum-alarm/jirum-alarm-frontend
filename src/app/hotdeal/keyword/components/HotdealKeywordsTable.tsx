@@ -3,6 +3,7 @@ import Switcher from '@/components/Switchers/Switcher';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
 import { HotDealKeywordType } from '@/types/keyword';
+import { getParticle } from '@/utils/text';
 import { useRouter } from 'next/navigation';
 
 const HotdealKeywordsTable = () => {
@@ -12,14 +13,17 @@ const HotdealKeywordsTable = () => {
   const moveKeywordDetail = (keywordId: number) => {
     router.push(`/hotdeal/keyword/${keywordId}`);
   };
-  const handleRemoveHotdealKeyword = (id: number) => {
+  const handleRemoveHotdealKeyword = (id: number, keyword: string) => {
     return (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
-      removeHotdealKeyword({
-        variables: {
-          id: Number(id),
-        },
-      });
+      if (confirm(`정말 "${keyword}"${getParticle(keyword)} 삭제하시겠습니까?`)) {
+        console.log('삭제?');
+      }
+      // removeHotdealKeyword({
+      //   variables: {
+      //     id: Number(id),
+      //   },
+      // });
     };
   };
   const handleChangeHotdealOption = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +83,7 @@ const HotdealKeywordsTable = () => {
                     <button className="text-sm hover:text-primary">수정</button>
                     <button
                       className="text-sm hover:text-danger"
-                      onClick={handleRemoveHotdealKeyword(hotdeal.id)}
+                      onClick={handleRemoveHotdealKeyword(hotdeal.id, hotdeal.keyword)}
                     >
                       삭제
                     </button>
