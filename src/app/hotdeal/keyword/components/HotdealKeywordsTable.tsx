@@ -1,9 +1,8 @@
 'use client';
-import SwitcherOne from '@/components/Switchers/SwitcherOne';
+import Switcher from '@/components/Switchers/Switcher';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
 import { HotDealKeywordType } from '@/types/keyword';
-import { Package } from '@/types/package';
 import { useRouter } from 'next/navigation';
 
 const HotdealKeywordsTable = () => {
@@ -23,11 +22,14 @@ const HotdealKeywordsTable = () => {
       });
     };
   };
+  const handleChangeHotdealOption = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('checked?', e.target.checked);
+  };
   return (
     <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex w-full items-center justify-end gap-2 p-2">
         <span>긍정</span>
-        <SwitcherOne />
+        <Switcher onChange={handleChangeHotdealOption} />
         <span>부정</span>
       </div>
       <div className="max-w-full overflow-x-auto">
@@ -74,9 +76,9 @@ const HotdealKeywordsTable = () => {
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
-                    <button className="hover:text-error text-sm">수정</button>
+                    <button className="text-sm hover:text-primary">수정</button>
                     <button
-                      className="hover:text-primary"
+                      className="text-sm hover:text-danger"
                       onClick={handleRemoveHotdealKeyword(hotdeal.id)}
                     >
                       삭제
