@@ -5,7 +5,14 @@ import {
   QueryHotDealKeywordsByAdmin,
 } from '@/graphql/keyword';
 import { HotDealKeywordOrderType, HotDealKeywordType, OrderOptionType } from '@/types/keyword';
-import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
+import {
+  MutationHookOptions,
+  QueryHookOptions,
+  SuspenseQueryHookOptions,
+  useMutation,
+  useQuery,
+  useSuspenseQuery,
+} from '@apollo/client';
 
 interface AddHotDealKeywordVariable {
   type: HotDealKeywordType;
@@ -76,11 +83,11 @@ interface GetHotDealKeywordsVariables {
 }
 
 export const useGetHotDealKeywords = (
-  queryOptions?: QueryHookOptions<any, GetHotDealKeywordsVariables>,
+  queryOptions?: SuspenseQueryHookOptions<any, GetHotDealKeywordsVariables>,
 ) => {
   const { variables, ...rest } = queryOptions ?? {};
 
-  return useQuery<
+  return useSuspenseQuery<
     { hotDealKeywordsByAdmin: GetHotDealKeywordsData[] },
     GetHotDealKeywordsVariables
   >(QueryHotDealKeywordsByAdmin, {

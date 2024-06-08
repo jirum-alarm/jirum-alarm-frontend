@@ -49,7 +49,7 @@ const HotdealKeywordsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.hotDealKeywordsByAdmin.map((hotdeal, key) => (
+            {data.hotDealKeywordsByAdmin.map((hotdeal, key) => (
               <tr
                 key={hotdeal.id}
                 className="cursor-pointer hover:bg-slate-100"
