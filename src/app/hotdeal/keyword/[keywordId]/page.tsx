@@ -27,7 +27,7 @@ const KeywordDetailPage = ({ params }: { params: { keywordId: string } }) => {
             synonymList={data?.hotDealKeywordByAdmin.synonyms ?? []}
             excludeKeywordList={data?.hotDealKeywordByAdmin.excludeKeywords ?? []}
           />
-          <KeywordSearch keywordId={params.keywordId}/>
+          <KeywordSearch keywordId={params.keywordId} />
         </div>
       </div>
     </DefaultLayout>

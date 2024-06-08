@@ -10,7 +10,7 @@ import { useGetComments } from '@/hooks/graphql/comments';
 const text = `덕분에 잘 샀어요 \n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가`;
 
 interface Props {
-  keywordId: number;
+  keywordId: string;
 }
 
 const KeywordSearch = ({ keywordId }: Props) => {
