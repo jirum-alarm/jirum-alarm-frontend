@@ -17,13 +17,12 @@ const HotdealKeywordsTable = () => {
     return (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       if (confirm(`정말 "${keyword}"${getParticle(keyword)} 삭제하시겠습니까?`)) {
-        console.log('삭제?');
+        removeHotdealKeyword({
+          variables: {
+            id: Number(id),
+          },
+        });
       }
-      // removeHotdealKeyword({
-      //   variables: {
-      //     id: Number(id),
-      //   },
-      // });
     };
   };
   const handleChangeHotdealOption = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,14 +48,14 @@ const HotdealKeywordsTable = () => {
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                 유형
               </th>
-              <th className="px-4 py-4 font-medium text-black dark:text-white">액션</th>
+              <th className="px-4 py-4 text-center font-medium text-black dark:text-white">액션</th>
             </tr>
           </thead>
           <tbody>
             {data.hotDealKeywordsByAdmin.map((hotdeal, key) => (
               <tr
                 key={hotdeal.id}
-                className="cursor-pointer hover:bg-slate-100"
+                className="cursor-pointer hover:bg-slate-50"
                 onClick={() => moveKeywordDetail(hotdeal.id)}
               >
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
@@ -80,9 +79,11 @@ const HotdealKeywordsTable = () => {
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
-                    <button className="text-sm hover:text-primary">수정</button>
+                    <button className="rounded-md p-2 text-sm hover:bg-slate-200 hover:text-primary">
+                      수정
+                    </button>
                     <button
-                      className="text-sm hover:text-danger"
+                      className="rounded-md p-2 text-sm hover:bg-rose-100 hover:text-danger"
                       onClick={handleRemoveHotdealKeyword(hotdeal.id, hotdeal.keyword)}
                     >
                       삭제

@@ -5,6 +5,7 @@ import KeywordSearch from './components/KeywordSearch';
 import SynonymInputResult from './components/SynonymInputResult';
 import { useGetHotDealKeyword } from '@/hooks/graphql/keyword';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
+import KeywordDetailInfo from './components/KeywordDetailInfo';
 
 const KeywordDetailPage = ({ params }: { params: { keywordId: string } }) => {
   const { data } = useGetHotDealKeyword({
@@ -16,12 +17,11 @@ const KeywordDetailPage = ({ params }: { params: { keywordId: string } }) => {
     <DefaultLayout>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-3">
-          <h2 className="text-lg text-black">키워드 : {data?.hotDealKeywordByAdmin.keyword}</h2>
-          <h2 className="text-lg text-black">가중치 : {data?.hotDealKeywordByAdmin.weight}</h2>
-          <h2 className="text-lg text-black">
-            유형 :{' '}
-            {data?.hotDealKeywordByAdmin && HotDealKeywordTypeMap[data.hotDealKeywordByAdmin.type]}
-          </h2>
+          <KeywordDetailInfo
+            keyword={data?.hotDealKeywordByAdmin.keyword}
+            weight={data?.hotDealKeywordByAdmin.weight}
+            type={data?.hotDealKeywordByAdmin.type}
+          ></KeywordDetailInfo>
           <SynonymInputResult
             keywordId={params.keywordId}
             synonymList={data?.hotDealKeywordByAdmin.synonyms ?? []}
