@@ -41,6 +41,17 @@ export const MutationRemoveHotDealKeywordByAdmin = gql`
   }
 `;
 
+export const MutationUpdateHotDealKeywordByAdmin = gql`
+  mutation MutationUpdateHotDealKeywordByAdmin(
+    $id: Int!
+    $keyword: String
+    $weight: Float
+    $isMajor: Boolean
+  ) {
+    updateHotDealKeywordByAdmin(id: $id, keyword: $keyword, weight: $weight, isMajor: $isMajor)
+  }
+`;
+
 export const QueryHotDealKeywordByAdmin = gql`
   query QueryHotDealKeywordByAdmin($id: Int!) {
     hotDealKeywordByAdmin(id: $id) {
@@ -59,6 +70,18 @@ export const QueryHotDealKeywordByAdmin = gql`
         hotDealKeywordId
         excludeKeyword
       }
+    }
+  }
+`;
+
+export const QueryHotDealKeywordDetailByAdmin = gql`
+  query QueryHotDealKeywordDetailByAdmin($id: Int!) {
+    hotDealKeywordByAdmin(id: $id) {
+      id
+      type
+      keyword
+      weight
+      isMajor
     }
   }
 `;

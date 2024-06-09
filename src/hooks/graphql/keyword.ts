@@ -1,7 +1,10 @@
+import { PAGE_LIMIT } from '@/constants/limit';
 import {
   MutationAddHotDealKeywordByAdmin,
   MutationRemoveHotDealKeywordByAdmin,
+  MutationUpdateHotDealKeywordByAdmin,
   QueryHotDealKeywordByAdmin,
+  QueryHotDealKeywordDetailByAdmin,
   QueryHotDealKeywordsByAdmin,
 } from '@/graphql/keyword';
 import { HotDealKeywordOrderType, HotDealKeywordType, OrderOptionType } from '@/types/keyword';
@@ -33,7 +36,7 @@ export const useAddHotDealKeyword = (
           variables: {
             orderBy: HotDealKeywordOrderType.ID,
             orderOption: OrderOptionType.ASC,
-            limit: 10,
+            limit: PAGE_LIMIT,
           },
         },
       ],
@@ -59,7 +62,35 @@ export const useRemoveHotDealKeyword = (
         variables: {
           orderBy: HotDealKeywordOrderType.ID,
           orderOption: OrderOptionType.ASC,
-          limit: 10,
+          limit: PAGE_LIMIT,
+        },
+      },
+    ],
+    ...options,
+  });
+};
+
+interface updateHotDealKeywordVariables {
+  id: number;
+  keyword?: string;
+  weight?: number;
+  isMajor?: boolean;
+}
+
+export const useUpdateHotDealKeyword = (
+  options?: MutationHookOptions<any, updateHotDealKeywordVariables>,
+) => {
+  return useMutation<
+    { data: { updateHotDealKeywordByAdmin: boolean } },
+    updateHotDealKeywordVariables
+  >(MutationUpdateHotDealKeywordByAdmin, {
+    refetchQueries: [
+      {
+        query: QueryHotDealKeywordsByAdmin,
+        variables: {
+          orderBy: HotDealKeywordOrderType.ID,
+          orderOption: OrderOptionType.ASC,
+          limit: PAGE_LIMIT,
         },
       },
     ],
@@ -97,7 +128,7 @@ export const useGetHotDealKeywords = (
       type: variables?.type,
       orderBy: HotDealKeywordOrderType.ID,
       orderOption: variables?.orderOption ?? OrderOptionType.ASC,
-      limit: variables?.limit ?? 10,
+      limit: variables?.limit ?? PAGE_LIMIT,
       searchAfter: variables?.searchAfter,
     },
   });
@@ -131,4 +162,18 @@ export const useGetHotDealKeyword = (
       },
     },
   );
+};
+
+export const useGetHotDealDetailKeyword = (
+  queryOptions: QueryHookOptions<
+    { hotDealKeywordByAdmin: Omit<GetHotDealKeywordData, 'synonyms' | 'excludeKeywords'> },
+    GetHotDealKeywordVariables
+  >,
+) => {
+  return useQuery<
+    { hotDealKeywordByAdmin: Omit<GetHotDealKeywordData, 'synonyms' | 'excludeKeywords'> },
+    GetHotDealKeywordVariables
+  >(QueryHotDealKeywordDetailByAdmin, {
+    ...queryOptions,
+  });
 };

@@ -1,13 +1,13 @@
 'use client';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import Card from '@/components/Card';
-import WeightSetter from '../components/WeightSetter';
-import PrimaryKeywordForm from '../components/PrimaryKeywordForm';
 import { useState } from 'react';
 import { HotDealKeywordType } from '@/types/keyword';
-import { useAddHotDealKeyword } from '@/hooks/graphql/keyword';
+import { useGetHotDealDetailKeyword, useUpdateHotDealKeyword } from '@/hooks/graphql/keyword';
 import { useRouter } from 'next/navigation';
-import KeywordTypeForm from './components/KeywordTypeForm';
+import WeightSetter from '../../components/WeightSetter';
+import PrimaryKeyword from '../../components/PrimaryKeywordForm';
+import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 
 interface KeywordFormType {
   type: HotDealKeywordType;
@@ -16,7 +16,14 @@ interface KeywordFormType {
   isMajor: boolean;
 }
 
-const KeywordRegisterPage = () => {
+interface Props {
+  params: {
+    keywordId: string;
+  };
+}
+
+const KeywordUpdatePage = ({ params }: Props) => {
+  const keywordId = Number(params.keywordId);
   const router = useRouter();
   const [keyword, setKeyword] = useState<KeywordFormType>({
     type: HotDealKeywordType.POSITIVE,
@@ -24,9 +31,20 @@ const KeywordRegisterPage = () => {
     weight: 1,
     isMajor: false,
   });
-  const [mutate, { loading }] = useAddHotDealKeyword({
+  const { loading: detailKeywordLoading } = useGetHotDealDetailKeyword({
+    variables: {
+      id: keywordId,
+    },
+    onCompleted: (data) => {
+      const {
+        hotDealKeywordByAdmin: { type, keyword, weight, isMajor },
+      } = data;
+      setKeyword({ type, keyword, weight, isMajor });
+    },
+  });
+  const [mutate, { loading }] = useUpdateHotDealKeyword({
     onCompleted: () => {
-      alert('키워드 등록 성공!');
+      alert('키워드 수정 성공!');
       router.push('/hotdeal/keyword');
     },
   });
@@ -42,28 +60,41 @@ const KeywordRegisterPage = () => {
       keyword: value,
     }));
   };
-  const handleChangeKeywordType = (type: HotDealKeywordType) => {
-    setKeyword((keyword) => ({
-      ...keyword,
-      type,
-    }));
-  };
-  const handleKeywordRegister = () => {
+
+  const handleKeywordUpdate = () => {
     mutate({
-      variables: keyword,
+      variables: {
+        id: keywordId,
+        keyword: keyword.keyword,
+        weight: keyword.weight,
+        isMajor: keyword.isMajor,
+      },
     });
   };
   return (
     <DefaultLayout>
       <div className="flex flex-col gap-2">
-        <PrimaryKeywordForm keyword={keyword.keyword} onChangeKeyword={handleChangeKeyword} />
+        <PrimaryKeyword keyword={keyword.keyword} onChangeKeyword={handleChangeKeyword} />
         <WeightSetter weight={keyword.weight} onChange={handleChangeWeight} />
-        <KeywordTypeForm onChangeKeywordType={handleChangeKeywordType} keywordType={keyword.type} />
+        <Card>
+          <span className="text-black">유형 : </span>
+          <p
+            className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
+              keyword.type === HotDealKeywordType.POSITIVE
+                ? 'bg-success text-success'
+                : keyword.type === HotDealKeywordType.NEGATIVE
+                  ? 'bg-danger text-danger'
+                  : ''
+            }`}
+          >
+            {HotDealKeywordTypeMap[keyword.type]}
+          </p>
+        </Card>
         <div>
           <button
             className="flex items-center rounded bg-slate-600 p-2 text-white"
             disabled={loading}
-            onClick={handleKeywordRegister}
+            onClick={handleKeywordUpdate}
           >
             {loading && (
               <svg
@@ -84,7 +115,7 @@ const KeywordRegisterPage = () => {
                 />
               </svg>
             )}
-            추가
+            수정
           </button>
         </div>
       </div>
@@ -92,4 +123,4 @@ const KeywordRegisterPage = () => {
   );
 };
 
-export default KeywordRegisterPage;
+export default KeywordUpdatePage;

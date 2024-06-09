@@ -31,6 +31,12 @@ const HotdealKeywordsTable = () => {
       }
     };
   };
+  const handleMoveKeywordUpdate = (id: number) => {
+    return (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      router.push(`/hotdeal/keyword/update/${id}`);
+    };
+  };
   const handleChangeHotdealOption = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     const type = isChecked ? HotDealKeywordType.NEGATIVE : HotDealKeywordType.POSITIVE;
@@ -86,8 +92,11 @@ const HotdealKeywordsTable = () => {
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <div className="flex items-center space-x-3.5">
-                    <button className="rounded-md p-2 text-sm hover:bg-slate-200 hover:text-primary">
+                  <div className="flex items-center justify-center space-x-3.5">
+                    <button
+                      className="rounded-md p-2 text-sm hover:bg-slate-200 hover:text-primary"
+                      onClick={handleMoveKeywordUpdate(hotdeal.id)}
+                    >
                       수정
                     </button>
                     <button
