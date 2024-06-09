@@ -5,10 +5,16 @@ import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/
 import { HotDealKeywordType } from '@/types/keyword';
 import { getParticle } from '@/utils/text';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const HotdealKeywordsTable = () => {
+  const [keywordType, setKeywordType] = useState(HotDealKeywordType.POSITIVE);
   const router = useRouter();
-  const { data } = useGetHotDealKeywords();
+  const { data } = useGetHotDealKeywords({
+    variables: {
+      type: keywordType,
+    },
+  });
   const [removeHotdealKeyword] = useRemoveHotDealKeyword();
   const moveKeywordDetail = (keywordId: number) => {
     router.push(`/hotdeal/keyword/${keywordId}`);
@@ -26,7 +32,9 @@ const HotdealKeywordsTable = () => {
     };
   };
   const handleChangeHotdealOption = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('checked?', e.target.checked);
+    const isChecked = e.target.checked;
+    const type = isChecked ? HotDealKeywordType.NEGATIVE : HotDealKeywordType.POSITIVE;
+    setKeywordType(type);
   };
   return (
     <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">

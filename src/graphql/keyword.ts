@@ -2,12 +2,14 @@ import { gql } from '@apollo/client';
 
 export const QueryHotDealKeywordsByAdmin = gql`
   query QueryHotDealKeywordsByAdmin(
+    $type: HotDealKeywordType
     $orderBy: HotDealKeywordOrderType!
     $orderOption: OrderOptionType!
     $limit: Int!
     $searchAfter: [String!]
   ) {
     hotDealKeywordsByAdmin(
+      type: $type
       orderBy: $orderBy
       orderOption: $orderOption
       limit: $limit

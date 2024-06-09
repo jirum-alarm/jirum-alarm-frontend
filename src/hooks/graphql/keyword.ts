@@ -76,9 +76,10 @@ interface GetHotDealKeywordsData {
 }
 
 interface GetHotDealKeywordsVariables {
-  orderBy: HotDealKeywordOrderType;
-  orderOption: OrderOptionType;
-  limit: number;
+  type?: HotDealKeywordType;
+  orderBy?: HotDealKeywordOrderType;
+  orderOption?: OrderOptionType;
+  limit?: number;
   searchAfter?: string[];
 }
 
@@ -93,6 +94,7 @@ export const useGetHotDealKeywords = (
   >(QueryHotDealKeywordsByAdmin, {
     ...rest,
     variables: {
+      type: variables?.type,
       orderBy: HotDealKeywordOrderType.ID,
       orderOption: variables?.orderOption ?? OrderOptionType.ASC,
       limit: variables?.limit ?? 10,
