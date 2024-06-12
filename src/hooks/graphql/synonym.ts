@@ -1,3 +1,4 @@
+import { QueryHotDealKeywordByAdmin } from '@/graphql/keyword';
 import {
   MutationAddHotDealExcludeKeywordByAdmin,
   MutationAddHotDealKeywordSynonymByAdmin,
@@ -12,12 +13,21 @@ interface AddHotDealKeywordSynonymByAdminVariable {
 }
 
 export const useAddHotDealKeywordSynonymByAdmin = (
+  keywordId: number,
   options?: MutationHookOptions<any, AddHotDealKeywordSynonymByAdminVariable>,
 ) => {
   return useMutation<
     { data: { addHotDealKeywordSynonymByAdmin: number } },
     AddHotDealKeywordSynonymByAdminVariable
   >(MutationAddHotDealKeywordSynonymByAdmin, {
+    refetchQueries: [
+      {
+        query: QueryHotDealKeywordByAdmin,
+        variables: {
+          id: keywordId,
+        },
+      },
+    ],
     ...options,
   });
 };
@@ -28,12 +38,21 @@ interface AddHotDealExcludeKeywordByAdminVariable {
 }
 
 export const useAddHotDealExcludeKeywordByAdmin = (
+  keywordId: number,
   options?: MutationHookOptions<any, AddHotDealExcludeKeywordByAdminVariable>,
 ) => {
   return useMutation<
     { data: { addHotDealExcludeKeywordByAdmin: number } },
     AddHotDealExcludeKeywordByAdminVariable
   >(MutationAddHotDealExcludeKeywordByAdmin, {
+    refetchQueries: [
+      {
+        query: QueryHotDealKeywordByAdmin,
+        variables: {
+          id: keywordId,
+        },
+      },
+    ],
     ...options,
   });
 };
@@ -43,12 +62,21 @@ interface RemoveHotDealKeywordSynonymVariable {
 }
 
 export const useRemoveHotDealKeywordSynonym = (
+  keywordId: number,
   options?: MutationHookOptions<any, RemoveHotDealKeywordSynonymVariable>,
 ) => {
   return useMutation<
     { data: { removeHotDealKeywordSynonymByAdmin: boolean } },
     RemoveHotDealKeywordSynonymVariable
   >(MutationRemoveHotDealKeywordSynonymByAdmin, {
+    refetchQueries: [
+      {
+        query: QueryHotDealKeywordByAdmin,
+        variables: {
+          id: keywordId,
+        },
+      },
+    ],
     ...options,
   });
 };
@@ -58,12 +86,21 @@ interface RemoveHotDealExcludeKeywordVariable {
 }
 
 export const useRemoveHotDealExcludeKeyword = (
+  keywordId: number,
   options?: MutationHookOptions<any, RemoveHotDealExcludeKeywordVariable>,
 ) => {
   return useMutation<
     { data: { removeHotDealExcludeKeywordByAdmin: boolean } },
     RemoveHotDealExcludeKeywordVariable
   >(MutationRemoveHotDealExcludeKeywordByAdmin, {
+    refetchQueries: [
+      {
+        query: QueryHotDealKeywordByAdmin,
+        variables: {
+          id: keywordId,
+        },
+      },
+    ],
     ...options,
   });
 };

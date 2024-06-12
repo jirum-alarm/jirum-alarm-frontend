@@ -43,10 +43,10 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
     filteredSynonyms: filteredExcludeSynonyms,
   } = useSynonymManager('exclude-synonym');
 
-  const [removeSynonym] = useRemoveHotDealKeywordSynonym();
-  const [removeExcludeSynonym] = useRemoveHotDealExcludeKeyword();
-  const [saveSynonym] = useAddHotDealKeywordSynonymByAdmin();
-  const [saveExcludeSynonym] = useAddHotDealExcludeKeywordByAdmin();
+  const [removeSynonym] = useRemoveHotDealKeywordSynonym(hotDealKeywordId);
+  const [removeExcludeSynonym] = useRemoveHotDealExcludeKeyword(hotDealKeywordId);
+  const [saveSynonym] = useAddHotDealKeywordSynonymByAdmin(hotDealKeywordId);
+  const [saveExcludeSynonym] = useAddHotDealExcludeKeywordByAdmin(hotDealKeywordId);
 
   useEffect(() => {
     syncSavedSynonymsToState(synonymList.map((synonym) => synonym.keyword));
@@ -129,6 +129,8 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
         },
       });
     }
+
+    alert('저장이 완료되었습니다!');
 
     // onReset();
   };
