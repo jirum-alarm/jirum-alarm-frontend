@@ -4,18 +4,22 @@ import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
 import { HotDealKeywordType } from '@/types/keyword';
 import { getParticle } from '@/utils/text';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 const HotdealKeywordsTable = () => {
-  const [keywordType, setKeywordType] = useState(HotDealKeywordType.POSITIVE);
+  // const [keywordType, setKeywordType] = useState(HotDealKeywordType.POSITIVE);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const keywordType = (searchParams.get('keywordType') ??
+    HotDealKeywordType.POSITIVE) as HotDealKeywordType;
   const { data } = useGetHotDealKeywords({
     variables: {
       type: keywordType,
     },
   });
-  const [removeHotdealKeyword] = useRemoveHotDealKeyword();
+
+  const [removeHotdealKeyword] = useRemoveHotDealKeyword(keywordType);
   const moveKeywordDetail = (keywordId: number) => {
     router.push(`/hotdeal/keyword/${keywordId}`);
   };
@@ -40,13 +44,17 @@ const HotdealKeywordsTable = () => {
   const handleChangeHotdealOption = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     const type = isChecked ? HotDealKeywordType.NEGATIVE : HotDealKeywordType.POSITIVE;
-    setKeywordType(type);
+    router.replace(`/hotdeal/keyword?keywordType=${type}`);
   };
+
   return (
     <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex w-full items-center justify-end gap-2 p-2">
         <span>긍정</span>
-        <Switcher onChange={handleChangeHotdealOption} />
+        <Switcher
+          onChange={handleChangeHotdealOption}
+          isEnabled={keywordType === HotDealKeywordType.NEGATIVE}
+        />
         <span>부정</span>
       </div>
       <div className="max-w-full overflow-x-auto">

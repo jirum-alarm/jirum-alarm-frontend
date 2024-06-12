@@ -30,16 +30,16 @@ export const useAddHotDealKeyword = (
   return useMutation<{ data: { addHotDealKeywordByAdmin: boolean } }, AddHotDealKeywordVariable>(
     MutationAddHotDealKeywordByAdmin,
     {
-      refetchQueries: [
-        {
-          query: QueryHotDealKeywordsByAdmin,
-          variables: {
-            orderBy: HotDealKeywordOrderType.ID,
-            orderOption: OrderOptionType.ASC,
-            limit: PAGE_LIMIT,
-          },
-        },
-      ],
+      // refetchQueries: [
+      //   {
+      //     query: QueryHotDealKeywordsByAdmin,
+      //     variables: {
+      //       orderBy: HotDealKeywordOrderType.ID,
+      //       orderOption: OrderOptionType.ASC,
+      //       limit: PAGE_LIMIT,
+      //     },
+      //   },
+      // ],
       ...options,
     },
   );
@@ -50,6 +50,7 @@ interface removeHotDealKeywordVariables {
 }
 
 export const useRemoveHotDealKeyword = (
+  keywordType: HotDealKeywordType,
   options?: MutationHookOptions<any, removeHotDealKeywordVariables>,
 ) => {
   return useMutation<
@@ -60,6 +61,7 @@ export const useRemoveHotDealKeyword = (
       {
         query: QueryHotDealKeywordsByAdmin,
         variables: {
+          type: keywordType,
           orderBy: HotDealKeywordOrderType.ID,
           orderOption: OrderOptionType.ASC,
           limit: PAGE_LIMIT,

@@ -4,10 +4,12 @@ import Card from '@/components/Card';
 import WeightSetter from '../components/WeightSetter';
 import PrimaryKeywordForm from '../components/PrimaryKeywordForm';
 import { useState } from 'react';
-import { HotDealKeywordType } from '@/types/keyword';
+import { HotDealKeywordOrderType, HotDealKeywordType, OrderOptionType } from '@/types/keyword';
 import { useAddHotDealKeyword } from '@/hooks/graphql/keyword';
 import { useRouter } from 'next/navigation';
 import KeywordTypeForm from './components/KeywordTypeForm';
+import { QueryHotDealKeywordsByAdmin } from '@/graphql/keyword';
+import { PAGE_LIMIT } from '@/constants/limit';
 
 interface KeywordFormType {
   type: HotDealKeywordType;
@@ -25,9 +27,20 @@ const KeywordRegisterPage = () => {
     isMajor: false,
   });
   const [mutate, { loading }] = useAddHotDealKeyword({
+    refetchQueries: [
+      {
+        query: QueryHotDealKeywordsByAdmin,
+        variables: {
+          type: keyword.type,
+          orderBy: HotDealKeywordOrderType.ID,
+          orderOption: OrderOptionType.ASC,
+          limit: PAGE_LIMIT,
+        },
+      },
+    ],
     onCompleted: () => {
       alert('키워드 등록 성공!');
-      router.push('/hotdeal/keyword');
+      router.push(`/hotdeal/keyword?keywordType=${keyword.type}`);
     },
   });
   const handleChangeWeight = (value: number) => {
