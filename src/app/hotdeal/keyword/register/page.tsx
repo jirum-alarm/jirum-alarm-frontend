@@ -26,18 +26,7 @@ const KeywordRegisterPage = () => {
     weight: 1,
     isMajor: false,
   });
-  const [mutate, { loading }] = useAddHotDealKeyword({
-    refetchQueries: [
-      {
-        query: QueryHotDealKeywordsByAdmin,
-        variables: {
-          type: keyword.type,
-          orderBy: HotDealKeywordOrderType.ID,
-          orderOption: OrderOptionType.ASC,
-          limit: PAGE_LIMIT,
-        },
-      },
-    ],
+  const [mutate, { loading }] = useAddHotDealKeyword(keyword.type, {
     onCompleted: () => {
       alert('키워드 등록 성공!');
       router.push(`/hotdeal/keyword?keywordType=${keyword.type}`);

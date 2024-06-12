@@ -44,18 +44,7 @@ const KeywordUpdatePage = ({ params }: Props) => {
       setKeyword({ type, keyword, weight, isMajor });
     },
   });
-  const [mutate, { loading }] = useUpdateHotDealKeyword({
-    refetchQueries: [
-      {
-        query: QueryHotDealKeywordsByAdmin,
-        variables: {
-          type: keyword.type,
-          orderBy: HotDealKeywordOrderType.ID,
-          orderOption: OrderOptionType.ASC,
-          limit: PAGE_LIMIT,
-        },
-      },
-    ],
+  const [mutate, { loading }] = useUpdateHotDealKeyword(keyword.type, {
     onCompleted: () => {
       alert('키워드 수정 성공!');
       router.push(`/hotdeal/keyword?keywordType=${keyword.type}`);
