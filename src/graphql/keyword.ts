@@ -20,6 +20,8 @@ export const QueryHotDealKeywordsByAdmin = gql`
       keyword
       weight
       isMajor
+      synonymCount
+      excludeKeywordCount
     }
   }
 `;
