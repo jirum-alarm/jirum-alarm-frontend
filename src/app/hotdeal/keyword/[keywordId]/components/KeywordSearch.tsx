@@ -1,13 +1,11 @@
 'use client';
 import Card from '@/components/Card';
 import React, { useMemo, useRef, useState } from 'react';
-import TypingEffectContainer from './TypingEffectContainer';
+import CommentsContainer from './CommentsContainer';
 import { handleKeydownEnter } from '@/utils/event';
 import useSynonymManager from '../hooks/useSynonymManager';
 import Chip from '@/components/Chip';
 import { useGetComments } from '@/hooks/graphql/comments';
-
-const text = `덕분에 잘 샀어요 \n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가\n바로샀네요\n너무좋아요\n초특가`;
 
 interface Props {
   keywordId: string;
@@ -75,7 +73,7 @@ const KeywordSearch = ({ keywordId }: Props) => {
         ))}
       </div>
       <div className="mt-3 h-full">
-        <TypingEffectContainer comments={highlightedComments} />
+        <CommentsContainer comments={highlightedComments} />
       </div>
     </Card>
   );

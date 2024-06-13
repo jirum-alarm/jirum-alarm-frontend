@@ -14,7 +14,7 @@ const useSynonymManager = (type: SynonymType) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [synonyms, setSynonyms] = useState<SynonymChips[]>([]);
-  const [filteredSynonyms, setFilteredSynonyms] = useState<string[]>();
+  const [filteredSynonyms, setFilteredSynonyms] = useState<string[]>([]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useMemo, useRef } from 'react';
 import Chip from '@/components/Chip';
-import TypingEffectContainer from './TypingEffectContainer';
+import CommentsContainer from './CommentsContainer';
 import { handleKeydownEnter } from '@/utils/event';
 import useSynonymManager from '../hooks/useSynonymManager';
 import Card from '@/components/Card';
@@ -135,20 +135,6 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
     // onReset();
   };
 
-  const highlightedComments = useMemo(() => {
-    if (!comments) return [];
-    let _comments = comments.commentsByAdmin.join('\n');
-    filteredSynonyms?.forEach((synonym) => {
-      const regex = new RegExp(synonym, 'g');
-      _comments = _comments.replace(regex, `<span class="bg-green-300">${synonym}</span>`);
-    });
-    filteredExcludeSynonyms?.forEach((synonym) => {
-      const regex = new RegExp(synonym, 'g');
-      _comments = _comments.replace(regex, `<span class="bg-rose-300">${synonym}</span>`);
-    });
-    return _comments.split('\n');
-  }, [comments, filteredSynonyms, filteredExcludeSynonyms]);
-
   return (
     <Card>
       <div className="flex w-full justify-end">
@@ -201,7 +187,11 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
         ))}
       </div>
       <div className="mt-3">
-        <TypingEffectContainer comments={highlightedComments} />
+        <CommentsContainer
+          comments={comments?.commentsByAdmin}
+          highlightedSynonym={filteredSynonyms}
+          highlightedExcludeSynonym={filteredExcludeSynonyms}
+        />
       </div>
     </Card>
   );
