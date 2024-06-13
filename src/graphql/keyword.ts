@@ -22,6 +22,7 @@ export const QueryHotDealKeywordsByAdmin = gql`
       isMajor
       synonymCount
       excludeKeywordCount
+      searchAfter
     }
   }
 `;

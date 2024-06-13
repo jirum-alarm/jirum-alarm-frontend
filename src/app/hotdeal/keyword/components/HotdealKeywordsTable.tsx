@@ -5,14 +5,14 @@ import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/
 import { HotDealKeywordType } from '@/types/keyword';
 import { getParticle } from '@/utils/text';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 const HotdealKeywordsTable = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const keywordType = (searchParams.get('keywordType') ??
     HotDealKeywordType.POSITIVE) as HotDealKeywordType;
-  const { data } = useGetHotDealKeywords({
+  const { data, fetchMore } = useGetHotDealKeywords({
     variables: {
       type: keywordType,
     },
@@ -46,6 +46,33 @@ const HotdealKeywordsTable = () => {
     router.replace(`/hotdeal/keyword?keywordType=${type}`);
   };
 
+  const { ref: viewRef, inView } = useInView({
+    threshold: 0,
+    onChange: (inView) => {
+      if (!inView) return;
+      // loadMore();
+    },
+  });
+
+  const loadMore = () => {
+    const searchAfter = data.hotDealKeywordsByAdmin.at(-1)?.searchAfter;
+    fetchMore({
+      variables: {
+        searchAfter,
+      },
+      updateQuery: ({ hotDealKeywordsByAdmin }, { fetchMoreResult }) => {
+        return {
+          hotDealKeywordsByAdmin: [
+            ...hotDealKeywordsByAdmin,
+            ...fetchMoreResult.hotDealKeywordsByAdmin,
+          ],
+        };
+      },
+    });
+    // 다음 데이터 가져오기
+    // useInfiniteQuery를 사용한다면 해당 함수를 사용할 수 있습니다!
+  };
+
   return (
     <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex w-full items-center justify-end gap-2 p-2">
@@ -56,6 +83,7 @@ const HotdealKeywordsTable = () => {
         />
         <span>부정</span>
       </div>
+
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
           <thead>
@@ -130,6 +158,7 @@ const HotdealKeywordsTable = () => {
             ))}
           </tbody>
         </table>
+        <div ref={viewRef} />
       </div>
     </div>
   );

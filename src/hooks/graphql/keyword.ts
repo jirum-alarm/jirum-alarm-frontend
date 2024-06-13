@@ -110,8 +110,9 @@ interface GetHotDealKeywordsData {
   keyword: string;
   weight: number;
   isMajor: boolean;
-  synonymCount : number;
-  excludeKeywordCount : number;
+  synonymCount: number;
+  excludeKeywordCount: number;
+  searchAfter?: string[];
 }
 
 interface GetHotDealKeywordsVariables {
