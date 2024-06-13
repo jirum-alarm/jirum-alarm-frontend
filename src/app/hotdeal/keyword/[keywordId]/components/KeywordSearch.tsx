@@ -38,17 +38,6 @@ const KeywordSearch = ({ keywordId }: Props) => {
     synonymInputRef.current.value = '';
   };
 
-  const highlightedComments = useMemo(() => {
-    if (!comments) return [];
-    let _comments = comments.commentsByAdmin.join('\n');
-    filteredSynonyms?.forEach((synonym) => {
-      const regex = new RegExp(synonym, 'g');
-      _comments = _comments.replace(regex, `<span class="bg-green-300">${synonym}</span>`);
-    });
-
-    return _comments.split('\n');
-  }, [comments, filteredSynonyms]);
-
   return (
     <Card className="h-full">
       <h2 className=" mb-3 block text-xl font-medium text-black dark:text-white">검색</h2>
@@ -73,7 +62,10 @@ const KeywordSearch = ({ keywordId }: Props) => {
         ))}
       </div>
       <div className="mt-3 h-full">
-        <CommentsContainer comments={highlightedComments} />
+        <CommentsContainer
+          comments={comments?.commentsByAdmin}
+          highlightedSynonym={filteredSynonyms}
+        />
       </div>
     </Card>
   );

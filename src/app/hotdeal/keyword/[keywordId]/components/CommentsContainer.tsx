@@ -4,8 +4,8 @@ import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
   comments?: string[];
-  highlightedSynonym: string[];
-  highlightedExcludeSynonym: string[];
+  highlightedSynonym?: string[];
+  highlightedExcludeSynonym?: string[];
 }
 const CommentsContainer = forwardRef<HTMLDivElement, Props>(
   ({ comments, highlightedSynonym, highlightedExcludeSynonym }, ref) => {
@@ -22,14 +22,14 @@ const CommentsContainer = forwardRef<HTMLDivElement, Props>(
     const highlightTextRenderer = useCallback(
       (text: string) => {
         let highlightText = text;
-        highlightedExcludeSynonym.forEach((synonym) => {
+        highlightedExcludeSynonym?.forEach((synonym) => {
           const regex = new RegExp(`(${synonym})`, 'g');
           highlightText = highlightText.replace(
             regex,
             `<span class="bg-rose-300">${synonym}</span>`,
           );
         });
-        highlightedSynonym.forEach((synonym) => {
+        highlightedSynonym?.forEach((synonym) => {
           const regex = new RegExp(`(?<!<[^>]*?>)(${synonym})(?![^<]*?>)`, 'g');
           highlightText = highlightText.replace(
             regex,

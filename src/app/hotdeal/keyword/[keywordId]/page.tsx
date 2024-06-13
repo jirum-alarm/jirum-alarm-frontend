@@ -4,7 +4,6 @@ import React from 'react';
 import KeywordSearch from './components/KeywordSearch';
 import SynonymInputResult from './components/SynonymInputResult';
 import { useGetHotDealKeyword } from '@/hooks/graphql/keyword';
-import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import KeywordDetailInfo from './components/KeywordDetailInfo';
 
 const KeywordDetailPage = ({ params }: { params: { keywordId: string } }) => {
