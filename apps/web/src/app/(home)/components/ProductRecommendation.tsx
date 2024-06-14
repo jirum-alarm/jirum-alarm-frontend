@@ -32,7 +32,7 @@ export default function ProductRecommendation({
 
   return (
     <>
-      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
+      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 pb-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
         {products
           ?.slice(0, firstRenderingCount)
           .map((product, i) => (
@@ -46,7 +46,7 @@ export default function ProductRecommendation({
       </div>
 
       {showRandomHotDeals && hotDeals && (
-        <div className="py-11">
+        <div className="py-6">
           <div className="flex w-full items-center justify-between pb-4 ">
             <span className=" text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
             <span className="text-sm text-gray-500">

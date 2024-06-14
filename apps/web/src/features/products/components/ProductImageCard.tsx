@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { mp } from '@/lib/mixpanel';
 import { IllustStanding, IllustStandingSmall } from '@/components/common/icons';
+import { displayTime } from '@/util/displayTime';
 
 export function ProductImageCard({
   product,
@@ -66,9 +67,17 @@ export function ProductImageCard({
         >
           {product.title}
         </span>
-        <span className="align-center line-clamp-1 flex h-8 pt-1 text-lg font-semibold text-gray-900">
-          {product?.price ?? ''}
-        </span>
+        <div className="flex h-8 items-center pt-1">
+          <span className="line-clamp-1 max-w-[98px] text-lg font-semibold text-gray-900">
+            {product?.price ?? ''}
+          </span>
+          {type === 'product' && (
+            <>
+              {product?.price && <span className="w-2"></span>}
+              <span className="text-sm text-gray-400">{displayTime(product.postedAt)}</span>
+            </>
+          )}
+        </div>
       </div>
     </a>
   );
