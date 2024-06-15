@@ -1,18 +1,19 @@
-FROM --platform=linux/amd64 node:18-alpine AS base
+FROM --platform=linux/amd64 node:18-alpine AS alpine
+
+# setup pnpm on the alpine base
+FROM alpine as base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+RUN pnpm install turbo@^2 --global
  
 FROM base AS builder
 RUN apk update
-RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm add -g turbo@^2
+RUN apk add --no-cache libc6-compat
+
 # Set working directory
 WORKDIR /app
-# Replace <your-major-version> with the major version installed in your repository. For example:
-# RUN yarn global add turbo@^2
-# Install pnpm and Turbo globally using corepack to enable pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
-RUN pnpm add -g turbo@^2
-
 COPY . .
- 
 # Generate a partial monorepo with a pruned lockfile for a target workspace.
 # Assuming "admin" is the name entered in the project's package.json: { name: "admin" }
 RUN turbo prune admin --docker
