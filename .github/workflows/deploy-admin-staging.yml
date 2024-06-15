@@ -1,9 +1,11 @@
+name: deploy-admin-staging
+
 on:
   push:
     branches:
-      - main
-
-name: Deploy Production
+      - develop
+    paths:
+      - "apps/admin/**"
 
 jobs:
   build:
@@ -12,7 +14,7 @@ jobs:
 
     env:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
-      DOCKER_REPOSITORY: ${{ secrets.DOCKER_USER }}/jirum-alarm-admin
+      DOCKER_REPOSITORY: ${{ secrets.DOCKER_USER }}/jirum-alarm-admin-dev
       DOCKER_USER: ${{ secrets.DOCKER_USER }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       INFRA_GITHUB_REPOSITORY: ${{ secrets.INFRA_GITHUB_REPOSITORY }}
@@ -56,10 +58,10 @@ jobs:
 
       - name: Build Image & Push Image
         run: |
-          docker build -t $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG -f deploy/production/Dockerfile .
-          docker tag $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPOSITORY:production
+          docker build -t $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG -f apps/admin/deploy/development/Dockerfile .
+          docker tag $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPOSITORY:develop
           docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG
-          docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:production
+          docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:develop
           echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG"
         env:
           IMAGE_TAG: ${{ steps.image.outputs.version }}
@@ -73,7 +75,7 @@ jobs:
 
       - name: Update Kubernetes Deployment resources
         run: |
-          perl -i -pe's/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin:.*/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin:${{ steps.image.outputs.version }}/' production/$INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH
+          perl -i -pe's/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin-dev:.*/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin-dev:${{ steps.image.outputs.version }}/' development/$INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH
 
       - name: Commit files
         run: |
@@ -87,7 +89,7 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          author_name: Github Bot (Production)
+          author_name: Github Bot (Development)
           fields: repo,message
           if_mention: success,failure
         env:
