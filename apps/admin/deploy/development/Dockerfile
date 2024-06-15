@@ -26,12 +26,12 @@ WORKDIR /app
  
 # First install the dependencies (as they change less often)
 COPY .gitignore .gitignore
-COPY --from=builder /out/json/ .
-COPY --from=builder /out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install
  
 # Build the project
-COPY --from=builder /out/full/ .
+COPY --from=builder /app/out/full/ .
 RUN pnpm turbo run build --filter=admin...
  
 FROM base AS runner
@@ -44,13 +44,13 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
  
-COPY --from=installer /apps/admin/next.config.mjs .
-COPY --from=installer /apps/admin/package.json .
+COPY --from=installer /app/apps/admin/next.config.mjs .
+COPY --from=installer /app/apps/admin/package.json .
  
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=installer --chown=nextjs:nodejs /apps/admin/.next/standalone ./
-COPY --from=installer --chown=nextjs:nodejs /apps/admin/.next/static ./apps/admin/.next/static
-COPY --from=installer --chown=nextjs:nodejs /apps/admin/public ./apps/admin/public
+COPY --from=installer --chown=nextjs:nodejs /app/apps/admin/.next/standalone ./
+COPY --from=installer --chown=nextjs:nodejs /app/apps/admin/.next/static ./apps/admin/.next/static
+COPY --from=installer --chown=nextjs:nodejs /app/apps/admin/public ./apps/admin/public
  
 CMD node apps/admin/server.js
