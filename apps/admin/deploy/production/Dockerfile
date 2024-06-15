@@ -8,7 +8,7 @@ WORKDIR /app
 # Replace <your-major-version> with the major version installed in your repository. For example:
 # RUN yarn global add turbo@^2
 # Install pnpm and Turbo globally using corepack to enable pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm add -g turbo@^2
+RUN /bin/sh -c corepack enable && corepack prepare pnpm@latest --activate && pnpm add -g turbo@^2
 
 COPY . .
  
