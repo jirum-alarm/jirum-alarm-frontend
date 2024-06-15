@@ -24,10 +24,10 @@ const buildPrettierCommand = (filenames) => {
 
   let commands = [];
   if (adminFiles) {
-    commands.push(`pnpm prettier-fix --filter=admin prettier-fix`);
+    commands.push(`pnpm --filter=admin prettier-fix `);
   }
   if (webFiles) {
-    commands.push(`pnpm prettier-fix --filter=web prettier-fix`);
+    commands.push(`pnpm --filter=web prettier-fix`);
   }
 
   return commands.join(' && ');
