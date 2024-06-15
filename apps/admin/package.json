@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "prettier-fix": "prettier --write \"./**/*.{js,ts,tsx}\" --ignore-path .gitignore --ignore-path .prettierignore ",
+    "check-types": "tsc --project tsconfig.json --noEmit",
     "lint": "next lint"
   },
   "dependencies": {

@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "turbo dev",
+    "lint": "turbo lint",
     "prepare": "husky",
+    "check-types": "turbo check-types",
+    "prettier-fix": "turbo prettier-fix",
     "lint-staged": "lint-staged"
   },
   "devDependencies": {

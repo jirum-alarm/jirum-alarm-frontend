@@ -8,6 +8,7 @@
     "check-types": {
       "dependsOn": ["^check-types"]
     },
+    "prettier-fix" : {},
     "lint": {},
     "dev": {
       "persistent": true,
