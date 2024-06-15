@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "turbo dev",
+    "build": "turbo build",
     "lint": "turbo lint",
     "prepare": "husky",
     "check-types": "turbo check-types",
