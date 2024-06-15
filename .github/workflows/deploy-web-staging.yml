@@ -8,6 +8,8 @@ on:
   push:
     branches:
       - "**"
+    paths:
+      - "apps/web/**"
 
 jobs:
   job_deploy_staging:
