@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <DefaultLayout>어드민 배포 테스트{/* <ECommerce /> */}</DefaultLayout>
+      <DefaultLayout>어드민 배포 테스트!{/* <ECommerce /> */}</DefaultLayout>
     </>
   );
 }
