@@ -5,6 +5,7 @@ export function displayTime(createdAt: Date) {
   if (seconds < 60) return `방금 전`;
 
   const minutes = seconds / 60;
+  if (minutes < 10) return `방금 전`;
   if (minutes < 60) return `${Math.floor(minutes / 10) * 10}분 전`;
 
   const hours = minutes / 60;
