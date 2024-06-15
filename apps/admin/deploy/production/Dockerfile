@@ -2,12 +2,12 @@ FROM --platform=linux/amd64 node:18-alpine AS base
  
 FROM base AS builder
 RUN apk update
-RUN apk add --no-cache libc6-compat
+RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm add -g turbo@^2
 # Set working directory
 WORKDIR /app
 # Replace <your-major-version> with the major version installed in your repository. For example:
 # RUN yarn global add turbo@^2
-RUN pnpm add -g turbo@^2
+RUN yarn global add turbo@^2
 
 COPY . .
  

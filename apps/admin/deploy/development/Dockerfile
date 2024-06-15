@@ -7,7 +7,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 # Replace <your-major-version> with the major version installed in your repository. For example:
 # RUN yarn global add turbo@^2
-RUN pnpm add -g turbo@^2
+RUN yarn global add turbo@^2
 
 COPY . .
  
