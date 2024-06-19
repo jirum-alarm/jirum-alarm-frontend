@@ -4,7 +4,9 @@ import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
 import { HotDealKeywordType } from '@/types/keyword';
 import { getParticle } from '@/utils/text';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { startTransition } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 const HotdealKeywordsTable = () => {
@@ -50,27 +52,29 @@ const HotdealKeywordsTable = () => {
     threshold: 0,
     onChange: (inView) => {
       if (!inView) return;
-      // loadMore();
+      loadMore();
     },
   });
 
   const loadMore = () => {
-    const searchAfter = data.hotDealKeywordsByAdmin.at(-1)?.searchAfter;
-    fetchMore({
-      variables: {
-        searchAfter,
-      },
-      updateQuery: ({ hotDealKeywordsByAdmin }, { fetchMoreResult }) => {
-        return {
-          hotDealKeywordsByAdmin: [
-            ...hotDealKeywordsByAdmin,
-            ...fetchMoreResult.hotDealKeywordsByAdmin,
-          ],
-        };
-      },
+    startTransition(() => {
+      const searchAfter = data.hotDealKeywordsByAdmin.at(-1)?.searchAfter;
+      fetchMore({
+        variables: {
+          searchAfter,
+        },
+        updateQuery: ({ hotDealKeywordsByAdmin }, { fetchMoreResult }) => {
+          return {
+            hotDealKeywordsByAdmin: [
+              ...hotDealKeywordsByAdmin,
+              ...fetchMoreResult.hotDealKeywordsByAdmin,
+            ],
+          };
+        },
+      });
+      // 다음 데이터 가져오기
+      // useInfiniteQuery를 사용한다면 해당 함수를 사용할 수 있습니다!
     });
-    // 다음 데이터 가져오기
-    // useInfiniteQuery를 사용한다면 해당 함수를 사용할 수 있습니다!
   };
 
   return (
