@@ -6,7 +6,7 @@ export interface INotification {
   createdAt: Date;
   message: string;
   url: string;
-  product: IProduct;
+  product: IProduct | null;
 }
 
 export enum Role {

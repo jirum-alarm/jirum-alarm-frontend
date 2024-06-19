@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 
 const AlarmItem = ({ notification }: { notification: INotification }) => {
   const { message, url, createdAt, product } = notification;
-  const { thumbnail, price, isHot, isEnd } = product;
+  const { thumbnail, price, isHot, isEnd } = product ?? {};
 
   return (
     <li className="flex gap-x-3 ">
