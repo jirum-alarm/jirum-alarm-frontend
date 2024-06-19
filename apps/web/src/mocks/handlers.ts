@@ -139,7 +139,7 @@ const QueryNotifications = graphql.query('QueryNotifications', () => {
       createdAt: new Date(Date.now() - (i * 3 + 3) * 60 * 1000),
       readAt: new Date(),
     },
-  ]);
+  ]) as unknown as INotification[];
 
   return HttpResponse.json<{ data: { notifications: INotification[] } }>({
     data: { notifications },
