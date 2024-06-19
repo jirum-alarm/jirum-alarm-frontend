@@ -1,4 +1,3 @@
-import 'flatpickr/dist/flatpickr.min.css';
 import '@/css/satoshi.css';
 import '@/css/style.css';
 import ApolloProvider from '@/lib/apolloProvider';

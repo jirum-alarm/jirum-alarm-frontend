@@ -4,6 +4,7 @@ import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
 import { HotDealKeywordType } from '@/types/keyword';
 import { getParticle } from '@/utils/text';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { startTransition } from 'react';
 import { useInView } from 'react-intersection-observer';
