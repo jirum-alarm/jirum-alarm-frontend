@@ -1,17 +1,12 @@
+import { IProduct } from './product';
+
 export interface INotification {
   id: string;
-  groupId: number;
-  receiverId: number;
-  senderId: number;
-  senderType: Role;
-  target: string;
-  targetId?: string;
-  title?: string;
-  message: string;
-  url?: string;
-  category: string;
-  readAt?: Date;
+  readAt: Date | null;
   createdAt: Date;
+  message: string;
+  url: string;
+  product: IProduct;
 }
 
 export enum Role {

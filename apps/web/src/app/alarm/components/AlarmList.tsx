@@ -7,7 +7,6 @@ import { useNotificationsViewModel } from '../hooks/useNotificationsViewModel';
 import { useDevice } from '@/hooks/useDevice';
 import { appDownloadGuide } from '@/assets/images/app_download_guide';
 import { Apple, ArrowDown, Google } from '@/components/common/icons';
-import { useEffect, useRef } from 'react';
 import Illust from '@/components/common/Illust';
 import Button from '@/components/common/Button';
 import Link from '@/features/Link';
