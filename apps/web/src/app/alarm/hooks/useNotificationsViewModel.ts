@@ -65,7 +65,10 @@ export const useNotificationsViewModel = () => {
 function adapter(notifications: INotification[]) {
   return notifications.map((notification) => {
     if (!notification.product) {
-      return { ...notification, product: { title: notification.message, url: notification.url } };
+      return {
+        ...notification,
+        product: { title: notification.message, url: notification.url },
+      } as INotification;
     }
 
     return notification;
