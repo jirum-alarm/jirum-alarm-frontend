@@ -59,16 +59,15 @@ export const useNotificationsViewModel = () => {
   };
 };
 
-
 /**
-* @TODO API 응답 인터페이스 변경에 따른 어댑터, 데이터 마이그레이션 되는 경우 삭제 가능
-*/
+ * @TODO API 응답 인터페이스 변경에 따른 어댑터, 데이터 마이그레이션 되는 경우 삭제 가능
+ */
 function adapter(notifications: INotification[]) {
   return notifications.map((notification) => {
     if (!notification.product) {
-      return { ...notification, product: { title: notification.message, url: notification.url, } };
+      return { ...notification, product: { title: notification.message, url: notification.url } };
     }
 
-    return notification
-  })
+    return notification;
+  });
 }

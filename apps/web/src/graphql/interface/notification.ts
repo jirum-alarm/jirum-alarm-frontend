@@ -1,4 +1,4 @@
-import { IProduct } from "./product";
+import { IProduct } from './product';
 
 export interface INotification {
   id: string;
@@ -7,11 +7,11 @@ export interface INotification {
 
   /**
    * @deprecated Use `product` instead.
-  */
+   */
   message?: string;
   /**
    * @deprecated Use `product` instead.
-  */
+   */
   url?: string;
 
   product: IProduct;
