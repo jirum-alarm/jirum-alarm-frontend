@@ -4,18 +4,12 @@ export const QueryNotifications = gql`
   query QueryNotifications($offset: Int!, $limit: Int!) {
     notifications(offset: $offset, limit: $limit) {
       id
-
       readAt
       createdAt
-
       message
       url
-
       product {
-        title
         thumbnail
-        url
-
         price
         isHot
         isEnd
