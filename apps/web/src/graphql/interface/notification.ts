@@ -4,16 +4,8 @@ export interface INotification {
   id: string;
   readAt: Date | null;
   createdAt: Date;
-
-  /**
-   * @deprecated Use `product` instead.
-   */
-  message?: string;
-  /**
-   * @deprecated Use `product` instead.
-   */
-  url?: string;
-
+  message: string;
+  url: string;
   product: IProduct;
 }
 

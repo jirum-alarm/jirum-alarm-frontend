@@ -5,8 +5,8 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/cn';
 
 const AlarmItem = ({ notification }: { notification: INotification }) => {
-  const { createdAt, product } = notification;
-  const { title, url, thumbnail, price, isHot, isEnd } = product;
+  const { message, url, createdAt, product } = notification;
+  const { thumbnail, price, isHot, isEnd } = product;
 
   return (
     <li className="flex gap-x-3 ">
@@ -17,7 +17,7 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
         className="flex w-full p-5 hover:bg-gray-100"
       >
         <div className="flex-1 pr-3">
-          <p className="line-clamp-2 w-full text-sm text-gray-900">{title}</p>
+          <p className="line-clamp-2 w-full text-sm text-gray-900">{message}</p>
           <div className="flex items-center gap-x-3 pt-2">
             {(isHot || isEnd) && (
               <div
@@ -42,7 +42,7 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
           </div>
         </div>
         <div className="h-14 w-14 overflow-hidden rounded border border-gray-200">
-          <ImageWithFallback src={thumbnail} title={title ?? ''} />
+          <ImageWithFallback src={thumbnail} title={message} />
         </div>
       </a>
     </li>
