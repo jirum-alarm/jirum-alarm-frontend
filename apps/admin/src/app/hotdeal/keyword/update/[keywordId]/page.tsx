@@ -2,14 +2,12 @@
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import Card from '@/components/Card';
 import { useState } from 'react';
-import { HotDealKeywordOrderType, HotDealKeywordType, OrderOptionType } from '@/types/keyword';
+import { HotDealKeywordType } from '@/types/keyword';
 import { useGetHotDealDetailKeyword, useUpdateHotDealKeyword } from '@/hooks/graphql/keyword';
 import { useRouter } from 'next/navigation';
 import WeightSetter from '../../components/WeightSetter';
 import PrimaryKeyword from '../../components/PrimaryKeywordForm';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
-import { QueryHotDealKeywordsByAdmin } from '@/graphql/keyword';
-import { PAGE_LIMIT } from '@/constants/limit';
 
 interface KeywordFormType {
   type: HotDealKeywordType;
@@ -47,7 +45,7 @@ const KeywordUpdatePage = ({ params }: Props) => {
   const [mutate, { loading }] = useUpdateHotDealKeyword(keyword.type, {
     onCompleted: () => {
       alert('키워드 수정 성공!');
-      router.push(`/hotdeal/keyword?keywordType=${keyword.type}`);
+      router.back();
     },
   });
   const handleChangeWeight = (value: number) => {
