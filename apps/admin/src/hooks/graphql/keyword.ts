@@ -105,8 +105,9 @@ export const useUpdateHotDealKeyword = (
   return useMutation<{ updateHotDealKeywordByAdmin: boolean }, updateHotDealKeywordVariables>(
     MutationUpdateHotDealKeywordByAdmin,
     {
-      refetchQueries: [
-        {
+      update(cache, { data }, option) {
+        const { variables } = option;
+        const existingKeywords = cache.readQuery({
           query: QueryHotDealKeywordsByAdmin,
           variables: {
             type: keywordType,
@@ -114,8 +115,24 @@ export const useUpdateHotDealKeyword = (
             orderOption: OrderOptionType.ASC,
             limit: PAGE_LIMIT,
           },
-        },
-      ],
+        }) as { hotDealKeywordsByAdmin: GetHotDealKeywordsData[] } | null;
+        if (existingKeywords?.hotDealKeywordsByAdmin.length && data?.updateHotDealKeywordByAdmin) {
+          cache.writeQuery({
+            query: QueryHotDealKeywordsByAdmin,
+            variables: {
+              type: keywordType,
+              orderBy: HotDealKeywordOrderType.ID,
+              orderOption: OrderOptionType.ASC,
+              limit: PAGE_LIMIT,
+            },
+            data: {
+              hotDealKeywordsByAdmin: existingKeywords.hotDealKeywordsByAdmin.map((keyword) =>
+                Number(keyword.id) === variables?.id ? { ...keyword, ...variables } : keyword,
+              ),
+            },
+          });
+        }
+      },
       ...options,
     },
   );
