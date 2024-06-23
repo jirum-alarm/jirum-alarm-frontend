@@ -28,7 +28,7 @@ export const useAddHotDealKeyword = (
   keywordType: HotDealKeywordType,
   options?: MutationHookOptions<any, AddHotDealKeywordVariable>,
 ) => {
-  return useMutation<{ data: { addHotDealKeywordByAdmin: boolean } }, AddHotDealKeywordVariable>(
+  return useMutation<{ addHotDealKeywordByAdmin: boolean }, AddHotDealKeywordVariable>(
     MutationAddHotDealKeywordByAdmin,
     {
       refetchQueries: [
@@ -55,23 +55,40 @@ export const useRemoveHotDealKeyword = (
   keywordType: HotDealKeywordType,
   options?: MutationHookOptions<any, removeHotDealKeywordVariables>,
 ) => {
-  return useMutation<
-    { data: { removeHotDealKeywordByAdmin: boolean } },
-    removeHotDealKeywordVariables
-  >(MutationRemoveHotDealKeywordByAdmin, {
-    refetchQueries: [
-      {
-        query: QueryHotDealKeywordsByAdmin,
-        variables: {
-          type: keywordType,
-          orderBy: HotDealKeywordOrderType.ID,
-          orderOption: OrderOptionType.ASC,
-          limit: PAGE_LIMIT,
-        },
+  return useMutation<{ removeHotDealKeywordByAdmin: boolean }, removeHotDealKeywordVariables>(
+    MutationRemoveHotDealKeywordByAdmin,
+    {
+      update(cache, { data }, option) {
+        const { variables } = option;
+        const existingKeywords = cache.readQuery({
+          query: QueryHotDealKeywordsByAdmin,
+          variables: {
+            type: keywordType,
+            orderBy: HotDealKeywordOrderType.ID,
+            orderOption: OrderOptionType.ASC,
+            limit: PAGE_LIMIT,
+          },
+        }) as { hotDealKeywordsByAdmin: GetHotDealKeywordsData[] } | null;
+        if (existingKeywords?.hotDealKeywordsByAdmin.length && data?.removeHotDealKeywordByAdmin) {
+          cache.writeQuery({
+            query: QueryHotDealKeywordsByAdmin,
+            variables: {
+              type: keywordType,
+              orderBy: HotDealKeywordOrderType.ID,
+              orderOption: OrderOptionType.ASC,
+              limit: PAGE_LIMIT,
+            },
+            data: {
+              hotDealKeywordsByAdmin: existingKeywords.hotDealKeywordsByAdmin.filter(
+                (keyword) => Number(keyword.id) !== variables?.id,
+              ),
+            },
+          });
+        }
       },
-    ],
-    ...options,
-  });
+      ...options,
+    },
+  );
 };
 
 interface updateHotDealKeywordVariables {
@@ -85,23 +102,40 @@ export const useUpdateHotDealKeyword = (
   keywordType: HotDealKeywordType,
   options?: MutationHookOptions<any, updateHotDealKeywordVariables>,
 ) => {
-  return useMutation<
-    { data: { updateHotDealKeywordByAdmin: boolean } },
-    updateHotDealKeywordVariables
-  >(MutationUpdateHotDealKeywordByAdmin, {
-    refetchQueries: [
-      {
-        query: QueryHotDealKeywordsByAdmin,
-        variables: {
-          type: keywordType,
-          orderBy: HotDealKeywordOrderType.ID,
-          orderOption: OrderOptionType.ASC,
-          limit: PAGE_LIMIT,
-        },
+  return useMutation<{ updateHotDealKeywordByAdmin: boolean }, updateHotDealKeywordVariables>(
+    MutationUpdateHotDealKeywordByAdmin,
+    {
+      update(cache, { data }, option) {
+        const { variables } = option;
+        const existingKeywords = cache.readQuery({
+          query: QueryHotDealKeywordsByAdmin,
+          variables: {
+            type: keywordType,
+            orderBy: HotDealKeywordOrderType.ID,
+            orderOption: OrderOptionType.ASC,
+            limit: PAGE_LIMIT,
+          },
+        }) as { hotDealKeywordsByAdmin: GetHotDealKeywordsData[] } | null;
+        if (existingKeywords?.hotDealKeywordsByAdmin.length && data?.updateHotDealKeywordByAdmin) {
+          cache.writeQuery({
+            query: QueryHotDealKeywordsByAdmin,
+            variables: {
+              type: keywordType,
+              orderBy: HotDealKeywordOrderType.ID,
+              orderOption: OrderOptionType.ASC,
+              limit: PAGE_LIMIT,
+            },
+            data: {
+              hotDealKeywordsByAdmin: existingKeywords.hotDealKeywordsByAdmin.map((keyword) =>
+                Number(keyword.id) === variables?.id ? { ...keyword, ...variables } : keyword,
+              ),
+            },
+          });
+        }
       },
-    ],
-    ...options,
-  });
+      ...options,
+    },
+  );
 };
 
 interface GetHotDealKeywordsData {
