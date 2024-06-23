@@ -1,25 +1,19 @@
-'use client';
-import DefaultLayout from '@/components/Layouts/DefaultLayout';
-import { useRouter } from 'next/navigation';
-import HotdealKeywordsTable from './components/HotdealKeywordsTable';
 import { Suspense } from 'react';
+import DefaultLayout from '@/components/Layouts/DefaultLayout';
+import HotdealKeywordsTable from './components/HotdealKeywordsTable';
 import HotdealKeywordsTableSkeleton from './components/HotdealKeywordsTableSkeleton';
+import Link from 'next/link';
 
 const KeywordPage = () => {
-  const router = useRouter();
-
-  const moveKeywordRegister = () => {
-    router.push('/hotdeal/keyword/register');
-  };
   return (
     <DefaultLayout>
       <div className="flex w-full justify-end">
-        <button
+        <Link
           className="mb-2 rounded-xl bg-lime-400 p-2 text-white"
-          onClick={moveKeywordRegister}
+          href={'/hotdeal/keyword/register'}
         >
           추가
-        </button>
+        </Link>
       </div>
       <div className="flex gap-3">
         <Suspense fallback={<HotdealKeywordsTableSkeleton />}>

@@ -21,9 +21,9 @@ const HotdealKeywordsTable = () => {
   });
 
   const [removeHotdealKeyword] = useRemoveHotDealKeyword(keywordType);
-  const moveKeywordDetail = (keywordId: number) => {
-    router.push(`/hotdeal/keyword/${keywordId}`);
-  };
+  // const moveKeywordDetail = (keywordId: number) => {
+  //   router.push(`/hotdeal/keyword/${keywordId}`);
+  // };
   const handleRemoveHotdealKeyword = (id: number, keyword: string) => {
     return (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
@@ -36,12 +36,7 @@ const HotdealKeywordsTable = () => {
       }
     };
   };
-  const handleMoveKeywordUpdate = (id: number) => {
-    return (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.stopPropagation();
-      router.push(`/hotdeal/keyword/update/${id}`);
-    };
-  };
+
   const handleChangeHotdealOption = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     const type = isChecked ? HotDealKeywordType.NEGATIVE : HotDealKeywordType.POSITIVE;
@@ -72,8 +67,6 @@ const HotdealKeywordsTable = () => {
           };
         },
       });
-      // 다음 데이터 가져오기
-      // useInfiniteQuery를 사용한다면 해당 함수를 사용할 수 있습니다!
     });
   };
 
@@ -109,47 +102,51 @@ const HotdealKeywordsTable = () => {
           </thead>
           <tbody>
             {data.hotDealKeywordsByAdmin.map((hotdeal, key) => (
-              <tr
-                key={hotdeal.id}
-                className="cursor-pointer hover:bg-slate-50"
-                onClick={() => moveKeywordDetail(hotdeal.id)}
-              >
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">{hotdeal.keyword}</h5>
+              <tr key={hotdeal.id} className="cursor-pointer hover:bg-slate-50">
+                <td className="border-b border-[#eee] pl-9 dark:border-strokedark xl:pl-11">
+                  <Link className="block h-full p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
+                    <h5 className="font-medium text-black dark:text-white">{hotdeal.keyword}</h5>
+                  </Link>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    <span className="font-bold text-green-500">{hotdeal.synonymCount}</span>
-                    <span>{`/`}</span>
-                    <span className="font-bold text-rose-500">{hotdeal.excludeKeywordCount}</span>
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
-                  <p className="text-black dark:text-white">{hotdeal.weight}</p>
-                </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <div className="flex justify-center">
-                    <p
-                      className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
-                        hotdeal.type === HotDealKeywordType.POSITIVE
-                          ? 'bg-success text-success'
-                          : hotdeal.type === HotDealKeywordType.NEGATIVE
-                            ? 'bg-danger text-danger'
-                            : ''
-                      }`}
-                    >
-                      {HotDealKeywordTypeMap[hotdeal.type]}
+                <td className="border-b border-[#eee] text-center dark:border-strokedark">
+                  <Link className="block h-full p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
+                    <p className="text-black dark:text-white">
+                      <span className="font-bold text-green-500">{hotdeal.synonymCount}</span>
+                      <span>{`/`}</span>
+                      <span className="font-bold text-rose-500">{hotdeal.excludeKeywordCount}</span>
                     </p>
-                  </div>
+                  </Link>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-[#eee] text-center dark:border-strokedark">
+                  <Link className="block h-full p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
+                    <p className="text-black dark:text-white">{hotdeal.weight}</p>
+                  </Link>
+                </td>
+                <td className="border-b border-[#eee] dark:border-strokedark">
+                  <Link className="block h-full p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
+                    <div className="flex justify-center">
+                      <p
+                        className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
+                          hotdeal.type === HotDealKeywordType.POSITIVE
+                            ? 'bg-success text-success'
+                            : hotdeal.type === HotDealKeywordType.NEGATIVE
+                              ? 'bg-danger text-danger'
+                              : ''
+                        }`}
+                      >
+                        {HotDealKeywordTypeMap[hotdeal.type]}
+                      </p>
+                    </div>
+                  </Link>
+                </td>
+                <td className="border-b border-[#eee] dark:border-strokedark">
                   <div className="flex items-center justify-center space-x-3.5">
-                    <button
+                    <Link
                       className="rounded-md p-2 text-sm hover:bg-slate-200 hover:text-primary"
-                      onClick={handleMoveKeywordUpdate(hotdeal.id)}
+                      href={`/hotdeal/keyword/update/${hotdeal.id}`}
                     >
                       수정
-                    </button>
+                    </Link>
                     <button
                       className="rounded-md p-2 text-sm hover:bg-rose-100 hover:text-danger"
                       onClick={handleRemoveHotdealKeyword(hotdeal.id, hotdeal.keyword)}
