@@ -1,10 +1,8 @@
 'use client';
 import React, { useState } from 'react';
-import Link from 'next/link';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import { useMutationAdminLogin } from '@/hooks/graphql/auth';
-import SvgLogo from '@/components/icons/Logo';
 
 const SignIn = () => {
   const [loginInputs, setLoginInputs] = useState({
