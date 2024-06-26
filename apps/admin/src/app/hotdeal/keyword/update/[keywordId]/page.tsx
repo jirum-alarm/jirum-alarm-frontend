@@ -31,7 +31,8 @@ const KeywordUpdatePage = ({ params }: Props) => {
     weight: 1,
     isMajor: false,
   });
-  const { loading: detailKeywordLoading } = useGetHotDealDetailKeyword({
+
+  useGetHotDealDetailKeyword({
     variables: {
       id: keywordId,
     },
@@ -42,6 +43,7 @@ const KeywordUpdatePage = ({ params }: Props) => {
       setKeyword({ type, keyword, weight, isMajor });
     },
   });
+
   const [mutate, { loading }] = useUpdateHotDealKeyword(keyword.type, {
     onCompleted: () => {
       alert('키워드 수정 성공!');

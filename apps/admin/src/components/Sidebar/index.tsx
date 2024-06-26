@@ -275,16 +275,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Sign In
                             </Link>
                           </li>
-                          <li>
-                            <Link
-                              href="/auth/signup"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/auth/signup' && 'text-white'
-                              }`}
-                            >
-                              Sign Up
-                            </Link>
-                          </li>
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
