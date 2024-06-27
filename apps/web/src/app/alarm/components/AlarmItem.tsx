@@ -5,19 +5,19 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/cn';
 
 const AlarmItem = ({ notification }: { notification: INotification }) => {
-  const { message, url, createdAt, product } = notification;
+  const { message, url, createdAt, product, keyword } = notification;
   const { thumbnail, price, isHot, isEnd } = product ?? {};
 
   return (
     <li className="flex gap-x-3 ">
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex w-full p-5 hover:bg-gray-100"
-      >
-        <div className="flex-1 pr-3">
-          <p className="line-clamp-2 w-full text-sm text-gray-900">{message}</p>
+      <a href={url} target="_blank" rel="noopener noreferrer" className="flex w-full p-5">
+        <div className="h-14 w-14 overflow-hidden rounded border border-gray-200">
+          <ImageWithFallback src={thumbnail} title={message} />
+        </div>
+        <div className="flex-1 pl-3">
+          <p className="line-clamp-2 w-full text-sm text-gray-900">
+            <HighlightText message={message} keyword={keyword.split(' ')[0]} />
+          </p>
           <div className="flex items-center gap-x-3 pt-2">
             {(isHot || isEnd) && (
               <div
@@ -41,15 +41,32 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
             <span className="text-xs text-gray-400">{displayTime(createdAt)}</span>
           </div>
         </div>
-        <div className="h-14 w-14 overflow-hidden rounded border border-gray-200">
-          <ImageWithFallback src={thumbnail} title={message} />
-        </div>
       </a>
     </li>
   );
 };
 
 export default AlarmItem;
+
+function HighlightText({ message, keyword }: { message: string; keyword: string }) {
+  const regex = new RegExp(`(${keyword})`, 'g');
+
+  const parts = message.split(regex);
+
+  return (
+    <>
+      {parts.map((part, i) =>
+        part === keyword ? (
+          <span key={i} className="font-bold">
+            {part}
+          </span>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      )}
+    </>
+  );
+}
 
 const ImageWithFallback = React.memo(function ImageWithFallback({
   src,

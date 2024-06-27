@@ -8,6 +8,7 @@ export const QueryNotifications = gql`
       createdAt
       message
       url
+      keyword
       product {
         thumbnail
         price

@@ -6,6 +6,7 @@ export interface INotification {
   createdAt: Date;
   message: string;
   url: string;
+  keyword: string;
   product: IProduct | null;
 }
 
