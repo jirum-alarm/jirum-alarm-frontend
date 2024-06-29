@@ -3,7 +3,7 @@ import { MutationHookOptions, useMutation } from '@apollo/client';
 
 interface TokenOutput {
   accessToken: string;
-  refreshToken: string;
+  refreshToken?: string;
 }
 
 interface AdminLoginVariable {

@@ -3,15 +3,19 @@ import React, { useState } from 'react';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import { useMutationAdminLogin } from '@/hooks/graphql/auth';
+import { setAccessToken } from '@/app/actions/token';
+import { useRouter } from 'next/navigation';
 
 const SignIn = () => {
+  const router = useRouter();
   const [loginInputs, setLoginInputs] = useState({
     email: '',
     password: '',
   });
   const [login] = useMutationAdminLogin({
-    onCompleted: (v) => {
-      console.log('info : ', v.adminLogin);
+    onCompleted: (data) => {
+      setAccessToken(data.adminLogin.accessToken);
+      router.push('/');
     },
     onError: (e) => {
       if (e.graphQLErrors[0].extensions.code === '404') {
