@@ -3,20 +3,33 @@ import React, { useState, ReactNode } from 'react';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 
-export default function DefaultLayout({ children }: { children: React.ReactNode }) {
+interface Props {
+  isLoggedIn: boolean;
+  children: React.ReactNode;
+}
+
+export default function DefaultLayout({ isLoggedIn, children }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <>
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex h-screen">
         {/* <!-- ===== Sidebar Start ===== --> */}
-        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <Sidebar
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+          isLoggedIn={isLoggedIn}
+        />
         {/* <!-- ===== Sidebar End ===== --> */}
 
         {/* <!-- ===== Content Area Start ===== --> */}
         <div className="relative flex flex-1 flex-col lg:ml-72.5">
           {/* <!-- ===== Header Start ===== --> */}
-          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          <Header
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+            isLoggedIn={isLoggedIn}
+          />
           {/* <!-- ===== Header End ===== --> */}
 
           {/* <!-- ===== Main Content Start ===== --> */}
