@@ -9,7 +9,7 @@ import SvgLogo from '../icons/Logo';
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
-  isLoggedIn?: boolean;
+  isLoggedIn: boolean;
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen, isLoggedIn }: SidebarProps) => {

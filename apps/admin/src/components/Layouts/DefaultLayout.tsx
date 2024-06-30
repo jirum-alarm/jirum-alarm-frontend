@@ -4,7 +4,7 @@ import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 
 interface Props {
-  isLoggedIn?: boolean;
+  isLoggedIn: boolean;
   children: React.ReactNode;
 }
 

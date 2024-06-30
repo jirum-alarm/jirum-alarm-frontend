@@ -3,10 +3,12 @@ import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import HotdealKeywordsTable from './components/HotdealKeywordsTable';
 import HotdealKeywordsTableSkeleton from './components/HotdealKeywordsTableSkeleton';
 import Link from 'next/link';
+import { getAccessToken } from '@/app/actions/token';
 
-const KeywordPage = () => {
+const HotDealKeywordPage = async () => {
+  const token = await getAccessToken();
   return (
-    <DefaultLayout>
+    <DefaultLayout isLoggedIn={!!token}>
       <div className="flex w-full justify-end">
         <Link
           className="mb-2 rounded-xl bg-lime-400 p-2 text-white"
@@ -24,4 +26,4 @@ const KeywordPage = () => {
   );
 };
 
-export default KeywordPage;
+export default HotDealKeywordPage;

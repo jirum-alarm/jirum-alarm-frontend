@@ -6,7 +6,7 @@ import useLogout from '@/hooks/useLogout';
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
-  isLoggedIn?: boolean;
+  isLoggedIn: boolean;
 }) => {
   const { logout } = useLogout();
 
