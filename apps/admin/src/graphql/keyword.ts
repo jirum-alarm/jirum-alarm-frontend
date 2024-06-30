@@ -20,6 +20,7 @@ export const QueryHotDealKeywordsByAdmin = gql`
       keyword
       weight
       isMajor
+      lastUpdatedAt
       synonymCount
       excludeKeywordCount
       searchAfter

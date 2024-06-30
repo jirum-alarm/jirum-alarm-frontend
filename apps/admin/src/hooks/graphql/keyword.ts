@@ -36,8 +36,8 @@ export const useAddHotDealKeyword = (
           query: QueryHotDealKeywordsByAdmin,
           variables: {
             type: keywordType,
-            orderBy: HotDealKeywordOrderType.ID,
-            orderOption: OrderOptionType.ASC,
+            orderBy: HotDealKeywordOrderType.WEIGHT,
+            orderOption: OrderOptionType.DESC,
             limit: PAGE_LIMIT,
           },
         },
@@ -64,8 +64,8 @@ export const useRemoveHotDealKeyword = (
           query: QueryHotDealKeywordsByAdmin,
           variables: {
             type: keywordType,
-            orderBy: HotDealKeywordOrderType.ID,
-            orderOption: OrderOptionType.ASC,
+            orderBy: HotDealKeywordOrderType.WEIGHT,
+            orderOption: OrderOptionType.DESC,
             limit: PAGE_LIMIT,
           },
         }) as { hotDealKeywordsByAdmin: GetHotDealKeywordsData[] } | null;
@@ -74,8 +74,8 @@ export const useRemoveHotDealKeyword = (
             query: QueryHotDealKeywordsByAdmin,
             variables: {
               type: keywordType,
-              orderBy: HotDealKeywordOrderType.ID,
-              orderOption: OrderOptionType.ASC,
+              orderBy: HotDealKeywordOrderType.WEIGHT,
+              orderOption: OrderOptionType.DESC,
               limit: PAGE_LIMIT,
             },
             data: {
@@ -111,8 +111,8 @@ export const useUpdateHotDealKeyword = (
           query: QueryHotDealKeywordsByAdmin,
           variables: {
             type: keywordType,
-            orderBy: HotDealKeywordOrderType.ID,
-            orderOption: OrderOptionType.ASC,
+            orderBy: HotDealKeywordOrderType.WEIGHT,
+            orderOption: OrderOptionType.DESC,
             limit: PAGE_LIMIT,
           },
         }) as { hotDealKeywordsByAdmin: GetHotDealKeywordsData[] } | null;
@@ -121,8 +121,8 @@ export const useUpdateHotDealKeyword = (
             query: QueryHotDealKeywordsByAdmin,
             variables: {
               type: keywordType,
-              orderBy: HotDealKeywordOrderType.ID,
-              orderOption: OrderOptionType.ASC,
+              orderBy: HotDealKeywordOrderType.WEIGHT,
+              orderOption: OrderOptionType.DESC,
               limit: PAGE_LIMIT,
             },
             data: {
@@ -144,6 +144,7 @@ interface GetHotDealKeywordsData {
   keyword: string;
   weight: number;
   isMajor: boolean;
+  lastUpdatedAt: number;
   synonymCount: number;
   excludeKeywordCount: number;
   searchAfter?: string[];
@@ -169,8 +170,8 @@ export const useGetHotDealKeywords = (
     ...rest,
     variables: {
       type: variables?.type,
-      orderBy: HotDealKeywordOrderType.ID,
-      orderOption: variables?.orderOption ?? OrderOptionType.ASC,
+      orderBy: HotDealKeywordOrderType.WEIGHT,
+      orderOption: variables?.orderOption ?? OrderOptionType.DESC,
       limit: variables?.limit ?? PAGE_LIMIT,
       searchAfter: variables?.searchAfter,
     },

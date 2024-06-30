@@ -5,6 +5,7 @@ export enum HotDealKeywordType {
 
 export enum HotDealKeywordOrderType {
   ID = 'ID',
+  WEIGHT = 'WEIGHT',
 }
 
 export enum OrderOptionType {

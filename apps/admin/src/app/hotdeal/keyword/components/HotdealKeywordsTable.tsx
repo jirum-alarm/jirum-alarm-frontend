@@ -3,6 +3,7 @@ import Switcher from '@/components/Switchers/SwitcherOne';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
 import { HotDealKeywordType } from '@/types/keyword';
+import { dateFormatter } from '@/utils/date';
 import { getParticle } from '@/utils/text';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -21,9 +22,7 @@ const HotdealKeywordsTable = () => {
   });
 
   const [removeHotdealKeyword] = useRemoveHotDealKeyword(keywordType);
-  // const moveKeywordDetail = (keywordId: number) => {
-  //   router.push(`/hotdeal/keyword/${keywordId}`);
-  // };
+
   const handleRemoveHotdealKeyword = (id: number, keyword: string) => {
     return (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
@@ -43,7 +42,7 @@ const HotdealKeywordsTable = () => {
     router.replace(`/hotdeal/keyword?keywordType=${type}`);
   };
 
-  const { ref: viewRef, inView } = useInView({
+  const { ref: viewRef } = useInView({
     threshold: 0,
     onChange: (inView) => {
       if (!inView) return;
@@ -85,8 +84,11 @@ const HotdealKeywordsTable = () => {
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="min-w-[150px] px-4 py-4 text-center font-medium text-black dark:text-white xl:pl-11">
                 키워드
+              </th>
+              <th className="min-w-[100px] px-4 py-4 text-center font-medium text-black dark:text-white">
+                업데이트
               </th>
               <th className="min-w-[100px] px-4 py-4 text-center font-medium text-black dark:text-white">
                 유의어
@@ -103,9 +105,18 @@ const HotdealKeywordsTable = () => {
           <tbody>
             {data.hotDealKeywordsByAdmin.map((hotdeal, key) => (
               <tr key={hotdeal.id} className="cursor-pointer hover:bg-slate-50">
-                <td className="border-b border-[#eee] pl-9 dark:border-strokedark xl:pl-11">
+                <td className="border-b border-[#eee] pl-9 text-center dark:border-strokedark xl:pl-11">
                   <Link className="block h-full p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
-                    <h5 className="font-medium text-black dark:text-white">{hotdeal.keyword}</h5>
+                    <h5 className="font-medium text-black dark:text-white">
+                      <span>{hotdeal.keyword}</span>
+                    </h5>
+                  </Link>
+                </td>
+                <td className="border-b border-[#eee] text-center dark:border-strokedark">
+                  <Link className="block h-full p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
+                    <span className="text-xs text-slate-400">
+                      {dateFormatter(hotdeal.lastUpdatedAt)}
+                    </span>
                   </Link>
                 </td>
                 <td className="border-b border-[#eee] text-center dark:border-strokedark">

@@ -32,6 +32,9 @@ importers:
       apexcharts:
         specifier: ^3.45.2
         version: 3.49.1
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.11
       flatpickr:
         specifier: ^4.6.13
         version: 4.6.13
