@@ -1,5 +1,4 @@
 'use client';
-import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 import React, { useState } from 'react';
 import { useMutationAdminLogin } from '@/hooks/graphql/auth';
 import { setAccessToken } from '@/app/actions/token';
@@ -43,8 +42,6 @@ const SigninPage = () => {
   };
   return (
     <>
-      <Breadcrumb pageName="Sign In" />
-
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="w-full border-stroke dark:border-strokedark">
           <div className="w-full p-4">
