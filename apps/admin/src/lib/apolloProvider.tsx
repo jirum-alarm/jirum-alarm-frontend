@@ -1,37 +1,86 @@
 'use client';
+import { redirect, useRouter } from 'next/navigation';
 import { baseUrl } from '@/constants/endpoint';
-
-import { HttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+import { ApolloLink, HttpLink } from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
 import {
   ApolloNextAppProvider,
   ApolloClient,
   InMemoryCache,
+  SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support';
+import { deleteAccessToken, getAccessToken } from '@/app/actions/token';
+import { useCallback, useEffect, useState } from 'react';
 
-// have a function to create a client for you
-function makeClient() {
-  const httpLink = new HttpLink({
-    // this needs to be an absolute url, as relative urls cannot be used in SSR
-    uri: baseUrl,
-    // you can disable result caching here if you want to
-    // (this does not work if you are rendering your page with `export const dynamic = "force-static"`)
-    fetchOptions: { cache: 'no-store' },
-    // you can override the default `fetchOptions` on a per query basis
-    // via the `context` property on the options passed as a second argument
-    // to an Apollo Client data fetching hook, e.g.:
-    // const { data } = useSuspenseQuery(MY_QUERY, { context: { fetchOptions: { cache: "force-cache" }}});
-  });
-
-  // use the `ApolloClient` from "@apollo/experimental-nextjs-app-support"
-  return new ApolloClient({
-    // use the `InMemoryCache` from "@apollo/experimental-nextjs-app-support"
-    cache: new InMemoryCache(),
-    link: httpLink,
-  });
+declare module '@apollo/client' {
+  export interface DefaultContext {
+    token?: string;
+  }
 }
 
 const ApolloProvider = ({ children }: React.PropsWithChildren) => {
-  return <ApolloNextAppProvider makeClient={makeClient}>{children}</ApolloNextAppProvider>;
+  const router = useRouter();
+  const [client, setClient] = useState<ApolloClient<any>>();
+
+  const makeClient = useCallback(() => {
+    const authLink = setContext(async (_, { headers }) => {
+      const token = await getAccessToken();
+      return {
+        headers: {
+          ...headers,
+          authorization: token ? `Bearer ${token}` : '',
+        },
+      };
+    });
+
+    const linkOnError = onError(({ graphQLErrors, operation, forward }) => {
+      if (graphQLErrors) {
+        for (let err of graphQLErrors) {
+          switch (err.extensions.code) {
+            case 'FORBIDDEN':
+            case 'UNAUTHENTICATED':
+              deleteAccessToken().then(() => {
+                router.replace('/auth/signin');
+              });
+              return undefined;
+          }
+        }
+      }
+      return forward(operation);
+    });
+
+    const httpLink = new HttpLink({
+      uri: baseUrl,
+      fetchOptions: { cache: 'no-store', crendentials: 'include' },
+    });
+
+    return new ApolloClient({
+      cache: new InMemoryCache(),
+      link:
+        typeof window === 'undefined'
+          ? ApolloLink.from([
+              new SSRMultipartLink({ stripDefer: true }),
+              authLink,
+              linkOnError,
+              httpLink,
+            ])
+          : ApolloLink.from([authLink, linkOnError, httpLink]),
+    });
+  }, [router]);
+
+  useEffect(() => {
+    const client = makeClient();
+    setClient(client);
+  }, [makeClient]);
+
+  return (
+    <>
+      {client && (
+        <ApolloNextAppProvider makeClient={() => client}>{children}</ApolloNextAppProvider>
+      )}
+    </>
+  );
 };
 
 export default ApolloProvider;

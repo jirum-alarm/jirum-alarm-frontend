@@ -1,14 +1,13 @@
 'use client';
 import Link from 'next/link';
 import SvgLogo from '../icons/Logo';
-import useAccessToken from '@/hooks/useAccessToken';
 import useLogout from '@/hooks/useLogout';
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
+  isLoggedIn?: boolean;
 }) => {
-  const { accessToken, isLoading } = useAccessToken();
   const { logout } = useLogout();
 
   return (
@@ -62,8 +61,8 @@ const Header = (props: {
           </Link>
         </div>
 
-        <div className="flex items-center gap-3 2xsm:gap-7">
-          {isLoading || !accessToken ? (
+        <div className="flex w-full items-center justify-end gap-3 2xsm:gap-7">
+          {!props.isLoggedIn ? (
             <Link className="rounded-md p-2 hover:bg-slate-100" href={'/auth/signin'}>
               로그인
             </Link>

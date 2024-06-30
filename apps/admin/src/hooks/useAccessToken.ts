@@ -6,13 +6,20 @@ const useAccessToken = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
+    const fetchAccessToken = async () => {
       setIsLoading(true);
-      const accessToken = await getAccessToken();
-      setIsLoading(false);
-      setAccessToken(accessToken);
-    })();
+      try {
+        const token = await getAccessToken();
+        setAccessToken(token);
+      } catch (error) {
+        console.error('Failed to fetch access token:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAccessToken();
   }, []);
+
   return { accessToken, isLoading };
 };
 
