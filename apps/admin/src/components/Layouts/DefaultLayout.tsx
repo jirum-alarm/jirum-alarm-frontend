@@ -15,11 +15,7 @@ export default function DefaultLayout({ isLoggedIn, children }: Props) {
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex h-screen">
         {/* <!-- ===== Sidebar Start ===== --> */}
-        <Sidebar
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
-          isLoggedIn={isLoggedIn}
-        />
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         {/* <!-- ===== Sidebar End ===== --> */}
 
         {/* <!-- ===== Content Area Start ===== --> */}
