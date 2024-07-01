@@ -4,7 +4,7 @@ import { useMutationAdminLogin } from '@/hooks/graphql/auth';
 import { setAccessToken } from '@/app/actions/token';
 import { useRouter } from 'next/navigation';
 
-const SigninPage = () => {
+const Signin = () => {
   const router = useRouter();
   const [loginInputs, setLoginInputs] = useState({
     email: '',
@@ -150,4 +150,4 @@ const SigninPage = () => {
   );
 };
 
-export default SigninPage;
+export default Signin;
