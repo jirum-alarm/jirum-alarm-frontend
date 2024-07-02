@@ -12,8 +12,8 @@ export default function DefaultLayout({ isLoggedIn, children }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <>
-      {/* <!-- ===== Page Wrapper Start ===== --> */}
-      <div className="flex">
+      <div>
+        {/* <!-- ===== Page Wrapper Start ===== --> */}
         {/* <!-- ===== Sidebar Start ===== --> */}
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         {/* <!-- ===== Sidebar End ===== --> */}
@@ -35,8 +35,8 @@ export default function DefaultLayout({ isLoggedIn, children }: Props) {
           {/* <!-- ===== Main Content End ===== --> */}
         </div>
         {/* <!-- ===== Content Area End ===== --> */}
+        {/* <!-- ===== Page Wrapper End ===== --> */}
       </div>
-      {/* <!-- ===== Page Wrapper End ===== --> */}
     </>
   );
 }
