@@ -1,4 +1,21 @@
+import { useCallback, useEffect } from 'react';
+
 const SearchInput = ({ goSearchPage }: { goSearchPage: () => void }) => {
+  const handleKeyPress = useCallback((event: KeyboardEvent) => {
+    const isInputEvent = event.target && (event.target as HTMLInputElement).tagName === 'INPUT';
+    if (event.key === '/' && !isInputEvent) {
+      event.preventDefault();
+      goSearchPage();
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
+
   return (
     <div onClick={goSearchPage} className="mb-4 cursor-pointer rounded bg-gray-50">
       <div className="relative mt-4 flex w-full items-center overflow-hidden">
@@ -20,6 +37,9 @@ const SearchInput = ({ goSearchPage }: { goSearchPage: () => void }) => {
         </div>
         <div className="flex h-full w-full items-center pr-2 text-sm text-gray-400 outline-none">
           핫딜 제품을 검색해 주세요
+        </div>
+        <div className="mr-2 flex h-[24px] w-[24px] items-center justify-center rounded-[4px] bg-gray-200 text-center text-[15px] leading-[20px] text-gray-400">
+          /
         </div>
       </div>
     </div>
