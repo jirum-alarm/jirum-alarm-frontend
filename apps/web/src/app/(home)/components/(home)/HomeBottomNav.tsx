@@ -4,7 +4,7 @@ const HomeBottomNav = () => {
   return (
     <div
       className={cn(
-        `fixed bottom-0 mx-auto w-full max-w-screen-md border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-transform`,
+        `pb-safe-bottom fixed bottom-0 mx-auto w-full max-w-screen-md border-t border-t-[#D0D5DD] bg-white transition-transform`,
       )}
     >
       <ul className="flex items-center justify-around">

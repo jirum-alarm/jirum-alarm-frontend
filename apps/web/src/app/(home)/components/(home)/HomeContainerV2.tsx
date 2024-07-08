@@ -1,4 +1,3 @@
-'use client';
 import { ArrowRight, RoundedLogo } from '@/components/common/icons';
 import HomeHeader from './HomeHeader';
 import HomeBottomNav from './HomeBottomNav';
