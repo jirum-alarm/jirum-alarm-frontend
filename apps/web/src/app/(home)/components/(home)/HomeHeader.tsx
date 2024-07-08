@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@/lib/cn';
-import useVisibilityOnScroll from '../hooks/useVisibilityOnScroll';
+import useVisibilityOnScroll from '../../hooks/useVisibilityOnScroll';
 import { Logo } from '@/components/common/icons';
 import SearchButton from './SearchButton';
 

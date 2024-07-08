@@ -1,14 +1,14 @@
 'use client';
 
 import { cn } from '@/lib/cn';
-import useVisibilityOnScroll from '../hooks/useVisibilityOnScroll';
+import useVisibilityOnScroll from '../../hooks/useVisibilityOnScroll';
 
 const HomeBottomNav = () => {
   const { isBottomNavVisible } = useVisibilityOnScroll();
   return (
     <div
       className={cn(
-        `fixed bottom-0 w-full max-w-screen-sm bg-white pb-safe-bottom transition-transform`,
+        `fixed bottom-0 w-full max-w-screen-sm border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-transform`,
         {
           'translate-y-full': !isBottomNavVisible,
           'translate-y-0': isBottomNavVisible,

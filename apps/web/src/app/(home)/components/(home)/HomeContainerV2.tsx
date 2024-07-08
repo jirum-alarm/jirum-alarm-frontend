@@ -1,8 +1,9 @@
-import { ArrowRight, RoundedLogo, Search } from '@/components/common/icons';
-import React, { useEffect, useRef, useState } from 'react';
+import { ArrowRight, RoundedLogo } from '@/components/common/icons';
 import HomeHeader from './HomeHeader';
 import HomeBottomNav from './HomeBottomNav';
 import SearchButton from './SearchButton';
+import JirumRankingSlider from './JirumRankingSlider';
+import LiveHotDeals from './LiveHotDeals';
 
 const HomeContainerV2 = () => {
   return (
@@ -30,29 +31,10 @@ const HomeContainerV2 = () => {
             </button>
           </div>
         </div>
-        <main className="z-1 relative h-[200vh] w-full rounded-t-[1.25rem] bg-gray-100">
-          <section>
-            <h2>지름알림 랭킹</h2>
-            <div className="item">Item 1</div>
-            <div className="item">Item 2</div>
-            <div className="item">Item 3</div>
-            <h2>지름알림 랭킹</h2>
-            <div className="item">Item 1</div>
-            <div className="item">Item 2</div>
-            <div className="item">Item 3</div>
-            <h2>지름알림 랭킹</h2>
-            <div className="item">Item 1</div>
-            <div className="item">Item 2</div>
-            <div className="item">Item 3</div>
-            <h2>지름알림 랭킹</h2>
-            <div className="item">Item 1</div>
-            <div className="item">Item 2</div>
-            <div className="item">Item 3</div>
-            <h2>지름알림 랭킹</h2>
-            <div className="item">Item 1</div>
-            <div className="item">Item 2</div>
-            <div className="item">Item 3</div>
-          </section>
+        <main className="z-1 relative h-[200vh] w-full rounded-t-[1.25rem] bg-white pt-3">
+          <JirumRankingSlider />
+          <div className="h-[20px]" />
+          <LiveHotDeals />
         </main>
       </div>
       <HomeBottomNav />
