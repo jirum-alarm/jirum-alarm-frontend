@@ -4,6 +4,7 @@ import HomeBottomNav from './HomeBottomNav';
 import SearchButton from './SearchButton';
 import JirumRankingSlider from './JirumRankingSlider';
 import LiveHotDeals from './LiveHotDeals';
+import TopButton from './TopButton';
 
 const HomeContainerV2 = () => {
   return (
@@ -38,6 +39,7 @@ const HomeContainerV2 = () => {
         </main>
       </div>
       <HomeBottomNav />
+      <TopButton />
     </div>
   );
 };

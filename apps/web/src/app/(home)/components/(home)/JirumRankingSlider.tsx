@@ -10,7 +10,7 @@ const JirumRankingSlider = () => {
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between px-4 py-6">
+      <div className="flex items-center justify-between px-4 pb-5 pt-2">
         <h2 className="text-lg font-semibold text-gray-900">지름알림 랭킹</h2>
         <span className="text-sm text-gray-500">더보기</span>
       </div>
@@ -44,13 +44,13 @@ const JirumRankingSlider = () => {
                 )}
               >
                 <div className="relative h-[240px] w-full">
-                  <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm text-primary-500">
+                  <div className="text-sm absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-primary-500">
                     {i + 1}
                   </div>
                   <Image fill className="object-cover" src={item.imageSrc} alt="임시" />
                 </div>
                 <div className="p-3 pb-0">
-                  <div className="line-clamp-2 text-sm text-gray-700">{item.text}</div>
+                  <div className="text-sm line-clamp-2 text-gray-700">{item.text}</div>
                   <div className="pt-2 text-lg font-semibold text-gray-900">{`${item.price}원`}</div>
                 </div>
               </div>
