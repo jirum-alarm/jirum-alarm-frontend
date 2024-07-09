@@ -3,6 +3,14 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    fontSize: {
+      lg: [
+        '1.125rem',
+        {
+          lineHeight: '2rem',
+        },
+      ],
+    },
     extend: {
       fontSize: {
         lg: [
