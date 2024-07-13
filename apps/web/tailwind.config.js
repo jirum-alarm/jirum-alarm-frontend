@@ -3,15 +3,15 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    fontSize: {
-      lg: [
-        '1.125rem',
-        {
-          lineHeight: '2rem',
-        },
-      ],
-    },
     extend: {
+      fontSize: {
+        lg: [
+          '1.125rem',
+          {
+            lineHeight: '2rem',
+          },
+        ],
+      },
       spacing: {
         22: '5.5rem',
         'safe-top': 'env(safe-area-inset-top)',
