@@ -48,7 +48,7 @@ export function ProductImageCard({
         {type === 'product' && (
           <div
             className={cn({
-              'text-semibold text-xs absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg':
+              'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
                 true,
               'border border-gray-400 bg-white px-2 text-gray-500': product.isEnd,
               'bg-error-500 px-3 text-white ': !product.isEnd && product.isHot,
@@ -62,7 +62,7 @@ export function ProductImageCard({
       <div className="flex flex-col">
         <span
           className={cn({
-            'text-sm line-clamp-2 h-12 break-words pt-2 text-gray-700': true,
+            'line-clamp-2 h-12 break-words pt-2 text-sm text-gray-700': true,
           })}
         >
           {product.title}

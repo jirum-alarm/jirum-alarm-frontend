@@ -57,7 +57,7 @@ export default AlarmList;
 function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-mobile' }) {
   return (
     <div className="flex h-full flex-col px-5 pb-8 pt-9">
-      <p className="text-2xl pb-7 font-semibold">
+      <p className="pb-7 text-2xl font-semibold">
         <span className="inline-block w-[85px] font-extrabold shadow-[inset_0-12px_0] shadow-primary-500">
           지름알림
         </span>{' '}
@@ -72,7 +72,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
 
       <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] bg-white px-5 pb-8 pt-4">
         <div className="flex flex-col items-center pb-6">
-          <p className="text-sm pb-3 text-center text-gray-400">
+          <p className="pb-3 text-center text-sm text-gray-400">
             키워드 알림으로
             <br />
             누구보다 빠르게 핫딜 받기
@@ -153,7 +153,7 @@ function LoginGuide() {
           <Illust size="sm" />
         </div>
         <div>
-          <p className="text-2xl pb-8 font-semibold text-gray-900">
+          <p className="pb-8 text-2xl font-semibold text-gray-900">
             키워드 알림은
             <br /> 로그인이 필요해요
           </p>
@@ -163,7 +163,7 @@ function LoginGuide() {
         <Button onClick={handleCTAButton} className="self-end">
           이메일로 시작하기
         </Button>
-        <p className="text-sm pt-6">
+        <p className="pt-6 text-sm">
           이미 지름알림 회원이신가요?
           <Link href={EMAIL_LOGIN_PATH} className="pl-3 text-primary-700">
             로그인
