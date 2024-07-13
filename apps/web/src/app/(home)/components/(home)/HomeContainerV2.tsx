@@ -8,7 +8,7 @@ import TopButton from './TopButton';
 
 const HomeContainerV2 = () => {
   return (
-    <div className="mx-auto max-w-screen-sm">
+    <div className="mx-auto max-w-screen-md">
       <HomeHeader />
       <div className="bg-gray-900">
         <div className="sticky top-0">

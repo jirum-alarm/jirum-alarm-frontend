@@ -5,7 +5,6 @@ const VISIBILITY_THRESHOLD = 90;
 const useVisibilityOnScroll = () => {
   const lastScrollTop = useRef(0);
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
-  const [isBottomNavVisible, setIsBottomNavVisible] = useState(true);
 
   const handleScroll = () => {
     const scrollTop = window.scrollY;
@@ -14,13 +13,10 @@ const useVisibilityOnScroll = () => {
 
     if (scrollTop < VISIBILITY_THRESHOLD) {
       setIsHeaderVisible(false);
-      setIsBottomNavVisible(true);
     } else if (scrollTop >= VISIBILITY_THRESHOLD && isScrollingUp) {
       setIsHeaderVisible(true);
-      setIsBottomNavVisible(true);
     } else if (isScrollingDown) {
       setIsHeaderVisible(false);
-      setIsBottomNavVisible(false);
     }
 
     lastScrollTop.current = scrollTop;
@@ -34,7 +30,7 @@ const useVisibilityOnScroll = () => {
     };
   }, []);
 
-  return { isHeaderVisible, isBottomNavVisible };
+  return { isHeaderVisible };
 };
 
 export default useVisibilityOnScroll;

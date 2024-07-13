@@ -4,15 +4,11 @@ import { cn } from '@/lib/cn';
 import useVisibilityOnScroll from '../../hooks/useVisibilityOnScroll';
 
 const HomeBottomNav = () => {
-  const { isBottomNavVisible } = useVisibilityOnScroll();
+  // const { isBottomNavVisible } = useVisibilityOnScroll();
   return (
     <div
       className={cn(
-        `fixed bottom-0 w-full max-w-screen-sm border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-transform`,
-        {
-          'translate-y-full': !isBottomNavVisible,
-          'translate-y-0': isBottomNavVisible,
-        },
+        `fixed bottom-0 mx-auto w-full max-w-screen-md border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-transform`,
       )}
     >
       <ul className="flex items-center justify-around">

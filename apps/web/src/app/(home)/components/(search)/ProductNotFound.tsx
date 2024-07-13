@@ -38,7 +38,7 @@ const ProductNotFound = () => {
         <div className="flex justify-center pb-4">
           <IllustError />
         </div>
-        <p className="pb-2 text-2xl font-semibold text-gray-900">검색 결과가 없어요.</p>
+        <p className="text-2xl pb-2 font-semibold text-gray-900">검색 결과가 없어요.</p>
         <p className="text-gray-500">
           {userResult.data?.me
             ? '키워드를 등록하고 알림을 받아보세요.'

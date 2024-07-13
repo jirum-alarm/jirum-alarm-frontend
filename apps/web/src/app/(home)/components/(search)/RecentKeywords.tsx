@@ -27,7 +27,7 @@ export default function RecentKeywords() {
           <h2 className="py-4">최근 검색어</h2>
           <div className={cn(isMobile && 'no-scrollbar h-[42px] overflow-x-scroll')}>
             {loading ? (
-              <div className="flex items-center text-sm">최근 검색어를 불러오는 중입니다...</div>
+              <div className="text-sm flex items-center">최근 검색어를 불러오는 중입니다...</div>
             ) : (
               <div className={cn('flex gap-2', !isMobile && 'flex-wrap')}>
                 {keywords.length !== 0 ? (
