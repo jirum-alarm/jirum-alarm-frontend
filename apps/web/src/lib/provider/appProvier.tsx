@@ -4,13 +4,16 @@ import { ApolloSetting } from './apollo';
 import CustomerServiceBoot from '../customerservice/CustomerServiceBoot';
 import FCMConfig from '../firebase/FCMConfig';
 import { RecoilRoot } from 'recoil';
+import PHProvider from './posthogProvider';
 
 const AppProvider = ({ children }: PropsWithChildren) => {
   return (
     <RecoilRoot>
-      <ApolloSetting>{children}</ApolloSetting>
-      <CustomerServiceBoot />
-      <FCMConfig />
+      <PHProvider>
+        <ApolloSetting>{children}</ApolloSetting>
+        <CustomerServiceBoot />
+        <FCMConfig />
+      </PHProvider>
     </RecoilRoot>
   );
 };

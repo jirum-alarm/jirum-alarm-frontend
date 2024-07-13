@@ -1,3 +1,4 @@
+'use client';
 import { ArrowRight, RoundedLogo } from '@/components/common/icons';
 import HomeHeader from './HomeHeader';
 import HomeBottomNav from './HomeBottomNav';
@@ -5,8 +6,11 @@ import SearchButton from './SearchButton';
 import JirumRankingSlider from './JirumRankingSlider';
 import LiveHotDeals from './LiveHotDeals';
 import TopButton from './TopButton';
+// import { useFeatureFlagEnabled } from 'posthog-js/react';
 
 const HomeContainerV2 = () => {
+  // const flagEnabled = useFeatureFlagEnabled('MAIN_PAGE_RENEWAL_FEATURE');
+  // console.log('flagEnabled', flagEnabled);
   return (
     <div className="mx-auto max-w-screen-md">
       <HomeHeader />
