@@ -1,10 +1,6 @@
-'use client';
-
 import { cn } from '@/lib/cn';
-import useVisibilityOnScroll from '../../hooks/useVisibilityOnScroll';
 
 const HomeBottomNav = () => {
-  // const { isBottomNavVisible } = useVisibilityOnScroll();
   return (
     <div
       className={cn(
