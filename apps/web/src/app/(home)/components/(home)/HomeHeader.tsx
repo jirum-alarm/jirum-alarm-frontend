@@ -9,10 +9,14 @@ const HomeHeader = () => {
   return (
     <header
       className={cn(
-        `fixed top-0 z-10 flex w-full max-w-screen-sm items-center justify-between bg-white px-5 py-3 transition-transform`,
+        `fixed top-0 z-10 flex w-full max-w-screen-sm items-center justify-between bg-white px-5 py-3 transition-opacity duration-500`,
+        // {
+        //   '-translate-y-full': !isHeaderVisible,
+        //   'translate-y-0': isHeaderVisible,
+        // },
         {
-          '-translate-y-full': !isHeaderVisible,
-          'translate-y-0': isHeaderVisible,
+          'opacity-0': !isHeaderVisible,
+          'opacity-100': isHeaderVisible,
         },
       )}
     >
