@@ -18,7 +18,7 @@ const SearchInput = ({ goSearchPage }: { goSearchPage: () => void }) => {
             />
           </svg>
         </div>
-        <div className="text-sm flex h-full w-full items-center pr-2 text-gray-400 outline-none">
+        <div className="flex h-full w-full items-center pr-2 text-sm text-gray-400 outline-none">
           핫딜 제품을 검색해 주세요
         </div>
       </div>

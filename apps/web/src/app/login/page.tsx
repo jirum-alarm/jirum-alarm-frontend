@@ -36,7 +36,7 @@ const Login = () => {
             <Button onClick={handleCTAButton} className="self-end">
               이메일로 시작하기
             </Button>
-            <p className="text-sm pt-6">
+            <p className="pt-6 text-sm">
               이미 지름알림 회원이신가요?
               <Link href={EMAIL_LOGIN_PATH} className="pl-3 text-primary-700">
                 로그인

@@ -22,7 +22,7 @@ const Completed = () => {
               <Illust />
             </div>
             <div>
-              <p className="text-2xl pb-3 font-semibold">가입을 축하합니다!</p>
+              <p className="pb-3 text-2xl font-semibold">가입을 축하합니다!</p>
               <p>
                 실시간으로 올라오는 핫딜 정보를 확인하고
                 <br />

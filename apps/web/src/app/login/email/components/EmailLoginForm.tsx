@@ -16,7 +16,7 @@ const EmailLoginForm = () => {
       <PasswordInput password={password} />
       <div className="bg-white px-5 py-9">
         {error && (
-          <p className="text-sm pb-4 text-center text-error-500">
+          <p className="pb-4 text-center text-sm text-error-500">
             이메일 혹은 비밀번호가 올바르지 않아요.
           </p>
         )}
@@ -37,7 +37,7 @@ const EmailInput = ({
 }) => {
   return (
     <>
-      <label htmlFor="email" className="text-sm pb-2 text-gray-500">
+      <label htmlFor="email" className="pb-2 text-sm text-gray-500">
         이메일
       </label>
       <Input
@@ -81,7 +81,7 @@ const PasswordInput = ({
 
   return (
     <>
-      <label htmlFor="password" className="text-sm pb-2 pt-11 text-gray-500">
+      <label htmlFor="password" className="pb-2 pt-11 text-sm text-gray-500">
         비밀번호
       </label>
       <Input
