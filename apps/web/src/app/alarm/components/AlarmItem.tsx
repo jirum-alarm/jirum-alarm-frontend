@@ -15,14 +15,14 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
           <ImageWithFallback src={thumbnail} title={message} />
         </div>
         <div className="flex-1 pl-3">
-          <p className="line-clamp-2 w-full text-sm text-gray-900">
+          <p className="text-sm line-clamp-2 w-full text-gray-900">
             <HighlightText message={message} keyword={keyword.split(' ')[0]} />
           </p>
           <div className="flex items-center gap-x-3 pt-2">
             {(isHot || isEnd) && (
               <div
                 className={cn(
-                  'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-normal',
+                  'text-semibold text-xs flex h-[22px] items-center rounded-lg leading-normal',
                   {
                     'border border-gray-400 bg-white px-2 text-gray-500': isEnd,
                     'bg-error-500 px-3 text-white ': !isEnd && isHot,

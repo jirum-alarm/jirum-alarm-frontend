@@ -36,7 +36,7 @@ const SearchInput = ({ show }: { show: boolean }) => {
           </div>
           <input
             value={keyword ?? ''}
-            className="h-10 w-full bg-gray-50 px-3 text-sm  outline-none"
+            className="text-sm h-10 w-full bg-gray-50 px-3  outline-none"
             onKeyDown={onKeyDown}
             onChange={handleChange}
             spellCheck={false}
