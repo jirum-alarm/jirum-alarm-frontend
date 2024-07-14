@@ -2,6 +2,7 @@
 import React from 'react';
 import { useProductListViewModel } from '../../hooks/useProductListViewModel';
 import ProductRecommendation from '../ProductRecommendation';
+import { LoadingSpinner } from '@/components/common/icons';
 
 const LiveHotDeals = () => {
   const {
@@ -21,6 +22,9 @@ const LiveHotDeals = () => {
         <h2 className="text-lg font-semibold text-gray-900">실시간 핫딜</h2>
       </div>
       <ProductRecommendation showRandomHotDeals={true} products={products} hotDeals={undefined} />
+      <div className="flex h-[250px] w-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
     </div>
   );
 };

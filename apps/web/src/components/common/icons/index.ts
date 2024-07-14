@@ -18,6 +18,7 @@ export { default as Home } from './Home';
 export { default as IllustError } from './IllustError';
 export { default as IllustStanding } from './IllustStanding';
 export { default as IllustStandingSmall } from './IllustStandingSmall';
+export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as Logo } from './Logo';
 export { default as My } from './My';
 export { default as RoundedLogo } from './RoundedLogo';
