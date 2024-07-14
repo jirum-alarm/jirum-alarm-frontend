@@ -85,7 +85,6 @@ export default function ProductRecommendation({
           </div>
         </div>
       )}
-
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
         {products
           ?.slice(firstRenderingCount)
