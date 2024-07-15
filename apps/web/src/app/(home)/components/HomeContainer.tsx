@@ -38,7 +38,7 @@ export default function HomeContainer() {
   }, [isSearchPage]);
 
   return (
-    <div className="mx-auto max-w-screen-lg px-5">
+    <div className="mx-auto max-w-screen-lg overflow-y-hidden px-5">
       {isSearchPage || showSearchPage ? <SearchPage /> : <HomePage goSearchPage={goSearchPage} />}
     </div>
   );

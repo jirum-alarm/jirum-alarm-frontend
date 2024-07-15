@@ -4,13 +4,25 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      fontSize: {
+        lg: [
+          '1.125rem',
+          {
+            lineHeight: '2rem',
+          },
+        ],
+      },
+      spacing: {
+        22: '5.5rem',
+        'safe-top': 'env(safe-area-inset-top)',
+        'safe-bottom': 'env(safe-area-inset-bottom)',
+        'safe-left': 'env(safe-area-inset-left)',
+        'safe-right': 'env(safe-area-inset-right)',
+      },
       screens: {
         txs: '320px',
         xs: '375px',
         'mouse-hover': { raw: '(hover: hover)' },
-      },
-      spacing: {
-        22: '5.5rem',
       },
       colors: {
         white: '#FFFFFF',

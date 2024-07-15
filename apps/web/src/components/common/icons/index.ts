@@ -20,3 +20,5 @@ export { default as IllustStanding } from './IllustStanding';
 export { default as IllustStandingSmall } from './IllustStandingSmall';
 export { default as Logo } from './Logo';
 export { default as My } from './My';
+export { default as RoundedLogo } from './RoundedLogo';
+export { default as Search } from './Search';

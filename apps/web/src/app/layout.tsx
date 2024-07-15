@@ -11,6 +11,10 @@ import MSWInit from '@/components/MSWInit';
 import Toaster from '@/components/common/Toast/Toaster';
 import { SERVICE_URL } from '@/constants/env';
 import { InitMixpanel } from '@/lib/mixpanel';
+import dynamic from 'next/dynamic';
+const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
   title: '지름알림: 핫딜 정보 모아보기',
@@ -51,6 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <div className="relative min-w-[320px] bg-white">{children}</div>
             <Toaster />
             <SpeedInsights />
+            <PostHogPageView />
           </AppProvider>
         </MSWInit>
       </body>
