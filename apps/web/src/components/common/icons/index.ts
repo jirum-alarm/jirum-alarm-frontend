@@ -15,6 +15,7 @@ export { default as EyeOff } from './EyeOff';
 export { default as Filter } from './Filter';
 export { default as Headset } from './Headset';
 export { default as Home } from './Home';
+export { default as Hot } from './Hot';
 export { default as IllustError } from './IllustError';
 export { default as IllustStanding } from './IllustStanding';
 export { default as IllustStandingSmall } from './IllustStandingSmall';
