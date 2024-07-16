@@ -60,12 +60,23 @@ const BottomNav = ({ type }: { type: NAV_TYPE }) => {
     >
       <ul className="flex items-center justify-around">
         {BottomNavList.map((nav, i) => (
-          <li className="flex-1" key={i}>
-            <Link className="flex h-20 flex-col items-center justify-center" href={nav.link}>
+          <li className="flex flex-1 items-center justify-center pb-[22px] pt-3" key={i}>
+            <Link
+              className={cn(
+                // px-5
+                'flex h-[46px] w-[68px] flex-col items-center justify-center rounded-lg text-gray-500',
+                {
+                  'text-gray-900': type === nav.type,
+                },
+              )}
+              href={nav.link}
+            >
               <button className="h-7 w-7">
                 {React.createElement(type === nav.type ? nav.activeIcon : nav.icon)}
               </button>
-              <span className="text-xs">{nav.text}</span>
+              <span className={cn('text-xs', { 'font-semibold': type === nav.type })}>
+                {nav.text}
+              </span>
             </Link>
           </li>
         ))}
