@@ -19,8 +19,7 @@ const LiveHotDealList = () => {
           />
         ))}
       </div>
-
-      <div className="mt-3 flex w-full items-center justify-center pb-4" ref={loadingCallbackRef}>
+      <div className="flex w-full items-center justify-center pb-6 pt-3" ref={loadingCallbackRef}>
         {isPending && <LoadingSpinner />}
       </div>
     </>
