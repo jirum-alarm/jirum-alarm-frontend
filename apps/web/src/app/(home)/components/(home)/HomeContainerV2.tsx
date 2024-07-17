@@ -3,13 +3,13 @@ import { ArrowRight, RoundedLogo } from '@/components/common/icons';
 import HomeHeader from './HomeHeader';
 import SearchButton from './SearchButton';
 import JirumRankingSlider from './JirumRankingSlider';
-import LiveHotDeals from './LiveHotDeals';
+import LiveHotDeals from './LiveHotDealContainer';
 import TopButton from './TopButton';
 import BottomNav, { NAV_TYPE } from '@/components/layout/BottomNav';
 
 const HomeContainerV2 = () => {
   return (
-    <div className="mx-auto max-w-screen-md">
+    <div className="mx-auto h-full max-w-screen-md pb-20">
       <HomeHeader />
       <div className="bg-gray-900">
         <div className="sticky top-0">
@@ -33,7 +33,7 @@ const HomeContainerV2 = () => {
             </button>
           </div>
         </div>
-        <main className="relative z-10 h-[200vh] w-full rounded-t-[1.25rem] bg-white pt-3">
+        <main className="relative z-10 w-full rounded-t-[1.25rem] bg-white pt-3">
           <JirumRankingSlider />
           <div className="h-[20px]" />
           <LiveHotDeals />
