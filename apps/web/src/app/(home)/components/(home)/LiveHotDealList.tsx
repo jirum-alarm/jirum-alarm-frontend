@@ -1,5 +1,5 @@
+'use client';
 import { ProductImageCard, useCollectProduct } from '@/features/products';
-import React from 'react';
 import useLiveHotDealsViewModel from '../../hooks/useLiveHotDealsViewModel';
 import { LoadingSpinner } from '@/components/common/icons';
 

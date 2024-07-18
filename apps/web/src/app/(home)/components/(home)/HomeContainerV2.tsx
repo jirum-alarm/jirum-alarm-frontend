@@ -1,11 +1,10 @@
-'use client';
 import { ArrowRight, RoundedLogo } from '@/components/common/icons';
 import HomeHeader from './HomeHeader';
 import SearchButton from './SearchButton';
-import JirumRankingSlider from './JirumRankingSlider';
-import LiveHotDeals from './LiveHotDealContainer';
+import LiveHotDealContainer from './LiveHotDealContainer';
 import TopButton from './TopButton';
 import BottomNav, { NAV_TYPE } from '@/components/layout/BottomNav';
+import JirumRankingContainer from './JirumRankingContainer';
 
 const HomeContainerV2 = () => {
   return (
@@ -34,9 +33,9 @@ const HomeContainerV2 = () => {
           </div>
         </div>
         <main className="relative z-10 w-full rounded-t-[1.25rem] bg-white pt-3">
-          <JirumRankingSlider />
+          <JirumRankingContainer />
           <div className="h-[20px]" />
-          <LiveHotDeals />
+          <LiveHotDealContainer />
         </main>
       </div>
       <BottomNav type={NAV_TYPE.HOME} />

@@ -42,6 +42,23 @@ export const QueryProducts = gql`
   }
 `;
 
+export const QueryProductsRanking = gql`
+  query QueryProductsRanking(
+    $limit: Int!
+    $orderBy: ProductOrderType
+    $orderOption: OrderOptionType
+    $startDate: DateTime
+  ) {
+    products(limit: $limit, orderBy: $orderBy, orderOption: $orderOption, startDate: $startDate) {
+      id
+      title
+      url
+      price
+      thumbnail
+    }
+  }
+`;
+
 export const QueryCommunityRandomRankingProducts = gql`
   query QueryCommunityRandomRankingProducts(
     $count: Int!
