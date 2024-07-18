@@ -10,9 +10,6 @@ export const QueryProducts = gql`
     $categoryId: Int
     $keyword: String
     $isHot: Boolean
-    $isApp: Boolean
-    $isReward: Boolean
-    $isGame: Boolean
   ) {
     products(
       limit: $limit
@@ -23,9 +20,6 @@ export const QueryProducts = gql`
       categoryId: $categoryId
       keyword: $keyword
       isHot: $isHot
-      isApp: $isApp
-      isReward: $isReward
-      isGame: $isGame
     ) {
       id
       title
