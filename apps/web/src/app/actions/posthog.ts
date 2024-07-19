@@ -11,7 +11,7 @@ const FEATURE_FLAG_DEV_SUFFIX = '_DEV';
 //   | WithSuffix<T, typeof FEATURE_FLAG_PRD_SUFFIX>
 //   | WithSuffix<T, typeof FEATURE_FLAG_DEV_SUFFIX>;
 
-type FeatureFlags = 'MAIN_PAGE_RENEWAL_FEATURE' | 'FEATURE_TEST';
+type FeatureFlags = 'MAIN_PAGE_RENEWAL_FEATURE' | 'FEATURE_TEST' | 'DETAIL_PAGE_RENEWAL';
 // type FeatureFlagsWithSuffix = FeatureFlagKeys<FeatureFlags>;
 
 type FeatureFlagMap = Record<FeatureFlags, string | boolean>;
