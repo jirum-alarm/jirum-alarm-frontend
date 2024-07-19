@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
   let distinct_id;
   if (cookie) {
-    distinct_id = JSON.parse(cookie?.value).distinct_id;
+    distinct_id = JSON.parse(cookie.value).distinct_id;
   } else {
     distinct_id = crypto.randomUUID();
   }
