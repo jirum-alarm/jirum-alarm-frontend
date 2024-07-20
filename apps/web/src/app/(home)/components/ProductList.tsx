@@ -1,5 +1,4 @@
 'use client';
-import { TopButton } from '@/components/TopButton';
 import SwipeableViews from 'react-swipeable-views';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -10,6 +9,7 @@ import ProductRecommendation from './ProductRecommendation';
 import { useHotDealsViewModel } from '../hooks/useHotDealsViewModel';
 import { mergeRefs } from '@/util/mergeRefs';
 import { ProductLoading } from '@/features/products';
+import TopButton from '@/components/TopButton';
 
 const ProductList = () => {
   const {

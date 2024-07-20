@@ -2,7 +2,6 @@
 
 import NavBar from '@/components/Navbar';
 import ProductList from './ProductList';
-import { TopButton } from '@/components/TopButton';
 import { useHotDealsRandom } from '@/features/products';
 import { cn } from '@/lib/cn';
 import SearchInput from './SearchInput';
@@ -18,6 +17,7 @@ import { useInputHideOnScroll } from '../hooks/(search)/useInputHideOnScroll';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ProductLoading } from '@/features/products';
+import TopButton from '@/components/TopButton';
 
 export default function HomeContainer() {
   const searchParams = useSearchParams();

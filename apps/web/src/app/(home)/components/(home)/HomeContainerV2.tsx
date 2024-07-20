@@ -2,7 +2,7 @@ import { ArrowRight, RoundedLogo } from '@/components/common/icons';
 import HomeHeader from './HomeHeader';
 import SearchButton from './SearchButton';
 import LiveHotDealContainer from './LiveHotDealContainer';
-import TopButton from './TopButton';
+import TopButton from '@/components/TopButton';
 import BottomNav, { NAV_TYPE } from '@/components/layout/BottomNav';
 import JirumRankingContainer from './JirumRankingContainer';
 import Link from 'next/link';
