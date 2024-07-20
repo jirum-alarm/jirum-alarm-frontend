@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { cn } from '@/lib/cn';
 import { useCollectProduct } from '@/features/products';
 import { ProductRankingImageCard } from '@/features/products/components/ProductRankingImageCard';
-import { SwiperSlide, Swiper } from 'swiper/react';
 import { IProductsRankingOutput } from '@/graphql/interface';
+import { SwiperSlide, Swiper } from 'swiper/react';
+import 'swiper/css';
 
 interface Props {
   products: IProductsRankingOutput;

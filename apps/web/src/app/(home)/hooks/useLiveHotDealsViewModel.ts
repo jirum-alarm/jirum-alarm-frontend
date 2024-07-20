@@ -9,7 +9,6 @@ const limit = 20;
 const useLiveHotDealsViewModel = () => {
   const [isPending, startTransition] = useTransition();
 
-  //TODO: query부분 hook으로 따로 빼기
   const {
     data: { products },
     fetchMore,
