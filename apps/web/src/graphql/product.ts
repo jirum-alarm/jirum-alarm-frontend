@@ -10,9 +10,6 @@ export const QueryProducts = gql`
     $categoryId: Int
     $keyword: String
     $isHot: Boolean
-    $isApp: Boolean
-    $isReward: Boolean
-    $isGame: Boolean
   ) {
     products(
       limit: $limit
@@ -23,9 +20,6 @@ export const QueryProducts = gql`
       categoryId: $categoryId
       keyword: $keyword
       isHot: $isHot
-      isApp: $isApp
-      isReward: $isReward
-      isGame: $isGame
     ) {
       id
       title
@@ -44,6 +38,23 @@ export const QueryProducts = gql`
       }
       searchAfter
       postedAt
+    }
+  }
+`;
+
+export const QueryProductsRanking = gql`
+  query QueryProductsRanking(
+    $limit: Int!
+    $orderBy: ProductOrderType
+    $orderOption: OrderOptionType
+    $startDate: DateTime
+  ) {
+    products(limit: $limit, orderBy: $orderBy, orderOption: $orderOption, startDate: $startDate) {
+      id
+      title
+      url
+      price
+      thumbnail
     }
   }
 `;
