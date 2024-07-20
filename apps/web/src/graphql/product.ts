@@ -27,7 +27,6 @@ export const QueryProducts = gql`
       url
       isHot
       isEnd
-      ship
       price
       providerId
       categoryId

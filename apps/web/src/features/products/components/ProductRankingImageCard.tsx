@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { mp } from '@/lib/mixpanel';
 import { IllustStanding } from '@/components/common/icons';
+import ImageWithFallback from '@/components/ImageWithFallback';
 
 export function ProductRankingImageCard({
   product,
@@ -43,7 +44,14 @@ export function ProductRankingImageCard({
           <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm text-primary-500">
             {index + 1}
           </div>
-          <ImageWithFallback src={product.thumbnail ?? ''} title={product.title} />
+          <ImageWithFallback
+            src={product.thumbnail ?? ''}
+            alt={product.title}
+            fill
+            className="object-cover"
+            priority
+            unoptimized
+          />
         </div>
         <div className="p-3 pb-0">
           <div className="line-clamp-2 text-sm text-gray-700">{product.title}</div>
@@ -51,43 +59,5 @@ export function ProductRankingImageCard({
         </div>
       </div>
     </a>
-  );
-}
-
-const ImageWithFallback = React.memo(function ImageWithFallback({
-  src,
-  title,
-}: {
-  src: string | undefined;
-  title: string;
-}) {
-  const [error, setError] = useState(false);
-
-  return (
-    <>
-      {error || !src ? (
-        <NoImage />
-      ) : (
-        <Image
-          fill
-          className="object-cover"
-          src={src}
-          alt={title}
-          onError={() => setError(true)}
-          priority
-          unoptimized
-          placeholder="blur"
-          blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-        />
-      )}
-    </>
-  );
-});
-
-function NoImage() {
-  return (
-    <div className="flex h-full items-center justify-center bg-gray-50">
-      <IllustStanding />
-    </div>
   );
 }

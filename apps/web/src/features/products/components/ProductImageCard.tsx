@@ -57,6 +57,7 @@ export function ProductImageCard({
             {product.isEnd ? '판매종료' : product.isHot ? '핫딜' : ''}
           </div>
         )}
+
         <ImageWithFallback src={product?.thumbnail} title={product.title} type={type} />
       </div>
       <div className="flex flex-col">
