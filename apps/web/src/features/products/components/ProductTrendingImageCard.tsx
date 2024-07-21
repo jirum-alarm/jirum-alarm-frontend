@@ -9,29 +9,29 @@ import React from 'react';
 const ProductTrendingImageCard = ({
   product,
   rank,
-  // collectProduct,
-  // logging,
+  collectProduct,
+  logging,
 }: {
   product: IProduct;
   rank: number;
-  // collectProduct: (productId: number) => void;
-  // logging: { page: keyof typeof EVENT.PAGE };
+  collectProduct: (productId: number) => void;
+  logging: { page: keyof typeof EVENT.PAGE };
 }) => {
-  // const handleClick = () => {
-  //   collectProduct(+product.id);
+  const handleClick = () => {
+    collectProduct(+product.id);
 
-  //   mp.track(EVENT.PRODUCT_CLICK.NAME, {
-  //     product,
-  //     page: EVENT.PAGE[logging.page],
-  //   });
-  // };
+    mp.track(EVENT.PRODUCT_CLICK.NAME, {
+      product,
+      page: EVENT.PAGE[logging.page],
+    });
+  };
   return (
     <a
       href={product.url}
       className="txs:w-[140px] xs:w-[162px]"
       target="_blank"
       rel="noopener noreferrer"
-      // onClick={handleClick}
+      onClick={handleClick}
     >
       <div
         className={

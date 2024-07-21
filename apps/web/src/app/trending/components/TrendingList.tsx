@@ -21,15 +21,19 @@ const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps)
   const collectProduct = useCollectProduct();
   const swiper = useSwiper();
 
-  console.log('liveProducts', liveProducts);
-
   return (
     <div>
       <div className="grid grid-cols-2 gap-x-2 gap-y-2">
         {products
           ?.slice(0, firstRenderingCount)
           .map((product, i) => (
-            <ProductTrendingImageCard key={product.id} product={product} rank={i + 1} />
+            <ProductTrendingImageCard
+              key={product.id}
+              product={product}
+              rank={i + 1}
+              collectProduct={collectProduct}
+              logging={{ page: 'TRENDING' }}
+            />
           ))}
       </div>
       {liveProducts && (
@@ -54,7 +58,7 @@ const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps)
                     product={hotDeal}
                     type="hotDeal"
                     collectProduct={collectProduct}
-                    logging={{ page: 'HOME' }}
+                    logging={{ page: 'TRENDING' }}
                   />
                 </SwiperSlide>
               ))}
@@ -71,6 +75,8 @@ const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps)
               key={product.id}
               product={product}
               rank={i + firstRenderingCount + 1}
+              collectProduct={collectProduct}
+              logging={{ page: 'TRENDING' }}
             />
           ))}
       </div>
