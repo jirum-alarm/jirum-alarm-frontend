@@ -1,8 +1,8 @@
 'use client';
 import { cn } from '@/lib/cn';
 import { Logo } from '@/components/common/icons';
-import SearchButton from './SearchButton';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
+import SearchLinkButton from '@/components/SearchLinkButton';
 
 const HomeHeader = () => {
   const { isHeaderVisible } = useVisibilityOnScroll({ visibilityThreshold: 90 });
@@ -20,7 +20,7 @@ const HomeHeader = () => {
         <Logo />
         <h2 className="text-lg font-semibold text-gray-900">지름알림</h2>
       </div>
-      <SearchButton color="#101828" />
+      <SearchLinkButton color="#101828" />
     </header>
   );
 };

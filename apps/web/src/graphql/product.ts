@@ -59,27 +59,14 @@ export const QueryProductsRanking = gql`
 `;
 
 export const QueryCommunityRandomRankingProducts = gql`
-  query QueryCommunityRandomRankingProducts(
-    $count: Int!
-    $limit: Int!
-    $isApp: Boolean
-    $isReward: Boolean
-    $isGame: Boolean
-  ) {
-    communityRandomRankingProducts(
-      count: $count
-      limit: $limit
-      isApp: $isApp
-      isReward: $isReward
-      isGame: $isGame
-    ) {
+  query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {
+    communityRandomRankingProducts(count: $count, limit: $limit) {
       id
       title
       mallId
       url
       isHot
       isEnd
-      ship
       price
       providerId
       categoryId

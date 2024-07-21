@@ -1,5 +1,5 @@
 'use client';
-import SearchButton from '@/app/(home)/components/(home)/SearchButton';
+import SearchLinkButton from '@/components/SearchLinkButton';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
 
@@ -16,7 +16,7 @@ const TrendingPageHeader = () => {
       )}
     >
       <h2 className="text-lg font-semibold">지름알림 랭킹</h2>
-      <SearchButton color="#1d2939" />
+      <SearchLinkButton color="#1d2939" />
     </header>
   );
 };
