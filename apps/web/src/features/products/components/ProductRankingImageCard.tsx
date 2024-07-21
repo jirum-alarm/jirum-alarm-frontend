@@ -1,10 +1,7 @@
 import { EVENT } from '@/constants/mixpanel';
 import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
-import React, { useState } from 'react';
-import Image from 'next/image';
 import { mp } from '@/lib/mixpanel';
-import { IllustStanding } from '@/components/common/icons';
 import ImageWithFallback from '@/components/ImageWithFallback';
 
 export function ProductRankingImageCard({

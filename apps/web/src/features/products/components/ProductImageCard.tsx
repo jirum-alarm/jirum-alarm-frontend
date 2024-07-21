@@ -68,7 +68,7 @@ export function ProductImageCard({
         >
           {product.title}
         </span>
-        <div className="flex h-8 items-center pt-1">
+        <div className="flex items-center pt-1">
           <span className="line-clamp-1 max-w-[98px] text-lg font-semibold text-gray-900">
             {product?.price ?? ''}
           </span>

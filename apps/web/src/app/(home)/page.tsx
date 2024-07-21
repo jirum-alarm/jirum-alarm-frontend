@@ -10,7 +10,6 @@ export default async function Home() {
     <>
       <AddFCMToken />
       {flags.MAIN_PAGE_RENEWAL_FEATURE ? <HomeContainerV2 /> : <HomeContainer />}
-      {/* <HomeContainer /> */}
     </>
   );
 }

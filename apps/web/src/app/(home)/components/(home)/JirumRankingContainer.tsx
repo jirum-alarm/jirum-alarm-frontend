@@ -1,7 +1,6 @@
 import { getClient } from '@/lib/client';
 import { QueryProductsRanking } from '@/graphql';
 import { IProductsRankingOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
-import dayjs from 'dayjs';
 import JirumRankingSlider from './JirumRankingSlider';
 import { getDayBefore } from '@/util/date';
 

@@ -53,14 +53,6 @@ const sentryBuildTimeConfigOptions = {
 };
 
 const nextConfig = withPWA({
-  async rewrites() {
-    return [
-      {
-        destination: 'https://jirum-api.kyojs.com/:path*',
-        source: '/:path*',
-      },
-    ];
-  },
   async headers() {
     return [
       {
