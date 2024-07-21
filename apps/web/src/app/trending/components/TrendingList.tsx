@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { ProductImageCard, useCollectProduct } from '@/features/products';
 
 interface TrendingListProps {
-  categoryId: number;
+  categoryId: number | null;
   categoryName: string;
   isActive: boolean;
 }

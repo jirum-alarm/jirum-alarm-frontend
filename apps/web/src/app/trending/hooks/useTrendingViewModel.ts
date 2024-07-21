@@ -10,10 +10,10 @@ const useTrendingViewModel = ({
   categoryId,
   isActive,
 }: {
-  categoryId: number;
+  categoryId: number | null;
   isActive: boolean;
 }) => {
-  const isHotCategory = categoryId === 0;
+  const isHotCategory = categoryId === null;
   const [isPending, startTransition] = useTransition();
 
   const { data: trending, fetchMore } = useGetProductTrendingList(
@@ -22,7 +22,7 @@ const useTrendingViewModel = ({
         limit: 10,
         orderBy: ProductOrderType.COMMUNITY_RANKING,
         startDate: getDayBefore(7),
-        categoryId: isHotCategory ? null : categoryId,
+        categoryId: categoryId,
         isHot: isHotCategory,
       },
       fetchPolicy: 'cache-and-network',

@@ -21,6 +21,7 @@ const TrendingContainer = () => {
     handleClickTab,
     tabRef,
   } = useTabSwitcher();
+
   const { categories } = useTabCategories();
   const { isHeaderVisible } = useVisibilityOnScroll();
 
