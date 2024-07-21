@@ -1,5 +1,6 @@
 import { useGetProductTrendingList } from '@/features/products';
-import { IProduct } from '@/graphql/interface';
+import { ProductOrderType } from '@/graphql/interface';
+import { getDayBefore } from '@/util/date';
 import { useTransition } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -15,9 +16,15 @@ const useTrendingViewModel = ({
   const isHotCategory = categoryId === 0;
   const [isPending, startTransition] = useTransition();
 
-  const { data, fetchMore } = useGetProductTrendingList(
+  const { data: trending, fetchMore } = useGetProductTrendingList(
     {
-      variables: { limit: 10, categoryId: isHotCategory ? null : categoryId, isHot: isHotCategory },
+      variables: {
+        limit: 10,
+        orderBy: ProductOrderType.COMMUNITY_RANKING,
+        startDate: getDayBefore(7),
+        categoryId: isHotCategory ? null : categoryId,
+        isHot: isHotCategory,
+      },
       fetchPolicy: 'cache-and-network',
     },
     {
@@ -25,7 +32,23 @@ const useTrendingViewModel = ({
     },
   );
 
-  const products = data?.products;
+  const products = trending?.products;
+  const { data: live } = useGetProductTrendingList(
+    {
+      variables: {
+        limit: 10,
+        orderBy: ProductOrderType.POSTED_AT,
+        categoryId: isHotCategory ? null : categoryId,
+        isHot: false,
+      },
+    },
+    {
+      suspenseSkip: !isActive || isHotCategory,
+    },
+  );
+
+  const liveProducts = live?.products;
+
   const { ref: loadingCallbackRef } = useInView({
     threshold: 0,
     onChange: (inView) => {
@@ -54,7 +77,7 @@ const useTrendingViewModel = ({
     });
   };
 
-  return { products, loadingCallbackRef, isPending };
+  return { products, liveProducts, loadingCallbackRef, isPending };
 };
 
 export default useTrendingViewModel;

@@ -1,23 +1,78 @@
 import ProductTrendingImageCard from '@/features/products/components/ProductTrendingImageCard';
 import useTrendingViewModel from '../hooks/useTrendingViewModel';
 import { LoadingSpinner } from '@/components/common/icons';
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { ProductImageCard, useCollectProduct } from '@/features/products';
 
 interface TrendingListProps {
   categoryId: number;
+  categoryName: string;
   isActive: boolean;
 }
 
-const TrendingList = ({ categoryId, isActive }: TrendingListProps) => {
-  const { products, loadingCallbackRef, isPending } = useTrendingViewModel({
+const firstRenderingCount = 10;
+
+const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps) => {
+  const { products, liveProducts, loadingCallbackRef, isPending } = useTrendingViewModel({
     categoryId,
     isActive,
   });
+
+  const collectProduct = useCollectProduct();
+  const swiper = useSwiper();
+
+  console.log('liveProducts', liveProducts);
+
   return (
     <div>
       <div className="grid grid-cols-2 gap-x-2 gap-y-2">
-        {products?.map((product) => (
-          <ProductTrendingImageCard key={product.id} product={product} />
-        ))}
+        {products
+          ?.slice(0, firstRenderingCount)
+          .map((product, i) => (
+            <ProductTrendingImageCard key={product.id} product={product} rank={i + 1} />
+          ))}
+      </div>
+      {liveProducts && (
+        <div className="py-10">
+          <div className="flex w-full items-center justify-between pb-4 ">
+            <span className="font-semibold text-gray-900">{`‘${categoryName}’ 실시간 핫딜`}</span>
+          </div>
+          <div>
+            <Swiper
+              spaceBetween={12}
+              slidesPerView={2.5}
+              onTouchStart={() => {
+                swiper.allowTouchMove = false;
+              }}
+              onTouchEnd={() => {
+                swiper.allowTouchMove = true;
+              }}
+            >
+              {liveProducts.map((hotDeal, i) => (
+                <SwiperSlide key={i}>
+                  <ProductImageCard
+                    product={hotDeal}
+                    type="hotDeal"
+                    collectProduct={collectProduct}
+                    logging={{ page: 'HOME' }}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      )}
+
+      <div className="grid grid-cols-2 gap-x-2 gap-y-2">
+        {products
+          ?.slice(firstRenderingCount)
+          .map((product, i) => (
+            <ProductTrendingImageCard
+              key={product.id}
+              product={product}
+              rank={i + firstRenderingCount + 1}
+            />
+          ))}
       </div>
       <div className="flex w-full items-center justify-center pb-6 pt-3" ref={loadingCallbackRef}>
         {isPending && <LoadingSpinner />}

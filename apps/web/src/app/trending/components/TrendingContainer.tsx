@@ -57,8 +57,8 @@ const TrendingContainer = () => {
           <SwiperSlide key={category.id} className="h-full w-full">
             <Suspense fallback={<TrendingListSkeleton />}>
               <TrendingList
-                key={category.id}
                 categoryId={category.id}
+                categoryName={category.name}
                 isActive={index === targetIndex || index === activeTab}
               />
             </Suspense>

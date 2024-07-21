@@ -3,6 +3,7 @@ import { QueryProductsRanking } from '@/graphql';
 import { IProductsRankingOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
 import dayjs from 'dayjs';
 import JirumRankingSlider from './JirumRankingSlider';
+import { getDayBefore } from '@/util/date';
 
 const JirumRankingContainer = async () => {
   const { data } = await getClient().query<IProductsRankingOutput>({
@@ -11,7 +12,7 @@ const JirumRankingContainer = async () => {
       limit: 10,
       orderBy: ProductOrderType.COMMUNITY_RANKING,
       orderOption: OrderOptionType.DESC,
-      startDate: dayjs().add(-1, 'day').toDate(),
+      startDate: getDayBefore(1),
     },
   });
   return (

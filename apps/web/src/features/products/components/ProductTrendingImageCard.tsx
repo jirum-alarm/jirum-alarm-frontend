@@ -8,10 +8,12 @@ import React from 'react';
 
 const ProductTrendingImageCard = ({
   product,
+  rank,
   // collectProduct,
   // logging,
 }: {
   product: IProduct;
+  rank: number;
   // collectProduct: (productId: number) => void;
   // logging: { page: keyof typeof EVENT.PAGE };
 }) => {
@@ -36,6 +38,9 @@ const ProductTrendingImageCard = ({
           'relative overflow-hidden rounded-lg border border-gray-200 txs:h-[140px] xs:h-[162px]'
         }
       >
+        <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm text-primary-500">
+          {rank}
+        </div>
         <div
           className={cn({
             'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
