@@ -6,7 +6,7 @@ const useVisibilityOnScroll = ({ visibilityThreshold }: { visibilityThreshold?: 
   const threshold = visibilityThreshold ?? 0;
 
   const handleScroll = () => {
-    const scrollTop = window.scrollY;
+    const scrollTop = window.scrollY < 0 ? 0 : window.scrollY;
     const isScrollingUp = scrollTop < lastScrollTop.current;
     const isScrollingDown = scrollTop > lastScrollTop.current;
 
