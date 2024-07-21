@@ -1,11 +1,11 @@
 'use client';
 import { cn } from '@/lib/cn';
-import useVisibilityOnScroll from '../../hooks/useVisibilityOnScroll';
 import { Logo } from '@/components/common/icons';
 import SearchButton from './SearchButton';
+import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 
 const HomeHeader = () => {
-  const { isHeaderVisible } = useVisibilityOnScroll();
+  const { isHeaderVisible } = useVisibilityOnScroll({ visibilityThreshold: 90 });
   return (
     <header
       className={cn(

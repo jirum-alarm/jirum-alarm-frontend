@@ -8,6 +8,8 @@ import TrendingList from './TrendingList';
 import { Suspense } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
+import { cn } from '@/lib/cn';
 
 const TrendingContainer = () => {
   const {
@@ -20,33 +22,41 @@ const TrendingContainer = () => {
     tabRef,
   } = useTabSwitcher();
   const { categories } = useTabCategories();
+  const { isHeaderVisible } = useVisibilityOnScroll();
 
   return (
     <div>
-      <Tabs selectedIndex={activeTab} onSelect={handleTabChange} defaultFocus disableUpDownKeys>
-        <div className="relative w-full">
-          <div className="w-full overflow-x-scroll scroll-smooth scrollbar-hide" ref={tabRef}>
-            <TabList className={`whitespace-nowrap will-change-transform`}>
-              {categories.map((category) => (
-                <Tab
-                  onClick={handleClickTab}
-                  key={category.id}
-                  className="inline-block cursor-pointer border-b-2 border-b-transparent px-[6px] pb-[8px] pt-[10px] text-sm text-gray-600 shadow-none outline-none transition-all transition-none duration-300 mouse-hover:hover:font-medium mouse-hover:hover:text-gray-900 [&:not(:last-child)]:mr-2"
-                  selectedClassName="!border-b-primary-600 text-gray-900 font-medium"
-                >
-                  {category.name}
-                </Tab>
-              ))}
-            </TabList>
+      <div
+        className={cn('sticky z-50 w-full max-w-[600px] bg-white transition-[top]', {
+          'top-[56px]': isHeaderVisible,
+          'top-0': !isHeaderVisible,
+        })}
+      >
+        <Tabs selectedIndex={activeTab} onSelect={handleTabChange} defaultFocus disableUpDownKeys>
+          <div className="relative w-full">
+            <div className="w-full overflow-x-scroll scroll-smooth scrollbar-hide" ref={tabRef}>
+              <TabList className={`whitespace-nowrap will-change-transform`}>
+                {categories.map((category) => (
+                  <Tab
+                    onClick={handleClickTab}
+                    key={category.id}
+                    className="inline-block cursor-pointer border-b-2 border-b-transparent px-[6px] pb-[8px] pt-[10px] text-sm text-gray-600 shadow-none outline-none transition-all transition-none duration-300 mouse-hover:hover:font-medium mouse-hover:hover:text-gray-900 [&:not(:last-child)]:mr-2"
+                    selectedClassName="!border-b-primary-600 text-gray-900 font-medium"
+                  >
+                    {category.name}
+                  </Tab>
+                ))}
+              </TabList>
+            </div>
+            <Link
+              className="absolute right-0 top-0 flex h-10 w-11 items-center justify-end bg-fade-to-white"
+              href={'/mypage/categories'}
+            >
+              <Setting />
+            </Link>
           </div>
-          <Link
-            className="absolute right-0 top-0 flex h-10 w-11 items-center justify-end bg-fade-to-white"
-            href={'/mypage/categories'}
-          >
-            <Setting />
-          </Link>
-        </div>
-      </Tabs>
+        </Tabs>
+      </div>
       <Swiper
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         onSlideChange={(swiper) => handleTabChange(swiper.realIndex)}
