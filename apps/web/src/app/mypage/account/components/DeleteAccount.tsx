@@ -3,7 +3,6 @@ import Button from '@/components/common/Button';
 import { useToast } from '@/components/common/Toast';
 import { MutationWithdraw } from '@/graphql/auth';
 import { useLogout } from '@/hooks/useLogout';
-import { StorageTokenKey } from '@/types/enum/auth';
 import { useMutation } from '@apollo/client';
 import React from 'react';
 

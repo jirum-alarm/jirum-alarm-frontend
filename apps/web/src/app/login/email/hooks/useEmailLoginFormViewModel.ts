@@ -1,5 +1,4 @@
 import { MutationLogin } from '@/graphql/auth';
-import { StorageTokenKey } from '@/types/enum/auth';
 import { ILoginOutput, ILoginVariable } from '@/types/login';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';

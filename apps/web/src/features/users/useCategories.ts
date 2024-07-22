@@ -1,12 +1,9 @@
 import { QueryMyCategories } from '@/graphql/auth';
 import { User } from '@/types/user';
-import { skipToken, useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from '@apollo/client';
 
-const useGetMyCategories = ({ suspenseSkip }: { suspenseSkip?: boolean } = {}) => {
-  return useSuspenseQuery<{ me: Pick<User, 'favoriteCategories'> }>(
-    QueryMyCategories,
-    suspenseSkip ? skipToken : undefined,
-  );
+const useGetMyCategories = () => {
+  return useSuspenseQuery<{ me: Pick<User, 'favoriteCategories'> }>(QueryMyCategories);
 };
 
 export { useGetMyCategories };

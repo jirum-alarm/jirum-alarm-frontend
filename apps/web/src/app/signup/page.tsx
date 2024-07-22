@@ -9,7 +9,6 @@ import Nickname from './nickname/components/Nickname';
 import { useMutation } from '@apollo/client';
 import { MutationSignup } from '@/graphql/auth';
 import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth';
-import { StorageTokenKey } from '@/types/enum/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Categories from './categories/components/Categories';
 import { ICategoryForm } from '@/features/categories/types';

@@ -1,9 +1,8 @@
 'use client';
-import { ApolloLink, from, fromPromise, HttpLink } from '@apollo/client';
+import { ApolloLink, fromPromise, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
 import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
-import { StorageTokenKey } from '@/types/enum/auth';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import {
   ApolloNextAppProvider,
@@ -20,7 +19,6 @@ import {
   setAccessToken,
   setRefreshToken,
 } from '@/app/actions/token';
-import { headers } from 'next/headers';
 
 const httpLink = new HttpLink({
   uri: GRAPHQL_ENDPOINT,
@@ -29,17 +27,17 @@ const httpLink = new HttpLink({
 
 const apolloClient = new ApolloClient({ link: httpLink, cache: new InMemoryCache() });
 
-export function ApolloSetting({ children }: { children: ReactNode }) {
+export function ApolloProvider({ children }: { children: ReactNode }) {
   const [client, setClient] = useState<ApolloClient<any>>();
 
   const makeClient = useCallback(() => {
     const getNewAccessToken = async () => {
-      const token = await getRefreshToken();
+      const refreshToken = await getRefreshToken();
       return apolloClient
         .mutate<ILoginByRefreshTokenOutput>({
           mutation: MutationLoginByRefreshToken,
           context: {
-            headers: { authorization: token ? `Bearer ${token}` : '' },
+            headers: { authorization: refreshToken ? `Bearer ${refreshToken}` : '' },
           },
         })
         .then(async (res) => {

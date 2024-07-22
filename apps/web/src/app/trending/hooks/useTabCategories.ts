@@ -1,7 +1,4 @@
-// import { useGetMyCategories } from '@/features/categories/hooks/useCategories';
-
 import { useGetMyCategories } from '@/features/users/useCategories';
-import { StorageTokenKey } from '@/types/enum/auth';
 
 const categories = [
   { id: null, name: '전체' }, // api요청시 categoryId를 null로 보내야 핫딜 상품을 불러올 수 있어서 null로 설정
@@ -19,9 +16,7 @@ const categories = [
 ];
 
 const useTabCategories = () => {
-  const hasToken =
-    typeof window === 'undefined' ? false : !!localStorage.getItem(StorageTokenKey.REFRESH_TOKEN);
-  const { data } = useGetMyCategories({ suspenseSkip: !hasToken });
+  const { data } = useGetMyCategories();
   const favoriteCategories = data?.me.favoriteCategories;
   if (favoriteCategories && favoriteCategories.length > 0) {
     return {
