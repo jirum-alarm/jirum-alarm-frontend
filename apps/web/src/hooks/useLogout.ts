@@ -1,11 +1,11 @@
+import { removeAccessToken, removeRefreshToken } from '@/app/actions/token';
 import { PAGE } from '@/constants/page';
-import { StorageTokenKey } from '@/types/enum/auth';
 
 export const useLogout = () => {
-  const handleLogout = () => {
-    localStorage.removeItem(StorageTokenKey.ACCESS_TOKEN);
-    localStorage.removeItem(StorageTokenKey.REFRESH_TOKEN);
+  const logout = () => {
+    removeAccessToken();
+    removeRefreshToken();
     window.location.replace(PAGE.HOME);
   };
-  return handleLogout;
+  return logout;
 };

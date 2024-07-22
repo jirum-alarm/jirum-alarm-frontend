@@ -9,6 +9,7 @@ import { TokenType, addPushTokenVariable } from '@/graphql/interface';
 import { MutationAddPushToken } from '@/graphql/notification';
 import { useRecoilValue } from 'recoil';
 import { fcmTokenAtom } from '@/state/fcmToken';
+import { setAccessToken, setRefreshToken } from '@/app/actions/token';
 
 const HOME_PATH = '/';
 
@@ -53,11 +54,11 @@ const useEmailLoginFormViewModel = () => {
   });
 
   const [login] = useMutation<ILoginOutput, ILoginVariable>(MutationLogin, {
-    onCompleted: (data) => {
-      localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, data.login.accessToken);
+    onCompleted: async (data) => {
+      await setAccessToken(data.login.accessToken);
 
       if (data.login.refreshToken) {
-        localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.login.refreshToken);
+        await setRefreshToken(data.login.refreshToken);
       }
 
       toast('로그인에 성공했어요.');
