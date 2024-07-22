@@ -4,7 +4,7 @@ import { useGetMyCategories } from '@/features/users/useCategories';
 import { StorageTokenKey } from '@/types/enum/auth';
 
 const categories = [
-  { id: null, name: '전체' },
+  { id: null, name: '전체' }, // api요청시 categoryId를 null로 보내야 핫딜 상품을 불러올 수 있어서 null로 설정
   { id: 1, name: '컴퓨터' },
   { id: 2, name: '생활·식품' },
   { id: 3, name: '화장품' },
