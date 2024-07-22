@@ -1,19 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 
-const VISIBILITY_THRESHOLD = 90;
-
-const useVisibilityOnScroll = () => {
+const useVisibilityOnScroll = ({ visibilityThreshold }: { visibilityThreshold?: number } = {}) => {
   const lastScrollTop = useRef(0);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(visibilityThreshold ? false : true);
+  const threshold = visibilityThreshold ?? 0;
 
   const handleScroll = () => {
-    const scrollTop = window.scrollY;
+    const scrollTop = window.scrollY < 0 ? 0 : window.scrollY;
     const isScrollingUp = scrollTop < lastScrollTop.current;
     const isScrollingDown = scrollTop > lastScrollTop.current;
 
-    if (scrollTop < VISIBILITY_THRESHOLD) {
+    if (scrollTop < threshold) {
       setIsHeaderVisible(false);
-    } else if (scrollTop >= VISIBILITY_THRESHOLD && isScrollingUp) {
+    } else if (scrollTop >= threshold && isScrollingUp) {
       setIsHeaderVisible(true);
     } else if (isScrollingDown) {
       setIsHeaderVisible(false);

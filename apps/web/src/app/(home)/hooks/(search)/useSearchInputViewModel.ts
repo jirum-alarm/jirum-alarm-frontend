@@ -20,7 +20,7 @@ export const useSearchInputViewModel = () => {
     setKeyword(value);
 
     if (value === '') {
-      router.push('/?search');
+      router.push('/search');
     }
   };
 
@@ -32,7 +32,7 @@ export const useSearchInputViewModel = () => {
     }
 
     if (event.key === 'Enter') {
-      router.push(`/?search&keyword=${keyword}`);
+      router.push(`/search?keyword=${keyword}`);
 
       mp.track(EVENT.PRODUCT_SEARCH.NAME, {
         keyword,
@@ -46,7 +46,7 @@ export const useSearchInputViewModel = () => {
   const handleReset = () => {
     setKeyword('');
 
-    router.push(`/?search`);
+    router.push(`/search`);
   };
 
   const handleGoHome = () => {

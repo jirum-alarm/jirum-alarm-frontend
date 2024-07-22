@@ -1,78 +1,33 @@
 'use client';
-
-import NavBar from '@/components/Navbar';
-import ProductList from './ProductList';
-import { useHotDealsRandom } from '@/features/products';
+import { ProductLoading, useHotDealsRandom } from '@/features/products';
+import { useInputHideOnScroll } from '../../hooks/(search)/useInputHideOnScroll';
+import { useProductListViewModel } from '../../hooks/(search)/useProductListViewModel';
+import { useSearchInputViewModel } from '../../hooks/(search)/useSearchInputViewModel';
+import RecentKeywords from './RecentKeywords';
+import RecommendationKeywords from './RecommendationKeywords';
 import { cn } from '@/lib/cn';
-import SearchInput from './SearchInput';
-import { useProductListViewModel } from '../hooks/(search)/useProductListViewModel';
-import { useSearchInputViewModel } from '../hooks/(search)/useSearchInputViewModel';
-import SearchPageInput from './(search)/SearchInput';
-import SearchPageProductList from './(search)/ProductList';
-import RecentKeywords from './(search)/RecentKeywords';
-import RecommendationKeywords from './(search)/RecommendationKeywords';
-import RecommendationProduct from './(search)/RecommendationProduct';
-import ProductNotFound from './(search)/ProductNotFound';
-import { useInputHideOnScroll } from '../hooks/(search)/useInputHideOnScroll';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { ProductLoading } from '@/features/products';
+import RecommendationProduct from './RecommendationProduct';
+import ProductNotFound from './ProductNotFound';
+import SearchPageProductList from './ProductList';
 import TopButton from '@/components/TopButton';
+import SearchPageInput from './SearchInput';
 
-export default function HomeContainer() {
-  const searchParams = useSearchParams();
-
-  const [showSearchPage, setShowSearchPage] = useState(false);
-
-  const isSearchPage = searchParams.has('search');
-
-  const goSearchPage = () => {
-    history.pushState({}, '', '/?search');
-    setShowSearchPage(true);
-  };
-
-  useEffect(() => {
-    if (isSearchPage) {
-      setShowSearchPage(false);
-    }
-  }, [isSearchPage]);
-
-  return (
-    <div className="mx-auto max-w-screen-lg overflow-y-hidden px-5">
-      {isSearchPage || showSearchPage ? <SearchPage /> : <HomePage goSearchPage={goSearchPage} />}
-    </div>
-  );
-}
-
-function HomePage({ goSearchPage }: { goSearchPage: () => void }) {
-  return (
-    <>
-      <header>
-        <NavBar />
-        <SearchInput goSearchPage={goSearchPage} />
-      </header>
-      <main>
-        <ProductList />
-      </main>
-    </>
-  );
-}
-
-function SearchPage() {
+export default function SearchPage() {
   const productViewModel = useProductListViewModel();
   const searchProductViewModel = useSearchInputViewModel();
   const showSearchBar = useInputHideOnScroll();
 
   return (
-    <>
-      <header>
+    <div className="w-full">
+      <header className="fixed z-50 w-full max-w-[600px]">
         <SearchPageInput show={showSearchBar} {...searchProductViewModel} />
       </header>
+      <div className="h-14"></div>
       <main>
         <InitialResult show={!searchProductViewModel.keyword} />
         <SearchResult show={!!searchProductViewModel.keyword} {...productViewModel} />
       </main>
-    </>
+    </div>
   );
 }
 

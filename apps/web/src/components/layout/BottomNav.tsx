@@ -15,7 +15,7 @@ import React from 'react';
 
 export enum NAV_TYPE {
   HOME = 'HOME',
-  HOT = 'HOT',
+  TRENDING = 'TRENDING',
   ALARM = 'ALARM',
   MYPAGE = 'MYPAGE',
 }
@@ -29,8 +29,8 @@ const BottomNavList = [
     activeIcon: HomeFill,
   },
   {
-    type: NAV_TYPE.HOT,
-    link: '/',
+    type: NAV_TYPE.TRENDING,
+    link: PAGE.TRENDING,
     text: '인기',
     icon: Hot,
     activeIcon: HotFill,

@@ -76,6 +76,14 @@ export const QueryMe = gql`
   }
 `;
 
+export const QueryMyCategories = gql`
+  query QueryMe {
+    me {
+      favoriteCategories
+    }
+  }
+`;
+
 export const MutationLoginByRefreshToken = gql`
   mutation QueryLoginByRefreshToken {
     loginByRefreshToken {

@@ -22,9 +22,6 @@ export const useHotDeals = ({
       orderBy: ProductOrderType.POSTED_AT,
       orderByOption: OrderOptionType.DESC,
       isHot: true,
-      isApp: false,
-      isReward: false,
-      isGame: false,
     },
     skip,
   });
@@ -42,9 +39,6 @@ export const useHotDealsRandom = ({
       variables: {
         count,
         limit,
-        isApp: false,
-        isReward: false,
-        isGame: false,
       },
     },
   );
