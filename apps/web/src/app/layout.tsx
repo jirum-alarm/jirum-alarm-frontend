@@ -12,6 +12,7 @@ import Toaster from '@/components/common/Toast/Toaster';
 import { SERVICE_URL } from '@/constants/env';
 import { InitMixpanel } from '@/lib/mixpanel';
 import dynamic from 'next/dynamic';
+import { getAccessToken } from './actions/token';
 const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
   ssr: false,
 });
@@ -38,6 +39,7 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const token = await getAccessToken();
   return (
     <html lang="ko" className={pretendard.className}>
       <head>
@@ -55,7 +57,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <MSWInit>
-          <AppProvider>
+          <AppProvider token={token}>
             <InitMixpanel />
             <div className="relative min-w-[320px] bg-white">{children}</div>
             <Toaster />

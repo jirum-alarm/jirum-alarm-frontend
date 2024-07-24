@@ -6,11 +6,16 @@ import FCMConfig from '../firebase/FCMConfig';
 import { RecoilRoot } from 'recoil';
 import PHProvider from './posthogProvider';
 
-const AppProvider = ({ children }: PropsWithChildren) => {
+interface Props {
+  children: React.ReactNode;
+  token?: string;
+}
+
+const AppProvider = ({ children, token }: Props) => {
   return (
     <RecoilRoot>
       <PHProvider>
-        <ApolloProvider>{children}</ApolloProvider>
+        <ApolloProvider token={token}>{children}</ApolloProvider>
         <CustomerServiceBoot />
         <FCMConfig />
       </PHProvider>

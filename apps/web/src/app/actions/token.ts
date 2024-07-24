@@ -1,10 +1,13 @@
 'use server';
 
+import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/constants/token';
 import { cookies } from 'next/headers';
 
 async function setAccessToken(token: string) {
-  const oneHour = 1 * 60 * 60 * 1000; // 1hour
-  cookies().set('ACCESS_TOKEN', token, { expires: Date.now() + oneHour, httpOnly: true });
+  cookies().set('ACCESS_TOKEN', token, {
+    expires: Date.now() + accessTokenExpiresAt,
+    httpOnly: true,
+  });
 }
 
 async function getAccessToken() {
@@ -15,8 +18,10 @@ async function removeAccessToken() {
   cookies().delete('ACCESS_TOKEN');
 }
 async function setRefreshToken(token: string) {
-  const sevendDays = 7 * 24 * 60 * 60 * 1000; // 7day
-  cookies().set('REFRESH_TOKEN', token, { expires: Date.now() + sevendDays, httpOnly: true });
+  cookies().set('REFRESH_TOKEN', token, {
+    expires: Date.now() + refreshTokenExpiresAt,
+    httpOnly: true,
+  });
 }
 
 async function getRefreshToken() {

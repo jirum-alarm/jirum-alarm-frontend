@@ -1,9 +1,11 @@
 import { QueryMyCategories } from '@/graphql/auth';
+import { getClient } from '@/lib/client';
 import { User } from '@/types/user';
-import { useSuspenseQuery } from '@apollo/client';
 
-const useGetMyCategories = () => {
-  return useSuspenseQuery<{ me: Pick<User, 'favoriteCategories'> }>(QueryMyCategories);
+const getMyCategories = async () => {
+  return getClient().query<{ me: Pick<User, 'favoriteCategories'> }>({
+    query: QueryMyCategories,
+  });
 };
 
-export { useGetMyCategories };
+export { getMyCategories };
