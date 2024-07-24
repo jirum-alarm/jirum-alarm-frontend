@@ -1,6 +1,27 @@
 // middleware.js
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseCookies, RequestCookies } from 'next/dist/server/web/spec-extension/cookies';
+import { PAGE } from './constants/page';
+
+export async function middleware(request: NextRequest): Promise<NextResponse> {
+  await handlePostHog(request);
+  return await routeGuard(request);
+}
+
+const routeGuard = async (req: NextRequest) => {
+  const { pathname } = req.nextUrl;
+
+  if (pathname.startsWith(PAGE.MYPAGE)) {
+    const access_token = req.cookies.get('ACCESS_TOKEN');
+    const refresh_token = req.cookies.get('REFRESH_TOKEN');
+    if (!access_token && !refresh_token) {
+      return NextResponse.redirect(new URL(PAGE.LOGIN, req.url));
+    }
+  }
+
+  // 토큰이 유효한 경우, 원래의 요청을 계속 처리
+  return NextResponse.next();
+};
 
 /**
  * Copy cookies from the Set-Cookie header of the response to the Cookie header of the request,
@@ -23,7 +44,7 @@ function applySetCookie(req: NextRequest, res: NextResponse): void {
   });
 }
 
-export async function middleware(request: NextRequest): Promise<NextResponse> {
+const handlePostHog = async (request: NextRequest) => {
   const ph_project_api_key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
   const ph_cookie_key = `ph_${ph_project_api_key}_posthog`;
   const cookie = request.cookies.get(ph_cookie_key);
@@ -73,7 +94,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   applySetCookie(request, response);
 
   return response;
-}
+};
 
 export const config = {
   matcher: ['/((?!api|_next/static|favicon.ico|vercel.svg|next.svg).*)'],
