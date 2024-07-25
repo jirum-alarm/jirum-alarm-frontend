@@ -1,11 +1,10 @@
-import { ApolloLink, fromPromise, HttpLink } from '@apollo/client';
+import { ApolloLink, from, fromPromise, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
 import {
   registerApolloClient,
   ApolloClient,
   InMemoryCache,
-  SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support';
 import { onError } from '@apollo/client/link/error';
 import { ILoginByRefreshTokenOutput } from '@/types/login';
@@ -82,17 +81,12 @@ const linkOnError = onError(({ graphQLErrors, networkError, operation, forward }
   }
 });
 
+const appLink = from([linkOnError, httpLink]);
+
 const makeClient = () => {
   return new ApolloClient({
+    link: getAuthLink.concat(appLink),
     cache: new InMemoryCache(),
-    link: ApolloLink.from([
-      new SSRMultipartLink({
-        stripDefer: true,
-      }),
-      getAuthLink,
-      linkOnError,
-      httpLink,
-    ]),
   });
 };
 
