@@ -2,25 +2,85 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseCookies, RequestCookies } from 'next/dist/server/web/spec-extension/cookies';
 import { PAGE } from './constants/page';
+import { MutationLoginByRefreshToken, QueryMe } from './graphql/auth';
+import { GRAPHQL_ENDPOINT } from './constants/graphql';
+import { accessTokenExpiresAt, refreshTokenExpiresAt } from './constants/token';
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
-  await handlePostHog(request);
-  return await routeGuard(request);
+  const response = await handlePostHog(request);
+  return await routeGuard(request, response);
 }
 
-const routeGuard = async (req: NextRequest) => {
+const tokenVerify = async (accessToken?: string) => {
+  const response = await fetch(GRAPHQL_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: accessToken ? `Bearer ${accessToken}` : '',
+    },
+    body: JSON.stringify({
+      query: QueryMe.loc?.source.body,
+    }),
+  });
+  return await response.json();
+};
+
+const getNewToken = async (refreshToken?: string) => {
+  const response = await fetch(GRAPHQL_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: refreshToken ? `Bearer ${refreshToken}` : '',
+    },
+    body: JSON.stringify({
+      query: MutationLoginByRefreshToken.loc?.source.body,
+    }),
+  });
+  return await response.json();
+};
+
+const routeGuard = async (req: NextRequest, res: NextResponse) => {
   const { pathname } = req.nextUrl;
 
   if (pathname.startsWith(PAGE.MYPAGE)) {
-    const access_token = req.cookies.get('ACCESS_TOKEN');
-    const refresh_token = req.cookies.get('REFRESH_TOKEN');
-    if (!access_token && !refresh_token) {
-      return NextResponse.redirect(new URL(PAGE.LOGIN, req.url));
+    const accessToken = req.cookies.get('ACCESS_TOKEN')?.value;
+    const refreshToken = req.cookies.get('REFRESH_TOKEN')?.value;
+
+    const result = await tokenVerify(accessToken);
+    if (result.errors) {
+      for (const error of result.errors) {
+        switch (error.extensions.code) {
+          case 'FORBIDDEN':
+          case 'UNAUTHENTICATED':
+            const result = await getNewToken(refreshToken);
+
+            if (result.data) {
+              const { accessToken, refreshToken } = result.data.loginByRefreshToken;
+              const access_token = {
+                name: 'ACCESS_TOKEN',
+                expires: Date.now() + accessTokenExpiresAt,
+                httpOnly: true,
+                value: accessToken,
+              };
+              const refresh_token = {
+                name: 'REFRESH_TOKEN',
+                expires: Date.now() + refreshTokenExpiresAt,
+                httpOnly: true,
+                value: refreshToken,
+              };
+              res.cookies.set(access_token);
+              res.cookies.set(refresh_token);
+              applySetCookie(req, res);
+            }
+            if (result.errors) {
+              return NextResponse.redirect(new URL(PAGE.LOGIN, req.url));
+            }
+        }
+      }
     }
   }
 
-  // 토큰이 유효한 경우, 원래의 요청을 계속 처리
-  return NextResponse.next();
+  return res;
 };
 
 /**
@@ -97,5 +157,5 @@ const handlePostHog = async (request: NextRequest) => {
 };
 
 export const config = {
-  matcher: ['/((?!api|_next/static|favicon.ico|vercel.svg|next.svg).*)'],
+  matcher: ['/mypage/:path*', '/((?!api|_next/static|favicon.ico|vercel.svg|next.svg).*)'],
 };

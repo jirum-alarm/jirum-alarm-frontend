@@ -10,7 +10,12 @@ import {
 import { onError } from '@apollo/client/link/error';
 import { ILoginByRefreshTokenOutput } from '@/types/login';
 import { MutationLoginByRefreshToken } from '@/graphql/auth';
-import { getAccessToken, getRefreshToken } from '@/app/actions/token';
+import {
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+  setRefreshToken,
+} from '@/app/actions/token';
 import { apolloClient, httpLink } from './provider/apollo';
 
 const getAuthLink = setContext(async (_, { headers }) => {
@@ -35,9 +40,9 @@ const getNewAccessToken = async () => {
     .then(async (res) => {
       if (!res.data) return;
       const { accessToken, refreshToken } = res.data.loginByRefreshToken;
-      // await setAccessToken(accessToken);
+      await setAccessToken(accessToken);
       if (refreshToken) {
-        // await setRefreshToken(refreshToken);
+        await setRefreshToken(refreshToken);
       }
       return accessToken;
     });
