@@ -1,4 +1,4 @@
-import { ApolloLink, from, fromPromise, HttpLink } from '@apollo/client';
+import { from, fromPromise } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
 import {
@@ -39,10 +39,13 @@ const getNewAccessToken = async () => {
     .then(async (res) => {
       if (!res.data) return;
       const { accessToken, refreshToken } = res.data.loginByRefreshToken;
-      await setAccessToken(accessToken);
-      if (refreshToken) {
-        await setRefreshToken(refreshToken);
-      }
+      fetch(
+        `http://localhost:3000/api/token?access_token=${accessToken}&refresh_token=${refreshToken}`,
+      );
+      // await setAccessToken(accessToken);
+      // if (refreshToken) {
+      // await setRefreshToken(refreshToken);
+      // }
       return accessToken;
     });
 };

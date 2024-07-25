@@ -8,7 +8,8 @@ import { accessTokenExpiresAt, refreshTokenExpiresAt } from './constants/token';
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   const response = await handlePostHog(request);
-  return await routeGuard(request, response);
+  return response;
+  // return await routeGuard(request, response);
 }
 
 const tokenVerify = async (accessToken?: string) => {
