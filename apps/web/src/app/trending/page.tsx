@@ -2,7 +2,6 @@ import BasicLayout from '@/components/layout/BasicLayout';
 import { NAV_TYPE } from '@/components/layout/BottomNav';
 import TopButton from '@/components/TopButton';
 import TrendingPageHeader from './components/TrendingPageHeader';
-import { getRefreshToken } from '../actions/token';
 import { getMyCategories } from '@/features/users/useCategories';
 import TrendingContainer from './components/TrendingContainer';
 
@@ -22,18 +21,19 @@ const TrendingPage = async () => {
 export default TrendingPage;
 
 const getTabCategories = async () => {
-  const token = await getRefreshToken();
-  if (!token) return { categories };
-
-  const { data } = await getMyCategories();
-  const favoriteCategories = data.me.favoriteCategories;
-  if (favoriteCategories && favoriteCategories.length > 0) {
-    return {
-      categories: categories.filter((category) => {
-        if (category.id === null) return true;
-        return favoriteCategories.includes(category.id);
-      }),
-    };
+  try {
+    const { data } = await getMyCategories();
+    const favoriteCategories = data.me.favoriteCategories;
+    if (favoriteCategories && favoriteCategories.length > 0) {
+      return {
+        categories: categories.filter((category) => {
+          if (category.id === null) return true;
+          return favoriteCategories.includes(category.id);
+        }),
+      };
+    }
+  } catch (e) {
+    return { categories };
   }
 
   return { categories };

@@ -8,14 +8,13 @@ import PHProvider from './posthogProvider';
 
 interface Props {
   children: React.ReactNode;
-  token?: string;
 }
 
-const AppProvider = ({ children, token }: Props) => {
+const AppProvider = ({ children }: Props) => {
   return (
     <RecoilRoot>
       <PHProvider>
-        <ApolloProvider token={token}>{children}</ApolloProvider>
+        <ApolloProvider>{children}</ApolloProvider>
         <CustomerServiceBoot />
         <FCMConfig />
       </PHProvider>

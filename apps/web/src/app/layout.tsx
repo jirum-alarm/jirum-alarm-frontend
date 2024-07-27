@@ -38,8 +38,7 @@ export const viewport: Viewport = {
   width: 'device-width',
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const token = await getAccessToken();
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className={pretendard.className}>
       <head>
@@ -57,7 +56,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <MSWInit>
-          <AppProvider token={token}>
+          <AppProvider>
             <InitMixpanel />
             <div className="relative min-w-[320px] bg-white">{children}</div>
             <Toaster />

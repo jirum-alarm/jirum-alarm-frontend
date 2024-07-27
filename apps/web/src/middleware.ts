@@ -1,4 +1,3 @@
-// middleware.js
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseCookies, RequestCookies } from 'next/dist/server/web/spec-extension/cookies';
 import { PAGE } from './constants/page';
@@ -11,98 +10,28 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   return await routeGuard(request, response);
 }
 
-const tokenVerify = async (accessToken?: string) => {
-  const response = await fetch(GRAPHQL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: accessToken ? `Bearer ${accessToken}` : '',
-    },
-    body: JSON.stringify({
-      query: QueryMe.loc?.source.body,
-    }),
-  });
-  return await response.json();
-};
-
-const getNewToken = async (refreshToken?: string) => {
-  const response = await fetch(GRAPHQL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: refreshToken ? `Bearer ${refreshToken}` : '',
-    },
-    body: JSON.stringify({
-      query: MutationLoginByRefreshToken.loc?.source.body,
-    }),
-  });
-  return await response.json();
-};
-
 const routeGuard = async (req: NextRequest, res: NextResponse) => {
   const { pathname } = req.nextUrl;
 
   if (pathname.startsWith(PAGE.MYPAGE)) {
-    const accessToken = req.cookies.get('ACCESS_TOKEN')?.value;
-    const refreshToken = req.cookies.get('REFRESH_TOKEN')?.value;
+    const { status } = await refreshAndVerifyToken(req, res);
+    if (status === 'valid') {
+      return res;
+    }
+    if (status === 'invalid') {
+      return NextResponse.redirect(new URL(PAGE.LOGIN, req.url));
+    }
+  }
 
-    const result = await tokenVerify(accessToken);
-    if (result.errors) {
-      for (const error of result.errors) {
-        switch (error.extensions.code) {
-          case 'FORBIDDEN':
-          case 'UNAUTHENTICATED':
-            const result = await getNewToken(refreshToken);
-
-            if (result.data) {
-              const { accessToken, refreshToken } = result.data.loginByRefreshToken;
-              const access_token = {
-                name: 'ACCESS_TOKEN',
-                expires: Date.now() + accessTokenExpiresAt,
-                httpOnly: true,
-                value: accessToken,
-              };
-              const refresh_token = {
-                name: 'REFRESH_TOKEN',
-                expires: Date.now() + refreshTokenExpiresAt,
-                httpOnly: true,
-                value: refreshToken,
-              };
-              res.cookies.set(access_token);
-              res.cookies.set(refresh_token);
-              applySetCookie(req, res);
-            }
-            if (result.errors) {
-              return NextResponse.redirect(new URL(PAGE.LOGIN, req.url));
-            }
-        }
-      }
+  if (pathname.startsWith(PAGE.TRENDING)) {
+    const { status } = await refreshAndVerifyToken(req, res);
+    if (status === 'valid') {
+      return res;
     }
   }
 
   return res;
 };
-
-/**
- * Copy cookies from the Set-Cookie header of the response to the Cookie header of the request,
- * so that it will appear to SSR/RSC as if the user already has the new cookies.
- */
-function applySetCookie(req: NextRequest, res: NextResponse): void {
-  // parse the outgoing Set-Cookie header
-  const setCookies = new ResponseCookies(res.headers);
-  // Build a new Cookie header for the request by adding the setCookies
-  const newReqHeaders = new Headers(req.headers);
-  const newReqCookies = new RequestCookies(newReqHeaders);
-  setCookies.getAll().forEach((cookie) => newReqCookies.set(cookie));
-  // set “request header overrides” on the outgoing response
-  NextResponse.next({
-    request: { headers: newReqHeaders },
-  }).headers.forEach((value, key) => {
-    if (key === 'x-middleware-override-headers' || key.startsWith('x-middleware-request-')) {
-      res.headers.set(key, value);
-    }
-  });
-}
 
 const handlePostHog = async (request: NextRequest) => {
   const ph_project_api_key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
@@ -156,6 +85,97 @@ const handlePostHog = async (request: NextRequest) => {
   return response;
 };
 
+const tokenVerify = async (accessToken?: string) => {
+  const response = await fetch(GRAPHQL_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: accessToken ? `Bearer ${accessToken}` : '',
+    },
+    body: JSON.stringify({
+      query: QueryMe.loc?.source.body,
+    }),
+  });
+  return await response.json();
+};
+
+const getNewToken = async (refreshToken?: string) => {
+  const response = await fetch(GRAPHQL_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: refreshToken ? `Bearer ${refreshToken}` : '',
+    },
+    body: JSON.stringify({
+      query: MutationLoginByRefreshToken.loc?.source.body,
+    }),
+  });
+  return await response.json();
+};
+
+const refreshAndVerifyToken = async (
+  req: NextRequest,
+  res: NextResponse,
+): Promise<{ status: 'invalid' | 'valid' }> => {
+  const accessToken = req.cookies.get('ACCESS_TOKEN')?.value;
+  const refreshToken = req.cookies.get('REFRESH_TOKEN')?.value;
+
+  const result = await tokenVerify(accessToken);
+  if (result.errors) {
+    for (const error of result.errors) {
+      switch (error.extensions.code) {
+        case 'FORBIDDEN':
+        case 'UNAUTHENTICATED':
+          const result = await getNewToken(refreshToken);
+
+          if (result.data) {
+            const { accessToken, refreshToken } = result.data.loginByRefreshToken;
+            const access_token = {
+              name: 'ACCESS_TOKEN',
+              expires: Date.now() + accessTokenExpiresAt,
+              httpOnly: true,
+              value: accessToken,
+            };
+            const refresh_token = {
+              name: 'REFRESH_TOKEN',
+              expires: Date.now() + refreshTokenExpiresAt,
+              httpOnly: true,
+              value: refreshToken,
+            };
+            res.cookies.set(access_token);
+            res.cookies.set(refresh_token);
+            applySetCookie(req, res);
+          }
+          if (result.errors) {
+            return { status: 'invalid' };
+          }
+      }
+    }
+  }
+  return { status: 'valid' };
+};
+
+/**
+ * Copy cookies from the Set-Cookie header of the response to the Cookie header of the request,
+ * so that it will appear to SSR/RSC as if the user already has the new cookies.
+ */
+function applySetCookie(req: NextRequest, res: NextResponse): void {
+  // parse the outgoing Set-Cookie header
+  const setCookies = new ResponseCookies(res.headers);
+  // Build a new Cookie header for the request by adding the setCookies
+  const newReqHeaders = new Headers(req.headers);
+  const newReqCookies = new RequestCookies(newReqHeaders);
+  setCookies.getAll().forEach((cookie) => newReqCookies.set(cookie));
+  // set “request header overrides” on the outgoing response
+  NextResponse.next({
+    request: { headers: newReqHeaders },
+  }).headers.forEach((value, key) => {
+    if (key === 'x-middleware-override-headers' || key.startsWith('x-middleware-request-')) {
+      res.headers.set(key, value);
+    }
+  });
+}
+//'/mypage/:path*',
 export const config = {
-  matcher: ['/mypage/:path*', '/((?!api|_next/static|favicon.ico|vercel.svg|next.svg).*)'],
+  matcher: ['/((?!api|_next/static|favicon.ico|vercel.svg|next.svg).*)'],
 };

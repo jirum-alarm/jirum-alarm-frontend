@@ -11,11 +11,15 @@ import {
 import { onError } from '@apollo/client/link/error';
 import { ILoginByRefreshTokenOutput } from '@/types/login';
 import { MutationLoginByRefreshToken } from '@/graphql/auth';
-import { getRefreshToken, setAccessToken, setRefreshToken } from '@/app/actions/token';
+import {
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+  setRefreshToken,
+} from '@/app/actions/token';
 
 interface Props {
   children: React.ReactNode;
-  token?: string;
 }
 
 export const httpLink = new HttpLink({
@@ -25,15 +29,15 @@ export const httpLink = new HttpLink({
 
 export const apolloClient = new ApolloClient({ link: httpLink, cache: new InMemoryCache() });
 
-const getAuthLink = (token?: string) =>
-  setContext(async (_, { headers }) => {
-    return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : '',
-      },
-    };
-  });
+const getAuthLink = setContext(async (_, { headers }) => {
+  const token = await getAccessToken();
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
 
 const getNewAccessToken = async () => {
   const refreshToken = await getRefreshToken();
@@ -91,7 +95,7 @@ const linkOnError = onError(({ graphQLErrors, networkError, operation, forward }
   }
 });
 
-export function ApolloProvider({ children, token }: Props) {
+export function ApolloProvider({ children }: Props) {
   const makeClient = () => {
     return new ApolloClient({
       // use the `NextSSRInMemoryCache`, not the normal `InMemoryCache`
@@ -102,11 +106,11 @@ export function ApolloProvider({ children, token }: Props) {
               new SSRMultipartLink({
                 stripDefer: true,
               }),
-              getAuthLink(token),
+              getAuthLink,
               linkOnError,
               httpLink,
             ])
-          : ApolloLink.from([getAuthLink(token), linkOnError, httpLink]),
+          : ApolloLink.from([getAuthLink, linkOnError, httpLink]),
     });
   };
 
