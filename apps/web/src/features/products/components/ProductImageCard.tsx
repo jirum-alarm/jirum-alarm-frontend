@@ -1,3 +1,5 @@
+'use client';
+
 import { EVENT } from '@/constants/mixpanel';
 import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';

@@ -1,5 +1,48 @@
 import { gql } from '@apollo/client';
 
+export const QueryProduct = gql`
+  query product($id: Int!) {
+    product(id: $id) {
+      id
+      providerId
+      category
+      categoryId
+      mallId
+      title
+      url
+      detailUrl
+      isHot
+      isEnd
+      price
+      postedAt
+      thumbnail
+      wishlistCount
+      positiveCommunityReactionCount
+      negativeCommunityReactionCount
+      provider {
+        id
+        name
+        nameKr
+        host
+      }
+      viewCount
+      mallName
+      guides {
+        id
+        title
+        content
+      }
+      prices {
+        id
+        target
+        type
+        price
+        createdAt
+      }
+    }
+  }
+`;
+
 export const QueryProducts = gql`
   query QueryProducts(
     $limit: Int!
