@@ -1,3 +1,4 @@
+'use client';
 import { ApolloLink, fromPromise, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
@@ -17,6 +18,7 @@ import {
   setAccessToken,
   setRefreshToken,
 } from '@/app/actions/token';
+import { useEffect, useState } from 'react';
 
 interface Props {
   children: React.ReactNode;
@@ -95,28 +97,32 @@ const linkOnError = onError(({ graphQLErrors, networkError, operation, forward }
   }
 });
 
+const makeClient = () => {
+  return new ApolloClient({
+    cache: new InMemoryCache(),
+    link:
+      typeof window === 'undefined'
+        ? ApolloLink.from([
+            new SSRMultipartLink({
+              stripDefer: true,
+            }),
+            getAuthLink,
+            linkOnError,
+            httpLink,
+          ])
+        : ApolloLink.from([getAuthLink, linkOnError, httpLink]),
+  });
+};
 export function ApolloProvider({ children }: Props) {
-  const makeClient = () => {
-    return new ApolloClient({
-      // use the `NextSSRInMemoryCache`, not the normal `InMemoryCache`
-      cache: new InMemoryCache(),
-      link:
-        typeof window === 'undefined'
-          ? ApolloLink.from([
-              new SSRMultipartLink({
-                stripDefer: true,
-              }),
-              getAuthLink,
-              linkOnError,
-              httpLink,
-            ])
-          : ApolloLink.from([getAuthLink, linkOnError, httpLink]),
-    });
-  };
-
+  const [client, setClient] = useState<any>();
+  useEffect(() => {
+    setClient(makeClient());
+  }, []);
   return (
     <>
-      <ApolloNextAppProvider makeClient={makeClient}>{children}</ApolloNextAppProvider>
+      {client && (
+        <ApolloNextAppProvider makeClient={() => client}>{children}</ApolloNextAppProvider>
+      )}
     </>
   );
 }

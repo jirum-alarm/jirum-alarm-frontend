@@ -2,7 +2,9 @@ import BasicLayout from '@/components/layout/BasicLayout';
 import MenuList from './components/MenuList';
 import MyProfileSection from './components/MyProfileSection';
 import { NAV_TYPE } from '@/components/layout/BottomNav';
-import { getMe } from '@/features/users';
+import { getMe } from '@/features/users/server/me';
+
+export const dynamic = 'force-dynamic';
 
 const MyPage = async () => {
   const { data } = await getMe();
