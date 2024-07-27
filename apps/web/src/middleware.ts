@@ -12,8 +12,13 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
 const routeGuard = async (req: NextRequest, res: NextResponse) => {
   const { pathname } = req.nextUrl;
+  const protectedPaths = [PAGE.MYPAGE];
+  const onlyRefreshTokenPaths = [PAGE.TRENDING];
 
-  if (pathname.startsWith(PAGE.MYPAGE)) {
+  const isProtectedPath = protectedPaths.some((path) => pathname.startsWith(path));
+  const isOnlyRefreshTokenPaths = onlyRefreshTokenPaths.some((path) => pathname.startsWith(path));
+
+  if (isProtectedPath) {
     const { status } = await refreshAndVerifyToken(req, res);
     if (status === 'valid') {
       return res;
@@ -23,7 +28,7 @@ const routeGuard = async (req: NextRequest, res: NextResponse) => {
     }
   }
 
-  if (pathname.startsWith(PAGE.TRENDING)) {
+  if (isOnlyRefreshTokenPaths) {
     const { status } = await refreshAndVerifyToken(req, res);
     if (status === 'valid') {
       return res;
