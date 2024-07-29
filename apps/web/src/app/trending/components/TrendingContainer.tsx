@@ -1,7 +1,6 @@
 'use client';
 import { Tab, TabList, Tabs } from 'react-tabs';
 import useTabSwitcher from '../hooks/useTabSwitcher';
-import useTabCategories from '../hooks/useTabCategories';
 import { IllustStandingSmall, Setting } from '@/components/common/icons';
 import Link from 'next/link';
 import TrendingList from './TrendingList';
@@ -10,8 +9,14 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
+import { useSuspenseQuery } from '@apollo/client';
+import { QueryMyCategories } from '@/graphql/auth';
 
-const TrendingContainer = () => {
+const TrendingContainer = ({
+  categories,
+}: {
+  categories: { id: number | null; name: string }[];
+}) => {
   const {
     swiperRef,
     targetIndex,
@@ -22,7 +27,6 @@ const TrendingContainer = () => {
     tabRef,
   } = useTabSwitcher();
 
-  const { categories } = useTabCategories();
   const { isHeaderVisible } = useVisibilityOnScroll();
 
   return (

@@ -5,8 +5,12 @@ import { User } from '@/types/user';
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import Link from '@/features/Link';
 
-const MyProfileSection = () => {
-  const { data } = useQuery<{ me: User }>(QueryMe);
+interface Props {
+  me: User;
+}
+
+const MyProfileSection = ({ me }: Props) => {
+  // const { data } = useQuery<{ me: User }>(QueryMe);
 
   return (
     <div className="px-5">
@@ -14,8 +18,8 @@ const MyProfileSection = () => {
         <Link href={'/mypage/account'}>
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold">{data?.me.nickname}</h2>
-              <span className="text-xs text-gray-400">{data?.me.email}</span>
+              <h2 className="text-lg font-bold">{me?.nickname}</h2>
+              <span className="text-xs text-gray-400">{me?.email}</span>
             </div>
             <div>
               <ArrowRight />

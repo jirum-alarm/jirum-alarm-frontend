@@ -4,10 +4,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { QueryMe } from '../../../../graphql/auth';
-import { useApiQuery } from '../../../../hooks/useGql';
 import { userState } from '../../../../state/user';
-import { StorageTokenKey } from '../../../../types/enum/auth';
 import { User } from '../../../../types/user';
+import { useQuery } from '@apollo/client';
+import { setAccessToken, setRefreshToken } from '@/app/actions/token';
+import { PAGE } from '@/constants/page';
 
 export default function OauthLoginSuccess() {
   const router = useRouter();
@@ -18,14 +19,14 @@ export default function OauthLoginSuccess() {
   const accessToken = searchParams.get('accessToken');
   const refreshToken = searchParams.get('refreshToken');
 
-  const { data } = useApiQuery<{ me: User }>(QueryMe);
+  const { data } = useQuery<{ me: User }>(QueryMe);
 
   if (accessToken) {
-    localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, accessToken);
+    setAccessToken(accessToken);
   }
 
   if (refreshToken) {
-    localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, refreshToken);
+    setRefreshToken(refreshToken);
   }
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function OauthLoginSuccess() {
       setUser(data.me);
     }
 
-    router.push('/');
+    router.push(PAGE.HOME);
     return;
   }, []);
 }

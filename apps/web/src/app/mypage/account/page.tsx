@@ -5,7 +5,7 @@ import MovePage from './components/MovePage';
 import { User } from '@/types/user';
 import { QueryMe } from '@/graphql/auth';
 import AccountManagement from './components/AccountManagement';
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useQuery } from '@apollo/client';
 
 const AccountPage = () => {
   const { data } = useQuery<{ me: Omit<User, 'favoriteCategories' | 'linkedSocialProviders'> }>(

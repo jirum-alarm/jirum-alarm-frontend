@@ -1,45 +1,61 @@
 'use client';
-import {
-  ApolloClient,
-  ApolloLink,
-  from,
-  fromPromise,
-  HttpLink,
-  InMemoryCache,
-} from '@apollo/client';
+import { ApolloLink, fromPromise, HttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
-import { StorageTokenKey } from '@/types/enum/auth';
-import { ReactNode } from 'react';
 import {
   ApolloNextAppProvider,
-  NextSSRApolloClient,
-  NextSSRInMemoryCache,
+  ApolloClient,
+  InMemoryCache,
   SSRMultipartLink,
-} from '@apollo/experimental-nextjs-app-support/ssr';
+} from '@apollo/experimental-nextjs-app-support';
 import { onError } from '@apollo/client/link/error';
 import { ILoginByRefreshTokenOutput } from '@/types/login';
 import { MutationLoginByRefreshToken } from '@/graphql/auth';
+import {
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+  setRefreshToken,
+} from '@/app/actions/token';
+import { useEffect, useState } from 'react';
 
-const httpLink = new HttpLink({ uri: GRAPHQL_ENDPOINT, credentials: 'include' });
+interface Props {
+  children: React.ReactNode;
+}
 
-const apolloClient = new ApolloClient({ link: httpLink, cache: new InMemoryCache() });
+export const httpLink = new HttpLink({
+  uri: GRAPHQL_ENDPOINT,
+  fetchOptions: { cache: 'no-store', crendentials: 'include' },
+});
+
+export const apolloClient = new ApolloClient({ link: httpLink, cache: new InMemoryCache() });
+
+const getAuthLink = setContext(async (_, { headers }) => {
+  const token = await getAccessToken();
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
 
 const getNewAccessToken = async () => {
-  const token = localStorage.getItem(StorageTokenKey.REFRESH_TOKEN);
+  const refreshToken = await getRefreshToken();
   return apolloClient
     .mutate<ILoginByRefreshTokenOutput>({
       mutation: MutationLoginByRefreshToken,
       context: {
-        headers: { authorization: token ? `Bearer ${token}` : '' },
+        headers: { authorization: refreshToken ? `Bearer ${refreshToken}` : '' },
       },
     })
-    .then((res) => {
+    .then(async (res) => {
       if (!res.data) return;
       const { accessToken, refreshToken } = res.data.loginByRefreshToken;
-      localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, accessToken);
+      await setAccessToken(accessToken);
       if (refreshToken) {
-        localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, refreshToken);
+        await setRefreshToken(refreshToken);
       }
       return accessToken;
     });
@@ -58,7 +74,6 @@ const linkOnError = onError(({ graphQLErrors, networkError, operation, forward }
               throw error;
             }),
           );
-
           // Retry the request, returning the new observable
           return refresh.filter(Boolean).flatMap((accessToken) => {
             // Modify the operation context with a new token
@@ -82,35 +97,32 @@ const linkOnError = onError(({ graphQLErrors, networkError, operation, forward }
   }
 });
 
-const authMiddleware = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem(StorageTokenKey.ACCESS_TOKEN);
-  operation.setContext({
-    headers: {
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  });
-  return forward(operation);
-});
-
-function makeClient() {
-  return new NextSSRApolloClient({
-    // use the `NextSSRInMemoryCache`, not the normal `InMemoryCache`
-    cache: new NextSSRInMemoryCache(),
+const makeClient = () => {
+  return new ApolloClient({
+    cache: new InMemoryCache(),
     link:
       typeof window === 'undefined'
         ? ApolloLink.from([
-            // in a SSR environment, if you use multipart features like
-            // @defer, you need to decide how to handle these.
-            // This strips all interfaces with a `@defer` directive from your queries.
             new SSRMultipartLink({
               stripDefer: true,
             }),
+            getAuthLink,
+            linkOnError,
             httpLink,
           ])
-        : from([authMiddleware, linkOnError, httpLink]),
+        : ApolloLink.from([getAuthLink, linkOnError, httpLink]),
   });
-}
-
-export function ApolloSetting({ children }: { children: ReactNode }) {
-  return <ApolloNextAppProvider makeClient={makeClient}>{children}</ApolloNextAppProvider>;
+};
+export function ApolloProvider({ children }: Props) {
+  const [client, setClient] = useState<any>();
+  useEffect(() => {
+    setClient(makeClient());
+  }, []);
+  return (
+    <>
+      {client && (
+        <ApolloNextAppProvider makeClient={() => client}>{children}</ApolloNextAppProvider>
+      )}
+    </>
+  );
 }

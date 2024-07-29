@@ -9,7 +9,6 @@ import Nickname from './nickname/components/Nickname';
 import { useMutation } from '@apollo/client';
 import { MutationSignup } from '@/graphql/auth';
 import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth';
-import { StorageTokenKey } from '@/types/enum/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Categories from './categories/components/Categories';
 import { ICategoryForm } from '@/features/categories/types';
@@ -17,6 +16,7 @@ import { CATEGORIES } from '@/constants/categories';
 import Personal from './personal/components/Personal';
 import { User } from '@/types/user';
 import { useToast } from '@/components/common/Toast';
+import { setAccessToken, setRefreshToken } from '../actions/token';
 
 const COMPLETE_ROUTE = 'signup/complete';
 
@@ -74,11 +74,11 @@ const Signup = () => {
   const steps = searchParams.get(QUERY_PARM_PREFIX) as Steps;
 
   const [signup] = useMutation<ISignupOutput, ISignupVariable>(MutationSignup, {
-    onCompleted: (data) => {
-      localStorage.setItem(StorageTokenKey.ACCESS_TOKEN, data.signup.accessToken);
+    onCompleted: async (data) => {
+      await setAccessToken(data.signup.accessToken);
 
       if (data.signup.refreshToken) {
-        localStorage.setItem(StorageTokenKey.REFRESH_TOKEN, data.signup.refreshToken);
+        await setRefreshToken(data.signup.refreshToken);
       }
 
       router.push(COMPLETE_ROUTE);

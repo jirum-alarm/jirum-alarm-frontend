@@ -2,17 +2,16 @@ import AlertDialog from '@/components/common/AlertDialog';
 import Button from '@/components/common/Button';
 import { useToast } from '@/components/common/Toast';
 import { MutationWithdraw } from '@/graphql/auth';
-import { StorageTokenKey } from '@/types/enum/auth';
+import { useLogout } from '@/hooks/useLogout';
 import { useMutation } from '@apollo/client';
 import React from 'react';
 
 const DeleteAccount = () => {
   const { toast } = useToast();
+  const logout = useLogout();
   const [deleteAccount] = useMutation<unknown, { password: string }>(MutationWithdraw, {
     onCompleted: () => {
-      localStorage.removeItem(StorageTokenKey.ACCESS_TOKEN);
-      localStorage.removeItem(StorageTokenKey.REFRESH_TOKEN);
-      window.location.href = '/';
+      logout();
     },
     onError: () => {
       toast('회원탈퇴가 실패했어요. 다시 시도해주세요.');

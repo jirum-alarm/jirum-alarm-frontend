@@ -12,6 +12,7 @@ import Toaster from '@/components/common/Toast/Toaster';
 import { SERVICE_URL } from '@/constants/env';
 import { InitMixpanel } from '@/lib/mixpanel';
 import dynamic from 'next/dynamic';
+import { getAccessToken } from './actions/token';
 const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
   ssr: false,
 });
@@ -37,7 +38,7 @@ export const viewport: Viewport = {
   width: 'device-width',
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className={pretendard.className}>
       <head>
