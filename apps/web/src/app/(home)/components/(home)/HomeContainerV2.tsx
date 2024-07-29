@@ -11,9 +11,9 @@ const HomeContainerV2 = () => {
   return (
     <div className="mx-auto h-full max-w-[600px] pb-20">
       <HomeHeader />
-      <div className="bg-gray-900">
+      <div>
         <HomeBackgroundHeader />
-        <main className="relative z-10 w-full rounded-t-[1.25rem] bg-white pt-3">
+        <main className="relative z-10 mt-[136px] w-full rounded-t-[1.25rem] bg-white pt-3">
           <JirumRankingContainer />
           <div className="h-[20px]" />
           <LiveHotDealContainer />
@@ -29,7 +29,7 @@ export default HomeContainerV2;
 
 const HomeBackgroundHeader = () => {
   return (
-    <div className="sticky top-0">
+    <div className="fixed top-0 z-0 h-full w-full max-w-[600px] bg-gray-900">
       <header className="flex h-[56px] w-full items-center justify-between px-5 py-3">
         <div className="flex items-center gap-2">
           <RoundedLogo />
