@@ -26,6 +26,7 @@ module.exports = {
       screens: {
         txs: '320px',
         xs: '375px',
+        smd: '550px',
         'mouse-hover': { raw: '(hover: hover)' },
       },
       colors: {

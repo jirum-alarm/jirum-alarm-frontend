@@ -6,6 +6,7 @@ type ScreenSizes = {
   xs: boolean;
   sm: boolean;
   md: boolean;
+  smd: boolean;
   lg: boolean;
   xl: boolean;
   // 2xl
@@ -16,6 +17,7 @@ const breakpoints: { [key in keyof ScreenSizes]: string } = {
   txs: '(min-width: 320px)',
   xs: '(min-width: 375px)',
   sm: '(min-width: 640px)',
+  smd: '(min-width: 550px)',
   md: '(min-width: 768px)',
   lg: '(min-width: 1024px)',
   xl: '(min-width: 1280px)',
@@ -31,6 +33,7 @@ function useScreen(): ScreenSizes {
     txs: false,
     xs: false,
     sm: false,
+    smd: false,
     md: false,
     lg: false,
     xl: false,
@@ -42,6 +45,7 @@ function useScreen(): ScreenSizes {
       txs: window.matchMedia(breakpoints.txs),
       xs: window.matchMedia(breakpoints.xs),
       sm: window.matchMedia(breakpoints.sm),
+      smd: window.matchMedia(breakpoints.smd),
       md: window.matchMedia(breakpoints.md),
       lg: window.matchMedia(breakpoints.lg),
       xl: window.matchMedia(breakpoints.xl),
@@ -53,6 +57,7 @@ function useScreen(): ScreenSizes {
         txs: mediaQueries.txs.matches,
         xs: mediaQueries.xs.matches,
         sm: mediaQueries.sm.matches,
+        smd: mediaQueries.smd.matches,
         md: mediaQueries.md.matches,
         lg: mediaQueries.lg.matches,
         xl: mediaQueries.xl.matches,

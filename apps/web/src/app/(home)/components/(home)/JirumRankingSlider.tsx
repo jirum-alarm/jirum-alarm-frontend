@@ -20,6 +20,10 @@ const JirumRankingSlider = ({ products: { products } }: Props) => {
       <Swiper
         centeredSlides={true}
         slidesPerView={1.5577}
+        breakpoints={{
+          450: { slidesPerView: 2 },
+          520: { slidesPerView: 2.3 },
+        }}
         loop={true}
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
       >

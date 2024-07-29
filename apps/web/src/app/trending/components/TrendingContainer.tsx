@@ -9,8 +9,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
-import { useSuspenseQuery } from '@apollo/client';
-import { QueryMyCategories } from '@/graphql/auth';
 
 const TrendingContainer = ({
   categories,
@@ -88,8 +86,8 @@ export default TrendingContainer;
 
 const TrendingListSkeleton = () => {
   return (
-    <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5">
-      {Array.from({ length: 10 }).map((item, i) => (
+    <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
+      {Array.from({ length: 12 }).map((item, i) => (
         <div key={i} className="txs:w-[140px] xs:w-[162px]">
           <div className="flex items-center justify-center rounded-lg bg-gray-100 txs:h-[140px] xs:h-[162px]">
             <IllustStandingSmall />

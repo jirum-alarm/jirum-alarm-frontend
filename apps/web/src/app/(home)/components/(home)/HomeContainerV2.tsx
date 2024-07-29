@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 const HomeContainerV2 = () => {
   return (
-    <div className="mx-auto h-full max-w-screen-md pb-20">
+    <div className="mx-auto h-full max-w-[600px] pb-20">
       <HomeHeader />
       <div className="bg-gray-900">
         <HomeBackgroundHeader />

@@ -10,20 +10,18 @@ interface TrendingListProps {
   isActive: boolean;
 }
 
-const firstRenderingCount = 10;
-
 const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps) => {
-  const { products, liveProducts, loadingCallbackRef, isPending } = useTrendingViewModel({
-    categoryId,
-    isActive,
-  });
-
+  const { products, liveProducts, loadingCallbackRef, firstRenderingCount, isPending } =
+    useTrendingViewModel({
+      categoryId,
+      isActive,
+    });
   const collectProduct = useCollectProduct();
   const swiper = useSwiper();
 
   return (
     <div>
-      <div className="grid grid-cols-2 gap-x-2 gap-y-2">
+      <div className="grid grid-cols-2 justify-items-center gap-x-2 gap-y-2 smd:grid-cols-3">
         {products
           ?.slice(0, firstRenderingCount)
           .map((product, i) => (
@@ -36,7 +34,7 @@ const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps)
             />
           ))}
       </div>
-      {liveProducts && (
+      {liveProducts ? (
         <div className="py-10">
           <div className="flex w-full items-center justify-between pb-4 ">
             <span className="font-semibold text-gray-900">{`‘${categoryName}’ 실시간 핫딜`}</span>
@@ -65,9 +63,11 @@ const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps)
             </Swiper>
           </div>
         </div>
+      ) : (
+        <div className="h-2" />
       )}
 
-      <div className="grid grid-cols-2 gap-x-2 gap-y-2">
+      <div className="grid grid-cols-2 justify-items-center gap-x-2 gap-y-2 smd:grid-cols-3">
         {products
           ?.slice(firstRenderingCount)
           .map((product, i) => (
@@ -80,7 +80,7 @@ const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps)
             />
           ))}
       </div>
-      <div className="flex w-full items-center justify-center pb-6 pt-3" ref={loadingCallbackRef}>
+      <div className="flex w-full items-center justify-center py-6" ref={loadingCallbackRef}>
         {isPending && <LoadingSpinner />}
       </div>
     </div>

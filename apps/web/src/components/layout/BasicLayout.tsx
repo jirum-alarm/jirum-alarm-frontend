@@ -35,7 +35,7 @@ const BasicLayout = ({
   return (
     <div
       className={cn(
-        'relative mx-auto grid max-w-[480px] grid-cols-1 bg-white',
+        'relative mx-auto grid max-w-[600px] grid-cols-1 bg-white',
         fullScreen && 'min-h-screen',
         {
           'pb-20': hasBottomNav,
@@ -43,7 +43,7 @@ const BasicLayout = ({
       )}
     >
       {header ?? (
-        <header className="fixed top-0 z-50 flex h-11 w-full max-w-[480px] items-center justify-center bg-white text-black">
+        <header className="fixed top-0 z-50 flex h-11 w-full max-w-[600px] items-center justify-center bg-white text-black">
           {hasBackButton && <div className="absolute left-0">{<BackButton />}</div>}
           {title && <h1 className="text-base font-semibold text-black">{title}</h1>}
         </header>
