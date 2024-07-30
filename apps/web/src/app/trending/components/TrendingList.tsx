@@ -1,8 +1,7 @@
-import ProductTrendingImageCard from '@/features/products/components/ProductTrendingImageCard';
 import useTrendingViewModel from '../hooks/useTrendingViewModel';
 import { LoadingSpinner } from '@/components/common/icons';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import { ProductImageCard, useCollectProduct } from '@/features/products';
+import { ProductImageCard, ProductTrendingImageCard, useCollectProduct } from '@/features/products';
 
 interface TrendingListProps {
   categoryId: number | null;

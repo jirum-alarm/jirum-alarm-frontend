@@ -1,22 +1,20 @@
-import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { displayTime } from '@/util/displayTime';
-import React from 'react';
+import ImageWithFallback from '@/components/ImageWithFallback';
 
-export const ProductTrendingImageCard = ({
+export function ProductLiveHotdealsImageCard({
   product,
-  rank,
   collectProduct,
   logging,
 }: {
   product: IProduct;
-  rank: number;
   collectProduct: (productId: number) => void;
+  type?: 'product' | 'hotDeal';
   logging: { page: keyof typeof EVENT.PAGE };
-}) => {
+}) {
   const handleClick = () => {
     collectProduct(+product.id);
 
@@ -25,22 +23,21 @@ export const ProductTrendingImageCard = ({
       page: EVENT.PAGE[logging.page],
     });
   };
+
   return (
     <a
       href={product.url}
-      className="txs:w-[140px] xs:w-[162px]"
+      className={cn('txs:w-[140px] xs:w-[162px]')}
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
     >
       <div
-        className={
-          'relative overflow-hidden rounded-lg border border-gray-200 txs:h-[140px] xs:h-[162px]'
-        }
+        className={cn({
+          'relative overflow-hidden rounded-lg border border-gray-200': true,
+          'txs:h-[140px] xs:h-[162px]': true,
+        })}
       >
-        <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm text-primary-500">
-          {rank}
-        </div>
         <div
           className={cn({
             'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
@@ -55,8 +52,8 @@ export const ProductTrendingImageCard = ({
         <ImageWithFallback
           src={product?.thumbnail ?? ''}
           alt={product.title}
-          width={162}
-          height={162}
+          fill
+          className="object-cover"
         />
       </div>
       <div className="flex flex-col">
@@ -77,4 +74,4 @@ export const ProductTrendingImageCard = ({
       </div>
     </a>
   );
-};
+}

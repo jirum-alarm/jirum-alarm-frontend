@@ -3,6 +3,8 @@ import { QueryProductsRanking } from '@/graphql';
 import { IProductsRankingOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
 import JirumRankingSlider from './JirumRankingSlider';
 import { getDayBefore } from '@/util/date';
+import Link from 'next/link';
+import { PAGE } from '@/constants/page';
 
 const JirumRankingContainer = async () => {
   const { data } = await getClient().query<IProductsRankingOutput>({
@@ -18,7 +20,9 @@ const JirumRankingContainer = async () => {
     <div className="w-full">
       <div className="flex items-center justify-between px-4 pb-5 pt-2">
         <h2 className="text-lg font-semibold text-gray-900">지름알림 랭킹</h2>
-        <span className="text-sm text-gray-500">더보기</span>
+        <Link className="text-sm text-gray-500" href={PAGE.TRENDING}>
+          더보기
+        </Link>
       </div>
 
       <JirumRankingSlider products={data} />
