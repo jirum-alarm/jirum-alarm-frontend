@@ -61,7 +61,7 @@ function ProductImage({ product }: { product: IProduct }) {
       {product.thumbnail ? (
         <Image src={product.thumbnail} width={480} height={480} alt={product.title} />
       ) : (
-        <div>no Image</div>
+        <div></div>
       )}
     </div>
   );
@@ -235,7 +235,7 @@ function HotdealIndex({ product }: { product: IProduct }) {
       <div className="flex justify-between gap-x-16 rounded border p-5 pr-8">
         <div>
           <div className="pt-3">
-            <HotdeealChip type={lowerThen(lowPrice, productPrice)} />
+            <HotdealChip type={lowerThen(lowPrice, productPrice)} />
             <div className="h-3"></div>
             <p className="text-nowrap txs:text-xs xs:text-sm">
               다나와 처죄가보다
@@ -278,7 +278,7 @@ function HotdealIndex({ product }: { product: IProduct }) {
   );
 }
 
-function HotdeealChip({ type }: { type: '비쌈' | '중박' | '대박' | '초대박' }) {
+function HotdealChip({ type }: { type: '비쌈' | '중박' | '대박' | '초대박' }) {
   return (
     <span
       className={cn(
@@ -458,7 +458,12 @@ function CommunityReaction({ product }: { product: IProduct }) {
             </div>
           </div>
         </div>
-        <a href={product.url} className="flex items-center justify-end pt-5">
+        <a
+          href={product.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-end pt-5"
+        >
           <p className="pt-0.5 text-xs text-gray-500">
             ‘{product.provider.nameKr ?? '커뮤니티'}’실제 반응 보러가기
           </p>

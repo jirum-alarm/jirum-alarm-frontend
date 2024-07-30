@@ -28,12 +28,7 @@ export function ProductRankingImageCard({
   };
 
   return (
-    <a
-      href={PAGE.DETAIL + '/' + product.id}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={handleClick}
-    >
+    <a href={PAGE.DETAIL + '/' + product.id} onClick={handleClick}>
       <div
         className={cn(
           `h-[340px] w-[240px] origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all`,

@@ -37,8 +37,6 @@ export function ProductImageCard({
         'txs:w-[140px] xs:w-[162px]': type === 'product',
         'w-[120px]': type === 'hotDeal',
       })}
-      target="_blank"
-      rel="noopener noreferrer"
       onClick={handleClick}
     >
       <div
