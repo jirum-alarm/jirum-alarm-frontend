@@ -28,8 +28,8 @@ export const EVENT = {
   },
   PAGE: {
     HOME: 'Home',
-    DETAIL: 'Detail',
     TRENDING: 'Trending',
+    DETAIL: 'Detail',
     SEARCH: 'Search',
     SEARCH_RESULT: 'Search Result',
     SEARCH_NOT_FOUND: 'Search Not Found',

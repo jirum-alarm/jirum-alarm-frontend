@@ -3,6 +3,7 @@ import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import ImageWithFallback from '@/components/ImageWithFallback';
+import { PAGE } from '@/constants/page';
 
 export function ProductRankingImageCard({
   product,
@@ -27,7 +28,12 @@ export function ProductRankingImageCard({
   };
 
   return (
-    <a href={product.url} target="_blank" rel="noopener noreferrer" onClick={handleClick}>
+    <a
+      href={PAGE.DETAIL + '/' + product.id}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={handleClick}
+    >
       <div
         className={cn(
           `h-[340px] w-[240px] origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all`,

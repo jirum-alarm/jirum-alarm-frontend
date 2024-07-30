@@ -32,7 +32,6 @@ export default function RelatedProducts({
           slidesPerView={2.5}
           breakpoints={{
             640: { slidesPerView: 2.7 },
-            1024: { slidesPerView: 5.5 },
           }}
         >
           {products?.map((product, i) => (

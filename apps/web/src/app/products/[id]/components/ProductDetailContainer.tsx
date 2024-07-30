@@ -303,9 +303,9 @@ function Won() {
       <path
         d="M2.19971 1L5.57471 10L8.94971 1L12.3247 10L15.6997 1"
         stroke="#101828"
-        stroke-width="1.5"
-        stroke-linecap="square"
-        stroke-linejoin="bevel"
+        strokeWidth="1.5"
+        strokeLinecap="square"
+        strokeLinejoin="bevel"
       />
       <path
         d="M1.2998 4.59961H3.0998"
@@ -326,11 +326,16 @@ function Won() {
 }
 
 function CommunityReaction({ product }: { product: IProduct }) {
+  const nanSafe = (num: number) => (isNaN(num) ? 0 : num);
   const positiveCount = product?.positiveCommunityReactionCount || 0;
   const negativeCount = product?.negativeCommunityReactionCount || 0;
+
   const allCount = positiveCount + negativeCount;
 
-  const positivePercent = (positiveCount / allCount) * 100;
+  const positivePercent = nanSafe((positiveCount / allCount) * 100);
+  const negativePercent = nanSafe((negativeCount / allCount) * 100);
+
+  const isPostiveMax = positivePercent === 100;
 
   return (
     <section>
@@ -442,22 +447,20 @@ function CommunityReaction({ product }: { product: IProduct }) {
         <div className="flex justify-between pt-2">
           <div className="relative h-7 w-full rounded-full bg-gray-100">
             <div
-              className="absolute h-full rounded-l-full bg-gray-900"
+              className={cn('absolute h-full rounded-l-full bg-gray-900', {
+                'rounded-full': isPostiveMax,
+              })}
               style={{ width: `${positivePercent}%`, transition: 'width 2s ease-in-out' }}
             ></div>
             <div className="relative flex h-full items-center justify-between px-2">
-              <span className="text-sm font-semibold text-primary-500">
-                {product.positiveCommunityReactionCount}%
-              </span>
-              <span className="right-2 text-sm text-gray-500">
-                {product.negativeCommunityReactionCount}%
-              </span>
+              <span className="text-sm font-semibold text-primary-500">{positivePercent}%</span>
+              <span className="right-2 text-sm text-gray-500">{negativePercent}%</span>
             </div>
           </div>
         </div>
         <a href={product.url} className="flex items-center justify-end pt-5">
           <p className="pt-0.5 text-xs text-gray-500">
-            '{product.provider.nameKr ?? '커뮤니티'}' 실제 반응 보러가기
+            ‘{product.provider.nameKr ?? '커뮤니티'}’실제 반응 보러가기
           </p>
           <svg
             xmlns="http://www.w3.org/2000/svg"

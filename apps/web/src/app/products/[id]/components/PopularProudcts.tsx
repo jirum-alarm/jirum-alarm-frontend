@@ -20,7 +20,9 @@ export default function PopularProducts({
 
   return (
     <section>
-      <h2 className="pb-5 font-semibold text-gray-900">‘{product.category}’에서 인기있는 상품</h2>
+      <h2 className="pb-5 font-semibold text-gray-900">
+        ‘{product.category || '기타'}’에서 인기있는 상품
+      </h2>
       <div
         onTouchStartCapture={(e) => {
           e.stopPropagation();
@@ -34,7 +36,6 @@ export default function PopularProducts({
           slidesPerView={2.5}
           breakpoints={{
             640: { slidesPerView: 2.7 },
-            1024: { slidesPerView: 5.5 },
           }}
         >
           {products?.map((product, i) => (

@@ -2,6 +2,8 @@ export enum PAGE {
   HOME = '/',
   TRENDING = '/trending',
 
+  DETAIL = '/products',
+
   LOGIN = '/login',
   LOGIN_BY_EMAIL = '/login/email',
   SIGNUP = '/signup',
