@@ -3,22 +3,35 @@ import { cn } from '@/lib/cn';
 import Image from 'next/image';
 import { displayTime } from '@/util/displayTime';
 import Button from '@/components/common/Button';
-import { QueryProduct, QueryProducts, QueryProductsRanking } from '@/graphql';
-import { getClient } from '@/lib/client';
-import { getDayBefore } from '@/util/date';
+import { getProductDetail } from '@/features/products/server/productDetail';
+import PopularProducts from './PopularProudcts';
+import { getProductRelated } from '@/features/products/server/productRelated';
+import { getProductPopular } from '@/features/products/server/productPopular';
+import RelatedProducts from './RelatedProducts';
 
 export default async function ProductDetailContainer({ id }: { id: string }) {
-  const { data } = await getClient().query<{ product: IProduct }>({
-    query: QueryProduct,
-    variables: {
-      id: +id,
-    },
-  });
+  const { data } = await getProductDetail(+id);
+  const { data: relatedProducts } = await getProductRelated(+id);
+  const { data: popularProducts } = await getProductPopular(data.product.categoryId ?? 0);
 
-  return <ProductDetaiLayout product={data.product} />;
+  return (
+    <ProductDetaiLayout
+      product={data.product}
+      relatedProducts={relatedProducts.togetherViewedProducts}
+      popularProducts={popularProducts.products}
+    />
+  );
 }
 
-function ProductDetaiLayout({ product }: { product: IProduct }) {
+function ProductDetaiLayout({
+  product,
+  relatedProducts,
+  popularProducts,
+}: {
+  product: IProduct;
+  relatedProducts: IProduct[];
+  popularProducts: IProduct[];
+}) {
   return (
     <main>
       <ProductImage product={product} />
@@ -28,8 +41,12 @@ function ProductDetaiLayout({ product }: { product: IProduct }) {
           <HotdealGuide product={product} />
           <HotdealIndex product={product} />
           <CommunityReaction product={product} />
-          {/* <RelatedProducts product={product} /> */}
-          {/* <PopularProducts product={product} /> */}
+          <RelatedProducts products={relatedProducts} logging={{ page: 'DETAIL' }} />
+          <PopularProducts
+            product={product}
+            products={popularProducts}
+            logging={{ page: 'DETAIL' }}
+          />
         </ProductInfoLayout>
         <BottomCTA product={product} />
         <div className="h-24"></div>
@@ -213,53 +230,51 @@ function HotdealIndex({ product }: { product: IProduct }) {
   }
 
   return (
-    <>
-      <section>
-        <h2 className="pb-3">핫딜 지수</h2>
-        <div className="flex justify-between gap-x-16 rounded border p-5 pr-8">
-          <div>
-            <div className="pt-3">
-              <HotdeealChip type={lowerThen(lowPrice, productPrice)} />
-              <div className="h-3"></div>
-              <p className="text-nowrap txs:text-xs xs:text-sm">
-                다나와 처죄가보다
-                <br />
-                <b>{chiperPrice}원</b> 저렴해요.
-              </p>
-            </div>
+    <section>
+      <h2 className="pb-3">핫딜 지수</h2>
+      <div className="flex justify-between gap-x-16 rounded border p-5 pr-8">
+        <div>
+          <div className="pt-3">
+            <HotdeealChip type={lowerThen(lowPrice, productPrice)} />
+            <div className="h-3"></div>
+            <p className="text-nowrap txs:text-xs xs:text-sm">
+              다나와 처죄가보다
+              <br />
+              <b>{chiperPrice}원</b> 저렴해요.
+            </p>
           </div>
-          <div className="flex">
-            <div className="flex flex-col items-end justify-between pr-2 text-xs text-gray-600">
-              <span>{lowPrice}원</span>
-              <div className="relative mr-3 rounded-full bg-gray-900 px-2.5 py-1.5 font-semibold text-primary-500">
-                <p className="text-nowrap txs:text-xs xs:text-sm">{productPrice}원</p>
-                <div className="absolute -right-1 top-1/2 -translate-y-1/2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="6"
-                    height="8"
-                    viewBox="0 0 6 8"
-                    fill="none"
-                  >
-                    <path d="M6 4L-3.26266e-07 7.4641L-2.34249e-08 0.535898L6 4Z" fill="#101828" />
-                  </svg>
-                </div>
+        </div>
+        <div className="flex">
+          <div className="flex flex-col items-end justify-between pr-2 text-xs text-gray-600">
+            <span>{lowPrice}원</span>
+            <div className="relative mr-3 rounded-full bg-gray-900 px-2.5 py-1.5 font-semibold text-primary-500">
+              <p className="text-nowrap txs:text-xs xs:text-sm">{productPrice}원</p>
+              <div className="absolute -right-1 top-1/2 -translate-y-1/2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="6"
+                  height="8"
+                  viewBox="0 0 6 8"
+                  fill="none"
+                >
+                  <path d="M6 4L-3.26266e-07 7.4641L-2.34249e-08 0.535898L6 4Z" fill="#101828" />
+                </svg>
               </div>
-              <span>{lowestPrice}원</span>
             </div>
-            <div className="flex h-36 w-4 rounded-3xl bg-gray-200">
-              <div className="flex h-full w-full flex-col items-center justify-between py-1">
-                <div className="h-1.5 w-1.5 rounded-full bg-white"></div>
-                <div className="flex h-8 w-8 items-center justify-center rounded-full border-4 border-gray-900 bg-primary-500 pt-0.5">
-                  <Won />
-                </div>
-                <div className="h-1.5 w-1.5 rounded-full bg-white"></div>
+            <span>{lowestPrice}원</span>
+          </div>
+          <div className="flex h-36 w-4 rounded-3xl bg-gray-200">
+            <div className="flex h-full w-full flex-col items-center justify-between py-1">
+              <div className="h-1.5 w-1.5 rounded-full bg-white"></div>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full border-4 border-gray-900 bg-primary-500 pt-0.5">
+                <Won />
               </div>
+              <div className="h-1.5 w-1.5 rounded-full bg-white"></div>
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
 
@@ -311,6 +326,12 @@ function Won() {
 }
 
 function CommunityReaction({ product }: { product: IProduct }) {
+  const positiveCount = product?.positiveCommunityReactionCount || 0;
+  const negativeCount = product?.negativeCommunityReactionCount || 0;
+  const allCount = positiveCount + negativeCount;
+
+  const positivePercent = (positiveCount / allCount) * 100;
+
   return (
     <section>
       <h2 className="pb-3">커뮤니티 반응</h2>
@@ -420,7 +441,10 @@ function CommunityReaction({ product }: { product: IProduct }) {
         </div>
         <div className="flex justify-between pt-2">
           <div className="relative h-7 w-full rounded-full bg-gray-100">
-            <div className="absolute h-full rounded-l-full bg-gray-900"></div>
+            <div
+              className="absolute h-full rounded-l-full bg-gray-900"
+              style={{ width: `${positivePercent}%`, transition: 'width 2s ease-in-out' }}
+            ></div>
             <div className="relative flex h-full items-center justify-between px-2">
               <span className="text-sm font-semibold text-primary-500">
                 {product.positiveCommunityReactionCount}%
@@ -431,38 +455,59 @@ function CommunityReaction({ product }: { product: IProduct }) {
             </div>
           </div>
         </div>
-        <div></div>
+        <a href={product.url} className="flex items-center justify-end pt-5">
+          <p className="pt-0.5 text-xs text-gray-500">
+            '{product.provider.nameKr ?? '커뮤니티'}' 실제 반응 보러가기
+          </p>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+            <path
+              d="M5.71436 12.5706L10.2858 7.99916L5.71436 3.42773"
+              stroke="#98A2B3"
+              strokeLinecap="square"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </a>
       </div>
-    </section>
-  );
-}
-
-function RelatedProducts({ product }: { product: IProduct }) {
-  return (
-    <section>
-      <h2>다른 고객이 함께 본 상품</h2>
-    </section>
-  );
-}
-
-function PopularProducts({ product }: { product: IProduct }) {
-  return (
-    <section>
-      <h2>‘{product.category}’에서 인기있는 상품</h2>
     </section>
   );
 }
 
 function BottomCTA({ product }: { product: IProduct }) {
   return (
-    <div className="fixed bottom-0 flex w-full max-w-[480px] gap-x-2 bg-white px-5 pb-6 pt-4 shadow-2xl">
+    <div className="fixed bottom-0 z-40 flex w-full max-w-[480px] gap-x-2 bg-white px-5 pb-6 pt-4 shadow-2xl">
       <Button
         variant="outlined"
         className="flex w-[52px] flex-col items-center justify-center px-2 py-1"
       >
+        <HeartIcon />
         <span className="text-[11px] leading-4 text-gray-900">찜하기</span>
       </Button>
-      <Button>구매하러 가기</Button>
+      <a href={product.detailUrl} className="w-full">
+        <Button>구매하러 가기</Button>
+      </a>
     </div>
+  );
+}
+
+function HeartIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M11.9931 5.33265C10.0271 3.03418 6.74861 2.4159 4.2853 4.52061C1.82199 6.62531 1.47519 10.1443 3.40964 12.6335C5.018 14.7032 9.88548 19.0682 11.4808 20.481C11.6593 20.639 11.7485 20.7181 11.8526 20.7491C11.9434 20.7762 12.0428 20.7762 12.1337 20.7491C12.2378 20.7181 12.327 20.639 12.5055 20.481C14.1008 19.0682 18.9683 14.7032 20.5766 12.6335C22.5111 10.1443 22.2066 6.60317 19.701 4.52061C17.1953 2.43804 13.9592 3.03418 11.9931 5.33265Z"
+        stroke="#344054"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }

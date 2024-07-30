@@ -124,6 +124,29 @@ export const QueryCommunityRandomRankingProducts = gql`
   }
 `;
 
+export const QueryTogetherViewedProducts = gql`
+  query togetherViewedProducts($limit: Int!, $productId: Int!) {
+    togetherViewedProducts(limit: $limit, productId: $productId) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
+    }
+  }
+`;
+
 export const MutationCollectProduct = gql`
   mutation MutationCollectProduct($productId: Int!) {
     collectProduct(productId: $productId)

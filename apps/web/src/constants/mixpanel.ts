@@ -28,6 +28,7 @@ export const EVENT = {
   },
   PAGE: {
     HOME: 'Home',
+    DETAIL: 'Detail',
     TRENDING: 'Trending',
     SEARCH: 'Search',
     SEARCH_RESULT: 'Search Result',
