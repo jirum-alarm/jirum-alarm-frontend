@@ -60,7 +60,7 @@ const BottomNav = ({ type }: { type: NAV_TYPE }) => {
     >
       <ul className="flex items-center justify-around">
         {BottomNavList.map((nav, i) => (
-          <li className="flex flex-1 items-center justify-center pb-[22px] pt-3" key={i}>
+          <li className="flex flex-1 items-center justify-center py-3" key={i}>
             <Link
               className={cn(
                 // px-5
