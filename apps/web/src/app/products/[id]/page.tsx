@@ -20,7 +20,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   const product = data.product;
 
   const title = `${product.title} | 지름알림`;
-  const description = product.guides?.map((guide) => guide.content).join(', ') || '';
+  const description =
+    product.guides?.map((guide) => guide.content).join(', ') || '핫딜 정보를 알려드려요!';
   const images = product.thumbnail || './opengraph-image.png';
 
   return {
