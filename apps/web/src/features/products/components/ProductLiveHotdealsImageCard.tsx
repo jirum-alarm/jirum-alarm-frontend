@@ -49,6 +49,7 @@ export function ProductLiveHotdealsImageCard({
           alt={product.title}
           fill
           className="object-cover"
+          sizes="300px"
         />
       </div>
       <div className="flex flex-col">
