@@ -3,6 +3,7 @@ import ProductDetailContainer from './components/ProductDetailContainer';
 import { getFeatureFlag } from '@/app/actions/posthog';
 import { Metadata } from 'next';
 import { getProductDetail } from '@/features/products/server/productDetail';
+import { SERVICE_URL } from '@/constants/env';
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const { flags } = await getFeatureFlag();
@@ -28,6 +29,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     openGraph: {
       title,
       description,
+      url: `${SERVICE_URL}/products/${id}`,
+      type: 'website',
       images: [{ url: image }],
     },
     icons: {
