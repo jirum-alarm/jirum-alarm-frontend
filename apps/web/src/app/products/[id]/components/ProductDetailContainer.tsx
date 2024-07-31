@@ -58,7 +58,7 @@ function ProductDetaiLayout({
 
 function ProductImage({ product }: { product: IProduct }) {
   return (
-    <div className="sticky top-0">
+    <div className="sticky top-11">
       {product.thumbnail ? (
         <Image src={product.thumbnail} width={480} height={480} alt={product.title} />
       ) : (
@@ -395,7 +395,7 @@ function CommunityReaction({ product }: { product: IProduct }) {
           </div>
 
           <div className="inline-flex items-center gap-x-1">
-            <span className="text-gray-600">조금 아쉬어요</span>
+            <span className="text-gray-600">조금 아쉬워요</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
