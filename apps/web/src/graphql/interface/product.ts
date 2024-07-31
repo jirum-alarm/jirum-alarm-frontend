@@ -26,7 +26,7 @@ export interface IProductGuide {
 }
 
 export interface IProduct {
-  id: number;
+  id: string;
   providerId: number;
   category?: string;
   categoryId?: number;
@@ -48,6 +48,7 @@ export interface IProduct {
   guides?: IProductGuide[];
   prices?: IProductPrice[];
   searchAfter?: string[];
+  isMyWhishlist: boolean;
 }
 
 export interface IProductOutput {

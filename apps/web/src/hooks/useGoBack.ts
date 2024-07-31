@@ -5,11 +5,9 @@ import { useCallback } from 'react';
 const useGoBack = (backTo: PAGE = PAGE.HOME) => {
   const router = useRouter();
   const goBack = useCallback(() => {
-    if (window.history.length > 1) {
-      router.back();
-    } else {
-      router.push(backTo);
-    }
+    document.referrer && document.referrer.indexOf('jirum-alarm.com') != -1
+      ? router.back()
+      : router.push(backTo);
   }, [router, backTo]);
   return goBack;
 };

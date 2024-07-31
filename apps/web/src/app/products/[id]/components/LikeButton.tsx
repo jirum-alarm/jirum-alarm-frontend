@@ -1,21 +1,46 @@
 'use client';
 
 import Button from '@/components/common/Button';
+import { PAGE } from '@/constants/page';
+import { useAddWishlist, useRemoveWishlist } from '@/features/products';
+import { useMe } from '@/features/users';
+import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function LikeButton() {
-  const [isLiked, setIsLiked] = useState(false);
+export default function LikeButton({ product }: { product: IProduct }) {
+  const [isLiked, setIsLiked] = useState(product.isMyWhishlist);
 
-  const handleLike = () => {
-    setIsLiked((prev) => !prev);
+  const productId = +product.id;
+
+  const router = useRouter();
+
+  const addWishlist = useAddWishlist();
+  const removeWishlist = useRemoveWishlist();
+  const me = useMe();
+
+  const handleClickWishlist = () => {
+    if (!me.data) {
+      router.push(PAGE.LOGIN);
+    }
+
+    if (isLiked) {
+      removeWishlist(productId);
+      setIsLiked(false);
+    }
+
+    if (!isLiked) {
+      addWishlist(productId);
+      setIsLiked(true);
+    }
   };
 
   return (
     <Button
       variant="outlined"
-      onClick={handleLike}
-      className="flex w-[52px] flex-col items-center justify-center px-2 py-1"
+      onClick={handleClickWishlist}
+      className="flex w-[52px] min-w-[52px] flex-col items-center justify-center border-gray-300 px-2 py-1"
     >
       <HeartIcon isLiked={isLiked} />
       <span className="text-[11px] leading-4 text-gray-900">찜하기</span>
@@ -34,7 +59,7 @@ function HeartIcon({ isLiked }: { isLiked: boolean }) {
       className={cn({
         'fill-error-400': isLiked,
       })}
-      style={{ transition: 'fill 0.3s ease' }}
+      style={{ transition: 'fill 0.3s ease-out' }}
     >
       <path
         fillRule="evenodd"
@@ -45,7 +70,7 @@ function HeartIcon({ isLiked }: { isLiked: boolean }) {
         strokeLinecap="round"
         strokeLinejoin="round"
         className={cn({ 'stroke-error-400': isLiked })}
-        style={{ transition: 'stroke 0.1s ease' }}
+        style={{ transition: 'stroke 0.1s ease-out' }}
       />
     </svg>
   );

@@ -4,17 +4,16 @@ import Image from 'next/image';
 import { displayTime } from '@/util/displayTime';
 import Button from '@/components/common/Button';
 import { getProductDetail } from '@/features/products/server/productDetail';
-import PopularProducts from './PopularProudcts';
 import { getProductRelated } from '@/features/products/server/productRelated';
 import { getProductPopular } from '@/features/products/server/productPopular';
 import RelatedProducts from './RelatedProducts';
+import PopularProducts from './PopularProudcts';
 import LikeButton from './LikeButton';
 
 export default async function ProductDetailContainer({ id }: { id: string }) {
   const { data } = await getProductDetail(+id);
   const { data: relatedProducts } = await getProductRelated(+id);
   const { data: popularProducts } = await getProductPopular(data.product.categoryId ?? 0);
-
   return (
     <ProductDetaiLayout
       product={data.product}
@@ -34,33 +33,35 @@ function ProductDetaiLayout({
   popularProducts: IProduct[];
 }) {
   return (
-    <main>
-      <ProductImage product={product} />
-      <div className="relative z-10 mt-[-32px] w-full rounded-t-3xl bg-white pt-8">
-        <ProductInfoLayout>
-          <ProductInfo product={product} />
-          <HotdealGuide product={product} />
-          <HotdealIndex product={product} />
-          <CommunityReaction product={product} />
-          <RelatedProducts products={relatedProducts} logging={{ page: 'DETAIL' }} />
-          <PopularProducts
-            product={product}
-            products={popularProducts}
-            logging={{ page: 'DETAIL' }}
-          />
-        </ProductInfoLayout>
-        <BottomCTA product={product} />
-        <div className="h-24"></div>
-      </div>
-    </main>
+    <>
+      <main className="border-x border-t border-gray-100 pb-7">
+        <ProductImage product={product} />
+        <div className="relative z-10 mt-[-32px] w-full rounded-t-3xl bg-white pt-8">
+          <ProductInfoLayout>
+            <ProductInfo product={product} />
+            <HotdealGuide product={product} />
+            <HotdealIndex product={product} />
+            <CommunityReaction product={product} />
+            <RelatedProducts products={relatedProducts} logging={{ page: 'DETAIL' }} />
+            <PopularProducts
+              product={product}
+              products={popularProducts}
+              logging={{ page: 'DETAIL' }}
+            />
+          </ProductInfoLayout>
+          <BottomCTA product={product} />
+        </div>
+      </main>
+      <div className="h-22"></div>
+    </>
   );
 }
 
 function ProductImage({ product }: { product: IProduct }) {
   return (
-    <div className="sticky top-11">
+    <div className="sticky top-11 px-0.5">
       {product.thumbnail ? (
-        <Image src={product.thumbnail} width={480} height={480} alt={product.title} />
+        <Image src={product.thumbnail} width={600} height={375} alt={product.title} />
       ) : (
         <div></div>
       )}
@@ -490,8 +491,8 @@ function CommunityReaction({ product }: { product: IProduct }) {
 
 function BottomCTA({ product }: { product: IProduct }) {
   return (
-    <div className="fixed bottom-0 z-40 flex w-full max-w-[480px] gap-x-2 bg-white px-5 pb-6 pt-4 shadow-2xl">
-      <LikeButton />
+    <div className="fixed bottom-0 z-40 ml-[-1px] flex w-full max-w-[600px] gap-x-2 border border-gray-100 bg-white px-5 pb-6 pt-4">
+      <LikeButton product={product} />
 
       <a href={product.detailUrl} className="w-full">
         <Button>구매하러 가기</Button>
