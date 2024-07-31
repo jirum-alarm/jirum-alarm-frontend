@@ -4,7 +4,7 @@ import { ArrowLeft } from '../common/icons';
 import useGoBack from '@/hooks/useGoBack';
 import { PAGE } from '@/constants/page';
 
-const BackButton = ({ backTo }: { backTo: PAGE }) => {
+const BackButton = ({ backTo }: { backTo?: PAGE }) => {
   const goBack = useGoBack(backTo);
 
   return (

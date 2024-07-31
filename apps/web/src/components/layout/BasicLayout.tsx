@@ -32,7 +32,7 @@ const BasicLayout = ({
   hasBottomNav,
   navType,
   header,
-  backTo = PAGE.HOME,
+  backTo,
   fullScreen = true,
 }: Props) => {
   return (
