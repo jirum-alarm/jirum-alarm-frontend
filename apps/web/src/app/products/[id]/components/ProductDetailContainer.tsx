@@ -8,6 +8,7 @@ import PopularProducts from './PopularProudcts';
 import { getProductRelated } from '@/features/products/server/productRelated';
 import { getProductPopular } from '@/features/products/server/productPopular';
 import RelatedProducts from './RelatedProducts';
+import LikeButton from './LikeButton';
 
 export default async function ProductDetailContainer({ id }: { id: string }) {
   const { data } = await getProductDetail(+id);
@@ -57,7 +58,7 @@ function ProductDetaiLayout({
 
 function ProductImage({ product }: { product: IProduct }) {
   return (
-    <div>
+    <div className="sticky top-0">
       {product.thumbnail ? (
         <Image src={product.thumbnail} width={480} height={480} alt={product.title} />
       ) : (
@@ -465,7 +466,7 @@ function CommunityReaction({ product }: { product: IProduct }) {
           className="flex items-center justify-end pt-5"
         >
           <p className="pt-0.5 text-xs text-gray-500">
-            ‘{product.provider.nameKr ?? '커뮤니티'}’실제 반응 보러가기
+            ‘{product.provider.nameKr ?? '커뮤니티'}’ 실제 반응 보러가기
           </p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -490,32 +491,11 @@ function CommunityReaction({ product }: { product: IProduct }) {
 function BottomCTA({ product }: { product: IProduct }) {
   return (
     <div className="fixed bottom-0 z-40 flex w-full max-w-[480px] gap-x-2 bg-white px-5 pb-6 pt-4 shadow-2xl">
-      <Button
-        variant="outlined"
-        className="flex w-[52px] flex-col items-center justify-center px-2 py-1"
-      >
-        <HeartIcon />
-        <span className="text-[11px] leading-4 text-gray-900">찜하기</span>
-      </Button>
+      <LikeButton />
+
       <a href={product.detailUrl} className="w-full">
         <Button>구매하러 가기</Button>
       </a>
     </div>
-  );
-}
-
-function HeartIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M11.9931 5.33265C10.0271 3.03418 6.74861 2.4159 4.2853 4.52061C1.82199 6.62531 1.47519 10.1443 3.40964 12.6335C5.018 14.7032 9.88548 19.0682 11.4808 20.481C11.6593 20.639 11.7485 20.7181 11.8526 20.7491C11.9434 20.7762 12.0428 20.7762 12.1337 20.7491C12.2378 20.7181 12.327 20.639 12.5055 20.481C14.1008 19.0682 18.9683 14.7032 20.5766 12.6335C22.5111 10.1443 22.2066 6.60317 19.701 4.52061C17.1953 2.43804 13.9592 3.03418 11.9931 5.33265Z"
-        stroke="#344054"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }
