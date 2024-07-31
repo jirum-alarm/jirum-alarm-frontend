@@ -3,7 +3,6 @@ import ProductDetailContainer from './components/ProductDetailContainer';
 import { getFeatureFlag } from '@/app/actions/posthog';
 import { Metadata } from 'next';
 import { getProductDetail } from '@/features/products/server/productDetail';
-import { SERVICE_URL } from '@/constants/env';
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const { flags } = await getFeatureFlag();
@@ -22,20 +21,18 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   const title = `${product.title} | 지름알림`;
   const description =
     product.guides?.map((guide) => guide.content).join(', ') || '핫딜 정보를 알려드려요!';
-  const images = product.thumbnail || './opengraph-image.png';
+  const image = product.thumbnail || '/opengraph-image.png';
 
   return {
     title,
     openGraph: {
       title,
       description,
-      images: [images],
+      images: [{ url: image }],
     },
     icons: {
       icon: '/icon.png',
     },
-
-    metadataBase: new URL(SERVICE_URL),
   };
 }
 
