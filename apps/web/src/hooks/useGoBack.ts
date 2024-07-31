@@ -1,11 +1,16 @@
+import { PAGE } from '@/constants/page';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
-const useGoBack = () => {
+const useGoBack = (backTo: PAGE) => {
   const router = useRouter();
   const goBack = useCallback(() => {
-    router.back();
-  }, [router]);
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push(backTo);
+    }
+  }, [router, backTo]);
   return goBack;
 };
 
