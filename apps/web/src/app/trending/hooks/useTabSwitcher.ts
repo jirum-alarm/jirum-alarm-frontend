@@ -1,5 +1,5 @@
 import useMoveListCenter from '@/hooks/useMoveListCenter';
-import { useState, useRef, startTransition } from 'react';
+import { useState, useRef } from 'react';
 import Swiper from 'swiper';
 
 const useTabSwitcher = () => {
@@ -17,17 +17,6 @@ const useTabSwitcher = () => {
     moveListCenter({ offsetLeft, offsetWidth });
   };
 
-  // const handleSwitching = (index: number, type: 'move' | 'end') => {
-  //   startTransition(() => {
-  //     const _index = Math.round(index);
-  //     if (type === 'end') {
-  //       setActiveTab(_index);
-  //     }
-  //     if (type == 'move') {
-  //       setTargetIndex(_index);
-  //     }
-  //   });
-  // };
   const handleProgressSwiper = (swiper: Swiper, progress: number) => {
     const currentTranslate = swiper.translate;
     const slideWidth = swiper.width;

@@ -2,7 +2,6 @@ import BasicLayout from '@/components/layout/BasicLayout';
 import { NAV_TYPE } from '@/components/layout/BottomNav';
 import TopButton from '@/components/TopButton';
 import TrendingPageHeader from './components/TrendingPageHeader';
-// import { getMyCategories } from '@/features/users/useCategories';
 import TrendingContainer from './components/TrendingContainer';
 import { getMyCategories } from '@/features/users/server/categories';
 
