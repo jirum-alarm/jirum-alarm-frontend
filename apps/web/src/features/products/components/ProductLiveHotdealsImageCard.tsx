@@ -27,17 +27,12 @@ export function ProductLiveHotdealsImageCard({
   return (
     <a
       href={product.url}
-      className={cn('txs:w-[140px] xs:w-[162px]')}
+      className={cn('w-full')}
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
     >
-      <div
-        className={cn({
-          'relative overflow-hidden rounded-lg border border-gray-200': true,
-          'txs:h-[140px] xs:h-[162px]': true,
-        })}
-      >
+      <div className={'relative aspect-square overflow-hidden rounded-lg border border-gray-200'}>
         <div
           className={cn({
             'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
@@ -59,17 +54,20 @@ export function ProductLiveHotdealsImageCard({
       <div className="flex flex-col">
         <span
           className={cn({
-            'line-clamp-2 h-12 break-words pt-2 text-sm text-gray-700': true,
+            'line-clamp-2 h-12 break-words pt-2 text-sm text-gray-700 pc-sm:h-16 pc-sm:text-xl':
+              true,
           })}
         >
           {product.title}
         </span>
         <div className="flex items-center pt-1">
-          <span className="line-clamp-1 max-w-[98px] text-lg font-semibold text-gray-900">
+          <span className="line-clamp-1 max-w-[98px] text-lg font-semibold text-gray-900 pc-sm:text-2xl">
             {product?.price ?? ''}
           </span>
           {product?.price && <span className="w-2"></span>}
-          <span className="text-sm text-gray-400">{displayTime(product.postedAt)}</span>
+          <span className="text-sm text-gray-400 pc-sm:text-base">
+            {displayTime(product.postedAt)}
+          </span>
         </div>
       </div>
     </a>

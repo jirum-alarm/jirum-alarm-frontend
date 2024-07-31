@@ -9,10 +9,9 @@ const LiveHotDealContainer = () => {
         <h2 className="text-lg font-semibold text-gray-900">실시간 핫딜</h2>
       </div>
       <div className="pb-5">
-        <LiveHotDealListSkeleton />
-        {/* <Suspense fallback={<LiveHotDealListSkeleton />}>
-        <LiveHotDealList />
-      </Suspense> */}
+        <Suspense fallback={<LiveHotDealListSkeleton />}>
+          <LiveHotDealList />
+        </Suspense>
       </div>
     </div>
   );
