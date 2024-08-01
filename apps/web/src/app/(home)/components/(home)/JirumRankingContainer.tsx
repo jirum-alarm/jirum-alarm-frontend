@@ -1,14 +1,14 @@
 import { getClient } from '@/lib/client';
-import { QueryProductsRanking } from '@/graphql';
-import { IProductsRankingOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
+import { QueryRankingProducts } from '@/graphql';
+import { IRankingProductsOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
 import JirumRankingSlider from './JirumRankingSlider';
 import { getDayBefore } from '@/util/date';
 import Link from 'next/link';
 import { PAGE } from '@/constants/page';
 
 const JirumRankingContainer = async () => {
-  const { data } = await getClient().query<IProductsRankingOutput>({
-    query: QueryProductsRanking,
+  const { data } = await getClient().query<IRankingProductsOutput>({
+    query: QueryRankingProducts,
     variables: {
       limit: 10,
       orderBy: ProductOrderType.COMMUNITY_RANKING,
