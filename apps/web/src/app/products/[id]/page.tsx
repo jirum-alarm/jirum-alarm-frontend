@@ -8,10 +8,8 @@ import { SERVICE_URL } from '@/constants/env';
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const { flags } = await getFeatureFlag();
 
-  if (flags.DETAIL_PAGE_RENEWAL) {
-    return {
-      title: '지름알림',
-    };
+  if (!flags.DETAIL_PAGE_RENEWAL) {
+    return {};
   }
 
   const id = params.id;
