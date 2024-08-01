@@ -9,6 +9,7 @@ import { mp } from '@/lib/mixpanel';
 import { IllustStanding, IllustStandingSmall } from '@/components/common/icons';
 import { displayTime } from '@/util/displayTime';
 import { PAGE } from '@/constants/page';
+import Link from 'next/link';
 
 export function ProductImageCard({
   product,
@@ -18,7 +19,7 @@ export function ProductImageCard({
 }: {
   product: IProduct;
   collectProduct: (productId: number) => void;
-  type?: 'product' | 'hotDeal';
+  type?: 'product' | 'hotDeal' | 'product-small';
   logging: { page: keyof typeof EVENT.PAGE };
 }) {
   const handleClick = () => {
@@ -31,8 +32,9 @@ export function ProductImageCard({
   };
 
   return (
-    <a
+    <Link
       href={PAGE.DETAIL + '/' + product.id}
+      prefetch={false}
       className={cn({
         'txs:w-[140px] xs:w-[162px]': type === 'product',
         'w-[120px]': type === 'hotDeal',
@@ -81,7 +83,7 @@ export function ProductImageCard({
           )}
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 

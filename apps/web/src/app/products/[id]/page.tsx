@@ -4,6 +4,7 @@ import { getFeatureFlag } from '@/app/actions/posthog';
 import { Metadata } from 'next';
 import { getProductDetail } from '@/features/products/server/productDetail';
 import { SERVICE_URL } from '@/constants/env';
+import ProductDetailPageHeader from './components/ProductDeatilPageHeader';
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const { flags } = await getFeatureFlag();
@@ -40,9 +41,18 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 export default async function ProductDetail({ params }: { params: { id: string } }) {
   const { flags } = await getFeatureFlag();
 
+  if (!flags.DETAIL_PAGE_RENEWAL) {
+    return;
+  }
+
+  const id = params.id;
+
+  const { data } = await getProductDetail(+id);
+  const product = data.product;
+
   return (
-    <BasicLayout hasBackButton>
-      {flags.DETAIL_PAGE_RENEWAL && <ProductDetailContainer id={params.id} />}
+    <BasicLayout header={<ProductDetailPageHeader product={product} />}>
+      <ProductDetailContainer id={params.id} />
     </BasicLayout>
   );
 }

@@ -33,7 +33,6 @@ export default function PopularProducts({
       >
         <Swiper
           spaceBetween={12}
-          slidesPerView={2.5}
           breakpoints={{
             300: { slidesPerView: 2.7 },
             450: { slidesPerView: 3.7 },
@@ -42,6 +41,7 @@ export default function PopularProducts({
           {products?.map((product, i) => (
             <SwiperSlide key={i}>
               <ProductImageCard
+                type="hotDeal"
                 product={product}
                 collectProduct={collectProduct}
                 logging={{ page: logging.page }}
