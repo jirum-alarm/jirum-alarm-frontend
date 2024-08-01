@@ -19,7 +19,7 @@ export function ProductImageCard({
 }: {
   product: IProduct;
   collectProduct: (productId: number) => void;
-  type?: 'product' | 'hotDeal' | 'product-small';
+  type?: 'product' | 'hotDeal';
   logging: { page: keyof typeof EVENT.PAGE };
 }) {
   const handleClick = () => {
