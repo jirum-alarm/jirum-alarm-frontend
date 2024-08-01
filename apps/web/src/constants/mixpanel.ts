@@ -10,6 +10,24 @@ export const EVENT = {
       RECOMMENDATION: 'Recommendation',
     },
   },
+  PRODUCT_WISH: {
+    NAME: 'Product Wish',
+    TYPE: {
+      NOT_LOGGED_IN: 'Not Logged In',
+      ADD: 'Add',
+      REMOVE: 'Remove',
+    },
+  },
+  PRODUCT_PURCHASE_LINK_BROWSE: {
+    NAME: 'Product Purchase Link Browse',
+  },
+  PRODUCT_SHARE: {
+    NAME: 'Product Share',
+    TYPE: {
+      SHARE_API: 'SHARE_API',
+      NOT_SHARE_API: 'NOT_SHARE_API',
+    },
+  },
   CATEGORY_CHECK: {
     NAME: 'Category Check',
   },

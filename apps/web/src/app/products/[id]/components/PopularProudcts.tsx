@@ -5,16 +5,13 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import React from 'react';
 import { ProductImageCard, useCollectProduct } from '@/features/products';
-import { EVENT } from '@/constants/mixpanel';
 
 export default function PopularProducts({
   product,
   products,
-  logging,
 }: {
   product: IProduct;
   products: IProduct[];
-  logging: { page: keyof typeof EVENT.PAGE };
 }) {
   const collectProduct = useCollectProduct();
 
@@ -44,7 +41,7 @@ export default function PopularProducts({
                 type="hotDeal"
                 product={product}
                 collectProduct={collectProduct}
-                logging={{ page: logging.page }}
+                logging={{ page: 'DETAIL' }}
               />
             </SwiperSlide>
           ))}

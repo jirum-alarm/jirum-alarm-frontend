@@ -5,15 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import React from 'react';
 import { ProductImageCard, useCollectProduct } from '@/features/products';
-import { EVENT } from '@/constants/mixpanel';
 
-export default function RelatedProducts({
-  products,
-  logging,
-}: {
-  products: IProduct[];
-  logging: { page: keyof typeof EVENT.PAGE };
-}) {
+export default function RelatedProducts({ products }: { products: IProduct[] }) {
   const collectProduct = useCollectProduct();
 
   return (
@@ -40,7 +33,7 @@ export default function RelatedProducts({
                 type="hotDeal"
                 product={product}
                 collectProduct={collectProduct}
-                logging={{ page: logging.page }}
+                logging={{ page: 'DETAIL' }}
               />
             </SwiperSlide>
           ))}

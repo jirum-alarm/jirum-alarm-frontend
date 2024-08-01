@@ -2,13 +2,12 @@ import { IProduct, IProductGuide } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import Image from 'next/image';
 import { displayTime } from '@/util/displayTime';
-import Button from '@/components/common/Button';
 import { getProductDetail } from '@/features/products/server/productDetail';
 import { getProductRelated } from '@/features/products/server/productRelated';
 import { getProductPopular } from '@/features/products/server/productPopular';
 import RelatedProducts from './RelatedProducts';
 import PopularProducts from './PopularProudcts';
-import LikeButton from './LikeButton';
+import BottomCTA from './BottomCTA';
 
 export default async function ProductDetailContainer({ id }: { id: string }) {
   const { data } = await getProductDetail(+id);
@@ -42,12 +41,8 @@ function ProductDetaiLayout({
             <HotdealGuide product={product} />
             <HotdealIndex product={product} />
             <CommunityReaction product={product} />
-            <RelatedProducts products={relatedProducts} logging={{ page: 'DETAIL' }} />
-            <PopularProducts
-              product={product}
-              products={popularProducts}
-              logging={{ page: 'DETAIL' }}
-            />
+            <RelatedProducts products={relatedProducts} />
+            <PopularProducts product={product} products={popularProducts} />
           </ProductInfoLayout>
           <BottomCTA product={product} />
         </div>
@@ -486,17 +481,5 @@ function CommunityReaction({ product }: { product: IProduct }) {
         </a>
       </div>
     </section>
-  );
-}
-
-function BottomCTA({ product }: { product: IProduct }) {
-  return (
-    <div className="fixed bottom-0 z-40 ml-[-1px] flex w-full max-w-[600px] gap-x-2 border border-gray-100 bg-white px-5 pb-6 pt-4">
-      <LikeButton product={product} />
-
-      <a href={product.detailUrl} className="w-full">
-        <Button>구매하러 가기</Button>
-      </a>
-    </div>
   );
 }

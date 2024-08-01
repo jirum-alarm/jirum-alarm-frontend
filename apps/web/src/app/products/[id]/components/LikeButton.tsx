@@ -1,11 +1,13 @@
 'use client';
 
 import Button from '@/components/common/Button';
+import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { useAddWishlist, useRemoveWishlist } from '@/features/products';
 import { useMe } from '@/features/users';
 import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
+import { mp } from '@/lib/mixpanel';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -22,15 +24,30 @@ export default function LikeButton({ product }: { product: IProduct }) {
 
   const handleClickWishlist = () => {
     if (!me.data) {
+      mp.track(EVENT.PRODUCT_WISH.NAME, {
+        type: EVENT.PRODUCT_WISH.TYPE.NOT_LOGGED_IN,
+        page: EVENT.PAGE.DETAIL,
+      });
+
       router.push(PAGE.LOGIN);
     }
 
     if (isLiked) {
+      mp.track(EVENT.PRODUCT_WISH.NAME, {
+        type: EVENT.PRODUCT_WISH.TYPE.REMOVE,
+        page: EVENT.PAGE.DETAIL,
+      });
+
       removeWishlist(productId);
       setIsLiked(false);
     }
 
     if (!isLiked) {
+      mp.track(EVENT.PRODUCT_WISH.NAME, {
+        type: EVENT.PRODUCT_WISH.TYPE.ADD,
+        page: EVENT.PAGE.DETAIL,
+      });
+
       addWishlist(productId);
       setIsLiked(true);
     }
