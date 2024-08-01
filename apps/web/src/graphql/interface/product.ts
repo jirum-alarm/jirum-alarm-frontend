@@ -55,8 +55,8 @@ export interface IProductOutput {
   products: IProduct[];
 }
 
-export interface IProductsRankingOutput {
-  products: Pick<IProduct, 'id' | 'title' | 'url' | 'price' | 'thumbnail'>[];
+export interface IRankingProductsOutput {
+  rankingProducts: Pick<IProduct, 'id' | 'title' | 'url' | 'price' | 'thumbnail'>[];
 }
 
 export interface CommunityRandomRankingProductsOutPut {

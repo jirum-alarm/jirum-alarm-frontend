@@ -1,22 +1,20 @@
-import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { displayTime } from '@/util/displayTime';
-import React from 'react';
+import ImageWithFallback from '@/components/ImageWithFallback';
 
-export const ProductTrendingImageCard = ({
+export function ProductLiveHotdealsImageCard({
   product,
-  rank,
   collectProduct,
   logging,
 }: {
   product: IProduct;
-  rank: number;
   collectProduct: (productId: number) => void;
+  type?: 'product' | 'hotDeal';
   logging: { page: keyof typeof EVENT.PAGE };
-}) => {
+}) {
   const handleClick = () => {
     collectProduct(+product.id);
 
@@ -25,18 +23,16 @@ export const ProductTrendingImageCard = ({
       page: EVENT.PAGE[logging.page],
     });
   };
+
   return (
     <a
       href={product.url}
-      className="w-full"
+      className={cn('w-full')}
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
     >
       <div className={'relative aspect-square overflow-hidden rounded-lg border border-gray-200'}>
-        <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm text-primary-500">
-          {rank}
-        </div>
         <div
           className={cn({
             'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
@@ -74,4 +70,4 @@ export const ProductTrendingImageCard = ({
       </div>
     </a>
   );
-};
+}

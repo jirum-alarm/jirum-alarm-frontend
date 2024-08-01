@@ -2,9 +2,9 @@ import BasicLayout from '@/components/layout/BasicLayout';
 import { NAV_TYPE } from '@/components/layout/BottomNav';
 import TopButton from '@/components/TopButton';
 import TrendingPageHeader from './components/TrendingPageHeader';
-// import { getMyCategories } from '@/features/users/useCategories';
 import TrendingContainer from './components/TrendingContainer';
 import { getMyCategories } from '@/features/users/server/categories';
+import { getCategories } from '@/features/categories/components/categories';
 
 const TrendingPage = async () => {
   const { categories } = await getTabCategories();
@@ -22,7 +22,11 @@ const TrendingPage = async () => {
 export default TrendingPage;
 
 const getTabCategories = async () => {
+  // const { categories } = await getCategories();
+  // [{id : null , name : '전체'}].categories
+  // console.log('data : ', ca.data.categories);
   try {
+    // const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
     const { data } = await getMyCategories();
     const favoriteCategories = data.me.favoriteCategories;
     if (favoriteCategories && favoriteCategories.length > 0) {

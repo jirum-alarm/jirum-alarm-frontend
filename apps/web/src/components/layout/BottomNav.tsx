@@ -55,12 +55,12 @@ const BottomNav = ({ type }: { type: NAV_TYPE }) => {
   return (
     <div
       className={cn(
-        `fixed bottom-0 z-50 mx-auto w-full max-w-screen-md border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-transform`,
+        `fixed bottom-0 z-50 mx-auto w-full max-w-[600px] border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-transform`,
       )}
     >
       <ul className="flex items-center justify-around">
         {BottomNavList.map((nav, i) => (
-          <li className="flex flex-1 items-center justify-center pb-[22px] pt-3" key={i}>
+          <li className="flex flex-1 items-center justify-center py-3" key={i}>
             <Link
               className={cn(
                 // px-5

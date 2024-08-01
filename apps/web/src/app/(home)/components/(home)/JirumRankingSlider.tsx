@@ -3,15 +3,15 @@ import { useState } from 'react';
 import { cn } from '@/lib/cn';
 import { useCollectProduct } from '@/features/products';
 import { ProductRankingImageCard } from '@/features/products/components/ProductRankingImageCard';
-import { IProductsRankingOutput } from '@/graphql/interface';
+import { IRankingProductsOutput } from '@/graphql/interface';
 import { SwiperSlide, Swiper } from 'swiper/react';
 import 'swiper/css';
 
 interface Props {
-  products: IProductsRankingOutput;
+  products: IRankingProductsOutput;
 }
 
-const JirumRankingSlider = ({ products: { products } }: Props) => {
+const JirumRankingSlider = ({ products: { rankingProducts } }: Props) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const collectProduct = useCollectProduct();
 
@@ -20,10 +20,14 @@ const JirumRankingSlider = ({ products: { products } }: Props) => {
       <Swiper
         centeredSlides={true}
         slidesPerView={1.5577}
+        breakpoints={{
+          450: { slidesPerView: 2 },
+          520: { slidesPerView: 2.3 },
+        }}
         loop={true}
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
       >
-        {products.map((product, i) => (
+        {rankingProducts.map((product, i) => (
           <SwiperSlide key={product.id} className="pb-2">
             <ProductRankingImageCard
               activeIndex={activeIndex}
@@ -36,7 +40,7 @@ const JirumRankingSlider = ({ products: { products } }: Props) => {
         ))}
       </Swiper>
       <div className="mt-3 flex h-[20px] w-full items-center justify-center">
-        {Array.from({ length: products.length }).map((_, i) => (
+        {Array.from({ length: rankingProducts.length }).map((_, i) => (
           <div
             key={i}
             className={cn(`h-[3px] w-[3px] bg-gray-400`, {
