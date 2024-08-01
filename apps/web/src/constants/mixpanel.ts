@@ -28,6 +28,9 @@ export const EVENT = {
       NOT_SHARE_API: 'NOT_SHARE_API',
     },
   },
+  COMMUNITY_LINK_CLICK: {
+    NAME: 'Community Link Click',
+  },
   CATEGORY_CHECK: {
     NAME: 'Category Check',
   },
