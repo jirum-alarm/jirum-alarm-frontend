@@ -59,7 +59,7 @@ function ProductDetaiLayout({
 
 function ProductImage({ product }: { product: IProduct }) {
   return (
-    <div className="sticky top-11 px-0.5">
+    <div className="sticky top-11">
       {product.thumbnail ? (
         <Image src={product.thumbnail} width={600} height={375} alt={product.title} />
       ) : (
