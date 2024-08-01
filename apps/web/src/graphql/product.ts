@@ -1,5 +1,49 @@
 import { gql } from '@apollo/client';
 
+export const QueryProduct = gql`
+  query product($id: Int!) {
+    product(id: $id) {
+      id
+      providerId
+      category
+      categoryId
+      mallId
+      title
+      url
+      detailUrl
+      isHot
+      isEnd
+      price
+      postedAt
+      thumbnail
+      wishlistCount
+      positiveCommunityReactionCount
+      negativeCommunityReactionCount
+      provider {
+        id
+        name
+        nameKr
+        host
+      }
+      viewCount
+      mallName
+      guides {
+        id
+        title
+        content
+      }
+      prices {
+        id
+        target
+        type
+        price
+        createdAt
+      }
+      isMyWishlist
+    }
+  }
+`;
+
 export const QueryProducts = gql`
   query QueryProducts(
     $limit: Int!
@@ -76,8 +120,43 @@ export const QueryCommunityRandomRankingProducts = gql`
   }
 `;
 
+export const QueryTogetherViewedProducts = gql`
+  query togetherViewedProducts($limit: Int!, $productId: Int!) {
+    togetherViewedProducts(limit: $limit, productId: $productId) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
+    }
+  }
+`;
+
 export const MutationCollectProduct = gql`
   mutation MutationCollectProduct($productId: Int!) {
     collectProduct(productId: $productId)
+  }
+`;
+
+export const MutationAddWishlist = gql`
+  mutation AddWishlist($productId: Int!) {
+    addWishlist(productId: $productId)
+  }
+`;
+
+export const MutationRemoveWishlist = gql`
+  mutation RemoveWishlist($productId: Int!) {
+    removeWishlist(productId: $productId)
   }
 `;

@@ -1,21 +1,54 @@
 import { IProvider } from './provider';
 
-export interface IProduct {
+export const enum ProductPriceTarget {
+  JIRUM_ALARM = 'JIRUM_ALARM',
+  MALL = 'MALL',
+  DANAWA = 'DANAWA',
+}
+
+export const enum CurrencyType {
+  WON = 'WON',
+  DOLLAR = 'DOLLAR',
+}
+
+export interface IProductPrice {
+  id: number;
+  target: ProductPriceTarget;
+  type: CurrencyType;
+  price: number;
+  createdAt: Date;
+}
+
+export interface IProductGuide {
   id: number;
   title: string;
-  provider: IProvider;
-  mallId?: number;
-  url: string;
-  isHot: boolean;
-  isEnd: boolean;
-  ship: string;
-  price: string;
+  content: string;
+}
+
+export interface IProduct {
+  id: string;
   providerId: number;
-  thumbnail?: string;
   category?: string;
   categoryId?: number;
-  searchAfter?: string[];
+  mallId?: number;
+  title: string;
+  url: string;
+  detailUrl: string;
+  isHot: boolean;
+  isEnd: boolean;
+  price: string;
   postedAt: Date;
+  thumbnail?: string;
+  wishlistCount?: number;
+  positiveCommunityReactionCount?: number;
+  negativeCommunityReactionCount?: number;
+  provider: IProvider;
+  viewCount?: number;
+  mallName?: string;
+  guides?: IProductGuide[];
+  prices?: IProductPrice[];
+  searchAfter?: string[];
+  isMyWhishlist: boolean;
 }
 
 export interface IProductOutput {
