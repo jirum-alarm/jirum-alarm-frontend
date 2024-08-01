@@ -8,7 +8,7 @@ const TrendingPageHeader = () => {
   return (
     <header
       className={cn(
-        `fixed z-50 flex h-[56px] w-full max-w-[480px] items-center justify-between bg-white px-4 transition-[top]`,
+        `fixed z-50 flex h-[56px] w-full max-w-[600px] items-center justify-between bg-white px-4 transition-[top]`,
         {
           'top-0': isHeaderVisible,
           '-top-[56px]': !isHeaderVisible,

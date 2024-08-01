@@ -31,7 +31,7 @@ export function ProductRankingImageCard({
     <a href={PAGE.DETAIL + '/' + product.id} onClick={handleClick}>
       <div
         className={cn(
-          `h-[340px] w-[240px] origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all`,
+          `h-[340px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all`,
           {
             'scale-100': activeIndex === index,
             'scale-90': activeIndex !== index,

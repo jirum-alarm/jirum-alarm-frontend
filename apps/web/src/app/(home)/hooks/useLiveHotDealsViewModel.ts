@@ -4,7 +4,7 @@ import { useSuspenseQuery } from '@apollo/client';
 import { useTransition } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-const limit = 20;
+const limit = 18;
 
 const useLiveHotDealsViewModel = () => {
   const [isPending, startTransition] = useTransition();
