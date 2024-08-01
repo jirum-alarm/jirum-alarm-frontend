@@ -22,6 +22,9 @@ const TrendingPage = async () => {
 export default TrendingPage;
 
 const getTabCategories = async () => {
+  // const { categories } = await getCategories();
+  // [{id : null , name : '전체'}].categories
+  // console.log('data : ', ca.data.categories);
   try {
     // const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
     const { data } = await getMyCategories();
