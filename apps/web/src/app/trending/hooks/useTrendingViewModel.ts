@@ -2,7 +2,6 @@ import { useGetProductTrendingList } from '@/features/products';
 import { ProductOrderType } from '@/graphql/interface';
 import useScreen from '@/hooks/useScreenSize';
 import { getDayBefore } from '@/util/date';
-import { p } from 'msw/lib/core/GraphQLHandler-COiPfZ8k';
 import { useTransition } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -25,7 +24,7 @@ const useTrendingViewModel = ({
       variables: {
         limit: 12,
         orderBy: ProductOrderType.COMMUNITY_RANKING,
-        startDate: getDayBefore(7),
+        startDate: getDayBefore(2),
         categoryId: categoryId,
         isHot: isHotCategory,
       },

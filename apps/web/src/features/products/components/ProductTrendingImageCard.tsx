@@ -28,16 +28,12 @@ export const ProductTrendingImageCard = ({
   return (
     <a
       href={product.url}
-      className="txs:w-[140px] xs:w-[162px]"
+      className="w-full"
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
     >
-      <div
-        className={
-          'relative overflow-hidden rounded-lg border border-gray-200 txs:h-[140px] xs:h-[162px]'
-        }
-      >
+      <div className={'relative aspect-square overflow-hidden rounded-lg border border-gray-200'}>
         <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm text-primary-500">
           {rank}
         </div>
@@ -55,8 +51,9 @@ export const ProductTrendingImageCard = ({
         <ImageWithFallback
           src={product?.thumbnail ?? ''}
           alt={product.title}
-          width={162}
-          height={162}
+          fill
+          className="object-cover"
+          sizes="300px"
         />
       </div>
       <div className="flex flex-col">

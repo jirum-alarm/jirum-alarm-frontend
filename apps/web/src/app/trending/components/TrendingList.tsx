@@ -20,7 +20,7 @@ const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps)
 
   return (
     <div>
-      <div className="grid grid-cols-2 justify-items-center gap-x-2 gap-y-2 smd:grid-cols-3">
+      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
         {products
           ?.slice(0, firstRenderingCount)
           .map((product, i) => (
@@ -66,7 +66,7 @@ const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps)
         <div className="h-2" />
       )}
 
-      <div className="grid grid-cols-2 justify-items-center gap-x-2 gap-y-2 smd:grid-cols-3">
+      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
         {products
           ?.slice(firstRenderingCount)
           .map((product, i) => (

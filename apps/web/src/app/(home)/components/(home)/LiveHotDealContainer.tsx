@@ -21,8 +21,8 @@ export default LiveHotDealContainer;
 
 const LiveHotDealListSkeleton = () => {
   return (
-    <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-[4%] gap-y-5">
-      {Array.from({ length: 10 }).map((item, i) => (
+    <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
+      {Array.from({ length: 12 }).map((item, i) => (
         <div key={i} className="w-full">
           <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
             <div className="hidden pc-sm:block">

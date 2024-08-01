@@ -55,20 +55,17 @@ export function ProductLiveHotdealsImageCard({
       <div className="flex flex-col">
         <span
           className={cn({
-            'line-clamp-2 h-12 break-words pt-2 text-sm text-gray-700 pc-sm:h-14 pc-sm:text-lg pc-sm:!leading-6':
-              true,
+            'line-clamp-2 h-12 break-words pt-2 text-sm text-gray-700': true,
           })}
         >
           {product.title}
         </span>
-        <div className="flex items-center pt-1">
-          <span className="line-clamp-1 max-w-[98px] text-lg font-semibold text-gray-900 pc-sm:text-xl">
+        <div className="flex h-9 items-center pt-1">
+          <span className="line-clamp-1 max-w-[98px] text-lg font-semibold text-gray-900">
             {product?.price ?? ''}
           </span>
           {product?.price && <span className="w-2"></span>}
-          <span className="text-sm text-gray-400 pc-sm:text-base">
-            {displayTime(product.postedAt)}
-          </span>
+          <span className="text-sm text-gray-400">{displayTime(product.postedAt)}</span>
         </div>
       </div>
     </a>

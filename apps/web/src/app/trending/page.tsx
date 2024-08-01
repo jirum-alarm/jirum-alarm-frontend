@@ -4,6 +4,7 @@ import TopButton from '@/components/TopButton';
 import TrendingPageHeader from './components/TrendingPageHeader';
 import TrendingContainer from './components/TrendingContainer';
 import { getMyCategories } from '@/features/users/server/categories';
+import { getCategories } from '@/features/categories/components/categories';
 
 const TrendingPage = async () => {
   const { categories } = await getTabCategories();
@@ -22,6 +23,7 @@ export default TrendingPage;
 
 const getTabCategories = async () => {
   try {
+    // const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
     const { data } = await getMyCategories();
     const favoriteCategories = data.me.favoriteCategories;
     if (favoriteCategories && favoriteCategories.length > 0) {

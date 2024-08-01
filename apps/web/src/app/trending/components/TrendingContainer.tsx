@@ -88,8 +88,8 @@ const TrendingListSkeleton = () => {
   return (
     <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
       {Array.from({ length: 12 }).map((item, i) => (
-        <div key={i} className="txs:w-[140px] xs:w-[162px]">
-          <div className="flex items-center justify-center rounded-lg bg-gray-100 txs:h-[140px] xs:h-[162px]">
+        <div key={i} className="w-full">
+          <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
             <IllustStandingSmall />
           </div>
           <div className="flex flex-col gap-1 pt-2">

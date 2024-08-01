@@ -36,8 +36,7 @@ export const useGetProductTrendingList = (
             isHot: variables?.isHot,
             orderBy: variables?.orderBy,
             startDate: variables?.startDate,
-            // ProductOrderType.POSTED_AT
-            orderByOption: OrderOptionType.DESC,
+            orderOption: OrderOptionType.DESC,
           },
           ...rest,
         },
