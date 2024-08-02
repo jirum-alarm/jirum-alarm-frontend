@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { IllustStanding, IllustStandingSmall } from '@/components/common/icons';
+import { IllustStanding } from '@/components/common/icons';
 import LiveHotDealList from './LiveHotDealList';
 
 const LiveHotDealContainer = () => {
@@ -25,12 +25,7 @@ const LiveHotDealListSkeleton = () => {
       {Array.from({ length: 12 }).map((item, i) => (
         <div key={i} className="w-full">
           <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
-            <div className="hidden pc-sm:block">
-              <IllustStanding />
-            </div>
-            <div className="block pc-sm:hidden">
-              <IllustStandingSmall />
-            </div>
+            <IllustStanding />
           </div>
           <div className="flex flex-col gap-1 pt-2">
             <div className="h-3 bg-gray-100"></div>

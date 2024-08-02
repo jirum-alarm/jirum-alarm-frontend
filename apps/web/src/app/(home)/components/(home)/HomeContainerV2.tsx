@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 const HomeContainerV2 = () => {
   return (
-    <div className="mx-auto h-full max-w-[600px] pb-[70px]">
+    <div className="mx-auto h-full max-w-screen-layout-max pb-[70px]">
       <HomeHeader />
       <div>
         <HomeBackgroundHeader />
@@ -29,7 +29,7 @@ export default HomeContainerV2;
 
 const HomeBackgroundHeader = () => {
   return (
-    <div className="fixed top-0 z-0 h-full w-full max-w-[600px] bg-gray-900">
+    <div className="fixed top-0 z-0 h-full w-full max-w-screen-layout-max bg-gray-900">
       <header className="flex h-[56px] w-full items-center justify-between px-5 py-3">
         <div className="flex items-center gap-2">
           <RoundedLogo />

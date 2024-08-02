@@ -20,14 +20,15 @@ module.exports = {
         22: '5.5rem',
         'safe-top': 'env(safe-area-inset-top)',
         'safe-bottom': 'env(safe-area-inset-bottom)',
+        'safe-bottom-96': 'calc(96px + env(safe-area-inset-bottom))',
         'safe-left': 'env(safe-area-inset-left)',
         'safe-right': 'env(safe-area-inset-right)',
       },
       screens: {
         txs: '320px',
         xs: '375px',
-        'pc-sm': '450px',
         smd: '550px',
+        'layout-max': '600px',
         'mouse-hover': { raw: '(hover: hover)' },
       },
       colors: {

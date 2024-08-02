@@ -46,7 +46,7 @@ export default function ProductDetailPageHeader({ product }: { product: IProduct
   };
 
   return (
-    <header className="fixed top-0 z-50 flex h-11 w-full max-w-[600px] flex-col items-center justify-center border border-gray-100 bg-white text-black">
+    <header className="fixed top-0 z-50 flex h-11 w-full max-w-screen-layout-max flex-col items-center justify-center border border-gray-100 bg-white text-black">
       <div className="absolute left-0">
         <BackButton backTo={PAGE.HOME} />
       </div>

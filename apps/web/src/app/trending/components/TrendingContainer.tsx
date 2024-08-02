@@ -30,7 +30,7 @@ const TrendingContainer = ({
   return (
     <div>
       <div
-        className={cn('sticky z-50 w-full max-w-[600px] bg-white transition-[top]', {
+        className={cn('sticky z-50 w-full max-w-screen-layout-max bg-white transition-[top]', {
           'top-[56px]': isHeaderVisible,
           'top-0': !isHeaderVisible,
         })}

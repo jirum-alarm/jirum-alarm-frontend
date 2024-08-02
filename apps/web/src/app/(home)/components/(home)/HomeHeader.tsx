@@ -9,7 +9,7 @@ const HomeHeader = () => {
   return (
     <header
       className={cn(
-        `fixed top-0 z-50 flex w-full max-w-[600px] items-center justify-between bg-white px-5 py-3 transition-opacity duration-500`,
+        `fixed top-0 z-50 flex w-full max-w-screen-layout-max items-center justify-between bg-white px-5 py-3 transition-opacity duration-500`,
         {
           'opacity-0': !isHeaderVisible,
           'opacity-100': isHeaderVisible,

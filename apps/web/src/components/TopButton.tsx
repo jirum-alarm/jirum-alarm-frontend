@@ -36,7 +36,7 @@ const TopButton = () => {
     <button
       onClick={scrollToTop}
       className={cn(
-        `fixed bottom-[96px] right-4 z-50 flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#101828] opacity-40 transition-opacity`,
+        `fixed bottom-safe-bottom-96 right-[16px] z-50 flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#101828] opacity-40 transition-opacity layout-max:right-1/2 layout-max:translate-x-[284px]`,
         { 'opacity-0': !isVisible },
       )}
     >

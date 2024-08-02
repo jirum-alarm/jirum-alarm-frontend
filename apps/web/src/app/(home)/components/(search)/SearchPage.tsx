@@ -19,7 +19,7 @@ export default function SearchPage() {
 
   return (
     <div className="w-full">
-      <header className="fixed z-50 w-full max-w-[600px]">
+      <header className="fixed z-50 w-full max-w-screen-layout-max">
         <SearchPageInput show={showSearchBar} {...searchProductViewModel} />
       </header>
       <div className="h-14"></div>
