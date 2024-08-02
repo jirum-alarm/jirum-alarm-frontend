@@ -63,7 +63,7 @@ const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps)
           </div>
         </div>
       ) : (
-        <div className="h-2" />
+        <div className="h-5" />
       )}
 
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
