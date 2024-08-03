@@ -2,11 +2,11 @@
 
 import Button from '@/components/common/Button';
 import { ArrowDown } from '@/components/common/icons';
-import { IProduct, IProductGuide } from '@/graphql/interface';
+import { IProductGuide } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { useEffect, useRef, useState } from 'react';
 
-export default function HotdealGuide({ product }: { product: IProduct }) {
+export default function HotdealGuide({ productGuides }: { productGuides: IProductGuide[] }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsExpansion, setNeedsExpansion] = useState(false);
 
@@ -34,9 +34,9 @@ export default function HotdealGuide({ product }: { product: IProduct }) {
     if (height > 310) {
       setNeedsExpansion(true);
     }
-  }, [product.guides]);
+  }, []);
 
-  if (!product.guides?.length) {
+  if (!productGuides?.length) {
     return;
   }
 
@@ -51,7 +51,7 @@ export default function HotdealGuide({ product }: { product: IProduct }) {
           'h-64 overflow-hidden': needsExpansion,
         })}
       >
-        {product.guides?.map((guide) => <HotdealGuideItem key={guide.id} guide={guide} />)}
+        {productGuides?.map((guide) => <HotdealGuideItem key={guide.id} guide={guide} />)}
       </div>
 
       {needsExpansion && (

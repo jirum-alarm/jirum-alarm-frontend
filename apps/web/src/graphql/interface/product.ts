@@ -11,6 +11,11 @@ export const enum CurrencyType {
   DOLLAR = 'DOLLAR',
 }
 
+export const enum ProductThumbnailType {
+  POST = 'POST',
+  MALL = 'MALL',
+}
+
 export interface IProductPrice {
   id: number;
   target: ProductPriceTarget;

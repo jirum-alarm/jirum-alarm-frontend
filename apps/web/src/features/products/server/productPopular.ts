@@ -1,5 +1,5 @@
 import { QueryProducts } from '@/graphql';
-import { IProduct } from '@/graphql/interface';
+import { IProduct, ProductThumbnailType } from '@/graphql/interface';
 import { getClient } from '@/lib/client';
 
 export const getProductPopular = async (categoryId: number) => {
@@ -8,6 +8,8 @@ export const getProductPopular = async (categoryId: number) => {
     variables: {
       limit: 20,
       categoryId,
+      thumbnailType: ProductThumbnailType.MALL,
+      isEnd: false,
     },
   });
 };

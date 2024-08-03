@@ -43,6 +43,15 @@ export const QueryProduct = gql`
     }
   }
 `;
+export const QueryProductGuides = gql`
+  query productGuides($productId: Int!) {
+    productGuides(productId: $productId) {
+      id
+      title
+      content
+    }
+  }
+`;
 
 export const QueryProducts = gql`
   query QueryProducts(
@@ -53,6 +62,8 @@ export const QueryProducts = gql`
     $orderOption: OrderOptionType
     $categoryId: Int
     $keyword: String
+    $thumbnailType: ThumbnailType
+    $isEnd: Boolean
     $isHot: Boolean
   ) {
     products(
@@ -63,6 +74,8 @@ export const QueryProducts = gql`
       orderOption: $orderOption
       categoryId: $categoryId
       keyword: $keyword
+      thumbnailType: $thumbnailType
+      isEnd: $isEnd
       isHot: $isHot
     ) {
       id

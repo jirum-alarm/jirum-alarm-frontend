@@ -10,15 +10,20 @@ import BottomCTA from './BottomCTA';
 import CommunityReaction from './CommunityReaction';
 import ProductImage from './ProductImage';
 import HotdealGuide from './HotdealGuide';
+import { getProductGuides } from '@/features/products/server/productGuides';
 
 export default async function ProductDetailContainer({ id }: { id: string }) {
-  const { data } = await getProductDetail(+id);
-  const { data: relatedProducts } = await getProductRelated(+id);
+  const productId = +id;
+
+  const { data } = await getProductDetail(productId);
+  const { data: productGuides } = await getProductGuides(productId);
+  const { data: relatedProducts } = await getProductRelated(productId);
   const { data: popularProducts } = await getProductPopular(data.product.categoryId ?? 0);
 
   return (
     <ProductDetaiLayout
       product={data.product}
+      productGuides={productGuides.productGuides}
       relatedProducts={relatedProducts.togetherViewedProducts}
       popularProducts={popularProducts.products}
     />
@@ -27,10 +32,12 @@ export default async function ProductDetailContainer({ id }: { id: string }) {
 
 function ProductDetaiLayout({
   product,
+  productGuides,
   relatedProducts,
   popularProducts,
 }: {
   product: IProduct;
+  productGuides: IProductGuide[];
   relatedProducts: IProduct[];
   popularProducts: IProduct[];
 }) {
@@ -41,7 +48,7 @@ function ProductDetaiLayout({
         <div className="relative z-10 mt-[-32px] w-full rounded-t-3xl bg-white pt-8">
           <ProductInfoLayout>
             <ProductInfo product={product} />
-            <HotdealGuide product={product} />
+            <HotdealGuide productGuides={productGuides} />
             <HotdealIndex product={product} />
             <CommunityReaction product={product} />
             <RelatedProducts products={relatedProducts} />
