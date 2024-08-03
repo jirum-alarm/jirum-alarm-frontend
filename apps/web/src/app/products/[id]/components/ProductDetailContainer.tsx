@@ -9,6 +9,7 @@ import PopularProducts from './PopularProudcts';
 import BottomCTA from './BottomCTA';
 import CommunityReaction from './CommunityReaction';
 import ProductImage from './ProductImage';
+import HotdealGuide from './HotdealGuide';
 
 export default async function ProductDetailContainer({ id }: { id: string }) {
   const { data } = await getProductDetail(+id);
@@ -115,63 +116,6 @@ function DisplayTimeIcon() {
         stroke="white"
         strokeWidth="1.2"
         strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function HotdealGuide({ product }: { product: IProduct }) {
-  if (!product.guides?.length) {
-    return;
-  }
-
-  return (
-    <section>
-      <div className="rounded-t bg-primary-100 px-4 py-3">
-        <h2 className="text-primary-800">핫딜 정보 요약</h2>
-      </div>
-
-      <div className="flex flex-col gap-y-4 py-4">
-        {product.guides?.map((guide) => <HotdealGuideItem key={guide.id} guide={guide} />)}
-      </div>
-
-      <div className="rounded-b bg-gray-50 px-3 py-2">
-        <span className="text-gray-500">
-          *요약은 실제와 다를 수 있습니다.
-          <br />
-          상품 구매시 행사 정보는 쇼핑몰 홈페이지에서 확인해 주세요.
-        </span>
-      </div>
-
-      <div className="pt-8">
-        <hr />
-      </div>
-    </section>
-  );
-}
-
-function HotdealGuideItem({ guide }: { guide: IProductGuide }) {
-  return (
-    <div className="flex gap-x-2 px-3">
-      <div className="h-5 w-5 rounded-full bg-primary-100 p-[3px]">
-        <HotdealGuideItemCheckIcon />
-      </div>
-      <div className="flex flex-col">
-        <span className="leading-5 text-gray-900">{guide.title}</span>
-        <span className="text-gray-600">{guide.content}</span>
-      </div>
-    </div>
-  );
-}
-
-function HotdealGuideItemCheckIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <path
-        d="M11 4.5L5.5 10L3 7.5"
-        stroke="#7FC125"
-        strokeLinecap="square"
         strokeLinejoin="round"
       />
     </svg>

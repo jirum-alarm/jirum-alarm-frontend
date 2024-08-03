@@ -1,9 +1,11 @@
 import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
+import { PAGE } from '@/constants/page';
 import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { displayTime } from '@/util/displayTime';
+import Link from 'next/link';
 import React from 'react';
 
 export const ProductTrendingImageCard = ({
@@ -26,11 +28,10 @@ export const ProductTrendingImageCard = ({
     });
   };
   return (
-    <a
-      href={product.url}
+    <Link
+      href={PAGE.DETAIL + '/' + product.id}
+      prefetch={false}
       className="w-full"
-      target="_blank"
-      rel="noopener noreferrer"
       onClick={handleClick}
     >
       <div className={'relative aspect-square overflow-hidden rounded-lg border border-gray-200'}>
@@ -72,6 +73,6 @@ export const ProductTrendingImageCard = ({
           <span className="text-sm text-gray-400">{displayTime(product.postedAt)}</span>
         </div>
       </div>
-    </a>
+    </Link>
   );
 };

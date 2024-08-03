@@ -4,6 +4,8 @@ import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { displayTime } from '@/util/displayTime';
 import ImageWithFallback from '@/components/ImageWithFallback';
+import { PAGE } from '@/constants/page';
+import Link from 'next/link';
 
 export function ProductLiveHotdealsImageCard({
   product,
@@ -25,11 +27,10 @@ export function ProductLiveHotdealsImageCard({
   };
 
   return (
-    <a
-      href={product.url}
+    <Link
+      href={PAGE.DETAIL + '/' + product.id}
+      prefetch={false}
       className={cn('w-full')}
-      target="_blank"
-      rel="noopener noreferrer"
       onClick={handleClick}
     >
       <div className={'relative aspect-square overflow-hidden rounded-lg border border-gray-200'}>
@@ -68,6 +69,6 @@ export function ProductLiveHotdealsImageCard({
           <span className="text-sm text-gray-400">{displayTime(product.postedAt)}</span>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
