@@ -25,7 +25,6 @@ export default function ProductDetailPageHeader({ product }: { product: IProduct
 
       navigator.share({
         title,
-        text: description,
         url: window.location.href,
       });
     } else {

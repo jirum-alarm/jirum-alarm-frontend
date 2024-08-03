@@ -1,6 +1,5 @@
 import { IProduct, IProductGuide } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
-import Image from 'next/image';
 import { displayTime } from '@/util/displayTime';
 import { getProductDetail } from '@/features/products/server/productDetail';
 import { getProductRelated } from '@/features/products/server/productRelated';
@@ -9,11 +8,13 @@ import RelatedProducts from './RelatedProducts';
 import PopularProducts from './PopularProudcts';
 import BottomCTA from './BottomCTA';
 import CommunityReaction from './CommunityReaction';
+import ProductImage from './ProductImage';
 
 export default async function ProductDetailContainer({ id }: { id: string }) {
   const { data } = await getProductDetail(+id);
   const { data: relatedProducts } = await getProductRelated(+id);
   const { data: popularProducts } = await getProductPopular(data.product.categoryId ?? 0);
+
   return (
     <ProductDetaiLayout
       product={data.product}
@@ -53,18 +54,6 @@ function ProductDetaiLayout({
   );
 }
 
-function ProductImage({ product }: { product: IProduct }) {
-  return (
-    <div className="sticky top-11">
-      {product.thumbnail ? (
-        <Image src={product.thumbnail} width={600} height={375} alt={product.title} />
-      ) : (
-        <div></div>
-      )}
-    </div>
-  );
-}
-
 function ProductInfoLayout({ children }: { children: React.ReactNode }) {
   return <div className="flex flex-col gap-y-10 px-5">{children}</div>;
 }
@@ -79,7 +68,7 @@ function ProductInfo({ product }: { product: IProduct }) {
       </div>
 
       <div className="inline-flex gap-x-2 pt-3">
-        <p>{product.price} </p>
+        {product.price && <p>{product.price}</p>}
         <div
           className={cn({
             'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-[20px]': true,
@@ -133,6 +122,10 @@ function DisplayTimeIcon() {
 }
 
 function HotdealGuide({ product }: { product: IProduct }) {
+  if (!product.guides?.length) {
+    return;
+  }
+
   return (
     <section>
       <div className="rounded-t bg-primary-100 px-4 py-3">
@@ -187,6 +180,11 @@ function HotdealGuideItemCheckIcon() {
 
 function HotdealIndex({ product }: { product: IProduct }) {
   const prices = product?.prices;
+
+  if (!prices?.length) {
+    return;
+  }
+
   const productPrice = prices?.[0].price || 0;
   const lowPrice = prices?.[2].price || 0;
   const lowestPrice = prices?.[3].price;

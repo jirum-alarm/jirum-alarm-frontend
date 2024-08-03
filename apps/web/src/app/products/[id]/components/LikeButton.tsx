@@ -30,6 +30,8 @@ export default function LikeButton({ product }: { product: IProduct }) {
       });
 
       router.push(PAGE.LOGIN);
+
+      return;
     }
 
     if (isLiked) {
@@ -40,6 +42,8 @@ export default function LikeButton({ product }: { product: IProduct }) {
 
       removeWishlist(productId);
       setIsLiked(false);
+
+      return;
     }
 
     if (!isLiked) {
@@ -50,6 +54,8 @@ export default function LikeButton({ product }: { product: IProduct }) {
 
       addWishlist(productId);
       setIsLiked(true);
+
+      return;
     }
   };
 
