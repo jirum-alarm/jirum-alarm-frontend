@@ -5,7 +5,7 @@ import {
   QueryProducts,
 } from '@/graphql';
 import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
-import { skipToken, SuspenseQueryHookOptions, useMutation, useSuspenseQuery } from '@apollo/client';
+import { SuspenseQueryHookOptions, useMutation, useSuspenseQuery } from '@apollo/client';
 
 export const useCollectProduct = () => {
   const result = useMutation<unknown, { productId: number }>(MutationCollectProduct);
@@ -27,25 +27,19 @@ interface ProductTrendingVariables {
 
 export const useGetProductTrendingList = (
   queryOptions: SuspenseQueryHookOptions<any, ProductTrendingVariables>,
-  skip?: { suspenseSkip: boolean },
 ) => {
   const { variables, ...rest } = queryOptions;
-  return useSuspenseQuery<IProductOutput>(
-    QueryProducts,
-    skip?.suspenseSkip
-      ? skipToken
-      : {
-          variables: {
-            limit: variables?.limit,
-            categoryId: variables?.categoryId,
-            isHot: variables?.isHot,
-            orderBy: variables?.orderBy,
-            startDate: variables?.startDate,
-            orderOption: OrderOptionType.DESC,
-          },
-          ...rest,
-        },
-  );
+  return useSuspenseQuery<IProductOutput>(QueryProducts, {
+    variables: {
+      limit: variables?.limit,
+      categoryId: variables?.categoryId,
+      isHot: variables?.isHot,
+      orderBy: variables?.orderBy,
+      startDate: variables?.startDate,
+      orderOption: OrderOptionType.DESC,
+    },
+    ...rest,
+  });
 };
 
 export const useAddWishlist = () => {

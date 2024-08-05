@@ -20,21 +20,20 @@ export default function RecommendationProduct({
   const swiper = useSwiper();
 
   return (
-    <div
-      onTouchStart={() => {
-        swiper.allowTouchMove = false;
-      }}
-      onTouchEnd={() => {
-        swiper.allowTouchMove = true;
-      }}
-      onTouchStartCapture={(e) => {
-        e.stopPropagation();
-      }}
-      onTouchMoveCapture={(e) => {
-        e.stopPropagation();
-      }}
-    >
+    <div>
       <Swiper
+        onTouchStartCapture={(e) => {
+          e.stopPropagation();
+        }}
+        onTouchMoveCapture={(e) => {
+          e.stopPropagation();
+        }}
+        onTouchStart={() => {
+          swiper.allowTouchMove = false;
+        }}
+        onTouchEnd={() => {
+          swiper.allowTouchMove = true;
+        }}
         spaceBetween={12}
         slidesPerView={2.5}
         breakpoints={{

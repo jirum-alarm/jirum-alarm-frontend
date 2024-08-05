@@ -16,7 +16,6 @@ const TrendingContainer = ({
   categories: { id: number | null; name: string }[];
 }) => {
   const { swiperRef, activeTab, handleTabChange, handleClickTab, tabRef } = useTabSwitcher();
-
   const { isHeaderVisible } = useVisibilityOnScroll();
 
   return (
@@ -60,13 +59,13 @@ const TrendingContainer = ({
       >
         {categories.map((category, index) => (
           <SwiperSlide key={category.id} className="h-full w-full">
-            <Suspense fallback={<TrendingListSkeleton />}>
-              <TrendingList
-                categoryId={category.id}
-                categoryName={category.name}
-                isActive={index === activeTab}
-              />
-            </Suspense>
+            {index === activeTab && (
+              <div>
+                <Suspense fallback={<TrendingListSkeleton />}>
+                  <TrendingList categoryId={category.id} categoryName={category.name} />
+                </Suspense>
+              </div>
+            )}
           </SwiperSlide>
         ))}
       </Swiper>

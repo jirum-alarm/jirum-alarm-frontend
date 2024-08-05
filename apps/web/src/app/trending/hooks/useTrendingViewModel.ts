@@ -7,49 +7,33 @@ import { useInView } from 'react-intersection-observer';
 
 const TRENDING_ITEMS_LIMIT = 50;
 
-const useTrendingViewModel = ({
-  categoryId,
-  isActive,
-}: {
-  categoryId: number | null;
-  isActive: boolean;
-}) => {
+const useTrendingViewModel = ({ categoryId }: { categoryId: number | null }) => {
   const isHotCategory = categoryId === null;
   const [isPending, startTransition] = useTransition();
   const [hasViewedAllProducts, setHasViewedAllProducts] = useState(false);
   const { smd } = useScreen();
   const firstRenderingCount = smd ? 9 : 10;
 
-  const { data: trending, fetchMore } = useGetProductTrendingList(
-    {
-      variables: {
-        limit: 12,
-        orderBy: ProductOrderType.COMMUNITY_RANKING,
-        startDate: getDayBefore(2),
-        categoryId: categoryId,
-        isHot: isHotCategory,
-      },
-      fetchPolicy: 'cache-and-network',
+  const { data: trending, fetchMore } = useGetProductTrendingList({
+    variables: {
+      limit: 12,
+      orderBy: ProductOrderType.COMMUNITY_RANKING,
+      startDate: getDayBefore(2),
+      categoryId: categoryId,
+      isHot: isHotCategory,
     },
-    {
-      suspenseSkip: !isActive,
-    },
-  );
+    fetchPolicy: 'cache-and-network',
+  });
 
   const products = trending?.products;
-  const { data: live } = useGetProductTrendingList(
-    {
-      variables: {
-        limit: 10,
-        orderBy: ProductOrderType.POSTED_AT,
-        categoryId: isHotCategory ? null : categoryId,
-        isHot: false,
-      },
+  const { data: live } = useGetProductTrendingList({
+    variables: {
+      limit: 10,
+      orderBy: ProductOrderType.POSTED_AT,
+      categoryId: isHotCategory ? null : categoryId,
+      isHot: false,
     },
-    {
-      suspenseSkip: !isActive || isHotCategory,
-    },
-  );
+  });
 
   const liveProducts = live?.products;
 

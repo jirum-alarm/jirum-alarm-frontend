@@ -12,10 +12,9 @@ import RecommendationProduct from '@/app/(home)/components/(search)/Recommendati
 interface TrendingListProps {
   categoryId: number | null;
   categoryName: string;
-  isActive: boolean;
 }
 
-const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps) => {
+const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
   const {
     products,
     liveProducts,
@@ -25,7 +24,6 @@ const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps)
     hasViewedAllProducts,
   } = useTrendingViewModel({
     categoryId,
-    isActive,
   });
   const { loading, data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
 
