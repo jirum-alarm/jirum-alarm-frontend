@@ -22,11 +22,17 @@ const TrendingPage = async () => {
 export default TrendingPage;
 
 const getTabCategories = async () => {
-  // const { categories } = await getCategories();
-  // [{id : null , name : '전체'}].categories
-  // console.log('data : ', ca.data.categories);
+  const { data } = await getCategories();
+
+  const initialCategory = { id: null as null | number, name: '전체' };
+
+  const categories: { id: null | number; name: string }[] = [initialCategory].concat(
+    data.categories.map((category) => ({
+      id: Number(category.id),
+      name: category.name,
+    })),
+  );
   try {
-    // const { data: categoriesData } = useSuspenseQuery<ICategoryOutput>(QueryCategories);
     const { data } = await getMyCategories();
     const favoriteCategories = data.me.favoriteCategories;
     if (favoriteCategories && favoriteCategories.length > 0) {
@@ -43,18 +49,3 @@ const getTabCategories = async () => {
 
   return { categories };
 };
-
-const categories = [
-  { id: null, name: '전체' }, // api요청시 categoryId를 null로 보내야 핫딜 상품을 불러올 수 있어서 null로 설정
-  { id: 1, name: '컴퓨터' },
-  { id: 2, name: '생활·식품' },
-  { id: 3, name: '화장품' },
-  { id: 4, name: '의류·잡화' },
-  { id: 5, name: '도서' },
-  { id: 6, name: '가전·가구' },
-  { id: 7, name: '등산·레저' },
-  { id: 8, name: '상품권' },
-  { id: 9, name: '디지털' },
-  { id: 10, name: '육아' },
-  { id: 11, name: '기타' },
-];
