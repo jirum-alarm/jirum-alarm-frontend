@@ -1,7 +1,13 @@
 import useTrendingViewModel from '../hooks/useTrendingViewModel';
 import { LoadingSpinner } from '@/components/common/icons';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import { ProductImageCard, ProductTrendingImageCard, useCollectProduct } from '@/features/products';
+import {
+  ProductImageCard,
+  ProductTrendingImageCard,
+  useCollectProduct,
+  useHotDealsRandom,
+} from '@/features/products';
+import RecommendationProduct from '@/app/(home)/components/(search)/RecommendationProduct';
 
 interface TrendingListProps {
   categoryId: number | null;
@@ -10,11 +16,19 @@ interface TrendingListProps {
 }
 
 const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps) => {
-  const { products, liveProducts, loadingCallbackRef, firstRenderingCount, isPending } =
-    useTrendingViewModel({
-      categoryId,
-      isActive,
-    });
+  const {
+    products,
+    liveProducts,
+    loadingCallbackRef,
+    firstRenderingCount,
+    isPending,
+    hasViewedAllProducts,
+  } = useTrendingViewModel({
+    categoryId,
+    isActive,
+  });
+  const { loading, data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
+
   const collectProduct = useCollectProduct();
   const swiper = useSwiper();
 
@@ -79,6 +93,12 @@ const TrendingList = ({ categoryId, categoryName, isActive }: TrendingListProps)
             />
           ))}
       </div>
+      {hasViewedAllProducts && hotDeals && (
+        <div>
+          <div className="pb-4 pt-9 text-base">추천 핫딜</div>
+          <RecommendationProduct hotDeals={hotDeals} logging={{ page: 'TRENDING' }} />
+        </div>
+      )}
       <div className="flex w-full items-center justify-center py-6" ref={loadingCallbackRef}>
         {isPending && <LoadingSpinner />}
       </div>

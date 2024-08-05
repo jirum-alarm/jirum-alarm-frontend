@@ -1,7 +1,7 @@
 'use client';
 
 import { IProduct } from '@/graphql/interface';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import 'swiper/css';
 import React from 'react';
 import { ProductImageCard, useCollectProduct } from '@/features/products';
@@ -17,9 +17,16 @@ export default function RecommendationProduct({
   const hotDealCount = 10;
 
   const collectProduct = useCollectProduct();
+  const swiper = useSwiper();
 
   return (
     <div
+      onTouchStart={() => {
+        swiper.allowTouchMove = false;
+      }}
+      onTouchEnd={() => {
+        swiper.allowTouchMove = true;
+      }}
       onTouchStartCapture={(e) => {
         e.stopPropagation();
       }}

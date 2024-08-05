@@ -15,15 +15,7 @@ const TrendingContainer = ({
 }: {
   categories: { id: number | null; name: string }[];
 }) => {
-  const {
-    swiperRef,
-    targetIndex,
-    handleProgressSwiper,
-    activeTab,
-    handleTabChange,
-    handleClickTab,
-    tabRef,
-  } = useTabSwitcher();
+  const { swiperRef, activeTab, handleTabChange, handleClickTab, tabRef } = useTabSwitcher();
 
   const { isHeaderVisible } = useVisibilityOnScroll();
 
@@ -63,7 +55,7 @@ const TrendingContainer = ({
       <Swiper
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         onSlideChange={(swiper) => handleTabChange(swiper.realIndex)}
-        onProgress={handleProgressSwiper}
+        // onProgress={handleProgressSwiper}
         className="my-6"
       >
         {categories.map((category, index) => (
@@ -72,7 +64,7 @@ const TrendingContainer = ({
               <TrendingList
                 categoryId={category.id}
                 categoryName={category.name}
-                isActive={index === targetIndex || index === activeTab}
+                isActive={index === activeTab}
               />
             </Suspense>
           </SwiperSlide>
