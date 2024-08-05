@@ -6,6 +6,8 @@ import TrendingContainer from './components/TrendingContainer';
 import { getMyCategories } from '@/features/users/server/categories';
 import { getCategories } from '@/features/categories/components/categories';
 
+export const dynamic = 'force-dynamic';
+
 const TrendingPage = async () => {
   const { categories } = await getTabCategories();
 
