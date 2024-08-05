@@ -53,7 +53,7 @@ export interface IProduct {
   guides?: IProductGuide[];
   prices?: IProductPrice[];
   searchAfter?: string[];
-  isMyWhishlist: boolean;
+  isMyWishlist: boolean;
 }
 
 export interface IProductOutput {

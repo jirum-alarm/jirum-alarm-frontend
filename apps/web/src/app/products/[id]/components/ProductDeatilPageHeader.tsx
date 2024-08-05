@@ -13,8 +13,6 @@ export default function ProductDetailPageHeader({ product }: { product: IProduct
   const { toast } = useToast();
 
   const title = `${product.title} | 지름알림`;
-  const description =
-    product.guides?.map((guide) => guide.content).join(', ') || '핫딜 정보를 알려드려요!';
 
   const handleShare = () => {
     if (navigator.share) {
@@ -49,7 +47,7 @@ export default function ProductDetailPageHeader({ product }: { product: IProduct
       <div className="absolute left-0">
         <BackButton backTo={PAGE.HOME} />
       </div>
-      <div className="flex gap-x-2 self-end pr-2">
+      <div className="flex gap-x-2 self-end pr-4">
         <Link href={PAGE.SEARCH} prefetch={false}>
           <Search color="#101828" />
         </Link>

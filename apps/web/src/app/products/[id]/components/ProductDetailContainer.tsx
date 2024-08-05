@@ -2,8 +2,6 @@ import { IProduct, IProductGuide } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { displayTime } from '@/util/displayTime';
 import { getProductDetail } from '@/features/products/server/productDetail';
-import { getProductRelated } from '@/features/products/server/productRelated';
-import { getProductPopular } from '@/features/products/server/productPopular';
 import RelatedProducts from './RelatedProducts';
 import PopularProducts from './PopularProudcts';
 import BottomCTA from './BottomCTA';
@@ -11,21 +9,21 @@ import CommunityReaction from './CommunityReaction';
 import ProductImage from './ProductImage';
 import HotdealGuide from './HotdealGuide';
 import { getProductGuides } from '@/features/products/server/productGuides';
+import { getAccessToken } from '@/app/actions/token';
 
 export default async function ProductDetailContainer({ id }: { id: string }) {
   const productId = +id;
 
   const { data } = await getProductDetail(productId);
   const { data: productGuides } = await getProductGuides(productId);
-  const { data: relatedProducts } = await getProductRelated(productId);
-  const { data: popularProducts } = await getProductPopular(data.product.categoryId ?? 0);
+
+  const token = await getAccessToken();
 
   return (
     <ProductDetaiLayout
       product={data.product}
       productGuides={productGuides.productGuides}
-      relatedProducts={relatedProducts.togetherViewedProducts}
-      popularProducts={popularProducts.products}
+      isUserLogin={!!token}
     />
   );
 }
@@ -33,13 +31,11 @@ export default async function ProductDetailContainer({ id }: { id: string }) {
 function ProductDetaiLayout({
   product,
   productGuides,
-  relatedProducts,
-  popularProducts,
+  isUserLogin,
 }: {
   product: IProduct;
   productGuides: IProductGuide[];
-  relatedProducts: IProduct[];
-  popularProducts: IProduct[];
+  isUserLogin: boolean;
 }) {
   return (
     <>
@@ -51,10 +47,10 @@ function ProductDetaiLayout({
             <HotdealGuide productGuides={productGuides} />
             <HotdealIndex product={product} />
             <CommunityReaction product={product} />
-            <RelatedProducts products={relatedProducts} />
-            <PopularProducts product={product} products={popularProducts} />
+            <RelatedProducts product={product} />
+            <PopularProducts product={product} />
           </ProductInfoLayout>
-          <BottomCTA product={product} />
+          <BottomCTA product={product} isUserLogin={isUserLogin} />
         </div>
       </main>
       <div className="h-22"></div>

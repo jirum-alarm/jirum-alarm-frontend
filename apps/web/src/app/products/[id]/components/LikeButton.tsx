@@ -4,15 +4,20 @@ import Button from '@/components/common/Button';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { useAddWishlist, useRemoveWishlist } from '@/features/products';
-import { useMe } from '@/features/users';
 import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function LikeButton({ product }: { product: IProduct }) {
-  const [isLiked, setIsLiked] = useState(product.isMyWhishlist);
+export default function LikeButton({
+  product,
+  isUserLogin,
+}: {
+  product: IProduct;
+  isUserLogin: boolean;
+}) {
+  const [isLiked, setIsLiked] = useState(product.isMyWishlist);
 
   const productId = +product.id;
 
@@ -20,10 +25,9 @@ export default function LikeButton({ product }: { product: IProduct }) {
 
   const addWishlist = useAddWishlist();
   const removeWishlist = useRemoveWishlist();
-  const me = useMe();
 
   const handleClickWishlist = () => {
-    if (!me.data) {
+    if (!isUserLogin) {
       mp.track(EVENT.PRODUCT_WISH.NAME, {
         type: EVENT.PRODUCT_WISH.TYPE.NOT_LOGGED_IN,
         page: EVENT.PAGE.DETAIL,
