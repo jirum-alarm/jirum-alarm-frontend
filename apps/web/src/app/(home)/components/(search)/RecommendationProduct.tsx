@@ -32,7 +32,6 @@ export default function RecommendationProduct({
         slidesPerView={2.5}
         breakpoints={{
           640: { slidesPerView: 3.5 },
-          1024: { slidesPerView: 5.5 },
         }}
       >
         {hotDeals.slice(0, hotDealCount).map((hotDeal, i) => (
