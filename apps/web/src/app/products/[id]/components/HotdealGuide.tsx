@@ -85,6 +85,79 @@ export default function HotdealGuide({ productGuides }: { productGuides: IProduc
   );
 }
 
+function LinkText({ content }: { content: string }) {
+  // 마크다운 링크와 일반 URL을 구분하는 정규표현식
+  const regex = /(\[([^\]]+)\]\((https?:\/\/[^\s]+)\))|(https?:\/\/[^\s]+)/g;
+  const parts = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(content)) !== null) {
+    // 일반 텍스트 추가
+    if (match.index > lastIndex) {
+      parts.push({ type: 'text', content: content.slice(lastIndex, match.index) });
+    }
+
+    if (match[1]) {
+      // [링크](url) 형식
+      const linkText = match[2];
+      const url = match[3];
+      parts.push({ type: 'markdown', text: linkText, url });
+    } else {
+      // 단순 URL
+      parts.push({ type: 'url', url: match[4] });
+    }
+
+    lastIndex = regex.lastIndex;
+  }
+
+  // 마지막 일반 텍스트 추가
+  if (lastIndex < content.length) {
+    parts.push({ type: 'text', content: content.slice(lastIndex) });
+  }
+
+  return (
+    <div>
+      {parts.map((part, index) => {
+        switch (part.type) {
+          case 'text':
+            return (
+              <span key={index} className="text-gray-600">
+                {part.content}
+              </span>
+            );
+          case 'markdown':
+            return (
+              <a
+                key={index}
+                href={part.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline hover:text-blue-700 hover:no-underline"
+              >
+                {part.text}
+              </a>
+            );
+          case 'url':
+            return (
+              <a
+                key={index}
+                href={part.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline hover:text-blue-700 hover:no-underline"
+              >
+                {part.url}
+              </a>
+            );
+          default:
+            return null;
+        }
+      })}
+    </div>
+  );
+}
+
 function HotdealGuideItem({ guide }: { guide: IProductGuide }) {
   return (
     <div className="flex gap-x-2 px-3">
@@ -93,7 +166,7 @@ function HotdealGuideItem({ guide }: { guide: IProductGuide }) {
       </div>
       <div className="flex flex-col">
         <span className="leading-5 text-gray-900">{guide.title}</span>
-        <span className="text-gray-600">{guide.content}</span>
+        <LinkText content={guide.content} />
       </div>
     </div>
   );
