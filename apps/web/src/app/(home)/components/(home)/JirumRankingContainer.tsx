@@ -1,21 +1,10 @@
-import { getClient } from '@/lib/client';
-import { QueryRankingProducts } from '@/graphql';
-import { IRankingProductsOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
-import JirumRankingSlider from './JirumRankingSlider';
-import { getDayBefore } from '@/util/date';
 import Link from 'next/link';
 import { PAGE } from '@/constants/page';
+import { Suspense } from 'react';
+import JrimRankingSliderServer from './JrimRankingSlider.server';
+import { cn } from '@/lib/cn';
 
 const JirumRankingContainer = async () => {
-  const { data } = await getClient().query<IRankingProductsOutput>({
-    query: QueryRankingProducts,
-    variables: {
-      limit: 10,
-      orderBy: ProductOrderType.COMMUNITY_RANKING,
-      orderOption: OrderOptionType.DESC,
-      startDate: getDayBefore(1),
-    },
-  });
   return (
     <div className="w-full">
       <div className="flex items-center justify-between px-4 pb-5 pt-2">
@@ -24,10 +13,33 @@ const JirumRankingContainer = async () => {
           더보기
         </Link>
       </div>
-
-      <JirumRankingSlider products={data} />
+      <Suspense fallback={<JirumRankingSliderSkeleton />}>
+        <JrimRankingSliderServer />
+      </Suspense>
     </div>
   );
 };
 
 export default JirumRankingContainer;
+
+const JirumRankingSliderSkeleton = () => {
+  return (
+    <div>
+      <div className="flex h-[340px] w-full justify-around">
+        <div className="w-1/4 scale-90 bg-gray-100 "></div>
+        <div className="w-1/2 scale-100 bg-gray-100"></div>
+        <div className="w-1/4 scale-90 bg-gray-100"></div>
+      </div>
+      <div className="mt-3 flex h-[20px] w-full items-center justify-center">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div
+            key={i}
+            className={cn(`h-[3px] w-[3px] bg-gray-400`, {
+              'ml-[6px] mr-[6px] h-[4px] w-[4px] bg-gray-600': 0 === i,
+            })}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};

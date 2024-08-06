@@ -32,7 +32,7 @@ export const httpLink = new HttpLink({
 export const apolloClient = new ApolloClient({ link: httpLink, cache: new InMemoryCache() });
 
 const getAuthLink = setContext(async (_, { headers }) => {
-  const token = await getAccessToken();
+  const token = typeof window !== 'undefined' ? await getAccessToken() : undefined;
   return {
     headers: {
       ...headers,
@@ -114,15 +114,9 @@ const makeClient = () => {
   });
 };
 export function ApolloProvider({ children }: Props) {
-  const [client, setClient] = useState<any>();
-  useEffect(() => {
-    setClient(makeClient());
-  }, []);
   return (
     <>
-      {client && (
-        <ApolloNextAppProvider makeClient={() => client}>{children}</ApolloNextAppProvider>
-      )}
+      <ApolloNextAppProvider makeClient={makeClient}>{children}</ApolloNextAppProvider>
     </>
   );
 }
