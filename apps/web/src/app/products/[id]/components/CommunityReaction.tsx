@@ -12,10 +12,10 @@ export default function CommunityReaction({ product }: { product: IProduct }) {
 
   const allCount = positiveCount + negativeCount;
 
-  const positivePercent = nanSafe((positiveCount / allCount) * 100);
-  const negativePercent = nanSafe((negativeCount / allCount) * 100);
+  const positivePercent = nanSafe((positiveCount / allCount) * 100).toFixed(0);
+  const negativePercent = nanSafe((negativeCount / allCount) * 100).toFixed(0);
 
-  const isPostiveMax = positivePercent === 100;
+  const isPostiveMax = +positivePercent === 100;
 
   const handleCommunityLinkClick = () => {
     mp.track(EVENT.COMMUNITY_LINK_CLICK.NAME, {
