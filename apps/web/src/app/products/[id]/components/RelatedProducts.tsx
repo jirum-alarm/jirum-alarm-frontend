@@ -17,37 +17,40 @@ export default function RelatedProducts({ product }: { product: IProduct }) {
   const products = result?.data.togetherViewedProducts;
 
   return (
-    <section>
-      <h2 className="pb-5 font-semibold text-gray-900">다른 고객이 함께 본 상품</h2>
-      <Suspense fallback={<div></div>}>
-        <div
-          onTouchStartCapture={(e) => {
-            e.stopPropagation();
-          }}
-          onTouchMoveCapture={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <Swiper
-            spaceBetween={12}
-            breakpoints={{
-              300: { slidesPerView: 2.7 },
-              450: { slidesPerView: 3.7 },
+    <>
+      <hr />
+      <section>
+        <h2 className="pb-5 font-semibold text-gray-900">다른 고객이 함께 본 상품</h2>
+        <Suspense fallback={<div></div>}>
+          <div
+            onTouchStartCapture={(e) => {
+              e.stopPropagation();
+            }}
+            onTouchMoveCapture={(e) => {
+              e.stopPropagation();
             }}
           >
-            {products?.map((product, i) => (
-              <SwiperSlide key={i}>
-                <ProductImageCard
-                  type="hotDeal"
-                  product={product}
-                  collectProduct={collectProduct}
-                  logging={{ page: 'DETAIL' }}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-      </Suspense>
-    </section>
+            <Swiper
+              spaceBetween={12}
+              breakpoints={{
+                300: { slidesPerView: 2.7 },
+                450: { slidesPerView: 3.7 },
+              }}
+            >
+              {products?.map((product, i) => (
+                <SwiperSlide key={i}>
+                  <ProductImageCard
+                    type="hotDeal"
+                    product={product}
+                    collectProduct={collectProduct}
+                    logging={{ page: 'DETAIL' }}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </Suspense>
+      </section>
+    </>
   );
 }

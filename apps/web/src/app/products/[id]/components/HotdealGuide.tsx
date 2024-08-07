@@ -79,10 +79,6 @@ export default function HotdealGuide({ productGuides }: { productGuides: IProduc
           </span>
         </div>
       )}
-
-      <div className="pt-8">
-        <hr />
-      </div>
     </section>
   );
 }

@@ -173,51 +173,54 @@ function HotdealIndex({ product }: { product: IProduct }) {
   }
 
   return (
-    <section>
-      <h2 className="pb-3">핫딜 지수</h2>
-      <div className="flex justify-between gap-x-16 rounded border p-5 pr-8">
-        <div>
-          <div className="pt-3">
-            <HotdealChip type={lowerThen(lowPrice, productPrice)} />
-            <div className="h-3"></div>
-            <p className="text-nowrap txs:text-xs xs:text-sm">
-              다나와 처죄가보다
-              <br />
-              <b>{chiperPrice}원</b> 저렴해요.
-            </p>
-          </div>
-        </div>
-        <div className="flex">
-          <div className="flex flex-col items-end justify-between pr-2 text-xs text-gray-600">
-            <span>{lowPrice}원</span>
-            <div className="relative mr-3 rounded-full bg-gray-900 px-2.5 py-1.5 font-semibold text-primary-500">
-              <p className="text-nowrap txs:text-xs xs:text-sm">{productPrice}원</p>
-              <div className="absolute -right-1 top-1/2 -translate-y-1/2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="6"
-                  height="8"
-                  viewBox="0 0 6 8"
-                  fill="none"
-                >
-                  <path d="M6 4L-3.26266e-07 7.4641L-2.34249e-08 0.535898L6 4Z" fill="#101828" />
-                </svg>
-              </div>
-            </div>
-            <span>{lowestPrice}원</span>
-          </div>
-          <div className="flex h-36 w-4 rounded-3xl bg-gray-200">
-            <div className="flex h-full w-full flex-col items-center justify-between py-1">
-              <div className="h-1.5 w-1.5 rounded-full bg-white"></div>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full border-4 border-gray-900 bg-primary-500 pt-0.5">
-                <Won />
-              </div>
-              <div className="h-1.5 w-1.5 rounded-full bg-white"></div>
+    <>
+      <hr />
+      <section>
+        <h2 className="pb-3">핫딜 지수</h2>
+        <div className="flex justify-between gap-x-16 rounded border p-5 pr-8">
+          <div>
+            <div className="pt-3">
+              <HotdealChip type={lowerThen(lowPrice, productPrice)} />
+              <div className="h-3"></div>
+              <p className="text-nowrap txs:text-xs xs:text-sm">
+                다나와 처죄가보다
+                <br />
+                <b>{chiperPrice}원</b> 저렴해요.
+              </p>
             </div>
           </div>
+          <div className="flex">
+            <div className="flex flex-col items-end justify-between pr-2 text-xs text-gray-600">
+              <span>{lowPrice}원</span>
+              <div className="relative mr-3 rounded-full bg-gray-900 px-2.5 py-1.5 font-semibold text-primary-500">
+                <p className="text-nowrap txs:text-xs xs:text-sm">{productPrice}원</p>
+                <div className="absolute -right-1 top-1/2 -translate-y-1/2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="6"
+                    height="8"
+                    viewBox="0 0 6 8"
+                    fill="none"
+                  >
+                    <path d="M6 4L-3.26266e-07 7.4641L-2.34249e-08 0.535898L6 4Z" fill="#101828" />
+                  </svg>
+                </div>
+              </div>
+              <span>{lowestPrice}원</span>
+            </div>
+            <div className="flex h-36 w-4 rounded-3xl bg-gray-200">
+              <div className="flex h-full w-full flex-col items-center justify-between py-1">
+                <div className="h-1.5 w-1.5 rounded-full bg-white"></div>
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border-4 border-gray-900 bg-primary-500 pt-0.5">
+                  <Won />
+                </div>
+                <div className="h-1.5 w-1.5 rounded-full bg-white"></div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 
