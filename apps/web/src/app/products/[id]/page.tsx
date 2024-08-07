@@ -10,37 +10,37 @@ import ProductDetailPageHeader from './components/ProductDeatilPageHeader';
 
 export const dynamic = 'force-dynamic';
 
-// export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-//   const { flags } = await getFeatureFlag();
-//
-//   if (!flags.DETAIL_PAGE_RENEWAL) {
-//     return {};
-//   }
-//
-//   const id = params.id;
-//
-//   const { data } = await getProductDetail(+id);
-//   const product = data.product;
-//
-//   const title = `지름알림 | ${product.title}`;
-//   const description =
-//     product.guides?.map((guide) => guide.content).join(', ') || '핫딜 정보를 알려드려요!';
-//   const image = product.thumbnail || '/opengraph-image.png';
-//
-//   return {
-//     title,
-//     openGraph: {
-//       title,
-//       description,
-//       url: `${SERVICE_URL}/products/${id}`,
-//       type: 'website',
-//       images: [{ url: image }],
-//     },
-//     icons: {
-//       icon: '/icon.png',
-//     },
-//   };
-// }
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const { flags } = await getFeatureFlag();
+
+  if (!flags.DETAIL_PAGE_RENEWAL) {
+    return {};
+  }
+
+  const id = params.id;
+
+  const { data } = await getProductDetail(+id);
+  const product = data.product;
+
+  const title = `지름알림 | ${product.title}`;
+  const description =
+    product.guides?.map((guide) => guide.content).join(', ') || '핫딜 정보를 알려드려요!';
+  const image = product.thumbnail || '/opengraph-image.png';
+
+  return {
+    title,
+    openGraph: {
+      title,
+      description,
+      url: `${SERVICE_URL}/products/${id}`,
+      type: 'website',
+      images: [{ url: image }],
+    },
+    icons: {
+      icon: '/icon.png',
+    },
+  };
+}
 
 export default async function ProductDetail({ params }: { params: { id: string } }) {
   const { flags } = await getFeatureFlag();
