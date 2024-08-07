@@ -38,6 +38,7 @@ export const useGetProductTogetherViewed = (productId: number) => {
       limit: 20,
       productId,
     },
+    fetchPolicy: 'cache-and-network',
   });
 };
 
@@ -49,6 +50,7 @@ export const useGetProductPopluar = (categoryId: number) => {
       thumbnailType: ProductThumbnailType.MALL,
       isEnd: false,
     },
+    fetchPolicy: 'cache-and-network',
   });
 };
 

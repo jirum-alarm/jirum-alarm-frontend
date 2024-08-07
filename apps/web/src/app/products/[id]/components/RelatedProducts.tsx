@@ -2,7 +2,6 @@
 
 import { IProduct } from '@/graphql/interface';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
 import React, { Suspense } from 'react';
 import {
   ProductImageCard,

@@ -2,14 +2,14 @@ import { IProduct, IProductGuide } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { displayTime } from '@/util/displayTime';
 import { getProductDetail } from '@/features/products/server/productDetail';
-import RelatedProducts from './RelatedProducts';
-import PopularProducts from './PopularProudcts';
 import BottomCTA from './BottomCTA';
 import CommunityReaction from './CommunityReaction';
 import ProductImage from './ProductImage';
 import HotdealGuide from './HotdealGuide';
 import { getProductGuides } from '@/features/products/server/productGuides';
 import { getAccessToken } from '@/app/actions/token';
+import PopularProductsContainer from './PopularProudctsContainer';
+import RelatedProductsContainer from './RelatedProductsContainer';
 
 export default async function ProductDetailContainer({ id }: { id: string }) {
   const productId = +id;
@@ -47,8 +47,8 @@ function ProductDetaiLayout({
             <HotdealGuide productGuides={productGuides} />
             <HotdealIndex product={product} />
             <CommunityReaction product={product} />
-            <RelatedProducts product={product} />
-            <PopularProducts product={product} />
+            <RelatedProductsContainer product={product} />
+            <PopularProductsContainer product={product} />
           </ProductInfoLayout>
           <BottomCTA product={product} isUserLogin={isUserLogin} />
         </div>
