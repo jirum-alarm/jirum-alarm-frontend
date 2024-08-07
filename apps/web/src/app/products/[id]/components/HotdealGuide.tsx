@@ -36,7 +36,9 @@ export default function HotdealGuide({ productGuides }: { productGuides: IProduc
     }
   }, []);
 
-  if (!productGuides?.length) {
+  const parsedGuides = productGuides?.filter((guide) => guide.title && guide.content);
+
+  if (!parsedGuides?.length) {
     return;
   }
 
@@ -51,7 +53,7 @@ export default function HotdealGuide({ productGuides }: { productGuides: IProduc
           'h-64 overflow-hidden': needsExpansion,
         })}
       >
-        {productGuides?.map((guide) => <HotdealGuideItem key={guide.id} guide={guide} />)}
+        {parsedGuides?.map((guide) => <HotdealGuideItem key={guide.id} guide={guide} />)}
       </div>
 
       {needsExpansion && (
