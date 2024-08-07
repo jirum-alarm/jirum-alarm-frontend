@@ -4,6 +4,7 @@ import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import ImageWithFallback from '@/components/ImageWithFallback';
 import { PAGE } from '@/constants/page';
+import Link from 'next/link';
 
 export function ProductRankingImageCard({
   product,
@@ -28,7 +29,7 @@ export function ProductRankingImageCard({
   };
 
   return (
-    <a href={PAGE.DETAIL + '/' + product.id} onClick={handleClick}>
+    <Link href={PAGE.DETAIL + '/' + product.id} onClick={handleClick} prefetch={false}>
       <div
         className={cn(
           `h-[340px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all`,
@@ -56,6 +57,6 @@ export function ProductRankingImageCard({
           <div className="pt-2 text-lg font-semibold text-gray-900">{product.price ?? ''}</div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
