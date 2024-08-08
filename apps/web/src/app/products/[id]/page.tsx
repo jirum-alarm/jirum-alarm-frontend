@@ -5,15 +5,13 @@ import ProductDetailContainer from './components/ProductDetailContainer';
 import { getFeatureFlag } from '@/app/actions/posthog';
 import { Metadata } from 'next';
 import { getProductDetail } from '@/features/products/server/productDetail';
-import { SERVICE_URL } from '@/constants/env';
+import { IS_VERCEL_PRD, SERVICE_URL } from '@/constants/env';
 import ProductDetailPageHeader from './components/ProductDeatilPageHeader';
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const { flags } = await getFeatureFlag();
-
-  if (!flags.DETAIL_PAGE_RENEWAL) {
+  if (IS_VERCEL_PRD) {
     return {};
   }
 
