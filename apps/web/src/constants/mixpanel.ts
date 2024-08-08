@@ -5,6 +5,7 @@ export const EVENT = {
   PRODUCT_SEARCH: {
     NAME: 'Product Search',
     TYPE: {
+      CLICK: 'Click',
       INPUT: 'Input',
       RECENT: 'Recent',
       RECOMMENDATION: 'Recommendation',

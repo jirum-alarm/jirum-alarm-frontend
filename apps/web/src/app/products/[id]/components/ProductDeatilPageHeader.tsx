@@ -7,12 +7,18 @@ import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { IProduct } from '@/graphql/interface';
 import { mp } from '@/lib/mixpanel';
-import Link from 'next/link';
 
 export default function ProductDetailPageHeader({ product }: { product: IProduct }) {
   const { toast } = useToast();
 
-  const title = `${product.title} | 지름알림`;
+  const title = `지름알림 | ${product.title}`;
+
+  const handleSearch = () => {
+    mp.track(EVENT.PRODUCT_SEARCH.NAME, {
+      type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
+      page: EVENT.PAGE.DETAIL,
+    });
+  };
 
   const handleShare = () => {
     if (navigator.share) {
@@ -48,9 +54,9 @@ export default function ProductDetailPageHeader({ product }: { product: IProduct
         <BackButton backTo={PAGE.HOME} />
       </div>
       <div className="flex gap-x-2 self-end pr-4">
-        <Link href={PAGE.SEARCH} prefetch={false}>
+        <a href={PAGE.SEARCH} onClick={handleSearch}>
           <Search color="#101828" />
-        </Link>
+        </a>
         <Share onClick={handleShare} className="hover:cursor-pointer" />
       </div>
     </header>
