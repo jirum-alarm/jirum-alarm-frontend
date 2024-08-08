@@ -1,14 +1,10 @@
-import 'swiper/css';
-
 import BasicLayout from '@/components/layout/BasicLayout';
 import ProductDetailContainer from './components/ProductDetailContainer';
-import { getFeatureFlag } from '@/app/actions/posthog';
 import { Metadata } from 'next';
 import { getProductDetail } from '@/features/products/server/productDetail';
 import { IS_VERCEL_PRD, SERVICE_URL } from '@/constants/env';
 import ProductDetailPageHeader from './components/ProductDeatilPageHeader';
-
-export const dynamic = 'force-dynamic';
+import { getProductGuides } from '@/features/products/server/productGuides';
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   if (IS_VERCEL_PRD) {
@@ -20,9 +16,12 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   const { data } = await getProductDetail(+id);
   const product = data.product;
 
+  const { data: productGuides } = await getProductGuides(+product.id);
+
   const title = `지름알림 | ${product.title}`;
   const description =
-    product.guides?.map((guide) => guide.content).join(', ') || '핫딜 정보를 알려드려요!';
+    productGuides.productGuides.map((guide) => guide.content).join(', ') ||
+    '핫딜 정보를 알려드려요!';
   const image = product.thumbnail || '/opengraph-image.png';
 
   return {
@@ -41,10 +40,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 export default async function ProductDetail({ params }: { params: { id: string } }) {
-  const { flags } = await getFeatureFlag();
-
-  if (!flags.DETAIL_PAGE_RENEWAL) {
-    return;
+  if (IS_VERCEL_PRD) {
+    return {};
   }
 
   const id = params.id;
@@ -54,7 +51,7 @@ export default async function ProductDetail({ params }: { params: { id: string }
 
   return (
     <BasicLayout header={<ProductDetailPageHeader product={product} />}>
-      <ProductDetailContainer id={params.id} />
+      <ProductDetailContainer product={product} />
     </BasicLayout>
   );
 }

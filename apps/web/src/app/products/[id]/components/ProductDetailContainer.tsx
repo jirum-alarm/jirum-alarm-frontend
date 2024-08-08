@@ -1,7 +1,8 @@
+import 'swiper/css';
+
 import { IProduct, IProductGuide } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { displayTime } from '@/util/displayTime';
-import { getProductDetail } from '@/features/products/server/productDetail';
 import BottomCTA from './BottomCTA';
 import CommunityReaction from './CommunityReaction';
 import ProductImage from './ProductImage';
@@ -11,17 +12,14 @@ import { getAccessToken } from '@/app/actions/token';
 import PopularProductsContainer from './PopularProudctsContainer';
 import RelatedProductsContainer from './RelatedProductsContainer';
 
-export default async function ProductDetailContainer({ id }: { id: string }) {
-  const productId = +id;
-
-  const { data } = await getProductDetail(productId);
-  const { data: productGuides } = await getProductGuides(productId);
+export default async function ProductDetailContainer({ product }: { product: IProduct }) {
+  const { data: productGuides } = await getProductGuides(+product.id);
 
   const token = await getAccessToken();
 
   return (
     <ProductDetaiLayout
-      product={data.product}
+      product={product}
       productGuides={productGuides.productGuides}
       isUserLogin={!!token}
     />

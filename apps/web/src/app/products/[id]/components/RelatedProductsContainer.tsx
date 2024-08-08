@@ -1,5 +1,7 @@
 'use client';
 
+import 'swiper/css';
+
 import { IProduct } from '@/graphql/interface';
 import React, { Suspense } from 'react';
 import RelatedProducts from './RelatedProducts';
