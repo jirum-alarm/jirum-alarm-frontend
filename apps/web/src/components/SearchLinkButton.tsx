@@ -4,11 +4,12 @@ import React from 'react';
 
 interface Props {
   color?: string;
+  onClick?: () => void;
 }
 
-const SearchLinkButton = ({ color }: Props) => {
+const SearchLinkButton = ({ color, onClick }: Props) => {
   return (
-    <Link className="-m-2 p-2" href={'/search'}>
+    <Link className="-m-2 p-2" href={'/search'} onClick={onClick}>
       <Search color={color} />
     </Link>
   );

@@ -3,9 +3,19 @@ import { cn } from '@/lib/cn';
 import { Logo } from '@/components/common/icons';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import SearchLinkButton from '@/components/SearchLinkButton';
+import { mp } from '@/lib/mixpanel';
+import { EVENT } from '@/constants/mixpanel';
 
 const HomeHeader = () => {
   const { isHeaderVisible } = useVisibilityOnScroll({ visibilityThreshold: 90 });
+
+  const handleSearchClick = () => {
+    mp.track(EVENT.PRODUCT_SEARCH.NAME, {
+      type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
+      page: EVENT.PAGE.HOME,
+    });
+  };
+
   return (
     <header
       className={cn(
@@ -20,7 +30,7 @@ const HomeHeader = () => {
         <Logo />
         <h2 className="text-lg font-semibold text-gray-900">지름알림</h2>
       </div>
-      <SearchLinkButton color="#101828" />
+      <SearchLinkButton color="#101828" onClick={handleSearchClick} />
     </header>
   );
 };
