@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { PAGE } from '@/constants/page';
 import { Suspense } from 'react';
-import JrimRankingSliderServer from './JrimRankingSlider.server';
 import { cn } from '@/lib/cn';
+import JirumRankingSlider from './JirumRankingSlider';
 
-const JirumRankingContainer = async () => {
+const JirumRankingContainer = () => {
   return (
     <div className="w-full">
       <div className="flex items-center justify-between px-4 pb-5 pt-2">
@@ -14,7 +14,7 @@ const JirumRankingContainer = async () => {
         </Link>
       </div>
       <Suspense fallback={<JirumRankingSliderSkeleton />}>
-        <JrimRankingSliderServer />
+        <JirumRankingSlider />
       </Suspense>
     </div>
   );

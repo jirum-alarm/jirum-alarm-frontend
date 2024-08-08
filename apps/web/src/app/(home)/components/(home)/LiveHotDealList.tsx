@@ -10,7 +10,7 @@ const LiveHotDealList = () => {
   return (
     <>
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
-        {products.map((product, i) => (
+        {products?.map((product, i) => (
           <ProductLiveHotdealsImageCard
             key={i}
             product={product}

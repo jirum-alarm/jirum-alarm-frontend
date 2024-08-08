@@ -3,15 +3,25 @@ import { useState } from 'react';
 import { cn } from '@/lib/cn';
 import { useCollectProduct } from '@/features/products';
 import { ProductRankingImageCard } from '@/features/products/components/ProductRankingImageCard';
-import { IRankingProductsOutput } from '@/graphql/interface';
+import { IRankingProductsOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
 import { SwiperSlide, Swiper } from 'swiper/react';
 import 'swiper/css';
+import { useSuspenseQuery } from '@apollo/client';
+import { QueryRankingProducts } from '@/graphql';
+import { getDayBefore } from '@/util/date';
 
-interface Props {
-  products: IRankingProductsOutput;
-}
+const JirumRankingSlider = () => {
+  const {
+    data: { rankingProducts },
+  } = useSuspenseQuery<IRankingProductsOutput>(QueryRankingProducts, {
+    variables: {
+      limit: 10,
+      orderBy: ProductOrderType.COMMUNITY_RANKING,
+      orderOption: OrderOptionType.DESC,
+      startDate: getDayBefore(1),
+    },
+  });
 
-const JirumRankingSlider = ({ products: { rankingProducts } }: Props) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const collectProduct = useCollectProduct();
 

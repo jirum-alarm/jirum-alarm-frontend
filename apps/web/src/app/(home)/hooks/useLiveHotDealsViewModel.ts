@@ -1,6 +1,6 @@
 import { QueryProducts } from '@/graphql';
 import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
-import { useSuspenseQuery } from '@apollo/client';
+import { useQuery, useSuspenseQuery } from '@apollo/client';
 import { useTransition } from 'react';
 import { useInView } from 'react-intersection-observer';
 
