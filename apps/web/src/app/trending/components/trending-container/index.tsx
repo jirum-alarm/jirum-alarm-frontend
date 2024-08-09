@@ -1,16 +1,16 @@
 'use client';
 import { Tab, TabList, Tabs } from 'react-tabs';
-import useTabSwitcher from '../hooks/useTabSwitcher';
 import { IllustStandingSmall, Setting } from '@/components/common/icons';
 import Link from 'next/link';
-import TrendingList from './TrendingList';
 import { Suspense } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
+import useTabSwitcher from '../../hooks/useTabSwitcher';
+import TrendingList from '../TrendingList';
 
-const TrendingContainer = ({
+export const TrendingContainer = ({
   categories,
 }: {
   categories: { id: number | null; name: string }[];
@@ -72,8 +72,6 @@ const TrendingContainer = ({
     </div>
   );
 };
-
-export default TrendingContainer;
 
 const TrendingListSkeleton = () => {
   return (

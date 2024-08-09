@@ -1,5 +1,4 @@
 import '@/style/globals.css';
-
 import { Metadata, Viewport } from 'next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GA_TRACKING_ID } from '@/constants/ga';
@@ -12,10 +11,10 @@ import Toaster from '@/components/common/Toast/Toaster';
 import { SERVICE_URL } from '@/constants/env';
 import { InitMixpanel } from '@/lib/mixpanel';
 import dynamic from 'next/dynamic';
-import { getAccessToken } from './actions/token';
-const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
-  ssr: false,
-});
+
+// const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
+//   ssr: false,
+// });
 
 export const metadata: Metadata = {
   title: '지름알림: 핫딜 정보 모아보기',
@@ -63,7 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
             <Toaster />
             <SpeedInsights />
-            <PostHogPageView />
+            {/* <PostHogPageView /> */}
           </AppProvider>
         </MSWInit>
       </body>
