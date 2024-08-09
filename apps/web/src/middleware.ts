@@ -6,7 +6,12 @@ import { GRAPHQL_ENDPOINT } from './constants/graphql';
 import { accessTokenExpiresAt, refreshTokenExpiresAt } from './constants/token';
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
-  const response = await handlePostHog(request);
+  // const response = await handlePostHog(request);
+  const response = NextResponse.next({
+    request: {
+      headers: new Headers(request.headers),
+    },
+  });
   return await routeGuard(request, response);
 }
 
