@@ -15,14 +15,7 @@ interface TrendingListProps {
 }
 
 const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
-  const {
-    products,
-    liveProducts,
-    loadingCallbackRef,
-    firstRenderingCount,
-    isPending,
-    hasViewedAllProducts,
-  } = useTrendingViewModel({
+  const { products, liveProducts, firstRenderingCount } = useTrendingViewModel({
     categoryId,
   });
   const { loading, data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
@@ -91,15 +84,15 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
             />
           ))}
       </div>
-      {hasViewedAllProducts && hotDeals && (
+      {hotDeals && (
         <div>
           <div className="pb-4 pt-9 text-base">추천 핫딜</div>
           <RecommendationProduct hotDeals={hotDeals} logging={{ page: 'TRENDING' }} />
         </div>
       )}
-      <div className="flex w-full items-center justify-center py-6" ref={loadingCallbackRef}>
-        {isPending && <LoadingSpinner />}
-      </div>
+      {/* <div className="flex w-full items-center justify-center py-6" ref={loadingCallbackRef}>
+        {isFetchingNextPage && <LoadingSpinner />}
+      </div> */}
     </div>
   );
 };

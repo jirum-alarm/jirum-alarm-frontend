@@ -10,6 +10,7 @@ import { IllustStanding, IllustStandingSmall } from '@/components/common/icons';
 import { displayTime } from '@/util/displayTime';
 import { PAGE } from '@/constants/page';
 import Link from 'next/link';
+import { QueryProductsQuery } from '@/shared/api/gql/graphql';
 
 export function ProductImageCard({
   product,
@@ -17,7 +18,7 @@ export function ProductImageCard({
   type = 'product',
   logging,
 }: {
-  product: IProduct;
+  product: IProduct | QueryProductsQuery['products'][number];
   collectProduct: (productId: number) => void;
   type?: 'product' | 'hotDeal';
   logging: { page: keyof typeof EVENT.PAGE };
@@ -61,7 +62,7 @@ export function ProductImageCard({
           </div>
         )}
 
-        <ImageWithFallback src={product?.thumbnail} title={product.title} type={type} />
+        <ImageWithFallback src={product?.thumbnail ?? ''} title={product.title} type={type} />
       </div>
       <div className="flex flex-col">
         <span
