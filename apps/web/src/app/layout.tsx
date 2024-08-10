@@ -4,13 +4,13 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GA_TRACKING_ID } from '@/constants/ga';
 import GoogleAnalytics from '../components/GoogleAnalitics';
 import Script from 'next/script';
-import AppProvider from '@/lib/provider/appProvier';
 import { pretendard } from '@/lib/fonts';
 import MSWInit from '@/components/MSWInit';
 import Toaster from '@/components/common/Toast/Toaster';
 import { SERVICE_URL } from '@/constants/env';
 import { InitMixpanel } from '@/lib/mixpanel';
 import dynamic from 'next/dynamic';
+import { AppProvider } from './(app)/providers';
 
 // const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
 //   ssr: false,
