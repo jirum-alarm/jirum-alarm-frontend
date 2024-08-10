@@ -7,6 +7,7 @@ import { cn } from '@/lib/cn';
 import { useEffect, useRef, useState } from 'react';
 
 export default function HotdealGuide({ productGuides }: { productGuides: IProductGuide[] }) {
+  console.info('🚀 : HotdealGuide.tsx:9: productGuides=', productGuides);
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsExpansion, setNeedsExpansion] = useState(false);
 
@@ -49,7 +50,7 @@ export default function HotdealGuide({ productGuides }: { productGuides: IProduc
       </div>
 
       <div
-        className={cn('flex flex-col gap-y-4 py-4', {
+        className={cn('flex flex-col gap-y-4 break-all py-4', {
           'h-64 overflow-hidden': needsExpansion,
         })}
       >
@@ -119,11 +120,14 @@ function LinkText({ content }: { content: string }) {
       {parts.map((part, index) => {
         switch (part.type) {
           case 'text':
-            return (
-              <span key={index} className="text-gray-600">
-                {part.content}
-              </span>
-            );
+            return part.content?.split('\n').map((text, index) => (
+              <>
+                {index > 0 && <br />}
+                <span key={index} className="text-gray-600">
+                  {text}
+                </span>
+              </>
+            ));
           case 'markdown':
             return (
               <a
