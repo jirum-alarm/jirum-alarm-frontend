@@ -5,7 +5,7 @@ import TrendingPageHeader from './components/TrendingPageHeader';
 import { TrendingContainerServer } from './components/trending-container/trending-server';
 import { Suspense } from 'react';
 
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
 
 const TrendingPage = () => {
   return (

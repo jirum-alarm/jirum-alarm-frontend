@@ -67,7 +67,6 @@ class HttpClient {
   private async getNewAccessToken() {
     const refreshToken = await getRefreshToken();
 
-    // 토큰 갱신 로직을 구현합니다. 여기서는 예시로 간단히 fetch를 사용합니다.
     const response = await fetch(this.baseUrl, {
       method: 'POST',
       credentials: 'include',
@@ -92,6 +91,10 @@ class HttpClient {
     };
 
     const { accessToken, refreshToken: newRefreshToken } = data.loginByRefreshToken;
+    /**
+     * NOTE: 서버단에서는 server action함수 사용을 못 하므로 분기처리!
+     * 어차피 서버단일땐 middleware단에서 token refresh를 하므로 분기를 태워도 상관없다.
+     */
     if (typeof window !== 'undefined') {
       await setAccessToken(accessToken);
       if (newRefreshToken) setRefreshToken(newRefreshToken);
@@ -101,13 +104,13 @@ class HttpClient {
   }
 
   private async fetchWithAuth(url: string, options: RequestInit): Promise<any> {
-    const accessToken = await getAccessToken();
+    const accessToken = typeof window !== 'undefined' ? await getAccessToken() : undefined;
 
     const response = await fetch(url, {
       ...options,
       headers: {
         ...options.headers,
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: accessToken ? `Bearer ${accessToken}` : '',
       },
     });
 
