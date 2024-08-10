@@ -1,1 +1,1 @@
-export { categoryQueries } from './category.queries';
+export { CategoryQueries } from './category.queries';

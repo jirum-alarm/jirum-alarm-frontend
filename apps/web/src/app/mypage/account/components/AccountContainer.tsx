@@ -2,12 +2,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import AccountManagement from './AccountManagement';
 import MovePage from './MovePage';
-import { authQueries } from '@/entities/auth/auth.queries';
+import { AuthQueries } from '@/entities/auth/auth.queries';
 
 const AccountContainer = () => {
   const {
     data: { me },
-  } = useSuspenseQuery(authQueries.me());
+  } = useSuspenseQuery(AuthQueries.me());
   return (
     <div className="flex h-full flex-col px-5 pb-8">
       <div className="border-b border-b-gray-300 pb-8 pt-6">

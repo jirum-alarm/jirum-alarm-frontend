@@ -1,4 +1,4 @@
-import { productQueries } from '@/entities/product';
+import { ProductQueries } from '@/entities/product';
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
@@ -11,7 +11,7 @@ const useLiveHotDealsViewModel = () => {
     fetchNextPage,
     isFetchingNextPage,
   } = useSuspenseInfiniteQuery(
-    productQueries.infiniteProducts({
+    ProductQueries.infiniteProducts({
       limit,
       orderBy: ProductOrderType.PostedAt,
       orderOption: OrderOptionType.Desc,

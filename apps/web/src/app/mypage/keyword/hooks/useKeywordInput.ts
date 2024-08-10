@@ -1,7 +1,5 @@
-import { useToast } from '@/components/common/Toast';
-import { MutationAddNotificationKeyword, QueryMypageKeyword } from '@/graphql/keyword';
-import { useMutation } from '@apollo/client';
 import { useState } from 'react';
+import { useUpdateKeyword } from '../../features';
 
 const MAX_KETWORD_LENGTH = 20;
 
@@ -10,17 +8,7 @@ export const useKeywordInput = () => {
     error: false,
     value: '',
   });
-  const { toast } = useToast();
-  const [addNotificationKeyword] = useMutation<
-    { addNotificationKeyword: boolean },
-    { keyword: string }
-  >(MutationAddNotificationKeyword, {
-    refetchQueries: [{ query: QueryMypageKeyword, variables: { limit: 20 } }],
-    onCompleted: () => {},
-    onError: (error) => {
-      toast(error.message);
-    },
-  });
+  const { mutate: addNotificationKeyword } = useUpdateKeyword();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
@@ -39,7 +27,7 @@ export const useKeywordInput = () => {
   const canSubmit = !!keyword.value && !keyword.error;
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addNotificationKeyword({ variables: { keyword: keyword.value } });
+    addNotificationKeyword({ keyword: keyword.value });
     reset();
   };
   return { handleInputChange, keyword, reset, handleSubmit, canSubmit };

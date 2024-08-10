@@ -1,1 +1,1 @@
-export { productQueries } from './product.queries';
+export { ProductQueries } from './product.queries';

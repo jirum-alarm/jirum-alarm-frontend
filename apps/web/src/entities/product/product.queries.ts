@@ -2,17 +2,17 @@ import { QueryProductsQueryVariables } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
-export const productQueries = {
+export const ProductQueries = {
   all: () => ['product'],
   ranking: () =>
     queryOptions({
-      queryKey: [...productQueries.all(), 'ranking'],
+      queryKey: [...ProductQueries.all(), 'ranking'],
       queryFn: () => ProductService.getRankingProducts(),
     }),
   products: (variables: QueryProductsQueryVariables) =>
     queryOptions({
       queryKey: [
-        ...productQueries.all(),
+        ...ProductQueries.all(),
         {
           limit: variables.categoryId,
           searchAfter: variables.searchAfter,
@@ -30,7 +30,7 @@ export const productQueries = {
     }),
   infiniteProducts: (variables: QueryProductsQueryVariables) =>
     infiniteQueryOptions({
-      queryKey: [...productQueries.products(variables).queryKey],
+      queryKey: [...ProductQueries.products(variables).queryKey],
       queryFn: ({ pageParam }) =>
         ProductService.getProducts({ ...variables, searchAfter: pageParam }),
       initialPageParam: null as null | string,

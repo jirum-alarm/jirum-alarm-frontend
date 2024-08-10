@@ -1,16 +1,16 @@
 import { CategoryService } from '@/shared/api/category';
 import { queryOptions } from '@tanstack/react-query';
 
-export const categoryQueries = {
+export const CategoryQueries = {
   all: () => ['category'],
   categories: () =>
     queryOptions({
-      queryKey: [...categoryQueries.all(), 'list'],
+      queryKey: [...CategoryQueries.all(), 'list'],
       queryFn: () => CategoryService.getCategories(),
     }),
   myCategories: () =>
     queryOptions({
-      queryKey: [...categoryQueries.categories().queryKey, 'my'],
+      queryKey: [...CategoryQueries.categories().queryKey, 'my'],
       queryFn: () => CategoryService.getMyCategories(),
     }),
 };

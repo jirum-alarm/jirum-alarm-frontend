@@ -60,6 +60,7 @@ class HttpClient {
         query,
         variables,
       }),
+      cache: 'no-store',
     });
 
     return response as { data: TResult };
@@ -132,6 +133,8 @@ class HttpClient {
             });
             const res = (await response).json();
             return res;
+          default:
+            throw new FetchError(err.message, err.extensions.response.statusCode);
         }
       }
     }

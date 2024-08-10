@@ -1,13 +1,13 @@
 'use client';
 import { ArrowRight } from '@/components/common/icons';
-import { authQueries } from '@/entities/auth/auth.queries';
+import { AuthQueries } from '@/entities/auth/auth.queries';
 import Link from '@/features/Link';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 const MyProfileSection = () => {
   const {
     data: { me },
-  } = useSuspenseQuery(authQueries.me());
+  } = useSuspenseQuery(AuthQueries.me());
 
   return (
     <div className="px-5">

@@ -1,3 +1,4 @@
+'use client';
 import PasswordInput from '../../components/PasswordInput';
 import Button from '@/components/common/Button';
 import { cn } from '@/lib/cn';
