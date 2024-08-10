@@ -1,10 +1,5 @@
-import { useToast } from '@/components/common/Toast';
-import { MutationUpdatePassword } from '@/graphql/auth';
-import { useMutation } from '@apollo/client';
-import { useRouter } from 'next/navigation';
+import { useUpdatePassword } from '@/app/mypage/features';
 import { useState } from 'react';
-
-const COMPLETE_ROUTE = '/mypage/account';
 
 const validate = (value: string) => {
   if (value === '') {
@@ -26,17 +21,8 @@ const validate = (value: string) => {
 };
 
 const useChangePasswordFormViewModel = () => {
-  const { toast } = useToast();
-  const router = useRouter();
-  const [updatePassword] = useMutation<unknown, { password: string }>(MutationUpdatePassword, {
-    onCompleted: () => {
-      toast('비밀번호 변경이 완료됐어요.');
-      router.push(COMPLETE_ROUTE);
-    },
-    onError: () => {
-      toast('비밀번호 변경중 에러가 발생했어요.');
-    },
-  });
+  const { mutate: updatePassword } = useUpdatePassword();
+
   const [input, setInput] = useState({
     password: { value: '', error: false, invalidType: false, invalidLength: false },
     confirmPassword: { value: '', error: false },
@@ -57,7 +43,7 @@ const useChangePasswordFormViewModel = () => {
     const { password, confirmPassword } = input;
 
     if (password.value === confirmPassword.value) {
-      updatePassword({ variables: { password: input.password.value } });
+      updatePassword({ password: input.password.value });
     } else {
       setInput((input) => ({
         ...input,

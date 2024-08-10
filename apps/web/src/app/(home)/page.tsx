@@ -1,11 +1,8 @@
-'use client';
 import AddFCMToken from './components/AddFCMToken';
 import HomeContainer from './components/HomeContainer';
 import HomeContainerV2 from './components/(home)/HomeContainerV2';
 // import { getFeatureFlag } from '../actions/posthog';
 import { IS_VERCEL_PRD } from '@/constants/env';
-
-export const dynamic = 'force-dynamic';
 
 export default function Home() {
   // const { flags } = await getFeatureFlag();

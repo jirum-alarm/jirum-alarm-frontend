@@ -1,20 +1,21 @@
 import AlertDialog from '@/components/common/AlertDialog';
 import Button from '@/components/common/Button';
 import { useToast } from '@/components/common/Toast';
-import { MutationWithdraw } from '@/graphql/auth';
 import { useLogout } from '@/hooks/useLogout';
-import { useMutation } from '@apollo/client';
-import React from 'react';
+import { AuthService } from '@/shared/api/auth';
+import { useMutation } from '@tanstack/react-query';
 
 const DeleteAccount = () => {
   const { toast } = useToast();
   const logout = useLogout();
-  const [deleteAccount] = useMutation<unknown, { password: string }>(MutationWithdraw, {
-    onCompleted: () => {
+
+  const { mutate: deleteAccount } = useMutation({
+    mutationFn: AuthService.deleteUser,
+    onSuccess: () => {
       logout();
     },
     onError: () => {
-      toast('회원탈퇴가 실패했어요. 다시 시도해주세요.');
+      toast('회원탈퇴에 실패했어요');
     },
   });
   const onDeleteAccount = () => {

@@ -4,7 +4,7 @@ import useLiveHotDealsViewModel from '../../hooks/useLiveHotDealsViewModel';
 import { LoadingSpinner } from '@/components/common/icons';
 
 const LiveHotDealList = () => {
-  const { products, loadingCallbackRef, isPending } = useLiveHotDealsViewModel();
+  const { products, loadingCallbackRef, isFetchingNextPage } = useLiveHotDealsViewModel();
   const collectProduct = useCollectProduct();
 
   return (
@@ -20,7 +20,7 @@ const LiveHotDealList = () => {
         ))}
       </div>
       <div className="flex w-full items-center justify-center pb-6 pt-3" ref={loadingCallbackRef}>
-        {isPending && <LoadingSpinner />}
+        {isFetchingNextPage && <LoadingSpinner />}
       </div>
     </>
   );

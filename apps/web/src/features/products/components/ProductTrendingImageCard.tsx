@@ -4,6 +4,7 @@ import { PAGE } from '@/constants/page';
 import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
+import { QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
 import Link from 'next/link';
 import React from 'react';
@@ -14,7 +15,7 @@ export const ProductTrendingImageCard = ({
   collectProduct,
   logging,
 }: {
-  product: IProduct;
+  product: QueryProductsQuery['products'][number];
   rank: number;
   collectProduct: (productId: number) => void;
   logging: { page: keyof typeof EVENT.PAGE };

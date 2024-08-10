@@ -4,8 +4,8 @@ import SearchButton from '../../../../components/SearchLinkButton';
 import LiveHotDealContainer from './LiveHotDealContainer';
 import TopButton from '@/components/TopButton';
 import BottomNav, { NAV_TYPE } from '@/components/layout/BottomNav';
-import JirumRankingContainer from './JirumRankingContainer';
 import Link from 'next/link';
+import JirumRankingContainer from './JirumRankingContainer';
 
 const HomeContainerV2 = () => {
   return (

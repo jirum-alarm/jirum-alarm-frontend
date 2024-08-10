@@ -2,10 +2,8 @@ import BasicLayout from '@/components/layout/BasicLayout';
 import { NAV_TYPE } from '@/components/layout/BottomNav';
 import TopButton from '@/components/TopButton';
 import TrendingPageHeader from './components/TrendingPageHeader';
-import { TrendingContainerServer } from './components/trending-container/server-provider';
+import { TrendingContainerServer } from './components/trending-container/trending-server';
 import { Suspense } from 'react';
-
-export const dynamic = 'force-dynamic';
 
 const TrendingPage = () => {
   return (

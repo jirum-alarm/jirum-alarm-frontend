@@ -1,18 +1,18 @@
 import { EVENT } from '@/constants/mixpanel';
-import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { displayTime } from '@/util/displayTime';
 import ImageWithFallback from '@/components/ImageWithFallback';
 import { PAGE } from '@/constants/page';
 import Link from 'next/link';
+import { type QueryProductsQuery } from '@/shared/api/gql/graphql';
 
 export function ProductLiveHotdealsImageCard({
   product,
   collectProduct,
   logging,
 }: {
-  product: IProduct;
+  product: QueryProductsQuery['products'][number];
   collectProduct: (productId: number) => void;
   type?: 'product' | 'hotDeal';
   logging: { page: keyof typeof EVENT.PAGE };
@@ -25,7 +25,6 @@ export function ProductLiveHotdealsImageCard({
       page: EVENT.PAGE[logging.page],
     });
   };
-
   return (
     <Link
       href={PAGE.DETAIL + '/' + product.id}

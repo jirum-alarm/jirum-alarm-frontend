@@ -57,12 +57,6 @@ export const MutationUpdateUserProfile = gql`
   }
 `;
 
-export const QueryLogout = gql`
-  query QueryLogout {
-    logout
-  }
-`;
-
 export const QueryMe = gql`
   query QueryMe {
     me {
@@ -77,7 +71,7 @@ export const QueryMe = gql`
 `;
 
 export const QueryMyCategories = gql`
-  query QueryMe {
+  query QueryMyCategories {
     me {
       favoriteCategories
     }
