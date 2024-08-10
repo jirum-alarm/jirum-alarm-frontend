@@ -1,15 +1,13 @@
 import { useToast } from '@/components/common/Toast';
-import { MypageKeyword } from '@/graphql/interface/keyword';
+import { authQueries } from '@/entities/auth/auth.queries';
 import { MutationRemoveNotificationKeyword, QueryMypageKeyword } from '@/graphql/keyword';
 import { useMutation } from '@apollo/client';
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const useKeywordList = () => {
-  const { data: { notificationKeywordsByMe } = {} } = useQuery<MypageKeyword>(QueryMypageKeyword, {
-    variables: {
-      limit: 20,
-    },
-  });
+  const {
+    data: { notificationKeywordsByMe },
+  } = useSuspenseQuery(authQueries.myKeyword({ limit: 20 }));
   const { toast } = useToast();
   const [removeNotificationKeyword] = useMutation<
     { removeNotificationKeyword: boolean },

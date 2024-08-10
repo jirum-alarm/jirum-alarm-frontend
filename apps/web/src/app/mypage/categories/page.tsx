@@ -1,5 +1,5 @@
 import BasicLayout from '@/components/layout/BasicLayout';
-import React from 'react';
+import React, { Suspense } from 'react';
 import CategoriesForm from './components/CategoriesForm';
 
 const CategoriesPage = () => {
@@ -13,7 +13,9 @@ const CategoriesPage = () => {
               <br /> 선택할 수 있어요.
             </p>
           </legend>
-          <CategoriesForm />
+          <Suspense>
+            <CategoriesForm />
+          </Suspense>
         </fieldset>
       </div>
     </BasicLayout>

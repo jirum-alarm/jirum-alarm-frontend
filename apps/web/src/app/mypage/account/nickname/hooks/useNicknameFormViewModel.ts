@@ -1,18 +1,18 @@
 import { useToast } from '@/components/common/Toast';
+import { authQueries } from '@/entities/auth/auth.queries';
 import { MutationUpdateUserProfile, QueryMe } from '@/graphql/auth';
 import useGoBack from '@/hooks/useGoBack';
-import { User } from '@/types/user';
 import { useMutation } from '@apollo/client';
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 const MIN_NICKNAME_LENGTH = 2;
 const MAX_NICKNAME_LENGTH = 12;
 
 const useInput = () => {
-  const { data } = useQuery<{ me: Omit<User, 'favoriteCategories' | 'linkedSocialProviders'> }>(
-    QueryMe,
-  );
+  const {
+    data: { me },
+  } = useSuspenseQuery(authQueries.me());
   const [nickname, setNickname] = useState(() => ({
     value: '',
     error: false,
@@ -34,10 +34,10 @@ const useInput = () => {
   );
 
   useEffect(() => {
-    if (data?.me) {
-      setNickname((prev) => ({ ...prev, value: data.me.nickname }));
+    if (me) {
+      setNickname((prev) => ({ ...prev, value: me.nickname }));
     }
-  }, [data]);
+  }, [me]);
 
   const isValidNickname = (value: string) => {
     const valueLength = [...new Intl.Segmenter().segment(value)].length;

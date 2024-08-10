@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
 import { CATEGORIES, MAX_SELECTION_COUNT } from '@/constants/categories';
 import { MutationUpdateUserProfile, QueryMe } from '@/graphql/auth';
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { useToast } from '@/components/common/Toast';
 import useGoBack from '@/hooks/useGoBack';
 import { useMutation } from '@apollo/client';
-import { type User } from '@/types/user';
 import { type ICategoryForm } from '@/features/categories/types';
 import { shallowArrayEqual } from '@/util/object';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { authQueries } from '@/entities/auth/auth.queries';
 
 const FAVORITE_CATEGORIES = CATEGORIES.map((category) => ({ ...category, isChecked: false }));
 
 export const useCategoriesFormViewModel = () => {
-  const { data } = useQuery<{ me: Pick<User, 'favoriteCategories'> }>(QueryMe);
+  const {
+    data: { me },
+  } = useSuspenseQuery(authQueries.me());
+
   const { toast } = useToast();
   const goBack = useGoBack();
   const [updateProfile] = useMutation<
@@ -33,7 +36,7 @@ export const useCategoriesFormViewModel = () => {
   const [originalCategory, setOriginalCategory] = useState<ICategoryForm[]>(FAVORITE_CATEGORIES);
 
   useEffect(() => {
-    const favoriteCategories = data?.me.favoriteCategories;
+    const favoriteCategories = me.favoriteCategories;
     if (!favoriteCategories) return;
 
     const _FAVORITE_CATEGORIES = FAVORITE_CATEGORIES.map((category) => ({
@@ -44,7 +47,7 @@ export const useCategoriesFormViewModel = () => {
     }));
     setCategories(_FAVORITE_CATEGORIES);
     setOriginalCategory(_FAVORITE_CATEGORIES);
-  }, [data?.me.favoriteCategories]);
+  }, [me.favoriteCategories]);
 
   const SELECTION_COUNT = categories.filter((category) => category.isChecked).length;
 

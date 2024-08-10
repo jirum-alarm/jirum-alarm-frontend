@@ -1,11 +1,12 @@
 import { useToast } from '@/components/common/Toast';
 import { BIRTH_YEAR } from '@/constants/birthYear';
+import { authQueries } from '@/entities/auth/auth.queries';
 import { MutationUpdateUserProfile, QueryMe } from '@/graphql/auth';
 import useGoBack from '@/hooks/useGoBack';
 import { User } from '@/types/user';
 import { shallowEqual } from '@/util/object';
 import { useMutation } from '@apollo/client';
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({ text: String(year), value: String(year) }));
@@ -19,9 +20,10 @@ const usePersonalInfoFormViewModel = () => {
     gender?: User['gender'] | null;
   }>();
 
-  const { data } = useQuery<{ me: Omit<User, 'favoriteCategories' | 'linkedSocialProviders'> }>(
-    QueryMe,
-  );
+  const {
+    data: { me },
+  } = useSuspenseQuery(authQueries.me());
+
   const { toast } = useToast();
   const goBack = useGoBack();
   const [updateProfile] = useMutation<
@@ -39,14 +41,14 @@ const usePersonalInfoFormViewModel = () => {
   });
 
   useEffect(() => {
-    if (data?.me) {
-      const _birthYear = data.me.birthYear ? String(data.me.birthYear) : null;
-      const _gender = data.me.gender;
+    if (me) {
+      const _birthYear = me.birthYear ? String(me.birthYear) : null;
+      const _gender = me.gender;
       setBirthYear(_birthYear);
       setGender(_gender);
       setOriginalInfo({ birthYear: _birthYear, gender: _gender });
     }
-  }, [data]);
+  }, [me]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

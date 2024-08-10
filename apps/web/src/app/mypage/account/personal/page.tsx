@@ -1,5 +1,6 @@
 import BasicLayout from '@/components/layout/BasicLayout';
 import PersonalInfoForm from './components/PersonalInfoForm';
+import { Suspense } from 'react';
 
 const PersonalPage = () => {
   return (
@@ -10,7 +11,9 @@ const PersonalPage = () => {
           <br />
           수정해주세요.
         </p>
-        <PersonalInfoForm />
+        <Suspense>
+          <PersonalInfoForm />
+        </Suspense>
       </div>
     </BasicLayout>
   );

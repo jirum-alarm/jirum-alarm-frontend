@@ -5,8 +5,6 @@ import TrendingPageHeader from './components/TrendingPageHeader';
 import { TrendingContainerServer } from './components/trending-container/trending-server';
 import { Suspense } from 'react';
 
-// export const dynamic = 'force-dynamic';
-
 const TrendingPage = () => {
   return (
     <BasicLayout hasBottomNav navType={NAV_TYPE.TRENDING} header={<TrendingPageHeader />}>

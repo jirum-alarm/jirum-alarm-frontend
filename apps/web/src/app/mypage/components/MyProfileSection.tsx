@@ -1,11 +1,13 @@
+'use client';
 import { ArrowRight } from '@/components/common/icons';
+import { authQueries } from '@/entities/auth/auth.queries';
 import Link from '@/features/Link';
-import { getMe } from '@/features/users/server/me';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-const MyProfileSection = async () => {
+const MyProfileSection = () => {
   const {
     data: { me },
-  } = await getMe();
+  } = useSuspenseQuery(authQueries.me());
 
   return (
     <div className="px-5">

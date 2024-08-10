@@ -42,7 +42,7 @@ async function rejectIfNeeded(response: Response) {
 }
 
 class HttpClient {
-  baseUrl: string;
+  private baseUrl: string;
   constructor(url: string) {
     this.baseUrl = url;
   }

@@ -1,7 +1,8 @@
-import { MutationLogin, QueryMe } from '@/graphql/auth';
+import { authQueries } from '@/entities/auth/auth.queries';
+import { MutationLogin } from '@/graphql/auth';
 import { ILoginVariable } from '@/types/login';
-import { User } from '@/types/user';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 const useCurrentPasswordFormViewModel = ({ nextStep }: { nextStep: () => void }) => {
@@ -10,7 +11,10 @@ const useCurrentPasswordFormViewModel = ({ nextStep }: { nextStep: () => void })
     error: false,
   });
 
-  const { data: { me } = {} } = useQuery<{ me: User }>(QueryMe);
+  const {
+    data: { me },
+  } = useSuspenseQuery(authQueries.me());
+
   // @FIXME: change to password check api
   const [login] = useMutation<unknown, ILoginVariable>(MutationLogin, {
     onCompleted: () => {
@@ -30,7 +34,7 @@ const useCurrentPasswordFormViewModel = ({ nextStep }: { nextStep: () => void })
     e.preventDefault();
     login({
       variables: {
-        email: me?.email ?? '',
+        email: me.email ?? '',
         password: currentPassword.value,
       },
     });

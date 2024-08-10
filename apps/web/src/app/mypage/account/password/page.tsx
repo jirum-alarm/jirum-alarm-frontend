@@ -1,7 +1,7 @@
 'use client';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import CurrentPassword from './current/components/CurrentPassword';
 import ChangePassword from './change/components/ChangePassword';
 
@@ -24,8 +24,10 @@ const PasswordPage = () => {
 
   return (
     <BasicLayout title="비밀번호 변경" hasBackButton>
-      {steps === 'current' && <CurrentPassword nextStep={() => nextStep('change')} />}
-      {steps === 'change' && <ChangePassword />}
+      <Suspense>
+        {steps === 'current' && <CurrentPassword nextStep={() => nextStep('change')} />}
+        {steps === 'change' && <ChangePassword />}
+      </Suspense>
     </BasicLayout>
   );
 };

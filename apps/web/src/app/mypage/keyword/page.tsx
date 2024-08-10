@@ -1,7 +1,7 @@
-import Button from '@/components/common/Button';
 import BasicLayout from '@/components/layout/BasicLayout';
 import KeywordInput from './components/KeywordInput';
 import KeywordList from './components/KeywordList';
+import { Suspense } from 'react';
 
 const KeywordPage = () => {
   return (
@@ -9,7 +9,9 @@ const KeywordPage = () => {
       <div className="relative h-full px-5 py-6">
         <KeywordInput />
         <div className=" h-10" />
-        <KeywordList />
+        <Suspense>
+          <KeywordList />
+        </Suspense>
       </div>
     </BasicLayout>
   );
