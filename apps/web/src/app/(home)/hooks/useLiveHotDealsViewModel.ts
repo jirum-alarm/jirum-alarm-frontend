@@ -1,4 +1,4 @@
-import { productQueries } from '@/entities/product/product.queries';
+import { productQueries } from '@/entities/product';
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';

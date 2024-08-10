@@ -1,5 +1,5 @@
-import { getMyCategories } from '@/features/users/server/categories';
-import { getCategories } from '@/features/categories/components/categories';
+import { categoryQueries } from '@/entities/category';
+import { QueryClient } from '@tanstack/react-query';
 import { TrendingContainer } from '.';
 
 export const TrendingContainerServer = async () => {
@@ -9,10 +9,9 @@ export const TrendingContainerServer = async () => {
 };
 
 const getTabCategories = async () => {
-  const { data } = await getCategories();
-
+  const queryClient = new QueryClient();
+  const data = await queryClient.fetchQuery(categoryQueries.categories());
   const initialCategory = { id: null as null | number, name: '전체' };
-
   const categories: { id: null | number; name: string }[] = [initialCategory].concat(
     data.categories.map((category) => ({
       id: Number(category.id),
@@ -20,8 +19,8 @@ const getTabCategories = async () => {
     })),
   );
   try {
-    const { data } = await getMyCategories();
-    const favoriteCategories = data.me.favoriteCategories;
+    const { me } = await queryClient.fetchQuery(categoryQueries.myCategories());
+    const favoriteCategories = me.favoriteCategories;
     if (favoriteCategories && favoriteCategories.length > 0) {
       return {
         categories: categories.filter((category) => {

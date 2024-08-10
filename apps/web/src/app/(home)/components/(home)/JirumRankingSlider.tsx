@@ -6,7 +6,7 @@ import { ProductRankingImageCard } from '@/features/products/components/ProductR
 import { SwiperSlide, Swiper } from 'swiper/react';
 import 'swiper/css';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { productQueries } from '@/entities/product/product.queries';
+import { productQueries } from '@/entities/product';
 
 const JirumRankingSlider = () => {
   const {
