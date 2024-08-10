@@ -2,7 +2,12 @@
 'use client';
 
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
-import { isServer, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  defaultShouldDehydrateQuery,
+  isServer,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 function makeQueryClient() {
@@ -13,13 +18,18 @@ function makeQueryClient() {
         // above 0 to avoid refetching immediately on the client
         staleTime: 60 * 1000,
       },
+      dehydrate: {
+        // include pending queries in dehydration
+        shouldDehydrateQuery: (query) =>
+          defaultShouldDehydrateQuery(query) || query.state.status === 'pending',
+      },
     },
   });
 }
 
 let browserQueryClient: QueryClient | undefined = undefined;
 
-function getQueryClient() {
+export function getQueryClient() {
   if (isServer) {
     // Server: always make a new query client
     return makeQueryClient();

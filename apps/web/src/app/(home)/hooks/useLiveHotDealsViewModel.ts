@@ -1,50 +1,36 @@
-import { QueryProducts } from '@/graphql';
-import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface';
-import { useQuery, useSuspenseQuery } from '@apollo/client';
-import { useTransition } from 'react';
+import { productQueries } from '@/entities/product/product.queries';
+import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
 const limit = 18;
 
 const useLiveHotDealsViewModel = () => {
-  const [isPending, startTransition] = useTransition();
-
   const {
-    data: { products },
-    fetchMore,
-  } = useSuspenseQuery<IProductOutput>(QueryProducts, {
-    variables: {
+    data: { pages },
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useSuspenseInfiniteQuery(
+    productQueries.infiniteProducts({
       limit,
-      orderBy: ProductOrderType.POSTED_AT,
-      orderByOption: OrderOptionType.DESC,
-    },
-  });
+      orderBy: ProductOrderType.PostedAt,
+      orderOption: OrderOptionType.Desc,
+    }),
+  );
 
   const { ref: loadingCallbackRef } = useInView({
     threshold: 0,
     onChange: (inView) => {
-      if (!inView) return;
-      loadMore();
+      if (inView && pages[0].products.length) {
+        fetchNextPage();
+      }
     },
   });
-
-  const loadMore = () => {
-    startTransition(() => {
-      const searchAfter = products.at(-1)?.searchAfter;
-      fetchMore({
-        variables: {
-          searchAfter,
-        },
-        updateQuery: ({ products }, { fetchMoreResult }) => {
-          return {
-            products: [...products, ...fetchMoreResult.products],
-          };
-        },
-      });
-    });
+  return {
+    products: pages.flatMap((page) => page.products),
+    loadingCallbackRef,
+    isFetchingNextPage,
   };
-
-  return { products, loadingCallbackRef, isPending };
 };
 
 export default useLiveHotDealsViewModel;

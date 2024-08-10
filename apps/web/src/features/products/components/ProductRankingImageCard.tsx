@@ -1,10 +1,10 @@
 import { EVENT } from '@/constants/mixpanel';
-import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import ImageWithFallback from '@/components/ImageWithFallback';
 import { PAGE } from '@/constants/page';
 import Link from 'next/link';
+import { type QueryRankingProductsQuery } from '@/shared/api/gql/graphql';
 
 export function ProductRankingImageCard({
   product,
@@ -13,7 +13,7 @@ export function ProductRankingImageCard({
   activeIndex,
   index,
 }: {
-  product: Pick<IProduct, 'id' | 'title' | 'url' | 'price' | 'thumbnail'>;
+  product: QueryRankingProductsQuery['rankingProducts'][number];
   collectProduct: (productId: number) => void;
   logging: { page: keyof typeof EVENT.PAGE };
   activeIndex: number;
