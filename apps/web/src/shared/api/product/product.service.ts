@@ -1,6 +1,9 @@
 import { httpClient } from '@/shared/lib/http-client';
 import { graphql } from '../gql';
-import { QueryProductsQueryVariables } from '../gql/graphql';
+import {
+  QueryCommunityRandomRankingProductsQueryVariables,
+  QueryProductsQueryVariables,
+} from '../gql/graphql';
 
 export class ProductService {
   static async getRankingProducts() {
@@ -8,6 +11,13 @@ export class ProductService {
   }
   static async getProducts(variables: QueryProductsQueryVariables) {
     return httpClient.execute(QueryProducts, variables).then((res) => res.data);
+  }
+  static async getHotDealProductsRandom(
+    variables: QueryCommunityRandomRankingProductsQueryVariables,
+  ) {
+    return httpClient
+      .execute(QueryCommunityRandomRankingProducts, variables)
+      .then((res) => res.data);
   }
 }
 
@@ -48,6 +58,29 @@ const QueryProducts = graphql(`
       isEnd: $isEnd
       isHot: $isHot
     ) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
+    }
+  }
+`);
+
+const QueryCommunityRandomRankingProducts = graphql(`
+  query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {
+    communityRandomRankingProducts(count: $count, limit: $limit) {
       id
       title
       mallId

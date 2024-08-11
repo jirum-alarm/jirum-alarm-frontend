@@ -1,4 +1,7 @@
-import { QueryProductsQueryVariables } from '@/shared/api/gql/graphql';
+import {
+  QueryCommunityRandomRankingProductsQueryVariables,
+  QueryProductsQueryVariables,
+} from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
@@ -27,6 +30,18 @@ export const ProductQueries = {
         },
       ],
       queryFn: () => ProductService.getProducts(variables),
+    }),
+  hotdealProductsRandom: (variables: QueryCommunityRandomRankingProductsQueryVariables) =>
+    queryOptions({
+      queryKey: [
+        ...ProductQueries.all(),
+        'random',
+        {
+          count: variables.count,
+          limit: variables.limit,
+        },
+      ],
+      queryFn: () => ProductService.getHotDealProductsRandom(variables),
     }),
   infiniteProducts: (variables: QueryProductsQueryVariables) =>
     infiniteQueryOptions({

@@ -190,7 +190,7 @@ class HttpClient {
               },
             });
             await rejectIfNeeded(newResponse);
-            const newRes = await response.json();
+            const newRes = await newResponse.json();
             if (!newRes.data) throw new FetchError(newRes, newRes.errors);
             return newRes;
           default:

@@ -45,6 +45,7 @@ export const TrendingContainer = ({
             <Link
               className="absolute right-0 top-0 flex h-10 w-11 items-center justify-end bg-fade-to-white"
               href={'/mypage/categories'}
+              prefetch={false}
             >
               <Setting />
             </Link>

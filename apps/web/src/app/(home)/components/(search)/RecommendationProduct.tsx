@@ -6,12 +6,13 @@ import 'swiper/css';
 import React from 'react';
 import { ProductImageCard, useCollectProduct } from '@/features/products';
 import { EVENT } from '@/constants/mixpanel';
+import { QueryCommunityRandomRankingProductsQuery } from '@/shared/api/gql/graphql';
 
 export default function RecommendationProduct({
   hotDeals,
   logging,
 }: {
-  hotDeals: IProduct[];
+  hotDeals: IProduct[] | QueryCommunityRandomRankingProductsQuery['communityRandomRankingProducts'];
   logging: { page: keyof typeof EVENT.PAGE };
 }) {
   const hotDealCount = 10;
