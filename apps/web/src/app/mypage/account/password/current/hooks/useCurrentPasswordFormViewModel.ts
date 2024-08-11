@@ -1,4 +1,4 @@
-import { AuthQueries } from '@/entities/auth/auth.queries';
+import { AuthQueries } from '@/entities/auth';
 import { AuthService } from '@/shared/api/auth';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';

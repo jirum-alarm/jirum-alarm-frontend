@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseCookies, RequestCookies } from 'next/dist/server/web/spec-extension/cookies';
 import { PAGE } from './constants/page';
-import { MutationLoginByRefreshToken, QueryMe } from './graphql/auth';
 import { GRAPHQL_ENDPOINT } from './constants/graphql';
 import { accessTokenExpiresAt, refreshTokenExpiresAt } from './constants/token';
+import { graphql } from './shared/api/gql';
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   // const response = await handlePostHog(request);
@@ -103,7 +103,7 @@ const tokenVerify = async (accessToken?: string) => {
       authorization: accessToken ? `Bearer ${accessToken}` : '',
     },
     body: JSON.stringify({
-      query: QueryMe.loc?.source.body,
+      query: QueryMe,
     }),
   });
   return await response.json();
@@ -117,7 +117,7 @@ const getNewToken = async (refreshToken?: string) => {
       authorization: refreshToken ? `Bearer ${refreshToken}` : '',
     },
     body: JSON.stringify({
-      query: MutationLoginByRefreshToken.loc?.source.body,
+      query: MutationLoginByRefreshToken,
     }),
   });
   return await response.json();
@@ -143,7 +143,7 @@ const refreshAndVerifyToken = async (
             const access_token = {
               name: 'ACCESS_TOKEN',
               expires: Date.now() + accessTokenExpiresAt,
-              httpOnly: true,
+              httpOnly: false,
               value: accessToken,
             };
             const refresh_token = {
@@ -185,6 +185,29 @@ function applySetCookie(req: NextRequest, res: NextResponse): void {
     }
   });
 }
+
+const QueryMe = graphql(`
+  query QueryMe {
+    me {
+      id
+      email
+      nickname
+      birthYear
+      gender
+      favoriteCategories
+    }
+  }
+`);
+
+const MutationLoginByRefreshToken = graphql(`
+  mutation QueryLoginByRefreshToken {
+    loginByRefreshToken {
+      accessToken
+      refreshToken
+    }
+  }
+`);
+
 //'/mypage/:path*',
 export const config = {
   matcher: ['/((?!api|_next/static|favicon.ico|vercel.svg|next.svg).*)'],

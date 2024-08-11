@@ -16,9 +16,23 @@ const MutationLoginByRefreshToken = graphql(`
     }
   }
 `);
-class FetchError extends Error {
+
+type customGraphqlResponse = Response & {
+  errors: Array<{
+    message: string;
+    extensions: {
+      code: string;
+      response: {
+        message: string;
+        error: string;
+        statusCode: number;
+      };
+    };
+  }>;
+};
+export class FetchError extends Error {
   constructor(
-    public response: Response,
+    public response: customGraphqlResponse,
     public data: any,
   ) {
     super(`Fetch failed with status ${response.status}`);
@@ -36,7 +50,7 @@ async function rejectIfNeeded(response: Response) {
     } else {
       data = await response.text();
     }
-    throw new FetchError(response, data);
+    throw new FetchError(response as customGraphqlResponse, data);
   }
   return response;
 }
@@ -50,24 +64,65 @@ class HttpClient {
     query: TypedDocumentString<TResult, TVariables>,
     ...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
   ) {
-    const response = await this.fetchWithAuth(this.baseUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/graphql-response+json',
+    const response = await this.fetchWithAuth(
+      this.baseUrl,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/graphql-response+json',
+        },
+        body: JSON.stringify({
+          query,
+          variables,
+        }),
+        cache: 'no-store',
       },
-      body: JSON.stringify({
-        query,
-        variables,
-      }),
-      cache: 'no-store',
-    });
+      false,
+    );
 
     return response as { data: TResult };
   }
-  private async getNewAccessToken() {
-    const refreshToken = await getRefreshToken();
+  /**
+   * @description 서버 컴포넌트에서 사용해야할 함수
+   */
+  public async server_execute<TResult, TVariables>(
+    query: TypedDocumentString<TResult, TVariables>,
+    ...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
+  ) {
+    const response = await this.fetchWithAuth(
+      this.baseUrl,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/graphql-response+json',
+        },
+        body: JSON.stringify({
+          query,
+          variables,
+        }),
+        cache: 'no-store',
+      },
+      true,
+    );
 
+    return response as { data: TResult };
+  }
+  private isServer() {
+    return typeof window === 'undefined';
+  }
+  private getCookieValue(name: string) {
+    const cookies = document.cookie.split('; ');
+    const cookie = cookies.find((cookie) => cookie.startsWith(`${name}=`));
+    return cookie ? cookie.split('=')[1] : null;
+  }
+  private async getNewAccessToken() {
+    /**
+     * NOTE: 서버단에서는 middleware단에서 token refresh를 하므로 return
+     */
+    if (this.isServer()) return;
+    const refreshToken = await getRefreshToken();
     const response = await fetch(this.baseUrl, {
       method: 'POST',
       credentials: 'include',
@@ -90,22 +145,25 @@ class HttpClient {
         };
       };
     };
-
+    if (data.loginByRefreshToken) return;
     const { accessToken, refreshToken: newRefreshToken } = data.loginByRefreshToken;
-    /**
-     * NOTE: 서버단에서는 server action함수 사용을 못 하므로 분기처리!
-     * 어차피 서버단일땐 middleware단에서 token refresh를 하므로 분기를 태워도 상관없다.
-     */
-    if (typeof window !== 'undefined') {
-      await setAccessToken(accessToken);
-      if (newRefreshToken) setRefreshToken(newRefreshToken);
-    }
+
+    await setAccessToken(accessToken);
+    if (newRefreshToken) setRefreshToken(newRefreshToken);
 
     return accessToken;
   }
 
-  private async fetchWithAuth(url: string, options: RequestInit): Promise<any> {
-    const accessToken = typeof window !== 'undefined' ? await getAccessToken() : undefined;
+  private async fetchWithAuth(
+    url: string,
+    options: RequestInit,
+    isServerComponent: boolean,
+  ): Promise<any> {
+    const accessToken = isServerComponent
+      ? await getAccessToken()
+      : !this.isServer()
+        ? this.getCookieValue('ACCESS_TOKEN')
+        : undefined;
 
     const response = await fetch(url, {
       ...options,
@@ -116,25 +174,27 @@ class HttpClient {
     });
 
     await rejectIfNeeded(response);
-
     const res = await response.json();
+
     if (res.errors && res.errors.length) {
       for (let err of res.errors) {
         switch (err.extensions.code) {
           case 'FORBIDDEN':
           case 'UNAUTHENTICATED':
             const newAccessToken = await this.getNewAccessToken();
-            const response = fetch(url, {
+            const newResponse = await fetch(url, {
               ...options,
               headers: {
                 ...options.headers,
-                Authorization: `Bearer ${newAccessToken}`,
+                Authorization: newAccessToken ? `Bearer ${newAccessToken}` : '',
               },
             });
-            const res = (await response).json();
-            return res;
+            await rejectIfNeeded(newResponse);
+            const newRes = await response.json();
+            if (!newRes.data) throw new FetchError(newRes, newRes.errors);
+            return newRes;
           default:
-            throw new FetchError(err.message, err.extensions.response.statusCode);
+            throw new FetchError(res, res.errors);
         }
       }
     }

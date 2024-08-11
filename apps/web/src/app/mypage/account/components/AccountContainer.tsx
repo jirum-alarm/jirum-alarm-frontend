@@ -2,7 +2,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import AccountManagement from './AccountManagement';
 import MovePage from './MovePage';
-import { AuthQueries } from '@/entities/auth/auth.queries';
+import { AuthQueries } from '@/entities/auth';
 
 const AccountContainer = () => {
   const {

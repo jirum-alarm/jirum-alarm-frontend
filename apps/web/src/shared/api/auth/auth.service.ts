@@ -16,6 +16,9 @@ export class AuthService {
   static async getMe() {
     return httpClient.execute(QueryMe).then((res) => res.data);
   }
+  static async getMeServer() {
+    return httpClient.server_execute(QueryMe).then((res) => res.data);
+  }
   static async getMyKeyword(variables: QueryMypageKeywordQueryVariables) {
     return httpClient.execute(QueryMypageKeyword, variables).then((res) => res.data);
   }

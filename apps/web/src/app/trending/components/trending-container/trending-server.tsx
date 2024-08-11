@@ -1,4 +1,4 @@
-import { CategoryQueries } from '@/entities/category';
+import { CategoryQueries, CategoryQueriesServer } from '@/entities/category';
 import { QueryClient } from '@tanstack/react-query';
 import { TrendingContainer } from '.';
 
@@ -19,7 +19,7 @@ const getTabCategories = async () => {
     })),
   );
   try {
-    const { me } = await queryClient.fetchQuery(CategoryQueries.myCategories());
+    const { me } = await queryClient.fetchQuery(CategoryQueriesServer.myCategories());
     const favoriteCategories = me.favoriteCategories;
     if (favoriteCategories && favoriteCategories.length > 0) {
       return {
@@ -30,6 +30,9 @@ const getTabCategories = async () => {
       };
     }
   } catch (e) {
+    // if (e instanceof FetchError) {
+    //   console.error(e.response.errors[0].extensions);
+    // }
     return { categories };
   }
 

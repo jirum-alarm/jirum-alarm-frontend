@@ -9,7 +9,7 @@ const TrendingPage = () => {
   return (
     <BasicLayout hasBottomNav navType={NAV_TYPE.TRENDING} header={<TrendingPageHeader />}>
       <div className="h-full px-4 pt-[56px]">
-        <Suspense>
+        <Suspense fallback={'loading....'}>
           <TrendingContainerServer />
         </Suspense>
       </div>

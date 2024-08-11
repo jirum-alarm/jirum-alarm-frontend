@@ -1,5 +1,5 @@
 import { useUpdateNickname } from '@/app/mypage/features';
-import { AuthQueries } from '@/entities/auth/auth.queries';
+import { AuthQueries } from '@/entities/auth';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 

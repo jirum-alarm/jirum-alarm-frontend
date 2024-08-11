@@ -1,6 +1,6 @@
 import { useUpdatePersonal } from '@/app/mypage/features';
 import { BIRTH_YEAR } from '@/constants/birthYear';
-import { AuthQueries } from '@/entities/auth/auth.queries';
+import { AuthQueries } from '@/entities/auth';
 import { Gender } from '@/shared/api/gql/graphql';
 import { shallowEqual } from '@/util/object';
 import { useSuspenseQuery } from '@tanstack/react-query';

@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 async function setAccessToken(token: string) {
   cookies().set('ACCESS_TOKEN', token, {
     expires: Date.now() + accessTokenExpiresAt,
-    httpOnly: true,
+    httpOnly: false,
   });
 }
 

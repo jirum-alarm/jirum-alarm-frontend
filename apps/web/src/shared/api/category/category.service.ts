@@ -8,6 +8,9 @@ export class CategoryService {
   static async getMyCategories() {
     return httpClient.execute(QueryMyCategories).then((res) => res.data);
   }
+  static async getMyCategoriesServer() {
+    return httpClient.server_execute(QueryMyCategories).then((res) => res.data);
+  }
 }
 
 const Queryategories = graphql(`

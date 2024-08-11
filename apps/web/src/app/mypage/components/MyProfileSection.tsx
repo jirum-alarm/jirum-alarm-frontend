@@ -1,6 +1,6 @@
 'use client';
 import { ArrowRight } from '@/components/common/icons';
-import { AuthQueries } from '@/entities/auth/auth.queries';
+import { AuthQueries } from '@/entities/auth';
 import Link from '@/features/Link';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
