@@ -8,9 +8,7 @@ const TrendingPage = () => {
   return (
     <BasicLayout hasBottomNav navType={NAV_TYPE.TRENDING} header={<TrendingPageHeader />}>
       <div className="h-full px-4 pt-[56px]">
-        {/* <Suspense> */}
         <TrendingContainerServer />
-        {/* </Suspense> */}
       </div>
       <TopButton />
     </BasicLayout>

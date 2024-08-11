@@ -1,14 +1,9 @@
 'use client';
 import useTrendingViewModel from '../hooks/useTrendingViewModel';
-import { LoadingSpinner } from '@/components/common/icons';
+// import { LoadingSpinner } from '@/components/common/icons';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { ProductImageCard, ProductTrendingImageCard, useCollectProduct } from '@/features/products';
 import RecommendationProduct from '@/app/(home)/components/(search)/RecommendationProduct';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
-
-const HOT_DEAL_COUNT_RANDOM = 20;
-const HOT_DEAL_LIMIT_RANDOM = 10;
 
 interface TrendingListProps {
   categoryId: number | null;
@@ -16,17 +11,9 @@ interface TrendingListProps {
 }
 
 const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
-  const { products, liveProducts, firstRenderingCount } = useTrendingViewModel({
+  const { products, liveProducts, hotDeals, firstRenderingCount } = useTrendingViewModel({
     categoryId,
   });
-  const {
-    data: { communityRandomRankingProducts: hotDeals },
-  } = useSuspenseQuery(
-    ProductQueries.hotdealProductsRandom({
-      count: HOT_DEAL_COUNT_RANDOM,
-      limit: HOT_DEAL_LIMIT_RANDOM,
-    }),
-  );
 
   const collectProduct = useCollectProduct();
   const swiper = useSwiper();
