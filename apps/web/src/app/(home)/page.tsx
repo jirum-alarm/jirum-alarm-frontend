@@ -3,6 +3,7 @@ import HomeContainer from './components/HomeContainer';
 import HomeContainerV2 from './components/(home)/HomeContainerV2';
 // import { getFeatureFlag } from '../actions/posthog';
 import { IS_VERCEL_PRD } from '@/constants/env';
+import { Suspense } from 'react';
 
 export default function Home() {
   // const { flags } = await getFeatureFlag();
@@ -11,7 +12,13 @@ export default function Home() {
     <>
       <AddFCMToken />
       {/* {flags.MAIN_PAGE_RENEWAL_FEATURE ? <HomeContainerV2 /> : <HomeContainer />} */}
-      {!IS_VERCEL_PRD ? <HomeContainerV2 /> : <HomeContainer />}
+      {!IS_VERCEL_PRD ? (
+        <HomeContainerV2 />
+      ) : (
+        <Suspense>
+          <HomeContainer />
+        </Suspense>
+      )}
     </>
   );
 }
