@@ -13,6 +13,7 @@ import Link from '@/features/Link';
 import { useRouter } from 'next/navigation';
 import { mp } from '@/lib/mixpanel';
 import { EVENT } from '@/constants/mixpanel';
+import { useEffect } from 'react';
 
 const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
@@ -55,6 +56,14 @@ const AlarmList = () => {
 export default AlarmList;
 
 function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-mobile' }) {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
   return (
     <div className="flex h-full flex-col px-5 pb-8 pt-9">
       <p className="pb-7 text-2xl font-semibold">
@@ -79,7 +88,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
           </p>
           <ArrowDown color="#D0D5DD" />
         </div>
-        <div className="flex gap-x-2">
+        <div className="flex gap-x-2 pb-16">
           {platform === 'non-mobile' && (
             <>
               <AndroidDownloadButton />
