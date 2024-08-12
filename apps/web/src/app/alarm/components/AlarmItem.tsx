@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { PAGE } from '@/constants/page';
 
 const AlarmItem = ({ notification }: { notification: INotification }) => {
-  const { message, url, createdAt, product, keyword } = notification;
+  const { message, createdAt, product, keyword } = notification;
   const { thumbnail, price, isHot, isEnd, id } = product ?? {};
 
   return (
