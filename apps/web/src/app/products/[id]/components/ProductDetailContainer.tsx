@@ -43,7 +43,8 @@ function ProductDetaiLayout({
           <ProductInfoLayout>
             <ProductInfo product={product} />
             <HotdealGuide productGuides={productGuides} />
-            <HotdealIndex product={product} />
+            {/* TODO: wait for api */}
+            {/* <HotdealIndex product={product} /> */}
             <CommunityReaction product={product} />
             <RelatedProductsContainer product={product} />
             <PopularProductsContainer product={product} />
