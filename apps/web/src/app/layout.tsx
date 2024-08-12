@@ -48,11 +48,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           integrity="sha384-mXVrIX2T/Kszp6Z0aEWaA8Nm7J6/ZeWXbL8UpGRjKwWe56Srd/iyNmWMBhcItAjH"
           crossOrigin="anonymous"
         ></Script>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3855723530036909"
-          crossOrigin="anonymous"
-        ></Script>
+        {/* hide until using real word */}
+        {/* <Script */}
+        {/*   async */}
+        {/*   src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3855723530036909" */}
+        {/*   crossOrigin="anonymous" */}
+        {/* ></Script> */}
       </head>
       <body>
         <MSWInit>
