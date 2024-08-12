@@ -56,7 +56,12 @@ const BottomNavList = [
 
 const BottomNav = ({ type }: { type: any }) => {
   const pathName = usePathname();
-  if (IS_VERCEL_PRD) return;
+
+  {
+    /* @TODO: remove afeter v1.1.0 QA */
+  }
+  // if (IS_VERCEL_PRD) return;
+
   if (!BottomNavList.some((nav) => nav.link === pathName)) return;
 
   const isActivePath = (link: PAGE) => {

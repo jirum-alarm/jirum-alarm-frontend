@@ -12,13 +12,17 @@ export default function Home() {
     <>
       <AddFCMToken />
       {/* {flags.MAIN_PAGE_RENEWAL_FEATURE ? <HomeContainerV2 /> : <HomeContainer />} */}
-      {!IS_VERCEL_PRD ? (
-        <HomeContainerV2 />
-      ) : (
-        <Suspense>
-          <HomeContainer />
-        </Suspense>
-      )}
+
+      <HomeContainerV2 />
+
+      {/* @TODO: remove afeter v1.1.0 QA */}
+      {/* {!IS_VERCEL_PRD ? ( */}
+      {/*   <HomeContainerV2 /> */}
+      {/* ) : ( */}
+      {/*   <Suspense> */}
+      {/*     <HomeContainer /> */}
+      {/*   </Suspense> */}
+      {/* )} */}
     </>
   );
 }

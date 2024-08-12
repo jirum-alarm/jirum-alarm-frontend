@@ -7,9 +7,12 @@ import ProductDetailPageHeader from './components/ProductDeatilPageHeader';
 import { getProductGuides } from '@/features/products/server/productGuides';
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  if (IS_VERCEL_PRD) {
-    return {};
+  {
+    /* @TODO: remove afeter v1.1.0 QA */
   }
+  // if (IS_VERCEL_PRD) {
+  //   return {};
+  // }
 
   const id = params.id;
 
@@ -40,9 +43,12 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 export default async function ProductDetail({ params }: { params: { id: string } }) {
-  if (IS_VERCEL_PRD) {
-    return {};
+  {
+    /* @TODO: remove afeter v1.1.0 QA */
   }
+  // if (IS_VERCEL_PRD) {
+  //   return {};
+  // }
 
   const id = params.id;
 
