@@ -11,6 +11,7 @@ import { SERVICE_URL } from '@/constants/env';
 import { InitMixpanel } from '@/lib/mixpanel';
 import dynamic from 'next/dynamic';
 import { AppProvider } from './(app)/providers';
+import BottomNav from '@/components/layout/BottomNav';
 
 // const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
 //   ssr: false,
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <InitMixpanel />
             <div className="relative min-w-[320px] bg-white before:fixed before:bottom-0 before:left-1/2 before:top-0 before:z-50 before:w-[1px] before:translate-x-[300px] before:bg-gray-100 after:fixed after:bottom-0  after:right-1/2 after:top-0 after:z-50 after:w-[1px] after:-translate-x-[300px] after:bg-gray-100">
               {children}
+              <BottomNav type={''} />
             </div>
             <Toaster />
             <SpeedInsights />

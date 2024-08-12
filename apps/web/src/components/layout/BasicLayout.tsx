@@ -52,7 +52,7 @@ const BasicLayout = ({
         </header>
       )}
       <div className={cn('h-full', { 'pt-11': !header })}>{children}</div>
-      {hasBottomNav && <BottomNav type={navType} />}
+      {/* {hasBottomNav && <BottomNav type={navType} />} */}
     </div>
   );
 };

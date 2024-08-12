@@ -19,7 +19,6 @@ const HomeContainerV2 = () => {
           <LiveHotDealContainer />
         </main>
       </div>
-      <BottomNav type={NAV_TYPE.HOME} />
       <TopButton />
     </div>
   );

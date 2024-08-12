@@ -1,3 +1,4 @@
+'use client';
 import {
   Alert,
   AlertFill,
@@ -8,9 +9,11 @@ import {
   My,
   MyFill,
 } from '@/components/common/icons';
+import { IS_VERCEL_PRD } from '@/constants/env';
 import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 export enum NAV_TYPE {
@@ -51,7 +54,13 @@ const BottomNavList = [
   },
 ] as const;
 
-const BottomNav = ({ type }: { type: NAV_TYPE }) => {
+const BottomNav = ({ type }: { type: any }) => {
+  const pathName = usePathname();
+  if (IS_VERCEL_PRD) return;
+
+  const isActivePath = (link: PAGE) => {
+    return link === pathName;
+  };
   return (
     <div
       className={cn(
@@ -66,15 +75,15 @@ const BottomNav = ({ type }: { type: NAV_TYPE }) => {
                 // px-5
                 'flex h-[46px] w-[68px] flex-col items-center justify-center rounded-lg text-gray-500',
                 {
-                  'text-gray-900': type === nav.type,
+                  'text-gray-900': isActivePath(nav.link),
                 },
               )}
               href={nav.link}
             >
               <button className="h-7 w-7">
-                {React.createElement(type === nav.type ? nav.activeIcon : nav.icon)}
+                {React.createElement(isActivePath(nav.link) ? nav.activeIcon : nav.icon)}
               </button>
-              <span className={cn('text-xs', { 'font-semibold': type === nav.type })}>
+              <span className={cn('text-xs', { 'font-semibold': isActivePath(nav.link) })}>
                 {nav.text}
               </span>
             </Link>
