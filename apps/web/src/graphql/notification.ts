@@ -10,6 +10,7 @@ export const QueryNotifications = gql`
       url
       keyword
       product {
+        id
         thumbnail
         price
         isHot

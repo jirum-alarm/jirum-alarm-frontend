@@ -8,13 +8,11 @@ import { PAGE } from '@/constants/page';
 
 const AlarmItem = ({ notification }: { notification: INotification }) => {
   const { message, createdAt, product, keyword } = notification;
-  const { url, thumbnail, price, isHot, isEnd, id } = product ?? {};
+  const { thumbnail, price, isHot, isEnd, id } = product ?? {};
 
   return (
     <li className="flex gap-x-3 ">
-      <a href={url} target="_blank" rel="noopener noreferrer" className="flex w-full p-5">
-        {/* @TODO: use when product id is served by API */}
-        {/* <Link href={PAGE.DETAIL + '/' + +id!} prefetch={false} className="flex w-full p-5"> */}
+      <Link href={PAGE.DETAIL + '/' + +id!} prefetch={false} className="flex w-full p-5">
         <div className="h-14 w-14 overflow-hidden rounded border border-gray-200">
           <ImageWithFallback src={thumbnail} title={message} />
         </div>
@@ -45,8 +43,7 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
             <span className="text-xs text-gray-400">{displayTime(createdAt)}</span>
           </div>
         </div>
-      </a>
-      {/* </Link> */}
+      </Link>
     </li>
   );
 };
