@@ -20,14 +20,13 @@ const useTrendingViewModel = ({ categoryId }: { categoryId: number | null }) => 
         orderBy: ProductOrderType.CommunityRanking,
         startDate: getDayBefore(2),
         categoryId: categoryId,
-        isHot: isHotCategory,
         orderOption: OrderOptionType.Desc,
+        isEnd: false,
       }),
       ProductQueries.products({
-        limit: 10,
+        limit: 18,
         orderBy: ProductOrderType.PostedAt,
         categoryId: isHotCategory ? null : categoryId,
-        isHot: false,
       }),
       ProductQueries.hotdealProductsRandom({
         count: HOT_DEAL_COUNT_RANDOM,
