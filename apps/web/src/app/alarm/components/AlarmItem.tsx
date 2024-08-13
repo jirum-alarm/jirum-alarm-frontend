@@ -12,7 +12,7 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
 
   return (
     <li className="flex gap-x-3 ">
-      <a href={url} target="_blank" rel="noopener noreferrer">
+      <a href={url} target="_blank" rel="noopener noreferrer" className="flex w-full p-5">
         {/* @TODO: use when product id is served by API */}
         {/* <Link href={PAGE.DETAIL + '/' + +id!} prefetch={false} className="flex w-full p-5"> */}
         <div className="h-14 w-14 overflow-hidden rounded border border-gray-200">
