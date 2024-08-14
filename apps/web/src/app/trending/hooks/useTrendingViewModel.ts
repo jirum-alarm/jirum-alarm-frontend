@@ -2,7 +2,7 @@ import { ProductQueries } from '@/entities/product';
 import useScreen from '@/hooks/useScreenSize';
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { getDayBefore } from '@/util/date';
-import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries } from '@tanstack/react-query';
 
 const TRENDING_ITEMS_LIMIT = 50;
 const HOT_DEAL_COUNT_RANDOM = 20;

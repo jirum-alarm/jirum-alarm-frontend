@@ -9,13 +9,14 @@ import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
 import useTabSwitcher from '../../hooks/useTabSwitcher';
 import TrendingList from '../TrendingList';
+import { CategoryQueries } from '@/entities/category';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-export const TrendingContainer = ({
-  categories,
-}: {
-  categories: { id: number | null; name: string }[];
-}) => {
+export const TrendingContainer = () => {
   const { swiperRef, activeTab, handleTabChange, handleClickTab, tabRef } = useTabSwitcher();
+  const {
+    data: { categories },
+  } = useSuspenseQuery(CategoryQueries.categoriesForUser());
   const { isHeaderVisible } = useVisibilityOnScroll();
 
   return (
