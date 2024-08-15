@@ -59,8 +59,8 @@ const BottomNavList = [
 // 2. touch start나 mouse down으로 active 후 링크가 이동 안 됐으면 unactive
 
 const BottomNav = ({ type }: { type: any }) => {
-  const [navType, setNavType] = useState<NAV_TYPE | undefined>(undefined);
-  const previousNavType = useRef<NAV_TYPE | undefined>(navType);
+  // const [navType, setNavType] = useState<NAV_TYPE | undefined>(undefined);
+  // const previousNavType = useRef<NAV_TYPE | undefined>(navType);
 
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
@@ -72,19 +72,22 @@ const BottomNav = ({ type }: { type: any }) => {
   }
   // if (IS_VERCEL_PRD) return;
 
-  const handleActiveNav = (type: NAV_TYPE) => () => {
-    console.log('handleActiveNav');
-    previousNavType.current = navType;
-    setNavType(type);
-  };
+  // const handleActiveNav = (type: NAV_TYPE) => () => {
+  //   console.log('handleActiveNav');
+  //   previousNavType.current = navType;
+  //   setNavType(type);
+  // };
 
-  const handleActiveNavCancel = () => {
-    console.log('handleActiveNavCancel');
-    setNavType(previousNavType.current);
-  };
+  // const handleActiveNavCancel = () => {
+  //   console.log('handleActiveNavCancel');
+  //   setNavType(previousNavType.current);
+  // };
 
+  // const isActiveNav = (type: NAV_TYPE, link: string) => {
+  //   return navType ? type === navType : link === pathName;
+  // };
   const isActiveNav = (type: NAV_TYPE, link: string) => {
-    return navType ? type === navType : link === pathName;
+    return link === pathName;
   };
 
   return (
@@ -96,33 +99,31 @@ const BottomNav = ({ type }: { type: any }) => {
       <ul className="flex items-center justify-around" ref={navRef}>
         {BottomNavList.map((nav, i) => (
           <li key={i} className="flex flex-1 items-center justify-center py-3">
-            <motion.div
+            {/* <motion.div
               className="rounded-lg"
               whileTap={{ scale: 0.9, backgroundColor: '#F2F4F7' }}
               transition={{ backgroundColor: { duration: 0 } }} // 애니메이션 없이 즉각적인 배경색 변경
               onPointerDown={handleActiveNav(nav.type)}
               onPointerCancel={handleActiveNavCancel}
+            > */}
+            <Link
+              data-nav-type={nav.type}
+              className={cn(
+                'flex h-[46px] w-[68px] flex-col items-center justify-center rounded-lg text-gray-500',
+                {
+                  'text-gray-900': isActiveNav(nav.type, nav.link),
+                },
+              )}
+              href={nav.link}
             >
-              <Link
-                data-nav-type={nav.type}
-                className={cn(
-                  'flex h-[46px] w-[68px] flex-col items-center justify-center rounded-lg text-gray-500',
-                  {
-                    'text-gray-900': isActiveNav(nav.type, nav.link),
-                  },
-                )}
-                href={nav.link}
-              >
-                <button className="h-7 w-7">
-                  {React.createElement(isActiveNav(nav.type, nav.link) ? nav.activeIcon : nav.icon)}
-                </button>
-                <span
-                  className={cn('text-xs', { 'font-semibold': isActiveNav(nav.type, nav.link) })}
-                >
-                  {nav.text}
-                </span>
-              </Link>
-            </motion.div>
+              <button className="h-7 w-7">
+                {React.createElement(isActiveNav(nav.type, nav.link) ? nav.activeIcon : nav.icon)}
+              </button>
+              <span className={cn('text-xs', { 'font-semibold': isActiveNav(nav.type, nav.link) })}>
+                {nav.text}
+              </span>
+            </Link>
+            {/* </motion.div> */}
           </li>
         ))}
       </ul>
