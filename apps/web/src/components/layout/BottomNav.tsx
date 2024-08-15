@@ -99,31 +99,33 @@ const BottomNav = ({ type }: { type: any }) => {
       <ul className="flex items-center justify-around" ref={navRef}>
         {BottomNavList.map((nav, i) => (
           <li key={i} className="flex flex-1 items-center justify-center py-3">
-            {/* <motion.div
+            <motion.div
               className="rounded-lg"
-              whileTap={{ scale: 0.9, backgroundColor: '#F2F4F7' }}
-              transition={{ backgroundColor: { duration: 0 } }} // 애니메이션 없이 즉각적인 배경색 변경
-              onPointerDown={handleActiveNav(nav.type)}
-              onPointerCancel={handleActiveNavCancel}
-            > */}
-            <Link
-              data-nav-type={nav.type}
-              className={cn(
-                'flex h-[46px] w-[68px] flex-col items-center justify-center rounded-lg text-gray-500',
-                {
-                  'text-gray-900': isActiveNav(nav.type, nav.link),
-                },
-              )}
-              href={nav.link}
+              whileTap={{ scale: 0.85, backgroundColor: '#F2F4F7' }}
+              transition={{ duration: 0.1, backgroundColor: { duration: 0 } }} // 애니메이션 없이 즉각적인 배경색 변경
+              // onPointerDown={handleActiveNav(nav.type)}
+              // onPointerCancel={handleActiveNavCancel}
             >
-              <button className="h-7 w-7">
-                {React.createElement(isActiveNav(nav.type, nav.link) ? nav.activeIcon : nav.icon)}
-              </button>
-              <span className={cn('text-xs', { 'font-semibold': isActiveNav(nav.type, nav.link) })}>
-                {nav.text}
-              </span>
-            </Link>
-            {/* </motion.div> */}
+              <Link
+                data-nav-type={nav.type}
+                className={cn(
+                  'flex h-[46px] w-[68px] flex-col items-center justify-center rounded-lg text-gray-500',
+                  {
+                    'text-gray-900': isActiveNav(nav.type, nav.link),
+                  },
+                )}
+                href={nav.link}
+              >
+                <button className="h-7 w-7">
+                  {React.createElement(isActiveNav(nav.type, nav.link) ? nav.activeIcon : nav.icon)}
+                </button>
+                <span
+                  className={cn('text-xs', { 'font-semibold': isActiveNav(nav.type, nav.link) })}
+                >
+                  {nav.text}
+                </span>
+              </Link>
+            </motion.div>
           </li>
         ))}
       </ul>
