@@ -54,6 +54,7 @@ export interface IProduct {
   prices?: IProductPrice[];
   searchAfter?: string[];
   isMyWishlist: boolean;
+  categoryName?: string;
 }
 
 export interface IProductOutput {
