@@ -35,13 +35,13 @@ const documents = {
     types.MutationRemoveNotificationKeywordDocument,
   '\n  query QueryMypageKeyword($limit: Int!, $searchAfter: [String!]) {\n    notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {\n      id\n      keyword\n    }\n  }\n':
     types.QueryMypageKeywordDocument,
-  '\n  query QueryNotifications($offset: Int!, $limit: Int!) {\n    notifications(offset: $offset, limit: $limit) {\n      id\n      readAt\n      createdAt\n      message\n      url\n      keyword\n      product {\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n':
+  '\n  query QueryNotifications($offset: Int!, $limit: Int!) {\n    notifications(offset: $offset, limit: $limit) {\n      id\n      readAt\n      createdAt\n      message\n      url\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n':
     types.QueryNotificationsDocument,
   '\n  query QueryUnreadNotificationsCount {\n    unreadNotificationsCount\n  }\n':
     types.QueryUnreadNotificationsCountDocument,
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n':
     types.MutationAddPushTokenDocument,
-  '\n  query product($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      guides {\n        id\n        title\n        content\n      }\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      isMyWishlist\n    }\n  }\n':
+  '\n  query product($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      guides {\n        id\n        title\n        content\n      }\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      isMyWishlist\n      categoryName\n    }\n  }\n':
     types.ProductDocument,
   '\n  query productGuides($productId: Int!) {\n    productGuides(productId: $productId) {\n      id\n      title\n      content\n    }\n  }\n':
     types.ProductGuidesDocument,
@@ -137,7 +137,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryNotifications($offset: Int!, $limit: Int!) {\n    notifications(offset: $offset, limit: $limit) {\n      id\n      readAt\n      createdAt\n      message\n      url\n      keyword\n      product {\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n',
+  source: '\n  query QueryNotifications($offset: Int!, $limit: Int!) {\n    notifications(offset: $offset, limit: $limit) {\n      id\n      readAt\n      createdAt\n      message\n      url\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n',
 ): typeof import('./graphql').QueryNotificationsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -155,7 +155,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query product($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      guides {\n        id\n        title\n        content\n      }\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      isMyWishlist\n    }\n  }\n',
+  source: '\n  query product($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      guides {\n        id\n        title\n        content\n      }\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      isMyWishlist\n      categoryName\n    }\n  }\n',
 ): typeof import('./graphql').ProductDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

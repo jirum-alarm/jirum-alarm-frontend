@@ -90,6 +90,7 @@ type HotDealKeywordSynonymOutput {
 enum HotDealKeywordType {
   NEGATIVE
   POSITIVE
+  SYNONYM
 }
 
 type InstagramPost {
@@ -106,81 +107,188 @@ enum InstagramPostType {
 }
 
 type Mutation {
-  """어드민) 핫딜 제외 키워드 추가"""
+  """
+  어드민) 핫딜 제외 키워드 추가
+  """
   addHotDealExcludeKeywordByAdmin(excludeKeywords: [String!]!, hotDealKeywordId: Int!): Boolean!
-  """어드민)핫딜 키워드 추가"""
-  addHotDealKeywordByAdmin(isMajor: Boolean!, keyword: String!, type: HotDealKeywordType!, weight: Float!): Int!
-  """어드민) 핫딜 유의어 추가"""
+  """
+  어드민)핫딜 키워드 추가
+  """
+  addHotDealKeywordByAdmin(
+    isMajor: Boolean!
+    keyword: String!
+    type: HotDealKeywordType!
+    weight: Float!
+  ): Int!
+  """
+  어드민) 핫딜 유의어 추가
+  """
   addHotDealKeywordSynonymByAdmin(hotDealKeywordId: Int!, keywords: [String!]!): Boolean!
-  """알림 키워드 추가"""
+  """
+  알림 키워드 추가
+  """
   addNotificationKeyword(keyword: String!): Boolean!
-  """비회원 푸시"""
+  """
+  비회원 푸시
+  """
   addNotificationToNonUsers(body: String!, title: String, url: String): Boolean!
-  """주제 지정하여 알림 센터에 알림을 추가하거나 푸시를 보내거나 모두 수행"""
+  """
+  주제 지정하여 알림 센터에 알림을 추가하거나 푸시를 보내거나 모두 수행
+  """
   addNotificationToTopic(
     body: String!
     notificationType: NotificationType!
-    """스로틀링 여부. 키면 푸시 초당 30개 정도로 속도 조절"""
+    """
+    스로틀링 여부. 키면 푸시 초당 30개 정도로 속도 조절
+    """
     throttle: Boolean
     title: String
     topic: NotificationTopic!
     url: String
   ): Boolean!
-  """유저 ID 지정하여 알림 센터에 알림을 추가하거나 푸시를 보내거나 모두 수행"""
-  addNotificationToUsers(body: String!, notificationType: NotificationType!, target: NotificationTarget!, targetId: String, title: String, url: String, userIds: [Int!]!): Boolean!
-  """푸시를 받기위한 토큰 등록"""
+  """
+  유저 ID 지정하여 알림 센터에 알림을 추가하거나 푸시를 보내거나 모두 수행
+  """
+  addNotificationToUsers(
+    body: String!
+    notificationType: NotificationType!
+    target: NotificationTarget!
+    targetId: String
+    title: String
+    url: String
+    userIds: [Int!]!
+  ): Boolean!
+  """
+  푸시를 받기위한 토큰 등록
+  """
   addPushToken(token: String!, tokenType: TokenType!): Boolean!
-  """wishlist 추가"""
+  """
+  wishlist 추가
+  """
   addWishlist(productId: Int!): Boolean!
-  """어드민) 로그인"""
+  """
+  어드민) 로그인
+  """
   adminLogin(email: String!, password: String!): TokenOutput!
-  """상품 단건 수집"""
+  """
+  상품 단건 수집
+  """
   collectProduct(productId: Int!): Boolean!
-  """로그인"""
+  """
+  썸네일 단건 수집
+  """
+  collectThumbnail(productId: Int!): Boolean!
+  """
+  로그인
+  """
   login(email: String!, password: String!): TokenOutput!
-  """리프레시 토큰으로 로그인"""
+  """
+  리프레시 토큰으로 로그인
+  """
   loginByRefreshToken: TokenOutput!
-  """로그아웃"""
+  """
+  로그아웃
+  """
   logout: Boolean!
-  """모든 알림 읽음 처리"""
+  """
+  모든 알림 읽음 처리
+  """
   readAllNotifications: Boolean!
-  """모든 알림 읽음 처리"""
+  """
+  모든 알림 읽음 처리
+  """
   readNotification(id: Int!): Boolean!
-  """모든 알림 삭제"""
+  """
+  모든 알림 삭제
+  """
   removeAllNotifications: Boolean!
-  """어드민) 핫딜 제외 키워드 추가"""
+  """
+  어드민) 핫딜 제외 키워드 추가
+  """
   removeHotDealExcludeKeywordByAdmin(ids: [Int!]!): Boolean!
-  """어드민) 핫딜 키워드 제거"""
+  """
+  어드민) 핫딜 키워드 제거
+  """
   removeHotDealKeywordByAdmin(id: Int!): Boolean!
-  """어드민) 핫딜 유의어 제거"""
+  """
+  어드민) 핫딜 유의어 제거
+  """
   removeHotDealKeywordSynonymByAdmin(ids: [Int!]!): Boolean!
-  """단일 알림 삭제"""
+  """
+  단일 알림 삭제
+  """
   removeNotification(id: Int!): Boolean!
-  """알림 키워드 제거"""
+  """
+  알림 키워드 제거
+  """
   removeNotificationKeyword(id: Float!): Boolean!
-  """토큰에 연결된 `userId` 연결 해제"""
+  """
+  토큰에 연결된 `userId` 연결 해제
+  """
   removeTokenLinkage(token: String!): Boolean!
-  """wishlist 제거"""
+  """
+  wishlist 제거
+  """
   removeWishlist(productId: Int!): Boolean!
-  """인스타그램 게시글 예약"""
+  """
+  인스타그램 게시글 예약
+  """
   reserveInstagramPost(id: Int!): Boolean!
-  """회원가입"""
-  signup(birthYear: Float, email: String!, favoriteCategories: [Int!], gender: Gender, nickname: String!, password: String!): SignupOutput!
-  """소셜 로그인"""
-  socialLogin(birthYear: Float, email: String, favoriteCategories: [Int!], gender: Gender, nickname: String, oauthProvider: OauthProvider!, socialAccessToken: String!): SocialLoginOutput!
-  """어드민) 핫딜 키워드 수정"""
+  """
+  회원가입
+  """
+  signup(
+    birthYear: Float
+    email: String!
+    favoriteCategories: [Int!]
+    gender: Gender
+    nickname: String!
+    password: String!
+  ): SignupOutput!
+  """
+  소셜 로그인
+  """
+  socialLogin(
+    birthYear: Float
+    email: String
+    favoriteCategories: [Int!]
+    gender: Gender
+    nickname: String
+    oauthProvider: OauthProvider!
+    socialAccessToken: String!
+  ): SocialLoginOutput!
+  """
+  어드민) 핫딜 키워드 수정
+  """
   updateHotDealKeywordByAdmin(id: Int!, isMajor: Boolean, keyword: String, weight: Float): Boolean!
-  """알림 키워드 상태 수정"""
+  """
+  알림 키워드 상태 수정
+  """
   updateNotificationKeywordStatus(id: Int!, isActive: Boolean!): Boolean!
-  """비밀번호 업데이트"""
+  """
+  비밀번호 업데이트
+  """
   updatePassword(password: String!): Boolean!
-  """계정 별로 관리되는 푸시 설정 업데이트"""
+  """
+  계정 별로 관리되는 푸시 설정 업데이트
+  """
   updatePushSetting(info: Boolean): Boolean!
-  """유저 프로필 수정"""
-  updateUserProfile(birthYear: Float, favoriteCategories: [Int!], gender: Gender, nickname: String): Boolean!
-  """인스타그램 게시글 업로드"""
+  """
+  유저 프로필 수정
+  """
+  updateUserProfile(
+    birthYear: Float
+    favoriteCategories: [Int!]
+    gender: Gender
+    nickname: String
+  ): Boolean!
+  """
+  인스타그램 게시글 업로드
+  """
   uploadInstagramPost: String!
-  """회원 탈퇴"""
+  """
+  회원 탈퇴
+  """
   withdraw: Boolean!
 }
 
@@ -256,28 +364,40 @@ enum ProductOrderType {
 }
 
 type ProductOutput {
-  """커뮤니티 내 카테고리"""
+  """
+  커뮤니티 내 카테고리
+  """
   category: String
   categoryId: Int
-  """서비스 카테고리"""
+  """
+  서비스 카테고리
+  """
   categoryName: String
   detailUrl: String
-  """핫딜 정보 요약"""
+  """
+  핫딜 정보 요약
+  """
   guides: [ProductGuide!] @deprecated(reason: "productGuides 쿼리를 사용해주세요.")
   id: ID!
   isEnd: Boolean
   isHot: Boolean
-  """로그인한 사용자의 위시리스트 여부"""
+  """
+  로그인한 사용자의 위시리스트 여부
+  """
   isMyWishlist: Boolean
   isPrivate: Boolean!
   mallId: Int
-  """쇼핑몰 이름"""
+  """
+  쇼핑몰 이름
+  """
   mallName: String
   negativeCommunityReactionCount: Int!
   positiveCommunityReactionCount: Int!
   postedAt: DateTime
   price: String
-  """상품 가격 목록"""
+  """
+  상품 가격 목록
+  """
   prices: [ProductPrice!]
   provider: Provider!
   providerId: Int!
@@ -286,7 +406,9 @@ type ProductOutput {
   thumbnail: String
   title: String!
   url: String!
-  """조회 수"""
+  """
+  조회 수
+  """
   viewCount: Int!
   wishlistCount: Int!
 }
@@ -316,12 +438,18 @@ type Query {
   adminMe: AdminUser!
   analysisTitleByDanawa: Boolean!
   categories: [Category!]!
-  """어드민) 댓글 목록 조회"""
+  """
+  어드민) 댓글 목록 조회
+  """
   commentsByAdmin(excludes: [String!], hotDealKeywordId: Int!, synonyms: [String!]): [String!]!
-  """상품 랭킹 랜덤 조회"""
+  """
+  상품 랭킹 랜덤 조회
+  """
   communityRandomRankingProducts(
     categoryId: Int
-    """상품 필터링시 고려할 아이템 개수(랭킹)"""
+    """
+    상품 필터링시 고려할 아이템 개수(랭킹)
+    """
     count: Int!
     isApp: Boolean
     isGame: Boolean
@@ -329,52 +457,145 @@ type Query {
     limit: Int!
   ): [ProductOutput!]!
   danawaProduct(id: String!): DanawaProductOutput!
-  danawaProducts(amount: String, brandName: String!, productName: String!, volume: String): [DanawaProductOutput!]!
-  """안읽은 알림 존재 여부 조회"""
+  danawaProducts(
+    amount: String
+    brandName: String!
+    productName: String!
+    volume: String
+  ): [DanawaProductOutput!]!
+  """
+  안읽은 알림 존재 여부 조회
+  """
   existUnreadNotification: Boolean!
-  """유저 존재 여부 조회"""
+  """
+  유저 존재 여부 조회
+  """
   existsUser(email: String!): ExistsUserOutput!
-  """어드민) 핫딜 제외 키워드 목록 조회"""
-  hotDealExcludeKeywordsByAdmin(hotDealKeywordId: Int!, limit: Int!, orderBy: HotDealExcludeKeywordOrderType!, orderOption: OrderOptionType!, searchAfter: [String!]): [HotDealExcludeKeywordOutput!]!
-  """어드민) 핫딜 키워드 조회"""
+  """
+  어드민) 핫딜 제외 키워드 목록 조회
+  """
+  hotDealExcludeKeywordsByAdmin(
+    hotDealKeywordId: Int!
+    limit: Int!
+    orderBy: HotDealExcludeKeywordOrderType!
+    orderOption: OrderOptionType!
+    searchAfter: [String!]
+  ): [HotDealExcludeKeywordOutput!]!
+  """
+  어드민) 핫딜 키워드 조회
+  """
   hotDealKeywordByAdmin(id: Int!): HotDealKeywordOutput
-  """어드민) 핫딜 키워드 유의어 목록 조회"""
-  hotDealKeywordSynonymsByAdmin(hotDealKeywordId: Int!, limit: Int!, orderBy: HotDealKeywordSynonymOrderType!, orderOption: OrderOptionType!, searchAfter: [String!]): [HotDealKeywordSynonymOutput!]!
-  """어드민) 핫딜 키워드 목록 조회"""
-  hotDealKeywordsByAdmin(limit: Int!, orderBy: HotDealKeywordOrderType!, orderOption: OrderOptionType!, searchAfter: [String!], type: HotDealKeywordType): [HotDealKeywordOutput!]!
+  """
+  어드민) 핫딜 키워드 유의어 목록 조회
+  """
+  hotDealKeywordSynonymsByAdmin(
+    hotDealKeywordId: Int!
+    limit: Int!
+    orderBy: HotDealKeywordSynonymOrderType!
+    orderOption: OrderOptionType!
+    searchAfter: [String!]
+  ): [HotDealKeywordSynonymOutput!]!
+  """
+  어드민) 핫딜 키워드 목록 조회
+  """
+  hotDealKeywordsByAdmin(
+    limit: Int!
+    orderBy: HotDealKeywordOrderType!
+    orderOption: OrderOptionType!
+    searchAfter: [String!]
+    type: HotDealKeywordType
+  ): [HotDealKeywordOutput!]!
   instagramPost(id: Int!): InstagramPost
   matchProduct(text: String!): String!
-  """로그인한 유저 정보 조회"""
+  """
+  로그인한 유저 정보 조회
+  """
   me: User!
-  """유저 알림 키워드 목록 조회"""
+  """
+  유저 알림 키워드 목록 조회
+  """
   notificationKeywordsByMe(limit: Int!, searchAfter: [String!]): [NotificationKeyword!]!
-  """알림 목록 조회"""
+  """
+  알림 목록 조회
+  """
   notifications(limit: Int = 10, offset: Int = 0): [Notification!]!
-  """어드민) 알림 목록 조회"""
-  notificationsByAdmin(limit: Int = 10, offset: Int = 0, target: NotificationTarget, targetId: String, userId: Int): [Notification!]!
-  """상품 조회"""
+  """
+  어드민) 알림 목록 조회
+  """
+  notificationsByAdmin(
+    limit: Int = 10
+    offset: Int = 0
+    target: NotificationTarget
+    targetId: String
+    userId: Int
+  ): [Notification!]!
+  """
+  상품 조회
+  """
   product(id: Int!): ProductOutput
   productGuides(productId: Int!): [ProductGuide!]!
   productInfoByTitleWithGPT(title: String!): String!
-  """상품 목록 조회"""
-  products(categoryId: Int, endDate: DateTime, isApp: Boolean, isEnd: Boolean, isGame: Boolean, isHot: Boolean, isReward: Boolean, keyword: String, limit: Int!, orderBy: ProductOrderType, orderOption: OrderOptionType, searchAfter: [String!], startDate: DateTime, thumbnailType: ThumbnailType): [ProductOutput!]!
-  """푸시 세팅 조회"""
+  """
+  상품 목록 조회
+  """
+  products(
+    categoryId: Int
+    endDate: DateTime
+    isApp: Boolean
+    isEnd: Boolean
+    isGame: Boolean
+    isHot: Boolean
+    isReward: Boolean
+    keyword: String
+    limit: Int!
+    orderBy: ProductOrderType
+    orderOption: OrderOptionType
+    searchAfter: [String!]
+    startDate: DateTime
+    thumbnailType: ThumbnailType
+  ): [ProductOutput!]!
+  """
+  푸시 세팅 조회
+  """
   pushSetting: UserPushSetting!
-  """상품 랭킹 목록 조회"""
+  """
+  상품 랭킹 목록 조회
+  """
   rankingProducts: [ProductOutput!]!
-  """소셜 액세스 토큰 조회"""
+  """
+  소셜 액세스 토큰 조회
+  """
   socialAccessToken(code: String!, oauthProvider: OauthProvider!, state: String!): String!
-  """소셜 정보 조회"""
+  """
+  소셜 정보 조회
+  """
   socialInfo(oauthProvider: OauthProvider!, socialAccessToken: String!): SocialInfoOutput!
   test: Boolean!
-  """같이 본 상품 목록 조회"""
+  """
+  같이 본 상품 목록 조회
+  """
   togetherViewedProducts(limit: Int!, productId: Int!): [ProductOutput!]!
-  """안읽은 알림 수 목록 조회"""
+  """
+  안읽은 알림 수 목록 조회
+  """
   unreadNotificationsCount: Int!
-  """유저 조회"""
+  """
+  유저 조회
+  """
   user(id: Int!): User!
-  """이메일로 유저 조회"""
+  """
+  이메일로 유저 조회
+  """
   userByEmail(email: String!): User!
+  """
+  위시리스트 목록 조회
+  """
+  wishlists(
+    limit: Int!
+    orderBy: WishlistOrderType!
+    orderOption: OrderOptionType!
+    searchAfter: [String!]
+  ): [WishlistOutput!]!
 }
 
 enum Role {
@@ -433,4 +654,18 @@ type UserPushSetting {
   id: ID!
   info: Boolean!
   userId: Int!
+}
+
+enum WishlistOrderType {
+  ID
+}
+
+type WishlistOutput {
+  id: ID!
+  """
+  상품 조회
+  """
+  product: ProductOutput!
+  productId: Int!
+  searchAfter: [String!]
 }
