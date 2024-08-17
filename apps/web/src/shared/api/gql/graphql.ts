@@ -110,6 +110,7 @@ export type HotDealKeywordSynonymOutput = {
 export enum HotDealKeywordType {
   Negative = 'NEGATIVE',
   Positive = 'POSITIVE',
+  Synonym = 'SYNONYM',
 }
 
 export type InstagramPost = {
@@ -150,6 +151,8 @@ export type Mutation = {
   adminLogin: TokenOutput;
   /** 상품 단건 수집 */
   collectProduct: Scalars['Boolean']['output'];
+  /** 썸네일 단건 수집 */
+  collectThumbnail: Scalars['Boolean']['output'];
   /** 로그인 */
   login: TokenOutput;
   /** 리프레시 토큰으로 로그인 */
@@ -259,6 +262,10 @@ export type MutationAdminLoginArgs = {
 };
 
 export type MutationCollectProductArgs = {
+  productId: Scalars['Int']['input'];
+};
+
+export type MutationCollectThumbnailArgs = {
   productId: Scalars['Int']['input'];
 };
 
@@ -542,6 +549,8 @@ export type Query = {
   user: User;
   /** 이메일로 유저 조회 */
   userByEmail: User;
+  /** 위시리스트 목록 조회 */
+  wishlists: Array<WishlistOutput>;
 };
 
 export type QueryCommentsByAdminArgs = {
@@ -681,6 +690,13 @@ export type QueryUserByEmailArgs = {
   email: Scalars['String']['input'];
 };
 
+export type QueryWishlistsArgs = {
+  limit: Scalars['Int']['input'];
+  orderBy: WishlistOrderType;
+  orderOption: OrderOptionType;
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
 export enum Role {
   Admin = 'ADMIN',
   User = 'USER',
@@ -744,6 +760,19 @@ export type UserPushSetting = {
   id: Scalars['ID']['output'];
   info: Scalars['Boolean']['output'];
   userId: Scalars['Int']['output'];
+};
+
+export enum WishlistOrderType {
+  Id = 'ID',
+}
+
+export type WishlistOutput = {
+  __typename?: 'WishlistOutput';
+  id: Scalars['ID']['output'];
+  /** 상품 조회 */
+  product: ProductOutput;
+  productId: Scalars['Int']['output'];
+  searchAfter?: Maybe<Array<Scalars['String']['output']>>;
 };
 
 export type MutationLoginMutationVariables = Exact<{
@@ -895,6 +924,7 @@ export type QueryNotificationsQuery = {
     keyword?: string | null;
     product?: {
       __typename?: 'ProductOutput';
+      id: string;
       thumbnail?: string | null;
       price?: string | null;
       isHot?: boolean | null;
@@ -944,6 +974,7 @@ export type ProductQuery = {
     viewCount: number;
     mallName?: string | null;
     isMyWishlist?: boolean | null;
+    categoryName?: string | null;
     provider: {
       __typename?: 'Provider';
       id: string;
@@ -1246,6 +1277,7 @@ export const QueryNotificationsDocument = new TypedDocumentString(`
     url
     keyword
     product {
+      id
       thumbnail
       price
       isHot
@@ -1310,6 +1342,7 @@ export const ProductDocument = new TypedDocumentString(`
       createdAt
     }
     isMyWishlist
+    categoryName
   }
 }
     `) as unknown as TypedDocumentString<ProductQuery, ProductQueryVariables>;

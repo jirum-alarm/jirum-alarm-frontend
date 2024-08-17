@@ -40,6 +40,7 @@ export const QueryProduct = gql`
         createdAt
       }
       isMyWishlist
+      categoryName
     }
   }
 `;
