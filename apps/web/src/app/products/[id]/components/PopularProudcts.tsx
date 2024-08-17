@@ -11,6 +11,10 @@ export default function PopularProducts({ product }: { product: IProduct }) {
   const result = useGetProductPopluar(product.categoryId ?? 0);
   const products = result?.data?.products;
 
+  if (!products?.length) {
+    return null;
+  }
+
   return (
     <section>
       <h2 className="pb-5 font-semibold text-gray-900">
