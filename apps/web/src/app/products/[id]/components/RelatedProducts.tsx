@@ -14,7 +14,6 @@ export default function RelatedProducts({ product }: { product: IProduct }) {
 
   const result = useGetProductTogetherViewed(+product.id);
   const products = result?.data.togetherViewedProducts;
-  console.info('🚀 : RelatedProducts.tsx:16: products=', products);
 
   if (!products?.length) {
     return null;

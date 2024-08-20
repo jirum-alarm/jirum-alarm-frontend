@@ -7,7 +7,6 @@ import { cn } from '@/lib/cn';
 import { useEffect, useRef, useState } from 'react';
 
 export default function HotdealGuide({ productGuides }: { productGuides: IProductGuide[] }) {
-  console.info('🚀 : HotdealGuide.tsx:9: productGuides=', productGuides);
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsExpansion, setNeedsExpansion] = useState(false);
 

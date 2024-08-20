@@ -19,6 +19,7 @@ export default React.memo(function ProductImage({ product }: { product: IProduct
           onError={() => setError(true)}
           priority
           unoptimized
+          style={{ maxHeight: 600, objectFit: 'contain' }}
         />
       ) : (
         <div className="flex h-[248px] w-full items-center justify-center">
