@@ -20,6 +20,7 @@ export { default as Home } from './Home';
 export { default as HomeFill } from './HomeFill';
 export { default as Hot } from './Hot';
 export { default as HotFill } from './HotFill';
+export { default as IllustEmpty } from './IllustEmpty';
 export { default as IllustError } from './IllustError';
 export { default as IllustStanding } from './IllustStanding';
 export { default as IllustStandingSmall } from './IllustStandingSmall';

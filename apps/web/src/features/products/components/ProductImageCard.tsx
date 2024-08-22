@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { mp } from '@/lib/mixpanel';
-import { IllustStanding, IllustStandingSmall } from '@/components/common/icons';
+import { IllustEmpty, IllustStanding, IllustStandingSmall } from '@/components/common/icons';
 import { displayTime } from '@/util/displayTime';
 import { PAGE } from '@/constants/page';
 import Link from 'next/link';
@@ -123,7 +123,8 @@ const ImageWithFallback = React.memo(function ImageWithFallback({
 function NoImage({ type }: { type: 'product' | 'hotDeal' }) {
   return (
     <div className="flex h-full items-center justify-center bg-gray-50">
-      {type === 'hotDeal' ? <IllustStandingSmall /> : <IllustStanding />}
+      {/* {type === 'hotDeal' ? <IllustStandingSmall /> : <IllustStanding />} */}
+      <IllustEmpty />
     </div>
   );
 }

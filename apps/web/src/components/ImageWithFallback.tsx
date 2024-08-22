@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { IllustStanding } from './common/icons';
+import { IllustEmpty, IllustStanding } from './common/icons';
 
 const ImageWithFallback = React.memo(function ImageWithFallback(
   props: React.ComponentProps<typeof Image>,
@@ -31,7 +31,8 @@ export default ImageWithFallback;
 function NoImage() {
   return (
     <div className="flex h-full items-center justify-center bg-gray-50">
-      <IllustStanding />
+      {/* <IllustStanding /> */}
+      <IllustEmpty />
     </div>
   );
 }

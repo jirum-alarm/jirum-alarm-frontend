@@ -1,5 +1,3 @@
-// import BasicLayout from '@/components/layout/BasicLayout';
-
 import Button from '@/components/common/Button';
 import { IllustWarning } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
