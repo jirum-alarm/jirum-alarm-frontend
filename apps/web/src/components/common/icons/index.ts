@@ -8,6 +8,8 @@ export { default as ArrowDown } from './ArrowDown';
 export { default as ArrowLeft } from './ArrowLeft';
 export { default as ArrowRight } from './ArrowRight';
 export { default as Cancel } from './Cancel';
+export { default as Category } from './Category';
+export { default as CategoryFill } from './CategoryFill';
 export { default as CheckDefault } from './CheckDefault';
 export { default as CheckboxSelected } from './CheckboxSelected';
 export { default as Close } from './Close';

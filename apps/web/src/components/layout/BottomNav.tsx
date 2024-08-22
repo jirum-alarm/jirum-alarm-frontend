@@ -2,10 +2,10 @@
 import {
   Alert,
   AlertFill,
+  Category,
+  CategoryFill,
   Home,
   HomeFill,
-  Hot,
-  HotFill,
   My,
   MyFill,
 } from '@/components/common/icons';
@@ -35,9 +35,9 @@ const BottomNavList = [
   {
     type: NAV_TYPE.TRENDING,
     link: PAGE.TRENDING,
-    text: '인기',
-    icon: Hot,
-    activeIcon: HotFill,
+    text: '카테고리',
+    icon: Category,
+    activeIcon: CategoryFill,
   },
   {
     type: NAV_TYPE.ALARM,
