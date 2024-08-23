@@ -5,6 +5,7 @@ import * as Sentry from '@sentry/nextjs';
 import { ApolloError } from '@apollo/client';
 import ApiError from '@/lib/api-error';
 import { SentryLevel } from '@/lib/sentry';
+import ServerError from '@/components/ServerError';
 
 export default function Error({
   error,
@@ -28,17 +29,5 @@ export default function Error({
     }
   }, [error]);
 
-  return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
-        Try again
-      </button>
-    </div>
-  );
+  return <ServerError onClick={() => reset()} />;
 }
