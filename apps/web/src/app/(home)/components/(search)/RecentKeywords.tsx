@@ -1,5 +1,6 @@
 'use client';
 
+import { Close } from '@/components/common/icons';
 import { EVENT } from '@/constants/mixpanel';
 import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
@@ -20,6 +21,16 @@ export default function RecentKeywords() {
     setLoading(false);
   }, [searchParams]);
 
+  const handleRemoveRecentKeyword = (keyword: string) => {
+    const recentKeywords = localStorage.getItem('gr-recent-keywords') ?? '[]';
+    const newRecentKeys = JSON.parse(recentKeywords).filter((key: string) => key !== keyword);
+
+    localStorage.setItem('gr-recent-keywords', JSON.stringify(newRecentKeys));
+
+    const updatedKeywords = JSON.parse(localStorage.getItem('gr-recent-keywords') ?? '[]');
+    setKeywords(updatedKeywords);
+  };
+
   return (
     <>
       {keywords.length > 0 && (
@@ -31,7 +42,13 @@ export default function RecentKeywords() {
             ) : (
               <div className={cn('flex gap-2', !isMobile && 'flex-wrap')}>
                 {keywords.length !== 0 ? (
-                  keywords.map((keyword, i) => <Chip key={i} keyword={keyword} />)
+                  keywords.map((keyword, i) => (
+                    <Chip
+                      key={i}
+                      keyword={keyword}
+                      handleRemoveRecentKeyword={handleRemoveRecentKeyword}
+                    />
+                  ))
                 ) : (
                   <span className="text-gray-400">검색 내역이 없어요.</span>
                 )}
@@ -44,7 +61,13 @@ export default function RecentKeywords() {
   );
 }
 
-function Chip({ keyword }: { keyword: string }) {
+function Chip({
+  keyword,
+  handleRemoveRecentKeyword,
+}: {
+  keyword: string;
+  handleRemoveRecentKeyword: (keyword: string) => void;
+}) {
   const router = useRouter();
 
   const handleClick = () => {
@@ -57,13 +80,23 @@ function Chip({ keyword }: { keyword: string }) {
     });
   };
 
+  const handleClose = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+
+    handleRemoveRecentKeyword(keyword);
+  };
+
   return (
     <div
       onClick={handleClick}
-      className="flex-shrink-0 truncate rounded-[40px] border border-gray-200 px-3 py-2 text-gray-900 hover:cursor-pointer hover:bg-gray-200"
+      className="flex flex-shrink-0 items-center gap-x-1 truncate rounded-[40px] border border-gray-200 px-3 py-2 text-gray-900 hover:cursor-pointer hover:bg-gray-200"
     >
       {keyword.slice(0, 15)}
       {keyword.length > 15 ? '...' : ''}
+
+      <div onClick={handleClose}>
+        <Close />
+      </div>
     </div>
   );
 }
