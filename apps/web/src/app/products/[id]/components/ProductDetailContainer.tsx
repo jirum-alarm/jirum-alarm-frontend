@@ -49,7 +49,7 @@ function ProductDetaiLayout({
             <RelatedProductsContainer product={product} />
             <PopularProductsContainer product={product} />
           </ProductInfoLayout>
-          <BottomCTA product={product} isUserLogin={isUserLogin} />
+          <BottomCTA product={product} isUserLogin={isUserLogin} detailUrl={product.detailUrl} />
         </div>
       </main>
       <div className="h-22"></div>
