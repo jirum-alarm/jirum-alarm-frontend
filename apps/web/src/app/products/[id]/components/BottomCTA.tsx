@@ -12,23 +12,20 @@ import { throttle } from 'lodash';
 function BottomCTA({
   product,
   isUserLogin,
-  detailUrl,
+  isProfitUrl,
 }: {
   product: IProduct;
   isUserLogin: boolean;
-  detailUrl: string;
+  isProfitUrl: boolean;
 }) {
   const [showFloatingMessage, setShowFloatingMessage] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-
-  const affiliateKeywords = ['coupang'];
-  const shouldShowMessage = affiliateKeywords.some((keyword) => detailUrl.includes(keyword));
 
   useEffect(() => {
     const handleScroll = throttle(() => {
       const isBottom =
         window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
-      setShowFloatingMessage(isBottom && shouldShowMessage);
+      setShowFloatingMessage(isBottom && isProfitUrl);
     }, 100);
 
     window.addEventListener('scroll', handleScroll);
@@ -36,7 +33,7 @@ function BottomCTA({
       window.removeEventListener('scroll', handleScroll);
       handleScroll.cancel();
     };
-  }, [shouldShowMessage]);
+  }, []);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
