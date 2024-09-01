@@ -386,6 +386,7 @@ type ProductOutput {
   """
   isMyWishlist: Boolean
   isPrivate: Boolean!
+  isProfitUrl: Boolean!
   mallId: Int
   """
   쇼핑몰 이름
@@ -393,7 +394,7 @@ type ProductOutput {
   mallName: String
   negativeCommunityReactionCount: Int!
   positiveCommunityReactionCount: Int!
-  postedAt: DateTime
+  postedAt: DateTime!
   price: String
   """
   상품 가격 목록
@@ -518,13 +519,13 @@ type Query {
   """
   알림 목록 조회
   """
-  notifications(limit: Int = 10, offset: Int = 0): [Notification!]!
+  notifications(limit: Int! = 10, offset: Int! = 0): [Notification!]!
   """
   어드민) 알림 목록 조회
   """
   notificationsByAdmin(
-    limit: Int = 10
-    offset: Int = 0
+    limit: Int! = 10
+    offset: Int! = 0
     target: NotificationTarget
     targetId: String
     userId: Int
@@ -534,7 +535,6 @@ type Query {
   """
   product(id: Int!): ProductOutput
   productGuides(productId: Int!): [ProductGuide!]!
-  productInfoByTitleWithGPT(title: String!): String!
   """
   상품 목록 조회
   """
@@ -570,7 +570,9 @@ type Query {
   소셜 정보 조회
   """
   socialInfo(oauthProvider: OauthProvider!, socialAccessToken: String!): SocialInfoOutput!
-  test: Boolean!
+  test6: Int!
+  test7: Boolean!
+  test8: Boolean!
   """
   같이 본 상품 목록 조회
   """

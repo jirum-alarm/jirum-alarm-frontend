@@ -449,12 +449,13 @@ export type ProductOutput = {
   /** 로그인한 사용자의 위시리스트 여부 */
   isMyWishlist?: Maybe<Scalars['Boolean']['output']>;
   isPrivate: Scalars['Boolean']['output'];
+  isProfitUrl: Scalars['Boolean']['output'];
   mallId?: Maybe<Scalars['Int']['output']>;
   /** 쇼핑몰 이름 */
   mallName?: Maybe<Scalars['String']['output']>;
   negativeCommunityReactionCount: Scalars['Int']['output'];
   positiveCommunityReactionCount: Scalars['Int']['output'];
-  postedAt?: Maybe<Scalars['DateTime']['output']>;
+  postedAt: Scalars['DateTime']['output'];
   price?: Maybe<Scalars['String']['output']>;
   /** 상품 가격 목록 */
   prices?: Maybe<Array<ProductPrice>>;
@@ -529,7 +530,6 @@ export type Query = {
   /** 상품 조회 */
   product?: Maybe<ProductOutput>;
   productGuides: Array<ProductGuide>;
-  productInfoByTitleWithGPT: Scalars['String']['output'];
   /** 상품 목록 조회 */
   products: Array<ProductOutput>;
   /** 푸시 세팅 조회 */
@@ -540,7 +540,6 @@ export type Query = {
   socialAccessToken: Scalars['String']['output'];
   /** 소셜 정보 조회 */
   socialInfo: SocialInfoOutput;
-  test: Scalars['Boolean']['output'];
   /** 같이 본 상품 목록 조회 */
   togetherViewedProducts: Array<ProductOutput>;
   /** 안읽은 알림 수 목록 조회 */
@@ -625,13 +624,13 @@ export type QueryNotificationKeywordsByMeArgs = {
 };
 
 export type QueryNotificationsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
+  limit?: Scalars['Int']['input'];
+  offset?: Scalars['Int']['input'];
 };
 
 export type QueryNotificationsByAdminArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
+  limit?: Scalars['Int']['input'];
+  offset?: Scalars['Int']['input'];
   target?: InputMaybe<NotificationTarget>;
   targetId?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['Int']['input']>;
@@ -643,10 +642,6 @@ export type QueryProductArgs = {
 
 export type QueryProductGuidesArgs = {
   productId: Scalars['Int']['input'];
-};
-
-export type QueryProductInfoByTitleWithGptArgs = {
-  title: Scalars['String']['input'];
 };
 
 export type QueryProductsArgs = {
@@ -966,7 +961,7 @@ export type ProductQuery = {
     isHot?: boolean | null;
     isEnd?: boolean | null;
     price?: string | null;
-    postedAt?: any | null;
+    postedAt: any;
     thumbnail?: string | null;
     wishlistCount: number;
     positiveCommunityReactionCount: number;
@@ -1037,7 +1032,7 @@ export type QueryProductsQuery = {
     category?: string | null;
     thumbnail?: string | null;
     searchAfter?: Array<string> | null;
-    postedAt?: any | null;
+    postedAt: any;
     provider: { __typename?: 'Provider'; nameKr: string };
   }>;
 };
@@ -1077,7 +1072,7 @@ export type QueryCommunityRandomRankingProductsQuery = {
     category?: string | null;
     thumbnail?: string | null;
     searchAfter?: Array<string> | null;
-    postedAt?: any | null;
+    postedAt: any;
     provider: { __typename?: 'Provider'; nameKr: string };
   }>;
 };
@@ -1103,7 +1098,7 @@ export type TogetherViewedProductsQuery = {
     category?: string | null;
     thumbnail?: string | null;
     searchAfter?: Array<string> | null;
-    postedAt?: any | null;
+    postedAt: any;
     provider: { __typename?: 'Provider'; nameKr: string };
   }>;
 };
