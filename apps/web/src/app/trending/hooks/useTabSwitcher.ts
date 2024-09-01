@@ -1,16 +1,17 @@
 import useMoveListCenter from '@/hooks/useMoveListCenter';
-import { useState, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useRef } from 'react';
 import Swiper from 'swiper';
 
 const useTabSwitcher = () => {
   const swiperRef = useRef<Swiper>();
-  const [activeTab, setActiveTab] = useState(0);
-  // const [targetIndex, setTargetIndex] = useState(0);
+  const searchParams = useSearchParams();
+  const search = searchParams.get('tab');
+  const activeTab = search ? Number(search) : 0;
   const { listRef, moveListCenter } = useMoveListCenter();
+
   const handleTabChange = (index: number) => {
     swiperRef.current?.slideTo(index);
-    setActiveTab(index);
-    // setTargetIndex(index);
   };
   const handleClickTab = (e: React.MouseEvent<HTMLLIElement>) => {
     const { offsetLeft, offsetWidth } = e.currentTarget;
@@ -33,8 +34,6 @@ const useTabSwitcher = () => {
   // };
   return {
     swiperRef,
-    // targetIndex,
-    // handleProgressSwiper,
     activeTab,
     handleTabChange,
     handleClickTab,

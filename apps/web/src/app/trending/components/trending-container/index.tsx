@@ -31,14 +31,28 @@ export const TrendingContainer = () => {
           <div className="relative w-full">
             <div className="w-full overflow-x-scroll scroll-smooth scrollbar-hide" ref={tabRef}>
               <TabList className={`whitespace-nowrap will-change-transform`}>
+                <Tab
+                  onClick={handleClickTab}
+                  className="inline-block h-full cursor-pointer border-b-2 border-b-transparent px-[6px] pb-[8px] pt-[10px] text-sm text-gray-600 shadow-none outline-none transition-all transition-none duration-300 mouse-hover:hover:font-medium mouse-hover:hover:text-gray-900 [&:not(:last-child)]:mr-2"
+                  selectedClassName="!border-b-primary-600 text-gray-900 font-medium"
+                >
+                  <Link href={`/trending?tab=${0}`} className="px-[6px] pb-[8px] pt-[10px]">
+                    전체
+                  </Link>
+                </Tab>
                 {categories.map((category) => (
                   <Tab
-                    onClick={handleClickTab}
                     key={category.id}
-                    className="inline-block cursor-pointer border-b-2 border-b-transparent px-[6px] pb-[8px] pt-[10px] text-sm text-gray-600 shadow-none outline-none transition-all transition-none duration-300 mouse-hover:hover:font-medium mouse-hover:hover:text-gray-900 [&:not(:last-child)]:mr-2"
+                    onClick={handleClickTab}
+                    className="inline-block h-full cursor-pointer border-b-2 border-b-transparent px-[6px] pb-[8px] pt-[10px] text-sm text-gray-600 shadow-none outline-none transition-all transition-none duration-300 mouse-hover:hover:font-medium mouse-hover:hover:text-gray-900 [&:not(:last-child)]:mr-2"
                     selectedClassName="!border-b-primary-600 text-gray-900 font-medium"
                   >
-                    {category.name}
+                    <Link
+                      href={`/trending?tab=${category.id}`}
+                      className="px-[6px] pb-[8px] pt-[10px]"
+                    >
+                      {category.name}
+                    </Link>
                   </Tab>
                 ))}
               </TabList>
@@ -56,12 +70,22 @@ export const TrendingContainer = () => {
       <Swiper
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         onSlideChange={(swiper) => handleTabChange(swiper.realIndex)}
+        initialSlide={activeTab}
         // onProgress={handleProgressSwiper}
         className="my-6"
       >
+        <SwiperSlide className="h-full w-full">
+          {0 === activeTab && (
+            <div>
+              <Suspense fallback={<TrendingListSkeleton />}>
+                <TrendingList categoryId={0} categoryName={'전체'} />
+              </Suspense>
+            </div>
+          )}
+        </SwiperSlide>
         {categories.map((category, index) => (
           <SwiperSlide key={category.id} className="h-full w-full">
-            {index === activeTab && (
+            {category.id === activeTab && (
               <div>
                 <Suspense fallback={<TrendingListSkeleton />}>
                   <TrendingList categoryId={category.id} categoryName={category.name} />
