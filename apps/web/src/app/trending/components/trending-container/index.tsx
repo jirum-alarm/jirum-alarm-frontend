@@ -11,6 +11,7 @@ import useTabSwitcher from '../../hooks/useTabSwitcher';
 import TrendingList from '../TrendingList';
 import { CategoryQueries } from '@/entities/category';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { PAGE } from '@/constants/page';
 
 export const TrendingContainer = () => {
   const { swiperRef, activeTab, handleTabChange, handleClickTab, tabRef } = useTabSwitcher();
@@ -40,7 +41,7 @@ export const TrendingContainer = () => {
                     전체
                   </Link>
                 </Tab>
-                {categories.map((category) => (
+                {categories.map((category, i) => (
                   <Tab
                     key={category.id}
                     onClick={handleClickTab}
@@ -48,7 +49,7 @@ export const TrendingContainer = () => {
                     selectedClassName="!border-b-primary-600 text-gray-900 font-medium"
                   >
                     <Link
-                      href={`/trending?tab=${category.id}`}
+                      href={`${PAGE.TRENDING}?tab=${i + 1}`}
                       className="px-[6px] pb-[8px] pt-[10px]"
                     >
                       {category.name}
@@ -85,7 +86,7 @@ export const TrendingContainer = () => {
         </SwiperSlide>
         {categories.map((category, index) => (
           <SwiperSlide key={category.id} className="h-full w-full">
-            {category.id === activeTab && (
+            {index + 1 === activeTab && (
               <div>
                 <Suspense fallback={<TrendingListSkeleton />}>
                   <TrendingList categoryId={category.id} categoryName={category.name} />
