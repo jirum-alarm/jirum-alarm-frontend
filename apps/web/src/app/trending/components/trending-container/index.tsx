@@ -1,9 +1,9 @@
 'use client';
-import { Tab, TabList, Tabs } from 'react-tabs';
+import React, { useRef, useEffect, useState, Suspense, KeyboardEvent } from 'react';
 import { IllustStandingSmall, Setting } from '@/components/common/icons';
 import Link from 'next/link';
-import { Suspense } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
@@ -14,11 +14,45 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { PAGE } from '@/constants/page';
 
 export const TrendingContainer = () => {
-  const { swiperRef, activeTab, handleTabChange, handleClickTab, tabRef } = useTabSwitcher();
+  const { swiperRef, activeTab, handleTabChange, tabRef } = useTabSwitcher();
   const {
     data: { categories },
   } = useSuspenseQuery(CategoryQueries.categoriesForUser());
   const { isHeaderVisible } = useVisibilityOnScroll();
+
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+  const tabsRef = useRef<(HTMLLIElement | null)[]>([]);
+  const tabListRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    const currentTab = tabsRef.current[activeTab];
+    if (currentTab) {
+      requestAnimationFrame(() => {
+        setIndicatorStyle({
+          left: currentTab.offsetLeft,
+          width: currentTab.offsetWidth,
+        });
+
+        currentTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      });
+    }
+  }, [activeTab]);
+
+  const handleClickTab = (index: number) => {
+    handleTabChange(index);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLUListElement>) => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      const direction = event.key === 'ArrowLeft' ? -1 : 1;
+      const newIndex = Math.max(0, Math.min(categories.length, activeTab + direction));
+      handleClickTab(newIndex);
+    }
+  };
+
+  const tabClassName =
+    'inline-block h-full cursor-pointer px-[6px] pb-[8px] pt-[10px] text-sm shadow-none outline-none transition-all duration-300 mouse-hover:hover:font-medium [&:not(:last-child)]:mr-2';
 
   return (
     <div>
@@ -28,55 +62,82 @@ export const TrendingContainer = () => {
           'top-0': !isHeaderVisible,
         })}
       >
-        <Tabs selectedIndex={activeTab} onSelect={handleTabChange} defaultFocus disableUpDownKeys>
-          <div className="relative w-full">
-            <div className="w-full overflow-x-scroll scroll-smooth scrollbar-hide" ref={tabRef}>
-              <TabList className={`whitespace-nowrap will-change-transform`}>
-                <Tab
-                  onClick={handleClickTab}
-                  className="inline-block h-full cursor-pointer border-b-2 border-b-transparent px-[6px] pb-[8px] pt-[10px] text-sm text-gray-600 shadow-none outline-none transition-all transition-none duration-300 mouse-hover:hover:font-medium mouse-hover:hover:text-gray-900 [&:not(:last-child)]:mr-2"
-                  selectedClassName="!border-b-primary-600 text-gray-900 font-medium"
-                >
-                  <Link href={`/trending?tab=${0}`} className="px-[6px] pb-[8px] pt-[10px]">
-                    전체
-                  </Link>
-                </Tab>
-                {categories.map((category, i) => (
-                  <Tab
-                    key={category.id}
-                    onClick={handleClickTab}
-                    className="inline-block h-full cursor-pointer border-b-2 border-b-transparent px-[6px] pb-[8px] pt-[10px] text-sm text-gray-600 shadow-none outline-none transition-all transition-none duration-300 mouse-hover:hover:font-medium mouse-hover:hover:text-gray-900 [&:not(:last-child)]:mr-2"
-                    selectedClassName="!border-b-primary-600 text-gray-900 font-medium"
-                  >
-                    <Link
-                      href={`${PAGE.TRENDING}?tab=${i + 1}`}
-                      className="px-[6px] pb-[8px] pt-[10px]"
-                    >
-                      {category.name}
-                    </Link>
-                  </Tab>
-                ))}
-              </TabList>
-            </div>
-            <Link
-              className="absolute right-0 top-0 flex h-10 w-11 items-center justify-end bg-fade-to-white"
-              href={'/mypage/categories'}
-              prefetch={false}
+        <div className="relative w-full">
+          <div className="w-full overflow-x-scroll scroll-smooth scrollbar-hide" ref={tabRef}>
+            <ul
+              className="relative whitespace-nowrap will-change-transform"
+              role="tablist"
+              ref={tabListRef}
+              onKeyDown={handleKeyDown}
+              tabIndex={0}
             >
-              <Setting />
-            </Link>
+              <li
+                ref={(el) => {
+                  tabsRef.current[0] = el;
+                }}
+                onClick={() => handleClickTab(0)}
+                role="tab"
+                aria-selected={activeTab === 0}
+                aria-controls={`panel-0`}
+                className={cn(
+                  tabClassName,
+                  activeTab === 0 ? 'font-medium text-gray-900' : 'text-gray-600',
+                )}
+              >
+                <Link href={`/trending?tab=${0}`} className="px-[6px] pb-[8px] pt-[10px]">
+                  전체
+                </Link>
+              </li>
+              {categories.map((category, i) => (
+                <li
+                  key={category.id}
+                  ref={(el) => {
+                    tabsRef.current[i + 1] = el;
+                  }}
+                  onClick={() => handleClickTab(i + 1)}
+                  role="tab"
+                  aria-selected={activeTab === i + 1}
+                  aria-controls={`panel-${i + 1}`}
+                  className={cn(
+                    tabClassName,
+                    activeTab === i + 1 ? 'font-medium text-gray-900' : 'text-gray-600',
+                  )}
+                >
+                  <Link
+                    href={`${PAGE.TRENDING}?tab=${i + 1}`}
+                    className="px-[6px] pb-[8px] pt-[10px]"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
+              <div
+                className="absolute bottom-0 h-0.5 bg-primary-600 transition-all duration-300"
+                style={{
+                  left: indicatorStyle.left,
+                  width: indicatorStyle.width,
+                }}
+              />
+            </ul>
           </div>
-        </Tabs>
+          <Link
+            className="absolute right-0 top-0 flex h-10 w-11 items-center justify-end bg-fade-to-white"
+            href={'/mypage/categories'}
+            prefetch={false}
+          >
+            <Setting />
+          </Link>
+        </div>
       </div>
       <Swiper
-        onSwiper={(swiper) => (swiperRef.current = swiper)}
-        onSlideChange={(swiper) => handleTabChange(swiper.realIndex)}
+        onSwiper={(swiper: SwiperType) => (swiperRef.current = swiper)}
+        onSlideChange={(swiper: SwiperType) => handleTabChange(swiper.realIndex)}
         initialSlide={activeTab}
         // onProgress={handleProgressSwiper}
         className="my-6"
       >
         <SwiperSlide className="h-full w-full">
-          {0 === activeTab && (
+          {activeTab === 0 && (
             <div>
               <Suspense fallback={<TrendingListSkeleton />}>
                 <TrendingList categoryId={0} categoryName={'전체'} />
@@ -84,17 +145,20 @@ export const TrendingContainer = () => {
             </div>
           )}
         </SwiperSlide>
-        {categories.map((category, index) => (
-          <SwiperSlide key={category.id} className="h-full w-full">
-            {index + 1 === activeTab && (
-              <div>
-                <Suspense fallback={<TrendingListSkeleton />}>
-                  <TrendingList categoryId={category.id} categoryName={category.name} />
-                </Suspense>
-              </div>
-            )}
-          </SwiperSlide>
-        ))}
+        {categories.map((category, index) => {
+          const shouldRender = index + 1 === activeTab;
+          return (
+            <SwiperSlide key={category.id} className="h-full w-full">
+              {shouldRender && (
+                <div>
+                  <Suspense fallback={<TrendingListSkeleton />}>
+                    <TrendingList categoryId={category.id} categoryName={category.name} />
+                  </Suspense>
+                </div>
+              )}
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </div>
   );
