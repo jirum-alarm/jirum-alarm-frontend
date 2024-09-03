@@ -72,7 +72,9 @@ export const TrendingContainer = () => {
               tabIndex={0}
             >
               <li
-                ref={(el) => (tabsRef.current[0] = el)}
+                ref={(el) => {
+                  tabsRef.current[0] = el;
+                }}
                 onClick={() => handleClickTab(0)}
                 role="tab"
                 aria-selected={activeTab === 0}
@@ -89,7 +91,9 @@ export const TrendingContainer = () => {
               {categories.map((category, i) => (
                 <li
                   key={category.id}
-                  ref={(el) => (tabsRef.current[i + 1] = el)}
+                  ref={(el) => {
+                    tabsRef.current[i + 1] = el;
+                  }}
                   onClick={() => handleClickTab(i + 1)}
                   role="tab"
                   aria-selected={activeTab === i + 1}
