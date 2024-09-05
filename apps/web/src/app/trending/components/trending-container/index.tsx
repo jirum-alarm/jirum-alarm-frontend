@@ -14,32 +14,34 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { PAGE } from '@/constants/page';
 
 export const TrendingContainer = () => {
-  const { swiperRef, activeTab, handleTabChange, tabRef } = useTabSwitcher();
   const {
     data: { categories },
   } = useSuspenseQuery(CategoryQueries.categoriesForUser());
   const { isHeaderVisible } = useVisibilityOnScroll();
 
+  const [activeTab, setActiveTab] = useState(0);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
   const tabsRef = useRef<(HTMLLIElement | null)[]>([]);
   const tabListRef = useRef<HTMLUListElement>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
 
-  useEffect(() => {
-    const currentTab = tabsRef.current[activeTab];
+  const updateIndicator = (index: number) => {
+    const currentTab = tabsRef.current[index];
     if (currentTab) {
-      requestAnimationFrame(() => {
-        setIndicatorStyle({
-          left: currentTab.offsetLeft,
-          width: currentTab.offsetWidth,
-        });
-
-        currentTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      setIndicatorStyle({
+        left: currentTab.offsetLeft,
+        width: currentTab.offsetWidth,
       });
+      currentTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
-  }, [activeTab]);
+  };
 
-  const handleClickTab = (index: number) => {
-    handleTabChange(index);
+  const handleTabChange = (index: number) => {
+    setActiveTab(index);
+    updateIndicator(index);
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(index);
+    }
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLUListElement>) => {
@@ -47,9 +49,13 @@ export const TrendingContainer = () => {
       event.preventDefault();
       const direction = event.key === 'ArrowLeft' ? -1 : 1;
       const newIndex = Math.max(0, Math.min(categories.length, activeTab + direction));
-      handleClickTab(newIndex);
+      handleTabChange(newIndex);
     }
   };
+
+  useEffect(() => {
+    updateIndicator(activeTab);
+  }, [activeTab]);
 
   const tabClassName =
     'inline-block h-full cursor-pointer px-[6px] pb-[8px] pt-[10px] text-sm shadow-none outline-none transition-all duration-300 mouse-hover:hover:font-medium [&:not(:last-child)]:mr-2';
@@ -63,7 +69,7 @@ export const TrendingContainer = () => {
         })}
       >
         <div className="relative w-full">
-          <div className="w-full overflow-x-scroll scroll-smooth scrollbar-hide" ref={tabRef}>
+          <div className="w-full overflow-x-scroll scroll-smooth scrollbar-hide">
             <ul
               className="relative whitespace-nowrap will-change-transform"
               role="tablist"
@@ -75,7 +81,7 @@ export const TrendingContainer = () => {
                 ref={(el) => {
                   tabsRef.current[0] = el;
                 }}
-                onClick={() => handleClickTab(0)}
+                onClick={() => handleTabChange(0)}
                 role="tab"
                 aria-selected={activeTab === 0}
                 aria-controls={`panel-0`}
@@ -94,7 +100,7 @@ export const TrendingContainer = () => {
                   ref={(el) => {
                     tabsRef.current[i + 1] = el;
                   }}
-                  onClick={() => handleClickTab(i + 1)}
+                  onClick={() => handleTabChange(i + 1)}
                   role="tab"
                   aria-selected={activeTab === i + 1}
                   aria-controls={`panel-${i + 1}`}
@@ -113,10 +119,7 @@ export const TrendingContainer = () => {
               ))}
               <div
                 className="absolute bottom-0 h-0.5 bg-primary-600 transition-all duration-300"
-                style={{
-                  left: indicatorStyle.left,
-                  width: indicatorStyle.width,
-                }}
+                style={indicatorStyle}
               />
             </ul>
           </div>
@@ -131,34 +134,22 @@ export const TrendingContainer = () => {
       </div>
       <Swiper
         onSwiper={(swiper: SwiperType) => (swiperRef.current = swiper)}
-        onSlideChange={(swiper: SwiperType) => handleTabChange(swiper.realIndex)}
+        onSlideChange={(swiper: SwiperType) => handleTabChange(swiper.activeIndex)}
         initialSlide={activeTab}
-        // onProgress={handleProgressSwiper}
         className="my-6"
       >
         <SwiperSlide className="h-full w-full">
-          {activeTab === 0 && (
-            <div>
-              <Suspense fallback={<TrendingListSkeleton />}>
-                <TrendingList categoryId={0} categoryName={'전체'} />
-              </Suspense>
-            </div>
-          )}
+          <Suspense fallback={<TrendingListSkeleton />}>
+            <TrendingList categoryId={0} categoryName={'전체'} />
+          </Suspense>
         </SwiperSlide>
-        {categories.map((category, index) => {
-          const shouldRender = index + 1 === activeTab;
-          return (
-            <SwiperSlide key={category.id} className="h-full w-full">
-              {shouldRender && (
-                <div>
-                  <Suspense fallback={<TrendingListSkeleton />}>
-                    <TrendingList categoryId={category.id} categoryName={category.name} />
-                  </Suspense>
-                </div>
-              )}
-            </SwiperSlide>
-          );
-        })}
+        {categories.map((category) => (
+          <SwiperSlide key={category.id} className="h-full w-full">
+            <Suspense fallback={<TrendingListSkeleton />}>
+              <TrendingList categoryId={category.id} categoryName={category.name} />
+            </Suspense>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );
