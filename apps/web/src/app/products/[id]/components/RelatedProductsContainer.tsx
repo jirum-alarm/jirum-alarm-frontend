@@ -2,12 +2,16 @@
 
 import 'swiper/css';
 
-import { IProduct } from '@/graphql/interface';
 import React, { Suspense } from 'react';
 import RelatedProducts from './RelatedProducts';
 import MoreProductsSkeleton from './MoreProductsSkeleton';
+import { ProductQuery } from '@/shared/api/gql/graphql';
 
-export default function RelatedProductsContainer({ product }: { product: IProduct }) {
+export default function RelatedProductsContainer({
+  product,
+}: {
+  product: NonNullable<ProductQuery['product']>;
+}) {
   return (
     <Suspense fallback={<MoreProductsSkeleton />}>
       <RelatedProducts product={product} />

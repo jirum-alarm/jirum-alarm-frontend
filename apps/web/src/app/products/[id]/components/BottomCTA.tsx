@@ -1,20 +1,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { IProduct } from '@/graphql/interface';
 import LikeButton from './LikeButton';
 import Button from '@/components/common/Button';
 import { EVENT } from '@/constants/mixpanel';
 import { mp } from '@/lib/mixpanel';
 import { BiSolidMessageDetail } from 'react-icons/bi';
 import { throttle } from 'lodash';
+import { ProductQuery } from '@/shared/api/gql/graphql';
 
 function BottomCTA({
   product,
   isUserLogin,
   isProfitUrl,
 }: {
-  product: IProduct;
+  product: NonNullable<ProductQuery['product']>;
   isUserLogin: boolean;
   isProfitUrl: boolean;
 }) {
@@ -73,7 +73,11 @@ function BottomCTA({
       </div>
       <div className="flex w-full gap-x-2">
         <LikeButton product={product} isUserLogin={isUserLogin} />
-        <a href={product.detailUrl} onClick={handleClickPurchaseLinkBrowse} className="w-full">
+        <a
+          href={product.detailUrl ?? ''}
+          onClick={handleClickPurchaseLinkBrowse}
+          className="w-full"
+        >
           <Button>구매하러 가기</Button>
         </a>
       </div>

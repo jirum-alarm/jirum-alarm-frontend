@@ -5,11 +5,20 @@ import { Search, Share } from '@/components/common/icons';
 import BackButton from '@/components/layout/BackButton';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
+import { ProductQueries } from '@/entities/product';
 import { IProduct } from '@/graphql/interface';
 import { mp } from '@/lib/mixpanel';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { notFound } from 'next/navigation';
 
-export default function ProductDetailPageHeader({ product }: { product: IProduct }) {
+// { product }: { product: IProduct }
+export default function ProductDetailPageHeader({ productId }: { productId: number }) {
   const { toast } = useToast();
+  const {
+    data: { product },
+  } = useSuspenseQuery(ProductQueries.product({ id: productId }));
+
+  if (!product) notFound();
 
   const title = `지름알림 | ${product.title}`;
 
