@@ -12,24 +12,13 @@ import { InitMixpanel } from '@/lib/mixpanel';
 import dynamic from 'next/dynamic';
 import { AppProvider } from './(app)/providers';
 import BottomNav from '@/components/layout/BottomNav';
+import { defaultMetadata } from '@/constants/metadata';
 
 // const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
 //   ssr: false,
 // });
 
-export const metadata: Metadata = {
-  title: '지름알림: 핫딜 정보 모아보기',
-  description: '지름 정보를 알려드려요!',
-  openGraph: {
-    title: '지름알림: 핫딜 정보 모아보기',
-    description: '핫딜 정보를 알려드려요!',
-    images: './opengraph-image.png',
-  },
-  icons: {
-    icon: '/icon.png',
-  },
-  metadataBase: new URL(SERVICE_URL),
-};
+export const metadata: Metadata = defaultMetadata;
 
 export const viewport: Viewport = {
   initialScale: 1,

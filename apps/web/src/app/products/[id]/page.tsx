@@ -5,6 +5,12 @@ import { getProductDetail } from '@/features/products/server/productDetail';
 import { IS_VERCEL_PRD, SERVICE_URL } from '@/constants/env';
 import ProductDetailPageHeader from './components/ProductDeatilPageHeader';
 import { getProductGuides } from '@/features/products/server/productGuides';
+import { Suspense } from 'react';
+import { ProductService } from '@/shared/api/product';
+import { defaultMetadata } from '@/constants/metadata';
+import { HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { ProductQueries } from '@/entities/product';
+import ProductDetailContainerServer from './components/ProductDetailContainerServer';
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   {
@@ -16,10 +22,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
   const id = params.id;
 
-  const { data } = await getProductDetail(+id);
-  const product = data.product;
-
-  const { data: productGuides } = await getProductGuides(+product.id);
+  const { product } = await ProductService.getProduct({ id: +id });
+  if (!product) return defaultMetadata;
+  const productGuides = await ProductService.getProductGuides({ productId: +product.id });
 
   const title = `지름알림 | ${product.title}`;
   const description =
@@ -52,12 +57,15 @@ export default async function ProductDetail({ params }: { params: { id: string }
 
   const id = params.id;
 
-  const { data } = await getProductDetail(+id);
-  const product = data.product;
+  // const { data } = await getProductDetail(+id);
+  // const product = data.product;
+
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(ProductQueries.product({ id: +id }));
 
   return (
-    <BasicLayout header={<ProductDetailPageHeader product={product} />}>
-      <ProductDetailContainer product={product} />
-    </BasicLayout>
+    <Suspense>
+      <ProductDetailContainerServer productId={+id} />
+    </Suspense>
   );
 }

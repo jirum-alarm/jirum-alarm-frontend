@@ -4,9 +4,14 @@ import Button from '@/components/common/Button';
 import { ArrowDown } from '@/components/common/icons';
 import { IProductGuide } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
+import { ProductGuidesQuery } from '@/shared/api/gql/graphql';
 import { useEffect, useRef, useState } from 'react';
 
-export default function HotdealGuide({ productGuides }: { productGuides: IProductGuide[] }) {
+export default function HotdealGuide({
+  productGuides,
+}: {
+  productGuides: ProductGuidesQuery['productGuides'];
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsExpansion, setNeedsExpansion] = useState(false);
 
@@ -159,7 +164,7 @@ function LinkText({ content }: { content: string }) {
   );
 }
 
-function HotdealGuideItem({ guide }: { guide: IProductGuide }) {
+function HotdealGuideItem({ guide }: { guide: ProductGuidesQuery['productGuides'][number] }) {
   return (
     <div className="flex gap-x-2 px-3">
       <div className="h-5 w-5 rounded-full bg-primary-100 p-[3px]">

@@ -1,11 +1,15 @@
 'use client';
 
 import { EVENT } from '@/constants/mixpanel';
-import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
+import { ProductQuery } from '@/shared/api/gql/graphql';
 
-export default function CommunityReaction({ product }: { product: IProduct }) {
+export default function CommunityReaction({
+  product,
+}: {
+  product: NonNullable<ProductQuery['product']>;
+}) {
   const nanSafe = (num: number) => (isNaN(num) ? 0 : num);
   const positiveCount = product?.positiveCommunityReactionCount || 0;
   const negativeCount = product?.negativeCommunityReactionCount || 0;

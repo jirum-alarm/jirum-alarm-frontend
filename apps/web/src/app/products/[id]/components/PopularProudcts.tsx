@@ -1,14 +1,27 @@
 'use client';
 
-import { IProduct } from '@/graphql/interface';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import React, { Suspense } from 'react';
-import { ProductImageCard, useCollectProduct, useGetProductPopluar } from '@/features/products';
+import { ProductImageCard } from '@/features/products';
+import { ProductQuery, ThumbnailType } from '@/shared/api/gql/graphql';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { ProductQueries } from '@/entities/product';
+import { ProductService } from '@/shared/api/product';
 
-export default function PopularProducts({ product }: { product: IProduct }) {
-  const collectProduct = useCollectProduct();
-
-  const result = useGetProductPopluar(product.categoryId ?? 0);
+export default function PopularProducts({
+  product,
+}: {
+  product: NonNullable<ProductQuery['product']>;
+}) {
+  const { mutate } = useMutation({ mutationFn: ProductService.collectProduct });
+  const result = useSuspenseQuery(
+    ProductQueries.products({
+      limit: 20,
+      categoryId: product.categoryId ?? 0,
+      thumbnailType: ThumbnailType.Mall,
+      isEnd: false,
+    }),
+  );
   const products = result?.data?.products;
 
   if (!products?.length) {
@@ -41,7 +54,7 @@ export default function PopularProducts({ product }: { product: IProduct }) {
                 <ProductImageCard
                   type="hotDeal"
                   product={product}
-                  collectProduct={collectProduct}
+                  collectProduct={(productId: number) => mutate({ productId })}
                   logging={{ page: 'DETAIL' }}
                 />
               </SwiperSlide>

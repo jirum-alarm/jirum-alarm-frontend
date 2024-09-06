@@ -4,9 +4,9 @@ import Button from '@/components/common/Button';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { useAddWishlist, useRemoveWishlist } from '@/features/products';
-import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
+import { ProductQuery } from '@/shared/api/gql/graphql';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -14,7 +14,7 @@ export default function LikeButton({
   product,
   isUserLogin,
 }: {
-  product: IProduct;
+  product: NonNullable<ProductQuery['product']>;
   isUserLogin: boolean;
 }) {
   const [isLiked, setIsLiked] = useState(product.isMyWishlist);
@@ -69,7 +69,7 @@ export default function LikeButton({
       onClick={handleClickWishlist}
       className="flex w-[52px] min-w-[52px] flex-col items-center justify-center border-gray-300 px-2 py-1"
     >
-      <HeartIcon isLiked={isLiked} />
+      <HeartIcon isLiked={!!isLiked} />
       <span className="text-[11px] leading-4 text-gray-900">찜하기</span>
     </Button>
   );

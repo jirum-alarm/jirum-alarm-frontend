@@ -5,7 +5,11 @@ import Image from 'next/image';
 import { IProduct } from '@/graphql/interface';
 import { IllustStanding } from '@/components/common/icons';
 
-export default React.memo(function ProductImage({ product }: { product: IProduct }) {
+export default React.memo(function ProductImage({
+  product,
+}: {
+  product: { thumbnail?: string | null; title: string };
+}) {
   const [error, setError] = useState(false);
 
   return (
@@ -14,7 +18,7 @@ export default React.memo(function ProductImage({ product }: { product: IProduct
         <div className="relative h-[375px] w-full smd:h-[550px]">
           <Image
             src={product.thumbnail}
-            alt={product.title}
+            alt={product.title ?? ''}
             onError={() => setError(true)}
             priority
             unoptimized

@@ -540,6 +540,9 @@ export type Query = {
   socialAccessToken: Scalars['String']['output'];
   /** 소셜 정보 조회 */
   socialInfo: SocialInfoOutput;
+  test6: Scalars['Int']['output'];
+  test7: Scalars['Boolean']['output'];
+  test8: Scalars['Boolean']['output'];
   /** 같이 본 상품 목록 조회 */
   togetherViewedProducts: Array<ProductOutput>;
   /** 안읽은 알림 수 목록 조회 */
@@ -960,6 +963,7 @@ export type ProductQuery = {
     detailUrl?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
+    isProfitUrl: boolean;
     price?: string | null;
     postedAt: any;
     thumbnail?: string | null;
@@ -1310,6 +1314,7 @@ export const ProductDocument = new TypedDocumentString(`
     detailUrl
     isHot
     isEnd
+    isProfitUrl
     price
     postedAt
     thumbnail
