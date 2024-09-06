@@ -92,6 +92,7 @@ jobs:
           author_name: Github Bot (Production)
           fields: repo,message
           if_mention: success,failure
+          channel: alert-deploy
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
         if: always()
