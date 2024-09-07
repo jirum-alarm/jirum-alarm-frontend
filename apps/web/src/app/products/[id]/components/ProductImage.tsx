@@ -5,34 +5,50 @@ import Image from 'next/image';
 import { IProduct } from '@/graphql/interface';
 import { IllustStanding } from '@/components/common/icons';
 
+const convertToWebp = (url?: string) => {
+  return url?.replace(/\.[^.]+$/, '.webp');
+};
+
 export default React.memo(function ProductImage({
   product,
 }: {
   product: { thumbnail?: string | null; title: string };
 }) {
-  const [error, setError] = useState(false);
+  const thumbnail = product.thumbnail ?? undefined;
+  const [imageSrc, setImageSrc] = useState<string | undefined>(convertToWebp(thumbnail));
+  const [isError, setIsError] = useState<boolean>(false);
+
+  const handleError = () => {
+    if (!imageSrc || imageSrc.endsWith('.webp')) {
+      setImageSrc(thumbnail);
+    } else {
+      setIsError(true);
+    }
+  };
+
+  if (!product.thumbnail || !imageSrc || isError) {
+    return (
+      <div className="flex h-[248px] w-full items-center justify-center">
+        <div className="-mt-20">
+          <IllustStanding />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="sticky top-11">
-      {!error && product.thumbnail ? (
-        <div className="relative h-[375px] w-full smd:h-[550px]">
-          <Image
-            src={product.thumbnail}
-            alt={product.title ?? ''}
-            onError={() => setError(true)}
-            priority
-            unoptimized
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </div>
-      ) : (
-        <div className="flex h-[248px] w-full items-center justify-center">
-          <div className="-mt-20">
-            <IllustStanding />
-          </div>
-        </div>
-      )}
+      <div className="relative h-[375px] w-full smd:h-[550px]">
+        <Image
+          src={imageSrc}
+          alt={product.title}
+          priority
+          unoptimized
+          fill
+          onError={handleError}
+          style={{ objectFit: 'contain' }}
+        />
+      </div>
     </div>
   );
 });

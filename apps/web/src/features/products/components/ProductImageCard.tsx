@@ -110,10 +110,10 @@ const ImageWithFallback = React.memo(function ImageWithFallback({
           height={162}
           alt={title}
           onError={() => setError(true)}
-          priority
           unoptimized
           placeholder="blur"
           blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+          loading="lazy"
         />
       )}
     </>
