@@ -55,17 +55,9 @@ export default async function ProductDetail({ params }: { params: { id: string }
   //   return {};
   // }
 
-  const id = params.id;
-
-  // const { data } = await getProductDetail(+id);
-  // const product = data.product;
-
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(ProductQueries.product({ id: +id }));
-
   return (
     <Suspense>
-      <ProductDetailContainerServer productId={+id} />
+      <ProductDetailContainerServer productId={+params.id} />
     </Suspense>
   );
 }
