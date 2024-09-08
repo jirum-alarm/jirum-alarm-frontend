@@ -7,7 +7,7 @@ import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
-import useTabSwitcher from '../../hooks/useTabSwitcher';
+import { useSearchParams } from 'next/navigation';
 import TrendingList from '../TrendingList';
 import { CategoryQueries } from '@/entities/category';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -19,7 +19,10 @@ export const TrendingContainer = () => {
   } = useSuspenseQuery(CategoryQueries.categoriesForUser());
   const { isHeaderVisible } = useVisibilityOnScroll();
 
-  const [activeTab, setActiveTab] = useState(0);
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get('tab');
+
+  const [activeTab, setActiveTab] = useState(tabParam ? parseInt(tabParam) : 0);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
   const tabsRef = useRef<(HTMLLIElement | null)[]>([]);
   const tabListRef = useRef<HTMLUListElement>(null);
@@ -56,6 +59,13 @@ export const TrendingContainer = () => {
   useEffect(() => {
     updateIndicator(activeTab);
   }, [activeTab]);
+
+  useEffect(() => {
+    if (tabParam) {
+      const index = parseInt(tabParam);
+      handleTabChange(index);
+    }
+  }, [tabParam]);
 
   const tabClassName =
     'inline-block h-full cursor-pointer px-[6px] pb-[8px] pt-[10px] text-sm shadow-none outline-none transition-all duration-300 mouse-hover:hover:font-medium [&:not(:last-child)]:mr-2';
