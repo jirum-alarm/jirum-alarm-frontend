@@ -1,6 +1,5 @@
 import '@/style/globals.css';
 import { Metadata, Viewport } from 'next';
-import Script from 'next/script';
 import dynamic from 'next/dynamic';
 
 import { AppProvider } from './(app)/providers';

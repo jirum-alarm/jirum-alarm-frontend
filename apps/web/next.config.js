@@ -67,14 +67,29 @@ const nextConfig = withPWA({
     ];
   },
   sentry: sentryBuildTimeConfigOptions,
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.optimization = {
+        ...config.optimization,
+        usedExports: true,
+        splitChunks: {
+          chunks: 'all',
+        },
+      };
+    }
+
+    return config;
+  },
+
   images: {
-    unoptimized: true,
     // 3days
     minimumCacheTTL: 3 * 24 * 60 * 60,
+    deviceSizes: [320, 420, 768, 1024, 1200],
+    imageSizes: [16, 32, 48, 64, 96],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'file.jirum-alarm.com',
+        hostname: 'cdn.jirum-alarm.com',
       },
       {
         protocol: 'https',

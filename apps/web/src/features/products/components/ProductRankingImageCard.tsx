@@ -22,22 +22,20 @@ export function ProductRankingImageCard({
 }) {
   const handleClick = () => {
     collectProduct(+product.id);
-
-    mp.track(EVENT.PRODUCT_CLICK.NAME, {
-      product,
-      page: EVENT.PAGE[logging.page],
-    });
+    setTimeout(() => {
+      mp.track(EVENT.PRODUCT_CLICK.NAME, {
+        product,
+        page: EVENT.PAGE[logging.page],
+      });
+    }, 0);
   };
 
   return (
-    <Link href={PAGE.DETAIL + '/' + product.id} onClick={handleClick} prefetch={false}>
+    <Link href={PAGE.DETAIL + '/' + product.id} onClick={handleClick} rel="preload">
       <div
         className={cn(
-          `h-[340px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all`,
-          {
-            'scale-100': activeIndex === index,
-            'scale-90': activeIndex !== index,
-          },
+          'h-[340px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all',
+          activeIndex === index ? 'scale-100' : 'scale-90',
         )}
       >
         <div className="relative h-[240px] w-full">
@@ -49,8 +47,7 @@ export function ProductRankingImageCard({
             alt={product.title}
             fill
             className="object-cover"
-            priority
-            unoptimized
+            priority={[0, 1, 9].includes(index)}
           />
         </div>
         <div className="p-3 pb-0">

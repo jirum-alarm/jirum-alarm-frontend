@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { SwiperSlide, Swiper } from 'swiper/react';
 import 'swiper/css';
 
@@ -17,6 +17,22 @@ const JirumRankingSlider = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const collectProduct = useCollectProduct();
 
+  const slides = useMemo(
+    () =>
+      rankingProducts.map((product, i) => (
+        <SwiperSlide key={product.id} className="pb-2">
+          <ProductRankingImageCard
+            activeIndex={activeIndex}
+            index={i}
+            product={product}
+            logging={{ page: 'HOME' }}
+            collectProduct={collectProduct}
+          />
+        </SwiperSlide>
+      )),
+    [rankingProducts, activeIndex],
+  );
+
   return (
     <div>
       <Swiper
@@ -31,17 +47,7 @@ const JirumRankingSlider = () => {
         lazyPreloaderClass="swiper-lazy-preloader"
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
       >
-        {rankingProducts.map((product, i) => (
-          <SwiperSlide key={product.id} className="pb-2">
-            <ProductRankingImageCard
-              activeIndex={activeIndex}
-              index={i}
-              product={product}
-              logging={{ page: 'HOME' }}
-              collectProduct={collectProduct}
-            />
-          </SwiperSlide>
-        ))}
+        {slides}
       </Swiper>
       <div className="mt-3 flex h-[20px] w-full items-center justify-center">
         {Array.from({ length: rankingProducts.length }).map((_, i) => (
