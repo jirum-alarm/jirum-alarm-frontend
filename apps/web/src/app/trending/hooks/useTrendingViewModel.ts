@@ -13,7 +13,7 @@ const ExtendStartDateCategories = [3, 5, 7, 8, 10];
 const adjustStartDate = (categoryId: number | null) => {
   return categoryId !== null && ExtendStartDateCategories.includes(categoryId)
     ? getDayBefore(60)
-    : getDayBefore(2);
+    : getDayBefore(3);
 };
 
 const useTrendingViewModel = ({ categoryId }: { categoryId: number | null }) => {
