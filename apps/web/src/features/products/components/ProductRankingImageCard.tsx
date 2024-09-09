@@ -48,7 +48,6 @@ export function ProductRankingImageCard({
             alt={product.title}
             fill
             className="object-cover"
-            priority
             unoptimized
           />
         </div>

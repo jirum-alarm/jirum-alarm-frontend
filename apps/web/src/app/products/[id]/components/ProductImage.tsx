@@ -42,7 +42,6 @@ export default React.memo(function ProductImage({
         <Image
           src={imageSrc}
           alt={product.title}
-          priority
           unoptimized
           fill
           onError={handleError}
