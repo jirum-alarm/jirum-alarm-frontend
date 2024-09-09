@@ -1,7 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "tsconfig.json",
+    "project": "./tsconfig.json",
     "sourceType": "module"
   },
   "settings": {
@@ -15,7 +15,8 @@
   "plugins": [
     "@typescript-eslint",
     "unused-imports",
-    "sort-class-members"
+    "sort-class-members",
+    "prettier"
   ],
   "extends": [
     "next/core-web-vitals",
@@ -52,7 +53,8 @@
     "unused-imports/no-unused-imports": "warn",
     "react-hooks/exhaustive-deps": "warn",
     "prefer-rest-params": "warn",
-    "promise/always-return": "warn"
+    "promise/always-return": "warn",
+    "prettier/prettier": "warn"
   },
   "overrides": [
     {

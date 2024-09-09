@@ -1,18 +1,29 @@
 import '@/style/globals.css';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Metadata, Viewport } from 'next';
 import Script from 'next/script';
+import dynamic from 'next/dynamic';
 
-import GoogleAnalytics from '../components/GoogleAnalitics';
 import { AppProvider } from './(app)/providers';
-
-import Toaster from '@/components/common/Toast/Toaster';
-import BottomNav from '@/components/layout/BottomNav';
-import MSWInit from '@/components/MSWInit';
 import { GA_TRACKING_ID } from '@/constants/ga';
 import { defaultMetadata } from '@/constants/metadata';
 import { pretendard } from '@/lib/fonts';
-import { InitMixpanel } from '@/lib/mixpanel';
+
+const SpeedInsights = dynamic(
+  () => import('@vercel/speed-insights/next').then((mod) => mod.SpeedInsights),
+  { ssr: false },
+);
+
+const GoogleAnalytics = dynamic(() => import('../components/GoogleAnalitics'), { ssr: false });
+
+const Toaster = dynamic(() => import('@/components/common/Toast/Toaster'), { ssr: false });
+
+const BottomNav = dynamic(() => import('@/components/layout/BottomNav'), { ssr: true });
+
+const MSWInit = dynamic(() => import('@/components/MSWInit'), { ssr: false });
+
+const InitMixpanel = dynamic(() => import('@/lib/mixpanel').then((mod) => mod.InitMixpanel), {
+  ssr: false,
+});
 
 // const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
 //   ssr: false,
@@ -34,9 +45,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="manifest" href="/manifest.json" />
         <Script
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.4.0/kakao.min.js"
+          strategy="lazyOnload"
           integrity="sha384-mXVrIX2T/Kszp6Z0aEWaA8Nm7J6/ZeWXbL8UpGRjKwWe56Srd/iyNmWMBhcItAjH"
           crossOrigin="anonymous"
-        ></Script>
+        />
         {/* hide until using real word */}
         {/* <Script */}
         {/*   async */}
@@ -48,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MSWInit>
           <AppProvider>
             <InitMixpanel />
-            <div className="relative min-w-[320px] bg-white before:fixed before:bottom-0 before:left-1/2 before:top-0 before:z-50 before:w-[1px] before:translate-x-[300px] before:bg-gray-100 after:fixed after:bottom-0  after:right-1/2 after:top-0 after:z-50 after:w-[1px] after:-translate-x-[300px] after:bg-gray-100">
+            <div className="relative min-w-[320px] bg-white before:fixed before:inset-y-0 before:left-1/2 before:z-50 before:w-[1px] before:translate-x-[300px] before:bg-gray-100 after:fixed after:inset-y-0 after:right-1/2 after:z-50 after:w-[1px] after:-translate-x-[300px] after:bg-gray-100">
               {children}
               <BottomNav type={''} />
             </div>
@@ -57,8 +69,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* <PostHogPageView /> */}
           </AppProvider>
         </MSWInit>
+        <GoogleAnalytics GA_TRACKING_ID={GA_TRACKING_ID} />
       </body>
-      <GoogleAnalytics GA_TRACKING_ID={GA_TRACKING_ID} />
     </html>
   );
 }
