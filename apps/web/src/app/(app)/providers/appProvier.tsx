@@ -16,7 +16,6 @@ export const AppProvider = ({ children }: Props) => {
       <ReactQueryProviders>
         <PHProvider>
           <ApolloProvider>{children}</ApolloProvider>
-          <CustomerServiceBoot />
           <FCMConfig />
         </PHProvider>
       </ReactQueryProviders>
