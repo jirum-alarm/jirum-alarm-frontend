@@ -1,5 +1,6 @@
-import { User } from '@/types/user';
 import { useId } from 'react';
+
+import { User } from '@/types/user';
 
 interface GenderRadioGroupProps {
   handleRadioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

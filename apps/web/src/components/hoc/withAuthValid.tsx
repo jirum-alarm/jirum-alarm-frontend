@@ -1,9 +1,10 @@
 /* eslint-disable react/display-name */
+import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { ComponentType } from 'react';
+
+import { PAGE } from '@/constants/page';
 import { QueryMe } from '@/graphql/auth';
 import { User } from '@/types/user';
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import { PAGE } from '@/constants/page';
 
 const withAuthValid = (Component: ComponentType<{ children: React.ReactNode }>) => {
   return (props: any) => {

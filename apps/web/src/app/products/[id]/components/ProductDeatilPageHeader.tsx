@@ -1,15 +1,15 @@
 'use client';
 
-import { useToast } from '@/components/common/Toast';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { notFound } from 'next/navigation';
+
 import { Search, Share } from '@/components/common/icons';
+import { useToast } from '@/components/common/Toast';
 import BackButton from '@/components/layout/BackButton';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { ProductQueries } from '@/entities/product';
-import { IProduct } from '@/graphql/interface';
 import { mp } from '@/lib/mixpanel';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { notFound } from 'next/navigation';
 
 // { product }: { product: IProduct }
 export default function ProductDetailPageHeader({ productId }: { productId: number }) {

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import { Cancel } from '../icons';
 import { Input } from './Input';
 

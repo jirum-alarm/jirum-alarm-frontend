@@ -1,22 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import BasicLayout from '@/components/layout/BasicLayout';
-import Email from './email/components/Email';
-import Password from './password/components/Password';
-import TermsOfService from './terms-of-service/components/TermsOfService';
-import Nickname from './nickname/components/Nickname';
 import { useMutation } from '@apollo/client';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+import { setAccessToken, setRefreshToken } from '../actions/token';
+import Categories from './categories/components/Categories';
+import Email from './email/components/Email';
+import Nickname from './nickname/components/Nickname';
+import Password from './password/components/Password';
+import Personal from './personal/components/Personal';
+import TermsOfService from './terms-of-service/components/TermsOfService';
+
+import { useToast } from '@/components/common/Toast';
+import BasicLayout from '@/components/layout/BasicLayout';
+import { CATEGORIES } from '@/constants/categories';
+import { ICategoryForm } from '@/features/categories/types';
 import { MutationSignup } from '@/graphql/auth';
 import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Categories from './categories/components/Categories';
-import { ICategoryForm } from '@/features/categories/types';
-import { CATEGORIES } from '@/constants/categories';
-import Personal from './personal/components/Personal';
 import { User } from '@/types/user';
-import { useToast } from '@/components/common/Toast';
-import { setAccessToken, setRefreshToken } from '../actions/token';
 
 const COMPLETE_ROUTE = 'signup/complete';
 

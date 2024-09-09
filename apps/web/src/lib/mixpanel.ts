@@ -1,8 +1,9 @@
 'use client';
 
-import { IS_VERCEL_PRD } from '@/constants/env';
 import mixpanel, { Mixpanel } from 'mixpanel-browser';
 import { useEffect } from 'react';
+
+import { IS_VERCEL_PRD } from '@/constants/env';
 
 class MixpanelService {
   private static instance: Mixpanel;

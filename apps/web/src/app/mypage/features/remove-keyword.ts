@@ -1,7 +1,8 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { useToast } from '@/components/common/Toast';
 import { AuthQueries } from '@/entities/auth';
 import { AuthService } from '@/shared/api/auth';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useRemoveKeyword = () => {
   const { toast } = useToast();

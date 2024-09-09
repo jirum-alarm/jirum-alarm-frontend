@@ -1,8 +1,9 @@
 'use client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import CurrentPassword from '../current/components/CurrentPassword';
+
 import ChangePassword from '../change/components/ChangePassword';
+import CurrentPassword from '../current/components/CurrentPassword';
 
 const QUERY_PARAM_PREFIX = 'step';
 const INITIAL_STEP = 'current';

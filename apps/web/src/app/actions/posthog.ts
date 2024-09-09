@@ -1,7 +1,8 @@
 'use server';
 import { cookies } from 'next/headers';
-import { postHogClient } from '@/lib/posthog';
+
 import { IS_VERCEL_PRD } from '@/constants/env';
+import { postHogClient } from '@/lib/posthog';
 
 const FEATURE_FLAG_PRD_SUFFIX = '_PROD';
 const FEATURE_FLAG_DEV_SUFFIX = '_DEV';

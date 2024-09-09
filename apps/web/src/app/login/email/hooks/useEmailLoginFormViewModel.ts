@@ -1,14 +1,16 @@
-import { MutationLogin } from '@/graphql/auth';
-import { ILoginOutput, ILoginVariable } from '@/types/login';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+
 import { useToast } from '../../../../components/common/Toast';
+
+import { setAccessToken, setRefreshToken } from '@/app/actions/token';
+import { MutationLogin } from '@/graphql/auth';
 import { TokenType, addPushTokenVariable } from '@/graphql/interface';
 import { MutationAddPushToken } from '@/graphql/notification';
-import { useRecoilValue } from 'recoil';
 import { fcmTokenAtom } from '@/state/fcmToken';
-import { setAccessToken, setRefreshToken } from '@/app/actions/token';
+import { ILoginOutput, ILoginVariable } from '@/types/login';
 
 const HOME_PATH = '/';
 

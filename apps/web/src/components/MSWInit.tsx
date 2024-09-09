@@ -1,7 +1,8 @@
 'use client';
 
-import { IS_API_MOCKING } from '@/constants/env';
 import { useState } from 'react';
+
+import { IS_API_MOCKING } from '@/constants/env';
 
 interface MSWInitProps {
   children: React.ReactNode;

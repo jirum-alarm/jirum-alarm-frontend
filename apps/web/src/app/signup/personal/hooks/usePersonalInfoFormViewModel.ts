@@ -1,6 +1,7 @@
-import { User } from '@/types/user';
 import { Registration } from '../../page';
+
 import { BIRTH_YEAR } from '@/constants/birthYear';
+import { User } from '@/types/user';
 
 const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({ text: String(year), value: String(year) }));
 const birthYearOptions = [{ text: '선택안함', value: null }, ..._BIRTH_YEAR];

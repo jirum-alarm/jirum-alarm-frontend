@@ -1,19 +1,21 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
 import AlarmItem from './AlarmItem';
 import NoAlerts from './NoAlerts';
 import { useNotificationsViewModel } from '../hooks/useNotificationsViewModel';
-import { useDevice } from '@/hooks/useDevice';
+
 import { appDownloadGuide } from '@/assets/images/app_download_guide';
+import Button from '@/components/common/Button';
 import { Apple, ArrowDown, Google } from '@/components/common/icons';
 import Illust from '@/components/common/Illust';
-import Button from '@/components/common/Button';
-import Link from '@/features/Link';
-import { useRouter } from 'next/navigation';
-import { mp } from '@/lib/mixpanel';
 import { EVENT } from '@/constants/mixpanel';
-import { useEffect } from 'react';
+import Link from '@/features/Link';
+import { useDevice } from '@/hooks/useDevice';
+import { mp } from '@/lib/mixpanel';
 
 const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';

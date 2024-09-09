@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgClose = (props: SVGProps<SVGSVGElement>) => {
   const { className, width, height, ...others } = props;
   return (

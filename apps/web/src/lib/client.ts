@@ -1,11 +1,11 @@
 import { from, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-
 import {
   registerApolloClient,
   ApolloClient,
   InMemoryCache,
 } from '@apollo/experimental-nextjs-app-support';
+
 import { getAccessToken } from '@/app/actions/token';
 import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
 

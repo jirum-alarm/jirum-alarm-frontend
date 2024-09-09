@@ -2,6 +2,7 @@
 
 import dayjs from 'dayjs';
 import { atom, DefaultValue, selector } from 'recoil';
+
 import { IErrorModal, IModal, IToast } from '../types/common';
 import { ModalStateType } from '../types/enum/common';
 
@@ -22,7 +23,7 @@ export const toastSelector = selector<Omit<IToast, 'arrayKey'>>({
     if (newValue instanceof DefaultValue) {
       return;
     }
-    let copyToast = [...get(toastAtom)];
+    const copyToast = [...get(toastAtom)];
     copyToast.push({
       ...newValue,
       arrayKey: dayjs().valueOf(),

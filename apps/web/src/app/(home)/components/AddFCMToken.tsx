@@ -1,11 +1,12 @@
 'use client';
-import { TokenType, addPushTokenVariable } from '@/graphql/interface';
-import { MutationAddPushToken } from '@/graphql/notification';
-import { fcmTokenAtom } from '@/state/fcmToken';
 import { useMutation } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
+
+import { TokenType, addPushTokenVariable } from '@/graphql/interface';
+import { MutationAddPushToken } from '@/graphql/notification';
+import { fcmTokenAtom } from '@/state/fcmToken';
 
 const AddFCMToken = () => {
   const searchParams = useSearchParams();

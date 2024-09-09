@@ -1,7 +1,9 @@
-import React from 'react';
 import { type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/cn';
+import React from 'react';
+
 import { inputVariant, containerVaraint, iconVaraint, helperVariant } from './variant/input';
+
+import { cn } from '@/lib/cn';
 
 interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,

@@ -1,5 +1,5 @@
-import { Registration } from '../../page';
 import CategoriesForm from './CategoriesForm';
+import { Registration } from '../../page';
 
 const Categories = ({
   registration,

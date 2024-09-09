@@ -1,12 +1,13 @@
-import { QueryProducts } from '@/graphql';
-import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface/product';
-import { useDevice } from '@/hooks/useDevice';
 import { useQuery } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { mp } from '@/lib/mixpanel';
+
 import { EVENT } from '@/constants/mixpanel';
+import { QueryProducts } from '@/graphql';
+import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface/product';
+import { useDevice } from '@/hooks/useDevice';
+import { mp } from '@/lib/mixpanel';
 
 const limit = 20;
 const allCategory = { id: '0', name: '전체' };

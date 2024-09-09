@@ -1,17 +1,21 @@
 'use client';
-import React, { useRef, useEffect, useState, Suspense, KeyboardEvent } from 'react';
-import { IllustStandingSmall, Setting } from '@/components/common/icons';
 import Link from 'next/link';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { useSearchParams } from 'next/navigation';
+import React, { useRef, useEffect, useState, Suspense, KeyboardEvent } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import TrendingList from '../TrendingList';
+
+import { IllustStandingSmall, Setting } from '@/components/common/icons';
+
 import 'swiper/css';
+import { PAGE } from '@/constants/page';
+import { CategoryQueries } from '@/entities/category';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
-import { useSearchParams } from 'next/navigation';
-import TrendingList from '../TrendingList';
-import { CategoryQueries } from '@/entities/category';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { PAGE } from '@/constants/page';
 
 export const TrendingContainer = () => {
   const {

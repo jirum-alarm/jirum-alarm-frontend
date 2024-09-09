@@ -1,6 +1,8 @@
-import BasicLayout from '@/components/layout/BasicLayout';
-import PersonalInfoForm from './components/PersonalInfoForm';
 import { Suspense } from 'react';
+
+import PersonalInfoForm from './components/PersonalInfoForm';
+
+import BasicLayout from '@/components/layout/BasicLayout';
 
 const PersonalPage = () => {
   return (

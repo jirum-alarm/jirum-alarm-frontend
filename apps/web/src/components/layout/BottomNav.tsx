@@ -1,4 +1,9 @@
 'use client';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import React, { useRef } from 'react';
+
 import {
   Alert,
   AlertFill,
@@ -9,13 +14,8 @@ import {
   My,
   MyFill,
 } from '@/components/common/icons';
-import { IS_VERCEL_PRD } from '@/constants/env';
 import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
-import React, { startTransition, useEffect, useRef, useState } from 'react';
 
 export enum NAV_TYPE {
   HOME = 'HOME',

@@ -1,17 +1,19 @@
 'use client';
 import 'swiper/css';
-import { ProductGuidesQuery, ProductQuery } from '@/shared/api/gql/graphql';
-import React from 'react';
-import ProductImage from './ProductImage';
-import HotdealGuide from './HotdealGuide';
-import CommunityReaction from './CommunityReaction';
-import RelatedProductsContainer from './RelatedProductsContainer';
-import PopularProductsContainer from './PopularProudctsContainer';
-import BottomCTA from './BottomCTA';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
 import { notFound } from 'next/navigation';
+import React from 'react';
+
+import BottomCTA from './BottomCTA';
+import CommunityReaction from './CommunityReaction';
+import HotdealGuide from './HotdealGuide';
+import PopularProductsContainer from './PopularProudctsContainer';
+import ProductImage from './ProductImage';
+import RelatedProductsContainer from './RelatedProductsContainer';
+
+import { ProductQueries } from '@/entities/product';
 import { cn } from '@/lib/cn';
+import { ProductGuidesQuery, ProductQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
 
 type Product = NonNullable<ProductQuery['product']>;

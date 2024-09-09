@@ -1,5 +1,6 @@
-import { MutationCollectProduct } from '@/graphql';
 import { useMutation } from '@apollo/client';
+
+import { MutationCollectProduct } from '@/graphql';
 
 export const useProductsRanking = () => {
   const result = useMutation<unknown, { productId: number }>(MutationCollectProduct);

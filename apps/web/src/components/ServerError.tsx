@@ -1,6 +1,7 @@
 import React from 'react';
-import { IllustWarning } from './common/icons';
+
 import Button from './common/Button';
+import { IllustWarning } from './common/icons';
 
 interface ServerErrorProps {
   onClick: () => void;

@@ -1,12 +1,14 @@
+import { useRouter } from 'next/navigation';
+import React from 'react';
+
 import RecommendationProduct from './RecommendationProduct';
+
 import { IllustError } from '@/components/common/icons';
 import { EVENT } from '@/constants/mixpanel';
 import Link from '@/features/Link';
 import { useHotDealsRandom } from '@/features/products';
 import { useMe } from '@/features/users';
 import { mp } from '@/lib/mixpanel';
-import { useRouter } from 'next/navigation';
-import React from 'react';
 
 const ProductNotFound = () => {
   const userResult = useMe();

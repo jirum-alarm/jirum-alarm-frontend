@@ -1,11 +1,12 @@
+import Link from 'next/link';
+
+import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
+import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
-import { displayTime } from '@/util/displayTime';
-import ImageWithFallback from '@/components/ImageWithFallback';
-import { PAGE } from '@/constants/page';
-import Link from 'next/link';
 import { type QueryProductsQuery } from '@/shared/api/gql/graphql';
+import { displayTime } from '@/util/displayTime';
 
 export function ProductLiveHotdealsImageCard({
   product,

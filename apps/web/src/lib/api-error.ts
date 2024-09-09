@@ -1,6 +1,7 @@
-import { HTTP_STATUS } from '@/types/enum/http';
 import { ApolloError, ServerError, ServerParseError } from '@apollo/client';
 import { GraphQLErrors } from '@apollo/client/errors';
+
+import { HTTP_STATUS } from '@/types/enum/http';
 
 class ApiError extends Error implements ApolloError {
   graphQLErrors: GraphQLErrors;
@@ -14,6 +15,7 @@ class ApiError extends Error implements ApolloError {
     | 'ApiNotFoundError'
     | 'ApiInternalServerError'
     | 'ApiError';
+
   constructor(error: ApolloError) {
     super(error.message);
     this.graphQLErrors = error.graphQLErrors;

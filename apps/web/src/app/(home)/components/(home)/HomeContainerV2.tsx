@@ -1,11 +1,12 @@
-import { ArrowRight, RoundedLogo } from '@/components/common/icons';
-import HomeHeader from './HomeHeader';
-import SearchButton from '../../../../components/SearchLinkButton';
-import LiveHotDealContainer from './LiveHotDealContainer';
-import TopButton from '@/components/TopButton';
-import BottomNav, { NAV_TYPE } from '@/components/layout/BottomNav';
 import Link from 'next/link';
+
+import HomeHeader from './HomeHeader';
 import JirumRankingContainer from './JirumRankingContainer';
+import LiveHotDealContainer from './LiveHotDealContainer';
+import SearchButton from '../../../../components/SearchLinkButton';
+
+import { ArrowRight, RoundedLogo } from '@/components/common/icons';
+import TopButton from '@/components/TopButton';
 
 const HomeContainerV2 = () => {
   return (

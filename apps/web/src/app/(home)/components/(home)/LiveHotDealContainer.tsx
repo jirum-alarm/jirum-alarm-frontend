@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
-import { IllustStanding } from '@/components/common/icons';
+
 import LiveHotDealList from './LiveHotDealList';
+
+import { IllustStanding } from '@/components/common/icons';
 
 const LiveHotDealContainer = () => {
   return (

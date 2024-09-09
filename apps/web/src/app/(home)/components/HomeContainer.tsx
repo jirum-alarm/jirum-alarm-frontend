@@ -1,23 +1,24 @@
 'use client';
 
-import NavBar from '@/components/Navbar';
-import ProductList from './ProductList';
-import { useHotDealsRandom } from '@/features/products';
-import { cn } from '@/lib/cn';
-import SearchInput from './SearchInput';
-import { useProductListViewModel } from '../hooks/(search)/useProductListViewModel';
-import { useSearchInputViewModel } from '../hooks/(search)/useSearchInputViewModel';
-import SearchPageInput from './(search)/SearchInput';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 import SearchPageProductList from './(search)/ProductList';
+import ProductNotFound from './(search)/ProductNotFound';
 import RecentKeywords from './(search)/RecentKeywords';
 import RecommendationKeywords from './(search)/RecommendationKeywords';
 import RecommendationProduct from './(search)/RecommendationProduct';
-import ProductNotFound from './(search)/ProductNotFound';
+import SearchPageInput from './(search)/SearchInput';
+import ProductList from './ProductList';
+import SearchInput from './SearchInput';
 import { useInputHideOnScroll } from '../hooks/(search)/useInputHideOnScroll';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { ProductLoading } from '@/features/products';
+import { useProductListViewModel } from '../hooks/(search)/useProductListViewModel';
+import { useSearchInputViewModel } from '../hooks/(search)/useSearchInputViewModel';
+
+import NavBar from '@/components/Navbar';
 import TopButton from '@/components/TopButton';
+import { useHotDealsRandom, ProductLoading } from '@/features/products';
+import { cn } from '@/lib/cn';
 
 export default function HomeContainer() {
   const searchParams = useSearchParams();

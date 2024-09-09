@@ -1,9 +1,10 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import Button from '@/components/common/Button';
 import Illust from '@/components/common/Illust';
 import BasicLayout from '@/components/layout/BasicLayout';
-import { useRouter } from 'next/navigation';
 
 const HOME_ROUTE = '/';
 

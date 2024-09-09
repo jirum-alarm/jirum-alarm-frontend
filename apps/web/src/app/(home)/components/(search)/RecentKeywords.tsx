@@ -1,12 +1,13 @@
 'use client';
 
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
 import { Close } from '@/components/common/icons';
 import { EVENT } from '@/constants/mixpanel';
 import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
 
 export default function RecentKeywords() {
   const [loading, setLoading] = useState(true);

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
 import Image from 'next/image';
-import { IProduct } from '@/graphql/interface';
+import React, { useState } from 'react';
+
 import { IllustStanding } from '@/components/common/icons';
 
 const convertToWebp = (url?: string) => {

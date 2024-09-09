@@ -1,9 +1,10 @@
-import { QueryProducts } from '@/graphql';
-import { IProductOutput } from '@/graphql/interface/product';
 import { useQuery } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+
+import { QueryProducts } from '@/graphql';
+import { IProductOutput } from '@/graphql/interface/product';
 
 const limit = 20;
 

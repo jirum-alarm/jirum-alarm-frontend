@@ -1,8 +1,9 @@
 'use client';
 import PasswordInput from '../../components/PasswordInput';
+import useChangePasswordFormViewModel from '../hooks/useChangePasswordFormViewModel';
+
 import Button from '@/components/common/Button';
 import { cn } from '@/lib/cn';
-import useChangePasswordFormViewModel from '../hooks/useChangePasswordFormViewModel';
 
 const ChangePasswordForm = () => {
   const { handleInputChange, handleSubmit, input } = useChangePasswordFormViewModel();

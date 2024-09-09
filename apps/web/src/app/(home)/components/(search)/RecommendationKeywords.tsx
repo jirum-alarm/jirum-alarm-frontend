@@ -1,9 +1,10 @@
 'use client';
 
-import { EVENT } from '@/constants/mixpanel';
-import { mp } from '@/lib/mixpanel';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
+import { EVENT } from '@/constants/mixpanel';
+import { mp } from '@/lib/mixpanel';
 
 const KEYWORDS = [
   '쌀',

@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react';
+
 const SvgIllustEmpty = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={65} height={64} fill="none" {...props}>
     <path

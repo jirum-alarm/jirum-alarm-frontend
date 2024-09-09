@@ -22,9 +22,11 @@ class MypageKeywordService {
     };
     this.rearId = 2;
   }
+
   public get() {
     return this.keyword;
   }
+
   public add(keyword: string) {
     if (
       this.keyword.notificationKeywordsByMe.some((notikeyword) => notikeyword.keyword === keyword)
@@ -34,6 +36,7 @@ class MypageKeywordService {
     this.keyword.notificationKeywordsByMe.push({ id: String(++this.rearId), keyword });
     return true;
   }
+
   public remove(id: number) {
     const removeIndex = this.keyword.notificationKeywordsByMe.findIndex(
       (keyword) => id === Number(keyword.id),

@@ -1,3 +1,5 @@
+import { useQuery } from '@apollo/client';
+
 import { QueryCommunityRandomRankingProducts, QueryProducts } from '@/graphql';
 import {
   CommunityRandomRankingProductsOutPut,
@@ -5,7 +7,6 @@ import {
   OrderOptionType,
   ProductOrderType,
 } from '@/graphql/interface';
-import { useQuery } from '@apollo/client';
 
 export const HOT_DEAL_LIMIT = 20;
 

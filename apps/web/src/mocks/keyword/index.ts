@@ -1,4 +1,5 @@
 import { HttpResponse, graphql } from 'msw';
+
 import { mypageKeyword } from './service';
 
 const QueryMypageKeyword = graphql.query('QueryMypageKeyword', async () => {

@@ -1,7 +1,8 @@
 'use client';
 import React from 'react';
-import Logout from './Logout';
+
 import DeleteAccount from './DeleteAccount';
+import Logout from './Logout';
 
 const AccountManagement = () => {
   return (

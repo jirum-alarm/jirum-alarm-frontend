@@ -1,4 +1,3 @@
-import { httpClient } from '@/shared/lib/http-client';
 import { graphql } from '../gql';
 import {
   MutationCollectProductMutationVariables,
@@ -9,16 +8,21 @@ import {
   TogetherViewedProductsQueryVariables,
 } from '../gql/graphql';
 
+import { httpClient } from '@/shared/lib/http-client';
+
 export class ProductService {
   static async getRankingProducts() {
     return httpClient.execute(QueryRankingProducts).then((res) => res.data);
   }
+
   static async getProduct(variables: ProductQueryVariables) {
     return httpClient.execute(QueryProduct, variables).then((res) => res.data);
   }
+
   static async getProducts(variables: QueryProductsQueryVariables) {
     return httpClient.execute(QueryProducts, variables).then((res) => res.data);
   }
+
   static async getHotDealProductsRandom(
     variables: QueryCommunityRandomRankingProductsQueryVariables,
   ) {
@@ -26,12 +30,15 @@ export class ProductService {
       .execute(QueryCommunityRandomRankingProducts, variables)
       .then((res) => res.data);
   }
+
   static async getProductGuides(variables: ProductGuidesQueryVariables) {
     return httpClient.execute(QueryProductGuides, variables).then((res) => res.data);
   }
+
   static async getTogetherViewedProducts(variables: TogetherViewedProductsQueryVariables) {
     return httpClient.execute(QueryTogetherViewedProducts, variables).then((res) => res.data);
   }
+
   static async collectProduct(variables: MutationCollectProductMutationVariables) {
     return httpClient.execute(MutationCollectProduct, variables).then((res) => res.data);
   }

@@ -1,4 +1,5 @@
 import React, { useId } from 'react';
+
 import { type ICategoryForm } from '../types';
 
 interface CategoriesCheckboxGroupProps {

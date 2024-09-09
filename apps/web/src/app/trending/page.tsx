@@ -1,10 +1,12 @@
+import { Suspense } from 'react';
+
+import TrendingContainerServer from './components/trending-container/server';
+import TrendingPageHeader from './components/TrendingPageHeader';
+
+import { LoadingSpinner } from '@/components/common/icons';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { NAV_TYPE } from '@/components/layout/BottomNav';
 import TopButton from '@/components/TopButton';
-import TrendingPageHeader from './components/TrendingPageHeader';
-import TrendingContainerServer from './components/trending-container/server';
-import { Suspense } from 'react';
-import { LoadingSpinner } from '@/components/common/icons';
 
 const TrendingPage = () => {
   return (

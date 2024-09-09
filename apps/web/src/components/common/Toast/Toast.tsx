@@ -1,7 +1,9 @@
-import React from 'react';
 import { VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/cn';
+import React from 'react';
+
 import { toastVariant } from './variant/toast';
+
+import { cn } from '@/lib/cn';
 
 interface ToastProps extends React.ComponentProps<'div'>, VariantProps<typeof toastVariant> {
   variant?: 'default';

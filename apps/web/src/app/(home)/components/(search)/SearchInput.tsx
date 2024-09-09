@@ -1,6 +1,7 @@
 'use client';
 
 import { useSearchInputViewModel } from '../../hooks/(search)/useSearchInputViewModel';
+
 import { Cancel, Home } from '@/components/common/icons';
 import { cn } from '@/lib/cn';
 

@@ -1,7 +1,9 @@
-import BasicLayout from '@/components/layout/BasicLayout';
+import { Suspense } from 'react';
+
 import KeywordInput from './components/KeywordInput';
 import KeywordList from './components/KeywordList';
-import { Suspense } from 'react';
+
+import BasicLayout from '@/components/layout/BasicLayout';
 
 const KeywordPage = () => {
   return (

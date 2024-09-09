@@ -1,5 +1,5 @@
-import { Registration } from '../../page';
 import EmailForm from './EmailForm';
+import { Registration } from '../../page';
 
 const Email = ({
   registration,

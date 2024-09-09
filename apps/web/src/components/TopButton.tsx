@@ -1,7 +1,8 @@
 'use client';
+import { useEffect, useRef, useState } from 'react';
+
 import { ArrowRight } from '@/components/common/icons';
 import { cn } from '@/lib/cn';
-import { useEffect, useRef, useState } from 'react';
 
 const TopButton = () => {
   const [isVisible, setIsVisible] = useState(false);

@@ -1,6 +1,7 @@
+import React from 'react';
+
 import { ArrowRight } from '@/components/common/icons';
 import Link from '@/features/Link';
-import React from 'react';
 
 interface MovePageProps {
   to: string;

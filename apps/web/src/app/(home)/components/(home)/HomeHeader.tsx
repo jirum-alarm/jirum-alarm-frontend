@@ -1,10 +1,10 @@
 'use client';
-import { cn } from '@/lib/cn';
 import { Logo } from '@/components/common/icons';
-import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import SearchLinkButton from '@/components/SearchLinkButton';
-import { mp } from '@/lib/mixpanel';
 import { EVENT } from '@/constants/mixpanel';
+import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
+import { cn } from '@/lib/cn';
+import { mp } from '@/lib/mixpanel';
 
 const HomeHeader = () => {
   const { isHeaderVisible } = useVisibilityOnScroll({ visibilityThreshold: 90 });

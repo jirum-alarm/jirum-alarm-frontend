@@ -1,11 +1,13 @@
 'use client';
 
 import { IProduct } from '@/graphql/interface';
+
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import 'swiper/css';
 import React from 'react';
-import { ProductImageCard, useCollectProduct } from '@/features/products';
+
 import { EVENT } from '@/constants/mixpanel';
+import { ProductImageCard, useCollectProduct } from '@/features/products';
 import { QueryCommunityRandomRankingProductsQuery } from '@/shared/api/gql/graphql';
 
 export default function RecommendationProduct({

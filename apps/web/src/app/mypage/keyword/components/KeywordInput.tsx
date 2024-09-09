@@ -1,8 +1,9 @@
 'use client';
-import Button from '@/components/common/Button';
-import Input from '@/components/common/Input';
 import { useKeywordInput } from '../hooks/useKeywordInput';
+
+import Button from '@/components/common/Button';
 import { Cancel } from '@/components/common/icons';
+import Input from '@/components/common/Input';
 
 const KeywordInput = () => {
   const { keyword, handleInputChange, reset, handleSubmit, canSubmit } = useKeywordInput();

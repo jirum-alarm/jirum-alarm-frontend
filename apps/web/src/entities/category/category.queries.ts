@@ -1,6 +1,8 @@
-import { CategoryService } from '@/shared/api/category';
 import { queryOptions } from '@tanstack/react-query';
+
 import { getCategoriesForUser } from './category.api';
+
+import { CategoryService } from '@/shared/api/category';
 
 export const CategoryQueries = {
   all: () => ['category'],

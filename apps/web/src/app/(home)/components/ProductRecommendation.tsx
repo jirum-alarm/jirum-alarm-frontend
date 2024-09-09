@@ -1,13 +1,14 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
+
 import 'swiper/css';
+import { EVENT } from '@/constants/mixpanel';
+import { PAGE } from '@/constants/page';
+import Link from '@/features/Link';
+import { ProductImageCard, useCollectProduct } from '@/features/products';
 import { IProduct } from '@/graphql/interface';
 import useScreenSize from '@/hooks/useScreenSize';
 import { mp } from '@/lib/mixpanel';
-import { EVENT } from '@/constants/mixpanel';
-import Link from '@/features/Link';
-import { PAGE } from '@/constants/page';
-import { ProductImageCard, useCollectProduct } from '@/features/products';
 
 export default function ProductRecommendation({
   showRandomHotDeals,

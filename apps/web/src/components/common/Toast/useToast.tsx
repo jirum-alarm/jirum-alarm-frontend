@@ -1,5 +1,6 @@
-import { Toast } from './Toast';
 import { useEffect, useState } from 'react';
+
+import { Toast } from './Toast';
 
 const TOAST_REMOVE_DELAY = 2000;
 

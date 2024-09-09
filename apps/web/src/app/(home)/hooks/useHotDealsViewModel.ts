@@ -1,7 +1,8 @@
-import { useHotDeals, useHotDealsRandom } from '@/features/products';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+
+import { useHotDeals, useHotDealsRandom } from '@/features/products';
 
 const LIMIT = 20;
 

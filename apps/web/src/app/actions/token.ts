@@ -1,7 +1,8 @@
 'use server';
 
-import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/constants/token';
 import { cookies } from 'next/headers';
+
+import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/constants/token';
 
 async function setAccessToken(token: string) {
   cookies().set('ACCESS_TOKEN', token, {

@@ -1,5 +1,6 @@
-import { useUpdatePassword } from '@/app/mypage/features';
 import { useState } from 'react';
+
+import { useUpdatePassword } from '@/app/mypage/features';
 
 const validate = (value: string) => {
   if (value === '') {

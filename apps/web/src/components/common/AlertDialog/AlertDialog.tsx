@@ -1,11 +1,13 @@
-import { cn } from '@/lib/cn';
+import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+
 import { AlertDialogContext, useAlertDialogContext } from './context/AlertDialogContext';
-import React, { useEffect, useId, useRef, useState } from 'react';
-import { composeEventHandlers } from '@/util/event';
+
+import FocusTrap from '@/components/headless/FocusTrap';
 import { Presence } from '@/components/headless/Presence';
 import ScrollLock from '@/components/headless/ScrollLock';
-import FocusTrap from '@/components/headless/FocusTrap';
+import { cn } from '@/lib/cn';
+import { composeEventHandlers } from '@/util/event';
 
 const getState = (open: boolean) => {
   return open ? 'open' : 'closed';

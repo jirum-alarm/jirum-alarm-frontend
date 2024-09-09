@@ -1,11 +1,14 @@
 'use client';
 import { useState } from 'react';
-import { cn } from '@/lib/cn';
+import { SwiperSlide, Swiper } from 'swiper/react';
+
 import { useCollectProduct } from '@/features/products';
 import { ProductRankingImageCard } from '@/features/products/components/ProductRankingImageCard';
-import { SwiperSlide, Swiper } from 'swiper/react';
+import { cn } from '@/lib/cn';
+
 import 'swiper/css';
 import { useSuspenseQuery } from '@tanstack/react-query';
+
 import { ProductQueries } from '@/entities/product';
 
 const JirumRankingSlider = () => {

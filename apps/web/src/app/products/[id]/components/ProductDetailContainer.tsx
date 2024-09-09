@@ -1,7 +1,9 @@
+import { QueryClient } from '@tanstack/react-query';
+
+import ProductDetailLayout from './ProductDetailLayout';
+
 import { getAccessToken } from '@/app/actions/token';
 import { ProductQueries } from '@/entities/product';
-import { QueryClient } from '@tanstack/react-query';
-import ProductDetailLayout from './ProductDetailLayout';
 
 export default async function ProductDetailContainer({ productId }: { productId: number }) {
   const queryClient = new QueryClient();

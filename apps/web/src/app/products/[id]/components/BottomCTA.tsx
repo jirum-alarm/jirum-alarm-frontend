@@ -1,12 +1,14 @@
 'use client';
 
+import { throttle } from 'lodash';
 import React, { useState, useEffect } from 'react';
+import { BiSolidMessageDetail } from 'react-icons/bi';
+
 import LikeButton from './LikeButton';
+
 import Button from '@/components/common/Button';
 import { EVENT } from '@/constants/mixpanel';
 import { mp } from '@/lib/mixpanel';
-import { BiSolidMessageDetail } from 'react-icons/bi';
-import { throttle } from 'lodash';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 
 function BottomCTA({

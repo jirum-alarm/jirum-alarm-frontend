@@ -18,6 +18,7 @@ class CustomerService {
   constructor(customerService: ICustomerService) {
     this.customerService = customerService;
   }
+
   onBootStrap() {
     this.customerService.loadScript();
     this.customerService.boot({
@@ -25,6 +26,7 @@ class CustomerService {
       hideChannelButtonOnBoot: true,
     });
   }
+
   onShowMessenger() {
     this.customerService.showMessenger();
   }

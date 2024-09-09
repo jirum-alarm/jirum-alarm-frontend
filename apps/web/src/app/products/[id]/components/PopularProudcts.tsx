@@ -1,11 +1,12 @@
 'use client';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import React, { Suspense } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import { ProductQueries } from '@/entities/product';
 import { ProductImageCard } from '@/features/products';
 import { ProductQuery, ThumbnailType } from '@/shared/api/gql/graphql';
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
 import { ProductService } from '@/shared/api/product';
 
 export default function PopularProducts({

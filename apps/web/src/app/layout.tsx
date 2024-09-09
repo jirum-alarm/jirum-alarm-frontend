@@ -1,18 +1,18 @@
 import '@/style/globals.css';
-import { Metadata, Viewport } from 'next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { GA_TRACKING_ID } from '@/constants/ga';
-import GoogleAnalytics from '../components/GoogleAnalitics';
+import { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import { pretendard } from '@/lib/fonts';
-import MSWInit from '@/components/MSWInit';
-import Toaster from '@/components/common/Toast/Toaster';
-import { SERVICE_URL } from '@/constants/env';
-import { InitMixpanel } from '@/lib/mixpanel';
-import dynamic from 'next/dynamic';
+
+import GoogleAnalytics from '../components/GoogleAnalitics';
 import { AppProvider } from './(app)/providers';
+
+import Toaster from '@/components/common/Toast/Toaster';
 import BottomNav from '@/components/layout/BottomNav';
+import MSWInit from '@/components/MSWInit';
+import { GA_TRACKING_ID } from '@/constants/ga';
 import { defaultMetadata } from '@/constants/metadata';
+import { pretendard } from '@/lib/fonts';
+import { InitMixpanel } from '@/lib/mixpanel';
 
 // const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
 //   ssr: false,

@@ -1,8 +1,9 @@
-import Button from '@/components/common/Button';
-import Input from '@/components/common/Input';
-import { Cancel } from '@/components/common/icons';
 import { Registration } from '../../page';
 import useEmailFormViewModel from '../hooks/useEmailFormViewModel';
+
+import Button from '@/components/common/Button';
+import { Cancel } from '@/components/common/icons';
+import Input from '@/components/common/Input';
 
 const EmailForm = ({
   registration,

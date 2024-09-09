@@ -1,5 +1,5 @@
-import { Registration } from '../../page';
 import PasswordForm from './PasswordForm';
+import { Registration } from '../../page';
 
 const Password = ({
   registration,

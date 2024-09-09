@@ -1,8 +1,9 @@
-import Link from '@/features/Link';
-import Button from '@/components/common/Button';
-import { CheckDefault, CheckboxSelected } from '@/components/common/icons';
 import { Registration } from '../../page';
 import useTermsOfServiceFormViewModel from '../hooks/useTermsOfServiceFormViewModel';
+
+import Button from '@/components/common/Button';
+import { CheckDefault, CheckboxSelected } from '@/components/common/icons';
+import Link from '@/features/Link';
 
 const CONSENT_ALL = '모두 동의';
 const CONSENT_REQUIRED = {

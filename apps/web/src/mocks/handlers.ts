@@ -1,6 +1,9 @@
-import { INotification, Role } from '@/graphql/interface';
 import { HttpResponse, graphql } from 'msw';
+
 import * as keyword from './keyword';
+
+import { INotification, Role } from '@/graphql/interface';
+
 const keywordHandlers = Object.values(keyword);
 
 const QueryProducts = graphql.query('QueryProducts', () => {

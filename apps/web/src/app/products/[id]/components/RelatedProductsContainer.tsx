@@ -3,8 +3,10 @@
 import 'swiper/css';
 
 import React, { Suspense } from 'react';
-import RelatedProducts from './RelatedProducts';
+
 import MoreProductsSkeleton from './MoreProductsSkeleton';
+import RelatedProducts from './RelatedProducts';
+
 import { ProductQuery } from '@/shared/api/gql/graphql';
 
 export default function RelatedProductsContainer({

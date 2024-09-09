@@ -1,7 +1,8 @@
 'use client';
-import { ProductLiveHotdealsImageCard, useCollectProduct } from '@/features/products';
 import useLiveHotDealsViewModel from '../../hooks/useLiveHotDealsViewModel';
+
 import { LoadingSpinner } from '@/components/common/icons';
+import { ProductLiveHotdealsImageCard, useCollectProduct } from '@/features/products';
 
 const LiveHotDealList = () => {
   const { products, loadingCallbackRef, isFetchingNextPage } = useLiveHotDealsViewModel();

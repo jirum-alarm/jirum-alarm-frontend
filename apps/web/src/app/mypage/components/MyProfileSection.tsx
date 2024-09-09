@@ -1,8 +1,9 @@
 'use client';
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import { ArrowRight } from '@/components/common/icons';
 import { AuthQueries } from '@/entities/auth';
 import Link from '@/features/Link';
-import { useSuspenseQuery } from '@tanstack/react-query';
 
 const MyProfileSection = () => {
   const {

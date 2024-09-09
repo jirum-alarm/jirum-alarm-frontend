@@ -1,6 +1,8 @@
-import BasicLayout from '@/components/layout/BasicLayout';
 import React, { Suspense } from 'react';
+
 import CategoriesForm from './components/CategoriesForm';
+
+import BasicLayout from '@/components/layout/BasicLayout';
 
 const CategoriesPage = () => {
   return (

@@ -1,7 +1,8 @@
-import { useToast } from '@/components/common/Toast';
-import { AuthService } from '@/shared/api/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+
+import { useToast } from '@/components/common/Toast';
+import { AuthService } from '@/shared/api/auth';
 
 const COMPLETE_ROUTE = '/mypage/account';
 

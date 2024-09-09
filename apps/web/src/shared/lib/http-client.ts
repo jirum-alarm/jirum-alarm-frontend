@@ -1,12 +1,13 @@
-import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
+import { graphql } from '../api/gql';
 import { TypedDocumentString } from '../api/gql/graphql';
+
 import {
   getAccessToken,
   getRefreshToken,
   setAccessToken,
   setRefreshToken,
 } from '@/app/actions/token';
-import { graphql } from '../api/gql';
+import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
 
 const MutationLoginByRefreshToken = graphql(`
   mutation QueryLoginByRefreshToken {
@@ -60,6 +61,7 @@ class HttpClient {
   constructor(url: string) {
     this.baseUrl = url;
   }
+
   public async execute<TResult, TVariables>(
     query: TypedDocumentString<TResult, TVariables>,
     ...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
@@ -83,6 +85,7 @@ class HttpClient {
 
     return response as { data: TResult };
   }
+
   /**
    * @description 서버 컴포넌트에서 사용해야할 함수
    */
@@ -109,14 +112,17 @@ class HttpClient {
 
     return response as { data: TResult };
   }
+
   private isServer() {
     return typeof window === 'undefined';
   }
+
   private getCookieValue(name: string) {
     const cookies = document.cookie.split('; ');
     const cookie = cookies.find((cookie) => cookie.startsWith(`${name}=`));
     return cookie ? cookie.split('=')[1] : null;
   }
+
   private async getNewAccessToken() {
     /**
      * NOTE: 서버단에서는 middleware단에서 token refresh를 하므로 return
@@ -177,7 +183,7 @@ class HttpClient {
     const res = await response.json();
 
     if (res.errors && res.errors.length) {
-      for (let err of res.errors) {
+      for (const err of res.errors) {
         switch (err.extensions.code) {
           case 'FORBIDDEN':
           case 'UNAUTHENTICATED':

@@ -1,10 +1,11 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+
 import { useUpdatePersonal } from '@/app/mypage/features';
 import { BIRTH_YEAR } from '@/constants/birthYear';
 import { AuthQueries } from '@/entities/auth';
 import { Gender } from '@/shared/api/gql/graphql';
 import { shallowEqual } from '@/util/object';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
 
 const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({ text: String(year), value: String(year) }));
 const birthYearOptions = [{ text: '선택안함', value: null }, ..._BIRTH_YEAR];

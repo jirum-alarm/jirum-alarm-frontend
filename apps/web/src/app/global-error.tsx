@@ -1,11 +1,12 @@
 'use client';
 
-import ApiError from '@/lib/api-error';
-import { SentryLevel } from '@/lib/sentry';
 import { ApolloError } from '@apollo/client';
 import * as Sentry from '@sentry/nextjs';
 import NextError from 'next/error';
 import { useEffect } from 'react';
+
+import ApiError from '@/lib/api-error';
+import { SentryLevel } from '@/lib/sentry';
 
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
   useEffect(() => {

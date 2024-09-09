@@ -1,7 +1,7 @@
 'use client';
 
-import { useToast } from './useToast';
 import { Toast } from './Toast';
+import { useToast } from './useToast';
 
 const Toaster = () => {
   const { toasts } = useToast();

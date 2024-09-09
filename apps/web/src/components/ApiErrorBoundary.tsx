@@ -1,6 +1,7 @@
 'use client';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
+
 import ServerError from './ServerError';
 
 interface Props {

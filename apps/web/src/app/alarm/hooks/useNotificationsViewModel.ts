@@ -1,8 +1,9 @@
-import { INotification } from '@/graphql/interface';
-import { QueryNotifications } from '@/graphql/notification';
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+
+import { INotification } from '@/graphql/interface';
+import { QueryNotifications } from '@/graphql/notification';
 
 const limit = 20;
 

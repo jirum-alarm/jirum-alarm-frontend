@@ -1,6 +1,7 @@
-import Button from '@/components/common/Button';
-import usePersonalInfoFormViewModel from '../hooks/usePersonalInfoFormViewModel';
 import { Registration } from '../../page';
+import usePersonalInfoFormViewModel from '../hooks/usePersonalInfoFormViewModel';
+
+import Button from '@/components/common/Button';
 import BirthYearSelect from '@/features/personal/components/BirthYearSelect';
 import GenderRadioGroup from '@/features/personal/components/GenderRadioGroup';
 

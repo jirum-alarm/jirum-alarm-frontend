@@ -1,5 +1,6 @@
-import BasicLayout from '@/components/layout/BasicLayout';
 import AlarmList from './components/AlarmList';
+
+import BasicLayout from '@/components/layout/BasicLayout';
 import { NAV_TYPE } from '@/components/layout/BottomNav';
 
 const Alarm = () => {

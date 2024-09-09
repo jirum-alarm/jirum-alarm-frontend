@@ -1,8 +1,9 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { useToast } from '@/components/common/Toast';
 import { AuthQueries } from '@/entities/auth';
 import useGoBack from '@/hooks/useGoBack';
 import { AuthService } from '@/shared/api/auth';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useUpdatePersonal = () => {
   const { toast } = useToast();

@@ -1,6 +1,7 @@
-import { Search } from '@/components/common/icons';
 import Link from 'next/link';
 import React from 'react';
+
+import { Search } from '@/components/common/icons';
 
 interface Props {
   color?: string;

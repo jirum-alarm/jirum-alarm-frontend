@@ -1,6 +1,7 @@
-import { IProduct } from '@/graphql/interface';
 import React from 'react';
+
 import { ProductImageCard, useCollectProduct } from '@/features/products';
+import { IProduct } from '@/graphql/interface';
 
 export default function ProductList({ products }: { products: IProduct[] }) {
   const collectProduct = useCollectProduct();

@@ -1,5 +1,8 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
 import Button from '@/components/common/Button';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
@@ -7,8 +10,6 @@ import { useAddWishlist, useRemoveWishlist } from '@/features/products';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { ProductQuery } from '@/shared/api/gql/graphql';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 export default function LikeButton({
   product,

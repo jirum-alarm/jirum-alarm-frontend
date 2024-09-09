@@ -1,15 +1,18 @@
 'use client';
 import SwipeableViews from 'react-swipeable-views';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+
 import 'react-tabs/style/react-tabs.css';
 import '@/style/React_tabs.css';
-import { useProductListViewModel } from '../hooks/useProductListViewModel';
-import React from 'react';
 import ProductRecommendation from './ProductRecommendation';
 import { useHotDealsViewModel } from '../hooks/useHotDealsViewModel';
-import { mergeRefs } from '@/util/mergeRefs';
-import { ProductLoading } from '@/features/products';
+import { useProductListViewModel } from '../hooks/useProductListViewModel';
+
+import React from 'react';
+
 import TopButton from '@/components/TopButton';
+import { ProductLoading } from '@/features/products';
+import { mergeRefs } from '@/util/mergeRefs';
 
 const ProductList = () => {
   const {

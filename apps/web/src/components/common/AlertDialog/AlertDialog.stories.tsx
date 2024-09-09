@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import AlertDialog from '.';
 import Button from '../Button';
-import { useEffect, useRef } from 'react';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {

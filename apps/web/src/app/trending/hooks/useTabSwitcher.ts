@@ -1,8 +1,9 @@
-import { PAGE } from '@/constants/page';
-import useMoveListCenter from '@/hooks/useMoveListCenter';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef } from 'react';
 import Swiper from 'swiper';
+
+import { PAGE } from '@/constants/page';
+import useMoveListCenter from '@/hooks/useMoveListCenter';
 
 const useTabSwitcher = () => {
   const swiperRef = useRef<Swiper>();

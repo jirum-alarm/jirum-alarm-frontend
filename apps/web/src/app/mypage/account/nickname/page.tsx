@@ -1,6 +1,8 @@
-import BasicLayout from '@/components/layout/BasicLayout';
-import NicknameForm from './components/NickNameForm';
 import { Suspense } from 'react';
+
+import NicknameForm from './components/NickNameForm';
+
+import BasicLayout from '@/components/layout/BasicLayout';
 
 const NickNamePage = () => {
   return (

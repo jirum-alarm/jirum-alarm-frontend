@@ -1,7 +1,9 @@
 'use client';
-import BasicLayout from '@/components/layout/BasicLayout';
 import { Suspense } from 'react';
+
 import PasswordContainerPage from './components/PasswordContainer';
+
+import BasicLayout from '@/components/layout/BasicLayout';
 
 const PasswordPage = () => {
   return (

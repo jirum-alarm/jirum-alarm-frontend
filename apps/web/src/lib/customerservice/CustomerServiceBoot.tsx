@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import customerService from './customer-service';
 
 const CustomerServiceBoot = () => {

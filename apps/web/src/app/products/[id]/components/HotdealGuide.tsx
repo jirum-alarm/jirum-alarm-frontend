@@ -1,11 +1,11 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
+
 import Button from '@/components/common/Button';
 import { ArrowDown } from '@/components/common/icons';
-import { IProductGuide } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { ProductGuidesQuery } from '@/shared/api/gql/graphql';
-import { useEffect, useRef, useState } from 'react';
 
 export default function HotdealGuide({
   productGuides,

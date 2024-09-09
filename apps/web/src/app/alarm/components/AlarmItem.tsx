@@ -1,10 +1,11 @@
 import Image from 'next/image';
-import { INotification } from '@/graphql/interface';
-import { displayTime } from '@/util/displayTime';
-import React, { useState } from 'react';
-import { cn } from '@/lib/cn';
 import Link from 'next/link';
+import React, { useState } from 'react';
+
 import { PAGE } from '@/constants/page';
+import { INotification } from '@/graphql/interface';
+import { cn } from '@/lib/cn';
+import { displayTime } from '@/util/displayTime';
 
 const AlarmItem = ({ notification }: { notification: INotification }) => {
   const { message, createdAt, product, keyword } = notification;

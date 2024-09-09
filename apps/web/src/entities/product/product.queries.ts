@@ -1,3 +1,5 @@
+import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
+
 import {
   ProductGuidesQueryVariables,
   ProductQueryVariables,
@@ -6,7 +8,6 @@ import {
   TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
-import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 export const ProductQueries = {
   all: () => ['product'],

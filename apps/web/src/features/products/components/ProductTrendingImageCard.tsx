@@ -1,13 +1,13 @@
+import Link from 'next/link';
+import React from 'react';
+
 import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
-import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
-import Link from 'next/link';
-import React from 'react';
 
 export const ProductTrendingImageCard = ({
   product,

@@ -1,9 +1,11 @@
 'use client';
-import { Close } from '@/components/common/icons';
 import React from 'react';
 import { Link } from 'react-scroll';
+
+import { Close } from '@/components/common/icons';
 import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/constants/policy';
 import useGoBack from '@/hooks/useGoBack';
+
 const PrivacyPolicy = () => {
   const goBack = useGoBack();
   return (

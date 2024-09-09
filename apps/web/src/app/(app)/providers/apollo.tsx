@@ -1,24 +1,23 @@
 'use client';
 import { ApolloLink, fromPromise, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-
-import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
+import { onError } from '@apollo/client/link/error';
 import {
   ApolloNextAppProvider,
   ApolloClient,
   InMemoryCache,
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support';
-import { onError } from '@apollo/client/link/error';
-import { ILoginByRefreshTokenOutput } from '@/types/login';
-import { MutationLoginByRefreshToken } from '@/graphql/auth';
+
 import {
   getAccessToken,
   getRefreshToken,
   setAccessToken,
   setRefreshToken,
 } from '@/app/actions/token';
-import { useEffect, useState } from 'react';
+import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
+import { MutationLoginByRefreshToken } from '@/graphql/auth';
+import { ILoginByRefreshTokenOutput } from '@/types/login';
 
 interface Props {
   children: React.ReactNode;
@@ -63,7 +62,7 @@ const getNewAccessToken = async () => {
 
 const linkOnError = onError(({ graphQLErrors, networkError, operation, forward }) => {
   if (graphQLErrors) {
-    for (let err of graphQLErrors) {
+    for (const err of graphQLErrors) {
       switch (err.extensions.code) {
         // Apollo Server sets code to UNAUTHENTICATED
         // when an AuthenticationError is thrown in a resolver

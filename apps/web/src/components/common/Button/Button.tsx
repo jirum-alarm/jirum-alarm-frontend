@@ -1,6 +1,8 @@
 import { type VariantProps } from 'class-variance-authority';
-import { buttonVaraint } from './variant/button';
 import React from 'react';
+
+import { buttonVaraint } from './variant/button';
+
 import { cn } from '@/lib/cn';
 
 interface ButtonProps

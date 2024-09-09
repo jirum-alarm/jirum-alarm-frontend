@@ -1,9 +1,11 @@
-import { useEffect } from 'react';
-import { Unsubscribe, getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { initializeApp } from 'firebase/app';
-import { firebaseConfig } from '@/constants/firebase';
+import { Unsubscribe, getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
+
+import { firebaseConfig } from '@/constants/firebase';
 import { fcmTokenAtom } from '@/state/fcmToken';
+
 const firebaseApp = initializeApp(firebaseConfig);
 
 const FCMConfig = () => {

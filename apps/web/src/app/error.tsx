@@ -1,11 +1,12 @@
 'use client'; // Error components must be Client Components
 
-import { useEffect } from 'react';
-import * as Sentry from '@sentry/nextjs';
 import { ApolloError } from '@apollo/client';
+import * as Sentry from '@sentry/nextjs';
+import { useEffect } from 'react';
+
+import ServerError from '@/components/ServerError';
 import ApiError from '@/lib/api-error';
 import { SentryLevel } from '@/lib/sentry';
-import ServerError from '@/components/ServerError';
 
 export default function Error({
   error,

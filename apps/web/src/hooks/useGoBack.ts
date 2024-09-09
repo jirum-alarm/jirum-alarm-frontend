@@ -1,6 +1,7 @@
-import { PAGE } from '@/constants/page';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
+
+import { PAGE } from '@/constants/page';
 
 const useGoBack = (backTo: PAGE = PAGE.HOME) => {
   const router = useRouter();
