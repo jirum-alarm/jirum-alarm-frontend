@@ -35,8 +35,6 @@ const ImageWithFallback = React.memo(function ImageWithFallback({
       alt={alt}
       onError={handleError}
       placeholder="blur"
-      width={180}
-      height={180}
       blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
       {...rest}
     />
