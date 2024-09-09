@@ -133,7 +133,6 @@ const nextConfig = withPWA({
     if (!isServer) {
       config.optimization = {
         ...config.optimization,
-        usedExports: true,
         splitChunks: {
           chunks: 'all',
           cacheGroups: {
