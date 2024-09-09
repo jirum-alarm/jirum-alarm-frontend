@@ -1,10 +1,24 @@
 'use client';
+
+import { useEffect } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 import Script from 'next/script';
 
 const GoogleAnalytics = ({ GA_TRACKING_ID }: { GA_TRACKING_ID: string }) => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (pathname && window.gtag) {
+      const pagePath = pathname + searchParams.toString();
+      window.gtag('config', GA_TRACKING_ID, {
+        page_path: pagePath,
+      });
+    }
+  }, [pathname, searchParams, GA_TRACKING_ID]);
+
   return (
     <>
-      {/* Google Analytics gtag.js */}
       <Script
         src={`https://www.google-analytics.com/gtag/js?id=${GA_TRACKING_ID}`}
         strategy="afterInteractive"
@@ -14,13 +28,7 @@ const GoogleAnalytics = ({ GA_TRACKING_ID }: { GA_TRACKING_ID: string }) => {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          
-          // 파라미터 포함 페이지 경로 설정
-          const pagePath = window.location.pathname + window.location.search;
-
-          gtag('config', '${GA_TRACKING_ID}', {
-            page_path: pagePath,
-          });
+          gtag('config', '${GA_TRACKING_ID}');
         `}
       </Script>
     </>
