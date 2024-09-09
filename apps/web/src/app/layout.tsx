@@ -43,12 +43,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko" className={pretendard.className}>
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <Script
+        {/* <Script
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.4.0/kakao.min.js"
           strategy="lazyOnload"
           integrity="sha384-mXVrIX2T/Kszp6Z0aEWaA8Nm7J6/ZeWXbL8UpGRjKwWe56Srd/iyNmWMBhcItAjH"
           crossOrigin="anonymous"
-        />
+        /> */}
         {/* hide until using real word */}
         {/* <Script */}
         {/*   async */}
