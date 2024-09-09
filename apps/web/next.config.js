@@ -64,23 +64,68 @@ const nextConfig = withPWA({
           },
         ],
       },
+      {
+        source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/images/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/fonts/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
     ];
   },
   sentry: sentryBuildTimeConfigOptions,
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
     if (!isServer) {
       config.optimization = {
         ...config.optimization,
         usedExports: true,
         splitChunks: {
           chunks: 'all',
+          cacheGroups: {
+            default: false,
+            vendors: false,
+            commons: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+            },
+            fonts: {
+              test: /[\\/]fonts[\\/]/,
+              name: 'fonts',
+              chunks: 'all',
+            },
+          },
         },
       };
     }
 
+    // 프로덕션 빌드에서만 적용되는 최적화
+    if (!dev) {
+      config.optimization.minimize = true;
+    }
+
     return config;
   },
-
   images: {
     // 3days
     minimumCacheTTL: 3 * 24 * 60 * 60,
@@ -96,6 +141,9 @@ const nextConfig = withPWA({
         hostname: 's3.ap-northeast-2.amazonaws.com',
       },
     ],
+  },
+  experimental: {
+    optimizeCss: true,
   },
 });
 
