@@ -1,14 +1,12 @@
 'use client';
 import { useState } from 'react';
 import { SwiperSlide, Swiper } from 'swiper/react';
+import 'swiper/css';
 
 import { useCollectProduct } from '@/features/products';
 import { ProductRankingImageCard } from '@/features/products/components/ProductRankingImageCard';
 import { cn } from '@/lib/cn';
-
-import 'swiper/css';
 import { useSuspenseQuery } from '@tanstack/react-query';
-
 import { ProductQueries } from '@/entities/product';
 
 const JirumRankingSlider = () => {
@@ -29,6 +27,8 @@ const JirumRankingSlider = () => {
           520: { slidesPerView: 2.3 },
         }}
         loop={true}
+        lazyPreloadPrevNext={1}
+        lazyPreloaderClass="swiper-lazy-preloader"
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
       >
         {rankingProducts.map((product, i) => (
