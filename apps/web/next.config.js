@@ -65,7 +65,25 @@ const nextConfig = withPWA({
         ],
       },
       {
+        source: '/_next/static/chunks/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
         source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/css/(.*)',
         headers: [
           {
             key: 'Cache-Control',
@@ -91,9 +109,26 @@ const nextConfig = withPWA({
           },
         ],
       },
+      {
+        source: '/_next/static/chunks/vendors-(.*).js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/static/(.*).js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
     ];
   },
-  sentry: sentryBuildTimeConfigOptions,
   webpack: (config, { isServer, dev }) => {
     if (!isServer) {
       config.optimization = {
@@ -103,23 +138,30 @@ const nextConfig = withPWA({
           chunks: 'all',
           cacheGroups: {
             default: false,
-            vendors: false,
-            commons: {
+            vendors: {
               test: /[\\/]node_modules[\\/]/,
               name: 'vendors',
               chunks: 'all',
+              enforce: true,
+            },
+            commons: {
+              test: /[\\/]common[\\/]/,
+              name: 'commons',
+              chunks: 'all',
+              minChunks: 2,
+              priority: 10,
             },
             fonts: {
               test: /[\\/]fonts[\\/]/,
               name: 'fonts',
               chunks: 'all',
+              enforce: true,
             },
           },
         },
       };
     }
 
-    // 프로덕션 빌드에서만 적용되는 최적화
     if (!dev) {
       config.optimization.minimize = true;
     }
@@ -127,7 +169,6 @@ const nextConfig = withPWA({
     return config;
   },
   images: {
-    // 3days
     minimumCacheTTL: 3 * 24 * 60 * 60,
     deviceSizes: [320, 420, 768, 1024, 1200],
     imageSizes: [16, 32, 48, 64, 96],
@@ -144,6 +185,15 @@ const nextConfig = withPWA({
   },
   experimental: {
     optimizeCss: true,
+  },
+  poweredByHeader: false,
+  reactStrictMode: true,
+  compiler: {
+    styledComponents: true,
+  },
+  onDemandEntries: {
+    maxInactiveAge: 60 * 60 * 1000,
+    pagesBufferLength: 10,
   },
 });
 
