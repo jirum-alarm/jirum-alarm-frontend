@@ -168,9 +168,6 @@ importers:
       react-intersection-observer:
         specifier: ^9.8.1
         version: 9.13.0(react-dom@18.2.0)(react@18.2.0)
-      react-router-dom:
-        specifier: ^6.22.1
-        version: 6.22.1(react-dom@18.2.0)(react@18.2.0)
       react-scroll:
         specifier: 1.9.0
         version: 1.9.0(react-dom@18.2.0)(react@18.2.0)
@@ -416,7 +413,7 @@ packages:
       '@apollo/client': ^3.10.4
       react: ^18
     dependencies:
-      '@apollo/client': 3.10.8(@types/react@18.2.58)(graphql-ws@5.15.0)(graphql@16.9.0)(react-dom@18.2.0)(react@18.2.0)
+      '@apollo/client': 3.10.8(@types/react@18.2.58)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       ts-invariant: 0.10.3
     dev: false
@@ -507,7 +504,7 @@ packages:
       next: ^13.4.1 || ^14.0.0 || 15.0.0-rc.0
       react: ^18
     dependencies:
-      '@apollo/client': 3.10.8(@types/react@18.2.58)(graphql-ws@5.15.0)(graphql@16.9.0)(react-dom@18.2.0)(react@18.2.0)
+      '@apollo/client': 3.10.8(@types/react@18.2.58)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@apollo/client-react-streaming': 0.11.2(@apollo/client@3.10.8)(react@18.2.0)
       next: 14.2.4(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -4746,11 +4743,6 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.9
     dev: true
-
-  /@remix-run/router@1.15.1:
-    resolution: {integrity: sha512-zcU0gM3z+3iqj8UX45AmWY810l3oUmXM7uH4dt5xtzvMhRtYVhKGOmgOd1877dOPPepfCjUv57w+syamWIYe7w==}
-    engines: {node: '>=14.0.0'}
-    dev: false
 
   /@repeaterjs/repeater@3.0.6:
     resolution: {integrity: sha512-Javneu5lsuhwNCryN+pXH93VPQ8g0dBX7wItHFgYiwQmzE1sVdg5tWHiOgHywzL2W21XQopa7IwIEnNbmeUJYA==}
@@ -14115,29 +14107,6 @@ packages:
       use-callback-ref: 1.3.1(@types/react@18.2.58)(react@18.2.0)
       use-sidecar: 1.1.2(@types/react@18.2.58)(react@18.2.0)
     dev: true
-
-  /react-router-dom@6.22.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-iwMyyyrbL7zkKY7MRjOVRy+TMnS/OPusaFVxM2P11x9dzSzGmLsebkCvYirGq0DWB9K9hOspHYYtDz33gE5Duw==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      react: '>=16.8'
-      react-dom: '>=16.8'
-    dependencies:
-      '@remix-run/router': 1.15.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-router: 6.22.1(react@18.2.0)
-    dev: false
-
-  /react-router@6.22.1(react@18.2.0):
-    resolution: {integrity: sha512-0pdoRGwLtemnJqn1K0XHUbnKiX0S4X8CgvVVmHGOWmofESj31msHo/1YiqcJWK7Wxfq2a4uvvtS01KAQyWK/CQ==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      react: '>=16.8'
-    dependencies:
-      '@remix-run/router': 1.15.1
-      react: 18.2.0
-    dev: false
 
   /react-scroll@1.9.0(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-mamNcaX9Ng+JeSbBu97nWwRhYvL2oba+xR2GxvyXsbDeGP+gkYIKZ+aDMMj/n20TbV9SCWm/H7nyuNTSiXA6yA==}
