@@ -3,7 +3,6 @@ import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 
 import useTrendingViewModel from '../hooks/useTrendingViewModel';
 
-// import { LoadingSpinner } from '@/components/common/icons';
 import RecommendationProduct from '@/app/(home)/components/(search)/RecommendationProduct';
 import { ProductImageCard, ProductTrendingImageCard, useCollectProduct } from '@/features/products';
 
