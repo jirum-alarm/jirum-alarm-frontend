@@ -40,11 +40,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link
-          rel="stylesheet"
-          as="style"
+          rel="preload"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.woff2"
+          as="font"
+          type="font/woff2"
           crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"
         />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"
+          crossOrigin="anonymous"
+        />
+
         {/* <Script
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.4.0/kakao.min.js"
           strategy="lazyOnload"
