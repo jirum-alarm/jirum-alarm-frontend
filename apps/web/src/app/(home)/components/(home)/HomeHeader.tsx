@@ -2,12 +2,12 @@
 import { Logo } from '@/components/common/icons';
 import SearchLinkButton from '@/components/SearchLinkButton';
 import { EVENT } from '@/constants/mixpanel';
-import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
+import useScrollPosition from '@/hooks/useScrollPosition';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 
 const HomeHeader = () => {
-  const { isHeaderVisible } = useVisibilityOnScroll({ visibilityThreshold: 90 });
+  const isScrolled = useScrollPosition(90);
 
   const handleSearchClick = () => {
     mp.track(EVENT.PRODUCT_SEARCH.NAME, {
@@ -19,10 +19,10 @@ const HomeHeader = () => {
   return (
     <header
       className={cn(
-        `fixed top-0 z-50 flex w-full max-w-screen-layout-max items-center justify-between bg-white px-5 py-3 transition-opacity duration-500`,
+        `fixed top-0 z-50 flex w-full max-w-screen-layout-max items-center justify-between bg-white px-5 py-2 transition-all duration-300`,
         {
-          'opacity-0': !isHeaderVisible,
-          'opacity-100': isHeaderVisible,
+          'translate-y-0 shadow-sm': isScrolled,
+          '-translate-y-full': !isScrolled,
         },
       )}
     >

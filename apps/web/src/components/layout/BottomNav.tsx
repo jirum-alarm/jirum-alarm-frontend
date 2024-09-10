@@ -16,6 +16,8 @@ import {
 } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
+import { useScrollDirection } from '../../hooks/useScrollDirection';
+import { useDevice } from '../../hooks/useDevice';
 
 export enum NAV_TYPE {
   HOME = 'HOME',
@@ -64,6 +66,8 @@ const BottomNav = ({ type }: { type: any }) => {
 
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
+  const scrollDirection = useScrollDirection();
+  const { isMobile } = useDevice();
 
   if (!BottomNavList.some((nav) => nav.link === pathName)) return;
 
@@ -93,16 +97,20 @@ const BottomNav = ({ type }: { type: any }) => {
   return (
     <div
       className={cn(
-        `fixed bottom-0 left-1/2 z-50 mx-auto w-full max-w-screen-layout-max -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-transform`,
+        `fixed bottom-0 left-1/2 z-50 mx-auto w-full max-w-screen-layout-max -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-all duration-300`,
+        {
+          'translate-y-full': isMobile && scrollDirection === 'down',
+          'translate-y-0': !isMobile || scrollDirection === 'up',
+        },
       )}
     >
       <ul className="flex items-center justify-around" ref={navRef}>
         {BottomNavList.map((nav, i) => (
-          <li key={i} className="flex flex-1 items-center justify-center py-3">
+          <li key={i} className="flex flex-1 items-center justify-center py-2">
             <motion.div
               className="rounded-lg"
               whileTap={{ scale: 0.85, backgroundColor: '#F2F4F7' }}
-              transition={{ duration: 0.1, backgroundColor: { duration: 0 } }} // 애니메이션 없이 즉각적인 배경색 변경
+              transition={{ duration: 0.1, backgroundColor: { duration: 0 } }}
               // onPointerDown={handleActiveNav(nav.type)}
               // onPointerCancel={handleActiveNavCancel}
             >
