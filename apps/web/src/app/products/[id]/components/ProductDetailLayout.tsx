@@ -15,6 +15,7 @@ import { ProductQueries } from '@/entities/product';
 import { cn } from '@/lib/cn';
 import { ProductGuidesQuery, ProductQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
+import { NoticeProfitLink } from './NoticeProfitUrl';
 
 type Product = NonNullable<ProductQuery['product']>;
 type ProductGuides = ProductGuidesQuery['productGuides'];
@@ -36,7 +37,7 @@ function ProductDetaiLayout({
 
   return (
     <>
-      <main className="border-x border-t border-gray-100 pb-7">
+      <main className="border-x border-t border-gray-100">
         <ProductImage product={{ title: product.title, thumbnail: product.thumbnail }} />
         <div className="relative z-10 mt-[-32px] w-full rounded-t-3xl bg-white pt-8">
           <ProductInfoLayout>
@@ -47,12 +48,9 @@ function ProductDetaiLayout({
             <CommunityReaction product={product} />
             <RelatedProductsContainer product={product} />
             <PopularProductsContainer product={product} />
+            {product.isProfitUrl && <NoticeProfitLink />}
           </ProductInfoLayout>
-          <BottomCTA
-            product={product}
-            isUserLogin={isUserLogin}
-            isProfitUrl={product.isProfitUrl}
-          />
+          <BottomCTA product={product} isUserLogin={isUserLogin} />
         </div>
       </main>
       <div className="h-22"></div>
