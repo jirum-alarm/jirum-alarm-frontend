@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic';
 import { AppProvider } from './(app)/providers';
 import { GA_TRACKING_ID } from '@/constants/ga';
 import { defaultMetadata } from '@/constants/metadata';
-import { pretendard } from '@/lib/fonts';
 
 const SpeedInsights = dynamic(
   () => import('@vercel/speed-insights/next').then((mod) => mod.SpeedInsights),
@@ -39,9 +38,15 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" className={pretendard.className}>
+    <html lang="ko">
       <head>
         <link rel="manifest" href="/manifest.json" />
+        <link
+          rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"
+        />
         {/* <Script
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.4.0/kakao.min.js"
           strategy="lazyOnload"
