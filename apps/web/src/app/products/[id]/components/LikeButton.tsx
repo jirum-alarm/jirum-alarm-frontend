@@ -6,10 +6,11 @@ import { useState } from 'react';
 import Button from '@/components/common/Button';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
-import { useAddWishlist, useRemoveWishlist } from '@/features/products';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { ProductQuery } from '@/shared/api/gql/graphql';
+import { useMutation } from '@tanstack/react-query';
+import { ProductService } from '@/shared/api/product';
 
 export default function LikeButton({
   product,
@@ -24,8 +25,8 @@ export default function LikeButton({
 
   const router = useRouter();
 
-  const addWishlist = useAddWishlist();
-  const removeWishlist = useRemoveWishlist();
+  const { mutate: addWishlist } = useMutation({ mutationFn: ProductService.addWishlist });
+  const { mutate: removeWishlist } = useMutation({ mutationFn: ProductService.removeWishlist });
 
   const handleClickWishlist = () => {
     if (!isUserLogin) {
@@ -45,7 +46,7 @@ export default function LikeButton({
         page: EVENT.PAGE.DETAIL,
       });
 
-      removeWishlist(productId);
+      removeWishlist({ productId });
       setIsLiked(false);
 
       return;
@@ -56,8 +57,7 @@ export default function LikeButton({
         type: EVENT.PRODUCT_WISH.TYPE.ADD,
         page: EVENT.PAGE.DETAIL,
       });
-
-      addWishlist(productId);
+      addWishlist({ productId });
       setIsLiked(true);
 
       return;
