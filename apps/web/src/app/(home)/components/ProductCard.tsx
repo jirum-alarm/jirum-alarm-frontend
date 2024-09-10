@@ -1,14 +1,14 @@
 'use client';
 
 import { IProduct } from '@/graphql/interface';
-import useTimeAgo from '@/lib/use-time-stamp';
+import { displayTime } from '@/util/displayTime';
 
 interface IProductCard {
   product: IProduct;
 }
 
 export const ProductCard = (props: IProductCard) => {
-  const timestamp = useTimeAgo(new Date(props.product.postedAt));
+  const timestamp = displayTime(new Date(props.product.postedAt));
   const product = props.product;
   return (
     <div className="rounded-md border border-gray-300 shadow transition duration-200 hover:shadow-md">

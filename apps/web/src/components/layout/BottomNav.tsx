@@ -117,14 +117,17 @@ const BottomNav = ({ type }: { type: any }) => {
               <Link
                 data-nav-type={nav.type}
                 className={cn(
-                  'flex h-[46px] w-[68px] flex-col items-center justify-center rounded-lg text-gray-500',
+                  'flex h-[56px] w-[80px] flex-col items-center justify-center rounded-lg text-gray-500',
                   {
                     'text-gray-900': isActiveNav(nav.type, nav.link),
                   },
                 )}
                 href={nav.link}
               >
-                <button className="h-7 w-7">
+                <button
+                  className="flex h-10 w-10 items-center justify-center"
+                  aria-label={nav.text}
+                >
                   {React.createElement(isActiveNav(nav.type, nav.link) ? nav.activeIcon : nav.icon)}
                 </button>
                 <span

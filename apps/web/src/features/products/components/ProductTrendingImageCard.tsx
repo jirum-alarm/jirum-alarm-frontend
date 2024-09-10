@@ -71,7 +71,7 @@ export const ProductTrendingImageCard = ({
             {product?.price ?? ''}
           </span>
           {product?.price && <span className="w-2"></span>}
-          <span className="text-sm text-gray-400">{displayTime(product.postedAt)}</span>
+          <span className="text-sm text-gray-600">{displayTime(product.postedAt)}</span>
         </div>
       </div>
     </Link>
