@@ -106,37 +106,35 @@ const BottomNav = ({ type }: { type: any }) => {
     >
       <ul className="flex items-center justify-around" ref={navRef}>
         {BottomNavList.map((nav, i) => (
-          <li key={i} className="flex flex-1 items-center justify-center py-2">
-            <motion.div
-              className="rounded-lg"
-              whileTap={{ scale: 0.85, backgroundColor: '#F2F4F7' }}
-              transition={{ duration: 0.1, backgroundColor: { duration: 0 } }}
-              // onPointerDown={handleActiveNav(nav.type)}
-              // onPointerCancel={handleActiveNavCancel}
+          <li key={i} className="flex flex-1 items-center justify-center">
+            <Link
+              data-nav-type={nav.type}
+              className={cn(
+                'flex w-full flex-col items-center justify-center rounded-lg py-2 text-gray-500',
+                {
+                  'text-gray-900': isActiveNav(nav.type, nav.link),
+                },
+              )}
+              href={nav.link}
             >
-              <Link
-                data-nav-type={nav.type}
-                className={cn(
-                  'flex h-[56px] w-[80px] flex-col items-center justify-center rounded-lg text-gray-500',
-                  {
-                    'text-gray-900': isActiveNav(nav.type, nav.link),
-                  },
-                )}
-                href={nav.link}
+              <motion.div
+                className="flex w-full flex-col items-center justify-center rounded-lg"
+                whileTap={{ scale: 0.95, backgroundColor: '#F2F4F7' }}
+                transition={{ duration: 0.1, backgroundColor: { duration: 0 } }}
               >
-                <button
-                  className="flex h-10 w-10 items-center justify-center"
-                  aria-label={nav.text}
+                <div
+                  className="flex h-[36px] w-[48px] items-center justify-center"
+                  aria-hidden="true"
                 >
                   {React.createElement(isActiveNav(nav.type, nav.link) ? nav.activeIcon : nav.icon)}
-                </button>
+                </div>
                 <span
                   className={cn('text-xs', { 'font-semibold': isActiveNav(nav.type, nav.link) })}
                 >
                   {nav.text}
                 </span>
-              </Link>
-            </motion.div>
+              </motion.div>
+            </Link>
           </li>
         ))}
       </ul>

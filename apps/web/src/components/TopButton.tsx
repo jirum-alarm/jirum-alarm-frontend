@@ -36,6 +36,7 @@ const TopButton = () => {
   return (
     <button
       onClick={scrollToTop}
+      aria-label="스크롤 최상단 이동"
       className={cn(
         `fixed bottom-safe-bottom-96 right-[16px] z-50 flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#101828] opacity-40 transition-opacity layout-max:right-1/2 layout-max:translate-x-[284px]`,
         { 'opacity-0': !isVisible },
