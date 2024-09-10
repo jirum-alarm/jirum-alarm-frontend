@@ -8,7 +8,6 @@ import AlarmItem from './AlarmItem';
 import NoAlerts from './NoAlerts';
 import { useNotificationsViewModel } from '../hooks/useNotificationsViewModel';
 
-import { appDownloadGuide } from '@/assets/images/app_download_guide';
 import Button from '@/components/common/Button';
 import { Apple, ArrowDown, Google } from '@/components/common/icons';
 import Illust from '@/components/common/Illust';
@@ -78,7 +77,13 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
         으로 받아보세요!
       </p>
       <div className="flex animate-fade-in justify-center rounded-md bg-gray-100">
-        <Image src={appDownloadGuide} alt="download app guide" width={335} height={400} />
+        <Image
+          src={`https://cdn.jirum-alarm.com/assets/app_download_guide.webp`}
+          alt="download app guide"
+          unoptimized
+          width={335}
+          height={400}
+        />
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] bg-white px-5 pb-8 pt-4">
