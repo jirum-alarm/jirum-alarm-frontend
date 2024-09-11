@@ -47,8 +47,8 @@ export default function HotdealGuide({
   }
 
   return (
-    <section ref={guidesRef} className="relative">
-      <div className="py-4">
+    <section ref={guidesRef} className="relative px-5">
+      <div className="pb-4">
         <h2 className="font-semibold text-gray-800">구매 정보 요약</h2>
       </div>
       <div className={cn('overflow-hidden rounded-lg border border-secondary-300 pt-4')}>
