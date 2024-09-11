@@ -100,8 +100,10 @@ function ProductInfo({ product }: { product: Product }) {
       <div ref={ref} className="flex h-[42px] w-full justify-center">
         <div
           className={cn(
-            `mt-5 flex h-[42px] w-full items-center justify-center bg-gray-50 text-sm text-gray-500 transition-all`,
-            { 'fixed top-[50px] z-50 mt-0 w-5/6 rounded-full border border-gray-100': !isView },
+            `relative top-0 mt-5 flex h-[42px] w-full items-center justify-center bg-gray-50 text-sm text-gray-500 transition-all`,
+            {
+              'fixed top-[50px] z-50 mt-0 w-fit rounded-full border border-gray-100 px-5': !isView,
+            },
           )}
         >
           지금&nbsp;
