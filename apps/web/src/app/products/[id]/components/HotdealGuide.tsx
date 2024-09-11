@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useRef, useState } from 'react';
 
 import Button from '@/components/common/Button';
@@ -36,7 +35,7 @@ export default function HotdealGuide({
 
     const height = guidesRef.current.clientHeight;
 
-    if (height > 310) {
+    if (height > 350) {
       setNeedsExpansion(true);
     }
   }, []);
@@ -49,41 +48,39 @@ export default function HotdealGuide({
 
   return (
     <section ref={guidesRef} className="relative">
-      <div className="rounded-t bg-primary-100 px-4 py-3">
-        <h2 className="text-primary-800">핫딜 정보 요약</h2>
+      <div className="py-4">
+        <h2 className="font-semibold text-gray-800">구매 정보 요약</h2>
       </div>
-
-      <div
-        className={cn('flex flex-col gap-y-4 break-all py-4', {
-          'h-64 overflow-hidden': needsExpansion,
-        })}
-      >
-        {parsedGuides?.map((guide) => <HotdealGuideItem key={guide.id} guide={guide} />)}
+      <div className={cn('overflow-hidden rounded-lg border border-secondary-300 pt-4')}>
+        <div
+          className={cn('flex flex-col gap-y-4 break-all', {
+            'h-64 overflow-hidden': needsExpansion,
+          })}
+        >
+          {parsedGuides?.map((guide) => <HotdealGuideItem key={guide.id} guide={guide} />)}
+        </div>
+        {needsExpansion && (
+          <div className="relative flex justify-center py-4">
+            <div className="absolute -top-16 h-16 w-full bg-gradient-to-t from-white"></div>
+            <Button
+              variant="filled"
+              color="secondary"
+              onClick={handleExpand}
+              className="h-[32px] w-[104px] text-sm font-medium"
+            >
+              자세히 보기
+            </Button>
+          </div>
+        )}
+        {!needsExpansion && (
+          <div className="mt-4 bg-secondary-50 px-3 py-2">
+            <span className="text-s text-gray-500">
+              * 요약은 실제와 다를 수 있어요. 상품 구매 시 정확한 행사 정보는 쇼핑몰 홈페이지에서
+              확인해 주세요.
+            </span>
+          </div>
+        )}
       </div>
-
-      {needsExpansion && (
-        <div className="relative">
-          <div className="absolute -top-16 h-16 w-full bg-gradient-to-t from-white"></div>
-          <Button
-            variant="outlined"
-            onClick={handleExpand}
-            className="flex items-center justify-center gap-x-2 border-gray-300 from-white"
-          >
-            자세히 보기
-            <ArrowDown />
-          </Button>
-        </div>
-      )}
-
-      {isExpanded && (
-        <div className="rounded-b bg-gray-50 px-3 py-2">
-          <span className="text-sm text-gray-500">
-            *요약은 실제와 다를 수 있습니다.
-            <br />
-            상품 구매시 행사 정보는 쇼핑몰 홈페이지에서 확인해 주세요.
-          </span>
-        </div>
-      )}
     </section>
   );
 }
@@ -127,7 +124,7 @@ function LinkText({ content }: { content: string }) {
             return part.content?.split('\n').map((text, index) => (
               <>
                 {index > 0 && <br />}
-                <span key={index} className="text-gray-600">
+                <span key={index} className="text-sm text-gray-600">
                   {text}
                 </span>
               </>
@@ -139,7 +136,7 @@ function LinkText({ content }: { content: string }) {
                 href={part.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-500 underline hover:text-blue-700 hover:no-underline"
+                className="text-sm text-blue-500 underline hover:text-blue-700 hover:no-underline"
               >
                 {part.text}
               </a>
@@ -151,7 +148,7 @@ function LinkText({ content }: { content: string }) {
                 href={part.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-500 underline hover:text-blue-700 hover:no-underline"
+                className="text-sm text-blue-500 underline hover:text-blue-700 hover:no-underline"
               >
                 {part.url}
               </a>
@@ -167,11 +164,11 @@ function LinkText({ content }: { content: string }) {
 function HotdealGuideItem({ guide }: { guide: ProductGuidesQuery['productGuides'][number] }) {
   return (
     <div className="flex gap-x-2 px-3">
-      <div className="h-5 w-5 rounded-full bg-primary-100 p-[3px]">
-        <HotdealGuideItemCheckIcon />
-      </div>
+      {/* <div className="h-5 w-5 rounded-full bg-primary-100 p-[3px]"> */}
+      <HotdealGuideItemCheckIcon />
+      {/* </div> */}
       <div className="flex flex-col">
-        <span className="leading-5 text-gray-900">{guide.title}</span>
+        <span className="text-sm font-semibold leading-5 text-gray-900">{guide.title}</span>
         <LinkText content={guide.content} />
       </div>
     </div>
@@ -180,12 +177,13 @@ function HotdealGuideItem({ guide }: { guide: ProductGuidesQuery['productGuides'
 
 function HotdealGuideItemCheckIcon() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
-        d="M11 4.5L5.5 10L3 7.5"
-        stroke="#7FC125"
-        strokeLinecap="square"
-        strokeLinejoin="round"
+        d="M15.7142 6.42773L7.85707 14.2849L4.28564 10.7134"
+        stroke="#6593FD"
+        stroke-width="2"
+        stroke-linecap="square"
+        stroke-linejoin="round"
       />
     </svg>
   );
