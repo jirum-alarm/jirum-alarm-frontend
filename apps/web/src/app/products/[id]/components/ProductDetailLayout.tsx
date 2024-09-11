@@ -20,7 +20,7 @@ import { NoticeProfitLink } from './NoticeProfitUrl';
 type Product = NonNullable<ProductQuery['product']>;
 type ProductGuides = ProductGuidesQuery['productGuides'];
 
-function ProductDetaiLayout({
+function ProductDetailLayout({
   productId,
   productGuides,
   isUserLogin,
@@ -37,9 +37,9 @@ function ProductDetaiLayout({
 
   return (
     <>
-      <main className="border-x border-t border-gray-100">
+      <main className="border-x border-t border-gray-200">
         <ProductImage product={{ title: product.title, thumbnail: product.thumbnail }} />
-        <div className="relative z-10 mt-[-32px] w-full rounded-t-3xl bg-white pt-8">
+        <div className="relative z-10 w-full rounded-t-3xl bg-white pt-8">
           <ProductInfoLayout>
             <ProductInfo product={product} />
             <HotdealGuide productGuides={productGuides} />
@@ -57,7 +57,7 @@ function ProductDetaiLayout({
     </>
   );
 }
-export default ProductDetaiLayout;
+export default ProductDetailLayout;
 
 function ProductInfoLayout({ children }: { children: React.ReactNode }) {
   return <div className="flex flex-col gap-y-10 px-5">{children}</div>;
@@ -66,19 +66,19 @@ function ProductInfoLayout({ children }: { children: React.ReactNode }) {
 function ProductInfo({ product }: { product: Product }) {
   return (
     <section>
-      <h1 className="text-gray-700">{product.title}</h1>
+      <h1 className="text-gray-800">{product.title}</h1>
 
       <div>
         <span className="text-green-700">{product?.viewCount}명</span>이 보고 있어요
       </div>
 
       <div className="inline-flex gap-x-2 pt-3">
-        {product.price && <p>{product.price}</p>}
+        {product.price && <p className="text-gray-800">{product.price}</p>}
         <div
           className={cn({
             'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-[20px]': true,
-            'border border-gray-400 bg-white px-2 text-gray-500': product.isEnd,
-            'bg-error-500 px-3 text-white ': !product.isEnd && product.isHot,
+            'border border-gray-400 bg-white px-2 text-gray-600': product.isEnd,
+            'bg-error-500 px-3 text-white': !product.isEnd && product.isHot,
           })}
         >
           {product.isEnd ? '판매종료' : product.isHot ? '핫딜' : ''}
@@ -88,10 +88,10 @@ function ProductInfo({ product }: { product: Product }) {
       <div className="flex items-center gap-x-3 pt-1">
         <div className="inline-flex items-center gap-x-1">
           <DisplayTimeIcon />
-          <span className="text-sm text-gray-500">{displayTime(product.postedAt)}</span>
+          <span className="text-sm text-gray-600">{displayTime(product.postedAt)}</span>
         </div>
         <div className="h-2 border border-gray-400"></div>
-        <span className="text-sm text-gray-400">{product.mallName}</span>
+        <span className="text-sm text-gray-600">{product.mallName}</span>
       </div>
     </section>
   );
@@ -130,7 +130,7 @@ function HotdealIndex({ product }: { product: Product }) {
   const prices = product?.prices;
 
   if (!prices?.length) {
-    return;
+    return null;
   }
 
   const productPrice = prices?.[0].price || 0;
@@ -165,12 +165,8 @@ function HotdealIndex({ product }: { product: Product }) {
     return '비쌈';
   };
 
-  /**
-   * 최저가보다 비싸면 일단 숨김
-   * @TODO 비쌀때 표시 고려
-   * */
   if (chiperPrice < 0) {
-    return undefined;
+    return null;
   }
 
   return (
@@ -191,7 +187,7 @@ function HotdealIndex({ product }: { product: Product }) {
             </div>
           </div>
           <div className="flex">
-            <div className="flex flex-col items-end justify-between pr-2 text-xs text-gray-600">
+            <div className="flex flex-col items-end justify-between pr-2 text-xs text-gray-700">
               <span>{lowPrice}원</span>
               <div className="relative mr-3 rounded-full bg-gray-900 px-2.5 py-1.5 font-semibold text-primary-500">
                 <p className="text-nowrap txs:text-xs xs:text-sm">{productPrice}원</p>
@@ -228,16 +224,12 @@ function HotdealIndex({ product }: { product: Product }) {
 function HotdealChip({ type }: { type: '비쌈' | '중박' | '대박' | '초대박' }) {
   return (
     <span
-      className={cn(
-        'rounded-lg px-3 py-1 text-xs font-semibold',
-
-        {
-          hidden: type === '비쌈',
-          'bg-gray-100 text-gray-500': type === '중박',
-          'bg-primary-100 text-primary-800': type === '대박',
-          'bg-error-100 text-error-600': type === '초대박',
-        },
-      )}
+      className={cn('rounded-lg px-3 py-1 text-xs font-semibold', {
+        hidden: type === '비쌈',
+        'bg-gray-100 text-gray-600': type === '중박',
+        'bg-primary-100 text-primary-800': type === '대박',
+        'bg-error-100 text-error-700': type === '초대박',
+      })}
     >
       {type}
     </span>

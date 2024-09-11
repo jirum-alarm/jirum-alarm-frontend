@@ -63,7 +63,7 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
         <BackButton backTo={PAGE.HOME} />
       </div>
       <div className="flex gap-x-2 self-end pr-4">
-        <a href={PAGE.SEARCH} onClick={handleSearch}>
+        <a href={PAGE.SEARCH} onClick={handleSearch} aria-label="검색" title="검색">
           <Search color="#101828" />
         </a>
         <Share onClick={handleShare} className="hover:cursor-pointer" />
