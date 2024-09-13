@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
   const id = params.id;
 
-  const { product } = await ProductService.getProduct({ id: +id });
+  const { product } = await ProductService.getProductServer({ id: +id });
   if (!product) return defaultMetadata;
   const productGuides = await ProductService.getProductGuides({ productId: +product.id });
 

@@ -21,6 +21,10 @@ export class ProductService {
     return httpClient.execute(QueryProduct, variables).then((res) => res.data);
   }
 
+  static async getProductServer(variables: ProductQueryVariables) {
+    return httpClient.server_execute(QueryProduct, variables).then((res) => res.data);
+  }
+
   static async getProducts(variables: QueryProductsQueryVariables) {
     return httpClient.execute(QueryProducts, variables).then((res) => res.data);
   }
