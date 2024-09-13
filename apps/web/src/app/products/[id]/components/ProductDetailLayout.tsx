@@ -48,7 +48,7 @@ function ProductDetailLayout({
             <CommunityReaction product={product} />
             <RelatedProductsContainer product={product} />
             <PopularProductsContainer product={product} />
-            {product.isProfitUrl && <NoticeProfitLink />}
+            <NoticeProfitLink />
           </ProductInfoLayout>
           <BottomCTA product={product} isUserLogin={isUserLogin} />
         </div>

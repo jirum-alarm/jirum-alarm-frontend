@@ -386,7 +386,6 @@ type ProductOutput {
   """
   isMyWishlist: Boolean
   isPrivate: Boolean!
-  isProfitUrl: Boolean!
   mallId: Int
   """
   쇼핑몰 이름

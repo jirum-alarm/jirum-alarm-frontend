@@ -54,7 +54,6 @@ export interface IProduct {
   prices?: IProductPrice[];
   searchAfter?: string[];
   isMyWishlist: boolean;
-  isProfitUrl: boolean;
   categoryName?: string;
 }
 

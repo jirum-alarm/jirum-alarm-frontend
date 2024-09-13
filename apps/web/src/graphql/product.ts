@@ -13,7 +13,6 @@ export const QueryProduct = gql`
       detailUrl
       isHot
       isEnd
-      isProfitUrl
       price
       postedAt
       thumbnail

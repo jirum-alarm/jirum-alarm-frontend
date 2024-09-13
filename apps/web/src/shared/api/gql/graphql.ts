@@ -449,7 +449,6 @@ export type ProductOutput = {
   /** 로그인한 사용자의 위시리스트 여부 */
   isMyWishlist?: Maybe<Scalars['Boolean']['output']>;
   isPrivate: Scalars['Boolean']['output'];
-  isProfitUrl: Scalars['Boolean']['output'];
   mallId?: Maybe<Scalars['Int']['output']>;
   /** 쇼핑몰 이름 */
   mallName?: Maybe<Scalars['String']['output']>;
@@ -963,7 +962,6 @@ export type ProductQuery = {
     detailUrl?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
-    isProfitUrl: boolean;
     price?: string | null;
     postedAt: any;
     thumbnail?: string | null;
@@ -1314,7 +1312,6 @@ export const ProductDocument = new TypedDocumentString(`
     detailUrl
     isHot
     isEnd
-    isProfitUrl
     price
     postedAt
     thumbnail

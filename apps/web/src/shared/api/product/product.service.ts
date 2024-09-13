@@ -79,7 +79,6 @@ const QueryProduct = graphql(`
       detailUrl
       isHot
       isEnd
-      isProfitUrl
       price
       postedAt
       thumbnail
