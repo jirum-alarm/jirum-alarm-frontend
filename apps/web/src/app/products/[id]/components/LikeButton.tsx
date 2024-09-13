@@ -9,8 +9,9 @@ import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { ProductQuery } from '@/shared/api/gql/graphql';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ProductService } from '@/shared/api/product';
+import { ProductQueries } from '@/entities/product';
 
 export default function LikeButton({
   product,
@@ -25,8 +26,25 @@ export default function LikeButton({
 
   const router = useRouter();
 
-  const { mutate: addWishlist } = useMutation({ mutationFn: ProductService.addWishlist });
-  const { mutate: removeWishlist } = useMutation({ mutationFn: ProductService.removeWishlist });
+  const productKey = ProductQueries.product({ id: productId }).queryKey;
+  const queryClient = useQueryClient();
+
+  const { mutate: addWishlist } = useMutation({
+    mutationFn: ProductService.addWishlist,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: productKey,
+      });
+    },
+  });
+  const { mutate: removeWishlist } = useMutation({
+    mutationFn: ProductService.removeWishlist,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: productKey,
+      });
+    },
+  });
 
   const handleClickWishlist = () => {
     if (!isUserLogin) {
