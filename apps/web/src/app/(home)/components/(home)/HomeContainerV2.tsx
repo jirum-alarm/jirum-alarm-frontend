@@ -33,7 +33,7 @@ const HomeBackgroundHeader = () => {
       <header className="flex h-[56px] w-full items-center justify-between px-5 py-3">
         <div className="flex items-center gap-2">
           <RoundedLogo />
-          <h2 className="text-lg font-semibold text-white">지름알림</h2>
+          <h2 className="text-lg font-medium text-slate-50">지름알림</h2>
         </div>
         <SearchButton />
       </header>

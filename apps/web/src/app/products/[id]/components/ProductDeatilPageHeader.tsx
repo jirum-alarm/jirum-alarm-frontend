@@ -2,16 +2,17 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
+import Link from 'next/link'; // Import next/link
 
-import { Search, Share } from '@/components/common/icons';
+import { Logo, Search, Share } from '@/components/common/icons';
 import { useToast } from '@/components/common/Toast';
 import BackButton from '@/components/layout/BackButton';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { ProductQueries } from '@/entities/product';
 import { mp } from '@/lib/mixpanel';
+import LogoLink from '../../../../components/common/Logo/LogiLink';
 
-// { product }: { product: IProduct }
 export default function ProductDetailPageHeader({ productId }: { productId: number }) {
   const { toast } = useToast();
   const {
@@ -58,15 +59,24 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
   };
 
   return (
-    <header className="fixed top-0 z-50 flex h-11 w-full max-w-screen-layout-max flex-col items-center justify-center border border-gray-100 bg-white text-black">
-      <div className="absolute left-0">
+    <header className="fixed top-0 z-50 flex h-11 w-full max-w-screen-layout-max items-center justify-between border border-gray-100 bg-white px-4">
+      <div className="flex items-center">
         <BackButton backTo={PAGE.HOME} />
       </div>
-      <div className="flex gap-x-2 self-end pr-4">
-        <a href={PAGE.SEARCH} onClick={handleSearch} aria-label="검색" title="검색">
+      <LogoLink />
+      <div className="flex items-center gap-x-2">
+        <a
+          href={PAGE.SEARCH}
+          onClick={handleSearch}
+          aria-label="검색"
+          title="검색"
+          className="py-2"
+        >
           <Search color="#101828" />
         </a>
-        <Share onClick={handleShare} className="hover:cursor-pointer" />
+        <button onClick={handleShare} className="hover:cursor-pointer">
+          <Share />
+        </button>
       </div>
     </header>
   );

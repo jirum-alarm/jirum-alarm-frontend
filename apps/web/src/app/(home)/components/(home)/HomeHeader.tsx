@@ -5,6 +5,7 @@ import { EVENT } from '@/constants/mixpanel';
 import useScrollPosition from '@/hooks/useScrollPosition';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
+import LogoLink from '../../../../components/common/Logo/LogiLink';
 
 const HomeHeader = () => {
   const isScrolled = useScrollPosition(90);
@@ -26,10 +27,7 @@ const HomeHeader = () => {
         },
       )}
     >
-      <div className="flex items-center gap-2">
-        <Logo />
-        <h2 className="text-lg font-semibold text-gray-900">지름알림</h2>
-      </div>
+      <LogoLink />
       <SearchLinkButton color="#101828" onClick={handleSearchClick} />
     </header>
   );
