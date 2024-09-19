@@ -1124,6 +1124,35 @@ export type RemoveWishlistMutationVariables = Exact<{
 
 export type RemoveWishlistMutation = { __typename?: 'Mutation'; removeWishlist: boolean };
 
+export type QueryWishlistsQueryVariables = Exact<{
+  orderBy: WishlistOrderType;
+  orderOption: OrderOptionType;
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+}>;
+
+export type QueryWishlistsQuery = {
+  __typename?: 'Query';
+  wishlists: Array<{
+    __typename?: 'WishlistOutput';
+    id: string;
+    productId: number;
+    searchAfter?: Array<string> | null;
+    product: {
+      __typename?: 'ProductOutput';
+      id: string;
+      title: string;
+      price?: string | null;
+      isHot?: boolean | null;
+      isEnd?: boolean | null;
+      isPrivate: boolean;
+      postedAt: any;
+      thumbnail?: string | null;
+      isMyWishlist?: boolean | null;
+    };
+  }>;
+};
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -1468,3 +1497,28 @@ export const RemoveWishlistDocument = new TypedDocumentString(`
   removeWishlist(productId: $productId)
 }
     `) as unknown as TypedDocumentString<RemoveWishlistMutation, RemoveWishlistMutationVariables>;
+export const QueryWishlistsDocument = new TypedDocumentString(`
+    query QueryWishlists($orderBy: WishlistOrderType!, $orderOption: OrderOptionType!, $limit: Int!, $searchAfter: [String!]) {
+  wishlists(
+    orderBy: $orderBy
+    orderOption: $orderOption
+    limit: $limit
+    searchAfter: $searchAfter
+  ) {
+    id
+    productId
+    searchAfter
+    product {
+      id
+      title
+      price
+      isHot
+      isEnd
+      isPrivate
+      postedAt
+      thumbnail
+      isMyWishlist
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<QueryWishlistsQuery, QueryWishlistsQueryVariables>;

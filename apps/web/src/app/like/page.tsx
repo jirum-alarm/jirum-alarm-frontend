@@ -1,6 +1,18 @@
+'use client';
 import BasicLayout from '@/components/layout/BasicLayout';
+import { ProductQueries } from '@/entities/product';
+import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 const LikePage = () => {
+  const { data } = useQuery(
+    ProductQueries.wishlistsServer({
+      orderBy: WishlistOrderType.Id,
+      orderOption: OrderOptionType.Desc,
+      limit: 10,
+    }),
+  );
+  console.log('dat : ', data);
   return (
     <BasicLayout hasBackButton title="찜 목록">
       <div className="flex h-full flex-col px-5 pb-9 pt-3">

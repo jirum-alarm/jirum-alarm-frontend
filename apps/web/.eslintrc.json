@@ -12,18 +12,14 @@
       "typescript": {}
     }
   },
-  "plugins": [
-    "@typescript-eslint",
-    "unused-imports",
-    "sort-class-members",
-  ],
+  "plugins": ["@typescript-eslint", "unused-imports", "sort-class-members"],
   "extends": [
     "next/core-web-vitals",
     "plugin:storybook/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/typescript",
     "plugin:import/recommended",
-    "plugin:promise/recommended",
+    "plugin:promise/recommended"
   ],
   "root": true,
   "env": {
@@ -50,7 +46,7 @@
     "unused-imports/no-unused-imports": "warn",
     "react-hooks/exhaustive-deps": "warn",
     "prefer-rest-params": "warn",
-    "promise/always-return": "warn",
+    "promise/always-return": "warn"
   },
   "overrides": [
     {
