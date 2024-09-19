@@ -34,3 +34,4 @@ export { default as MyFill } from './MyFill';
 export { default as RoundedLogo } from './RoundedLogo';
 export { default as Search } from './Search';
 export { default as Setting } from './Setting';
+export { default as Heart } from './Heart';

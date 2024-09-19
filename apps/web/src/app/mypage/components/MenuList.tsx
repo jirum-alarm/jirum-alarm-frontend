@@ -1,7 +1,7 @@
 'use client';
 import { SVGProps, createElement } from 'react';
 
-import { Alert, Description, Filter, Headset } from '@/components/common/icons';
+import { Alert, Description, Filter, Headset, Heart } from '@/components/common/icons';
 import Link from '@/features/Link';
 import customerService from '@/lib/customerservice/customer-service';
 
@@ -10,6 +10,11 @@ const MENU_LIST: Array<{
   title: string;
   url: string;
 }> = [
+  {
+    icon: Heart,
+    title: '찜 목록',
+    url: '/like',
+  },
   {
     icon: Filter,
     title: '관심 카테고리',
