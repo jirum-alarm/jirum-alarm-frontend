@@ -16,7 +16,6 @@
     "@typescript-eslint",
     "unused-imports",
     "sort-class-members",
-    "prettier"
   ],
   "extends": [
     "next/core-web-vitals",
@@ -24,9 +23,7 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:import/typescript",
     "plugin:import/recommended",
-    "plugin:prettier/recommended",
     "plugin:promise/recommended",
-    "prettier"
   ],
   "root": true,
   "env": {
@@ -54,18 +51,11 @@
     "react-hooks/exhaustive-deps": "warn",
     "prefer-rest-params": "warn",
     "promise/always-return": "warn",
-    "prettier/prettier": "warn"
   },
   "overrides": [
     {
       "files": ["error-messages.ts", "exceptions.ts"],
       "rules": {
-        "prettier/prettier": [
-          "warn",
-          {
-            "endOfLine": "auto"
-          }
-        ],
         "lines-between-class-members": "off",
         "sort-class-members/sort-class-members": "off"
       }
