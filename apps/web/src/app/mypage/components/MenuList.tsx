@@ -1,32 +1,33 @@
 'use client';
-import { SVGProps, createElement } from 'react';
-
 import { Alert, Description, Filter, Headset, Heart } from '@/components/common/icons';
 import Link from '@/features/Link';
 import customerService from '@/lib/customerservice/customer-service';
-
 const MENU_LIST: Array<{
-  icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+  icon: React.ReactNode;
   title: string;
   url: string;
 }> = [
   {
-    icon: Heart,
+    icon: (
+      <div className="flex h-[28px] w-[28px] items-center justify-center">
+        <Heart width={24} height={24} />
+      </div>
+    ),
     title: '찜 목록',
     url: '/like',
   },
   {
-    icon: Filter,
+    icon: <Filter />,
     title: '관심 카테고리',
     url: '/mypage/categories',
   },
   {
-    icon: Alert,
+    icon: <Alert />,
     title: '키워드 알림',
     url: '/mypage/keyword',
   },
   {
-    icon: Description,
+    icon: <Description />,
     title: '약관 및 정책',
     url: '/mypage/terms-policies',
   },
@@ -45,7 +46,7 @@ const MenuList = () => {
               <li key={i}>
                 <Link href={menu.url}>
                   <div className="flex items-center gap-3 py-3">
-                    {createElement(menu.icon)}
+                    {menu.icon}
                     <span className="text-gray-900">{menu.title}</span>
                   </div>
                 </Link>

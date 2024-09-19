@@ -10,3 +10,7 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+html {
+  @apply text-gray-900;
+}
