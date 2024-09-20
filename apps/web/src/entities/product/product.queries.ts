@@ -5,7 +5,6 @@ import {
   ProductQueryVariables,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsQueryVariables,
-  QueryWishlistsQueryVariables,
   TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
@@ -97,19 +96,5 @@ export const ProductQueries = {
         },
       ],
       queryFn: () => ProductService.getTogetherViewedProducts(variables),
-    }),
-  wishlistsServer: (variables: QueryWishlistsQueryVariables) =>
-    queryOptions({
-      queryKey: [
-        ...ProductQueries.all(),
-        'wishlist',
-        {
-          orderBy: variables.orderBy,
-          orderOption: variables.orderOption,
-          limit: variables.limit,
-          searchAfter: variables.searchAfter,
-        },
-      ],
-      queryFn: () => ProductService.getWishlistsServer(variables),
     }),
 };

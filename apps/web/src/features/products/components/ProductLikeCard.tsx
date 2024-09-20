@@ -1,21 +1,31 @@
 import Link from 'next/link';
-
 import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
-import { type QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
 
-export function ProductLiveHotdealsImageCard({
+interface Product {
+  id: string;
+  isEnd?: boolean | null;
+  isHot?: boolean | null;
+  thumbnail?: string | null;
+  title: string;
+  price?: string | null;
+  postedAt: any;
+}
+
+export function ProductLikeCard({
   product,
   collectProduct,
   logging,
+  actionIcon,
 }: {
-  product: QueryProductsQuery['products'][number];
+  product: Product;
   collectProduct: (productId: number) => void;
   logging: { page: keyof typeof EVENT.PAGE };
+  actionIcon: React.ReactNode;
 }) {
   const handleClick = () => {
     collectProduct(+product.id);
@@ -33,6 +43,15 @@ export function ProductLiveHotdealsImageCard({
       onClick={handleClick}
     >
       <div className={'relative aspect-square overflow-hidden rounded-lg border border-gray-200'}>
+        <div className=" absolute right-0 top-0 z-10">{actionIcon}</div>
+        <ImageWithFallback
+          src={product?.thumbnail ?? ''}
+          alt={product.title}
+          fill
+          unoptimized
+          className="object-cover"
+          sizes="300px"
+        />
         <div
           className={cn({
             'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
@@ -43,15 +62,6 @@ export function ProductLiveHotdealsImageCard({
         >
           {product.isEnd ? '판매종료' : product.isHot ? '핫딜' : ''}
         </div>
-
-        <ImageWithFallback
-          src={product?.thumbnail ?? ''}
-          alt={product.title}
-          fill
-          unoptimized
-          className="object-cover"
-          sizes="300px"
-        />
       </div>
       <div className="flex flex-col">
         <span
