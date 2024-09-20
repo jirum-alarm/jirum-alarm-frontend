@@ -32,24 +32,28 @@ export default function LikeButton({
 
   const { mutate: addWishlist } = useMutation({
     mutationFn: WishlistService.addWishlist,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: productKey,
-      });
-      queryClient.invalidateQueries({
-        queryKey: WishlistQueries.all(),
-      });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: productKey,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: WishlistQueries.lists(),
+        }),
+      ]);
     },
   });
   const { mutate: removeWishlist } = useMutation({
     mutationFn: WishlistService.removeWishlist,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: productKey,
-      });
-      queryClient.invalidateQueries({
-        queryKey: WishlistQueries.all(),
-      });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: productKey,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: WishlistQueries.lists(),
+        }),
+      ]);
     },
   });
 

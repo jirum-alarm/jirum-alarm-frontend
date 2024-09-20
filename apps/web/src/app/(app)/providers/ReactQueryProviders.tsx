@@ -31,15 +31,7 @@ function makeQueryClient() {
   });
 }
 
-let browserQueryClient: QueryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 0,
-      refetchOnWindowFocus: false, // 창이 포커스를 받을 때 자동 패칭 비활성화
-      refetchOnReconnect: false, // 네트워크 재연결 시 자동 패칭 비활성화
-    },
-  },
-});
+let browserQueryClient: QueryClient | undefined = undefined;
 
 export function getQueryClient() {
   if (isServer) {

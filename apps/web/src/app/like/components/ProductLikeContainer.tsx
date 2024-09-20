@@ -21,7 +21,7 @@ const ProductLikeContainer = () => {
     WishlistQueries.infiniteWishlists({
       orderBy: WishlistOrderType.Id,
       orderOption: OrderOptionType.Desc,
-      limit: 10,
+      limit: 18,
     }),
   );
 
@@ -41,7 +41,7 @@ const ProductLikeContainer = () => {
       <div className="pb-3 text-sm">
         전체 <span className="font-semibold">{wishlists.length}</span>개
       </div>
-      <div className="grid grid-cols-2 gap-x-3 gap-y-4">
+      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
         {wishlists.map((wishlist) => (
           <ProductLikeCard
             key={wishlist.id}

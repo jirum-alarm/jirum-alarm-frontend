@@ -9,7 +9,7 @@ const ProductLikeContainerServer = async () => {
     WishlistQueries.infiniteWishlistsServer({
       orderBy: WishlistOrderType.Id,
       orderOption: OrderOptionType.Desc,
-      limit: 10,
+      limit: 18,
     }),
   );
   return (
