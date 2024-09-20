@@ -2,7 +2,7 @@
 import { ProductLikeCard } from '@/features/products/components/ProductLikeCard';
 import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
-import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { useMutation, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Heart, LoadingSpinner } from '@/components/common/icons';
 import { useInView } from 'react-intersection-observer';
 import { WishlistQueries } from '@/entities/wishlist';
@@ -48,7 +48,7 @@ const ProductLikeContainer = () => {
             product={wishlist.product}
             collectProduct={(productId: number) => mutate({ productId })}
             logging={{ page: 'LIKE' }}
-            actionIcon={<ProductLikeAction />}
+            actionIcon={<ProductLikeAction productId={wishlist.product.id} />}
           />
         ))}
       </div>
@@ -61,30 +61,14 @@ const ProductLikeContainer = () => {
 
 export default ProductLikeContainer;
 
-const ProductLikeAction = () => {
+const ProductLikeAction = ({ productId }: { productId: string }) => {
   const [isLiked, setIsLiked] = useState(true);
-  const queryClient = useQueryClient();
+
   const { mutate: addWishlist } = useMutation({
     mutationFn: WishlistService.addWishlist,
-    onSuccess: () => {
-      // queryClient.invalidateQueries({
-      //   queryKey: productKey,
-      // });
-      queryClient.invalidateQueries({
-        queryKey: WishlistQueries.all(),
-      });
-    },
   });
   const { mutate: removeWishlist } = useMutation({
     mutationFn: WishlistService.removeWishlist,
-    onSuccess: () => {
-      // queryClient.invalidateQueries({
-      //   queryKey: productKey,
-      // });
-      queryClient.invalidateQueries({
-        queryKey: WishlistQueries.all(),
-      });
-    },
   });
 
   const handleClickWishlist = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -95,7 +79,7 @@ const ProductLikeAction = () => {
         type: EVENT.PRODUCT_WISH.TYPE.REMOVE,
         page: EVENT.PAGE.LIKE,
       });
-
+      removeWishlist({ productId: +productId });
       setIsLiked(false);
       return;
     }
@@ -105,6 +89,7 @@ const ProductLikeAction = () => {
         type: EVENT.PRODUCT_WISH.TYPE.ADD,
         page: EVENT.PAGE.LIKE,
       });
+      addWishlist({ productId: +productId });
       setIsLiked(true);
       return;
     }

@@ -4,11 +4,11 @@ import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 export const WishlistQueries = {
   all: () => ['wishlist'],
+  lists: () => [...WishlistQueries.all(), 'list'],
   wishlistsServer: (variables: QueryWishlistsQueryVariables) =>
     queryOptions({
       queryKey: [
-        ...WishlistQueries.all(),
-        'wishlist',
+        ...WishlistQueries.lists(),
         {
           orderBy: variables.orderBy,
           orderOption: variables.orderOption,
@@ -18,11 +18,22 @@ export const WishlistQueries = {
       ],
       queryFn: () => WishlistService.getWishlistsServer(variables),
     }),
-  infiniteWishlists: (variables: QueryWishlistsQueryVariables) =>
+  infiniteWishlistsServer: (variables: QueryWishlistsQueryVariables) =>
     infiniteQueryOptions({
       queryKey: [...WishlistQueries.wishlistsServer(variables).queryKey],
       queryFn: ({ pageParam }) =>
         WishlistService.getWishlistsServer({ ...variables, searchAfter: pageParam }),
+      initialPageParam: null as null | string,
+      getNextPageParam: (lastPage) => {
+        return lastPage.wishlists.at(-1)?.searchAfter?.[0];
+      },
+    }),
+  infiniteWishlists: (variables: QueryWishlistsQueryVariables) =>
+    infiniteQueryOptions({
+      staleTime: 0,
+      queryKey: [...WishlistQueries.wishlistsServer(variables).queryKey],
+      queryFn: ({ pageParam }) =>
+        WishlistService.getWishlists({ ...variables, searchAfter: pageParam }),
       initialPageParam: null as null | string,
       getNextPageParam: (lastPage) => {
         return lastPage.wishlists.at(-1)?.searchAfter?.[0];

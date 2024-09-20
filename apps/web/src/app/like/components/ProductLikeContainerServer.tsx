@@ -6,7 +6,7 @@ import { WishlistQueries } from '@/entities/wishlist';
 const ProductLikeContainerServer = async () => {
   const queryClient = new QueryClient();
   await queryClient.prefetchInfiniteQuery(
-    WishlistQueries.infiniteWishlists({
+    WishlistQueries.infiniteWishlistsServer({
       orderBy: WishlistOrderType.Id,
       orderOption: OrderOptionType.Desc,
       limit: 10,

@@ -11,12 +11,14 @@ export class WishlistService {
   static async addWishlist(variables: AddWishlistMutationVariables) {
     return httpClient.execute(MutationAddWishlist, variables).then((res) => res.data);
   }
-
   static async removeWishlist(variables: RemoveWishlistMutationVariables) {
     return httpClient.execute(MutationRemoveWidthlist, variables).then((res) => res.data);
   }
   static async getWishlistsServer(variables: QueryWishlistsQueryVariables) {
     return httpClient.server_execute(QueryWishlists, variables).then((res) => res.data);
+  }
+  static async getWishlists(variables: QueryWishlistsQueryVariables) {
+    return httpClient.execute(QueryWishlists, variables).then((res) => res.data);
   }
 }
 
