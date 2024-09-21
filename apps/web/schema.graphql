@@ -590,6 +590,10 @@ type Query {
   """
   userByEmail(email: String!): User!
   """
+  위시리스트 개수 조회
+  """
+  wishlistCount: Int!
+  """
   위시리스트 목록 조회
   """
   wishlists(

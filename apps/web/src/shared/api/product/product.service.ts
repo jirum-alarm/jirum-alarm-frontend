@@ -6,6 +6,7 @@ import {
   ProductQueryVariables,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsQueryVariables,
+  QueryWishlistsQueryVariables,
   RemoveWishlistMutationVariables,
   TogetherViewedProductsQueryVariables,
 } from '../gql/graphql';
@@ -47,14 +48,6 @@ export class ProductService {
 
   static async collectProduct(variables: MutationCollectProductMutationVariables) {
     return httpClient.execute(MutationCollectProduct, variables).then((res) => res.data);
-  }
-
-  static async addWishlist(variables: AddWishlistMutationVariables) {
-    return httpClient.execute(MutationAddWishlist, variables).then((res) => res.data);
-  }
-
-  static async removeWishlist(variables: RemoveWishlistMutationVariables) {
-    return httpClient.execute(MutationRemoveWidthlist, variables).then((res) => res.data);
   }
 }
 
@@ -219,17 +212,5 @@ const QueryTogetherViewedProducts = graphql(`
 const MutationCollectProduct = graphql(`
   mutation MutationCollectProduct($productId: Int!) {
     collectProduct(productId: $productId)
-  }
-`);
-
-const MutationAddWishlist = graphql(`
-  mutation AddWishlist($productId: Int!) {
-    addWishlist(productId: $productId)
-  }
-`);
-
-const MutationRemoveWidthlist = graphql(`
-  mutation RemoveWishlist($productId: Int!) {
-    removeWishlist(productId: $productId)
   }
 `);

@@ -18,7 +18,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
 const routeGuard = async (req: NextRequest, res: NextResponse) => {
   const { pathname } = req.nextUrl;
-  const protectedPaths = [PAGE.MYPAGE];
+  const protectedPaths = [PAGE.MYPAGE, PAGE.LIKE];
   const onlyRefreshTokenPaths = [PAGE.TRENDING];
 
   const isProtectedPath = protectedPaths.some((path) => pathname.startsWith(path));

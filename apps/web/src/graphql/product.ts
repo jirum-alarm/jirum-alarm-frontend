@@ -162,15 +162,3 @@ export const MutationCollectProduct = gql`
     collectProduct(productId: $productId)
   }
 `;
-
-export const MutationAddWishlist = gql`
-  mutation AddWishlist($productId: Int!) {
-    addWishlist(productId: $productId)
-  }
-`;
-
-export const MutationRemoveWishlist = gql`
-  mutation RemoveWishlist($productId: Int!) {
-    removeWishlist(productId: $productId)
-  }
-`;

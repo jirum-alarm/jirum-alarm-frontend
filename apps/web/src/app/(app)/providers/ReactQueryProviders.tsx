@@ -18,6 +18,9 @@ function makeQueryClient() {
         // With SSR, we usually want to set some default staleTime
         // above 0 to avoid refetching immediately on the client
         staleTime: 60 * 1000,
+        // Disable refetch on window focus and network reconnect
+        refetchOnWindowFocus: false, // 창이 포커스를 받을 때 자동 패칭 비활성화
+        refetchOnReconnect: false, // 네트워크 재연결 시 자동 패칭 비활성화
       },
       dehydrate: {
         // include pending queries in dehydration

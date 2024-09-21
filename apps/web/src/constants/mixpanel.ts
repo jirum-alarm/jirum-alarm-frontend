@@ -56,5 +56,6 @@ export const EVENT = {
     SEARCH_RESULT: 'Search Result',
     SEARCH_NOT_FOUND: 'Search Not Found',
     ALARM: 'Alarm',
+    LIKE: 'Like',
   },
 };
