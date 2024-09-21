@@ -20,6 +20,12 @@ export class WishlistService {
   static async getWishlists(variables: QueryWishlistsQueryVariables) {
     return httpClient.execute(QueryWishlists, variables).then((res) => res.data);
   }
+  static async getWishlistCount() {
+    return httpClient.execute(QueryWishlistCount).then((res) => res.data);
+  }
+  static async getWishlistCountServer() {
+    return httpClient.server_execute(QueryWishlistCount).then((res) => res.data);
+  }
 }
 
 const MutationAddWishlist = graphql(`
@@ -64,3 +70,10 @@ const QueryWishlists = graphql(`
     }
   }
 `);
+
+// const QueryWishlistCount = graphql(`
+//   query QueryWishlistCount {
+//     wishlistCount
+//   }
+// `);
+const QueryWishlistCount = graphql('\n  query QueryWishlistCount {\n    wishlistCount \n  }\n');

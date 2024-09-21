@@ -1,12 +1,6 @@
 import { SuspenseQueryHookOptions, useMutation, useSuspenseQuery } from '@apollo/client';
 
-import {
-  MutationAddWishlist,
-  MutationRemoveWishlist,
-  MutationCollectProduct,
-  QueryProducts,
-  QueryTogetherViewedProducts,
-} from '@/graphql';
+import { MutationCollectProduct, QueryProducts, QueryTogetherViewedProducts } from '@/graphql';
 import {
   IProduct,
   IProductOutput,
@@ -14,6 +8,7 @@ import {
   ProductOrderType,
   ProductThumbnailType,
 } from '@/graphql/interface';
+import { MutationAddWishlist, MutationRemoveWishlist } from '@/graphql/wishlist';
 
 export const useCollectProduct = () => {
   const result = useMutation<unknown, { productId: number }>(MutationCollectProduct);

@@ -5,13 +5,18 @@ import { WishlistQueries } from '@/entities/wishlist';
 
 const ProductLikeContainerServer = async () => {
   const queryClient = new QueryClient();
-  await queryClient.prefetchInfiniteQuery(
-    WishlistQueries.infiniteWishlistsServer({
-      orderBy: WishlistOrderType.Id,
-      orderOption: OrderOptionType.Desc,
-      limit: 18,
-    }),
-  );
+
+  await Promise.all([
+    queryClient.prefetchInfiniteQuery(
+      WishlistQueries.infiniteWishlistsServer({
+        orderBy: WishlistOrderType.Id,
+        orderOption: OrderOptionType.Desc,
+        limit: 18,
+      }),
+    ),
+    queryClient.prefetchQuery(WishlistQueries.wishlistCountServer()),
+  ]);
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <ProductLikeContainer />

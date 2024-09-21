@@ -551,6 +551,8 @@ export type Query = {
   user: User;
   /** 이메일로 유저 조회 */
   userByEmail: User;
+  /** 위시리스트 개수 조회 */
+  wishlistCount: Scalars['Int']['output'];
   /** 위시리스트 목록 조회 */
   wishlists: Array<WishlistOutput>;
 };
@@ -1153,6 +1155,10 @@ export type QueryWishlistsQuery = {
   }>;
 };
 
+export type QueryWishlistCountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryWishlistCountQuery = { __typename?: 'Query'; wishlistCount: number };
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -1522,3 +1528,8 @@ export const QueryWishlistsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<QueryWishlistsQuery, QueryWishlistsQueryVariables>;
+export const QueryWishlistCountDocument = new TypedDocumentString(`
+    query QueryWishlistCount {
+  wishlistCount
+}
+    `) as unknown as TypedDocumentString<QueryWishlistCountQuery, QueryWishlistCountQueryVariables>;

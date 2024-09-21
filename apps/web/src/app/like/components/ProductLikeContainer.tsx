@@ -2,7 +2,12 @@
 import { ProductLikeCard } from '@/features/products/components/ProductLikeCard';
 import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
-import { useMutation, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { Heart, LoadingSpinner } from '@/components/common/icons';
 import { useInView } from 'react-intersection-observer';
 import { WishlistQueries } from '@/entities/wishlist';
@@ -10,6 +15,8 @@ import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
 import { useState } from 'react';
 import { EVENT } from '@/constants/mixpanel';
 import { mp } from '@/lib/mixpanel';
+
+const LIMIT = 18;
 
 const ProductLikeContainer = () => {
   const { mutate } = useMutation({ mutationFn: ProductService.collectProduct });
@@ -21,25 +28,28 @@ const ProductLikeContainer = () => {
     WishlistQueries.infiniteWishlists({
       orderBy: WishlistOrderType.Id,
       orderOption: OrderOptionType.Desc,
-      limit: 18,
+      limit: LIMIT,
     }),
   );
+  const {
+    data: { wishlistCount },
+  } = useSuspenseQuery(WishlistQueries.wishlistCount());
+
+  const wishlists = pages.flatMap((page) => page.wishlists);
 
   const { ref: loadingCallbackRef } = useInView({
     threshold: 0,
     onChange: (inView) => {
-      if (inView && pages[0].wishlists.length) {
+      if (inView && wishlists.length >= LIMIT) {
         fetchNextPage();
       }
     },
   });
 
-  const wishlists = pages.flatMap((page) => page.wishlists);
-
   return (
     <div>
       <div className="pb-3 text-sm">
-        전체 <span className="font-semibold">{wishlists.length}</span>개
+        전체 <span className="font-semibold">{wishlistCount}</span>개
       </div>
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
         {wishlists.map((wishlist) => (

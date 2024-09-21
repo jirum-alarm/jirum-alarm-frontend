@@ -33,7 +33,6 @@ export const WishlistQueries = {
     }),
   infiniteWishlistsServer: (variables: QueryWishlistsQueryVariables) =>
     infiniteQueryOptions({
-      staleTime: 0,
       queryKey: [...WishlistQueries.wishlistsServer(variables).queryKey],
       queryFn: ({ pageParam }) =>
         WishlistService.getWishlistsServer({ ...variables, searchAfter: pageParam }),
@@ -52,5 +51,16 @@ export const WishlistQueries = {
       getNextPageParam: (lastPage) => {
         return lastPage.wishlists.at(-1)?.searchAfter?.[0];
       },
+    }),
+  wishlistCountServer: () =>
+    queryOptions({
+      queryKey: [...WishlistQueries.all(), 'wishlistcount'],
+      queryFn: () => WishlistService.getWishlistCountServer(),
+    }),
+  wishlistCount: () =>
+    queryOptions({
+      staleTime: 0,
+      queryKey: [...WishlistQueries.all(), 'wishlistcount'],
+      queryFn: () => WishlistService.getWishlistCount(),
     }),
 };
