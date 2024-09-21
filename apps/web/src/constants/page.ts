@@ -25,4 +25,6 @@ export enum PAGE {
 
   POLICIES_PRIVACY = '/policies/privacy',
   POLICIES_TERMS = '/policies/terms',
+
+  LIKE = '/like',
 }
