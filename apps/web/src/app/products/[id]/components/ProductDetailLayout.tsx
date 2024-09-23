@@ -15,6 +15,7 @@ import { ProductQueries } from '@/entities/product';
 import { cn } from '@/lib/cn';
 import { ProductGuidesQuery, ProductQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
+import { NoticeProfitLink } from './NoticeProfitUrl';
 
 type Product = NonNullable<ProductQuery['product']>;
 type ProductGuides = ProductGuidesQuery['productGuides'];
@@ -38,7 +39,7 @@ function ProductDetailLayout({
     <>
       <main className="border-x border-t border-gray-200">
         <ProductImage product={{ title: product.title, thumbnail: product.thumbnail }} />
-        <div className="relative z-10 w-full rounded-t-3xl bg-white py-8">
+        <div className="relative z-10 w-full rounded-t-3xl bg-white pt-8">
           <ProductInfoLayout>
             <ProductInfo product={product} />
             <HotdealGuide productGuides={productGuides} />
@@ -47,6 +48,7 @@ function ProductDetailLayout({
             <CommunityReaction product={product} />
             <RelatedProductsContainer product={product} />
             <PopularProductsContainer product={product} />
+            <NoticeProfitLink />
           </ProductInfoLayout>
           <BottomCTA product={product} isUserLogin={isUserLogin} />
         </div>
