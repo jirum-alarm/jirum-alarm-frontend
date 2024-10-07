@@ -15,8 +15,6 @@ RUN corepack enable
 RUN npm install turbo --global
 RUN pnpm config set store-dir ~/.pnpm-store
 
-RUN turbo --version
-
 # 2. Prune projects
 FROM base AS pruner
 ARG PROJECT
