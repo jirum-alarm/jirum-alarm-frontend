@@ -1,11 +1,14 @@
-FROM --platform=linux/amd64 node:18-alpine AS alpine
+
+ARG NODE_VERSION=20.11
+
+FROM --platform=linux/amd64 node:${NODE_VERSION}-alpine AS alpine
 
 # setup pnpm on the alpine base
 FROM alpine as base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
-RUN pnpm install turbo@^2 --global
+RUN pnpm install turbo --global
 
 FROM base AS builder
 RUN apk update
@@ -37,7 +40,7 @@ RUN pnpm turbo run build --filter=web...
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
+ENV NODE_ENV=development
  
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs

@@ -1,8 +1,8 @@
 services:
   jirum-alarm-web-development:
     build:
-      context: ../../
-      dockerfile: deploy/development/Dockerfile
+      context: ../../../../
+      dockerfile: apps/web/deploy/development/Dockerfile
     image: jirum-alarm-web-development
     ports:
       - '3001:3000'

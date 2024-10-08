@@ -102,6 +102,9 @@ importers:
       '@sentry/nextjs':
         specifier: ^7.105.0
         version: 7.107.0(next@14.2.4(@babel/core@7.23.9)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(webpack@5.90.3(@swc/core@1.4.2(@swc/helpers@0.5.5))(esbuild@0.18.20))
+      '@sentry/utils':
+        specifier: ^8.33.1
+        version: 8.33.1
       '@tanstack/react-query':
         specifier: ^5.51.23
         version: 5.53.1(react@18.2.0)
@@ -2637,9 +2640,17 @@ packages:
     resolution: {integrity: sha512-H7qcPjPSUWHE/Zf5bR1EE24G0pGVuJgrSx8Tvvl5nKEepswMYlbXHRVSDN0gTk/E5Z7cqf+hUBOpkQgZyps77w==}
     engines: {node: '>=8'}
 
+  '@sentry/types@8.33.1':
+    resolution: {integrity: sha512-GjoAMvwtpIemoF/IiwZ7A60g4nQv3qwzR21GvJqDVUoKD0e8pv9OLX+HyXoUat4wEDGSuDUcUyUKD2G+od73QA==}
+    engines: {node: '>=14.18'}
+
   '@sentry/utils@7.107.0':
     resolution: {integrity: sha512-C6PbN5gHh73MRHohnReeQ60N8rrLYa9LciHue3Ru2290eSThg4CzsPnx4SzkGpkSeVlhhptKtKZ+hp/ha3iVuw==}
     engines: {node: '>=8'}
+
+  '@sentry/utils@8.33.1':
+    resolution: {integrity: sha512-uzuYpiiJuFY3N4WNHMBWUQX5oNv2t/TbG0OHRp3Rr7yeu+HSfD542TIp9/gMZ+G0Cxd8AmVO3wkKIFbk0TL4Qg==}
+    engines: {node: '>=14.18'}
 
   '@sentry/vercel-edge@7.107.0':
     resolution: {integrity: sha512-8p4v0QrMus3lVOwfIfevf/F+GuJnkC/0CIyp69FF7RMHb0zvkCmuXBjuski1AMD5aCL+E3e4MEU73UKA5XNqSA==}
@@ -11844,9 +11855,15 @@ snapshots:
 
   '@sentry/types@7.107.0': {}
 
+  '@sentry/types@8.33.1': {}
+
   '@sentry/utils@7.107.0':
     dependencies:
       '@sentry/types': 7.107.0
+
+  '@sentry/utils@8.33.1':
+    dependencies:
+      '@sentry/types': 8.33.1
 
   '@sentry/vercel-edge@7.107.0':
     dependencies:
