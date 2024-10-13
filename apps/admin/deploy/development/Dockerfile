@@ -67,8 +67,8 @@ COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/package.json .
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/.next/standalone ./
-COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/.next/static ./apps/${APP_DIRNAME}/.next/static
+COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/.next/static ./.next/static
 COPY --from=dependencies --chown=remix:nodejs /dependencies/node_modules ./node_modules
-COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/public ./apps/${A}/public
+COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/public ./public
 
-CMD ["node", "/app/server.js"]
+CMD ["node", "/app/apps/admin/server.js"]

@@ -51,7 +51,8 @@
     "sharp": "^0.33.3",
     "swiper": "^11.1.1",
     "tailwind-merge": "^2.2.1",
-    "tailwind-scrollbar-hide": "^1.1.7"
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "clsx": "^2.1.0"
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.12",
@@ -84,7 +85,6 @@
     "@typescript-eslint/eslint-plugin": "^8.4.0",
     "@typescript-eslint/parser": "^8.4.0",
     "autoprefixer": "^10.4.17",
-    "clsx": "^2.1.0",
     "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.1.0",
