@@ -1,59 +1,52 @@
+ARG --platform=linux/amd64 NODE_VERSION=20.11
 
-ARG NODE_VERSION=20.11
+FROM --platform=linux/amd64 node:${NODE_VERSION}-alpine AS base
 
-FROM --platform=linux/amd64 node:${NODE_VERSION}-alpine AS alpine
-
-# setup pnpm on the alpine base
-FROM alpine as base
+# Setup pnpm on the base image
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
-RUN pnpm install turbo --global
+RUN corepack enable && pnpm install turbo --global
 
+# Prepare the build
 FROM base AS builder
-RUN apk update
-RUN apk add --no-cache libc6-compat
+RUN apk update && apk add --no-cache libc6-compat
 
 # Set working directory
 WORKDIR /app
 COPY . .
 # Generate a partial monorepo with a pruned lockfile for a target workspace.
-# Assuming "web" is the name entered in the project's package.json: { name: "web" }
 RUN turbo prune web --docker
- 
-# Add lockfile and package.json's of isolated subworkspace
+
+# Install dependencies for isolated subworkspace
 FROM base AS installer
-RUN apk update
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
- 
+
 # First install the dependencies (as they change less often)
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN pnpm install --filter=web
- 
+RUN pnpm install --filter=web --prefer-frozen-lockfile
+
 # Build the project
 COPY --from=builder /app/out/full/ .
 RUN pnpm turbo run build --filter=web...
- 
-FROM base AS runner
+
+# Set up the runner environment
+FROM node:${NODE_VERSION}-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
- 
+
 # Don't run production as root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
 USER nextjs
- 
+
 COPY --from=installer /app/apps/web/next.config.js .
 COPY --from=installer /app/apps/web/package.json .
- 
+
 # Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
- 
-CMD node /app/apps/web/server.js
+
+CMD ["node", "/app/server.js"]
