@@ -1,4 +1,4 @@
-ARG --platform=linux/amd64 NODE_VERSION=20.11
+ARG NODE_VERSION=20.11
 
 FROM --platform=linux/amd64 node:${NODE_VERSION}-alpine AS base
 
@@ -25,7 +25,7 @@ WORKDIR /app
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN pnpm install --filter=web --prefer-frozen-lockfile
+RUN pnpm install --filter=web
 
 # Build the project
 COPY --from=builder /app/out/full/ .
