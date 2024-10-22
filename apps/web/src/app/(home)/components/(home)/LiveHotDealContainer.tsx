@@ -8,7 +8,7 @@ const LiveHotDealContainer = () => {
   return (
     <div className="px-4">
       <div className="flex items-center justify-between pb-5 pt-2">
-        <h2 className="text-lg font-semibold text-gray-900">실시간 핫딜</h2>
+        <h2 className="text-lg font-bold text-gray-900">실시간 핫딜</h2>
       </div>
       <div className="pb-5">
         <Suspense fallback={<LiveHotDealListSkeleton />}>

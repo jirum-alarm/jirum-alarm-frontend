@@ -33,13 +33,13 @@ const HomeBackgroundHeader = () => {
       <header className="flex h-[56px] w-full items-center justify-between px-5 py-3">
         <div className="flex items-center gap-2">
           <RoundedLogo />
-          <h2 className="text-lg font-medium text-slate-50">지름알림</h2>
+          <h2 className="text-lg font-bold text-slate-50">지름알림</h2>
         </div>
         <SearchButton />
       </header>
       <div className="px-5 py-2">
         <Link
-          className="flex h-[64px] w-full items-center justify-between bg-gray-800 px-4 py-3"
+          className="flex h-[64px] w-full items-center justify-between rounded-lg bg-gray-800 px-4 py-3"
           href={'/alarm'}
         >
           <p className="text-left">
