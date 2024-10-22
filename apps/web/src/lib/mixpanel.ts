@@ -3,7 +3,7 @@
 import mixpanel, { Mixpanel } from 'mixpanel-browser';
 import { useEffect } from 'react';
 
-import { IS_VERCEL_PRD } from '@/constants/env';
+import { IS_PRD } from '@/constants/env';
 
 class MixpanelService {
   private static instance: Mixpanel;
@@ -11,7 +11,7 @@ class MixpanelService {
   private constructor() {}
 
   public static getInstance(): Mixpanel {
-    if (IS_VERCEL_PRD && typeof window !== 'undefined' && !MixpanelService.instance) {
+    if (IS_PRD && typeof window !== 'undefined' && !MixpanelService.instance) {
       mixpanel.init('99abe16c628a67e5eabe97cce1956b82', {
         debug: true,
         track_pageview: 'full-url',

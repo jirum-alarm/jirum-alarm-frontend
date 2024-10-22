@@ -3,8 +3,8 @@ version: '3'
 services:
   jirum-alarm-admin-development:
     build:
-      context: ../../
-      dockerfile: docker/development/Dockerfile
+      context: ../../../../
+      dockerfile: apps/admin/deploy/development/Dockerfile
     image: jirum-alarm-admin-development
     ports:
       - '3001:3000'

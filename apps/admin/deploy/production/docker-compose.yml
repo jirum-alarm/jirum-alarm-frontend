@@ -4,7 +4,7 @@ services:
   jirum-alarm-admin-production:
     build:
       context: ../../
-      dockerfile: docker/production/Dockerfile
+      dockerfile: deploy/production/Dockerfile
     image: jirum-alarm-admin-production
     ports:
       - '3002:3000'

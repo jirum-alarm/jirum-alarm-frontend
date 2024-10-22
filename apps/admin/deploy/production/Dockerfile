@@ -5,7 +5,7 @@ FROM alpine as base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
-RUN pnpm install turbo@^2 --global
+RUN pnpm install turbo --global
 
 FROM base AS builder
 RUN apk update
@@ -28,7 +28,7 @@ WORKDIR /app
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN pnpm install
+RUN pnpm install --filter=admin
  
 # Build the project
 COPY --from=builder /app/out/full/ .
