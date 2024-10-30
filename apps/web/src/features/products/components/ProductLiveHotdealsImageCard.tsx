@@ -15,7 +15,6 @@ export function ProductLiveHotdealsImageCard({
 }: {
   product: QueryProductsQuery['products'][number];
   collectProduct: (productId: number) => void;
-  type?: 'product' | 'hotDeal';
   logging: { page: keyof typeof EVENT.PAGE };
 }) {
   const handleClick = () => {
@@ -63,7 +62,7 @@ export function ProductLiveHotdealsImageCard({
           {product.title}
         </span>
         <div className="flex h-9 items-center pt-1">
-          <span className="line-clamp-1 max-w-[98px] text-lg font-semibold text-gray-900">
+          <span className="line-clamp-1 max-w-[98px] text-lg font-bold text-gray-900">
             {product?.price ?? ''}
           </span>
           {product?.price && <span className="w-2"></span>}

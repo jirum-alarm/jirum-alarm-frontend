@@ -19,7 +19,7 @@ export default function CommunityReaction({
   const positivePercent = nanSafe((positiveCount / allCount) * 100).toFixed(0);
   const negativePercent = nanSafe((negativeCount / allCount) * 100).toFixed(0);
 
-  const isPostiveMax = +positivePercent === 100;
+  const isPositiveMax = +positivePercent === 100;
 
   const handleCommunityLinkClick = () => {
     mp.track(EVENT.COMMUNITY_LINK_CLICK.NAME, {
@@ -139,18 +139,16 @@ export default function CommunityReaction({
               </svg>
             </div>
           </div>
-          <div className="flex justify-between pt-2">
-            <div className="relative h-7 w-full rounded-full bg-gray-100">
-              <div
-                className={cn('absolute h-full rounded-l-full bg-gray-900', {
-                  'rounded-full': isPostiveMax,
-                })}
-                style={{ width: `${positivePercent}%`, transition: 'width 2s ease-in-out' }}
-              ></div>
-              <div className="relative flex h-full items-center justify-between px-2">
-                <span className="text-sm font-semibold text-primary-500">{positivePercent}%</span>
-                <span className="right-2 text-sm text-gray-500">{negativePercent}%</span>
-              </div>
+          <div className="relative h-7 w-full rounded-full bg-gray-200">
+            <div
+              className={cn('absolute h-full rounded-l-full bg-gray-900', {
+                'rounded-full': isPositiveMax,
+              })}
+              style={{ width: `${positivePercent}%`, transition: 'width 2s ease-in-out' }}
+            ></div>
+            <div className="relative flex h-full items-center justify-between px-2">
+              <span className="text-sm font-semibold text-primary-600">{positivePercent}%</span>
+              <span className="right-2 text-sm text-gray-700">{negativePercent}%</span>
             </div>
           </div>
           <a

@@ -37,7 +37,7 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
       {liveProducts ? (
         <div className="py-10">
           <div className="flex w-full items-center justify-between pb-4 ">
-            <span className="font-semibold text-gray-900">{`‘${categoryName}’ 실시간 핫딜`}</span>
+            <span className="font-bold text-gray-900">{`‘${categoryName}’ 실시간 핫딜`}</span>
           </div>
           <div>
             <Swiper

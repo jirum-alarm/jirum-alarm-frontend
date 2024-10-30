@@ -6,11 +6,13 @@ import { useState } from 'react';
 import Button from '@/components/common/Button';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
-import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { ProductQuery } from '@/shared/api/gql/graphql';
-import { useMutation } from '@tanstack/react-query';
-import { ProductService } from '@/shared/api/product';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ProductQueries } from '@/entities/product';
+import { Heart } from '@/components/common/icons';
+import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
+import { WishlistQueries } from '@/entities/wishlist';
 
 export default function LikeButton({
   product,
@@ -25,8 +27,35 @@ export default function LikeButton({
 
   const router = useRouter();
 
-  const { mutate: addWishlist } = useMutation({ mutationFn: ProductService.addWishlist });
-  const { mutate: removeWishlist } = useMutation({ mutationFn: ProductService.removeWishlist });
+  const productKey = ProductQueries.product({ id: productId }).queryKey;
+  const queryClient = useQueryClient();
+
+  const { mutate: addWishlist } = useMutation({
+    mutationFn: WishlistService.addWishlist,
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: productKey,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: WishlistQueries.lists(),
+        }),
+      ]);
+    },
+  });
+  const { mutate: removeWishlist } = useMutation({
+    mutationFn: WishlistService.removeWishlist,
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: productKey,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: WishlistQueries.lists(),
+        }),
+      ]);
+    },
+  });
 
   const handleClickWishlist = () => {
     if (!isUserLogin) {
@@ -70,36 +99,8 @@ export default function LikeButton({
       onClick={handleClickWishlist}
       className="flex w-[52px] min-w-[52px] flex-col items-center justify-center border-gray-300 px-2 py-1"
     >
-      <HeartIcon isLiked={!!isLiked} />
+      <Heart isLiked={!!isLiked} />
       <span className="text-[11px] leading-4 text-gray-900">찜하기</span>
     </Button>
-  );
-}
-
-function HeartIcon({ isLiked }: { isLiked: boolean }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="transparent"
-      className={cn({
-        'fill-error-400': isLiked,
-      })}
-      style={{ transition: 'fill 0.3s ease-out' }}
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M11.9931 5.33265C10.0271 3.03418 6.74861 2.4159 4.2853 4.52061C1.82199 6.62531 1.47519 10.1443 3.40964 12.6335C5.018 14.7032 9.88548 19.0682 11.4808 20.481C11.6593 20.639 11.7485 20.7181 11.8526 20.7491C11.9434 20.7762 12.0428 20.7762 12.1337 20.7491C12.2378 20.7181 12.327 20.639 12.5055 20.481C14.1008 19.0682 18.9683 14.7032 20.5766 12.6335C22.5111 10.1443 22.2066 6.60317 19.701 4.52061C17.1953 2.43804 13.9592 3.03418 11.9931 5.33265Z"
-        stroke="#344054"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={cn({ 'stroke-error-400': isLiked })}
-        style={{ transition: 'stroke 0.1s ease-out' }}
-      />
-    </svg>
   );
 }

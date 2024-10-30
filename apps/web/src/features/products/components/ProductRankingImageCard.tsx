@@ -52,7 +52,7 @@ export function ProductRankingImageCard({
         </div>
         <div className="p-3 pb-0">
           <div className="line-clamp-2 text-sm text-gray-700">{product.title}</div>
-          <div className="pt-2 text-lg font-semibold text-gray-900">{product.price ?? ''}</div>
+          <div className="pt-2 text-lg font-bold text-gray-900">{product.price ?? ''}</div>
         </div>
       </div>
     </Link>

@@ -110,6 +110,7 @@ const ImageWithFallback = React.memo(function ImageWithFallback({
           width={162}
           height={162}
           alt={title}
+          aria-hidden="true"
           onError={() => setError(true)}
           unoptimized
           placeholder="blur"

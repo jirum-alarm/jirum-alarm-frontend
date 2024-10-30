@@ -1,7 +1,7 @@
 'use server';
 import { cookies } from 'next/headers';
 
-import { IS_VERCEL_PRD } from '@/constants/env';
+import { IS_PRD } from '@/constants/env';
 import { postHogClient } from '@/lib/posthog';
 
 const FEATURE_FLAG_PRD_SUFFIX = '_PROD';
@@ -80,7 +80,7 @@ async function getFeatureFlag() {
   const flags = (await posthog.getAllFlags(distinctID)) as FeatureFlagMap;
   validateFeatureFlagKeys(flags);
 
-  return { flags: filterAndNormalizeFeatureFlags(flags, IS_VERCEL_PRD) };
+  return { flags: filterAndNormalizeFeatureFlags(flags, IS_PRD) };
 }
 
 export { getFeatureFlag };

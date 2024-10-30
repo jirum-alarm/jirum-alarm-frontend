@@ -19,16 +19,18 @@ const useLiveHotDealsViewModel = () => {
     }),
   );
 
+  const products = pages.flatMap((page) => page.products);
+
   const { ref: loadingCallbackRef } = useInView({
     threshold: 0,
     onChange: (inView) => {
-      if (inView && pages[0].products.length) {
+      if (inView && products.length >= limit) {
         fetchNextPage();
       }
     },
   });
   return {
-    products: pages.flatMap((page) => page.products),
+    products,
     loadingCallbackRef,
     isFetchingNextPage,
   };

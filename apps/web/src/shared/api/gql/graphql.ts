@@ -551,6 +551,8 @@ export type Query = {
   user: User;
   /** 이메일로 유저 조회 */
   userByEmail: User;
+  /** 위시리스트 개수 조회 */
+  wishlistCount: Scalars['Int']['output'];
   /** 위시리스트 목록 조회 */
   wishlists: Array<WishlistOutput>;
 };
@@ -963,7 +965,6 @@ export type ProductQuery = {
     detailUrl?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
-    isProfitUrl: boolean;
     price?: string | null;
     postedAt: any;
     thumbnail?: string | null;
@@ -1124,6 +1125,39 @@ export type RemoveWishlistMutationVariables = Exact<{
 }>;
 
 export type RemoveWishlistMutation = { __typename?: 'Mutation'; removeWishlist: boolean };
+
+export type QueryWishlistsQueryVariables = Exact<{
+  orderBy: WishlistOrderType;
+  orderOption: OrderOptionType;
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+}>;
+
+export type QueryWishlistsQuery = {
+  __typename?: 'Query';
+  wishlists: Array<{
+    __typename?: 'WishlistOutput';
+    id: string;
+    productId: number;
+    searchAfter?: Array<string> | null;
+    product: {
+      __typename?: 'ProductOutput';
+      id: string;
+      title: string;
+      price?: string | null;
+      isHot?: boolean | null;
+      isEnd?: boolean | null;
+      isPrivate: boolean;
+      postedAt: any;
+      thumbnail?: string | null;
+      isMyWishlist?: boolean | null;
+    };
+  }>;
+};
+
+export type QueryWishlistCountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryWishlistCountQuery = { __typename?: 'Query'; wishlistCount: number };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -1314,7 +1348,6 @@ export const ProductDocument = new TypedDocumentString(`
     detailUrl
     isHot
     isEnd
-    isProfitUrl
     price
     postedAt
     thumbnail
@@ -1470,3 +1503,33 @@ export const RemoveWishlistDocument = new TypedDocumentString(`
   removeWishlist(productId: $productId)
 }
     `) as unknown as TypedDocumentString<RemoveWishlistMutation, RemoveWishlistMutationVariables>;
+export const QueryWishlistsDocument = new TypedDocumentString(`
+    query QueryWishlists($orderBy: WishlistOrderType!, $orderOption: OrderOptionType!, $limit: Int!, $searchAfter: [String!]) {
+  wishlists(
+    orderBy: $orderBy
+    orderOption: $orderOption
+    limit: $limit
+    searchAfter: $searchAfter
+  ) {
+    id
+    productId
+    searchAfter
+    product {
+      id
+      title
+      price
+      isHot
+      isEnd
+      isPrivate
+      postedAt
+      thumbnail
+      isMyWishlist
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<QueryWishlistsQuery, QueryWishlistsQueryVariables>;
+export const QueryWishlistCountDocument = new TypedDocumentString(`
+    query QueryWishlistCount {
+  wishlistCount
+}
+    `) as unknown as TypedDocumentString<QueryWishlistCountQuery, QueryWishlistCountQueryVariables>;

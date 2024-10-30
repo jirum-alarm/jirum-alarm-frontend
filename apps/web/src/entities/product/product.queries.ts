@@ -27,6 +27,17 @@ export const ProductQueries = {
       ],
       queryFn: () => ProductService.getProduct(variables),
     }),
+  productServer: (variables: ProductQueryVariables) =>
+    queryOptions({
+      queryKey: [
+        ...ProductQueries.all(),
+        'detail',
+        {
+          id: variables.id,
+        },
+      ],
+      queryFn: () => ProductService.getProductServer(variables),
+    }),
   products: (variables: QueryProductsQueryVariables) =>
     queryOptions({
       queryKey: [

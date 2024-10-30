@@ -13,7 +13,6 @@ export const QueryProduct = gql`
       detailUrl
       isHot
       isEnd
-      isProfitUrl
       price
       postedAt
       thumbnail
@@ -161,17 +160,5 @@ export const QueryTogetherViewedProducts = gql`
 export const MutationCollectProduct = gql`
   mutation MutationCollectProduct($productId: Int!) {
     collectProduct(productId: $productId)
-  }
-`;
-
-export const MutationAddWishlist = gql`
-  mutation AddWishlist($productId: Int!) {
-    addWishlist(productId: $productId)
-  }
-`;
-
-export const MutationRemoveWishlist = gql`
-  mutation RemoveWishlist($productId: Int!) {
-    removeWishlist(productId: $productId)
   }
 `;

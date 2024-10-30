@@ -1,11 +1,43 @@
 import type { SVGProps } from 'react';
 
-const SvgSearch = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={28} height={28} fill="none" {...props}>
-    <path
-      fill={props.color ?? '#fff'}
-      d="m22.8 24.007-7.328-7.328a6.7 6.7 0 0 1-2.013 1.13 6.9 6.9 0 0 1-2.353.41q-2.991 0-5.063-2.072-2.072-2.07-2.072-5.062 0-2.989 2.072-5.063 2.07-2.073 5.061-2.073t5.064 2.072 2.072 5.063q0 1.25-.42 2.387a6.7 6.7 0 0 1-1.119 1.979l7.328 7.327zm-11.694-7.539q2.254 0 3.82-1.565t1.565-3.82-1.565-3.819q-1.566-1.565-3.82-1.565-2.255 0-3.82 1.565t-1.565 3.82 1.565 3.82 3.82 1.564"
-    />
-  </svg>
-);
+const SvgSearch = (props: SVGProps<SVGSVGElement>) => {
+  const { width, height, color, ...others } = props;
+  return (
+    <svg
+      width={width ?? 28}
+      height={height ?? 28}
+      viewBox="0 0 28 28"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...others}
+    >
+      <path
+        d="M23 23L17.0001 17M19 12C19 15.866 15.866 19 12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12Z"
+        stroke={color ?? '#fff'}
+        strokeWidth="1.5"
+        strokeLinecap="square"
+        strokeLinejoin="round"
+      />
+    </svg>
+
+    // <svg
+    //   width={width ?? 21}
+    //   height={height ?? 21}
+    //   viewBox="0 0 21 21"
+    //   fill="none"
+    //   xmlns="http://www.w3.org/2000/svg"
+    //   {...others}
+    // >
+    //   <path
+    //     fill={color ?? '#fff'}
+    //     d="M19 19L13.0001 13M15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8Z"
+    //     stroke="white"
+    //     strokeWidth="1.5"
+    //     strokeLinecap="square"
+    //     strokeLinejoin="round"
+    //   />
+    // </svg>
+  );
+};
+
 export default SvgSearch;

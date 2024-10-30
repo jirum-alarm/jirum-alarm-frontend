@@ -41,7 +41,7 @@ const documents = {
     types.QueryUnreadNotificationsCountDocument,
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n':
     types.MutationAddPushTokenDocument,
-  '\n  query product($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      isProfitUrl\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      guides {\n        id\n        title\n        content\n      }\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      isMyWishlist\n      categoryName\n    }\n  }\n':
+  '\n  query product($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      guides {\n        id\n        title\n        content\n      }\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      isMyWishlist\n      categoryName\n    }\n  }\n':
     types.ProductDocument,
   '\n  query productGuides($productId: Int!) {\n    productGuides(productId: $productId) {\n      id\n      title\n      content\n    }\n  }\n':
     types.ProductGuidesDocument,
@@ -59,6 +59,9 @@ const documents = {
     types.AddWishlistDocument,
   '\n  mutation RemoveWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n':
     types.RemoveWishlistDocument,
+  '\n  query QueryWishlists(\n    $orderBy: WishlistOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    wishlists(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      productId\n      searchAfter\n      product {\n        id\n        title\n        price\n        isHot\n        isEnd\n        isPrivate\n        postedAt\n        thumbnail\n        isMyWishlist\n      }\n    }\n  }\n':
+    types.QueryWishlistsDocument,
+  '\n  query QueryWishlistCount {\n    wishlistCount \n  }\n': types.QueryWishlistCountDocument,
 };
 
 /**
@@ -155,7 +158,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query product($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      isProfitUrl\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      guides {\n        id\n        title\n        content\n      }\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      isMyWishlist\n      categoryName\n    }\n  }\n',
+  source: '\n  query product($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      guides {\n        id\n        title\n        content\n      }\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      isMyWishlist\n      categoryName\n    }\n  }\n',
 ): typeof import('./graphql').ProductDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -205,6 +208,18 @@ export function graphql(
 export function graphql(
   source: '\n  mutation RemoveWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n',
 ): typeof import('./graphql').RemoveWishlistDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryWishlists(\n    $orderBy: WishlistOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    wishlists(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      productId\n      searchAfter\n      product {\n        id\n        title\n        price\n        isHot\n        isEnd\n        isPrivate\n        postedAt\n        thumbnail\n        isMyWishlist\n      }\n    }\n  }\n',
+): typeof import('./graphql').QueryWishlistsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryWishlistCount {\n    wishlistCount \n  }\n',
+): typeof import('./graphql').QueryWishlistCountDocument;
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

@@ -97,8 +97,9 @@ export const TrendingContainer = () => {
                 }}
                 onClick={() => handleTabChange(0)}
                 role="tab"
-                aria-selected={activeTab === 0}
+                aria-selected={activeTab === 0 ? 'true' : 'false'}
                 aria-controls={`panel-0`}
+                id={`tab-0`}
                 className={cn(
                   tabClassName,
                   activeTab === 0 ? 'font-medium text-gray-900' : 'text-gray-600',
@@ -141,6 +142,7 @@ export const TrendingContainer = () => {
             className="absolute right-0 top-0 flex h-10 w-11 items-center justify-end bg-fade-to-white"
             href={'/mypage/categories'}
             prefetch={false}
+            aria-label="카테고리 설정 페이지로 이동" // 추가: 명확한 링크 설명
           >
             <Setting />
           </Link>

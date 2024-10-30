@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Allow: /
+
+Sitemap: https://cdn.jirum-alarm.com/sitemap/title-index.xml

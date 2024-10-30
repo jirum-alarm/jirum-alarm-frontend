@@ -9,7 +9,7 @@ import { ProductQueries } from '@/entities/product';
 
 const ProductDetailContainerServer = async ({ productId }: { productId: number }) => {
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(ProductQueries.product({ id: productId }));
+  await queryClient.prefetchQuery(ProductQueries.productServer({ id: productId }));
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <BasicLayout header={<ProductDetailPageHeader productId={productId} />}>
