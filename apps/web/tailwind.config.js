@@ -9,6 +9,7 @@ module.exports = {
           'linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%)',
       },
       fontSize: {
+        s: ['0.8125rem', { lineHeight: '1rem' }], // 13px
         lg: [
           '1.125rem',
           {
@@ -70,6 +71,18 @@ module.exports = {
           700: '#344054',
           800: '#1D2939',
           900: '#101828',
+        },
+        secondary: {
+          50: '#EFF4FF',
+          100: '#DAE5FE',
+          200: '#B5CBFD',
+          300: '#91B1FB',
+          400: '#6C97FA',
+          500: '#477DF9',
+          600: '#3964C7',
+          700: '#2B4B95',
+          800: '#1C3264',
+          900: '#0E1932',
         },
       },
       boxShadow: {

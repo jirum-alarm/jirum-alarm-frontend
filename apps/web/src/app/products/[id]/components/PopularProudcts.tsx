@@ -30,7 +30,7 @@ export default function PopularProducts({
   }
 
   return (
-    <section>
+    <section className="px-5">
       <h2 className="pb-5 font-semibold text-gray-900">
         ‘{product.categoryName || '기타'}’에서 인기있는 상품
       </h2>

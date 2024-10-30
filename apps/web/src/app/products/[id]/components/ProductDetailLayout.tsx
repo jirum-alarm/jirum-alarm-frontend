@@ -2,7 +2,7 @@
 import 'swiper/css';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
 import BottomCTA from './BottomCTA';
 import CommunityReaction from './CommunityReaction';
@@ -16,6 +16,7 @@ import { cn } from '@/lib/cn';
 import { ProductGuidesQuery, ProductQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
 import { NoticeProfitLink } from './NoticeProfitUrl';
+import { useInView } from 'react-intersection-observer';
 
 type Product = NonNullable<ProductQuery['product']>;
 type ProductGuides = ProductGuidesQuery['productGuides'];
@@ -60,38 +61,57 @@ function ProductDetailLayout({
 export default ProductDetailLayout;
 
 function ProductInfoLayout({ children }: { children: React.ReactNode }) {
-  return <div className="flex flex-col gap-y-10 px-5">{children}</div>;
+  return <div className="flex flex-col gap-y-10">{children}</div>;
 }
 
 function ProductInfo({ product }: { product: Product }) {
+  const [isView, setIsView] = useState(true);
+  const { ref } = useInView({
+    threshold: 1,
+    onChange: (inView) => {
+      setIsView(inView);
+    },
+  });
   return (
     <section>
-      <h1 className="text-gray-800">{product.title}</h1>
-
-      <div>
-        <span className="text-green-700">{product?.viewCount}명</span>이 보고 있어요
+      <div className="px-5">
+        <div className="flex items-center gap-3 pb-2">
+          {product.isEnd ||
+            (product.isHot && (
+              <div
+                className={cn({
+                  'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-[20px]':
+                    true,
+                  'border border-gray-400 bg-white px-2 text-gray-500': product.isEnd,
+                  'bg-error-500 px-3 text-white ': !product.isEnd && product.isHot,
+                })}
+              >
+                {product.isEnd ? '판매종료' : product.isHot ? '핫딜' : ''}
+              </div>
+            ))}
+          <span className="text-s font-semibold text-gray-500">{product.mallName}</span>
+        </div>
+        <h1 className="text-gray-800">{product.title}</h1>
+        <div className="inline-flex items-center gap-x-3 pt-3">
+          {product.price && <p className="text-xl font-semibold">{product.price}</p>}
+          <span className="text-s text-gray-400">{displayTime(product.postedAt)}</span>
+        </div>
       </div>
-
-      <div className="inline-flex gap-x-2 pt-3">
-        {product.price && <p className="text-gray-800">{product.price}</p>}
+      <div ref={ref} className="flex h-[42px] w-full justify-center">
         <div
-          className={cn({
-            'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-[20px]': true,
-            'border border-gray-400 bg-white px-2 text-gray-600': product.isEnd,
-            'bg-error-500 px-3 text-white': !product.isEnd && product.isHot,
-          })}
+          className={cn(
+            `relative top-0 mt-5 flex h-[42px] w-full items-center justify-center bg-gray-50 text-sm text-gray-500 transition-all`,
+            {
+              'fixed top-[50px] z-50 mt-0 w-fit rounded-full border border-gray-100 px-5': !isView,
+            },
+          )}
         >
-          {product.isEnd ? '판매종료' : product.isHot ? '핫딜' : ''}
+          지금&nbsp;
+          <strong className="font-semibold text-secondary-500">
+            {product.viewCount.toLocaleString('ko-kr')}명
+          </strong>
+          이 보고 있어요
         </div>
-      </div>
-
-      <div className="flex items-center gap-x-3 pt-1">
-        <div className="inline-flex items-center gap-x-1">
-          <DisplayTimeIcon />
-          <span className="text-sm text-gray-600">{displayTime(product.postedAt)}</span>
-        </div>
-        <div className="h-2 border border-gray-400"></div>
-        <span className="text-sm text-gray-600">{product.mallName}</span>
       </div>
     </section>
   );
