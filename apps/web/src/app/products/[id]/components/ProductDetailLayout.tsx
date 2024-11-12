@@ -97,10 +97,28 @@ function ProductInfo({ product }: { product: Product }) {
           <span className="text-s text-gray-400">{displayTime(product.postedAt)}</span>
         </div>
       </div>
+      <div className="px-5 pt-4">
+        <div className="flex flex-col gap-[8px]">
+          <div className=" h-fit">
+            <span className="mr-[16px] inline-block w-[69px] text-sm text-gray-500">쇼핑몰</span>
+            <span className="text-sm font-medium text-gray-500">{product.mallName}</span>
+          </div>
+          <div>
+            <span className="mr-[16px] inline-block w-[69px] text-sm text-gray-500">업로드</span>
+            <span className="text-sm font-medium text-gray-500">지름알림</span>
+          </div>
+          <div>
+            <span className="mr-[16px] inline-block w-[69px] text-sm text-gray-500">
+              추천/비추천
+            </span>
+            <span className="text-sm font-medium text-gray-500">11번가</span>
+          </div>
+        </div>
+      </div>
       <div ref={ref} className="flex h-[42px] w-full justify-center">
         <div
           className={cn(
-            `relative top-0 mt-5 flex h-[42px] w-full items-center justify-center bg-gray-50 text-sm text-gray-500 transition-all`,
+            `relative top-0 mt-7 flex h-[42px] w-full items-center justify-center bg-gray-50 text-sm text-gray-500 transition-all`,
             {
               'fixed top-[50px] z-50 mt-0 w-fit rounded-full border border-gray-100 px-5': !isView,
             },
