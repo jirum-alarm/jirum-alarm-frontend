@@ -26,9 +26,7 @@ export default function RelatedProducts({
 
   return (
     <>
-      <div className="px-5">
-        <hr />
-      </div>
+      <div className="h-[8px] bg-gray-100" />
       <section className="px-5">
         <h2 className="pb-5 font-semibold text-gray-900">다른 고객이 함께 본 상품</h2>
         <Suspense fallback={<div></div>}>

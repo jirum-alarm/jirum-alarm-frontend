@@ -27,6 +27,7 @@ export { default as IllustError } from './IllustError';
 export { default as IllustStanding } from './IllustStanding';
 export { default as IllustStandingSmall } from './IllustStandingSmall';
 export { default as IllustWarning } from './IllustWarning';
+export { default as Info } from './Info';
 export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as Logo } from './Logo';
 export { default as My } from './My';

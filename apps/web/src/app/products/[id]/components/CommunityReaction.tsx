@@ -1,5 +1,6 @@
 'use client';
 
+import { Info } from '@/components/common/icons';
 import { EVENT } from '@/constants/mixpanel';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
@@ -30,13 +31,43 @@ export default function CommunityReaction({
   return (
     <>
       {/* @TODO: remove after add hotdeal index section */}
-      <div className="px-5">
-        <hr />
-      </div>
       <section className="px-5">
-        <h2 className="pb-3">커뮤니티 반응</h2>
-        <div className="rounded border p-5">
-          <div className="flex justify-between">
+        <div className="flex items-center justify-between pb-4">
+          <div className="flex items-center gap-2">
+            <h2 className="font-semibold text-gray-900">커뮤니티 반응</h2>
+            <Info />
+          </div>
+          <div>
+            <a
+              href={product.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleCommunityLinkClick}
+              className="flex items-center justify-end gap-1"
+            >
+              <p className="text-sm font-semibold text-gray-500">
+                ‘{product.provider.nameKr ?? '커뮤니티'}’ 반응 보러가기
+              </p>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.14307 15.7147L12.8574 10.0004L7.14307 4.28613"
+                  stroke="#667085"
+                  stroke-width="1.5"
+                  stroke-linecap="square"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div className="rounded border px-4 pb-8 pt-6">
+          <div className="flex justify-between pb-[10px]">
             <div className="inline-flex items-center gap-x-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -151,33 +182,10 @@ export default function CommunityReaction({
               <span className="right-2 text-sm text-gray-700">{negativePercent}%</span>
             </div>
           </div>
-          <a
-            href={product.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={handleCommunityLinkClick}
-            className="flex items-center justify-end pt-5"
-          >
-            <p className="pt-0.5 text-xs text-gray-500">
-              ‘{product.provider.nameKr ?? '커뮤니티'}’ 실제 반응 보러가기
-            </p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-            >
-              <path
-                d="M5.71436 12.5706L10.2858 7.99916L5.71436 3.42773"
-                stroke="#98A2B3"
-                strokeLinecap="square"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </a>
         </div>
       </section>
     </>
   );
 }
+
+const NoReaction = () => {};

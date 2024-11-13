@@ -1,6 +1,6 @@
 export function NoticeProfitLink() {
   return (
-    <section className="px-5">
+    <section>
       <div className="bg-gray-50 px-5 py-4 pb-4">
         <p className="text-black-500 mb-2 text-sm font-semibold">안내</p>
         <div className="flex">
