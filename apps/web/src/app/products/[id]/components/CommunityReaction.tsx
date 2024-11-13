@@ -66,7 +66,7 @@ export default function CommunityReaction({
             </a>
           </div>
         </div>
-        <div className="rounded border px-4 pb-8 pt-6">
+        <div className="rounded border border-gray-200 px-4 pb-8 pt-6">
           <div className="flex justify-between pb-[10px]">
             <div className="inline-flex items-center gap-x-1">
               <svg

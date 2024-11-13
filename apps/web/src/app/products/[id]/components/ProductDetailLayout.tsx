@@ -2,7 +2,7 @@
 import 'swiper/css';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import BottomCTA from './BottomCTA';
 import CommunityReaction from './CommunityReaction';
@@ -18,6 +18,7 @@ import { displayTime } from '@/util/displayTime';
 import { NoticeProfitLink } from './NoticeProfitUrl';
 import { useInView } from 'react-intersection-observer';
 import { Thumbsdown, Thumbsup } from '@/components/common/icons';
+import HotdealScore from './HotdealScore';
 
 type Product = NonNullable<ProductQuery['product']>;
 type ProductGuides = ProductGuidesQuery['productGuides'];
@@ -47,6 +48,7 @@ function ProductDetailLayout({
             <HotdealGuide productGuides={productGuides} />
             {/* TODO: wait for api */}
             {/* <HotdealIndex product={product} /> */}
+            <HotdealScore product={product} />
             <CommunityReaction product={product} />
             <RelatedProductsContainer product={product} />
             <PopularProductsContainer product={product} />
