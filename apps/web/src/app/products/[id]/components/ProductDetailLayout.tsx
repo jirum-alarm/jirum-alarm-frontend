@@ -17,6 +17,7 @@ import { ProductGuidesQuery, ProductQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
 import { NoticeProfitLink } from './NoticeProfitUrl';
 import { useInView } from 'react-intersection-observer';
+import { Thumbsdown, Thumbsup } from '@/components/common/icons';
 
 type Product = NonNullable<ProductQuery['product']>;
 type ProductGuides = ProductGuidesQuery['productGuides'];
@@ -99,19 +100,29 @@ function ProductInfo({ product }: { product: Product }) {
       </div>
       <div className="px-5 pt-4">
         <div className="flex flex-col gap-[8px]">
-          <div className=" h-fit">
+          <div>
             <span className="mr-[16px] inline-block w-[69px] text-sm text-gray-500">쇼핑몰</span>
             <span className="text-sm font-medium text-gray-500">{product.mallName}</span>
           </div>
-          <div>
+          {/* <div>
             <span className="mr-[16px] inline-block w-[69px] text-sm text-gray-500">업로드</span>
             <span className="text-sm font-medium text-gray-500">지름알림</span>
-          </div>
-          <div>
+          </div> */}
+          <div className="flex">
             <span className="mr-[16px] inline-block w-[69px] text-sm text-gray-500">
               추천/비추천
             </span>
-            <span className="text-sm font-medium text-gray-500">11번가</span>
+            {/* className="inline-flex items-center text-sm font-medium text-gray-500" */}
+            <div className="flex gap-3">
+              <div className="flex items-center gap-1">
+                <Thumbsup />
+                <span className="text-sm font-medium text-gray-600">165</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Thumbsdown />
+                <span className="text-sm font-medium text-gray-600">20</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
