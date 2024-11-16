@@ -30,9 +30,6 @@ export default function CommunityReaction({
   return (
     <>
       {/* @TODO: remove after add hotdeal index section */}
-      <div className="px-5">
-        <hr />
-      </div>
       <section className="px-5">
         <h2 className="pb-3">커뮤니티 반응</h2>
         <div className="rounded border p-5">

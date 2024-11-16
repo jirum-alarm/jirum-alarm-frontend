@@ -33,7 +33,7 @@ function ProductDetailLayout({
   const {
     data: { product },
   } = useSuspenseQuery(ProductQueries.product({ id: productId }));
-
+  console.log(product);
   if (!product) notFound();
 
   return (
@@ -44,8 +44,7 @@ function ProductDetailLayout({
           <ProductInfoLayout>
             <ProductInfo product={product} />
             <HotdealGuide productGuides={productGuides} />
-            {/* TODO: wait for api */}
-            {/* <HotdealIndex product={product} /> */}
+            <HotdealIndex product={product} />
             <CommunityReaction product={product} />
             <RelatedProductsContainer product={product} />
             <PopularProductsContainer product={product} />
@@ -191,8 +190,7 @@ function HotdealIndex({ product }: { product: Product }) {
 
   return (
     <>
-      <hr />
-      <section>
+      <section className="px-5">
         <h2 className="pb-3">핫딜 지수</h2>
         <div className="flex justify-between gap-x-16 rounded border p-5 pr-8">
           <div>
