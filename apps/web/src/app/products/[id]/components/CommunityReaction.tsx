@@ -35,7 +35,9 @@ export default function CommunityReaction({
         <div className="flex items-center justify-between pb-4">
           <div className="flex items-center gap-2">
             <h2 className="font-semibold text-gray-900">커뮤니티 반응</h2>
-            <Info />
+            <button>
+              <Info />
+            </button>
           </div>
           <div>
             <a

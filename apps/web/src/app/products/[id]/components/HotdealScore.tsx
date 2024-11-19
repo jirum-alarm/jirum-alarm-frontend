@@ -8,7 +8,9 @@ const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product'
     <section className="px-5">
       <div className="flex items-center gap-2 pb-4">
         <h2 className="font-semibold text-gray-900">핫딜 지수</h2>
-        <Info />
+        <button>
+          <Info />
+        </button>
       </div>
       <div className="rounded border border-gray-200 px-6 py-5">
         <div className="flex justify-between">
