@@ -15,7 +15,7 @@ type Story = StoryObj<typeof Tooltip>;
 export const Default: Story = {
   render: () => {
     return (
-      <div className=" p-10">
+      <div className="h-[800px] p-10">
         <Tooltip
           content={
             <p className="text-s text-white">

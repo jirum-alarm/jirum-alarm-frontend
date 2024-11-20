@@ -19,34 +19,19 @@ const Tooltip = ({ content, children }: Props) => {
 
   const updateTooltipPosition = () => {
     if (!triggerRef.current) return;
-    const {
-      top,
-      left,
-      width: triggerCompoWidth,
-      height: triggerCompoHeight,
-    } = triggerRef.current.getBoundingClientRect();
+    const { offsetTop, offsetLeft, offsetHeight, offsetWidth } = triggerRef.current;
+    // const {
+    //   top,
+    //   left,
+    //   width: triggerCompoWidth,
+    //   height: triggerCompoHeight,
+    // } = triggerRef.current.getBoundingClientRect();
     const polygonOffset = 28; // tooltip container기준 Polygon의 위치
     const polygonWidth = 10; // Polygon의 너비
     const offsetY = 14;
-    const offsetX = polygonOffset - triggerCompoWidth / 2 + polygonWidth / 2;
-    setPos({ x: left - offsetX, y: top + triggerCompoHeight + offsetY });
+    const offsetX = polygonOffset - offsetWidth / 2 + polygonWidth / 2;
+    setPos({ x: offsetLeft - offsetX, y: offsetTop + offsetHeight + offsetY });
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (isShow) {
-        updateTooltipPosition(); // 화면 크기 변경 시 위치 업데이트
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleResize);
-    };
-  }, [isShow]);
 
   const handleTrigger = () => {
     setShow((prev) => !prev);
@@ -62,13 +47,17 @@ const Tooltip = ({ content, children }: Props) => {
     : null;
 
   return (
-    <>
+    <div className="relative flex">
       {triggerButton}
       {isShow && (
         <div
           ref={toolTipContentRef}
-          className="fixed left-0 top-0 z-50 will-change-transform"
-          style={{ transform: `translate(${pos.x}px,${pos.y}px)` }}
+          className="absolute z-50 whitespace-nowrap will-change-transform"
+          // style={{ transform: `translate(${pos.x}px,${pos.y}px)` }}
+          style={{
+            top: pos.y, // 트리거 요소 기준 아래쪽
+            left: pos.x, // 중앙 정렬
+          }}
         >
           <div className="rounded-lg bg-gray-600 px-[16px] py-[10px]">{content}</div>
           <span className="absolute -top-[8px] left-[28px] text-gray-600">
@@ -84,7 +73,7 @@ const Tooltip = ({ content, children }: Props) => {
           </span>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
