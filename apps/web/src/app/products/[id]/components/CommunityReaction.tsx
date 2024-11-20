@@ -1,6 +1,7 @@
 'use client';
 
 import { Info } from '@/components/common/icons';
+import Tooltip from '@/components/common/Tooltip';
 import { EVENT } from '@/constants/mixpanel';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
@@ -35,9 +36,18 @@ export default function CommunityReaction({
         <div className="flex items-center justify-between pb-4">
           <div className="flex items-center gap-2">
             <h2 className="font-semibold text-gray-900">커뮤니티 반응</h2>
-            <button>
-              <Info />
-            </button>
+            <Tooltip
+              content={
+                <p className="text-s text-white">
+                  <strong className="font-semibold">실제 커뮤니티</strong> 사용자들의
+                  <br /> 핫딜 리뷰를 요약해 확인해요
+                </p>
+              }
+            >
+              <button>
+                <Info />
+              </button>
+            </Tooltip>
           </div>
           <div>
             <a

@@ -1,4 +1,5 @@
 import { Info } from '@/components/common/icons';
+import Tooltip from '@/components/common/Tooltip';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect, useRef } from 'react';
@@ -8,9 +9,19 @@ const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product'
     <section className="px-5">
       <div className="flex items-center gap-2 pb-4">
         <h2 className="font-semibold text-gray-900">핫딜 지수</h2>
-        <button>
-          <Info />
-        </button>
+        <Tooltip
+          content={
+            <p className="text-s text-white">
+              <strong className="font-semibold">다나와 최저가</strong>와{' '}
+              <strong className="font-semibold">역대 최저가</strong>를 비교하여
+              <br /> 현재 핫딜 정도를 계산해 볼 수 있어요
+            </p>
+          }
+        >
+          <button>
+            <Info />
+          </button>
+        </Tooltip>
       </div>
       <div className="rounded border border-gray-200 px-6 py-5">
         <div className="flex justify-between">
