@@ -8,16 +8,16 @@ interface Props {
 }
 
 const Tooltip = ({ content, children }: Props) => {
-  const [isShow, setShow] = useState(false);
+  const [isShowToolTip, setIsShowToolTip] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const toolTipContentRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLElement>(null);
 
   useOutsideClick(toolTipContentRef, () => {
-    setShow(false);
+    setIsShowToolTip(false);
   });
 
-  const updateTooltipPosition = () => {
+  const setTooltipPosition = () => {
     if (!triggerRef.current) return;
     const { offsetTop, offsetLeft, offsetHeight, offsetWidth } = triggerRef.current;
     // const {
@@ -33,25 +33,24 @@ const Tooltip = ({ content, children }: Props) => {
     setPos({ x: offsetLeft - offsetX, y: offsetTop + offsetHeight + offsetY });
   };
 
-  const handleTrigger = () => {
-    setShow((prev) => !prev);
-    updateTooltipPosition();
+  const handleShowToolTipClick = () => {
+    setIsShowToolTip((prev) => !prev);
+    setTooltipPosition();
   };
 
   const triggerButton = React.isValidElement(children)
     ? React.cloneElement(children, {
         ...children.props,
         ref: triggerRef,
-        onClick: composeEventHandlers(children?.props?.onClick, handleTrigger),
+        onClick: composeEventHandlers(children?.props?.onClick, handleShowToolTipClick),
       })
     : null;
 
   return (
-    <div className="relative flex">
+    <div className="relative flex" ref={toolTipContentRef}>
       {triggerButton}
-      {isShow && (
+      {isShowToolTip && (
         <div
-          ref={toolTipContentRef}
           className="absolute z-50 whitespace-nowrap will-change-transform"
           // style={{ transform: `translate(${pos.x}px,${pos.y}px)` }}
           style={{
