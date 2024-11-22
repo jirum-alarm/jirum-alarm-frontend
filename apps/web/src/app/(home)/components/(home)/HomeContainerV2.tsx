@@ -7,6 +7,9 @@ import SearchButton from '../../../../components/SearchLinkButton';
 
 import { RoundedLogo } from '@/components/common/icons';
 import TopButton from '@/components/TopButton';
+import { cn } from '@/lib/cn';
+import { mp } from '@/lib/mixpanel';
+import { EVENT } from '@/constants/mixpanel';
 
 const HomeContainerV2 = () => {
   return (
@@ -28,6 +31,12 @@ const HomeContainerV2 = () => {
 export default HomeContainerV2;
 
 const HomeBackgroundHeader = () => {
+  const handleClick = () => {
+    mp.track(EVENT.OPEN_KAKAO_TALK.NAME, {
+      page: EVENT.PAGE.HOME,
+    });
+  };
+
   return (
     <div className="fixed top-0 z-0 h-full w-full max-w-screen-layout-max bg-gray-900">
       <header className="flex h-[56px] w-full items-center justify-between px-5 py-3">
@@ -39,7 +48,11 @@ const HomeBackgroundHeader = () => {
       </header>
       <div className="px-5 pb-4 pt-2">
         <Link
-          className="flex h-[68px] w-full items-center justify-between rounded-lg border border-gray-600 bg-gray-800 py-3 pl-[16px] pr-[6px]"
+          onClick={handleClick}
+          className={cn(
+            'flex h-[68px] w-full items-center justify-between rounded-lg border border-gray-600 bg-gray-800 py-3 pl-[16px] pr-[6px]',
+            '',
+          )}
           href={'https://open.kakao.com/o/gJZTWAAg'}
           target="_blank"
         >
