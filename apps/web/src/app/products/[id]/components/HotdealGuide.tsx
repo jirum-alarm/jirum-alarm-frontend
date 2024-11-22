@@ -165,7 +165,9 @@ function HotdealGuideItem({ guide }: { guide: ProductGuidesQuery['productGuides'
   return (
     <div className="flex gap-x-2 px-3">
       {/* <div className="h-5 w-5 rounded-full bg-primary-100 p-[3px]"> */}
-      <HotdealGuideItemCheckIcon />
+      <div className="shrink-0">
+        <HotdealGuideItemCheckIcon />
+      </div>
       {/* </div> */}
       <div className="flex flex-col">
         <span className="text-sm font-semibold leading-5 text-gray-900">{guide.title}</span>
