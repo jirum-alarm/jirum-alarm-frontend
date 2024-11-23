@@ -48,6 +48,9 @@ export const EVENT = {
   SHOW_MORE_HOT_DEALS_CLICK: {
     NAME: 'Show More Hot Deals Click',
   },
+  OPEN_KAKAO_TALK: {
+    NAME: 'Open Kakao Talk Link Click',
+  },
   PAGE: {
     HOME: 'Home',
     TRENDING: 'Trending',
