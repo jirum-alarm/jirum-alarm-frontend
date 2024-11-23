@@ -15,22 +15,20 @@ const LiveHotDealList = () => {
   return (
     <>
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
-        {products
-          ?.slice(0, firstRenderingCount)
-          .map((product, i) => (
-            <ProductLiveHotdealsImageCard
-              key={i}
-              product={product}
-              collectProduct={collectProduct}
-              logging={{ page: 'HOME' }}
-            />
-          ))}
+        {products.slice(0, firstRenderingCount).map((product, i) => (
+          <ProductLiveHotdealsImageCard
+            key={product.id}
+            product={product}
+            collectProduct={collectProduct}
+            logging={{ page: 'HOME' }}
+          />
+        ))}
       </div>
       <AppDownloadCTA />
       <div className="mt-[20px] grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
         {products.slice(firstRenderingCount).map((product, i) => (
           <ProductLiveHotdealsImageCard
-            key={i}
+            key={product.id}
             product={product}
             collectProduct={collectProduct}
             logging={{ page: 'HOME' }}
