@@ -23,7 +23,7 @@ const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product'
           </button>
         </Tooltip>
       </div>
-      <div className="rounded border border-gray-200 px-6 py-5">
+      <div className="rounded-[8px] border border-gray-200 px-6 py-5">
         <div className="flex justify-between">
           <div className="pt-3">
             <div className="mb-3 h-[22px] w-fit rounded-[8px] bg-primary-100 px-3">
