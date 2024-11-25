@@ -19,6 +19,7 @@ import { NoticeProfitLink } from './NoticeProfitUrl';
 import { useInView } from 'react-intersection-observer';
 import { Thumbsdown, Thumbsup } from '@/components/common/icons';
 import HotdealScore from './HotdealScore';
+import ProductReport from './ProductReport';
 
 type Product = NonNullable<ProductQuery['product']>;
 type ProductGuides = ProductGuidesQuery['productGuides'];
@@ -50,6 +51,7 @@ function ProductDetailLayout({
             {/* <HotdealIndex product={product} /> */}
             <HotdealScore product={product} />
             <CommunityReaction product={product} />
+            <ProductReport />
             <RelatedProductsContainer product={product} />
             <PopularProductsContainer product={product} />
             <NoticeProfitLink />
