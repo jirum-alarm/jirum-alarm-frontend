@@ -25,6 +25,7 @@
     "@vercel/speed-insights": "^1.0.11",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
+    "clsx": "^2.1.0",
     "critters": "^0.0.24",
     "css-minimizer-webpack-plugin": "^7.0.0",
     "dayjs": "^1.11.10",
@@ -52,7 +53,7 @@
     "swiper": "^11.1.1",
     "tailwind-merge": "^2.2.1",
     "tailwind-scrollbar-hide": "^1.1.7",
-    "clsx": "^2.1.0"
+    "vaul": "^1.1.1"
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.12",

@@ -12,3 +12,7 @@ const ProductReport = () => {
 };
 
 export default ProductReport;
+
+const ProductReportModal = () => {
+  return <Dra>sdf</Dra>;
+};

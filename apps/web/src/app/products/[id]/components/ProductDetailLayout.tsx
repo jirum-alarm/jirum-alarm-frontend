@@ -84,6 +84,7 @@ function ProductInfo({ product }: { product: Product }) {
       setIsView(inView);
     },
   });
+  console.log('product : ', product);
   return (
     <section>
       <div className="px-5">
