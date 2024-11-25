@@ -20,6 +20,7 @@ import { useInView } from 'react-intersection-observer';
 import { Thumbsdown, Thumbsup } from '@/components/common/icons';
 import HotdealScore from './HotdealScore';
 import ProductReport from './ProductReport';
+import ProductFeedback from './ProductFeedback';
 
 type Product = NonNullable<ProductQuery['product']>;
 type ProductGuides = ProductGuidesQuery['productGuides'];
@@ -52,6 +53,8 @@ function ProductDetailLayout({
             <HotdealScore product={product} />
             <CommunityReaction product={product} />
             <ProductReport />
+            <Hr />
+            <ProductFeedback />
             <RelatedProductsContainer product={product} />
             <PopularProductsContainer product={product} />
             <NoticeProfitLink />
@@ -64,6 +67,10 @@ function ProductDetailLayout({
   );
 }
 export default ProductDetailLayout;
+
+function Hr() {
+  return <div className="h-[8px] bg-gray-100" />;
+}
 
 function ProductInfoLayout({ children }: { children: React.ReactNode }) {
   return <div className="flex flex-col gap-y-10">{children}</div>;
