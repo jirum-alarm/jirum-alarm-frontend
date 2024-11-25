@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ProductFeedback = () => {
   return (
     <div className="px-[20px]">
