@@ -57,7 +57,9 @@ export default function HotdealGuide({
             'h-64 overflow-hidden': needsExpansion,
           })}
         >
-          {parsedGuides?.map((guide) => <HotdealGuideItem key={guide.id} guide={guide} />)}
+          {parsedGuides?.map((guide, i) => (
+            <HotdealGuideItem key={`${guide.id}_${i}`} guide={guide} />
+          ))}
         </div>
         {needsExpansion && (
           <div className="relative flex justify-center py-4">
@@ -124,7 +126,7 @@ function LinkText({ content }: { content: string }) {
             return part.content?.split('\n').map((text, index) => (
               <>
                 {index > 0 && <br />}
-                <span key={index} className="text-sm text-gray-600">
+                <span key={`${index}_text`} className="text-sm text-gray-600">
                   {text}
                 </span>
               </>
@@ -132,7 +134,7 @@ function LinkText({ content }: { content: string }) {
           case 'markdown':
             return (
               <a
-                key={index}
+                key={`${index}_markdown`}
                 href={part.url}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -144,7 +146,7 @@ function LinkText({ content }: { content: string }) {
           case 'url':
             return (
               <a
-                key={index}
+                key={`${index}_url`}
                 href={part.url}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -183,9 +185,9 @@ function HotdealGuideItemCheckIcon() {
       <path
         d="M15.7142 6.42773L7.85707 14.2849L4.28564 10.7134"
         stroke="#6593FD"
-        stroke-width="2"
-        stroke-linecap="square"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="square"
+        strokeLinejoin="round"
       />
     </svg>
   );

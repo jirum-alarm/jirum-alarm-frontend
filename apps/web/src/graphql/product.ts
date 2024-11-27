@@ -39,6 +39,17 @@ export const QueryProduct = gql`
         price
         createdAt
       }
+      hotDealIndex {
+        id
+        type
+        message
+        highestPrice
+        currentPrice
+        lowestPrice
+      }
+      isMyLike
+      likeCount
+      dislikeCount
       isMyWishlist
       categoryName
     }
@@ -160,5 +171,11 @@ export const QueryTogetherViewedProducts = gql`
 export const MutationCollectProduct = gql`
   mutation MutationCollectProduct($productId: Int!) {
     collectProduct(productId: $productId)
+  }
+`;
+
+export const MutationReportExpiredProduct = gql`
+  mutation MutationReportExpiredProduct($productId: Int!) {
+    reportExpiredProduct(productId: $productId)
   }
 `;

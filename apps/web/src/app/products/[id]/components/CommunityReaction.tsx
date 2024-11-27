@@ -70,9 +70,9 @@ export default function CommunityReaction({
                 <path
                   d="M7.14307 15.7147L12.8574 10.0004L7.14307 4.28613"
                   stroke="#667085"
-                  stroke-width="1.5"
-                  stroke-linecap="square"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="square"
+                  strokeLinejoin="round"
                 />
               </svg>
             </a>

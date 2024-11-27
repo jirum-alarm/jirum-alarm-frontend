@@ -37,7 +37,7 @@ function ProductDetailLayout({
   const {
     data: { product },
   } = useSuspenseQuery(ProductQueries.product({ id: productId }));
-  console.log(product);
+
   if (!product) notFound();
 
   return (
@@ -52,9 +52,9 @@ function ProductDetailLayout({
             {/* <HotdealIndex product={product} /> */}
             <HotdealScore product={product} />
             <CommunityReaction product={product} />
-            <ProductReport />
+            <ProductReport product={product} />
             <Hr />
-            <ProductFeedback />
+            <ProductFeedback product={product} />
             <RelatedProductsContainer product={product} />
             <PopularProductsContainer product={product} />
             <NoticeProfitLink />
@@ -62,7 +62,7 @@ function ProductDetailLayout({
           <BottomCTA product={product} isUserLogin={isUserLogin} />
         </div>
       </main>
-      <div className="h-22"></div>
+      <div className="h-[64px]"></div>
     </>
   );
 }
@@ -84,7 +84,6 @@ function ProductInfo({ product }: { product: Product }) {
       setIsView(inView);
     },
   });
-  console.log('product : ', product);
   return (
     <section>
       <div className="px-5">
@@ -128,11 +127,11 @@ function ProductInfo({ product }: { product: Product }) {
             <div className="flex gap-3">
               <div className="flex items-center gap-1">
                 <Thumbsup />
-                <span className="text-sm font-medium text-gray-600">165</span>
+                <span className="text-sm font-medium text-gray-600">{product.likeCount}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Thumbsdown />
-                <span className="text-sm font-medium text-gray-600">20</span>
+                <span className="text-sm font-medium text-gray-600">{product.dislikeCount}</span>
               </div>
             </div>
           </div>

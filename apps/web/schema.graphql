@@ -93,6 +93,24 @@ enum HotDealKeywordType {
   SYNONYM
 }
 
+"""
+핫딜 타입
+"""
+enum HotDealType {
+  """
+  핫딜
+  """
+  HOT_DEAL
+  """
+  대박딜
+  """
+  SUPER_DEAL
+  """
+  초대박딜
+  """
+  ULTRA_DEAL
+}
+
 type InstagramPost {
   content: String!
   dagDefinition: String!
@@ -162,6 +180,7 @@ type Mutation {
   푸시를 받기위한 토큰 등록
   """
   addPushToken(token: String!, tokenType: TokenType!): Boolean!
+  addUserLikeOrDislike(isLike: Boolean, target: UserLikeTarget!, targetId: Int!): Boolean!
   """
   wishlist 추가
   """
@@ -230,6 +249,10 @@ type Mutation {
   wishlist 제거
   """
   removeWishlist(productId: Int!): Boolean!
+  """
+  종료된 상품 제보
+  """
+  reportExpiredProduct(productId: Int!): Boolean!
   """
   인스타그램 게시글 예약
   """
@@ -348,10 +371,24 @@ enum OrderOptionType {
   DESC
 }
 
+enum ProductExpiredReportsOrderType {
+  ID
+}
+
 type ProductGuide {
   content: String!
   id: ID!
   title: String!
+}
+
+type ProductHotDealIndex {
+  currentPrice: Float!
+  highestPrice: Float!
+  id: ID!
+  lowestPrice: Float!
+  message: String!
+  productId: Int!
+  type: HotDealType!
 }
 
 enum ProductOrderType {
@@ -374,19 +411,26 @@ type ProductOutput {
   """
   categoryName: String
   detailUrl: String
+  dislikeCount: Int!
   """
   핫딜 정보 요약
   """
   guides: [ProductGuide!] @deprecated(reason: "productGuides 쿼리를 사용해주세요.")
+  hotDealIndex: ProductHotDealIndex
   id: ID!
   isEnd: Boolean
   isHot: Boolean
+  """
+  true:좋아요, false:싫어요, null:로그인 안됨/좋아요,싫어요 안함
+  """
+  isMyLike: Boolean
   """
   로그인한 사용자의 위시리스트 여부
   """
   isMyWishlist: Boolean
   isPrivate: Boolean!
   isProfitUrl: Boolean!
+  likeCount: Int!
   mallId: Int
   """
   쇼핑몰 이름
@@ -472,6 +516,20 @@ type Query {
   유저 존재 여부 조회
   """
   existsUser(email: String!): ExistsUserOutput!
+  """
+  해당 상품 신고된 횟수 조회
+  """
+  expireProductReportCount(productId: Int!): Int!
+  """
+  종료된 상품 제보 내역 조회
+  """
+  expireProductReports(
+    limit: Int!
+    orderBy: ProductExpiredReportsOrderType!
+    orderOption: OrderOptionType!
+    productId: Int
+    searchAfter: [String!]
+  ): [productExpireReport!]!
   """
   어드민) 핫딜 제외 키워드 목록 조회
   """
@@ -655,6 +713,13 @@ type User {
   nickname: String!
 }
 
+"""
+좋아요 대상
+"""
+enum UserLikeTarget {
+  PRODUCT
+}
+
 type UserPushSetting {
   createdAt: DateTime!
   id: ID!
@@ -674,4 +739,12 @@ type WishlistOutput {
   product: ProductOutput!
   productId: Int!
   searchAfter: [String!]
+}
+
+type productExpireReport {
+  createdAt: DateTime!
+  id: ID!
+  product: ProductOutput!
+  productId: Int!
+  userId: Int!
 }

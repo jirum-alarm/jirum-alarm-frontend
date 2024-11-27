@@ -1,12 +1,18 @@
 'use client';
 import Button from '@/components/common/Button';
+import { useToast } from '@/components/common/Toast';
+import useRedirectIfNotLoggedIn from '@/features/auth/useRedirectIfNotLoggedIn';
+import { ProductQuery } from '@/shared/api/gql/graphql';
+import { ProductService } from '@/shared/api/product';
+import { useMutation } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
-const ProductReport = () => {
+const ProductReport = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
   return (
     <div className="px-5">
       <div className="flex h-[56px] items-center justify-between rounded-lg bg-gray-100 p-[18px]">
         <span className="text-sm text-gray-600">혹시 판매가 종료된 상품인가요?</span>
-        <ProductReportModal />
+        <ProductReportModal productId={+product.id} />
       </div>
     </div>
   );
@@ -14,9 +20,32 @@ const ProductReport = () => {
 
 export default ProductReport;
 
-const ProductReportModal = () => {
+const ProductReportModal = ({ productId }: { productId: number }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { toast } = useToast();
+  const { checkAndRedirect } = useRedirectIfNotLoggedIn();
+  const { mutate: reportExpiredProduct } = useMutation({
+    mutationFn: ProductService.reportExpiredProduct,
+    onSuccess: () => {
+      setIsModalOpen(false);
+      toast('제보해주셔서 감사해요 :)');
+    },
+    onError: () => {
+      setIsModalOpen(false);
+      toast('이미 종료 제보된 상품입니다 :(');
+    },
+  });
+
+  const handleReportExpiredProductClick = () => {
+    if (checkAndRedirect()) return;
+    reportExpiredProduct({ productId });
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    setIsModalOpen(open);
+  };
   return (
-    <Drawer.Root>
+    <Drawer.Root onOpenChange={handleOpenChange} open={isModalOpen}>
       <Drawer.Trigger asChild>
         <button className="text-gray-900">제보하기</button>
       </Drawer.Trigger>
@@ -24,7 +53,9 @@ const ProductReportModal = () => {
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
         <Drawer.Content className="fixed bottom-0 left-0 right-0 z-[9999] h-fit rounded-t-[20px] bg-white outline-none">
           <div className="flex flex-col items-center">
-            <h2 className="pb-[20px] pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>
+            <Drawer.Title asChild>
+              <h2 className="pb-[20px] pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>
+            </Drawer.Title>
             <SoldOutIcon />
             <p className="py-3 text-center text-gray-700">
               더 빠른 핫딜 확인을 위해
@@ -32,8 +63,10 @@ const ProductReportModal = () => {
               종료된 상품을 제보해 주세요!
             </p>
             <div className="flex w-full gap-[12px] p-5">
-              <Button color={'secondary'}>취소</Button>
-              <Button>종료 제보하기</Button>
+              <Drawer.Close asChild>
+                <Button color={'secondary'}>취소</Button>
+              </Drawer.Close>
+              <Button onClick={handleReportExpiredProductClick}>종료 제보하기</Button>
             </div>
           </div>
         </Drawer.Content>
@@ -52,7 +85,7 @@ const SoldOutIcon = () => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g clip-path="url(#clip0_3_8134)">
+        <g clipPath="url(#clip0_3_8134)">
           <rect width="136" height="136" rx="68" fill="#E6F1D7" />
           <path
             d="M103.388 89.1526C102.568 92.492 102.824 95.7606 101.051 98.9409C95.1502 109.569 85.0684 115.214 71.1232 115.744C50.0863 116.539 36.141 112.776 28.4143 104.215C22.1164 97.1917 20.026 86.935 22.0106 72.8352C22.1694 71.6691 22.3546 70.5294 22.5134 69.4428C22.5398 69.2043 22.5928 68.9657 22.6192 68.7272C25.9269 52.1626 29.1023 48.8232 29.1023 48.8232C29.1023 48.8232 39.3429 72.2256 44.1324 56.8272C45.2703 53.1698 45.9053 49.7508 46.3287 46.4909C46.3552 46.3849 46.3552 46.2524 46.3817 46.1199C47.9429 40.5542 48.4457 35.5716 48.922 30.7215C49.0278 29.7144 49.1337 28.7337 49.2395 27.7531V27.6736C49.2395 27.6736 49.2924 27.5411 49.3189 27.4616C50.4832 23.8306 52.3355 20.1202 55.3521 16.1182C55.3521 16.1182 57.8924 33.6368 65.2752 38.646C72.6315 43.6816 85.4389 46.3319 88.3232 59.4245C91.2075 72.5437 94.7268 62.0749 94.7268 62.0749C94.7268 62.0749 96.3145 66.7129 101.766 73.4713C103.512 75.6711 103.547 81.8642 103.388 89.1526Z"
@@ -78,7 +111,7 @@ const SoldOutIcon = () => {
             d="M66.8664 73.9503C68.1643 73.9503 69.2164 72.8982 69.2164 71.6003C69.2164 70.3025 68.1643 69.2503 66.8664 69.2503C65.5686 69.2503 64.5164 70.3025 64.5164 71.6003C64.5164 72.8982 65.5686 73.9503 66.8664 73.9503ZM56.9165 73.9503C58.2144 73.9503 59.2665 72.8982 59.2665 71.6003C59.2665 70.3025 58.2144 69.2503 56.9165 69.2503C55.6186 69.2503 54.5665 70.3025 54.5665 71.6003C54.5665 72.8982 55.6186 73.9503 56.9165 73.9503Z"
             fill="black"
             stroke="black"
-            stroke-width="0.2"
+            strokeWidth="0.2"
           />
           <path
             d="M102.667 72.125C102.067 71.075 101.467 70 100.892 68.95C98.2915 64.225 96.6415 61.3 95.2415 60.35L93.8915 59.425L93.3665 61C92.8915 62.425 91.9665 63.975 91.5665 64.1C91.5665 64.075 90.5165 63.65 89.3915 58.5C87.1165 48.125 79.0915 44.05 72.0165 40.475C69.7915 39.325 67.6665 38.25 65.8915 37.05C59.0915 32.4 56.5665 15.625 56.5415 15.45L56.0915 12.5L54.2915 14.9C47.2665 24.2 46.4665 32.1 45.6415 40.45C45.1665 45.275 44.6665 50.25 42.9415 55.8C42.0665 58.525 40.9915 60.075 39.8915 60.15H39.7915C36.9915 60.15 32.5415 52.9 30.2665 47.7L29.4165 45.725L28.1165 47.45C27.9665 47.675 24.0665 53.125 20.2165 80.075C18.2165 94.15 20.3915 104.5 26.8915 111.7C32.3915 117.8 40.8915 121.5 52.6665 122.875C54.6915 123.125 56.7915 123.3 59.0165 123.375C60.4415 123.45 61.8915 123.5 63.3915 123.5H64.0665C65.7165 123.5 67.4165 123.475 69.1665 123.4C69.3915 123.4 69.6165 123.375 69.8165 123.35C83.4165 122.675 93.6915 116.775 99.5665 106.275C106.767 93.35 105.392 76.95 102.667 72.125ZM100.992 95.75C100.217 98.9 99.0415 102.05 97.3665 105.05C94.5665 110.075 90.7915 113.9 86.0665 116.55C85.4915 116.875 84.8915 117.2 84.2665 117.475C82.4915 118.325 80.5665 119.025 78.5415 119.55C77.8415 119.75 77.1165 119.9 76.3915 120.05C75.6915 120.2 74.9415 120.325 74.2165 120.425C73.4415 120.55 72.6665 120.65 71.8665 120.7C71.0915 120.775 70.2915 120.825 69.4915 120.875C69.3665 120.9 69.2165 120.9 69.0915 120.9C67.1165 120.975 65.2165 121 63.3915 121C61.8915 121 60.4165 120.95 59.0165 120.875C57.8165 120.825 56.6415 120.75 55.5165 120.65C54.6415 120.575 53.7915 120.5 52.9665 120.4C52.2665 120.325 51.5915 120.225 50.9165 120.125C50.3165 120.05 49.7165 119.95 49.1415 119.85C47.7665 119.6 46.4415 119.325 45.1915 119.025C44.6165 118.875 44.0415 118.725 43.4665 118.55C43.0915 118.45 42.7415 118.35 42.3915 118.25C41.6915 118.025 41.0165 117.8 40.3665 117.55C39.1665 117.1 38.0415 116.625 36.9915 116.125C36.6165 115.925 36.2415 115.75 35.8915 115.55C33.8915 114.475 32.1165 113.225 30.5665 111.825C30.2665 111.575 29.9915 111.325 29.7415 111.05C29.3915 110.725 29.0665 110.375 28.7415 110.025C22.7915 103.4 20.8165 93.725 22.6915 80.425C22.8415 79.325 23.0165 78.25 23.1665 77.225C23.1915 77 23.2415 76.775 23.2665 76.55C25.5915 61.5 27.8415 54.275 29.1165 51.1C31.1915 55.275 35.4665 62.65 39.8165 62.65C39.8915 62.65 39.9665 62.65 40.0415 62.65C42.3165 62.525 44.0915 60.475 45.3165 56.575C45.4665 56.125 45.5915 55.675 45.7165 55.25C47.1915 50 47.6665 45.3 48.1165 40.725C48.2165 39.775 48.3165 38.85 48.4165 37.925V37.85C49.1415 31.425 50.1915 25.525 54.5915 18.825C55.7165 24.15 58.6165 35.125 64.4915 39.15C66.3915 40.425 68.5665 41.55 70.8915 42.725C77.7915 46.225 84.9165 49.85 86.9415 59.05C88.0665 64.175 89.4415 66.5 91.4165 66.6C93.0915 66.75 94.1915 65.125 94.9415 63.725C95.9915 65.25 97.4165 67.825 98.6915 70.175C99.2915 71.225 99.8915 72.3 100.492 73.375C102.142 76.325 103.467 85.925 100.992 95.775V95.75Z"
@@ -103,8 +136,8 @@ const Clock = () => {
     <svg width="90" height="88" viewBox="0 0 90 88" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g filter="url(#filter0_d_3_8145)">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M46 74C63.6731 74 78 59.6731 78 42C78 24.3269 63.6731 10 46 10C28.3269 10 14 24.3269 14 42C14 46.2935 14.8456 50.3895 16.3793 54.1305L12 68.3164L24.2943 65.5132C29.9982 70.7813 37.6233 74 46 74Z"
           fill="white"
         />
@@ -139,7 +172,7 @@ const Clock = () => {
           filterUnits="userSpaceOnUse"
           colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"

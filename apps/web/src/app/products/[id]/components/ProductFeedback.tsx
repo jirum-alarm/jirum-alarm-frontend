@@ -1,4 +1,48 @@
-const ProductFeedback = () => {
+'use client';
+import { ProductQueries } from '@/entities/product';
+import useRedirectIfNotLoggedIn from '@/features/auth/useRedirectIfNotLoggedIn';
+import { cn } from '@/lib/cn';
+import { ProductQuery, UserLikeTarget } from '@/shared/api/gql/graphql';
+import { LikeService } from '@/shared/api/like/like.service';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+const ProductFeedback = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
+  const queryClient = useQueryClient();
+  const productKey = ProductQueries.product({ id: +product.id }).queryKey;
+
+  const { mutate: addUserLikeOrDislike } = useMutation({
+    mutationFn: LikeService.addUserLikeOrDislike,
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: productKey,
+      }),
+  });
+  const { checkAndRedirect } = useRedirectIfNotLoggedIn();
+
+  const handleUserLikeClick = () => {
+    if (checkAndRedirect()) return;
+    if (product.isMyLike) {
+      addUserLikeOrDislike({ target: UserLikeTarget.Product, targetId: +product.id, isLike: null });
+    } else {
+      addUserLikeOrDislike({ target: UserLikeTarget.Product, targetId: +product.id, isLike: true });
+    }
+  };
+  const handleUserDisLikeClick = () => {
+    if (checkAndRedirect()) return;
+    if (product.isMyLike !== null && product.isMyLike === false) {
+      addUserLikeOrDislike({
+        target: UserLikeTarget.Product,
+        targetId: +product.id,
+        isLike: null,
+      });
+    } else {
+      addUserLikeOrDislike({
+        target: UserLikeTarget.Product,
+        targetId: +product.id,
+        isLike: false,
+      });
+    }
+  };
   return (
     <div className="px-[20px]">
       <h2 className=" py-[16px] font-semibold text-gray-900">상품 추천하기</h2>
@@ -9,11 +53,29 @@ const ProductFeedback = () => {
           의견을 알려주세요!
         </p>
         <div className="flex gap-[12px]">
-          <button className="flex h-[40px] w-[130px] items-center justify-center gap-[8px] rounded-full bg-white py-[8px] text-gray-700">
+          <button
+            className={cn(
+              `flex h-[40px] w-[130px] items-center justify-center gap-[8px] rounded-full bg-white py-[8px] text-gray-700`,
+              {
+                'border border-secondary-500 font-semibold text-secondary-700':
+                  product.isMyLike !== null && product.isMyLike,
+              },
+            )}
+            onClick={handleUserLikeClick}
+          >
             <ThumbUp />
             <span>추천해요</span>
           </button>
-          <button className="flex h-[40px] w-[130px] items-center justify-center gap-[8px] rounded-full bg-white py-[8px] text-gray-700">
+          <button
+            className={cn(
+              `flex h-[40px] w-[130px] items-center justify-center gap-[8px] rounded-full bg-white py-[8px] text-gray-700`,
+              {
+                'border border-error-300 font-semibold text-error-800':
+                  product.isMyLike !== null && !product.isMyLike,
+              },
+            )}
+            onClick={handleUserDisLikeClick}
+          >
             <ThumbDown />
             <span>비추천해요</span>
           </button>

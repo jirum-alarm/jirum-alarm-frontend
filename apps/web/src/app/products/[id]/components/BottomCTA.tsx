@@ -18,9 +18,8 @@ export default function BottomCTA({
       page: EVENT.PAGE.DETAIL,
     });
   };
-
   return (
-    <div className="fixed bottom-0 z-40 ml-[-1px] flex w-full max-w-screen-layout-max gap-x-2 border border-gray-100 bg-white px-5 pb-6 pt-4">
+    <div className="fixed bottom-0 z-40 ml-[-1px] flex h-[64px] w-full max-w-screen-layout-max gap-x-2 border border-gray-100 bg-white px-5 py-2 pb-safe-bottom">
       <LikeButton product={product} isUserLogin={isUserLogin} />
 
       <a href={product.detailUrl ?? ''} onClick={handleClickPurchaseLinkBrowse} className="w-full">
