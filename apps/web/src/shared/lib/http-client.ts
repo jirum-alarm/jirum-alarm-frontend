@@ -58,8 +58,19 @@ async function rejectIfNeeded(response: Response) {
 
 class HttpClient {
   private baseUrl: string;
+  private distinctId: string | null;
+  private fcmToken: string | null;
   constructor(url: string) {
     this.baseUrl = url;
+    this.distinctId = null;
+    this.fcmToken = null;
+  }
+
+  public setDistintId(distinctId: string | null) {
+    this.distinctId = distinctId;
+  }
+  public setFcmToken(fcmToken: string | null) {
+    this.fcmToken = fcmToken;
   }
 
   public async execute<TResult, TVariables>(
@@ -73,6 +84,8 @@ class HttpClient {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/graphql-response+json',
+          'X-distinct-id': this.distinctId ?? '',
+          'X-FCM-token': this.fcmToken ?? '',
         },
         body: JSON.stringify({
           query,

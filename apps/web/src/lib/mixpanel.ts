@@ -4,6 +4,7 @@ import mixpanel, { Mixpanel } from 'mixpanel-browser';
 import { useEffect } from 'react';
 
 import { IS_PRD } from '@/constants/env';
+import { httpClient } from '@/shared/lib/http-client';
 
 class MixpanelService {
   private static instance: Mixpanel;
@@ -18,6 +19,8 @@ class MixpanelService {
         persistence: 'localStorage',
         ignore_dnt: true,
       });
+      const distinctId = mixpanel.get_distinct_id();
+      httpClient.setDistintId(distinctId);
       MixpanelService.instance = mixpanel;
     } else {
       // mock when not prd
@@ -25,9 +28,20 @@ class MixpanelService {
       MixpanelService.instance.track = (event: string, props?: any) => {
         console.info('Mixpanel track:', event, props);
       };
+      MixpanelService.instance.get_distinct_id = (user?: any) => {
+        console.info('Mixpanel get_distinct_id:', user);
+      };
     }
 
     return MixpanelService.instance;
+  }
+
+  public static getDistinctId(): string | null {
+    if (MixpanelService.instance) {
+      return mixpanel.get_distinct_id();
+    }
+
+    return null;
   }
 }
 

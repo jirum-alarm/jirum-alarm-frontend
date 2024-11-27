@@ -1,15 +1,18 @@
 import { initializeApp } from 'firebase/app';
 import { Unsubscribe, getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { firebaseConfig } from '@/constants/firebase';
 import { fcmTokenAtom } from '@/state/fcmToken';
+import { httpClient } from '@/shared/lib/http-client';
 
 const firebaseApp = initializeApp(firebaseConfig);
 
 const FCMConfig = () => {
   const setFcmToken = useSetRecoilState(fcmTokenAtom);
+  const fcmToken = useRecoilValue(fcmTokenAtom);
+  httpClient.setFcmToken(fcmToken);
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
     const retrieveToken = async () => {
