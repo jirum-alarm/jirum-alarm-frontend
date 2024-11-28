@@ -1,45 +1,57 @@
 import { Info } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
+import { hotdealTextMap } from '@/constants/hotdeal';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 
 const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
+  const hotDealIndex = product.hotDealIndex;
   return (
-    <section className="px-5">
-      <div className="flex items-center gap-2 pb-4">
-        <h2 className="font-semibold text-gray-900">핫딜 지수</h2>
-        <Tooltip
-          content={
-            <p className="text-s text-white">
-              <strong className="font-semibold">다나와 최저가</strong>와{' '}
-              <strong className="font-semibold">역대 최저가</strong>를 비교하여
-              <br /> 현재 핫딜 정도를 계산해 볼 수 있어요
-            </p>
-          }
-        >
-          <button>
-            <Info />
-          </button>
-        </Tooltip>
-      </div>
-      <div className="rounded border border-gray-200 px-6 py-5">
-        <div className="flex justify-between">
-          <div className="pt-3">
-            <div className="mb-3 h-[22px] w-fit rounded-[8px] bg-primary-100 px-3">
-              <span className="text-xs font-semibold leading-4 text-[#025900]">대박</span>
+    <>
+      {hotDealIndex ? (
+        <section className="px-5">
+          <div className="flex items-center gap-2 pb-4">
+            <h2 className="font-semibold text-gray-900">핫딜 지수</h2>
+            <Tooltip
+              content={
+                <p className="text-s text-white">
+                  <strong className="font-semibold">다나와 최저가</strong>와{' '}
+                  <strong className="font-semibold">역대 최저가</strong>를 비교하여
+                  <br /> 현재 핫딜 정도를 계산해 볼 수 있어요
+                </p>
+              }
+            >
+              <button>
+                <Info />
+              </button>
+            </Tooltip>
+          </div>
+          <div className="rounded-[8px] border border-gray-200 px-6 py-5">
+            <div className="flex justify-between">
+              <div className="pt-3">
+                <div className="mb-3 h-[22px] w-fit rounded-[8px] bg-primary-100 px-3">
+                  <span className="text-xs font-semibold leading-4 text-[#025900]">
+                    {hotdealTextMap[hotDealIndex.type]}
+                  </span>
+                </div>
+                <p
+                  className="text-sm font-medium text-gray-800"
+                  dangerouslySetInnerHTML={{ __html: hotDealIndex.message }}
+                />
+              </div>
+              <div className="h-[140px]">
+                <HotdealScoreBar
+                  maxValue={hotDealIndex.highestPrice}
+                  minValue={hotDealIndex.lowestPrice}
+                  currentValue={hotDealIndex.currentPrice}
+                />
+              </div>
             </div>
-            <p className="text-sm font-medium text-gray-800">
-              다나와 최저가보다
-              <br /> <span className="text-base font-semibold text-gray-900">4000원</span> 저렴해요.
-            </p>
           </div>
-          <div className="h-[140px]">
-            <HotdealScoreBar maxValue={32000} minValue={27000} currentValue={28000} />
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
+      ) : null}
+    </>
   );
 };
 
@@ -50,13 +62,17 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
   const controls = useAnimation();
   const ref = useRef<HTMLDivElement>(null);
   const percentage = ((currentValue - minValue) / (maxValue - minValue)) * 100;
+  const iconHeight = 54; // 아이콘 크기
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            controls.start({ bottom: `${percentage}%` }); // 애니메이션 시작
+            const adjustedPercentage =
+              Math.max(0, Math.min(100, percentage)) -
+              (iconHeight / 2) * (100 / ref.current!.offsetHeight);
+            controls.start({ bottom: `${adjustedPercentage}%` }); // 애니메이션 시작
           }
         });
       },
@@ -101,27 +117,27 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
               xmlns="http://www.w3.org/2000/svg"
             >
               <g filter="url(#filter0_d_3_7679)">
-                <circle cx="27" cy="25" r="14" fill="#9EF22E" stroke="#101828" stroke-width="2" />
+                <circle cx="27" cy="25" r="14" fill="#9EF22E" stroke="#101828" strokeWidth="2" />
                 <path
                   d="M20.1997 21L23.5747 30L26.9497 21L30.3247 30L33.6997 21"
                   stroke="#101828"
-                  stroke-width="1.5"
-                  stroke-linecap="square"
-                  stroke-linejoin="bevel"
+                  strokeWidth="1.5"
+                  strokeLinecap="square"
+                  strokeLinejoin="bevel"
                 />
                 <path
                   d="M19.2998 24.5996H21.0998"
                   stroke="#101828"
-                  stroke-width="1.5"
-                  stroke-linecap="square"
-                  stroke-linejoin="bevel"
+                  strokeWidth="1.5"
+                  strokeLinecap="square"
+                  strokeLinejoin="bevel"
                 />
                 <path
                   d="M32.7998 24.5996H34.5998"
                   stroke="#101828"
-                  stroke-width="1.5"
-                  stroke-linecap="square"
-                  stroke-linejoin="bevel"
+                  strokeWidth="1.5"
+                  strokeLinecap="square"
+                  strokeLinejoin="bevel"
                 />
               </g>
               <defs>
@@ -132,9 +148,9 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
                   width="54"
                   height="54"
                   filterUnits="userSpaceOnUse"
-                  color-interpolation-filters="sRGB"
+                  colorInterpolationFilters="sRGB"
                 >
-                  <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
                   <feColorMatrix
                     in="SourceAlpha"
                     type="matrix"

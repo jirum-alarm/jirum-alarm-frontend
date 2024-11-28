@@ -1,13 +1,11 @@
 import { graphql } from '../gql';
 import {
-  AddWishlistMutationVariables,
   MutationCollectProductMutationVariables,
+  MutationReportExpiredProductMutationVariables,
   ProductGuidesQueryVariables,
   ProductQueryVariables,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsQueryVariables,
-  QueryWishlistsQueryVariables,
-  RemoveWishlistMutationVariables,
   TogetherViewedProductsQueryVariables,
 } from '../gql/graphql';
 
@@ -48,6 +46,9 @@ export class ProductService {
 
   static async collectProduct(variables: MutationCollectProductMutationVariables) {
     return httpClient.execute(MutationCollectProduct, variables).then((res) => res.data);
+  }
+  static async reportExpiredProduct(variables: MutationReportExpiredProductMutationVariables) {
+    return httpClient.execute(MutationReportExpiredProduct, variables).then((res) => res.data);
   }
 }
 
@@ -102,6 +103,17 @@ const QueryProduct = graphql(`
         price
         createdAt
       }
+      hotDealIndex {
+        id
+        type
+        message
+        highestPrice
+        currentPrice
+        lowestPrice
+      }
+      isMyLike
+      likeCount
+      dislikeCount
       isMyWishlist
       categoryName
     }
@@ -212,5 +224,11 @@ const QueryTogetherViewedProducts = graphql(`
 const MutationCollectProduct = graphql(`
   mutation MutationCollectProduct($productId: Int!) {
     collectProduct(productId: $productId)
+  }
+`);
+
+const MutationReportExpiredProduct = graphql(`
+  mutation MutationReportExpiredProduct($productId: Int!) {
+    reportExpiredProduct(productId: $productId)
   }
 `);
