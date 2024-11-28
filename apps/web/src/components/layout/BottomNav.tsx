@@ -13,6 +13,8 @@ import {
   HomeFill,
   My,
   MyFill,
+  Ranking,
+  RankingFill,
 } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
@@ -37,9 +39,9 @@ const BottomNavList = [
   {
     type: NAV_TYPE.TRENDING,
     link: PAGE.TRENDING,
-    text: '카테고리',
-    icon: Category,
-    activeIcon: CategoryFill,
+    text: '랭킹',
+    icon: Ranking,
+    activeIcon: RankingFill,
   },
   {
     type: NAV_TYPE.ALARM,

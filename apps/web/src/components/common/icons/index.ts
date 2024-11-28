@@ -32,6 +32,8 @@ export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as Logo } from './Logo';
 export { default as My } from './My';
 export { default as MyFill } from './MyFill';
+export { default as Ranking } from './Ranking';
+export { default as RankingFill } from './RankingFill';
 export { default as RoundedLogo } from './RoundedLogo';
 export { default as Search } from './Search';
 export { default as Setting } from './Setting';
