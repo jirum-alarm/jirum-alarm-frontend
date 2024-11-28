@@ -175,7 +175,7 @@ const HotdealGuideModal = () => {
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="fixed inset-x-4 bottom-0 z-[9999] mx-auto h-fit w-full max-w-screen-layout-max rounded-t-[20px] bg-white outline-none">
+        <Drawer.Content className="fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full max-w-screen-layout-max rounded-t-[20px] bg-white outline-none">
           <div className="flex flex-col items-center">
             <Drawer.Title asChild>
               <h2 className="pb-[12px] pt-[32px] text-xl font-bold">핫딜 기준 안내</h2>
