@@ -1,4 +1,4 @@
-import BackgroundHeader from './BackgroundHeader';
+import BackgroundHeader from './BackgronudHeader';
 import HomeHeader from './HomeHeader';
 import JirumRankingContainer from './JirumRankingContainer';
 import LiveHotDealContainer from './LiveHotDealContainer';

@@ -113,6 +113,16 @@ export enum HotDealKeywordType {
   Synonym = 'SYNONYM',
 }
 
+/** 핫딜 타입 */
+export enum HotDealType {
+  /** 핫딜 */
+  HotDeal = 'HOT_DEAL',
+  /** 대박딜 */
+  SuperDeal = 'SUPER_DEAL',
+  /** 초대박딜 */
+  UltraDeal = 'ULTRA_DEAL',
+}
+
 export type InstagramPost = {
   __typename?: 'InstagramPost';
   content: Scalars['String']['output'];
@@ -145,6 +155,7 @@ export type Mutation = {
   addNotificationToUsers: Scalars['Boolean']['output'];
   /** 푸시를 받기위한 토큰 등록 */
   addPushToken: Scalars['Boolean']['output'];
+  addUserLikeOrDislike: Scalars['Boolean']['output'];
   /** wishlist 추가 */
   addWishlist: Scalars['Boolean']['output'];
   /** 어드민) 로그인 */
@@ -179,6 +190,8 @@ export type Mutation = {
   removeTokenLinkage: Scalars['Boolean']['output'];
   /** wishlist 제거 */
   removeWishlist: Scalars['Boolean']['output'];
+  /** 종료된 상품 제보 */
+  reportExpiredProduct: Scalars['Boolean']['output'];
   /** 인스타그램 게시글 예약 */
   reserveInstagramPost: Scalars['Boolean']['output'];
   /** 회원가입 */
@@ -252,6 +265,12 @@ export type MutationAddPushTokenArgs = {
   tokenType: TokenType;
 };
 
+export type MutationAddUserLikeOrDislikeArgs = {
+  isLike?: InputMaybe<Scalars['Boolean']['input']>;
+  target: UserLikeTarget;
+  targetId: Scalars['Int']['input'];
+};
+
 export type MutationAddWishlistArgs = {
   productId: Scalars['Int']['input'];
 };
@@ -303,6 +322,10 @@ export type MutationRemoveTokenLinkageArgs = {
 };
 
 export type MutationRemoveWishlistArgs = {
+  productId: Scalars['Int']['input'];
+};
+
+export type MutationReportExpiredProductArgs = {
   productId: Scalars['Int']['input'];
 };
 
@@ -414,11 +437,25 @@ export enum OrderOptionType {
   Desc = 'DESC',
 }
 
+export enum ProductExpiredReportsOrderType {
+  Id = 'ID',
+}
+
 export type ProductGuide = {
   __typename?: 'ProductGuide';
   content: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   title: Scalars['String']['output'];
+};
+
+export type ProductHotDealIndex = {
+  __typename?: 'ProductHotDealIndex';
+  currentPrice: Scalars['Float']['output'];
+  highestPrice: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  lowestPrice: Scalars['Float']['output'];
+  message: Scalars['String']['output'];
+  productId: Scalars['Int']['output'];
 };
 
 export enum ProductOrderType {
@@ -438,18 +475,25 @@ export type ProductOutput = {
   /** 서비스 카테고리 */
   categoryName?: Maybe<Scalars['String']['output']>;
   detailUrl?: Maybe<Scalars['String']['output']>;
+  dislikeCount: Scalars['Int']['output'];
   /**
    * 핫딜 정보 요약
    * @deprecated productGuides 쿼리를 사용해주세요.
    */
   guides?: Maybe<Array<ProductGuide>>;
+  hotDealIndex?: Maybe<ProductHotDealIndex>;
+  hotDealType?: Maybe<HotDealType>;
   id: Scalars['ID']['output'];
   isEnd?: Maybe<Scalars['Boolean']['output']>;
   isHot?: Maybe<Scalars['Boolean']['output']>;
+  /** true:좋아요, false:싫어요, null:로그인 안됨/좋아요,싫어요 안함 */
+  isMyLike?: Maybe<Scalars['Boolean']['output']>;
+  isMyReported: Scalars['Boolean']['output'];
   /** 로그인한 사용자의 위시리스트 여부 */
   isMyWishlist?: Maybe<Scalars['Boolean']['output']>;
   isPrivate: Scalars['Boolean']['output'];
   isProfitUrl: Scalars['Boolean']['output'];
+  likeCount: Scalars['Int']['output'];
   mallId?: Maybe<Scalars['Int']['output']>;
   /** 쇼핑몰 이름 */
   mallName?: Maybe<Scalars['String']['output']>;
@@ -509,6 +553,10 @@ export type Query = {
   existUnreadNotification: Scalars['Boolean']['output'];
   /** 유저 존재 여부 조회 */
   existsUser: ExistsUserOutput;
+  /** 해당 상품 신고된 횟수 조회 */
+  expireProductReportCount: Scalars['Int']['output'];
+  /** 종료된 상품 제보 내역 조회 */
+  expireProductReports: Array<ProductExpireReport>;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
   /** 어드민) 핫딜 키워드 조회 */
@@ -585,6 +633,18 @@ export type QueryDanawaProductsArgs = {
 
 export type QueryExistsUserArgs = {
   email: Scalars['String']['input'];
+};
+
+export type QueryExpireProductReportCountArgs = {
+  productId: Scalars['Int']['input'];
+};
+
+export type QueryExpireProductReportsArgs = {
+  limit: Scalars['Int']['input'];
+  orderBy: ProductExpiredReportsOrderType;
+  orderOption: OrderOptionType;
+  productId?: InputMaybe<Scalars['Int']['input']>;
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type QueryHotDealExcludeKeywordsByAdminArgs = {
@@ -754,6 +814,11 @@ export type User = {
   nickname: Scalars['String']['output'];
 };
 
+/** 좋아요 대상 */
+export enum UserLikeTarget {
+  Product = 'PRODUCT',
+}
+
 export type UserPushSetting = {
   __typename?: 'UserPushSetting';
   createdAt: Scalars['DateTime']['output'];
@@ -773,6 +838,15 @@ export type WishlistOutput = {
   product: ProductOutput;
   productId: Scalars['Int']['output'];
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+};
+
+export type ProductExpireReport = {
+  __typename?: 'productExpireReport';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  product: ProductOutput;
+  productId: Scalars['Int']['output'];
+  userId: Scalars['Int']['output'];
 };
 
 export type MutationLoginMutationVariables = Exact<{
@@ -907,6 +981,17 @@ export type QueryMypageKeywordQuery = {
   }>;
 };
 
+export type AddUserLikeOrDislikeMutationVariables = Exact<{
+  target: UserLikeTarget;
+  targetId: Scalars['Int']['input'];
+  isLike?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type AddUserLikeOrDislikeMutation = {
+  __typename?: 'Mutation';
+  addUserLikeOrDislike: boolean;
+};
+
 export type QueryNotificationsQueryVariables = Exact<{
   offset: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
@@ -973,6 +1058,11 @@ export type ProductQuery = {
     negativeCommunityReactionCount: number;
     viewCount: number;
     mallName?: string | null;
+    hotDealType?: HotDealType | null;
+    isMyLike?: boolean | null;
+    isMyReported: boolean;
+    likeCount: number;
+    dislikeCount: number;
     isMyWishlist?: boolean | null;
     categoryName?: string | null;
     provider: {
@@ -996,6 +1086,14 @@ export type ProductQuery = {
       price: number;
       createdAt: any;
     }> | null;
+    hotDealIndex?: {
+      __typename?: 'ProductHotDealIndex';
+      id: string;
+      message: string;
+      highestPrice: number;
+      currentPrice: number;
+      lowestPrice: number;
+    } | null;
   } | null;
 };
 
@@ -1036,6 +1134,7 @@ export type QueryProductsQuery = {
     categoryId?: number | null;
     category?: string | null;
     thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
     searchAfter?: Array<string> | null;
     postedAt: any;
     provider: { __typename?: 'Provider'; nameKr: string };
@@ -1114,6 +1213,15 @@ export type MutationCollectProductMutationVariables = Exact<{
 
 export type MutationCollectProductMutation = { __typename?: 'Mutation'; collectProduct: boolean };
 
+export type MutationReportExpiredProductMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+}>;
+
+export type MutationReportExpiredProductMutation = {
+  __typename?: 'Mutation';
+  reportExpiredProduct: boolean;
+};
+
 export type AddWishlistMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -1149,6 +1257,7 @@ export type QueryWishlistsQuery = {
       isEnd?: boolean | null;
       isPrivate: boolean;
       postedAt: any;
+      hotDealType?: HotDealType | null;
       thumbnail?: string | null;
       isMyWishlist?: boolean | null;
     };
@@ -1300,6 +1409,14 @@ export const QueryMypageKeywordDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<QueryMypageKeywordQuery, QueryMypageKeywordQueryVariables>;
+export const AddUserLikeOrDislikeDocument = new TypedDocumentString(`
+    mutation AddUserLikeOrDislike($target: UserLikeTarget!, $targetId: Int!, $isLike: Boolean) {
+  addUserLikeOrDislike(target: $target, targetId: $targetId, isLike: $isLike)
+}
+    `) as unknown as TypedDocumentString<
+  AddUserLikeOrDislikeMutation,
+  AddUserLikeOrDislikeMutationVariables
+>;
 export const QueryNotificationsDocument = new TypedDocumentString(`
     query QueryNotifications($offset: Int!, $limit: Int!) {
   notifications(offset: $offset, limit: $limit) {
@@ -1374,6 +1491,18 @@ export const ProductDocument = new TypedDocumentString(`
       price
       createdAt
     }
+    hotDealType
+    hotDealIndex {
+      id
+      message
+      highestPrice
+      currentPrice
+      lowestPrice
+    }
+    isMyLike
+    isMyReported
+    likeCount
+    dislikeCount
     isMyWishlist
     categoryName
   }
@@ -1413,6 +1542,7 @@ export const QueryProductsDocument = new TypedDocumentString(`
     categoryId
     category
     thumbnail
+    hotDealType
     provider {
       nameKr
     }
@@ -1493,6 +1623,14 @@ export const MutationCollectProductDocument = new TypedDocumentString(`
   MutationCollectProductMutation,
   MutationCollectProductMutationVariables
 >;
+export const MutationReportExpiredProductDocument = new TypedDocumentString(`
+    mutation MutationReportExpiredProduct($productId: Int!) {
+  reportExpiredProduct(productId: $productId)
+}
+    `) as unknown as TypedDocumentString<
+  MutationReportExpiredProductMutation,
+  MutationReportExpiredProductMutationVariables
+>;
 export const AddWishlistDocument = new TypedDocumentString(`
     mutation AddWishlist($productId: Int!) {
   addWishlist(productId: $productId)
@@ -1522,6 +1660,7 @@ export const QueryWishlistsDocument = new TypedDocumentString(`
       isEnd
       isPrivate
       postedAt
+      hotDealType
       thumbnail
       isMyWishlist
     }

@@ -64,6 +64,7 @@ const QueryWishlists = graphql(`
         isEnd
         isPrivate
         postedAt
+        hotDealType
         thumbnail
         isMyWishlist
       }
@@ -76,4 +77,9 @@ const QueryWishlists = graphql(`
 //     wishlistCount
 //   }
 // `);
-const QueryWishlistCount = graphql('\n  query QueryWishlistCount {\n    wishlistCount \n  }\n');
+// const QueryWishlistCount = graphql(`
+//   query QueryWishlistCount {
+//     wishlistCount
+//   }
+// `);
+const QueryWishlistCount = graphql('\n  query QueryWishlistCount {\n    wishlistCount\n  }\n');
