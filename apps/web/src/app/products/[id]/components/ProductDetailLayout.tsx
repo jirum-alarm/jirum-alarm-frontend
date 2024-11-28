@@ -91,25 +91,21 @@ function ProductInfo({ product }: { product: Product }) {
     <section>
       <div className="px-5">
         <div className="flex items-center gap-3 pb-2">
-          {/* {product.isEnd ||
-            (product.isHot && (
-              <div
-                className={cn({
-                  'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-[20px]':
-                    true,
-                  'border border-gray-400 bg-white px-2 text-gray-500': product.isEnd,
-                  'bg-error-500 px-3 text-white ': !product.isEnd && product.isHot,
-                })}
-              >
-                {product.isEnd ? '판매종료' : product.isHot ? '핫딜' : ''}
-              </div>
-            ))} */}
-          {/* {product.hotDealIndex && ( */}
-          <div className="flex items-center gap-[8px]">
-            <HotdealBadge badgeVariant="page" hotdealType={HotDealType.HotDeal} />
-            <HotdealGuideModal />
-          </div>
-          {/* )} */}
+          {product.isEnd && (
+            <div
+              className={cn('border border-gray-400 bg-white px-2 text-gray-500', {
+                'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-[20px]': true,
+              })}
+            >
+              판매종료
+            </div>
+          )}
+          {!product.isEnd && product.hotDealType && (
+            <div className="flex items-center gap-[8px]">
+              <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />
+              <HotdealGuideModal />
+            </div>
+          )}
         </div>
         <h1 className="text-gray-800">{product.title}</h1>
         <div className="inline-flex items-center gap-x-3 pt-3">

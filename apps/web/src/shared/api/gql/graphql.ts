@@ -456,7 +456,6 @@ export type ProductHotDealIndex = {
   lowestPrice: Scalars['Float']['output'];
   message: Scalars['String']['output'];
   productId: Scalars['Int']['output'];
-  type: HotDealType;
 };
 
 export enum ProductOrderType {
@@ -483,11 +482,13 @@ export type ProductOutput = {
    */
   guides?: Maybe<Array<ProductGuide>>;
   hotDealIndex?: Maybe<ProductHotDealIndex>;
+  hotDealType?: Maybe<HotDealType>;
   id: Scalars['ID']['output'];
   isEnd?: Maybe<Scalars['Boolean']['output']>;
   isHot?: Maybe<Scalars['Boolean']['output']>;
   /** true:좋아요, false:싫어요, null:로그인 안됨/좋아요,싫어요 안함 */
   isMyLike?: Maybe<Scalars['Boolean']['output']>;
+  isMyReported: Scalars['Boolean']['output'];
   /** 로그인한 사용자의 위시리스트 여부 */
   isMyWishlist?: Maybe<Scalars['Boolean']['output']>;
   isPrivate: Scalars['Boolean']['output'];
@@ -1057,7 +1058,9 @@ export type ProductQuery = {
     negativeCommunityReactionCount: number;
     viewCount: number;
     mallName?: string | null;
+    hotDealType?: HotDealType | null;
     isMyLike?: boolean | null;
+    isMyReported: boolean;
     likeCount: number;
     dislikeCount: number;
     isMyWishlist?: boolean | null;
@@ -1086,7 +1089,6 @@ export type ProductQuery = {
     hotDealIndex?: {
       __typename?: 'ProductHotDealIndex';
       id: string;
-      type: HotDealType;
       message: string;
       highestPrice: number;
       currentPrice: number;
@@ -1487,15 +1489,16 @@ export const ProductDocument = new TypedDocumentString(`
       price
       createdAt
     }
+    hotDealType
     hotDealIndex {
       id
-      type
       message
       highestPrice
       currentPrice
       lowestPrice
     }
     isMyLike
+    isMyReported
     likeCount
     dislikeCount
     isMyWishlist

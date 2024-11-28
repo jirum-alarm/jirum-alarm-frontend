@@ -388,7 +388,6 @@ type ProductHotDealIndex {
   lowestPrice: Float!
   message: String!
   productId: Int!
-  type: HotDealType!
 }
 
 enum ProductOrderType {
@@ -417,6 +416,7 @@ type ProductOutput {
   """
   guides: [ProductGuide!] @deprecated(reason: "productGuides 쿼리를 사용해주세요.")
   hotDealIndex: ProductHotDealIndex
+  hotDealType: HotDealType
   id: ID!
   isEnd: Boolean
   isHot: Boolean
@@ -424,6 +424,7 @@ type ProductOutput {
   true:좋아요, false:싫어요, null:로그인 안됨/좋아요,싫어요 안함
   """
   isMyLike: Boolean
+  isMyReported: Boolean!
   """
   로그인한 사용자의 위시리스트 여부
   """

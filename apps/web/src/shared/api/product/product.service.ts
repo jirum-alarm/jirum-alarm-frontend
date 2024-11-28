@@ -103,15 +103,16 @@ const QueryProduct = graphql(`
         price
         createdAt
       }
+      hotDealType
       hotDealIndex {
         id
-        type
         message
         highestPrice
         currentPrice
         lowestPrice
       }
       isMyLike
+      isMyReported
       likeCount
       dislikeCount
       isMyWishlist

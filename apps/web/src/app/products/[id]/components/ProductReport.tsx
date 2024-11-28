@@ -1,18 +1,30 @@
 'use client';
 import Button from '@/components/common/Button';
 import { useToast } from '@/components/common/Toast';
+import { ProductQueries } from '@/entities/product';
 import useRedirectIfNotLoggedIn from '@/features/auth/useRedirectIfNotLoggedIn';
+import { cn } from '@/lib/cn';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
-import { useMutation } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { Drawer } from 'vaul';
 const ProductReport = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
   return (
     <div className="px-5">
-      <div className="flex h-[56px] items-center justify-between rounded-lg bg-gray-100 p-[18px]">
-        <span className="text-sm text-gray-600">혹시 판매가 종료된 상품인가요?</span>
-        <ProductReportModal productId={+product.id} />
+      <div
+        className={cn(`flex h-[56px] items-center justify-between rounded-lg bg-gray-100 p-[18px]`)}
+      >
+        {product.isMyReported ? (
+          <p className="flex items-center gap-2 text-sm text-gray-600">
+            종료된 상품으로 제보해주셔서 감사해요 <span className="text-lg">😄</span>
+          </p>
+        ) : (
+          <>
+            <span className="text-sm text-gray-600">혹시 판매가 종료된 상품인가요?</span>
+            <ProductReportModal productId={+product.id} />
+          </>
+        )}
       </div>
     </div>
   );
@@ -21,12 +33,17 @@ const ProductReport = ({ product }: { product: NonNullable<ProductQuery['product
 export default ProductReport;
 
 const ProductReportModal = ({ productId }: { productId: number }) => {
+  const queryClient = useQueryClient();
+  const productKey = ProductQueries.product({ id: productId }).queryKey;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { toast } = useToast();
   const { checkAndRedirect } = useRedirectIfNotLoggedIn();
   const { mutate: reportExpiredProduct } = useMutation({
     mutationFn: ProductService.reportExpiredProduct,
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: productKey,
+      });
       setIsModalOpen(false);
       toast('제보해주셔서 감사해요 :)');
     },
