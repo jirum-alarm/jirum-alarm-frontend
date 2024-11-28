@@ -36,6 +36,7 @@ export const QueryWishlists = gql`
         isEnd
         isPrivate
         postedAt
+        hotDealType
         thumbnail
         isMyWishlist
       }

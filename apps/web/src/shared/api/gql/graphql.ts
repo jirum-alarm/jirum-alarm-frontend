@@ -1134,6 +1134,7 @@ export type QueryProductsQuery = {
     categoryId?: number | null;
     category?: string | null;
     thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
     searchAfter?: Array<string> | null;
     postedAt: any;
     provider: { __typename?: 'Provider'; nameKr: string };
@@ -1256,6 +1257,7 @@ export type QueryWishlistsQuery = {
       isEnd?: boolean | null;
       isPrivate: boolean;
       postedAt: any;
+      hotDealType?: HotDealType | null;
       thumbnail?: string | null;
       isMyWishlist?: boolean | null;
     };
@@ -1540,6 +1542,7 @@ export const QueryProductsDocument = new TypedDocumentString(`
     categoryId
     category
     thumbnail
+    hotDealType
     provider {
       nameKr
     }
@@ -1657,6 +1660,7 @@ export const QueryWishlistsDocument = new TypedDocumentString(`
       isEnd
       isPrivate
       postedAt
+      hotDealType
       thumbnail
       isMyWishlist
     }

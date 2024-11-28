@@ -157,6 +157,7 @@ const QueryProducts = graphql(`
       categoryId
       category
       thumbnail
+      hotDealType
       provider {
         nameKr
       }

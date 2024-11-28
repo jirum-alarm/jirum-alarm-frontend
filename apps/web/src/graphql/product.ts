@@ -102,6 +102,7 @@ export const QueryProducts = gql`
       categoryId
       category
       thumbnail
+      hotDealType
       provider {
         nameKr
       }

@@ -8,6 +8,7 @@ import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
+import HotdealBadge from './HotdealBadge';
 
 export const ProductTrendingImageCard = ({
   product,
@@ -39,16 +40,21 @@ export const ProductTrendingImageCard = ({
         <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm text-primary-500">
           {rank}
         </div>
-        <div
-          className={cn({
-            'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
-              true,
-            'border border-gray-400 bg-white px-2 text-gray-500': product.isEnd,
-            'bg-error-500 px-3 text-white ': !product.isEnd && product.isHot,
-          })}
-        >
-          {product.isEnd ? '판매종료' : product.isHot ? '핫딜' : ''}
-        </div>
+        {product.isEnd && (
+          <div
+            className={cn('border border-gray-400 bg-white px-2 text-gray-500', {
+              'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
+                true,
+            })}
+          >
+            판매종료
+          </div>
+        )}
+        {!product.isEnd && product.hotDealType && (
+          <div className="absolute bottom-0 left-0 z-10">
+            <HotdealBadge badgeVariant="card" hotdealType={product.hotDealType} />
+          </div>
+        )}
 
         <ImageWithFallback
           src={product?.thumbnail ?? ''}

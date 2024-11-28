@@ -12,6 +12,7 @@ import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
+import HotdealBadge from './HotdealBadge';
 
 export function ProductImageCard({
   product,
@@ -50,16 +51,19 @@ export function ProductImageCard({
           'h-[120px]': type === 'hotDeal',
         })}
       >
-        {type === 'product' && (
+        {type === 'product' && product.isEnd && (
           <div
-            className={cn({
+            className={cn('border border-gray-400 bg-white px-2 text-gray-500', {
               'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
                 true,
-              'border border-gray-400 bg-white px-2 text-gray-500': product.isEnd,
-              'bg-error-500 px-3 text-white ': !product.isEnd && product.isHot,
             })}
           >
-            {product.isEnd ? '판매종료' : product.isHot ? '핫딜' : ''}
+            판매종료
+          </div>
+        )}
+        {type === 'product' && !product.isEnd && product.hotDealType && (
+          <div className="absolute bottom-0 left-0 z-10">
+            <HotdealBadge badgeVariant="card" hotdealType={product.hotDealType} />
           </div>
         )}
 

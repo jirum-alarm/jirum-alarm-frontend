@@ -1,3 +1,4 @@
+import { HotDealType } from '@/shared/api/gql/graphql';
 import { IProvider } from './provider';
 
 export const enum ProductPriceTarget {
@@ -52,6 +53,7 @@ export interface IProduct {
   mallName?: string;
   guides?: IProductGuide[];
   prices?: IProductPrice[];
+  hotDealType?: HotDealType | null;
   searchAfter?: string[];
   isMyWishlist: boolean;
   categoryName?: string;
