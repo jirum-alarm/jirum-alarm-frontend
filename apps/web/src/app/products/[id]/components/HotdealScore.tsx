@@ -1,14 +1,9 @@
 import { Info } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
-import { HotDealType, ProductQuery } from '@/shared/api/gql/graphql';
+import { hotdealTextMap } from '@/constants/hotdeal';
+import { ProductQuery } from '@/shared/api/gql/graphql';
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-
-const hodealTextMap: Record<HotDealType, string> = {
-  [HotDealType.HotDeal]: '핫딜',
-  [HotDealType.SuperDeal]: '대박딜',
-  [HotDealType.UltraDeal]: '초대박딜',
-};
 
 const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
   const hotDealIndex = product.hotDealIndex;
@@ -37,7 +32,7 @@ const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product'
               <div className="pt-3">
                 <div className="mb-3 h-[22px] w-fit rounded-[8px] bg-primary-100 px-3">
                   <span className="text-xs font-semibold leading-4 text-[#025900]">
-                    {hodealTextMap[hotDealIndex.type]}
+                    {hotdealTextMap[hotDealIndex.type]}
                   </span>
                 </div>
                 <p
