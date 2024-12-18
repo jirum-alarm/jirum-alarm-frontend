@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useRef, useEffect, useState, Suspense, KeyboardEvent } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,7 +22,7 @@ export const TrendingContainer = () => {
     data: { categories },
   } = useSuspenseQuery(CategoryQueries.categoriesForUser());
   const { isHeaderVisible } = useVisibilityOnScroll();
-
+  const router = useRouter();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
 
@@ -39,6 +39,7 @@ export const TrendingContainer = () => {
         left: currentTab.offsetLeft,
         width: currentTab.offsetWidth,
       });
+      router.push(`${PAGE.TRENDING}?tab=${index}`);
       currentTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
   };
