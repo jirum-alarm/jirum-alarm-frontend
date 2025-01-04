@@ -3,8 +3,8 @@ import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
 import { ProductQueries } from '@/entities/product';
 import { Suspense, useState } from 'react';
 import ProductImageCardList from '@/app/(home)/components/(home)/RecommendedProduct/ProductImageCardList';
-import { cn } from '@/lib/cn';
 import { IllustStandingSmall } from '@/components/common/icons';
+import RecommendedProductTabs from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductTabs';
 
 const RecommendedProductList = () => {
   const {
@@ -12,31 +12,16 @@ const RecommendedProductList = () => {
   } = useSuspenseQuery(ProductQueries.productKeywords());
   const [selectedKeyword, setSelectedKeyword] = useState<string>(productKeywords[0]);
 
-  const handleKeywordClick = (keyword: string) => {
-    return (e: React.MouseEvent<HTMLLIElement>) => {
-      e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      setSelectedKeyword(keyword);
-    };
-  };
-
   return (
     <div>
-      <ul className="no-wrap flex gap-2 overflow-x-scroll pb-4 scrollbar-hide">
-        {productKeywords.map((keyword) => (
-          <li
-            key={keyword}
-            onClick={handleKeywordClick(keyword)}
-            className={cn(`shrink-0 rounded-[40px] border transition-all`, {
-              'border-secondary-500 bg-secondary-50 font-semibold text-secondary-800':
-                selectedKeyword === keyword,
-              'border-gray-300 bg-white text-gray-700': selectedKeyword !== keyword,
-            })}
-          >
-            <button className="px-[16px] py-[6px]">{keyword}</button>
-          </li>
-        ))}
-      </ul>
       <div className="h-[216px]">
+        <div className="pb-[16px]">
+          <RecommendedProductTabs
+            productKeywords={productKeywords}
+            selectedKeyword={selectedKeyword}
+            setSelectedKeyword={(keyword) => setSelectedKeyword(keyword)}
+          />
+        </div>
         <Suspense fallback={<ProductImageCardListSkeleton />}>
           <ProductImageCardList keyword={selectedKeyword} />
         </Suspense>

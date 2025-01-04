@@ -122,4 +122,14 @@ export const ProductQueries = {
       ],
       queryFn: () => ProductService.getProductsByKeyword(variables),
     }),
+  infiniteProductsByKeywords: (variables: QueryProductsByKeywordQueryVariables) =>
+    infiniteQueryOptions({
+      queryKey: [...ProductQueries.productsByKeywords(variables).queryKey],
+      queryFn: ({ pageParam }) =>
+        ProductService.getProductsByKeyword({ ...variables, searchAfter: pageParam }),
+      initialPageParam: null as null | string,
+      getNextPageParam: (lastPage, allPage) => {
+        return lastPage.productsByKeyword?.at(-1)?.searchAfter?.[0];
+      },
+    }),
 };
