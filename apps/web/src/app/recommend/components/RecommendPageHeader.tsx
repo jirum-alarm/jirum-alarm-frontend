@@ -14,7 +14,7 @@ export default function RecommendPageHeader() {
   const handleSearch = () => {
     mp.track(EVENT.PRODUCT_SEARCH.NAME, {
       type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
-      page: EVENT.PAGE.DETAIL,
+      page: EVENT.PAGE.RECOMMEND,
     });
   };
 
@@ -22,7 +22,7 @@ export default function RecommendPageHeader() {
     if (navigator.share) {
       mp.track(EVENT.PRODUCT_SHARE.NAME, {
         type: EVENT.PRODUCT_SHARE.TYPE.SHARE_API,
-        page: EVENT.PAGE.DETAIL,
+        page: EVENT.PAGE.RECOMMEND,
       });
 
       navigator.share({
@@ -32,7 +32,7 @@ export default function RecommendPageHeader() {
     } else {
       mp.track(EVENT.PRODUCT_SHARE.NAME, {
         type: EVENT.PRODUCT_SHARE.TYPE.NOT_SHARE_API,
-        page: EVENT.PAGE.DETAIL,
+        page: EVENT.PAGE.RECOMMEND,
       });
 
       navigator.clipboard.writeText(window.location.href);
