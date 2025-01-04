@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  ProductImageCard,
-  ProductLiveHotdealsImageCard,
-  ProductTrendingImageCard,
-  useCollectProduct,
-} from '@/features/products';
+import { ProductLiveHotdealsImageCard, useCollectProduct } from '@/features/products';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { ProductQueries } from '@/entities/product';
 import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 import { useInView } from 'react-intersection-observer';
 import { LoadingSpinner } from '@/components/common/icons';
-import useScreenSize from '@/hooks/useScreenSize';
 
 interface ProductImageCardListProps {
   keyword: string;
