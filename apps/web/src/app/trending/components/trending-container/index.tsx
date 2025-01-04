@@ -165,7 +165,6 @@ export const TrendingContainer = () => {
             <Suspense fallback={<TrendingListSkeleton />}>
               <TrendingList categoryId={category.id} categoryName={category.name} />
             </Suspense>
-            <div>hello</div>
           </SwiperSlide>
         ))}
       </Swiper>

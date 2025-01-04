@@ -5,11 +5,13 @@ import {
   ProductGuidesQueryVariables,
   ProductQueryVariables,
   QueryCommunityRandomRankingProductsQueryVariables,
+  QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
   TogetherViewedProductsQueryVariables,
 } from '../gql/graphql';
 
 import { httpClient } from '@/shared/lib/http-client';
+import { gql } from '@apollo/client';
 
 export class ProductService {
   static async getRankingProducts() {
@@ -49,6 +51,12 @@ export class ProductService {
   }
   static async reportExpiredProduct(variables: MutationReportExpiredProductMutationVariables) {
     return httpClient.execute(MutationReportExpiredProduct, variables).then((res) => res.data);
+  }
+  static async getProductKeywords() {
+    return httpClient.execute(QueryProductKeywords).then((res) => res.data);
+  }
+  static async getProductsByKeyword(variables: QueryProductsByKeywordQueryVariables) {
+    return httpClient.execute(QueryProductsByKeyword, variables).then((res) => res.data);
   }
 }
 
@@ -91,11 +99,6 @@ const QueryProduct = graphql(`
       }
       viewCount
       mallName
-      guides {
-        id
-        title
-        content
-      }
       prices {
         id
         target
@@ -232,5 +235,47 @@ const MutationCollectProduct = graphql(`
 const MutationReportExpiredProduct = graphql(`
   mutation MutationReportExpiredProduct($productId: Int!) {
     reportExpiredProduct(productId: $productId)
+  }
+`);
+
+const QueryProductKeywords = graphql(`
+  query QueryProductKeywords {
+    productKeywords
+  }
+`);
+
+const QueryProductsByKeyword = graphql(`
+  query QueryProductsByKeyword(
+    $limit: Int!
+    $searchAfter: [String!]
+    $keyword: String!
+    $orderBy: KeywordProductOrderType!
+    $orderOption: OrderOptionType!
+  ) {
+    productsByKeyword(
+      limit: $limit
+      searchAfter: $searchAfter
+      keyword: $keyword
+      orderBy: $orderBy
+      orderOption: $orderOption
+    ) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      hotDealType
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
+    }
   }
 `);
