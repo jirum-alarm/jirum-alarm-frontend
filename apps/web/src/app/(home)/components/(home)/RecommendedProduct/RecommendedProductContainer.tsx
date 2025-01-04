@@ -1,7 +1,8 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { PAGE } from '@/constants/page';
-import RecommendedProductListServer from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductContainerServer';
+import RecommendedProductTabsFetcher from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductTabsFetcher';
+import RecommendedProductList from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductList';
 
 const RecommendedProductContainer = () => {
   return (
@@ -14,7 +15,9 @@ const RecommendedProductContainer = () => {
       </div>
       <div className="pb-[52px]">
         <Suspense>
-          <RecommendedProductListServer />
+          <RecommendedProductTabsFetcher>
+            <RecommendedProductList />
+          </RecommendedProductTabsFetcher>
         </Suspense>
       </div>
     </div>

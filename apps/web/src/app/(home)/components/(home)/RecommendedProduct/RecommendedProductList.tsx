@@ -1,5 +1,5 @@
 'use client';
-import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { ProductQueries } from '@/entities/product';
 import { Suspense, useState } from 'react';
 import ProductImageCardList from '@/app/(home)/components/(home)/RecommendedProduct/ProductImageCardList';
