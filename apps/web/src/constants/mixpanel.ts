@@ -53,6 +53,7 @@ export const EVENT = {
   },
   PAGE: {
     HOME: 'Home',
+    RECOMMEND: 'Recommend',
     TRENDING: 'Trending',
     DETAIL: 'Detail',
     SEARCH: 'Search',

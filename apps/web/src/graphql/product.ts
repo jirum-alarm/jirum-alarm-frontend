@@ -27,11 +27,6 @@ export const QueryProduct = gql`
       }
       viewCount
       mallName
-      guides {
-        id
-        title
-        content
-      }
       prices {
         id
         target
@@ -161,6 +156,48 @@ export const QueryTogetherViewedProducts = gql`
       categoryId
       category
       thumbnail
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
+    }
+  }
+`;
+
+export const QueryProductKeywords = gql`
+  query QueryProductKeywords {
+    productKeywords
+  }
+`;
+
+export const QueryProductsByKeyword = gql`
+  query QueryProductsByKeyword(
+    $limit: Int!
+    $searchAfter: [String!]
+    $keyword: String!
+    $orderBy: KeywordProductOrderType!
+    $orderOption: OrderOptionType!
+  ) {
+    productsByKeyword(
+      limit: $limit
+      searchAfter: $searchAfter
+      keyword: $keyword
+      orderBy: $orderBy
+      orderOption: $orderOption
+    ) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      hotDealType
       provider {
         nameKr
       }

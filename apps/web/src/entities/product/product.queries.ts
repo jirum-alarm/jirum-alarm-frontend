@@ -1,10 +1,15 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 import {
+  InputMaybe,
+  KeywordProductOrderType,
+  OrderOptionType,
   ProductGuidesQueryVariables,
   ProductQueryVariables,
   QueryCommunityRandomRankingProductsQueryVariables,
+  QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
+  Scalars,
   TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
@@ -96,5 +101,35 @@ export const ProductQueries = {
         },
       ],
       queryFn: () => ProductService.getTogetherViewedProducts(variables),
+    }),
+  productKeywords: () =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'keywords'],
+      queryFn: () => ProductService.getProductKeywords(),
+    }),
+  productsByKeywords: (variables: QueryProductsByKeywordQueryVariables) =>
+    queryOptions({
+      queryKey: [
+        ...ProductQueries.all(),
+        'productsByKeywords',
+        {
+          limit: variables.limit,
+          searchAfter: variables.searchAfter,
+          keyword: variables.keyword,
+          orderBy: variables.orderBy,
+          orderOption: variables.orderOption,
+        },
+      ],
+      queryFn: () => ProductService.getProductsByKeyword(variables),
+    }),
+  infiniteProductsByKeywords: (variables: QueryProductsByKeywordQueryVariables) =>
+    infiniteQueryOptions({
+      queryKey: [...ProductQueries.productsByKeywords(variables).queryKey],
+      queryFn: ({ pageParam }) =>
+        ProductService.getProductsByKeyword({ ...variables, searchAfter: pageParam }),
+      initialPageParam: null as null | string,
+      getNextPageParam: (lastPage, allPage) => {
+        return lastPage.productsByKeyword?.at(-1)?.searchAfter?.[0];
+      },
     }),
 };

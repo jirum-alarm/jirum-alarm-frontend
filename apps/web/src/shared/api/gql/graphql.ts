@@ -137,6 +137,10 @@ export enum InstagramPostType {
   Normal = 'NORMAL',
 }
 
+export enum KeywordProductOrderType {
+  PostedAt = 'POSTED_AT',
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   /** 어드민) 핫딜 제외 키워드 추가 */
@@ -578,8 +582,11 @@ export type Query = {
   /** 상품 조회 */
   product?: Maybe<ProductOutput>;
   productGuides: Array<ProductGuide>;
+  productKeywords: Array<Scalars['String']['output']>;
   /** 상품 목록 조회 */
   products: Array<ProductOutput>;
+  /** 키워드로 상품 목록 조회 */
+  productsByKeyword: Array<ProductOutput>;
   /** 푸시 세팅 조회 */
   pushSetting: UserPushSetting;
   /** 상품 랭킹 목록 조회 */
@@ -709,6 +716,11 @@ export type QueryProductGuidesArgs = {
   productId: Scalars['Int']['input'];
 };
 
+export type QueryProductKeywordsArgs = {
+  endedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  startedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
 export type QueryProductsArgs = {
   categoryId?: InputMaybe<Scalars['Int']['input']>;
   endDate?: InputMaybe<Scalars['DateTime']['input']>;
@@ -724,6 +736,14 @@ export type QueryProductsArgs = {
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
   startDate?: InputMaybe<Scalars['DateTime']['input']>;
   thumbnailType?: InputMaybe<ThumbnailType>;
+};
+
+export type QueryProductsByKeywordArgs = {
+  keyword: Scalars['String']['input'];
+  limit: Scalars['Int']['input'];
+  orderBy: KeywordProductOrderType;
+  orderOption: OrderOptionType;
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type QuerySocialAccessTokenArgs = {
@@ -1072,12 +1092,6 @@ export type ProductQuery = {
       nameKr: string;
       host?: string | null;
     };
-    guides?: Array<{
-      __typename?: 'ProductGuide';
-      id: string;
-      title: string;
-      content: string;
-    }> | null;
     prices?: Array<{
       __typename?: 'ProductPrice';
       id: string;
@@ -1201,6 +1215,40 @@ export type TogetherViewedProductsQuery = {
     categoryId?: number | null;
     category?: string | null;
     thumbnail?: string | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+    provider: { __typename?: 'Provider'; nameKr: string };
+  }>;
+};
+
+export type QueryProductKeywordsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryProductKeywordsQuery = { __typename?: 'Query'; productKeywords: Array<string> };
+
+export type QueryProductsByKeywordQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  keyword: Scalars['String']['input'];
+  orderBy: KeywordProductOrderType;
+  orderOption: OrderOptionType;
+}>;
+
+export type QueryProductsByKeywordQuery = {
+  __typename?: 'Query';
+  productsByKeyword: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    url: string;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId?: number | null;
+    category?: string | null;
+    thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
     searchAfter?: Array<string> | null;
     postedAt: any;
     provider: { __typename?: 'Provider'; nameKr: string };
@@ -1479,11 +1527,6 @@ export const ProductDocument = new TypedDocumentString(`
     }
     viewCount
     mallName
-    guides {
-      id
-      title
-      content
-    }
     prices {
       id
       target
@@ -1614,6 +1657,46 @@ export const TogetherViewedProductsDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   TogetherViewedProductsQuery,
   TogetherViewedProductsQueryVariables
+>;
+export const QueryProductKeywordsDocument = new TypedDocumentString(`
+    query QueryProductKeywords {
+  productKeywords
+}
+    `) as unknown as TypedDocumentString<
+  QueryProductKeywordsQuery,
+  QueryProductKeywordsQueryVariables
+>;
+export const QueryProductsByKeywordDocument = new TypedDocumentString(`
+    query QueryProductsByKeyword($limit: Int!, $searchAfter: [String!], $keyword: String!, $orderBy: KeywordProductOrderType!, $orderOption: OrderOptionType!) {
+  productsByKeyword(
+    limit: $limit
+    searchAfter: $searchAfter
+    keyword: $keyword
+    orderBy: $orderBy
+    orderOption: $orderOption
+  ) {
+    id
+    title
+    mallId
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    hotDealType
+    provider {
+      nameKr
+    }
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryProductsByKeywordQuery,
+  QueryProductsByKeywordQueryVariables
 >;
 export const MutationCollectProductDocument = new TypedDocumentString(`
     mutation MutationCollectProduct($productId: Int!) {

@@ -124,6 +124,10 @@ enum InstagramPostType {
   NORMAL
 }
 
+enum KeywordProductOrderType {
+  POSTED_AT
+}
+
 type Mutation {
   """
   어드민) 핫딜 제외 키워드 추가
@@ -594,6 +598,7 @@ type Query {
   """
   product(id: Int!): ProductOutput
   productGuides(productId: Int!): [ProductGuide!]!
+  productKeywords(endedAt: DateTime, startedAt: DateTime): [String!]!
   """
   상품 목록 조회
   """
@@ -612,6 +617,16 @@ type Query {
     searchAfter: [String!]
     startDate: DateTime
     thumbnailType: ThumbnailType
+  ): [ProductOutput!]!
+  """
+  키워드로 상품 목록 조회
+  """
+  productsByKeyword(
+    keyword: String!
+    limit: Int!
+    orderBy: KeywordProductOrderType!
+    orderOption: OrderOptionType!
+    searchAfter: [String!]
   ): [ProductOutput!]!
   """
   푸시 세팅 조회

@@ -48,12 +48,12 @@ const BasicLayout = ({
       )}
     >
       {header ?? (
-        <header className="fixed top-0 z-50 flex h-11 w-full max-w-screen-layout-max items-center justify-center bg-white text-black">
+        <header className="fixed top-0 z-50 flex h-14 w-full max-w-screen-layout-max items-center justify-center bg-white text-black">
           {hasBackButton && <div className="absolute left-0">{<BackButton backTo={backTo} />}</div>}
-          {title && <h1 className="text-base font-semibold text-black">{title}</h1>}
+          {title && <h1 className="text-lg font-semibold text-black">{title}</h1>}
         </header>
       )}
-      <div className={cn('h-full', { 'pt-11': !header })}>{children}</div>
+      <div className={cn('h-full', { 'pt-14': !header })}>{children}</div>
       {/* {hasBottomNav && <BottomNav type={navType} />} */}
     </div>
   );
