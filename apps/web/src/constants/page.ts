@@ -1,6 +1,7 @@
 export enum PAGE {
   HOME = '/',
   TRENDING = '/trending',
+  RECOMMEND = '/recommend',
 
   DETAIL = '/products',
 

@@ -11,7 +11,7 @@ const BackButton = ({ backTo }: { backTo?: PAGE }) => {
 
   return (
     <button className="p-2" onClick={goBack} aria-label="뒤로 가기" title="뒤로 가기">
-      <ArrowLeft />
+      <ArrowLeft width={28} height={28} />
     </button>
   );
 };

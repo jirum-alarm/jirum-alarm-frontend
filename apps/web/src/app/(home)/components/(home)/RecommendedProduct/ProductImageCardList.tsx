@@ -34,6 +34,7 @@ const ProductImageCardList = ({ keyword }: ProductImageCardListProps) => {
           <SwiperSlide key={product.id}>
             <ProductImageCard
               key={product.id}
+              type="hotDeal"
               product={product}
               collectProduct={collectProduct}
               logging={{ page: 'HOME' }}

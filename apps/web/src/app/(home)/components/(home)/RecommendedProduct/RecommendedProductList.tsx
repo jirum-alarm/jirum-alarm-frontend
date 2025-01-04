@@ -36,7 +36,7 @@ const RecommendedProductList = () => {
           </li>
         ))}
       </ul>
-      <div className="h-[246px]">
+      <div className="h-[216px]">
         <Suspense fallback={<ProductImageCardListSkeleton />}>
           <ProductImageCardList keyword={selectedKeyword} />
         </Suspense>
