@@ -1,5 +1,10 @@
 import React from 'react';
-import { ProductTrendingImageCard, useCollectProduct } from '@/features/products';
+import {
+  ProductImageCard,
+  ProductLiveHotdealsImageCard,
+  ProductTrendingImageCard,
+  useCollectProduct,
+} from '@/features/products';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { ProductQueries } from '@/entities/product';
 import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
@@ -34,10 +39,9 @@ const RecommendProductList = ({ keyword }: ProductImageCardListProps) => {
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
         {data.pages.flatMap(({ productsByKeyword }, i) =>
           productsByKeyword.map((product, index) => (
-            <ProductTrendingImageCard
+            <ProductLiveHotdealsImageCard
               key={product.id}
               product={product}
-              rank={i * 10 + (index + 1)}
               collectProduct={collectProduct}
               logging={{ page: 'RECOMMEND' }}
             />

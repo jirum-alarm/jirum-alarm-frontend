@@ -4,18 +4,18 @@ import { cn } from '@/lib/cn';
 interface RecommendedProductTabsProps {
   productKeywords: string[];
   selectedKeyword: string;
-  setSelectedKeyword: (keyword: string) => void;
+  onSelectedKeyword: (keyword: string) => void;
 }
 
 const RecommendedProductTabs = ({
   productKeywords,
-  setSelectedKeyword,
+  onSelectedKeyword,
   selectedKeyword,
 }: RecommendedProductTabsProps) => {
   const handleKeywordClick = (keyword: string) => {
     return (e: React.MouseEvent<HTMLLIElement>) => {
       e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      setSelectedKeyword(keyword);
+      onSelectedKeyword(keyword);
     };
   };
 

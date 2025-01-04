@@ -5,18 +5,23 @@ import { ProductQueries } from '@/entities/product';
 import React, { Suspense, useState } from 'react';
 import RecommendProductList from '@/app/recommend/components/RecommendProductList';
 import { IllustStandingSmall } from '@/components/common/icons';
+import useTabQueryString from '@/hooks/useTabQueryString';
 const RecommendContainer = () => {
   const {
     data: { productKeywords },
   } = useSuspenseQuery(ProductQueries.productKeywords());
-  const [selectedKeyword, setSelectedKeyword] = useState<string>(productKeywords[0]);
+  const { currentTab, setTabChange } = useTabQueryString('keyword');
+  const selectedKeyword = currentTab ?? productKeywords[0];
+  const handleSelectedKeyword = (keyword: string) => {
+    setTabChange(keyword);
+  };
   return (
     <div>
       <div className="sticky top-[56px] z-[50] w-full max-w-screen-layout-max bg-white pb-[20px] pt-[12px]">
         <RecommendedProductTabs
           productKeywords={productKeywords}
           selectedKeyword={selectedKeyword}
-          setSelectedKeyword={(keyword) => setSelectedKeyword(keyword)}
+          onSelectedKeyword={(keyword) => handleSelectedKeyword(keyword)}
         />
       </div>
       <Suspense fallback={<RecommendProductListSkeleton />}>

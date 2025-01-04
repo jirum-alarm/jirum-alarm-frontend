@@ -1,16 +1,22 @@
 'use client';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { ProductQueries } from '@/entities/product';
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import ProductImageCardList from '@/app/(home)/components/(home)/RecommendedProduct/ProductImageCardList';
 import { IllustStandingSmall } from '@/components/common/icons';
 import RecommendedProductTabs from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductTabs';
+import useTabQueryString from '@/hooks/useTabQueryString';
 
 const RecommendedProductList = () => {
   const {
     data: { productKeywords },
   } = useSuspenseQuery(ProductQueries.productKeywords());
-  const [selectedKeyword, setSelectedKeyword] = useState<string>(productKeywords[0]);
+
+  const { currentTab, setTabChange } = useTabQueryString('keyword');
+  const selectedKeyword = currentTab ?? productKeywords[0];
+  const handleSelectedKeyword = (keyword: string) => {
+    setTabChange(keyword);
+  };
 
   return (
     <div>
@@ -19,7 +25,7 @@ const RecommendedProductList = () => {
           <RecommendedProductTabs
             productKeywords={productKeywords}
             selectedKeyword={selectedKeyword}
-            setSelectedKeyword={(keyword) => setSelectedKeyword(keyword)}
+            onSelectedKeyword={(keyword) => handleSelectedKeyword(keyword)}
           />
         </div>
         <Suspense fallback={<ProductImageCardListSkeleton />}>
