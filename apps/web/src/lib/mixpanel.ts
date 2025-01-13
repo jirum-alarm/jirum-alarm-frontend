@@ -21,6 +21,9 @@ class MixpanelService {
       });
       const distinctId = mixpanel.get_distinct_id();
       httpClient.setDistintId(distinctId);
+
+      mixpanel.identify(distinctId);
+
       MixpanelService.instance = mixpanel;
     } else {
       // mock when not prd
@@ -31,6 +34,14 @@ class MixpanelService {
       MixpanelService.instance.get_distinct_id = (user?: any) => {
         console.info('Mixpanel get_distinct_id:', user);
       };
+      MixpanelService.instance.identify = (id: string) => {
+        console.info('Mixpanel identify:', id);
+      };
+      MixpanelService.instance.people = {
+        set: (props: any) => {
+          console.info('Mixpanel people set:', props);
+        },
+      } as any;
     }
 
     return MixpanelService.instance;
@@ -43,9 +54,21 @@ class MixpanelService {
 
     return null;
   }
+
+  public static setUser(props: {
+    $name: string | null;
+    $email: string | null;
+    [key: string]: any;
+  }) {
+    mixpanel.people.set(props);
+  }
 }
 
-export const mp = MixpanelService.getInstance();
+export const mp = MixpanelService.getInstance() as Mixpanel & {
+  set_user: typeof MixpanelService.setUser;
+};
+
+mp.set_user = MixpanelService.setUser;
 
 export function InitMixpanel() {
   useEffect(() => {

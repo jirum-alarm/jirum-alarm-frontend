@@ -11,6 +11,7 @@ import { TokenType, addPushTokenVariable } from '@/graphql/interface';
 import { MutationAddPushToken } from '@/graphql/notification';
 import { fcmTokenAtom } from '@/state/fcmToken';
 import { ILoginOutput, ILoginVariable } from '@/types/login';
+import { mp } from '@/lib/mixpanel';
 
 const HOME_PATH = '/';
 
@@ -69,6 +70,11 @@ const useEmailLoginFormViewModel = () => {
         console.error('fcmToken is not exist');
         return;
       }
+
+      mp.set_user({
+        $name: null,
+        $email: loginForm.email.value,
+      });
 
       addPushToken({ variables: { token: fcmToken, tokenType: TokenType.FCM } });
     },

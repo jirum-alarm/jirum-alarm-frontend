@@ -19,6 +19,7 @@ import { ICategoryForm } from '@/features/categories/types';
 import { MutationSignup } from '@/graphql/auth';
 import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth';
 import { User } from '@/types/user';
+import { mp } from '@/lib/mixpanel';
 
 const COMPLETE_ROUTE = 'signup/complete';
 
@@ -121,6 +122,13 @@ const Signup = () => {
         gender,
         favoriteCategories,
       },
+    });
+
+    mp.set_user({
+      $name: nickname.value,
+      $email: email.value,
+      birthYear,
+      gender,
     });
   };
 
