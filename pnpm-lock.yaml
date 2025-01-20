@@ -93,6 +93,9 @@ importers:
 
   apps/mobile:
     dependencies:
+      '@react-native/gradle-plugin':
+        specifier: ^0.76.6
+        version: 0.76.6
       '@rnx-kit/metro-config':
         specifier: ^2.0.1
         version: 2.0.1(@react-native/metro-config@0.76.6(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0)))(react-native@0.76.6(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@15.0.1)(@types/react@18.2.58)(react@18.3.1))(react@18.3.1)
