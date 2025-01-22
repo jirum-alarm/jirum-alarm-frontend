@@ -1,15 +1,20 @@
+const path = require('path');
 const {makeMetroConfig} = require('@rnx-kit/metro-config');
 const MetroSymlinksResolver = require('@rnx-kit/metro-resolver-symlinks');
 
-/**
- * Metro configuration
- * https://reactnative.dev/docs/metro
- *
- * @type {import('metro-config').MetroConfig}
- */
+const extraNodeModules = {
+  modules: path.resolve(path.join(__dirname, '../../node_modules')),
+};
+
+const watchFolders = [path.resolve(path.join(__dirname, '../../node_modules'))];
+
+const nodeModulesPaths = [path.resolve(path.join(__dirname, './node_modules'))];
+
 module.exports = makeMetroConfig({
-  // projectRoot: __dirname,
   resolver: {
     resolveRequest: MetroSymlinksResolver(),
+    extraNodeModules,
+    nodeModulesPaths,
   },
+  watchFolders,
 });
