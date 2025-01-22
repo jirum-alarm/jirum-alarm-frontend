@@ -23,6 +23,7 @@ function App(): React.JSX.Element {
   return (
     <SafeAreaView style={styles.container}>
       <WebView
+        pullToRefreshEnabled
         source={{uri: 'https://jirum-alarm.com/'}}
         userAgent={userAgent}
         onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
