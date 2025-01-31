@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "570660841537",
+    "project_id": "jirumalarm-b25f9",
+    "storage_bucket": "jirumalarm-b25f9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570660841537:android:d336a8695b68c74dffbec0",
+        "android_client_info": {
+          "package_name": "com.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "570660841537-gqco31f4adfm7htvh909k049ebuot5nh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgOcfC9ufST6KxJmDQZkb6peE363FfzK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570660841537-gqco31f4adfm7htvh909k049ebuot5nh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570660841537:android:80325bc58d182972ffbec0",
+        "android_client_info": {
+          "package_name": "com.solcode.jirmalam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "570660841537-gqco31f4adfm7htvh909k049ebuot5nh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgOcfC9ufST6KxJmDQZkb6peE363FfzK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570660841537-gqco31f4adfm7htvh909k049ebuot5nh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
