@@ -12,6 +12,7 @@ import { MutationAddPushToken } from '@/graphql/notification';
 import { fcmTokenAtom } from '@/state/fcmToken';
 import { ILoginOutput, ILoginVariable } from '@/types/login';
 import { mp } from '@/lib/mixpanel';
+import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 
 const HOME_PATH = '/';
 
@@ -60,6 +61,9 @@ const useEmailLoginFormViewModel = () => {
       await setAccessToken(data.login.accessToken);
 
       if (data.login.refreshToken) {
+        WebViewBridge.sendMessage(WebViewEventType.LOGIN_SUCCESS, {
+          data: { accessToken: data.login.accessToken, refreshToken: data.login.refreshToken },
+        });
         await setRefreshToken(data.login.refreshToken);
       }
 

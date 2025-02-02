@@ -1,24 +1,26 @@
 import {
-  type WebViewEvent,
-  type WebViewEventPayloads,
-  WebViewEventType,
+  type WebViewReceiverEvent,
+  type WebViewReceiverEventPayloads,
+  WebViewReceiverEventType,
 } from '@/shared/lib/webview/type';
-type EventHandler<T extends WebViewEventType> = (payload: WebViewEventPayloads[T]) => void;
+type EventHandler<T extends WebViewReceiverEventType> = (
+  payload: WebViewReceiverEventPayloads[T],
+) => void;
 
 export class AuthHandler {
-  static tokenRefresh: EventHandler<WebViewEventType.TOKEN_REFRESH> = (payload) => {
+  static tokenRefresh: EventHandler<WebViewReceiverEventType.TOKEN_REFRESH> = (payload) => {
     console.log('Token refreshed:', payload);
   };
 }
 
 const eventHandlers: {
-  [key in WebViewEventType]: (payload: any) => void;
+  [key in WebViewReceiverEventType]: (payload: any) => void;
 } = {
-  [WebViewEventType.TOKEN_REFRESH]: AuthHandler.tokenRefresh,
+  [WebViewReceiverEventType.TOKEN_REFRESH]: AuthHandler.tokenRefresh,
 };
 
 export const handleReactNativeEvent = (message: string) => {
-  const parsedMessage: WebViewEvent<WebViewEventType> = JSON.parse(message);
+  const parsedMessage: WebViewReceiverEvent<WebViewReceiverEventType> = JSON.parse(message);
 
   const handler = eventHandlers[parsedMessage.type];
   if (handler) {

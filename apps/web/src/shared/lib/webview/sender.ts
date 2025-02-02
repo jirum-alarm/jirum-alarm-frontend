@@ -4,10 +4,10 @@ import type {
   WebViewEventType,
 } from '@/shared/lib/webview/type';
 
-export class WebviewBridge {
+export class WebViewBridge {
   static sendMessage<T extends WebViewEventType>(type: T, payload: WebViewEventPayloads[T]) {
     const message = this.createWebViewEvent(type, payload);
-    window.ReactNativeWebView.postMessage(JSON.stringify(message));
+    window.ReactNativeWebView?.postMessage(JSON.stringify(message));
   }
   private static createWebViewEvent<T extends WebViewEventType>(
     type: T,
