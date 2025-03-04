@@ -11,7 +11,7 @@ import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
 
 const httpLink = new HttpLink({
   uri: GRAPHQL_ENDPOINT,
-  fetchOptions: { cache: 'no-store', crendentials: 'include' },
+  fetchOptions: { cache: 'no-store', credentials: 'include' },
 });
 
 const getAuthLink = setContext(async (_, { headers }) => {

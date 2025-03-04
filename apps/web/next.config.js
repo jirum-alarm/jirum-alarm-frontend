@@ -93,19 +93,10 @@ const nextConfig = withPWA({
     return config;
   },
   images: {
-    minimumCacheTTL: 3 * 24 * 60 * 60,
-    deviceSizes: [320, 420, 768, 1024, 1200],
-    imageSizes: [16, 32, 48, 64, 96],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'cdn.jirum-alarm.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 's3.ap-northeast-2.amazonaws.com',
-      },
-    ],
+    domains: ['cdn.jirum-alarm.com'],
+    minimumCacheTTL: 60,
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    formats: ['image/webp'],
   },
   experimental: {
     optimizeCss: true,
