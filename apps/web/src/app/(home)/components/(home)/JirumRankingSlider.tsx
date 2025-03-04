@@ -9,6 +9,34 @@ import { cn } from '@/lib/cn';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { ProductQueries } from '@/entities/product';
 
+const SLIDER_CONFIG = {
+  centeredSlides: true,
+  slidesPerView: 1.5577,
+  breakpoints: {
+    450: { slidesPerView: 2 },
+    520: { slidesPerView: 2.3 },
+  },
+  loop: true,
+  lazyPreloadPrevNext: 1,
+  lazyPreloaderClass: 'swiper-lazy-preloader',
+} as const;
+
+const SliderDots = ({ total, activeIndex }: { total: number; activeIndex: number }) => (
+  <div className="mt-3 flex h-[20px] w-full items-center justify-center" role="tablist">
+    {Array.from({ length: total }).map((_, i) => (
+      <div
+        key={i}
+        role="tab"
+        aria-selected={activeIndex === i}
+        aria-label={`슬라이드 ${i + 1}`}
+        className={cn(`h-[3px] w-[3px] bg-gray-400`, {
+          'ml-[6px] mr-[6px] h-[4px] w-[4px] bg-gray-600': activeIndex === i,
+        })}
+      />
+    ))}
+  </div>
+);
+
 const JirumRankingSlider = () => {
   const {
     data: { rankingProducts },
@@ -30,35 +58,19 @@ const JirumRankingSlider = () => {
           />
         </SwiperSlide>
       )),
-    [rankingProducts, activeIndex],
+    [rankingProducts, activeIndex, collectProduct],
   );
+
+  if (!rankingProducts?.length) {
+    return <div>No products available</div>;
+  }
 
   return (
     <div>
-      <Swiper
-        centeredSlides={true}
-        slidesPerView={1.5577}
-        breakpoints={{
-          450: { slidesPerView: 2 },
-          520: { slidesPerView: 2.3 },
-        }}
-        loop={true}
-        lazyPreloadPrevNext={1}
-        lazyPreloaderClass="swiper-lazy-preloader"
-        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-      >
+      <Swiper {...SLIDER_CONFIG} onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}>
         {slides}
       </Swiper>
-      <div className="mt-3 flex h-[20px] w-full items-center justify-center">
-        {Array.from({ length: rankingProducts.length }).map((_, i) => (
-          <div
-            key={i}
-            className={cn(`h-[3px] w-[3px] bg-gray-400`, {
-              'ml-[6px] mr-[6px] h-[4px] w-[4px] bg-gray-600': activeIndex === i,
-            })}
-          />
-        ))}
-      </div>
+      <SliderDots total={rankingProducts.length} activeIndex={activeIndex} />
     </div>
   );
 };
