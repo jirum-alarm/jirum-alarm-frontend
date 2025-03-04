@@ -33,6 +33,8 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+
+  --font-pretendard: var(--Pretendard);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -76,7 +78,7 @@
 
 body {
   user-select: none;
-  font-family: 'Pretendard', sans-serif;
+  font-family: var(--font-pretendard);
 }
 
 a {

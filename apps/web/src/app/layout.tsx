@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { AppProvider } from './(app)/providers';
 import { GA_TRACKING_ID } from '@/constants/ga';
 import { defaultMetadata } from '@/constants/metadata';
+import { pretendard } from '@/lib/fonts';
 
 const SpeedInsights = dynamic(
   () => import('@vercel/speed-insights/next').then((mod) => mod.SpeedInsights),
@@ -36,34 +37,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={pretendard.variable}>
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link
-          rel="preload"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"
-          crossOrigin="anonymous"
-        />
-
-        {/* <Script
-          src="https://t1.kakaocdn.net/kakao_js_sdk/2.4.0/kakao.min.js"
-          strategy="lazyOnload"
-          integrity="sha384-mXVrIX2T/Kszp6Z0aEWaA8Nm7J6/ZeWXbL8UpGRjKwWe56Srd/iyNmWMBhcItAjH"
-          crossOrigin="anonymous"
-        /> */}
-        {/* hide until using real word */}
-        {/* <Script */}
-        {/*   async */}
-        {/*   src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3855723530036909" */}
-        {/*   crossOrigin="anonymous" */}
-        {/* ></Script> */}
+        {/* CDN 폰트 관련 link 태그들 제거 */}
       </head>
       <body>
         <MSWInit>
