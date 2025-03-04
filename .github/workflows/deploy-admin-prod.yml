@@ -75,7 +75,7 @@ jobs:
 
       - name: Update Kubernetes Deployment resources
         run: |
-          perl -i -pe's/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin:.*/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin:${{ steps.image.outputs.version }}/' production/$INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH
+          perl -i -pe's/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin:.*/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin:${{ steps.image.outputs.version }}/' server/jirum-alarm-admin/production/$INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH
 
       - name: Commit files
         run: |

@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Deploy to Staging
     runs-on: ubuntu-latest
 
     env:
@@ -18,7 +18,7 @@ jobs:
       DOCKER_USER: ${{ secrets.DOCKER_USER }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       INFRA_GITHUB_REPOSITORY: ${{ secrets.INFRA_GITHUB_REPOSITORY }}
-      INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH: ${{ secrets.INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH }}
+      INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH: jirum-alarm-frontend-admin-deployment.yaml
 
     steps:
       - name: Checkout
@@ -75,7 +75,7 @@ jobs:
 
       - name: Update Kubernetes Deployment resources
         run: |
-          perl -i -pe's/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin-dev:.*/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin-dev:${{ steps.image.outputs.version }}/' development/$INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH
+          perl -i -pe's/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin-dev:.*/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin-dev:${{ steps.image.outputs.version }}/' server/jirum-alarm-admin/development/$INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH
 
       - name: Commit files
         run: |
