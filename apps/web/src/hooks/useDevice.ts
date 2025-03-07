@@ -20,8 +20,8 @@ export const useDevice = () => {
     setIsApple(Boolean(userAgent.match(/iPhone|iPad|iPod|Mac/i)));
     setIsIos(Boolean(userAgent.match(/iPhone|iPad|iPod/i)));
     setIsAndroid(Boolean(userAgent.match(/Android/i)));
-    setIsJirumAlarmIOSApp(Boolean(userAgent.match(/IOS Flutter Webview Jirum Alarm/i)));
-    setIsJirumAlarmAndroidApp(Boolean(userAgent.match(/Android Flutter Webview Jirum Alarm/i)));
+    setIsJirumAlarmIOSApp(Boolean(userAgent.match(/IOS ReactNative Webview Jirum Alarm/i)));
+    setIsJirumAlarmAndroidApp(Boolean(userAgent.match(/Android ReactNative Webview Jirum Alarm/i)));
   }, []);
 
   return {

@@ -5,7 +5,7 @@ import { NAV_TYPE } from '@/components/layout/BottomNav';
 
 const Alarm = () => {
   return (
-    <BasicLayout hasBackButton title="알림" hasBottomNav navType={NAV_TYPE.ALARM}>
+    <BasicLayout title="알림" hasBottomNav navType={NAV_TYPE.ALARM}>
       <AlarmList />
     </BasicLayout>
   );

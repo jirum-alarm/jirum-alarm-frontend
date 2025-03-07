@@ -72,6 +72,10 @@ const BottomNav = ({ type }: { type: any }) => {
   const { isMobile, isJirumAlarmApp } = useDevice();
   const isMobileWithApp = isMobile || isJirumAlarmApp;
 
+  if (isJirumAlarmApp) {
+    return null;
+  }
+
   if (!BottomNavList.some((nav) => nav.link === pathName)) return;
 
   {

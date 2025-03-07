@@ -2,11 +2,13 @@ export enum WebViewEventType {
   'TOKEN_REFRESH' = 'TOKEN_REFRESH',
   'LOGIN_SUCCESS' = 'LOGIN_SUCCESS',
   'TOKEN_REMOVE' = 'TOKEN_REMOVE',
+  'PRESS_BACKBUTTON' = 'PRESS_BACKBUTTON',
 }
 export type WebViewEventPayloads = {
   [WebViewEventType.TOKEN_REFRESH]: { data: string };
   [WebViewEventType.LOGIN_SUCCESS]: { data: { accessToken: string; refreshToken: string } };
   [WebViewEventType.TOKEN_REMOVE]: null;
+  [WebViewEventType.PRESS_BACKBUTTON]: null;
 };
 export interface WebViewEvent<T extends WebViewEventType> {
   type: T;
