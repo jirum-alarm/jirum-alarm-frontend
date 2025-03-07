@@ -5,8 +5,6 @@ import { PAGE } from '@/constants/page';
 import { useDevice } from '@/hooks/useDevice';
 import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 
-const noop = () => {};
-
 const useGoBack = (backTo: PAGE = PAGE.HOME) => {
   const router = useRouter();
   const { isJirumAlarmApp } = useDevice();
@@ -19,8 +17,7 @@ const useGoBack = (backTo: PAGE = PAGE.HOME) => {
   }, [router, backTo]);
 
   if (isJirumAlarmApp) {
-    WebViewBridge.sendMessage(WebViewEventType.PRESS_BACKBUTTON, null);
-    return noop;
+    return () => WebViewBridge.sendMessage(WebViewEventType.PRESS_BACKBUTTON, null);
   }
 
   return goBack;
