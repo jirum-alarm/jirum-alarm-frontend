@@ -9,7 +9,7 @@ import { NAV_TYPE } from '@/components/layout/BottomNav';
 
 const MyPage = () => {
   return (
-    <BasicLayout hasBackButton hasBottomNav navType={NAV_TYPE.MYPAGE} title="마이페이지">
+    <BasicLayout hasBottomNav navType={NAV_TYPE.MYPAGE} title="마이페이지">
       <Suspense>
         <MyProfileSection />
         <CustomerServiceBoot />
