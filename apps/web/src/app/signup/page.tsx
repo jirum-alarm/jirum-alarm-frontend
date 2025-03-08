@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation } from '@apollo/client';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { setAccessToken, setRefreshToken } from '../actions/token';
@@ -20,6 +20,7 @@ import { MutationSignup } from '@/graphql/auth';
 import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth';
 import { User } from '@/types/user';
 import { mp } from '@/lib/mixpanel';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const COMPLETE_ROUTE = 'signup/complete';
 
@@ -70,7 +71,7 @@ const Signup = () => {
     personal: { birthYear: '', gender: undefined },
   });
 
-  const router = useRouter();
+  const router = useMyRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
 

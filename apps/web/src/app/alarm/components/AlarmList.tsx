@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 import AlarmItem from './AlarmItem';
@@ -15,6 +14,7 @@ import { EVENT } from '@/constants/mixpanel';
 import Link from '@/features/Link';
 import { useDevice } from '@/hooks/useDevice';
 import { mp } from '@/lib/mixpanel';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
@@ -157,7 +157,7 @@ function IosDownloadButton() {
 }
 
 function LoginGuide() {
-  const router = useRouter();
+  const router = useMyRouter();
   const handleCTAButton = () => {
     router.push(SIGNUP_PATH);
   };

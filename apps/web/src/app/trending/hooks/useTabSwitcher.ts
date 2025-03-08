@@ -1,15 +1,16 @@
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useRef } from 'react';
 import Swiper from 'swiper';
 
 import { PAGE } from '@/constants/page';
 import useMoveListCenter from '@/hooks/useMoveListCenter';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const useTabSwitcher = () => {
   const swiperRef = useRef<Swiper>();
   const searchParams = useSearchParams();
   const search = searchParams.get('tab');
-  const router = useRouter();
+  const router = useMyRouter();
   const activeTab = search ? Number(search) : 0;
   const { listRef, moveListCenter } = useMoveListCenter();
 

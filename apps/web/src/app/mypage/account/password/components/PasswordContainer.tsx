@@ -1,9 +1,10 @@
 'use client';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 import ChangePassword from '../change/components/ChangePassword';
 import CurrentPassword from '../current/components/CurrentPassword';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const QUERY_PARAM_PREFIX = 'step';
 const INITIAL_STEP = 'current';
@@ -11,7 +12,7 @@ const STEPS = ['current', 'change'] as const;
 type Steps = (typeof STEPS)[number];
 
 const PasswordContainerPage = () => {
-  const router = useRouter();
+  const router = useMyRouter();
   const searchParams = useSearchParams();
   const steps = searchParams.get(QUERY_PARAM_PREFIX) as Steps;
   const nextStep = (steps: Steps) => {

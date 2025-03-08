@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 import { Close } from '@/components/common/icons';
@@ -8,6 +8,7 @@ import { EVENT } from '@/constants/mixpanel';
 import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
+import useMyRouter from '@/hooks/useMyRouter';
 
 export default function RecentKeywords() {
   const [loading, setLoading] = useState(true);
@@ -69,7 +70,7 @@ function Chip({
   keyword: string;
   handleRemoveRecentKeyword: (keyword: string) => void;
 }) {
-  const router = useRouter();
+  const router = useMyRouter();
 
   const handleClick = () => {
     router.push(`/search?keyword=${keyword}`);

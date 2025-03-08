@@ -8,6 +8,7 @@ import { defaultMetadata } from '@/constants/metadata';
 import { pretendard } from '@/lib/fonts';
 import BottomNav from '@/components/layout/BottomNav';
 import { headers } from 'next/headers';
+import { checkJirumAlarmApp } from '@/app/actions/agent';
 
 const SpeedInsights = dynamic(
   () => import('@vercel/speed-insights/next').then((mod) => mod.SpeedInsights),
@@ -36,13 +37,7 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const userAgent = headers().get('user-agent');
-  let isIosApp = false;
-  let isAndroidApp = false;
-  if (userAgent) {
-    isIosApp = Boolean(userAgent.match(/IOS ReactNative Webview Jirum Alarm/i));
-    isAndroidApp = Boolean(userAgent.match(/Android ReactNative Webview Jirum Alarm/i));
-  }
+  const { isJirumAlarmApp } = checkJirumAlarmApp();
 
   return (
     <html lang="ko" className={pretendard.variable}>
@@ -56,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <InitMixpanel />
             <div className="relative min-w-[320px] bg-white before:fixed before:inset-y-0 before:left-1/2 before:z-50 before:w-[1px] before:translate-x-[300px] before:bg-gray-100 after:fixed after:inset-y-0 after:right-1/2 after:z-50 after:w-[1px] after:-translate-x-[300px] after:bg-gray-100">
               {children}
-              {!isIosApp && !isAndroidApp && <BottomNav type={''} />}
+              {!isJirumAlarmApp && <BottomNav type={''} />}
             </div>
             <Toaster />
             <SpeedInsights />

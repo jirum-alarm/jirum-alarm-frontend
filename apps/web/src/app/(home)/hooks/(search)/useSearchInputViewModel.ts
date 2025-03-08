@@ -1,15 +1,16 @@
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { EVENT } from '@/constants/mixpanel';
 import { mp } from '@/lib/mixpanel';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const RECENT_KEYWORDS_KEY = 'gr-recent-keywords';
 const RECENT_KEYWORDS_LIMIT = 10;
 
 export const useSearchInputViewModel = () => {
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const router = useMyRouter();
 
   const keywordParam = searchParams.get('keyword');
 

@@ -1,7 +1,7 @@
 'use client';
 import React, { PropsWithChildren } from 'react';
 import { PAGE } from '@/constants/page';
-import Link from 'next/link';
+import Link from '@/features/Link';
 import useTabQueryString from '@/hooks/useTabQueryString';
 
 const RecommendedMoreLink = ({ children }: PropsWithChildren) => {

@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import Button from '@/components/common/Button';
@@ -13,6 +12,9 @@ import { ProductQueries } from '@/entities/product';
 import { Heart } from '@/components/common/icons';
 import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
 import { WishlistQueries } from '@/entities/wishlist';
+import { useDevice } from '@/hooks/useDevice';
+import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
+import useMyRouter from '@/hooks/useMyRouter';
 
 export default function LikeButton({
   product,
@@ -21,11 +23,12 @@ export default function LikeButton({
   product: NonNullable<ProductQuery['product']>;
   isUserLogin: boolean;
 }) {
+  const { isJirumAlarmApp } = useDevice();
   const [isLiked, setIsLiked] = useState(product.isMyWishlist);
 
   const productId = +product.id;
 
-  const router = useRouter();
+  const router = useMyRouter();
 
   const productKey = ProductQueries.product({ id: productId }).queryKey;
   const queryClient = useQueryClient();
@@ -64,7 +67,13 @@ export default function LikeButton({
         page: EVENT.PAGE.DETAIL,
       });
 
-      router.push(PAGE.LOGIN);
+      if (isJirumAlarmApp) {
+        WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
+          data: { url: PAGE.LOGIN },
+        });
+      } else {
+        router.push(PAGE.LOGIN);
+      }
 
       return;
     }

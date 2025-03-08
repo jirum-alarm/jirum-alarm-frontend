@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/features/Link';
 
 import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';

@@ -1,10 +1,10 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { EVENT } from '@/constants/mixpanel';
 import { mp } from '@/lib/mixpanel';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const KEYWORDS = [
   '쌀',
@@ -53,7 +53,7 @@ export default function RecommendationKeywords() {
 }
 
 function Chip({ keyword }: { keyword: string }) {
-  const router = useRouter();
+  const router = useMyRouter();
 
   const handleClick = () => {
     router.push(`/search?keyword=${keyword}`);

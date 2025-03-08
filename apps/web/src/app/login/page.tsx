@@ -1,17 +1,16 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import Button from '@/components/common/Button';
 import Illust from '@/components/common/Illust';
 import BasicLayout from '@/components/layout/BasicLayout';
 import Link from '@/features/Link';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
 
 const Login = () => {
-  const router = useRouter();
+  const router = useMyRouter();
   const handleCTAButton = () => {
     router.push(SIGNUP_PATH);
   };

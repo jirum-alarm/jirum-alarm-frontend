@@ -1,9 +1,9 @@
-import { useRouter } from 'next/navigation';
 import useIsLoggedIn from './useIsLoggedIn';
 import { PAGE } from '@/constants/page';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const useRedirectIfNotLoggedIn = () => {
-  const router = useRouter();
+  const router = useMyRouter();
   const isLoggedIn = useIsLoggedIn();
 
   const checkAndRedirect = () => {

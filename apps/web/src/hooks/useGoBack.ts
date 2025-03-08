@@ -1,12 +1,12 @@
-import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
 import { PAGE } from '@/constants/page';
 import { useDevice } from '@/hooks/useDevice';
 import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const useGoBack = (backTo: PAGE = PAGE.HOME) => {
-  const router = useRouter();
+  const router = useMyRouter();
   const { isJirumAlarmApp } = useDevice();
 
   const goBack = useCallback(() => {

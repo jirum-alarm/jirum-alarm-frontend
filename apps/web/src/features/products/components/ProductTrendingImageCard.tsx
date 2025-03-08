@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/features/Link';
 import React from 'react';
 
 import ImageWithFallback from '@/components/ImageWithFallback';

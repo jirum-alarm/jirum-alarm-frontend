@@ -1,14 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 
 import { useToast } from '@/components/common/Toast';
 import { AuthService } from '@/shared/api/auth';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const COMPLETE_ROUTE = '/mypage/account';
 
 export const useUpdatePassword = () => {
   const { toast } = useToast();
-  const router = useRouter();
+  const router = useMyRouter();
   return useMutation({
     mutationFn: AuthService.updatePassword,
     onSuccess: () => {

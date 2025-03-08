@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
-import Link from 'next/link'; // Import next/link
+import Link from '@/features/Link'; // Import next/link
 
 import { Logo, Search, Share } from '@/components/common/icons';
 import { useToast } from '@/components/common/Toast';

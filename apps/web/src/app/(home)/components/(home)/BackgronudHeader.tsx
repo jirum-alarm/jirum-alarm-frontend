@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+import Link from '@/features/Link';
 
 import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';

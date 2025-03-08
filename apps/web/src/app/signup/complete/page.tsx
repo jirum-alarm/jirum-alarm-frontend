@@ -1,15 +1,14 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import Button from '@/components/common/Button';
 import Illust from '@/components/common/Illust';
 import BasicLayout from '@/components/layout/BasicLayout';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const HOME_ROUTE = '/';
 
 const Completed = () => {
-  const router = useRouter();
+  const router = useMyRouter();
   const handleCTAButton = () => {
     router.replace(HOME_ROUTE);
   };

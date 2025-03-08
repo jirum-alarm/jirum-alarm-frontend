@@ -5,7 +5,7 @@ import { cn } from '@/lib/cn';
 import { mp } from '@/lib/mixpanel';
 import { EVENT } from '@/constants/mixpanel';
 import SearchLinkButton from '@/components/SearchLinkButton';
-import Link from 'next/link';
+import Link from '@/features/Link';
 
 const BackgroundHeader = () => {
   const handleClick = () => {

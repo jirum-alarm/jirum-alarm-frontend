@@ -1,4 +1,3 @@
-import { useRouter } from 'next/navigation';
 import React from 'react';
 
 import RecommendationProduct from './RecommendationProduct';
@@ -9,10 +8,11 @@ import Link from '@/features/Link';
 import { useHotDealsRandom } from '@/features/products';
 import { useMe } from '@/features/users';
 import { mp } from '@/lib/mixpanel';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const ProductNotFound = () => {
   const userResult = useMe();
-  const router = useRouter();
+  const router = useMyRouter();
 
   const { data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
 

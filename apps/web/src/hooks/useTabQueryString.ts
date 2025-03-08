@@ -1,8 +1,9 @@
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const useTabQueryString = (tab: string) => {
-  const router = useRouter();
+  const router = useMyRouter();
   const searchParams = useSearchParams();
   const [tabQuery, setTabQuery] = useState<string | null>(null);
   const createQueryString = useCallback(

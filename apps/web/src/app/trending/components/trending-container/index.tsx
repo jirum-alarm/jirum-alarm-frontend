@@ -1,6 +1,6 @@
 'use client';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import Link from '@/features/Link';
+import { useSearchParams } from 'next/navigation';
 import React, { useRef, useEffect, useState, Suspense, KeyboardEvent } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -16,13 +16,14 @@ import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
+import useMyRouter from '@/hooks/useMyRouter';
 
 export const TrendingContainer = () => {
   const {
     data: { categories },
   } = useSuspenseQuery(CategoryQueries.categoriesForUser());
   const { isHeaderVisible } = useVisibilityOnScroll();
-  const router = useRouter();
+  const router = useMyRouter();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
 

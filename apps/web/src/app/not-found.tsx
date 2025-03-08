@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/features/Link';
 
 import Button from '@/components/common/Button';
 import { IllustWarning } from '@/components/common/icons';

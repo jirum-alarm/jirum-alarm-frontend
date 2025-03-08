@@ -1,5 +1,4 @@
 import { useMutation } from '@apollo/client';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
@@ -13,6 +12,7 @@ import { fcmTokenAtom } from '@/state/fcmToken';
 import { ILoginOutput, ILoginVariable } from '@/types/login';
 import { mp } from '@/lib/mixpanel';
 import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const HOME_PATH = '/';
 
@@ -47,7 +47,7 @@ const useEmailLoginFormViewModel = () => {
     error: false,
   });
 
-  const router = useRouter();
+  const router = useMyRouter();
   const fcmToken = useRecoilValue(fcmTokenAtom);
 
   const [addPushToken] = useMutation<unknown, addPushTokenVariable>(MutationAddPushToken, {
