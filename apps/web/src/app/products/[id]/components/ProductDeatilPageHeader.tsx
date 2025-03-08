@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
-import Link from '@/features/Link'; // Import next/link
+import Link from '@/features/Link';
 
 import { Logo, Search, Share } from '@/components/common/icons';
 import { useToast } from '@/components/common/Toast';
@@ -65,7 +65,7 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
       </div>
       <LogoLink />
       <div className="flex items-center gap-x-2">
-        <a
+        <Link
           href={PAGE.SEARCH}
           onClick={handleSearch}
           aria-label="검색"
@@ -73,7 +73,7 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
           className="py-2"
         >
           <Search color="#101828" />
-        </a>
+        </Link>
         <button onClick={handleShare} className="hover:cursor-pointer">
           <Share />
         </button>
