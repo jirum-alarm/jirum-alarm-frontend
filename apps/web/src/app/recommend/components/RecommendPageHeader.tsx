@@ -7,6 +7,7 @@ import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { mp } from '@/lib/mixpanel';
 import React from 'react';
+import Link from '@/features/Link';
 
 export default function RecommendPageHeader() {
   const { toast } = useToast();
@@ -53,7 +54,7 @@ export default function RecommendPageHeader() {
         <h2 className="text-lg font-semibold text-black">지금 추천하는 상품</h2>
       </div>
       <div className="flex w-full items-center justify-end gap-x-[16px]">
-        <a
+        <Link
           href={PAGE.SEARCH}
           onClick={handleSearch}
           aria-label="검색"
@@ -61,7 +62,7 @@ export default function RecommendPageHeader() {
           className="py-2"
         >
           <Search color="#101828" />
-        </a>
+        </Link>
         <button onClick={handleShare} className="hover:cursor-pointer">
           <Share />
         </button>
