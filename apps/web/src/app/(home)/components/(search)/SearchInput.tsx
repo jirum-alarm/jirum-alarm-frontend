@@ -4,6 +4,7 @@ import { useSearchInputViewModel } from '../../hooks/(search)/useSearchInputView
 
 import { Cancel, Home } from '@/components/common/icons';
 import { cn } from '@/lib/cn';
+import BackButton from '@/components/layout/BackButton';
 
 const SearchInput = ({ show }: { show: boolean }) => {
   const { keyword, onKeyDown, handleChange, handleReset, handleGoHome } = useSearchInputViewModel();
@@ -18,6 +19,7 @@ const SearchInput = ({ show }: { show: boolean }) => {
             : 'opacity-0 transition-opacity duration-150',
         )}
       >
+        <BackButton />
         <div className="flex w-full items-center overflow-hidden rounded bg-gray-50 pl-3">
           <div className="h-6">
             <svg
