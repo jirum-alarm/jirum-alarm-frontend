@@ -2,7 +2,7 @@
 
 import { useMutation } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { setAccessToken, setRefreshToken } from '../actions/token';
 import Categories from './categories/components/Categories';
@@ -21,6 +21,8 @@ import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth';
 import { User } from '@/types/user';
 import { mp } from '@/lib/mixpanel';
 import useMyRouter from '@/hooks/useMyRouter';
+import BackButton from '@/components/layout/BackButton';
+import * as console from 'node:console';
 
 const COMPLETE_ROUTE = 'signup/complete';
 
@@ -72,10 +74,12 @@ const Signup = () => {
   });
 
   const router = useMyRouter();
+
   const searchParams = useSearchParams();
   const { toast } = useToast();
 
-  const steps = searchParams.get(QUERY_PARM_PREFIX) as Steps;
+  const urlSteps = searchParams.get(QUERY_PARM_PREFIX) as Steps;
+  const [currentStep, setCurrentStep] = useState<Steps>(INITIAL_STEP);
 
   const [signup] = useMutation<ISignupOutput, ISignupVariable>(MutationSignup, {
     onCompleted: async (data) => {
@@ -97,7 +101,7 @@ const Signup = () => {
       completeRegistration();
       return;
     }
-
+    setCurrentStep(steps);
     router.push(`?${QUERY_PARM_PREFIX}=${steps}`);
   };
 
@@ -148,45 +152,66 @@ const Signup = () => {
     router.replace(`?${QUERY_PARM_PREFIX}=${INITIAL_STEP}`);
   }, [router]);
 
+  useEffect(() => {
+    if (currentStep !== urlSteps) {
+      setCurrentStep(urlSteps);
+    }
+  }, [urlSteps]);
+
+  const handleBackButton = () => {
+    const currentStepIndex = STEPS.findIndex((step) => step === currentStep);
+    setCurrentStep(STEPS[currentStepIndex - 1]);
+  };
+
   return (
-    <BasicLayout hasBackButton fullScreen={false}>
+    <BasicLayout
+      // hasBackButton
+      fullScreen={false}
+      header={
+        <header className="sticky top-0 z-50 flex h-14 w-full max-w-screen-layout-max items-center justify-center bg-white">
+          <div className="absolute left-0">
+            <BackButton onClick={handleBackButton} />
+          </div>
+        </header>
+      }
+    >
       <div className="px-5 py-9">
-        {steps === 'termsOfService' && (
+        {currentStep === 'termsOfService' && (
           <TermsOfService
             registration={registration}
             handleRegistration={handleRegistration}
             moveNextStep={() => moveNextStep('email')}
           />
         )}
-        {steps === 'email' && (
+        {currentStep === 'email' && (
           <Email
             registration={registration}
             handleRegistration={handleRegistration}
             moveNextStep={() => moveNextStep('password')}
           />
         )}
-        {steps === 'password' && (
+        {currentStep === 'password' && (
           <Password
             registration={registration}
             handleRegistration={handleRegistration}
             moveNextStep={() => moveNextStep('nickname')}
           />
         )}
-        {steps === 'nickname' && (
+        {currentStep === 'nickname' && (
           <Nickname
             registration={registration}
             handleRegistration={handleRegistration}
             moveNextStep={() => moveNextStep('categories')}
           />
         )}
-        {steps === 'categories' && (
+        {currentStep === 'categories' && (
           <Categories
             registration={registration}
             handleRegistration={handleRegistration}
             moveNextStep={() => moveNextStep('personal')}
           />
         )}
-        {steps === 'personal' && (
+        {currentStep === 'personal' && (
           <Personal
             registration={registration}
             handleRegistration={handleRegistration}
