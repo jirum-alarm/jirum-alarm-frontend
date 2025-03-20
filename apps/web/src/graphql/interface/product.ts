@@ -38,7 +38,7 @@ export interface IProduct {
   categoryId?: number;
   mallId?: number;
   title: string;
-  url: string;
+  url?: string;
   detailUrl: string;
   isHot: boolean;
   isEnd: boolean;
@@ -57,6 +57,7 @@ export interface IProduct {
   searchAfter?: string[];
   isMyWishlist: boolean;
   categoryName?: string;
+  author?: string;
 }
 
 export interface IProductOutput {
