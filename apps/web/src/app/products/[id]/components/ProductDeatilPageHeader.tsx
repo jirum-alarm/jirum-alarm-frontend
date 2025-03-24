@@ -4,7 +4,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
 import Link from '@/features/Link';
 
-import { Logo, Search, Share } from '@/components/common/icons';
+import { Search, Share } from '@/components/common/icons';
 import { useToast } from '@/components/common/Toast';
 import BackButton from '@/components/layout/BackButton';
 import { EVENT } from '@/constants/mixpanel';
@@ -74,7 +74,12 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
         >
           <Search color="#101828" />
         </Link>
-        <button onClick={handleShare} className="hover:cursor-pointer">
+        <button
+          onClick={handleShare}
+          className="hover:cursor-pointer"
+          aria-label="공유하기"
+          title="공유하기"
+        >
           <Share />
         </button>
       </div>
