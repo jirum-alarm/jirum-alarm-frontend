@@ -12,13 +12,12 @@ import { checkJirumAlarmApp } from '@/app/actions/agent';
 const Analytics = dynamic(() => import('@/components/Analytics').then((mod) => mod.Analytics), {
   ssr: false,
   loading: () => null,
-  webpack: () => ['analytics'],
+  webpack: () => ['analytics-chunk'],
 });
 
 const Toaster = dynamic(() => import('@/components/common/Toast/Toaster'), {
   ssr: false,
   loading: () => null,
-  suspense: true,
 });
 
 const MSWInit = dynamic(() => import('@/components/MSWInit'), {
@@ -49,34 +48,28 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const { isJirumAlarmApp } = checkJirumAlarmApp();
 
-  const MainContent = () => (
-    <div className="relative min-w-[320px] bg-white before:fixed before:inset-y-0 before:left-1/2 before:z-50 before:w-[1px] before:translate-x-[300px] before:bg-gray-100 after:fixed after:inset-y-0 after:right-1/2 after:z-50 after:w-[1px] after:-translate-x-[300px] after:bg-gray-100">
-      {children}
-      {!isJirumAlarmApp && <BottomNav type={''} />}
-    </div>
-  );
-
   return (
     <html lang="ko" className={pretendard.variable}>
       <head>
         <link rel="manifest" href="/manifest.json" />
-        {/* CDN 폰트 관련 link 태그들 제거 */}
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://api.mixpanel.com" />
+        <link rel="preconnect" href="https://cdn.jirum-alarm.com" />
       </head>
       <body>
-        {process.env.NODE_ENV === 'development' ? (
-          <MSWInit>
-            <AppProvider>
-              <MainContent />
-              <Toaster />
-            </AppProvider>
-          </MSWInit>
-        ) : (
-          <AppProvider>
-            <MainContent />
-            <Toaster />
-          </AppProvider>
-        )}
-        <Analytics GA_TRACKING_ID={GA_TRACKING_ID} />
+        <div className="relative min-w-[320px] bg-white before:fixed before:inset-y-0 before:left-1/2 before:z-50 before:w-[1px] before:translate-x-[300px] before:bg-gray-100 after:fixed after:inset-y-0 after:right-1/2 after:z-50 after:w-[1px] after:-translate-x-[300px] after:bg-gray-100">
+          {process.env.NODE_ENV === 'development' ? (
+            <MSWInit>
+              <AppProvider>{children}</AppProvider>
+            </MSWInit>
+          ) : (
+            <AppProvider>{children}</AppProvider>
+          )}
+          {!isJirumAlarmApp && <BottomNav type={''} />}
+        </div>
+
+        <Toaster />
+        {process.env.NODE_ENV === 'production' && <Analytics GA_TRACKING_ID={GA_TRACKING_ID} />}
       </body>
     </html>
   );
