@@ -13,6 +13,7 @@ import { mp } from '@/lib/mixpanel';
 import { QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
 import HotdealBadge from './HotdealBadge';
+import { convertToWebp } from '../../../util/image';
 
 export function ProductImageCard({
   product,
@@ -102,7 +103,16 @@ const ImageWithFallback = React.memo(function ImageWithFallback({
   title: string;
   type: 'product' | 'hotDeal';
 }) {
+  const [imageSrc, setImageSrc] = useState<string | undefined>(convertToWebp(src));
   const [error, setError] = useState(false);
+
+  const handleError = () => {
+    if (!imageSrc || imageSrc.endsWith('.webp')) {
+      setImageSrc(src);
+    } else {
+      setError(true);
+    }
+  };
 
   return (
     <>
@@ -110,13 +120,12 @@ const ImageWithFallback = React.memo(function ImageWithFallback({
         <NoImage type={type} />
       ) : (
         <Image
-          src={src}
+          src={imageSrc ?? ''}
           width={162}
           height={162}
           alt={title}
           aria-hidden="true"
-          onError={() => setError(true)}
-          unoptimized
+          onError={handleError}
           placeholder="blur"
           blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
           loading="lazy"
