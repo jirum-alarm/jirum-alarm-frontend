@@ -4,10 +4,7 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 
 import { IllustEmpty } from './common/icons';
-
-const convertToWebp = (url?: string) => {
-  return url?.replace(/\.[^.]+$/, '.webp');
-};
+import { convertToWebp } from '../util/image';
 
 const ImageWithFallback = React.memo(function ImageWithFallback({
   src,
@@ -33,7 +30,6 @@ const ImageWithFallback = React.memo(function ImageWithFallback({
     <Image
       src={imageSrc}
       alt={alt}
-      unoptimized
       onError={handleError}
       placeholder="blur"
       blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
