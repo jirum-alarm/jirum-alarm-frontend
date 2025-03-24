@@ -47,7 +47,7 @@ function ProductDetailLayout({
     <>
       <main>
         <ProductImage product={{ title: product.title, thumbnail: product.thumbnail }} />
-        <div className="relative z-10 w-full rounded-t-3xl bg-white pt-8">
+        <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-8 shadow-sm">
           <ProductInfoLayout>
             <ProductInfo product={product} />
             <HotdealGuide productGuides={productGuides} />
@@ -110,7 +110,7 @@ function ProductInfo({ product }: { product: Product }) {
         <h1 className="text-gray-800">{product.title}</h1>
         <div className="inline-flex items-center gap-x-3 pt-3">
           {product.price && <p className="text-xl font-semibold">{product.price}</p>}
-          <span className="text-s text-gray-400">{displayTime(product.postedAt)}</span>
+          <span className="text-s text-gray-600">{displayTime(product.postedAt)}</span>
         </div>
       </div>
       <div className="px-5 pt-4">
@@ -144,14 +144,14 @@ function ProductInfo({ product }: { product: Product }) {
       <div ref={ref} className="flex h-[42px] w-full justify-center">
         <div
           className={cn(
-            `relative top-0 mt-7 flex h-[42px] w-full items-center justify-center bg-gray-50 text-sm text-gray-500 transition-all`,
+            `relative top-0 mt-7 flex h-[42px] w-full items-center justify-center bg-gray-100 text-sm text-gray-500 transition-all`,
             {
               'fixed top-[50px] z-50 mt-0 w-fit rounded-full border border-gray-100 px-5': !isView,
             },
           )}
         >
           지금&nbsp;
-          <strong className="font-semibold text-secondary-500">
+          <strong className="font-semibold text-secondary-700">
             {product.viewCount.toLocaleString('ko-kr')}명
           </strong>
           이 보고 있어요
@@ -165,7 +165,7 @@ const HotdealGuideModal = () => {
   return (
     <Drawer.Root>
       <Drawer.Trigger asChild>
-        <button>
+        <button aria-label="핫딜 기준 안내" title="핫딜 기준 안내">
           <Info />
         </button>
       </Drawer.Trigger>

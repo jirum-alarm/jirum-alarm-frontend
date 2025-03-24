@@ -44,7 +44,7 @@ export default function CommunityReaction({
                 </p>
               }
             >
-              <button>
+              <button aria-label="커뮤니티 반응" title="커뮤니티 반응">
                 <Info />
               </button>
             </Tooltip>
