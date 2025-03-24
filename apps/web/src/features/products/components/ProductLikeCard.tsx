@@ -51,7 +51,6 @@ export function ProductLikeCard({
           src={product?.thumbnail ?? ''}
           alt={product.title}
           fill
-          unoptimized
           className="object-cover"
           sizes="300px"
         />

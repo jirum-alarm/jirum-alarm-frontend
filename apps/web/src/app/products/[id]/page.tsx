@@ -67,13 +67,6 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 export default async function ProductDetail({ params }: { params: { id: string } }) {
-  {
-    /* @TODO: remove afeter v1.1.0 QA */
-  }
-  // if (IS_VERCEL_PRD) {
-  //   return {};
-  // }
-
   return (
     <Suspense>
       <ProductDetailContainerServer productId={+params.id} />

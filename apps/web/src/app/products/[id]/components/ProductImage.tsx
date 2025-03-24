@@ -1,32 +1,18 @@
-'use client';
-
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React from 'react';
 
 import { IllustStanding } from '@/components/common/icons';
+import { convertToWebp } from '../../../../util/image';
 
-const convertToWebp = (url?: string) => {
-  return url?.replace(/\.[^.]+$/, '.webp');
-};
-
-export default React.memo(function ProductImage({
+export default function ProductImage({
   product,
 }: {
   product: { thumbnail?: string | null; title: string };
 }) {
   const thumbnail = product.thumbnail ?? undefined;
-  const [imageSrc, setImageSrc] = useState<string | undefined>(convertToWebp(thumbnail));
-  const [isError, setIsError] = useState<boolean>(false);
+  const imageSrc = convertToWebp(thumbnail);
 
-  const handleError = () => {
-    if (!imageSrc || imageSrc.endsWith('.webp')) {
-      setImageSrc(thumbnail);
-    } else {
-      setIsError(true);
-    }
-  };
-
-  if (!product.thumbnail || !imageSrc || isError) {
+  if (!product.thumbnail || !imageSrc) {
     return (
       <div className="flex h-[248px] w-full items-center justify-center">
         <div className="-mt-20">
@@ -38,16 +24,30 @@ export default React.memo(function ProductImage({
 
   return (
     <div className="sticky top-11">
-      <div className="relative h-[375px] w-full smd:h-[550px]">
+      <div
+        className="relative aspect-[4/3] w-full"
+        style={{
+          contain: 'layout paint',
+          contentVisibility: 'auto',
+        }}
+      >
         <Image
           src={imageSrc}
           alt={product.title}
-          unoptimized
           fill
-          onError={handleError}
-          style={{ objectFit: 'contain' }}
+          priority={true}
+          sizes="(max-width: 768px) 640px, 750px"
+          quality={75}
+          loading="eager"
+          fetchPriority="high"
+          placeholder="empty"
+          style={{
+            objectFit: 'contain',
+            transform: 'translateZ(0)',
+            willChange: 'transform',
+          }}
         />
       </div>
     </div>
   );
-});
+}
