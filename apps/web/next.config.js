@@ -1,5 +1,6 @@
 const runtimeCaching = require('next-pwa/cache');
-const { withSentryConfig } = require('@sentry/nextjs');
+const CompressionPlugin = require('compression-webpack-plugin');
+const BrotliPlugin = require('brotli-webpack-plugin');
 const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
@@ -9,49 +10,6 @@ const withPWA = require('next-pwa')({
   disableDevLogs: true,
 });
 
-const sentryWebpackPluginOptions = {
-  // For all available options, see:
-  // https://github.com/getsentry/sentry-webpack-plugin#options
-
-  // Suppresses source map uploading logs during build
-  silent: true,
-  org: 'jirumalarm',
-  project:
-    process.env.VERCEL_ENV === 'production'
-      ? 'jirum-alarm-frontend-prod'
-      : 'jirum-alarm-frontend-dev',
-  // An auth token is required for uploading source maps.
-  authToken: process.env.SENTRY_AUTH_TOKEN,
-};
-
-const sentryBuildTimeConfigOptions = {
-  // For all available options, see:
-  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-  // Upload a larger set of source maps for prettier stack traces (increases build time)
-  widenClientFileUpload: true,
-
-  // Transpiles SDK to be compatible with IE11 (increases bundle size)
-  transpileClientSDK: true,
-
-  // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers. (increases server load)
-  // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-  // side errors will fail.
-  tunnelRoute: '/monitoring',
-
-  // Hides source maps from generated client bundles
-  hideSourceMaps: true,
-
-  // Automatically tree-shake Sentry logger statements to reduce bundle size
-  disableLogger: true,
-
-  // Enables automatic instrumentation of Vercel Cron Monitors.
-  // See the following for more information:
-  // https://docs.sentry.io/product/crons/
-  // https://vercel.com/docs/cron-jobs
-  automaticVercelMonitors: true,
-};
-
 const nextConfig = withPWA({
   output: 'standalone',
   webpack: (config, { isServer, dev }) => {
@@ -60,13 +18,24 @@ const nextConfig = withPWA({
         ...config.optimization,
         splitChunks: {
           chunks: 'all',
+          maxInitialRequests: 10,
+          maxAsyncRequests: 20,
+          minSize: 40000,
+          maxSize: 244000,
+          minChunks: 1,
           cacheGroups: {
-            default: false,
+            default: {
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true,
+            },
             vendors: {
               test: /[\\/]node_modules[\\/]/,
               name: 'vendors',
               chunks: 'all',
               enforce: true,
+              priority: -10,
+              reuseExistingChunk: true,
             },
             commons: {
               test: /[\\/]common[\\/]/,
@@ -74,37 +43,99 @@ const nextConfig = withPWA({
               chunks: 'all',
               minChunks: 2,
               priority: 10,
+              reuseExistingChunk: true,
             },
-            fonts: {
-              test: /[\\/]fonts[\\/]/,
-              name: 'fonts',
+            react: {
+              test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
+              name: 'react',
               chunks: 'all',
+              priority: 30,
+              reuseExistingChunk: true,
+            },
+            mui: {
+              test: /[\\/]node_modules[\\/]@mui[\\/]/,
+              name: 'mui',
+              chunks: 'all',
+              priority: 20,
+              reuseExistingChunk: true,
+            },
+            analytics: {
+              test: /[\\/]node_modules[\\/](@google-analytics|mixpanel-browser)[\\/]/,
+              name: 'analytics',
+              chunks: 'async',
+              priority: 5,
+              reuseExistingChunk: true,
+            },
+            styles: {
+              test: /\.(css|scss|sass)$/,
+              name: 'styles',
+              chunks: 'all',
+              enforce: true,
+              priority: 40,
+            },
+            critical: {
+              test: /[\\/](components|pages|features)[\\/]/,
+              name: 'critical',
+              chunks: 'all',
+              priority: 50,
               enforce: true,
             },
           },
         },
+        minimize: !dev,
       };
     }
 
     if (!dev) {
       config.optimization.minimize = true;
+
+      config.plugins.push(
+        new CompressionPlugin({
+          filename: '[path][base].gz',
+          algorithm: 'gzip',
+          test: /\.(js|css|html|svg)$/,
+          threshold: 5120,
+          minRatio: 0.8,
+          deleteOriginalAssets: false,
+        }),
+        new BrotliPlugin({
+          asset: '[path].br[query]',
+          test: /\.(js|css|html|svg)$/,
+          threshold: 5120,
+          minRatio: 0.8,
+        }),
+      );
     }
 
     return config;
   },
   images: {
     domains: ['cdn.jirum-alarm.com'],
-    minimumCacheTTL: 60,
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
-    formats: ['image/webp'],
+    minimumCacheTTL: 60 * 60 * 24 * 7,
+    deviceSizes: [640, 750, 1080, 1920],
+    imageSizes: [16, 32, 64, 96, 128],
+    formats: ['image/webp', 'image/avif'],
+    contentSecurityPolicy: "default-src 'self'; img-src 'self' data: cdn.jirum-alarm.com;",
   },
   experimental: {
     optimizeCss: true,
+    scrollRestoration: true,
+    optimizePackageImports: [
+      '@google-analytics/analytics',
+      'mixpanel-browser',
+      '@mui/material',
+      '@mui/icons-material',
+      'lodash',
+      'date-fns',
+    ],
+    nextScriptWorkers: true,
+    optimisticClientCache: true,
   },
   poweredByHeader: false,
   reactStrictMode: true,
   compiler: {
     styledComponents: true,
+    removeConsole: process.env.NODE_ENV === 'production',
   },
   onDemandEntries: {
     maxInactiveAge: 60 * 60 * 1000,
@@ -112,5 +143,4 @@ const nextConfig = withPWA({
   },
 });
 
-// module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions);
 module.exports = nextConfig;
