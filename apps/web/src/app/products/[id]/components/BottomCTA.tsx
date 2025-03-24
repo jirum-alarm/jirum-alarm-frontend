@@ -19,20 +19,16 @@ export default function BottomCTA({
     });
   };
   return (
-    <div className="fixed bottom-0 z-40 ml-[-1px] flex h-[72px] w-full max-w-screen-layout-max gap-x-2 border border-gray-100 bg-white px-5 py-2 pb-safe-bottom">
-      <div className="py-1">
+    <div className="fixed bottom-0 z-40 ml-[-1px] flex h-[84px] w-full max-w-screen-layout-max gap-x-4 border border-gray-100 bg-white px-5 py-4">
+      <div className="flex min-h-[62px] items-center">
         <LikeButton product={product} isUserLogin={isUserLogin} />
       </div>
       <a
         href={product.detailUrl ?? ''}
         onClick={handleClickPurchaseLinkBrowse}
-        className="block w-full py-1"
+        className="block flex-1"
       >
-        <Button className="min-h-[48px] w-full px-6 py-3 text-base">
-          {' '}
-          {/* 높이와 패딩 증가 */}
-          구매하러 가기
-        </Button>
+        <Button className=" min-h-[56px] w-full px-6 text-base">구매하러 가기</Button>
       </a>
     </div>
   );
