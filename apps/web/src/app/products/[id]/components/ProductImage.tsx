@@ -35,12 +35,21 @@ export default React.memo(function ProductImage({
 
   return (
     <div className="sticky top-11">
-      <div className="relative h-[375px] w-full smd:h-[550px]">
+      <div
+        className="relative aspect-[4/3] w-full"
+        style={{
+          contain: 'layout paint',
+          contentVisibility: 'auto',
+        }}
+      >
         <Image
+          rel="preload"
           src={imageSrc}
           alt={product.title}
           fill
           loading="eager"
+          decoding="async"
+          priority={true}
           onError={handleError}
           style={{ objectFit: 'contain' }}
         />
