@@ -36,13 +36,16 @@ export default function ProductImage({
           alt={product.title}
           fill
           priority={true}
-          sizes="(max-width: 768px) 100vw, 50vw"
-          quality={90}
-          placeholder="blur"
-          blurDataURL={`data:image/svg+xml;base64,${Buffer.from(
-            '<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#f0f0f0"/></svg>',
-          ).toString('base64')}`}
-          style={{ objectFit: 'contain' }}
+          sizes="(max-width: 768px) 640px, 750px"
+          quality={75}
+          loading="eager"
+          fetchPriority="high"
+          placeholder="empty"
+          style={{
+            objectFit: 'contain',
+            transform: 'translateZ(0)',
+            willChange: 'transform',
+          }}
         />
       </div>
     </div>

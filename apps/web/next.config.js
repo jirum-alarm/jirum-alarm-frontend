@@ -92,9 +92,9 @@ const nextConfig = withPWA({
   },
   images: {
     domains: ['cdn.jirum-alarm.com'],
-    minimumCacheTTL: 60 * 60 * 24 * 7,
-    deviceSizes: [640, 750, 1080, 1920],
-    imageSizes: [16, 32, 64, 96, 128],
+    deviceSizes: [640, 750],
+    imageSizes: [16, 32, 64],
+    minimumCacheTTL: 31536000,
     formats: ['image/webp', 'image/avif'],
     contentSecurityPolicy: "default-src 'self'; img-src 'self' data: cdn.jirum-alarm.com;",
   },
