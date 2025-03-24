@@ -80,7 +80,6 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
         <Image
           src={`https://cdn.jirum-alarm.com/assets/app_download_guide.webp`}
           alt="download app guide"
-          unoptimized
           width={335}
           height={400}
         />

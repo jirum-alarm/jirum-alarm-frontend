@@ -4,10 +4,7 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 
 import { IllustStanding } from '@/components/common/icons';
-
-const convertToWebp = (url?: string) => {
-  return url?.replace(/\.[^.]+$/, '.webp');
-};
+import { convertToWebp } from '../../../../util/image';
 
 export default React.memo(function ProductImage({
   product,
@@ -42,8 +39,8 @@ export default React.memo(function ProductImage({
         <Image
           src={imageSrc}
           alt={product.title}
-          unoptimized
           fill
+          loading="eager"
           onError={handleError}
           style={{ objectFit: 'contain' }}
         />
