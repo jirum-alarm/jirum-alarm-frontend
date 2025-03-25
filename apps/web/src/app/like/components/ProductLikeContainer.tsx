@@ -14,7 +14,7 @@ import { WishlistQueries } from '@/entities/wishlist';
 import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
 import { useState } from 'react';
 import { EVENT } from '@/constants/mixpanel';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 
 const LIMIT = 18;
 
@@ -85,7 +85,7 @@ const ProductLikeAction = ({ productId }: { productId: string }) => {
     e.preventDefault();
 
     if (isLiked) {
-      mp.track(EVENT.PRODUCT_WISH.NAME, {
+      mp?.track(EVENT.PRODUCT_WISH.NAME, {
         type: EVENT.PRODUCT_WISH.TYPE.REMOVE,
         page: EVENT.PAGE.LIKE,
       });
@@ -95,7 +95,7 @@ const ProductLikeAction = ({ productId }: { productId: string }) => {
     }
 
     if (!isLiked) {
-      mp.track(EVENT.PRODUCT_WISH.NAME, {
+      mp?.track(EVENT.PRODUCT_WISH.NAME, {
         type: EVENT.PRODUCT_WISH.TYPE.ADD,
         page: EVENT.PAGE.LIKE,
       });

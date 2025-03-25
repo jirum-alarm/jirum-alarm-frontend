@@ -3,7 +3,7 @@
 import LikeButton from './LikeButton';
 import Button from '@/components/common/Button';
 import { EVENT } from '@/constants/mixpanel';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 
 export default function BottomCTA({
@@ -14,10 +14,11 @@ export default function BottomCTA({
   isUserLogin: boolean;
 }) {
   const handleClickPurchaseLinkBrowse = () => {
-    mp.track(EVENT.PRODUCT_PURCHASE_LINK_BROWSE.NAME, {
+    mp?.track(EVENT.PRODUCT_PURCHASE_LINK_BROWSE.NAME, {
       page: EVENT.PAGE.DETAIL,
     });
   };
+
   return (
     <div className="fixed bottom-0 z-40 ml-[-1px] flex h-[84px] w-full max-w-screen-layout-max gap-x-4 border border-gray-100 bg-white px-5 py-4">
       <div className="flex min-h-[62px] items-center">

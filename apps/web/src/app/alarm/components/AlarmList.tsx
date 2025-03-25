@@ -13,7 +13,7 @@ import Illust from '@/components/common/Illust';
 import { EVENT } from '@/constants/mixpanel';
 import Link from '@/features/Link';
 import { useDevice } from '@/hooks/useDevice';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import useMyRouter from '@/hooks/useMyRouter';
 
 const SIGNUP_PATH = '/signup';
@@ -113,7 +113,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
 
 function AndroidDownloadButton() {
   const handleClick = () => {
-    mp.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
+    mp?.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
       type: EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.ANDROID,
       page: EVENT.PAGE.ALARM,
     });
@@ -135,7 +135,7 @@ function AndroidDownloadButton() {
 
 function IosDownloadButton() {
   const handleClick = () => {
-    mp.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
+    mp?.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
       type: EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.IOS,
       page: EVENT.PAGE.ALARM,
     });

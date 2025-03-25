@@ -10,7 +10,7 @@ import { TokenType, addPushTokenVariable } from '@/graphql/interface';
 import { MutationAddPushToken } from '@/graphql/notification';
 import { fcmTokenAtom } from '@/state/fcmToken';
 import { ILoginOutput, ILoginVariable } from '@/types/login';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 import useMyRouter from '@/hooks/useMyRouter';
 
@@ -75,7 +75,7 @@ const useEmailLoginFormViewModel = () => {
         return;
       }
 
-      mp.set_user({
+      mp?.set_user({
         $name: null,
         $email: loginForm.email.value,
       });

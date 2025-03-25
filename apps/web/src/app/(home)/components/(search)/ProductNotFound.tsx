@@ -7,7 +7,7 @@ import { EVENT } from '@/constants/mixpanel';
 import Link from '@/features/Link';
 import { useHotDealsRandom } from '@/features/products';
 import { useMe } from '@/features/users';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import useMyRouter from '@/hooks/useMyRouter';
 
 const ProductNotFound = () => {
@@ -17,7 +17,7 @@ const ProductNotFound = () => {
   const { data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
 
   const handleAddKeywordClick = () => {
-    mp.track(EVENT.ADD_KEYWORD_CLICK.NAME, {
+    mp?.track(EVENT.ADD_KEYWORD_CLICK.NAME, {
       page: EVENT.PAGE.SEARCH_NOT_FOUND,
     });
   };
@@ -25,7 +25,7 @@ const ProductNotFound = () => {
   const handleShowMoreClick = () => {
     router.push(`/?categoryId=0`);
 
-    mp.track(EVENT.SHOW_MORE_HOT_DEALS_CLICK.NAME, {
+    mp?.track(EVENT.SHOW_MORE_HOT_DEALS_CLICK.NAME, {
       page: EVENT.PAGE.SEARCH_NOT_FOUND,
     });
   };

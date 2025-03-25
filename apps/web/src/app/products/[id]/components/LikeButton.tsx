@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Button from '@/components/common/Button';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ProductQueries } from '@/entities/product';
@@ -62,7 +62,7 @@ export default function LikeButton({
 
   const handleClickWishlist = () => {
     if (!isUserLogin) {
-      mp.track(EVENT.PRODUCT_WISH.NAME, {
+      mp?.track(EVENT.PRODUCT_WISH.NAME, {
         type: EVENT.PRODUCT_WISH.TYPE.NOT_LOGGED_IN,
         page: EVENT.PAGE.DETAIL,
       });
@@ -79,7 +79,7 @@ export default function LikeButton({
     }
 
     if (isLiked) {
-      mp.track(EVENT.PRODUCT_WISH.NAME, {
+      mp?.track(EVENT.PRODUCT_WISH.NAME, {
         type: EVENT.PRODUCT_WISH.TYPE.REMOVE,
         page: EVENT.PAGE.DETAIL,
       });
@@ -91,7 +91,7 @@ export default function LikeButton({
     }
 
     if (!isLiked) {
-      mp.track(EVENT.PRODUCT_WISH.NAME, {
+      mp?.track(EVENT.PRODUCT_WISH.NAME, {
         type: EVENT.PRODUCT_WISH.TYPE.ADD,
         page: EVENT.PAGE.DETAIL,
       });

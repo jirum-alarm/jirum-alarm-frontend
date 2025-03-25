@@ -2,14 +2,14 @@
 import Link from '@/features/Link';
 
 import { cn } from '@/lib/cn';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import { EVENT } from '@/constants/mixpanel';
 import SearchButton from '../../../../components/SearchLinkButton';
 import { RoundedLogo } from '@/components/common/icons';
 
 const BackgroundHeader = () => {
   const handleClick = () => {
-    mp.track(EVENT.OPEN_KAKAO_TALK.NAME, {
+    mp?.track(EVENT.OPEN_KAKAO_TALK.NAME, {
       page: EVENT.PAGE.HOME,
     });
   };
@@ -97,7 +97,7 @@ const KaKaoIcon = () => {
 const JirumIcon = () => {
   return (
     <svg width="44" height="43" viewBox="0 0 44 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0_61_25759)">
+      <g clipPath="url(#clip0_61_25759)">
         <rect
           x="9.52295"
           y="0.949219"
