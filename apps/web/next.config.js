@@ -8,6 +8,10 @@ const withPWA = require('next-pwa')({
   disableDevLogs: true,
 });
 
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const nextConfig = withPWA({
   output: 'standalone',
   webpack: (config, { isServer, dev }) => {
@@ -74,7 +78,12 @@ const nextConfig = withPWA({
     return config;
   },
   images: {
-    domains: ['cdn.jirum-alarm.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.jirum-alarm.com',
+      },
+    ],
     deviceSizes: [640, 750],
     imageSizes: [16, 32, 64],
     minimumCacheTTL: 31536000,
@@ -106,4 +115,4 @@ const nextConfig = withPWA({
   },
 });
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);
