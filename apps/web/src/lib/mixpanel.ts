@@ -1,12 +1,11 @@
 'use client';
 
 import mixpanel, { Mixpanel } from 'mixpanel-browser';
-import { useEffect } from 'react';
 
 import { IS_PRD } from '@/constants/env';
 import { httpClient } from '@/shared/lib/http-client';
 
-class MixpanelService {
+export class MixpanelService {
   private static instance: Mixpanel;
 
   private constructor() {}
@@ -49,7 +48,7 @@ class MixpanelService {
 
   public static getDistinctId(): string | null {
     if (MixpanelService.instance) {
-      return mixpanel.get_distinct_id();
+      return MixpanelService.instance.get_distinct_id();
     }
 
     return null;
@@ -60,22 +59,8 @@ class MixpanelService {
     $email: string | null;
     [key: string]: any;
   }) {
-    mixpanel.people.set(props);
-  }
-}
-
-export const mp = MixpanelService.getInstance() as Mixpanel & {
-  set_user: typeof MixpanelService.setUser;
-};
-
-mp.set_user = MixpanelService.setUser;
-
-export function InitMixpanel() {
-  useEffect(() => {
-    if (mp) {
-      MixpanelService.getInstance();
+    if (MixpanelService.instance) {
+      MixpanelService.instance.people.set(props);
     }
-  }, []);
-
-  return undefined;
+  }
 }

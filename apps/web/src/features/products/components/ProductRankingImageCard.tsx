@@ -4,7 +4,7 @@ import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import { type QueryRankingProductsQuery } from '@/shared/api/gql/graphql';
 
 export function ProductRankingImageCard({
@@ -23,7 +23,7 @@ export function ProductRankingImageCard({
   const handleClick = () => {
     collectProduct(+product.id);
     setTimeout(() => {
-      mp.track(EVENT.PRODUCT_CLICK.NAME, {
+      mp?.track(EVENT.PRODUCT_CLICK.NAME, {
         product,
         page: EVENT.PAGE[logging.page],
       });
@@ -46,6 +46,7 @@ export function ProductRankingImageCard({
             src={product.thumbnail ?? ''}
             alt={product.title}
             fill
+            sizes="300px"
             className="object-cover"
             priority={[0, 1, 9].includes(index)}
           />

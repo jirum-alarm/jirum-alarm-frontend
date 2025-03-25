@@ -10,11 +10,12 @@ import BackButton from '@/components/layout/BackButton';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { ProductQueries } from '@/entities/product';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import LogoLink from '../../../../components/common/Logo/LogiLink';
 
 export default function ProductDetailPageHeader({ productId }: { productId: number }) {
   const { toast } = useToast();
+
   const {
     data: { product },
   } = useSuspenseQuery(ProductQueries.product({ id: productId }));
@@ -24,7 +25,7 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
   const title = `지름알림 | ${product.title}`;
 
   const handleSearch = () => {
-    mp.track(EVENT.PRODUCT_SEARCH.NAME, {
+    mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
       type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
       page: EVENT.PAGE.DETAIL,
     });
@@ -32,7 +33,7 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
 
   const handleShare = () => {
     if (navigator.share) {
-      mp.track(EVENT.PRODUCT_SHARE.NAME, {
+      mp?.track(EVENT.PRODUCT_SHARE.NAME, {
         type: EVENT.PRODUCT_SHARE.TYPE.SHARE_API,
         page: EVENT.PAGE.DETAIL,
       });
@@ -42,7 +43,7 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
         url: window.location.href,
       });
     } else {
-      mp.track(EVENT.PRODUCT_SHARE.NAME, {
+      mp?.track(EVENT.PRODUCT_SHARE.NAME, {
         type: EVENT.PRODUCT_SHARE.TYPE.NOT_SHARE_API,
         page: EVENT.PAGE.DETAIL,
       });

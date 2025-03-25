@@ -2,7 +2,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { EVENT } from '@/constants/mixpanel';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import useMyRouter from '@/hooks/useMyRouter';
 
 const RECENT_KEYWORDS_KEY = 'gr-recent-keywords';
@@ -36,7 +36,7 @@ export const useSearchInputViewModel = () => {
     if (event.key === 'Enter') {
       router.push(`/search?keyword=${keyword}`);
 
-      mp.track(EVENT.PRODUCT_SEARCH.NAME, {
+      mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
         keyword,
         type: EVENT.PRODUCT_SEARCH.TYPE.INPUT,
         page: EVENT.PAGE.SEARCH,

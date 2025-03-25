@@ -12,9 +12,9 @@ const SvgArrowLeft = (props: SVGProps<SVGSVGElement>) => (
     <path
       d="M18 22L10 14L18 6"
       stroke="#101828"
-      stroke-width="1.5"
-      stroke-linecap="square"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="square"
+      strokeLinejoin="round"
     />
   </svg>
 );

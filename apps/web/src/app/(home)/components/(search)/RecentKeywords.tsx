@@ -7,7 +7,7 @@ import { Close } from '@/components/common/icons';
 import { EVENT } from '@/constants/mixpanel';
 import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import useMyRouter from '@/hooks/useMyRouter';
 
 export default function RecentKeywords() {
@@ -75,7 +75,7 @@ function Chip({
   const handleClick = () => {
     router.push(`/search?keyword=${keyword}`);
 
-    mp.track(EVENT.PRODUCT_SEARCH.NAME, {
+    mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
       keyword,
       type: EVENT.PRODUCT_SEARCH.TYPE.RECENT,
       page: EVENT.PAGE.SEARCH,

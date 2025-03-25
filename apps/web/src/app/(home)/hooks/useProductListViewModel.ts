@@ -7,7 +7,7 @@ import { EVENT } from '@/constants/mixpanel';
 import { QueryProducts } from '@/graphql';
 import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface/product';
 import { useDevice } from '@/hooks/useDevice';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 
 const limit = 20;
 const allCategory = { id: '0', name: '전체' };
@@ -79,7 +79,7 @@ export const useProductListViewModel = () => {
     const search = current.toString();
     history.pushState({}, '', '?' + search);
 
-    mp.track(EVENT.CATEGORY_CHECK.NAME, {
+    mp?.track(EVENT.CATEGORY_CHECK.NAME, {
       category: categoriesData.categories.find((category) => category.id === String(index)),
       page: EVENT.PAGE.HOME,
     });

@@ -5,7 +5,7 @@ import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import { QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
 import HotdealBadge from './HotdealBadge';
@@ -24,7 +24,7 @@ export const ProductTrendingImageCard = ({
   const handleClick = () => {
     collectProduct(+product.id);
 
-    mp.track(EVENT.PRODUCT_CLICK.NAME, {
+    mp?.track(EVENT.PRODUCT_CLICK.NAME, {
       product,
       page: EVENT.PAGE[logging.page],
     });

@@ -19,7 +19,7 @@ import { ICategoryForm } from '@/features/categories/types';
 import { MutationSignup } from '@/graphql/auth';
 import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth';
 import { User } from '@/types/user';
-import { mp } from '@/lib/mixpanel';
+import { mp } from '@/components/Mixpanel';
 import useMyRouter from '@/hooks/useMyRouter';
 import BackButton from '@/components/layout/BackButton';
 import * as console from 'node:console';
@@ -129,7 +129,7 @@ const Signup = () => {
       },
     });
 
-    mp.set_user({
+    mp?.set_user({
       $name: nickname.value,
       $email: email.value,
       birthYear,
