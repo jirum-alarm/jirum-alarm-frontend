@@ -1,13 +1,8 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { GA_TRACKING_ID } from '@/constants/ga';
+import GoogleAnalytics from '@/components/GoogleAnalitics';
 import Mixpanel from '@/components/Mixpanel';
-
-const GoogleAnalytics = dynamic(() => import('./GoogleAnalitics'), {
-  ssr: false,
-  loading: () => null,
-});
 
 export default function Analytics() {
   return (
