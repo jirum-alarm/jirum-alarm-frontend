@@ -14,60 +14,61 @@ const nextConfig = withPWA({
     if (!isServer) {
       config.optimization = {
         ...config.optimization,
-        splitChunks: {
-          chunks: 'all',
-          maxInitialRequests: 5,
-          maxAsyncRequests: 10,
-          minSize: 100000,
-          maxSize: 300000,
-          minChunks: 1,
-          cacheGroups: {
-            vendor: {
-              test: /[\\/]node_modules[\\/](react|react-dom|scheduler|@mui)[\\/]/,
-              name: 'vendor-core',
-              chunks: 'all',
-              priority: 40,
-              enforce: true,
-              reuseExistingChunk: true,
-            },
-            vendors: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
-              chunks: 'all',
-              priority: 20,
-              enforce: true,
-              reuseExistingChunk: true,
-            },
-            common: {
-              test: /[\\/](components|common|features)[\\/]/,
-              name: 'common',
-              chunks: 'all',
-              minChunks: 2,
-              priority: 30,
-              reuseExistingChunk: true,
-            },
-            analytics: {
-              test: /[\\/]node_modules[\\/](@google-analytics|mixpanel-browser)[\\/]/,
-              name: 'analytics',
-              chunks: 'async',
-              priority: 10,
-              reuseExistingChunk: true,
-            },
-            styles: {
-              test: /\.(css|scss|sass)$/,
-              name: 'styles',
-              chunks: 'all',
-              enforce: true,
-              priority: 50,
-            },
-          },
-        },
+        /**
+         * B/C: Trusting Next.js bundle optimization
+         * https://nextjs.org/docs/app/building-your-application/optimizing/package-bundling
+         */
+
+        // splitChunks: {
+        //   chunks: 'all',
+        //   maxInitialRequests: 5,
+        //   maxAsyncRequests: 10,
+        //   minSize: 100000,
+        //   maxSize: 300000,
+        //   minChunks: 1,
+        //   cacheGroups: {
+        //     vendor: {
+        //       test: /[\\/]node_modules[\\/](react|react-dom|scheduler|@mui)[\\/]/,
+        //       name: 'vendor-core',
+        //       chunks: 'all',
+        //       priority: 40,
+        //       enforce: true,
+        //       reuseExistingChunk: true,
+        //     },
+        //     vendors: {
+        //       test: /[\\/]node_modules[\\/]/,
+        //       name: 'vendors',
+        //       chunks: 'all',
+        //       priority: 20,
+        //       enforce: true,
+        //       reuseExistingChunk: true,
+        //     },
+        //     common: {
+        //       test: /[\\/](components|common|features)[\\/]/,
+        //       name: 'common',
+        //       chunks: 'all',
+        //       minChunks: 2,
+        //       priority: 30,
+        //       reuseExistingChunk: true,
+        //     },
+        //     analytics: {
+        //       test: /[\\/]node_modules[\\/](@google-analytics|mixpanel-browser)[\\/]/,
+        //       name: 'analytics',
+        //       chunks: 'async',
+        //       priority: 10,
+        //       reuseExistingChunk: true,
+        //     },
+        //     styles: {
+        //       test: /\.(css|scss|sass)$/,
+        //       name: 'styles',
+        //       chunks: 'all',
+        //       enforce: true,
+        //       priority: 50,
+        //     },
+        //   },
+        // },
         minimize: !dev,
       };
-    }
-
-    if (!dev) {
-      config.optimization.minimize = true;
     }
 
     return config;
