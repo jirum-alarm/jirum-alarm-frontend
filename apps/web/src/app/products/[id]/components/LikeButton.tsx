@@ -1,20 +1,18 @@
 'use client';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import Button from '@/components/common/Button';
-import { EVENT } from '@/constants/mixpanel';
-import { PAGE } from '@/constants/page';
-import { mp } from '@/components/Mixpanel';
-import { ProductQuery } from '@/shared/api/gql/graphql';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
 import { Heart } from '@/components/common/icons';
-import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
+import { PAGE } from '@/constants/page';
+import { ProductQueries } from '@/entities/product';
 import { WishlistQueries } from '@/entities/wishlist';
 import { useDevice } from '@/hooks/useDevice';
-import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 import useMyRouter from '@/hooks/useMyRouter';
+import { ProductQuery } from '@/shared/api/gql/graphql';
+import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
+import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 
 export default function LikeButton({
   product,
@@ -62,10 +60,11 @@ export default function LikeButton({
 
   const handleClickWishlist = () => {
     if (!isUserLogin) {
-      mp?.track(EVENT.PRODUCT_WISH.NAME, {
-        type: EVENT.PRODUCT_WISH.TYPE.NOT_LOGGED_IN,
-        page: EVENT.PAGE.DETAIL,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_WISH.NAME, {
+      //   type: EVENT.PRODUCT_WISH.TYPE.NOT_LOGGED_IN,
+      //   page: EVENT.PAGE.DETAIL,
+      // });
 
       if (isJirumAlarmApp) {
         WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
@@ -79,10 +78,11 @@ export default function LikeButton({
     }
 
     if (isLiked) {
-      mp?.track(EVENT.PRODUCT_WISH.NAME, {
-        type: EVENT.PRODUCT_WISH.TYPE.REMOVE,
-        page: EVENT.PAGE.DETAIL,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_WISH.NAME, {
+      //   type: EVENT.PRODUCT_WISH.TYPE.REMOVE,
+      //   page: EVENT.PAGE.DETAIL,
+      // });
 
       removeWishlist({ productId });
       setIsLiked(false);
@@ -91,10 +91,11 @@ export default function LikeButton({
     }
 
     if (!isLiked) {
-      mp?.track(EVENT.PRODUCT_WISH.NAME, {
-        type: EVENT.PRODUCT_WISH.TYPE.ADD,
-        page: EVENT.PAGE.DETAIL,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_WISH.NAME, {
+      //   type: EVENT.PRODUCT_WISH.TYPE.ADD,
+      //   page: EVENT.PAGE.DETAIL,
+      // });
       addWishlist({ productId });
       setIsLiked(true);
 

@@ -1,10 +1,11 @@
 'use client';
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 
-import useTrendingViewModel from '../hooks/useTrendingViewModel';
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 
 import RecommendationProduct from '@/app/(home)/components/(search)/RecommendationProduct';
 import { ProductImageCard, ProductTrendingImageCard, useCollectProduct } from '@/features/products';
+
+import useTrendingViewModel from '../hooks/useTrendingViewModel';
 
 interface TrendingListProps {
   categoryId: number | null;

@@ -2,12 +2,12 @@
 
 import 'swiper/css';
 
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
+
+import { ProductQuery } from '@/shared/api/gql/graphql';
 
 import MoreProductsSkeleton from './MoreProductsSkeleton';
 import RelatedProducts from './RelatedProducts';
-
-import { ProductQuery } from '@/shared/api/gql/graphql';
 
 export default function RelatedProductsContainer({
   product,

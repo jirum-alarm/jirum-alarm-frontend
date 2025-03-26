@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ProductImageCard, useCollectProduct } from '@/features/products';
 import { IProduct } from '@/graphql/interface';
 

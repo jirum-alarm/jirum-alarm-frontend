@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
 
-import JirumRankingSlider from './JirumRankingSlider';
-
 import { PAGE } from '@/constants/page';
-import { cn } from '@/lib/cn';
 import Link from '@/features/Link';
+import { cn } from '@/lib/cn';
+
+import JirumRankingSlider from './JirumRankingSlider';
 
 const JirumRankingContainer = () => {
   return (

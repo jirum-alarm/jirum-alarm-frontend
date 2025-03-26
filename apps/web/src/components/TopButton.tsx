@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useRef, useState } from 'react';
 
 import { ArrowRight } from '@/components/common/icons';

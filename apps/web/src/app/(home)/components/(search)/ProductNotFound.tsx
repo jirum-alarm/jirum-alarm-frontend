@@ -1,14 +1,10 @@
-import React from 'react';
-
-import RecommendationProduct from './RecommendationProduct';
-
 import { IllustError } from '@/components/common/icons';
-import { EVENT } from '@/constants/mixpanel';
 import Link from '@/features/Link';
 import { useHotDealsRandom } from '@/features/products';
 import { useMe } from '@/features/users';
-import { mp } from '@/components/Mixpanel';
 import useMyRouter from '@/hooks/useMyRouter';
+
+import RecommendationProduct from './RecommendationProduct';
 
 const ProductNotFound = () => {
   const userResult = useMe();
@@ -17,17 +13,19 @@ const ProductNotFound = () => {
   const { data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
 
   const handleAddKeywordClick = () => {
-    mp?.track(EVENT.ADD_KEYWORD_CLICK.NAME, {
-      page: EVENT.PAGE.SEARCH_NOT_FOUND,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.ADD_KEYWORD_CLICK.NAME, {
+    //   page: EVENT.PAGE.SEARCH_NOT_FOUND,
+    // });
   };
 
   const handleShowMoreClick = () => {
     router.push(`/?categoryId=0`);
 
-    mp?.track(EVENT.SHOW_MORE_HOT_DEALS_CLICK.NAME, {
-      page: EVENT.PAGE.SEARCH_NOT_FOUND,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.SHOW_MORE_HOT_DEALS_CLICK.NAME, {
+    //   page: EVENT.PAGE.SEARCH_NOT_FOUND,
+    // });
   };
 
   if (userResult.loading) {

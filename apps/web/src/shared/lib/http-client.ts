@@ -1,6 +1,3 @@
-import { graphql } from '../api/gql';
-import { TypedDocumentString } from '../api/gql/graphql';
-
 import {
   getAccessToken,
   getRefreshToken,
@@ -8,6 +5,9 @@ import {
   setRefreshToken,
 } from '@/app/actions/token';
 import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
+
+import { graphql } from '../api/gql';
+import { TypedDocumentString } from '../api/gql/graphql';
 
 const MutationLoginByRefreshToken = graphql(`
   mutation QueryLoginByRefreshToken {

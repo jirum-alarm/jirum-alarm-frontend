@@ -1,9 +1,9 @@
 import { type VariantProps } from 'class-variance-authority';
-import React from 'react';
-
-import { inputVariant, containerVaraint, iconVaraint, helperVariant } from './variant/input';
+import { forwardRef } from 'react';
 
 import { cn } from '@/lib/cn';
+
+import { inputVariant, containerVaraint, iconVaraint, helperVariant } from './variant/input';
 
 interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
@@ -16,7 +16,7 @@ interface InputProps
   icon?: React.ReactNode;
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
       variant = 'standard',

@@ -1,7 +1,5 @@
-import Link from '@/features/Link';
-import React from 'react';
-
 import { Search } from '@/components/common/icons';
+import Link from '@/features/Link';
 
 interface Props {
   color?: string;

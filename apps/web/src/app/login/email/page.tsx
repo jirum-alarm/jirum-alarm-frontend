@@ -1,6 +1,6 @@
-import EmailLogin from './components/EmailLogin';
-
 import BasicLayout from '@/components/layout/BasicLayout';
+
+import EmailLogin from './components/EmailLogin';
 
 const LoginEmail = () => {
   return (

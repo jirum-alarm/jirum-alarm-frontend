@@ -1,8 +1,8 @@
 import { HttpResponse, graphql } from 'msw';
 
-import * as keyword from './keyword';
-
 import { INotification, Role } from '@/graphql/interface';
+
+import * as keyword from './keyword';
 
 const keywordHandlers = Object.values(keyword);
 

@@ -1,3 +1,5 @@
+import { httpClient } from '@/shared/lib/http-client';
+
 import { graphql } from '../gql';
 import {
   MutationAddNotificationKeywordMutationVariables,
@@ -7,8 +9,6 @@ import {
   MutationUpdateUserProfileMutationVariables,
   QueryMypageKeywordQueryVariables,
 } from '../gql/graphql';
-
-import { httpClient } from '@/shared/lib/http-client';
 
 export class AuthService {
   static async loginByRefreshTokenMutation() {

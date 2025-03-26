@@ -1,7 +1,8 @@
 import { Suspense } from 'react';
-import RecommendedProductTabsFetcher from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductTabsFetcher';
-import RecommendedProductList from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductList';
-import RecommendedMoreLink from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedMoreLink';
+
+import RecommendedMoreLink from './RecommendedMoreLink';
+import RecommendedProductList from './RecommendedProductList';
+import RecommendedProductTabsFetcher from './RecommendedProductTabsFetcher';
 
 const RecommendedProductContainer = () => {
   return (

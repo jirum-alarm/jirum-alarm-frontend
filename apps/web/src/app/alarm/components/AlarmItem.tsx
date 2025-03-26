@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import Link from '@/features/Link';
-import React, { useState } from 'react';
+import { memo, useState } from 'react';
 
 import { PAGE } from '@/constants/page';
+import Link from '@/features/Link';
 import { INotification } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
 import { displayTime } from '@/util/displayTime';
@@ -71,7 +71,7 @@ function HighlightText({ message, keyword }: { message: string; keyword: string 
   );
 }
 
-const ImageWithFallback = React.memo(function ImageWithFallback({
+const ImageWithFallback = memo(function ImageWithFallback({
   src,
   title,
 }: {

@@ -1,10 +1,10 @@
 'use client';
 
-import { useSearchInputViewModel } from '../../hooks/(search)/useSearchInputViewModel';
-
 import { Cancel, Home } from '@/components/common/icons';
-import { cn } from '@/lib/cn';
 import BackButton from '@/components/layout/BackButton';
+import { cn } from '@/lib/cn';
+
+import { useSearchInputViewModel } from '../../hooks/(search)/useSearchInputViewModel';
 
 const SearchInput = ({ show }: { show: boolean }) => {
   const { keyword, onKeyDown, handleChange, handleReset, handleGoHome } = useSearchInputViewModel();

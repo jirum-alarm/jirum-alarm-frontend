@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-import { Registration } from '../../page';
-import usePasswordFormViewModel from '../hooks/usePasswordFormViewModel';
-
 import Button from '@/components/common/Button';
 import { Eye, EyeOff } from '@/components/common/icons';
 import Input from '@/components/common/Input';
 import { cn } from '@/lib/cn';
+
+import { Registration } from '../../page';
+import usePasswordFormViewModel from '../hooks/usePasswordFormViewModel';
 
 const PasswordForm = ({
   registration,

@@ -1,10 +1,11 @@
 'use client';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { AuthQueries } from '@/entities/auth';
 
 import AccountManagement from './AccountManagement';
 import MovePage from './MovePage';
-
-import { AuthQueries } from '@/entities/auth';
 
 const AccountContainer = () => {
   const {

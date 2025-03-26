@@ -2,15 +2,14 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
-import Link from '@/features/Link';
 
 import { Search, Share } from '@/components/common/icons';
 import { useToast } from '@/components/common/Toast';
 import BackButton from '@/components/layout/BackButton';
-import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import { ProductQueries } from '@/entities/product';
-import { mp } from '@/components/Mixpanel';
+import Link from '@/features/Link';
+
 import LogoLink from '../../../../components/common/Logo/LogiLink';
 
 export default function ProductDetailPageHeader({ productId }: { productId: number }) {
@@ -25,28 +24,31 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
   const title = `지름알림 | ${product.title}`;
 
   const handleSearch = () => {
-    mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
-      type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
-      page: EVENT.PAGE.DETAIL,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
+    //   type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
+    //   page: EVENT.PAGE.DETAIL,
+    // });
   };
 
   const handleShare = () => {
     if (navigator.share) {
-      mp?.track(EVENT.PRODUCT_SHARE.NAME, {
-        type: EVENT.PRODUCT_SHARE.TYPE.SHARE_API,
-        page: EVENT.PAGE.DETAIL,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_SHARE.NAME, {
+      //   type: EVENT.PRODUCT_SHARE.TYPE.SHARE_API,
+      //   page: EVENT.PAGE.DETAIL,
+      // });
 
       navigator.share({
         title,
         url: window.location.href,
       });
     } else {
-      mp?.track(EVENT.PRODUCT_SHARE.NAME, {
-        type: EVENT.PRODUCT_SHARE.TYPE.NOT_SHARE_API,
-        page: EVENT.PAGE.DETAIL,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_SHARE.NAME, {
+      //   type: EVENT.PRODUCT_SHARE.TYPE.NOT_SHARE_API,
+      //   page: EVENT.PAGE.DETAIL,
+      // });
 
       navigator.clipboard.writeText(window.location.href);
       toast(

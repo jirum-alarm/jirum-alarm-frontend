@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 
-import useEmailLoginFormViewModel from '../hooks/useEmailLoginFormViewModel';
-
 import Button from '@/components/common/Button';
 import { Cancel, Eye, EyeOff } from '@/components/common/icons';
 import Input from '@/components/common/Input';
 import { cn } from '@/lib/cn';
+
+import useEmailLoginFormViewModel from '../hooks/useEmailLoginFormViewModel';
 
 const EmailLoginForm = () => {
   const { email, password, error, handleSubmit } = useEmailLoginFormViewModel();

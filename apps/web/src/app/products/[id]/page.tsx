@@ -1,11 +1,11 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
-import ProductDetailContainerServer from './components/ProductDetailContainerServer';
-
 import { SERVICE_URL } from '@/constants/env';
 import { defaultMetadata } from '@/constants/metadata';
 import { ProductService } from '@/shared/api/product';
+
+import ProductDetailContainerServer from './components/ProductDetailContainerServer';
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const id = params.id;

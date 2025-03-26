@@ -1,12 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState } from 'react';
+import { memo, useState } from 'react';
 
-import { IllustEmpty } from './common/icons';
-import { convertToWebp } from '../util/image';
+import { IllustEmpty } from '@/components/common/icons';
+import { convertToWebp } from '@/util/image';
 
-const ImageWithFallback = React.memo(function ImageWithFallback({
+const ImageWithFallback = memo(function ImageWithFallback({
   src,
   alt,
   ...rest

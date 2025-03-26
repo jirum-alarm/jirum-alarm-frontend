@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import React from 'react';
 
 import { IllustStanding } from '@/components/common/icons';
+
 import { convertToWebp } from '../../../../util/image';
 
 export default function ProductImage({

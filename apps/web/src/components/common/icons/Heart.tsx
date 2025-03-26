@@ -1,5 +1,6 @@
-import { cn } from '@/lib/cn';
 import { SVGProps } from 'react';
+
+import { cn } from '@/lib/cn';
 
 const SvgHeart = (props: SVGProps<SVGSVGElement> & { isLiked?: boolean }) => {
   const { isLiked, width, height, ...others } = props;

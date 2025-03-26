@@ -1,17 +1,16 @@
 'use client';
 
 import { RoundedLogo } from '@/components/common/icons';
-import { cn } from '@/lib/cn';
-import { mp } from '@/components/Mixpanel';
-import { EVENT } from '@/constants/mixpanel';
 import SearchLinkButton from '@/components/SearchLinkButton';
 import Link from '@/features/Link';
+import { cn } from '@/lib/cn';
 
 const BackgroundHeader = () => {
   const handleClick = () => {
-    mp?.track(EVENT.OPEN_KAKAO_TALK.NAME, {
-      page: EVENT.PAGE.HOME,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.OPEN_KAKAO_TALK.NAME, {
+    //   page: EVENT.PAGE.HOME,
+    // });
   };
 
   return (

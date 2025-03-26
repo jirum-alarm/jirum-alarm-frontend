@@ -26,21 +26,21 @@ export class MixpanelService {
       MixpanelService.instance = mixpanel;
     } else {
       // mock when not prd
-      MixpanelService.instance = {} as any;
-      MixpanelService.instance.track = (event: string, props?: any) => {
+      MixpanelService.instance = {} as Mixpanel;
+      MixpanelService.instance.track = (event: string, props?: Record<string, unknown>) => {
         console.info('Mixpanel track:', event, props);
       };
-      MixpanelService.instance.get_distinct_id = (user?: any) => {
+      MixpanelService.instance.get_distinct_id = (user?: unknown) => {
         console.info('Mixpanel get_distinct_id:', user);
       };
       MixpanelService.instance.identify = (id: string) => {
         console.info('Mixpanel identify:', id);
       };
       MixpanelService.instance.people = {
-        set: (props: any) => {
+        set: (props: Record<string, unknown>) => {
           console.info('Mixpanel people set:', props);
         },
-      } as any;
+      } as Mixpanel['people'];
     }
 
     return MixpanelService.instance;
@@ -57,7 +57,7 @@ export class MixpanelService {
   public static setUser(props: {
     $name: string | null;
     $email: string | null;
-    [key: string]: any;
+    [key: string]: unknown;
   }) {
     if (MixpanelService.instance) {
       MixpanelService.instance.people.set(props);

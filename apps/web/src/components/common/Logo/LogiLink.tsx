@@ -1,5 +1,5 @@
-import Link from '@/features/Link';
 import { Logo } from '@/components/common/icons';
+import Link from '@/features/Link';
 
 export default function LogoLink() {
   return (

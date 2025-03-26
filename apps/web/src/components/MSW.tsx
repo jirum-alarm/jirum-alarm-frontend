@@ -1,7 +1,8 @@
 'use client';
 
-import { IS_API_MOCKING } from '@/constants/env';
 import { useEffect, useState } from 'react';
+
+import { IS_API_MOCKING } from '@/constants/env';
 
 export default function MSW() {
   const [enableMocking, setEnableMocking] = useState(false);

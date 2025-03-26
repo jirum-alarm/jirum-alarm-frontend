@@ -1,19 +1,20 @@
 'use client';
 
 import Image from 'next/image';
-import Link from '@/features/Link';
-import React, { useState } from 'react';
+import { memo, useState } from 'react';
 
 import { IllustEmpty } from '@/components/common/icons';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
+import Link from '@/features/Link';
 import { IProduct } from '@/graphql/interface';
 import { cn } from '@/lib/cn';
-import { mp } from '@/components/Mixpanel';
 import { QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
-import HotdealBadge from './HotdealBadge';
+
 import { convertToWebp } from '../../../util/image';
+
+import HotdealBadge from './HotdealBadge';
 
 export function ProductImageCard({
   product,
@@ -29,10 +30,11 @@ export function ProductImageCard({
   const handleClick = () => {
     collectProduct(+product.id);
 
-    mp?.track(EVENT.PRODUCT_CLICK.NAME, {
-      product,
-      page: EVENT.PAGE[logging.page],
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.PRODUCT_CLICK.NAME, {
+    //   product,
+    //   page: EVENT.PAGE[logging.page],
+    // });
   };
 
   return (
@@ -94,7 +96,7 @@ export function ProductImageCard({
   );
 }
 
-const ImageWithFallback = React.memo(function ImageWithFallback({
+const ImageWithFallback = memo(function ImageWithFallback({
   src,
   title,
   type,

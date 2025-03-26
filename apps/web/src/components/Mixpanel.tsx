@@ -1,25 +1,26 @@
-'use client';
+// 'use client';
 
-import { MixpanelService } from '@/lib/mixpanel';
-import { type Mixpanel as MixpanelType } from 'mixpanel-browser';
-import { useEffect } from 'react';
+// import { type Mixpanel as MixpanelType } from 'mixpanel-browser';
+// import { useEffect } from 'react';
 
-type MixpanelInstance = MixpanelType & {
-  set_user: typeof MixpanelService.setUser;
-};
+// import { MixpanelService } from '@/lib/mixpanel';
 
-export let mp: MixpanelInstance | null = null;
+// type MixpanelInstance = MixpanelType & {
+//   set_user: typeof MixpanelService.setUser;
+// };
 
-export default function Mixpanel() {
-  useEffect(() => {
-    if (mp) {
-      return;
-    }
-    const instance = MixpanelService.getInstance();
-    mp = Object.assign(instance, {
-      set_user: MixpanelService.setUser,
-    });
-  }, []);
+// export let mp: MixpanelInstance | null = null;
 
-  return null;
-}
+// export default function Mixpanel() {
+//   useEffect(() => {
+//     if (mp) {
+//       return;
+//     }
+//     const instance = MixpanelService.getInstance();
+//     mp = Object.assign(instance, {
+//       set_user: MixpanelService.setUser,
+//     });
+//   }, []);
+
+//   return null;
+// }

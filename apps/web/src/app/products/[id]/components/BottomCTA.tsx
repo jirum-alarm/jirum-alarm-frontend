@@ -1,10 +1,9 @@
 'use client';
 
-import LikeButton from './LikeButton';
 import Button from '@/components/common/Button';
-import { EVENT } from '@/constants/mixpanel';
-import { mp } from '@/components/Mixpanel';
 import { ProductQuery } from '@/shared/api/gql/graphql';
+
+import LikeButton from './LikeButton';
 
 export default function BottomCTA({
   product,
@@ -14,9 +13,10 @@ export default function BottomCTA({
   isUserLogin: boolean;
 }) {
   const handleClickPurchaseLinkBrowse = () => {
-    mp?.track(EVENT.PRODUCT_PURCHASE_LINK_BROWSE.NAME, {
-      page: EVENT.PAGE.DETAIL,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.PRODUCT_PURCHASE_LINK_BROWSE.NAME, {
+    //   page: EVENT.PAGE.DETAIL,
+    // });
   };
 
   return (

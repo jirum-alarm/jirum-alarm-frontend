@@ -1,4 +1,5 @@
 'use client';
+
 import SearchLinkButton from '@/components/SearchLinkButton';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';

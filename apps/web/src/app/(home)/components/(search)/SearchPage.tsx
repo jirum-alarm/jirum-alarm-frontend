@@ -1,17 +1,19 @@
 'use client';
+
+import TopButton from '@/components/TopButton';
+import { ProductLoading, useHotDealsRandom } from '@/features/products';
+import { cn } from '@/lib/cn';
+
+import { useInputHideOnScroll } from '../../hooks/(search)/useInputHideOnScroll';
+import { useProductListViewModel } from '../../hooks/(search)/useProductListViewModel';
+import { useSearchInputViewModel } from '../../hooks/(search)/useSearchInputViewModel';
+
 import SearchPageProductList from './ProductList';
 import ProductNotFound from './ProductNotFound';
 import RecentKeywords from './RecentKeywords';
 import RecommendationKeywords from './RecommendationKeywords';
 import RecommendationProduct from './RecommendationProduct';
 import SearchPageInput from './SearchInput';
-import { useInputHideOnScroll } from '../../hooks/(search)/useInputHideOnScroll';
-import { useProductListViewModel } from '../../hooks/(search)/useProductListViewModel';
-import { useSearchInputViewModel } from '../../hooks/(search)/useSearchInputViewModel';
-
-import TopButton from '@/components/TopButton';
-import { ProductLoading, useHotDealsRandom } from '@/features/products';
-import { cn } from '@/lib/cn';
 
 export default function SearchPage() {
   const productViewModel = useProductListViewModel();

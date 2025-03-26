@@ -1,6 +1,7 @@
+import { cloneElement, isValidElement, useRef, useState } from 'react';
+
 import useOutsideClick from '@/hooks/useOutsideClick';
 import { composeEventHandlers } from '@/util/event';
-import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
   content: React.ReactNode | string;
@@ -38,8 +39,8 @@ const Tooltip = ({ content, children }: Props) => {
     setTooltipPosition();
   };
 
-  const triggerButton = React.isValidElement(children)
-    ? React.cloneElement(children, {
+  const triggerButton = isValidElement(children)
+    ? cloneElement(children, {
         ...children.props,
         ref: triggerRef,
         onClick: composeEventHandlers(children?.props?.onClick, handleShowToolTipClick),

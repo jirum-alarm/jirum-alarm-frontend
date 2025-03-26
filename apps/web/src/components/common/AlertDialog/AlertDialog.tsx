@@ -1,13 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+import {
+  cloneElement,
+  forwardRef,
+  isValidElement,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
-
-import { AlertDialogContext, useAlertDialogContext } from './context/AlertDialogContext';
 
 import FocusTrap from '@/components/headless/FocusTrap';
 import { Presence } from '@/components/headless/Presence';
 import ScrollLock from '@/components/headless/ScrollLock';
 import { cn } from '@/lib/cn';
 import { composeEventHandlers } from '@/util/event';
+
+import { AlertDialogContext, useAlertDialogContext } from './context/AlertDialogContext';
 
 const getState = (open: boolean) => {
   return open ? 'open' : 'closed';
@@ -30,7 +38,7 @@ const AlertDialog = (props: DialogProps) => {
     onOpenChange?.(open);
   }, [onOpenChange, open]);
 
-  const alertDialogContextValue = React.useMemo(
+  const alertDialogContextValue = useMemo(
     () => ({
       open,
       triggerRef,
@@ -62,7 +70,7 @@ const Portal = (props: PortalProps) => {
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogTrigger
  * -----------------------------------------------------------------------------------------------*/
-const Trigger = React.forwardRef<
+const Trigger = forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
 >((props, forwardRef) => {
@@ -94,7 +102,7 @@ const Trigger = React.forwardRef<
         {children}
       </button>
     );
-  if (!React.isValidElement(children)) return null;
+  if (!isValidElement(children)) return null;
 
   function handler(childHanlder?: (e: React.MouseEvent<HTMLButtonElement>) => void) {
     return (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -103,7 +111,7 @@ const Trigger = React.forwardRef<
     };
   }
 
-  const Compo = React.cloneElement(children, {
+  const Compo = cloneElement(children, {
     ...{ ...others, ...children?.props },
     type: 'button',
     'data-state': getState(open),
@@ -125,7 +133,7 @@ const Overlay = (props: React.HTMLAttributes<HTMLDivElement>) => {
   );
 };
 
-const OverlayImpl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+const OverlayImpl = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   (props: React.HTMLAttributes<HTMLDivElement>, ref) => {
     const { className, onClick, ...others } = props;
     const { onOpenChange, open } = useAlertDialogContext();
@@ -148,7 +156,7 @@ const OverlayImpl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
 );
 OverlayImpl.displayName = 'OverlayImpl';
 
-const ContentImpl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+const ContentImpl = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   (props, ref) => {
     const { className, ...others } = props;
     const { open, onOpenChange, triggerRef } = useAlertDialogContext();
@@ -181,21 +189,19 @@ ContentImpl.displayName = 'ContentImpl';
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogContent
  * -----------------------------------------------------------------------------------------------*/
-const Content = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  (props, ref) => {
-    return (
-      <Portal>
-        <Overlay />
-        <ContentImpl {...props} ref={ref} />
-      </Portal>
-    );
-  },
-);
+const Content = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+  return (
+    <Portal>
+      <Overlay />
+      <ContentImpl {...props} ref={ref} />
+    </Portal>
+  );
+});
 Content.displayName = 'Content';
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogHeader
  * -----------------------------------------------------------------------------------------------*/
-const Header = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+const Header = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...others }, ref) => (
     <div ref={ref} className={cn('flex flex-col gap-3 text-center', className)} {...others} />
   ),
@@ -205,16 +211,14 @@ Header.displayName = 'Header';
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogTitle
  * -----------------------------------------------------------------------------------------------*/
-const Title = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  (props, ref) => {
-    return <div ref={ref} {...props} />;
-  },
-);
+const Title = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+  return <div ref={ref} {...props} />;
+});
 Title.displayName = 'Title';
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogDescription
  * -----------------------------------------------------------------------------------------------*/
-const Description = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+const Description = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   (props, ref) => {
     return <div ref={ref} {...props} />;
   },
@@ -225,7 +229,7 @@ Description.displayName = 'Description';
  * AlertDialogClose
  * -----------------------------------------------------------------------------------------------*/
 
-const Close = React.forwardRef<
+const Close = forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
 >((props, ref) => {
@@ -242,7 +246,7 @@ const Close = React.forwardRef<
         {children}
       </button>
     );
-  if (!React.isValidElement(children)) return null;
+  if (!isValidElement(children)) return null;
 
   function handler(childHanlder?: (e: React.MouseEvent<HTMLButtonElement>) => void) {
     return (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -251,7 +255,7 @@ const Close = React.forwardRef<
     };
   }
 
-  const Compo = React.cloneElement(children, {
+  const Compo = cloneElement(children, {
     ...{ ...others, ...children?.props },
     type: 'button',
     ref: ref,
@@ -265,18 +269,16 @@ Close.displayName = 'Close';
  * AlertDialogFooter
  * -----------------------------------------------------------------------------------------------*/
 
-const Footer = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  (props, ref) => {
-    const { className, ...others } = props;
-    return <div ref={ref} className={cn('flex justify-end gap-2', className)} {...others} />;
-  },
-);
+const Footer = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+  const { className, ...others } = props;
+  return <div ref={ref} className={cn('flex justify-end gap-2', className)} {...others} />;
+});
 Footer.displayName = 'Footer';
 
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogAction
  * -----------------------------------------------------------------------------------------------*/
-const Action = React.forwardRef<
+const Action = forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
 >((props, ref) => {
@@ -286,7 +288,7 @@ Action.displayName = 'Action';
 /* -------------------------------------------------------------------------------------------------
  * AlertDialogCancel
  * -----------------------------------------------------------------------------------------------*/
-const Cancel = React.forwardRef<
+const Cancel = forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
 >((props, ref) => {

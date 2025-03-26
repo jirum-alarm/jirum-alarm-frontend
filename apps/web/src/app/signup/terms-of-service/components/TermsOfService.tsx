@@ -1,5 +1,6 @@
-import TermsOfServiceForm, { ConsentRequiredKey } from './TermsOfServiceForm';
 import { Registration } from '../../page';
+
+import TermsOfServiceForm, { ConsentRequiredKey } from './TermsOfServiceForm';
 
 const TermsOfService = ({
   registration,

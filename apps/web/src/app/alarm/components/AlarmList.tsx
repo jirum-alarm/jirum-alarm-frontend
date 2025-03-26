@@ -3,18 +3,17 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
 
-import AlarmItem from './AlarmItem';
-import NoAlerts from './NoAlerts';
-import { useNotificationsViewModel } from '../hooks/useNotificationsViewModel';
-
 import Button from '@/components/common/Button';
 import { Apple, ArrowDown, Google } from '@/components/common/icons';
 import Illust from '@/components/common/Illust';
-import { EVENT } from '@/constants/mixpanel';
 import Link from '@/features/Link';
 import { useDevice } from '@/hooks/useDevice';
-import { mp } from '@/components/Mixpanel';
 import useMyRouter from '@/hooks/useMyRouter';
+
+import { useNotificationsViewModel } from '../hooks/useNotificationsViewModel';
+
+import AlarmItem from './AlarmItem';
+import NoAlerts from './NoAlerts';
 
 const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
@@ -113,10 +112,11 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
 
 function AndroidDownloadButton() {
   const handleClick = () => {
-    mp?.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
-      type: EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.ANDROID,
-      page: EVENT.PAGE.ALARM,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
+    //   type: EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.ANDROID,
+    //   page: EVENT.PAGE.ALARM,
+    // });
   };
 
   return (
@@ -135,10 +135,11 @@ function AndroidDownloadButton() {
 
 function IosDownloadButton() {
   const handleClick = () => {
-    mp?.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
-      type: EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.IOS,
-      page: EVENT.PAGE.ALARM,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
+    //   type: EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.IOS,
+    //   page: EVENT.PAGE.ALARM,
+    // });
   };
 
   return (

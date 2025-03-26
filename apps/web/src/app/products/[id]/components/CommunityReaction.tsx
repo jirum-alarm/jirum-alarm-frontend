@@ -2,9 +2,7 @@
 
 import { Info } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
-import { EVENT } from '@/constants/mixpanel';
 import { cn } from '@/lib/cn';
-import { mp } from '@/components/Mixpanel';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 
 export default function CommunityReaction({
@@ -24,9 +22,10 @@ export default function CommunityReaction({
   const isPositiveMax = +positivePercent === 100;
 
   const handleCommunityLinkClick = () => {
-    mp?.track(EVENT.COMMUNITY_LINK_CLICK.NAME, {
-      page: EVENT.PAGE.DETAIL,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.COMMUNITY_LINK_CLICK.NAME, {
+    //   page: EVENT.PAGE.DETAIL,
+    // });
   };
 
   return (

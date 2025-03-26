@@ -1,10 +1,8 @@
-import Link from '@/features/Link';
-
 import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
+import Link from '@/features/Link';
 import { cn } from '@/lib/cn';
-import { mp } from '@/components/Mixpanel';
 import { type QueryRankingProductsQuery } from '@/shared/api/gql/graphql';
 
 export function ProductRankingImageCard({
@@ -22,12 +20,13 @@ export function ProductRankingImageCard({
 }) {
   const handleClick = () => {
     collectProduct(+product.id);
-    setTimeout(() => {
-      mp?.track(EVENT.PRODUCT_CLICK.NAME, {
-        product,
-        page: EVENT.PAGE[logging.page],
-      });
-    }, 0);
+
+    // setTimeout(() => {
+    //   mp?// mp?.track(EVENT.PRODUCT_CLICK.NAME, {
+    //     product,
+    //     page: EVENT.PAGE[logging.page],
+    //   });
+    // }, 0);
   };
 
   return (

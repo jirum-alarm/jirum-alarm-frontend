@@ -1,9 +1,10 @@
+import RecommendedProductContainer from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductContainer';
+import TopButton from '@/components/TopButton';
+
 import BackgroundHeader from './BackgronudHeader';
 import HomeHeader from './HomeHeader';
 import JirumRankingContainer from './JirumRankingContainer';
 import LiveHotDealContainer from './LiveHotDealContainer';
-import TopButton from '@/components/TopButton';
-import RecommendedProductContainer from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductContainer';
 
 const HomeContainerV2 = () => {
   return (

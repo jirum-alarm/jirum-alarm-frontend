@@ -1,5 +1,3 @@
-import { EVENT } from '@/constants/mixpanel';
-import { mp } from '@/components/Mixpanel';
 import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
 
 const AppDownloadCTA = () => {
@@ -7,13 +5,14 @@ const AppDownloadCTA = () => {
 
   const handleAppDownloadClick = () => {
     if (!type) return;
-    mp?.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
-      type:
-        type === 'android'
-          ? EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.ANDROID
-          : EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.IOS,
-      page: EVENT.PAGE.HOME,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.APP_DOWNLOAD_LINK_CLICK.NAME, {
+    //   type:
+    //     type === 'android'
+    //       ? EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.ANDROID
+    //       : EVENT.APP_DOWNLOAD_LINK_CLICK.TYPE.IOS,
+    //   page: EVENT.PAGE.HOME,
+    // });
   };
   return (
     <>

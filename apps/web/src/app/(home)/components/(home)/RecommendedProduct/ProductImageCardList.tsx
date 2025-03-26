@@ -1,9 +1,11 @@
 'use client';
-import { ProductImageCard, useCollectProduct } from '@/features/products';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
-import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 import { Swiper, SwiperSlide } from 'swiper/react';
+
+import { ProductQueries } from '@/entities/product';
+import { ProductImageCard, useCollectProduct } from '@/features/products';
+import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 
 interface ProductImageCardListProps {
   keyword: string;

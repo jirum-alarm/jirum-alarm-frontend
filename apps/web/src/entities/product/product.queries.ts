@@ -1,15 +1,11 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 import {
-  InputMaybe,
-  KeywordProductOrderType,
-  OrderOptionType,
   ProductGuidesQueryVariables,
   ProductQueryVariables,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
-  Scalars,
   TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';

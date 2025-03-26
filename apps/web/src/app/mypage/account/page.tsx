@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 
-import AccountContainer from './components/AccountContainer';
-
 import BasicLayout from '@/components/layout/BasicLayout';
+
+import AccountContainer from './components/AccountContainer';
 
 const AccountPage = async () => {
   return (

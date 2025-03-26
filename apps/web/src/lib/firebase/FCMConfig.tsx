@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { firebaseConfig } from '@/constants/firebase';
-import { fcmTokenAtom } from '@/state/fcmToken';
 import { httpClient } from '@/shared/lib/http-client';
+import { fcmTokenAtom } from '@/state/fcmToken';
 
 const firebaseApp = initializeApp(firebaseConfig);
 

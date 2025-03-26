@@ -3,38 +3,38 @@
 import { Search, Share } from '@/components/common/icons';
 import { useToast } from '@/components/common/Toast';
 import BackButton from '@/components/layout/BackButton';
-import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
-import { mp } from '@/components/Mixpanel';
-import React from 'react';
 import Link from '@/features/Link';
 
 export default function RecommendPageHeader() {
   const { toast } = useToast();
 
   const handleSearch = () => {
-    mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
-      type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
-      page: EVENT.PAGE.RECOMMEND,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
+    //   type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
+    //   page: EVENT.PAGE.RECOMMEND,
+    // });
   };
 
   const handleShare = () => {
     if (navigator.share) {
-      mp?.track(EVENT.PRODUCT_SHARE.NAME, {
-        type: EVENT.PRODUCT_SHARE.TYPE.SHARE_API,
-        page: EVENT.PAGE.RECOMMEND,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_SHARE.NAME, {
+      //   type: EVENT.PRODUCT_SHARE.TYPE.SHARE_API,
+      //   page: EVENT.PAGE.RECOMMEND,
+      // });
 
       navigator.share({
         title: '지금 추천하는 상품',
         url: window.location.href,
       });
     } else {
-      mp?.track(EVENT.PRODUCT_SHARE.NAME, {
-        type: EVENT.PRODUCT_SHARE.TYPE.NOT_SHARE_API,
-        page: EVENT.PAGE.RECOMMEND,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_SHARE.NAME, {
+      //   type: EVENT.PRODUCT_SHARE.TYPE.NOT_SHARE_API,
+      //   page: EVENT.PAGE.RECOMMEND,
+      // });
 
       navigator.clipboard.writeText(window.location.href);
       toast(

@@ -1,11 +1,11 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
+
+import { ProductQuery } from '@/shared/api/gql/graphql';
 
 import MoreProductsSkeleton from './MoreProductsSkeleton';
 import PopularProducts from './PopularProudcts';
-
-import { ProductQuery } from '@/shared/api/gql/graphql';
 
 export default function PopularProductsContainer({
   product,

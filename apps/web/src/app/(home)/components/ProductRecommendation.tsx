@@ -1,14 +1,12 @@
-import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
-import { EVENT } from '@/constants/mixpanel';
+
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 import { ProductImageCard, useCollectProduct } from '@/features/products';
 import { IProduct } from '@/graphql/interface';
 import useScreenSize from '@/hooks/useScreenSize';
-import { mp } from '@/components/Mixpanel';
 
 export default function ProductRecommendation({
   showRandomHotDeals,
@@ -26,9 +24,10 @@ export default function ProductRecommendation({
   const hotDealCount = 10;
 
   const handleShowMoreClick = () => {
-    mp?.track(EVENT.SHOW_MORE_HOT_DEALS_CLICK.NAME, {
-      page: EVENT.PAGE.HOME,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.SHOW_MORE_HOT_DEALS_CLICK.NAME, {
+    //   page: EVENT.PAGE.HOME,
+    // });
   };
 
   return (

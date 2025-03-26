@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 
 import { PAGE } from '@/constants/page';
 import { useDevice } from '@/hooks/useDevice';
-import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 import useMyRouter from '@/hooks/useMyRouter';
+import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 
 const useGoBack = (backTo: PAGE = PAGE.HOME) => {
   const router = useMyRouter();

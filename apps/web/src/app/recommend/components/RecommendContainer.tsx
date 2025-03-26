@@ -1,10 +1,12 @@
 'use client';
-import RecommendedProductTabs from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductTabs';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
-import React, { Suspense, useState } from 'react';
+import { Suspense } from 'react';
+
+import RecommendedProductTabs from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductTabs';
 import RecommendProductList from '@/app/recommend/components/RecommendProductList';
 import { IllustStandingSmall } from '@/components/common/icons';
+import { ProductQueries } from '@/entities/product';
 import useTabQueryString from '@/hooks/useTabQueryString';
 const RecommendContainer = () => {
   const {

@@ -1,3 +1,4 @@
+// TODO: Need GTM Migration
 export const EVENT = {
   PRODUCT_CLICK: {
     NAME: 'Product Click',

@@ -1,10 +1,10 @@
 import { VariantProps } from 'class-variance-authority';
 import { useEffect, useRef } from 'react';
 
+import { cn } from '@/lib/cn';
+
 import { useSelectContext } from './context/SelectContext';
 import { optionVaraint } from './variant/option';
-
-import { cn } from '@/lib/cn';
 
 interface OptionProps
   extends Omit<

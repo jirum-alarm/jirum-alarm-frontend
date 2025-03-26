@@ -1,22 +1,21 @@
 'use client';
-import Link from '@/features/Link';
+
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import React, { useRef, useEffect, useState, Suspense, KeyboardEvent } from 'react';
+import { useRef, useEffect, useState, Suspense } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import TrendingList from '../TrendingList';
-
+import TrendingList from '@/app/trending/components/TrendingList';
 import { IllustStandingSmall, Setting } from '@/components/common/icons';
-
-import 'swiper/css';
 import { PAGE } from '@/constants/page';
 import { CategoryQueries } from '@/entities/category';
+import Link from '@/features/Link';
+import useMyRouter from '@/hooks/useMyRouter';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
-import useMyRouter from '@/hooks/useMyRouter';
+import 'swiper/css';
 
 export const TrendingContainer = () => {
   const {
@@ -53,7 +52,7 @@ export const TrendingContainer = () => {
     }
   };
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLUListElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLUListElement>) => {
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       event.preventDefault();
       const direction = event.key === 'ArrowLeft' ? -1 : 1;

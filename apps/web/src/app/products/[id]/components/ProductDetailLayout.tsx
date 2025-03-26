@@ -1,29 +1,30 @@
 'use client';
+
 import 'swiper/css';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { Drawer } from 'vaul';
+
+import Button from '@/components/common/Button';
+import { Info, Thumbsdown, Thumbsup } from '@/components/common/icons';
+import { ProductQueries } from '@/entities/product';
+import HotdealBadge from '@/features/products/components/HotdealBadge';
+import { cn } from '@/lib/cn';
+import { HotDealType, ProductGuidesQuery, ProductQuery } from '@/shared/api/gql/graphql';
+import { displayTime } from '@/util/displayTime';
 
 import BottomCTA from './BottomCTA';
 import CommunityReaction from './CommunityReaction';
 import HotdealGuide from './HotdealGuide';
-import PopularProductsContainer from './PopularProudctsContainer';
-import ProductImage from './ProductImage';
-import RelatedProductsContainer from './RelatedProductsContainer';
-
-import { ProductQueries } from '@/entities/product';
-import { cn } from '@/lib/cn';
-import { HotDealType, ProductGuidesQuery, ProductQuery } from '@/shared/api/gql/graphql';
-import { displayTime } from '@/util/displayTime';
-import { NoticeProfitLink } from './NoticeProfitUrl';
-import { useInView } from 'react-intersection-observer';
-import { Info, Thumbsdown, Thumbsup } from '@/components/common/icons';
 import HotdealScore from './HotdealScore';
-import ProductReport from './ProductReport';
+import { NoticeProfitLink } from './NoticeProfitUrl';
+import PopularProductsContainer from './PopularProudctsContainer';
 import ProductFeedback from './ProductFeedback';
-import HotdealBadge from '@/features/products/components/HotdealBadge';
-import { Drawer } from 'vaul';
-import Button from '@/components/common/Button';
+import ProductImage from './ProductImage';
+import ProductReport from './ProductReport';
+import RelatedProductsContainer from './RelatedProductsContainer';
 
 type Product = NonNullable<ProductQuery['product']>;
 type ProductGuides = ProductGuidesQuery['productGuides'];

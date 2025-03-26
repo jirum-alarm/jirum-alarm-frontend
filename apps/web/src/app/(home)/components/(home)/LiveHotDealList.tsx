@@ -1,10 +1,12 @@
 'use client';
-import useLiveHotDealsViewModel from '../../hooks/useLiveHotDealsViewModel';
 
 import { LoadingSpinner } from '@/components/common/icons';
 import { ProductLiveHotdealsImageCard, useCollectProduct } from '@/features/products';
-import AppDownloadCTA from './AppDownloadCTA';
 import useScreen from '@/hooks/useScreenSize';
+
+import useLiveHotDealsViewModel from '../../hooks/useLiveHotDealsViewModel';
+
+import AppDownloadCTA from './AppDownloadCTA';
 
 const LiveHotDealList = () => {
   const { products, loadingCallbackRef, isFetchingNextPage } = useLiveHotDealsViewModel();

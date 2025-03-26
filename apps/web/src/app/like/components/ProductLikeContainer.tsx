@@ -1,20 +1,15 @@
 'use client';
+
+import { useMutation, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+
+import { Heart, LoadingSpinner } from '@/components/common/icons';
+import { WishlistQueries } from '@/entities/wishlist';
 import { ProductLikeCard } from '@/features/products/components/ProductLikeCard';
 import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-import { Heart, LoadingSpinner } from '@/components/common/icons';
-import { useInView } from 'react-intersection-observer';
-import { WishlistQueries } from '@/entities/wishlist';
 import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
-import { useState } from 'react';
-import { EVENT } from '@/constants/mixpanel';
-import { mp } from '@/components/Mixpanel';
 
 const LIMIT = 18;
 
@@ -85,20 +80,22 @@ const ProductLikeAction = ({ productId }: { productId: string }) => {
     e.preventDefault();
 
     if (isLiked) {
-      mp?.track(EVENT.PRODUCT_WISH.NAME, {
-        type: EVENT.PRODUCT_WISH.TYPE.REMOVE,
-        page: EVENT.PAGE.LIKE,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_WISH.NAME, {
+      //   type: EVENT.PRODUCT_WISH.TYPE.REMOVE,
+      //   page: EVENT.PAGE.LIKE,
+      // });
       removeWishlist({ productId: +productId });
       setIsLiked(false);
       return;
     }
 
     if (!isLiked) {
-      mp?.track(EVENT.PRODUCT_WISH.NAME, {
-        type: EVENT.PRODUCT_WISH.TYPE.ADD,
-        page: EVENT.PAGE.LIKE,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_WISH.NAME, {
+      //   type: EVENT.PRODUCT_WISH.TYPE.ADD,
+      //   page: EVENT.PAGE.LIKE,
+      // });
       addWishlist({ productId: +productId });
       setIsLiked(true);
       return;

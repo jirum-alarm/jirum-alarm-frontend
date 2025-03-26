@@ -1,13 +1,15 @@
 'use client';
-import { useMemo, useState } from 'react';
-import { SwiperSlide, Swiper } from 'swiper/react';
+
 import 'swiper/css';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
+import { SwiperSlide, Swiper } from 'swiper/react';
+
+import { ProductQueries } from '@/entities/product';
 import { useCollectProduct } from '@/features/products';
 import { ProductRankingImageCard } from '@/features/products/components/ProductRankingImageCard';
 import { cn } from '@/lib/cn';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
 
 const SLIDER_CONFIG = {
   centeredSlides: true,

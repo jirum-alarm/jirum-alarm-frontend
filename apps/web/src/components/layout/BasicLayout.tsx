@@ -1,10 +1,8 @@
-import React from 'react';
+import { PAGE } from '@/constants/page';
+import { cn } from '@/lib/cn';
 
 import BackButton from './BackButton';
 import { type NAV_TYPE } from './BottomNav';
-
-import { PAGE } from '@/constants/page';
-import { cn } from '@/lib/cn';
 
 interface BaseProps {
   children: React.ReactNode;

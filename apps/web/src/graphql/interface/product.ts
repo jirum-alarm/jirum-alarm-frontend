@@ -1,4 +1,5 @@
 import { HotDealType } from '@/shared/api/gql/graphql';
+
 import { IProvider } from './provider';
 
 export const enum ProductPriceTarget {

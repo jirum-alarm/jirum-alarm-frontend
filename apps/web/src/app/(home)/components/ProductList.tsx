@@ -1,18 +1,19 @@
 'use client';
+
+import { memo } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 
 import 'react-tabs/style/react-tabs.css';
 import '@/style/React_tabs.css';
-import ProductRecommendation from './ProductRecommendation';
-import { useHotDealsViewModel } from '../hooks/useHotDealsViewModel';
-import { useProductListViewModel } from '../hooks/useProductListViewModel';
-
-import React from 'react';
-
 import TopButton from '@/components/TopButton';
 import { ProductLoading } from '@/features/products';
 import { mergeRefs } from '@/util/mergeRefs';
+
+import { useHotDealsViewModel } from '../hooks/useHotDealsViewModel';
+import { useProductListViewModel } from '../hooks/useProductListViewModel';
+
+import ProductRecommendation from './ProductRecommendation';
 
 const ProductList = () => {
   const {
@@ -105,4 +106,4 @@ const ProductList = () => {
   );
 };
 
-export default React.memo(ProductList);
+export default memo(ProductList);

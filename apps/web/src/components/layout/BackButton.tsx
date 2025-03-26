@@ -1,10 +1,9 @@
 'use client';
-import React from 'react';
-
-import { ArrowLeft } from '../common/icons';
 
 import { PAGE } from '@/constants/page';
 import useGoBack from '@/hooks/useGoBack';
+
+import { ArrowLeft } from '../common/icons';
 
 const BackButton = ({ backTo, onClick }: { backTo?: PAGE; onClick?: () => void }) => {
   const goBack = useGoBack(backTo);

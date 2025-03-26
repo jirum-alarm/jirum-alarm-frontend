@@ -1,9 +1,10 @@
+import { motion, useAnimation } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+
 import { Info } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
 import HotdealBadge from '@/features/products/components/HotdealBadge';
 import { ProductQuery } from '@/shared/api/gql/graphql';
-import { motion, useAnimation } from 'framer-motion';
-import { useEffect, useRef } from 'react';
 
 const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
   const hotDealIndex = product.hotDealIndex;

@@ -1,14 +1,12 @@
 'use client';
+
 import { motion } from 'framer-motion';
-import Link from '@/features/Link';
 import { usePathname } from 'next/navigation';
-import React, { useRef } from 'react';
+import { createElement, useRef } from 'react';
 
 import {
   Alert,
   AlertFill,
-  Category,
-  CategoryFill,
   Home,
   HomeFill,
   My,
@@ -17,9 +15,11 @@ import {
   RankingFill,
 } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
+import Link from '@/features/Link';
 import { cn } from '@/lib/cn';
-import { useScrollDirection } from '../../hooks/useScrollDirection';
+
 import { useDevice } from '../../hooks/useDevice';
+import { useScrollDirection } from '../../hooks/useScrollDirection';
 
 export enum NAV_TYPE {
   HOME = 'HOME',
@@ -129,7 +129,7 @@ const BottomNav = ({ type }: { type: any }) => {
                   className="flex h-[36px] w-[48px] items-center justify-center"
                   aria-hidden="true"
                 >
-                  {React.createElement(isActiveNav(nav.type, nav.link) ? nav.activeIcon : nav.icon)}
+                  {createElement(isActiveNav(nav.type, nav.link) ? nav.activeIcon : nav.icon)}
                 </div>
                 <span
                   className={cn('text-xs', { 'font-semibold': isActiveNav(nav.type, nav.link) })}

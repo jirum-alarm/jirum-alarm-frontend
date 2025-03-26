@@ -1,20 +1,20 @@
 'use client';
-import { Logo } from '@/components/common/icons';
+
 import SearchLinkButton from '@/components/SearchLinkButton';
-import { EVENT } from '@/constants/mixpanel';
 import useScrollPosition from '@/hooks/useScrollPosition';
 import { cn } from '@/lib/cn';
-import { mp } from '@/components/Mixpanel';
+
 import LogoLink from '../../../../components/common/Logo/LogiLink';
 
 const HomeHeader = () => {
   const isScrolled = useScrollPosition(90);
 
   const handleSearchClick = () => {
-    mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
-      type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
-      page: EVENT.PAGE.HOME,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
+    //   type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
+    //   page: EVENT.PAGE.HOME,
+    // });
   };
 
   return (

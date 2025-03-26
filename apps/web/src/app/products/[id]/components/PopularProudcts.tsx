@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ProductQueries } from '@/entities/product';

@@ -1,5 +1,7 @@
 'use client';
-import React, { PropsWithChildren } from 'react';
+
+import { PropsWithChildren } from 'react';
+
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 import useTabQueryString from '@/hooks/useTabQueryString';

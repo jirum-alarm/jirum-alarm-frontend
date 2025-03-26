@@ -1,3 +1,5 @@
+import { httpClient } from '@/shared/lib/http-client';
+
 import { graphql } from '../gql';
 import {
   MutationCollectProductMutationVariables,
@@ -9,9 +11,6 @@ import {
   QueryProductsQueryVariables,
   TogetherViewedProductsQueryVariables,
 } from '../gql/graphql';
-
-import { httpClient } from '@/shared/lib/http-client';
-import { gql } from '@apollo/client';
 
 export class ProductService {
   static async getRankingProducts() {

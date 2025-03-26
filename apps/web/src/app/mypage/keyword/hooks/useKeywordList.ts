@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { useRemoveKeyword } from '../../features';
-
 import { AuthQueries } from '@/entities/auth';
+
+import { useRemoveKeyword } from '../../features';
 
 export const useKeywordList = () => {
   const {
