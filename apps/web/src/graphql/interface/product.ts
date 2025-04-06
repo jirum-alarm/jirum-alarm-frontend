@@ -34,29 +34,30 @@ export interface IProductGuide {
 
 export interface IProduct {
   id: string;
-  providerId: number;
-  category?: string;
-  categoryId?: number;
-  mallId?: number;
   title: string;
-  url?: string;
-  detailUrl: string;
-  isHot: boolean;
-  isEnd: boolean;
-  price: string;
+  mallId?: number | null;
+  url?: string | null;
+  isHot?: boolean | null;
+  isEnd?: boolean | null;
+  price?: string | null;
+  providerId: number;
+  categoryId?: number | null;
+  category?: string | null;
+  thumbnail?: string | null;
+  hotDealType?: HotDealType | null;
+  searchAfter?: Array<string> | null;
   postedAt: Date;
-  thumbnail?: string;
+  provider: IProvider;
+
+  detailUrl?: string;
   wishlistCount?: number;
   positiveCommunityReactionCount?: number;
   negativeCommunityReactionCount?: number;
-  provider: IProvider;
   viewCount?: number;
   mallName?: string;
   guides?: IProductGuide[];
   prices?: IProductPrice[];
-  hotDealType?: HotDealType | null;
-  searchAfter?: string[];
-  isMyWishlist: boolean;
+  isMyWishlist?: boolean;
   categoryName?: string;
   author?: string;
 }

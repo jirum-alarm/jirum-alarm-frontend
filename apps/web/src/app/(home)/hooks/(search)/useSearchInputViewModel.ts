@@ -47,7 +47,7 @@ export const useSearchInputViewModel = () => {
   const handleReset = () => {
     setKeyword('');
 
-    router.push(`/search`);
+    // router.push(`/search`);
   };
 
   const handleGoHome = () => {

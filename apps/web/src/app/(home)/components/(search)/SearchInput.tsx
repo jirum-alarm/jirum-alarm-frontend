@@ -2,18 +2,19 @@
 
 import { Cancel, Home } from '@/components/common/icons';
 import BackButton from '@/components/layout/BackButton';
+import Link from '@/features/Link';
 import { cn } from '@/lib/cn';
 
 import { useSearchInputViewModel } from '../../hooks/(search)/useSearchInputViewModel';
 
 const SearchInput = ({ show }: { show: boolean }) => {
-  const { keyword, onKeyDown, handleChange, handleReset, handleGoHome } = useSearchInputViewModel();
+  const { keyword, onKeyDown, handleChange, handleReset } = useSearchInputViewModel();
 
   return (
     <>
       <div
         className={cn(
-          'ml-[-20px] flex w-full items-center justify-between gap-x-3 rounded bg-white px-5 py-4',
+          'flex w-full items-center justify-between gap-x-3 rounded bg-white px-5 py-4',
           show
             ? 'flex opacity-100 transition-opacity duration-150'
             : 'opacity-0 transition-opacity duration-150',
@@ -45,13 +46,14 @@ const SearchInput = ({ show }: { show: boolean }) => {
             spellCheck={false}
             placeholder="&nbsp;&nbsp;핫딜 제품을 검색해 주세요"
             autoFocus
+            inputMode="search"
           />
 
           {keyword && <ResetButton handleReset={handleReset} />}
         </div>
-        <div onClick={handleGoHome} className="cursor-pointer">
+        <Link href="/" className="cursor-pointer">
           <Home />
-        </div>
+        </Link>
       </div>
     </>
   );
@@ -61,11 +63,12 @@ export default SearchInput;
 
 function ResetButton({ handleReset }: { handleReset: () => void }) {
   return (
-    <div
+    <Link
       className="grid h-full w-14 cursor-pointer place-items-center text-gray-300"
+      href="/search"
       onClick={handleReset}
     >
       <Cancel />
-    </div>
+    </Link>
   );
 }

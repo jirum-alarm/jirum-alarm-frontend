@@ -1,6 +1,7 @@
 'use client';
 
 import { IProduct } from '@/graphql/interface';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { displayTime } from '@/util/displayTime';
 
 interface IProductCard {
@@ -8,11 +9,13 @@ interface IProductCard {
 }
 
 export const ProductCard = (props: IProductCard) => {
-  const timestamp = displayTime(new Date(props.product.postedAt));
+  const isHydrated = useIsHydrated();
+
+  const timestamp = isHydrated ? displayTime(new Date(props.product.postedAt)) : '';
   const product = props.product;
   return (
     <div className="rounded-md border border-gray-300 shadow transition duration-200 hover:shadow-md">
-      <a href={product.url} target="_blank" rel="noopener noreferrer">
+      <a href={product.url ?? undefined} target="_blank" rel="noopener noreferrer">
         <div className="h-full">
           <div className="flex justify-between bg-primary-100 px-5 py-2 text-sm">
             <h2 className="font-bold">{product.provider.nameKr}</h2>

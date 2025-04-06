@@ -15,7 +15,9 @@ const ProductReport = ({ product }: { product: NonNullable<ProductQuery['product
   return (
     <div className="px-5">
       <div
-        className={cn(`flex h-[56px] items-center justify-between rounded-lg bg-gray-100 p-[18px]`)}
+        className={cn(
+          `flex h-[56px] items-center justify-between rounded-lg border bg-gray-50 p-[16px]`,
+        )}
       >
         {product.isMyReported ? (
           <p className="flex items-center gap-2 text-sm text-gray-600">
@@ -66,14 +68,14 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
   return (
     <Drawer.Root onOpenChange={handleOpenChange} open={isModalOpen}>
       <Drawer.Trigger asChild>
-        <button className="text-gray-900">제보하기</button>
+        <button className="-m-2 p-2 text-gray-900">제보하기</button>
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
         <Drawer.Content className="fixed inset-x-0 bottom-0 left-0 right-0 z-[9999] mx-auto h-fit max-w-screen-layout-max rounded-t-[20px] bg-white outline-none">
           <div className="flex flex-col items-center">
             <Drawer.Title asChild>
-              <h2 className="pb-[20px] pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>
+              <h2 className="pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>
             </Drawer.Title>
             <SoldOutIcon />
             <p className="py-3 text-center text-gray-700">
@@ -96,7 +98,7 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
 
 const SoldOutIcon = () => {
   return (
-    <div className="relative flex h-[172px] w-fit items-center justify-center">
+    <div className="relative mt-0.5 flex h-[172px] w-fit items-center justify-center">
       <svg
         width="136"
         height="136"
@@ -143,7 +145,7 @@ const SoldOutIcon = () => {
           </clipPath>
         </defs>
       </svg>
-      <div className="absolute -right-[2.75rem] -top-[14px] z-50">
+      <div className="absolute -right-[2.65rem] top-0 z-50">
         <Clock />
       </div>
     </div>

@@ -13,7 +13,7 @@ const BackButton = ({ backTo, onClick }: { backTo?: PAGE; onClick?: () => void }
   };
 
   return (
-    <button className="p-2" onClick={handleClick} aria-label="뒤로 가기" title="뒤로 가기">
+    <button className="-m-2 p-2" onClick={handleClick} aria-label="뒤로 가기" title="뒤로 가기">
       <ArrowLeft width={28} height={28} />
     </button>
   );

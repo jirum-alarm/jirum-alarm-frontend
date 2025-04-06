@@ -1,14 +1,14 @@
 'use client';
 
+import { useQueryState } from 'nuqs';
 import { PropsWithChildren } from 'react';
 
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
-import useTabQueryString from '@/hooks/useTabQueryString';
 
 const RecommendedMoreLink = ({ children }: PropsWithChildren) => {
-  const { currentTab } = useTabQueryString('keyword');
-  const queryString = currentTab ? `?keyword=${currentTab}` : '';
+  const [keyword] = useQueryState('keyword');
+  const queryString = keyword ? `?keyword=${keyword}` : '';
   return (
     <Link className="text-sm text-gray-500" href={`${PAGE.RECOMMEND}${queryString}`}>
       {children}

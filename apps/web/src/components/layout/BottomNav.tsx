@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { createElement, useRef } from 'react';
 
@@ -111,6 +111,7 @@ const BottomNav = ({ type }: { type: any }) => {
         {BottomNavList.map((nav, i) => (
           <li key={i} className="flex flex-1 items-center justify-center">
             <Link
+              prefetch
               data-nav-type={nav.type}
               className={cn(
                 'flex w-full flex-col items-center justify-center rounded-lg py-2 text-gray-500',

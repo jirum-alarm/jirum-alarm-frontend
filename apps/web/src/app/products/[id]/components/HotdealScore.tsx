@@ -1,4 +1,4 @@
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
 import { Info } from '@/components/common/icons';

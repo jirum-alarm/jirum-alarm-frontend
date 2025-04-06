@@ -84,10 +84,10 @@ const nextConfig = withPWA({
         hostname: 'cdn.jirum-alarm.com',
       },
     ],
-    deviceSizes: [640, 750],
-    imageSizes: [16, 32, 64],
+    deviceSizes: [320, 375, 600],
+    imageSizes: [120, 140, 160, 180, 200, 250],
     minimumCacheTTL: 31536000,
-    formats: ['image/webp', 'image/avif'],
+    formats: ['image/avif', 'image/webp'],
     contentSecurityPolicy: "default-src 'self'; img-src 'self' data: cdn.jirum-alarm.com;",
   },
   experimental: {

@@ -19,6 +19,10 @@ export const QueryProduct = gql`
       wishlistCount
       positiveCommunityReactionCount
       negativeCommunityReactionCount
+      author {
+        id
+        nickname
+      }
       provider {
         id
         name

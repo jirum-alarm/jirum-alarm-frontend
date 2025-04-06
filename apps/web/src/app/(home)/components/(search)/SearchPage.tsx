@@ -21,16 +21,18 @@ export default function SearchPage() {
   const showSearchBar = useInputHideOnScroll();
 
   return (
-    <div className="w-full">
-      <header className="fixed z-50 w-full max-w-screen-layout-max">
+    <>
+      <header className="sticky left-0 right-0 top-0 z-50 w-full">
         <SearchPageInput show={showSearchBar} {...searchProductViewModel} />
       </header>
-      <div className="h-14"></div>
-      <main>
-        <InitialResult show={!searchProductViewModel.keyword} />
-        <SearchResult show={!!searchProductViewModel.keyword} {...productViewModel} />
-      </main>
-    </div>
+      <div className="w-full">
+        <div className="h-14"></div>
+        <main>
+          <InitialResult show={!searchProductViewModel.keyword} />
+          <SearchResult show={!!searchProductViewModel.keyword} {...productViewModel} />
+        </main>
+      </div>
+    </>
   );
 }
 

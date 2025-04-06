@@ -1,58 +1,43 @@
 'use client';
 
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { useContext } from 'react';
 
+import { WatchDragContext } from '@/app/trending/components/trending-container';
 import { EVENT } from '@/constants/mixpanel';
-import { ProductImageCard, useCollectProduct } from '@/features/products';
+import HorizontalProductCarousel from '@/features/carousel/HorizontalProductCarousel';
 import { IProduct } from '@/graphql/interface';
-import { QueryCommunityRandomRankingProductsQuery } from '@/shared/api/gql/graphql';
-
-import 'swiper/css';
 
 export default function RecommendationProduct({
   hotDeals,
   logging,
 }: {
-  hotDeals: IProduct[] | QueryCommunityRandomRankingProductsQuery['communityRandomRankingProducts'];
+  hotDeals: IProduct[];
   logging: { page: keyof typeof EVENT.PAGE };
 }) {
-  const hotDealCount = 10;
+  const { setWatchDrag } = useContext(WatchDragContext);
 
-  const collectProduct = useCollectProduct();
-  const swiper = useSwiper();
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setWatchDrag(false);
+  };
+
+  const handlePointerEnd = () => {
+    setWatchDrag(true);
+  };
 
   return (
-    <div>
-      <Swiper
-        onTouchStartCapture={(e) => {
-          e.stopPropagation();
-        }}
-        onTouchMoveCapture={(e) => {
-          e.stopPropagation();
-        }}
-        onTouchStart={() => {
-          swiper.allowTouchMove = false;
-        }}
-        onTouchEnd={() => {
-          swiper.allowTouchMove = true;
-        }}
-        spaceBetween={12}
-        slidesPerView={2.5}
-        breakpoints={{
-          640: { slidesPerView: 3.5 },
-        }}
-      >
-        {hotDeals.slice(0, hotDealCount).map((hotDeal, i) => (
-          <SwiperSlide key={i}>
-            <ProductImageCard
-              product={hotDeal}
-              type="hotDeal"
-              collectProduct={collectProduct}
-              logging={{ page: logging.page }}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+    <div
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerEnd}
+      onPointerLeave={handlePointerEnd}
+      onPointerOut={handlePointerEnd}
+    >
+      <HorizontalProductCarousel
+        products={hotDeals}
+        type="hotDeal"
+        logging={logging}
+        maxItems={10}
+      />
     </div>
   );
 }

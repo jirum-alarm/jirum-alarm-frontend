@@ -53,7 +53,7 @@ export const useNotificationsViewModel = () => {
   return {
     notifications,
     loading,
-    isNotLogin: error?.graphQLErrors[0]?.extensions.code === 'FORBIDDEN',
+    isNotLogin: error?.graphQLErrors[0]?.extensions?.code === 'FORBIDDEN',
     noData,
     hasNextData,
     ref,

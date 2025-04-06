@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 
 import MoreProductsSkeleton from './MoreProductsSkeleton';
-import PopularProducts from './PopularProudcts';
+import PopularProducts from './PopularProducts';
 
 export default function PopularProductsContainer({
   product,

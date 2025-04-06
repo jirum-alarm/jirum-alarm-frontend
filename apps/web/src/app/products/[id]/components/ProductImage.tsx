@@ -1,8 +1,7 @@
 import Image from 'next/image';
 
 import { IllustStanding } from '@/components/common/icons';
-
-import { convertToWebp } from '../../../../util/image';
+import { convertToWebp } from '@/util/image';
 
 export default function ProductImage({
   product,
@@ -23,7 +22,7 @@ export default function ProductImage({
   }
 
   return (
-    <div className="sticky top-11">
+    <div className="sticky top-[56px]">
       <div
         className="relative aspect-[4/3] w-full"
         style={{

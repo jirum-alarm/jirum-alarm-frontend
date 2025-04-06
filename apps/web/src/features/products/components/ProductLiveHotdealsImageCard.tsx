@@ -2,6 +2,7 @@ import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 import { type QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
@@ -17,6 +18,8 @@ export function ProductLiveHotdealsImageCard({
   collectProduct: (productId: number) => void;
   logging: { page: keyof typeof EVENT.PAGE };
 }) {
+  const isHydrated = useIsHydrated();
+
   const handleClick = () => {
     collectProduct(+product.id);
 
@@ -51,6 +54,8 @@ export function ProductLiveHotdealsImageCard({
         )}
         <ImageWithFallback
           src={product?.thumbnail ?? ''}
+          title={product.title}
+          type="product"
           alt={product.title}
           fill
           className="object-cover"
@@ -70,7 +75,9 @@ export function ProductLiveHotdealsImageCard({
             {product?.price ?? ''}
           </span>
           {product?.price && <span className="w-2"></span>}
-          <span className="text-sm text-gray-600">{displayTime(product.postedAt)}</span>
+          <span className="text-sm text-gray-600">
+            {isHydrated ? displayTime(product.postedAt) : ''}
+          </span>
         </div>
       </div>
     </Link>

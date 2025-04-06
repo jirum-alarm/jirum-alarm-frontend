@@ -1,11 +1,14 @@
 'use client';
 
-import type { NavigateOptions } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 
 import { useDevice } from '@/hooks/useDevice';
 import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
+
+type NavigateOptions = {
+  scroll?: boolean;
+};
 
 export default function useMyRouter() {
   const router = useRouter();

@@ -1,10 +1,7 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-
-import 'swiper/css';
-
 import { PAGE } from '@/constants/page';
+import HorizontalProductCarousel from '@/features/carousel/HorizontalProductCarousel';
 import Link from '@/features/Link';
-import { ProductImageCard, useCollectProduct } from '@/features/products';
+import { ProductImageCard } from '@/features/products';
 import { IProduct } from '@/graphql/interface';
 import useScreenSize from '@/hooks/useScreenSize';
 
@@ -17,8 +14,6 @@ export default function ProductRecommendation({
   products: IProduct[] | undefined;
   hotDeals: IProduct[] | undefined;
 }) {
-  const collectProduct = useCollectProduct();
-
   const { lg, md, sm } = useScreenSize();
   const firstRenderingCount = lg ? 15 : md ? 12 : sm ? 9 : 6;
   const hotDealCount = 10;
@@ -36,12 +31,7 @@ export default function ProductRecommendation({
         {products
           ?.slice(0, firstRenderingCount)
           .map((product, i) => (
-            <ProductImageCard
-              key={i}
-              product={product}
-              collectProduct={collectProduct}
-              logging={{ page: 'HOME' }}
-            />
+            <ProductImageCard key={i} product={product} logging={{ page: 'HOME' }} />
           ))}
       </div>
 
@@ -55,46 +45,20 @@ export default function ProductRecommendation({
               </Link>
             </span>
           </div>
-          <div
-            onTouchStartCapture={(e) => {
-              e.stopPropagation();
-            }}
-            onTouchMoveCapture={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <Swiper
-              spaceBetween={12}
-              slidesPerView={2.5}
-              breakpoints={{
-                640: { slidesPerView: 3.5 },
-                1024: { slidesPerView: 5.5 },
-              }}
-            >
-              {hotDeals.slice(0, hotDealCount).map((hotDeal, i) => (
-                <SwiperSlide key={i}>
-                  <ProductImageCard
-                    product={hotDeal}
-                    type="hotDeal"
-                    collectProduct={collectProduct}
-                    logging={{ page: 'HOME' }}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+
+          <HorizontalProductCarousel
+            products={hotDeals}
+            type="hotDeal"
+            maxItems={hotDealCount}
+            logging={{ page: 'HOME' }}
+          />
         </div>
       )}
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
         {products
           ?.slice(firstRenderingCount)
           .map((product, i) => (
-            <ProductImageCard
-              key={i}
-              product={product}
-              collectProduct={collectProduct}
-              logging={{ page: 'HOME' }}
-            />
+            <ProductImageCard key={i} product={product} logging={{ page: 'HOME' }} />
           ))}
       </div>
     </>

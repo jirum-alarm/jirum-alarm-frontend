@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image, { ImageProps } from 'next/image';
 import { memo, useState } from 'react';
 
 import { IllustEmpty } from '@/components/common/icons';
@@ -9,30 +9,39 @@ import { convertToWebp } from '@/util/image';
 const ImageWithFallback = memo(function ImageWithFallback({
   src,
   alt,
+  title,
+  type = 'product',
+  width,
+  height,
   ...rest
-}: React.ComponentProps<typeof Image>) {
-  const [imageSrc, setImageSrc] = useState<string | undefined>(convertToWebp(src.toString()));
+}: Omit<ImageProps, 'src'> & {
+  src?: string;
+  type: 'product' | 'hotDeal';
+  width?: number;
+  height?: number;
+}) {
+  const imageSrc = src ? convertToWebp(src) : undefined;
+
   const [isError, setIsError] = useState<boolean>(false);
 
   const handleError = () => {
-    if (!imageSrc || imageSrc.endsWith('.webp')) {
-      setImageSrc(src.toString());
-    } else {
-      setIsError(true);
-    }
+    setIsError(true);
   };
 
   if (!src || !imageSrc || isError) {
-    return <NoImage />;
+    return <NoImage type={type} />;
   }
 
   return (
     <Image
       src={imageSrc}
-      alt={alt}
+      alt={alt || title || ''}
+      title={title || ''}
       onError={handleError}
       placeholder="blur"
       blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+      width={width}
+      height={height}
       {...rest}
     />
   );
@@ -40,9 +49,10 @@ const ImageWithFallback = memo(function ImageWithFallback({
 
 export default ImageWithFallback;
 
-function NoImage() {
+function NoImage({ type }: { type: 'product' | 'hotDeal' }) {
   return (
     <div className="flex h-full items-center justify-center bg-gray-50">
+      {/* {type === 'hotDeal' ? <IllustStandingSmall /> : <IllustStanding />} */}
       <IllustEmpty />
     </div>
   );

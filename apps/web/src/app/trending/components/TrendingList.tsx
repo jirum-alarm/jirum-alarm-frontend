@@ -1,82 +1,62 @@
 'use client';
 
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { memo, useEffect } from 'react';
 
 import RecommendationProduct from '@/app/(home)/components/(search)/RecommendationProduct';
-import { ProductImageCard, ProductTrendingImageCard, useCollectProduct } from '@/features/products';
+import { ProductTrendingImageCard } from '@/features/products';
+import useScreen from '@/hooks/useScreenSize';
 
 import useTrendingViewModel from '../hooks/useTrendingViewModel';
 
 interface TrendingListProps {
   categoryId: number | null;
   categoryName: string;
+  onReady?: () => void;
 }
 
-const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
-  const { products, liveProducts, hotDeals, firstRenderingCount } = useTrendingViewModel({
+const TrendingList = ({ categoryId, categoryName, onReady }: TrendingListProps) => {
+  const { smd } = useScreen();
+  const size = smd ? 9 : 10;
+
+  const { products, liveProducts, hotDeals } = useTrendingViewModel({
     categoryId,
   });
 
-  const collectProduct = useCollectProduct();
-  const swiper = useSwiper();
+  useEffect(() => {
+    onReady?.();
+  }, [onReady]);
 
   return (
-    <div>
+    <div className="flex flex-col gap-y-8">
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
         {products
-          ?.slice(0, firstRenderingCount)
+          ?.slice(0, size)
           .map((product, i) => (
             <ProductTrendingImageCard
               key={product.id}
               product={product}
               rank={i + 1}
-              collectProduct={collectProduct}
               logging={{ page: 'TRENDING' }}
             />
           ))}
       </div>
-      {liveProducts ? (
-        <div className="py-10">
-          <div className="flex w-full items-center justify-between pb-4 ">
+      {liveProducts && (
+        <div>
+          <div className="flex w-full items-center justify-between pb-4">
             <span className="font-bold text-gray-900">{`‘${categoryName}’ 실시간 핫딜`}</span>
           </div>
-          <div>
-            <Swiper
-              spaceBetween={12}
-              slidesPerView={2.5}
-              onTouchStart={() => {
-                swiper.allowTouchMove = false;
-              }}
-              onTouchEnd={() => {
-                swiper.allowTouchMove = true;
-              }}
-            >
-              {liveProducts.map((hotDeal, i) => (
-                <SwiperSlide key={i}>
-                  <ProductImageCard
-                    product={hotDeal}
-                    type="hotDeal"
-                    collectProduct={collectProduct}
-                    logging={{ page: 'TRENDING' }}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+          <RecommendationProduct hotDeals={liveProducts} logging={{ page: 'TRENDING' }} />
         </div>
-      ) : (
-        <div className="h-5" />
       )}
 
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
         {products
-          ?.slice(firstRenderingCount)
+          ?.slice(size)
           .map((product, i) => (
             <ProductTrendingImageCard
               key={product.id}
               product={product}
-              rank={i + firstRenderingCount + 1}
-              collectProduct={collectProduct}
+              rank={i + size + 1}
               logging={{ page: 'TRENDING' }}
             />
           ))}
@@ -87,11 +67,11 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
           <RecommendationProduct hotDeals={hotDeals} logging={{ page: 'TRENDING' }} />
         </div>
       )}
-      {/* <div className="flex w-full items-center justify-center py-6" ref={loadingCallbackRef}>
+      {/* <div className="flex w-full items-center justify-center pb-6 pt-3" ref={loadingCallbackRef}>
         {isFetchingNextPage && <LoadingSpinner />}
       </div> */}
     </div>
   );
 };
 
-export default TrendingList;
+export default memo(TrendingList);

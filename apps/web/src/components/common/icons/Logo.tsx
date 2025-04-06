@@ -1,7 +1,18 @@
 import type { SVGProps } from 'react';
 
-const SvgLogo = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={28} height={28} fill="none" {...props}>
+interface LogoProps extends SVGProps<SVGSVGElement> {
+  size?: number;
+}
+
+const SvgLogo = ({ size = 28, ...props }: LogoProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 28 28"
+    fill="none"
+    {...props}
+  >
     <g clipPath="url(#logo_svg__a)">
       <path fill="#fff" d="M0 0h28v28H0z" />
       <path

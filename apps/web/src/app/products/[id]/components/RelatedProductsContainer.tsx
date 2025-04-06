@@ -1,7 +1,5 @@
 'use client';
 
-import 'swiper/css';
-
 import { Suspense } from 'react';
 
 import { ProductQuery } from '@/shared/api/gql/graphql';

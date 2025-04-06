@@ -2,23 +2,27 @@ import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 import { QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
+
+import { useCollectProduct } from '../hooks';
 
 import HotdealBadge from './HotdealBadge';
 
 export const ProductTrendingImageCard = ({
   product,
   rank,
-  collectProduct,
   logging,
 }: {
   product: QueryProductsQuery['products'][number];
   rank: number;
-  collectProduct: (productId: number) => void;
   logging: { page: keyof typeof EVENT.PAGE };
 }) => {
+  const collectProduct = useCollectProduct();
+  const isHydrated = useIsHydrated();
+
   const handleClick = () => {
     collectProduct(+product.id);
 
@@ -57,10 +61,12 @@ export const ProductTrendingImageCard = ({
 
         <ImageWithFallback
           src={product?.thumbnail ?? ''}
+          title={product.title}
+          type="product"
           alt={product.title}
           fill
+          sizes="240px"
           className="object-cover"
-          sizes="300px"
         />
       </div>
       <div className="flex flex-col">
@@ -76,7 +82,9 @@ export const ProductTrendingImageCard = ({
             {product?.price ?? ''}
           </span>
           {product?.price && <span className="w-2"></span>}
-          <span className="text-sm text-gray-600">{displayTime(product.postedAt)}</span>
+          <span className="text-sm text-gray-600">
+            {isHydrated ? displayTime(product.postedAt) : ''}
+          </span>
         </div>
       </div>
     </Link>

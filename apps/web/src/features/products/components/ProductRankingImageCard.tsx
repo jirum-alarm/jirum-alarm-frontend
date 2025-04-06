@@ -43,6 +43,8 @@ export function ProductRankingImageCard({
           </div>
           <ImageWithFallback
             src={product.thumbnail ?? ''}
+            title={product.title}
+            type="product"
             alt={product.title}
             fill
             sizes="300px"

@@ -1,7 +1,7 @@
 import RecommendedProductContainer from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductContainer';
 import TopButton from '@/components/TopButton';
 
-import BackgroundHeader from './BackgronudHeader';
+import BackgroundHeader from './BackgroundHeader';
 import HomeHeader from './HomeHeader';
 import JirumRankingContainer from './JirumRankingContainer';
 import LiveHotDealContainer from './LiveHotDealContainer';

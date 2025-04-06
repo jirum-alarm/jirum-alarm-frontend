@@ -20,7 +20,7 @@ const BackgroundHeader = () => {
           <RoundedLogo />
           <h2 className="text-lg font-bold text-slate-50">지름알림</h2>
         </div>
-        <SearchLinkButton />
+        <SearchLinkButton color="#FFF" />
       </header>
       <div className="px-5 pb-4 pt-2">
         <Link

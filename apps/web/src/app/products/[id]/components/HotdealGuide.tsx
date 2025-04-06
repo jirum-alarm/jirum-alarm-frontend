@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 
 import Button from '@/components/common/Button';
 import { cn } from '@/lib/cn';
@@ -47,9 +47,9 @@ export default function HotdealGuide({
   }
 
   return (
-    <section ref={guidesRef} className="relative px-5">
-      <div className="py-4">
-        <h2 className="font-semibold text-gray-800">구매 정보 요약</h2>
+    <section ref={guidesRef} className="relative px-5 pb-12 pt-5">
+      <div className="flex h-[56px] items-center">
+        <h2 className="text-lg font-bold text-gray-900">핫딜 제대로 알고 사자!</h2>
       </div>
       <div className={cn('overflow-hidden rounded-lg border border-secondary-300 pt-4')}>
         <div
@@ -75,8 +75,8 @@ export default function HotdealGuide({
           </div>
         )}
         {!needsExpansion && (
-          <div className="mt-4 bg-secondary-50 px-3 py-2">
-            <span className="text-s text-gray-500">
+          <div className="m-3 mt-4 rounded-lg bg-secondary-50 p-3">
+            <span className="text-[13px] leading-[16px] text-gray-600">
               * 요약은 실제와 다를 수 있어요. 상품 구매 시 정확한 행사 정보는 쇼핑몰 홈페이지에서
               확인해 주세요.
             </span>
@@ -124,12 +124,10 @@ function LinkText({ content }: { content: string }) {
         switch (part.type) {
           case 'text':
             return part.content?.split('\n').map((text, index) => (
-              <>
+              <Fragment key={`${index}_text`}>
                 {index > 0 && <br />}
-                <span key={`${index}_text`} className="text-sm text-gray-600">
-                  {text}
-                </span>
-              </>
+                <span className="text-sm text-gray-600">{text}</span>
+              </Fragment>
             ));
           case 'markdown':
             return (
@@ -171,8 +169,8 @@ function HotdealGuideItem({ guide }: { guide: ProductGuidesQuery['productGuides'
         <HotdealGuideItemCheckIcon />
       </div>
       {/* </div> */}
-      <div className="flex flex-col">
-        <span className="text-sm font-semibold leading-5 text-gray-900">{guide.title}</span>
+      <div className="flex flex-col gap-y-1">
+        <span className="text-base font-semibold text-gray-900">{guide.title}</span>
         <LinkText content={guide.content} />
       </div>
     </div>
@@ -184,7 +182,7 @@ function HotdealGuideItemCheckIcon() {
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M15.7142 6.42773L7.85707 14.2849L4.28564 10.7134"
-        stroke="#6593FD"
+        stroke="#477df9"
         strokeWidth="2"
         strokeLinecap="square"
         strokeLinejoin="round"

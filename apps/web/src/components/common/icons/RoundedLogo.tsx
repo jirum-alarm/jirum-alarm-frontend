@@ -1,7 +1,18 @@
 import type { SVGProps } from 'react';
 
-const SvgRoundedLogo = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={28} height={28} fill="none" {...props}>
+interface RoundedLogoProps extends SVGProps<SVGSVGElement> {
+  size?: number;
+}
+
+const SvgRoundedLogo = ({ size = 28, ...props }: RoundedLogoProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 28 28"
+    fill="none"
+    {...props}
+  >
     <g clipPath="url(#rounded-logo_svg__a)">
       <rect width={28} height={28} fill="#fff" rx={14} />
       <path

@@ -1,11 +1,19 @@
-import { cloneElement, isValidElement, useRef, useState } from 'react';
+import {
+  cloneElement,
+  isValidElement,
+  useRef,
+  useState,
+  ReactElement,
+  HTMLAttributes,
+  RefAttributes,
+} from 'react';
 
 import useOutsideClick from '@/hooks/useOutsideClick';
 import { composeEventHandlers } from '@/util/event';
 
 interface Props {
   content: React.ReactNode | string;
-  children: React.ReactNode;
+  children: ReactElement<HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement>>;
 }
 
 const Tooltip = ({ content, children }: Props) => {
@@ -43,7 +51,7 @@ const Tooltip = ({ content, children }: Props) => {
     ? cloneElement(children, {
         ...children.props,
         ref: triggerRef,
-        onClick: composeEventHandlers(children?.props?.onClick, handleShowToolTipClick),
+        onClick: composeEventHandlers(children.props.onClick, handleShowToolTipClick),
       })
     : null;
 

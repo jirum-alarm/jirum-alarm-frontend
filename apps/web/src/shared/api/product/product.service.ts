@@ -90,6 +90,10 @@ const QueryProduct = graphql(`
       wishlistCount
       positiveCommunityReactionCount
       negativeCommunityReactionCount
+      author {
+        id
+        nickname
+      }
       provider {
         id
         name

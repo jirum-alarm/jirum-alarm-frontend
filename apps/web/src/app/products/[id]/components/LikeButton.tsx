@@ -107,10 +107,10 @@ export default function LikeButton({
     <Button
       variant="outlined"
       onClick={handleClickWishlist}
-      className="flex w-[56px] min-w-[56px] flex-col items-center justify-center border-gray-300 p-2"
+      className="flex w-[48px] flex-col items-center justify-center border-gray-300 p-2"
     >
-      <Heart isLiked={!!isLiked} />
-      <span className="text-[11px] leading-4 text-gray-900">찜하기</span>
+      <Heart className="shrink-0" color="#98A2B3" isLiked={!!isLiked} />
+      <span className="text-[11px] leading-4 text-gray-800">찜하기</span>
     </Button>
   );
 }

@@ -30,11 +30,40 @@ export type AdminUser = {
   name: Scalars['String']['output'];
 };
 
+export type CategorizedReactionKeywords = {
+  __typename?: 'CategorizedReactionKeywords';
+  count: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  tag: Scalars['String']['output'];
+};
+
+export type CategorizedReactionKeywordsResponse = {
+  __typename?: 'CategorizedReactionKeywordsResponse';
+  items: Array<CategorizedReactionKeywords>;
+  lastUpdatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
 export type Category = {
   __typename?: 'Category';
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
 };
+
+export type Comment = {
+  __typename?: 'Comment';
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  isMyLike?: Maybe<Scalars['Boolean']['output']>;
+  likeCount: Scalars['Int']['output'];
+  parentId?: Maybe<Scalars['Float']['output']>;
+  productId: Scalars['Float']['output'];
+  userId: Scalars['Float']['output'];
+};
+
+export enum CommentOrder {
+  Id = 'ID',
+}
 
 export enum CurrencyType {
   Dollor = 'DOLLOR',
@@ -84,6 +113,7 @@ export type HotDealKeywordOutput = {
   __typename?: 'HotDealKeywordOutput';
   excludeKeywordCount: Scalars['Int']['output'];
   excludeKeywords: Array<HotDealExcludeKeywordOutput>;
+  groupId: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   isMajor: Scalars['Boolean']['output'];
   keyword: Scalars['String']['output'];
@@ -143,6 +173,7 @@ export enum KeywordProductOrderType {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 제외 키워드 추가 */
   addHotDealExcludeKeywordByAdmin: Scalars['Boolean']['output'];
   /** 어드민)핫딜 키워드 추가 */
@@ -180,6 +211,7 @@ export type Mutation = {
   readNotification: Scalars['Boolean']['output'];
   /** 모든 알림 삭제 */
   removeAllNotifications: Scalars['Boolean']['output'];
+  removeComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 제외 키워드 추가 */
   removeHotDealExcludeKeywordByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 제거 */
@@ -202,6 +234,7 @@ export type Mutation = {
   signup: SignupOutput;
   /** 소셜 로그인 */
   socialLogin: SocialLoginOutput;
+  updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
   /** 알림 키워드 상태 수정 */
@@ -216,6 +249,12 @@ export type Mutation = {
   uploadInstagramPost: Scalars['String']['output'];
   /** 회원 탈퇴 */
   withdraw: Scalars['Boolean']['output'];
+};
+
+export type MutationAddCommentArgs = {
+  content: Scalars['String']['input'];
+  parentId?: InputMaybe<Scalars['Int']['input']>;
+  productId: Scalars['Int']['input'];
 };
 
 export type MutationAddHotDealExcludeKeywordByAdminArgs = {
@@ -301,6 +340,10 @@ export type MutationReadNotificationArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type MutationRemoveCommentArgs = {
+  id: Scalars['Int']['input'];
+};
+
 export type MutationRemoveHotDealExcludeKeywordByAdminArgs = {
   ids: Array<Scalars['Int']['input']>;
 };
@@ -354,6 +397,11 @@ export type MutationSocialLoginArgs = {
   nickname?: InputMaybe<Scalars['String']['input']>;
   oauthProvider: OauthProvider;
   socialAccessToken: Scalars['String']['input'];
+};
+
+export type MutationUpdateCommentArgs = {
+  content: Scalars['String']['input'];
+  id: Scalars['Int']['input'];
 };
 
 export type MutationUpdateHotDealKeywordByAdminArgs = {
@@ -473,6 +521,9 @@ export enum ProductOrderType {
 
 export type ProductOutput = {
   __typename?: 'ProductOutput';
+  /** 핫딜 작성자 */
+  author?: Maybe<User>;
+  authorId?: Maybe<Scalars['Int']['output']>;
   /** 커뮤니티 내 카테고리 */
   category?: Maybe<Scalars['String']['output']>;
   categoryId?: Maybe<Scalars['Int']['output']>;
@@ -513,7 +564,7 @@ export type ProductOutput = {
   ship?: Maybe<Scalars['String']['output']>;
   thumbnail?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
-  url: Scalars['String']['output'];
+  url?: Maybe<Scalars['String']['output']>;
   /** 조회 수 */
   viewCount: Scalars['Int']['output'];
   wishlistCount: Scalars['Int']['output'];
@@ -547,6 +598,9 @@ export type Query = {
   adminMe: AdminUser;
   analysisTitleByDanawa: Scalars['Boolean']['output'];
   categories: Array<Category>;
+  /** 커뮤니티 반응 카테고리별 키워드 조회 */
+  categorizedReactionKeywords: CategorizedReactionKeywordsResponse;
+  comments: Array<Comment>;
   /** 어드민) 댓글 목록 조회 */
   commentsByAdmin: Array<Scalars['String']['output']>;
   /** 상품 랭킹 랜덤 조회 */
@@ -610,6 +664,18 @@ export type Query = {
   wishlistCount: Scalars['Int']['output'];
   /** 위시리스트 목록 조회 */
   wishlists: Array<WishlistOutput>;
+};
+
+export type QueryCategorizedReactionKeywordsArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type QueryCommentsArgs = {
+  limit: Scalars['Int']['input'];
+  orderBy: CommentOrder;
+  orderOption: OrderOptionType;
+  productId: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type QueryCommentsByAdminArgs = {
@@ -836,6 +902,7 @@ export type User = {
 
 /** 좋아요 대상 */
 export enum UserLikeTarget {
+  Comment = 'COMMENT',
   Product = 'PRODUCT',
 }
 
@@ -1066,7 +1133,7 @@ export type ProductQuery = {
     categoryId?: number | null;
     mallId?: number | null;
     title: string;
-    url: string;
+    url?: string | null;
     detailUrl?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
@@ -1085,6 +1152,7 @@ export type ProductQuery = {
     dislikeCount: number;
     isMyWishlist?: boolean | null;
     categoryName?: string | null;
+    author?: { __typename?: 'User'; id: string; nickname: string } | null;
     provider: {
       __typename?: 'Provider';
       id: string;
@@ -1140,7 +1208,7 @@ export type QueryProductsQuery = {
     id: string;
     title: string;
     mallId?: number | null;
-    url: string;
+    url?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
     price?: string | null;
@@ -1163,7 +1231,7 @@ export type QueryRankingProductsQuery = {
     __typename?: 'ProductOutput';
     id: string;
     title: string;
-    url: string;
+    url?: string | null;
     price?: string | null;
     thumbnail?: string | null;
   }>;
@@ -1181,7 +1249,7 @@ export type QueryCommunityRandomRankingProductsQuery = {
     id: string;
     title: string;
     mallId?: number | null;
-    url: string;
+    url?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
     price?: string | null;
@@ -1207,7 +1275,7 @@ export type TogetherViewedProductsQuery = {
     id: string;
     title: string;
     mallId?: number | null;
-    url: string;
+    url?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
     price?: string | null;
@@ -1240,7 +1308,7 @@ export type QueryProductsByKeywordQuery = {
     id: string;
     title: string;
     mallId?: number | null;
-    url: string;
+    url?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
     price?: string | null;
@@ -1321,12 +1389,13 @@ export class TypedDocumentString<TResult, TVariables>
   implements DocumentTypeDecoration<TResult, TVariables>
 {
   __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
+  private value: string;
+  public __meta__?: Record<string, any> | undefined;
 
-  constructor(
-    private value: string,
-    public __meta__?: Record<string, any>,
-  ) {
+  constructor(value: string, __meta__?: Record<string, any> | undefined) {
     super(value);
+    this.value = value;
+    this.__meta__ = __meta__;
   }
 
   toString(): string & DocumentTypeDecoration<TResult, TVariables> {
@@ -1519,6 +1588,10 @@ export const ProductDocument = new TypedDocumentString(`
     wishlistCount
     positiveCommunityReactionCount
     negativeCommunityReactionCount
+    author {
+      id
+      nickname
+    }
     provider {
       id
       name

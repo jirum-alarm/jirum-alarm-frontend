@@ -1,10 +1,9 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ProductQueries } from '@/entities/product';
-import { ProductImageCard, useCollectProduct } from '@/features/products';
+import HorizontalProductCarousel from '@/features/carousel/HorizontalProductCarousel';
 import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 
 interface ProductImageCardListProps {
@@ -12,7 +11,6 @@ interface ProductImageCardListProps {
 }
 
 const ProductImageCardList = ({ keyword }: ProductImageCardListProps) => {
-  const collectProduct = useCollectProduct();
   const {
     data: { productsByKeyword },
   } = useSuspenseQuery(
@@ -23,28 +21,13 @@ const ProductImageCardList = ({ keyword }: ProductImageCardListProps) => {
       orderOption: OrderOptionType.Desc,
     }),
   );
+
   return (
-    <div>
-      <Swiper
-        spaceBetween={12}
-        slidesPerView={2.5}
-        breakpoints={{
-          640: { slidesPerView: 3.5 },
-        }}
-      >
-        {productsByKeyword.map((product) => (
-          <SwiperSlide key={product.id}>
-            <ProductImageCard
-              key={product.id}
-              type="hotDeal"
-              product={product}
-              collectProduct={collectProduct}
-              logging={{ page: 'HOME' }}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+    <HorizontalProductCarousel
+      products={productsByKeyword}
+      type="hotDeal"
+      logging={{ page: 'HOME' }}
+    />
   );
 };
 

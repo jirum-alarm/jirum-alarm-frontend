@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -22,7 +23,7 @@ const getState = (open: boolean) => {
 };
 
 interface DialogProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
@@ -60,7 +61,7 @@ const AlertDialog = (props: DialogProps) => {
 
 interface PortalProps {
   container?: HTMLElement | null;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 const Portal = (props: PortalProps) => {
   const { container = globalThis?.document?.body, children } = props;
@@ -111,13 +112,15 @@ const Trigger = forwardRef<
     };
   }
 
+  const childProps = children.props as Record<string, any>;
   const Compo = cloneElement(children, {
-    ...{ ...others, ...children?.props },
+    ...others,
+    ...childProps,
     type: 'button',
     'data-state': getState(open),
     ref: composeRef(triggerRef, forwardRef),
-    onClick: composeEventHandlers(handler(children?.props?.onClick), onOpenToggle),
-  });
+    onClick: composeEventHandlers(handler(childProps?.onClick), onOpenToggle),
+  } as React.HTMLAttributes<HTMLButtonElement>);
   return <>{Compo}</>;
 });
 Trigger.displayName = 'Trigger';
@@ -255,12 +258,14 @@ const Close = forwardRef<
     };
   }
 
+  const childProps = children.props as Record<string, any>;
   const Compo = cloneElement(children, {
-    ...{ ...others, ...children?.props },
+    ...others,
+    ...childProps,
     type: 'button',
     ref: ref,
-    onClick: composeEventHandlers(handler(children?.props?.onClick), () => onOpenChange(false)),
-  });
+    onClick: composeEventHandlers(handler(childProps?.onClick), () => onOpenChange(false)),
+  } as React.HTMLAttributes<HTMLButtonElement>);
   return <>{Compo}</>;
 });
 Close.displayName = 'Close';

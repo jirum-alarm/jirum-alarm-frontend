@@ -1,5 +1,6 @@
 'use client';
 
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { RecoilRoot } from 'recoil';
 
 import FCMConfig from '@/lib/firebase/FCMConfig';
@@ -17,7 +18,9 @@ export const AppProvider = ({ children }: Props) => {
     <RecoilRoot>
       <ReactQueryProviders>
         <PHProvider>
-          <ApolloProvider>{children}</ApolloProvider>
+          <NuqsAdapter>
+            <ApolloProvider>{children}</ApolloProvider>
+          </NuqsAdapter>
           <FCMConfig />
         </PHProvider>
       </ReactQueryProviders>

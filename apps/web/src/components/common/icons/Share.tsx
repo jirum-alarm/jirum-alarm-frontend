@@ -1,14 +1,24 @@
 import type { SVGProps } from 'react';
 
-const SvgShare = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={28} height={28} fill="none" {...props}>
-    <path
-      stroke="#101828"
-      strokeLinecap="square"
-      strokeLinejoin="round"
-      strokeWidth={1.5}
-      d="M22.5 14v3.967c0 1.587 0 2.38-.309 2.986a2.83 2.83 0 0 1-1.238 1.238c-.606.309-1.4.309-2.986.309h-7.934c-1.586 0-2.38 0-2.986-.309a2.83 2.83 0 0 1-1.238-1.238c-.309-.606-.309-1.4-.309-2.986V14m12.278-4.722L14 5.5m0 0-3.778 3.778M14 5.5v11.333"
-    />
-  </svg>
-);
+const SvgShare = (props: SVGProps<SVGSVGElement>) => {
+  const { width, height, color, ...others } = props;
+  return (
+    <svg
+      width={width ?? 28}
+      height={height ?? 28}
+      viewBox="0 0 28 28"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      stroke={color ?? '#1D2939'}
+      strokeWidth="1.5"
+      {...others}
+    >
+      <circle cx="8.37158" cy="14" r="2.75" />
+      <circle cx="19" cy="7.18555" r="2.75" />
+      <circle cx="19" cy="20.8145" r="2.75" />
+      <path d="M11.062 12.3105L16.2427 8.92383" />
+      <path d="M11.2158 15.7461L16.4478 19.1836" />
+    </svg>
+  );
+};
 export default SvgShare;

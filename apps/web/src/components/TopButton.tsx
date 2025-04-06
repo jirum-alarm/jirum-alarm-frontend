@@ -39,11 +39,11 @@ const TopButton = () => {
       onClick={scrollToTop}
       aria-label="스크롤 최상단 이동"
       className={cn(
-        `fixed bottom-safe-bottom-96 right-[16px] z-50 flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#101828] opacity-40 transition-opacity layout-max:right-1/2 layout-max:translate-x-[284px]`,
+        `fixed bottom-safe-bottom-96 right-[16px] z-50 flex h-[40px] w-[40px] items-center justify-center rounded-full border border-gray-300 bg-white opacity-100 shadow-[0_2px_12px_0_rgba(0,0,0,0.08)] transition-opacity layout-max:right-1/2 layout-max:translate-x-[284px]`,
         { 'opacity-0': !isVisible },
       )}
     >
-      <ArrowRight color="white" className="-rotate-90" />
+      <ArrowRight color="#475467" className="-rotate-90" />
     </button>
   );
 };

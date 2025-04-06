@@ -4,6 +4,7 @@ import { memo, useState } from 'react';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 import { INotification } from '@/graphql/interface';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 import { displayTime } from '@/util/displayTime';
 
@@ -11,11 +12,13 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
   const { message, createdAt, product, keyword } = notification;
   const { thumbnail, price, isHot, isEnd, id } = product ?? {};
 
+  const isHydrated = useIsHydrated();
+
   return (
     <li className="flex gap-x-3 ">
       <Link href={PAGE.DETAIL + '/' + +id!} prefetch={false} className="flex w-full p-5">
         <div className="h-14 w-14 overflow-hidden rounded border border-gray-200">
-          <ImageWithFallback src={thumbnail} title={message} />
+          <ImageWithFallback src={thumbnail ?? ''} title={message} />
         </div>
         <div className="flex-1 pl-3">
           <p className="line-clamp-2 w-full text-sm text-gray-900">
@@ -41,7 +44,9 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
                 <span className="inline-block h-2.5 border-l border-gray-400"></span>
               </>
             )}
-            <span className="text-xs text-gray-400">{displayTime(createdAt)}</span>
+            <span className="text-xs text-gray-400">
+              {isHydrated ? displayTime(createdAt) : ''}
+            </span>
           </div>
         </div>
       </Link>
@@ -75,7 +80,7 @@ const ImageWithFallback = memo(function ImageWithFallback({
   src,
   title,
 }: {
-  src: string | undefined;
+  src?: string | null;
   title: string;
 }) {
   const [error, setError] = useState(false);

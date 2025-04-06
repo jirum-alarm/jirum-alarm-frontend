@@ -62,24 +62,24 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
   };
 
   return (
-    <header className="fixed top-0 z-50 flex h-11 w-full max-w-screen-layout-max items-center justify-between border border-gray-100 bg-white px-4">
-      <div className="flex items-center">
-        <BackButton backTo={PAGE.HOME} />
-      </div>
-      <LogoLink />
+    <header className="fixed top-0 z-50 flex h-[56px] w-full max-w-screen-layout-max items-center justify-between border border-gray-100 bg-white px-5">
       <div className="flex items-center gap-x-2">
+        <BackButton backTo={PAGE.HOME} />
+        <LogoLink />
+      </div>
+      <div className="flex items-center gap-x-4">
         <Link
           href={PAGE.SEARCH}
           onClick={handleSearch}
           aria-label="검색"
           title="검색"
-          className="py-2"
+          className="-m-2 p-2"
         >
-          <Search color="#101828" />
+          <Search />
         </Link>
         <button
           onClick={handleShare}
-          className="hover:cursor-pointer"
+          className="-m-2 p-2 hover:cursor-pointer"
           aria-label="공유하기"
           title="공유하기"
         >
