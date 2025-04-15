@@ -17,6 +17,7 @@ import { cn } from '@/lib/cn';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import useMyRouter from '@/hooks/useMyRouter';
+import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 
 export const TrendingContainer = () => {
   const {
@@ -157,15 +158,19 @@ export const TrendingContainer = () => {
         className="my-6"
       >
         <SwiperSlide className="h-full w-full">
-          <Suspense fallback={<TrendingListSkeleton />}>
-            <TrendingList categoryId={0} categoryName={'전체'} />
-          </Suspense>
+          <ApiErrorBoundary>
+            <Suspense fallback={<TrendingListSkeleton />}>
+              <TrendingList categoryId={0} categoryName={'전체'} />
+            </Suspense>
+          </ApiErrorBoundary>
         </SwiperSlide>
         {categories.map((category) => (
           <SwiperSlide key={category.id} className="h-full w-full">
-            <Suspense fallback={<TrendingListSkeleton />}>
-              <TrendingList categoryId={category.id} categoryName={category.name} />
-            </Suspense>
+            <ApiErrorBoundary>
+              <Suspense fallback={<TrendingListSkeleton />}>
+                <TrendingList categoryId={category.id} categoryName={category.name} />
+              </Suspense>
+            </ApiErrorBoundary>
           </SwiperSlide>
         ))}
       </Swiper>
