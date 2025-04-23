@@ -27,7 +27,15 @@ type Category {
   name: String!
 }
 
-type Comment {
+enum CommentOrder {
+  ID
+}
+
+type CommentOutput {
+  """
+  댓글 작성자
+  """
+  author: User
   content: String!
   createdAt: DateTime!
   id: ID!
@@ -35,11 +43,8 @@ type Comment {
   likeCount: Int!
   parentId: Float
   productId: Float!
+  searchAfter: [String!]
   userId: Float!
-}
-
-enum CommentOrder {
-  ID
 }
 
 enum CurrencyType {
@@ -533,7 +538,7 @@ type Query {
     orderOption: OrderOptionType!
     productId: Int!
     searchAfter: [String!]
-  ): [Comment!]!
+  ): [CommentOutput!]!
   """
   어드민) 댓글 목록 조회
   """
@@ -682,6 +687,10 @@ type Query {
   상품 랭킹 목록 조회
   """
   rankingProducts: [ProductOutput!]!
+  """
+  신고한 사용자 목록 조회 (마스킹)
+  """
+  reportUserNames(productId: Int!): [String!]!
   """
   소셜 액세스 토큰 조회
   """

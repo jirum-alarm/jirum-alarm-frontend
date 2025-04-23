@@ -6,6 +6,7 @@ import {
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
+  QueryReportUserNamesQueryVariables,
   TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
@@ -79,6 +80,11 @@ export const ProductQueries = {
       getNextPageParam: (lastPage, allPages) => {
         return lastPage.products.at(-1)?.searchAfter?.[0];
       },
+    }),
+  reportUserNames: (variables: QueryReportUserNamesQueryVariables) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'reportUserNames', { productId: variables.productId }],
+      queryFn: () => ProductService.getReportUserNames(variables),
     }),
   productGuide: (variables: ProductGuidesQueryVariables) =>
     queryOptions({

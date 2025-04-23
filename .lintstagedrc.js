@@ -1,39 +1,66 @@
-const path = require('path');
+const path = require("path");
 
-// ESLint 명령어 빌드 함수
-const buildEslintCommand = (filenames) => {
+const CHUNK_SIZE = 5;
+
+function chunkArray(array, size) {
+  const result = [];
+  for (let i = 0; i < array.length; i += size) {
+    result.push(array.slice(i, i + size));
+  }
+  return result;
+}
+
+const buildEslintCommands = (filenames) => {
   const relFilenames = filenames.map((f) => path.relative(process.cwd(), f));
-  const adminFiles = relFilenames.filter(f => f.startsWith('apps/admin/')).join(' --file ');
-  const webFiles = relFilenames.filter(f => f.startsWith('apps/web/')).join(' --file ');
+  const adminFiles = relFilenames.filter((f) => f.startsWith("apps/admin/"));
+  const webFiles = relFilenames.filter((f) => f.startsWith("apps/web/"));
 
-  let commands = [];
-  if (adminFiles) {
-    commands.push(`pnpm lint --filter=admin -- --fix --file ${adminFiles}`);
-  }
-  if (webFiles) {
-    commands.push(`pnpm lint --filter=web -- --fix --file ${webFiles}`);
+  const commands = [];
+
+  if (adminFiles.length > 0) {
+    const adminChunks = chunkArray(adminFiles, CHUNK_SIZE);
+    adminChunks.forEach((chunk) => {
+      const filesArgs = chunk.map((f) => `--file ${f}`).join(" ");
+      commands.push(`pnpm lint --filter=admin -- --fix ${filesArgs}`);
+    });
   }
 
-  return commands.join(' && ');
+  if (webFiles.length > 0) {
+    const webChunks = chunkArray(webFiles, CHUNK_SIZE);
+    webChunks.forEach((chunk) => {
+      const filesArgs = chunk.map((f) => `--file ${f}`).join(" ");
+      commands.push(`pnpm lint --filter=web -- --fix ${filesArgs}`);
+    });
+  }
+
+  return commands;
 };
 
-const buildPrettierCommand = (filenames) => {
+const buildPrettierCommands = (filenames) => {
   const relFilenames = filenames.map((f) => path.relative(process.cwd(), f));
-  const adminFiles = relFilenames.filter(f => f.startsWith('apps/admin/')).join(' ');
-  const webFiles = relFilenames.filter(f => f.startsWith('apps/web/')).join(' ');
+  const adminFiles = relFilenames.filter((f) => f.startsWith("apps/admin/"));
+  const webFiles = relFilenames.filter((f) => f.startsWith("apps/web/"));
 
-  let commands = [];
-  if (adminFiles) {
-    commands.push(`pnpm --filter=admin prettier-fix `);
-  }
-  if (webFiles) {
-    commands.push(`pnpm --filter=web prettier-fix`);
+  const commands = [];
+
+  if (adminFiles.length > 0) {
+    const adminChunks = chunkArray(adminFiles, CHUNK_SIZE);
+    adminChunks.forEach(() => {
+      commands.push(`pnpm --filter=admin prettier-fix`);
+    });
   }
 
-  return commands.join(' && ');
+  if (webFiles.length > 0) {
+    const webChunks = chunkArray(webFiles, CHUNK_SIZE);
+    webChunks.forEach(() => {
+      commands.push(`pnpm --filter=web prettier-fix`);
+    });
+  }
+
+  return commands;
 };
 
 module.exports = {
-  '*.{js,ts,tsx}': [buildEslintCommand, buildPrettierCommand],
-  '*.{ts,tsx}': [() => 'pnpm check-types'],
+  "*.{js,ts,tsx}": [buildEslintCommands, buildPrettierCommands],
+  "*.{ts,tsx}": [() => "pnpm check-types"],
 };

@@ -62,8 +62,8 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
   };
 
   return (
-    <header className="fixed top-0 z-50 flex h-[56px] w-full max-w-screen-layout-max items-center justify-between border border-gray-100 bg-white px-5">
-      <div className="flex items-center gap-x-2">
+    <header className="fixed top-0 z-50 flex h-[56px] w-full max-w-screen-layout-max items-center justify-between border-b border-gray-100 bg-white px-5">
+      <div className="flex items-center gap-x-1">
         <BackButton backTo={PAGE.HOME} />
         <LogoLink />
       </div>

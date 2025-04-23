@@ -13,11 +13,14 @@ const RecommendContainer = () => {
   const {
     data: { productKeywords },
   } = useSuspenseQuery(ProductQueries.productKeywords());
-  const [keyword, setKeyword] = useQueryState('keyword');
-  const selectedKeyword = keyword ?? productKeywords[0];
+
+  const [recommend, setRecommend] = useQueryState('recommend');
+  const validRecommend = recommend && productKeywords.includes(recommend);
+  const selectedKeyword = validRecommend ? recommend : productKeywords[0];
   const handleSelectedKeyword = (keyword: string) => {
-    setKeyword(keyword);
+    setRecommend(keyword);
   };
+
   return (
     <div>
       <div className="sticky top-[56px] z-[50] w-full max-w-screen-layout-max bg-white pb-[20px] pt-[12px]">

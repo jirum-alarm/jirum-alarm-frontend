@@ -46,9 +46,9 @@ const BasicLayout = ({
       )}
     >
       {header ?? (
-        <header className="fixed top-0 z-50 flex h-14 w-full max-w-screen-layout-max items-center justify-center bg-white text-black">
-          {hasBackButton && <div className="absolute left-0">{<BackButton backTo={backTo} />}</div>}
-          {title && <h1 className="text-lg font-semibold text-black">{title}</h1>}
+        <header className="fixed top-0 z-50 flex h-14 w-full max-w-screen-layout-max items-center gap-x-1 border-b border-white bg-white px-5 text-black">
+          {hasBackButton && <BackButton backTo={backTo} />}
+          {title && <h1 className="text-lg font-bold text-black">{title}</h1>}
         </header>
       )}
       <div className={cn('h-full', { 'pt-14': !header })}>{children}</div>

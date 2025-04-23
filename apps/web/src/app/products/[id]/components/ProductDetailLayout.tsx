@@ -1,18 +1,25 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
+import { useEffect, useState, useRef, Suspense, useMemo } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Drawer } from 'vaul';
 
 import Button from '@/components/common/Button';
+import { BubbleChatFill } from '@/components/common/icons';
 import Jirume from '@/components/common/icons/Jirume';
 import TopButton from '@/components/TopButton';
+import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { ProductQueries } from '@/entities/product';
+import Link from '@/features/Link';
 import HotdealBadge from '@/features/products/components/HotdealBadge';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 import { HotDealType, ProductGuidesQuery, ProductQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
+
+import Comment from '../comment/components/Comment';
 
 import BottomCTA from './BottomCTA';
 import CommunityReaction from './CommunityReaction';
@@ -43,22 +50,26 @@ function ProductDetailLayout({
   } = useSuspenseQuery(ProductQueries.product({ id: productId }));
 
   if (!product) notFound();
-  console.log(product);
+
   return (
     <>
-      <main className="pt-[56px]">
-        <ViewerCount count={product.viewCount} />
+      {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
+      <main className="overflow-x-hidden pt-[56px]">
         <ProductImage
           product={{
             title: product.title,
             thumbnail: product.thumbnail,
           }}
         />
-        <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6 shadow-sm">
+        <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6 shadow-[0_-2px_12px_0_rgba(0,0,0,0.08)]">
           <ProductInfoLayout>
             <ProductInfo product={product} />
-            <ProductExpiredBanner product={product} />
-            <div className="mb-12 flex flex-col gap-y-9">
+            <ErrorBoundary fallback={<div className="h-2 bg-gray-50" />}>
+              <Suspense fallback={<div className="h-2 bg-gray-50" />}>
+                <ProductExpiredBanner product={product} />
+              </Suspense>
+            </ErrorBoundary>
+            <div className="mb-12 mt-5 flex flex-col gap-y-9">
               <HotdealGuide productGuides={productGuides} />
               {/* TODO: wait for api */}
               {/* <HotdealIndex product={product} /> */}
@@ -67,6 +78,9 @@ function ProductDetailLayout({
               <ProductReport product={product} />
             </div>
             <Hr />
+            <CommentSection productId={productId} />
+            <Hr />
+
             <div className="mt-7 flex flex-col gap-y-8">
               {/* <ProductFeedback product={product} /> */}
               <RelatedProductsContainer product={product} />
@@ -93,23 +107,76 @@ function ProductInfoLayout({ children }: { children: React.ReactNode }) {
 }
 
 function ProductExpiredBanner({ product }: { product: Product }) {
-  return (
-    <div className="flex h-[48px] items-center justify-center bg-gray-50">
-      {/* <p className="font-medium text-gray-600">
-        <strong className="font-bold">판매종료</strong>로 제보했어요!
-      </p> */}
+  const {
+    data: { reportUserNames },
+  } = useSuspenseQuery(ProductQueries.reportUserNames({ productId: +product.id }));
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (reportUserNames.length <= 1) return;
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % reportUserNames.length);
+    }, 1000 * 5);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [reportUserNames.length]);
+
+  const visibleMessages = useMemo(() => {
+    if (reportUserNames.length === 0) {
+      return [];
+    } else if (reportUserNames.length === 1) {
+      return [reportUserNames[0]];
+    } else {
+      const prevIndex = (currentIndex - 1 + reportUserNames.length) % reportUserNames.length;
+      const nextIndex = (currentIndex + 1) % reportUserNames.length;
+      return [
+        reportUserNames[prevIndex],
+        reportUserNames[currentIndex],
+        reportUserNames[nextIndex],
+      ];
+    }
+  }, [reportUserNames, currentIndex]);
+
+  return visibleMessages.length > 0 ? (
+    <div className="relative flex h-[48px] items-center justify-center overflow-hidden bg-gray-50">
+      <div className="h-full w-full">
+        {visibleMessages.map((item, idx) => {
+          let translateY;
+          if (visibleMessages.length === 1) {
+            translateY = 0;
+          } else {
+            translateY = (idx - 1) * 100;
+          }
+          return (
+            <div
+              key={item}
+              className="absolute left-0 top-0 flex h-[48px] w-full items-center justify-center"
+              style={{
+                transform: `translateY(${translateY}%)`,
+                width: '100%',
+                transition: 'transform 0.5s ease-in-out',
+              }}
+            >
+              <p className="font-medium text-gray-600">
+                {item}님이 <strong className="font-semibold text-gray-900">판매종료</strong>로
+                제보했어요!
+              </p>
+            </div>
+          );
+        })}
+      </div>
     </div>
+  ) : (
+    <div className="h-2 bg-gray-50" />
   );
 }
 
 function ProductInfo({ product }: { product: Product }) {
   const priceWithoutWon = product.price ? product.price.replace('원', '').trim() : null;
   const isHydrated = useIsHydrated();
-
-  const author = {
-    id: 'admin',
-    nickname: '지름알림',
-  };
 
   return (
     <section className="px-5 pb-9">
@@ -143,14 +210,18 @@ function ProductInfo({ product }: { product: Product }) {
           </span>
           <div className="flex items-center justify-between">
             <div>
-              {priceWithoutWon && (
-                <p className="text-lg font-bold text-gray-500">
-                  <strong className="mr-0.5 text-2xl font-semibold text-gray-900">
-                    {priceWithoutWon}
-                  </strong>
-                  원
-                </p>
-              )}
+              <p className="text-lg font-bold text-gray-500">
+                {priceWithoutWon ? (
+                  <>
+                    <strong className="mr-0.5 text-2xl font-semibold text-gray-900">
+                      {priceWithoutWon}
+                    </strong>
+                    원
+                  </>
+                ) : (
+                  <span className="text-2xl font-semibold">{/* 가격 준비중 */}</span>
+                )}
+              </p>
             </div>
             <div>
               <RecommendButton product={product} />
@@ -164,25 +235,24 @@ function ProductInfo({ product }: { product: Product }) {
             <span className="text-gray-400">쇼핑몰</span>
             <span className="text-gray-500">{product.mallName}</span>
           </div>
-          {author && (
+          {product.author && (
             <div className="flex justify-between text-sm font-medium">
               <span className="text-gray-400">업로드</span>
               <span
                 className={cn('flex items-center gap-1 text-gray-500', {
-                  'text-primary-800': author.id === 'admin',
+                  'text-primary-800': product.author.id === 'admin',
                 })}
               >
-                {author.id === 'admin' && <Jirume width={18} height={18} />}
-                {author.nickname}
+                {product.author.id === 'admin' && <Jirume width={18} height={18} />}
+                {product.author.nickname}
               </span>
             </div>
           )}
-          {!!product.likeCount && (
-            <div className="flex justify-between text-sm font-medium">
-              <span className="text-gray-400">추천수</span>
-              <span className="text-gray-500">{product.likeCount}개</span>
-            </div>
-          )}
+
+          <div className="flex justify-between text-sm font-medium">
+            <span className="text-gray-400">추천수</span>
+            <span className="text-gray-500">{product.likeCount}개</span>
+          </div>
         </div>
       </div>
     </section>
@@ -291,5 +361,73 @@ const HotdealGuideModal = ({ trigger }: { trigger: React.ReactNode }) => {
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
+  );
+};
+
+const CommentSection = ({ productId }: { productId: number }) => {
+  return (
+    <section className="mb-7 mt-4 flex flex-col">
+      <div className="flex h-[56px] w-full items-center px-5 py-4">
+        <span className="text-lg font-bold text-gray-900">지름알림 댓글</span>
+      </div>
+      <Suspense fallback={<CommentListSkeleton productId={productId} />}>
+        <CommentList productId={productId} />
+      </Suspense>
+    </section>
+  );
+};
+
+const CommentList = ({ productId }: { productId: number }) => {
+  const {
+    data: { pages },
+  } = useSuspenseInfiniteQuery(
+    CommentQueries.infiniteComments({ productId, ...defaultCommentsVariables }),
+  );
+
+  const comments = pages.flatMap(({ comments }) => comments);
+
+  if (!comments.length) return <CommentListSkeleton productId={productId} />;
+
+  return (
+    <>
+      <div className="relative flex flex-col">
+        <div className="relative flex max-h-[400px] flex-col divide-y divide-gray-200 overflow-hidden">
+          {comments.map((comment) => (
+            <Comment key={comment.id} comment={comment} canReply={false} />
+          ))}
+        </div>
+        {comments.length > 1 && (
+          <div className="pointer-events-none absolute bottom-0 left-0 h-12 w-full bg-gradient-to-t from-white to-transparent" />
+        )}
+      </div>
+      <div className="mt-5 w-full px-12">
+        <Link href={`/products/${productId}/comment`}>
+          <Button className="bg-gray-100">댓글 보기</Button>
+        </Link>
+      </div>
+    </>
+  );
+};
+
+const CommentListSkeleton = ({ productId }: { productId: number }) => {
+  return (
+    <>
+      <div className="flex flex-col">
+        <div className="flex h-40 w-full items-center justify-center">
+          <div className="flex flex-col items-center gap-y-3">
+            <BubbleChatFill />
+            <div className="flex flex-col items-center gap-y-1">
+              <p className="font-semibold text-gray-700">가장 먼저 댓글을 달아보세요!</p>
+              <p className="text-sm font-medium text-gray-500">핫딜을 주제로 소통해요</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full px-12">
+        <Link href={`/products/${productId}/comment`}>
+          <Button className="bg-gray-100">댓글 작성하기</Button>
+        </Link>
+      </div>
+    </>
   );
 };

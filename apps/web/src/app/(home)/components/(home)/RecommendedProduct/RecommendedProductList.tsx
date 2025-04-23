@@ -4,6 +4,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
 import { Suspense } from 'react';
 
+import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import { IllustStandingSmall } from '@/components/common/icons';
 import { ProductQueries } from '@/entities/product';
 
@@ -15,10 +16,11 @@ const RecommendedProductList = () => {
     data: { productKeywords },
   } = useSuspenseQuery(ProductQueries.productKeywords());
 
-  const [keyword, setKeyword] = useQueryState('keyword');
-  const selectedKeyword = keyword ?? productKeywords[0];
+  const [recommend, setRecommend] = useQueryState('recommend');
+  const validRecommend = recommend && productKeywords.includes(recommend);
+  const selectedKeyword = validRecommend ? recommend : productKeywords[0];
   const handleSelectedKeyword = (keyword: string) => {
-    setKeyword(keyword);
+    setRecommend(keyword);
   };
 
   return (
@@ -31,9 +33,11 @@ const RecommendedProductList = () => {
             onSelectedKeyword={(keyword) => handleSelectedKeyword(keyword)}
           />
         </div>
-        <Suspense fallback={<ProductImageCardListSkeleton />}>
-          <ProductImageCardList keyword={selectedKeyword} />
-        </Suspense>
+        <ApiErrorBoundary>
+          <Suspense fallback={<ProductImageCardListSkeleton />}>
+            <ProductImageCardList keyword={selectedKeyword} />
+          </Suspense>
+        </ApiErrorBoundary>
       </div>
     </div>
   );

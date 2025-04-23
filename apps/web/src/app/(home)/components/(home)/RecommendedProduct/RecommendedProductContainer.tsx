@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
 
+import ApiErrorBoundary from '@/components/ApiErrorBoundary';
+
 import RecommendedMoreLink from './RecommendedMoreLink';
 import RecommendedProductList from './RecommendedProductList';
 import RecommendedProductTabsFetcher from './RecommendedProductTabsFetcher';
@@ -12,11 +14,13 @@ const RecommendedProductContainer = () => {
         <RecommendedMoreLink>더보기</RecommendedMoreLink>
       </div>
       <div className="pb-[52px]">
-        <Suspense>
-          <RecommendedProductTabsFetcher>
-            <RecommendedProductList />
-          </RecommendedProductTabsFetcher>
-        </Suspense>
+        <ApiErrorBoundary>
+          <Suspense>
+            <RecommendedProductTabsFetcher>
+              <RecommendedProductList />
+            </RecommendedProductTabsFetcher>
+          </Suspense>
+        </ApiErrorBoundary>
       </div>
     </div>
   );

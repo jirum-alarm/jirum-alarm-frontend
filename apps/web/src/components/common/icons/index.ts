@@ -39,4 +39,7 @@ export { default as Search } from './Search';
 export { default as Setting } from './Setting';
 export { default as Thumbsdown } from './Thumbsdown';
 export { default as Thumbsup } from './Thumbsup';
+export { default as ThumbsupFill } from './ThumbsupFill';
 export { default as Heart } from './Heart';
+export { default as BubbleChat } from './BubbleChat';
+export { default as BubbleChatFill } from './BubbleChatFill';

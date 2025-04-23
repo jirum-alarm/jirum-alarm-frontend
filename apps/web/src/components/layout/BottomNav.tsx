@@ -16,10 +16,9 @@ import {
 } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
+import { useDevice } from '@/hooks/useDevice';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { cn } from '@/lib/cn';
-
-import { useDevice } from '../../hooks/useDevice';
-import { useScrollDirection } from '../../hooks/useScrollDirection';
 
 export enum NAV_TYPE {
   HOME = 'HOME',
@@ -111,7 +110,6 @@ const BottomNav = ({ type }: { type: any }) => {
         {BottomNavList.map((nav, i) => (
           <li key={i} className="flex flex-1 items-center justify-center">
             <Link
-              prefetch
               data-nav-type={nav.type}
               className={cn(
                 'flex w-full flex-col items-center justify-center rounded-lg py-2 text-gray-500',

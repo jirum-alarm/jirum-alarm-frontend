@@ -45,7 +45,7 @@ function RecommendButton({ product }: { product: Product }) {
       onClick={handleUserLikeClick}
     >
       <span>상품 추천</span>
-      <Thumbsup />
+      <Thumbsup width={18} height={18} fill="#F2F4F7" />
     </Button>
   );
 }

@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 
+import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 import { cn } from '@/lib/cn';
@@ -15,9 +16,11 @@ const JirumRankingContainer = () => {
           더보기
         </Link>
       </div>
-      <Suspense fallback={<JirumRankingSliderSkeleton />}>
-        <JirumRankingSlider />
-      </Suspense>
+      <ApiErrorBoundary>
+        <Suspense fallback={<JirumRankingSliderSkeleton />}>
+          <JirumRankingSlider />
+        </Suspense>
+      </ApiErrorBoundary>
     </div>
   );
 };

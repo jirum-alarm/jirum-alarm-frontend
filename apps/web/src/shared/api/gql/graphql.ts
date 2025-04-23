@@ -49,8 +49,14 @@ export type Category = {
   name: Scalars['String']['output'];
 };
 
-export type Comment = {
-  __typename?: 'Comment';
+export enum CommentOrder {
+  Id = 'ID',
+}
+
+export type CommentOutput = {
+  __typename?: 'CommentOutput';
+  /** 댓글 작성자 */
+  author?: Maybe<User>;
   content: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
@@ -58,12 +64,9 @@ export type Comment = {
   likeCount: Scalars['Int']['output'];
   parentId?: Maybe<Scalars['Float']['output']>;
   productId: Scalars['Float']['output'];
+  searchAfter?: Maybe<Array<Scalars['String']['output']>>;
   userId: Scalars['Float']['output'];
 };
-
-export enum CommentOrder {
-  Id = 'ID',
-}
 
 export enum CurrencyType {
   Dollor = 'DOLLOR',
@@ -600,7 +603,7 @@ export type Query = {
   categories: Array<Category>;
   /** 커뮤니티 반응 카테고리별 키워드 조회 */
   categorizedReactionKeywords: CategorizedReactionKeywordsResponse;
-  comments: Array<Comment>;
+  comments: Array<CommentOutput>;
   /** 어드민) 댓글 목록 조회 */
   commentsByAdmin: Array<Scalars['String']['output']>;
   /** 상품 랭킹 랜덤 조회 */
@@ -645,6 +648,8 @@ export type Query = {
   pushSetting: UserPushSetting;
   /** 상품 랭킹 목록 조회 */
   rankingProducts: Array<ProductOutput>;
+  /** 신고한 사용자 목록 조회 (마스킹) */
+  reportUserNames: Array<Scalars['String']['output']>;
   /** 소셜 액세스 토큰 조회 */
   socialAccessToken: Scalars['String']['output'];
   /** 소셜 정보 조회 */
@@ -810,6 +815,10 @@ export type QueryProductsByKeywordArgs = {
   orderBy: KeywordProductOrderType;
   orderOption: OrderOptionType;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryReportUserNamesArgs = {
+  productId: Scalars['Int']['input'];
 };
 
 export type QuerySocialAccessTokenArgs = {
@@ -1036,6 +1045,51 @@ export type QueryCategoriesQuery = {
   categories: Array<{ __typename?: 'Category'; id: string; name: string }>;
 };
 
+export type CommentsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  productId: Scalars['Int']['input'];
+  orderBy: CommentOrder;
+  orderOption: OrderOptionType;
+}>;
+
+export type CommentsQuery = {
+  __typename?: 'Query';
+  comments: Array<{
+    __typename?: 'CommentOutput';
+    id: string;
+    productId: number;
+    parentId?: number | null;
+    content: string;
+    createdAt: any;
+    searchAfter?: Array<string> | null;
+    likeCount: number;
+    isMyLike?: boolean | null;
+    author?: { __typename?: 'User'; id: string; nickname: string } | null;
+  }>;
+};
+
+export type AddCommentMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+  parentId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type AddCommentMutation = { __typename?: 'Mutation'; addComment: boolean };
+
+export type UpdateCommentMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+export type UpdateCommentMutation = { __typename?: 'Mutation'; updateComment: boolean };
+
+export type RemoveCommentMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type RemoveCommentMutation = { __typename?: 'Mutation'; removeComment: boolean };
+
 export type MutationAddNotificationKeywordMutationVariables = Exact<{
   keyword: Scalars['String']['input'];
 }>;
@@ -1178,6 +1232,12 @@ export type ProductQuery = {
     } | null;
   } | null;
 };
+
+export type QueryReportUserNamesQueryVariables = Exact<{
+  productId: Scalars['Int']['input'];
+}>;
+
+export type QueryReportUserNamesQuery = { __typename?: 'Query'; reportUserNames: Array<string> };
 
 export type ProductGuidesQueryVariables = Exact<{
   productId: Scalars['Int']['input'];
@@ -1502,6 +1562,45 @@ export const QueryCategoriesDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<QueryCategoriesQuery, QueryCategoriesQueryVariables>;
+export const CommentsDocument = new TypedDocumentString(`
+    query comments($limit: Int!, $searchAfter: [String!], $productId: Int!, $orderBy: CommentOrder!, $orderOption: OrderOptionType!) {
+  comments(
+    limit: $limit
+    searchAfter: $searchAfter
+    productId: $productId
+    orderBy: $orderBy
+    orderOption: $orderOption
+  ) {
+    id
+    productId
+    parentId
+    content
+    createdAt
+    searchAfter
+    author {
+      id
+      nickname
+    }
+    likeCount
+    isMyLike
+  }
+}
+    `) as unknown as TypedDocumentString<CommentsQuery, CommentsQueryVariables>;
+export const AddCommentDocument = new TypedDocumentString(`
+    mutation addComment($productId: Int!, $content: String!, $parentId: Int) {
+  addComment(productId: $productId, content: $content, parentId: $parentId)
+}
+    `) as unknown as TypedDocumentString<AddCommentMutation, AddCommentMutationVariables>;
+export const UpdateCommentDocument = new TypedDocumentString(`
+    mutation updateComment($id: Int!, $content: String!) {
+  updateComment(id: $id, content: $content)
+}
+    `) as unknown as TypedDocumentString<UpdateCommentMutation, UpdateCommentMutationVariables>;
+export const RemoveCommentDocument = new TypedDocumentString(`
+    mutation removeComment($id: Int!) {
+  removeComment(id: $id)
+}
+    `) as unknown as TypedDocumentString<RemoveCommentMutation, RemoveCommentMutationVariables>;
 export const MutationAddNotificationKeywordDocument = new TypedDocumentString(`
     mutation MutationAddNotificationKeyword($keyword: String!) {
   addNotificationKeyword(keyword: $keyword)
@@ -1624,6 +1723,14 @@ export const ProductDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<ProductQuery, ProductQueryVariables>;
+export const QueryReportUserNamesDocument = new TypedDocumentString(`
+    query QueryReportUserNames($productId: Int!) {
+  reportUserNames(productId: $productId)
+}
+    `) as unknown as TypedDocumentString<
+  QueryReportUserNamesQuery,
+  QueryReportUserNamesQueryVariables
+>;
 export const ProductGuidesDocument = new TypedDocumentString(`
     query productGuides($productId: Int!) {
   productGuides(productId: $productId) {

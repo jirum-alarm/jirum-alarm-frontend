@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 
+import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import { IllustStanding } from '@/components/common/icons';
 
 import LiveHotDealList from './LiveHotDealList';
@@ -11,9 +12,11 @@ const LiveHotDealContainer = () => {
         <h2 className="text-lg font-bold text-gray-900">실시간 핫딜</h2>
       </div>
       <div className="pb-5">
-        <Suspense fallback={<LiveHotDealListSkeleton />}>
-          <LiveHotDealList />
-        </Suspense>
+        <ApiErrorBoundary>
+          <Suspense fallback={<LiveHotDealListSkeleton />}>
+            <LiveHotDealList />
+          </Suspense>
+        </ApiErrorBoundary>
       </div>
     </div>
   );

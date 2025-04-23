@@ -12,10 +12,11 @@ import {
   useRef,
   useMemo,
   useState,
-  useTransition,
   createContext,
+  startTransition,
 } from 'react';
 
+import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import { IllustStandingSmall, Setting } from '@/components/common/icons';
 import { CategoryQueries } from '@/entities/category';
 import Link from '@/features/Link';
@@ -38,14 +39,11 @@ export const TrendingContainer = () => {
   const [emblaRef, embla] = useEmblaCarousel({
     containScroll: 'trimSnaps',
     loop: false,
-    align: 'center',
     slidesToScroll: 1,
     watchDrag,
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const [isPending, startTransition] = useTransition();
 
   const {
     data: { categories },
@@ -54,7 +52,7 @@ export const TrendingContainer = () => {
   const allCategories = useMemo(() => [{ id: 0, name: '전체' }, ...categories], [categories]);
   const categoryIds = allCategories.map((c) => c.id);
 
-  const [tabIndex, setTabIndex] = useQueryState('tab', {
+  const [tabId, setTabId] = useQueryState('tab', {
     defaultValue: 0,
     parse: (value) => {
       const parsed = Number(value);
@@ -82,28 +80,41 @@ export const TrendingContainer = () => {
     containerRef.current.style.height = `${slide.clientHeight}px`;
   }, [allCategories, embla]);
 
+  const [fetchedTabIds, setFetchedTabIds] = useState<Set<number>>(() => new Set([tabId]));
+
   useEffect(() => {
     if (didInitRef.current) return;
     if (!embla) return;
 
-    const index = allCategories.findIndex((c) => c.id === tabIndex);
+    const index = allCategories.findIndex((c) => c.id === tabId);
     if (index < 0) return;
 
-    requestAnimationFrame(() => {
+    startTransition(() => {
       embla.scrollTo(index, true);
+      setFetchedTabIds(() => {
+        const newSet = new Set<number>();
+        // newSet.add(Math.max(0, tabId - 1));
+        newSet.add(tabId);
+        // newSet.add(Math.min(allCategories.length - 1, tabId + 1));
+        return newSet;
+      });
       didInitRef.current = true;
     });
-  }, [tabIndex, embla, allCategories]);
+  }, [tabId, embla, allCategories]);
 
   useEffect(() => {
     if (!embla) return;
     const handleEmblaSelect = () => {
       const index = embla.selectedScrollSnap();
       const newId = allCategories[index]?.id;
-      if (typeof newId === 'number' && newId !== tabIndex) {
-        startTransition(() => {
-          setTabIndex(newId);
+      if (typeof newId === 'number' && newId !== tabId) {
+        // startTransition(() => {
+        setTabId(newId);
+        setFetchedTabIds((prev) => {
+          prev.add(newId);
+          return prev;
         });
+        // });
       }
     };
 
@@ -112,44 +123,49 @@ export const TrendingContainer = () => {
     return () => {
       embla.off('select', handleEmblaSelect);
     };
-  }, [embla, setTabIndex, allCategories, tabIndex]);
+  }, [embla, setTabId, allCategories, tabId]);
 
   const handleTabChange = useCallback(
     (value: string) => {
       const nextIndex = Number(value);
-      if (nextIndex === tabIndex) return;
-      embla?.scrollTo(nextIndex, Math.abs(nextIndex - tabIndex) > 1);
+      if (nextIndex === tabId) return;
+      embla?.scrollTo(nextIndex);
     },
-    [embla, tabIndex],
+    [embla, tabId],
   );
 
   return (
-    <Tabs.Root value={`${tabIndex}`} onValueChange={handleTabChange} asChild>
+    <Tabs.Root value={`${tabId}`} onValueChange={handleTabChange} asChild>
       <div className="relative">
-        <TabBar allCategories={allCategories} tabIndex={tabIndex} onTabClick={handleTabChange} />
+        <TabBar allCategories={allCategories} tabIndex={tabId} onTabClick={handleTabChange} />
 
         <div ref={emblaRef} className="mt-[72px] overflow-hidden">
           <div ref={containerRef} className="flex items-start">
             <WatchDragContext.Provider value={{ setWatchDrag }}>
-              {allCategories.map((category) => (
-                <div
-                  key={category.id}
-                  className="min-w-full flex-[0_0_100%] px-5"
-                  data-tab-index={category.id}
-                >
-                  {Math.abs(category.id - tabIndex) <= 1 ? (
-                    <Suspense fallback={<TrendingListSkeleton />}>
-                      <TrendingList
-                        categoryId={category.id}
-                        categoryName={category.name}
-                        onReady={category.id === tabIndex ? setContainerHeight : undefined}
-                      />
-                    </Suspense>
-                  ) : (
-                    <TrendingListSkeleton />
-                  )}
-                </div>
-              ))}
+              {allCategories.map((category) => {
+                const isFetched = fetchedTabIds.has(category.id);
+                return (
+                  <div
+                    key={category.id}
+                    className="min-w-full flex-[0_0_100%] px-5"
+                    data-tab-index={category.id}
+                  >
+                    {isFetched ? (
+                      <ApiErrorBoundary>
+                        <Suspense fallback={<TrendingListSkeleton />}>
+                          <TrendingList
+                            categoryId={category.id}
+                            categoryName={category.name}
+                            onReady={category.id === tabId ? setContainerHeight : undefined}
+                          />
+                        </Suspense>
+                      </ApiErrorBoundary>
+                    ) : (
+                      <TrendingListSkeleton />
+                    )}
+                  </div>
+                );
+              })}
             </WatchDragContext.Provider>
           </div>
         </div>
@@ -160,28 +176,51 @@ export const TrendingContainer = () => {
 
 const TrendingListSkeleton = () => {
   return (
-    <div className="grid w-full animate-pulse grid-cols-2 gap-4 smd:grid-cols-3">
-      {Array.from({ length: 9 }).map((_, i) => (
+    <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
+      {Array.from({ length: 12 }).map((_, i) => (
         <div key={i} className="w-full">
-          <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-200">
-            <IllustStandingSmall className="h-12 w-12 text-gray-400" />
+          <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
+            <IllustStandingSmall />
           </div>
           <div className="flex flex-col">
-            <span
-              className={cn({
-                'line-clamp-2 h-12 break-words pt-2 text-sm text-gray-700': true,
-              })}
-            >
-              <div className="mt-2 h-4 w-full rounded bg-gray-200"></div>
-              <div className="mt-1 h-4 w-3/4 rounded bg-gray-200"></div>
-            </span>
-            <div className="h-9 w-16 max-w-[98px] rounded bg-gray-200 pt-1" />
+            <div className="flex h-12 flex-col items-stretch justify-stretch gap-1 pt-2">
+              <div className="grow rounded bg-gray-100"></div>
+              <div className="w-1/2 grow rounded bg-gray-100"></div>
+            </div>
+            <div className="flex h-9 items-center pt-1">
+              <div className="h-6 w-16 max-w-[120px] rounded bg-gray-100" />
+            </div>
           </div>
         </div>
       ))}
     </div>
   );
 };
+
+// const TrendingListSkeleton = () => {
+//   return (
+//     <div className="grid w-full animate-pulse grid-cols-2 gap-4 smd:grid-cols-3">
+//       {Array.from({ length: 9 }).map((_, i) => (
+//         <div key={i} className="w-full">
+//           <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-200">
+//             <IllustStandingSmall className="h-12 w-12 text-gray-400" />
+//           </div>
+//           <div className="flex flex-col">
+//             <span
+//               className={cn({
+//                 'line-clamp-2 h-12 break-words pt-2 text-sm text-gray-700': true,
+//               })}
+//             >
+//               <div className="mt-2 h-4 w-full rounded bg-gray-200"></div>
+//               <div className="mt-1 h-4 w-3/4 rounded bg-gray-200"></div>
+//             </span>
+//             <div className="h-9 w-16 max-w-[98px] rounded bg-gray-200 pt-1" />
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
 
 const TabBar = ({
   allCategories,
@@ -228,18 +267,11 @@ const TabBar = ({
 
       const activeTab = container.children[tabIndex] as HTMLElement;
       if (activeTab) {
-        const padding = 16 * 2;
-        const visibleStart = -x.get();
-        const visibleEnd = visibleStart + clientWidth;
+        // 탭의 중앙이 화면 중앙에 오도록 스크롤 위치 계산
+        const targetScroll = activeTab.offsetLeft + activeTab.offsetWidth / 2 - clientWidth / 2;
+        const clampedScroll = Math.max(0, Math.min(targetScroll, maxScroll));
 
-        let targetScroll = visibleStart;
-        if (activeTab.offsetLeft < visibleStart + padding) {
-          targetScroll = activeTab.offsetLeft - padding;
-        } else if (activeTab.offsetLeft + activeTab.offsetWidth > visibleEnd - padding) {
-          targetScroll = activeTab.offsetLeft + activeTab.offsetWidth - clientWidth + padding;
-        }
-
-        animate(x, -Math.min(Math.max(0, targetScroll), maxScroll), {
+        animate(x, -clampedScroll, {
           type: 'spring',
           damping: 40,
           stiffness: 300,
@@ -253,7 +285,7 @@ const TabBar = ({
     scrollToTab();
   }, [tabIndex, tabIndicatorLeft, tabIndicatorWidth, x]);
 
-  const handlePointerDown = (e: React.PointerEvent, id: string) => {
+  const handlePointerDown = (e: React.PointerEvent, _id: string) => {
     dragStartX.current = e.clientX;
     e.preventDefault();
   };
@@ -261,7 +293,9 @@ const TabBar = ({
   const handlePointerUp = (e: React.PointerEvent, id: string) => {
     const dx = Math.abs(e.clientX - (dragStartX.current ?? 0));
     if (dx < 5) {
-      onTabClick(id);
+      startTransition(() => {
+        onTabClick(id);
+      });
     }
   };
 

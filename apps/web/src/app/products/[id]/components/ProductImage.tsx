@@ -22,7 +22,7 @@ export default function ProductImage({
   }
 
   return (
-    <div className="sticky top-[56px]">
+    <div className="sticky top-0">
       <div
         className="relative aspect-[4/3] w-full"
         style={{

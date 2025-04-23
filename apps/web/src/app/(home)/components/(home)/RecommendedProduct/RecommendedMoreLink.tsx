@@ -7,10 +7,15 @@ import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 
 const RecommendedMoreLink = ({ children }: PropsWithChildren) => {
-  const [keyword] = useQueryState('keyword');
-  const queryString = keyword ? `?keyword=${keyword}` : '';
+  const [recommend] = useQueryState('recommend');
+
+  const hrefObject = {
+    pathname: PAGE.RECOMMEND,
+    query: recommend ? { recommend } : undefined,
+  };
+
   return (
-    <Link className="text-sm text-gray-500" href={`${PAGE.RECOMMEND}${queryString}`}>
+    <Link className="text-sm text-gray-500" href={hrefObject}>
       {children}
     </Link>
   );

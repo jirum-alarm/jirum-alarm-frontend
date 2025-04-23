@@ -38,7 +38,7 @@ export class FetchError extends Error {
   ) {
     super(`Fetch failed with status ${response.status}`);
     this.name = 'FetchError';
-    this.message = data;
+    this.message = JSON.stringify({ data });
   }
 }
 
@@ -164,7 +164,7 @@ class HttpClient {
         };
       };
     };
-    if (data.loginByRefreshToken) return;
+    if (!data?.loginByRefreshToken) return;
     const { accessToken, refreshToken: newRefreshToken } = data.loginByRefreshToken;
 
     await setAccessToken(accessToken);

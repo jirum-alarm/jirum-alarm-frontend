@@ -55,6 +55,13 @@ export const QueryProduct = gql`
     }
   }
 `;
+
+export const QueryReportUserNames = gql`
+  query QueryReportUserNames($productId: Int!) {
+    reportUserNames(productId: $productId)
+  }
+`;
+
 export const QueryProductGuides = gql`
   query productGuides($productId: Int!) {
     productGuides(productId: $productId) {

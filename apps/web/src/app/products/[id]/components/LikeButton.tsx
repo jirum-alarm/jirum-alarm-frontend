@@ -5,9 +5,11 @@ import { useState } from 'react';
 
 import Button from '@/components/common/Button';
 import { Heart } from '@/components/common/icons';
+import { useToast } from '@/components/common/Toast';
 import { PAGE } from '@/constants/page';
 import { ProductQueries } from '@/entities/product';
 import { WishlistQueries } from '@/entities/wishlist';
+import Link from '@/features/Link';
 import { useDevice } from '@/hooks/useDevice';
 import useMyRouter from '@/hooks/useMyRouter';
 import { ProductQuery } from '@/shared/api/gql/graphql';
@@ -21,6 +23,8 @@ export default function LikeButton({
   product: NonNullable<ProductQuery['product']>;
   isUserLogin: boolean;
 }) {
+  const { toast } = useToast();
+
   const { isJirumAlarmApp } = useDevice();
   const [isLiked, setIsLiked] = useState(product.isMyWishlist);
 
@@ -42,6 +46,7 @@ export default function LikeButton({
           queryKey: WishlistQueries.lists(),
         }),
       ]);
+      toast(<LikeToast />);
     },
   });
   const { mutate: removeWishlist } = useMutation({
@@ -114,3 +119,16 @@ export default function LikeButton({
     </Button>
   );
 }
+
+const LikeToast = () => {
+  return (
+    <div className="flex w-full items-center justify-between gap-2">
+      <p>찜 목록에 추가되었어요.</p>
+      <Link href={PAGE.LIKE}>
+        <Button size="sm" className="rounded-3xl" color="primary" variant="filled">
+          보러가기
+        </Button>
+      </Link>
+    </div>
+  );
+};

@@ -16,7 +16,7 @@ const ProductReport = ({ product }: { product: NonNullable<ProductQuery['product
     <div className="px-5">
       <div
         className={cn(
-          `flex h-[56px] items-center justify-between rounded-lg border bg-gray-50 p-[16px]`,
+          `flex h-[56px] items-center justify-between rounded-lg border bg-white p-[16px]`,
         )}
       >
         {product.isMyReported ? (

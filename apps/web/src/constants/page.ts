@@ -4,6 +4,7 @@ export enum PAGE {
   RECOMMEND = '/recommend',
 
   DETAIL = '/products',
+  COMMENT = '/products/comment',
 
   LOGIN = '/login',
   LOGIN_BY_EMAIL = '/login/email',

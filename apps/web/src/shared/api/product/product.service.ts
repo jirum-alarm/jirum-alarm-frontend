@@ -9,6 +9,7 @@ import {
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
+  QueryReportUserNamesQueryVariables,
   TogetherViewedProductsQueryVariables,
 } from '../gql/graphql';
 
@@ -35,6 +36,10 @@ export class ProductService {
     return httpClient
       .execute(QueryCommunityRandomRankingProducts, variables)
       .then((res) => res.data);
+  }
+
+  static async getReportUserNames(variables: QueryReportUserNamesQueryVariables) {
+    return httpClient.execute(QueryReportUserNames, variables).then((res) => res.data);
   }
 
   static async getProductGuides(variables: ProductGuidesQueryVariables) {
@@ -193,6 +198,12 @@ const QueryCommunityRandomRankingProducts = graphql(`
       searchAfter
       postedAt
     }
+  }
+`);
+
+const QueryReportUserNames = graphql(`
+  query QueryReportUserNames($productId: Int!) {
+    reportUserNames(productId: $productId)
   }
 `);
 
