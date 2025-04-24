@@ -17,9 +17,10 @@ import {
 } from 'react';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
-import { IllustStandingSmall, Setting } from '@/components/common/icons';
+import { Setting } from '@/components/common/icons';
 import { CategoryQueries } from '@/entities/category';
 import Link from '@/features/Link';
+import ProductImageCardSkeleton from '@/features/products/components/ProductImageCardSkeleton';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
 
@@ -178,20 +179,7 @@ const TrendingListSkeleton = () => {
   return (
     <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
       {Array.from({ length: 12 }).map((_, i) => (
-        <div key={i} className="w-full">
-          <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
-            <IllustStandingSmall />
-          </div>
-          <div className="flex flex-col">
-            <div className="flex h-12 flex-col items-stretch justify-stretch gap-1 pt-2">
-              <div className="grow rounded bg-gray-100"></div>
-              <div className="w-1/2 grow rounded bg-gray-100"></div>
-            </div>
-            <div className="flex h-9 items-center pt-1">
-              <div className="h-6 w-16 max-w-[120px] rounded bg-gray-100" />
-            </div>
-          </div>
-        </div>
+        <ProductImageCardSkeleton key={i} />
       ))}
     </div>
   );

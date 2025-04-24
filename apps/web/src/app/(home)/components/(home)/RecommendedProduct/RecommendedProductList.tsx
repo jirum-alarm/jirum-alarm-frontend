@@ -5,8 +5,8 @@ import { useQueryState } from 'nuqs';
 import { Suspense } from 'react';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
-import { IllustStandingSmall } from '@/components/common/icons';
 import { ProductQueries } from '@/entities/product';
+import ProductImageCardSkeleton from '@/features/products/components/ProductImageCardSkeleton';
 
 import ProductImageCardList from './ProductImageCardList';
 import RecommendedProductTabs from './RecommendedProductTabs';
@@ -47,12 +47,10 @@ export default RecommendedProductList;
 
 const ProductImageCardListSkeleton = () => {
   return (
-    <div className="flex animate-pulse flex-nowrap justify-start gap-[10px] overflow-x-scroll scrollbar-hide">
-      {Array.from({ length: 6 }).map((item, i) => (
-        <div key={i} className="w-full shrink-0 txs:w-[140px] xs:w-[162px]">
-          <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
-            <IllustStandingSmall />
-          </div>
+    <div className="flex animate-pulse flex-nowrap justify-start gap-x-3 overflow-x-scroll scrollbar-hide">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="w-[120px] shrink-0">
+          <ProductImageCardSkeleton />
         </div>
       ))}
     </div>
