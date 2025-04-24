@@ -3,7 +3,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { BubbleChat, ThumbsupFill } from '@/components/common/icons';
+import { useToast } from '@/components/common/Toast';
 import { defaultCommentsVariables, CommentQueries } from '@/entities/comment';
+import { useUser } from '@/hooks/useUser';
 import { cn } from '@/lib/cn';
 import { UserLikeTarget } from '@/shared/api/gql/graphql';
 import { LikeService } from '@/shared/api/like/like.service';
@@ -23,6 +25,9 @@ export default function CommentAction({
   hasParentComment,
   editStatus,
 }: CommentActionProps) {
+  const { me } = useUser();
+  const { toast } = useToast();
+
   const queryClient = useQueryClient();
 
   const { mutate: likeComment } = useMutation({
@@ -39,6 +44,11 @@ export default function CommentAction({
   });
 
   const handleLike = () => {
+    if (!me) {
+      toast('로그인 후 이용해주세요.');
+      return;
+    }
+
     likeComment({
       target: UserLikeTarget.Comment,
       targetId: Number(comment.id),
@@ -58,7 +68,11 @@ export default function CommentAction({
 
   return (
     <>
-      <button className="flex h-auto items-center gap-x-1 bg-transparent" onClick={handleLike}>
+      <button
+        className="flex h-auto items-center gap-x-1 bg-transparent"
+        onClick={handleLike}
+        disabled={!me}
+      >
         <ThumbsupFill className="h-4 w-4" active={!!comment.isMyLike} />
         <span className={cn('text-sm', comment.isMyLike ? 'text-primary-700' : 'text-gray-500')}>
           좋아요
@@ -68,7 +82,11 @@ export default function CommentAction({
         </span>
       </button>
       {canReply && !hasParentComment && (
-        <button className="flex h-auto items-center gap-x-1 bg-transparent" onClick={handleReply}>
+        <button
+          className="flex h-auto items-center gap-x-1 bg-transparent"
+          onClick={handleReply}
+          disabled={!me}
+        >
           <BubbleChat className="h-4 w-4" active={isReply} />
           <span className={cn('text-sm', isReply ? 'text-secondary-500' : 'text-gray-500')}>
             대댓글

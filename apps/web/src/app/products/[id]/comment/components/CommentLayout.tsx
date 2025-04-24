@@ -1,12 +1,11 @@
 'use client';
 
-import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { LoadingSpinner, BubbleChatFill } from '@/components/common/icons';
 import TopButton from '@/components/TopButton';
-import { AuthQueries } from '@/entities/auth';
 import { defaultCommentsVariables, CommentQueries } from '@/entities/comment';
 import { CommentsQuery } from '@/shared/api/gql/graphql';
 
@@ -32,10 +31,6 @@ export default function CommentLayout({
     comment: TComment;
     status: TEditStatus;
   } | null>(null);
-
-  const {
-    data: { me },
-  } = useSuspenseQuery(AuthQueries.me());
 
   const {
     data: { pages },
@@ -82,47 +77,47 @@ export default function CommentLayout({
   const comments = pages.flatMap(({ comments }) => comments);
   return (
     <>
-      <main className="flex grow flex-col divide-y divide-gray-200 pt-[56px]">
-        {comments.length > 0 ? (
-          comments.map((comment) => {
-            return (
-              <Comment
-                key={comment.id}
-                comment={comment}
-                isMyComment={`${comment.author?.id ?? '#no-author'}` === `${me.id}`}
-                editStatus={
-                  editingComment?.status === 'update' && editingComment?.comment.id === comment.id
-                    ? 'update'
-                    : editingComment?.status === 'reply' &&
-                        editingComment?.comment.id === comment.id
-                      ? 'reply'
-                      : undefined
-                }
-                canReply
-              />
-            );
-          })
-        ) : (
-          <CommentListSkeleton />
-        )}
-      </main>
-      <div className="flex w-full items-center justify-center py-6" ref={ref}>
-        {isFetchingNextPage && <LoadingSpinner />}
-      </div>
+      {comments.length > 0 ? (
+        <>
+          <main className="flex grow flex-col divide-y divide-gray-200 pb-[64px] pt-[56px]">
+            {comments.map((comment) => {
+              return (
+                <Comment
+                  key={comment.id}
+                  comment={comment}
+                  editStatus={
+                    editingComment?.status === 'update' && editingComment?.comment.id === comment.id
+                      ? 'update'
+                      : editingComment?.status === 'reply' &&
+                          editingComment?.comment.id === comment.id
+                        ? 'reply'
+                        : undefined
+                  }
+                  canReply
+                />
+              );
+            })}
+          </main>
+          <div className="flex w-full items-center justify-center py-6" ref={ref}>
+            {isFetchingNextPage && <LoadingSpinner />}
+          </div>
+        </>
+      ) : (
+        <CommentListSkeleton />
+      )}
       <TopButton />
       <CommentInput
         productId={productId}
         isUserLogin={isUserLogin}
         editingComment={editingComment}
       />
-      <div className="h-[64px]" />
     </>
   );
 }
 
 const CommentListSkeleton = () => {
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex h-screen w-full items-center justify-center pb-[64px] pt-[56px]">
       <div className="flex flex-col items-center gap-y-3">
         <BubbleChatFill />
         <div className="flex flex-col items-center gap-y-1">

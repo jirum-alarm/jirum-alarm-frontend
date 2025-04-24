@@ -1,3 +1,4 @@
+import { useUser } from '@/hooks/useUser';
 import { cn } from '@/lib/cn';
 import { displayTime } from '@/util/displayTime';
 
@@ -7,16 +8,17 @@ import CommentMenu from './CommentMenu';
 
 export default function Comment({
   comment,
-  isMyComment,
   editStatus,
   canReply,
 }: {
   comment: TComment;
-  isMyComment?: boolean;
   editStatus?: TEditStatus;
   canReply: boolean;
   drawer?: React.ReactNode;
 }) {
+  const { me } = useUser();
+
+  const isMyComment = `${comment.author?.id ?? '#no-author'}` === `${me?.id}`;
   const hasParentComment = !!comment.parentId;
 
   return (
