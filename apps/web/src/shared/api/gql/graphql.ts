@@ -1155,6 +1155,7 @@ export type QueryNotificationsQuery = {
       price?: string | null;
       isHot?: boolean | null;
       isEnd?: boolean | null;
+      categoryId?: number | null;
     } | null;
   }>;
 };
@@ -1294,6 +1295,7 @@ export type QueryRankingProductsQuery = {
     url?: string | null;
     price?: string | null;
     thumbnail?: string | null;
+    categoryId?: number | null;
   }>;
 };
 
@@ -1436,6 +1438,7 @@ export type QueryWishlistsQuery = {
       hotDealType?: HotDealType | null;
       thumbnail?: string | null;
       isMyWishlist?: boolean | null;
+      categoryId?: number | null;
     };
   }>;
 };
@@ -1648,6 +1651,7 @@ export const QueryNotificationsDocument = new TypedDocumentString(`
       price
       isHot
       isEnd
+      categoryId
     }
   }
 }
@@ -1782,6 +1786,7 @@ export const QueryRankingProductsDocument = new TypedDocumentString(`
     url
     price
     thumbnail
+    categoryId
   }
 }
     `) as unknown as TypedDocumentString<
@@ -1926,6 +1931,7 @@ export const QueryWishlistsDocument = new TypedDocumentString(`
       hotDealType
       thumbnail
       isMyWishlist
+      categoryId
     }
   }
 }
