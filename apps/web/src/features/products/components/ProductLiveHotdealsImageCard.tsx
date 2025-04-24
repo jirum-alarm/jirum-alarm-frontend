@@ -40,13 +40,13 @@ export function ProductLiveHotdealsImageCard({
         <ProductImage
           src={product?.thumbnail ?? ''}
           title={product.title}
-          type="product"
           categoryId={product.categoryId}
+          type="product"
           alt={product.title}
-          fill
+          width={162}
+          height={162}
+          sizes="(max-width: 320px) 140px, 162px"
           className="object-cover"
-          sizes="300px"
-          priority={false}
         />
         {product.isEnd && (
           <div

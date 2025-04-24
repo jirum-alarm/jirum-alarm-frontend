@@ -47,8 +47,9 @@ export function ProductRankingImageCard({
             type="product"
             categoryId={product.categoryId}
             alt={product.title}
-            fill
-            sizes="300px"
+            width={240}
+            height={240}
+            sizes="240px"
             className="object-cover"
             priority={[0, 1, 9].includes(index)}
           />

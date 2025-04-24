@@ -5,6 +5,7 @@ import { memo, useState } from 'react';
 
 import { IllustEmpty } from '@/components/common/icons';
 import { CATEGORY_MAP } from '@/constants/categories';
+import { cn } from '@/lib/cn';
 import { convertToWebp } from '@/util/image';
 
 const ProductImage = memo(function ProductImage({
@@ -13,15 +14,12 @@ const ProductImage = memo(function ProductImage({
   title,
   categoryId,
   type = 'product',
-  width,
-  height,
+  className,
   ...rest
 }: Omit<ImageProps, 'src'> & {
   src?: string;
   categoryId?: number | null;
   type: 'product' | 'hotDeal' | 'product-detail';
-  width?: number;
-  height?: number;
 }) {
   const imageSrc = src ? convertToWebp(src) : undefined;
 
@@ -39,8 +37,7 @@ const ProductImage = memo(function ProductImage({
       onError={() => setIsError(true)}
       placeholder="blur"
       blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-      width={width}
-      height={height}
+      className={cn(['h-full w-full object-cover', className])}
       {...rest}
     />
   );

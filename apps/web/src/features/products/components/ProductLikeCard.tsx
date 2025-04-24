@@ -58,9 +58,10 @@ export function ProductLikeCard({
           categoryId={product.categoryId}
           type="product"
           alt={product.title}
-          fill
-          className="object-cover"
-          sizes="300px"
+          width={162}
+          height={162}
+          sizes="(max-width: 320px) 140px, 162px"
+          className="h-full object-cover"
         />
         {product.isEnd && (
           <div

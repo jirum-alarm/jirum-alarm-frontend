@@ -62,6 +62,7 @@ export function ProductImageCard({
           alt={product.title}
           width={162}
           height={162}
+          sizes="(max-width: 320px) 140px, 162px"
           className="h-full object-cover"
         />
         {type === 'product' && product.isEnd && (

@@ -46,7 +46,8 @@ export const ProductTrendingImageCard = ({
           type="product"
           categoryId={product.categoryId}
           alt={product.title}
-          fill
+          width={240}
+          height={240}
           sizes="240px"
           className="object-cover"
         />
