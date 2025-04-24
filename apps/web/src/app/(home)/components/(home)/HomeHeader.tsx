@@ -12,10 +12,10 @@ const HomeHeader = () => {
   const isScrolled = useScrollPosition(90);
 
   useEffect(() => {
-    const statusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+    const statusBar = document.querySelector('meta[name="theme-color"]');
     if (statusBar) {
       if (isScrolled) {
-        statusBar.setAttribute('content', 'white');
+        statusBar.setAttribute('content', '#FFFFFF');
       } else {
         statusBar.setAttribute('content', '#101828');
       }

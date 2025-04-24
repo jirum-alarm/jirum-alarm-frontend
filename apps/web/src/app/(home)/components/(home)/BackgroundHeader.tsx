@@ -1,11 +1,25 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import { RoundedLogo } from '@/components/common/icons';
 import SearchLinkButton from '@/components/SearchLinkButton';
 import Link from '@/features/Link';
 import { cn } from '@/lib/cn';
 
 const BackgroundHeader = () => {
+  useEffect(() => {
+    const statusBar = document.querySelector('meta[name="theme-color"]');
+    if (statusBar) {
+      statusBar.setAttribute('content', '#101828');
+    }
+    return () => {
+      if (statusBar) {
+        statusBar.setAttribute('content', '#FFFFFF');
+      }
+    };
+  }, []);
+
   const handleClick = () => {
     // TODO: Need GTM Migration
     // mp?.track(EVENT.OPEN_KAKAO_TALK.NAME, {
