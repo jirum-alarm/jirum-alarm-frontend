@@ -4,19 +4,22 @@ import Image, { ImageProps } from 'next/image';
 import { memo, useState } from 'react';
 
 import { IllustEmpty } from '@/components/common/icons';
+import { CATEGORY_MAP } from '@/constants/categories';
 import { convertToWebp } from '@/util/image';
 
-const ImageWithFallback = memo(function ImageWithFallback({
+const ProductImage = memo(function ProductImage({
   src,
   alt,
   title,
+  categoryId,
   type = 'product',
   width,
   height,
   ...rest
 }: Omit<ImageProps, 'src'> & {
   src?: string;
-  type: 'product' | 'hotDeal';
+  categoryId?: number | null;
+  type: 'product' | 'hotDeal' | 'product-detail';
   width?: number;
   height?: number;
 }) {
@@ -24,12 +27,8 @@ const ImageWithFallback = memo(function ImageWithFallback({
 
   const [isError, setIsError] = useState<boolean>(false);
 
-  const handleError = () => {
-    setIsError(true);
-  };
-
   if (!src || !imageSrc || isError) {
-    return <NoImage type={type} />;
+    return <NoImage type={type} categoryId={categoryId} />;
   }
 
   return (
@@ -37,7 +36,7 @@ const ImageWithFallback = memo(function ImageWithFallback({
       src={imageSrc}
       alt={alt || title || ''}
       title={title || ''}
-      onError={handleError}
+      onError={() => setIsError(true)}
       placeholder="blur"
       blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
       width={width}
@@ -47,13 +46,21 @@ const ImageWithFallback = memo(function ImageWithFallback({
   );
 });
 
-export default ImageWithFallback;
+export default ProductImage;
 
-function NoImage({ type }: { type: 'product' | 'hotDeal' }) {
+function NoImage({
+  type,
+  categoryId,
+}: {
+  type: 'product' | 'hotDeal' | 'product-detail';
+  categoryId?: number | null;
+}) {
+  const Icon = categoryId ? (CATEGORY_MAP[categoryId]?.iconComponent ?? IllustEmpty) : IllustEmpty;
+
   return (
     <div className="flex h-full items-center justify-center bg-gray-50">
       {/* {type === 'hotDeal' ? <IllustStandingSmall /> : <IllustStanding />} */}
-      <IllustEmpty />
+      <Icon />
     </div>
   );
 }

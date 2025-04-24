@@ -1,9 +1,9 @@
 'use client';
 
-import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
+import ProductImage from '@/features/products/components/ProductImage';
 import { IProduct } from '@/graphql/interface';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
@@ -54,9 +54,19 @@ export function ProductImageCard({
           'h-[120px]': type === 'hotDeal',
         })}
       >
+        <ProductImage
+          src={product?.thumbnail ?? ''}
+          title={product.title}
+          categoryId={product.categoryId}
+          type={type}
+          alt={product.title}
+          width={162}
+          height={162}
+          className="h-full object-cover"
+        />
         {type === 'product' && product.isEnd && (
           <div
-            className={cn('border border-gray-400 bg-white px-2 text-gray-500', {
+            className={cn('bg-white px-2 text-gray-700', {
               'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
                 true,
             })}
@@ -69,16 +79,6 @@ export function ProductImageCard({
             <HotdealBadge badgeVariant="card" hotdealType={product.hotDealType} />
           </div>
         )}
-
-        <ImageWithFallback
-          src={product?.thumbnail ?? ''}
-          title={product.title}
-          type={type}
-          alt={product.title}
-          width={162}
-          height={162}
-          className="object-cover"
-        />
       </div>
       <div className="flex flex-col">
         <span

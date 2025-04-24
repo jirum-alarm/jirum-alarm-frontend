@@ -27,7 +27,7 @@ import HotdealGuide from './HotdealGuide';
 import HotdealScore from './HotdealScore';
 import { NoticeProfitLink } from './NoticeProfitUrl';
 import PopularProductsContainer from './PopularProudctsContainer';
-import ProductImage from './ProductImage';
+import ProductDetailImage from './ProductDetailImage';
 import ProductReport from './ProductReport';
 import RecommendButton from './RecommendButton';
 import RelatedProductsContainer from './RelatedProductsContainer';
@@ -54,11 +54,12 @@ function ProductDetailLayout({
   return (
     <>
       {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
-      <main className="overflow-x-hidden pt-[56px]">
-        <ProductImage
+      <main className="pt-[56px]">
+        <ProductDetailImage
           product={{
             title: product.title,
             thumbnail: product.thumbnail,
+            categoryId: product.categoryId,
           }}
         />
         <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6 shadow-[0_-2px_12px_0_rgba(0,0,0,0.08)]">

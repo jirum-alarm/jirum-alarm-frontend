@@ -126,6 +126,7 @@ export const QueryRankingProducts = gql`
       url
       price
       thumbnail
+      categoryId
     }
   }
 `;

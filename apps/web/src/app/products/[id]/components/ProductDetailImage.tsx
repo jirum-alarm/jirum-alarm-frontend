@@ -1,41 +1,40 @@
-import Image from 'next/image';
-
-import { IllustStanding } from '@/components/common/icons';
+import ProductImage from '@/features/products/components/ProductImage';
 import { convertToWebp } from '@/util/image';
 
-export default function ProductImage({
+export default function ProductDetailImage({
   product,
 }: {
-  product: { thumbnail?: string | null; title: string };
+  product: { thumbnail?: string | null; title: string; categoryId?: number | null };
 }) {
   const thumbnail = product.thumbnail ?? undefined;
   const imageSrc = convertToWebp(thumbnail);
 
-  if (!product.thumbnail || !imageSrc) {
-    return (
-      <div className="flex h-[248px] w-full items-center justify-center">
-        <div className="-mt-20">
-          <IllustStanding />
-        </div>
-      </div>
-    );
-  }
+  // if (!imageSrc && !product.categoryId) {
+  //   return (
+  //     <div className="flex h-[248px] w-full items-center justify-center">
+  //       <div className="-mt-20">
+  //         <IllustStanding />
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
-    <div className="sticky top-0">
+    <div className="sticky top-0 -mb-6">
       <div
-        className="relative aspect-[4/3] w-full"
+        className="relative aspect-square w-full"
         style={{
           contain: 'layout paint',
           contentVisibility: 'auto',
         }}
       >
-        <Image
+        <ProductImage
           src={imageSrc}
           alt={product.title}
           fill
+          categoryId={product.categoryId}
+          type="product-detail"
           priority={true}
-          sizes="(max-width: 768px) 640px, 750px"
           quality={75}
           loading="eager"
           fetchPriority="high"

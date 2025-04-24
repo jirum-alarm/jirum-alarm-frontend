@@ -1,7 +1,7 @@
-import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
+import ProductImage from '@/features/products/components/ProductImage';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 import { HotDealType } from '@/shared/api/gql/graphql';
@@ -18,6 +18,7 @@ interface Product {
   price?: string | null;
   hotDealType?: HotDealType | null;
   postedAt: any;
+  categoryId?: number | null;
 }
 
 export function ProductLikeCard({
@@ -51,9 +52,10 @@ export function ProductLikeCard({
     >
       <div className={'relative aspect-square overflow-hidden rounded-lg border border-gray-200'}>
         <div className=" absolute right-0 top-0 z-10">{actionIcon}</div>
-        <ImageWithFallback
+        <ProductImage
           src={product?.thumbnail ?? ''}
           title={product.title}
+          categoryId={product.categoryId}
           type="product"
           alt={product.title}
           fill
@@ -62,7 +64,7 @@ export function ProductLikeCard({
         />
         {product.isEnd && (
           <div
-            className={cn('border border-gray-400 bg-white px-2 text-gray-500', {
+            className={cn('bg-white px-2 text-gray-700', {
               'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
                 true,
             })}

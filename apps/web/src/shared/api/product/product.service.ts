@@ -72,6 +72,7 @@ const QueryRankingProducts = graphql(`
       url
       price
       thumbnail
+      categoryId
     }
   }
 `);

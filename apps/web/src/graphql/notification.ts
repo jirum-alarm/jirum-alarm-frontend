@@ -15,6 +15,7 @@ export const QueryNotifications = gql`
         price
         isHot
         isEnd
+        categoryId
       }
     }
   }
