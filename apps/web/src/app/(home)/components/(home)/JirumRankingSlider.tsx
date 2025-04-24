@@ -38,25 +38,29 @@ const JirumRankingSlider = () => {
     loop: true,
     containScroll: 'trimSnaps',
     skipSnaps: true,
+    dragFree: false,
   });
 
   useEffect(() => {
     if (!emblaApi) return;
 
+    let rafId: number;
     const handler = () => {
-      emblaApi.internalEngine().scrollBody.useFriction(0.73).useDuration(21);
+      emblaApi.internalEngine().scrollBody.useFriction(0.85).useDuration(15);
     };
 
-    emblaApi.on('pointerUp', handler);
-    emblaApi.on('select', handler);
+    const throttledHandler = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(handler);
+    };
 
-    requestAnimationFrame(() => {
-      emblaApi.scrollTo(0, true);
-    });
+    emblaApi.on('pointerUp', throttledHandler);
+    emblaApi.on('select', throttledHandler);
 
     return () => {
-      emblaApi.off('pointerUp', handler);
-      emblaApi.off('select', handler);
+      if (rafId) cancelAnimationFrame(rafId);
+      emblaApi.off('pointerUp', throttledHandler);
+      emblaApi.off('select', throttledHandler);
     };
   }, [emblaApi]);
 
