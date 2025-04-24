@@ -1,3 +1,5 @@
+import Head from 'next/head';
+
 import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
 
@@ -36,24 +38,29 @@ const BasicLayout = ({
   fullScreen = true,
 }: Props) => {
   return (
-    <div
-      className={cn(
-        'relative mx-auto grid max-w-screen-layout-max grid-cols-1 bg-white',
-        fullScreen && 'min-h-screen',
-        {
-          'pb-20': hasBottomNav,
-        },
-      )}
-    >
-      {header ?? (
-        <header className="fixed top-0 z-50 flex h-14 w-full max-w-screen-layout-max items-center gap-x-1 border-b border-white bg-white px-5 text-black">
-          {hasBackButton && <BackButton backTo={backTo} />}
-          {title && <h1 className="text-lg font-bold text-black">{title}</h1>}
-        </header>
-      )}
-      <div className={cn('h-full', { 'pt-14': !header })}>{children}</div>
-      {/* {hasBottomNav && <BottomNav type={navType} />} */}
-    </div>
+    <>
+      <Head>
+        <meta name="apple-mobile-web-app-status-bar-style" content="#FFFFFF" />
+      </Head>
+      <div
+        className={cn(
+          'relative mx-auto grid max-w-screen-layout-max grid-cols-1 bg-white',
+          fullScreen && 'min-h-screen',
+          {
+            'pb-20': hasBottomNav,
+          },
+        )}
+      >
+        {header ?? (
+          <header className="fixed top-0 z-50 flex h-14 w-full max-w-screen-layout-max items-center gap-x-1 border-b border-white bg-white px-5 text-black">
+            {hasBackButton && <BackButton backTo={backTo} />}
+            {title && <h1 className="text-lg font-bold text-black">{title}</h1>}
+          </header>
+        )}
+        <div className={cn('h-full', { 'pt-14': !header })}>{children}</div>
+        {/* {hasBottomNav && <BottomNav type={navType} />} */}
+      </div>
+    </>
   );
 };
 

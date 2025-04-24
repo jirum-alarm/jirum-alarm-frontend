@@ -1,3 +1,5 @@
+import Head from 'next/head';
+
 import HomeContainerV2 from './components/(home)/HomeContainerV2';
 import AddFCMToken from './components/AddFCMToken';
 // import { getFeatureFlag } from '../actions/posthog';
@@ -7,6 +9,9 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <meta name="apple-mobile-web-app-status-bar-style" content="#101828" />
+      </Head>
       <AddFCMToken />
       {/* {flags.MAIN_PAGE_RENEWAL_FEATURE ? <HomeContainerV2 /> : <HomeContainer />} */}
 
