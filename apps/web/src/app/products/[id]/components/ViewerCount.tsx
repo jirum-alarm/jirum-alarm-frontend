@@ -19,18 +19,18 @@ export const ViewerCount = ({ count }: ViewerCountProps) => {
           <motion.div
             layout
             initial={{
-              width: '100%',
+              opacity: 0,
+              width: 1,
               y: 0,
             }}
             animate={{
+              opacity: 1,
               width: isInView ? '100%' : 'auto',
               y: isInView ? 0 : 8,
             }}
             transition={{
-              type: 'spring',
-              stiffness: 500,
-              mass: 0.5,
-              damping: 25,
+              duration: 0.3,
+              ease: 'easeOut',
             }}
           >
             <motion.div
@@ -41,11 +41,11 @@ export const ViewerCount = ({ count }: ViewerCountProps) => {
               )}
               initial={{
                 borderRadius: 0,
-                borderColor: '#EFF4FF',
+                borderColor: '#F3F7FF',
               }}
               animate={{
                 borderRadius: isInView ? 0 : 48,
-                borderColor: isInView ? '#EFF4FF' : '#B5CBFD',
+                borderColor: isInView ? '#F3F7FF' : '#B5CBFD',
               }}
             >
               <span className="text-sm text-gray-700">

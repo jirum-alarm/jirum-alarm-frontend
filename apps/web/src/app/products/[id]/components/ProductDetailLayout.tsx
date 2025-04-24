@@ -82,7 +82,7 @@ function ProductDetailLayout({
             <CommentSection productId={productId} />
             <Hr />
 
-            <div className="mt-7 flex flex-col gap-y-8">
+            <div className="mb-8 mt-7 flex flex-col gap-y-8">
               {/* <ProductFeedback product={product} /> */}
               <RelatedProductsContainer product={product} />
               <PopularProductsContainer product={product} />
@@ -185,7 +185,7 @@ function ProductInfo({ product }: { product: Product }) {
         <div className="flex items-center gap-3 pb-2">
           {product.isEnd && (
             <div
-              className={cn('border border-gray-400 bg-white px-2 text-gray-500', {
+              className={cn('border border-gray-400 bg-white px-2 text-gray-700', {
                 'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-[20px]': true,
               })}
             >
@@ -206,9 +206,9 @@ function ProductInfo({ product }: { product: Product }) {
         </div>
         <h1 className="font-medium text-gray-800">{product.title}</h1>
         <div className="flex flex-col gap-y-1 pt-3">
-          <span className="text-sm text-gray-600">
+          <div className="h-5 text-sm text-gray-600">
             {isHydrated ? displayTime(product.postedAt) : ''}
-          </span>
+          </div>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-lg font-bold text-gray-500">

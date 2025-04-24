@@ -43,10 +43,21 @@ const JirumRankingSlider = () => {
   useEffect(() => {
     if (!emblaApi) return;
 
+    const handler = () => {
+      emblaApi.internalEngine().scrollBody.useFriction(0.73).useDuration(21);
+    };
+
+    emblaApi.on('pointerUp', handler);
+    emblaApi.on('select', handler);
+
     requestAnimationFrame(() => {
-      emblaApi.reInit();
       emblaApi.scrollTo(0, true);
     });
+
+    return () => {
+      emblaApi.off('pointerUp', handler);
+      emblaApi.off('select', handler);
+    };
   }, [emblaApi]);
 
   const onSelect = useCallback(() => {
@@ -81,8 +92,12 @@ const JirumRankingSlider = () => {
   return (
     <>
       {rankingProducts.length > 0 && (
-        <div>
-          <div className="overflow-hidden" ref={emblaRef} onMouseMove={(e) => e.stopPropagation()}>
+        <div className="mt-2">
+          <div
+            className="overflow-hidden will-change-transform"
+            ref={emblaRef}
+            onMouseMove={(e) => e.stopPropagation()}
+          >
             <div
               className="flex"
               style={{

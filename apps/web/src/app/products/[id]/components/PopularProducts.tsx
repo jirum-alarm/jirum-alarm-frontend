@@ -1,18 +1,16 @@
 'use client';
 
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { ProductQueries } from '@/entities/product';
 import HorizontalProductCarousel from '@/features/carousel/HorizontalProductCarousel';
 import { ProductQuery, ThumbnailType } from '@/shared/api/gql/graphql';
-import { ProductService } from '@/shared/api/product';
 
 export default function PopularProducts({
   product,
 }: {
   product: NonNullable<ProductQuery['product']>;
 }) {
-  const { mutate } = useMutation({ mutationFn: ProductService.collectProduct });
   const result = useSuspenseQuery(
     ProductQueries.products({
       limit: 20,
@@ -21,7 +19,7 @@ export default function PopularProducts({
       isEnd: false,
     }),
   );
-  const products = result?.data?.products;
+  const products = result.data.products;
 
   if (!products?.length) {
     return null;

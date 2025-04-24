@@ -48,12 +48,12 @@ export default function RecommendPageHeader() {
   };
 
   return (
-    <header className="fixed top-0 z-50 flex h-14 w-full max-w-screen-layout-max items-center justify-between bg-white pl-[4px] pr-[20px] text-black">
-      <div className="flex w-full items-center">
-        <div>{<BackButton backTo={PAGE.HOME} />}</div>
+    <header className="fixed top-0 z-50 flex h-[56px] w-full max-w-screen-layout-max items-center justify-between bg-white px-5">
+      <div className="flex grow items-center gap-x-1">
+        <BackButton backTo={PAGE.HOME} />
         <h2 className="text-lg font-semibold text-black">지금 추천하는 상품</h2>
       </div>
-      <div className="flex w-full items-center justify-end gap-x-[16px]">
+      <div className="flex items-center gap-x-4">
         <Link
           href={PAGE.SEARCH}
           onClick={handleSearch}
@@ -61,9 +61,14 @@ export default function RecommendPageHeader() {
           title="검색"
           className="py-2"
         >
-          <Search color="#101828" />
+          <Search />
         </Link>
-        <button onClick={handleShare} className="hover:cursor-pointer">
+        <button
+          onClick={handleShare}
+          className="-m-2 p-2 hover:cursor-pointer"
+          aria-label="공유하기"
+          title="공유하기"
+        >
           <Share />
         </button>
       </div>

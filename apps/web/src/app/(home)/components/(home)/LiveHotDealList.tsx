@@ -27,7 +27,7 @@ const LiveHotDealList = () => {
         ))}
       </div>
       <AppDownloadCTA />
-      <div className="mt-[20px] grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
+      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
         {products.slice(firstRenderingCount).map((product, i) => (
           <ProductLiveHotdealsImageCard
             key={product.id}

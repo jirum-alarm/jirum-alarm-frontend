@@ -36,7 +36,7 @@ function RecommendButton({ product }: { product: Product }) {
       variant={'outlined'}
       color={'secondary'}
       className={cn(
-        `flex h-[36px] w-[110px] items-center justify-center gap-x-1 rounded-full bg-white text-gray-700`,
+        `flex h-[36px] items-center justify-center gap-x-1 rounded-full bg-white px-3.5 text-gray-700`,
         {
           'border border-secondary-500 font-semibold text-secondary-700':
             product.isMyLike !== null && product.isMyLike,

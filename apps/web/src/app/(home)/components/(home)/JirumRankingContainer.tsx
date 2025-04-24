@@ -9,7 +9,7 @@ import JirumRankingSlider from './JirumRankingSlider';
 const JirumRankingContainer = () => {
   return (
     <div className="w-full">
-      <div className="mb-2 flex items-center justify-between px-5 py-3">
+      <div className="flex items-center justify-between px-5 py-3">
         <h2 className="text-lg font-bold text-gray-900">지름알림 랭킹</h2>
         <Link className="text-sm text-gray-500" href={PAGE.TRENDING}>
           더보기

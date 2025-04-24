@@ -21,9 +21,6 @@ export default function RelatedProducts({
   }
 
   return (
-    <section className="px-5">
-      <h2 className="pb-5 font-semibold text-gray-900">다른 고객이 함께 본 상품</h2>
-      <HorizontalProductCarousel products={products} type="hotDeal" logging={{ page: 'DETAIL' }} />
-    </section>
+    <HorizontalProductCarousel products={products} type="hotDeal" logging={{ page: 'DETAIL' }} />
   );
 }
