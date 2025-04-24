@@ -43,3 +43,5 @@ export { default as ThumbsupFill } from './ThumbsupFill';
 export { default as Heart } from './Heart';
 export { default as BubbleChat } from './BubbleChat';
 export { default as BubbleChatFill } from './BubbleChatFill';
+export { default as AIIcon } from './AI';
+export * as CategoryIcons from './category';
