@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react';
 
-import { EVENT } from '@/constants/mixpanel';
-import { mp } from '@/components/Mixpanel';
 import useMyRouter from '@/hooks/useMyRouter';
 
 const KEYWORDS = [
@@ -42,7 +40,7 @@ export default function RecommendationKeywords() {
   }, []);
   return (
     <section>
-      <h2 className="py-4">추천 검색어</h2>
+      <h2 className="flex h-[56px] items-center font-semibold text-gray-900">추천 검색어</h2>
       <div className="flex flex-wrap gap-2">
         {keywords.map((keyword, i) => (
           <Chip key={i} keyword={keyword} />
@@ -58,11 +56,12 @@ function Chip({ keyword }: { keyword: string }) {
   const handleClick = () => {
     router.push(`/search?keyword=${keyword}`);
 
-    mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
-      keyword,
-      type: EVENT.PRODUCT_SEARCH.TYPE.RECOMMENDATION,
-      page: EVENT.PAGE.SEARCH,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
+    //   keyword,
+    //   type: EVENT.PRODUCT_SEARCH.TYPE.RECOMMENDATION,
+    //   page: EVENT.PAGE.SEARCH,
+    // });
   };
 
   return (

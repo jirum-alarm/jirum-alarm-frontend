@@ -1,4 +1,5 @@
 'use client';
+
 import { useMutation } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect } from 'react';

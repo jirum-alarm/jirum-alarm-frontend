@@ -39,6 +39,7 @@ export const QueryWishlists = gql`
         hotDealType
         thumbnail
         isMyWishlist
+        categoryId
       }
     }
   }

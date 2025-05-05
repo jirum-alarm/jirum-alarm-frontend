@@ -1,6 +1,3 @@
-import { graphql } from '../api/gql';
-import { TypedDocumentString } from '../api/gql/graphql';
-
 import {
   getAccessToken,
   getRefreshToken,
@@ -8,6 +5,9 @@ import {
   setRefreshToken,
 } from '@/app/actions/token';
 import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
+
+import { graphql } from '../api/gql';
+import { TypedDocumentString } from '../api/gql/graphql';
 
 const MutationLoginByRefreshToken = graphql(`
   mutation QueryLoginByRefreshToken {
@@ -38,7 +38,7 @@ export class FetchError extends Error {
   ) {
     super(`Fetch failed with status ${response.status}`);
     this.name = 'FetchError';
-    this.message = data;
+    this.message = JSON.stringify({ data });
   }
 }
 
@@ -164,7 +164,7 @@ class HttpClient {
         };
       };
     };
-    if (data.loginByRefreshToken) return;
+    if (!data?.loginByRefreshToken) return;
     const { accessToken, refreshToken: newRefreshToken } = data.loginByRefreshToken;
 
     await setAccessToken(accessToken);

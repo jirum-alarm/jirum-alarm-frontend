@@ -5,6 +5,7 @@ export const buttonVaraint = cva('w-full', {
     size: {
       lg: ['h-12 px-3 rounded-[8px] text-base'],
       md: ['rounded-[8px]'],
+      sm: ['rounded-[8px]'],
     },
     variant: {
       outlined: ['border'],
@@ -36,8 +37,14 @@ export const buttonVaraint = cva('w-full', {
     },
     {
       variant: 'filled',
+      color: 'primary',
+      size: 'sm',
+      class: 'font-semibold bg-gray-800 text-primary-500 w-auto px-3 py-1 h-auto',
+    },
+    {
+      variant: 'filled',
       color: 'secondary',
-      class: 'font-semibold bg-gray-100 text-gray-700',
+      class: 'font-semibold bg-gray-100 text-gray-700 active:text-gray-400',
     },
     {
       variant: 'filled',

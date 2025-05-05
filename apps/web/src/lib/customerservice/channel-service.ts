@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { ICustomerService } from './customer-service';
 
 declare global {

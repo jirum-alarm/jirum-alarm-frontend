@@ -1,12 +1,12 @@
-import Link from '@/features/Link';
-
-import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
+import Link from '@/features/Link';
+import ProductImage from '@/features/products/components/ProductImage';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
-import { mp } from '@/components/Mixpanel';
 import { type QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
+
 import HotdealBadge from './HotdealBadge';
 
 export function ProductLiveHotdealsImageCard({
@@ -18,13 +18,16 @@ export function ProductLiveHotdealsImageCard({
   collectProduct: (productId: number) => void;
   logging: { page: keyof typeof EVENT.PAGE };
 }) {
+  const isHydrated = useIsHydrated();
+
   const handleClick = () => {
     collectProduct(+product.id);
 
-    mp?.track(EVENT.PRODUCT_CLICK.NAME, {
-      product,
-      page: EVENT.PAGE[logging.page],
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.PRODUCT_CLICK.NAME, {
+    //   product,
+    //   page: EVENT.PAGE[logging.page],
+    // });
   };
   return (
     <Link
@@ -34,9 +37,20 @@ export function ProductLiveHotdealsImageCard({
       onClick={handleClick}
     >
       <div className={'relative aspect-square overflow-hidden rounded-lg border border-gray-200'}>
+        <ProductImage
+          src={product?.thumbnail ?? ''}
+          title={product.title}
+          categoryId={product.categoryId}
+          type="product"
+          alt={product.title}
+          width={162}
+          height={162}
+          sizes="(max-width: 320px) 140px, 162px"
+          className="object-cover"
+        />
         {product.isEnd && (
           <div
-            className={cn('border border-gray-400 bg-white px-2 text-gray-500', {
+            className={cn('bg-white px-2 text-gray-700', {
               'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
                 true,
             })}
@@ -49,13 +63,6 @@ export function ProductLiveHotdealsImageCard({
             <HotdealBadge badgeVariant="card" hotdealType={product.hotDealType} />
           </div>
         )}
-        <ImageWithFallback
-          src={product?.thumbnail ?? ''}
-          alt={product.title}
-          fill
-          className="object-cover"
-          sizes="300px"
-        />
       </div>
       <div className="flex flex-col">
         <span
@@ -70,7 +77,9 @@ export function ProductLiveHotdealsImageCard({
             {product?.price ?? ''}
           </span>
           {product?.price && <span className="w-2"></span>}
-          <span className="text-sm text-gray-600">{displayTime(product.postedAt)}</span>
+          <span className="text-sm text-gray-600">
+            {isHydrated ? displayTime(product.postedAt) : ''}
+          </span>
         </div>
       </div>
     </Link>

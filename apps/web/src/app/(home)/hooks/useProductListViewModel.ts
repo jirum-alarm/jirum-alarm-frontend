@@ -3,11 +3,9 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { EVENT } from '@/constants/mixpanel';
 import { QueryProducts } from '@/graphql';
 import { IProductOutput, OrderOptionType, ProductOrderType } from '@/graphql/interface/product';
 import { useDevice } from '@/hooks/useDevice';
-import { mp } from '@/components/Mixpanel';
 
 const limit = 20;
 const allCategory = { id: '0', name: '전체' };
@@ -79,10 +77,11 @@ export const useProductListViewModel = () => {
     const search = current.toString();
     history.pushState({}, '', '?' + search);
 
-    mp?.track(EVENT.CATEGORY_CHECK.NAME, {
-      category: categoriesData.categories.find((category) => category.id === String(index)),
-      page: EVENT.PAGE.HOME,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.CATEGORY_CHECK.NAME, {
+    //   category: categoriesData.categories.find((category) => category.id === String(index)),
+    //   page: EVENT.PAGE.HOME,
+    // });
   };
 
   const fetchMoreProducts = () => {

@@ -1,12 +1,14 @@
 'use client';
+
 import NextLink, { type LinkProps as NextLinkProps } from 'next/link';
-import { type AnchorHTMLAttributes, forwardRef, type ReactNode } from 'react';
-import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
+import { forwardRef } from 'react';
+
 import { useDevice } from '@/hooks/useDevice';
+import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 
 type LinkProps = NextLinkProps &
-  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, keyof NextLinkProps> & {
-    children?: ReactNode;
+  Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof NextLinkProps> & {
+    children?: React.ReactNode;
   };
 
 const Link = forwardRef<HTMLAnchorElement, LinkProps>(function LinkWithRef(

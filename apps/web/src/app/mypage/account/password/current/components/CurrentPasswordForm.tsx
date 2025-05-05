@@ -1,7 +1,7 @@
+import Button from '@/components/common/Button';
+
 import PasswordInput from '../../components/PasswordInput';
 import useCurrentPasswordFormViewModel from '../hooks/useCurrentPasswordFormViewModel';
-
-import Button from '@/components/common/Button';
 
 interface CurrentPasswordFormProps {
   nextStep: () => void;

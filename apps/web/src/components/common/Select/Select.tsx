@@ -1,12 +1,13 @@
 import { type VariantProps } from 'class-variance-authority';
 import React, { isValidElement, useEffect, useId, useMemo, useRef, useState } from 'react';
 
-import { ArrowDown } from '../icons';
-import { SelectContext } from './context/SelectContext';
-import { selectButtonVaraint, selectListContainerVariant } from './variant/select';
-
 import useOutsideClick from '@/hooks/useOutsideClick';
 import { cn } from '@/lib/cn';
+
+import { ArrowDown } from '../icons';
+
+import { SelectContext } from './context/SelectContext';
+import { selectButtonVaraint, selectListContainerVariant } from './variant/select';
 
 interface SelectProps
   extends Omit<
@@ -56,7 +57,7 @@ export const Select = ({
     setIsExpanded(false);
   };
 
-  const selectcontextValue = React.useMemo(
+  const selectcontextValue = useMemo(
     () => ({
       selectedIndex,
       setSelectedIndex: onSetSelectedIndex,

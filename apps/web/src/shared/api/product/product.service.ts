@@ -1,17 +1,18 @@
+import { httpClient } from '@/shared/lib/http-client';
+
 import { graphql } from '../gql';
 import {
   MutationCollectProductMutationVariables,
   MutationReportExpiredProductMutationVariables,
   ProductGuidesQueryVariables,
   ProductQueryVariables,
+  QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
+  QueryReportUserNamesQueryVariables,
   TogetherViewedProductsQueryVariables,
 } from '../gql/graphql';
-
-import { httpClient } from '@/shared/lib/http-client';
-import { gql } from '@apollo/client';
 
 export class ProductService {
   static async getRankingProducts() {
@@ -38,6 +39,10 @@ export class ProductService {
       .then((res) => res.data);
   }
 
+  static async getReportUserNames(variables: QueryReportUserNamesQueryVariables) {
+    return httpClient.execute(QueryReportUserNames, variables).then((res) => res.data);
+  }
+
   static async getProductGuides(variables: ProductGuidesQueryVariables) {
     return httpClient.execute(QueryProductGuides, variables).then((res) => res.data);
   }
@@ -58,6 +63,10 @@ export class ProductService {
   static async getProductsByKeyword(variables: QueryProductsByKeywordQueryVariables) {
     return httpClient.execute(QueryProductsByKeyword, variables).then((res) => res.data);
   }
+
+  static async getReactionKeywords(variables: QueryCategorizedReactionKeywordsArgs) {
+    return httpClient.execute(QueryCategorizedReactionKeywords, variables).then((res) => res.data);
+  }
 }
 
 const QueryRankingProducts = graphql(`
@@ -68,6 +77,7 @@ const QueryRankingProducts = graphql(`
       url
       price
       thumbnail
+      categoryId
     }
   }
 `);
@@ -91,6 +101,10 @@ const QueryProduct = graphql(`
       wishlistCount
       positiveCommunityReactionCount
       negativeCommunityReactionCount
+      author {
+        id
+        nickname
+      }
       provider {
         id
         name
@@ -193,6 +207,12 @@ const QueryCommunityRandomRankingProducts = graphql(`
   }
 `);
 
+const QueryReportUserNames = graphql(`
+  query QueryReportUserNames($productId: Int!) {
+    reportUserNames(productId: $productId)
+  }
+`);
+
 const QueryProductGuides = graphql(`
   query productGuides($productId: Int!) {
     productGuides(productId: $productId) {
@@ -276,6 +296,20 @@ const QueryProductsByKeyword = graphql(`
       }
       searchAfter
       postedAt
+    }
+  }
+`);
+
+const QueryCategorizedReactionKeywords = graphql(`
+  query QueryCategorizedReactionKeywords($id: Int!) {
+    categorizedReactionKeywords(id: $id) {
+      lastUpdatedAt
+      items {
+        type
+        name
+        count
+        tag
+      }
     }
   }
 `);

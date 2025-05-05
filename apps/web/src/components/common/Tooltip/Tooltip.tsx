@@ -1,13 +1,25 @@
+import {
+  cloneElement,
+  isValidElement,
+  useRef,
+  useState,
+  ReactElement,
+  HTMLAttributes,
+  RefAttributes,
+} from 'react';
+
 import useOutsideClick from '@/hooks/useOutsideClick';
+import { cn } from '@/lib/cn';
 import { composeEventHandlers } from '@/util/event';
-import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
   content: React.ReactNode | string;
-  children: React.ReactNode;
+  children: ReactElement<HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement>>;
+  align?: 'left' | 'right';
+  polygonOffset?: number;
 }
 
-const Tooltip = ({ content, children }: Props) => {
+const Tooltip = ({ content, children, align = 'left', polygonOffset = 28 }: Props) => {
   const [isShowToolTip, setIsShowToolTip] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const toolTipContentRef = useRef<HTMLDivElement>(null);
@@ -20,17 +32,18 @@ const Tooltip = ({ content, children }: Props) => {
   const setTooltipPosition = () => {
     if (!triggerRef.current) return;
     const { offsetTop, offsetLeft, offsetHeight, offsetWidth } = triggerRef.current;
-    // const {
-    //   top,
-    //   left,
-    //   width: triggerCompoWidth,
-    //   height: triggerCompoHeight,
-    // } = triggerRef.current.getBoundingClientRect();
-    const polygonOffset = 28; // tooltip container기준 Polygon의 위치
-    const polygonWidth = 10; // Polygon의 너비
+    const polygonWidth = 10;
     const offsetY = 14;
-    const offsetX = polygonOffset - offsetWidth / 2 + polygonWidth / 2;
-    setPos({ x: offsetLeft - offsetX, y: offsetTop + offsetHeight + offsetY });
+
+    let x = 0;
+    if (align === 'left') {
+      const offsetX = polygonOffset - offsetWidth / 2 + polygonWidth / 2;
+      x = offsetLeft - offsetX;
+    } else if (align === 'right') {
+      const offsetX = -polygonOffset + offsetWidth / 2 - polygonWidth / 2;
+      x = offsetLeft + offsetX;
+    }
+    setPos({ x, y: offsetTop + offsetHeight + offsetY });
   };
 
   const handleShowToolTipClick = () => {
@@ -38,11 +51,11 @@ const Tooltip = ({ content, children }: Props) => {
     setTooltipPosition();
   };
 
-  const triggerButton = React.isValidElement(children)
-    ? React.cloneElement(children, {
+  const triggerButton = isValidElement(children)
+    ? cloneElement(children, {
         ...children.props,
         ref: triggerRef,
-        onClick: composeEventHandlers(children?.props?.onClick, handleShowToolTipClick),
+        onClick: composeEventHandlers(children.props.onClick, handleShowToolTipClick),
       })
     : null;
 
@@ -52,14 +65,18 @@ const Tooltip = ({ content, children }: Props) => {
       {isShowToolTip && (
         <div
           className="absolute z-50 whitespace-nowrap will-change-transform"
-          // style={{ transform: `translate(${pos.x}px,${pos.y}px)` }}
           style={{
-            top: pos.y, // 트리거 요소 기준 아래쪽
-            left: pos.x, // 중앙 정렬
+            top: pos.y - 12,
+            [align]: pos.x,
           }}
         >
           <div className="rounded-lg bg-gray-600 px-[16px] py-[10px]">{content}</div>
-          <span className="absolute -top-[8px] left-[28px] text-gray-600">
+          <span
+            className={cn('absolute -top-[8px] text-gray-600')}
+            style={{
+              [align]: polygonOffset,
+            }}
+          >
             <svg
               width="10"
               height="8"

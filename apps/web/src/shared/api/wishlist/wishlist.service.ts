@@ -1,6 +1,6 @@
-import { graphql } from '../gql';
-
 import { httpClient } from '@/shared/lib/http-client';
+
+import { graphql } from '../gql';
 import {
   AddWishlistMutationVariables,
   QueryWishlistsQueryVariables,
@@ -67,6 +67,7 @@ const QueryWishlists = graphql(`
         hotDealType
         thumbnail
         isMyWishlist
+        categoryId
       }
     }
   }
@@ -82,4 +83,8 @@ const QueryWishlists = graphql(`
 //     wishlistCount
 //   }
 // `);
-const QueryWishlistCount = graphql('\n  query QueryWishlistCount {\n    wishlistCount\n  }\n');
+const QueryWishlistCount = graphql(`
+  query QueryWishlistCount {
+    wishlistCount
+  }
+`);

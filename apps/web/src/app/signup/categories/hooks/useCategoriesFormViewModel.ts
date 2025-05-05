@@ -1,6 +1,6 @@
-import { Registration } from '../../page';
-
 import { MAX_SELECTION_COUNT } from '@/constants/categories';
+
+import { Registration } from '../../page';
 
 export const useCategoriesFormViewModel = ({
   registration,

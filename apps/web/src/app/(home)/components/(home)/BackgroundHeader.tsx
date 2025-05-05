@@ -1,17 +1,30 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import { RoundedLogo } from '@/components/common/icons';
-import { cn } from '@/lib/cn';
-import { mp } from '@/components/Mixpanel';
-import { EVENT } from '@/constants/mixpanel';
 import SearchLinkButton from '@/components/SearchLinkButton';
 import Link from '@/features/Link';
+import { cn } from '@/lib/cn';
 
 const BackgroundHeader = () => {
+  useEffect(() => {
+    const statusBar = document.querySelector('meta[name="theme-color"]');
+    if (statusBar) {
+      statusBar.setAttribute('content', '#101828');
+    }
+    return () => {
+      if (statusBar) {
+        statusBar.setAttribute('content', '#FFFFFF');
+      }
+    };
+  }, []);
+
   const handleClick = () => {
-    mp?.track(EVENT.OPEN_KAKAO_TALK.NAME, {
-      page: EVENT.PAGE.HOME,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.OPEN_KAKAO_TALK.NAME, {
+    //   page: EVENT.PAGE.HOME,
+    // });
   };
 
   return (
@@ -21,7 +34,7 @@ const BackgroundHeader = () => {
           <RoundedLogo />
           <h2 className="text-lg font-bold text-slate-50">지름알림</h2>
         </div>
-        <SearchLinkButton />
+        <SearchLinkButton color="#FFF" />
       </header>
       <div className="px-5 pb-4 pt-2">
         <Link

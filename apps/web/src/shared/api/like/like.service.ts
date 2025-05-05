@@ -1,6 +1,6 @@
-import { graphql } from '../gql';
-
 import { httpClient } from '@/shared/lib/http-client';
+
+import { graphql } from '../gql';
 import { AddUserLikeOrDislikeMutationVariables } from '../gql/graphql';
 
 export class LikeService {

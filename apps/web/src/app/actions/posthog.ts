@@ -71,7 +71,7 @@ const validateFeatureFlagKeys = (data: FeatureFlagMap) => {
 async function getFeatureFlag() {
   const posthog = postHogClient();
   const cookie = cookies().get('bootstrapData') as BootstrapCookie;
-  const { distinctID, featureFlags } = JSON.parse(cookie.value) as BootstrapData;
+  const { distinctID, featureFlags: _featureFlags } = JSON.parse(cookie.value) as BootstrapData;
   posthog.capture({
     distinctId: distinctID,
     event: 'Page was loaded',

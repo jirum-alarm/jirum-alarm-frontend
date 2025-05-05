@@ -1,20 +1,20 @@
 'use client';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import Button from '@/components/common/Button';
-import { EVENT } from '@/constants/mixpanel';
-import { PAGE } from '@/constants/page';
-import { mp } from '@/components/Mixpanel';
-import { ProductQuery } from '@/shared/api/gql/graphql';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
 import { Heart } from '@/components/common/icons';
-import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
+import { useToast } from '@/components/common/Toast';
+import { PAGE } from '@/constants/page';
+import { ProductQueries } from '@/entities/product';
 import { WishlistQueries } from '@/entities/wishlist';
+import Link from '@/features/Link';
 import { useDevice } from '@/hooks/useDevice';
-import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 import useMyRouter from '@/hooks/useMyRouter';
+import { ProductQuery } from '@/shared/api/gql/graphql';
+import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
+import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 
 export default function LikeButton({
   product,
@@ -23,6 +23,8 @@ export default function LikeButton({
   product: NonNullable<ProductQuery['product']>;
   isUserLogin: boolean;
 }) {
+  const { toast } = useToast();
+
   const { isJirumAlarmApp } = useDevice();
   const [isLiked, setIsLiked] = useState(product.isMyWishlist);
 
@@ -44,6 +46,7 @@ export default function LikeButton({
           queryKey: WishlistQueries.lists(),
         }),
       ]);
+      toast(<LikeToast />);
     },
   });
   const { mutate: removeWishlist } = useMutation({
@@ -62,10 +65,11 @@ export default function LikeButton({
 
   const handleClickWishlist = () => {
     if (!isUserLogin) {
-      mp?.track(EVENT.PRODUCT_WISH.NAME, {
-        type: EVENT.PRODUCT_WISH.TYPE.NOT_LOGGED_IN,
-        page: EVENT.PAGE.DETAIL,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_WISH.NAME, {
+      //   type: EVENT.PRODUCT_WISH.TYPE.NOT_LOGGED_IN,
+      //   page: EVENT.PAGE.DETAIL,
+      // });
 
       if (isJirumAlarmApp) {
         WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
@@ -79,10 +83,11 @@ export default function LikeButton({
     }
 
     if (isLiked) {
-      mp?.track(EVENT.PRODUCT_WISH.NAME, {
-        type: EVENT.PRODUCT_WISH.TYPE.REMOVE,
-        page: EVENT.PAGE.DETAIL,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_WISH.NAME, {
+      //   type: EVENT.PRODUCT_WISH.TYPE.REMOVE,
+      //   page: EVENT.PAGE.DETAIL,
+      // });
 
       removeWishlist({ productId });
       setIsLiked(false);
@@ -91,10 +96,11 @@ export default function LikeButton({
     }
 
     if (!isLiked) {
-      mp?.track(EVENT.PRODUCT_WISH.NAME, {
-        type: EVENT.PRODUCT_WISH.TYPE.ADD,
-        page: EVENT.PAGE.DETAIL,
-      });
+      // TODO: Need GTM Migration
+      // mp?.track(EVENT.PRODUCT_WISH.NAME, {
+      //   type: EVENT.PRODUCT_WISH.TYPE.ADD,
+      //   page: EVENT.PAGE.DETAIL,
+      // });
       addWishlist({ productId });
       setIsLiked(true);
 
@@ -106,10 +112,23 @@ export default function LikeButton({
     <Button
       variant="outlined"
       onClick={handleClickWishlist}
-      className="flex w-[56px] min-w-[56px] flex-col items-center justify-center border-gray-300 p-2"
+      className="flex w-[48px] flex-col items-center justify-center border-gray-300 p-2"
     >
-      <Heart isLiked={!!isLiked} />
-      <span className="text-[11px] leading-4 text-gray-900">찜하기</span>
+      <Heart className="shrink-0" color="#98A2B3" isLiked={!!isLiked} />
+      <span className="text-[11px] leading-4 text-gray-800">찜하기</span>
     </Button>
   );
 }
+
+const LikeToast = () => {
+  return (
+    <div className="flex w-full items-center justify-between gap-2">
+      <p>찜 목록에 추가되었어요.</p>
+      <Link href={PAGE.LIKE}>
+        <Button size="sm" className="rounded-3xl" color="primary" variant="filled">
+          보러가기
+        </Button>
+      </Link>
+    </div>
+  );
+};

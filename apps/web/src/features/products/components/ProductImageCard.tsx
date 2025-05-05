@@ -1,38 +1,39 @@
 'use client';
 
-import Image from 'next/image';
-import Link from '@/features/Link';
-import React, { useState } from 'react';
-
-import { IllustEmpty } from '@/components/common/icons';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
+import Link from '@/features/Link';
+import ProductImage from '@/features/products/components/ProductImage';
 import { IProduct } from '@/graphql/interface';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
-import { mp } from '@/components/Mixpanel';
 import { QueryProductsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
+
+import { useCollectProduct } from '../hooks';
+
 import HotdealBadge from './HotdealBadge';
-import { convertToWebp } from '../../../util/image';
 
 export function ProductImageCard({
   product,
-  collectProduct,
   type = 'product',
   logging,
 }: {
   product: IProduct | QueryProductsQuery['products'][number];
-  collectProduct: (productId: number) => void;
   type?: 'product' | 'hotDeal';
   logging: { page: keyof typeof EVENT.PAGE };
 }) {
+  const collectProduct = useCollectProduct();
+  const isHydrated = useIsHydrated();
+
   const handleClick = () => {
     collectProduct(+product.id);
 
-    mp?.track(EVENT.PRODUCT_CLICK.NAME, {
-      product,
-      page: EVENT.PAGE[logging.page],
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.PRODUCT_CLICK.NAME, {
+    //   product,
+    //   page: EVENT.PAGE[logging.page],
+    // });
   };
 
   return (
@@ -40,6 +41,7 @@ export function ProductImageCard({
       href={PAGE.DETAIL + '/' + product.id}
       prefetch={false}
       className={cn({
+        'inline-block': true,
         'txs:w-[140px] xs:w-[162px]': type === 'product',
         'w-[120px]': type === 'hotDeal',
       })}
@@ -47,14 +49,25 @@ export function ProductImageCard({
     >
       <div
         className={cn({
-          'relative overflow-hidden rounded-lg border border-gray-200': true,
+          'relative aspect-square overflow-hidden rounded-lg border border-gray-200': true,
           'txs:h-[140px] xs:h-[162px]': type === 'product',
           'h-[120px]': type === 'hotDeal',
         })}
       >
+        <ProductImage
+          src={product?.thumbnail ?? ''}
+          title={product.title}
+          categoryId={product.categoryId}
+          type={type}
+          alt={product.title}
+          width={162}
+          height={162}
+          sizes="(max-width: 320px) 140px, 162px"
+          className="h-full object-cover"
+        />
         {type === 'product' && product.isEnd && (
           <div
-            className={cn('border border-gray-400 bg-white px-2 text-gray-500', {
+            className={cn('bg-white px-2 text-gray-700', {
               'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
                 true,
             })}
@@ -67,13 +80,11 @@ export function ProductImageCard({
             <HotdealBadge badgeVariant="card" hotdealType={product.hotDealType} />
           </div>
         )}
-
-        <ImageWithFallback src={product?.thumbnail ?? ''} title={product.title} type={type} />
       </div>
       <div className="flex flex-col">
         <span
           className={cn({
-            'line-clamp-2 h-12 break-words pt-2 text-sm text-gray-700': true,
+            'line-clamp-2 h-12 w-full break-words pt-2 text-sm text-gray-700': true,
           })}
         >
           {product.title}
@@ -85,7 +96,9 @@ export function ProductImageCard({
           {type === 'product' && (
             <>
               {product?.price && <span className="w-2"></span>}
-              <span className="text-sm text-gray-600">{displayTime(product.postedAt)}</span>
+              <span className="text-sm text-gray-600">
+                {isHydrated ? displayTime(product.postedAt) : ''}
+              </span>
             </>
           )}
         </div>
@@ -94,52 +107,52 @@ export function ProductImageCard({
   );
 }
 
-const ImageWithFallback = React.memo(function ImageWithFallback({
-  src,
-  title,
-  type,
-}: {
-  src: string | undefined;
-  title: string;
-  type: 'product' | 'hotDeal';
-}) {
-  const [imageSrc, setImageSrc] = useState<string | undefined>(convertToWebp(src));
-  const [error, setError] = useState(false);
+// const ImageWithFallback = memo(function ImageWithFallback({
+//   src,
+//   title,
+//   type,
+// }: {
+//   src: string | undefined;
+//   title: string;
+//   type: 'product' | 'hotDeal';
+// }) {
+//   const imageSrc = convertToWebp(src);
 
-  const handleError = () => {
-    if (!imageSrc || imageSrc.endsWith('.webp')) {
-      setImageSrc(src);
-    } else {
-      setError(true);
-    }
-  };
+//   const [error, setError] = useState(false);
+//   const handleError = () => {
+//     setError(true);
+//   };
 
-  return (
-    <>
-      {error || !src ? (
-        <NoImage type={type} />
-      ) : (
-        <Image
-          src={imageSrc ?? ''}
-          width={162}
-          height={162}
-          alt={title}
-          aria-hidden="true"
-          onError={handleError}
-          placeholder="blur"
-          blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-          loading="lazy"
-        />
-      )}
-    </>
-  );
-});
+//   if (!src || !imageSrc || isError) {
+//     return <NoImage />;
+//   }
 
-function NoImage({ type }: { type: 'product' | 'hotDeal' }) {
-  return (
-    <div className="flex h-full items-center justify-center bg-gray-50">
-      {/* {type === 'hotDeal' ? <IllustStandingSmall /> : <IllustStanding />} */}
-      <IllustEmpty />
-    </div>
-  );
-}
+//   return (
+//     <>
+//       {error || !imageSrc ? (
+//         <NoImage type={type} />
+//       ) : (
+//         <Image
+//           src={imageSrc}
+//           width={162}
+//           height={162}
+//           alt={title}
+//           aria-hidden="true"
+//           onError={handleError}
+//           placeholder="blur"
+//           blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+//           loading="lazy"
+//         />
+//       )}
+//     </>
+//   );
+// });
+
+// function NoImage({ type }: { type: 'product' | 'hotDeal' }) {
+//   return (
+//     <div className="flex h-full items-center justify-center bg-gray-50">
+//       {/* {type === 'hotDeal' ? <IllustStandingSmall /> : <IllustStanding />} */}
+//       <IllustEmpty />
+//     </div>
+//   );
+// }

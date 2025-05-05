@@ -1,9 +1,9 @@
 import { VariantProps } from 'class-variance-authority';
-import React from 'react';
-
-import { toastVariant } from './variant/toast';
+import { forwardRef } from 'react';
 
 import { cn } from '@/lib/cn';
+
+import { toastVariant } from './variant/toast';
 
 interface ToastProps extends React.ComponentProps<'div'>, VariantProps<typeof toastVariant> {
   variant?: 'default';
@@ -11,7 +11,7 @@ interface ToastProps extends React.ComponentProps<'div'>, VariantProps<typeof to
   children?: React.ReactNode;
 }
 
-export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
+export const Toast = forwardRef<HTMLDivElement, ToastProps>(
   ({ variant = 'default', show, className, children, ...rest }, ref) => {
     return (
       show && (

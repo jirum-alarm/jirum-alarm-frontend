@@ -19,6 +19,10 @@ export const QueryProduct = gql`
       wishlistCount
       positiveCommunityReactionCount
       negativeCommunityReactionCount
+      author {
+        id
+        nickname
+      }
       provider {
         id
         name
@@ -51,6 +55,13 @@ export const QueryProduct = gql`
     }
   }
 `;
+
+export const QueryReportUserNames = gql`
+  query QueryReportUserNames($productId: Int!) {
+    reportUserNames(productId: $productId)
+  }
+`;
+
 export const QueryProductGuides = gql`
   query productGuides($productId: Int!) {
     productGuides(productId: $productId) {
@@ -115,6 +126,7 @@ export const QueryRankingProducts = gql`
       url
       price
       thumbnail
+      categoryId
     }
   }
 `;
@@ -216,5 +228,19 @@ export const MutationCollectProduct = gql`
 export const MutationReportExpiredProduct = gql`
   mutation MutationReportExpiredProduct($productId: Int!) {
     reportExpiredProduct(productId: $productId)
+  }
+`;
+
+export const QueryCategorizedReactionKeywords = gql`
+  query QueryCategorizedReactionKeywords($id: Int!) {
+    categorizedReactionKeywords(id: $id) {
+      lastUpdatedAt
+      items {
+        type
+        name
+        count
+        tag
+      }
+    }
   }
 `;

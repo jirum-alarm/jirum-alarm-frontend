@@ -1,197 +1,296 @@
 'use client';
-import Link from '@/features/Link';
-import { useSearchParams } from 'next/navigation';
-import React, { useRef, useEffect, useState, Suspense, KeyboardEvent } from 'react';
-import type { Swiper as SwiperType } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
-import TrendingList from '../TrendingList';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { animate, motion, useMotionValue, useSpring } from 'motion/react';
+import { useQueryState } from 'nuqs';
+import { Tabs } from 'radix-ui';
+import {
+  useCallback,
+  Suspense,
+  useEffect,
+  useRef,
+  useMemo,
+  useState,
+  startTransition,
+} from 'react';
+import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
+import { SwiperOptions } from 'swiper/types';
 
-import { IllustStandingSmall, Setting } from '@/components/common/icons';
-
-import 'swiper/css';
-import { PAGE } from '@/constants/page';
+import ApiErrorBoundary from '@/components/ApiErrorBoundary';
+import { Setting } from '@/components/common/icons';
 import { CategoryQueries } from '@/entities/category';
+import Link from '@/features/Link';
+import ProductImageCardSkeleton from '@/features/products/components/ProductImageCardSkeleton';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
-import useMyRouter from '@/hooks/useMyRouter';
-import ApiErrorBoundary from '@/components/ApiErrorBoundary';
+import TrendingList from '../TrendingList';
 
-export const TrendingContainer = () => {
+const SWIPER_OPTIONS: SwiperOptions = {
+  slidesPerView: 1,
+  spaceBetween: 0,
+  loop: false,
+};
+
+type Props = {
+  initialTab: number;
+};
+
+export const TrendingContainer = ({ initialTab }: Props) => {
   const {
     data: { categories },
   } = useSuspenseQuery(CategoryQueries.categoriesForUser());
-  const { isHeaderVisible } = useVisibilityOnScroll();
-  const router = useMyRouter();
-  const searchParams = useSearchParams();
-  const tabParam = searchParams.get('tab');
 
-  const [activeTab, setActiveTab] = useState(tabParam ? parseInt(tabParam) : 0);
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
-  const tabsRef = useRef<(HTMLLIElement | null)[]>([]);
-  const tabListRef = useRef<HTMLUListElement>(null);
-  const swiperRef = useRef<SwiperType | null>(null);
+  const allCategories = useMemo(() => [{ id: 0, name: '전체' }, ...categories], [categories]);
+  const categoryIds = allCategories.map((c) => c.id);
 
-  const updateIndicator = (index: number) => {
-    const currentTab = tabsRef.current[index];
-    if (currentTab) {
-      setIndicatorStyle({
-        left: currentTab.offsetLeft,
-        width: currentTab.offsetWidth,
+  const [tabId, setTabId] = useQueryState('tab', {
+    defaultValue: initialTab,
+    parse: (value) => {
+      const parsed = Number(value);
+      if (isNaN(parsed)) return 0;
+      if (!categoryIds.includes(parsed)) return 0;
+      return parsed;
+    },
+    serialize: String,
+    history: 'push',
+  });
+
+  const [fetchedTabIds, setFetchedTabIds] = useState<Set<number>>(new Set([initialTab]));
+
+  const swiperRef = useRef<SwiperClass>();
+
+  const handleInitSwiper = (swiper: SwiperClass) => {
+    swiperRef.current = swiper;
+  };
+
+  const handleSlideChange = (swiper: SwiperClass) => {
+    const index = swiper.activeIndex;
+    const newId = allCategories[index]?.id;
+    if (typeof newId === 'number' && newId !== tabId) {
+      setTabId(newId);
+      setFetchedTabIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.add(newId);
+        return newSet;
       });
-      router.push(`${PAGE.TRENDING}?tab=${index}`);
-      currentTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
   };
 
-  const handleTabChange = (index: number) => {
-    setActiveTab(index);
-    updateIndicator(index);
-    if (swiperRef.current) {
-      swiperRef.current.slideTo(index);
-    }
-  };
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLUListElement>) => {
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-      event.preventDefault();
-      const direction = event.key === 'ArrowLeft' ? -1 : 1;
-      const newIndex = Math.max(0, Math.min(categories.length, activeTab + direction));
-      handleTabChange(newIndex);
-    }
-  };
-
-  useEffect(() => {
-    updateIndicator(activeTab);
-  }, [activeTab]);
-
-  useEffect(() => {
-    if (tabParam) {
-      const index = parseInt(tabParam);
-      handleTabChange(index);
-    }
-  }, [tabParam]);
-
-  const tabClassName =
-    'inline-block h-full cursor-pointer px-[6px] pb-[8px] pt-[10px] text-sm shadow-none outline-none transition-all duration-300 mouse-hover:hover:font-medium [&:not(:last-child)]:mr-2';
+  const handleTabChange = useCallback(
+    (nextIndex: number) => {
+      if (nextIndex === tabId) return;
+      swiperRef.current?.slideTo(nextIndex);
+    },
+    [tabId],
+  );
 
   return (
-    <div>
-      <div
-        className={cn('sticky z-50 w-full max-w-screen-layout-max bg-white transition-[top]', {
-          'top-[56px]': isHeaderVisible,
-          'top-0': !isHeaderVisible,
-        })}
-      >
-        <div className="relative w-full">
-          <div className="w-full overflow-x-scroll scroll-smooth scrollbar-hide">
-            <ul
-              className="relative whitespace-nowrap will-change-transform"
-              role="tablist"
-              ref={tabListRef}
-              onKeyDown={handleKeyDown}
-              tabIndex={0}
-            >
-              <li
-                ref={(el) => {
-                  tabsRef.current[0] = el;
-                }}
-                onClick={() => handleTabChange(0)}
-                role="tab"
-                aria-selected={activeTab === 0 ? 'true' : 'false'}
-                aria-controls={`panel-0`}
-                id={`tab-0`}
-                className={cn(
-                  tabClassName,
-                  activeTab === 0 ? 'font-medium text-gray-900' : 'text-gray-600',
-                )}
-              >
-                <Link href={`/trending?tab=${0}`} className="px-[6px] pb-[8px] pt-[10px]">
-                  전체
-                </Link>
-              </li>
-              {categories.map((category, i) => (
-                <li
-                  key={category.id}
-                  ref={(el) => {
-                    tabsRef.current[i + 1] = el;
-                  }}
-                  onClick={() => handleTabChange(i + 1)}
-                  role="tab"
-                  aria-selected={activeTab === i + 1}
-                  aria-controls={`panel-${i + 1}`}
-                  className={cn(
-                    tabClassName,
-                    activeTab === i + 1 ? 'font-medium text-gray-900' : 'text-gray-600',
-                  )}
-                >
-                  <Link
-                    href={`${PAGE.TRENDING}?tab=${i + 1}`}
-                    className="px-[6px] pb-[8px] pt-[10px]"
-                  >
-                    {category.name}
-                  </Link>
-                </li>
-              ))}
-              <div
-                className="absolute bottom-0 h-0.5 bg-primary-600 transition-all duration-300"
-                style={indicatorStyle}
-              />
-            </ul>
-          </div>
-          <Link
-            className="absolute right-0 top-0 flex h-10 w-11 items-center justify-end bg-fade-to-white"
-            href={'/mypage/categories'}
-            prefetch={false}
-            aria-label="카테고리 설정 페이지로 이동" // 추가: 명확한 링크 설명
+    <Tabs.Root value={`${tabId}`} onValueChange={(value) => handleTabChange(Number(value))} asChild>
+      <div className="relative">
+        <TabBar
+          allCategories={allCategories}
+          tabIndex={tabId}
+          onTabClick={(id) => handleTabChange(Number(id))}
+        />
+
+        <div className="mt-[72px] overflow-hidden">
+          <Swiper
+            {...SWIPER_OPTIONS}
+            initialSlide={tabId}
+            onSlideChange={handleSlideChange}
+            onSwiper={handleInitSwiper}
           >
-            <Setting />
-          </Link>
+            {allCategories.map((category) => {
+              const isFetched = fetchedTabIds.has(category.id);
+              return (
+                <SwiperSlide key={category.id} className="w-full flex-[0_0_100%] px-5">
+                  {isFetched ? (
+                    <ApiErrorBoundary>
+                      <Suspense fallback={<TrendingListSkeleton />}>
+                        <TrendingList categoryId={category.id} categoryName={category.name} />
+                      </Suspense>
+                    </ApiErrorBoundary>
+                  ) : (
+                    <TrendingListSkeleton />
+                  )}
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
         </div>
       </div>
-      <Swiper
-        onSwiper={(swiper: SwiperType) => (swiperRef.current = swiper)}
-        onSlideChange={(swiper: SwiperType) => handleTabChange(swiper.activeIndex)}
-        initialSlide={activeTab}
-        className="my-6"
-      >
-        <SwiperSlide className="h-full w-full">
-          <ApiErrorBoundary>
-            <Suspense fallback={<TrendingListSkeleton />}>
-              <TrendingList categoryId={0} categoryName={'전체'} />
-            </Suspense>
-          </ApiErrorBoundary>
-        </SwiperSlide>
-        {categories.map((category) => (
-          <SwiperSlide key={category.id} className="h-full w-full">
-            <ApiErrorBoundary>
-              <Suspense fallback={<TrendingListSkeleton />}>
-                <TrendingList categoryId={category.id} categoryName={category.name} />
-              </Suspense>
-            </ApiErrorBoundary>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+    </Tabs.Root>
   );
 };
 
 const TrendingListSkeleton = () => {
   return (
     <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
-      {Array.from({ length: 12 }).map((item, i) => (
-        <div key={i} className="w-full">
-          <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
-            <IllustStandingSmall />
-          </div>
-          <div className="flex flex-col gap-1 pt-2">
-            <div className="h-3 bg-gray-100"></div>
-            <div className="h-3 w-1/2 bg-gray-100"></div>
-          </div>
-        </div>
+      {Array.from({ length: 12 }).map((_, i) => (
+        <ProductImageCardSkeleton key={i} />
       ))}
+    </div>
+  );
+};
+
+// const TrendingListSkeleton = () => {
+//   return (
+//     <div className="grid w-full animate-pulse grid-cols-2 gap-4 smd:grid-cols-3">
+//       {Array.from({ length: 9 }).map((_, i) => (
+//         <div key={i} className="w-full">
+//           <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-200">
+//             <IllustStandingSmall className="h-12 w-12 text-gray-400" />
+//           </div>
+//           <div className="flex flex-col">
+//             <span
+//               className={cn({
+//                 'line-clamp-2 h-12 break-words pt-2 text-sm text-gray-700': true,
+//               })}
+//             >
+//               <div className="mt-2 h-4 w-full rounded bg-gray-200"></div>
+//               <div className="mt-1 h-4 w-3/4 rounded bg-gray-200"></div>
+//             </span>
+//             <div className="h-9 w-16 max-w-[98px] rounded bg-gray-200 pt-1" />
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
+
+const TabBar = ({
+  allCategories,
+  tabIndex,
+  onTabClick,
+}: {
+  allCategories: { id: number; name: string }[];
+  tabIndex: number;
+  onTabClick: (id: string) => void;
+}) => {
+  const { isHeaderVisible } = useVisibilityOnScroll();
+
+  const tabDragRef = useRef<HTMLDivElement>(null);
+  const dragStartX = useRef<number | null>(null);
+
+  const x = useMotionValue(0);
+
+  const tabIndicatorLeft = useMotionValue(0);
+  const tabIndicatorWidth = useMotionValue(0);
+  const springLeft = useSpring(tabIndicatorLeft, { damping: 30, stiffness: 250 });
+  const springWidth = useSpring(tabIndicatorWidth, { damping: 30, stiffness: 250 });
+
+  const [constraints, setConstraints] = useState({ left: 0, right: 0 });
+
+  useEffect(() => {
+    const container = tabDragRef.current;
+    if (!container) return;
+
+    const scrollWidth = container.scrollWidth;
+    const clientWidth = container.clientWidth;
+    const maxScroll = scrollWidth - clientWidth;
+
+    setConstraints({ left: -maxScroll, right: 0 });
+  }, [allCategories]);
+
+  useEffect(() => {
+    const scrollToTab = () => {
+      const container = tabDragRef.current;
+      if (!container) return;
+
+      const scrollWidth = container.scrollWidth;
+      const clientWidth = container.clientWidth;
+      const maxScroll = scrollWidth - clientWidth;
+
+      const activeTab = container.children[tabIndex] as HTMLElement;
+      if (activeTab) {
+        // 탭의 중앙이 화면 중앙에 오도록 스크롤 위치 계산
+        const targetScroll = activeTab.offsetLeft + activeTab.offsetWidth / 2 - clientWidth / 2;
+        const clampedScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+
+        animate(x, -clampedScroll, {
+          type: 'spring',
+          damping: 40,
+          stiffness: 300,
+        });
+
+        tabIndicatorLeft.set(activeTab.offsetLeft);
+        tabIndicatorWidth.set(activeTab.offsetWidth);
+      }
+    };
+
+    scrollToTab();
+  }, [tabIndex, tabIndicatorLeft, tabIndicatorWidth, x]);
+
+  const handlePointerDown = (e: React.PointerEvent, _id: string) => {
+    dragStartX.current = e.clientX;
+    e.preventDefault();
+  };
+
+  const handlePointerUp = (e: React.PointerEvent, id: string) => {
+    const dx = Math.abs(e.clientX - (dragStartX.current ?? 0));
+    if (dx < 5) {
+      startTransition(() => {
+        onTabClick(id);
+      });
+    }
+  };
+
+  return (
+    <div
+      className={cn([
+        'sticky top-0 z-30 overflow-hidden bg-white pl-4 pr-12 shadow-sm transition-transform',
+        {
+          'translate-y-0': !isHeaderVisible,
+          'translate-y-[56px]': isHeaderVisible,
+        },
+      ])}
+    >
+      <Tabs.List asChild>
+        <motion.div
+          ref={tabDragRef}
+          style={{ x }}
+          drag="x"
+          dragConstraints={constraints}
+          dragElastic={0.1}
+          dragTransition={{ power: 0.2, timeConstant: 250, modifyTarget: (v) => Math.round(v) }}
+          className="relative flex"
+        >
+          {allCategories.map((category) => (
+            <Tabs.Trigger
+              key={category.id}
+              value={`${category.id}`}
+              onPointerDown={(e) => handlePointerDown(e, category.id.toString())}
+              onPointerUp={(e) => handlePointerUp(e, category.id.toString())}
+              className={cn(
+                'relative h-[40px] shrink-0 whitespace-nowrap px-3 py-2 text-base transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
+                tabIndex === category.id
+                  ? 'font-semibold text-primary-600'
+                  : 'font-medium text-gray-500 hover:text-gray-900',
+              )}
+            >
+              {category.name}
+            </Tabs.Trigger>
+          ))}
+          <motion.div
+            style={{ left: springLeft, width: springWidth }}
+            className="absolute bottom-[0.1px] h-0.5 bg-primary-600"
+          />
+        </motion.div>
+      </Tabs.List>
+      <div className="absolute bottom-0 right-0 flex h-full w-16 items-center">
+        <div className="h-full w-4 bg-gradient-to-r from-transparent to-white" />
+        <div className="flex h-full items-center justify-center bg-white pr-5">
+          <Link
+            className="-m-2 p-2"
+            href={'/mypage/categories'}
+            prefetch={false}
+            aria-label="카테고리 설정 페이지로 이동"
+          >
+            <Setting />
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };

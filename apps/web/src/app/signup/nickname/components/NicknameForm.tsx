@@ -1,9 +1,9 @@
-import { Registration } from '../../page';
-import useNicknameFormViewModel from '../hooks/useNicknameFormViewModel';
-
 import Button from '@/components/common/Button';
 import { Cancel } from '@/components/common/icons';
 import Input from '@/components/common/Input';
+
+import { Registration } from '../../page';
+import useNicknameFormViewModel from '../hooks/useNicknameFormViewModel';
 
 const NickNameForm = ({
   registration,

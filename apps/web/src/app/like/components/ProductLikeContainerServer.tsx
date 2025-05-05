@@ -1,7 +1,9 @@
-import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import ProductLikeContainer from './ProductLikeContainer';
+
 import { WishlistQueries } from '@/entities/wishlist';
+import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
+
+import ProductLikeContainer from './ProductLikeContainer';
 
 const ProductLikeContainerServer = async () => {
   const queryClient = new QueryClient();

@@ -2,17 +2,15 @@ import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { useToast } from '../../../../components/common/Toast';
-
 import { setAccessToken, setRefreshToken } from '@/app/actions/token';
+import { useToast } from '@/components/common/Toast';
 import { MutationLogin } from '@/graphql/auth';
 import { TokenType, addPushTokenVariable } from '@/graphql/interface';
 import { MutationAddPushToken } from '@/graphql/notification';
+import useMyRouter from '@/hooks/useMyRouter';
+import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 import { fcmTokenAtom } from '@/state/fcmToken';
 import { ILoginOutput, ILoginVariable } from '@/types/login';
-import { mp } from '@/components/Mixpanel';
-import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
-import useMyRouter from '@/hooks/useMyRouter';
 
 const HOME_PATH = '/';
 
@@ -75,10 +73,11 @@ const useEmailLoginFormViewModel = () => {
         return;
       }
 
-      mp?.set_user({
-        $name: null,
-        $email: loginForm.email.value,
-      });
+      // TODO: Need GTM Migration
+      // mp?.set_user({
+      //   $name: null,
+      //   $email: loginForm.email.value,
+      // });
 
       addPushToken({ variables: { token: fcmToken, tokenType: TokenType.FCM } });
     },

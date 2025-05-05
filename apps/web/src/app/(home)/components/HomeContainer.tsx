@@ -3,6 +3,15 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import NavBar from '@/components/Navbar';
+import TopButton from '@/components/TopButton';
+import { useHotDealsRandom, ProductLoading } from '@/features/products';
+import { cn } from '@/lib/cn';
+
+import { useInputHideOnScroll } from '../hooks/(search)/useInputHideOnScroll';
+import { useProductListViewModel } from '../hooks/(search)/useProductListViewModel';
+import { useSearchInputViewModel } from '../hooks/(search)/useSearchInputViewModel';
+
 import SearchPageProductList from './(search)/ProductList';
 import ProductNotFound from './(search)/ProductNotFound';
 import RecentKeywords from './(search)/RecentKeywords';
@@ -11,15 +20,10 @@ import RecommendationProduct from './(search)/RecommendationProduct';
 import SearchPageInput from './(search)/SearchInput';
 import ProductList from './ProductList';
 import SearchInput from './SearchInput';
-import { useInputHideOnScroll } from '../hooks/(search)/useInputHideOnScroll';
-import { useProductListViewModel } from '../hooks/(search)/useProductListViewModel';
-import { useSearchInputViewModel } from '../hooks/(search)/useSearchInputViewModel';
 
-import NavBar from '@/components/Navbar';
-import TopButton from '@/components/TopButton';
-import { useHotDealsRandom, ProductLoading } from '@/features/products';
-import { cn } from '@/lib/cn';
-
+/**
+ * @deprecated
+ */
 export default function HomeContainer() {
   const searchParams = useSearchParams();
 

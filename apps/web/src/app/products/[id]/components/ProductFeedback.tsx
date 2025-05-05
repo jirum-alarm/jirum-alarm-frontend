@@ -1,10 +1,12 @@
 'use client';
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { ProductQueries } from '@/entities/product';
 import useRedirectIfNotLoggedIn from '@/features/auth/useRedirectIfNotLoggedIn';
 import { cn } from '@/lib/cn';
 import { ProductQuery, UserLikeTarget } from '@/shared/api/gql/graphql';
 import { LikeService } from '@/shared/api/like/like.service';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const ProductFeedback = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
   const queryClient = useQueryClient();

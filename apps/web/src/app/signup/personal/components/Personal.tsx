@@ -1,5 +1,6 @@
-import PersonalForm from './PersonalForm';
 import { Registration } from '../../page';
+
+import PersonalForm from './PersonalForm';
 
 const Personal = ({
   registration,

@@ -12,6 +12,9 @@ const LOGIN_PATH = '/login';
 const MYPAGE_PATH = '/mypage';
 const ALARM_PATH = '/alarm';
 
+/**
+ * @deprecated
+ */
 export default function NavBar() {
   const { data } = useMe();
   const unreadNotificationsCount = useQuery<{ unreadNotificationsCount: UnreadNotificationsCount }>(

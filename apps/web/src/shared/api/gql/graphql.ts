@@ -30,10 +30,43 @@ export type AdminUser = {
   name: Scalars['String']['output'];
 };
 
+export type CategorizedReactionKeywords = {
+  __typename?: 'CategorizedReactionKeywords';
+  count: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  tag: Scalars['String']['output'];
+  type: HotDealKeywordType;
+};
+
+export type CategorizedReactionKeywordsResponse = {
+  __typename?: 'CategorizedReactionKeywordsResponse';
+  items: Array<CategorizedReactionKeywords>;
+  lastUpdatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
 export type Category = {
   __typename?: 'Category';
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+};
+
+export enum CommentOrder {
+  Id = 'ID',
+}
+
+export type CommentOutput = {
+  __typename?: 'CommentOutput';
+  /** 댓글 작성자 */
+  author?: Maybe<User>;
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  isMyLike?: Maybe<Scalars['Boolean']['output']>;
+  likeCount: Scalars['Int']['output'];
+  parentId?: Maybe<Scalars['Float']['output']>;
+  productId: Scalars['Float']['output'];
+  searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  userId: Scalars['Float']['output'];
 };
 
 export enum CurrencyType {
@@ -84,6 +117,7 @@ export type HotDealKeywordOutput = {
   __typename?: 'HotDealKeywordOutput';
   excludeKeywordCount: Scalars['Int']['output'];
   excludeKeywords: Array<HotDealExcludeKeywordOutput>;
+  groupId: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   isMajor: Scalars['Boolean']['output'];
   keyword: Scalars['String']['output'];
@@ -143,6 +177,7 @@ export enum KeywordProductOrderType {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 제외 키워드 추가 */
   addHotDealExcludeKeywordByAdmin: Scalars['Boolean']['output'];
   /** 어드민)핫딜 키워드 추가 */
@@ -180,6 +215,7 @@ export type Mutation = {
   readNotification: Scalars['Boolean']['output'];
   /** 모든 알림 삭제 */
   removeAllNotifications: Scalars['Boolean']['output'];
+  removeComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 제외 키워드 추가 */
   removeHotDealExcludeKeywordByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 제거 */
@@ -202,6 +238,7 @@ export type Mutation = {
   signup: SignupOutput;
   /** 소셜 로그인 */
   socialLogin: SocialLoginOutput;
+  updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
   /** 알림 키워드 상태 수정 */
@@ -216,6 +253,12 @@ export type Mutation = {
   uploadInstagramPost: Scalars['String']['output'];
   /** 회원 탈퇴 */
   withdraw: Scalars['Boolean']['output'];
+};
+
+export type MutationAddCommentArgs = {
+  content: Scalars['String']['input'];
+  parentId?: InputMaybe<Scalars['Int']['input']>;
+  productId: Scalars['Int']['input'];
 };
 
 export type MutationAddHotDealExcludeKeywordByAdminArgs = {
@@ -301,6 +344,10 @@ export type MutationReadNotificationArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type MutationRemoveCommentArgs = {
+  id: Scalars['Int']['input'];
+};
+
 export type MutationRemoveHotDealExcludeKeywordByAdminArgs = {
   ids: Array<Scalars['Int']['input']>;
 };
@@ -354,6 +401,11 @@ export type MutationSocialLoginArgs = {
   nickname?: InputMaybe<Scalars['String']['input']>;
   oauthProvider: OauthProvider;
   socialAccessToken: Scalars['String']['input'];
+};
+
+export type MutationUpdateCommentArgs = {
+  content: Scalars['String']['input'];
+  id: Scalars['Int']['input'];
 };
 
 export type MutationUpdateHotDealKeywordByAdminArgs = {
@@ -473,6 +525,9 @@ export enum ProductOrderType {
 
 export type ProductOutput = {
   __typename?: 'ProductOutput';
+  /** 핫딜 작성자 */
+  author?: Maybe<User>;
+  authorId?: Maybe<Scalars['Int']['output']>;
   /** 커뮤니티 내 카테고리 */
   category?: Maybe<Scalars['String']['output']>;
   categoryId?: Maybe<Scalars['Int']['output']>;
@@ -513,7 +568,7 @@ export type ProductOutput = {
   ship?: Maybe<Scalars['String']['output']>;
   thumbnail?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
-  url: Scalars['String']['output'];
+  url?: Maybe<Scalars['String']['output']>;
   /** 조회 수 */
   viewCount: Scalars['Int']['output'];
   wishlistCount: Scalars['Int']['output'];
@@ -547,6 +602,9 @@ export type Query = {
   adminMe: AdminUser;
   analysisTitleByDanawa: Scalars['Boolean']['output'];
   categories: Array<Category>;
+  /** 커뮤니티 반응 카테고리별 키워드 조회 */
+  categorizedReactionKeywords: CategorizedReactionKeywordsResponse;
+  comments: Array<CommentOutput>;
   /** 어드민) 댓글 목록 조회 */
   commentsByAdmin: Array<Scalars['String']['output']>;
   /** 상품 랭킹 랜덤 조회 */
@@ -591,6 +649,8 @@ export type Query = {
   pushSetting: UserPushSetting;
   /** 상품 랭킹 목록 조회 */
   rankingProducts: Array<ProductOutput>;
+  /** 신고한 사용자 목록 조회 (마스킹) */
+  reportUserNames: Array<Scalars['String']['output']>;
   /** 소셜 액세스 토큰 조회 */
   socialAccessToken: Scalars['String']['output'];
   /** 소셜 정보 조회 */
@@ -610,6 +670,18 @@ export type Query = {
   wishlistCount: Scalars['Int']['output'];
   /** 위시리스트 목록 조회 */
   wishlists: Array<WishlistOutput>;
+};
+
+export type QueryCategorizedReactionKeywordsArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type QueryCommentsArgs = {
+  limit: Scalars['Int']['input'];
+  orderBy: CommentOrder;
+  orderOption: OrderOptionType;
+  productId: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type QueryCommentsByAdminArgs = {
@@ -746,6 +818,10 @@ export type QueryProductsByKeywordArgs = {
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type QueryReportUserNamesArgs = {
+  productId: Scalars['Int']['input'];
+};
+
 export type QuerySocialAccessTokenArgs = {
   code: Scalars['String']['input'];
   oauthProvider: OauthProvider;
@@ -836,6 +912,7 @@ export type User = {
 
 /** 좋아요 대상 */
 export enum UserLikeTarget {
+  Comment = 'COMMENT',
   Product = 'PRODUCT',
 }
 
@@ -969,6 +1046,51 @@ export type QueryCategoriesQuery = {
   categories: Array<{ __typename?: 'Category'; id: string; name: string }>;
 };
 
+export type CommentsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  productId: Scalars['Int']['input'];
+  orderBy: CommentOrder;
+  orderOption: OrderOptionType;
+}>;
+
+export type CommentsQuery = {
+  __typename?: 'Query';
+  comments: Array<{
+    __typename?: 'CommentOutput';
+    id: string;
+    productId: number;
+    parentId?: number | null;
+    content: string;
+    createdAt: any;
+    searchAfter?: Array<string> | null;
+    likeCount: number;
+    isMyLike?: boolean | null;
+    author?: { __typename?: 'User'; id: string; nickname: string } | null;
+  }>;
+};
+
+export type AddCommentMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+  parentId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type AddCommentMutation = { __typename?: 'Mutation'; addComment: boolean };
+
+export type UpdateCommentMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+export type UpdateCommentMutation = { __typename?: 'Mutation'; updateComment: boolean };
+
+export type RemoveCommentMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type RemoveCommentMutation = { __typename?: 'Mutation'; removeComment: boolean };
+
 export type MutationAddNotificationKeywordMutationVariables = Exact<{
   keyword: Scalars['String']['input'];
 }>;
@@ -1034,6 +1156,7 @@ export type QueryNotificationsQuery = {
       price?: string | null;
       isHot?: boolean | null;
       isEnd?: boolean | null;
+      categoryId?: number | null;
     } | null;
   }>;
 };
@@ -1066,7 +1189,7 @@ export type ProductQuery = {
     categoryId?: number | null;
     mallId?: number | null;
     title: string;
-    url: string;
+    url?: string | null;
     detailUrl?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
@@ -1085,6 +1208,7 @@ export type ProductQuery = {
     dislikeCount: number;
     isMyWishlist?: boolean | null;
     categoryName?: string | null;
+    author?: { __typename?: 'User'; id: string; nickname: string } | null;
     provider: {
       __typename?: 'Provider';
       id: string;
@@ -1110,6 +1234,12 @@ export type ProductQuery = {
     } | null;
   } | null;
 };
+
+export type QueryReportUserNamesQueryVariables = Exact<{
+  productId: Scalars['Int']['input'];
+}>;
+
+export type QueryReportUserNamesQuery = { __typename?: 'Query'; reportUserNames: Array<string> };
 
 export type ProductGuidesQueryVariables = Exact<{
   productId: Scalars['Int']['input'];
@@ -1140,7 +1270,7 @@ export type QueryProductsQuery = {
     id: string;
     title: string;
     mallId?: number | null;
-    url: string;
+    url?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
     price?: string | null;
@@ -1163,9 +1293,10 @@ export type QueryRankingProductsQuery = {
     __typename?: 'ProductOutput';
     id: string;
     title: string;
-    url: string;
+    url?: string | null;
     price?: string | null;
     thumbnail?: string | null;
+    categoryId?: number | null;
   }>;
 };
 
@@ -1181,7 +1312,7 @@ export type QueryCommunityRandomRankingProductsQuery = {
     id: string;
     title: string;
     mallId?: number | null;
-    url: string;
+    url?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
     price?: string | null;
@@ -1207,7 +1338,7 @@ export type TogetherViewedProductsQuery = {
     id: string;
     title: string;
     mallId?: number | null;
-    url: string;
+    url?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
     price?: string | null;
@@ -1240,7 +1371,7 @@ export type QueryProductsByKeywordQuery = {
     id: string;
     title: string;
     mallId?: number | null;
-    url: string;
+    url?: string | null;
     isHot?: boolean | null;
     isEnd?: boolean | null;
     price?: string | null;
@@ -1268,6 +1399,25 @@ export type MutationReportExpiredProductMutationVariables = Exact<{
 export type MutationReportExpiredProductMutation = {
   __typename?: 'Mutation';
   reportExpiredProduct: boolean;
+};
+
+export type QueryCategorizedReactionKeywordsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type QueryCategorizedReactionKeywordsQuery = {
+  __typename?: 'Query';
+  categorizedReactionKeywords: {
+    __typename?: 'CategorizedReactionKeywordsResponse';
+    lastUpdatedAt?: any | null;
+    items: Array<{
+      __typename?: 'CategorizedReactionKeywords';
+      type: HotDealKeywordType;
+      name: string;
+      count: number;
+      tag: string;
+    }>;
+  };
 };
 
 export type AddWishlistMutationVariables = Exact<{
@@ -1308,6 +1458,7 @@ export type QueryWishlistsQuery = {
       hotDealType?: HotDealType | null;
       thumbnail?: string | null;
       isMyWishlist?: boolean | null;
+      categoryId?: number | null;
     };
   }>;
 };
@@ -1321,12 +1472,13 @@ export class TypedDocumentString<TResult, TVariables>
   implements DocumentTypeDecoration<TResult, TVariables>
 {
   __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
+  private value: string;
+  public __meta__?: Record<string, any> | undefined;
 
-  constructor(
-    private value: string,
-    public __meta__?: Record<string, any>,
-  ) {
+  constructor(value: string, __meta__?: Record<string, any> | undefined) {
     super(value);
+    this.value = value;
+    this.__meta__ = __meta__;
   }
 
   toString(): string & DocumentTypeDecoration<TResult, TVariables> {
@@ -1433,6 +1585,45 @@ export const QueryCategoriesDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<QueryCategoriesQuery, QueryCategoriesQueryVariables>;
+export const CommentsDocument = new TypedDocumentString(`
+    query comments($limit: Int!, $searchAfter: [String!], $productId: Int!, $orderBy: CommentOrder!, $orderOption: OrderOptionType!) {
+  comments(
+    limit: $limit
+    searchAfter: $searchAfter
+    productId: $productId
+    orderBy: $orderBy
+    orderOption: $orderOption
+  ) {
+    id
+    productId
+    parentId
+    content
+    createdAt
+    searchAfter
+    author {
+      id
+      nickname
+    }
+    likeCount
+    isMyLike
+  }
+}
+    `) as unknown as TypedDocumentString<CommentsQuery, CommentsQueryVariables>;
+export const AddCommentDocument = new TypedDocumentString(`
+    mutation addComment($productId: Int!, $content: String!, $parentId: Int) {
+  addComment(productId: $productId, content: $content, parentId: $parentId)
+}
+    `) as unknown as TypedDocumentString<AddCommentMutation, AddCommentMutationVariables>;
+export const UpdateCommentDocument = new TypedDocumentString(`
+    mutation updateComment($id: Int!, $content: String!) {
+  updateComment(id: $id, content: $content)
+}
+    `) as unknown as TypedDocumentString<UpdateCommentMutation, UpdateCommentMutationVariables>;
+export const RemoveCommentDocument = new TypedDocumentString(`
+    mutation removeComment($id: Int!) {
+  removeComment(id: $id)
+}
+    `) as unknown as TypedDocumentString<RemoveCommentMutation, RemoveCommentMutationVariables>;
 export const MutationAddNotificationKeywordDocument = new TypedDocumentString(`
     mutation MutationAddNotificationKeyword($keyword: String!) {
   addNotificationKeyword(keyword: $keyword)
@@ -1480,6 +1671,7 @@ export const QueryNotificationsDocument = new TypedDocumentString(`
       price
       isHot
       isEnd
+      categoryId
     }
   }
 }
@@ -1519,6 +1711,10 @@ export const ProductDocument = new TypedDocumentString(`
     wishlistCount
     positiveCommunityReactionCount
     negativeCommunityReactionCount
+    author {
+      id
+      nickname
+    }
     provider {
       id
       name
@@ -1551,6 +1747,14 @@ export const ProductDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<ProductQuery, ProductQueryVariables>;
+export const QueryReportUserNamesDocument = new TypedDocumentString(`
+    query QueryReportUserNames($productId: Int!) {
+  reportUserNames(productId: $productId)
+}
+    `) as unknown as TypedDocumentString<
+  QueryReportUserNamesQuery,
+  QueryReportUserNamesQueryVariables
+>;
 export const ProductGuidesDocument = new TypedDocumentString(`
     query productGuides($productId: Int!) {
   productGuides(productId: $productId) {
@@ -1602,6 +1806,7 @@ export const QueryRankingProductsDocument = new TypedDocumentString(`
     url
     price
     thumbnail
+    categoryId
   }
 }
     `) as unknown as TypedDocumentString<
@@ -1714,6 +1919,22 @@ export const MutationReportExpiredProductDocument = new TypedDocumentString(`
   MutationReportExpiredProductMutation,
   MutationReportExpiredProductMutationVariables
 >;
+export const QueryCategorizedReactionKeywordsDocument = new TypedDocumentString(`
+    query QueryCategorizedReactionKeywords($id: Int!) {
+  categorizedReactionKeywords(id: $id) {
+    lastUpdatedAt
+    items {
+      type
+      name
+      count
+      tag
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryCategorizedReactionKeywordsQuery,
+  QueryCategorizedReactionKeywordsQueryVariables
+>;
 export const AddWishlistDocument = new TypedDocumentString(`
     mutation AddWishlist($productId: Int!) {
   addWishlist(productId: $productId)
@@ -1746,6 +1967,7 @@ export const QueryWishlistsDocument = new TypedDocumentString(`
       hotDealType
       thumbnail
       isMyWishlist
+      categoryId
     }
   }
 }

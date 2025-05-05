@@ -1,4 +1,5 @@
 'use client';
+
 import ChangePasswordForm from './ChangePasswordForm';
 
 const ChangePassword = () => {

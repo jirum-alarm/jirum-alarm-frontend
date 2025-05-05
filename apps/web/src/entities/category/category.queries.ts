@@ -1,8 +1,8 @@
 import { queryOptions } from '@tanstack/react-query';
 
-import { getCategoriesForUser } from './category.api';
-
 import { CategoryService } from '@/shared/api/category';
+
+import { getCategoriesForUser } from './category.api';
 
 export const CategoryQueries = {
   all: () => ['category'],
@@ -10,15 +10,18 @@ export const CategoryQueries = {
     queryOptions({
       queryKey: [...CategoryQueries.all(), 'list'],
       queryFn: () => CategoryService.getCategories(),
+      staleTime: 1000 * 60 * 60 * 24,
     }),
   myCategories: () =>
     queryOptions({
       queryKey: [...CategoryQueries.categories().queryKey, 'my'],
       queryFn: () => CategoryService.getMyCategories(),
+      staleTime: 1000 * 60 * 60 * 24,
     }),
   categoriesForUser: () =>
     queryOptions({
       queryKey: [...CategoryQueries.categories().queryKey, 'user'],
       queryFn: () => getCategoriesForUser(),
+      staleTime: 1000 * 60 * 60 * 24,
     }),
 };

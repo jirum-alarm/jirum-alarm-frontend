@@ -1,4 +1,5 @@
 'use client';
+
 import SearchLinkButton from '@/components/SearchLinkButton';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
@@ -8,14 +9,14 @@ const TrendingPageHeader = () => {
   return (
     <header
       className={cn(
-        `fixed z-50 flex h-[56px] w-full max-w-screen-layout-max items-center justify-between bg-white px-4 transition-[top]`,
+        `fixed top-0 z-50 flex h-[56px] w-full max-w-screen-txs items-center justify-between bg-white px-5 transition-transform txs:max-w-screen-xs xs:max-w-screen-smd smd:max-w-screen-layout-max`,
         {
-          'top-0': isHeaderVisible,
-          '-top-[56px]': !isHeaderVisible,
+          'translate-y-0': isHeaderVisible,
+          'translate-y-[-56px]': !isHeaderVisible,
         },
       )}
     >
-      <h2 className="text-lg font-semibold">지름알림 랭킹</h2>
+      <h2 className="text-lg font-bold">지름알림 랭킹</h2>
       <SearchLinkButton color="#1d2939" />
     </header>
   );

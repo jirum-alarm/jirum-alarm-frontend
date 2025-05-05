@@ -1,4 +1,5 @@
 'use client';
+
 import { ApolloLink, fromPromise, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
@@ -63,6 +64,7 @@ const getNewAccessToken = async () => {
 const linkOnError = onError(({ graphQLErrors, networkError, operation, forward }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
+      if (!err.extensions) continue;
       switch (err.extensions.code) {
         // Apollo Server sets code to UNAUTHENTICATED
         // when an AuthenticationError is thrown in a resolver

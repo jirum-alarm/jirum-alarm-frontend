@@ -1,8 +1,8 @@
-import React, { Suspense } from 'react';
-
-import CategoriesForm from './components/CategoriesForm';
+import { Suspense } from 'react';
 
 import BasicLayout from '@/components/layout/BasicLayout';
+
+import CategoriesForm from './components/CategoriesForm';
 
 const CategoriesPage = () => {
   return (

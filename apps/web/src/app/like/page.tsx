@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
+
 import { IllustStandingSmall } from '@/components/common/icons';
 import BasicLayout from '@/components/layout/BasicLayout';
+
 import ProductLikeContainerServer from './components/ProductLikeContainerServer';
 
 const LikePage = () => {

@@ -1,9 +1,10 @@
 'use client';
-import usePersonalInfoFormViewModel from '../hooks/usePersonalInfoFormViewModel';
 
 import Button from '@/components/common/Button';
 import BirthYearSelect from '@/features/personal/components/BirthYearSelect';
 import GenderRadioGroup from '@/features/personal/components/GenderRadioGroup';
+
+import usePersonalInfoFormViewModel from '../hooks/usePersonalInfoFormViewModel';
 
 const PersonalInfoForm = () => {
   const {

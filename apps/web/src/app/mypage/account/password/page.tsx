@@ -1,12 +1,13 @@
 'use client';
-import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
 
-import useMyRouter from '@/hooks/useMyRouter';
-import BasicLayout from '@/components/layout/BasicLayout';
-import CurrentPassword from '@/app/mypage/account/password/current/components/CurrentPassword';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 import ChangePassword from '@/app/mypage/account/password/change/components/ChangePassword';
+import CurrentPassword from '@/app/mypage/account/password/current/components/CurrentPassword';
 import BackButton from '@/components/layout/BackButton';
+import BasicLayout from '@/components/layout/BasicLayout';
+import useMyRouter from '@/hooks/useMyRouter';
 
 const QUERY_PARAM_PREFIX = 'step';
 const INITIAL_STEP = 'current';

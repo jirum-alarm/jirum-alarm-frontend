@@ -1,15 +1,13 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 import {
-  InputMaybe,
-  KeywordProductOrderType,
-  OrderOptionType,
   ProductGuidesQueryVariables,
   ProductQueryVariables,
+  QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
-  Scalars,
+  QueryReportUserNamesQueryVariables,
   TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
@@ -84,6 +82,11 @@ export const ProductQueries = {
         return lastPage.products.at(-1)?.searchAfter?.[0];
       },
     }),
+  reportUserNames: (variables: QueryReportUserNamesQueryVariables) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'reportUserNames', { productId: variables.productId }],
+      queryFn: () => ProductService.getReportUserNames(variables),
+    }),
   productGuide: (variables: ProductGuidesQueryVariables) =>
     queryOptions({
       queryKey: [...ProductQueries.all(), 'guide', { productId: variables.productId }],
@@ -131,5 +134,11 @@ export const ProductQueries = {
       getNextPageParam: (lastPage, allPage) => {
         return lastPage.productsByKeyword?.at(-1)?.searchAfter?.[0];
       },
+    }),
+
+  reactionKeywords: (variables: QueryCategorizedReactionKeywordsArgs) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'reactionKeywords', { id: variables.id }],
+      queryFn: () => ProductService.getReactionKeywords(variables),
     }),
 };

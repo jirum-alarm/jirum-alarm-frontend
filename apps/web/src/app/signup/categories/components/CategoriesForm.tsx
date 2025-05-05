@@ -1,9 +1,9 @@
-import { Registration } from '../../page';
-import { useCategoriesFormViewModel } from '../hooks/useCategoriesFormViewModel';
-
 import Button from '@/components/common/Button';
 import { MAX_SELECTION_COUNT } from '@/constants/categories';
 import CategoriesCheckboxGroup from '@/features/categories/components/CategoriesCheckboxGroup';
+
+import { Registration } from '../../page';
+import { useCategoriesFormViewModel } from '../hooks/useCategoriesFormViewModel';
 
 const CategoriesForm = ({
   registration,

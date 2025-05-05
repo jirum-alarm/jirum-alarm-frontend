@@ -1,37 +1,42 @@
 'use client';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
+import { useQueryState } from 'nuqs';
 import { Suspense } from 'react';
-import ProductImageCardList from '@/app/(home)/components/(home)/RecommendedProduct/ProductImageCardList';
-import { IllustStandingSmall } from '@/components/common/icons';
-import RecommendedProductTabs from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductTabs';
-import useTabQueryString from '@/hooks/useTabQueryString';
+
+import ApiErrorBoundary from '@/components/ApiErrorBoundary';
+import { ProductQueries } from '@/entities/product';
+import ProductImageCardSkeleton from '@/features/products/components/ProductImageCardSkeleton';
+
+import ProductImageCardList from './ProductImageCardList';
+import RecommendedProductTabs from './RecommendedProductTabs';
 
 const RecommendedProductList = () => {
   const {
     data: { productKeywords },
   } = useSuspenseQuery(ProductQueries.productKeywords());
 
-  const { currentTab, setTabChange } = useTabQueryString('keyword');
-  const selectedKeyword = currentTab ?? productKeywords[0];
+  const [recommend, setRecommend] = useQueryState('recommend');
+  const validRecommend = recommend && productKeywords.includes(recommend);
+  const selectedKeyword = validRecommend ? recommend : productKeywords[0];
   const handleSelectedKeyword = (keyword: string) => {
-    setTabChange(keyword);
+    setRecommend(keyword);
   };
 
   return (
     <div>
-      <div className="h-[216px]">
-        <div className="pb-[16px]">
-          <RecommendedProductTabs
-            productKeywords={productKeywords}
-            selectedKeyword={selectedKeyword}
-            onSelectedKeyword={(keyword) => handleSelectedKeyword(keyword)}
-          />
-        </div>
+      <div className="pb-[16px]">
+        <RecommendedProductTabs
+          productKeywords={productKeywords}
+          selectedKeyword={selectedKeyword}
+          onSelectedKeyword={(keyword) => handleSelectedKeyword(keyword)}
+        />
+      </div>
+      <ApiErrorBoundary>
         <Suspense fallback={<ProductImageCardListSkeleton />}>
           <ProductImageCardList keyword={selectedKeyword} />
         </Suspense>
-      </div>
+      </ApiErrorBoundary>
     </div>
   );
 };
@@ -40,12 +45,10 @@ export default RecommendedProductList;
 
 const ProductImageCardListSkeleton = () => {
   return (
-    <div className="flex animate-pulse flex-nowrap justify-start gap-[10px] overflow-x-scroll scrollbar-hide">
-      {Array.from({ length: 6 }).map((item, i) => (
-        <div key={i} className="w-full shrink-0 txs:w-[140px] xs:w-[162px]">
-          <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
-            <IllustStandingSmall />
-          </div>
+    <div className="flex animate-pulse flex-nowrap justify-start gap-x-3 overflow-x-scroll scrollbar-hide">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="w-[120px] shrink-0">
+          <ProductImageCardSkeleton />
         </div>
       ))}
     </div>

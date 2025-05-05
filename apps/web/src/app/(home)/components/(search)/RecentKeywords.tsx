@@ -4,11 +4,9 @@ import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 import { Close } from '@/components/common/icons';
-import { EVENT } from '@/constants/mixpanel';
 import { useDevice } from '@/hooks/useDevice';
-import { cn } from '@/lib/cn';
-import { mp } from '@/components/Mixpanel';
 import useMyRouter from '@/hooks/useMyRouter';
+import { cn } from '@/lib/cn';
 
 export default function RecentKeywords() {
   const [loading, setLoading] = useState(true);
@@ -37,7 +35,7 @@ export default function RecentKeywords() {
     <>
       {keywords.length > 0 && (
         <section>
-          <h2 className="py-4">최근 검색어</h2>
+          <h2 className="flex h-[56px] items-center font-semibold text-gray-900">최근 검색어</h2>
           <div className={cn(isMobile && 'no-scrollbar h-[42px] overflow-x-scroll')}>
             {loading ? (
               <div className="flex items-center text-sm">최근 검색어를 불러오는 중입니다...</div>
@@ -75,11 +73,12 @@ function Chip({
   const handleClick = () => {
     router.push(`/search?keyword=${keyword}`);
 
-    mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
-      keyword,
-      type: EVENT.PRODUCT_SEARCH.TYPE.RECENT,
-      page: EVENT.PAGE.SEARCH,
-    });
+    // TODO: Need GTM Migration
+    // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
+    //   keyword,
+    //   type: EVENT.PRODUCT_SEARCH.TYPE.RECENT,
+    //   page: EVENT.PAGE.SEARCH,
+    // });
   };
 
   const handleClose = (event: React.MouseEvent<HTMLElement>) => {
@@ -91,7 +90,7 @@ function Chip({
   return (
     <div
       onClick={handleClick}
-      className="flex flex-shrink-0 items-center gap-x-1 truncate rounded-[40px] border border-gray-200 px-3 py-2 text-gray-900 hover:cursor-pointer hover:bg-gray-200"
+      className="flex h-[40px] flex-shrink-0 items-center gap-x-1 truncate rounded-[40px] border border-gray-200 px-3 text-gray-900 hover:cursor-pointer hover:bg-gray-200"
     >
       {keyword.slice(0, 15)}
       {keyword.length > 15 ? '...' : ''}

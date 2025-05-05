@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ArrowRight } from '@/components/common/icons';
 import Link from '@/features/Link';
 

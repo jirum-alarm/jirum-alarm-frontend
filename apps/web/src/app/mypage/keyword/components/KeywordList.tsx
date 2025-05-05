@@ -1,7 +1,8 @@
 'use client';
-import { useKeywordList } from '../hooks/useKeywordList';
 
 import { Close } from '@/components/common/icons';
+
+import { useKeywordList } from '../hooks/useKeywordList';
 
 const KeywordList = () => {
   const { notificationKeywordsByMe, onDeleteKeyword } = useKeywordList();

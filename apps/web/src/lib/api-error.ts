@@ -1,10 +1,10 @@
 import { ApolloError, ServerError, ServerParseError } from '@apollo/client';
-import { GraphQLErrors } from '@apollo/client/errors';
+import { GraphQLFormattedError } from 'graphql';
 
 import { HTTP_STATUS } from '@/types/enum/http';
 
-class ApiError extends Error implements ApolloError {
-  graphQLErrors: GraphQLErrors;
+class ApiError extends Error {
+  graphQLErrors: readonly GraphQLFormattedError[];
   protocolErrors;
   clientErrors: readonly Error[];
   networkError: Error | ServerParseError | ServerError | null;
@@ -24,7 +24,7 @@ class ApiError extends Error implements ApolloError {
     this.networkError = error.networkError;
     this.extraInfo = error.extraInfo;
 
-    const statusCode = (error.networkError as ServerError).statusCode;
+    const statusCode = (error.networkError as ServerError)?.statusCode;
 
     switch (statusCode) {
       case HTTP_STATUS.BAD_REQUEST: // 400

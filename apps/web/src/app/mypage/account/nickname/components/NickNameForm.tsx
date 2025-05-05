@@ -1,9 +1,10 @@
 'use client';
-import useNicknameFormViewModel from '../hooks/useNicknameFormViewModel';
 
 import Button from '@/components/common/Button';
 import { Cancel } from '@/components/common/icons';
 import Input from '@/components/common/Input';
+
+import useNicknameFormViewModel from '../hooks/useNicknameFormViewModel';
 
 const NickNameForm = () => {
   const { nickname, handleSubmit, handleInputChange, reset, isValidInput } =

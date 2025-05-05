@@ -1,10 +1,8 @@
-import Link from '@/features/Link';
-
-import ImageWithFallback from '@/components/ImageWithFallback';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
+import Link from '@/features/Link';
+import ProductImage from '@/features/products/components/ProductImage';
 import { cn } from '@/lib/cn';
-import { mp } from '@/components/Mixpanel';
 import { type QueryRankingProductsQuery } from '@/shared/api/gql/graphql';
 
 export function ProductRankingImageCard({
@@ -22,12 +20,13 @@ export function ProductRankingImageCard({
 }) {
   const handleClick = () => {
     collectProduct(+product.id);
-    setTimeout(() => {
-      mp?.track(EVENT.PRODUCT_CLICK.NAME, {
-        product,
-        page: EVENT.PAGE[logging.page],
-      });
-    }, 0);
+
+    // setTimeout(() => {
+    //   mp?// mp?.track(EVENT.PRODUCT_CLICK.NAME, {
+    //     product,
+    //     page: EVENT.PAGE[logging.page],
+    //   });
+    // }, 0);
   };
 
   return (
@@ -39,14 +38,18 @@ export function ProductRankingImageCard({
         )}
       >
         <div className="relative h-[240px] w-full">
-          <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm text-primary-500">
+          <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm font-medium text-primary-500">
             {index + 1}
           </div>
-          <ImageWithFallback
+          <ProductImage
             src={product.thumbnail ?? ''}
+            title={product.title}
+            type="product"
+            categoryId={product.categoryId}
             alt={product.title}
-            fill
-            sizes="300px"
+            width={240}
+            height={240}
+            sizes="240px"
             className="object-cover"
             priority={[0, 1, 9].includes(index)}
           />

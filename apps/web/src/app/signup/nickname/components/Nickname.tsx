@@ -1,5 +1,6 @@
-import NickNameForm from './NicknameForm';
 import { Registration } from '../../page';
+
+import NickNameForm from './NicknameForm';
 
 const Nickname = ({
   registration,

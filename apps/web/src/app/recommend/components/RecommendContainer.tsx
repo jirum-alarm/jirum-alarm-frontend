@@ -1,20 +1,26 @@
 'use client';
-import RecommendedProductTabs from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductTabs';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
-import React, { Suspense, useState } from 'react';
+import { useQueryState } from 'nuqs';
+import { Suspense } from 'react';
+
+import RecommendedProductTabs from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductTabs';
 import RecommendProductList from '@/app/recommend/components/RecommendProductList';
 import { IllustStandingSmall } from '@/components/common/icons';
-import useTabQueryString from '@/hooks/useTabQueryString';
+import { ProductQueries } from '@/entities/product';
+
 const RecommendContainer = () => {
   const {
     data: { productKeywords },
   } = useSuspenseQuery(ProductQueries.productKeywords());
-  const { currentTab, setTabChange } = useTabQueryString('keyword');
-  const selectedKeyword = currentTab ?? productKeywords[0];
+
+  const [recommend, setRecommend] = useQueryState('recommend');
+  const validRecommend = recommend && productKeywords.includes(recommend);
+  const selectedKeyword = validRecommend ? recommend : productKeywords[0];
   const handleSelectedKeyword = (keyword: string) => {
-    setTabChange(keyword);
+    setRecommend(keyword);
   };
+
   return (
     <div>
       <div className="sticky top-[56px] z-[50] w-full max-w-screen-layout-max bg-white pb-[20px] pt-[12px]">

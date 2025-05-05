@@ -1,10 +1,10 @@
-import React from 'react';
-import { ProductLiveHotdealsImageCard, useCollectProduct } from '@/features/products';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
-import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 import { useInView } from 'react-intersection-observer';
+
 import { LoadingSpinner } from '@/components/common/icons';
+import { ProductQueries } from '@/entities/product';
+import { ProductLiveHotdealsImageCard, useCollectProduct } from '@/features/products';
+import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 
 interface ProductImageCardListProps {
   keyword: string;
@@ -31,8 +31,8 @@ const RecommendProductList = ({ keyword }: ProductImageCardListProps) => {
   return (
     <>
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
-        {data.pages.flatMap(({ productsByKeyword }, i) =>
-          productsByKeyword.map((product, index) => (
+        {data.pages.flatMap(({ productsByKeyword }) =>
+          productsByKeyword.map((product) => (
             <ProductLiveHotdealsImageCard
               key={product.id}
               product={product}

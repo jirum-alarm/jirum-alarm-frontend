@@ -1,6 +1,7 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
 import { PropsWithChildren } from 'react';
+
+import { ProductQueries } from '@/entities/product';
 
 const RecommendedProductTabsFetcher = async ({ children }: PropsWithChildren) => {
   const queryClient = new QueryClient();

@@ -1,7 +1,6 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
 
 import { ProductQueries } from '@/entities/product';
-import useScreen from '@/hooks/useScreenSize';
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { getDayBefore } from '@/util/date';
 
@@ -19,10 +18,8 @@ const adjustStartDate = (categoryId: number | null) => {
 
 const useTrendingViewModel = ({ categoryId }: { categoryId: number | null }) => {
   const isHotCategory = categoryId === null;
-  const { smd } = useScreen();
-  const firstRenderingCount = smd ? 9 : 10;
 
-  const [products, live, hotDelas] = useSuspenseQueries({
+  const [products, live, hotDeals] = useSuspenseQueries({
     queries: [
       ProductQueries.products({
         limit: TRENDING_ITEMS_LIMIT,
@@ -47,8 +44,7 @@ const useTrendingViewModel = ({ categoryId }: { categoryId: number | null }) => 
   return {
     products: products.data.products,
     liveProducts: live.data.products,
-    hotDeals: hotDelas.data.communityRandomRankingProducts,
-    firstRenderingCount,
+    hotDeals: hotDeals.data.communityRandomRankingProducts,
   };
 };
 

@@ -1,6 +1,7 @@
-import useIsLoggedIn from './useIsLoggedIn';
 import { PAGE } from '@/constants/page';
 import useMyRouter from '@/hooks/useMyRouter';
+
+import useIsLoggedIn from './useIsLoggedIn';
 
 const useRedirectIfNotLoggedIn = () => {
   const router = useMyRouter();

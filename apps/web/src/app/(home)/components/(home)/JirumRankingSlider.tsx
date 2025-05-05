@@ -1,21 +1,23 @@
 'use client';
-import { useMemo, useState } from 'react';
-import { SwiperSlide, Swiper } from 'swiper/react';
+
 import 'swiper/css';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { AnimatePresence, motion } from 'motion/react';
+import { useState } from 'react';
+import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
+import { SwiperOptions } from 'swiper/types';
+
+import { ProductQueries } from '@/entities/product';
 import { useCollectProduct } from '@/features/products';
 import { ProductRankingImageCard } from '@/features/products/components/ProductRankingImageCard';
 import { cn } from '@/lib/cn';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { ProductQueries } from '@/entities/product';
 
-const SLIDER_CONFIG = {
+import { JirumRankingSliderSkeleton } from './JirumRankingContainer';
+
+const SLIDER_CONFIG: SwiperOptions = {
+  slidesPerView: 'auto',
   centeredSlides: true,
-  slidesPerView: 1.5577,
-  breakpoints: {
-    450: { slidesPerView: 2 },
-    520: { slidesPerView: 2.3 },
-  },
   loop: true,
   lazyPreloadPrevNext: 1,
   lazyPreloaderClass: 'swiper-lazy-preloader',
@@ -43,35 +45,61 @@ const JirumRankingSlider = () => {
   } = useSuspenseQuery(ProductQueries.ranking());
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isInit, setIsInit] = useState(false);
+
   const collectProduct = useCollectProduct();
 
-  const slides = useMemo(
-    () =>
-      rankingProducts.map((product, i) => (
-        <SwiperSlide key={product.id} className="pb-2">
-          <ProductRankingImageCard
-            activeIndex={activeIndex}
-            index={i}
-            product={product}
-            logging={{ page: 'HOME' }}
-            collectProduct={collectProduct}
-          />
-        </SwiperSlide>
-      )),
-    [rankingProducts, activeIndex, collectProduct],
-  );
+  const handleAfterInit = () => {
+    setIsInit(true);
+  };
 
-  if (!rankingProducts?.length) {
-    return <div>No products available</div>;
-  }
+  const handleIndexChange = (swiper: SwiperClass) => {
+    setActiveIndex(swiper.realIndex);
+  };
 
   return (
-    <div>
-      <Swiper {...SLIDER_CONFIG} onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}>
-        {slides}
-      </Swiper>
-      <SliderDots total={rankingProducts.length} activeIndex={activeIndex} />
-    </div>
+    <>
+      {rankingProducts.length > 0 && (
+        <div className="relative mt-2">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isInit ? 1 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Swiper
+              {...SLIDER_CONFIG}
+              onRealIndexChange={handleIndexChange}
+              onAfterInit={handleAfterInit}
+            >
+              {rankingProducts.map((product, i) => (
+                <SwiperSlide key={product.id} style={{ width: '240px', paddingBottom: '8px' }}>
+                  <ProductRankingImageCard
+                    activeIndex={activeIndex}
+                    index={i}
+                    product={product}
+                    logging={{ page: 'HOME' }}
+                    collectProduct={collectProduct}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </motion.div>
+          <AnimatePresence>
+            {!isInit && (
+              <motion.div
+                className="absolute inset-0 z-10"
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <JirumRankingSliderSkeleton />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <SliderDots total={rankingProducts.length} activeIndex={activeIndex} />
+        </div>
+      )}
+    </>
   );
 };
 
