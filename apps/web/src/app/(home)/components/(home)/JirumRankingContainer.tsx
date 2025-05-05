@@ -16,7 +16,14 @@ const JirumRankingContainer = () => {
         </Link>
       </div>
       <ApiErrorBoundary>
-        <Suspense fallback={<JirumRankingSliderSkeleton />}>
+        <Suspense
+          fallback={
+            <>
+              <JirumRankingSliderSkeleton />
+              <SliderDotsSkeleton total={10} />
+            </>
+          }
+        >
           <JirumRankingSlider />
         </Suspense>
       </ApiErrorBoundary>
@@ -80,7 +87,7 @@ export default JirumRankingContainer;
 // );
 
 const SliderDotsSkeleton = ({ total }: { total: number }) => (
-  <div className="flex h-[20px] w-full animate-pulse items-center justify-center">
+  <div className="mt-3 flex h-[20px] w-full animate-pulse items-center justify-center">
     <div className="ml-[6px] mr-[6px] h-[4px] w-[4px] bg-gray-200" />
     {Array.from({ length: total - 1 }).map((_, i) => (
       <div key={i} className="h-[3px] w-[3px]  bg-gray-100" />
@@ -88,10 +95,10 @@ const SliderDotsSkeleton = ({ total }: { total: number }) => (
   </div>
 );
 
-const JirumRankingSliderSkeleton = () => {
+export const JirumRankingSliderSkeleton = () => {
   return (
     <>
-      <div className="relative flex animate-pulse justify-center overflow-x-hidden pb-3">
+      <div className="relative mt-2 flex animate-pulse justify-center overflow-x-hidden pb-3">
         <div className="flex h-[340px] w-auto justify-center">
           <div className="h-[340px] min-w-fit flex-shrink-0 origin-center scale-90 animate-pulse overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all">
             <div className="relative h-[240px] w-full">
@@ -125,7 +132,6 @@ const JirumRankingSliderSkeleton = () => {
           </div>
         </div>
       </div>
-      <SliderDotsSkeleton total={10} />
     </>
   );
 };

@@ -2,7 +2,6 @@
 
 import { LoadingSpinner } from '@/components/common/icons';
 import { ProductLiveHotdealsImageCard, useCollectProduct } from '@/features/products';
-import useScreen from '@/hooks/useScreenSize';
 
 import useLiveHotDealsViewModel from '../../hooks/useLiveHotDealsViewModel';
 
@@ -10,14 +9,12 @@ import AppDownloadCTA from './AppDownloadCTA';
 
 const LiveHotDealList = () => {
   const { products, loadingCallbackRef, isFetchingNextPage } = useLiveHotDealsViewModel();
-  const { smd } = useScreen();
-  const firstRenderingCount = smd ? 6 : 4;
   const collectProduct = useCollectProduct();
 
   return (
     <>
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
-        {products.slice(0, firstRenderingCount).map((product, i) => (
+        {products.slice(0, 6).map((product) => (
           <ProductLiveHotdealsImageCard
             key={product.id}
             product={product}
@@ -25,10 +22,8 @@ const LiveHotDealList = () => {
             logging={{ page: 'HOME' }}
           />
         ))}
-      </div>
-      <AppDownloadCTA />
-      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
-        {products.slice(firstRenderingCount).map((product, i) => (
+        <AppDownloadCTA />
+        {products.slice(6).map((product) => (
           <ProductLiveHotdealsImageCard
             key={product.id}
             product={product}

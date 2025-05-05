@@ -25,20 +25,18 @@ const RecommendedProductList = () => {
 
   return (
     <div>
-      <div className="h-[216px]">
-        <div className="pb-[16px]">
-          <RecommendedProductTabs
-            productKeywords={productKeywords}
-            selectedKeyword={selectedKeyword}
-            onSelectedKeyword={(keyword) => handleSelectedKeyword(keyword)}
-          />
-        </div>
-        <ApiErrorBoundary>
-          <Suspense fallback={<ProductImageCardListSkeleton />}>
-            <ProductImageCardList keyword={selectedKeyword} />
-          </Suspense>
-        </ApiErrorBoundary>
+      <div className="pb-[16px]">
+        <RecommendedProductTabs
+          productKeywords={productKeywords}
+          selectedKeyword={selectedKeyword}
+          onSelectedKeyword={(keyword) => handleSelectedKeyword(keyword)}
+        />
       </div>
+      <ApiErrorBoundary>
+        <Suspense fallback={<ProductImageCardListSkeleton />}>
+          <ProductImageCardList keyword={selectedKeyword} />
+        </Suspense>
+      </ApiErrorBoundary>
     </div>
   );
 };

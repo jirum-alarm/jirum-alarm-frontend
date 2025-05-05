@@ -26,7 +26,6 @@ export default function SearchPage() {
         <SearchPageInput show={showSearchBar} {...searchProductViewModel} />
       </header>
       <div className="w-full">
-        <div className="h-14"></div>
         <main>
           <InitialResult show={!searchProductViewModel.keyword} />
           <SearchResult show={!!searchProductViewModel.keyword} {...productViewModel} />
@@ -44,7 +43,7 @@ function InitialResult({ show }: { show: boolean }) {
       {loading ? (
         <></>
       ) : (
-        <div className="flex flex-col gap-y-5">
+        <div className="flex flex-col gap-y-5 pt-2">
           <RecentKeywords />
           <RecommendationKeywords />
           {!hotDeals?.length ? (
@@ -52,10 +51,11 @@ function InitialResult({ show }: { show: boolean }) {
               <></>
             </div>
           ) : (
-            <section>
-              <h2 className="py-4">추천 핫딜</h2>
-              <RecommendationProduct hotDeals={hotDeals} logging={{ page: 'SEARCH' }} />
-            </section>
+            <RecommendationProduct
+              label="추천 핫딜"
+              hotDeals={hotDeals}
+              logging={{ page: 'SEARCH' }}
+            />
           )}
         </div>
       )}
@@ -78,13 +78,15 @@ function SearchResult({
         <div className="flex h-[90vh] items-center justify-center">
           <ProductLoading />
         </div>
-      ) : (
+      ) : isProductEmpty ? (
         <div className="flex justify-center pb-10 pt-5">
-          {isProductEmpty ? <ProductNotFound /> : <SearchPageProductList products={products} />}
+          <ProductNotFound />
         </div>
+      ) : (
+        <SearchPageProductList products={products} />
       )}
 
-      {!isProductEmpty && <TopButton />}
+      {!isProductEmpty && <TopButton hasBottomNav={false} />}
       {hasNextData && <div ref={nextDataRef} className="h-[48px] w-full" />}
     </div>
   );

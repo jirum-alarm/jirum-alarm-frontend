@@ -15,8 +15,10 @@ const HomeContainerV2 = () => {
         <main className="relative z-10 mt-[144px] w-full rounded-t-[1.25rem] bg-white pt-3">
           <JirumRankingContainer />
           <div className="h-[20px]" />
-          <RecommendedProductContainer />
-          <LiveHotDealContainer />
+          <div className="flex flex-col gap-y-8 py-3">
+            <RecommendedProductContainer />
+            <LiveHotDealContainer />
+          </div>
         </main>
       </div>
       <TopButton />

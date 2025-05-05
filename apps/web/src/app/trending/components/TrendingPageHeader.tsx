@@ -9,7 +9,7 @@ const TrendingPageHeader = () => {
   return (
     <header
       className={cn(
-        `fixed top-0 z-50 flex h-[56px] w-full max-w-screen-txs items-center justify-between bg-white px-4 transition-transform txs:max-w-screen-xs xs:max-w-screen-smd smd:max-w-screen-layout-max`,
+        `fixed top-0 z-50 flex h-[56px] w-full max-w-screen-txs items-center justify-between bg-white px-5 transition-transform txs:max-w-screen-xs xs:max-w-screen-smd smd:max-w-screen-layout-max`,
         {
           'translate-y-0': isHeaderVisible,
           'translate-y-[-56px]': !isHeaderVisible,

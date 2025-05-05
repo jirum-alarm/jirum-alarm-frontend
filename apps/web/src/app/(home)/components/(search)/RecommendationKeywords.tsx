@@ -40,7 +40,7 @@ export default function RecommendationKeywords() {
   }, []);
   return (
     <section>
-      <h2 className="py-4">추천 검색어</h2>
+      <h2 className="flex h-[56px] items-center font-semibold text-gray-900">추천 검색어</h2>
       <div className="flex flex-wrap gap-2">
         {keywords.map((keyword, i) => (
           <Chip key={i} keyword={keyword} />

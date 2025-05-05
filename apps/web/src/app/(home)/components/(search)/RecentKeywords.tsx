@@ -35,7 +35,7 @@ export default function RecentKeywords() {
     <>
       {keywords.length > 0 && (
         <section>
-          <h2 className="py-4">최근 검색어</h2>
+          <h2 className="flex h-[56px] items-center font-semibold text-gray-900">최근 검색어</h2>
           <div className={cn(isMobile && 'no-scrollbar h-[42px] overflow-x-scroll')}>
             {loading ? (
               <div className="flex items-center text-sm">최근 검색어를 불러오는 중입니다...</div>
@@ -90,7 +90,7 @@ function Chip({
   return (
     <div
       onClick={handleClick}
-      className="flex flex-shrink-0 items-center gap-x-1 truncate rounded-[40px] border border-gray-200 px-3 py-2 text-gray-900 hover:cursor-pointer hover:bg-gray-200"
+      className="flex h-[40px] flex-shrink-0 items-center gap-x-1 truncate rounded-[40px] border border-gray-200 px-3 text-gray-900 hover:cursor-pointer hover:bg-gray-200"
     >
       {keyword.slice(0, 15)}
       {keyword.length > 15 ? '...' : ''}

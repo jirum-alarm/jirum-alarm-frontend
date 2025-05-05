@@ -1,6 +1,6 @@
 'use client';
 
-import { Cancel, Home } from '@/components/common/icons';
+import { Cancel, Home, Search } from '@/components/common/icons';
 import BackButton from '@/components/layout/BackButton';
 import Link from '@/features/Link';
 import { cn } from '@/lib/cn';
@@ -14,44 +14,29 @@ const SearchInput = ({ show }: { show: boolean }) => {
     <>
       <div
         className={cn(
-          'flex w-full items-center justify-between gap-x-3 rounded bg-white px-5 py-4',
+          'flex h-[56px] w-full items-center justify-between gap-x-3 rounded bg-white',
           show
             ? 'flex opacity-100 transition-opacity duration-150'
-            : 'opacity-0 transition-opacity duration-150',
+            : 'pointer-events-none opacity-0 transition-opacity duration-150',
         )}
       >
         <BackButton />
-        <div className="flex w-full items-center overflow-hidden rounded bg-gray-50 pl-3">
-          <div className="h-6">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </div>
+        <div className="flex w-full items-center overflow-hidden rounded bg-gray-50 pl-3 focus-within:outline focus-within:outline-1 focus-within:outline-gray-900">
+          <Search color="#98A2B3" className="shrink-0" />
           <input
             value={keyword ?? ''}
-            className="h-10 w-full bg-gray-50 px-3 text-sm  outline-none"
+            className="h-10 w-full bg-gray-50 px-3 text-sm outline-none"
             onKeyDown={onKeyDown}
             onChange={handleChange}
             spellCheck={false}
-            placeholder="&nbsp;&nbsp;핫딜 제품을 검색해 주세요"
+            placeholder="핫딜 제품을 검색해 주세요"
             autoFocus
             inputMode="search"
           />
 
           {keyword && <ResetButton handleReset={handleReset} />}
         </div>
-        <Link href="/" className="cursor-pointer">
+        <Link href="/" className="-m-2 cursor-pointer p-2">
           <Home />
         </Link>
       </div>

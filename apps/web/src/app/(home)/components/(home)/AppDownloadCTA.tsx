@@ -17,7 +17,7 @@ const AppDownloadCTA = () => {
   return (
     <>
       {type && link && (
-        <div className="pb-[36px] pt-[24px]">
+        <div className="col-span-2 w-full pb-3 pt-1 smd:col-span-3">
           <div className="flex h-[84px] w-full items-center rounded-[8px] bg-gradient-to-b from-secondary-50 to-secondary-100 px-[16px] py-[14px]">
             <JirumIcon />
             <div className="ml-[14px]">
