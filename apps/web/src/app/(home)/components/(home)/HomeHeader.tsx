@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import SearchLinkButton from '@/components/SearchLinkButton';
 import useScrollPosition from '@/hooks/useScrollPosition';
 import { cn } from '@/lib/cn';
@@ -11,16 +9,28 @@ import LogoLink from '../../../../components/common/Logo/LogiLink';
 const HomeHeader = () => {
   const isScrolled = useScrollPosition(90);
 
-  useEffect(() => {
-    const statusBar = document.querySelector('meta[name="theme-color"]');
-    if (statusBar) {
-      if (isScrolled) {
-        statusBar.setAttribute('content', '#FFFFFF');
-      } else {
-        statusBar.setAttribute('content', '#101828');
-      }
-    }
-  }, [isScrolled]);
+  // useEffect(() => {
+  //   const statusBar = document.querySelector('meta[name="theme-color"]');
+  //   if (statusBar) {
+  //     statusBar.setAttribute('content', '#101828');
+  //   }
+  //   return () => {
+  //     if (statusBar) {
+  //       statusBar.setAttribute('content', '#FFFFFF');
+  //     }
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   const statusBar = document.querySelector('meta[name="theme-color"]');
+  //   if (statusBar) {
+  //     if (isScrolled) {
+  //       statusBar.setAttribute('content', '#FFFFFF');
+  //     } else {
+  //       statusBar.setAttribute('content', '#101828');
+  //     }
+  //   }
+  // }, [isScrolled]);
 
   const handleSearchClick = () => {
     // TODO: Need GTM Migration
