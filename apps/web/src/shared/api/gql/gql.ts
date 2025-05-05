@@ -44,6 +44,7 @@ type Documents = {
   '\n  query QueryProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryProductsByKeywordDocument;
   '\n  mutation MutationCollectProduct($productId: Int!) {\n    collectProduct(productId: $productId)\n  }\n': typeof types.MutationCollectProductDocument;
   '\n  mutation MutationReportExpiredProduct($productId: Int!) {\n    reportExpiredProduct(productId: $productId)\n  }\n': typeof types.MutationReportExpiredProductDocument;
+  '\n  query QueryCategorizedReactionKeywords($id: Int!) {\n    categorizedReactionKeywords(id: $id) {\n      lastUpdatedAt\n      items {\n        type\n        name\n        count\n        tag\n      }\n    }\n  }\n': typeof types.QueryCategorizedReactionKeywordsDocument;
   '\n  mutation AddWishlist($productId: Int!) {\n    addWishlist(productId: $productId)\n  }\n': typeof types.AddWishlistDocument;
   '\n  mutation RemoveWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n': typeof types.RemoveWishlistDocument;
   '\n  query QueryWishlists(\n    $orderBy: WishlistOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    wishlists(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      productId\n      searchAfter\n      product {\n        id\n        title\n        price\n        isHot\n        isEnd\n        isPrivate\n        postedAt\n        hotDealType\n        thumbnail\n        isMyWishlist\n        categoryId\n      }\n    }\n  }\n': typeof types.QueryWishlistsDocument;
@@ -111,6 +112,8 @@ const documents: Documents = {
     types.MutationCollectProductDocument,
   '\n  mutation MutationReportExpiredProduct($productId: Int!) {\n    reportExpiredProduct(productId: $productId)\n  }\n':
     types.MutationReportExpiredProductDocument,
+  '\n  query QueryCategorizedReactionKeywords($id: Int!) {\n    categorizedReactionKeywords(id: $id) {\n      lastUpdatedAt\n      items {\n        type\n        name\n        count\n        tag\n      }\n    }\n  }\n':
+    types.QueryCategorizedReactionKeywordsDocument,
   '\n  mutation AddWishlist($productId: Int!) {\n    addWishlist(productId: $productId)\n  }\n':
     types.AddWishlistDocument,
   '\n  mutation RemoveWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n':
@@ -306,6 +309,12 @@ export function graphql(
 export function graphql(
   source: '\n  mutation MutationReportExpiredProduct($productId: Int!) {\n    reportExpiredProduct(productId: $productId)\n  }\n',
 ): typeof import('./graphql').MutationReportExpiredProductDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryCategorizedReactionKeywords($id: Int!) {\n    categorizedReactionKeywords(id: $id) {\n      lastUpdatedAt\n      items {\n        type\n        name\n        count\n        tag\n      }\n    }\n  }\n',
+): typeof import('./graphql').QueryCategorizedReactionKeywordsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

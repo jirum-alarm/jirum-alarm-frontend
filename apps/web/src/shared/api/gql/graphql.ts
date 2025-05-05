@@ -35,6 +35,7 @@ export type CategorizedReactionKeywords = {
   count: Scalars['Int']['output'];
   name: Scalars['String']['output'];
   tag: Scalars['String']['output'];
+  type: HotDealKeywordType;
 };
 
 export type CategorizedReactionKeywordsResponse = {
@@ -1400,6 +1401,25 @@ export type MutationReportExpiredProductMutation = {
   reportExpiredProduct: boolean;
 };
 
+export type QueryCategorizedReactionKeywordsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type QueryCategorizedReactionKeywordsQuery = {
+  __typename?: 'Query';
+  categorizedReactionKeywords: {
+    __typename?: 'CategorizedReactionKeywordsResponse';
+    lastUpdatedAt?: any | null;
+    items: Array<{
+      __typename?: 'CategorizedReactionKeywords';
+      type: HotDealKeywordType;
+      name: string;
+      count: number;
+      tag: string;
+    }>;
+  };
+};
+
 export type AddWishlistMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -1898,6 +1918,22 @@ export const MutationReportExpiredProductDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationReportExpiredProductMutation,
   MutationReportExpiredProductMutationVariables
+>;
+export const QueryCategorizedReactionKeywordsDocument = new TypedDocumentString(`
+    query QueryCategorizedReactionKeywords($id: Int!) {
+  categorizedReactionKeywords(id: $id) {
+    lastUpdatedAt
+    items {
+      type
+      name
+      count
+      tag
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryCategorizedReactionKeywordsQuery,
+  QueryCategorizedReactionKeywordsQueryVariables
 >;
 export const AddWishlistDocument = new TypedDocumentString(`
     mutation AddWishlist($productId: Int!) {

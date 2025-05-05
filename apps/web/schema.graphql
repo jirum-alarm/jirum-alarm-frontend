@@ -15,6 +15,7 @@ type CategorizedReactionKeywords {
   count: Int!
   name: String!
   tag: String!
+  type: HotDealKeywordType!
 }
 
 type CategorizedReactionKeywordsResponse {

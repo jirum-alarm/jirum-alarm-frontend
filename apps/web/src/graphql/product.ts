@@ -230,3 +230,17 @@ export const MutationReportExpiredProduct = gql`
     reportExpiredProduct(productId: $productId)
   }
 `;
+
+export const QueryCategorizedReactionKeywords = gql`
+  query QueryCategorizedReactionKeywords($id: Int!) {
+    categorizedReactionKeywords(id: $id) {
+      lastUpdatedAt
+      items {
+        type
+        name
+        count
+        tag
+      }
+    }
+  }
+`;

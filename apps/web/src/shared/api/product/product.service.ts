@@ -6,6 +6,7 @@ import {
   MutationReportExpiredProductMutationVariables,
   ProductGuidesQueryVariables,
   ProductQueryVariables,
+  QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
@@ -61,6 +62,10 @@ export class ProductService {
   }
   static async getProductsByKeyword(variables: QueryProductsByKeywordQueryVariables) {
     return httpClient.execute(QueryProductsByKeyword, variables).then((res) => res.data);
+  }
+
+  static async getReactionKeywords(variables: QueryCategorizedReactionKeywordsArgs) {
+    return httpClient.execute(QueryCategorizedReactionKeywords, variables).then((res) => res.data);
   }
 }
 
@@ -291,6 +296,20 @@ const QueryProductsByKeyword = graphql(`
       }
       searchAfter
       postedAt
+    }
+  }
+`);
+
+const QueryCategorizedReactionKeywords = graphql(`
+  query QueryCategorizedReactionKeywords($id: Int!) {
+    categorizedReactionKeywords(id: $id) {
+      lastUpdatedAt
+      items {
+        type
+        name
+        count
+        tag
+      }
     }
   }
 `);
