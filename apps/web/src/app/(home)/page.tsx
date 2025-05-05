@@ -1,12 +1,6 @@
-import { Viewport } from 'next';
-
 import HomeContainerV2 from './components/(home)/HomeContainerV2';
 import AddFCMToken from './components/AddFCMToken';
 // import { getFeatureFlag } from '../actions/posthog';
-
-export const viewport: Viewport = {
-  themeColor: '#101828',
-};
 
 export default function Home() {
   // const { flags } = await getFeatureFlag();

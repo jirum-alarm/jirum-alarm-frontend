@@ -3,6 +3,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
 
+/**
+ * @deprecated
+ */
 const SearchInput = ({ goSearchPage }: { goSearchPage: () => void }) => {
   const [mounted, setMounted] = useState(false);
 

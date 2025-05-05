@@ -21,6 +21,9 @@ import SearchPageInput from './(search)/SearchInput';
 import ProductList from './ProductList';
 import SearchInput from './SearchInput';
 
+/**
+ * @deprecated
+ */
 export default function HomeContainer() {
   const searchParams = useSearchParams();
 

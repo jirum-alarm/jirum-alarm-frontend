@@ -5,6 +5,9 @@ import { ProductImageCard } from '@/features/products';
 import { IProduct } from '@/graphql/interface';
 import useScreenSize from '@/hooks/useScreenSize';
 
+/**
+ * @deprecated
+ */
 export default function ProductRecommendation({
   showRandomHotDeals,
   products,

@@ -15,6 +15,9 @@ import { useProductListViewModel } from '../hooks/useProductListViewModel';
 
 import ProductRecommendation from './ProductRecommendation';
 
+/**
+ * @deprecated
+ */
 const ProductList = () => {
   const {
     loading,

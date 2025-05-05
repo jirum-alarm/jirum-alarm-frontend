@@ -8,6 +8,9 @@ interface IProductCard {
   product: IProduct;
 }
 
+/**
+ * @deprecated
+ */
 export const ProductCard = (props: IProductCard) => {
   const isHydrated = useIsHydrated();
 
