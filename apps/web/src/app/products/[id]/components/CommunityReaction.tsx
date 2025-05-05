@@ -70,7 +70,11 @@ export default function CommunityReaction({
           ) : (
             <NoReaction />
           )}
-          <ReactionKeywords productId={+product.id} provider={product.provider.nameKr} />
+          <ReactionKeywords
+            productId={+product.id}
+            provider={product.provider.nameKr}
+            url={product.url!}
+          />
           <ProductReport product={product} />
         </div>
       </section>

@@ -1,39 +1,64 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import dayjs from 'dayjs';
 
 import { AIIcon, ArrowRight } from '@/components/common/icons';
 import { ProductQueries } from '@/entities/product';
 import { cn } from '@/lib/cn';
+import { getFromNow } from '@/util/date';
 
-function ReactionKeywords({ productId, provider }: { productId: number; provider: string }) {
+function ReactionKeywords({
+  productId,
+  provider,
+  url,
+}: {
+  productId: number;
+  provider: string;
+  url: string;
+}) {
   const {
     data: { categorizedReactionKeywords },
   } = useSuspenseQuery(ProductQueries.reactionKeywords({ id: productId }));
 
-  if (!categorizedReactionKeywords.lastUpdatedAt) return null;
+  const { items, lastUpdatedAt: lastUpdatedAtString } = categorizedReactionKeywords;
 
-  const lastUpdatedDayjs = dayjs(categorizedReactionKeywords.lastUpdatedAt);
-  const lastUpdatedAt = lastUpdatedDayjs.isValid()
-    ? lastUpdatedDayjs.format('A h시 업데이트')
-    : null;
+  const lastUpdatedAt = lastUpdatedAtString ? getFromNow(lastUpdatedAtString) + ' 업데이트' : null;
 
-  const { items } = categorizedReactionKeywords;
+  if (!lastUpdatedAt || !items.length) {
+    return (
+      <section className="rounded-lg bg-secondary-50">
+        <header className="flex h-[56px] items-center justify-between px-4">
+          <div className="flex items-center gap-2">
+            <span className="flex h-6 w-6 items-center justify-center">
+              <AIIcon className="size-5" />
+            </span>
+            <span className="font-semibold text-gray-900">요약 준비중</span>
+          </div>
+          <a
+            className="flex h-full items-center gap-x-1 text-sm font-semibold text-secondary-700"
+            href={url}
+            aria-label={`‘${provider ?? '커뮤니티'}’ 반응 보러가기`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>‘{provider ?? '커뮤니티'}’ 반응 보러가기</span>
+            <span className="flex size-5 items-center justify-center rounded-3xl bg-secondary-100">
+              <ArrowRight color="#2B4B95" width={16} height={16} strokeWidth={1.5} />
+            </span>
+          </a>
+        </header>
+      </section>
+    );
+  }
 
   return (
     <section className="rounded-lg bg-secondary-50">
-      <header className="flex items-center justify-between px-3 py-4">
+      <header className="flex items-center justify-between py-4 pl-3 pr-4">
         <div className="flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center">
             <AIIcon className="size-5" />
           </span>
           <span className="font-semibold text-gray-900">AI가 요약했어요</span>
         </div>
-        <time
-          className="text-sm font-medium text-gray-400"
-          dateTime={lastUpdatedDayjs.isValid() ? lastUpdatedDayjs.toISOString() : undefined}
-        >
-          {lastUpdatedAt}
-        </time>
+        <time className="text-sm font-medium text-gray-400">{lastUpdatedAt}</time>
       </header>
       <ul className="flex flex-wrap gap-x-2 gap-y-1.5 px-4">
         {items.map((item) => (
@@ -67,10 +92,11 @@ function ReactionKeywords({ productId, provider }: { productId: number; provider
       </ul>
       <footer className="flex w-full justify-end">
         <a
-          className="flex items-center gap-x-1 px-3 py-4 text-sm font-semibold text-secondary-700"
-          href="#"
-          tabIndex={0}
+          className="flex items-center gap-x-1 px-4 py-4 text-sm font-semibold text-secondary-700"
+          href={url}
           aria-label={`‘${provider ?? '커뮤니티'}’ 반응 보러가기`}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <span>‘{provider ?? '커뮤니티'}’ 반응 보러가기</span>
           <span className="flex size-5 items-center justify-center rounded-3xl bg-secondary-100">
