@@ -44,7 +44,7 @@ export const buttonVaraint = cva('w-full', {
     {
       variant: 'filled',
       color: 'secondary',
-      class: 'font-semibold bg-gray-100 text-gray-700',
+      class: 'font-semibold bg-gray-100 text-gray-700 active:text-gray-400',
     },
     {
       variant: 'filled',

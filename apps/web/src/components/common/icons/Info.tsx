@@ -1,12 +1,19 @@
 import type { SVGProps } from 'react';
 const SvgInfo = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none" {...props}>
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
     <path
+      d="M10 13.2V10M10 6.8H10.008M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10Z"
       stroke="#98A2B3"
+      strokeWidth="1.5"
       strokeLinecap="square"
       strokeLinejoin="round"
-      strokeWidth={1.5}
-      d="M10 13.2V10m0-3.2h.008M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
     />
   </svg>
 );
