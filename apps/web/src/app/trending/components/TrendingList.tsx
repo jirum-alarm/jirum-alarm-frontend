@@ -1,6 +1,7 @@
 'use client';
 
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useRef } from 'react';
+import { useSwiper } from 'swiper/react';
 
 import RecommendationProduct from '@/app/(home)/components/(search)/RecommendationProduct';
 import { ProductTrendingImageCard } from '@/features/products';
@@ -11,10 +12,11 @@ import useTrendingViewModel from '../hooks/useTrendingViewModel';
 interface TrendingListProps {
   categoryId: number | null;
   categoryName: string;
-  onReady?: () => void;
 }
 
-const TrendingList = ({ categoryId, categoryName, onReady }: TrendingListProps) => {
+const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
+  const swiper = useSwiper();
+  const ref = useRef<HTMLDivElement>(null);
   const { smd } = useScreen();
   const size = smd ? 9 : 10;
 
@@ -23,11 +25,13 @@ const TrendingList = ({ categoryId, categoryName, onReady }: TrendingListProps) 
   });
 
   useEffect(() => {
-    onReady?.();
-  }, [onReady]);
+    if (!ref.current) return;
+    // FIX: Height 조절 필요
+    swiper.height = ref.current.scrollHeight;
+  }, [swiper, ref]);
 
   return (
-    <div className="flex flex-col gap-y-8">
+    <div ref={ref} className="flex flex-col gap-y-8">
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
         {products
           ?.slice(0, size)
@@ -41,12 +45,12 @@ const TrendingList = ({ categoryId, categoryName, onReady }: TrendingListProps) 
           ))}
       </div>
       {liveProducts && (
-        <div>
-          <div className="flex w-full items-center justify-between pb-4">
-            <span className="font-bold text-gray-900">{`‘${categoryName}’ 실시간 핫딜`}</span>
-          </div>
-          <RecommendationProduct hotDeals={liveProducts} logging={{ page: 'TRENDING' }} />
-        </div>
+        <RecommendationProduct
+          label={`‘${categoryName}’ 실시간 핫딜`}
+          hotDeals={liveProducts}
+          logging={{ page: 'TRENDING' }}
+          nested
+        />
       )}
 
       <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 smd:grid-cols-3">
@@ -62,10 +66,12 @@ const TrendingList = ({ categoryId, categoryName, onReady }: TrendingListProps) 
           ))}
       </div>
       {hotDeals && (
-        <div>
-          <div className="pb-4 pt-9 text-base">추천 핫딜</div>
-          <RecommendationProduct hotDeals={hotDeals} logging={{ page: 'TRENDING' }} />
-        </div>
+        <RecommendationProduct
+          label="추천 핫딜"
+          hotDeals={hotDeals}
+          logging={{ page: 'TRENDING' }}
+          nested
+        />
       )}
       {/* <div className="flex w-full items-center justify-center pb-6 pt-3" ref={loadingCallbackRef}>
         {isFetchingNextPage && <LoadingSpinner />}

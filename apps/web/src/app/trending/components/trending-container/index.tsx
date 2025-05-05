@@ -1,7 +1,6 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import useEmblaCarousel from 'embla-carousel-react';
 import { animate, motion, useMotionValue, useSpring } from 'motion/react';
 import { useQueryState } from 'nuqs';
 import { Tabs } from 'radix-ui';
@@ -12,9 +11,10 @@ import {
   useRef,
   useMemo,
   useState,
-  createContext,
   startTransition,
 } from 'react';
+import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
+import { SwiperOptions } from 'swiper/types';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import { Setting } from '@/components/common/icons';
@@ -26,26 +26,17 @@ import { cn } from '@/lib/cn';
 
 import TrendingList from '../TrendingList';
 
-type WatchDragContextType = {
-  setWatchDrag: (watchDrag: boolean) => void;
+const SWIPER_OPTIONS: SwiperOptions = {
+  slidesPerView: 1,
+  spaceBetween: 0,
+  loop: false,
 };
 
-export const WatchDragContext = createContext<WatchDragContextType>({
-  setWatchDrag: () => {},
-});
+type Props = {
+  initialTab: number;
+};
 
-export const TrendingContainer = () => {
-  const [watchDrag, setWatchDrag] = useState(true);
-
-  const [emblaRef, embla] = useEmblaCarousel({
-    containScroll: 'trimSnaps',
-    loop: false,
-    slidesToScroll: 1,
-    watchDrag,
-  });
-
-  const containerRef = useRef<HTMLDivElement>(null);
-
+export const TrendingContainer = ({ initialTab }: Props) => {
   const {
     data: { categories },
   } = useSuspenseQuery(CategoryQueries.categoriesForUser());
@@ -54,7 +45,7 @@ export const TrendingContainer = () => {
   const categoryIds = allCategories.map((c) => c.id);
 
   const [tabId, setTabId] = useQueryState('tab', {
-    defaultValue: 0,
+    defaultValue: initialTab,
     parse: (value) => {
       const parsed = Number(value);
       if (isNaN(parsed)) return 0;
@@ -65,110 +56,68 @@ export const TrendingContainer = () => {
     history: 'push',
   });
 
-  const didInitRef = useRef(false);
+  const [fetchedTabIds, setFetchedTabIds] = useState<Set<number>>(new Set([initialTab]));
 
-  const setContainerHeight = useCallback(() => {
-    if (!containerRef.current || !embla) return;
+  const swiperRef = useRef<SwiperClass>();
 
-    const index = embla.selectedScrollSnap();
+  const handleInitSwiper = (swiper: SwiperClass) => {
+    swiperRef.current = swiper;
+  };
 
-    if (index === null) return;
-
-    const slide = containerRef.current.querySelector(
-      `[data-tab-index="${allCategories[index].id}"]`,
-    );
-    if (!slide || !slide.clientHeight) return;
-    containerRef.current.style.height = `${slide.clientHeight}px`;
-  }, [allCategories, embla]);
-
-  const [fetchedTabIds, setFetchedTabIds] = useState<Set<number>>(() => new Set([tabId]));
-
-  useEffect(() => {
-    if (didInitRef.current) return;
-    if (!embla) return;
-
-    const index = allCategories.findIndex((c) => c.id === tabId);
-    if (index < 0) return;
-
-    startTransition(() => {
-      embla.scrollTo(index, true);
-      setFetchedTabIds(() => {
-        const newSet = new Set<number>();
-        // newSet.add(Math.max(0, tabId - 1));
-        newSet.add(tabId);
-        // newSet.add(Math.min(allCategories.length - 1, tabId + 1));
+  const handleSlideChange = (swiper: SwiperClass) => {
+    const index = swiper.activeIndex;
+    const newId = allCategories[index]?.id;
+    if (typeof newId === 'number' && newId !== tabId) {
+      setTabId(newId);
+      setFetchedTabIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.add(newId);
         return newSet;
       });
-      didInitRef.current = true;
-    });
-  }, [tabId, embla, allCategories]);
-
-  useEffect(() => {
-    if (!embla) return;
-    const handleEmblaSelect = () => {
-      const index = embla.selectedScrollSnap();
-      const newId = allCategories[index]?.id;
-      if (typeof newId === 'number' && newId !== tabId) {
-        // startTransition(() => {
-        setTabId(newId);
-        setFetchedTabIds((prev) => {
-          prev.add(newId);
-          return prev;
-        });
-        // });
-      }
-    };
-
-    embla.on('select', handleEmblaSelect);
-
-    return () => {
-      embla.off('select', handleEmblaSelect);
-    };
-  }, [embla, setTabId, allCategories, tabId]);
+    }
+  };
 
   const handleTabChange = useCallback(
-    (value: string) => {
-      const nextIndex = Number(value);
+    (nextIndex: number) => {
       if (nextIndex === tabId) return;
-      embla?.scrollTo(nextIndex);
+      swiperRef.current?.slideTo(nextIndex);
     },
-    [embla, tabId],
+    [tabId],
   );
 
   return (
-    <Tabs.Root value={`${tabId}`} onValueChange={handleTabChange} asChild>
+    <Tabs.Root value={`${tabId}`} onValueChange={(value) => handleTabChange(Number(value))} asChild>
       <div className="relative">
-        <TabBar allCategories={allCategories} tabIndex={tabId} onTabClick={handleTabChange} />
+        <TabBar
+          allCategories={allCategories}
+          tabIndex={tabId}
+          onTabClick={(id) => handleTabChange(Number(id))}
+        />
 
-        <div ref={emblaRef} className="mt-[72px] overflow-hidden">
-          <div ref={containerRef} className="flex items-start">
-            <WatchDragContext.Provider value={{ setWatchDrag }}>
-              {allCategories.map((category) => {
-                const isFetched = fetchedTabIds.has(category.id);
-                return (
-                  <div
-                    key={category.id}
-                    className="min-w-full flex-[0_0_100%] px-5"
-                    data-tab-index={category.id}
-                  >
-                    {isFetched ? (
-                      <ApiErrorBoundary>
-                        <Suspense fallback={<TrendingListSkeleton />}>
-                          <TrendingList
-                            categoryId={category.id}
-                            categoryName={category.name}
-                            onReady={category.id === tabId ? setContainerHeight : undefined}
-                          />
-                        </Suspense>
-                      </ApiErrorBoundary>
-                    ) : (
-                      <TrendingListSkeleton />
-                    )}
-                  </div>
-                );
-              })}
-            </WatchDragContext.Provider>
-          </div>
+        <div className="mt-[72px] overflow-hidden">
+          <Swiper
+            {...SWIPER_OPTIONS}
+            initialSlide={tabId}
+            onSlideChange={handleSlideChange}
+            onSwiper={handleInitSwiper}
+          >
+            {allCategories.map((category) => {
+              const isFetched = fetchedTabIds.has(category.id);
+              return (
+                <SwiperSlide key={category.id} className="w-full flex-[0_0_100%] px-5">
+                  {isFetched ? (
+                    <ApiErrorBoundary>
+                      <Suspense fallback={<TrendingListSkeleton />}>
+                        <TrendingList categoryId={category.id} categoryName={category.name} />
+                      </Suspense>
+                    </ApiErrorBoundary>
+                  ) : (
+                    <TrendingListSkeleton />
+                  )}
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
         </div>
       </div>
     </Tabs.Root>

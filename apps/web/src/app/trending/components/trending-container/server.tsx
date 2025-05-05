@@ -42,7 +42,7 @@ const TrendingContainerServer = async ({ tab }: Props) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <TrendingContainer />
+      <TrendingContainer initialTab={tab} />
     </HydrationBoundary>
   );
 };
