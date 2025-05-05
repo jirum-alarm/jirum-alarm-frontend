@@ -18,10 +18,10 @@ const JirumRankingContainer = () => {
       <ApiErrorBoundary>
         <Suspense
           fallback={
-            <>
+            <div className="mt-2">
               <JirumRankingSliderSkeleton />
               <SliderDotsSkeleton total={10} />
-            </>
+            </div>
           }
         >
           <JirumRankingSlider />
@@ -98,7 +98,7 @@ const SliderDotsSkeleton = ({ total }: { total: number }) => (
 export const JirumRankingSliderSkeleton = () => {
   return (
     <>
-      <div className="relative mt-2 flex animate-pulse justify-center overflow-x-hidden pb-3">
+      <div className="relative flex animate-pulse justify-center overflow-x-hidden pb-2">
         <div className="flex h-[340px] w-auto justify-center">
           <div className="h-[340px] min-w-fit flex-shrink-0 origin-center scale-90 animate-pulse overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all">
             <div className="relative h-[240px] w-full">
