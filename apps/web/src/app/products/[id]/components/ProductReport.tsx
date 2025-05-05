@@ -13,23 +13,21 @@ import { ProductQuery } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
 const ProductReport = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
   return (
-    <div className="px-5">
-      <div
-        className={cn(
-          `flex h-[56px] items-center justify-between rounded-lg border bg-white p-[16px]`,
-        )}
-      >
-        {product.isMyReported ? (
-          <p className="flex items-center gap-2 text-sm text-gray-600">
-            종료된 상품으로 제보해주셔서 감사해요 <span className="text-lg">😄</span>
-          </p>
-        ) : (
-          <>
-            <span className="text-sm text-gray-600">혹시 판매가 종료된 상품인가요?</span>
-            <ProductReportModal productId={+product.id} />
-          </>
-        )}
-      </div>
+    <div
+      className={cn(
+        `flex h-[56px] items-center justify-between rounded-lg border bg-white p-[16px]`,
+      )}
+    >
+      {product.isMyReported ? (
+        <p className="flex items-center gap-2 text-sm text-gray-600">
+          종료된 상품으로 제보해주셔서 감사해요 <span className="text-lg">😄</span>
+        </p>
+      ) : (
+        <>
+          <span className="text-sm text-gray-600">혹시 판매가 종료된 상품인가요?</span>
+          <ProductReportModal productId={+product.id} />
+        </>
+      )}
     </div>
   );
 };

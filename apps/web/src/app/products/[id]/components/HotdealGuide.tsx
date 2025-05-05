@@ -28,7 +28,7 @@ export default function HotdealGuide({
   }
 
   return (
-    <section className="relative px-5 pb-12">
+    <section className="relative px-5">
       <div className="flex h-[56px] items-center">
         <h2 className="text-lg font-bold text-gray-900">핫딜 제대로 알고 사자!</h2>
       </div>

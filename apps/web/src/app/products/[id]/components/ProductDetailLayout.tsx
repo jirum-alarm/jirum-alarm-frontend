@@ -28,7 +28,6 @@ import HotdealScore from './HotdealScore';
 import { NoticeProfitLink } from './NoticeProfitUrl';
 import PopularProductsContainer from './PopularProudctsContainer';
 import ProductDetailImage from './ProductDetailImage';
-import ProductReport from './ProductReport';
 import RecommendButton from './RecommendButton';
 import RelatedProductsContainer from './RelatedProductsContainer';
 import { ViewerCount } from './ViewerCount';
@@ -70,13 +69,12 @@ function ProductDetailLayout({
                 <ProductExpiredBanner product={product} />
               </Suspense>
             </ErrorBoundary>
-            <div className="mb-12 mt-5 flex flex-col gap-y-9">
+            <div className="mb-12 mt-4 flex flex-col gap-y-9">
               <HotdealGuide productGuides={productGuides} />
               {/* TODO: wait for api */}
               {/* <HotdealIndex product={product} /> */}
               <HotdealScore product={product} />
               <CommunityReaction product={product} />
-              <ProductReport product={product} />
             </div>
             <Hr />
             <CommentSection productId={productId} />

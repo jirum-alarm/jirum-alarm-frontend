@@ -3,6 +3,7 @@ import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import {
   ProductGuidesQueryVariables,
   ProductQueryVariables,
+  QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
@@ -133,5 +134,11 @@ export const ProductQueries = {
       getNextPageParam: (lastPage, allPage) => {
         return lastPage.productsByKeyword?.at(-1)?.searchAfter?.[0];
       },
+    }),
+
+  reactionKeywords: (variables: QueryCategorizedReactionKeywordsArgs) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'reactionKeywords', { id: variables.id }],
+      queryFn: () => ProductService.getReactionKeywords(variables),
     }),
 };

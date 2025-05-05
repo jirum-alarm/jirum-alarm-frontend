@@ -8,6 +8,9 @@ import Tooltip from '@/components/common/Tooltip';
 import { cn } from '@/lib/cn';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 
+import ProductReport from './ProductReport';
+import ReactionKeywords from './ReactionKeywords';
+
 const nanSafe = (num: number) => (isNaN(num) ? 0 : num);
 
 export default function CommunityReaction({
@@ -30,7 +33,7 @@ export default function CommunityReaction({
     <>
       {/* @TODO: remove after add hotdeal index section */}
       <section className="mb-4 px-5">
-        <div className="flex items-center justify-between py-3">
+        <div className="flex h-[56px] items-center justify-between">
           <div className="flex items-center gap-2">
             <h2 className="flex gap-x-2 text-lg font-bold text-gray-900">
               커뮤니티 반응
@@ -38,57 +41,38 @@ export default function CommunityReaction({
                 <span className="text-secondary-500">{product.positiveCommunityReactionCount}</span>
               )}
             </h2>
+          </div>
+          <div>
             <Tooltip
+              align="right"
+              polygonOffset={8}
               content={
                 <p className="text-s text-white">
                   <strong className="font-semibold">실제 커뮤니티</strong> 사용자들의
-                  <br /> 핫딜 리뷰를 요약해 확인해요
+                  <br />
+                  핫딜 리뷰를 요약해 확인해요
                 </p>
               }
             >
-              <button aria-label="커뮤니티 반응" title="커뮤니티 반응">
+              <button aria-label="커뮤니티 반응" title="커뮤니티 반응" className="-m-2 flex p-2">
                 <Info />
               </button>
             </Tooltip>
           </div>
-          <div>
-            <a
-              href={product.url!}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleCommunityLinkClick}
-              className="flex items-center justify-end gap-1"
-            >
-              <p className="text-sm font-semibold text-gray-500">
-                ‘{product.provider.nameKr ?? '커뮤니티'}’ 반응 보러가기
-              </p>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.14307 15.7147L12.8574 10.0004L7.14307 4.28613"
-                  stroke="#667085"
-                  strokeWidth="1.5"
-                  strokeLinecap="square"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
-          </div>
         </div>
-        {allCount !== 0 ? (
-          <Reaction
-            positiveCount={positiveCount}
-            negativeCount={negativeCount}
-            allCount={allCount}
-          />
-        ) : (
-          <NoReaction />
-        )}
+        <div className="mt-1 flex flex-col gap-y-4">
+          {allCount !== 0 ? (
+            <Reaction
+              positiveCount={positiveCount}
+              negativeCount={negativeCount}
+              allCount={allCount}
+            />
+          ) : (
+            <NoReaction />
+          )}
+          <ReactionKeywords productId={+product.id} provider={product.provider.nameKr} />
+          <ProductReport product={product} />
+        </div>
       </section>
     </>
   );
