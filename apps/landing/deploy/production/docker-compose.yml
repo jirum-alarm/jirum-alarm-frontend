@@ -1,0 +1,8 @@
+services:
+  jirum-alarm-landing-production:
+    build:
+      context: ../../../../
+      dockerfile: apps/landing/deploy/production/Dockerfile
+    image: jirum-alarm-landing-production
+    ports:
+      - "3002:3000"
