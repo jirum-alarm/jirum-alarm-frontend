@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import SectionHeader from '@/components/SectionHeader';
 import useMyRouter from '@/hooks/useMyRouter';
 
 const KEYWORDS = [
@@ -40,7 +41,7 @@ export default function RecommendationKeywords() {
   }, []);
   return (
     <section>
-      <h2 className="flex h-[56px] items-center font-semibold text-gray-900">추천 검색어</h2>
+      <SectionHeader title="추천 검색어" titleClassName="text-base" />
       <div className="flex flex-wrap gap-2">
         {keywords.map((keyword, i) => (
           <Chip key={i} keyword={keyword} />

@@ -33,7 +33,7 @@ const AppDownloadCTA = () => {
               <a
                 href={link}
                 onClick={handleAppDownloadClick}
-                className="block h-[32px] w-[88px] rounded-[20px] bg-gray-800 px-[12px] py-[6px] text-sm font-semibold text-white"
+                className="block h-[32px] rounded-[20px] bg-gray-800 px-[12px] py-[6px] text-sm font-semibold text-white"
               >
                 앱 다운받기
               </a>

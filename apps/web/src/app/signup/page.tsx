@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { useToast } from '@/components/common/Toast';
-import BackButton from '@/components/layout/BackButton';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { CATEGORIES } from '@/constants/categories';
 import { ICategoryForm } from '@/features/categories/types';
@@ -164,17 +163,7 @@ const Signup = () => {
   };
 
   return (
-    <BasicLayout
-      // hasBackButton
-      fullScreen={false}
-      header={
-        <header className="sticky top-0 z-50 flex h-14 w-full max-w-screen-layout-max items-center justify-center bg-white">
-          <div className="absolute left-0">
-            <BackButton onClick={handleBackButton} />
-          </div>
-        </header>
-      }
-    >
+    <BasicLayout hasBackButton fullScreen={false}>
       <div className="px-5 py-9">
         {currentStep === 'termsOfService' && (
           <TermsOfService

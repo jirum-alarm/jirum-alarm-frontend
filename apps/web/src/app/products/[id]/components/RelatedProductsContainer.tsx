@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react';
 
+import SectionHeader from '@/components/SectionHeader';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 
 import MoreProductsSkeleton from './MoreProductsSkeleton';
@@ -14,7 +15,7 @@ export default function RelatedProductsContainer({
 }) {
   return (
     <section className="px-5">
-      <h2 className="pb-5 font-semibold text-gray-900">다른 고객이 함께 본 상품</h2>
+      <SectionHeader title="다른 고객이 함께 본 상품" />
       <Suspense fallback={<MoreProductsSkeleton />}>
         <RelatedProducts product={product} />
       </Suspense>

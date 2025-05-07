@@ -14,7 +14,7 @@ const SearchInput = ({ show }: { show: boolean }) => {
     <>
       <div
         className={cn(
-          'flex h-[56px] w-full items-center justify-between gap-x-3 rounded bg-white',
+          'flex h-[56px] w-full items-center justify-between gap-x-1 rounded bg-white',
           show
             ? 'flex opacity-100 transition-opacity duration-150'
             : 'pointer-events-none opacity-0 transition-opacity duration-150',
@@ -36,8 +36,8 @@ const SearchInput = ({ show }: { show: boolean }) => {
 
           {keyword && <ResetButton handleReset={handleReset} />}
         </div>
-        <Link href="/" className="-m-2 cursor-pointer p-2">
-          <Home />
+        <Link href="/" className="relative -m-2 cursor-pointer p-2">
+          <Home className="relative -right-1" />
         </Link>
       </div>
     </>

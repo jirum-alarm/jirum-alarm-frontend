@@ -52,6 +52,7 @@ function ProductDetailLayout({
 
   return (
     <>
+      <div className="fixed inset-0 -z-10 bg-gray-100" />
       {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
       <main className="pt-[56px]">
         <ProductDetailImage
@@ -61,11 +62,11 @@ function ProductDetailLayout({
             categoryId: product.categoryId,
           }}
         />
-        <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6 shadow-[0_-2px_12px_0_rgba(0,0,0,0.08)]">
+        <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <ProductInfoLayout>
             <ProductInfo product={product} />
-            <ErrorBoundary fallback={<div className="h-2 bg-gray-50" />}>
-              <Suspense fallback={<div className="h-2 bg-gray-50" />}>
+            <ErrorBoundary fallback={<div className="h-2 bg-gray-100" />}>
+              <Suspense fallback={<div className="h-2 bg-gray-100" />}>
                 <ProductExpiredBanner product={product} />
               </Suspense>
             </ErrorBoundary>
@@ -87,18 +88,18 @@ function ProductDetailLayout({
             </div>
             <NoticeProfitLink />
           </ProductInfoLayout>
+          <TopButton />
+          <div className="h-[64px] bg-gray-100" />
           <BottomCTA product={product} isUserLogin={isUserLogin} />
         </div>
       </main>
-      <TopButton />
-      <div className="h-[64px]"></div>
     </>
   );
 }
 export default ProductDetailLayout;
 
 function Hr() {
-  return <div className="h-[8px] bg-gray-50" />;
+  return <div className="h-[8px] bg-gray-100" />;
 }
 
 function ProductInfoLayout({ children }: { children: React.ReactNode }) {
@@ -140,7 +141,7 @@ function ProductExpiredBanner({ product }: { product: Product }) {
   }, [reportUserNames, currentIndex]);
 
   return visibleMessages.length > 0 ? (
-    <div className="relative flex h-[48px] items-center justify-center overflow-hidden bg-gray-50">
+    <div className="relative flex h-[48px] items-center justify-center overflow-hidden bg-gray-100">
       <div className="h-full w-full">
         {visibleMessages.map((item, idx) => {
           let translateY;
@@ -169,7 +170,7 @@ function ProductExpiredBanner({ product }: { product: Product }) {
       </div>
     </div>
   ) : (
-    <div className="h-2 bg-gray-50" />
+    <div className="h-2 bg-gray-100" />
   );
 }
 
@@ -267,7 +268,7 @@ const HotdealGuideModal = ({ trigger }: { trigger: React.ReactNode }) => {
         <Drawer.Content className="fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full max-w-screen-layout-max rounded-t-[20px] bg-white outline-none">
           <div className="flex flex-col items-center">
             <Drawer.Title asChild>
-              <h2 className="pb-[12px] pt-[32px] text-xl font-bold">핫딜 기준 안내</h2>
+              <h3 className="pb-[12px] pt-[32px] text-xl font-bold">핫딜 기준 안내</h3>
             </Drawer.Title>
             <p className="pb-[90px] text-center text-gray-700">
               AI를 활용해서 상품의 기존 가격과 할인된 가격을
@@ -365,7 +366,7 @@ const HotdealGuideModal = ({ trigger }: { trigger: React.ReactNode }) => {
 
 const CommentSection = ({ productId }: { productId: number }) => {
   return (
-    <section className="mb-7 mt-4 flex flex-col">
+    <section className="mb-10 mt-4 flex flex-col">
       <div className="flex h-[56px] w-full items-center px-5 py-4">
         <span className="text-lg font-bold text-gray-900">지름알림 댓글</span>
       </div>
