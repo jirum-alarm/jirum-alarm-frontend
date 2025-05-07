@@ -1,5 +1,3 @@
-import Head from 'next/head';
-
 import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
 
@@ -39,9 +37,6 @@ const BasicLayout = ({
 }: Props) => {
   return (
     <>
-      <Head>
-        <meta name="apple-mobile-web-app-status-bar-style" content="#FFFFFF" />
-      </Head>
       <div
         className={cn(
           'relative mx-auto grid max-w-screen-layout-max grid-cols-1 bg-white',

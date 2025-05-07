@@ -14,12 +14,12 @@ const BackButton = ({ backTo, onClick }: { backTo?: PAGE; onClick?: () => void }
 
   return (
     <button
-      className="relative -m-2 w-11 p-2"
+      className="relative -m-2 p-2"
       onClick={handleClick}
       aria-label="뒤로 가기"
       title="뒤로 가기"
     >
-      <ArrowLeft width={28} height={28} className="relative -left-1" />
+      <ArrowLeft width={28} height={28} className="relative -left-2" />
     </button>
   );
 };
