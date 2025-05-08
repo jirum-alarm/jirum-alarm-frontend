@@ -6,7 +6,7 @@ import HomeHeader from './HomeHeader';
 import JirumRankingContainer from './JirumRankingContainer';
 import LiveHotDealContainer from './LiveHotDealContainer';
 
-const HomeContainerV2 = () => {
+const HomeContainerV2 = ({ isJirumAlarmApp }: { isJirumAlarmApp: boolean }) => {
   return (
     <div className="mx-auto h-full max-w-screen-layout-max pb-[70px]">
       <HomeHeader />
@@ -21,7 +21,7 @@ const HomeContainerV2 = () => {
           </div>
         </main>
       </div>
-      <TopButton />
+      <TopButton hasBottomNav={!isJirumAlarmApp} />
     </div>
   );
 };

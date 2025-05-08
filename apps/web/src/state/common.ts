@@ -7,12 +7,18 @@ import { IErrorModal, IModal, IToast } from '../types/common';
 import { ModalStateType } from '../types/enum/common';
 
 // Toast
+/**
+ * @deprecated
+ */
 export const toastAtom = atom<IToast[] | []>({
   // @TODO: refs: duplicated './toast.ts' fix it
   key: '#toastAtom',
   default: [],
 });
 
+/**
+ * @deprecated
+ */
 export const toastSelector = selector<Omit<IToast, 'arrayKey'>>({
   key: 'toastSelector',
   //GET이 없으면 오류가 발생해서 임의로 만들었습니다. 사용은 안합니다.
