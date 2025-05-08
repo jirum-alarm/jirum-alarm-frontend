@@ -81,20 +81,14 @@ export default function CommentLayout({
         <>
           <main className="flex grow flex-col divide-y divide-gray-200 pb-[64px] pt-[56px]">
             {comments.map((comment) => {
+              const editStatus =
+                editingComment?.status === 'update' && editingComment?.comment.id === comment.id
+                  ? 'update'
+                  : editingComment?.status === 'reply' && editingComment?.comment.id === comment.id
+                    ? 'reply'
+                    : undefined;
               return (
-                <Comment
-                  key={comment.id}
-                  comment={comment}
-                  editStatus={
-                    editingComment?.status === 'update' && editingComment?.comment.id === comment.id
-                      ? 'update'
-                      : editingComment?.status === 'reply' &&
-                          editingComment?.comment.id === comment.id
-                        ? 'reply'
-                        : undefined
-                  }
-                  canReply
-                />
+                <Comment key={comment.id} comment={comment} editStatus={editStatus} canReply />
               );
             })}
           </main>
