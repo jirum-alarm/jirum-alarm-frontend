@@ -15,7 +15,10 @@ const useInput = ({
   const isValidInput = isAllConsented;
 
   const handleConsentAllChange = () => {
-    handleRegistration({ termsOfService: !isAllConsented, privacyPolicy: !isAllConsented });
+    handleRegistration({
+      termsOfService: !isAllConsented,
+      privacyPolicy: !isAllConsented,
+    });
   };
 
   const handleConsentRequiredChange = (id: ConsentRequiredKey) => {

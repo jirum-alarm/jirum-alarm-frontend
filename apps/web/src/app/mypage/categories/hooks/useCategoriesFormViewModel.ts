@@ -8,7 +8,10 @@ import { shallowArrayEqual } from '@/util/object';
 
 import { useUpdateCategory } from '../../features';
 
-const FAVORITE_CATEGORIES = CATEGORIES.map((category) => ({ ...category, isChecked: false }));
+const FAVORITE_CATEGORIES = CATEGORIES.map((category) => ({
+  ...category,
+  isChecked: false,
+}));
 
 export const useCategoriesFormViewModel = () => {
   const {
@@ -67,5 +70,11 @@ export const useCategoriesFormViewModel = () => {
     );
   };
 
-  return { handleSubmit, handleCheckChange, categories, canSubmit, SELECTION_COUNT };
+  return {
+    handleSubmit,
+    handleCheckChange,
+    categories,
+    canSubmit,
+    SELECTION_COUNT,
+  };
 };

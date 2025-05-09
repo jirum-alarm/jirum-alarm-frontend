@@ -2,11 +2,11 @@ import {
   cloneElement,
   forwardRef,
   isValidElement,
+  ReactNode,
   useEffect,
   useMemo,
   useRef,
   useState,
-  ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -301,4 +301,4 @@ const Cancel = forwardRef<
 });
 Cancel.displayName = 'Cancel';
 
-export { AlertDialog, Trigger, Content, Header, Footer, Title, Description, Action, Cancel };
+export { Action, AlertDialog, Cancel, Content, Description, Footer, Header, Title, Trigger };

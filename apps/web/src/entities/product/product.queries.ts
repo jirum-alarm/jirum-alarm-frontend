@@ -129,7 +129,10 @@ export const ProductQueries = {
     infiniteQueryOptions({
       queryKey: [...ProductQueries.productsByKeywords(variables).queryKey],
       queryFn: ({ pageParam }) =>
-        ProductService.getProductsByKeyword({ ...variables, searchAfter: pageParam }),
+        ProductService.getProductsByKeyword({
+          ...variables,
+          searchAfter: pageParam,
+        }),
       initialPageParam: null as null | string,
       getNextPageParam: (lastPage, allPage) => {
         return lastPage.productsByKeyword?.at(-1)?.searchAfter?.[0];

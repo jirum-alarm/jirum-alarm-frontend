@@ -2,7 +2,7 @@
 
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
-import { useEffect, useState, useRef, Suspense, useMemo } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Drawer } from 'vaul';
 

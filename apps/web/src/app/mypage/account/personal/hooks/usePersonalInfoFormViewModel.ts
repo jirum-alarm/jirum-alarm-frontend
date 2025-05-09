@@ -7,7 +7,10 @@ import { AuthQueries } from '@/entities/auth';
 import { Gender } from '@/shared/api/gql/graphql';
 import { shallowEqual } from '@/util/object';
 
-const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({ text: String(year), value: String(year) }));
+const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({
+  text: String(year),
+  value: String(year),
+}));
 const birthYearOptions = [{ text: '선택안함', value: null }, ..._BIRTH_YEAR];
 
 const usePersonalInfoFormViewModel = () => {

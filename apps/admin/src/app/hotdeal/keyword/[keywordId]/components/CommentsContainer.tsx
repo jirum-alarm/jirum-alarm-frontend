@@ -79,7 +79,5 @@ CommentsContainer.displayName = 'CommentsContainer';
 export default CommentsContainer;
 
 const Cursor = () => {
-  return (
-    <div className=" ml-1 inline-block h-4 w-[2px] translate-y-[2px] animate-blink bg-black" />
-  );
+  return <div className="ml-1 inline-block h-4 w-[2px] translate-y-[2px] animate-blink bg-black" />;
 };

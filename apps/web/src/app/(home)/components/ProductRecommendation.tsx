@@ -40,8 +40,8 @@ export default function ProductRecommendation({
 
       {showRandomHotDeals && hotDeals && (
         <div className="py-6">
-          <div className="flex w-full items-center justify-between pb-4 ">
-            <span className=" text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
+          <div className="flex w-full items-center justify-between pb-4">
+            <span className="text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
             <span className="text-sm text-gray-500">
               <Link onClick={handleShowMoreClick} href={PAGE.HOME + '/?categoryId=0'}>
                 더보기

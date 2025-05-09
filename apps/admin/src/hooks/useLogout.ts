@@ -1,5 +1,6 @@
-import { deleteAccessToken } from '@/app/actions/token';
 import { useRouter } from 'next/navigation';
+
+import { deleteAccessToken } from '@/app/actions/token';
 
 const useLogout = () => {
   const router = useRouter();

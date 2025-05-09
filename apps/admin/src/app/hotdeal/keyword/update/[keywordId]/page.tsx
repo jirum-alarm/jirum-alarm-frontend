@@ -1,18 +1,18 @@
-import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import { getAccessToken } from '@/app/actions/token';
+import DefaultLayout from '@/components/Layouts/DefaultLayout';
+
 import KeywordUpdate from './components/KeywordUpdate';
 
 interface Props {
-  params: {
-    keywordId: string;
-  };
+  params: Promise<{ keywordId: string }>;
 }
 
 const KeywordUpdatePage = async ({ params }: Props) => {
+  const { keywordId } = await params;
   const token = await getAccessToken();
   return (
     <DefaultLayout isLoggedIn={!!token}>
-      <KeywordUpdate keywordId={params.keywordId} />
+      <KeywordUpdate keywordId={keywordId} />
     </DefaultLayout>
   );
 };

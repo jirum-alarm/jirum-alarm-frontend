@@ -5,13 +5,13 @@ import { animate, motion, useMotionValue, useSpring } from 'motion/react';
 import { useQueryState } from 'nuqs';
 import { Tabs } from 'radix-ui';
 import {
-  useCallback,
-  Suspense,
-  useEffect,
-  useRef,
-  useMemo,
-  useState,
   startTransition,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from 'react';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
@@ -177,8 +177,14 @@ const TabBar = ({
 
   const tabIndicatorLeft = useMotionValue(0);
   const tabIndicatorWidth = useMotionValue(0);
-  const springLeft = useSpring(tabIndicatorLeft, { damping: 30, stiffness: 250 });
-  const springWidth = useSpring(tabIndicatorWidth, { damping: 30, stiffness: 250 });
+  const springLeft = useSpring(tabIndicatorLeft, {
+    damping: 30,
+    stiffness: 250,
+  });
+  const springWidth = useSpring(tabIndicatorWidth, {
+    damping: 30,
+    stiffness: 250,
+  });
 
   const [constraints, setConstraints] = useState({ left: 0, right: 0 });
 
@@ -253,7 +259,11 @@ const TabBar = ({
           drag="x"
           dragConstraints={constraints}
           dragElastic={0.1}
-          dragTransition={{ power: 0.2, timeConstant: 250, modifyTarget: (v) => Math.round(v) }}
+          dragTransition={{
+            power: 0.2,
+            timeConstant: 250,
+            modifyTarget: (v) => Math.round(v),
+          }}
           className="relative flex"
         >
           {allCategories.map((category) => (

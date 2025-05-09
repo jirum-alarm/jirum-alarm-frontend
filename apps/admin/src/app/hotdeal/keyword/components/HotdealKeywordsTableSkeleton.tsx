@@ -21,19 +21,19 @@ const HotdealKeywordsTableSkeleton = () => {
           {Array.from({ length: 5 }, (v, i) => i).map((v, i) => (
             <tr key={v}>
               <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                <div className=" dark:bg-gray-700 mb-4 h-2.5 w-12 rounded-full bg-slate-200"></div>
+                <div className="dark:bg-gray-700 mb-4 h-2.5 w-12 rounded-full bg-slate-200"></div>
               </td>
               <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                <div className=" dark:bg-gray-700 mb-4 h-2.5 w-12 rounded-full bg-slate-200"></div>
+                <div className="dark:bg-gray-700 mb-4 h-2.5 w-12 rounded-full bg-slate-200"></div>
               </td>
               <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                <div className=" dark:bg-gray-700 mb-4 h-2.5 w-12 rounded-full bg-slate-200"></div>
+                <div className="dark:bg-gray-700 mb-4 h-2.5 w-12 rounded-full bg-slate-200"></div>
               </td>
               <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                <div className=" dark:bg-gray-700 mb-4 h-2.5 w-12 rounded-full bg-slate-200"></div>
+                <div className="dark:bg-gray-700 mb-4 h-2.5 w-12 rounded-full bg-slate-200"></div>
               </td>
               <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                <div className=" dark:bg-gray-700 mb-4 h-2.5 w-12 rounded-full bg-slate-200"></div>
+                <div className="dark:bg-gray-700 mb-4 h-2.5 w-12 rounded-full bg-slate-200"></div>
               </td>
             </tr>
           ))}

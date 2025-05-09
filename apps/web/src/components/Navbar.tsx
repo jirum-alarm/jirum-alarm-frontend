@@ -17,10 +17,9 @@ const ALARM_PATH = '/alarm';
  */
 export default function NavBar() {
   const { data } = useMe();
-  const unreadNotificationsCount = useQuery<{ unreadNotificationsCount: UnreadNotificationsCount }>(
-    QueryUnreadNotificationsCount,
-    { skip: !data?.me },
-  );
+  const unreadNotificationsCount = useQuery<{
+    unreadNotificationsCount: UnreadNotificationsCount;
+  }>(QueryUnreadNotificationsCount, { skip: !data?.me });
 
   return (
     <div className="flex items-center justify-between pt-6">

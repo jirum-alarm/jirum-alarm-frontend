@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 
 import { cn } from '@/lib/cn';
 
-import { inputVariant, containerVaraint, iconVaraint, helperVariant } from './variant/input';
+import { containerVaraint, helperVariant, iconVaraint, inputVariant } from './variant/input';
 
 interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
@@ -36,7 +36,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             {...rest}
             ref={ref}
-            className={cn(inputVariant({ variant, size, color }), { 'pr-10': icon })}
+            className={cn(inputVariant({ variant, size, color }), {
+              'pr-10': icon,
+            })}
           />
         </div>
         {helperText && <div className={helperVariant({ size, error })}>{helperText}</div>}

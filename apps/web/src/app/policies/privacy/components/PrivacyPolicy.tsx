@@ -46,7 +46,9 @@ const PrivacyPolicy = () => {
                   <p
                     className="text-sm"
                     key={data.idx}
-                    dangerouslySetInnerHTML={{ __html: content.text.replace(/\n/g, '<br/>') }}
+                    dangerouslySetInnerHTML={{
+                      __html: content.text.replace(/\n/g, '<br/>'),
+                    }}
                   ></p>
                 ))}
               </div>

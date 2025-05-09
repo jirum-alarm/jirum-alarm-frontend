@@ -25,7 +25,12 @@ const useChangePasswordFormViewModel = () => {
   const { mutate: updatePassword } = useUpdatePassword();
 
   const [input, setInput] = useState({
-    password: { value: '', error: false, invalidType: false, invalidLength: false },
+    password: {
+      value: '',
+      error: false,
+      invalidType: false,
+      invalidLength: false,
+    },
     confirmPassword: { value: '', error: false },
   });
 

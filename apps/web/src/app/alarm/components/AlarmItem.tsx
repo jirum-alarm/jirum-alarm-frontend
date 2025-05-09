@@ -15,7 +15,7 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
   const isHydrated = useIsHydrated();
 
   return (
-    <li className="flex gap-x-3 ">
+    <li className="flex gap-x-3">
       <Link href={PAGE.DETAIL + '/' + +id!} prefetch={false} className="flex w-full p-5">
         <div className="h-14 w-14 overflow-hidden rounded border border-gray-200">
           <ImageWithFallback src={thumbnail ?? ''} title={message} />
@@ -31,7 +31,7 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
                   'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-normal',
                   {
                     'border border-gray-400 bg-white px-2 text-gray-500': isEnd,
-                    'bg-error-500 px-3 text-white ': !isEnd && isHot,
+                    'bg-error-500 px-3 text-white': !isEnd && isHot,
                   },
                 )}
               >

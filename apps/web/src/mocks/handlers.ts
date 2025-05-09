@@ -1,4 +1,4 @@
-import { HttpResponse, graphql } from 'msw';
+import { graphql, HttpResponse } from 'msw';
 
 import { INotification, Role } from '@/graphql/interface';
 

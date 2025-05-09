@@ -33,7 +33,10 @@ class MypageKeywordService {
     ) {
       return false;
     }
-    this.keyword.notificationKeywordsByMe.push({ id: String(++this.rearId), keyword });
+    this.keyword.notificationKeywordsByMe.push({
+      id: String(++this.rearId),
+      keyword,
+    });
     return true;
   }
 

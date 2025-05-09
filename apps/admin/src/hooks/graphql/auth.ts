@@ -1,5 +1,6 @@
-import { MutationAdminLogin } from '@/graphql/auth';
 import { MutationHookOptions, useMutation } from '@apollo/client';
+
+import { MutationAdminLogin } from '@/graphql/auth';
 
 interface TokenOutput {
   accessToken: string;

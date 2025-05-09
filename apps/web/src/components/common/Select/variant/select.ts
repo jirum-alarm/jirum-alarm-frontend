@@ -11,7 +11,11 @@ export const selectButtonVaraint = cva(['w-full', 'min-w-[220px]', 'flex', 'just
     variant: { outlined: ['border-b'] },
   },
   compoundVariants: [
-    { variant: 'outlined', color: 'black', class: 'border-b-gray-900 text-gray-900' },
+    {
+      variant: 'outlined',
+      color: 'black',
+      class: 'border-b-gray-900 text-gray-900',
+    },
   ],
   defaultVariants: {
     color: 'black',

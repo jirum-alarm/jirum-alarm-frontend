@@ -131,7 +131,9 @@ const BottomNav = ({ type }: { type: any }) => {
                   {createElement(isActiveNav(nav.type, nav.link) ? nav.activeIcon : nav.icon)}
                 </div>
                 <span
-                  className={cn('text-xs', { 'font-semibold': isActiveNav(nav.type, nav.link) })}
+                  className={cn('text-xs', {
+                    'font-semibold': isActiveNav(nav.type, nav.link),
+                  })}
                 >
                   {nav.text}
                 </span>

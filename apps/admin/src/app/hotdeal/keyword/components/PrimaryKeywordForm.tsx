@@ -1,8 +1,11 @@
 'use client';
-import Card from '@/components/Card';
+
 import React, { useState } from 'react';
-import RadioButton from '../register/components/RadioButton';
+
+import Card from '@/components/Card';
 import { HotDealKeywordType } from '@/types/keyword';
+
+import RadioButton from '../register/components/RadioButton';
 
 interface Props {
   onChangeKeyword?: (value: string) => void;

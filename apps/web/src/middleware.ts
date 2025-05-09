@@ -1,4 +1,4 @@
-import { ResponseCookies, RequestCookies } from 'next/dist/server/web/spec-extension/cookies';
+import { RequestCookies, ResponseCookies } from 'next/dist/server/web/spec-extension/cookies';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { GRAPHQL_ENDPOINT } from './constants/graphql';

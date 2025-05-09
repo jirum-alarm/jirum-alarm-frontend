@@ -90,7 +90,10 @@ function LinkText({ content }: { content: string }) {
 
   while ((match = regex.exec(content)) !== null) {
     if (match.index > lastIndex) {
-      parts.push({ type: 'text', content: content.slice(lastIndex, match.index) });
+      parts.push({
+        type: 'text',
+        content: content.slice(lastIndex, match.index),
+      });
     }
 
     if (match[1]) {

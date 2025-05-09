@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 import NavBar from '@/components/Navbar';
 import TopButton from '@/components/TopButton';
-import { useHotDealsRandom, ProductLoading } from '@/features/products';
+import { ProductLoading, useHotDealsRandom } from '@/features/products';
 import { cn } from '@/lib/cn';
 
 import { useInputHideOnScroll } from '../hooks/(search)/useInputHideOnScroll';

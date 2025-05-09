@@ -4,9 +4,9 @@ import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { LoadingSpinner, BubbleChatFill } from '@/components/common/icons';
+import { BubbleChatFill, LoadingSpinner } from '@/components/common/icons';
 import TopButton from '@/components/TopButton';
-import { defaultCommentsVariables, CommentQueries } from '@/entities/comment';
+import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { CommentsQuery } from '@/shared/api/gql/graphql';
 
 import Comment from './Comment';

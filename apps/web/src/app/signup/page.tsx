@@ -2,14 +2,14 @@
 
 import { useMutation } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { useToast } from '@/components/common/Toast';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { CATEGORIES } from '@/constants/categories';
 import { ICategoryForm } from '@/features/categories/types';
 import { MutationSignup } from '@/graphql/auth';
-import { ISignupVariable, ISignupOutput } from '@/graphql/interface/auth';
+import { ISignupOutput, ISignupVariable } from '@/graphql/interface/auth';
 import useMyRouter from '@/hooks/useMyRouter';
 import { User } from '@/types/user';
 
@@ -63,11 +63,20 @@ export interface Registration {
 const Signup = () => {
   const [registration, setRegistration] = useState<Registration>({
     email: { value: '', error: false, focus: false },
-    password: { value: '', error: false, invalidType: false, invalidLength: false, focus: false },
+    password: {
+      value: '',
+      error: false,
+      invalidType: false,
+      invalidLength: false,
+      focus: false,
+    },
     termsOfService: false,
     privacyPolicy: false,
     nickname: { value: '', error: false, focus: false },
-    categories: CATEGORIES.map((category) => ({ ...category, isChecked: false })),
+    categories: CATEGORIES.map((category) => ({
+      ...category,
+      isChecked: false,
+    })),
     personal: { birthYear: '', gender: undefined },
   });
 
@@ -212,4 +221,12 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+const SignupPage = () => {
+  return (
+    <Suspense>
+      <Signup />
+    </Suspense>
+  );
+};
+
+export default SignupPage;

@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 const runtimeCaching = require('next-pwa/cache');
 const withPWA = require('next-pwa')({
   dest: 'public',
@@ -7,10 +8,10 @@ const withPWA = require('next-pwa')({
   buildExcludes: [/middleware-manifest.json$/],
   disableDevLogs: true,
 });
-
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
+/* eslint-enable import/order */
 
 const nextConfig = withPWA({
   output: 'standalone',

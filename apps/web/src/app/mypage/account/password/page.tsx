@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import ChangePassword from '@/app/mypage/account/password/change/components/ChangePassword';
 import CurrentPassword from '@/app/mypage/account/password/current/components/CurrentPassword';
@@ -14,7 +14,7 @@ const INITIAL_STEP = 'current';
 const STEPS = ['current', 'change'] as const;
 type Steps = (typeof STEPS)[number];
 
-const PasswordPage = () => {
+const Password = () => {
   const router = useMyRouter();
   const searchParams = useSearchParams();
   const urlSteps = searchParams.get(QUERY_PARAM_PREFIX) as Steps;
@@ -55,6 +55,14 @@ const PasswordPage = () => {
       {currentStep === 'current' && <CurrentPassword nextStep={() => nextStep('change')} />}
       {currentStep === 'change' && <ChangePassword />}
     </BasicLayout>
+  );
+};
+
+const PasswordPage = () => {
+  return (
+    <Suspense>
+      <Password />
+    </Suspense>
   );
 };
 

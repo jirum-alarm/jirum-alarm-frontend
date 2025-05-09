@@ -1,11 +1,15 @@
 'use client';
+
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+
+import { useAddHotDealKeyword } from '@/hooks/graphql/keyword';
+import { HotDealKeywordType } from '@/types/keyword';
+
 import PrimaryKeywordForm from '../../components/PrimaryKeywordForm';
 import WeightSetter from '../../components/WeightSetter';
+
 import KeywordTypeForm from './KeywordTypeForm';
-import { useRouter } from 'next/navigation';
-import { HotDealKeywordType } from '@/types/keyword';
-import { useAddHotDealKeyword } from '@/hooks/graphql/keyword';
 
 interface KeywordFormType {
   type: HotDealKeywordType;

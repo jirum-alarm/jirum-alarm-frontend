@@ -7,15 +7,21 @@ import { ProductService } from '@/shared/api/product';
 
 import ProductDetailContainerServer from './components/ProductDetailContainerServer';
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const id = params.id;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
 
   const { product } = await ProductService.getProductServer({ id: +id });
   if (!product) {
     return defaultMetadata;
   }
 
-  const productGuides = await ProductService.getProductGuides({ productId: +product.id });
+  const productGuides = await ProductService.getProductGuides({
+    productId: +product.id,
+  });
 
   const title = `지름알림 | ${product.title}`;
 
@@ -66,10 +72,11 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-export default async function ProductDetail({ params }: { params: { id: string } }) {
+export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   return (
     <Suspense>
-      <ProductDetailContainerServer productId={+params.id} />
+      <ProductDetailContainerServer productId={+id} />
     </Suspense>
   );
 }

@@ -1,7 +1,9 @@
 'use client';
-import React, { useState, ReactNode } from 'react';
-import Sidebar from '@/components/Sidebar';
+
+import React, { ReactNode, useState } from 'react';
+
 import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
 
 interface Props {
   isLoggedIn: boolean;
