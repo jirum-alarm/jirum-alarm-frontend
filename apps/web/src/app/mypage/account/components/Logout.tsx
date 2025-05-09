@@ -18,7 +18,8 @@ const Logout = () => {
             <p className="text-gray-700">
               로그아웃 시 알림을 받을 수 없어요.
               <br />
-              지름알림에서 <span className="font-semibold">로그아웃</span>할까요?
+              지름알림에서 <span className="font-semibold">로그아웃</span>
+              할까요?
             </p>
           </AlertDialog.Description>
         </AlertDialog.Header>

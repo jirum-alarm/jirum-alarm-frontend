@@ -56,7 +56,11 @@ const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product'
 
 export default HotdealScore;
 
-type HotdealScoreBarType = { maxValue: number; minValue: number; currentValue: number };
+type HotdealScoreBarType = {
+  maxValue: number;
+  minValue: number;
+  currentValue: number;
+};
 const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarType) => {
   const controls = useAnimation();
   const ref = useRef<HTMLDivElement>(null);

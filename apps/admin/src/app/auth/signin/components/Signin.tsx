@@ -1,8 +1,9 @@
 'use client';
-import React, { useState } from 'react';
-import { useMutationAdminLogin } from '@/hooks/graphql/auth';
-import { setAccessToken } from '@/app/actions/token';
 import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+
+import { setAccessToken } from '@/app/actions/token';
+import { useMutationAdminLogin } from '@/hooks/graphql/auth';
 
 const Signin = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const Signin = () => {
       router.push('/');
     },
     onError: (e) => {
-      if (e.graphQLErrors[0].extensions.code === '404') {
+      if (e.graphQLErrors[0]?.extensions?.code === '404') {
         alert('존재하지 않는 아이디입니다.');
       } else {
         alert('에러가 발생했습니다.');

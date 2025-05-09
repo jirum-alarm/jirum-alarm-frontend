@@ -1,11 +1,11 @@
 import {
   cloneElement,
+  HTMLAttributes,
   isValidElement,
+  ReactElement,
+  RefAttributes,
   useRef,
   useState,
-  ReactElement,
-  HTMLAttributes,
-  RefAttributes,
 } from 'react';
 
 import useOutsideClick from '@/hooks/useOutsideClick';

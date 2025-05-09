@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { Unsubscribe, getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getMessaging, getToken, onMessage, Unsubscribe } from 'firebase/messaging';
 import { useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 

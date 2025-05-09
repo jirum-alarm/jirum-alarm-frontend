@@ -1,7 +1,9 @@
 import '@/css/satoshi.css';
 import '@/css/style.css';
-import ApolloProvider from '@/lib/apolloProvider';
+
 import { Metadata } from 'next';
+
+import ApolloProvider from '@/lib/apolloProvider';
 
 export const metadata: Metadata = {
   title: '지름알림 어드민',

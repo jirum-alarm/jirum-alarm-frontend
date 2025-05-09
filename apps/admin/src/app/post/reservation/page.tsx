@@ -1,8 +1,10 @@
-import { Suspense } from 'react';
-import DefaultLayout from '@/components/Layouts/DefaultLayout';
-import Table from './components/PostReservationsTable';
 import Link from 'next/link';
+import { Suspense } from 'react';
+
 import { getAccessToken } from '@/app/actions/token';
+import DefaultLayout from '@/components/Layouts/DefaultLayout';
+
+import Table from './components/PostReservationsTable';
 
 const PostReservationPage = async () => {
   const token = await getAccessToken();

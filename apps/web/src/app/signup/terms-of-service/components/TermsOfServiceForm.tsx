@@ -1,5 +1,5 @@
 import Button from '@/components/common/Button';
-import { CheckDefault, CheckboxSelected } from '@/components/common/icons';
+import { CheckboxSelected, CheckDefault } from '@/components/common/icons';
 import Link from '@/features/Link';
 
 import { Registration } from '../../page';

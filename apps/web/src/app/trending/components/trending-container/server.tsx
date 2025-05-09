@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 
 import { CategoryQueries, getCategoriesForUser } from '@/entities/category';
 import { ProductQueries } from '@/entities/product';
-import { ProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
+import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { getDayBefore } from '@/util/date';
 
 import { TrendingContainer } from '.';
@@ -25,7 +25,9 @@ const TrendingContainerServer = async ({ tab }: Props) => {
   const queryClient = new QueryClient();
 
   const { categories } = await getCategoriesForUser();
-  queryClient.setQueryData(CategoryQueries.categoriesForUser().queryKey, { categories });
+  queryClient.setQueryData(CategoryQueries.categoriesForUser().queryKey, {
+    categories,
+  });
 
   if (categories.find((c) => c.id === tab)) {
     await queryClient.prefetchQuery(

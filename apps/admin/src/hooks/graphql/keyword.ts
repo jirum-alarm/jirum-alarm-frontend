@@ -1,3 +1,12 @@
+import {
+  MutationHookOptions,
+  QueryHookOptions,
+  SuspenseQueryHookOptions,
+  useMutation,
+  useQuery,
+  useSuspenseQuery,
+} from '@apollo/client';
+
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
   MutationAddHotDealKeywordByAdmin,
@@ -8,14 +17,6 @@ import {
   QueryHotDealKeywordsByAdmin,
 } from '@/graphql/keyword';
 import { HotDealKeywordOrderType, HotDealKeywordType, OrderOptionType } from '@/types/keyword';
-import {
-  MutationHookOptions,
-  QueryHookOptions,
-  SuspenseQueryHookOptions,
-  useMutation,
-  useQuery,
-  useSuspenseQuery,
-} from '@apollo/client';
 
 interface AddHotDealKeywordVariable {
   type: HotDealKeywordType;

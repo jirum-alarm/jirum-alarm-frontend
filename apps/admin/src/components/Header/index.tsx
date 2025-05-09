@@ -1,7 +1,10 @@
 'use client';
+
 import Link from 'next/link';
-import SvgLogo from '../icons/Logo';
+
 import useLogout from '@/hooks/useLogout';
+
+import SvgLogo from '../icons/Logo';
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;

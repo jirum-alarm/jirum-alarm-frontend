@@ -15,7 +15,11 @@ const RecommendedProductTabs = ({
 }: RecommendedProductTabsProps) => {
   const handleKeywordClick = (keyword: string) => {
     return (e: React.MouseEvent<HTMLLIElement>) => {
-      e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      e.currentTarget.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
       onSelectedKeyword(keyword);
     };
   };

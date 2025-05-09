@@ -1,5 +1,6 @@
-import { QueryCommentsByAdmin } from '@/graphql/comments';
 import { QueryHookOptions, useQuery } from '@apollo/client';
+
+import { QueryCommentsByAdmin } from '@/graphql/comments';
 
 interface GetCommentsData {
   commentsByAdmin: string[];

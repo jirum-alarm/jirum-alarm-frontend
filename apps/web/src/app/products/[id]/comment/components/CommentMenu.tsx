@@ -6,7 +6,7 @@ import { Drawer } from 'vaul';
 
 import Dots from '@/components/common/icons/Dots';
 import { useToast } from '@/components/common/Toast';
-import { defaultCommentsVariables, CommentQueries } from '@/entities/comment';
+import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { CommentService } from '@/shared/api/comment/comment.service';
 
 import { TComment, UPDATE_EVENT } from './CommentLayout';

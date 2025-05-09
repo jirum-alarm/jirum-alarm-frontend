@@ -1,9 +1,11 @@
+import Link from 'next/link';
 import { Suspense } from 'react';
+
+import { getAccessToken } from '@/app/actions/token';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
+
 import HotdealKeywordsTable from './components/HotdealKeywordsTable';
 import HotdealKeywordsTableSkeleton from './components/HotdealKeywordsTableSkeleton';
-import Link from 'next/link';
-import { getAccessToken } from '@/app/actions/token';
 
 const HotDealKeywordPage = async () => {
   const token = await getAccessToken();

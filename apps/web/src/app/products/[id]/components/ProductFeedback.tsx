@@ -24,9 +24,17 @@ const ProductFeedback = ({ product }: { product: NonNullable<ProductQuery['produ
   const handleUserLikeClick = () => {
     if (checkAndRedirect()) return;
     if (product.isMyLike) {
-      addUserLikeOrDislike({ target: UserLikeTarget.Product, targetId: +product.id, isLike: null });
+      addUserLikeOrDislike({
+        target: UserLikeTarget.Product,
+        targetId: +product.id,
+        isLike: null,
+      });
     } else {
-      addUserLikeOrDislike({ target: UserLikeTarget.Product, targetId: +product.id, isLike: true });
+      addUserLikeOrDislike({
+        target: UserLikeTarget.Product,
+        targetId: +product.id,
+        isLike: true,
+      });
     }
   };
   const handleUserDisLikeClick = () => {
@@ -47,7 +55,7 @@ const ProductFeedback = ({ product }: { product: NonNullable<ProductQuery['produ
   };
   return (
     <div className="px-[20px]">
-      <h2 className=" py-[16px] font-semibold text-gray-900">상품 추천하기</h2>
+      <h2 className="py-[16px] font-semibold text-gray-900">상품 추천하기</h2>
       <div className="flex h-[140px] flex-col items-center gap-[12px] rounded-[8px] border border-secondary-200 bg-secondary-50 px-[31px] py-[20px]">
         <p className="text-center text-gray-800">
           이 상품 정말 <span className="font-semibold text-secondary-700">핫딜</span>이 맞나요?

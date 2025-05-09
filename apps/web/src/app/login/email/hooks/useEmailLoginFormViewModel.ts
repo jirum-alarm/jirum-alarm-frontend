@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { setAccessToken, setRefreshToken } from '@/app/actions/token';
 import { useToast } from '@/components/common/Toast';
 import { MutationLogin } from '@/graphql/auth';
-import { TokenType, addPushTokenVariable } from '@/graphql/interface';
+import { addPushTokenVariable, TokenType } from '@/graphql/interface';
 import { MutationAddPushToken } from '@/graphql/notification';
 import useMyRouter from '@/hooks/useMyRouter';
 import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
@@ -60,7 +60,10 @@ const useEmailLoginFormViewModel = () => {
 
       if (data.login.refreshToken) {
         WebViewBridge.sendMessage(WebViewEventType.LOGIN_SUCCESS, {
-          data: { accessToken: data.login.accessToken, refreshToken: data.login.refreshToken },
+          data: {
+            accessToken: data.login.accessToken,
+            refreshToken: data.login.refreshToken,
+          },
         });
         await setRefreshToken(data.login.refreshToken);
       }
@@ -79,7 +82,9 @@ const useEmailLoginFormViewModel = () => {
       //   $email: loginForm.email.value,
       // });
 
-      addPushToken({ variables: { token: fcmToken, tokenType: TokenType.FCM } });
+      addPushToken({
+        variables: { token: fcmToken, tokenType: TokenType.FCM },
+      });
     },
     onError: () => {
       setLoginForm((prev) => ({ ...prev, error: true }));
@@ -100,19 +105,31 @@ const useEmailLoginFormViewModel = () => {
     const { value } = e.currentTarget;
     const error = emailValidate(value) ? false : true;
 
-    setLoginForm((prev) => ({ ...prev, email: { ...prev.email, value, error } }));
+    setLoginForm((prev) => ({
+      ...prev,
+      email: { ...prev.email, value, error },
+    }));
   };
 
   const emailHandleInputFocus = () => {
-    setLoginForm((prev) => ({ ...prev, email: { ...prev.email, focus: true } }));
+    setLoginForm((prev) => ({
+      ...prev,
+      email: { ...prev.email, focus: true },
+    }));
   };
 
   const emailHandleInputBlur = () => {
-    setLoginForm((prev) => ({ ...prev, email: { ...prev.email, focus: false } }));
+    setLoginForm((prev) => ({
+      ...prev,
+      email: { ...prev.email, focus: false },
+    }));
   };
 
   const emailReset = () => {
-    setLoginForm((prev) => ({ ...prev, email: { value: '', error: false, focus: false } }));
+    setLoginForm((prev) => ({
+      ...prev,
+      email: { value: '', error: false, focus: false },
+    }));
   };
 
   const passwordValidate = (value: string) => {
@@ -138,7 +155,10 @@ const useEmailLoginFormViewModel = () => {
     const { value } = e.currentTarget;
     const error = passwordValidate(value);
 
-    setLoginForm((prev) => ({ ...prev, password: { ...prev.password, value, ...error } }));
+    setLoginForm((prev) => ({
+      ...prev,
+      password: { ...prev.password, value, ...error },
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

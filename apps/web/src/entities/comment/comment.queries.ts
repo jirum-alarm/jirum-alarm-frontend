@@ -61,7 +61,10 @@ export const CommentQueries = {
     infiniteQueryOptions({
       queryKey: [...CommentQueries.commentsServer(variables).queryKey],
       queryFn: ({ pageParam }) =>
-        CommentService.getCommentsServer({ ...variables, searchAfter: pageParam }),
+        CommentService.getCommentsServer({
+          ...variables,
+          searchAfter: pageParam,
+        }),
       initialPageParam: null as null | string[],
       getNextPageParam: (lastPage) => {
         return lastPage.comments.at(-1)?.searchAfter;

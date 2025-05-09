@@ -23,7 +23,7 @@ const Chip = ({ children, onClick, onDelete, isChecked, isActive }: Props) => {
           <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"></path>
         </svg>
       )}
-      <span className=" px-3 text-[13px] text-zinc-800">{children}</span>
+      <span className="px-3 text-[13px] text-zinc-800">{children}</span>
 
       {onDelete && (
         <svg

@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
-import { TokenType, addPushTokenVariable } from '@/graphql/interface';
+import { addPushTokenVariable, TokenType } from '@/graphql/interface';
 import { MutationAddPushToken } from '@/graphql/notification';
 import { fcmTokenAtom } from '@/state/fcmToken';
 
@@ -19,14 +19,17 @@ const AddFCMToken = () => {
     },
   });
 
-  const addTokenToServer = useCallback((token: string) => {
+  const addTokenToServer = useCallback(
+    (token: string) => {
     addPushToken({
       variables: {
         token: token,
         tokenType: TokenType.FCM,
       },
     });
-  }, []);
+    },
+    [addPushToken],
+  );
 
   useEffect(() => {
     const fcmAppToken = searchParams.get('token');

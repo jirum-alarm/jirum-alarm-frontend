@@ -1,14 +1,16 @@
 'use client';
+
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { startTransition } from 'react';
+import { useInView } from 'react-intersection-observer';
+
 import Switcher from '@/components/Switchers/SwitcherOne';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
 import { HotDealKeywordType } from '@/types/keyword';
 import { dateFormatter } from '@/utils/date';
 import { getParticle } from '@/utils/text';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { startTransition } from 'react';
-import { useInView } from 'react-intersection-observer';
 
 const HotdealKeywordsTable = () => {
   const router = useRouter();

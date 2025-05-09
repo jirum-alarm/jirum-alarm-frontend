@@ -1,10 +1,12 @@
 'use client';
-import Switcher from '@/components/Switchers/SwitcherOne';
-import { dateFormatter } from '@/utils/date';
-import { getParticle } from '@/utils/text';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useInView } from 'react-intersection-observer';
+
+import Switcher from '@/components/Switchers/SwitcherOne';
+import { dateFormatter } from '@/utils/date';
+import { getParticle } from '@/utils/text';
 
 type Reservation = {
   id: number;

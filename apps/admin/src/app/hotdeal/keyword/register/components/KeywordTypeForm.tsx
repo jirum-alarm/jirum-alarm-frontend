@@ -1,7 +1,9 @@
-import Card from '@/components/Card';
 import React from 'react';
-import RadioButton from './RadioButton';
+
+import Card from '@/components/Card';
 import { HotDealKeywordType } from '@/types/keyword';
+
+import RadioButton from './RadioButton';
 
 const TypeList = [
   {

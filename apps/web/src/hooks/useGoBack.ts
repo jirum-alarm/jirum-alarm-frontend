@@ -10,10 +10,14 @@ const useGoBack = (backTo: PAGE = PAGE.HOME) => {
   const { isJirumAlarmApp } = useDevice();
 
   const goBack = useCallback(() => {
-    (document.referrer && document.referrer.indexOf('jirum-alarm.com') != -1) ||
-    window.history.length > 1
-      ? router.back()
-      : router.push(backTo);
+    if (
+      (document.referrer && document.referrer.indexOf('jirum-alarm.com') != -1) ||
+      window.history.length > 1
+    ) {
+      router.back();
+    } else {
+      router.push(backTo);
+    }
   }, [router, backTo]);
 
   if (isJirumAlarmApp) {

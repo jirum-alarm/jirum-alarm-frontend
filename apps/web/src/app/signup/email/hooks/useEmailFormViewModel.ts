@@ -31,15 +31,21 @@ const useInput = ({
   };
 
   const handleInputFocus = () => {
-    handleRegistration((prev) => ({ email: { ...prev['email'], focus: true } }));
+    handleRegistration((prev) => ({
+      email: { ...prev['email'], focus: true },
+    }));
   };
 
   const handleInputBlur = () => {
-    handleRegistration((prev) => ({ email: { ...prev['email'], focus: false } }));
+    handleRegistration((prev) => ({
+      email: { ...prev['email'], focus: false },
+    }));
   };
 
   const reset = () => {
-    handleRegistration(() => ({ email: { value: '', error: false, focus: false } }));
+    handleRegistration(() => ({
+      email: { value: '', error: false, focus: false },
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

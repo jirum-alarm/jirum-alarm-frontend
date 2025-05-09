@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { BubbleChat, ThumbsupFill } from '@/components/common/icons';
 import { useToast } from '@/components/common/Toast';
-import { defaultCommentsVariables, CommentQueries } from '@/entities/comment';
+import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { useUser } from '@/hooks/useUser';
 import { cn } from '@/lib/cn';
 import { UserLikeTarget } from '@/shared/api/gql/graphql';

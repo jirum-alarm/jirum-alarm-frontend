@@ -1,7 +1,9 @@
-import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import React from 'react';
-import KeywordDetail from './components/KeywordDetail';
+
 import { getAccessToken } from '@/app/actions/token';
+import DefaultLayout from '@/components/Layouts/DefaultLayout';
+
+import KeywordDetail from './components/KeywordDetail';
 
 const KeywordDetailPage = async ({ params }: { params: { keywordId: string } }) => {
   const token = await getAccessToken();

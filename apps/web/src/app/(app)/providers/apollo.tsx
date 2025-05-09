@@ -4,8 +4,8 @@ import { ApolloLink, fromPromise, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import {
-  ApolloNextAppProvider,
   ApolloClient,
+  ApolloNextAppProvider,
   InMemoryCache,
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support';
@@ -29,7 +29,10 @@ export const httpLink = new HttpLink({
   fetchOptions: { cache: 'no-store', crendentials: 'include' },
 });
 
-export const apolloClient = new ApolloClient({ link: httpLink, cache: new InMemoryCache() });
+export const apolloClient = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+});
 
 const getAuthLink = setContext(async (_, { headers }) => {
   const token = typeof window !== 'undefined' ? await getAccessToken() : undefined;
@@ -47,7 +50,9 @@ const getNewAccessToken = async () => {
     .mutate<ILoginByRefreshTokenOutput>({
       mutation: MutationLoginByRefreshToken,
       context: {
-        headers: { authorization: refreshToken ? `Bearer ${refreshToken}` : '' },
+        headers: {
+          authorization: refreshToken ? `Bearer ${refreshToken}` : '',
+        },
       },
     })
     .then(async (res) => {
