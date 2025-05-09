@@ -10,9 +10,10 @@ import { checkJirumAlarmApp } from '../actions/agent';
 import TrendingContainerServer from './components/trending-container/server';
 import TrendingPageHeader from './components/TrendingPageHeader';
 
-const TrendingPage = ({ searchParams }: { searchParams: { tab: string } }) => {
-  const tab = searchParams.tab ? Number(searchParams.tab) : 0;
-  const { isJirumAlarmApp } = checkJirumAlarmApp();
+const TrendingPage = async ({ searchParams }: { searchParams: { tab: string } }) => {
+  const { tab } = await searchParams;
+  const tabNumber = tab ? Number(tab) : 0;
+  const { isJirumAlarmApp } = await checkJirumAlarmApp();
 
   return (
     <BasicLayout hasBottomNav navType={NAV_TYPE.TRENDING} header={<TrendingPageHeader />}>
@@ -24,7 +25,7 @@ const TrendingPage = ({ searchParams }: { searchParams: { tab: string } }) => {
             </div>
           }
         >
-          <TrendingContainerServer tab={tab} />
+          <TrendingContainerServer tab={tabNumber} />
         </Suspense>
       </div>
       <TopButton hasBottomNav={!isJirumAlarmApp} />

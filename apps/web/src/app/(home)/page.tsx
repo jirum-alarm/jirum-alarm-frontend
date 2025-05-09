@@ -6,8 +6,8 @@ import HomeContainerV2 from './components/(home)/HomeContainerV2';
 import AddFCMToken from './components/AddFCMToken';
 // import { getFeatureFlag } from '../actions/posthog';
 
-export default function Home() {
-  const { isJirumAlarmApp } = checkJirumAlarmApp();
+export default async function Home() {
+  const { isJirumAlarmApp } = await checkJirumAlarmApp();
   // const { flags } = await getFeatureFlag();
 
   return (
@@ -15,7 +15,7 @@ export default function Home() {
       <AddFCMToken />
       {/* {flags.MAIN_PAGE_RENEWAL_FEATURE ? <HomeContainerV2 /> : <HomeContainer />} */}
 
-      <HomeContainerV2 />
+      <HomeContainerV2 isJirumAlarmApp={isJirumAlarmApp} />
       <TopButton hasBottomNav={!isJirumAlarmApp} />
 
       {/* @TODO: remove afeter v1.1.0 QA */}

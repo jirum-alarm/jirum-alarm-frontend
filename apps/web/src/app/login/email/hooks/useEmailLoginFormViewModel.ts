@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
+import { useAtomValue } from 'jotai';
 import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
 
 import { setAccessToken, setRefreshToken } from '@/app/actions/token';
 import { useToast } from '@/components/common/Toast';
@@ -46,7 +46,7 @@ const useEmailLoginFormViewModel = () => {
   });
 
   const router = useMyRouter();
-  const fcmToken = useRecoilValue(fcmTokenAtom);
+  const fcmToken = useAtomValue(fcmTokenAtom);
 
   const [addPushToken] = useMutation<unknown, addPushTokenVariable>(MutationAddPushToken, {
     onError: (e) => {

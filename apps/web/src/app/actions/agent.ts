@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 
-function checkJirumAlarmApp() {
-  const userAgent = headers().get('user-agent');
+async function checkJirumAlarmApp() {
+  const userAgent = (await headers()).get('user-agent');
   let isIosApp = false;
   let isAndroidApp = false;
   if (userAgent) {

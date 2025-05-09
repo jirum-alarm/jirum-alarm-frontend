@@ -10,7 +10,7 @@ const KeywordPage = () => {
     <BasicLayout hasBackButton title="키워드 알림">
       <div className="relative h-full px-5 py-6">
         <KeywordInput />
-        <div className=" h-10" />
+        <div className="h-10" />
         <Suspense>
           <KeywordList />
         </Suspense>

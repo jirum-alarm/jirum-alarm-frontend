@@ -1,8 +1,5 @@
 'use client';
 
-import { atom } from 'recoil';
+import { atom } from 'jotai';
 
-export const fcmTokenAtom = atom<string | null>({
-  key: '#fcmTokenAtom',
-  default: null,
-});
+export const fcmTokenAtom = atom<string>();
