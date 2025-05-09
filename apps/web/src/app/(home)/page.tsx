@@ -1,5 +1,3 @@
-import TopButton from '@/components/TopButton';
-
 import { checkJirumAlarmApp } from '../actions/agent';
 
 import HomeContainerV2 from './components/(home)/HomeContainerV2';
@@ -16,7 +14,6 @@ export default async function Home() {
       {/* {flags.MAIN_PAGE_RENEWAL_FEATURE ? <HomeContainerV2 /> : <HomeContainer />} */}
 
       <HomeContainerV2 isJirumAlarmApp={isJirumAlarmApp} />
-      <TopButton hasBottomNav={!isJirumAlarmApp} />
 
       {/* @TODO: remove afeter v1.1.0 QA */}
       {/* {!IS_VERCEL_PRD ? ( */}

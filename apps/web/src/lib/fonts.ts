@@ -20,26 +20,5 @@ export const pretendard = localFont({
     'sans-serif',
   ],
   adjustFontFallback: 'Arial',
-  src: [
-    {
-      path: '../fonts/Pretendard-Regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../fonts/Pretendard-Medium.woff2',
-      weight: '500',
-      style: 'normal',
-    },
-    {
-      path: '../fonts/Pretendard-SemiBold.woff2',
-      weight: '600',
-      style: 'normal',
-    },
-    {
-      path: '../fonts/Pretendard-Bold.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
+  src: '../fonts/PretendardStdVariable.woff2',
 });

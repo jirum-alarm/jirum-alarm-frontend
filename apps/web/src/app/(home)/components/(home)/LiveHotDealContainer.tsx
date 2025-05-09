@@ -2,15 +2,14 @@ import { Suspense } from 'react';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import { IllustStanding } from '@/components/common/icons';
+import SectionHeader from '@/components/SectionHeader';
 
 import LiveHotDealList from './LiveHotDealList';
 
 const LiveHotDealContainer = () => {
   return (
     <div className="px-5">
-      <div className="flex items-center justify-between py-3">
-        <h2 className="text-lg font-bold text-gray-900">실시간 핫딜</h2>
-      </div>
+      <SectionHeader title="실시간 핫딜" />
       <div className="flex flex-col gap-y-5 pb-5">
         <ApiErrorBoundary>
           <Suspense fallback={<LiveHotDealListSkeleton />}>

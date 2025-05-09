@@ -52,7 +52,7 @@ function RecommendButton({ product }: { product: Product }) {
       )}
       onClick={handleUserLikeClick}
     >
-      <span>상품 추천</span>
+      <span>{product.isMyLike ? '추천 완료' : '상품 추천'}</span>
       <Thumbsup width={18} height={18} fill="#F2F4F7" />
     </Button>
   );

@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { Close } from '@/components/common/icons';
+import SectionHeader from '@/components/SectionHeader';
 import { useDevice } from '@/hooks/useDevice';
 import useMyRouter from '@/hooks/useMyRouter';
 import { cn } from '@/lib/cn';
@@ -35,7 +36,7 @@ export default function RecentKeywords() {
     <>
       {keywords.length > 0 && (
         <section>
-          <h2 className="flex h-[56px] items-center font-semibold text-gray-900">최근 검색어</h2>
+          <SectionHeader title="최근 검색어" titleClassName="text-base" />
           <div className={cn(isMobile && 'no-scrollbar h-[42px] overflow-x-scroll')}>
             {loading ? (
               <div className="flex items-center text-sm">최근 검색어를 불러오는 중입니다...</div>

@@ -9,10 +9,10 @@ import useGoBack from '@/hooks/useGoBack';
 const TermsOfUse = () => {
   const goBack = useGoBack();
   return (
-    <div className="flex w-full flex-col items-center pt-[44px]">
-      <header className="fixed top-0 flex h-[44px] w-full items-center justify-center bg-white px-[20px] py-[10px] font-semibold">
-        <h1>서비스 이용약관</h1>
-        <button className="absolute right-[18px] p-2" onClick={goBack}>
+    <div className="flex w-full flex-col items-center pt-[56px]">
+      <header className="fixed top-0 z-50 flex h-[56px] w-full max-w-screen-layout-max items-center justify-between bg-white px-5 py-2">
+        <h1 className="text-lg font-bold text-black">서비스 이용약관</h1>
+        <button className="-m-2 flex items-center justify-center p-2" onClick={goBack}>
           <Close />
         </button>
       </header>

@@ -5,6 +5,7 @@ import { useRef } from 'react';
 
 import { Info, Thumbsdown, Thumbsup } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
+import SectionHeader from '@/components/SectionHeader';
 import { cn } from '@/lib/cn';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 
@@ -33,33 +34,35 @@ export default function CommunityReaction({
     <>
       {/* @TODO: remove after add hotdeal index section */}
       <section className="mb-4 px-5">
-        <div className="flex h-[56px] items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h2 className="flex gap-x-2 text-lg font-bold text-gray-900">
+        <SectionHeader
+          title={
+            <>
               커뮤니티 반응
               {!!product.positiveCommunityReactionCount && (
                 <span className="text-secondary-500">{product.positiveCommunityReactionCount}</span>
               )}
-            </h2>
-          </div>
-          <div>
-            <Tooltip
-              align="right"
-              polygonOffset={8}
-              content={
-                <p className="text-s text-white">
-                  <strong className="font-semibold">실제 커뮤니티</strong> 사용자들의
-                  <br />
-                  핫딜 리뷰를 요약해 확인해요
-                </p>
-              }
-            >
-              <button aria-label="커뮤니티 반응" title="커뮤니티 반응" className="-m-2 flex p-2">
-                <Info />
-              </button>
-            </Tooltip>
-          </div>
-        </div>
+            </>
+          }
+          right={
+            <div>
+              <Tooltip
+                align="right"
+                polygonOffset={8}
+                content={
+                  <p className="text-s text-white">
+                    <strong className="font-semibold">실제 커뮤니티</strong> 사용자들의
+                    <br />
+                    핫딜 리뷰를 요약해 확인해요
+                  </p>
+                }
+              >
+                <button aria-label="커뮤니티 반응" title="커뮤니티 반응" className="-m-2 flex p-2">
+                  <Info />
+                </button>
+              </Tooltip>
+            </div>
+          }
+        />
         <div className="mt-1 flex flex-col gap-y-4">
           {allCount !== 0 ? (
             <Reaction
