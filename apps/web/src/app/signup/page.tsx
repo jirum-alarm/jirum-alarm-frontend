@@ -2,7 +2,7 @@
 
 import { useMutation } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { useToast } from '@/components/common/Toast';
 import BackButton from '@/components/layout/BackButton';
@@ -232,4 +232,12 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+const SignupPage = () => {
+  return (
+    <Suspense>
+      <Signup />
+    </Suspense>
+  );
+};
+
+export default SignupPage;

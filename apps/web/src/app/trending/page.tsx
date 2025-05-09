@@ -10,7 +10,7 @@ import { checkJirumAlarmApp } from '../actions/agent';
 import TrendingContainerServer from './components/trending-container/server';
 import TrendingPageHeader from './components/TrendingPageHeader';
 
-const TrendingPage = async ({ searchParams }: { searchParams: { tab: string } }) => {
+const TrendingPage = async ({ searchParams }: { searchParams: Promise<{ tab: string }> }) => {
   const { tab } = await searchParams;
   const tabNumber = tab ? Number(tab) : 0;
   const { isJirumAlarmApp } = await checkJirumAlarmApp();
