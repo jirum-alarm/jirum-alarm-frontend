@@ -5,11 +5,12 @@ import DefaultLayout from '@/components/Layouts/DefaultLayout';
 
 import KeywordDetail from './components/KeywordDetail';
 
-const KeywordDetailPage = async ({ params }: { params: { keywordId: string } }) => {
+const KeywordDetailPage = async ({ params }: { params: Promise<{ keywordId: string }> }) => {
+  const { keywordId } = await params;
   const token = await getAccessToken();
   return (
     <DefaultLayout isLoggedIn={!!token}>
-      <KeywordDetail keywordId={params.keywordId} />
+      <KeywordDetail keywordId={keywordId} />
     </DefaultLayout>
   );
 };

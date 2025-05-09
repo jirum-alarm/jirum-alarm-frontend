@@ -1,3 +1,3 @@
-import config from "@jirum/prettier";
+import config from '@jirum/prettier';
 
 export default config;
