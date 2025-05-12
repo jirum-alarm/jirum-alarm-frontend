@@ -1,8 +1,10 @@
 'use client';
+
 import { useGetHotDealKeyword } from '@/hooks/graphql/keyword';
+
 import KeywordDetailInfo from './KeywordDetailInfo';
-import SynonymInputResult from './SynonymInputResult';
 import KeywordSearch from './KeywordSearch';
+import SynonymInputResult from './SynonymInputResult';
 
 interface Props {
   keywordId: string;

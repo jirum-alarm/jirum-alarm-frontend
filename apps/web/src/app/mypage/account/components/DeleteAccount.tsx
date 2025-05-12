@@ -36,7 +36,8 @@ const DeleteAccount = () => {
             <p className="text-gray-700">
               회원탈퇴 시 모든 계정 정보가 삭제돼요.
               <br />
-              지름알림에서 <span className="font-semibold">회원탈퇴</span>할까요?
+              지름알림에서 <span className="font-semibold">회원탈퇴</span>
+              할까요?
             </p>
           </AlertDialog.Description>
         </AlertDialog.Header>

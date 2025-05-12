@@ -1,12 +1,15 @@
 'use client';
-import React, { useState } from 'react';
-import PrimaryKeywordForm from '../../../components/PrimaryKeywordForm';
-import WeightSetter from '../../../components/WeightSetter';
-import { HotDealKeywordType } from '@/types/keyword';
+
 import { useRouter } from 'next/navigation';
-import { useGetHotDealDetailKeyword, useUpdateHotDealKeyword } from '@/hooks/graphql/keyword';
+import React, { useState } from 'react';
+
 import Card from '@/components/Card';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
+import { useGetHotDealDetailKeyword, useUpdateHotDealKeyword } from '@/hooks/graphql/keyword';
+import { HotDealKeywordType } from '@/types/keyword';
+
+import PrimaryKeywordForm from '../../../components/PrimaryKeywordForm';
+import WeightSetter from '../../../components/WeightSetter';
 
 interface KeywordFormType {
   type: HotDealKeywordType;

@@ -59,17 +59,16 @@ async function rejectIfNeeded(response: Response) {
 class HttpClient {
   private baseUrl: string;
   private distinctId: string | null;
-  private fcmToken: string | null;
+  private fcmToken?: string;
   constructor(url: string) {
     this.baseUrl = url;
     this.distinctId = null;
-    this.fcmToken = null;
   }
 
   public setDistintId(distinctId: string | null) {
     this.distinctId = distinctId;
   }
-  public setFcmToken(fcmToken: string | null) {
+  public setFcmToken(fcmToken?: string) {
     this.fcmToken = fcmToken;
   }
 

@@ -1,5 +1,6 @@
-import { getAccessToken } from '@/app/actions/token';
 import { useEffect, useState } from 'react';
+
+import { getAccessToken } from '@/app/actions/token';
 
 const useAccessToken = () => {
   const [accessToken, setAccessToken] = useState<string>();

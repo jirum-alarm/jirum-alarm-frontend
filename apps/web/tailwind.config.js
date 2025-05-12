@@ -99,12 +99,24 @@ module.exports = {
           '100%': { opacity: 0 },
         },
         modalZoomIn: {
-          '0%': { transform: 'translateY(-50%) translateX(-50%) scale(0.75)', opacity: 0 },
-          '100%': { transform: 'translateY(-50%) translateX(-50%) scale(1)', opacity: 1 },
+          '0%': {
+            transform: 'translateY(-50%) translateX(-50%) scale(0.75)',
+            opacity: 0,
+          },
+          '100%': {
+            transform: 'translateY(-50%) translateX(-50%) scale(1)',
+            opacity: 1,
+          },
         },
         modalZoomOut: {
-          '0%': { transform: 'translateY(-50%) translateX(-50%) scale(1)', opacity: 1 },
-          '100%': { transform: 'translateY(-50%) translateX(-50%) scale(0.75)', opacity: 0 },
+          '0%': {
+            transform: 'translateY(-50%) translateX(-50%) scale(1)',
+            opacity: 1,
+          },
+          '100%': {
+            transform: 'translateY(-50%) translateX(-50%) scale(0.75)',
+            opacity: 0,
+          },
         },
       },
       animation: {

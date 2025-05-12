@@ -1,20 +1,7 @@
 {
+  "extends": "@jirum/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "target": "ES6",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "preserveSymlinks": false,
     "jsx": "preserve",
-    "strict": true,
-    "allowJs": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "incremental": true,
     "plugins": [
       {
         "name": "next"
@@ -35,7 +22,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components",
-    "src/graphql/auth.gql"
+    "src/graphql/auth.gql",
+    "*.config.(js|mjs)"
   ],
   "exclude": ["node_modules"]
 }

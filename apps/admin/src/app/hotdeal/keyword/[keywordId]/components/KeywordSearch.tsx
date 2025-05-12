@@ -1,11 +1,14 @@
 'use client';
-import Card from '@/components/Card';
 import React, { useMemo, useRef, useState } from 'react';
-import CommentsContainer from './CommentsContainer';
-import { handleKeydownEnter } from '@/utils/event';
-import useSynonymManager from '../hooks/useSynonymManager';
+
+import Card from '@/components/Card';
 import Chip from '@/components/Chip';
 import { useGetComments } from '@/hooks/graphql/comments';
+import { handleKeydownEnter } from '@/utils/event';
+
+import useSynonymManager from '../hooks/useSynonymManager';
+
+import CommentsContainer from './CommentsContainer';
 
 interface Props {
   keywordId: string;
@@ -40,7 +43,7 @@ const KeywordSearch = ({ keywordId }: Props) => {
 
   return (
     <Card className="h-full">
-      <h2 className=" mb-3 block text-xl font-medium text-black dark:text-white">검색</h2>
+      <h2 className="mb-3 block text-xl font-medium text-black dark:text-white">검색</h2>
       <input
         ref={synonymInputRef}
         type="text"

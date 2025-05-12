@@ -1,7 +1,8 @@
+import React from 'react';
+
 import Card from '@/components/Card';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { HotDealKeywordType } from '@/types/keyword';
-import React from 'react';
 
 interface Props {
   keyword?: string;

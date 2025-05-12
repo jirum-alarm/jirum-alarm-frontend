@@ -1,4 +1,4 @@
-import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import Button from '@/components/common/Button';
 import { Thumbsup } from '@/components/common/icons';
@@ -26,9 +26,17 @@ function RecommendButton({ product }: { product: Product }) {
   const handleUserLikeClick = () => {
     if (checkAndRedirect()) return;
     if (product.isMyLike) {
-      addUserLikeOrDislike({ target: UserLikeTarget.Product, targetId: +product.id, isLike: null });
+      addUserLikeOrDislike({
+        target: UserLikeTarget.Product,
+        targetId: +product.id,
+        isLike: null,
+      });
     } else {
-      addUserLikeOrDislike({ target: UserLikeTarget.Product, targetId: +product.id, isLike: true });
+      addUserLikeOrDislike({
+        target: UserLikeTarget.Product,
+        targetId: +product.id,
+        isLike: true,
+      });
     }
   };
   return (

@@ -115,14 +115,21 @@ export const Select = ({
           onClick={toggleOptionList}
         >
           <span>{buttonTextRenderer()}</span>
-          <ArrowDown className={cn(' transition-transform', { 'rotate-180': isExpanded })} />
+          <ArrowDown
+            className={cn('transition-transform', {
+              'rotate-180': isExpanded,
+            })}
+          />
         </button>
         {isExpanded && (
           <ul
             ref={ulRef}
             role="listbox"
             id={selectId}
-            className={selectListContainerVariant({ size, expanded: isExpanded })}
+            className={selectListContainerVariant({
+              size,
+              expanded: isExpanded,
+            })}
           >
             {SelectOptions}
           </ul>

@@ -30,8 +30,10 @@ export const useCommentInput = ({
 
       // TODO: Need GTM Migration
       queryClient.invalidateQueries({
-        queryKey: CommentQueries.infiniteComments({ productId, ...defaultCommentsVariables })
-          .queryKey,
+        queryKey: CommentQueries.infiniteComments({
+          productId,
+          ...defaultCommentsVariables,
+        }).queryKey,
       });
     },
   });
@@ -43,8 +45,10 @@ export const useCommentInput = ({
 
       // TODO: Need GTM Migration
       queryClient.invalidateQueries({
-        queryKey: CommentQueries.infiniteComments({ productId, ...defaultCommentsVariables })
-          .queryKey,
+        queryKey: CommentQueries.infiniteComments({
+          productId,
+          ...defaultCommentsVariables,
+        }).queryKey,
       });
     },
   });
@@ -83,9 +87,16 @@ export const useCommentInput = ({
       addComment({ content: comment, productId });
     } else {
       if (editingComment.status === 'update') {
-        updateComment({ content: comment, id: Number(editingComment.comment.id) });
+        updateComment({
+          content: comment,
+          id: Number(editingComment.comment.id),
+        });
       } else {
-        addComment({ content: comment, productId, parentId: Number(editingComment.comment.id) });
+        addComment({
+          content: comment,
+          productId,
+          parentId: Number(editingComment.comment.id),
+        });
       }
     }
     reset();

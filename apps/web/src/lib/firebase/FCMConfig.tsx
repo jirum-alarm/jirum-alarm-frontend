@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { Unsubscribe, getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getMessaging, getToken, onMessage, Unsubscribe } from 'firebase/messaging';
+import { useAtom } from 'jotai';
 import { useEffect } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { firebaseConfig } from '@/constants/firebase';
 import { httpClient } from '@/shared/lib/http-client';
@@ -10,8 +10,7 @@ import { fcmTokenAtom } from '@/state/fcmToken';
 const firebaseApp = initializeApp(firebaseConfig);
 
 const FCMConfig = () => {
-  const setFcmToken = useSetRecoilState(fcmTokenAtom);
-  const fcmToken = useRecoilValue(fcmTokenAtom);
+  const [fcmToken, setFcmToken] = useAtom(fcmTokenAtom);
   httpClient.setFcmToken(fcmToken);
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
@@ -43,7 +42,7 @@ const FCMConfig = () => {
     };
     retrieveToken();
     return () => unsubscribe?.();
-  }, []);
+  }, [setFcmToken]);
 
   return null;
 };

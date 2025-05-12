@@ -28,19 +28,27 @@ const useInput = ({
     const { value } = e.target;
     const error = validate(value) ? false : true;
 
-    handleRegistration((prev) => ({ nickname: { ...prev.nickname, value, error } }));
+    handleRegistration((prev) => ({
+      nickname: { ...prev.nickname, value, error },
+    }));
   };
 
   const handleInputFocus = () => {
-    handleRegistration((prev) => ({ nickname: { ...prev.nickname, focus: true } }));
+    handleRegistration((prev) => ({
+      nickname: { ...prev.nickname, focus: true },
+    }));
   };
 
   const handleInputBlur = () => {
-    handleRegistration((prev) => ({ nickname: { ...prev.nickname, focus: false } }));
+    handleRegistration((prev) => ({
+      nickname: { ...prev.nickname, focus: false },
+    }));
   };
 
   const reset = () => {
-    handleRegistration(() => ({ nickname: { value: '', error: false, focus: false } }));
+    handleRegistration(() => ({
+      nickname: { value: '', error: false, focus: false },
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

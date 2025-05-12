@@ -51,7 +51,7 @@ export function ProductLikeCard({
       onClick={handleClick}
     >
       <div className={'relative aspect-square overflow-hidden rounded-lg border border-gray-200'}>
-        <div className=" absolute right-0 top-0 z-10">{actionIcon}</div>
+        <div className="absolute right-0 top-0 z-10">{actionIcon}</div>
         <ProductImage
           src={product?.thumbnail ?? ''}
           title={product.title}

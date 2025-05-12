@@ -31,7 +31,8 @@ const Description = () => {
   return (
     <legend>
       <p className="text-2xl font-semibold">
-        관심사를 알려주세요.<span className="pl-2 text-base text-gray-500">(선택)</span>
+        관심사를 알려주세요.
+        <span className="pl-2 text-base text-gray-500">(선택)</span>
       </p>
       <p className="pt-4 text-sm text-gray-700">
         관심분야 핫딜이 올라오면

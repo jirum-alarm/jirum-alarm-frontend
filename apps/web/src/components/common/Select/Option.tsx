@@ -22,7 +22,9 @@ export const Option = ({ size, color, children, index = -1, value, className }: 
     useSelectContext();
   const listRef = useRef<HTMLLIElement>(null);
   const handleOptionClick = () => {
-    index && setSelectedIndex(index);
+    if (index) {
+      setSelectedIndex(index);
+    }
     onChange(value);
     onClose();
   };

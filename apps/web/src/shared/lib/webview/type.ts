@@ -7,7 +7,9 @@ export enum WebViewEventType {
 }
 export type WebViewEventPayloads = {
   [WebViewEventType.TOKEN_REFRESH]: { data: string };
-  [WebViewEventType.LOGIN_SUCCESS]: { data: { accessToken: string; refreshToken: string } };
+  [WebViewEventType.LOGIN_SUCCESS]: {
+    data: { accessToken: string; refreshToken: string };
+  };
   [WebViewEventType.TOKEN_REMOVE]: null;
   [WebViewEventType.PRESS_BACKBUTTON]: null;
   [WebViewEventType.ROUTE_CHANGED]: { data: { url: string } };

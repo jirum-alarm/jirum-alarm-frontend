@@ -4,7 +4,11 @@ import { convertToWebp } from '@/util/image';
 export default function ProductDetailImage({
   product,
 }: {
-  product: { thumbnail?: string | null; title: string; categoryId?: number | null };
+  product: {
+    thumbnail?: string | null;
+    title: string;
+    categoryId?: number | null;
+  };
 }) {
   const thumbnail = product.thumbnail ?? undefined;
   const imageSrc = convertToWebp(thumbnail);

@@ -1,3 +1,5 @@
+import { MutationHookOptions, useMutation } from '@apollo/client';
+
 import { QueryHotDealKeywordByAdmin } from '@/graphql/keyword';
 import {
   MutationAddHotDealExcludeKeywordByAdmin,
@@ -5,7 +7,6 @@ import {
   MutationRemoveHotDealExcludeKeywordByAdmin,
   MutationRemoveHotDealKeywordSynonymByAdmin,
 } from '@/graphql/synonym';
-import { MutationHookOptions, useMutation } from '@apollo/client';
 
 interface AddHotDealKeywordSynonymByAdminVariable {
   hotDealKeywordId: number;

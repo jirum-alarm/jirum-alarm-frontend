@@ -36,7 +36,10 @@ export const WishlistQueries = {
     infiniteQueryOptions({
       queryKey: [...WishlistQueries.wishlistsServer(variables).queryKey],
       queryFn: ({ pageParam }) =>
-        WishlistService.getWishlistsServer({ ...variables, searchAfter: pageParam }),
+        WishlistService.getWishlistsServer({
+          ...variables,
+          searchAfter: pageParam,
+        }),
       initialPageParam: null as null | string,
       getNextPageParam: (lastPage) => {
         return lastPage.wishlists.at(-1)?.searchAfter?.[0];

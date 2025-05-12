@@ -25,7 +25,9 @@ const SearchInput = ({ goSearchPage }: { goSearchPage: () => void }) => {
   useEffect(() => {
     setMounted(true);
 
-    !isMobile && document.addEventListener('keydown', handleKeyPress);
+    if (!isMobile) {
+      document.addEventListener('keydown', handleKeyPress);
+    }
 
     return () => {
       document.removeEventListener('keydown', handleKeyPress);

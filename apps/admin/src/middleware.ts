@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+
 import { getAccessToken } from './app/actions/token';
 
 const unProtectedRoutes = ['/auth/signin'];

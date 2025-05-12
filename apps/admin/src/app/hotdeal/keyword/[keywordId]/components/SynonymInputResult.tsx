@@ -1,10 +1,9 @@
 'use client';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useMemo, useRef } from 'react';
-import Chip from '@/components/Chip';
-import CommentsContainer from './CommentsContainer';
-import { handleKeydownEnter } from '@/utils/event';
-import useSynonymManager from '../hooks/useSynonymManager';
+
 import Card from '@/components/Card';
+import Chip from '@/components/Chip';
 import { useGetComments } from '@/hooks/graphql/comments';
 import {
   useAddHotDealExcludeKeywordByAdmin,
@@ -12,7 +11,11 @@ import {
   useRemoveHotDealExcludeKeyword,
   useRemoveHotDealKeywordSynonym,
 } from '@/hooks/graphql/synonym';
-import { usePathname, useRouter } from 'next/navigation';
+import { handleKeydownEnter } from '@/utils/event';
+
+import useSynonymManager from '../hooks/useSynonymManager';
+
+import CommentsContainer from './CommentsContainer';
 
 interface Props {
   keywordId: string;
@@ -142,7 +145,7 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
           저장
         </button>
       </div>
-      <h2 className=" mb-3 block text-xl font-medium text-black dark:text-white ">유의어 검색</h2>
+      <h2 className="mb-3 block text-xl font-medium text-black dark:text-white">유의어 검색</h2>
       <input
         ref={synonymInputRef}
         type="text"

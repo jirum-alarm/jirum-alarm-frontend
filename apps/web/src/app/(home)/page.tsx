@@ -4,8 +4,8 @@ import HomeContainerV2 from './components/(home)/HomeContainerV2';
 import AddFCMToken from './components/AddFCMToken';
 // import { getFeatureFlag } from '../actions/posthog';
 
-export default function Home() {
-  const { isJirumAlarmApp } = checkJirumAlarmApp();
+export default async function Home() {
+  const { isJirumAlarmApp } = await checkJirumAlarmApp();
   // const { flags } = await getFeatureFlag();
 
   return (

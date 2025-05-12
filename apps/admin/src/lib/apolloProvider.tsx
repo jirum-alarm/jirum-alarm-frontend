@@ -1,17 +1,19 @@
 'use client';
-import { redirect, useRouter } from 'next/navigation';
-import { baseUrl } from '@/constants/endpoint';
-import { setContext } from '@apollo/client/link/context';
+
 import { ApolloLink, HttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import {
-  ApolloNextAppProvider,
   ApolloClient,
+  ApolloNextAppProvider,
   InMemoryCache,
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support';
-import { deleteAccessToken, getAccessToken } from '@/app/actions/token';
+import { redirect, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+
+import { deleteAccessToken, getAccessToken } from '@/app/actions/token';
+import { baseUrl } from '@/constants/endpoint';
 
 declare module '@apollo/client' {
   export interface DefaultContext {
@@ -36,8 +38,8 @@ const ApolloProvider = ({ children }: React.PropsWithChildren) => {
 
     const linkOnError = onError(({ graphQLErrors, operation, forward }) => {
       if (graphQLErrors) {
-        for (let err of graphQLErrors) {
-          switch (err.extensions.code) {
+        for (const err of graphQLErrors) {
+          switch (err.extensions?.code) {
             case 'FORBIDDEN':
             case 'UNAUTHENTICATED':
               deleteAccessToken().then(() => {

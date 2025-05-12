@@ -1,5 +1,6 @@
 import CommentContainerServer from './components/CommentContainerServer';
 
-export default function CommentPage({ params }: { params: { id: string } }) {
-  return <CommentContainerServer productId={+params.id} />;
+export default async function CommentPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <CommentContainerServer productId={+id} />;
 }

@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import SidebarLinkGroup from './SidebarLinkGroup';
+import { usePathname } from 'next/navigation';
+import React, { useEffect, useRef, useState } from 'react';
+
 import SvgLogo from '../icons/Logo';
+
+import SidebarLinkGroup from './SidebarLinkGroup';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -17,7 +19,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
-  let storedSidebarExpanded = 'true';
+  const storedSidebarExpanded = 'true';
 
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
