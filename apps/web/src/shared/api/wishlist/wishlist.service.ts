@@ -1,30 +1,33 @@
-import { httpClient } from '@/shared/lib/http-client';
+import { http } from '@/shared/lib/http';
 
 import { graphql } from '../gql';
 import {
   AddWishlistMutationVariables,
+  QueryWishlistCountQuery,
+  QueryWishlistCountQueryVariables,
+  QueryWishlistsQuery,
   QueryWishlistsQueryVariables,
   RemoveWishlistMutationVariables,
 } from '../gql/graphql';
 
 export class WishlistService {
   static async addWishlist(variables: AddWishlistMutationVariables) {
-    return httpClient.execute(MutationAddWishlist, variables).then((res) => res.data);
+    return http.execute(MutationAddWishlist, variables);
   }
   static async removeWishlist(variables: RemoveWishlistMutationVariables) {
-    return httpClient.execute(MutationRemoveWidthlist, variables).then((res) => res.data);
+    return http.execute(MutationRemoveWidthlist, variables);
   }
-  static async getWishlistsServer(variables: QueryWishlistsQueryVariables) {
-    return httpClient.server_execute(QueryWishlists, variables).then((res) => res.data);
+  static async getWishlistsServer(variables: QueryWishlistsQueryVariables, cookieHeader: string) {
+    return http.executeServer(cookieHeader, QueryWishlists, variables);
   }
   static async getWishlists(variables: QueryWishlistsQueryVariables) {
-    return httpClient.execute(QueryWishlists, variables).then((res) => res.data);
+    return http.execute(QueryWishlists, variables);
   }
   static async getWishlistCount() {
-    return httpClient.execute(QueryWishlistCount).then((res) => res.data);
+    return http.execute(QueryWishlistCount);
   }
-  static async getWishlistCountServer() {
-    return httpClient.server_execute(QueryWishlistCount).then((res) => res.data);
+  static async getWishlistCountServer(cookieHeader: string) {
+    return http.executeServer(cookieHeader, QueryWishlistCount);
   }
 }
 

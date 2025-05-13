@@ -24,7 +24,7 @@ export const ProductTrendingImageCard = ({
   const isHydrated = useIsHydrated();
 
   const handleClick = () => {
-    collectProduct(+product.id);
+    collectProduct({ productId: +product.id });
 
     // TODO: Need GTM Migration
     // mp?.track(EVENT.PRODUCT_CLICK.NAME, {

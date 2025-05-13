@@ -15,13 +15,13 @@ const RecommendedProductContainer = () => {
         right={<RecommendedMoreLink>더보기</RecommendedMoreLink>}
       />
       <div className="pb-5">
-        <ApiErrorBoundary>
-          <Suspense>
-            <RecommendedProductTabsFetcher>
+        <RecommendedProductTabsFetcher>
+          <ApiErrorBoundary>
+            <Suspense>
               <RecommendedProductList />
-            </RecommendedProductTabsFetcher>
-          </Suspense>
-        </ApiErrorBoundary>
+            </Suspense>
+          </ApiErrorBoundary>
+        </RecommendedProductTabsFetcher>
       </div>
     </div>
   );

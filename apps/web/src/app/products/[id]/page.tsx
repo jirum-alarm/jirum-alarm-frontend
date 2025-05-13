@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
 import { SERVICE_URL } from '@/constants/env';
@@ -13,8 +14,10 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
 
-  const { product } = await ProductService.getProductServer({ id: +id });
+  const { product } = await ProductService.getProductServer({ id: +id }, cookieHeader);
   if (!product) {
     return defaultMetadata;
   }

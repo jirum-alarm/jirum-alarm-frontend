@@ -34,18 +34,20 @@ const SWIPER_OPTIONS: SwiperOptions = {
 
 type Props = {
   initialTab: number;
+  isUserLogin: boolean;
 };
 
-export const TrendingContainer = ({ initialTab }: Props) => {
+export const TrendingContainer = ({ initialTab, isUserLogin }: Props) => {
   const {
     data: { categories },
-  } = useSuspenseQuery(CategoryQueries.categoriesForUser());
+  } = useSuspenseQuery(CategoryQueries.categoriesForUser(isUserLogin));
 
   const allCategories = useMemo(() => [{ id: 0, name: '전체' }, ...categories], [categories]);
   const categoryIds = allCategories.map((c) => c.id);
 
   const [tabId, setTabId] = useQueryState('tab', {
     defaultValue: initialTab,
+    clearOnDefault: false,
     parse: (value) => {
       const parsed = Number(value);
       if (isNaN(parsed)) return 0;
@@ -78,11 +80,12 @@ export const TrendingContainer = ({ initialTab }: Props) => {
   };
 
   const handleTabChange = useCallback(
-    (nextIndex: number) => {
-      if (nextIndex === tabId) return;
+    (nextId: number) => {
+      if (nextId === tabId) return;
+      const nextIndex = allCategories.findIndex((c) => c.id === nextId);
       swiperRef.current?.slideTo(nextIndex);
     },
-    [tabId],
+    [allCategories, tabId],
   );
 
   return (
@@ -90,7 +93,7 @@ export const TrendingContainer = ({ initialTab }: Props) => {
       <div className="relative">
         <TabBar
           allCategories={allCategories}
-          tabIndex={tabId}
+          tabId={tabId}
           onTabClick={(id) => handleTabChange(Number(id))}
         />
 
@@ -161,14 +164,16 @@ const TrendingListSkeleton = () => {
 
 const TabBar = ({
   allCategories,
-  tabIndex,
+  tabId,
   onTabClick,
 }: {
   allCategories: { id: number; name: string }[];
-  tabIndex: number;
+  tabId: number;
   onTabClick: (id: string) => void;
 }) => {
   const { isHeaderVisible } = useVisibilityOnScroll();
+
+  const tabIndex = allCategories.findIndex((c) => c.id === tabId);
 
   const tabDragRef = useRef<HTMLDivElement>(null);
   const dragStartX = useRef<number | null>(null);
@@ -266,7 +271,7 @@ const TabBar = ({
           }}
           className="relative flex"
         >
-          {allCategories.map((category) => (
+          {allCategories.map((category, index) => (
             <Tabs.Trigger
               key={category.id}
               value={`${category.id}`}
@@ -274,7 +279,7 @@ const TabBar = ({
               onPointerUp={(e) => handlePointerUp(e, category.id.toString())}
               className={cn(
                 'relative h-[40px] shrink-0 whitespace-nowrap px-3 py-2 text-base transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
-                tabIndex === category.id
+                tabIndex === index
                   ? 'font-semibold text-primary-600'
                   : 'font-medium text-gray-500 hover:text-gray-900',
               )}

@@ -1,61 +1,35 @@
-import { useQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useInfiniteQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
-import { INotification } from '@/graphql/interface';
-import { QueryNotifications } from '@/graphql/notification';
+import { NotificationQueries } from '@/entities/notification/notification.queries';
 
 const limit = 20;
 
 export const useNotificationsViewModel = () => {
-  const [page, setPage] = useState(1);
-  const [hasNextData, setHasNextData] = useState(true);
+  const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
+    NotificationQueries.infiniteNotifications({
+      limit,
+      offset: 0,
+    }),
+  );
 
-  const {
-    data: { notifications } = { notifications: [] },
-    loading,
-    error,
-    fetchMore,
-  } = useQuery<{ notifications: INotification[] }>(QueryNotifications, {
-    variables: { offset: 0, limit },
-  });
+  const notifications = data?.pages.flatMap((page) => page.notifications) ?? [];
 
-  const noData = !loading && notifications.length === 0;
-
+  const noData = !isFetching && notifications.length === 0;
   const { ref } = useInView({
     onChange(inView) {
-      if (inView && hasNextData) {
-        fetchMore({
-          variables: {
-            offset: page * limit,
-          },
-          updateQuery: ({ notifications }, { fetchMoreResult }) => {
-            if (fetchMoreResult.notifications.length < limit) {
-              setHasNextData(false);
-            }
-            return {
-              notifications: [...notifications, ...fetchMoreResult.notifications],
-            };
-          },
-        });
+      if (inView && hasNextPage) {
+        fetchNextPage();
       }
-
-      setPage(page + 1);
     },
   });
 
-  useEffect(() => {
-    if (notifications && notifications.length % limit !== 0) {
-      setHasNextData(false);
-    }
-  }, [notifications]);
-
   return {
     notifications,
-    loading,
-    isNotLogin: error?.graphQLErrors[0]?.extensions?.code === 'FORBIDDEN',
     noData,
-    hasNextData,
+    hasNextPage,
     ref,
   };
 };

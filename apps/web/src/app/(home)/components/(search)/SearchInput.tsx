@@ -8,7 +8,7 @@ import { cn } from '@/lib/cn';
 import { useSearchInputViewModel } from '../../hooks/(search)/useSearchInputViewModel';
 
 const SearchInput = ({ show }: { show: boolean }) => {
-  const { keyword, onKeyDown, handleChange, handleReset } = useSearchInputViewModel();
+  const { keywordInput, keyword, onKeyDown, handleChange, handleReset } = useSearchInputViewModel();
 
   return (
     <>
@@ -24,7 +24,7 @@ const SearchInput = ({ show }: { show: boolean }) => {
         <div className="flex w-full items-center overflow-hidden rounded bg-gray-50 pl-3 focus-within:outline focus-within:outline-1 focus-within:outline-gray-900">
           <Search color="#98A2B3" className="shrink-0" />
           <input
-            value={keyword ?? ''}
+            value={keywordInput}
             className="h-10 w-full bg-gray-50 px-3 text-sm outline-none"
             onKeyDown={onKeyDown}
             onChange={handleChange}

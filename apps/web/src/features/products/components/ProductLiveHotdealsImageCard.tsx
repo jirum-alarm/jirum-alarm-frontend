@@ -15,13 +15,13 @@ export function ProductLiveHotdealsImageCard({
   logging,
 }: {
   product: QueryProductsQuery['products'][number];
-  collectProduct: (productId: number) => void;
+  collectProduct: ({ productId }: { productId: number }) => void;
   logging: { page: keyof typeof EVENT.PAGE };
 }) {
   const isHydrated = useIsHydrated();
 
   const handleClick = () => {
-    collectProduct(+product.id);
+    collectProduct({ productId: +product.id });
 
     // TODO: Need GTM Migration
     // mp?.track(EVENT.PRODUCT_CLICK.NAME, {

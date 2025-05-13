@@ -3,12 +3,16 @@ import { memo, useState } from 'react';
 
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
-import { INotification } from '@/graphql/interface';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
+import { QueryNotificationsQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
 
-const AlarmItem = ({ notification }: { notification: INotification }) => {
+const AlarmItem = ({
+  notification,
+}: {
+  notification: QueryNotificationsQuery['notifications'][number];
+}) => {
   const { message, createdAt, product, keyword } = notification;
   const { thumbnail, price, isHot, isEnd, id } = product ?? {};
 
@@ -22,7 +26,7 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
         </div>
         <div className="flex-1 pl-3">
           <p className="line-clamp-2 w-full text-sm text-gray-900">
-            <HighlightText message={message} keyword={keyword?.split(' ')[0]} />
+            <HighlightText message={message} keyword={keyword?.split(' ')[0] ?? ''} />
           </p>
           <div className="flex items-center gap-x-3 pt-2">
             {(isHot || isEnd) && (

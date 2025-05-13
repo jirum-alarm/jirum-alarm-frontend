@@ -1,22 +1,22 @@
-import { httpClient } from '@/shared/lib/http-client';
+import { http } from '@/shared/lib/http';
 
 import { graphql } from '../gql';
 
 export class CategoryService {
   static async getCategories() {
-    return httpClient.execute(Queryategories).then((res) => res.data);
+    return http.execute(QueryCategories);
   }
 
   static async getMyCategories() {
-    return httpClient.execute(QueryMyCategories).then((res) => res.data);
+    return http.execute(QueryMyCategories);
   }
 
-  static async getMyCategoriesServer() {
-    return httpClient.server_execute(QueryMyCategories).then((res) => res.data);
+  static async getMyCategoriesServer(cookieHeader: string) {
+    return http.executeServer(cookieHeader, QueryMyCategories);
   }
 }
 
-const Queryategories = graphql(`
+const QueryCategories = graphql(`
   query QueryCategories {
     categories {
       id

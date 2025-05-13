@@ -1,17 +1,16 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage, Unsubscribe } from 'firebase/messaging';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 
 import { firebaseConfig } from '@/constants/firebase';
-import { httpClient } from '@/shared/lib/http-client';
+import { http } from '@/shared/lib/http';
 import { fcmTokenAtom } from '@/state/fcmToken';
 
 const firebaseApp = initializeApp(firebaseConfig);
 
 const FCMConfig = () => {
-  const [fcmToken, setFcmToken] = useAtom(fcmTokenAtom);
-  httpClient.setFcmToken(fcmToken);
+  const setFcmToken = useSetAtom(fcmTokenAtom);
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
     const retrieveToken = async () => {
@@ -27,6 +26,7 @@ const FCMConfig = () => {
           .then((currentToken) => {
             if (currentToken) {
               setFcmToken(currentToken);
+              http.setFcmToken(currentToken);
             } else {
               // Show permission request UI
               console.log('No registration token available. Request permission to generate one.');

@@ -1,13 +1,15 @@
 'use client';
 
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Button from '@/components/common/Button';
 import { Apple, ArrowDown, Google } from '@/components/common/icons';
 import Illust from '@/components/common/Illust';
 import Link from '@/features/Link';
 import { useDevice } from '@/hooks/useDevice';
+import { useIsHydrated } from '@/hooks/useIsHydrated';
 import useMyRouter from '@/hooks/useMyRouter';
 
 import { useNotificationsViewModel } from '../hooks/useNotificationsViewModel';
@@ -19,22 +21,7 @@ const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
 
 const AlarmList = () => {
-  const { isApple, isAndroid, isJirumAlarmApp } = useDevice();
-
-  const { notifications, loading, isNotLogin, noData, hasNextData, ref } =
-    useNotificationsViewModel();
-
-  if (loading) {
-    return;
-  }
-
-  if (isNotLogin && !isJirumAlarmApp) {
-    return <AppDownloadGuide platform={isApple ? 'apple' : isAndroid ? 'android' : 'non-mobile'} />;
-  }
-
-  if (isNotLogin && isJirumAlarmApp) {
-    return <LoginGuide />;
-  }
+  const { notifications, noData, hasNextPage, ref } = useNotificationsViewModel();
 
   if (noData) {
     return <NoAlerts />;
@@ -48,14 +35,26 @@ const AlarmList = () => {
         ))}
       </ul>
 
-      {hasNextData && <div ref={ref} className="h-[48px] w-full" />}
+      {hasNextPage && <div ref={ref} className="h-[48px] w-full" />}
     </>
   );
 };
 
 export default AlarmList;
 
+export function NoLogin() {
+  const { isApple, isAndroid, isJirumAlarmApp } = useDevice();
+
+  if (!isJirumAlarmApp) {
+    return <AppDownloadGuide platform={isApple ? 'apple' : isAndroid ? 'android' : 'non-mobile'} />;
+  } else {
+    return <LoginGuide />;
+  }
+}
+
 function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-mobile' }) {
+  const isHydrated = useIsHydrated();
+
   useEffect(() => {
     document.body.style.overflow = 'hidden';
 
@@ -94,16 +93,20 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
           <ArrowDown color="#D0D5DD" />
         </div>
         <div className="flex gap-x-2 pb-16">
-          {platform === 'non-mobile' && (
+          {isHydrated && (
             <>
-              <AndroidDownloadButton />
-              <IosDownloadButton />
+              {platform === 'non-mobile' && (
+                <>
+                  <AndroidDownloadButton />
+                  <IosDownloadButton />
+                </>
+              )}
+
+              {platform === 'android' && <AndroidDownloadButton />}
+
+              {platform === 'apple' && <IosDownloadButton />}
             </>
           )}
-
-          {platform === 'android' && <AndroidDownloadButton />}
-
-          {platform === 'apple' && <IosDownloadButton />}
         </div>
       </div>
     </div>

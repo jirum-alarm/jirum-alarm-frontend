@@ -1,16 +1,24 @@
+import { useQuery } from '@tanstack/react-query';
+
 import { IllustError } from '@/components/common/icons';
+import { ProductQueries } from '@/entities/product';
 import Link from '@/features/Link';
-import { useHotDealsRandom } from '@/features/products';
-import { useMe } from '@/features/users';
 import useMyRouter from '@/hooks/useMyRouter';
+import { useUser } from '@/hooks/useUser';
 
 import RecommendationProduct from './RecommendationProduct';
+import { HOT_DEAL_COUNT_RANDOM, HOT_DEAL_LIMIT_RANDOM } from './SearchPage';
 
 const ProductNotFound = () => {
-  const userResult = useMe();
+  const userResult = useUser();
   const router = useMyRouter();
 
-  const { data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
+  const { data: { communityRandomRankingProducts: hotDeals } = {} } = useQuery(
+    ProductQueries.hotdealProductsRandom({
+      limit: HOT_DEAL_LIMIT_RANDOM,
+      count: HOT_DEAL_COUNT_RANDOM,
+    }),
+  );
 
   const handleAddKeywordClick = () => {
     // TODO: Need GTM Migration
@@ -28,10 +36,6 @@ const ProductNotFound = () => {
     // });
   };
 
-  if (userResult.loading) {
-    return <></>;
-  }
-
   return (
     <div className="flex h-full w-full animate-fade-in flex-col items-start justify-center pt-11">
       <div className="w-full pb-8 text-center">
@@ -40,12 +44,10 @@ const ProductNotFound = () => {
         </div>
         <p className="pb-2 text-2xl font-semibold text-gray-900">검색 결과가 없어요.</p>
         <p className="text-gray-500">
-          {userResult.data?.me
-            ? '키워드를 등록하고 알림을 받아보세요.'
-            : '다른 키워드로 검색해보세요.'}
+          {userResult?.me ? '키워드를 등록하고 알림을 받아보세요.' : '다른 키워드로 검색해보세요.'}
         </p>
       </div>
-      {userResult.data?.me && (
+      {userResult?.me && (
         <div className="w-full pb-16 text-center">
           <button
             onClick={handleAddKeywordClick}

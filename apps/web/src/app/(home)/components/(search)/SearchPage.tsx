@@ -1,11 +1,15 @@
 'use client';
 
+import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { Suspense } from 'react';
+import { useInView } from 'react-intersection-observer';
+
 import TopButton from '@/components/TopButton';
-import { ProductLoading, useHotDealsRandom } from '@/features/products';
+import { ProductQueries } from '@/entities/product';
 import { cn } from '@/lib/cn';
+import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 
 import { useInputHideOnScroll } from '../../hooks/(search)/useInputHideOnScroll';
-import { useProductListViewModel } from '../../hooks/(search)/useProductListViewModel';
 import { useSearchInputViewModel } from '../../hooks/(search)/useSearchInputViewModel';
 
 import SearchPageProductList from './ProductList';
@@ -16,7 +20,6 @@ import RecommendationProduct from './RecommendationProduct';
 import SearchPageInput from './SearchInput';
 
 export default function SearchPage() {
-  const productViewModel = useProductListViewModel();
   const searchProductViewModel = useSearchInputViewModel();
   const showSearchBar = useInputHideOnScroll();
 
@@ -27,67 +30,93 @@ export default function SearchPage() {
       </header>
       <div className="w-full">
         <main>
-          <InitialResult show={!searchProductViewModel.keyword} />
-          <SearchResult show={!!searchProductViewModel.keyword} {...productViewModel} />
+          <Suspense>
+            <InitialResult show={!searchProductViewModel.keyword} />
+          </Suspense>
+          <Suspense>
+            {!!searchProductViewModel.keyword && (
+              <SearchResult
+                show={!!searchProductViewModel.keyword}
+                keyword={searchProductViewModel.keyword}
+              />
+            )}
+          </Suspense>
         </main>
       </div>
     </>
   );
 }
 
+export const HOT_DEAL_COUNT_RANDOM = 20;
+export const HOT_DEAL_LIMIT_RANDOM = 10;
 function InitialResult({ show }: { show: boolean }) {
-  const { loading, data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
+  const { data: { communityRandomRankingProducts: hotDeals } = {} } = useSuspenseQuery(
+    ProductQueries.hotdealProductsRandom({
+      limit: HOT_DEAL_LIMIT_RANDOM,
+      count: HOT_DEAL_COUNT_RANDOM,
+    }),
+  );
 
   return (
     <div className={cn(show ? 'block' : 'hidden')}>
-      {loading ? (
-        <></>
-      ) : (
-        <div className="flex flex-col gap-y-5 pt-2">
-          <RecentKeywords />
-          <RecommendationKeywords />
-          {!hotDeals?.length ? (
-            <div className="flex min-h-[500px]">
-              <></>
-            </div>
-          ) : (
-            <RecommendationProduct
-              label="추천 핫딜"
-              hotDeals={hotDeals}
-              logging={{ page: 'SEARCH' }}
-            />
-          )}
-        </div>
-      )}
+      <div className="flex flex-col gap-y-5 pt-2">
+        <RecentKeywords />
+        <RecommendationKeywords />
+        {!hotDeals?.length ? (
+          <div className="flex min-h-[500px]">
+            <></>
+          </div>
+        ) : (
+          <RecommendationProduct
+            label="추천 핫딜"
+            hotDeals={hotDeals}
+            logging={{ page: 'SEARCH' }}
+          />
+        )}
+      </div>
     </div>
   );
 }
 
-function SearchResult({
-  show,
-  loading,
-  products,
-  hasNextData,
-  nextDataRef,
-}: ReturnType<typeof useProductListViewModel> & { show: boolean }) {
-  const isProductEmpty = !products || products.length === 0;
+function SearchResult({ show, keyword }: { show: boolean; keyword: string }) {
+  const {
+    data: { pages },
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useSuspenseInfiniteQuery(
+    ProductQueries.infiniteProducts({
+      limit: 20,
+      keyword,
+      orderBy: ProductOrderType.PostedAt,
+      orderOption: OrderOptionType.Desc,
+    }),
+  );
+
+  const { ref } = useInView({
+    onChange: (inView) => {
+      if (inView && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+  });
+
+  const products = pages.flatMap((page) => page.products);
 
   return (
     <div className={cn({ hidden: !show })}>
-      {loading ? (
-        <div className="flex h-[90vh] items-center justify-center">
-          <ProductLoading />
-        </div>
-      ) : isProductEmpty ? (
+      {products.length === 0 ? (
         <div className="flex justify-center pb-10 pt-5">
-          <ProductNotFound />
+          <Suspense>
+            <ProductNotFound />
+          </Suspense>
         </div>
       ) : (
         <SearchPageProductList products={products} />
       )}
 
-      {!isProductEmpty && <TopButton hasBottomNav={false} />}
-      {hasNextData && <div ref={nextDataRef} className="h-[48px] w-full" />}
+      <TopButton hasBottomNav={false} />
+      {hasNextPage && <div ref={ref} className="h-[48px] w-full" />}
     </div>
   );
 }

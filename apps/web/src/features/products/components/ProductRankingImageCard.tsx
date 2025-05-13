@@ -1,25 +1,30 @@
+import { useMutation } from '@tanstack/react-query';
+
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 import ProductImage from '@/features/products/components/ProductImage';
 import { cn } from '@/lib/cn';
 import { type QueryRankingProductsQuery } from '@/shared/api/gql/graphql';
+import { ProductService } from '@/shared/api/product';
+
+import { useCollectProduct } from '../hooks';
 
 export function ProductRankingImageCard({
   product,
-  collectProduct,
   logging,
   activeIndex,
   index,
 }: {
   product: QueryRankingProductsQuery['rankingProducts'][number];
-  collectProduct: (productId: number) => void;
   logging: { page: keyof typeof EVENT.PAGE };
   activeIndex: number;
   index: number;
 }) {
+  const collectProduct = useCollectProduct();
+
   const handleClick = () => {
-    collectProduct(+product.id);
+    collectProduct({ productId: +product.id });
 
     // setTimeout(() => {
     //   mp?// mp?.track(EVENT.PRODUCT_CLICK.NAME, {

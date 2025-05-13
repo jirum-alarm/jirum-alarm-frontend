@@ -9,7 +9,6 @@ import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
 import { ProductQueries } from '@/entities/product';
-import { useCollectProduct } from '@/features/products';
 import { ProductRankingImageCard } from '@/features/products/components/ProductRankingImageCard';
 import { cn } from '@/lib/cn';
 
@@ -47,8 +46,6 @@ const JirumRankingSlider = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isInit, setIsInit] = useState(false);
 
-  const collectProduct = useCollectProduct();
-
   const handleAfterInit = () => {
     setIsInit(true);
   };
@@ -78,7 +75,6 @@ const JirumRankingSlider = () => {
                     index={i}
                     product={product}
                     logging={{ page: 'HOME' }}
-                    collectProduct={collectProduct}
                   />
                 </SwiperSlide>
               ))}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
@@ -8,9 +8,9 @@ import { useToast } from '@/components/common/Toast';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { CATEGORIES } from '@/constants/categories';
 import { ICategoryForm } from '@/features/categories/types';
-import { MutationSignup } from '@/graphql/auth';
-import { ISignupOutput, ISignupVariable } from '@/graphql/interface/auth';
 import useMyRouter from '@/hooks/useMyRouter';
+import { AuthService } from '@/shared/api/auth';
+import { Gender } from '@/shared/api/gql/graphql';
 import { User } from '@/types/user';
 
 import { setAccessToken, setRefreshToken } from '../actions/token';
@@ -88,8 +88,9 @@ const Signup = () => {
   const urlSteps = searchParams.get(QUERY_PARM_PREFIX) as Steps;
   const [currentStep, setCurrentStep] = useState<Steps>(INITIAL_STEP);
 
-  const [signup] = useMutation<ISignupOutput, ISignupVariable>(MutationSignup, {
-    onCompleted: async (data) => {
+  const { mutate: signup } = useMutation({
+    mutationFn: AuthService.signup,
+    onSuccess: async (data) => {
       await setAccessToken(data.signup.accessToken);
 
       if (data.signup.refreshToken) {
@@ -126,14 +127,12 @@ const Signup = () => {
     const _birthYear = birthYear ? Number(birthYear) : null;
 
     await signup({
-      variables: {
-        email: email.value,
-        password: password.value,
-        nickname: nickname.value,
-        birthYear: _birthYear,
-        gender,
-        favoriteCategories,
-      },
+      email: email.value,
+      password: password.value,
+      nickname: nickname.value,
+      birthYear: _birthYear,
+      gender: gender as Gender,
+      favoriteCategories,
     });
 
     // TODO: Need GTM Migration

@@ -219,7 +219,7 @@ function ProductInfo({ product }: { product: Product }) {
                     원
                   </>
                 ) : (
-                  <span className="text-2xl font-semibold">{/* 가격 준비중 */}</span>
+                  <span className="text-2xl font-semibold">커뮤니티 참고</span>
                 )}
               </p>
             </div>

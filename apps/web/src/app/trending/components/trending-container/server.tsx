@@ -1,7 +1,10 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { cookies } from 'next/headers';
 
+import { getAccessToken } from '@/app/actions/token';
 import { CategoryQueries, getCategoriesForUser } from '@/entities/category';
 import { ProductQueries } from '@/entities/product';
+import { CategoryService } from '@/shared/api/category';
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { getDayBefore } from '@/util/date';
 
@@ -22,29 +25,37 @@ type Props = {
 };
 
 const TrendingContainerServer = async ({ tab }: Props) => {
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+
+  const token = await getAccessToken();
+
   const queryClient = new QueryClient();
 
-  const { categories } = await getCategoriesForUser();
-  queryClient.setQueryData(CategoryQueries.categoriesForUser().queryKey, {
+  const { categories } = await getCategoriesForUser(!!token, cookieHeader);
+  queryClient.setQueryData(CategoryQueries.categoriesForUser(!!token).queryKey, {
     categories,
   });
 
   if (categories.find((c) => c.id === tab)) {
     await queryClient.prefetchQuery(
-      ProductQueries.products({
-        limit: TRENDING_ITEMS_LIMIT,
-        orderBy: ProductOrderType.CommunityRanking,
-        startDate: adjustStartDate(tab),
-        categoryId: tab,
-        orderOption: OrderOptionType.Desc,
-        isEnd: false,
-      }),
+      ProductQueries.productsServer(
+        {
+          limit: TRENDING_ITEMS_LIMIT,
+          orderBy: ProductOrderType.CommunityRanking,
+          startDate: adjustStartDate(tab),
+          categoryId: tab,
+          orderOption: OrderOptionType.Desc,
+          isEnd: false,
+        },
+        cookieHeader,
+      ),
     );
   }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <TrendingContainer initialTab={tab} />
+      <TrendingContainer initialTab={tab} isUserLogin={!!token} />
     </HydrationBoundary>
   );
 };

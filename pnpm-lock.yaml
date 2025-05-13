@@ -136,12 +136,6 @@ importers:
 
   apps/web:
     dependencies:
-      '@apollo/client':
-        specifier: ^3.13.6
-        version: 3.13.8(@types/react@18.3.21)(graphql-ws@5.16.2(graphql@16.11.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@apollo/experimental-nextjs-app-support':
-        specifier: ^0.11.11
-        version: 0.11.11(@apollo/client@3.13.8(@types/react@18.3.21)(graphql-ws@5.16.2(graphql@16.11.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(graphql@16.11.0)(next@15.3.2(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@next/third-parties':
         specifier: ^15.2.4
         version: 15.3.2(next@15.3.2(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
@@ -239,6 +233,9 @@ importers:
       '@0no-co/graphqlsp':
         specifier: ^1.12.16
         version: 1.12.16(graphql@16.11.0)(typescript@5.8.3)
+      '@apollo/client':
+        specifier: ^3.13.6
+        version: 3.13.8(@types/react@18.3.21)(graphql-ws@5.16.2(graphql@16.11.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@graphql-codegen/cli':
         specifier: ^5.0.5
         version: 5.0.6(@parcel/watcher@2.5.1)(@types/node@20.17.46)(graphql-sock@1.0.1(graphql@16.11.0))(graphql@16.11.0)(typescript@5.8.3)
@@ -8810,15 +8807,6 @@ snapshots:
       jsonpointer: 5.0.1
       leven: 3.1.0
 
-  '@apollo/client-react-streaming@0.11.11(@apollo/client@3.13.8(@types/react@18.3.21)(graphql-ws@5.16.2(graphql@16.11.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
-    dependencies:
-      '@apollo/client': 3.13.8(@types/react@18.3.21)(graphql-ws@5.16.2(graphql@16.11.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@wry/equality': 0.5.7
-      graphql: 16.11.0
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-      ts-invariant: 0.10.3
-
   '@apollo/client-react-streaming@0.11.11(@apollo/client@3.13.8(@types/react@18.3.21)(graphql-ws@6.0.4(graphql@16.11.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@apollo/client': 3.13.8(@types/react@18.3.21)(graphql-ws@6.0.4(graphql@16.11.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -8873,16 +8861,6 @@ snapshots:
       react-dom: 19.1.0(react@19.1.0)
     transitivePeerDependencies:
       - '@types/react'
-
-  '@apollo/experimental-nextjs-app-support@0.11.11(@apollo/client@3.13.8(@types/react@18.3.21)(graphql-ws@5.16.2(graphql@16.11.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(graphql@16.11.0)(next@15.3.2(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
-    dependencies:
-      '@apollo/client': 3.13.8(@types/react@18.3.21)(graphql-ws@5.16.2(graphql@16.11.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@apollo/client-react-streaming': 0.11.11(@apollo/client@3.13.8(@types/react@18.3.21)(graphql-ws@5.16.2(graphql@16.11.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      next: 15.3.2(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react: 19.1.0
-    transitivePeerDependencies:
-      - graphql
-      - react-dom
 
   '@apollo/experimental-nextjs-app-support@0.11.11(@apollo/client@3.13.8(@types/react@18.3.21)(graphql-ws@6.0.4(graphql@16.11.0))(graphql@16.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(graphql@16.11.0)(next@15.3.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:

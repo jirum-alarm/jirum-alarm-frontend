@@ -1,16 +1,14 @@
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@tanstack/react-query';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 
 import { setAccessToken, setRefreshToken } from '@/app/actions/token';
 import { useToast } from '@/components/common/Toast';
-import { MutationLogin } from '@/graphql/auth';
-import { addPushTokenVariable, TokenType } from '@/graphql/interface';
-import { MutationAddPushToken } from '@/graphql/notification';
 import useMyRouter from '@/hooks/useMyRouter';
+import { AuthService } from '@/shared/api/auth';
+import { TokenType } from '@/shared/api/gql/graphql';
 import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 import { fcmTokenAtom } from '@/state/fcmToken';
-import { ILoginOutput, ILoginVariable } from '@/types/login';
 
 const HOME_PATH = '/';
 
@@ -48,14 +46,13 @@ const useEmailLoginFormViewModel = () => {
   const router = useMyRouter();
   const fcmToken = useAtomValue(fcmTokenAtom);
 
-  const [addPushToken] = useMutation<unknown, addPushTokenVariable>(MutationAddPushToken, {
-    onError: (e) => {
-      console.error(e);
-    },
+  const { mutate: addPushToken } = useMutation({
+    mutationFn: AuthService.addPushToken,
   });
 
-  const [login] = useMutation<ILoginOutput, ILoginVariable>(MutationLogin, {
-    onCompleted: async (data) => {
+  const { mutate: login } = useMutation({
+    mutationFn: AuthService.loginUser,
+    onSuccess: async (data) => {
       await setAccessToken(data.login.accessToken);
 
       if (data.login.refreshToken) {
@@ -76,18 +73,10 @@ const useEmailLoginFormViewModel = () => {
         return;
       }
 
-      // TODO: Need GTM Migration
-      // mp?.set_user({
-      //   $name: null,
-      //   $email: loginForm.email.value,
-      // });
-
-      addPushToken({
-        variables: { token: fcmToken, tokenType: TokenType.FCM },
-      });
+      addPushToken({ token: fcmToken, tokenType: TokenType.Fcm });
     },
-    onError: () => {
-      setLoginForm((prev) => ({ ...prev, error: true }));
+    onError: (e) => {
+      console.error(e);
     },
   });
 
@@ -164,10 +153,8 @@ const useEmailLoginFormViewModel = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     login({
-      variables: {
-        email: loginForm.email.value,
-        password: loginForm.password.value,
-      },
+      email: loginForm.email.value,
+      password: loginForm.password.value,
     });
   };
 

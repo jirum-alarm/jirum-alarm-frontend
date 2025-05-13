@@ -1,5 +1,5 @@
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useQueryState } from 'nuqs';
+import { useState } from 'react';
 
 import useMyRouter from '@/hooks/useMyRouter';
 
@@ -7,17 +7,17 @@ const RECENT_KEYWORDS_KEY = 'gr-recent-keywords';
 const RECENT_KEYWORDS_LIMIT = 10;
 
 export const useSearchInputViewModel = () => {
-  const searchParams = useSearchParams();
   const router = useMyRouter();
 
-  const keywordParam = searchParams.get('keyword');
-
-  const [keyword, setKeyword] = useState(keywordParam);
+  const [keywordInput, setKeywordInput] = useState('');
+  const [keyword, setKeyword] = useQueryState('keyword', {
+    history: 'push',
+  });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event?.currentTarget.value;
 
-    setKeyword(value);
+    setKeywordInput(value);
 
     if (value === '') {
       router.push('/search');
@@ -25,14 +25,12 @@ export const useSearchInputViewModel = () => {
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const keyword = event.currentTarget.value;
-
-    if (!keyword) {
+    if (!keywordInput) {
       return;
     }
 
     if (event.key === 'Enter') {
-      router.push(`/search?keyword=${keyword}`);
+      setKeyword(keywordInput);
 
       // TODO: Need GTM Migration
       // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
@@ -41,7 +39,7 @@ export const useSearchInputViewModel = () => {
       //   page: EVENT.PAGE.SEARCH,
       // });
 
-      setRecentKeyord(keyword);
+      setRecentKeyord(keywordInput);
     }
   };
   const handleReset = () => {
@@ -54,14 +52,8 @@ export const useSearchInputViewModel = () => {
     router.replace(`/`);
   };
 
-  useEffect(() => {
-    const keyword = searchParams.get('keyword');
-
-    setKeyword(keyword);
-    setRecentKeyord(keyword ? keyword : '');
-  }, [searchParams]);
-
   return {
+    keywordInput,
     keyword,
     onKeyDown,
     handleChange,

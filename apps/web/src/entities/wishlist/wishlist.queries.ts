@@ -6,7 +6,7 @@ import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
 export const WishlistQueries = {
   all: () => ['wishlist'],
   lists: () => [...WishlistQueries.all(), 'list'],
-  wishlistsServer: (variables: QueryWishlistsQueryVariables) =>
+  wishlistsServer: (variables: QueryWishlistsQueryVariables, cookieHeader: string) =>
     queryOptions({
       queryKey: [
         ...WishlistQueries.lists(),
@@ -17,7 +17,7 @@ export const WishlistQueries = {
           searchAfter: variables.searchAfter,
         },
       ],
-      queryFn: () => WishlistService.getWishlistsServer(variables),
+      queryFn: () => WishlistService.getWishlistsServer(variables, cookieHeader),
     }),
   wishlists: (variables: QueryWishlistsQueryVariables) =>
     queryOptions({
@@ -32,14 +32,17 @@ export const WishlistQueries = {
       ],
       queryFn: () => WishlistService.getWishlists(variables),
     }),
-  infiniteWishlistsServer: (variables: QueryWishlistsQueryVariables) =>
+  infiniteWishlistsServer: (variables: QueryWishlistsQueryVariables, cookieHeader: string) =>
     infiniteQueryOptions({
-      queryKey: [...WishlistQueries.wishlistsServer(variables).queryKey],
+      queryKey: [...WishlistQueries.wishlistsServer(variables, cookieHeader).queryKey],
       queryFn: ({ pageParam }) =>
-        WishlistService.getWishlistsServer({
-          ...variables,
-          searchAfter: pageParam,
-        }),
+        WishlistService.getWishlistsServer(
+          {
+            ...variables,
+            searchAfter: pageParam,
+          },
+          cookieHeader,
+        ),
       initialPageParam: null as null | string,
       getNextPageParam: (lastPage) => {
         return lastPage.wishlists.at(-1)?.searchAfter?.[0];
@@ -56,10 +59,10 @@ export const WishlistQueries = {
         return lastPage.wishlists.at(-1)?.searchAfter?.[0];
       },
     }),
-  wishlistCountServer: () =>
+  wishlistCountServer: (cookieHeader: string) =>
     queryOptions({
       queryKey: [...WishlistQueries.all(), 'wishlistcount'],
-      queryFn: () => WishlistService.getWishlistCountServer(),
+      queryFn: () => WishlistService.getWishlistCountServer(cookieHeader),
     }),
   wishlistCount: () =>
     queryOptions({

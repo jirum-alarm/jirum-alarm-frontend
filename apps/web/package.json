@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "dev:mock": "concurrently --kill-others  \"NEXT_PUBLIC_API_MOCKING=enable next dev\" \"npx tsx watch ./src/mocks/http.ts\"",
     "generate:svg-component": "npx @svgr/cli --ignore-existing --jsx-runtime=automatic --out-dir src/components/common/icons --typescript -- src/assets/icons",
     "code-gen": "pnpm graphql-codegen --config codegen.ts",
@@ -19,8 +19,6 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
-    "@apollo/client": "^3.13.6",
-    "@apollo/experimental-nextjs-app-support": "^0.11.11",
     "@next/third-parties": "^15.2.4",
     "@sentry/nextjs": "^7.120.3",
     "@sentry/utils": "^8.55.0",
@@ -54,6 +52,7 @@
     "vaul": "^1.1.2"
   },
   "devDependencies": {
+    "@apollo/client": "^3.13.6",
     "@0no-co/graphqlsp": "^1.12.16",
     "@graphql-codegen/cli": "^5.0.5",
     "@graphql-codegen/near-operation-file-preset": "^3.0.0",

@@ -18,10 +18,16 @@ export const CategoryQueries = {
       queryFn: () => CategoryService.getMyCategories(),
       staleTime: 1000 * 60 * 60 * 24,
     }),
-  categoriesForUser: () =>
+  categoriesForUser: (isLoggedIn: boolean) =>
     queryOptions({
       queryKey: [...CategoryQueries.categories().queryKey, 'user'],
-      queryFn: () => getCategoriesForUser(),
+      queryFn: () => getCategoriesForUser(isLoggedIn),
+      staleTime: 1000 * 60 * 60 * 24,
+    }),
+  categoriesForUserServer: (isLoggedIn: boolean, cookieHeader: string) =>
+    queryOptions({
+      queryKey: [...CategoryQueries.categories().queryKey, 'user'],
+      queryFn: () => getCategoriesForUser(isLoggedIn, cookieHeader),
       staleTime: 1000 * 60 * 60 * 24,
     }),
 };

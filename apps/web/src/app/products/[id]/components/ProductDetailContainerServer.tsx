@@ -1,4 +1,5 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { cookies } from 'next/headers';
 
 import BasicLayout from '@/components/layout/BasicLayout';
 import { ProductQueries } from '@/entities/product';
@@ -7,8 +8,11 @@ import ProductDetailPageHeader from './ProductDeatilPageHeader';
 import ProductDetailContainer from './ProductDetailContainer';
 
 const ProductDetailContainerServer = async ({ productId }: { productId: number }) => {
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(ProductQueries.productServer({ id: productId }));
+  await queryClient.prefetchQuery(ProductQueries.productServer({ id: productId }, cookieHeader));
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <BasicLayout header={<ProductDetailPageHeader productId={productId} />}>
