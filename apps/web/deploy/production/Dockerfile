@@ -38,6 +38,7 @@ FROM node:${NODE_VERSION}-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV GRAPHQL_ENDPOINT=http://crawling-server-lb.crawling-server.svc.cluster.local:3100
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
