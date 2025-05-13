@@ -27,6 +27,8 @@ COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --filter=web
 
+ENV NEXT_PUBLIC_SERVICE_URL=https://dev.jirum-alarm.com
+
 # Build the project
 COPY --from=builder /app/out/full/ .
 RUN pnpm turbo run build --filter=web...
@@ -36,7 +38,6 @@ FROM node:${NODE_VERSION}-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=development
-ENV NEXT_PUBLIC_SERVICE_URL=https://dev.jirum-alarm.com
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
