@@ -221,4 +221,6 @@ class HttpClient {
   }
 }
 
-export const httpClient = new HttpClient(GRAPHQL_ENDPOINT);
+export const httpClient = new HttpClient(
+  GRAPHQL_ENDPOINT ?? 'https://jirum-dev-api.kyojs.com/graphql',
+);

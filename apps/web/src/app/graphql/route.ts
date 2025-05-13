@@ -1,18 +1,20 @@
 import { cookies } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
 
-import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
 import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/constants/token';
 import { graphql } from '@/shared/api/gql';
 
+const GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT;
+
 export async function POST(req: NextRequest) {
+  const endpoint = GRAPHQL_ENDPOINT ?? 'https://jirum-dev-api.kyojs.com/graphql';
+
   const cookieStore = await cookies();
   const accessToken =
     req.cookies.get('ACCESS_TOKEN')?.value || cookieStore.get('ACCESS_TOKEN')?.value;
 
   const { query, variables } = await req.json();
-
-  const res = await fetch(GRAPHQL_ENDPOINT, {
+  const res = await fetch(endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +32,7 @@ export async function POST(req: NextRequest) {
             req.cookies.get('REFRESH_TOKEN')?.value || cookieStore.get('REFRESH_TOKEN')?.value;
 
           if (refreshToken) {
-            const tokenResponse = await fetch(GRAPHQL_ENDPOINT, {
+            const tokenResponse = await fetch(endpoint, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -57,7 +59,7 @@ export async function POST(req: NextRequest) {
             const newAccessToken = tokenData.loginByRefreshToken.accessToken;
             const newRefreshToken = tokenData.loginByRefreshToken.refreshToken;
 
-            const newRes = await fetch(GRAPHQL_ENDPOINT, {
+            const newRes = await fetch(endpoint, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
