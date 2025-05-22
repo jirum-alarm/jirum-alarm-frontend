@@ -1,4 +1,4 @@
-import { http } from '@/shared/lib/http';
+import { execute } from '@/shared/lib/http';
 
 import { graphql } from '../gql';
 import {
@@ -12,22 +12,22 @@ import {
 
 export class WishlistService {
   static async addWishlist(variables: AddWishlistMutationVariables) {
-    return http.execute(MutationAddWishlist, variables);
+    return execute(MutationAddWishlist, variables);
   }
   static async removeWishlist(variables: RemoveWishlistMutationVariables) {
-    return http.execute(MutationRemoveWidthlist, variables);
+    return execute(MutationRemoveWidthlist, variables);
   }
-  static async getWishlistsServer(variables: QueryWishlistsQueryVariables, cookieHeader: string) {
-    return http.executeServer(cookieHeader, QueryWishlists, variables);
+  static async getWishlistsServer(variables: QueryWishlistsQueryVariables) {
+    return execute(QueryWishlists, variables);
   }
   static async getWishlists(variables: QueryWishlistsQueryVariables) {
-    return http.execute(QueryWishlists, variables);
+    return execute(QueryWishlists, variables);
   }
   static async getWishlistCount() {
-    return http.execute(QueryWishlistCount);
+    return execute(QueryWishlistCount);
   }
-  static async getWishlistCountServer(cookieHeader: string) {
-    return http.executeServer(cookieHeader, QueryWishlistCount);
+  static async getWishlistCountServer() {
+    return execute(QueryWishlistCount);
   }
 }
 

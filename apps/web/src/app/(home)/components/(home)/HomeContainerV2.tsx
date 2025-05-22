@@ -6,7 +6,13 @@ import HomeHeader from './HomeHeader';
 import JirumRankingContainer from './JirumRankingContainer';
 import LiveHotDealContainer from './LiveHotDealContainer';
 
-const HomeContainerV2 = ({ isJirumAlarmApp }: { isJirumAlarmApp: boolean }) => {
+const HomeContainerV2 = ({
+  isJirumAlarmApp,
+  recommend,
+}: {
+  isJirumAlarmApp: boolean;
+  recommend: string;
+}) => {
   return (
     <div className="mx-auto h-full max-w-screen-layout-max pb-[70px]">
       <HomeHeader />
@@ -16,7 +22,7 @@ const HomeContainerV2 = ({ isJirumAlarmApp }: { isJirumAlarmApp: boolean }) => {
           <JirumRankingContainer />
           <div className="h-[20px]" />
           <div className="flex flex-col gap-y-8 py-3">
-            <RecommendedProductContainer />
+            <RecommendedProductContainer recommend={recommend} />
             <LiveHotDealContainer />
           </div>
         </main>

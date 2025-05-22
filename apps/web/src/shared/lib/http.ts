@@ -1,81 +1,10 @@
-import { SERVICE_URL } from '@/constants/env';
+'use server';
+
+import { cookies } from 'next/headers';
+
+import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
 
 import { TypedDocumentString } from '../api/gql/graphql';
-
-const headers = {
-  credentials: 'include',
-  'Content-Type': 'application/json',
-  Accept: 'application/graphql-response+json',
-  // TODO: 해당 속성 추가 필요
-  // 'X-distinct-id': '',
-  // 'X-FCM-token': '',
-};
-
-async function executeBase<TResult, TVariables>(
-  query: TypedDocumentString<TResult, TVariables>,
-  variables?: TVariables,
-  options?: {
-    cookieHeader?: string;
-    fcmToken?: string;
-  },
-) {
-  try {
-    const response = await fetch(SERVICE_URL + '/graphql', {
-      method: 'POST',
-      headers: {
-        ...headers,
-        ...(options?.cookieHeader ? { Cookie: options.cookieHeader } : {}),
-        ...(options?.fcmToken ? { 'X-FCM-token': options.fcmToken } : {}),
-      },
-      body: JSON.stringify({ query, variables }),
-    });
-
-    if (!response.ok) {
-      throw new FetchError(response as customGraphqlResponse, { query, variables });
-    }
-
-    let data;
-    const contentType = response.headers.get('Content-Type');
-    if (contentType && contentType.includes('application/json')) {
-      data = (await response.json()).data;
-    } else {
-      data = await response.text();
-    }
-    return data as TResult;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-class Http {
-  private fcmToken?: string;
-
-  public setFcmToken(fcmToken?: string) {
-    console.log('setFcmToken', fcmToken);
-    this.fcmToken = fcmToken;
-  }
-
-  public async execute<TResult, TVariables>(
-    query: TypedDocumentString<TResult, TVariables>,
-    variables?: TVariables,
-  ) {
-    return executeBase(query, variables, { fcmToken: this.fcmToken });
-  }
-
-  public async executeServer<TResult, TVariables>(
-    cookieHeader: string,
-    query: TypedDocumentString<TResult, TVariables>,
-    variables?: TVariables,
-  ) {
-    return executeBase(query, variables, {
-      cookieHeader,
-      fcmToken: this.fcmToken,
-    });
-  }
-}
-
-export const http = new Http();
 
 type customGraphqlResponse = Response & {
   errors: Array<{
@@ -90,7 +19,7 @@ type customGraphqlResponse = Response & {
     };
   }>;
 };
-export class FetchError extends Error {
+class FetchError extends Error {
   constructor(
     public response: customGraphqlResponse,
     public data: any,
@@ -100,3 +29,35 @@ export class FetchError extends Error {
     this.message = JSON.stringify({ data });
   }
 }
+
+export const execute = async <TResult, TVariables>(
+  query: TypedDocumentString<TResult, TVariables>,
+  variables?: TVariables,
+) => {
+  const headers = new Headers();
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('ACCESS_TOKEN')?.value;
+
+  console.log(query.toString());
+  try {
+    const result = await fetch(GRAPHQL_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json',
+        Accept: 'application/graphql-response+json',
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      },
+      body: JSON.stringify({ query: query.toString(), variables }),
+    });
+
+    const res = await result.json();
+
+    if (res.errors && res.errors.length) {
+      throw new FetchError(res as any, res.errors);
+    }
+    return res.data as TResult;
+  } catch (error) {
+    throw error;
+  }
+};

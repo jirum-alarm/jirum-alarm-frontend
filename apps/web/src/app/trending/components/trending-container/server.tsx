@@ -25,31 +25,25 @@ type Props = {
 };
 
 const TrendingContainerServer = async ({ tab }: Props) => {
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString();
-
   const token = await getAccessToken();
 
   const queryClient = new QueryClient();
 
-  const { categories } = await getCategoriesForUser(!!token, cookieHeader);
+  const { categories } = await getCategoriesForUser(!!token);
   queryClient.setQueryData(CategoryQueries.categoriesForUser(!!token).queryKey, {
     categories,
   });
 
   if (categories.find((c) => c.id === tab)) {
     await queryClient.prefetchQuery(
-      ProductQueries.productsServer(
-        {
-          limit: TRENDING_ITEMS_LIMIT,
-          orderBy: ProductOrderType.CommunityRanking,
-          startDate: adjustStartDate(tab),
-          categoryId: tab,
-          orderOption: OrderOptionType.Desc,
-          isEnd: false,
-        },
-        cookieHeader,
-      ),
+      ProductQueries.productsServer({
+        limit: TRENDING_ITEMS_LIMIT,
+        orderBy: ProductOrderType.CommunityRanking,
+        startDate: adjustStartDate(tab),
+        categoryId: tab,
+        orderOption: OrderOptionType.Desc,
+        isEnd: false,
+      }),
     );
   }
 

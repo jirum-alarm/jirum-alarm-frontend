@@ -2,7 +2,7 @@ import { CategoryService } from '@/shared/api/category';
 
 // const initialCategory = { id: null as null | number, name: '전체' };
 
-export const getCategoriesForUser = async (isLoggedIn: boolean, cookieHeader?: string) => {
+export const getCategoriesForUser = async (isLoggedIn: boolean) => {
   // 두 개의 API를 병렬로 요청하고 각각의 성공/실패 여부를 다룹니다.
   const [categoriesResult, myCategoriesResult] = await Promise.allSettled([
     CategoryService.getCategories(),
@@ -12,9 +12,7 @@ export const getCategoriesForUser = async (isLoggedIn: boolean, cookieHeader?: s
             favoriteCategories: [],
           },
         })
-      : cookieHeader
-        ? CategoryService.getMyCategoriesServer(cookieHeader)
-        : CategoryService.getMyCategories(),
+      : CategoryService.getMyCategories(),
   ]);
 
   let categories: { id: number; name: string }[] = [];

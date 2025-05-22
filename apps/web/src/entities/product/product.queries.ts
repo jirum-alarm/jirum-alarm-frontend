@@ -30,7 +30,7 @@ export const ProductQueries = {
       ],
       queryFn: () => ProductService.getProduct(variables),
     }),
-  productServer: (variables: ProductQueryVariables, cookieHeader: string) =>
+  productServer: (variables: ProductQueryVariables) =>
     queryOptions({
       queryKey: [
         ...ProductQueries.all(),
@@ -39,7 +39,7 @@ export const ProductQueries = {
           id: variables.id,
         },
       ],
-      queryFn: () => ProductService.getProductServer(variables, cookieHeader),
+      queryFn: () => ProductService.getProductServer(variables),
     }),
   products: (variables: QueryProductsQueryVariables) =>
     queryOptions({
@@ -60,10 +60,10 @@ export const ProductQueries = {
       ],
       queryFn: () => ProductService.getProducts(variables),
     }),
-  productsServer: (variables: QueryProductsQueryVariables, cookieHeader: string) =>
+  productsServer: (variables: QueryProductsQueryVariables) =>
     queryOptions({
       queryKey: [...ProductQueries.products(variables).queryKey],
-      queryFn: () => ProductService.getProductsServer(variables, cookieHeader),
+      queryFn: () => ProductService.getProductsServer(variables),
     }),
   hotdealProductsRandom: (variables: QueryCommunityRandomRankingProductsQueryVariables) =>
     queryOptions({
@@ -115,10 +115,10 @@ export const ProductQueries = {
       queryKey: [...ProductQueries.all(), 'keywords'],
       queryFn: () => ProductService.getProductKeywords(),
     }),
-  productKeywordsServer: (cookieHeader: string) =>
+  productKeywordsServer: () =>
     queryOptions({
       queryKey: [...ProductQueries.all(), 'keywords'],
-      queryFn: () => ProductService.getProductKeywordsServer(cookieHeader),
+      queryFn: () => ProductService.getProductKeywordsServer(),
     }),
   productsByKeywords: (variables: QueryProductsByKeywordQueryVariables) =>
     queryOptions({

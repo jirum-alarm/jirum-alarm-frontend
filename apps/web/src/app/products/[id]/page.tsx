@@ -14,10 +14,8 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString();
 
-  const { product } = await ProductService.getProductServer({ id: +id }, cookieHeader);
+  const { product } = await ProductService.getProductServer({ id: +id });
   if (!product) {
     return defaultMetadata;
   }

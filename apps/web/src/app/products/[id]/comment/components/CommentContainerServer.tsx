@@ -9,20 +9,14 @@ import CommentContainer from './CommentContainer';
 import CommentPageHeader from './CommentPageHeader';
 
 const CommentContainerServer = async ({ productId }: { productId: number }) => {
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString();
-
   const queryClient = new QueryClient();
   const [token] = await Promise.all([
     getAccessToken(),
     queryClient.prefetchInfiniteQuery(
-      CommentQueries.infiniteCommentsServer(
-        {
-          productId,
-          ...defaultCommentsVariables,
-        },
-        cookieHeader,
-      ),
+      CommentQueries.infiniteCommentsServer({
+        productId,
+        ...defaultCommentsVariables,
+      }),
     ),
   ]);
 

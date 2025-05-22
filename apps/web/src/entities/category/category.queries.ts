@@ -24,10 +24,10 @@ export const CategoryQueries = {
       queryFn: () => getCategoriesForUser(isLoggedIn),
       staleTime: 1000 * 60 * 60 * 24,
     }),
-  categoriesForUserServer: (isLoggedIn: boolean, cookieHeader: string) =>
+  categoriesForUserServer: (isLoggedIn: boolean) =>
     queryOptions({
       queryKey: [...CategoryQueries.categories().queryKey, 'user'],
-      queryFn: () => getCategoriesForUser(isLoggedIn, cookieHeader),
+      queryFn: () => getCategoriesForUser(isLoggedIn),
       staleTime: 1000 * 60 * 60 * 24,
     }),
 };

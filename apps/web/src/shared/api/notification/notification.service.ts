@@ -1,4 +1,4 @@
-import { http } from '@/shared/lib/http';
+import { execute } from '@/shared/lib/http';
 
 import { graphql } from '../gql';
 import {
@@ -8,11 +8,11 @@ import {
 
 export class NotificationService {
   static async getNotifications(variables: QueryNotificationsQueryVariables) {
-    return http.execute(QueryNotifications, variables);
+    return execute(QueryNotifications, variables);
   }
 
   static async addPushToken(variables: MutationAddPushTokenMutationVariables) {
-    return http.execute(MutationAddPushToken, variables);
+    return execute(MutationAddPushToken, variables);
   }
 }
 

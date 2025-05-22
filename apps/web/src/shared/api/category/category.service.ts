@@ -1,18 +1,18 @@
-import { http } from '@/shared/lib/http';
+import { execute } from '@/shared/lib/http';
 
 import { graphql } from '../gql';
 
 export class CategoryService {
   static async getCategories() {
-    return http.execute(QueryCategories);
+    return execute(QueryCategories);
   }
 
   static async getMyCategories() {
-    return http.execute(QueryMyCategories);
+    return execute(QueryMyCategories);
   }
 
-  static async getMyCategoriesServer(cookieHeader: string) {
-    return http.executeServer(cookieHeader, QueryMyCategories);
+  static async getMyCategoriesServer() {
+    return execute(QueryMyCategories);
   }
 }
 

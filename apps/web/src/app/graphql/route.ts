@@ -1,20 +1,24 @@
 import { cookies } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { IS_PRD } from '@/constants/env';
 import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/constants/token';
 import { graphql } from '@/shared/api/gql';
 
-const GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT;
+const GRAPHQL_ENDPOINT =
+  process.env.GRAPHQL_ENDPOINT ??
+  (IS_PRD
+    ? 'http://crawling-server-lb.crawling-server.svc.cluster.local:3100/graphql'
+    : 'http://crawling-server-lb.crawling-server-dev.svc.cluster.local:3100/graphql');
 
 export async function POST(req: NextRequest) {
-  const endpoint = GRAPHQL_ENDPOINT ?? 'https://jirum-dev-api.kyojs.com/graphql';
-
   const cookieStore = await cookies();
   const accessToken =
     req.cookies.get('ACCESS_TOKEN')?.value || cookieStore.get('ACCESS_TOKEN')?.value;
 
   const { query, variables } = await req.json();
-  const res = await fetch(endpoint, {
+
+  const res = await fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -32,7 +36,7 @@ export async function POST(req: NextRequest) {
             req.cookies.get('REFRESH_TOKEN')?.value || cookieStore.get('REFRESH_TOKEN')?.value;
 
           if (refreshToken) {
-            const tokenResponse = await fetch(endpoint, {
+            const tokenResponse = await fetch(GRAPHQL_ENDPOINT, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -59,7 +63,7 @@ export async function POST(req: NextRequest) {
             const newAccessToken = tokenData.loginByRefreshToken.accessToken;
             const newRefreshToken = tokenData.loginByRefreshToken.refreshToken;
 
-            const newRes = await fetch(endpoint, {
+            const newRes = await fetch(GRAPHQL_ENDPOINT, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

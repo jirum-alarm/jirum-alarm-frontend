@@ -1,4 +1,4 @@
-import { http } from '@/shared/lib/http';
+import { execute } from '@/shared/lib/http';
 
 import { graphql } from '../gql';
 import {
@@ -14,51 +14,51 @@ import {
 
 export class AuthService {
   static async loginByRefreshTokenMutation() {
-    return http.execute(MutationLoginByRefreshToken);
+    return execute(MutationLoginByRefreshToken);
   }
 
   static async getMe() {
-    return http.execute(QueryMe);
+    return execute(QueryMe);
   }
 
-  static async getMeServer(cookieHeader: string) {
-    return http.executeServer(cookieHeader, QueryMe);
+  static async getMeServer() {
+    return execute(QueryMe);
   }
 
   static async getMyKeyword(variables: QueryMypageKeywordQueryVariables) {
-    return http.execute(QueryMypageKeyword, variables);
+    return execute(QueryMypageKeyword, variables);
   }
 
   static async updateMe(variables: MutationUpdateUserProfileMutationVariables) {
-    return http.execute(MutationUpdateUserProfile, variables);
+    return execute(MutationUpdateUserProfile, variables);
   }
 
   static async signup(variables: MutationSignupMutationVariables) {
-    return http.execute(MutationSignup, variables);
+    return execute(MutationSignup, variables);
   }
 
   static async loginUser(variables: MutationLoginMutationVariables) {
-    return http.execute(MutationLogin, variables);
+    return execute(MutationLogin, variables);
   }
 
   static async addPushToken(variables: MutationAddPushTokenMutationVariables) {
-    return http.execute(MutationAddPushToken, variables);
+    return execute(MutationAddPushToken, variables);
   }
 
   static async deleteUser() {
-    return http.execute(MutationWithdraw);
+    return execute(MutationWithdraw);
   }
 
   static async updatePassword(variables: MutationUpdatePasswordMutationVariables) {
-    return http.execute(UpdatePassword, variables);
+    return execute(UpdatePassword, variables);
   }
 
   static async updateKeyword(variables: MutationAddNotificationKeywordMutationVariables) {
-    return http.execute(MutationAddNotificationKeyword, variables);
+    return execute(MutationAddNotificationKeyword, variables);
   }
 
   static async removeKeyword(variables: MutationRemoveNotificationKeywordMutationVariables) {
-    return http.execute(MutationRemoveNotificationKeyword, variables);
+    return execute(MutationRemoveNotificationKeyword, variables);
   }
 }
 

@@ -11,10 +11,10 @@ export const AuthQueries = {
       queryKey: [...AuthQueries.all(), 'me'],
       queryFn: () => AuthService.getMe(),
     }),
-  meServer: (cookieHeader: string) =>
+  meServer: () =>
     queryOptions({
       queryKey: [...AuthQueries.all(), 'me'],
-      queryFn: () => AuthService.getMeServer(cookieHeader),
+      queryFn: () => AuthService.getMeServer(),
     }),
   keyword: () => [...AuthQueries.all(), 'keyword'],
   myKeywords: (variables: QueryMypageKeywordQueryVariables) =>

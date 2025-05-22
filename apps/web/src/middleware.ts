@@ -1,12 +1,16 @@
 import { RequestCookies, ResponseCookies } from 'next/dist/server/web/spec-extension/cookies';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { IS_PRD } from './constants/env';
 import { PAGE } from './constants/page';
 import { accessTokenExpiresAt, refreshTokenExpiresAt } from './constants/token';
 import { graphql } from './shared/api/gql';
 
-const GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT;
-const endpoint = GRAPHQL_ENDPOINT ?? 'https://jirum-dev-api.kyojs.com/graphql';
+const GRAPHQL_ENDPOINT =
+  process.env.GRAPHQL_ENDPOINT ??
+  (IS_PRD
+    ? 'http://crawling-server-lb.crawling-server.svc.cluster.local:3100/graphql'
+    : 'http://crawling-server-lb.crawling-server-dev.svc.cluster.local:3100/graphql');
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   // const response = await handlePostHog(request);
@@ -99,7 +103,7 @@ const routeGuard = async (req: NextRequest, res: NextResponse) => {
 // };
 
 const tokenVerify = async (accessToken?: string) => {
-  const response = await fetch(endpoint, {
+  const response = await fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -113,7 +117,7 @@ const tokenVerify = async (accessToken?: string) => {
 };
 
 const getNewToken = async (refreshToken?: string) => {
-  const response = await fetch(endpoint, {
+  const response = await fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

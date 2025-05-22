@@ -1482,7 +1482,11 @@ export class TypedDocumentString<TResult, TVariables>
   }
 
   toString(): string & DocumentTypeDecoration<TResult, TVariables> {
-    return this.value;
+    return this.value.toString();
+  }
+
+  toJSON(): string {
+    return this.value.toString();
   }
 }
 

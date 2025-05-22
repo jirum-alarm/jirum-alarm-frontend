@@ -8,11 +8,8 @@ import ProductDetailPageHeader from './ProductDeatilPageHeader';
 import ProductDetailContainer from './ProductDetailContainer';
 
 const ProductDetailContainerServer = async ({ productId }: { productId: number }) => {
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString();
-
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(ProductQueries.productServer({ id: productId }, cookieHeader));
+  await queryClient.prefetchQuery(ProductQueries.productServer({ id: productId }));
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <BasicLayout header={<ProductDetailPageHeader productId={productId} />}>

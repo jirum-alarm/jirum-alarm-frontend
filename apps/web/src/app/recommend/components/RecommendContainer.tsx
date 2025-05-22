@@ -2,10 +2,11 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
-import { Suspense } from 'react';
+import { startTransition, Suspense, useMemo } from 'react';
 
 import RecommendedProductTabs from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductTabs';
 import RecommendProductList from '@/app/recommend/components/RecommendProductList';
+import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import { IllustStandingSmall } from '@/components/common/icons';
 import { ProductQueries } from '@/entities/product';
 
@@ -14,9 +15,16 @@ const RecommendContainer = () => {
     data: { productKeywords },
   } = useSuspenseQuery(ProductQueries.productKeywords());
 
-  const [recommend, setRecommend] = useQueryState('recommend');
-  const validRecommend = recommend && productKeywords.includes(recommend);
-  const selectedKeyword = validRecommend ? recommend : productKeywords[0];
+  const [recommend, setRecommend] = useQueryState('recommend', {
+    startTransition,
+    throttleMs: 100,
+  });
+
+  const selectedKeyword = useMemo(() => {
+    const validRecommend = recommend && productKeywords.includes(recommend);
+    return validRecommend ? recommend : productKeywords[0];
+  }, [recommend, productKeywords]);
+
   const handleSelectedKeyword = (keyword: string) => {
     setRecommend(keyword);
   };
@@ -30,9 +38,11 @@ const RecommendContainer = () => {
           onSelectedKeyword={(keyword) => handleSelectedKeyword(keyword)}
         />
       </div>
-      <Suspense fallback={<RecommendProductListSkeleton />}>
-        <RecommendProductList keyword={selectedKeyword} />
-      </Suspense>
+      <ApiErrorBoundary>
+        <Suspense fallback={<RecommendProductListSkeleton />}>
+          <RecommendProductList keyword={selectedKeyword} />
+        </Suspense>
+      </ApiErrorBoundary>
     </div>
   );
 };

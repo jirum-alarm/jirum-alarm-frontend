@@ -1,13 +1,19 @@
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import SectionHeader from '@/components/SectionHeader';
 import { PAGE } from '@/constants/page';
+import { ProductQueries } from '@/entities/product/product.queries';
 import Link from '@/features/Link';
 
 import JirumRankingSlider from './JirumRankingSlider';
 
-const JirumRankingContainer = () => {
+const JirumRankingContainer = async () => {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery(ProductQueries.ranking());
+
   return (
     <div className="w-full">
       <div className="px-5">
@@ -20,18 +26,20 @@ const JirumRankingContainer = () => {
           }
         />
       </div>
-      <ApiErrorBoundary>
-        <Suspense
-          fallback={
-            <div className="mt-2">
-              <JirumRankingSliderSkeleton />
-              <SliderDotsSkeleton total={10} />
-            </div>
-          }
-        >
-          <JirumRankingSlider />
-        </Suspense>
-      </ApiErrorBoundary>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ApiErrorBoundary>
+          <Suspense
+            fallback={
+              <div className="mt-2">
+                <JirumRankingSliderSkeleton />
+                <SliderDotsSkeleton total={10} />
+              </div>
+            }
+          >
+            <JirumRankingSlider />
+          </Suspense>
+        </ApiErrorBoundary>
+      </HydrationBoundary>
     </div>
   );
 };

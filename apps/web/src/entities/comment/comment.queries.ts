@@ -31,7 +31,7 @@ export const CommentQueries = {
       queryFn: () => CommentService.getComments(variables),
     }),
 
-  commentsServer: (variables: CommentsQueryVariables, cookieHeader: string) =>
+  commentsServer: (variables: CommentsQueryVariables) =>
     queryOptions({
       queryKey: [
         ...CommentQueries.all(),
@@ -43,7 +43,7 @@ export const CommentQueries = {
           orderOption: variables.orderOption,
         },
       ],
-      queryFn: () => CommentService.getCommentsServer(variables, cookieHeader),
+      queryFn: () => CommentService.getCommentsServer(variables),
     }),
 
   infiniteComments: (variables: CommentsQueryVariables) =>
@@ -57,17 +57,14 @@ export const CommentQueries = {
       },
     }),
 
-  infiniteCommentsServer: (variables: CommentsQueryVariables, cookieHeader: string) =>
+  infiniteCommentsServer: (variables: CommentsQueryVariables) =>
     infiniteQueryOptions({
-      queryKey: [...CommentQueries.commentsServer(variables, cookieHeader).queryKey],
+      queryKey: [...CommentQueries.commentsServer(variables).queryKey],
       queryFn: ({ pageParam }) =>
-        CommentService.getCommentsServer(
-          {
-            ...variables,
-            searchAfter: pageParam,
-          },
-          cookieHeader,
-        ),
+        CommentService.getCommentsServer({
+          ...variables,
+          searchAfter: pageParam,
+        }),
       initialPageParam: null as null | string[],
       getNextPageParam: (lastPage) => {
         return lastPage.comments.at(-1)?.searchAfter;

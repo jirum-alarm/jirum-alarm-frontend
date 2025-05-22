@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import { ProductQueries } from '@/entities/product';
@@ -17,8 +17,10 @@ const RecommendedProductList = () => {
   } = useSuspenseQuery(ProductQueries.productKeywords());
 
   const [recommend, setRecommend] = useQueryState('recommend');
-  const validRecommend = recommend && productKeywords.includes(recommend);
-  const selectedKeyword = validRecommend ? recommend : productKeywords[0];
+  const selectedKeyword = useMemo(() => {
+    const isValid = recommend && productKeywords.includes(recommend);
+    return isValid ? recommend : productKeywords[0];
+  }, [recommend, productKeywords]);
   const handleSelectedKeyword = (keyword: string) => {
     setRecommend(keyword);
   };
