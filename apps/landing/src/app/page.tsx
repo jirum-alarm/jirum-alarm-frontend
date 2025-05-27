@@ -1,3 +1,4 @@
+import Footer from './components/footer/Footer';
 import Header from './components/header/Header';
 import KeyVisual from './components/key-visual/KeyVisual';
 import PainPoint from './components/pain-point/PainPoint';
@@ -14,6 +15,7 @@ export default function Home() {
         <ServiceIntroduction />
         <Talk />
       </div>
+      <Footer />
     </>
   );
 }

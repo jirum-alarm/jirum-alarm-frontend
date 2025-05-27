@@ -35,7 +35,7 @@ const KeyVisual = () => (
           <h1 className="text-primary-500 text-[44px] leading-[1.3] font-bold md:text-[66px] lg:text-[88px]">
             지름알림
           </h1>
-          <AppDownload />
+          <AppDownload type="key-visual" />
         </div>
       </div>
       <div className="pointer-events-none absolute inset-0 -mx-5 flex items-center justify-between md:-mx-8">

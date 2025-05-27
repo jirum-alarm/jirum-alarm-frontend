@@ -3,15 +3,15 @@ import { motion } from 'motion/react';
 import { cn } from '@/shared/libs/cn';
 
 type BubbleProps = {
-  text: string;
+  children: React.ReactNode;
   direction: 'left' | 'right';
   type: 'default' | 'inverted';
   delay?: number;
 };
 
-const Bubble = ({ text, direction, type, delay }: BubbleProps) => {
+const Bubble = ({ children, direction, type, delay }: BubbleProps) => {
   const textStyle = [
-    'text-xl',
+    'text-lg lg:text-xl',
     type === 'default'
       ? 'text-primary-500 bg-gray-900 font-semibold'
       : 'bg-primary-500 text-gray-900 font-bold',
@@ -28,9 +28,9 @@ const Bubble = ({ text, direction, type, delay }: BubbleProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: delay }}
-        className={cn(['relative rounded-full px-5 py-3', ...textStyle, ...tail])}
+        className={cn(['relative rounded-3xl px-5 py-3', ...textStyle, ...tail])}
       >
-        {text}
+        {children}
       </motion.div>
     </div>
   );
