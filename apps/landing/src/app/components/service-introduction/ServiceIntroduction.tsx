@@ -1,10 +1,16 @@
+import SectionHeader from '../SectionHeader';
+
 import Content from './ContentWrapper';
-import IntroductionHeader from './IntroductionHeader';
 
 const ServiceIntroduction = () => {
   return (
-    <>
-      <IntroductionHeader />
+    <section className="flex w-full snap-always flex-col items-center justify-center bg-gray-50">
+      <SectionHeader
+        keyword="서비스 소개"
+        title="필요한 정보만! 핫딜 쇼핑이 쉬워져요"
+        className="z-5 bg-gray-50 lg:pt-22 lg:pb-7"
+        sticky
+      />
       <Content>
         <Content.Image src="/images/intro-1.png" alt="핫딜 카테고리" />
         <Content.Wrapper>
@@ -41,7 +47,10 @@ const ServiceIntroduction = () => {
           </Content.Description>
         </Content.Wrapper>
       </Content>
-      <Content>
+      <Content
+        isLast
+        className="relative z-1 before:absolute before:bottom-0 before:z-6 before:h-1/2 before:w-full before:bg-gray-50 before:content-['']"
+      >
         <Content.Image src="/images/intro-4.png" alt="최저가" />
         <Content.Wrapper>
           <Content.Keyword>최저가</Content.Keyword>
@@ -53,7 +62,7 @@ const ServiceIntroduction = () => {
           </Content.Description>
         </Content.Wrapper>
       </Content>
-    </>
+    </section>
   );
 };
 

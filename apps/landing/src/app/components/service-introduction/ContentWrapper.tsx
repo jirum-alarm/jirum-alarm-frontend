@@ -1,10 +1,26 @@
 import Image from 'next/image';
 
-const Content = ({ children }: { children: React.ReactNode }) => {
+import { cn } from '@/shared/libs/cn';
+
+const Content = ({
+  children,
+  className,
+  isLast,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  isLast?: boolean;
+}) => {
   return (
-    <section className="flex h-screen w-full snap-start items-center justify-center bg-gray-50 pt-50">
-      {children}
-    </section>
+    <div
+      className={cn(
+        'h-mobile-height lg:h-desktop-height z-0 flex w-full snap-center snap-always items-center justify-center pt-50',
+        className,
+        isLast && 'z-7',
+      )}
+    >
+      <div className={cn('flex', isLast && 'z-7 bg-gray-50')}>{children}</div>
+    </div>
   );
 };
 

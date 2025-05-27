@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { cn } from '@/shared/libs/cn';
 
@@ -16,9 +17,9 @@ const Category = ({ src, alt, className }: { src: string; alt: string; className
 );
 
 const KeyVisual = () => (
-  <section className="mx-auto -mt-14 h-screen w-full snap-center px-5 pt-14 pb-5 lg:-mt-15 lg:px-8 lg:pt-15 lg:pb-9">
+  <section className="snap-cetnter h-mobile-height lg:h-desktop-height mx-auto w-full snap-always bg-white px-5 pb-5 lg:px-8 lg:pb-9">
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[28px] rounded-bl-none py-5">
-      <div className="to-landing-background absolute inset-0 -z-1 bg-linear-to-b from-gray-900" />
+      <div className="to-landing-background absolute inset-0 -z-0 bg-linear-to-b from-gray-900" />
       <div className="relative">
         <div className="flex flex-col items-center justify-center">
           <Image
@@ -72,12 +73,16 @@ const KeyVisual = () => (
       <div className="absolute bottom-0 left-0">
         <div className="h-16 w-16 rounded-bl-3xl shadow-[0_36px_0_rgb(255,255,255)]" />
         <div className="flex items-end">
-          <button className="flex h-16 items-center gap-x-4 rounded-tr-4xl bg-white px-5 lg:px-10 lg:py-9.5">
+          <Link
+            href="#"
+            target="_blank"
+            className="flex h-16 items-center gap-x-4 rounded-tr-4xl bg-white px-5 lg:px-10 lg:py-9.5"
+          >
             <span className="text-xl font-semibold">핫딜 카톡방 입장</span>
             <div className="bg-primary-500 flex h-8 w-8 items-center justify-center rounded-full">
               <Image src="/icons/arrow-right.svg" alt="arrow-right" width={24} height={24} />
             </div>
-          </button>
+          </Link>
           <div className="h-16 w-16 rounded-bl-3xl shadow-[0_36px_0_rgb(255,255,255)]" />
         </div>
       </div>

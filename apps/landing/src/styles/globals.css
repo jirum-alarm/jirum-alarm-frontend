@@ -55,6 +55,9 @@
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1440px;
+
+  --spacing-mobile-height: calc(100vh - var(--spacing) * 14);
+  --spacing-desktop-height: calc(100vh - var(--spacing) * 15);
 }
 
 :root {

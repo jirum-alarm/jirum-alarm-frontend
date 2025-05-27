@@ -9,7 +9,7 @@ const PainPoint = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref);
   return (
-    <section className="flex h-screen w-full snap-center flex-col items-center justify-center bg-white">
+    <section className="snap-cetnter h-mobile-height lg:h-desktop-height flex w-full snap-always flex-col items-center justify-center bg-white">
       <h2 className="mb-20 text-center text-[40px] font-bold">쇼핑, 더 편하게 할 방법 없을까?</h2>
       <div ref={ref} className="flex w-180 flex-col gap-y-[3vh]">
         {isInView && (
