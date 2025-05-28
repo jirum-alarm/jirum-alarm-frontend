@@ -66,10 +66,10 @@ const AppStoreDownload = () => {
     <Link
       href={AppStoreLink}
       target="_blank"
-      className="flex h-11 items-center gap-x-1 rounded-lg border border-white/40 bg-white/10 pr-5 pl-4 text-gray-300"
+      className="flex h-11 w-38.5 items-center justify-center gap-x-1 rounded-lg border border-white/40 bg-white/10 text-gray-300"
     >
-      <div className="flex size-8 items-center justify-center">
-        <Image src="/icons/apple.svg" alt="apple" unoptimized width={20} height={26} />
+      <div className="-ml-1 flex size-8 items-center justify-center">
+        <Image src="/assets/icons/apple.svg" alt="apple" unoptimized width={20} height={26} />
       </div>
       App Store
     </Link>
@@ -81,9 +81,16 @@ const GooglePlayDownload = () => {
     <Link
       href={GooglePlayLink}
       target="_blank"
-      className="flex h-11 items-center gap-x-1 rounded-lg border border-white/40 bg-white/10 pr-5 pl-4 text-gray-300"
+      className="flex h-11 w-38.5 items-center justify-center gap-x-1 rounded-lg border border-white/40 bg-white/10 text-gray-300"
     >
-      <Image src="/icons/google-play.png" alt="google" className="size-8" width={32} height={32} />
+      <Image
+        unoptimized
+        src="/assets/icons/google-play.png"
+        alt="google"
+        className="size-8"
+        width={32}
+        height={32}
+      />
       Google Play
     </Link>
   );

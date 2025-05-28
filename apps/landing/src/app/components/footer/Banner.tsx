@@ -26,9 +26,10 @@ const Banner = () => {
       </div>
       <div className="flex h-full max-h-[50vh] w-full max-w-[50vh] justify-end lg:max-h-[75vh] lg:max-w-160">
         <MotionImage
+          unoptimized
           style={{ y }}
           className="aspect-[240/340] object-contain lg:object-right"
-          src="/images/banner.png"
+          src="/assets/images/banner.png"
           alt="banner"
           width={956}
           height={1360}

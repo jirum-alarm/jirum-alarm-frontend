@@ -11,8 +11,14 @@ const Footer = () => {
       <div className="flex items-end lg:h-[30vh]">
         <footer className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-between px-5 py-15 lg:px-20 lg:py-12">
           <div className="mb-5 flex justify-between">
-            <div className="flex gap-x-2.5">
-              <Image src="/icons/logo.svg" alt="logo" width={28} height={28} />
+            <div className="flex items-center gap-x-2.5">
+              <Image
+                src="/assets/icons/logo.svg"
+                alt="logo"
+                className="size-7"
+                width={32}
+                height={32}
+              />
               <p className="text-2xl font-bold text-white">지름알림</p>
             </div>
             <Link
@@ -20,7 +26,7 @@ const Footer = () => {
               target="_blank"
               className="flex size-9 items-center justify-center rounded-full bg-[#FAE300]"
             >
-              <Image src="/icons/katalk2.svg" alt="katalk" width={30} height={31} />
+              <Image src="/assets/icons/katalk2.svg" alt="katalk" width={30} height={31} />
             </Link>
           </div>
           <p className="mb-4 text-sm font-medium whitespace-pre-line text-white">

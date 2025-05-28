@@ -23,11 +23,12 @@ const KeyVisual = () => (
       <div className="relative">
         <div className="flex flex-col items-center justify-center">
           <Image
-            src="/icons/jirum.svg"
+            src="/assets/icons/jirum.svg"
             alt="jirum"
             className="mb-2 aspect-square w-[100px] md:mb-0 md:w-[150px] lg:w-[200px]"
             width={200}
             height={200}
+            priority
           />
           <p className="text-[32px] leading-[1.3] font-bold text-white md:text-[48px] lg:text-[64px]">
             득템의 시작
@@ -41,30 +42,34 @@ const KeyVisual = () => (
       <div className="pointer-events-none absolute inset-0 -mx-5 flex items-center justify-between md:-mx-8">
         <div className="relative flex h-40 w-1/2 items-center justify-between pr-18 md:pr-30 lg:pr-50">
           <Category
-            src="/icons/computer.svg"
+            src="/assets/icons/computer.svg"
             alt="computer"
             className="top-0 -left-1 w-19 md:max-w-46"
           />
           <Category
-            src="/icons/cart.svg"
+            src="/assets/icons/cart.svg"
             alt="cart"
             className="bottom-0 left-4 w-17.5 md:max-w-41"
           />
-          <Category src="/icons/game.svg" alt="game" className="top-13 left-14 w-14 md:max-w-32" />
+          <Category
+            src="/assets/icons/game.svg"
+            alt="game"
+            className="top-13 left-14 w-14 md:max-w-32"
+          />
         </div>
         <div className="relative flex h-40 w-1/2 flex-row-reverse items-center justify-between pl-18 md:pl-30 lg:pl-50">
           <Category
-            src="/icons/leisure.svg"
+            src="/assets/icons/leisure.svg"
             alt="leisure"
             className="right-0 bottom-2 w-20 md:max-w-47.5"
           />
           <Category
-            src="/icons/electric.svg"
+            src="/assets/icons/electric.svg"
             alt="electric"
             className="top-0.75 right-3 w-15 md:max-w-35"
           />
           <Category
-            src="/icons/cosmetics.svg"
+            src="/assets/icons/cosmetics.svg"
             alt="cosmetics"
             className="top-11.25 right-14.5 w-14 md:max-w-32"
           />
@@ -80,7 +85,7 @@ const KeyVisual = () => (
           >
             <span className="text-xl font-semibold">핫딜 카톡방 입장</span>
             <div className="bg-primary-500 flex h-8 w-8 items-center justify-center rounded-full">
-              <Image src="/icons/arrow-right.svg" alt="arrow-right" width={24} height={24} />
+              <Image src="/assets/icons/arrow-right.svg" alt="arrow-right" width={24} height={24} />
             </div>
           </Link>
           <div className="h-16 w-16 rounded-bl-3xl shadow-[0_36px_0_rgb(255,255,255)]" />

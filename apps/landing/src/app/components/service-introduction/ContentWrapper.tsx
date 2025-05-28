@@ -14,7 +14,7 @@ const Content = ({
   return (
     <div
       className={cn(
-        'z-0 flex h-screen w-full snap-start justify-center pt-56.5 pb-11 lg:items-center',
+        'z-0 flex h-screen max-h-lvh w-full snap-start justify-center pt-56.5 pb-11 lg:items-center lg:pt-0',
         className,
         isLast && 'z-7',
       )}
@@ -26,13 +26,20 @@ const Content = ({
 
 const ContentImage = ({ src, alt }: { src: string; alt: string }) => {
   return (
-    <Image src={src} alt={alt} width={460} height={548} className="max-h-[45vh] object-contain" />
+    <Image
+      unoptimized
+      src={src}
+      alt={alt}
+      width={460}
+      height={548}
+      className="max-h-[45vh] object-contain"
+    />
   );
 };
 
 const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-col items-center px-5 py-6 lg:items-start lg:px-0 lg:pt-30">
+    <div className="flex flex-col items-center px-5 py-6 lg:items-start lg:px-10 lg:pt-30">
       {children}
     </div>
   );

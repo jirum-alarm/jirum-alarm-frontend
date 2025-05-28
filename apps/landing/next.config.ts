@@ -5,10 +5,11 @@ const nextConfig: NextConfig = {
   images: {
     localPatterns: [
       {
-        pathname: '/**',
+        pathname: '/assets/**',
       },
     ],
   },
+  output: 'export',
 };
 
 export default nextConfig;
