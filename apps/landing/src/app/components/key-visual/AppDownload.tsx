@@ -19,7 +19,7 @@ const useAppDownloadLink = () => {
     return { type: 'android', link: GooglePlayLink } as const;
   }
 
-  return { type: null, link: null } as const;
+  return { type: null, link: '#' } as const;
 };
 
 const AppDownload = ({ type }: { type: 'key-visual' | 'footer' }) => {
@@ -32,7 +32,8 @@ const AppDownload = ({ type }: { type: 'key-visual' | 'footer' }) => {
       </div>
       {type === 'key-visual' && (
         <Link
-          href={link ?? '#'}
+          href={link}
+          target="_blank"
           className="mt-5 w-full rounded-full border border-white/40 bg-white/10 px-8.75 py-3 text-center text-lg leading-none font-bold text-gray-300 lg:hidden"
         >
           앱 다운로드
@@ -53,7 +54,8 @@ export default AppDownload;
 const AppStoreDownload = () => {
   return (
     <Link
-      href={AppStoreLink ?? '#'}
+      href={AppStoreLink}
+      target="_blank"
       className="flex h-11 items-center gap-x-1 rounded-lg border border-white/40 bg-white/10 pr-5 pl-4 text-gray-300"
     >
       <div className="flex size-8 items-center justify-center">
@@ -67,7 +69,8 @@ const AppStoreDownload = () => {
 const GooglePlayDownload = () => {
   return (
     <Link
-      href={GooglePlayLink ?? '#'}
+      href={GooglePlayLink}
+      target="_blank"
       className="flex h-11 items-center gap-x-1 rounded-lg border border-white/40 bg-white/10 pr-5 pl-4 text-gray-300"
     >
       <Image src="/icons/google-play.png" alt="google" className="size-8" width={32} height={32} />

@@ -38,7 +38,11 @@ const Talk = () => {
             <Image src="/images/talk-2.png" alt="카톡방 이미지 2" width={1056} height={560} />
           </div>
         </motion.div>
-        <Link href="#" className="flex gap-x-2 rounded-lg bg-gray-700 px-7 py-2.5">
+        <Link
+          href="https://open.kakao.com/o/gJZTWAAg"
+          target="_blank"
+          className="flex gap-x-2 rounded-lg bg-gray-700 px-7 py-2.5"
+        >
           <span className="font-bold text-white">핫딜 카톡방 입장하기</span>
           <Image src="/icons/katalk.svg" alt="kakao" width={24} height={24} />
         </Link>

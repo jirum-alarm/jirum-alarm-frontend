@@ -74,7 +74,7 @@ const KeyVisual = () => (
         <div className="h-16 w-16 rounded-bl-3xl shadow-[0_36px_0_rgb(255,255,255)]" />
         <div className="flex items-end">
           <Link
-            href="#"
+            href="https://open.kakao.com/o/gJZTWAAg"
             target="_blank"
             className="flex h-16 items-center gap-x-4 rounded-tr-4xl bg-white px-5 lg:px-10 lg:py-9.5"
           >
