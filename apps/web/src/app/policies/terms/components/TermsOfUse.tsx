@@ -16,7 +16,7 @@ const TermsOfUse = () => {
           <Close />
         </button>
       </header>
-      <article className="flex w-full flex-col gap-[24px] p-[20px]">
+      <article className="flex w-full max-w-screen-layout-max flex-col gap-[24px] p-[20px]">
         <div className="flex w-full flex-col gap-[8px] text-[13px] text-gray-500">
           <p>공고일자 : 2023년 12월 01일</p>
           <p>시행일자 : 2023년 12월 01일</p>
