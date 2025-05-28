@@ -4,11 +4,17 @@ import Content from './ContentWrapper';
 
 const ServiceIntroduction = () => {
   return (
-    <section className="flex w-full snap-always flex-col items-center justify-center bg-gray-50">
+    <section className="flex w-full flex-col items-center justify-center bg-gray-50">
       <SectionHeader
         keyword="서비스 소개"
-        title="필요한 정보만! 핫딜 쇼핑이 쉬워져요"
-        className="z-5 bg-gray-50 lg:pt-22 lg:pb-7"
+        title={
+          <>
+            <span>필요한 정보만!</span>
+            <br />
+            <span>핫딜 쇼핑이 쉬워져요</span>
+          </>
+        }
+        className="z-5 bg-gray-50 pt-10 pb-8 lg:pt-22 lg:pb-7"
         sticky
       />
       <Content>

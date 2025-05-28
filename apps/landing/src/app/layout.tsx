@@ -14,7 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${PretendardVariable.variable} antialiased`}>
+    <html
+      lang="en"
+      className={`${PretendardVariable.variable} max-h-lvh min-h-svh snap-y snap-mandatory antialiased`}
+    >
       <body>{children}</body>
     </html>
   );

@@ -19,7 +19,7 @@ const SectionHeader = ({
         className,
       )}
     >
-      <div className="flex flex-col items-center gap-y-2 pt-10 pb-8 lg:pt-0 lg:pb-0">
+      <div className="flex flex-col items-center gap-y-2">
         <p className="font-bold text-gray-500">{keyword}</p>
         <h2 className="text-center text-[22px] font-bold lg:text-[40px]">{title}</h2>
       </div>

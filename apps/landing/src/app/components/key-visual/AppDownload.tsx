@@ -10,7 +10,11 @@ const AppStoreLink =
   'https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420';
 
 const useAppDownloadLink = () => {
-  const { isApple, isAndroid } = useDevice();
+  const { isApple, isAndroid, isMounted } = useDevice();
+
+  if (!isMounted) {
+    return { type: undefined, link: '#' } as const;
+  }
 
   if (isApple) {
     return { type: 'apple', link: AppStoreLink } as const;
@@ -43,6 +47,12 @@ const AppDownload = ({ type }: { type: 'key-visual' | 'footer' }) => {
         <div className="lg:hidden">
           {downloadType === 'apple' && <AppStoreDownload />}
           {downloadType === 'android' && <GooglePlayDownload />}
+          {downloadType === null && (
+            <div className="flex gap-x-6">
+              <AppStoreDownload />
+              <GooglePlayDownload />
+            </div>
+          )}
         </div>
       )}
     </div>

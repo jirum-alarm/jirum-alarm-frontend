@@ -14,7 +14,7 @@ const Content = ({
   return (
     <div
       className={cn(
-        'h-mobile-height lg:h-desktop-height z-0 flex w-full snap-center snap-always items-center justify-center',
+        'z-0 flex h-screen w-full snap-start justify-center pt-56.5 pb-11 lg:items-center',
         className,
         isLast && 'z-7',
       )}
@@ -25,7 +25,9 @@ const Content = ({
 };
 
 const ContentImage = ({ src, alt }: { src: string; alt: string }) => {
-  return <Image src={src} alt={alt} width={460} height={548} />;
+  return (
+    <Image src={src} alt={alt} width={460} height={548} className="max-h-[45vh] object-contain" />
+  );
 };
 
 const ContentWrapper = ({ children }: { children: React.ReactNode }) => {

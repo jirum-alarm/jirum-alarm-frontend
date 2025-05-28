@@ -17,9 +17,9 @@ const Category = ({ src, alt, className }: { src: string; alt: string; className
 );
 
 const KeyVisual = () => (
-  <section className="snap-cetnter h-mobile-height lg:h-desktop-height mx-auto w-full snap-always bg-white px-5 pb-5 lg:px-8 lg:pb-9">
-    <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[28px] rounded-bl-none py-5">
-      <div className="to-landing-background absolute inset-0 -z-0 bg-linear-to-b from-gray-900" />
+  <section className="mx-auto flex h-full max-h-lvh min-h-svh w-full snap-start flex-col bg-white px-5 pt-14 pb-5 lg:px-8 lg:pt-15 lg:pb-9">
+    <div className="relative flex w-full grow items-center justify-center overflow-hidden rounded-[28px] rounded-bl-none py-5">
+      <div className="to-landing-background absolute inset-0 -z-0 bg-linear-to-b from-gray-900 via-37% lg:via-0%" />
       <div className="relative">
         <div className="flex flex-col items-center justify-center">
           <Image

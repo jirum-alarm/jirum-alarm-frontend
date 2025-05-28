@@ -12,8 +12,8 @@ const Talk = () => {
   const isInView = useInView(targetRef, { amount: 'some', margin: '-30%' });
 
   return (
-    <section className="relative flex min-h-screen w-full snap-center snap-always flex-col items-center justify-center bg-white lg:min-h-[200vh]">
-      <div className="sticky inset-0 bottom-auto flex min-h-screen w-full flex-col items-center justify-center overflow-x-hidden">
+    <section className="relative flex h-full max-h-lvh min-h-svh w-full flex-col items-center justify-center bg-white lg:min-h-[200vh]">
+      <div className="sticky inset-0 bottom-auto flex h-full max-h-lvh min-h-svh w-full flex-col items-center justify-center overflow-x-hidden">
         <SectionHeader
           keyword="오픈카톡방"
           title={
@@ -23,7 +23,7 @@ const Talk = () => {
               <span>카톡으로 핫딜 먼저 만나보세요</span>
             </>
           }
-          className="bg-white lg:pt-16 lg:pb-20"
+          className="bg-white pt-14 pb-8 lg:pt-16 lg:pb-20"
         />
         <motion.div
           initial={{ x: '-264px' }}
@@ -47,7 +47,12 @@ const Talk = () => {
           <Image src="/icons/katalk.svg" alt="kakao" width={24} height={24} />
         </Link>
       </div>
-      <div ref={targetRef} className="absolute bottom-0 hidden w-full lg:block" />
+
+      <div className="pointer-events-none absolute top-0 h-full max-h-lvh min-h-svh w-full snap-start" />
+      <div
+        ref={targetRef}
+        className="pointer-events-none relative bottom-0 hidden h-full max-h-lvh min-h-svh w-full snap-start lg:block"
+      />
     </section>
   );
 };

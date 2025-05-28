@@ -11,8 +11,10 @@ export const useDevice = () => {
   const [isJirumAlarmAndroidApp, setIsJirumAlarmAndroidApp] = useState<boolean | 'ios' | 'android'>(
     false,
   );
+  const [isMounted, setIsMounted] = useState<boolean>(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const userAgent = window.navigator.userAgent;
     const isMobileDevice = Boolean(
       userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|Mobile/i),
@@ -34,5 +36,6 @@ export const useDevice = () => {
     isJirumAlarmIOSApp,
     isJirumAlarmAndroidApp,
     isJirumAlarmApp: !!(isJirumAlarmIOSApp || isJirumAlarmAndroidApp),
+    isMounted,
   };
 };

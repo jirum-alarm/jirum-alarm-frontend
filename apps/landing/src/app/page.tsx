@@ -9,12 +9,10 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className="snap-y snap-mandatory pt-14 lg:pt-15">
-        <KeyVisual />
-        <PainPoint />
-        <ServiceIntroduction />
-        <Talk />
-      </div>
+      <KeyVisual />
+      <PainPoint />
+      <ServiceIntroduction />
+      <Talk />
       <Footer />
     </>
   );
