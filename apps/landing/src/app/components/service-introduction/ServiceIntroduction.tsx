@@ -1,6 +1,6 @@
 import SectionHeader from '../SectionHeader';
 
-import Content from './ContentWrapper';
+import Content from './ContentPage';
 
 const ServiceIntroduction = () => {
   return (

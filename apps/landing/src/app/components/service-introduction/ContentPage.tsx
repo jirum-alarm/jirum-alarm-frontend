@@ -14,7 +14,7 @@ const Content = ({
   return (
     <div
       className={cn(
-        'z-0 flex h-screen max-h-lvh w-full snap-start justify-center pt-56.5 pb-11 lg:items-center lg:pt-0',
+        'z-0 flex h-screen max-h-lvh w-full snap-start justify-center pt-56.5 pb-11 lg:pt-82',
         className,
         isLast && 'z-7',
       )}
@@ -32,7 +32,7 @@ const ContentImage = ({ src, alt }: { src: string; alt: string }) => {
       alt={alt}
       width={460}
       height={548}
-      className="max-h-[45vh] object-contain"
+      className="object-contain"
     />
   );
 };
@@ -46,11 +46,17 @@ const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
 };
 
 const ContentKeyword = ({ children }: { children: React.ReactNode }) => {
-  return <p className="text-primary-700 pb-1 text-sm font-bold lg:pb-2 lg:text-base">{children}</p>;
+  return (
+    <p className="text-primary-700 pb-1 text-sm font-bold lg:pb-2 lg:text-base">
+      {children}
+    </p>
+  );
 };
 
 const ContentTitle = ({ children }: { children: React.ReactNode }) => {
-  return <h3 className="pb-2 text-lg font-bold lg:pb-4 lg:text-4xl">{children}</h3>;
+  return (
+    <h3 className="pb-2 text-lg font-bold lg:pb-4 lg:text-4xl">{children}</h3>
+  );
 };
 
 const ContentDescription = ({ children }: { children: React.ReactNode }) => {

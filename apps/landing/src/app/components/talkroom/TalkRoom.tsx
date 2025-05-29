@@ -31,7 +31,7 @@ const Talk = () => {
           transition={{ duration: 0.3, ease: 'easeInOut' }}
           className="mb-7 flex flex-col gap-x-6 gap-y-5 px-5 lg:ml-138 lg:flex-row lg:px-0"
         >
-          <div className="relative w-full lg:h-70 lg:w-132">
+          <div className="relative w-full max-w-132 lg:h-70 lg:w-132">
             <Image
               unoptimized
               src="/assets/images/talk-1.png"
@@ -40,7 +40,7 @@ const Talk = () => {
               height={560}
             />
           </div>
-          <div className="relative w-full lg:h-70 lg:w-132">
+          <div className="relative w-full max-w-132 lg:h-70 lg:w-132">
             <Image
               unoptimized
               src="/assets/images/talk-2.png"
