@@ -32,7 +32,7 @@ const ContentImage = ({ src, alt }: { src: string; alt: string }) => {
       alt={alt}
       width={460}
       height={548}
-      className="object-contain"
+      className="max-h-[45vh] object-contain lg:max-h-none"
     />
   );
 };
