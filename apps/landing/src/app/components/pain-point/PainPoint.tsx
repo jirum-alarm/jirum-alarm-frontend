@@ -19,10 +19,10 @@ const PainPoint = () => {
         <Bubble direction="left" type="default" isInView={isInView}>
           내가 원하는 제품은 왜 맨날 품절이지?
         </Bubble>
-        <Bubble direction="right" type="inverted" delay={1} isInView={isInView}>
+        <Bubble direction="right" type="inverted" delay={1.4} isInView={isInView}>
           최저가 검색하기 너무 귀찮아...
         </Bubble>
-        <Bubble direction="left" type="default" delay={1.4} isInView={isInView}>
+        <Bubble direction="left" type="default" delay={2.2} isInView={isInView}>
           가격이 떨어졌다가 올랐다가... <br className="lg:hidden" />
           대체 언제 사야해?
         </Bubble>
