@@ -33,7 +33,7 @@ const PasswordForm = ({
         handleInputChange={handleInputChange}
       />
       <div className="h-32" />
-      <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] bg-white px-5 pb-9 pt-3">
+      <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[600px] bg-white px-5 pb-9 pt-3">
         <Button type="submit" disabled={!isValidInput}>
           다음
         </Button>

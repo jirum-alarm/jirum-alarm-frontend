@@ -67,7 +67,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
   return (
     <div className="flex h-full flex-col px-5 pb-8 pt-9">
       <p className="pb-7 text-2xl font-semibold">
-        <span className="inline-block w-[85px] font-extrabold shadow-[inset_0-12px_0] shadow-primary-500">
+        <span className="inline-block font-extrabold shadow-[inset_0-12px_0] shadow-primary-500">
           지름알림
         </span>{' '}
         앱 다운받고
@@ -84,7 +84,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
         />
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] bg-white px-5 pb-8 pt-4">
+      <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[600px] bg-white px-5 pb-8 pt-4">
         <div className="flex flex-col items-center pb-6">
           <p className="pb-3 text-center text-sm text-gray-400">
             키워드 알림으로
@@ -175,7 +175,7 @@ function LoginGuide() {
           </p>
         </div>
       </div>
-      <div className="w-full max-w-[480px] px-5 pb-9">
+      <div className="w-full max-w-[600px] px-5 pb-9">
         <Button onClick={handleCTAButton} className="self-end">
           이메일로 시작하기
         </Button>
