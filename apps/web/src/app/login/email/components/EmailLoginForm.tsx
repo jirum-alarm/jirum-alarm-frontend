@@ -15,8 +15,8 @@ const EmailLoginForm = () => {
   return (
     <form onSubmit={handleSubmit} className="flex flex-1 flex-col justify-between pt-11">
       <EmailInput email={email} />
-      <PasswordInput password={password} />
-      <div className="bg-white px-5 py-9">
+      <PasswordInput password={password} hideHelperText={true} />
+      <div className="bg-white py-9">
         {error && (
           <p className="pb-4 text-center text-sm text-error-500">
             이메일 혹은 비밀번호가 올바르지 않아요.
@@ -72,8 +72,10 @@ const EmailInput = ({
 
 const PasswordInput = ({
   password,
+  hideHelperText,
 }: {
   password: ReturnType<typeof useEmailLoginFormViewModel>['password'];
+  hideHelperText: boolean;
 }) => {
   const [masking, setMasking] = useState(true);
 
@@ -101,7 +103,8 @@ const PasswordInput = ({
           )
         }
         helperText={
-          password.value && (
+          password.value &&
+          !hideHelperText && (
             <HelperText
               value={password.value}
               isInvalidType={password.isInvalidType}

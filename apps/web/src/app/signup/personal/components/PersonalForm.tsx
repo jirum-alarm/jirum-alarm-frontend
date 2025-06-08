@@ -38,7 +38,7 @@ const PersonalForm = ({
         <div className="h-10" />
         <GenderRadioGroup handleRadioChange={handleRadioChange} gender={gender} />
       </div>
-      <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[480px] px-5 pb-9">
+      <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[600px] px-5 pb-9">
         <Button type="submit">가입완료</Button>
       </div>
     </form>

@@ -26,7 +26,7 @@ const KeywordInput = () => {
           )
         }
       />
-      <div className="fixed bottom-0 left-0 right-0 m-auto max-w-[480px] bg-white px-5 py-6">
+      <div className="fixed bottom-0 left-0 right-0 m-auto max-w-[600px] bg-white px-5 py-6">
         <Button type="submit" className="w-full" disabled={!canSubmit}>
           등록
         </Button>

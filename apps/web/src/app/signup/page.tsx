@@ -21,6 +21,7 @@ import Nickname from './nickname/components/Nickname';
 import Password from './password/components/Password';
 import Personal from './personal/components/Personal';
 import TermsOfService from './terms-of-service/components/TermsOfService';
+import { useQueryState } from 'nuqs';
 
 const COMPLETE_ROUTE = 'signup/complete';
 
@@ -81,12 +82,11 @@ const Signup = () => {
   });
 
   const router = useMyRouter();
-
-  const searchParams = useSearchParams();
   const { toast } = useToast();
 
-  const urlSteps = searchParams.get(QUERY_PARM_PREFIX) as Steps;
-  const [currentStep, setCurrentStep] = useState<Steps>(INITIAL_STEP);
+  const [currentStep, setCurrentStep] = useQueryState(QUERY_PARM_PREFIX, {
+    defaultValue: INITIAL_STEP,
+  });
 
   const [signup] = useMutation<ISignupOutput, ISignupVariable>(MutationSignup, {
     onCompleted: async (data) => {
@@ -159,12 +159,6 @@ const Signup = () => {
   useEffect(() => {
     router.replace(`?${QUERY_PARM_PREFIX}=${INITIAL_STEP}`);
   }, [router]);
-
-  useEffect(() => {
-    if (currentStep !== urlSteps) {
-      setCurrentStep(urlSteps);
-    }
-  }, [urlSteps]);
 
   const handleBackButton = () => {
     const currentStepIndex = STEPS.findIndex((step) => step === currentStep);
