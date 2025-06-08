@@ -20,7 +20,7 @@ const ScrollLock = ({ children }: ScrollLockProps) => {
     };
   }, []);
   return React.isValidElement(children)
-    ? React.cloneElement(children, { ...children.props })
+    ? React.cloneElement(children, Object.assign({}, children.props))
     : null;
 };
 

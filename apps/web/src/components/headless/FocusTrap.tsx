@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from 'react';
 
 const composeRef = <T extends HTMLDivElement>(
   forwardRef: React.ForwardedRef<T>,
-  focusTrapRef: React.MutableRefObject<T>,
-  childRef?: React.MutableRefObject<T>,
+  focusTrapRef: React.RefObject<T>,
+  childRef?: React.RefObject<T>,
 ) => {
   return (node: T) => {
     if (!forwardRef) return;
@@ -120,9 +120,12 @@ const FocusTrap = React.forwardRef<HTMLDivElement, FocusTrapProps>((props, forwa
   }, [firstElement, lastElement, onEscapeFocusTrap]);
 
   const Compo = React.cloneElement(children, {
-    ...{ ...others, ...children?.props },
-    tabIndex: -1,
-    ref: composeRef(forwardedRef, focusTrapRef as any, (child as any).ref),
+    ...{
+      ...Object.assign({}, others, children?.props, {
+        tabIndex: -1,
+        ref: composeRef(forwardedRef, focusTrapRef as any, (child as any).ref),
+      }),
+    },
   });
 
   return <>{Compo}</>;

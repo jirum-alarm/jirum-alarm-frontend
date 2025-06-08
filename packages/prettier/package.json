@@ -2,11 +2,10 @@
   "name": "@jirum/prettier",
   "version": "0.0.0",
   "main": "prettier.config.cjs",
-  "type": "module",
+  "type": "commonjs",
   "types": "prettier.d.ts",
   "private": true,
   "devDependencies": {
-    "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.11"
+    "prettier": "^3.5.3"
   }
 }

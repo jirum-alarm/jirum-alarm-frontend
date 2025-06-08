@@ -10,7 +10,7 @@ export const mergeRefs = <T>(...refs: React.Ref<T>[]): React.RefCallback<T> => {
         continue;
       }
 
-      (ref as React.MutableRefObject<T | null>).current = node;
+      (ref as React.RefObject<T | null>).current = node;
     }
   };
 };

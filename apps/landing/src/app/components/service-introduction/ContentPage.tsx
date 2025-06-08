@@ -46,17 +46,11 @@ const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
 };
 
 const ContentKeyword = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <p className="text-primary-700 pb-1 text-sm font-bold lg:pb-2 lg:text-base">
-      {children}
-    </p>
-  );
+  return <p className="text-primary-700 pb-1 text-sm font-bold lg:pb-2 lg:text-base">{children}</p>;
 };
 
 const ContentTitle = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <h3 className="pb-2 text-lg font-bold lg:pb-4 lg:text-4xl">{children}</h3>
-  );
+  return <h3 className="pb-2 text-lg font-bold lg:pb-4 lg:text-4xl">{children}</h3>;
 };
 
 const ContentDescription = ({ children }: { children: React.ReactNode }) => {

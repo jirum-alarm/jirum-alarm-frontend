@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   keywords:
     '실시간, 핫딜, 할인, 초특가, 최저가, 알뜰, 쇼핑, 전자제품, 패션, 가전, 알뜰쇼핑, 쿠폰, 이벤트, 지름알림, 핫딜알림',
   openGraph: {
-    type: 'website',  
+    type: 'website',
     siteName: '지름알림',
   },
   twitter: {

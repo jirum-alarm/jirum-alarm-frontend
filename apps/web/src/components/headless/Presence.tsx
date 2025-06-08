@@ -32,7 +32,9 @@ const Presence: React.FC<PresenceProps> = (props) => {
       (child as any).ref.current = node;
     }
   };
-  return presence.isPresent ? React.cloneElement(child, { ref: composeRef }) : null;
+  return presence.isPresent
+    ? React.cloneElement(child, Object.assign({}, { ref: composeRef }))
+    : null;
 };
 
 Presence.displayName = 'Presence';
