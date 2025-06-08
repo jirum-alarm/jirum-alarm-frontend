@@ -79,8 +79,8 @@ const Trigger = forwardRef<
   const { onOpenToggle, open, triggerRef } = useAlertDialogContext();
 
   const composeRef = (
-    triggerRef: React.RefObject<HTMLButtonElement>,
-    forwardRef?: React.ForwardedRef<HTMLButtonElement>,
+    triggerRef: React.RefObject<HTMLButtonElement | null>,
+    forwardRef?: React.ForwardedRef<HTMLButtonElement | null>,
   ) => {
     return (node: HTMLButtonElement) => {
       if (typeof forwardRef === 'function') {
@@ -88,7 +88,7 @@ const Trigger = forwardRef<
       } else if (forwardRef) {
         forwardRef.current = node;
       }
-      (triggerRef as React.MutableRefObject<HTMLButtonElement>).current = node;
+      (triggerRef as React.RefObject<HTMLButtonElement>).current = node;
     };
   };
 

@@ -82,12 +82,12 @@ export const Select = ({
       React.Children.map(children, (child, index) => {
         if (!isValidElement(child)) return;
 
-        if (child.props.value === defaultValue) {
+        if ((child.props as any).value === defaultValue) {
           setSelectedIndex(index + 1);
         }
         return React.cloneElement(child, {
-          ...child?.props,
-          index: child.props?.index || index + 1,
+          ...(child?.props as any),
+          index: (child.props as any)?.index || index + 1,
         });
       }),
     [children, defaultValue],

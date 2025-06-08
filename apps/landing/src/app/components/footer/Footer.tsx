@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="to-landing-background pointer-events-none absolute bottom-0 -z-1 h-full max-h-lvh min-h-svh w-full bg-linear-to-b from-gray-900" />
       <Banner />
       <div className="flex items-end lg:h-[30vh]">
-        <footer className="mx-auto flex w-full max-w-8xl flex-1 flex-col justify-between px-5 py-15 lg:px-20 lg:py-12">
+        <footer className="max-w-8xl mx-auto flex w-full flex-1 flex-col justify-between px-5 py-15 lg:px-20 lg:py-12">
           <div className="mb-5 flex justify-between">
             <div className="flex items-center gap-x-2.5">
               <Image

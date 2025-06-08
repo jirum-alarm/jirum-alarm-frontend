@@ -58,7 +58,7 @@ export const TrendingContainer = ({ initialTab }: Props) => {
 
   const [fetchedTabIds, setFetchedTabIds] = useState<Set<number>>(new Set([initialTab]));
 
-  const swiperRef = useRef<SwiperClass>();
+  const swiperRef = useRef<SwiperClass>(null);
 
   const handleInitSwiper = (swiper: SwiperClass) => {
     swiperRef.current = swiper;
