@@ -13,7 +13,7 @@ export default async function Home() {
       <AddFCMToken />
       {/* {flags.MAIN_PAGE_RENEWAL_FEATURE ? <HomeContainerV2 /> : <HomeContainer />} */}
 
-      <HomeContainerV2 isJirumAlarmApp={isJirumAlarmApp} />
+      <HomeContainerV2 isJirumAlarmApp={false} />
 
       {/* @TODO: remove afeter v1.1.0 QA */}
       {/* {!IS_VERCEL_PRD ? ( */}
