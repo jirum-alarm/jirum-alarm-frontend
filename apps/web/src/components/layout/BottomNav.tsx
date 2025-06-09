@@ -68,8 +68,8 @@ const BottomNav = ({ type }: { type: any }) => {
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
   const scrollDirection = useScrollDirection();
-  const { isMobile, isJirumAlarmApp } = useDevice();
-  const isMobileWithApp = isMobile || isJirumAlarmApp;
+  // const { isMobile, isJirumAlarmApp } = useDevice();
+  // const isMobileWithApp = isMobile || isJirumAlarmApp;
 
   if (!BottomNavList.some((nav) => nav.link === pathName)) return;
 
@@ -101,8 +101,8 @@ const BottomNav = ({ type }: { type: any }) => {
       className={cn(
         `fixed bottom-0 left-1/2 z-50 mx-auto w-full max-w-screen-layout-max -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-all duration-300`,
         {
-          'translate-y-full': isMobileWithApp && scrollDirection === 'down',
-          'translate-y-0': !isMobileWithApp || scrollDirection === 'up',
+          'translate-y-full': scrollDirection === 'down',
+          'translate-y-0': scrollDirection === 'up',
         },
       )}
     >
