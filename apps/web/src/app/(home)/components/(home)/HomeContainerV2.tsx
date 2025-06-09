@@ -12,7 +12,7 @@ const HomeContainerV2 = ({ isJirumAlarmApp }: { isJirumAlarmApp: boolean }) => {
       <HomeHeader />
       <div>
         <BackgroundHeader />
-        <main className="relative z-10 mt-[144px] w-full rounded-t-[1.25rem] bg-white pt-3">
+        <main className="relative z-10 mt-[144px] h-full w-full rounded-t-[1.25rem] bg-white pt-3">
           <JirumRankingContainer />
           <div className="h-[20px]" />
           <div className="flex flex-col gap-y-8 py-3">
