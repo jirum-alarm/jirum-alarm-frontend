@@ -16,40 +16,40 @@ export default function useMyRouter() {
 
   const push = useCallback(
     (href: string, options?: NavigateOptions) => {
-      if (isJirumAlarmApp) {
-        WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
-          data: {
-            url: href,
-          },
-        });
-      } else {
-        router.push(href, options);
-      }
+      // if (isJirumAlarmApp) {
+      //   WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
+      //     data: {
+      //       url: href,
+      //     },
+      //   });
+      // } else {
+      router.push(href, options);
+      // }
     },
     [router, isJirumAlarmApp],
   );
 
   const replace = useCallback(
     (href: string, options?: NavigateOptions) => {
-      if (isJirumAlarmApp) {
-        WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
-          data: {
-            url: href,
-          },
-        });
-      } else {
-        router.replace(href, options);
-      }
+      // if (isJirumAlarmApp) {
+      //   WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
+      //     data: {
+      //       url: href,
+      //     },
+      //   });
+      // } else {
+      router.replace(href, options);
+      // }
     },
     [router, isJirumAlarmApp],
   );
 
   const back = useCallback(() => {
-    if (isJirumAlarmApp) {
-      WebViewBridge.sendMessage(WebViewEventType.PRESS_BACKBUTTON, null);
-    } else {
-      router.back();
-    }
+    // if (isJirumAlarmApp) {
+    //   WebViewBridge.sendMessage(WebViewEventType.PRESS_BACKBUTTON, null);
+    // } else {
+    router.back();
+    // }
   }, [router, isJirumAlarmApp]);
 
   return useMemo(
@@ -58,6 +58,6 @@ export default function useMyRouter() {
       replace,
       back,
     }),
-    [push, replace, back], // ✅ 새로운 객체를 안전하게 반환
+    [push, replace, back],
   );
 }
