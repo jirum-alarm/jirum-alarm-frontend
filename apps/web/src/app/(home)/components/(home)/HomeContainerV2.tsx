@@ -11,7 +11,7 @@ const HomeContainerV2 = ({ isJirumAlarmApp }: { isJirumAlarmApp: boolean }) => {
     <div className="mx-auto h-full max-w-screen-layout-max pb-[70px]">
       <HomeHeader />
       <div>
-        <BackgroundHeader />
+        <BackgroundHeader hasTopPadding={!isJirumAlarmApp} />
         <main className="relative z-10 mt-[144px] h-full w-full rounded-t-[1.25rem] bg-white pt-3">
           <JirumRankingContainer />
           <div className="h-[20px]" />

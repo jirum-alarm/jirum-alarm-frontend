@@ -5,7 +5,8 @@ import SearchLinkButton from '@/components/SearchLinkButton';
 import Link from '@/features/Link';
 import { cn } from '@/lib/cn';
 
-const BackgroundHeader = () => {
+const BackgroundHeader = ({ hasTopPadding }: { hasTopPadding: boolean }) => {
+
   const handleClick = () => {
     // TODO: Need GTM Migration
     // mp?.track(EVENT.OPEN_KAKAO_TALK.NAME, {
@@ -14,7 +15,14 @@ const BackgroundHeader = () => {
   };
 
   return (
-    <div className="fixed top-[0.5px] z-0 h-[300px] w-full max-w-screen-layout-max bg-gray-900">
+    <div
+      className={cn(
+        'fixed z-0 h-[300px] w-full max-w-screen-layout-max bg-gray-900',
+        {
+          'top-[0.5px]': hasTopPadding,
+        },
+      )}
+    >
       <header className="flex h-[56px] w-full items-center justify-between px-5 py-3">
         <div className="flex items-center gap-2">
           <RoundedLogo />
