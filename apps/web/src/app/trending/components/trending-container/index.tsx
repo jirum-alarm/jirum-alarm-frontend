@@ -24,6 +24,7 @@ import ProductImageCardSkeleton from '@/features/products/components/ProductImag
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
 
+import { TAB_META } from '../../tabMeta';
 import TrendingList from '../TrendingList';
 
 const SWIPER_OPTIONS: SwiperOptions = {
@@ -84,6 +85,12 @@ export const TrendingContainer = ({ initialTab }: Props) => {
     },
     [tabId],
   );
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const meta = TAB_META[tabId] || TAB_META[0];
+    document.title = meta.title;
+  }, [tabId]);
 
   return (
     <Tabs.Root value={`${tabId}`} onValueChange={(value) => handleTabChange(Number(value))} asChild>

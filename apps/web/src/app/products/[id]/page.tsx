@@ -23,7 +23,7 @@ export async function generateMetadata({
     productId: +product.id,
   });
 
-  const title = `지름알림 | ${product.title}`;
+  const title = `${product.title} | 지름알림`;
 
   const guideDescriptions = productGuides.productGuides
     .map((guide) => `${guide.title}: ${guide.content}`)
