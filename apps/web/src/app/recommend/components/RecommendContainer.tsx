@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import RecommendedProductTabs from '@/app/(home)/components/(home)/RecommendedProduct/RecommendedProductTabs';
 import RecommendProductList from '@/app/recommend/components/RecommendProductList';
@@ -20,6 +20,11 @@ const RecommendContainer = () => {
   const handleSelectedKeyword = (keyword: string) => {
     setRecommend(keyword);
   };
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    document.title = `${selectedKeyword} 추천 상품 | 지름알림`;
+  }, [selectedKeyword]);
 
   return (
     <div>

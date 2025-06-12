@@ -21,7 +21,7 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
 
   if (!product) notFound();
 
-  const title = `지름알림 | ${product.title}`;
+  const title = `${product.title} | 지름알림`;
 
   const handleSearch = () => {
     // TODO: Need GTM Migration
