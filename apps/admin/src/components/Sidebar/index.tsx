@@ -186,7 +186,11 @@ function MenuGroup({
       }`}
       onClick={(e) => {
         e.preventDefault();
-        sidebarExpanded ? handleClick() : openSidebar();
+        if (sidebarExpanded) {
+          handleClick();
+        } else {
+          openSidebar();
+        }
       }}
     >
       <MenuGroupIcon />

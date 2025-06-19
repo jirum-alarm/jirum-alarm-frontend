@@ -6,12 +6,12 @@ import HomeHeader from './HomeHeader';
 import JirumRankingContainer from './JirumRankingContainer';
 import LiveHotDealContainer from './LiveHotDealContainer';
 
-const HomeContainerV2 = ({ isJirumAlarmApp }: { isJirumAlarmApp: boolean }) => {
+const HomeContainerV2 = ({ isSafari, isMobile }: { isSafari: boolean; isMobile: boolean }) => {
   return (
-    <div className="mx-auto h-full max-w-screen-layout-max pb-[70px]">
-      <HomeHeader />
+    <div className="mx-auto h-full w-full pb-[70px]">
+      <HomeHeader isMobile={isMobile} />
+      <BackgroundHeader hasTopPadding={isSafari} />
       <div>
-        <BackgroundHeader hasTopPadding={!isJirumAlarmApp} />
         <main className="relative z-10 mt-[144px] h-full w-full rounded-t-[1.25rem] bg-white pt-3">
           <JirumRankingContainer />
           <div className="h-[20px]" />
@@ -21,7 +21,7 @@ const HomeContainerV2 = ({ isJirumAlarmApp }: { isJirumAlarmApp: boolean }) => {
           </div>
         </main>
       </div>
-      <TopButton hasBottomNav={!isJirumAlarmApp} />
+      <TopButton hasBottomNav={true} />
     </div>
   );
 };

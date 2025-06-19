@@ -30,7 +30,7 @@ const KeywordSearch = ({ keywordId }: Props) => {
       hotDealKeywordId: hotDealKeywordId,
       synonyms: filteredSynonyms,
     },
-    skip: !Boolean(filteredSynonyms?.length),
+    skip: !filteredSynonyms?.length,
   });
 
   const addSynonym = () => {

@@ -10,7 +10,7 @@ import { PAGE } from '@/constants/page';
 import { ProductQueries } from '@/entities/product';
 import Link from '@/features/Link';
 
-import LogoLink from '../../../../components/common/Logo/LogiLink';
+import LogoLink from '../../../../components/common/Logo/LogoLink';
 
 export default function ProductDetailPageHeader({ productId }: { productId: number }) {
   const { toast } = useToast();
@@ -62,7 +62,7 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
   };
 
   return (
-    <header className="fixed top-0 z-50 flex h-[56px] w-full max-w-screen-layout-max items-center justify-between border-b border-gray-100 bg-white px-5">
+    <header className="fixed top-0 z-50 flex h-[56px] w-full max-w-screen-mobile-max items-center justify-between border-b border-gray-100 bg-white px-5">
       <div className="flex items-center gap-x-1">
         <BackButton backTo={PAGE.HOME} />
         <LogoLink />

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import { Illust } from './Illust';
+
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
   title: 'components/Illust',

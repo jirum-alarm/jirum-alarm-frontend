@@ -139,7 +139,7 @@ const useEmailLoginFormViewModel = () => {
 
     const isAlphabet = /[a-zA-Z]/.test(value);
     const isNumber = /\d/.test(value);
-    const isSpecialCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(value);
+    const isSpecialCharacter = /[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/.test(value);
 
     const isValidType = [isAlphabet, isNumber, isSpecialCharacter].filter(Boolean).length >= 2;
     const isValidLength = /^(.{8,30})$/.test(value);

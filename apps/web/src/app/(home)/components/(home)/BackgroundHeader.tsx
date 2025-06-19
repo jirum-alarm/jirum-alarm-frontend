@@ -6,7 +6,6 @@ import Link from '@/features/Link';
 import { cn } from '@/lib/cn';
 
 const BackgroundHeader = ({ hasTopPadding }: { hasTopPadding: boolean }) => {
-
   const handleClick = () => {
     // TODO: Need GTM Migration
     // mp?.track(EVENT.OPEN_KAKAO_TALK.NAME, {
@@ -16,47 +15,47 @@ const BackgroundHeader = ({ hasTopPadding }: { hasTopPadding: boolean }) => {
 
   return (
     <div
-      className={cn(
-        'fixed z-0 h-[300px] w-full max-w-screen-layout-max bg-gray-900',
-        {
-          'top-[0.5px]': hasTopPadding,
-        },
-      )}
+      className={cn('fixed z-0 h-[300px] w-full bg-gray-900', {
+        'top-[0.5px]': hasTopPadding,
+        'top-[0px]': !hasTopPadding,
+      })}
     >
-      <header className="flex h-[56px] w-full items-center justify-between px-5 py-3">
-        <div className="flex items-center gap-2">
-          <RoundedLogo />
-          <h2 className="text-lg font-bold text-slate-50">지름알림</h2>
-        </div>
-        <SearchLinkButton color="#FFF" />
-      </header>
-      <div className="px-5 pb-4 pt-2">
-        <Link
-          onClick={handleClick}
-          className={cn(
-            'flex h-[68px] w-full items-center justify-between rounded-lg border border-gray-600 bg-gray-800 py-3 pl-[16px] pr-[6px]',
-            '',
-          )}
-          href={'https://open.kakao.com/o/gJZTWAAg'}
-          target="_blank"
-        >
-          <div>
-            <p className="mb-[4px] text-base">
-              <span className="text-sm font-medium text-gray-100">핫딜 전용 카톡방 </span>
-              <span className="font-semibold text-primary-300">OPEN</span>
-            </p>
-            <p className="text-s text-gray-200">오픈 카톡방에서 소식을 확인해보세요!</p>
+      <div className="mx-auto max-w-screen-layout-max">
+        <header className="flex h-[56px] w-full items-center justify-between px-5 py-3">
+          <div className="flex items-center gap-2">
+            <RoundedLogo />
+            <h2 className="text-lg font-bold text-slate-50">지름알림</h2>
           </div>
+          <SearchLinkButton color="#FFF" />
+        </header>
+        <div className="px-5 pb-4 pt-2">
+          <Link
+            onClick={handleClick}
+            className={cn(
+              'flex h-[68px] w-full items-center justify-between rounded-lg border border-gray-600 bg-gray-800 py-3 pl-[16px] pr-[6px]',
+              '',
+            )}
+            href={'https://open.kakao.com/o/gJZTWAAg'}
+            target="_blank"
+          >
+            <div>
+              <p className="mb-[4px] text-base">
+                <span className="text-sm font-medium text-gray-100">핫딜 전용 카톡방 </span>
+                <span className="font-semibold text-primary-300">OPEN</span>
+              </p>
+              <p className="text-s text-gray-200">오픈 카톡방에서 소식을 확인해보세요!</p>
+            </div>
 
-          <div className="relative h-[59px] w-[91px]">
-            <div className="absolute z-[1] flex h-full flex-col justify-end">
-              <KaKaoIcon />
+            <div className="relative h-[59px] w-[91px]">
+              <div className="absolute z-[1] flex h-full flex-col justify-end">
+                <KaKaoIcon />
+              </div>
+              <div className="absolute right-0 z-[0] flex h-full flex-col justify-end">
+                <JirumIcon />
+              </div>
             </div>
-            <div className="absolute right-0 z-[0] flex h-full flex-col justify-end">
-              <JirumIcon />
-            </div>
-          </div>
-        </Link>
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -99,7 +99,7 @@ const BottomNav = ({ type }: { type: any }) => {
   return (
     <div
       className={cn(
-        `fixed bottom-0 left-1/2 z-50 mx-auto w-full max-w-screen-layout-max -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-all duration-300`,
+        `fixed bottom-safe-bottom left-1/2 z-50 mx-auto w-full max-w-screen-layout-max -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-all duration-300`,
         {
           'translate-y-full': scrollDirection === 'down',
           'translate-y-0': scrollDirection === 'up',

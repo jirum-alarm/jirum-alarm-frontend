@@ -15,4 +15,4 @@ async function deleteAccessToken() {
   (await cookies()).delete('accessToken');
 }
 
-export { setAccessToken, getAccessToken, deleteAccessToken };
+export { deleteAccessToken, getAccessToken, setAccessToken };

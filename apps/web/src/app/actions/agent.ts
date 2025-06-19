@@ -1,15 +1,27 @@
 import { headers } from 'next/headers';
+import { userAgent } from 'next/server';
 
-async function checkJirumAlarmApp() {
-  const userAgent = (await headers()).get('user-agent');
-  let isIosApp = false;
-  let isAndroidApp = false;
-  if (userAgent) {
-    isIosApp = Boolean(userAgent.match(/IOS ReactNative Webview Jirum Alarm/i));
-    isAndroidApp = Boolean(userAgent.match(/Android ReactNative Webview Jirum Alarm/i));
-  }
-  const isJirumAlarmApp = isIosApp || isAndroidApp;
-  return { isJirumAlarmApp };
+async function checkDevice() {
+  const headersList = await headers();
+  const { device, browser, ua } = userAgent({ headers: headersList });
+  const userAgentString = ua || '';
+
+  const isMobile = Boolean(device.type === 'mobile');
+  const isSafari = Boolean(browser.name === 'Mobile Safari');
+
+  const isJirumAlarmIOSApp = Boolean(userAgentString.match(/IOS ReactNative Webview Jirum Alarm/i));
+  const isJirumAlarmAndroidApp = Boolean(
+    userAgentString.match(/Android ReactNative Webview Jirum Alarm/i),
+  );
+  const isJirumAlarmApp = !!(isJirumAlarmIOSApp || isJirumAlarmAndroidApp);
+
+  return {
+    isMobile,
+    isSafari,
+    isJirumAlarmIOSApp,
+    isJirumAlarmAndroidApp,
+    isJirumAlarmApp,
+  };
 }
 
-export { checkJirumAlarmApp };
+export { checkDevice };

@@ -1,6 +1,6 @@
-import type { Metadata } from 'next';
-
 import { PretendardVariable } from '@/fonts/font';
+
+import type { Metadata } from 'next';
 
 import '@/styles/globals.css';
 

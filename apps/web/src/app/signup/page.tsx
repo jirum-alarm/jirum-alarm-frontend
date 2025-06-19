@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation } from '@apollo/client';
-import { useSearchParams } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 import { Suspense, useEffect, useState } from 'react';
 
 import { useToast } from '@/components/common/Toast';
@@ -21,7 +21,6 @@ import Nickname from './nickname/components/Nickname';
 import Password from './password/components/Password';
 import Personal from './personal/components/Personal';
 import TermsOfService from './terms-of-service/components/TermsOfService';
-import { useQueryState } from 'nuqs';
 
 const COMPLETE_ROUTE = 'signup/complete';
 
