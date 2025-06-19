@@ -10,8 +10,13 @@ import TrendingContainerServer from './components/trending-container/server';
 import TrendingPageHeader from './components/TrendingPageHeader';
 import { TAB_META } from './tabMeta';
 
-export async function generateMetadata({ searchParams }: any): Promise<Metadata> {
-  const tabNumber = searchParams?.tab ? Number(searchParams.tab) : 0;
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab: string }>;
+}): Promise<Metadata> {
+  const { tab } = await searchParams;
+  const tabNumber = tab ? Number(tab) : 0;
   const meta = TAB_META[tabNumber] || TAB_META[0];
   return {
     title: meta.title,
@@ -27,8 +32,9 @@ export async function generateMetadata({ searchParams }: any): Promise<Metadata>
   };
 }
 
-const TrendingPage = ({ searchParams }: any) => {
-  const tabNumber = searchParams?.tab ? Number(searchParams.tab) : 0;
+const TrendingPage = async ({ searchParams }: { searchParams: Promise<{ tab: string }> }) => {
+  const { tab } = await searchParams;
+  const tabNumber = tab ? Number(tab) : 0;
   // checkJirumAlarmApp는 서버에서만 사용되므로, TrendingPage를 async로 유지할 필요 없음
   // const { isJirumAlarmApp } = await checkJirumAlarmApp();
   // TopButton의 hasBottomNav prop은 true로 고정하거나, 별도 처리 필요

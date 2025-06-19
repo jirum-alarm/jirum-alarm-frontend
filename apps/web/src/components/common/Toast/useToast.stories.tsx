@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import Button from '../Button';
 
 import Toaster from './Toaster';
 import { useToast } from './useToast';
+
+import type { Meta, StoryObj } from '@storybook/react';
 
 const ToastStoryDisplay = ({ message }: { message?: React.ReactNode } = { message: '' }) => {
   return (

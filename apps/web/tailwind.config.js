@@ -30,7 +30,8 @@ module.exports = {
         txs: '320px',
         xs: '375px',
         smd: '550px',
-        'layout-max': '600px',
+        'layout-max': '1280px',
+        'mobile-max': '600px',
         'mouse-hover': { raw: '(hover: hover)' },
       },
       colors: {

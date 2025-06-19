@@ -51,6 +51,7 @@ export default function PostReservationsTable() {
       e.preventDefault();
       e.stopPropagation();
       if (confirm(`정말 "${keyword}"${getParticle(keyword)} 삭제하시겠습니까?`)) {
+        /* empty */
       }
     };
   };

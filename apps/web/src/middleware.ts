@@ -136,7 +136,7 @@ const refreshAndVerifyToken = async (
     for (const error of result.errors) {
       switch (error.extensions.code) {
         case 'FORBIDDEN':
-        case 'UNAUTHENTICATED':
+        case 'UNAUTHENTICATED': {
           const result = await getNewToken(refreshToken);
 
           if (result.data) {
@@ -160,6 +160,7 @@ const refreshAndVerifyToken = async (
           if (result.errors) {
             return { status: 'invalid' };
           }
+        }
       }
     }
   }

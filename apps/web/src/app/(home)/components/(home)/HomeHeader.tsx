@@ -1,13 +1,14 @@
 'use client';
 
+import LogoLink from '@/components/common/Logo/LogoLink';
 import SearchLinkButton from '@/components/SearchLinkButton';
 import useScrollPosition from '@/hooks/useScrollPosition';
 import { cn } from '@/lib/cn';
 
-import LogoLink from '../../../../components/common/Logo/LogiLink';
+const HomeHeader = ({ isMobile }: { isMobile: boolean }) => {
+  const scrollThreshold = isMobile ? 90 : 800;
 
-const HomeHeader = () => {
-  const isScrolled = useScrollPosition(90);
+  const isScrolled = useScrollPosition(scrollThreshold, !isMobile);
 
   // useEffect(() => {
   //   const statusBar = document.querySelector('meta[name="theme-color"]');
@@ -41,18 +42,20 @@ const HomeHeader = () => {
   };
 
   return (
-    <header
+    <div
       className={cn(
-        `fixed top-0 z-50 flex h-[56px] w-full max-w-screen-layout-max items-center justify-between bg-white px-5 py-2 transition-all duration-300`,
+        'fixed top-0 z-50 w-full bg-white shadow-sm transition-all duration-300 lg:translate-y-0',
         {
-          'translate-y-0 shadow-sm': isScrolled,
-          '-translate-y-full': !isScrolled,
+          'translate-y-0 lg:bg-white': isScrolled,
+          '-translate-y-full lg:bg-gray-900': !isScrolled,
         },
       )}
     >
-      <LogoLink />
-      <SearchLinkButton color="#101828" onClick={handleSearchClick} />
-    </header>
+      <header className="mx-auto flex h-[56px] w-full max-w-screen-layout-max items-center justify-between px-5 py-2">
+        <LogoLink inverted={isScrolled} />
+        <SearchLinkButton color="#101828" onClick={handleSearchClick} />
+      </header>
+    </div>
   );
 };
 
