@@ -7,25 +7,21 @@ import { ProductService } from '@/shared/api/product';
 
 import ProductDetailContainerServer from './components/ProductDetailContainerServer';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}): Promise<Metadata> {
-  const { id } = await params;
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const { id } = params;
 
   const { product } = await ProductService.getProductServer({ id: +id });
   if (!product) {
     return defaultMetadata;
   }
 
-  const productGuides = await ProductService.getProductGuides({
+  const { productGuides } = await ProductService.getProductGuides({
     productId: +product.id,
   });
 
   const title = `${product.title} | 지름알림`;
 
-  const guideDescriptions = productGuides.productGuides
+  const guideDescriptions = productGuides
     .map((guide) => `${guide.title}: ${guide.content}`)
     .join(', ');
   const description = guideDescriptions || '지름알림에서 제공하는 초특가 핫딜 상품!';
@@ -72,11 +68,25 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default async function ProductDetail({ params }: { params: { id: string } }) {
+  const { id } = params;
+
+  const [{ product }, { productGuides }] = await Promise.all([
+    ProductService.getProductServer({ id: +id }),
+    ProductService.getProductGuides({ productId: +id }),
+  ]);
+
+  if (!product) {
+    return null; // or notFound()
+  }
+
   return (
     <Suspense>
-      <ProductDetailContainerServer productId={+id} />
+      <ProductDetailContainerServer
+        productId={+id}
+        product={product}
+        productGuides={productGuides}
+      />
     </Suspense>
   );
 }
