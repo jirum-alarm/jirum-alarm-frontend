@@ -79,11 +79,11 @@ export const TrendingContainer = ({ initialTab }: Props) => {
   };
 
   const handleTabChange = useCallback(
-    (nextIndex: number) => {
-      if (nextIndex === tabId) return;
-      swiperRef.current?.slideTo(nextIndex);
+    (nextId: number) => {
+      if (nextId === tabId) return;
+      swiperRef.current?.slideTo(categoryIds.indexOf(nextId));
     },
-    [tabId],
+    [categoryIds, tabId],
   );
 
   useEffect(() => {
@@ -93,12 +93,12 @@ export const TrendingContainer = ({ initialTab }: Props) => {
   }, [tabId]);
 
   return (
-    <Tabs.Root value={`${tabId}`} onValueChange={(value) => handleTabChange(Number(value))} asChild>
+    <Tabs.Root value={`${tabId}`} asChild>
       <div className="relative">
         <TabBar
           allCategories={allCategories}
-          tabIndex={tabId}
-          onTabClick={(id) => handleTabChange(Number(id))}
+          tabIndex={categoryIds.indexOf(tabId)}
+          onTabClick={(id) => handleTabChange(id)}
         />
 
         <div className="mt-[72px] overflow-hidden">
@@ -173,8 +173,10 @@ const TabBar = ({
 }: {
   allCategories: { id: number; name: string }[];
   tabIndex: number;
-  onTabClick: (id: string) => void;
+  onTabClick: (id: number) => void;
 }) => {
+  const categoryIds = allCategories.map((c) => c.id);
+
   const { isHeaderVisible } = useVisibilityOnScroll();
 
   const tabDragRef = useRef<HTMLDivElement>(null);
@@ -244,7 +246,7 @@ const TabBar = ({
     const dx = Math.abs(e.clientX - (dragStartX.current ?? 0));
     if (dx < 5) {
       startTransition(() => {
-        onTabClick(id);
+        onTabClick(Number(id));
       });
     }
   };
@@ -281,7 +283,7 @@ const TabBar = ({
               onPointerUp={(e) => handlePointerUp(e, category.id.toString())}
               className={cn(
                 'relative h-[40px] shrink-0 whitespace-nowrap px-3 py-2 text-base transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
-                tabIndex === category.id
+                tabIndex === categoryIds.indexOf(category.id)
                   ? 'font-semibold text-primary-600'
                   : 'font-medium text-gray-500 hover:text-gray-900',
               )}

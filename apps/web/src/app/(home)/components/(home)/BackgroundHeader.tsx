@@ -3,9 +3,20 @@
 import { RoundedLogo } from '@/components/common/icons';
 import SearchLinkButton from '@/components/SearchLinkButton';
 import Link from '@/features/Link';
+import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
 
-const BackgroundHeader = ({ hasTopPadding }: { hasTopPadding: boolean }) => {
+import JirumRankingContainer from './JirumRankingContainer';
+
+const BackgroundHeader = ({
+  hasTopPadding,
+  isMobile,
+}: {
+  hasTopPadding: boolean;
+  isMobile: boolean;
+}) => {
+  const { isMobile: isDeviceMobile } = useDevice(isMobile);
+
   const handleClick = () => {
     // TODO: Need GTM Migration
     // mp?.track(EVENT.OPEN_KAKAO_TALK.NAME, {
@@ -15,12 +26,12 @@ const BackgroundHeader = ({ hasTopPadding }: { hasTopPadding: boolean }) => {
 
   return (
     <div
-      className={cn('fixed z-0 h-[300px] w-full bg-gray-900', {
+      className={cn('fixed z-0 h-[300px] w-full bg-gray-900 lg:h-[100dvh]', {
         'top-[0.5px]': hasTopPadding,
         'top-[0px]': !hasTopPadding,
       })}
     >
-      <div className="mx-auto max-w-screen-layout-max">
+      <div className="mx-auto max-w-screen-mobile-max lg:max-w-screen-layout-max">
         <header className="flex h-[56px] w-full items-center justify-between px-5 py-3">
           <div className="flex items-center gap-2">
             <RoundedLogo />
@@ -28,11 +39,12 @@ const BackgroundHeader = ({ hasTopPadding }: { hasTopPadding: boolean }) => {
           </div>
           <SearchLinkButton color="#FFF" />
         </header>
+        {!isDeviceMobile && <JirumRankingContainer isMobile={isDeviceMobile} />}
         <div className="px-5 pb-4 pt-2">
           <Link
             onClick={handleClick}
             className={cn(
-              'flex h-[68px] w-full items-center justify-between rounded-lg border border-gray-600 bg-gray-800 py-3 pl-[16px] pr-[6px]',
+              'flex h-[76px] w-full items-center justify-between rounded-lg border border-gray-600 bg-gray-800 py-3 pl-[16px] pr-[6px]',
               '',
             )}
             href={'https://open.kakao.com/o/gJZTWAAg'}
@@ -40,7 +52,7 @@ const BackgroundHeader = ({ hasTopPadding }: { hasTopPadding: boolean }) => {
           >
             <div>
               <p className="mb-[4px] text-base">
-                <span className="text-sm font-medium text-gray-100">핫딜 전용 카톡방 </span>
+                <span className="text-base font-medium text-white">핫딜 전용 카톡방 </span>
                 <span className="font-semibold text-primary-300">OPEN</span>
               </p>
               <p className="text-s text-gray-200">오픈 카톡방에서 소식을 확인해보세요!</p>

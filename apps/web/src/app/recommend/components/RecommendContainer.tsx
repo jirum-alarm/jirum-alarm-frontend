@@ -28,7 +28,7 @@ const RecommendContainer = () => {
 
   return (
     <div>
-      <div className="sticky top-[56px] z-[50] w-full max-w-screen-layout-max bg-white pb-[20px] pt-[12px]">
+      <div className="sticky top-[56px] z-[50] w-full max-w-screen-mobile-max bg-white pb-[20px] pt-[12px]">
         <RecommendedProductTabs
           productKeywords={productKeywords}
           selectedKeyword={selectedKeyword}

@@ -10,13 +10,13 @@ const PrivacyPolicy = () => {
   const goBack = useGoBack();
   return (
     <div className="flex w-full flex-col items-center pt-[56px]">
-      <header className="fixed top-0 z-50 flex h-[56px] w-full max-w-screen-layout-max items-center justify-between bg-white px-5 py-2">
+      <header className="fixed top-0 z-50 flex h-[56px] w-full max-w-screen-mobile-max items-center justify-between bg-white px-5 py-2">
         <h1 className="text-lg font-bold text-black">개인정보 처리방침</h1>
         <button className="-m-2 flex items-center justify-center p-2" onClick={goBack}>
           <Close />
         </button>
       </header>
-      <article className="flex w-full max-w-screen-layout-max flex-col gap-[24px] p-[20px]">
+      <article className="flex w-full max-w-screen-mobile-max flex-col gap-[24px] p-[20px]">
         <div className="flex w-full flex-col gap-[8px] text-[13px] text-gray-500">
           <p>공고일자 : 2023년 12월 01일</p>
           <p>시행일자 : 2023년 12월 01일</p>

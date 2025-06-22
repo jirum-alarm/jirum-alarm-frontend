@@ -8,6 +8,9 @@ module.exports = {
         'fade-to-white':
           'linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%)',
       },
+      fontFamily: {
+        sans: ['var(--font-pretendard)'],
+      },
       fontSize: {
         s: ['0.8125rem', { lineHeight: '1rem' }], // 13px
         lg: [

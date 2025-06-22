@@ -40,8 +40,8 @@ const BasicLayout = ({
       <div
         className={cn(
           'relative mx-auto grid max-w-screen-mobile-max grid-cols-1 bg-white',
-          'mobile-max:before:fixed mobile-max:before:left-1/2 mobile-max:before:top-0 mobile-max:before:h-full mobile-max:before:w-[1px] mobile-max:before:-translate-x-1/2 mobile-max:before:bg-gray-200',
-          'mobile-max:after:fixed mobile-max:after:left-1/2 mobile-max:after:top-0 mobile-max:after:h-full mobile-max:after:w-[1px] mobile-max:after:-translate-x-1/2 mobile-max:after:bg-gray-200',
+          'mobile-max:before:fixed mobile-max:before:left-1/2 mobile-max:before:top-0 mobile-max:before:-ml-[300px] mobile-max:before:h-full mobile-max:before:w-[1px] mobile-max:before:-translate-x-1/2 mobile-max:before:bg-gray-200',
+          'mobile-max:after:fixed mobile-max:after:left-1/2 mobile-max:after:top-0 mobile-max:after:ml-[300px] mobile-max:after:h-full mobile-max:after:w-[1px] mobile-max:after:-translate-x-1/2 mobile-max:after:bg-gray-200',
           fullScreen && 'min-h-screen',
           {
             'pb-20': hasBottomNav,

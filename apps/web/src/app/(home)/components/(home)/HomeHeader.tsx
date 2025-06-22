@@ -1,14 +1,22 @@
 'use client';
 
+import { My } from '@/components/common/icons';
+import TalkDark from '@/components/common/icons/TalkDark';
+import TalkLight from '@/components/common/icons/TalkLight';
 import LogoLink from '@/components/common/Logo/LogoLink';
 import SearchLinkButton from '@/components/SearchLinkButton';
+import { PAGE } from '@/constants/page';
+import Link from '@/features/Link';
 import useScrollPosition from '@/hooks/useScrollPosition';
+import { useUser } from '@/hooks/useUser';
 import { cn } from '@/lib/cn';
 
 const HomeHeader = ({ isMobile }: { isMobile: boolean }) => {
+  const { me } = useUser();
+
   const scrollThreshold = isMobile ? 90 : 800;
 
-  const isScrolled = useScrollPosition(scrollThreshold, !isMobile);
+  const isScrolled = useScrollPosition(scrollThreshold, false);
 
   // useEffect(() => {
   //   const statusBar = document.querySelector('meta[name="theme-color"]');
@@ -53,7 +61,38 @@ const HomeHeader = ({ isMobile }: { isMobile: boolean }) => {
     >
       <header className="mx-auto flex h-[56px] w-full max-w-screen-layout-max items-center justify-between px-5 py-2">
         <LogoLink inverted={isScrolled} />
-        <SearchLinkButton color="#101828" onClick={handleSearchClick} />
+        <div className="flex items-center gap-x-5">
+          <SearchLinkButton
+            color={isScrolled ? '#101828' : '#FFFFFF'}
+            onClick={handleSearchClick}
+          />
+          <Link href={PAGE.MYPAGE} className="relative hidden size-8 lg:block">
+            <TalkDark
+              className={cn('size-8 transition-opacity', {
+                'opacity-100': !isScrolled,
+                'opacity-0': isScrolled,
+              })}
+            />
+            <TalkLight
+              className={cn('absolute inset-0 size-8 transition-opacity', {
+                'opacity-0': !isScrolled,
+                'opacity-100': isScrolled,
+              })}
+            />
+          </Link>
+          {me ? (
+            <Link href={PAGE.MYPAGE} className="hidden size-8 lg:block">
+              <My width={32} height={32} />
+            </Link>
+          ) : (
+            <Link
+              href={PAGE.LOGIN}
+              className="hidden rounded-full bg-gray-700 px-4 py-2 font-semibold text-white lg:block"
+            >
+              로그인
+            </Link>
+          )}
+        </div>
       </header>
     </div>
   );

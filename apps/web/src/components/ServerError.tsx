@@ -7,7 +7,7 @@ interface ServerErrorProps {
 
 const ServerError = ({ onClick }: ServerErrorProps) => {
   return (
-    <div className="mx-auto flex h-[calc(100dvh)] max-w-screen-layout-max flex-col items-center justify-center">
+    <div className="mx-auto flex h-[calc(100dvh)] max-w-screen-mobile-max flex-col items-center justify-center">
       <div className="flex -translate-y-1/3 flex-col items-center">
         <div className="pb-[26px]">
           <IllustWarning />

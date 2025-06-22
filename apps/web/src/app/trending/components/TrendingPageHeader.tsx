@@ -9,14 +9,14 @@ const TrendingPageHeader = () => {
   return (
     <header
       className={cn(
-        `fixed top-0 z-50 flex h-[56px] w-full max-w-screen-txs items-center justify-between bg-white px-5 transition-transform txs:max-w-screen-xs xs:max-w-screen-smd smd:max-w-screen-layout-max`,
+        `fixed top-0 z-50 flex h-[56px] w-full max-w-screen-mobile-max items-center justify-between bg-white px-5 transition-transform`,
         {
           'translate-y-0': isHeaderVisible,
           'translate-y-[-56px]': !isHeaderVisible,
         },
       )}
     >
-      <h2 className="text-lg font-bold">지름알림 랭킹</h2>
+      <h1 className="text-lg font-bold">지름알림 랭킹</h1>
       <SearchLinkButton color="#1d2939" />
     </header>
   );
