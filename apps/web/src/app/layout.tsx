@@ -21,7 +21,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" className={pretendard.variable}>
+    <html lang="ko" className={`${pretendard.className} antialiased`}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />

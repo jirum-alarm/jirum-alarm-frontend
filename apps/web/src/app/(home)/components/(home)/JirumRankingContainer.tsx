@@ -7,7 +7,7 @@ import Link from '@/features/Link';
 
 import JirumRankingSlider from './JirumRankingSlider';
 
-const JirumRankingContainer = () => {
+const JirumRankingContainer = ({ isMobile }: { isMobile: boolean }) => {
   return (
     <div className="w-full">
       <div className="px-5">
@@ -29,7 +29,7 @@ const JirumRankingContainer = () => {
             </div>
           }
         >
-          <JirumRankingSlider />
+          <JirumRankingSlider isMobile={isMobile} />
         </Suspense>
       </ApiErrorBoundary>
     </div>

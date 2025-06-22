@@ -49,7 +49,7 @@ export default function CommentMenu({ comment }: { comment: TComment }) {
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="fixed inset-x-0 bottom-0 left-0 right-0 z-[9999] mx-auto h-fit max-w-screen-layout-max rounded-t-[20px] bg-white outline-none">
+        <Drawer.Content className="fixed inset-x-0 bottom-0 left-0 right-0 z-[9999] mx-auto h-fit max-w-screen-mobile-max rounded-t-[20px] bg-white outline-none">
           <div className="flex flex-col items-center pb-8 pt-4">
             <button
               className="flex h-[56px] w-full items-center justify-center text-lg font-medium text-error-500"

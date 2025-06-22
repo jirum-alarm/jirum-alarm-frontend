@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-export const useDevice = () => {
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+export const useDevice = (initialIsMobile: boolean = false) => {
+  const [isMobile, setIsMobile] = useState<boolean>(initialIsMobile);
   const [isApple, setIsApple] = useState<boolean>(false);
   const [isIos, setIsIos] = useState<boolean>(false);
   const [isAndroid, setIsAndroid] = useState<boolean>(false);

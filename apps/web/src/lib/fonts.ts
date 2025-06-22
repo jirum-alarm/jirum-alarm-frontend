@@ -1,7 +1,6 @@
 import localFont from 'next/font/local';
 
 export const pretendard = localFont({
-  variable: '--Pretendard',
   display: 'swap',
   preload: true,
   fallback: [
@@ -20,5 +19,5 @@ export const pretendard = localFont({
     'sans-serif',
   ],
   adjustFontFallback: 'Arial',
-  src: '../fonts/PretendardStdVariable.woff2',
+  src: '../fonts/PretendardVariable.woff2',
 });

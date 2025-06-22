@@ -48,7 +48,7 @@ export default function RecommendPageHeader() {
   };
 
   return (
-    <header className="fixed top-0 z-50 flex h-[56px] w-full max-w-screen-layout-max items-center justify-between bg-white px-5">
+    <header className="fixed top-0 z-50 flex h-[56px] w-full max-w-screen-mobile-max items-center justify-between bg-white px-5">
       <div className="flex grow items-center gap-x-1">
         <BackButton backTo={PAGE.HOME} />
         <h2 className="text-lg font-semibold text-black">지금 추천하는 상품</h2>

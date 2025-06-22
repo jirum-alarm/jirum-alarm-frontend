@@ -20,7 +20,7 @@ export default function BottomCTA({
   };
 
   return (
-    <div className="fixed bottom-0 z-40 ml-[-1px] flex h-[64px] w-full max-w-screen-layout-max gap-x-4 border border-gray-100 bg-white px-5 py-2">
+    <div className="fixed bottom-0 z-40 ml-[-1px] flex h-[64px] w-full max-w-screen-mobile-max gap-x-4 border border-gray-100 bg-white px-5 py-2">
       <div className="flex h-[48px] items-center">
         <LikeButton product={product} isUserLogin={isUserLogin} />
       </div>

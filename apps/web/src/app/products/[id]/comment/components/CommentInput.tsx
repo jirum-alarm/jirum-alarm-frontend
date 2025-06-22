@@ -42,7 +42,7 @@ export default function CommentInput({ productId, editingComment, isUserLogin }:
   return (
     <form
       onSubmit={handleSubmit}
-      className="fixed bottom-0 z-40 ml-[-1px] flex min-h-[64px] w-full max-w-screen-layout-max items-end gap-x-3 border-t border-gray-300 bg-white px-5 py-3"
+      className="fixed bottom-0 z-40 ml-[-1px] flex min-h-[64px] w-full max-w-screen-mobile-max items-end gap-x-3 border-t border-gray-300 bg-white px-5 py-3"
       onPointerDown={handlePointerDown}
     >
       <div className="flex grow flex-col items-center overflow-hidden rounded-lg border border-transparent bg-gray-50 focus-within:border-gray-500">
