@@ -1,5 +1,4 @@
 import ProductImage from '@/features/products/components/ProductImage';
-import { convertToWebp } from '@/util/image';
 
 export default function ProductDetailImage({
   product,
@@ -10,19 +9,6 @@ export default function ProductDetailImage({
     categoryId?: number | null;
   };
 }) {
-  const thumbnail = product.thumbnail ?? undefined;
-  const imageSrc = convertToWebp(thumbnail);
-
-  // if (!imageSrc && !product.categoryId) {
-  //   return (
-  //     <div className="flex h-[248px] w-full items-center justify-center">
-  //       <div className="-mt-20">
-  //         <IllustStanding />
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
   return (
     <div className="sticky top-0 -mb-6">
       <div
@@ -33,7 +19,7 @@ export default function ProductDetailImage({
         }}
       >
         <ProductImage
-          src={imageSrc}
+          src={product.thumbnail ?? undefined}
           alt={product.title}
           fill
           categoryId={product.categoryId}
