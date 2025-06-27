@@ -15,6 +15,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const nextConfig = withPWA({
   output: 'standalone',
+  httpAgentOptions: {
+    keepAlive: true,
+  },
+  productionBrowserSourceMaps: false,
   webpack: (config, { isServer, dev }) => {
     if (!isServer) {
       config.optimization = {
@@ -85,8 +89,8 @@ const nextConfig = withPWA({
         hostname: 'cdn.jirum-alarm.com',
       },
     ],
-    deviceSizes: [320, 375, 414, 600],
-    imageSizes: [140, 162, 240, 300, 335, 414, 600],
+    deviceSizes: [320, 480, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 190, 256, 300, 384],
     minimumCacheTTL: 31536000,
     formats: ['image/avif', 'image/webp'],
     contentSecurityPolicy: "default-src 'self'; img-src 'self' data: cdn.jirum-alarm.com;",
@@ -102,7 +106,6 @@ const nextConfig = withPWA({
       'lodash',
       'date-fns',
     ],
-    optimisticClientCache: true,
   },
   poweredByHeader: false,
   reactStrictMode: true,

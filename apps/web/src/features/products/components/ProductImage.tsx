@@ -6,7 +6,6 @@ import { memo, useState } from 'react';
 import { IllustEmpty } from '@/components/common/icons';
 import { CATEGORY_MAP } from '@/constants/categories';
 import { cn } from '@/lib/cn';
-import { convertToWebp } from '@/util/image';
 
 const ProductImage = memo(function ProductImage({
   src,
@@ -21,17 +20,15 @@ const ProductImage = memo(function ProductImage({
   categoryId?: number | null;
   type: 'product' | 'hotDeal' | 'product-detail';
 }) {
-  const imageSrc = src ? convertToWebp(src) : undefined;
-
   const [isError, setIsError] = useState<boolean>(false);
 
-  if (!src || !imageSrc || isError) {
+  if (!src || isError) {
     return <NoImage type={type} categoryId={categoryId} />;
   }
 
   return (
     <Image
-      src={imageSrc}
+      src={src}
       alt={alt || title || ''}
       title={title || ''}
       onError={() => setIsError(true)}
