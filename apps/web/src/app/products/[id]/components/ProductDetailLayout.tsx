@@ -1,36 +1,34 @@
 'use client';
 
-import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import dynamic from 'next/dynamic';
 import { notFound } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Drawer } from 'vaul';
 
 import Button from '@/components/common/Button';
-import { BubbleChatFill } from '@/components/common/icons';
 import Jirume from '@/components/common/icons/Jirume';
 import TopButton from '@/components/TopButton';
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { ProductQueries } from '@/entities/product';
-import Link from '@/features/Link';
 import HotdealBadge from '@/features/products/components/HotdealBadge';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 import { HotDealType, ProductGuidesQuery, ProductQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
 
-import Comment from '../comment/components/Comment';
-
 import BottomCTA from './BottomCTA';
-import CommunityReaction from './CommunityReaction';
 import HotdealGuide from './HotdealGuide';
-import HotdealScore from './HotdealScore';
 import { NoticeProfitLink } from './NoticeProfitUrl';
-import PopularProductsContainer from './PopularProudctsContainer';
 import ProductDetailImage from './ProductDetailImage';
 import RecommendButton from './RecommendButton';
-import RelatedProductsContainer from './RelatedProductsContainer';
 import { ViewerCount } from './ViewerCount';
+
+const HotdealScore = dynamic(() => import('./HotdealScore'));
+const CommunityReaction = dynamic(() => import('./CommunityReaction'));
+const CommentSection = dynamic(() => import('./CommentSection').then((mod) => mod.CommentSection));
+const RelatedProductsContainer = dynamic(() => import('./RelatedProductsContainer'));
+const PopularProductsContainer = dynamic(() => import('./PopularProudctsContainer'));
 
 type Product = NonNullable<ProductQuery['product']>;
 type ProductGuides = ProductGuidesQuery['productGuides'];
@@ -74,17 +72,27 @@ function ProductDetailLayout({
               <HotdealGuide productGuides={productGuides} />
               {/* TODO: wait for api */}
               {/* <HotdealIndex product={product} /> */}
-              <HotdealScore product={product} />
-              <CommunityReaction product={product} />
+              <Suspense>
+                <HotdealScore product={product} />
+              </Suspense>
+              <Suspense>
+                <CommunityReaction product={product} />
+              </Suspense>
             </div>
             <Hr />
-            <CommentSection productId={productId} />
+            <Suspense>
+              <CommentSection productId={productId} />
+            </Suspense>
             <Hr />
 
             <div className="mb-8 mt-7 flex flex-col gap-y-8">
               {/* <ProductFeedback product={product} /> */}
-              <RelatedProductsContainer product={product} />
-              <PopularProductsContainer product={product} />
+              <Suspense>
+                <RelatedProductsContainer product={product} />
+              </Suspense>
+              <Suspense>
+                <PopularProductsContainer product={product} />
+              </Suspense>
             </div>
             <NoticeProfitLink />
           </ProductInfoLayout>
@@ -248,12 +256,22 @@ function ProductInfo({ product }: { product: Product }) {
               </span>
             </div>
           )}
-
           <div className="flex justify-between text-sm font-medium">
             <span className="text-gray-400">추천수</span>
             <span className="text-gray-500">{product.likeCount}개</span>
           </div>
+          <div className="flex justify-between text-sm font-medium">
+            <span className="text-gray-400">조회수</span>
+            <span className="text-gray-500">{product.viewCount.toLocaleString()}</span>
+          </div>
         </div>
+        {product.url && (
+          <a href={product.url} target="_blank" rel="noopener noreferrer">
+            <Button color="primary" className="mt-6 w-full">
+              상품 보러 가기
+            </Button>
+          </a>
+        )}
       </div>
     </section>
   );
@@ -361,73 +379,5 @@ const HotdealGuideModal = ({ trigger }: { trigger: React.ReactNode }) => {
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
-  );
-};
-
-const CommentSection = ({ productId }: { productId: number }) => {
-  return (
-    <section className="mb-10 mt-4 flex flex-col">
-      <div className="flex h-[56px] w-full items-center px-5 py-4">
-        <span className="text-lg font-bold text-gray-900">지름알림 댓글</span>
-      </div>
-      <Suspense fallback={<CommentListSkeleton productId={productId} />}>
-        <CommentList productId={productId} />
-      </Suspense>
-    </section>
-  );
-};
-
-const CommentList = ({ productId }: { productId: number }) => {
-  const {
-    data: { pages },
-  } = useSuspenseInfiniteQuery(
-    CommentQueries.infiniteComments({ productId, ...defaultCommentsVariables }),
-  );
-
-  const comments = pages.flatMap(({ comments }) => comments);
-
-  if (!comments.length) return <CommentListSkeleton productId={productId} />;
-
-  return (
-    <>
-      <div className="relative flex flex-col">
-        <div className="relative flex max-h-[400px] flex-col divide-y divide-gray-200 overflow-hidden">
-          {comments.map((comment) => (
-            <Comment key={comment.id} comment={comment} canReply={false} />
-          ))}
-        </div>
-        {comments.length > 1 && (
-          <div className="pointer-events-none absolute bottom-0 left-0 h-12 w-full bg-gradient-to-t from-white to-transparent" />
-        )}
-      </div>
-      <div className="mt-5 w-full px-12">
-        <Link href={`/products/${productId}/comment`}>
-          <Button className="bg-gray-100">댓글 보기</Button>
-        </Link>
-      </div>
-    </>
-  );
-};
-
-const CommentListSkeleton = ({ productId }: { productId: number }) => {
-  return (
-    <>
-      <div className="flex flex-col">
-        <div className="flex h-40 w-full items-center justify-center">
-          <div className="flex flex-col items-center gap-y-3">
-            <BubbleChatFill />
-            <div className="flex flex-col items-center gap-y-1">
-              <p className="font-semibold text-gray-700">가장 먼저 댓글을 달아보세요!</p>
-              <p className="text-sm font-medium text-gray-500">핫딜을 주제로 소통해요</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="w-full px-12">
-        <Link href={`/products/${productId}/comment`}>
-          <Button className="bg-gray-100">댓글 작성하기</Button>
-        </Link>
-      </div>
-    </>
   );
 };
