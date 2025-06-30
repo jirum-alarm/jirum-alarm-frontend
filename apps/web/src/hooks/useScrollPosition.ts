@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-const useScrollPosition = (threshold = 100) => {
-  const [isScrolled, setIsScrolled] = useState(false);
+const useScrollPosition = (threshold = 100, initialValue = false) => {
+  const [isScrolled, setIsScrolled] = useState(initialValue);
 
   useEffect(() => {
     const handleScroll = () => {

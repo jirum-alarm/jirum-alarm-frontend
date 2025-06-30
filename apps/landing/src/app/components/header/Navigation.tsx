@@ -12,7 +12,7 @@ const Navigation = () => (
     <Link
       href="https://jirum-alarm.com/signup"
       target="_blank"
-      className="hidden rounded-full bg-primary-500 px-4 py-1.5 font-bold lg:block"
+      className="bg-primary-500 hidden rounded-full px-4 py-1.5 font-bold lg:block"
     >
       회원가입
     </Link>

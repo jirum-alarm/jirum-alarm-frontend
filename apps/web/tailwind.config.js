@@ -8,6 +8,9 @@ module.exports = {
         'fade-to-white':
           'linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%)',
       },
+      fontFamily: {
+        sans: ['var(--font-pretendard)'],
+      },
       fontSize: {
         s: ['0.8125rem', { lineHeight: '1rem' }], // 13px
         lg: [
@@ -25,12 +28,15 @@ module.exports = {
         'safe-bottom-96': 'calc(96px + env(safe-area-inset-bottom))',
         'safe-left': 'env(safe-area-inset-left)',
         'safe-right': 'env(safe-area-inset-right)',
+        'slider-max': 'calc(100% - 128px)',
       },
       screens: {
         txs: '320px',
         xs: '375px',
         smd: '550px',
-        'layout-max': '600px',
+        '3xl': '1440px',
+        'layout-max': '1280px',
+        'mobile-max': '600px',
         'mouse-hover': { raw: '(hover: hover)' },
       },
       colors: {

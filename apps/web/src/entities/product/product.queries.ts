@@ -46,7 +46,7 @@ export const ProductQueries = {
       queryKey: [
         ...ProductQueries.all(),
         {
-          limit: variables.categoryId,
+          limit: variables.limit,
           searchAfter: variables.searchAfter,
           startDate: variables.startDate,
           orderBy: variables.orderBy,

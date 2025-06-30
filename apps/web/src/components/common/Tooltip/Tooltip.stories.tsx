@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import { Info } from '../icons';
 
 import Tooltip from '.';
+
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof Tooltip> = {
   title: 'components/Tooltip',
@@ -19,7 +19,7 @@ export const Default: Story = {
       <div className="h-[800px] p-10">
         <Tooltip
           content={
-            <p className="text-s text-white">
+            <p className="text-[13px] text-white">
               <strong>다나와 최저가</strong>와 <strong>역대 최저가</strong>를 비교하여
               <br /> 현재 핫딜 정도를 계산해 볼 수 있어요
             </p>

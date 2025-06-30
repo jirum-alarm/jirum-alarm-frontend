@@ -73,25 +73,6 @@ const BottomNav = ({ type }: { type: any }) => {
 
   if (!BottomNavList.some((nav) => nav.link === pathName)) return;
 
-  {
-    /* @TODO: remove afeter v1.1.0 QA */
-  }
-  // if (IS_VERCEL_PRD) return;
-
-  // const handleActiveNav = (type: NAV_TYPE) => () => {
-  //   console.log('handleActiveNav');
-  //   previousNavType.current = navType;
-  //   setNavType(type);
-  // };
-
-  // const handleActiveNavCancel = () => {
-  //   console.log('handleActiveNavCancel');
-  //   setNavType(previousNavType.current);
-  // };
-
-  // const isActiveNav = (type: NAV_TYPE, link: string) => {
-  //   return navType ? type === navType : link === pathName;
-  // };
   const isActiveNav = (type: NAV_TYPE, link: string) => {
     return link === pathName;
   };
@@ -99,7 +80,7 @@ const BottomNav = ({ type }: { type: any }) => {
   return (
     <div
       className={cn(
-        `fixed bottom-0 left-1/2 z-50 mx-auto w-full max-w-screen-layout-max -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-all duration-300`,
+        `fixed bottom-safe-bottom left-1/2 z-50 mx-auto w-full max-w-screen-mobile-max -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-all duration-300`,
         {
           'translate-y-full': scrollDirection === 'down',
           'translate-y-0': scrollDirection === 'up',

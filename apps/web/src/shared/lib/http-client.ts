@@ -198,7 +198,7 @@ class HttpClient {
       for (const err of res.errors) {
         switch (err.extensions.code) {
           case 'FORBIDDEN':
-          case 'UNAUTHENTICATED':
+          case 'UNAUTHENTICATED': {
             const newAccessToken = await this.getNewAccessToken();
             const newResponse = await fetch(url, {
               ...options,
@@ -211,6 +211,7 @@ class HttpClient {
             const newRes = await newResponse.json();
             if (!newRes.data) throw new FetchError(newRes, newRes.errors);
             return newRes;
+          }
           default:
             throw new FetchError(res, res.errors);
         }
