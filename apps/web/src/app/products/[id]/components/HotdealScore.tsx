@@ -134,7 +134,7 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
             </div>
           </motion.div>
         </div>
-        <div className="mt-[8px] flex h-full w-full items-center justify-between">
+        <div className="mt-[8px] flex w-full items-center justify-between">
           <span className="text-xs text-gray-500">{`${minValue.toLocaleString()}원`}</span>
           <span className="text-xs text-gray-500">{`${maxValue.toLocaleString()}원`}</span>
         </div>
