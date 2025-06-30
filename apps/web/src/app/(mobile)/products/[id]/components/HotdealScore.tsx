@@ -5,11 +5,10 @@ import { Info } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
 import HotdealBadge from '@/features/products/components/HotdealBadge';
 import { cn } from '@/lib/cn';
-import { HotDealType, ProductQuery } from '@/shared/api/gql/graphql';
+import { ProductQuery } from '@/shared/api/gql/graphql';
 
 const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
   const hotDealIndex = product.hotDealIndex;
-  console.log(hotDealIndex);
   return (
     <>
       {hotDealIndex ? (
@@ -32,13 +31,13 @@ const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product'
               </button>
             </Tooltip>
           </div>
-          <div className="flex flex-col justify-between rounded-[12px] bg-gray-100 px-6 py-5">
+          <div className="flex flex-col justify-between rounded-[12px] bg-gray-100 px-6 py-6">
             <div>
-              <div className="flex w-full flex-col items-center justify-center pb-[31px] pt-[19px]">
+              <div className="flex w-full flex-col items-center justify-center pb-4">
                 <div>
                   <div className="flex items-center justify-center">
                     {product.hotDealType && (
-                      <div className="mb-3">
+                      <div className="mb-1.5">
                         <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />
                       </div>
                     )}
@@ -83,7 +82,8 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const adjustedPercentage = percentage === 100 ? 'calc(100% - 30px)' : `${percentage}%`;
+            // const adjustedPercentage = percentage === 100 ? `calc(${percentage}% - 18px)` : `calc(${percentage}%`;
+            const adjustedPercentage = `calc((100% - 18px) * ${percentage / 100})`;
             controls.start({ left: adjustedPercentage }); // 애니메이션 시작
           }
         });
@@ -128,7 +128,7 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
               <div className="absolute bottom-[34px] flex h-[32px] w-fit items-center justify-center whitespace-nowrap rounded-full bg-gray-900 px-[10px] py-[6px]">
                 <span className="text-base font-semibold text-primary-500">{`${currentValue.toLocaleString()}원`}</span>
               </div>
-              <div className="flex h-[30px] w-[30px] items-center justify-center">
+              <div className="flex h-[30px] items-center justify-center">
                 <div className="h-[18px] w-[18px] rounded-full border border-solid border-gray-400 bg-white" />
               </div>
             </div>
