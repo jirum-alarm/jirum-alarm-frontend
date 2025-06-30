@@ -1,19 +1,22 @@
-import DeviceSpecific from '@/components/layout/DeviceSpecific';
+import { Suspense } from 'react';
+
+import withCheckDevice from '@/components/hoc/withCheckDevice';
 
 import AddFCMToken from './components/AddFCMToken';
 import HomeContainerV2 from './components/HomeContainerV2';
 // import { getFeatureFlag } from '../actions/posthog';
+
+const HomeContainerHOC = withCheckDevice(HomeContainerV2);
 
 export default async function Home() {
   // const { flags } = await getFeatureFlag();
 
   return (
     <>
-      <AddFCMToken />
-      <DeviceSpecific
-        mobile={<HomeContainerV2 isMobile={true} />}
-        desktop={<HomeContainerV2 isMobile={false} />}
-      />
+      <Suspense>
+        <AddFCMToken />
+      </Suspense>
+      <HomeContainerHOC />
     </>
   );
 }

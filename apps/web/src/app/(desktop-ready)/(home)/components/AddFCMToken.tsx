@@ -2,7 +2,6 @@
 
 import { useMutation } from '@apollo/client';
 import { useAtom } from 'jotai';
-import { useSearchParams } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { useCallback, useEffect } from 'react';
 
