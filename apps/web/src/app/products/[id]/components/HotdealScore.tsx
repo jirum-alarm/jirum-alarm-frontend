@@ -4,17 +4,21 @@ import { useEffect, useRef } from 'react';
 import { Info } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
 import HotdealBadge from '@/features/products/components/HotdealBadge';
-import { ProductQuery } from '@/shared/api/gql/graphql';
+import { HotDealType, ProductQuery } from '@/shared/api/gql/graphql';
+import { cn } from '@/lib/cn';
 
 const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
   const hotDealIndex = product.hotDealIndex;
+  console.log(hotDealIndex);
   return (
     <>
       {hotDealIndex ? (
         <section className="px-5">
-          <div className="flex items-center gap-2 pb-4">
+          <div className="flex items-center justify-between gap-2 pb-4">
             <h2 className="font-semibold text-gray-900">핫딜 지수</h2>
             <Tooltip
+              align="right"
+              polygonOffset={8}
               content={
                 <p className="text-s text-white">
                   <strong className="font-semibold">다나와 최저가</strong>와{' '}
@@ -23,29 +27,35 @@ const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product'
                 </p>
               }
             >
-              <button>
+              <button aria-label="핫딜 지수 정보" title="핫딜 지수 정보" className="-m-2 flex p-2">
                 <Info />
               </button>
             </Tooltip>
           </div>
-          <div className="rounded-[8px] border border-gray-200 px-6 py-5">
-            <div className="flex justify-between">
-              <div className="pt-3">
-                <div className="mb-3">
-                  <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType!} />
+          <div className="flex flex-col justify-between rounded-[12px] bg-gray-100 px-6 py-5">
+            <div>
+              <div className="flex w-full flex-col items-center justify-center pb-[31px] pt-[19px]">
+                <div>
+                  <div className="flex items-center justify-center">
+                    {product.hotDealType && (
+                      <div className="mb-3">
+                        <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />
+                      </div>
+                    )}
+                  </div>
+                  <p
+                    className="text-center font-medium text-gray-800"
+                    dangerouslySetInnerHTML={{ __html: hotDealIndex.message }}
+                  />
                 </div>
-                <p
-                  className="text-sm font-medium text-gray-800"
-                  dangerouslySetInnerHTML={{ __html: hotDealIndex.message }}
-                />
               </div>
-              <div className="h-[140px]">
-                <HotdealScoreBar
-                  maxValue={hotDealIndex.highestPrice}
-                  minValue={hotDealIndex.lowestPrice}
-                  currentValue={hotDealIndex.currentPrice}
-                />
-              </div>
+            </div>
+            <div>
+              <HotdealScoreBar
+                maxValue={hotDealIndex.highestPrice}
+                minValue={hotDealIndex.lowestPrice}
+                currentValue={hotDealIndex.currentPrice}
+              />
             </div>
           </div>
         </section>
@@ -65,17 +75,16 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
   const controls = useAnimation();
   const ref = useRef<HTMLDivElement>(null);
   const percentage = ((currentValue - minValue) / (maxValue - minValue)) * 100;
-  const iconHeight = 54; // 아이콘 크기
+  const iconWidth = 18; // 아이콘 크기
+  console.log(percentage);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const adjustedPercentage =
-              Math.max(0, Math.min(100, percentage)) -
-              (iconHeight / 2) * (100 / ref.current!.offsetHeight);
-            controls.start({ bottom: `${adjustedPercentage}%` }); // 애니메이션 시작
+            const adjustedPercentage = percentage === 100 ? 'calc(100% - 30px)' : `${percentage}%`;
+            controls.start({ left: adjustedPercentage }); // 애니메이션 시작
           }
         });
       },
@@ -94,94 +103,40 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
   }, [controls, percentage]);
 
   return (
-    <div ref={ref}>
-      <div className="flex h-[140px] gap-[8px]">
-        <div className="flex h-full flex-col items-center justify-between">
-          <span className="text-xs text-gray-600">{`${maxValue.toLocaleString()}원`}</span>
-          <span className="text-xs text-gray-600">{`${minValue.toLocaleString()}원`}</span>
-        </div>
-        <div className="relative flex h-full w-[16px] flex-col items-center justify-between rounded-b-[20px] rounded-t-[20px] bg-gray-200 p-[5px]">
-          <div className="h-[6px] w-[6px] rounded-full bg-white" />
-          <div className="h-[6px] w-[6px] rounded-full bg-white" />
+    <div ref={ref} className="flex h-[83px] w-full flex-col justify-end">
+      <div className="w-full gap-[8px]">
+        <div className="relative flex h-[14px] w-full items-center justify-between rounded-[20px] bg-gray-300 p-[5px]">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <div key={index} className="h-[4px] w-[4px] rounded-full bg-gray-400" />
+          ))}
           <motion.div
-            initial={{ bottom: '100%' }}
-            animate={controls} // Intersection Observer에서 제어
+            initial={{ left: '0%' }}
+            animate={controls}
             transition={{ duration: 1, ease: 'easeOut' }}
             className="absolute z-10"
           >
-            <div className="absolute right-[50px] top-[11px] h-[28px] w-fit whitespace-nowrap rounded-full bg-gray-900 px-[10px] pt-[1px] after:absolute after:right-[-11.5px] after:top-1/2 after:-translate-y-1/2 after:border-[8px] after:border-b-transparent after:border-l-gray-900 after:border-r-transparent after:border-t-transparent">
-              <span className="text-s font-semibold text-primary-500">{`${currentValue.toLocaleString()}원`}</span>
-            </div>
-            <svg
-              width="54"
-              height="54"
-              viewBox="0 0 54 54"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              className={cn(
+                'flex',
+                percentage < 4
+                  ? 'justify-start'
+                  : percentage > 90
+                    ? 'justify-end'
+                    : 'justify-center',
+              )}
             >
-              <g filter="url(#filter0_d_3_7679)">
-                <circle cx="27" cy="25" r="14" fill="#9EF22E" stroke="#101828" strokeWidth="2" />
-                <path
-                  d="M20.1997 21L23.5747 30L26.9497 21L30.3247 30L33.6997 21"
-                  stroke="#101828"
-                  strokeWidth="1.5"
-                  strokeLinecap="square"
-                  strokeLinejoin="bevel"
-                />
-                <path
-                  d="M19.2998 24.5996H21.0998"
-                  stroke="#101828"
-                  strokeWidth="1.5"
-                  strokeLinecap="square"
-                  strokeLinejoin="bevel"
-                />
-                <path
-                  d="M32.7998 24.5996H34.5998"
-                  stroke="#101828"
-                  strokeWidth="1.5"
-                  strokeLinecap="square"
-                  strokeLinejoin="bevel"
-                />
-              </g>
-              <defs>
-                <filter
-                  id="filter0_d_3_7679"
-                  x="0"
-                  y="0"
-                  width="54"
-                  height="54"
-                  filterUnits="userSpaceOnUse"
-                  colorInterpolationFilters="sRGB"
-                >
-                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                  <feColorMatrix
-                    in="SourceAlpha"
-                    type="matrix"
-                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                    result="hardAlpha"
-                  />
-                  <feOffset dy="2" />
-                  <feGaussianBlur stdDeviation="6" />
-                  <feComposite in2="hardAlpha" operator="out" />
-                  <feColorMatrix
-                    type="matrix"
-                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"
-                  />
-                  <feBlend
-                    mode="normal"
-                    in2="BackgroundImageFix"
-                    result="effect1_dropShadow_3_7679"
-                  />
-                  <feBlend
-                    mode="normal"
-                    in="SourceGraphic"
-                    in2="effect1_dropShadow_3_7679"
-                    result="shape"
-                  />
-                </filter>
-              </defs>
-            </svg>
+              <div className="absolute bottom-[34px] flex h-[32px] w-fit items-center justify-center whitespace-nowrap rounded-full bg-gray-900 px-[10px] py-[6px]">
+                <span className="text-base font-semibold text-primary-500">{`${currentValue.toLocaleString()}원`}</span>
+              </div>
+              <div className="flex h-[30px] w-[30px] items-center justify-center">
+                <div className="h-[18px] w-[18px] rounded-full border border-solid border-gray-400 bg-white" />
+              </div>
+            </div>
           </motion.div>
+        </div>
+        <div className="mt-[8px] flex h-full w-full items-center justify-between">
+          <span className="text-xs text-gray-500">{`${minValue.toLocaleString()}원`}</span>
+          <span className="text-xs text-gray-500">{`${maxValue.toLocaleString()}원`}</span>
         </div>
       </div>
     </div>
