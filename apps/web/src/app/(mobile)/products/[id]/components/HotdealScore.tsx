@@ -75,15 +75,13 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
   const ref = useRef<HTMLDivElement>(null);
   const percentage = ((currentValue - minValue) / (maxValue - minValue)) * 100;
   const iconWidth = 18; // 아이콘 크기
-  console.log(percentage);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // const adjustedPercentage = percentage === 100 ? `calc(${percentage}% - 18px)` : `calc(${percentage}%`;
-            const adjustedPercentage = `calc((100% - 18px) * ${percentage / 100})`;
+            const adjustedPercentage = `calc((100% - ${iconWidth}px) * ${percentage / 100})`;
             controls.start({ left: adjustedPercentage }); // 애니메이션 시작
           }
         });
