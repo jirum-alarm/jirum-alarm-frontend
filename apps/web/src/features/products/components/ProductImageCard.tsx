@@ -4,7 +4,6 @@ import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 import ProductImage from '@/features/products/components/ProductImage';
-import { IProduct } from '@/graphql/interface';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 import { QueryProductsQuery } from '@/shared/api/gql/graphql';
@@ -19,7 +18,7 @@ export function ProductImageCard({
   type = 'product',
   logging,
 }: {
-  product: IProduct | QueryProductsQuery['products'][number];
+  product: QueryProductsQuery['products'][number];
   type?: 'product' | 'hotDeal';
   logging: { page: keyof typeof EVENT.PAGE };
 }) {
@@ -43,7 +42,7 @@ export function ProductImageCard({
       className={cn({
         'inline-block': true,
         'txs:w-[140px] xs:w-[162px]': type === 'product',
-        'w-[120px]': type === 'hotDeal',
+        'w-[120px] lg:w-[192px]': type === 'hotDeal',
       })}
       onClick={handleClick}
     >
@@ -51,7 +50,7 @@ export function ProductImageCard({
         className={cn({
           'relative aspect-square overflow-hidden rounded-lg border border-gray-200': true,
           'txs:h-[140px] xs:h-[162px]': type === 'product',
-          'h-[120px]': type === 'hotDeal',
+          'h-[120px] lg:h-[192px]': type === 'hotDeal',
         })}
       >
         <ProductImage
@@ -68,8 +67,7 @@ export function ProductImageCard({
         {type === 'product' && product.isEnd && (
           <div
             className={cn('bg-white px-2 text-gray-700', {
-              'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
-                true,
+              'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs': true,
             })}
           >
             판매종료

@@ -51,8 +51,7 @@ export function ProductLiveHotdealsImageCard({
         {product.isEnd && (
           <div
             className={cn('bg-white px-2 text-gray-700', {
-              'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs':
-                true,
+              'text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg text-xs': true,
             })}
           >
             판매종료

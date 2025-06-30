@@ -1,4 +1,4 @@
-import SearchPageComponent from '../(home)/components/(search)/SearchPage';
+import SearchPageComponent from '@/features/search/SearchPage';
 
 export default function SearchPage() {
   return (

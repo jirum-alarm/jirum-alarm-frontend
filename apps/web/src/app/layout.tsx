@@ -3,7 +3,6 @@ import '@/style/globals.css';
 import { Metadata, Viewport } from 'next';
 
 import { AppProvider } from '@/app/(app)/providers';
-import BottomNavServer from '@/components/layout/BottomNavServer';
 import { defaultMetadata } from '@/constants/metadata';
 import { pretendard } from '@/lib/fonts';
 
@@ -31,7 +30,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <div className="relative">
           <AppProvider>{children}</AppProvider>
-          <BottomNavServer />
         </div>
       </body>
     </html>

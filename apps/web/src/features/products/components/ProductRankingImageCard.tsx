@@ -11,13 +11,17 @@ export function ProductRankingImageCard({
   logging,
   activeIndex,
   index,
+  isMobile,
 }: {
   product: QueryRankingProductsQuery['rankingProducts'][number];
   collectProduct: (productId: number) => void;
   logging: { page: keyof typeof EVENT.PAGE };
   activeIndex: number;
   index: number;
+  isMobile: boolean;
 }) {
+  const imageSize = isMobile ? 240 : 252;
+
   const handleClick = () => {
     collectProduct(+product.id);
 
@@ -33,11 +37,13 @@ export function ProductRankingImageCard({
     <Link href={PAGE.DETAIL + '/' + product.id} onClick={handleClick} rel="preload">
       <div
         className={cn(
-          'h-[340px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all',
-          activeIndex === index ? 'scale-100' : 'scale-90',
+          'w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all',
+          isMobile && 'h-[340px] scale-90 transition-all duration-300',
+          isMobile && activeIndex === index && 'scale-100',
+          //  !isMobile && 'h-[350px] xl:h-[362px]',
         )}
       >
-        <div className="relative h-[240px] w-full">
+        <div className={cn('relative h-[240px] w-full', !isMobile && 'lg:aspect-square lg:h-auto')}>
           <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm font-medium text-primary-500">
             {index + 1}
           </div>
@@ -47,16 +53,26 @@ export function ProductRankingImageCard({
             type="product"
             categoryId={product.categoryId}
             alt={product.title}
-            width={240}
-            height={240}
-            sizes="240px"
+            width={imageSize}
+            height={imageSize}
+            sizes={`${imageSize}px`}
             className="object-cover"
             priority={[0, 1, 9].includes(index)}
           />
         </div>
-        <div className="p-3 pb-0">
-          <div className="line-clamp-2 text-sm text-gray-700">{product.title}</div>
-          <div className="pt-2 text-lg font-bold text-gray-900">{product.price ?? ''}</div>
+        <div className={cn('p-3 pb-0', !isMobile && 'h-[110px]')}>
+          <div className={cn('line-clamp-2 text-sm text-gray-700', !isMobile && 'xl:text-base')}>
+            {product.title}
+          </div>
+          <div
+            className={cn(
+              'text-lg font-bold text-gray-900',
+              !isMobile && 'h-[36px] pt-0.5 xl:text-[22px]',
+              isMobile && 'pt-2',
+            )}
+          >
+            {product.price ?? ''}
+          </div>
         </div>
       </div>
     </Link>

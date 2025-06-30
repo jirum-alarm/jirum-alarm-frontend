@@ -6,7 +6,7 @@ interface LogoLinkProps {
   inverted?: boolean;
 }
 
-export default function LogoLink({ inverted = false }: LogoLinkProps) {
+export default function LogoLink({ inverted = true }: LogoLinkProps) {
   return (
     <div className="flex items-center">
       <Link href="/" className="flex items-center gap-2">

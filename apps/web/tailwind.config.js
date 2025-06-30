@@ -28,6 +28,7 @@ module.exports = {
         'safe-bottom-96': 'calc(96px + env(safe-area-inset-bottom))',
         'safe-left': 'env(safe-area-inset-left)',
         'safe-right': 'env(safe-area-inset-right)',
+        'slider-max': 'calc(100% - 128px)',
       },
       screens: {
         txs: '320px',

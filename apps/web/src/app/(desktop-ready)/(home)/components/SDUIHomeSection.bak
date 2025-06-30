@@ -1,0 +1,244 @@
+import React, { Suspense } from 'react';
+
+import SectionHeader from '@/components/SectionHeaderHOC';
+import { ProductQueries } from '@/entities/product/product.queries';
+import HorizontalProductCarousel from '@/features/carousel/HorizontalProductCarousel';
+import { ProductImageCard } from '@/features/products/components/ProductImageCard';
+
+const ProductQueriesMap = {
+  productsByKeywords: {
+    query: ProductQueries.productsByKeywords,
+    dataKey: 'productsByKeyword',
+  },
+  products: {
+    query: ProductQueries.products,
+    dataKey: 'products',
+  },
+} as const;
+
+const sectionMap: Record<string, { Component: React.ComponentType; Skeleton: React.ReactNode }> = {
+  product_list_with_tabs: {
+    Component: ProductListWithTabsSection,
+    Skeleton: <></>,
+  },
+  product_list: {
+    Component: ProductListSection,
+    Skeleton: <></>,
+  },
+  promotion_banner: {
+    Component: Banner,
+    Skeleton: <></>,
+  },
+};
+
+const ProductListSection = ({ title, productsQuery, displayType, cta }: any) => {
+  const { queryName, variables } = productsQuery;
+
+  const queryFn = ProductQueriesMap[queryName as keyof typeof ProductQueriesMap].query(variables);
+  const { data } = useSuspenseQuery(queryFn);
+  const products = data?.[ProductQueriesMap[queryName].dataKey] as Product[];
+
+  return (
+    <section className="px-5">
+      <SectionHeader title={title} right={cta && <a href={cta.url}>{cta.label}</a>} />
+      <div className="pb-5">
+        {displayType === 'carousel' ? (
+          <HorizontalProductCarousel
+            products={products}
+            type="hotDeal"
+            logging={{ page: 'HOME' }}
+          />
+        ) : (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+            {products.map((product: any) => (
+              <ProductImageCard key={product.id} product={product} logging={{ page: 'HOME' }} />
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+const Banner = ({ imageUrl, link }: any) => (
+  <a href={link} className="block px-5">
+    <img src={imageUrl} alt="배너" className="w-full rounded-lg" />
+  </a>
+);
+
+const SectionItem = ({ item: { __type, ...props } }: { item: any }) => {
+  const { Component, Skeleton } = sectionMap[__type] ?? {};
+  if (!Component) return null;
+
+  console.log(props);
+  return (
+    <Suspense fallback={Skeleton}>
+      <Component {...props} />
+    </Suspense>
+  );
+};
+
+export function SDUIHomeSection({ items }: { items: any[] }) {
+  return (
+    <div className="flex flex-col gap-y-8 py-3">
+      {items.map((item, idx) => {
+        return <SectionItem key={idx} item={item} />;
+      })}
+    </div>
+  );
+}
+
+interface BaseItem {
+  __type: string;
+}
+
+interface CTA {
+  label: string;
+  url: string;
+}
+
+interface BaseSection extends BaseItem {
+  title: string;
+  cta?: CTA;
+}
+
+interface Query {
+  query: string;
+  variables?: Record<string, any>;
+}
+
+type ProductListDisplayType = 'carousel' | 'grid';
+
+interface ProductListSection extends BaseSection {
+  __type: 'product_list';
+  productsQuery: Query;
+  displayType: ProductListDisplayType;
+}
+
+interface ProductListWithTabsSection extends BaseSection {
+  __type: 'product_list_with_tabs';
+  tabsQuery: Query;
+  productsQuery: Query;
+  displayType: ProductListDisplayType;
+}
+
+interface CategoriesMenu extends BaseItem {
+  __type: 'categories_menu';
+  categories: Category[];
+}
+
+interface RecentCommentsSection extends BaseSection {
+  __type: 'recent_comments';
+  productId: string;
+}
+
+interface BannerItem {
+  imageUrl: string;
+  link: string;
+  title?: string;
+  description?: string;
+}
+
+interface PromotionBanner extends BaseItem {
+  __type: 'promotion_banner';
+  banner: BannerItem;
+}
+
+interface BannerCarouselSection extends BaseSection {
+  __type: 'banner_carousel';
+  banners: BannerItem[];
+  autoPlay?: boolean;
+}
+
+type Item =
+  | CategoriesMenu
+  | ProductListSection
+  | ProductListWithTabsSection
+  | RecentCommentsSection
+  | PromotionBanner
+  | BannerCarouselSection;
+
+// 예시
+const section: Item = {
+  __type: 'product_list',
+  title: '실시간 핫딜',
+  productsQuery: {
+    query: 'products',
+  },
+  displayType: 'carousel',
+};
+
+// 섹션 리스트 예시
+const list: Item[] = [
+  {
+    __type: 'categories_menu',
+    categories: [
+      {
+        id: 0,
+        name: '전체',
+      },
+      {
+        id: 1,
+        name: '컴퓨터',
+      },
+      {
+        id: 2,
+        name: '생활/식품',
+      },
+      // ...
+    ],
+  },
+  {
+    __type: 'product_list_with_tabs',
+    title: '지름알림 추천',
+    tabsQuery: {
+      query: 'productKeywords',
+    },
+    productsQuery: {
+      query: 'productsByKeywords',
+      variables: {
+        limit: 10,
+        orderBy: 'POSTED_AT',
+        orderOption: 'DESC',
+      },
+    },
+    displayType: 'carousel',
+    cta: { label: '더보기', url: '/recommended' },
+  },
+  {
+    __type: 'product_list',
+    title: '만원이하 상품',
+    productsQuery: {
+      query: 'productsByKeywords',
+      variables: {
+        limit: 10,
+        keyword: '만원이하',
+        orderBy: 'POSTED_AT',
+        orderOption: 'DESC',
+      },
+    },
+    displayType: 'carousel',
+  },
+  {
+    __type: 'promotion_banner',
+    banner: {
+      imageUrl: '/images/...',
+      link: '/trending',
+      title: '랭킹',
+      description: '인기있는 상품을 모아봤어요.',
+    },
+  },
+  {
+    __type: 'product_list',
+    title: '실시간 핫딜',
+    productsQuery: {
+      query: 'products',
+      variables: {
+        limit: 20,
+        orderBy: 'POSTED_AT',
+        orderOption: 'DESC',
+      },
+    },
+    displayType: 'grid',
+  },
+];
