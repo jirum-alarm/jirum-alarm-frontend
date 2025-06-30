@@ -92,7 +92,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             )}
             <motion.div
               className={cn('w-full overflow-visible', {
-                'lg:max-w-slider-max': !isMobile,
+                'max-w-slider-max': !isMobile,
               })}
               initial={{ opacity: 0 }}
               animate={{ opacity: isInit ? 1 : 0 }}

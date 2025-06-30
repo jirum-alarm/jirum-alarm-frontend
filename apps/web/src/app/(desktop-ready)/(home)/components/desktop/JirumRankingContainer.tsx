@@ -35,7 +35,7 @@ const JirumRankingContainer = () => {
         />
       </div>
       <ApiErrorBoundary>
-        <div className="mt-6 w-full xl:px-9">
+        <div className="mt-6 w-full">
           <Suspense
             fallback={
               <div className="flex animate-pulse flex-col gap-y-6">

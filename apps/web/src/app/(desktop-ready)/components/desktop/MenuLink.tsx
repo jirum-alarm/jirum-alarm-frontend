@@ -5,15 +5,18 @@ interface MenuLinkProps {
   href: string;
   label: string;
   isActive: boolean;
+  isScrolled: boolean;
 }
 
-export default function MenuLink({ href, label, isActive }: MenuLinkProps) {
+export default function MenuLink({ href, label, isActive, isScrolled }: MenuLinkProps) {
   return (
     <Link
       href={href}
       className={cn('relative flex h-full items-center text-lg font-semibold', {
         'text-white': isActive,
         'text-gray-200': !isActive,
+        'text-gray-900': isActive && isScrolled,
+        'text-gray-700': !isActive && isScrolled,
       })}
     >
       {label}

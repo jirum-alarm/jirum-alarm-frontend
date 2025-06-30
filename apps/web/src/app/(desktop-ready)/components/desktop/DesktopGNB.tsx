@@ -39,20 +39,35 @@ const DesktopGNB = () => {
   return (
     <div
       className={cn(
-        'fixed top-0 z-50 w-full border-b bg-white shadow-sm transition-all duration-300 lg:translate-y-0',
+        'fixed top-0 z-50 w-full border-b bg-white shadow-sm transition-all duration-300',
         {
-          'translate-y-0 border-b-gray-200 bg-white': isScrolled,
-          '-translate-y-full border-b-gray-700 bg-gray-900': !isScrolled,
+          'border-b-gray-200 bg-white': isScrolled,
+          'border-b-gray-700 bg-gray-900': !isScrolled,
         },
       )}
     >
-      <header className="mx-auto flex h-[56px] w-full max-w-screen-layout-max items-center justify-between px-5 xl:px-0">
+      <header className="mx-auto flex h-[56px] w-full max-w-screen-layout-max items-center justify-between px-5">
         <div className="flex h-full gap-x-11">
           <LogoLink inverted={isScrolled} />
           <div className="flex h-full items-center gap-x-10">
-            <MenuLink href={PAGE.HOME} label="홈" isActive={isActive(PAGE.HOME)} />
-            <MenuLink href={PAGE.RECOMMEND} label="추천" isActive={isActive(PAGE.RECOMMEND)} />
-            <MenuLink href={PAGE.TRENDING} label="랭킹" isActive={isActive(PAGE.TRENDING)} />
+            <MenuLink
+              href={PAGE.HOME}
+              label="홈"
+              isActive={isActive(PAGE.HOME)}
+              isScrolled={isScrolled}
+            />
+            <MenuLink
+              href={PAGE.RECOMMEND}
+              label="추천"
+              isActive={isActive(PAGE.RECOMMEND)}
+              isScrolled={isScrolled}
+            />
+            <MenuLink
+              href={PAGE.TRENDING}
+              label="랭킹"
+              isActive={isActive(PAGE.TRENDING)}
+              isScrolled={isScrolled}
+            />
           </div>
         </div>
         <div className="flex items-center gap-x-5">

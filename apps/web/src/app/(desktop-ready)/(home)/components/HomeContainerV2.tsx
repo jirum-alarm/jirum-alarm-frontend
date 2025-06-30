@@ -19,7 +19,7 @@ const HomeContainerV2 = ({ isMobile }: { isMobile: boolean }) => {
         'mx-auto max-w-screen-mobile-max': isMobile,
       })}
     >
-      <DeviceSpecific mobile={<MobileHomeHeader />} desktop={<DesktopHomeHeader />} />
+      <DeviceSpecific mobile={<MobileHomeHeader />} />
       <DeviceSpecific mobile={<MobileBackgroundHeader />} desktop={<DesktopHeroSection />} />
       <div>
         <main

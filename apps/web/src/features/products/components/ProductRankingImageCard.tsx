@@ -43,7 +43,7 @@ export function ProductRankingImageCard({
           //  !isMobile && 'h-[350px] xl:h-[362px]',
         )}
       >
-        <div className={cn('relative h-[240px] w-full', !isMobile && 'lg:aspect-square lg:h-auto')}>
+        <div className={cn('relative h-[240px] w-full', !isMobile && 'aspect-square h-auto')}>
           <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm font-medium text-primary-500">
             {index + 1}
           </div>

@@ -34,6 +34,7 @@ module.exports = {
         txs: '320px',
         xs: '375px',
         smd: '550px',
+        '3xl': '1440px',
         'layout-max': '1280px',
         'mobile-max': '600px',
         'mouse-hover': { raw: '(hover: hover)' },

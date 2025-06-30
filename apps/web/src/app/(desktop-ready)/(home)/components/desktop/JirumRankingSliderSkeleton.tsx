@@ -5,9 +5,9 @@ export const JirumRankingSliderSkeleton = () => {
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
-            className="overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] lg:basis-1/4"
+            className="basis-1/4 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)]"
           >
-            <div className="relative w-full lg:aspect-square lg:h-auto">
+            <div className="relative aspect-square w-full lg:h-auto">
               <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-200" />
               <div className="h-full bg-gray-100 lg:w-full" />
             </div>
