@@ -17,7 +17,7 @@ const LiveHotDealList = () => {
 
   return (
     <>
-      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3 lg:grid-cols-5">
+      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 pc:pt-4 sm:grid-cols-3">
         {products.slice(0, size).map((product) => (
           <ProductLiveHotdealsImageCard
             key={product.id}

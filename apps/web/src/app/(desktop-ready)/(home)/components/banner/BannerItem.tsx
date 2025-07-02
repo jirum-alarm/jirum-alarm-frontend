@@ -33,7 +33,7 @@ const BannerItem = ({
     <Link
       onClick={handleClick}
       className={cn(
-        'flex h-full w-full items-center justify-between rounded-lg border py-3 lg:w-1/2 lg:grow',
+        'flex h-full w-full items-center justify-between rounded-lg border py-3 pc:w-1/2 pc:grow',
         className,
         {
           'pl-[16px] pr-[6px]': isMobile,

@@ -25,7 +25,7 @@ const RecommendedProductList = () => {
 
   return (
     <div>
-      <div className="pb-[16px]">
+      <div className="flex justify-center pb-[16px]">
         <RecommendedProductTabs
           productKeywords={productKeywords}
           selectedKeyword={selectedKeyword}
@@ -47,7 +47,7 @@ const ProductImageCardListSkeleton = () => {
   return (
     <div className="flex animate-pulse flex-nowrap justify-start gap-x-3 overflow-x-scroll scrollbar-hide">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="w-[120px] shrink-0 lg:w-[192px]">
+        <div key={i} className="w-[120px] shrink-0 pc:w-[192px]">
           <ProductImageCardSkeleton />
         </div>
       ))}

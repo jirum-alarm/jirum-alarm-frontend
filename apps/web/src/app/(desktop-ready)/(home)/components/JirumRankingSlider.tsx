@@ -107,9 +107,10 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
                   <SwiperSlide
                     className={cn('pb-5', {
                       'pb-6': !isMobile,
+                      'pb-1.5': !isMobile && !isInit,
                     })}
                     key={product.id}
-                    style={{ width: isMobile ? '240px' : '234px' }}
+                    style={{ width: isMobile ? '240px' : 'calc(100% / 4)' }}
                   >
                     <ProductRankingImageCard
                       isMobile={isMobile}

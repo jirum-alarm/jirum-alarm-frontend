@@ -5,9 +5,13 @@ import DeviceSpecific from '@/components/layout/DeviceSpecific';
 import TopButton from '@/components/TopButton';
 import { AuthQueriesServer } from '@/entities/auth';
 
+import { checkDevice } from '../actions/agent';
+
 import DesktopGNB from './components/desktop/DesktopGNB';
 
 const DesktopLayout = async ({ children }: { children: React.ReactNode }) => {
+  const { isMobile } = await checkDevice();
+
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(AuthQueriesServer.me());
@@ -27,7 +31,7 @@ const DesktopLayout = async ({ children }: { children: React.ReactNode }) => {
         }
         mobile={<BottomNavServer />}
       />
-      {children}
+      <div className={isMobile ? '' : 'pc'}>{children}</div>
     </>
   );
 };

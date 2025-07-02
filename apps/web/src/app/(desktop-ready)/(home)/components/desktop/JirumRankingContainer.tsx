@@ -40,9 +40,7 @@ const JirumRankingContainer = () => {
             fallback={
               <div className="flex animate-pulse flex-col gap-y-6">
                 <JirumRankingSliderSkeleton />
-                <div className="flex justify-center">
-                  <SliderDotsSkeleton total={10} />
-                </div>
+                <SliderDotsSkeleton total={10} />
               </div>
             }
           >
@@ -59,10 +57,10 @@ const JirumRankingContainer = () => {
 export default JirumRankingContainer;
 
 const SliderDotsSkeleton = ({ total }: { total: number }) => (
-  <div className="flex h-[20px] w-[100px] items-center justify-center">
-    <div className="ml-[6px] mr-[6px] h-[4px] w-[32px] bg-gray-300" />
+  <div className="mx-auto flex h-[20px] w-[100px] items-center justify-center">
+    <div className="ml-[6px] mr-[6px] h-[4px] w-[32px] grow bg-gray-300" />
     {Array.from({ length: total - 1 }).map((_, i) => (
-      <div key={i} className="h-[3px] grow bg-gray-500" />
+      <div key={i} className="h-[3px] w-[3px] grow bg-gray-500" />
     ))}
   </div>
 );

@@ -1,15 +1,15 @@
+import withCheckDevice from '@/components/hoc/withCheckDevice';
 import DeviceSpecific from '@/components/layout/DeviceSpecific';
-import TopButton from '@/components/TopButton';
+import RecommendedProductSection from '@/features/recommended/RecommendedProductSection';
 import { cn } from '@/lib/cn';
-
-import RecommendedProductSection from '../../../../features/recommended/RecommendedProductSection';
-import DesktopHomeHeader from '../../components/desktop/DesktopGNB';
 
 import DesktopHeroSection from './desktop/HeroSection';
 import LiveHotDealSection from './LiveHotDealSection';
 import MobileBackgroundHeader from './mobile/BackgroundHeader';
 import MobileHomeHeader from './mobile/HomeHeader';
 import MobileJirumRankingContainer from './mobile/JirumRankingContainer';
+
+const RecommendedProductSectionHOC = withCheckDevice(RecommendedProductSection);
 
 const HomeContainerV2 = ({ isMobile }: { isMobile: boolean }) => {
   return (
@@ -43,8 +43,12 @@ const HomeContainerV2 = ({ isMobile }: { isMobile: boolean }) => {
                 </>
               }
             />
-            <div className="flex flex-col gap-y-8 py-3 lg:gap-y-[60px] lg:pt-0">
-              <RecommendedProductSection />
+            <div
+              className={cn('flex flex-col gap-y-8 py-3', {
+                'gap-y-[60px] pt-0': !isMobile,
+              })}
+            >
+              <RecommendedProductSectionHOC />
               <LiveHotDealSection />
             </div>
           </div>

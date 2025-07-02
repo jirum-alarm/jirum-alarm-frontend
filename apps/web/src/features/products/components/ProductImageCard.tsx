@@ -42,7 +42,7 @@ export function ProductImageCard({
       className={cn({
         'inline-block': true,
         'txs:w-[140px] xs:w-[162px]': type === 'product',
-        'w-[120px] lg:w-[192px]': type === 'hotDeal',
+        'w-[120px] pc:w-[192px]': type === 'hotDeal',
       })}
       onClick={handleClick}
     >
@@ -50,7 +50,7 @@ export function ProductImageCard({
         className={cn({
           'relative aspect-square overflow-hidden rounded-lg border border-gray-200': true,
           'txs:h-[140px] xs:h-[162px]': type === 'product',
-          'h-[120px] lg:h-[192px]': type === 'hotDeal',
+          'h-[120px] pc:h-[192px]': type === 'hotDeal',
         })}
       >
         <ProductImage
