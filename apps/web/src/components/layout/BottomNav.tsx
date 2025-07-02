@@ -78,7 +78,7 @@ const BottomNav = ({ type }: { type: any }) => {
   };
 
   return (
-    <div
+    <nav
       className={cn(
         `fixed bottom-safe-bottom left-1/2 z-50 mx-auto w-full max-w-screen-mobile-max -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-all duration-300`,
         {
@@ -123,7 +123,7 @@ const BottomNav = ({ type }: { type: any }) => {
           </li>
         ))}
       </ul>
-    </div>
+    </nav>
   );
 };
 
