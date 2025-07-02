@@ -6,15 +6,15 @@ interface LogoLinkProps {
   inverted?: boolean;
 }
 
-export default function LogoLink({ inverted = true }: LogoLinkProps) {
+export default function LogoLink({ inverted = false }: LogoLinkProps) {
   return (
     <div className="flex items-center">
       <Link href="/" className="flex items-center gap-2">
         <RoundedLogo size={28} />
         <h2
-          className={cn('relative top-0.5 text-lg font-bold text-gray-800', {
-            'lg:text-white': !inverted,
-            'lg:text-gray-800': inverted,
+          className={cn('relative text-lg font-bold text-gray-800', {
+            'pc:text-white': inverted,
+            'pc:text-gray-800': !inverted,
           })}
         >
           지름알림

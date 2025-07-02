@@ -7,7 +7,7 @@ import RecommendedMoreLink from './RecommendedMoreLink';
 import RecommendedProductList from './RecommendedProductList';
 import RecommendedProductTabsFetcher from './RecommendedProductTabsFetcher';
 
-const RecommendedProductSection = async () => {
+const RecommendedProductSection = () => {
   return (
     <div className="px-5">
       <SectionHeader
@@ -18,7 +18,7 @@ const RecommendedProductSection = async () => {
           </div>
         }
       />
-      <div className="pb-5 lg:pt-4">
+      <div className="pb-5 pc:pt-4">
         <RecommendedProductTabsFetcher>
           <ApiErrorBoundary>
             <Suspense>

@@ -25,7 +25,7 @@ const RecommendedProductTabs = ({
   };
 
   return (
-    <ul className="flex flex-nowrap gap-2 overflow-x-scroll scrollbar-hide lg:justify-center">
+    <ul className="flex flex-nowrap gap-2 overflow-x-auto px-5 scrollbar-hide">
       {productKeywords.map((keyword) => (
         <li
           key={keyword}

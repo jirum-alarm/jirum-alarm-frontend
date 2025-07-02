@@ -71,7 +71,7 @@ function HorizontalProductCarousel({
       {itemsToShow.map((product, i) => (
         <SwiperSlide
           key={product.id || i}
-          className="pr-3 last:pr-0 lg:pr-6"
+          className="pr-3 last:pr-0 pc:pr-6"
           style={{ width: 'fit-content' }}
         >
           <ProductImageCard product={product} type={type} logging={logging} />

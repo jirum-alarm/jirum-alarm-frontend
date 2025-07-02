@@ -5,18 +5,18 @@ interface MenuLinkProps {
   href: string;
   label: string;
   isActive: boolean;
-  isScrolled: boolean;
+  isInverted: boolean;
 }
 
-export default function MenuLink({ href, label, isActive, isScrolled }: MenuLinkProps) {
+export default function MenuLink({ href, label, isActive, isInverted }: MenuLinkProps) {
   return (
     <Link
       href={href}
       className={cn('relative flex h-full items-center text-lg font-semibold', {
         'text-white': isActive,
         'text-gray-200': !isActive,
-        'text-gray-900': isActive && isScrolled,
-        'text-gray-700': !isActive && isScrolled,
+        'text-gray-900': isActive && !isInverted,
+        'text-gray-700': !isActive && !isInverted,
       })}
     >
       {label}
