@@ -95,7 +95,7 @@ const DesktopGNB = () => {
           </Link>
           {me ? (
             <Link href={PAGE.MYPAGE} className="size-8">
-              <My width={32} height={32} color={isInHomeHero ? '#101828' : '#FFFFFF'} />
+              <My width={32} height={32} color={isInHomeHero ? '#FFFFFF' : '#101828'} />
             </Link>
           ) : (
             <Link

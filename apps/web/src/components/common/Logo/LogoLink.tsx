@@ -12,9 +12,9 @@ export default function LogoLink({ inverted = false }: LogoLinkProps) {
       <Link href="/" className="flex items-center gap-2">
         <RoundedLogo size={28} />
         <h2
-          className={cn('relative text-lg font-bold text-gray-800', {
-            'pc:text-white': inverted,
-            'pc:text-gray-800': !inverted,
+          className={cn('relative text-lg font-bold', {
+            'text-white': inverted,
+            'text-gray-800': !inverted,
           })}
         >
           지름알림

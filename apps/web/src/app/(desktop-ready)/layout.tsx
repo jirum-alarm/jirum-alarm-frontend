@@ -11,13 +11,12 @@ import DesktopGNB from './components/desktop/DesktopGNB';
 
 const DesktopLayout = async ({ children }: { children: React.ReactNode }) => {
   const { isMobile } = await checkDevice();
-
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(AuthQueriesServer.me());
 
   return (
-    <>
+    <div className={isMobile ? '' : 'pc'}>
       <DeviceSpecific
         desktop={
           <>
@@ -31,8 +30,8 @@ const DesktopLayout = async ({ children }: { children: React.ReactNode }) => {
         }
         mobile={<BottomNavServer />}
       />
-      <div className={isMobile ? '' : 'pc'}>{children}</div>
-    </>
+      {children}
+    </div>
   );
 };
 
