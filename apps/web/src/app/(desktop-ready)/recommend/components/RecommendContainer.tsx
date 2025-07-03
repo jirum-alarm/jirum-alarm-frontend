@@ -48,7 +48,7 @@ export default RecommendContainer;
 
 const RecommendProductListSkeleton = () => {
   return (
-    <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 pc:gap-x-[25px] pc:gap-y-10 sm:grid-cols-3">
+    <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 sm:grid-cols-3">
       {Array.from({ length: 12 }).map((item, i) => (
         <div key={i} className="w-full">
           <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
