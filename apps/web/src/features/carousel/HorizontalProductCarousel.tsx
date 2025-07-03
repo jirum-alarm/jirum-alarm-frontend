@@ -38,7 +38,6 @@ function HorizontalProductCarousel({
   maxItems,
   nested = false,
 }: HorizontalProductCarouselProps) {
-  const isHydrated = useIsHydrated();
   const parentSwiper = useSwiper();
 
   const swiperRef = useRef<SwiperClass>(null);
@@ -52,9 +51,6 @@ function HorizontalProductCarousel({
   return (
     <Swiper
       {...SWIPER_OPTIONS}
-      wrapperClass={cn({
-        flex: !isHydrated,
-      })}
       nested={nested}
       onAfterInit={handleAfterInit}
       onTouchStart={() => {
