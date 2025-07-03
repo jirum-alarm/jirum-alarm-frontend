@@ -6,14 +6,13 @@ async function checkDevice() {
   const { device, browser, ua } = userAgent({ headers: headersList });
   const userAgentString = ua || '';
 
-  const isMobile = Boolean(device.type === 'mobile');
-  const isSafari = Boolean(browser.name === 'Mobile Safari');
-
   const isJirumAlarmIOSApp = Boolean(userAgentString.match(/IOS ReactNative Webview Jirum Alarm/i));
   const isJirumAlarmAndroidApp = Boolean(
     userAgentString.match(/Android ReactNative Webview Jirum Alarm/i),
   );
   const isJirumAlarmApp = !!(isJirumAlarmIOSApp || isJirumAlarmAndroidApp);
+  const isMobile = Boolean(device.type === 'mobile') || isJirumAlarmApp;
+  const isSafari = Boolean(browser.name === 'Mobile Safari');
 
   return {
     isMobile,
