@@ -13,47 +13,36 @@ const RecommendedProductSectionHOC = withCheckDevice(RecommendedProductSection);
 
 const HomeContainerV2 = ({ isMobile }: { isMobile: boolean }) => {
   return (
-    <div
-      className={cn('h-full w-full pb-[70px]', {
-        'mx-auto': !isMobile,
-        'mx-auto max-w-screen-mobile-max': isMobile,
-      })}
-    >
-      <DeviceSpecific mobile={<MobileHomeHeader />} />
-      <DeviceSpecific mobile={<MobileBackgroundHeader />} desktop={<DesktopHeroSection />} />
-      <div>
-        <main
-          className={cn(
-            'relative z-10 h-full bg-white',
-            isMobile
-              ? 'mx-auto mt-[153px] max-w-screen-mobile-max rounded-t-[1.25rem] pt-3'
-              : 'mx-auto mt-[770px] w-full rounded-t-[1.75rem] pt-[72px]',
-          )}
-        >
-          <div
-            className={cn({
-              'mx-auto max-w-screen-layout-max': !isMobile,
-            })}
-          >
-            <DeviceSpecific
-              mobile={
-                <>
-                  <MobileJirumRankingContainer />
-                  <div className="h-[20px]" />
-                </>
-              }
-            />
-            <div
-              className={cn('flex flex-col gap-y-8 py-3', {
-                'gap-y-[60px] pt-0': !isMobile,
-              })}
-            >
-              <RecommendedProductSectionHOC />
-              <LiveHotDealSection />
-            </div>
+    <div className="mx-auto h-full w-full max-w-screen-mobile-max pb-[70px] pc:max-w-none">
+      <DeviceSpecific
+        mobile={
+          <>
+            <MobileHomeHeader />
+            <MobileBackgroundHeader />
+          </>
+        }
+        desktop={
+          <>
+            <DesktopHeroSection />
+          </>
+        }
+      />
+      <main className="relative z-10 mx-auto mt-[153px] h-full max-w-screen-mobile-max rounded-t-[1.25rem] bg-white pt-3 pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-[1.75rem] pc:pt-[72px]">
+        <div className="pc:mx-auto pc:max-w-screen-layout-max">
+          <DeviceSpecific
+            mobile={
+              <>
+                <MobileJirumRankingContainer />
+                <div className="h-[20px]" />
+              </>
+            }
+          />
+          <div className="flex flex-col gap-y-8 py-3 pc:gap-y-[60px] pc:pt-0">
+            <RecommendedProductSectionHOC />
+            <LiveHotDealSection />
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 };
