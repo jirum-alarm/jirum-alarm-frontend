@@ -26,6 +26,8 @@ type Props = {
 };
 
 export const TrendingContainer = ({ initialTab }: Props) => {
+  const swiperRef = useRef<SwiperClass>(null);
+
   const {
     data: { categories },
   } = useSuspenseQuery(CategoryQueries.categoriesForUser());
@@ -47,8 +49,6 @@ export const TrendingContainer = ({ initialTab }: Props) => {
   });
 
   const [fetchedTabIds, setFetchedTabIds] = useState<Set<number>>(new Set([initialTab]));
-
-  const swiperRef = useRef<SwiperClass>(null);
 
   const handleInitSwiper = (swiper: SwiperClass) => {
     swiperRef.current = swiper;
@@ -79,6 +79,11 @@ export const TrendingContainer = ({ initialTab }: Props) => {
     if (typeof window === 'undefined') return;
     const meta = TAB_META[tabId] || TAB_META[0];
     document.title = meta.title;
+    setFetchedTabIds((prev) => {
+      const newSet = new Set(prev);
+      newSet.add(tabId);
+      return newSet;
+    });
   }, [tabId]);
 
   return (
