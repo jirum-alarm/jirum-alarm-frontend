@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>지름알림</ShortName>
+  <Description>지름알림 실시간 핫딜 검색</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image height="16" width="16" type="image/png">https://jirum-alarm.com/icon.png</Image>
+  <Url type="text/html" method="get" template="https://jirum-alarm.com/search?keyword={searchTerms}" />
+  <SearchForm>https://jirum-alarm.com/search</SearchForm>
+</OpenSearchDescription> 

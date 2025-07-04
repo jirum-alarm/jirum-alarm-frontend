@@ -49,15 +49,36 @@ export const jsonLd = {
   name: '지름알림',
   description,
   url: SERVICE_URL,
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: `${SERVICE_URL}/search?keyword={search_term_string}`,
-    'query-input': 'required name=search_term_string',
-  },
+  potentialAction: [
+    {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${SERVICE_URL}/search?keyword={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  ],
   image: {
     '@type': 'ImageObject',
     url: `${SERVICE_URL}/opengraph-image.png`,
     width: 1200,
     height: 630,
+  },
+};
+
+export const organizationLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: '지름알림',
+  url: SERVICE_URL,
+  sameAs: [
+    'https://apps.apple.com/kr/app/id6474611420',
+    'https://play.google.com/store/apps/details?id=com.solcode.jirmalam',
+    'https://www.instagram.com/jirumalarm_',
+  ],
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'KR',
   },
 };
