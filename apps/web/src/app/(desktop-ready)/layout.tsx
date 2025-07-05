@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import BottomNavServer from '@/components/layout/BottomNavServer';
+import BottomNav from '@/components/layout/BottomNav';
 import DeviceSpecific from '@/components/layout/DeviceSpecific';
 import TopButton from '@/components/TopButton';
 import { AuthQueriesServer } from '@/entities/auth';
@@ -28,7 +28,7 @@ const DesktopLayout = async ({ children }: { children: React.ReactNode }) => {
             </div>
           </>
         }
-        mobile={<BottomNavServer />}
+        mobile={<BottomNav type={''} />}
       />
       {children}
     </div>
