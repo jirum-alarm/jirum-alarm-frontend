@@ -1,7 +1,5 @@
-import withCheckDevice from '@/components/hoc/withCheckDevice';
 import DeviceSpecific from '@/components/layout/DeviceSpecific';
 import RecommendedProductSection from '@/features/recommended/RecommendedProductSection';
-import { cn } from '@/lib/cn';
 
 import DesktopHeroSection from './desktop/HeroSection';
 import LiveHotDealSection from './LiveHotDealSection';
@@ -9,9 +7,7 @@ import MobileBackgroundHeader from './mobile/BackgroundHeader';
 import MobileHomeHeader from './mobile/HomeHeader';
 import MobileJirumRankingContainer from './mobile/JirumRankingContainer';
 
-const RecommendedProductSectionHOC = withCheckDevice(RecommendedProductSection);
-
-const HomeContainerV2 = ({ isMobile }: { isMobile: boolean }) => {
+const HomeContainerV2 = () => {
   return (
     <div className="mx-auto h-full w-full max-w-screen-mobile-max pb-[70px] pc:max-w-none">
       <DeviceSpecific
@@ -38,7 +34,7 @@ const HomeContainerV2 = ({ isMobile }: { isMobile: boolean }) => {
             }
           />
           <div className="flex flex-col gap-y-8 py-3 pc:gap-y-[60px] pc:pt-0">
-            <RecommendedProductSectionHOC />
+            <RecommendedProductSection />
             <LiveHotDealSection />
           </div>
         </div>
