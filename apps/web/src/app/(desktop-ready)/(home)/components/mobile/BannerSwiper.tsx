@@ -21,11 +21,15 @@ const BannerSwiper = ({
   className?: string;
   children: React.ReactNode;
 }) => {
+  const childrenCount = Children.count(children);
+  const initialSlide = Math.floor(Math.random() * childrenCount);
+
   return (
     <Swiper
       className={cn('flex w-full', className)}
       modules={[Autoplay]}
       {...MOBILE_SWIPER_OPTIONS}
+      initialSlide={initialSlide}
     >
       {Children.map(children, (child) => {
         return <SwiperSlide className="px-5">{child}</SwiperSlide>;
