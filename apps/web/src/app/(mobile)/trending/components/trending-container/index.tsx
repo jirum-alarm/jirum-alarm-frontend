@@ -9,7 +9,7 @@ import { SwiperOptions } from 'swiper/types';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import { CategoryQueries } from '@/entities/category';
-import ProductImageCardSkeleton from '@/features/products/components/ProductImageCardSkeleton';
+import GridProductListSkeleton from '@/features/products/components/skeleton/GridProductListSkeleton';
 
 import { TAB_META } from '../../tabMeta';
 import TabBar from '../Tabbar';
@@ -108,12 +108,12 @@ export const TrendingContainer = ({ initialTab }: Props) => {
                 <SwiperSlide key={category.id} className="w-full flex-[0_0_100%] px-5">
                   {isFetched ? (
                     <ApiErrorBoundary>
-                      <Suspense fallback={<TrendingListSkeleton />}>
+                      <Suspense fallback={<GridProductListSkeleton length={12} />}>
                         <TrendingList categoryId={category.id} categoryName={category.name} />
                       </Suspense>
                     </ApiErrorBoundary>
                   ) : (
-                    <TrendingListSkeleton />
+                    <GridProductListSkeleton length={12} />
                   )}
                 </SwiperSlide>
               );
@@ -122,15 +122,5 @@ export const TrendingContainer = ({ initialTab }: Props) => {
         </div>
       </div>
     </Tabs.Root>
-  );
-};
-
-const TrendingListSkeleton = () => {
-  return (
-    <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
-      {Array.from({ length: 12 }).map((_, i) => (
-        <ProductImageCardSkeleton key={i} />
-      ))}
-    </div>
   );
 };

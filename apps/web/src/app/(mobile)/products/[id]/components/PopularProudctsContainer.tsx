@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 
 import SectionHeader from '@/components/SectionHeader';
+import HorizontalProductListSkeleton from '@/features/products/components/skeleton/HorizontalProductListSkeleton';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 
-import MoreProductsSkeleton from './MoreProductsSkeleton';
 import PopularProducts from './PopularProducts';
 
 export default function PopularProductsContainer({
@@ -14,7 +14,7 @@ export default function PopularProductsContainer({
   return (
     <section className="px-5">
       <SectionHeader title={`‘${product.categoryName || '기타'}’에서 인기있는 상품`} />
-      <Suspense fallback={<MoreProductsSkeleton />}>
+      <Suspense fallback={<HorizontalProductListSkeleton />}>
         <PopularProducts product={product} />
       </Suspense>
     </section>
