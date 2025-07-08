@@ -43,7 +43,7 @@ const DesktopGNB = () => {
   return (
     <div
       className={cn(
-        'fixed top-0 z-50 w-full border-b bg-white shadow-sm transition-all duration-300',
+        'fixed top-0 z-50 w-full min-w-[1024px] border-b bg-white shadow-sm transition-all duration-300',
         {
           'border-b-gray-200 bg-white': !isInHomeHero,
           'border-b-gray-700 bg-gray-900': isInHomeHero,
