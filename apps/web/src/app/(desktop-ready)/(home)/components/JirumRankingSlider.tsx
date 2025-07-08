@@ -135,7 +135,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           <button
             className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
             onClick={handleSlideNext}
-            disabled={index === rankingProducts.length}
+            disabled={index === rankingProducts.length - 4}
           >
             <ArrowLeft className="ml-1 size-8 -scale-x-100 text-white" color="white" />
           </button>
