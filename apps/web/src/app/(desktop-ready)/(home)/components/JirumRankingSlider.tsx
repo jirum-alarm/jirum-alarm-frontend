@@ -65,8 +65,6 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
 
   const shouldShowSkeleton = useMemo(() => !isHydrated && !isInit, [isHydrated, isInit]);
 
-  console.log(isHydrated, isInit);
-
   const collectProduct = useCollectProduct();
 
   const handleAfterInit = (swiper: SwiperClass) => {
