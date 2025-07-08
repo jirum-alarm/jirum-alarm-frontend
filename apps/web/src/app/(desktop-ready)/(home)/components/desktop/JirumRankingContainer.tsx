@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { SwiperOptions } from 'swiper/types';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
-import SectionHeader from '@/components/SectionHeaderHOC';
+import SectionHeader from '@/components/SectionHeader';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 

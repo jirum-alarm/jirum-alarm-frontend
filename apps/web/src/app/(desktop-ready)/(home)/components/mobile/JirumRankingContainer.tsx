@@ -30,7 +30,6 @@ const JirumRankingContainer = () => {
               더보기
             </Link>
           }
-          isMobile
         />
       </div>
       <ApiErrorBoundary>

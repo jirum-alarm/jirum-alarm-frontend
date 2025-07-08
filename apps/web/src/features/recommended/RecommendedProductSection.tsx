@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
-import SectionHeader from '@/components/SectionHeaderHOC';
+import SectionHeader from '@/components/SectionHeader';
 
 import RecommendedMoreLink from './RecommendedMoreLink';
 import RecommendedProductList from './RecommendedProductList';
