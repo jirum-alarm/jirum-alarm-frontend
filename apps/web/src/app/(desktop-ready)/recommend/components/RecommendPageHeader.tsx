@@ -6,7 +6,11 @@ import BackButton from '@/components/layout/BackButton';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 
+import useRecommendedKeyword from '../hooks/useRecommendedKeyword';
+
 export default function RecommendPageHeader() {
+  const { recommendedKeyword } = useRecommendedKeyword();
+
   const { toast } = useToast();
 
   const handleSearch = () => {

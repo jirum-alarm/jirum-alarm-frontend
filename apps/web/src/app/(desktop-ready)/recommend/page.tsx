@@ -1,9 +1,7 @@
 import { Metadata } from 'next';
-import { Suspense } from 'react';
 
 import RecommendContainer from '@/app/(desktop-ready)/recommend/components/RecommendContainer';
-import RecommendPageHeader from '@/app/(desktop-ready)/recommend/components/RecommendPageHeader';
-import BasicLayout from '@/components/layout/BasicLayout';
+import { checkDevice } from '@/app/actions/agent';
 import RecommendedProductTabsFetcher from '@/features/recommended/RecommendedProductTabsFetcher';
 import { ProductService } from '@/shared/api/product';
 
@@ -36,13 +34,13 @@ export async function generateMetadata({
   };
 }
 
-const RecommendPage = () => {
+const RecommendPage = async () => {
+  const { isMobile } = await checkDevice();
+
   return (
-    <Suspense>
-      <RecommendedProductTabsFetcher>
-        <RecommendContainer />
-      </RecommendedProductTabsFetcher>
-    </Suspense>
+    <RecommendedProductTabsFetcher>
+      <RecommendContainer isMobile={isMobile} />
+    </RecommendedProductTabsFetcher>
   );
 };
 
