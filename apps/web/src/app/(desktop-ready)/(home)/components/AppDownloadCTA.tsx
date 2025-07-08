@@ -18,22 +18,20 @@ const AppDownloadCTA = () => {
     <>
       {type && link && (
         <div className="col-span-2 w-full pb-3 pt-1 pc:col-span-5 sm:col-span-3">
-          <div className="flex h-[84px] w-full items-center rounded-[8px] bg-gradient-to-b from-secondary-50 to-secondary-100 px-[16px] py-[14px]">
+          <div className="flex h-[84px] w-full items-center rounded-[8px] bg-gradient-to-b from-secondary-50 to-secondary-100 px-[16px]">
             <JirumIcon />
             <div className="ml-[14px]">
               <p>
-                <span className="text-lg font-bold text-gray-800">지름알림 앱에서</span>
+                <span className="font-semibold text-secondary-800">지름알림 앱 다운받고</span>
                 <br />
-                <span className="text-base font-semibold text-secondary-700">
-                  핫딜 알림 받아보세요!
-                </span>
+                <span className="text-s text-secondary-700">핫딜을 실시간으로 확인하세요!</span>
               </p>
             </div>
             <div className="ml-auto">
               <a
                 href={link}
                 onClick={handleAppDownloadClick}
-                className="block h-[32px] rounded-[20px] bg-gray-800 px-[12px] py-[6px] text-sm font-semibold text-white"
+                className="block h-[32px] rounded-[20px] bg-secondary-700 px-[12px] py-[6px] text-sm font-semibold text-white"
               >
                 앱 다운받기
               </a>

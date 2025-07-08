@@ -11,7 +11,7 @@ const props = {
       <strong>어떻게 쓰나요?</strong>
     </>
   ),
-  description: '서비스 소개 페이지에서 한눈에 알아보세요!',
+  description: '소개 페이지에서 한 눈에 알아보세요!',
   image: landing,
   // eventName: EVENT.OPEN_KAKAO_TALK.NAME,
   className: 'bg-[#193E21] border-[#34673C]',
