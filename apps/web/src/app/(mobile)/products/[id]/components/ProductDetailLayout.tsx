@@ -1,27 +1,22 @@
 'use client';
 
-import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Drawer } from 'vaul';
 
 import Button from '@/components/common/Button';
-import { BubbleChatFill } from '@/components/common/icons';
 import Jirume from '@/components/common/icons/Jirume';
-import TopButton from '@/components/TopButton';
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { ProductQueries } from '@/entities/product';
-import Link from '@/features/Link';
 import HotdealBadge from '@/features/products/components/HotdealBadge';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 import { HotDealType, ProductGuidesQuery, ProductQuery } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
 
-import Comment from '../comment/components/Comment';
-
 import BottomCTA from './BottomCTA';
+import CommentSection from './comment/CommentSection';
 import CommunityReaction from './CommunityReaction';
 import HotdealGuide from './HotdealGuide';
 import HotdealScore from './HotdealScore';
@@ -174,6 +169,7 @@ function ProductExpiredBanner({ product }: { product: Product }) {
 }
 
 function ProductInfo({ product }: { product: Product }) {
+  const priceTextHasWon = product.price?.includes('원');
   const priceWithoutWon = product.price ? product.price.replace('원', '').trim() : null;
   const isHydrated = useIsHydrated();
 
@@ -215,7 +211,7 @@ function ProductInfo({ product }: { product: Product }) {
                     <strong className="mr-0.5 text-2xl font-semibold text-gray-900">
                       {priceWithoutWon}
                     </strong>
-                    원
+                    {priceTextHasWon && '원'}
                   </>
                 ) : (
                   <span className="text-2xl font-semibold">{/* 가격 준비중 */}</span>
@@ -360,73 +356,5 @@ const HotdealGuideModal = ({ trigger }: { trigger: React.ReactNode }) => {
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
-  );
-};
-
-const CommentSection = ({ productId }: { productId: number }) => {
-  return (
-    <section className="mb-10 mt-4 flex flex-col">
-      <div className="flex h-[56px] w-full items-center px-5 py-4">
-        <span className="text-lg font-bold text-gray-900">지름알림 댓글</span>
-      </div>
-      <Suspense fallback={<CommentListSkeleton productId={productId} />}>
-        <CommentList productId={productId} />
-      </Suspense>
-    </section>
-  );
-};
-
-const CommentList = ({ productId }: { productId: number }) => {
-  const {
-    data: { pages },
-  } = useSuspenseInfiniteQuery(
-    CommentQueries.infiniteComments({ productId, ...defaultCommentsVariables }),
-  );
-
-  const comments = pages.flatMap(({ comments }) => comments);
-
-  if (!comments.length) return <CommentListSkeleton productId={productId} />;
-
-  return (
-    <>
-      <div className="relative flex flex-col">
-        <div className="relative flex max-h-[400px] flex-col divide-y divide-gray-200 overflow-hidden">
-          {comments.map((comment) => (
-            <Comment key={comment.id} comment={comment} canReply={false} />
-          ))}
-        </div>
-        {comments.length > 1 && (
-          <div className="pointer-events-none absolute bottom-0 left-0 h-12 w-full bg-gradient-to-t from-white to-transparent" />
-        )}
-      </div>
-      <div className="mt-5 w-full px-12">
-        <Link href={`/products/${productId}/comment`}>
-          <Button className="bg-gray-100">댓글 보기</Button>
-        </Link>
-      </div>
-    </>
-  );
-};
-
-const CommentListSkeleton = ({ productId }: { productId: number }) => {
-  return (
-    <>
-      <div className="flex flex-col">
-        <div className="flex h-40 w-full items-center justify-center">
-          <div className="flex flex-col items-center gap-y-3">
-            <BubbleChatFill />
-            <div className="flex flex-col items-center gap-y-1">
-              <p className="font-semibold text-gray-700">가장 먼저 댓글을 달아보세요!</p>
-              <p className="text-sm font-medium text-gray-500">핫딜을 주제로 소통해요</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="w-full px-12">
-        <Link href={`/products/${productId}/comment`}>
-          <Button className="bg-gray-100">댓글 작성하기</Button>
-        </Link>
-      </div>
-    </>
   );
 };

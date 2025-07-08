@@ -2,13 +2,13 @@ import { Suspense } from 'react';
 import { SwiperOptions } from 'swiper/types';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
-import SectionHeader from '@/components/SectionHeaderHOC';
+import SectionHeader from '@/components/SectionHeader';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 
 import JirumRankingSlider from '../JirumRankingSlider';
 
-import { JirumRankingSliderSkeleton } from './JirumRankingSliderSkeleton';
+import JirumRankingSliderSkeleton from './JirumRankingSliderSkeleton';
 
 const SLIDE_SIZE = 4;
 
@@ -35,7 +35,7 @@ const JirumRankingContainer = () => {
         />
       </div>
       <ApiErrorBoundary>
-        <div className="mt-6 w-full">
+        <div className="mt-6">
           <Suspense
             fallback={
               <div className="flex animate-pulse flex-col gap-y-6">
@@ -44,9 +44,7 @@ const JirumRankingContainer = () => {
               </div>
             }
           >
-            <div className="w-full">
-              <JirumRankingSlider config={SLIDER_CONFIG_DESKTOP} isMobile={false} />
-            </div>
+            <JirumRankingSlider config={SLIDER_CONFIG_DESKTOP} isMobile={false} />
           </Suspense>
         </div>
       </ApiErrorBoundary>

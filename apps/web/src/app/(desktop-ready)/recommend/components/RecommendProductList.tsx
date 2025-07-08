@@ -8,13 +8,14 @@ import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graph
 
 interface ProductImageCardListProps {
   keyword: string;
+  limit?: number;
 }
 
-const RecommendProductList = ({ keyword }: ProductImageCardListProps) => {
+const RecommendProductList = ({ keyword, limit = 12 }: ProductImageCardListProps) => {
   const collectProduct = useCollectProduct();
   const { data, isFetchingNextPage, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
     ProductQueries.infiniteProductsByKeywords({
-      limit: 12,
+      limit,
       keyword,
       orderBy: KeywordProductOrderType.PostedAt,
       orderOption: OrderOptionType.Desc,

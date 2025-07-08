@@ -1,4 +1,4 @@
-export const JirumRankingSliderSkeleton = () => {
+const JirumRankingSliderSkeleton = () => {
   return (
     <>
       <div className="relative flex w-full justify-center gap-x-6 overflow-x-hidden px-16">
@@ -21,3 +21,5 @@ export const JirumRankingSliderSkeleton = () => {
     </>
   );
 };
+
+export default JirumRankingSliderSkeleton;

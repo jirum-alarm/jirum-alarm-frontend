@@ -8,7 +8,7 @@ import Link from '@/features/Link';
 
 import JirumRankingSlider from '../JirumRankingSlider';
 
-import { JirumRankingSliderSkeleton } from './JirumRankingSliderSkeleton';
+import JirumRankingSliderSkeleton from './JirumRankingSliderSkeleton';
 
 const SLIDER_CONFIG_MOBILE: SwiperOptions = {
   slidesPerView: 'auto',
@@ -30,7 +30,6 @@ const JirumRankingContainer = () => {
               더보기
             </Link>
           }
-          isMobile
         />
       </div>
       <ApiErrorBoundary>
