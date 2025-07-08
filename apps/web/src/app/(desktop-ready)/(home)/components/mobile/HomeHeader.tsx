@@ -29,12 +29,9 @@ const HomeHeader = () => {
       )}
     >
       <header className="mx-auto flex h-[56px] w-full max-w-screen-mobile-max items-center justify-between px-5 py-2">
-        <LogoLink inverted={isScrolled} />
+        <LogoLink />
         <div className="flex items-center gap-x-5">
-          <SearchLinkButton
-            color={isScrolled ? '#101828' : '#FFFFFF'}
-            onClick={handleSearchClick}
-          />
+          <SearchLinkButton color="#101828" onClick={handleSearchClick} />
         </div>
       </header>
     </div>

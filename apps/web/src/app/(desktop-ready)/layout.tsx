@@ -16,7 +16,7 @@ const DesktopLayout = async ({ children }: { children: React.ReactNode }) => {
   await queryClient.prefetchQuery(AuthQueriesServer.me());
 
   return (
-    <div className={isMobile ? '' : 'pc'}>
+    <div className={isMobile ? '' : 'pc min-w-[1024px]'}>
       <DeviceSpecific
         desktop={
           <>
