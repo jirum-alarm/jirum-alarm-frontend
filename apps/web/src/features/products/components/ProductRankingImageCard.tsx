@@ -37,13 +37,11 @@ export function ProductRankingImageCard({
     <Link href={PAGE.DETAIL + '/' + product.id} onClick={handleClick} rel="preload">
       <div
         className={cn(
-          'w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all',
-          isMobile && 'h-[340px] scale-90 transition-all duration-300',
-          isMobile && activeIndex === index && 'scale-100',
-          //  !isMobile && 'h-[350px] xl:h-[362px]',
+          'h-[340px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300 pc:h-auto pc:scale-100',
+          activeIndex === index && 'scale-100',
         )}
       >
-        <div className={cn('relative h-[240px] w-full', !isMobile && 'aspect-square h-auto')}>
+        <div className="relative h-[240px] w-full pc:aspect-square pc:h-auto">
           <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm font-medium text-primary-500">
             {index + 1}
           </div>
@@ -60,17 +58,9 @@ export function ProductRankingImageCard({
             priority={[0, 1, 9].includes(index)}
           />
         </div>
-        <div className={cn('p-3 pb-0', !isMobile && 'h-[110px]')}>
-          <div className={cn('line-clamp-2 text-sm text-gray-700', !isMobile && 'xl:text-base')}>
-            {product.title}
-          </div>
-          <div
-            className={cn(
-              'text-lg font-bold text-gray-900',
-              !isMobile && 'h-[36px] pt-0.5 xl:text-[22px]',
-              isMobile && 'pt-2',
-            )}
-          >
+        <div className="p-3 pb-0 pc:h-[110px]">
+          <div className="line-clamp-2 text-sm text-gray-700 pc:xl:text-base">{product.title}</div>
+          <div className="pt-2 text-lg font-bold text-gray-900 pc:h-[36px] pc:pt-0.5 pc:xl:text-[22px]">
             {product.price ?? ''}
           </div>
         </div>

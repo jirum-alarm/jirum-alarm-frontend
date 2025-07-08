@@ -169,6 +169,7 @@ function ProductExpiredBanner({ product }: { product: Product }) {
 }
 
 function ProductInfo({ product }: { product: Product }) {
+  const priceTextHasWon = product.price?.includes('원');
   const priceWithoutWon = product.price ? product.price.replace('원', '').trim() : null;
   const isHydrated = useIsHydrated();
 
@@ -210,7 +211,7 @@ function ProductInfo({ product }: { product: Product }) {
                     <strong className="mr-0.5 text-2xl font-semibold text-gray-900">
                       {priceWithoutWon}
                     </strong>
-                    원
+                    {priceTextHasWon && '원'}
                   </>
                 ) : (
                   <span className="text-2xl font-semibold">{/* 가격 준비중 */}</span>
