@@ -16,22 +16,12 @@ import { ProductRankingImageCard } from '@/features/products/components/ProductR
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 
-import { JirumRankingSliderSkeleton as DesktopSliderSkeleton } from './desktop/JirumRankingSliderSkeleton';
-import { JirumRankingSliderSkeleton as MobileSliderSkeleton } from './mobile/JirumRankingSliderSkeleton';
+import DesktopSliderSkeleton from './desktop/JirumRankingSliderSkeleton';
+import MobileSliderSkeleton from './mobile/JirumRankingSliderSkeleton';
 
-const SliderDots = ({
-  total,
-  activeIndex,
-  isMobile,
-}: {
-  total: number;
-  activeIndex: number;
-  isMobile: boolean;
-}) => (
+const SliderDots = ({ total, activeIndex }: { total: number; activeIndex: number }) => (
   <div
-    className={cn('mx-auto flex h-[20px] w-full items-center justify-center', {
-      'w-[100px]': !isMobile,
-    })}
+    className="mx-auto flex h-[20px] w-full items-center justify-center pc:w-[100px]"
     role="tablist"
   >
     {Array.from({ length: total }).map((_, i) => (
@@ -40,11 +30,11 @@ const SliderDots = ({
         role="tab"
         aria-selected={activeIndex === i}
         aria-label={`슬라이드 ${i + 1}`}
-        className={cn(`h-[3px] w-[3px] bg-gray-400`, {
-          'ml-[6px] mr-[6px] h-[4px] w-[4px] bg-gray-600': activeIndex === i,
-          'grow bg-gray-500': !isMobile,
-          'w-[32px] bg-gray-300': !isMobile && activeIndex === i,
-        })}
+        className={cn(
+          `h-[3px] w-[3px] bg-gray-400 pc:grow pc:bg-gray-500`,
+          activeIndex === i &&
+            'ml-[6px] mr-[6px] h-[4px] w-[4px] bg-gray-600 pc:w-[32px] pc:bg-gray-300',
+        )}
       />
     ))}
   </div>
@@ -87,19 +77,15 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   return (
     <>
       <div className="relative flex w-full items-center gap-x-5 gap-y-3">
-        {!isMobile && (
-          <button
-            className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
-            onClick={handleSlidePrev}
-            disabled={index === 0}
-          >
-            <ArrowLeft className="mr-1 size-8 text-white" color="white" />
-          </button>
-        )}
+        <button
+          className="hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0 pc:flex"
+          onClick={handleSlidePrev}
+          disabled={index === 0}
+        >
+          <ArrowLeft className="mr-1 size-8 text-white" color="white" />
+        </button>
         <motion.div
-          className={cn('w-full overflow-visible', {
-            'max-w-slider-max': !isMobile,
-          })}
+          className={cn('w-full overflow-visible pc:max-w-slider-max')}
           initial={{ opacity: 0 }}
           animate={{ opacity: shouldShowSkeleton ? 0 : 1 }}
           transition={{ duration: 0.2 }}
@@ -112,10 +98,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           >
             {rankingProducts.map((product, i) => (
               <SwiperSlide
-                className={cn('pb-5', {
-                  'pb-6': !isMobile,
-                  'pb-1.5': !isMobile && !isInit,
-                })}
+                className={cn('pb-5 pc:pb-6', !isInit && 'pc:pb-1.5')}
                 key={product.id}
                 style={{ width: isMobile ? '240px' : 'calc(100% / 4)' }}
               >
@@ -131,18 +114,13 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             ))}
           </Swiper>
         </motion.div>
-        {!isMobile && (
-          <button
-            className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
-            onClick={handleSlideNext}
-            disabled={index === rankingProducts.length - 4}
-          >
-            <ArrowLeft className="ml-1 size-8 -scale-x-100 text-white" color="white" />
-          </button>
-        )}
-        {/* <div className="absolute inset-0 z-10 animate-pulse">
-              {isMobile ? <MobileSliderSkeleton /> : <DesktopSliderSkeleton />}
-            </div> */}
+        <button
+          className="hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0 pc:flex"
+          onClick={handleSlideNext}
+          disabled={index === rankingProducts.length - 4}
+        >
+          <ArrowLeft className="ml-1 size-8 -scale-x-100 text-white" color="white" />
+        </button>
 
         <AnimatePresence>
           {shouldShowSkeleton && (
@@ -157,11 +135,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           )}
         </AnimatePresence>
       </div>
-      <SliderDots
-        total={rankingProducts.length - (isMobile ? 0 : 3)}
-        activeIndex={index}
-        isMobile={isMobile}
-      />
+      <SliderDots total={rankingProducts.length - (isMobile ? 0 : 3)} activeIndex={index} />
     </>
   );
 };
