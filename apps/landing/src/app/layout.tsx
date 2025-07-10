@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${PretendardVariable.variable} relative max-h-lvh min-h-svh snap-y snap-mandatory antialiased`}
+      className={`${PretendardVariable.className} relative max-h-lvh min-h-svh snap-y snap-mandatory antialiased`}
     >
       <body>{children}</body>
     </html>
