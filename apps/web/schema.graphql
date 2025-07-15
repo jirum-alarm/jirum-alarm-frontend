@@ -11,6 +11,18 @@ type AdminUser {
   name: String!
 }
 
+type ApiQuery {
+  dependsOn: String
+  query: String!
+  variables: JSONObject
+}
+
+interface BaseSection {
+  cta: Cta
+  title: String!
+  type: ID!
+}
+
 type CategorizedReactionKeywords {
   count: Int!
   name: String!
@@ -48,6 +60,11 @@ type CommentOutput {
   userId: Float!
 }
 
+type Cta {
+  label: String!
+  url: String!
+}
+
 enum CurrencyType {
   DOLLOR
   WON
@@ -76,6 +93,30 @@ type ExistsUserOutput {
 enum Gender {
   FEMALE
   MALE
+}
+
+type HomeHotDealSection implements BaseSection {
+  cta: Cta
+  dataSources: [ApiQuery!]!
+  displayType: String!
+  title: String!
+  type: ID!
+}
+
+type HomeRankingSection implements BaseSection {
+  cta: Cta
+  dataSources: [ApiQuery!]!
+  displayType: String!
+  title: String!
+  type: ID!
+}
+
+type HomeRecommendationSection implements BaseSection {
+  cta: Cta
+  dataSources: [ApiQuery!]!
+  displayType: String!
+  title: String!
+  type: ID!
 }
 
 enum HotDealExcludeKeywordOrderType {
@@ -157,6 +198,13 @@ enum InstagramPostType {
   NORMAL
 }
 
+union ItemUnion = HomeHotDealSection | HomeRankingSection | HomeRecommendationSection
+
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject
+
 enum KeywordProductOrderType {
   POSTED_AT
 }
@@ -214,6 +262,7 @@ type Mutation {
     url: String
     userIds: [Int!]!
   ): Boolean!
+  addProductMapping(brandProductId: Int!, productId: Int!): Boolean!
   """
   푸시를 받기위한 토큰 등록
   """
@@ -247,6 +296,7 @@ type Mutation {
   로그아웃
   """
   logout: Boolean!
+  matchProductToDanawaProduct(productId: Int!): Boolean!
   """
   모든 알림 읽음 처리
   """
@@ -280,6 +330,7 @@ type Mutation {
   알림 키워드 제거
   """
   removeNotificationKeyword(id: Float!): Boolean!
+  removeProductMapping(productId: Int!): Boolean!
   """
   토큰에 연결된 `userId` 연결 해제
   """
@@ -411,6 +462,11 @@ enum OrderOptionType {
   DESC
 }
 
+type PageSchema {
+  items: [ItemUnion!]!
+  schemaVersion: String!
+}
+
 enum ProductExpiredReportsOrderType {
   ID
 }
@@ -422,12 +478,37 @@ type ProductGuide {
 }
 
 type ProductHotDealIndex {
+  confidence: String
   currentPrice: Float!
+  detailMessage: String
   highestPrice: Float!
+  hotDealType: String
   id: ID!
   lowestPrice: Float!
   message: String!
   productId: Int!
+  score: Int
+}
+
+type ProductMapping {
+  brandProduct: String
+  createdAt: DateTime!
+  id: ID!
+  productId: Int!
+  target: ProductMappingTarget!
+  targetId: Int!
+}
+
+type ProductMappingInfoOutput {
+  amount: String!
+  brandProductId: Int!
+  quantity: String!
+}
+
+enum ProductMappingTarget {
+  BRAND_ITEM
+  BRAND_PRODUCT
+  BRAND_PRODUCT_ITEM
 }
 
 enum ProductOrderType {
@@ -482,6 +563,7 @@ type ProductOutput {
   쇼핑몰 이름
   """
   mallName: String
+  mappingInfo: [ProductMappingInfoOutput!]
   negativeCommunityReactionCount: Int!
   positiveCommunityReactionCount: Int!
   postedAt: DateTime!
@@ -490,6 +572,7 @@ type ProductOutput {
   상품 가격 목록
   """
   prices: [ProductPrice!]
+  productMapping: ProductMapping
   provider: Provider!
   providerId: Int!
   searchAfter: [String!]
@@ -587,6 +670,7 @@ type Query {
     productId: Int
     searchAfter: [String!]
   ): [productExpireReport!]!
+  homePage(version: String!): PageSchema!
   """
   어드민) 핫딜 제외 키워드 목록 조회
   """
@@ -655,6 +739,7 @@ type Query {
   상품 목록 조회
   """
   products(
+    brandProductId: Int
     categoryId: Int
     endDate: DateTime
     isApp: Boolean

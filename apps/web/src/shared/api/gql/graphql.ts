@@ -19,6 +19,8 @@ export type Scalars = {
   Float: { input: number; output: number };
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any };
+  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSONObject: { input: any; output: any };
 };
 
 export type AdminUser = {
@@ -27,6 +29,19 @@ export type AdminUser = {
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+};
+
+export type ApiQuery = {
+  __typename?: 'ApiQuery';
+  dependsOn?: Maybe<Scalars['String']['output']>;
+  query: Scalars['String']['output'];
+  variables?: Maybe<Scalars['JSONObject']['output']>;
+};
+
+export type BaseSection = {
+  cta?: Maybe<Cta>;
+  title: Scalars['String']['output'];
+  type: Scalars['ID']['output'];
 };
 
 export type CategorizedReactionKeywords = {
@@ -68,6 +83,12 @@ export type CommentOutput = {
   userId: Scalars['Float']['output'];
 };
 
+export type Cta = {
+  __typename?: 'Cta';
+  label: Scalars['String']['output'];
+  url: Scalars['String']['output'];
+};
+
 export enum CurrencyType {
   Dollor = 'DOLLOR',
   Won = 'WON',
@@ -94,6 +115,33 @@ export enum Gender {
   Female = 'FEMALE',
   Male = 'MALE',
 }
+
+export type HomeHotDealSection = BaseSection & {
+  __typename?: 'HomeHotDealSection';
+  cta?: Maybe<Cta>;
+  dataSources: Array<ApiQuery>;
+  displayType: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  type: Scalars['ID']['output'];
+};
+
+export type HomeRankingSection = BaseSection & {
+  __typename?: 'HomeRankingSection';
+  cta?: Maybe<Cta>;
+  dataSources: Array<ApiQuery>;
+  displayType: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  type: Scalars['ID']['output'];
+};
+
+export type HomeRecommendationSection = BaseSection & {
+  __typename?: 'HomeRecommendationSection';
+  cta?: Maybe<Cta>;
+  dataSources: Array<ApiQuery>;
+  displayType: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  type: Scalars['ID']['output'];
+};
 
 export enum HotDealExcludeKeywordOrderType {
   Id = 'ID',
@@ -170,6 +218,8 @@ export enum InstagramPostType {
   Normal = 'NORMAL',
 }
 
+export type ItemUnion = HomeHotDealSection | HomeRankingSection | HomeRecommendationSection;
+
 export enum KeywordProductOrderType {
   PostedAt = 'POSTED_AT',
 }
@@ -191,6 +241,7 @@ export type Mutation = {
   addNotificationToTopic: Scalars['Boolean']['output'];
   /** 유저 ID 지정하여 알림 센터에 알림을 추가하거나 푸시를 보내거나 모두 수행 */
   addNotificationToUsers: Scalars['Boolean']['output'];
+  addProductMapping: Scalars['Boolean']['output'];
   /** 푸시를 받기위한 토큰 등록 */
   addPushToken: Scalars['Boolean']['output'];
   addUserLikeOrDislike: Scalars['Boolean']['output'];
@@ -208,6 +259,7 @@ export type Mutation = {
   loginByRefreshToken: TokenOutput;
   /** 로그아웃 */
   logout: Scalars['Boolean']['output'];
+  matchProductToDanawaProduct: Scalars['Boolean']['output'];
   /** 모든 알림 읽음 처리 */
   readAllNotifications: Scalars['Boolean']['output'];
   /** 모든 알림 읽음 처리 */
@@ -225,6 +277,7 @@ export type Mutation = {
   removeNotification: Scalars['Boolean']['output'];
   /** 알림 키워드 제거 */
   removeNotificationKeyword: Scalars['Boolean']['output'];
+  removeProductMapping: Scalars['Boolean']['output'];
   /** 토큰에 연결된 `userId` 연결 해제 */
   removeTokenLinkage: Scalars['Boolean']['output'];
   /** wishlist 제거 */
@@ -306,6 +359,11 @@ export type MutationAddNotificationToUsersArgs = {
   userIds: Array<Scalars['Int']['input']>;
 };
 
+export type MutationAddProductMappingArgs = {
+  brandProductId: Scalars['Int']['input'];
+  productId: Scalars['Int']['input'];
+};
+
 export type MutationAddPushTokenArgs = {
   token: Scalars['String']['input'];
   tokenType: TokenType;
@@ -339,6 +397,10 @@ export type MutationLoginArgs = {
   password: Scalars['String']['input'];
 };
 
+export type MutationMatchProductToDanawaProductArgs = {
+  productId: Scalars['Int']['input'];
+};
+
 export type MutationReadNotificationArgs = {
   id: Scalars['Int']['input'];
 };
@@ -365,6 +427,10 @@ export type MutationRemoveNotificationArgs = {
 
 export type MutationRemoveNotificationKeywordArgs = {
   id: Scalars['Float']['input'];
+};
+
+export type MutationRemoveProductMappingArgs = {
+  productId: Scalars['Int']['input'];
 };
 
 export type MutationRemoveTokenLinkageArgs = {
@@ -492,6 +558,12 @@ export enum OrderOptionType {
   Desc = 'DESC',
 }
 
+export type PageSchema = {
+  __typename?: 'PageSchema';
+  items: Array<ItemUnion>;
+  schemaVersion: Scalars['String']['output'];
+};
+
 export enum ProductExpiredReportsOrderType {
   Id = 'ID',
 }
@@ -505,13 +577,40 @@ export type ProductGuide = {
 
 export type ProductHotDealIndex = {
   __typename?: 'ProductHotDealIndex';
+  confidence?: Maybe<Scalars['String']['output']>;
   currentPrice: Scalars['Float']['output'];
+  detailMessage?: Maybe<Scalars['String']['output']>;
   highestPrice: Scalars['Float']['output'];
+  hotDealType?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lowestPrice: Scalars['Float']['output'];
   message: Scalars['String']['output'];
   productId: Scalars['Int']['output'];
+  score?: Maybe<Scalars['Int']['output']>;
 };
+
+export type ProductMapping = {
+  __typename?: 'ProductMapping';
+  brandProduct?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  productId: Scalars['Int']['output'];
+  target: ProductMappingTarget;
+  targetId: Scalars['Int']['output'];
+};
+
+export type ProductMappingInfoOutput = {
+  __typename?: 'ProductMappingInfoOutput';
+  amount: Scalars['String']['output'];
+  brandProductId: Scalars['Int']['output'];
+  quantity: Scalars['String']['output'];
+};
+
+export enum ProductMappingTarget {
+  BrandItem = 'BRAND_ITEM',
+  BrandProduct = 'BRAND_PRODUCT',
+  BrandProductItem = 'BRAND_PRODUCT_ITEM',
+}
 
 export enum ProductOrderType {
   CommentCount = 'COMMENT_COUNT',
@@ -555,12 +654,14 @@ export type ProductOutput = {
   mallId?: Maybe<Scalars['Int']['output']>;
   /** 쇼핑몰 이름 */
   mallName?: Maybe<Scalars['String']['output']>;
+  mappingInfo?: Maybe<Array<ProductMappingInfoOutput>>;
   negativeCommunityReactionCount: Scalars['Int']['output'];
   positiveCommunityReactionCount: Scalars['Int']['output'];
   postedAt: Scalars['DateTime']['output'];
   price?: Maybe<Scalars['String']['output']>;
   /** 상품 가격 목록 */
   prices?: Maybe<Array<ProductPrice>>;
+  productMapping?: Maybe<ProductMapping>;
   provider: Provider;
   providerId: Scalars['Int']['output'];
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
@@ -618,6 +719,7 @@ export type Query = {
   expireProductReportCount: Scalars['Int']['output'];
   /** 종료된 상품 제보 내역 조회 */
   expireProductReports: Array<ProductExpireReport>;
+  homePage: PageSchema;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
   /** 어드민) 핫딜 키워드 조회 */
@@ -725,6 +827,10 @@ export type QueryExpireProductReportsArgs = {
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type QueryHomePageArgs = {
+  version: Scalars['String']['input'];
+};
+
 export type QueryHotDealExcludeKeywordsByAdminArgs = {
   hotDealKeywordId: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
@@ -793,6 +899,7 @@ export type QueryProductKeywordsArgs = {
 };
 
 export type QueryProductsArgs = {
+  brandProductId?: InputMaybe<Scalars['Int']['input']>;
   categoryId?: InputMaybe<Scalars['Int']['input']>;
   endDate?: InputMaybe<Scalars['DateTime']['input']>;
   isApp?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1470,7 +1577,7 @@ export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
 {
-  __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
+  __apiType?: NonNullable<DocumentTypeDecoration<TResult, TVariables>['__apiType']>;
   private value: string;
   public __meta__?: Record<string, any> | undefined;
 
@@ -1480,7 +1587,7 @@ export class TypedDocumentString<TResult, TVariables>
     this.__meta__ = __meta__;
   }
 
-  toString(): string & DocumentTypeDecoration<TResult, TVariables> {
+  override toString(): string & DocumentTypeDecoration<TResult, TVariables> {
     return this.value;
   }
 }

@@ -30,26 +30,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="application-name" content="지름알림" />
-        <link rel="preconnect" href="https://cdn.jirum-alarm.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
         <link rel="preload" as="image" href="/images/icon-144x144.png" />
-        <link
-          rel="preload"
-          as="font"
-          href="/fonts/PretendardStdVariable.woff2"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
 
         <meta name="author" content="지름알림" />
-        <meta name="msapplication-TileImage" content="/images/icon-144x144.png" />
-        <meta name="msapplication-TileColor" content="#ffffff" />
 
         <link
           rel="search"

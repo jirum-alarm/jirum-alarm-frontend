@@ -6,17 +6,20 @@ const SectionHeader = ({
   title,
   right,
   titleClassName,
+  shouldShowMobileUI,
 }: {
   title: ReactNode;
   right?: ReactNode;
   titleClassName?: string;
+  shouldShowMobileUI?: boolean;
 }) => {
   return (
     <div className="relative flex h-[56px] w-full items-center justify-between">
-      <div className="hidden pc:block" />
+      <div className={cn('hidden', { 'pc:block': !shouldShowMobileUI })} />
       <h2
         className={cn(
-          'text-lg font-bold text-gray-900 pc:absolute pc:left-1/2 pc:-translate-x-1/2 pc:text-[28px]',
+          'text-lg font-bold text-gray-900',
+          !shouldShowMobileUI && 'pc:absolute pc:left-1/2 pc:-translate-x-1/2 pc:text-[28px]',
           titleClassName,
         )}
       >

@@ -24,13 +24,13 @@ const DesktopGNB = () => {
 
   const isScrolled = useScrollPosition(HOME_SCROLLTHRESHOLD, false);
 
-  const handleSearchClick = () => {
-    // TODO: Need GTM Migration
-    // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
-    //   type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
-    //   page: EVENT.PAGE.HOME,
-    // });
-  };
+  // TODO: Need GTM Migration
+  // const handleSearchClick = () => {
+  //   mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
+  //     type: EVENT.PRODUCT_SEARCH.TYPE.CLICK,
+  //     page: EVENT.PAGE.HOME,
+  //   });
+  // };
 
   const pathname = usePathname();
 
@@ -75,10 +75,7 @@ const DesktopGNB = () => {
           </div>
         </nav>
         <div className="flex items-center gap-x-5">
-          <SearchLinkButton
-            color={isInHomeHero ? '#FFFFFF' : '#101828'}
-            onClick={handleSearchClick}
-          />
+          <SearchLinkButton color={isInHomeHero ? '#FFFFFF' : '#101828'} />
           <Link href={talkroomLink} target="_blank" className="relative size-8">
             <TalkDark
               className={cn('size-8 transition-opacity', {
