@@ -47,7 +47,7 @@ export default async function DesktopProductDetailLayout({
             <HotdealGuide fixExpanded={true} productId={productId} />
           </ProductGuidesFetcher>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 pl-2">
           <CommunityReaction product={product} />
           <HotdealScore product={product} />
         </div>

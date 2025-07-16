@@ -37,7 +37,7 @@ export default function ProductInfo({
           <DisplayTime time={product.postedAt} />
         </div>
         <div className="flex justify-between pb-8">
-          <div>
+          <div className="flex gap-x-2">
             {product.isEnd && (
               <div
                 className={cn('border border-gray-400 bg-white px-2 text-gray-700', {

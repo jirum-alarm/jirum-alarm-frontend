@@ -20,9 +20,7 @@ const ProductDetailLayout = async ({
       desktop={
         <>
           <div className="mx-auto mt-[56px] grid max-w-screen-layout-max grid-cols-12 gap-x-6 pt-11">
-            <div className="col-span-1" />
-            <div className="col-span-10">{children}</div>
-            <div className="col-span-1" />
+            <div className="col-span-10 col-start-2">{children}</div>
           </div>
           <NoticeProfitLink />
         </>
