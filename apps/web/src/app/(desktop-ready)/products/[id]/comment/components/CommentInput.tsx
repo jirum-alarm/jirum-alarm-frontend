@@ -72,7 +72,7 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
         )}
         <textarea
           ref={ref}
-          className="max-h-[100px] min-h-[40px] w-full resize-none border-none bg-transparent px-3 py-2 outline-none"
+          className="max-h-[100px] min-h-[40px] w-full resize-none border-none bg-transparent px-3 py-2 outline-none pc:max-h-[300px]"
           placeholder={placeholder}
           value={comment}
           onChange={handleInputChange}

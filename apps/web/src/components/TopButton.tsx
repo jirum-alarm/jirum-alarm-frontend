@@ -5,19 +5,30 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from '@/components/common/icons';
 import { cn } from '@/lib/cn';
 
-const TopButton = () => {
+const TopButton = ({ type = 'scrolling-up' }: { type?: 'scrolling-up' | 'scrolled' }) => {
   const [isVisible, setIsVisible] = useState(false);
   const prevScrollPos = useRef(0);
 
   const topButtonVisibility = () => {
+    if (type === 'scrolled') {
+      const isScrolled = window.scrollY >= window.innerHeight;
+
+      if (isScrolled) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+      return;
+    }
+
     const isScrollingUp = window.scrollY < prevScrollPos.current;
+    prevScrollPos.current = window.scrollY;
 
     if (isScrollingUp) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
     }
-    prevScrollPos.current = window.scrollY;
   };
 
   const scrollToTop = () => {
