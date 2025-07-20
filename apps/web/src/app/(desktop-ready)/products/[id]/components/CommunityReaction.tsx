@@ -64,7 +64,7 @@ export default function CommunityReaction({
             </div>
           }
         />
-        <div className="mt-1 flex flex-col gap-y-4">
+        <div className="flex flex-col gap-y-4">
           {allCount !== 0 ? (
             <Reaction
               positiveCount={positiveCount}
