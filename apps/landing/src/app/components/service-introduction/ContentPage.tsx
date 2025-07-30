@@ -39,7 +39,7 @@ const ContentImage = ({ src, alt }: { src: string; alt: string }) => {
 
 const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-col items-center px-5 py-6 lg:items-start lg:px-10 lg:pt-30">
+    <div className="flex flex-col items-center justify-center px-5 py-6 lg:items-start lg:px-10">
       {children}
     </div>
   );
