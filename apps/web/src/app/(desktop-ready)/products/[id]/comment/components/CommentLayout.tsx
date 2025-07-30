@@ -53,7 +53,7 @@ export default function CommentLayout({
         <CommentListSkeleton />
       )}
       <TopButton />
-      <div className="fixed bottom-0 z-40 max-w-screen-mobile-max px-5 py-3">
+      <div className="fixed bottom-0 z-40 w-full max-w-screen-mobile-max">
         <CommentInput productId={productId} isUserLogin={isUserLogin} />
       </div>
     </>

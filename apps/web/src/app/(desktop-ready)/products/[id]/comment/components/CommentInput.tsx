@@ -42,7 +42,7 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white pc:min-h-[80px] pc:px-5 pc:py-3"
+      className="flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 py-3 pc:min-h-[80px]"
       onPointerDown={handlePointerDown}
     >
       <div className="flex grow flex-col items-center overflow-hidden rounded-lg border border-transparent bg-gray-50 focus-within:border-gray-500">

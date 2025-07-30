@@ -22,7 +22,7 @@ const CommentContainerServer = async ({ productId }: { productId: number }) => {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <BasicLayout header={<CommentPageHeader productId={productId} />}>
-        <div className="flex w-full grow flex-col">
+        <div className="flex h-full w-full grow flex-col">
           <CommentContainer productId={productId} isUserLogin={!!token} />
         </div>
       </BasicLayout>
