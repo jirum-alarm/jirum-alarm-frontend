@@ -1,7 +1,9 @@
+import { QueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { getAccessToken } from '@/app/actions/token';
+import { ProductQueries } from '@/entities/product';
 import { ProductQuery } from '@/shared/api/gql/graphql';
 
 import CommentSection from '../comment/CommentSection';
@@ -23,15 +25,14 @@ type Product = NonNullable<ProductQuery['product']>;
 
 async function ProductDetailLayout({
   productId,
-  product,
+  isUserLogin,
 }: {
-  product: Product;
   productId: number;
+  isUserLogin: boolean;
 }) {
-  const token = await getAccessToken();
-
-  const isUserLogin = !!token;
-
+  const queryClient = new QueryClient();
+  const { product } = await queryClient.fetchQuery(ProductQueries.product({ id: productId }));
+  if (!product) notFound();
   return (
     <>
       {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}

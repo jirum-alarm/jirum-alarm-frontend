@@ -29,8 +29,8 @@ export default function ImageComponent({
       title={title}
       className={className}
       onError={() => setIsError(true)}
-      placeholder="blur"
-      blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+      // placeholder="blur"
+      // blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
       {...rest}
     />
   );

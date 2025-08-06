@@ -14,6 +14,7 @@ const ProductImage = memo(function ProductImage({
   categoryId,
   type = 'product',
   className,
+  unoptimized = true,
   ...rest
 }: Omit<ImageProps, 'src'> & {
   src?: string;
@@ -37,6 +38,7 @@ const ProductImage = memo(function ProductImage({
       categoryId={categoryId}
       type={type}
       className={cn(['h-full w-full object-cover', className])}
+      unoptimized={unoptimized}
       {...rest}
     />
   );

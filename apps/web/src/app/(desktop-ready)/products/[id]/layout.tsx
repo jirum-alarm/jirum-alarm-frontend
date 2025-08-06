@@ -3,6 +3,7 @@ import DeviceSpecific from '@/components/layout/DeviceSpecific';
 
 import { NoticeProfitLink } from './components/NoticeProfitUrl';
 import ProductDetailPageHeader from './components/ProductDeatilPageHeader';
+import ProductFetcher from './components/ProductFetcher';
 
 const ProductDetailLayout = async ({
   params,
@@ -13,19 +14,21 @@ const ProductDetailLayout = async ({
 }) => {
   const { id } = await params;
   return (
-    <DeviceSpecific
-      mobile={
-        <BasicLayout header={<ProductDetailPageHeader productId={+id} />}>{children}</BasicLayout>
-      }
-      desktop={
-        <>
-          <div className="mx-auto mt-[56px] grid max-w-screen-layout-max grid-cols-12 gap-x-6 pt-11">
-            <div className="col-span-10 col-start-2">{children}</div>
-          </div>
-          <NoticeProfitLink />
-        </>
-      }
-    />
+    <ProductFetcher productId={+id}>
+      <DeviceSpecific
+        mobile={
+          <BasicLayout header={<ProductDetailPageHeader productId={+id} />}>{children}</BasicLayout>
+        }
+        desktop={
+          <>
+            <div className="mx-auto mt-[56px] grid max-w-screen-layout-max grid-cols-12 gap-x-6 pt-11">
+              <div className="col-span-10 col-start-2">{children}</div>
+            </div>
+            <NoticeProfitLink />
+          </>
+        }
+      />
+    </ProductFetcher>
   );
 };
 
