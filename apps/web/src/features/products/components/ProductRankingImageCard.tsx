@@ -1,36 +1,27 @@
+'use client';
+
+import { collectProductAction } from '@/app/actions/product';
 import { EVENT } from '@/constants/mixpanel';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
-import ProductImage from '@/features/products/components/ProductImage';
+import ProductImage from '@/features/products/components/image/ProductImage';
 import { cn } from '@/lib/cn';
 import { type QueryRankingProductsQuery } from '@/shared/api/gql/graphql';
 
 export function ProductRankingImageCard({
   product,
-  collectProduct,
   logging,
   activeIndex,
   index,
-  isMobile,
 }: {
   product: QueryRankingProductsQuery['rankingProducts'][number];
-  collectProduct: (productId: number) => void;
   logging: { page: keyof typeof EVENT.PAGE };
   activeIndex: number;
   index: number;
   isMobile: boolean;
 }) {
-  const imageSize = isMobile ? 240 : 252;
-
   const handleClick = () => {
-    collectProduct(+product.id);
-
-    // setTimeout(() => {
-    //   mp?// mp?.track(EVENT.PRODUCT_CLICK.NAME, {
-    //     product,
-    //     page: EVENT.PAGE[logging.page],
-    //   });
-    // }, 0);
+    collectProductAction(+product.id);
   };
 
   return (
@@ -41,7 +32,7 @@ export function ProductRankingImageCard({
           activeIndex === index && 'scale-100',
         )}
       >
-        <div className="relative h-[240px] w-full pc:aspect-square pc:h-auto">
+        <div className="relative h-[240px] w-full bg-gray-50 pc:aspect-square pc:h-auto">
           <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm font-medium text-primary-500">
             {index + 1}
           </div>
@@ -51,11 +42,10 @@ export function ProductRankingImageCard({
             type="product"
             categoryId={product.categoryId}
             alt={product.title}
-            width={imageSize}
-            height={imageSize}
-            sizes={`${imageSize}px`}
-            className="object-cover"
-            priority={[0, 1, 9].includes(index)}
+            width={252}
+            height={252}
+            sizes="252px"
+            loading="eager"
           />
         </div>
         <div className="p-3 pb-0 pc:h-[110px]">

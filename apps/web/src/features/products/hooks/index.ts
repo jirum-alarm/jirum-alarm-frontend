@@ -1,2 +1,1 @@
-export * from './useHotdeals';
-export * from './useProducts';
+export * from './useHotDealsRandom';
