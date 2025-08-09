@@ -32,7 +32,11 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
 
   return (
     <div ref={ref} className="flex flex-col gap-y-8">
-      <ProductGridList products={products?.slice(0, size) ?? []} loggingPage={'TRENDING'} />
+      <ProductGridList
+        products={products?.slice(0, size) ?? []}
+        rankFrom={1}
+        loggingPage={'TRENDING'}
+      />
       {liveProducts && (
         <RecommendationProduct
           label={`‘${categoryName}’ 실시간 핫딜`}
@@ -42,7 +46,11 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
         />
       )}
 
-      <ProductGridList products={products?.slice(size) ?? []} loggingPage={'TRENDING'} />
+      <ProductGridList
+        products={products?.slice(size) ?? []}
+        rankFrom={size + 1}
+        loggingPage={'TRENDING'}
+      />
       {hotDeals && (
         <RecommendationProduct
           label="추천 핫딜"
