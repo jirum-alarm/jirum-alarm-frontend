@@ -45,7 +45,7 @@ async function ProductDetailLayout({
             <Suspense
               fallback={<div className="relative aspect-square w-full rounded-b-3xl bg-gray-100" />}
             >
-              <ProductDetailImage productId={productId} />
+              <ProductDetailImage productId={productId} fill />
             </Suspense>
           </div>
         </div>

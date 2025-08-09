@@ -40,7 +40,7 @@ export default async function DesktopProductDetailLayout({
               className="relative aspect-square flex-1 basis-1/2 overflow-hidden rounded-[20px] border border-gray-200"
               style={{ contain: 'layout paint', contentVisibility: 'auto' }}
             >
-              <ProductDetailImage productId={productId} />
+              <ProductDetailImage productId={productId} fill={false} />
             </div>
             <ProductInfo productId={productId} isUserLogin={isUserLogin} />
           </ProductInfoFetcher>
