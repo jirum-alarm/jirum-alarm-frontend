@@ -30,7 +30,7 @@ const Banner = () => {
           style={{ y }}
           className="aspect-[240/340] object-contain lg:object-right"
           src="/assets/images/banner.png"
-          alt="banner"
+          alt="지름알림 화면"
           width={956}
           height={1360}
         />
