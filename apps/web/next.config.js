@@ -1,4 +1,3 @@
-/* eslint-disable import/order */
 const runtimeCaching = require('next-pwa/cache');
 const withPWA = require('next-pwa')({
   dest: 'public',
@@ -11,7 +10,6 @@ const withPWA = require('next-pwa')({
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
-/* eslint-enable import/order */
 
 const nextConfig = withPWA({
   output: 'standalone',
@@ -89,8 +87,8 @@ const nextConfig = withPWA({
         hostname: 'cdn.jirum-alarm.com',
       },
     ],
-    deviceSizes: [320, 480, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 190, 256, 300, 384],
+    deviceSizes: [320, 640, 1024, 1280],
+    imageSizes: [16, 256],
     minimumCacheTTL: 31536000,
     formats: ['image/avif', 'image/webp'],
     contentSecurityPolicy: "default-src 'self'; img-src 'self' data: cdn.jirum-alarm.com;",
