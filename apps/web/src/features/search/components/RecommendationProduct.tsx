@@ -1,7 +1,7 @@
 'use client';
 
 import { EVENT } from '@/constants/mixpanel';
-import HorizontalProductCarousel from '@/features/carousel/HorizontalProductCarousel';
+import HorizontalProductCarousel from '@/features/products/components/carousel/ProductCarouselList';
 import { IProduct } from '@/graphql/interface';
 
 export default function RecommendationProduct({

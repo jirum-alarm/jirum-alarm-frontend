@@ -1,3 +1,5 @@
+'use client';
+
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -34,20 +36,11 @@ export const useSearchInputViewModel = () => {
     if (event.key === 'Enter') {
       router.push(`/search?keyword=${keyword}`);
 
-      // TODO: Need GTM Migration
-      // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
-      //   keyword,
-      //   type: EVENT.PRODUCT_SEARCH.TYPE.INPUT,
-      //   page: EVENT.PAGE.SEARCH,
-      // });
-
       setRecentKeyord(keyword);
     }
   };
   const handleReset = () => {
     setKeyword('');
-
-    // router.push(`/search`);
   };
 
   const handleGoHome = () => {
