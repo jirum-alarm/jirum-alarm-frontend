@@ -1,17 +1,25 @@
 'use client';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 
+import { ProductQueries } from '@/entities/product';
 import { cn } from '@/lib/cn';
 
 interface ViewerCountProps {
-  count: number;
+  productId: number;
 }
 
-export const ViewerCount = ({ count }: ViewerCountProps) => {
+export const ViewerCount = ({ productId }: ViewerCountProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false });
+
+  const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+
+  const count = product.viewCount;
+
+  if (count < 10) return null;
 
   return (
     <>

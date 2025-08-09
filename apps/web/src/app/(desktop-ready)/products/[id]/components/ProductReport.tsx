@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
 
@@ -9,9 +9,11 @@ import { useToast } from '@/components/common/Toast';
 import { ProductQueries } from '@/entities/product';
 import useRedirectIfNotLoggedIn from '@/features/auth/useRedirectIfNotLoggedIn';
 import { cn } from '@/lib/cn';
-import { ProductQuery } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
-const ProductReport = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
+
+const ProductReport = ({ productId }: { productId: number }) => {
+  const { data: product } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
+
   return (
     <div
       className={cn(
@@ -25,7 +27,7 @@ const ProductReport = ({ product }: { product: NonNullable<ProductQuery['product
       ) : (
         <>
           <span className="text-sm text-gray-600">혹시 판매가 종료된 상품인가요?</span>
-          <ProductReportModal productId={+product.id} />
+          <ProductReportModal productId={productId} />
         </>
       )}
     </div>
@@ -36,7 +38,7 @@ export default ProductReport;
 
 const ProductReportModal = ({ productId }: { productId: number }) => {
   const queryClient = useQueryClient();
-  const productKey = ProductQueries.product({ id: productId }).queryKey;
+  const productKey = ProductQueries.productStats({ id: productId }).queryKey;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { toast } = useToast();
   const { checkAndRedirect } = useRedirectIfNotLoggedIn();

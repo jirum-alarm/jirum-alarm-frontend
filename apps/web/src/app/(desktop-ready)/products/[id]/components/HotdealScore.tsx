@@ -1,17 +1,22 @@
 'use client';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion, useAnimation } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
 import { Info } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
+import { ProductQueries } from '@/entities/product';
 import HotdealBadge from '@/features/products/components/HotdealBadge';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
-import { ProductQuery } from '@/shared/api/gql/graphql';
 
-const HotdealScore = ({ product }: { product: NonNullable<ProductQuery['product']> }) => {
+const HotdealScore = ({ productId }: { productId: number }) => {
   const isHydrated = useIsHydrated();
+
+  const { data: product } = useSuspenseQuery(
+    ProductQueries.productAdditionalInfo({ id: productId }),
+  );
 
   const hotDealIndex = product.hotDealIndex;
   return (

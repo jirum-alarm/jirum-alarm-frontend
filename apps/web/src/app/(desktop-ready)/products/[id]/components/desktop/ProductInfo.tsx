@@ -1,6 +1,12 @@
+'use client';
+
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { Suspense } from 'react';
+
 import Button from '@/components/common/Button';
 import Jirume from '@/components/common/icons/Jirume';
 import ShareButton from '@/components/ShareButton';
+import { ProductQueries } from '@/entities/product';
 import HotdealBadge from '@/features/products/components/HotdealBadge';
 import { cn } from '@/lib/cn';
 import { ProductQuery } from '@/shared/api/gql/graphql';
@@ -11,22 +17,22 @@ import RecommendButton from '../RecommendButton';
 
 import ViewerCount from './ViewerCount';
 
-type Product = NonNullable<ProductQuery['product']>;
-
 export default function ProductInfo({
-  product,
+  productId,
   isUserLogin,
 }: {
-  product: Product;
+  productId: number;
   isUserLogin: boolean;
 }) {
+  const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+
   const priceTextHasWon = product.price?.includes('원');
   const priceWithoutWon = product.price ? product.price.replace('원', '').trim() : null;
 
   const shareTitle = `${product.title} | 지름알림`;
 
   return (
-    <section className="flex flex-1 flex-col justify-between pl-4">
+    <section className="flex flex-1 basis-1/2 flex-col justify-between pl-3">
       <div>
         <div className="h-0.5 w-full bg-gray-600" />
         <div className="flex items-start justify-between gap-x-5 py-4">
@@ -70,7 +76,7 @@ export default function ProductInfo({
           </div>
 
           <div>
-            <RecommendButton product={product} />
+            <RecommendButton productId={productId} />
           </div>
         </div>
         {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
@@ -101,7 +107,9 @@ export default function ProductInfo({
       </div>
       <div className="flex w-full gap-x-4">
         <div className="flex h-[48px] items-center">
-          <LikeButton product={product} isUserLogin={isUserLogin} />
+          <Suspense>
+            <LikeButton productId={productId} isUserLogin={isUserLogin} />
+          </Suspense>
         </div>
         <a href={product.detailUrl ?? ''} className="block flex-1">
           <Button className="h-[48px] w-full px-6 text-base font-semibold">구매하러 가기</Button>

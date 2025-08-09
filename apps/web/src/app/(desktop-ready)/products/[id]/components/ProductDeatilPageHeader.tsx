@@ -12,11 +12,7 @@ import { ProductQueries } from '@/entities/product';
 import Link from '@/features/Link';
 
 export default function ProductDetailPageHeader({ productId }: { productId: number }) {
-  const {
-    data: { product },
-  } = useSuspenseQuery(ProductQueries.product({ id: productId }));
-
-  if (!product) notFound();
+  const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
 
   const title = `${product.title} | 지름알림`;
 

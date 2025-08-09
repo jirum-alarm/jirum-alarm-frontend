@@ -30,7 +30,7 @@ export default function HotdealGuide({
 
   const parsedGuides = productGuides?.filter((guide) => guide.title && guide.content);
 
-  const needsExpansion = parsedGuides?.length >= 3 && !fixExpanded;
+  const isCollapsed = !fixExpanded && !isExpanded;
 
   if (!parsedGuides?.length) {
     return;
@@ -45,19 +45,19 @@ export default function HotdealGuide({
         <div
           ref={guidesRef}
           className={cn('relative flex flex-col gap-y-4 break-all px-3', {
-            'max-h-64 overflow-y-hidden': !isExpanded,
+            'max-h-64 overflow-y-hidden': isCollapsed,
           })}
         >
           {parsedGuides?.map((guide, i) => (
             <HotdealGuideItem key={`${guide.id}_${i}`} guide={guide} />
           ))}
-          {needsExpansion && !isExpanded && (
+          {isCollapsed && (
             <div className="absolute bottom-0 left-0 right-0 z-10 h-16 w-full bg-gradient-to-t from-white via-white/80 to-transparent" />
           )}
-          {(!needsExpansion || isExpanded) && (
+          {!isCollapsed && (
             <div
               className={cn('mt-4 rounded-lg bg-secondary-50 p-3', {
-                'mb-4': isExpanded || !needsExpansion,
+                'mb-4': !isCollapsed,
               })}
             >
               <span className="text-[13px] leading-[16px] text-gray-600">
@@ -69,7 +69,7 @@ export default function HotdealGuide({
         </div>
         <div
           className={cn('relative flex h-16 items-center justify-center', {
-            hidden: !needsExpansion || isExpanded,
+            hidden: !isCollapsed,
           })}
         >
           <Button
@@ -78,10 +78,9 @@ export default function HotdealGuide({
             onClick={handleExpand}
             className={cn(
               'h-[32px] w-[104px] text-sm font-medium transition-opacity duration-300 ease-in-out',
-              needsExpansion && !isExpanded ? 'opacity-100' : 'pointer-events-none opacity-0',
+              isCollapsed ? 'opacity-100' : 'pointer-events-none opacity-0',
             )}
-            aria-hidden={!(needsExpansion && !isExpanded)}
-            tabIndex={needsExpansion && !isExpanded ? 0 : -1}
+            tabIndex={isCollapsed ? 0 : -1}
           >
             자세히 보기
           </Button>

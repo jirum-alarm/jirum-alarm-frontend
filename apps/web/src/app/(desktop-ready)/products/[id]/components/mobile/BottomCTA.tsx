@@ -1,24 +1,30 @@
+'use client';
+
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import Button from '@/components/common/Button';
 import TopButton from '@/components/TopButton';
-import { ProductQuery } from '@/shared/api/gql/graphql';
+import { ProductQueries } from '@/entities/product';
 
 import LikeButton from '../LikeButton';
 
 export default function BottomCTA({
-  product,
+  productId,
   isUserLogin,
 }: {
-  product: NonNullable<ProductQuery['product']>;
+  productId: number;
   isUserLogin: boolean;
 }) {
+  const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+
   return (
     <div className="fixed bottom-0 z-40 flex h-[64px] w-full max-w-screen-mobile-max gap-x-4 border-t border-gray-100 bg-white px-5 py-2">
       <TopButton />
       <div className="flex h-[48px] items-center">
-        <LikeButton product={product} isUserLogin={isUserLogin} />
+        <LikeButton productId={productId} isUserLogin={isUserLogin} />
       </div>
       <a
-        href={product.detailUrl ?? ''}
+        href={product?.detailUrl ?? ''}
         // onClick={handleClickPurchaseLinkBrowse}
         className="block flex-1"
       >

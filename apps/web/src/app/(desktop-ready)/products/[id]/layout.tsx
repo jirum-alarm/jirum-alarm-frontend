@@ -12,21 +12,24 @@ const ProductDetailLayout = async ({
   children: React.ReactNode;
 }) => {
   const { id } = await params;
-  return (
-    <DeviceSpecific
-      mobile={
-        <BasicLayout header={<ProductDetailPageHeader productId={+id} />}>{children}</BasicLayout>
-      }
-      desktop={
-        <>
-          <div className="mx-auto mt-[56px] grid max-w-screen-layout-max grid-cols-12 gap-x-6 pt-11">
-            <div className="col-span-10 col-start-2">{children}</div>
-          </div>
-          <NoticeProfitLink />
-        </>
-      }
-    />
-  );
+
+  const renderMobile = () => {
+    return (
+      <BasicLayout header={<ProductDetailPageHeader productId={+id} />}>{children}</BasicLayout>
+    );
+  };
+  const renderDesktop = () => {
+    return (
+      <>
+        <div className="mx-auto mt-[56px] grid max-w-screen-layout-max grid-cols-12 gap-x-6 pt-11">
+          <div className="col-span-10 col-start-2">{children}</div>
+        </div>
+        <NoticeProfitLink />
+      </>
+    );
+  };
+
+  return <DeviceSpecific mobile={renderMobile} desktop={renderDesktop} />;
 };
 
 export default ProductDetailLayout;

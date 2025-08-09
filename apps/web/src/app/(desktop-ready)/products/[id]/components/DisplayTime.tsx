@@ -6,5 +6,5 @@ import { displayTime } from '@/util/displayTime';
 export default function DisplayTime({ time }: { time: Date }) {
   const isHydrated = useIsHydrated();
 
-  return isHydrated ? displayTime(time) : '';
+  return <span suppressHydrationWarning>{isHydrated ? displayTime(time) : ''}</span>;
 }
