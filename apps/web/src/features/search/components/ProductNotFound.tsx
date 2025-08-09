@@ -1,13 +1,13 @@
-import { IllustError } from '@/components/common/icons';
+import { ErrorIllust } from '@/components/common/icons/Illust';
 import Link from '@/features/Link';
 import { useHotDealsRandom } from '@/features/products';
-import { useMe } from '@/features/users';
 import useMyRouter from '@/hooks/useMyRouter';
+import { useUser } from '@/hooks/useUser';
 
 import RecommendationProduct from './RecommendationProduct';
 
 const ProductNotFound = () => {
-  const userResult = useMe();
+  const { me } = useUser();
   const router = useMyRouter();
 
   const { data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
@@ -21,31 +21,20 @@ const ProductNotFound = () => {
 
   const handleShowMoreClick = () => {
     router.push(`/?categoryId=0`);
-
-    // TODO: Need GTM Migration
-    // mp?.track(EVENT.SHOW_MORE_HOT_DEALS_CLICK.NAME, {
-    //   page: EVENT.PAGE.SEARCH_NOT_FOUND,
-    // });
   };
-
-  if (userResult.loading) {
-    return <></>;
-  }
 
   return (
     <div className="flex h-full w-full animate-fade-in flex-col items-start justify-center pt-11">
       <div className="w-full pb-8 text-center">
         <div className="flex justify-center pb-4">
-          <IllustError />
+          <ErrorIllust />
         </div>
         <p className="pb-2 text-2xl font-semibold text-gray-900">검색 결과가 없어요.</p>
         <p className="text-gray-500">
-          {userResult.data?.me
-            ? '키워드를 등록하고 알림을 받아보세요.'
-            : '다른 키워드로 검색해보세요.'}
+          {me ? '키워드를 등록하고 알림을 받아보세요.' : '다른 키워드로 검색해보세요.'}
         </p>
       </div>
-      {userResult.data?.me && (
+      {me && (
         <div className="w-full pb-16 text-center">
           <button
             onClick={handleAddKeywordClick}
