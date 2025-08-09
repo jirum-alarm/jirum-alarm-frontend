@@ -3,7 +3,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { ProductQueries } from '@/entities/product';
-import HorizontalProductCarousel from '@/features/carousel/HorizontalProductCarousel';
+import HorizontalProductCarousel from '@/features/products/components/carousel/ProductCarouselList';
 import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 
 interface ProductImageCardListProps {
