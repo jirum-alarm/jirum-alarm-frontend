@@ -11,7 +11,7 @@ export default async function ProductGuidesFetcher({
 }) {
   const queryClient = new QueryClient();
 
-  await queryClient.fetchQuery(ProductQueries.productGuide({ productId }));
+  await queryClient.prefetchQuery(ProductQueries.productGuideServer({ productId }));
 
   return <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>;
 }

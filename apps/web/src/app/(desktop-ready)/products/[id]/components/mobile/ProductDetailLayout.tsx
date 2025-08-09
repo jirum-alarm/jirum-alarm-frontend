@@ -1,81 +1,126 @@
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { getAccessToken } from '@/app/actions/token';
-import { ProductQuery } from '@/shared/api/gql/graphql';
+import SectionHeader from '@/components/SectionHeader';
+import HorizontalProductListSkeleton from '@/features/products/components/skeleton/HorizontalProductListSkeleton';
 
 import CommentSection from '../comment/CommentSection';
 import CommunityReaction from '../CommunityReaction';
+import ProductAdditionalInfoFetcher from '../fetcher/ProductAdditionalInfoFetcher';
+import ProductGuidesFetcher from '../fetcher/ProductGuidesFetcher';
+import ProductInfoFetcher from '../fetcher/ProductInfoFetcher';
 import HotdealGuide from '../HotdealGuide';
 import HotdealScore from '../HotdealScore';
 import { NoticeProfitLink } from '../NoticeProfitUrl';
 import PopularProductsContainer from '../PopularProudctsContainer';
 import ProductDetailImage from '../ProductDetailImage';
 import ProductExpiredBanner from '../ProductExpiredBanner';
-import ProductGuidesFetcher from '../ProductGuidesFetcher';
 import RelatedProductsContainer from '../RelatedProductsContainer';
 
 import BottomCTA from './BottomCTA';
 import ProductInfo from './ProductInfo';
 import { ViewerCount } from './ViewerCount';
 
-type Product = NonNullable<ProductQuery['product']>;
-
 async function ProductDetailLayout({
   productId,
-  product,
+  isUserLogin,
 }: {
-  product: Product;
   productId: number;
+  isUserLogin: boolean;
 }) {
-  const token = await getAccessToken();
-
-  const isUserLogin = !!token;
-
   return (
-    <>
-      {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
+    <ProductInfoFetcher productId={productId}>
+      <Suspense
+        fallback={<div className="sticky top-[56px] z-50 h-[48px] w-full bg-secondary-50" />}
+      >
+        <ViewerCount productId={productId} />
+      </Suspense>
+
       <main className="pt-[56px]">
         <div className="sticky top-0 -mb-6">
-          <ProductDetailImage
-            product={{
-              title: product.title,
-              thumbnail: product.thumbnail,
-              categoryId: product.categoryId,
-            }}
-          />
+          <div
+            className="relative aspect-square w-full"
+            style={{ contain: 'layout paint', contentVisibility: 'auto' }}
+          >
+            <Suspense
+              fallback={<div className="relative aspect-square w-full rounded-b-3xl bg-gray-100" />}
+            >
+              <ProductDetailImage productId={productId} />
+            </Suspense>
+          </div>
         </div>
+
         <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <div className="flex flex-col">
-            <ProductInfo product={product} />
+            <Suspense
+              fallback={
+                <div className="px-5">
+                  <div className="h-6 w-4/5 rounded bg-gray-100" />
+                  <div className="mt-3 h-5 w-20 rounded bg-gray-100" />
+                  <div className="mt-4 flex justify-between">
+                    <div className="h-6 w-24 rounded bg-gray-100" />
+                    <div className="h-8 w-[88px] rounded bg-gray-100" />
+                  </div>
+                </div>
+              }
+            >
+              <ProductInfo productId={productId} />
+            </Suspense>
+
             <ErrorBoundary fallback={<Hr />}>
               <Suspense fallback={<Hr />}>
-                <ProductExpiredBanner product={product} />
+                <ProductExpiredBanner productId={productId} />
               </Suspense>
             </ErrorBoundary>
+
             <div className="mb-12 mt-4 flex flex-col gap-y-9 px-5">
-              <ProductGuidesFetcher productId={productId}>
-                <HotdealGuide productId={productId} />
-              </ProductGuidesFetcher>
-              <CommunityReaction product={product} />
-              <HotdealScore product={product} />
+              <Suspense
+                fallback={
+                  <div className="h-[160px] rounded-[12px] border border-gray-100 bg-gray-50" />
+                }
+              >
+                <ProductGuidesFetcher productId={productId}>
+                  <HotdealGuide productId={productId} />
+                </ProductGuidesFetcher>
+              </Suspense>
+              <Suspense
+                fallback={
+                  <div className="h-[160px] rounded-[12px] border border-gray-100 bg-gray-50" />
+                }
+              >
+                <ProductAdditionalInfoFetcher productId={productId}>
+                  <CommunityReaction productId={productId} />
+                  <HotdealScore productId={productId} />
+                </ProductAdditionalInfoFetcher>
+              </Suspense>
             </div>
+
             <Hr />
-            <CommentSection productId={productId} isUserLogin={isUserLogin} />
+            <CommentSection productId={productId} />
             <Hr />
 
             <div className="mb-8 mt-7 flex flex-col gap-y-8 px-5">
-              {/* <ProductFeedback product={product} /> */}
-              <RelatedProductsContainer product={product} />
-              <PopularProductsContainer product={product} />
+              <RelatedProductsContainer productId={productId} />
+              <Suspense
+                fallback={
+                  <section>
+                    <SectionHeader shouldShowMobileUI={true} title="" />
+                    <HorizontalProductListSkeleton />
+                  </section>
+                }
+              >
+                <PopularProductsContainer productId={productId} />
+              </Suspense>
             </div>
+
             <NoticeProfitLink />
           </div>
+
           <div className="h-[64px] bg-gray-100" />
-          <BottomCTA product={product} isUserLogin={isUserLogin} />
+          <BottomCTA productId={productId} isUserLogin={isUserLogin} />
         </div>
       </main>
-    </>
+    </ProductInfoFetcher>
   );
 }
 export default ProductDetailLayout;

@@ -1,16 +1,20 @@
+'use client';
+
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import Jirume from '@/components/common/icons/Jirume';
+import { ProductQueries } from '@/entities/product';
 import HotdealBadge from '@/features/products/components/HotdealBadge';
 import { cn } from '@/lib/cn';
-import { ProductQuery } from '@/shared/api/gql/graphql';
 
 import DisplayTime from '../DisplayTime';
 import RecommendButton from '../RecommendButton';
 
 import HotdealGuideModal from './HotDealGuideModal';
 
-type Product = NonNullable<ProductQuery['product']>;
+export default function ProductInfo({ productId }: { productId: number }) {
+  const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
 
-export default function ProductInfo({ product }: { product: Product }) {
   const priceTextHasWon = product.price?.includes('원');
   const priceWithoutWon = product.price ? product.price.replace('원', '').trim() : null;
 
@@ -60,7 +64,7 @@ export default function ProductInfo({ product }: { product: Product }) {
               </p>
             </div>
             <div>
-              <RecommendButton product={product} />
+              <RecommendButton productId={productId} />
             </div>
           </div>
         </div>

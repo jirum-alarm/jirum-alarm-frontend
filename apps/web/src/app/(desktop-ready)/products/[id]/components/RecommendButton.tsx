@@ -1,20 +1,19 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
 import Button from '@/components/common/Button';
 import { Thumbsup } from '@/components/common/icons';
 import { ProductQueries } from '@/entities/product';
 import useRedirectIfNotLoggedIn from '@/features/auth/useRedirectIfNotLoggedIn';
 import { cn } from '@/lib/cn';
-import { ProductQuery, UserLikeTarget } from '@/shared/api/gql/graphql';
+import { UserLikeTarget } from '@/shared/api/gql/graphql';
 import { LikeService } from '@/shared/api/like/like.service';
 
-type Product = NonNullable<ProductQuery['product']>;
-
-function RecommendButton({ product }: { product: Product }) {
+function RecommendButton({ productId }: { productId: number }) {
+  const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
   const queryClient = useQueryClient();
-  const productKey = ProductQueries.product({ id: +product.id }).queryKey;
+  const productKey = ProductQueries.productStats({ id: productId }).queryKey;
 
   const { mutate: addUserLikeOrDislike } = useMutation({
     mutationFn: LikeService.addUserLikeOrDislike,
@@ -27,16 +26,16 @@ function RecommendButton({ product }: { product: Product }) {
 
   const handleUserLikeClick = () => {
     if (checkAndRedirect()) return;
-    if (product.isMyLike) {
+    if (productStats?.isMyLike) {
       addUserLikeOrDislike({
         target: UserLikeTarget.Product,
-        targetId: +product.id,
+        targetId: productId,
         isLike: null,
       });
     } else {
       addUserLikeOrDislike({
         target: UserLikeTarget.Product,
-        targetId: +product.id,
+        targetId: productId,
         isLike: true,
       });
     }
@@ -49,12 +48,12 @@ function RecommendButton({ product }: { product: Product }) {
         `flex h-[36px] items-center justify-center gap-x-1 rounded-full bg-white px-3.5 text-gray-700`,
         {
           'border border-secondary-500 font-semibold text-secondary-700':
-            product.isMyLike !== null && product.isMyLike,
+            productStats?.isMyLike !== null && productStats?.isMyLike,
         },
       )}
       onClick={handleUserLikeClick}
     >
-      <span>{product.isMyLike ? '추천 완료' : '상품 추천'}</span>
+      <span>{productStats?.isMyLike ? '추천 완료' : '상품 추천'}</span>
       <Thumbsup width={18} height={18} fill="#F2F4F7" />
     </Button>
   );

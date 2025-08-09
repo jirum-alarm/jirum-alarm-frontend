@@ -3,8 +3,8 @@ import { BubbleChatFill } from '@/components/common/icons';
 const CommentListSkeleton = () => {
   return (
     <>
-      <div className="flex h-full w-full items-center justify-center">
-        <div className="flex h-40 flex-col items-center gap-y-3">
+      <div className="flex h-full w-full items-center justify-center pt-6 pc:pb-10">
+        <div className="flex flex-col items-center gap-y-3">
           <BubbleChatFill />
           <div className="flex flex-col items-center gap-y-1">
             <p className="font-semibold text-gray-700">첫 후기를 남겨주세요!</p>

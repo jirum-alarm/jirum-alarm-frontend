@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { checkDevice } from '@/app/actions/agent';
 import { getAccessToken } from '@/app/actions/token';
 import Button from '@/components/common/Button';
+import withCheckDevice from '@/components/hoc/withCheckDevice';
 import DeviceSpecific from '@/components/layout/DeviceSpecific';
 import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import Link from '@/features/Link';
@@ -15,16 +16,14 @@ import CommentInput from '../../comment/components/CommentInput';
 import CommentList from './CommentList';
 import CommentListSkeleton from './CommentListSkeleton';
 
-export default async function CommentSection({
-  productId,
-  isUserLogin,
-}: {
-  productId: number;
-  isUserLogin: boolean;
-}) {
+const CommentListWithDevice = withCheckDevice(CommentList);
+
+export default async function CommentSection({ productId }: { productId: number }) {
   const queryClient = new QueryClient();
   const { isMobile } = await checkDevice();
   const accessToken = await getAccessToken();
+  const isUserLogin = !!accessToken;
+
   let me: User | undefined;
   if (accessToken) {
     const { me: user } = await AuthService.getMeServer();
@@ -38,6 +37,21 @@ export default async function CommentSection({
   );
   const comments = pages.flatMap(({ comments }) => comments);
   const hasComments = comments.length > 0;
+
+  const renderMobile = () => {
+    return (
+      <div className="mt-8 w-full px-12">
+        <Link href={`/products/${productId}/comment`}>
+          <Button className="bg-gray-100">{hasComments ? '댓글 보기' : '댓글 작성하기'}</Button>
+        </Link>
+      </div>
+    );
+  };
+
+  const renderDesktop = () => {
+    return <CommentInput productId={productId} isUserLogin={isUserLogin} />;
+  };
+
   return (
     <section className="mb-10 mt-4 flex flex-col pc:my-0">
       <div className="flex h-[56px] w-full items-center px-5 py-4">
@@ -46,21 +60,10 @@ export default async function CommentSection({
       <>
         <HydrationBoundary state={dehydrate(queryClient)}>
           <Suspense fallback={<CommentListSkeleton />}>
-            <CommentList productId={productId} isMobile={isMobile} me={me} />
+            <CommentListWithDevice productId={productId} me={me} />
           </Suspense>
         </HydrationBoundary>
-        <DeviceSpecific
-          mobile={
-            <div className="mt-5 w-full px-12">
-              <Link href={`/products/${productId}/comment`}>
-                <Button className="bg-gray-100">
-                  {hasComments ? '댓글 보기' : '댓글 작성하기'}
-                </Button>
-              </Link>
-            </div>
-          }
-          desktop={<CommentInput productId={productId} isUserLogin={isUserLogin} />}
-        />
+        <DeviceSpecific mobile={renderMobile} desktop={renderDesktop} />
       </>
     </section>
   );

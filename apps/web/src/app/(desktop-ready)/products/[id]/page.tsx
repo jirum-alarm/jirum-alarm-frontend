@@ -1,10 +1,13 @@
 import { Metadata } from 'next';
 
+import { getAccessToken } from '@/app/actions/token';
+import DeviceSpecific from '@/components/layout/DeviceSpecific';
 import { SERVICE_URL } from '@/constants/env';
 import { defaultMetadata } from '@/constants/metadata';
 import { ProductService } from '@/shared/api/product';
 
-import ProductDetailContainer from './components/ProductDetailContainer';
+import DesktopProductDetailLayout from './components/desktop/ProductDetailLayout';
+import ProductDetailLayout from './components/mobile/ProductDetailLayout';
 
 export async function generateMetadata({
   params,
@@ -13,12 +16,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
 
-  const { product } = await ProductService.getProductServer({ id: +id });
+  const product = await ProductService.getProductInfoServer({ id: +id });
   if (!product) {
     return defaultMetadata;
   }
 
-  const productGuides = await ProductService.getProductGuides({
+  const productGuides = await ProductService.getProductGuidesServer({
     productId: +product.id,
   });
 
@@ -73,5 +76,16 @@ export async function generateMetadata({
 
 export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  return <ProductDetailContainer productId={+id} />;
+
+  const token = await getAccessToken();
+  const isUserLogin = !!token;
+
+  const renderMobile = () => {
+    return <ProductDetailLayout productId={+id} isUserLogin={isUserLogin} />;
+  };
+  const renderDesktop = () => {
+    return <DesktopProductDetailLayout productId={+id} isUserLogin={isUserLogin} />;
+  };
+
+  return <DeviceSpecific mobile={renderMobile} desktop={renderDesktop} />;
 }
