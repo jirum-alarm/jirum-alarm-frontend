@@ -19,7 +19,7 @@ const RecommendContainer = ({ isMobile }: { isMobile: boolean }) => {
 
   return (
     <>
-      <div className="sticky top-[56px] z-[50] w-full bg-white px-5 py-2 pc:flex pc:justify-center pc:py-3">
+      <div className="sticky top-[56px] z-40 w-full bg-white px-5 py-2 pc:flex pc:justify-center pc:py-3">
         <RecommendedProductTabs
           productKeywords={productKeywords}
           selectedKeyword={recommendedKeyword}
