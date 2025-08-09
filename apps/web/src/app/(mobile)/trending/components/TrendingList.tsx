@@ -3,7 +3,7 @@
 import { memo, useEffect, useRef } from 'react';
 import { useSwiper } from 'swiper/react';
 
-import { ProductTrendingImageCard } from '@/features/products';
+import ProductGridList from '@/features/products/components/grid/ProductGridList';
 import RecommendationProduct from '@/features/search/components/RecommendationProduct';
 import useScreen from '@/hooks/useScreenSize';
 
@@ -32,16 +32,7 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
 
   return (
     <div ref={ref} className="flex flex-col gap-y-8">
-      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
-        {products?.slice(0, size).map((product, i) => (
-          <ProductTrendingImageCard
-            key={product.id}
-            product={product}
-            rank={i + 1}
-            logging={{ page: 'TRENDING' }}
-          />
-        ))}
-      </div>
+      <ProductGridList products={products?.slice(0, size) ?? []} loggingPage={'TRENDING'} />
       {liveProducts && (
         <RecommendationProduct
           label={`‘${categoryName}’ 실시간 핫딜`}
@@ -51,16 +42,7 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
         />
       )}
 
-      <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
-        {products?.slice(size).map((product, i) => (
-          <ProductTrendingImageCard
-            key={product.id}
-            product={product}
-            rank={i + size + 1}
-            logging={{ page: 'TRENDING' }}
-          />
-        ))}
-      </div>
+      <ProductGridList products={products?.slice(size) ?? []} loggingPage={'TRENDING'} />
       {hotDeals && (
         <RecommendationProduct
           label="추천 핫딜"
@@ -69,9 +51,6 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
           nested
         />
       )}
-      {/* <div className="flex w-full items-center justify-center pb-6 pt-3" ref={loadingCallbackRef}>
-        {isFetchingNextPage && <LoadingSpinner />}
-      </div> */}
     </div>
   );
 };
