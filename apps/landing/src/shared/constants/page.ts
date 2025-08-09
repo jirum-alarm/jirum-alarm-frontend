@@ -1,6 +1,5 @@
 export enum PAGE {
-  BASE = 'http://localhost:3000',
-  // BASE = 'https://jirum-alarm.com',
+  BASE = 'https://jirum-alarm.com',
 
   HOME = '/',
   TRENDING = '/trending',
@@ -33,6 +32,5 @@ export enum PAGE {
 
   LIKE = '/like',
 
-  // LANDING = 'https://about-us.jirum-alarm.com/',
-  LANDING = 'http://localhost:3100',
+  LANDING = 'https://about-us.jirum-alarm.com/',
 }
