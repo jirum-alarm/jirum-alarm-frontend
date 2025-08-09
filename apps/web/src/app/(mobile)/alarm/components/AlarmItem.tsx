@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { memo, useState } from 'react';
 
+import DisplayTime from '@/app/(desktop-ready)/products/[id]/components/DisplayTime';
 import { PAGE } from '@/constants/page';
 import Link from '@/features/Link';
 import { INotification } from '@/graphql/interface';
@@ -45,7 +46,7 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
               </>
             )}
             <span className="text-xs text-gray-400">
-              {isHydrated ? displayTime(createdAt) : ''}
+              <DisplayTime time={createdAt} />
             </span>
           </div>
         </div>
