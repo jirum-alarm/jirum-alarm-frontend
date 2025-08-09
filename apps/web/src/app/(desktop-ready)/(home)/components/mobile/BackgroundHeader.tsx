@@ -10,7 +10,9 @@ import KakaoOpenChatLink from '../banner/KakaoOpenChatLink';
 import BannerSwiper from './BannerSwiper';
 
 const BackgroundHeader = async () => {
-  const { isSafari } = await checkDevice();
+  const { isSafari, isMobile, isJirumAlarmApp } = await checkDevice();
+
+  const isAppDownloadVisible = isMobile && !isJirumAlarmApp;
 
   return (
     <div
@@ -28,10 +30,10 @@ const BackgroundHeader = async () => {
           <SearchLinkButton color="#FFF" />
         </header>
         <BannerSwiper>
-          <AppDownloadCTA />
+          {isAppDownloadVisible && <AppDownloadCTA />}
           <KakaoOpenChatLink />
           <AboutLink />
-          <AppDownloadCTA />
+          {isAppDownloadVisible && <AppDownloadCTA />}
           <KakaoOpenChatLink />
           <AboutLink />
         </BannerSwiper>
