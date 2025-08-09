@@ -6,11 +6,19 @@ interface MenuLinkProps {
   label: string;
   isActive: boolean;
   isInverted: boolean;
+  prefetch?: boolean;
 }
 
-export default function MenuLink({ href, label, isActive, isInverted }: MenuLinkProps) {
+export default function NavLink({
+  href,
+  label,
+  isActive,
+  isInverted,
+  prefetch = true,
+}: MenuLinkProps) {
   return (
     <Link
+      prefetch={prefetch}
       href={href}
       className={cn('relative flex h-full items-center text-lg font-semibold', {
         'text-white': isActive,
