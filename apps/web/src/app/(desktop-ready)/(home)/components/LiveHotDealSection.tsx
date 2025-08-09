@@ -11,7 +11,7 @@ const LiveHotDealSection = () => {
     <div className="px-5 pc:pt-11">
       <SectionHeader title="실시간 핫딜" />
       <ApiErrorBoundary>
-        <Suspense fallback={<GridProductListSkeleton length={12} />}>
+        <Suspense fallback={<GridProductListSkeleton length={20} />}>
           <LiveHotDealList />
         </Suspense>
       </ApiErrorBoundary>

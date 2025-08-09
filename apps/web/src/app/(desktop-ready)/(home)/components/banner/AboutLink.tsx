@@ -1,10 +1,11 @@
 import withCheckDevice from '@/components/hoc/withCheckDevice';
+import { LANDING_URL } from '@/constants/env';
 
 import BannerItem from './BannerItem';
 import landing from './images/landing.png';
 
 const props = {
-  href: 'https://about-us.jirum-alarm.com/',
+  href: LANDING_URL,
   title: (
     <>
       <span>지름알림, </span>
