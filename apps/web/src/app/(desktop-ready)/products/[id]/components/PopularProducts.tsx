@@ -3,18 +3,16 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { ProductQueries } from '@/entities/product';
-import HorizontalProductCarousel from '@/features/carousel/HorizontalProductCarousel';
-import { ProductQuery, ThumbnailType } from '@/shared/api/gql/graphql';
+import HorizontalProductCarousel from '@/features/products/components/carousel/ProductCarouselList';
+import { ThumbnailType } from '@/shared/api/gql/graphql';
 
-export default function PopularProducts({
-  product,
-}: {
-  product: NonNullable<ProductQuery['product']>;
-}) {
+export default function PopularProducts({ productId }: { productId: number }) {
+  const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+
   const result = useSuspenseQuery(
     ProductQueries.products({
       limit: 20,
-      categoryId: product.categoryId ?? 0,
+      categoryId: product?.categoryId ?? 0,
       thumbnailType: ThumbnailType.Mall,
       isEnd: false,
     }),

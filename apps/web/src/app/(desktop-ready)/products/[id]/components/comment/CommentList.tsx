@@ -7,7 +7,7 @@ import useComment from '../../comment/hooks/useComment';
 
 import CommentListSkeleton from './CommentListSkeleton';
 
-export default function CommentList({
+function CommentList({
   productId,
   isMobile,
   me,
@@ -55,3 +55,5 @@ export default function CommentList({
     </div>
   );
 }
+
+export default CommentList;

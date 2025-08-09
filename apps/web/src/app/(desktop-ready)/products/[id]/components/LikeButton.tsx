@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import Button from '@/components/common/Button';
@@ -12,27 +12,28 @@ import { WishlistQueries } from '@/entities/wishlist';
 import Link from '@/features/Link';
 import { useDevice } from '@/hooks/useDevice';
 import useMyRouter from '@/hooks/useMyRouter';
-import { ProductQuery } from '@/shared/api/gql/graphql';
+import { useFragment } from '@/shared/api/gql';
+import { ProductStatsFragmentDoc } from '@/shared/api/gql/graphql';
 import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
 import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 
 export default function LikeButton({
-  product,
+  productId,
   isUserLogin,
 }: {
-  product: NonNullable<ProductQuery['product']>;
+  productId: number;
   isUserLogin: boolean;
 }) {
   const { toast } = useToast();
 
-  const { isJirumAlarmApp } = useDevice();
-  const [isLiked, setIsLiked] = useState(product.isMyWishlist);
+  const { data: product } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
 
-  const productId = +product.id;
+  const { isJirumAlarmApp } = useDevice();
+  const [isLiked, setIsLiked] = useState(product?.isMyWishlist ?? false);
 
   const router = useMyRouter();
 
-  const productKey = ProductQueries.product({ id: productId }).queryKey;
+  const productKey = ProductQueries.productStats({ id: productId }).queryKey;
   const queryClient = useQueryClient();
 
   const { mutate: addWishlist } = useMutation({
@@ -112,10 +113,10 @@ export default function LikeButton({
     <Button
       variant="outlined"
       onClick={handleClickWishlist}
-      className="flex w-[48px] flex-col items-center justify-center border-gray-300 p-2"
+      className="flex flex-col items-center justify-center border-gray-300 p-2"
     >
       <Heart className="shrink-0" color="#98A2B3" isLiked={!!isLiked} />
-      <span className="text-[11px] leading-4 text-gray-800">찜하기</span>
+      <span className="shrink-0 text-[11px] leading-4 text-gray-800">찜하기</span>
     </Button>
   );
 }

@@ -3,17 +3,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { ProductQueries } from '@/entities/product';
-import HorizontalProductCarousel from '@/features/carousel/HorizontalProductCarousel';
-import { ProductQuery } from '@/shared/api/gql/graphql';
+import HorizontalProductCarousel from '@/features/products/components/carousel/ProductCarouselList';
 
-export default function RelatedProducts({
-  product,
-}: {
-  product: NonNullable<ProductQuery['product']>;
-}) {
-  const result = useSuspenseQuery(
-    ProductQueries.togetherViewed({ limit: 20, productId: +product.id }),
-  );
+export default function RelatedProducts({ productId }: { productId: number }) {
+  const result = useSuspenseQuery(ProductQueries.togetherViewed({ limit: 20, productId }));
   const products = result.data.togetherViewedProducts;
 
   if (!products?.length) {

@@ -4,14 +4,10 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { ProductQueries } from '@/entities/product';
-import { ProductQuery } from '@/shared/api/gql/graphql';
 
-type Product = NonNullable<ProductQuery['product']>;
-
-export default function ProductExpiredBanner({ product }: { product: Product }) {
-  const {
-    data: { reportUserNames },
-  } = useSuspenseQuery(ProductQueries.reportUserNames({ productId: +product.id }));
+export default function ProductExpiredBanner({ productId }: { productId: number }) {
+  const { data } = useSuspenseQuery(ProductQueries.reportUserNames({ productId }));
+  const reportUserNames = data.reportUserNames;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);

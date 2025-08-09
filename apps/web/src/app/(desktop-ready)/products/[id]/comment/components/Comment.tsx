@@ -21,20 +21,17 @@ export default function Comment({
   const isMyComment = `${comment.author?.id ?? '#no-author'}` === `${user?.id}`;
   const hasParentComment = !!comment.parentId;
 
+  const bgClass = isMyComment
+    ? hasParentComment
+      ? 'bg-primary-100'
+      : 'bg-primary-50'
+    : hasParentComment
+      ? 'bg-gray-100'
+      : 'bg-white';
+  const paddingClass = hasParentComment ? 'pl-8' : '';
+
   return (
-    <div
-      className={cn([
-        'flex flex-col px-5 py-4',
-        isMyComment
-          ? hasParentComment
-            ? 'bg-primary-100'
-            : 'bg-primary-50'
-          : hasParentComment
-            ? 'bg-gray-100'
-            : 'bg-white',
-        hasParentComment ? 'pl-8' : '',
-      ])}
-    >
+    <div className={cn('flex flex-col px-5 py-4', bgClass, paddingClass)}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-2">
           <span className="text-sm font-medium text-gray-600">{comment.author?.nickname}</span>

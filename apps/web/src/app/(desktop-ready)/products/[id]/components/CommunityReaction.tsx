@@ -1,26 +1,28 @@
 'use client';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion, useInView } from 'motion/react';
-import { useRef } from 'react';
+import { Suspense, useRef } from 'react';
 
 import { Info, Thumbsdown, Thumbsup } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
 import SectionHeader from '@/components/SectionHeader';
+import { ProductQueries } from '@/entities/product';
 import { cn } from '@/lib/cn';
-import { ProductQuery } from '@/shared/api/gql/graphql';
 
+import ProductStatsFetcher from './fetcher/ProductStatsFetcher';
 import ProductReport from './ProductReport';
 import ReactionKeywords from './ReactionKeywords';
 
 const nanSafe = (num: number) => (isNaN(num) ? 0 : num);
 
-export default function CommunityReaction({
-  product,
-}: {
-  product: NonNullable<ProductQuery['product']>;
-}) {
-  const positiveCount = product?.positiveCommunityReactionCount || 0;
-  const negativeCount = product?.negativeCommunityReactionCount || 0;
+export default function CommunityReaction({ productId }: { productId: number }) {
+  const { data: product } = useSuspenseQuery(
+    ProductQueries.productAdditionalInfo({ id: productId }),
+  );
+
+  const positiveCount = product?.positiveCommunityReactionCount ?? 0;
+  const negativeCount = product?.negativeCommunityReactionCount ?? 0;
   const allCount = positiveCount + negativeCount;
 
   const handleCommunityLinkClick = () => {
@@ -40,7 +42,9 @@ export default function CommunityReaction({
             <>
               커뮤니티 반응
               {!!product.positiveCommunityReactionCount && (
-                <span className="text-secondary-500">{product.positiveCommunityReactionCount}</span>
+                <span className="pl-2 text-secondary-500">
+                  {product.positiveCommunityReactionCount}
+                </span>
               )}
             </>
           }
@@ -74,12 +78,16 @@ export default function CommunityReaction({
           ) : (
             <NoReaction />
           )}
-          <ReactionKeywords
-            productId={+product.id}
-            provider={product.provider.nameKr}
-            url={product.url!}
-          />
-          <ProductReport product={product} />
+          <Suspense>
+            <ReactionKeywords
+              productId={productId}
+              provider={product.provider.nameKr}
+              url={product.url!}
+            />
+          </Suspense>
+          <Suspense>
+            <ProductReport productId={productId} />
+          </Suspense>
         </div>
       </section>
     </>
