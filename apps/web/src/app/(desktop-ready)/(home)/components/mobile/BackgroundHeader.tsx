@@ -1,8 +1,9 @@
 import { checkDevice } from '@/app/actions/agent';
-import { RoundedLogo } from '@/components/common/icons';
+import { IllustIcons, RoundedLogo } from '@/components/common/icons';
 import SearchLinkButton from '@/components/SearchLinkButton';
 import { cn } from '@/lib/cn';
 
+import AppDownloadCTA from '../AppDownloadCTA';
 import AboutLink from '../banner/AboutLink';
 import KakaoOpenChatLink from '../banner/KakaoOpenChatLink';
 
@@ -21,12 +22,16 @@ const BackgroundHeader = async () => {
       <div className="mx-auto max-w-screen-mobile-max">
         <header className="flex h-[56px] w-full items-center justify-between px-5 py-3">
           <div className="flex items-center gap-2">
-            <RoundedLogo />
+            <IllustIcons.IconLogo />
             <h2 className="text-lg font-bold text-slate-50">지름알림</h2>
           </div>
           <SearchLinkButton color="#FFF" />
         </header>
         <BannerSwiper>
+          <AppDownloadCTA />
+          <KakaoOpenChatLink />
+          <AboutLink />
+          <AppDownloadCTA />
           <KakaoOpenChatLink />
           <AboutLink />
         </BannerSwiper>

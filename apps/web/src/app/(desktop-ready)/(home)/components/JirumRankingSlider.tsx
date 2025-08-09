@@ -11,7 +11,6 @@ import { SwiperOptions } from 'swiper/types';
 
 import { ArrowLeft } from '@/components/common/icons';
 import { ProductQueries } from '@/entities/product';
-import { useCollectProduct } from '@/features/products';
 import { ProductRankingImageCard } from '@/features/products/components/ProductRankingImageCard';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
@@ -53,9 +52,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   const swiperRef = useRef<SwiperClass>(null);
   const [isInit, setIsInit] = useState(false);
 
-  const shouldShowSkeleton = useMemo(() => !isHydrated && !isInit, [isHydrated, isInit]);
-
-  const collectProduct = useCollectProduct();
+  const canRender = useMemo(() => isHydrated && isInit, [isHydrated, isInit]);
 
   const handleAfterInit = (swiper: SwiperClass) => {
     swiperRef.current = swiper;
@@ -81,13 +78,14 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           className="hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0 pc:flex"
           onClick={handleSlidePrev}
           disabled={index === 0}
+          name="이전"
         >
           <ArrowLeft className="mr-1 size-8 text-white" color="white" />
         </button>
         <motion.div
           className={cn('w-full overflow-visible pc:max-w-slider-max')}
           initial={{ opacity: 0 }}
-          animate={{ opacity: shouldShowSkeleton ? 0 : 1 }}
+          animate={{ opacity: canRender ? 1 : 0 }}
           transition={{ duration: 0.2 }}
         >
           <Swiper
@@ -108,7 +106,6 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
                   index={i}
                   product={product}
                   logging={{ page: 'HOME' }}
-                  collectProduct={collectProduct}
                 />
               </SwiperSlide>
             ))}
@@ -118,12 +115,13 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           className="hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0 pc:flex"
           onClick={handleSlideNext}
           disabled={index === rankingProducts.length - 4}
+          name="다음"
         >
           <ArrowLeft className="ml-1 size-8 -scale-x-100 text-white" color="white" />
         </button>
 
         <AnimatePresence>
-          {shouldShowSkeleton && (
+          {!canRender && (
             <motion.div
               className="absolute inset-0 bottom-auto z-10 animate-pulse"
               initial={{ opacity: 1 }}
