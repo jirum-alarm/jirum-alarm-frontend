@@ -1,3 +1,5 @@
+import { LANDING_URL } from './env';
+
 export enum PAGE {
   HOME = '/',
   TRENDING = '/trending',

@@ -6,39 +6,41 @@ import TopButton from '@/components/TopButton';
 import { AuthQueriesServer } from '@/entities/auth';
 
 import { checkDevice } from '../actions/agent';
+import { getAccessToken } from '../actions/token';
 
 import DesktopGNB from './components/desktop/DesktopGNB';
 import Footer from './components/desktop/Footer';
 
-const DesktopLayout = async ({ children }: { children: React.ReactNode }) => {
+const DesktopReadyLayout = async ({ children }: { children: React.ReactNode }) => {
   const { isMobile } = await checkDevice();
-  const queryClient = new QueryClient();
+  const accessToken = await getAccessToken();
 
-  await queryClient.prefetchQuery(AuthQueriesServer.me());
+  const renderDesktop = () => {
+    return <DesktopGNB isLoggedIn={!!accessToken} />;
+  };
+
+  const renderMobile = () => {
+    return <BottomNav type={''} />;
+  };
 
   return (
     <div className={isMobile ? '' : 'pc min-w-[1024px]'}>
+      <DeviceSpecific desktop={renderDesktop} mobile={renderMobile} />
+      <div className="min-h-screen">{children}</div>
       <DeviceSpecific
-        desktop={
+        desktop={() => (
           <>
-            <DesktopGNB />
-          </>
-        }
-        mobile={<BottomNav type={''} />}
-      />
-      {children}
-      {isMobile ? null : (
-        <>
-          <div className="sticky bottom-0 left-0 right-0 z-50">
-            <div className="relative left-0 mx-auto max-w-screen-layout-max 3xl:left-10">
-              <TopButton type="scrolled" />
+            <div className="sticky bottom-0 left-0 right-0 z-50">
+              <div className="relative left-0 mx-auto max-w-screen-layout-max 3xl:left-10">
+                <TopButton type="scrolling-up" />
+              </div>
             </div>
-          </div>
-          <Footer />
-        </>
-      )}
+            <Footer />
+          </>
+        )}
+      />
     </div>
   );
 };
 
-export default DesktopLayout;
+export default DesktopReadyLayout;
