@@ -17,7 +17,7 @@ const Category = ({ src, alt, className }: { src: string; alt: string; className
 );
 
 const KeyVisual = () => (
-  <section className="mx-auto flex h-full max-h-lvh min-h-svh w-full snap-start flex-col bg-white px-5 pt-14 pb-5 lg:px-8 lg:pt-15 lg:pb-9">
+  <section className="mx-auto flex h-full max-h-lvh min-h-svh w-full snap-start flex-col bg-white px-5 pt-14 pb-5 lg:px-8 lg:pb-9">
     <div className="relative flex w-full grow items-center justify-center overflow-hidden rounded-[28px] rounded-bl-none py-5">
       <div className="to-landing-background absolute inset-0 -z-0 bg-linear-to-b from-gray-900 via-37% lg:via-0%" />
       <div className="relative">
@@ -43,34 +43,34 @@ const KeyVisual = () => (
         <div className="relative flex h-40 w-1/2 items-center justify-between pr-18 md:pr-30 lg:pr-50">
           <Category
             src="/assets/icons/computer.svg"
-            alt="computer"
+            alt="컴퓨터"
             className="top-0 -left-1 w-19 md:max-w-46"
           />
           <Category
             src="/assets/icons/cart.svg"
-            alt="cart"
+            alt="장바구니"
             className="bottom-0 left-4 w-17.5 md:max-w-41"
           />
           <Category
             src="/assets/icons/game.svg"
-            alt="game"
+            alt="게임"
             className="top-13 left-14 w-14 md:max-w-32"
           />
         </div>
         <div className="relative flex h-40 w-1/2 flex-row-reverse items-center justify-between pl-18 md:pl-30 lg:pl-50">
           <Category
             src="/assets/icons/leisure.svg"
-            alt="leisure"
+            alt="여가"
             className="right-0 bottom-2 w-20 md:max-w-47.5"
           />
           <Category
             src="/assets/icons/electric.svg"
-            alt="electric"
+            alt="전자기기"
             className="top-0.75 right-3 w-15 md:max-w-35"
           />
           <Category
             src="/assets/icons/cosmetics.svg"
-            alt="cosmetics"
+            alt="화장품"
             className="top-11.25 right-14.5 w-14 md:max-w-32"
           />
         </div>

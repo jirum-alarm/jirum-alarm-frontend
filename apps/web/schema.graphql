@@ -467,6 +467,16 @@ type PageSchema {
   schemaVersion: String!
 }
 
+type ProductCommentSummary {
+  additionalInfo: String
+  option: String
+  price: String
+  productId: ID!
+  purchaseMethod: String
+  satisfaction: String
+  summary: String
+}
+
 enum ProductExpiredReportsOrderType {
   ID
 }
@@ -535,6 +545,7 @@ type ProductOutput {
   서비스 카테고리
   """
   categoryName: String
+  commentSummary: ProductCommentSummary
   detailUrl: String
   dislikeCount: Int!
   """

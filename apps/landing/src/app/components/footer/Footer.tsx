@@ -14,7 +14,7 @@ const Footer = () => {
             <div className="flex items-center gap-x-2.5">
               <Image
                 src="/assets/icons/logo.svg"
-                alt="logo"
+                alt=""
                 className="size-7"
                 width={32}
                 height={32}

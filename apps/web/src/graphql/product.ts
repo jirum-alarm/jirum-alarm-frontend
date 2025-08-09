@@ -56,6 +56,94 @@ export const QueryProduct = gql`
   }
 `;
 
+export const QueryProductAdditionalInfo = gql`
+  fragment ProductAdditionalInfo on ProductOutput {
+    id
+    url
+    positiveCommunityReactionCount
+    negativeCommunityReactionCount
+    provider {
+      id
+      name
+      nameKr
+      host
+    }
+    prices {
+      id
+      target
+      type
+      price
+      createdAt
+    }
+    hotDealType
+    hotDealIndex {
+      id
+      message
+      highestPrice
+      currentPrice
+      lowestPrice
+    }
+  }
+  query ProductAdditionalInfo($id: Int!) {
+    product(id: $id) {
+      ...ProductAdditionalInfo
+    }
+  }
+`;
+
+export const QueryProductInfo = gql`
+  fragment ProductInfo on ProductOutput {
+    id
+    categoryId
+    categoryName
+    title
+    url
+    detailUrl
+    isHot
+    isEnd
+    price
+    postedAt
+    thumbnail
+    author {
+      id
+      nickname
+    }
+    provider {
+      id
+      name
+      nameKr
+      host
+    }
+    hotDealType
+    viewCount
+    likeCount
+    mallName
+  }
+  query ProductInfo($id: Int!) {
+    product(id: $id) {
+      ...ProductInfo
+    }
+  }
+`;
+
+export const QueryProductStats = gql`
+  fragment ProductStats on ProductOutput {
+    id
+    isHot
+    isEnd
+    wishlistCount
+    isMyLike
+    isMyReported
+    likeCount
+    isMyWishlist
+  }
+  query ProductStats($id: Int!) {
+    product(id: $id) {
+      ...ProductStats
+    }
+  }
+`;
+
 export const QueryReportUserNames = gql`
   query QueryReportUserNames($productId: Int!) {
     reportUserNames(productId: $productId)
