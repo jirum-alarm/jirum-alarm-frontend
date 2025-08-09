@@ -1,11 +1,20 @@
 import { httpClient } from '@/shared/lib/http-client';
 
-import { graphql } from '../gql';
+import { graphql, useFragment } from '../gql';
 import {
   MutationCollectProductMutationVariables,
   MutationReportExpiredProductMutationVariables,
+  ProductAdditionalInfoDocument,
+  ProductAdditionalInfoFragmentDoc,
+  ProductAdditionalInfoQueryVariables,
   ProductGuidesQueryVariables,
+  ProductInfoDocument,
+  ProductInfoFragmentDoc,
+  ProductInfoQueryVariables,
   ProductQueryVariables,
+  ProductStatsDocument,
+  ProductStatsFragmentDoc,
+  ProductStatsQueryVariables,
   QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
@@ -27,6 +36,42 @@ export class ProductService {
     return httpClient.server_execute(QueryProduct, variables).then((res) => res.data);
   }
 
+  static async getProductInfo(variables: ProductInfoQueryVariables) {
+    return httpClient
+      .execute(ProductInfoDocument, variables)
+      .then((res) => useFragment(ProductInfoFragmentDoc, res.data.product));
+  }
+
+  static async getProductStats(variables: ProductStatsQueryVariables) {
+    return httpClient
+      .execute(ProductStatsDocument, variables)
+      .then((res) => useFragment(ProductStatsFragmentDoc, res.data.product));
+  }
+
+  static async getProductAdditionalInfo(variables: ProductAdditionalInfoQueryVariables) {
+    return httpClient
+      .execute(ProductAdditionalInfoDocument, variables)
+      .then((res) => useFragment(ProductAdditionalInfoFragmentDoc, res.data.product));
+  }
+
+  static async getProductInfoServer(variables: ProductInfoQueryVariables) {
+    return httpClient
+      .server_execute(ProductInfoDocument, variables)
+      .then((res) => useFragment(ProductInfoFragmentDoc, res.data.product));
+  }
+
+  static async getProductStatsServer(variables: ProductStatsQueryVariables) {
+    return httpClient
+      .server_execute(ProductStatsDocument, variables)
+      .then((res) => useFragment(ProductStatsFragmentDoc, res.data.product));
+  }
+
+  static async getProductAdditionalInfoServer(variables: ProductAdditionalInfoQueryVariables) {
+    return httpClient
+      .server_execute(ProductAdditionalInfoDocument, variables)
+      .then((res) => useFragment(ProductAdditionalInfoFragmentDoc, res.data.product));
+  }
+
   static async getProducts(variables: QueryProductsQueryVariables) {
     return httpClient.execute(QueryProducts, variables).then((res) => res.data);
   }
@@ -46,6 +91,9 @@ export class ProductService {
   static async getProductGuides(variables: ProductGuidesQueryVariables) {
     return httpClient.execute(QueryProductGuides, variables).then((res) => res.data);
   }
+  static async getProductGuidesServer(variables: ProductGuidesQueryVariables) {
+    return httpClient.server_execute(QueryProductGuides, variables).then((res) => res.data);
+  }
 
   static async getTogetherViewedProducts(variables: TogetherViewedProductsQueryVariables) {
     return httpClient.execute(QueryTogetherViewedProducts, variables).then((res) => res.data);
@@ -53,6 +101,9 @@ export class ProductService {
 
   static async collectProduct(variables: MutationCollectProductMutationVariables) {
     return httpClient.execute(MutationCollectProduct, variables).then((res) => res.data);
+  }
+  static async collectProductServer(variables: MutationCollectProductMutationVariables) {
+    return httpClient.server_execute(MutationCollectProduct, variables).then((res) => res.data);
   }
   static async reportExpiredProduct(variables: MutationReportExpiredProductMutationVariables) {
     return httpClient.execute(MutationReportExpiredProduct, variables).then((res) => res.data);

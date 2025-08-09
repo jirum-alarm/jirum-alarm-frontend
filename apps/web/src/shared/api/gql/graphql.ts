@@ -564,6 +564,17 @@ export type PageSchema = {
   schemaVersion: Scalars['String']['output'];
 };
 
+export type ProductCommentSummary = {
+  __typename?: 'ProductCommentSummary';
+  additionalInfo?: Maybe<Scalars['String']['output']>;
+  option?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['String']['output']>;
+  productId: Scalars['ID']['output'];
+  purchaseMethod?: Maybe<Scalars['String']['output']>;
+  satisfaction?: Maybe<Scalars['String']['output']>;
+  summary?: Maybe<Scalars['String']['output']>;
+};
+
 export enum ProductExpiredReportsOrderType {
   Id = 'ID',
 }
@@ -631,6 +642,7 @@ export type ProductOutput = {
   categoryId?: Maybe<Scalars['Int']['output']>;
   /** 서비스 카테고리 */
   categoryName?: Maybe<Scalars['String']['output']>;
+  commentSummary?: Maybe<ProductCommentSummary>;
   detailUrl?: Maybe<Scalars['String']['output']>;
   dislikeCount: Scalars['Int']['output'];
   /**
@@ -1341,6 +1353,116 @@ export type ProductQuery = {
   } | null;
 };
 
+export type ProductAdditionalInfoFragment = {
+  __typename?: 'ProductOutput';
+  id: string;
+  url?: string | null;
+  positiveCommunityReactionCount: number;
+  negativeCommunityReactionCount: number;
+  hotDealType?: HotDealType | null;
+  provider: {
+    __typename?: 'Provider';
+    id: string;
+    name: string;
+    nameKr: string;
+    host?: string | null;
+  };
+  prices?: Array<{
+    __typename?: 'ProductPrice';
+    id: string;
+    target: ProductPriceTarget;
+    type: CurrencyType;
+    price: number;
+    createdAt: any;
+  }> | null;
+  hotDealIndex?: {
+    __typename?: 'ProductHotDealIndex';
+    id: string;
+    message: string;
+    highestPrice: number;
+    currentPrice: number;
+    lowestPrice: number;
+  } | null;
+} & { ' $fragmentName'?: 'ProductAdditionalInfoFragment' };
+
+export type ProductAdditionalInfoQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type ProductAdditionalInfoQuery = {
+  __typename?: 'Query';
+  product?:
+    | ({ __typename?: 'ProductOutput' } & {
+        ' $fragmentRefs'?: { ProductAdditionalInfoFragment: ProductAdditionalInfoFragment };
+      })
+    | null;
+};
+
+export type ProductInfoFragment = {
+  __typename?: 'ProductOutput';
+  id: string;
+  categoryId?: number | null;
+  categoryName?: string | null;
+  title: string;
+  url?: string | null;
+  detailUrl?: string | null;
+  isHot?: boolean | null;
+  isEnd?: boolean | null;
+  price?: string | null;
+  postedAt: any;
+  thumbnail?: string | null;
+  hotDealType?: HotDealType | null;
+  viewCount: number;
+  likeCount: number;
+  mallName?: string | null;
+  author?: { __typename?: 'User'; id: string; nickname: string } | null;
+  provider: {
+    __typename?: 'Provider';
+    id: string;
+    name: string;
+    nameKr: string;
+    host?: string | null;
+  };
+} & { ' $fragmentName'?: 'ProductInfoFragment' };
+
+export type ProductInfoQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type ProductInfoQuery = {
+  __typename?: 'Query';
+  product?:
+    | ({ __typename?: 'ProductOutput' } & {
+        ' $fragmentRefs'?: { ProductInfoFragment: ProductInfoFragment };
+      })
+    | null;
+};
+
+export type ProductStatsFragment = {
+  __typename?: 'ProductOutput';
+  id: string;
+  isHot?: boolean | null;
+  isEnd?: boolean | null;
+  wishlistCount: number;
+  isMyLike?: boolean | null;
+  isMyReported: boolean;
+  likeCount: number;
+  isMyWishlist?: boolean | null;
+} & { ' $fragmentName'?: 'ProductStatsFragment' };
+
+export type ProductStatsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type ProductStatsQuery = {
+  __typename?: 'Query';
+  product?:
+    | ({ __typename?: 'ProductOutput' } & {
+        ' $fragmentRefs'?: { ProductStatsFragment: ProductStatsFragment };
+      })
+    | null;
+};
+
 export type QueryReportUserNamesQueryVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -1591,7 +1713,85 @@ export class TypedDocumentString<TResult, TVariables>
     return this.value;
   }
 }
-
+export const ProductAdditionalInfoFragmentDoc = new TypedDocumentString(
+  `
+    fragment ProductAdditionalInfo on ProductOutput {
+  id
+  url
+  positiveCommunityReactionCount
+  negativeCommunityReactionCount
+  provider {
+    id
+    name
+    nameKr
+    host
+  }
+  prices {
+    id
+    target
+    type
+    price
+    createdAt
+  }
+  hotDealType
+  hotDealIndex {
+    id
+    message
+    highestPrice
+    currentPrice
+    lowestPrice
+  }
+}
+    `,
+  { fragmentName: 'ProductAdditionalInfo' },
+) as unknown as TypedDocumentString<ProductAdditionalInfoFragment, unknown>;
+export const ProductInfoFragmentDoc = new TypedDocumentString(
+  `
+    fragment ProductInfo on ProductOutput {
+  id
+  categoryId
+  categoryName
+  title
+  url
+  detailUrl
+  isHot
+  isEnd
+  price
+  postedAt
+  thumbnail
+  author {
+    id
+    nickname
+  }
+  provider {
+    id
+    name
+    nameKr
+    host
+  }
+  hotDealType
+  viewCount
+  likeCount
+  mallName
+}
+    `,
+  { fragmentName: 'ProductInfo' },
+) as unknown as TypedDocumentString<ProductInfoFragment, unknown>;
+export const ProductStatsFragmentDoc = new TypedDocumentString(
+  `
+    fragment ProductStats on ProductOutput {
+  id
+  isHot
+  isEnd
+  wishlistCount
+  isMyLike
+  isMyReported
+  likeCount
+  isMyWishlist
+}
+    `,
+  { fragmentName: 'ProductStats' },
+) as unknown as TypedDocumentString<ProductStatsFragment, unknown>;
 export const MutationLoginDocument = new TypedDocumentString(`
     mutation MutationLogin($email: String!, $password: String!) {
   login(email: $email, password: $password) {
@@ -1853,6 +2053,91 @@ export const ProductDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<ProductQuery, ProductQueryVariables>;
+export const ProductAdditionalInfoDocument = new TypedDocumentString(`
+    query ProductAdditionalInfo($id: Int!) {
+  product(id: $id) {
+    ...ProductAdditionalInfo
+  }
+}
+    fragment ProductAdditionalInfo on ProductOutput {
+  id
+  url
+  positiveCommunityReactionCount
+  negativeCommunityReactionCount
+  provider {
+    id
+    name
+    nameKr
+    host
+  }
+  prices {
+    id
+    target
+    type
+    price
+    createdAt
+  }
+  hotDealType
+  hotDealIndex {
+    id
+    message
+    highestPrice
+    currentPrice
+    lowestPrice
+  }
+}`) as unknown as TypedDocumentString<
+  ProductAdditionalInfoQuery,
+  ProductAdditionalInfoQueryVariables
+>;
+export const ProductInfoDocument = new TypedDocumentString(`
+    query ProductInfo($id: Int!) {
+  product(id: $id) {
+    ...ProductInfo
+  }
+}
+    fragment ProductInfo on ProductOutput {
+  id
+  categoryId
+  categoryName
+  title
+  url
+  detailUrl
+  isHot
+  isEnd
+  price
+  postedAt
+  thumbnail
+  author {
+    id
+    nickname
+  }
+  provider {
+    id
+    name
+    nameKr
+    host
+  }
+  hotDealType
+  viewCount
+  likeCount
+  mallName
+}`) as unknown as TypedDocumentString<ProductInfoQuery, ProductInfoQueryVariables>;
+export const ProductStatsDocument = new TypedDocumentString(`
+    query ProductStats($id: Int!) {
+  product(id: $id) {
+    ...ProductStats
+  }
+}
+    fragment ProductStats on ProductOutput {
+  id
+  isHot
+  isEnd
+  wishlistCount
+  isMyLike
+  isMyReported
+  likeCount
+  isMyWishlist
+}`) as unknown as TypedDocumentString<ProductStatsQuery, ProductStatsQueryVariables>;
 export const QueryReportUserNamesDocument = new TypedDocumentString(`
     query QueryReportUserNames($productId: Int!) {
   reportUserNames(productId: $productId)

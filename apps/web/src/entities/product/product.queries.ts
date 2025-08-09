@@ -1,8 +1,11 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 import {
+  ProductAdditionalInfoQueryVariables,
   ProductGuidesQueryVariables,
+  ProductInfoQueryVariables,
   ProductQueryVariables,
+  ProductStatsQueryVariables,
   QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
@@ -40,6 +43,60 @@ export const ProductQueries = {
         },
       ],
       queryFn: () => ProductService.getProductServer(variables),
+    }),
+  productInfo: (variables: ProductInfoQueryVariables) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'info'],
+      queryFn: () => ProductService.getProductInfo(variables),
+      select: (data) => {
+        if (!data) throw new Error('PRODUCT_NOT_FOUND');
+        return data;
+      },
+    }),
+  productStats: (variables: ProductStatsQueryVariables) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'stats'],
+      queryFn: () => ProductService.getProductStats(variables),
+      select: (data) => {
+        if (!data) throw new Error('PRODUCT_STATS_NOT_FOUND');
+        return data;
+      },
+    }),
+  productAdditionalInfo: (variables: ProductAdditionalInfoQueryVariables) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'additionalInfo'],
+      queryFn: () => ProductService.getProductAdditionalInfo(variables),
+      select: (data) => {
+        if (!data) throw new Error('PRODUCT_ADDITIONAL_INFO_NOT_FOUND');
+        return data;
+      },
+    }),
+  productInfoServer: (variables: ProductInfoQueryVariables) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'info'],
+      queryFn: () => ProductService.getProductInfoServer(variables),
+      select: (data) => {
+        if (!data) throw new Error('PRODUCT_NOT_FOUND');
+        return data;
+      },
+    }),
+  productStatsServer: (variables: ProductStatsQueryVariables) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'stats'],
+      queryFn: () => ProductService.getProductStatsServer(variables),
+      select: (data) => {
+        if (!data) throw new Error('PRODUCT_STATS_NOT_FOUND');
+        return data;
+      },
+    }),
+  productAdditionalInfoServer: (variables: ProductQueryVariables) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'additionalInfo'],
+      queryFn: () => ProductService.getProductAdditionalInfoServer(variables),
+      select: (data) => {
+        if (!data) throw new Error('PRODUCT_ADDITIONAL_INFO_NOT_FOUND');
+        return data;
+      },
     }),
   products: (variables: QueryProductsQueryVariables) =>
     queryOptions({
@@ -91,6 +148,11 @@ export const ProductQueries = {
     queryOptions({
       queryKey: [...ProductQueries.all(), 'guide', { productId: variables.productId }],
       queryFn: () => ProductService.getProductGuides(variables),
+    }),
+  productGuideServer: (variables: ProductGuidesQueryVariables) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'guide', { productId: variables.productId }],
+      queryFn: () => ProductService.getProductGuidesServer(variables),
     }),
 
   togetherViewed: (variables: TogetherViewedProductsQueryVariables) =>
