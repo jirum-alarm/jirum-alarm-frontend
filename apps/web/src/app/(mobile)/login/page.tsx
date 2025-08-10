@@ -1,11 +1,11 @@
 'use client';
 
 import Button from '@/components/common/Button';
-import { IllustIcons } from '@/components/common/icons';
-import Illust from '@/components/common/Illust';
+import { LoginIllust } from '@/components/common/icons/Illust';
 import BasicLayout from '@/components/layout/BasicLayout';
-import Link from '@/features/Link';
 import useMyRouter from '@/hooks/useMyRouter';
+
+import Link from '@shared/ui/Link';
 
 import AppDownloadCTA from './components/AppDownloadCTA';
 
@@ -24,7 +24,7 @@ const Login = () => {
         <div className="grid pb-4 text-center">
           <div>
             <div className="grid justify-center">
-              <IllustIcons.LoginIllust className="size-[120px]" />
+              <LoginIllust className="size-[120px]" />
             </div>
             <div>
               <p className="pt-5 text-[32px] font-bold">지름알림</p>

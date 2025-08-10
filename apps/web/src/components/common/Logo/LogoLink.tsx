@@ -1,6 +1,7 @@
-import { IllustIcons, RoundedLogo } from '@/components/common/icons';
-import Link from '@/features/Link';
+import { IconLogo } from '@/components/common/icons/Illust';
 import { cn } from '@/lib/cn';
+
+import Link from '@shared/ui/Link';
 
 interface LogoLinkProps {
   inverted?: boolean;
@@ -9,7 +10,7 @@ interface LogoLinkProps {
 export default function LogoLink({ inverted = false }: LogoLinkProps) {
   return (
     <Link href="/" className="flex items-center gap-2">
-      <IllustIcons.IconLogo />
+      <IconLogo />
       <h2
         className={cn('relative text-lg font-bold', {
           'text-white': inverted,

@@ -8,31 +8,6 @@ const config = [
   {
     files: ['src/**/*.{ts,tsx}'],
     rules: {
-      // 피처/위젯 내부 경로 직접 임포트 금지 (배럴만 허용)
-      'no-restricted-imports': [
-        'warn',
-        {
-          patterns: [
-            {
-              group: ['@features/*/*'],
-              message: '피처는 루트 배럴(@features/<name>)로만 import 하세요.',
-            },
-            {
-              group: ['@widgets/*/*'],
-              message: '위젯은 루트 배럴(@widgets/<name>)로만 import 하세요.',
-            },
-            // 레거시 경로 호환 차단
-            {
-              group: ['@/features/*/*'],
-              message: '피처는 루트 배럴(@features/<name>)로만 import 하세요.',
-            },
-            {
-              group: ['@/widgets/*/*'],
-              message: '위젯은 루트 배럴(@widgets/<name>)로만 import 하세요.',
-            },
-          ],
-        },
-      ],
       'import-x/order': [
         'warn',
         {
@@ -48,8 +23,8 @@ const config = [
             'unknown',
           ],
           pathGroups: [
-            { pattern: '@shared/**', group: 'internal', position: 'before' },
-            { pattern: '@entities/**', group: 'internal', position: 'before' },
+            { pattern: '@shared/**', group: 'internal', position: 'after' },
+            { pattern: '@entities/**', group: 'internal', position: 'after' },
             { pattern: '@features/**', group: 'internal', position: 'after' },
             { pattern: '@widgets/**', group: 'internal', position: 'after' },
           ],

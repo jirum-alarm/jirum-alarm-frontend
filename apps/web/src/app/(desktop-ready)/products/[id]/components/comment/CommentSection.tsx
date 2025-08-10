@@ -6,10 +6,12 @@ import { getAccessToken } from '@/app/actions/token';
 import Button from '@/components/common/Button';
 import withCheckDevice from '@/components/hoc/withCheckDevice';
 import DeviceSpecific from '@/components/layout/DeviceSpecific';
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
-import Link from '@/features/Link';
-import { AuthService } from '@/shared/api/auth';
-import { User } from '@/shared/api/gql/graphql';
+
+import { AuthService } from '@shared/api/auth';
+import { User } from '@shared/api/gql/graphql';
+import Link from '@shared/ui/Link';
+
+import { CommentQueries, defaultCommentsVariables } from '@entities/comment';
 
 import CommentInput from '../../comment/components/CommentInput';
 

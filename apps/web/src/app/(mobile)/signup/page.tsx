@@ -7,11 +7,12 @@ import { Suspense, useEffect, useState } from 'react';
 import { useToast } from '@/components/common/Toast';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { CATEGORIES } from '@/constants/categories';
-import { ICategoryForm } from '@/features/categories/types';
 import { MutationSignup } from '@/graphql/auth';
 import { ISignupOutput, ISignupVariable } from '@/graphql/interface/auth';
 import useMyRouter from '@/hooks/useMyRouter';
 import { User } from '@/types/user';
+
+import { ICategoryForm } from '@features/categories/types';
 
 import { setAccessToken, setRefreshToken } from '../../actions/token';
 

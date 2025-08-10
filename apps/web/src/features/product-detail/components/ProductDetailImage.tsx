@@ -3,9 +3,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import ImageComponent from '@/components/ImageComponent';
-import { ProductQueries } from '@entities/product';
 
 import NoImage from '@shared/ui/NoImage';
+
+import { ProductQueries } from '@entities/product';
 
 export default function ProductDetailImage({
   productId,

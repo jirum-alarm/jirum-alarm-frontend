@@ -1,6 +1,7 @@
 import Button from '@/components/common/Button';
 import { CheckboxSelected, CheckDefault } from '@/components/common/icons';
-import Link from '@/features/Link';
+
+import Link from '@shared/ui/Link';
 
 import { Registration } from '../../page';
 import useTermsOfServiceFormViewModel from '../hooks/useTermsOfServiceFormViewModel';

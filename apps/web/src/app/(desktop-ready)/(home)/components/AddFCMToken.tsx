@@ -1,34 +1,30 @@
 'use client';
 
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
 import { useQueryState } from 'nuqs';
 import { useCallback, useEffect } from 'react';
 
-import { addPushTokenVariable, TokenType } from '@/graphql/interface';
-import { MutationAddPushToken } from '@/graphql/notification';
 import { fcmTokenAtom } from '@/state/fcmToken';
+
+import { MutationAddPushTokenMutationVariables, TokenType } from '@shared/api/gql/graphql';
+import { NotificationService } from '@shared/api/notification/notification.service';
 
 const AddFCMToken = () => {
   const [token] = useQueryState('token');
   const [fcmToken, setFcmToken] = useAtom(fcmTokenAtom);
 
-  const [addPushToken] = useMutation<unknown, addPushTokenVariable>(MutationAddPushToken, {
-    onError: (e) => {
-      console.error(e);
-    },
+  const { mutate } = useMutation({
+    mutationFn: (variables: MutationAddPushTokenMutationVariables) =>
+      NotificationService.addPushToken(variables),
+    onError: (e) => console.error(e),
   });
 
   const addTokenToServer = useCallback(
     (token: string) => {
-      addPushToken({
-        variables: {
-          token: token,
-          tokenType: TokenType.FCM,
-        },
-      });
+      mutate({ token, tokenType: TokenType.Fcm });
     },
-    [addPushToken],
+    [mutate],
   );
 
   useEffect(() => {

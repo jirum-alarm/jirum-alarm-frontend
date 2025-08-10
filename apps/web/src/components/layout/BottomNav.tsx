@@ -15,10 +15,11 @@ import {
   RankingFill,
 } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
-import Link from '@/features/Link';
 import { useDevice } from '@/hooks/useDevice';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { cn } from '@/lib/cn';
+
+import Link from '@shared/ui/Link';
 
 export enum NAV_TYPE {
   HOME = 'HOME',

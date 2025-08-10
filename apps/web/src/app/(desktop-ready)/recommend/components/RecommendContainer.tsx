@@ -2,11 +2,13 @@
 
 import { Suspense } from 'react';
 
-import RecommendProductList from '@/app/(desktop-ready)/recommend/components/RecommendProductList';
-import GridProductListSkeleton from '@/features/products/components/skeleton/GridProductListSkeleton';
-import RecommendedProductTabs from '@/features/recommended/RecommendedProductTabs';
+import { GridProductListSkeleton } from '@features/products/grid';
+
+import { RecommendedProductTabs } from '@widgets/recommend';
 
 import useRecommendedKeyword from '../hooks/useRecommendedKeyword';
+
+import RecommendProductList from './RecommendProductList';
 
 const RecommendContainer = ({ isMobile }: { isMobile: boolean }) => {
   const { recommendedKeyword, setRecommendedKeyword, productKeywords } = useRecommendedKeyword();

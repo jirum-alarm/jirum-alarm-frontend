@@ -5,12 +5,13 @@ import { Suspense } from 'react';
 
 import Button from '@/components/common/Button';
 import Jirume from '@/components/common/icons/Jirume';
-import { ProductQueries } from '@entities/product';
 import { cn } from '@/lib/cn';
 
 import DisplayTime from '@shared/ui/DisplayTime';
 import HotdealBadge from '@shared/ui/HotdealBadge';
 import ShareButton from '@shared/ui/ShareButton';
+
+import { ProductQueries } from '@entities/product';
 
 import { LikeButton, RecommendButton } from '@features/product-detail/controls';
 

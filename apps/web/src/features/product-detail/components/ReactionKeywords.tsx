@@ -3,9 +3,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { AIIcon, ArrowRight } from '@/components/common/icons';
-import { ProductQueries } from '@entities/product';
 import { cn } from '@/lib/cn';
 import { getFromNow } from '@/util/date';
+
+import { ProductQueries } from '@entities/product';
 
 function ReactionKeywords({
   productId,

@@ -2,8 +2,10 @@ import { Metadata } from 'next';
 
 import RecommendContainer from '@/app/(desktop-ready)/recommend/components/RecommendContainer';
 import { checkDevice } from '@/app/actions/agent';
-import RecommendedProductTabsFetcher from '@/features/recommended/RecommendedProductTabsFetcher';
-import { ProductService } from '@/shared/api/product';
+
+import { ProductService } from '@shared/api/product';
+
+import { RecommendPrefetch } from '@widgets/recommend';
 
 export async function generateMetadata({
   searchParams,
@@ -38,9 +40,9 @@ const RecommendPage = async () => {
   const { isMobile } = await checkDevice();
 
   return (
-    <RecommendedProductTabsFetcher>
+    <RecommendPrefetch>
       <RecommendContainer isMobile={isMobile} />
-    </RecommendedProductTabsFetcher>
+    </RecommendPrefetch>
   );
 };
 

@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 
 import { useDevice } from '@/hooks/useDevice';
-import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
+
+import { WebViewBridge, WebViewEventType } from '@shared/lib/webview';
 
 type NavigateOptions = {
   scroll?: boolean;

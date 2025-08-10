@@ -3,11 +3,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import Jirume from '@/components/common/icons/Jirume';
-import { ProductQueries } from '@entities/product';
 import { cn } from '@/lib/cn';
 
 import DisplayTime from '@shared/ui/DisplayTime';
 import HotdealBadge from '@shared/ui/HotdealBadge';
+
+import { ProductQueries } from '@entities/product';
 
 import { RecommendButton } from '@features/product-detail/controls';
 

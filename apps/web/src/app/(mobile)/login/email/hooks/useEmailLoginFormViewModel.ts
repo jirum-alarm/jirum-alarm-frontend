@@ -8,9 +8,10 @@ import { MutationLogin } from '@/graphql/auth';
 import { addPushTokenVariable, TokenType } from '@/graphql/interface';
 import { MutationAddPushToken } from '@/graphql/notification';
 import useMyRouter from '@/hooks/useMyRouter';
-import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 import { fcmTokenAtom } from '@/state/fcmToken';
 import { ILoginOutput, ILoginVariable } from '@/types/login';
+
+import { WebViewBridge, WebViewEventType } from '@shared/lib/webview';
 
 const HOME_PATH = '/';
 

@@ -6,11 +6,12 @@ import { useEffect, useRef } from 'react';
 
 import { Info } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
-import { ProductQueries } from '@entities/product';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 
 import HotdealBadge from '@shared/ui/HotdealBadge';
+
+import { ProductQueries } from '@entities/product';
 
 const HotdealScore = ({ productId }: { productId: number }) => {
   const isHydrated = useIsHydrated();

@@ -2,7 +2,8 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 
 import { getAccessToken } from '@/app/actions/token';
 import BasicLayout from '@/components/layout/BasicLayout';
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
+
+import { CommentQueries, defaultCommentsVariables } from '@entities/comment';
 
 import CommentContainer from './CommentContainer';
 import CommentPageHeader from './CommentPageHeader';

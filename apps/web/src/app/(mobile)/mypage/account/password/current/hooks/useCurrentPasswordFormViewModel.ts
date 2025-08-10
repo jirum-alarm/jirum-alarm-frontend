@@ -1,8 +1,9 @@
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { AuthQueries } from '@/entities/auth';
-import { AuthService } from '@/shared/api/auth';
+import { AuthService } from '@shared/api/auth';
+
+import { AuthQueries } from '@entities/auth';
 
 const useCurrentPasswordFormViewModel = ({ nextStep }: { nextStep: () => void }) => {
   const [currentPassword, setCurrentPassword] = useState({

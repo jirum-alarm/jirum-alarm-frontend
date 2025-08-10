@@ -5,9 +5,10 @@ import { Suspense } from 'react';
 
 import SectionHeader from '@/components/SectionHeader';
 import { PAGE } from '@/constants/page';
-import { ProductQueries } from '@entities/product';
 
 import { ThumbnailType } from '@shared/api/gql/graphql';
+
+import { ProductQueries } from '@entities/product';
 
 import { CarouselProductsSection } from '../carousel';
 

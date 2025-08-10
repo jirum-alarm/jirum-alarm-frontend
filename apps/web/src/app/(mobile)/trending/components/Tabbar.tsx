@@ -3,9 +3,10 @@ import { Tabs } from 'radix-ui';
 import { startTransition, useEffect, useRef, useState } from 'react';
 
 import { Setting } from '@/components/common/icons';
-import Link from '@/features/Link';
 import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
 import { cn } from '@/lib/cn';
+
+import Link from '@shared/ui/Link';
 
 // 스타일 관련 타입 정의
 interface TabBarStyles {

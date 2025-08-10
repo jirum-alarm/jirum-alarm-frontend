@@ -7,8 +7,10 @@ import { Drawer } from 'vaul';
 
 import Dots from '@/components/common/icons/Dots';
 import { useToast } from '@/components/common/Toast';
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
-import { CommentService } from '@/shared/api/comment/comment.service';
+
+import { CommentService } from '@shared/api/comment/comment.service';
+
+import { CommentQueries, defaultCommentsVariables } from '@entities/comment';
 
 import { TComment, UPDATE_EVENT } from './CommentLayout';
 

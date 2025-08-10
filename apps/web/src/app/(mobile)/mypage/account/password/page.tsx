@@ -3,11 +3,12 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
-import ChangePassword from '@/app/(mobile)/mypage/account/password/change/components/ChangePassword';
-import CurrentPassword from '@/app/(mobile)/mypage/account/password/current/components/CurrentPassword';
 import BackButton from '@/components/layout/BackButton';
 import BasicLayout from '@/components/layout/BasicLayout';
 import useMyRouter from '@/hooks/useMyRouter';
+
+import ChangePassword from './change/components/ChangePassword';
+import CurrentPassword from './current/components/CurrentPassword';
 
 const QUERY_PARAM_PREFIX = 'step';
 const INITIAL_STEP = 'current';

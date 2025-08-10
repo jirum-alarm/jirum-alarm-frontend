@@ -1,6 +1,7 @@
 import Button from '@/components/common/Button';
 import { AlarmIllustError } from '@/components/common/icons';
-import Link from '@/features/Link';
+
+import Link from '@shared/ui/Link';
 
 const NoAlerts = () => {
   return (

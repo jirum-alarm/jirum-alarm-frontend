@@ -4,12 +4,13 @@ import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-q
 
 import Button from '@/components/common/Button';
 import { Thumbsup } from '@/components/common/icons';
-import { ProductQueries } from '@entities/product';
 import { cn } from '@/lib/cn';
 
 import { UserLikeTarget } from '@shared/api/gql/graphql';
 import { LikeService } from '@shared/api/like/like.service';
 import useRedirectIfNotLoggedIn from '@shared/hooks/useRedirectIfNotLoggedIn';
+
+import { ProductQueries } from '@entities/product';
 
 export default function RecommendButton({ productId }: { productId: number }) {
   const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));

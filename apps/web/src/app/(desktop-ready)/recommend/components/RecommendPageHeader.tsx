@@ -1,11 +1,11 @@
 'use client';
 
 import { Search } from '@/components/common/icons';
-import { useToast } from '@/components/common/Toast';
 import BackButton from '@/components/layout/BackButton';
-import ShareButton from '@/components/ShareButton';
 import { PAGE } from '@/constants/page';
-import Link from '@/features/Link';
+
+import Link from '@shared/ui/Link';
+import ShareButton from '@shared/ui/ShareButton';
 
 import useRecommendedKeyword from '../hooks/useRecommendedKeyword';
 

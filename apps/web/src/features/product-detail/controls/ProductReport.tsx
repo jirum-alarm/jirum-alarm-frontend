@@ -6,11 +6,12 @@ import { Drawer } from 'vaul';
 
 import Button from '@/components/common/Button';
 import { useToast } from '@/components/common/Toast';
-import { ProductQueries } from '@entities/product';
 import { cn } from '@/lib/cn';
 
 import { ProductService } from '@shared/api/product';
 import useRedirectIfNotLoggedIn from '@shared/hooks/useRedirectIfNotLoggedIn';
+
+import { ProductQueries } from '@entities/product';
 
 const ProductReport = ({ productId }: { productId: number }) => {
   const { data: product } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));

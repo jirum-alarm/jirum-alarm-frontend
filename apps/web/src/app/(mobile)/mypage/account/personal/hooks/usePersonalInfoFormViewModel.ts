@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 
 import { useUpdatePersonal } from '@/app/(mobile)/mypage/features';
 import { BIRTH_YEAR } from '@/constants/birthYear';
-import { AuthQueries } from '@/entities/auth';
-import { Gender } from '@/shared/api/gql/graphql';
 import { shallowEqual } from '@/util/object';
+
+import { Gender } from '@shared/api/gql/graphql';
+
+import { AuthQueries } from '@entities/auth';
 
 const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({
   text: String(year),

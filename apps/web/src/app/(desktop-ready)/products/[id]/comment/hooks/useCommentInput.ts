@@ -3,8 +3,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
-import { CommentService } from '@/shared/api/comment';
+import { CommentService } from '@shared/api/comment';
+
+import { CommentQueries, defaultCommentsVariables } from '@entities/comment';
 
 import { CANCEL_EVENT, TComment, TEditStatus } from '../components/CommentLayout';
 

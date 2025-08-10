@@ -10,9 +10,10 @@ import LogoLink from '@/components/common/Logo/LogoLink';
 import SearchLinkButton from '@/components/SearchLinkButton';
 import { LANDING_URL } from '@/constants/env';
 import { PAGE } from '@/constants/page';
-import Link from '@/features/Link';
 import useScrollPosition from '@/hooks/useScrollPosition';
 import { cn } from '@/lib/cn';
+
+import Link from '@shared/ui/Link';
 
 import NavLink from './MenuLink';
 

@@ -3,7 +3,8 @@
 import mixpanel, { Mixpanel } from 'mixpanel-browser';
 
 import { IS_PRD } from '@/constants/env';
-import { httpClient } from '@/shared/lib/http-client';
+
+import { httpClient } from '@shared/lib/http-client';
 
 export class MixpanelService {
   private static instance: Mixpanel;

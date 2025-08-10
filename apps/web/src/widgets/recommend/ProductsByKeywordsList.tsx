@@ -2,9 +2,9 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { ProductQueries } from '@entities/product';
-
 import { KeywordProductOrderType, OrderOptionType } from '@shared/api/gql/graphql';
+
+import { ProductQueries } from '@entities/product';
 
 import { CarouselProductList } from '@features/products/carousel';
 

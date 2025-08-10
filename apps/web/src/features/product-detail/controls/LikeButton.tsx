@@ -7,14 +7,15 @@ import Button from '@/components/common/Button';
 import { Heart } from '@/components/common/icons';
 import { useToast } from '@/components/common/Toast';
 import { PAGE } from '@/constants/page';
-import { ProductQueries } from '@entities/product';
-import { WishlistQueries } from '@entities/wishlist';
 import { useDevice } from '@/hooks/useDevice';
 import useMyRouter from '@/hooks/useMyRouter';
 
 import { WishlistService } from '@shared/api/wishlist/wishlist.service';
 import { WebViewBridge, WebViewEventType } from '@shared/lib/webview';
 import Link from '@shared/ui/Link';
+
+import { ProductQueries } from '@entities/product';
+import { WishlistQueries } from '@entities/wishlist';
 
 export default function LikeButton({
   productId,

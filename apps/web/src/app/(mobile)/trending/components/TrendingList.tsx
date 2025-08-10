@@ -3,9 +3,10 @@
 import { memo, useEffect, useRef } from 'react';
 import { useSwiper } from 'swiper/react';
 
-import ProductGridList from '@/features/products/components/grid/ProductGridList';
-import RecommendationProduct from '@/features/search/components/RecommendationProduct';
 import useScreen from '@/hooks/useScreenSize';
+
+import { CarouselProductsSection } from '@features/products/carousel';
+import { GridProductList } from '@features/products/grid';
 
 import useTrendingViewModel from '../hooks/useTrendingViewModel';
 
@@ -32,33 +33,17 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
 
   return (
     <div ref={ref} className="flex flex-col gap-y-8">
-      <ProductGridList
-        products={products?.slice(0, size) ?? []}
-        rankFrom={1}
-        loggingPage={'TRENDING'}
-      />
+      <GridProductList products={products?.slice(0, size) ?? []} rankFrom={1} />
       {liveProducts && (
-        <RecommendationProduct
-          label={`‘${categoryName}’ 실시간 핫딜`}
-          hotDeals={liveProducts}
-          logging={{ page: 'TRENDING' }}
+        <CarouselProductsSection
+          title={`‘${categoryName}’ 실시간 핫딜`}
+          products={liveProducts}
           nested
         />
       )}
 
-      <ProductGridList
-        products={products?.slice(size) ?? []}
-        rankFrom={size + 1}
-        loggingPage={'TRENDING'}
-      />
-      {hotDeals && (
-        <RecommendationProduct
-          label="추천 핫딜"
-          hotDeals={hotDeals}
-          logging={{ page: 'TRENDING' }}
-          nested
-        />
-      )}
+      <GridProductList products={products?.slice(size) ?? []} rankFrom={size + 1} />
+      {hotDeals && <CarouselProductsSection title="추천 핫딜" products={hotDeals} nested />}
     </div>
   );
 };

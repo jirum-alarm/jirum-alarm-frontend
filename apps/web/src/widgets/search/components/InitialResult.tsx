@@ -2,11 +2,11 @@
 
 import { cn } from '@/lib/cn';
 
+import { CarouselProductsSection } from '@features/products/carousel';
 import { useHotDealsRandom } from '@features/products/hooks';
 
 import RecentKeywords from './RecentKeywords';
 import RecommendationKeywords from './RecommendationKeywords';
-import RecommendationProduct from './RecommendationProduct';
 
 export default function InitialResult({ show }: { show: boolean }) {
   const { data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
@@ -21,7 +21,7 @@ export default function InitialResult({ show }: { show: boolean }) {
             <></>
           </div>
         ) : (
-          <RecommendationProduct title="추천 핫딜" products={hotDeals} />
+          <CarouselProductsSection title="추천 핫딜" products={hotDeals} />
         )}
       </div>
     </div>

@@ -7,8 +7,9 @@ import { Suspense, useRef } from 'react';
 import { Info, Thumbsdown, Thumbsup } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
 import SectionHeader from '@/components/SectionHeader';
-import { ProductQueries } from '@entities/product';
 import { cn } from '@/lib/cn';
+
+import { ProductQueries } from '@entities/product';
 
 import { ProductReport } from '../controls';
 

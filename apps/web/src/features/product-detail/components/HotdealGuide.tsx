@@ -5,10 +5,11 @@ import { Fragment, useRef, useState } from 'react';
 
 import Button from '@/components/common/Button';
 import HotdealGuideItemCheckIcon from '@/components/common/icons/HotdealGuideItemCheckIcon';
-import { ProductQueries } from '@entities/product';
 import { cn } from '@/lib/cn';
 
 import { ProductGuidesQuery } from '@shared/api/gql/graphql';
+
+import { ProductQueries } from '@entities/product';
 
 export default function HotdealGuide({
   productId,
