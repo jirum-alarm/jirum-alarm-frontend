@@ -1,7 +1,8 @@
 import BasicLayout from '@/components/layout/BasicLayout';
 import DeviceSpecific from '@/components/layout/DeviceSpecific';
 
-import { NoticeProfitLink } from './components/NoticeProfitUrl';
+import NoticeProfitLink from '@features/product-detail/components/NoticeProfitUrl';
+
 import ProductDetailPageHeader from './components/ProductDeatilPageHeader';
 
 const ProductDetailLayout = async ({

@@ -4,10 +4,11 @@ import { getAccessToken } from '@/app/actions/token';
 import DeviceSpecific from '@/components/layout/DeviceSpecific';
 import { SERVICE_URL } from '@/constants/env';
 import { defaultMetadata } from '@/constants/metadata';
-import { ProductService } from '@/shared/api/product';
 
-import DesktopProductDetailLayout from './components/desktop/ProductDetailLayout';
-import ProductDetailLayout from './components/mobile/ProductDetailLayout';
+import { ProductService } from '@shared/api/product';
+
+import DesktopProductDetailPage from './components/desktop/ProductDetailPage';
+import MobileProductDetailPage from './components/mobile/ProductDetailPage';
 
 export async function generateMetadata({
   params,
@@ -81,10 +82,10 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   const isUserLogin = !!token;
 
   const renderMobile = () => {
-    return <ProductDetailLayout productId={+id} isUserLogin={isUserLogin} />;
+    return <MobileProductDetailPage productId={+id} isUserLogin={isUserLogin} />;
   };
   const renderDesktop = () => {
-    return <DesktopProductDetailLayout productId={+id} isUserLogin={isUserLogin} />;
+    return <DesktopProductDetailPage productId={+id} isUserLogin={isUserLogin} />;
   };
 
   return <DeviceSpecific mobile={renderMobile} desktop={renderDesktop} />;

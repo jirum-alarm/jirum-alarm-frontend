@@ -5,15 +5,14 @@ import { Suspense } from 'react';
 
 import Button from '@/components/common/Button';
 import Jirume from '@/components/common/icons/Jirume';
-import ShareButton from '@/components/ShareButton';
-import { ProductQueries } from '@/entities/product';
-import HotdealBadge from '@/features/products/components/HotdealBadge';
+import { ProductQueries } from '@entities/product';
 import { cn } from '@/lib/cn';
-import { ProductQuery } from '@/shared/api/gql/graphql';
 
-import DisplayTime from '../DisplayTime';
-import LikeButton from '../LikeButton';
-import RecommendButton from '../RecommendButton';
+import DisplayTime from '@shared/ui/DisplayTime';
+import HotdealBadge from '@shared/ui/HotdealBadge';
+import ShareButton from '@shared/ui/ShareButton';
+
+import { LikeButton, RecommendButton } from '@features/product-detail/controls';
 
 import ViewerCount from './ViewerCount';
 
@@ -37,7 +36,7 @@ export default function ProductInfo({
         <div className="h-0.5 w-full bg-gray-600" />
         <div className="flex items-start justify-between gap-x-5 py-4">
           <h1 className="text-xl font-medium text-gray-800">{product.title}</h1>
-          <ShareButton title={shareTitle} page="DETAIL" />
+          <ShareButton title={shareTitle} />
         </div>
         <div className="mb-2 mt-3 h-5 text-sm text-gray-500">
           <DisplayTime time={product.postedAt} />
