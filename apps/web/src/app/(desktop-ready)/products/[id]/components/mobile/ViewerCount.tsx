@@ -24,8 +24,8 @@ export default function ViewerCount({ productId }: ViewerCountProps) {
 
   return (
     <>
-      <div ref={ref} className="relative top-0 h-0 w-full translate-y-[28px]" />
-      <div className="sticky top-[56px] z-50 h-[48px] w-full">
+      <div ref={ref} className="relative top-0 h-0 w-full translate-y-7" />
+      <div className="sticky top-14 z-50 h-[48px] w-full">
         <div className="flex w-full items-center justify-center">
           <motion.div
             layout
@@ -47,7 +47,7 @@ export default function ViewerCount({ productId }: ViewerCountProps) {
             <motion.div
               layout
               className={cn(
-                `flex h-[48px] items-center justify-center border bg-secondary-50 px-5`,
+                `bg-secondary-50 flex h-[48px] items-center justify-center border px-5`,
                 'shrink-0 whitespace-nowrap',
               )}
               initial={{
@@ -61,7 +61,7 @@ export default function ViewerCount({ productId }: ViewerCountProps) {
             >
               <span className="text-sm text-gray-700">
                 지금&nbsp;
-                <strong className="font-semibold text-secondary-500">
+                <strong className="text-secondary-500 font-semibold">
                   {count.toLocaleString('ko-kr')}명
                 </strong>
                 이 보고 있어요

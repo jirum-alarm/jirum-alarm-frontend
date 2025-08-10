@@ -22,8 +22,8 @@ const SLIDER_CONFIG_DESKTOP: SwiperOptions = {
 } as const;
 
 const JirumRankingContainer = () => (
-  <div className="w-full px-9 pt-[56px]">
-    <div className="mx-auto mt-9 max-w-slider-max">
+  <div className="w-full px-9 pt-14">
+    <div className="max-w-slider-max mx-auto mt-9">
       <SectionHeader
         title="지름알림 랭킹"
         titleClassName="text-white"

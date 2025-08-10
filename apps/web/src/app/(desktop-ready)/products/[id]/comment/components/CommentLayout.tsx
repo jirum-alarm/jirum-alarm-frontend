@@ -33,7 +33,7 @@ export default function CommentLayout({
     <>
       {comments.length > 0 ? (
         <>
-          <main className="flex grow flex-col divide-y divide-gray-200 pb-[64px] pt-[56px]">
+          <main className="flex grow flex-col divide-y divide-gray-200 pt-14 pb-[64px]">
             {comments.map((comment) => {
               const editStatus =
                 editingComment?.status === 'update' && editingComment?.comment.id === comment.id
@@ -54,7 +54,7 @@ export default function CommentLayout({
         <CommentListSkeleton />
       )}
       <TopButton />
-      <div className="fixed bottom-0 z-40 w-full max-w-screen-mobile-max">
+      <div className="max-w-mobile-max fixed bottom-0 z-40 w-full">
         <CommentInput productId={productId} isUserLogin={isUserLogin} />
       </div>
     </>

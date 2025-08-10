@@ -27,7 +27,7 @@ export default function ProductInfo({ productId }: { productId: number }) {
           {product.isEnd && (
             <div
               className={cn('border border-gray-400 bg-white px-2 text-gray-700', {
-                'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-[20px]': true,
+                'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-5': true,
               })}
             >
               판매종료

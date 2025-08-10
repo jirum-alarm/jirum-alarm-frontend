@@ -15,7 +15,7 @@ export default function RecommendPageHeader() {
   const title = keyword ? `${keyword} 추천 상품 | 지름알림` : '지금 추천하는 상품';
 
   return (
-    <header className="fixed top-0 z-40 flex h-[56px] w-full max-w-screen-mobile-max items-center justify-between bg-white px-5">
+    <header className="max-w-mobile-max fixed top-0 z-40 flex h-14 w-full items-center justify-between bg-white px-5">
       <div className="flex grow items-center gap-x-1">
         <BackButton backTo={PAGE.HOME} />
         <h2 className="text-lg font-semibold text-black">지금 추천하는 상품</h2>

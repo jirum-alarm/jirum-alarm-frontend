@@ -21,14 +21,14 @@ const HomeHeader = () => {
   return (
     <div
       className={cn(
-        'fixed top-0 z-50 w-full max-w-screen-mobile-max bg-white shadow-sm transition-all duration-300',
+        'max-w-mobile-max fixed top-0 z-50 w-full bg-white shadow-xs transition-all duration-300',
         {
           'translate-y-0': isScrolled,
           '-translate-y-full': !isScrolled,
         },
       )}
     >
-      <header className="mx-auto flex h-[56px] w-full max-w-screen-mobile-max items-center justify-between px-5 py-2">
+      <header className="max-w-mobile-max mx-auto flex h-14 w-full items-center justify-between px-5 py-2">
         <LogoLink />
         <div className="flex items-center gap-x-5">
           <SearchLinkButton color="#101828" onClick={handleSearchClick} />

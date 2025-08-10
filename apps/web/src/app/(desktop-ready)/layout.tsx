@@ -25,14 +25,14 @@ const DesktopReadyLayout = async ({ children }: { children: React.ReactNode }) =
   };
 
   return (
-    <div className={isMobile ? '' : 'pc min-w-[1024px]'}>
+    <div className={isMobile ? '' : 'pc min-w-5xl'}>
       <DeviceSpecific desktop={renderDesktop} mobile={renderMobile} />
       <div className="min-h-screen">{children}</div>
       <DeviceSpecific
         desktop={() => (
           <>
-            <div className="sticky bottom-0 left-0 right-0 z-50">
-              <div className="relative left-0 mx-auto max-w-screen-layout-max 3xl:left-10">
+            <div className="sticky right-0 bottom-0 left-0 z-50">
+              <div className="max-w-layout-max 3xl:left-10 relative left-0 mx-auto">
                 <TopButton type="scrolling-up" />
               </div>
             </div>

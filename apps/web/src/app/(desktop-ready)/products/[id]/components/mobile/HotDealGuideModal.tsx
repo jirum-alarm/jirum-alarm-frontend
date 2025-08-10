@@ -13,11 +13,11 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
     <Drawer.Root>
       <Drawer.Trigger asChild>{trigger}</Drawer.Trigger>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full max-w-screen-mobile-max rounded-t-[20px] bg-white outline-none">
+        <Drawer.Overlay className="fixed inset-0 z-9999 bg-black/40" />
+        <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 bottom-0 z-9999 mx-auto h-fit w-full bg-white outline-hidden">
           <div className="flex flex-col items-center">
             <Drawer.Title asChild>
-              <h3 className="pb-[12px] pt-[32px] text-xl font-bold">핫딜 기준 안내</h3>
+              <h3 className="pt-[32px] pb-[12px] text-xl font-bold">핫딜 기준 안내</h3>
             </Drawer.Title>
             <p className="pb-[90px] text-center text-gray-700">
               AI를 활용해서 상품의 기존 가격과 할인된 가격을
@@ -25,12 +25,12 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
               비교해서 3단계로 구분해드려요!
             </p>
             <div className="w-[311px]">
-              <div className="flex h-[20px] w-full items-center justify-around gap-[12px] rounded-[40px] bg-gradient-to-r from-[#FFEEE0] from-0% via-[#FFC0B2] via-[27%] to-[#FF4639] to-100%">
+              <div className="flex h-5 w-full items-center justify-around gap-[12px] rounded-[40px] bg-linear-to-r from-[#FFEEE0] from-0% via-[#FFC0B2] via-27% to-[#FF4639] to-100%">
                 <div className="relative h-[12px] w-[12px] rounded-full bg-white">
-                  <div className="absolute -left-[calc(66px/2-6px)] -top-[calc(30px+12px)] inline-flex flex-col items-center">
+                  <div className="absolute -top-[calc(30px+12px)] -left-[calc(66px/2-6px)] inline-flex flex-col items-center">
                     <div
                       className={cn(
-                        `flex h-[24px] w-[66px] items-center justify-center rounded-[8px] bg-gray-200 text-sm font-semibold text-gray-800`,
+                        `flex h-6 w-[66px] items-center justify-center rounded-[8px] bg-gray-200 text-sm font-semibold text-gray-800`,
                       )}
                     >
                       기존 가격
@@ -48,7 +48,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
                   </div>
                 </div>
                 <div className="relative h-[12px] w-[12px] rounded-full bg-white">
-                  <div className="absolute -left-[calc(57px/2-6px)] -top-[calc(30px+12px)] inline-flex flex-col items-center">
+                  <div className="absolute -top-[calc(30px+12px)] -left-[calc(57px/2-6px)] inline-flex flex-col items-center">
                     <HotdealBadge badgeVariant="page" hotdealType={HotDealType.HotDeal} />
                     <svg
                       className="-mt-[2px]"
@@ -64,7 +64,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
                 </div>
 
                 <div className="relative h-[12px] w-[12px] rounded-full bg-white">
-                  <div className="absolute -left-[calc(57px/2-6px)] -top-[calc(30px+12px)] inline-flex flex-col items-center">
+                  <div className="absolute -top-[calc(30px+12px)] -left-[calc(57px/2-6px)] inline-flex flex-col items-center">
                     <HotdealBadge badgeVariant="page" hotdealType={HotDealType.SuperDeal} />
                     <svg
                       className="-mt-[2px]"
@@ -80,7 +80,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
                 </div>
 
                 <div className="relative h-[12px] w-[12px] rounded-full bg-white">
-                  <div className="absolute -left-[calc(62px/2-6px)] -top-[calc(30px+12px)] inline-flex flex-col items-center">
+                  <div className="absolute -top-[calc(30px+12px)] -left-[calc(62px/2-6px)] inline-flex flex-col items-center">
                     <HotdealBadge badgeVariant="page" hotdealType={HotDealType.UltraDeal} />
                     <svg
                       className="-mt-[2px]"

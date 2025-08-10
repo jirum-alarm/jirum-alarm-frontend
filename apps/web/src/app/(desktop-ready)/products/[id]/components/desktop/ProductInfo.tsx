@@ -39,7 +39,7 @@ export default function ProductInfo({
           <h1 className="text-xl font-medium text-gray-800">{product.title}</h1>
           <ShareButton title={shareTitle} />
         </div>
-        <div className="mb-2 mt-3 h-5 text-sm text-gray-500">
+        <div className="mt-3 mb-2 h-5 text-sm text-gray-500">
           <DisplayTime time={product.postedAt} />
         </div>
         <div className="flex justify-between pb-8">
@@ -47,7 +47,7 @@ export default function ProductInfo({
             {product.isEnd && (
               <div
                 className={cn('border border-gray-400 bg-white px-2 text-gray-700', {
-                  'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-[20px]': true,
+                  'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-5': true,
                 })}
               >
                 판매종료

@@ -116,7 +116,7 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
   return (
     <div ref={ref} className="flex h-[83px] w-full flex-col justify-end">
       <div className="w-full gap-[8px]">
-        <div className="relative flex h-[14px] w-full items-center justify-between rounded-[20px] bg-gray-300 p-[5px]">
+        <div className="rounded-5 relative flex h-[14px] w-full items-center justify-between bg-gray-300 p-[5px]">
           {Array.from({ length: 5 }).map((_, index) => (
             <div key={index} className="h-[4px] w-[4px] rounded-full bg-gray-400" />
           ))}
@@ -136,8 +136,8 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
                     : 'justify-center',
               )}
             >
-              <div className="absolute bottom-[34px] flex h-[32px] w-fit items-center justify-center whitespace-nowrap rounded-full bg-gray-900 px-[10px] py-[6px]">
-                <span className="text-base font-semibold text-primary-500">
+              <div className="absolute bottom-[34px] flex h-[32px] w-fit items-center justify-center rounded-full bg-gray-900 px-[10px] py-[6px] whitespace-nowrap">
+                <span className="text-primary-500 text-base font-semibold">
                   {`${currentValue.toLocaleString()}원`}
                 </span>
               </div>

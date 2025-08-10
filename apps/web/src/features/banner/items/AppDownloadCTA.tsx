@@ -13,12 +13,12 @@ const AppDownloadCTA = () => {
   return (
     <>
       {type && link && (
-        <div className="flex h-[76px] w-full items-center rounded-[8px] border border-secondary-700 bg-secondary-800 px-[16px]">
+        <div className="border-secondary-700 bg-secondary-800 flex h-[76px] w-full items-center rounded-[8px] border px-[16px]">
           <AppIcon />
           <div className="ml-[14px]">
             <p>
               <span className="font-medium text-white">
-                지름알림 앱 <strong className="font-semibold text-secondary-200">다운받고</strong>
+                지름알림 앱 <strong className="text-secondary-200 font-semibold">다운받고</strong>
               </span>
               <br />
               <span className="text-s text-gray-200">핫딜을 실시간으로 확인하세요!</span>
@@ -28,7 +28,7 @@ const AppDownloadCTA = () => {
             <a
               href={link}
               onClick={handleAppDownloadClick}
-              className="block h-[32px] rounded-[20px] bg-secondary-50 px-[12px] py-[6px] text-sm font-semibold text-secondary-700"
+              className="rounded-5 bg-secondary-50 text-secondary-700 block h-[32px] px-[12px] py-[6px] text-sm font-semibold"
             >
               다운받기
             </a>

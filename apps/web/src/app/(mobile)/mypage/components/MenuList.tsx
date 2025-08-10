@@ -11,7 +11,7 @@ const MENU_LIST: Array<{
 }> = [
   {
     icon: (
-      <div className="flex h-[28px] w-[28px] items-center justify-center">
+      <div className="flex h-7 w-7 items-center justify-center">
         <Heart width={24} height={24} />
       </div>
     ),

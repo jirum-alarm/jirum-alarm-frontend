@@ -55,16 +55,16 @@ interface TabBarProps {
 
 // 기본 스타일 정의
 const defaultStyles: Required<TabBarStyles> = {
-  container: 'sticky top-0 z-30 overflow-hidden bg-white pl-4 pr-12 shadow-sm transition-transform',
+  container: 'sticky top-0 z-30 overflow-hidden bg-white pl-4 pr-12 shadow-xs transition-transform',
   tabList: 'relative flex',
   tabTrigger: {
-    base: 'relative h-[40px] shrink-0 whitespace-nowrap px-3 py-2 text-base transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
+    base: 'relative h-[40px] shrink-0 whitespace-nowrap px-3 py-2 text-base transition-colors duration-200 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
     active: 'font-semibold text-primary-600',
     inactive: 'font-medium text-gray-500 hover:text-gray-900',
   },
   tabIndicator: 'absolute bottom-[0.1px] h-0.5 bg-primary-600',
   settingsContainer: 'absolute bottom-0 right-0 flex h-full w-16 items-center',
-  settingsGradient: 'h-full w-4 bg-gradient-to-r from-transparent to-white',
+  settingsGradient: 'h-full w-4 bg-linear-to-r from-transparent to-white',
   settingsButton: '-m-2 p-2',
 };
 
@@ -195,7 +195,7 @@ const TabBar = ({
         mergedStyles.container,
         {
           'translate-y-0': !isHeaderVisible,
-          'translate-y-[56px]': isHeaderVisible,
+          'translate-y-14': isHeaderVisible,
         },
       ])}
     >

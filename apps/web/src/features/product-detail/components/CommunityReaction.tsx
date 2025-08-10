@@ -40,7 +40,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
             <>
               커뮤니티 반응
               {!!product.positiveCommunityReactionCount && (
-                <span className="pl-2 text-secondary-500">
+                <span className="text-secondary-500 pl-2">
                   {product.positiveCommunityReactionCount}
                 </span>
               )}
@@ -122,14 +122,14 @@ const Reaction = ({
   return (
     <div ref={ref} className="rounded-lg bg-gray-800 pb-6">
       <div className="flex justify-between pb-[10px]">
-        <div className="flex items-center gap-x-1.5 px-4 pb-3 pt-4">
+        <div className="flex items-center gap-x-1.5 px-4 pt-4 pb-3">
           {<Thumbsup active={isPositive} />}
           <span className={cn(['font-semibold', isPositive ? 'text-white' : 'text-gray-400'])}>
             구매할래요!
           </span>
         </div>
 
-        <div className="flex items-center gap-x-1.5 px-4 pb-3 pt-4">
+        <div className="flex items-center gap-x-1.5 px-4 pt-4 pb-3">
           <span className={cn(['font-semibold', !isPositive ? 'text-white' : 'text-gray-400'])}>
             아쉬워요
           </span>
@@ -210,7 +210,7 @@ const Reaction = ({
         <div className={cn(['absolute -bottom-1 left-1/2 -translate-x-1/2'])}>
           <span
             className={cn([
-              'text-[32px] font-semibold leading-[38px]',
+              'text-[32px] leading-[38px] font-semibold',
               isPositive ? 'text-secondary-50' : 'text-error-100',
             ])}
           >
@@ -225,8 +225,8 @@ const Reaction = ({
 
 const NoReaction = () => {
   return (
-    <div className="flex h-[156px] items-center justify-center gap-[4px] rounded-[8px] border border-gray-200 px-[28px] py-[24px]">
-      <div className="flex aspect-square w-[60px] items-center justify-center">
+    <div className="h-156px] flex items-center justify-center gap-[4px] rounded-[8px] border border-gray-200 px-7 py-6">
+      <div className="flex aspect-square w-15 items-center justify-center">
         {/* simplified static svg removed for brevity in feature refactor */}
       </div>
       <p>

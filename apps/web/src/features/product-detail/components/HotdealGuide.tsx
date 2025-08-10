@@ -40,13 +40,13 @@ export default function HotdealGuide({
 
   return (
     <section className="relative">
-      <div className="flex h-[56px] items-center">
+      <div className="flex h-14 items-center">
         <h2 className="text-lg font-bold text-gray-900">핫딜 제대로 알고 사자!</h2>
       </div>
-      <div className={cn('overflow-hidden rounded-lg border border-secondary-300 pt-4')}>
+      <div className={cn('border-secondary-300 overflow-hidden rounded-lg border pt-4')}>
         <div
           ref={guidesRef}
-          className={cn('relative flex flex-col gap-y-4 break-all px-3', {
+          className={cn('relative flex flex-col gap-y-4 px-3 break-all', {
             'max-h-64 overflow-y-hidden': isCollapsed,
           })}
         >
@@ -54,11 +54,11 @@ export default function HotdealGuide({
             <HotdealGuideItem key={`${guide.id}_${i}`} guide={guide} />
           ))}
           {isCollapsed && (
-            <div className="absolute bottom-0 left-0 right-0 z-10 h-16 w-full bg-gradient-to-t from-white via-white/80 to-transparent" />
+            <div className="absolute right-0 bottom-0 left-0 z-10 h-16 w-full bg-linear-to-t from-white via-white/80 to-transparent" />
           )}
           {!isCollapsed && (
             <div
-              className={cn('mt-4 rounded-lg bg-secondary-50 p-3', {
+              className={cn('bg-secondary-50 mt-4 rounded-lg p-3', {
                 'mb-4': !isCollapsed,
               })}
             >

@@ -50,7 +50,7 @@ function CommentList({
         })}
       </div>
       {comments.length > 1 && isMobile && (
-        <div className="pointer-events-none absolute bottom-0 left-0 h-12 w-full bg-gradient-to-t from-white to-transparent" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-12 w-full bg-linear-to-t from-white to-transparent" />
       )}
     </div>
   );

@@ -19,7 +19,7 @@ export default function BottomCTA({
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
 
   return (
-    <div className="fixed bottom-0 z-40 flex h-[64px] w-full max-w-screen-mobile-max gap-x-4 border-t border-gray-100 bg-white px-5 py-2">
+    <div className="max-w-mobile-max fixed bottom-0 z-40 flex h-[64px] w-full gap-x-4 border-t border-gray-100 bg-white px-5 py-2">
       <TopButton />
       <div className="flex h-[48px] items-center">
         <LikeButton productId={productId} isUserLogin={isUserLogin} />

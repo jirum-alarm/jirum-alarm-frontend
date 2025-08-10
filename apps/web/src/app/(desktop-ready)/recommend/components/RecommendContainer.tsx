@@ -21,14 +21,14 @@ const RecommendContainer = ({ isMobile }: { isMobile: boolean }) => {
 
   return (
     <>
-      <div className="sticky top-[56px] z-40 w-full bg-white px-5 py-2 pc:flex pc:justify-center pc:py-3">
+      <div className="pc:flex pc:justify-center pc:py-3 sticky top-14 z-40 w-full bg-white px-5 py-2">
         <RecommendedProductTabs
           productKeywords={productKeywords}
           selectedKeyword={recommendedKeyword}
           onSelectedKeyword={handleSelectedKeyword}
         />
       </div>
-      <div className="px-5 pt-14 pc:pt-7">
+      <div className="pc:pt-7 px-5 pt-14">
         <Suspense fallback={<GridProductListSkeleton length={size} />}>
           <RecommendProductList keyword={recommendedKeyword} limit={size} />
         </Suspense>
