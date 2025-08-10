@@ -20,3 +20,5 @@
 .turbo
 
 .idea
+# Ignore Cursor project files
+.cursor/
