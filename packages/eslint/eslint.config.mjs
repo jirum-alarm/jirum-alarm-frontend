@@ -16,7 +16,7 @@ const compat = new FlatCompat({
 const config = [
   js.configs.recommended,
   ...compat.config({
-    extends: ["next"],
+    extends: ["next/core-web-vitals"],
   }),
   ...tseslint.recommended,
   eslintConfigPrettier,

@@ -1,5 +1,5 @@
 {
-  "extends": "@jirum/tsconfig/tsconfig.json",
+  "extends": "@jirum/tsconfig/nextjs.json",
   "compilerOptions": {
     "jsx": "preserve",
     "plugins": [
@@ -20,14 +20,6 @@
       "@widgets/*": ["./src/widgets/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/components",
-    "src/graphql/auth.gql",
-    "*.config.(js|mjs)"
-  ],
+  "include": ["./next-env.d.ts", "./src", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
