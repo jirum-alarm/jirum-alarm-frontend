@@ -62,7 +62,7 @@ function CarouselProductList({
       {itemsToShow.map((product, i) => (
         <SwiperSlide
           key={product.id || i}
-          className="pr-3 last:pr-0 pc:pr-6"
+          className="pc:pr-6 pr-3 last:pr-0"
           style={{ width: 'fit-content' }}
         >
           <CarouselProductCard product={product} />

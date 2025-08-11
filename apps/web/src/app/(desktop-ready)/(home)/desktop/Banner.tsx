@@ -3,7 +3,7 @@ import KakaoOpenChatLink from '../../../../features/banner/items/KakaoOpenChatLi
 
 const Banner = () => {
   return (
-    <div className="mb-10 mt-8 flex h-[120px] w-full gap-x-[25px] px-5">
+    <div className="mt-8 mb-10 flex h-[120px] w-full gap-x-[25px] px-5">
       <KakaoOpenChatLink />
       <AboutLink />
     </div>

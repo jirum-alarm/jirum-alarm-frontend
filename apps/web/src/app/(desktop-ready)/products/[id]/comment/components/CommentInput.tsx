@@ -42,12 +42,12 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 py-3 pc:min-h-[80px]"
+      className="pc:min-h-[80px] flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 py-3"
       onPointerDown={handlePointerDown}
     >
       <div className="flex grow flex-col items-center overflow-hidden rounded-lg border border-transparent bg-gray-50 focus-within:border-gray-500">
         {editingComment?.status === 'reply' && (
-          <div className="flex h-[30px] w-full items-center justify-between border-b border-secondary-100 bg-secondary-50 pl-3 pr-2 text-sm text-secondary-700">
+          <div className="border-secondary-100 bg-secondary-50 text-secondary-700 flex h-[30px] w-full items-center justify-between border-b pr-2 pl-3 text-sm">
             <div className="flex items-center gap-x-1">
               {editingComment.comment.author?.nickname ?? '?'}님에게 대댓글 남기는 중
             </div>
@@ -60,7 +60,7 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
           </div>
         )}
         {editingComment?.status === 'update' && (
-          <div className="flex h-[30px] w-full items-center justify-between border-b border-primary-100 bg-primary-50 pl-3 pr-2 text-sm text-primary-700">
+          <div className="border-primary-100 bg-primary-50 text-primary-700 flex h-[30px] w-full items-center justify-between border-b pr-2 pl-3 text-sm">
             <div className="flex items-center gap-x-1">댓글 수정 중</div>
             <button
               className="-m-2 flex h-auto items-center gap-x-1 bg-transparent p-2"
@@ -72,7 +72,7 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
         )}
         <textarea
           ref={ref}
-          className="max-h-[100px] min-h-[40px] w-full resize-none border-none bg-transparent px-3 py-2 outline-hidden pc:max-h-[300px]"
+          className="pc:max-h-[300px] max-h-[100px] min-h-[40px] w-full resize-none border-none bg-transparent px-3 py-2 outline-hidden"
           placeholder={placeholder}
           value={comment}
           onChange={handleInputChange}
@@ -91,7 +91,7 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
       </div>
       <Button
         type="submit"
-        className="h-10 w-auto shrink-0 bg-gray-800 px-6 text-base font-semibold text-primary-500 disabled:bg-gray-400 disabled:text-white"
+        className="text-primary-500 h-10 w-auto shrink-0 bg-gray-800 px-6 text-base font-semibold disabled:bg-gray-400 disabled:text-white"
         disabled={!canSubmit}
       >
         등록

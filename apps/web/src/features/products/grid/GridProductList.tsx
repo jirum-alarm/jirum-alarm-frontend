@@ -14,7 +14,7 @@ type ProductGridListProps = {
 
 export default function ProductGridList({ products, rankFrom, logging }: ProductGridListProps) {
   return (
-    <div className="grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 sm:grid-cols-3">
+    <div className="pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
       {products.map((product, index) => (
         <ProductGridCard
           key={product.id}

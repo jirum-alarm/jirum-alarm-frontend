@@ -12,7 +12,7 @@ const ProductImageCardSkeleton = () => {
           <div className="w-1/2 grow rounded-sm bg-gray-100"></div>
         </div>
         <div className="flex h-9 items-center pt-1">
-          <div className="h-6 w-2/3 max-w-[120px] rounded-sm bg-gray-100 pc:max-w-[192px]" />
+          <div className="pc:max-w-[192px] h-6 w-2/3 max-w-[120px] rounded-sm bg-gray-100" />
         </div>
       </div>
     </div>

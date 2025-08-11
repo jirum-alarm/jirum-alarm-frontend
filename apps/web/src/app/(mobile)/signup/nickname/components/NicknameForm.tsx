@@ -37,7 +37,7 @@ const NickNameForm = ({
         reset={reset}
       />
       <div className="h-32" />
-      <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[600px] px-5 pb-9 pt-3">
+      <div className="fixed right-0 bottom-0 left-0 m-auto w-full max-w-[600px] px-5 pt-3 pb-9">
         <Button type="submit" disabled={!isValidInput}>
           다음
         </Button>

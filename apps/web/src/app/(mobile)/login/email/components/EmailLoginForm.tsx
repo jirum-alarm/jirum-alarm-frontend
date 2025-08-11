@@ -18,7 +18,7 @@ const EmailLoginForm = () => {
       <PasswordInput password={password} hideHelperText={true} />
       <div className="bg-white py-9">
         {error && (
-          <p className="pb-4 text-center text-sm text-error-500">
+          <p className="text-error-500 pb-4 text-center text-sm">
             이메일 혹은 비밀번호가 올바르지 않아요.
           </p>
         )}
@@ -54,7 +54,7 @@ const EmailInput = ({
             <button
               type="button"
               onMouseDown={email.reset}
-              className="absolute left-[-5px] top-[-5px] cursor-pointer p-2"
+              className="absolute top-[-5px] left-[-5px] cursor-pointer p-2"
             >
               <Cancel />
             </button>
@@ -85,7 +85,7 @@ const PasswordInput = ({
 
   return (
     <>
-      <label htmlFor="password" className="pb-2 pt-11 text-sm text-gray-500">
+      <label htmlFor="password" className="pt-11 pb-2 text-sm text-gray-500">
         비밀번호
       </label>
       <Input
@@ -128,7 +128,7 @@ const HelperText = ({
   isInvalidLength: boolean;
 }) => {
   return (
-    <ul className="list-disc pl-4 pt-2">
+    <ul className="list-disc pt-2 pl-4">
       <li
         className={cn(
           'transition-colors',

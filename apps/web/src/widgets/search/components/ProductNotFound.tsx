@@ -25,7 +25,7 @@ const ProductNotFound = () => {
   };
 
   return (
-    <div className="flex h-full w-full animate-fade-in flex-col items-start justify-center pt-11">
+    <div className="animate-fade-in flex h-full w-full flex-col items-start justify-center pt-11">
       <div className="w-full pb-8 text-center">
         <div className="flex justify-center pb-4">
           <ErrorIllust />
@@ -39,7 +39,7 @@ const ProductNotFound = () => {
         <div className="w-full pb-16 text-center">
           <button
             onClick={handleAddKeywordClick}
-            className="rounded-lg bg-gray-800 px-5 py-1.5 font-semibold text-primary-500"
+            className="text-primary-500 rounded-lg bg-gray-800 px-5 py-1.5 font-semibold"
           >
             <Link href="/mypage/keyword">키워드 등록</Link>
           </button>

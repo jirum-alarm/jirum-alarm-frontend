@@ -49,7 +49,7 @@ export default function RecommendButton({ productId }: { productId: number }) {
       className={cn(
         `flex h-[36px] items-center justify-center gap-x-1 rounded-full bg-white px-3.5 text-gray-700`,
         {
-          'border border-secondary-500 font-semibold text-secondary-700':
+          'border-secondary-500 text-secondary-700 border font-semibold':
             productStats?.isMyLike !== null && productStats?.isMyLike,
         },
       )}

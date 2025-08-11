@@ -18,7 +18,7 @@ const RecommendedProductSection = () => {
           </div>
         }
       />
-      <div className="pb-5 pc:pt-4">
+      <div className="pc:pt-4 pb-5">
         <RecommendPrefetch>
           <ApiErrorBoundary>
             <Suspense>

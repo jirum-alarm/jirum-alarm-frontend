@@ -37,7 +37,7 @@ export default CategoriesForm;
 
 const Description = () => {
   return (
-    <p className="pb-4 pt-12 text-center text-sm text-gray-400">
+    <p className="pt-12 pb-4 text-center text-sm text-gray-400">
       관심 분야는 나중에 다시 변경할 수 있어요!
     </p>
   );

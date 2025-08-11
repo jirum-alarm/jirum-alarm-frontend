@@ -16,10 +16,10 @@ export default function CarouselProductCard({ product }: { product: ProductCardT
     <Link
       href={PAGE.DETAIL + '/' + product.id}
       prefetch={false}
-      className="inline-block w-[120px] pc:w-[192px]"
+      className="pc:w-[192px] inline-block w-[120px]"
       onClick={handleClick}
     >
-      <div className="relative aspect-square h-[120px] overflow-hidden rounded-lg border border-gray-200 bg-gray-50 pc:h-[192px]">
+      <div className="pc:h-[192px] relative aspect-square h-[120px] overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
         <ProductThumbnail
           src={product?.thumbnail ?? ''}
           title={product.title}
@@ -28,7 +28,7 @@ export default function CarouselProductCard({ product }: { product: ProductCardT
           alt={product.title}
         />
         {product.isEnd ? (
-          <div className="text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg bg-white px-2 text-xs text-gray-700">
+          <div className="text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">
             판매종료
           </div>
         ) : (
@@ -40,7 +40,7 @@ export default function CarouselProductCard({ product }: { product: ProductCardT
         )}
       </div>
       <div className="flex flex-col">
-        <span className="line-clamp-2 h-12 w-full break-words pt-2 text-sm text-gray-700">
+        <span className="line-clamp-2 h-12 w-full pt-2 text-sm break-words text-gray-700">
           {product.title}
         </span>
         <div className="flex items-center pt-1">

@@ -66,17 +66,17 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
   }, []);
 
   return (
-    <div className="flex h-full flex-col px-5 pb-8 pt-9">
+    <div className="flex h-full flex-col px-5 pt-9 pb-8">
       <p className="pb-7 text-2xl font-semibold">
-        <span className="inline-block font-extrabold shadow-[inset_0-12px_0] shadow-primary-500">
+        <span className="shadow-primary-500 inline-block font-extrabold shadow-[inset_0-12px_0]">
           지름알림
         </span>{' '}
         앱 다운받고
         <br /> 핫딜을 알림
-        <span className="inline-flex h-2 w-2 rounded-full bg-primary-500 align-text-top"></span>{' '}
+        <span className="bg-primary-500 inline-flex h-2 w-2 rounded-full align-text-top"></span>{' '}
         으로 받아보세요!
       </p>
-      <div className="flex animate-fade-in justify-center rounded-md bg-gray-100">
+      <div className="animate-fade-in flex justify-center rounded-md bg-gray-100">
         <Image
           src={`https://cdn.jirum-alarm.com/assets/app_download_guide.webp`}
           alt="download app guide"
@@ -85,7 +85,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
         />
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 m-auto w-full max-w-[600px] bg-white px-5 pb-8 pt-4">
+      <div className="fixed right-0 bottom-0 left-0 m-auto w-full max-w-[600px] bg-white px-5 pt-4 pb-8">
         <div className="flex flex-col items-center pb-6">
           <p className="pb-3 text-center text-sm text-gray-400">
             키워드 알림으로
@@ -126,7 +126,7 @@ function AndroidDownloadButton() {
       onClick={handleClick}
       className="w-full"
     >
-      <button className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-primary-500 py-3 font-semibold text-gray-900">
+      <button className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900">
         <Google />
         Google Play
       </button>
@@ -149,7 +149,7 @@ function IosDownloadButton() {
       onClick={handleClick}
       className="w-full"
     >
-      <button className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-primary-500 py-3 font-semibold text-gray-900">
+      <button className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900">
         <Apple />
         App Store
       </button>
@@ -182,7 +182,7 @@ function LoginGuide() {
         </Button>
         <p className="pt-6 text-sm">
           이미 지름알림 회원이신가요?
-          <Link href={EMAIL_LOGIN_PATH} className="pl-3 text-primary-700">
+          <Link href={EMAIL_LOGIN_PATH} className="text-primary-700 pl-3">
             로그인
           </Link>
         </p>
