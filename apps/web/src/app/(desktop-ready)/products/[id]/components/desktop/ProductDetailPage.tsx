@@ -31,7 +31,7 @@ export default async function DesktopProductDetailPage({
 }) {
   return (
     <div className="mb-[68px] flex flex-col items-stretch">
-      <div className="flex gap-x-6">
+      <div className="flex gap-x-12">
         <Suspense
           fallback={
             <>
@@ -52,15 +52,15 @@ export default async function DesktopProductDetailPage({
         </Suspense>
       </div>
       <Hr className="mt-15 mb-[52px]" />
-      <div className="flex gap-x-6">
-        <div className="flex-1 basis-1/2 pr-3">
+      <div className="flex gap-x-12">
+        <div className="flex-1 basis-1/2">
           <Suspense fallback={<div className="h-[400px] opacity-0" />}>
             <ProductAdditionalInfoPrefetch productId={productId}>
               <HotdealGuide fixExpanded={true} productId={productId} />
             </ProductAdditionalInfoPrefetch>
           </Suspense>
         </div>
-        <div className="flex-1 basis-1/2 pl-3">
+        <div className="flex-1 basis-1/2">
           <Suspense fallback={<div className="h-[400px] opacity-0" />}>
             <ProductStatsPrefetch productId={productId}>
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
@@ -74,7 +74,7 @@ export default async function DesktopProductDetailPage({
         </div>
       </div>
       <Hr className="mt-21.5 mb-15" />
-      <div className="flex flex-col gap-y-15">
+      <div className="gap-y-15 flex flex-col">
         <CommentSection productId={productId} />
         <Hr />
         <TogetherViewedSection productId={productId} />

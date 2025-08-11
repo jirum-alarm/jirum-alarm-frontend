@@ -1,12 +1,16 @@
 import React from 'react';
 
-interface LoginIllustProps {
+interface StandingIllustProps {
   width?: number;
   height?: number;
   className?: string;
 }
 
-const LoginIllust: React.FC<LoginIllustProps> = ({ width = 241, height = 240, className }) => {
+const StandingIllust: React.FC<StandingIllustProps> = ({
+  width = 241,
+  height = 240,
+  className,
+}) => {
   return (
     <svg
       width={width}
@@ -68,4 +72,4 @@ const LoginIllust: React.FC<LoginIllustProps> = ({ width = 241, height = 240, cl
   );
 };
 
-export default LoginIllust;
+export default StandingIllust;

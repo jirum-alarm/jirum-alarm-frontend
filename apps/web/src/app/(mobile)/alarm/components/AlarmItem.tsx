@@ -5,7 +5,6 @@ import { PAGE } from '@/constants/page';
 import { INotification } from '@/graphql/interface';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
-import { displayTime } from '@/util/displayTime';
 
 import DisplayTime from '@shared/ui/DisplayTime';
 import Link from '@shared/ui/Link';
@@ -24,7 +23,7 @@ const AlarmItem = ({ notification }: { notification: INotification }) => {
         </div>
         <div className="flex-1 pl-3">
           <p className="line-clamp-2 w-full text-sm text-gray-900">
-            <HighlightText message={message} keyword={keyword?.split(' ')[0]} />
+            <HighlightText message={message} keyword={keyword?.split(' ')[0] ?? ''} />
           </p>
           <div className="flex items-center gap-x-3 pt-2">
             {(isHot || isEnd) && (

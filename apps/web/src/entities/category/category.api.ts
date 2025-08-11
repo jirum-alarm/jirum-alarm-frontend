@@ -6,7 +6,7 @@ export const getCategoriesForUser = async () => {
   // 두 개의 API를 병렬로 요청하고 각각의 성공/실패 여부를 다룹니다.
   const [categoriesResult, myCategoriesResult] = await Promise.allSettled([
     CategoryService.getCategories(),
-    CategoryService.getMyCategoriesServer(),
+    CategoryService.getMyCategories(),
   ]);
 
   let categories: { id: number; name: string }[] = [];

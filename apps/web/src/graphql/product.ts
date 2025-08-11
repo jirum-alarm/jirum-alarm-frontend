@@ -116,7 +116,6 @@ export const QueryProductInfo = gql`
     }
     hotDealType
     viewCount
-    likeCount
     mallName
   }
   query ProductInfo($id: Int!) {

@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/components/common/Button';
-import { LoginIllust } from '@/components/common/icons/Illust';
+import { StandingIllust } from '@/components/common/icons/Illust';
 import BasicLayout from '@/components/layout/BasicLayout';
 import useMyRouter from '@/hooks/useMyRouter';
 
@@ -24,7 +24,7 @@ const Login = () => {
         <div className="grid pb-4 text-center">
           <div>
             <div className="grid justify-center">
-              <LoginIllust className="size-[120px]" />
+              <StandingIllust className="size-[120px]" />
             </div>
             <div>
               <p className="pt-5 text-[32px] font-bold">지름알림</p>
@@ -40,13 +40,13 @@ const Login = () => {
               </Button>
               <p className="pt-6 text-sm">
                 이미 지름알림 회원이신가요?
-                <Link href={EMAIL_LOGIN_PATH} className="-m-2 ml-1 p-2 text-primary-700">
+                <Link href={EMAIL_LOGIN_PATH} className="text-primary-700 -m-2 ml-1 p-2">
                   로그인
                 </Link>
               </p>
             </div>
           </div>
-          <div className="fixed bottom-0 left-0 right-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
+          <div className="fixed right-0 bottom-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
             <AppDownloadCTA />
           </div>
         </div>

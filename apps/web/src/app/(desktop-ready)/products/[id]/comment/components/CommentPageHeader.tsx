@@ -1,5 +1,5 @@
 import BackButton from '@/components/layout/BackButton';
-import { detailPage } from '@/util/common';
+import { detailPage } from '@/util/navigation';
 
 export default function CommentPageHeader({ productId }: { productId: number }) {
   return (

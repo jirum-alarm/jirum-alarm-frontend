@@ -3,6 +3,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { ArrowRight } from '@/components/common/icons';
+import { PAGE } from '@/constants/page';
 
 import Link from '@shared/ui/Link';
 
@@ -16,11 +17,11 @@ const MyProfileSection = () => {
   return (
     <div className="px-5">
       <div className="border-b-2 border-gray-600 py-8">
-        <Link href={'/mypage/account'}>
+        <Link href={PAGE.MYPAGE_ACCOUNT}>
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold">{me.nickname}</h2>
-              <span className="text-xs text-gray-400">{me.email}</span>
+              <h2 className="text-lg font-bold">{me?.nickname}</h2>
+              <span className="text-xs text-gray-400">{me?.email}</span>
             </div>
             <div>
               <ArrowRight />

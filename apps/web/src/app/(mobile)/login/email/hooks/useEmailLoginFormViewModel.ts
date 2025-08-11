@@ -9,7 +9,6 @@ import { addPushTokenVariable, TokenType } from '@/graphql/interface';
 import { MutationAddPushToken } from '@/graphql/notification';
 import useMyRouter from '@/hooks/useMyRouter';
 import { fcmTokenAtom } from '@/state/fcmToken';
-import { ILoginOutput, ILoginVariable } from '@/types/login';
 
 import { WebViewBridge, WebViewEventType } from '@shared/lib/webview';
 
@@ -55,7 +54,7 @@ const useEmailLoginFormViewModel = () => {
     },
   });
 
-  const [login] = useMutation<ILoginOutput, ILoginVariable>(MutationLogin, {
+  const [login] = useMutation(MutationLogin, {
     onCompleted: async (data) => {
       await setAccessToken(data.login.accessToken);
 

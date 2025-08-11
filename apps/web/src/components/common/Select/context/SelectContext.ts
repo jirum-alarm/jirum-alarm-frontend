@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-export type SelectContextProps = {
+type SelectContextProps = {
   selectedIndex: number;
   setSelectedIndex: (index: number) => void;
   onChange: (value?: string | null) => void;

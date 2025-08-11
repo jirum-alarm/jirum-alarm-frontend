@@ -1,0 +1,9 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "eslint": false,
+  "ignore": [
+    "**/graphql.ts",
+    "**/graphql/**/*",
+    "**/gql/**/*"
+  ]
+}

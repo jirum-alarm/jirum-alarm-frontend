@@ -8,11 +8,11 @@ import { ProductQueries } from '@entities/product';
 
 import { CarouselProductList } from '@features/products/carousel';
 
-interface ProductImageCardListProps {
+interface ProductByKeywordsListProps {
   keyword: string;
 }
 
-const ProductsByKeywordsList = ({ keyword }: ProductImageCardListProps) => {
+const ProductsByKeywordsList = ({ keyword }: ProductByKeywordsListProps) => {
   const {
     data: { productsByKeyword },
   } = useSuspenseQuery(

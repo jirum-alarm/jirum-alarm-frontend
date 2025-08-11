@@ -1,10 +1,10 @@
 import { useId } from 'react';
 
-import { User } from '@/types/user';
+import { Gender } from '@/shared/api/gql/graphql';
 
 interface GenderRadioGroupProps {
   handleRadioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  gender?: User['gender'] | null;
+  gender?: Gender | null;
 }
 
 const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) => {
@@ -16,8 +16,8 @@ const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) 
         <li>
           <Radio
             name="gender"
-            value="FEMALE"
-            checked={'FEMALE' === gender}
+            value={Gender.Female}
+            checked={gender === Gender.Female}
             handleRadioChange={handleRadioChange}
           >
             <div className="flex flex-col gap-2">
@@ -29,8 +29,8 @@ const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) 
         <li>
           <Radio
             name="gender"
-            value="MALE"
-            checked={'MALE' === gender}
+            value={Gender.Male}
+            checked={gender === Gender.Male}
             handleRadioChange={handleRadioChange}
           >
             <div className="flex flex-col gap-2">
@@ -53,7 +53,7 @@ const Radio = ({
   handleRadioChange,
   children,
 }: {
-  value: NonNullable<User['gender']>;
+  value: Gender;
   name: string;
   checked: boolean;
   children: React.ReactNode;
@@ -73,7 +73,7 @@ const Radio = ({
       />
       <label
         htmlFor={`${name}-${id}`}
-        className="inline-flex h-22 w-full cursor-pointer items-center justify-center rounded-lg border border-gray-300 peer-checked:border-primary-500 peer-checked:bg-primary-50"
+        className="peer-checked:border-primary-500 peer-checked:bg-primary-50 inline-flex h-22 w-full cursor-pointer items-center justify-center rounded-lg border border-gray-300"
       >
         {children}
       </label>

@@ -15,7 +15,7 @@ const SectionHeader = ({
     <div
       className={cn(
         'flex w-full flex-col items-center justify-end',
-        sticky && 'sticky top-14 lg:top-15',
+        sticky && 'sticky top-14',
         className,
       )}
     >

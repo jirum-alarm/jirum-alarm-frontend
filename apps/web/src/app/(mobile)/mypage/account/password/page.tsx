@@ -45,11 +45,13 @@ const Password = () => {
       // title="비밀번호 변경"
       fullScreen={true}
       header={
-        <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center justify-center bg-white">
-          <div className="absolute left-0">
+        <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center justify-between border-b border-gray-100 bg-white px-5">
+          <div className="flex items-center">
             <BackButton onClick={handleBackButton} />
           </div>
-          <h1 className="text-lg font-semibold text-black">비밀번호 변경</h1>
+          <h1 className="absolute left-1/2 -translate-x-1/2 text-lg font-semibold">
+            비밀번호 변경
+          </h1>
         </header>
       }
     >

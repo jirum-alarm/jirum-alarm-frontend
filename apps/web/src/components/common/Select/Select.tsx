@@ -9,7 +9,7 @@ import { ArrowDown } from '../icons';
 import { SelectContext } from './context/SelectContext';
 import { selectButtonVaraint, selectListContainerVariant } from './variant/select';
 
-interface SelectProps
+export interface SelectProps
   extends Omit<
       React.SelectHTMLAttributes<HTMLSelectElement>,
       'size' | 'color' | 'onChange' | 'value' | 'defaultValue'

@@ -1,8 +1,7 @@
 import withCheckDevice from '@/components/hoc/withCheckDevice';
 
 import BannerItem from '../BannerItem';
-
-import kakao from './images/kakao.png';
+import kakao from '../images/kakao.png';
 
 const props = {
   href: 'https://open.kakao.com/o/gJZTWAAg',

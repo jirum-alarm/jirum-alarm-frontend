@@ -1,7 +1,11 @@
-import PrivacyPolicy from '@/app/(mobile)/policies/privacy/components/PrivacyPolicy';
+import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/constants/policy';
+
+import TermsLayout from '../components/TermsLayout';
 
 const PrivacyPolicyPage = () => {
-  return <PrivacyPolicy />;
+  return (
+    <TermsLayout termsIndexData={PRIVACY_INDEX_DATA} termsContentData={PRIVACY_CONTENT_DATA} />
+  );
 };
 
 export default PrivacyPolicyPage;

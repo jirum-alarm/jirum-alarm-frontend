@@ -15,7 +15,6 @@ import {
   RankingFill,
 } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
-import { useDevice } from '@/hooks/useDevice';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { cn } from '@/lib/cn';
 
@@ -62,15 +61,10 @@ const BottomNavList = [
 // 1. 링크를 기준으로 active
 // 2. touch start나 mouse down으로 active 후 링크가 이동 안 됐으면 unactive
 
-const BottomNav = ({ type }: { type: any }) => {
-  // const [navType, setNavType] = useState<NAV_TYPE | undefined>(undefined);
-  // const previousNavType = useRef<NAV_TYPE | undefined>(navType);
-
+const BottomNav = () => {
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
   const scrollDirection = useScrollDirection();
-  // const { isMobile, isJirumAlarmApp } = useDevice();
-  // const isMobileWithApp = isMobile || isJirumAlarmApp;
 
   if (!BottomNavList.some((nav) => nav.link === pathName)) return;
 

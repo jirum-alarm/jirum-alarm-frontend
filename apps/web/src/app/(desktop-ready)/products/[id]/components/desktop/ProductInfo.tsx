@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import Button from '@/components/common/Button';
 import Jirume from '@/components/common/icons/Jirume';
 import { cn } from '@/lib/cn';
+import { parsePrice } from '@/util/price';
 
 import DisplayTime from '@shared/ui/DisplayTime';
 import HotdealBadge from '@shared/ui/HotdealBadge';
@@ -25,14 +26,14 @@ export default function ProductInfo({
   isUserLogin: boolean;
 }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+  const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
 
-  const priceTextHasWon = product.price?.includes('원');
-  const priceWithoutWon = product.price ? product.price.replace('원', '').trim() : null;
+  const { hasWon: priceTextHasWon, priceWithoutWon } = parsePrice(product.price);
 
   const shareTitle = `${product.title} | 지름알림`;
 
   return (
-    <section className="flex flex-1 basis-1/2 flex-col justify-between pl-3">
+    <section className="flex flex-1 basis-1/2 flex-col justify-between">
       <div>
         <div className="h-0.5 w-full bg-gray-600" />
         <div className="flex items-start justify-between gap-x-5 py-4">
@@ -101,7 +102,7 @@ export default function ProductInfo({
 
           <div className="flextext-sm font-medium">
             <span className="inline-block w-[110px] text-gray-400">추천수</span>
-            <span className="text-gray-500">{product.likeCount}개</span>
+            <span className="text-gray-500">{productStats.likeCount}개</span>
           </div>
         </div>
       </div>

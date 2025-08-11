@@ -16,7 +16,8 @@
     "check-types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "analyze": "ANALYZE=true next build"
+    "analyze": "ANALYZE=true next build",
+    "knip": "knip"
   },
   "dependencies": {
     "@apollo/client": "^3.13.6",
@@ -26,8 +27,8 @@
     "@sentry/utils": "^8.55.0",
     "@tanstack/react-query": "^5.71.10",
     "@tanstack/react-query-next-experimental": "^5.71.10",
-    "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "critters": "^0.0.25",
     "dayjs": "^1.11.13",
     "firebase": "^10.14.1",
@@ -47,10 +48,8 @@
     "react-error-boundary": "^4.1.2",
     "react-intersection-observer": "^9.16.0",
     "react-scroll": "^1.9.3",
-    "react-tabs": "^6.1.0",
     "swiper": "^11.2.6",
     "tailwind-merge": "^3.3.1",
-    "tailwind-scrollbar-hide": "^4.0.0",
     "vaul": "^1.1.2"
   },
   "devDependencies": {
@@ -80,7 +79,7 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/lodash": "^4.17.16",
     "@types/mixpanel-browser": "^2.54.0",
-    "@types/node": "^20.17.30",
+    "@types/node": "^20.19.8",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19",
     "@types/react-scroll": "^1.8.10",
@@ -90,6 +89,7 @@
     "eslint-plugin-storybook": "^0.10.0",
     "express": "^4.21.2",
     "husky": "^9.1.7",
+    "knip": "^5.62.0",
     "lint-staged": "^15.5.0",
     "msw": "^2.7.3",
     "next-pwa": "^5.6.0",
@@ -98,6 +98,8 @@
     "prettier-plugin-tailwindcss": "^0.6.14",
     "storybook": "^8.6.12",
     "tailwindcss": "^4.1.11",
+    "tailwind-scrollbar-hide": "^4.0.0",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.8.3"
   },
   "msw": {

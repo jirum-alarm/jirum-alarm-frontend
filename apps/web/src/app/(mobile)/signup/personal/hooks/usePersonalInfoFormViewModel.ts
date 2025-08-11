@@ -1,5 +1,5 @@
 import { BIRTH_YEAR } from '@/constants/birthYear';
-import { User } from '@/types/user';
+import { Gender } from '@/shared/api/gql/graphql';
 
 import { Registration } from '../../page';
 
@@ -40,7 +40,7 @@ const usePersonalInfoFormViewModel = ({
     handleRegistration((prev) => ({
       personal: {
         ...prev.personal,
-        gender: gender === value ? null : (value as User['gender']),
+        gender: gender === value ? null : (value as Gender),
       },
     }));
   };

@@ -175,7 +175,7 @@ const ContentImpl = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEleme
             ref={ref}
             data-state={getState(open)}
             className={cn(
-              'fixed left-1/2 top-1/2 z-50 grid w-full max-w-[335px] -translate-x-1/2 -translate-y-1/2 gap-8 rounded-lg border bg-white px-4 py-5 shadow-lg',
+              'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[335px] -translate-x-1/2 -translate-y-1/2 gap-8 rounded-lg border bg-white px-4 py-5 shadow-lg',
               'data-[state=closed]:animate-modal-zoom-out data-[state=open]:animate-modal-zoom-in',
               className,
             )}
