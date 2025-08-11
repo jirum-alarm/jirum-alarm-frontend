@@ -9,6 +9,16 @@ on:
       - packages/**
   workflow_dispatch:
 
+concurrency:
+  group: staging-deployment
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  security-events: write
+
 jobs:
   build-and-push:
     name: Build and Push Docker Image
