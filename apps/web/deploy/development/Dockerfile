@@ -24,8 +24,9 @@ RUN corepack enable && \
 FROM base AS deps
 WORKDIR /app
 
-# Install build dependencies
-RUN apk add --no-cache libc6-compat python3 make g++ && \
+# Install build dependencies and apply security updates
+RUN apk update && apk upgrade --no-cache && \
+    apk add --no-cache libc6-compat python3 make g++ && \
     rm -rf /var/cache/apk/*
 
 # Copy dependency files only
@@ -89,8 +90,9 @@ RUN turbo prune web --docker && \
 FROM node:${NODE_VERSION}-alpine AS runner
 WORKDIR /app
 
-# Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init && \
+# Install dumb-init and apply security updates for runtime image
+RUN apk update && apk upgrade --no-cache && \
+    apk add --no-cache dumb-init && \
     rm -rf /var/cache/apk/*
 
 # Create non-root user with specific UID/GID
