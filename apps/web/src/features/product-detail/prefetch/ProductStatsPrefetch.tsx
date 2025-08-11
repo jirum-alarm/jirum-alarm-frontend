@@ -10,7 +10,7 @@ export default async function ProductStatsPrefetch({
   children: React.ReactNode;
 }) {
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(ProductQueries.productStatsServer({ id: productId }));
+  await queryClient.prefetchQuery(ProductQueries.productStats({ id: productId }));
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       {/* children 내부에 추가 Suspense를 허용 */}

@@ -32,10 +32,6 @@ export class ProductService {
     return httpClient.execute(QueryProduct, variables).then((res) => res.data);
   }
 
-  static async getProductServer(variables: ProductQueryVariables) {
-    return httpClient.server_execute(QueryProduct, variables).then((res) => res.data);
-  }
-
   static async getProductInfo(variables: ProductInfoQueryVariables) {
     return httpClient
       .execute(ProductInfoDocument, variables)
@@ -51,24 +47,6 @@ export class ProductService {
   static async getProductAdditionalInfo(variables: ProductAdditionalInfoQueryVariables) {
     return httpClient
       .execute(ProductAdditionalInfoDocument, variables)
-      .then((res) => useFragment(ProductAdditionalInfoFragmentDoc, res.data.product));
-  }
-
-  static async getProductInfoServer(variables: ProductInfoQueryVariables) {
-    return httpClient
-      .server_execute(ProductInfoDocument, variables)
-      .then((res) => useFragment(ProductInfoFragmentDoc, res.data.product));
-  }
-
-  static async getProductStatsServer(variables: ProductStatsQueryVariables) {
-    return httpClient
-      .server_execute(ProductStatsDocument, variables)
-      .then((res) => useFragment(ProductStatsFragmentDoc, res.data.product));
-  }
-
-  static async getProductAdditionalInfoServer(variables: ProductAdditionalInfoQueryVariables) {
-    return httpClient
-      .server_execute(ProductAdditionalInfoDocument, variables)
       .then((res) => useFragment(ProductAdditionalInfoFragmentDoc, res.data.product));
   }
 
@@ -91,9 +69,6 @@ export class ProductService {
   static async getProductGuides(variables: ProductGuidesQueryVariables) {
     return httpClient.execute(QueryProductGuides, variables).then((res) => res.data);
   }
-  static async getProductGuidesServer(variables: ProductGuidesQueryVariables) {
-    return httpClient.server_execute(QueryProductGuides, variables).then((res) => res.data);
-  }
 
   static async getTogetherViewedProducts(variables: TogetherViewedProductsQueryVariables) {
     return httpClient.execute(QueryTogetherViewedProducts, variables).then((res) => res.data);
@@ -101,9 +76,6 @@ export class ProductService {
 
   static async collectProduct(variables: MutationCollectProductMutationVariables) {
     return httpClient.execute(MutationCollectProduct, variables).then((res) => res.data);
-  }
-  static async collectProductServer(variables: MutationCollectProductMutationVariables) {
-    return httpClient.server_execute(MutationCollectProduct, variables).then((res) => res.data);
   }
   static async reportExpiredProduct(variables: MutationReportExpiredProductMutationVariables) {
     return httpClient.execute(MutationReportExpiredProduct, variables).then((res) => res.data);

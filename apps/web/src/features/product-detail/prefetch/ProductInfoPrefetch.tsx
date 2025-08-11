@@ -10,6 +10,6 @@ export default async function ProductInfoPrefetch({
   children: React.ReactNode;
 }) {
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(ProductQueries.productInfoServer({ id: productId }));
+  await queryClient.prefetchQuery(ProductQueries.productInfo({ id: productId }));
   return <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>;
 }

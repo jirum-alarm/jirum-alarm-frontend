@@ -31,40 +31,11 @@ export const CommentQueries = {
       queryFn: () => CommentService.getComments(variables),
     }),
 
-  commentsServer: (variables: CommentsQueryVariables) =>
-    queryOptions({
-      queryKey: [
-        ...CommentQueries.all(),
-        {
-          productId: variables.productId,
-          searchAfter: variables.searchAfter,
-          limit: variables.limit,
-          orderBy: variables.orderBy,
-          orderOption: variables.orderOption,
-        },
-      ],
-      queryFn: () => CommentService.getCommentsServer(variables),
-    }),
-
   infiniteComments: (variables: CommentsQueryVariables) =>
     infiniteQueryOptions({
       queryKey: [...CommentQueries.comments(variables).queryKey],
       queryFn: ({ pageParam }) =>
         CommentService.getComments({ ...variables, searchAfter: pageParam }),
-      initialPageParam: null as null | string[],
-      getNextPageParam: (lastPage) => {
-        return lastPage.comments.at(-1)?.searchAfter;
-      },
-    }),
-
-  infiniteCommentsServer: (variables: CommentsQueryVariables) =>
-    infiniteQueryOptions({
-      queryKey: [...CommentQueries.commentsServer(variables).queryKey],
-      queryFn: ({ pageParam }) =>
-        CommentService.getCommentsServer({
-          ...variables,
-          searchAfter: pageParam,
-        }),
       initialPageParam: null as null | string[],
       getNextPageParam: (lastPage) => {
         return lastPage.comments.at(-1)?.searchAfter;
