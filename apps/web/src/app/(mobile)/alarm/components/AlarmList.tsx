@@ -6,9 +6,10 @@ import { useEffect } from 'react';
 import Button from '@/components/common/Button';
 import { Apple, ArrowDown, Google } from '@/components/common/icons';
 import Illust from '@/components/common/Illust';
-import Link from '@/features/Link';
 import { useDevice } from '@/hooks/useDevice';
 import useMyRouter from '@/hooks/useMyRouter';
+
+import Link from '@shared/ui/Link';
 
 import { useNotificationsViewModel } from '../hooks/useNotificationsViewModel';
 

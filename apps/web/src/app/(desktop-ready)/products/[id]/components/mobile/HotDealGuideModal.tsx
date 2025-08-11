@@ -3,9 +3,10 @@
 import { Drawer } from 'vaul';
 
 import Button from '@/components/common/Button';
-import HotdealBadge from '@/features/products/components/HotdealBadge';
 import { cn } from '@/lib/cn';
-import { HotDealType } from '@/shared/api/gql/graphql';
+
+import { HotDealType } from '@shared/api/gql/graphql';
+import HotdealBadge from '@shared/ui/HotdealBadge';
 
 export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNode }) {
   return (
@@ -25,7 +26,6 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
             </p>
             <div className="w-[311px]">
               <div className="flex h-[20px] w-full items-center justify-around gap-[12px] rounded-[40px] bg-gradient-to-r from-[#FFEEE0] from-0% via-[#FFC0B2] via-[27%] to-[#FF4639] to-100%">
-                {/* {Array.from({ length: 4 }, (_, i) => i).map((v) => ( */}
                 <div className="relative h-[12px] w-[12px] rounded-full bg-white">
                   <div className="absolute -left-[calc(66px/2-6px)] -top-[calc(30px+12px)] inline-flex flex-col items-center">
                     <div

@@ -3,9 +3,12 @@ import { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { LoadingSpinner } from '@/components/common/icons';
-import { ProductQueries } from '@/entities/product';
-import ProductGridList from '@/features/products/components/grid/ProductGridList';
-import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
+
+import { KeywordProductOrderType, OrderOptionType } from '@shared/api/gql/graphql';
+
+import { ProductQueries } from '@entities/product';
+
+import { GridProductList } from '@features/products/grid';
 
 interface ProductImageCardListProps {
   keyword: string;
@@ -36,7 +39,7 @@ const RecommendProductList = ({ keyword, limit }: ProductImageCardListProps) => 
 
   return (
     <>
-      <ProductGridList products={products} loggingPage={'RECOMMEND'} />
+      <GridProductList products={products} />
       <div className="flex w-full items-center justify-center bg-white py-6" ref={ref}>
         {isFetchingNextPage && <LoadingSpinner />}
       </div>

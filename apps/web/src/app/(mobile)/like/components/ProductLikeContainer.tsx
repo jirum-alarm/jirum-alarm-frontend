@@ -4,8 +4,10 @@ import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-quer
 import { useInView } from 'react-intersection-observer';
 
 import { LoadingSpinner } from '@/components/common/icons';
-import { WishlistQueries } from '@/entities/wishlist';
-import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
+
+import { OrderOptionType, WishlistOrderType } from '@shared/api/gql/graphql';
+
+import { WishlistQueries } from '@entities/wishlist';
 
 import ProductLikeGridList from './ProductLikeGridList';
 
@@ -43,7 +45,7 @@ const ProductLikeContainer = () => {
       <div className="pb-3 text-sm">
         전체 <span className="font-semibold">{wishlistCount}</span>개
       </div>
-      <ProductLikeGridList products={wishlists.map((w) => w.product)} loggingPage={'LIKE'} />
+      <ProductLikeGridList products={wishlists.map((w) => w.product)} />
       <div className="flex w-full items-center justify-center pb-6 pt-3" ref={loadingCallbackRef}>
         {isFetchingNextPage && <LoadingSpinner />}
       </div>

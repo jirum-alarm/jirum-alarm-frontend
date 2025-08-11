@@ -4,9 +4,10 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 import Button from '@/components/common/Button';
 import TopButton from '@/components/TopButton';
-import { ProductQueries } from '@/entities/product';
 
-import LikeButton from '../LikeButton';
+import { ProductQueries } from '@entities/product';
+
+import { LikeButton } from '@features/product-detail/controls';
 
 export default function BottomCTA({
   productId,

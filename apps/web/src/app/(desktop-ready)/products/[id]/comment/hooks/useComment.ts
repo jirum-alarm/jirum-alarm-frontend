@@ -5,7 +5,7 @@ import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
+import { CommentQueries, defaultCommentsVariables } from '@entities/comment';
 
 import {
   CANCEL_EVENT,
@@ -63,7 +63,7 @@ export default function useComment(productId: number) {
       document.removeEventListener(REPLY_EVENT, reply);
       document.removeEventListener(UPDATE_EVENT, update);
     };
-  }, []);
+  }, [setEditingComment]);
 
   return {
     editingComment,

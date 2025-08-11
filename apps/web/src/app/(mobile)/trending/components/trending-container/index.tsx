@@ -8,8 +8,10 @@ import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
-import { CategoryQueries } from '@/entities/category';
-import GridProductListSkeleton from '@/features/products/components/skeleton/GridProductListSkeleton';
+
+import { CategoryQueries } from '@entities/category';
+
+import GridProductListSkeleton from '@features/products/grid/GridProductListSkeleton';
 
 import { TAB_META } from '../../tabMeta';
 import TabBar from '../Tabbar';

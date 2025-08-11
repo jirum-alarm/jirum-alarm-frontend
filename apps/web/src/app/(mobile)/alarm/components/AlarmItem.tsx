@@ -1,13 +1,14 @@
 import Image from 'next/image';
 import { memo, useState } from 'react';
 
-import DisplayTime from '@/app/(desktop-ready)/products/[id]/components/DisplayTime';
 import { PAGE } from '@/constants/page';
-import Link from '@/features/Link';
 import { INotification } from '@/graphql/interface';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 import { displayTime } from '@/util/displayTime';
+
+import DisplayTime from '@shared/ui/DisplayTime';
+import Link from '@shared/ui/Link';
 
 const AlarmItem = ({ notification }: { notification: INotification }) => {
   const { message, createdAt, product, keyword } = notification;

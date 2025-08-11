@@ -9,28 +9,6 @@ const TopButton = ({ type = 'scrolling-up' }: { type?: 'scrolling-up' | 'scrolle
   const [isVisible, setIsVisible] = useState(false);
   const prevScrollPos = useRef(0);
 
-  const topButtonVisibility = () => {
-    if (type === 'scrolled') {
-      const isScrolled = window.scrollY >= window.innerHeight;
-
-      if (isScrolled) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-      return;
-    }
-
-    const isScrollingUp = window.scrollY < prevScrollPos.current;
-    prevScrollPos.current = window.scrollY;
-
-    if (isScrollingUp) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
-
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -39,11 +17,33 @@ const TopButton = ({ type = 'scrolling-up' }: { type?: 'scrolling-up' | 'scrolle
   };
 
   useEffect(() => {
+    const topButtonVisibility = () => {
+      if (type === 'scrolled') {
+        const isScrolled = window.scrollY >= window.innerHeight;
+
+        if (isScrolled) {
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+        }
+        return;
+      }
+
+      const isScrollingUp = window.scrollY < prevScrollPos.current;
+      prevScrollPos.current = window.scrollY;
+
+      if (isScrollingUp) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
     window.addEventListener('scroll', topButtonVisibility);
     return () => {
       window.removeEventListener('scroll', topButtonVisibility);
     };
-  }, []);
+  }, [type]);
 
   return (
     <button

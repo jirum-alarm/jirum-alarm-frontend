@@ -10,13 +10,15 @@ import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
 import { ArrowLeft } from '@/components/common/icons';
-import { ProductQueries } from '@/entities/product';
-import { ProductRankingImageCard } from '@/features/products/components/ProductRankingImageCard';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 
-import DesktopSliderSkeleton from './desktop/JirumRankingSliderSkeleton';
-import MobileSliderSkeleton from './mobile/JirumRankingSliderSkeleton';
+import { ProductQueries } from '@entities/product';
+
+import ProductRankingImageCard from '@features/products/ranking/ProductRankingImageCard';
+
+import { RankingSkeleton as DesktopRankingSkeleton } from '../desktop/RankingSkeleton';
+import { RankingSkeleton as MobileRankingSkeleton } from '../mobile/RankingSkeleton';
 
 const SliderDots = ({ total, activeIndex }: { total: number; activeIndex: number }) => (
   <div
@@ -100,13 +102,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
                 key={product.id}
                 style={{ width: isMobile ? '240px' : 'calc(100% / 4)' }}
               >
-                <ProductRankingImageCard
-                  isMobile={isMobile}
-                  activeIndex={index}
-                  index={i}
-                  product={product}
-                  logging={{ page: 'HOME' }}
-                />
+                <ProductRankingImageCard activeIndex={index} index={i} product={product} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -128,7 +124,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
             >
-              {isMobile ? <MobileSliderSkeleton /> : <DesktopSliderSkeleton />}
+              {isMobile ? <MobileRankingSkeleton /> : <DesktopRankingSkeleton />}
             </motion.div>
           )}
         </AnimatePresence>

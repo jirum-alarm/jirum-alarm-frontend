@@ -1,6 +1,7 @@
 import { cn } from '@/lib/cn';
-import { User } from '@/shared/api/gql/graphql';
 import { displayTime } from '@/util/displayTime';
+
+import { User } from '@shared/api/gql/graphql';
 
 import CommentAction from './CommentAction';
 import { TComment, TEditStatus } from './CommentLayout';

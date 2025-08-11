@@ -4,10 +4,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { BubbleChat, ThumbsupFill } from '@/components/common/icons';
 import { useToast } from '@/components/common/Toast';
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { cn } from '@/lib/cn';
-import { UserLikeTarget } from '@/shared/api/gql/graphql';
-import { LikeService } from '@/shared/api/like/like.service';
+
+import { UserLikeTarget } from '@shared/api/gql/graphql';
+import { LikeService } from '@shared/api/like/like.service';
+
+import { CommentQueries, defaultCommentsVariables } from '@entities/comment';
 
 import { CANCEL_EVENT, REPLY_EVENT, TComment, TEditStatus } from './CommentLayout';
 

@@ -2,7 +2,8 @@
 
 import { LoadingSpinner } from '@/components/common/icons';
 import TopButton from '@/components/TopButton';
-import { CommentsQuery } from '@/shared/api/gql/graphql';
+
+import { CommentsQuery } from '@shared/api/gql/graphql';
 
 import CommentListSkeleton from '../../components/comment/CommentListSkeleton';
 import useComment from '../hooks/useComment';

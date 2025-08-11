@@ -4,8 +4,9 @@ import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 
 import { firebaseConfig } from '@/constants/firebase';
-import { httpClient } from '@/shared/lib/http-client';
 import { fcmTokenAtom } from '@/state/fcmToken';
+
+import { httpClient } from '@shared/lib/http-client';
 
 const firebaseApp = initializeApp(firebaseConfig);
 

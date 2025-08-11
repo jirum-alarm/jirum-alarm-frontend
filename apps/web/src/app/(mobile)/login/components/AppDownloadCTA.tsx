@@ -1,7 +1,8 @@
 'use client';
 
-import { IllustIcons } from '@/components/common/icons';
-import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
+import { AppIcon } from '@/components/common/icons/Illust';
+
+import useAppDownloadLink from '@shared/hooks/useAppDownloadLink';
 
 const AppDownloadCTA = () => {
   const { type, link } = useAppDownloadLink();
@@ -13,7 +14,7 @@ const AppDownloadCTA = () => {
     <>
       {type && link && (
         <div className="flex h-[84px] w-full items-center bg-gradient-to-b from-secondary-50 to-secondary-100 px-8">
-          <IllustIcons.AppIcon />
+          <AppIcon />
           <div className="ml-[14px]">
             <p className="text-left">
               <span className="font-semibold text-secondary-800">지름알림 앱 다운받고</span>

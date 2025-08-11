@@ -1,5 +1,6 @@
 import BasicLayout from '@/components/layout/BasicLayout';
-import Link from '@/features/Link';
+
+import Link from '@shared/ui/Link';
 
 const TermsPoliciesPage = () => {
   return (

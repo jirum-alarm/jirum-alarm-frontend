@@ -1,5 +1,6 @@
 import { Search } from '@/components/common/icons';
-import Link from '@/features/Link';
+
+import Link from '@shared/ui/Link';
 
 interface Props {
   color?: string;

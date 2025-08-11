@@ -3,8 +3,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { ArrowRight } from '@/components/common/icons';
-import { AuthQueries } from '@/entities/auth';
-import Link from '@/features/Link';
+
+import Link from '@shared/ui/Link';
+
+import { AuthQueries } from '@entities/auth';
 
 const MyProfileSection = () => {
   const {
