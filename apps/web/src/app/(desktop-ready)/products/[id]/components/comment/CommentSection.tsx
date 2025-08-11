@@ -47,7 +47,7 @@ export default async function CommentSection({ productId }: { productId: number 
   };
 
   return (
-    <section className="mb-10 mt-4 flex flex-col pc:my-0">
+    <section className="pc:my-0 mt-4 mb-10 flex flex-col">
       <div className="flex h-[56px] w-full items-center px-5 py-4">
         <span className="text-lg font-bold text-gray-900">지름알림 댓글</span>
       </div>
