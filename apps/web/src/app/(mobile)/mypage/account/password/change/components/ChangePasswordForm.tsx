@@ -58,7 +58,7 @@ const HelperText = ({
   isInvalidLength: boolean;
 }) => {
   return (
-    <ul className="list-disc pl-4 pt-2">
+    <ul className="list-disc pt-2 pl-4">
       <li
         className={cn(
           'transition-colors',

@@ -33,7 +33,7 @@ export const inputVariant = cva(
     'h-full',
     'bg-transparent',
     'font-normal',
-    'outline',
+    'outline-solid',
     'outline-0',
     'focus:outline-0',
   ],

@@ -55,7 +55,7 @@ const BannerSwiper = ({
           return <SwiperSlide style={{ width: 'calc(100% - 50px)' }}>{child}</SwiperSlide>;
         })}
       </Swiper>
-      <div className="absolute -bottom-3 right-6 z-10 h-[4px] w-[60px]">
+      <div className="absolute right-6 -bottom-3 z-10 h-[4px] w-15">
         <div className="h-full w-full overflow-hidden rounded-full bg-white/20">
           <div
             className="h-full bg-white"

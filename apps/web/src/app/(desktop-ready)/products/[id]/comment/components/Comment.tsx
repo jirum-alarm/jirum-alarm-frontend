@@ -1,3 +1,6 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { AuthQueries } from '@/entities/auth';
 import { cn } from '@/lib/cn';
 import { displayTime } from '@/util/displayTime';
 
@@ -11,15 +14,17 @@ export default function Comment({
   comment,
   editStatus,
   canReply,
-  user,
 }: {
   comment: TComment;
   editStatus?: TEditStatus;
   canReply: boolean;
   drawer?: React.ReactNode;
-  user?: User;
 }) {
-  const isMyComment = `${comment.author?.id ?? '#no-author'}` === `${user?.id}`;
+  const {
+    data: { me },
+  } = useSuspenseQuery(AuthQueries.me());
+
+  const isMyComment = `${comment.author?.id ?? '#no-author'}` === `${me?.id}`;
   const hasParentComment = !!comment.parentId;
 
   const bgClass = isMyComment
@@ -49,7 +54,7 @@ export default function Comment({
           canReply={canReply}
           hasParentComment={hasParentComment}
           editStatus={editStatus}
-          isUserLogin={!!user}
+          isUserLogin={!!me}
         />
       </div>
     </div>

@@ -18,7 +18,6 @@ import {
 } from '@/app/actions/token';
 import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
 import { MutationLoginByRefreshToken } from '@/graphql/auth';
-import { ILoginByRefreshTokenOutput } from '@/types/login';
 
 interface Props {
   children: React.ReactNode;
@@ -47,7 +46,7 @@ const getAuthLink = setContext(async (_, { headers }) => {
 const getNewAccessToken = async () => {
   const refreshToken = await getRefreshToken();
   return apolloClient
-    .mutate<ILoginByRefreshTokenOutput>({
+    .mutate({
       mutation: MutationLoginByRefreshToken,
       context: {
         headers: {

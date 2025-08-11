@@ -25,7 +25,7 @@ export const selectButtonVaraint = cva(['w-full', 'min-w-[220px]', 'flex', 'just
 });
 
 export const selectListContainerVariant = cva(
-  ['z-[999]', 'absolute', 'w-full', 'bg-white', 'shadow-small'],
+  ['z-999', 'absolute', 'w-full', 'bg-white', 'shadow-small'],
   {
     variants: {
       size: {

@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <div className="relative flex w-full flex-col bg-gray-50">
       <div className="flex items-end">
-        <footer className="max-w-8xl py-15 mx-auto flex w-full flex-1 flex-col justify-between px-5 lg:px-20 lg:py-12">
+        <footer className="max-w-8xl mx-auto flex w-full flex-1 flex-col justify-between px-5 py-15 lg:px-20 lg:py-12">
           <div className="mb-5 flex justify-between">
             <div className="flex items-center gap-x-2.5">
               <RoundedLogo />
@@ -22,7 +22,7 @@ const Footer = () => {
               <TalkLight />
             </Link>
           </div>
-          <p className="mb-4 whitespace-pre-line text-sm font-medium text-gray-700">
+          <p className="mb-4 text-sm font-medium whitespace-pre-line text-gray-700">
             지름알림{'\n'}
             고객센터 :{' '}
             <Link href="mailto:jirumalarm@gmail.com" className="font-medium underline">

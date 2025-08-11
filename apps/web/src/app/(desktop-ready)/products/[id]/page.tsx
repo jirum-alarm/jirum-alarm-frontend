@@ -17,12 +17,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
 
-  const product = await ProductService.getProductInfoServer({ id: +id });
+  const product = await ProductService.getProductInfo({ id: +id });
   if (!product) {
     return defaultMetadata;
   }
 
-  const productGuides = await ProductService.getProductGuidesServer({
+  const productGuides = await ProductService.getProductGuides({
     productId: +product.id,
   });
 

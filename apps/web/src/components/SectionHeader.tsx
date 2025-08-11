@@ -14,7 +14,7 @@ const SectionHeader = ({
   shouldShowMobileUI?: boolean;
 }) => {
   return (
-    <div className="relative flex h-[56px] w-full items-center justify-between">
+    <div className="relative flex h-14 w-full items-center justify-between">
       <div className={cn('hidden', { 'pc:block': !shouldShowMobileUI })} />
       <h2
         className={cn(

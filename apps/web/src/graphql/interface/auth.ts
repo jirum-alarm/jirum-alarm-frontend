@@ -1,4 +1,4 @@
-import { User } from '@/types/user';
+import { type User } from '@/shared/api/gql/graphql';
 
 export interface ISignupOutput {
   signup: {

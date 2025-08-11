@@ -1,10 +1,10 @@
 import '@/style/globals.css';
 
-import { Metadata, Viewport } from 'next';
-
 import { AppProvider } from '@/app/(app)/providers';
 import { defaultMetadata, jsonLd } from '@/constants/metadata';
 import { pretendard } from '@/lib/fonts';
+
+import type { Metadata, Viewport } from 'next';
 
 // const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
 //   ssr: false,

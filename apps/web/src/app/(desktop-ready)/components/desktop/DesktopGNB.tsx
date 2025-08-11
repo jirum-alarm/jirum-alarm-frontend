@@ -34,14 +34,14 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   return (
     <div
       className={cn(
-        'fixed top-0 z-50 w-full min-w-[1024px] border-b bg-white shadow-sm transition-all duration-300',
+        'fixed top-0 z-50 w-full min-w-5xl border-b bg-white shadow-xs transition-all duration-300',
         {
           'border-b-gray-200 bg-white': !isInHomeHero,
           'border-b-gray-700 bg-gray-900': isInHomeHero,
         },
       )}
     >
-      <header className="mx-auto flex h-[56px] w-full max-w-screen-layout-max items-center justify-between px-5">
+      <header className="max-w-layout-max mx-auto flex h-14 w-full items-center justify-between px-5">
         <nav className="flex h-full items-center gap-x-11">
           <LogoLink inverted={isInHomeHero} />
           <div className="flex h-full items-center gap-x-10">

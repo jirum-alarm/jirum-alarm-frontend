@@ -19,18 +19,18 @@ const HomeContainerV2 = () => {
     return (
       <>
         <MobileJirumRankingContainer />
-        <div className="h-[20px]" />
+        <div className="h-5" />
       </>
     );
   };
 
   return (
-    <div className="mx-auto h-full w-full max-w-screen-mobile-max pb-[70px] pc:max-w-none">
+    <div className="pc:max-w-none max-w-mobile-max mx-auto h-full w-full pb-[70px]">
       <DeviceSpecific desktop={renderDesktop} />
-      <main className="relative z-10 mx-auto mt-[153px] h-full max-w-screen-mobile-max rounded-t-[1.25rem] bg-white pt-3 pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-[1.75rem] pc:pt-[72px]">
-        <div className="pc:mx-auto pc:max-w-screen-layout-max">
+      <main className="pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-[1.75rem] pc:pt-[72px] max-w-mobile-max mt-153px] relative z-10 mx-auto h-full rounded-t-[1.25rem] bg-white pt-3">
+        <div className="pc:mx-auto pc:max-w-layout-max">
           <DeviceSpecific mobile={renderMobile} />
-          <div className="flex flex-col gap-y-8 py-3 pc:gap-y-[60px] pc:pt-0">
+          <div className="pc:gap-y-15 pc:pt-0 flex flex-col gap-y-8 py-3">
             <RecommendedProductSection />
             <LiveHotDealSection />
           </div>

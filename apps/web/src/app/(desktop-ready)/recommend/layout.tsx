@@ -14,7 +14,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
     return (
       <div className="mt-14 pt-8">
         <SectionHeader title="지름알림 추천" />
-        <div className="mx-auto max-w-screen-layout-max">{children}</div>
+        <div className="max-w-layout-max mx-auto">{children}</div>
       </div>
     );
   };

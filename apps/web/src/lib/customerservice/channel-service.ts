@@ -15,7 +15,7 @@ interface IChannelIO {
   (...args: any): void;
 }
 
-export interface BootOption {
+interface BootOption {
   appearance?: string;
   customLauncherSelector?: string;
   hideChannelButtonOnBoot?: boolean;
@@ -33,7 +33,7 @@ export interface BootOption {
   zIndex?: number;
 }
 
-export interface Callback {
+interface Callback {
   (error: Error | null, user: CallbackUser | null): void;
 }
 
@@ -79,7 +79,7 @@ class ChannelService implements ICustomerService {
         s.async = true;
         s.src = 'https://cdn.channel.io/plugin/ch-plugin-web.js';
         const x = document.getElementsByTagName('script')[0];
-        if (x.parentNode) {
+        if (x?.parentNode) {
           x.parentNode.insertBefore(s, x);
         }
       }

@@ -7,7 +7,7 @@ import NicknameForm from './components/NickNameForm';
 const NickNamePage = () => {
   return (
     <BasicLayout hasBackButton title="닉네임 수정">
-      <div className="flex h-full flex-col px-5 pb-9 pt-9">
+      <div className="flex h-full flex-col px-5 pt-9 pb-9">
         <p className="text-2xl font-semibold">
           변경할 닉네임을
           <br />

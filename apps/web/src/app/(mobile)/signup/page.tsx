@@ -10,7 +10,7 @@ import { CATEGORIES } from '@/constants/categories';
 import { MutationSignup } from '@/graphql/auth';
 import { ISignupOutput, ISignupVariable } from '@/graphql/interface/auth';
 import useMyRouter from '@/hooks/useMyRouter';
-import { User } from '@/types/user';
+import { Gender } from '@/shared/api/gql/graphql';
 
 import { ICategoryForm } from '@features/categories/types';
 
@@ -48,7 +48,7 @@ interface Input {
 
 interface Personal {
   birthYear?: string | null;
-  gender: User['gender'] | null;
+  gender: Gender | null;
 }
 
 export interface Registration {
@@ -78,7 +78,7 @@ const Signup = () => {
       ...category,
       isChecked: false,
     })),
-    personal: { birthYear: '', gender: undefined },
+    personal: { birthYear: '', gender: null },
   });
 
   const router = useMyRouter();

@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-export type AlertDialogContextValue = {
+type AlertDialogContextValue = {
   open: boolean;
   triggerRef: React.RefObject<HTMLButtonElement | null>;
   onOpenChange: (open: boolean) => void;

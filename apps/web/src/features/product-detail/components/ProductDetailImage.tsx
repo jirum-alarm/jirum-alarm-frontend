@@ -32,7 +32,7 @@ export default function ProductDetailImage({
       loading="eager"
       fetchPriority="high"
       placeholder="empty"
-      className="size-full object-contain"
+      className="size-full object-cover"
     />
   );
 }

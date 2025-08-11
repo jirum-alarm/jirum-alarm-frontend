@@ -15,7 +15,6 @@ import {
   RankingFill,
 } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
-import { useDevice } from '@/hooks/useDevice';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { cn } from '@/lib/cn';
 
@@ -62,15 +61,10 @@ const BottomNavList = [
 // 1. 링크를 기준으로 active
 // 2. touch start나 mouse down으로 active 후 링크가 이동 안 됐으면 unactive
 
-const BottomNav = ({ type }: { type: any }) => {
-  // const [navType, setNavType] = useState<NAV_TYPE | undefined>(undefined);
-  // const previousNavType = useRef<NAV_TYPE | undefined>(navType);
-
+const BottomNav = () => {
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
   const scrollDirection = useScrollDirection();
-  // const { isMobile, isJirumAlarmApp } = useDevice();
-  // const isMobileWithApp = isMobile || isJirumAlarmApp;
 
   if (!BottomNavList.some((nav) => nav.link === pathName)) return;
 
@@ -81,7 +75,7 @@ const BottomNav = ({ type }: { type: any }) => {
   return (
     <nav
       className={cn(
-        `fixed bottom-safe-bottom left-1/2 z-50 mx-auto w-full max-w-screen-mobile-max -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white pb-safe-bottom transition-all duration-300`,
+        `bottom-safe-bottom max-w-mobile-max pb-safe-bottom fixed left-1/2 z-50 mx-auto w-full -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white transition-all duration-300`,
         {
           'translate-y-full': scrollDirection === 'down',
           'translate-y-0': scrollDirection === 'up',

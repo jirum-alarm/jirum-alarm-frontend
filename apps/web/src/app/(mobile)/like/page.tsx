@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { IllustStandingSmall } from '@/components/common/icons';
+import SmallIllust from '@/components/common/icons/Illust/SmallIllust';
 import BasicLayout from '@/components/layout/BasicLayout';
 
 import ProductLikeContainerServer from './components/ProductLikeContainerServer';
@@ -8,7 +8,7 @@ import ProductLikeContainerServer from './components/ProductLikeContainerServer'
 const LikePage = () => {
   return (
     <BasicLayout hasBackButton title="찜 목록">
-      <div className="flex h-full flex-col px-5 pb-9 pt-3">
+      <div className="flex h-full flex-col px-5 pt-3 pb-9">
         <Suspense fallback={<ProductLikeSkeleton />}>
           <ProductLikeContainerServer />
         </Suspense>
@@ -27,7 +27,7 @@ const ProductLikeSkeleton = () => {
         {Array.from({ length: 12 }).map((item, i) => (
           <div key={i} className="w-full">
             <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
-              <IllustStandingSmall />
+              <SmallIllust />
             </div>
             <div className="flex flex-col gap-1 pt-2">
               <div className="h-3 bg-gray-100"></div>

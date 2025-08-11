@@ -21,10 +21,7 @@ import { RankingSkeleton as DesktopRankingSkeleton } from '../desktop/RankingSke
 import { RankingSkeleton as MobileRankingSkeleton } from '../mobile/RankingSkeleton';
 
 const SliderDots = ({ total, activeIndex }: { total: number; activeIndex: number }) => (
-  <div
-    className="mx-auto flex h-[20px] w-full items-center justify-center pc:w-[100px]"
-    role="tablist"
-  >
+  <div className="pc:w-[100px] mx-auto flex h-5 w-full items-center justify-center" role="tablist">
     {Array.from({ length: total }).map((_, i) => (
       <div
         key={i}
@@ -32,9 +29,9 @@ const SliderDots = ({ total, activeIndex }: { total: number; activeIndex: number
         aria-selected={activeIndex === i}
         aria-label={`슬라이드 ${i + 1}`}
         className={cn(
-          `h-[3px] w-[3px] bg-gray-400 pc:grow pc:bg-gray-500`,
+          `pc:grow pc:bg-gray-500 h-[3px] w-[3px] bg-gray-400`,
           activeIndex === i &&
-            'ml-[6px] mr-[6px] h-[4px] w-[4px] bg-gray-600 pc:w-[32px] pc:bg-gray-300',
+            'pc:w-[32px] pc:bg-gray-300 mr-[6px] ml-[6px] h-[4px] w-[4px] bg-gray-600',
         )}
       />
     ))}
@@ -77,7 +74,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
     <>
       <div className="relative flex w-full items-center gap-x-5 gap-y-3">
         <button
-          className="hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0 pc:flex"
+          className="pc:flex hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
           onClick={handleSlidePrev}
           disabled={index === 0}
           name="이전"
@@ -85,7 +82,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           <ArrowLeft className="mr-1 size-8 text-white" color="white" />
         </button>
         <motion.div
-          className={cn('w-full overflow-visible pc:max-w-slider-max')}
+          className={cn('pc:max-w-slider-max w-full overflow-visible')}
           initial={{ opacity: 0 }}
           animate={{ opacity: canRender ? 1 : 0 }}
           transition={{ duration: 0.2 }}
@@ -98,7 +95,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           >
             {rankingProducts.map((product, i) => (
               <SwiperSlide
-                className={cn('pb-5 pc:pb-6', !isInit && 'pc:pb-1.5')}
+                className={cn('pc:pb-6 pb-5', !isInit && 'pc:pb-1.5')}
                 key={product.id}
                 style={{ width: isMobile ? '240px' : 'calc(100% / 4)' }}
               >
@@ -108,7 +105,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           </Swiper>
         </motion.div>
         <button
-          className="hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0 pc:flex"
+          className="pc:flex hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
           onClick={handleSlideNext}
           disabled={index === rankingProducts.length - 4}
           name="다음"

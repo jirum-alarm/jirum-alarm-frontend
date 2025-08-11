@@ -1,21 +1,15 @@
 'use client';
 
-import { User } from '@/shared/api/gql/graphql';
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { AuthQueries } from '@/entities/auth';
 
 import Comment from '../../comment/components/Comment';
 import useComment from '../../comment/hooks/useComment';
 
 import CommentListSkeleton from './CommentListSkeleton';
 
-function CommentList({
-  productId,
-  isMobile,
-  me,
-}: {
-  productId: number;
-  isMobile: boolean;
-  me?: User;
-}) {
+function CommentList({ productId, isMobile }: { productId: number; isMobile: boolean }) {
   const { pages, editingComment } = useComment(productId);
 
   const comments = pages.flatMap(({ comments }) => comments);
@@ -44,13 +38,12 @@ function CommentList({
               comment={comment}
               editStatus={editStatus}
               canReply={!isMobile}
-              user={me}
             />
           );
         })}
       </div>
       {comments.length > 1 && isMobile && (
-        <div className="pointer-events-none absolute bottom-0 left-0 h-12 w-full bg-gradient-to-t from-white to-transparent" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-12 w-full bg-linear-to-t from-white to-transparent" />
       )}
     </div>
   );

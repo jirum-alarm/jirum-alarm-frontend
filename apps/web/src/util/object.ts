@@ -9,7 +9,10 @@ export const shallowEqual = <T>(objA: T, objB: T): boolean => {
     return false;
   }
   for (let i = 0; i < keysA.length; i++) {
-    if (!Object.hasOwnProperty.call(objB, keysA[i]) || !Object.is(objA[keysA[i]], objB[keysA[i]])) {
+    if (
+      !Object.hasOwnProperty.call(objB, keysA[i]) ||
+      !Object.is(objA[keysA[i]!], objB[keysA[i]])
+    ) {
       return false;
     }
   }

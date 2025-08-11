@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import Button from '@/components/common/Button';
 import Jirume from '@/components/common/icons/Jirume';
 import { cn } from '@/lib/cn';
+import { parsePrice } from '@/util/price';
 
 import DisplayTime from '@shared/ui/DisplayTime';
 import HotdealBadge from '@shared/ui/HotdealBadge';
@@ -25,21 +26,21 @@ export default function ProductInfo({
   isUserLogin: boolean;
 }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+  const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
 
-  const priceTextHasWon = product.price?.includes('원');
-  const priceWithoutWon = product.price ? product.price.replace('원', '').trim() : null;
+  const { hasWon: priceTextHasWon, priceWithoutWon } = parsePrice(product.price);
 
   const shareTitle = `${product.title} | 지름알림`;
 
   return (
-    <section className="flex flex-1 basis-1/2 flex-col justify-between pl-3">
+    <section className="flex flex-1 basis-1/2 flex-col justify-between">
       <div>
         <div className="h-0.5 w-full bg-gray-600" />
         <div className="flex items-start justify-between gap-x-5 py-4">
           <h1 className="text-xl font-medium text-gray-800">{product.title}</h1>
           <ShareButton title={shareTitle} />
         </div>
-        <div className="mb-2 mt-3 h-5 text-sm text-gray-500">
+        <div className="mt-3 mb-2 h-5 text-sm text-gray-500">
           <DisplayTime time={product.postedAt} />
         </div>
         <div className="flex justify-between pb-8">
@@ -47,7 +48,7 @@ export default function ProductInfo({
             {product.isEnd && (
               <div
                 className={cn('border border-gray-400 bg-white px-2 text-gray-700', {
-                  'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-[20px]': true,
+                  'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-5': true,
                 })}
               >
                 판매종료
@@ -101,7 +102,7 @@ export default function ProductInfo({
 
           <div className="flextext-sm font-medium">
             <span className="inline-block w-[110px] text-gray-400">추천수</span>
-            <span className="text-gray-500">{product.likeCount}개</span>
+            <span className="text-gray-500">{productStats.likeCount}개</span>
           </div>
         </div>
       </div>

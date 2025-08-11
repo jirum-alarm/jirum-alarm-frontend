@@ -46,7 +46,7 @@ const ProductLikeContainer = () => {
         전체 <span className="font-semibold">{wishlistCount}</span>개
       </div>
       <ProductLikeGridList products={wishlists.map((w) => w.product)} />
-      <div className="flex w-full items-center justify-center pb-6 pt-3" ref={loadingCallbackRef}>
+      <div className="flex w-full items-center justify-center pt-3 pb-6" ref={loadingCallbackRef}>
         {isFetchingNextPage && <LoadingSpinner />}
       </div>
     </div>

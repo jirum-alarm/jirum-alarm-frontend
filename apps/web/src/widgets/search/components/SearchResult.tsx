@@ -17,7 +17,7 @@ export default function SearchResult({ show }: { show: boolean }) {
   return (
     <div className={cn({ hidden: !show })}>
       {isProductEmpty ? (
-        <div className="flex justify-center pb-10 pt-5">
+        <div className="flex justify-center pt-5 pb-10">
           <Suspense fallback={<></>}>
             <ProductNotFound />
           </Suspense>
@@ -27,7 +27,7 @@ export default function SearchResult({ show }: { show: boolean }) {
       )}
 
       {!isProductEmpty && (
-        <div className="fixed bottom-0 left-0 right-0">
+        <div className="fixed right-0 bottom-0 left-0">
           <TopButton />
         </div>
       )}

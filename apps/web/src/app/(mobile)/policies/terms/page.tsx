@@ -1,7 +1,9 @@
-import TermsOfUse from '@/app/(mobile)/policies/terms/components/TermsOfUse';
+import { TERMS_CONTENT_DATA, TERMS_INDEX_DATA } from '@/constants/policy';
+
+import TermsLayout from '../components/TermsLayout';
 
 const TermsOfUsePage = () => {
-  return <TermsOfUse />;
+  return <TermsLayout termsIndexData={TERMS_INDEX_DATA} termsContentData={TERMS_CONTENT_DATA} />;
 };
 
 export default TermsOfUsePage;

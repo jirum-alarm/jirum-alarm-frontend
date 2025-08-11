@@ -16,6 +16,7 @@ import HotdealGuideModal from './HotDealGuideModal';
 
 export default function ProductInfo({ productId }: { productId: number }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+  const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
 
   const priceTextHasWon = product.price?.includes('원');
   const priceWithoutWon = product.price ? product.price.replace('원', '').trim() : null;
@@ -27,7 +28,7 @@ export default function ProductInfo({ productId }: { productId: number }) {
           {product.isEnd && (
             <div
               className={cn('border border-gray-400 bg-white px-2 text-gray-700', {
-                'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-[20px]': true,
+                'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-5': true,
               })}
             >
               판매종료
@@ -93,7 +94,7 @@ export default function ProductInfo({ productId }: { productId: number }) {
 
           <div className="flex justify-between text-sm font-medium">
             <span className="text-gray-400">추천수</span>
-            <span className="text-gray-500">{product.likeCount}개</span>
+            <span className="text-gray-500">{productStats.likeCount}개</span>
           </div>
         </div>
       </div>

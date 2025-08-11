@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn';
 import { useSelectContext } from './context/SelectContext';
 import { optionVaraint } from './variant/option';
 
-interface OptionProps
+export interface OptionProps
   extends Omit<
       React.SelectHTMLAttributes<HTMLSelectElement>,
       'size' | 'color' | 'onChange' | 'value'

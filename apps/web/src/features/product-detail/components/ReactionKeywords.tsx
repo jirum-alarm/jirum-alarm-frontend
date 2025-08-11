@@ -27,8 +27,8 @@ function ReactionKeywords({
 
   if (!lastUpdatedAt || !items.length) {
     return (
-      <section className="rounded-lg bg-secondary-50">
-        <header className="flex h-[56px] items-center justify-between px-4">
+      <section className="bg-secondary-50 rounded-lg">
+        <header className="flex h-14 items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <span className="flex h-6 w-6 items-center justify-center">
               <AIIcon className="size-5" />
@@ -36,14 +36,14 @@ function ReactionKeywords({
             <span className="font-semibold text-gray-900">요약 준비중</span>
           </div>
           <a
-            className="flex h-full items-center gap-x-1 text-sm font-semibold text-secondary-700"
+            className="text-secondary-700 flex h-full items-center gap-x-1 text-sm font-semibold"
             href={url}
             aria-label={`‘${provider ?? '커뮤니티'}’ 반응 보러가기`}
             target="_blank"
             rel="noopener noreferrer"
           >
             <span>‘{provider ?? '커뮤니티'}’ 반응 보러가기</span>
-            <span className="flex size-5 items-center justify-center rounded-3xl bg-secondary-100">
+            <span className="bg-secondary-100 flex size-5 items-center justify-center rounded-3xl">
               <ArrowRight color="#2B4B95" width={16} height={16} strokeWidth={1.5} />
             </span>
           </a>
@@ -53,8 +53,8 @@ function ReactionKeywords({
   }
 
   return (
-    <section className="rounded-lg bg-secondary-50">
-      <header className="flex items-center justify-between py-4 pl-3 pr-4">
+    <section className="bg-secondary-50 rounded-lg">
+      <header className="flex items-center justify-between py-4 pr-4 pl-3">
         <div className="flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center">
             <AIIcon className="size-5" />
@@ -95,14 +95,14 @@ function ReactionKeywords({
       </ul>
       <footer className="flex w-full justify-end">
         <a
-          className="flex items-center gap-x-1 px-4 py-4 text-sm font-semibold text-secondary-700"
+          className="text-secondary-700 flex items-center gap-x-1 px-4 py-4 text-sm font-semibold"
           href={url}
           aria-label={`‘${provider ?? '커뮤니티'}’ 반응 보러가기`}
           target="_blank"
           rel="noopener noreferrer"
         >
           <span>‘{provider ?? '커뮤니티'}’ 반응 보러가기</span>
-          <span className="flex size-5 items-center justify-center rounded-3xl bg-secondary-100">
+          <span className="bg-secondary-100 flex size-5 items-center justify-center rounded-3xl">
             <ArrowRight color="#2B4B95" width={16} height={16} strokeWidth={1.5} />
           </span>
         </a>

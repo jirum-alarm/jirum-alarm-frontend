@@ -10,12 +10,12 @@ interface Props {
 const SearchLinkButton = ({ color, onClick }: Props) => {
   return (
     <Link
-      className="-m-2 p-2 pc:m-0 pc:size-8 pc:p-0"
+      className="pc:m-0 pc:size-8 pc:p-0 -m-2 p-2"
       href={'/search'}
       onClick={onClick}
       aria-label="검색"
     >
-      <Search color={color} className="size-6 pc:size-8" />
+      <Search color={color} className="pc:size-8 size-6" />
     </Link>
   );
 };

@@ -1,5 +1,5 @@
 {
-  "extends": "@jirum/tsconfig/tsconfig.json",
+  "extends": "@jirum/tsconfig/nextjs.json",
   "compilerOptions": {
     "jsx": "preserve",
     "plugins": [

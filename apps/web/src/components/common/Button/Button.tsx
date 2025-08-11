@@ -11,19 +11,25 @@ interface ButtonProps
   children?: React.ReactNode;
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ size, variant, color, className, children, ...rest }, ref) => {
-    return (
-      <button
-        {...rest}
-        ref={ref}
-        type={rest.type ?? 'button'}
-        className={cn(buttonVaraint({ size, variant, color }), className)}
-      >
-        {children}
-      </button>
-    );
-  },
-);
+export const Button = ({
+  size,
+  variant,
+  color,
+  className,
+  children,
+  ref,
+  ...rest
+}: ButtonProps) => {
+  return (
+    <button
+      {...rest}
+      ref={ref}
+      type={rest.type ?? 'button'}
+      className={cn(buttonVaraint({ size, variant, color }), className)}
+    >
+      {children}
+    </button>
+  );
+};
 
 Button.displayName = 'Button';

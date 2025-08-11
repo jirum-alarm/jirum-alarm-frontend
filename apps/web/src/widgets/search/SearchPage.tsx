@@ -14,7 +14,7 @@ export default function SearchPage() {
 
   return (
     <>
-      <header className="sticky left-0 right-0 top-0 z-50 w-full">
+      <header className="sticky top-0 right-0 left-0 z-50 w-full">
         <SearchPageInput show={showSearchBar} />
       </header>
       <div className="w-full">

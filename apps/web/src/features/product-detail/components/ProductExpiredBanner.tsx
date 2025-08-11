@@ -51,7 +51,7 @@ export default function ProductExpiredBanner({ productId }: { productId: number 
           return (
             <div
               key={item}
-              className="absolute left-0 top-0 flex h-[48px] w-full items-center justify-center"
+              className="absolute top-0 left-0 flex h-[48px] w-full items-center justify-center"
               style={{
                 transform: `translateY(${translateY}%)`,
                 width: '100%',

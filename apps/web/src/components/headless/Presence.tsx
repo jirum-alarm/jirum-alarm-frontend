@@ -131,4 +131,3 @@ function getAnimationName(styles?: CSSStyleDeclaration) {
 }
 
 export { Presence };
-export type { PresenceProps };

@@ -31,7 +31,7 @@ export default function ProductGridCard({
       onClick={handleClick}
     >
       <div className="relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
-        {actionIcon && <div className="absolute right-0 top-0 z-10">{actionIcon}</div>}
+        {actionIcon && <div className="absolute top-0 right-0 z-10">{actionIcon}</div>}
         <ProductThumbnail
           src={product?.thumbnail ?? ''}
           title={product.title}
@@ -43,12 +43,12 @@ export default function ProductGridCard({
           sizes="252px"
         />
         {typeof rank === 'number' && (
-          <div className="absolute left-0 top-0 z-10 flex h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900 text-sm text-primary-500">
+          <div className="text-primary-500 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900 text-sm">
             {rank}
           </div>
         )}
         {product.isEnd ? (
-          <div className="text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-bl-lg rounded-tr-lg bg-white px-2 text-xs text-gray-700">
+          <div className="text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">
             판매종료
           </div>
         ) : (
@@ -60,7 +60,7 @@ export default function ProductGridCard({
         )}
       </div>
       <div className="flex flex-col">
-        <span className="line-clamp-2 h-12 break-words pt-2 text-sm text-gray-700">
+        <span className="line-clamp-2 h-12 pt-2 text-sm break-words text-gray-700">
           {product.title}
         </span>
         <div className="flex h-9 items-center pt-1">

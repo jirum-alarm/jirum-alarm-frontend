@@ -2,7 +2,7 @@ import EmailLoginForm from './EmailLoginForm';
 
 const EmailLogin = () => {
   return (
-    <div className="px-5 pb-5 pt-9">
+    <div className="px-5 pt-9 pb-5">
       <Description />
       <EmailLoginForm />
     </div>
