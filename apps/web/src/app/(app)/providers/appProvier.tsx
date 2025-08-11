@@ -37,6 +37,7 @@ export const AppProvider = ({ children }: Props) => {
         </ReactQueryProviders>
       </JotaiProvider>
       <Toaster />
+      <FCMConfig />
     </>
   );
 };

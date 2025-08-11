@@ -3,94 +3,155 @@ name: deploy-web-staging
 on:
   push:
     branches:
-      - "main"
+      - main
     paths:
-      - "apps/web/**"
+      - apps/web/**
+      - packages/**
   workflow_dispatch:
 
 jobs:
-  job_deploy_staging:
-    name: Deploy to Staging
+  build-and-push:
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
-
+    timeout-minutes: 30
+    environment:
+      name: staging
+      
+    outputs:
+      image-tag: ${{ steps.meta.outputs.version }}
+      image-digest: ${{ steps.build.outputs.digest }}
+    
     env:
-      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
-      DOCKER_REPOSITORY: ${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web-dev
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      INFRA_GITHUB_REPOSITORY: ${{ secrets.INFRA_GITHUB_REPOSITORY }}
-      INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH: jirum-alarm-frontend-web-deployment.yaml
-
+      DOCKER_BUILDKIT: 1
+      COMPOSE_DOCKER_CLI_BUILD: 1
+      
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js 20
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Get version
-        id: image
-        run: |
-          VERSION=$(echo ${{ github.sha }} | cut -c1-8)
-          echo VERSION=$VERSION
-          echo "::set-output name=version::$VERSION"
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install packages
-        run: pnpm install
-
-      - name: Docker private registry setting
-        run: |
-          echo $DOCKER_PASSWORD | docker login $DOCKER_REGISTRY -u $DOCKER_USER --password-stdin
-
-      - name: Build Image & Push Image
-        run: |
-          docker build -t $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG -f apps/web/deploy/development/Dockerfile .
-          docker tag $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPOSITORY:develop
-          docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG
-          docker push $DOCKER_REGISTRY/$DOCKER_REPOSITORY:develop
-          echo "::set-output name=image::$DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG"
-        env:
-          IMAGE_TAG: ${{ steps.image.outputs.version }}
-
-      - name: Checkout kubernetes infra repository
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          repository: ${{ env.INFRA_GITHUB_REPOSITORY }}
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          version: latest
+          buildkitd-config-inline: |
+            [worker.oci]
+              max-parallelism = 4
+
+      - name: Log in to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web-dev
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-,format=short
+            type=raw,value=develop,enable={{is_default_branch}}
+            type=raw,value=latest,enable={{is_default_branch}}
+          labels: |
+            org.opencontainers.image.title=Jirum Alarm Web Frontend
+            org.opencontainers.image.description=Staging deployment
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+            maintainer=${{ github.repository_owner }}
+
+
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/web/deploy/development/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            NEXT_PUBLIC_SERVICE_URL=${{ vars.NEXT_PUBLIC_SERVICE_URL }}
+            API_URL=${{ vars.API_URL }}
+            NODE_ENV=${{ vars.NODE_ENV }}
+          provenance: true
+          sbom: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web-dev:${{ steps.meta.outputs.version }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '0'
+        continue-on-error: true
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  deploy:
+    name: Deploy to Kubernetes
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: staging
+    
+    steps:
+      - name: Checkout infrastructure repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.INFRA_GITHUB_REPOSITORY }}
           ref: main
           token: ${{ secrets.ACTION_TOKEN }}
+          path: infra
 
-      - name: Update Kubernetes Deployment resources
+      - name: Install yq
         run: |
-          perl -i -pe's/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-frontend-web-dev:.*/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-frontend-web-dev:${{ steps.image.outputs.version }}/' server/jirum-alarm-frontend-web/development/$INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH
+          set -euo pipefail
+          YQ_VERSION="v4.44.3"
+          sudo wget -qO /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64"
+          sudo chmod +x /usr/local/bin/yq
+          yq --version
+
+      - name: Update Kubernetes manifest
+        working-directory: infra
+        run: |
+          set -euo pipefail
+          DEPLOYMENT_FILE="server/jirum-alarm-frontend-web/development/jirum-alarm-frontend-web-deployment.yaml"
+
+          # Build image url
+          export IMAGE_URL="${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web-dev:${{ needs.build-and-push.outputs.image-tag }}"
+          yq eval -i '.spec.template.spec.containers[0].image = strenv(IMAGE_URL)' "$DEPLOYMENT_FILE"
+
+          # Change cause
+          export CHANGE_CAUSE="Deployed by GitHub Actions - ${{ github.sha }}"
+          yq eval -i '.spec.template.metadata.annotations."kubernetes.io/change-cause" = strenv(CHANGE_CAUSE)' "$DEPLOYMENT_FILE"
+
+          # Timestamp to trigger rollout
+          export TIMESTAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          yq eval -i '.spec.template.metadata.annotations."deployment.kubernetes.io/revision-timestamp" = strenv(TIMESTAMP)' "$DEPLOYMENT_FILE"
+
+      - name: Validate Kubernetes manifest
+        working-directory: infra
+        run: |
+          set -euo pipefail
+          yq eval '.' server/jirum-alarm-frontend-web/development/*.yaml > /dev/null
 
       - name: Commit files
+        working-directory: infra
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"
           git add .
           git commit -am "Update image tag"
           git push -u origin main
-
-      - name: action-slack
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          author_name: Github Bot (Development)
-          fields: repo,message
-          if_mention: success,failure
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always()
