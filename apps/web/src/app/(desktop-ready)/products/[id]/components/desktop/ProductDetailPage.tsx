@@ -35,14 +35,14 @@ export default async function DesktopProductDetailPage({
         <Suspense
           fallback={
             <>
-              <div className="rounded-5 relative aspect-square flex-1 basis-1/2 border border-gray-200 bg-gray-50" />
+              <div className="relative aspect-square flex-1 basis-1/2 rounded-xl border border-gray-200 bg-gray-50" />
               <div className="flex flex-1 basis-1/2 pl-3 opacity-0" />
             </>
           }
         >
           <ProductInfoPrefetch productId={productId}>
             <div
-              className="rounded-5 relative aspect-square flex-1 basis-1/2 overflow-hidden border border-gray-200"
+              className="relative aspect-square flex-1 basis-1/2 overflow-hidden rounded-xl border border-gray-200"
               style={{ contain: 'layout paint', contentVisibility: 'auto' }}
             >
               <ProductDetailImage productId={productId} fill={false} />

@@ -1,4 +1,4 @@
-import { httpClient } from '@/shared/lib/http-client';
+import { execute } from '@/shared/lib/http-client';
 
 import { graphql } from '../gql';
 import {
@@ -9,16 +9,16 @@ import {
 
 export class WishlistService {
   static async addWishlist(variables: AddWishlistMutationVariables) {
-    return httpClient.execute(MutationAddWishlist, variables).then((res) => res.data);
+    return execute(MutationAddWishlist, variables).then((res) => res.data);
   }
   static async removeWishlist(variables: RemoveWishlistMutationVariables) {
-    return httpClient.execute(MutationRemoveWidthlist, variables).then((res) => res.data);
+    return execute(MutationRemoveWidthlist, variables).then((res) => res.data);
   }
   static async getWishlists(variables: QueryWishlistsQueryVariables) {
-    return httpClient.execute(QueryWishlists, variables).then((res) => res.data);
+    return execute(QueryWishlists, variables).then((res) => res.data);
   }
   static async getWishlistCount() {
-    return httpClient.execute(QueryWishlistCount).then((res) => res.data);
+    return execute(QueryWishlistCount).then((res) => res.data);
   }
 }
 

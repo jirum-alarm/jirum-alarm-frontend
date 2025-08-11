@@ -1,15 +1,14 @@
 'use client';
 
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
 import { Suspense, useEffect, useState } from 'react';
 
 import { useToast } from '@/components/common/Toast';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { CATEGORIES } from '@/constants/categories';
-import { MutationSignup } from '@/graphql/auth';
-import { ISignupOutput, ISignupVariable } from '@/graphql/interface/auth';
 import useMyRouter from '@/hooks/useMyRouter';
+import { AuthService } from '@/shared/api/auth/auth.service';
 import { Gender } from '@/shared/api/gql/graphql';
 
 import { ICategoryForm } from '@features/categories/types';
@@ -88,16 +87,8 @@ const Signup = () => {
     defaultValue: INITIAL_STEP,
   });
 
-  const [signup] = useMutation<ISignupOutput, ISignupVariable>(MutationSignup, {
-    onCompleted: async (data) => {
-      await setAccessToken(data.signup.accessToken);
-
-      if (data.signup.refreshToken) {
-        await setRefreshToken(data.signup.refreshToken);
-      }
-
-      router.push(COMPLETE_ROUTE);
-    },
+  const { mutateAsync: signup } = useMutation({
+    mutationFn: AuthService.signupUser,
     onError: () => {
       toast('회원가입에 실패했어요');
     },
@@ -125,16 +116,20 @@ const Signup = () => {
 
     const _birthYear = birthYear ? Number(birthYear) : null;
 
-    await signup({
-      variables: {
-        email: email.value,
-        password: password.value,
-        nickname: nickname.value,
-        birthYear: _birthYear,
-        gender,
-        favoriteCategories,
-      },
+    const data = await signup({
+      email: email.value,
+      password: password.value,
+      nickname: nickname.value,
+      birthYear: _birthYear as any,
+      gender: gender as any,
+      favoriteCategories,
     });
+
+    await setAccessToken(data.signup.accessToken);
+    if (data.signup.refreshToken) {
+      await setRefreshToken(data.signup.refreshToken);
+    }
+    router.push(COMPLETE_ROUTE);
 
     // TODO: Need GTM Migration
     // mp?.set_user({

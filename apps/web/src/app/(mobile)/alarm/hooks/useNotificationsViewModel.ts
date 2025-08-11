@@ -1,61 +1,39 @@
-import { useQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { INotification } from '@/graphql/interface';
-import { QueryNotifications } from '@/graphql/notification';
+import { NotificationQueries } from '@/entities/notification/notification.queries';
 
 const limit = 20;
 
 export const useNotificationsViewModel = () => {
-  const [page, setPage] = useState(1);
-  const [hasNextData, setHasNextData] = useState(true);
+  const { data, isLoading, error, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery(NotificationQueries.infiniteNotifications({ limit }));
 
-  const {
-    data: { notifications } = { notifications: [] },
-    loading,
-    error,
-    fetchMore,
-  } = useQuery<{ notifications: INotification[] }>(QueryNotifications, {
-    variables: { offset: 0, limit },
-  });
+  const notifications = useMemo(() => (data?.pages ?? []).flat(), [data?.pages]);
 
-  const noData = !loading && notifications.length === 0;
+  const noData = !isLoading && notifications.length === 0;
 
   const { ref } = useInView({
     onChange(inView) {
-      if (inView && hasNextData) {
-        fetchMore({
-          variables: {
-            offset: page * limit,
-          },
-          updateQuery: ({ notifications }, { fetchMoreResult }) => {
-            if (fetchMoreResult.notifications.length < limit) {
-              setHasNextData(false);
-            }
-            return {
-              notifications: [...notifications, ...fetchMoreResult.notifications],
-            };
-          },
-        });
+      if (inView && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
       }
-
-      setPage(page + 1);
     },
   });
 
+  const isNotLogin = (error as any)?.response?.errors?.[0]?.extensions?.code === 'FORBIDDEN';
+
   useEffect(() => {
-    if (notifications && notifications.length % limit !== 0) {
-      setHasNextData(false);
-    }
+    // noop: kept for parity and potential side-effects later
   }, [notifications]);
 
   return {
     notifications,
-    loading,
-    isNotLogin: error?.graphQLErrors[0]?.extensions?.code === 'FORBIDDEN',
+    loading: isLoading || isFetchingNextPage,
+    isNotLogin,
     noData,
-    hasNextData,
+    hasNextData: !!hasNextPage,
     ref,
   };
 };

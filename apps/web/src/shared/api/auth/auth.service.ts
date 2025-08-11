@@ -1,13 +1,14 @@
 import { redirect } from 'next/navigation';
 
 import { PAGE } from '@/constants/page';
-import { httpClient } from '@/shared/lib/http-client';
+import { execute } from '@/shared/lib/http-client';
 
 import { graphql } from '../gql';
 import {
   MutationAddNotificationKeywordMutationVariables,
   MutationLoginMutationVariables,
   MutationRemoveNotificationKeywordMutationVariables,
+  MutationSignupMutationVariables,
   MutationUpdatePasswordMutationVariables,
   MutationUpdateUserProfileMutationVariables,
   QueryMypageKeywordQueryVariables,
@@ -15,12 +16,11 @@ import {
 
 export class AuthService {
   static async loginByRefreshTokenMutation() {
-    return httpClient.execute(MutationLoginByRefreshToken).then((res) => res.data);
+    return execute(MutationLoginByRefreshToken).then((res) => res.data);
   }
 
   static async getMe() {
-    return httpClient
-      .execute(QueryMe)
+    return execute(QueryMe)
       .then((res) => res.data)
       .catch(() => {
         redirect(PAGE.LOGIN);
@@ -28,31 +28,35 @@ export class AuthService {
   }
 
   static async getMyKeyword(variables: QueryMypageKeywordQueryVariables) {
-    return httpClient.execute(QueryMypageKeyword, variables).then((res) => res.data);
+    return execute(QueryMypageKeyword, variables).then((res) => res.data);
   }
 
   static async updateMe(variables: MutationUpdateUserProfileMutationVariables) {
-    return httpClient.execute(MutationUpdateUserProfile, variables).then((res) => res.data);
+    return execute(MutationUpdateUserProfile, variables).then((res) => res.data);
   }
 
   static async loginUser(variables: MutationLoginMutationVariables) {
-    return httpClient.execute(MutationLogin, variables).then((res) => res.data);
+    return execute(MutationLogin, variables).then((res) => res.data);
+  }
+
+  static async signupUser(variables: MutationSignupMutationVariables) {
+    return execute(MutationSignup, variables).then((res) => res.data);
   }
 
   static async deleteUser() {
-    return httpClient.execute(MutationWithdraw).then((res) => res.data);
+    return execute(MutationWithdraw).then((res) => res.data);
   }
 
   static async updatePassword(variables: MutationUpdatePasswordMutationVariables) {
-    return httpClient.execute(UpdatePassword, variables).then((res) => res.data);
+    return execute(UpdatePassword, variables).then((res) => res.data);
   }
 
   static async updateKeyword(variables: MutationAddNotificationKeywordMutationVariables) {
-    return httpClient.execute(MutationAddNotificationKeyword, variables).then((res) => res.data);
+    return execute(MutationAddNotificationKeyword, variables).then((res) => res.data);
   }
 
   static async removeKeyword(variables: MutationRemoveNotificationKeywordMutationVariables) {
-    return httpClient.execute(MutationRemoveNotificationKeyword, variables).then((res) => res.data);
+    return execute(MutationRemoveNotificationKeyword, variables).then((res) => res.data);
   }
 }
 
@@ -107,6 +111,38 @@ const MutationLogin = graphql(`
     login(email: $email, password: $password) {
       accessToken
       refreshToken
+    }
+  }
+`);
+
+const MutationSignup = graphql(`
+  mutation MutationSignup(
+    $email: String!
+    $password: String!
+    $nickname: String!
+    $birthYear: Float
+    $gender: Gender
+    $favoriteCategories: [Int!]
+  ) {
+    signup(
+      email: $email
+      password: $password
+      nickname: $nickname
+      birthYear: $birthYear
+      gender: $gender
+      favoriteCategories: $favoriteCategories
+    ) {
+      accessToken
+      refreshToken
+      user {
+        id
+        email
+        nickname
+        birthYear
+        gender
+        favoriteCategories
+        linkedSocialProviders
+      }
     }
   }
 `);

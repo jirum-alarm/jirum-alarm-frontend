@@ -1,4 +1,4 @@
-import { httpClient } from '@/shared/lib/http-client';
+import { execute } from '@/shared/lib/http-client';
 
 import { graphql, useFragment } from '../gql';
 import {
@@ -25,70 +25,68 @@ import {
 
 export class ProductService {
   static async getRankingProducts() {
-    return httpClient.execute(QueryRankingProducts).then((res) => res.data);
+    return execute(QueryRankingProducts).then((res) => res.data);
   }
 
   static async getProduct(variables: ProductQueryVariables) {
-    return httpClient.execute(QueryProduct, variables).then((res) => res.data);
+    return execute(QueryProduct, variables).then((res) => res.data);
   }
 
   static async getProductInfo(variables: ProductInfoQueryVariables) {
-    return httpClient
-      .execute(ProductInfoDocument, variables)
-      .then((res) => useFragment(ProductInfoFragmentDoc, res.data.product));
+    return execute(ProductInfoDocument, variables).then((res) =>
+      useFragment(ProductInfoFragmentDoc, res.data.product),
+    );
   }
 
   static async getProductStats(variables: ProductStatsQueryVariables) {
-    return httpClient
-      .execute(ProductStatsDocument, variables)
-      .then((res) => useFragment(ProductStatsFragmentDoc, res.data.product));
+    return execute(ProductStatsDocument, variables).then((res) =>
+      useFragment(ProductStatsFragmentDoc, res.data.product),
+    );
   }
 
   static async getProductAdditionalInfo(variables: ProductAdditionalInfoQueryVariables) {
-    return httpClient
-      .execute(ProductAdditionalInfoDocument, variables)
-      .then((res) => useFragment(ProductAdditionalInfoFragmentDoc, res.data.product));
+    return execute(ProductAdditionalInfoDocument, variables).then((res) =>
+      useFragment(ProductAdditionalInfoFragmentDoc, res.data.product),
+    );
   }
 
   static async getProducts(variables: QueryProductsQueryVariables) {
-    return httpClient.execute(QueryProducts, variables).then((res) => res.data);
+    return execute(QueryProducts, variables).then((res) => res.data);
   }
 
   static async getHotDealProductsRandom(
     variables: QueryCommunityRandomRankingProductsQueryVariables,
   ) {
-    return httpClient
-      .execute(QueryCommunityRandomRankingProducts, variables)
-      .then((res) => res.data);
+    return execute(QueryCommunityRandomRankingProducts, variables).then((res) => res.data);
   }
 
   static async getReportUserNames(variables: QueryReportUserNamesQueryVariables) {
-    return httpClient.execute(QueryReportUserNames, variables).then((res) => res.data);
+    return execute(QueryReportUserNames, variables).then((res) => res.data);
   }
 
   static async getProductGuides(variables: ProductGuidesQueryVariables) {
-    return httpClient.execute(QueryProductGuides, variables).then((res) => res.data);
+    return execute(QueryProductGuides, variables).then((res) => res.data);
   }
 
   static async getTogetherViewedProducts(variables: TogetherViewedProductsQueryVariables) {
-    return httpClient.execute(QueryTogetherViewedProducts, variables).then((res) => res.data);
+    return execute(QueryTogetherViewedProducts, variables).then((res) => res.data);
   }
 
   static async collectProduct(variables: MutationCollectProductMutationVariables) {
-    return httpClient.execute(MutationCollectProduct, variables).then((res) => res.data);
+    return execute(MutationCollectProduct, variables).then((res) => res.data);
   }
   static async reportExpiredProduct(variables: MutationReportExpiredProductMutationVariables) {
-    return httpClient.execute(MutationReportExpiredProduct, variables).then((res) => res.data);
+    return execute(MutationReportExpiredProduct, variables).then((res) => res.data);
   }
   static async getProductKeywords() {
-    return httpClient.execute(QueryProductKeywords).then((res) => res.data);
+    return execute(QueryProductKeywords).then((res) => res.data);
   }
   static async getProductsByKeyword(variables: QueryProductsByKeywordQueryVariables) {
-    return httpClient.execute(QueryProductsByKeyword, variables).then((res) => res.data);
+    return execute(QueryProductsByKeyword, variables).then((res) => res.data);
   }
 
   static async getReactionKeywords(variables: QueryCategorizedReactionKeywordsArgs) {
-    return httpClient.execute(QueryCategorizedReactionKeywords, variables).then((res) => res.data);
+    return execute(QueryCategorizedReactionKeywords, variables).then((res) => res.data);
   }
 }
 

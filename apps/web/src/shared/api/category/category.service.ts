@@ -1,14 +1,14 @@
-import { httpClient } from '@/shared/lib/http-client';
+import { execute } from '@/shared/lib/http-client';
 
 import { graphql } from '../gql';
 
 export class CategoryService {
   static async getCategories() {
-    return httpClient.execute(Queryategories).then((res) => res.data);
+    return execute(Queryategories).then((res) => res.data);
   }
 
   static async getMyCategories() {
-    return httpClient.execute(QueryMyCategories).then((res) => res.data);
+    return execute(QueryMyCategories).then((res) => res.data);
   }
 }
 

@@ -8,6 +8,7 @@ import { useKeywordInput } from '../hooks/useKeywordInput';
 
 const KeywordInput = () => {
   const { keyword, handleInputChange, reset, handleSubmit, canSubmit } = useKeywordInput();
+
   return (
     <form onSubmit={handleSubmit}>
       <Input

@@ -1,49 +1,44 @@
+'use client';
+
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage, Unsubscribe } from 'firebase/messaging';
-import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 
+import { setFcmToken as setFcmTokenAction } from '@/app/actions/token';
 import { firebaseConfig } from '@/constants/firebase';
-import { fcmTokenAtom } from '@/state/fcmToken';
-
-import { httpClient } from '@shared/lib/http-client';
 
 const firebaseApp = initializeApp(firebaseConfig);
 
 const FCMConfig = () => {
-  const [fcmToken, setFcmToken] = useAtom(fcmTokenAtom);
-  httpClient.setFcmToken(fcmToken);
   useEffect(() => {
+    if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
+
     let unsubscribe: Unsubscribe | null = null;
-    const retrieveToken = async () => {
-      if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-        // Retrieve the notification permission status
-        const permission = await Notification.requestPermission();
-        if (permission !== 'granted') return;
+
+    const setupGranted = async () => {
+      try {
+        // 권한이 이미 허용된 경우에만 토큰 조회/구독
+        if (Notification.permission !== 'granted') return;
 
         const messaging = getMessaging(firebaseApp);
-        getToken(messaging, {
-          vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
-        })
-          .then((currentToken) => {
-            if (currentToken) {
-              setFcmToken(currentToken);
-            } else {
-              // Show permission request UI
-              console.log('No registration token available. Request permission to generate one.');
-            }
-          })
-          .catch((err) => {
-            console.log('An error occurred while retrieving token. ', err);
-          });
+        const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
+        const token = await getToken(messaging, { vapidKey });
+        if (token) {
+          await setFcmTokenAction(token);
+        }
+
         unsubscribe = onMessage(messaging, (payload) => {
           console.log('Foreground : ', payload);
         });
+      } catch (err) {
+        console.log('FCM setup error: ', err);
       }
     };
-    retrieveToken();
+
+    setupGranted();
+
     return () => unsubscribe?.();
-  }, [setFcmToken]);
+  }, []);
 
   return null;
 };
