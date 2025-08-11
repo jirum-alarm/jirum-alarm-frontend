@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { setAccessToken, setRefreshToken } from '@/app/actions/token';
 import { useToast } from '@/components/common/Toast';
 import useMyRouter from '@/hooks/useMyRouter';
-import { fcmTokenAtom } from '@/state/fcmToken';
+import { useFcmPermission } from '@/lib/firebase/useFcmPermission';
 import { AuthService } from '@/shared/api/auth/auth.service';
 
 import { WebViewBridge, WebViewEventType } from '@shared/lib/webview';
@@ -25,6 +25,8 @@ interface Login {
 
 const useEmailLoginFormViewModel = () => {
   const { toast } = useToast();
+
+  const { requestPermission } = useFcmPermission();
 
   const [loginForm, setLoginForm] = useState<Login>({
     email: {
@@ -59,6 +61,7 @@ const useEmailLoginFormViewModel = () => {
         });
         await setRefreshToken(data.login.refreshToken);
       }
+      requestPermission();
 
       toast('로그인에 성공했어요.');
       router.replace(HOME_PATH);
@@ -141,9 +144,8 @@ const useEmailLoginFormViewModel = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     login({
-        email: loginForm.email.value,
-        password: loginForm.password.value,
-      },
+      email: loginForm.email.value,
+      password: loginForm.password.value,
     });
   };
 

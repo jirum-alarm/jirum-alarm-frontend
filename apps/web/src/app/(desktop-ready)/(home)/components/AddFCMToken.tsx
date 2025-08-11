@@ -3,7 +3,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
 import { useQueryState } from 'nuqs';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { fcmTokenAtom } from '@/state/fcmToken';
 
@@ -14,30 +14,23 @@ const AddFCMToken = () => {
   const [token] = useQueryState('token');
   const [fcmToken, setFcmToken] = useAtom(fcmTokenAtom);
 
-  const { mutate } = useMutation({
+  const { mutate: addPushToken } = useMutation({
     mutationFn: (variables: MutationAddPushTokenMutationVariables) =>
       NotificationService.addPushToken(variables),
     onError: (e) => console.error(e),
   });
 
-  const addTokenToServer = useCallback(
-    (token: string) => {
-      mutate({ token, tokenType: TokenType.Fcm });
-    },
-    [mutate],
-  );
-
   useEffect(() => {
     const fcmAppToken = token;
     setFcmToken(fcmAppToken ?? undefined);
     if (!fcmAppToken) return;
-    addTokenToServer(fcmAppToken);
-  }, [addTokenToServer, token, setFcmToken]);
+    addPushToken({ token: fcmAppToken, tokenType: TokenType.Fcm });
+  }, [addPushToken, token, setFcmToken]);
 
   useEffect(() => {
     if (!fcmToken) return;
-    addTokenToServer(fcmToken);
-  }, [addTokenToServer, fcmToken]);
+    addPushToken({ token: fcmToken, tokenType: TokenType.Fcm });
+  }, [addPushToken, fcmToken]);
 
   return null;
 };

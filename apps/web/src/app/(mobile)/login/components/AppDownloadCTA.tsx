@@ -26,7 +26,7 @@ const AppDownloadCTA = () => {
             <a
               href={link}
               onClick={handleAppDownloadClick}
-              className="rounded-5 bg-secondary-600 flex h-[32px] w-20 items-center justify-center text-sm font-semibold text-white"
+              className="bg-secondary-600 flex h-[32px] w-20 items-center justify-center rounded-xl text-sm font-semibold text-white"
             >
               다운받기
             </a>

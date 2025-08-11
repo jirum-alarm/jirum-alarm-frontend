@@ -1,4 +1,4 @@
-import { httpClient } from '@/shared/lib/http-client';
+import { execute } from '@/shared/lib/http-client';
 
 import { graphql } from '../gql';
 import {
@@ -10,19 +10,19 @@ import {
 
 export class CommentService {
   static async getComments(variables: CommentsQueryVariables) {
-    return httpClient.execute(QueryComments, variables).then((res) => res.data);
+    return execute(QueryComments, variables).then((res) => res.data);
   }
 
   static async addComment(variables: AddCommentMutationVariables) {
-    return httpClient.execute(MutationAddComment, variables).then((res) => res.data);
+    return execute(MutationAddComment, variables).then((res) => res.data);
   }
 
   static async updateComment(variables: UpdateCommentMutationVariables) {
-    return httpClient.execute(MutationUpdateComment, variables).then((res) => res.data);
+    return execute(MutationUpdateComment, variables).then((res) => res.data);
   }
 
   static async removeComment(variables: RemoveCommentMutationVariables) {
-    return httpClient.execute(MutationRemoveComment, variables).then((res) => res.data);
+    return execute(MutationRemoveComment, variables).then((res) => res.data);
   }
 }
 

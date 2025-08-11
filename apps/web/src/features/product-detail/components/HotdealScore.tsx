@@ -116,7 +116,7 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
   return (
     <div ref={ref} className="flex h-[83px] w-full flex-col justify-end">
       <div className="w-full gap-[8px]">
-        <div className="rounded-5 relative flex h-[14px] w-full items-center justify-between bg-gray-300 p-[5px]">
+        <div className="relative flex h-[14px] w-full items-center justify-between rounded-xl bg-gray-300 p-[5px]">
           {Array.from({ length: 5 }).map((_, index) => (
             <div key={index} className="h-[4px] w-[4px] rounded-full bg-gray-400" />
           ))}

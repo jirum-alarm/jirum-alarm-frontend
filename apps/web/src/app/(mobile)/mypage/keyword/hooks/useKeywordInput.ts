@@ -7,7 +7,7 @@ import { useUpdateKeyword } from '../../features';
 const MAX_KETWORD_LENGTH = 20;
 
 export const useKeywordInput = () => {
-  const { requestPermissionAndRegister } = useFcmPermission();
+  const { requestPermission } = useFcmPermission();
   const [keyword, setKeyword] = useState({
     error: false,
     value: '',
@@ -32,7 +32,7 @@ export const useKeywordInput = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     addNotificationKeyword({ keyword: keyword.value });
-    requestPermissionAndRegister();
+    requestPermission();
     reset();
   };
   return { handleInputChange, keyword, reset, handleSubmit, canSubmit };

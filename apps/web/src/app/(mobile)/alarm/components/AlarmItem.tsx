@@ -2,14 +2,18 @@ import Image from 'next/image';
 import { memo, useState } from 'react';
 
 import { PAGE } from '@/constants/page';
-import { INotification } from '@/graphql/interface';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
+import { QueryNotificationsQuery } from '@/shared/api/gql/graphql';
 
 import DisplayTime from '@shared/ui/DisplayTime';
 import Link from '@shared/ui/Link';
 
-const AlarmItem = ({ notification }: { notification: INotification }) => {
+const AlarmItem = ({
+  notification,
+}: {
+  notification: QueryNotificationsQuery['notifications'][number];
+}) => {
   const { message, createdAt, product, keyword } = notification;
   const { thumbnail, price, isHot, isEnd, id } = product ?? {};
 
