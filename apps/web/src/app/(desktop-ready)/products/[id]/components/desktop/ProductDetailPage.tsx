@@ -74,7 +74,7 @@ export default async function DesktopProductDetailPage({
         </div>
       </div>
       <Hr className="mt-21.5 mb-15" />
-      <div className="gap-y-15 flex flex-col">
+      <div className="flex flex-col gap-y-15">
         <CommentSection productId={productId} />
         <Hr />
         <TogetherViewedSection productId={productId} />

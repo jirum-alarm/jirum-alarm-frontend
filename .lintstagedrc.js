@@ -2,6 +2,7 @@ const path = require("path");
 
 const buildEslintCommands = (filenames) => {
   const relFilenames = filenames.map((f) => path.relative(process.cwd(), f));
+
   const adminFiles = relFilenames.filter((f) => f.startsWith("apps/admin/"));
   const webFiles = relFilenames.filter((f) => f.startsWith("apps/web/"));
   const landingFiles = relFilenames.filter((f) =>
@@ -50,7 +51,32 @@ const buildPrettierCommands = (filenames) => {
   return commands;
 };
 
+const buildCheckTypesCommands = (filenames) => {
+  const relFilenames = filenames.map((f) => path.relative(process.cwd(), f));
+  const adminFiles = relFilenames.filter((f) => f.startsWith("apps/admin/"));
+  const webFiles = relFilenames.filter((f) => f.startsWith("apps/web/"));
+  const landingFiles = relFilenames.filter((f) =>
+    f.startsWith("apps/landing/")
+  );
+
+  const packages = [];
+
+  if (adminFiles.length > 0) {
+    packages.push("admin");
+  }
+
+  if (webFiles.length > 0) {
+    packages.push("web");
+  }
+
+  if (landingFiles.length > 0) {
+    packages.push("landing");
+  }
+
+  return `pnpm check-types --filter=${packages.join(" --filter=")}`;
+};
+
 module.exports = {
   "*.{js,ts,tsx}": [buildEslintCommands, buildPrettierCommands],
-  "*.{ts,tsx}": [() => "pnpm check-types"],
+  "*.{ts,tsx}": [buildCheckTypesCommands],
 };

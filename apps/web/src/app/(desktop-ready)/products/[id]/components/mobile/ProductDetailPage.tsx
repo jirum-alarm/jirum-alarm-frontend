@@ -78,7 +78,7 @@ async function ProductDetailPage({
             <div className="mt-4 mb-12 flex flex-col gap-y-9 px-5">
               <Suspense
                 fallback={
-                  <div className="h-[115 rounded-[12px] border border-gray-100 bg-gray-50" />
+                  <div className="h-[160px] rounded-[12px] border border-gray-100 bg-gray-50" />
                 }
               >
                 <ProductGuidesPrefetch productId={productId}>
@@ -87,7 +87,7 @@ async function ProductDetailPage({
               </Suspense>
               <Suspense
                 fallback={
-                  <div className="h-[115 rounded-[12px] border border-gray-100 bg-gray-50" />
+                  <div className="h-[160px] rounded-[12px] border border-gray-100 bg-gray-50" />
                 }
               >
                 <ProductAdditionalInfoPrefetch productId={productId}>

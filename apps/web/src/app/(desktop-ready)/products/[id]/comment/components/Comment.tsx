@@ -4,6 +4,8 @@ import { AuthQueries } from '@/entities/auth';
 import { cn } from '@/lib/cn';
 import { displayTime } from '@/util/displayTime';
 
+import { User } from '@shared/api/gql/graphql';
+
 import CommentAction from './CommentAction';
 import { TComment, TEditStatus } from './CommentLayout';
 import CommentMenu from './CommentMenu';
