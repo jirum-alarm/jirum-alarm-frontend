@@ -5,7 +5,7 @@ import { OrderOptionType, ProductOrderType } from '@shared/api/gql/graphql';
 
 import { ProductQueries } from '@entities/product';
 
-const limit = 18;
+const limit = 20;
 
 const useLiveHotDealsViewModel = () => {
   const {
