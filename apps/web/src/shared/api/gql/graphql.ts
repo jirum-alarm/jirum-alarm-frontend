@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -1413,7 +1414,6 @@ export type ProductInfoFragment = {
   thumbnail?: string | null;
   hotDealType?: HotDealType | null;
   viewCount: number;
-  likeCount: number;
   mallName?: string | null;
   author?: { __typename?: 'User'; id: string; nickname: string } | null;
   provider: {
@@ -1771,7 +1771,6 @@ export const ProductInfoFragmentDoc = new TypedDocumentString(
   }
   hotDealType
   viewCount
-  likeCount
   mallName
 }
     `,
@@ -2119,7 +2118,6 @@ export const ProductInfoDocument = new TypedDocumentString(`
   }
   hotDealType
   viewCount
-  likeCount
   mallName
 }`) as unknown as TypedDocumentString<ProductInfoQuery, ProductInfoQueryVariables>;
 export const ProductStatsDocument = new TypedDocumentString(`

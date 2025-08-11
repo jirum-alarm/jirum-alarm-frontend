@@ -1,14 +1,12 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
-import { checkDevice } from '@/app/actions/agent';
 import { getAccessToken } from '@/app/actions/token';
 import Button from '@/components/common/Button';
 import withCheckDevice from '@/components/hoc/withCheckDevice';
 import DeviceSpecific from '@/components/layout/DeviceSpecific';
+import { detailCommentPage } from '@/util/navigation';
 
-import { AuthService } from '@shared/api/auth';
-import { User } from '@shared/api/gql/graphql';
 import Link from '@shared/ui/Link';
 
 import { CommentQueries, defaultCommentsVariables } from '@entities/comment';
@@ -22,17 +20,11 @@ const CommentListWithDevice = withCheckDevice(CommentList);
 
 export default async function CommentSection({ productId }: { productId: number }) {
   const queryClient = new QueryClient();
-  const { isMobile } = await checkDevice();
   const accessToken = await getAccessToken();
   const isUserLogin = !!accessToken;
 
-  let me: User | undefined;
-  if (accessToken) {
-    const { me: user } = await AuthService.getMeServer();
-    me = user;
-  }
   const { pages } = await queryClient.fetchInfiniteQuery(
-    CommentQueries.infiniteCommentsServer({
+    CommentQueries.infiniteComments({
       productId,
       ...defaultCommentsVariables,
     }),
@@ -43,7 +35,7 @@ export default async function CommentSection({ productId }: { productId: number 
   const renderMobile = () => {
     return (
       <div className="mt-8 w-full px-12">
-        <Link href={`/products/${productId}/comment`}>
+        <Link href={detailCommentPage(productId)}>
           <Button className="bg-gray-100">{hasComments ? '댓글 보기' : '댓글 작성하기'}</Button>
         </Link>
       </div>
@@ -55,14 +47,14 @@ export default async function CommentSection({ productId }: { productId: number 
   };
 
   return (
-    <section className="mb-10 mt-4 flex flex-col pc:my-0">
+    <section className="pc:my-0 mt-4 mb-10 flex flex-col">
       <div className="flex h-[56px] w-full items-center px-5 py-4">
         <span className="text-lg font-bold text-gray-900">지름알림 댓글</span>
       </div>
       <>
         <HydrationBoundary state={dehydrate(queryClient)}>
           <Suspense fallback={<CommentListSkeleton />}>
-            <CommentListWithDevice productId={productId} me={me} />
+            <CommentListWithDevice productId={productId} />
           </Suspense>
         </HydrationBoundary>
         <DeviceSpecific mobile={renderMobile} desktop={renderDesktop} />

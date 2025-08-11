@@ -1,6 +1,7 @@
 import { RequestCookies, ResponseCookies } from 'next/dist/server/web/spec-extension/cookies';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { IS_PRD } from './constants/env';
 import { GRAPHQL_ENDPOINT } from './constants/graphql';
 import { PAGE } from './constants/page';
 import { accessTokenExpiresAt, refreshTokenExpiresAt } from './constants/token';
@@ -16,10 +17,11 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   return await routeGuard(request, response);
 }
 
+const protectedPaths = [PAGE.MYPAGE, PAGE.LIKE];
+const onlyRefreshTokenPaths = [PAGE.TRENDING];
+
 const routeGuard = async (req: NextRequest, res: NextResponse) => {
   const { pathname } = req.nextUrl;
-  const protectedPaths = [PAGE.MYPAGE, PAGE.LIKE];
-  const onlyRefreshTokenPaths = [PAGE.TRENDING];
 
   const isProtectedPath = protectedPaths.some((path) => pathname.startsWith(path));
   const isOnlyRefreshTokenPaths = onlyRefreshTokenPaths.some((path) => pathname.startsWith(path));
@@ -101,7 +103,7 @@ const tokenVerify = async (accessToken?: string) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      authorization: accessToken ? `Bearer ${accessToken}` : '',
+      Authorization: accessToken ? `Bearer ${accessToken}` : '',
     },
     body: JSON.stringify({
       query: QueryMe,
@@ -115,7 +117,7 @@ const getNewToken = async (refreshToken?: string) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      authorization: refreshToken ? `Bearer ${refreshToken}` : '',
+      Authorization: refreshToken ? `Bearer ${refreshToken}` : '',
     },
     body: JSON.stringify({
       query: MutationLoginByRefreshToken,
@@ -144,13 +146,17 @@ const refreshAndVerifyToken = async (
             const access_token = {
               name: 'ACCESS_TOKEN',
               expires: Date.now() + accessTokenExpiresAt,
-              httpOnly: false,
+              httpOnly: true,
+              sameSite: 'lax' as const,
+              secure: IS_PRD,
               value: accessToken,
             };
             const refresh_token = {
               name: 'REFRESH_TOKEN',
               expires: Date.now() + refreshTokenExpiresAt,
               httpOnly: true,
+              sameSite: 'lax' as const,
+              secure: IS_PRD,
               value: refreshToken,
             };
             res.cookies.set(access_token);

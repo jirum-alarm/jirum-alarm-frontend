@@ -1,18 +1,24 @@
 'use server';
 
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/constants/token';
 
 async function setAccessToken(token: string) {
   (await cookies()).set('ACCESS_TOKEN', token, {
     expires: Date.now() + accessTokenExpiresAt,
-    httpOnly: false,
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
   });
 }
 
 async function getAccessToken() {
   return (await cookies()).get('ACCESS_TOKEN')?.value;
+}
+
+async function getHeaderAuth() {
+  return (await headers()).get('authorization');
 }
 
 async function removeAccessToken() {
@@ -22,6 +28,8 @@ async function setRefreshToken(token: string) {
   (await cookies()).set('REFRESH_TOKEN', token, {
     expires: Date.now() + refreshTokenExpiresAt,
     httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
   });
 }
 
@@ -35,6 +43,7 @@ async function removeRefreshToken() {
 
 export {
   getAccessToken,
+  getHeaderAuth,
   getRefreshToken,
   removeAccessToken,
   removeRefreshToken,

@@ -13,10 +13,6 @@ export class CommentService {
     return httpClient.execute(QueryComments, variables).then((res) => res.data);
   }
 
-  static async getCommentsServer(variables: CommentsQueryVariables) {
-    return httpClient.server_execute(QueryComments, variables).then((res) => res.data);
-  }
-
   static async addComment(variables: AddCommentMutationVariables) {
     return httpClient.execute(MutationAddComment, variables).then((res) => res.data);
   }

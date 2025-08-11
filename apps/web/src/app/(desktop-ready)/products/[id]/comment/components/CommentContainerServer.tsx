@@ -13,7 +13,7 @@ const CommentContainerServer = async ({ productId }: { productId: number }) => {
   const [token] = await Promise.all([
     getAccessToken(),
     queryClient.prefetchInfiniteQuery(
-      CommentQueries.infiniteCommentsServer({
+      CommentQueries.infiniteComments({
         productId,
         ...defaultCommentsVariables,
       }),

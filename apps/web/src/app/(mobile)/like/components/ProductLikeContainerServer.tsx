@@ -11,13 +11,13 @@ const ProductLikeContainerServer = async () => {
 
   await Promise.all([
     queryClient.prefetchInfiniteQuery(
-      WishlistQueries.infiniteWishlistsServer({
+      WishlistQueries.infiniteWishlists({
         orderBy: WishlistOrderType.Id,
         orderOption: OrderOptionType.Desc,
         limit: 18,
       }),
     ),
-    queryClient.prefetchQuery(WishlistQueries.wishlistCountServer()),
+    queryClient.prefetchQuery(WishlistQueries.wishlistCount()),
   ]);
 
   return (

@@ -1,3 +1,6 @@
+import { redirect } from 'next/navigation';
+
+import { PAGE } from '@/constants/page';
 import { httpClient } from '@/shared/lib/http-client';
 
 import { graphql } from '../gql';
@@ -16,11 +19,12 @@ export class AuthService {
   }
 
   static async getMe() {
-    return httpClient.execute(QueryMe).then((res) => res.data);
-  }
-
-  static async getMeServer() {
-    return httpClient.server_execute(QueryMe).then((res) => res.data);
+    return httpClient
+      .execute(QueryMe)
+      .then((res) => res.data)
+      .catch(() => {
+        redirect(PAGE.LOGIN);
+      });
   }
 
   static async getMyKeyword(variables: QueryMypageKeywordQueryVariables) {
