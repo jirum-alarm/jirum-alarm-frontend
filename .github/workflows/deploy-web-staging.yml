@@ -6,6 +6,11 @@ on:
       - "main"
     paths:
       - "apps/web/**"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'select branch to deploy to staging'
+        required: true
 
 jobs:
   job_deploy_staging:
