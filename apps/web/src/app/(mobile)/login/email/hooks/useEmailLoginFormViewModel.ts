@@ -1,14 +1,11 @@
-import { useMutation } from '@apollo/client';
-import { useAtomValue } from 'jotai';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { setAccessToken, setRefreshToken } from '@/app/actions/token';
 import { useToast } from '@/components/common/Toast';
-import { MutationLogin } from '@/graphql/auth';
-import { addPushTokenVariable, TokenType } from '@/graphql/interface';
-import { MutationAddPushToken } from '@/graphql/notification';
 import useMyRouter from '@/hooks/useMyRouter';
 import { fcmTokenAtom } from '@/state/fcmToken';
+import { AuthService } from '@/shared/api/auth/auth.service';
 
 import { WebViewBridge, WebViewEventType } from '@shared/lib/webview';
 
@@ -46,16 +43,11 @@ const useEmailLoginFormViewModel = () => {
   });
 
   const router = useMyRouter();
-  const fcmToken = useAtomValue(fcmTokenAtom);
 
-  const [addPushToken] = useMutation<unknown, addPushTokenVariable>(MutationAddPushToken, {
-    onError: (e) => {
-      console.error(e);
-    },
-  });
-
-  const [login] = useMutation(MutationLogin, {
-    onCompleted: async (data) => {
+  const { mutate: login } = useMutation({
+    mutationKey: ['auth', 'login'],
+    mutationFn: AuthService.loginUser,
+    onSuccess: async (data) => {
       await setAccessToken(data.login.accessToken);
 
       if (data.login.refreshToken) {
@@ -70,21 +62,6 @@ const useEmailLoginFormViewModel = () => {
 
       toast('로그인에 성공했어요.');
       router.replace(HOME_PATH);
-
-      if (!fcmToken) {
-        console.error('fcmToken is not exist');
-        return;
-      }
-
-      // TODO: Need GTM Migration
-      // mp?.set_user({
-      //   $name: null,
-      //   $email: loginForm.email.value,
-      // });
-
-      addPushToken({
-        variables: { token: fcmToken, tokenType: TokenType.FCM },
-      });
     },
     onError: () => {
       setLoginForm((prev) => ({ ...prev, error: true }));
@@ -164,7 +141,6 @@ const useEmailLoginFormViewModel = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     login({
-      variables: {
         email: loginForm.email.value,
         password: loginForm.password.value,
       },
