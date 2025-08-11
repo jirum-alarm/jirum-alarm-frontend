@@ -5,6 +5,7 @@ FROM --platform=linux/amd64 node:${NODE_VERSION}-alpine AS base
 # Setup pnpm on the base image
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+
 RUN corepack enable && pnpm install turbo --global
 
 # Prepare the build
@@ -27,6 +28,10 @@ COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --filter=web
 
+ENV SERVICE_URL=https://dev.jirum-alarm.com
+ENV API_URL=http://crawling-service-lb.crawling-server.svc.cluster.local:3100
+ENV NODE_ENV=test
+
 # Build the project
 COPY --from=builder /app/out/full/ .
 RUN pnpm turbo run build --filter=web...
@@ -34,8 +39,6 @@ RUN pnpm turbo run build --filter=web...
 # Set up the runner environment
 FROM node:${NODE_VERSION}-alpine AS runner
 WORKDIR /app
-
-ENV NODE_ENV=development
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
