@@ -225,7 +225,7 @@ const Reaction = ({
 
 const NoReaction = () => {
   return (
-    <div className="h-156px] flex items-center justify-center gap-[4px] rounded-[8px] border border-gray-200 px-7 py-6">
+    <div className="flex h-[156px] items-center justify-center gap-[4px] rounded-[8px] border border-gray-200 px-7 py-6">
       <div className="flex aspect-square w-15 items-center justify-center">
         {/* simplified static svg removed for brevity in feature refactor */}
       </div>
