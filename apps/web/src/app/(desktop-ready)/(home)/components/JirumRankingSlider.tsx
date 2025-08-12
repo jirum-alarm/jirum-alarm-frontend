@@ -5,8 +5,9 @@ import 'swiper/css';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
-import { useMemo, useRef, useState } from 'react';
-import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
+import dynamic from 'next/dynamic';
+import { useMemo, useRef } from 'react';
+import { SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
 import { ArrowLeft } from '@/components/common/icons';
@@ -20,25 +21,14 @@ import ProductRankingImageCard from '@features/products/ranking/ProductRankingIm
 import { RankingSkeleton as DesktopRankingSkeleton } from '../desktop/RankingSkeleton';
 import { RankingSkeleton as MobileRankingSkeleton } from '../mobile/RankingSkeleton';
 
-const SliderDots = ({ total, activeIndex }: { total: number; activeIndex: number }) => (
-  <div className="pc:w-[100px] mx-auto flex h-5 w-full items-center justify-center" role="tablist">
-    {Array.from({ length: total }).map((_, i) => (
-      <div
-        key={i}
-        role="tab"
-        aria-selected={activeIndex === i}
-        aria-label={`슬라이드 ${i + 1}`}
-        className={cn(
-          `pc:grow pc:bg-gray-500 h-[3px] w-[3px] bg-gray-400`,
-          activeIndex === i &&
-            'pc:w-[32px] pc:bg-gray-300 mr-[6px] ml-[6px] h-[4px] w-[4px] bg-gray-600',
-        )}
-      />
-    ))}
-  </div>
-);
+import SliderDots from './SliderDots';
+
+const Swiper = dynamic(() => import('swiper/react').then((mod) => mod.Swiper), {
+  ssr: false,
+});
 
 const indexAtom = atom(0);
+const isInitAtom = atom(false);
 
 const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMobile: boolean }) => {
   const isHydrated = useIsHydrated();
@@ -49,8 +39,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
 
   const [index, setIndex] = useAtom(indexAtom);
   const swiperRef = useRef<SwiperClass>(null);
-  const [isInit, setIsInit] = useState(false);
-
+  const [isInit, setIsInit] = useAtom(isInitAtom);
   const canRender = useMemo(() => isHydrated && isInit, [isHydrated, isInit]);
 
   const handleAfterInit = (swiper: SwiperClass) => {
@@ -81,11 +70,18 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         >
           <ArrowLeft className="mr-1 size-8 text-white" color="white" />
         </button>
+        {!isInit && (
+          <div className="w-slider-max grid grid-cols-4 gap-x-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="mb-33.75 aspect-square" />
+            ))}
+          </div>
+        )}
         <motion.div
-          className={cn('pc:max-w-slider-max w-full overflow-visible')}
-          initial={{ opacity: 0 }}
+          className={cn('max-w-slider-max overflow-visible')}
+          initial={{ opacity: canRender ? 1 : 0 }}
           animate={{ opacity: canRender ? 1 : 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.3 }}
         >
           <Swiper
             {...config}
@@ -95,9 +91,9 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           >
             {rankingProducts.map((product, i) => (
               <SwiperSlide
-                className={cn('pc:pb-6 pb-5', !isInit && 'pc:pb-1.5')}
+                className={cn('pb-5')}
                 key={product.id}
-                style={{ width: isMobile ? '240px' : 'calc(100% / 4)' }}
+                style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
               >
                 <ProductRankingImageCard activeIndex={index} index={i} product={product} />
               </SwiperSlide>
@@ -116,7 +112,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         <AnimatePresence>
           {!canRender && (
             <motion.div
-              className="absolute inset-0 bottom-auto z-10 animate-pulse"
+              className="absolute inset-0 bottom-auto z-10 animate-pulse px-16"
               initial={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
