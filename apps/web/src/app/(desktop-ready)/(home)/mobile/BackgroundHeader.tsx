@@ -17,7 +17,7 @@ const BackgroundHeader = async () => {
   return (
     <div
       className={cn(
-        'max-w-mobile-max fixed top-0 z-0 h-[300px] w-full bg-gray-900',
+        'max-w-mobile-max fixed top-0 z-0 mx-auto h-[300px] w-full bg-gray-900',
         isSafari && 'top-[0.5px]',
       )}
     >

@@ -8,8 +8,9 @@ import { PAGE } from '@/constants/page';
 import Link from '@shared/ui/Link';
 
 import JirumRankingSlider from '../components/JirumRankingSlider';
+import SliderDots from '../components/SliderDots';
 
-import { RankingSkeleton, SliderDotsSkeleton } from './RankingSkeleton';
+import { RankingSkeleton } from './RankingSkeleton';
 
 const SLIDE_SIZE = 4;
 
@@ -22,7 +23,7 @@ const SLIDER_CONFIG_DESKTOP: SwiperOptions = {
 } as const;
 
 const JirumRankingContainer = () => (
-  <div className="w-full px-9 pt-14">
+  <div className="w-full pt-14">
     <div className="max-w-slider-max mx-auto mt-9">
       <SectionHeader
         title="지름알림 랭킹"
@@ -38,9 +39,9 @@ const JirumRankingContainer = () => (
       <div className="mt-6">
         <Suspense
           fallback={
-            <div className="flex animate-pulse flex-col gap-y-6">
+            <div className="flex flex-col px-16">
               <RankingSkeleton />
-              <SliderDotsSkeleton total={10} />
+              <SliderDots total={7} activeIndex={0} />
             </div>
           }
         >

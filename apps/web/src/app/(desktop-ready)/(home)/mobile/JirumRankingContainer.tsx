@@ -8,8 +8,9 @@ import { PAGE } from '@/constants/page';
 import Link from '@shared/ui/Link';
 
 import JirumRankingSlider from '../components/JirumRankingSlider';
+import SliderDots from '../components/SliderDots';
 
-import { RankingSkeleton, SliderDotsSkeleton } from './RankingSkeleton';
+import { RankingSkeleton } from './RankingSkeleton';
 
 const SLIDER_CONFIG_MOBILE: SwiperOptions = {
   slidesPerView: 'auto',
@@ -39,7 +40,7 @@ const JirumRankingContainer = () => {
             fallback={
               <>
                 <RankingSkeleton />
-                <SliderDotsSkeleton total={10} />
+                <SliderDots total={10} activeIndex={0} />
               </>
             }
           >

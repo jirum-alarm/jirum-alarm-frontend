@@ -25,12 +25,3 @@ const SkeletonCard = ({ scale }: { scale: number }) => (
     </div>
   </div>
 );
-
-export const SliderDotsSkeleton = ({ total }: { total: number }) => (
-  <div className="flex h-5 w-full items-center justify-center">
-    <div className="mr-[6px] ml-[6px] h-[4px] w-[4px] bg-gray-200" />
-    {Array.from({ length: total - 1 }).map((_, i) => (
-      <div key={i} className="h-[3px] w-[3px] bg-gray-100" />
-    ))}
-  </div>
-);
