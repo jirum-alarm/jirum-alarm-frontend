@@ -3,11 +3,17 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
 import { Tabs } from 'radix-ui';
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  startTransition,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
-
-import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 
 import { CategoryQueries } from '@entities/category';
 
@@ -35,7 +41,7 @@ export const TrendingContainer = ({ initialTab }: Props) => {
   } = useSuspenseQuery(CategoryQueries.categoriesForUser());
 
   const allCategories = useMemo(() => [{ id: 0, name: '전체' }, ...categories], [categories]);
-  const categoryIds = allCategories.map((c) => c.id);
+  const categoryIds = useMemo(() => allCategories.map((c) => c.id), [allCategories]);
 
   const [tabId, setTabId] = useQueryState('tab', {
     defaultValue: initialTab,
@@ -59,12 +65,17 @@ export const TrendingContainer = ({ initialTab }: Props) => {
   const handleSlideChange = (swiper: SwiperClass) => {
     const index = swiper.activeIndex;
     const newId = allCategories[index]?.id;
-    if (typeof newId === 'number' && newId !== tabId) {
-      setTabId(newId);
+    if (typeof newId === 'number') {
+      if (newId !== tabId) {
+        startTransition(() => {
+          setTabId(newId);
+        });
+      }
       setFetchedTabIds((prev) => {
-        const newSet = new Set(prev);
-        newSet.add(newId);
-        return newSet;
+        if (prev.has(newId)) return prev;
+        const next = new Set(prev);
+        next.add(newId);
+        return next;
       });
     }
   };
@@ -72,21 +83,26 @@ export const TrendingContainer = ({ initialTab }: Props) => {
   const handleTabChange = useCallback(
     (nextId: number) => {
       if (nextId === tabId) return;
-      swiperRef.current?.slideTo(categoryIds.indexOf(nextId));
+      setTabId(nextId);
     },
-    [categoryIds, tabId],
+    [tabId, setTabId],
   );
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
     const meta = TAB_META[tabId] || TAB_META[0];
     document.title = meta.title;
+    const swiper = swiperRef.current;
+    const targetIndex = categoryIds.indexOf(tabId);
+    if (swiper && targetIndex >= 0 && targetIndex !== swiper.activeIndex) {
+      swiper.slideTo(targetIndex);
+    }
     setFetchedTabIds((prev) => {
-      const newSet = new Set(prev);
-      newSet.add(tabId);
-      return newSet;
+      if (prev.has(tabId)) return prev;
+      const next = new Set(prev);
+      next.add(tabId);
+      return next;
     });
-  }, [tabId]);
+  }, [tabId, categoryIds]);
 
   return (
     <Tabs.Root value={`${tabId}`} asChild>
@@ -100,20 +116,21 @@ export const TrendingContainer = ({ initialTab }: Props) => {
         <div className="mt-[72px] overflow-hidden">
           <Swiper
             {...SWIPER_OPTIONS}
-            initialSlide={tabId}
+            initialSlide={categoryIds.indexOf(tabId)}
             onSlideChange={handleSlideChange}
             onSwiper={handleInitSwiper}
           >
             {allCategories.map((category) => {
               const isFetched = fetchedTabIds.has(category.id);
+              const currentIndex = categoryIds.indexOf(category.id);
+              const activeIndex = categoryIds.indexOf(tabId);
+              const isWithinRange = Math.abs(currentIndex - activeIndex) <= 1;
               return (
                 <SwiperSlide key={category.id} className="w-full flex-[0_0_100%] px-5">
-                  {isFetched ? (
-                    <ApiErrorBoundary>
-                      <Suspense fallback={<GridProductListSkeleton length={12} />}>
-                        <TrendingList categoryId={category.id} categoryName={category.name} />
-                      </Suspense>
-                    </ApiErrorBoundary>
+                  {isFetched && isWithinRange ? (
+                    <Suspense fallback={<GridProductListSkeleton length={12} />}>
+                      <TrendingList categoryId={category.id} categoryName={category.name} />
+                    </Suspense>
                   ) : (
                     <GridProductListSkeleton length={12} />
                   )}

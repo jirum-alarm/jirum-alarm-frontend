@@ -171,7 +171,6 @@ const TabBar = ({
         tabIndicatorWidth.set(activeTab.offsetWidth);
       }
     };
-
     scrollToTab();
   }, [tabIndex, tabIndicatorLeft, tabIndicatorWidth, x, mergedAnimationConfig.scroll]);
 
@@ -183,9 +182,7 @@ const TabBar = ({
   const handlePointerUp = (e: React.PointerEvent, id: string) => {
     const dx = Math.abs(e.clientX - (dragStartX.current ?? 0));
     if (dx < 5) {
-      startTransition(() => {
-        onTabClick(Number(id));
-      });
+      onTabClick(Number(id));
     }
   };
 
@@ -242,7 +239,6 @@ const TabBar = ({
             <Link
               className={mergedStyles.settingsButton}
               href={settingsHref}
-              prefetch={false}
               aria-label={settingsAriaLabel}
             >
               {settingsIcon}
