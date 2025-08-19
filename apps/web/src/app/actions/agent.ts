@@ -1,7 +1,11 @@
+'use server';
+
 import { headers } from 'next/headers';
 import { userAgent } from 'next/server';
 
-async function checkDevice() {
+import { CheckDeviceResult } from './agent.types';
+
+async function checkDevice(): Promise<CheckDeviceResult> {
   const headersList = await headers();
   const { device, browser, ua } = userAgent({ headers: headersList });
   const userAgentString = ua || '';
@@ -25,12 +29,20 @@ async function checkDevice() {
   const isMobile = Boolean(device.type === 'mobile') || isJirumAlarmApp;
   const isSafari = Boolean(browser.name === 'Mobile Safari');
 
+  const isMobileBrowser = Boolean(device.type === 'mobile' && !isJirumAlarmApp);
+
+  const isApple = Boolean(device.vendor === 'Apple');
+  const isAndroid = Boolean(device.vendor === 'Google');
+
   return {
     isMobile,
     isSafari,
     isJirumAlarmIOSApp,
     isJirumAlarmAndroidApp,
     isJirumAlarmApp,
+    isApple,
+    isAndroid,
+    isMobileBrowser,
   };
 }
 

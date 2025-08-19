@@ -1,15 +1,19 @@
 'use client';
 
+import { CheckDeviceResult } from '@/app/actions/agent.types';
 import { AppIcon } from '@/components/common/icons/Illust';
 
 import useAppDownloadLink from '@shared/hooks/useAppDownloadLink';
 
-const AppDownloadCTA = () => {
-  const { type, link } = useAppDownloadLink();
+const AppDownloadCTA = ({ device }: { device: CheckDeviceResult }) => {
+  const { type, link } = useAppDownloadLink(device);
 
   const handleAppDownloadClick = () => {
     if (!type) return;
   };
+
+  if (type === null) return null;
+
   return (
     <>
       {type && link && (

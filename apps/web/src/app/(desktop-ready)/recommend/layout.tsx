@@ -1,12 +1,14 @@
 import { ReactNode } from 'react';
 
+import { checkDevice } from '@/app/actions/agent';
 import BasicLayout from '@/components/layout/BasicLayout';
-import DeviceSpecific from '@/components/layout/DeviceSpecific';
 import SectionHeader from '@/components/SectionHeader';
 
 import RecommendPageHeader from './components/RecommendPageHeader';
 
 export default async function Layout({ children }: { children: ReactNode }) {
+  const { isMobile } = await checkDevice();
+
   const renderMobile = () => {
     return <BasicLayout header={<RecommendPageHeader />}>{children}</BasicLayout>;
   };
@@ -19,5 +21,5 @@ export default async function Layout({ children }: { children: ReactNode }) {
     );
   };
 
-  return <DeviceSpecific mobile={renderMobile} desktop={renderDesktop} />;
+  return isMobile ? renderMobile() : renderDesktop();
 }
