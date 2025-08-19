@@ -1,9 +1,9 @@
-const runtimeCaching = require('next-pwa/cache');
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  runtimeCaching,
   buildExcludes: [/middleware-manifest.json$/],
   disableDevLogs: true,
 });
