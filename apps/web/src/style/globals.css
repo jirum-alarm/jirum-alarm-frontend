@@ -39,11 +39,11 @@ html {
   --breakpoint-xs: 375px;
   --breakpoint-smd: 550px;
   --breakpoint-3xl: 1440px;
-  --breakpoint-mobile-max: 600px;
+  --breakpoint-mobile-max: min(600px, 100vw);
 
   /* container */
   --container-layout-max: 1280px;
-  --container-mobile-max: 600px;
+  --container-mobile-max: min(600px, 100vw);
 
   /* font family */
   --font-sans: var(--font-pretendard);
@@ -140,21 +140,21 @@ html {
 }
 @keyframes modalZoomIn {
   0% {
-    transform: translateY(-50%) translateX(-50%) scale(0.75);
+    transform: scale(0.75);
     opacity: 0;
   }
   100% {
-    transform: translateY(-50%) translateX(-50%) scale(1);
+    transform: scale(1);
     opacity: 1;
   }
 }
 @keyframes modalZoomOut {
   0% {
-    transform: translateY(-50%) translateX(-50%) scale(1);
+    transform: scale(1);
     opacity: 1;
   }
   100% {
-    transform: translateY(-50%) translateX(-50%) scale(0.75);
+    transform: scale(0.75);
     opacity: 0;
   }
 }

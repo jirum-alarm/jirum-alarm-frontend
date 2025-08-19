@@ -1,4 +1,5 @@
 import { Search } from '@/components/common/icons';
+import { PAGE } from '@/constants/page';
 
 import Link from '@shared/ui/Link';
 
@@ -11,7 +12,7 @@ const SearchLinkButton = ({ color, onClick }: Props) => {
   return (
     <Link
       className="pc:m-0 pc:size-8 pc:p-0 -m-2 p-2"
-      href={'/search'}
+      href={PAGE.SEARCH}
       onClick={onClick}
       aria-label="검색"
     >
