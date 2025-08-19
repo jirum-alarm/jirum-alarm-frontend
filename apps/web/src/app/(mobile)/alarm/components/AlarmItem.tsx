@@ -21,7 +21,7 @@ const AlarmItem = ({
 
   return (
     <li className="flex gap-x-3">
-      <Link href={PAGE.DETAIL + '/' + +id!} prefetch={false} className="flex w-full p-5">
+      <Link href={PAGE.DETAIL + '/' + +id!} className="flex w-full p-5">
         <div className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">
           <ImageWithFallback src={thumbnail ?? ''} title={message} />
         </div>
