@@ -17,8 +17,7 @@ const SLIDE_SIZE = 4;
 const SLIDER_CONFIG_DESKTOP: SwiperOptions = {
   slidesPerView: SLIDE_SIZE,
   centeredSlides: false,
-  loop: false,
-  slidesPerGroup: SLIDE_SIZE,
+  loop: true,
   spaceBetween: 24,
 } as const;
 
@@ -41,7 +40,7 @@ const JirumRankingContainer = () => (
           fallback={
             <div className="flex flex-col px-16">
               <RankingSkeleton />
-              <SliderDots total={7} activeIndex={0} />
+              <SliderDots total={10} visibleSlides={[0, 1, 2, 3]} />
             </div>
           }
         >

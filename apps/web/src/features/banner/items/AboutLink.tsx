@@ -1,4 +1,3 @@
-import withCheckDevice from '@/components/hoc/withCheckDevice';
 import { LANDING_URL } from '@/constants/env';
 
 import BannerItem from '../BannerItem';
@@ -29,4 +28,4 @@ const AboutLink = ({ isMobile }: { isMobile: boolean }) => {
   return <BannerItem {...props} isMobile={isMobile} />;
 };
 
-export default withCheckDevice(AboutLink);
+export default AboutLink;

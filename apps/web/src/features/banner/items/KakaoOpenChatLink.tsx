@@ -1,5 +1,3 @@
-import withCheckDevice from '@/components/hoc/withCheckDevice';
-
 import BannerItem from '../BannerItem';
 import kakao from '../images/kakao.png';
 
@@ -21,4 +19,4 @@ const KakaoOpenChatLink = ({ isMobile }: { isMobile: boolean }) => {
   return <BannerItem {...props} isMobile={isMobile} />;
 };
 
-export default withCheckDevice(KakaoOpenChatLink);
+export default KakaoOpenChatLink;
