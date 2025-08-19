@@ -35,22 +35,11 @@ export async function generateMetadata({
 const TrendingPage = async ({ searchParams }: { searchParams: Promise<{ tab: string }> }) => {
   const { tab } = await searchParams;
   const tabNumber = tab ? Number(tab) : 0;
-  // checkJirumAlarmApp는 서버에서만 사용되므로, TrendingPage를 async로 유지할 필요 없음
-  // const { isJirumAlarmApp } = await checkJirumAlarmApp();
-  // TopButton의 hasBottomNav prop은 true로 고정하거나, 별도 처리 필요
-  // SSR에서만 필요한 경우 별도 처리 가능
+
   return (
     <BasicLayout hasBottomNav navType={NAV_TYPE.TRENDING} header={<TrendingPageHeader />}>
       <div className="h-full">
-        <Suspense
-          fallback={
-            <div className="-mt-10 flex h-full w-full items-center justify-center">
-              <LoadingSpinner width={50} height={50} />
-            </div>
-          }
-        >
-          <TrendingContainerServer tab={tabNumber} />
-        </Suspense>
+        <TrendingContainerServer tab={tabNumber} />
       </div>
       <TopButton />
     </BasicLayout>

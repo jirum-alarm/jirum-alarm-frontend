@@ -32,7 +32,7 @@ const TrendingContainerServer = async ({ tab }: Props) => {
   });
 
   if (categories.find((c) => c.id === tab)) {
-    await queryClient.prefetchQuery(
+    queryClient.prefetchQuery(
       ProductQueries.products({
         limit: TRENDING_ITEMS_LIMIT,
         orderBy: ProductOrderType.CommunityRanking,
