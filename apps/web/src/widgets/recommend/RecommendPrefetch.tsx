@@ -1,11 +1,13 @@
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+
+import { getQueryClient } from '@/app/(app)/react-query/query-client';
 
 import { ProductQueries } from '@entities/product';
 
 const RecommendPrefetch = async ({ children }: { children: React.ReactNode }) => {
-  const queryClient = new QueryClient();
+  const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery(ProductQueries.productKeywords());
+  queryClient.prefetchQuery(ProductQueries.productKeywords());
 
   return <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>;
 };
