@@ -1,12 +1,11 @@
 import { QueryClient } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
-import { getAccessToken } from '@/app/actions/token';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { NAV_TYPE } from '@/components/layout/BottomNav';
-import { AuthQueries } from '@/entities/auth';
+import CustomerServiceBoot from '@/lib/customerservice/CustomerServiceBoot';
 
-import CustomerServiceBoot from '../../../lib/customerservice/CustomerServiceBoot';
+import { AuthQueries } from '@entities/auth';
 
 import MenuList from './components/MenuList';
 import MyProfileSection from './components/MyProfileSection';
