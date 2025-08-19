@@ -1,6 +1,5 @@
 'use client';
 
-import { collectProductAction } from '@/app/actions/product';
 import { PAGE } from '@/constants/page';
 import { cn } from '@/lib/cn';
 
@@ -18,12 +17,8 @@ export default function ProductRankingImageCard({
   activeIndex: number;
   index: number;
 }) {
-  const handleClick = () => {
-    collectProductAction(+product.id);
-  };
-
   return (
-    <Link href={PAGE.DETAIL + '/' + product.id} onClick={handleClick} rel="preload">
+    <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
       <div
         className={cn(
           'pc:h-auto pc:scale-100 h-[340px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',

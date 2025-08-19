@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 
 import {
   CommunityReaction,
@@ -9,11 +8,6 @@ import {
   ProductDetailImage,
   ProductExpiredBanner,
 } from '@features/product-detail/components';
-import {
-  ProductAdditionalInfoPrefetch,
-  ProductGuidesPrefetch,
-  ProductInfoPrefetch,
-} from '@features/product-detail/prefetch';
 import {
   CategoryPopularByProductSection,
   TogetherViewedSection,
@@ -25,7 +19,7 @@ import BottomCTA from './BottomCTA';
 import ProductInfo from './ProductInfo';
 import ViewerCount from './ViewerCount';
 
-async function ProductDetailPage({
+function ProductDetailPage({
   productId,
   isUserLogin,
 }: {
@@ -33,72 +27,47 @@ async function ProductDetailPage({
   isUserLogin: boolean;
 }) {
   return (
-    <ProductInfoPrefetch productId={productId}>
-      <Suspense fallback={<div className="bg-secondary-50 sticky top-14 z-50 h-[48px] w-full" />}>
+    <>
+      <Suspense>
         <ViewerCount productId={productId} />
       </Suspense>
 
       <main className="pt-14">
-        <div className="sticky top-0 -mb-6">
-          <div
-            className="relative aspect-square w-full"
-            style={{ contain: 'layout paint', contentVisibility: 'auto' }}
-          >
-            <Suspense
-              fallback={<div className="relative aspect-square w-full rounded-b-3xl bg-gray-100" />}
+        <Suspense>
+          <div className="sticky top-0 -mb-6">
+            <div
+              className="relative aspect-square w-full"
+              style={{ contain: 'layout paint', contentVisibility: 'auto' }}
             >
               <ProductDetailImage productId={productId} fill />
-            </Suspense>
+            </div>
           </div>
-        </div>
+        </Suspense>
 
         <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <div className="flex flex-col">
-            <Suspense
-              fallback={
-                <div className="px-5">
-                  <div className="h-6 w-4/5 rounded-sm bg-gray-100" />
-                  <div className="mt-3 h-5 w-20 rounded-sm bg-gray-100" />
-                  <div className="mt-4 flex justify-between">
-                    <div className="h-6 w-24 rounded-sm bg-gray-100" />
-                    <div className="h-8 w-[88px] rounded-sm bg-gray-100" />
-                  </div>
-                </div>
-              }
-            >
+            <Suspense>
               <ProductInfo productId={productId} />
             </Suspense>
 
-            <ErrorBoundary fallback={<Hr />}>
-              <Suspense fallback={<Hr />}>
-                <ProductExpiredBanner productId={productId} />
-              </Suspense>
-            </ErrorBoundary>
+            <Suspense fallback={<Hr />}>
+              <ProductExpiredBanner productId={productId} />
+            </Suspense>
 
             <div className="mt-4 mb-12 flex flex-col gap-y-9 px-5">
-              <Suspense
-                fallback={
-                  <div className="h-[160px] rounded-[12px] border border-gray-100 bg-gray-50" />
-                }
-              >
-                <ProductGuidesPrefetch productId={productId}>
-                  <HotdealGuide productId={productId} />
-                </ProductGuidesPrefetch>
+              <Suspense>
+                <HotdealGuide productId={productId} />
               </Suspense>
-              <Suspense
-                fallback={
-                  <div className="h-[160px] rounded-[12px] border border-gray-100 bg-gray-50" />
-                }
-              >
-                <ProductAdditionalInfoPrefetch productId={productId}>
-                  <CommunityReaction productId={productId} />
-                  <HotdealScore productId={productId} />
-                </ProductAdditionalInfoPrefetch>
+              <Suspense>
+                <CommunityReaction productId={productId} />
+              </Suspense>
+              <Suspense>
+                <HotdealScore productId={productId} />
               </Suspense>
             </div>
 
             <Hr />
-            <CommentSection productId={productId} />
+            <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={true} />
             <Hr />
 
             <div className="mt-7 mb-8 flex flex-col gap-y-8 px-5">
@@ -113,7 +82,7 @@ async function ProductDetailPage({
           <BottomCTA productId={productId} isUserLogin={isUserLogin} />
         </div>
       </main>
-    </ProductInfoPrefetch>
+    </>
   );
 }
 export default ProductDetailPage;

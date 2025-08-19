@@ -1,4 +1,3 @@
-import { collectProductAction } from '@/app/actions/product';
 import { PAGE } from '@/constants/page';
 
 import HotdealBadge from '@shared/ui/HotdealBadge';
@@ -8,17 +7,8 @@ import ProductThumbnail from '../image/ProductThumbnail';
 import { type ProductCardType } from '../type';
 
 export default function CarouselProductCard({ product }: { product: ProductCardType }) {
-  const handleClick = () => {
-    collectProductAction(+product.id);
-  };
-
   return (
-    <Link
-      href={PAGE.DETAIL + '/' + product.id}
-      prefetch={false}
-      className="pc:w-[192px] inline-block w-[120px]"
-      onClick={handleClick}
-    >
+    <Link href={PAGE.DETAIL + '/' + product.id} className="pc:w-[192px] inline-block w-[120px]">
       <div className="pc:h-[192px] relative aspect-square h-[120px] overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
         <ProductThumbnail
           src={product?.thumbnail ?? ''}

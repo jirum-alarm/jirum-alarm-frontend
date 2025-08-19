@@ -1,6 +1,3 @@
-'use client';
-
-import { collectProductAction } from '@/app/actions/product';
 import { PAGE } from '@/constants/page';
 
 import DisplayTime from '@shared/ui/DisplayTime';
@@ -19,17 +16,8 @@ export default function ProductGridCard({
   rank?: number;
   actionIcon?: React.ReactNode;
 }) {
-  const handleClick = () => {
-    collectProductAction(+product.id!);
-  };
-
   return (
-    <Link
-      href={PAGE.DETAIL + '/' + product.id}
-      prefetch={false}
-      className="w-full"
-      onClick={handleClick}
-    >
+    <Link href={PAGE.DETAIL + '/' + product.id} className="w-full">
       <div className="relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
         {actionIcon && <div className="absolute top-0 right-0 z-10">{actionIcon}</div>}
         <ProductThumbnail
