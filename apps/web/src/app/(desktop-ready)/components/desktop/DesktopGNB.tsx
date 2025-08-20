@@ -77,21 +77,25 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           <Link
             href={talkroomLink}
             target="_blank"
-            className="relative size-8"
+            className="relative size-9 rounded-full hover:bg-gray-100"
             aria-label="핫딜 카톡방 입장"
           >
-            <TalkDark
-              className={cn('size-8 transition-opacity', {
-                'opacity-0': !isInHomeHero,
-                'opacity-100': isInHomeHero,
-              })}
-            />
-            <TalkLight
-              className={cn('absolute inset-0 size-8 transition-opacity', {
+            <div
+              className={cn('absolute inset-0 size-9 p-1 transition-opacity', {
                 'opacity-100': !isInHomeHero,
                 'opacity-0': isInHomeHero,
               })}
-            />
+            >
+              <TalkDark className="size-full" />
+            </div>
+            <div
+              className={cn('absolute inset-0 size-9 p-1 transition-opacity', {
+                'opacity-100': !isInHomeHero,
+                'opacity-0': isInHomeHero,
+              })}
+            >
+              <TalkLight className="size-full" />
+            </div>
           </Link>
           {isLoggedIn ? (
             <Link href={PAGE.MYPAGE} className="size-8">
@@ -100,7 +104,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           ) : (
             <Link
               href={PAGE.LOGIN}
-              className="rounded-full bg-gray-700 px-4 py-1.5 font-semibold text-white"
+              className="rounded-full bg-gray-700 px-4 py-1.5 font-semibold text-white transition-colors hover:bg-gray-600"
             >
               로그인
             </Link>
