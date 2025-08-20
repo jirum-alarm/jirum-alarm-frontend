@@ -30,12 +30,12 @@ const KeyVisual = () => (
             height={200}
             priority
           />
-          <p className="text-[32px] leading-[1.3] font-bold text-white md:text-[48px] lg:text-[64px]">
-            득템의 시작
-          </p>
           <h1 className="text-primary-500 text-[44px] leading-[1.3] font-bold md:text-[66px] lg:text-[88px]">
             지름알림
           </h1>
+          <p className="text-[32px] leading-[1.3] font-bold text-white md:text-[48px] lg:text-[64px]">
+            득템의 시작
+          </p>
           <AppDownload type="key-visual" />
         </div>
       </div>

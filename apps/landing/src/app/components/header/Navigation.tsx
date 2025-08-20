@@ -7,7 +7,11 @@ const talkroomLink = 'https://open.kakao.com/o/gJZTWAAg';
 
 const GnbActions = () => (
   <div className="flex items-center gap-x-5">
-    <a className="-m-2 size-10 p-2 lg:size-12" href={PAGE.BASE + PAGE.SEARCH} aria-label="검색">
+    <a
+      className="flex size-8 items-center justify-center rounded-full p-1 hover:bg-gray-100 lg:size-9"
+      href={PAGE.BASE + PAGE.SEARCH}
+      aria-label="검색"
+    >
       <Image
         className="size-full"
         src="/assets/icons/search.svg"
@@ -17,19 +21,24 @@ const GnbActions = () => (
         unoptimized
       />
     </a>
-    <a href={talkroomLink} target="_blank" aria-label="핫딜 카톡방 입장" className="size-8">
+    <a
+      href={talkroomLink}
+      target="_blank"
+      aria-label="핫딜 카톡방 입장"
+      className="flex size-8 items-center justify-center rounded-full p-1 hover:bg-gray-100 lg:size-9"
+    >
       <Image
         src="/assets/icons/katalk2.svg"
         alt=""
         className="size-full"
-        width={32}
-        height={32}
+        width={28}
+        height={28}
         unoptimized
       />
     </a>
     <a
       href={PAGE.BASE + PAGE.LOGIN}
-      className="rounded-full bg-gray-900 px-4 py-1.5 font-semibold text-white"
+      className="rounded-full bg-gray-700 px-4 py-1.5 font-semibold text-white transition-colors hover:bg-gray-600"
     >
       로그인
     </a>
