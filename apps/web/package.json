@@ -104,6 +104,5 @@
   },
   "msw": {
     "workerDirectory": "public"
-  },
-  "packageManager": "pnpm@10.10.0"
+  }
 }
