@@ -83,6 +83,15 @@ export const QueryProductAdditionalInfo = gql`
       currentPrice
       lowestPrice
     }
+    commentSummary {
+      additionalInfo
+      option
+      price
+      productId
+      purchaseMethod
+      satisfaction
+      summary
+    }
   }
   query ProductAdditionalInfo($id: Int!) {
     product(id: $id) {
