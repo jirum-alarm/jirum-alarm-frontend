@@ -77,13 +77,13 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           <Link
             href={talkroomLink}
             target="_blank"
-            className="relative size-9 rounded-full hover:bg-gray-100"
+            className="relative size-9 rounded-full transition-colors duration-300 hover:bg-white/10"
             aria-label="핫딜 카톡방 입장"
           >
             <div
               className={cn('absolute inset-0 size-9 p-1 transition-opacity', {
-                'opacity-100': !isInHomeHero,
-                'opacity-0': isInHomeHero,
+                'opacity-100': isInHomeHero,
+                'opacity-0': !isInHomeHero,
               })}
             >
               <TalkDark className="size-full" />
@@ -104,7 +104,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           ) : (
             <Link
               href={PAGE.LOGIN}
-              className="rounded-full bg-gray-700 px-4 py-1.5 font-semibold text-white transition-colors hover:bg-gray-600"
+              className="rounded-full bg-gray-700 px-4 py-1.5 font-semibold text-white transition-colors duration-300 hover:bg-gray-600"
             >
               로그인
             </Link>

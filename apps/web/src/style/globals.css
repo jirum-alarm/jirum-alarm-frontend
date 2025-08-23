@@ -31,6 +31,10 @@ html {
   @apply text-gray-900;
 }
 
+html {
+  font-synthesis: none !important;
+}
+
 /* ---- Tailwind v4 theme/variant/utilities migrated from tailwind.config.js ---- */
 
 @theme {

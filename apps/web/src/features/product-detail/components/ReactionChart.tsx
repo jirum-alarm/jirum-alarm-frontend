@@ -85,7 +85,7 @@ export function ReactionChart({
               />
 
               {/* 진행 반원 */}
-              {isInView && (
+              {percent && isInView && (
                 <motion.path
                   d="M7.20996 95.9719C10.9267 46.2193 52.7747 7 103.852 7C154.929 7 196.777 46.2193 200.494 95.9719"
                   fill="transparent"
@@ -114,26 +114,26 @@ export function ReactionChart({
             {disabled ? '-' : positiveCount}명
           </span>
           <div>
-            <span
+            <div
               className={cn([
-                'text-[44px] leading-[44px] font-semibold text-gray-800',
+                'text-center text-[44px] leading-[44px] font-semibold text-gray-800',
                 disabled && 'text-gray-400',
               ])}
             >
               {disabled ? '00' : positivePercent.toFixed(0)}
               <span className="text-semibold ml-[1px] text-2xl text-gray-400">%</span>
-            </span>
+            </div>
             <div className="flex items-center justify-center gap-x-0.5">
               {!disabled &&
                 (isPositive ? (
                   <>
                     <span className="text-sm text-gray-500">추천해요</span>
-                    <Thumbsup className="size-4.5" />
+                    <Thumbsup className="size-4.5" active />
                   </>
                 ) : (
                   <>
                     <span className="text-sm text-gray-500">비추천해요</span>
-                    <Thumbsdown />
+                    <Thumbsdown className="size-4.5" active />
                   </>
                 ))}
               {disabled && <span className="text-sm text-gray-500">반응 수집중</span>}
