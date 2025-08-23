@@ -540,7 +540,7 @@ type ProductOutput {
   커뮤니티 내 카테고리
   """
   category: String
-  categoryId: Int
+  categoryId: Int!
   """
   서비스 카테고리
   """

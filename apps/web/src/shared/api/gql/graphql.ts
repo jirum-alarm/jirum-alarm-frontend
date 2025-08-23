@@ -639,7 +639,7 @@ export type ProductOutput = {
   authorId?: Maybe<Scalars['Int']['output']>;
   /** 커뮤니티 내 카테고리 */
   category?: Maybe<Scalars['String']['output']>;
-  categoryId?: Maybe<Scalars['Int']['output']>;
+  categoryId: Scalars['Int']['output'];
   /** 서비스 카테고리 */
   categoryName?: Maybe<Scalars['String']['output']>;
   commentSummary?: Maybe<ProductCommentSummary>;
@@ -1274,7 +1274,7 @@ export type QueryNotificationsQuery = {
       price?: string | null;
       isHot?: boolean | null;
       isEnd?: boolean | null;
-      categoryId?: number | null;
+      categoryId: number;
     } | null;
   }>;
 };
@@ -1304,7 +1304,7 @@ export type ProductQuery = {
     id: string;
     providerId: number;
     category?: string | null;
-    categoryId?: number | null;
+    categoryId: number;
     mallId?: number | null;
     title: string;
     url?: string | null;
@@ -1383,6 +1383,16 @@ export type ProductAdditionalInfoFragment = {
     currentPrice: number;
     lowestPrice: number;
   } | null;
+  commentSummary?: {
+    __typename?: 'ProductCommentSummary';
+    additionalInfo?: string | null;
+    option?: string | null;
+    price?: string | null;
+    productId: string;
+    purchaseMethod?: string | null;
+    satisfaction?: string | null;
+    summary?: string | null;
+  } | null;
 } & { ' $fragmentName'?: 'ProductAdditionalInfoFragment' };
 
 export type ProductAdditionalInfoQueryVariables = Exact<{
@@ -1401,7 +1411,7 @@ export type ProductAdditionalInfoQuery = {
 export type ProductInfoFragment = {
   __typename?: 'ProductOutput';
   id: string;
-  categoryId?: number | null;
+  categoryId: number;
   categoryName?: string | null;
   title: string;
   url?: string | null;
@@ -1502,7 +1512,7 @@ export type QueryProductsQuery = {
     isEnd?: boolean | null;
     price?: string | null;
     providerId: number;
-    categoryId?: number | null;
+    categoryId: number;
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
@@ -1523,7 +1533,7 @@ export type QueryRankingProductsQuery = {
     url?: string | null;
     price?: string | null;
     thumbnail?: string | null;
-    categoryId?: number | null;
+    categoryId: number;
   }>;
 };
 
@@ -1544,7 +1554,7 @@ export type QueryCommunityRandomRankingProductsQuery = {
     isEnd?: boolean | null;
     price?: string | null;
     providerId: number;
-    categoryId?: number | null;
+    categoryId: number;
     category?: string | null;
     thumbnail?: string | null;
     searchAfter?: Array<string> | null;
@@ -1570,7 +1580,7 @@ export type TogetherViewedProductsQuery = {
     isEnd?: boolean | null;
     price?: string | null;
     providerId: number;
-    categoryId?: number | null;
+    categoryId: number;
     category?: string | null;
     thumbnail?: string | null;
     searchAfter?: Array<string> | null;
@@ -1603,7 +1613,7 @@ export type QueryProductsByKeywordQuery = {
     isEnd?: boolean | null;
     price?: string | null;
     providerId: number;
-    categoryId?: number | null;
+    categoryId: number;
     category?: string | null;
     thumbnail?: string | null;
     hotDealType?: HotDealType | null;
@@ -1685,7 +1695,7 @@ export type QueryWishlistsQuery = {
       hotDealType?: HotDealType | null;
       thumbnail?: string | null;
       isMyWishlist?: boolean | null;
-      categoryId?: number | null;
+      categoryId: number;
     };
   }>;
 };
@@ -1739,6 +1749,15 @@ export const ProductAdditionalInfoFragmentDoc = new TypedDocumentString(
     highestPrice
     currentPrice
     lowestPrice
+  }
+  commentSummary {
+    additionalInfo
+    option
+    price
+    productId
+    purchaseMethod
+    satisfaction
+    summary
   }
 }
     `,
@@ -2082,6 +2101,15 @@ export const ProductAdditionalInfoDocument = new TypedDocumentString(`
     highestPrice
     currentPrice
     lowestPrice
+  }
+  commentSummary {
+    additionalInfo
+    option
+    price
+    productId
+    purchaseMethod
+    satisfaction
+    summary
   }
 }`) as unknown as TypedDocumentString<
   ProductAdditionalInfoQuery,
