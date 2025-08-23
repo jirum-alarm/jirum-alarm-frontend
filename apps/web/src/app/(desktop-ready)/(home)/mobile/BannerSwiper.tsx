@@ -45,10 +45,10 @@ const BannerSwiper = ({ device }: { device: CheckDeviceResult }) => {
         <>
           {[...Array(3)].map((_, i) => (
             <Fragment key={i}>
-              <SwiperSlide style={{ width: 'calc(100% - 50px)' }}>
+              <SwiperSlide key={`${i}-kakao-open-chat-link`} style={{ width: 'calc(100% - 50px)' }}>
                 <KakaoOpenChatLink isMobile={true} />
               </SwiperSlide>
-              <SwiperSlide style={{ width: 'calc(100% - 50px)' }}>
+              <SwiperSlide key={`${i}-about-link`} style={{ width: 'calc(100% - 50px)' }}>
                 <AboutLink isMobile={true} />
               </SwiperSlide>
             </Fragment>
@@ -62,13 +62,13 @@ const BannerSwiper = ({ device }: { device: CheckDeviceResult }) => {
       <>
         {[...Array(2)].map((_, i) => (
           <Fragment key={i}>
-            <SwiperSlide style={{ width: 'calc(100% - 50px)' }}>
+            <SwiperSlide key={`${i}-app-download-cta`} style={{ width: 'calc(100% - 50px)' }}>
               <AppDownloadCTA device={device} />
             </SwiperSlide>
-            <SwiperSlide style={{ width: 'calc(100% - 50px)' }}>
+            <SwiperSlide key={`${i}-kakao-open-chat-link`} style={{ width: 'calc(100% - 50px)' }}>
               <KakaoOpenChatLink isMobile={true} />
             </SwiperSlide>
-            <SwiperSlide style={{ width: 'calc(100% - 50px)' }}>
+            <SwiperSlide key={`${i}-about-link`} style={{ width: 'calc(100% - 50px)' }}>
               <AboutLink isMobile={true} />
             </SwiperSlide>
           </Fragment>
