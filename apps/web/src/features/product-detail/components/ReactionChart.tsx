@@ -95,7 +95,7 @@ export function ReactionChart({
                   // 경로를 1로 정규화
                   pathLength={1}
                   initial={{
-                    strokeDasharray: '0 1',
+                    strokeDasharray: !disabled ? '0 1' : `${percent} 1`,
                     strokeDashoffset: isPositive ? 0 : 1,
                   }}
                   animate={{
