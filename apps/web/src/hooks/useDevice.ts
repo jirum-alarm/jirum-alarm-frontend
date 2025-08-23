@@ -1,36 +1,24 @@
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useQuery } from '@tanstack/react-query';
+
+import { checkDevice } from '@/app/actions/agent';
 
 export const useDevice = (initialIsMobile: boolean = false) => {
-  const [isMobile, setIsMobile] = useState<boolean>(initialIsMobile);
-  const [isApple, setIsApple] = useState<boolean>(false);
-  const [isIos, setIsIos] = useState<boolean>(false);
-  const [isAndroid, setIsAndroid] = useState<boolean>(false);
-  const [isJirumAlarmIOSApp, setIsJirumAlarmIOSApp] = useState<boolean | 'ios' | 'android'>(false);
-  const [isJirumAlarmAndroidApp, setIsJirumAlarmAndroidApp] = useState<boolean | 'ios' | 'android'>(
-    false,
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ['device'],
+    queryFn: async () => await checkDevice(),
+    initialData: {
+      isMobile: initialIsMobile,
+      isSafari: false,
+      isJirumAlarmIOSApp: false,
+      isJirumAlarmAndroidApp: false,
+      isJirumAlarmApp: false,
+      isApple: false,
+      isAndroid: false,
+      isMobileBrowser: initialIsMobile,
+    },
+  });
 
-  useEffect(() => {
-    const userAgent = window.navigator.userAgent;
-    const isMobileDevice = Boolean(
-      userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|Mobile/i),
-    );
-    setIsMobile(isMobileDevice);
-
-    setIsApple(Boolean(userAgent.match(/iPhone|iPad|iPod|Mac/i)));
-    setIsIos(Boolean(userAgent.match(/iPhone|iPad|iPod/i)));
-    setIsAndroid(Boolean(userAgent.match(/Android/i)));
-    setIsJirumAlarmIOSApp(Boolean(userAgent.match(/IOS ReactNative Webview Jirum Alarm/i)));
-    setIsJirumAlarmAndroidApp(Boolean(userAgent.match(/Android ReactNative Webview Jirum Alarm/i)));
-  }, []);
-
-  return {
-    isMobile,
-    isApple,
-    isIos,
-    isAndroid,
-    isJirumAlarmIOSApp,
-    isJirumAlarmAndroidApp,
-    isJirumAlarmApp: !!(isJirumAlarmIOSApp || isJirumAlarmAndroidApp),
-  };
+  return { ...data, isLoading };
 };

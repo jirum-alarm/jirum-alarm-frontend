@@ -57,6 +57,7 @@ COPY . .
 
 ARG NEXT_PUBLIC_SERVICE_URL=https://dev.jirum-alarm.com
 ARG API_URL=http://crawling-service-lb.crawling-server.svc.cluster.local:3100
+ARG NEXT_PUBLIC_FIREBASE_VAPID_KEY=AIzaSyCpfnPqj8e_uVFTASlpumCYJ9w7R3d-8wQ
 ARG NODE_ENV=test
 
 # Build the application with cache mount
@@ -104,9 +105,11 @@ RUN addgroup --system --gid 1001 nodejs && \
 
 ARG NEXT_PUBLIC_SERVICE_URL=https://dev.jirum-alarm.com
 ARG API_URL=http://crawling-service-lb.crawling-server.svc.cluster.local:3100
+ARG NEXT_PUBLIC_FIREBASE_VAPID_KEY=AIzaSyCpfnPqj8e_uVFTASlpumCYJ9w7R3d-8wQ
 ARG NODE_ENV=test
 ENV NEXT_PUBLIC_SERVICE_URL=${NEXT_PUBLIC_SERVICE_URL} \
     API_URL=${API_URL} \
+    NEXT_PUBLIC_FIREBASE_VAPID_KEY=${NEXT_PUBLIC_FIREBASE_VAPID_KEY} \
     NODE_ENV=${NODE_ENV} \
     PORT=3000
 

@@ -1,10 +1,9 @@
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+'use client';
+
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
-import { getAccessToken } from '@/app/actions/token';
 import Button from '@/components/common/Button';
-import withCheckDevice from '@/components/hoc/withCheckDevice';
-import DeviceSpecific from '@/components/layout/DeviceSpecific';
 import { detailCommentPage } from '@/util/navigation';
 
 import Link from '@shared/ui/Link';
@@ -16,14 +15,18 @@ import CommentInput from '../../comment/components/CommentInput';
 import CommentList from './CommentList';
 import CommentListSkeleton from './CommentListSkeleton';
 
-const CommentListWithDevice = withCheckDevice(CommentList);
-
-export default async function CommentSection({ productId }: { productId: number }) {
-  const queryClient = new QueryClient();
-  const accessToken = await getAccessToken();
-  const isUserLogin = !!accessToken;
-
-  const { pages } = await queryClient.fetchInfiniteQuery(
+export default function CommentSection({
+  productId,
+  isUserLogin,
+  isMobile,
+}: {
+  productId: number;
+  isUserLogin: boolean;
+  isMobile: boolean;
+}) {
+  const {
+    data: { pages },
+  } = useSuspenseInfiniteQuery(
     CommentQueries.infiniteComments({
       productId,
       ...defaultCommentsVariables,
@@ -52,12 +55,10 @@ export default async function CommentSection({ productId }: { productId: number 
         <span className="text-lg font-bold text-gray-900">지름알림 댓글</span>
       </div>
       <>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <Suspense fallback={<CommentListSkeleton />}>
-            <CommentListWithDevice productId={productId} />
-          </Suspense>
-        </HydrationBoundary>
-        <DeviceSpecific mobile={renderMobile} desktop={renderDesktop} />
+        <Suspense fallback={<CommentListSkeleton />}>
+          <CommentList productId={productId} isMobile={isMobile} />
+        </Suspense>
+        {isMobile ? renderMobile() : renderDesktop()}
       </>
     </section>
   );

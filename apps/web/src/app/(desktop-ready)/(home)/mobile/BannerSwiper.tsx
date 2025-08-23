@@ -1,12 +1,23 @@
 'use client';
 
-import { Children, useRef } from 'react';
+import { atom, useAtom } from 'jotai';
+import dynamic from 'next/dynamic';
+import { cloneElement, Fragment, useRef } from 'react';
 import { Autoplay } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { SwiperSlide } from 'swiper/react';
 import { AutoplayOptions, SwiperOptions } from 'swiper/types';
 
-import { useIsHydrated } from '@/hooks/useIsHydrated';
+import { CheckDeviceResult } from '@/app/actions/agent.types';
+import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
+
+import AboutLink from '@features/banner/items/AboutLink';
+import AppDownloadCTA from '@features/banner/items/AppDownloadCTA';
+import KakaoOpenChatLink from '@features/banner/items/KakaoOpenChatLink';
+
+const Swiper = dynamic(() => import('swiper/react').then((mod) => mod.Swiper), {
+  ssr: false,
+});
 
 const MOBILE_SWIPER_OPTIONS: SwiperOptions & AutoplayOptions = {
   slidesPerView: 'auto',
@@ -19,43 +30,79 @@ const MOBILE_SWIPER_OPTIONS: SwiperOptions & AutoplayOptions = {
   },
 };
 
-const BannerSwiper = ({
-  className,
-  children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) => {
-  const isHydrated = useIsHydrated();
+const isInitAtom = atom(false);
 
-  const childrenCount = Children.count(children);
-  const initialSlide = Math.floor(Math.random() * childrenCount);
+const BannerSwiper = ({ device }: { device: CheckDeviceResult }) => {
+  const initialSlide = Math.floor(Math.random() * 3);
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const [isInit, setIsInit] = useAtom(isInitAtom);
+
+  // 중복 제거
+  const renderBanners = () => {
+    if (device.isJirumAlarmApp) {
+      // KakaoOpenChatLink, AboutLink 반복 3회
+      return (
+        <>
+          {[...Array(3)].map((_, i) => (
+            <Fragment key={i}>
+              <SwiperSlide key={`${i}-kakao-open-chat-link`} style={{ width: 'calc(100% - 50px)' }}>
+                <KakaoOpenChatLink isMobile={true} />
+              </SwiperSlide>
+              <SwiperSlide key={`${i}-about-link`} style={{ width: 'calc(100% - 50px)' }}>
+                <AboutLink isMobile={true} />
+              </SwiperSlide>
+            </Fragment>
+          ))}
+        </>
+      );
+    }
+
+    // AppDownloadCTA, KakaoOpenChatLink, AboutLink 반복 2회
+    return (
+      <>
+        {[...Array(2)].map((_, i) => (
+          <Fragment key={i}>
+            <SwiperSlide key={`${i}-app-download-cta`} style={{ width: 'calc(100% - 50px)' }}>
+              <AppDownloadCTA device={device} />
+            </SwiperSlide>
+            <SwiperSlide key={`${i}-kakao-open-chat-link`} style={{ width: 'calc(100% - 50px)' }}>
+              <KakaoOpenChatLink isMobile={true} />
+            </SwiperSlide>
+            <SwiperSlide key={`${i}-about-link`} style={{ width: 'calc(100% - 50px)' }}>
+              <AboutLink isMobile={true} />
+            </SwiperSlide>
+          </Fragment>
+        ))}
+      </>
+    );
+  };
 
   return (
     <div
       className={cn(
-        'relative transition-opacity duration-300',
-        isHydrated && 'opacity-100',
-        !isHydrated && 'opacity-0',
+        'max-w-mobile-max relative w-full transition-opacity',
+        isInit && 'opacity-100',
+        !isInit && 'opacity-0',
       )}
     >
+      {/* <CheckMount label="BannerSwiper" /> */}
       <Swiper
-        className={cn('flex w-full', className)}
+        className={cn('flex w-full')}
         modules={[Autoplay]}
         {...MOBILE_SWIPER_OPTIONS}
         initialSlide={initialSlide}
+        onAfterInit={() => {
+          setIsInit(true);
+        }}
         onAutoplayTimeLeft={(_, __, progress) => {
           if (progressBarRef.current) {
             progressBarRef.current.style.setProperty('--progress', `${1 - progress}`);
           }
         }}
       >
-        {Children.map(children, (child) => {
-          return <SwiperSlide style={{ width: 'calc(100% - 50px)' }}>{child}</SwiperSlide>;
-        })}
+        {renderBanners()}
       </Swiper>
-      <div className="absolute right-6 -bottom-3 z-10 h-[4px] w-15">
+      <div className="absolute right-6.25 -bottom-3.75 z-10 h-[4px] w-15">
         <div className="h-full w-full overflow-hidden rounded-full bg-white/20">
           <div
             className="h-full bg-white"

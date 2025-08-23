@@ -6,13 +6,14 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 import dynamic from 'next/dynamic';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
 import { ArrowLeft } from '@/components/common/icons';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
+import { getVisibleSlides } from '@/shared/lib/utils/swiper';
 
 import { ProductQueries } from '@entities/product';
 
@@ -41,14 +42,18 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   const swiperRef = useRef<SwiperClass>(null);
   const [isInit, setIsInit] = useAtom(isInitAtom);
   const canRender = useMemo(() => isHydrated && isInit, [isHydrated, isInit]);
+  const [visibleSlides, setVisibleSlides] = useState<number[]>([]);
 
   const handleAfterInit = (swiper: SwiperClass) => {
     swiperRef.current = swiper;
     setIsInit(true);
+    setVisibleSlides(getVisibleSlides(swiper));
   };
 
   const handleIndexChange = (swiper: SwiperClass) => {
     setIndex(swiper.realIndex);
+    const visibleIndices = getVisibleSlides(swiper);
+    setVisibleSlides(visibleIndices);
   };
 
   const handleSlidePrev = () => {
@@ -65,20 +70,30 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         <button
           className="pc:flex hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
           onClick={handleSlidePrev}
-          disabled={index === 0}
           name="이전"
         >
           <ArrowLeft className="mr-1 size-8 text-white" color="white" />
         </button>
-        {!isInit && (
-          <div className="w-slider-max grid grid-cols-4 gap-x-6">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="mb-33.75 aspect-square" />
-            ))}
-          </div>
-        )}
+        {!canRender &&
+          (isMobile ? (
+            <div className="invisible">
+              <MobileRankingSkeleton />
+            </div>
+          ) : (
+            <div className="max-w-slider-max grid w-full grow grid-cols-4 gap-x-6">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="basis-1/4">
+                  <div className="aspect-square w-full" />
+                  <div className="h-32.5" />
+                </div>
+              ))}
+            </div>
+          ))}
         <motion.div
-          className={cn('max-w-slider-max overflow-visible')}
+          className={cn(
+            'pc:max-w-slider-max max-w-mobile-max w-full overflow-visible',
+            !canRender && 'pc:hidden',
+          )}
           initial={{ opacity: canRender ? 1 : 0 }}
           animate={{ opacity: canRender ? 1 : 0 }}
           transition={{ duration: 0.3 }}
@@ -87,7 +102,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             {...config}
             onRealIndexChange={handleIndexChange}
             onAfterInit={handleAfterInit}
-            initialSlide={index + (isMobile ? 0 : (config.slidesPerView as number) - 1)}
+            initialSlide={index}
           >
             {rankingProducts.map((product, i) => (
               <SwiperSlide
@@ -103,7 +118,6 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         <button
           className="pc:flex hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
           onClick={handleSlideNext}
-          disabled={index === rankingProducts.length - 4}
           name="다음"
         >
           <ArrowLeft className="ml-1 size-8 -scale-x-100 text-white" color="white" />
@@ -112,7 +126,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         <AnimatePresence>
           {!canRender && (
             <motion.div
-              className="absolute inset-0 bottom-auto z-10 animate-pulse px-16"
+              className="pc:px-16 absolute inset-0 bottom-auto z-10 animate-pulse"
               initial={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
@@ -122,7 +136,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           )}
         </AnimatePresence>
       </div>
-      <SliderDots total={rankingProducts.length - (isMobile ? 0 : 3)} activeIndex={index} />
+      <SliderDots total={rankingProducts.length} visibleSlides={visibleSlides} />
     </>
   );
 };

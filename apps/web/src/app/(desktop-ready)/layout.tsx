@@ -1,5 +1,4 @@
 import BottomNav from '@/components/layout/BottomNav';
-import DeviceSpecific from '@/components/layout/DeviceSpecific';
 import TopButton from '@/components/TopButton';
 
 import { checkDevice } from '../actions/agent';
@@ -22,20 +21,18 @@ const DesktopReadyLayout = async ({ children }: { children: React.ReactNode }) =
 
   return (
     <div className={isMobile ? '' : 'pc min-w-5xl'}>
-      <DeviceSpecific desktop={renderDesktop} mobile={renderMobile} />
+      {isMobile ? renderMobile() : renderDesktop()}
       <div className="min-h-screen">{children}</div>
-      <DeviceSpecific
-        desktop={() => (
-          <>
-            <div className="sticky right-0 bottom-0 left-0 z-50">
-              <div className="max-w-layout-max 3xl:left-10 relative left-0 mx-auto">
-                <TopButton type="scrolling-up" />
-              </div>
+      {!isMobile && (
+        <>
+          <div className="sticky right-0 bottom-0 left-0 z-50">
+            <div className="max-w-layout-max 3xl:left-10 relative left-0 mx-auto">
+              <TopButton type="scrolling-up" />
             </div>
-            <Footer />
-          </>
-        )}
-      />
+          </div>
+          <Footer />
+        </>
+      )}
     </div>
   );
 };

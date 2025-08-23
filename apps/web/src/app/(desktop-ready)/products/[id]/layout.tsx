@@ -1,5 +1,5 @@
+import { checkDevice } from '@/app/actions/agent';
 import BasicLayout from '@/components/layout/BasicLayout';
-import DeviceSpecific from '@/components/layout/DeviceSpecific';
 
 import NoticeProfitLink from '@features/product-detail/components/NoticeProfitUrl';
 
@@ -13,6 +13,8 @@ const ProductDetailLayout = async ({
   children: React.ReactNode;
 }) => {
   const { id } = await params;
+
+  const { isMobile } = await checkDevice();
 
   const renderMobile = () => {
     return (
@@ -30,7 +32,7 @@ const ProductDetailLayout = async ({
     );
   };
 
-  return <DeviceSpecific mobile={renderMobile} desktop={renderDesktop} />;
+  return isMobile ? renderMobile() : renderDesktop();
 };
 
 export default ProductDetailLayout;

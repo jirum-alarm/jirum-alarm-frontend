@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
 
+import { checkDevice } from '@/app/actions/agent';
+import { collectProductAction } from '@/app/actions/product';
 import { getAccessToken } from '@/app/actions/token';
-import DeviceSpecific from '@/components/layout/DeviceSpecific';
 import { METADATA_SERVICE_URL } from '@/constants/env';
 import { defaultMetadata } from '@/constants/metadata';
+import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
 import { ProductService } from '@shared/api/product';
 
@@ -81,6 +83,10 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   const token = await getAccessToken();
   const isUserLogin = !!token;
 
+  await collectProductAction(+id);
+
+  const { isMobile } = await checkDevice();
+
   const renderMobile = () => {
     return <MobileProductDetailPage productId={+id} isUserLogin={isUserLogin} />;
   };
@@ -88,5 +94,9 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
     return <DesktopProductDetailPage productId={+id} isUserLogin={isUserLogin} />;
   };
 
-  return <DeviceSpecific mobile={renderMobile} desktop={renderDesktop} />;
+  return (
+    <ProductPrefetch productId={+id}>
+      {!isMobile ? renderDesktop() : renderMobile()}
+    </ProductPrefetch>
+  );
 }

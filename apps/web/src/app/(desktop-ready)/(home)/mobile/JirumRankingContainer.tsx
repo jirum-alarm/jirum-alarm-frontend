@@ -40,7 +40,7 @@ const JirumRankingContainer = () => {
             fallback={
               <>
                 <RankingSkeleton />
-                <SliderDots total={10} activeIndex={0} />
+                <SliderDots total={10} visibleSlides={[0]} />
               </>
             }
           >

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --experimental-https",
     "dev:mock": "concurrently --kill-others  \"NEXT_PUBLIC_API_MOCKING=enable next dev\" \"npx tsx watch ./src/mocks/http.ts\"",
     "generate:svg-component": "npx @svgr/cli --ignore-existing --jsx-runtime=automatic --out-dir src/components/common/icons --typescript -- src/assets/icons",
     "code-gen": "pnpm graphql-codegen --config codegen.ts",
@@ -104,6 +104,5 @@
   },
   "msw": {
     "workerDirectory": "public"
-  },
-  "packageManager": "pnpm@10.10.0"
+  }
 }

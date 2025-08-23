@@ -1,7 +1,6 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
-import { RoundedLogo } from '@/components/common/icons';
+import { IllustIcons } from '@/components/common/icons';
 import TalkLight from '@/components/common/icons/TalkLight';
 
 const Footer = () => {
@@ -11,7 +10,7 @@ const Footer = () => {
         <footer className="max-w-8xl mx-auto flex w-full flex-1 flex-col justify-between px-5 py-15 lg:px-20 lg:py-12">
           <div className="mb-5 flex justify-between">
             <div className="flex items-center gap-x-2.5">
-              <RoundedLogo />
+              <IllustIcons.IconLogo />
               <p className="text-2xl font-bold text-gray-900">지름알림</p>
             </div>
             <Link

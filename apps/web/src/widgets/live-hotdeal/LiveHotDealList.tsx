@@ -1,5 +1,6 @@
 'use client';
 
+import { CheckDeviceResult } from '@/app/actions/agent.types';
 import { LoadingSpinner } from '@/components/common/icons';
 import useScreen from '@/hooks/useScreenSize';
 
@@ -8,7 +9,7 @@ import ProductGridList from '@features/products/grid/GridProductList';
 
 import useLiveHotDealsViewModel from './hooks/useLiveHotDealsViewModel';
 
-const LiveHotDealList = () => {
+const LiveHotDealList = ({ device }: { device: CheckDeviceResult }) => {
   const { products, loadingCallbackRef, isFetchingNextPage } = useLiveHotDealsViewModel();
   const { smd, lg } = useScreen();
 
@@ -18,7 +19,7 @@ const LiveHotDealList = () => {
     <>
       <ProductGridList products={products.slice(0, size)} />
       <div className="pc:hidden col-span-2 w-full pt-1 pb-3 sm:col-span-3">
-        <AppDownloadCTA />
+        <AppDownloadCTA device={device} />
       </div>
       <ProductGridList products={products.slice(size)} />
       <div

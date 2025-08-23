@@ -1,7 +1,6 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 import { Search } from '@/components/common/icons';
 import LogoLink from '@/components/common/Logo/LogoLink';
@@ -9,19 +8,10 @@ import BackButton from '@/components/layout/BackButton';
 import { PAGE } from '@/constants/page';
 
 import Link from '@shared/ui/Link';
-import ShareButton from '@shared/ui/ShareButton';
 
-import { ProductQueries } from '@entities/product';
+import ProductShareButton from './ProductShareButton';
 
 export default function ProductDetailPageHeader({ productId }: { productId: number }) {
-  const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
-
-  if (!product) {
-    notFound();
-  }
-
-  const title = `${product.title} | 지름알림`;
-
   const handleSearch = () => {
     // TODO: Need GTM Migration
     // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {
@@ -46,7 +36,9 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
         >
           <Search />
         </Link>
-        <ShareButton title={title} page="DETAIL" />
+        <Suspense>
+          <ProductShareButton productId={productId} />
+        </Suspense>
       </div>
     </header>
   );

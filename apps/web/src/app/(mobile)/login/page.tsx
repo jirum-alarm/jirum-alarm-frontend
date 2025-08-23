@@ -3,6 +3,7 @@
 import Button from '@/components/common/Button';
 import { StandingIllust } from '@/components/common/icons/Illust';
 import BasicLayout from '@/components/layout/BasicLayout';
+import { useDevice } from '@/hooks/useDevice';
 import useMyRouter from '@/hooks/useMyRouter';
 
 import Link from '@shared/ui/Link';
@@ -13,6 +14,7 @@ const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
 
 const Login = () => {
+  const device = useDevice();
   const router = useMyRouter();
   const handleCTAButton = () => {
     router.push(SIGNUP_PATH);
@@ -46,9 +48,11 @@ const Login = () => {
               </p>
             </div>
           </div>
-          <div className="fixed right-0 bottom-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
-            <AppDownloadCTA />
-          </div>
+          {device.isMobileBrowser && (
+            <div className="fixed right-0 bottom-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
+              <AppDownloadCTA device={device} />
+            </div>
+          )}
         </div>
       </div>
     </BasicLayout>
