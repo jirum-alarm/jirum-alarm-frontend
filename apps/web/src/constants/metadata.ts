@@ -1,13 +1,16 @@
+import { Metadata } from 'next';
+
 import { METADATA_SERVICE_URL } from './env';
 
 const title = '지름알림: 실시간 초특가 핫딜 정보 모아보기 | 지금 놓치면 끝!';
 const description =
   '전자제품부터 패션까지 초특가 할인 정보를 실시간으로 만나보세요. 모두가 알뜰하게 쇼핑하는 그날까지🔥';
 
-export const defaultMetadata = {
+export const defaultMetadata: Metadata = {
   metadataBase: new URL(METADATA_SERVICE_URL),
   title,
   description,
+  appleWebApp: true,
   keywords:
     '실시간, 핫딜, 할인, 초특가, 최저가, 알뜰, 쇼핑, 전자제품, 패션, 가전, 알뜰쇼핑, 쿠폰, 이벤트, 지름알림, 핫딜알림',
   openGraph: {
@@ -33,6 +36,7 @@ export const defaultMetadata = {
   },
   icons: {
     icon: `${METADATA_SERVICE_URL}/icon.png`,
+    apple: [{ url: '/apple-touch-icon.png' }],
   },
   alternates: {
     canonical: METADATA_SERVICE_URL,

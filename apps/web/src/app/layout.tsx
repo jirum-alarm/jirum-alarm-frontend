@@ -14,8 +14,11 @@ export const metadata: Metadata = defaultMetadata;
 
 export const viewport: Viewport = {
   initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
   width: 'device-width',
   themeColor: '#FFFFFF',
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -34,14 +37,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-
         <meta name="application-name" content="지름알림" />
         <meta name="author" content="지름알림" />
       </head>
       <body>
-        <div className="relative">
-          <AppProvider>{children}</AppProvider>
-        </div>
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );

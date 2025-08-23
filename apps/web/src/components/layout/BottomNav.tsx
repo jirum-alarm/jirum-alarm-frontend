@@ -75,7 +75,7 @@ const BottomNav = () => {
   return (
     <nav
       className={cn(
-        `bottom-safe-bottom max-w-mobile-max pb-safe-bottom fixed left-1/2 z-50 mx-auto w-full -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white transition-all duration-300`,
+        `max-w-mobile-max pb-safe-bottom fixed bottom-0 left-1/2 z-50 mx-auto w-full -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white transition-all duration-300`,
         {
           'translate-y-full': scrollDirection === 'down',
           'translate-y-0': scrollDirection === 'up',
