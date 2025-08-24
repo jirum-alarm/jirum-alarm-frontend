@@ -30,7 +30,6 @@ const DesktopReadyLayout = async ({ children }: { children: React.ReactNode }) =
               <TopButton type="scrolling-up" />
             </div>
           </div>
-          <Footer />
         </>
       )}
     </div>

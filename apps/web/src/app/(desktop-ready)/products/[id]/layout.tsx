@@ -3,6 +3,8 @@ import BasicLayout from '@/components/layout/BasicLayout';
 
 import NoticeProfitLink from '@features/product-detail/components/NoticeProfitUrl';
 
+import Footer from '../../components/desktop/Footer';
+
 import ProductDetailPageHeader from './components/ProductDeatilPageHeader';
 
 const ProductDetailLayout = async ({
@@ -28,6 +30,7 @@ const ProductDetailLayout = async ({
           <div className="col-span-10 col-start-2">{children}</div>
         </div>
         <NoticeProfitLink />
+        <Footer />
       </>
     );
   };
