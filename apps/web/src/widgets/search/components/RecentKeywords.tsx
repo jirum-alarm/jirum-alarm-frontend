@@ -13,7 +13,7 @@ export default function RecentKeywords() {
   const [loading, setLoading] = useState(true);
   const [keywords, setKeywords] = useState<string[]>([]);
 
-  const { isMobile } = useDevice();
+  const { device } = useDevice();
 
   const searchParams = useSearchParams();
 
@@ -37,11 +37,11 @@ export default function RecentKeywords() {
       {keywords.length > 0 && (
         <section>
           <SectionHeader title="최근 검색어" titleClassName="text-base" />
-          <div className={cn(isMobile && 'no-scrollbar h-[42px] overflow-x-scroll')}>
+          <div className={cn(device.isMobile && 'no-scrollbar h-[42px] overflow-x-scroll')}>
             {loading ? (
               <div className="flex items-center text-sm">최근 검색어를 불러오는 중입니다...</div>
             ) : (
-              <div className={cn('flex gap-2', !isMobile && 'flex-wrap')}>
+              <div className={cn('flex gap-2', !device.isMobile && 'flex-wrap')}>
                 {keywords.length !== 0 ? (
                   keywords.map((keyword, i) => (
                     <Chip

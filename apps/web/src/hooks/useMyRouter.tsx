@@ -13,7 +13,9 @@ type NavigateOptions = {
 
 export default function useMyRouter() {
   const router = useRouter();
-  const { isJirumAlarmApp } = useDevice();
+  const {
+    device: { isJirumAlarmApp },
+  } = useDevice();
 
   const push = useCallback(
     (href: string, options?: NavigateOptions) => {

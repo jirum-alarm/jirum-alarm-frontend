@@ -28,7 +28,7 @@ export default function LikeButton({
 
   const { data: product } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
 
-  const { isJirumAlarmApp } = useDevice();
+  const { device } = useDevice();
   const [isLiked, setIsLiked] = useState(product?.isMyWishlist ?? false);
 
   const router = useMyRouter();
@@ -58,7 +58,7 @@ export default function LikeButton({
 
   const handleClickWishlist = () => {
     if (!isUserLogin) {
-      if (isJirumAlarmApp) {
+      if (device.isJirumAlarmApp) {
         WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
           data: { url: PAGE.LOGIN },
         });

@@ -14,11 +14,14 @@ const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
 
 const Login = () => {
-  const device = useDevice();
+  const { device, isHydrated } = useDevice();
+
   const router = useMyRouter();
   const handleCTAButton = () => {
     router.push(SIGNUP_PATH);
   };
+
+  console.log(device, isHydrated, 'device');
 
   return (
     <BasicLayout hasBackButton fullScreen={true}>
@@ -48,12 +51,12 @@ const Login = () => {
               </p>
             </div>
           </div>
-          {device.isMobileBrowser && (
-            <div className="fixed right-0 bottom-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
-              <AppDownloadCTA device={device} />
-            </div>
-          )}
         </div>
+        {device.isMobileBrowser && isHydrated && (
+          <div className="fixed right-0 bottom-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
+            <AppDownloadCTA device={device} />
+          </div>
+        )}
       </div>
     </BasicLayout>
   );

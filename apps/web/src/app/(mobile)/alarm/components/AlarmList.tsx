@@ -20,7 +20,7 @@ const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
 
 const AlarmList = () => {
-  const { isApple, isAndroid, isJirumAlarmApp } = useDevice();
+  const { device } = useDevice();
 
   const { notifications, loading, isNotLogin, noData, hasNextData, ref } =
     useNotificationsViewModel();
@@ -29,11 +29,15 @@ const AlarmList = () => {
     return;
   }
 
-  if (isNotLogin && !isJirumAlarmApp) {
-    return <AppDownloadGuide platform={isApple ? 'apple' : isAndroid ? 'android' : 'non-mobile'} />;
+  if (isNotLogin && !device.isJirumAlarmApp) {
+    return (
+      <AppDownloadGuide
+        platform={device.isApple ? 'apple' : device.isAndroid ? 'android' : 'non-mobile'}
+      />
+    );
   }
 
-  if (isNotLogin && isJirumAlarmApp) {
+  if (isNotLogin && device.isJirumAlarmApp) {
     return <LoginGuide />;
   }
 
