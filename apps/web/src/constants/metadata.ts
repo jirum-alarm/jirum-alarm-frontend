@@ -10,7 +10,11 @@ export const defaultMetadata: Metadata = {
   metadataBase: new URL(METADATA_SERVICE_URL),
   title,
   description,
-  appleWebApp: true,
+  appleWebApp: {
+    capable: true,
+    title: '지름알림',
+    statusBarStyle: 'default',
+  },
   keywords:
     '실시간, 핫딜, 할인, 초특가, 최저가, 알뜰, 쇼핑, 전자제품, 패션, 가전, 알뜰쇼핑, 쿠폰, 이벤트, 지름알림, 핫딜알림',
   openGraph: {
