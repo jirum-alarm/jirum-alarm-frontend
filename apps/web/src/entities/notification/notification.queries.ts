@@ -25,11 +25,12 @@ export const NotificationQueries = {
         NotificationService.getNotifications({
           ...merged,
           offset: (pageParam as number | undefined) ?? 0,
-        }).then((d) => d.notifications),
+        }),
       initialPageParam: 0 as number,
       getNextPageParam: (lastPage, allPages) => {
         return lastPage.length < merged.limit ? undefined : allPages.length * merged.limit;
       },
+      retry: false,
     });
   },
 };

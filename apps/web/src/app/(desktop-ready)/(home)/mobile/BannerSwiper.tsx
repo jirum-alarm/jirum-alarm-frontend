@@ -2,13 +2,12 @@
 
 import { atom, useAtom } from 'jotai';
 import dynamic from 'next/dynamic';
-import { cloneElement, Fragment, useRef } from 'react';
+import { Fragment, useRef } from 'react';
 import { Autoplay } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 import { AutoplayOptions, SwiperOptions } from 'swiper/types';
 
 import { CheckDeviceResult } from '@/app/actions/agent.types';
-import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
 
 import AboutLink from '@features/banner/items/AboutLink';

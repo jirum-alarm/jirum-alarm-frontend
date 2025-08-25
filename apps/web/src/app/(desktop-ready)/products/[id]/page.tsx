@@ -64,9 +64,6 @@ export async function generateMetadata({
       description,
       images: image,
     },
-    icons: {
-      icon: '/icon.png',
-    },
     alternates: {
       canonical: url,
     },

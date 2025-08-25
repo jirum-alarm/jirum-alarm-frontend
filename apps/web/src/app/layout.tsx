@@ -37,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="application-name" content="지름알림" />
         <meta name="author" content="지름알림" />
       </head>

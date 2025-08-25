@@ -5,7 +5,7 @@ import useIsLoggedIn from './useIsLoggedIn';
 
 const useRedirectIfNotLoggedIn = () => {
   const router = useMyRouter();
-  const isLoggedIn = useIsLoggedIn();
+  const { isLoggedIn } = useIsLoggedIn();
 
   const checkAndRedirect = () => {
     if (!isLoggedIn) {

@@ -9,7 +9,9 @@ export const useIsHydrated = () => {
   const [isHydrated, setIsHydrated] = useAtom(isHydratedAtom);
 
   useEffect(() => {
-    setIsHydrated(true);
+    if (typeof window !== 'undefined') {
+      setIsHydrated(true);
+    }
   }, [setIsHydrated]);
 
   return isHydrated;
