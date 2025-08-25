@@ -63,16 +63,10 @@ export default function ProductInfo({
               </div>
             )}
             <p className="text-2xl font-bold text-gray-500">
-              {priceWithoutWon ? (
-                <>
-                  <strong className="mr-0.5 text-[28px] font-semibold text-gray-900">
-                    {priceWithoutWon}
-                  </strong>
-                  {priceTextHasWon && '원'}
-                </>
-              ) : (
-                <span className="text-[28px] font-semibold">{/* 가격 준비중 */}</span>
-              )}
+              <strong className="mr-0.5 text-[28px] font-semibold text-gray-900">
+                {priceWithoutWon}
+              </strong>
+              {priceTextHasWon && '원'}
             </p>
           </div>
 
