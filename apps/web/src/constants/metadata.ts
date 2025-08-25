@@ -40,7 +40,7 @@ export const defaultMetadata: Metadata = {
   },
   icons: {
     icon: `${METADATA_SERVICE_URL}/icon.png`,
-    apple: [{ url: '/apple-touch-icon.png' }],
+    apple: [{ url: `${METADATA_SERVICE_URL}/apple-touch-icon.png` }],
   },
   alternates: {
     canonical: METADATA_SERVICE_URL,
