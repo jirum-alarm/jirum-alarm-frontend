@@ -4,6 +4,8 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 import Jirume from '@/components/common/icons/Jirume';
 import { cn } from '@/lib/cn';
+import DisplayPrice from '@/shared/ui/DisplayPrice';
+import { parsePrice } from '@/util/price';
 
 import DisplayTime from '@shared/ui/DisplayTime';
 import HotdealBadge from '@shared/ui/HotdealBadge';
@@ -17,9 +19,6 @@ import HotdealGuideModal from './HotDealGuideModal';
 export default function ProductInfo({ productId }: { productId: number }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
   const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
-
-  const priceTextHasWon = product.price?.includes('원');
-  const priceWithoutWon = product.price ? product.price.replace('원', '').trim() : null;
 
   return (
     <section className="px-5 pb-9">
@@ -53,18 +52,7 @@ export default function ProductInfo({ productId }: { productId: number }) {
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-lg font-bold text-gray-500">
-                {priceWithoutWon ? (
-                  <>
-                    <strong className="mr-0.5 text-2xl font-semibold text-gray-900">
-                      {priceWithoutWon}
-                    </strong>
-                    {priceTextHasWon && '원'}
-                  </>
-                ) : (
-                  <span className="text-2xl font-semibold">{/* 가격 준비중 */}</span>
-                )}
-              </p>
+              <DisplayPrice price={product.price} />
             </div>
             <div>
               <RecommendButton productId={productId} />

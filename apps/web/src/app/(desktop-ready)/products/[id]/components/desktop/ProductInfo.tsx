@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import Button from '@/components/common/Button';
 import Jirume from '@/components/common/icons/Jirume';
 import { cn } from '@/lib/cn';
+import DisplayPrice from '@/shared/ui/DisplayPrice';
 import { parsePrice } from '@/util/price';
 
 import DisplayTime from '@shared/ui/DisplayTime';
@@ -62,18 +63,7 @@ export default function ProductInfo({
                 </button>
               </div>
             )}
-            <p className="text-2xl font-bold text-gray-500">
-              {priceWithoutWon ? (
-                <>
-                  <strong className="mr-0.5 text-[28px] font-semibold text-gray-900">
-                    {priceWithoutWon}
-                  </strong>
-                  {priceTextHasWon && '원'}
-                </>
-              ) : (
-                <span className="text-[28px] font-semibold">{/* 가격 준비중 */}</span>
-              )}
-            </p>
+            <DisplayPrice price={product.price} isMobile={false} />
           </div>
 
           <div>
