@@ -9,7 +9,7 @@ import { useHotDealsRandom } from '@features/products/hooks';
 
 const ProductNotFound = () => {
   const router = useMyRouter();
-  const isLoggedIn = useIsLoggedIn();
+  const { isLoggedIn } = useIsLoggedIn();
 
   const { data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
 
