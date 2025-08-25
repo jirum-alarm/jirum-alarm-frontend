@@ -21,7 +21,6 @@ const Login = () => {
     router.push(SIGNUP_PATH);
   };
 
-  console.log(device, isHydrated, 'device');
 
   return (
     <BasicLayout hasBackButton fullScreen={true}>

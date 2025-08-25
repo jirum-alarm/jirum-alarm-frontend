@@ -1,7 +1,7 @@
 'use client';
 
 import { atom, useAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const isHydratedAtom = atom(false);
 
