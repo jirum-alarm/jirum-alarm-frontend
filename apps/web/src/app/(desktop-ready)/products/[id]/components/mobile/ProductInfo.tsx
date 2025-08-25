@@ -4,6 +4,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 import Jirume from '@/components/common/icons/Jirume';
 import { cn } from '@/lib/cn';
+import { parsePrice } from '@/util/price';
 
 import DisplayTime from '@shared/ui/DisplayTime';
 import HotdealBadge from '@shared/ui/HotdealBadge';
@@ -18,8 +19,7 @@ export default function ProductInfo({ productId }: { productId: number }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
   const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
 
-  const priceTextHasWon = product.price?.includes('원');
-  const priceWithoutWon = product.price ? product.price.replace('원', '').trim() : null;
+  const { hasWon: priceTextHasWon, priceWithoutWon } = parsePrice(product.price);
 
   return (
     <section className="px-5 pb-9">
@@ -54,16 +54,10 @@ export default function ProductInfo({ productId }: { productId: number }) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-lg font-bold text-gray-500">
-                {priceWithoutWon ? (
-                  <>
-                    <strong className="mr-0.5 text-2xl font-semibold text-gray-900">
-                      {priceWithoutWon}
-                    </strong>
-                    {priceTextHasWon && '원'}
-                  </>
-                ) : (
-                  <span className="text-2xl font-semibold">{/* 가격 준비중 */}</span>
-                )}
+                <strong className="mr-0.5 text-2xl font-semibold text-gray-900">
+                  {priceWithoutWon}
+                </strong>
+                {priceTextHasWon && '원'}
               </p>
             </div>
             <div>
