@@ -37,7 +37,9 @@ export function ReactionChart({
   const stroke = 14;
   const circumference = Math.PI * radius;
 
-  const percent = (isPositive ? positivePercent : negativePercent) / 100;
+  const raw = (isPositive ? positivePercent : negativePercent) / 100;
+  const percent = Math.min(0.999, Math.max(0.001, raw));
+
   const color = isPositive ? '#467DFB' : '#F36677';
 
   const strokeLinecap = 'round';
@@ -96,11 +98,11 @@ export function ReactionChart({
                   pathLength={1}
                   initial={{
                     strokeDasharray: !disabled ? '0 1' : `${percent} 1`,
-                    strokeDashoffset: isPositive ? 0 : 1,
+                    strokeDashoffset: isPositive ? 0 : 1 - percent,
                   }}
                   animate={{
-                    strokeDasharray: `${percent} 1`,
-                    strokeDashoffset: isPositive ? 0 : 1,
+                    strokeDasharray: isPositive ? `${percent} 1` : `${1 - percent} 1`,
+                    strokeDashoffset: isPositive ? 0 : 1 - percent,
                   }}
                   transition={{ duration: 1.5, ease: 'easeOut' }}
                 />
