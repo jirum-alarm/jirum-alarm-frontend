@@ -53,7 +53,7 @@ const Login = () => {
           </div>
         </div>
         {device.isMobileBrowser && isHydrated && (
-          <div className="fixed right-0 bottom-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
+          <div className="bottom-safe-bottom fixed right-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
             <AppDownloadCTA device={device} />
           </div>
         )}
