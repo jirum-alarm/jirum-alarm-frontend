@@ -21,6 +21,7 @@ import GridProductListSkeleton from '@features/products/grid/GridProductListSkel
 
 import { TAB_META } from '../../tabMeta';
 import TabBar from '../Tabbar';
+import TabBarV2 from '../TabbarV2';
 import TrendingList from '../TrendingList';
 
 const SWIPER_OPTIONS: SwiperOptions = {
@@ -107,13 +108,13 @@ export const TrendingContainer = ({ initialTab }: Props) => {
   return (
     <Tabs.Root value={`${tabId}`} asChild>
       <div className="relative">
-        <TabBar
+        <TabBarV2
           allCategories={allCategories}
           tabIndex={categoryIds.indexOf(tabId)}
           onTabClick={(id) => handleTabChange(id)}
         />
 
-        <div className="mt-[72px] overflow-hidden">
+        <div className="pc:mt-7 mt-[72px] overflow-hidden">
           <Swiper
             {...SWIPER_OPTIONS}
             initialSlide={categoryIds.indexOf(tabId)}
@@ -128,7 +129,7 @@ export const TrendingContainer = ({ initialTab }: Props) => {
               return (
                 <SwiperSlide key={category.id} className="w-full flex-[0_0_100%] px-5">
                   {isFetched && isWithinRange ? (
-                    <Suspense fallback={<GridProductListSkeleton length={12} />}>
+                    <Suspense fallback={<GridProductListSkeleton length={20} />}>
                       <TrendingList categoryId={category.id} categoryName={category.name} />
                     </Suspense>
                   ) : (
