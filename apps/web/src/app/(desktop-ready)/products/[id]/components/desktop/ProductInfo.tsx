@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import Button from '@/components/common/Button';
 import Jirume from '@/components/common/icons/Jirume';
 import { cn } from '@/lib/cn';
+import DisplayPrice from '@/shared/ui/DisplayPrice';
 import { parsePrice } from '@/util/price';
 
 import DisplayTime from '@shared/ui/DisplayTime';
@@ -62,12 +63,7 @@ export default function ProductInfo({
                 </button>
               </div>
             )}
-            <p className="text-2xl font-bold text-gray-500">
-              <strong className="mr-0.5 text-[28px] font-semibold text-gray-900">
-                {priceWithoutWon}
-              </strong>
-              {priceTextHasWon && '원'}
-            </p>
+            <DisplayPrice price={product.price} />
           </div>
 
           <div>
@@ -76,7 +72,7 @@ export default function ProductInfo({
         </div>
         {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
         <div className="my-8 flex flex-col gap-[8px]">
-          <div className="flextext-sm font-medium">
+          <div className="flex text-sm font-medium">
             <span className="inline-block w-[110px] text-gray-400">쇼핑몰</span>
             <span className="text-gray-500">{product.mallName}</span>
           </div>
@@ -94,7 +90,7 @@ export default function ProductInfo({
             </div>
           )}
 
-          <div className="flextext-sm font-medium">
+          <div className="flex text-sm font-medium">
             <span className="inline-block w-[110px] text-gray-400">추천수</span>
             <span className="text-gray-500">{productStats.likeCount}개</span>
           </div>

@@ -1,8 +1,10 @@
 import { PAGE } from '@/constants/page';
+import DisplayTime from '@/shared/ui/DisplayTime';
 
 import HotdealBadge from '@shared/ui/HotdealBadge';
 import Link from '@shared/ui/Link';
 
+import DisplayListPrice from '../DisplayListPrice';
 import ProductThumbnail from '../image/ProductThumbnail';
 import { type ProductCardType } from '../type';
 
@@ -34,8 +36,10 @@ export default function CarouselProductCard({ product }: { product: ProductCardT
           {product.title}
         </span>
         <div className="flex items-center pt-1">
-          <span className="line-clamp-1 max-w-[98px] text-lg font-semibold text-gray-900">
-            {product?.price ?? ''}
+          <DisplayListPrice price={product.price} />
+          <span className="w-2"></span>
+          <span className="pc:inline hidden text-sm text-gray-600">
+            <DisplayTime time={product.postedAt} />
           </span>
         </div>
       </div>

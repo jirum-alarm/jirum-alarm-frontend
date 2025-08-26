@@ -59,7 +59,7 @@ const ProductNotFound = () => {
             </div>
           </div>
           <div className="w-full pt-4">
-            <CarouselProductList products={hotDeals} type="hotDeal" />
+            <CarouselProductList products={hotDeals} type="mobile" />
           </div>
         </>
       ) : undefined}

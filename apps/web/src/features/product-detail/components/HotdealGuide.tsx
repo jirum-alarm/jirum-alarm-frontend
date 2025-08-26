@@ -5,6 +5,7 @@ import { Fragment, useRef, useState } from 'react';
 
 import Button from '@/components/common/Button';
 import HotdealGuideItemCheckIcon from '@/components/common/icons/HotdealGuideItemCheckIcon';
+import SectionHeader from '@/components/SectionHeader';
 import { cn } from '@/lib/cn';
 
 import { ProductGuidesQuery } from '@shared/api/gql/graphql';
@@ -40,9 +41,7 @@ export default function HotdealGuide({
 
   return (
     <section className="relative">
-      <div className="flex h-14 items-center">
-        <h2 className="text-lg font-bold text-gray-900">핫딜 제대로 알고 사자!</h2>
-      </div>
+      <SectionHeader shouldShowMobileUI title="핫딜 제대로 알고 사자!" />
       <div className={cn('border-secondary-300 overflow-hidden rounded-lg border pt-4')}>
         <div
           ref={guidesRef}

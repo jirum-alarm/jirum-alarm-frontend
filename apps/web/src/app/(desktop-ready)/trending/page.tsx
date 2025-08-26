@@ -36,14 +36,7 @@ const TrendingPage = async ({ searchParams }: { searchParams: Promise<{ tab: str
   const { tab } = await searchParams;
   const tabNumber = tab ? Number(tab) : 0;
 
-  return (
-    <BasicLayout hasBottomNav navType={NAV_TYPE.TRENDING} header={<TrendingPageHeader />}>
-      <div className="h-full">
-        <TrendingContainerServer tab={tabNumber} />
-      </div>
-      <TopButton />
-    </BasicLayout>
-  );
+  return <TrendingContainerServer tab={tabNumber} />;
 };
 
 export default TrendingPage;

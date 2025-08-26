@@ -21,7 +21,6 @@ const Login = () => {
     router.push(SIGNUP_PATH);
   };
 
-
   return (
     <BasicLayout hasBackButton fullScreen={true}>
       <div className="flex h-full flex-col justify-center">

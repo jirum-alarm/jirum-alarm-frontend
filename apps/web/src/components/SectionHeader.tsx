@@ -30,4 +30,6 @@ const SectionHeader = ({
   );
 };
 
+console.log(cn('pc:text-[28px]', 'pc:text-2xl'));
+
 export default SectionHeader;

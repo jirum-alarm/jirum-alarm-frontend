@@ -20,6 +20,8 @@ import { cn } from '@/lib/cn';
 
 import Link from '@shared/ui/Link';
 
+import TopButton from '../TopButton';
+
 export enum NAV_TYPE {
   HOME = 'HOME',
   TRENDING = 'TRENDING',
@@ -82,6 +84,7 @@ const BottomNav = () => {
         },
       )}
     >
+      <TopButton />
       <ul className="flex items-center justify-around" ref={navRef}>
         {BottomNavList.map((nav, i) => (
           <li key={i} className="flex flex-1 items-center justify-center">
