@@ -4,6 +4,7 @@ import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
 import Button from '@/components/common/Button';
+import SectionHeader from '@/components/SectionHeader';
 import { detailCommentPage } from '@/util/navigation';
 
 import Link from '@shared/ui/Link';
@@ -51,9 +52,16 @@ export default function CommentSection({
 
   return (
     <section className="pc:my-0 mt-4 mb-10 flex flex-col">
-      <div className="flex h-[56px] w-full items-center px-5 py-4">
-        <span className="text-lg font-bold text-gray-900">지름알림 댓글</span>
-      </div>
+      <SectionHeader
+        title={
+          <span>
+            지름알림 댓글
+            {hasComments && <span className="text-secondary-500">{comments.length}개</span>}
+          </span>
+        }
+        shouldShowMobileUI
+        titleClassName="pc:text-[20px]"
+      />
       <>
         <Suspense fallback={<CommentListSkeleton />}>
           <CommentList productId={productId} isMobile={isMobile} />
