@@ -70,7 +70,7 @@ function ProductDetailPage({
             <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={true} />
             <Hr />
 
-            <div className="mt-7 mb-8 flex flex-col gap-y-8 px-5">
+            <div className="mt-7 mb-8 flex flex-col gap-y-8">
               <TogetherViewedSection productId={productId} />
               <CategoryPopularByProductSection productId={productId} />
             </div>

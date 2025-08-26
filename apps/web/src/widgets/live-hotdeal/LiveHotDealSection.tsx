@@ -28,7 +28,7 @@ const LiveHotDealSection = async () => {
   );
 
   return (
-    <div className="pc:pt-11 px-5">
+    <div className="pc:pt-11 space-y-10 px-5">
       <SectionHeader title="실시간 핫딜" />
       <ApiErrorBoundary>
         <Suspense fallback={<GridProductListSkeleton length={20} />}>

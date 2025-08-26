@@ -1,9 +1,7 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Suspense } from 'react';
 
-import SectionHeader from '@/components/SectionHeader';
 import { PAGE } from '@/constants/page';
 
 import { ThumbnailType } from '@shared/api/gql/graphql';

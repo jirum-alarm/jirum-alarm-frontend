@@ -37,9 +37,6 @@ const SearchInput = ({ show }: { show: boolean }) => {
 
           {keyword && <ResetButton handleReset={handleReset} />}
         </div>
-        <Link href="/" className="relative -m-2 cursor-pointer p-2">
-          <Home className="relative -right-1" />
-        </Link>
       </div>
     </>
   );

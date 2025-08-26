@@ -2,6 +2,8 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { useDevice } from '@/hooks/useDevice';
+
 import { KeywordProductOrderType, OrderOptionType } from '@shared/api/gql/graphql';
 
 import { ProductQueries } from '@entities/product';
@@ -13,6 +15,7 @@ interface ProductByKeywordsListProps {
 }
 
 const ProductsByKeywordsList = ({ keyword }: ProductByKeywordsListProps) => {
+  const { device } = useDevice();
   const {
     data: { productsByKeyword },
   } = useSuspenseQuery(
@@ -24,7 +27,9 @@ const ProductsByKeywordsList = ({ keyword }: ProductByKeywordsListProps) => {
     }),
   );
 
-  return <CarouselProductList products={productsByKeyword} type="hotDeal" />;
+  return (
+    <CarouselProductList products={productsByKeyword} type={device.isMobile ? 'mobile' : 'pc'} />
+  );
 };
 
 export default ProductsByKeywordsList;

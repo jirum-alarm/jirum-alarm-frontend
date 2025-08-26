@@ -35,7 +35,7 @@ export default function RecentKeywords() {
   return (
     <>
       {keywords.length > 0 && (
-        <section>
+        <section className="px-5">
           <SectionHeader title="최근 검색어" titleClassName="text-base" />
           <div className={cn(device.isMobile && 'no-scrollbar h-[42px] overflow-x-scroll')}>
             {loading ? (

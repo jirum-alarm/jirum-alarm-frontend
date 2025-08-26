@@ -4,6 +4,7 @@ import DisplayTime from '@shared/ui/DisplayTime';
 import HotdealBadge from '@shared/ui/HotdealBadge';
 import Link from '@shared/ui/Link';
 
+import DisplayListPrice from '../DisplayListPrice';
 import ProductThumbnail from '../image/ProductThumbnail';
 import { type ProductCardType } from '../type';
 
@@ -52,10 +53,8 @@ export default function ProductGridCard({
           {product.title}
         </span>
         <div className="flex h-9 items-center pt-1">
-          <span className="line-clamp-1 max-w-[98px] text-lg font-bold text-gray-900">
-            {product?.price ?? ''}
-          </span>
-          {product?.price && <span className="w-2"></span>}
+          <DisplayListPrice price={product.price} />
+          <span className="w-2"></span>
           <span className="text-sm text-gray-600">
             <DisplayTime time={product.postedAt} />
           </span>

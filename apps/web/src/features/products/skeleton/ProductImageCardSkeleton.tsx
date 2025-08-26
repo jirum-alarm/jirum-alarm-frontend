@@ -3,9 +3,7 @@ import { IllustEmpty } from '@/components/common/icons';
 const ProductImageCardSkeleton = () => {
   return (
     <div className="w-full">
-      <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
-        <IllustEmpty />
-      </div>
+      <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100" />
       <div className="flex flex-col">
         <div className="flex h-12 flex-col items-stretch justify-stretch gap-1 pt-2">
           <div className="grow rounded-sm bg-gray-100"></div>
