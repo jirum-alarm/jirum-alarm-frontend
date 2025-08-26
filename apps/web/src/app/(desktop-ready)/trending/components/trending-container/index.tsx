@@ -89,9 +89,14 @@ export const TrendingContainer = ({ initialTab }: Props) => {
     [tabId, setTabId],
   );
 
+  // Split useEffect for better performance - title updates
   useEffect(() => {
     const meta = TAB_META[tabId] || TAB_META[0];
     document.title = meta.title;
+  }, [tabId]);
+
+  // Split useEffect for better performance - swiper and fetch logic
+  useEffect(() => {
     const swiper = swiperRef.current;
     const targetIndex = categoryIds.indexOf(tabId);
     if (swiper && targetIndex >= 0 && targetIndex !== swiper.activeIndex) {

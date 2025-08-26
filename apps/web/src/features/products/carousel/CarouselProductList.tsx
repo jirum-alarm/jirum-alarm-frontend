@@ -2,7 +2,7 @@
 
 import 'swiper/css';
 
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperClass, SwiperSlide, useSwiper } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
@@ -48,6 +48,19 @@ function CarouselProductList({
     setIsInit(true);
   };
 
+  // Optimized touch event handlers with useCallback to prevent unnecessary re-renders
+  const handleTouchStart = useCallback(() => {
+    if (nested && parentSwiper) {
+      parentSwiper.allowTouchMove = false;
+    }
+  }, [nested, parentSwiper]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (nested && parentSwiper) {
+      parentSwiper.allowTouchMove = true;
+    }
+  }, [nested, parentSwiper]);
+
   const itemsToShow = maxItems ? products.slice(0, maxItems) : products;
 
   return (
@@ -56,16 +69,8 @@ function CarouselProductList({
       {...SWIPER_OPTIONS}
       nested={nested}
       onAfterInit={handleAfterInit}
-      onTouchStart={() => {
-        if (nested) {
-          parentSwiper.allowTouchMove = false;
-        }
-      }}
-      onTouchEnd={() => {
-        if (nested) {
-          parentSwiper.allowTouchMove = true;
-        }
-      }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {itemsToShow.map((product, i) => (
         <SwiperSlide

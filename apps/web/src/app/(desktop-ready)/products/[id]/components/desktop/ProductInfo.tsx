@@ -63,7 +63,7 @@ export default function ProductInfo({
                 </button>
               </div>
             )}
-            <DisplayPrice price={product.price} isMobile={false} />
+            <DisplayPrice price={product.price} />
           </div>
 
           <div>
@@ -72,7 +72,7 @@ export default function ProductInfo({
         </div>
         {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
         <div className="my-8 flex flex-col gap-[8px]">
-          <div className="flextext-sm font-medium">
+          <div className="flex text-sm font-medium">
             <span className="inline-block w-[110px] text-gray-400">쇼핑몰</span>
             <span className="text-gray-500">{product.mallName}</span>
           </div>
@@ -90,7 +90,7 @@ export default function ProductInfo({
             </div>
           )}
 
-          <div className="flextext-sm font-medium">
+          <div className="flex text-sm font-medium">
             <span className="inline-block w-[110px] text-gray-400">추천수</span>
             <span className="text-gray-500">{productStats.likeCount}개</span>
           </div>

@@ -3,31 +3,15 @@ import { parsePrice } from '@/util/price';
 
 type DisplayPriceProps = {
   price?: string | null;
-  isMobile?: boolean;
+  className?: string;
 };
 
-const TEXT_SIZES = {
-  mobile: {
-    strong: 'text-[24px]',
-    p: 'text-lg',
-  },
-  desktop: {
-    strong: 'text-[28px]',
-    p: 'text-2xl',
-  },
-};
-
-export default function DisplayPrice({ price, isMobile }: DisplayPriceProps) {
+export default function DisplayPrice({ price, className }: DisplayPriceProps) {
   const { hasWon, priceWithoutWon } = parsePrice(price);
 
   return (
-    <p className={cn(TEXT_SIZES[isMobile ? 'mobile' : 'desktop'].p, 'font-bold text-gray-500')}>
-      <strong
-        className={cn(
-          TEXT_SIZES[isMobile ? 'mobile' : 'desktop'].strong,
-          'font-semibold text-gray-900',
-        )}
-      >
+    <p className={cn('text-lg pc:text-2xl font-bold text-gray-500', className)}>
+      <strong className="text-[24px] pc:text-[28px] font-semibold text-gray-900">
         {priceWithoutWon}
       </strong>
       {hasWon && '원'}

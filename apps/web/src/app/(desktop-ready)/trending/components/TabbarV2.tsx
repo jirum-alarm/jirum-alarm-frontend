@@ -56,7 +56,7 @@ interface TabBarProps {
 // 기본 스타일 정의 (뱃지 형태)
 const defaultStyles: Required<TabBarStyles> = {
   container:
-    'sticky top-0 pc:top- z-30 overflow-hidden bg-white pl-4 pr-12 transition-transform pc:pr-4 pt-3 pb-3 pc:pb-2',
+    'sticky top-0 pc:top-0 z-30 overflow-hidden bg-white pl-4 pr-12 transition-transform pc:pr-4 pt-3 pb-3 pc:pb-2',
   tabList: 'relative flex gap-2.5 pc:justify-center',
   tabTrigger: {
     base: 'relative pc:h-10 h-9 shrink-0 whitespace-nowrap px-3 py-2 pc:text-lg transition-all duration-400 rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 leading-none',
