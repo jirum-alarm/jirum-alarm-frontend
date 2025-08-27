@@ -21,7 +21,9 @@ export default function InitialResult({ show }: { show: boolean }) {
             <></>
           </div>
         ) : (
-          <CarouselProductsSection title="추천 핫딜" products={hotDeals} />
+          <div className="px-5">
+            <CarouselProductsSection title="추천 핫딜" products={hotDeals} />
+          </div>
         )}
       </div>
     </div>

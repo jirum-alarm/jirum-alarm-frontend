@@ -23,7 +23,9 @@ export default function SearchResult({ show }: { show: boolean }) {
           </Suspense>
         </div>
       ) : (
-        <ProductGridList products={products} />
+        <div className="px-5">
+          <ProductGridList products={products} />
+        </div>
       )}
 
       {!isProductEmpty && (
