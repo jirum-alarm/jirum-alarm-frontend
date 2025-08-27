@@ -10,8 +10,8 @@ export default function DisplayPrice({ price, className }: DisplayPriceProps) {
   const { hasWon, priceWithoutWon } = parsePrice(price);
 
   return (
-    <p className={cn('text-lg pc:text-2xl font-bold text-gray-500', className)}>
-      <strong className="text-[24px] pc:text-[28px] font-semibold text-gray-900">
+    <p className={cn('pc:text-2xl text-lg font-bold text-gray-500', className)}>
+      <strong className="pc:text-[28px] text-[24px] font-semibold text-gray-900">
         {priceWithoutWon}
       </strong>
       {hasWon && '원'}
