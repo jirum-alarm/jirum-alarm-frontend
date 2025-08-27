@@ -20,7 +20,6 @@ import { CategoryQueries } from '@entities/category';
 import GridProductListSkeleton from '@features/products/grid/GridProductListSkeleton';
 
 import { TAB_META } from '../../tabMeta';
-import TabBar from '../Tabbar';
 import TabBarV2 from '../TabbarV2';
 import TrendingList from '../TrendingList';
 
@@ -85,6 +84,7 @@ export const TrendingContainer = ({ initialTab }: Props) => {
     (nextId: number) => {
       if (nextId === tabId) return;
       setTabId(nextId);
+      window.scrollTo(0, 0);
     },
     [tabId, setTabId],
   );
@@ -112,7 +112,7 @@ export const TrendingContainer = ({ initialTab }: Props) => {
 
   return (
     <Tabs.Root value={`${tabId}`} asChild>
-      <div className="relative">
+      <div>
         <TabBarV2
           allCategories={allCategories}
           tabIndex={categoryIds.indexOf(tabId)}
@@ -135,7 +135,9 @@ export const TrendingContainer = ({ initialTab }: Props) => {
                 <SwiperSlide key={category.id} className="w-full flex-[0_0_100%] px-5">
                   {isFetched && isWithinRange ? (
                     <Suspense fallback={<GridProductListSkeleton length={20} />}>
-                      <TrendingList categoryId={category.id} categoryName={category.name} />
+                      <div className="overflow-x-hidden">
+                        <TrendingList categoryId={category.id} categoryName={category.name} />
+                      </div>
                     </Suspense>
                   ) : (
                     <GridProductListSkeleton length={12} />

@@ -14,7 +14,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
   };
   const renderDesktop = () => {
     return (
-      <div className="mt-14 pt-8">
+      <div className="pt-22">
         <SectionHeader title="지름알림 랭킹" />
         <div className="max-w-layout-max mx-auto">{children}</div>
       </div>
