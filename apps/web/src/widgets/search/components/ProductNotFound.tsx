@@ -1,4 +1,5 @@
 import { ErrorIllust } from '@/components/common/icons/Illust';
+import SectionHeader from '@/components/SectionHeader';
 import useMyRouter from '@/hooks/useMyRouter';
 
 import useIsLoggedIn from '@shared/hooks/useIsLoggedIn';
@@ -28,11 +29,11 @@ const ProductNotFound = () => {
     <div className="animate-fade-in flex h-full w-full flex-col items-start justify-center pt-11">
       <div className="w-full pb-8 text-center">
         <div className="flex justify-center pb-4">
-          <ErrorIllust />
+          <ErrorIllust className="size-25" />
         </div>
-        <p className="pb-2 text-2xl font-semibold text-gray-900">검색 결과가 없어요.</p>
+        <p className="pb-2 text-2xl font-semibold text-gray-900">검색 결과가 없어요</p>
         <p className="text-gray-500">
-          {isLoggedIn ? '키워드를 등록하고 알림을 받아보세요.' : '다른 키워드로 검색해보세요.'}
+          {isLoggedIn ? '키워드를 등록하고 알림을 받아보세요' : '다른 키워드로 검색해보세요'}
         </p>
       </div>
       {isLoggedIn && (
@@ -48,15 +49,17 @@ const ProductNotFound = () => {
       {hotDeals?.length ? (
         <>
           <hr className="w-full border-gray-300" />
-          <div className="w-full pt-10">
-            <div className="flex w-full items-center justify-between">
-              <span className="text-lg font-semibold text-gray-900">오늘 가장 인기있는 핫딜</span>
-              <span className="text-sm text-gray-500">
-                <div onClick={handleShowMoreClick} className="cursor-pointer">
-                  더보기
+          <div className="w-full px-5 pt-7">
+            <SectionHeader
+              title="오늘 가장 인기있는 핫딜"
+              right={
+                <div className="flex items-center px-2 py-3">
+                  <div onClick={handleShowMoreClick} className="cursor-pointer">
+                    더보기
+                  </div>
                 </div>
-              </span>
-            </div>
+              }
+            />
           </div>
           <div className="w-full pt-4">
             <CarouselProductList products={hotDeals} type="mobile" />

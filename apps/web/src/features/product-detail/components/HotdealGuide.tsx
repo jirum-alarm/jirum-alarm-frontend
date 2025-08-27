@@ -41,8 +41,12 @@ export default function HotdealGuide({
 
   return (
     <section className="relative">
-      <SectionHeader shouldShowMobileUI title="핫딜 제대로 알고 사자!" />
-      <div className={cn('border-secondary-300 overflow-hidden rounded-lg border pt-4')}>
+      <SectionHeader
+        shouldShowMobileUI
+        title="핫딜 제대로 알고 사자!"
+        titleClassName="pc:text-[20px]"
+      />
+      <div className={cn('border-secondary-300 mt-2 overflow-hidden rounded-lg border pt-4')}>
         <div
           ref={guidesRef}
           className={cn('relative flex flex-col gap-y-4 px-3 break-all', {

@@ -39,7 +39,7 @@ function CarouselProductList({
       preventClicks: true,
       preventClicksPropagation: true,
       touchStartForcePreventDefault: true,
-      slidesOffsetBefore: type === 'pc' ? 0 : 20,
+      slidesOffsetBefore: 20,
     };
   }, [type]);
 

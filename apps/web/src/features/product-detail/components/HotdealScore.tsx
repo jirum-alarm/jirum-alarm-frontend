@@ -26,7 +26,7 @@ const HotdealScore = ({ productId }: { productId: number }) => {
       {hotDealIndex ? (
         <section>
           <div className="flex items-center justify-between gap-2 pb-4">
-            <h2 className="font-semibold text-gray-900">핫딜 지수</h2>
+            <h2 className="pc:text-[20px] font-semibold text-gray-900">핫딜 지수</h2>
             <Tooltip
               align="right"
               polygonOffset={8}
@@ -43,7 +43,7 @@ const HotdealScore = ({ productId }: { productId: number }) => {
               </button>
             </Tooltip>
           </div>
-          <div className="flex flex-col justify-between rounded-[12px] bg-gray-100 px-6 py-6">
+          <div className="mt-2 flex flex-col justify-between rounded-[12px] bg-gray-100 px-6 py-6">
             <div>
               <div className="flex w-full flex-col items-center justify-center pb-4">
                 <div>

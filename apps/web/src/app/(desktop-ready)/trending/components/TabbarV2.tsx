@@ -50,13 +50,13 @@ interface TabBarProps {
   settingsIcon?: React.ReactNode;
   settingsAriaLabel?: string;
   showSettings?: boolean;
-  isHeaderVisible?: boolean; // 외부에서 헤더 가시성 제어
+  isHeaderVisible?: boolean;
 }
 
 // 기본 스타일 정의 (뱃지 형태)
 const defaultStyles: Required<TabBarStyles> = {
   container:
-    'sticky top-0 pc:top-0 z-30 overflow-hidden bg-white pl-4 pr-12 transition-transform pc:pr-4 pt-3 pb-3 pc:pb-2',
+    'sticky top-0 pc:top-14 z-30 overflow-hidden bg-white pl-4 pr-12 transition-transform pc:pr-4 pt-3 pb-3 pc:pb-2',
   tabList: 'relative flex gap-2.5 pc:justify-center',
   tabTrigger: {
     base: 'relative pc:h-10 h-9 shrink-0 whitespace-nowrap px-3 py-2 pc:text-lg transition-all duration-400 rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 leading-none',
@@ -77,7 +77,7 @@ const defaultAnimationConfig: Required<TabBarAnimationConfig> = {
   scroll: {
     damping: 40,
     bounce: 0.05,
-    stiffness: 100,
+    stiffness: 300,
   },
   drag: {
     power: 0.2,
@@ -180,13 +180,10 @@ const TabBarV2 = ({
 
   return (
     <div
-      className={cn([
-        mergedStyles.container,
-        {
-          'translate-y-0': !isHeaderVisible,
-          'pc:translate-y-0 translate-y-14': isHeaderVisible,
-        },
-      ])}
+      className={cn(mergedStyles.container, {
+        'translate-y-0': !isHeaderVisible,
+        'pc:translate-y-0 translate-y-14': isHeaderVisible,
+      })}
     >
       <Tabs.List asChild>
         <motion.div
