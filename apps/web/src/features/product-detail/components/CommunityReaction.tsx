@@ -39,6 +39,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
     <section className="mb-4">
       <SectionHeader
         shouldShowMobileUI={true}
+        titleClassName="pc:text-[20px]"
         title={
           <>
             커뮤니티 AI 요약
@@ -69,7 +70,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
           </div>
         }
       />
-      <div className="space-y-4">
+      <div className="mt-2 space-y-4">
         <div className="bg-secondary-50 flex flex-col gap-y-4 rounded-xl p-4">
           {allCount !== 0 ? (
             <ReactionChart

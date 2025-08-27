@@ -27,7 +27,7 @@ const ProductDetailLayout = async ({
     return (
       <>
         <div className="max-w-layout-max mx-auto mt-14 grid grid-cols-12 gap-x-6 pt-11">
-          <div className="col-span-10 col-start-2">{children}</div>
+          <div className="col-span-10 col-start-2 overflow-hidden">{children}</div>
         </div>
         <NoticeProfitLink />
         <Footer />
