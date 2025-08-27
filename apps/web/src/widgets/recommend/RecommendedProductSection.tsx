@@ -9,15 +9,17 @@ import RecommendPrefetch from './RecommendPrefetch';
 
 const RecommendedProductSection = () => {
   return (
-    <div className="px-5">
-      <SectionHeader
-        title="지름알림 추천"
-        right={
-          <div className="flex items-center px-2 py-3">
-            <RecommendedMoreLink>더보기</RecommendedMoreLink>
-          </div>
-        }
-      />
+    <section>
+      <div className="pc:px-0 px-5">
+        <SectionHeader
+          title="지름알림 추천"
+          right={
+            <div className="flex items-center px-2 py-3">
+              <RecommendedMoreLink>더보기</RecommendedMoreLink>
+            </div>
+          }
+        />
+      </div>
       <div className="pc:pt-4 pb-5">
         <RecommendPrefetch>
           <ApiErrorBoundary>
@@ -27,7 +29,7 @@ const RecommendedProductSection = () => {
           </ApiErrorBoundary>
         </RecommendPrefetch>
       </div>
-    </div>
+    </section>
   );
 };
 
