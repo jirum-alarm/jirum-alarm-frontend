@@ -1,7 +1,10 @@
+import { atom, useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 
-const useScrollPosition = (threshold = 100, initialValue = false) => {
-  const [isScrolled, setIsScrolled] = useState(initialValue);
+const isScrolledAtom = atom(false);
+
+const useScrollPosition = (threshold = 100) => {
+  const [isScrolled, setIsScrolled] = useAtom(isScrolledAtom);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -10,7 +13,7 @@ const useScrollPosition = (threshold = 100, initialValue = false) => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [threshold]);
+  }, [setIsScrolled, threshold]);
 
   return isScrolled;
 };
