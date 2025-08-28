@@ -1,8 +1,11 @@
+import { atom, useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
+
+const isHeaderVisibleAtom = atom(false);
 
 const useVisibilityOnScroll = ({ visibilityThreshold }: { visibilityThreshold?: number } = {}) => {
   const lastScrollTop = useRef(0);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(visibilityThreshold ? false : true);
+  const [isHeaderVisible, setIsHeaderVisible] = useAtom(isHeaderVisibleAtom);
   const threshold = visibilityThreshold ?? 0;
 
   const handleScroll = () => {
