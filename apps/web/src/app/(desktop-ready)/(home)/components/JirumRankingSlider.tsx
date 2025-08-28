@@ -68,7 +68,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
     <>
       <div className="relative flex w-full items-center gap-x-5 gap-y-3">
         <button
-          className="pc:flex hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
+          className="pc:flex mb-5 hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
           onClick={handleSlidePrev}
           name="이전"
         >
@@ -116,7 +116,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           </Swiper>
         </motion.div>
         <button
-          className="pc:flex hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
+          className="pc:flex mb-5 hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
           onClick={handleSlideNext}
           name="다음"
         >
