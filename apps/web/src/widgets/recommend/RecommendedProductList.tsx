@@ -34,7 +34,13 @@ const RecommendedProductList = () => {
         />
       </div>
       <ApiErrorBoundary>
-        <Suspense fallback={<CarouselProductListSkeleton />}>
+        <Suspense
+          fallback={
+            <div className="pc:my-7">
+              <CarouselProductListSkeleton />
+            </div>
+          }
+        >
           <ProductsByKeywordsList keyword={selectedKeyword} />
         </Suspense>
       </ApiErrorBoundary>

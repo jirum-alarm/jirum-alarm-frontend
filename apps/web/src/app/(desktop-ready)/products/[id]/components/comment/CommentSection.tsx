@@ -52,16 +52,18 @@ export default function CommentSection({
 
   return (
     <section className="pc:my-0 mt-4 mb-10 flex flex-col">
-      <SectionHeader
-        title={
-          <span>
-            지름알림 댓글
-            {hasComments && <span className="text-secondary-500">{comments.length}개</span>}
-          </span>
-        }
-        shouldShowMobileUI
-        titleClassName="pc:text-[20px]"
-      />
+      <div className="pc:px-0 px-5">
+        <SectionHeader
+          title={
+            <span>
+              지름알림 댓글
+              {hasComments && <span className="text-secondary-500">{comments.length}개</span>}
+            </span>
+          }
+          shouldShowMobileUI
+          titleClassName="pc:text-[20px]"
+        />
+      </div>
       <>
         <Suspense fallback={<CommentListSkeleton />}>
           <CommentList productId={productId} isMobile={isMobile} />

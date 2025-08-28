@@ -28,27 +28,21 @@ function ProductDetailPage({
 }) {
   return (
     <>
-      <Suspense>
-        <ViewerCount productId={productId} />
-      </Suspense>
+      <ViewerCount productId={productId} />
 
       <main className="pt-14">
-        <Suspense>
-          <div className="sticky top-0 -mb-6">
-            <div
-              className="relative aspect-square w-full"
-              style={{ contain: 'layout paint', contentVisibility: 'auto' }}
-            >
-              <ProductDetailImage productId={productId} fill />
-            </div>
+        <div className="sticky top-0 -mb-6">
+          <div
+            className="relative aspect-square w-full"
+            style={{ contain: 'layout paint', contentVisibility: 'auto' }}
+          >
+            <ProductDetailImage productId={productId} fill />
           </div>
-        </Suspense>
+        </div>
 
         <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <div className="flex flex-col">
-            <Suspense>
-              <ProductInfo productId={productId} />
-            </Suspense>
+            <ProductInfo productId={productId} />
 
             <Suspense fallback={<Hr />}>
               <ProductExpiredBanner productId={productId} />
