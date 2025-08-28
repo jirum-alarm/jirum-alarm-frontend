@@ -21,7 +21,7 @@ const HOME_SCROLLTHRESHOLD = 720;
 const talkroomLink = 'https://open.kakao.com/o/gJZTWAAg';
 
 const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
-  const isScrolled = useScrollPosition(HOME_SCROLLTHRESHOLD, false);
+  const isScrolled = useScrollPosition(HOME_SCROLLTHRESHOLD);
 
   const pathname = usePathname();
 
@@ -77,30 +77,30 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           <Link
             href={talkroomLink}
             target="_blank"
-            className="relative size-9 rounded-full transition-colors duration-300 hover:bg-white/10"
+            className="relative size-9 rounded-full transition-colors duration-300 hover:bg-gray-200/50"
             aria-label="핫딜 카톡방 입장"
           >
             <div
               className={cn(
-                'absolute inset-0 flex size-9 items-center justify-center p-1 transition-opacity',
+                'absolute inset-0 flex items-center justify-center transition-opacity',
                 {
                   'opacity-100': isInHomeHero,
                   'opacity-0': !isInHomeHero,
                 },
               )}
             >
-              <TalkDark width={28} height={28} />
+              <TalkDark width={28} height={28} className="size-full p-1" />
             </div>
             <div
               className={cn(
-                'absolute inset-0 flex size-9 items-center justify-center p-1 transition-opacity',
+                'absolute inset-0 flex items-center justify-center transition-opacity',
                 {
                   'opacity-100': !isInHomeHero,
                   'opacity-0': isInHomeHero,
                 },
               )}
             >
-              <TalkLight width={28} height={28} />
+              <TalkLight width={28} height={28} className="size-full p-1" />
             </div>
           </Link>
           {isLoggedIn ? (
