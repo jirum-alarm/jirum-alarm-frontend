@@ -5,6 +5,7 @@ import { cn } from '@/lib/cn';
 
 import Link from '@shared/ui/Link';
 
+import DisplayListPrice from '../DisplayListPrice';
 import ProductThumbnail from '../image/ProductThumbnail';
 import { type ProductCardType } from '../type';
 
@@ -44,7 +45,7 @@ export default function ProductRankingImageCard({
         <div className="pc:h-[110px] p-3 pb-0">
           <div className="xl:pc:text-base line-clamp-2 text-sm text-gray-700">{product.title}</div>
           <div className="pc:h-[36px] pc:pt-0.5 xl:pc:text-[22px] pt-2 text-lg font-bold text-gray-900">
-            {product.price ?? ''}
+            <DisplayListPrice price={product.price} />
           </div>
         </div>
       </div>

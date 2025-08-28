@@ -81,20 +81,26 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             aria-label="핫딜 카톡방 입장"
           >
             <div
-              className={cn('absolute inset-0 size-9 p-1 transition-opacity', {
-                'opacity-100': isInHomeHero,
-                'opacity-0': !isInHomeHero,
-              })}
+              className={cn(
+                'absolute inset-0 flex size-9 items-center justify-center p-1 transition-opacity',
+                {
+                  'opacity-100': isInHomeHero,
+                  'opacity-0': !isInHomeHero,
+                },
+              )}
             >
-              <TalkDark className="size-full" />
+              <TalkDark width={28} height={28} />
             </div>
             <div
-              className={cn('absolute inset-0 size-9 p-1 transition-opacity', {
-                'opacity-100': !isInHomeHero,
-                'opacity-0': isInHomeHero,
-              })}
+              className={cn(
+                'absolute inset-0 flex size-9 items-center justify-center p-1 transition-opacity',
+                {
+                  'opacity-100': !isInHomeHero,
+                  'opacity-0': isInHomeHero,
+                },
+              )}
             >
-              <TalkLight className="size-full" />
+              <TalkLight width={28} height={28} />
             </div>
           </Link>
           {isLoggedIn ? (

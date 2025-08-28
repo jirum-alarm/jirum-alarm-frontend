@@ -14,7 +14,7 @@ const RecommendedProductSection = () => {
         <SectionHeader
           title="지름알림 추천"
           right={
-            <div className="flex items-center px-2 py-3">
+            <div className="-mx-2 flex items-center px-2 py-3">
               <RecommendedMoreLink>더보기</RecommendedMoreLink>
             </div>
           }

@@ -2,9 +2,9 @@ import type { SVGProps } from 'react';
 
 const TalkLight = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width="30"
-    height="30"
-    viewBox="0 0 30 30"
+    width={props.width ?? 30}
+    height={props.height ?? 30}
+    viewBox="0 0 28 28"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}

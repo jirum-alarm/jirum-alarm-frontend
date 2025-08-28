@@ -41,7 +41,9 @@ const RecommendedProductList = () => {
             </div>
           }
         >
-          <ProductsByKeywordsList keyword={selectedKeyword} />
+          <div className="pc:-mx-5">
+            <ProductsByKeywordsList keyword={selectedKeyword} />
+          </div>
         </Suspense>
       </ApiErrorBoundary>
     </div>
