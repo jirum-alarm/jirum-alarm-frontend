@@ -102,7 +102,7 @@ export default function ProductInfo({
             <LikeButton productId={productId} isUserLogin={isUserLogin} />
           </Suspense>
         </div>
-        <a href={product.detailUrl ?? ''} className="block flex-1">
+        <a href={product.detailUrl ?? ''} className="block flex-1" target="_blank" rel="noopener noreferrer">
           <Button className="h-[48px] w-full px-6 text-base font-semibold">구매하러 가기</Button>
         </a>
       </div>
