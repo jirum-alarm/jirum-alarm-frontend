@@ -4,7 +4,7 @@ const TalkDark = (props: SVGProps<SVGSVGElement>) => (
   <svg
     width={props.width ?? 30}
     height={props.height ?? 30}
-    viewBox="0 0 28 28"
+    viewBox="0 0 30 30"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
@@ -15,8 +15,8 @@ const TalkDark = (props: SVGProps<SVGSVGElement>) => (
       maskUnits="userSpaceOnUse"
       x="1"
       y="1"
-      width="28"
-      height="28"
+      width="30"
+      height="30"
     >
       <path d="M1 1H29V29H1V1Z" fill="white" />
     </mask>
