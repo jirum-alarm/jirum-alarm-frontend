@@ -5,7 +5,6 @@ import { checkDevice } from '../actions/agent';
 import { getAccessToken } from '../actions/token';
 
 import DesktopGNB from './components/desktop/DesktopGNB';
-import Footer from './components/desktop/Footer';
 
 const DesktopReadyLayout = async ({ children }: { children: React.ReactNode }) => {
   const { isMobile } = await checkDevice();
