@@ -1,22 +1,16 @@
 'use client';
 
-import { Atom, atom, useAtom } from 'jotai';
-import { usePathname } from 'next/navigation';
-import { useEffect, useMemo, useRef } from 'react';
+import { atom, useAtom } from 'jotai';
+import { useEffect, useRef } from 'react';
 
 type ScrollDirection = 'up' | 'down' | null;
 
-interface ScrollDirectionAtom {
-  [key: string]: ScrollDirection;
-}
+const scrollDirectionAtom = atom<ScrollDirection>(null);
 
-const scrollDirectionAtom = atom<ScrollDirectionAtom>({});
+export function useScrollDirection() {
+  const isInitialMount = useRef(true);
 
-export function useScrollDirection(key: string) {
-  const pathname = usePathname();
-  const prevPathname = useRef(pathname);
-
-  const [scrollDirection, setScrollDirection] = useAtom<ScrollDirectionAtom>(scrollDirectionAtom);
+  const [scrollDirection, setScrollDirection] = useAtom(scrollDirectionAtom);
 
   useEffect(() => {
     let lastScrollY = window.pageYOffset;
@@ -25,23 +19,24 @@ export function useScrollDirection(key: string) {
     const updateScrollDirection = () => {
       const scrollY = window.pageYOffset;
       const direction = scrollY > lastScrollY ? 'down' : 'up';
-      console.log('direction', direction);
+
       if (
-        direction !== scrollDirection.value &&
+        direction !== scrollDirection &&
         (scrollY - lastScrollY > 10 || scrollY - lastScrollY < -10)
       ) {
-        setScrollDirection({ ...scrollDirection, [key]: direction });
+        setScrollDirection(direction);
       }
       lastScrollY = scrollY > 0 ? scrollY : 0;
       ticking = false;
     };
 
     const onScroll = () => {
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+        return;
+      }
+
       if (!ticking) {
-        if (prevPathname.current !== pathname) {
-          prevPathname.current = pathname;
-          return;
-        }
         window.requestAnimationFrame(updateScrollDirection);
         ticking = true;
       }
@@ -52,13 +47,12 @@ export function useScrollDirection(key: string) {
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
-  }, [scrollDirection, setScrollDirection, pathname, key]);
+  }, [scrollDirection, setScrollDirection]);
 
-  return scrollDirection[key];
+  return scrollDirection;
 }
 
 export function useHeaderVisibility() {
-  const scrollDirection = useScrollDirection('header');
-  console.log(scrollDirection);
+  const scrollDirection = useScrollDirection();
   return scrollDirection ? scrollDirection === 'up' : true;
 }
