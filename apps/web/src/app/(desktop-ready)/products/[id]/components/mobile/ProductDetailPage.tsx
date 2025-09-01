@@ -6,7 +6,7 @@ import {
   HotdealScore,
   NoticeProfitLink,
   ProductDetailImage,
-  ProductExpiredBanner,
+  // ProductExpiredBanner,
 } from '@features/product-detail/components';
 import {
   CategoryPopularByProductSection,
@@ -14,6 +14,7 @@ import {
 } from '@features/products/sections';
 
 import CommentSection from '../comment/CommentSection';
+import CoupangPartnerGuide from '../CoupangPartnerGuide';
 
 import BottomCTA from './BottomCTA';
 import ProductInfo from './ProductInfo';
@@ -39,14 +40,11 @@ function ProductDetailPage({
             <ProductDetailImage productId={productId} fill />
           </div>
         </div>
-
         <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <div className="flex flex-col">
             <ProductInfo productId={productId} />
 
-            <Suspense fallback={<Hr />}>
-              <ProductExpiredBanner productId={productId} />
-            </Suspense>
+            <CoupangPartnerGuide productId={productId} />
 
             <div className="mt-4 mb-12 flex flex-col gap-y-9 px-5">
               <Suspense>
@@ -69,7 +67,7 @@ function ProductDetailPage({
               <CategoryPopularByProductSection productId={productId} />
             </div>
 
-            <NoticeProfitLink />
+            <NoticeProfitLink productId={productId} />
           </div>
 
           <div className="h-[64px] bg-gray-100" />
