@@ -61,7 +61,7 @@ export default async function DesktopProductDetailPage({
       </div>
 
       <div className="col-span-1">
-        <div className="h-[calc( sticky top-25">
+        <div className="sticky top-25">
           <Suspense fallback={<div className="h-[400px] opacity-0" />}>
             <ProductInfo productId={productId} isUserLogin={isUserLogin} />
           </Suspense>
