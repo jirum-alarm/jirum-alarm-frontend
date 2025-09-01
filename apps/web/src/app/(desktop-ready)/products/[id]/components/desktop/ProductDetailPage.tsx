@@ -14,6 +14,7 @@ import {
 } from '@features/products/sections';
 
 import { CommentSection } from '../comment';
+import CoupangPartnerGuide from '../CoupangPartnerGuide';
 
 import ProductInfo from './ProductInfo';
 
@@ -25,49 +26,59 @@ export default async function DesktopProductDetailPage({
   isUserLogin: boolean;
 }) {
   return (
-    <div className="mb-[68px] flex flex-col items-stretch">
-      <div className="flex gap-x-12">
+    <div
+      className="grid grid-cols-2 gap-x-12 gap-y-10"
+      style={{ gridTemplateRows: 'min-content 1fr' }}
+    >
+      <div className="col-span-1 space-y-10">
         <Suspense
           fallback={
-            <>
-              <div className="relative aspect-square flex-1 basis-1/2 rounded-xl border border-gray-200 bg-gray-50" />
-              <div className="flex flex-1 basis-1/2 pl-3 opacity-0" />
-            </>
+            <div className="relative aspect-square rounded-xl border border-gray-200 bg-gray-50" />
           }
         >
-          <div
-            className="relative aspect-square flex-1 basis-1/2 overflow-hidden rounded-xl border border-gray-200"
-            style={{ contain: 'layout paint', contentVisibility: 'auto' }}
-          >
-            <ProductDetailImage productId={productId} fill={false} />
+          <div className="space-y-4">
+            <div
+              className="relative aspect-square overflow-hidden rounded-xl border border-gray-200"
+              style={{ contain: 'layout paint', contentVisibility: 'auto' }}
+            >
+              <ProductDetailImage productId={productId} fill={false} />
+            </div>
+            <CoupangPartnerGuide productId={productId} />
           </div>
-          <ProductInfo productId={productId} isUserLogin={isUserLogin} />
         </Suspense>
-      </div>
-      <Hr className="mt-15 mb-[52px]" />
-      <div className="flex gap-x-12">
-        <div className="flex-1 basis-1/2">
+
+        <div className="space-y-12">
           <Suspense fallback={<div className="h-[400px] opacity-0" />}>
             <HotdealGuide fixExpanded={true} productId={productId} />
           </Suspense>
-        </div>
-        <div className="flex-1 basis-1/2">
           <Suspense fallback={<div className="h-[400px] opacity-0" />}>
-            <Suspense fallback={<div className="h-[400px] opacity-0" />}>
-              <CommunityReaction productId={productId} />
-            </Suspense>
-            <Suspense fallback={<div className="h-[400px] opacity-0" />}>
-              <HotdealScore productId={productId} />
-            </Suspense>
+            <HotdealScore productId={productId} />
+          </Suspense>
+          <Suspense fallback={<div className="h-[400px] opacity-0" />}>
+            <CommunityReaction productId={productId} />
           </Suspense>
         </div>
       </div>
-      <Hr className="mt-21.5 mb-15" />
-      <div className="flex flex-col gap-y-15">
-        <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={false} />
+
+      <div className="col-span-1">
+        <div className="h-[calc( sticky top-25">
+          <Suspense fallback={<div className="h-[400px] opacity-0" />}>
+            <ProductInfo productId={productId} isUserLogin={isUserLogin} />
+          </Suspense>
+        </div>
+      </div>
+      <div className="col-span-2 pt-5">
         <Hr />
-        <TogetherViewedSection productId={productId} />
-        <CategoryPopularByProductSection productId={productId} />
+        <div className="space-y-11 py-11">
+          <div>
+            <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={false} />
+          </div>
+          <Hr />
+          <div>
+            <TogetherViewedSection productId={productId} />
+            <CategoryPopularByProductSection productId={productId} />
+          </div>
+        </div>
       </div>
     </div>
   );
