@@ -1,7 +1,7 @@
-export const isCoupangPartner = (url?: string | null) => {
-  if (!url) {
+export const isCoupangPartner = (mallName?: string | null) => {
+  if (!mallName) {
     return false;
   }
 
-  return url.includes('coupang.com');
+  return mallName.includes('쿠팡') || mallName.includes('coupang');
 };

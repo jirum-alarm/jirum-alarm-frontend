@@ -9,7 +9,7 @@ import { isCoupangPartner } from '../utils/isCoupangPartner';
 export default function CoupangPartnerGuide({ productId }: { productId: number }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
 
-  if (!isCoupangPartner(product.detailUrl)) {
+  if (!isCoupangPartner(product.mallName)) {
     return null;
   }
 

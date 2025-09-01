@@ -9,7 +9,7 @@ import { ProductQueries } from '@entities/product';
 export default function NoticeProfitLink({ productId }: { productId: number }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
 
-  if (isCoupangPartner(product.detailUrl)) {
+  if (isCoupangPartner(product.mallName)) {
     return null;
   }
 
