@@ -1,4 +1,4 @@
-import { throttle } from 'lodash';
+import { throttle } from 'es-toolkit';
 import { useCallback, useEffect, useState } from 'react';
 
 export const useInputHideOnScroll = () => {
