@@ -3,7 +3,7 @@ import { Tabs } from 'radix-ui';
 import { useEffect, useRef, useState } from 'react';
 
 import { Setting } from '@/components/common/icons';
-import useVisibilityOnScroll from '@/hooks/useVisibilityOnScroll';
+import { useHeaderVisibility } from '@/hooks/useScrollDirection';
 import { cn } from '@/lib/cn';
 
 import Link from '@shared/ui/Link';
@@ -96,13 +96,10 @@ const TabBarV2 = ({
   settingsIcon = <Setting color="#467DFB" />,
   settingsAriaLabel = '카테고리 설정 페이지로 이동',
   showSettings = true,
-  isHeaderVisible: externalHeaderVisible,
 }: TabBarProps) => {
   const categoryIds = allCategories.map((c) => c.id);
 
-  // 외부에서 isHeaderVisible이 제공되지 않으면 내부 훅 사용
-  const { isHeaderVisible: internalHeaderVisible } = useVisibilityOnScroll();
-  const isHeaderVisible = externalHeaderVisible ?? internalHeaderVisible;
+  const isHeaderVisible = useHeaderVisibility();
 
   const tabDragRef = useRef<HTMLDivElement>(null);
   const dragStartX = useRef<number | null>(null);
