@@ -18,7 +18,7 @@ const Footer = () => {
               target="_blank"
               className="flex size-9 items-center justify-center rounded-full bg-[#FAE300]"
             >
-              <TalkLight />
+              <TalkLight className="mt-0.5 mr-0.25" />
             </Link>
           </div>
           <p className="mb-4 text-sm font-medium whitespace-pre-line text-gray-700">
