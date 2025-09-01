@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import { Info } from '@/components/common/icons';
 import Tooltip from '@/components/common/Tooltip';
 import SectionHeader from '@/components/SectionHeader';
+import { getFromNow } from '@/util/date';
 
 import { ProductQueries } from '@entities/product';
 
@@ -13,17 +14,22 @@ import { ProductReport } from '../controls';
 
 import { NoReactionChart } from './NoReactionChart';
 import { ReactionChart } from './ReactionChart';
+import ReactionChartHeader from './ReactionChartHeader';
+import ReactionKeywords from './ReactionKeywords';
 import { Reactions } from './Reactions';
-import { ReactionSummary } from './ReactionSummary';
 
 export default function CommunityReaction({ productId }: { productId: number }) {
   const { data: product } = useSuspenseQuery(
     ProductQueries.productAdditionalInfo({ id: productId }),
   );
 
-  // const { items, lastUpdatedAt: lastUpdatedAtString } = categorizedReactionKeywords;
+  const { data: reactionKeywordsData } = useSuspenseQuery(
+    ProductQueries.reactionKeywords({ id: productId }),
+  );
 
-  // const lastUpdatedAt = lastUpdatedAtString ? getFromNow(lastUpdatedAtString) + ' 업데이트' : null;
+  const { lastUpdatedAt: lastUpdatedAtString } = reactionKeywordsData.categorizedReactionKeywords;
+
+  const lastUpdatedAt = lastUpdatedAtString ? getFromNow(lastUpdatedAtString) + ' 업데이트' : null;
 
   const positiveCount = product?.positiveCommunityReactionCount ?? 0;
   const negativeCount = product?.negativeCommunityReactionCount ?? 0;
@@ -36,7 +42,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
   };
 
   return (
-    <section className="mb-4">
+    <section>
       <SectionHeader
         shouldShowMobileUI={true}
         titleClassName="pc:text-[20px]"
@@ -71,25 +77,24 @@ export default function CommunityReaction({ productId }: { productId: number }) 
         }
       />
       <div className="mt-2 space-y-4">
-        <div className="bg-secondary-50 flex flex-col gap-y-4 rounded-xl p-4">
-          {allCount !== 0 ? (
-            <ReactionChart
-              positiveCount={positiveCount}
-              negativeCount={negativeCount}
-              allCount={allCount}
+        <div className="bg-secondary-50 space-y-3 rounded-xl p-4">
+          <div className="space-y-1 rounded-xl bg-white pb-5">
+            <ReactionChartHeader
               url={product.url!}
               provider={product.provider.nameKr}
+              lastUpdatedAt={lastUpdatedAt}
             />
-          ) : (
-            <NoReactionChart url={product.url!} provider={product.provider.nameKr} />
-          )}
-          {commentSummary && (
-            <ReactionSummary
-              commentSummary={commentSummary}
-              provider={product.provider.nameKr}
-              url={product.url!}
-            />
-          )}
+            {allCount !== 0 ? (
+              <ReactionChart
+                positiveCount={positiveCount}
+                negativeCount={negativeCount}
+                allCount={allCount}
+              />
+            ) : (
+              <NoReactionChart />
+            )}
+          </div>
+          <ReactionKeywords productId={productId} />
         </div>
         {commentSummary && <Reactions commentSummary={commentSummary} />}
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { AIIcon } from '@/components/common/icons';
 import Etc from '@/components/common/icons/Etc';
 import Option from '@/components/common/icons/Option';
 import Price from '@/components/common/icons/Price';
@@ -12,6 +13,7 @@ const SUMMARY_DATA: {
   title: string;
   icon: React.ReactNode;
 }[] = [
+  { id: 'summary', title: '핫딜 추천 이유', icon: <AIIcon /> },
   { id: 'price', title: '핫딜 가격', icon: <Price /> },
   { id: 'satisfaction', title: '만족도', icon: <Shop /> },
   { id: 'option', title: '옵션 및 사이즈', icon: <Option /> },

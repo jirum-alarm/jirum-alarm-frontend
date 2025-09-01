@@ -1,4 +1,18 @@
-export default function NoticeProfitLink() {
+'use client';
+
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { isCoupangPartner } from '@/app/(desktop-ready)/products/[id]/utils/isCoupangPartner';
+
+import { ProductQueries } from '@entities/product';
+
+export default function NoticeProfitLink({ productId }: { productId: number }) {
+  const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+
+  if (isCoupangPartner(product.detailUrl)) {
+    return null;
+  }
+
   return (
     <section className="pc:relative pc:inset-0 pc:top-auto bg-gray-100">
       <div className="pc:flex pc:items-center pc:justify-center pc:gap-x-3 pc:pb-5 p-5 pb-8">

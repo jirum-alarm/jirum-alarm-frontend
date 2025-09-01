@@ -41,15 +41,11 @@ export default function HotdealGuide({
 
   return (
     <section className="relative">
-      <SectionHeader
-        shouldShowMobileUI
-        title="핫딜 제대로 알고 사자!"
-        titleClassName="pc:text-[20px]"
-      />
-      <div className={cn('border-secondary-300 mt-2 overflow-hidden rounded-lg border pt-4')}>
+      <SectionHeader shouldShowMobileUI title="구매 방법" titleClassName="pc:text-[20px]" />
+      <div className={cn('border-secondary-300 mt-2 overflow-hidden rounded-2xl border pt-4')}>
         <div
           ref={guidesRef}
-          className={cn('relative flex flex-col gap-y-4 px-3 break-all', {
+          className={cn('relative space-y-4 break-all', {
             'max-h-64 overflow-y-hidden': isCollapsed,
           })}
         >
@@ -60,16 +56,14 @@ export default function HotdealGuide({
             <div className="absolute right-0 bottom-0 left-0 z-10 h-16 w-full bg-linear-to-t from-white via-white/80 to-transparent" />
           )}
           {!isCollapsed && (
-            <div
-              className={cn('bg-secondary-50 mt-4 rounded-lg p-3', {
-                'mb-4': !isCollapsed,
-              })}
-            >
-              <span className="text-[13px] leading-[16px] text-gray-600">
-                * 요약은 실제와 다를 수 있어요. 상품 구매 시 정확한 행사 정보는 쇼핑몰 홈페이지에서
-                확인해 주세요.
-              </span>
-            </div>
+            <small className="bg-secondary-50 mt-4 flex gap-x-1 p-3 text-[13px] leading-[16px] text-gray-600">
+              <span>*</span>
+              <div>
+                <span>요약은 실제와 다를 수 있어요.</span>
+                <br />
+                <span>상품 구매 시 정확한 행사 정보는 쇼핑몰 홈페이지에서 확인해 주세요.</span>
+              </div>
+            </small>
           )}
         </div>
         <div
@@ -174,7 +168,7 @@ function LinkText({ content }: { content: string }) {
 
 function HotdealGuideItem({ guide }: { guide: ProductGuidesQuery['productGuides'][number] }) {
   return (
-    <div className="flex gap-x-2">
+    <div className="flex gap-x-2 px-3">
       <div className="shrink-0">
         <HotdealGuideItemCheckIcon />
       </div>
