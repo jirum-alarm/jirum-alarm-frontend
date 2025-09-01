@@ -2,7 +2,6 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { AIIcon, ArrowRight } from '@/components/common/icons';
 import { cn } from '@/lib/cn';
 import { getFromNow } from '@/util/date';
 
@@ -18,16 +17,7 @@ function ReactionKeywords({ productId }: { productId: number }) {
   const lastUpdatedAt = lastUpdatedAtString ? getFromNow(lastUpdatedAtString) + ' 업데이트' : null;
 
   if (!lastUpdatedAt || !items.length) {
-    return (
-      <header className="flex h-14 items-center justify-between px-4">
-        <div className="flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center">
-            <AIIcon className="size-5" />
-          </span>
-          <span className="font-semibold text-gray-900">요약 준비중</span>
-        </div>
-      </header>
-    );
+    return null;
   }
 
   return (
