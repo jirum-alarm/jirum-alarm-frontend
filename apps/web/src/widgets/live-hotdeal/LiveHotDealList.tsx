@@ -11,9 +11,8 @@ import useLiveHotDealsViewModel from './hooks/useLiveHotDealsViewModel';
 
 const LiveHotDealList = ({ device }: { device: CheckDeviceResult }) => {
   const { products, loadingCallbackRef, isFetchingNextPage } = useLiveHotDealsViewModel();
-  const { smd, lg } = useScreen();
 
-  const size = lg ? 10 : smd ? 6 : 4;
+  const size = device.isMobile ? 4 : 10;
 
   return (
     <>

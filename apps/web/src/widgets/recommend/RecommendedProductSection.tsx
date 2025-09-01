@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 
-import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import SectionHeader from '@/components/SectionHeader';
 
 import RecommendedMoreLink from './RecommendedMoreLink';
@@ -20,13 +19,11 @@ const RecommendedProductSection = () => {
           }
         />
       </div>
-      <div className="pc:pt-4 pb-5">
+      <div className="pc:pt-4 pc:overflow-x-hidden pb-5">
         <RecommendPrefetch>
-          <ApiErrorBoundary>
-            <Suspense>
-              <RecommendedProductList />
-            </Suspense>
-          </ApiErrorBoundary>
+          <Suspense>
+            <RecommendedProductList />
+          </Suspense>
         </RecommendPrefetch>
       </div>
     </section>

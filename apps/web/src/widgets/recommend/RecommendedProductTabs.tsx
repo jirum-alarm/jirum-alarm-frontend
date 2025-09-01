@@ -25,7 +25,7 @@ const RecommendedProductTabs = ({
   };
 
   return (
-    <ul className="scrollbar-hide flex flex-nowrap gap-2 overflow-x-auto px-5">
+    <ul className="scrollbar-hide flex w-fit max-w-full space-x-2 overflow-x-auto px-5">
       {productKeywords.map((keyword) => (
         <li
           key={keyword}

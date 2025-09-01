@@ -25,28 +25,26 @@ const RecommendedProductList = () => {
   };
 
   return (
-    <div>
-      <div className="flex justify-center pb-[16px]">
+    <>
+      <div className="mx-auto w-fit max-w-full pb-[16px]">
         <RecommendedProductTabs
           productKeywords={productKeywords}
           selectedKeyword={selectedKeyword}
           onSelectedKeyword={(keyword) => handleSelectedKeyword(keyword)}
         />
       </div>
-      <ApiErrorBoundary>
-        <Suspense
-          fallback={
-            <div className="pc:my-7">
-              <CarouselProductListSkeleton />
-            </div>
-          }
-        >
-          <div className="pc:-mx-5">
-            <ProductsByKeywordsList keyword={selectedKeyword} />
+      <Suspense
+        fallback={
+          <div className="pc:my-7 pc:-ml-5">
+            <CarouselProductListSkeleton />
           </div>
-        </Suspense>
-      </ApiErrorBoundary>
-    </div>
+        }
+      >
+        <div className="pc:-ml-5">
+          <ProductsByKeywordsList keyword={selectedKeyword} />
+        </div>
+      </Suspense>
+    </>
   );
 };
 

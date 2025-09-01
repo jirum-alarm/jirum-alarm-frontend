@@ -7,7 +7,7 @@ import { ProductQueries } from '@entities/product';
 const RecommendPrefetch = async ({ children }: { children: React.ReactNode }) => {
   const queryClient = getQueryClient();
 
-  queryClient.prefetchQuery(ProductQueries.productKeywords());
+  await queryClient.prefetchQuery(ProductQueries.productKeywords());
 
   return <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>;
 };
