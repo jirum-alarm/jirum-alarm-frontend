@@ -27,9 +27,7 @@ export default function ProductGridCard({
           categoryId={product.categoryId}
           type="product"
           alt={product.title}
-          width={252}
-          height={252}
-          sizes="252px"
+          sizes="(max-width: 768px) 160px, 252px"
         />
         {typeof rank === 'number' && (
           <div className="text-primary-500 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900 text-sm">

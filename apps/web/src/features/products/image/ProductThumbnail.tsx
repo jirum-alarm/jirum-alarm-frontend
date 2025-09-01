@@ -37,9 +37,9 @@ const ProductThumbnail = memo(function ProductThumbnail({
       title={titleText}
       fallback={<NoImage type={type} categoryId={categoryId} />}
       loading="eager"
-      width={162}
-      height={162}
-      sizes="200px"
+      width={192}
+      height={192}
+      sizes="192px"
       className={cn(['h-full w-full object-cover', className])}
       {...rest}
     />
