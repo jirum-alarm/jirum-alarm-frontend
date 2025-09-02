@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 import Button from '@/components/common/Button';
 import { Apple, ArrowDown, Google, LoadingSpinner } from '@/components/common/icons';
-import Illust from '@/components/common/Illust';
+import { Illust } from '@/components/common/icons/Illust';
 import { useDevice } from '@/hooks/useDevice';
 import useMyRouter from '@/hooks/useMyRouter';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
@@ -158,7 +158,7 @@ function LoginGuide() {
     <div className="flex h-full flex-col text-center">
       <div className="flex h-full flex-1 flex-col items-center justify-center">
         <div className="pb-4">
-          <Illust size="sm" />
+          <Illust />
         </div>
         <div>
           <p className="pb-8 text-2xl font-semibold text-gray-900">

@@ -3,7 +3,7 @@
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
-import { LoadingSpinner } from '@/components/common/icons';
+import { GridProductListSkeleton } from '@/features/products/grid';
 
 import { OrderOptionType, WishlistOrderType } from '@shared/api/gql/graphql';
 
@@ -47,7 +47,7 @@ const ProductLikeContainer = () => {
       </div>
       <ProductLikeGridList products={wishlists.map((w) => w.product)} />
       <div className="flex w-full items-center justify-center pt-3 pb-6" ref={loadingCallbackRef}>
-        {isFetchingNextPage && <LoadingSpinner />}
+        {isFetchingNextPage && <GridProductListSkeleton length={10} />}
       </div>
     </div>
   );

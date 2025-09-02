@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/components/common/Button';
-import Illust from '@/components/common/Illust';
+import { Illust } from '@/components/common/icons/Illust';
 import BasicLayout from '@/components/layout/BasicLayout';
 import useMyRouter from '@/hooks/useMyRouter';
 

@@ -2,13 +2,11 @@ import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { LoadingSpinner } from '@/components/common/icons';
-
 import { KeywordProductOrderType, OrderOptionType } from '@shared/api/gql/graphql';
 
 import { ProductQueries } from '@entities/product';
 
-import { GridProductList } from '@features/products/grid';
+import { GridProductList, GridProductListSkeleton } from '@features/products/grid';
 
 interface ProductImageCardListProps {
   keyword: string;
@@ -41,7 +39,7 @@ const RecommendProductList = ({ keyword, limit }: ProductImageCardListProps) => 
     <>
       <GridProductList products={products} />
       <div className="flex w-full items-center justify-center bg-white py-6" ref={ref}>
-        {isFetchingNextPage && <LoadingSpinner />}
+        {isFetchingNextPage && <GridProductListSkeleton length={10} />}
       </div>
     </>
   );

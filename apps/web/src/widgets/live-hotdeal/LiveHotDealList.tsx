@@ -1,8 +1,7 @@
 'use client';
 
 import { CheckDeviceResult } from '@/app/actions/agent.types';
-import { LoadingSpinner } from '@/components/common/icons';
-import useScreen from '@/hooks/useScreenSize';
+import { GridProductListSkeleton } from '@/features/products/grid';
 
 import AppDownloadCTA from '@features/banner/items/AppDownloadCTA';
 import ProductGridList from '@features/products/grid/GridProductList';
@@ -21,11 +20,8 @@ const LiveHotDealList = ({ device }: { device: CheckDeviceResult }) => {
         <AppDownloadCTA device={device} />
       </div>
       <ProductGridList products={products.slice(size)} />
-      <div
-        className="flex w-full items-center justify-center bg-white pt-3 pb-6"
-        ref={loadingCallbackRef}
-      >
-        {isFetchingNextPage && <LoadingSpinner />}
+      <div className="flex w-full items-center justify-center" ref={loadingCallbackRef}>
+        {isFetchingNextPage && <GridProductListSkeleton length={size} />}
       </div>
     </>
   );

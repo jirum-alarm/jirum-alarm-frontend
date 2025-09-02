@@ -22,21 +22,23 @@ export default function CarouselProductsSection({
   const { device } = useDevice();
 
   return (
-    <section className="-ml-5">
-      <div className="px-5">
+    <section>
+      <div className="pc:px-0 px-5">
         <SectionHeader
           shouldShowMobileUI={shouldShowMobileUI}
           title={title}
           titleClassName="pc:text-[20px]"
         />
       </div>
-      <Suspense fallback={<CarouselProductListSkeleton />}>
-        <CarouselProductList
-          products={products}
-          type={device.isMobile ? 'mobile' : 'pc'}
-          nested={nested}
-        />
-      </Suspense>
+      <div>
+        <Suspense fallback={<CarouselProductListSkeleton />}>
+          <CarouselProductList
+            products={products}
+            type={device.isMobile ? 'mobile' : 'pc'}
+            nested={nested}
+          />
+        </Suspense>
+      </div>
     </section>
   );
 }

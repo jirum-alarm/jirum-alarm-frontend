@@ -39,7 +39,8 @@ function CarouselProductList({
       preventClicks: true,
       preventClicksPropagation: true,
       touchStartForcePreventDefault: true,
-      slidesOffsetBefore: 20,
+      slidesOffsetBefore: type === 'mobile' ? 20 : 0,
+      slidesOffsetAfter: type === 'mobile' ? 20 : 0,
     };
   }, [type]);
 
@@ -65,7 +66,7 @@ function CarouselProductList({
 
   return (
     <Swiper
-      className="pc:my-7"
+      className="pc:my-7 -mx-5"
       {...SWIPER_OPTIONS}
       nested={nested}
       onAfterInit={handleAfterInit}
@@ -75,7 +76,7 @@ function CarouselProductList({
       {itemsToShow.map((product, i) => (
         <SwiperSlide
           key={product.id || i}
-          className={cn(!isInit && 'pc:first:pl-5 pc:pr-6 pr-3 first:pl-5')}
+          className={cn(!isInit && 'pc:pr-6 pc:first:pl-0 pr-3 first:pl-5')}
           style={{ width: 'fit-content' }}
         >
           <CarouselProductCard product={product} />

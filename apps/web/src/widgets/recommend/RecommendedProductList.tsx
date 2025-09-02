@@ -40,9 +40,7 @@ const RecommendedProductList = () => {
           </div>
         }
       >
-        <div className="pc:-ml-5">
-          <ProductsByKeywordsList keyword={selectedKeyword} />
-        </div>
+        <ProductsByKeywordsList keyword={selectedKeyword} />
       </Suspense>
     </>
   );
