@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 
 import SectionHeader from '@/components/SectionHeader';
 import { useDevice } from '@/hooks/useDevice';
-import { cn } from '@/lib/cn';
 
 import { ProductCardType } from '../type';
 
@@ -23,7 +22,7 @@ export default function CarouselProductsSection({
   const { device } = useDevice();
 
   return (
-    <section className="-mx-5">
+    <section className="-ml-5">
       <div className="px-5">
         <SectionHeader
           shouldShowMobileUI={shouldShowMobileUI}

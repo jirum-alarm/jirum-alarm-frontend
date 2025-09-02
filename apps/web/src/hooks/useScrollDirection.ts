@@ -1,9 +1,16 @@
-import { useEffect, useState } from 'react';
+'use client';
+
+import { atom, useAtom } from 'jotai';
+import { useEffect, useRef } from 'react';
 
 type ScrollDirection = 'up' | 'down' | null;
 
+const scrollDirectionAtom = atom<ScrollDirection>(null);
+
 export function useScrollDirection() {
-  const [scrollDirection, setScrollDirection] = useState<ScrollDirection>(null);
+  const isInitialMount = useRef(true);
+
+  const [scrollDirection, setScrollDirection] = useAtom(scrollDirectionAtom);
 
   useEffect(() => {
     let lastScrollY = window.pageYOffset;
@@ -12,6 +19,7 @@ export function useScrollDirection() {
     const updateScrollDirection = () => {
       const scrollY = window.pageYOffset;
       const direction = scrollY > lastScrollY ? 'down' : 'up';
+
       if (
         direction !== scrollDirection &&
         (scrollY - lastScrollY > 10 || scrollY - lastScrollY < -10)
@@ -23,6 +31,11 @@ export function useScrollDirection() {
     };
 
     const onScroll = () => {
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+        return;
+      }
+
       if (!ticking) {
         window.requestAnimationFrame(updateScrollDirection);
         ticking = true;
@@ -31,8 +44,15 @@ export function useScrollDirection() {
 
     window.addEventListener('scroll', onScroll);
 
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [scrollDirection]);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [scrollDirection, setScrollDirection]);
 
   return scrollDirection;
+}
+
+export function useHeaderVisibility() {
+  const scrollDirection = useScrollDirection();
+  return scrollDirection ? scrollDirection === 'up' : true;
 }

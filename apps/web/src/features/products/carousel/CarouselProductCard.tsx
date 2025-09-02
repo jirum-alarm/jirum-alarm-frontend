@@ -18,6 +18,7 @@ export default function CarouselProductCard({ product }: { product: ProductCardT
           categoryId={product.categoryId}
           type="hotDeal"
           alt={product.title}
+          sizes="(max-width: 768px) 120px, 192px"
         />
         {product.isEnd ? (
           <div className="text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">

@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
 import { checkDevice } from '@/app/actions/agent';
-import ApiErrorBoundary from '@/components/ApiErrorBoundary';
 import SectionHeader from '@/components/SectionHeader';
 
 import { OrderOptionType, ProductOrderType } from '@shared/api/gql/graphql';
@@ -30,11 +29,9 @@ const LiveHotDealSection = async () => {
   return (
     <div className="pc:pt-11 pc:px-0 pc:space-y-10 px-5">
       <SectionHeader title="실시간 핫딜" />
-      <ApiErrorBoundary>
-        <Suspense fallback={<GridProductListSkeleton length={20} />}>
-          <LiveHotDealList device={device} />
-        </Suspense>
-      </ApiErrorBoundary>
+      <Suspense fallback={<GridProductListSkeleton length={20} />}>
+        <LiveHotDealList device={device} />
+      </Suspense>
     </div>
   );
 };

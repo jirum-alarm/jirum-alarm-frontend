@@ -15,7 +15,7 @@ import {
   RankingFill,
 } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
-import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { useHeaderVisibility } from '@/hooks/useScrollDirection';
 import { cn } from '@/lib/cn';
 
 import Link from '@shared/ui/Link';
@@ -63,12 +63,10 @@ const BottomNavList = [
 // 1. 링크를 기준으로 active
 // 2. touch start나 mouse down으로 active 후 링크가 이동 안 됐으면 unactive
 
-const BottomNav = () => {
+const BottomNavComponent = () => {
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
-  const scrollDirection = useScrollDirection();
-
-  if (!BottomNavList.some((nav) => nav.link === pathName)) return;
+  const isBottomNavVisible = useHeaderVisibility();
 
   const isActiveNav = (type: NAV_TYPE, link: string) => {
     return link === pathName;
@@ -79,8 +77,8 @@ const BottomNav = () => {
       className={cn(
         `max-w-mobile-max pb-safe-bottom fixed bottom-0 left-1/2 z-50 mx-auto w-full -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white transition-all duration-300`,
         {
-          'translate-y-full': scrollDirection === 'down',
-          'translate-y-0': scrollDirection === 'up',
+          'translate-y-full': !isBottomNavVisible,
+          'translate-y-0': isBottomNavVisible,
         },
       )}
     >
@@ -125,4 +123,8 @@ const BottomNav = () => {
   );
 };
 
-export default BottomNav;
+export default function BottomNav() {
+  const pathName = usePathname();
+  if (!BottomNavList.some((nav) => nav.link === pathName)) return null;
+  return <BottomNavComponent />;
+}
