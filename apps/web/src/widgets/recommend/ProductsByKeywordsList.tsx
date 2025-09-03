@@ -15,7 +15,6 @@ interface ProductByKeywordsListProps {
 }
 
 const ProductsByKeywordsList = ({ keyword }: ProductByKeywordsListProps) => {
-  const { device } = useDevice();
   const {
     data: { productsByKeyword },
   } = useSuspenseQuery(
@@ -27,9 +26,7 @@ const ProductsByKeywordsList = ({ keyword }: ProductByKeywordsListProps) => {
     }),
   );
 
-  return (
-    <CarouselProductList products={productsByKeyword} type={device.isMobile ? 'mobile' : 'pc'} />
-  );
+  return <CarouselProductList products={productsByKeyword} />;
 };
 
 export default ProductsByKeywordsList;

@@ -22,7 +22,7 @@ const ProductNotFound = () => {
   };
 
   const handleShowMoreClick = () => {
-    router.push(`/?categoryId=0`);
+    router.push(`/trending`);
   };
 
   return (
@@ -48,22 +48,23 @@ const ProductNotFound = () => {
       )}
       {hotDeals?.length ? (
         <>
-          <hr className="w-full border-gray-300" />
-          <div className="w-full px-5 pt-7">
-            <SectionHeader
-              title="오늘 가장 인기있는 핫딜"
-              right={
-                <div className="flex items-center px-2 py-3">
-                  <div onClick={handleShowMoreClick} className="cursor-pointer">
-                    더보기
+          <hr className="mx-5 mb-7 border-gray-300" />
+          <section className="w-full overflow-x-hidden">
+            <div className="pc:px-0 w-full px-5">
+              <SectionHeader
+                title="오늘 가장 인기있는 핫딜"
+                right={
+                  <div className="flex items-center px-2 py-3">
+                    <div onClick={handleShowMoreClick} className="cursor-pointer">
+                      더보기
+                    </div>
                   </div>
-                </div>
-              }
-            />
-          </div>
-          <div className="w-full pt-4">
-            <CarouselProductList products={hotDeals} type="mobile" />
-          </div>
+                }
+                shouldShowMobileUI
+              />
+            </div>
+            <CarouselProductList products={hotDeals} />
+          </section>
         </>
       ) : undefined}
     </div>

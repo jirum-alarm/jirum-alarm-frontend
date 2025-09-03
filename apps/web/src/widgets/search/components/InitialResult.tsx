@@ -13,7 +13,7 @@ export default function InitialResult({ show }: { show: boolean }) {
 
   return (
     <div className={cn(show ? 'block' : 'hidden')}>
-      <div className="flex flex-col gap-y-5 pt-2">
+      <div className="pc:space-y-8 pc:pt-6 space-y-5 pt-2">
         <RecentKeywords />
         <RecommendationKeywords />
         {!hotDeals?.length ? (
@@ -21,9 +21,7 @@ export default function InitialResult({ show }: { show: boolean }) {
             <></>
           </div>
         ) : (
-          <div className="px-5">
-            <CarouselProductsSection title="추천 핫딜" products={hotDeals} />
-          </div>
+          <CarouselProductsSection title="추천 핫딜" products={hotDeals} />
         )}
       </div>
     </div>

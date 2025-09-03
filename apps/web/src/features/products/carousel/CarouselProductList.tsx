@@ -6,6 +6,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperClass, SwiperSlide, useSwiper } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
+import { useDevice } from '@/hooks/useDevice';
 import { cn } from '@/lib/cn';
 
 import { ProductCardType } from '../type';
@@ -15,17 +16,13 @@ import CarouselProductCard from './CarouselProductCard';
 interface CarouselProductListProps {
   products: ProductCardType[];
   itemWidth?: string;
-  type?: 'pc' | 'mobile';
   maxItems?: number;
   nested?: boolean;
 }
 
-function CarouselProductList({
-  products,
-  type,
-  maxItems,
-  nested = false,
-}: CarouselProductListProps) {
+function CarouselProductList({ products, maxItems, nested = false }: CarouselProductListProps) {
+  const { device } = useDevice();
+
   const [isInit, setIsInit] = useState(false);
   const parentSwiper = useSwiper();
 
@@ -34,15 +31,15 @@ function CarouselProductList({
   const SWIPER_OPTIONS: SwiperOptions = useMemo(() => {
     return {
       slidesPerView: 'auto',
-      spaceBetween: type === 'pc' ? 24 : 12,
+      spaceBetween: device.isMobile ? 12 : 24,
       edgeSwipeThreshold: 100,
       preventClicks: true,
       preventClicksPropagation: true,
       touchStartForcePreventDefault: true,
-      slidesOffsetBefore: type === 'mobile' ? 20 : 0,
-      slidesOffsetAfter: type === 'mobile' ? 20 : 0,
+      slidesOffsetBefore: device.isMobile ? 20 : 0,
+      slidesOffsetAfter: device.isMobile ? 20 : 0,
     };
-  }, [type]);
+  }, [device.isMobile]);
 
   const handleAfterInit = (swiper: SwiperClass) => {
     swiperRef.current = swiper;

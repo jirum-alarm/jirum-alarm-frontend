@@ -35,8 +35,8 @@ export default function RecentKeywords() {
   return (
     <>
       {keywords.length > 0 && (
-        <section className="px-5">
-          <SectionHeader title="최근 검색어" titleClassName="text-base" />
+        <section className="pc:px-0 px-5">
+          <SectionHeader title="최근 검색어" shouldShowMobileUI />
           <div className={cn(device.isMobile && 'no-scrollbar h-[42px] overflow-x-scroll')}>
             {loading ? (
               <div className="flex items-center text-sm">최근 검색어를 불러오는 중입니다...</div>

@@ -119,7 +119,7 @@ export const TrendingContainer = ({ initialTab }: Props) => {
           onTabClick={(id) => handleTabChange(id)}
         />
 
-        <div className="pc:mt-7 mt-[72px] overflow-hidden">
+        <div className="pc:mt-7 mt-33 overflow-hidden">
           <Swiper
             {...SWIPER_OPTIONS}
             initialSlide={categoryIds.indexOf(tabId)}
@@ -132,7 +132,7 @@ export const TrendingContainer = ({ initialTab }: Props) => {
               const activeIndex = categoryIds.indexOf(tabId);
               const isWithinRange = Math.abs(currentIndex - activeIndex) <= 1;
               return (
-                <SwiperSlide key={category.id} className="w-full flex-[0_0_100%] px-5">
+                <SwiperSlide key={category.id} className="w-full flex-[0_0_100%]">
                   {isFetched && isWithinRange ? (
                     <Suspense fallback={<GridProductListSkeleton length={20} />}>
                       <div className="overflow-x-hidden">

@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
 import SectionHeader from '@/components/SectionHeader';
-import { useDevice } from '@/hooks/useDevice';
+import { cn } from '@/lib/cn';
 
 import { ProductCardType } from '../type';
 
@@ -12,31 +12,23 @@ export default function CarouselProductsSection({
   title,
   products,
   nested = false,
-  shouldShowMobileUI = true,
+  shouldShowMobileHeader = true,
+  isFullWidth = false,
 }: {
   title: string;
   products: ProductCardType[];
   nested?: boolean;
-  shouldShowMobileUI?: boolean;
+  shouldShowMobileHeader?: boolean;
+  isFullWidth?: boolean;
 }) {
-  const { device } = useDevice();
-
   return (
     <section>
       <div className="pc:px-0 px-5">
-        <SectionHeader
-          shouldShowMobileUI={shouldShowMobileUI}
-          title={title}
-          titleClassName="pc:text-[20px]"
-        />
+        <SectionHeader shouldShowMobileUI={shouldShowMobileHeader} title={title} />
       </div>
-      <div>
+      <div className={cn({ 'pc:px-5': nested, 'pc:-px-5': isFullWidth })}>
         <Suspense fallback={<CarouselProductListSkeleton />}>
-          <CarouselProductList
-            products={products}
-            type={device.isMobile ? 'mobile' : 'pc'}
-            nested={nested}
-          />
+          <CarouselProductList products={products} nested={nested} />
         </Suspense>
       </div>
     </section>

@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 
-import TopButton from '@/components/TopButton';
 import { cn } from '@/lib/cn';
 
 import ProductGridList from '@features/products/grid/GridProductList';
@@ -23,16 +22,11 @@ export default function SearchResult({ show }: { show: boolean }) {
           </Suspense>
         </div>
       ) : (
-        <div className="px-5">
+        <div className="pc:px-0 px-5">
           <ProductGridList products={products} />
         </div>
       )}
 
-      {!isProductEmpty && (
-        <div className="fixed right-0 bottom-0 left-0">
-          <TopButton />
-        </div>
-      )}
       {hasNextPage && <div ref={nextDataRef} className="h-[48px] w-full" />}
     </div>
   );

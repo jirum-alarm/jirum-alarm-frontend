@@ -40,8 +40,8 @@ export default function RecommendationKeywords() {
     setKeywords(KEYWORDS.sort(() => 0.5 - Math.random()).slice(0, 5));
   }, []);
   return (
-    <section className="px-5">
-      <SectionHeader title="추천 검색어" titleClassName="text-base" />
+    <section className="pc:px-0 px-5">
+      <SectionHeader title="추천 검색어" shouldShowMobileUI />
       <div className="flex flex-wrap gap-2">
         {keywords.map((keyword, i) => (
           <Chip key={i} keyword={keyword} />

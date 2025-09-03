@@ -32,23 +32,28 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
   }, [swiper, ref]);
 
   return (
-    <div ref={ref} className="pc:gap-y-10 flex flex-col gap-y-8">
-      <GridProductList products={products?.slice(0, SIZE) ?? []} rankFrom={1} />
+    <div ref={ref} className="pc:space-y-10 space-y-8">
+      <div className="px-5">
+        <GridProductList products={products?.slice(0, SIZE) ?? []} rankFrom={1} />
+      </div>
       {liveProducts && (
         <CarouselProductsSection
           title={`‘${categoryName}’ 실시간 핫딜`}
           products={liveProducts}
           nested
-          shouldShowMobileUI={false}
+          shouldShowMobileHeader={false}
         />
       )}
-      <GridProductList products={products?.slice(SIZE) ?? []} rankFrom={SIZE + 1} />
+      <div className="px-5">
+        <GridProductList products={products?.slice(SIZE) ?? []} rankFrom={SIZE + 1} />
+      </div>
+
       {hotDeals && (
         <CarouselProductsSection
           title="추천 핫딜"
           products={hotDeals}
           nested
-          shouldShowMobileUI={false}
+          shouldShowMobileHeader={false}
         />
       )}
     </div>
