@@ -11,6 +11,8 @@ import { SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
 import { ArrowLeft } from '@/components/common/icons';
+import { Advertisement } from '@/constants/advertisement';
+import ADProductRankingImageCard from '@/features/products/ranking/ADProductRankingImageCard';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 import { getVisibleSlides } from '@/shared/lib/utils/swiper';
@@ -43,6 +45,13 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   const [isInit, setIsInit] = useAtom(isInitAtom);
   const canRender = useMemo(() => isHydrated && isInit, [isHydrated, isInit]);
   const [visibleSlides, setVisibleSlides] = useState<number[]>([]);
+
+  const activeProductId = useMemo(() => {
+    if (Advertisement.Persil.isInPeriod) {
+      return index === 0 ? null : rankingProducts[index - 1]?.id;
+    }
+    return rankingProducts[index]?.id;
+  }, [index, rankingProducts]);
 
   const handleAfterInit = (swiper: SwiperClass) => {
     swiperRef.current = swiper;
@@ -104,13 +113,38 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             onAfterInit={handleAfterInit}
             initialSlide={index}
           >
+            {Advertisement.Persil.isInPeriod && (
+              <SwiperSlide
+                className={cn('pb-5')}
+                style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
+              >
+                <ADProductRankingImageCard
+                  url={Advertisement.Persil.url}
+                  product={
+                    {
+                      id: '-1',
+                      title: '퍼실 딥 클린 라벤더젤 플러스 드럼용 액상세제 본품, 2.7L, 2개',
+                      price: '23,470원',
+                      thumbnail: '/persil.png',
+                      categoryId: 0,
+                    } as const
+                  }
+                  activeIndex={index}
+                  index={0}
+                />
+              </SwiperSlide>
+            )}
             {rankingProducts.map((product, i) => (
               <SwiperSlide
                 className={cn('pb-5')}
                 key={product.id}
                 style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
               >
-                <ProductRankingImageCard activeIndex={index} index={i} product={product} />
+                <ProductRankingImageCard
+                  activeIndex={product.id === activeProductId ? i : -1}
+                  index={i}
+                  product={product}
+                />
               </SwiperSlide>
             ))}
           </Swiper>
