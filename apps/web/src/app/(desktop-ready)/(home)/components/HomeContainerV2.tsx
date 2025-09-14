@@ -51,7 +51,8 @@ async function HomeContainerV2() {
           {!isMobile ? null : renderMobileRanking()}
           <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-3">
             <div>
-              {Advertisement.Persil.isInPeriod && <AdPersilBanner />}
+              {/* {Advertisement.Persil.isInPeriod && <AdPersilBanner />} */}
+              <AdPersilBanner />
               <RecommendedProductSection />
               <LiveHotDealSection />
             </div>

@@ -46,13 +46,6 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   const canRender = useMemo(() => isHydrated && isInit, [isHydrated, isInit]);
   const [visibleSlides, setVisibleSlides] = useState<number[]>([]);
 
-  const activeProductId = useMemo(() => {
-    if (Advertisement.Persil.isInPeriod) {
-      return index === 0 ? null : rankingProducts[index - 1]?.id;
-    }
-    return rankingProducts[index]?.id;
-  }, [index, rankingProducts]);
-
   const handleAfterInit = (swiper: SwiperClass) => {
     swiperRef.current = swiper;
     setIsInit(true);
@@ -60,6 +53,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   };
 
   const handleIndexChange = (swiper: SwiperClass) => {
+    console.log('swiper.realIndex:::', swiper.realIndex);
     setIndex(swiper.realIndex);
     const visibleIndices = getVisibleSlides(swiper);
     setVisibleSlides(visibleIndices);
@@ -113,6 +107,15 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             onAfterInit={handleAfterInit}
             initialSlide={index}
           >
+            {rankingProducts.map((product, i) => (
+              <SwiperSlide
+                className={cn('pb-5')}
+                key={product.id}
+                style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
+              >
+                <ProductRankingImageCard activeIndex={index} index={i} product={product} />
+              </SwiperSlide>
+            ))}
             {Advertisement.Persil.isInPeriod && (
               <SwiperSlide
                 className={cn('pb-5')}
@@ -130,23 +133,10 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
                     } as const
                   }
                   activeIndex={index}
-                  index={0}
+                  index={10}
                 />
               </SwiperSlide>
             )}
-            {rankingProducts.map((product, i) => (
-              <SwiperSlide
-                className={cn('pb-5')}
-                key={product.id}
-                style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
-              >
-                <ProductRankingImageCard
-                  activeIndex={product.id === activeProductId ? i : -1}
-                  index={i}
-                  product={product}
-                />
-              </SwiperSlide>
-            ))}
           </Swiper>
         </motion.div>
         <button

@@ -27,26 +27,39 @@ export const getFromNow = (date: string) => {
 };
 
 export const period = (timeZone: TimeZone = 'Asia/Seoul') => ({
-  start: (startDate: string) => {
+  startAt: (startDate: string) => {
     return {
-      end: (endDate: string) => {
-        const now = dayjs().tz(timeZone);
+      endAt: (endDate: string) => {
+        try {
+          const now = dayjs().tz(timeZone);
 
-        if (startDate) {
-          const start = dayjs(startDate).tz(timeZone);
-          if (now.isBefore(start)) {
-            return false;
+          console.log('period check - now:', now.format(), 'timezone:', timeZone);
+
+          if (startDate) {
+            const start = dayjs(startDate).tz(timeZone);
+            console.log('period check - start:', start.format());
+            if (now.isBefore(start)) {
+              console.log('period check - before start, returning false');
+              return false;
+            }
           }
-        }
 
-        if (endDate) {
-          const end = dayjs(endDate).tz(timeZone).endOf('day');
-          if (now.isAfter(end)) {
-            return false;
+          if (endDate) {
+            const end = dayjs(endDate).tz(timeZone).endOf('day');
+            console.log('period check - end:', end.format());
+            if (now.isAfter(end)) {
+              console.log('period check - after end, returning false');
+              return false;
+            }
           }
-        }
 
-        return true;
+          console.log('period check - in range, returning true');
+          return true;
+        } catch (error) {
+          console.error('period check error:', error);
+          // 에러 시 안전하게 false 반환
+          return false;
+        }
       },
     };
   },
