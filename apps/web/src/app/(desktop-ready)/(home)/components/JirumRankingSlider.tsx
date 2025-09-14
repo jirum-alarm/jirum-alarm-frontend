@@ -53,7 +53,6 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   };
 
   const handleIndexChange = (swiper: SwiperClass) => {
-    console.log('swiper.realIndex:::', swiper.realIndex);
     setIndex(swiper.realIndex);
     const visibleIndices = getVisibleSlides(swiper);
     setVisibleSlides(visibleIndices);
@@ -160,7 +159,10 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           )}
         </AnimatePresence>
       </div>
-      <SliderDots total={rankingProducts.length} visibleSlides={visibleSlides} />
+      <SliderDots
+        total={rankingProducts.length + (Advertisement.Persil.isInPeriod ? 1 : 0)}
+        visibleSlides={visibleSlides}
+      />
     </>
   );
 };
