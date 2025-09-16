@@ -20,9 +20,9 @@ export default function Comment({
   canReply: boolean;
   drawer?: React.ReactNode;
 }) {
-  const {
-    data: { me },
-  } = useSuspenseQuery(AuthQueries.me());
+  const { data } = useSuspenseQuery(AuthQueries.me());
+
+  const me = data?.me;
 
   const isMyComment = `${comment.author?.id ?? '#no-author'}` === `${me?.id}`;
   const hasParentComment = !!comment.parentId;
