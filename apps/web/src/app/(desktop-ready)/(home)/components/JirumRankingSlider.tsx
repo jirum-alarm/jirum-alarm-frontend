@@ -115,7 +115,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
                 <ProductRankingImageCard activeIndex={index} index={i} product={product} />
               </SwiperSlide>
             ))}
-            {Advertisement.Persil.isInPeriod && (
+            {Advertisement.Persil.isInPeriod() && (
               <SwiperSlide
                 className={cn('pb-5')}
                 style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
@@ -160,7 +160,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         </AnimatePresence>
       </div>
       <SliderDots
-        total={rankingProducts.length + (Advertisement.Persil.isInPeriod ? 1 : 0)}
+        total={rankingProducts.length + (Advertisement.Persil.isInPeriod() ? 1 : 0)}
         visibleSlides={visibleSlides}
       />
     </>

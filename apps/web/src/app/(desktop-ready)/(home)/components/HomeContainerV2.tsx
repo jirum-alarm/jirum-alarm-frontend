@@ -51,8 +51,8 @@ async function HomeContainerV2() {
           {!isMobile ? null : renderMobileRanking()}
           <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-3">
             <div>
-              {/* {Advertisement.Persil.isInPeriod && <AdPersilBanner />} */}
-              <AdPersilBanner />
+              {Advertisement.Persil.isInPeriod() && <AdPersilBanner />}
+              {/* <AdPersilBanner /> */}
               <RecommendedProductSection />
               <LiveHotDealSection />
             </div>
@@ -66,7 +66,7 @@ async function HomeContainerV2() {
 export default HomeContainerV2;
 
 const AdPersilBanner = () => {
-  console.log('[[AdPersilBanner isInPeriod]]', Advertisement.Persil.isInPeriod);
+  console.log('[[AdPersilBanner isInPeriod]]', Advertisement.Persil.isInPeriod());
   return (
     <div className="ad-pirsil-20250917 px-[20px] pt-[8px] pb-[28px]">
       <Link
