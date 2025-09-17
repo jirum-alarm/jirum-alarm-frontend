@@ -21,7 +21,7 @@ export default function ProductRankingImageCard({
   index: number;
 }) {
   return (
-    <Link href={url} target="_blank">
+    <Link href={url} target="_blank" className="ad-pirsil-20250917">
       <div
         className={cn(
           'pc:h-auto pc:scale-100 pc:border h-[340px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',

@@ -67,7 +67,7 @@ export default HomeContainerV2;
 
 const AdPersilBanner = () => {
   return (
-    <div className="px-[20px] pt-[8px] pb-[28px]">
+    <div className="ad-pirsil-20250917 px-[20px] pt-[8px] pb-[28px]">
       <Link
         className="relative block h-[100px] rounded-[8px] bg-gradient-to-r from-[#C8CFFF] to-[#E4EBFF] px-[5px] py-[10px] pl-[19px]"
         href={Advertisement.Persil.url}
