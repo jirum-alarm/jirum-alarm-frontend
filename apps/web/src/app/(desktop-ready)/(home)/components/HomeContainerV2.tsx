@@ -66,6 +66,7 @@ async function HomeContainerV2() {
 export default HomeContainerV2;
 
 const AdPersilBanner = () => {
+  console.log('[[AdPersilBanner isInPeriod]]', Advertisement.Persil.isInPeriod);
   return (
     <div className="ad-pirsil-20250917 px-[20px] pt-[8px] pb-[28px]">
       <Link
