@@ -66,44 +66,21 @@ async function HomeContainerV2() {
 export default HomeContainerV2;
 
 const AdPersilBanner = () => {
-  console.log('[[AdPersilBanner isInPeriod]]', Advertisement.Persil.isInPeriod());
   return (
     <div className="px-[20px] pt-[8px] pb-[28px]" id="ad-pirsil-banner-20250917">
       <Link
-        className="relative block h-[100px] rounded-[8px] bg-gradient-to-r from-[#C8CFFF] to-[#E4EBFF] px-[5px] py-[10px] pl-[19px]"
+        className="relative block h-[100px] rounded-[8px]"
         href={Advertisement.Persil.url}
         target="_blank"
       >
-        <div className="relative flex w-full justify-center">
-          <div className="flex w-full max-w-[648px] items-center justify-between">
-            <div>
-              <div className="flex items-center gap-[9px]">
-                <p className="text-lg font-bold text-[#3B0090]">여름철 필수템</p>
-                <div className="h-[19px] w-fit rounded-[8px] bg-white px-[10px] pt-[2px] pb-[4px] text-xs font-medium text-[#909CEA]">
-                  event
-                </div>
-              </div>
-              <p className="text-sm font-semibold text-[#5C3297]">
-                세제 핫딜 모음전을 확인해 보세요!
-              </p>
-            </div>
-            <div>
-              <ImageComponent
-                src="/cleanser-icon.png"
-                width={120}
-                height={120}
-                alt="cleanser-icon"
-                priority
-                loading="eager"
-                fetchPriority="high"
-                placeholder="empty"
-                className="object-contain"
-              />
-            </div>
-          </div>
-          <div className="bg-opacity-90 absolute right-0 bottom-0 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[8px] pt-[3px] pb-[3px] text-xs font-medium text-white">
-            AD
-          </div>
+        <ImageComponent
+          className="rounded-[8px] object-cover"
+          src="/ad_persil_banner.jpg"
+          alt="ad-persil-banner"
+          fill
+        />
+        <div className="bg-opacity-90 absolute right-[5px] bottom-[10px] w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[8px] pt-[3px] pb-[3px] text-xs font-medium text-white">
+          AD
         </div>
       </Link>
     </div>

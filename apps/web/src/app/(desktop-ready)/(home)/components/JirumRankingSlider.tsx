@@ -125,9 +125,9 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
                   product={
                     {
                       id: '-1',
-                      title: '퍼실 딥 클린 라벤더젤 플러스 드럼용 액상세제 본품, 2.7L, 2개',
-                      price: '23,470원',
-                      thumbnail: '/persil.png',
+                      title: '퍼실 라벤더 듀얼 2.7L x4개',
+                      price: '37,600원',
+                      thumbnail: '/persil_product_img.jpg',
                       categoryId: 0,
                     } as const
                   }
