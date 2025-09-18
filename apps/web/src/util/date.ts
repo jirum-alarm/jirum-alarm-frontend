@@ -31,12 +31,12 @@ export const period = (timeZone: TimeZone = 'Asia/Seoul') => ({
     return {
       endAt: (endDate: string) => {
         try {
-          const now = dayjs().tz(timeZone);
+          const now = dayjs.tz(new Date(), timeZone);
 
           console.log('period check - now:', now.format(), 'timezone:', timeZone);
 
           if (startDate) {
-            const start = dayjs(startDate).tz(timeZone);
+            const start = dayjs.tz(startDate, timeZone);
             console.log('period check - start:', start.format());
             if (now.isBefore(start)) {
               console.log('period check - before start, returning false');
@@ -45,7 +45,7 @@ export const period = (timeZone: TimeZone = 'Asia/Seoul') => ({
           }
 
           if (endDate) {
-            const end = dayjs(endDate).tz(timeZone).endOf('day');
+            const end = dayjs.tz(endDate, timeZone).endOf('day');
             console.log('period check - end:', end.format());
             if (now.isAfter(end)) {
               console.log('period check - after end, returning false');
