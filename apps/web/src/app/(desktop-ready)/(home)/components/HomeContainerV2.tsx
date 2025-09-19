@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { checkDevice } from '@/app/actions/agent';
@@ -52,7 +53,6 @@ async function HomeContainerV2() {
           <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-3">
             <div>
               {Advertisement.Persil.isInPeriod() && <AdPersilBanner />}
-              {/* <AdPersilBanner /> */}
               <RecommendedProductSection />
               <LiveHotDealSection />
             </div>
@@ -69,17 +69,37 @@ const AdPersilBanner = () => {
   return (
     <div className="px-[20px] pt-[8px] pb-[28px]" id="ad-pirsil-banner-20250917">
       <Link
-        className="relative block h-[100px] rounded-[8px]"
+        className="relative block h-[100px] overflow-hidden rounded-[8px] bg-linear-180 from-[#d3e5ff] to-[#8cbbf7]"
         href={Advertisement.Persil.url}
         target="_blank"
       >
-        <ImageComponent
-          className="rounded-[8px] object-cover"
-          src="/ad_persil_banner.jpg"
-          alt="ad-persil-banner"
-          fill
-        />
-        <div className="bg-opacity-90 absolute right-[5px] bottom-[10px] w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[8px] pt-[3px] pb-[3px] text-xs font-medium text-white">
+        <div className="absolute top-0 left-0 z-10 h-24 w-full bg-linear-0 from-[#e4efff_0%] to-[#e4efff]" />
+        <div className="absolute bottom-[7px] left-[calc(50%_-_135px)] h-[271px] w-[271px] rounded-[50%] bg-radial-[at_50%_50%] from-[#b6d5ff_62.08%] to-[#cee3ff] shadow-[0px_4px_20px_rgba(255,_255,_255,_0.1)]" />
+        <div className="relative z-20 mx-auto flex h-[100px] w-full max-w-[460px] shrink-0 justify-between px-4 py-3">
+          <div className="flex flex-col justify-between overflow-hidden rounded-lg text-left">
+            <div>
+              <div className="flex items-center text-lg text-[#0054d4]">
+                <b className="mr-1.5">{Advertisement.Persil.title}</b>
+                <b className="mr-0.5">{Advertisement.Persil.discountRate}</b>
+                <div className="text-[13px] leading-[18px] font-semibold">%</div>
+              </div>
+              <div className="text-[13px] leading-[18px] font-medium text-[#0040a1]">
+                {Advertisement.Persil.description}
+              </div>
+            </div>
+            <div className="text-[11px] leading-[14px] text-[#062f6a] opacity-[0.8]">
+              {Advertisement.Persil.period}
+            </div>
+          </div>
+          <Image
+            className="h-[81px] w-[105px] object-cover"
+            src="/ad_persil_banner_img.png"
+            alt=""
+            width={105}
+            height={81}
+          />
+        </div>
+        <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[8px] py-[4px] text-xs leading-none font-medium text-white">
           AD
         </div>
       </Link>
