@@ -134,13 +134,21 @@ export const TrendingContainer = ({ initialTab }: Props) => {
               return (
                 <SwiperSlide key={category.id} className="w-full flex-[0_0_100%]">
                   {isFetched && isWithinRange ? (
-                    <Suspense fallback={<GridProductListSkeleton length={20} />}>
+                    <Suspense
+                      fallback={
+                        <div className="px-5">
+                          <GridProductListSkeleton length={20} />
+                        </div>
+                      }
+                    >
                       <div className="overflow-x-hidden">
                         <TrendingList categoryId={category.id} categoryName={category.name} />
                       </div>
                     </Suspense>
                   ) : (
-                    <GridProductListSkeleton length={12} />
+                    <div className="px-5">
+                      <GridProductListSkeleton length={20} />
+                    </div>
                   )}
                 </SwiperSlide>
               );
