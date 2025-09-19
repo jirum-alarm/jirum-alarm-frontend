@@ -13,7 +13,7 @@ export class Advertisement {
         return period('Asia/Seoul').startAt('2025-09-18 22:10').endAt('2025-09-19 23:59:59');
       }
     },
-    url: 'https://ibpartner.cafe24.com/surl/O/806',
+    url: 'https://ibpartner.cafe24.com/',
     title: '헨켈 생필품 할인',
     discountRate: '73',
     description: '세제, 섬유유연제, 샴푸 모음전',
