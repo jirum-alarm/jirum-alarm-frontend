@@ -121,13 +121,13 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
                 style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
               >
                 <ADProductRankingImageCard
-                  url={Advertisement.Persil.url}
+                  url="https://ibpartner.cafe24.com/surl/O/896"
                   product={
                     {
                       id: '-1',
-                      title: '퍼실 라벤더 듀얼 2.7L x4개',
-                      price: '37,600원',
-                      thumbnail: '/persil_product_img.jpg',
+                      title: '퍼실 컬러젤 라벤더 1.5L x6개',
+                      price: '25,800원',
+                      thumbnail: '/persil_product_img_2.jpg',
                       categoryId: 0,
                     } as const
                   }
