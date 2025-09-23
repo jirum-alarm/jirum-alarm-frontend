@@ -46,5 +46,3 @@ next-env.d.ts
 **/public/worker-*.js.map
 **/public/fallback-*.js
 certificates
-# Sentry Config File
-.env.sentry-build-plugin
