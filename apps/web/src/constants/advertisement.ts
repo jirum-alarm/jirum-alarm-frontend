@@ -8,7 +8,7 @@ export class Advertisement {
     // 퍼실광고
     isInPeriod: () => {
       if (IS_PRD) {
-        return period('Asia/Seoul').startAt('2025-09-19 12:00').endAt('2025-09-25 23:59:59');
+        return period('Asia/Seoul').startAt('2025-09-19 12:00').endAt('2025-09-26 23:59:59');
       } else {
         return period('Asia/Seoul').startAt('2025-09-18 22:10').endAt('2025-09-19 23:59:59');
       }
