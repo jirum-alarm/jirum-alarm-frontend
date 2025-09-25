@@ -17,6 +17,6 @@ export class Advertisement {
     title: '헨켈 생필품 할인',
     discountRate: '73',
     description: '세제, 섬유유연제, 샴푸 모음전',
-    period: '09.19 - 09.25',
+    period: '09.19 - 09.26',
   };
 }
