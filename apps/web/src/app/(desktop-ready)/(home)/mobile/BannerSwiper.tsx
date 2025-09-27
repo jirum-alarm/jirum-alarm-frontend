@@ -33,7 +33,7 @@ const MOBILE_SWIPER_OPTIONS: SwiperOptions & AutoplayOptions = {
 const isInitAtom = atom(false);
 
 const BannerSwiper = ({ device }: { device: CheckDeviceResult }) => {
-  const initialSlide = Math.floor(Math.random() * 3);
+  const initialSlide = 0; //Math.floor(Math.random() * 3);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useAtom(isInitAtom);
 
