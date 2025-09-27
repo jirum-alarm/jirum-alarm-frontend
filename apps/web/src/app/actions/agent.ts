@@ -32,7 +32,8 @@ async function checkDevice(): Promise<CheckDeviceResult> {
   const isMobileBrowser = Boolean(device.type === 'mobile' && !isJirumAlarmApp);
 
   const isApple = Boolean(device.vendor === 'Apple');
-  const isAndroid = Boolean(device.vendor === 'Google');
+  const isAndroid =
+    Boolean(device.vendor === 'Google') || userAgentString.includes('(Linux; Android 10; K)');
 
   return {
     isMobile,
