@@ -8,6 +8,7 @@ import { SwiperSlide } from 'swiper/react';
 import { AutoplayOptions, SwiperOptions } from 'swiper/types';
 
 import { CheckDeviceResult } from '@/app/actions/agent.types';
+import AdBanner from '@/features/banner/items/AdBanner';
 import { cn } from '@/lib/cn';
 
 import AboutLink from '@features/banner/items/AboutLink';
@@ -32,7 +33,7 @@ const MOBILE_SWIPER_OPTIONS: SwiperOptions & AutoplayOptions = {
 const isInitAtom = atom(false);
 
 const BannerSwiper = ({ device }: { device: CheckDeviceResult }) => {
-  const initialSlide = Math.floor(Math.random() * 3);
+  const initialSlide = 0; //Math.floor(Math.random() * 3);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useAtom(isInitAtom);
 
@@ -44,6 +45,9 @@ const BannerSwiper = ({ device }: { device: CheckDeviceResult }) => {
         <>
           {[...Array(3)].map((_, i) => (
             <Fragment key={i}>
+              <SwiperSlide key={`${i}-ad-banner`} style={{ width: 'calc(100% - 50px)' }}>
+                <AdBanner isMobile={true} />
+              </SwiperSlide>
               <SwiperSlide key={`${i}-kakao-open-chat-link`} style={{ width: 'calc(100% - 50px)' }}>
                 <KakaoOpenChatLink isMobile={true} />
               </SwiperSlide>
@@ -61,6 +65,9 @@ const BannerSwiper = ({ device }: { device: CheckDeviceResult }) => {
       <>
         {[...Array(2)].map((_, i) => (
           <Fragment key={i}>
+            <SwiperSlide key={`${i}-ad-banner`} style={{ width: 'calc(100% - 50px)' }}>
+              <AdBanner isMobile={true} />
+            </SwiperSlide>
             <SwiperSlide key={`${i}-app-download-cta`} style={{ width: 'calc(100% - 50px)' }}>
               <AppDownloadCTA device={device} />
             </SwiperSlide>

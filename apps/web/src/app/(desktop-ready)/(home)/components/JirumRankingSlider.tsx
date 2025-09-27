@@ -106,6 +106,28 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             onAfterInit={handleAfterInit}
             initialSlide={index}
           >
+            {Advertisement.Beproc.isInPeriod() && (
+              <SwiperSlide
+                className={cn('pb-5')}
+                style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
+              >
+                <ADProductRankingImageCard
+                  url={Advertisement.Beproc.url}
+                  product={
+                    {
+                      id: '-1',
+                      title: '비프록 음식물 처리기 화이트팟/실버맥스',
+                      price: '299,000원~',
+                      thumbnail: '/beproc_product_img_1.webp',
+                      categoryId: 0,
+                      beforePrice: '999,000원',
+                    } as const
+                  }
+                  activeIndex={index}
+                  index={0}
+                />
+              </SwiperSlide>
+            )}
             {rankingProducts.map((product, i) => (
               <SwiperSlide
                 className={cn('pb-5')}
@@ -115,27 +137,6 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
                 <ProductRankingImageCard activeIndex={index} index={i} product={product} />
               </SwiperSlide>
             ))}
-            {Advertisement.Persil.isInPeriod() && (
-              <SwiperSlide
-                className={cn('pb-5')}
-                style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
-              >
-                <ADProductRankingImageCard
-                  url="https://ibpartner.cafe24.com/surl/O/896"
-                  product={
-                    {
-                      id: '-1',
-                      title: '퍼실 컬러젤 라벤더 1.5L x6개',
-                      price: '25,800원',
-                      thumbnail: '/persil_product_img_2.jpg',
-                      categoryId: 0,
-                    } as const
-                  }
-                  activeIndex={index}
-                  index={10}
-                />
-              </SwiperSlide>
-            )}
           </Swiper>
         </motion.div>
         <button
@@ -160,7 +161,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         </AnimatePresence>
       </div>
       <SliderDots
-        total={rankingProducts.length + (Advertisement.Persil.isInPeriod() ? 1 : 0)}
+        total={rankingProducts.length + (Advertisement.Beproc.isInPeriod() ? 1 : 0)}
         visibleSlides={visibleSlides}
       />
     </>

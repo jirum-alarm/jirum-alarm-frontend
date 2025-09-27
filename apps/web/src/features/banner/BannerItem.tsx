@@ -14,14 +14,16 @@ const BannerItem = ({
   description,
   image,
   className,
+  isAd,
 }: {
   isMobile: boolean;
   href: string;
   title: ReactNode;
-  description: string;
+  description: string | ReactNode;
   image: StaticImageData;
   className?: string;
   eventName?: string;
+  isAd?: boolean;
 }) => {
   const handleClick = () => {
     // TODO: Need GTM Migration
@@ -57,6 +59,12 @@ const BannerItem = ({
           height={isMobile ? 56 : 84}
         />
       </div>
+
+      {isAd && (
+        <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[8px] py-[4px] text-xs leading-none font-medium text-white">
+          AD
+        </div>
+      )}
     </Link>
   );
 };
