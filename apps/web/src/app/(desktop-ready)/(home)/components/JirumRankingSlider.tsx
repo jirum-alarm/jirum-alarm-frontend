@@ -66,6 +66,8 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
     swiperRef.current?.slideNext();
   };
 
+  const isActiveAdvertise = Advertisement.Beproc.isInPeriod();
+
   return (
     <>
       <div className="relative flex w-full items-center gap-x-5 gap-y-3">
@@ -106,7 +108,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             onAfterInit={handleAfterInit}
             initialSlide={index}
           >
-            {Advertisement.Beproc.isInPeriod() && (
+            {isActiveAdvertise && (
               <SwiperSlide
                 className={cn('pb-5')}
                 style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
@@ -134,7 +136,11 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
                 key={product.id}
                 style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
               >
-                <ProductRankingImageCard activeIndex={index} index={i} product={product} />
+                <ProductRankingImageCard
+                  activeIndex={isActiveAdvertise ? index - 1 : index}
+                  index={i}
+                  product={product}
+                />
               </SwiperSlide>
             ))}
           </Swiper>
