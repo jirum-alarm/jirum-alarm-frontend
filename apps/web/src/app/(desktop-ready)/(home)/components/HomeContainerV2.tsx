@@ -52,7 +52,7 @@ async function HomeContainerV2() {
           {!isMobile ? null : renderMobileRanking()}
           <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-3">
             <div>
-              {Advertisement.Persil.isInPeriod() && <AdPersilBanner />}
+              {!isMobile && Advertisement.Beproc.isInPeriod() && <AdBeprocBanner />}
               <RecommendedProductSection />
               <LiveHotDealSection />
             </div>
@@ -94,6 +94,43 @@ const AdPersilBanner = () => {
           <Image
             className="h-[81px] w-[105px] object-cover"
             src="/ad_persil_banner_img.png"
+            alt=""
+            width={105}
+            height={81}
+          />
+        </div>
+        <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[8px] py-[4px] text-xs leading-none font-medium text-white">
+          AD
+        </div>
+      </Link>
+    </div>
+  );
+};
+
+const AdBeprocBanner = () => {
+  return (
+    <div className="px-[20px] pt-[8px] pb-[28px]" id="ad-pirsil-banner-20250917">
+      <Link
+        className="relative block h-[100px] overflow-hidden rounded-[8px] bg-linear-90 from-[#ced4e0] to-[#E6ECF5]"
+        href={Advertisement.Beproc.url}
+        target="_blank"
+      >
+        <div className="relative z-20 mx-auto flex h-[100px] w-full max-w-[460px] shrink-0 justify-between px-4 py-3">
+          <div className="flex flex-col justify-center overflow-hidden rounded-lg text-left">
+            <div>
+              <div className="mb-1 flex items-center text-lg text-[#0054d4]">
+                <span className="text-secondary-800 mr-1.5 font-semibold">
+                  비프록 음식물 처리기 <b className="text-[#0036B1]">추석특가</b>
+                </span>
+              </div>
+              <div className="text-[13px] leading-[18px] font-medium text-gray-700">
+                오직 <b>지름알림</b>에서만 <b className="text-secondary-600">70% 할인</b>
+              </div>
+            </div>
+          </div>
+          <Image
+            className="h-[81px] w-[105px] object-cover"
+            src="/beproc_ad_banner_img.png"
             alt=""
             width={105}
             height={81}

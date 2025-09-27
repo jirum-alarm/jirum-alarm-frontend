@@ -15,7 +15,7 @@ export default function ProductRankingImageCard({
   url,
   index,
 }: {
-  product: Omit<ProductCardType, 'postedAt'>;
+  product: Omit<ProductCardType & { beforePrice?: string }, 'postedAt'>;
   activeIndex: number;
   url: string;
   index: number;
@@ -48,7 +48,12 @@ export default function ProductRankingImageCard({
         <div className="pc:h-[110px] p-3 pb-0">
           <div className="xl:pc:text-base line-clamp-2 text-sm text-gray-700">{product.title}</div>
           <div className="pc:h-[36px] pc:pt-0.5 xl:pc:text-[22px] pt-2 text-lg font-bold text-gray-900">
-            <DisplayListPrice price={product.price} />
+            <DisplayListPrice
+              price={product.price}
+              forceString
+              widthType="wide"
+              beforePrice={product.beforePrice}
+            />
           </div>
         </div>
       </div>
