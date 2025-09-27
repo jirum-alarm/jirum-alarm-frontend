@@ -1,8 +1,7 @@
 import { Advertisement } from '@/constants/advertisement';
-import { LANDING_URL } from '@/constants/env';
 
 import BannerItem from '../BannerItem';
-import beprocImg from '/public/beproc_ad_banner_img.png';
+import beprocImg from '/public/beproc_ad_banner_img_2.png';
 
 const props = {
   href: Advertisement.Beproc.url,
