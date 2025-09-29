@@ -1,7 +1,6 @@
 import { Advertisement } from '@/constants/advertisement';
 
 import BannerItem from '../BannerItem';
-import beprocImg from '/public/beproc_ad_banner_img_2.png';
 
 const props = {
   href: Advertisement.Beproc.url,
@@ -18,7 +17,7 @@ const props = {
       오직 <b>지름알림</b>에서만 <b className="text-secondary-600">70% 할인</b>
     </span>
   ),
-  image: beprocImg,
+  image: '/beproc_ad_banner_img.png',
   // eventName: EVENT.OPEN_KAKAO_TALK.NAME,
   className: 'bg-gradient-to-tr from-[#E1E6EF] to-white border-gray-400',
 };

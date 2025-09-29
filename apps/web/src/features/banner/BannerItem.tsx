@@ -20,7 +20,7 @@ const BannerItem = ({
   href: string;
   title: ReactNode;
   description: string | ReactNode;
-  image: StaticImageData;
+  image: StaticImageData | string;
   className?: string;
   eventName?: string;
   isAd?: boolean;
