@@ -45,7 +45,14 @@ export const period = (timeZone: TimeZone = 'Asia/Seoul') => ({
           }
 
           if (endDate) {
-            const end = dayjs.tz(endDate, timeZone).endOf('day');
+            let end = dayjs.tz(endDate, timeZone);
+            const hasTimeComponent = /(\d{2}:\d{2})/.test(endDate);
+
+            if (!hasTimeComponent) {
+              // 기존 코드 호환성 사유로 추가 (이전 시간 동작 호환)
+              end = end.endOf('day');
+            }
+
             console.log('period check - end:', end.format());
             if (now.isAfter(end)) {
               console.log('period check - after end, returning false');

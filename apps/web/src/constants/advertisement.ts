@@ -26,7 +26,7 @@ export class Advertisement {
       if (IS_PRD) {
         return period('Asia/Seoul').startAt('2025-09-28 00:00').endAt('2025-10-13 05:59:59'); // end: 추석 연휴
       } else {
-        return period('Asia/Seoul').startAt('2025-09-27 22:10').endAt('2025-09-29 23:59:59');
+        return period('Asia/Seoul').startAt('2025-09-27 22:10').endAt('2025-10-13 05:59:59'); // end: 추석 연휴
       }
     },
     url: 'https://smartstore.naver.com/beproc/products/12465286599',
