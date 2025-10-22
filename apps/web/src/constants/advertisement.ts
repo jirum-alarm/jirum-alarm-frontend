@@ -44,6 +44,6 @@ export class Advertisement {
     title: '헨켈 생필품 최대 77% 할인',
     discountRate: '77',
     description: '세제, 섬유유연제, 주방세제 모음전',
-    period: '10.22 - 10.28',
+    period: '10.22 - 10.31',
   };
 }
