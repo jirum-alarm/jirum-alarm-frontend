@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { checkDevice } from '@/app/actions/agent';
-import ImageComponent from '@/components/ImageComponent';
 import { Advertisement } from '@/constants/advertisement';
 
 import { LiveHotDealSection } from '@widgets/live-hotdeal';
@@ -52,7 +51,9 @@ async function HomeContainerV2() {
           {!isMobile ? null : renderMobileRanking()}
           <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-3">
             <div>
-              {!isMobile && Advertisement.Beproc.isInPeriod() && <AdBeprocBanner />}
+              {!isMobile && Advertisement.Persil_20251022.isInPeriod() && (
+                <AdPersilBanner20251022 />
+              )}
               <RecommendedProductSection />
               <LiveHotDealSection />
             </div>
@@ -131,6 +132,44 @@ const AdBeprocBanner = () => {
           <Image
             className="h-[81px] w-[105px] object-cover"
             src="/beproc_ad_banner_img.png"
+            alt=""
+            width={105}
+            height={81}
+          />
+        </div>
+        <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[8px] py-[4px] text-xs leading-none font-medium text-white">
+          AD
+        </div>
+      </Link>
+    </div>
+  );
+};
+
+const AdPersilBanner20251022 = () => {
+  return (
+    <div className="px-[20px] pt-[8px] pb-[28px]" id="ad-persil-banner-20251022">
+      <Link
+        className="relative block h-[100px] overflow-hidden rounded-[8px] bg-[url(/persil_2510_bg.svg)] bg-cover bg-center"
+        href={Advertisement.Persil_20251022.url}
+        target="_blank"
+      >
+        <div className="relative z-20 mx-auto flex h-[100px] w-full max-w-[460px] shrink-0 justify-between px-4 py-3">
+          <div className="flex flex-col justify-between overflow-hidden rounded-lg text-left">
+            <div>
+              <div className="flex items-center text-lg text-white">
+                <b className="mr-1.5 text-[22px]">{Advertisement.Persil_20251022.title}</b>
+              </div>
+              <div className="text-[13px] leading-[18px] font-medium text-[#DEEBFF]">
+                {Advertisement.Persil_20251022.description}
+              </div>
+            </div>
+            <div className="text-[11px] leading-[14px] text-[#DCD5FF] opacity-[0.8]">
+              {Advertisement.Persil_20251022.period}
+            </div>
+          </div>
+          <Image
+            className="h-[81px] w-[105px] object-cover"
+            src="/persil_2510_banner.png"
             alt=""
             width={105}
             height={81}

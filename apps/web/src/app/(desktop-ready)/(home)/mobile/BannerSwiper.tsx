@@ -40,13 +40,13 @@ const BannerSwiper = ({ device }: { device: CheckDeviceResult }) => {
 
   // 중복 제거
   const renderBanners = () => {
-    // const promoBannerGenerator = Advertisement.Persil.isInPeriod()
-    //   ? (i: number) => (
-    //       <SwiperSlide key={`${i}-ad-banner`} style={{ width: 'calc(100% - 50px)' }}>
-    //         <AdBanner isMobile={true} />
-    //       </SwiperSlide>
-    //     )
-    //   : undefined;
+    const promoBannerGenerator = Advertisement.Persil_20251022.isInPeriod()
+      ? (i: number) => (
+          <SwiperSlide key={`${i}-persil-2510-banner`} style={{ width: 'calc(100% - 50px)' }}>
+            <AdBanner isMobile={true} />
+          </SwiperSlide>
+        )
+      : undefined;
 
     if (device.isJirumAlarmApp) {
       // KakaoOpenChatLink, AboutLink 반복 3회
@@ -54,7 +54,7 @@ const BannerSwiper = ({ device }: { device: CheckDeviceResult }) => {
         <>
           {[...Array(3)].map((_, i) => (
             <Fragment key={i}>
-              {/* {promoBannerGenerator?.(i)} */}
+              {promoBannerGenerator?.(i)}
               <SwiperSlide key={`${i}-kakao-open-chat-link`} style={{ width: 'calc(100% - 50px)' }}>
                 <KakaoOpenChatLink isMobile={true} />
               </SwiperSlide>
@@ -72,7 +72,7 @@ const BannerSwiper = ({ device }: { device: CheckDeviceResult }) => {
       <>
         {[...Array(2)].map((_, i) => (
           <Fragment key={i}>
-            {/* {promoBannerGenerator?.(i)} */}
+            {promoBannerGenerator?.(i)}
             <SwiperSlide key={`${i}-app-download-cta`} style={{ width: 'calc(100% - 50px)' }}>
               <AppDownloadCTA device={device} />
             </SwiperSlide>

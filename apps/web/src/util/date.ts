@@ -33,13 +33,9 @@ export const period = (timeZone: TimeZone = 'Asia/Seoul') => ({
         try {
           const now = dayjs.tz(new Date(), timeZone);
 
-          console.log('period check - now:', now.format(), 'timezone:', timeZone);
-
           if (startDate) {
             const start = dayjs.tz(startDate, timeZone);
-            console.log('period check - start:', start.format());
             if (now.isBefore(start)) {
-              console.log('period check - before start, returning false');
               return false;
             }
           }
@@ -53,17 +49,13 @@ export const period = (timeZone: TimeZone = 'Asia/Seoul') => ({
               end = end.endOf('day');
             }
 
-            console.log('period check - end:', end.format());
             if (now.isAfter(end)) {
-              console.log('period check - after end, returning false');
               return false;
             }
           }
 
-          console.log('period check - in range, returning true');
           return true;
         } catch (error) {
-          console.error('period check error:', error);
           // 에러 시 안전하게 false 반환
           return false;
         }

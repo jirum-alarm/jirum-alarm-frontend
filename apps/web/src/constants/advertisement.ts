@@ -35,4 +35,15 @@ export class Advertisement {
     description: '오직 지름알림에서만 70% 할인',
     period: null,
   };
+
+  static readonly Persil_20251022 = {
+    isInPeriod: () => {
+      return period('Asia/Seoul').startAt('2025-10-22 10:00').endAt('2025-10-31 23:59:59');
+    },
+    url: 'https://ibpartner.cafe24.com/',
+    title: '헨켈 생필품 최대 77% 할인',
+    discountRate: '77',
+    description: '세제, 섬유유연제, 주방세제 모음전',
+    period: '10.22 - 10.28',
+  };
 }

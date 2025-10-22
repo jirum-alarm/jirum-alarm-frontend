@@ -66,7 +66,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
     swiperRef.current?.slideNext();
   };
 
-  const isActiveAdvertise = Advertisement.Beproc.isInPeriod();
+  const isActiveAdvertise = Advertisement.Persil_20251022.isInPeriod();
 
   return (
     <>
@@ -108,41 +108,36 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             onAfterInit={handleAfterInit}
             initialSlide={index}
           >
-            {isActiveAdvertise && (
-              <SwiperSlide
-                className={cn('pb-5')}
-                style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
-              >
-                <ADProductRankingImageCard
-                  url={Advertisement.Beproc.url}
-                  product={
-                    {
-                      id: '-1',
-                      title: '비프록 음식물 처리기 화이트팟/실버맥스',
-                      price: '299,000원~',
-                      thumbnail: '/beproc_product_img_1.webp',
-                      categoryId: 0,
-                      beforePrice: '999,000원',
-                    } as const
-                  }
-                  activeIndex={index}
-                  index={0}
-                />
-              </SwiperSlide>
-            )}
             {rankingProducts.map((product, i) => (
               <SwiperSlide
                 className={cn('pb-5')}
                 key={product.id}
                 style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
               >
-                <ProductRankingImageCard
-                  activeIndex={isActiveAdvertise ? index - 1 : index}
-                  index={i}
-                  product={product}
-                />
+                <ProductRankingImageCard activeIndex={index} index={i} product={product} />
               </SwiperSlide>
             ))}
+            {isActiveAdvertise && (
+              <SwiperSlide
+                className={cn('pb-5')}
+                style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
+              >
+                <ADProductRankingImageCard
+                  url={'https://ibpartner.cafe24.com/surl/O/808'}
+                  product={
+                    {
+                      id: '-1',
+                      title: '퍼실 파워젤 듀얼 2.7L x4개',
+                      price: '40,800원',
+                      thumbnail: '/persil_2510_product.png',
+                      categoryId: 0,
+                    } as const
+                  }
+                  activeIndex={index}
+                  index={rankingProducts.length}
+                />
+              </SwiperSlide>
+            )}
           </Swiper>
         </motion.div>
         <button
@@ -167,7 +162,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         </AnimatePresence>
       </div>
       <SliderDots
-        total={rankingProducts.length + (Advertisement.Beproc.isInPeriod() ? 1 : 0)}
+        total={rankingProducts.length + (Advertisement.Persil_20251022.isInPeriod() ? 1 : 0)}
         visibleSlides={visibleSlides}
       />
     </>

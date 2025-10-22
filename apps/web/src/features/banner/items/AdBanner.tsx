@@ -3,23 +3,17 @@ import { Advertisement } from '@/constants/advertisement';
 import BannerItem from '../BannerItem';
 
 const props = {
-  href: Advertisement.Beproc.url,
+  href: Advertisement.Persil_20251022.url,
   title: (
     <>
-      <span className="text-secondary-800 font-semibold">
-        비프록 음식물 처리기 <b className="text-[#0036B1]">추석특가</b>
-      </span>
+      <span className="font-semibold text-white">{Advertisement.Persil_20251022.title}</span>
       {/* <span>{Advertisement.Beproc.description}</span> */}
     </>
   ),
-  description: (
-    <span className="text-gray-700">
-      오직 <b>지름알림</b>에서만 <b className="text-secondary-600">70% 할인</b>
-    </span>
-  ),
-  image: '/beproc_ad_banner_img.png',
+  description: <span className="text-[#DEEBFF]">{Advertisement.Persil_20251022.description}</span>,
+  image: '/persil_2510_banner.png',
   // eventName: EVENT.OPEN_KAKAO_TALK.NAME,
-  className: 'bg-gradient-to-tr from-[#E1E6EF] to-white border-gray-400',
+  className: 'bg-[url(/persil_2510_bg.svg)] bg-cover border-none bg-center',
 };
 
 const AdBanner = ({ isMobile }: { isMobile: boolean }) => {
