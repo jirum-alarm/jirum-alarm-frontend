@@ -80,7 +80,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   const token = await getAccessToken();
   const isUserLogin = !!token;
 
-  await collectProductAction(+id);
+  await collectProductAction(+id).catch();
 
   const { isMobile } = await checkDevice();
 
