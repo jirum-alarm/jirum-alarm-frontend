@@ -15,7 +15,9 @@ import { Advertisement } from '@/constants/advertisement';
 import ADProductRankingImageCard from '@/features/products/ranking/ADProductRankingImageCard';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
+import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { getVisibleSlides } from '@/shared/lib/utils/swiper';
+import { getDayBefore } from '@/util/date';
 
 import { ProductQueries } from '@entities/product';
 
@@ -37,8 +39,17 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   const isHydrated = useIsHydrated();
 
   const {
-    data: { rankingProducts },
-  } = useSuspenseQuery(ProductQueries.ranking());
+    data: { products },
+  } = useSuspenseQuery(
+    ProductQueries.products({
+      limit: 10,
+      orderBy: ProductOrderType.CommunityRanking,
+      startDate: getDayBefore(3),
+      categoryId: null,
+      orderOption: OrderOptionType.Desc,
+      isEnd: false,
+    }),
+  );
 
   const [index, setIndex] = useAtom(indexAtom);
   const swiperRef = useRef<SwiperClass>(null);
@@ -108,7 +119,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             onAfterInit={handleAfterInit}
             initialSlide={index}
           >
-            {rankingProducts.map((product, i) => (
+            {products.map((product, i) => (
               <SwiperSlide
                 className={cn('pb-5')}
                 key={product.id}
@@ -134,7 +145,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
                     } as const
                   }
                   activeIndex={index}
-                  index={rankingProducts.length}
+                  index={products.length}
                 />
               </SwiperSlide>
             )}
@@ -162,7 +173,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         </AnimatePresence>
       </div>
       <SliderDots
-        total={rankingProducts.length + (Advertisement.Persil_20251022.isInPeriod() ? 1 : 0)}
+        total={products.length + (Advertisement.Persil_20251022.isInPeriod() ? 1 : 0)}
         visibleSlides={visibleSlides}
       />
     </>
