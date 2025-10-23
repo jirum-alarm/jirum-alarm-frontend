@@ -244,6 +244,7 @@ export type Mutation = {
   addProductMapping: Scalars['Boolean']['output'];
   /** 푸시를 받기위한 토큰 등록 */
   addPushToken: Scalars['Boolean']['output'];
+  addUserDevice: Scalars['Boolean']['output'];
   addUserLikeOrDislike: Scalars['Boolean']['output'];
   /** wishlist 추가 */
   addWishlist: Scalars['Boolean']['output'];
@@ -367,6 +368,10 @@ export type MutationAddProductMappingArgs = {
 export type MutationAddPushTokenArgs = {
   token: Scalars['String']['input'];
   tokenType: TokenType;
+};
+
+export type MutationAddUserDeviceArgs = {
+  deviceId: Scalars['String']['input'];
 };
 
 export type MutationAddUserLikeOrDislikeArgs = {
@@ -604,10 +609,14 @@ export type ProductMapping = {
   __typename?: 'ProductMapping';
   brandProduct?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
+  danawaUrl?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  matchStatus?: Maybe<ProductMappingMatchStatus>;
   productId: Scalars['Int']['output'];
-  target: ProductMappingTarget;
-  targetId: Scalars['Int']['output'];
+  reason?: Maybe<Scalars['String']['output']>;
+  target?: Maybe<ProductMappingTarget>;
+  targetId?: Maybe<Scalars['Int']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type ProductMappingInfoOutput = {
@@ -616,6 +625,13 @@ export type ProductMappingInfoOutput = {
   brandProductId: Scalars['Int']['output'];
   quantity: Scalars['String']['output'];
 };
+
+export enum ProductMappingMatchStatus {
+  Matched = 'MATCHED',
+  NotMatchable = 'NOT_MATCHABLE',
+  NoMatchedProduct = 'NO_MATCHED_PRODUCT',
+  NoPriceComparison = 'NO_PRICE_COMPARISON',
+}
 
 export enum ProductMappingTarget {
   BrandItem = 'BRAND_ITEM',
@@ -670,6 +686,7 @@ export type ProductOutput = {
   negativeCommunityReactionCount: Scalars['Int']['output'];
   positiveCommunityReactionCount: Scalars['Int']['output'];
   postedAt: Scalars['DateTime']['output'];
+  precomputedRankingScore?: Maybe<Scalars['Float']['output']>;
   price?: Maybe<Scalars['String']['output']>;
   /** 상품 가격 목록 */
   prices?: Maybe<Array<ProductPrice>>;
@@ -743,7 +760,7 @@ export type Query = {
   instagramPost?: Maybe<InstagramPost>;
   matchProduct: Scalars['String']['output'];
   /** 로그인한 유저 정보 조회 */
-  me: User;
+  me?: Maybe<User>;
   /** 유저 알림 키워드 목록 조회 */
   notificationKeywordsByMe: Array<NotificationKeyword>;
   /** 알림 목록 조회 */
@@ -1118,7 +1135,7 @@ export type QueryMeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type QueryMeQuery = {
   __typename?: 'Query';
-  me: {
+  me?: {
     __typename?: 'User';
     id: string;
     email: string;
@@ -1126,14 +1143,14 @@ export type QueryMeQuery = {
     birthYear?: number | null;
     gender?: Gender | null;
     favoriteCategories?: Array<number> | null;
-  };
+  } | null;
 };
 
 export type QueryMyCategoriesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type QueryMyCategoriesQuery = {
   __typename?: 'Query';
-  me: { __typename?: 'User'; favoriteCategories?: Array<number> | null };
+  me?: { __typename?: 'User'; favoriteCategories?: Array<number> | null } | null;
 };
 
 export type QueryLoginByRefreshTokenMutationVariables = Exact<{ [key: string]: never }>;
@@ -1156,6 +1173,12 @@ export type MutationUpdatePasswordMutation = { __typename?: 'Mutation'; updatePa
 export type MutationWithdrawMutationVariables = Exact<{ [key: string]: never }>;
 
 export type MutationWithdrawMutation = { __typename?: 'Mutation'; withdraw: boolean };
+
+export type MutationAddUserDeviceMutationVariables = Exact<{
+  deviceId: Scalars['String']['input'];
+}>;
+
+export type MutationAddUserDeviceMutation = { __typename?: 'Mutation'; addUserDevice: boolean };
 
 export type QueryCategoriesQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -1899,6 +1922,14 @@ export const MutationWithdrawDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationWithdrawMutation,
   MutationWithdrawMutationVariables
+>;
+export const MutationAddUserDeviceDocument = new TypedDocumentString(`
+    mutation MutationAddUserDevice($deviceId: String!) {
+  addUserDevice(deviceId: $deviceId)
+}
+    `) as unknown as TypedDocumentString<
+  MutationAddUserDeviceMutation,
+  MutationAddUserDeviceMutationVariables
 >;
 export const QueryCategoriesDocument = new TypedDocumentString(`
     query QueryCategories {

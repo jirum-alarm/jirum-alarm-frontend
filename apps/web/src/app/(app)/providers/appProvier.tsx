@@ -9,6 +9,7 @@ import { IS_PRD } from '@/constants/env';
 import { GTM_ID } from '@/constants/gtm';
 import FCMConfig from '@/lib/firebase/FCMConfig';
 
+import { DeviceId } from './deviceId';
 import { ReactQueryProviders } from './ReactQueryProviders';
 
 const MSW = dynamic(() => import('@/components/MSW'), {
@@ -31,6 +32,7 @@ export const AppProvider = ({ children }: Props) => {
       {IS_PRD ? <GoogleTagManager gtmId={GTM_ID} /> : <MSW />}
       <JotaiProvider>
         <ReactQueryProviders>
+          {IS_PRD ? <DeviceId /> : null}
           {/* <PHProvider> */}
           <NuqsAdapter>{children}</NuqsAdapter>
           {/* </PHProvider> */}

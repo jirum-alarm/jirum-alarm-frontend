@@ -20,6 +20,7 @@ type Documents = {
   '\n  mutation QueryLoginByRefreshToken {\n    loginByRefreshToken {\n      accessToken\n      refreshToken\n    }\n  }\n': typeof types.QueryLoginByRefreshTokenDocument;
   '\n  mutation MutationUpdatePassword($password: String!) {\n    updatePassword(password: $password)\n  }\n': typeof types.MutationUpdatePasswordDocument;
   '\n  mutation MutationWithdraw {\n    withdraw\n  }\n': typeof types.MutationWithdrawDocument;
+  '\n  mutation MutationAddUserDevice($deviceId: String!) {\n    addUserDevice(deviceId: $deviceId)\n  }\n': typeof types.MutationAddUserDeviceDocument;
   '\n  query QueryCategories {\n    categories {\n      id\n      name\n    }\n  }\n': typeof types.QueryCategoriesDocument;
   '\n  query comments(\n    $limit: Int!\n    $searchAfter: [String!]\n    $productId: Int!\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      productId: $productId\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      content\n      createdAt\n      searchAfter\n      author {\n        id\n        nickname\n      }\n      likeCount\n      isMyLike\n    }\n  }\n': typeof types.CommentsDocument;
   '\n  mutation addComment($productId: Int!, $content: String!, $parentId: Int) {\n    addComment(productId: $productId, content: $content, parentId: $parentId)\n  }\n': typeof types.AddCommentDocument;
@@ -68,6 +69,8 @@ const documents: Documents = {
   '\n  mutation MutationUpdatePassword($password: String!) {\n    updatePassword(password: $password)\n  }\n':
     types.MutationUpdatePasswordDocument,
   '\n  mutation MutationWithdraw {\n    withdraw\n  }\n': types.MutationWithdrawDocument,
+  '\n  mutation MutationAddUserDevice($deviceId: String!) {\n    addUserDevice(deviceId: $deviceId)\n  }\n':
+    types.MutationAddUserDeviceDocument,
   '\n  query QueryCategories {\n    categories {\n      id\n      name\n    }\n  }\n':
     types.QueryCategoriesDocument,
   '\n  query comments(\n    $limit: Int!\n    $searchAfter: [String!]\n    $productId: Int!\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      productId: $productId\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      content\n      createdAt\n      searchAfter\n      author {\n        id\n        nickname\n      }\n      likeCount\n      isMyLike\n    }\n  }\n':
@@ -179,6 +182,12 @@ export function graphql(
 export function graphql(
   source: '\n  mutation MutationWithdraw {\n    withdraw\n  }\n',
 ): typeof import('./graphql').MutationWithdrawDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationAddUserDevice($deviceId: String!) {\n    addUserDevice(deviceId: $deviceId)\n  }\n',
+): typeof import('./graphql').MutationAddUserDeviceDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -6,6 +6,7 @@ import { execute } from '@/shared/lib/http-client';
 import { graphql } from '../gql';
 import {
   MutationAddNotificationKeywordMutationVariables,
+  MutationAddUserDeviceMutationVariables,
   MutationLoginMutationVariables,
   MutationRemoveNotificationKeywordMutationVariables,
   MutationSignupMutationVariables,
@@ -57,6 +58,10 @@ export class AuthService {
 
   static async removeKeyword(variables: MutationRemoveNotificationKeywordMutationVariables) {
     return execute(MutationRemoveNotificationKeyword, variables).then((res) => res.data);
+  }
+
+  static async addUserDevice(variables: MutationAddUserDeviceMutationVariables) {
+    return execute(MutationAddUserDevice, variables).then((res) => res.data);
   }
 }
 
@@ -168,5 +173,11 @@ const MutationAddNotificationKeyword = graphql(`
 const MutationRemoveNotificationKeyword = graphql(`
   mutation MutationRemoveNotificationKeyword($id: Float!) {
     removeNotificationKeyword(id: $id)
+  }
+`);
+
+const MutationAddUserDevice = graphql(`
+  mutation MutationAddUserDevice($deviceId: String!) {
+    addUserDevice(deviceId: $deviceId)
   }
 `);

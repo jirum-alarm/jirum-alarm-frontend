@@ -98,3 +98,9 @@ export const MutationWithdraw = gql`
     withdraw
   }
 `;
+
+export const MutationAddUserDevice = gql`
+  mutation MutationAddUserDevice($deviceId: String!) {
+    addUserDevice(deviceId: $deviceId)
+  }
+`;
