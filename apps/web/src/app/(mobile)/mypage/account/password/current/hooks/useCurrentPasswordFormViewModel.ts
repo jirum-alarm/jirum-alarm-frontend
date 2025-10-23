@@ -34,7 +34,7 @@ const useCurrentPasswordFormViewModel = ({ nextStep }: { nextStep: () => void })
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     login({
-      email: me.email ?? '',
+      email: me?.email ?? '',
       password: currentPassword.value,
     });
   };

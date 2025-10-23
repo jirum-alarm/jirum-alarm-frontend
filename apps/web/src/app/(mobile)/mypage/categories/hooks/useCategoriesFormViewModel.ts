@@ -26,7 +26,7 @@ export const useCategoriesFormViewModel = () => {
   const [originalCategory, setOriginalCategory] = useState<ICategoryForm[]>(FAVORITE_CATEGORIES);
 
   useEffect(() => {
-    const favoriteCategories = me.favoriteCategories;
+    const favoriteCategories = me?.favoriteCategories;
     if (!favoriteCategories) return;
 
     const _FAVORITE_CATEGORIES = FAVORITE_CATEGORIES.map((category) => ({
@@ -37,7 +37,7 @@ export const useCategoriesFormViewModel = () => {
     }));
     setCategories(_FAVORITE_CATEGORIES);
     setOriginalCategory(_FAVORITE_CATEGORIES);
-  }, [me.favoriteCategories]);
+  }, [me?.favoriteCategories]);
 
   const SELECTION_COUNT = categories.filter((category) => category.isChecked).length;
 
