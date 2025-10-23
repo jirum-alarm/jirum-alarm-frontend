@@ -134,40 +134,35 @@ const refreshAndVerifyToken = async (
   const refreshToken = req.cookies.get('REFRESH_TOKEN')?.value;
 
   const result = await tokenVerify(accessToken);
-  if (result.errors) {
-    for (const error of result.errors) {
-      switch (error.extensions.code) {
-        case 'FORBIDDEN':
-        case 'UNAUTHENTICATED': {
-          const result = await getNewToken(refreshToken);
-
-          if (result.data) {
-            const { accessToken, refreshToken } = result.data.loginByRefreshToken;
-            const access_token = {
-              name: 'ACCESS_TOKEN',
-              expires: Date.now() + accessTokenExpiresAt,
-              httpOnly: true,
-              sameSite: 'lax' as const,
-              secure: IS_PRD,
-              value: accessToken,
-            };
-            const refresh_token = {
-              name: 'REFRESH_TOKEN',
-              expires: Date.now() + refreshTokenExpiresAt,
-              httpOnly: true,
-              sameSite: 'lax' as const,
-              secure: IS_PRD,
-              value: refreshToken,
-            };
-            res.cookies.set(access_token);
-            res.cookies.set(refresh_token);
-            applySetCookie(req, res);
-          }
-          if (result.errors) {
-            return { status: 'invalid' };
-          }
-        }
-      }
+  if (!result.data?.me) {
+    if (!refreshToken) {
+      return { status: 'invalid' };
+    }
+    const result = await getNewToken(refreshToken);
+    if (result.data) {
+      const { accessToken, refreshToken } = result.data.loginByRefreshToken;
+      const access_token = {
+        name: 'ACCESS_TOKEN',
+        expires: Date.now() + accessTokenExpiresAt,
+        httpOnly: true,
+        sameSite: 'lax' as const,
+        secure: IS_PRD,
+        value: accessToken,
+      };
+      const refresh_token = {
+        name: 'REFRESH_TOKEN',
+        expires: Date.now() + refreshTokenExpiresAt,
+        httpOnly: true,
+        sameSite: 'lax' as const,
+        secure: IS_PRD,
+        value: refreshToken,
+      };
+      res.cookies.set(access_token);
+      res.cookies.set(refresh_token);
+      applySetCookie(req, res);
+    }
+    if (result.errors) {
+      return { status: 'invalid' };
     }
   }
   return { status: 'valid' };
