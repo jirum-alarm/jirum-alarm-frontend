@@ -35,7 +35,7 @@ export async function generateMetadata({
     .join(', ');
   const description = guideDescriptions || '지름알림에서 제공하는 초특가 핫딜 상품!';
 
-  const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.png`;
+  const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
   const url = `${METADATA_SERVICE_URL}/products/${id}`;
 
   const defaultKeywords =

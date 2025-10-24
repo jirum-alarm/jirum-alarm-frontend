@@ -25,7 +25,7 @@ export const defaultMetadata: Metadata = {
     siteName: '지름알림',
     images: [
       {
-        url: `${METADATA_SERVICE_URL}/opengraph-image.png`,
+        url: `${METADATA_SERVICE_URL}/opengraph-image.webp`,
         width: 1200,
         height: 630,
         alt: title,
@@ -36,7 +36,7 @@ export const defaultMetadata: Metadata = {
     card: 'summary_large_image',
     title,
     description,
-    images: `${METADATA_SERVICE_URL}/opengraph-image.png`,
+    images: `${METADATA_SERVICE_URL}/opengraph-image.webp`,
   },
   icons: {
     icon: `${METADATA_SERVICE_URL}/icon.png`,
@@ -69,7 +69,7 @@ export const jsonLd = {
   ],
   image: {
     '@type': 'ImageObject',
-    url: `${METADATA_SERVICE_URL}/opengraph-image.png`,
+    url: `${METADATA_SERVICE_URL}/opengraph-image.webp`,
     width: 1200,
     height: 630,
   },

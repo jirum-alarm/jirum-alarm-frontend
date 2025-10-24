@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title,
     description,
-    // images: `${URL_BASE}/opengraph-image.png`,
+    // images: `${URL_BASE}/opengraph-image.webp`,
   },
   alternates: {
     canonical: URL_BASE,

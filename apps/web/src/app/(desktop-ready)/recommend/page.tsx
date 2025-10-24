@@ -29,7 +29,7 @@ export async function generateMetadata({
       title,
       description,
       url: `https://jirum-alarm.com/recommend?recommend=${encodeURIComponent(selectedKeyword)}`,
-      images: ['/assets/images/opengraph-image.png'],
+      images: ['/assets/images/opengraph-image.webp'],
       type: 'website',
       siteName: '지름알림',
     },

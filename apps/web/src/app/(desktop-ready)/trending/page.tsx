@@ -1,13 +1,6 @@
 import { Metadata } from 'next';
-import { Suspense } from 'react';
-
-import { LoadingSpinner } from '@/components/common/icons';
-import BasicLayout from '@/components/layout/BasicLayout';
-import { NAV_TYPE } from '@/components/layout/BottomNav';
-import TopButton from '@/components/TopButton';
 
 import TrendingContainerServer from './components/trending-container/server';
-import TrendingPageHeader from './components/TrendingPageHeader';
 import { TAB_META } from './tabMeta';
 
 export async function generateMetadata({
@@ -25,7 +18,7 @@ export async function generateMetadata({
       title: meta.title,
       description: meta.description,
       url: `https://jirum-alarm.com/trending?tab=${tabNumber}`,
-      images: ['/assets/images/opengraph-image.png'],
+      images: ['/assets/images/opengraph-image.webp'],
       type: 'website',
       siteName: '지름알림',
     },
