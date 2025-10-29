@@ -1,10 +1,11 @@
-import Image from 'next/image';
-import { memo, useState } from 'react';
+import { memo } from 'react';
 
+import ImageComponent from '@/components/ImageComponent';
 import { PAGE } from '@/constants/page';
 import { useIsHydrated } from '@/hooks/useIsHydrated';
 import { cn } from '@/lib/cn';
 import { QueryNotificationsQuery } from '@/shared/api/gql/graphql';
+import { convertToWebp } from '@/util/image';
 
 import DisplayTime from '@shared/ui/DisplayTime';
 import Link from '@shared/ui/Link';
@@ -23,7 +24,11 @@ const AlarmItem = ({
     <li className="flex gap-x-3">
       <Link href={PAGE.DETAIL + '/' + +id!} className="flex w-full p-5">
         <div className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">
-          <ImageWithFallback src={thumbnail ?? ''} title={message} />
+          <ImageWithFallback
+            src={convertToWebp(thumbnail)}
+            fallbackSrc={thumbnail ?? ''}
+            title={message}
+          />
         </div>
         <div className="flex-1 pl-3">
           <p className="line-clamp-2 w-full text-sm text-gray-900">
@@ -83,29 +88,22 @@ function HighlightText({ message, keyword }: { message: string; keyword: string 
 
 const ImageWithFallback = memo(function ImageWithFallback({
   src,
+  fallbackSrc,
   title,
 }: {
   src?: string | null;
+  fallbackSrc?: string;
   title: string;
 }) {
-  const [error, setError] = useState(false);
-
   return (
-    <>
-      {error || !src ? (
-        <NoImage />
-      ) : (
-        <Image
-          src={src}
-          width={56}
-          height={56}
-          alt={title}
-          onError={() => setError(true)}
-          placeholder="blur"
-          blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-        />
-      )}
-    </>
+    <ImageComponent
+      src={src ?? ''}
+      fallbackSrc={fallbackSrc}
+      alt={title}
+      width={56}
+      height={56}
+      fallback={<NoImage />}
+    />
   );
 });
 

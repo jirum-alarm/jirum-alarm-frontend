@@ -19,16 +19,15 @@ const nextConfig = withPWA({
   },
   productionBrowserSourceMaps: false,
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'cdn.jirum-alarm.com',
       },
     ],
-    deviceSizes: [375, 480, 640, 768, 1024, 1280],
-    imageSizes: [16, 120, 192, 252],
     minimumCacheTTL: 31536000,
-    formats: ['image/avif', 'image/webp'],
+    formats: ['image/webp'],
     contentSecurityPolicy: "default-src 'self'; img-src 'self' data: cdn.jirum-alarm.com;",
   },
   experimental: {

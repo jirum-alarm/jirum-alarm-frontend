@@ -3,6 +3,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import ImageComponent from '@/components/ImageComponent';
+import { convertToWebp } from '@/util/image';
 
 import NoImage from '@shared/ui/NoImage';
 
@@ -17,13 +18,15 @@ export default function ProductDetailImage({
 }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
 
-  const thumbnail = product?.thumbnail ?? '';
+  const thumbnail = convertToWebp(product?.thumbnail) ?? '';
+  const originalThumbnail = product?.thumbnail ?? '';
   const title = product?.title ?? '';
   const categoryId = product?.categoryId;
 
   return (
     <ImageComponent
       src={thumbnail}
+      fallbackSrc={originalThumbnail}
       alt={title}
       fill={fill}
       {...(!fill && { width: 512, height: 512, sizes: '512px' })}
@@ -31,7 +34,6 @@ export default function ProductDetailImage({
       priority
       loading="eager"
       fetchPriority="high"
-      placeholder="empty"
       className="size-full object-cover"
     />
   );

@@ -9,24 +9,32 @@ export default function ImageComponent({
   title,
   className,
   fallback,
+  fallbackSrc,
   ...rest
 }: ImageProps & {
   fallback?: React.ReactNode;
+  fallbackSrc?: string;
 }) {
-  const [isError, setIsError] = useState<boolean>(false);
-  if (!src || isError) {
+  const [currentSrc, setCurrentSrc] = useState<any>(src);
+  const [hasError, setHasError] = useState<boolean>(false);
+
+  if (!currentSrc || hasError) {
     return fallback;
   }
 
   return (
     <Image
-      src={src}
+      src={currentSrc}
       alt={alt}
       title={title}
       className={className}
-      onError={() => setIsError(true)}
-      placeholder="blur"
-      blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+      onError={() => {
+        if (fallbackSrc && typeof currentSrc === 'string' && currentSrc !== fallbackSrc) {
+          setCurrentSrc(fallbackSrc);
+        } else {
+          setHasError(true);
+        }
+      }}
       {...rest}
     />
   );

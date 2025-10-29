@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import { ImageProps } from 'next/image';
 import { memo } from 'react';
 
@@ -22,6 +21,7 @@ const ProductThumbnail = memo(function ProductThumbnail({
   type: 'product' | 'hotDeal';
 }) {
   const imageSrc = convertToWebp(src) ?? '';
+  const originalSrc = src ?? '';
 
   const altText = alt || title || '';
   const titleText = title || '';
@@ -33,6 +33,7 @@ const ProductThumbnail = memo(function ProductThumbnail({
   return (
     <ImageComponent
       src={imageSrc}
+      fallbackSrc={originalSrc}
       alt={altText}
       title={titleText}
       fallback={<NoImage type={type} categoryId={categoryId} />}
