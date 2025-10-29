@@ -131,7 +131,7 @@ jobs:
         working-directory: infra
         run: |
           set -euo pipefail
-          DEPLOYMENT_FILE="server/jirum-alarm-frontend-web/production/jirum-alarm-frontend-web-statefulset.yaml"
+          DEPLOYMENT_FILE="server/jirum-alarm-frontend-web/production/jirum-alarm-frontend-web-deployment.yaml"
 
           # Build image url
           export IMAGE_URL="${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web:${{ needs.build-and-push.outputs.image-tag }}"
