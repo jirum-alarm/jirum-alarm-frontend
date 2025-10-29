@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
     ],
   },
   output: 'export',
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [{ key: 'X-Robots-Tag', value: 'max-image-preview:large' }],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

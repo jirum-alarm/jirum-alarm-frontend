@@ -17,6 +17,22 @@ const nextConfig = withPWA({
   httpAgentOptions: {
     keepAlive: true,
   },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'max-image-preview:large' },
+        ],
+      },
+      {
+        source: '/api/(.*)',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+        ],
+      },
+    ];
+  },
   productionBrowserSourceMaps: false,
   images: {
     unoptimized: true,
