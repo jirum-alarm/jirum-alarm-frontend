@@ -18,6 +18,8 @@ export async function POST(req: NextRequest) {
 
   const accessToken = req.cookies.get('ACCESS_TOKEN')?.value;
   const incomingAuth = req.headers.get('Authorization');
+  const deviceId = req.headers.get('x-device-id') || req.headers.get('X-Device-Id');
+  const userAgent = req.headers.get('user-agent') || req.headers.get('User-Agent');
 
   const auth = incomingAuth ?? `Bearer ${accessToken}`;
 
@@ -27,6 +29,8 @@ export async function POST(req: NextRequest) {
       'Content-Type': 'application/json',
       Accept: 'application/graphql-response+json',
       Authorization: auth || '',
+      ...(deviceId ? { 'X-Device-Id': deviceId } : {}),
+      ...(userAgent ? { 'User-Agent': userAgent } : {}),
     },
     body: JSON.stringify(body),
     cache: 'no-store',
@@ -96,6 +100,8 @@ export async function POST(req: NextRequest) {
             'Content-Type': 'application/json',
             Accept: 'application/graphql-response+json',
             Authorization: `Bearer ${tokens.accessToken}`,
+            ...(deviceId ? { 'X-Device-Id': deviceId } : {}),
+            ...(userAgent ? { 'User-Agent': userAgent } : {}),
           },
           body: JSON.stringify(body),
           cache: 'no-store',
