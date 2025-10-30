@@ -64,7 +64,7 @@ const useEmailLoginFormViewModel = () => {
       requestPermission();
 
       toast('로그인에 성공했어요.');
-      router.replace(HOME_PATH);
+      window.location.replace(HOME_PATH);
     },
     onError: () => {
       setLoginForm((prev) => ({ ...prev, error: true }));
