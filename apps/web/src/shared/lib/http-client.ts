@@ -2,6 +2,8 @@ import { GRAPHQL_ENDPOINT_PROXY } from '@/constants/graphql';
 
 import { TypedDocumentString } from '../api/gql/graphql';
 
+import { generateDeviceId } from './device-id';
+
 type customGraphqlResponse = Response & {
   errors: Array<{
     message: string;
@@ -52,12 +54,22 @@ export async function execute<TResult, TVariables>(
   headers.set('Content-Type', 'application/json');
   headers.set('Accept', 'application/graphql-response+json');
 
+  let deviceId: string | null = null;
+
   if (isServer) {
-    const { cookies } = await import('next/headers');
-    const token = (await cookies()).get('ACCESS_TOKEN')?.value;
-    if (token) {
-      headers.set('Authorization', `Bearer ${token}`);
+    deviceId = null;
+    if (!deviceId) {
+      deviceId = generateDeviceId();
     }
+  } else {
+    deviceId = localStorage.getItem('jirum-alarm-device-id');
+    if (!deviceId) {
+      deviceId = generateDeviceId();
+      localStorage.setItem('jirum-alarm-device-id', deviceId);
+    }
+  }
+  if (deviceId) {
+    headers.set('X-Device-Id', deviceId);
   }
 
   const response = await fetch(baseUrl, {

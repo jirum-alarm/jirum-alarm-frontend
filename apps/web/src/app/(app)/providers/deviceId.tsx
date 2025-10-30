@@ -13,15 +13,13 @@ export const DeviceId = () => {
 
   useEffect(() => {
     const getOrCreateDeviceId = () => {
-      const deviceId = localStorage.getItem('jirum-alarm-device-id');
-
+      let deviceId = localStorage.getItem('jirum-alarm-device-id');
       if (!deviceId) {
-        const newDeviceId = generateDeviceId();
-        localStorage.setItem('jirum-alarm-device-id', newDeviceId);
-        mutate({ deviceId: newDeviceId });
+        deviceId = generateDeviceId();
+        localStorage.setItem('jirum-alarm-device-id', deviceId);
+        mutate({ deviceId });
       }
     };
-
     getOrCreateDeviceId();
   }, [mutate]);
 
