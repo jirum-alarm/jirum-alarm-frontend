@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 
+import { getQueryClient } from '@/app/(app)/react-query/query-client';
 import { checkDevice } from '@/app/actions/agent';
 import { collectProductAction } from '@/app/actions/product';
 import { getAccessToken } from '@/app/actions/token';
@@ -7,7 +8,7 @@ import { METADATA_SERVICE_URL } from '@/constants/env';
 import { defaultMetadata } from '@/constants/metadata';
 import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
-import { ProductService } from '@shared/api/product';
+import { ProductQueries } from '@entities/product';
 
 import DesktopProductDetailPage from './components/desktop/ProductDetailPage';
 import MobileProductDetailPage from './components/mobile/ProductDetailPage';
@@ -18,15 +19,19 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
+  const productId = +id;
 
-  const product = await ProductService.getProductInfo({ id: +id });
+  const queryClient = getQueryClient();
+  const productPromise = queryClient.fetchQuery(ProductQueries.productInfo({ id: productId }));
+  const productGuidesPromise = queryClient.fetchQuery(ProductQueries.productGuide({ productId }));
+
+  const [product, productGuidesData] = await Promise.all([productPromise, productGuidesPromise]);
+
   if (!product) {
     return defaultMetadata;
   }
 
-  const productGuides = await ProductService.getProductGuides({
-    productId: +product.id,
-  });
+  const productGuides = productGuidesData;
 
   const title = `${product.title} | 지름알림`;
 

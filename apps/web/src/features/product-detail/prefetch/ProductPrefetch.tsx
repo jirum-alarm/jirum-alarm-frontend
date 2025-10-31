@@ -13,10 +13,14 @@ export default async function ProductPrefetch({
 }) {
   const queryClient = getQueryClient();
 
-  queryClient.prefetchQuery(ProductQueries.productInfo({ id: productId }));
-  queryClient.prefetchQuery(ProductQueries.productStats({ id: productId }));
-  queryClient.prefetchQuery(ProductQueries.productAdditionalInfo({ id: productId }));
-  queryClient.prefetchQuery(ProductQueries.productGuide({ productId }));
+  const prefetchPromises = [
+    queryClient.prefetchQuery(ProductQueries.productInfo({ id: productId })),
+    queryClient.prefetchQuery(ProductQueries.productStats({ id: productId })),
+    queryClient.prefetchQuery(ProductQueries.productAdditionalInfo({ id: productId })),
+    queryClient.prefetchQuery(ProductQueries.productGuide({ productId })),
+  ];
+
+  await Promise.all(prefetchPromises);
 
   return <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>;
 }
