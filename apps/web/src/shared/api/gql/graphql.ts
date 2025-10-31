@@ -736,6 +736,7 @@ export type Query = {
   comments: Array<CommentOutput>;
   /** 어드민) 댓글 목록 조회 */
   commentsByAdmin: Array<Scalars['String']['output']>;
+  communityProviders: Array<Provider>;
   /** 상품 랭킹 랜덤 조회 */
   communityRandomRankingProducts: Array<ProductOutput>;
   danawaProduct: DanawaProductOutput;
@@ -757,6 +758,8 @@ export type Query = {
   hotDealKeywordSynonymsByAdmin: Array<HotDealKeywordSynonymOutput>;
   /** 어드민) 핫딜 키워드 목록 조회 */
   hotDealKeywordsByAdmin: Array<HotDealKeywordOutput>;
+  /** 놓치면 아까운 핫딜 - 랭킹순 핫딜 상품 조회 */
+  hotDealRankingProducts: Array<ProductOutput>;
   instagramPost?: Maybe<InstagramPost>;
   matchProduct: Scalars['String']['output'];
   /** 로그인한 유저 정보 조회 */
@@ -777,8 +780,6 @@ export type Query = {
   productsByKeyword: Array<ProductOutput>;
   /** 푸시 세팅 조회 */
   pushSetting: UserPushSetting;
-  /** 상품 랭킹 목록 조회 */
-  rankingProducts: Array<ProductOutput>;
   /** 신고한 사용자 목록 조회 (마스킹) */
   reportUserNames: Array<Scalars['String']['output']>;
   /** 소셜 액세스 토큰 조회 */
@@ -888,6 +889,11 @@ export type QueryHotDealKeywordsByAdminArgs = {
   type?: InputMaybe<HotDealKeywordType>;
 };
 
+export type QueryHotDealRankingProductsArgs = {
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+};
+
 export type QueryInstagramPostArgs = {
   id: Scalars['Int']['input'];
 };
@@ -938,8 +944,10 @@ export type QueryProductsArgs = {
   isReward?: InputMaybe<Scalars['Boolean']['input']>;
   keyword?: InputMaybe<Scalars['String']['input']>;
   limit: Scalars['Int']['input'];
+  mallId?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<ProductOrderType>;
   orderOption?: InputMaybe<OrderOptionType>;
+  providerId?: InputMaybe<Scalars['Int']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
   startDate?: InputMaybe<Scalars['DateTime']['input']>;
   thumbnailType?: InputMaybe<ThumbnailType>;
@@ -1542,21 +1550,6 @@ export type QueryProductsQuery = {
     searchAfter?: Array<string> | null;
     postedAt: any;
     provider: { __typename?: 'Provider'; nameKr: string };
-  }>;
-};
-
-export type QueryRankingProductsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type QueryRankingProductsQuery = {
-  __typename?: 'Query';
-  rankingProducts: Array<{
-    __typename?: 'ProductOutput';
-    id: string;
-    title: string;
-    url?: string | null;
-    price?: string | null;
-    thumbnail?: string | null;
-    categoryId: number;
   }>;
 };
 
@@ -2245,21 +2238,6 @@ export const QueryProductsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<QueryProductsQuery, QueryProductsQueryVariables>;
-export const QueryRankingProductsDocument = new TypedDocumentString(`
-    query QueryRankingProducts {
-  rankingProducts {
-    id
-    title
-    url
-    price
-    thumbnail
-    categoryId
-  }
-}
-    `) as unknown as TypedDocumentString<
-  QueryRankingProductsQuery,
-  QueryRankingProductsQueryVariables
->;
 export const QueryCommunityRandomRankingProductsDocument = new TypedDocumentString(`
     query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {
   communityRandomRankingProducts(count: $count, limit: $limit) {

@@ -18,7 +18,7 @@ export default function TogetherViewedSection({
   limit = 20,
 }: Props) {
   const { data } = useSuspenseQuery(ProductQueries.togetherViewed({ productId, limit }));
-  const products = data.togetherViewedProducts;
+  const products = data?.togetherViewedProducts ?? [];
 
   if (!products.length) return null;
 

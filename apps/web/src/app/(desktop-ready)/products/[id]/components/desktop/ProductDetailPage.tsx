@@ -78,8 +78,12 @@ export default async function DesktopProductDetailPage({
               </div>
               <Hr />
               <div>
-                <TogetherViewedSection productId={productId} />
-                <CategoryPopularByProductSection productId={productId} />
+                <Suspense>
+                  <TogetherViewedSection productId={productId} />
+                </Suspense>
+                <Suspense>
+                  <CategoryPopularByProductSection productId={productId} />
+                </Suspense>
               </div>
             </div>
           </div>

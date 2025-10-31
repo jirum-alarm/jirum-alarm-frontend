@@ -267,6 +267,7 @@ type Mutation {
   푸시를 받기위한 토큰 등록
   """
   addPushToken(token: String!, tokenType: TokenType!): Boolean!
+  addUserDevice(deviceId: String!): Boolean!
   addUserLikeOrDislike(isLike: Boolean, target: UserLikeTarget!, targetId: Int!): Boolean!
   """
   wishlist 추가
@@ -503,16 +504,27 @@ type ProductHotDealIndex {
 type ProductMapping {
   brandProduct: String
   createdAt: DateTime!
+  danawaUrl: String
   id: ID!
+  matchStatus: ProductMappingMatchStatus
   productId: Int!
-  target: ProductMappingTarget!
-  targetId: Int!
+  reason: String
+  target: ProductMappingTarget
+  targetId: Int
+  updatedAt: DateTime!
 }
 
 type ProductMappingInfoOutput {
   amount: String!
   brandProductId: Int!
   quantity: String!
+}
+
+enum ProductMappingMatchStatus {
+  MATCHED
+  NOT_MATCHABLE
+  NO_MATCHED_PRODUCT
+  NO_PRICE_COMPARISON
 }
 
 enum ProductMappingTarget {
@@ -578,6 +590,7 @@ type ProductOutput {
   negativeCommunityReactionCount: Int!
   positiveCommunityReactionCount: Int!
   postedAt: DateTime!
+  precomputedRankingScore: Float
   price: String
   """
   상품 가격 목록
@@ -638,6 +651,7 @@ type Query {
   어드민) 댓글 목록 조회
   """
   commentsByAdmin(excludes: [String!], hotDealKeywordId: Int!, synonyms: [String!]): [String!]!
+  communityProviders: [Provider!]!
   """
   상품 랭킹 랜덤 조회
   """
@@ -716,12 +730,25 @@ type Query {
     searchAfter: [String!]
     type: HotDealKeywordType
   ): [HotDealKeywordOutput!]!
+  """
+  놓치면 아까운 핫딜 - 랭킹순 핫딜 상품 조회
+  """
+  hotDealRankingProducts(
+    """
+    한 페이지당 아이템 개수 (최대 20개)
+    """
+    limit: Int!
+    """
+    페이지 번호 (0부터 시작)
+    """
+    page: Int!
+  ): [ProductOutput!]!
   instagramPost(id: Int!): InstagramPost
   matchProduct(text: String!): String!
   """
   로그인한 유저 정보 조회
   """
-  me: User!
+  me: User
   """
   유저 알림 키워드 목록 조회
   """
@@ -760,8 +787,10 @@ type Query {
     isReward: Boolean
     keyword: String
     limit: Int!
+    mallId: Int
     orderBy: ProductOrderType
     orderOption: OrderOptionType
+    providerId: Int
     searchAfter: [String!]
     startDate: DateTime
     thumbnailType: ThumbnailType
@@ -780,10 +809,6 @@ type Query {
   푸시 세팅 조회
   """
   pushSetting: UserPushSetting!
-  """
-  상품 랭킹 목록 조회
-  """
-  rankingProducts: [ProductOutput!]!
   """
   신고한 사용자 목록 조회 (마스킹)
   """

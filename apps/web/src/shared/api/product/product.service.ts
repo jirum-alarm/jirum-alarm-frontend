@@ -24,10 +24,6 @@ import {
 } from '../gql/graphql';
 
 export class ProductService {
-  static async getRankingProducts() {
-    return execute(QueryRankingProducts).then((res) => res.data);
-  }
-
   static async getProduct(variables: ProductQueryVariables) {
     return execute(QueryProduct, variables).then((res) => res.data);
   }
@@ -89,19 +85,6 @@ export class ProductService {
     return execute(QueryCategorizedReactionKeywords, variables).then((res) => res.data);
   }
 }
-
-const QueryRankingProducts = graphql(`
-  query QueryRankingProducts {
-    rankingProducts {
-      id
-      title
-      url
-      price
-      thumbnail
-      categoryId
-    }
-  }
-`);
 
 const QueryProduct = graphql(`
   query product($id: Int!) {

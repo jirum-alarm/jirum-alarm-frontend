@@ -17,11 +17,6 @@ import { ProductService } from '@/shared/api/product';
 
 export const ProductQueries = {
   all: () => ['product'],
-  ranking: () =>
-    queryOptions({
-      queryKey: [...ProductQueries.all(), 'ranking'],
-      queryFn: () => ProductService.getRankingProducts(),
-    }),
   product: (variables: ProductQueryVariables) =>
     queryOptions({
       queryKey: [

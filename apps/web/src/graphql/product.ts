@@ -214,19 +214,6 @@ export const QueryProducts = gql`
   }
 `;
 
-export const QueryRankingProducts = gql`
-  query QueryRankingProducts {
-    rankingProducts {
-      id
-      title
-      url
-      price
-      thumbnail
-      categoryId
-    }
-  }
-`;
-
 export const QueryCommunityRandomRankingProducts = gql`
   query QueryCommunityRandomRankingProducts($count: Int!, $limit: Int!) {
     communityRandomRankingProducts(count: $count, limit: $limit) {

@@ -63,8 +63,12 @@ function ProductDetailPage({
             <Hr />
 
             <div className="mt-7 mb-8 space-y-8">
-              <TogetherViewedSection productId={productId} />
-              <CategoryPopularByProductSection productId={productId} />
+              <Suspense>
+                <TogetherViewedSection productId={productId} />
+              </Suspense>
+              <Suspense>
+                <CategoryPopularByProductSection productId={productId} />
+              </Suspense>
             </div>
 
             <NoticeProfitLink productId={productId} />
