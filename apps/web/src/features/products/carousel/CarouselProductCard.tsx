@@ -18,6 +18,7 @@ export default function CarouselProductCard({ product }: { product: ProductCardT
           categoryId={product.categoryId}
           type="hotDeal"
           alt={product.title}
+          fetchPriority="high"
           sizes="(max-width: 768px) 120px, 192px"
         />
         {product.isEnd ? (
