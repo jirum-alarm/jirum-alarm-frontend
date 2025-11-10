@@ -2,8 +2,10 @@ import { NextRequest } from 'next/server';
 
 import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
 import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/constants/token';
+import { customFetch } from '@/lib/http-client';
 
-export const runtime = 'edge';
+// Node.js Runtime으로 변경하여 HTTP Agent 사용 가능하도록 설정
+export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
   const upstream = GRAPHQL_ENDPOINT;
@@ -23,7 +25,7 @@ export async function POST(req: NextRequest) {
 
   const auth = incomingAuth ?? `Bearer ${accessToken}`;
 
-  let res = await fetch(upstream, {
+  let res = await customFetch(upstream, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,7 +48,7 @@ export async function POST(req: NextRequest) {
     const refreshToken = req.cookies.get('REFRESH_TOKEN')?.value;
 
     if (hasAuthError && refreshToken) {
-      const refreshRes = await fetch(upstream, {
+      const refreshRes = await customFetch(upstream, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +96,7 @@ export async function POST(req: NextRequest) {
         }
 
         // retry original request with new access token
-        res = await fetch(upstream, {
+        res = await customFetch(upstream, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
