@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const CDN_BASE_URL = 'https://cdn.jirum-alarm.com';
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> },
+) {
   try {
     // 경로 조합: /sitemap/title-index.xml -> title-index.xml
     const { path: pathArray } = await params;

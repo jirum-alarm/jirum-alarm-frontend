@@ -21,15 +21,11 @@ const nextConfig = withPWA({
     return [
       {
         source: '/(.*)',
-        headers: [
-          { key: 'X-Robots-Tag', value: 'max-image-preview:large' },
-        ],
+        headers: [{ key: 'X-Robots-Tag', value: 'max-image-preview:large' }],
       },
       {
         source: '/api/(.*)',
-        headers: [
-          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
-        ],
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }],
       },
     ];
   },

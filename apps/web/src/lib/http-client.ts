@@ -29,7 +29,7 @@ export async function customFetch(url: string, options: RequestInit = {}) {
 
   return fetch(url, {
     ...options,
-    // @ts-ignore - Node.js fetch에서 agent 옵션 지원
+    // @ts-expect-error - Node.js fetch에서 agent 옵션 지원
     agent,
     headers: {
       ...options.headers,
