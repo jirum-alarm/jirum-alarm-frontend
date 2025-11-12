@@ -8,7 +8,7 @@ export const GRAPHQL_ENDPOINT = IS_INTERNAL_NETWORK
 
 export const GRAPHQL_ENDPOINT_PROXY = IS_INTERNAL_NETWORK
   ? `${NEXT_PUBLIC_SERVICE_URL}/api/graphql`
-  : 'https://localhost:3000/api/graphql';
+  : 'http://localhost:3000/api/graphql';
 
 export const GRAPHQL_SUBSCRIPTIONS_ENDPOINT =
   process.env.SUBSCRIPTIONS_GRAPHQL_ENDPOINT || 'wss://jirum-dev-api.kyojs.com/graphql';
