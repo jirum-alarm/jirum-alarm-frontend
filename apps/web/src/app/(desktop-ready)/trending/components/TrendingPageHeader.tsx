@@ -4,6 +4,8 @@ import SearchLinkButton from '@/components/SearchLinkButton';
 import { useHeaderVisibility } from '@/hooks/useScrollDirection';
 import { cn } from '@/lib/cn';
 
+import PageTabNavigation from './PageTabNavigation';
+
 const TrendingPageHeader = () => {
   const isHeaderVisible = useHeaderVisibility();
   return (
@@ -16,8 +18,9 @@ const TrendingPageHeader = () => {
         },
       )}
     >
-      <h1 className="text-lg font-bold">지름알림 랭킹</h1>
-      <SearchLinkButton color="#1d2939" />
+      <PageTabNavigation />
+      {/* <h1 className="text-lg font-bold">발견</h1>
+      <SearchLinkButton color="#1d2939" /> */}
     </header>
   );
 };

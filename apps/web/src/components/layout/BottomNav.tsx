@@ -7,12 +7,12 @@ import { createElement, useRef } from 'react';
 import {
   Alert,
   AlertFill,
+  Find,
+  FindFill,
   Home,
   HomeFill,
   My,
   MyFill,
-  Ranking,
-  RankingFill,
 } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
 import { useHeaderVisibility } from '@/hooks/useScrollDirection';
@@ -36,13 +36,16 @@ const BottomNavList = [
     text: '홈',
     icon: Home,
     activeIcon: HomeFill,
+    isActive: (pathName: string) => pathName === PAGE.HOME,
   },
   {
     type: NAV_TYPE.TRENDING,
-    link: PAGE.TRENDING,
-    text: '랭킹',
-    icon: Ranking,
-    activeIcon: RankingFill,
+    getLink: (pathName: string) =>
+      pathName === PAGE.TRENDING_RANKING ? PAGE.TRENDING_LIVE : PAGE.TRENDING_RANKING,
+    text: '발견',
+    icon: Find,
+    activeIcon: FindFill,
+    isActive: (pathName: string) => pathName.startsWith(PAGE.TRENDING),
   },
   {
     type: NAV_TYPE.ALARM,
@@ -50,6 +53,7 @@ const BottomNavList = [
     text: '알림',
     icon: Alert,
     activeIcon: AlertFill,
+    isActive: (pathName: string) => pathName.startsWith(PAGE.ALARM),
   },
   {
     type: NAV_TYPE.MYPAGE,
@@ -57,8 +61,9 @@ const BottomNavList = [
     text: '내정보',
     icon: My,
     activeIcon: MyFill,
+    isActive: (pathName: string) => pathName.startsWith(PAGE.MYPAGE),
   },
-] as const;
+];
 
 // 1. 링크를 기준으로 active
 // 2. touch start나 mouse down으로 active 후 링크가 이동 안 됐으면 unactive
@@ -68,8 +73,8 @@ const BottomNavComponent = () => {
   const navRef = useRef<HTMLUListElement>(null);
   const isBottomNavVisible = useHeaderVisibility();
 
-  const isActiveNav = (type: NAV_TYPE, link: string) => {
-    return link === pathName;
+  const isActiveNav = (nav: (typeof BottomNavList)[number]) => {
+    return nav.isActive(pathName);
   };
 
   return (
@@ -91,10 +96,10 @@ const BottomNavComponent = () => {
               className={cn(
                 'flex w-full flex-col items-center justify-center rounded-lg py-2 text-gray-500',
                 {
-                  'text-gray-900': isActiveNav(nav.type, nav.link),
+                  'text-gray-900': isActiveNav(nav),
                 },
               )}
-              href={nav.link}
+              href={nav.link ?? nav.getLink(pathName)}
             >
               <motion.div
                 className="flex w-full flex-col items-center justify-center rounded-lg"
@@ -105,11 +110,11 @@ const BottomNavComponent = () => {
                   className="flex h-[36px] w-[48px] items-center justify-center"
                   aria-hidden="true"
                 >
-                  {createElement(isActiveNav(nav.type, nav.link) ? nav.activeIcon : nav.icon)}
+                  {createElement(isActiveNav(nav) ? nav.activeIcon : nav.icon)}
                 </div>
                 <span
                   className={cn('text-xs', {
-                    'font-semibold': isActiveNav(nav.type, nav.link),
+                    'font-semibold': isActiveNav(nav),
                   })}
                 >
                   {nav.text}
@@ -125,6 +130,6 @@ const BottomNavComponent = () => {
 
 export default function BottomNav() {
   const pathName = usePathname();
-  if (!BottomNavList.some((nav) => nav.link === pathName)) return null;
+  if (!BottomNavList.some((nav) => nav.isActive(pathName))) return null;
   return <BottomNavComponent />;
 }
