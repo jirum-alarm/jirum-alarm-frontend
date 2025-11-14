@@ -1,51 +1,127 @@
 'use client';
 
+import { useMutation } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+import { setAccessToken, setRefreshToken } from '@/app/actions/token';
 import { StandingIllust } from '@/components/common/icons/Illust';
+import LoadingSpinner from '@/components/common/icons/LoadingSpinner';
 import SvgEmail from '@/components/common/icons/login/Email';
 import SvgKakao from '@/components/common/icons/login/Kakao';
 import SvgNaver from '@/components/common/icons/login/Naver';
 import BasicLayout from '@/components/layout/BasicLayout';
+import { PAGE } from '@/constants/page';
 import { useDevice } from '@/hooks/useDevice';
+import { useKakaoSDK } from '@/hooks/useKakaoSDK';
 import useMyRouter, { MyRouter } from '@/hooks/useMyRouter';
 import { cn } from '@/lib/cn';
+import { AuthService } from '@/shared/api/auth';
+import { OauthProvider } from '@/shared/api/gql/graphql';
+import { WindowLocation } from '@/shared/lib/window-location';
 
 import AppDownloadCTA from './components/AppDownloadCTA';
 
-const EMAIL_LOGIN_PATH = '/login/email';
+enum LoginType {
+  KAKAO = 'KAKAO',
+  NAVER = 'NAVER',
+  EMAIL = 'EMAIL',
+}
 
-const LOGIN_BUTTONS = [
-  {
-    name: '카카오로 시작하기',
-    icon: <SvgKakao />,
-    style: 'bg-[#FBE84C] hover:bg-[#F5DC3D] text-gray-900',
-    action: (router: MyRouter) => {
-      // TODO: Implement Kakao login
-      console.log('Kakao login');
-    },
-  },
-  {
-    name: '네이버로 시작하기',
-    icon: <SvgNaver />,
-    style: 'bg-[#02C75A] hover:bg-[#00B04F] text-white',
-    action: (router: MyRouter) => {
-      // TODO: Implement Naver login
-      console.log('Naver login');
-    },
-  },
-  {
-    name: '이메일로 시작하기',
-    icon: <SvgEmail />,
-    style: 'hover:bg-[#E4E7EC] border-[1px] border-[#E4E7EC] text-gray-900',
-    action: (router: MyRouter) => {
-      router.push(EMAIL_LOGIN_PATH);
-    },
-  },
-];
+type LoginButton = {
+  name: string;
+  icon: React.ReactNode;
+  style: string;
+  action: () => void;
+  type: LoginType;
+};
 
 const Login = () => {
   const { device, isHydrated } = useDevice();
-
   const router = useMyRouter();
+  const searchParams = useSearchParams();
+  const { executeKakaoLogin, isLoading: isKakaoLoading } = useKakaoSDK();
+  const [loadingButton, setLoadingButton] = useState<LoginType | null>(null);
+  const { mutate: socialLogin } = useMutation({
+    mutationFn: AuthService.socialLogin,
+  });
+
+  useEffect(() => {
+    const code = searchParams.get('code');
+    if (code) {
+      console.log('Kakao login code:', code);
+      console.log('Kakao login oauthProvider:', OauthProvider.Kakao);
+      socialLogin(
+        {
+          oauthProvider: OauthProvider.Kakao,
+          socialAccessToken: code,
+        },
+        {
+          onSuccess: async (data) => {
+            console.log('Kakao login success:', data);
+            // await setAccessToken(data.socialLogin.accessToken);
+            // await setRefreshToken(data.socialLogin.refreshToken ?? '');
+            router.push(PAGE.HOME);
+          },
+          onError: (error) => {
+            console.error('Failed to login with Kakao:', error);
+            router.push(PAGE.LOGIN);
+          },
+        },
+      );
+    }
+  }, [socialLogin, searchParams]);
+
+  const handleKakaoLogin = async () => {
+    try {
+      setLoadingButton(LoginType.KAKAO);
+      await executeKakaoLogin();
+    } catch (error) {
+      console.error('카카오 로그인 실패:', error);
+    } finally {
+      setLoadingButton(null);
+    }
+  };
+
+  const handleNaverLogin = async () => {
+    try {
+      setLoadingButton(LoginType.NAVER);
+      // TODO: Implement Naver login
+      console.log('Naver login');
+    } catch (error) {
+      console.error('Failed to login with Naver:', error);
+    } finally {
+      setLoadingButton(null);
+    }
+  };
+
+  const handleEmailLogin = () => {
+    router.push(PAGE.LOGIN_BY_EMAIL);
+  };
+
+  const LOGIN_BUTTONS: LoginButton[] = [
+    {
+      name: '카카오로 시작하기',
+      icon: <SvgKakao />,
+      style: 'bg-[#FBE84C] hover:bg-[#F5DC3D] text-gray-900',
+      action: handleKakaoLogin,
+      type: LoginType.KAKAO,
+    },
+    {
+      name: '네이버로 시작하기',
+      icon: <SvgNaver />,
+      style: 'bg-[#02C75A] hover:bg-[#00B04F] text-white',
+      action: handleNaverLogin,
+      type: LoginType.NAVER,
+    },
+    {
+      name: '이메일로 시작하기',
+      icon: <SvgEmail />,
+      style: 'hover:bg-[#E4E7EC] border-[1px] border-[#E4E7EC] text-gray-900',
+      action: handleEmailLogin,
+      type: LoginType.EMAIL,
+    },
+  ];
 
   return (
     <BasicLayout hasBackButton fullScreen={true}>
@@ -66,19 +142,33 @@ const Login = () => {
 
           {/* Login Buttons */}
           <div className="flex flex-col items-center gap-2">
-            {LOGIN_BUTTONS.map((button) => (
-              <button
-                key={button.name}
-                onClick={() => button.action(router)}
-                className={cn(
-                  'flex h-[48px] w-[280px] items-center justify-center gap-2 rounded-[230px] font-semibold text-gray-900 transition-colors',
-                  button.style,
-                )}
-              >
-                {button.icon}
-                {button.name}
-              </button>
-            ))}
+            {LOGIN_BUTTONS.map((button) => {
+              const isLoading = loadingButton === button.type;
+              return (
+                <button
+                  key={button.name}
+                  onClick={button.action}
+                  disabled={isLoading}
+                  className={cn(
+                    'flex h-[48px] w-[280px] items-center justify-center gap-2 rounded-[230px] font-semibold transition-colors',
+                    button.style,
+                    isLoading && 'cursor-not-allowed opacity-70',
+                  )}
+                >
+                  {isLoading ? (
+                    <>
+                      <LoadingSpinner className="size-5" />
+                      로딩 중...
+                    </>
+                  ) : (
+                    <>
+                      {button.icon}
+                      {button.name}
+                    </>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 

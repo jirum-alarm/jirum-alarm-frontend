@@ -6,3 +6,7 @@ export const NEXT_PUBLIC_DEFAULT_SERVICE_URL = 'https://jirum-alarm.com';
 export const METADATA_SERVICE_URL = NEXT_PUBLIC_SERVICE_URL ?? NEXT_PUBLIC_DEFAULT_SERVICE_URL;
 export const API_URL = process.env.API_URL;
 export const LANDING_URL = process.env.LANDING_URL ?? 'https://about-us.jirum-alarm.com';
+
+export const KAKAO_SECRET = process.env.NEXT_PUBLIC_KAKAO_SECRET ?? '';
+
+export const KAKAO_REDIRECT_URI = process.env.KAKAO_REDIRECT_URI ?? '';

@@ -659,8 +659,10 @@ export type ProductOutput = {
   /** 서비스 카테고리 */
   categoryName?: Maybe<Scalars['String']['output']>;
   commentSummary?: Maybe<ProductCommentSummary>;
+  consumptionDate?: Maybe<Scalars['DateTime']['output']>;
   detailUrl?: Maybe<Scalars['String']['output']>;
   dislikeCount: Scalars['Int']['output'];
+  distributionDate?: Maybe<Scalars['DateTime']['output']>;
   /**
    * 핫딜 정보 요약
    * @deprecated productGuides 쿼리를 사용해주세요.
@@ -749,6 +751,8 @@ export type Query = {
   expireProductReportCount: Scalars['Int']['output'];
   /** 종료된 상품 제보 내역 조회 */
   expireProductReports: Array<ProductExpireReport>;
+  /** 유통기한 임박 특가 상품 조회 */
+  expiringSoonHotDealProducts: Array<ProductOutput>;
   homePage: PageSchema;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
@@ -761,7 +765,6 @@ export type Query = {
   /** 놓치면 아까운 핫딜 - 랭킹순 핫딜 상품 조회 */
   hotDealRankingProducts: Array<ProductOutput>;
   instagramPost?: Maybe<InstagramPost>;
-  matchProduct: Scalars['String']['output'];
   /** 로그인한 유저 정보 조회 */
   me?: Maybe<User>;
   /** 유저 알림 키워드 목록 조회 */
@@ -857,6 +860,12 @@ export type QueryExpireProductReportsArgs = {
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type QueryExpiringSoonHotDealProductsArgs = {
+  daysUntilExpiry: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
 export type QueryHomePageArgs = {
   version: Scalars['String']['input'];
 };
@@ -896,10 +905,6 @@ export type QueryHotDealRankingProductsArgs = {
 
 export type QueryInstagramPostArgs = {
   id: Scalars['Int']['input'];
-};
-
-export type QueryMatchProductArgs = {
-  text: Scalars['String']['input'];
 };
 
 export type QueryNotificationKeywordsByMeArgs = {
@@ -1187,6 +1192,26 @@ export type MutationAddUserDeviceMutationVariables = Exact<{
 }>;
 
 export type MutationAddUserDeviceMutation = { __typename?: 'Mutation'; addUserDevice: boolean };
+
+export type MutationSocialLoginMutationVariables = Exact<{
+  oauthProvider: OauthProvider;
+  socialAccessToken: Scalars['String']['input'];
+  email?: InputMaybe<Scalars['String']['input']>;
+  nickname?: InputMaybe<Scalars['String']['input']>;
+  birthYear?: InputMaybe<Scalars['Float']['input']>;
+  gender?: InputMaybe<Gender>;
+  favoriteCategories?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+}>;
+
+export type MutationSocialLoginMutation = {
+  __typename?: 'Mutation';
+  socialLogin: {
+    __typename?: 'SocialLoginOutput';
+    accessToken: string;
+    refreshToken?: string | null;
+    type: string;
+  };
+};
 
 export type QueryCategoriesQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -1923,6 +1948,26 @@ export const MutationAddUserDeviceDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationAddUserDeviceMutation,
   MutationAddUserDeviceMutationVariables
+>;
+export const MutationSocialLoginDocument = new TypedDocumentString(`
+    mutation MutationSocialLogin($oauthProvider: OauthProvider!, $socialAccessToken: String!, $email: String, $nickname: String, $birthYear: Float, $gender: Gender, $favoriteCategories: [Int!]) {
+  socialLogin(
+    oauthProvider: $oauthProvider
+    socialAccessToken: $socialAccessToken
+    email: $email
+    nickname: $nickname
+    birthYear: $birthYear
+    gender: $gender
+    favoriteCategories: $favoriteCategories
+  ) {
+    accessToken
+    refreshToken
+    type
+  }
+}
+    `) as unknown as TypedDocumentString<
+  MutationSocialLoginMutation,
+  MutationSocialLoginMutationVariables
 >;
 export const QueryCategoriesDocument = new TypedDocumentString(`
     query QueryCategories {

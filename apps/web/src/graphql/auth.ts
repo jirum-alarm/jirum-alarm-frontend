@@ -104,3 +104,29 @@ export const MutationAddUserDevice = gql`
     addUserDevice(deviceId: $deviceId)
   }
 `;
+
+export const MutationSocialLogin = gql`
+  mutation MutationSocialLogin(
+    $oauthProvider: OauthProvider!
+    $socialAccessToken: String!
+    $email: String
+    $nickname: String
+    $birthYear: Float
+    $gender: Gender
+    $favoriteCategories: [Int!]
+  ) {
+    socialLogin(
+      oauthProvider: $oauthProvider
+      socialAccessToken: $socialAccessToken
+      email: $email
+      nickname: $nickname
+      birthYear: $birthYear
+      gender: $gender
+      favoriteCategories: $favoriteCategories
+    ) {
+      accessToken
+      refreshToken
+      type
+    }
+  }
+`;
