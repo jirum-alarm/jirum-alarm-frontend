@@ -13,7 +13,7 @@ const KAKAO_SDK_URL = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.7/kakao.min.js';
 const KAKAO_SDK_INTEGRITY =
   'sha384-tJkjbtDbvoxO+diRuDtwRO9JXR7pjWnfjfRn5ePUpl7e7RJCxKCwwnfqUAdXh53p';
 
-export const useKakaoSDK = () => {
+export const useKakaoLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
 

@@ -35,5 +35,3 @@ export const useNaverLogin = () => {
     isLoading,
   };
 };
-
-export default useNaverLogin;

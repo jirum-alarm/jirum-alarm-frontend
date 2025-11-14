@@ -1,10 +1,7 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { setAccessToken, setRefreshToken } from '@/app/actions/token';
 import { StandingIllust } from '@/components/common/icons/Illust';
 import LoadingSpinner from '@/components/common/icons/LoadingSpinner';
 import SvgEmail from '@/components/common/icons/login/Email';
@@ -12,14 +9,11 @@ import SvgKakao from '@/components/common/icons/login/Kakao';
 import SvgNaver from '@/components/common/icons/login/Naver';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { PAGE } from '@/constants/page';
+import { useKakaoLogin } from '@/features/auth/lib/use-kakao-login';
+import { useNaverLogin } from '@/features/auth/lib/use-naver-login';
 import { useDevice } from '@/hooks/useDevice';
-import { useKakaoSDK } from '@/hooks/useKakaoSDK';
-import useMyRouter, { MyRouter } from '@/hooks/useMyRouter';
-import useNaverLogin from '@/hooks/useNaverLogin';
+import useMyRouter from '@/hooks/useMyRouter';
 import { cn } from '@/lib/cn';
-import { AuthService } from '@/shared/api/auth';
-import { OauthProvider } from '@/shared/api/gql/graphql';
-import { WindowLocation } from '@/shared/lib/window-location';
 
 import AppDownloadCTA from './components/AppDownloadCTA';
 
@@ -41,8 +35,7 @@ type LoginButton = {
 const Login = () => {
   const { device, isHydrated } = useDevice();
   const router = useMyRouter();
-  const searchParams = useSearchParams();
-  const { executeKakaoLogin, isLoading: isKakaoLoading } = useKakaoSDK();
+  const { executeKakaoLogin, isLoading: isKakaoLoading } = useKakaoLogin();
   const { executeNaverLogin, isLoading: isNaverLoading } = useNaverLogin();
   const [loadingButton, setLoadingButton] = useState<LoginType | null>(null);
 
