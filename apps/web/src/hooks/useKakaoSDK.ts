@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { KAKAO_REDIRECT_URI, KAKAO_SECRET } from '@/constants/env';
+import { KAKAO_SECRET } from '@/constants/env';
 import { WindowLocation } from '@/shared/lib/window-location';
 
 declare global {
@@ -15,13 +15,11 @@ const KAKAO_SDK_INTEGRITY =
 
 export const useKakaoSDK = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
 
   const loadKakaoSDK = (): Promise<void> => {
     return new Promise((resolve, reject) => {
       if (window.Kakao && window.Kakao.isInitialized()) {
-        setIsLoaded(true);
         resolve();
         return;
       }
@@ -29,13 +27,10 @@ export const useKakaoSDK = () => {
       const existingScript = document.querySelector(`script[src="${KAKAO_SDK_URL}"]`);
       if (existingScript) {
         existingScript.addEventListener('load', () => {
-          setIsLoaded(true);
           resolve();
         });
         return;
       }
-
-      setIsLoading(true);
 
       const script = document.createElement('script');
       script.src = KAKAO_SDK_URL;
@@ -44,13 +39,10 @@ export const useKakaoSDK = () => {
       script.async = true;
 
       script.onload = () => {
-        setIsLoading(false);
-        setIsLoaded(true);
         resolve();
       };
 
       script.onerror = () => {
-        setIsLoading(false);
         reject(new Error('카카오 로그인 SDK 로드 실패'));
       };
 
@@ -79,8 +71,9 @@ export const useKakaoSDK = () => {
       }
 
       window.Kakao.Auth.authorize({
-        redirectUri: `${WindowLocation.getCurrentOrigin()}/login`,
+        redirectUri: `${WindowLocation.getCurrentOrigin()}/login/callback/kakao`,
       });
+
       resolve();
     });
   };
@@ -109,11 +102,7 @@ export const useKakaoSDK = () => {
   }, []);
 
   return {
-    loadKakaoSDK,
-    initKakaoSDK,
-    loginWithKakao,
     executeKakaoLogin,
     isLoading,
-    isLoaded,
   };
 };

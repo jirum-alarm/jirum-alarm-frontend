@@ -10,3 +10,6 @@ export const LANDING_URL = process.env.LANDING_URL ?? 'https://about-us.jirum-al
 export const KAKAO_SECRET = process.env.NEXT_PUBLIC_KAKAO_SECRET ?? '';
 
 export const KAKAO_REDIRECT_URI = process.env.KAKAO_REDIRECT_URI ?? '';
+
+export const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID ?? '';
+export const NAVER_CLIENT_SECRET = process.env.NEXT_PUBLIC_NAVER_CLIENT_SECRET ?? '';

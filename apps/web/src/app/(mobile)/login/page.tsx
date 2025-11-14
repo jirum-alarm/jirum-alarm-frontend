@@ -15,6 +15,7 @@ import { PAGE } from '@/constants/page';
 import { useDevice } from '@/hooks/useDevice';
 import { useKakaoSDK } from '@/hooks/useKakaoSDK';
 import useMyRouter, { MyRouter } from '@/hooks/useMyRouter';
+import useNaverLogin from '@/hooks/useNaverLogin';
 import { cn } from '@/lib/cn';
 import { AuthService } from '@/shared/api/auth';
 import { OauthProvider } from '@/shared/api/gql/graphql';
@@ -30,6 +31,7 @@ enum LoginType {
 
 type LoginButton = {
   name: string;
+  id: string;
   icon: React.ReactNode;
   style: string;
   action: () => void;
@@ -41,36 +43,8 @@ const Login = () => {
   const router = useMyRouter();
   const searchParams = useSearchParams();
   const { executeKakaoLogin, isLoading: isKakaoLoading } = useKakaoSDK();
+  const { executeNaverLogin, isLoading: isNaverLoading } = useNaverLogin();
   const [loadingButton, setLoadingButton] = useState<LoginType | null>(null);
-  const { mutate: socialLogin } = useMutation({
-    mutationFn: AuthService.socialLogin,
-  });
-
-  useEffect(() => {
-    const code = searchParams.get('code');
-    if (code) {
-      console.log('Kakao login code:', code);
-      console.log('Kakao login oauthProvider:', OauthProvider.Kakao);
-      socialLogin(
-        {
-          oauthProvider: OauthProvider.Kakao,
-          socialAccessToken: code,
-        },
-        {
-          onSuccess: async (data) => {
-            console.log('Kakao login success:', data);
-            // await setAccessToken(data.socialLogin.accessToken);
-            // await setRefreshToken(data.socialLogin.refreshToken ?? '');
-            router.push(PAGE.HOME);
-          },
-          onError: (error) => {
-            console.error('Failed to login with Kakao:', error);
-            router.push(PAGE.LOGIN);
-          },
-        },
-      );
-    }
-  }, [socialLogin, searchParams]);
 
   const handleKakaoLogin = async () => {
     try {
@@ -86,10 +60,9 @@ const Login = () => {
   const handleNaverLogin = async () => {
     try {
       setLoadingButton(LoginType.NAVER);
-      // TODO: Implement Naver login
-      console.log('Naver login');
+      await executeNaverLogin();
     } catch (error) {
-      console.error('Failed to login with Naver:', error);
+      console.error('네이버 로그인 실패:', error);
     } finally {
       setLoadingButton(null);
     }
@@ -102,6 +75,7 @@ const Login = () => {
   const LOGIN_BUTTONS: LoginButton[] = [
     {
       name: '카카오로 시작하기',
+      id: 'kakao-login-button',
       icon: <SvgKakao />,
       style: 'bg-[#FBE84C] hover:bg-[#F5DC3D] text-gray-900',
       action: handleKakaoLogin,
@@ -109,6 +83,7 @@ const Login = () => {
     },
     {
       name: '네이버로 시작하기',
+      id: 'naver_id_login',
       icon: <SvgNaver />,
       style: 'bg-[#02C75A] hover:bg-[#00B04F] text-white',
       action: handleNaverLogin,
@@ -116,6 +91,7 @@ const Login = () => {
     },
     {
       name: '이메일로 시작하기',
+      id: 'email-login-button',
       icon: <SvgEmail />,
       style: 'hover:bg-[#E4E7EC] border-[1px] border-[#E4E7EC] text-gray-900',
       action: handleEmailLogin,
@@ -143,10 +119,12 @@ const Login = () => {
           {/* Login Buttons */}
           <div className="flex flex-col items-center gap-2">
             {LOGIN_BUTTONS.map((button) => {
-              const isLoading = loadingButton === button.type;
+              const isLoadingButton = loadingButton === button.type;
+              const isLoading = isLoadingButton ? isKakaoLoading || isNaverLoading : false;
               return (
                 <button
-                  key={button.name}
+                  key={button.id}
+                  id={button.id}
                   onClick={button.action}
                   disabled={isLoading}
                   className={cn(
