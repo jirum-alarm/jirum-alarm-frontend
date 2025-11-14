@@ -1,55 +1,87 @@
 'use client';
 
-import Button from '@/components/common/Button';
 import { StandingIllust } from '@/components/common/icons/Illust';
+import SvgEmail from '@/components/common/icons/login/Email';
+import SvgKakao from '@/components/common/icons/login/Kakao';
+import SvgNaver from '@/components/common/icons/login/Naver';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { useDevice } from '@/hooks/useDevice';
-import useMyRouter from '@/hooks/useMyRouter';
-
-import Link from '@shared/ui/Link';
+import useMyRouter, { MyRouter } from '@/hooks/useMyRouter';
+import { cn } from '@/lib/cn';
 
 import AppDownloadCTA from './components/AppDownloadCTA';
 
-const SIGNUP_PATH = '/signup';
 const EMAIL_LOGIN_PATH = '/login/email';
+
+const LOGIN_BUTTONS = [
+  {
+    name: '카카오로 시작하기',
+    icon: <SvgKakao />,
+    style: 'bg-[#FBE84C] hover:bg-[#F5DC3D] text-gray-900',
+    action: (router: MyRouter) => {
+      // TODO: Implement Kakao login
+      console.log('Kakao login');
+    },
+  },
+  {
+    name: '네이버로 시작하기',
+    icon: <SvgNaver />,
+    style: 'bg-[#02C75A] hover:bg-[#00B04F] text-white',
+    action: (router: MyRouter) => {
+      // TODO: Implement Naver login
+      console.log('Naver login');
+    },
+  },
+  {
+    name: '이메일로 시작하기',
+    icon: <SvgEmail />,
+    style: 'hover:bg-[#E4E7EC] border-[1px] border-[#E4E7EC] text-gray-900',
+    action: (router: MyRouter) => {
+      router.push(EMAIL_LOGIN_PATH);
+    },
+  },
+];
 
 const Login = () => {
   const { device, isHydrated } = useDevice();
 
   const router = useMyRouter();
-  const handleCTAButton = () => {
-    router.push(SIGNUP_PATH);
-  };
 
   return (
     <BasicLayout hasBackButton fullScreen={true}>
-      <div className="flex h-full flex-col justify-center">
-        <div className="grid pb-4 text-center">
-          <div>
-            <div className="grid justify-center">
-              <StandingIllust className="size-[120px]" />
-            </div>
-            <div>
-              <p className="pt-5 text-[32px] font-bold">지름알림</p>
-              <p className="pt-9">
-                내가 찾는 모든 핫딜
-                <br />
-                누구보다 빠르게 알림받으세요!
-              </p>
-            </div>
-            <div className="px-8 pt-12">
-              <Button onClick={handleCTAButton} className="self-end">
-                이메일로 시작하기
-              </Button>
-              <p className="pt-6 text-sm">
-                이미 지름알림 회원이신가요?
-                <Link href={EMAIL_LOGIN_PATH} className="text-primary-700 -m-2 ml-1 p-2">
-                  로그인
-                </Link>
-              </p>
-            </div>
+      <div className="flex h-full flex-col justify-center px-8">
+        <div className="flex flex-col items-center text-center">
+          {/* Character Icon */}
+          <div className="mb-3">
+            <StandingIllust className="size-[100px]" />
+          </div>
+
+          {/* Title */}
+          <div className="mb-12">
+            <p className="text-[28px] leading-[130%] font-bold tracking-[-1%]">핫딜의 시작</p>
+            <p className="text-[38px] leading-[130%] font-bold tracking-[-1%] text-gray-900">
+              지름알림
+            </p>
+          </div>
+
+          {/* Login Buttons */}
+          <div className="flex flex-col items-center gap-2">
+            {LOGIN_BUTTONS.map((button) => (
+              <button
+                key={button.name}
+                onClick={() => button.action(router)}
+                className={cn(
+                  'flex h-[48px] w-[280px] items-center justify-center gap-2 rounded-[230px] font-semibold text-gray-900 transition-colors',
+                  button.style,
+                )}
+              >
+                {button.icon}
+                {button.name}
+              </button>
+            ))}
           </div>
         </div>
+
         {device.isMobileBrowser && isHydrated && (
           <div className="bottom-safe-bottom fixed right-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
             <AppDownloadCTA device={device} />
