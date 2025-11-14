@@ -54,21 +54,18 @@ export async function execute<TResult, TVariables>(
   headers.set('Content-Type', 'application/json');
   headers.set('Accept', 'application/graphql-response+json');
 
-  let deviceId: string | null = null;
-
   if (isServer) {
-    deviceId = null;
-    if (!deviceId) {
-      deviceId = generateDeviceId();
+    const { cookies } = await import('next/headers');
+    const token = (await cookies()).get('ACCESS_TOKEN')?.value;
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
     }
   } else {
-    deviceId = localStorage.getItem('jirum-alarm-device-id');
+    let deviceId = localStorage.getItem('jirum-alarm-device-id');
     if (!deviceId) {
       deviceId = generateDeviceId();
       localStorage.setItem('jirum-alarm-device-id', deviceId);
     }
-  }
-  if (deviceId) {
     headers.set('X-Device-Id', deviceId);
   }
 

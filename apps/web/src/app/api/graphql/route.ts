@@ -23,14 +23,14 @@ export async function POST(req: NextRequest) {
   const deviceId = req.headers.get('x-device-id') || req.headers.get('X-Device-Id');
   const userAgent = req.headers.get('user-agent') || req.headers.get('User-Agent');
 
-  const auth = incomingAuth ?? `Bearer ${accessToken}`;
+  const auth = incomingAuth ?? (accessToken ? `Bearer ${accessToken}` : null);
 
   let res = await customFetch(upstream, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/graphql-response+json',
-      Authorization: auth || '',
+      ...(auth ? { Authorization: auth } : {}),
       ...(deviceId ? { 'X-Device-Id': deviceId } : {}),
       ...(userAgent ? { 'User-Agent': userAgent } : {}),
     },
