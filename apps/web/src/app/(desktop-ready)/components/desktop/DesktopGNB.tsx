@@ -37,7 +37,7 @@ const NAV_LINKS = [
     isActive: (pathname: string) => pathname === PAGE.TRENDING_LIVE,
   },
   {
-    href: PAGE.TRENDING,
+    href: PAGE.TRENDING_RANKING,
     label: '랭킹',
     isActive: (pathname: string) => pathname === PAGE.TRENDING_RANKING,
   },
