@@ -20,16 +20,35 @@ import NavLink from './MenuLink';
 const HOME_SCROLLTHRESHOLD = 720;
 const talkroomLink = 'https://open.kakao.com/o/gJZTWAAg';
 
+const NAV_LINKS = [
+  {
+    href: PAGE.HOME,
+    label: '홈',
+    isActive: (pathname: string) => pathname === PAGE.HOME,
+  },
+  {
+    href: PAGE.RECOMMEND,
+    label: '추천',
+    isActive: (pathname: string) => pathname === PAGE.RECOMMEND,
+  },
+  {
+    href: PAGE.TRENDING_LIVE,
+    label: '실시간',
+    isActive: (pathname: string) => pathname === PAGE.TRENDING_LIVE,
+  },
+  {
+    href: PAGE.TRENDING,
+    label: '랭킹',
+    isActive: (pathname: string) => pathname === PAGE.TRENDING_RANKING,
+  },
+];
+
 const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const isScrolled = useScrollPosition(HOME_SCROLLTHRESHOLD);
 
   const pathname = usePathname();
 
   const isInHomeHero = useMemo(() => pathname === PAGE.HOME && !isScrolled, [pathname, isScrolled]);
-
-  const isActive = (href: string) => {
-    return pathname === href;
-  };
 
   return (
     <div
@@ -45,29 +64,20 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
         <nav className="flex h-full items-center gap-x-11">
           <LogoLink inverted={isInHomeHero} />
           <div className="flex h-full items-center gap-x-10">
-            <NavLink
-              href={PAGE.HOME}
-              label="홈"
-              isActive={isActive(PAGE.HOME)}
-              isInverted={isInHomeHero}
-            />
-            <NavLink
-              href={PAGE.RECOMMEND}
-              label="추천"
-              isActive={isActive(PAGE.RECOMMEND)}
-              isInverted={isInHomeHero}
-            />
-            <NavLink
-              href={PAGE.TRENDING}
-              label="랭킹"
-              isActive={isActive(PAGE.TRENDING)}
-              isInverted={isInHomeHero}
-            />
+            {NAV_LINKS.map((nav) => (
+              <NavLink
+                key={nav.href}
+                href={nav.href}
+                label={nav.label}
+                isActive={nav.isActive(pathname)}
+                isInverted={isInHomeHero}
+              />
+            ))}
             <NavLink
               href={LANDING_URL}
               label="소개"
               prefetch={false}
-              isActive={isActive(LANDING_URL)}
+              isActive={pathname === LANDING_URL}
               isInverted={isInHomeHero}
             />
           </div>

@@ -31,6 +31,8 @@ export { default as MyFill } from './MyFill';
 export { default as Ranking } from './Ranking';
 export { default as RankingFill } from './RankingFill';
 export { default as RoundedLogo } from './RoundedLogo';
+export { default as Find } from './Find';
+export { default as FindFill } from './FindFill';
 export { default as Search } from './Search';
 export { default as Setting } from './Setting';
 export { default as Thumbsdown } from './Thumbsdown';

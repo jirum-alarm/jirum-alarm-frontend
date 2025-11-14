@@ -19,9 +19,8 @@ import { CategoryQueries } from '@entities/category';
 
 import GridProductListSkeleton from '@features/products/grid/GridProductListSkeleton';
 
-import { TAB_META } from '../../tabMeta';
+import LiveList from '../LiveList';
 import TabBarV2 from '../TabbarV2';
-import TrendingList from '../TrendingList';
 
 const SWIPER_OPTIONS: SwiperOptions = {
   slidesPerView: 1,
@@ -33,7 +32,7 @@ type Props = {
   initialTab: number;
 };
 
-export const TrendingContainer = ({ initialTab }: Props) => {
+export const LiveContainer = ({ initialTab }: Props) => {
   const swiperRef = useRef<SwiperClass>(null);
 
   const {
@@ -89,13 +88,10 @@ export const TrendingContainer = ({ initialTab }: Props) => {
     [tabId, setTabId],
   );
 
-  // Split useEffect for better performance - title updates
   useEffect(() => {
-    const meta = TAB_META[tabId] || TAB_META[0];
-    document.title = meta.title;
-  }, [tabId]);
+    document.title = '실시간 핫딜 | 지름알림';
+  }, []);
 
-  // Split useEffect for better performance - swiper and fetch logic
   useEffect(() => {
     const swiper = swiperRef.current;
     const targetIndex = categoryIds.indexOf(tabId);
@@ -142,7 +138,7 @@ export const TrendingContainer = ({ initialTab }: Props) => {
                       }
                     >
                       <div className="overflow-x-hidden">
-                        <TrendingList categoryId={category.id} categoryName={category.name} />
+                        <LiveList categoryId={category.id === 0 ? null : category.id} />
                       </div>
                     </Suspense>
                   ) : (
