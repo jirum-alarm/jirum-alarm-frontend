@@ -1213,6 +1213,14 @@ export type MutationSocialLoginMutation = {
   };
 };
 
+export type QuerySocialAccessTokenQueryVariables = Exact<{
+  code: Scalars['String']['input'];
+  oauthProvider: OauthProvider;
+  state: Scalars['String']['input'];
+}>;
+
+export type QuerySocialAccessTokenQuery = { __typename?: 'Query'; socialAccessToken: string };
+
 export type QueryCategoriesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type QueryCategoriesQuery = {
@@ -1968,6 +1976,14 @@ export const MutationSocialLoginDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationSocialLoginMutation,
   MutationSocialLoginMutationVariables
+>;
+export const QuerySocialAccessTokenDocument = new TypedDocumentString(`
+    query QuerySocialAccessToken($code: String!, $oauthProvider: OauthProvider!, $state: String!) {
+  socialAccessToken(code: $code, oauthProvider: $oauthProvider, state: $state)
+}
+    `) as unknown as TypedDocumentString<
+  QuerySocialAccessTokenQuery,
+  QuerySocialAccessTokenQueryVariables
 >;
 export const QueryCategoriesDocument = new TypedDocumentString(`
     query QueryCategories {

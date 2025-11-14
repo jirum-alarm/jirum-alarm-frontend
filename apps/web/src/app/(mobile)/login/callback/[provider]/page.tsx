@@ -66,10 +66,21 @@ const SocialLoginCallbackPage = () => {
       return;
     }
 
-    socialLogin({
+    AuthService.socialAccessToken({
+      code,
       oauthProvider,
-      socialAccessToken: code,
-    });
+      state: searchParams.get('state') || '',
+    })
+      .then((res) =>
+        socialLogin({
+          oauthProvider,
+          socialAccessToken: res.socialAccessToken,
+        }),
+      )
+      .catch((error) => {
+        console.error('socialAccessToken 조회 실패:', error);
+        router.push(PAGE.LOGIN);
+      });
   }, [code, error, oauthProvider, providerName, socialLogin, router]);
 
   return (

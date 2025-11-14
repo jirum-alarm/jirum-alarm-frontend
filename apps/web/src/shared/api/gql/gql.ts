@@ -22,6 +22,7 @@ type Documents = {
   '\n  mutation MutationWithdraw {\n    withdraw\n  }\n': typeof types.MutationWithdrawDocument;
   '\n  mutation MutationAddUserDevice($deviceId: String!) {\n    addUserDevice(deviceId: $deviceId)\n  }\n': typeof types.MutationAddUserDeviceDocument;
   '\n  mutation MutationSocialLogin(\n    $oauthProvider: OauthProvider!\n    $socialAccessToken: String!\n    $email: String\n    $nickname: String\n    $birthYear: Float\n    $gender: Gender\n    $favoriteCategories: [Int!]\n  ) {\n    socialLogin(\n      oauthProvider: $oauthProvider\n      socialAccessToken: $socialAccessToken\n      email: $email\n      nickname: $nickname\n      birthYear: $birthYear\n      gender: $gender\n      favoriteCategories: $favoriteCategories\n    ) {\n      accessToken\n      refreshToken\n      type\n    }\n  }\n': typeof types.MutationSocialLoginDocument;
+  '\n  query QuerySocialAccessToken($code: String!, $oauthProvider: OauthProvider!, $state: String!) {\n    socialAccessToken(code: $code, oauthProvider: $oauthProvider, state: $state)\n  }\n': typeof types.QuerySocialAccessTokenDocument;
   '\n  query QueryCategories {\n    categories {\n      id\n      name\n    }\n  }\n': typeof types.QueryCategoriesDocument;
   '\n  query comments(\n    $limit: Int!\n    $searchAfter: [String!]\n    $productId: Int!\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      productId: $productId\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      content\n      createdAt\n      searchAfter\n      author {\n        id\n        nickname\n      }\n      likeCount\n      isMyLike\n    }\n  }\n': typeof types.CommentsDocument;
   '\n  mutation addComment($productId: Int!, $content: String!, $parentId: Int) {\n    addComment(productId: $productId, content: $content, parentId: $parentId)\n  }\n': typeof types.AddCommentDocument;
@@ -73,6 +74,8 @@ const documents: Documents = {
     types.MutationAddUserDeviceDocument,
   '\n  mutation MutationSocialLogin(\n    $oauthProvider: OauthProvider!\n    $socialAccessToken: String!\n    $email: String\n    $nickname: String\n    $birthYear: Float\n    $gender: Gender\n    $favoriteCategories: [Int!]\n  ) {\n    socialLogin(\n      oauthProvider: $oauthProvider\n      socialAccessToken: $socialAccessToken\n      email: $email\n      nickname: $nickname\n      birthYear: $birthYear\n      gender: $gender\n      favoriteCategories: $favoriteCategories\n    ) {\n      accessToken\n      refreshToken\n      type\n    }\n  }\n':
     types.MutationSocialLoginDocument,
+  '\n  query QuerySocialAccessToken($code: String!, $oauthProvider: OauthProvider!, $state: String!) {\n    socialAccessToken(code: $code, oauthProvider: $oauthProvider, state: $state)\n  }\n':
+    types.QuerySocialAccessTokenDocument,
   '\n  query QueryCategories {\n    categories {\n      id\n      name\n    }\n  }\n':
     types.QueryCategoriesDocument,
   '\n  query comments(\n    $limit: Int!\n    $searchAfter: [String!]\n    $productId: Int!\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      productId: $productId\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      content\n      createdAt\n      searchAfter\n      author {\n        id\n        nickname\n      }\n      likeCount\n      isMyLike\n    }\n  }\n':
@@ -194,6 +197,12 @@ export function graphql(
 export function graphql(
   source: '\n  mutation MutationSocialLogin(\n    $oauthProvider: OauthProvider!\n    $socialAccessToken: String!\n    $email: String\n    $nickname: String\n    $birthYear: Float\n    $gender: Gender\n    $favoriteCategories: [Int!]\n  ) {\n    socialLogin(\n      oauthProvider: $oauthProvider\n      socialAccessToken: $socialAccessToken\n      email: $email\n      nickname: $nickname\n      birthYear: $birthYear\n      gender: $gender\n      favoriteCategories: $favoriteCategories\n    ) {\n      accessToken\n      refreshToken\n      type\n    }\n  }\n',
 ): typeof import('./graphql').MutationSocialLoginDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QuerySocialAccessToken($code: String!, $oauthProvider: OauthProvider!, $state: String!) {\n    socialAccessToken(code: $code, oauthProvider: $oauthProvider, state: $state)\n  }\n',
+): typeof import('./graphql').QuerySocialAccessTokenDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

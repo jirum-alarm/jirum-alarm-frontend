@@ -14,6 +14,7 @@ import {
   MutationUpdatePasswordMutationVariables,
   MutationUpdateUserProfileMutationVariables,
   QueryMypageKeywordQueryVariables,
+  QuerySocialAccessTokenQueryVariables,
 } from '../gql/graphql';
 
 export class AuthService {
@@ -66,10 +67,15 @@ export class AuthService {
   }
 
   static async socialLogin(variables: MutationSocialLoginMutationVariables) {
+    console.log('socialLogin variables:', variables);
     return execute(MutationSocialLogin, variables).then((res) => {
       console.log('socialLogin response:', res);
       return res.data;
     });
+  }
+
+  static async socialAccessToken(variables: QuerySocialAccessTokenQueryVariables) {
+    return execute(QuerySocialAccessToken, variables).then((res) => res.data);
   }
 }
 
@@ -213,5 +219,11 @@ const MutationSocialLogin = graphql(`
       refreshToken
       type
     }
+  }
+`);
+
+const QuerySocialAccessToken = graphql(`
+  query QuerySocialAccessToken($code: String!, $oauthProvider: OauthProvider!, $state: String!) {
+    socialAccessToken(code: $code, oauthProvider: $oauthProvider, state: $state)
   }
 `);

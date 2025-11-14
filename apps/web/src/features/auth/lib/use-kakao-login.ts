@@ -70,8 +70,11 @@ export const useKakaoLogin = () => {
         throw new Error('Kakao SDK가 초기화되지 않았습니다.');
       }
 
+      const STATE = Math.random().toString(36).substring(2, 15);
+
       window.Kakao.Auth.authorize({
         redirectUri: `${WindowLocation.getCurrentOrigin()}/login/callback/kakao`,
+        state: STATE,
       });
 
       resolve();

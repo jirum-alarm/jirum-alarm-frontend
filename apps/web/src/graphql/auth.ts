@@ -130,3 +130,9 @@ export const MutationSocialLogin = gql`
     }
   }
 `;
+
+export const QuerySocialAccessToken = gql`
+  query QuerySocialAccessToken($code: String!, $oauthProvider: OauthProvider!, $state: String!) {
+    socialAccessToken(code: $code, oauthProvider: $oauthProvider, state: $state)
+  }
+`;
