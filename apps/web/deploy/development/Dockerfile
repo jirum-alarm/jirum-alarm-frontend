@@ -1,6 +1,6 @@
 # Build arguments
 ARG NODE_VERSION=22.18
-ARG PNPM_VERSION=10.14.0
+ARG PNPM_VERSION=10.15.0
 
 # ========================================
 # Base stage - Setup Node.js and pnpm
