@@ -1,5 +1,7 @@
 import '@/style/globals.css';
 
+import { PublicEnvScript } from 'next-runtime-env';
+
 import { AppProvider } from '@/app/(app)/providers';
 import { defaultMetadata, jsonLd } from '@/constants/metadata';
 import { pretendard } from '@/lib/fonts';
@@ -25,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={`${pretendard.className} antialiased`}>
       <head>
+        <PublicEnvScript />
         <link rel="dns-prefetch" href="https://api.mixpanel.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link
