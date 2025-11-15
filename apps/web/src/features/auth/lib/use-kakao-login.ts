@@ -1,6 +1,6 @@
+import { env } from 'next-runtime-env';
 import { useEffect, useRef, useState } from 'react';
 
-import { KAKAO_SECRET } from '@/constants/env';
 import { WindowLocation } from '@/shared/lib/window-location';
 
 declare global {
@@ -58,7 +58,8 @@ export const useKakaoLogin = () => {
       }
 
       if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(KAKAO_SECRET);
+        const kakaoSecret = env('NEXT_PUBLIC_KAKAO_SECRET') ?? '';
+        window.Kakao.init(kakaoSecret);
       }
       resolve();
     });

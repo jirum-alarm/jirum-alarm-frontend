@@ -1,6 +1,6 @@
+import { env } from 'next-runtime-env';
 import { useState } from 'react';
 
-import { NAVER_CLIENT_ID } from '@/constants/env';
 import { WindowLocation } from '@/shared/lib/window-location';
 
 export const useNaverLogin = () => {
@@ -12,7 +12,8 @@ export const useNaverLogin = () => {
       const REDIRECT_URI = encodeURIComponent(
         WindowLocation.getCurrentOrigin() + '/login/callback/naver',
       );
-      const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
+      const naverClientId = env('NEXT_PUBLIC_NAVER_CLIENT_ID') ?? '';
+      const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverClientId}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
       window.location.href = naverAuthUrl;
       resolve();
     });
