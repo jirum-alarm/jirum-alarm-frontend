@@ -10,9 +10,11 @@ import {
   MutationLoginMutationVariables,
   MutationRemoveNotificationKeywordMutationVariables,
   MutationSignupMutationVariables,
+  MutationSocialLoginMutationVariables,
   MutationUpdatePasswordMutationVariables,
   MutationUpdateUserProfileMutationVariables,
   QueryMypageKeywordQueryVariables,
+  QuerySocialAccessTokenQueryVariables,
 } from '../gql/graphql';
 
 export class AuthService {
@@ -62,6 +64,18 @@ export class AuthService {
 
   static async addUserDevice(variables: MutationAddUserDeviceMutationVariables) {
     return execute(MutationAddUserDevice, variables).then((res) => res.data);
+  }
+
+  static async socialLogin(variables: MutationSocialLoginMutationVariables) {
+    console.log('socialLogin variables:', variables);
+    return execute(MutationSocialLogin, variables).then((res) => {
+      console.log('socialLogin response:', res);
+      return res.data;
+    });
+  }
+
+  static async socialAccessToken(variables: QuerySocialAccessTokenQueryVariables) {
+    return execute(QuerySocialAccessToken, variables).then((res) => res.data);
   }
 }
 
@@ -179,5 +193,37 @@ const MutationRemoveNotificationKeyword = graphql(`
 const MutationAddUserDevice = graphql(`
   mutation MutationAddUserDevice($deviceId: String!) {
     addUserDevice(deviceId: $deviceId)
+  }
+`);
+
+const MutationSocialLogin = graphql(`
+  mutation MutationSocialLogin(
+    $oauthProvider: OauthProvider!
+    $socialAccessToken: String!
+    $email: String
+    $nickname: String
+    $birthYear: Float
+    $gender: Gender
+    $favoriteCategories: [Int!]
+  ) {
+    socialLogin(
+      oauthProvider: $oauthProvider
+      socialAccessToken: $socialAccessToken
+      email: $email
+      nickname: $nickname
+      birthYear: $birthYear
+      gender: $gender
+      favoriteCategories: $favoriteCategories
+    ) {
+      accessToken
+      refreshToken
+      type
+    }
+  }
+`);
+
+const QuerySocialAccessToken = graphql(`
+  query QuerySocialAccessToken($code: String!, $oauthProvider: OauthProvider!, $state: String!) {
+    socialAccessToken(code: $code, oauthProvider: $oauthProvider, state: $state)
   }
 `);

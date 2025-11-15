@@ -558,8 +558,10 @@ type ProductOutput {
   """
   categoryName: String
   commentSummary: ProductCommentSummary
+  consumptionDate: DateTime
   detailUrl: String
   dislikeCount: Int!
+  distributionDate: DateTime
   """
   핫딜 정보 요약
   """
@@ -695,6 +697,17 @@ type Query {
     productId: Int
     searchAfter: [String!]
   ): [productExpireReport!]!
+  """
+  유통기한 임박 특가 상품 조회
+  """
+  expiringSoonHotDealProducts(
+    """
+    유통기한 임박 기간 (일 단위)
+    """
+    daysUntilExpiry: Int!
+    limit: Int!
+    searchAfter: [String!]
+  ): [ProductOutput!]!
   homePage(version: String!): PageSchema!
   """
   어드민) 핫딜 제외 키워드 목록 조회
@@ -744,7 +757,6 @@ type Query {
     page: Int!
   ): [ProductOutput!]!
   instagramPost(id: Int!): InstagramPost
-  matchProduct(text: String!): String!
   """
   로그인한 유저 정보 조회
   """

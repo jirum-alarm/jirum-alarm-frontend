@@ -11,7 +11,13 @@ type NavigateOptions = {
   scroll?: boolean;
 };
 
-export default function useMyRouter() {
+export type MyRouter = {
+  push: (href: string, options?: NavigateOptions) => void;
+  replace: (href: string, options?: NavigateOptions) => void;
+  back: () => void;
+};
+
+export default function useMyRouter(): MyRouter {
   const router = useRouter();
   const {
     device: { isJirumAlarmApp },
