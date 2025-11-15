@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 
 import { StandingIllust } from '@/components/common/icons/Illust';
@@ -140,6 +141,14 @@ const Login = () => {
                 </button>
               );
             })}
+
+            {/* Email Signup Link */}
+            <Link
+              href={PAGE.SIGNUP}
+              className="mt-2 text-sm text-gray-600 underline transition-colors hover:text-gray-900"
+            >
+              이메일로 가입하기
+            </Link>
           </div>
         </div>
 

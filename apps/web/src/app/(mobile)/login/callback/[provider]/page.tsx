@@ -4,7 +4,9 @@ import { useMutation } from '@tanstack/react-query';
 import { notFound, useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
+import { setAccessToken, setRefreshToken } from '@/app/actions/token';
 import LoadingSpinner from '@/components/common/icons/LoadingSpinner';
+import { useToast } from '@/components/common/Toast';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { PAGE } from '@/constants/page';
 import { AuthService } from '@/shared/api/auth';
@@ -28,6 +30,7 @@ const SocialLoginCallbackPage = () => {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
+  const { toast } = useToast();
 
   const provider = params.provider as string;
   const code = searchParams.get('code');
@@ -42,9 +45,12 @@ const SocialLoginCallbackPage = () => {
 
   const { mutate: socialLogin } = useMutation({
     mutationFn: AuthService.socialLogin,
-    onSuccess: (data) => {
-      console.log(`${providerName} 로그인 성공:`, data);
-      // TODO: 토큰 저장 및 페이지 이동
+    onSuccess: async (data) => {
+      await setAccessToken(data.socialLogin.accessToken);
+      if (data.socialLogin.refreshToken) {
+        await setRefreshToken(data.socialLogin.refreshToken);
+      }
+      toast('로그인에 성공했어요.');
       router.push(PAGE.HOME);
     },
     onError: (error) => {
