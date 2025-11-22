@@ -6,7 +6,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 import dynamic from 'next/dynamic';
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
@@ -77,7 +77,62 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
     swiperRef.current?.slideNext();
   };
 
-  const isActiveAdvertise = Advertisement.Persil_20251022.isInPeriod();
+  const isActiveAdvertise = Advertisement.Persil_20251124.isInPeriod();
+
+  const renderProducts = useCallback(() => {
+    const productList = products.map((product, i) => {
+      const slideIndex = !isMobile && isActiveAdvertise && i >= 3 ? i + 1 : i;
+      return (
+        <SwiperSlide
+          className={cn('pb-5')}
+          key={product.id}
+          style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
+        >
+          <ProductRankingImageCard
+            activeIndex={index}
+            index={slideIndex}
+            rank={i + 1}
+            product={product}
+          />
+        </SwiperSlide>
+      );
+    });
+    if (!isActiveAdvertise) {
+      return productList;
+    }
+
+    const AdSlide = (
+      <SwiperSlide
+        key="ad-slide"
+        className={cn('pb-5')}
+        style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
+      >
+        <ADProductRankingImageCard
+          url={'https://ibpartner.cafe24.com/surl/O/807'}
+          product={
+            {
+              id: '-1',
+              title: '퍼실 파워젤 듀얼(드럼/일반 겸용) 1.8L x6개',
+              beforePrice: '111,000원',
+              price: '36,000원',
+              thumbnail: '/persil_2511_product.png',
+              categoryId: 0,
+            } as const
+          }
+          activeIndex={index}
+          index={isMobile ? products.length : 3}
+        />
+      </SwiperSlide>
+    );
+
+    if (isMobile) {
+      return [...productList, AdSlide];
+    }
+
+    const desktopList = [...productList];
+    desktopList.splice(3, 0, AdSlide);
+    return desktopList;
+  }, [products, isActiveAdvertise, isMobile, index]);
 
   return (
     <>
@@ -119,36 +174,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             onAfterInit={handleAfterInit}
             initialSlide={index}
           >
-            {products.map((product, i) => (
-              <SwiperSlide
-                className={cn('pb-5')}
-                key={product.id}
-                style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
-              >
-                <ProductRankingImageCard activeIndex={index} index={i} product={product} />
-              </SwiperSlide>
-            ))}
-            {isActiveAdvertise && (
-              <SwiperSlide
-                className={cn('pb-5')}
-                style={{ width: isMobile ? '240px' : 'calc((100% - 72px) / 4)' }}
-              >
-                <ADProductRankingImageCard
-                  url={'https://ibpartner.cafe24.com/surl/O/808'}
-                  product={
-                    {
-                      id: '-1',
-                      title: '퍼실 파워젤 듀얼 2.7L x4개',
-                      price: '40,800원',
-                      thumbnail: '/persil_2510_product.png',
-                      categoryId: 0,
-                    } as const
-                  }
-                  activeIndex={index}
-                  index={products.length}
-                />
-              </SwiperSlide>
-            )}
+            {renderProducts()}
           </Swiper>
         </motion.div>
         <button
@@ -173,7 +199,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         </AnimatePresence>
       </div>
       <SliderDots
-        total={products.length + (Advertisement.Persil_20251022.isInPeriod() ? 1 : 0)}
+        total={products.length + (Advertisement.Persil_20251124.isInPeriod() ? 1 : 0)}
         visibleSlides={visibleSlides}
       />
     </>

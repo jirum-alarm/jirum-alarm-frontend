@@ -36,8 +36,8 @@ const BannerItem = ({
     <Link
       onClick={handleClick}
       className={cn(
-        'pc:w-1/2 pc:grow pc:pl-[32px] pc:pr-6.5 flex h-full w-full items-center justify-between rounded-lg border py-3 pr-[6px] pl-4',
-        isMobile && 'h-[76px]',
+        'pc:w-1/2 pc:grow pc:pl-[32px] pc:pr-6.5 relative flex h-full w-full items-center justify-between rounded-lg border py-3 pr-[6px] pl-4',
+        isMobile && 'h-[92px]',
         className,
       )}
       href={href}
@@ -50,7 +50,7 @@ const BannerItem = ({
         <p className="pc:text-base text-[13px] text-gray-200">{description}</p>
       </div>
 
-      <div className="pc:h-[84px] pc:w-[120px] relative h-14 w-[80px]">
+      <div className="pc:h-[84px] pc:w-[120px] relative flex h-14 w-[80px] items-center justify-center">
         <Image
           src={image}
           alt=""

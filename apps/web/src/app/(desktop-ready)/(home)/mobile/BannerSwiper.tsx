@@ -42,11 +42,19 @@ const BannerSwiper = () => {
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useAtom(isInitAtom);
 
+  if (Advertisement.Persil_20251124.isInPeriod()) {
+    return (
+      <div className="mx-5">
+        <AdBanner isMobile={true} />
+      </div>
+    );
+  }
+
   // 중복 제거
   const renderBanners = () => {
-    const promoBannerGenerator = Advertisement.Persil_20251022.isInPeriod()
+    const promoBannerGenerator = Advertisement.Persil_20251124.isInPeriod()
       ? (i: number) => (
-          <SwiperSlide key={`${i}-persil-2510-banner`} style={{ width: 'calc(100% - 50px)' }}>
+          <SwiperSlide key={`${i}-persil-2511-banner`} style={{ width: 'calc(100% - 50px)' }}>
             <AdBanner isMobile={true} />
           </SwiperSlide>
         )
@@ -119,7 +127,7 @@ const BannerSwiper = () => {
       >
         {renderBanners()}
       </Swiper>
-      <div className="absolute right-6.25 -bottom-3.75 z-10 h-[4px] w-15">
+      <div className="absolute top-2 right-9 z-10 h-1 w-8">
         <div className="h-full w-full overflow-hidden rounded-full bg-white/20">
           <div
             className="h-full bg-white"

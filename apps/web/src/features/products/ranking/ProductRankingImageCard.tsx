@@ -13,10 +13,12 @@ export default function ProductRankingImageCard({
   product,
   activeIndex,
   index,
+  rank,
 }: {
   product: Omit<ProductCardType, 'postedAt'>;
   activeIndex: number;
   index: number;
+  rank?: number;
 }) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
@@ -28,7 +30,7 @@ export default function ProductRankingImageCard({
       >
         <div className="pc:aspect-square pc:h-auto relative h-[240px] w-full bg-gray-50">
           <div className="text-primary-500 pc:text-white pc:bg-gray-600/80 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900 text-sm font-medium">
-            {index + 1}
+            {rank ?? index + 1}
           </div>
           <ProductThumbnail
             src={product.thumbnail ?? ''}
