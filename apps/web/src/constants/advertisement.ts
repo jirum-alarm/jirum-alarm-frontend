@@ -52,8 +52,8 @@ export class Advertisement {
       return period('Asia/Seoul').startAt('2025-11-24 12:00').endAt('2025-11-30 23:59:59');
     },
     url: 'https://ibpartner.cafe24.com/',
-    title: '헨켈 생필품 할인 최대 ~68%',
-    discountRate: '68',
+    title: '헨켈 생필품 할인 최대 ~72%',
+    discountRate: '72',
     description: '세제, 섬유유연제, 주방세제 모음전',
     period: '11.24 - 11.30',
   };
