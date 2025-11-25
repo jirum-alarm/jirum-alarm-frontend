@@ -56,7 +56,7 @@ COPY --from=deps /app/packages/*/node_modules ./packages/*/node_modules
 COPY . .
 
 ARG NEXT_PUBLIC_SERVICE_URL=https://dev.jirum-alarm.com
-ARG API_URL=http://crawling-service-lb.crawling-server.svc.cluster.local:3100
+ARG API_URL=http://crawling-server-lb.crawling-server-dev.svc.cluster.local:3100
 ARG NEXT_PUBLIC_FIREBASE_VAPID_KEY=AIzaSyCpfnPqj8e_uVFTASlpumCYJ9w7R3d-8wQ
 ARG NODE_ENV=test
 
@@ -104,7 +104,7 @@ RUN addgroup --system --gid 1001 nodejs && \
     chown -R nextjs:nodejs /app
 
 ARG NEXT_PUBLIC_SERVICE_URL=https://dev.jirum-alarm.com
-ARG API_URL=http://crawling-service-lb.crawling-server.svc.cluster.local:3100
+ARG API_URL=http://crawling-server-lb.crawling-server-dev.svc.cluster.local:3100
 ARG NEXT_PUBLIC_FIREBASE_VAPID_KEY=AIzaSyCpfnPqj8e_uVFTASlpumCYJ9w7R3d-8wQ
 ARG NODE_ENV=test
 ENV NEXT_PUBLIC_SERVICE_URL=${NEXT_PUBLIC_SERVICE_URL} \
