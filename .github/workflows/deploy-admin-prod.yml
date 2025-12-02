@@ -2,10 +2,11 @@ name: deploy-admin-production
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "v*.*.*"
     paths:
       - "apps/admin/**"
+      - "packages/**"
 
 jobs:
   build:
@@ -18,7 +19,7 @@ jobs:
       DOCKER_USER: ${{ secrets.DOCKER_USER }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       INFRA_GITHUB_REPOSITORY: ${{ secrets.INFRA_GITHUB_REPOSITORY }}
-      INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH: ${{ secrets.INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH }}
+      INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH: jirum-alarm-frontend-admin-deployment.yaml
 
     steps:
       - name: Checkout
@@ -86,7 +87,7 @@ jobs:
         working-directory: infra
         run: |
           set -euo pipefail
-          DEPLOYMENT_FILE="server/jirum-alarm-admin/production/$INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH"
+          DEPLOYMENT_FILE="server/jirum-alarm-frontend-admin/production/$INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH"
 
           # Build image url
           export IMAGE_URL="harbor.kyojs.com/tjsry0466/jirum-alarm-admin:${{ steps.image.outputs.version }}"
@@ -101,6 +102,7 @@ jobs:
           yq eval -i '.spec.template.metadata.annotations."deployment.kubernetes.io/revision-timestamp" = strenv(TIMESTAMP)' "$DEPLOYMENT_FILE"
 
       - name: Commit files
+        working-directory: infra
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"

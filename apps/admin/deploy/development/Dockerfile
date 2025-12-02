@@ -48,7 +48,7 @@ RUN rm -rf ./**/*/src
 # 4. Production dependencies
 FROM builder AS dependencies
 WORKDIR /app
-RUN pnpm --filter=$PROJECT deploy --prod --ignore-scripts --no-optional /dependencies
+RUN pnpm --filter=$PROJECT deploy --prod --ignore-scripts --no-optional --legacy /dependencies
 
 # 5. Final image - runner stage to run the application
 FROM alpine AS runner
