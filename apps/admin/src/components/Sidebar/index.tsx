@@ -19,7 +19,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
-  const storedSidebarExpanded = 'true';
+  const storedSidebarExpanded =
+    typeof window !== 'undefined' ? localStorage.getItem('sidebar-expanded') : null;
 
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
@@ -145,6 +146,28 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <Menu
                         name="예약 목록"
                         linkTo="/post/reservation"
+                        open={open}
+                        pathname={pathname}
+                      />
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+              <SidebarLinkGroup activeCondition={pathname.startsWith('/product')}>
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <MenuGroup
+                        name="상품"
+                        isSelectedPath={pathname.startsWith('/product')}
+                        open={open}
+                        sidebarExpanded={sidebarExpanded}
+                        openSidebar={openSidebar}
+                        handleClick={handleClick}
+                      />
+                      <Menu
+                        name="매칭"
+                        linkTo="/product/matching"
                         open={open}
                         pathname={pathname}
                       />
