@@ -72,10 +72,33 @@ jobs:
           repository: ${{ env.INFRA_GITHUB_REPOSITORY }}
           ref: main
           token: ${{ secrets.ACTION_TOKEN }}
+          path: infra
 
-      - name: Update Kubernetes Deployment resources
+      - name: Install yq
         run: |
-          perl -i -pe's/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin-dev:.*/image: harbor.kyojs.com\/tjsry0466\/jirum-alarm-admin-dev:${{ steps.image.outputs.version }}/' server/jirum-alarm-admin/development/$INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH
+          set -euo pipefail
+          YQ_VERSION="v4.44.3"
+          sudo wget -qO /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64"
+          sudo chmod +x /usr/local/bin/yq
+          yq --version
+
+      - name: Update Kubernetes manifest
+        working-directory: infra
+        run: |
+          set -euo pipefail
+          DEPLOYMENT_FILE="server/jirum-alarm-admin/development/$INFRA_GITHUB_REPOSITORY_DEPLOY_FILE_PATH"
+
+          # Build image url
+          export IMAGE_URL="harbor.kyojs.com/tjsry0466/jirum-alarm-admin-dev:${{ steps.image.outputs.version }}"
+          yq eval -i '.spec.template.spec.containers[0].image = strenv(IMAGE_URL)' "$DEPLOYMENT_FILE"
+
+          # Change cause
+          export CHANGE_CAUSE="Deployed by GitHub Actions - ${{ github.sha }}"
+          yq eval -i '.spec.template.metadata.annotations."kubernetes.io/change-cause" = strenv(CHANGE_CAUSE)' "$DEPLOYMENT_FILE"
+
+          # Timestamp to trigger rollout
+          export TIMESTAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          yq eval -i '.spec.template.metadata.annotations."deployment.kubernetes.io/revision-timestamp" = strenv(TIMESTAMP)' "$DEPLOYMENT_FILE"
 
       - name: Commit files
         run: |
