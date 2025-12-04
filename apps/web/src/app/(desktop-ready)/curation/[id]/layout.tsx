@@ -1,0 +1,45 @@
+import { notFound } from 'next/navigation';
+import { ReactNode } from 'react';
+
+import { checkDevice } from '@/app/actions/agent';
+import BasicLayout from '@/components/layout/BasicLayout';
+import SectionHeader from '@/components/SectionHeader';
+import { getPromotionSectionById } from '@/entities/promotion/api/getPromotionSections';
+
+import Footer from '../../components/desktop/Footer';
+import CurationPageHeader from '../components/CurationPageHeader';
+
+interface LayoutProps {
+  children: ReactNode;
+  params: Promise<{ id: string }>;
+}
+
+export default async function Layout({ children, params }: LayoutProps) {
+  const { isMobile } = await checkDevice();
+  const { id } = await params;
+  const section = getPromotionSectionById(id);
+
+  if (!section) {
+    notFound();
+  }
+
+  const renderMobile = () => {
+    return (
+      <BasicLayout header={<CurationPageHeader title={section.title} />}>
+        {children}
+        <Footer />
+      </BasicLayout>
+    );
+  };
+
+  const renderDesktop = () => {
+    return (
+      <div className="mt-14 pt-8">
+        <SectionHeader title={section.title} />
+        <div className="max-w-layout-max mx-auto">{children}</div>
+      </div>
+    );
+  };
+
+  return isMobile ? renderMobile() : renderDesktop();
+}
