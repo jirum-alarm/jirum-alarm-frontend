@@ -327,3 +327,27 @@ export const QueryCategorizedReactionKeywords = gql`
     }
   }
 `;
+
+export const QueryHotDealRankingProducts = gql`
+  query QueryHotDealRankingProducts($page: Int!, $limit: Int!) {
+    hotDealRankingProducts(page: $page, limit: $limit) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      hotDealType
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
+    }
+  }
+`;

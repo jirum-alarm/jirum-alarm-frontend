@@ -17,6 +17,7 @@ import {
   ProductStatsQueryVariables,
   QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
+  QueryHotDealRankingProductsArgs,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
   QueryReportUserNamesQueryVariables,
@@ -83,6 +84,10 @@ export class ProductService {
 
   static async getReactionKeywords(variables: QueryCategorizedReactionKeywordsArgs) {
     return execute(QueryCategorizedReactionKeywords, variables).then((res) => res.data);
+  }
+
+  static async getHotDealRankingProducts(variables: QueryHotDealRankingProductsArgs) {
+    return execute(QueryHotDealRankingProducts, variables).then((res) => res.data);
   }
 }
 
@@ -314,6 +319,30 @@ const QueryCategorizedReactionKeywords = graphql(`
         count
         tag
       }
+    }
+  }
+`);
+
+const QueryHotDealRankingProducts = graphql(`
+  query QueryHotDealRankingProducts($page: Int!, $limit: Int!) {
+    hotDealRankingProducts(page: $page, limit: $limit) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      hotDealType
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
     }
   }
 `);

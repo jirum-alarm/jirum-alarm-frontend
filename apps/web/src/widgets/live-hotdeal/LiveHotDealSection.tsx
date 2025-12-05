@@ -13,7 +13,11 @@ import GridProductListSkeleton from '@features/products/grid/GridProductListSkel
 import LiveHotDealList from './LiveHotDealList';
 
 const limit = 20;
-const LiveHotDealSection = async () => {
+interface LiveHotDealSectionProps {
+  title?: string;
+}
+
+const LiveHotDealSection = async ({ title = '실시간 핫딜' }: LiveHotDealSectionProps) => {
   const device = await checkDevice();
 
   const queryClient = getQueryClient();
@@ -28,7 +32,7 @@ const LiveHotDealSection = async () => {
 
   return (
     <div className="pc:pt-11 pc:px-0 pc:space-y-10 px-5">
-      <SectionHeader title="실시간 핫딜" />
+      <SectionHeader title={title} />
       <Suspense fallback={<GridProductListSkeleton length={20} />}>
         <LiveHotDealList device={device} />
       </Suspense>
