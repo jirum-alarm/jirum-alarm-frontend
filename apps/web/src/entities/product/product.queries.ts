@@ -8,6 +8,7 @@ import {
   ProductStatsQueryVariables,
   QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
+  QueryHotDealRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
   QueryReportUserNamesQueryVariables,
@@ -157,5 +158,11 @@ export const ProductQueries = {
     queryOptions({
       queryKey: [...ProductQueries.all(), 'reactionKeywords', { id: variables.id }],
       queryFn: () => ProductService.getReactionKeywords(variables),
+    }),
+
+  hotDealRankingProducts: (variables: QueryHotDealRankingProductsQueryVariables) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'hotDealRankingProducts', variables],
+      queryFn: () => ProductService.getHotDealRankingProducts(variables),
     }),
 };

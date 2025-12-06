@@ -23,6 +23,37 @@ export type Scalars = {
   JSONObject: { input: any; output: any };
 };
 
+export type Ad = {
+  __typename?: 'Ad';
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  endAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  isActive: Scalars['Boolean']['output'];
+  linkUrl?: Maybe<Scalars['String']['output']>;
+  slotType: AdSlotType;
+  startAt: Scalars['DateTime']['output'];
+  title?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+  weight: Scalars['Int']['output'];
+};
+
+export enum AdSlotType {
+  DetailPageBanner = 'DETAIL_PAGE_BANNER',
+  MainBanner = 'MAIN_BANNER',
+  MainRankingInfeed = 'MAIN_RANKING_INFEED',
+  MenuRankingInfeed = 'MENU_RANKING_INFEED',
+}
+
+export type AdStats = {
+  __typename?: 'AdStats';
+  adId: Scalars['Int']['output'];
+  clicks: Scalars['Int']['output'];
+  date: Scalars['String']['output'];
+  impressions: Scalars['Int']['output'];
+};
+
 export type AdminUser = {
   __typename?: 'AdminUser';
   createdAt: Scalars['DateTime']['output'];
@@ -250,10 +281,13 @@ export type Mutation = {
   addWishlist: Scalars['Boolean']['output'];
   /** 어드민) 로그인 */
   adminLogin: TokenOutput;
+  clearAdCache: Scalars['Boolean']['output'];
   /** 상품 단건 수집 */
   collectProduct: Scalars['Boolean']['output'];
   /** 썸네일 단건 수집 */
   collectThumbnail: Scalars['Boolean']['output'];
+  createAd: Ad;
+  deleteAd: Scalars['Boolean']['output'];
   /** 로그인 */
   login: TokenOutput;
   /** 리프레시 토큰으로 로그인 */
@@ -291,6 +325,9 @@ export type Mutation = {
   signup: SignupOutput;
   /** 소셜 로그인 */
   socialLogin: SocialLoginOutput;
+  trackAdClick: Scalars['Boolean']['output'];
+  trackAdImpression: Scalars['Boolean']['output'];
+  updateAd: Ad;
   updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
@@ -389,12 +426,32 @@ export type MutationAdminLoginArgs = {
   password: Scalars['String']['input'];
 };
 
+export type MutationClearAdCacheArgs = {
+  slot: AdSlotType;
+};
+
 export type MutationCollectProductArgs = {
   productId: Scalars['Int']['input'];
 };
 
 export type MutationCollectThumbnailArgs = {
   productId: Scalars['Int']['input'];
+};
+
+export type MutationCreateAdArgs = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  endAt: Scalars['DateTime']['input'];
+  imageUrl?: InputMaybe<Scalars['String']['input']>;
+  isActive?: Scalars['Boolean']['input'];
+  linkUrl?: InputMaybe<Scalars['String']['input']>;
+  slotType: AdSlotType;
+  startAt: Scalars['DateTime']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
+  weight?: Scalars['Int']['input'];
+};
+
+export type MutationDeleteAdArgs = {
+  id: Scalars['Int']['input'];
 };
 
 export type MutationLoginArgs = {
@@ -471,6 +528,27 @@ export type MutationSocialLoginArgs = {
   nickname?: InputMaybe<Scalars['String']['input']>;
   oauthProvider: OauthProvider;
   socialAccessToken: Scalars['String']['input'];
+};
+
+export type MutationTrackAdClickArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type MutationTrackAdImpressionArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type MutationUpdateAdArgs = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  endAt?: InputMaybe<Scalars['DateTime']['input']>;
+  id: Scalars['Int']['input'];
+  imageUrl?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  linkUrl?: InputMaybe<Scalars['String']['input']>;
+  slotType?: InputMaybe<AdSlotType>;
+  startAt?: InputMaybe<Scalars['DateTime']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  weight?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type MutationUpdateCommentArgs = {
@@ -730,7 +808,9 @@ export type Provider = {
 
 export type Query = {
   __typename?: 'Query';
+  adStats: Array<AdStats>;
   adminMe: AdminUser;
+  ads: Array<Ad>;
   analysisTitleByDanawa: Scalars['Boolean']['output'];
   categories: Array<Category>;
   /** 커뮤니티 반응 카테고리별 키워드 조회 */
@@ -804,6 +884,16 @@ export type Query = {
   wishlistCount: Scalars['Int']['output'];
   /** 위시리스트 목록 조회 */
   wishlists: Array<WishlistOutput>;
+};
+
+export type QueryAdStatsArgs = {
+  adId?: InputMaybe<Scalars['Int']['input']>;
+  endDate: Scalars['DateTime']['input'];
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryAdsArgs = {
+  slots: Array<AdSlotType>;
 };
 
 export type QueryCategorizedReactionKeywordsArgs = {
@@ -1706,6 +1796,33 @@ export type QueryCategorizedReactionKeywordsQuery = {
   };
 };
 
+export type QueryHotDealRankingProductsQueryVariables = Exact<{
+  page: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+}>;
+
+export type QueryHotDealRankingProductsQuery = {
+  __typename?: 'Query';
+  hotDealRankingProducts: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+    provider: { __typename?: 'Provider'; nameKr: string };
+  }>;
+};
+
 export type AddWishlistMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -2420,6 +2537,32 @@ export const QueryCategorizedReactionKeywordsDocument = new TypedDocumentString(
     `) as unknown as TypedDocumentString<
   QueryCategorizedReactionKeywordsQuery,
   QueryCategorizedReactionKeywordsQueryVariables
+>;
+export const QueryHotDealRankingProductsDocument = new TypedDocumentString(`
+    query QueryHotDealRankingProducts($page: Int!, $limit: Int!) {
+  hotDealRankingProducts(page: $page, limit: $limit) {
+    id
+    title
+    mallId
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    hotDealType
+    provider {
+      nameKr
+    }
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryHotDealRankingProductsQuery,
+  QueryHotDealRankingProductsQueryVariables
 >;
 export const AddWishlistDocument = new TypedDocumentString(`
     mutation AddWishlist($productId: Int!) {

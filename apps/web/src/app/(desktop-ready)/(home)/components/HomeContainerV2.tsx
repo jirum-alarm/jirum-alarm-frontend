@@ -3,10 +3,10 @@ import Link from 'next/link';
 
 import { checkDevice } from '@/app/actions/agent';
 import { Advertisement } from '@/constants/advertisement';
+import { getPromotionSections } from '@/entities/promotion/api/getPromotionSections';
+import PromotionSectionList from '@/widgets/home/PromotionSectionList';
 
-import { LiveHotDealSection } from '@widgets/live-hotdeal';
-import { RecommendedProductSection } from '@widgets/recommend';
-
+import Footer from '../../components/desktop/Footer';
 import DesktopHeroSection from '../desktop/HeroSection';
 import MobileBackgroundHeader from '../mobile/BackgroundHeader';
 import MobileHomeHeader from '../mobile/HomeHeader';
@@ -14,6 +14,7 @@ import MobileJirumRankingContainer from '../mobile/JirumRankingContainer';
 
 async function HomeContainerV2() {
   const { isMobile } = await checkDevice();
+  const sections = getPromotionSections();
 
   const renderDesktop = () => {
     return (
@@ -44,19 +45,19 @@ async function HomeContainerV2() {
   };
 
   return (
-    <div className="pc:max-w-none max-w-mobile-max mx-auto h-full w-full overflow-x-hidden pb-[70px]">
+    <div className="pc:max-w-none max-w-mobile-max mx-auto h-full w-full overflow-x-hidden">
       {!isMobile ? renderDesktop() : renderMobile()}
       <main className="pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-[1.75rem] pc:pt-[72px] max-w-mobile-max relative z-10 mt-[160px] rounded-t-[1.25rem] bg-white pt-3">
         <div className="pc:mx-auto pc:max-w-layout-max">
           {!isMobile ? null : renderMobileRanking()}
-          <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-3">
+          <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-14">
             <div>
-              <RecommendedProductSection />
-              <LiveHotDealSection />
+              <PromotionSectionList sections={sections} />
             </div>
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

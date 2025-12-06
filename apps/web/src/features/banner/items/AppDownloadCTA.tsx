@@ -16,7 +16,7 @@ export default function AppDownloadCTA({
   return (
     <>
       {type && link && (
-        <div className="border-secondary-700 bg-secondary-800 flex h-[92px] w-full items-center rounded-[8px] border px-[16px]">
+        <div className="border-secondary-700 bg-secondary-800 flex h-[92px] w-full items-center rounded-[8px] border px-4">
           <AppIcon />
           <div className="ml-[14px]">
             <p>

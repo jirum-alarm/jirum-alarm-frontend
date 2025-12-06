@@ -12,10 +12,12 @@ export default function ProductGridCard({
   product,
   rank,
   actionIcon,
+  displayTime = true,
 }: {
   product: ProductCardType;
   rank?: number;
   actionIcon?: React.ReactNode;
+  displayTime?: boolean;
 }) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} className="w-full">
@@ -47,15 +49,19 @@ export default function ProductGridCard({
         )}
       </div>
       <div className="flex flex-col">
-        <span className="line-clamp-2 h-12 pt-2 text-sm break-words text-gray-700">
+        <span className="line-clamp-2 h-12 pt-2 text-sm wrap-break-word text-gray-700">
           {product.title}
         </span>
         <div className="flex h-9 items-center pt-1">
           <DisplayListPrice price={product.price} />
-          <span className="w-2"></span>
-          <span className="text-sm text-gray-600">
-            <DisplayTime time={product.postedAt} />
-          </span>
+          {displayTime && (
+            <>
+              <span className="w-2"></span>
+              <span className="text-sm text-gray-600">
+                <DisplayTime time={product.postedAt} />
+              </span>
+            </>
+          )}
         </div>
       </div>
     </Link>

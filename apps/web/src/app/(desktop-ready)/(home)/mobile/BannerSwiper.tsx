@@ -127,7 +127,7 @@ const BannerSwiper = () => {
       >
         {renderBanners()}
       </Swiper>
-      <div className="absolute top-2 right-9 z-10 h-1 w-8">
+      <div className="absolute top-2 right-10 z-10 h-1 w-8">
         <div className="h-full w-full overflow-hidden rounded-full bg-white/20">
           <div
             className="h-full bg-white"

@@ -4,6 +4,35 @@ schema {
   subscription: Subscription
 }
 
+type Ad {
+  createdAt: DateTime!
+  description: String
+  endAt: DateTime!
+  id: ID!
+  imageUrl: String
+  isActive: Boolean!
+  linkUrl: String
+  slotType: AdSlotType!
+  startAt: DateTime!
+  title: String
+  updatedAt: DateTime!
+  weight: Int!
+}
+
+enum AdSlotType {
+  DETAIL_PAGE_BANNER
+  MAIN_BANNER
+  MAIN_RANKING_INFEED
+  MENU_RANKING_INFEED
+}
+
+type AdStats {
+  adId: Int!
+  clicks: Int!
+  date: String!
+  impressions: Int!
+}
+
 type AdminUser {
   createdAt: DateTime!
   email: String!
@@ -277,6 +306,7 @@ type Mutation {
   어드민) 로그인
   """
   adminLogin(email: String!, password: String!): TokenOutput!
+  clearAdCache(slot: AdSlotType!): Boolean!
   """
   상품 단건 수집
   """
@@ -285,6 +315,18 @@ type Mutation {
   썸네일 단건 수집
   """
   collectThumbnail(productId: Int!): Boolean!
+  createAd(
+    description: String
+    endAt: DateTime!
+    imageUrl: String
+    isActive: Boolean! = true
+    linkUrl: String
+    slotType: AdSlotType!
+    startAt: DateTime!
+    title: String
+    weight: Int! = 1
+  ): Ad!
+  deleteAd(id: Int!): Boolean!
   """
   로그인
   """
@@ -371,6 +413,20 @@ type Mutation {
     oauthProvider: OauthProvider!
     socialAccessToken: String!
   ): SocialLoginOutput!
+  trackAdClick(id: Int!): Boolean!
+  trackAdImpression(id: Int!): Boolean!
+  updateAd(
+    description: String
+    endAt: DateTime
+    id: Int!
+    imageUrl: String
+    isActive: Boolean
+    linkUrl: String
+    slotType: AdSlotType
+    startAt: DateTime
+    title: String
+    weight: Int
+  ): Ad!
   updateComment(content: String!, id: Int!): Boolean!
   """
   어드민) 핫딜 키워드 수정
@@ -635,7 +691,9 @@ type Provider {
 }
 
 type Query {
+  adStats(adId: Int, endDate: DateTime!, startDate: DateTime!): [AdStats!]!
   adminMe: AdminUser!
+  ads(slots: [AdSlotType!]!): [Ad!]!
   analysisTitleByDanawa: Boolean!
   categories: [Category!]!
   """
