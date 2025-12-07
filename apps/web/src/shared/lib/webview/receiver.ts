@@ -2,7 +2,7 @@ import {
   type WebViewReceiverEvent,
   type WebViewReceiverEventPayloads,
   WebViewReceiverEventType,
-} from '@shared/lib/webview/type';
+} from '@/shared/lib/webview/type';
 type EventHandler<T extends WebViewReceiverEventType> = (
   payload: WebViewReceiverEventPayloads[T],
 ) => void;

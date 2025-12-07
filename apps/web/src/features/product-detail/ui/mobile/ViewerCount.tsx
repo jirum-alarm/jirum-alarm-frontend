@@ -4,9 +4,9 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 
-import { cn } from '@shared/lib/cn';
-
 import { ProductQueries } from '@entities/product';
+
+import { cn } from '@/shared/lib/cn';
 
 interface ViewerCountProps {
   productId: number;

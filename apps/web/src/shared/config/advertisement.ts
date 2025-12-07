@@ -1,4 +1,4 @@
-import { period } from '@shared/lib/utils/date';
+import { period } from '@/shared/lib/utils/date';
 
 import { IS_PRD } from './env';
 

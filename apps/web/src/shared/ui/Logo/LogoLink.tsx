@@ -1,6 +1,6 @@
-import { cn } from '@shared/lib/cn';
-import { IconLogo } from '@shared/ui/icons/Illust';
-import Link from '@shared/ui/Link';
+import { cn } from '@/shared/lib/cn';
+import { IconLogo } from '@/shared/ui/icons/Illust';
+import Link from '@/shared/ui/Link';
 
 interface LogoLinkProps {
   inverted?: boolean;

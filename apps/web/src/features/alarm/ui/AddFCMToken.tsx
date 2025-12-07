@@ -5,10 +5,10 @@ import { useAtom } from 'jotai';
 import { useQueryState } from 'nuqs';
 import { useEffect } from 'react';
 
-import { fcmTokenAtom } from '@/state/fcmToken';
+import { MutationAddPushTokenMutationVariables, TokenType } from '@/shared/api/gql/graphql';
+import { NotificationService } from '@/shared/api/notification/notification.service';
 
-import { MutationAddPushTokenMutationVariables, TokenType } from '@shared/api/gql/graphql';
-import { NotificationService } from '@shared/api/notification/notification.service';
+import { fcmTokenAtom } from '../model/fcmTokenAtom';
 
 const AddFCMToken = () => {
   const [token] = useQueryState('token');

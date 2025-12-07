@@ -1,10 +1,9 @@
 import { Registration } from '@/app/(mobile)/signup/page';
-
-import Button from '@shared/ui/Button';
-
 import { BirthYearSelect, GenderRadioGroup } from '@entities/user';
 
-import usePersonalInfoFormViewModel from '@features/auth/signup/model/usePersonalInfoFormViewModel';
+import Button from '@/shared/ui/Button';
+
+import usePersonalInfoFormViewModel from '@/features/auth/signup/model/usePersonalInfoFormViewModel';
 
 const PersonalForm = ({
   registration,

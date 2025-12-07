@@ -1,6 +1,6 @@
-import BasicLayout from '@shared/ui/layout/BasicLayout';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import EmailLogin from '@features/auth/login/ui/EmailLogin';
+import EmailLogin from '@/features/auth/login/ui/EmailLogin';
 
 const LoginEmail = () => {
   return (

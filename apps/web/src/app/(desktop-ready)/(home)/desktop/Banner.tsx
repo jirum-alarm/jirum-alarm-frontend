@@ -1,8 +1,6 @@
-import { Advertisement } from '@shared/config/advertisement';
+import { Advertisement } from '@/shared/config/advertisement';
 
-import AboutLink from '@features/banner/items/AboutLink';
-import AdBanner from '@features/banner/items/AdBanner';
-import KakaoOpenChatLink from '@features/banner/items/KakaoOpenChatLink';
+import { AboutLink, AdBanner, KakaoOpenChatLink } from '@/features/banner';
 
 const Banner = () => {
   const isPersilBanner = Advertisement.Persil_20251124.isInPeriod();

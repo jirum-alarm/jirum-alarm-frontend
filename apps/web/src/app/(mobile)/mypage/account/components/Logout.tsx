@@ -1,6 +1,6 @@
-import { useLogout } from '@shared/hooks/useLogout';
-import AlertDialog from '@shared/ui/AlertDialog';
-import Button from '@shared/ui/Button';
+import { useLogout } from '@/shared/hooks/useLogout';
+import AlertDialog from '@/shared/ui/AlertDialog';
+import Button from '@/shared/ui/Button';
 
 const Logout = () => {
   const logout = useLogout();

@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { cn } from '@shared/lib/cn';
-import { ArrowRight } from '@shared/ui/icons';
+import { cn } from '@/shared/lib/cn';
+import { ArrowRight } from '@/shared/ui/icons';
 
 const TopButton = ({ type = 'scrolling-up' }: { type?: 'scrolling-up' | 'scrolled' }) => {
   const [isVisible, setIsVisible] = useState(false);

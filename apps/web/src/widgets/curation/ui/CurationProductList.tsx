@@ -2,10 +2,9 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { getPromotionQueryOptions } from '@entities/promotion/lib/getPromotionQueryOptions';
-import { ContentPromotionSection } from '@entities/promotion/model/types';
+import { ContentPromotionSection, getPromotionQueryOptions } from '@entities/promotion';
 
-import { GridProductList } from '@features/product-list';
+import { GridProductList } from '@/features/product-list';
 
 interface CurationProductListProps {
   section: ContentPromotionSection;

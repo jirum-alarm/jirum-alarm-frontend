@@ -2,10 +2,10 @@
 
 import { Suspense } from 'react';
 
-import { GridProductListSkeleton } from '@features/product-list/grid';
+import { GridProductListSkeleton } from '@/features/product-list/grid';
 
-import { RecommendedProductTabs } from '@widgets/recommend';
-import useRecommendedKeyword from '@widgets/recommend/model/useRecommendedKeyword';
+import { RecommendedProductTabs } from '@/widgets/recommend';
+import useRecommendedKeyword from '@/widgets/recommend/model/useRecommendedKeyword';
 
 import RecommendProductList from './RecommendProductList';
 

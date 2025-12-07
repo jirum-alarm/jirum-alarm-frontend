@@ -1,8 +1,8 @@
 'use client';
 
-import Button from '@shared/ui/Button';
-import { Cancel } from '@shared/ui/icons';
-import Input from '@shared/ui/Input';
+import Button from '@/shared/ui/Button';
+import { Cancel } from '@/shared/ui/icons';
+import Input from '@/shared/ui/Input';
 
 import { useKeywordInput } from '../hooks/useKeywordInput';
 

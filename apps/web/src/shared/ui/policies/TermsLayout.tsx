@@ -2,9 +2,9 @@
 
 import { Link } from 'react-scroll';
 
-import useGoBack from '@shared/hooks/useGoBack';
-import { cn } from '@shared/lib/cn';
-import { Close } from '@shared/ui/icons';
+import useGoBack from '@/shared/hooks/useGoBack';
+import { cn } from '@/shared/lib/cn';
+import { Close } from '@/shared/ui/icons';
 
 type TermsIndexData = {
   idx: number;

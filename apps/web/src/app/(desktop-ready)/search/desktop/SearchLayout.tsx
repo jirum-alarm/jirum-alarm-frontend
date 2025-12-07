@@ -1,6 +1,6 @@
 'use client';
 
-import SearchInput from '@widgets/search/components/SearchInput';
+import { SearchInput } from '@/widgets/search';
 
 export default function DesktopSearchLayout({ children }: { children: React.ReactNode }) {
   return (

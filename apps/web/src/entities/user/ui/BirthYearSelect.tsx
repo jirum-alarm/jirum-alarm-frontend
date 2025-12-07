@@ -1,4 +1,4 @@
-import Select from '@shared/ui/Select';
+import Select from '@/shared/ui/Select';
 
 interface BirthYearSelectProps {
   handleSelectChange: (value?: string | null) => void;

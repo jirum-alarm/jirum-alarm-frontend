@@ -1,8 +1,8 @@
 'use client';
 
-import { PAGE } from '@shared/config/page';
-import useGoBack from '@shared/hooks/useGoBack';
-import { ArrowLeft } from '@shared/ui/icons';
+import { PAGE } from '@/shared/config/page';
+import useGoBack from '@/shared/hooks/useGoBack';
+import { ArrowLeft } from '@/shared/ui/icons';
 
 const BackButton = ({ backTo, onClick }: { backTo?: PAGE; onClick?: () => void }) => {
   const goBack = useGoBack(backTo);

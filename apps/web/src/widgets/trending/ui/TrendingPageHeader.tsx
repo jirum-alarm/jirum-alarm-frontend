@@ -1,8 +1,9 @@
 'use client';
 
-import { useHeaderVisibility } from '@shared/hooks/useScrollDirection';
-import { cn } from '@shared/lib/cn';
-import SearchLinkButton from '@shared/ui/SearchLinkButton';
+import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
+import { cn } from '@/shared/lib/cn';
+
+import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
 
 import PageTabNavigation from './PageTabNavigation';
 

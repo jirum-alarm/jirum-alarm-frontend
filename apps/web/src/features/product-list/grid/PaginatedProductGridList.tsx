@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 
-import { useDevice } from '@shared/hooks/useDevice';
-
 import { type ProductCardType } from '@entities/product';
+
+import { useDevice } from '@/shared/hooks/useDevice';
 
 import ProductGridList from './GridProductList';
 

@@ -1,4 +1,4 @@
-import { cn } from '@shared/lib/cn';
+import { cn } from '@/shared/lib/cn';
 
 const SliderDots = ({ total, visibleSlides }: { total: number; visibleSlides: number[] }) => {
   // visibleSlides에 포함된 인덱스의 앞/뒤에 active가 있는지 확인해서 마진을 동적으로 부여

@@ -1,8 +1,8 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
-import { OrderOptionType, WishlistOrderType } from '@shared/api/gql/graphql';
-
 import { WishlistQueries } from '@entities/wishlist';
+
+import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
 
 import ProductLikeContainer from './ProductLikeContainer';
 

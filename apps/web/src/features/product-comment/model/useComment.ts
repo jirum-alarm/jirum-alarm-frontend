@@ -5,14 +5,15 @@ import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { CommentQueries, defaultCommentsVariables } from '@entities/comment';
 import {
   CANCEL_EVENT,
+  CommentQueries,
+  defaultCommentsVariables,
   REPLY_EVENT,
   TComment,
   TEditStatus,
   UPDATE_EVENT,
-} from '@entities/comment/TComment';
+} from '@entities/comment';
 
 export const editingCommentAtom = atom<{
   comment: TComment;

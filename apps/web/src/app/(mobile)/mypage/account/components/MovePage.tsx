@@ -1,5 +1,5 @@
-import { ArrowRight } from '@shared/ui/icons';
-import Link from '@shared/ui/Link';
+import { ArrowRight } from '@/shared/ui/icons';
+import Link from '@/shared/ui/Link';
 
 interface MovePageProps {
   to: string;

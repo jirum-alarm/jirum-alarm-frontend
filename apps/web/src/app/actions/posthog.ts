@@ -1,8 +1,8 @@
 'use server';
 import { cookies } from 'next/headers';
 
-import { IS_PRD } from '@shared/config/env';
-import { postHogClient } from '@shared/lib/posthog';
+import { IS_PRD } from '@/shared/config/env';
+import { postHogClient } from '@/shared/lib/posthog';
 
 const FEATURE_FLAG_PRD_SUFFIX = '_PROD';
 const FEATURE_FLAG_DEV_SUFFIX = '_DEV';

@@ -1,8 +1,8 @@
 import { type VariantProps } from 'class-variance-authority';
 import React, { isValidElement, useEffect, useId, useMemo, useRef, useState } from 'react';
 
-import useOutsideClick from '@shared/hooks/useOutsideClick';
-import { cn } from '@shared/lib/cn';
+import useOutsideClick from '@/shared/hooks/useOutsideClick';
+import { cn } from '@/shared/lib/cn';
 
 import { ArrowDown } from '../icons';
 

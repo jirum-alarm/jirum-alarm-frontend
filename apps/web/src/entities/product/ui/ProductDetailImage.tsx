@@ -2,11 +2,11 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { convertToWebp } from '@shared/lib/utils/image';
-import ImageComponent from '@shared/ui/ImageComponent';
-import NoImage from '@shared/ui/NoImage';
-
 import { ProductQueries } from '@entities/product';
+
+import { convertToWebp } from '@/shared/lib/utils/image';
+import ImageComponent from '@/shared/ui/ImageComponent';
+import NoImage from '@/shared/ui/NoImage';
 
 export default function ProductDetailImage({
   productId,

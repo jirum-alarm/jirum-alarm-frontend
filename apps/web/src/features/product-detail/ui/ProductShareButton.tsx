@@ -1,9 +1,9 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
 
-import ShareButton from '@shared/ui/ShareButton';
-
 import { ProductQueries } from '@entities/product';
+
+import ShareButton from '@/shared/ui/ShareButton';
 
 export default function ProductShareButton({ productId }: { productId: number }) {
   const { data: product, isLoading } = useSuspenseQuery(

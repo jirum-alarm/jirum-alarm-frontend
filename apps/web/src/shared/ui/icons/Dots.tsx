@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-import { cn } from '@shared/lib/cn';
+import { cn } from '@/shared/lib/cn';
 
 type DotsProps = SVGProps<SVGSVGElement> & {
   direction?: 'vertical' | 'horizontal';

@@ -1,4 +1,4 @@
-import { ArrowRight } from '@shared/ui/icons';
+import { ArrowRight } from '@/shared/ui/icons';
 
 export default function ReactionChartHeader({
   url,

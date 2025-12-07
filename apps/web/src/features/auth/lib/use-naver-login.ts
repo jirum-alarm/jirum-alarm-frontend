@@ -1,7 +1,7 @@
 import { env } from 'next-runtime-env';
 import { useState } from 'react';
 
-import { WindowLocation } from '@shared/lib/window-location';
+import { WindowLocation } from '@/shared/lib/window-location';
 
 export const useNaverLogin = () => {
   const [isLoading, setIsLoading] = useState(false);

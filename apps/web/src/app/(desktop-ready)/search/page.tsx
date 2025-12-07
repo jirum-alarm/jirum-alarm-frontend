@@ -1,4 +1,4 @@
-import SearchPageComponent from '@widgets/search/SearchPage';
+import { SearchPage as SearchPageComponent } from '@/widgets/search';
 
 export default function SearchPage() {
   return <SearchPageComponent />;

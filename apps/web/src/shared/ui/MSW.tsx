@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { IS_API_MOCKING } from '@shared/config/env';
+import { IS_API_MOCKING } from '@/shared/config/env';
 
 export default function MSW() {
   const [enableMocking, setEnableMocking] = useState(false);

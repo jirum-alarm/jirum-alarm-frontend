@@ -3,16 +3,17 @@
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 
-import { LANDING_URL } from '@shared/config/env';
-import { PAGE } from '@shared/config/page';
-import useScrollPosition from '@shared/hooks/useScrollPosition';
-import { cn } from '@shared/lib/cn';
-import { My } from '@shared/ui/icons';
-import TalkDark from '@shared/ui/icons/TalkDark';
-import TalkLight from '@shared/ui/icons/TalkLight';
-import Link from '@shared/ui/Link';
-import LogoLink from '@shared/ui/Logo/LogoLink';
-import SearchLinkButton from '@shared/ui/SearchLinkButton';
+import { LANDING_URL } from '@/shared/config/env';
+import { PAGE } from '@/shared/config/page';
+import useScrollPosition from '@/shared/hooks/useScrollPosition';
+import { cn } from '@/shared/lib/cn';
+import { My } from '@/shared/ui/icons';
+import TalkDark from '@/shared/ui/icons/TalkDark';
+import TalkLight from '@/shared/ui/icons/TalkLight';
+import Link from '@/shared/ui/Link';
+import LogoLink from '@/shared/ui/Logo/LogoLink';
+
+import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
 
 import NavLink from './MenuLink';
 

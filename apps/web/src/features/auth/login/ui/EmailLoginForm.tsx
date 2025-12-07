@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 
-import { cn } from '@shared/lib/cn';
-import Button from '@shared/ui/Button';
-import { Cancel, Eye, EyeOff } from '@shared/ui/icons';
-import Input from '@shared/ui/Input';
+import { cn } from '@/shared/lib/cn';
+import Button from '@/shared/ui/Button';
+import { Cancel, Eye, EyeOff } from '@/shared/ui/icons';
+import Input from '@/shared/ui/Input';
 
 import useEmailLoginFormViewModel from '../model/useEmailLoginFormViewModel';
 

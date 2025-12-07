@@ -2,12 +2,12 @@ import { useState } from 'react';
 
 import { Registration } from '@/app/(mobile)/signup/page';
 
-import { cn } from '@shared/lib/cn';
-import Button from '@shared/ui/Button';
-import { Eye, EyeOff } from '@shared/ui/icons';
-import Input from '@shared/ui/Input';
+import { cn } from '@/shared/lib/cn';
+import Button from '@/shared/ui/Button';
+import { Eye, EyeOff } from '@/shared/ui/icons';
+import Input from '@/shared/ui/Input';
 
-import usePasswordFormViewModel from '@features/auth/signup/model/usePasswordFormViewModel';
+import usePasswordFormViewModel from '@/features/auth/signup/model/usePasswordFormViewModel';
 
 const PasswordForm = ({
   registration,

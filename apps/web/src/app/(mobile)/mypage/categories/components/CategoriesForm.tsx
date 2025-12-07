@@ -1,9 +1,9 @@
 'use client';
 
-import { MAX_SELECTION_COUNT } from '@shared/config/categories';
-import Button from '@shared/ui/Button';
-
 import { CategoriesCheckboxGroup } from '@entities/category';
+
+import { MAX_SELECTION_COUNT } from '@/shared/config/categories';
+import Button from '@/shared/ui/Button';
 
 import { useCategoriesFormViewModel } from '../hooks/useCategoriesFormViewModel';
 

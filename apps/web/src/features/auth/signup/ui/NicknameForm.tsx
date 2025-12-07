@@ -1,10 +1,10 @@
 import { Registration } from '@/app/(mobile)/signup/page';
 
-import Button from '@shared/ui/Button';
-import { Cancel } from '@shared/ui/icons';
-import Input from '@shared/ui/Input';
+import Button from '@/shared/ui/Button';
+import { Cancel } from '@/shared/ui/icons';
+import Input from '@/shared/ui/Input';
 
-import useNicknameFormViewModel from '@features/auth/signup/model/useNicknameFormViewModel';
+import useNicknameFormViewModel from '@/features/auth/signup/model/useNicknameFormViewModel';
 
 const NickNameForm = ({
   registration,

@@ -1,4 +1,4 @@
-import { parsePrice } from '@shared/lib/utils/price';
+import { parsePrice } from '@/shared/lib/utils/price';
 
 type DisplayListPriceProps = {
   price?: string | null;

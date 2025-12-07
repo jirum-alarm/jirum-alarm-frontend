@@ -12,20 +12,19 @@ import { SwiperOptions } from 'swiper/types';
 
 import { RankingSkeleton as DesktopRankingSkeleton } from '@/app/(desktop-ready)/(home)/desktop/RankingSkeleton';
 import { RankingSkeleton as MobileRankingSkeleton } from '@/app/(desktop-ready)/(home)/mobile/RankingSkeleton';
-
-import { OrderOptionType, ProductOrderType } from '@shared/api/gql/graphql';
-import { Advertisement } from '@shared/config/advertisement';
-import { useIsHydrated } from '@shared/hooks/useIsHydrated';
-import { cn } from '@shared/lib/cn';
-import { getDayBefore } from '@shared/lib/utils/date';
-import { getVisibleSlides } from '@shared/lib/utils/swiper';
-import { ArrowLeft } from '@shared/ui/icons';
-import SliderDots from '@shared/ui/SliderDots';
-
 import { ProductQueries } from '@entities/product';
 
-import ADProductRankingImageCard from '@features/product-list/ranking/ADProductRankingImageCard';
-import ProductRankingImageCard from '@features/product-list/ranking/ProductRankingImageCard';
+import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
+import { Advertisement } from '@/shared/config/advertisement';
+import { useIsHydrated } from '@/shared/hooks/useIsHydrated';
+import { cn } from '@/shared/lib/cn';
+import { getDayBefore } from '@/shared/lib/utils/date';
+import { getVisibleSlides } from '@/shared/lib/utils/swiper';
+import { ArrowLeft } from '@/shared/ui/icons';
+import SliderDots from '@/shared/ui/SliderDots';
+
+import ADProductRankingImageCard from '@/features/product-list/ranking/ADProductRankingImageCard';
+import ProductRankingImageCard from '@/features/product-list/ranking/ProductRankingImageCard';
 
 const Swiper = dynamic(() => import('swiper/react').then((mod) => mod.Swiper), {
   ssr: false,

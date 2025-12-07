@@ -10,9 +10,11 @@ export type PromotionSectionType = ContentPromotionSectionType | 'GROUP';
 
 export type PromotionDataSourceType = 'GRAPHQL_QUERY' | 'STATIC_LIST';
 
+export type PromotionQueryName = 'hotDealRankingProducts' | 'productsByKeyword' | 'products';
+
 export type PromotionDataSource = {
   type: PromotionDataSourceType;
-  queryName: string;
+  queryName: PromotionQueryName;
   variables: Record<string, any>;
 };
 

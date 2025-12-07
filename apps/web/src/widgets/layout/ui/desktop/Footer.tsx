@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { IllustIcons } from '@shared/ui/icons';
-import TalkLight from '@shared/ui/icons/TalkLight';
+import { IllustIcons } from '@/shared/ui/icons';
+import TalkLight from '@/shared/ui/icons/TalkLight';
 
 const Footer = () => {
   return (

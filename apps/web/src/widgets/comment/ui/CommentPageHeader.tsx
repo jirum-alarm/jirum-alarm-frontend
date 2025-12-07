@@ -1,5 +1,5 @@
-import { detailPage } from '@shared/lib/utils/navigation';
-import BackButton from '@shared/ui/layout/BackButton';
+import { detailPage } from '@/shared/lib/utils/navigation';
+import BackButton from '@/shared/ui/layout/BackButton';
 
 export default function CommentPageHeader({ productId }: { productId: number }) {
   return (

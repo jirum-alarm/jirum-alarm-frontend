@@ -1,4 +1,4 @@
-import { BubbleChatFill } from '@shared/ui/icons';
+import { BubbleChatFill } from '@/shared/ui/icons';
 
 const CommentListSkeleton = () => {
   return (

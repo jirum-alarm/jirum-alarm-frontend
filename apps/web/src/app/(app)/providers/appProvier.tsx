@@ -5,20 +5,20 @@ import { Provider as JotaiProvider } from 'jotai';
 import dynamic from 'next/dynamic';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
-import { IS_PRD } from '@shared/config/env';
-import { GTM_ID } from '@shared/config/gtm';
-import FCMConfig from '@shared/lib/firebase/FCMConfig';
+import { IS_PRD } from '@/shared/config/env';
+import { GTM_ID } from '@/shared/config/gtm';
+import FCMConfig from '@/shared/lib/firebase/FCMConfig';
 
 import { DeviceId } from '../deviceId';
 
 import { ReactQueryProviders } from './ReactQueryProviders';
 
-const MSW = dynamic(() => import('@shared/ui/MSW'), {
+const MSW = dynamic(() => import('@/shared/ui/MSW'), {
   ssr: false,
   loading: () => null,
 });
 
-const Toaster = dynamic(() => import('@shared/ui/Toast/Toaster'), {
+const Toaster = dynamic(() => import('@/shared/ui/Toast/Toaster'), {
   ssr: false,
   loading: () => null,
 });

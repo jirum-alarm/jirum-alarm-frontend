@@ -10,11 +10,11 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
-import { cn } from '@shared/lib/cn';
-import { composeEventHandlers } from '@shared/lib/utils/event';
-import FocusTrap from '@shared/ui/headless/FocusTrap';
-import { Presence } from '@shared/ui/headless/Presence';
-import ScrollLock from '@shared/ui/headless/ScrollLock';
+import { cn } from '@/shared/lib/cn';
+import { composeEventHandlers } from '@/shared/lib/utils/event';
+import FocusTrap from '@/shared/ui/headless/FocusTrap';
+import { Presence } from '@/shared/ui/headless/Presence';
+import ScrollLock from '@/shared/ui/headless/ScrollLock';
 
 import { AlertDialogContext, useAlertDialogContext } from './context/AlertDialogContext';
 

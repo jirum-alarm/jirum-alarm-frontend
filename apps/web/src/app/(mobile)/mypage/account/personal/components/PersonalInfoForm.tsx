@@ -1,8 +1,8 @@
 'use client';
 
-import Button from '@shared/ui/Button';
-
 import { BirthYearSelect, GenderRadioGroup } from '@entities/user';
+
+import Button from '@/shared/ui/Button';
 
 import usePersonalInfoFormViewModel from '../hooks/usePersonalInfoFormViewModel';
 

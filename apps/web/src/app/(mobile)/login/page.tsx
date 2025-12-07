@@ -4,20 +4,20 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-import { PAGE } from '@shared/config/page';
-import { useDevice } from '@shared/hooks/useDevice';
-import useMyRouter from '@shared/hooks/useMyRouter';
-import { cn } from '@shared/lib/cn';
-import AppDownloadCTA from '@shared/ui/AppDownloadCTA';
-import { StandingIllust } from '@shared/ui/icons/Illust';
-import LoadingSpinner from '@shared/ui/icons/LoadingSpinner';
-import SvgEmail from '@shared/ui/icons/login/Email';
-import SvgKakao from '@shared/ui/icons/login/Kakao';
-import SvgNaver from '@shared/ui/icons/login/Naver';
-import BasicLayout from '@shared/ui/layout/BasicLayout';
+import { PAGE } from '@/shared/config/page';
+import { useDevice } from '@/shared/hooks/useDevice';
+import useMyRouter from '@/shared/hooks/useMyRouter';
+import { cn } from '@/shared/lib/cn';
+import { StandingIllust } from '@/shared/ui/icons/Illust';
+import LoadingSpinner from '@/shared/ui/icons/LoadingSpinner';
+import SvgEmail from '@/shared/ui/icons/login/Email';
+import SvgKakao from '@/shared/ui/icons/login/Kakao';
+import SvgNaver from '@/shared/ui/icons/login/Naver';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import { useKakaoLogin } from '@features/auth/lib/use-kakao-login';
-import { useNaverLogin } from '@features/auth/lib/use-naver-login';
+import AppDownloadBanner from '@/features/app-download/ui/AppDownloadBanner';
+import { useKakaoLogin } from '@/features/auth/lib/use-kakao-login';
+import { useNaverLogin } from '@/features/auth/lib/use-naver-login';
 
 enum LoginType {
   KAKAO = 'KAKAO',
@@ -160,7 +160,7 @@ const Login = () => {
 
         {device.isMobileBrowser && isHydrated && (
           <div className="bottom-safe-bottom fixed right-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
-            <AppDownloadCTA device={device} />
+            <AppDownloadBanner device={device} />
           </div>
         )}
       </div>

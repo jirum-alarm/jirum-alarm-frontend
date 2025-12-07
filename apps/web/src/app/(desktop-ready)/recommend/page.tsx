@@ -2,10 +2,10 @@ import { Metadata } from 'next';
 
 import { checkDevice } from '@/app/actions/agent';
 
-import { ProductService } from '@shared/api/product';
+import { ProductService } from '@/shared/api/product';
 
-import { RecommendPrefetch } from '@widgets/recommend';
-import RecommendContainer from '@widgets/recommend/ui/RecommendContainer';
+import { RecommendPrefetch } from '@/widgets/recommend';
+import RecommendContainer from '@/widgets/recommend/ui/RecommendContainer';
 
 export async function generateMetadata({
   searchParams,

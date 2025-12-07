@@ -3,7 +3,9 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 import { setAccessToken, setRefreshToken } from '@/app/actions/token';
+
 import { AuthService } from '@/shared/api/auth/auth.service';
+import { PAGE } from '@/shared/config/page';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';

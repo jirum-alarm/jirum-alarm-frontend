@@ -1,12 +1,17 @@
 import { Suspense } from 'react';
 
-import { cn } from '@shared/lib/cn';
+import { ProductDetailImage } from '@entities/product';
 
-import { HotdealGuide, HotdealScore, ProductDetailImage } from '@entities/product';
+import { cn } from '@/shared/lib/cn';
 
-import { CommentSection } from '@features/product-comment';
-import { CoupangPartnerGuide, NoticeProfitUrl } from '@features/product-detail';
-import { CategoryPopularByProductSection, TogetherViewedSection } from '@features/product-list';
+import { CommentSection } from '@/features/product-comment';
+import {
+  CoupangPartnerGuide,
+  HotdealGuide,
+  HotdealScore,
+  NoticeProfitUrl,
+} from '@/features/product-detail';
+import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list';
 
 import CommunityReaction from '../CommunityReaction';
 

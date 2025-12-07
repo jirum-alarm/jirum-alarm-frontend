@@ -2,12 +2,12 @@
 
 import { useAtom, useAtomValue } from 'jotai';
 
-import { CANCEL_EVENT, TComment, TEditStatus } from '@/entities/comment/TComment';
+import { CANCEL_EVENT } from '@entities/comment';
 
-import { PAGE } from '@shared/config/page';
-import useMyRouter from '@shared/hooks/useMyRouter';
-import Button from '@shared/ui/Button';
-import { Close } from '@shared/ui/icons';
+import { PAGE } from '@/shared/config/page';
+import useMyRouter from '@/shared/hooks/useMyRouter';
+import Button from '@/shared/ui/Button';
+import { Close } from '@/shared/ui/icons';
 
 import { editingCommentAtom } from '../model/useComment';
 import { useCommentInput } from '../model/useCommentInput';

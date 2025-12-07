@@ -1,12 +1,12 @@
 'use client';
 
-import { ProductCommentSummary } from '@shared/api/gql/graphql';
-import { AIIcon } from '@shared/ui/icons';
-import Etc from '@shared/ui/icons/Etc';
-import Option from '@shared/ui/icons/Option';
-import Price from '@shared/ui/icons/Price';
-import Shop from '@shared/ui/icons/Shop';
-import Tip from '@shared/ui/icons/Tip';
+import { ProductCommentSummary } from '@/shared/api/gql/graphql';
+import { AIIcon } from '@/shared/ui/icons';
+import Etc from '@/shared/ui/icons/Etc';
+import Option from '@/shared/ui/icons/Option';
+import Price from '@/shared/ui/icons/Price';
+import Shop from '@/shared/ui/icons/Shop';
+import Tip from '@/shared/ui/icons/Tip';
 
 const SUMMARY_DATA: {
   id: keyof ProductCommentSummary;

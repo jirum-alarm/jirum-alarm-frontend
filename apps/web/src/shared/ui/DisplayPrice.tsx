@@ -1,5 +1,5 @@
-import { cn } from '@shared/lib/cn';
-import { parsePrice } from '@shared/lib/utils/price';
+import { cn } from '@/shared/lib/cn';
+import { parsePrice } from '@/shared/lib/utils/price';
 
 type DisplayPriceProps = {
   price?: string | null;

@@ -3,7 +3,7 @@
 // import { type Mixpanel as MixpanelType } from 'mixpanel-browser';
 // import { useEffect } from 'react';
 
-// import { MixpanelService } from '@shared/lib/mixpanel';
+// import { MixpanelService } from '@/shared/lib/mixpanel';
 
 // type MixpanelInstance = MixpanelType & {
 //   set_user: typeof MixpanelService.setUser;

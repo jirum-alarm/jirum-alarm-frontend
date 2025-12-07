@@ -3,12 +3,12 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { QueryWishlistsQuery } from '@shared/api/gql/graphql';
-import { WishlistService } from '@shared/api/wishlist/wishlist.service';
-import { EVENT } from '@shared/config/mixpanel';
-import { Heart } from '@shared/ui/icons';
-
 import { GridProductCard } from '@entities/product';
+
+import { QueryWishlistsQuery } from '@/shared/api/gql/graphql';
+import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
+import { EVENT } from '@/shared/config/mixpanel';
+import { Heart } from '@/shared/ui/icons';
 
 type ProductGridListProps = {
   products: QueryWishlistsQuery['wishlists'][number]['product'][];

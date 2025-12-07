@@ -6,9 +6,9 @@ import { useCallback } from 'react';
 
 import { setFcmToken as setFcmTokenAction } from '@/app/actions/token';
 
-import { TokenType } from '@shared/api/gql/graphql';
-import { NotificationService } from '@shared/api/notification/notification.service';
-import { firebaseConfig } from '@shared/config/firebase';
+import { TokenType } from '@/shared/api/gql/graphql';
+import { NotificationService } from '@/shared/api/notification/notification.service';
+import { firebaseConfig } from '@/shared/config/firebase';
 
 const COOLDOWN_KEY = 'fcm-permission-cooldown';
 const COOLDOWN_MS = 3 * 24 * 60 * 60 * 1000; // 3 days

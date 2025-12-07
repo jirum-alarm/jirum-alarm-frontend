@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 import { setFcmToken as setFcmTokenAction } from '@/app/actions/token';
 
-import { firebaseConfig } from '@shared/config/firebase';
+import { firebaseConfig } from '@/shared/config/firebase';
 
 const firebaseApp = initializeApp(firebaseConfig);
 

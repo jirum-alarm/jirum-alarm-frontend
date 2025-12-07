@@ -1,10 +1,10 @@
 import { Registration } from '@/app/(mobile)/signup/page';
 
-import Button from '@shared/ui/Button';
-import { Cancel } from '@shared/ui/icons';
-import Input from '@shared/ui/Input';
+import Button from '@/shared/ui/Button';
+import { Cancel } from '@/shared/ui/icons';
+import Input from '@/shared/ui/Input';
 
-import useEmailFormViewModel from '@features/auth/signup/model/useEmailFormViewModel';
+import useEmailFormViewModel from '@/features/auth/signup/model/useEmailFormViewModel';
 
 const EmailForm = ({
   registration,

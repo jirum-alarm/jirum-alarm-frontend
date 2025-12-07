@@ -4,12 +4,12 @@ import { PublicEnvScript } from 'next-runtime-env';
 
 import { AppProvider } from '@/app/(app)/providers';
 
-import { defaultMetadata, jsonLd } from '@shared/config/metadata';
-import { pretendard } from '@shared/lib/fonts';
+import { defaultMetadata, jsonLd } from '@/shared/config/metadata';
+import { pretendard } from '@/shared/lib/fonts';
 
 import type { Metadata, Viewport } from 'next';
 
-// const PostHogPageView = dynamic(() => import('@shared/ui/PostHogPageView'), {
+// const PostHogPageView = dynamic(() => import('@/shared/ui/PostHogPageView'), {
 //   ssr: false,
 // });
 

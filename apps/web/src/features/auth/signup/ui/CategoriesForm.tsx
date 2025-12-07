@@ -1,11 +1,10 @@
 import { Registration } from '@/app/(mobile)/signup/page';
-
-import { MAX_SELECTION_COUNT } from '@shared/config/categories';
-import Button from '@shared/ui/Button';
-
 import { CategoriesCheckboxGroup } from '@entities/category';
 
-import { useCategoriesFormViewModel } from '@features/auth/signup/model/useCategoriesFormViewModel';
+import { MAX_SELECTION_COUNT } from '@/shared/config/categories';
+import Button from '@/shared/ui/Button';
+
+import { useCategoriesFormViewModel } from '@/features/auth/signup/model/useCategoriesFormViewModel';
 
 const CategoriesForm = ({
   registration,

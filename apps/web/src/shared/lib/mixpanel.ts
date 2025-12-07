@@ -2,9 +2,9 @@
 
 // import mixpanel, { Mixpanel } from 'mixpanel-browser';
 
-// import { IS_PRD } from '@shared/config/env';
+// import { IS_PRD } from '@/shared/config/env';
 
-// import { httpClient } from '@shared/lib/http-client';
+// import { httpClient } from '@/shared/lib/http-client';
 
 // export class MixpanelService {
 //   private static instance: Mixpanel;

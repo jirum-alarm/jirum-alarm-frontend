@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { AuthQueries } from '@entities/auth';
 
-import { useUpdateNickname } from '@features/mypage/model/update-nickname';
+import { useUpdateNickname } from '@/features/mypage/model/update-nickname';
 
 const MIN_NICKNAME_LENGTH = 2;
 const MAX_NICKNAME_LENGTH = 12;

@@ -1,10 +1,10 @@
 'use client';
 
-import { PAGE } from '@shared/config/page';
-import { Search } from '@shared/ui/icons';
-import BackButton from '@shared/ui/layout/BackButton';
-import Link from '@shared/ui/Link';
-import ShareButton from '@shared/ui/ShareButton';
+import { PAGE } from '@/shared/config/page';
+import { Search } from '@/shared/ui/icons';
+import BackButton from '@/shared/ui/layout/BackButton';
+import Link from '@/shared/ui/Link';
+import ShareButton from '@/shared/ui/ShareButton';
 
 interface CurationPageHeaderProps {
   title: string;

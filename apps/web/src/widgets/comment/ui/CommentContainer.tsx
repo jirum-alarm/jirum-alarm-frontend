@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
-import ApiErrorBoundary from '@shared/ui/ApiErrorBoundary';
-import { LoadingSpinner } from '@shared/ui/icons';
+import ApiErrorBoundary from '@/shared/ui/ApiErrorBoundary';
+import { LoadingSpinner } from '@/shared/ui/icons';
 
 import CommentLayout from './CommentLayout';
 

@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 
-import SmallIllust from '@shared/ui/icons/Illust/SmallIllust';
-import BasicLayout from '@shared/ui/layout/BasicLayout';
+import SmallIllust from '@/shared/ui/icons/Illust/SmallIllust';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import { ProductLikeContainerServer } from '@widgets/like';
+import { ProductLikeContainerServer } from '@/widgets/like';
 
 const LikePage = () => {
   return (

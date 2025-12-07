@@ -1,7 +1,7 @@
-import { PAGE } from '@shared/config/page';
-import DisplayTime from '@shared/ui/DisplayTime';
-import HotdealBadge from '@shared/ui/HotdealBadge';
-import Link from '@shared/ui/Link';
+import { PAGE } from '@/shared/config/page';
+import DisplayTime from '@/shared/ui/DisplayTime';
+import HotdealBadge from '@/shared/ui/HotdealBadge';
+import Link from '@/shared/ui/Link';
 
 import { type ProductCardType } from '../model/types';
 

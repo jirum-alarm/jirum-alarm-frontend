@@ -1,6 +1,6 @@
 import { Registration } from '@/app/(mobile)/signup/page';
 
-import { ConsentRequiredKey } from '@features/auth/signup/ui/TermsOfServiceForm';
+import { ConsentRequiredKey } from '@/features/auth/signup/ui/TermsOfServiceForm';
 
 const useInput = ({
   registration,

@@ -1,7 +1,7 @@
 import { type VariantProps } from 'class-variance-authority';
 import { forwardRef } from 'react';
 
-import { cn } from '@shared/lib/cn';
+import { cn } from '@/shared/lib/cn';
 
 import { containerVaraint, helperVariant, iconVaraint, inputVariant } from './variant/input';
 

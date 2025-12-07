@@ -1,5 +1,5 @@
-import Button from '@shared/ui/Button';
-import { IllustWarning } from '@shared/ui/icons';
+import Button from '@/shared/ui/Button';
+import { IllustWarning } from '@/shared/ui/icons';
 
 interface ServerErrorProps {
   onClick: () => void;

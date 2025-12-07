@@ -1,11 +1,10 @@
 'use client';
 
-import { cn } from '@shared/lib/cn';
-import BackButton from '@shared/ui/layout/BackButton';
-import BasicLayout from '@shared/ui/layout/BasicLayout';
+import { cn } from '@/shared/lib/cn';
+import BackButton from '@/shared/ui/layout/BackButton';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import SearchInput from '@widgets/search/components/SearchInput';
-import { useInputHideOnScroll } from '@widgets/search/hooks/useInputHideOnScroll';
+import { SearchInput, useInputHideOnScroll } from '@/widgets/search';
 
 export default function MobileSearchLayout({ children }: { children: React.ReactNode }) {
   const showSearchBar = useInputHideOnScroll();

@@ -1,7 +1,8 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
-import { CommentService } from '@shared/api/comment';
-import { CommentOrder, CommentsQueryVariables, OrderOptionType } from '@shared/api/gql/graphql';
+import { CommentService } from '@/shared/api/comment';
+import { CommentOrder, CommentsQueryVariables, OrderOptionType } from '@/shared/api/gql/graphql';
+import { buildQueryKey } from '@/shared/api/query-key';
 
 const COMMENTS_LIMIT = 10;
 const COMMENTS_ORDER_BY = CommentOrder.Id;
@@ -18,16 +19,13 @@ export const CommentQueries = {
 
   comments: (variables: CommentsQueryVariables) =>
     queryOptions({
-      queryKey: [
-        ...CommentQueries.all(),
-        {
-          productId: variables.productId,
-          searchAfter: variables.searchAfter,
-          limit: variables.limit,
-          orderBy: variables.orderBy,
-          orderOption: variables.orderOption,
-        },
-      ],
+      queryKey: buildQueryKey('comments', {
+        productId: variables.productId,
+        searchAfter: variables.searchAfter,
+        limit: variables.limit,
+        orderBy: variables.orderBy,
+        orderOption: variables.orderOption,
+      }),
       queryFn: () => CommentService.getComments(variables),
     }),
 

@@ -3,20 +3,20 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
-import { getFromNow } from '@shared/lib/utils/date';
-import { Info } from '@shared/ui/icons';
-import SectionHeader from '@shared/ui/SectionHeader';
-import Tooltip from '@shared/ui/Tooltip';
-
 import { ProductQueries, ReactionChart } from '@entities/product';
 
-import { ProductReport } from '@features/product-actions';
+import { getFromNow } from '@/shared/lib/utils/date';
+import { Info } from '@/shared/ui/icons';
+import SectionHeader from '@/shared/ui/SectionHeader';
+import Tooltip from '@/shared/ui/Tooltip';
+
+import { ProductReport } from '@/features/product-actions';
 import {
   NoReactionChart,
   ReactionChartHeader,
   ReactionKeywords,
   Reactions,
-} from '@features/product-reaction';
+} from '@/features/product-reaction';
 
 export default function CommunityReaction({ productId }: { productId: number }) {
   const { data: product } = useSuspenseQuery(

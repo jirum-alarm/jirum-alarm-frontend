@@ -1,10 +1,10 @@
 import { Registration } from '@/app/(mobile)/signup/page';
 
-import Button from '@shared/ui/Button';
-import { CheckboxSelected, CheckDefault } from '@shared/ui/icons';
-import Link from '@shared/ui/Link';
+import Button from '@/shared/ui/Button';
+import { CheckboxSelected, CheckDefault } from '@/shared/ui/icons';
+import Link from '@/shared/ui/Link';
 
-import useTermsOfServiceFormViewModel from '@features/auth/signup/model/useTermsOfServiceFormViewModel';
+import useTermsOfServiceFormViewModel from '@/features/auth/signup/model/useTermsOfServiceFormViewModel';
 
 const CONSENT_ALL = '모두 동의';
 const CONSENT_REQUIRED = {

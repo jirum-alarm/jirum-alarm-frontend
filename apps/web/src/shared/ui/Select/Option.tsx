@@ -1,7 +1,7 @@
 import { VariantProps } from 'class-variance-authority';
 import { useEffect, useRef } from 'react';
 
-import { cn } from '@shared/lib/cn';
+import { cn } from '@/shared/lib/cn';
 
 import { useSelectContext } from './context/SelectContext';
 import { optionVaraint } from './variant/option';
