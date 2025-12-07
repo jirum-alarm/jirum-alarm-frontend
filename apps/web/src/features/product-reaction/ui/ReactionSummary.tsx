@@ -1,7 +1,7 @@
 'use client';
 
-import { ProductCommentSummary } from '@shared/api/gql/graphql';
-import { AIIcon } from '@shared/ui/icons';
+import { ProductCommentSummary } from '@/shared/api/gql/graphql';
+import { AIIcon } from '@/shared/ui/icons';
 
 function ReactionSummary({
   commentSummary,

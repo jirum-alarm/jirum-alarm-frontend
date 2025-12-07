@@ -1,6 +1,6 @@
-import Button from '@shared/ui/Button';
-import { AlarmIllustError } from '@shared/ui/icons';
-import Link from '@shared/ui/Link';
+import Button from '@/shared/ui/Button';
+import { AlarmIllustError } from '@/shared/ui/icons';
+import Link from '@/shared/ui/Link';
 
 const NoAlerts = () => {
   return (

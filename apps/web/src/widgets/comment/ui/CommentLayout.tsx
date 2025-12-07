@@ -1,12 +1,12 @@
 'use client';
 
-import { LoadingSpinner } from '@shared/ui/icons';
-import TopButton from '@shared/ui/TopButton';
+import { LoadingSpinner } from '@/shared/ui/icons';
+import TopButton from '@/shared/ui/TopButton';
 
-import useComment from '@features/product-comment/model/useComment';
-import Comment from '@features/product-comment/ui/Comment';
-import CommentInput from '@features/product-comment/ui/CommentInput';
-import CommentListSkeleton from '@features/product-comment/ui/CommentListSkeleton';
+import useComment from '@/features/product-comment/model/useComment';
+import Comment from '@/features/product-comment/ui/Comment';
+import CommentInput from '@/features/product-comment/ui/CommentInput';
+import CommentListSkeleton from '@/features/product-comment/ui/CommentListSkeleton';
 
 export default function CommentLayout({
   productId,

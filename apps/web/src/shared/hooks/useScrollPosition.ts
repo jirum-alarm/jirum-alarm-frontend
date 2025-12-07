@@ -1,7 +1,7 @@
-import { atom, useAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useAtom } from 'jotai';
+import { useEffect } from 'react';
 
-const isScrolledAtom = atom(false);
+import { isScrolledAtom } from '@/shared/model/ui';
 
 const useScrollPosition = (threshold = 100) => {
   const [isScrolled, setIsScrolled] = useAtom(isScrolledAtom);

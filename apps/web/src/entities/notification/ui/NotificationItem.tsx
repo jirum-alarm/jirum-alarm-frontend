@@ -1,13 +1,13 @@
 import { memo } from 'react';
 
-import { QueryNotificationsQuery } from '@shared/api/gql/graphql';
-import { PAGE } from '@shared/config/page';
-import { useIsHydrated } from '@shared/hooks/useIsHydrated';
-import { cn } from '@shared/lib/cn';
-import { convertToWebp } from '@shared/lib/utils/image';
-import DisplayTime from '@shared/ui/DisplayTime';
-import ImageComponent from '@shared/ui/ImageComponent';
-import Link from '@shared/ui/Link';
+import { QueryNotificationsQuery } from '@/shared/api/gql/graphql';
+import { PAGE } from '@/shared/config/page';
+import { useIsHydrated } from '@/shared/hooks/useIsHydrated';
+import { cn } from '@/shared/lib/cn';
+import { convertToWebp } from '@/shared/lib/utils/image';
+import DisplayTime from '@/shared/ui/DisplayTime';
+import ImageComponent from '@/shared/ui/ImageComponent';
+import Link from '@/shared/ui/Link';
 
 const NotificationItem = ({
   notification,

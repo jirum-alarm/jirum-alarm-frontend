@@ -3,12 +3,12 @@
 import { memo, useEffect, useRef } from 'react';
 import { useSwiper } from 'swiper/react';
 
-import useScreen from '@shared/hooks/useScreenSize';
+import useScreen from '@/shared/hooks/useScreenSize';
 
-import { CarouselProductsSection } from '@features/product-list/carousel';
-import { GridProductList } from '@features/product-list/grid';
+import { CarouselProductsSection } from '@/features/product-list/carousel';
+import { GridProductList } from '@/features/product-list/grid';
 
-import useTrendingViewModel from '@widgets/trending/model/useTrendingViewModel';
+import useTrendingViewModel from '@/widgets/trending/model/useTrendingViewModel';
 
 interface TrendingListProps {
   categoryId: number | null;

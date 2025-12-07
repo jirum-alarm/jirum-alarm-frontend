@@ -1,7 +1,7 @@
 import { Registration } from '@/app/(mobile)/signup/page';
 
-import { Gender } from '@shared/api/gql/graphql';
-import { BIRTH_YEAR } from '@shared/config/birthYear';
+import { Gender } from '@/shared/api/gql/graphql';
+import { BIRTH_YEAR } from '@/shared/config/birthYear';
 
 const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({
   text: String(year),

@@ -2,10 +2,10 @@ import { ReactNode } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
 
-import BasicLayout from '@shared/ui/layout/BasicLayout';
-import SectionHeader from '@shared/ui/SectionHeader';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
+import SectionHeader from '@/shared/ui/SectionHeader';
 
-import RecommendPageHeader from '@widgets/recommend/ui/RecommendPageHeader';
+import RecommendPageHeader from '@/widgets/recommend/ui/RecommendPageHeader';
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const { isMobile } = await checkDevice();

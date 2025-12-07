@@ -3,11 +3,11 @@
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
-import { OrderOptionType, WishlistOrderType } from '@shared/api/gql/graphql';
-
 import { WishlistQueries } from '@entities/wishlist';
 
-import { GridProductListSkeleton } from '@features/product-list';
+import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
+
+import { GridProductListSkeleton } from '@/features/product-list';
 
 import ProductLikeGridList from './ProductLikeGridList';
 

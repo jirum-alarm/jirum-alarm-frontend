@@ -1,6 +1,7 @@
-import { cn } from '@shared/lib/cn';
-import { IconLogo } from '@shared/ui/icons/Illust';
-import SearchLinkButton from '@shared/ui/SearchLinkButton';
+import { cn } from '@/shared/lib/cn';
+import { IconLogo } from '@/shared/ui/icons/Illust';
+
+import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
 
 import BannerSwiper from './BannerSwiper';
 

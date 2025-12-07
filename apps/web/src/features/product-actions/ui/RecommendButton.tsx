@@ -2,14 +2,14 @@
 
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
-import { UserLikeTarget } from '@shared/api/gql/graphql';
-import { LikeService } from '@shared/api/like/like.service';
-import useRedirectIfNotLoggedIn from '@shared/hooks/useRedirectIfNotLoggedIn';
-import { cn } from '@shared/lib/cn';
-import Button from '@shared/ui/Button';
-import { Thumbsup } from '@shared/ui/icons';
-
 import { ProductQueries } from '@entities/product';
+
+import { UserLikeTarget } from '@/shared/api/gql/graphql';
+import { LikeService } from '@/shared/api/like/like.service';
+import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
+import { cn } from '@/shared/lib/cn';
+import Button from '@/shared/ui/Button';
+import { Thumbsup } from '@/shared/ui/icons';
 
 export default function RecommendButton({ productId }: { productId: number }) {
   const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));

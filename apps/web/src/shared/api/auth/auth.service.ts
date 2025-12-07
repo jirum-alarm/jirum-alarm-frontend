@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { PAGE } from '@shared/config/page';
-import { execute } from '@shared/lib/http-client';
+import { PAGE } from '@/shared/config/page';
+import { execute } from '@/shared/lib/http-client';
 
 import { graphql } from '../gql';
 import {

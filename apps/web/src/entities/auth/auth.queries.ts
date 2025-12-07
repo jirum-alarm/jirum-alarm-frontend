@@ -1,7 +1,7 @@
 import { queryOptions } from '@tanstack/react-query';
 
-import { AuthService } from '@shared/api/auth';
-import { QueryMypageKeywordQueryVariables } from '@shared/api/gql/graphql';
+import { AuthService } from '@/shared/api/auth';
+import { QueryMypageKeywordQueryVariables } from '@/shared/api/gql/graphql';
 
 export const AuthQueries = {
   all: () => ['auth'],

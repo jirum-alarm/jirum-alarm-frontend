@@ -1,9 +1,9 @@
 'use client';
 
-import { atom, useAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 
-const isHydratedAtom = atom(false);
+import { isHydratedAtom } from '@/shared/model/hydration';
 
 export const useIsHydrated = () => {
   const [isHydrated, setIsHydrated] = useAtom(isHydratedAtom);

@@ -1,7 +1,7 @@
 import http from 'http';
 import https from 'https';
 
-import { GRAPHQL_ENDPOINT_PROXY } from '@shared/config/graphql';
+import { GRAPHQL_ENDPOINT_PROXY } from '@/shared/config/graphql';
 
 import { TypedDocumentString } from '../api/gql/graphql';
 

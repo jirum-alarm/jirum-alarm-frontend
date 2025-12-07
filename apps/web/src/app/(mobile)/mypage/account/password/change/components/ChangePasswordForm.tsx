@@ -1,7 +1,7 @@
 'use client';
 
-import { cn } from '@shared/lib/cn';
-import Button from '@shared/ui/Button';
+import { cn } from '@/shared/lib/cn';
+import Button from '@/shared/ui/Button';
 
 import PasswordInput from '../../components/PasswordInput';
 import useChangePasswordFormViewModel from '../hooks/useChangePasswordFormViewModel';

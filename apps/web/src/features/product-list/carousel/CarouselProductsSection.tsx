@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 
-import { cn } from '@shared/lib/cn';
-import SectionHeader from '@shared/ui/SectionHeader';
-
 import { type ProductCardType } from '@entities/product';
+
+import { cn } from '@/shared/lib/cn';
+import SectionHeader from '@/shared/ui/SectionHeader';
 
 import CarouselProductList from './CarouselProductList';
 import CarouselProductListSkeleton from './CarouselProductListSkeleton';

@@ -1,5 +1,5 @@
-import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@shared/config/policy';
-import TermsLayout from '@shared/ui/policies/TermsLayout';
+import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/shared/config/policy';
+import TermsLayout from '@/shared/ui/policies/TermsLayout';
 
 const PrivacyPolicyPage = () => {
   return (

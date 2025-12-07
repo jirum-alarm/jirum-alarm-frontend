@@ -1,4 +1,4 @@
-import { IllustEmpty } from '@shared/ui/icons';
+import { IllustEmpty } from '@/shared/ui/icons';
 
 const ProductImageCardSkeleton = () => {
   return (

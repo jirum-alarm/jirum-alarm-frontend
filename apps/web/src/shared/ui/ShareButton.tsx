@@ -1,8 +1,8 @@
 'use client';
 
-import { EVENT } from '@shared/config/mixpanel';
-import { Share } from '@shared/ui/icons';
-import { useToast } from '@shared/ui/Toast';
+import { EVENT } from '@/shared/config/mixpanel';
+import { Share } from '@/shared/ui/icons';
+import { useToast } from '@/shared/ui/Toast';
 
 const ShareButton = ({ title, page }: { title: string; page?: keyof typeof EVENT.PAGE }) => {
   const { toast } = useToast();

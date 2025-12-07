@@ -1,5 +1,5 @@
-import { cn } from '@shared/lib/cn';
-import Link from '@shared/ui/Link';
+import { cn } from '@/shared/lib/cn';
+import Link from '@/shared/ui/Link';
 
 interface MenuLinkProps {
   href: string;

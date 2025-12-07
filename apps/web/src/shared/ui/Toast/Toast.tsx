@@ -1,7 +1,7 @@
 import { VariantProps } from 'class-variance-authority';
 import { forwardRef } from 'react';
 
-import { cn } from '@shared/lib/cn';
+import { cn } from '@/shared/lib/cn';
 
 import { toastVariant } from './variant/toast';
 

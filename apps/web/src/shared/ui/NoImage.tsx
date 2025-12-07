@@ -1,5 +1,5 @@
-import { CATEGORY_MAP } from '@shared/config/categories';
-import { IllustEmpty } from '@shared/ui/icons';
+import { CATEGORY_MAP } from '@/shared/config/categories';
+import { IllustEmpty } from '@/shared/ui/icons';
 
 const ICON_SIZE = {
   product: 'size-[64px]',

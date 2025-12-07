@@ -1,4 +1,4 @@
-import Button from '@shared/ui/Button';
+import Button from '@/shared/ui/Button';
 
 import PasswordInput from '../../components/PasswordInput';
 import useCurrentPasswordFormViewModel from '../hooks/useCurrentPasswordFormViewModel';

@@ -2,11 +2,11 @@
 
 import { Suspense, useState } from 'react';
 
-import { cn } from '@shared/lib/cn';
+import { ContentPromotionSection } from '@entities/promotion';
 
-import { ContentPromotionSection } from '@entities/promotion/model/types';
+import { cn } from '@/shared/lib/cn';
 
-import { GridProductListSkeleton } from '@features/product-list';
+import { GridProductListSkeleton } from '@/features/product-list';
 
 import CurationProductList from './CurationProductList';
 

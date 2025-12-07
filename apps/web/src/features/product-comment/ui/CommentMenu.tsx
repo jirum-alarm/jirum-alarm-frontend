@@ -5,13 +5,16 @@ import { VisuallyHidden } from 'radix-ui';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
 
-import { TComment, UPDATE_EVENT } from '@/entities/comment/TComment';
+import {
+  CommentQueries,
+  defaultCommentsVariables,
+  TComment,
+  UPDATE_EVENT,
+} from '@entities/comment';
 
-import { CommentService } from '@shared/api/comment/comment.service';
-import Dots from '@shared/ui/icons/Dots';
-import { useToast } from '@shared/ui/Toast';
-
-import { CommentQueries, defaultCommentsVariables } from '@entities/comment';
+import { CommentService } from '@/shared/api/comment/comment.service';
+import Dots from '@/shared/ui/icons/Dots';
+import { useToast } from '@/shared/ui/Toast';
 
 export default function CommentMenu({ comment }: { comment: TComment }) {
   const queryClient = useQueryClient();

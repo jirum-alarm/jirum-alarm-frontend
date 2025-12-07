@@ -6,10 +6,10 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperClass, SwiperSlide, useSwiper } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
-import { useDevice } from '@shared/hooks/useDevice';
-import { cn } from '@shared/lib/cn';
-
 import { CarouselProductCard, type ProductCardType } from '@entities/product';
+
+import { useDevice } from '@/shared/hooks/useDevice';
+import { cn } from '@/shared/lib/cn';
 
 interface CarouselProductListProps {
   products: ProductCardType[];

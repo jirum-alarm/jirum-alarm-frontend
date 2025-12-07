@@ -3,8 +3,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
-import { AuthService } from '@shared/api/auth';
-import { generateDeviceId } from '@shared/lib/device-id';
+import { AuthService } from '@/shared/api/auth';
+import { generateDeviceId } from '@/shared/lib/device-id';
 
 export const DeviceId = () => {
   const { mutate } = useMutation({

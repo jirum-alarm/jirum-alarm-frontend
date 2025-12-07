@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import useMyRouter from '@shared/hooks/useMyRouter';
+import useMyRouter from '@/shared/hooks/useMyRouter';
 
 const RECENT_KEYWORDS_KEY = 'gr-recent-keywords';
 const RECENT_KEYWORDS_LIMIT = 10;

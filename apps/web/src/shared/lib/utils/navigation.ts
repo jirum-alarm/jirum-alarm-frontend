@@ -1,4 +1,4 @@
-import { PAGE } from '@shared/config/page';
+import { PAGE } from '@/shared/config/page';
 
 export const goBackHandler = () => {
   if (document.referrer && document.referrer.includes('jirum-alarm.com')) {

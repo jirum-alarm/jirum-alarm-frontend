@@ -2,7 +2,7 @@
 
 import { cookies, headers } from 'next/headers';
 
-import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@shared/config/token';
+import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/shared/config/token';
 
 async function setAccessToken(token: string) {
   (await cookies()).set('ACCESS_TOKEN', token, {

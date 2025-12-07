@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import { Eye, EyeOff } from '@shared/ui/icons';
-import Input from '@shared/ui/Input';
+import { Eye, EyeOff } from '@/shared/ui/icons';
+import Input from '@/shared/ui/Input';
 
 interface PasswordInputProps {
   autoFocus?: boolean;

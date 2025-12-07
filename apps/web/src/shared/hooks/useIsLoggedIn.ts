@@ -1,11 +1,11 @@
 'use client';
 
-import { atom, useAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 
 import { getAccessToken } from '@/app/actions/token';
 
-const accessTokenAtom = atom<string | null>(null);
+import { accessTokenAtom } from '@/shared/model/session';
 
 const useIsLoggedIn = () => {
   const [accessToken, setAccessToken] = useAtom(accessTokenAtom);

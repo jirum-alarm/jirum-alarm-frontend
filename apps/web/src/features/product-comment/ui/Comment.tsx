@@ -1,12 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { TComment, TEditStatus } from '@/entities/comment/TComment';
-
-import { User } from '@shared/api/gql/graphql';
-import { cn } from '@shared/lib/cn';
-import { displayTime } from '@shared/lib/utils/displayTime';
-
 import { AuthQueries } from '@entities/auth';
+import { TComment, TEditStatus } from '@entities/comment';
+
+import { User } from '@/shared/api/gql/graphql';
+import { cn } from '@/shared/lib/cn';
+import { displayTime } from '@/shared/lib/utils/displayTime';
 
 import CommentAction from './CommentAction';
 import CommentMenu from './CommentMenu';

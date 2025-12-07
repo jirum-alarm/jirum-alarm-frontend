@@ -1,10 +1,16 @@
 import { Suspense } from 'react';
 
-import { HotdealGuide, HotdealScore, ProductDetailImage } from '@entities/product';
+import { ProductDetailImage } from '@entities/product';
 
-import { CommentSection } from '@features/product-comment';
-import { CoupangPartnerGuide, MobileViewerCount, NoticeProfitUrl } from '@features/product-detail';
-import { CategoryPopularByProductSection, TogetherViewedSection } from '@features/product-list';
+import { CommentSection } from '@/features/product-comment';
+import {
+  CoupangPartnerGuide,
+  HotdealGuide,
+  HotdealScore,
+  MobileViewerCount,
+  NoticeProfitUrl,
+} from '@/features/product-detail';
+import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list';
 
 import CommunityReaction from '../CommunityReaction';
 

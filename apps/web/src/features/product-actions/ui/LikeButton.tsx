@@ -3,18 +3,19 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { WishlistService } from '@shared/api/wishlist/wishlist.service';
-import { PAGE } from '@shared/config/page';
-import { useDevice } from '@shared/hooks/useDevice';
-import useMyRouter from '@shared/hooks/useMyRouter';
-import { WebViewBridge, WebViewEventType } from '@shared/lib/webview';
-import Button from '@shared/ui/Button';
-import { Heart } from '@shared/ui/icons';
-import Link from '@shared/ui/Link';
-import { useToast } from '@shared/ui/Toast';
-
 import { ProductQueries } from '@entities/product';
 import { WishlistQueries } from '@entities/wishlist';
+
+import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
+import { PAGE } from '@/shared/config/page';
+import { useDevice } from '@/shared/hooks/useDevice';
+import useMyRouter from '@/shared/hooks/useMyRouter';
+import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
+import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
+import Button from '@/shared/ui/Button';
+import { Heart } from '@/shared/ui/icons';
+import Link from '@/shared/ui/Link';
+import { useToast } from '@/shared/ui/Toast';
 
 export default function LikeButton({
   productId,

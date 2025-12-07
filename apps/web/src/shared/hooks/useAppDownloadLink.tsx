@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckDeviceResult } from '@shared/types/agent';
+import { CheckDeviceResult } from '@/shared/types/agent';
 
 const GooglePlayLink = 'https://play.google.com/store/apps/details?id=com.solcode.jirmalam';
 const AppStoreLink =

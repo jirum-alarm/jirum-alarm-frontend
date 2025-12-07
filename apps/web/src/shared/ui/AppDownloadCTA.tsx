@@ -1,8 +1,8 @@
 'use client';
 
-import useAppDownloadLink from '@shared/hooks/useAppDownloadLink';
-import { CheckDeviceResult } from '@shared/types/agent';
-import { AppIcon } from '@shared/ui/icons/Illust';
+import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
+import { CheckDeviceResult } from '@/shared/types/agent';
+import { AppIcon } from '@/shared/ui/icons/Illust';
 
 const AppDownloadCTA = ({ device }: { device: CheckDeviceResult }) => {
   const { type, link } = useAppDownloadLink(device);

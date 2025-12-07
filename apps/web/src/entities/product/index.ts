@@ -5,8 +5,6 @@ export { default as ProductThumbnail } from './ui/ProductThumbnail';
 export { default as GridProductCard } from './ui/GridProductCard';
 export { default as ListProductCard } from './ui/ListProductCard';
 export { default as CarouselProductCard } from './ui/CarouselProductCard';
-export { default as HotdealGuide } from './ui/HotdealGuide';
-export { default as HotdealScore } from './ui/HotdealScore';
 export { ReactionChart } from './ui/ReactionChart';
 export { default as ProductDetailImage } from './ui/ProductDetailImage';
 export { default as ProductExpiredBanner } from './ui/ProductExpiredBanner';

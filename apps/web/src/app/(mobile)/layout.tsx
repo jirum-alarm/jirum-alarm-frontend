@@ -1,4 +1,4 @@
-import BottomNav from '@shared/ui/layout/BottomNav';
+import BottomNav from '@/shared/ui/layout/BottomNav';
 
 export default function MobileLayout({ children }: { children: React.ReactNode }) {
   return (

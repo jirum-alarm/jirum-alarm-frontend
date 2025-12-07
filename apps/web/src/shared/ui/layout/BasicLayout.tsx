@@ -1,5 +1,5 @@
-import { PAGE } from '@shared/config/page';
-import { cn } from '@shared/lib/cn';
+import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 
 import BackButton from './BackButton';
 import { type NAV_TYPE } from './BottomNav';

@@ -3,8 +3,8 @@
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 
-import { cn } from '@shared/lib/cn';
-import { Thumbsdown, Thumbsup } from '@shared/ui/icons';
+import { cn } from '@/shared/lib/cn';
+import { Thumbsdown, Thumbsup } from '@/shared/ui/icons';
 
 const DISABLED_COLOR = '#D0D5DD';
 

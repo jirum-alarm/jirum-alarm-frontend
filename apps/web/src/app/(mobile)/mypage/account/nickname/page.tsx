@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import BasicLayout from '@shared/ui/layout/BasicLayout';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 import NicknameForm from './components/NickNameForm';
 

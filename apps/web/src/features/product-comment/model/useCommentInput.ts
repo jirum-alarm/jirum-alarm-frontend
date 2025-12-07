@@ -3,11 +3,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 
-import { CANCEL_EVENT, TComment, TEditStatus } from '@/entities/comment/TComment';
+import {
+  CANCEL_EVENT,
+  CommentQueries,
+  defaultCommentsVariables,
+  TComment,
+  TEditStatus,
+} from '@entities/comment';
 
-import { CommentService } from '@shared/api/comment';
-
-import { CommentQueries, defaultCommentsVariables } from '@entities/comment';
+import { CommentService } from '@/shared/api/comment';
 
 export const useCommentInput = ({
   productId,

@@ -13,25 +13,20 @@ import {
   QueryProductsQueryVariables,
   QueryReportUserNamesQueryVariables,
   TogetherViewedProductsQueryVariables,
-} from '@shared/api/gql/graphql';
-import { ProductService } from '@shared/api/product';
+} from '@/shared/api/gql/graphql';
+import { ProductService } from '@/shared/api/product';
+import { buildQueryKey } from '@/shared/api/query-key';
 
 export const ProductQueries = {
   all: () => ['product'],
   product: (variables: ProductQueryVariables) =>
     queryOptions({
-      queryKey: [
-        ...ProductQueries.all(),
-        'detail',
-        {
-          id: variables.id,
-        },
-      ],
+      queryKey: buildQueryKey('product', 'detail', { id: variables.id }),
       queryFn: () => ProductService.getProduct(variables),
     }),
   productInfo: (variables: ProductInfoQueryVariables) =>
     queryOptions({
-      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'info'],
+      queryKey: buildQueryKey('product', 'detail', { id: variables.id }, 'info'),
       queryFn: () => ProductService.getProductInfo(variables),
       select: (data) => {
         if (!data) throw new Error('PRODUCT_NOT_FOUND');
@@ -40,7 +35,7 @@ export const ProductQueries = {
     }),
   productStats: (variables: ProductStatsQueryVariables) =>
     queryOptions({
-      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'stats'],
+      queryKey: buildQueryKey('product', 'detail', { id: variables.id }, 'stats'),
       queryFn: () => ProductService.getProductStats(variables),
       select: (data) => {
         if (!data) throw new Error('PRODUCT_STATS_NOT_FOUND');
@@ -49,7 +44,7 @@ export const ProductQueries = {
     }),
   productAdditionalInfo: (variables: ProductAdditionalInfoQueryVariables) =>
     queryOptions({
-      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'additionalInfo'],
+      queryKey: buildQueryKey('product', 'detail', { id: variables.id }, 'additionalInfo'),
       queryFn: () => ProductService.getProductAdditionalInfo(variables),
       select: (data) => {
         if (!data) throw new Error('PRODUCT_ADDITIONAL_INFO_NOT_FOUND');
@@ -58,33 +53,26 @@ export const ProductQueries = {
     }),
   products: (variables: QueryProductsQueryVariables) =>
     queryOptions({
-      queryKey: [
-        ...ProductQueries.all(),
-        {
-          limit: variables.limit,
-          searchAfter: variables.searchAfter,
-          startDate: variables.startDate,
-          orderBy: variables.orderBy,
-          orderOption: variables.orderOption,
-          categoryId: variables.categoryId,
-          keyword: variables.keyword,
-          thumbnailType: variables.thumbnailType,
-          isEnd: variables.isEnd,
-          isHot: variables.isHot,
-        },
-      ],
+      queryKey: buildQueryKey('product', 'list', {
+        limit: variables.limit,
+        searchAfter: variables.searchAfter,
+        startDate: variables.startDate,
+        orderBy: variables.orderBy,
+        orderOption: variables.orderOption,
+        categoryId: variables.categoryId,
+        keyword: variables.keyword,
+        thumbnailType: variables.thumbnailType,
+        isEnd: variables.isEnd,
+        isHot: variables.isHot,
+      }),
       queryFn: () => ProductService.getProducts(variables),
     }),
   hotdealProductsRandom: (variables: QueryCommunityRandomRankingProductsQueryVariables) =>
     queryOptions({
-      queryKey: [
-        ...ProductQueries.all(),
-        'random',
-        {
-          count: variables.count,
-          limit: variables.limit,
-        },
-      ],
+      queryKey: buildQueryKey('product', 'random', {
+        count: variables.count,
+        limit: variables.limit,
+      }),
       queryFn: () => ProductService.getHotDealProductsRandom(variables),
     }),
   infiniteProducts: (variables: QueryProductsQueryVariables) =>
@@ -99,45 +87,37 @@ export const ProductQueries = {
     }),
   reportUserNames: (variables: QueryReportUserNamesQueryVariables) =>
     queryOptions({
-      queryKey: [...ProductQueries.all(), 'reportUserNames', { productId: variables.productId }],
+      queryKey: buildQueryKey('product', 'reportUserNames', { productId: variables.productId }),
       queryFn: () => ProductService.getReportUserNames(variables),
     }),
   productGuide: (variables: ProductGuidesQueryVariables) =>
     queryOptions({
-      queryKey: [...ProductQueries.all(), 'guide', { productId: variables.productId }],
+      queryKey: buildQueryKey('product', 'guide', { productId: variables.productId }),
       queryFn: () => ProductService.getProductGuides(variables),
     }),
 
   togetherViewed: (variables: TogetherViewedProductsQueryVariables) =>
     queryOptions({
-      queryKey: [
-        ...ProductQueries.all(),
-        'viewed',
-        {
-          limit: variables.limit,
-          productId: variables.productId,
-        },
-      ],
+      queryKey: buildQueryKey('product', 'viewed', {
+        limit: variables.limit,
+        productId: variables.productId,
+      }),
       queryFn: () => ProductService.getTogetherViewedProducts(variables),
     }),
   productKeywords: () =>
     queryOptions({
-      queryKey: [...ProductQueries.all(), 'keywords'],
+      queryKey: buildQueryKey('product', 'keywords'),
       queryFn: () => ProductService.getProductKeywords(),
     }),
   productsByKeywords: (variables: QueryProductsByKeywordQueryVariables) =>
     queryOptions({
-      queryKey: [
-        ...ProductQueries.all(),
-        'productsByKeywords',
-        {
-          limit: variables.limit,
-          searchAfter: variables.searchAfter,
-          keyword: variables.keyword,
-          orderBy: variables.orderBy,
-          orderOption: variables.orderOption,
-        },
-      ],
+      queryKey: buildQueryKey('product', 'productsByKeywords', {
+        limit: variables.limit,
+        searchAfter: variables.searchAfter,
+        keyword: variables.keyword,
+        orderBy: variables.orderBy,
+        orderOption: variables.orderOption,
+      }),
       queryFn: () => ProductService.getProductsByKeyword(variables),
     }),
   infiniteProductsByKeywords: (variables: QueryProductsByKeywordQueryVariables) =>
@@ -156,13 +136,13 @@ export const ProductQueries = {
 
   reactionKeywords: (variables: QueryCategorizedReactionKeywordsArgs) =>
     queryOptions({
-      queryKey: [...ProductQueries.all(), 'reactionKeywords', { id: variables.id }],
+      queryKey: buildQueryKey('product', 'reactionKeywords', { id: variables.id }),
       queryFn: () => ProductService.getReactionKeywords(variables),
     }),
 
   hotDealRankingProducts: (variables: QueryHotDealRankingProductsQueryVariables) =>
     queryOptions({
-      queryKey: [...ProductQueries.all(), 'hotDealRankingProducts', variables],
+      queryKey: buildQueryKey('product', 'hotDealRankingProducts', variables),
       queryFn: () => ProductService.getHotDealRankingProducts(variables),
     }),
 };

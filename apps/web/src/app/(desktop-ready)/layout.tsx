@@ -1,7 +1,7 @@
-import BottomNav from '@shared/ui/layout/BottomNav';
-import TopButton from '@shared/ui/TopButton';
+import BottomNav from '@/shared/ui/layout/BottomNav';
+import TopButton from '@/shared/ui/TopButton';
 
-import DesktopGNB from '@widgets/layout/ui/desktop/DesktopGNB';
+import DesktopGNB from '@/widgets/layout/ui/desktop/DesktopGNB';
 
 import { checkDevice } from '../actions/agent';
 import { getAccessToken } from '../actions/token';

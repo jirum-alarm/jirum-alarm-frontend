@@ -2,13 +2,13 @@
 
 import { Suspense } from 'react';
 
-import { PAGE } from '@shared/config/page';
-import { Search } from '@shared/ui/icons';
-import BackButton from '@shared/ui/layout/BackButton';
-import Link from '@shared/ui/Link';
-import LogoLink from '@shared/ui/Logo/LogoLink';
+import { PAGE } from '@/shared/config/page';
+import { Search } from '@/shared/ui/icons';
+import BackButton from '@/shared/ui/layout/BackButton';
+import Link from '@/shared/ui/Link';
+import LogoLink from '@/shared/ui/Logo/LogoLink';
 
-import ProductShareButton from '@features/product-detail/ui/ProductShareButton';
+import ProductShareButton from '@/features/product-detail/ui/ProductShareButton';
 
 export default function ProductDetailPageHeader({ productId }: { productId: number }) {
   const handleSearch = () => {

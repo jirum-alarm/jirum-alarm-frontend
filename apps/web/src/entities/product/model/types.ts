@@ -1,5 +1,5 @@
 'use client';
-import { HotDealType } from '@shared/api/gql/graphql';
+import { HotDealType } from '@/shared/api/gql/graphql';
 
 export interface ProductCardType {
   id: string;

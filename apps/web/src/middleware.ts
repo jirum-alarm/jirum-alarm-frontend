@@ -1,11 +1,11 @@
 import { RequestCookies, ResponseCookies } from 'next/dist/server/web/spec-extension/cookies';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { graphql } from '@shared/api/gql';
-import { IS_PRD } from '@shared/config/env';
-import { GRAPHQL_ENDPOINT } from '@shared/config/graphql';
-import { PAGE } from '@shared/config/page';
-import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@shared/config/token';
+import { graphql } from '@/shared/api/gql';
+import { IS_PRD } from '@/shared/config/env';
+import { GRAPHQL_ENDPOINT } from '@/shared/config/graphql';
+import { PAGE } from '@/shared/config/page';
+import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/shared/config/token';
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   // const response = await handlePostHog(request);

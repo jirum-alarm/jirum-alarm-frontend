@@ -2,10 +2,10 @@
 
 import { Drawer } from 'vaul';
 
-import { HotDealType } from '@shared/api/gql/graphql';
-import { cn } from '@shared/lib/cn';
-import Button from '@shared/ui/Button';
-import HotdealBadge from '@shared/ui/HotdealBadge';
+import { HotDealType } from '@/shared/api/gql/graphql';
+import { cn } from '@/shared/lib/cn';
+import Button from '@/shared/ui/Button';
+import HotdealBadge from '@/shared/ui/HotdealBadge';
 
 export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNode }) {
   return (

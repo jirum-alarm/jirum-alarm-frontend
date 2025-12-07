@@ -1,8 +1,8 @@
 'use client';
 
-import customerService from '@shared/lib/customerservice/customer-service';
-import { Alert, Description, Filter, Headset, Heart } from '@shared/ui/icons';
-import Link from '@shared/ui/Link';
+import customerService from '@/shared/lib/customerservice/customer-service';
+import { Alert, Description, Filter, Headset, Heart } from '@/shared/ui/icons';
+import Link from '@/shared/ui/Link';
 const MENU_LIST: Array<{
   icon: React.ReactNode;
   title: string;

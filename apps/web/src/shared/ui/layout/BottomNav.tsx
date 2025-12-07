@@ -4,11 +4,11 @@ import { motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { createElement, useRef } from 'react';
 
-import { PAGE } from '@shared/config/page';
-import { useHeaderVisibility } from '@shared/hooks/useScrollDirection';
-import { cn } from '@shared/lib/cn';
-import { Alert, AlertFill, Find, FindFill, Home, HomeFill, My, MyFill } from '@shared/ui/icons';
-import Link from '@shared/ui/Link';
+import { PAGE } from '@/shared/config/page';
+import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
+import { cn } from '@/shared/lib/cn';
+import { Alert, AlertFill, Find, FindFill, Home, HomeFill, My, MyFill } from '@/shared/ui/icons';
+import Link from '@/shared/ui/Link';
 
 import TopButton from '../TopButton';
 

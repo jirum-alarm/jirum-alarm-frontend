@@ -2,7 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { AuthQueries } from '@entities/auth';
 
-import { useRemoveKeyword } from '@features/mypage/model/remove-keyword';
+import { useRemoveKeyword } from '@/features/mypage/model/remove-keyword';
 
 export const useKeywordList = () => {
   const {

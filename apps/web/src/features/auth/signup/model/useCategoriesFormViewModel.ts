@@ -1,6 +1,6 @@
 import { Registration } from '@/app/(mobile)/signup/page';
 
-import { MAX_SELECTION_COUNT } from '@shared/config/categories';
+import { MAX_SELECTION_COUNT } from '@/shared/config/categories';
 
 export const useCategoriesFormViewModel = ({
   registration,

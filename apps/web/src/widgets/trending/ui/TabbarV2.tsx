@@ -2,10 +2,10 @@ import { animate, motion, useMotionValue } from 'motion/react';
 import { Tabs } from 'radix-ui';
 import { useEffect, useRef, useState } from 'react';
 
-import { useHeaderVisibility } from '@shared/hooks/useScrollDirection';
-import { cn } from '@shared/lib/cn';
-import { Setting } from '@shared/ui/icons';
-import Link from '@shared/ui/Link';
+import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
+import { cn } from '@/shared/lib/cn';
+import { Setting } from '@/shared/ui/icons';
+import Link from '@/shared/ui/Link';
 
 // 스타일 관련 타입 정의
 interface TabBarStyles {

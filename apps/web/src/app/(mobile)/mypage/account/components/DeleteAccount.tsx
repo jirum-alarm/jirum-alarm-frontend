@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { AuthService } from '@shared/api/auth';
-import { useLogout } from '@shared/hooks/useLogout';
-import AlertDialog from '@shared/ui/AlertDialog';
-import Button from '@shared/ui/Button';
-import { useToast } from '@shared/ui/Toast';
+import { AuthService } from '@/shared/api/auth';
+import { useLogout } from '@/shared/hooks/useLogout';
+import AlertDialog from '@/shared/ui/AlertDialog';
+import Button from '@/shared/ui/Button';
+import { useToast } from '@/shared/ui/Toast';
 
 const DeleteAccount = () => {
   const { toast } = useToast();

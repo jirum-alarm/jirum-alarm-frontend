@@ -3,18 +3,18 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
-import { cn } from '@shared/lib/cn';
-import Button from '@shared/ui/Button';
-import DisplayPrice from '@shared/ui/DisplayPrice';
-import DisplayTime from '@shared/ui/DisplayTime';
-import HotdealBadge from '@shared/ui/HotdealBadge';
-import Jirume from '@shared/ui/icons/Jirume';
-import ShareButton from '@shared/ui/ShareButton';
-
 import { ProductQueries } from '@entities/product';
 
-import { LikeButton, RecommendButton } from '@features/product-actions';
-import ViewerCount from '@features/product-detail/ui/desktop/ViewerCount';
+import { cn } from '@/shared/lib/cn';
+import Button from '@/shared/ui/Button';
+import DisplayPrice from '@/shared/ui/DisplayPrice';
+import DisplayTime from '@/shared/ui/DisplayTime';
+import HotdealBadge from '@/shared/ui/HotdealBadge';
+import Jirume from '@/shared/ui/icons/Jirume';
+import ShareButton from '@/shared/ui/ShareButton';
+
+import { LikeButton, RecommendButton } from '@/features/product-actions';
+import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
 
 export default function ProductInfo({
   productId,

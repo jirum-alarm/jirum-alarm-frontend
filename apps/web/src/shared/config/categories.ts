@@ -1,4 +1,4 @@
-import { CategoryIcons } from '@shared/ui/icons';
+import { CategoryIcons } from '@/shared/ui/icons';
 
 export const CATEGORIES = [
   {

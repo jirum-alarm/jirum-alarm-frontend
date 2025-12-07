@@ -1,6 +1,6 @@
 import { getAccessToken } from '@/app/actions/token';
 
-import { CategoryService } from '@shared/api/category';
+import { CategoryService } from '@/shared/api/category';
 
 // const initialCategory = { id: null as null | number, name: '전체' };
 

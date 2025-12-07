@@ -1,7 +1,7 @@
-import { atom, useAtom } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
+import { useAtom } from 'jotai';
+import { useEffect, useRef } from 'react';
 
-const isHeaderVisibleAtom = atom(false);
+import { isHeaderVisibleAtom } from '@/shared/model/ui';
 
 const useVisibilityOnScroll = ({ visibilityThreshold }: { visibilityThreshold?: number } = {}) => {
   const lastScrollTop = useRef(0);

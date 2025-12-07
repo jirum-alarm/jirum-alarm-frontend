@@ -1,9 +1,9 @@
 'use client';
 
-import { EVENT } from '@shared/config/mixpanel';
-import { cn } from '@shared/lib/cn';
-
 import { GridProductCard, type ProductCardType } from '@entities/product';
+
+import { EVENT } from '@/shared/config/mixpanel';
+import { cn } from '@/shared/lib/cn';
 
 type ProductGridListProps = {
   products: ProductCardType[];

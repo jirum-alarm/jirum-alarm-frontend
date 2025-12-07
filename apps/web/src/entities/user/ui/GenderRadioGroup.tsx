@@ -1,6 +1,6 @@
 import { useId } from 'react';
 
-import { Gender } from '@shared/api/gql/graphql';
+import { Gender } from '@/shared/api/gql/graphql';
 
 interface GenderRadioGroupProps {
   handleRadioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

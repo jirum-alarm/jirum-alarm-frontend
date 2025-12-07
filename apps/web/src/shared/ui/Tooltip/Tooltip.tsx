@@ -8,9 +8,9 @@ import {
   useState,
 } from 'react';
 
-import useOutsideClick from '@shared/hooks/useOutsideClick';
-import { cn } from '@shared/lib/cn';
-import { composeEventHandlers } from '@shared/lib/utils/event';
+import useOutsideClick from '@/shared/hooks/useOutsideClick';
+import { cn } from '@/shared/lib/cn';
+import { composeEventHandlers } from '@/shared/lib/utils/event';
 
 interface Props {
   content: React.ReactNode | string;

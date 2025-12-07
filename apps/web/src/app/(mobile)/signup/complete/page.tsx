@@ -1,9 +1,9 @@
 'use client';
 
-import useMyRouter from '@shared/hooks/useMyRouter';
-import Button from '@shared/ui/Button';
-import { Illust } from '@shared/ui/icons/Illust';
-import BasicLayout from '@shared/ui/layout/BasicLayout';
+import useMyRouter from '@/shared/hooks/useMyRouter';
+import Button from '@/shared/ui/Button';
+import { Illust } from '@/shared/ui/icons/Illust';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 const HOME_ROUTE = '/';
 

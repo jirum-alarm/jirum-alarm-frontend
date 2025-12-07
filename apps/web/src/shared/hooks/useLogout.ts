@@ -1,7 +1,7 @@
 import { removeAccessToken, removeRefreshToken } from '@/app/actions/token';
 
-import { PAGE } from '@shared/config/page';
-import { WebViewBridge, WebViewEventType } from '@shared/lib/webview';
+import { PAGE } from '@/shared/config/page';
+import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 
 export const useLogout = () => {
   const logout = async () => {
