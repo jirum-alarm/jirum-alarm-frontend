@@ -1,6 +1,6 @@
-import AlertDialog from '@/components/common/AlertDialog';
-import Button from '@/components/common/Button';
-import { useLogout } from '@/hooks/useLogout';
+import { useLogout } from '@shared/hooks/useLogout';
+import AlertDialog from '@shared/ui/AlertDialog';
+import Button from '@shared/ui/Button';
 
 const Logout = () => {
   const logout = useLogout();

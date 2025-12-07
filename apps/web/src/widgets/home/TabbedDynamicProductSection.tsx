@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import { Suspense, useState } from 'react';
 
-import SectionHeader from '@/components/SectionHeader';
-import { getPromotionQueryOptions } from '@/entities/promotion/lib/getPromotionQueryOptions';
-import { ContentPromotionSection, PromotionTab } from '@/entities/promotion/model/types';
+import SectionHeader from '@shared/ui/SectionHeader';
 
-import ProductGridList from '@features/products/grid/GridProductList';
-import GridProductListSkeleton from '@features/products/grid/GridProductListSkeleton';
+import { getPromotionQueryOptions } from '@entities/promotion/lib/getPromotionQueryOptions';
+import { ContentPromotionSection, PromotionTab } from '@entities/promotion/model/types';
+
+import ProductGridList from '@features/product-list/grid/GridProductList';
+import GridProductListSkeleton from '@features/product-list/grid/GridProductListSkeleton';
 
 import DynamicProductList from './DynamicProductList';
 import PromotionTabs from './PromotionTabs';

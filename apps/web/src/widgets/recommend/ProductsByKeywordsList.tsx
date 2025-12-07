@@ -2,13 +2,12 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { useDevice } from '@/hooks/useDevice';
-
 import { KeywordProductOrderType, OrderOptionType } from '@shared/api/gql/graphql';
+import { useDevice } from '@shared/hooks/useDevice';
 
 import { ProductQueries } from '@entities/product';
 
-import { CarouselProductList } from '@features/products/carousel';
+import { CarouselProductList } from '@features/product-list/carousel';
 
 interface ProductByKeywordsListProps {
   keyword: string;

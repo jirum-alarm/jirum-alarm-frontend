@@ -1,4 +1,4 @@
-import { LANDING_URL } from '@/constants/env';
+import { LANDING_URL } from '@shared/config/env';
 
 import BannerItem from '../BannerItem';
 import landing from '../images/landing.png';

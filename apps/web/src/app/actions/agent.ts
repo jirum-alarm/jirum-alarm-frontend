@@ -3,7 +3,7 @@
 import { headers } from 'next/headers';
 import { userAgent } from 'next/server';
 
-import { CheckDeviceResult } from './agent.types';
+import { CheckDeviceResult } from '@shared/types/agent';
 
 async function checkDevice(): Promise<CheckDeviceResult> {
   const headersList = await headers();

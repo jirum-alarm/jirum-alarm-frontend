@@ -13,8 +13,8 @@ import {
   QueryProductsQueryVariables,
   QueryReportUserNamesQueryVariables,
   TogetherViewedProductsQueryVariables,
-} from '@/shared/api/gql/graphql';
-import { ProductService } from '@/shared/api/product';
+} from '@shared/api/gql/graphql';
+import { ProductService } from '@shared/api/product';
 
 export const ProductQueries = {
   all: () => ['product'],

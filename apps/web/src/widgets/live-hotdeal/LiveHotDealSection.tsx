@@ -2,13 +2,13 @@ import { Suspense } from 'react';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
 import { checkDevice } from '@/app/actions/agent';
-import SectionHeader from '@/components/SectionHeader';
 
 import { OrderOptionType, ProductOrderType } from '@shared/api/gql/graphql';
+import SectionHeader from '@shared/ui/SectionHeader';
 
 import { ProductQueries } from '@entities/product';
 
-import GridProductListSkeleton from '@features/products/grid/GridProductListSkeleton';
+import GridProductListSkeleton from '@features/product-list/grid/GridProductListSkeleton';
 
 import LiveHotDealList from './LiveHotDealList';
 

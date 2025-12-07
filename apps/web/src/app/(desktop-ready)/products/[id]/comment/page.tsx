@@ -2,7 +2,7 @@ import { redirect, RedirectType } from 'next/navigation';
 
 import { checkDevice } from '@/app/actions/agent';
 
-import CommentContainerServer from './components/CommentContainerServer';
+import CommentContainerServer from '@widgets/comment/ui/CommentContainerServer';
 
 export default async function CommentPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

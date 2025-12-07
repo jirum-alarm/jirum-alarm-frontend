@@ -2,7 +2,7 @@ import type {
   WebViewEvent,
   WebViewEventPayloads,
   WebViewEventType,
-} from '@/shared/lib/webview/type';
+} from '@shared/lib/webview/type';
 
 export class WebViewBridge {
   static sendMessage<T extends WebViewEventType>(type: T, payload: WebViewEventPayloads[T]) {

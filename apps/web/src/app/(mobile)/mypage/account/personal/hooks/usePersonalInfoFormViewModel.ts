@@ -1,13 +1,13 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
-import { useUpdatePersonal } from '@/app/(mobile)/mypage/features';
-import { BIRTH_YEAR } from '@/constants/birthYear';
-import { shallowEqual } from '@/util/object';
-
 import { Gender } from '@shared/api/gql/graphql';
+import { BIRTH_YEAR } from '@shared/config/birthYear';
+import { shallowEqual } from '@shared/lib/utils/object';
 
 import { AuthQueries } from '@entities/auth';
+
+import { useUpdatePersonal } from '@features/mypage/model/update-personal';
 
 const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({
   text: String(year),

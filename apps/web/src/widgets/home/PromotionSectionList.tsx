@@ -1,4 +1,4 @@
-import { PromotionSection } from '@/entities/promotion/model/types';
+import { PromotionSection } from '@entities/promotion/model/types';
 
 import DynamicProductSection from './DynamicProductSection';
 

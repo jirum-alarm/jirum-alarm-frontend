@@ -1,9 +1,9 @@
 'use client';
 
-import { cn } from '@/lib/cn';
+import { cn } from '@shared/lib/cn';
 
-import { CarouselProductsSection } from '@features/products/carousel';
-import { useHotDealsRandom } from '@features/products/hooks';
+import { CarouselProductsSection } from '@features/product-list/carousel';
+import { useHotDealsRandom } from '@features/product-list/hooks';
 
 import RecentKeywords from './RecentKeywords';
 import RecommendationKeywords from './RecommendationKeywords';

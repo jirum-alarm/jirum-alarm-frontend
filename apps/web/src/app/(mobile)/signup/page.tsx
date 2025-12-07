@@ -4,23 +4,23 @@ import { useMutation } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
 import { Suspense, useEffect, useState } from 'react';
 
-import { useToast } from '@/components/common/Toast';
-import BasicLayout from '@/components/layout/BasicLayout';
-import { CATEGORIES } from '@/constants/categories';
-import useMyRouter from '@/hooks/useMyRouter';
-import { AuthService } from '@/shared/api/auth/auth.service';
-import { Gender } from '@/shared/api/gql/graphql';
+import { AuthService } from '@shared/api/auth/auth.service';
+import { Gender } from '@shared/api/gql/graphql';
+import { CATEGORIES } from '@shared/config/categories';
+import useMyRouter from '@shared/hooks/useMyRouter';
+import BasicLayout from '@shared/ui/layout/BasicLayout';
+import { useToast } from '@shared/ui/Toast';
 
-import { ICategoryForm } from '@features/categories/types';
+import { type ICategoryForm } from '@entities/category';
+
+import Categories from '@features/auth/signup/ui/Categories';
+import Email from '@features/auth/signup/ui/Email';
+import Nickname from '@features/auth/signup/ui/Nickname';
+import Password from '@features/auth/signup/ui/Password';
+import Personal from '@features/auth/signup/ui/Personal';
+import TermsOfService from '@features/auth/signup/ui/TermsOfService';
 
 import { setAccessToken, setRefreshToken } from '../../actions/token';
-
-import Categories from './categories/components/Categories';
-import Email from './email/components/Email';
-import Nickname from './nickname/components/Nickname';
-import Password from './password/components/Password';
-import Personal from './personal/components/Personal';
-import TermsOfService from './terms-of-service/components/TermsOfService';
 
 const COMPLETE_ROUTE = 'signup/complete';
 

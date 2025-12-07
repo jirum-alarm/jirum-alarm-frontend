@@ -3,8 +3,7 @@
 import Image, { StaticImageData } from 'next/image';
 import { ReactNode } from 'react';
 
-import { cn } from '@/lib/cn';
-
+import { cn } from '@shared/lib/cn';
 import Link from '@shared/ui/Link';
 
 const BannerItem = ({

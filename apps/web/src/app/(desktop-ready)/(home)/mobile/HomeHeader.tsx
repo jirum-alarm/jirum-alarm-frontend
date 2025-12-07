@@ -1,9 +1,9 @@
 'use client';
 
-import LogoLink from '@/components/common/Logo/LogoLink';
-import SearchLinkButton from '@/components/SearchLinkButton';
-import useScrollPosition from '@/hooks/useScrollPosition';
-import { cn } from '@/lib/cn';
+import useScrollPosition from '@shared/hooks/useScrollPosition';
+import { cn } from '@shared/lib/cn';
+import LogoLink from '@shared/ui/Logo/LogoLink';
+import SearchLinkButton from '@shared/ui/SearchLinkButton';
 
 const HomeHeader = () => {
   const scrollThreshold = 90;

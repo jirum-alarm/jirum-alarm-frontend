@@ -2,12 +2,14 @@ import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
-import BasicLayout from '@/components/layout/BasicLayout';
-import SectionHeader from '@/components/SectionHeader';
-import { getPromotionSectionById } from '@/entities/promotion/api/getPromotionSections';
 
-import Footer from '../../components/desktop/Footer';
-import CurationPageHeader from '../components/CurationPageHeader';
+import BasicLayout from '@shared/ui/layout/BasicLayout';
+import SectionHeader from '@shared/ui/SectionHeader';
+
+import { getPromotionSectionById } from '@entities/promotion/api/getPromotionSections';
+
+import CurationPageHeader from '@widgets/curation/ui/CurationPageHeader';
+import Footer from '@widgets/layout/ui/desktop/Footer';
 
 interface LayoutProps {
   children: ReactNode;

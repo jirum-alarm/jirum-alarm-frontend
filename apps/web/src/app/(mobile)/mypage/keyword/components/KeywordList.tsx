@@ -1,6 +1,6 @@
 'use client';
 
-import { Close } from '@/components/common/icons';
+import { Close } from '@shared/ui/icons';
 
 import { useKeywordList } from '../hooks/useKeywordList';
 

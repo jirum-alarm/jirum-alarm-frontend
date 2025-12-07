@@ -3,15 +3,16 @@ import { Metadata } from 'next';
 import { checkDevice } from '@/app/actions/agent';
 import { collectProductAction } from '@/app/actions/product';
 import { getAccessToken } from '@/app/actions/token';
-import { CATEGORY_MAP } from '@/constants/categories';
-import { METADATA_SERVICE_URL } from '@/constants/env';
-import { defaultMetadata } from '@/constants/metadata';
-import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
 import { ProductService } from '@shared/api/product';
+import { CATEGORY_MAP } from '@shared/config/categories';
+import { METADATA_SERVICE_URL } from '@shared/config/env';
+import { defaultMetadata } from '@shared/config/metadata';
 
-import DesktopProductDetailPage from './components/desktop/ProductDetailPage';
-import MobileProductDetailPage from './components/mobile/ProductDetailPage';
+import { ProductPrefetch } from '@features/product-detail/prefetch';
+
+import DesktopProductDetailPage from '@widgets/product-detail/ui/desktop/ProductDetailPage';
+import MobileProductDetailPage from '@widgets/product-detail/ui/mobile/ProductDetailPage';
 
 function parseNumericPrice(rawPrice?: string | null) {
   if (!rawPrice) {

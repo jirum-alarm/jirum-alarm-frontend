@@ -1,4 +1,4 @@
-import { Advertisement } from '@/constants/advertisement';
+import { Advertisement } from '@shared/config/advertisement';
 
 import BannerItem from '../BannerItem';
 

@@ -1,14 +1,13 @@
 import { Suspense } from 'react';
 import { SwiperOptions } from 'swiper/types';
 
-import ApiErrorBoundary from '@/components/ApiErrorBoundary';
-import SectionHeader from '@/components/SectionHeader';
-import { PAGE } from '@/constants/page';
-
+import { PAGE } from '@shared/config/page';
+import ApiErrorBoundary from '@shared/ui/ApiErrorBoundary';
 import Link from '@shared/ui/Link';
+import SectionHeader from '@shared/ui/SectionHeader';
+import SliderDots from '@shared/ui/SliderDots';
 
-import JirumRankingSlider from '../components/JirumRankingSlider';
-import SliderDots from '../components/SliderDots';
+import JirumRankingSlider from '@widgets/home/ui/JirumRankingSlider';
 
 import { RankingSkeleton } from './RankingSkeleton';
 

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { useFcmPermission } from '@/lib/firebase/useFcmPermission';
+import { useFcmPermission } from '@shared/lib/firebase/useFcmPermission';
 
-import { useUpdateKeyword } from '../../features';
+import { useUpdateKeyword } from '@features/mypage/model/update-keyword';
 
 const MAX_KETWORD_LENGTH = 20;
 

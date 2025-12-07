@@ -2,7 +2,7 @@ import {
   KeywordProductOrderType,
   OrderOptionType,
   ProductOrderType,
-} from '@/shared/api/gql/graphql';
+} from '@shared/api/gql/graphql';
 
 import { ContentPromotionSection, PromotionSection } from '../model/types';
 

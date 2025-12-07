@@ -1,12 +1,11 @@
-import { ErrorIllust } from '@/components/common/icons/Illust';
-import SectionHeader from '@/components/SectionHeader';
-import useMyRouter from '@/hooks/useMyRouter';
-
 import useIsLoggedIn from '@shared/hooks/useIsLoggedIn';
+import useMyRouter from '@shared/hooks/useMyRouter';
+import { ErrorIllust } from '@shared/ui/icons/Illust';
 import Link from '@shared/ui/Link';
+import SectionHeader from '@shared/ui/SectionHeader';
 
-import { CarouselProductList } from '@features/products/carousel';
-import { useHotDealsRandom } from '@features/products/hooks';
+import { CarouselProductList } from '@features/product-list/carousel';
+import { useHotDealsRandom } from '@features/product-list/hooks';
 
 const ProductNotFound = () => {
   const router = useMyRouter();

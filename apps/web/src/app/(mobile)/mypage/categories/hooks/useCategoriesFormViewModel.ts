@@ -1,14 +1,13 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
-import { CATEGORIES, MAX_SELECTION_COUNT } from '@/constants/categories';
-import { shallowArrayEqual } from '@/util/object';
+import { CATEGORIES, MAX_SELECTION_COUNT } from '@shared/config/categories';
+import { shallowArrayEqual } from '@shared/lib/utils/object';
 
 import { AuthQueries } from '@entities/auth';
+import { type ICategoryForm } from '@entities/category';
 
-import { type ICategoryForm } from '@features/categories/types';
-
-import { useUpdateCategory } from '../../features';
+import { useUpdateCategory } from '@features/mypage/model/update-category';
 
 const FAVORITE_CATEGORIES = CATEGORIES.map((category) => ({
   ...category,

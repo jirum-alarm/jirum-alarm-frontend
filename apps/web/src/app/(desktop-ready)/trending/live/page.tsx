@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import LiveContainerServer from '../components/live-container/server';
+import LiveContainerServer from '@widgets/trending/ui/live-container/server';
 
 export const metadata: Metadata = {
   title: '실시간 핫딜 | 지름알림',

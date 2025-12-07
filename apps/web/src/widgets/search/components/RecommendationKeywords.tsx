@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-import SectionHeader from '@/components/SectionHeader';
-import useMyRouter from '@/hooks/useMyRouter';
+import useMyRouter from '@shared/hooks/useMyRouter';
+import SectionHeader from '@shared/ui/SectionHeader';
 
 const KEYWORDS = [
   '쌀',

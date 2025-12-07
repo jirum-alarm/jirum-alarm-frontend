@@ -2,13 +2,13 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { getPromotionQueryOptions } from '@/entities/promotion/lib/getPromotionQueryOptions';
-import { ContentPromotionSection } from '@/entities/promotion/model/types';
+import { getPromotionQueryOptions } from '@entities/promotion/lib/getPromotionQueryOptions';
+import { ContentPromotionSection } from '@entities/promotion/model/types';
 
-import { CarouselProductList } from '@features/products/carousel';
-import ProductGridList from '@features/products/grid/GridProductList';
-import PaginatedProductGridList from '@features/products/grid/PaginatedProductGridList';
-import ListProductList from '@features/products/list/ListProductList';
+import { CarouselProductList } from '@features/product-list/carousel';
+import ProductGridList from '@features/product-list/grid/GridProductList';
+import PaginatedProductGridList from '@features/product-list/grid/PaginatedProductGridList';
+import ListProductList from '@features/product-list/list/ListProductList';
 
 interface DynamicProductListProps {
   section: ContentPromotionSection;

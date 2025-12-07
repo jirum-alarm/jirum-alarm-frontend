@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 
-import { GRAPHQL_ENDPOINT } from '@/constants/graphql';
-import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/constants/token';
-import { customFetch } from '@/lib/http-client';
+import { GRAPHQL_ENDPOINT } from '@shared/config/graphql';
+import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@shared/config/token';
+import { customFetch } from '@shared/lib/http-client';
 
 // Node.js Runtime으로 변경하여 HTTP Agent 사용 가능하도록 설정
 export const runtime = 'nodejs';

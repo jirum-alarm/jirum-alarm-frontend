@@ -3,8 +3,7 @@
 import { useQueryState } from 'nuqs';
 import { PropsWithChildren } from 'react';
 
-import { PAGE } from '@/constants/page';
-
+import { PAGE } from '@shared/config/page';
 import Link from '@shared/ui/Link';
 
 const RecommendedMoreLink = ({ children }: PropsWithChildren) => {

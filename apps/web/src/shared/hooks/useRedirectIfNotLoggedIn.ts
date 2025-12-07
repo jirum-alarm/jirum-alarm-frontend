@@ -1,9 +1,8 @@
-import { PAGE } from '@/constants/page';
-import { useDevice } from '@/hooks/useDevice';
-import useMyRouter from '@/hooks/useMyRouter';
-
-import { WebViewBridge, WebViewEventType } from '../lib/webview';
-import { WindowLocation } from '../lib/window-location';
+import { PAGE } from '@/shared/config/page';
+import { useDevice } from '@/shared/hooks/useDevice';
+import useMyRouter from '@/shared/hooks/useMyRouter';
+import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
+import { WindowLocation } from '@/shared/lib/window-location';
 
 import useIsLoggedIn from './useIsLoggedIn';
 

@@ -1,7 +1,8 @@
 'use client';
 
-import { PromotionTab } from '@/entities/promotion/model/types';
-import { cn } from '@/lib/cn';
+import { cn } from '@shared/lib/cn';
+
+import { PromotionTab } from '@entities/promotion/model/types';
 
 interface PromotionTabsProps {
   tabs: PromotionTab[];

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
-import TrendingContainerServer from '../components/trending-container/server';
-import { TAB_META } from '../tabMeta';
+import { TAB_META } from '@widgets/trending/lib/tabMeta';
+import TrendingContainerServer from '@widgets/trending/ui/trending-container/server';
 
 export async function generateMetadata({
   searchParams,

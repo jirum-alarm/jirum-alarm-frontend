@@ -2,11 +2,13 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
-import SectionHeader from '@/components/SectionHeader';
-import { getPromotionQueryOptions } from '@/entities/promotion/lib/getPromotionQueryOptions';
-import { ContentPromotionSection } from '@/entities/promotion/model/types';
 
-import GridProductListSkeleton from '@features/products/grid/GridProductListSkeleton';
+import SectionHeader from '@shared/ui/SectionHeader';
+
+import { getPromotionQueryOptions } from '@entities/promotion/lib/getPromotionQueryOptions';
+import { ContentPromotionSection } from '@entities/promotion/model/types';
+
+import GridProductListSkeleton from '@features/product-list/grid/GridProductListSkeleton';
 
 import DynamicProductList from './DynamicProductList';
 import TabbedDynamicProductSection from './TabbedDynamicProductSection';

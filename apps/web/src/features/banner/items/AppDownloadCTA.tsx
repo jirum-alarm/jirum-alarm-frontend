@@ -1,6 +1,6 @@
 'use client';
 
-import { AppIcon } from '@/components/common/icons/Illust';
+import { AppIcon } from '@shared/ui/icons/Illust';
 
 export default function AppDownloadCTA({
   type,

@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import SectionHeader from '@/components/SectionHeader';
+import SectionHeader from '@shared/ui/SectionHeader';
 
 import RecommendedMoreLink from './RecommendedMoreLink';
 import RecommendedProductList from './RecommendedProductList';

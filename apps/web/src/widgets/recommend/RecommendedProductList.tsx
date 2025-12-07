@@ -3,11 +3,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 
-import ApiErrorBoundary from '@/components/ApiErrorBoundary';
+import ApiErrorBoundary from '@shared/ui/ApiErrorBoundary';
 
 import { ProductQueries } from '@entities/product';
 
-import { CarouselProductListSkeleton } from '@features/products/carousel';
+import { CarouselProductListSkeleton } from '@features/product-list/carousel';
 
 import ProductsByKeywordsList from './ProductsByKeywordsList';
 import RecommendedProductTabs from './RecommendedProductTabs';

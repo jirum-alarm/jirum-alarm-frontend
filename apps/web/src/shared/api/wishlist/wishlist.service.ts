@@ -1,4 +1,4 @@
-import { execute } from '@/shared/lib/http-client';
+import { execute } from '@shared/lib/http-client';
 
 import { graphql } from '../gql';
 import {

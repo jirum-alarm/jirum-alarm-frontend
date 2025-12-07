@@ -1,9 +1,9 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
-import { useUpdateNickname } from '@/app/(mobile)/mypage/features';
-
 import { AuthQueries } from '@entities/auth';
+
+import { useUpdateNickname } from '@features/mypage/model/update-nickname';
 
 const MIN_NICKNAME_LENGTH = 2;
 const MAX_NICKNAME_LENGTH = 12;

@@ -1,7 +1,7 @@
 import { infiniteQueryOptions } from '@tanstack/react-query';
 
-import { QueryNotificationsQueryVariables } from '@/shared/api/gql/graphql';
-import { NotificationService } from '@/shared/api/notification/notification.service';
+import { QueryNotificationsQueryVariables } from '@shared/api/gql/graphql';
+import { NotificationService } from '@shared/api/notification/notification.service';
 
 const NOTIFICATION_LIMIT = 20;
 

@@ -1,7 +1,7 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
-import { CommentService } from '@/shared/api/comment';
-import { CommentOrder, CommentsQueryVariables, OrderOptionType } from '@/shared/api/gql/graphql';
+import { CommentService } from '@shared/api/comment';
+import { CommentOrder, CommentsQueryVariables, OrderOptionType } from '@shared/api/gql/graphql';
 
 const COMMENTS_LIMIT = 10;
 const COMMENTS_ORDER_BY = CommentOrder.Id;

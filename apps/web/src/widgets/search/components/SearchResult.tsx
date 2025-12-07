@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 
-import { cn } from '@/lib/cn';
+import { cn } from '@shared/lib/cn';
 
-import ProductGridList from '@features/products/grid/GridProductList';
+import ProductGridList from '@features/product-list/grid/GridProductList';
 
 import { useProductListViewModel } from '../hooks/useProductListViewModel';
 

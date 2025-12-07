@@ -4,20 +4,20 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-import { StandingIllust } from '@/components/common/icons/Illust';
-import LoadingSpinner from '@/components/common/icons/LoadingSpinner';
-import SvgEmail from '@/components/common/icons/login/Email';
-import SvgKakao from '@/components/common/icons/login/Kakao';
-import SvgNaver from '@/components/common/icons/login/Naver';
-import BasicLayout from '@/components/layout/BasicLayout';
-import { PAGE } from '@/constants/page';
-import { useKakaoLogin } from '@/features/auth/lib/use-kakao-login';
-import { useNaverLogin } from '@/features/auth/lib/use-naver-login';
-import { useDevice } from '@/hooks/useDevice';
-import useMyRouter from '@/hooks/useMyRouter';
-import { cn } from '@/lib/cn';
+import { PAGE } from '@shared/config/page';
+import { useDevice } from '@shared/hooks/useDevice';
+import useMyRouter from '@shared/hooks/useMyRouter';
+import { cn } from '@shared/lib/cn';
+import AppDownloadCTA from '@shared/ui/AppDownloadCTA';
+import { StandingIllust } from '@shared/ui/icons/Illust';
+import LoadingSpinner from '@shared/ui/icons/LoadingSpinner';
+import SvgEmail from '@shared/ui/icons/login/Email';
+import SvgKakao from '@shared/ui/icons/login/Kakao';
+import SvgNaver from '@shared/ui/icons/login/Naver';
+import BasicLayout from '@shared/ui/layout/BasicLayout';
 
-import AppDownloadCTA from './components/AppDownloadCTA';
+import { useKakaoLogin } from '@features/auth/lib/use-kakao-login';
+import { useNaverLogin } from '@features/auth/lib/use-naver-login';
 
 enum LoginType {
   KAKAO = 'KAKAO',

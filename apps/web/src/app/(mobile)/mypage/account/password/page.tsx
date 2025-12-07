@@ -3,9 +3,9 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
-import BackButton from '@/components/layout/BackButton';
-import BasicLayout from '@/components/layout/BasicLayout';
-import useMyRouter from '@/hooks/useMyRouter';
+import useMyRouter from '@shared/hooks/useMyRouter';
+import BackButton from '@shared/ui/layout/BackButton';
+import BasicLayout from '@shared/ui/layout/BasicLayout';
 
 import ChangePassword from './change/components/ChangePassword';
 import CurrentPassword from './current/components/CurrentPassword';

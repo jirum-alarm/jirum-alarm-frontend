@@ -1,7 +1,6 @@
 'use client';
 
-import { Cancel, Home, Search } from '@/components/common/icons';
-
+import { Cancel, Home, Search } from '@shared/ui/icons';
 import Link from '@shared/ui/Link';
 
 import { useSearchInputViewModel } from '../hooks/useSearchInputViewModel';

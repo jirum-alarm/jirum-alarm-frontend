@@ -5,12 +5,13 @@ import { notFound, useParams, useRouter, useSearchParams } from 'next/navigation
 import { useEffect } from 'react';
 
 import { setAccessToken, setRefreshToken } from '@/app/actions/token';
-import LoadingSpinner from '@/components/common/icons/LoadingSpinner';
-import { useToast } from '@/components/common/Toast';
-import BasicLayout from '@/components/layout/BasicLayout';
-import { PAGE } from '@/constants/page';
-import { AuthService } from '@/shared/api/auth';
-import { OauthProvider } from '@/shared/api/gql/graphql';
+
+import { AuthService } from '@shared/api/auth';
+import { OauthProvider } from '@shared/api/gql/graphql';
+import { PAGE } from '@shared/config/page';
+import LoadingSpinner from '@shared/ui/icons/LoadingSpinner';
+import BasicLayout from '@shared/ui/layout/BasicLayout';
+import { useToast } from '@shared/ui/Toast';
 
 const PROVIDER_MAP: Record<string, OauthProvider> = {
   kakao: OauthProvider.Kakao,

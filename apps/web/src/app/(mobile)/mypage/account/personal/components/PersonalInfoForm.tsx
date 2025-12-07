@@ -1,9 +1,8 @@
 'use client';
 
-import Button from '@/components/common/Button';
+import Button from '@shared/ui/Button';
 
-import BirthYearSelect from '@features/personal/components/BirthYearSelect';
-import GenderRadioGroup from '@features/personal/components/GenderRadioGroup';
+import { BirthYearSelect, GenderRadioGroup } from '@entities/user';
 
 import usePersonalInfoFormViewModel from '../hooks/usePersonalInfoFormViewModel';
 

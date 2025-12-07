@@ -1,7 +1,7 @@
 import { env } from 'next-runtime-env';
 import { useEffect, useRef, useState } from 'react';
 
-import { WindowLocation } from '@/shared/lib/window-location';
+import { WindowLocation } from '@shared/lib/window-location';
 
 declare global {
   interface Window {

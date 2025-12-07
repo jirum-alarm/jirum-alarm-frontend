@@ -3,11 +3,11 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { Close } from '@/components/common/icons';
-import SectionHeader from '@/components/SectionHeader';
-import { useDevice } from '@/hooks/useDevice';
-import useMyRouter from '@/hooks/useMyRouter';
-import { cn } from '@/lib/cn';
+import { useDevice } from '@shared/hooks/useDevice';
+import useMyRouter from '@shared/hooks/useMyRouter';
+import { cn } from '@shared/lib/cn';
+import { Close } from '@shared/ui/icons';
+import SectionHeader from '@shared/ui/SectionHeader';
 
 export default function RecentKeywords() {
   const [loading, setLoading] = useState(true);

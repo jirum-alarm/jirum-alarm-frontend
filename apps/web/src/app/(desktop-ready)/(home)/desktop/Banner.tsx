@@ -1,7 +1,7 @@
-import { Advertisement } from '@/constants/advertisement';
-import AdBanner from '@/features/banner/items/AdBanner';
+import { Advertisement } from '@shared/config/advertisement';
 
 import AboutLink from '@features/banner/items/AboutLink';
+import AdBanner from '@features/banner/items/AdBanner';
 import KakaoOpenChatLink from '@features/banner/items/KakaoOpenChatLink';
 
 const Banner = () => {

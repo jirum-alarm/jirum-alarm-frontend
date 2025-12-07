@@ -1,5 +1,4 @@
-import BasicLayout from '@/components/layout/BasicLayout';
-
+import BasicLayout from '@shared/ui/layout/BasicLayout';
 import Link from '@shared/ui/Link';
 
 const TermsPoliciesPage = () => {

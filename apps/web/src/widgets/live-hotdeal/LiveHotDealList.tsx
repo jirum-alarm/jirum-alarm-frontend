@@ -1,11 +1,11 @@
 'use client';
 
-import { CheckDeviceResult } from '@/app/actions/agent.types';
-import { GridProductListSkeleton } from '@/features/products/grid';
-import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
+import useAppDownloadLink from '@shared/hooks/useAppDownloadLink';
+import { CheckDeviceResult } from '@shared/types/agent';
 
 import AppDownloadCTA from '@features/banner/items/AppDownloadCTA';
-import ProductGridList from '@features/products/grid/GridProductList';
+import { GridProductListSkeleton } from '@features/product-list/grid';
+import ProductGridList from '@features/product-list/grid/GridProductList';
 
 import useLiveHotDealsViewModel from './hooks/useLiveHotDealsViewModel';
 

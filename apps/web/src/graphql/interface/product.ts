@@ -1,4 +1,4 @@
-import { HotDealType } from '@/shared/api/gql/graphql';
+import { HotDealType } from '@shared/api/gql/graphql';
 
 import { IProvider } from './provider';
 

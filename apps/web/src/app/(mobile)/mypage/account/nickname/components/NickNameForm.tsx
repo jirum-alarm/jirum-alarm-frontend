@@ -1,8 +1,8 @@
 'use client';
 
-import Button from '@/components/common/Button';
-import { Cancel } from '@/components/common/icons';
-import Input from '@/components/common/Input';
+import Button from '@shared/ui/Button';
+import { Cancel } from '@shared/ui/icons';
+import Input from '@shared/ui/Input';
 
 import useNicknameFormViewModel from '../hooks/useNicknameFormViewModel';
 

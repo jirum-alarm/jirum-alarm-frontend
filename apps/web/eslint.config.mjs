@@ -45,7 +45,7 @@ const config = [
         {
           patterns: [
             {
-              group: ['@features/*', '@/features/*'],
+              group: ['@features/*'],
               message: '피처 내부에서는 다른 피처를 직접 import 하지 마세요.',
             },
           ],

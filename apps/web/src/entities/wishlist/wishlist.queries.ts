@@ -1,7 +1,7 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
-import { QueryWishlistsQueryVariables } from '@/shared/api/gql/graphql';
-import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
+import { QueryWishlistsQueryVariables } from '@shared/api/gql/graphql';
+import { WishlistService } from '@shared/api/wishlist/wishlist.service';
 
 export const WishlistQueries = {
   all: () => ['wishlist'],

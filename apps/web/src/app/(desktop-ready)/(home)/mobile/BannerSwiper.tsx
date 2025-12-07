@@ -7,13 +7,13 @@ import { Autoplay } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 import { AutoplayOptions, SwiperOptions } from 'swiper/types';
 
-import { Advertisement } from '@/constants/advertisement';
-import AdBanner from '@/features/banner/items/AdBanner';
-import { useDevice } from '@/hooks/useDevice';
-import { cn } from '@/lib/cn';
-import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
+import { Advertisement } from '@shared/config/advertisement';
+import useAppDownloadLink from '@shared/hooks/useAppDownloadLink';
+import { useDevice } from '@shared/hooks/useDevice';
+import { cn } from '@shared/lib/cn';
 
 import AboutLink from '@features/banner/items/AboutLink';
+import AdBanner from '@features/banner/items/AdBanner';
 import AppDownloadCTA from '@features/banner/items/AppDownloadCTA';
 import KakaoOpenChatLink from '@features/banner/items/KakaoOpenChatLink';
 
