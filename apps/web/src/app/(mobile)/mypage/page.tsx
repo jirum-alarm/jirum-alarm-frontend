@@ -16,7 +16,7 @@ const MyPage = async () => {
   await queryClient.prefetchQuery(AuthQueries.me());
 
   return (
-    <BasicLayout hasBottomNav navType={NAV_TYPE.MYPAGE} title="마이페이지">
+    <BasicLayout hasBottomNav navType={NAV_TYPE.MYPAGE} title="마이페이지" hasBackButton>
       <Suspense>
         <MyProfileSection />
         <CustomerServiceBoot />

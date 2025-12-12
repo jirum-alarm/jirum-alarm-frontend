@@ -60,9 +60,6 @@ const BottomNavList = [
   },
 ] as const;
 
-// 1. 링크를 기준으로 active
-// 2. touch start나 mouse down으로 active 후 링크가 이동 안 됐으면 unactive
-
 const BottomNavComponent = () => {
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
@@ -71,6 +68,10 @@ const BottomNavComponent = () => {
   const isActiveNav = (type: NAV_TYPE, link: string) => {
     return link === pathName;
   };
+
+  if (pathName.startsWith(PAGE.MYPAGE)) {
+    return null;
+  }
 
   return (
     <nav
