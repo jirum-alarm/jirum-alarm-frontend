@@ -35,6 +35,7 @@ const SocialLoginCallbackPage = () => {
   const provider = params.provider as string;
   const code = searchParams.get('code');
   const error = searchParams.get('error');
+  const state = searchParams.get('state');
 
   if (isInvalidProvider(provider)) {
     notFound();
@@ -42,6 +43,16 @@ const SocialLoginCallbackPage = () => {
 
   const oauthProvider = PROVIDER_MAP[provider];
   const providerName = PROVIDER_NAMES[provider] || provider;
+
+  const extractRtnUrlFromState = (state: string | null): string | null => {
+    if (!state) return null;
+    try {
+      const stateData = JSON.parse(atob(state));
+      return stateData.rtnUrl || null;
+    } catch {
+      return null;
+    }
+  };
 
   const { mutate: socialLogin } = useMutation({
     mutationFn: AuthService.socialLogin,
@@ -51,7 +62,9 @@ const SocialLoginCallbackPage = () => {
         await setRefreshToken(data.socialLogin.refreshToken);
       }
       toast('로그인에 성공했어요.');
-      router.push(PAGE.HOME);
+
+      const rtnUrl = extractRtnUrlFromState(state);
+      router.replace(rtnUrl && rtnUrl !== '' ? decodeURIComponent(rtnUrl) : PAGE.HOME);
     },
     onError: (error) => {
       console.error(`${providerName} 로그인 실패:`, error);
@@ -75,7 +88,7 @@ const SocialLoginCallbackPage = () => {
     AuthService.socialAccessToken({
       code,
       oauthProvider,
-      state: searchParams.get('state') || '',
+      state: state || '',
     })
       .then((res) =>
         socialLogin({

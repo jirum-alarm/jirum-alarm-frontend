@@ -6,9 +6,13 @@ import { WindowLocation } from '@/shared/lib/window-location';
 export const useNaverLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const loginWithNaver = (): Promise<void> => {
+  const loginWithNaver = (rtnUrl?: string): Promise<void> => {
     return new Promise((resolve) => {
-      const STATE = Math.random().toString(36).substring(2, 15);
+      const stateData = {
+        random: Math.random().toString(36).substring(2, 15),
+        rtnUrl: rtnUrl || '',
+      };
+      const STATE = btoa(JSON.stringify(stateData));
       const REDIRECT_URI = encodeURIComponent(
         WindowLocation.getCurrentOrigin() + '/login/callback/naver',
       );
@@ -19,10 +23,10 @@ export const useNaverLogin = () => {
     });
   };
 
-  const executeNaverLogin = async (): Promise<void> => {
+  const executeNaverLogin = async (rtnUrl?: string): Promise<void> => {
     try {
       setIsLoading(true);
-      await loginWithNaver();
+      await loginWithNaver(rtnUrl);
     } catch (error) {
       console.error('네이버 로그인 실패:', error);
       throw error;
