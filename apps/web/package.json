@@ -38,7 +38,7 @@
     "jotai": "^2.12.4",
     "mixpanel-browser": "^2.63.0",
     "motion": "^12.6.3",
-    "next": "15.4.8",
+    "next": "15.4.10",
     "next-runtime-env": "^3.3.0",
     "nuqs": "^2.4.1",
     "posthog-js": "^1.234.9",
