@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import Button from '@/components/common/Button';
 import { Apple, ArrowDown, Google, LoadingSpinner } from '@/components/common/icons';
 import { Illust } from '@/components/common/icons/Illust';
+import { PAGE } from '@/constants/page';
 import { useDevice } from '@/hooks/useDevice';
 import useMyRouter from '@/hooks/useMyRouter';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
@@ -15,7 +16,6 @@ import Link from '@shared/ui/Link';
 import AlarmList from './AlarmList';
 
 const SIGNUP_PATH = '/signup';
-const EMAIL_LOGIN_PATH = '/login/email';
 
 const AlarmContainer = () => {
   const { device, isHydrated } = useDevice();
@@ -173,7 +173,7 @@ function LoginGuide() {
         </Button>
         <p className="pt-6 text-sm">
           이미 지름알림 회원이신가요?
-          <Link href={EMAIL_LOGIN_PATH} className="text-primary-700 pl-3">
+          <Link href={PAGE.LOGIN_BY_EMAIL} className="text-primary-700 pl-3">
             로그인
           </Link>
         </p>
