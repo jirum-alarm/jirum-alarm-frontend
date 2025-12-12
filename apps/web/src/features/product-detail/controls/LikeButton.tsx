@@ -9,6 +9,7 @@ import { useToast } from '@/components/common/Toast';
 import { PAGE } from '@/constants/page';
 import { useDevice } from '@/hooks/useDevice';
 import useMyRouter from '@/hooks/useMyRouter';
+import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 
 import { WishlistService } from '@shared/api/wishlist/wishlist.service';
 import { WebViewBridge, WebViewEventType } from '@shared/lib/webview';
@@ -26,6 +27,7 @@ export default function LikeButton({
 }) {
   const { toast } = useToast();
 
+  const { checkAndRedirect } = useRedirectIfNotLoggedIn();
   const { data: product } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
 
   const { device } = useDevice();
@@ -57,16 +59,7 @@ export default function LikeButton({
   });
 
   const handleClickWishlist = () => {
-    if (!isUserLogin) {
-      if (device.isJirumAlarmApp) {
-        WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
-          data: { url: PAGE.LOGIN },
-        });
-      } else {
-        router.push(PAGE.LOGIN);
-      }
-      return;
-    }
+    if (checkAndRedirect()) return;
 
     if (isLiked) {
       removeWishlist({ productId });
