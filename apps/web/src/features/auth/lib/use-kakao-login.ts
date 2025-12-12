@@ -65,13 +65,17 @@ export const useKakaoLogin = () => {
     });
   };
 
-  const loginWithKakao = (): Promise<void> => {
+  const loginWithKakao = (rtnUrl?: string): Promise<void> => {
     return new Promise((resolve) => {
       if (!window.Kakao || !window.Kakao.isInitialized()) {
         throw new Error('Kakao SDK가 초기화되지 않았습니다.');
       }
 
-      const STATE = Math.random().toString(36).substring(2, 15);
+      const stateData = {
+        random: Math.random().toString(36).substring(2, 15),
+        rtnUrl: rtnUrl || '',
+      };
+      const STATE = btoa(JSON.stringify(stateData));
 
       window.Kakao.Auth.authorize({
         redirectUri: `${WindowLocation.getCurrentOrigin()}/login/callback/kakao`,
@@ -82,12 +86,12 @@ export const useKakaoLogin = () => {
     });
   };
 
-  const executeKakaoLogin = async (): Promise<void> => {
+  const executeKakaoLogin = async (rtnUrl?: string): Promise<void> => {
     try {
       setIsLoading(true);
       await loadKakaoSDK();
       await initKakaoSDK();
-      await loginWithKakao();
+      await loginWithKakao(rtnUrl);
     } catch (error) {
       console.error('카카오 로그인 실패:', error);
       throw error;

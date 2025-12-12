@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 import { StandingIllust } from '@/components/common/icons/Illust';
@@ -36,6 +37,8 @@ type LoginButton = {
 const Login = () => {
   const { device, isHydrated } = useDevice();
   const router = useMyRouter();
+  const searchParams = useSearchParams();
+  const rtnUrl = searchParams.get('rtnUrl') || undefined;
   const { executeKakaoLogin, isLoading: isKakaoLoading } = useKakaoLogin();
   const { executeNaverLogin, isLoading: isNaverLoading } = useNaverLogin();
   const [loadingButton, setLoadingButton] = useState<LoginType | null>(null);
@@ -43,7 +46,7 @@ const Login = () => {
   const handleKakaoLogin = async () => {
     try {
       setLoadingButton(LoginType.KAKAO);
-      await executeKakaoLogin();
+      await executeKakaoLogin(rtnUrl);
     } catch (error) {
       console.error('카카오 로그인 실패:', error);
     } finally {
@@ -54,7 +57,7 @@ const Login = () => {
   const handleNaverLogin = async () => {
     try {
       setLoadingButton(LoginType.NAVER);
-      await executeNaverLogin();
+      await executeNaverLogin(rtnUrl);
     } catch (error) {
       console.error('네이버 로그인 실패:', error);
     } finally {
@@ -63,7 +66,10 @@ const Login = () => {
   };
 
   const handleEmailLogin = () => {
-    router.push(PAGE.LOGIN_BY_EMAIL);
+    const emailLoginUrl = rtnUrl
+      ? `${PAGE.LOGIN_BY_EMAIL}?rtnUrl=${encodeURIComponent(rtnUrl)}`
+      : PAGE.LOGIN_BY_EMAIL;
+    router.push(emailLoginUrl);
   };
 
   const LOGIN_BUTTONS: LoginButton[] = [

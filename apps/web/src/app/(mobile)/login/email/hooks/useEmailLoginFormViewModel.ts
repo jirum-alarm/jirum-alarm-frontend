@@ -1,15 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 import { setAccessToken, setRefreshToken } from '@/app/actions/token';
 import { useToast } from '@/components/common/Toast';
-import useMyRouter from '@/hooks/useMyRouter';
+import { PAGE } from '@/constants/page';
 import { useFcmPermission } from '@/lib/firebase/useFcmPermission';
 import { AuthService } from '@/shared/api/auth/auth.service';
 
 import { WebViewBridge, WebViewEventType } from '@shared/lib/webview';
-
-const HOME_PATH = '/';
 
 interface Input {
   value: string;
@@ -25,6 +24,8 @@ interface Login {
 
 const useEmailLoginFormViewModel = () => {
   const { toast } = useToast();
+  const searchParams = useSearchParams();
+  const rtnUrl = searchParams.get('rtnUrl') || undefined;
 
   const { requestPermission } = useFcmPermission();
 
@@ -44,8 +45,6 @@ const useEmailLoginFormViewModel = () => {
     error: false,
   });
 
-  const router = useMyRouter();
-
   const { mutate: login } = useMutation({
     mutationKey: ['auth', 'login'],
     mutationFn: AuthService.loginUser,
@@ -64,7 +63,8 @@ const useEmailLoginFormViewModel = () => {
       requestPermission();
 
       toast('로그인에 성공했어요.');
-      window.location.replace(HOME_PATH);
+      const redirectUrl = rtnUrl ? decodeURIComponent(rtnUrl) : PAGE.HOME;
+      window.location.href = redirectUrl;
     },
     onError: () => {
       setLoginForm((prev) => ({ ...prev, error: true }));
