@@ -101,7 +101,7 @@ const Login = () => {
 
   return (
     <BasicLayout hasBackButton fullScreen={true}>
-      <div className="flex h-full flex-col justify-center px-8">
+      <div className="flex h-full flex-col px-8 pt-[10px] pb-[90px]">
         <div className="flex flex-col items-center text-center">
           {/* Character Icon */}
           <div className="mb-3">
