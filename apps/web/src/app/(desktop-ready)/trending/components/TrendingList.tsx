@@ -3,8 +3,6 @@
 import { memo, useEffect, useRef } from 'react';
 import { useSwiper } from 'swiper/react';
 
-import useScreen from '@/hooks/useScreenSize';
-
 import { CarouselProductsSection } from '@features/products/carousel';
 import { GridProductList } from '@features/products/grid';
 
