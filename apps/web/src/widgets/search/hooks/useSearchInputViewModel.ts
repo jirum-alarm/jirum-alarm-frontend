@@ -22,7 +22,7 @@ export const useSearchInputViewModel = () => {
     setKeyword(value);
 
     if (value === '') {
-      router.push('/search');
+      router.replace('/search');
     }
   };
 
@@ -34,7 +34,7 @@ export const useSearchInputViewModel = () => {
     }
 
     if (event.key === 'Enter') {
-      router.push(`/search?keyword=${keyword}`);
+      router.replace(`/search?keyword=${keyword}`);
 
       setRecentKeyord(keyword);
     }
