@@ -15,6 +15,7 @@ import {
   MyFill,
 } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
+import { useDevice } from '@/hooks/useDevice';
 import { useHeaderVisibility } from '@/hooks/useScrollDirection';
 import { cn } from '@/lib/cn';
 
@@ -130,7 +131,11 @@ const BottomNavComponent = () => {
 };
 
 export default function BottomNav() {
+  const {
+    device: { isJirumAlarmApp },
+  } = useDevice();
   const pathName = usePathname();
+  if (isJirumAlarmApp) return null;
   if (!BottomNavList.some((nav) => nav.isActive(pathName))) return null;
   return <BottomNavComponent />;
 }
