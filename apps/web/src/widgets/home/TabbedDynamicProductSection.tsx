@@ -1,11 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { Suspense, useState } from 'react';
 
 import SectionHeader from '@/components/SectionHeader';
-import { getPromotionQueryOptions } from '@/entities/promotion/lib/getPromotionQueryOptions';
 import { ContentPromotionSection, PromotionTab } from '@/entities/promotion/model/types';
+import Link from '@/shared/ui/Link';
 
 import ProductGridList from '@features/products/grid/GridProductList';
 import GridProductListSkeleton from '@features/products/grid/GridProductListSkeleton';
