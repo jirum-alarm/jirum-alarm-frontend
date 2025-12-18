@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { useDevice } from '@/hooks/useDevice';
 import useMyRouter from '@/hooks/useMyRouter';
 
 const RECENT_KEYWORDS_KEY = 'gr-recent-keywords';
@@ -16,13 +17,19 @@ export const useSearchInputViewModel = () => {
 
   const [keyword, setKeyword] = useState(keywordParam);
 
+  const {
+    device: { isJirumAlarmApp },
+  } = useDevice();
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event?.currentTarget.value;
 
     setKeyword(value);
 
     if (value === '') {
-      router.replace('/search');
+      if (!isJirumAlarmApp) {
+        router.replace('/search');
+      }
     }
   };
 
