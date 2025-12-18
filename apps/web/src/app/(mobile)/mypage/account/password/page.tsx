@@ -22,11 +22,11 @@ const Password = () => {
   const [currentStep, setCurrentStep] = useState<Steps>(INITIAL_STEP);
   const nextStep = (steps: Steps) => {
     setCurrentStep(steps);
-    router.push(`?${QUERY_PARAM_PREFIX}=${steps}`);
+    router.push(`/mypage/account/password?${QUERY_PARAM_PREFIX}=${steps}`);
   };
 
   useEffect(() => {
-    router.replace(`?${QUERY_PARAM_PREFIX}=${INITIAL_STEP}`);
+    router.replace(`/mypage/account/password?${QUERY_PARAM_PREFIX}=${INITIAL_STEP}`);
   }, [router]);
 
   useEffect(() => {
