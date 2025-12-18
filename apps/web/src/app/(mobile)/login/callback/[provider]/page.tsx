@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
-import { notFound, useParams, useRouter, useSearchParams } from 'next/navigation';
+import { notFound, useParams, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { setAccessToken, setRefreshToken } from '@/app/actions/token';
@@ -9,6 +9,7 @@ import LoadingSpinner from '@/components/common/icons/LoadingSpinner';
 import { useToast } from '@/components/common/Toast';
 import BasicLayout from '@/components/layout/BasicLayout';
 import { PAGE } from '@/constants/page';
+import useMyRouter from '@/hooks/useMyRouter';
 import { AuthService } from '@/shared/api/auth';
 import { OauthProvider } from '@/shared/api/gql/graphql';
 
@@ -27,7 +28,7 @@ const isInvalidProvider = (provider: string) => {
 };
 
 const SocialLoginCallbackPage = () => {
-  const router = useRouter();
+  const router = useMyRouter();
   const params = useParams();
   const searchParams = useSearchParams();
   const { toast } = useToast();

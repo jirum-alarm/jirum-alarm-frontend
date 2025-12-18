@@ -10,7 +10,7 @@ import useMyRouter from '@/hooks/useMyRouter';
 import { editingCommentAtom } from '../hooks/useComment';
 import { useCommentInput } from '../hooks/useCommentInput';
 
-import { CANCEL_EVENT, TComment, TEditStatus } from './CommentLayout';
+import { CANCEL_EVENT } from './CommentLayout';
 
 interface BottomInputProps {
   productId: number;

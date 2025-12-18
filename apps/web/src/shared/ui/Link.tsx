@@ -23,7 +23,7 @@ const Link = forwardRef<HTMLAnchorElement, LinkProps>(function LinkWithRef(
     if (isJirumAlarmApp) {
       event.preventDefault();
       WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
-        data: { url: rest.href as string },
+        data: { url: rest.href as string, type: 'push' },
       });
       return;
     }

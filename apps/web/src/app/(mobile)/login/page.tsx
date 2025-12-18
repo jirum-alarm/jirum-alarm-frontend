@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
@@ -16,6 +15,7 @@ import { useNaverLogin } from '@/features/auth/lib/use-naver-login';
 import { useDevice } from '@/hooks/useDevice';
 import useMyRouter from '@/hooks/useMyRouter';
 import { cn } from '@/lib/cn';
+import Link from '@/shared/ui/Link';
 
 import AppDownloadCTA from './components/AppDownloadCTA';
 
