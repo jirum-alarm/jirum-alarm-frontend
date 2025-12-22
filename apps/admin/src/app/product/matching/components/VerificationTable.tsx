@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
@@ -18,11 +18,12 @@ import {
   VerificationStatus,
 } from '@/types/verification';
 import { dateFormatter } from '@/utils/date';
+import { getJaccardSimilarity } from '@/utils/text';
 
 const VerificationStatusMap: Record<VerificationStatus, string> = {
-  [VerificationStatus.PendingVerification]: '검증 대기',
-  [VerificationStatus.Verified]: '승인됨',
-  [VerificationStatus.Rejected]: '거부됨',
+  [VerificationStatus.PendingVerification]: '대기',
+  [VerificationStatus.Verified]: '승인',
+  [VerificationStatus.Rejected]: '거부',
 };
 
 const VerificationStatusColorMap: Record<VerificationStatus, string> = {
@@ -38,7 +39,15 @@ const VerificationTable = () => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [allItems, setAllItems] = useState<PendingVerification[]>([]);
   const [searchAfter, setSearchAfter] = useState<string[] | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const [statusFilter, setStatusFilter] = useState<ProductMappingVerificationStatus | 'ALL'>(
+    ProductMappingVerificationStatus.PendingVerification,
+  );
+  const [processedInSessionIds, setProcessedInSessionIds] = useState<Set<string>>(new Set());
   const isInitialLoad = useRef(true);
+  const tableRef = useRef<HTMLTableSectionElement>(null);
 
   const {
     data,
@@ -58,16 +67,7 @@ const VerificationTable = () => {
   const [verifyProductMapping, { loading }] = useVerifyProductMapping();
   const [batchVerifyProductMapping, { loading: batchLoading }] = useBatchVerifyProductMapping();
   const [removeProductMapping, { loading: removeLoading }] = useRemoveProductMapping();
-  const [cancelVerification, { loading: cancelLoading }] = useCancelVerification();
-  const [feedbackModal, setFeedbackModal] = useState<{
-    isOpen: boolean;
-    productMappingId: number | null;
-    isBatch: boolean;
-  }>({
-    isOpen: false,
-    productMappingId: null,
-    isBatch: false,
-  });
+
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
     productId: number | null;
@@ -77,7 +77,7 @@ const VerificationTable = () => {
     productId: null,
     productTitle: null,
   });
-  const [feedback, setFeedback] = useState('');
+  const [cancelVerification, { loading: cancelLoading }] = useCancelVerification();
 
   const [toast, setToast] = useState<{
     message: string;
@@ -96,10 +96,40 @@ const VerificationTable = () => {
     }, 3000);
   };
 
+  const moveToNext = () => {
+    setFocusedIndex((prev) => {
+      if (prev < filteredItems.length - 1) {
+        return prev + 1;
+      }
+      return prev;
+    });
+  };
+
+  const flushProcessed = useCallback(() => {
+    setAllItems((prev) => {
+      // 현재 allItems에서 이미 처리된(processedInSessionIds에 있는) 항목들을 제거
+      return prev.filter((item) => {
+        const isProcessed =
+          item.verificationStatus !== ProductMappingVerificationStatus.PendingVerification;
+        return (
+          !isProcessed || statusFilter !== ProductMappingVerificationStatus.PendingVerification
+        );
+      });
+    });
+    setProcessedInSessionIds(new Set());
+    setFocusedIndex(0);
+  }, [statusFilter]);
+
   const handleVerify = async (productMappingId: number | string) => {
     const numericId = Number(productMappingId);
+    const currentItem = allItems.find((item) => Number(item.id) === numericId);
 
-    // 즉시 UI 업데이트 (타입 비교를 위해 Number로 변환)
+    // 이미 승인된 경우 취소 처리 (토글)
+    if (currentItem?.verificationStatus === ProductMappingVerificationStatus.Verified) {
+      return handleCancelVerification(productMappingId, VerificationStatus.Verified);
+    }
+
+    // 즉시 UI 업데이트
     setAllItems((prev) => {
       return prev.map((item) =>
         Number(item.id) === numericId
@@ -112,6 +142,10 @@ const VerificationTable = () => {
       );
     });
 
+    // 배치 처리를 위해 세션 목록에 즉시 추가 (필터링 시 사라지지 않게 함)
+    setProcessedInSessionIds((prev) => new Set(prev).add(String(productMappingId)));
+    moveToNext();
+
     try {
       await verifyProductMapping({
         variables: {
@@ -120,10 +154,18 @@ const VerificationTable = () => {
         },
       });
       showToast('승인되었습니다.', 'success');
+
+      // 약 5개 이상 처리 시 플러시
+      setProcessedInSessionIds((prev) => {
+        if (prev.size >= 5) {
+          setTimeout(flushProcessed, 100);
+        }
+        return prev;
+      });
     } catch (error) {
       // 에러 발생 시 롤백
       refetch();
-      alert('승인 처리 중 오류가 발생했습니다.');
+      showToast('승인 처리 중 오류가 발생했습니다.', 'error');
       console.error(error);
     }
   };
@@ -161,33 +203,28 @@ const VerificationTable = () => {
           : '거부가 취소되었습니다.',
         'success',
       );
+
+      // 세션 처리 목록에서도 제거
+      setProcessedInSessionIds((prev) => {
+        const next = new Set(prev);
+        next.delete(String(productMappingId));
+        return next;
+      });
     } catch (error) {
       // 에러 발생 시 롤백
       refetch();
-      alert('검증 취소 처리 중 오류가 발생했습니다.');
+      showToast('검증 취소 처리 중 오류가 발생했습니다.', 'error');
       console.error(error);
     }
   };
 
-  const handleOpenRejectModal = (productMappingId: number | string, isBatch = false) => {
-    setFeedbackModal({ isOpen: true, productMappingId: Number(productMappingId), isBatch });
-    setFeedback('');
-  };
-
-  const handleCloseRejectModal = () => {
-    setFeedbackModal({ isOpen: false, productMappingId: null, isBatch: false });
-    setFeedback('');
-  };
-
-  const handleReject = async () => {
-    if (feedbackModal.isBatch) {
+  const handleReject = async (productMappingId?: number | string, isBatch = false) => {
+    if (isBatch) {
       // 일괄 거부
       if (selectedIds.size === 0) {
-        alert('선택된 항목이 없습니다.');
+        showToast('선택된 항목이 없습니다.', 'error');
         return;
       }
-
-      const feedbackValue = feedback.trim() || undefined;
 
       // 즉시 UI 업데이트 (타입 비교를 위해 Number로 변환)
       const selectedIdsArray = Array.from(selectedIds);
@@ -198,66 +235,84 @@ const VerificationTable = () => {
                 ...item,
                 verificationStatus: ProductMappingVerificationStatus.Rejected,
                 verifiedAt: new Date().toISOString(),
-                verificationNote: feedbackValue ?? null,
+                verificationNote: null,
               }
             : item,
         ),
       );
       setSelectedIds(new Set());
-      handleCloseRejectModal();
 
       try {
         const result = await batchVerifyProductMapping({
           variables: {
             productMappingIds: selectedIdsArray.map(Number),
             result: ProductMappingVerificationStatus.Rejected,
-            feedback: feedbackValue,
+            feedback: undefined,
           },
         });
         showToast(
           `${result.data?.batchVerifyProductMapping ?? 0}개 항목이 거부되었습니다.`,
           'success',
         );
+        setAllItems([]);
+        setProcessedInSessionIds(new Set());
+        isInitialLoad.current = true;
+        refetch();
       } catch (error) {
         // 에러 발생 시 롤백
         refetch();
-        alert('일괄 거부 처리 중 오류가 발생했습니다.');
+        showToast('일괄 거부 처리 중 오류가 발생했습니다.', 'error');
         console.error(error);
       }
     } else {
       // 단일 거부
-      if (!feedbackModal.productMappingId) return;
+      const numericId = Number(productMappingId);
+      const currentItem = allItems.find((item) => Number(item.id) === numericId);
 
-      const feedbackValue = feedback.trim() || undefined;
+      // 이미 거부된 경우 취소 처리 (토글)
+      if (currentItem?.verificationStatus === ProductMappingVerificationStatus.Rejected) {
+        return handleCancelVerification(productMappingId as string, VerificationStatus.Rejected);
+      }
 
       // 즉시 UI 업데이트
       setAllItems((prev) =>
         prev.map((item) =>
-          item.id === String(feedbackModal.productMappingId)
+          Number(item.id) === numericId
             ? {
                 ...item,
                 verificationStatus: ProductMappingVerificationStatus.Rejected,
                 verifiedAt: new Date().toISOString(),
-                verificationNote: feedbackValue ?? null,
+                verificationNote: null,
               }
             : item,
         ),
       );
-      handleCloseRejectModal();
+
+      // 세션 목록에 즉시 추가 및 다음 이동
+      setProcessedInSessionIds((prev) => new Set(prev).add(String(productMappingId)));
+      moveToNext();
 
       try {
         await verifyProductMapping({
           variables: {
-            productMappingId: feedbackModal.productMappingId,
+            productMappingId: numericId,
             result: ProductMappingVerificationStatus.Rejected,
-            feedback: feedbackValue,
+            feedback: undefined,
           },
         });
         showToast('거부되었습니다.', 'success');
+
+        // 약 5개 이상 처리 시 플러시
+        setProcessedInSessionIds((prev) => {
+          if (prev.size >= 5) {
+            setTimeout(flushProcessed, 100);
+          }
+          return prev;
+        });
       } catch (error) {
         // 에러 발생 시 롤백
         refetch();
-        alert('거부 처리 중 오류가 발생했습니다.');
+        showToast('거부 처리 중 오류가 발생했습니다.', 'error');
         console.error(error);
       }
     }
@@ -283,7 +338,7 @@ const VerificationTable = () => {
 
   const handleBatchVerify = async () => {
     if (selectedIds.size === 0) {
-      alert('선택된 항목이 없습니다.');
+      showToast('선택된 항목이 없습니다.', 'error');
       return;
     }
 
@@ -313,10 +368,14 @@ const VerificationTable = () => {
         `${result.data?.batchVerifyProductMapping ?? 0}개 항목이 승인되었습니다.`,
         'success',
       );
+      setAllItems([]);
+      setProcessedInSessionIds(new Set());
+      isInitialLoad.current = true;
+      refetch();
     } catch (error) {
       // 에러 발생 시 롤백
       refetch();
-      alert('일괄 승인 처리 중 오류가 발생했습니다.');
+      showToast('일괄 승인 처리 중 오류가 발생했습니다.', 'error');
       console.error(error);
     }
   };
@@ -351,10 +410,121 @@ const VerificationTable = () => {
       // 삭제 후 목록에서 제거
       setAllItems((prev) => prev.filter((item) => item.productId !== deleteModal.productId));
     } catch (error) {
-      alert('매핑 삭제 중 오류가 발생했습니다.');
+      showToast('매핑 삭제 중 오류가 발생했습니다.', 'error');
       console.error(error);
     }
   };
+
+  const toggleRow = (id: string) => {
+    const newExpanded = new Set(expandedIds);
+    if (newExpanded.has(id)) {
+      newExpanded.delete(id);
+    } else {
+      newExpanded.add(id);
+    }
+    setExpandedIds(newExpanded);
+  };
+
+  const pendingVerifications = allItems.length > 0 ? allItems : (data?.pendingVerifications ?? []);
+
+  const filteredItems = pendingVerifications.filter((item) => {
+    // Pending 필터일 때, 이번 세션에서 처리된 항목은 아직 보여줌 (배치 처리를 위해)
+    const isProcessedInSession = processedInSessionIds.has(item.id);
+    const statusMatch =
+      statusFilter === 'ALL' || item.verificationStatus === statusFilter || isProcessedInSession;
+    if (!statusMatch) return false;
+
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      String(item.id).includes(query) ||
+      String(item.productId).includes(query) ||
+      item.product?.title?.toLowerCase().includes(query) ||
+      item.brandProduct?.toLowerCase().includes(query)
+    );
+  });
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Input이나 TextArea가 활성 상태면 단축키 무시
+      if (
+        document.activeElement?.tagName === 'INPUT' ||
+        document.activeElement?.tagName === 'TEXTAREA'
+      ) {
+        return;
+      }
+
+      if (filteredItems.length === 0) return;
+
+      const item = focusedIndex >= 0 ? filteredItems[focusedIndex] : null;
+
+      switch (e.key.toLowerCase()) {
+        case 'j':
+        case 'arrowdown':
+          e.preventDefault();
+          setFocusedIndex((prev) => (prev < filteredItems.length - 1 ? prev + 1 : prev));
+          break;
+        case 'k':
+        case 'arrowup':
+          e.preventDefault();
+          setFocusedIndex((prev) => (prev > 0 ? prev - 1 : 0));
+          break;
+        case 'a': {
+          if (item) {
+            handleVerify(item.id);
+          }
+          break;
+        }
+        case 'r': {
+          if (item) {
+            handleReject(item.id);
+          }
+          break;
+        }
+        case 'd': {
+          if (deleteModal.isOpen) {
+            handleCloseDeleteModal();
+          } else if (item) {
+            handleOpenDeleteModal(item.productId, item.product?.title ?? null);
+          }
+          break;
+        }
+        case ' ':
+        case 'spacebar': {
+          if (focusedIndex >= 0) {
+            e.preventDefault();
+            handleToggleSelect(filteredItems[focusedIndex].id);
+          }
+          break;
+        }
+        case 'enter': {
+          if (focusedIndex >= 0) {
+            toggleRow(filteredItems[focusedIndex].id);
+          }
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [focusedIndex, filteredItems, deleteModal.isOpen]);
+
+  // 스크롤 동기화
+  useEffect(() => {
+    if (focusedIndex >= 0 && tableRef.current) {
+      const rows = tableRef.current.querySelectorAll('tr');
+      const focusedRow = rows[focusedIndex] as HTMLElement;
+      if (focusedRow) {
+        // 배치 플러시 후에는 최상단으로, 평소에는 화면 안으로만 이동 (less jumpy)
+        focusedRow.scrollIntoView({
+          behavior: 'smooth',
+          block: focusedIndex === 0 ? 'center' : 'nearest',
+        });
+      }
+    }
+  }, [focusedIndex]);
 
   // 데이터가 변경되면 allItems 업데이트 (초기 로드 시에만)
   useEffect(() => {
@@ -427,9 +597,16 @@ const VerificationTable = () => {
       }
     } catch (error) {
       console.error('더 보기 로드 중 오류:', error);
-      alert('더 보기 로드 중 오류가 발생했습니다.');
+      showToast('더 보기 로드 중 오류가 발생했습니다.', 'error');
     }
   }, [searchAfter, queryLoading, fetchMore, prioritizeOld]);
+
+  // 키보드 네비게이션으로 마지막 항목 근처 도달 시 추가 로딩
+  useEffect(() => {
+    if (focusedIndex >= filteredItems.length - 5 && filteredItems.length > 0) {
+      handleLoadMore();
+    }
+  }, [focusedIndex, filteredItems.length, handleLoadMore]);
 
   const handlePrioritizeChange = (newPrioritizeOld: boolean) => {
     setPrioritizeOld(newPrioritizeOld);
@@ -454,7 +631,6 @@ const VerificationTable = () => {
     [queryLoading, searchAfter, handleLoadMore],
   );
 
-  const pendingVerifications = allItems.length > 0 ? allItems : (data?.pendingVerifications ?? []);
   const hasNextPage =
     pendingVerifications.length > 0 &&
     pendingVerifications.length % PAGE_LIMIT === 0 &&
@@ -508,28 +684,129 @@ const VerificationTable = () => {
       <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         {/* 필터 및 일괄 액션 */}
         <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-black dark:text-white">정렬:</span>
-            <button
-              className={`rounded-md px-3 py-1.5 text-sm font-medium ${
-                !prioritizeOld
-                  ? 'bg-primary text-white'
-                  : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
-              }`}
-              onClick={() => handlePrioritizeChange(false)}
-            >
-              최신순
-            </button>
-            <button
-              className={`rounded-md px-3 py-1.5 text-sm font-medium ${
-                prioritizeOld
-                  ? 'bg-primary text-white'
-                  : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
-              }`}
-              onClick={() => handlePrioritizeChange(true)}
-            >
-              오래된순
-            </button>
+          <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-medium text-black dark:text-white">상태:</span>
+              <button
+                className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+                  statusFilter === ProductMappingVerificationStatus.PendingVerification
+                    ? 'bg-warning text-white'
+                    : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
+                }`}
+                onClick={() => {
+                  setStatusFilter(ProductMappingVerificationStatus.PendingVerification);
+                  setFocusedIndex(-1);
+                }}
+              >
+                대기 (
+                {
+                  allItems.filter(
+                    (i) =>
+                      i.verificationStatus === ProductMappingVerificationStatus.PendingVerification,
+                  ).length
+                }
+                )
+              </button>
+              <button
+                className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+                  statusFilter === ProductMappingVerificationStatus.Verified
+                    ? 'bg-success text-white'
+                    : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
+                }`}
+                onClick={() => {
+                  setStatusFilter(ProductMappingVerificationStatus.Verified);
+                  setFocusedIndex(-1);
+                }}
+              >
+                승인 (
+                {
+                  allItems.filter(
+                    (i) => i.verificationStatus === ProductMappingVerificationStatus.Verified,
+                  ).length
+                }
+                )
+              </button>
+              <button
+                className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+                  statusFilter === ProductMappingVerificationStatus.Rejected
+                    ? 'bg-danger text-white'
+                    : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
+                }`}
+                onClick={() => {
+                  setStatusFilter(ProductMappingVerificationStatus.Rejected);
+                  setFocusedIndex(-1);
+                }}
+              >
+                거부 (
+                {
+                  allItems.filter(
+                    (i) => i.verificationStatus === ProductMappingVerificationStatus.Rejected,
+                  ).length
+                }
+                )
+              </button>
+              <button
+                className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+                  statusFilter === 'ALL'
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
+                }`}
+                onClick={() => {
+                  setStatusFilter('ALL');
+                  setFocusedIndex(-1);
+                }}
+              >
+                전체 ({allItems.length})
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-black dark:text-white">정렬:</span>
+              <button
+                className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+                  !prioritizeOld
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
+                }`}
+                onClick={() => handlePrioritizeChange(false)}
+              >
+                최신순
+              </button>
+              <button
+                className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+                  prioritizeOld
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
+                }`}
+                onClick={() => handlePrioritizeChange(true)}
+              >
+                오래된순
+              </button>
+            </div>
+            <div className="relative">
+              <span className="text-gray-400 absolute left-3 top-1/2 -translate-y-1/2">
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  ></path>
+                </svg>
+              </span>
+              <input
+                type="text"
+                placeholder="ID, 상품명, 브랜드 검색..."
+                className="bg-gray-50 w-64 rounded-md border border-stroke py-1.5 pl-9 pr-4 text-sm focus:border-primary focus:outline-none dark:border-strokedark dark:bg-meta-4"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
           {selectedIds.size > 0 && (
             <div className="flex items-center gap-2">
@@ -545,7 +822,7 @@ const VerificationTable = () => {
               </button>
               <button
                 className="whitespace-nowrap rounded-md bg-danger bg-opacity-10 px-3 py-1.5 text-sm font-medium text-danger hover:bg-opacity-20 disabled:cursor-not-allowed disabled:opacity-50"
-                onClick={() => handleOpenRejectModal(0, true)}
+                onClick={() => handleReject(undefined, true)}
                 disabled={batchLoading || loading}
               >
                 일괄 거부
@@ -557,7 +834,7 @@ const VerificationTable = () => {
           <table className="w-full table-auto">
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                <th className="min-w-[50px] px-4 py-4 text-center font-medium text-black dark:text-white">
+                <th className="min-w-[40px] px-1 py-4 text-center font-medium text-black dark:text-white">
                   <input
                     type="checkbox"
                     checked={
@@ -568,156 +845,337 @@ const VerificationTable = () => {
                     className="border-gray-300 h-4 w-4 rounded text-primary focus:ring-2 focus:ring-primary"
                   />
                 </th>
-                <th className="min-w-[80px] px-4 py-4 text-center font-medium text-black dark:text-white">
+                <th className="min-w-[40px] px-1 py-4 text-center font-medium text-black dark:text-white">
                   ID
                 </th>
-                <th className="min-w-[140px] px-4 py-4 text-center font-medium text-black dark:text-white">
-                  Product ID
+                <th className="min-w-[60px] px-1 py-4 text-center font-medium text-black dark:text-white">
+                  PID
                 </th>
-                <th className="px-4 py-4 text-center font-medium text-black dark:text-white">
+                <th className="min-w-[340px] px-4 py-4 text-center font-medium text-black dark:text-white">
                   상품명
                 </th>
-                <th className="px-4 py-4 text-center font-medium text-black dark:text-white">
+                <th className="min-w-[280px] px-4 py-4 text-center font-medium text-black dark:text-white">
                   다나와 상품명
                 </th>
-                <th className="min-w-[120px] px-4 py-4 text-center font-medium text-black dark:text-white">
-                  검증 상태
+                <th className="min-w-[50px] px-1 py-4 text-center font-medium text-black dark:text-white">
+                  유사
                 </th>
-                <th className="min-w-[160px] px-4 py-4 text-center font-medium text-black dark:text-white">
+                <th className="min-w-[70px] px-1 py-4 text-center font-medium text-black dark:text-white">
+                  상태
+                </th>
+                <th className="min-w-[140px] px-1 py-4 text-center font-medium text-black dark:text-white">
                   액션
                 </th>
-                <th className="min-w-[220px] px-4 py-4 text-center font-medium text-black dark:text-white">
-                  검증 정보
+                <th className="min-w-[140px] px-1 py-4 text-center font-medium text-black dark:text-white">
+                  정보
                 </th>
               </tr>
             </thead>
-            <tbody>
-              {pendingVerifications.map((verification) => (
-                <tr key={verification.id} className="hover:bg-slate-50 dark:hover:bg-meta-4">
-                  <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
-                    <input
-                      type="checkbox"
-                      checked={selectedIds.has(String(verification.id))}
-                      onChange={() => handleToggleSelect(String(verification.id))}
-                      className="border-gray-300 h-4 w-4 rounded text-primary focus:ring-2 focus:ring-primary"
-                    />
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
-                    <p className="text-black dark:text-white">{verification.id}</p>
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
-                    <Link
-                      href={`https://jirum-alarm.com/products/${verification.productId}`}
-                      target="_blank"
-                      className="text-sm text-primary underline-offset-2 hover:underline"
-                    >
-                      {verification.productId}
-                    </Link>
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
-                    <p className="whitespace-normal text-sm text-black dark:text-white">
-                      {verification.product?.title ?? '-'}
-                    </p>
-                    {!verification.product?.title && (
-                      <p className="text-gray-400 mt-1 text-xs">
-                        (Product ID: {verification.productId})
-                      </p>
-                    )}
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
-                    <p className="whitespace-normal text-sm text-black dark:text-white">
-                      {verification.brandProduct ?? '-'}
-                    </p>
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
-                    <span
-                      className={`inline-flex rounded-full px-3 py-1 text-sm font-medium ${
-                        verification.verificationStatus
-                          ? VerificationStatusColorMap[verification.verificationStatus]
-                          : ''
+            <tbody ref={tableRef}>
+              {filteredItems.map((item, index) => {
+                const verification = item as PendingVerification;
+                const similarity = getJaccardSimilarity(
+                  verification.product?.title ?? '',
+                  verification.brandProduct ?? '',
+                );
+
+                const isExpanded = expandedIds.has(verification.id);
+                const isFocused = focusedIndex === index;
+                const isProcessed = processedInSessionIds.has(verification.id);
+
+                return (
+                  <Fragment key={verification.id}>
+                    <tr
+                      data-index={index}
+                      className={`cursor-pointer transition-colors ${
+                        isFocused ? 'bg-primary bg-opacity-5' : ''
+                      } ${
+                        isProcessed
+                          ? 'opacity-50 grayscale-[0.5] hover:bg-transparent'
+                          : 'hover:bg-slate-50 dark:hover:bg-meta-4'
                       }`}
+                      onClick={() => toggleRow(verification.id)}
                     >
-                      {verification.verificationStatus
-                        ? VerificationStatusMap[verification.verificationStatus]
-                        : '-'}
-                    </span>
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <div className="flex items-center justify-center gap-2">
-                      {verification.verificationStatus ===
-                      ProductMappingVerificationStatus.Verified ? (
-                        <button
-                          className="whitespace-nowrap rounded-md bg-success bg-opacity-10 px-3 py-1.5 text-sm font-medium text-success hover:bg-opacity-20 disabled:cursor-not-allowed disabled:opacity-50"
-                          onClick={() =>
-                            handleCancelVerification(
-                              Number(verification.id),
-                              ProductMappingVerificationStatus.Verified,
-                            )
-                          }
-                          disabled={loading || removeLoading || cancelLoading}
+                      <td className="border-b border-[#eee] px-2 py-3 text-center dark:border-strokedark">
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.has(String(verification.id))}
+                          onChange={(e) => {
+                            e.stopPropagation();
+                            handleToggleSelect(String(verification.id));
+                          }}
+                          className="border-gray-300 h-4 w-4 rounded text-primary focus:ring-2 focus:ring-primary"
+                        />
+                      </td>
+                      <td className="border-b border-[#eee] px-2 py-3 text-center dark:border-strokedark">
+                        <p className="text-black dark:text-white">{verification.id}</p>
+                      </td>
+                      <td className="border-b border-[#eee] px-2 py-3 text-center dark:border-strokedark">
+                        <Link
+                          href={`https://jirum-alarm.com/products/${verification.productId}`}
+                          target="_blank"
+                          className="text-sm text-primary underline-offset-2 hover:underline"
+                          onClick={(e) => e.stopPropagation()}
                         >
-                          승인 취소
-                        </button>
-                      ) : verification.verificationStatus ===
-                        ProductMappingVerificationStatus.Rejected ? (
-                        <button
-                          className="whitespace-nowrap rounded-md bg-danger bg-opacity-10 px-3 py-1.5 text-sm font-medium text-danger hover:bg-opacity-20 disabled:cursor-not-allowed disabled:opacity-50"
-                          onClick={() =>
-                            handleCancelVerification(
-                              Number(verification.id),
-                              ProductMappingVerificationStatus.Rejected,
-                            )
-                          }
-                          disabled={loading || removeLoading || cancelLoading}
+                          {verification.productId}
+                        </Link>
+                      </td>
+                      <td className="border-b border-[#eee] px-2 py-3 text-center dark:border-strokedark">
+                        <p className="whitespace-normal text-sm text-black dark:text-white">
+                          {verification.product?.title ?? '-'}
+                        </p>
+                        {!verification.product?.title && (
+                          <p className="text-gray-400 mt-1 text-xs">
+                            (Product ID: {verification.productId})
+                          </p>
+                        )}
+                      </td>
+                      <td className="border-b border-[#eee] px-2 py-3 text-center dark:border-strokedark">
+                        <div className="flex flex-col gap-1">
+                          <p className="whitespace-normal text-sm text-black dark:text-white">
+                            {verification.brandProduct ?? '-'}
+                          </p>
+                          <div className="flex justify-center gap-2">
+                            <button
+                              className="text-gray-400 text-[10px] hover:text-primary"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(
+                                  `https://search.danawa.com/mobile/dsearch.php?keyword=${encodeURIComponent(
+                                    verification.product?.title ?? '',
+                                  )}`,
+                                  '_blank',
+                                );
+                              }}
+                            >
+                              다나와 검색
+                            </button>
+                            <button
+                              className="text-gray-400 text-[10px] hover:text-primary"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(
+                                  `https://m.search.naver.com/search.naver?query=${encodeURIComponent(
+                                    verification.product?.title ?? '',
+                                  )}`,
+                                  '_blank',
+                                );
+                              }}
+                            >
+                              네이버 검색
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
+                        <span
+                          className={`text-sm font-bold ${
+                            similarity >= 0.9
+                              ? 'text-success'
+                              : similarity < 0.5
+                                ? 'text-danger'
+                                : 'text-warning'
+                          }`}
                         >
-                          거부 취소
-                        </button>
-                      ) : (
-                        <>
+                          {(similarity * 100).toFixed(0)}%
+                        </span>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
+                        <span
+                          className={`inline-flex rounded-full px-3 py-1 text-sm font-medium ${
+                            verification.verificationStatus
+                              ? VerificationStatusColorMap[verification.verificationStatus]
+                              : ''
+                          }`}
+                        >
+                          {verification.verificationStatus
+                            ? VerificationStatusMap[verification.verificationStatus]
+                            : '-'}
+                        </span>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <div className="flex items-center justify-center gap-2">
+                          {verification.verificationStatus ===
+                          ProductMappingVerificationStatus.Verified ? (
+                            <button
+                              className="whitespace-nowrap rounded-md bg-success bg-opacity-10 px-3 py-1.5 text-sm font-medium text-success hover:bg-opacity-20 disabled:cursor-not-allowed disabled:opacity-50"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCancelVerification(
+                                  Number(verification.id),
+                                  ProductMappingVerificationStatus.Verified,
+                                );
+                              }}
+                              disabled={loading || removeLoading || cancelLoading}
+                            >
+                              승인 취소
+                            </button>
+                          ) : verification.verificationStatus ===
+                            ProductMappingVerificationStatus.Rejected ? (
+                            <button
+                              className="whitespace-nowrap rounded-md bg-danger bg-opacity-10 px-3 py-1.5 text-sm font-medium text-danger hover:bg-opacity-20 disabled:cursor-not-allowed disabled:opacity-50"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCancelVerification(
+                                  Number(verification.id),
+                                  ProductMappingVerificationStatus.Rejected,
+                                );
+                              }}
+                              disabled={loading || removeLoading || cancelLoading}
+                            >
+                              거부 취소
+                            </button>
+                          ) : (
+                            <>
+                              <button
+                                title="Approve (A)"
+                                className="whitespace-nowrap rounded-md bg-success bg-opacity-10 px-3 py-1.5 text-sm font-medium text-success hover:bg-opacity-20 disabled:cursor-not-allowed disabled:opacity-50"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleVerify(verification.id);
+                                }}
+                                disabled={loading || removeLoading}
+                              >
+                                승인
+                              </button>
+                              <button
+                                title="Reject (R)"
+                                className="whitespace-nowrap rounded-md bg-danger bg-opacity-10 px-3 py-1.5 text-sm font-medium text-danger hover:bg-opacity-20 disabled:cursor-not-allowed disabled:opacity-50"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleReject(verification.id);
+                                }}
+                                disabled={loading || removeLoading}
+                              >
+                                거부
+                              </button>
+                            </>
+                          )}
                           <button
-                            className="whitespace-nowrap rounded-md bg-success bg-opacity-10 px-3 py-1.5 text-sm font-medium text-success hover:bg-opacity-20 disabled:cursor-not-allowed disabled:opacity-50"
-                            onClick={() => handleVerify(verification.id)}
+                            title="Delete (D)"
+                            className="whitespace-nowrap rounded-md bg-slate-600 bg-opacity-10 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-opacity-20 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-400"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenDeleteModal(
+                                verification.productId,
+                                verification.product?.title ?? null,
+                              );
+                            }}
                             disabled={loading || removeLoading}
                           >
-                            승인
+                            삭제
                           </button>
-                          <button
-                            className="whitespace-nowrap rounded-md bg-danger bg-opacity-10 px-3 py-1.5 text-sm font-medium text-danger hover:bg-opacity-20 disabled:cursor-not-allowed disabled:opacity-50"
-                            onClick={() => handleOpenRejectModal(verification.id)}
-                            disabled={loading || removeLoading}
+                        </div>
+                      </td>
+                      <td className="border-b border-[#eee] px-2 py-3 text-center dark:border-strokedark">
+                        <div className="flex flex-col items-start gap-1 text-left text-xs text-slate-600 dark:text-slate-300">
+                          <span className="w-full truncate">
+                            검증: {verification.verifiedBy ?? '-'}
+                          </span>
+                          <span className="w-full truncate">
+                            날짜:{' '}
+                            {verification.verifiedAt
+                              ? dateFormatter(verification.verifiedAt).split(' ')[0]
+                              : '-'}
+                          </span>
+                          <span
+                            className="max-w-[120px] truncate text-[10px] text-black dark:text-white"
+                            title={verification.verificationNote ?? ''}
                           >
-                            거부
-                          </button>
-                        </>
-                      )}
-                      <button
-                        className="whitespace-nowrap rounded-md bg-slate-600 bg-opacity-10 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-opacity-20 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-400"
-                        onClick={() =>
-                          handleOpenDeleteModal(
-                            verification.productId,
-                            verification.product?.title ?? null,
-                          )
-                        }
-                        disabled={loading || removeLoading}
-                      >
-                        삭제
-                      </button>
-                    </div>
-                  </td>
-                  <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
-                    <div className="flex flex-col items-start gap-1 text-left text-xs text-slate-600 dark:text-slate-300">
-                      <span>검증자: {verification.verifiedBy ?? '-'}</span>
-                      <span>
-                        검증일:{' '}
-                        {verification.verifiedAt ? dateFormatter(verification.verifiedAt) : '-'}
-                      </span>
-                      <span className="max-w-[260px] truncate text-[11px] text-black dark:text-white">
-                        비고: {verification.verificationNote ?? '-'}
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                            비고: {verification.verificationNote ?? '-'}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                    {isExpanded && (
+                      <tr>
+                        <td
+                          colSpan={9}
+                          className="bg-slate-50 px-4 py-6 shadow-inner dark:bg-meta-4"
+                        >
+                          <div className="flex gap-10">
+                            {/* Jirum Alarm Info */}
+                            <div className="flex-1 rounded-lg border border-stroke bg-white p-4 dark:border-strokedark dark:bg-boxdark">
+                              <h4 className="text-gray-500 mb-3 text-xs font-bold uppercase tracking-wider">
+                                지름알람 상품 정보
+                              </h4>
+                              <div className="flex gap-4">
+                                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded border border-stroke dark:border-strokedark">
+                                  {verification.product?.thumbnail ? (
+                                    <img
+                                      src={verification.product.thumbnail}
+                                      alt="Product"
+                                      className="h-full w-full object-contain"
+                                    />
+                                  ) : (
+                                    <div className="bg-gray-100 text-gray-400 flex h-full w-full items-center justify-center text-[10px]">
+                                      이미지 없음
+                                    </div>
+                                  )}
+                                </div>
+                                <div>
+                                  <p className="mb-2 line-clamp-2 text-sm font-medium text-black dark:text-white">
+                                    {verification.product?.title}
+                                  </p>
+                                  <Link
+                                    href={`https://jirum-alarm.com/products/${verification.productId}`}
+                                    target="_blank"
+                                    className="inline-flex items-center gap-1 text-xs text-primary transition-colors hover:text-opacity-80 hover:underline"
+                                  >
+                                    상품 페이지 이동
+                                    <svg
+                                      className="h-3 w-3"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                      />
+                                    </svg>
+                                  </Link>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Danawa Info */}
+                            <div className="flex-1 rounded-lg border border-stroke bg-white p-4 dark:border-strokedark dark:bg-boxdark">
+                              <h4 className="text-gray-400 mb-3 flex justify-between text-xs font-bold uppercase tracking-wider">
+                                <span>다나와/브랜드 매칭 정보</span>
+                                {verification.danawaUrl && (
+                                  <Link
+                                    href={verification.danawaUrl}
+                                    target="_blank"
+                                    className="scale-90 transform font-normal text-primary hover:underline"
+                                  >
+                                    다나와 페이지기 이동
+                                  </Link>
+                                )}
+                              </h4>
+                              <div className="flex flex-col gap-2">
+                                <p className="text-sm font-medium text-black dark:text-white">
+                                  {verification.brandProduct ?? '정보 없음'}
+                                </p>
+                                <div className="mt-2 flex gap-2">
+                                  <span className="rounded bg-slate-100 px-2 py-1 text-[11px] text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                                    Target ID: {verification.id}
+                                  </span>
+                                  <span className="rounded bg-slate-100 px-2 py-1 text-[11px] text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                                    Created: {dateFormatter(verification.createdAt)}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -792,45 +1250,6 @@ const VerificationTable = () => {
                 disabled={removeLoading}
               >
                 {removeLoading ? '삭제 중...' : '삭제'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 거부 사유 입력 모달 */}
-      {feedbackModal.isOpen && (
-        <div className="fixed inset-0 z-99999 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-boxdark">
-            <h3 className="mb-4 text-lg font-bold text-black dark:text-white">
-              {feedbackModal.isBatch ? '일괄 거부 사유 입력' : '거부 사유 입력'}
-            </h3>
-            {feedbackModal.isBatch && (
-              <p className="text-gray-600 dark:text-gray-400 mb-2 text-sm">
-                {selectedIds.size}개 항목을 거부합니다.
-              </p>
-            )}
-            <textarea
-              className="w-full rounded-md border border-stroke bg-transparent px-4 py-3 text-black outline-none focus:border-primary dark:border-strokedark dark:text-white"
-              rows={4}
-              placeholder="거부 사유를 입력해주세요. (선택)"
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
-            />
-            <div className="mt-4 flex justify-end gap-2">
-              <button
-                className="bg-gray-200 hover:bg-gray-300 rounded-md px-4 py-2 text-sm font-medium text-black dark:bg-meta-4 dark:text-white dark:hover:bg-opacity-80"
-                onClick={handleCloseRejectModal}
-                disabled={batchLoading || loading}
-              >
-                취소
-              </button>
-              <button
-                className="rounded-md bg-danger px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-                onClick={handleReject}
-                disabled={batchLoading || loading}
-              >
-                {batchLoading || loading ? '처리 중...' : '거부'}
               </button>
             </div>
           </div>

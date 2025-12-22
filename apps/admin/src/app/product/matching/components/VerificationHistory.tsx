@@ -13,9 +13,9 @@ import {
 import { dateFormatter } from '@/utils/date';
 
 const VerificationStatusMap: Record<VerificationStatus, string> = {
-  [VerificationStatus.PendingVerification]: '검증 대기',
-  [VerificationStatus.Verified]: '승인됨',
-  [VerificationStatus.Rejected]: '거부됨',
+  [VerificationStatus.PendingVerification]: '대기',
+  [VerificationStatus.Verified]: '승인',
+  [VerificationStatus.Rejected]: '거부',
 };
 
 const VerificationStatusColorMap: Record<VerificationStatus, string> = {
@@ -31,7 +31,7 @@ const VerificationHistory = () => {
   const [orderBy, setOrderBy] = useState<OrderOptionType>(OrderOptionType.Desc);
   const [searchAfter, setSearchAfter] = useState<string[] | null>(null);
 
-  const { data, loading, fetchMore } = useGetVerificationHistory({
+  const { data, loading, fetchMore, error, refetch } = useGetVerificationHistory({
     verificationStatus: verificationStatus.length > 0 ? verificationStatus : undefined,
     orderBy,
     searchAfter,
@@ -143,7 +143,19 @@ const VerificationHistory = () => {
         </div>
       </div>
 
-      {loading && historyItems.length === 0 ? (
+      {error ? (
+        <div className="w-full rounded-sm border border-stroke bg-white px-5 py-10 shadow-default dark:border-strokedark dark:bg-boxdark">
+          <p className="text-red-500 dark:text-red-400 text-center">
+            오류가 발생했습니다: {error.message}
+          </p>
+          <button
+            onClick={() => refetch()}
+            className="mx-auto mt-4 block rounded-md bg-primary px-4 py-2 text-white hover:bg-opacity-90"
+          >
+            다시 시도
+          </button>
+        </div>
+      ) : loading && historyItems.length === 0 ? (
         <div className="text-gray-500 dark:text-gray-400 py-10 text-center">로딩 중...</div>
       ) : historyItems.length === 0 ? (
         <div className="text-gray-500 dark:text-gray-400 py-10 text-center">

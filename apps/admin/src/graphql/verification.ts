@@ -18,7 +18,10 @@ export const QueryPendingVerifications = gql`
       brandProduct
       product {
         title
+        thumbnail
       }
+      danawaUrl
+
       verificationStatus
       verifiedBy
       verifiedAt
@@ -66,7 +69,10 @@ export const QueryVerificationHistory = gql`
       brandProduct
       product {
         title
+        thumbnail
       }
+      danawaUrl
+
       verificationStatus
       verifiedBy
       verifiedAt
