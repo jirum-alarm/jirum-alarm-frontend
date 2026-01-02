@@ -75,6 +75,21 @@ export type BaseSection = {
   type: Scalars['ID']['output'];
 };
 
+export type BrandProductMatchCountOutput = {
+  __typename?: 'BrandProductMatchCountOutput';
+  amount: Scalars['String']['output'];
+  brandItemId: Scalars['Int']['output'];
+  brandName: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  danawaProductId: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  matchCount: Scalars['Int']['output'];
+  pendingVerificationCount: Scalars['Int']['output'];
+  productName: Scalars['String']['output'];
+  searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  volume: Scalars['String']['output'];
+};
+
 export type CategorizedReactionKeywords = {
   __typename?: 'CategorizedReactionKeywords';
   count: Scalars['Int']['output'];
@@ -254,6 +269,16 @@ export type ItemUnion = HomeHotDealSection | HomeRankingSection | HomeRecommenda
 export enum KeywordProductOrderType {
   PostedAt = 'POSTED_AT',
 }
+
+export type MallGroup = {
+  __typename?: 'MallGroup';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['Float']['output'];
+  isActive: Scalars['Boolean']['output'];
+  site?: Maybe<Scalars['String']['output']>;
+  sort?: Maybe<Scalars['Float']['output']>;
+  title: Scalars['String']['output'];
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -708,15 +733,25 @@ export type ProductHotDealIndex = {
 
 export type ProductMapping = {
   __typename?: 'ProductMapping';
+  correctPcode?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   danawaUrl?: Maybe<Scalars['String']['output']>;
+  extractedProductInfo?: Maybe<Scalars['String']['output']>;
+  feedbackAt?: Maybe<Scalars['DateTime']['output']>;
+  feedbackBy?: Maybe<Scalars['Int']['output']>;
+  feedbackReason?: Maybe<Scalars['String']['output']>;
+  feedbackType?: Maybe<ProductMappingFeedbackType>;
   id: Scalars['ID']['output'];
   matchStatus?: Maybe<ProductMappingMatchStatus>;
   matchingCandidates?: Maybe<Scalars['String']['output']>;
+  matchingConfidence?: Maybe<Scalars['Int']['output']>;
+  matchingReasoning?: Maybe<Scalars['String']['output']>;
+  matchingSource?: Maybe<Scalars['String']['output']>;
   metadataContext?: Maybe<Scalars['String']['output']>;
   productId: Scalars['Int']['output'];
   reason?: Maybe<Scalars['String']['output']>;
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  searchKeyword?: Maybe<Scalars['String']['output']>;
   target?: Maybe<ProductMappingTarget>;
   targetId?: Maybe<Scalars['Int']['output']>;
   updatedAt: Scalars['DateTime']['output'];
@@ -725,6 +760,12 @@ export type ProductMapping = {
   verifiedAt?: Maybe<Scalars['DateTime']['output']>;
   verifiedBy?: Maybe<Scalars['Int']['output']>;
 };
+
+export enum ProductMappingFeedbackType {
+  Confirmed = 'CONFIRMED',
+  Corrected = 'CORRECTED',
+  Rejected = 'REJECTED',
+}
 
 export type ProductMappingInfoOutput = {
   __typename?: 'ProductMappingInfoOutput';
@@ -743,17 +784,27 @@ export enum ProductMappingMatchStatus {
 export type ProductMappingOutput = {
   __typename?: 'ProductMappingOutput';
   brandProduct?: Maybe<Scalars['String']['output']>;
+  correctPcode?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   danawaUrl?: Maybe<Scalars['String']['output']>;
+  extractedProductInfo?: Maybe<Scalars['String']['output']>;
+  feedbackAt?: Maybe<Scalars['DateTime']['output']>;
+  feedbackBy?: Maybe<Scalars['Int']['output']>;
+  feedbackReason?: Maybe<Scalars['String']['output']>;
+  feedbackType?: Maybe<ProductMappingFeedbackType>;
   id: Scalars['ID']['output'];
   matchStatus?: Maybe<ProductMappingMatchStatus>;
   matchingCandidates?: Maybe<Scalars['String']['output']>;
+  matchingConfidence?: Maybe<Scalars['Int']['output']>;
+  matchingReasoning?: Maybe<Scalars['String']['output']>;
+  matchingSource?: Maybe<Scalars['String']['output']>;
   metadataContext?: Maybe<Scalars['String']['output']>;
   /** 매핑된 상품 정보 */
   product?: Maybe<ProductOutput>;
   productId: Scalars['Int']['output'];
   reason?: Maybe<Scalars['String']['output']>;
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  searchKeyword?: Maybe<Scalars['String']['output']>;
   target?: Maybe<ProductMappingTarget>;
   targetId?: Maybe<Scalars['Int']['output']>;
   updatedAt: Scalars['DateTime']['output'];
@@ -778,6 +829,7 @@ export enum ProductMappingVerificationStatus {
 export enum ProductOrderType {
   CommentCount = 'COMMENT_COUNT',
   CommunityRanking = 'COMMUNITY_RANKING',
+  ExpiringSoon = 'EXPIRING_SOON',
   Id = 'ID',
   PostedAt = 'POSTED_AT',
   Reaction = 'REACTION',
@@ -799,11 +851,13 @@ export type ProductOutput = {
   detailUrl?: Maybe<Scalars['String']['output']>;
   dislikeCount: Scalars['Int']['output'];
   distributionDate?: Maybe<Scalars['DateTime']['output']>;
+  earliestExpiryDate?: Maybe<Scalars['DateTime']['output']>;
   /**
    * 핫딜 정보 요약
    * @deprecated productGuides 쿼리를 사용해주세요.
    */
   guides?: Maybe<Array<ProductGuide>>;
+  hotDealAt?: Maybe<Scalars['DateTime']['output']>;
   hotDealIndex?: Maybe<ProductHotDealIndex>;
   hotDealType?: Maybe<HotDealType>;
   id: Scalars['ID']['output'];
@@ -822,6 +876,7 @@ export type ProductOutput = {
   mallName?: Maybe<Scalars['String']['output']>;
   mappingInfo?: Maybe<Array<ProductMappingInfoOutput>>;
   negativeCommunityReactionCount: Scalars['Int']['output'];
+  parsedPrice?: Maybe<Scalars['Float']['output']>;
   positiveCommunityReactionCount: Scalars['Int']['output'];
   postedAt: Scalars['DateTime']['output'];
   precomputedRankingScore?: Maybe<Scalars['Float']['output']>;
@@ -833,6 +888,8 @@ export type ProductOutput = {
   providerId: Scalars['Int']['output'];
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
   ship?: Maybe<Scalars['String']['output']>;
+  /** 유사도 */
+  similarity?: Maybe<Scalars['Float']['output']>;
   thumbnail?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
@@ -870,6 +927,12 @@ export type Query = {
   adminMe: AdminUser;
   ads: Array<Ad>;
   analysisTitleByDanawa: Scalars['Boolean']['output'];
+  /** 특정 브랜드 상품의 매핑 개수 조회 */
+  brandProductMatchCount: Scalars['Int']['output'];
+  /** 매칭된 브랜드 상품 전체 개수 조회 */
+  brandProductsByMatchCountTotalCount: Scalars['Int']['output'];
+  /** 매칭된 개수가 많은 순으로 브랜드 상품 목록 조회 (커서 기반 페이지네이션) */
+  brandProductsOrderByMatchCount: Array<BrandProductMatchCountOutput>;
   categories: Array<Category>;
   /** 커뮤니티 반응 카테고리별 키워드 조회 */
   categorizedReactionKeywords: CategorizedReactionKeywordsResponse;
@@ -891,6 +954,10 @@ export type Query = {
   expireProductReports: Array<ProductExpireReport>;
   /** 유통기한 임박 특가 상품 조회 */
   expiringSoonHotDealProducts: Array<ProductOutput>;
+  /** 특정 사용자의 추천 상품 조회 (관리자용) */
+  getPersonalizedProductsByUserId: Array<RecommendedProductOutput>;
+  /** 특정 상품과 유사한 상품 조회 */
+  getSimilarProducts: Array<ProductOutput>;
   homePage: PageSchema;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
@@ -903,6 +970,7 @@ export type Query = {
   /** 놓치면 아까운 핫딜 - 랭킹순 핫딜 상품 조회 */
   hotDealRankingProducts: Array<ProductOutput>;
   instagramPost?: Maybe<InstagramPost>;
+  mallGroups: Array<MallGroup>;
   /** 로그인한 유저 정보 조회 */
   me?: Maybe<User>;
   /** 유저 알림 키워드 목록 조회 */
@@ -913,6 +981,10 @@ export type Query = {
   notificationsByAdmin: Array<Notification>;
   /** 검증 대기 중인 매핑 목록 조회 */
   pendingVerifications: Array<ProductMappingOutput>;
+  /** 검증 대기 중인 매핑 전체 개수 조회 (필터 적용 가능) */
+  pendingVerificationsTotalCount: Scalars['Int']['output'];
+  /** 개인화 추천 상품 조회 (로그인 필요) */
+  personalizedProducts: Array<RecommendedProductOutput>;
   /** 상품 조회 */
   product?: Maybe<ProductOutput>;
   productGuides: Array<ProductGuide>;
@@ -923,8 +995,14 @@ export type Query = {
   productsByKeyword: Array<ProductOutput>;
   /** 푸시 세팅 조회 */
   pushSetting: UserPushSetting;
+  /** 알림 키워드 추천 목록 조회 */
+  recommendedNotificationKeywords: Array<Scalars['String']['output']>;
   /** 신고한 사용자 목록 조회 (마스킹) */
   reportUserNames: Array<Scalars['String']['output']>;
+  /** 유사 상품 목록 조회 */
+  similarProducts: Array<ProductOutput>;
+  /** 제목으로 유사 상품 목록 조회 */
+  similarProductsByTitle: Array<ProductOutput>;
   /** 소셜 액세스 토큰 조회 */
   socialAccessToken: Scalars['String']['output'];
   /** 소셜 정보 조회 */
@@ -958,6 +1036,22 @@ export type QueryAdStatsArgs = {
 
 export type QueryAdsArgs = {
   slots: Array<AdSlotType>;
+};
+
+export type QueryBrandProductMatchCountArgs = {
+  brandProductId: Scalars['Int']['input'];
+};
+
+export type QueryBrandProductsByMatchCountTotalCountArgs = {
+  brandItemId?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryBrandProductsOrderByMatchCountArgs = {
+  brandItemId?: InputMaybe<Scalars['Int']['input']>;
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryCategorizedReactionKeywordsArgs = {
@@ -1020,6 +1114,17 @@ export type QueryExpiringSoonHotDealProductsArgs = {
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type QueryGetPersonalizedProductsByUserIdArgs = {
+  categoryId?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  userId: Scalars['Int']['input'];
+};
+
+export type QueryGetSimilarProductsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  productId: Scalars['Int']['input'];
+};
+
 export type QueryHomePageArgs = {
   version: Scalars['String']['input'];
 };
@@ -1080,6 +1185,7 @@ export type QueryNotificationsByAdminArgs = {
 };
 
 export type QueryPendingVerificationsArgs = {
+  brandProductId?: InputMaybe<Scalars['Int']['input']>;
   limit: Scalars['Int']['input'];
   matchStatus?: InputMaybe<Array<ProductMappingMatchStatus>>;
   orderBy?: InputMaybe<OrderOptionType>;
@@ -1088,6 +1194,20 @@ export type QueryPendingVerificationsArgs = {
   productTitle?: InputMaybe<Scalars['String']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
   target?: InputMaybe<ProductMappingTarget>;
+};
+
+export type QueryPendingVerificationsTotalCountArgs = {
+  brandProductId?: InputMaybe<Scalars['Int']['input']>;
+  matchStatus?: InputMaybe<Array<ProductMappingMatchStatus>>;
+  productId?: InputMaybe<Scalars['Int']['input']>;
+  productTitle?: InputMaybe<Scalars['String']['input']>;
+  target?: InputMaybe<ProductMappingTarget>;
+};
+
+export type QueryPersonalizedProductsArgs = {
+  categoryId?: InputMaybe<Scalars['Int']['input']>;
+  excludeProductIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryProductArgs = {
@@ -1114,7 +1234,7 @@ export type QueryProductsArgs = {
   isReward?: InputMaybe<Scalars['Boolean']['input']>;
   keyword?: InputMaybe<Scalars['String']['input']>;
   limit: Scalars['Int']['input'];
-  mallId?: InputMaybe<Scalars['Int']['input']>;
+  mallGroupId?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<ProductOrderType>;
   orderOption?: InputMaybe<OrderOptionType>;
   providerId?: InputMaybe<Scalars['Int']['input']>;
@@ -1133,6 +1253,17 @@ export type QueryProductsByKeywordArgs = {
 
 export type QueryReportUserNamesArgs = {
   productId: Scalars['Int']['input'];
+};
+
+export type QuerySimilarProductsArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type QuerySimilarProductsByTitleArgs = {
+  limit?: Scalars['Int']['input'];
+  minRankingScore?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  title: Scalars['String']['input'];
 };
 
 export type QuerySocialAccessTokenArgs = {
@@ -1175,6 +1306,13 @@ export type QueryWishlistsArgs = {
   orderBy: WishlistOrderType;
   orderOption: OrderOptionType;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type RecommendedProductOutput = {
+  __typename?: 'RecommendedProductOutput';
+  product: ProductOutput;
+  recommendationReason?: Maybe<Scalars['String']['output']>;
+  recommendationScore?: Maybe<Scalars['Float']['output']>;
 };
 
 export enum Role {
@@ -1286,6 +1424,70 @@ export type MutationAdminLoginMutationVariables = Exact<{
 export type MutationAdminLoginMutation = {
   __typename?: 'Mutation';
   adminLogin: { __typename?: 'TokenOutput'; accessToken: string; refreshToken?: string | null };
+};
+
+export type QueryBrandProductsOrderByMatchCountQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  brandItemId?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type QueryBrandProductsOrderByMatchCountQuery = {
+  __typename?: 'Query';
+  brandProductsOrderByMatchCount: Array<{
+    __typename?: 'BrandProductMatchCountOutput';
+    id: string;
+    danawaProductId: number;
+    brandItemId: number;
+    brandName: string;
+    productName: string;
+    volume: string;
+    amount: string;
+    matchCount: number;
+    pendingVerificationCount: number;
+    createdAt: any;
+    searchAfter?: Array<string> | null;
+  }>;
+};
+
+export type QuerySimilarProductsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type QuerySimilarProductsQuery = {
+  __typename?: 'Query';
+  similarProducts: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    url?: string | null;
+    thumbnail?: string | null;
+    price?: string | null;
+    categoryId: number;
+    providerId: number;
+    postedAt: any;
+    provider: { __typename?: 'Provider'; name: string };
+  }>;
+};
+
+export type QueryBrandProductsByMatchCountTotalCountQueryVariables = Exact<{
+  brandItemId?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type QueryBrandProductsByMatchCountTotalCountQuery = {
+  __typename?: 'Query';
+  brandProductsByMatchCountTotalCount: number;
+};
+
+export type QueryBrandProductMatchCountQueryVariables = Exact<{
+  brandProductId: Scalars['Int']['input'];
+}>;
+
+export type QueryBrandProductMatchCountQuery = {
+  __typename?: 'Query';
+  brandProductMatchCount: number;
 };
 
 export type CommentsByAdminQueryVariables = Exact<{
@@ -1440,6 +1642,7 @@ export type QueryPendingVerificationsQueryVariables = Exact<{
   searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
   prioritizeOld?: InputMaybe<Scalars['Boolean']['input']>;
   orderBy?: InputMaybe<OrderOptionType>;
+  brandProductId?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 export type QueryPendingVerificationsQuery = {
@@ -1449,13 +1652,14 @@ export type QueryPendingVerificationsQuery = {
     id: string;
     productId: number;
     brandProduct?: string | null;
+    danawaUrl?: string | null;
     verificationStatus?: ProductMappingVerificationStatus | null;
     verifiedBy?: number | null;
     verifiedAt?: any | null;
     verificationNote?: string | null;
     createdAt: any;
     searchAfter?: Array<string> | null;
-    product?: { __typename?: 'ProductOutput'; title: string } | null;
+    product?: { __typename?: 'ProductOutput'; title: string; thumbnail?: string | null } | null;
   }>;
 };
 
@@ -1492,13 +1696,14 @@ export type QueryVerificationHistoryQuery = {
     id: string;
     productId: number;
     brandProduct?: string | null;
+    danawaUrl?: string | null;
     verificationStatus?: ProductMappingVerificationStatus | null;
     verifiedBy?: number | null;
     verifiedAt?: any | null;
     verificationNote?: string | null;
     createdAt: any;
     searchAfter?: Array<string> | null;
-    product?: { __typename?: 'ProductOutput'; title: string } | null;
+    product?: { __typename?: 'ProductOutput'; title: string; thumbnail?: string | null } | null;
   }>;
 };
 
@@ -1543,6 +1748,15 @@ export type MutationCancelVerificationMutation = {
   cancelVerification: boolean;
 };
 
+export type QueryPendingVerificationsTotalCountQueryVariables = Exact<{
+  brandProductId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type QueryPendingVerificationsTotalCountQuery = {
+  __typename?: 'Query';
+  pendingVerificationsTotalCount: number;
+};
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -1572,6 +1786,67 @@ export const MutationAdminLoginDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationAdminLoginMutation,
   MutationAdminLoginMutationVariables
+>;
+export const QueryBrandProductsOrderByMatchCountDocument = new TypedDocumentString(`
+    query QueryBrandProductsOrderByMatchCount($limit: Int!, $searchAfter: [String!], $brandItemId: Int, $title: String) {
+  brandProductsOrderByMatchCount(
+    limit: $limit
+    searchAfter: $searchAfter
+    brandItemId: $brandItemId
+    title: $title
+  ) {
+    id
+    danawaProductId
+    brandItemId
+    brandName
+    productName
+    volume
+    amount
+    matchCount
+    pendingVerificationCount
+    createdAt
+    searchAfter
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryBrandProductsOrderByMatchCountQuery,
+  QueryBrandProductsOrderByMatchCountQueryVariables
+>;
+export const QuerySimilarProductsDocument = new TypedDocumentString(`
+    query QuerySimilarProducts($id: Int!) {
+  similarProducts(id: $id) {
+    id
+    title
+    url
+    thumbnail
+    price
+    categoryId
+    providerId
+    provider {
+      name
+    }
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QuerySimilarProductsQuery,
+  QuerySimilarProductsQueryVariables
+>;
+export const QueryBrandProductsByMatchCountTotalCountDocument = new TypedDocumentString(`
+    query QueryBrandProductsByMatchCountTotalCount($brandItemId: Int, $title: String) {
+  brandProductsByMatchCountTotalCount(brandItemId: $brandItemId, title: $title)
+}
+    `) as unknown as TypedDocumentString<
+  QueryBrandProductsByMatchCountTotalCountQuery,
+  QueryBrandProductsByMatchCountTotalCountQueryVariables
+>;
+export const QueryBrandProductMatchCountDocument = new TypedDocumentString(`
+    query QueryBrandProductMatchCount($brandProductId: Int!) {
+  brandProductMatchCount(brandProductId: $brandProductId)
+}
+    `) as unknown as TypedDocumentString<
+  QueryBrandProductMatchCountQuery,
+  QueryBrandProductMatchCountQueryVariables
 >;
 export const CommentsByAdminDocument = new TypedDocumentString(`
     query commentsByAdmin($hotDealKeywordId: Int!, $synonyms: [String!], $excludes: [String!]) {
@@ -1717,19 +1992,22 @@ export const MutationRemoveHotDealExcludeKeywordByAdminDocument = new TypedDocum
   MutationRemoveHotDealExcludeKeywordByAdminMutationVariables
 >;
 export const QueryPendingVerificationsDocument = new TypedDocumentString(`
-    query QueryPendingVerifications($limit: Int!, $searchAfter: [String!], $prioritizeOld: Boolean, $orderBy: OrderOptionType) {
+    query QueryPendingVerifications($limit: Int!, $searchAfter: [String!], $prioritizeOld: Boolean, $orderBy: OrderOptionType, $brandProductId: Int) {
   pendingVerifications(
     limit: $limit
     searchAfter: $searchAfter
     prioritizeOld: $prioritizeOld
     orderBy: $orderBy
+    brandProductId: $brandProductId
   ) {
     id
     productId
     brandProduct
     product {
       title
+      thumbnail
     }
+    danawaUrl
     verificationStatus
     verifiedBy
     verifiedAt
@@ -1772,7 +2050,9 @@ export const QueryVerificationHistoryDocument = new TypedDocumentString(`
     brandProduct
     product {
       title
+      thumbnail
     }
+    danawaUrl
     verificationStatus
     verifiedBy
     verifiedAt
@@ -1824,4 +2104,12 @@ export const MutationCancelVerificationDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationCancelVerificationMutation,
   MutationCancelVerificationMutationVariables
+>;
+export const QueryPendingVerificationsTotalCountDocument = new TypedDocumentString(`
+    query QueryPendingVerificationsTotalCount($brandProductId: Int) {
+  pendingVerificationsTotalCount(brandProductId: $brandProductId)
+}
+    `) as unknown as TypedDocumentString<
+  QueryPendingVerificationsTotalCountQuery,
+  QueryPendingVerificationsTotalCountQueryVariables
 >;

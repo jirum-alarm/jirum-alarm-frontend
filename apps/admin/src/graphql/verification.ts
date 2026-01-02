@@ -6,12 +6,14 @@ export const QueryPendingVerifications = gql`
     $searchAfter: [String!]
     $prioritizeOld: Boolean
     $orderBy: OrderOptionType
+    $brandProductId: Int
   ) {
     pendingVerifications(
       limit: $limit
       searchAfter: $searchAfter
       prioritizeOld: $prioritizeOld
       orderBy: $orderBy
+      brandProductId: $brandProductId
     ) {
       id
       productId
@@ -110,5 +112,11 @@ export const MutationRemoveProductMapping = gql`
 export const MutationCancelVerification = gql`
   mutation MutationCancelVerification($productMappingId: Int!, $reason: String) {
     cancelVerification(productMappingId: $productMappingId, reason: $reason)
+  }
+`;
+
+export const QueryPendingVerificationsTotalCount = gql`
+  query QueryPendingVerificationsTotalCount($brandProductId: Int) {
+    pendingVerificationsTotalCount(brandProductId: $brandProductId)
   }
 `;
