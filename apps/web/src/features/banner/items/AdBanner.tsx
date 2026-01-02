@@ -16,8 +16,8 @@ const props = {
   className: 'bg-[url(/persil_2511_bg.svg)] bg-cover border-gray-700 bg-center',
 };
 
-const AdBanner = ({ isMobile }: { isMobile: boolean }) => {
-  return <BannerItem {...props} isMobile={isMobile} isAd />;
+const AdBanner = ({ isMobile, priority }: { isMobile: boolean; priority?: boolean }) => {
+  return <BannerItem {...props} isMobile={isMobile} isAd priority={priority} />;
 };
 
 export default AdBanner;
