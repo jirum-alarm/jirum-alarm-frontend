@@ -81,9 +81,11 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
             height: '40px',
           }}
           onInput={(e) => {
-            e.currentTarget.style.height = '40px';
-            const { scrollHeight } = e.currentTarget;
-            e.currentTarget.style.height = `${Math.min(scrollHeight, 100)}px`;
+            const target = e.currentTarget;
+            requestAnimationFrame(() => {
+              target.style.height = 'auto';
+              target.style.height = `${Math.min(target.scrollHeight, 100)}px`;
+            });
           }}
           maxLength={300}
           rows={1}
