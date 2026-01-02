@@ -15,6 +15,7 @@ const BannerItem = ({
   image,
   className,
   isAd,
+  priority,
 }: {
   isMobile: boolean;
   href: string;
@@ -22,8 +23,10 @@ const BannerItem = ({
   description: string | ReactNode;
   image: StaticImageData | string;
   className?: string;
+
   eventName?: string;
   isAd?: boolean;
+  priority?: boolean;
 }) => {
   const handleClick = () => {
     // TODO: Need GTM Migration
@@ -54,7 +57,8 @@ const BannerItem = ({
         <Image
           src={image}
           alt=""
-          unoptimized
+          priority={priority}
+          sizes={isMobile ? '80px' : '120px'}
           width={isMobile ? 80 : 120}
           height={isMobile ? 56 : 84}
         />

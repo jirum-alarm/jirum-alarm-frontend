@@ -15,8 +15,8 @@ const props = {
   className: 'bg-gray-800 border-gray-600',
 };
 
-const KakaoOpenChatLink = ({ isMobile }: { isMobile: boolean }) => {
-  return <BannerItem {...props} isMobile={isMobile} />;
+const KakaoOpenChatLink = ({ isMobile, priority }: { isMobile: boolean; priority?: boolean }) => {
+  return <BannerItem {...props} isMobile={isMobile} priority={priority} />;
 };
 
 export default KakaoOpenChatLink;

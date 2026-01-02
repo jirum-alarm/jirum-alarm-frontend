@@ -2,6 +2,7 @@
 
 const withPWA = require('next-pwa')({
   dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
   register: true,
   skipWaiting: true,
   buildExcludes: [/middleware-manifest.json$/],
@@ -27,19 +28,27 @@ const nextConfig = withPWA({
         source: '/api/(.*)',
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }],
       },
+      {
+        source: '/(fonts|images|icons)/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
     ];
   },
   productionBrowserSourceMaps: false,
   images: {
-    unoptimized: true,
+    minimumCacheTTL: 31536000,
+    formats: ['image/webp', 'image/avif'],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'cdn.jirum-alarm.com',
       },
     ],
-    minimumCacheTTL: 31536000,
-    formats: ['image/webp'],
     contentSecurityPolicy: "default-src 'self'; img-src 'self' data: cdn.jirum-alarm.com;",
   },
   experimental: {

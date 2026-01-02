@@ -93,6 +93,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             index={slideIndex}
             rank={i + 1}
             product={product}
+            priority={slideIndex < 4}
           />
         </SwiperSlide>
       );
