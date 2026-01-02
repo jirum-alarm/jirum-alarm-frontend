@@ -23,8 +23,8 @@ import { ProductQueries } from '@entities/product';
 
 import ProductRankingImageCard from '@features/products/ranking/ProductRankingImageCard';
 
-import { RankingSkeleton as DesktopRankingSkeleton } from '../desktop/RankingSkeleton';
-import { RankingSkeleton as MobileRankingSkeleton } from '../mobile/RankingSkeleton';
+import { RankingPreview as DesktopRankingPreview } from '../desktop/RankingSkeleton';
+import { RankingPreview as MobileRankingPreview } from '../mobile/RankingSkeleton';
 
 import SliderDots from './SliderDots';
 
@@ -145,21 +145,15 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         >
           <ArrowLeft className="mr-1 size-8 text-white" color="white" />
         </button>
-        {!canRender &&
-          (isMobile ? (
-            <div className="invisible">
-              <MobileRankingSkeleton />
-            </div>
-          ) : (
-            <div className="max-w-slider-max grid w-full grow grid-cols-4 gap-x-6">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="basis-1/4">
-                  <div className="aspect-square w-full" />
-                  <div className="h-32.5" />
-                </div>
-              ))}
-            </div>
-          ))}
+        {!canRender && (
+          <div className="invisible">
+            {isMobile ? (
+              <MobileRankingPreview products={products} />
+            ) : (
+              <DesktopRankingPreview products={products} />
+            )}
+          </div>
+        )}
         <motion.div
           className={cn(
             'pc:max-w-slider-max max-w-mobile-max w-full overflow-visible',
@@ -189,12 +183,16 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
         <AnimatePresence>
           {!canRender && (
             <motion.div
-              className="pc:px-16 absolute inset-0 bottom-auto z-10 animate-pulse"
+              className="pc:px-16 absolute inset-0 bottom-auto z-10"
               initial={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
             >
-              {isMobile ? <MobileRankingSkeleton /> : <DesktopRankingSkeleton />}
+              {isMobile ? (
+                <MobileRankingPreview products={products} />
+              ) : (
+                <DesktopRankingPreview products={products} />
+              )}
             </motion.div>
           )}
         </AnimatePresence>
