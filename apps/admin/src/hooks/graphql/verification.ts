@@ -1,4 +1,10 @@
-import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
+import {
+  MutationHookOptions,
+  QueryHookOptions,
+  useLazyQuery,
+  useMutation,
+  useQuery,
+} from '@apollo/client';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
@@ -24,12 +30,13 @@ import {
   MutationRemoveProductMapping,
   MutationVerifyProductMapping,
   QueryPendingVerifications,
+  QueryPendingVerificationsTotalCount,
   QueryVerificationHistory,
   QueryVerificationStatistics,
 } from '@/graphql/verification';
 
 export const useGetPendingVerifications = (
-  variables?: Partial<QueryPendingVerificationsQueryVariables>,
+  variables?: Partial<QueryPendingVerificationsQueryVariables> & { brandProductId?: number },
   options?: QueryHookOptions<
     QueryPendingVerificationsQuery,
     QueryPendingVerificationsQueryVariables
@@ -45,7 +52,23 @@ export const useGetPendingVerifications = (
         orderBy:
           variables?.orderBy ??
           (variables?.prioritizeOld ? OrderOptionType.Asc : OrderOptionType.Desc),
+        brandProductId: variables?.brandProductId ?? undefined,
       },
+      fetchPolicy: 'network-only',
+      ...options,
+    },
+  );
+};
+
+export const useGetPendingVerificationsLazy = (
+  options?: QueryHookOptions<
+    QueryPendingVerificationsQuery,
+    QueryPendingVerificationsQueryVariables
+  >,
+) => {
+  return useLazyQuery<QueryPendingVerificationsQuery, QueryPendingVerificationsQueryVariables>(
+    QueryPendingVerifications,
+    {
       fetchPolicy: 'network-only',
       ...options,
     },
@@ -157,5 +180,42 @@ export const useCancelVerification = (
     ],
     // pendingVerifications는 optimistic update로 처리하므로 refetch 제거
     ...options,
+  });
+};
+
+// TotalCount 쿼리 타입 정의
+export interface QueryPendingVerificationsTotalCountQuery {
+  pendingVerificationsTotalCount: number;
+}
+
+export interface QueryPendingVerificationsTotalCountQueryVariables {
+  brandProductId?: number;
+}
+
+export const useGetPendingVerificationsTotalCount = (
+  variables?: QueryPendingVerificationsTotalCountQueryVariables,
+  options?: QueryHookOptions<
+    QueryPendingVerificationsTotalCountQuery,
+    QueryPendingVerificationsTotalCountQueryVariables
+  >,
+) => {
+  return useQuery<
+    QueryPendingVerificationsTotalCountQuery,
+    QueryPendingVerificationsTotalCountQueryVariables
+  >(QueryPendingVerificationsTotalCount, {
+    variables: {
+      brandProductId: variables?.brandProductId ?? undefined,
+    },
+    fetchPolicy: 'network-only',
+    ...options,
+  });
+};
+
+export const useGetPendingVerificationsTotalCountLazy = () => {
+  return useLazyQuery<
+    QueryPendingVerificationsTotalCountQuery,
+    QueryPendingVerificationsTotalCountQueryVariables
+  >(QueryPendingVerificationsTotalCount, {
+    fetchPolicy: 'network-only',
   });
 };

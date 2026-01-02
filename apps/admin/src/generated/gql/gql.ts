@@ -13,6 +13,10 @@ import * as types from './graphql';
  */
 type Documents = {
   '\n  mutation MutationAdminLogin($email: String!, $password: String!) {\n    adminLogin(email: $email, password: $password) {\n      accessToken\n      refreshToken\n    }\n  }\n': typeof types.MutationAdminLoginDocument;
+  '\n  query QueryBrandProductsOrderByMatchCount($limit: Int!, $searchAfter: [String!], $brandItemId: Int, $title: String) {\n    brandProductsOrderByMatchCount(limit: $limit, searchAfter: $searchAfter, brandItemId: $brandItemId, title: $title) {\n      id\n      danawaProductId\n      brandItemId\n      brandName\n      productName\n      volume\n      amount\n      matchCount\n      pendingVerificationCount\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryBrandProductsOrderByMatchCountDocument;
+  '\n  query QuerySimilarProducts($id: Int!) {\n    similarProducts(id: $id) {\n      id\n      title\n      url\n      thumbnail\n      price\n      categoryId\n      providerId\n      provider {\n        name\n      }\n      postedAt\n    }\n  }\n': typeof types.QuerySimilarProductsDocument;
+  '\n  query QueryBrandProductsByMatchCountTotalCount($brandItemId: Int, $title: String) {\n    brandProductsByMatchCountTotalCount(brandItemId: $brandItemId, title: $title)\n  }\n': typeof types.QueryBrandProductsByMatchCountTotalCountDocument;
+  '\n  query QueryBrandProductMatchCount($brandProductId: Int!) {\n    brandProductMatchCount(brandProductId: $brandProductId)\n  }\n': typeof types.QueryBrandProductMatchCountDocument;
   '\n  query commentsByAdmin($hotDealKeywordId: Int!, $synonyms: [String!], $excludes: [String!]) {\n    commentsByAdmin(hotDealKeywordId: $hotDealKeywordId, synonyms: $synonyms, excludes: $excludes)\n  }\n': typeof types.CommentsByAdminDocument;
   '\n  query QueryHotDealKeywordsByAdmin(\n    $type: HotDealKeywordType\n    $orderBy: HotDealKeywordOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    hotDealKeywordsByAdmin(\n      type: $type\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      type\n      keyword\n      weight\n      isMajor\n      lastUpdatedAt\n      synonymCount\n      excludeKeywordCount\n      searchAfter\n    }\n  }\n': typeof types.QueryHotDealKeywordsByAdminDocument;
   '\n  mutation MutationAddHotDealKeywordByAdmin(\n    $type: HotDealKeywordType!\n    $keyword: String!\n    $weight: Float!\n    $isMajor: Boolean!\n  ) {\n    addHotDealKeywordByAdmin(type: $type, keyword: $keyword, weight: $weight, isMajor: $isMajor)\n  }\n': typeof types.MutationAddHotDealKeywordByAdminDocument;
@@ -24,17 +28,26 @@ type Documents = {
   '\n  mutation MutationAddHotDealExcludeKeywordByAdmin(\n    $hotDealKeywordId: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    addHotDealExcludeKeywordByAdmin(\n      hotDealKeywordId: $hotDealKeywordId\n      excludeKeywords: $excludeKeywords\n    )\n  }\n': typeof types.MutationAddHotDealExcludeKeywordByAdminDocument;
   '\n  mutation MutationRemoveHotDealKeywordSynonymByAdmin($ids: [Int!]!) {\n    removeHotDealKeywordSynonymByAdmin(ids: $ids)\n  }\n': typeof types.MutationRemoveHotDealKeywordSynonymByAdminDocument;
   '\n  mutation MutationRemoveHotDealExcludeKeywordByAdmin($ids: [Int!]!) {\n    removeHotDealExcludeKeywordByAdmin(ids: $ids)\n  }\n': typeof types.MutationRemoveHotDealExcludeKeywordByAdminDocument;
-  '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n      }\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryPendingVerificationsDocument;
+  '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n    $brandProductId: Int\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n      brandProductId: $brandProductId\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n      }\n      danawaUrl\n\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryPendingVerificationsDocument;
   '\n  query QueryVerificationStatistics {\n    verificationStatistics {\n      pending\n      verified\n      rejected\n      total\n    }\n  }\n': typeof types.QueryVerificationStatisticsDocument;
-  '\n  query QueryVerificationHistory(\n    $limit: Int!\n    $searchAfter: [String!]\n    $verificationStatus: [ProductMappingVerificationStatus!]\n    $matchStatus: [ProductMappingMatchStatus!]\n    $target: ProductMappingTarget\n    $productId: Int\n    $verifiedBy: Int\n    $orderBy: OrderOptionType\n  ) {\n    verificationHistory(\n      limit: $limit\n      searchAfter: $searchAfter\n      verificationStatus: $verificationStatus\n      matchStatus: $matchStatus\n      target: $target\n      productId: $productId\n      verifiedBy: $verifiedBy\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n      }\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryVerificationHistoryDocument;
+  '\n  query QueryVerificationHistory(\n    $limit: Int!\n    $searchAfter: [String!]\n    $verificationStatus: [ProductMappingVerificationStatus!]\n    $matchStatus: [ProductMappingMatchStatus!]\n    $target: ProductMappingTarget\n    $productId: Int\n    $verifiedBy: Int\n    $orderBy: OrderOptionType\n  ) {\n    verificationHistory(\n      limit: $limit\n      searchAfter: $searchAfter\n      verificationStatus: $verificationStatus\n      matchStatus: $matchStatus\n      target: $target\n      productId: $productId\n      verifiedBy: $verifiedBy\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n      }\n      danawaUrl\n\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryVerificationHistoryDocument;
   '\n  mutation MutationVerifyProductMapping(\n    $productMappingId: Int!\n    $result: ProductMappingVerificationStatus!\n    $feedback: String\n  ) {\n    verifyProductMapping(productMappingId: $productMappingId, result: $result, feedback: $feedback)\n  }\n': typeof types.MutationVerifyProductMappingDocument;
   '\n  mutation MutationBatchVerifyProductMapping(\n    $productMappingIds: [Int!]!\n    $result: ProductMappingVerificationStatus!\n    $feedback: String\n  ) {\n    batchVerifyProductMapping(\n      productMappingIds: $productMappingIds\n      result: $result\n      feedback: $feedback\n    )\n  }\n': typeof types.MutationBatchVerifyProductMappingDocument;
   '\n  mutation MutationRemoveProductMapping($productId: Int!) {\n    removeProductMapping(productId: $productId)\n  }\n': typeof types.MutationRemoveProductMappingDocument;
   '\n  mutation MutationCancelVerification($productMappingId: Int!, $reason: String) {\n    cancelVerification(productMappingId: $productMappingId, reason: $reason)\n  }\n': typeof types.MutationCancelVerificationDocument;
+  '\n  query QueryPendingVerificationsTotalCount($brandProductId: Int) {\n    pendingVerificationsTotalCount(brandProductId: $brandProductId)\n  }\n': typeof types.QueryPendingVerificationsTotalCountDocument;
 };
 const documents: Documents = {
   '\n  mutation MutationAdminLogin($email: String!, $password: String!) {\n    adminLogin(email: $email, password: $password) {\n      accessToken\n      refreshToken\n    }\n  }\n':
     types.MutationAdminLoginDocument,
+  '\n  query QueryBrandProductsOrderByMatchCount($limit: Int!, $searchAfter: [String!], $brandItemId: Int, $title: String) {\n    brandProductsOrderByMatchCount(limit: $limit, searchAfter: $searchAfter, brandItemId: $brandItemId, title: $title) {\n      id\n      danawaProductId\n      brandItemId\n      brandName\n      productName\n      volume\n      amount\n      matchCount\n      pendingVerificationCount\n      createdAt\n      searchAfter\n    }\n  }\n':
+    types.QueryBrandProductsOrderByMatchCountDocument,
+  '\n  query QuerySimilarProducts($id: Int!) {\n    similarProducts(id: $id) {\n      id\n      title\n      url\n      thumbnail\n      price\n      categoryId\n      providerId\n      provider {\n        name\n      }\n      postedAt\n    }\n  }\n':
+    types.QuerySimilarProductsDocument,
+  '\n  query QueryBrandProductsByMatchCountTotalCount($brandItemId: Int, $title: String) {\n    brandProductsByMatchCountTotalCount(brandItemId: $brandItemId, title: $title)\n  }\n':
+    types.QueryBrandProductsByMatchCountTotalCountDocument,
+  '\n  query QueryBrandProductMatchCount($brandProductId: Int!) {\n    brandProductMatchCount(brandProductId: $brandProductId)\n  }\n':
+    types.QueryBrandProductMatchCountDocument,
   '\n  query commentsByAdmin($hotDealKeywordId: Int!, $synonyms: [String!], $excludes: [String!]) {\n    commentsByAdmin(hotDealKeywordId: $hotDealKeywordId, synonyms: $synonyms, excludes: $excludes)\n  }\n':
     types.CommentsByAdminDocument,
   '\n  query QueryHotDealKeywordsByAdmin(\n    $type: HotDealKeywordType\n    $orderBy: HotDealKeywordOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    hotDealKeywordsByAdmin(\n      type: $type\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      type\n      keyword\n      weight\n      isMajor\n      lastUpdatedAt\n      synonymCount\n      excludeKeywordCount\n      searchAfter\n    }\n  }\n':
@@ -57,11 +70,11 @@ const documents: Documents = {
     types.MutationRemoveHotDealKeywordSynonymByAdminDocument,
   '\n  mutation MutationRemoveHotDealExcludeKeywordByAdmin($ids: [Int!]!) {\n    removeHotDealExcludeKeywordByAdmin(ids: $ids)\n  }\n':
     types.MutationRemoveHotDealExcludeKeywordByAdminDocument,
-  '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n      }\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n':
+  '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n    $brandProductId: Int\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n      brandProductId: $brandProductId\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n      }\n      danawaUrl\n\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n':
     types.QueryPendingVerificationsDocument,
   '\n  query QueryVerificationStatistics {\n    verificationStatistics {\n      pending\n      verified\n      rejected\n      total\n    }\n  }\n':
     types.QueryVerificationStatisticsDocument,
-  '\n  query QueryVerificationHistory(\n    $limit: Int!\n    $searchAfter: [String!]\n    $verificationStatus: [ProductMappingVerificationStatus!]\n    $matchStatus: [ProductMappingMatchStatus!]\n    $target: ProductMappingTarget\n    $productId: Int\n    $verifiedBy: Int\n    $orderBy: OrderOptionType\n  ) {\n    verificationHistory(\n      limit: $limit\n      searchAfter: $searchAfter\n      verificationStatus: $verificationStatus\n      matchStatus: $matchStatus\n      target: $target\n      productId: $productId\n      verifiedBy: $verifiedBy\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n      }\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n':
+  '\n  query QueryVerificationHistory(\n    $limit: Int!\n    $searchAfter: [String!]\n    $verificationStatus: [ProductMappingVerificationStatus!]\n    $matchStatus: [ProductMappingMatchStatus!]\n    $target: ProductMappingTarget\n    $productId: Int\n    $verifiedBy: Int\n    $orderBy: OrderOptionType\n  ) {\n    verificationHistory(\n      limit: $limit\n      searchAfter: $searchAfter\n      verificationStatus: $verificationStatus\n      matchStatus: $matchStatus\n      target: $target\n      productId: $productId\n      verifiedBy: $verifiedBy\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n      }\n      danawaUrl\n\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n':
     types.QueryVerificationHistoryDocument,
   '\n  mutation MutationVerifyProductMapping(\n    $productMappingId: Int!\n    $result: ProductMappingVerificationStatus!\n    $feedback: String\n  ) {\n    verifyProductMapping(productMappingId: $productMappingId, result: $result, feedback: $feedback)\n  }\n':
     types.MutationVerifyProductMappingDocument,
@@ -71,6 +84,8 @@ const documents: Documents = {
     types.MutationRemoveProductMappingDocument,
   '\n  mutation MutationCancelVerification($productMappingId: Int!, $reason: String) {\n    cancelVerification(productMappingId: $productMappingId, reason: $reason)\n  }\n':
     types.MutationCancelVerificationDocument,
+  '\n  query QueryPendingVerificationsTotalCount($brandProductId: Int) {\n    pendingVerificationsTotalCount(brandProductId: $brandProductId)\n  }\n':
+    types.QueryPendingVerificationsTotalCountDocument,
 };
 
 /**
@@ -79,6 +94,30 @@ const documents: Documents = {
 export function graphql(
   source: '\n  mutation MutationAdminLogin($email: String!, $password: String!) {\n    adminLogin(email: $email, password: $password) {\n      accessToken\n      refreshToken\n    }\n  }\n',
 ): typeof import('./graphql').MutationAdminLoginDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryBrandProductsOrderByMatchCount($limit: Int!, $searchAfter: [String!], $brandItemId: Int, $title: String) {\n    brandProductsOrderByMatchCount(limit: $limit, searchAfter: $searchAfter, brandItemId: $brandItemId, title: $title) {\n      id\n      danawaProductId\n      brandItemId\n      brandName\n      productName\n      volume\n      amount\n      matchCount\n      pendingVerificationCount\n      createdAt\n      searchAfter\n    }\n  }\n',
+): typeof import('./graphql').QueryBrandProductsOrderByMatchCountDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QuerySimilarProducts($id: Int!) {\n    similarProducts(id: $id) {\n      id\n      title\n      url\n      thumbnail\n      price\n      categoryId\n      providerId\n      provider {\n        name\n      }\n      postedAt\n    }\n  }\n',
+): typeof import('./graphql').QuerySimilarProductsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryBrandProductsByMatchCountTotalCount($brandItemId: Int, $title: String) {\n    brandProductsByMatchCountTotalCount(brandItemId: $brandItemId, title: $title)\n  }\n',
+): typeof import('./graphql').QueryBrandProductsByMatchCountTotalCountDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryBrandProductMatchCount($brandProductId: Int!) {\n    brandProductMatchCount(brandProductId: $brandProductId)\n  }\n',
+): typeof import('./graphql').QueryBrandProductMatchCountDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -149,7 +188,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n      }\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n',
+  source: '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n    $brandProductId: Int\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n      brandProductId: $brandProductId\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n      }\n      danawaUrl\n\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n',
 ): typeof import('./graphql').QueryPendingVerificationsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -161,7 +200,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryVerificationHistory(\n    $limit: Int!\n    $searchAfter: [String!]\n    $verificationStatus: [ProductMappingVerificationStatus!]\n    $matchStatus: [ProductMappingMatchStatus!]\n    $target: ProductMappingTarget\n    $productId: Int\n    $verifiedBy: Int\n    $orderBy: OrderOptionType\n  ) {\n    verificationHistory(\n      limit: $limit\n      searchAfter: $searchAfter\n      verificationStatus: $verificationStatus\n      matchStatus: $matchStatus\n      target: $target\n      productId: $productId\n      verifiedBy: $verifiedBy\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n      }\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n',
+  source: '\n  query QueryVerificationHistory(\n    $limit: Int!\n    $searchAfter: [String!]\n    $verificationStatus: [ProductMappingVerificationStatus!]\n    $matchStatus: [ProductMappingMatchStatus!]\n    $target: ProductMappingTarget\n    $productId: Int\n    $verifiedBy: Int\n    $orderBy: OrderOptionType\n  ) {\n    verificationHistory(\n      limit: $limit\n      searchAfter: $searchAfter\n      verificationStatus: $verificationStatus\n      matchStatus: $matchStatus\n      target: $target\n      productId: $productId\n      verifiedBy: $verifiedBy\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n      }\n      danawaUrl\n\n      verificationStatus\n      verifiedBy\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n',
 ): typeof import('./graphql').QueryVerificationHistoryDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -187,6 +226,12 @@ export function graphql(
 export function graphql(
   source: '\n  mutation MutationCancelVerification($productMappingId: Int!, $reason: String) {\n    cancelVerification(productMappingId: $productMappingId, reason: $reason)\n  }\n',
 ): typeof import('./graphql').MutationCancelVerificationDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryPendingVerificationsTotalCount($brandProductId: Int) {\n    pendingVerificationsTotalCount(brandProductId: $brandProductId)\n  }\n',
+): typeof import('./graphql').QueryPendingVerificationsTotalCountDocument;
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
