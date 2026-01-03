@@ -122,7 +122,17 @@ export const MutationCancelVerification = gql`
 `;
 
 export const QueryPendingVerificationsTotalCount = gql`
-  query QueryPendingVerificationsTotalCount($brandProductId: Int) {
-    pendingVerificationsTotalCount(brandProductId: $brandProductId)
+  query QueryPendingVerificationsTotalCount(
+    $brandProductId: Int
+    $matchStatus: [ProductMappingMatchStatus!]
+    $target: ProductMappingTarget
+    $verificationStatus: [ProductMappingVerificationStatus!]
+  ) {
+    pendingVerificationsTotalCount(
+      brandProductId: $brandProductId
+      matchStatus: $matchStatus
+      target: $target
+      verificationStatus: $verificationStatus
+    )
   }
 `;

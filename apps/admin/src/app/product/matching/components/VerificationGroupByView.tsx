@@ -2,7 +2,11 @@
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { ProductMappingVerificationStatus } from '@/generated/gql/graphql';
+import {
+  ProductMappingMatchStatus,
+  ProductMappingTarget,
+  ProductMappingVerificationStatus,
+} from '@/generated/gql/graphql';
 import {
   BrandProduct,
   useGetBrandProductsByMatchCountTotalCount,
@@ -226,7 +230,10 @@ const VerificationGroupByView = () => {
 
   // Total count hooks
   const { data: brandProductsTotalCountData } = useGetBrandProductsByMatchCountTotalCount();
-  const { data: pendingVerificationsTotalCountData } = useGetPendingVerificationsTotalCount();
+  const { data: pendingVerificationsTotalCountData } = useGetPendingVerificationsTotalCount({
+    matchStatus: [ProductMappingMatchStatus.Matched],
+    target: ProductMappingTarget.BrandProduct,
+  });
   const [fetchBrandItemTotalCount, { data: brandItemTotalCountData }] =
     useGetBrandProductsByMatchCountTotalCountLazy();
   const [
@@ -649,19 +656,59 @@ const VerificationGroupByView = () => {
       );
 
       // 브랜드 상품 목록에서 pendingVerificationCount 업데이트
-      setAllBrandProducts((prev) =>
-        prev.map((bp) =>
-          bp.id === selectedBrandProduct?.id
-            ? {
-                ...bp,
-                pendingVerificationCount: Math.max(
-                  0,
-                  bp.pendingVerificationCount - (approvedCount + rejectedCount),
-                ),
-              }
-            : bp,
-        ),
-      );
+      // 상세 탭인 경우 부모(expandedBrandProductId)를 찾아 업데이트하고,
+      // 브랜드 탭인 경우 현재 선택된 항목(selectedBrandProduct.id)을 업데이트
+      const parentIdToUpdate =
+        activeTab === 'details' ? expandedBrandProductId : selectedBrandProduct?.id;
+
+      if (parentIdToUpdate) {
+        setAllBrandProducts((prev) =>
+          prev.map((bp) =>
+            bp.id === parentIdToUpdate
+              ? {
+                  ...bp,
+                  pendingVerificationCount: Math.max(
+                    0,
+                    bp.pendingVerificationCount - (approvedCount + rejectedCount),
+                  ),
+                }
+              : bp,
+          ),
+        );
+      }
+
+      if (activeTab === 'details') {
+        // Expanded items 업데이트
+        setExpandedItems((prev) =>
+          prev.map((bp) =>
+            bp.id === selectedBrandProduct?.id
+              ? {
+                  ...bp,
+                  pendingVerificationCount: Math.max(
+                    0,
+                    bp.pendingVerificationCount - (approvedCount + rejectedCount),
+                  ),
+                }
+              : bp,
+          ),
+        );
+
+        const nextExpandedIndex = expandedSelectedIndex + 1;
+        if (nextExpandedIndex < expandedItems.length) {
+          setSelectedBrandProduct(expandedItems[nextExpandedIndex]);
+          setExpandedSelectedIndex(nextExpandedIndex);
+          setFocusedPostIndex(-1);
+          setIsLeftPanelFocused(true);
+          return;
+        }
+
+        // 상세 상품 목록의 끝에 도달하면 브랜드 목록으로 돌아가서 다음 항목으로 이동
+        setActiveTab('brands');
+        setExpandedBrandProductId(null);
+        setExpandedBrandItemId(null);
+        setExpandedItems([]);
+        setExpandedSelectedIndex(0);
+      }
 
       // Move to next brand product
       const nextIndex = selectedProductIndex + 1;
@@ -689,6 +736,10 @@ const VerificationGroupByView = () => {
     selectedBrandProduct,
     showToast,
     batchVerifyMutation,
+    activeTab,
+    expandedItems,
+    expandedSelectedIndex,
+    expandedBrandProductId,
   ]);
 
   // Keyboard navigation
