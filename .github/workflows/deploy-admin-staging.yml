@@ -112,6 +112,7 @@ jobs:
 
       - name: action-slack
         uses: 8398a7/action-slack@v3
+        continue-on-error: true
         with:
           status: ${{ job.status }}
           author_name: Github Bot (Development)
