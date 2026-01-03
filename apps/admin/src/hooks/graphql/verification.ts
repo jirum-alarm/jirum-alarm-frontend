@@ -17,6 +17,8 @@ import {
   MutationVerifyProductMappingMutation,
   MutationVerifyProductMappingMutationVariables,
   OrderOptionType,
+  ProductMappingMatchStatus,
+  ProductMappingTarget,
   ProductMappingVerificationStatus,
   QueryPendingVerificationsQuery,
   QueryPendingVerificationsQueryVariables,
@@ -190,6 +192,9 @@ export interface QueryPendingVerificationsTotalCountQuery {
 
 export interface QueryPendingVerificationsTotalCountQueryVariables {
   brandProductId?: number;
+  matchStatus?: ProductMappingMatchStatus[];
+  target?: ProductMappingTarget;
+  verificationStatus?: ProductMappingVerificationStatus[];
 }
 
 export const useGetPendingVerificationsTotalCount = (
@@ -205,6 +210,9 @@ export const useGetPendingVerificationsTotalCount = (
   >(QueryPendingVerificationsTotalCount, {
     variables: {
       brandProductId: variables?.brandProductId ?? undefined,
+      matchStatus: variables?.matchStatus ?? undefined,
+      target: variables?.target ?? undefined,
+      verificationStatus: variables?.verificationStatus ?? undefined,
     },
     fetchPolicy: 'network-only',
     ...options,
