@@ -59,7 +59,7 @@ const VerificationItem = memo(function VerificationItem({
     <div
       data-post-index={index}
       onClick={() => onItemClick(index)}
-      className={`group relative cursor-pointer rounded-xl border-2 bg-white p-4 shadow-sm dark:bg-boxdark ${
+      className={`group relative cursor-pointer rounded-xl border-2 bg-white p-1.5 shadow-sm dark:bg-boxdark ${
         isFocused
           ? 'border-primary ring-2 ring-primary/20'
           : item.isSelected
@@ -108,7 +108,7 @@ const VerificationItem = memo(function VerificationItem({
               e.stopPropagation();
               onImageClick(item.product?.thumbnail || '', item.product?.title || '');
             }}
-            className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border border-stroke bg-white hover:scale-105 dark:border-strokedark"
+            className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg border border-stroke bg-white hover:scale-105 dark:border-strokedark"
           >
             <img
               src={item.product.thumbnail}
@@ -116,7 +116,7 @@ const VerificationItem = memo(function VerificationItem({
               className="h-full w-full object-cover"
               loading="lazy"
               onError={(e) => {
-                e.currentTarget.src = 'https://via.placeholder.com/64x64?text=No';
+                e.currentTarget.src = 'https://via.placeholder.com/48x48?text=No';
               }}
             />
           </button>
@@ -124,35 +124,35 @@ const VerificationItem = memo(function VerificationItem({
 
         {/* Content */}
         <div className="min-w-0 flex-1">
-          {/* Status Badge */}
-          <div className="mb-2 flex items-center gap-2">
+          {/* Status Badge, ID, Date */}
+          <div className="mb-0.5 flex items-center gap-1.5">
             <span
-              className={`rounded px-2 py-0.5 text-[10px] font-bold ${
+              className={`rounded px-1 py-0.5 text-[10px] font-bold ${
                 item.isSelected ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'
               }`}
             >
-              {item.isSelected ? '승인 예정' : '거절 예정'}
+              {item.isSelected ? '승인' : '거절'}
             </span>
             <span className="text-gray-400 text-[10px]">ID: {item.productId}</span>
+            <span className="text-gray-400 text-[10px]">
+              {new Date(item.createdAt).toLocaleDateString()}
+            </span>
           </div>
 
-          {/* Title */}
-          <p className="mb-2 line-clamp-2 text-sm font-semibold text-black dark:text-white">
-            {item.product?.title || '제목 없음'}
-          </p>
-
-          {/* Meta */}
-          <div className="text-gray-500 flex items-center gap-4 text-xs">
-            <span>{new Date(item.createdAt).toLocaleDateString()}</span>
+          {/* Title and Danawa Link */}
+          <div className="flex items-center gap-1">
+            <p className="line-clamp-1 flex-1 text-xs font-semibold text-black dark:text-white">
+              {item.product?.title || '제목 없음'}
+            </p>
             {item.danawaUrl && (
               <a
                 href={item.danawaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary hover:underline"
+                className="whitespace-nowrap text-[10px] text-primary hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
-                다나와 링크
+                다나와
               </a>
             )}
           </div>
@@ -193,6 +193,24 @@ const VerificationGroupByView = () => {
   const [itemSelections, setItemSelections] = useState<Record<string, boolean>>({});
   const [focusedPostIndex, setFocusedPostIndex] = useState<number>(-1);
   const [isLeftPanelFocused, setIsLeftPanelFocused] = useState(true);
+
+  // 탭 상태
+  const [activeTab, setActiveTab] = useState<'brands' | 'details'>('brands');
+
+  // 탭 변경 시 좌측 패널 포커스 유지 및 선택 상태 복원
+  useEffect(() => {
+    // 모든 탭에서 좌측 패널 포커스 유지
+    setIsLeftPanelFocused(true);
+    if (activeTab === 'brands') {
+      // 선택된 브랜드 상품이 있으면 인덱스 복원
+      if (selectedBrandProduct) {
+        const index = allBrandProducts.findIndex((bp) => bp.id === selectedBrandProduct.id);
+        if (index >= 0) {
+          setSelectedProductIndex(index);
+        }
+      }
+    }
+  }, [activeTab, selectedBrandProduct, allBrandProducts]);
 
   // 검색어 쓰로틀 (300ms)
   const searchThrottleRef = useRef<NodeJS.Timeout | null>(null);
@@ -378,6 +396,9 @@ const VerificationGroupByView = () => {
         loadExpandedItems(brandProduct.brandItemId);
         // 해당 brandItemId의 전체 개수 조회
         fetchBrandItemTotalCount({ variables: { brandItemId: brandProduct.brandItemId } });
+
+        // 상세 상품 탭으로 자동 전환
+        setActiveTab('details');
       }
     },
     [expandedBrandProductId, loadExpandedItems, fetchBrandItemTotalCount],
@@ -539,6 +560,9 @@ const VerificationGroupByView = () => {
   const leftScrollRef = useRef<HTMLDivElement>(null);
   const rightScrollRef = useRef<HTMLDivElement>(null);
 
+  // Throttle ref for left panel navigation
+  const lastNavigationTimeRef = useRef<number>(0);
+
   // Filtered products (서버에서 이미 필터링되어 옴)
   const filteredBrandProducts = allBrandProducts;
 
@@ -697,16 +721,14 @@ const VerificationGroupByView = () => {
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
+          // 탭이 브랜드 상품 탭일 때만 좌측 포커스 허용
           if (isLeftPanelFocused) {
-            // 확장된 상태에서는 확장된 항목들 사이에서 이동
-            if (expandedBrandProductId !== null && expandedItems.length > 0) {
-              const nextExpandedIndex = Math.min(
-                expandedSelectedIndex + 1,
-                expandedItems.length - 1,
-              );
-              setExpandedSelectedIndex(nextExpandedIndex);
-              setSelectedBrandProduct(expandedItems[nextExpandedIndex]);
-            } else {
+            // Throttle navigation (150ms)
+            const now = Date.now();
+            if (now - lastNavigationTimeRef.current < 150) return;
+            lastNavigationTimeRef.current = now;
+
+            if (activeTab === 'brands') {
               const nextIndex = selectedProductIndex + 1;
               // 마지막 항목 근처에 도달하면 자동으로 더 로딩
               if (
@@ -719,6 +741,13 @@ const VerificationGroupByView = () => {
               const clampedIndex = Math.min(nextIndex, filteredBrandProducts.length - 1);
               setSelectedProductIndex(clampedIndex);
               setSelectedBrandProduct(filteredBrandProducts[clampedIndex]);
+            } else if (activeTab === 'details' && expandedItems.length > 0) {
+              const nextExpandedIndex = Math.min(
+                expandedSelectedIndex + 1,
+                expandedItems.length - 1,
+              );
+              setExpandedSelectedIndex(nextExpandedIndex);
+              setSelectedBrandProduct(expandedItems[nextExpandedIndex]);
             }
           } else {
             const nextIndex = focusedPostIndex + 1;
@@ -739,15 +768,19 @@ const VerificationGroupByView = () => {
         case 'ArrowUp':
           e.preventDefault();
           if (isLeftPanelFocused) {
-            // 확장된 상태에서는 확장된 항목들 사이에서 이동
-            if (expandedBrandProductId !== null && expandedItems.length > 0) {
-              const prevExpandedIndex = Math.max(expandedSelectedIndex - 1, 0);
-              setExpandedSelectedIndex(prevExpandedIndex);
-              setSelectedBrandProduct(expandedItems[prevExpandedIndex]);
-            } else {
+            // Throttle navigation (150ms)
+            const now = Date.now();
+            if (now - lastNavigationTimeRef.current < 150) return;
+            lastNavigationTimeRef.current = now;
+
+            if (activeTab === 'brands') {
               const prevIndex = Math.max(selectedProductIndex - 1, 0);
               setSelectedProductIndex(prevIndex);
               setSelectedBrandProduct(filteredBrandProducts[prevIndex]);
+            } else if (activeTab === 'details' && expandedItems.length > 0) {
+              const prevExpandedIndex = Math.max(expandedSelectedIndex - 1, 0);
+              setExpandedSelectedIndex(prevExpandedIndex);
+              setSelectedBrandProduct(expandedItems[prevExpandedIndex]);
             }
           } else {
             setFocusedPostIndex((prev) => Math.max(prev - 1, 0));
@@ -764,23 +797,51 @@ const VerificationGroupByView = () => {
 
         case 'ArrowLeft':
           e.preventDefault();
-          if (isLeftPanelFocused && expandedBrandProductId !== null) {
-            // 확장된 상태에서 왼쪽 키: 확장 닫기
+          if (!isLeftPanelFocused) {
+            // 우측 패널에서 왼쪽 키: 좌측 패널로 이동
+            setIsLeftPanelFocused(true);
+            setFocusedPostIndex(-1);
+          } else if (activeTab === 'details') {
+            // 좌측 패널(상세 탭)에서 왼쪽 키: 브랜드 탭으로 이동 (확장 닫기)
+            // 스페이스바와 동일한 로직
+            setActiveTab('brands');
+            setIsLeftPanelFocused(true);
+            setFocusedPostIndex(-1);
+
             setExpandedBrandProductId(null);
             setExpandedBrandItemId(null);
             setExpandedItems([]);
             setExpandedSelectedIndex(0);
-          } else {
-            setIsLeftPanelFocused(true);
-            setFocusedPostIndex(-1);
+
+            if (filteredBrandProducts[selectedProductIndex]) {
+              setSelectedBrandProduct(filteredBrandProducts[selectedProductIndex]);
+            }
           }
           break;
 
         case ' ':
           e.preventDefault();
-          if (isLeftPanelFocused && filteredBrandProducts[selectedProductIndex]) {
-            // 왼쪽 패널에서 스페이스: expand/collapse
-            toggleExpand(filteredBrandProducts[selectedProductIndex]);
+          if (isLeftPanelFocused) {
+            if (activeTab === 'brands' && filteredBrandProducts[selectedProductIndex]) {
+              // 브랜드 상품 탭에서 스페이스: expand/collapse
+              toggleExpand(filteredBrandProducts[selectedProductIndex]);
+            } else if (activeTab === 'details') {
+              // 상세 상품 탭에서 스페이스: 브랜드 상품 탭으로 돌아가기
+              setActiveTab('brands');
+              setIsLeftPanelFocused(true);
+              setFocusedPostIndex(-1); // 우측 포커스 초기화
+
+              // 확장 상태 초기화
+              setExpandedBrandProductId(null);
+              setExpandedBrandItemId(null);
+              setExpandedItems([]);
+              setExpandedSelectedIndex(0);
+
+              // 부모 항목 선택 상태 복원
+              if (filteredBrandProducts[selectedProductIndex]) {
+                setSelectedBrandProduct(filteredBrandProducts[selectedProductIndex]);
+              }
+            }
           } else if (!isLeftPanelFocused && currentItems[focusedPostIndex]) {
             toggleItemSelection(currentItems[focusedPostIndex].id);
           }
@@ -940,7 +1001,7 @@ const VerificationGroupByView = () => {
           }`}
         >
           {/* Search */}
-          <div className="border-b border-stroke p-4 dark:border-strokedark">
+          <div className="border-b border-stroke p-3 dark:border-strokedark">
             <div className="relative">
               <input
                 type="text"
@@ -963,11 +1024,11 @@ const VerificationGroupByView = () => {
                 />
               </svg>
             </div>
-            <div className="text-gray-500 mt-2 flex items-center justify-between text-xs">
+            <div className="text-gray-500 mt-1.5 flex items-center justify-between text-[10px]">
               <span>
                 {isSearching ? (
                   <span className="flex items-center gap-1">
-                    <span className="h-3 w-3 animate-spin rounded-full border border-primary border-t-transparent"></span>
+                    <span className="h-2.5 w-2.5 animate-spin rounded-full border border-primary border-t-transparent"></span>
                     검색 중...
                   </span>
                 ) : debouncedSearchQuery ? (
@@ -991,7 +1052,7 @@ const VerificationGroupByView = () => {
                   </>
                 )}
               </span>
-              <span className="rounded-full bg-warning/10 px-2 py-0.5 text-[10px] font-semibold text-warning">
+              <span className="rounded bg-warning/10 px-1.5 py-0.5 text-[9px] font-semibold text-warning">
                 전체 대기{' '}
                 {pendingVerificationsTotalCountData?.pendingVerificationsTotalCount?.toLocaleString() ??
                   '-'}
@@ -1000,180 +1061,203 @@ const VerificationGroupByView = () => {
             </div>
           </div>
 
-          {/* Brand Product List */}
-          <div ref={leftScrollRef} className="flex-1 overflow-y-auto">
-            {filteredBrandProducts.length > 0 ? (
-              <>
-                {filteredBrandProducts.map((bp, index) => (
-                  <div key={bp.id}>
-                    {/* 메인 항목 */}
-                    <button
-                      data-product-index={index}
-                      onClick={() => {
-                        setSelectedBrandProduct(bp);
-                        setSelectedProductIndex(index);
-                        setIsLeftPanelFocused(true);
-                        // 확장 상태 초기화
-                        if (expandedBrandProductId !== bp.id) {
-                          setExpandedBrandProductId(null);
-                          setExpandedBrandItemId(null);
-                          setExpandedItems([]);
-                        }
-                        // 마지막 항목 근처 클릭 시 추가 로딩
+          {/* Tabs */}
+          <div className="border-b border-stroke px-3 py-2 dark:border-strokedark">
+            <div className="flex space-x-1">
+              <button
+                onClick={() => setActiveTab('brands')}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+                  activeTab === 'brands'
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:bg-meta-4 dark:hover:bg-meta-3'
+                }`}
+              >
+                브랜드 상품
+              </button>
+              <button
+                onClick={() => setActiveTab('details')}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+                  activeTab === 'details'
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:bg-meta-4 dark:hover:bg-meta-3'
+                }`}
+              >
+                상세 상품 ({expandedItems.length > 0 ? expandedItems.length : '-'})
+              </button>
+            </div>
+          </div>
+
+          {/* Tab Content */}
+          {activeTab === 'brands' ? (
+            <div ref={leftScrollRef} className="flex-1 overflow-y-auto">
+              {/* Brand Product List */}
+              {filteredBrandProducts.length > 0 ? (
+                <>
+                  {filteredBrandProducts.map((bp, index) => (
+                    <div key={bp.id} className="mb-0.5">
+                      {/* 메인 항목 */}
+                      <button
+                        data-product-index={index}
+                        onClick={() => {
+                          setSelectedBrandProduct(bp);
+                          setSelectedProductIndex(index);
+                          setIsLeftPanelFocused(true);
+                          // 확장 상태 초기화
+                          if (expandedBrandProductId !== bp.id) {
+                            setExpandedBrandProductId(null);
+                            setExpandedBrandItemId(null);
+                            setExpandedItems([]);
+                          }
+                          // 마지막 항목 근처 클릭 시 추가 로딩
+                          if (
+                            index >= filteredBrandProducts.length - 3 &&
+                            hasBrandProductMore &&
+                            !isLoadingBrandProductMore
+                          ) {
+                            loadMoreBrandProducts();
+                          }
+                        }}
+                        className={`hover:bg-gray-50 flex w-full items-center gap-2 p-2 text-left transition-all dark:hover:bg-meta-4 ${
+                          selectedBrandProduct?.id === bp.id && expandedBrandItemId === null
+                            ? 'border-r-4 border-primary bg-primary/5'
+                            : ''
+                        } ${
+                          isLeftPanelFocused &&
+                          selectedProductIndex === index &&
+                          expandedBrandItemId === null
+                            ? 'ring-2 ring-inset ring-primary/50'
+                            : ''
+                        } ${expandedBrandProductId === bp.id ? 'bg-gray-100 dark:bg-meta-4' : ''}`}
+                      >
+                        <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-warning text-[10px] font-bold text-white">
+                          {bp.pendingVerificationCount}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p
+                            className={`line-clamp-2 text-xs font-semibold ${
+                              selectedBrandProduct?.id === bp.id && expandedBrandItemId === null
+                                ? 'text-primary'
+                                : 'text-black dark:text-white'
+                            }`}
+                          >
+                            {bp.brandName} {bp.productName}
+                          </p>
+                          <p className="text-gray-400 mt-0.5 text-[9px]">
+                            {bp.volume && `${bp.volume}`}
+                            {bp.volume && bp.amount && ' · '}
+                            {bp.amount && `${bp.amount}`}
+                          </p>
+                        </div>
+                      </button>
+                    </div>
+                  ))}
+                  {/* Loading indicator */}
+                  {isLoadingBrandProductMore && (
+                    <div className="flex items-center justify-center py-4">
+                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+                      <span className="text-gray-500 ml-2 text-xs">불러오는 중...</span>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-gray-500 flex flex-col items-center justify-center py-20">
+                  <p>브랜드 상품이 없습니다.</p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex-1 overflow-y-auto p-3">
+              {/* Header with selected brand product */}
+              {selectedBrandProduct && (
+                <div className="mb-3">
+                  <button
+                    onClick={() => {
+                      setActiveTab('brands');
+                      setIsLeftPanelFocused(true);
+                      // 선택 상태 복원
+                      setTimeout(() => {
                         if (
-                          index >= filteredBrandProducts.length - 3 &&
-                          hasBrandProductMore &&
-                          !isLoadingBrandProductMore
+                          selectedBrandProduct &&
+                          allBrandProducts[selectedProductIndex]?.id === selectedBrandProduct.id
                         ) {
-                          loadMoreBrandProducts();
+                          // 선택 상태가 일치하면 그대로 유지
+                        } else {
+                          // 선택 상태 복원
+                          const index = allBrandProducts.findIndex(
+                            (bp) => bp.id === selectedBrandProduct?.id,
+                          );
+                          if (index >= 0) {
+                            setSelectedProductIndex(index);
+                          }
                         }
+                      }, 0);
+                    }}
+                    className="hover:bg-gray-50 flex w-full items-center gap-2 rounded border border-stroke p-2 text-left transition-all dark:border-strokedark dark:hover:bg-meta-4"
+                  >
+                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+                      ←
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-semibold text-primary">
+                        {selectedBrandProduct.brandName} {selectedBrandProduct.productName}
+                      </p>
+                      <p className="text-gray-400 mt-0.5 text-[9px]">
+                        {selectedBrandProduct.volume && `${selectedBrandProduct.volume}`}
+                        {selectedBrandProduct.volume && selectedBrandProduct.amount && ' · '}
+                        {selectedBrandProduct.amount && `${selectedBrandProduct.amount}`}
+                      </p>
+                    </div>
+                  </button>
+                </div>
+              )}
+
+              {/* Details Product List */}
+              {expandedItems.length > 0 ? (
+                <>
+                  {expandedItems.map((expandedBp, expandedIndex) => (
+                    <button
+                      key={expandedBp.id}
+                      data-expanded-index={expandedIndex}
+                      onClick={() => {
+                        setExpandedSelectedIndex(expandedIndex);
+                        setSelectedBrandProduct(expandedBp);
+                        setIsLeftPanelFocused(true);
                       }}
-                      className={`hover:bg-gray-50 flex w-full items-center gap-3 p-4 text-left transition-all dark:hover:bg-meta-4 ${
-                        selectedBrandProduct?.id === bp.id && expandedBrandItemId === null
-                          ? 'border-r-4 border-primary bg-primary/5'
+                      className={`hover:bg-gray-100 mb-1 flex w-full items-center gap-1.5 px-2 py-1.5 text-left transition-all dark:hover:bg-meta-4 ${
+                        selectedBrandProduct?.id === expandedBp.id
+                          ? 'border-r-3 border-primary bg-primary/10'
                           : ''
                       } ${
-                        isLeftPanelFocused &&
-                        selectedProductIndex === index &&
-                        expandedBrandItemId === null
-                          ? 'ring-2 ring-inset ring-primary/50'
+                        isLeftPanelFocused && expandedSelectedIndex === expandedIndex
+                          ? 'ring-1 ring-inset ring-primary/50'
                           : ''
-                      } ${expandedBrandProductId === bp.id ? 'bg-gray-100 dark:bg-meta-4' : ''}`}
+                      }`}
                     >
-                      <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-warning text-xs font-bold text-white">
-                        {bp.pendingVerificationCount}
+                      <div className="flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-warning/80 text-[9px] font-bold text-white">
+                        {expandedBp.pendingVerificationCount}
                       </div>
                       <div className="min-w-0 flex-1">
                         <p
-                          className={`line-clamp-2 text-sm font-semibold ${
-                            selectedBrandProduct?.id === bp.id && expandedBrandItemId === null
+                          className={`line-clamp-1 text-[10px] font-medium ${
+                            selectedBrandProduct?.id === expandedBp.id
                               ? 'text-primary'
                               : 'text-black dark:text-white'
                           }`}
                         >
-                          {bp.brandName} {bp.productName}
-                        </p>
-                        <p className="text-gray-400 mt-0.5 text-[10px]">
-                          {bp.volume && `${bp.volume}`}
-                          {bp.volume && bp.amount && ' · '}
-                          {bp.amount && `${bp.amount}`}
+                          {expandedBp.volume || '-'} · {expandedBp.amount || '-'}
                         </p>
                       </div>
-                      {/* 확장 표시 아이콘 */}
-                      {expandedBrandProductId === bp.id && (
-                        <svg
-                          className="h-4 w-4 text-primary"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      )}
                     </button>
-
-                    {/* 확장된 하위 항목들 */}
-                    {expandedBrandProductId === bp.id && (
-                      <div className="bg-gray-50 ml-4 border-l-2 border-primary/30 dark:bg-meta-4/50">
-                        {/* 확장된 항목 개수 표시 */}
-                        <div className="border-b border-stroke/50 px-3 py-2 dark:border-strokedark/50">
-                          <span className="text-gray-500 text-[10px]">
-                            용량/개수 조합 총{' '}
-                            <span className="font-semibold text-primary">
-                              {brandItemTotalCountData?.brandProductsByMatchCountTotalCount ?? '-'}
-                            </span>
-                            개
-                          </span>
-                        </div>
-                        {isLoadingExpanded ? (
-                          <div className="flex items-center justify-center py-4">
-                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-                            <span className="text-gray-500 ml-2 text-xs">로딩 중...</span>
-                          </div>
-                        ) : expandedItems.length > 0 ? (
-                          expandedItems.map((expandedBp, expandedIndex) => (
-                            <button
-                              key={expandedBp.id}
-                              data-expanded-index={expandedIndex}
-                              onClick={() => {
-                                setExpandedSelectedIndex(expandedIndex);
-                                setSelectedBrandProduct(expandedBp);
-                                setIsLeftPanelFocused(true);
-                              }}
-                              className={`hover:bg-gray-100 flex w-full items-center gap-2 px-3 py-2 text-left transition-all dark:hover:bg-meta-4 ${
-                                selectedBrandProduct?.id === expandedBp.id
-                                  ? 'border-r-4 border-primary bg-primary/10'
-                                  : ''
-                              } ${
-                                isLeftPanelFocused && expandedSelectedIndex === expandedIndex
-                                  ? 'ring-2 ring-inset ring-primary/50'
-                                  : ''
-                              }`}
-                            >
-                              <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-warning/80 text-[10px] font-bold text-white">
-                                {expandedBp.pendingVerificationCount}
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <p
-                                  className={`line-clamp-1 text-xs font-medium ${
-                                    selectedBrandProduct?.id === expandedBp.id
-                                      ? 'text-primary'
-                                      : 'text-black dark:text-white'
-                                  }`}
-                                >
-                                  {expandedBp.volume || '-'} · {expandedBp.amount || '-'}
-                                </p>
-                              </div>
-                            </button>
-                          ))
-                        ) : (
-                          <div className="text-gray-400 px-3 py-3 text-xs">하위 항목 없음</div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
-                {/* Loading indicator */}
-                {isLoadingBrandProductMore && (
-                  <div className="flex items-center justify-center py-4">
-                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-                    <span className="text-gray-500 ml-2 text-xs">불러오는 중...</span>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="text-gray-500 flex flex-col items-center justify-center py-20">
-                <p>브랜드 상품이 없습니다.</p>
-              </div>
-            )}
-          </div>
-
-          {/* Keyboard Hints */}
-          <div className="bg-gray-50 border-t border-stroke px-4 py-3 dark:border-strokedark dark:bg-meta-4">
-            <div className="text-gray-500 dark:text-gray-400 grid grid-cols-2 gap-2 text-[10px]">
-              <div className="flex items-center gap-1">
-                <kbd className="font-mono rounded bg-white px-1 py-0.5 dark:bg-boxdark">↑↓</kbd>
-                <span>이동</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <kbd className="font-mono rounded bg-white px-1 py-0.5 dark:bg-boxdark">Space</kbd>
-                <span>확장</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <kbd className="font-mono rounded bg-white px-1 py-0.5 dark:bg-boxdark">→</kbd>
-                <span>항목으로</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <kbd className="font-mono rounded bg-white px-1 py-0.5 dark:bg-boxdark">←</kbd>
-                <span>접기</span>
-              </div>
+                  ))}
+                </>
+              ) : (
+                <div className="text-gray-500 flex flex-col items-center justify-center py-10">
+                  <p className="text-xs">스페이스바로 브랜드 상품을 선택하여</p>
+                  <p className="text-xs">상세 상품 목록을 확인하세요.</p>
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
 
         {/* Right Content Area */}
@@ -1181,12 +1265,12 @@ const VerificationGroupByView = () => {
           {selectedBrandProduct ? (
             <>
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-stroke bg-white p-4 dark:border-strokedark dark:bg-boxdark">
+              <div className="flex items-center justify-between border-b border-stroke bg-white p-1.5 dark:border-strokedark dark:bg-boxdark">
                 <div className="min-w-0 flex-1">
-                  <h3 className="truncate text-lg font-bold text-black dark:text-white">
+                  <h3 className="text-base font-bold text-black dark:text-white">
                     {selectedBrandProduct.brandName} {selectedBrandProduct.productName}
                   </h3>
-                  <p className="text-gray-500 mt-1 text-sm">
+                  <p className="text-gray-500 mt-0.5 text-xs">
                     {selectedBrandProduct.volume && `${selectedBrandProduct.volume}`}
                     {selectedBrandProduct.volume && selectedBrandProduct.amount && ' · '}
                     {selectedBrandProduct.amount && `${selectedBrandProduct.amount}`}
@@ -1194,13 +1278,18 @@ const VerificationGroupByView = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
                   <button
                     onClick={selectAll}
-                    className="flex items-center gap-1.5 rounded-lg bg-success/10 px-3 py-2 text-sm font-medium text-success transition-colors hover:bg-success/20"
+                    className="flex items-center gap-1 rounded bg-success/10 px-2 py-1.5 text-xs font-medium text-success transition-colors hover:bg-success/20"
                     title="Shift+A"
                   >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      className="h-3.5 w-3.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -1208,14 +1297,19 @@ const VerificationGroupByView = () => {
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    전체 선택
+                    전체선택
                   </button>
                   <button
                     onClick={deselectAll}
-                    className="bg-gray-100 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors dark:bg-meta-4"
+                    className="bg-gray-100 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 flex items-center gap-1 rounded px-2 py-1.5 text-xs font-medium transition-colors dark:bg-meta-4"
                     title="N"
                   >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      className="h-3.5 w-3.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -1223,14 +1317,19 @@ const VerificationGroupByView = () => {
                         d="M6 18L18 6M6 6l12 12"
                       />
                     </svg>
-                    전체 해제
+                    해제
                   </button>
                   <button
                     onClick={handleConfirmMatching}
-                    className="flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-opacity-90"
+                    className="flex items-center gap-1 rounded bg-primary px-2.5 py-1.5 text-xs font-bold text-white transition-colors hover:bg-opacity-90"
                     title="Enter"
                   >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      className="h-3.5 w-3.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -1238,33 +1337,33 @@ const VerificationGroupByView = () => {
                         d="M5 13l4 4L19 7"
                       />
                     </svg>
-                    매칭 확정
+                    확정
                   </button>
                 </div>
               </div>
 
               {/* Stats Panel */}
-              <div className="grid grid-cols-3 gap-4 border-b border-stroke bg-white px-4 py-3 dark:border-strokedark dark:bg-boxdark">
-                <div className="bg-gray-50 rounded-lg p-3 dark:bg-meta-4">
-                  <p className="text-gray-500 dark:text-gray-400 text-xs">전체</p>
-                  <p className="text-2xl font-bold text-black dark:text-white">
+              <div className="grid grid-cols-3 gap-1 border-b border-stroke bg-white px-1.5 py-0.5 dark:border-strokedark dark:bg-boxdark">
+                <div className="bg-gray-50 rounded p-1 dark:bg-meta-4">
+                  <p className="text-gray-500 dark:text-gray-400 text-[9px]">전체</p>
+                  <p className="text-sm font-bold text-black dark:text-white">
                     {pendingVerificationsTotalCountByBrandProductData?.pendingVerificationsTotalCount ??
                       stats.total}
                   </p>
                 </div>
-                <div className="rounded-lg bg-success/10 p-3">
-                  <p className="text-xs text-success">승인 예정</p>
-                  <p className="text-2xl font-bold text-success">{stats.selected}</p>
+                <div className="rounded bg-success/10 p-1">
+                  <p className="text-[9px] text-success">승인</p>
+                  <p className="text-sm font-bold text-success">{stats.selected}</p>
                 </div>
-                <div className="rounded-lg bg-danger/10 p-3">
-                  <p className="text-xs text-danger">거절 예정</p>
-                  <p className="text-2xl font-bold text-danger">{stats.deselected}</p>
+                <div className="rounded bg-danger/10 p-1">
+                  <p className="text-[9px] text-danger">거절</p>
+                  <p className="text-sm font-bold text-danger">{stats.deselected}</p>
                 </div>
               </div>
 
               {/* Items List */}
-              <div ref={rightScrollRef} className="flex-1 overflow-y-auto p-4">
-                <div ref={rightPanelRef} className="mb-3 flex items-center justify-between">
+              <div ref={rightScrollRef} className="flex-1 overflow-y-auto p-2">
+                <div ref={rightPanelRef} className="mb-1 flex items-center justify-between">
                   <span className="text-gray-500 text-sm font-medium">
                     매칭된 커뮤니티 게시물 ({currentItems.length})
                     {hasVerificationMore && ' · ↓ 더 불러오기'}
@@ -1291,7 +1390,7 @@ const VerificationGroupByView = () => {
                     <span className="text-gray-500 ml-2">검증 대기 목록 불러오는 중...</span>
                   </div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-1">
                     {currentItems.length > 0 ? (
                       <>
                         {currentItems.map((item, index) => (
@@ -1302,7 +1401,8 @@ const VerificationGroupByView = () => {
                             isFocused={focusedPostIndex === index && !isLeftPanelFocused}
                             onItemClick={(idx) => {
                               setFocusedPostIndex(idx);
-                              setIsLeftPanelFocused(false);
+                              // 우측 아이템 클릭 시에도 좌측 포커스 유지 (항상 좌측에 포커스)
+                              setIsLeftPanelFocused(true);
                               // 마지막 항목 근처 클릭 시 추가 로딩
                               if (
                                 idx >= currentItems.length - 3 &&
