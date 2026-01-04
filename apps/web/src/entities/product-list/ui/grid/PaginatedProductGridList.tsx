@@ -6,7 +6,7 @@ import { useDevice } from '@/shared/hooks/useDevice';
 
 import { ProductCardType } from '@/entities/product-list';
 
-import ProductGridList from './GridProductList';
+import ProductGridList from './ProductGridList';
 
 type PaginatedProductGridListProps = {
   products: ProductCardType[];

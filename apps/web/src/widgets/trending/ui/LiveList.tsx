@@ -3,7 +3,7 @@
 import { memo, useEffect, useRef } from 'react';
 import { useSwiper } from 'swiper/react';
 
-import { GridProductList, GridProductListSkeleton } from '@/entities/product-list';
+import { ProductGridList, ProductGridListSkeleton } from '@/entities/product-list';
 
 import { useLiveViewModel } from '@/widgets/trending';
 
@@ -29,10 +29,10 @@ const LiveList = ({ categoryId }: LiveListProps) => {
   return (
     <div ref={ref} className="pc:space-y-10 space-y-8">
       <div className="px-5">
-        <GridProductList products={products} />
+        <ProductGridList products={products} />
       </div>
       <div className="flex w-full items-center justify-center px-5" ref={loadingCallbackRef}>
-        {isFetchingNextPage && <GridProductListSkeleton length={SIZE} />}
+        {isFetchingNextPage && <ProductGridListSkeleton length={SIZE} />}
       </div>
     </div>
   );

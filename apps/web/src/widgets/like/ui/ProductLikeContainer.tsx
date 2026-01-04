@@ -5,9 +5,8 @@ import { useInView } from 'react-intersection-observer';
 
 import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
 
+import { ProductGridListSkeleton } from '@/entities/product-list';
 import { WishlistQueries } from '@/entities/wishlist';
-
-import { GridProductListSkeleton } from '@/features/product-list';
 
 import ProductLikeGridList from './ProductLikeGridList';
 
@@ -47,7 +46,7 @@ const ProductLikeContainer = () => {
       </div>
       <ProductLikeGridList products={wishlists.map((w) => w.product)} />
       <div className="flex w-full items-center justify-center pt-3 pb-6" ref={loadingCallbackRef}>
-        {isFetchingNextPage && <GridProductListSkeleton length={10} />}
+        {isFetchingNextPage && <ProductGridListSkeleton length={10} />}
       </div>
     </div>
   );

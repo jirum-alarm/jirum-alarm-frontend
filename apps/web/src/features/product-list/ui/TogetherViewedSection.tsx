@@ -2,9 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { ProductListQueries } from '@/entities/product-list';
-
-import { CarouselProductsSection } from '../carousel';
+import { CarouselProductsSection, ProductListQueries } from '@/entities/product-list';
 
 type Props = {
   productId: number;

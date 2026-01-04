@@ -6,9 +6,9 @@ export { default as CarouselProductCard } from './ui/card/CarouselProductCard';
 export * from './model/types';
 export * from './api/product-list.queries';
 
-export { default as GridProductList } from './ui/grid/GridProductList';
+export { default as ProductGridList } from './ui/grid/ProductGridList';
 export { default as PaginatedProductGridList } from './ui/grid/PaginatedProductGridList';
-export { default as GridProductListSkeleton } from './ui/grid/GridProductListSkeleton';
+export { default as ProductGridListSkeleton } from './ui/grid/ProductGridListSkeleton';
 
 export { default as CarouselProductList } from './ui/carousel/CarouselProductList';
 export { default as CarouselProductListSkeleton } from './ui/carousel/CarouselProductListSkeleton';

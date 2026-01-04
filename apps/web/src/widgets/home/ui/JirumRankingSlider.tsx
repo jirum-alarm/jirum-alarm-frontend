@@ -19,10 +19,11 @@ import { getVisibleSlides } from '@/shared/lib/utils/swiper';
 import { ArrowLeft } from '@/shared/ui/icons';
 import SliderDots from '@/shared/ui/SliderDots';
 
-import { ProductListQueries } from '@/entities/product-list';
-
-import { ADProductRankingImageCard } from '@/entities/product-list';
-import { ProductRankingImageCard } from '@/entities/product-list';
+import {
+  ADProductRankingImageCard,
+  ProductListQueries,
+  ProductRankingImageCard,
+} from '@/entities/product-list';
 
 import { RankingPreview as DesktopRankingPreview } from './desktop/RankingSkeleton';
 import { RankingPreview as MobileRankingPreview } from './mobile/RankingSkeleton';

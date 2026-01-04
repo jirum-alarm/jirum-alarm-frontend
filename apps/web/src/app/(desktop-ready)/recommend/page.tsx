@@ -5,8 +5,7 @@ import { checkDevice } from '@/app/actions/agent';
 import { ProductService } from '@/shared/api/product';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
-import { RecommendPrefetch } from '@/widgets/recommend';
-import { RecommendContainer } from '@/widgets/recommend';
+import { RecommendContainer, RecommendPrefetch } from '@/widgets/recommend';
 
 export async function generateMetadata({
   searchParams,

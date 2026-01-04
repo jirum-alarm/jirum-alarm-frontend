@@ -11,7 +11,7 @@ import Jirume from '@/shared/ui/icons/Jirume';
 import { ProductQueries } from '@/entities/product';
 
 import { RecommendButton } from '@/features/product-actions';
-import { HotdealGuideModal } from '@/features/product-detail';
+import { HotDealGuideModal } from '@/features/product-detail';
 
 export default function ProductInfo({ productId }: { productId: number }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
@@ -32,7 +32,7 @@ export default function ProductInfo({ productId }: { productId: number }) {
           )}
           {!product.isEnd && product.hotDealType && (
             <div className="flex items-center gap-[8px]">
-              <HotdealGuideModal
+              <HotDealGuideModal
                 trigger={
                   <button aria-label="핫딜 기준 안내" title="핫딜 기준 안내">
                     <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />

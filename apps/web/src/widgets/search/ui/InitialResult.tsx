@@ -3,6 +3,7 @@
 import { cn } from '@/shared/lib/cn';
 
 import { CarouselProductsSection } from '@/entities/product-list';
+
 import { useHotDealsRandom } from '@/features/product-list';
 
 import RecentKeywords from './RecentKeywords';

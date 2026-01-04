@@ -5,9 +5,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { ThumbnailType } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
 
-import { ProductListQueries } from '@/entities/product-list';
-
-import { CarouselProductsSection } from '../carousel';
+import { CarouselProductsSection, ProductListQueries } from '@/entities/product-list';
 
 type Props = {
   categoryId: number | null;

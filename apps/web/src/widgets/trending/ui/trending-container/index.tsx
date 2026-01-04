@@ -5,10 +5,9 @@ import { Suspense, useCallback, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
-import { GridProductListSkeleton } from '@/entities/product-list';
+import { ProductGridListSkeleton } from '@/entities/product-list';
 
-import { TAB_META } from '@/widgets/trending';
-import { useTabSwiper } from '@/widgets/trending';
+import { TAB_META, useTabSwiper } from '@/widgets/trending';
 
 import TabBarV2 from '../TabbarV2';
 import TrendingList from '../TrendingList';
@@ -62,7 +61,7 @@ export const TrendingContainer = ({ initialTab }: Props) => {
                   <Suspense
                     fallback={
                       <div className="px-5">
-                        <GridProductListSkeleton length={20} />
+                        <ProductGridListSkeleton length={20} />
                       </div>
                     }
                   >
@@ -72,7 +71,7 @@ export const TrendingContainer = ({ initialTab }: Props) => {
                   </Suspense>
                 ) : (
                   <div className="px-5">
-                    <GridProductListSkeleton length={20} />
+                    <ProductGridListSkeleton length={20} />
                   </div>
                 )}
               </SwiperSlide>

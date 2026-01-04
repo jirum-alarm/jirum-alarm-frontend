@@ -4,9 +4,11 @@ import { useInView } from 'react-intersection-observer';
 
 import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 
-import { ProductListQueries } from '@/entities/product-list';
-
-import { GridProductList, GridProductListSkeleton } from '@/entities/product-list';
+import {
+  ProductGridList,
+  ProductGridListSkeleton,
+  ProductListQueries,
+} from '@/entities/product-list';
 
 interface ProductImageCardListProps {
   keyword: string;
@@ -37,9 +39,9 @@ const RecommendProductList = ({ keyword, limit }: ProductImageCardListProps) => 
 
   return (
     <>
-      <GridProductList products={products} />
+      <ProductGridList products={products} />
       <div className="flex w-full items-center justify-center bg-white py-6" ref={ref}>
-        {isFetchingNextPage && <GridProductListSkeleton length={10} />}
+        {isFetchingNextPage && <ProductGridListSkeleton length={10} />}
       </div>
     </>
   );

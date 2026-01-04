@@ -1,10 +1,8 @@
-import { Registration } from '@/features/auth';
-
 import Button from '@/shared/ui/Button';
 import { Cancel } from '@/shared/ui/icons';
 import Input from '@/shared/ui/Input';
 
-import { useEmailFormViewModel } from '@/features/auth';
+import { Registration, useEmailFormViewModel } from '@/features/auth';
 
 const EmailForm = ({
   registration,

@@ -1,10 +1,8 @@
-import { Registration } from '@/features/auth';
-
 import Button from '@/shared/ui/Button';
 import { CheckboxSelected, CheckDefault } from '@/shared/ui/icons';
 import Link from '@/shared/ui/Link';
 
-import { useTermsOfServiceFormViewModel } from '@/features/auth';
+import { Registration, useTermsOfServiceFormViewModel } from '@/features/auth';
 
 const CONSENT_ALL = '모두 동의';
 const CONSENT_REQUIRED = {

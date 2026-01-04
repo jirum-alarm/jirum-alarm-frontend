@@ -2,8 +2,7 @@ import { Metadata } from 'next';
 
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
-import { TAB_META } from '@/widgets/trending';
-import { TrendingContainerServer } from '@/widgets/trending';
+import { TAB_META, TrendingContainerServer } from '@/widgets/trending';
 
 export async function generateMetadata({
   searchParams,

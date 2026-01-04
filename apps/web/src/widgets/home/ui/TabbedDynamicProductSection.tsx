@@ -5,9 +5,8 @@ import { Suspense, useMemo, useState } from 'react';
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
+import { ProductGridListSkeleton } from '@/entities/product-list';
 import { ContentPromotionSection, PromotionTab } from '@/entities/promotion';
-
-import { GridProductListSkeleton } from '@/entities/product-list';
 
 import DynamicProductList from './DynamicProductList';
 import PromotionTabs from './PromotionTabs';
@@ -59,7 +58,7 @@ const TabbedDynamicProductSection = ({ section }: TabbedDynamicProductSectionPro
         <PromotionTabs tabs={tabs} activeTabId={activeTab?.id ?? ''} onTabClick={handleTabClick} />
       </div>
 
-      <Suspense fallback={<GridProductListSkeleton length={4} />}>
+      <Suspense fallback={<ProductGridListSkeleton length={4} />}>
         <DynamicProductList section={activeSection} />
       </Suspense>
     </div>

@@ -6,9 +6,7 @@ import { checkDevice } from '@/app/actions/agent';
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
-import { ProductListQueries } from '@/entities/product-list';
-
-import { GridProductListSkeleton } from '@/entities/product-list';
+import { ProductGridListSkeleton, ProductListQueries } from '@/entities/product-list';
 
 import LiveHotDealList from './LiveHotDealList';
 
@@ -33,7 +31,7 @@ const LiveHotDealSection = async ({ title = '실시간 핫딜' }: LiveHotDealSec
   return (
     <div className="pc:pt-11 pc:px-0 pc:space-y-10 px-5">
       <SectionHeader title={title} />
-      <Suspense fallback={<GridProductListSkeleton length={20} />}>
+      <Suspense fallback={<ProductGridListSkeleton length={20} />}>
         <LiveHotDealList device={device} />
       </Suspense>
     </div>

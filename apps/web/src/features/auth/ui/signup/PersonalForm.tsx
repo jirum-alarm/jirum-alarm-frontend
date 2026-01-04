@@ -1,10 +1,8 @@
-import { Registration } from '@/features/auth';
-
 import Button from '@/shared/ui/Button';
 
 import { BirthYearSelect, GenderRadioGroup } from '@/entities/user';
 
-import { usePersonalInfoFormViewModel } from '@/features/auth';
+import { Registration, usePersonalInfoFormViewModel } from '@/features/auth';
 
 const PersonalForm = ({
   registration,

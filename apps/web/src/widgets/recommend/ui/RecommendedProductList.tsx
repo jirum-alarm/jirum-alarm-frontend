@@ -6,7 +6,6 @@ import { Suspense, useState } from 'react';
 import ApiErrorBoundary from '@/shared/ui/ApiErrorBoundary';
 
 import { ProductQueries } from '@/entities/product';
-
 import { CarouselProductListSkeleton } from '@/entities/product-list';
 
 import ProductsByKeywordsList from './ProductsByKeywordsList';

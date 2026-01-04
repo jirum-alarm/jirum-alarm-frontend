@@ -1,11 +1,9 @@
-import { Registration } from '@/features/auth';
-
 import { MAX_SELECTION_COUNT } from '@/shared/config/categories';
 import Button from '@/shared/ui/Button';
 
 import { CategoriesCheckboxGroup } from '@/entities/category';
 
-import { useCategoriesFormViewModel } from '@/features/auth';
+import { Registration, useCategoriesFormViewModel } from '@/features/auth';
 
 const CategoriesForm = ({
   registration,

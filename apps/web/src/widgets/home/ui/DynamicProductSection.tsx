@@ -5,9 +5,8 @@ import { getQueryClient } from '@/app/(app)/react-query/query-client';
 
 import SectionHeader from '@/shared/ui/SectionHeader';
 
+import { ProductGridListSkeleton } from '@/entities/product-list';
 import { ContentPromotionSection, createPromotionSectionQuery } from '@/entities/promotion';
-
-import { GridProductListSkeleton } from '@/entities/product-list';
 
 import DynamicProductList from './DynamicProductList';
 import TabbedDynamicProductSection from './TabbedDynamicProductSection';
@@ -57,7 +56,7 @@ const DynamicProductSection = async ({ section }: DynamicProductSectionProps) =>
           }
         />
       </div>
-      <Suspense fallback={<GridProductListSkeleton length={4} />}>
+      <Suspense fallback={<ProductGridListSkeleton length={4} />}>
         <DynamicProductList section={section} />
       </Suspense>
     </div>

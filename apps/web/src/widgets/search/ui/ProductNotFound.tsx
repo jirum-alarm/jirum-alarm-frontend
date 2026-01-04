@@ -5,6 +5,7 @@ import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
 import { CarouselProductList } from '@/entities/product-list';
+
 import { useHotDealsRandom } from '@/features/product-list';
 
 const ProductNotFound = () => {

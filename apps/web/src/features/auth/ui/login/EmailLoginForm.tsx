@@ -7,7 +7,7 @@ import Button from '@/shared/ui/Button';
 import { Cancel, Eye, EyeOff } from '@/shared/ui/icons';
 import Input from '@/shared/ui/Input';
 
-import useEmailLoginFormViewModel from '../model/useEmailLoginFormViewModel';
+import { useEmailLoginFormViewModel } from '@/features/auth';
 
 const EmailLoginForm = () => {
   const { email, password, error, handleSubmit } = useEmailLoginFormViewModel();

@@ -4,9 +4,8 @@ import { Suspense, useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 
+import { ProductGridListSkeleton } from '@/entities/product-list';
 import { ContentPromotionSection } from '@/entities/promotion';
-
-import { GridProductListSkeleton } from '@/features/product-list';
 
 import CurationProductList from './CurationProductList';
 
@@ -56,7 +55,7 @@ const CurationContainer = ({ section }: CurationContainerProps) => {
       )}
 
       <div className="pc:pt-7 px-5 py-14">
-        <Suspense fallback={<GridProductListSkeleton length={12} />}>
+        <Suspense fallback={<ProductGridListSkeleton length={12} />}>
           <CurationProductList key={activeSection.id + activeTabId} section={activeSection} />
         </Suspense>
       </div>

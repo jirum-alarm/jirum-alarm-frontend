@@ -5,7 +5,7 @@ import { Suspense, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
-import { GridProductListSkeleton } from '@/entities/product-list';
+import { ProductGridListSkeleton } from '@/entities/product-list';
 
 import { useTabSwiper } from '@/widgets/trending';
 
@@ -60,7 +60,7 @@ export const LiveContainer = ({ initialTab }: Props) => {
                   <Suspense
                     fallback={
                       <div className="px-5">
-                        <GridProductListSkeleton length={20} />
+                        <ProductGridListSkeleton length={20} />
                       </div>
                     }
                   >
@@ -70,7 +70,7 @@ export const LiveContainer = ({ initialTab }: Props) => {
                   </Suspense>
                 ) : (
                   <div className="px-5">
-                    <GridProductListSkeleton length={20} />
+                    <ProductGridListSkeleton length={20} />
                   </div>
                 )}
               </SwiperSlide>

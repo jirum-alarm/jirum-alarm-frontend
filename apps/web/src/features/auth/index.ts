@@ -4,4 +4,5 @@ export { useNaverLogin } from './lib/use-naver-login';
 export * from './ui/login';
 export * from './ui/signup';
 
-export * from './model/signup/types';
+export * from './model/login';
+export * from './model/signup';

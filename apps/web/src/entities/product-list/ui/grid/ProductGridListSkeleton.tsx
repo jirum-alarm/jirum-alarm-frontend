@@ -1,6 +1,6 @@
 import ProductImageCardSkeleton from '../skeleton/ProductImageCardSkeleton';
 
-const GridProductListSkeleton = ({ length = 12 }: { length?: number }) => {
+const ProductGridListSkeleton = ({ length = 12 }: { length?: number }) => {
   return (
     <div className="pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
       {Array.from({ length }).map((_, i) => (
@@ -10,4 +10,4 @@ const GridProductListSkeleton = ({ length = 12 }: { length?: number }) => {
   );
 };
 
-export default GridProductListSkeleton;
+export default ProductGridListSkeleton;

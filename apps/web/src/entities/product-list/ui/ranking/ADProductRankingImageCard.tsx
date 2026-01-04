@@ -1,10 +1,9 @@
 'use client';
 
-import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 import Link from '@/shared/ui/Link';
 
-import { ProductCardType } from '@/entities/product-list';
+import { DisplayListPrice, ProductCardType, ProductThumbnail } from '@/entities/product-list';
 
 export default function ProductRankingImageCard({
   product,

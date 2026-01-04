@@ -1,6 +1,6 @@
 import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 
-import { ContentPromotionSection, PromotionSection } from './model/types';
+import { ContentPromotionSection, PromotionSection } from '../model/types';
 
 const sortByDisplayOrder = <T extends { displayOrder: number }>(items: T[]) =>
   [...items].sort((a, b) => a.displayOrder - b.displayOrder);

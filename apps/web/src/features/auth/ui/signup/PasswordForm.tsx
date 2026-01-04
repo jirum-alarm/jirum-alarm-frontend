@@ -1,13 +1,11 @@
 import { useState } from 'react';
 
-import { Registration } from '@/features/auth';
-
 import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/Button';
 import { Eye, EyeOff } from '@/shared/ui/icons';
 import Input from '@/shared/ui/Input';
 
-import { usePasswordFormViewModel } from '@/features/auth';
+import { type Registration, usePasswordFormViewModel } from '@/features/auth';
 
 const PasswordForm = ({
   registration,

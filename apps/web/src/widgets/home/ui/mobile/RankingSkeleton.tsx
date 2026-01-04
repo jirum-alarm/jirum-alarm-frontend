@@ -2,8 +2,7 @@ import Link from '@shared/ui/Link';
 
 import { PAGE } from '@/shared/config/page';
 
-import { ProductCardType } from '@/entities/product-list';
-import { DisplayListPrice, ProductThumbnail } from '@/entities/product-list';
+import { DisplayListPrice, ProductCardType, ProductThumbnail } from '@/entities/product-list';
 
 type RankingProduct = Omit<ProductCardType, 'postedAt'>;
 

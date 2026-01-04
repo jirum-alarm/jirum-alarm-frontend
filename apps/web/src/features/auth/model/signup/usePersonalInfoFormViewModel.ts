@@ -1,7 +1,7 @@
-import { Registration } from '@/features/auth';
-
 import { Gender } from '@/shared/api/gql/graphql';
 import { BIRTH_YEAR } from '@/shared/config/birthYear';
+
+import { Registration } from '@/features/auth';
 
 const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({
   text: String(year),

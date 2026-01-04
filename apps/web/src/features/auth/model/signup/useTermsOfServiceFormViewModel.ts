@@ -1,6 +1,4 @@
-import { Registration } from '@/features/auth';
-
-import { ConsentRequiredKey } from '@/features/auth';
+import { type ConsentRequiredKey, type Registration } from '@/features/auth';
 
 const useInput = ({
   registration,

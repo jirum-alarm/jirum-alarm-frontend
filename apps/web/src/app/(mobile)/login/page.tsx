@@ -16,8 +16,7 @@ import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import Link from '@/shared/ui/Link';
 
 import { AppDownloadBanner } from '@/features/app-download';
-import { useKakaoLogin } from '@/features/auth';
-import { useNaverLogin } from '@/features/auth';
+import { useKakaoLogin, useNaverLogin } from '@/features/auth';
 
 enum LoginType {
   KAKAO = 'KAKAO',

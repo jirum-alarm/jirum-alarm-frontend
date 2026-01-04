@@ -1,6 +1,6 @@
-import { Registration } from '@/features/auth';
-
 import { MAX_SELECTION_COUNT } from '@/shared/config/categories';
+
+import { Registration } from '@/features/auth';
 
 export const useCategoriesFormViewModel = ({
   registration,

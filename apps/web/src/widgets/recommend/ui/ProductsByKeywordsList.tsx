@@ -5,9 +5,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 import { useDevice } from '@/shared/hooks/useDevice';
 
-import { ProductListQueries } from '@/entities/product-list';
-
-import { CarouselProductList } from '@/entities/product-list';
+import { CarouselProductList, ProductListQueries } from '@/entities/product-list';
 
 interface ProductByKeywordsListProps {
   keyword: string;

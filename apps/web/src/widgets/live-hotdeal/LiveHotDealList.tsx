@@ -3,9 +3,9 @@
 import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
 import { CheckDeviceResult } from '@/shared/types/agent';
 
+import { ProductGridList, ProductGridListSkeleton } from '@/entities/product-list';
+
 import { AppDownloadCTA } from '@/features/banner';
-import { GridProductListSkeleton } from '@/entities/product-list';
-import { ProductGridList } from '@/entities/product-list';
 
 import useLiveHotDealsViewModel from './hooks/useLiveHotDealsViewModel';
 
@@ -24,7 +24,7 @@ const LiveHotDealList = ({ device }: { device: CheckDeviceResult }) => {
       </div>
       <ProductGridList products={products.slice(size)} />
       <div className="flex w-full items-center justify-center" ref={loadingCallbackRef}>
-        {isFetchingNextPage && <GridProductListSkeleton length={size} />}
+        {isFetchingNextPage && <ProductGridListSkeleton length={size} />}
       </div>
     </>
   );

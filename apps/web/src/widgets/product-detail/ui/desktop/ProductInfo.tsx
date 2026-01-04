@@ -14,7 +14,7 @@ import ShareButton from '@/shared/ui/ShareButton';
 import { ProductQueries } from '@/entities/product';
 
 import { LikeButton, RecommendButton } from '@/features/product-actions';
-import { ViewerCount } from '@/features/product-detail';
+import { DesktopViewerCount } from '@/features/product-detail';
 
 export default function ProductInfo({
   productId,
@@ -70,7 +70,7 @@ export default function ProductInfo({
             </div>
           </div>
         </div>
-        {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
+        {product.viewCount >= 10 && <DesktopViewerCount count={product.viewCount} />}
         <div className="my-6 space-y-2">
           <div className="flex text-sm font-medium">
             <span className="inline-block w-[110px] text-gray-400">쇼핑몰</span>

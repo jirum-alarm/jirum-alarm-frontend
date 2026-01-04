@@ -19,8 +19,8 @@ import {
   Nickname,
   Password,
   Personal,
-  TermsOfService,
   type Registration,
+  TermsOfService,
 } from '@/features/auth';
 
 import { setAccessToken, setRefreshToken } from '../../actions/token';

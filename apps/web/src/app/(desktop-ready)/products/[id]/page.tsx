@@ -11,8 +11,7 @@ import { defaultMetadata } from '@/shared/config/metadata';
 
 import { ProductPrefetch } from '@/features/product-detail';
 
-import { DesktopProductDetailPage } from '@/widgets/product-detail';
-import { MobileProductDetailPage } from '@/widgets/product-detail';
+import { DesktopProductDetailPage, MobileProductDetailPage } from '@/widgets/product-detail';
 
 function parseNumericPrice(rawPrice?: string | null) {
   if (!rawPrice) {

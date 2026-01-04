@@ -1,10 +1,11 @@
-import { ProductCardType } from '@/entities/product-list';
+import {
+  CarouselProductList,
+  ListProductList,
+  PaginatedProductGridList,
+  ProductCardType,
+  ProductGridList,
+} from '@/entities/product-list';
 import { ContentPromotionSection } from '@/entities/promotion';
-
-import { CarouselProductList } from '@/entities/product-list';
-import { ProductGridList } from '@/entities/product-list';
-import { PaginatedProductGridList } from '@/entities/product-list';
-import { ListProductList } from '@/entities/product-list';
 
 type DynamicProductListViewProps = {
   section: ContentPromotionSection;

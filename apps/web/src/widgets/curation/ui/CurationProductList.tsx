@@ -2,9 +2,8 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { ProductGridList } from '@/entities/product-list';
 import { ContentPromotionSection, getPromotionQueryOptions } from '@/entities/promotion';
-
-import { GridProductList } from '@/features/product-list';
 
 interface CurationProductListProps {
   section: ContentPromotionSection;
@@ -45,7 +44,7 @@ const CurationProductList = ({ section }: CurationProductListProps) => {
     return <div className="py-10 text-center text-gray-500">상품이 없습니다.</div>;
   }
 
-  return <GridProductList products={products} />;
+  return <ProductGridList products={products} />;
 };
 
 export default CurationProductList;

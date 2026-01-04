@@ -1,10 +1,8 @@
-import { Registration } from '@/features/auth';
-
 import Button from '@/shared/ui/Button';
 import { Cancel } from '@/shared/ui/icons';
 import Input from '@/shared/ui/Input';
 
-import { useNicknameFormViewModel } from '@/features/auth';
+import { Registration, useNicknameFormViewModel } from '@/features/auth';
 
 const NickNameForm = ({
   registration,

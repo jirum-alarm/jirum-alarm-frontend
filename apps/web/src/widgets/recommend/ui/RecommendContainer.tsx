@@ -2,10 +2,9 @@
 
 import { Suspense } from 'react';
 
-import { GridProductListSkeleton } from '@/entities/product-list';
+import { ProductGridListSkeleton } from '@/entities/product-list';
 
-import { RecommendedProductTabs } from '@/widgets/recommend';
-import { useRecommendedKeyword } from '@/widgets/recommend';
+import { RecommendedProductTabs, useRecommendedKeyword } from '@/widgets/recommend';
 
 import RecommendProductList from './RecommendProductList';
 
@@ -28,7 +27,7 @@ const RecommendContainer = ({ isMobile }: { isMobile: boolean }) => {
         />
       </div>
       <div className="pc:pt-7 px-5 pt-14">
-        <Suspense fallback={<GridProductListSkeleton length={size} />}>
+        <Suspense fallback={<ProductGridListSkeleton length={size} />}>
           <RecommendProductList keyword={recommendedKeyword} limit={size} />
         </Suspense>
       </div>

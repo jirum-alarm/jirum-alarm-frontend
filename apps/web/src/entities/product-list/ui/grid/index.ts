@@ -1,2 +1,2 @@
-export { default as GridProductListSkeleton } from './GridProductListSkeleton';
-export { default as GridProductList } from './GridProductList';
+export { default as ProductGridListSkeleton } from './ProductGridListSkeleton';
+export { default as GridProductList } from './ProductGridList';

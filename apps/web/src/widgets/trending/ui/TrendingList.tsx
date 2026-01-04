@@ -3,8 +3,7 @@
 import { memo, useEffect, useRef } from 'react';
 import { useSwiper } from 'swiper/react';
 
-import { CarouselProductsSection } from '@/entities/product-list';
-import { GridProductList } from '@/entities/product-list';
+import { CarouselProductsSection, ProductGridList } from '@/entities/product-list';
 
 import { useTrendingViewModel } from '@/widgets/trending';
 
@@ -32,7 +31,7 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
   return (
     <div ref={ref} className="pc:space-y-10 space-y-8">
       <div className="px-5">
-        <GridProductList products={products?.slice(0, SIZE) ?? []} rankFrom={1} />
+        <ProductGridList products={products?.slice(0, SIZE) ?? []} rankFrom={1} />
       </div>
       {liveProducts && (
         <CarouselProductsSection
@@ -43,7 +42,7 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
         />
       )}
       <div className="px-5">
-        <GridProductList products={products?.slice(SIZE) ?? []} rankFrom={SIZE + 1} />
+        <ProductGridList products={products?.slice(SIZE) ?? []} rankFrom={SIZE + 1} />
       </div>
 
       {hotDeals && (

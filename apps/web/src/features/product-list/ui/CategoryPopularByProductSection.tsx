@@ -4,7 +4,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { ProductQueries } from '@/entities/product';
 
-import CategoryPopularSection from './CategoryPopularSection';
+import CategoryPopularSection from '@/features/product-list/ui/CategoryPopularSection';
 
 type Props = {
   productId: number;

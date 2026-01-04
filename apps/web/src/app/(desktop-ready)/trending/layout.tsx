@@ -5,8 +5,7 @@ import { checkDevice } from '@/app/actions/agent';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 import { Footer } from '@/widgets/layout';
-import { PageTabNavigation } from '@/widgets/trending';
-import { TrendingPageHeader } from '@/widgets/trending';
+import { PageTabNavigation, TrendingPageHeader } from '@/widgets/trending';
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const { isMobile } = await checkDevice();
