@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
@@ -14,6 +13,7 @@ import SvgEmail from '@/shared/ui/icons/login/Email';
 import SvgKakao from '@/shared/ui/icons/login/Kakao';
 import SvgNaver from '@/shared/ui/icons/login/Naver';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
+import Link from '@/shared/ui/Link';
 
 import AppDownloadBanner from '@/features/app-download/ui/AppDownloadBanner';
 import { useKakaoLogin } from '@/features/auth/lib/use-kakao-login';
@@ -101,7 +101,7 @@ const Login = () => {
 
   return (
     <BasicLayout hasBackButton fullScreen={true}>
-      <div className="flex h-full flex-col justify-center px-8">
+      <div className="flex h-full flex-col px-8 pt-[10px] pb-[90px]">
         <div className="flex flex-col items-center text-center">
           {/* Character Icon */}
           <div className="mb-3">

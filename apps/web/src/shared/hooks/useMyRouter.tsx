@@ -24,15 +24,16 @@ export default function useMyRouter(): MyRouter {
 
   const push = useCallback(
     (href: string, options?: NavigateOptions) => {
-      // if (isJirumAlarmApp) {
-      //   WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
-      //     data: {
-      //       url: href,
-      //     },
-      //   });
-      // } else {
-      router.push(href, options);
-      // }
+      if (isJirumAlarmApp) {
+        WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
+          data: {
+            url: href,
+            type: 'push',
+          },
+        });
+      } else {
+        router.push(href, options);
+      }
     },
     [
       router,
@@ -42,25 +43,26 @@ export default function useMyRouter(): MyRouter {
 
   const replace = useCallback(
     (href: string, options?: NavigateOptions) => {
-      // if (isJirumAlarmApp) {
-      //   WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
-      //     data: {
-      //       url: href,
-      //     },
-      //   });
-      // } else {
-      router.replace(href, options);
-      // }
+      if (isJirumAlarmApp) {
+        WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
+          data: {
+            url: href,
+            type: 'replace',
+          },
+        });
+      } else {
+        router.replace(href, options);
+      }
     },
     [router, isJirumAlarmApp],
   );
 
   const back = useCallback(() => {
-    // if (isJirumAlarmApp) {
-    //   WebViewBridge.sendMessage(WebViewEventType.PRESS_BACKBUTTON, null);
-    // } else {
-    router.back();
-    // }
+    if (isJirumAlarmApp) {
+      WebViewBridge.sendMessage(WebViewEventType.PRESS_BACKBUTTON, null);
+    } else {
+      router.back();
+    }
   }, [router, isJirumAlarmApp]);
 
   return useMemo(

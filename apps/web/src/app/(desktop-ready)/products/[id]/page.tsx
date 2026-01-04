@@ -83,6 +83,45 @@ function generateDescription(
     : `${product.title} | 지름알림에서 제공하는 초특가 핫딜 상품!`;
 }
 
+// Product 구조화 데이터 생성 함수
+function generateProductJsonLd(
+  product: Awaited<ReturnType<typeof ProductService.getProductInfo>>,
+  productGuides?: { productGuides: Array<{ title: string; content: string }> },
+) {
+  if (!product) return null;
+
+  const categoryName = resolveCategoryName(product);
+  const priceValue = parseNumericPrice(product.price);
+  const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
+  const description = productGuides
+    ? generateDescription(productGuides, product, categoryName)
+    : product.title;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    image: [image],
+    description,
+    brand: {
+      '@type': 'Brand',
+      name: product.provider?.nameKr || '지름알림',
+    },
+    category: categoryName,
+    offers: {
+      '@type': 'Offer',
+      price: priceValue,
+      priceCurrency: 'KRW',
+      availability: 'https://schema.org/InStock',
+      url: `${METADATA_SERVICE_URL}/products/${product.id}`,
+      seller: {
+        '@type': 'Organization',
+        name: product.mallName || '지름알림',
+      },
+    },
+  };
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -182,7 +221,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   const token = await getAccessToken();
   const isUserLogin = !!token;
 
-  await collectProductAction(+id).catch();
+  collectProductAction(+id).catch();
 
   const { isMobile } = await checkDevice();
 
@@ -193,9 +232,23 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
     return <DesktopProductDetailPage productId={+id} isUserLogin={isUserLogin} />;
   };
 
+  /* JSON-LD 생성을 위한 상품 정보 조회 */
+  const product = await ProductService.getProductInfo({ id: +id });
+  const productGuides = product
+    ? await ProductService.getProductGuides({ productId: +product.id })
+    : null;
+
+  const jsonLd = generateProductJsonLd(product, productGuides || undefined);
+
   return (
-    <ProductPrefetch productId={+id}>
-      {!isMobile ? renderDesktop() : renderMobile()}
-    </ProductPrefetch>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ProductPrefetch productId={+id}>
+        {!isMobile ? renderDesktop() : renderMobile()}
+      </ProductPrefetch>
+    </>
   );
 }

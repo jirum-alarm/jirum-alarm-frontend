@@ -1,7 +1,6 @@
 'use client';
 
-import { Cancel, Home, Search } from '@/shared/ui/icons';
-import Link from '@/shared/ui/Link';
+import { Cancel, Search } from '@/shared/ui/icons';
 
 import { useSearchInputViewModel } from '../hooks/useSearchInputViewModel';
 
@@ -31,12 +30,12 @@ export default SearchInput;
 
 function ResetButton({ handleReset }: { handleReset: () => void }) {
   return (
-    <Link
-      className="grid h-full w-14 cursor-pointer place-items-center text-gray-300"
-      href="/search"
+    <button
+      className="-m-2 grid h-full w-14 cursor-pointer place-items-center p-2 text-gray-300"
+      type="reset"
       onClick={handleReset}
     >
       <Cancel />
-    </Link>
+    </button>
   );
 }

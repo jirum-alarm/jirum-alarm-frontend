@@ -15,7 +15,8 @@ export type PendingVerification = {
   id: string;
   productId: number;
   brandProduct?: string | null;
-  product?: { title: string } | null;
+  product?: { title: string; thumbnail?: string | null } | null;
+  danawaUrl?: string | null;
   verificationStatus?: ProductMappingVerificationStatus | null;
   verifiedBy?: number | null;
   verifiedAt?: string | null;

@@ -16,6 +16,7 @@ const PageTabNavigation = () => {
       <div className="flex">
         <Link
           href="/trending/live"
+          replace={true}
           className={cn(
             'relative flex-1 py-3 text-center text-base font-medium transition-colors',
             isLive ? 'text-gray-900' : 'text-gray-500',
@@ -26,6 +27,7 @@ const PageTabNavigation = () => {
         </Link>
         <Link
           href="/trending/ranking"
+          replace={true}
           className={cn(
             'relative flex-1 py-3 text-center text-base font-medium transition-colors',
             isRanking ? 'text-gray-900' : 'text-gray-500',

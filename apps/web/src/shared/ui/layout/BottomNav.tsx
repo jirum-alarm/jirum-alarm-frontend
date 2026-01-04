@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { createElement, useRef } from 'react';
 
 import { PAGE } from '@/shared/config/page';
+import { useDevice } from '@/shared/hooks/useDevice';
 import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
 import { cn } from '@/shared/lib/cn';
 import { Alert, AlertFill, Find, FindFill, Home, HomeFill, My, MyFill } from '@/shared/ui/icons';
@@ -120,7 +121,11 @@ const BottomNavComponent = () => {
 };
 
 export default function BottomNav() {
+  const {
+    device: { isJirumAlarmApp },
+  } = useDevice();
   const pathName = usePathname();
+  if (isJirumAlarmApp) return null;
   if (!BottomNavList.some((nav) => nav.isActive(pathName))) return null;
   return <BottomNavComponent />;
 }

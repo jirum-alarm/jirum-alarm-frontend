@@ -11,11 +11,13 @@ export default function ProductRankingImageCard({
   activeIndex,
   index,
   rank,
+  priority,
 }: {
   product: Omit<ProductCardType, 'postedAt'>;
   activeIndex: number;
   index: number;
   rank?: number;
+  priority?: boolean;
 }) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
@@ -39,6 +41,7 @@ export default function ProductRankingImageCard({
             height={252}
             sizes="252px"
             loading="eager"
+            priority={priority}
           />
         </div>
         <div className="pc:h-[110px] p-3 pb-0">

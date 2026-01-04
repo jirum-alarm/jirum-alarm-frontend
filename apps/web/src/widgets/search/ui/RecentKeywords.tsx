@@ -72,7 +72,7 @@ function Chip({
   const router = useMyRouter();
 
   const handleClick = () => {
-    router.push(`/search?keyword=${keyword}`);
+    router.replace(`/search?keyword=${keyword}`);
 
     // TODO: Need GTM Migration
     // mp?.track(EVENT.PRODUCT_SEARCH.NAME, {

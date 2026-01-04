@@ -15,7 +15,7 @@ const useRedirectIfNotLoggedIn = () => {
     if (!isLoggedIn) {
       if (device.isJirumAlarmApp) {
         WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
-          data: { url: PAGE.LOGIN },
+          data: { url: PAGE.LOGIN, type: 'push' },
         });
       } else {
         router.push(PAGE.LOGIN + '?rtnUrl=' + encodeURIComponent(WindowLocation.getCurrentUrl()));

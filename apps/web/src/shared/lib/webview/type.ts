@@ -12,7 +12,7 @@ export type WebViewEventPayloads = {
   };
   [WebViewEventType.TOKEN_REMOVE]: null;
   [WebViewEventType.PRESS_BACKBUTTON]: null;
-  [WebViewEventType.ROUTE_CHANGED]: { data: { url: string } };
+  [WebViewEventType.ROUTE_CHANGED]: { data: { url: string; type: 'push' | 'replace' } };
 };
 export interface WebViewEvent<T extends WebViewEventType> {
   type: T;

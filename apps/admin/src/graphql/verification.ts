@@ -6,19 +6,24 @@ export const QueryPendingVerifications = gql`
     $searchAfter: [String!]
     $prioritizeOld: Boolean
     $orderBy: OrderOptionType
+    $brandProductId: Int
   ) {
     pendingVerifications(
       limit: $limit
       searchAfter: $searchAfter
       prioritizeOld: $prioritizeOld
       orderBy: $orderBy
+      brandProductId: $brandProductId
     ) {
       id
       productId
       brandProduct
       product {
         title
+        thumbnail
       }
+      danawaUrl
+
       verificationStatus
       verifiedBy
       verifiedAt
@@ -66,7 +71,10 @@ export const QueryVerificationHistory = gql`
       brandProduct
       product {
         title
+        thumbnail
       }
+      danawaUrl
+
       verificationStatus
       verifiedBy
       verifiedAt
@@ -110,5 +118,21 @@ export const MutationRemoveProductMapping = gql`
 export const MutationCancelVerification = gql`
   mutation MutationCancelVerification($productMappingId: Int!, $reason: String) {
     cancelVerification(productMappingId: $productMappingId, reason: $reason)
+  }
+`;
+
+export const QueryPendingVerificationsTotalCount = gql`
+  query QueryPendingVerificationsTotalCount(
+    $brandProductId: Int
+    $matchStatus: [ProductMappingMatchStatus!]
+    $target: ProductMappingTarget
+    $verificationStatus: [ProductMappingVerificationStatus!]
+  ) {
+    pendingVerificationsTotalCount(
+      brandProductId: $brandProductId
+      matchStatus: $matchStatus
+      target: $target
+      verificationStatus: $verificationStatus
+    )
   }
 `;

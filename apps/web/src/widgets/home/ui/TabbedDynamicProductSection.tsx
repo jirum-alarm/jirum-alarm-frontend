@@ -1,13 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { Suspense, useMemo, useState } from 'react';
 
 import { ContentPromotionSection, PromotionTab } from '@entities/promotion';
 
+import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
-import ProductGridList from '@/features/product-list/grid/GridProductList';
 import GridProductListSkeleton from '@/features/product-list/grid/GridProductListSkeleton';
 
 import DynamicProductList from './DynamicProductList';

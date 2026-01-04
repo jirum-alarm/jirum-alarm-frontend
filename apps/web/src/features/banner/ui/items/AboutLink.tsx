@@ -1,7 +1,7 @@
 import { LANDING_URL } from '@/shared/config/env';
 
+import landing from '../../images/landing.png';
 import BannerItem from '../BannerItem';
-import landing from '../images/landing.png';
 
 const props = {
   href: LANDING_URL,
@@ -17,7 +17,7 @@ const props = {
   className: 'bg-[#193E21] border-[#34673C]',
 };
 
-const AboutLink = ({ isMobile }: { isMobile: boolean }) => {
+const AboutLink = ({ isMobile, priority }: { isMobile: boolean; priority?: boolean }) => {
   const handleClick = () => {
     // TODO: Need GTM Migration
     // mp?.track(EVENT.OPEN_KAKAO_TALK.NAME, {
@@ -25,7 +25,7 @@ const AboutLink = ({ isMobile }: { isMobile: boolean }) => {
     // });
   };
 
-  return <BannerItem {...props} isMobile={isMobile} />;
+  return <BannerItem {...props} isMobile={isMobile} priority={priority} />;
 };
 
 export default AboutLink;
