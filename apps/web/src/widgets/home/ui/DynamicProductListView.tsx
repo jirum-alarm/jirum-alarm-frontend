@@ -1,5 +1,5 @@
-import { ProductCardType } from '@entities/product';
-import { ContentPromotionSection } from '@entities/promotion';
+import { ProductCardType } from '@/entities/product';
+import { ContentPromotionSection } from '@/entities/promotion';
 
 import { CarouselProductList } from '@/features/product-list/carousel';
 import ProductGridList from '@/features/product-list/grid/GridProductList';

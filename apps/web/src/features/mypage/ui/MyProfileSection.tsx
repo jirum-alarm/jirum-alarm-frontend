@@ -2,11 +2,11 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { AuthQueries } from '@entities/auth';
-
 import { PAGE } from '@/shared/config/page';
 import { ArrowRight } from '@/shared/ui/icons';
 import Link from '@/shared/ui/Link';
+
+import { AuthQueries } from '@/entities/auth';
 
 const MyProfileSection = () => {
   const {

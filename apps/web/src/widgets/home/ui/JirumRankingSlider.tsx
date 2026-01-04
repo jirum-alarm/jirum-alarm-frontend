@@ -10,10 +10,6 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
-import { RankingPreview as DesktopRankingPreview } from '@/app/(desktop-ready)/(home)/desktop/RankingSkeleton';
-import { RankingPreview as MobileRankingPreview } from '@/app/(desktop-ready)/(home)/mobile/RankingSkeleton';
-import { ProductQueries } from '@entities/product';
-
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { Advertisement } from '@/shared/config/advertisement';
 import { useIsHydrated } from '@/shared/hooks/useIsHydrated';
@@ -23,8 +19,13 @@ import { getVisibleSlides } from '@/shared/lib/utils/swiper';
 import { ArrowLeft } from '@/shared/ui/icons';
 import SliderDots from '@/shared/ui/SliderDots';
 
+import { ProductQueries } from '@/entities/product';
+
 import ADProductRankingImageCard from '@/features/product-list/ranking/ADProductRankingImageCard';
 import ProductRankingImageCard from '@/features/product-list/ranking/ProductRankingImageCard';
+
+import { RankingPreview as DesktopRankingPreview } from './desktop/RankingSkeleton';
+import { RankingPreview as MobileRankingPreview } from './mobile/RankingSkeleton';
 
 const Swiper = dynamic(() => import('swiper/react').then((mod) => mod.Swiper), {
   ssr: false,

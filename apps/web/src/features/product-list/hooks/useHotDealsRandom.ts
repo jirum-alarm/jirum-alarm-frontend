@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { ProductQueries } from '@entities/product';
+import { ProductQueries } from '@/entities/product';
 
 const HOT_DEAL_COUNT_RANDOM = 20;
 const HOT_DEAL_LIMIT_RANDOM = 10;

@@ -2,9 +2,9 @@ import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { ProductQueries } from '@entities/product';
-
 import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
+
+import { ProductQueries } from '@/entities/product';
 
 import { GridProductList, GridProductListSkeleton } from '@/features/product-list/grid';
 

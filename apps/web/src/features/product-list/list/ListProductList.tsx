@@ -1,8 +1,8 @@
 'use client';
 
-import { ListProductCard, type ProductCardType } from '@entities/product';
-
 import { cn } from '@/shared/lib/cn';
+
+import { ListProductCard, type ProductCardType } from '@/entities/product';
 
 type ListProductListProps = {
   products: ProductCardType[];

@@ -3,9 +3,9 @@
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
-import { WishlistQueries } from '@entities/wishlist';
-
 import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
+
+import { WishlistQueries } from '@/entities/wishlist';
 
 import { GridProductListSkeleton } from '@/features/product-list';
 

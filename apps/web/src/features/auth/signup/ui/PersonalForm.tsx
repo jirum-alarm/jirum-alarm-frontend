@@ -1,7 +1,8 @@
 import { Registration } from '@/app/(mobile)/signup/page';
-import { BirthYearSelect, GenderRadioGroup } from '@entities/user';
 
 import Button from '@/shared/ui/Button';
+
+import { BirthYearSelect, GenderRadioGroup } from '@/entities/user';
 
 import usePersonalInfoFormViewModel from '@/features/auth/signup/model/usePersonalInfoFormViewModel';
 

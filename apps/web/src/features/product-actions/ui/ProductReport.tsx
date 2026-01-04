@@ -4,13 +4,13 @@ import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-q
 import { useState } from 'react';
 import { Drawer } from 'vaul';
 
-import { ProductQueries } from '@entities/product';
-
 import { ProductService } from '@/shared/api/product';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/Button';
 import { useToast } from '@/shared/ui/Toast';
+
+import { ProductQueries } from '@/entities/product';
 
 const ProductReport = ({ productId }: { productId: number }) => {
   const { data: product } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));

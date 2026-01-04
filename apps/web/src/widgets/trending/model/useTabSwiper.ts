@@ -5,7 +5,7 @@ import { useQueryState } from 'nuqs';
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SwiperClass } from 'swiper/react';
 
-import { CategoryQueries } from '@entities/category';
+import { CategoryQueries } from '@/entities/category';
 
 export type CategoryItem = {
   id: number;

@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { ContentPromotionSection, getPromotionQueryOptions } from '@entities/promotion';
+import { ContentPromotionSection, getPromotionQueryOptions } from '@/entities/promotion';
 
 import { GridProductList } from '@/features/product-list';
 

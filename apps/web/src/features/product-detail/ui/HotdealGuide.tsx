@@ -3,13 +3,13 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Fragment, useRef, useState } from 'react';
 
-import { ProductQueries } from '@entities/product';
-
 import { ProductGuidesQuery } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/Button';
 import HotdealGuideItemCheckIcon from '@/shared/ui/icons/HotdealGuideItemCheckIcon';
 import SectionHeader from '@/shared/ui/SectionHeader';
+
+import { ProductQueries } from '@/entities/product';
 
 export default function HotdealGuide({
   productId,

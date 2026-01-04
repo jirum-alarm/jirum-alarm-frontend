@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 
-import { ProductDetailImage } from '@entities/product';
-
 import { cn } from '@/shared/lib/cn';
+
+import { ProductDetailImage } from '@/entities/product';
 
 import { CommentSection } from '@/features/product-comment';
 import {

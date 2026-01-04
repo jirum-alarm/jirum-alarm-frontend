@@ -3,12 +3,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
-import { ProductQueries, ReactionChart } from '@entities/product';
-
 import { getFromNow } from '@/shared/lib/utils/date';
 import { Info } from '@/shared/ui/icons';
 import SectionHeader from '@/shared/ui/SectionHeader';
 import Tooltip from '@/shared/ui/Tooltip';
+
+import { ProductQueries, ReactionChart } from '@/entities/product';
 
 import { ProductReport } from '@/features/product-actions';
 import {

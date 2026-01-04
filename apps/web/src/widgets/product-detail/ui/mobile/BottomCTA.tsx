@@ -2,10 +2,10 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { ProductQueries } from '@entities/product';
-
 import Button from '@/shared/ui/Button';
 import TopButton from '@/shared/ui/TopButton';
+
+import { ProductQueries } from '@/entities/product';
 
 import { LikeButton } from '@/features/product-actions';
 

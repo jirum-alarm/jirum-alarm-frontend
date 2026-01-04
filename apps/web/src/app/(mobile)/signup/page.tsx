@@ -4,14 +4,14 @@ import { useMutation } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
 import { Suspense, useEffect, useState } from 'react';
 
-import { type ICategoryForm } from '@entities/category';
-
 import { AuthService } from '@/shared/api/auth/auth.service';
 import { Gender } from '@/shared/api/gql/graphql';
 import { CATEGORIES } from '@/shared/config/categories';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import { useToast } from '@/shared/ui/Toast';
+
+import { type ICategoryForm } from '@/entities/category';
 
 import Categories from '@/features/auth/signup/ui/Categories';
 import Email from '@/features/auth/signup/ui/Email';

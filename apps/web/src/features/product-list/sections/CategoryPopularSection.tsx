@@ -2,10 +2,10 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { ProductQueries } from '@entities/product';
-
 import { ThumbnailType } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
+
+import { ProductQueries } from '@/entities/product';
 
 import { CarouselProductsSection } from '../carousel';
 

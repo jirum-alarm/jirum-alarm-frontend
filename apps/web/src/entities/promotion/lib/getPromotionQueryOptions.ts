@@ -1,10 +1,10 @@
-import { ProductQueries } from '@entities/product/product.queries';
-
 import {
   QueryHotDealRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQueryVariables,
 } from '@/shared/api/gql/graphql';
+
+import { ProductQueries } from '@/entities/product/product.queries';
 
 import { ContentPromotionSection, PromotionQueryName } from '../model/types';
 

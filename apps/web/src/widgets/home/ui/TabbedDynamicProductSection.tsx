@@ -2,10 +2,10 @@
 
 import { Suspense, useMemo, useState } from 'react';
 
-import { ContentPromotionSection, PromotionTab } from '@entities/promotion';
-
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
+
+import { ContentPromotionSection, PromotionTab } from '@/entities/promotion';
 
 import GridProductListSkeleton from '@/features/product-list/grid/GridProductListSkeleton';
 

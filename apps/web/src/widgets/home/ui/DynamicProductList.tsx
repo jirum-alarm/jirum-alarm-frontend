@@ -1,6 +1,6 @@
 'use client';
 
-import { ContentPromotionSection } from '@entities/promotion';
+import { ContentPromotionSection } from '@/entities/promotion';
 
 import { usePromotionProducts } from '../model/usePromotionProducts';
 

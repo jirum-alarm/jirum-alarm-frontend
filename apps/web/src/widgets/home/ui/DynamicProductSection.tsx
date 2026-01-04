@@ -2,9 +2,10 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
-import { ContentPromotionSection, createPromotionSectionQuery } from '@entities/promotion';
 
 import SectionHeader from '@/shared/ui/SectionHeader';
+
+import { ContentPromotionSection, createPromotionSectionQuery } from '@/entities/promotion';
 
 import GridProductListSkeleton from '@/features/product-list/grid/GridProductListSkeleton';
 

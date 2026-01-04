@@ -13,7 +13,7 @@ import {
   TComment,
   TEditStatus,
   UPDATE_EVENT,
-} from '@entities/comment';
+} from '@/entities/comment';
 
 export const editingCommentAtom = atom<{
   comment: TComment;

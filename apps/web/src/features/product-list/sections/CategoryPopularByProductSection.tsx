@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { ProductQueries } from '@entities/product';
+import { ProductQueries } from '@/entities/product';
 
 import CategoryPopularSection from './CategoryPopularSection';
 

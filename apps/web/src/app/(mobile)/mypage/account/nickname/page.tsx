@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import NicknameForm from './components/NickNameForm';
+import { NickNameForm } from '@/features/mypage';
 
 const NickNamePage = () => {
   return (
@@ -14,7 +14,7 @@ const NickNamePage = () => {
           입력해주세요.
         </p>
         <Suspense>
-          <NicknameForm />
+          <NickNameForm />
         </Suspense>
       </div>
     </BasicLayout>

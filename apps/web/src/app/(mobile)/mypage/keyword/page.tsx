@@ -2,8 +2,7 @@ import { Suspense } from 'react';
 
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import KeywordInput from './components/KeywordInput';
-import KeywordList from './components/KeywordList';
+import { KeywordInput, KeywordList } from '@/features/mypage';
 
 const KeywordPage = () => {
   return (

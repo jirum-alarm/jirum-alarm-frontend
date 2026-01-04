@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 
 import SectionHeader from '@/components/SectionHeaderHOC';
-import { ProductQueries } from '@entities/product/product.queries';
+import { ProductQueries } from '@/entities/product/product.queries';
 import HorizontalProductCarousel from '@/features/carousel/HorizontalProductCarousel';
 import { ProductImageCard } from '@/features/products/components/ProductImageCard';
 

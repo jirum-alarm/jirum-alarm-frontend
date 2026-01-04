@@ -4,13 +4,13 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion, useAnimation } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
-import { ProductQueries } from '@entities/product';
-
 import { useIsHydrated } from '@/shared/hooks/useIsHydrated';
 import { cn } from '@/shared/lib/cn';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 import { Info } from '@/shared/ui/icons';
 import Tooltip from '@/shared/ui/Tooltip';
+
+import { ProductQueries } from '@/entities/product';
 
 const HotdealScore = ({ productId }: { productId: number }) => {
   const isHydrated = useIsHydrated();

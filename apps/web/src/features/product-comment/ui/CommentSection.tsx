@@ -3,12 +3,12 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
-import { CommentQueries, defaultCommentsVariables } from '@entities/comment';
-
 import { detailCommentPage } from '@/shared/lib/utils/navigation';
 import Button from '@/shared/ui/Button';
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
+
+import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 
 import CommentInput from './CommentInput';
 import CommentList from './CommentList';

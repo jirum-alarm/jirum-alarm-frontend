@@ -1,12 +1,12 @@
 import { UseSuspenseQueryOptions } from '@tanstack/react-query';
 
-import { ProductCardType } from '@entities/product';
-
 import {
   QueryHotDealRankingProductsQuery,
   QueryProductsByKeywordQuery,
   QueryProductsQuery,
 } from '@/shared/api/gql/graphql';
+
+import { ProductCardType } from '@/entities/product';
 
 import { ContentPromotionSection, PromotionQueryName } from '../model/types';
 

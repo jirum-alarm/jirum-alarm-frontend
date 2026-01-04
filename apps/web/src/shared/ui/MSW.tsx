@@ -14,7 +14,7 @@ export default function MSW() {
 
     if (typeof window !== 'undefined' && !enableMocking) {
       (async () => {
-        const { worker } = await import('@/mocks/browser');
+        const { worker } = await import('@/shared/mocks/browser');
         await worker.start();
         console.log('[MSW] MSWInit success');
         setEnableMocking(true);

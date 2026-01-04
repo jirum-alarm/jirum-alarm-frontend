@@ -2,7 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { NotificationQueries } from '@entities/notification/notification.queries';
+import { NotificationQueries } from '@/entities/notification/notification.queries';
 
 const limit = 20;
 

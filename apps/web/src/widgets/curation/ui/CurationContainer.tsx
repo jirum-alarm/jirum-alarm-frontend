@@ -2,9 +2,9 @@
 
 import { Suspense, useState } from 'react';
 
-import { ContentPromotionSection } from '@entities/promotion';
-
 import { cn } from '@/shared/lib/cn';
+
+import { ContentPromotionSection } from '@/entities/promotion';
 
 import { GridProductListSkeleton } from '@/features/product-list';
 

@@ -7,8 +7,7 @@ import useMyRouter from '@/shared/hooks/useMyRouter';
 import BackButton from '@/shared/ui/layout/BackButton';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import ChangePassword from './change/components/ChangePassword';
-import CurrentPassword from './current/components/CurrentPassword';
+import { ChangePassword, CurrentPassword } from '@/features/mypage';
 
 const QUERY_PARAM_PREFIX = 'step';
 const INITIAL_STEP = 'current';
@@ -42,7 +41,6 @@ const Password = () => {
 
   return (
     <BasicLayout
-      // title="비밀번호 변경"
       fullScreen={true}
       header={
         <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center justify-between border-b border-gray-100 bg-white px-5">

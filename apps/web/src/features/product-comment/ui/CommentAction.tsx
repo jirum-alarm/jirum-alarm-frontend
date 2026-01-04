@@ -2,6 +2,12 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { UserLikeTarget } from '@/shared/api/gql/graphql';
+import { LikeService } from '@/shared/api/like/like.service';
+import { cn } from '@/shared/lib/cn';
+import { BubbleChat, ThumbsupFill } from '@/shared/ui/icons';
+import { useToast } from '@/shared/ui/Toast';
+
 import {
   CANCEL_EVENT,
   CommentQueries,
@@ -9,13 +15,7 @@ import {
   REPLY_EVENT,
   TComment,
   TEditStatus,
-} from '@entities/comment';
-
-import { UserLikeTarget } from '@/shared/api/gql/graphql';
-import { LikeService } from '@/shared/api/like/like.service';
-import { cn } from '@/shared/lib/cn';
-import { BubbleChat, ThumbsupFill } from '@/shared/ui/icons';
-import { useToast } from '@/shared/ui/Toast';
+} from '@/entities/comment';
 
 type CommentActionProps = {
   comment: TComment;

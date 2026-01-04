@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { AuthQueries } from '@entities/auth';
-
 import { AuthService } from '@/shared/api/auth';
 import useGoBack from '@/shared/hooks/useGoBack';
 import { useToast } from '@/shared/ui/Toast';
+
+import { AuthQueries } from '@/entities/auth';
 
 export const useUpdateNickname = () => {
   const { toast } = useToast();

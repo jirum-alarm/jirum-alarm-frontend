@@ -1,13 +1,14 @@
-import DesktopHeroSection from '@/app/(desktop-ready)/(home)/desktop/HeroSection';
-import MobileBackgroundHeader from '@/app/(desktop-ready)/(home)/mobile/BackgroundHeader';
-import MobileHomeHeader from '@/app/(desktop-ready)/(home)/mobile/HomeHeader';
-import MobileJirumRankingContainer from '@/app/(desktop-ready)/(home)/mobile/JirumRankingContainer';
 import { checkDevice } from '@/app/actions/agent';
-import { getPromotionSections } from '@entities/promotion';
+
+import { getPromotionSections } from '@/entities/promotion';
 
 import Footer from '@/widgets/layout/ui/desktop/Footer';
 
 import AdPersilBanner20251124 from './AdPersilBanner20251124';
+import DesktopHeroSection from './desktop/HeroSection';
+import MobileBackgroundHeader from './mobile/BackgroundHeader';
+import MobileHomeHeader from './mobile/HomeHeader';
+import MobileJirumRankingContainer from './mobile/JirumRankingContainer';
 import PromotionSectionList from './PromotionSectionList';
 
 async function HomeContainerV2() {

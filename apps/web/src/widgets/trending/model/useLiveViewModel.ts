@@ -1,9 +1,9 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
-import { ProductQueries } from '@entities/product';
-
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
+
+import { ProductQueries } from '@/entities/product';
 
 const LIVE_ITEMS_LIMIT = 20;
 

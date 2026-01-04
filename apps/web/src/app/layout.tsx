@@ -1,4 +1,4 @@
-import '@/style/globals.css';
+import '@/shared/style/globals.css';
 
 import { PublicEnvScript } from 'next-runtime-env';
 

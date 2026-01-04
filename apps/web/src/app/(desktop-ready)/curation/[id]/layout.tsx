@@ -2,10 +2,11 @@ import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
-import { getPromotionSectionById } from '@entities/promotion';
 
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import SectionHeader from '@/shared/ui/SectionHeader';
+
+import { getPromotionSectionById } from '@/entities/promotion';
 
 import CurationPageHeader from '@/widgets/curation/ui/CurationPageHeader';
 import Footer from '@/widgets/layout/ui/desktop/Footer';

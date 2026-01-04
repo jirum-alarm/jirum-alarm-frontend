@@ -3,9 +3,9 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 
-import { ProductQueries } from '@entities/product';
-
 import ApiErrorBoundary from '@/shared/ui/ApiErrorBoundary';
+
+import { ProductQueries } from '@/entities/product';
 
 import { CarouselProductListSkeleton } from '@/features/product-list/carousel';
 

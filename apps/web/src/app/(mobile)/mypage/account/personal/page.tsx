@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import PersonalInfoForm from './components/PersonalInfoForm';
+import { PersonalInfoForm } from '@/features/mypage';
 
 const PersonalPage = () => {
   return (

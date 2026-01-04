@@ -1,6 +1,6 @@
 'use client';
 
-import { NotificationItem } from '@entities/notification';
+import { NotificationItem } from '@/entities/notification';
 
 import { useNotificationsViewModel } from '../model/useNotificationsViewModel';
 

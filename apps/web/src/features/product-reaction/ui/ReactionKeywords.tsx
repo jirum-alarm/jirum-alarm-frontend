@@ -2,10 +2,10 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { ProductQueries } from '@entities/product';
-
 import { cn } from '@/shared/lib/cn';
 import { getFromNow } from '@/shared/lib/utils/date';
+
+import { ProductQueries } from '@/entities/product';
 
 function ReactionKeywords({ productId }: { productId: number }) {
   const {
