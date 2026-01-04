@@ -5,9 +5,9 @@ import { Suspense, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
-import GridProductListSkeleton from '@/features/product-list/grid/GridProductListSkeleton';
+import { GridProductListSkeleton } from '@/entities/product-list';
 
-import { useTabSwiper } from '@/widgets/trending/model/useTabSwiper';
+import { useTabSwiper } from '@/widgets/trending';
 
 import LiveList from '../LiveList';
 import TabBarV2 from '../TabbarV2';

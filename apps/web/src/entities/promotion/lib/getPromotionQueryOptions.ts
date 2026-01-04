@@ -4,7 +4,7 @@ import {
   QueryProductsQueryVariables,
 } from '@/shared/api/gql/graphql';
 
-import { ProductQueries } from '@/entities/product/product.queries';
+import { ProductListQueries } from '@/entities/product-list/api/product-list.queries';
 
 import { ContentPromotionSection, PromotionQueryName } from '../model/types';
 
@@ -15,9 +15,9 @@ type PromotionQueryVariablesMap = {
 };
 
 type PromotionQueryReturnMap = {
-  hotDealRankingProducts: ReturnType<typeof ProductQueries.hotDealRankingProducts>;
-  productsByKeyword: ReturnType<typeof ProductQueries.productsByKeywords>;
-  products: ReturnType<typeof ProductQueries.products>;
+  hotDealRankingProducts: ReturnType<typeof ProductListQueries.hotDealRankingProducts>;
+  productsByKeyword: ReturnType<typeof ProductListQueries.productsByKeywords>;
+  products: ReturnType<typeof ProductListQueries.products>;
 };
 
 const promotionQueryFactories: {
@@ -25,9 +25,9 @@ const promotionQueryFactories: {
     variables: PromotionQueryVariablesMap[K],
   ) => PromotionQueryReturnMap[K];
 } = {
-  hotDealRankingProducts: ProductQueries.hotDealRankingProducts,
-  productsByKeyword: ProductQueries.productsByKeywords,
-  products: ProductQueries.products,
+  hotDealRankingProducts: ProductListQueries.hotDealRankingProducts,
+  productsByKeyword: ProductListQueries.productsByKeywords,
+  products: ProductListQueries.products,
 };
 
 export const getPromotionQueryOptions = <K extends PromotionQueryName>(

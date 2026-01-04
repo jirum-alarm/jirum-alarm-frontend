@@ -4,7 +4,7 @@ import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { getDayBefore } from '@/shared/lib/utils/date';
 
 import { CategoryQueries, getCategoriesForUser } from '@/entities/category';
-import { ProductQueries } from '@/entities/product';
+import { ProductListQueries } from '@/entities/product-list';
 
 import { TrendingContainer } from '.';
 
@@ -32,7 +32,7 @@ const TrendingContainerServer = async ({ tab }: Props) => {
 
   if (categories.find((c) => c.id === tab)) {
     queryClient.prefetchQuery(
-      ProductQueries.products({
+      ProductListQueries.products({
         limit: TRENDING_ITEMS_LIMIT,
         orderBy: ProductOrderType.CommunityRanking,
         startDate: adjustStartDate(tab),

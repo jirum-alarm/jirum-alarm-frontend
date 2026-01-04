@@ -3,7 +3,7 @@ import { useSuspenseQueries } from '@tanstack/react-query';
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { getDayBefore } from '@/shared/lib/utils/date';
 
-import { ProductQueries } from '@/entities/product';
+import { ProductListQueries } from '@/entities/product-list';
 
 const TRENDING_ITEMS_LIMIT = 50;
 const HOT_DEAL_COUNT_RANDOM = 20;
@@ -22,7 +22,7 @@ const useTrendingViewModel = ({ categoryId }: { categoryId: number | null }) => 
 
   const [products, live, hotDeals] = useSuspenseQueries({
     queries: [
-      ProductQueries.products({
+      ProductListQueries.products({
         limit: TRENDING_ITEMS_LIMIT,
         orderBy: ProductOrderType.CommunityRanking,
         startDate: adjustStartDate(categoryId),
@@ -30,12 +30,12 @@ const useTrendingViewModel = ({ categoryId }: { categoryId: number | null }) => 
         orderOption: OrderOptionType.Desc,
         isEnd: false,
       }),
-      ProductQueries.products({
+      ProductListQueries.products({
         limit: 10,
         orderBy: ProductOrderType.PostedAt,
         categoryId: isHotCategory ? null : categoryId,
       }),
-      ProductQueries.hotdealProductsRandom({
+      ProductListQueries.hotdealProductsRandom({
         count: HOT_DEAL_COUNT_RANDOM,
         limit: HOT_DEAL_LIMIT_RANDOM,
       }),

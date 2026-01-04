@@ -2,7 +2,7 @@ import { checkDevice } from '@/app/actions/agent';
 
 import { getPromotionSections } from '@/entities/promotion';
 
-import Footer from '@/widgets/layout/ui/desktop/Footer';
+import { Footer } from '@/widgets/layout';
 
 import AdPersilBanner20251124 from './AdPersilBanner20251124';
 import DesktopHeroSection from './desktop/HeroSection';

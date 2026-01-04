@@ -8,7 +8,7 @@ import BackButton from '@/shared/ui/layout/BackButton';
 import Link from '@/shared/ui/Link';
 import LogoLink from '@/shared/ui/Logo/LogoLink';
 
-import ProductShareButton from '@/features/product-detail/ui/ProductShareButton';
+import { ProductShareButton } from '@/features/product-detail';
 
 export default function ProductDetailPageHeader({ productId }: { productId: number }) {
   const handleSearch = () => {

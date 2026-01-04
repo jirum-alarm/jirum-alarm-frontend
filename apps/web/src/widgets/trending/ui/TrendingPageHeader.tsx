@@ -3,7 +3,7 @@
 import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
 import { cn } from '@/shared/lib/cn';
 
-import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
+import { SearchLinkButton } from '@/features/search';
 
 import PageTabNavigation from './PageTabNavigation';
 

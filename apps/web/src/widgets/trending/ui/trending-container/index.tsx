@@ -5,10 +5,10 @@ import { Suspense, useCallback, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
-import GridProductListSkeleton from '@/features/product-list/grid/GridProductListSkeleton';
+import { GridProductListSkeleton } from '@/entities/product-list';
 
-import { TAB_META } from '@/widgets/trending/lib/tabMeta';
-import { useTabSwiper } from '@/widgets/trending/model/useTabSwiper';
+import { TAB_META } from '@/widgets/trending';
+import { useTabSwiper } from '@/widgets/trending';
 
 import TabBarV2 from '../TabbarV2';
 import TrendingList from '../TrendingList';

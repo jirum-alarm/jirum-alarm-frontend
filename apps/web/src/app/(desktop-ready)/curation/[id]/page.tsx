@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { getPromotionSectionById } from '@/entities/promotion';
 
-import CurationContainer from '@/widgets/curation/ui/CurationContainer';
+import { CurationContainer } from '@/widgets/curation';
 
 interface PageProps {
   params: Promise<{ id: string }>;

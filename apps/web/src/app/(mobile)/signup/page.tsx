@@ -13,12 +13,15 @@ import { useToast } from '@/shared/ui/Toast';
 
 import { type ICategoryForm } from '@/entities/category';
 
-import Categories from '@/features/auth/signup/ui/Categories';
-import Email from '@/features/auth/signup/ui/Email';
-import Nickname from '@/features/auth/signup/ui/Nickname';
-import Password from '@/features/auth/signup/ui/Password';
-import Personal from '@/features/auth/signup/ui/Personal';
-import TermsOfService from '@/features/auth/signup/ui/TermsOfService';
+import {
+  Categories,
+  Email,
+  Nickname,
+  Password,
+  Personal,
+  TermsOfService,
+  type Registration,
+} from '@/features/auth';
 
 import { setAccessToken, setRefreshToken } from '../../actions/token';
 
@@ -38,27 +41,6 @@ type Steps = (typeof STEPS)[number];
 const INITIAL_STEP: Steps = 'termsOfService';
 const LAST_STEP = STEPS[STEPS.length - 1];
 const QUERY_PARM_PREFIX = 'steps';
-
-interface Input {
-  value: string;
-  error: boolean;
-  focus: boolean;
-}
-
-interface Personal {
-  birthYear?: string | null;
-  gender: Gender | null;
-}
-
-export interface Registration {
-  email: Input;
-  password: Input & { invalidType: boolean; invalidLength: boolean };
-  termsOfService: boolean;
-  privacyPolicy: boolean;
-  nickname: Input;
-  categories: ICategoryForm[];
-  personal: Personal;
-}
 
 const Signup = () => {
   const [registration, setRegistration] = useState<Registration>({

@@ -8,7 +8,7 @@ import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
 import { EVENT } from '@/shared/config/mixpanel';
 import { Heart } from '@/shared/ui/icons';
 
-import { GridProductCard } from '@/entities/product';
+import { GridProductCard } from '@/entities/product-list';
 
 type ProductGridListProps = {
   products: QueryWishlistsQuery['wishlists'][number]['product'][];

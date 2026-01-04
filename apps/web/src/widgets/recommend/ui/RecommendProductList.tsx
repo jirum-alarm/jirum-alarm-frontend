@@ -4,9 +4,9 @@ import { useInView } from 'react-intersection-observer';
 
 import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 
-import { ProductQueries } from '@/entities/product';
+import { ProductListQueries } from '@/entities/product-list';
 
-import { GridProductList, GridProductListSkeleton } from '@/features/product-list/grid';
+import { GridProductList, GridProductListSkeleton } from '@/entities/product-list';
 
 interface ProductImageCardListProps {
   keyword: string;
@@ -15,7 +15,7 @@ interface ProductImageCardListProps {
 
 const RecommendProductList = ({ keyword, limit }: ProductImageCardListProps) => {
   const { data, isFetchingNextPage, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
-    ProductQueries.infiniteProductsByKeywords({
+    ProductListQueries.infiniteProductsByKeywords({
       limit,
       keyword,
       orderBy: KeywordProductOrderType.PostedAt,

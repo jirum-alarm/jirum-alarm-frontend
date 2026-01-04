@@ -4,8 +4,8 @@ import { ErrorIllust } from '@/shared/ui/icons/Illust';
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
-import { CarouselProductList } from '@/features/product-list/carousel';
-import { useHotDealsRandom } from '@/features/product-list/hooks';
+import { CarouselProductList } from '@/entities/product-list';
+import { useHotDealsRandom } from '@/features/product-list';
 
 const ProductNotFound = () => {
   const router = useMyRouter();

@@ -1,7 +1,7 @@
 import { checkDevice } from '@/app/actions/agent';
 
-import DesktopSearchLayout from '@/widgets/search/ui/layout/DesktopSearchLayout';
-import MobileSearchLayout from '@/widgets/search/ui/layout/MobileSearchLayout';
+import { DesktopSearchLayout } from '@/widgets/search';
+import { MobileSearchLayout } from '@/widgets/search';
 
 export default async function SearchLayout({ children }: { children: React.ReactNode }) {
   const { isMobile } = await checkDevice();

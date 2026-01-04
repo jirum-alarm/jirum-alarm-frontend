@@ -3,10 +3,10 @@
 import { memo, useEffect, useRef } from 'react';
 import { useSwiper } from 'swiper/react';
 
-import { CarouselProductsSection } from '@/features/product-list/carousel';
-import { GridProductList } from '@/features/product-list/grid';
+import { CarouselProductsSection } from '@/entities/product-list';
+import { GridProductList } from '@/entities/product-list';
 
-import useTrendingViewModel from '@/widgets/trending/model/useTrendingViewModel';
+import { useTrendingViewModel } from '@/widgets/trending';
 
 interface TrendingListProps {
   categoryId: number | null;

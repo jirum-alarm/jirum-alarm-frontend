@@ -6,7 +6,7 @@ import {
   QueryProductsQuery,
 } from '@/shared/api/gql/graphql';
 
-import { ProductCardType } from '@/entities/product';
+import { ProductCardType } from '@/entities/product-list';
 
 import { ContentPromotionSection, PromotionQueryName } from '../model/types';
 

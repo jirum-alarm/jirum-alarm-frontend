@@ -19,10 +19,10 @@ import { getVisibleSlides } from '@/shared/lib/utils/swiper';
 import { ArrowLeft } from '@/shared/ui/icons';
 import SliderDots from '@/shared/ui/SliderDots';
 
-import { ProductQueries } from '@/entities/product';
+import { ProductListQueries } from '@/entities/product-list';
 
-import ADProductRankingImageCard from '@/features/product-list/ranking/ADProductRankingImageCard';
-import ProductRankingImageCard from '@/features/product-list/ranking/ProductRankingImageCard';
+import { ADProductRankingImageCard } from '@/entities/product-list';
+import { ProductRankingImageCard } from '@/entities/product-list';
 
 import { RankingPreview as DesktopRankingPreview } from './desktop/RankingSkeleton';
 import { RankingPreview as MobileRankingPreview } from './mobile/RankingSkeleton';
@@ -40,7 +40,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   const {
     data: { products },
   } = useSuspenseQuery(
-    ProductQueries.products({
+    ProductListQueries.products({
       limit: 10,
       orderBy: ProductOrderType.CommunityRanking,
       startDate: getDayBefore(3),

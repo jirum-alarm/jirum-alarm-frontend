@@ -6,7 +6,7 @@ import BackButton from '@/shared/ui/layout/BackButton';
 import Link from '@/shared/ui/Link';
 import ShareButton from '@/shared/ui/ShareButton';
 
-import useRecommendedKeyword from '@/widgets/recommend/model/useRecommendedKeyword';
+import { useRecommendedKeyword } from '@/widgets/recommend';
 
 export default function RecommendPageHeader() {
   const { recommendedKeyword: keyword } = useRecommendedKeyword();

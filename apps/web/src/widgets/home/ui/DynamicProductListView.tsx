@@ -1,10 +1,10 @@
-import { ProductCardType } from '@/entities/product';
+import { ProductCardType } from '@/entities/product-list';
 import { ContentPromotionSection } from '@/entities/promotion';
 
-import { CarouselProductList } from '@/features/product-list/carousel';
-import ProductGridList from '@/features/product-list/grid/GridProductList';
-import PaginatedProductGridList from '@/features/product-list/grid/PaginatedProductGridList';
-import ListProductList from '@/features/product-list/list/ListProductList';
+import { CarouselProductList } from '@/entities/product-list';
+import { ProductGridList } from '@/entities/product-list';
+import { PaginatedProductGridList } from '@/entities/product-list';
+import { ListProductList } from '@/entities/product-list';
 
 type DynamicProductListViewProps = {
   section: ContentPromotionSection;

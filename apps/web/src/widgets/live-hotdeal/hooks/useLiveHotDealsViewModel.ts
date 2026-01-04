@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 
-import { ProductQueries } from '@/entities/product';
+import { ProductListQueries } from '@/entities/product-list';
 
 const limit = 20;
 
@@ -13,7 +13,7 @@ const useLiveHotDealsViewModel = () => {
     fetchNextPage,
     isFetchingNextPage,
   } = useSuspenseInfiniteQuery(
-    ProductQueries.infiniteProducts({
+    ProductListQueries.infiniteProducts({
       limit,
       orderBy: ProductOrderType.PostedAt,
       orderOption: OrderOptionType.Desc,

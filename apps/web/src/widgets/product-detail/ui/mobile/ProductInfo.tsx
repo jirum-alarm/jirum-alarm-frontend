@@ -11,7 +11,7 @@ import Jirume from '@/shared/ui/icons/Jirume';
 import { ProductQueries } from '@/entities/product';
 
 import { RecommendButton } from '@/features/product-actions';
-import HotdealGuideModal from '@/features/product-detail/ui/mobile/HotDealGuideModal';
+import { HotdealGuideModal } from '@/features/product-detail';
 
 export default function ProductInfo({ productId }: { productId: number }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));

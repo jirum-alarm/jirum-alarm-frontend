@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 
-import { ProductQueries } from '@/entities/product';
+import { ProductListQueries } from '@/entities/product-list';
 
 const LIVE_ITEMS_LIMIT = 20;
 
@@ -13,7 +13,7 @@ const useLiveViewModel = ({ categoryId }: { categoryId: number | null }) => {
     fetchNextPage,
     isFetchingNextPage,
   } = useSuspenseInfiniteQuery(
-    ProductQueries.infiniteProducts({
+    ProductListQueries.infiniteProducts({
       limit: LIVE_ITEMS_LIMIT,
       orderBy: ProductOrderType.PostedAt,
       orderOption: OrderOptionType.Desc,

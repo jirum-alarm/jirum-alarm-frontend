@@ -6,9 +6,9 @@ import { checkDevice } from '@/app/actions/agent';
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
-import { ProductQueries } from '@/entities/product';
+import { ProductListQueries } from '@/entities/product-list';
 
-import GridProductListSkeleton from '@/features/product-list/grid/GridProductListSkeleton';
+import { GridProductListSkeleton } from '@/entities/product-list';
 
 import LiveHotDealList from './LiveHotDealList';
 
@@ -23,7 +23,7 @@ const LiveHotDealSection = async ({ title = '실시간 핫딜' }: LiveHotDealSec
   const queryClient = getQueryClient();
 
   queryClient.prefetchInfiniteQuery(
-    ProductQueries.infiniteProducts({
+    ProductListQueries.infiniteProducts({
       limit,
       orderBy: ProductOrderType.PostedAt,
       orderOption: OrderOptionType.Desc,

@@ -3,7 +3,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 
 import { CategoryQueries, getCategoriesForUser } from '@/entities/category';
-import { ProductQueries } from '@/entities/product';
+import { ProductListQueries } from '@/entities/product-list';
 
 import { LiveContainer } from '.';
 
@@ -23,7 +23,7 @@ const LiveContainerServer = async ({ tab }: Props) => {
 
   if (categories.find((c) => c.id === tab)) {
     queryClient.prefetchInfiniteQuery(
-      ProductQueries.infiniteProducts({
+      ProductListQueries.infiniteProducts({
         limit: LIVE_ITEMS_LIMIT,
         orderBy: ProductOrderType.PostedAt,
         orderOption: OrderOptionType.Desc,

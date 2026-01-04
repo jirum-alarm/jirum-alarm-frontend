@@ -2,8 +2,8 @@
 
 import { cn } from '@/shared/lib/cn';
 
-import { CarouselProductsSection } from '@/features/product-list/carousel';
-import { useHotDealsRandom } from '@/features/product-list/hooks';
+import { CarouselProductsSection } from '@/entities/product-list';
+import { useHotDealsRandom } from '@/features/product-list';
 
 import RecentKeywords from './RecentKeywords';
 import RecommendationKeywords from './RecommendationKeywords';

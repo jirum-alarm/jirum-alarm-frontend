@@ -4,7 +4,7 @@ import useScrollPosition from '@/shared/hooks/useScrollPosition';
 import { cn } from '@/shared/lib/cn';
 import LogoLink from '@/shared/ui/Logo/LogoLink';
 
-import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
+import { SearchLinkButton } from '@/features/search';
 
 const HomeHeader = () => {
   const scrollThreshold = 90;

@@ -3,9 +3,9 @@
 import { memo, useEffect, useRef } from 'react';
 import { useSwiper } from 'swiper/react';
 
-import { GridProductList, GridProductListSkeleton } from '@/features/product-list/grid';
+import { GridProductList, GridProductListSkeleton } from '@/entities/product-list';
 
-import useLiveViewModel from '@/widgets/trending/model/useLiveViewModel';
+import { useLiveViewModel } from '@/widgets/trending';
 
 interface LiveListProps {
   categoryId: number | null;

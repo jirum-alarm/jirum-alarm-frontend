@@ -7,8 +7,8 @@ import { NAV_TYPE } from '@/shared/ui/layout/BottomNav';
 
 import { AuthQueries } from '@/entities/auth';
 
-import MenuList from '@/features/mypage/ui/MenuList';
-import MyProfileSection from '@/features/mypage/ui/MyProfileSection';
+import { MenuList } from '@/features/mypage';
+import { MyProfileSection } from '@/features/mypage';
 
 const MyPage = async () => {
   const queryClient = new QueryClient();

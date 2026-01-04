@@ -14,7 +14,7 @@ import ShareButton from '@/shared/ui/ShareButton';
 import { ProductQueries } from '@/entities/product';
 
 import { LikeButton, RecommendButton } from '@/features/product-actions';
-import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
+import { ViewerCount } from '@/features/product-detail';
 
 export default function ProductInfo({
   productId,

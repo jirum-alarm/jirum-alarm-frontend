@@ -3,9 +3,9 @@ import { Suspense } from 'react';
 
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
-import AddFCMToken from '@/features/alarm/ui/AddFCMToken';
+import { AddFCMToken } from '@/features/alarm';
 
-import HomeContainerV2 from '@/widgets/home/ui/HomeContainerV2';
+import { HomeContainerV2 } from '@/widgets/home';
 
 // import { getFeatureFlag } from '../actions/posthog';
 

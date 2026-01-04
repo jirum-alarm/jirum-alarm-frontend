@@ -9,10 +9,10 @@ import { CATEGORY_MAP } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { defaultMetadata } from '@/shared/config/metadata';
 
-import { ProductPrefetch } from '@/features/product-detail/prefetch';
+import { ProductPrefetch } from '@/features/product-detail';
 
-import DesktopProductDetailPage from '@/widgets/product-detail/ui/desktop/ProductDetailPage';
-import MobileProductDetailPage from '@/widgets/product-detail/ui/mobile/ProductDetailPage';
+import { DesktopProductDetailPage } from '@/widgets/product-detail';
+import { MobileProductDetailPage } from '@/widgets/product-detail';
 
 function parseNumericPrice(rawPrice?: string | null) {
   if (!rawPrice) {

@@ -15,9 +15,9 @@ import SvgNaver from '@/shared/ui/icons/login/Naver';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import Link from '@/shared/ui/Link';
 
-import AppDownloadBanner from '@/features/app-download/ui/AppDownloadBanner';
-import { useKakaoLogin } from '@/features/auth/lib/use-kakao-login';
-import { useNaverLogin } from '@/features/auth/lib/use-naver-login';
+import { AppDownloadBanner } from '@/features/app-download';
+import { useKakaoLogin } from '@/features/auth';
+import { useNaverLogin } from '@/features/auth';
 
 enum LoginType {
   KAKAO = 'KAKAO',

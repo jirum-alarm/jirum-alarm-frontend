@@ -13,7 +13,7 @@ import TalkLight from '@/shared/ui/icons/TalkLight';
 import Link from '@/shared/ui/Link';
 import LogoLink from '@/shared/ui/Logo/LogoLink';
 
-import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
+import { SearchLinkButton } from '@/features/search';
 
 import NavLink from './MenuLink';
 

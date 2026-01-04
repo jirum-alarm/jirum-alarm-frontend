@@ -7,7 +7,7 @@ import SectionHeader from '@/shared/ui/SectionHeader';
 
 import { ContentPromotionSection, createPromotionSectionQuery } from '@/entities/promotion';
 
-import GridProductListSkeleton from '@/features/product-list/grid/GridProductListSkeleton';
+import { GridProductListSkeleton } from '@/entities/product-list';
 
 import DynamicProductList from './DynamicProductList';
 import TabbedDynamicProductSection from './TabbedDynamicProductSection';

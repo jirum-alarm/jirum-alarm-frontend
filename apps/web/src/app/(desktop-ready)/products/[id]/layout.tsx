@@ -2,8 +2,8 @@ import { checkDevice } from '@/app/actions/agent';
 
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import Footer from '@/widgets/layout/ui/desktop/Footer';
-import ProductDetailPageHeader from '@/widgets/product-detail/ui/ProductDetailPageHeader';
+import { Footer } from '@/widgets/layout';
+import { ProductDetailPageHeader } from '@/widgets/product-detail';
 
 const ProductDetailLayout = async ({
   params,

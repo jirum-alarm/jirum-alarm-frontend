@@ -7,7 +7,7 @@ import ApiErrorBoundary from '@/shared/ui/ApiErrorBoundary';
 
 import { ProductQueries } from '@/entities/product';
 
-import { CarouselProductListSkeleton } from '@/features/product-list/carousel';
+import { CarouselProductListSkeleton } from '@/entities/product-list';
 
 import ProductsByKeywordsList from './ProductsByKeywordsList';
 import RecommendedProductTabs from './RecommendedProductTabs';

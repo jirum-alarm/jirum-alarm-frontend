@@ -4,7 +4,7 @@ import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useInView } from 'react-intersection-observer';
 
-import { ProductQueries } from '@/entities/product';
+import { ProductListQueries } from '@/entities/product-list';
 
 const limit = 20;
 
@@ -14,7 +14,7 @@ export const useProductListViewModel = () => {
   const keywordParam = searchParams.get('keyword');
 
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useSuspenseInfiniteQuery(
-    ProductQueries.infiniteProducts({ limit, keyword: keywordParam || undefined } as any),
+    ProductListQueries.infiniteProducts({ limit, keyword: keywordParam || undefined } as any),
   );
   const pages = data?.pages ?? [];
   const products = pages.flatMap((page) => page.products);

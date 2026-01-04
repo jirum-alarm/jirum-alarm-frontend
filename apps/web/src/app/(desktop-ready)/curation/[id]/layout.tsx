@@ -8,8 +8,8 @@ import SectionHeader from '@/shared/ui/SectionHeader';
 
 import { getPromotionSectionById } from '@/entities/promotion';
 
-import CurationPageHeader from '@/widgets/curation/ui/CurationPageHeader';
-import Footer from '@/widgets/layout/ui/desktop/Footer';
+import { CurationPageHeader } from '@/widgets/curation';
+import { Footer } from '@/widgets/layout';
 
 interface LayoutProps {
   children: ReactNode;
