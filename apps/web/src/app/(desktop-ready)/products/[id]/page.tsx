@@ -44,7 +44,7 @@ function resolveCategoryName(product: {
 }
 
 function generateDescription(
-  productGuides: { productGuides: Array<{ title: string; content: string }> },
+  productGuides: { productGuides: Array<{ title: string; content: string }> } | null | undefined,
   product: {
     title: string;
     categoryId?: number | null;
@@ -55,8 +55,8 @@ function generateDescription(
   },
   categoryName?: string,
 ): string {
-  const guideDescriptions = productGuides.productGuides
-    .map((guide) => `${guide.title}: ${guide.content}`)
+  const guideDescriptions = productGuides?.productGuides
+    ?.map((guide) => `${guide.title}: ${guide.content}`)
     .join(', ');
 
   if (guideDescriptions) {
@@ -236,7 +236,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   const productGuides = product
     ? await ProductService.getProductGuides({ productId: +product.id })
     : null;
-  const jsonLd = generateProductJsonLd(product, productGuides || undefined);
+  const jsonLd = generateProductJsonLd(product, productGuides ?? undefined);
 
   return (
     <>
