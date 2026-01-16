@@ -39,6 +39,14 @@ interface PendingVerificationItem {
   createdAt: string;
   searchAfter: string[] | null;
   isSelected: boolean;
+  // 검증 상태 관련 필드 추가
+  verificationStatus: string | null;
+  verifiedBy: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+  verifiedAt: string | null;
 }
 
 // 메모이제이션된 검증 아이템 컴포넌트
@@ -46,6 +54,7 @@ interface VerificationItemProps {
   item: PendingVerificationItem;
   index: number;
   isFocused: boolean;
+  isVerified: boolean;
   onItemClick: (index: number) => void;
   onToggleSelection: (id: string) => void;
   onImageClick: (thumbnail: string, title: string) => void;
@@ -55,36 +64,50 @@ const VerificationItem = memo(function VerificationItem({
   item,
   index,
   isFocused,
+  isVerified,
   onItemClick,
   onToggleSelection,
   onImageClick,
 }: VerificationItemProps) {
+  const verifierName = item.verifiedBy?.name;
+
+  // 검증 상태에 따른 스타일 결정
+  const getBorderClass = () => {
+    if (isFocused) return 'border-primary ring-2 ring-primary/20';
+    if (isVerified) return 'border-blue-400/50 bg-blue-50/50 dark:bg-blue-900/20';
+    if (item.isSelected) return 'border-success/50';
+    return 'border-danger/50';
+  };
+
+  const getStatusBadge = () => {
+    if (isVerified) {
+      return (
+        <span className="rounded bg-blue-100 px-1 py-0.5 text-[10px] font-bold text-blue-600 dark:bg-blue-900/50 dark:text-blue-400">
+          검증완료
+        </span>
+      );
+    }
+    return (
+      <span
+        className={`rounded px-1 py-0.5 text-[10px] font-bold ${
+          item.isSelected ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'
+        }`}
+      >
+        {item.isSelected ? '승인' : '거절'}
+      </span>
+    );
+  };
+
   return (
     <div
       data-post-index={index}
       onClick={() => onItemClick(index)}
-      className={`group relative cursor-pointer rounded-xl border-2 bg-white p-1.5 shadow-sm dark:bg-boxdark ${
-        isFocused
-          ? 'border-primary ring-2 ring-primary/20'
-          : item.isSelected
-            ? 'border-success/50'
-            : 'border-danger/50'
-      }`}
+      className={`group relative cursor-pointer rounded-xl border-2 bg-white p-1.5 shadow-sm dark:bg-boxdark ${getBorderClass()}`}
     >
       <div className="flex items-start gap-4">
-        {/* Checkbox */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleSelection(item.id);
-          }}
-          className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border-2 ${
-            item.isSelected
-              ? 'border-success bg-success text-white'
-              : 'border-danger bg-danger/10 text-danger'
-          }`}
-        >
-          {item.isSelected ? (
+        {/* Checkbox - 검증 완료 항목은 비활성화 */}
+        {isVerified ? (
+          <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border-2 border-blue-400 bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400">
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -93,17 +116,40 @@ const VerificationItem = memo(function VerificationItem({
                 d="M5 13l4 4L19 7"
               />
             </svg>
-          ) : (
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={3}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          )}
-        </button>
+          </div>
+        ) : (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleSelection(item.id);
+            }}
+            className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border-2 ${
+              item.isSelected
+                ? 'border-success bg-success text-white'
+                : 'border-danger bg-danger/10 text-danger'
+            }`}
+          >
+            {item.isSelected ? (
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            ) : (
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            )}
+          </button>
+        )}
 
         {/* Image Thumbnail */}
         {item.product?.thumbnail && (
@@ -128,19 +174,19 @@ const VerificationItem = memo(function VerificationItem({
 
         {/* Content */}
         <div className="min-w-0 flex-1">
-          {/* Status Badge, ID, Date */}
-          <div className="mb-0.5 flex items-center gap-1.5">
-            <span
-              className={`rounded px-1 py-0.5 text-[10px] font-bold ${
-                item.isSelected ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'
-              }`}
-            >
-              {item.isSelected ? '승인' : '거절'}
-            </span>
+          {/* Status Badge, ID, Date, Verifier */}
+          <div className="mb-0.5 flex flex-wrap items-center gap-1.5">
+            {getStatusBadge()}
             <span className="text-gray-400 text-[10px]">ID: {item.productId}</span>
             <span className="text-gray-400 text-[10px]">
               {new Date(item.createdAt).toLocaleDateString()}
             </span>
+            {/* 검증자 표시 (모킹) */}
+            {isVerified && verifierName && (
+              <span className="rounded bg-blue-50 px-1 py-0.5 text-[10px] text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                검증: {verifierName}
+              </span>
+            )}
           </div>
 
           {/* Title and Danawa Link */}
@@ -200,6 +246,9 @@ const VerificationGroupByView = () => {
 
   // 탭 상태
   const [activeTab, setActiveTab] = useState<'brands' | 'details'>('brands');
+
+  // 검증된 상품 포함 여부
+  const [includeVerified, setIncludeVerified] = useState(false);
 
   // 탭 변경 시 좌측 패널 포커스 유지 및 선택 상태 복원
   useEffect(() => {
@@ -263,15 +312,20 @@ const VerificationGroupByView = () => {
     }
   }, [allBrandProducts, selectedBrandProduct]);
 
-  // 선택된 브랜드 상품이 바뀌면 검증 대기 목록 로드 및 전체 개수 조회
+  // 선택된 브랜드 상품이 바뀌거나 includeVerified 상태가 바뀌면 검증 목록 로드 및 전체 개수 조회
   useEffect(() => {
     if (selectedBrandProduct) {
       loadVerificationsForBrandProduct(parseInt(selectedBrandProduct.id));
       fetchPendingVerificationsTotalCountByBrandProduct({
-        variables: { brandProductId: parseInt(selectedBrandProduct.id) },
+        variables: {
+          brandProductId: parseInt(selectedBrandProduct.id),
+          verificationStatus: includeVerified
+            ? undefined
+            : [ProductMappingVerificationStatus.PendingVerification],
+        },
       });
     }
-  }, [selectedBrandProduct, fetchPendingVerificationsTotalCountByBrandProduct]);
+  }, [selectedBrandProduct, includeVerified, fetchPendingVerificationsTotalCountByBrandProduct]);
 
   // 특정 브랜드 상품의 검증 대기 목록 로드
   const loadVerificationsForBrandProduct = useCallback(
@@ -286,6 +340,9 @@ const VerificationGroupByView = () => {
           variables: {
             limit: PAGE_LIMIT,
             brandProductId,
+            verificationStatus: includeVerified
+              ? undefined
+              : [ProductMappingVerificationStatus.PendingVerification],
           },
         });
 
@@ -298,7 +355,16 @@ const VerificationGroupByView = () => {
             danawaUrl: item.danawaUrl ?? null,
             createdAt: item.createdAt,
             searchAfter: item.searchAfter ?? null,
-            isSelected: true,
+            isSelected: item.verificationStatus !== 'VERIFIED',
+            verificationStatus: item.verificationStatus ?? null,
+            verifiedBy: item.verifiedBy
+              ? {
+                  id: item.verifiedBy.id,
+                  name: item.verifiedBy.name,
+                  email: item.verifiedBy.email,
+                }
+              : null,
+            verifiedAt: item.verifiedAt ?? null,
           }));
           setVerificationItems(items);
 
@@ -428,6 +494,9 @@ const VerificationGroupByView = () => {
           limit: PAGE_LIMIT,
           searchAfter: verificationSearchAfter,
           brandProductId: parseInt(selectedBrandProduct.id),
+          verificationStatus: includeVerified
+            ? undefined
+            : [ProductMappingVerificationStatus.PendingVerification],
         },
       });
 
@@ -440,7 +509,16 @@ const VerificationGroupByView = () => {
           danawaUrl: item.danawaUrl ?? null,
           createdAt: item.createdAt,
           searchAfter: item.searchAfter ?? null,
-          isSelected: true,
+          isSelected: item.verificationStatus !== 'VERIFIED',
+          verificationStatus: item.verificationStatus ?? null,
+          verifiedBy: item.verifiedBy
+            ? {
+                id: item.verifiedBy.id,
+                name: item.verifiedBy.name,
+                email: item.verifiedBy.email,
+              }
+            : null,
+          verifiedAt: item.verifiedAt ?? null,
         }));
 
         if (newItems.length > 0) {
@@ -1393,6 +1471,30 @@ const VerificationGroupByView = () => {
                 </div>
               </div>
 
+              {/* Include Verified Checkbox */}
+              <div className="flex items-center justify-end border-b border-stroke bg-white px-3 py-1.5 dark:border-strokedark dark:bg-boxdark">
+                <label className="text-gray-600 dark:text-gray-400 flex cursor-pointer items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={includeVerified}
+                    onChange={(e) => setIncludeVerified(e.target.checked)}
+                    className="border-gray-300 h-4 w-4 rounded text-blue-500 focus:ring-blue-500"
+                  />
+                  <span
+                    className={
+                      includeVerified ? 'font-medium text-blue-600 dark:text-blue-400' : ''
+                    }
+                  >
+                    검증된 상품 포함
+                  </span>
+                  {includeVerified && (
+                    <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-600 dark:bg-blue-900/50 dark:text-blue-400">
+                      모든 상태 표시
+                    </span>
+                  )}
+                </label>
+              </div>
+
               {/* Stats Panel */}
               <div className="grid grid-cols-3 gap-1 border-b border-stroke bg-white px-1.5 py-0.5 dark:border-strokedark dark:bg-boxdark">
                 <div className="bg-gray-50 rounded p-1 dark:bg-meta-4">
@@ -1450,6 +1552,7 @@ const VerificationGroupByView = () => {
                             item={item}
                             index={index}
                             isFocused={focusedPostIndex === index && !isLeftPanelFocused}
+                            isVerified={item.verificationStatus === 'VERIFIED'}
                             onItemClick={(idx) => {
                               setFocusedPostIndex(idx);
                               // 우측 아이템 클릭 시에도 좌측 포커스 유지 (항상 좌측에 포커스)
