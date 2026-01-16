@@ -706,7 +706,7 @@ const VerificationTable = () => {
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
                     <div className="flex flex-col items-start gap-1 text-left text-xs text-slate-600 dark:text-slate-300">
-                      <span>검증자: {verification.verifiedBy ?? '-'}</span>
+                      <span>검증자: {verification.verifiedBy?.name ?? '-'}</span>
                       <span>
                         검증일:{' '}
                         {verification.verifiedAt ? dateFormatter(verification.verifiedAt) : '-'}

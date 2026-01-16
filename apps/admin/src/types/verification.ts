@@ -17,7 +17,7 @@ export type PendingVerification = {
   brandProduct?: string | null;
   product?: { title: string } | null;
   verificationStatus?: ProductMappingVerificationStatus | null;
-  verifiedBy?: number | null;
+  verifiedBy?: { id: string; name: string; email: string } | null;
   verifiedAt?: string | null;
   verificationNote?: string | null;
   createdAt: string;

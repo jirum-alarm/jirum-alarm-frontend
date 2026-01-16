@@ -626,7 +626,10 @@ type ProductMapping {
   verificationNote: String
   verificationStatus: ProductMappingVerificationStatus
   verifiedAt: DateTime
-  verifiedBy: Int
+  """
+  검증자 ID
+  """
+  verifiedById: Int
 }
 
 enum ProductMappingFeedbackType {
@@ -679,7 +682,14 @@ type ProductMappingOutput {
   verificationNote: String
   verificationStatus: ProductMappingVerificationStatus
   verifiedAt: DateTime
-  verifiedBy: Int
+  """
+  검증자 정보
+  """
+  verifiedBy: AdminUser
+  """
+  검증자 ID
+  """
+  verifiedById: Int
 }
 
 enum ProductMappingTarget {
@@ -1011,6 +1021,7 @@ type Query {
     productTitle: String
     searchAfter: [String!]
     target: ProductMappingTarget
+    verificationStatus: [ProductMappingVerificationStatus!]
   ): [ProductMappingOutput!]!
   """
   검증 대기 중인 매핑 전체 개수 조회 (필터 적용 가능)
@@ -1027,6 +1038,7 @@ type Query {
     """
     productTitle: String
     target: ProductMappingTarget
+    verificationStatus: [ProductMappingVerificationStatus!]
   ): Int!
   """
   개인화 추천 상품 조회 (로그인 필요)
@@ -1040,7 +1052,7 @@ type Query {
   상품 조회
   """
   product(id: Int!): ProductOutput
-  productGuides(productId: Int!): [ProductGuide!]!
+  productGuides(productId: Int!): [ProductGuide!]
   productKeywords(endedAt: DateTime, startedAt: DateTime): [String!]!
   """
   상품 목록 조회
