@@ -386,8 +386,28 @@ const VerificationGroupByView = () => {
         console.error('Failed to load verifications:', error);
       }
     },
-    [fetchPendingVerifications],
+    [fetchPendingVerifications, includeVerified],
   );
+
+  // 선택된 브랜드 상품이 바뀌거나 includeVerified 상태가 바뀌면 검증 목록 로드 및 전체 개수 조회
+  useEffect(() => {
+    if (selectedBrandProduct) {
+      loadVerificationsForBrandProduct(parseInt(selectedBrandProduct.id));
+      fetchPendingVerificationsTotalCountByBrandProduct({
+        variables: {
+          brandProductId: parseInt(selectedBrandProduct.id),
+          verificationStatus: includeVerified
+            ? undefined
+            : [ProductMappingVerificationStatus.PendingVerification],
+        },
+      });
+    }
+  }, [
+    selectedBrandProduct,
+    includeVerified,
+    fetchPendingVerificationsTotalCountByBrandProduct,
+    loadVerificationsForBrandProduct,
+  ]);
 
   // 브랜드 상품 더 불러오기
   const loadMoreBrandProducts = useCallback(async () => {
@@ -550,6 +570,7 @@ const VerificationGroupByView = () => {
     hasVerificationMore,
     verificationSearchAfter,
     selectedBrandProduct,
+    includeVerified,
     fetchPendingVerifications,
   ]);
 
@@ -1037,6 +1058,7 @@ const VerificationGroupByView = () => {
     hasVerificationMore,
     isLoadingVerificationMore,
     loadMoreVerifications,
+    activeTab,
   ]);
 
   // Scroll focused post into view (debounced for performance)
@@ -1096,7 +1118,7 @@ const VerificationGroupByView = () => {
       );
       expandedElement?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
     }
-  }, [expandedSelectedIndex, expandedBrandItemId]);
+  }, [expandedSelectedIndex, expandedBrandItemId, expandedBrandProductId]);
 
   // Statistics
   const stats = {
