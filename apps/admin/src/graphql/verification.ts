@@ -7,6 +7,7 @@ export const QueryPendingVerifications = gql`
     $prioritizeOld: Boolean
     $orderBy: OrderOptionType
     $brandProductId: Int
+    $verificationStatus: [ProductMappingVerificationStatus!]
   ) {
     pendingVerifications(
       limit: $limit
@@ -14,6 +15,7 @@ export const QueryPendingVerifications = gql`
       prioritizeOld: $prioritizeOld
       orderBy: $orderBy
       brandProductId: $brandProductId
+      verificationStatus: $verificationStatus
     ) {
       id
       productId
@@ -25,7 +27,11 @@ export const QueryPendingVerifications = gql`
       danawaUrl
 
       verificationStatus
-      verifiedBy
+      verifiedBy {
+        id
+        name
+        email
+      }
       verifiedAt
       verificationNote
       createdAt
@@ -76,7 +82,11 @@ export const QueryVerificationHistory = gql`
       danawaUrl
 
       verificationStatus
-      verifiedBy
+      verifiedBy {
+        id
+        name
+        email
+      }
       verifiedAt
       verificationNote
       createdAt

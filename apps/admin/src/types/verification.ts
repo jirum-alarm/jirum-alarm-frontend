@@ -18,7 +18,7 @@ export type PendingVerification = {
   product?: { title: string; thumbnail?: string | null } | null;
   danawaUrl?: string | null;
   verificationStatus?: ProductMappingVerificationStatus | null;
-  verifiedBy?: number | null;
+  verifiedBy?: { id: string; name: string; email: string } | null;
   verifiedAt?: string | null;
   verificationNote?: string | null;
   createdAt: string;

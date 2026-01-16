@@ -758,7 +758,8 @@ export type ProductMapping = {
   verificationNote?: Maybe<Scalars['String']['output']>;
   verificationStatus?: Maybe<ProductMappingVerificationStatus>;
   verifiedAt?: Maybe<Scalars['DateTime']['output']>;
-  verifiedBy?: Maybe<Scalars['Int']['output']>;
+  /** 검증자 ID */
+  verifiedById?: Maybe<Scalars['Int']['output']>;
 };
 
 export enum ProductMappingFeedbackType {
@@ -811,7 +812,10 @@ export type ProductMappingOutput = {
   verificationNote?: Maybe<Scalars['String']['output']>;
   verificationStatus?: Maybe<ProductMappingVerificationStatus>;
   verifiedAt?: Maybe<Scalars['DateTime']['output']>;
-  verifiedBy?: Maybe<Scalars['Int']['output']>;
+  /** 검증자 정보 */
+  verifiedBy?: Maybe<AdminUser>;
+  /** 검증자 ID */
+  verifiedById?: Maybe<Scalars['Int']['output']>;
 };
 
 export enum ProductMappingTarget {
@@ -987,7 +991,7 @@ export type Query = {
   personalizedProducts: Array<RecommendedProductOutput>;
   /** 상품 조회 */
   product?: Maybe<ProductOutput>;
-  productGuides: Array<ProductGuide>;
+  productGuides?: Maybe<Array<ProductGuide>>;
   productKeywords: Array<Scalars['String']['output']>;
   /** 상품 목록 조회 */
   products: Array<ProductOutput>;
@@ -1194,6 +1198,7 @@ export type QueryPendingVerificationsArgs = {
   productTitle?: InputMaybe<Scalars['String']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
   target?: InputMaybe<ProductMappingTarget>;
+  verificationStatus?: InputMaybe<Array<ProductMappingVerificationStatus>>;
 };
 
 export type QueryPendingVerificationsTotalCountArgs = {
@@ -1202,6 +1207,7 @@ export type QueryPendingVerificationsTotalCountArgs = {
   productId?: InputMaybe<Scalars['Int']['input']>;
   productTitle?: InputMaybe<Scalars['String']['input']>;
   target?: InputMaybe<ProductMappingTarget>;
+  verificationStatus?: InputMaybe<Array<ProductMappingVerificationStatus>>;
 };
 
 export type QueryPersonalizedProductsArgs = {
@@ -1643,6 +1649,9 @@ export type QueryPendingVerificationsQueryVariables = Exact<{
   prioritizeOld?: InputMaybe<Scalars['Boolean']['input']>;
   orderBy?: InputMaybe<OrderOptionType>;
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
+  verificationStatus?: InputMaybe<
+    Array<ProductMappingVerificationStatus> | ProductMappingVerificationStatus
+  >;
 }>;
 
 export type QueryPendingVerificationsQuery = {
@@ -1654,12 +1663,12 @@ export type QueryPendingVerificationsQuery = {
     brandProduct?: string | null;
     danawaUrl?: string | null;
     verificationStatus?: ProductMappingVerificationStatus | null;
-    verifiedBy?: number | null;
     verifiedAt?: any | null;
     verificationNote?: string | null;
     createdAt: any;
     searchAfter?: Array<string> | null;
     product?: { __typename?: 'ProductOutput'; title: string; thumbnail?: string | null } | null;
+    verifiedBy?: { __typename?: 'AdminUser'; id: string; name: string; email: string } | null;
   }>;
 };
 
@@ -1698,12 +1707,12 @@ export type QueryVerificationHistoryQuery = {
     brandProduct?: string | null;
     danawaUrl?: string | null;
     verificationStatus?: ProductMappingVerificationStatus | null;
-    verifiedBy?: number | null;
     verifiedAt?: any | null;
     verificationNote?: string | null;
     createdAt: any;
     searchAfter?: Array<string> | null;
     product?: { __typename?: 'ProductOutput'; title: string; thumbnail?: string | null } | null;
+    verifiedBy?: { __typename?: 'AdminUser'; id: string; name: string; email: string } | null;
   }>;
 };
 
@@ -1750,6 +1759,11 @@ export type MutationCancelVerificationMutation = {
 
 export type QueryPendingVerificationsTotalCountQueryVariables = Exact<{
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
+  matchStatus?: InputMaybe<Array<ProductMappingMatchStatus> | ProductMappingMatchStatus>;
+  target?: InputMaybe<ProductMappingTarget>;
+  verificationStatus?: InputMaybe<
+    Array<ProductMappingVerificationStatus> | ProductMappingVerificationStatus
+  >;
 }>;
 
 export type QueryPendingVerificationsTotalCountQuery = {
@@ -1992,13 +2006,14 @@ export const MutationRemoveHotDealExcludeKeywordByAdminDocument = new TypedDocum
   MutationRemoveHotDealExcludeKeywordByAdminMutationVariables
 >;
 export const QueryPendingVerificationsDocument = new TypedDocumentString(`
-    query QueryPendingVerifications($limit: Int!, $searchAfter: [String!], $prioritizeOld: Boolean, $orderBy: OrderOptionType, $brandProductId: Int) {
+    query QueryPendingVerifications($limit: Int!, $searchAfter: [String!], $prioritizeOld: Boolean, $orderBy: OrderOptionType, $brandProductId: Int, $verificationStatus: [ProductMappingVerificationStatus!]) {
   pendingVerifications(
     limit: $limit
     searchAfter: $searchAfter
     prioritizeOld: $prioritizeOld
     orderBy: $orderBy
     brandProductId: $brandProductId
+    verificationStatus: $verificationStatus
   ) {
     id
     productId
@@ -2009,7 +2024,11 @@ export const QueryPendingVerificationsDocument = new TypedDocumentString(`
     }
     danawaUrl
     verificationStatus
-    verifiedBy
+    verifiedBy {
+      id
+      name
+      email
+    }
     verifiedAt
     verificationNote
     createdAt
@@ -2054,7 +2073,11 @@ export const QueryVerificationHistoryDocument = new TypedDocumentString(`
     }
     danawaUrl
     verificationStatus
-    verifiedBy
+    verifiedBy {
+      id
+      name
+      email
+    }
     verifiedAt
     verificationNote
     createdAt
@@ -2106,8 +2129,13 @@ export const MutationCancelVerificationDocument = new TypedDocumentString(`
   MutationCancelVerificationMutationVariables
 >;
 export const QueryPendingVerificationsTotalCountDocument = new TypedDocumentString(`
-    query QueryPendingVerificationsTotalCount($brandProductId: Int) {
-  pendingVerificationsTotalCount(brandProductId: $brandProductId)
+    query QueryPendingVerificationsTotalCount($brandProductId: Int, $matchStatus: [ProductMappingMatchStatus!], $target: ProductMappingTarget, $verificationStatus: [ProductMappingVerificationStatus!]) {
+  pendingVerificationsTotalCount(
+    brandProductId: $brandProductId
+    matchStatus: $matchStatus
+    target: $target
+    verificationStatus: $verificationStatus
+  )
 }
     `) as unknown as TypedDocumentString<
   QueryPendingVerificationsTotalCountQuery,
