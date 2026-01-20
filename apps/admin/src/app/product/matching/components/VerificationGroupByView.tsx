@@ -52,9 +52,9 @@ interface PendingVerificationItem {
 // 메모이제이션된 검증 아이템 컴포넌트
 interface VerificationItemProps {
   item: PendingVerificationItem;
+  isSelected: boolean;
   index: number;
   isFocused: boolean;
-  isVerified: boolean;
   onItemClick: (index: number) => void;
   onToggleSelection: (id: string) => void;
   onImageClick: (thumbnail: string, title: string) => void;
@@ -62,9 +62,9 @@ interface VerificationItemProps {
 
 const VerificationItem = memo(function VerificationItem({
   item,
+  isSelected,
   index,
   isFocused,
-  isVerified,
   onItemClick,
   onToggleSelection,
   onImageClick,
@@ -74,26 +74,36 @@ const VerificationItem = memo(function VerificationItem({
   // 검증 상태에 따른 스타일 결정
   const getBorderClass = () => {
     if (isFocused) return 'border-primary ring-2 ring-primary/20';
-    if (isVerified) return 'border-blue-400/50 bg-blue-50/50 dark:bg-blue-900/20';
-    if (item.isSelected) return 'border-success/50';
-    return 'border-danger/50';
+    if (item.verificationStatus === 'VERIFIED')
+      return 'border-success/50 bg-success/5 dark:bg-success/10';
+    if (item.verificationStatus === 'REJECTED')
+      return 'border-danger/50 bg-danger/5 dark:bg-danger/10';
+    if (isSelected) return 'border-success/30';
+    return 'border-danger/30';
   };
 
   const getStatusBadge = () => {
-    if (isVerified) {
+    if (item.verificationStatus === 'VERIFIED') {
       return (
-        <span className="rounded bg-blue-100 px-1 py-0.5 text-[10px] font-bold text-blue-600 dark:bg-blue-900/50 dark:text-blue-400">
-          검증완료
+        <span className="rounded bg-success/10 px-1 py-0.5 text-[10px] font-bold text-success">
+          승인완료
+        </span>
+      );
+    }
+    if (item.verificationStatus === 'REJECTED') {
+      return (
+        <span className="rounded bg-danger/10 px-1 py-0.5 text-[10px] font-bold text-danger">
+          거절완료
         </span>
       );
     }
     return (
       <span
         className={`rounded px-1 py-0.5 text-[10px] font-bold ${
-          item.isSelected ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'
+          isSelected ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'
         }`}
       >
-        {item.isSelected ? '승인' : '거절'}
+        {isSelected ? '승인 대기' : '거절 대기'}
       </span>
     );
   };
@@ -102,12 +112,22 @@ const VerificationItem = memo(function VerificationItem({
     <div
       data-post-index={index}
       onClick={() => onItemClick(index)}
-      className={`group relative cursor-pointer rounded-xl border-2 bg-white p-1.5 shadow-sm dark:bg-boxdark ${getBorderClass()}`}
+      className={`group relative cursor-pointer rounded-xl border-2 bg-white p-1.5 shadow-sm transition-all dark:bg-boxdark ${getBorderClass()}`}
     >
       <div className="flex items-start gap-4">
-        {/* Checkbox - 검증 완료 항목은 비활성화 */}
-        {isVerified ? (
-          <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border-2 border-blue-400 bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400">
+        {/* Checkbox - 항상 활성화하여 수정 가능하도록 함 */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSelection(item.id);
+          }}
+          className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border-2 transition-all ${
+            isSelected
+              ? 'border-success bg-success text-white'
+              : 'border-danger bg-danger/10 text-danger'
+          }`}
+        >
+          {isSelected ? (
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -116,40 +136,17 @@ const VerificationItem = memo(function VerificationItem({
                 d="M5 13l4 4L19 7"
               />
             </svg>
-          </div>
-        ) : (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleSelection(item.id);
-            }}
-            className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border-2 ${
-              item.isSelected
-                ? 'border-success bg-success text-white'
-                : 'border-danger bg-danger/10 text-danger'
-            }`}
-          >
-            {item.isSelected ? (
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={3}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            ) : (
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={3}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            )}
-          </button>
-        )}
+          ) : (
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={3}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          )}
+        </button>
 
         {/* Image Thumbnail */}
         {item.product?.thumbnail && (
@@ -182,7 +179,7 @@ const VerificationItem = memo(function VerificationItem({
               {new Date(item.createdAt).toLocaleDateString()}
             </span>
             {/* 검증자 표시 (모킹) */}
-            {isVerified && verifierName && (
+            {item.verificationStatus === 'VERIFIED' && verifierName && (
               <span className="rounded bg-blue-50 px-1 py-0.5 text-[10px] text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                 검증: {verifierName}
               </span>
@@ -252,8 +249,11 @@ const VerificationGroupByView = () => {
 
   // 탭 변경 시 좌측 패널 포커스 유지 및 선택 상태 복원
   useEffect(() => {
-    // 모든 탭에서 좌측 패널 포커스 유지
+    // 탭이 변경될 때만 좌측 패널로 포커스 이동
     setIsLeftPanelFocused(true);
+  }, [activeTab]);
+
+  useEffect(() => {
     if (activeTab === 'brands') {
       // 선택된 브랜드 상품이 있으면 인덱스 복원
       if (selectedBrandProduct) {
@@ -263,7 +263,7 @@ const VerificationGroupByView = () => {
         }
       }
     }
-  }, [activeTab, selectedBrandProduct, allBrandProducts]);
+  }, [selectedBrandProduct, allBrandProducts, activeTab]);
 
   // 검색어 쓰로틀 (300ms)
   const searchThrottleRef = useRef<NodeJS.Timeout | null>(null);
@@ -353,10 +353,16 @@ const VerificationGroupByView = () => {
           }));
           setVerificationItems(items);
 
-          // 초기 선택 상태 설정
+          // 초기 선택 상태 설정: VERIFIED면 true, REJECTED면 false, 나머지는 true(승인대기)
           const initialSelections: Record<string, boolean> = {};
           items.forEach((item) => {
-            initialSelections[item.id] = true;
+            if (item.verificationStatus === 'VERIFIED') {
+              initialSelections[item.id] = true;
+            } else if (item.verificationStatus === 'REJECTED') {
+              initialSelections[item.id] = false;
+            } else {
+              initialSelections[item.id] = true;
+            }
           });
           setItemSelections(initialSelections);
 
@@ -651,9 +657,6 @@ const VerificationGroupByView = () => {
   const leftScrollRef = useRef<HTMLDivElement>(null);
   const rightScrollRef = useRef<HTMLDivElement>(null);
 
-  // Throttle ref for left panel navigation
-  const lastNavigationTimeRef = useRef<number>(0);
-
   // Filtered products (서버에서 이미 필터링되어 옴)
   const filteredBrandProducts = allBrandProducts;
 
@@ -704,44 +707,57 @@ const VerificationGroupByView = () => {
 
   // Handle confirm matching
   const handleConfirmMatching = useCallback(async () => {
-    const approvedCount = selectedItems.length;
-    const rejectedCount = deselectedItems.length;
+    const itemsToApprove = selectedItems.filter((item) => item.verificationStatus !== 'VERIFIED');
+    const itemsToReject = deselectedItems.filter((item) => item.verificationStatus !== 'REJECTED');
 
-    if (approvedCount === 0 && rejectedCount === 0) {
-      showToast('처리할 항목이 없습니다.', 'info');
+    const totalCount = itemsToApprove.length + itemsToReject.length;
+
+    if (totalCount === 0) {
+      showToast('변경 사항이 없습니다.', 'info');
       return;
     }
 
     try {
       // 승인된 항목 처리
-      if (approvedCount > 0) {
+      if (itemsToApprove.length > 0) {
         await batchVerifyMutation({
           variables: {
-            productMappingIds: selectedItems.map((item) => parseInt(item.id)),
+            productMappingIds: itemsToApprove.map((item) => parseInt(item.id)),
             result: ProductMappingVerificationStatus.Verified,
           },
         });
       }
 
       // 거절된 항목 처리
-      if (rejectedCount > 0) {
+      if (itemsToReject.length > 0) {
         await batchVerifyMutation({
           variables: {
-            productMappingIds: deselectedItems.map((item) => parseInt(item.id)),
+            productMappingIds: itemsToReject.map((item) => parseInt(item.id)),
             result: ProductMappingVerificationStatus.Rejected,
           },
         });
       }
 
+      // 로컬 상태 업데이트
+      setVerificationItems((prev) =>
+        prev.map((item) => {
+          if (itemsToApprove.some((a) => a.id === item.id)) {
+            return { ...item, verificationStatus: 'VERIFIED' };
+          }
+          if (itemsToReject.some((r) => r.id === item.id)) {
+            return { ...item, verificationStatus: 'REJECTED' };
+          }
+          return item;
+        }),
+      );
+
       // Show success toast
       showToast(
-        `저장 완료! ✓ ${approvedCount}건 승인${rejectedCount > 0 ? ` · ✗ ${rejectedCount}건 제외` : ''}`,
+        `저장 완료! ✓ ${itemsToApprove.length}건 승인${itemsToReject.length > 0 ? ` · ✗ ${itemsToReject.length}건 제외` : ''}`,
         'success',
       );
 
       // 브랜드 상품 목록에서 pendingVerificationCount 업데이트
-      // 상세 탭인 경우 부모(expandedBrandProductId)를 찾아 업데이트하고,
-      // 브랜드 탭인 경우 현재 선택된 항목(selectedBrandProduct.id)을 업데이트
       const parentIdToUpdate =
         activeTab === 'details' ? expandedBrandProductId : selectedBrandProduct?.id;
 
@@ -751,10 +767,7 @@ const VerificationGroupByView = () => {
             bp.id === parentIdToUpdate
               ? {
                   ...bp,
-                  pendingVerificationCount: Math.max(
-                    0,
-                    bp.pendingVerificationCount - (approvedCount + rejectedCount),
-                  ),
+                  pendingVerificationCount: Math.max(0, bp.pendingVerificationCount - totalCount),
                 }
               : bp,
           ),
@@ -762,52 +775,18 @@ const VerificationGroupByView = () => {
       }
 
       if (activeTab === 'details') {
-        // Expanded items 업데이트
         setExpandedItems((prev) =>
           prev.map((bp) =>
             bp.id === selectedBrandProduct?.id
               ? {
                   ...bp,
-                  pendingVerificationCount: Math.max(
-                    0,
-                    bp.pendingVerificationCount - (approvedCount + rejectedCount),
-                  ),
+                  pendingVerificationCount: Math.max(0, bp.pendingVerificationCount - totalCount),
                 }
               : bp,
           ),
         );
-
-        const nextExpandedIndex = expandedSelectedIndex + 1;
-        if (nextExpandedIndex < expandedItems.length) {
-          setSelectedBrandProduct(expandedItems[nextExpandedIndex]);
-          setExpandedSelectedIndex(nextExpandedIndex);
-          setFocusedPostIndex(-1);
-          setIsLeftPanelFocused(true);
-          return;
-        }
-
-        // 상세 상품 목록의 끝에 도달하면 브랜드 목록으로 돌아가서 다음 항목으로 이동
-        setActiveTab('brands');
-        setExpandedBrandProductId(null);
-        setExpandedBrandItemId(null);
-        setExpandedItems([]);
-        setExpandedSelectedIndex(0);
       }
-
-      // Move to next brand product
-      const nextIndex = selectedProductIndex + 1;
-      if (nextIndex < filteredBrandProducts.length) {
-        setSelectedBrandProduct(filteredBrandProducts[nextIndex]);
-        setSelectedProductIndex(nextIndex);
-        setFocusedPostIndex(-1);
-        setIsLeftPanelFocused(true);
-      } else if (filteredBrandProducts.length > 0) {
-        // 처음으로 돌아가기
-        setSelectedBrandProduct(filteredBrandProducts[0]);
-        setSelectedProductIndex(0);
-        setFocusedPostIndex(-1);
-        setIsLeftPanelFocused(true);
-      }
+      // 자동 이동 로직 제거 (수정 가능한 구조를 위해 현재 페이지 유지)
     } catch (error) {
       showToast('저장 중 오류가 발생했습니다.', 'error');
       console.error(error);
@@ -815,16 +794,39 @@ const VerificationGroupByView = () => {
   }, [
     selectedItems,
     deselectedItems,
-    selectedProductIndex,
-    filteredBrandProducts,
     selectedBrandProduct,
     showToast,
     batchVerifyMutation,
     activeTab,
-    expandedItems,
-    expandedSelectedIndex,
     expandedBrandProductId,
   ]);
+
+  // Handlers for VerificationItem
+  const handleItemClick = useCallback(
+    (idx: number) => {
+      setFocusedPostIndex(idx);
+      setIsLeftPanelFocused(false);
+      // 마지막 항목 근처 클릭 시 추가 로딩
+      if (idx >= currentItems.length - 3 && hasVerificationMore && !isLoadingVerificationMore) {
+        loadMoreVerifications();
+      }
+    },
+    [currentItems.length, hasVerificationMore, isLoadingVerificationMore, loadMoreVerifications],
+  );
+
+  const handleImageClick = useCallback(
+    (thumbnail: string, title: string) => {
+      if (!selectedBrandProduct) return;
+      setImageModalData({
+        isOpen: true,
+        danawaImage: '',
+        danawaTitle: `${selectedBrandProduct.brandName} ${selectedBrandProduct.productName}`,
+        communityImage: thumbnail || undefined,
+        communityTitle: title,
+      });
+    },
+    [selectedBrandProduct],
+  );
 
   // Keyboard navigation
   useEffect(() => {
@@ -856,66 +858,40 @@ const VerificationGroupByView = () => {
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
-          // 탭이 브랜드 상품 탭일 때만 좌측 포커스 허용
           if (isLeftPanelFocused) {
-            // Throttle navigation (150ms)
-            const now = Date.now();
-            if (now - lastNavigationTimeRef.current < 150) return;
-            lastNavigationTimeRef.current = now;
-
             if (activeTab === 'brands') {
-              const nextIndex = selectedProductIndex + 1;
-              // 마지막 항목 근처에 도달하면 자동으로 더 로딩
-              if (
-                nextIndex >= filteredBrandProducts.length - 2 &&
-                hasBrandProductMore &&
-                !isLoadingBrandProductMore
-              ) {
-                loadMoreBrandProducts();
-              }
-              const clampedIndex = Math.min(nextIndex, filteredBrandProducts.length - 1);
-              setSelectedProductIndex(clampedIndex);
-              setSelectedBrandProduct(filteredBrandProducts[clampedIndex]);
+              setSelectedProductIndex((prev) => {
+                const next = Math.min(prev + 1, filteredBrandProducts.length - 1);
+                setSelectedBrandProduct(filteredBrandProducts[next]);
+                return next;
+              });
             } else if (activeTab === 'details' && expandedItems.length > 0) {
-              const nextExpandedIndex = Math.min(
-                expandedSelectedIndex + 1,
-                expandedItems.length - 1,
-              );
-              setExpandedSelectedIndex(nextExpandedIndex);
-              setSelectedBrandProduct(expandedItems[nextExpandedIndex]);
+              setExpandedSelectedIndex((prev) => {
+                const next = Math.min(prev + 1, expandedItems.length - 1);
+                setSelectedBrandProduct(expandedItems[next]);
+                return next;
+              });
             }
           } else {
-            const nextIndex = focusedPostIndex + 1;
-            // 마지막 항목 근처에 도달하면 자동으로 더 로딩
-            if (
-              nextIndex >= currentItems.length - 2 &&
-              hasVerificationMore &&
-              !isLoadingVerificationMore
-            ) {
-              loadMoreVerifications();
-            }
-            setFocusedPostIndex((prev) =>
-              Math.min(nextIndex, Math.max(currentItems.length - 1, 0)),
-            );
+            setFocusedPostIndex((prev) => Math.min(prev + 1, verificationItems.length - 1));
           }
           break;
 
         case 'ArrowUp':
           e.preventDefault();
           if (isLeftPanelFocused) {
-            // Throttle navigation (150ms)
-            const now = Date.now();
-            if (now - lastNavigationTimeRef.current < 150) return;
-            lastNavigationTimeRef.current = now;
-
             if (activeTab === 'brands') {
-              const prevIndex = Math.max(selectedProductIndex - 1, 0);
-              setSelectedProductIndex(prevIndex);
-              setSelectedBrandProduct(filteredBrandProducts[prevIndex]);
+              setSelectedProductIndex((prev) => {
+                const next = Math.max(prev - 1, 0);
+                setSelectedBrandProduct(filteredBrandProducts[next]);
+                return next;
+              });
             } else if (activeTab === 'details' && expandedItems.length > 0) {
-              const prevExpandedIndex = Math.max(expandedSelectedIndex - 1, 0);
-              setExpandedSelectedIndex(prevExpandedIndex);
-              setSelectedBrandProduct(expandedItems[prevExpandedIndex]);
+              setExpandedSelectedIndex((prev) => {
+                const next = Math.max(prev - 1, 0);
+                setSelectedBrandProduct(expandedItems[next]);
+                return next;
+              });
             }
           } else {
             setFocusedPostIndex((prev) => Math.max(prev - 1, 0));
@@ -924,7 +900,7 @@ const VerificationGroupByView = () => {
 
         case 'ArrowRight':
           e.preventDefault();
-          if (isLeftPanelFocused && currentItems.length > 0) {
+          if (isLeftPanelFocused && verificationItems.length > 0) {
             setIsLeftPanelFocused(false);
             setFocusedPostIndex(0);
           }
@@ -948,18 +924,27 @@ const VerificationGroupByView = () => {
             setExpandedItems([]);
             setExpandedSelectedIndex(0);
 
-            if (filteredBrandProducts[selectedProductIndex]) {
-              setSelectedBrandProduct(filteredBrandProducts[selectedProductIndex]);
-            }
+            setSelectedBrandProduct((prevSelected) => {
+              if (prevSelected) {
+                const index = filteredBrandProducts.findIndex((bp) => bp.id === prevSelected.id);
+                if (index >= 0) setSelectedProductIndex(index);
+              }
+              return prevSelected;
+            });
           }
           break;
 
         case ' ':
           e.preventDefault();
           if (isLeftPanelFocused) {
-            if (activeTab === 'brands' && filteredBrandProducts[selectedProductIndex]) {
+            const currentProduct =
+              activeTab === 'brands'
+                ? filteredBrandProducts[selectedProductIndex]
+                : expandedItems[expandedSelectedIndex];
+
+            if (activeTab === 'brands' && currentProduct) {
               // 브랜드 상품 탭에서 스페이스: expand/collapse
-              toggleExpand(filteredBrandProducts[selectedProductIndex]);
+              toggleExpand(currentProduct);
             } else if (activeTab === 'details') {
               // 상세 상품 탭에서 스페이스: 브랜드 상품 탭으로 돌아가기
               setActiveTab('brands');
@@ -971,20 +956,42 @@ const VerificationGroupByView = () => {
               setExpandedBrandItemId(null);
               setExpandedItems([]);
               setExpandedSelectedIndex(0);
-
-              // 부모 항목 선택 상태 복원
-              if (filteredBrandProducts[selectedProductIndex]) {
-                setSelectedBrandProduct(filteredBrandProducts[selectedProductIndex]);
-              }
             }
-          } else if (!isLeftPanelFocused && currentItems[focusedPostIndex]) {
-            toggleItemSelection(currentItems[focusedPostIndex].id);
+          } else if (!isLeftPanelFocused) {
+            const currentItem = verificationItems[focusedPostIndex];
+            if (currentItem) {
+              toggleItemSelection(currentItem.id);
+            }
           }
           break;
 
         case 'Enter':
           e.preventDefault();
-          handleConfirmMatching();
+          if (e.ctrlKey || e.metaKey) {
+            // Ctrl/Cmd + Enter: Move to next
+            if (activeTab === 'details') {
+              setExpandedSelectedIndex((prev) => {
+                const next = prev + 1;
+                if (next < expandedItems.length) {
+                  setSelectedBrandProduct(expandedItems[next]);
+                  return next;
+                } else {
+                  setActiveTab('brands');
+                  return prev;
+                }
+              });
+            } else {
+              setSelectedProductIndex((prev) => {
+                const next = Math.min(prev + 1, filteredBrandProducts.length - 1);
+                setSelectedBrandProduct(filteredBrandProducts[next]);
+                return next;
+              });
+            }
+            setFocusedPostIndex(-1);
+            setIsLeftPanelFocused(true);
+          } else {
+            handleConfirmMatching();
+          }
           break;
 
         case 'a':
@@ -1004,8 +1011,8 @@ const VerificationGroupByView = () => {
         case 'i':
         case 'I':
           e.preventDefault();
-          if (!isLeftPanelFocused && currentItems[focusedPostIndex] && selectedBrandProduct) {
-            const item = currentItems[focusedPostIndex];
+          if (!isLeftPanelFocused && verificationItems[focusedPostIndex] && selectedBrandProduct) {
+            const item = verificationItems[focusedPostIndex];
             setImageModalData({
               isOpen: true,
               danawaImage: '',
@@ -1022,28 +1029,17 @@ const VerificationGroupByView = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [
     isLeftPanelFocused,
-    selectedProductIndex,
-    focusedPostIndex,
+    activeTab,
     filteredBrandProducts,
-    currentItems,
-    selectedBrandProduct,
+    expandedItems,
+    verificationItems,
+    handleConfirmMatching,
+    toggleExpand,
     toggleItemSelection,
     selectAll,
     deselectAll,
-    handleConfirmMatching,
+    selectedBrandProduct,
     imageModalData.isOpen,
-    expandedBrandProductId,
-    expandedBrandItemId,
-    expandedItems,
-    expandedSelectedIndex,
-    toggleExpand,
-    hasBrandProductMore,
-    isLoadingBrandProductMore,
-    loadMoreBrandProducts,
-    hasVerificationMore,
-    isLoadingVerificationMore,
-    loadMoreVerifications,
-    activeTab,
   ]);
 
   // Scroll focused post into view (debounced for performance)
@@ -1104,6 +1100,42 @@ const VerificationGroupByView = () => {
       expandedElement?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
     }
   }, [expandedSelectedIndex, expandedBrandItemId, expandedBrandProductId]);
+
+  // 자동 페이징: 좌측 브랜드 목록
+  useEffect(() => {
+    if (
+      activeTab === 'brands' &&
+      selectedProductIndex >= filteredBrandProducts.length - 3 &&
+      hasBrandProductMore &&
+      !isLoadingBrandProductMore
+    ) {
+      loadMoreBrandProducts();
+    }
+  }, [
+    selectedProductIndex,
+    filteredBrandProducts.length,
+    hasBrandProductMore,
+    isLoadingBrandProductMore,
+    loadMoreBrandProducts,
+    activeTab,
+  ]);
+
+  // 자동 페이징: 우측 검증 목록
+  useEffect(() => {
+    if (
+      focusedPostIndex >= verificationItems.length - 3 &&
+      hasVerificationMore &&
+      !isLoadingVerificationMore
+    ) {
+      loadMoreVerifications();
+    }
+  }, [
+    focusedPostIndex,
+    verificationItems.length,
+    hasVerificationMore,
+    isLoadingVerificationMore,
+    loadMoreVerifications,
+  ]);
 
   // Statistics
   const stats = {
@@ -1475,6 +1507,44 @@ const VerificationGroupByView = () => {
                     </svg>
                     확정
                   </button>
+                  <button
+                    onClick={() => {
+                      if (activeTab === 'details') {
+                        const nextExpandedIndex = expandedSelectedIndex + 1;
+                        if (nextExpandedIndex < expandedItems.length) {
+                          setSelectedBrandProduct(expandedItems[nextExpandedIndex]);
+                          setExpandedSelectedIndex(nextExpandedIndex);
+                        } else {
+                          setActiveTab('brands');
+                        }
+                      } else {
+                        const nextIndex = selectedProductIndex + 1;
+                        if (nextIndex < filteredBrandProducts.length) {
+                          setSelectedBrandProduct(filteredBrandProducts[nextIndex]);
+                          setSelectedProductIndex(nextIndex);
+                        }
+                      }
+                      setFocusedPostIndex(-1);
+                      setIsLeftPanelFocused(true);
+                    }}
+                    className="bg-gray-100 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 flex items-center gap-1 rounded px-2.5 py-1.5 text-xs font-bold transition-colors dark:bg-meta-4"
+                    title="Ctrl + Enter"
+                  >
+                    다음
+                    <svg
+                      className="h-3.5 w-3.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
                 </div>
               </div>
 
@@ -1551,38 +1621,18 @@ const VerificationGroupByView = () => {
                   </div>
                 ) : (
                   <div className="space-y-1">
-                    {currentItems.length > 0 ? (
+                    {verificationItems.length > 0 ? (
                       <>
-                        {currentItems.map((item, index) => (
+                        {verificationItems.map((item, index) => (
                           <VerificationItem
                             key={item.id}
                             item={item}
+                            isSelected={itemSelections[item.id] ?? true}
                             index={index}
                             isFocused={focusedPostIndex === index && !isLeftPanelFocused}
-                            isVerified={item.verificationStatus === 'VERIFIED'}
-                            onItemClick={(idx) => {
-                              setFocusedPostIndex(idx);
-                              // 우측 아이템 클릭 시에도 좌측 포커스 유지 (항상 좌측에 포커스)
-                              setIsLeftPanelFocused(true);
-                              // 마지막 항목 근처 클릭 시 추가 로딩
-                              if (
-                                idx >= currentItems.length - 3 &&
-                                hasVerificationMore &&
-                                !isLoadingVerificationMore
-                              ) {
-                                loadMoreVerifications();
-                              }
-                            }}
+                            onItemClick={handleItemClick}
                             onToggleSelection={toggleItemSelection}
-                            onImageClick={(thumbnail, title) => {
-                              setImageModalData({
-                                isOpen: true,
-                                danawaImage: '',
-                                danawaTitle: `${selectedBrandProduct.brandName} ${selectedBrandProduct.productName}`,
-                                communityImage: thumbnail || undefined,
-                                communityTitle: title,
-                              });
-                            }}
+                            onImageClick={handleImageClick}
                           />
                         ))}
                         {/* Loading indicator */}
