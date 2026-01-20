@@ -12,10 +12,12 @@ export default function ProductGridCard({
   product,
   rank,
   actionIcon,
+  priority,
 }: {
   product: ProductCardType;
   rank?: number;
   actionIcon?: React.ReactNode;
+  priority?: boolean;
 }) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} className="w-full">
@@ -28,6 +30,7 @@ export default function ProductGridCard({
           type="product"
           alt={product.title}
           sizes="(max-width: 768px) 160px, 252px"
+          priority={priority}
         />
         {typeof rank === 'number' && (
           <div className="text-primary-500 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900 text-sm">
