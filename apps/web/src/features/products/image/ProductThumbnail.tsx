@@ -14,6 +14,7 @@ const ProductThumbnail = memo(function ProductThumbnail({
   categoryId,
   type = 'product',
   className,
+  loading = 'eager',
   ...rest
 }: Omit<ImageProps, 'src'> & {
   src?: string;
@@ -37,7 +38,7 @@ const ProductThumbnail = memo(function ProductThumbnail({
       alt={altText}
       title={titleText}
       fallback={<NoImage type={type} categoryId={categoryId} />}
-      loading="eager"
+      loading={loading}
       width={192}
       height={192}
       sizes="192px"

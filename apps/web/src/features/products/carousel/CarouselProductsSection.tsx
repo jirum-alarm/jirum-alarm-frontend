@@ -14,12 +14,14 @@ export default function CarouselProductsSection({
   nested = false,
   shouldShowMobileHeader = true,
   isFullWidth = false,
+  priorityCount = 0,
 }: {
   title: string;
   products: ProductCardType[];
   nested?: boolean;
   shouldShowMobileHeader?: boolean;
   isFullWidth?: boolean;
+  priorityCount?: number;
 }) {
   return (
     <section>
@@ -28,7 +30,7 @@ export default function CarouselProductsSection({
       </div>
       <div className={cn({ 'pc:px-5': nested, 'pc:-px-5': isFullWidth })}>
         <Suspense fallback={<CarouselProductListSkeleton />}>
-          <CarouselProductList products={products} nested={nested} />
+          <CarouselProductList products={products} nested={nested} priorityCount={priorityCount} />
         </Suspense>
       </div>
     </section>

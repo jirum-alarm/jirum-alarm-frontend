@@ -8,7 +8,13 @@ import DisplayListPrice from '../DisplayListPrice';
 import ProductThumbnail from '../image/ProductThumbnail';
 import { type ProductCardType } from '../type';
 
-export default function CarouselProductCard({ product }: { product: ProductCardType }) {
+export default function CarouselProductCard({
+  product,
+  priority,
+}: {
+  product: ProductCardType;
+  priority?: boolean;
+}) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} className="pc:w-[192px] inline-block w-[120px]">
       <div className="pc:h-[192px] relative aspect-square h-[120px] overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
@@ -19,6 +25,7 @@ export default function CarouselProductCard({ product }: { product: ProductCardT
           type="hotDeal"
           alt={product.title}
           sizes="(max-width: 768px) 120px, 192px"
+          priority={priority}
         />
         {product.isEnd ? (
           <div className="text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">

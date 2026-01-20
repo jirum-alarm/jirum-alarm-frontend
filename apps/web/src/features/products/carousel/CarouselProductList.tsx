@@ -18,9 +18,15 @@ interface CarouselProductListProps {
   itemWidth?: string;
   maxItems?: number;
   nested?: boolean;
+  priorityCount?: number;
 }
 
-function CarouselProductList({ products, maxItems, nested = false }: CarouselProductListProps) {
+function CarouselProductList({
+  products,
+  maxItems,
+  nested = false,
+  priorityCount = 0,
+}: CarouselProductListProps) {
   const { device } = useDevice();
 
   const [isInit, setIsInit] = useState(false);
@@ -76,7 +82,7 @@ function CarouselProductList({ products, maxItems, nested = false }: CarouselPro
           className={cn(!isInit && 'pc:pr-6 pc:first:pl-0 pr-3 first:pl-5')}
           style={{ width: 'fit-content' }}
         >
-          <CarouselProductCard product={product} />
+          <CarouselProductCard product={product} priority={i < priorityCount} />
         </SwiperSlide>
       ))}
     </Swiper>

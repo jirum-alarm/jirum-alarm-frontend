@@ -32,7 +32,7 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
   return (
     <div ref={ref} className="pc:space-y-10 space-y-8">
       <div className="px-5">
-        <GridProductList products={products?.slice(0, SIZE) ?? []} rankFrom={1} />
+        <GridProductList products={products?.slice(0, SIZE) ?? []} rankFrom={1} priorityCount={5} />
       </div>
       {liveProducts && (
         <CarouselProductsSection
@@ -40,6 +40,7 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
           products={liveProducts}
           nested
           shouldShowMobileHeader={false}
+          priorityCount={3}
         />
       )}
       <div className="px-5">
@@ -52,6 +53,7 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
           products={hotDeals}
           nested
           shouldShowMobileHeader={false}
+          priorityCount={3}
         />
       )}
     </div>

@@ -18,6 +18,11 @@ export default function ImageComponent({
   const [currentSrc, setCurrentSrc] = useState<any>(src);
   const [hasError, setHasError] = useState<boolean>(false);
 
+  // handle src change from outside (e.g. infinite scroll)
+  if (currentSrc !== src && !hasError) {
+    setCurrentSrc(src);
+  }
+
   if (!currentSrc || hasError) {
     return fallback;
   }

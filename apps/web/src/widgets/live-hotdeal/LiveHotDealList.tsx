@@ -18,7 +18,7 @@ const LiveHotDealList = ({ device }: { device: CheckDeviceResult }) => {
 
   return (
     <>
-      <ProductGridList products={products.slice(0, size)} />
+      <ProductGridList products={products.slice(0, size)} priorityCount={size} />
       <div className="pc:hidden col-span-2 w-full pt-1 pb-3 sm:col-span-3">
         {type && link && <AppDownloadCTA type={type} link={link} />}
       </div>
