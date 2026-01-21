@@ -1,3 +1,5 @@
+import { motion } from 'motion/react';
+
 import { cn } from '@/lib/cn';
 
 import Link from '@shared/ui/Link';
@@ -28,7 +30,13 @@ export default function NavLink({
         'text-gray-700': !isActive && !isInverted,
       })}
     >
-      {label}
+      <motion.div
+        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.1 }}
+        className="flex h-full items-center"
+      >
+        {label}
+      </motion.div>
       {isActive && <div className="bg-primary-500 absolute right-0 bottom-0 left-0 h-[2px]" />}
     </Link>
   );

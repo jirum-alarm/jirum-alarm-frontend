@@ -1,5 +1,7 @@
 'use client';
 
+import { motion } from 'motion/react';
+
 import { Alert, Description, Filter, Headset, Heart } from '@/components/common/icons';
 import customerService from '@/lib/customerservice/customer-service';
 
@@ -56,12 +58,19 @@ const MenuList = () => {
             );
           })}
           <li>
-            <button className="w-full">
-              <div className="flex items-center gap-3 py-3" onClick={handleShowChannelTalkClick}>
+            <motion.button
+              className="w-full rounded-lg"
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.1 }}
+            >
+              <div
+                className="flex items-center gap-3 px-2 py-3"
+                onClick={handleShowChannelTalkClick}
+              >
                 {<Headset />}
                 <span className="text-gray-900">고객센터</span>
               </div>
-            </button>
+            </motion.button>
           </li>
         </ul>
       </div>

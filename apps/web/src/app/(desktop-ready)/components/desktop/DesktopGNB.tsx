@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 
@@ -77,45 +78,59 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           <Link
             href={talkroomLink}
             target="_blank"
-            className="relative size-9 rounded-full duration-300 hover:bg-gray-400/20"
+            className="group relative size-9 rounded-full duration-300 hover:bg-gray-400/20"
             aria-label="핫딜 카톡방 입장"
           >
-            <div
-              className={cn(
-                'absolute inset-0 flex items-center justify-center transition-opacity',
-                {
-                  'opacity-100': isInHomeHero,
-                  'opacity-0': !isInHomeHero,
-                },
-              )}
+            <motion.div
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.1 }}
+              className="flex h-full w-full items-center justify-center"
             >
-              <TalkDark className="mt-0.25 size-full p-0.5" />
-            </div>
-            <div
-              className={cn(
-                'absolute inset-0 flex items-center justify-center transition-opacity',
-                {
-                  'opacity-100': !isInHomeHero,
-                  'opacity-0': isInHomeHero,
-                },
-              )}
-            >
-              <TalkLight className="mt-0.25 size-full p-0.5" />
-            </div>
+              <div
+                className={cn(
+                  'absolute inset-0 flex items-center justify-center transition-opacity',
+                  {
+                    'opacity-100': isInHomeHero,
+                    'opacity-0': !isInHomeHero,
+                  },
+                )}
+              >
+                <TalkDark className="mt-0.25 size-full p-0.5" />
+              </div>
+              <div
+                className={cn(
+                  'absolute inset-0 flex items-center justify-center transition-opacity',
+                  {
+                    'opacity-100': !isInHomeHero,
+                    'opacity-0': isInHomeHero,
+                  },
+                )}
+              >
+                <TalkLight className="mt-0.25 size-full p-0.5" />
+              </div>
+            </motion.div>
           </Link>
           {isLoggedIn ? (
             <Link
               href={PAGE.MYPAGE}
               className="flex size-8 items-center justify-center rounded-full duration-300 hover:bg-gray-400/20"
             >
-              <My width={28} height={28} color={isInHomeHero ? '#FFFFFF' : '#101828'} />
+              <motion.div
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.1 }}
+                className="flex items-center justify-center"
+              >
+                <My width={28} height={28} color={isInHomeHero ? '#FFFFFF' : '#101828'} />
+              </motion.div>
             </Link>
           ) : (
             <Link
               href={PAGE.LOGIN}
               className="rounded-full bg-gray-700 px-4 py-1.5 font-semibold text-white transition-colors duration-300 hover:bg-gray-600"
             >
-              로그인
+              <motion.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
+                로그인
+              </motion.div>
             </Link>
           )}
         </div>

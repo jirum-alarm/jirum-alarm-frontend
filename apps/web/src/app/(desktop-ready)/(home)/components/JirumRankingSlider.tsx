@@ -138,13 +138,15 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   return (
     <>
       <div className="relative flex w-full items-center gap-x-5 gap-y-3">
-        <button
+        <motion.button
           className="pc:flex mb-5 hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
           onClick={handleSlidePrev}
           name="이전"
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.1 }}
         >
           <ArrowLeft className="mr-1 size-8 text-white" color="white" />
-        </button>
+        </motion.button>
         {!canRender && (
           <div className="invisible">
             {isMobile ? (
@@ -172,13 +174,15 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             {renderProducts()}
           </Swiper>
         </motion.div>
-        <button
+        <motion.button
           className="pc:flex mb-5 hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
           onClick={handleSlideNext}
           name="다음"
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.1 }}
         >
           <ArrowLeft className="ml-1 size-8 -scale-x-100 text-white" color="white" />
-        </button>
+        </motion.button>
 
         <AnimatePresence>
           {!canRender && (

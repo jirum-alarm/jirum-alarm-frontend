@@ -6,7 +6,8 @@ import { cn } from '@/lib/cn';
 import { containerVaraint, helperVariant, iconVaraint, inputVariant } from './variant/input';
 
 interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
+  extends
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
     VariantProps<typeof inputVariant> {
   variant?: 'standard';
   size?: 'md';

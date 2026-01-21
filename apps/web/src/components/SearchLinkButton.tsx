@@ -1,3 +1,7 @@
+'use client';
+
+import { motion } from 'motion/react';
+
 import { Search } from '@/components/common/icons';
 import { PAGE } from '@/constants/page';
 
@@ -16,7 +20,13 @@ const SearchLinkButton = ({ color, onClick }: Props) => {
       onClick={onClick}
       aria-label="검색"
     >
-      <Search color={color} className="pc:size-7 size-6" />
+      <motion.div
+        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.1 }}
+        className="flex h-full w-full items-center justify-center rounded-full"
+      >
+        <Search color={color} className="pc:size-7 size-6" />
+      </motion.div>
     </Link>
   );
 };

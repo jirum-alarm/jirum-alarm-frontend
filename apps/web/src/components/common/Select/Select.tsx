@@ -10,7 +10,8 @@ import { SelectContext } from './context/SelectContext';
 import { selectButtonVaraint, selectListContainerVariant } from './variant/select';
 
 export interface SelectProps
-  extends Omit<
+  extends
+    Omit<
       React.SelectHTMLAttributes<HTMLSelectElement>,
       'size' | 'color' | 'onChange' | 'value' | 'defaultValue'
     >,

@@ -55,8 +55,8 @@ function generateDescription(
   },
   categoryName?: string,
 ): string {
-  const guideDescriptions = productGuides.productGuides
-    .map((guide) => `${guide.title}: ${guide.content}`)
+  const guideDescriptions = productGuides?.productGuides
+    ?.map((guide) => `${guide.title}: ${guide.content}`)
     .join(', ');
 
   if (guideDescriptions) {
