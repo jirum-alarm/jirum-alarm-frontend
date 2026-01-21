@@ -8,65 +8,47 @@ type ScrollDirection = 'up' | 'down' | null;
 const scrollDirectionAtom = atom<ScrollDirection>(null);
 
 export function useScrollDirection() {
-  const isInitialMount = useRef(true);
-  const scrollStartY = useRef(0);
-  const scrollEndTimeout = useRef<NodeJS.Timeout | null>(null);
+  const lastScrollY = useRef(0);
   const ticking = useRef(false);
 
   const [scrollDirection, setScrollDirection] = useAtom(scrollDirectionAtom);
 
   useEffect(() => {
-    const SCROLL_END_DELAY = 100; // 스크롤 종료로 판단하는 시간 (ms)
-    const MIN_SCROLL_DISTANCE = 10; // 최소 스크롤 거리 (px)
+    const THRESHOLD = 10;
 
-    const onScroll = () => {
-      if (isInitialMount.current) {
-        isInitialMount.current = false;
-        scrollStartY.current = window.pageYOffset;
+    const updateScrollDirection = () => {
+      const scrollY = window.pageYOffset;
+
+      if (Math.abs(scrollY - lastScrollY.current) < THRESHOLD) {
+        ticking.current = false;
         return;
       }
 
+      // Always show when near top
+      if (scrollY < THRESHOLD) {
+        setScrollDirection('up');
+      } else {
+        const direction = scrollY > lastScrollY.current ? 'down' : 'up';
+        if (direction !== scrollDirection) {
+          setScrollDirection(direction);
+        }
+      }
+
+      lastScrollY.current = scrollY > 0 ? scrollY : 0;
+      ticking.current = false;
+    };
+
+    const onScroll = () => {
       if (!ticking.current) {
-        requestAnimationFrame(() => {
-          // 스크롤이 시작될 때 시작 위치 저장
-          if (scrollEndTimeout.current === null) {
-            scrollStartY.current = window.pageYOffset;
-          }
-
-          // 이전 타이머 취소
-          if (scrollEndTimeout.current) {
-            clearTimeout(scrollEndTimeout.current);
-          }
-
-          // 스크롤이 끝났을 때 방향 판단
-          scrollEndTimeout.current = setTimeout(() => {
-            const scrollEndY = window.pageYOffset;
-            const scrollDistance = scrollEndY - scrollStartY.current;
-
-            // 최소 스크롤 거리 이상일 때만 방향 업데이트
-            if (Math.abs(scrollDistance) > MIN_SCROLL_DISTANCE) {
-              const direction = scrollDistance > 0 ? 'down' : 'up';
-              if (direction !== scrollDirection) {
-                setScrollDirection(direction);
-              }
-            }
-
-            scrollEndTimeout.current = null;
-          }, SCROLL_END_DELAY);
-
-          ticking.current = false;
-        });
+        window.requestAnimationFrame(updateScrollDirection);
         ticking.current = true;
       }
     };
 
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', onScroll);
-      if (scrollEndTimeout.current) {
-        clearTimeout(scrollEndTimeout.current);
-      }
     };
   }, [scrollDirection, setScrollDirection]);
 
