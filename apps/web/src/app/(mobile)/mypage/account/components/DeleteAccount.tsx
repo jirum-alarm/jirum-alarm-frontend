@@ -1,4 +1,7 @@
+'use client';
+
 import { useMutation } from '@tanstack/react-query';
+import { motion } from 'motion/react';
 
 import AlertDialog from '@/components/common/AlertDialog';
 import Button from '@/components/common/Button';
@@ -26,7 +29,13 @@ const DeleteAccount = () => {
   return (
     <AlertDialog>
       <AlertDialog.Trigger asChild>
-        <button className="px-6 py-3 text-[13px] text-gray-500">회원탈퇴</button>
+        <motion.button
+          className="rounded-lg px-6 py-3 text-[13px] text-gray-500"
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.1 }}
+        >
+          회원탈퇴
+        </motion.button>
       </AlertDialog.Trigger>
       <AlertDialog.Content>
         <AlertDialog.Header>

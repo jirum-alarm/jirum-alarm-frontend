@@ -1,5 +1,7 @@
 'use client';
 
+import { motion } from 'motion/react';
+
 import { PromotionTab } from '@/entities/promotion/model/types';
 import { cn } from '@/lib/cn';
 
@@ -33,7 +35,13 @@ const PromotionTabs = ({ tabs, activeTabId, onTabClick }: PromotionTabsProps) =>
             'border-gray-300 bg-white text-gray-700': activeTabId !== tab.id,
           })}
         >
-          <button className="px-[16px] py-[6px]">{tab.label}</button>
+          <motion.button
+            className="px-[16px] py-[6px]"
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.1 }}
+          >
+            {tab.label}
+          </motion.button>
         </li>
       ))}
     </ul>

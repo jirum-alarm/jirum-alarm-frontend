@@ -105,8 +105,8 @@ const BottomNavComponent = () => {
             >
               <motion.div
                 className="flex w-full flex-col items-center justify-center rounded-lg"
-                whileTap={{ scale: 0.95, backgroundColor: '#F2F4F7' }}
-                transition={{ duration: 0.1, backgroundColor: { duration: 0 } }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.1 }}
               >
                 <div
                   className="flex h-[36px] w-[48px] items-center justify-center"

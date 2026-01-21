@@ -35,12 +35,14 @@ const MOBILE_SWIPER_OPTIONS: SwiperOptions & AutoplayOptions = {
 const isInitAtom = atom(false);
 
 const BannerSwiper = () => {
-  const { device } = useDevice();
+  const { device, isHydrated } = useDevice();
   const { type, link } = useAppDownloadLink(device);
 
   const initialSlide = 0; //Math.floor(Math.random() * 3);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useAtom(isInitAtom);
+
+  const canRenderAppDownload = isHydrated && type && link;
 
   // Persil 광고 기간일 때는 단일 배너만 렌더링
   if (Advertisement.Persil_20251124.isInPeriod()) {
@@ -58,7 +60,7 @@ const BannerSwiper = () => {
     if (device.isJirumAlarmApp) {
       return <KakaoOpenChatLink isMobile={true} priority />;
     }
-    if (type && link) {
+    if (canRenderAppDownload) {
       return <AppDownloadCTA type={type} link={link} />;
     }
     return <KakaoOpenChatLink isMobile={true} priority />;
@@ -100,7 +102,7 @@ const BannerSwiper = () => {
         {[...Array(2)].map((_, i) => (
           <Fragment key={i}>
             {promoBannerGenerator?.(i)}
-            {type && link && (
+            {canRenderAppDownload && (
               <SwiperSlide key={`${i}-app-download-cta`} style={{ width: 'calc(100% - 50px)' }}>
                 <AppDownloadCTA type={type} link={link} />
               </SwiperSlide>
@@ -109,7 +111,7 @@ const BannerSwiper = () => {
               {/* Persil X, AppDownload X (type&&link false) 이면 Kakao가 첫번째 */}
               <KakaoOpenChatLink
                 isMobile={true}
-                priority={i === 0 && !promoBannerGenerator && !(type && link)}
+                priority={i === 0 && !promoBannerGenerator && !canRenderAppDownload}
               />
             </SwiperSlide>
             <SwiperSlide key={`${i}-about-link`} style={{ width: 'calc(100% - 50px)' }}>

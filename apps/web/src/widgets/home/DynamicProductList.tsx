@@ -12,9 +12,10 @@ import ListProductList from '@features/products/list/ListProductList';
 
 interface DynamicProductListProps {
   section: ContentPromotionSection;
+  isMobile: boolean;
 }
 
-const DynamicProductList = ({ section }: DynamicProductListProps) => {
+const DynamicProductList = ({ section, isMobile }: DynamicProductListProps) => {
   const queryOptions = getPromotionQueryOptions(section);
   const { data } = useSuspenseQuery(queryOptions as any);
 
@@ -49,7 +50,7 @@ const DynamicProductList = ({ section }: DynamicProductListProps) => {
   }
 
   if (section.type === 'PAGINATED_GRID') {
-    return <PaginatedProductGridList products={products} />;
+    return <PaginatedProductGridList products={products} isMobile={isMobile} />;
   }
 
   if (section.type === 'GRID_TABBED') {

@@ -7,10 +7,8 @@ import { useSelectContext } from './context/SelectContext';
 import { optionVaraint } from './variant/option';
 
 export interface OptionProps
-  extends Omit<
-      React.SelectHTMLAttributes<HTMLSelectElement>,
-      'size' | 'color' | 'onChange' | 'value'
-    >,
+  extends
+    Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size' | 'color' | 'onChange' | 'value'>,
     VariantProps<typeof optionVaraint> {
   children: React.ReactNode;
   index?: number;

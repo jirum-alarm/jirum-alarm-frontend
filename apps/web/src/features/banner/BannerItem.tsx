@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'motion/react';
 import Image, { StaticImageData } from 'next/image';
 import { ReactNode } from 'react';
 
@@ -46,23 +47,29 @@ const BannerItem = ({
       href={href}
       target="_blank"
     >
-      <div>
-        <p className="pc:text-[22px] [&>strong]:text-primary-300 mb-[4px] font-bold text-white">
-          {title}
-        </p>
-        <p className="pc:text-base text-[13px] text-gray-200">{description}</p>
-      </div>
+      <motion.div
+        className="flex h-full w-full items-center justify-between"
+        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.1 }}
+      >
+        <div>
+          <p className="pc:text-[22px] [&>strong]:text-primary-300 mb-[4px] font-bold text-white">
+            {title}
+          </p>
+          <p className="pc:text-base text-[13px] text-gray-200">{description}</p>
+        </div>
 
-      <div className="pc:h-[84px] pc:w-[120px] relative flex h-14 w-[80px] items-center justify-center">
-        <Image
-          src={image}
-          alt=""
-          priority={priority}
-          sizes={isMobile ? '80px' : '120px'}
-          width={isMobile ? 80 : 120}
-          height={isMobile ? 56 : 84}
-        />
-      </div>
+        <div className="pc:h-[84px] pc:w-[120px] relative flex h-14 w-[80px] items-center justify-center">
+          <Image
+            src={image}
+            alt=""
+            priority={priority}
+            sizes={isMobile ? '80px' : '120px'}
+            width={isMobile ? 80 : 120}
+            height={isMobile ? 56 : 84}
+          />
+        </div>
+      </motion.div>
 
       {isAd && (
         <div className="bg-opacity-90 absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[7px] py-[3px] text-xs leading-none font-medium text-white">

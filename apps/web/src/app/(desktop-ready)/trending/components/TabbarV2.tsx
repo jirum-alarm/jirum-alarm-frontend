@@ -1,3 +1,5 @@
+'use client';
+
 import { animate, motion, useMotionValue } from 'motion/react';
 import { Tabs } from 'radix-ui';
 import { useEffect, useRef, useState } from 'react';
@@ -209,7 +211,13 @@ const TabBarV2 = ({
                   : mergedStyles.tabTrigger.inactive,
               )}
             >
-              {category.name}
+              <motion.span
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.1 }}
+                className="inline-block"
+              >
+                {category.name}
+              </motion.span>
             </Tabs.Trigger>
           ))}
         </motion.div>

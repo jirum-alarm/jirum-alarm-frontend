@@ -2,10 +2,9 @@ import { Suspense } from 'react';
 import { SwiperOptions } from 'swiper/types';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
+import InteractiveMoreLink from '@/components/InteractiveMoreLink';
 import SectionHeader from '@/components/SectionHeader';
 import { PAGE } from '@/constants/page';
-
-import Link from '@shared/ui/Link';
 
 import JirumRankingSlider from '../components/JirumRankingSlider';
 import SliderDots from '../components/SliderDots';
@@ -18,7 +17,8 @@ const SLIDER_CONFIG_MOBILE: SwiperOptions = {
   centeredSlides: true,
   loop: true,
   lazyPreloadPrevNext: 1,
-  lazyPreloaderClass: 'swiper-lazy-preloader',
+  touchStartForcePreventDefault: true,
+  preventClicksPropagation: true,
 } as const;
 
 const JirumRankingContainer = () => {
@@ -27,11 +27,7 @@ const JirumRankingContainer = () => {
       <div className="px-5">
         <SectionHeader
           title="지름알림 랭킹"
-          right={
-            <Link className="text-sm text-gray-500" href={PAGE.TRENDING}>
-              더보기
-            </Link>
-          }
+          right={<InteractiveMoreLink href={PAGE.TRENDING}>더보기</InteractiveMoreLink>}
         />
       </div>
       <ApiErrorBoundary>

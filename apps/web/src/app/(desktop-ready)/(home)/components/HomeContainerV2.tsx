@@ -52,7 +52,7 @@ async function HomeContainerV2() {
           {!isMobile ? null : renderMobileRanking()}
           <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-14">
             <div>
-              <PromotionSectionList sections={sections} />
+              <PromotionSectionList sections={sections} isMobile={isMobile} />
             </div>
           </div>
         </div>

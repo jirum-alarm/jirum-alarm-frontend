@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { SwiperOptions } from 'swiper/types';
 
 import ApiErrorBoundary from '@/components/ApiErrorBoundary';
+import InteractiveMoreLink from '@/components/InteractiveMoreLink';
 import SectionHeader from '@/components/SectionHeader';
 import { PAGE } from '@/constants/page';
 
@@ -19,6 +20,8 @@ const SLIDER_CONFIG_DESKTOP: SwiperOptions = {
   centeredSlides: false,
   loop: true,
   spaceBetween: 24,
+  touchStartForcePreventDefault: true,
+  preventClicksPropagation: true,
 } as const;
 
 const JirumRankingContainer = () => (
@@ -28,9 +31,9 @@ const JirumRankingContainer = () => (
         title="지름알림 랭킹"
         titleClassName="text-white"
         right={
-          <Link className="px-3 text-sm text-gray-100" href={PAGE.TRENDING}>
+          <InteractiveMoreLink className="px-3 text-sm text-gray-100" href={PAGE.TRENDING}>
             더보기
-          </Link>
+          </InteractiveMoreLink>
         }
       />
     </div>

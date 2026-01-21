@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
+import InteractiveMoreLink from '@/components/InteractiveMoreLink';
 import SectionHeader from '@/components/SectionHeader';
 import { getPromotionQueryOptions } from '@/entities/promotion/lib/getPromotionQueryOptions';
 import { ContentPromotionSection } from '@/entities/promotion/model/types';
-import Link from '@/shared/ui/Link';
 
 import GridProductListSkeleton from '@features/products/grid/GridProductListSkeleton';
 
@@ -13,9 +13,10 @@ import TabbedDynamicProductSection from './TabbedDynamicProductSection';
 
 interface DynamicProductSectionProps {
   section: ContentPromotionSection;
+  isMobile: boolean;
 }
 
-const DynamicProductSection = async ({ section }: DynamicProductSectionProps) => {
+const DynamicProductSection = async ({ section, isMobile }: DynamicProductSectionProps) => {
   const queryClient = getQueryClient();
 
   let sectionToPrefetch = section;
@@ -36,7 +37,7 @@ const DynamicProductSection = async ({ section }: DynamicProductSectionProps) =>
   await queryClient.prefetchQuery(queryOptions as any);
 
   if (section.tabs && section.tabs.length > 0) {
-    return <TabbedDynamicProductSection section={section} />;
+    return <TabbedDynamicProductSection section={section} isMobile={isMobile} />;
   }
 
   return (
@@ -46,18 +47,18 @@ const DynamicProductSection = async ({ section }: DynamicProductSectionProps) =>
           title={section.title}
           right={
             section.viewMoreLink ? (
-              <Link
+              <InteractiveMoreLink
                 href={section.viewMoreLink}
                 className="text-sm text-gray-500 hover:text-gray-700"
               >
                 더보기
-              </Link>
+              </InteractiveMoreLink>
             ) : undefined
           }
         />
       </div>
       <Suspense fallback={<GridProductListSkeleton length={4} />}>
-        <DynamicProductList section={section} />
+        <DynamicProductList section={section} isMobile={isMobile} />
       </Suspense>
     </div>
   );

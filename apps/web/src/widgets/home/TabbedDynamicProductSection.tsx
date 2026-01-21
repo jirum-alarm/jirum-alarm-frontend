@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'motion/react';
 import { Suspense, useState } from 'react';
 
 import SectionHeader from '@/components/SectionHeader';
@@ -14,9 +15,10 @@ import PromotionTabs from './PromotionTabs';
 
 interface TabbedDynamicProductSectionProps {
   section: ContentPromotionSection;
+  isMobile: boolean;
 }
 
-const TabbedDynamicProductSection = ({ section }: TabbedDynamicProductSectionProps) => {
+const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProductSectionProps) => {
   const tabs = section.tabs || [];
   const [activeTab, setActiveTab] = useState<PromotionTab>(tabs[0]);
 
@@ -44,12 +46,18 @@ const TabbedDynamicProductSection = ({ section }: TabbedDynamicProductSectionPro
           title={section.title}
           right={
             section.viewMoreLink ? (
-              <Link
-                href={section.viewMoreLink}
-                className="text-sm text-gray-500 hover:text-gray-700"
+              <motion.div
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.1 }}
+                className="rounded-lg"
               >
-                더보기
-              </Link>
+                <Link
+                  href={section.viewMoreLink}
+                  className="px-2 py-1 text-sm text-gray-500 hover:text-gray-700"
+                >
+                  더보기
+                </Link>
+              </motion.div>
             ) : undefined
           }
         />
@@ -59,7 +67,7 @@ const TabbedDynamicProductSection = ({ section }: TabbedDynamicProductSectionPro
       </div>
 
       <Suspense fallback={<GridProductListSkeleton length={4} />}>
-        <DynamicProductList section={activeSection} />
+        <DynamicProductList section={activeSection} isMobile={isMobile} />
       </Suspense>
     </div>
   );

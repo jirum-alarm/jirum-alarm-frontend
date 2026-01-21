@@ -1,5 +1,7 @@
 'use client';
 
+import { motion } from 'motion/react';
+
 import { Share } from '@/components/common/icons';
 import { useToast } from '@/components/common/Toast';
 import { EVENT } from '@/constants/mixpanel';
@@ -25,14 +27,16 @@ const ShareButton = ({ title, page }: { title: string; page?: keyof typeof EVENT
     }
   };
   return (
-    <button
+    <motion.button
       onClick={handleShare}
-      className="-m-2 p-2 hover:cursor-pointer"
+      className="-m-2 rounded-full p-2 hover:cursor-pointer"
       aria-label="공유하기"
       title="공유하기"
+      whileTap={{ scale: 0.95 }}
+      transition={{ duration: 0.1 }}
     >
       <Share />
-    </button>
+    </motion.button>
   );
 };
 

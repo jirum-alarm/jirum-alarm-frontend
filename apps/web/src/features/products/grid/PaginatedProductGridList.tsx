@@ -10,12 +10,15 @@ import ProductGridList from './GridProductList';
 
 type PaginatedProductGridListProps = {
   products: ProductCardType[];
+  isMobile: boolean;
 };
 
-export default function PaginatedProductGridList({ products }: PaginatedProductGridListProps) {
+export default function PaginatedProductGridList({
+  products,
+  isMobile,
+}: PaginatedProductGridListProps) {
   const [currentPage, setCurrentPage] = useState(0);
-  const { device, isHydrated } = useDevice();
-  const itemsPerPage = isHydrated && !device.isMobile ? 5 : 4;
+  const itemsPerPage = !isMobile ? 5 : 4;
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
   const currentProducts = products.slice(

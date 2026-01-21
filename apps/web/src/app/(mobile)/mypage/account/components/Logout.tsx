@@ -1,3 +1,7 @@
+'use client';
+
+import { motion } from 'motion/react';
+
 import AlertDialog from '@/components/common/AlertDialog';
 import Button from '@/components/common/Button';
 import { useLogout } from '@/hooks/useLogout';
@@ -7,7 +11,13 @@ const Logout = () => {
   return (
     <AlertDialog>
       <AlertDialog.Trigger asChild>
-        <button className="px-6 py-3 text-[13px] text-gray-500">로그아웃</button>
+        <motion.button
+          className="rounded-lg px-6 py-3 text-[13px] text-gray-500"
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.1 }}
+        >
+          로그아웃
+        </motion.button>
       </AlertDialog.Trigger>
       <AlertDialog.Content>
         <AlertDialog.Header>

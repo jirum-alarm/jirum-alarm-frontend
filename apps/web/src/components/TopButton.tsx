@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 
 import { ArrowRight } from '@/components/common/icons';
@@ -46,7 +47,7 @@ const TopButton = ({ type = 'scrolling-up' }: { type?: 'scrolling-up' | 'scrolle
   }, [type]);
 
   return (
-    <button
+    <motion.button
       onClick={scrollToTop}
       aria-label="스크롤 최상단 이동"
       className={cn(
@@ -55,9 +56,11 @@ const TopButton = ({ type = 'scrolling-up' }: { type?: 'scrolling-up' | 'scrolle
           'opacity-0': !isVisible,
         },
       )}
+      whileTap={{ scale: 0.95 }}
+      transition={{ duration: 0.1 }}
     >
       <ArrowRight color="#475467" className="-rotate-90" />
-    </button>
+    </motion.button>
   );
 };
 

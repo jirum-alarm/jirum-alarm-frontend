@@ -1,34 +1,26 @@
 import { type VariantProps } from 'class-variance-authority';
-import { forwardRef } from 'react';
+import { type HTMLMotionProps, motion } from 'motion/react';
 
 import { cn } from '@/lib/cn';
 
 import { buttonVaraint } from './variant/button';
 
 interface ButtonProps
-  extends Omit<React.ComponentProps<'button'>, 'color'>,
-    VariantProps<typeof buttonVaraint> {
+  extends Omit<HTMLMotionProps<'button'>, 'color'>, VariantProps<typeof buttonVaraint> {
   children?: React.ReactNode;
 }
 
-export const Button = ({
-  size,
-  variant,
-  color,
-  className,
-  children,
-  ref,
-  ...rest
-}: ButtonProps) => {
+export const Button = ({ size, variant, color, className, children, ...rest }: ButtonProps) => {
   return (
-    <button
+    <motion.button
       {...rest}
-      ref={ref}
       type={rest.type ?? 'button'}
       className={cn(buttonVaraint({ size, variant, color }), className)}
+      whileTap={{ scale: 0.95 }}
+      transition={{ duration: 0.1 }}
     >
       {children}
-    </button>
+    </motion.button>
   );
 };
 
