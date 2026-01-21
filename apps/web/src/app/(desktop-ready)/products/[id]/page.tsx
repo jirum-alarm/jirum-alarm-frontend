@@ -224,11 +224,23 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
 
   const { isMobile } = await checkDevice();
 
-  const renderMobile = () => {
-    return <MobileProductDetailPage productId={+id} isUserLogin={isUserLogin} />;
+  const renderMobile = (productData?: any) => {
+    return (
+      <MobileProductDetailPage
+        productId={+id}
+        isUserLogin={isUserLogin}
+        initialProduct={productData}
+      />
+    );
   };
-  const renderDesktop = () => {
-    return <DesktopProductDetailPage productId={+id} isUserLogin={isUserLogin} />;
+  const renderDesktop = (productData?: any) => {
+    return (
+      <DesktopProductDetailPage
+        productId={+id}
+        isUserLogin={isUserLogin}
+        initialProduct={productData}
+      />
+    );
   };
 
   /* JSON-LD 생성을 위한 상품 정보 조회 */
@@ -245,7 +257,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ProductPrefetch productId={+id}>
-        {!isMobile ? renderDesktop() : renderMobile()}
+        {!isMobile ? renderDesktop(product ?? undefined) : renderMobile(product ?? undefined)}
       </ProductPrefetch>
     </>
   );

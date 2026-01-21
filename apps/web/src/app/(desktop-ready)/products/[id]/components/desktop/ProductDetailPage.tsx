@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 
 import { cn } from '@/lib/cn';
+import { ProductInfoFragment } from '@/shared/api/gql/graphql';
 
 import {
   CommunityReaction,
@@ -22,9 +23,11 @@ import ProductInfo from './ProductInfo';
 export default async function DesktopProductDetailPage({
   productId,
   isUserLogin,
+  initialProduct,
 }: {
   productId: number;
   isUserLogin: boolean;
+  initialProduct?: ProductInfoFragment;
 }) {
   return (
     <>
@@ -34,21 +37,16 @@ export default async function DesktopProductDetailPage({
           style={{ gridTemplateRows: 'min-content 1fr' }}
         >
           <div className="col-span-1 space-y-10">
-            <Suspense
-              fallback={
-                <div className="relative aspect-square rounded-xl border border-gray-200 bg-gray-50" />
-              }
-            >
-              <div className="space-y-4">
-                <div
-                  className="relative aspect-square overflow-hidden rounded-xl border border-gray-200"
-                  style={{ contain: 'layout paint', contentVisibility: 'auto' }}
-                >
-                  <ProductDetailImage productId={productId} fill={false} />
-                </div>
-                <CoupangPartnerGuide productId={productId} />
+            <div className="space-y-4">
+              <div className="relative aspect-square overflow-hidden rounded-xl border border-gray-200">
+                <ProductDetailImage
+                  productId={productId}
+                  fill={false}
+                  initialData={initialProduct}
+                />
               </div>
-            </Suspense>
+              <CoupangPartnerGuide productId={productId} />
+            </div>
 
             <div className="space-y-12">
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>

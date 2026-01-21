@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
 
+import { ProductInfoFragment } from '@/shared/api/gql/graphql';
+
 import {
   CommunityReaction,
   HotdealGuide,
@@ -23,9 +25,11 @@ import ViewerCount from './ViewerCount';
 function ProductDetailPage({
   productId,
   isUserLogin,
+  initialProduct,
 }: {
   productId: number;
   isUserLogin: boolean;
+  initialProduct?: ProductInfoFragment;
 }) {
   return (
     <>
@@ -33,11 +37,8 @@ function ProductDetailPage({
 
       <main className="pt-14">
         <div className="sticky top-0 -mb-6">
-          <div
-            className="relative aspect-square w-full"
-            style={{ contain: 'layout paint', contentVisibility: 'auto' }}
-          >
-            <ProductDetailImage productId={productId} fill />
+          <div className="relative aspect-square w-full">
+            <ProductDetailImage productId={productId} fill initialData={initialProduct} />
           </div>
         </div>
         <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6">
