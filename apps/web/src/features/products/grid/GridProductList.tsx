@@ -1,6 +1,7 @@
 'use client';
 
 import { EVENT } from '@/constants/mixpanel';
+import { cn } from '@/lib/cn';
 
 import { type ProductCardType } from '../type';
 
@@ -26,7 +27,12 @@ export default function ProductGridList({
   priorityCount = 0,
 }: ProductGridListProps) {
   return (
-    <div className="pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
+    <div
+      className={cn(
+        'pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3',
+        className,
+      )}
+    >
       {products.map((product, index) => (
         <ProductGridCard
           key={product.id}
@@ -34,6 +40,7 @@ export default function ProductGridList({
           rank={rankFrom ? rankFrom + index : undefined}
           priority={index < priorityCount}
           className={cardClassName}
+          displayTime={displayTime}
         />
       ))}
     </div>
