@@ -4,6 +4,7 @@ import { ProductInfoFragment } from '@/shared/api/gql/graphql';
 
 import {
   CommunityReaction,
+  ExpiredProductWarning,
   HotdealGuide,
   HotdealScore,
   NoticeProfitLink,
@@ -46,6 +47,8 @@ function ProductDetailPage({
             <ProductInfo productId={productId} />
 
             <CoupangPartnerGuide productId={productId} />
+
+            {initialProduct && <ExpiredProductWarning product={initialProduct} isMobile={true} />}
 
             <div className="mt-4 mb-12 flex flex-col gap-y-9 px-5">
               <Suspense>

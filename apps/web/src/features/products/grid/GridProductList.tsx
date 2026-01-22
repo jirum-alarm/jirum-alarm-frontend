@@ -9,6 +9,9 @@ import ProductGridCard from './GridProductCard';
 type ProductGridListProps = {
   products: ProductCardType[];
   rankFrom?: number;
+  className?: string;
+  cardClassName?: string;
+  displayTime?: boolean;
   logging?: { page: keyof typeof EVENT.PAGE };
   priorityCount?: number;
 };
@@ -16,6 +19,9 @@ type ProductGridListProps = {
 export default function ProductGridList({
   products,
   rankFrom,
+  className,
+  cardClassName,
+  displayTime = true,
   logging,
   priorityCount = 0,
 }: ProductGridListProps) {
@@ -27,6 +33,7 @@ export default function ProductGridList({
           product={product}
           rank={rankFrom ? rankFrom + index : undefined}
           priority={index < priorityCount}
+          className={cardClassName}
         />
       ))}
     </div>

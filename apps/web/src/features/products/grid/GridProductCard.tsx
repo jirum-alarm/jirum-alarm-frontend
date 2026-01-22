@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 
 import { PAGE } from '@/constants/page';
+import { cn } from '@/lib/cn';
 
 import DisplayTime from '@shared/ui/DisplayTime';
 import HotdealBadge from '@shared/ui/HotdealBadge';
@@ -17,16 +18,18 @@ export default function ProductGridCard({
   rank,
   actionIcon,
   priority,
+  className,
 }: {
   product: ProductCardType;
   rank?: number;
   actionIcon?: React.ReactNode;
   priority?: boolean;
+  className?: string;
 }) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} className="w-full">
       <motion.div
-        className="rounded-lg p-2"
+        className={cn('rounded-lg p-2', className)}
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >

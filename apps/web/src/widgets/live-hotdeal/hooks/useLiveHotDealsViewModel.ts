@@ -20,7 +20,9 @@ const useLiveHotDealsViewModel = () => {
     }),
   );
 
-  const products = pages.flatMap((page) => page.products);
+  const products = Array.from(
+    new Map(pages.flatMap((page) => page.products).map((p) => [p.id, p])).values(),
+  );
 
   const { ref: loadingCallbackRef } = useInView({
     threshold: 0,

@@ -6,3 +6,4 @@ export { default as HotdealScore } from './HotdealScore';
 export { default as ReactionKeywords } from './ReactionKeywords';
 export { default as ProductReport } from '../controls/ProductReport';
 export { default as NoticeProfitLink } from './NoticeProfitUrl';
+export { default as ExpiredProductWarning } from './ExpiredProductWarning';

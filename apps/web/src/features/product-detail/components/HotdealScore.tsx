@@ -56,7 +56,9 @@ const HotdealScore = ({ productId }: { productId: number }) => {
                   </div>
                   <p
                     className="text-center font-medium text-gray-800"
-                    dangerouslySetInnerHTML={{ __html: isHydrated ? hotDealIndex.message : '' }}
+                    dangerouslySetInnerHTML={{
+                      __html: hotDealIndex.message.replace(/<b\/>/g, '</b>'),
+                    }}
                   />
                 </div>
               </div>
