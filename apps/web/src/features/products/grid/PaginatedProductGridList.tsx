@@ -11,14 +11,18 @@ import ProductGridList from './GridProductList';
 type PaginatedProductGridListProps = {
   products: ProductCardType[];
   isMobile: boolean;
+  itemsPerPage?: number;
+  className?: string;
 };
 
 export default function PaginatedProductGridList({
   products,
   isMobile,
+  itemsPerPage: initialItemsPerPage,
+  className,
 }: PaginatedProductGridListProps) {
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = !isMobile ? 5 : 4;
+  const itemsPerPage = initialItemsPerPage ?? (!isMobile ? 5 : 4);
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
   const currentProducts = products.slice(
@@ -32,8 +36,8 @@ export default function PaginatedProductGridList({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="px-5">
-        <ProductGridList products={currentProducts} />
+      <div className="pc:px-0 px-5">
+        <ProductGridList products={currentProducts} className={className} />
       </div>
 
       <div className="flex justify-center">

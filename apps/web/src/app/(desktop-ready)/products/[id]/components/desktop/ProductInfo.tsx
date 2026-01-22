@@ -98,20 +98,22 @@ export default function ProductInfo({
           </div>
         </div>
       </div>
-      <div className="flex w-full gap-x-4">
-        <div className="flex h-[48px] items-center">
-          <Suspense>
-            <LikeButton productId={productId} isUserLogin={isUserLogin} />
-          </Suspense>
+      <div>
+        <div className="flex w-full gap-x-4">
+          <div className="flex h-[48px] items-center">
+            <Suspense>
+              <LikeButton productId={productId} isUserLogin={isUserLogin} />
+            </Suspense>
+          </div>
+          <a
+            href={product.detailUrl ?? ''}
+            className="block flex-1"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button className="h-[48px] w-full px-6 text-base font-semibold">구매하러 가기</Button>
+          </a>
         </div>
-        <a
-          href={product.detailUrl ?? ''}
-          className="block flex-1"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button className="h-[48px] w-full px-6 text-base font-semibold">구매하러 가기</Button>
-        </a>
       </div>
     </section>
   );

@@ -10,8 +10,8 @@ import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
 import { ProductService } from '@shared/api/product';
 
-import DesktopProductDetailPage from './components/desktop/ProductDetailPage';
-import MobileProductDetailPage from './components/mobile/ProductDetailPage';
+import DesktopProductDetailPage from '../components/desktop/ProductDetailPage';
+import MobileProductDetailPage from '../components/mobile/ProductDetailPage';
 
 function parseNumericPrice(rawPrice?: string | null) {
   if (!rawPrice) {

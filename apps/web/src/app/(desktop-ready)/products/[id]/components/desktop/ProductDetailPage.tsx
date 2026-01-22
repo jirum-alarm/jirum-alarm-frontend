@@ -5,6 +5,7 @@ import { ProductInfoFragment } from '@/shared/api/gql/graphql';
 
 import {
   CommunityReaction,
+  ExpiredProductWarning,
   HotdealGuide,
   HotdealScore,
   NoticeProfitLink,
@@ -47,6 +48,8 @@ export default async function DesktopProductDetailPage({
               </div>
               <CoupangPartnerGuide productId={productId} />
             </div>
+
+            {initialProduct && <ExpiredProductWarning product={initialProduct} isMobile={false} />}
 
             <div className="space-y-12">
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
