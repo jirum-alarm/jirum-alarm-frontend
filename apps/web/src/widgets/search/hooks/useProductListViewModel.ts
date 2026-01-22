@@ -15,7 +15,9 @@ export const useProductListViewModel = () => {
     ProductQueries.infiniteProducts({ limit, keyword: keywordParam || undefined } as any),
   );
   const pages = data?.pages ?? [];
-  const products = pages.flatMap((page) => page.products);
+  const products = Array.from(
+    new Map(pages.flatMap((page) => page.products).map((p) => [p.id, p])).values(),
+  );
 
   const { ref } = useInView({
     onChange(inView) {

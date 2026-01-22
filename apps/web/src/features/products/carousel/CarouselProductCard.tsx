@@ -15,9 +15,11 @@ import { type ProductCardType } from '../type';
 export default function CarouselProductCard({
   product,
   priority,
+  displayTime = true,
 }: {
   product: ProductCardType;
   priority?: boolean;
+  displayTime?: boolean;
 }) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} className="pc:w-[192px] inline-block w-[120px]">
@@ -54,10 +56,14 @@ export default function CarouselProductCard({
           </span>
           <div className="flex items-center pt-1">
             <DisplayListPrice price={product.price} />
-            <span className="w-2"></span>
-            <span className="pc:inline hidden text-sm text-gray-600">
-              <DisplayTime time={product.postedAt} />
-            </span>
+            {displayTime && (
+              <>
+                <span className="w-2"></span>
+                <span className="pc:inline hidden text-sm text-gray-600">
+                  <DisplayTime time={product.postedAt} />
+                </span>
+              </>
+            )}
           </div>
         </div>
       </motion.div>
