@@ -37,7 +37,7 @@ export default function DisplayListPrice({
         className={
           widthType === 'wide'
             ? 'line-clamp-1 max-w-[120px] text-lg font-semibold text-gray-900'
-            : 'line-clamp-1 max-w-[98px] text-lg font-semibold text-gray-900'
+            : 'line-clamp-1 max-w-[120px] text-lg font-semibold text-gray-900'
         }
       >
         {displayString}
