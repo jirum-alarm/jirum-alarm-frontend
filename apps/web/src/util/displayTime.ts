@@ -1,8 +1,12 @@
 import dayjs from 'dayjs';
 
-export function displayTime(createdAt: Date) {
+export function displayTime(createdAt: string | Date) {
+  if (!createdAt) return '';
+
   const now = dayjs();
   const created = dayjs(createdAt);
+
+  if (!created.isValid()) return '';
 
   const seconds = now.diff(created, 'second');
   if (seconds < 60) return '방금 전';
