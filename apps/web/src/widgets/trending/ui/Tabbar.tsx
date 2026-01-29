@@ -1,3 +1,5 @@
+'use client';
+
 import { animate, motion, useMotionValue, useSpring } from 'motion/react';
 import { Tabs } from 'radix-ui';
 import { startTransition, useEffect, useRef, useState } from 'react';
