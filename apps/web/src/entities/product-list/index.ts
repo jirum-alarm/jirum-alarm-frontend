@@ -11,6 +11,7 @@ export { default as PaginatedProductGridList } from './ui/grid/PaginatedProductG
 export { default as ProductGridListSkeleton } from './ui/grid/ProductGridListSkeleton';
 
 export { default as CarouselProductList } from './ui/carousel/CarouselProductList';
+export { default as DoubleRowCarouselProductList } from './ui/carousel/DoubleRowCarouselProductList';
 export { default as CarouselProductListSkeleton } from './ui/carousel/CarouselProductListSkeleton';
 export { default as CarouselProductsSection } from './ui/carousel/CarouselProductsSection';
 

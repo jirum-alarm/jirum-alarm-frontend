@@ -29,7 +29,7 @@ export default function PaginatedProductGridList({ products }: PaginatedProductG
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="px-5">
+      <div className="pc:px-0 px-5">
         <ProductGridList products={currentProducts} />
       </div>
 
