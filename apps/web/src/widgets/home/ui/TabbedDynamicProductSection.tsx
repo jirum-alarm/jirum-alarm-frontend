@@ -5,17 +5,18 @@ import { Suspense, useMemo, useState } from 'react';
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
-import { ProductGridListSkeleton } from '@/entities/product-list';
+import { ProductImageCardSkeleton } from '@/entities/product-list';
 import { ContentPromotionSection, PromotionTab } from '@/entities/promotion';
 
 import DynamicProductList from './DynamicProductList';
 import PromotionTabs from './PromotionTabs';
 
 interface TabbedDynamicProductSectionProps {
+  isMobile: boolean;
   section: ContentPromotionSection;
 }
 
-const TabbedDynamicProductSection = ({ section }: TabbedDynamicProductSectionProps) => {
+const TabbedDynamicProductSection = ({ isMobile, section }: TabbedDynamicProductSectionProps) => {
   const tabs = section.tabs || [];
   const [activeTab, setActiveTab] = useState<PromotionTab | null>(tabs[0] ?? null);
 
@@ -43,9 +44,9 @@ const TabbedDynamicProductSection = ({ section }: TabbedDynamicProductSectionPro
         <SectionHeader
           title={section.title}
           right={
-            section.viewMoreLink ? (
+            activeTab?.viewMoreLink ? (
               <Link
-                href={section.viewMoreLink}
+                href={activeTab.viewMoreLink}
                 className="text-sm text-gray-500 hover:text-gray-700"
               >
                 더보기
@@ -58,8 +59,18 @@ const TabbedDynamicProductSection = ({ section }: TabbedDynamicProductSectionPro
         <PromotionTabs tabs={tabs} activeTabId={activeTab?.id ?? ''} onTabClick={handleTabClick} />
       </div>
 
-      <Suspense fallback={<ProductGridListSkeleton length={4} />}>
-        <DynamicProductList section={activeSection} />
+      <Suspense
+        fallback={
+          <div className="pc:py-4 pc:px-0 px-5">
+            <div className="pc:grid-cols-6 grid animate-pulse grid-cols-3 gap-x-3 gap-y-5">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <ProductImageCardSkeleton key={i} />
+              ))}
+            </div>
+          </div>
+        }
+      >
+        <DynamicProductList isMobile={isMobile} section={activeSection} />
       </Suspense>
     </div>
   );

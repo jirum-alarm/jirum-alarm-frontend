@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
+import { checkDevice } from '@/app/actions/agent';
 
 import SectionHeader from '@/shared/ui/SectionHeader';
 
@@ -16,6 +17,7 @@ interface DynamicProductSectionProps {
 }
 
 const DynamicProductSection = async ({ section }: DynamicProductSectionProps) => {
+  const { isMobile } = await checkDevice();
   const queryClient = getQueryClient();
 
   let sectionToPrefetch = section;
@@ -36,7 +38,7 @@ const DynamicProductSection = async ({ section }: DynamicProductSectionProps) =>
   await queryClient.prefetchQuery(queryOptions);
 
   if (section.tabs && section.tabs.length > 0) {
-    return <TabbedDynamicProductSection section={section} />;
+    return <TabbedDynamicProductSection isMobile={isMobile} section={section} />;
   }
 
   return (
@@ -56,8 +58,14 @@ const DynamicProductSection = async ({ section }: DynamicProductSectionProps) =>
           }
         />
       </div>
-      <Suspense fallback={<ProductGridListSkeleton length={4} />}>
-        <DynamicProductList section={section} />
+      <Suspense
+        fallback={
+          <div className="px-5">
+            <ProductGridListSkeleton length={4} />
+          </div>
+        }
+      >
+        <DynamicProductList isMobile={isMobile} section={section} />
       </Suspense>
     </div>
   );

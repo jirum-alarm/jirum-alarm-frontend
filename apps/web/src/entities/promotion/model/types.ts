@@ -4,7 +4,8 @@ export type ContentPromotionSectionType =
   | 'LIST'
   | 'BANNER'
   | 'GRID_TABBED'
-  | 'PAGINATED_GRID';
+  | 'PAGINATED_GRID'
+  | 'DOUBLE_ROW';
 
 export type PromotionSectionType = ContentPromotionSectionType | 'GROUP';
 
@@ -22,6 +23,7 @@ export interface PromotionTab {
   id: string;
   label: string;
   variables: Record<string, any>;
+  viewMoreLink?: string;
 }
 
 interface BasePromotionSection {

@@ -7,17 +7,18 @@ import { usePromotionProducts } from '../model/usePromotionProducts';
 import DynamicProductListView from './DynamicProductListView';
 
 interface DynamicProductListProps {
+  isMobile: boolean;
   section: ContentPromotionSection;
 }
 
-const DynamicProductList = ({ section }: DynamicProductListProps) => {
+const DynamicProductList = ({ isMobile, section }: DynamicProductListProps) => {
   const products = usePromotionProducts(section);
 
   if (products === null) {
     return null;
   }
 
-  return <DynamicProductListView section={section} products={products} />;
+  return <DynamicProductListView isMobile={isMobile} section={section} products={products} />;
 };
 
 export default DynamicProductList;

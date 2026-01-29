@@ -1,5 +1,8 @@
+import { checkDevice } from '@/app/actions/agent';
+
 import {
   CarouselProductList,
+  DoubleRowCarouselProductList,
   ListProductList,
   PaginatedProductGridList,
   ProductCardType,
@@ -8,11 +11,12 @@ import {
 import { ContentPromotionSection } from '@/entities/promotion';
 
 type DynamicProductListViewProps = {
+  isMobile: boolean;
   section: ContentPromotionSection;
   products: ProductCardType[];
 };
 
-const DynamicProductListView = ({ section, products }: DynamicProductListViewProps) => {
+const DynamicProductListView = ({ isMobile, section, products }: DynamicProductListViewProps) => {
   if (section.type === 'GRID') {
     return (
       <div className="pc:px-0 px-5">
@@ -46,6 +50,14 @@ const DynamicProductListView = ({ section, products }: DynamicProductListViewPro
       <div className="pc:px-0 px-5">
         <ListProductList products={products} />
       </div>
+    );
+  }
+
+  if (section.type === 'DOUBLE_ROW') {
+    return isMobile ? (
+      <DoubleRowCarouselProductList products={products} />
+    ) : (
+      <ListProductList products={products} />
     );
   }
 
