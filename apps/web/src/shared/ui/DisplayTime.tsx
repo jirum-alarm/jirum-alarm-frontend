@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { displayTime } from '@/util/displayTime';
+import { displayTime } from '@/shared/lib/utils/displayTime';
 
 export default function DisplayTime({ time }: { time: string | Date }) {
   const [mountedTime, setMountedTime] = useState<string | null>(null);

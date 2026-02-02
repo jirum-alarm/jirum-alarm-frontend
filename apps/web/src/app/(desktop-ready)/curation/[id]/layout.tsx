@@ -2,11 +2,15 @@ import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
-import BasicLayout from '@/components/layout/BasicLayout';
-import SectionHeader from '@/components/SectionHeader';
+
+
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
+import SectionHeader from '@/shared/ui/SectionHeader';
+
 import { getPromotionSectionById } from '@/entities/promotion/api/getPromotionSections';
 
-import Footer from '../../components/desktop/Footer';
+import Footer from '@/widgets/layout/ui/desktop/Footer';
+
 import CurationPageHeader from '../components/CurationPageHeader';
 
 interface LayoutProps {

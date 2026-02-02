@@ -1,4 +1,4 @@
-import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/constants/policy';
+import { PRIVACY_CONTENT_DATA, PRIVACY_INDEX_DATA } from '@/shared/config/policy';
 
 import TermsLayout from '../components/TermsLayout';
 

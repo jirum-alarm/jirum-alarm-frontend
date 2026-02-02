@@ -1,13 +1,12 @@
 'use client';
 
+import { ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
+import { WishlistQueries } from '@/entities/wishlist';
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
-import { GridProductListSkeleton } from '@/features/products/grid';
+import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
 
-import { OrderOptionType, WishlistOrderType } from '@shared/api/gql/graphql';
-
-import { WishlistQueries } from '@entities/wishlist';
 
 import ProductLikeGridList from './ProductLikeGridList';
 
@@ -47,7 +46,7 @@ const ProductLikeContainer = () => {
       </div>
       <ProductLikeGridList products={wishlists.map((w) => w.product)} />
       <div className="flex w-full items-center justify-center pt-3 pb-6" ref={loadingCallbackRef}>
-        {isFetchingNextPage && <GridProductListSkeleton length={10} />}
+        {isFetchingNextPage && <ProductGridListSkeleton length={10} />}
       </div>
     </div>
   );

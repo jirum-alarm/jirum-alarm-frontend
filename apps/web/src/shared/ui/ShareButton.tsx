@@ -2,9 +2,9 @@
 
 import { motion } from 'motion/react';
 
-import { Share } from '@/components/common/icons';
-import { useToast } from '@/components/common/Toast';
-import { EVENT } from '@/constants/mixpanel';
+import { EVENT } from '@/shared/config/mixpanel';
+import { Share } from '@/shared/ui/common/icons';
+import { useToast } from '@/shared/ui/common/Toast';
 
 const ShareButton = ({ title, page }: { title: string; page?: keyof typeof EVENT.PAGE }) => {
   const { toast } = useToast();

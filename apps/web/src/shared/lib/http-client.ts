@@ -1,4 +1,4 @@
-import { GRAPHQL_ENDPOINT_PROXY } from '@/constants/graphql';
+import { GRAPHQL_ENDPOINT_PROXY } from '@/shared/config/graphql';
 
 import { TypedDocumentString } from '../api/gql/graphql';
 

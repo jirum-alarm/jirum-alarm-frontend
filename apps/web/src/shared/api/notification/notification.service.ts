@@ -1,11 +1,11 @@
-import { execute } from '@/shared/lib/http-client';
-
 import {
   MutationAddPushTokenDocument,
   MutationAddPushTokenMutationVariables,
   QueryNotificationsDocument,
   QueryNotificationsQueryVariables,
-} from '@shared/api/gql/graphql';
+} from '@/shared/api/gql/graphql';
+import { execute } from '@/shared/lib/http-client';
+
 
 export class NotificationService {
   static async addPushToken(variables: MutationAddPushTokenMutationVariables) {

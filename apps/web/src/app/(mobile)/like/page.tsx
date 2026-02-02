@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
-import SmallIllust from '@/components/common/icons/Illust/SmallIllust';
-import BasicLayout from '@/components/layout/BasicLayout';
+import SmallIllust from '@/shared/ui/common/icons/Illust/SmallIllust';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 import ProductLikeContainerServer from './components/ProductLikeContainerServer';
 

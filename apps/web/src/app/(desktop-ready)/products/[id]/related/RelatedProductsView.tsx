@@ -1,11 +1,12 @@
 'use client';
 
+import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { ProductQueries } from '@/entities/product';
-import ProductGridList from '@/features/products/grid/GridProductList';
+
 
 interface RelatedProductsViewProps {
   productId: number;

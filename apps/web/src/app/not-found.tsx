@@ -1,8 +1,7 @@
-import Button from '@/components/common/Button';
-import { IllustWarning } from '@/components/common/icons';
-import { PAGE } from '@/constants/page';
-
-import Link from '@shared/ui/Link';
+import { PAGE } from '@/shared/config/page';
+import Button from '@/shared/ui/common/Button';
+import { IllustWarning } from '@/shared/ui/common/icons';
+import Link from '@/shared/ui/Link';
 
 const NotFoundPage = () => {
   return (

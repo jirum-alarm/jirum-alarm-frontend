@@ -1,15 +1,14 @@
 'use client';
 
+import { ProductGridCard } from '@/entities/product-list/ui/grid';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { Heart } from '@/components/common/icons';
-import { EVENT } from '@/constants/mixpanel';
+import { QueryWishlistsQuery } from '@/shared/api/gql/graphql';
+import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
+import { EVENT } from '@/shared/config/mixpanel';
+import { Heart } from '@/shared/ui/common/icons';
 
-import { QueryWishlistsQuery } from '@shared/api/gql/graphql';
-import { WishlistService } from '@shared/api/wishlist/wishlist.service';
-
-import { GridProductCard } from '@features/products/grid';
 
 type ProductGridListProps = {
   products: QueryWishlistsQuery['wishlists'][number]['product'][];
@@ -19,7 +18,7 @@ export default function ProductLikeGridList({ products }: ProductGridListProps) 
   return (
     <div className="pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
       {products.map((product) => (
-        <GridProductCard
+        <ProductGridCard
           key={product.id}
           product={product}
           actionIcon={<ProductLikeAction productId={product.id} />}

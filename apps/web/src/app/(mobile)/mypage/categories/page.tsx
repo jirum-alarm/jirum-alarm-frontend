@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 
-import BasicLayout from '@/components/layout/BasicLayout';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import CategoriesForm from './components/CategoriesForm';
+import CategoriesForm from '@/features/mypage/ui/categories/CategoriesForm';
 
 const CategoriesPage = () => {
   return (

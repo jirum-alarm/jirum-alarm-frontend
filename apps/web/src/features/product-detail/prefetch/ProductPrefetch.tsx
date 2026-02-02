@@ -1,8 +1,8 @@
+import { ProductQueries } from '@/entities/product';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
 
-import { ProductQueries } from '@entities/product';
 
 export default function ProductPrefetch({
   productId,

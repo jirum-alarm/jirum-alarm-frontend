@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
-import BasicLayout from '@/components/layout/BasicLayout';
 
-import Footer from '../components/desktop/Footer';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import PageTabNavigation from './components/PageTabNavigation';
-import TrendingPageHeader from './components/TrendingPageHeader';
+import Footer from '@/widgets/layout/ui/desktop/Footer';
+import PageTabNavigation from '@/widgets/trending/ui/PageTabNavigation';
+import TrendingPageHeader from '@/widgets/trending/ui/TrendingPageHeader';
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const { isMobile } = await checkDevice();

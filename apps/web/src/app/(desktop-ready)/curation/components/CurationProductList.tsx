@@ -1,11 +1,11 @@
 'use client';
 
+import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { getPromotionQueryOptions } from '@/entities/promotion/lib/getPromotionQueryOptions';
 import { ContentPromotionSection } from '@/entities/promotion/model/types';
 
-import ProductGridList from '@features/products/grid/GridProductList';
 
 interface CurationProductListProps {
   section: ContentPromotionSection;
