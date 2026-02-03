@@ -9,7 +9,7 @@ import { ContentPromotionSection, PromotionSection } from '../model/types';
 export const getPromotionSections = (): PromotionSection[] => {
   return [
     {
-      id: 'section-1',
+      id: 'hot-deals',
       title: '놓치면 아까운 핫딜',
       type: 'PAGINATED_GRID',
       dataSource: {
@@ -21,10 +21,10 @@ export const getPromotionSections = (): PromotionSection[] => {
         },
       },
       displayOrder: 1,
-      viewMoreLink: '/curation/section-1',
+      viewMoreLink: '/curation/hot-deals',
     },
     {
-      id: 'section-2',
+      id: 'under-10k',
       title: '부담없이 만원이하템',
       type: 'HORIZONTAL_SCROLL',
       dataSource: {
@@ -38,16 +38,16 @@ export const getPromotionSections = (): PromotionSection[] => {
         },
       },
       displayOrder: 2,
-      viewMoreLink: '/curation/section-2',
+      viewMoreLink: '/curation/under-10k',
     },
     {
-      id: 'section-group-1',
+      id: 'special-deals-group',
       title: '그룹 섹션',
       type: 'GROUP',
       displayOrder: 2,
       sections: [
         {
-          id: 'section-2-group',
+          id: 'expiring-soon',
           title: '유통기한 임박 특가',
           type: 'LIST',
           dataSource: {
@@ -61,10 +61,10 @@ export const getPromotionSections = (): PromotionSection[] => {
             },
           },
           displayOrder: 1,
-          viewMoreLink: '/curation/section-2-group',
+          viewMoreLink: '/curation/expiring-soon',
         },
         {
-          id: 'section-5',
+          id: 'premium-deals',
           title: '프리미엄 핫딜',
           type: 'LIST',
           dataSource: {
@@ -78,12 +78,12 @@ export const getPromotionSections = (): PromotionSection[] => {
             },
           },
           displayOrder: 2,
-          viewMoreLink: '/curation/section-5',
+          viewMoreLink: '/curation/premium-deals',
         },
       ],
     },
     {
-      id: 'section-3',
+      id: 'by-shopping-mall',
       title: '쇼핑몰별 모아보기',
       type: 'GRID_TABBED',
       dataSource: {
@@ -98,28 +98,28 @@ export const getPromotionSections = (): PromotionSection[] => {
       displayOrder: 3,
       tabs: [
         {
-          id: 'tab-1',
+          id: 'tab-aliexpress',
           label: '알리',
           variables: {
             keyword: '알리',
           },
         },
         {
-          id: 'tab-2',
+          id: 'tab-coupang',
           label: '쿠팡',
           variables: {
             keyword: '쿠팡',
           },
         },
         {
-          id: 'tab-3',
+          id: 'tab-naver',
           label: '네이버',
           variables: {
             keyword: '네이버',
           },
         },
         {
-          id: 'tab-4',
+          id: 'tab-naver-2',
           label: '네이버',
           variables: {
             keyword: '네이버',
@@ -128,7 +128,7 @@ export const getPromotionSections = (): PromotionSection[] => {
       ],
     },
     {
-      id: 'section-4',
+      id: 'by-community',
       title: '커뮤니티 모아보기',
       type: 'GRID_TABBED',
       dataSource: {
@@ -142,21 +142,21 @@ export const getPromotionSections = (): PromotionSection[] => {
       },
       tabs: [
         {
-          id: 'tab-1',
+          id: 'tab-ppomppu',
           label: '뽐뿌',
           variables: {
             keyword: '뽐뿌',
           },
         },
         {
-          id: 'tab-2',
+          id: 'tab-eomisae',
           label: '어미새패션',
           variables: {
             keyword: '어미새패션',
           },
         },
         {
-          id: 'tab-3',
+          id: 'tab-mamibebe',
           label: '마미베베',
           variables: {
             keyword: '마미베베',

@@ -28,11 +28,6 @@ const NAV_LINKS = [
     isActive: (pathname: string) => pathname === PAGE.HOME,
   },
   {
-    href: PAGE.RECOMMEND,
-    label: '추천',
-    isActive: (pathname: string) => pathname === PAGE.RECOMMEND,
-  },
-  {
     href: PAGE.TRENDING_LIVE,
     label: '실시간',
     isActive: (pathname: string) => pathname === PAGE.TRENDING_LIVE,

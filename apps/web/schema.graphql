@@ -52,6 +52,20 @@ interface BaseSection {
   type: ID!
 }
 
+type BrandProductMatchCountOutput {
+  amount: String!
+  brandItemId: Int!
+  brandName: String!
+  createdAt: DateTime!
+  danawaProductId: Int!
+  id: ID!
+  matchCount: Int!
+  pendingVerificationCount: Int!
+  productName: String!
+  searchAfter: [String!]
+  volume: String!
+}
+
 type CategorizedReactionKeywords {
   count: Int!
   name: String!
@@ -82,11 +96,17 @@ type CommentOutput {
   createdAt: DateTime!
   id: ID!
   isMyLike: Boolean
+  isMyReported: Boolean!
+  isNotice: Boolean!
   likeCount: Int!
   parentId: Float
-  productId: Float!
+  productId: Int!
   searchAfter: [String!]
+  taggedProduct: ProductOutput!
+  title: String
+  trendedAt: DateTime
   userId: Float!
+  viewCount: Int!
 }
 
 type Cta {
@@ -248,7 +268,13 @@ type MallGroup {
 }
 
 type Mutation {
-  addComment(content: String!, parentId: Int, productId: Int!): Boolean!
+  addComment(
+    content: String!
+    isNotice: Boolean
+    parentId: Int
+    productId: Int!
+    title: String
+  ): Boolean!
   """
   어드민) 핫딜 제외 키워드 추가
   """
@@ -307,6 +333,18 @@ type Mutation {
   addPushToken(token: String!, tokenType: TokenType!): Boolean!
   addUserDevice(deviceId: String!): Boolean!
   addUserLikeOrDislike(isLike: Boolean, target: UserLikeTarget!, targetId: Int!): Boolean!
+  """
+  사용자 신고
+  """
+  addUserReport(
+    """
+    기타 신고 사유 (reason이 OTHER일 때 필수)
+    """
+    description: String
+    reason: UserReportReason!
+    target: UserReportTarget!
+    targetId: Float!
+  ): Boolean!
   """
   wishlist 추가
   """
@@ -587,22 +625,41 @@ type ProductHotDealIndex {
 }
 
 type ProductMapping {
+  correctPcode: String
   createdAt: DateTime!
   danawaUrl: String
+  extractedProductInfo: String
+  feedbackAt: DateTime
+  feedbackBy: Int
+  feedbackReason: String
+  feedbackType: ProductMappingFeedbackType
   id: ID!
   matchStatus: ProductMappingMatchStatus
   matchingCandidates: String
+  matchingConfidence: Int
+  matchingReasoning: String
+  matchingSource: String
   metadataContext: String
   productId: Int!
   reason: String
   searchAfter: [String!]
+  searchKeyword: String
   target: ProductMappingTarget
   targetId: Int
   updatedAt: DateTime!
   verificationNote: String
   verificationStatus: ProductMappingVerificationStatus
   verifiedAt: DateTime
-  verifiedBy: Int
+  """
+  검증자 ID
+  """
+  verifiedById: Int
+}
+
+enum ProductMappingFeedbackType {
+  CONFIRMED
+  CORRECTED
+  REJECTED
 }
 
 type ProductMappingInfoOutput {
@@ -620,11 +677,20 @@ enum ProductMappingMatchStatus {
 
 type ProductMappingOutput {
   brandProduct: String
+  correctPcode: String
   createdAt: DateTime!
   danawaUrl: String
+  extractedProductInfo: String
+  feedbackAt: DateTime
+  feedbackBy: Int
+  feedbackReason: String
+  feedbackType: ProductMappingFeedbackType
   id: ID!
   matchStatus: ProductMappingMatchStatus
   matchingCandidates: String
+  matchingConfidence: Int
+  matchingReasoning: String
+  matchingSource: String
   metadataContext: String
   """
   매핑된 상품 정보
@@ -633,13 +699,21 @@ type ProductMappingOutput {
   productId: Int!
   reason: String
   searchAfter: [String!]
+  searchKeyword: String
   target: ProductMappingTarget
   targetId: Int
   updatedAt: DateTime!
   verificationNote: String
   verificationStatus: ProductMappingVerificationStatus
   verifiedAt: DateTime
-  verifiedBy: Int
+  """
+  검증자 정보
+  """
+  verifiedBy: AdminUser
+  """
+  검증자 ID
+  """
+  verifiedById: Int
 }
 
 enum ProductMappingTarget {
@@ -714,6 +788,7 @@ type ProductOutput {
   mallName: String
   mappingInfo: [ProductMappingInfoOutput!]
   negativeCommunityReactionCount: Int!
+  parsedPrice: Float
   positiveCommunityReactionCount: Int!
   postedAt: DateTime!
   precomputedRankingScore: Float
@@ -727,6 +802,10 @@ type ProductOutput {
   providerId: Int!
   searchAfter: [String!]
   ship: String
+  """
+  유사도
+  """
+  similarity: Float
   thumbnail: String
   title: String!
   url: String
@@ -763,16 +842,45 @@ type Query {
   adminMe: AdminUser!
   ads(slots: [AdSlotType!]!): [Ad!]!
   analysisTitleByDanawa: Boolean!
+  """
+  특정 브랜드 상품의 매핑 개수 조회
+  """
+  brandProductMatchCount(brandProductId: Int!): Int!
+  """
+  매칭된 브랜드 상품 전체 개수 조회
+  """
+  brandProductsByMatchCountTotalCount(
+    brandItemId: Int
+    """
+    브랜드명 + 상품명 + 용량 + 수량 LIKE 검색
+    """
+    title: String
+  ): Int!
+  """
+  매칭된 개수가 많은 순으로 브랜드 상품 목록 조회 (커서 기반 페이지네이션)
+  """
+  brandProductsOrderByMatchCount(
+    brandItemId: Int
+    limit: Int!
+    searchAfter: [String!]
+    """
+    브랜드명 + 상품명 + 용량 + 수량 LIKE 검색
+    """
+    title: String
+  ): [BrandProductMatchCountOutput!]!
   categories: [Category!]!
   """
   커뮤니티 반응 카테고리별 키워드 조회
   """
   categorizedReactionKeywords(id: Int!): CategorizedReactionKeywordsResponse!
+  comment(id: Int!): CommentOutput!
   comments(
+    isNotice: Boolean
+    isTrending: Boolean
     limit: Int!
     orderBy: CommentOrder!
     orderOption: OrderOptionType!
-    productId: Int!
+    productId: Int
     searchAfter: [String!]
   ): [CommentOutput!]!
   """
@@ -834,6 +942,18 @@ type Query {
     limit: Int!
     searchAfter: [String!]
   ): [ProductOutput!]!
+  """
+  특정 사용자의 추천 상품 조회 (관리자용)
+  """
+  getPersonalizedProductsByUserId(
+    categoryId: Int
+    limit: Int
+    userId: Int!
+  ): [RecommendedProductOutput!]!
+  """
+  특정 상품과 유사한 상품 조회
+  """
+  getSimilarProducts(limit: Int = 10, productId: Int!): [ProductOutput!]!
   homePage(version: String!): PageSchema!
   """
   어드민) 핫딜 제외 키워드 목록 조회
@@ -910,6 +1030,10 @@ type Query {
   검증 대기 중인 매핑 목록 조회
   """
   pendingVerifications(
+    """
+    브랜드 상품 ID로 필터링
+    """
+    brandProductId: Int
     limit: Int!
     matchStatus: [ProductMappingMatchStatus!]
     orderBy: OrderOptionType = DESC
@@ -924,12 +1048,38 @@ type Query {
     productTitle: String
     searchAfter: [String!]
     target: ProductMappingTarget
+    verificationStatus: [ProductMappingVerificationStatus!]
   ): [ProductMappingOutput!]!
+  """
+  검증 대기 중인 매핑 전체 개수 조회 (필터 적용 가능)
+  """
+  pendingVerificationsTotalCount(
+    """
+    브랜드 상품 ID로 필터링
+    """
+    brandProductId: Int
+    matchStatus: [ProductMappingMatchStatus!]
+    productId: Int
+    """
+    상품명으로 검색 (부분 일치)
+    """
+    productTitle: String
+    target: ProductMappingTarget
+    verificationStatus: [ProductMappingVerificationStatus!]
+  ): Int!
+  """
+  개인화 추천 상품 조회 (로그인 필요)
+  """
+  personalizedProducts(
+    categoryId: Int
+    excludeProductIds: [Int!]
+    limit: Int = 20
+  ): [RecommendedProductOutput!]!
   """
   상품 조회
   """
   product(id: Int!): ProductOutput
-  productGuides(productId: Int!): [ProductGuide!]!
+  productGuides(productId: Int!): [ProductGuide!]
   productKeywords(endedAt: DateTime, startedAt: DateTime): [String!]!
   """
   상품 목록 조회
@@ -979,6 +1129,24 @@ type Query {
   유사 상품 목록 조회
   """
   similarProducts(id: Int!): [ProductOutput!]!
+  """
+  제목으로 유사 상품 목록 조회
+  """
+  similarProductsByTitle(
+    limit: Int! = 10
+    """
+    최소 유사도 점수 (0~1, 기본값: 0.3)
+    """
+    minRankingScore: Float
+    """
+    페이지네이션용 offset (기본값: 0)
+    """
+    offset: Int
+    """
+    검색할 상품 제목
+    """
+    title: String!
+  ): [ProductOutput!]!
   """
   소셜 액세스 토큰 조회
   """
@@ -1038,6 +1206,12 @@ type Query {
   ): [WishlistOutput!]!
 }
 
+type RecommendedProductOutput {
+  product: ProductOutput!
+  recommendationReason: String
+  recommendationScore: Float
+}
+
 enum Role {
   ADMIN
   USER
@@ -1085,6 +1259,7 @@ type User {
   favoriteCategories: [Int!]
   gender: Gender
   id: ID!
+  lastReadNoticeAt: DateTime
   linkedSocialProviders: [OauthProvider!]
   nickname: String!
 }
@@ -1102,6 +1277,25 @@ type UserPushSetting {
   id: ID!
   info: Boolean!
   userId: Int!
+}
+
+"""
+신고 사유
+"""
+enum UserReportReason {
+  ABUSE
+  INAPPROPRIATE
+  OTHER
+  PRIVACY
+  SPAM
+}
+
+"""
+신고 대상
+"""
+enum UserReportTarget {
+  COMMENT
+  COMMENT_REPLY
 }
 
 type VerificationStatistics {

@@ -45,7 +45,10 @@ function resolveCategoryName(product: {
 }
 
 function generateDescription(
-  productGuides: { productGuides: Array<{ title: string; content: string }> } | null | undefined,
+  productGuides:
+    | { productGuides?: Array<{ title: string; content: string }> | null }
+    | null
+    | undefined,
   product: {
     title: string;
     categoryId?: number | null;
@@ -86,7 +89,7 @@ function generateDescription(
 // Product 구조화 데이터 생성 함수
 function generateProductJsonLd(
   product: Awaited<ReturnType<typeof ProductService.getProductInfo>>,
-  productGuides?: { productGuides: Array<{ title: string; content: string }> },
+  productGuides?: { productGuides?: Array<{ title: string; content: string }> | null },
 ) {
   if (!product) return null;
 

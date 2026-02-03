@@ -75,6 +75,21 @@ export type BaseSection = {
   type: Scalars['ID']['output'];
 };
 
+export type BrandProductMatchCountOutput = {
+  __typename?: 'BrandProductMatchCountOutput';
+  amount: Scalars['String']['output'];
+  brandItemId: Scalars['Int']['output'];
+  brandName: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  danawaProductId: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  matchCount: Scalars['Int']['output'];
+  pendingVerificationCount: Scalars['Int']['output'];
+  productName: Scalars['String']['output'];
+  searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  volume: Scalars['String']['output'];
+};
+
 export type CategorizedReactionKeywords = {
   __typename?: 'CategorizedReactionKeywords';
   count: Scalars['Int']['output'];
@@ -107,11 +122,17 @@ export type CommentOutput = {
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   isMyLike?: Maybe<Scalars['Boolean']['output']>;
+  isMyReported: Scalars['Boolean']['output'];
+  isNotice: Scalars['Boolean']['output'];
   likeCount: Scalars['Int']['output'];
   parentId?: Maybe<Scalars['Float']['output']>;
-  productId: Scalars['Float']['output'];
+  productId: Scalars['Int']['output'];
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  taggedProduct: ProductOutput;
+  title?: Maybe<Scalars['String']['output']>;
+  trendedAt?: Maybe<Scalars['DateTime']['output']>;
   userId: Scalars['Float']['output'];
+  viewCount: Scalars['Int']['output'];
 };
 
 export type Cta = {
@@ -287,6 +308,8 @@ export type Mutation = {
   addPushToken: Scalars['Boolean']['output'];
   addUserDevice: Scalars['Boolean']['output'];
   addUserLikeOrDislike: Scalars['Boolean']['output'];
+  /** 사용자 신고 */
+  addUserReport: Scalars['Boolean']['output'];
   /** wishlist 추가 */
   addWishlist: Scalars['Boolean']['output'];
   /** 어드민) 로그인 */
@@ -363,8 +386,10 @@ export type Mutation = {
 
 export type MutationAddCommentArgs = {
   content: Scalars['String']['input'];
+  isNotice?: InputMaybe<Scalars['Boolean']['input']>;
   parentId?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationAddHotDealExcludeKeywordByAdminArgs = {
@@ -431,6 +456,13 @@ export type MutationAddUserLikeOrDislikeArgs = {
   isLike?: InputMaybe<Scalars['Boolean']['input']>;
   target: UserLikeTarget;
   targetId: Scalars['Int']['input'];
+};
+
+export type MutationAddUserReportArgs = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  reason: UserReportReason;
+  target: UserReportTarget;
+  targetId: Scalars['Float']['input'];
 };
 
 export type MutationAddWishlistArgs = {
@@ -718,23 +750,40 @@ export type ProductHotDealIndex = {
 
 export type ProductMapping = {
   __typename?: 'ProductMapping';
+  correctPcode?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   danawaUrl?: Maybe<Scalars['String']['output']>;
+  extractedProductInfo?: Maybe<Scalars['String']['output']>;
+  feedbackAt?: Maybe<Scalars['DateTime']['output']>;
+  feedbackBy?: Maybe<Scalars['Int']['output']>;
+  feedbackReason?: Maybe<Scalars['String']['output']>;
+  feedbackType?: Maybe<ProductMappingFeedbackType>;
   id: Scalars['ID']['output'];
   matchStatus?: Maybe<ProductMappingMatchStatus>;
   matchingCandidates?: Maybe<Scalars['String']['output']>;
+  matchingConfidence?: Maybe<Scalars['Int']['output']>;
+  matchingReasoning?: Maybe<Scalars['String']['output']>;
+  matchingSource?: Maybe<Scalars['String']['output']>;
   metadataContext?: Maybe<Scalars['String']['output']>;
   productId: Scalars['Int']['output'];
   reason?: Maybe<Scalars['String']['output']>;
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  searchKeyword?: Maybe<Scalars['String']['output']>;
   target?: Maybe<ProductMappingTarget>;
   targetId?: Maybe<Scalars['Int']['output']>;
   updatedAt: Scalars['DateTime']['output'];
   verificationNote?: Maybe<Scalars['String']['output']>;
   verificationStatus?: Maybe<ProductMappingVerificationStatus>;
   verifiedAt?: Maybe<Scalars['DateTime']['output']>;
-  verifiedBy?: Maybe<Scalars['Int']['output']>;
+  /** 검증자 ID */
+  verifiedById?: Maybe<Scalars['Int']['output']>;
 };
+
+export enum ProductMappingFeedbackType {
+  Confirmed = 'CONFIRMED',
+  Corrected = 'CORRECTED',
+  Rejected = 'REJECTED',
+}
 
 export type ProductMappingInfoOutput = {
   __typename?: 'ProductMappingInfoOutput';
@@ -753,24 +802,37 @@ export enum ProductMappingMatchStatus {
 export type ProductMappingOutput = {
   __typename?: 'ProductMappingOutput';
   brandProduct?: Maybe<Scalars['String']['output']>;
+  correctPcode?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   danawaUrl?: Maybe<Scalars['String']['output']>;
+  extractedProductInfo?: Maybe<Scalars['String']['output']>;
+  feedbackAt?: Maybe<Scalars['DateTime']['output']>;
+  feedbackBy?: Maybe<Scalars['Int']['output']>;
+  feedbackReason?: Maybe<Scalars['String']['output']>;
+  feedbackType?: Maybe<ProductMappingFeedbackType>;
   id: Scalars['ID']['output'];
   matchStatus?: Maybe<ProductMappingMatchStatus>;
   matchingCandidates?: Maybe<Scalars['String']['output']>;
+  matchingConfidence?: Maybe<Scalars['Int']['output']>;
+  matchingReasoning?: Maybe<Scalars['String']['output']>;
+  matchingSource?: Maybe<Scalars['String']['output']>;
   metadataContext?: Maybe<Scalars['String']['output']>;
   /** 매핑된 상품 정보 */
   product?: Maybe<ProductOutput>;
   productId: Scalars['Int']['output'];
   reason?: Maybe<Scalars['String']['output']>;
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  searchKeyword?: Maybe<Scalars['String']['output']>;
   target?: Maybe<ProductMappingTarget>;
   targetId?: Maybe<Scalars['Int']['output']>;
   updatedAt: Scalars['DateTime']['output'];
   verificationNote?: Maybe<Scalars['String']['output']>;
   verificationStatus?: Maybe<ProductMappingVerificationStatus>;
   verifiedAt?: Maybe<Scalars['DateTime']['output']>;
-  verifiedBy?: Maybe<Scalars['Int']['output']>;
+  /** 검증자 정보 */
+  verifiedBy?: Maybe<AdminUser>;
+  /** 검증자 ID */
+  verifiedById?: Maybe<Scalars['Int']['output']>;
 };
 
 export enum ProductMappingTarget {
@@ -835,6 +897,7 @@ export type ProductOutput = {
   mallName?: Maybe<Scalars['String']['output']>;
   mappingInfo?: Maybe<Array<ProductMappingInfoOutput>>;
   negativeCommunityReactionCount: Scalars['Int']['output'];
+  parsedPrice?: Maybe<Scalars['Float']['output']>;
   positiveCommunityReactionCount: Scalars['Int']['output'];
   postedAt: Scalars['DateTime']['output'];
   precomputedRankingScore?: Maybe<Scalars['Float']['output']>;
@@ -846,6 +909,8 @@ export type ProductOutput = {
   providerId: Scalars['Int']['output'];
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
   ship?: Maybe<Scalars['String']['output']>;
+  /** 유사도 */
+  similarity?: Maybe<Scalars['Float']['output']>;
   thumbnail?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
@@ -883,9 +948,16 @@ export type Query = {
   adminMe: AdminUser;
   ads: Array<Ad>;
   analysisTitleByDanawa: Scalars['Boolean']['output'];
+  /** 특정 브랜드 상품의 매핑 개수 조회 */
+  brandProductMatchCount: Scalars['Int']['output'];
+  /** 매칭된 브랜드 상품 전체 개수 조회 */
+  brandProductsByMatchCountTotalCount: Scalars['Int']['output'];
+  /** 매칭된 개수가 많은 순으로 브랜드 상품 목록 조회 (커서 기반 페이지네이션) */
+  brandProductsOrderByMatchCount: Array<BrandProductMatchCountOutput>;
   categories: Array<Category>;
   /** 커뮤니티 반응 카테고리별 키워드 조회 */
   categorizedReactionKeywords: CategorizedReactionKeywordsResponse;
+  comment: CommentOutput;
   comments: Array<CommentOutput>;
   /** 어드민) 댓글 목록 조회 */
   commentsByAdmin: Array<Scalars['String']['output']>;
@@ -904,6 +976,10 @@ export type Query = {
   expireProductReports: Array<ProductExpireReport>;
   /** 유통기한 임박 특가 상품 조회 */
   expiringSoonHotDealProducts: Array<ProductOutput>;
+  /** 특정 사용자의 추천 상품 조회 (관리자용) */
+  getPersonalizedProductsByUserId: Array<RecommendedProductOutput>;
+  /** 특정 상품과 유사한 상품 조회 */
+  getSimilarProducts: Array<ProductOutput>;
   homePage: PageSchema;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
@@ -927,9 +1003,13 @@ export type Query = {
   notificationsByAdmin: Array<Notification>;
   /** 검증 대기 중인 매핑 목록 조회 */
   pendingVerifications: Array<ProductMappingOutput>;
+  /** 검증 대기 중인 매핑 전체 개수 조회 (필터 적용 가능) */
+  pendingVerificationsTotalCount: Scalars['Int']['output'];
+  /** 개인화 추천 상품 조회 (로그인 필요) */
+  personalizedProducts: Array<RecommendedProductOutput>;
   /** 상품 조회 */
   product?: Maybe<ProductOutput>;
-  productGuides: Array<ProductGuide>;
+  productGuides?: Maybe<Array<ProductGuide>>;
   productKeywords: Array<Scalars['String']['output']>;
   /** 상품 목록 조회 */
   products: Array<ProductOutput>;
@@ -943,6 +1023,8 @@ export type Query = {
   reportUserNames: Array<Scalars['String']['output']>;
   /** 유사 상품 목록 조회 */
   similarProducts: Array<ProductOutput>;
+  /** 제목으로 유사 상품 목록 조회 */
+  similarProductsByTitle: Array<ProductOutput>;
   /** 소셜 액세스 토큰 조회 */
   socialAccessToken: Scalars['String']['output'];
   /** 소셜 정보 조회 */
@@ -978,15 +1060,37 @@ export type QueryAdsArgs = {
   slots: Array<AdSlotType>;
 };
 
+export type QueryBrandProductMatchCountArgs = {
+  brandProductId: Scalars['Int']['input'];
+};
+
+export type QueryBrandProductsByMatchCountTotalCountArgs = {
+  brandItemId?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryBrandProductsOrderByMatchCountArgs = {
+  brandItemId?: InputMaybe<Scalars['Int']['input']>;
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type QueryCategorizedReactionKeywordsArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type QueryCommentArgs = {
+  id: Scalars['Int']['input'];
+};
+
 export type QueryCommentsArgs = {
+  isNotice?: InputMaybe<Scalars['Boolean']['input']>;
+  isTrending?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
   orderBy: CommentOrder;
   orderOption: OrderOptionType;
-  productId: Scalars['Int']['input'];
+  productId?: InputMaybe<Scalars['Int']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
@@ -1036,6 +1140,17 @@ export type QueryExpiringSoonHotDealProductsArgs = {
   daysUntilExpiry: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryGetPersonalizedProductsByUserIdArgs = {
+  categoryId?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  userId: Scalars['Int']['input'];
+};
+
+export type QueryGetSimilarProductsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  productId: Scalars['Int']['input'];
 };
 
 export type QueryHomePageArgs = {
@@ -1098,6 +1213,7 @@ export type QueryNotificationsByAdminArgs = {
 };
 
 export type QueryPendingVerificationsArgs = {
+  brandProductId?: InputMaybe<Scalars['Int']['input']>;
   limit: Scalars['Int']['input'];
   matchStatus?: InputMaybe<Array<ProductMappingMatchStatus>>;
   orderBy?: InputMaybe<OrderOptionType>;
@@ -1106,6 +1222,22 @@ export type QueryPendingVerificationsArgs = {
   productTitle?: InputMaybe<Scalars['String']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
   target?: InputMaybe<ProductMappingTarget>;
+  verificationStatus?: InputMaybe<Array<ProductMappingVerificationStatus>>;
+};
+
+export type QueryPendingVerificationsTotalCountArgs = {
+  brandProductId?: InputMaybe<Scalars['Int']['input']>;
+  matchStatus?: InputMaybe<Array<ProductMappingMatchStatus>>;
+  productId?: InputMaybe<Scalars['Int']['input']>;
+  productTitle?: InputMaybe<Scalars['String']['input']>;
+  target?: InputMaybe<ProductMappingTarget>;
+  verificationStatus?: InputMaybe<Array<ProductMappingVerificationStatus>>;
+};
+
+export type QueryPersonalizedProductsArgs = {
+  categoryId?: InputMaybe<Scalars['Int']['input']>;
+  excludeProductIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryProductArgs = {
@@ -1157,6 +1289,13 @@ export type QuerySimilarProductsArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type QuerySimilarProductsByTitleArgs = {
+  limit?: Scalars['Int']['input'];
+  minRankingScore?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  title: Scalars['String']['input'];
+};
+
 export type QuerySocialAccessTokenArgs = {
   code: Scalars['String']['input'];
   oauthProvider: OauthProvider;
@@ -1197,6 +1336,13 @@ export type QueryWishlistsArgs = {
   orderBy: WishlistOrderType;
   orderOption: OrderOptionType;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type RecommendedProductOutput = {
+  __typename?: 'RecommendedProductOutput';
+  product: ProductOutput;
+  recommendationReason?: Maybe<Scalars['String']['output']>;
+  recommendationScore?: Maybe<Scalars['Float']['output']>;
 };
 
 export enum Role {
@@ -1252,6 +1398,7 @@ export type User = {
   favoriteCategories?: Maybe<Array<Scalars['Int']['output']>>;
   gender?: Maybe<Gender>;
   id: Scalars['ID']['output'];
+  lastReadNoticeAt?: Maybe<Scalars['DateTime']['output']>;
   linkedSocialProviders?: Maybe<Array<OauthProvider>>;
   nickname: Scalars['String']['output'];
 };
@@ -1269,6 +1416,21 @@ export type UserPushSetting = {
   info: Scalars['Boolean']['output'];
   userId: Scalars['Int']['output'];
 };
+
+/** 신고 사유 */
+export enum UserReportReason {
+  Abuse = 'ABUSE',
+  Inappropriate = 'INAPPROPRIATE',
+  Other = 'OTHER',
+  Privacy = 'PRIVACY',
+  Spam = 'SPAM',
+}
+
+/** 신고 대상 */
+export enum UserReportTarget {
+  Comment = 'COMMENT',
+  CommentReply = 'COMMENT_REPLY',
+}
 
 export type VerificationStatistics = {
   __typename?: 'VerificationStatistics';
@@ -1754,7 +1916,12 @@ export type ProductGuidesQueryVariables = Exact<{
 
 export type ProductGuidesQuery = {
   __typename?: 'Query';
-  productGuides: Array<{ __typename?: 'ProductGuide'; id: string; title: string; content: string }>;
+  productGuides?: Array<{
+    __typename?: 'ProductGuide';
+    id: string;
+    title: string;
+    content: string;
+  }> | null;
 };
 
 export type QueryProductsQueryVariables = Exact<{

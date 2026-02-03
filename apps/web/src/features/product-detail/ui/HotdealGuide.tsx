@@ -3,7 +3,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Fragment, useRef, useState } from 'react';
 
-import { ProductGuidesQuery } from '@/shared/api/gql/graphql';
+import { type ProductGuide } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
 import HotdealGuideItemCheckIcon from '@/shared/ui/common/icons/HotdealGuideItemCheckIcon';
@@ -165,7 +165,7 @@ function LinkText({ content }: { content: string }) {
   );
 }
 
-function HotdealGuideItem({ guide }: { guide: ProductGuidesQuery['productGuides'][number] }) {
+function HotdealGuideItem({ guide }: { guide: ProductGuide }) {
   return (
     <div className="flex gap-x-2 px-3">
       <div className="shrink-0">

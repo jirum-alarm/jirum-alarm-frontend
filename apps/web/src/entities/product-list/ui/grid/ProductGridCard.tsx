@@ -30,7 +30,7 @@ export default function ProductGridCard({
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} className="w-full">
       <motion.div
-        className={cn('rounded-lg p-2', className)}
+        className={cn('rounded-lg', className)}
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >

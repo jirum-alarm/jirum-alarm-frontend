@@ -13,11 +13,7 @@ import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 export default function ListProductCard({ product }: { product: ProductCardType }) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} className="w-full">
-      <motion.div
-        className="rounded-lg p-2"
-        whileTap={{ scale: 0.95 }}
-        transition={{ duration: 0.1 }}
-      >
+      <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="flex items-center gap-4">
           <div className="relative h-[100px] w-[100px] shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
             <ProductThumbnail

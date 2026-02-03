@@ -25,7 +25,7 @@ export default function ProductRankingImageCard({
 }) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
-      <motion.div
+      <div
         className={cn(
           'pc:h-auto pc:scale-100 pc:border h-[340px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',
           activeIndex === index && 'scale-100',
@@ -62,7 +62,7 @@ export default function ProductRankingImageCard({
             </div>
           </div>
         </motion.div>
-      </motion.div>
+      </div>
     </Link>
   );
 }

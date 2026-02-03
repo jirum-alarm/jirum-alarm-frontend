@@ -62,7 +62,7 @@ const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProduct
           }
         />
       </div>
-      <div className="mx-auto w-fit max-w-full">
+      <div className="pc:mx-auto w-fit max-w-full">
         <PromotionTabs tabs={tabs} activeTabId={activeTab.id} onTabClick={handleTabClick} />
       </div>
 

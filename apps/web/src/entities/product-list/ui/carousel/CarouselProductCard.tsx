@@ -20,11 +20,7 @@ export default function CarouselProductCard({
 }) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} className="pc:w-[192px] inline-block w-[120px]">
-      <motion.div
-        className="rounded-lg p-2"
-        whileTap={{ scale: 0.95 }}
-        transition={{ duration: 0.1 }}
-      >
+      <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="pc:h-[192px] relative aspect-square h-[120px] overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
           <ProductThumbnail
             src={product?.thumbnail ?? ''}
