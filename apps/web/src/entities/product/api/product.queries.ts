@@ -10,11 +10,10 @@ import {
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryHotDealRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
-  QueryProductsQueryVariables,
   QueryReportUserNamesQueryVariables,
   TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql';
-import { ProductService } from '@/shared/api/product';
+import { ProductListQueryVariables, ProductService } from '@/shared/api/product';
 
 export const ProductQueries = {
   all: () => ['product'],
@@ -56,7 +55,7 @@ export const ProductQueries = {
         return data;
       },
     }),
-  products: (variables: QueryProductsQueryVariables) =>
+  products: (variables: ProductListQueryVariables) =>
     queryOptions({
       queryKey: [
         ...ProductQueries.all(),
@@ -71,6 +70,8 @@ export const ProductQueries = {
           thumbnailType: variables.thumbnailType,
           isEnd: variables.isEnd,
           isHot: variables.isHot,
+          providerId: variables.providerId,
+          mallGroupId: variables.mallGroupId,
         },
       ],
       queryFn: () => ProductService.getProducts(variables),
@@ -87,7 +88,7 @@ export const ProductQueries = {
       ],
       queryFn: () => ProductService.getHotDealProductsRandom(variables),
     }),
-  infiniteProducts: (variables: QueryProductsQueryVariables) =>
+  infiniteProducts: (variables: ProductListQueryVariables) =>
     infiniteQueryOptions({
       queryKey: [...ProductQueries.products(variables).queryKey],
       queryFn: ({ pageParam }) =>

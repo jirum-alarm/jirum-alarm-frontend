@@ -19,10 +19,17 @@ import {
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryHotDealRankingProductsArgs,
   QueryProductsByKeywordQueryVariables,
+  QueryProductsQuery,
   QueryProductsQueryVariables,
   QueryReportUserNamesQueryVariables,
   TogetherViewedProductsQueryVariables,
+  TypedDocumentString,
 } from '../gql/graphql';
+
+export type ProductListQueryVariables = QueryProductsQueryVariables & {
+  providerId?: number;
+  mallGroupId?: number;
+};
 
 export class ProductService {
   static async getProduct(variables: ProductQueryVariables) {
@@ -47,7 +54,7 @@ export class ProductService {
     );
   }
 
-  static async getProducts(variables: QueryProductsQueryVariables) {
+  static async getProducts(variables: ProductListQueryVariables) {
     return execute(QueryProducts, variables).then((res) => res.data);
   }
 
@@ -147,7 +154,7 @@ const QueryProduct = graphql(`
   }
 `);
 
-const QueryProducts = graphql(`
+const QueryProducts = new TypedDocumentString<QueryProductsQuery, ProductListQueryVariables>(`
   query QueryProducts(
     $limit: Int!
     $searchAfter: [String!]
@@ -159,6 +166,8 @@ const QueryProducts = graphql(`
     $thumbnailType: ThumbnailType
     $isEnd: Boolean
     $isHot: Boolean
+    $providerId: Int
+    $mallGroupId: Int
   ) {
     products(
       limit: $limit
@@ -171,6 +180,8 @@ const QueryProducts = graphql(`
       thumbnailType: $thumbnailType
       isEnd: $isEnd
       isHot: $isHot
+      providerId: $providerId
+      mallGroupId: $mallGroupId
     ) {
       id
       title

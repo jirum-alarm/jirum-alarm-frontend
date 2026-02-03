@@ -10,12 +10,12 @@ import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
-export default function ListProductCard({ product }: { product: ProductCardType }) {
+export default function DoubleRowProductCard({ product }: { product: ProductCardType }) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id}>
       <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
-        <div className="flex items-center gap-4">
-          <div className="pc:h-25 pc:w-25 relative h-19 w-19 shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+        <div className="flex w-full flex-row items-start gap-2">
+          <div className="relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
             <ProductThumbnail
               src={product?.thumbnail ?? ''}
               title={product.title}
@@ -30,9 +30,11 @@ export default function ListProductCard({ product }: { product: ProductCardType 
               </div>
             )}
           </div>
-          <div className="flex h-full flex-col justify-between gap-1">
-            <span className="line-clamp-2 text-sm break-all text-gray-700">{product.title}</span>
-            <div className="flex items-center gap-2">
+          <div className="flex flex-1 flex-col gap-2">
+            <span className="line-clamp-2 text-sm font-normal break-all text-gray-800">
+              {product.title}
+            </span>
+            <div className="mt-auto flex items-center gap-2">
               <DisplayListPrice price={product.price} widthType="wide" />
               {product.hotDealType && !product.isEnd && (
                 <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />

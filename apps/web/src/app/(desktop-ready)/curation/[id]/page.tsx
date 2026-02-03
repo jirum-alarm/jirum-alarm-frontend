@@ -11,7 +11,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const section = getPromotionSectionById(id);
+  const section = await getPromotionSectionById(id);
 
   if (!section) {
     return {
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CurationPage({ params }: PageProps) {
   const { id } = await params;
-  const section = getPromotionSectionById(id);
+  const section = await getPromotionSectionById(id);
 
   if (!section) {
     notFound();

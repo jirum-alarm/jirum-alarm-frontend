@@ -20,7 +20,7 @@ interface LayoutProps {
 export default async function Layout({ children, params }: LayoutProps) {
   const { isMobile } = await checkDevice();
   const { id } = await params;
-  const section = getPromotionSectionById(id);
+  const section = await getPromotionSectionById(id);
 
   if (!section) {
     notFound();

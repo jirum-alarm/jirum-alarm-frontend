@@ -14,7 +14,7 @@ type ListProductListProps = {
 export default function ListProductList({ products, className }: ListProductListProps) {
   return (
     <div className={cn('flex flex-col gap-4', className)}>
-      {products.map((product) => (
+      {products.slice(0, 4).map((product) => (
         <ListProductCard key={product.id} product={product} />
       ))}
     </div>

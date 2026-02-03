@@ -58,7 +58,13 @@ const DynamicProductSection = async ({ section, isMobile }: DynamicProductSectio
           }
         />
       </div>
-      <Suspense fallback={<ProductGridListSkeleton length={4} />}>
+      <Suspense
+        fallback={
+          <div className="px-5">
+            <ProductGridListSkeleton length={4} />
+          </div>
+        }
+      >
         <DynamicProductList section={section} isMobile={isMobile} />
       </Suspense>
     </div>

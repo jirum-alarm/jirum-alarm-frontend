@@ -17,7 +17,7 @@ import MobileJirumRankingContainer from './mobile/JirumRankingContainer';
 
 async function HomeContainerV2() {
   const { isMobile } = await checkDevice();
-  const sections = getPromotionSections();
+  const sections = await getPromotionSections();
 
   const renderDesktop = () => {
     return (

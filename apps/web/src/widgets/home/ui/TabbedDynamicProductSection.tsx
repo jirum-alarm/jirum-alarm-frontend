@@ -6,8 +6,7 @@ import { Suspense, useState } from 'react';
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
-import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
-import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
+import ProductImageCardSkeleton from '@/entities/product-list/ui/card/ProductImageCardSkeleton';
 import { ContentPromotionSection, PromotionTab } from '@/entities/promotion/model/types';
 
 import DynamicProductList from './DynamicProductList';
@@ -20,10 +19,13 @@ interface TabbedDynamicProductSectionProps {
 
 const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProductSectionProps) => {
   const tabs = section.tabs || [];
-  const [activeTab, setActiveTab] = useState<PromotionTab>(tabs[0]);
+  const [activeTabId, setActiveTabId] = useState<string | undefined>(tabs[0]?.id);
+  const activeTab = tabs.find((tab) => tab.id === activeTabId) ?? tabs[0];
+
+  if (!activeTab) return null;
 
   const handleTabClick = (tab: PromotionTab) => {
-    setActiveTab(tab);
+    setActiveTabId(tab.id);
   };
 
   // Create a temporary section object for the active tab to pass to DynamicProductList
@@ -45,14 +47,14 @@ const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProduct
         <SectionHeader
           title={section.title}
           right={
-            section.viewMoreLink ? (
+            activeTab.viewMoreLink ? (
               <motion.div
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.1 }}
                 className="rounded-lg"
               >
                 <Link
-                  href={section.viewMoreLink}
+                  href={activeTab.viewMoreLink}
                   className="px-2 py-1 text-sm text-gray-500 hover:text-gray-700"
                 >
                   더보기
@@ -66,7 +68,17 @@ const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProduct
         <PromotionTabs tabs={tabs} activeTabId={activeTab.id} onTabClick={handleTabClick} />
       </div>
 
-      <Suspense fallback={<ProductGridListSkeleton length={4} />}>
+      <Suspense
+        fallback={
+          <div className="pc:py-4 pc:px-0 px-5">
+            <div className="pc:grid-cols-6 grid animate-pulse grid-cols-3 gap-x-3 gap-y-5">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <ProductImageCardSkeleton key={index} />
+              ))}
+            </div>
+          </div>
+        }
+      >
         <DynamicProductList section={activeSection} isMobile={isMobile} />
       </Suspense>
     </div>

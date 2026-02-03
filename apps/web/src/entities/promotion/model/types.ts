@@ -2,6 +2,7 @@ export type ContentPromotionSectionType =
   | 'GRID'
   | 'HORIZONTAL_SCROLL'
   | 'LIST'
+  | 'DOUBLE_ROW'
   | 'BANNER'
   | 'GRID_TABBED'
   | 'PAGINATED_GRID';
@@ -20,6 +21,7 @@ export interface PromotionTab {
   id: string;
   label: string;
   variables: Record<string, any>;
+  viewMoreLink?: string;
 }
 
 interface BasePromotionSection {

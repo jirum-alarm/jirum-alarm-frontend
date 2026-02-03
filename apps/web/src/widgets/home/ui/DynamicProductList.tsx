@@ -3,6 +3,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { CarouselProductList } from '@/entities/product-list/ui/carousel';
+import DoubleRowCarouselProductList from '@/entities/product-list/ui/carousel/DoubleRowCarouselProductList';
 import PaginatedProductGridList from '@/entities/product-list/ui/grid/PaginatedProductGridList';
 import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
 import ListProductList from '@/entities/product-list/ui/list/ListProductList';
@@ -66,6 +67,18 @@ const DynamicProductList = ({ section, isMobile }: DynamicProductListProps) => {
 
   if (section.type === 'HORIZONTAL_SCROLL') {
     return <CarouselProductList products={products} />;
+  }
+
+  if (section.type === 'DOUBLE_ROW') {
+    if (isMobile) {
+      return <DoubleRowCarouselProductList products={products} />;
+    }
+
+    return (
+      <div className="pc:px-0 px-5">
+        <ListProductList products={products} />
+      </div>
+    );
   }
 
   if (section.type === 'LIST') {
