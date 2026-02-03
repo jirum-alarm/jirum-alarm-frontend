@@ -1,9 +1,9 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { ProductQueries } from '@/entities/product';
 
 export default function ProductExpiredBanner({ productId }: { productId: number }) {
   const { data } = useSuspenseQuery(ProductQueries.reportUserNames({ productId }));

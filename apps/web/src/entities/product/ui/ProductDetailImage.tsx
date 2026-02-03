@@ -1,6 +1,5 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { ProductInfoFragment } from '@/shared/api/gql/graphql';
@@ -8,6 +7,7 @@ import { convertToWebp } from '@/shared/lib/utils/image';
 import ImageComponent from '@/shared/ui/ImageComponent';
 import NoImage from '@/shared/ui/NoImage';
 
+import { ProductQueries } from '@/entities/product';
 
 export default function ProductDetailImage({
   productId,

@@ -1,4 +1,4 @@
-import { ProductQueries } from '@/entities/product/product.queries';
+import { ProductQueries } from '@/entities/product';
 
 import { ContentPromotionSection } from '../model/types';
 

@@ -1,1 +1,1 @@
-export * from './comment.queries';
+export * from './api/comment.queries';

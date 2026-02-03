@@ -1,1 +1,1 @@
-export { WishlistQueries } from './wishlist.queries';
+export { WishlistQueries } from './api/wishlist.queries';
