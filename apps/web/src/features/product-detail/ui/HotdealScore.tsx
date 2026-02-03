@@ -1,6 +1,5 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion, useAnimation } from 'motion/react';
 import { useEffect, useRef } from 'react';
@@ -11,6 +10,7 @@ import { Info } from '@/shared/ui/common/icons';
 import Tooltip from '@/shared/ui/common/Tooltip';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 
+import { ProductQueries } from '@/entities/product';
 
 const HotdealScore = ({ productId }: { productId: number }) => {
   const isHydrated = useIsHydrated();

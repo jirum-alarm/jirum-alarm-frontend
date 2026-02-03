@@ -1,10 +1,9 @@
+import { PAGE } from '@/shared/config/page';
+import Link from '@/shared/ui/Link';
 
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
-
-import { PAGE } from '@/shared/config/page';
-import Link from '@/shared/ui/Link';
 
 type RankingProduct = Omit<ProductCardType, 'postedAt'>;
 

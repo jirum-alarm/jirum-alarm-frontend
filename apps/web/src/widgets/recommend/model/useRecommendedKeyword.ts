@@ -1,7 +1,7 @@
-import { ProductQueries } from '@/entities/product';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
 
+import { ProductQueries } from '@/entities/product';
 
 const useRecommendedKeyword = () => {
   const {

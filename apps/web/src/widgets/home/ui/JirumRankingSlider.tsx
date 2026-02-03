@@ -2,9 +2,6 @@
 
 import 'swiper/css';
 
-import { ProductQueries } from '@/entities/product';
-import ADProductRankingImageCard from '@/entities/product-list/ui/ranking/ADProductRankingImageCard';
-import ProductRankingImageCard from '@/entities/product-list/ui/ranking/ProductRankingImageCard';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
@@ -21,6 +18,9 @@ import { getDayBefore } from '@/shared/lib/utils/date';
 import { getVisibleSlides } from '@/shared/lib/utils/swiper';
 import { ArrowLeft } from '@/shared/ui/common/icons';
 
+import { ProductQueries } from '@/entities/product';
+import ADProductRankingImageCard from '@/entities/product-list/ui/ranking/ADProductRankingImageCard';
+import ProductRankingImageCard from '@/entities/product-list/ui/ranking/ProductRankingImageCard';
 
 import { RankingPreview as DesktopRankingPreview } from './desktop/RankingSkeleton';
 import { RankingPreview as MobileRankingPreview } from './mobile/RankingSkeleton';

@@ -1,11 +1,10 @@
-import { CarouselProductList } from '@/entities/product-list/ui/carousel';
-
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import { ErrorIllust } from '@/shared/ui/common/icons/Illust';
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
+import { CarouselProductList } from '@/entities/product-list/ui/carousel';
 
 import { useHotDealsRandom } from '@/features/product-list/hooks';
 

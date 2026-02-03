@@ -1,11 +1,11 @@
-import { ProductQueries } from '@/entities/product';
-import { ProductGridList, ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { KeywordProductOrderType, OrderOptionType } from '@/shared/api/gql/graphql';
 
+import { ProductQueries } from '@/entities/product';
+import { ProductGridList, ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
 
 interface ProductImageCardListProps {
   keyword: string;

@@ -1,12 +1,12 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
-import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { ThumbnailType } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
 
+import { ProductQueries } from '@/entities/product';
+import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
 
 type Props = {
   categoryId: number | null;

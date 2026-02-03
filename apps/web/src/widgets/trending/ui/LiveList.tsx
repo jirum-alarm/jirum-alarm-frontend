@@ -1,9 +1,9 @@
 'use client';
 
-import { ProductGridList, ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
 import { memo, useEffect, useRef } from 'react';
 import { useSwiper } from 'swiper/react';
 
+import { ProductGridList, ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
 
 import useLiveViewModel from '../model/useLiveViewModel';
 

@@ -1,10 +1,9 @@
 'use client';
 
+import Button from '@/shared/ui/common/Button';
 
 import BirthYearSelect from '@/entities/user/ui/BirthYearSelect';
 import GenderRadioGroup from '@/entities/user/ui/GenderRadioGroup';
-
-import Button from '@/shared/ui/common/Button';
 
 import usePersonalInfoFormViewModel from '../../model/usePersonalInfoFormViewModel';
 

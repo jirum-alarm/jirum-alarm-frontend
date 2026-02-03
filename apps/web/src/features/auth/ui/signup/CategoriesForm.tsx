@@ -1,8 +1,7 @@
-import CategoriesCheckboxGroup from '@/entities/category/ui/CategoriesCheckboxGroup';
-
 import { MAX_SELECTION_COUNT } from '@/shared/config/categories';
 import Button from '@/shared/ui/common/Button';
 
+import CategoriesCheckboxGroup from '@/entities/category/ui/CategoriesCheckboxGroup';
 
 import { Registration } from '../../model/signup/registration';
 import { useCategoriesFormViewModel } from '../../model/signup/useCategoriesFormViewModel';

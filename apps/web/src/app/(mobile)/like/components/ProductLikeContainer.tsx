@@ -1,12 +1,12 @@
 'use client';
 
-import { ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
-import { WishlistQueries } from '@/entities/wishlist';
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
 import { OrderOptionType, WishlistOrderType } from '@/shared/api/gql/graphql';
 
+import { ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
+import { WishlistQueries } from '@/entities/wishlist';
 
 import ProductLikeGridList from './ProductLikeGridList';
 

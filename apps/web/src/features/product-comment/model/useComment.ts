@@ -1,11 +1,11 @@
 'use client';
 
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
+import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 
 import {
   CANCEL_EVENT,

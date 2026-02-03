@@ -1,9 +1,8 @@
 'use client';
 
-import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
-
 import { cn } from '@/shared/lib/cn';
 
+import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
 
 import { useHotDealsRandom } from '@/features/product-list/hooks';
 

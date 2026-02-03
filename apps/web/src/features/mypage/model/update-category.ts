@@ -1,11 +1,11 @@
-import { AuthQueries } from '@/entities/auth';
-import { CategoryQueries } from '@/entities/category';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { AuthService } from '@/shared/api/auth';
 import useGoBack from '@/shared/hooks/useGoBack';
 import { useToast } from '@/shared/ui/common/Toast';
 
+import { AuthQueries } from '@/entities/auth';
+import { CategoryQueries } from '@/entities/category';
 
 export const useUpdateCategory = () => {
   const { toast } = useToast();

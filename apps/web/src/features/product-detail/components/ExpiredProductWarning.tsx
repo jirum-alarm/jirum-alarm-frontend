@@ -1,6 +1,5 @@
 'use client';
 
-import { ProductGridList } from '@/entities/product-list/ui/grid';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import Link from 'next/link';
@@ -12,7 +11,7 @@ import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
 import { ProductQueries } from '@/entities/product';
-
+import { ProductGridList } from '@/entities/product-list/ui/grid';
 
 interface Props {
   product: ProductInfoFragment;

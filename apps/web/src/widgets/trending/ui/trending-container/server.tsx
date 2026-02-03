@@ -1,10 +1,10 @@
-import { CategoryQueries, getCategoriesForUser } from '@/entities/category';
-import { ProductQueries } from '@/entities/product';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { getDayBefore } from '@/shared/lib/utils/date';
 
+import { CategoryQueries, getCategoriesForUser } from '@/entities/category';
+import { ProductQueries } from '@/entities/product';
 
 import { TrendingContainer } from '.';
 

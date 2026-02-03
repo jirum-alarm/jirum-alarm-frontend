@@ -1,13 +1,11 @@
 'use client';
 
-import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 import { Suspense, useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 
+import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 import { ContentPromotionSection } from '@/entities/promotion/model/types';
-
-
 
 import CurationProductList from './CurationProductList';
 

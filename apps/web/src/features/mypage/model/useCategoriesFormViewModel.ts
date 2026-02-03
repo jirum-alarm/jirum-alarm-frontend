@@ -1,11 +1,11 @@
-import { AuthQueries } from '@/entities/auth';
-import { type ICategoryForm } from '@/entities/category/model/types';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 import { CATEGORIES, MAX_SELECTION_COUNT } from '@/shared/config/categories';
 import { shallowArrayEqual } from '@/shared/lib/utils/object';
 
+import { AuthQueries } from '@/entities/auth';
+import { type ICategoryForm } from '@/entities/category/model/types';
 
 import { useUpdateCategory } from './update-category';
 

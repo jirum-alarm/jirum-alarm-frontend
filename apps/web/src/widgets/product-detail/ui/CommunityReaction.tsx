@@ -1,6 +1,5 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
@@ -9,6 +8,7 @@ import { Info } from '@/shared/ui/common/icons';
 import Tooltip from '@/shared/ui/common/Tooltip';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
+import { ProductQueries } from '@/entities/product';
 
 import ProductReport from '@/features/product-actions/ui/ProductReport';
 import { NoReactionChart } from '@/features/product-reaction/ui/NoReactionChart';

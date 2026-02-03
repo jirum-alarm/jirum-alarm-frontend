@@ -1,6 +1,5 @@
 'use client';
 
-
 import { cn } from '@/shared/lib/cn';
 import BackButton from '@/shared/ui/layout/BackButton';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';

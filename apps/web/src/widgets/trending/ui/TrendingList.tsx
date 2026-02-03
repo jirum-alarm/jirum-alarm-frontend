@@ -1,10 +1,10 @@
 'use client';
 
-import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
-import { ProductGridList } from '@/entities/product-list/ui/grid';
 import { memo, useEffect, useRef } from 'react';
 import { useSwiper } from 'swiper/react';
 
+import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
+import { ProductGridList } from '@/entities/product-list/ui/grid';
 
 import useTrendingViewModel from '../model/useTrendingViewModel';
 

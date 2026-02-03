@@ -1,6 +1,5 @@
 'use client';
 
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
@@ -9,6 +8,7 @@ import Button from '@/shared/ui/common/Button';
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
+import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 
 import CommentInput from './CommentInput';
 import CommentList from './CommentList';

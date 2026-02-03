@@ -1,6 +1,6 @@
-import { AuthQueries } from '@/entities/auth';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { AuthQueries } from '@/entities/auth';
 
 import { useRemoveKeyword } from './remove-keyword';
 

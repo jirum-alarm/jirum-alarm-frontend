@@ -1,10 +1,10 @@
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 import { getAccessToken } from '@/app/actions/token';
 
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
+import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 
 import CommentContainer from './CommentContainer';
 import CommentPageHeader from './CommentPageHeader';

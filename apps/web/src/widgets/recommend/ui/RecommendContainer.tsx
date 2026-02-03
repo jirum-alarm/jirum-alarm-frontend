@@ -1,8 +1,8 @@
 'use client';
 
-import { ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
 import { Suspense } from 'react';
 
+import { ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
 
 import { RecommendedProductTabs } from '@/widgets/recommend';
 

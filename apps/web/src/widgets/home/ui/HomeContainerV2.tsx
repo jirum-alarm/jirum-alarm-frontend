@@ -7,7 +7,6 @@ import { Advertisement } from '@/shared/config/advertisement';
 
 import { getPromotionSections } from '@/entities/promotion/api/getPromotionSections';
 
-
 import PromotionSectionList from '@/widgets/home/ui/PromotionSectionList';
 import Footer from '@/widgets/layout/ui/desktop/Footer';
 

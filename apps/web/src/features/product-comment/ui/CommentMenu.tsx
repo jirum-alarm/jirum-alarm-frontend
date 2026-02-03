@@ -1,6 +1,5 @@
 'use client';
 
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { VisuallyHidden } from 'radix-ui';
 import { useState } from 'react';
@@ -10,6 +9,7 @@ import { CommentService } from '@/shared/api/comment/comment.service';
 import Dots from '@/shared/ui/common/icons/Dots';
 import { useToast } from '@/shared/ui/common/Toast';
 
+import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 
 import { TComment, UPDATE_EVENT } from './CommentLayout';
 

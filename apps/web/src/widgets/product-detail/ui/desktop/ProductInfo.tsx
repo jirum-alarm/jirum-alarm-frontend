@@ -1,9 +1,7 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
-
 
 import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
@@ -13,6 +11,7 @@ import DisplayTime from '@/shared/ui/DisplayTime';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 import ShareButton from '@/shared/ui/ShareButton';
 
+import { ProductQueries } from '@/entities/product';
 
 import { LikeButton, RecommendButton } from '@/features/product-actions/ui';
 import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';

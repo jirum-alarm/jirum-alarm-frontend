@@ -1,7 +1,5 @@
 'use client';
 
-
-
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { CarouselProductList } from '@/entities/product-list/ui/carousel';

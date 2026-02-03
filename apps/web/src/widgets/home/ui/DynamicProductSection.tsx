@@ -1,4 +1,3 @@
-import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 import { Suspense } from 'react';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
@@ -6,10 +5,9 @@ import { getQueryClient } from '@/app/(app)/react-query/query-client';
 import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
+import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 import { getPromotionQueryOptions } from '@/entities/promotion/lib/getPromotionQueryOptions';
 import { ContentPromotionSection } from '@/entities/promotion/model/types';
-
-
 
 import DynamicProductList from './DynamicProductList';
 import TabbedDynamicProductSection from './TabbedDynamicProductSection';

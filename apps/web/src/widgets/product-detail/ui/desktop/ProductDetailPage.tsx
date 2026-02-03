@@ -1,9 +1,9 @@
-import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 import { Suspense } from 'react';
 
 import { ProductInfoFragment } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 
+import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';

@@ -1,8 +1,8 @@
 'use client';
 
-import { AuthQueries } from '@/entities/auth';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { AuthQueries } from '@/entities/auth';
 
 import AccountManagement from './AccountManagement';
 import MovePage from './MovePage';

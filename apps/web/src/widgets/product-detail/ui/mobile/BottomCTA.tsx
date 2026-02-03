@@ -1,11 +1,11 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import Button from '@/shared/ui/common/Button';
 import TopButton from '@/shared/ui/TopButton';
 
+import { ProductQueries } from '@/entities/product';
 
 import { LikeButton } from '@/features/product-actions/ui';
 

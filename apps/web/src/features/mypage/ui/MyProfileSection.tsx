@@ -1,12 +1,12 @@
 'use client';
 
-import { AuthQueries } from '@/entities/auth';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { PAGE } from '@/shared/config/page';
 import { ArrowRight } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
+import { AuthQueries } from '@/entities/auth';
 
 const MyProfileSection = () => {
   const {

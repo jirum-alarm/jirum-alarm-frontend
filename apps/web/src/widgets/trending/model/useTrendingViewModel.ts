@@ -1,9 +1,9 @@
-import { ProductQueries } from '@/entities/product';
 import { useSuspenseQueries } from '@tanstack/react-query';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { getDayBefore } from '@/shared/lib/utils/date';
 
+import { ProductQueries } from '@/entities/product';
 
 const TRENDING_ITEMS_LIMIT = 50;
 const HOT_DEAL_COUNT_RANDOM = 20;

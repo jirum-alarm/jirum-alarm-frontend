@@ -4,7 +4,6 @@ import { checkDevice } from '@/app/actions/agent';
 import { collectProductAction } from '@/app/actions/product';
 import { getAccessToken } from '@/app/actions/token';
 
-
 import { ProductService } from '@/shared/api/product';
 import { CATEGORY_MAP } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';

@@ -1,8 +1,5 @@
 'use client';
 
-import { type ProductCardType } from '@/entities/product-list/model/types';
-import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
-import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 import { motion } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
@@ -10,6 +7,9 @@ import DisplayTime from '@/shared/ui/DisplayTime';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 import Link from '@/shared/ui/Link';
 
+import { type ProductCardType } from '@/entities/product-list/model/types';
+import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
+import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 export default function CarouselProductCard({
   product,

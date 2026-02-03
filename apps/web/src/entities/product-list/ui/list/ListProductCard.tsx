@@ -1,14 +1,14 @@
 'use client';
 
-import { type ProductCardType } from '@/entities/product-list/model/types';
-import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
-import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 import { motion } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 import Link from '@/shared/ui/Link';
 
+import { type ProductCardType } from '@/entities/product-list/model/types';
+import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
+import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 export default function ListProductCard({ product }: { product: ProductCardType }) {
   return (

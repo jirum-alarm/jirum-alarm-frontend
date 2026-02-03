@@ -1,12 +1,12 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
-import { CarouselProductListSkeleton } from '@/entities/product-list/ui/carousel';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 
 import ApiErrorBoundary from '@/shared/ui/ApiErrorBoundary';
 
+import { ProductQueries } from '@/entities/product';
+import { CarouselProductListSkeleton } from '@/entities/product-list/ui/carousel';
 
 import ProductsByKeywordsList from './ProductsByKeywordsList';
 import RecommendedProductTabs from './RecommendedProductTabs';

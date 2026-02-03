@@ -1,6 +1,5 @@
 'use client';
 
-import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { UserLikeTarget } from '@/shared/api/gql/graphql';
@@ -9,6 +8,7 @@ import { cn } from '@/shared/lib/cn';
 import { BubbleChat, ThumbsupFill } from '@/shared/ui/common/icons';
 import { useToast } from '@/shared/ui/common/Toast';
 
+import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
 
 import { CANCEL_EVENT, REPLY_EVENT, TComment, TEditStatus } from './CommentLayout';
 

@@ -1,6 +1,5 @@
 'use client';
 
-import { ProductGridCard } from '@/entities/product-list/ui/grid';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -9,6 +8,7 @@ import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
 import { EVENT } from '@/shared/config/mixpanel';
 import { Heart } from '@/shared/ui/common/icons';
 
+import { ProductGridCard } from '@/entities/product-list/ui/grid';
 
 type ProductGridListProps = {
   products: QueryWishlistsQuery['wishlists'][number]['product'][];

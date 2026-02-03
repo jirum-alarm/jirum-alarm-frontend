@@ -1,7 +1,5 @@
 'use client';
 
-import { CategoryQueries } from '@/entities/category';
-import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
 import { Tabs } from 'radix-ui';
@@ -17,6 +15,8 @@ import {
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
+import { CategoryQueries } from '@/entities/category';
+import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 
 import LiveList from '../LiveList';
 import TabBarV2 from '../TabbarV2';

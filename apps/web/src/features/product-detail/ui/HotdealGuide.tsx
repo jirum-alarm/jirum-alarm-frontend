@@ -1,6 +1,5 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Fragment, useRef, useState } from 'react';
 
@@ -10,6 +9,7 @@ import Button from '@/shared/ui/common/Button';
 import HotdealGuideItemCheckIcon from '@/shared/ui/common/icons/HotdealGuideItemCheckIcon';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
+import { ProductQueries } from '@/entities/product';
 
 export default function HotdealGuide({
   productId,

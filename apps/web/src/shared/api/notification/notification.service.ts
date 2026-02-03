@@ -6,7 +6,6 @@ import {
 } from '@/shared/api/gql/graphql';
 import { execute } from '@/shared/lib/http-client';
 
-
 export class NotificationService {
   static async addPushToken(variables: MutationAddPushTokenMutationVariables) {
     return execute(MutationAddPushTokenDocument, variables);

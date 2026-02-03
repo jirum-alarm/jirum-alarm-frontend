@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 
-
 import { PAGE } from '@/shared/config/page';
 // import { useDevice } from '@/shared/hooks/useDevice';
 import useMyRouter from '@/shared/hooks/useMyRouter';

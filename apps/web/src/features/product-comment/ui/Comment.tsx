@@ -1,6 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-
 import { User } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 import { displayTime } from '@/shared/lib/utils/displayTime';

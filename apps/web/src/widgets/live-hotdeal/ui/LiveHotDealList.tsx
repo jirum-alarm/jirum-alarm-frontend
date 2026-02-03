@@ -1,12 +1,11 @@
 'use client';
 
-import { ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
-import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
-
 import { CheckDeviceResult } from '@/app/actions/agent.types';
 
 import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
 
+import { ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
+import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
 
 import AppDownloadBanner from '@/features/app-download/ui/AppDownloadBanner';
 

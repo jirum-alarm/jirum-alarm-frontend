@@ -1,8 +1,6 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
 import { useSuspenseQuery } from '@tanstack/react-query';
-
 
 import { cn } from '@/shared/lib/cn';
 import { parsePrice } from '@/shared/lib/utils/price';
@@ -11,6 +9,7 @@ import DisplayPrice from '@/shared/ui/DisplayPrice';
 import DisplayTime from '@/shared/ui/DisplayTime';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 
+import { ProductQueries } from '@/entities/product';
 
 import { RecommendButton } from '@/features/product-actions/ui';
 import HotdealGuideModal from '@/features/product-detail/ui/mobile/HotDealGuideModal';

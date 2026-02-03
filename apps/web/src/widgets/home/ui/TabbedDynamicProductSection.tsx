@@ -1,15 +1,14 @@
 'use client';
 
-import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
-import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 import { motion } from 'motion/react';
 import { Suspense, useState } from 'react';
 
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
+import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
+import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 import { ContentPromotionSection, PromotionTab } from '@/entities/promotion/model/types';
-
 
 import DynamicProductList from './DynamicProductList';
 import PromotionTabs from './PromotionTabs';

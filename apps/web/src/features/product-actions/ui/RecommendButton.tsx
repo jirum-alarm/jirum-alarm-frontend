@@ -1,6 +1,5 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
 import { UserLikeTarget } from '@/shared/api/gql/graphql';
@@ -10,6 +9,7 @@ import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
 import { Thumbsup } from '@/shared/ui/common/icons';
 
+import { ProductQueries } from '@/entities/product';
 
 export default function RecommendButton({ productId }: { productId: number }) {
   const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));

@@ -1,10 +1,10 @@
 'use client';
 
-import { type ProductCardType } from '@/entities/product-list/model/types';
 import { useState } from 'react';
 
 import { useDevice } from '@/shared/hooks/useDevice';
 
+import { type ProductCardType } from '@/entities/product-list/model/types';
 
 import ProductGridList from './ProductGridList';
 

@@ -1,9 +1,8 @@
 'use client';
 
-import { type ProductCardType } from '@/entities/product-list/model/types';
-
 import { cn } from '@/shared/lib/cn';
 
+import { type ProductCardType } from '@/entities/product-list/model/types';
 
 import ListProductCard from './ListProductCard';
 

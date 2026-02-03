@@ -1,7 +1,7 @@
-import { AuthQueries } from '@/entities/auth';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+import { AuthQueries } from '@/entities/auth';
 
 import { useUpdateNickname } from './update-nickname';
 

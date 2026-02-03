@@ -1,4 +1,3 @@
-import { AuthQueries } from '@/entities/auth';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
@@ -6,6 +5,7 @@ import { Gender } from '@/shared/api/gql/graphql';
 import { BIRTH_YEAR } from '@/shared/config/birthYear';
 import { shallowEqual } from '@/shared/lib/utils/object';
 
+import { AuthQueries } from '@/entities/auth';
 
 import { useUpdatePersonal } from './update-personal';
 

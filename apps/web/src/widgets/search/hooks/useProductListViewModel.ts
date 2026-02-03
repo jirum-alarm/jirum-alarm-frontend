@@ -1,8 +1,8 @@
-import { ProductQueries } from '@/entities/product';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useInView } from 'react-intersection-observer';
 
+import { ProductQueries } from '@/entities/product';
 
 const limit = 20;
 

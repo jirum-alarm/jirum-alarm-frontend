@@ -1,9 +1,9 @@
 'use client';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { ProductQueries } from '@/entities/product';
 import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
-import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
   productId: number;

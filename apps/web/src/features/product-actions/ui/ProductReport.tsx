@@ -1,6 +1,5 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
@@ -11,6 +10,7 @@ import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
 import { useToast } from '@/shared/ui/common/Toast';
 
+import { ProductQueries } from '@/entities/product';
 
 const ProductReport = ({ productId }: { productId: number }) => {
   const { data: product } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));

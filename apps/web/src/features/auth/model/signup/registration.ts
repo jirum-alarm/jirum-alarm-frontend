@@ -1,7 +1,6 @@
-import { ICategoryForm } from '@/entities/category/model/types';
-
 import { Gender } from '@/shared/api/gql/graphql';
 
+import { ICategoryForm } from '@/entities/category/model/types';
 
 interface Input {
   value: string;

@@ -1,10 +1,7 @@
 'use client';
 
-import { ProductQueries } from '@/entities/product';
-import { WishlistQueries } from '@/entities/wishlist';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-
 
 import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
 import { PAGE } from '@/shared/config/page';
@@ -17,6 +14,8 @@ import { Heart } from '@/shared/ui/common/icons';
 import { useToast } from '@/shared/ui/common/Toast';
 import Link from '@/shared/ui/Link';
 
+import { ProductQueries } from '@/entities/product';
+import { WishlistQueries } from '@/entities/wishlist';
 
 export default function LikeButton({
   productId,

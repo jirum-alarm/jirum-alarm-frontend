@@ -4,7 +4,6 @@ import { motion } from 'motion/react';
 import Image from 'next/image';
 import { useEffect } from 'react';
 
-
 import { PAGE } from '@/shared/config/page';
 import { useDevice } from '@/shared/hooks/useDevice';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
