@@ -913,6 +913,7 @@ type Query {
   안읽은 알림 존재 여부 조회
   """
   existUnreadNotification: Boolean!
+  existsUnreadNotice: Boolean!
   """
   유저 존재 여부 조회
   """

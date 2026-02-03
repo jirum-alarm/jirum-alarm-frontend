@@ -8,6 +8,7 @@ import {
   ProductStatsQueryVariables,
   QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
+  QueryExpiringSoonHotDealProductsArgs,
   QueryHotDealRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryReportUserNamesQueryVariables,
@@ -165,5 +166,25 @@ export const ProductQueries = {
     queryOptions({
       queryKey: [...ProductQueries.all(), 'hotDealRankingProducts', variables],
       queryFn: () => ProductService.getHotDealRankingProducts(variables),
+    }),
+
+  expiringSoonHotDealProducts: (variables: QueryExpiringSoonHotDealProductsArgs) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'expiringSoonHotDealProducts', variables],
+      queryFn: () => ProductService.getExpiringSoonHotDealProducts(variables),
+    }),
+
+  infiniteExpiringSoonHotDealProducts: (variables: QueryExpiringSoonHotDealProductsArgs) =>
+    infiniteQueryOptions({
+      queryKey: [...ProductQueries.expiringSoonHotDealProducts(variables).queryKey],
+      queryFn: ({ pageParam }) =>
+        ProductService.getExpiringSoonHotDealProducts({
+          ...variables,
+          searchAfter: pageParam ? [pageParam] : undefined,
+        }),
+      initialPageParam: null as null | string,
+      getNextPageParam: (lastPage) => {
+        return lastPage.expiringSoonHotDealProducts?.at(-1)?.searchAfter?.[0];
+      },
     }),
 };

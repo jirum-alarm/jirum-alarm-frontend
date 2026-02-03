@@ -14,6 +14,8 @@ export const getPromotionQueryOptions = (section: ContentPromotionSection) => {
         return ProductQueries.productsByKeywords(variables as any);
       case 'products':
         return ProductQueries.products(variables as any);
+      case 'expiringSoonHotDealProducts':
+        return ProductQueries.expiringSoonHotDealProducts(variables as any);
       default:
         throw new Error(`Unknown query name: ${queryName}`);
     }

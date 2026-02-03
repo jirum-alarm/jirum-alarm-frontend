@@ -36,6 +36,9 @@ const DynamicProductList = ({ section, isMobile }: DynamicProductListProps) => {
       case 'products':
         products = (data as any).products;
         break;
+      case 'expiringSoonHotDealProducts':
+        products = (data as any).expiringSoonHotDealProducts;
+        break;
       default:
         products = [];
     }

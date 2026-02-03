@@ -968,6 +968,7 @@ export type Query = {
   danawaProducts: Array<DanawaProductOutput>;
   /** 안읽은 알림 존재 여부 조회 */
   existUnreadNotification: Scalars['Boolean']['output'];
+  existsUnreadNotice: Scalars['Boolean']['output'];
   /** 유저 존재 여부 조회 */
   existsUser: ExistsUserOutput;
   /** 해당 상품 신고된 횟수 조회 */
@@ -2106,6 +2107,34 @@ export type QueryHotDealRankingProductsQuery = {
   }>;
 };
 
+export type QueryExpiringSoonHotDealProductsQueryVariables = Exact<{
+  daysUntilExpiry: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+}>;
+
+export type QueryExpiringSoonHotDealProductsQuery = {
+  __typename?: 'Query';
+  expiringSoonHotDealProducts: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+    provider: { __typename?: 'Provider'; nameKr: string };
+  }>;
+};
+
 export type AddWishlistMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -2846,6 +2875,36 @@ export const QueryHotDealRankingProductsDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   QueryHotDealRankingProductsQuery,
   QueryHotDealRankingProductsQueryVariables
+>;
+export const QueryExpiringSoonHotDealProductsDocument = new TypedDocumentString(`
+    query QueryExpiringSoonHotDealProducts($daysUntilExpiry: Int!, $limit: Int!, $searchAfter: [String!]) {
+  expiringSoonHotDealProducts(
+    daysUntilExpiry: $daysUntilExpiry
+    limit: $limit
+    searchAfter: $searchAfter
+  ) {
+    id
+    title
+    mallId
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    hotDealType
+    provider {
+      nameKr
+    }
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryExpiringSoonHotDealProductsQuery,
+  QueryExpiringSoonHotDealProductsQueryVariables
 >;
 export const AddWishlistDocument = new TypedDocumentString(`
     mutation AddWishlist($productId: Int!) {

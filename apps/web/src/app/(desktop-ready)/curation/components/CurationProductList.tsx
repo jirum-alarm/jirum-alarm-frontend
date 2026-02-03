@@ -4,7 +4,10 @@ import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-quer
 import { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { QueryProductsByKeywordQueryVariables } from '@/shared/api/gql/graphql';
+import {
+  QueryExpiringSoonHotDealProductsArgs,
+  QueryProductsByKeywordQueryVariables,
+} from '@/shared/api/gql/graphql';
 import { ProductListQueryVariables } from '@/shared/api/product';
 import { LoadingSpinner } from '@/shared/ui/common/icons';
 
@@ -92,6 +95,43 @@ const ByProducts = ({ section }: CurationProductListProps) => {
   );
 };
 
+const ByExpiringSoon = ({ section }: CurationProductListProps) => {
+  const queryVariables: QueryExpiringSoonHotDealProductsArgs = {
+    ...(section.dataSource.variables as QueryExpiringSoonHotDealProductsArgs),
+    limit: LIMIT,
+  };
+
+  const { data, isFetchingNextPage, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
+    ProductQueries.infiniteExpiringSoonHotDealProducts(queryVariables),
+  );
+
+  const { ref } = useInView({
+    onChange(inView) {
+      if (inView && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+  });
+
+  const products = useMemo(
+    () => data.pages.flatMap(({ expiringSoonHotDealProducts }) => [...expiringSoonHotDealProducts]),
+    [data.pages],
+  );
+
+  if (products.length === 0) {
+    return <EmptyState />;
+  }
+
+  return (
+    <>
+      <ProductGridList products={products} />
+      <div className="flex w-full items-center justify-center py-6" ref={ref}>
+        {isFetchingNextPage && <LoadingSpinner />}
+      </div>
+    </>
+  );
+};
+
 const ByHotDeal = ({ section }: CurationProductListProps) => {
   const sectionWithLimit = {
     ...section,
@@ -124,6 +164,10 @@ const CurationProductList = ({ section }: CurationProductListProps) => {
 
   if (section.dataSource.queryName === 'hotDealRankingProducts') {
     return <ByHotDeal section={section} />;
+  }
+
+  if (section.dataSource.queryName === 'expiringSoonHotDealProducts') {
+    return <ByExpiringSoon section={section} />;
   }
 
   if (section.dataSource.queryName === 'productsByKeyword') {

@@ -17,6 +17,7 @@ import {
   ProductStatsQueryVariables,
   QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
+  QueryExpiringSoonHotDealProductsArgs,
   QueryHotDealRankingProductsArgs,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQuery,
@@ -95,6 +96,10 @@ export class ProductService {
 
   static async getHotDealRankingProducts(variables: QueryHotDealRankingProductsArgs) {
     return execute(QueryHotDealRankingProducts, variables).then((res) => res.data);
+  }
+
+  static async getExpiringSoonHotDealProducts(variables: QueryExpiringSoonHotDealProductsArgs) {
+    return execute(QueryExpiringSoonHotDealProducts, variables).then((res) => res.data);
   }
 }
 
@@ -337,6 +342,38 @@ const QueryCategorizedReactionKeywords = graphql(`
 const QueryHotDealRankingProducts = graphql(`
   query QueryHotDealRankingProducts($page: Int!, $limit: Int!) {
     hotDealRankingProducts(page: $page, limit: $limit) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      hotDealType
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
+    }
+  }
+`);
+
+const QueryExpiringSoonHotDealProducts = graphql(`
+  query QueryExpiringSoonHotDealProducts(
+    $daysUntilExpiry: Int!
+    $limit: Int!
+    $searchAfter: [String!]
+  ) {
+    expiringSoonHotDealProducts(
+      daysUntilExpiry: $daysUntilExpiry
+      limit: $limit
+      searchAfter: $searchAfter
+    ) {
       id
       title
       mallId

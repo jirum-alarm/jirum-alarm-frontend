@@ -96,11 +96,11 @@ export const getPromotionSections = async (): Promise<PromotionSection[]> => {
           type: 'DOUBLE_ROW',
           dataSource: {
             type: 'GRAPHQL_QUERY',
-            queryName: 'productsByKeyword',
+            queryName: 'expiringSoonHotDealProducts',
             variables: {
-              keyword: '만원이하',
+              daysUntilExpiry: 7,
               limit: 10,
-              orderBy: KeywordProductOrderType.PostedAt,
+              orderBy: ProductOrderType.PostedAt,
               orderOption: OrderOptionType.Desc,
             },
           },
