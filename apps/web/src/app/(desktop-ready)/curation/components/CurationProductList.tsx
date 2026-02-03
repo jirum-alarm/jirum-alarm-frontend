@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import {
-  QueryExpiringSoonHotDealProductsArgs,
+  QueryExpiringSoonHotDealProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
 } from '@/shared/api/gql/graphql';
 import { ProductListQueryVariables } from '@/shared/api/product';
@@ -96,8 +96,8 @@ const ByProducts = ({ section }: CurationProductListProps) => {
 };
 
 const ByExpiringSoon = ({ section }: CurationProductListProps) => {
-  const queryVariables: QueryExpiringSoonHotDealProductsArgs = {
-    ...(section.dataSource.variables as QueryExpiringSoonHotDealProductsArgs),
+  const queryVariables: QueryExpiringSoonHotDealProductsQueryVariables = {
+    ...(section.dataSource.variables as QueryExpiringSoonHotDealProductsQueryVariables),
     limit: LIMIT,
   };
 

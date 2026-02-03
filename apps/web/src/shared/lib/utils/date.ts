@@ -26,6 +26,10 @@ export const getFromNow = (date: string) => {
   return dayjsDate.fromNow();
 };
 
+export const formatDateToMMD = (date: Date) => {
+  return dayjs(date).format('MM.DD');
+};
+
 export const period = (timeZone: TimeZone = 'Asia/Seoul') => ({
   startAt: (startDate: string) => {
     return {

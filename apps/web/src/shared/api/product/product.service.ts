@@ -18,6 +18,7 @@ import {
   QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryExpiringSoonHotDealProductsArgs,
+  QueryExpiringSoonHotDealProductsQueryVariables,
   QueryHotDealRankingProductsArgs,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQuery,
@@ -98,7 +99,9 @@ export class ProductService {
     return execute(QueryHotDealRankingProducts, variables).then((res) => res.data);
   }
 
-  static async getExpiringSoonHotDealProducts(variables: QueryExpiringSoonHotDealProductsArgs) {
+  static async getExpiringSoonHotDealProducts(
+    variables: QueryExpiringSoonHotDealProductsQueryVariables,
+  ) {
     return execute(QueryExpiringSoonHotDealProducts, variables).then((res) => res.data);
   }
 }
@@ -391,6 +394,7 @@ const QueryExpiringSoonHotDealProducts = graphql(`
       }
       searchAfter
       postedAt
+      earliestExpiryDate
     }
   }
 `);

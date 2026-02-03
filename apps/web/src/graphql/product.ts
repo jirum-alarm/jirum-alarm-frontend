@@ -380,6 +380,7 @@ export const QueryExpiringSoonHotDealProducts = gql`
       }
       searchAfter
       postedAt
+      earliestExpiryDate
     }
   }
 `;

@@ -100,7 +100,7 @@ export const getPromotionSections = async (): Promise<PromotionSection[]> => {
             variables: {
               daysUntilExpiry: 7,
               limit: 10,
-              orderBy: ProductOrderType.PostedAt,
+              orderBy: ProductOrderType.ExpiringSoon,
               orderOption: OrderOptionType.Desc,
             },
           },

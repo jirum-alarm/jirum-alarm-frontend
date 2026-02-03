@@ -11,4 +11,5 @@ export interface ProductCardType {
   hotDealType?: HotDealType | null;
   postedAt: Date;
   categoryId?: number | null;
+  earliestExpiryDate?: Date | null;
 }

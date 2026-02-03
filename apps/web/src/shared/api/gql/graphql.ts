@@ -2131,6 +2131,7 @@ export type QueryExpiringSoonHotDealProductsQuery = {
     hotDealType?: HotDealType | null;
     searchAfter?: Array<string> | null;
     postedAt: any;
+    earliestExpiryDate?: any | null;
     provider: { __typename?: 'Provider'; nameKr: string };
   }>;
 };
@@ -2900,6 +2901,7 @@ export const QueryExpiringSoonHotDealProductsDocument = new TypedDocumentString(
     }
     searchAfter
     postedAt
+    earliestExpiryDate
   }
 }
     `) as unknown as TypedDocumentString<

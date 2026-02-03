@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
+import { formatDateToMMD } from '@/shared/lib/utils/date';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 import Link from '@/shared/ui/Link';
 
@@ -27,6 +28,11 @@ export default function DoubleRowProductCard({ product }: { product: ProductCard
             {product.isEnd && (
               <div className="text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">
                 판매종료
+              </div>
+            )}
+            {product.earliestExpiryDate && (
+              <div className="text-semibold absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg bg-gray-700/80 px-2 text-xs text-white">
+                유통기한 {formatDateToMMD(product.earliestExpiryDate)}
               </div>
             )}
           </div>

@@ -9,6 +9,7 @@ import {
   QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryExpiringSoonHotDealProductsArgs,
+  QueryExpiringSoonHotDealProductsQueryVariables,
   QueryHotDealRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryReportUserNamesQueryVariables,
@@ -168,13 +169,15 @@ export const ProductQueries = {
       queryFn: () => ProductService.getHotDealRankingProducts(variables),
     }),
 
-  expiringSoonHotDealProducts: (variables: QueryExpiringSoonHotDealProductsArgs) =>
+  expiringSoonHotDealProducts: (variables: QueryExpiringSoonHotDealProductsQueryVariables) =>
     queryOptions({
       queryKey: [...ProductQueries.all(), 'expiringSoonHotDealProducts', variables],
       queryFn: () => ProductService.getExpiringSoonHotDealProducts(variables),
     }),
 
-  infiniteExpiringSoonHotDealProducts: (variables: QueryExpiringSoonHotDealProductsArgs) =>
+  infiniteExpiringSoonHotDealProducts: (
+    variables: QueryExpiringSoonHotDealProductsQueryVariables,
+  ) =>
     infiniteQueryOptions({
       queryKey: [...ProductQueries.expiringSoonHotDealProducts(variables).queryKey],
       queryFn: ({ pageParam }) =>
