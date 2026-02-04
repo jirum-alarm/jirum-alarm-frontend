@@ -143,7 +143,7 @@ const refreshAndVerifyToken = async (
       const { accessToken, refreshToken } = result.data.loginByRefreshToken;
       const access_token = {
         name: 'ACCESS_TOKEN',
-        expires: Date.now() + accessTokenExpiresAt,
+        expires: new Date(Date.now() + accessTokenExpiresAt),
         httpOnly: true,
         sameSite: 'lax' as const,
         secure: IS_PRD,
@@ -151,7 +151,7 @@ const refreshAndVerifyToken = async (
       };
       const refresh_token = {
         name: 'REFRESH_TOKEN',
-        expires: Date.now() + refreshTokenExpiresAt,
+        expires: new Date(Date.now() + refreshTokenExpiresAt),
         httpOnly: true,
         sameSite: 'lax' as const,
         secure: IS_PRD,
