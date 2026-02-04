@@ -117,8 +117,8 @@ export const getPromotionSections = async (): Promise<PromotionSection[]> => {
             variables: {
               keyword: '백만원이상',
               limit: 4,
-              orderBy: 'POSTED_AT',
-              orderOption: 'DESC',
+              orderBy: KeywordProductOrderType.PostedAt,
+              orderOption: OrderOptionType.Desc,
             },
           },
           displayOrder: 2,
