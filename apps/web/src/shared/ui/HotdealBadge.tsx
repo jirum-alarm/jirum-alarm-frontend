@@ -1,7 +1,6 @@
-import { hotdealTextMap } from '@/constants/hotdeal';
-import { cn } from '@/lib/cn';
-
-import { HotDealType } from '@shared/api/gql/graphql';
+import { HotDealType } from '@/shared/api/gql/graphql';
+import { hotdealTextMap } from '@/shared/config/hotdeal';
+import { cn } from '@/shared/lib/cn';
 
 const HotdealBadge = ({
   hotdealType,

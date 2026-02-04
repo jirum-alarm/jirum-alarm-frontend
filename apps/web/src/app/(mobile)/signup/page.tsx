@@ -4,23 +4,21 @@ import { useMutation } from '@tanstack/react-query';
 import { useQueryState } from 'nuqs';
 import { Suspense, useEffect, useState } from 'react';
 
-import { useToast } from '@/components/common/Toast';
-import BasicLayout from '@/components/layout/BasicLayout';
-import { CATEGORIES } from '@/constants/categories';
-import useMyRouter from '@/hooks/useMyRouter';
 import { AuthService } from '@/shared/api/auth/auth.service';
-import { Gender } from '@/shared/api/gql/graphql';
+import { CATEGORIES } from '@/shared/config/categories';
+import useMyRouter from '@/shared/hooks/useMyRouter';
+import { useToast } from '@/shared/ui/common/Toast';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import { ICategoryForm } from '@features/categories/types';
+import { Registration } from '@/features/auth/model/signup/registration';
+import Categories from '@/features/auth/ui/signup/Categories';
+import Email from '@/features/auth/ui/signup/Email';
+import Nickname from '@/features/auth/ui/signup/Nickname';
+import Password from '@/features/auth/ui/signup/Password';
+import Personal from '@/features/auth/ui/signup/Personal';
+import TermsOfService from '@/features/auth/ui/signup/TermsOfService';
 
 import { setAccessToken, setRefreshToken } from '../../actions/token';
-
-import Categories from './categories/components/Categories';
-import Email from './email/components/Email';
-import Nickname from './nickname/components/Nickname';
-import Password from './password/components/Password';
-import Personal from './personal/components/Personal';
-import TermsOfService from './terms-of-service/components/TermsOfService';
 
 const COMPLETE_ROUTE = 'signup/complete';
 
@@ -38,27 +36,6 @@ type Steps = (typeof STEPS)[number];
 const INITIAL_STEP: Steps = 'termsOfService';
 const LAST_STEP = STEPS[STEPS.length - 1];
 const QUERY_PARM_PREFIX = 'steps';
-
-interface Input {
-  value: string;
-  error: boolean;
-  focus: boolean;
-}
-
-interface Personal {
-  birthYear?: string | null;
-  gender: Gender | null;
-}
-
-export interface Registration {
-  email: Input;
-  password: Input & { invalidType: boolean; invalidLength: boolean };
-  termsOfService: boolean;
-  privacyPolicy: boolean;
-  nickname: Input;
-  categories: ICategoryForm[];
-  personal: Personal;
-}
 
 const Signup = () => {
   const [registration, setRegistration] = useState<Registration>({

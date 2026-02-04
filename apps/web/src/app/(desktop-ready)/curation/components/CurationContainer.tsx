@@ -2,10 +2,10 @@
 
 import { Suspense, useState } from 'react';
 
-import { ContentPromotionSection } from '@/entities/promotion/model/types';
-import { cn } from '@/lib/cn';
+import { cn } from '@/shared/lib/cn';
 
-import GridProductListSkeleton from '@features/products/grid/GridProductListSkeleton';
+import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
+import { ContentPromotionSection } from '@/entities/promotion/model/types';
 
 import CurationProductList from './CurationProductList';
 
@@ -55,7 +55,7 @@ const CurationContainer = ({ section }: CurationContainerProps) => {
       )}
 
       <div className="pc:pt-7 px-5 py-14">
-        <Suspense fallback={<GridProductListSkeleton length={12} />}>
+        <Suspense fallback={<ProductGridListSkeleton length={12} />}>
           <CurationProductList key={activeSection.id + activeTabId} section={activeSection} />
         </Suspense>
       </div>

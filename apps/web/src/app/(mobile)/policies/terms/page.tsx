@@ -1,4 +1,4 @@
-import { TERMS_CONTENT_DATA, TERMS_INDEX_DATA } from '@/constants/policy';
+import { TERMS_CONTENT_DATA, TERMS_INDEX_DATA } from '@/shared/config/policy';
 
 import TermsLayout from '../components/TermsLayout';
 

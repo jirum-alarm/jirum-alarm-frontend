@@ -3,12 +3,12 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
-import BackButton from '@/components/layout/BackButton';
-import BasicLayout from '@/components/layout/BasicLayout';
-import useMyRouter from '@/hooks/useMyRouter';
+import useMyRouter from '@/shared/hooks/useMyRouter';
+import BackButton from '@/shared/ui/layout/BackButton';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-import ChangePassword from './change/components/ChangePassword';
-import CurrentPassword from './current/components/CurrentPassword';
+import ChangePassword from '@/features/mypage/ui/password/ChangePassword';
+import CurrentPassword from '@/features/mypage/ui/password/CurrentPassword';
 
 const QUERY_PARAM_PREFIX = 'step';
 const INITIAL_STEP = 'current';
@@ -33,7 +33,7 @@ const Password = () => {
     if (currentStep !== urlSteps) {
       setCurrentStep(urlSteps);
     }
-  }, [urlSteps]);
+  }, [currentStep, urlSteps]);
 
   const handleBackButton = () => {
     const currentStepIndex = STEPS.findIndex((step) => step === currentStep);

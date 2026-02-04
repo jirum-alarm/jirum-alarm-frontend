@@ -1,14 +1,15 @@
-import '@/style/globals.css';
+import '@/shared/style/globals.css';
 
 import { PublicEnvScript } from 'next-runtime-env';
 
 import { AppProvider } from '@/app/(app)/providers';
-import { defaultMetadata, jsonLd } from '@/constants/metadata';
-import { pretendard } from '@/lib/fonts';
+
+import { defaultMetadata, jsonLd } from '@/shared/config/metadata';
+import { pretendard } from '@/shared/lib/fonts';
 
 import type { Metadata, Viewport } from 'next';
 
-// const PostHogPageView = dynamic(() => import('@/components/PostHogPageView'), {
+// const PostHogPageView = dynamic(() => import('@/shared/ui/PostHogPageView'), {
 //   ssr: false,
 // });
 

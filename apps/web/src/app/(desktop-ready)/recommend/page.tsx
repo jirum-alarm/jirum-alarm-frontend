@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 
-import RecommendContainer from '@/app/(desktop-ready)/recommend/components/RecommendContainer';
 import { checkDevice } from '@/app/actions/agent';
-import { METADATA_SERVICE_URL } from '@/constants/env';
 
-import { ProductService } from '@shared/api/product';
+import { ProductService } from '@/shared/api/product';
+import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
-import { RecommendPrefetch } from '@widgets/recommend';
+import { RecommendPrefetch } from '@/widgets/recommend';
+import RecommendContainer from '@/widgets/recommend/ui/RecommendContainer';
 
 export async function generateMetadata({
   searchParams,

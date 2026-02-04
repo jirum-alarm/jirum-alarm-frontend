@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { PAGE } from '@/constants/page';
+import { PAGE } from '@/shared/config/page';
 import { execute } from '@/shared/lib/http-client';
 
 import { graphql } from '../gql';

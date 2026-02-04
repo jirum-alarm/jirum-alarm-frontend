@@ -351,3 +351,36 @@ export const QueryHotDealRankingProducts = gql`
     }
   }
 `;
+
+export const QueryExpiringSoonHotDealProducts = gql`
+  query QueryExpiringSoonHotDealProducts(
+    $daysUntilExpiry: Int!
+    $limit: Int!
+    $searchAfter: [String!]
+  ) {
+    expiringSoonHotDealProducts(
+      daysUntilExpiry: $daysUntilExpiry
+      limit: $limit
+      searchAfter: $searchAfter
+    ) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      hotDealType
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
+      earliestExpiryDate
+    }
+  }
+`;

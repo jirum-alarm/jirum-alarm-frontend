@@ -1,1 +1,1 @@
-export { default as LiveHotDealSection } from './LiveHotDealSection';
+export { default as LiveHotDealSection } from './ui/LiveHotDealSection';

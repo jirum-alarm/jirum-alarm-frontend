@@ -1,9 +1,10 @@
 import { checkDevice } from '@/app/actions/agent';
-import BasicLayout from '@/components/layout/BasicLayout';
-import SectionHeader from '@/components/SectionHeader';
-import { ProductService } from '@/shared/api/product';
 
-import Footer from '../../../components/desktop/Footer';
+import { ProductService } from '@/shared/api/product';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
+import SectionHeader from '@/shared/ui/SectionHeader';
+
+import Footer from '@/widgets/layout/ui/desktop/Footer';
 
 function truncateTitle(title: string, maxLength: number = 20): string {
   if (title.length <= maxLength) return title;
