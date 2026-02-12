@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { METADATA_SERVICE_URL } from '@/constants/env';
+import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
 export function GET() {
   const robotsTxt = `User-agent: *

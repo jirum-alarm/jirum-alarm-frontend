@@ -2,11 +2,11 @@
 
 import { cookies, headers } from 'next/headers';
 
-import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/constants/token';
+import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/shared/config/token';
 
 async function setAccessToken(token: string) {
   (await cookies()).set('ACCESS_TOKEN', token, {
-    expires: Date.now() + accessTokenExpiresAt,
+    expires: new Date(Date.now() + accessTokenExpiresAt),
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
@@ -15,7 +15,7 @@ async function setAccessToken(token: string) {
 
 async function setRefreshToken(token: string) {
   (await cookies()).set('REFRESH_TOKEN', token, {
-    expires: Date.now() + refreshTokenExpiresAt,
+    expires: new Date(Date.now() + refreshTokenExpiresAt),
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
@@ -24,7 +24,7 @@ async function setRefreshToken(token: string) {
 
 async function setDistinctId(id: string | null) {
   (await cookies()).set('DISTINCT_ID', id ?? '', {
-    expires: Date.now() + refreshTokenExpiresAt,
+    expires: new Date(Date.now() + refreshTokenExpiresAt),
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
@@ -32,7 +32,7 @@ async function setDistinctId(id: string | null) {
 }
 async function setFcmToken(token?: string) {
   (await cookies()).set('FCM_TOKEN', token ?? '', {
-    expires: Date.now() + refreshTokenExpiresAt,
+    expires: new Date(Date.now() + refreshTokenExpiresAt),
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',

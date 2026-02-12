@@ -17,12 +17,21 @@ import {
   ProductStatsQueryVariables,
   QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
+  QueryExpiringSoonHotDealProductsArgs,
+  QueryExpiringSoonHotDealProductsQueryVariables,
   QueryHotDealRankingProductsArgs,
   QueryProductsByKeywordQueryVariables,
+  QueryProductsQuery,
   QueryProductsQueryVariables,
   QueryReportUserNamesQueryVariables,
   TogetherViewedProductsQueryVariables,
+  TypedDocumentString,
 } from '../gql/graphql';
+
+export type ProductListQueryVariables = QueryProductsQueryVariables & {
+  providerId?: number;
+  mallGroupId?: number;
+};
 
 export class ProductService {
   static async getProduct(variables: ProductQueryVariables) {
@@ -47,7 +56,7 @@ export class ProductService {
     );
   }
 
-  static async getProducts(variables: QueryProductsQueryVariables) {
+  static async getProducts(variables: ProductListQueryVariables) {
     return execute(QueryProducts, variables).then((res) => res.data);
   }
 
@@ -88,6 +97,12 @@ export class ProductService {
 
   static async getHotDealRankingProducts(variables: QueryHotDealRankingProductsArgs) {
     return execute(QueryHotDealRankingProducts, variables).then((res) => res.data);
+  }
+
+  static async getExpiringSoonHotDealProducts(
+    variables: QueryExpiringSoonHotDealProductsQueryVariables,
+  ) {
+    return execute(QueryExpiringSoonHotDealProducts, variables).then((res) => res.data);
   }
 }
 
@@ -147,7 +162,7 @@ const QueryProduct = graphql(`
   }
 `);
 
-const QueryProducts = graphql(`
+const QueryProducts = new TypedDocumentString<QueryProductsQuery, ProductListQueryVariables>(`
   query QueryProducts(
     $limit: Int!
     $searchAfter: [String!]
@@ -159,6 +174,8 @@ const QueryProducts = graphql(`
     $thumbnailType: ThumbnailType
     $isEnd: Boolean
     $isHot: Boolean
+    $providerId: Int
+    $mallGroupId: Int
   ) {
     products(
       limit: $limit
@@ -171,6 +188,8 @@ const QueryProducts = graphql(`
       thumbnailType: $thumbnailType
       isEnd: $isEnd
       isHot: $isHot
+      providerId: $providerId
+      mallGroupId: $mallGroupId
     ) {
       id
       title
@@ -343,6 +362,39 @@ const QueryHotDealRankingProducts = graphql(`
       }
       searchAfter
       postedAt
+    }
+  }
+`);
+
+const QueryExpiringSoonHotDealProducts = graphql(`
+  query QueryExpiringSoonHotDealProducts(
+    $daysUntilExpiry: Int!
+    $limit: Int!
+    $searchAfter: [String!]
+  ) {
+    expiringSoonHotDealProducts(
+      daysUntilExpiry: $daysUntilExpiry
+      limit: $limit
+      searchAfter: $searchAfter
+    ) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      hotDealType
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
+      earliestExpiryDate
     }
   }
 `);

@@ -1,4 +1,4 @@
-import { ProductQueries } from '@/entities/product/product.queries';
+import { ProductQueries } from '@/entities/product';
 
 import { ContentPromotionSection } from '../model/types';
 
@@ -14,6 +14,8 @@ export const getPromotionQueryOptions = (section: ContentPromotionSection) => {
         return ProductQueries.productsByKeywords(variables as any);
       case 'products':
         return ProductQueries.products(variables as any);
+      case 'expiringSoonHotDealProducts':
+        return ProductQueries.expiringSoonHotDealProducts(variables as any);
       default:
         throw new Error(`Unknown query name: ${queryName}`);
     }

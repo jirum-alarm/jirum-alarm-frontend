@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 
-import { METADATA_SERVICE_URL } from '@/constants/env';
+import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
-import TrendingContainerServer from '../components/trending-container/server';
-import { TAB_META } from '../tabMeta';
+import { TAB_META } from '@/widgets/trending/lib/tabMeta';
+import TrendingContainerServer from '@/widgets/trending/ui/trending-container/server';
 
 export async function generateMetadata({
   searchParams,

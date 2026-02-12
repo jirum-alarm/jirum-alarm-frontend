@@ -1,3 +1,3 @@
-export { default as RecommendedProductSection } from './RecommendedProductSection';
-export { default as RecommendedProductTabs } from './RecommendedProductTabs';
-export { default as RecommendPrefetch } from './RecommendPrefetch';
+export { default as RecommendedProductSection } from './ui/RecommendedProductSection';
+export { default as RecommendedProductTabs } from './ui/RecommendedProductTabs';
+export { default as RecommendPrefetch } from './ui/RecommendPrefetch';

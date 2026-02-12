@@ -5,13 +5,14 @@ import { notFound, useParams, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { setAccessToken, setRefreshToken } from '@/app/actions/token';
-import LoadingSpinner from '@/components/common/icons/LoadingSpinner';
-import { useToast } from '@/components/common/Toast';
-import BasicLayout from '@/components/layout/BasicLayout';
-import { PAGE } from '@/constants/page';
-import useMyRouter from '@/hooks/useMyRouter';
+
 import { AuthService } from '@/shared/api/auth';
 import { OauthProvider } from '@/shared/api/gql/graphql';
+import { PAGE } from '@/shared/config/page';
+import useMyRouter from '@/shared/hooks/useMyRouter';
+import LoadingSpinner from '@/shared/ui/common/icons/LoadingSpinner';
+import { useToast } from '@/shared/ui/common/Toast';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 const PROVIDER_MAP: Record<string, OauthProvider> = {
   kakao: OauthProvider.Kakao,
@@ -101,7 +102,7 @@ const SocialLoginCallbackPage = () => {
         console.error('socialAccessToken 조회 실패:', error);
         router.push(PAGE.LOGIN);
       });
-  }, [code, error, oauthProvider, providerName, socialLogin, router]);
+  }, [code, error, oauthProvider, providerName, socialLogin, router, state]);
 
   return (
     <BasicLayout fullScreen>

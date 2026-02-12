@@ -5,12 +5,13 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import { Suspense, useEffect, useState } from 'react';
 
-import InteractiveMoreLink from '@/components/InteractiveMoreLink';
-import SectionHeader from '@/components/SectionHeader';
-import { ProductQueries } from '@/entities/product';
-import ProductGridList from '@/features/products/grid/GridProductList';
-import { useDevice } from '@/hooks/useDevice';
 import { OrderOptionType, ProductInfoFragment, ProductOrderType } from '@/shared/api/gql/graphql';
+import { useDevice } from '@/shared/hooks/useDevice';
+import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
+import SectionHeader from '@/shared/ui/SectionHeader';
+
+import { ProductQueries } from '@/entities/product';
+import { ProductGridList } from '@/entities/product-list/ui/grid';
 
 interface Props {
   product: ProductInfoFragment;

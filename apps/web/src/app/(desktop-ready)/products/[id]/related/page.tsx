@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
+
 import { ProductService } from '@/shared/api/product';
 
 import RelatedProductsView from './RelatedProductsView';

@@ -1,11 +1,11 @@
 import { RequestCookies, ResponseCookies } from 'next/dist/server/web/spec-extension/cookies';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { IS_PRD } from './constants/env';
-import { GRAPHQL_ENDPOINT } from './constants/graphql';
-import { PAGE } from './constants/page';
-import { accessTokenExpiresAt, refreshTokenExpiresAt } from './constants/token';
-import { graphql } from './shared/api/gql';
+import { graphql } from '@/shared/api/gql';
+import { IS_PRD } from '@/shared/config/env';
+import { GRAPHQL_ENDPOINT } from '@/shared/config/graphql';
+import { PAGE } from '@/shared/config/page';
+import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/shared/config/token';
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   // const response = await handlePostHog(request);
@@ -143,7 +143,7 @@ const refreshAndVerifyToken = async (
       const { accessToken, refreshToken } = result.data.loginByRefreshToken;
       const access_token = {
         name: 'ACCESS_TOKEN',
-        expires: Date.now() + accessTokenExpiresAt,
+        expires: new Date(Date.now() + accessTokenExpiresAt),
         httpOnly: true,
         sameSite: 'lax' as const,
         secure: IS_PRD,
@@ -151,7 +151,7 @@ const refreshAndVerifyToken = async (
       };
       const refresh_token = {
         name: 'REFRESH_TOKEN',
-        expires: Date.now() + refreshTokenExpiresAt,
+        expires: new Date(Date.now() + refreshTokenExpiresAt),
         httpOnly: true,
         sameSite: 'lax' as const,
         secure: IS_PRD,

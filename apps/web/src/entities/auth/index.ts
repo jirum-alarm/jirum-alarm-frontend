@@ -1,1 +1,1 @@
-export { AuthQueries } from './auth.queries';
+export { AuthQueries } from './api/auth.queries';

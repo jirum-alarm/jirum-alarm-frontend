@@ -3,21 +3,21 @@
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-import { StandingIllust } from '@/components/common/icons/Illust';
-import LoadingSpinner from '@/components/common/icons/LoadingSpinner';
-import SvgEmail from '@/components/common/icons/login/Email';
-import SvgKakao from '@/components/common/icons/login/Kakao';
-import SvgNaver from '@/components/common/icons/login/Naver';
-import BasicLayout from '@/components/layout/BasicLayout';
-import { PAGE } from '@/constants/page';
-import { useKakaoLogin } from '@/features/auth/lib/use-kakao-login';
-import { useNaverLogin } from '@/features/auth/lib/use-naver-login';
-import { useDevice } from '@/hooks/useDevice';
-import useMyRouter from '@/hooks/useMyRouter';
-import { cn } from '@/lib/cn';
+import { PAGE } from '@/shared/config/page';
+import { useDevice } from '@/shared/hooks/useDevice';
+import useMyRouter from '@/shared/hooks/useMyRouter';
+import { cn } from '@/shared/lib/cn';
+import { StandingIllust } from '@/shared/ui/common/icons/Illust';
+import LoadingSpinner from '@/shared/ui/common/icons/LoadingSpinner';
+import SvgEmail from '@/shared/ui/common/icons/login/Email';
+import SvgKakao from '@/shared/ui/common/icons/login/Kakao';
+import SvgNaver from '@/shared/ui/common/icons/login/Naver';
+import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import Link from '@/shared/ui/Link';
 
-import AppDownloadCTA from './components/AppDownloadCTA';
+import AppDownloadBanner from '@/features/app-download/ui/AppDownloadBanner';
+import { useKakaoLogin } from '@/features/auth/lib/use-kakao-login';
+import { useNaverLogin } from '@/features/auth/lib/use-naver-login';
 
 enum LoginType {
   KAKAO = 'KAKAO',
@@ -160,7 +160,7 @@ const Login = () => {
 
         {device.isMobileBrowser && isHydrated && (
           <div className="bottom-safe-bottom fixed right-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
-            <AppDownloadCTA device={device} />
+            <AppDownloadBanner device={device} />
           </div>
         )}
       </div>

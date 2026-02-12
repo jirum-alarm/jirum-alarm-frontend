@@ -3,15 +3,16 @@ import { Metadata } from 'next';
 import { checkDevice } from '@/app/actions/agent';
 import { collectProductAction } from '@/app/actions/product';
 import { getAccessToken } from '@/app/actions/token';
-import { CATEGORY_MAP } from '@/constants/categories';
-import { METADATA_SERVICE_URL } from '@/constants/env';
-import { defaultMetadata } from '@/constants/metadata';
+
+import { ProductService } from '@/shared/api/product';
+import { CATEGORY_MAP } from '@/shared/config/categories';
+import { METADATA_SERVICE_URL } from '@/shared/config/env';
+import { defaultMetadata } from '@/shared/config/metadata';
+
 import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
-import { ProductService } from '@shared/api/product';
-
-import DesktopProductDetailPage from '../components/desktop/ProductDetailPage';
-import MobileProductDetailPage from '../components/mobile/ProductDetailPage';
+import DesktopProductDetailPage from '@/widgets/product-detail/ui/desktop/ProductDetailPage';
+import MobileProductDetailPage from '@/widgets/product-detail/ui/mobile/ProductDetailPage';
 
 function parseNumericPrice(rawPrice?: string | null) {
   if (!rawPrice) {
@@ -44,7 +45,10 @@ function resolveCategoryName(product: {
 }
 
 function generateDescription(
-  productGuides: { productGuides: Array<{ title: string; content: string }> } | null | undefined,
+  productGuides:
+    | { productGuides?: Array<{ title: string; content: string }> | null }
+    | null
+    | undefined,
   product: {
     title: string;
     categoryId?: number | null;
@@ -85,7 +89,7 @@ function generateDescription(
 // Product 구조화 데이터 생성 함수
 function generateProductJsonLd(
   product: Awaited<ReturnType<typeof ProductService.getProductInfo>>,
-  productGuides?: { productGuides: Array<{ title: string; content: string }> },
+  productGuides?: { productGuides?: Array<{ title: string; content: string }> | null },
 ) {
   if (!product) return null;
 
