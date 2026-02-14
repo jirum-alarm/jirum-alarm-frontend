@@ -134,13 +134,13 @@ const Sidebar = ({
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
-              <SidebarLinkGroup activeCondition={pathname === '/'}>
+              <SidebarLinkGroup activeCondition={pathname === '/' || pathname.startsWith('/stats')}>
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
                       <MenuGroup
                         name="대시보드"
-                        isSelectedPath={pathname === '/'}
+                        isSelectedPath={pathname === '/' || pathname.startsWith('/stats')}
                         open={open}
                         sidebarExpanded={sidebarExpanded}
                         openSidebar={openSidebar}
@@ -148,7 +148,8 @@ const Sidebar = ({
                         icon={<DashboardIcon />}
                       />
                       <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
-                        <SubMenuItem name="통계" linkTo="/" pathname={pathname} />
+                        <SubMenuItem name="홈" linkTo="/" pathname={pathname} />
+                        <SubMenuItem name="통계" linkTo="/stats" pathname={pathname} />
                       </SubMenu>
                     </React.Fragment>
                   );
