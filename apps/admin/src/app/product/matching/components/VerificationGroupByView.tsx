@@ -244,8 +244,8 @@ const VerificationGroupByView = () => {
   // 탭 상태
   const [activeTab, setActiveTab] = useState<'brands' | 'details'>('brands');
 
-  // 검증된 상품 포함 여부
-  const [includeVerified, setIncludeVerified] = useState(false);
+  // 검증된 상품 포함 여부 (기본값 true: 매칭 완료 후에도 항목을 계속 볼 수 있도록)
+  const [includeVerified, setIncludeVerified] = useState(true);
 
   // 탭 변경 시 좌측 패널 포커스 유지 및 선택 상태 복원
   useEffect(() => {
@@ -315,10 +315,8 @@ const VerificationGroupByView = () => {
   // 특정 브랜드 상품의 검증 대기 목록 로드
   const loadVerificationsForBrandProduct = useCallback(
     async (brandProductId: number) => {
-      setVerificationItems([]);
       setVerificationSearchAfter(null);
       setHasVerificationMore(true);
-      setItemSelections({});
 
       try {
         const result = await fetchPendingVerifications({
@@ -786,7 +784,8 @@ const VerificationGroupByView = () => {
           ),
         );
       }
-      // 자동 이동 로직 제거 (수정 가능한 구조를 위해 현재 페이지 유지)
+      // 매칭 완료 후에도 항목이 보이도록 includeVerified를 true로 유지
+      setIncludeVerified(true);
     } catch (error) {
       showToast('저장 중 오류가 발생했습니다.', 'error');
       console.error(error);
@@ -968,27 +967,29 @@ const VerificationGroupByView = () => {
         case 'Enter':
           e.preventDefault();
           if (e.ctrlKey || e.metaKey) {
-            // Ctrl/Cmd + Enter: Move to next
-            if (activeTab === 'details') {
-              setExpandedSelectedIndex((prev) => {
-                const next = prev + 1;
-                if (next < expandedItems.length) {
-                  setSelectedBrandProduct(expandedItems[next]);
+            // Ctrl/Cmd + Enter: 확정 + 다음 상품으로 이동
+            handleConfirmMatching().then(() => {
+              if (activeTab === 'details') {
+                setExpandedSelectedIndex((prev) => {
+                  const next = prev + 1;
+                  if (next < expandedItems.length) {
+                    setSelectedBrandProduct(expandedItems[next]);
+                    return next;
+                  } else {
+                    setActiveTab('brands');
+                    return prev;
+                  }
+                });
+              } else {
+                setSelectedProductIndex((prev) => {
+                  const next = Math.min(prev + 1, filteredBrandProducts.length - 1);
+                  setSelectedBrandProduct(filteredBrandProducts[next]);
                   return next;
-                } else {
-                  setActiveTab('brands');
-                  return prev;
-                }
-              });
-            } else {
-              setSelectedProductIndex((prev) => {
-                const next = Math.min(prev + 1, filteredBrandProducts.length - 1);
-                setSelectedBrandProduct(filteredBrandProducts[next]);
-                return next;
-              });
-            }
-            setFocusedPostIndex(-1);
-            setIsLeftPanelFocused(true);
+                });
+              }
+              setFocusedPostIndex(-1);
+              setIsLeftPanelFocused(true);
+            });
           } else {
             handleConfirmMatching();
           }
@@ -1297,8 +1298,28 @@ const VerificationGroupByView = () => {
                             : ''
                         } ${expandedBrandProductId === bp.id ? 'bg-gray-100 dark:bg-meta-4' : ''}`}
                       >
-                        <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-warning text-[10px] font-bold text-white">
-                          {bp.pendingVerificationCount}
+                        <div
+                          className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white ${
+                            bp.pendingVerificationCount === 0 ? 'bg-success' : 'bg-warning'
+                          }`}
+                        >
+                          {bp.pendingVerificationCount === 0 ? (
+                            <svg
+                              className="h-3 w-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={3}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          ) : (
+                            bp.pendingVerificationCount
+                          )}
                         </div>
                         <div className="min-w-0 flex-1">
                           <p
@@ -1401,8 +1422,30 @@ const VerificationGroupByView = () => {
                           : ''
                       }`}
                     >
-                      <div className="flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-warning/80 text-[9px] font-bold text-white">
-                        {expandedBp.pendingVerificationCount}
+                      <div
+                        className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white ${
+                          expandedBp.pendingVerificationCount === 0
+                            ? 'bg-success/80'
+                            : 'bg-warning/80'
+                        }`}
+                      >
+                        {expandedBp.pendingVerificationCount === 0 ? (
+                          <svg
+                            className="h-2.5 w-2.5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={3}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        ) : (
+                          expandedBp.pendingVerificationCount
+                        )}
                       </div>
                       <div className="min-w-0 flex-1">
                         <p
@@ -1432,83 +1475,46 @@ const VerificationGroupByView = () => {
         <div className="bg-gray-50 flex flex-1 flex-col overflow-hidden dark:bg-black">
           {selectedBrandProduct ? (
             <>
-              {/* Header */}
-              <div className="flex items-center justify-between border-b border-stroke bg-white p-1.5 dark:border-strokedark dark:bg-boxdark">
+              {/* Header - 상품명 + 액션 버튼 */}
+              <div className="flex items-center justify-between border-b border-stroke bg-white px-3 py-2 dark:border-strokedark dark:bg-boxdark">
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-base font-bold text-black dark:text-white">
+                  <h3 className="text-sm font-bold text-black dark:text-white">
                     {selectedBrandProduct.brandName} {selectedBrandProduct.productName}
+                    {(selectedBrandProduct.volume || selectedBrandProduct.amount) && (
+                      <span className="text-gray-400 ml-2 text-xs font-normal">
+                        {selectedBrandProduct.volume}
+                        {selectedBrandProduct.volume && selectedBrandProduct.amount && ' · '}
+                        {selectedBrandProduct.amount}
+                      </span>
+                    )}
                   </h3>
-                  <p className="text-gray-500 mt-0.5 text-xs">
-                    {selectedBrandProduct.volume && `${selectedBrandProduct.volume}`}
-                    {selectedBrandProduct.volume && selectedBrandProduct.amount && ' · '}
-                    {selectedBrandProduct.amount && `${selectedBrandProduct.amount}`}
-                  </p>
                 </div>
-
-                {/* Action Buttons */}
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={selectAll}
-                    className="flex items-center gap-1 rounded bg-success/10 px-2 py-1.5 text-xs font-medium text-success transition-colors hover:bg-success/20"
+                    className="rounded bg-success/10 px-2 py-1 text-[11px] font-medium text-success transition-colors hover:bg-success/20"
                     title="Shift+A"
                   >
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    전체선택
+                    전체승인
                   </button>
                   <button
                     onClick={deselectAll}
-                    className="bg-gray-100 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 flex items-center gap-1 rounded px-2 py-1.5 text-xs font-medium transition-colors dark:bg-meta-4"
+                    className="bg-gray-100 text-gray-500 hover:bg-gray-200 dark:text-gray-400 rounded px-2 py-1 text-[11px] font-medium transition-colors dark:bg-meta-4"
                     title="N"
                   >
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                    해제
+                    전체거절
                   </button>
+                  <div className="bg-gray-200 mx-0.5 h-4 w-px dark:bg-strokedark" />
                   <button
                     onClick={handleConfirmMatching}
-                    className="flex items-center gap-1 rounded bg-primary px-2.5 py-1.5 text-xs font-bold text-white transition-colors hover:bg-opacity-90"
+                    className="flex items-center gap-1 rounded bg-primary px-2.5 py-1 text-[11px] font-bold text-white transition-colors hover:bg-opacity-90"
                     title="Enter"
                   >
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
                     확정
                   </button>
                   <button
-                    onClick={() => {
+                    onClick={async () => {
+                      await handleConfirmMatching();
                       if (activeTab === 'details') {
                         const nextExpandedIndex = expandedSelectedIndex + 1;
                         if (nextExpandedIndex < expandedItems.length) {
@@ -1527,20 +1533,15 @@ const VerificationGroupByView = () => {
                       setFocusedPostIndex(-1);
                       setIsLeftPanelFocused(true);
                     }}
-                    className="bg-gray-100 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-600 flex items-center gap-1 rounded px-2.5 py-1.5 text-xs font-bold transition-colors dark:bg-meta-4"
-                    title="Ctrl + Enter"
+                    className="flex items-center gap-0.5 rounded bg-primary/80 px-2 py-1 text-[11px] font-bold text-white transition-colors hover:bg-primary"
+                    title="Ctrl+Enter"
                   >
-                    다음
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    확정+다음
+                    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
+                        strokeWidth={2.5}
                         d="M9 5l7 7-7 7"
                       />
                     </svg>
@@ -1548,71 +1549,43 @@ const VerificationGroupByView = () => {
                 </div>
               </div>
 
-              {/* Include Verified Checkbox */}
-              <div className="flex items-center justify-end border-b border-stroke bg-white px-3 py-1.5 dark:border-strokedark dark:bg-boxdark">
-                <label className="text-gray-600 dark:text-gray-400 flex cursor-pointer items-center gap-2 text-xs">
+              {/* 통계 + 필터 통합 바 */}
+              <div className="flex items-center justify-between border-b border-stroke bg-white px-3 py-1 dark:border-strokedark dark:bg-boxdark">
+                <div className="flex items-center gap-3 text-[11px]">
+                  <span className="text-gray-500 dark:text-gray-400">
+                    전체{' '}
+                    <span className="font-bold text-black dark:text-white">
+                      {pendingVerificationsTotalCountByBrandProductData?.pendingVerificationsTotalCount ??
+                        stats.total}
+                    </span>
+                  </span>
+                  <span className="text-success">
+                    승인 <span className="font-bold">{stats.selected}</span>
+                  </span>
+                  <span className="text-danger">
+                    거절 <span className="font-bold">{stats.deselected}</span>
+                  </span>
+                </div>
+                <label className="text-gray-500 dark:text-gray-400 flex cursor-pointer items-center gap-1.5 text-[11px]">
                   <input
                     type="checkbox"
-                    checked={includeVerified}
-                    onChange={(e) => setIncludeVerified(e.target.checked)}
-                    className="border-gray-300 h-4 w-4 rounded text-blue-500 focus:ring-blue-500"
+                    checked={!includeVerified}
+                    onChange={(e) => setIncludeVerified(!e.target.checked)}
+                    className="border-gray-300 h-3.5 w-3.5 rounded text-blue-500 focus:ring-blue-500"
                   />
                   <span
                     className={
-                      includeVerified ? 'font-medium text-blue-600 dark:text-blue-400' : ''
+                      !includeVerified ? 'font-medium text-blue-600 dark:text-blue-400' : ''
                     }
                   >
-                    검증된 상품 포함
+                    대기만
                   </span>
-                  {includeVerified && (
-                    <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-600 dark:bg-blue-900/50 dark:text-blue-400">
-                      모든 상태 표시
-                    </span>
-                  )}
                 </label>
-              </div>
-
-              {/* Stats Panel */}
-              <div className="grid grid-cols-3 gap-1 border-b border-stroke bg-white px-1.5 py-0.5 dark:border-strokedark dark:bg-boxdark">
-                <div className="bg-gray-50 rounded p-1 dark:bg-meta-4">
-                  <p className="text-gray-500 dark:text-gray-400 text-[9px]">전체</p>
-                  <p className="text-sm font-bold text-black dark:text-white">
-                    {pendingVerificationsTotalCountByBrandProductData?.pendingVerificationsTotalCount ??
-                      stats.total}
-                  </p>
-                </div>
-                <div className="rounded bg-success/10 p-1">
-                  <p className="text-[9px] text-success">승인</p>
-                  <p className="text-sm font-bold text-success">{stats.selected}</p>
-                </div>
-                <div className="rounded bg-danger/10 p-1">
-                  <p className="text-[9px] text-danger">거절</p>
-                  <p className="text-sm font-bold text-danger">{stats.deselected}</p>
-                </div>
               </div>
 
               {/* Items List */}
               <div ref={rightScrollRef} className="flex-1 overflow-y-auto p-2">
-                <div ref={rightPanelRef} className="mb-1 flex items-center justify-between">
-                  <span className="text-gray-500 text-sm font-medium">
-                    매칭된 커뮤니티 게시물 ({currentItems.length})
-                    {hasVerificationMore && ' · ↓ 더 불러오기'}
-                  </span>
-                  <div className="text-gray-400 flex items-center gap-4 text-xs">
-                    <span className="flex items-center gap-1">
-                      <kbd className="font-mono rounded bg-white px-1.5 py-0.5 text-[10px] dark:bg-boxdark">
-                        Space
-                      </kbd>
-                      선택/해제
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <kbd className="font-mono rounded bg-white px-1.5 py-0.5 text-[10px] dark:bg-boxdark">
-                        Enter
-                      </kbd>
-                      확정
-                    </span>
-                  </div>
-                </div>
+                <div ref={rightPanelRef}></div>
 
                 {pendingLoading && verificationItems.length === 0 ? (
                   <div className="flex items-center justify-center py-20">
@@ -1644,21 +1617,28 @@ const VerificationGroupByView = () => {
                         )}
                       </>
                     ) : (
-                      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-stroke bg-white py-20 dark:border-strokedark dark:bg-boxdark">
-                        <svg
-                          className="text-gray-300 mb-4 h-16 w-16"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1}
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                          />
-                        </svg>
-                        <p className="text-gray-500">검증 대기 항목이 없습니다.</p>
+                      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-stroke bg-white py-16 dark:border-strokedark dark:bg-boxdark">
+                        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-success/10">
+                          <svg
+                            className="h-6 w-6 text-success"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        </div>
+                        <p className="text-gray-500 text-sm">매칭 항목이 없습니다</p>
+                        <p className="text-gray-400 mt-1 text-xs">
+                          {!includeVerified
+                            ? '검증 완료된 항목은 필터에서 숨겨져 있습니다'
+                            : '이 상품에 매칭된 게시물이 없습니다'}
+                        </p>
                       </div>
                     )}
                   </div>
