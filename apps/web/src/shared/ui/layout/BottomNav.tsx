@@ -74,10 +74,6 @@ const BottomNavComponent = () => {
     return nav.isActive(pathName);
   };
 
-  if (pathName.startsWith(PAGE.MYPAGE)) {
-    return null;
-  }
-
   return (
     <nav
       className={cn(

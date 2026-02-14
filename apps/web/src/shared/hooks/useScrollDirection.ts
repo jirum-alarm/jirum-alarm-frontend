@@ -18,14 +18,16 @@ export function useScrollDirection() {
 
     const updateScrollDirection = () => {
       const scrollY = window.pageYOffset;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
 
       if (Math.abs(scrollY - lastScrollY.current) < THRESHOLD) {
         ticking.current = false;
         return;
       }
 
-      // Always show when near top
-      if (scrollY < THRESHOLD) {
+      // Always show when near top or bottom
+      if (scrollY < THRESHOLD || scrollY + clientHeight >= scrollHeight - THRESHOLD) {
         setScrollDirection('up');
       } else {
         const direction = scrollY > lastScrollY.current ? 'down' : 'up';
