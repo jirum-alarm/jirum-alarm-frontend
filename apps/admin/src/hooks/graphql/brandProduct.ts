@@ -2,6 +2,8 @@ import { QueryHookOptions, useLazyQuery, useQuery } from '@apollo/client';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
+  QueryBrandItemsByMatchCountTotalCount,
+  QueryBrandItemsOrderByTotalMatchCount,
   QueryBrandProductMatchCount,
   QueryBrandProductsByMatchCountTotalCount,
   QueryBrandProductsOrderByMatchCount,
@@ -179,4 +181,87 @@ export const useGetBrandProductMatchCountLazy = () => {
       fetchPolicy: 'network-only',
     },
   );
+};
+
+// BrandItem 타입 정의
+export interface BrandItem {
+  id: string;
+  brandName: string;
+  productName: string;
+  totalMatchCount: number;
+  pendingVerificationCount: number;
+  searchAfter: string[];
+}
+
+export interface QueryBrandItemsOrderByTotalMatchCountQuery {
+  brandItemsOrderByTotalMatchCount: BrandItem[];
+}
+
+export interface QueryBrandItemsOrderByTotalMatchCountQueryVariables {
+  limit: number;
+  searchAfter?: string[];
+  title?: string;
+}
+
+export const useGetBrandItemsOrderByTotalMatchCount = (
+  variables?: Partial<QueryBrandItemsOrderByTotalMatchCountQueryVariables>,
+  options?: QueryHookOptions<
+    QueryBrandItemsOrderByTotalMatchCountQuery,
+    QueryBrandItemsOrderByTotalMatchCountQueryVariables
+  >,
+) => {
+  return useQuery<
+    QueryBrandItemsOrderByTotalMatchCountQuery,
+    QueryBrandItemsOrderByTotalMatchCountQueryVariables
+  >(QueryBrandItemsOrderByTotalMatchCount, {
+    variables: {
+      limit: variables?.limit ?? PAGE_LIMIT,
+      searchAfter: variables?.searchAfter ?? undefined,
+    },
+    fetchPolicy: 'network-only',
+    ...options,
+  });
+};
+
+export const useGetBrandItemsOrderByTotalMatchCountLazy = () => {
+  return useLazyQuery<
+    QueryBrandItemsOrderByTotalMatchCountQuery,
+    QueryBrandItemsOrderByTotalMatchCountQueryVariables
+  >(QueryBrandItemsOrderByTotalMatchCount, {
+    fetchPolicy: 'network-only',
+  });
+};
+
+// BrandItem TotalCount
+export interface QueryBrandItemsByMatchCountTotalCountQuery {
+  brandItemsByMatchCountTotalCount: number;
+}
+
+export interface QueryBrandItemsByMatchCountTotalCountQueryVariables {
+  title?: string;
+}
+
+export const useGetBrandItemsByMatchCountTotalCount = (
+  variables?: QueryBrandItemsByMatchCountTotalCountQueryVariables,
+  options?: QueryHookOptions<
+    QueryBrandItemsByMatchCountTotalCountQuery,
+    QueryBrandItemsByMatchCountTotalCountQueryVariables
+  >,
+) => {
+  return useQuery<
+    QueryBrandItemsByMatchCountTotalCountQuery,
+    QueryBrandItemsByMatchCountTotalCountQueryVariables
+  >(QueryBrandItemsByMatchCountTotalCount, {
+    fetchPolicy: 'network-only',
+    ...options,
+  });
+};
+
+export const useGetBrandItemsByMatchCountTotalCountLazy = () => {
+  return useLazyQuery<
+    QueryBrandItemsByMatchCountTotalCountQuery,
+    QueryBrandItemsByMatchCountTotalCountQueryVariables
+  >(QueryBrandItemsByMatchCountTotalCount, {
+    fetchPolicy: 'network-only',
+  });
 };

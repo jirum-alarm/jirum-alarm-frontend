@@ -8,10 +8,12 @@ import {
   ProductMappingVerificationStatus,
 } from '@/generated/gql/graphql';
 import {
+  BrandItem,
   BrandProduct,
-  useGetBrandProductsByMatchCountTotalCount,
-  useGetBrandProductsByMatchCountTotalCountLazy,
-  useGetBrandProductsOrderByMatchCount,
+  useGetBrandItemsByMatchCountTotalCount,
+  useGetBrandItemsByMatchCountTotalCountLazy,
+  useGetBrandItemsOrderByTotalMatchCount,
+  useGetBrandItemsOrderByTotalMatchCountLazy,
   useGetBrandProductsOrderByMatchCountLazy,
 } from '@/hooks/graphql/brandProduct';
 import {
@@ -36,11 +38,11 @@ const PAGE_LIMIT = 20;
 // ─────────────────────────────────────────────
 
 const VerificationGroupByView = () => {
-  // ── 좌측: 브랜드 상품 목록 상태 ──
-  const [allBrandProducts, setAllBrandProducts] = useState<BrandProduct[]>([]);
-  const [brandProductSearchAfter, setBrandProductSearchAfter] = useState<string[] | null>(null);
-  const [hasBrandProductMore, setHasBrandProductMore] = useState(true);
-  const [isLoadingBrandProductMore, setIsLoadingBrandProductMore] = useState(false);
+  // ── 좌측: 브랜드 아이템 목록 상태 ──
+  const [allBrandItems, setAllBrandItems] = useState<BrandItem[]>([]);
+  const [brandItemSearchAfter, setBrandItemSearchAfter] = useState<string[] | null>(null);
+  const [hasBrandItemMore, setHasBrandItemMore] = useState(true);
+  const [isLoadingBrandItemMore, setIsLoadingBrandItemMore] = useState(false);
 
   // ── 우측: 검증 대기 목록 상태 ──
   const [verificationItems, setVerificationItems] = useState<PendingVerificationItem[]>([]);
@@ -49,15 +51,14 @@ const VerificationGroupByView = () => {
   const [isLoadingVerificationMore, setIsLoadingVerificationMore] = useState(false);
 
   // ── 선택 상태 ──
+  const [selectedBrandItem, setSelectedBrandItem] = useState<BrandItem | null>(null);
+  const [selectedBrandItemIndex, setSelectedBrandItemIndex] = useState(0);
   const [selectedBrandProduct, setSelectedBrandProduct] = useState<BrandProduct | null>(null);
-  const [selectedProductIndex, setSelectedProductIndex] = useState(0);
   const [itemSelections, setItemSelections] = useState<Record<string, boolean>>({});
   const [focusedPostIndex, setFocusedPostIndex] = useState<number>(-1);
   const [isLeftPanelFocused, setIsLeftPanelFocused] = useState(true);
 
-  // ── Expand 상태 ──
-  const [expandedBrandProductId, setExpandedBrandProductId] = useState<string | null>(null);
-  const [expandedBrandItemId, setExpandedBrandItemId] = useState<number | null>(null);
+  // ── Expand 상태 (details 탭: BrandItem 하위 BrandProduct 목록) ──
   const [expandedItems, setExpandedItems] = useState<BrandProduct[]>([]);
   const [isLoadingExpanded, setIsLoadingExpanded] = useState(false);
   const [expandedSelectedIndex, setExpandedSelectedIndex] = useState(0);
@@ -98,27 +99,29 @@ const VerificationGroupByView = () => {
   const leftScrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // ── API Hooks ──
-  const { data: brandProductData, loading: brandProductLoading } =
-    useGetBrandProductsOrderByMatchCount({ limit: PAGE_LIMIT });
+  const { data: brandItemData, loading: brandItemLoading } = useGetBrandItemsOrderByTotalMatchCount(
+    { limit: PAGE_LIMIT },
+  );
+  const [fetchMoreBrandItems] = useGetBrandItemsOrderByTotalMatchCountLazy();
   const [fetchMoreBrandProducts] = useGetBrandProductsOrderByMatchCountLazy();
   const [fetchPendingVerifications, { loading: pendingLoading }] = useGetPendingVerificationsLazy();
   const [batchVerifyMutation] = useBatchVerifyProductMapping();
 
   // Total count hooks
-  const { data: brandProductsTotalCountData } = useGetBrandProductsByMatchCountTotalCount();
+  const { data: brandItemsTotalCountData } = useGetBrandItemsByMatchCountTotalCount();
   const { data: pendingVerificationsTotalCountData } = useGetPendingVerificationsTotalCount({
     matchStatus: [ProductMappingMatchStatus.Matched],
     target: ProductMappingTarget.BrandProduct,
   });
-  const [fetchBrandItemTotalCount, { data: brandItemTotalCountData }] =
-    useGetBrandProductsByMatchCountTotalCountLazy();
+  const [fetchBrandItemSearchTotalCount, { data: brandItemSearchTotalCountData }] =
+    useGetBrandItemsByMatchCountTotalCountLazy();
   const [
     fetchPendingVerificationsTotalCountByBrandProduct,
     { data: pendingVerificationsTotalCountByBrandProductData },
   ] = useGetPendingVerificationsTotalCountLazy();
 
   // ── Computed ──
-  const filteredBrandProducts = allBrandProducts;
+  const filteredBrandItems = allBrandItems;
 
   const currentItems = useMemo(() => {
     return verificationItems.map((item) => ({
@@ -169,27 +172,64 @@ const VerificationGroupByView = () => {
   );
 
   // ─────────────────────────────────────────────
-  // 브랜드 상품 데이터 로딩
+  // 브랜드 아이템 데이터 로딩
   // ─────────────────────────────────────────────
 
   useEffect(() => {
-    if (brandProductData?.brandProductsOrderByMatchCount) {
-      const items = brandProductData.brandProductsOrderByMatchCount;
-      setAllBrandProducts(items);
+    if (brandItemData?.brandItemsOrderByTotalMatchCount) {
+      const items = brandItemData.brandItemsOrderByTotalMatchCount;
+      setAllBrandItems(items);
       if (items.length > 0) {
-        setBrandProductSearchAfter(items[items.length - 1].searchAfter);
-        setHasBrandProductMore(items.length >= PAGE_LIMIT);
+        setBrandItemSearchAfter(items[items.length - 1].searchAfter);
+        setHasBrandItemMore(items.length >= PAGE_LIMIT);
       } else {
-        setHasBrandProductMore(false);
+        setHasBrandItemMore(false);
       }
     }
-  }, [brandProductData]);
+  }, [brandItemData]);
+
+  // BrandItem 하이라이트만 (방향키, 클릭)
+  const highlightBrandItem = useCallback((item: BrandItem) => {
+    setSelectedBrandItem(item);
+  }, []);
+
+  // BrandItem 확장: details 탭 전환 및 하위 BrandProduct 로드 (스페이스)
+  const expandBrandItem = useCallback(
+    (item: BrandItem) => {
+      setSelectedBrandItem(item);
+      setSelectedBrandProduct(null);
+      setExpandedItems([]);
+      setExpandedSelectedIndex(0);
+      setActiveTab('details');
+      setIsLoadingExpanded(true);
+      fetchMoreBrandProducts({
+        variables: { limit: 50, brandItemId: parseInt(item.id) },
+      })
+        .then((result) => {
+          if (result.data?.brandProductsOrderByMatchCount) {
+            const products = result.data.brandProductsOrderByMatchCount;
+            setExpandedItems(products);
+            if (products.length > 0) {
+              setSelectedBrandProduct(products[0]);
+              setExpandedSelectedIndex(0);
+            }
+          }
+        })
+        .catch((error) => {
+          console.error('Failed to load expanded items:', error);
+        })
+        .finally(() => {
+          setIsLoadingExpanded(false);
+        });
+    },
+    [fetchMoreBrandProducts],
+  );
 
   useEffect(() => {
-    if (allBrandProducts.length > 0 && !selectedBrandProduct) {
-      setSelectedBrandProduct(allBrandProducts[0]);
+    if (allBrandItems.length > 0 && !selectedBrandItem) {
+      highlightBrandItem(allBrandItems[0]);
     }
-  }, [allBrandProducts, selectedBrandProduct]);
+  }, [allBrandItems, selectedBrandItem, highlightBrandItem]);
 
   // ─────────────────────────────────────────────
   // 검증 대기 목록 로딩
@@ -256,60 +296,40 @@ const VerificationGroupByView = () => {
   // 추가 로딩 (페이징)
   // ─────────────────────────────────────────────
 
-  const loadMoreBrandProducts = useCallback(async () => {
-    if (isLoadingBrandProductMore || !hasBrandProductMore || !brandProductSearchAfter) return;
-    setIsLoadingBrandProductMore(true);
+  const loadMoreBrandItems = useCallback(async () => {
+    if (isLoadingBrandItemMore || !hasBrandItemMore || !brandItemSearchAfter) return;
+    setIsLoadingBrandItemMore(true);
     try {
-      const result = await fetchMoreBrandProducts({
+      const result = await fetchMoreBrandItems({
         variables: {
           limit: PAGE_LIMIT,
-          searchAfter: brandProductSearchAfter,
+          searchAfter: brandItemSearchAfter,
           title: debouncedSearchQuery || undefined,
         },
       });
-      if (result.data?.brandProductsOrderByMatchCount) {
-        const newItems = result.data.brandProductsOrderByMatchCount;
+      if (result.data?.brandItemsOrderByTotalMatchCount) {
+        const newItems = result.data.brandItemsOrderByTotalMatchCount;
         if (newItems.length > 0) {
-          setAllBrandProducts((prev) => [...prev, ...newItems]);
-          setBrandProductSearchAfter(newItems[newItems.length - 1].searchAfter);
-          setHasBrandProductMore(newItems.length >= PAGE_LIMIT);
+          setAllBrandItems((prev) => [...prev, ...newItems]);
+          setBrandItemSearchAfter(newItems[newItems.length - 1].searchAfter);
+          setHasBrandItemMore(newItems.length >= PAGE_LIMIT);
         } else {
-          setHasBrandProductMore(false);
+          setHasBrandItemMore(false);
         }
       }
     } catch (error) {
-      console.error('Failed to load more brand products:', error);
-      setHasBrandProductMore(false);
+      console.error('Failed to load more brand items:', error);
+      setHasBrandItemMore(false);
     } finally {
-      setIsLoadingBrandProductMore(false);
+      setIsLoadingBrandItemMore(false);
     }
   }, [
-    isLoadingBrandProductMore,
-    hasBrandProductMore,
-    brandProductSearchAfter,
-    fetchMoreBrandProducts,
+    isLoadingBrandItemMore,
+    hasBrandItemMore,
+    brandItemSearchAfter,
+    fetchMoreBrandItems,
     debouncedSearchQuery,
   ]);
-
-  const loadExpandedItems = useCallback(
-    async (brandItemId: number) => {
-      setIsLoadingExpanded(true);
-      try {
-        const result = await fetchMoreBrandProducts({
-          variables: { limit: 50, brandItemId },
-        });
-        if (result.data?.brandProductsOrderByMatchCount) {
-          setExpandedItems(result.data.brandProductsOrderByMatchCount);
-          setExpandedSelectedIndex(0);
-        }
-      } catch (error) {
-        console.error('Failed to load expanded items:', error);
-      } finally {
-        setIsLoadingExpanded(false);
-      }
-    },
-    [fetchMoreBrandProducts],
-  );
 
   const loadMoreVerifications = useCallback(async () => {
     if (
@@ -375,41 +395,46 @@ const VerificationGroupByView = () => {
   }, []);
 
   useEffect(() => {
-    const searchBrandProducts = async () => {
+    const searchBrandItems = async () => {
       setIsSearching(true);
+      setSelectedBrandItem(null);
       setSelectedBrandProduct(null);
-      setSelectedProductIndex(0);
-      setBrandProductSearchAfter(null);
-      setHasBrandProductMore(true);
-      setExpandedBrandProductId(null);
-      setExpandedBrandItemId(null);
+      setSelectedBrandItemIndex(0);
+      setBrandItemSearchAfter(null);
+      setHasBrandItemMore(true);
       setExpandedItems([]);
       try {
-        const result = await fetchMoreBrandProducts({
+        const result = await fetchMoreBrandItems({
           variables: { limit: PAGE_LIMIT, title: debouncedSearchQuery || undefined },
         });
-        if (result.data?.brandProductsOrderByMatchCount) {
-          const items = result.data.brandProductsOrderByMatchCount;
-          setAllBrandProducts(items);
+        if (result.data?.brandItemsOrderByTotalMatchCount) {
+          const items = result.data.brandItemsOrderByTotalMatchCount;
+          setAllBrandItems(items);
           if (items.length > 0) {
-            setBrandProductSearchAfter(items[items.length - 1].searchAfter);
-            setHasBrandProductMore(items.length >= PAGE_LIMIT);
-            setSelectedBrandProduct(items[0]);
+            setBrandItemSearchAfter(items[items.length - 1].searchAfter);
+            setHasBrandItemMore(items.length >= PAGE_LIMIT);
+            highlightBrandItem(items[0]);
           } else {
-            setHasBrandProductMore(false);
+            setHasBrandItemMore(false);
           }
         }
-        fetchBrandItemTotalCount({
+        fetchBrandItemSearchTotalCount({
           variables: { title: debouncedSearchQuery || undefined },
         });
       } catch (error) {
-        console.error('Failed to search brand products:', error);
+        console.error('Failed to search brand items:', error);
       } finally {
         setIsSearching(false);
       }
     };
-    if (brandProductData) searchBrandProducts();
-  }, [debouncedSearchQuery, fetchMoreBrandProducts, fetchBrandItemTotalCount, brandProductData]);
+    if (brandItemData) searchBrandItems();
+  }, [
+    debouncedSearchQuery,
+    fetchMoreBrandItems,
+    fetchBrandItemSearchTotalCount,
+    brandItemData,
+    highlightBrandItem,
+  ]);
 
   // ─────────────────────────────────────────────
   // 탭 / 확장
@@ -420,29 +445,11 @@ const VerificationGroupByView = () => {
   }, [activeTab]);
 
   useEffect(() => {
-    if (activeTab === 'brands' && selectedBrandProduct) {
-      const index = allBrandProducts.findIndex((bp) => bp.id === selectedBrandProduct.id);
-      if (index >= 0) setSelectedProductIndex(index);
+    if (activeTab === 'brands' && selectedBrandItem) {
+      const index = allBrandItems.findIndex((item) => item.id === selectedBrandItem.id);
+      if (index >= 0) setSelectedBrandItemIndex(index);
     }
-  }, [selectedBrandProduct, allBrandProducts, activeTab]);
-
-  const toggleExpand = useCallback(
-    (brandProduct: BrandProduct) => {
-      if (expandedBrandProductId === brandProduct.id) {
-        setExpandedBrandProductId(null);
-        setExpandedBrandItemId(null);
-        setExpandedItems([]);
-        setExpandedSelectedIndex(0);
-      } else {
-        setExpandedBrandProductId(brandProduct.id);
-        setExpandedBrandItemId(brandProduct.brandItemId);
-        loadExpandedItems(brandProduct.brandItemId);
-        fetchBrandItemTotalCount({ variables: { brandItemId: brandProduct.brandItemId } });
-        setActiveTab('details');
-      }
-    },
-    [expandedBrandProductId, loadExpandedItems, fetchBrandItemTotalCount],
-  );
+  }, [selectedBrandItem, allBrandItems, activeTab]);
 
   // ─────────────────────────────────────────────
   // 선택 / 확정
@@ -543,24 +550,22 @@ const VerificationGroupByView = () => {
       );
 
       // pendingVerificationCount 업데이트
-      const parentIdToUpdate =
-        activeTab === 'details' ? expandedBrandProductId : selectedBrandProduct?.id;
-      if (parentIdToUpdate) {
-        setAllBrandProducts((prev) =>
-          prev.map((bp) =>
-            bp.id === parentIdToUpdate
+      if (selectedBrandItem) {
+        setAllBrandItems((prev) =>
+          prev.map((item) =>
+            item.id === selectedBrandItem.id
               ? {
-                  ...bp,
-                  pendingVerificationCount: Math.max(0, bp.pendingVerificationCount - totalCount),
+                  ...item,
+                  pendingVerificationCount: Math.max(0, item.pendingVerificationCount - totalCount),
                 }
-              : bp,
+              : item,
           ),
         );
       }
-      if (activeTab === 'details') {
+      if (selectedBrandProduct) {
         setExpandedItems((prev) =>
           prev.map((bp) =>
-            bp.id === selectedBrandProduct?.id
+            bp.id === selectedBrandProduct.id
               ? {
                   ...bp,
                   pendingVerificationCount: Math.max(0, bp.pendingVerificationCount - totalCount),
@@ -578,10 +583,9 @@ const VerificationGroupByView = () => {
     selectedItems,
     deselectedItems,
     selectedBrandProduct,
+    selectedBrandItem,
     showToast,
     batchVerifyMutation,
-    activeTab,
-    expandedBrandProductId,
     itemSelections,
     verificationItems,
     pushUndo,
@@ -603,19 +607,19 @@ const VerificationGroupByView = () => {
 
       // pendingVerificationCount 복원
       const restoredCount = undoneAction.approvedIds.length + undoneAction.rejectedIds.length;
-      if (undoneAction.brandProductId) {
-        setAllBrandProducts((prev) =>
-          prev.map((bp) =>
-            bp.id === undoneAction.brandProductId
-              ? { ...bp, pendingVerificationCount: bp.pendingVerificationCount + restoredCount }
-              : bp,
+      if (selectedBrandItem) {
+        setAllBrandItems((prev) =>
+          prev.map((item) =>
+            item.id === selectedBrandItem.id
+              ? { ...item, pendingVerificationCount: item.pendingVerificationCount + restoredCount }
+              : item,
           ),
         );
       }
     } else if (!isUndoing) {
       showToast('취소할 작업이 없습니다.', 'info');
     }
-  }, [undo, isUndoing, showToast]);
+  }, [undo, isUndoing, showToast, selectedBrandItem]);
 
   // ─────────────────────────────────────────────
   // 핸들러
@@ -654,30 +658,28 @@ const VerificationGroupByView = () => {
 
   const handleConfirmAndNext = useCallback(async () => {
     await handleConfirmMatching();
-    if (activeTab === 'details') {
-      const nextExpandedIndex = expandedSelectedIndex + 1;
-      if (nextExpandedIndex < expandedItems.length) {
-        setSelectedBrandProduct(expandedItems[nextExpandedIndex]);
-        setExpandedSelectedIndex(nextExpandedIndex);
-      } else {
-        setActiveTab('brands');
-      }
+    // details 탭에서 다음 BrandProduct로 이동
+    const nextExpandedIndex = expandedSelectedIndex + 1;
+    if (nextExpandedIndex < expandedItems.length) {
+      setSelectedBrandProduct(expandedItems[nextExpandedIndex]);
+      setExpandedSelectedIndex(nextExpandedIndex);
     } else {
-      const nextIndex = selectedProductIndex + 1;
-      if (nextIndex < filteredBrandProducts.length) {
-        setSelectedBrandProduct(filteredBrandProducts[nextIndex]);
-        setSelectedProductIndex(nextIndex);
+      // 모든 BrandProduct 처리 완료 → 다음 BrandItem으로 이동
+      const nextBrandItemIndex = selectedBrandItemIndex + 1;
+      if (nextBrandItemIndex < filteredBrandItems.length) {
+        setSelectedBrandItemIndex(nextBrandItemIndex);
+        expandBrandItem(filteredBrandItems[nextBrandItemIndex]);
       }
     }
     setFocusedPostIndex(-1);
     setIsLeftPanelFocused(true);
   }, [
     handleConfirmMatching,
-    activeTab,
     expandedSelectedIndex,
     expandedItems,
-    selectedProductIndex,
-    filteredBrandProducts,
+    selectedBrandItemIndex,
+    filteredBrandItems,
+    expandBrandItem,
   ]);
 
   // ─────────────────────────────────────────────
@@ -696,9 +698,9 @@ const VerificationGroupByView = () => {
         e.preventDefault();
         (document.activeElement as HTMLElement).blur();
         setIsLeftPanelFocused(true);
-        if (filteredBrandProducts.length > 0 && selectedProductIndex < 0) {
-          setSelectedProductIndex(0);
-          setSelectedBrandProduct(filteredBrandProducts[0]);
+        if (filteredBrandItems.length > 0 && selectedBrandItemIndex < 0) {
+          setSelectedBrandItemIndex(0);
+          highlightBrandItem(filteredBrandItems[0]);
         }
         return;
       }
@@ -713,9 +715,9 @@ const VerificationGroupByView = () => {
           e.preventDefault();
           if (isLeftPanelFocused) {
             if (activeTab === 'brands') {
-              setSelectedProductIndex((prev) => {
-                const next = Math.min(prev + 1, filteredBrandProducts.length - 1);
-                setSelectedBrandProduct(filteredBrandProducts[next]);
+              setSelectedBrandItemIndex((prev) => {
+                const next = Math.min(prev + 1, filteredBrandItems.length - 1);
+                highlightBrandItem(filteredBrandItems[next]);
                 return next;
               });
             } else if (activeTab === 'details' && expandedItems.length > 0) {
@@ -734,9 +736,9 @@ const VerificationGroupByView = () => {
           e.preventDefault();
           if (isLeftPanelFocused) {
             if (activeTab === 'brands') {
-              setSelectedProductIndex((prev) => {
+              setSelectedBrandItemIndex((prev) => {
                 const next = Math.max(prev - 1, 0);
-                setSelectedBrandProduct(filteredBrandProducts[next]);
+                highlightBrandItem(filteredBrandItems[next]);
                 return next;
               });
             } else if (activeTab === 'details' && expandedItems.length > 0) {
@@ -768,37 +770,21 @@ const VerificationGroupByView = () => {
             setActiveTab('brands');
             setIsLeftPanelFocused(true);
             setFocusedPostIndex(-1);
-            setExpandedBrandProductId(null);
-            setExpandedBrandItemId(null);
-            setExpandedItems([]);
-            setExpandedSelectedIndex(0);
-            setSelectedBrandProduct((prevSelected) => {
-              if (prevSelected) {
-                const index = filteredBrandProducts.findIndex((bp) => bp.id === prevSelected.id);
-                if (index >= 0) setSelectedProductIndex(index);
-              }
-              return prevSelected;
-            });
           }
           break;
 
         case ' ':
           e.preventDefault();
           if (isLeftPanelFocused) {
-            const currentProduct =
-              activeTab === 'brands'
-                ? filteredBrandProducts[selectedProductIndex]
-                : expandedItems[expandedSelectedIndex];
-            if (activeTab === 'brands' && currentProduct) {
-              toggleExpand(currentProduct);
+            if (activeTab === 'brands') {
+              const currentItem = filteredBrandItems[selectedBrandItemIndex];
+              if (currentItem) {
+                expandBrandItem(currentItem);
+              }
             } else if (activeTab === 'details') {
               setActiveTab('brands');
               setIsLeftPanelFocused(true);
               setFocusedPostIndex(-1);
-              setExpandedBrandProductId(null);
-              setExpandedBrandItemId(null);
-              setExpandedItems([]);
-              setExpandedSelectedIndex(0);
             }
           } else {
             const currentItem = verificationItems[focusedPostIndex];
@@ -867,12 +853,13 @@ const VerificationGroupByView = () => {
   }, [
     isLeftPanelFocused,
     activeTab,
-    filteredBrandProducts,
+    filteredBrandItems,
     expandedItems,
     verificationItems,
     handleConfirmMatching,
     handleConfirmAndNext,
-    toggleExpand,
+    highlightBrandItem,
+    expandBrandItem,
     toggleItemSelection,
     selectAll,
     deselectAll,
@@ -880,7 +867,7 @@ const VerificationGroupByView = () => {
     imageModalData.isOpen,
     isShortcutModalOpen,
     handleUndo,
-    selectedProductIndex,
+    selectedBrandItemIndex,
     expandedSelectedIndex,
     focusedPostIndex,
   ]);
@@ -903,11 +890,11 @@ const VerificationGroupByView = () => {
   }, [focusedPostIndex]);
 
   useEffect(() => {
-    if (selectedProductIndex >= 0 && leftScrollRef.current && expandedBrandItemId === null) {
+    if (activeTab === 'brands' && selectedBrandItemIndex >= 0 && leftScrollRef.current) {
       if (leftScrollTimeoutRef.current) clearTimeout(leftScrollTimeoutRef.current);
       leftScrollTimeoutRef.current = setTimeout(() => {
         const el = leftScrollRef.current?.querySelector(
-          `[data-product-index="${selectedProductIndex}"]`,
+          `[data-product-index="${selectedBrandItemIndex}"]`,
         );
         el?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
       }, 16);
@@ -915,33 +902,33 @@ const VerificationGroupByView = () => {
     return () => {
       if (leftScrollTimeoutRef.current) clearTimeout(leftScrollTimeoutRef.current);
     };
-  }, [selectedProductIndex, expandedBrandItemId]);
+  }, [selectedBrandItemIndex, activeTab]);
 
   useEffect(() => {
-    if (expandedBrandProductId !== null && expandedSelectedIndex >= 0 && leftScrollRef.current) {
+    if (activeTab === 'details' && expandedSelectedIndex >= 0 && leftScrollRef.current) {
       const el = leftScrollRef.current.querySelector(
         `[data-expanded-index="${expandedSelectedIndex}"]`,
       );
       el?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
     }
-  }, [expandedSelectedIndex, expandedBrandItemId, expandedBrandProductId]);
+  }, [expandedSelectedIndex, activeTab]);
 
   // 자동 페이징: 좌측
   useEffect(() => {
     if (
       activeTab === 'brands' &&
-      selectedProductIndex >= filteredBrandProducts.length - 3 &&
-      hasBrandProductMore &&
-      !isLoadingBrandProductMore
+      selectedBrandItemIndex >= filteredBrandItems.length - 3 &&
+      hasBrandItemMore &&
+      !isLoadingBrandItemMore
     ) {
-      loadMoreBrandProducts();
+      loadMoreBrandItems();
     }
   }, [
-    selectedProductIndex,
-    filteredBrandProducts.length,
-    hasBrandProductMore,
-    isLoadingBrandProductMore,
-    loadMoreBrandProducts,
+    selectedBrandItemIndex,
+    filteredBrandItems.length,
+    hasBrandItemMore,
+    isLoadingBrandItemMore,
+    loadMoreBrandItems,
     activeTab,
   ]);
 
@@ -966,7 +953,7 @@ const VerificationGroupByView = () => {
   // 로딩 화면
   // ─────────────────────────────────────────────
 
-  if (brandProductLoading && allBrandProducts.length === 0) {
+  if (brandItemLoading && allBrandItems.length === 0) {
     return (
       <div className="flex h-[calc(100vh-200px)] items-center justify-center rounded-xl border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="text-center">
@@ -1028,20 +1015,20 @@ const VerificationGroupByView = () => {
                   <>
                     검색결과{' '}
                     <span className="font-semibold text-primary">
-                      {brandItemTotalCountData?.brandProductsByMatchCountTotalCount?.toLocaleString() ??
-                        allBrandProducts.length}
+                      {brandItemSearchTotalCountData?.brandItemsByMatchCountTotalCount?.toLocaleString() ??
+                        allBrandItems.length}
                     </span>
-                    개{hasBrandProductMore && ` · 로드됨 ${allBrandProducts.length}개`}
+                    개{hasBrandItemMore && ` · 로드됨 ${allBrandItems.length}개`}
                   </>
                 ) : (
                   <>
                     총{' '}
                     <span className="font-semibold text-primary">
-                      {brandProductsTotalCountData?.brandProductsByMatchCountTotalCount?.toLocaleString() ??
+                      {brandItemsTotalCountData?.brandItemsByMatchCountTotalCount?.toLocaleString() ??
                         '-'}
                     </span>
-                    개 브랜드 상품
-                    {hasBrandProductMore && ` · 로드됨 ${allBrandProducts.length}개`}
+                    개 브랜드 아이템
+                    {hasBrandItemMore && ` · 로드됨 ${allBrandItems.length}개`}
                   </>
                 )}
               </span>
@@ -1065,7 +1052,7 @@ const VerificationGroupByView = () => {
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:bg-meta-4 dark:hover:bg-meta-3'
                 }`}
               >
-                브랜드 상품
+                브랜드 아이템
               </button>
               <button
                 onClick={() => setActiveTab('details')}
@@ -1083,47 +1070,40 @@ const VerificationGroupByView = () => {
           {/* 탭 콘텐츠 */}
           {activeTab === 'brands' ? (
             <div ref={leftScrollRef} className="flex-1 overflow-y-auto">
-              {filteredBrandProducts.length > 0 ? (
+              {filteredBrandItems.length > 0 ? (
                 <>
-                  {filteredBrandProducts.map((bp, index) => (
-                    <div key={bp.id} className="mb-0.5">
+                  {filteredBrandItems.map((item, index) => (
+                    <div key={item.id} className="mb-0.5">
                       <button
                         data-product-index={index}
                         onClick={() => {
-                          setSelectedBrandProduct(bp);
-                          setSelectedProductIndex(index);
+                          setSelectedBrandItemIndex(index);
+                          highlightBrandItem(item);
                           setIsLeftPanelFocused(true);
-                          if (expandedBrandProductId !== bp.id) {
-                            setExpandedBrandProductId(null);
-                            setExpandedBrandItemId(null);
-                            setExpandedItems([]);
-                          }
                           if (
-                            index >= filteredBrandProducts.length - 3 &&
-                            hasBrandProductMore &&
-                            !isLoadingBrandProductMore
+                            index >= filteredBrandItems.length - 3 &&
+                            hasBrandItemMore &&
+                            !isLoadingBrandItemMore
                           ) {
-                            loadMoreBrandProducts();
+                            loadMoreBrandItems();
                           }
                         }}
                         className={`hover:bg-gray-50 flex w-full items-center gap-2 p-2 text-left transition-all dark:hover:bg-meta-4 ${
-                          selectedBrandProduct?.id === bp.id && expandedBrandItemId === null
+                          selectedBrandItem?.id === item.id
                             ? 'border-r-4 border-primary bg-primary/5'
                             : ''
                         } ${
-                          isLeftPanelFocused &&
-                          selectedProductIndex === index &&
-                          expandedBrandItemId === null
+                          isLeftPanelFocused && selectedBrandItemIndex === index
                             ? 'ring-2 ring-inset ring-primary/50'
                             : ''
-                        } ${expandedBrandProductId === bp.id ? 'bg-gray-100 dark:bg-meta-4' : ''}`}
+                        }`}
                       >
                         <div
                           className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white ${
-                            bp.pendingVerificationCount === 0 ? 'bg-success' : 'bg-warning'
+                            item.pendingVerificationCount === 0 ? 'bg-success' : 'bg-warning'
                           }`}
                         >
-                          {bp.pendingVerificationCount === 0 ? (
+                          {item.pendingVerificationCount === 0 ? (
                             <svg
                               className="h-3 w-3"
                               fill="none"
@@ -1138,29 +1118,27 @@ const VerificationGroupByView = () => {
                               />
                             </svg>
                           ) : (
-                            bp.pendingVerificationCount
+                            item.pendingVerificationCount
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
                           <p
                             className={`line-clamp-2 text-xs font-semibold ${
-                              selectedBrandProduct?.id === bp.id && expandedBrandItemId === null
+                              selectedBrandItem?.id === item.id
                                 ? 'text-primary'
                                 : 'text-black dark:text-white'
                             }`}
                           >
-                            {bp.brandName} {bp.productName}
+                            {item.brandName} {item.productName}
                           </p>
                           <p className="text-gray-400 mt-0.5 text-[9px]">
-                            {bp.volume && `${bp.volume}`}
-                            {bp.volume && bp.amount && ' · '}
-                            {bp.amount && `${bp.amount}`}
+                            매칭 {item.totalMatchCount}건
                           </p>
                         </div>
                       </button>
                     </div>
                   ))}
-                  {isLoadingBrandProductMore && (
+                  {isLoadingBrandItemMore && (
                     <div className="flex items-center justify-center py-4">
                       <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
                       <span className="text-gray-500 ml-2 text-xs">불러오는 중...</span>
@@ -1169,24 +1147,18 @@ const VerificationGroupByView = () => {
                 </>
               ) : (
                 <div className="text-gray-500 flex flex-col items-center justify-center py-20">
-                  <p>브랜드 상품이 없습니다.</p>
+                  <p>브랜드 아이템이 없습니다.</p>
                 </div>
               )}
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto p-3">
-              {selectedBrandProduct && (
+              {selectedBrandItem && (
                 <div className="mb-3">
                   <button
                     onClick={() => {
                       setActiveTab('brands');
                       setIsLeftPanelFocused(true);
-                      setTimeout(() => {
-                        const index = allBrandProducts.findIndex(
-                          (bp) => bp.id === selectedBrandProduct?.id,
-                        );
-                        if (index >= 0) setSelectedProductIndex(index);
-                      }, 0);
                     }}
                     className="hover:bg-gray-50 flex w-full items-center gap-2 rounded border border-stroke p-2 text-left transition-all dark:border-strokedark dark:hover:bg-meta-4"
                   >
@@ -1195,12 +1167,10 @@ const VerificationGroupByView = () => {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-semibold text-primary">
-                        {selectedBrandProduct.brandName} {selectedBrandProduct.productName}
+                        {selectedBrandItem.brandName} {selectedBrandItem.productName}
                       </p>
                       <p className="text-gray-400 mt-0.5 text-[9px]">
-                        {selectedBrandProduct.volume && `${selectedBrandProduct.volume}`}
-                        {selectedBrandProduct.volume && selectedBrandProduct.amount && ' · '}
-                        {selectedBrandProduct.amount && `${selectedBrandProduct.amount}`}
+                        매칭 {selectedBrandItem.totalMatchCount}건
                       </p>
                     </div>
                   </button>
@@ -1469,9 +1439,9 @@ const VerificationGroupByView = () => {
             </>
           ) : (
             <div className="text-gray-500 flex flex-1 items-center justify-center">
-              {filteredBrandProducts.length > 0
-                ? '좌측에서 브랜드 상품을 선택해주세요.'
-                : '브랜드 상품이 없습니다.'}
+              {filteredBrandItems.length > 0
+                ? '좌측에서 브랜드 아이템을 선택해주세요.'
+                : '브랜드 아이템이 없습니다.'}
             </div>
           )}
         </div>

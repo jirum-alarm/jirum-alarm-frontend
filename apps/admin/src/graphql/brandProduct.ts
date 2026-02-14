@@ -57,3 +57,26 @@ export const QueryBrandProductMatchCount = gql`
     brandProductMatchCount(brandProductId: $brandProductId)
   }
 `;
+
+export const QueryBrandItemsOrderByTotalMatchCount = gql`
+  query QueryBrandItemsOrderByTotalMatchCount(
+    $limit: Int!
+    $searchAfter: [String!]
+    $title: String
+  ) {
+    brandItemsOrderByTotalMatchCount(limit: $limit, searchAfter: $searchAfter, title: $title) {
+      id
+      brandName
+      productName
+      totalMatchCount
+      pendingVerificationCount
+      searchAfter
+    }
+  }
+`;
+
+export const QueryBrandItemsByMatchCountTotalCount = gql`
+  query QueryBrandItemsByMatchCountTotalCount($title: String) {
+    brandItemsByMatchCountTotalCount(title: $title)
+  }
+`;

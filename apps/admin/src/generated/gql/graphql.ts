@@ -64,15 +64,27 @@ export type AdminUser = {
 
 export type ApiQuery = {
   __typename?: 'ApiQuery';
-  dependsOn?: Maybe<Scalars['String']['output']>;
-  query: Scalars['String']['output'];
+  queryName: Scalars['String']['output'];
+  type: DataSourceType;
   variables?: Maybe<Scalars['JSONObject']['output']>;
 };
 
 export type BaseSection = {
-  cta?: Maybe<Cta>;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
   title: Scalars['String']['output'];
-  type: Scalars['ID']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
+
+export type BrandItemMatchCountOutput = {
+  __typename?: 'BrandItemMatchCountOutput';
+  brandName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  pendingVerificationCount: Scalars['Int']['output'];
+  productName: Scalars['String']['output'];
+  searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  totalMatchCount: Scalars['Int']['output'];
 };
 
 export type BrandProductMatchCountOutput = {
@@ -122,17 +134,17 @@ export type CommentOutput = {
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   isMyLike?: Maybe<Scalars['Boolean']['output']>;
+  isMyReported: Scalars['Boolean']['output'];
+  isNotice: Scalars['Boolean']['output'];
   likeCount: Scalars['Int']['output'];
   parentId?: Maybe<Scalars['Float']['output']>;
-  productId: Scalars['Float']['output'];
+  productId: Scalars['Int']['output'];
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  taggedProduct: ProductOutput;
+  title?: Maybe<Scalars['String']['output']>;
+  trendedAt?: Maybe<Scalars['DateTime']['output']>;
   userId: Scalars['Float']['output'];
-};
-
-export type Cta = {
-  __typename?: 'Cta';
-  label: Scalars['String']['output'];
-  url: Scalars['String']['output'];
+  viewCount: Scalars['Int']['output'];
 };
 
 export enum CurrencyType {
@@ -151,6 +163,10 @@ export type DanawaProductOutput = {
   volume?: Maybe<Scalars['String']['output']>;
 };
 
+export enum DataSourceType {
+  GraphqlQuery = 'GRAPHQL_QUERY',
+}
+
 export type ExistsUserOutput = {
   __typename?: 'ExistsUserOutput';
   email: Scalars['Boolean']['output'];
@@ -162,31 +178,35 @@ export enum Gender {
   Male = 'MALE',
 }
 
-export type HomeHotDealSection = BaseSection & {
-  __typename?: 'HomeHotDealSection';
-  cta?: Maybe<Cta>;
-  dataSources: Array<ApiQuery>;
-  displayType: Scalars['String']['output'];
+export type GridTabbedSection = BaseSection & {
+  __typename?: 'GridTabbedSection';
+  dataSource: ApiQuery;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  tabs: Array<LayoutTab>;
   title: Scalars['String']['output'];
-  type: Scalars['ID']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
-export type HomeRankingSection = BaseSection & {
-  __typename?: 'HomeRankingSection';
-  cta?: Maybe<Cta>;
-  dataSources: Array<ApiQuery>;
-  displayType: Scalars['String']['output'];
+export type GroupSection = BaseSection & {
+  __typename?: 'GroupSection';
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  sections: Array<BaseSection>;
   title: Scalars['String']['output'];
-  type: Scalars['ID']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
-export type HomeRecommendationSection = BaseSection & {
-  __typename?: 'HomeRecommendationSection';
-  cta?: Maybe<Cta>;
-  dataSources: Array<ApiQuery>;
-  displayType: Scalars['String']['output'];
+export type HorizontalScrollSection = BaseSection & {
+  __typename?: 'HorizontalScrollSection';
+  dataSource: ApiQuery;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
   title: Scalars['String']['output'];
-  type: Scalars['ID']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
 export enum HotDealExcludeKeywordOrderType {
@@ -264,11 +284,26 @@ export enum InstagramPostType {
   Normal = 'NORMAL',
 }
 
-export type ItemUnion = HomeHotDealSection | HomeRankingSection | HomeRecommendationSection;
-
 export enum KeywordProductOrderType {
   PostedAt = 'POSTED_AT',
 }
+
+export type LayoutTab = {
+  __typename?: 'LayoutTab';
+  id: Scalars['ID']['output'];
+  label: Scalars['String']['output'];
+  variables?: Maybe<Scalars['JSONObject']['output']>;
+};
+
+export type ListSection = BaseSection & {
+  __typename?: 'ListSection';
+  dataSource: ApiQuery;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
 
 export type MallGroup = {
   __typename?: 'MallGroup';
@@ -302,6 +337,8 @@ export type Mutation = {
   addPushToken: Scalars['Boolean']['output'];
   addUserDevice: Scalars['Boolean']['output'];
   addUserLikeOrDislike: Scalars['Boolean']['output'];
+  /** 사용자 신고 */
+  addUserReport: Scalars['Boolean']['output'];
   /** wishlist 추가 */
   addWishlist: Scalars['Boolean']['output'];
   /** 어드민) 로그인 */
@@ -350,6 +387,8 @@ export type Mutation = {
   reportExpiredProduct: Scalars['Boolean']['output'];
   /** 인스타그램 게시글 예약 */
   reserveInstagramPost: Scalars['Boolean']['output'];
+  /** 어드민) 알림 발송 */
+  sendNotificationByAdmin: Scalars['Boolean']['output'];
   /** 회원가입 */
   signup: SignupOutput;
   /** 소셜 로그인 */
@@ -378,8 +417,10 @@ export type Mutation = {
 
 export type MutationAddCommentArgs = {
   content: Scalars['String']['input'];
+  isNotice?: InputMaybe<Scalars['Boolean']['input']>;
   parentId?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationAddHotDealExcludeKeywordByAdminArgs = {
@@ -446,6 +487,13 @@ export type MutationAddUserLikeOrDislikeArgs = {
   isLike?: InputMaybe<Scalars['Boolean']['input']>;
   target: UserLikeTarget;
   targetId: Scalars['Int']['input'];
+};
+
+export type MutationAddUserReportArgs = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  reason: UserReportReason;
+  target: UserReportTarget;
+  targetId: Scalars['Float']['input'];
 };
 
 export type MutationAddWishlistArgs = {
@@ -553,6 +601,16 @@ export type MutationReserveInstagramPostArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type MutationSendNotificationByAdminArgs = {
+  message: Scalars['String']['input'];
+  target?: InputMaybe<NotificationTarget>;
+  targetId?: InputMaybe<Scalars['Int']['input']>;
+  title: Scalars['String']['input'];
+  type: NotificationType;
+  url?: InputMaybe<Scalars['String']['input']>;
+  userIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+};
+
 export type MutationSignupArgs = {
   birthYear?: InputMaybe<Scalars['Float']['input']>;
   email: Scalars['String']['input'];
@@ -650,6 +708,17 @@ export type Notification = {
   url?: Maybe<Scalars['String']['output']>;
 };
 
+export type NotificationByAdminOutput = {
+  __typename?: 'NotificationByAdminOutput';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  message: Scalars['String']['output'];
+  searchAfter: Array<Scalars['String']['output']>;
+  target: Scalars['String']['output'];
+  targetId?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+};
+
 export type NotificationKeyword = {
   __typename?: 'NotificationKeyword';
   createdAt: Scalars['DateTime']['output'];
@@ -689,10 +758,14 @@ export enum OrderOptionType {
   Desc = 'DESC',
 }
 
-export type PageSchema = {
-  __typename?: 'PageSchema';
-  items: Array<ItemUnion>;
-  schemaVersion: Scalars['String']['output'];
+export type PaginatedGridSection = BaseSection & {
+  __typename?: 'PaginatedGridSection';
+  dataSource: ApiQuery;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
 export type ProductCommentSummary = {
@@ -931,6 +1004,10 @@ export type Query = {
   adminMe: AdminUser;
   ads: Array<Ad>;
   analysisTitleByDanawa: Scalars['Boolean']['output'];
+  /** BrandItem 단위 매칭된 전체 개수 조회 */
+  brandItemsByMatchCountTotalCount: Scalars['Int']['output'];
+  /** BrandItem 단위 매칭 합산 목록 조회 (커서 기반 페이지네이션) */
+  brandItemsOrderByTotalMatchCount: Array<BrandItemMatchCountOutput>;
   /** 특정 브랜드 상품의 매핑 개수 조회 */
   brandProductMatchCount: Scalars['Int']['output'];
   /** 매칭된 브랜드 상품 전체 개수 조회 */
@@ -940,6 +1017,7 @@ export type Query = {
   categories: Array<Category>;
   /** 커뮤니티 반응 카테고리별 키워드 조회 */
   categorizedReactionKeywords: CategorizedReactionKeywordsResponse;
+  comment: CommentOutput;
   comments: Array<CommentOutput>;
   /** 어드민) 댓글 목록 조회 */
   commentsByAdmin: Array<Scalars['String']['output']>;
@@ -950,6 +1028,7 @@ export type Query = {
   danawaProducts: Array<DanawaProductOutput>;
   /** 안읽은 알림 존재 여부 조회 */
   existUnreadNotification: Scalars['Boolean']['output'];
+  existsUnreadNotice: Scalars['Boolean']['output'];
   /** 유저 존재 여부 조회 */
   existsUser: ExistsUserOutput;
   /** 해당 상품 신고된 횟수 조회 */
@@ -962,7 +1041,7 @@ export type Query = {
   getPersonalizedProductsByUserId: Array<RecommendedProductOutput>;
   /** 특정 상품과 유사한 상품 조회 */
   getSimilarProducts: Array<ProductOutput>;
-  homePage: PageSchema;
+  homePage: Array<BaseSection>;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
   /** 어드민) 핫딜 키워드 조회 */
@@ -979,10 +1058,12 @@ export type Query = {
   me?: Maybe<User>;
   /** 유저 알림 키워드 목록 조회 */
   notificationKeywordsByMe: Array<NotificationKeyword>;
+  /** 어드민) 개별 알림 목록 조회 */
+  notificationListByAdmin: Array<Notification>;
   /** 알림 목록 조회 */
   notifications: Array<Notification>;
-  /** 어드민) 알림 목록 조회 */
-  notificationsByAdmin: Array<Notification>;
+  /** 어드민) 알림 발송 이력 조회 */
+  notificationsByAdmin: Array<NotificationByAdminOutput>;
   /** 검증 대기 중인 매핑 목록 조회 */
   pendingVerifications: Array<ProductMappingOutput>;
   /** 검증 대기 중인 매핑 전체 개수 조회 (필터 적용 가능) */
@@ -1020,8 +1101,14 @@ export type Query = {
   unreadNotificationsCount: Scalars['Int']['output'];
   /** 유저 조회 */
   user: User;
+  /** 어드민) 사용자 상세 조회 */
+  userByAdmin: User;
   /** 이메일로 유저 조회 */
   userByEmail: User;
+  /** 어드민) 사용자 목록 조회 */
+  usersByAdmin: Array<UserByAdminOutput>;
+  /** 어드민) 사용자 총 인원수 조회 */
+  usersTotalCountByAdmin: Scalars['Int']['output'];
   /** 검증 완료/거부된 매핑 목록 조회 */
   verificationHistory: Array<ProductMappingOutput>;
   /** 검증 통계 조회 (대기/완료/거부 개수) */
@@ -1040,6 +1127,16 @@ export type QueryAdStatsArgs = {
 
 export type QueryAdsArgs = {
   slots: Array<AdSlotType>;
+};
+
+export type QueryBrandItemsByMatchCountTotalCountArgs = {
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryBrandItemsOrderByTotalMatchCountArgs = {
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryBrandProductMatchCountArgs = {
@@ -1062,11 +1159,17 @@ export type QueryCategorizedReactionKeywordsArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type QueryCommentArgs = {
+  id: Scalars['Int']['input'];
+};
+
 export type QueryCommentsArgs = {
+  isNotice?: InputMaybe<Scalars['Boolean']['input']>;
+  isTrending?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
   orderBy: CommentOrder;
   orderOption: OrderOptionType;
-  productId: Scalars['Int']['input'];
+  productId?: InputMaybe<Scalars['Int']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
@@ -1129,10 +1232,6 @@ export type QueryGetSimilarProductsArgs = {
   productId: Scalars['Int']['input'];
 };
 
-export type QueryHomePageArgs = {
-  version: Scalars['String']['input'];
-};
-
 export type QueryHotDealExcludeKeywordsByAdminArgs = {
   hotDealKeywordId: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
@@ -1175,17 +1274,22 @@ export type QueryNotificationKeywordsByMeArgs = {
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type QueryNotificationListByAdminArgs = {
+  limit?: Scalars['Int']['input'];
+  offset?: Scalars['Int']['input'];
+  target?: InputMaybe<NotificationTarget>;
+  targetId?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type QueryNotificationsArgs = {
   limit?: Scalars['Int']['input'];
   offset?: Scalars['Int']['input'];
 };
 
 export type QueryNotificationsByAdminArgs = {
-  limit?: Scalars['Int']['input'];
-  offset?: Scalars['Int']['input'];
-  target?: InputMaybe<NotificationTarget>;
-  targetId?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['Int']['input']>;
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type QueryPendingVerificationsArgs = {
@@ -1292,8 +1396,22 @@ export type QueryUserArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type QueryUserByAdminArgs = {
+  id: Scalars['Int']['input'];
+};
+
 export type QueryUserByEmailArgs = {
   email: Scalars['String']['input'];
+};
+
+export type QueryUsersByAdminArgs = {
+  keyword?: InputMaybe<Scalars['String']['input']>;
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryUsersTotalCountByAdminArgs = {
+  keyword?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryVerificationHistoryArgs = {
@@ -1324,6 +1442,14 @@ export type RecommendedProductOutput = {
 export enum Role {
   Admin = 'ADMIN',
   User = 'USER',
+}
+
+export enum SectionDisplayType {
+  GridTabbed = 'GRID_TABBED',
+  Group = 'GROUP',
+  HorizontalScroll = 'HORIZONTAL_SCROLL',
+  List = 'LIST',
+  PaginatedGrid = 'PAGINATED_GRID',
 }
 
 export type SignupOutput = {
@@ -1370,12 +1496,25 @@ export enum TokenType {
 export type User = {
   __typename?: 'User';
   birthYear?: Maybe<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   favoriteCategories?: Maybe<Array<Scalars['Int']['output']>>;
   gender?: Maybe<Gender>;
   id: Scalars['ID']['output'];
+  lastReadNoticeAt?: Maybe<Scalars['DateTime']['output']>;
   linkedSocialProviders?: Maybe<Array<OauthProvider>>;
   nickname: Scalars['String']['output'];
+};
+
+export type UserByAdminOutput = {
+  __typename?: 'UserByAdminOutput';
+  birthYear?: Maybe<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  email: Scalars['String']['output'];
+  gender?: Maybe<Gender>;
+  id: Scalars['ID']['output'];
+  nickname?: Maybe<Scalars['String']['output']>;
+  searchAfter: Array<Scalars['String']['output']>;
 };
 
 /** 좋아요 대상 */
@@ -1391,6 +1530,21 @@ export type UserPushSetting = {
   info: Scalars['Boolean']['output'];
   userId: Scalars['Int']['output'];
 };
+
+/** 신고 사유 */
+export enum UserReportReason {
+  Abuse = 'ABUSE',
+  Inappropriate = 'INAPPROPRIATE',
+  Other = 'OTHER',
+  Privacy = 'PRIVACY',
+  Spam = 'SPAM',
+}
+
+/** 신고 대상 */
+export enum UserReportTarget {
+  Comment = 'COMMENT',
+  CommentReply = 'COMMENT_REPLY',
+}
 
 export type VerificationStatistics = {
   __typename?: 'VerificationStatistics';
@@ -1430,6 +1584,13 @@ export type MutationAdminLoginMutationVariables = Exact<{
 export type MutationAdminLoginMutation = {
   __typename?: 'Mutation';
   adminLogin: { __typename?: 'TokenOutput'; accessToken: string; refreshToken?: string | null };
+};
+
+export type QueryAdminMeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryAdminMeQuery = {
+  __typename?: 'Query';
+  adminMe: { __typename?: 'AdminUser'; id: string; name: string; email: string };
 };
 
 export type QueryBrandProductsOrderByMatchCountQueryVariables = Exact<{
@@ -1494,6 +1655,13 @@ export type QueryBrandProductMatchCountQueryVariables = Exact<{
 export type QueryBrandProductMatchCountQuery = {
   __typename?: 'Query';
   brandProductMatchCount: number;
+};
+
+export type QueryCategoriesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryCategoriesQuery = {
+  __typename?: 'Query';
+  categories: Array<{ __typename?: 'Category'; id: string; name: string }>;
 };
 
 export type CommentsByAdminQueryVariables = Exact<{
@@ -1605,6 +1773,132 @@ export type QueryHotDealKeywordDetailByAdminQuery = {
   } | null;
 };
 
+export type QueryNotificationsByAdminQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+}>;
+
+export type QueryNotificationsByAdminQuery = {
+  __typename?: 'Query';
+  notificationsByAdmin: Array<{
+    __typename?: 'NotificationByAdminOutput';
+    id: string;
+    title?: string | null;
+    message: string;
+    target: string;
+    targetId?: string | null;
+    createdAt: any;
+    searchAfter: Array<string>;
+  }>;
+};
+
+export type MutationSendNotificationByAdminMutationVariables = Exact<{
+  title: Scalars['String']['input'];
+  message: Scalars['String']['input'];
+  type: NotificationType;
+  target?: InputMaybe<NotificationTarget>;
+  targetId?: InputMaybe<Scalars['Int']['input']>;
+  url?: InputMaybe<Scalars['String']['input']>;
+  userIds?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+}>;
+
+export type MutationSendNotificationByAdminMutation = {
+  __typename?: 'Mutation';
+  sendNotificationByAdmin: boolean;
+};
+
+export type QueryProductsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+  orderBy?: InputMaybe<ProductOrderType>;
+  orderOption?: InputMaybe<OrderOptionType>;
+  categoryId?: InputMaybe<Scalars['Int']['input']>;
+  keyword?: InputMaybe<Scalars['String']['input']>;
+  thumbnailType?: InputMaybe<ThumbnailType>;
+  isEnd?: InputMaybe<Scalars['Boolean']['input']>;
+  isHot?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type QueryProductsQuery = {
+  __typename?: 'Query';
+  products: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+    provider: { __typename?: 'Provider'; nameKr: string };
+  }>;
+};
+
+export type QueryProductQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type QueryProductQuery = {
+  __typename?: 'Query';
+  product?: {
+    __typename?: 'ProductOutput';
+    id: string;
+    providerId: number;
+    category?: string | null;
+    categoryId: number;
+    categoryName?: string | null;
+    mallId?: number | null;
+    title: string;
+    url?: string | null;
+    detailUrl?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    postedAt: any;
+    thumbnail?: string | null;
+    wishlistCount: number;
+    positiveCommunityReactionCount: number;
+    negativeCommunityReactionCount: number;
+    viewCount: number;
+    mallName?: string | null;
+    hotDealType?: HotDealType | null;
+    likeCount: number;
+    dislikeCount: number;
+    author?: { __typename?: 'User'; id: string; nickname: string } | null;
+    provider: {
+      __typename?: 'Provider';
+      id: string;
+      name: string;
+      nameKr: string;
+      host?: string | null;
+    };
+    prices?: Array<{
+      __typename?: 'ProductPrice';
+      id: string;
+      target: ProductPriceTarget;
+      type: CurrencyType;
+      price: number;
+      createdAt: any;
+    }> | null;
+    hotDealIndex?: {
+      __typename?: 'ProductHotDealIndex';
+      id: string;
+      message: string;
+      highestPrice: number;
+      currentPrice: number;
+      lowestPrice: number;
+    } | null;
+  } | null;
+};
+
 export type MutationAddHotDealKeywordSynonymByAdminMutationVariables = Exact<{
   hotDealKeywordId: Scalars['Int']['input'];
   keywords: Array<Scalars['String']['input']> | Scalars['String']['input'];
@@ -1643,6 +1937,54 @@ export type MutationRemoveHotDealExcludeKeywordByAdminMutation = {
   removeHotDealExcludeKeywordByAdmin: boolean;
 };
 
+export type QueryUsersByAdminQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  keyword?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type QueryUsersByAdminQuery = {
+  __typename?: 'Query';
+  usersByAdmin: Array<{
+    __typename?: 'UserByAdminOutput';
+    id: string;
+    email: string;
+    nickname?: string | null;
+    birthYear?: number | null;
+    gender?: Gender | null;
+    createdAt: any;
+    searchAfter: Array<string>;
+  }>;
+};
+
+export type QueryUserByAdminQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type QueryUserByAdminQuery = {
+  __typename?: 'Query';
+  userByAdmin: {
+    __typename?: 'User';
+    id: string;
+    email: string;
+    nickname: string;
+    birthYear?: number | null;
+    gender?: Gender | null;
+    favoriteCategories?: Array<number> | null;
+    linkedSocialProviders?: Array<OauthProvider> | null;
+    createdAt: any;
+  };
+};
+
+export type QueryUsersTotalCountByAdminQueryVariables = Exact<{
+  keyword?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type QueryUsersTotalCountByAdminQuery = {
+  __typename?: 'Query';
+  usersTotalCountByAdmin: number;
+};
+
 export type QueryPendingVerificationsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
@@ -1662,12 +2004,21 @@ export type QueryPendingVerificationsQuery = {
     productId: number;
     brandProduct?: string | null;
     danawaUrl?: string | null;
+    matchingConfidence?: number | null;
+    matchingReasoning?: string | null;
     verificationStatus?: ProductMappingVerificationStatus | null;
     verifiedAt?: any | null;
     verificationNote?: string | null;
     createdAt: any;
     searchAfter?: Array<string> | null;
-    product?: { __typename?: 'ProductOutput'; title: string; thumbnail?: string | null } | null;
+    product?: {
+      __typename?: 'ProductOutput';
+      title: string;
+      thumbnail?: string | null;
+      price?: string | null;
+      url?: string | null;
+      provider: { __typename?: 'Provider'; name: string };
+    } | null;
     verifiedBy?: { __typename?: 'AdminUser'; id: string; name: string; email: string } | null;
   }>;
 };
@@ -1801,6 +2152,15 @@ export const MutationAdminLoginDocument = new TypedDocumentString(`
   MutationAdminLoginMutation,
   MutationAdminLoginMutationVariables
 >;
+export const QueryAdminMeDocument = new TypedDocumentString(`
+    query QueryAdminMe {
+  adminMe {
+    id
+    name
+    email
+  }
+}
+    `) as unknown as TypedDocumentString<QueryAdminMeQuery, QueryAdminMeQueryVariables>;
 export const QueryBrandProductsOrderByMatchCountDocument = new TypedDocumentString(`
     query QueryBrandProductsOrderByMatchCount($limit: Int!, $searchAfter: [String!], $brandItemId: Int, $title: String) {
   brandProductsOrderByMatchCount(
@@ -1862,6 +2222,14 @@ export const QueryBrandProductMatchCountDocument = new TypedDocumentString(`
   QueryBrandProductMatchCountQuery,
   QueryBrandProductMatchCountQueryVariables
 >;
+export const QueryCategoriesDocument = new TypedDocumentString(`
+    query QueryCategories {
+  categories {
+    id
+    name
+  }
+}
+    `) as unknown as TypedDocumentString<QueryCategoriesQuery, QueryCategoriesQueryVariables>;
 export const CommentsByAdminDocument = new TypedDocumentString(`
     query commentsByAdmin($hotDealKeywordId: Int!, $synonyms: [String!], $excludes: [String!]) {
   commentsByAdmin(
@@ -1967,6 +2335,124 @@ export const QueryHotDealKeywordDetailByAdminDocument = new TypedDocumentString(
   QueryHotDealKeywordDetailByAdminQuery,
   QueryHotDealKeywordDetailByAdminQueryVariables
 >;
+export const QueryNotificationsByAdminDocument = new TypedDocumentString(`
+    query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {
+  notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {
+    id
+    title
+    message
+    target
+    targetId
+    createdAt
+    searchAfter
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryNotificationsByAdminQuery,
+  QueryNotificationsByAdminQueryVariables
+>;
+export const MutationSendNotificationByAdminDocument = new TypedDocumentString(`
+    mutation MutationSendNotificationByAdmin($title: String!, $message: String!, $type: NotificationType!, $target: NotificationTarget, $targetId: Int, $url: String, $userIds: [Int!]) {
+  sendNotificationByAdmin(
+    title: $title
+    message: $message
+    type: $type
+    target: $target
+    targetId: $targetId
+    url: $url
+    userIds: $userIds
+  )
+}
+    `) as unknown as TypedDocumentString<
+  MutationSendNotificationByAdminMutation,
+  MutationSendNotificationByAdminMutationVariables
+>;
+export const QueryProductsDocument = new TypedDocumentString(`
+    query QueryProducts($limit: Int!, $searchAfter: [String!], $startDate: DateTime, $orderBy: ProductOrderType, $orderOption: OrderOptionType, $categoryId: Int, $keyword: String, $thumbnailType: ThumbnailType, $isEnd: Boolean, $isHot: Boolean) {
+  products(
+    limit: $limit
+    searchAfter: $searchAfter
+    startDate: $startDate
+    orderBy: $orderBy
+    orderOption: $orderOption
+    categoryId: $categoryId
+    keyword: $keyword
+    thumbnailType: $thumbnailType
+    isEnd: $isEnd
+    isHot: $isHot
+  ) {
+    id
+    title
+    mallId
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    hotDealType
+    provider {
+      nameKr
+    }
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<QueryProductsQuery, QueryProductsQueryVariables>;
+export const QueryProductDocument = new TypedDocumentString(`
+    query QueryProduct($id: Int!) {
+  product(id: $id) {
+    id
+    providerId
+    category
+    categoryId
+    categoryName
+    mallId
+    title
+    url
+    detailUrl
+    isHot
+    isEnd
+    price
+    postedAt
+    thumbnail
+    wishlistCount
+    positiveCommunityReactionCount
+    negativeCommunityReactionCount
+    author {
+      id
+      nickname
+    }
+    provider {
+      id
+      name
+      nameKr
+      host
+    }
+    viewCount
+    mallName
+    prices {
+      id
+      target
+      type
+      price
+      createdAt
+    }
+    hotDealType
+    hotDealIndex {
+      id
+      message
+      highestPrice
+      currentPrice
+      lowestPrice
+    }
+    likeCount
+    dislikeCount
+  }
+}
+    `) as unknown as TypedDocumentString<QueryProductQuery, QueryProductQueryVariables>;
 export const MutationAddHotDealKeywordSynonymByAdminDocument = new TypedDocumentString(`
     mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keywords: [String!]!) {
   addHotDealKeywordSynonymByAdmin(
@@ -2005,6 +2491,41 @@ export const MutationRemoveHotDealExcludeKeywordByAdminDocument = new TypedDocum
   MutationRemoveHotDealExcludeKeywordByAdminMutation,
   MutationRemoveHotDealExcludeKeywordByAdminMutationVariables
 >;
+export const QueryUsersByAdminDocument = new TypedDocumentString(`
+    query QueryUsersByAdmin($limit: Int!, $searchAfter: [String!], $keyword: String) {
+  usersByAdmin(limit: $limit, searchAfter: $searchAfter, keyword: $keyword) {
+    id
+    email
+    nickname
+    birthYear
+    gender
+    createdAt
+    searchAfter
+  }
+}
+    `) as unknown as TypedDocumentString<QueryUsersByAdminQuery, QueryUsersByAdminQueryVariables>;
+export const QueryUserByAdminDocument = new TypedDocumentString(`
+    query QueryUserByAdmin($id: Int!) {
+  userByAdmin(id: $id) {
+    id
+    email
+    nickname
+    birthYear
+    gender
+    favoriteCategories
+    linkedSocialProviders
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<QueryUserByAdminQuery, QueryUserByAdminQueryVariables>;
+export const QueryUsersTotalCountByAdminDocument = new TypedDocumentString(`
+    query QueryUsersTotalCountByAdmin($keyword: String) {
+  usersTotalCountByAdmin(keyword: $keyword)
+}
+    `) as unknown as TypedDocumentString<
+  QueryUsersTotalCountByAdminQuery,
+  QueryUsersTotalCountByAdminQueryVariables
+>;
 export const QueryPendingVerificationsDocument = new TypedDocumentString(`
     query QueryPendingVerifications($limit: Int!, $searchAfter: [String!], $prioritizeOld: Boolean, $orderBy: OrderOptionType, $brandProductId: Int, $verificationStatus: [ProductMappingVerificationStatus!]) {
   pendingVerifications(
@@ -2021,8 +2542,15 @@ export const QueryPendingVerificationsDocument = new TypedDocumentString(`
     product {
       title
       thumbnail
+      price
+      url
+      provider {
+        name
+      }
     }
     danawaUrl
+    matchingConfidence
+    matchingReasoning
     verificationStatus
     verifiedBy {
       id
