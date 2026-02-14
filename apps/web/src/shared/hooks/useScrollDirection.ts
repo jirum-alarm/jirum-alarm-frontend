@@ -1,6 +1,7 @@
 'use client';
 
 import { atom, useAtom } from 'jotai';
+import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
 type ScrollDirection = 'up' | 'down' | null;
@@ -10,14 +11,23 @@ const scrollDirectionAtom = atom<ScrollDirection>(null);
 export function useScrollDirection() {
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
+  const scrollDirectionRef = useRef<ScrollDirection>(null);
 
   const [scrollDirection, setScrollDirection] = useAtom(scrollDirectionAtom);
+  const pathname = usePathname();
+
+  scrollDirectionRef.current = scrollDirection;
+
+  useEffect(() => {
+    setScrollDirection('up');
+    lastScrollY.current = 0;
+  }, [pathname, setScrollDirection]);
 
   useEffect(() => {
     const THRESHOLD = 10;
 
     const updateScrollDirection = () => {
-      const scrollY = window.pageYOffset;
+      const scrollY = window.scrollY;
       const scrollHeight = document.documentElement.scrollHeight;
       const clientHeight = document.documentElement.clientHeight;
 
@@ -31,7 +41,7 @@ export function useScrollDirection() {
         setScrollDirection('up');
       } else {
         const direction = scrollY > lastScrollY.current ? 'down' : 'up';
-        if (direction !== scrollDirection) {
+        if (direction !== scrollDirectionRef.current) {
           setScrollDirection(direction);
         }
       }
@@ -52,7 +62,7 @@ export function useScrollDirection() {
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
-  }, [scrollDirection, setScrollDirection]);
+  }, [setScrollDirection]);
 
   return scrollDirection;
 }
