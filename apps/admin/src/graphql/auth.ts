@@ -8,3 +8,13 @@ export const MutationAdminLogin = gql`
     }
   }
 `;
+
+export const QueryAdminMe = gql`
+  query QueryAdminMe {
+    adminMe {
+      id
+      name
+      email
+    }
+  }
+`;

@@ -23,8 +23,15 @@ export const QueryPendingVerifications = gql`
       product {
         title
         thumbnail
+        price
+        url
+        provider {
+          name
+        }
       }
       danawaUrl
+      matchingConfidence
+      matchingReasoning
 
       verificationStatus
       verifiedBy {
