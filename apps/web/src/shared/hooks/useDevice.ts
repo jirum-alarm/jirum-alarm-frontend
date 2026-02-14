@@ -43,7 +43,9 @@ const getDeviceInfo = (): DeviceInfo => {
     isLegacyJirumAlarmAndroidApp;
 
   const isMobile =
-    /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) || isJirumAlarmApp;
+    /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ||
+    isJirumAlarmApp ||
+    (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0 && /Macintosh/i.test(ua));
   const isSafari =
     /Safari/i.test(ua) &&
     !/Chrome/i.test(ua) &&

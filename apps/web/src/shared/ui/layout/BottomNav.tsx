@@ -36,7 +36,7 @@ const BottomNavList = [
     text: '홈',
     icon: Home,
     activeIcon: HomeFill,
-    isActive: (pathName: string) => pathName === PAGE.HOME,
+    isActive: (pathName: string) => pathName === PAGE.HOME || pathName === '',
   },
   {
     type: NAV_TYPE.TRENDING,
@@ -68,7 +68,8 @@ const BottomNavList = [
 const BottomNavComponent = () => {
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
-  const isBottomNavVisible = useHeaderVisibility();
+  const scrollVisibility = useHeaderVisibility();
+  const isBottomNavVisible = pathName === PAGE.HOME ? true : scrollVisibility;
 
   const isActiveNav = (nav: (typeof BottomNavList)[number]) => {
     return nav.isActive(pathName);
@@ -77,7 +78,7 @@ const BottomNavComponent = () => {
   return (
     <nav
       className={cn(
-        `max-w-mobile-max pb-safe-bottom fixed bottom-0 left-1/2 z-50 mx-auto w-full -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white transition-all duration-300`,
+        'max-w-mobile-max fixed inset-x-0 bottom-0 z-[100] mx-auto min-h-[calc(56px+env(safe-area-inset-bottom))] w-full border-t border-t-[#D0D5DD] bg-white pb-[env(safe-area-inset-bottom)] transition-transform duration-300 will-change-transform',
         {
           'translate-y-full': !isBottomNavVisible,
           'translate-y-0': isBottomNavVisible,
@@ -131,7 +132,10 @@ export default function BottomNav() {
     isHydrated,
   } = useDevice();
   const pathName = usePathname();
-  if (isHydrated && isJirumAlarmApp) return null;
+
+  // 앱 환경에서도 웹 바텀 네비게이션을 표시하도록 수정 (사용자 요청 대응)
+  // if (isHydrated && isJirumAlarmApp) return null;
+
   if (!BottomNavList.some((nav) => nav.isActive(pathName))) return null;
   return <BottomNavComponent />;
 }
