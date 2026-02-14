@@ -1,19 +1,19 @@
 import { getAccessToken } from '@/app/actions/token';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 
-import Dashboard from './components/Dashboard';
+import CategoryList from './components/CategoryList';
 
-const DashboardPage = async () => {
+const CategoryPage = async () => {
   const token = await getAccessToken();
 
   return (
     <DefaultLayout isLoggedIn={!!token}>
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-black dark:text-white">대시보드</h2>
+        <h2 className="text-2xl font-semibold text-black dark:text-white">카테고리 관리</h2>
       </div>
-      <Dashboard />
+      <CategoryList />
     </DefaultLayout>
   );
 };
 
-export default DashboardPage;
+export default CategoryPage;
