@@ -57,7 +57,7 @@ interface TabBarProps {
 // 기본 스타일 정의 (뱃지 형태)
 const defaultStyles: Required<TabBarStyles> = {
   container:
-    'fixed w-full max-w-mobile-max pc:max-w-none pc:sticky top-14 pc:top-14 z-30 overflow-hidden bg-white pl-4 pr-18 transition-transform pc:pr-4 pt-3 pb-3 pc:pb-2',
+    'fixed w-full max-w-mobile-max pc:max-w-none pc:sticky top-14 pc:top-14 z-30 overflow-hidden bg-white px-4 transition-transform pt-3 pb-3 pc:pb-2',
   tabList: 'relative flex gap-2.5 pc:justify-center',
   tabTrigger: {
     base: 'relative pc:h-10 h-9 shrink-0 whitespace-nowrap px-3 py-2 pc:text-lg transition-all duration-400 rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 leading-none',
@@ -96,7 +96,7 @@ const TabBarV2 = ({
   settingsHref = '/mypage/categories',
   settingsIcon = <Setting color="#467DFB" />,
   settingsAriaLabel = '카테고리 설정 페이지로 이동',
-  showSettings = true,
+  showSettings = false,
 }: TabBarProps) => {
   const categoryIds = allCategories.map((c) => c.id);
 
