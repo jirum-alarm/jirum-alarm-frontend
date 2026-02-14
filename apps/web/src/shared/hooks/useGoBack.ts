@@ -1,19 +1,10 @@
 import { useCallback } from 'react';
 
 import { PAGE } from '@/shared/config/page';
-// import { useDevice } from '@/shared/hooks/useDevice';
 import useMyRouter from '@/shared/hooks/useMyRouter';
-import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
-
-import { useDevice } from './useDevice';
-
-// import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 
 const useGoBack = (backTo: PAGE = PAGE.HOME) => {
   const router = useMyRouter();
-  const {
-    device: { isJirumAlarmApp },
-  } = useDevice();
 
   const goBack = useCallback(() => {
     if (
@@ -25,10 +16,6 @@ const useGoBack = (backTo: PAGE = PAGE.HOME) => {
       router.push(backTo);
     }
   }, [router, backTo]);
-
-  if (isJirumAlarmApp) {
-    return () => WebViewBridge.sendMessage(WebViewEventType.PRESS_BACKBUTTON, null);
-  }
 
   return goBack;
 };

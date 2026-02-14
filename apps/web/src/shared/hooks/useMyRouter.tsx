@@ -3,9 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 
-import { useDevice } from '@/shared/hooks/useDevice';
-import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
-
 type NavigateOptions = {
   scroll?: boolean;
 };
@@ -18,49 +15,24 @@ export type MyRouter = {
 
 export default function useMyRouter(): MyRouter {
   const router = useRouter();
-  const {
-    device: { isJirumAlarmApp },
-  } = useDevice();
 
   const push = useCallback(
     (href: string, options?: NavigateOptions) => {
-      if (isJirumAlarmApp) {
-        WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
-          data: {
-            url: href,
-            type: 'push',
-          },
-        });
-      } else {
-        router.push(href, options);
-      }
+      router.push(href, options);
     },
-    [router, isJirumAlarmApp],
+    [router],
   );
 
   const replace = useCallback(
     (href: string, options?: NavigateOptions) => {
-      if (isJirumAlarmApp) {
-        WebViewBridge.sendMessage(WebViewEventType.ROUTE_CHANGED, {
-          data: {
-            url: href,
-            type: 'replace',
-          },
-        });
-      } else {
-        router.replace(href, options);
-      }
+      router.replace(href, options);
     },
-    [router, isJirumAlarmApp],
+    [router],
   );
 
   const back = useCallback(() => {
-    if (isJirumAlarmApp) {
-      WebViewBridge.sendMessage(WebViewEventType.PRESS_BACKBUTTON, null);
-    } else {
-      router.back();
-    }
-  }, [router, isJirumAlarmApp]);
+    router.back();
+  }, [router]);
 
   return useMemo(
     () => ({

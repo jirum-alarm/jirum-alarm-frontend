@@ -132,9 +132,10 @@ const BottomNavComponent = () => {
 export default function BottomNav() {
   const {
     device: { isJirumAlarmApp },
+    isHydrated,
   } = useDevice();
   const pathName = usePathname();
-  if (isJirumAlarmApp) return null;
+  if (isHydrated && isJirumAlarmApp) return null;
   if (!BottomNavList.some((nav) => nav.isActive(pathName))) return null;
   return <BottomNavComponent />;
 }
