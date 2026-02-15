@@ -114,7 +114,7 @@ export const LiveContainer = ({ initialTab }: Props) => {
           onTabClick={(id) => handleTabChange(id)}
         />
 
-        <div className="pc:mt-7 mt-16 overflow-hidden">
+        <div className="pc:mt-7 mt-29 overflow-hidden">
           <Swiper
             {...SWIPER_OPTIONS}
             initialSlide={categoryIds.indexOf(tabId)}

@@ -3,16 +3,20 @@ import { ReactNode } from 'react';
 import { checkDevice } from '@/app/actions/agent';
 
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
+import { NAV_TYPE } from '@/shared/ui/layout/BottomNav';
 
 import Footer from '@/widgets/layout/ui/desktop/Footer';
-import PageTabNavigation from '@/widgets/trending/ui/PageTabNavigation';
 import TrendingPageHeader from '@/widgets/trending/ui/TrendingPageHeader';
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const { isMobile } = await checkDevice();
 
   const renderMobile = () => {
-    return <BasicLayout header={<TrendingPageHeader />}>{children}</BasicLayout>;
+    return (
+      <BasicLayout header={<TrendingPageHeader />} hasBottomNav navType={NAV_TYPE.TRENDING}>
+        {children}
+      </BasicLayout>
+    );
   };
   const renderDesktop = () => {
     return (
