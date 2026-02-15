@@ -32,12 +32,19 @@ RUN pnpm install --filter=admin
  
 # Build the project
 COPY --from=builder /app/out/full/ .
+
+ARG NEXT_PUBLIC_API_URL
+ARG NODE_ENV=production
+
 RUN pnpm turbo run build --filter=admin...
  
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
+ARG NEXT_PUBLIC_API_URL
+ARG NODE_ENV=production
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL} \
+    NODE_ENV=${NODE_ENV}
  
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
