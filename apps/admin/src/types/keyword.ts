@@ -8,6 +8,10 @@ export enum HotDealKeywordOrderType {
   WEIGHT = 'WEIGHT',
 }
 
+export enum KeywordMapGroupOrderType {
+  ID = 'ID',
+}
+
 export enum OrderOptionType {
   ASC = 'ASC',
   DESC = 'DESC',

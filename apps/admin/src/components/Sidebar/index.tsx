@@ -210,6 +210,27 @@ const Sidebar = ({
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
+              <SidebarLinkGroup activeCondition={pathname.startsWith('/keyword-map')}>
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <MenuGroup
+                        name="키워드맵"
+                        isSelectedPath={pathname.startsWith('/keyword-map')}
+                        open={open}
+                        sidebarExpanded={sidebarExpanded}
+                        openSidebar={openSidebar}
+                        handleClick={handleClick}
+                        icon={<KeywordMapIcon />}
+                      />
+                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
+                        <SubMenuItem name="그룹 목록" linkTo="/keyword-map" pathname={pathname} />
+                      </SubMenu>
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+
               <SidebarLinkGroup activeCondition={pathname.startsWith('/category')}>
                 {(handleClick, open) => {
                   return (
@@ -564,6 +585,28 @@ function BellIcon() {
       />
       <path
         d="M8.99993 17.2125C9.84368 17.2125 10.5187 16.5375 10.5187 15.6938H7.48118C7.48118 16.5375 8.15618 17.2125 8.99993 17.2125Z"
+        fill=""
+      />
+    </svg>
+  );
+}
+
+function KeywordMapIcon() {
+  return (
+    <svg
+      className="fill-current"
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M14.25 2.25H3.75C2.92157 2.25 2.25 2.92157 2.25 3.75V6.75C2.25 7.57843 2.92157 8.25 3.75 8.25H14.25C15.0784 8.25 15.75 7.57843 15.75 6.75V3.75C15.75 2.92157 15.0784 2.25 14.25 2.25ZM14.25 6.75H3.75V3.75H14.25V6.75ZM5.25 4.875H6.75V5.625H5.25V4.875Z"
+        fill=""
+      />
+      <path
+        d="M14.25 9.75H3.75C2.92157 9.75 2.25 10.4216 2.25 11.25V14.25C2.25 15.0784 2.92157 15.75 3.75 15.75H14.25C15.0784 15.75 15.75 15.0784 15.75 14.25V11.25C15.75 10.4216 15.0784 9.75 14.25 9.75ZM14.25 14.25H3.75V11.25H14.25V14.25ZM5.25 12.375H6.75V13.125H5.25V12.375Z"
         fill=""
       />
     </svg>
