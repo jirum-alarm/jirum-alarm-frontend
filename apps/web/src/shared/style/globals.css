@@ -176,6 +176,11 @@ html {
   animation: modalZoomOut 0.15s ease-in-out;
 }
 
+/* Channel Talk messenger position adjustment for bottom nav overlap */
+#ch-plugin {
+  padding-bottom: calc(56px + env(safe-area-inset-bottom)) !important;
+}
+
 /* Optional: predeclare commonly dynamic color classes to aid detection (v4 @source)
    If you build class strings dynamically, consider adding @source inline() in a
    separate file or here with the specific combinations used. */

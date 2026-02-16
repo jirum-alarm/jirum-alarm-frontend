@@ -3,6 +3,7 @@ import ChannelService from './channel-service';
 interface BootOption {
   pluginKey: string;
   hideChannelButtonOnBoot: boolean;
+  zIndex?: number;
 }
 
 export interface ICustomerService {
@@ -24,6 +25,7 @@ class CustomerService {
     this.customerService.boot({
       pluginKey: CHANNEL_PLUGIN_KEY,
       hideChannelButtonOnBoot: true,
+      zIndex: 200,
     });
   }
 
