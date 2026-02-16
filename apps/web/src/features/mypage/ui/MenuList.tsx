@@ -3,6 +3,8 @@
 import { motion } from 'motion/react';
 
 import customerService from '@/shared/lib/customerservice/customer-service';
+import { WebViewBridge } from '@/shared/lib/webview/sender';
+import { WebViewEventType } from '@/shared/lib/webview/type';
 import { Alert, Description, Filter, Headset, Heart } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 const MENU_LIST: Array<{
@@ -38,6 +40,10 @@ const MENU_LIST: Array<{
 
 const MenuList = () => {
   const handleShowChannelTalkClick = () => {
+    if (window.ReactNativeWebView) {
+      WebViewBridge.sendMessage(WebViewEventType.OPEN_CHANNEL_TALK, null);
+      return;
+    }
     customerService.onShowMessenger();
   };
   return (
