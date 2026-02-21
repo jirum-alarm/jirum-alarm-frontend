@@ -15,9 +15,14 @@ import TabbedDynamicProductSection from './TabbedDynamicProductSection';
 interface DynamicProductSectionProps {
   section: ContentPromotionSection;
   isMobile: boolean;
+  priorityCount?: number;
 }
 
-const DynamicProductSection = async ({ section, isMobile }: DynamicProductSectionProps) => {
+const DynamicProductSection = async ({
+  section,
+  isMobile,
+  priorityCount = 0,
+}: DynamicProductSectionProps) => {
   const queryClient = getQueryClient();
 
   let sectionToPrefetch = section;
@@ -51,6 +56,7 @@ const DynamicProductSection = async ({ section, isMobile }: DynamicProductSectio
               <InteractiveMoreLink
                 href={section.viewMoreLink}
                 className="text-sm text-gray-500 hover:text-gray-700"
+                aria-label={`${section.title} 더보기`}
               >
                 더보기
               </InteractiveMoreLink>
@@ -65,7 +71,7 @@ const DynamicProductSection = async ({ section, isMobile }: DynamicProductSectio
           </div>
         }
       >
-        <DynamicProductList section={section} isMobile={isMobile} />
+        <DynamicProductList section={section} isMobile={isMobile} priorityCount={priorityCount} />
       </Suspense>
     </div>
   );

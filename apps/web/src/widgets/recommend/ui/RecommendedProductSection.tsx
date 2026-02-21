@@ -14,7 +14,7 @@ const RecommendedProductSection = () => {
           title="지름알림 추천"
           right={
             <div className="-mx-2 flex items-center px-2 py-3">
-              <RecommendedMoreLink>더보기</RecommendedMoreLink>
+              <RecommendedMoreLink aria-label="지름알림 추천 더보기">더보기</RecommendedMoreLink>
             </div>
           }
         />

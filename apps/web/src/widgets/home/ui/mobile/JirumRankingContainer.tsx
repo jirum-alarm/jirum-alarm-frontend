@@ -27,7 +27,11 @@ const JirumRankingContainer = () => {
       <div className="px-5">
         <SectionHeader
           title="지름알림 랭킹"
-          right={<InteractiveMoreLink href={PAGE.TRENDING}>더보기</InteractiveMoreLink>}
+          right={
+            <InteractiveMoreLink href={PAGE.TRENDING} aria-label="지름알림 랭킹 더보기">
+              더보기
+            </InteractiveMoreLink>
+          }
         />
       </div>
       <ApiErrorBoundary>

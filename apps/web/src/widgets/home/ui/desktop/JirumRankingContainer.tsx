@@ -30,7 +30,11 @@ const JirumRankingContainer = () => (
         title="지름알림 랭킹"
         titleClassName="text-white"
         right={
-          <InteractiveMoreLink className="px-3 text-sm text-gray-100" href={PAGE.TRENDING}>
+          <InteractiveMoreLink
+            className="px-3 text-sm text-gray-100"
+            href={PAGE.TRENDING}
+            aria-label="지름알림 랭킹 더보기"
+          >
             더보기
           </InteractiveMoreLink>
         }

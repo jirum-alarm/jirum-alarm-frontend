@@ -13,9 +13,10 @@ import { ContentPromotionSection } from '@/entities/promotion/model/types';
 interface DynamicProductListProps {
   section: ContentPromotionSection;
   isMobile: boolean;
+  priorityCount?: number;
 }
 
-const DynamicProductList = ({ section, isMobile }: DynamicProductListProps) => {
+const DynamicProductList = ({ section, isMobile, priorityCount = 0 }: DynamicProductListProps) => {
   const queryOptions = getPromotionQueryOptions(section);
   const { data } = useSuspenseQuery(queryOptions as any);
 
@@ -47,7 +48,7 @@ const DynamicProductList = ({ section, isMobile }: DynamicProductListProps) => {
   if (section.type === 'GRID') {
     return (
       <div className="pc:px-0 px-5">
-        <ProductGridList products={products} />
+        <ProductGridList products={products} priorityCount={priorityCount} />
       </div>
     );
   }

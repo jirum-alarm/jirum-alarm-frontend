@@ -7,7 +7,10 @@ import { PropsWithChildren } from 'react';
 import { PAGE } from '@/shared/config/page';
 import Link from '@/shared/ui/Link';
 
-const RecommendedMoreLink = ({ children }: PropsWithChildren) => {
+const RecommendedMoreLink = ({
+  children,
+  'aria-label': ariaLabel,
+}: PropsWithChildren<{ 'aria-label'?: string }>) => {
   const [recommend] = useQueryState('recommend');
 
   const hrefObject = {
@@ -16,7 +19,7 @@ const RecommendedMoreLink = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <Link className="h-full text-sm text-gray-500" href={hrefObject}>
+    <Link className="h-full text-sm text-gray-500" href={hrefObject} aria-label={ariaLabel}>
       <motion.div
         className="rounded-lg px-2 py-1"
         whileTap={{ scale: 0.95 }}

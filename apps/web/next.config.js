@@ -43,6 +43,9 @@ const nextConfig = withPWA({
   images: {
     minimumCacheTTL: 31536000,
     formats: ['image/webp', 'image/avif'],
+    // Product thumbnails are displayed at 120, 160, 192, 252px.
+    // Adding these sizes prevents Next.js from over-serving larger variants (e.g., 384→320, 640→550).
+    imageSizes: [120, 160, 192, 256, 320, 384, 420, 550],
     remotePatterns: [
       {
         protocol: 'https',

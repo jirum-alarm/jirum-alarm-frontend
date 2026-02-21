@@ -8,10 +8,14 @@ interface PromotionSectionListProps {
 }
 
 const PromotionSectionList = ({ sections, isMobile }: PromotionSectionListProps) => {
+  let isFirst = true;
+
   return (
     <div className="flex flex-col gap-y-8">
       {sections.map((section) => {
         if (section.type === 'GROUP') {
+          const priority = isFirst ? 4 : 0;
+          isFirst = false;
           return (
             <div
               key={section.id}
@@ -22,12 +26,22 @@ const PromotionSectionList = ({ sections, isMobile }: PromotionSectionListProps)
                   key={subSection.id}
                   section={subSection}
                   isMobile={isMobile}
+                  priorityCount={priority}
                 />
               ))}
             </div>
           );
         }
-        return <DynamicProductSection key={section.id} section={section} isMobile={isMobile} />;
+        const priority = isFirst ? 4 : 0;
+        isFirst = false;
+        return (
+          <DynamicProductSection
+            key={section.id}
+            section={section}
+            isMobile={isMobile}
+            priorityCount={priority}
+          />
+        );
       })}
     </div>
   );

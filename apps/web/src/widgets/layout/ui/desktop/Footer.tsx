@@ -16,6 +16,7 @@ const Footer = () => {
             <Link
               href="https://open.kakao.com/o/gJZTWAAg"
               target="_blank"
+              aria-label="카카오톡 오픈채팅 바로가기"
               className="flex size-9 items-center justify-center rounded-full bg-[#FAE300]"
             >
               <TalkLight className="mt-0.5 mr-0.25" />
@@ -29,16 +30,16 @@ const Footer = () => {
             </Link>
           </p>
           <div className="flex h-full flex-col justify-between lg:flex-row">
-            <div className="flex gap-x-2 text-sm text-gray-500">
+            <div className="flex gap-x-2 text-sm text-gray-600">
               <Link href="https://jirum-alarm.com/policies/terms" className="underline">
                 서비스 이용약관
               </Link>
-              <span className="text-gray-300">ㅣ</span>
+              <span className="text-gray-400">ㅣ</span>
               <Link href="https://jirum-alarm.com/policies/privacy" className="underline">
                 개인정보 처리방침
               </Link>
             </div>
-            <p className="text-sm text-gray-400">Copyright 2025. 지름알림. All rights reserved.</p>
+            <p className="text-sm text-gray-600">Copyright 2025. 지름알림. All rights reserved.</p>
           </div>
         </footer>
       </div>
