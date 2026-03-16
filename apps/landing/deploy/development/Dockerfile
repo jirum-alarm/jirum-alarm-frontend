@@ -1,11 +1,13 @@
-ARG NODE_VERSION=22.15
+ARG NODE_VERSION=22.18
+ARG PNPM_VERSION=10.30.3
 
 FROM --platform=linux/amd64 node:${NODE_VERSION}-alpine AS base
 
 # Setup pnpm on the base image
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable && pnpm install turbo --global
+ARG PNPM_VERSION
+RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate && pnpm install turbo --global
 
 # Prepare the build
 FROM base AS builder
@@ -23,6 +25,7 @@ WORKDIR /app
 
 # First install the dependencies (as they change less often)
 COPY .gitignore .gitignore
+COPY .npmrc ./.npmrc
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --filter=landing

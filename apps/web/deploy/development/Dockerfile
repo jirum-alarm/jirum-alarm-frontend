@@ -1,6 +1,6 @@
 # Build arguments
 ARG NODE_VERSION=22.18
-ARG PNPM_VERSION=10.15.0
+ARG PNPM_VERSION=10.30.3
 
 # ========================================
 # Base stage - Setup Node.js and pnpm
@@ -30,6 +30,7 @@ RUN apk update && apk upgrade --no-cache && \
     rm -rf /var/cache/apk/*
 
 # Copy dependency files only
+COPY .npmrc ./
 COPY pnpm-workspace.yaml ./
 COPY package.json ./
 COPY pnpm-lock.yaml ./
