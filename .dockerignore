@@ -1,0 +1,17 @@
+apps/mobile/**
+!apps/mobile/package.json
+
+apps/mobile/node_modules/
+apps/mobile/.expo/
+apps/mobile/.idea/
+apps/mobile/android/.gradle/
+apps/mobile/android/.kotlin/
+apps/mobile/android/app/.cxx/
+apps/mobile/android/app/build/
+apps/mobile/android/build/
+apps/mobile/android/local.properties
+apps/mobile/ios/Pods/
+apps/mobile/ios/build/
+apps/mobile/ios/.xcode.env.local
+apps/mobile/ios/**/*.xcuserdata/
+apps/mobile/vendor/bundle/

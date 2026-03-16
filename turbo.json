@@ -8,8 +8,14 @@
     "check-types": {
       "dependsOn": ["^check-types"]
     },
-    "prettier-fix" : {},
+    "prettier-fix": {},
     "lint": {},
+    "test": {},
+    "mobile#verify:contracts": {},
+    "mobile#verify:migration": {},
+    "verify:mobile": {
+      "dependsOn": ["mobile#verify:migration", "mobile#verify:contracts"]
+    },
     "dev": {
       "persistent": true,
       "cache": false

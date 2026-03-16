@@ -1,9 +1,10 @@
-const path = require("path");
+const path = require("node:path");
 
 const buildEslintCommands = (filenames) => {
   const relFilenames = filenames.map((f) => path.relative(process.cwd(), f));
 
   const adminFiles = relFilenames.filter((f) => f.startsWith("apps/admin/"));
+  const mobileFiles = relFilenames.filter((f) => f.startsWith("apps/mobile/"));
   const webFiles = relFilenames.filter((f) => f.startsWith("apps/web/"));
   const landingFiles = relFilenames.filter((f) =>
     f.startsWith("apps/landing/")
@@ -13,6 +14,10 @@ const buildEslintCommands = (filenames) => {
 
   if (adminFiles.length > 0) {
     commands.push(`pnpm lint --filter=admin -- --fix`);
+  }
+
+  if (mobileFiles.length > 0) {
+    commands.push(`pnpm lint --filter=mobile -- --fix`);
   }
 
   if (webFiles.length > 0) {
@@ -29,6 +34,7 @@ const buildEslintCommands = (filenames) => {
 const buildPrettierCommands = (filenames) => {
   const relFilenames = filenames.map((f) => path.relative(process.cwd(), f));
   const adminFiles = relFilenames.filter((f) => f.startsWith("apps/admin/"));
+  const mobileFiles = relFilenames.filter((f) => f.startsWith("apps/mobile/"));
   const webFiles = relFilenames.filter((f) => f.startsWith("apps/web/"));
   const landingFiles = relFilenames.filter((f) =>
     f.startsWith("apps/landing/")
@@ -38,6 +44,10 @@ const buildPrettierCommands = (filenames) => {
 
   if (adminFiles.length > 0) {
     commands.push(`pnpm --filter=admin prettier-fix`);
+  }
+
+  if (mobileFiles.length > 0) {
+    commands.push(`pnpm --filter=mobile prettier-fix`);
   }
 
   if (webFiles.length > 0) {
@@ -54,6 +64,7 @@ const buildPrettierCommands = (filenames) => {
 const buildCheckTypesCommands = (filenames) => {
   const relFilenames = filenames.map((f) => path.relative(process.cwd(), f));
   const adminFiles = relFilenames.filter((f) => f.startsWith("apps/admin/"));
+  const mobileFiles = relFilenames.filter((f) => f.startsWith("apps/mobile/"));
   const webFiles = relFilenames.filter((f) => f.startsWith("apps/web/"));
   const landingFiles = relFilenames.filter((f) =>
     f.startsWith("apps/landing/")
@@ -63,6 +74,10 @@ const buildCheckTypesCommands = (filenames) => {
 
   if (adminFiles.length > 0) {
     packages.push("admin");
+  }
+
+  if (mobileFiles.length > 0) {
+    packages.push("mobile");
   }
 
   if (webFiles.length > 0) {
