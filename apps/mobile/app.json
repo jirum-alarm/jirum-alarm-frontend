@@ -6,10 +6,7 @@
     "experiments": {
       "autolinkingModuleResolution": true
     },
-    "plugins": [
-      "expo-dev-client",
-      "expo-web-browser"
-    ],
+    "plugins": ["expo-dev-client", "expo-web-browser"],
     "ios": {
       "bundleIdentifier": "com.jirum-alarm.jirumalarm",
       "usesAppleSignIn": true
