@@ -1,0 +1,8 @@
+export const COLORS = {
+  BLACK: '#000000',
+  WHITE: '#FFFFFF',
+  PRIMARY_600: '#4AD11B',
+  GRAY_800: '#1D2939',
+  GRAY_900: '#101828',
+  GRAY_200: '#E4E7EC',
+};

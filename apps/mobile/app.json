@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "지름알림",
+    "slug": "jirum-alarm",
+    "scheme": "jirumalarm",
+    "experiments": {
+      "autolinkingModuleResolution": true
+    },
+    "plugins": [
+      "expo-dev-client",
+      "expo-web-browser"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.jirum-alarm.jirumalarm",
+      "usesAppleSignIn": true
+    },
+    "android": {
+      "package": "com.solcode.jirmalam"
+    }
+  }
+}
