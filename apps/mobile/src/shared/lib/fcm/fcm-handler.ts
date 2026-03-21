@@ -1,5 +1,6 @@
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
+import {Platform} from 'react-native';
 
 /**
  * Handle FCM messages when app is in foreground
@@ -15,6 +16,9 @@ export async function onForegroundMessageHandler(
     id: 'alarm',
     name: '지름 알림',
   });
+
+  const badgeCount = Number(message.data?.badge ?? 0);
+
   try {
     await notifee.displayNotification({
       title: message.notification?.title,
@@ -29,8 +33,13 @@ export async function onForegroundMessageHandler(
       },
       ios: {
         sound: 'default',
+        badgeCount: Platform.OS === 'ios' ? badgeCount : undefined,
       },
     });
+
+    if (Platform.OS === 'ios' && badgeCount >= 0) {
+      await notifee.setBadgeCount(badgeCount);
+    }
   } catch (error) {
     console.log('FCM foreground notification error:', error);
   }

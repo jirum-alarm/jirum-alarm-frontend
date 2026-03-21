@@ -6,7 +6,8 @@ import AlarmItem from './AlarmItem';
 import NoAlerts from './NoAlerts';
 
 export default function AlarmList() {
-  const { notifications, loading, noData, hasNextData, ref } = useNotificationsViewModel();
+  const { notifications, loading, noData, hasNextData, ref, onReadNotification } =
+    useNotificationsViewModel();
 
   return (
     <>
@@ -15,7 +16,11 @@ export default function AlarmList() {
       ) : (
         <ul>
           {notifications.map((notification) => (
-            <AlarmItem key={notification.id} notification={notification} />
+            <AlarmItem
+              key={notification.id}
+              notification={notification}
+              onRead={onReadNotification}
+            />
           ))}
           {hasNextData && <div ref={ref} className="h-[48px] w-full" />}
         </ul>

@@ -1,4 +1,4 @@
-import { infiniteQueryOptions } from '@tanstack/react-query';
+import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 import { QueryNotificationsQueryVariables } from '@/shared/api/gql/graphql';
 import { NotificationService } from '@/shared/api/notification/notification.service';
@@ -8,6 +8,12 @@ const NOTIFICATION_LIMIT = 20;
 export const NotificationQueries = {
   all: () => ['notification'],
   lists: () => [...NotificationQueries.all(), 'list'],
+  unreadCount: () =>
+    queryOptions({
+      queryKey: [...NotificationQueries.all(), 'unreadCount'],
+      queryFn: () => NotificationService.getUnreadCount(),
+      staleTime: 0,
+    }),
   infiniteNotifications: (variables?: Partial<QueryNotificationsQueryVariables>) => {
     const merged: QueryNotificationsQueryVariables = {
       offset: 0,

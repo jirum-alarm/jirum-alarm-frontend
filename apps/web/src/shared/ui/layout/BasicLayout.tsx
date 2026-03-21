@@ -54,7 +54,11 @@ const BasicLayout = ({
             {title && <h1 className="text-lg font-bold text-black">{title}</h1>}
           </header>
         )}
-        <div className={cn('h-full grow', { 'pt-14': !header })}>{children}</div>
+        <div
+          className={cn('h-full grow', { 'pt-14': header !== undefined || title || hasBackButton })}
+        >
+          {children}
+        </div>
         {/* {hasBottomNav && <BottomNav type={navType} />} */}
       </div>
     </>
