@@ -7,6 +7,7 @@ export enum WebViewEventType {
   TOKEN_REMOVE = 'TOKEN_REMOVE',
   PRESS_BACKBUTTON = 'PRESS_BACKBUTTON',
   'ROUTE_CHANGED' = 'ROUTE_CHANGED',
+  NOTIFICATION_READ = 'NOTIFICATION_READ',
 }
 
 export type WebViewEventPayloads = {
@@ -19,6 +20,7 @@ export type WebViewEventPayloads = {
   [WebViewEventType.ROUTE_CHANGED]: {
     data: {url: string; type: 'push' | 'replace'};
   };
+  [WebViewEventType.NOTIFICATION_READ]: {data: {unreadCount: number}};
 };
 
 export interface WebViewEvent<T extends WebViewEventType> {
@@ -34,6 +36,7 @@ const eventHandlers: {
   [WebViewEventType.TOKEN_REMOVE]: AuthBridge.tokenRemove,
   [WebViewEventType.PRESS_BACKBUTTON]: EventBridge.pressBackButton,
   [WebViewEventType.ROUTE_CHANGED]: EventBridge.routeChanged,
+  [WebViewEventType.NOTIFICATION_READ]: EventBridge.notificationRead,
 };
 
 export const parsedWebViewMessage = (event: WebViewMessageEvent) => {

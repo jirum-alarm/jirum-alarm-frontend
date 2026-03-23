@@ -5,6 +5,8 @@ import { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { NotificationService } from '@/shared/api/notification/notification.service';
+import { WebViewBridge } from '@/shared/lib/webview/sender';
+import { WebViewEventType } from '@/shared/lib/webview/type';
 
 import { NotificationQueries } from '@/entities/notification';
 
@@ -48,8 +50,12 @@ export const useNotificationsViewModel = () => {
 
       return { previousData };
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: NotificationQueries.unreadCount().queryKey });
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: NotificationQueries.unreadCount().queryKey });
+      const unreadCount = await NotificationService.getUnreadCount();
+      WebViewBridge.sendMessage(WebViewEventType.NOTIFICATION_READ, {
+        data: { unreadCount: unreadCount ?? 0 },
+      });
     },
     onError: (_err, _id, context) => {
       if (context?.previousData) {
@@ -77,8 +83,12 @@ export const useNotificationsViewModel = () => {
 
       return { previousData };
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: NotificationQueries.unreadCount().queryKey });
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: NotificationQueries.unreadCount().queryKey });
+      const unreadCount = await NotificationService.getUnreadCount();
+      WebViewBridge.sendMessage(WebViewEventType.NOTIFICATION_READ, {
+        data: { unreadCount: unreadCount ?? 0 },
+      });
     },
     onError: (_err, _vars, context) => {
       if (context?.previousData) {
