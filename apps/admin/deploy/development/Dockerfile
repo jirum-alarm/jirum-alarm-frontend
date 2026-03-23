@@ -2,7 +2,8 @@
 
 ARG APP_DIRNAME=admin
 ARG PROJECT=admin
-ARG NODE_VERSION=20.11
+ARG NODE_VERSION=22.18
+ARG PNPM_VERSION=10.30.3
 
 # 1. Alpine image
 FROM node:${NODE_VERSION}-alpine AS alpine
@@ -10,9 +11,12 @@ RUN apk update
 RUN apk add --no-cache libc6-compat
 
 # Setup pnpm and turbo on the alpine base
-FROM alpine as base
-RUN corepack enable
-RUN npm install turbo --global
+FROM alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+ARG PNPM_VERSION
+RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+RUN pnpm install turbo --global
 RUN pnpm config set store-dir ~/.pnpm-store
 
 # 2. Prune projects
@@ -30,6 +34,7 @@ ARG PROJECT
 WORKDIR /app
 
 # Copy lockfile and package.json's of isolated subworkspace
+COPY .npmrc ./.npmrc
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=pruner /app/out/json/ .
@@ -41,7 +46,7 @@ RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfi
 COPY --from=pruner /app/out/full/ .
 
 RUN turbo build --filter=${PROJECT}
-RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm prune --prod --no-optional
+RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store CI=true pnpm prune --prod --no-optional
 RUN rm -rf ./**/*/src
 
 

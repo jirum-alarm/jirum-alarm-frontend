@@ -42,7 +42,6 @@ jirum-alarm-frontend/
 - **`turbo.json`**: Turborepo task orchestration and caching
 - **`pnpm-workspace.yaml`**: PNPM workspace configuration
 - **`knip.json`**: Knip configuration for unused code detection
-- **`vercel.json`**: Vercel deployment configuration
 
 ### Development Environment
 - **Node.js**: `>=v20.x.x` required
@@ -233,8 +232,8 @@ Reusable UI components accessed via workspace links:
 ### Analytics & Monitoring
 - **Error Tracking**: Sentry 10.x
 - **Analytics**: Mixpanel, PostHog
-- **Performance**: Vercel Speed Insights
-- **Deployment**: Vercel (with custom configuration)
+- **Performance**: Web performance monitoring
+- **Deployment**: Platform-agnostic deployment configuration
 
 ### External Integrations
 - **Authentication**: JWT-based auth system
@@ -305,10 +304,10 @@ Each app may require specific environment variables:
 - Content Security Policy headers implemented
 
 ### Deployment
-- Vercel deployment with custom configuration
+- Deployment configuration managed per platform/environment
 - Docker support for admin application
 - Separate environments for development and production
-- Automated CI/CD through Vercel integration
+- Automated CI/CD through repository-integrated workflows
 
 ---
 

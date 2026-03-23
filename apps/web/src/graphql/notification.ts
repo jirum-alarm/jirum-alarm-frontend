@@ -32,3 +32,15 @@ export const MutationAddPushToken = gql`
     addPushToken(token: $token, tokenType: $tokenType)
   }
 `;
+
+export const MutationReadNotification = gql`
+  mutation MutationReadNotification($id: Int!) {
+    readNotification(id: $id)
+  }
+`;
+
+export const MutationReadAllNotifications = gql`
+  mutation MutationReadAllNotifications {
+    readAllNotifications
+  }
+`;

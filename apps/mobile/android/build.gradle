@@ -1,0 +1,45 @@
+def resolveNodeModuleDir = { String packageName ->
+    def packageJsonPath = providers.exec {
+        workingDir(rootDir)
+        commandLine("node", "--print", "require.resolve('${packageName}/package.json')")
+    }.standardOutput.asText.get().trim()
+
+    new File(packageJsonPath).getParentFile()
+}
+
+def notifeeAndroidLibsDir = new File(resolveNodeModuleDir("@notifee/react-native"), "android/libs")
+
+buildscript {
+    ext {
+        buildToolsVersion = "36.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 36
+        targetSdkVersion = 36
+        ndkVersion = "27.1.12297006"
+        kotlinVersion = "2.1.20"
+        // Only using Android Support libraries
+        supportLibVersion = "28.0.0"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath("com.google.gms:google-services:4.4.2")
+    }
+}
+
+apply plugin: "com.facebook.react.rootproject"
+apply plugin: "expo-root-project"
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url(notifeeAndroidLibsDir.toURI()) }
+        maven { url("https://devrepo.kakao.com/nexus/content/groups/public/") }
+    }
+}

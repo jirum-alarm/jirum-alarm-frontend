@@ -12,12 +12,34 @@
 # local env files
 .env*.local
 
-# vercel
-.vercel
-
-
 # turbo
 .turbo
+
+# mobile native local/generated artifacts
+/apps/mobile/.expo/
+/apps/mobile/.expo-shared/
+/apps/mobile/coverage/
+/apps/mobile/dist/
+/apps/mobile/web-build/
+/apps/mobile/.bundle/
+/apps/mobile/vendor/bundle/
+/apps/mobile/android/.gradle/
+/apps/mobile/android/.kotlin/
+/apps/mobile/android/app/.cxx/
+/apps/mobile/android/app/build
+/apps/mobile/android/build
+/apps/mobile/android/local.properties
+/apps/mobile/android/keystore.properties
+/apps/mobile/android/app/google-services.json
+/apps/mobile/android/app/debug.keystore
+/apps/mobile/android/**/*.jks
+/apps/mobile/android/**/*.keystore
+/apps/mobile/ios/Pods
+/apps/mobile/ios/build
+/apps/mobile/ios/.xcode.env.local
+/apps/mobile/ios/GoogleService-Info.plist
+/apps/mobile/ios/**/xcuserdata/
+/apps/mobile/ios/**/*.xcuserstate
 
 .idea
 # Ignore Cursor project files

@@ -4,6 +4,7 @@ export enum WebViewEventType {
   'TOKEN_REMOVE' = 'TOKEN_REMOVE',
   'PRESS_BACKBUTTON' = 'PRESS_BACKBUTTON',
   'ROUTE_CHANGED' = 'ROUTE_CHANGED',
+  'NOTIFICATION_READ' = 'NOTIFICATION_READ',
 }
 export type WebViewEventPayloads = {
   [WebViewEventType.TOKEN_REFRESH]: { data: string };
@@ -13,6 +14,7 @@ export type WebViewEventPayloads = {
   [WebViewEventType.TOKEN_REMOVE]: null;
   [WebViewEventType.PRESS_BACKBUTTON]: null;
   [WebViewEventType.ROUTE_CHANGED]: { data: { url: string; type: 'push' | 'replace' } };
+  [WebViewEventType.NOTIFICATION_READ]: { data: { unreadCount: number } };
 };
 export interface WebViewEvent<T extends WebViewEventType> {
   type: T;

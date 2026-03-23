@@ -1,0 +1,42 @@
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+.expo-shared/
+dist/
+web-build/
+
+# test coverage
+coverage/
+
+# local Ruby
+.bundle/
+vendor/bundle/
+
+# Android local/build artifacts
+android/.gradle/
+android/.kotlin/
+android/app/.cxx/
+android/app/build
+android/build
+android/local.properties
+android/keystore.properties
+android/app/google-services.json
+android/app/debug.keystore
+android/**/*.jks
+android/**/*.keystore
+
+# iOS local/build artifacts
+ios/Pods
+ios/build
+ios/.xcode.env.local
+ios/GoogleService-Info.plist
+ios/**/xcuserdata/
+ios/**/*.xcuserstate
+
+# Xcode and macOS state
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+DerivedData/
+.DS_Store

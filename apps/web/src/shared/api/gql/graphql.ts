@@ -1726,6 +1726,22 @@ export type MutationAddPushTokenMutationVariables = Exact<{
 
 export type MutationAddPushTokenMutation = { __typename?: 'Mutation'; addPushToken: boolean };
 
+export type MutationReadNotificationMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type MutationReadNotificationMutation = {
+  __typename?: 'Mutation';
+  readNotification: boolean;
+};
+
+export type MutationReadAllNotificationsMutationVariables = Exact<{ [key: string]: never }>;
+
+export type MutationReadAllNotificationsMutation = {
+  __typename?: 'Mutation';
+  readAllNotifications: boolean;
+};
+
 export type ProductQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
@@ -2529,6 +2545,22 @@ export const MutationAddPushTokenDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationAddPushTokenMutation,
   MutationAddPushTokenMutationVariables
+>;
+export const MutationReadNotificationDocument = new TypedDocumentString(`
+    mutation MutationReadNotification($id: Int!) {
+  readNotification(id: $id)
+}
+    `) as unknown as TypedDocumentString<
+  MutationReadNotificationMutation,
+  MutationReadNotificationMutationVariables
+>;
+export const MutationReadAllNotificationsDocument = new TypedDocumentString(`
+    mutation MutationReadAllNotifications {
+  readAllNotifications
+}
+    `) as unknown as TypedDocumentString<
+  MutationReadAllNotificationsMutation,
+  MutationReadAllNotificationsMutationVariables
 >;
 export const ProductDocument = new TypedDocumentString(`
     query product($id: Int!) {

@@ -1,8 +1,12 @@
 import {
   MutationAddPushTokenDocument,
   MutationAddPushTokenMutationVariables,
+  MutationReadAllNotificationsDocument,
+  MutationReadNotificationDocument,
+  MutationReadNotificationMutationVariables,
   QueryNotificationsDocument,
   QueryNotificationsQueryVariables,
+  QueryUnreadNotificationsCountDocument,
 } from '@/shared/api/gql/graphql';
 import { execute } from '@/shared/lib/http-client';
 
@@ -20,5 +24,21 @@ export class NotificationService {
       }
       return res.data.notifications;
     });
+  }
+
+  static async getUnreadCount() {
+    return execute(QueryUnreadNotificationsCountDocument).then((res) => {
+      // @ts-expect-error errors type
+      if (res.errors) throw res.errors;
+      return res.data.unreadNotificationsCount;
+    });
+  }
+
+  static async readNotification(variables: MutationReadNotificationMutationVariables) {
+    return execute(MutationReadNotificationDocument, variables);
+  }
+
+  static async readAllNotifications() {
+    return execute(MutationReadAllNotificationsDocument);
   }
 }

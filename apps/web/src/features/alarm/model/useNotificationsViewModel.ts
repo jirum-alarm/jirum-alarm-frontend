@@ -1,14 +1,20 @@
 'use client';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useEffect, useMemo } from 'react';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
+
+import { NotificationService } from '@/shared/api/notification/notification.service';
+import { WebViewBridge } from '@/shared/lib/webview/sender';
+import { WebViewEventType } from '@/shared/lib/webview/type';
 
 import { NotificationQueries } from '@/entities/notification';
 
 const limit = 20;
 
 export const useNotificationsViewModel = () => {
+  const queryClient = useQueryClient();
+
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     NotificationQueries.infiniteNotifications({ limit }),
   );
@@ -25,9 +31,73 @@ export const useNotificationsViewModel = () => {
     },
   });
 
-  useEffect(() => {
-    // noop: kept for parity and potential side-effects later
-  }, [notifications]);
+  const { mutate: readNotification } = useMutation({
+    mutationFn: (id: number) => NotificationService.readNotification({ id }),
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: NotificationQueries.lists() });
+
+      const previousData = queryClient.getQueriesData({ queryKey: NotificationQueries.lists() });
+
+      queryClient.setQueriesData({ queryKey: NotificationQueries.lists() }, (old: typeof data) => {
+        if (!old) return old;
+        return {
+          ...old,
+          pages: old.pages.map((page) =>
+            page.map((n) => (Number(n.id) === id ? { ...n, readAt: new Date() } : n)),
+          ),
+        };
+      });
+
+      return { previousData };
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: NotificationQueries.unreadCount().queryKey });
+      const unreadCount = await NotificationService.getUnreadCount();
+      WebViewBridge.sendMessage(WebViewEventType.NOTIFICATION_READ, {
+        data: { unreadCount: unreadCount ?? 0 },
+      });
+    },
+    onError: (_err, _id, context) => {
+      if (context?.previousData) {
+        context.previousData.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+    },
+  });
+
+  const { mutate: readAllNotifications } = useMutation({
+    mutationFn: () => NotificationService.readAllNotifications(),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: NotificationQueries.lists() });
+
+      const previousData = queryClient.getQueriesData({ queryKey: NotificationQueries.lists() });
+
+      queryClient.setQueriesData({ queryKey: NotificationQueries.lists() }, (old: typeof data) => {
+        if (!old) return old;
+        return {
+          ...old,
+          pages: old.pages.map((page) => page.map((n) => ({ ...n, readAt: new Date() }))),
+        };
+      });
+
+      return { previousData };
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: NotificationQueries.unreadCount().queryKey });
+      const unreadCount = await NotificationService.getUnreadCount();
+      WebViewBridge.sendMessage(WebViewEventType.NOTIFICATION_READ, {
+        data: { unreadCount: unreadCount ?? 0 },
+      });
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousData) {
+        context.previousData.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+    },
+  });
 
   return {
     notifications,
@@ -35,5 +105,7 @@ export const useNotificationsViewModel = () => {
     noData,
     hasNextData: !!hasNextPage,
     ref,
+    onReadNotification: readNotification,
+    onReadAll: readAllNotifications,
   };
 };
