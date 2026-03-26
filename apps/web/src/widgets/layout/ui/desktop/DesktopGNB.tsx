@@ -37,6 +37,11 @@ const NAV_LINKS = [
     label: '랭킹',
     isActive: (pathname: string) => pathname === PAGE.TRENDING_RANKING,
   },
+  {
+    href: PAGE.COMMUNITY,
+    label: '커뮤니티',
+    isActive: (pathname: string) => pathname.startsWith(PAGE.COMMUNITY),
+  },
 ];
 
 const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {

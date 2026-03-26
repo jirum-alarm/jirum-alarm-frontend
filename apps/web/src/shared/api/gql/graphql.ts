@@ -388,7 +388,7 @@ export type MutationAddCommentArgs = {
   content: Scalars['String']['input'];
   isNotice?: InputMaybe<Scalars['Boolean']['input']>;
   parentId?: InputMaybe<Scalars['Int']['input']>;
-  productId: Scalars['Int']['input'];
+  productId?: InputMaybe<Scalars['Int']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1642,6 +1642,112 @@ export type RemoveCommentMutationVariables = Exact<{
 
 export type RemoveCommentMutation = { __typename?: 'Mutation'; removeComment: boolean };
 
+export type CommunityPostsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  isNotice?: InputMaybe<Scalars['Boolean']['input']>;
+  isTrending?: InputMaybe<Scalars['Boolean']['input']>;
+  orderBy: CommentOrder;
+  orderOption: OrderOptionType;
+}>;
+
+export type CommunityPostsQuery = {
+  __typename?: 'Query';
+  comments: Array<{
+    __typename?: 'CommentOutput';
+    id: string;
+    productId: number;
+    parentId?: number | null;
+    title?: string | null;
+    content: string;
+    createdAt: any;
+    searchAfter?: Array<string> | null;
+    isNotice: boolean;
+    likeCount: number;
+    viewCount: number;
+    isMyLike?: boolean | null;
+    isMyReported: boolean;
+    author?: { __typename?: 'User'; id: string; nickname: string } | null;
+    taggedProduct: {
+      __typename?: 'ProductOutput';
+      id: string;
+      title: string;
+      thumbnail?: string | null;
+      price?: string | null;
+      postedAt: any;
+      url?: string | null;
+    };
+  }>;
+};
+
+export type CommunityPostQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type CommunityPostQuery = {
+  __typename?: 'Query';
+  comment: {
+    __typename?: 'CommentOutput';
+    id: string;
+    title?: string | null;
+    content: string;
+    createdAt: any;
+    likeCount: number;
+    viewCount: number;
+    isMyLike?: boolean | null;
+    isNotice: boolean;
+    isMyReported: boolean;
+    productId: number;
+    author?: { __typename?: 'User'; id: string; nickname: string } | null;
+    taggedProduct: {
+      __typename?: 'ProductOutput';
+      id: string;
+      title: string;
+      thumbnail?: string | null;
+      price?: string | null;
+      postedAt?: any | null;
+      url?: string | null;
+    };
+  };
+};
+
+export type AddCommunityPostMutationVariables = Exact<{
+  content: Scalars['String']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
+  productId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type AddCommunityPostMutation = { __typename?: 'Mutation'; addComment: boolean };
+
+export type UpdateCommunityPostMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+export type UpdateCommunityPostMutation = { __typename?: 'Mutation'; updateComment: boolean };
+
+export type RemoveCommunityPostMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type RemoveCommunityPostMutation = { __typename?: 'Mutation'; removeComment: boolean };
+
+export type ReportCommunityPostMutationVariables = Exact<{
+  targetId: Scalars['Float']['input'];
+  target: UserReportTarget;
+  reason: UserReportReason;
+  description?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type ReportCommunityPostMutation = { __typename?: 'Mutation'; addUserReport: boolean };
+
+export type LikeCommunityPostMutationVariables = Exact<{
+  targetId: Scalars['Int']['input'];
+  isLike?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type LikeCommunityPostMutation = { __typename?: 'Mutation'; addUserLikeOrDislike: boolean };
+
 export type MutationAddNotificationKeywordMutationVariables = Exact<{
   keyword: Scalars['String']['input'];
 }>;
@@ -2478,6 +2584,116 @@ export const RemoveCommentDocument = new TypedDocumentString(`
   removeComment(id: $id)
 }
     `) as unknown as TypedDocumentString<RemoveCommentMutation, RemoveCommentMutationVariables>;
+export const CommunityPostsDocument = new TypedDocumentString(`
+    query CommunityPosts($limit: Int!, $searchAfter: [String!], $isNotice: Boolean, $isTrending: Boolean, $orderBy: CommentOrder!, $orderOption: OrderOptionType!) {
+  comments(
+    limit: $limit
+    searchAfter: $searchAfter
+    isNotice: $isNotice
+    isTrending: $isTrending
+    orderBy: $orderBy
+    orderOption: $orderOption
+  ) {
+    id
+    productId
+    parentId
+    title
+    content
+    createdAt
+    searchAfter
+    isNotice
+    likeCount
+    viewCount
+    isMyLike
+    isMyReported
+    author {
+      id
+      nickname
+    }
+    taggedProduct {
+      id
+      title
+      thumbnail
+      price
+      postedAt
+      url
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<CommunityPostsQuery, CommunityPostsQueryVariables>;
+export const CommunityPostDocument = new TypedDocumentString(`
+    query CommunityPost($id: Int!) {
+  comment(id: $id) {
+    id
+    title
+    content
+    createdAt
+    likeCount
+    viewCount
+    isMyLike
+    isNotice
+    isMyReported
+    productId
+    author {
+      id
+      nickname
+    }
+    taggedProduct {
+      id
+      title
+      thumbnail
+      price
+      postedAt
+      url
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<CommunityPostQuery, CommunityPostQueryVariables>;
+export const AddCommunityPostDocument = new TypedDocumentString(`
+    mutation AddCommunityPost($content: String!, $title: String, $productId: Int) {
+  addComment(content: $content, title: $title, productId: $productId)
+}
+    `) as unknown as TypedDocumentString<
+  AddCommunityPostMutation,
+  AddCommunityPostMutationVariables
+>;
+export const UpdateCommunityPostDocument = new TypedDocumentString(`
+    mutation UpdateCommunityPost($id: Int!, $content: String!) {
+  updateComment(id: $id, content: $content)
+}
+    `) as unknown as TypedDocumentString<
+  UpdateCommunityPostMutation,
+  UpdateCommunityPostMutationVariables
+>;
+export const RemoveCommunityPostDocument = new TypedDocumentString(`
+    mutation RemoveCommunityPost($id: Int!) {
+  removeComment(id: $id)
+}
+    `) as unknown as TypedDocumentString<
+  RemoveCommunityPostMutation,
+  RemoveCommunityPostMutationVariables
+>;
+export const ReportCommunityPostDocument = new TypedDocumentString(`
+    mutation ReportCommunityPost($targetId: Float!, $target: UserReportTarget!, $reason: UserReportReason!, $description: String) {
+  addUserReport(
+    target: $target
+    targetId: $targetId
+    reason: $reason
+    description: $description
+  )
+}
+    `) as unknown as TypedDocumentString<
+  ReportCommunityPostMutation,
+  ReportCommunityPostMutationVariables
+>;
+export const LikeCommunityPostDocument = new TypedDocumentString(`
+    mutation LikeCommunityPost($targetId: Int!, $isLike: Boolean) {
+  addUserLikeOrDislike(target: COMMENT, targetId: $targetId, isLike: $isLike)
+}
+    `) as unknown as TypedDocumentString<
+  LikeCommunityPostMutation,
+  LikeCommunityPostMutationVariables
+>;
 export const MutationAddNotificationKeywordDocument = new TypedDocumentString(`
     mutation MutationAddNotificationKeyword($keyword: String!) {
   addNotificationKeyword(keyword: $keyword)

@@ -11,6 +11,8 @@ import { cn } from '@/shared/lib/cn';
 import {
   Alert,
   AlertFill,
+  BubbleChat,
+  BubbleChatFill,
   Find,
   FindFill,
   Home,
@@ -25,6 +27,7 @@ import TopButton from '../TopButton';
 export enum NAV_TYPE {
   HOME = 'HOME',
   TRENDING = 'TRENDING',
+  COMMUNITY = 'COMMUNITY',
   ALARM = 'ALARM',
   MYPAGE = 'MYPAGE',
 }
@@ -46,6 +49,14 @@ const BottomNavList = [
     icon: Find,
     activeIcon: FindFill,
     isActive: (pathName: string) => pathName.startsWith(PAGE.TRENDING),
+  },
+  {
+    type: NAV_TYPE.COMMUNITY,
+    link: PAGE.COMMUNITY,
+    text: '커뮤니티',
+    icon: BubbleChat,
+    activeIcon: BubbleChatFill,
+    isActive: (pathName: string) => pathName.startsWith(PAGE.COMMUNITY),
   },
   {
     type: NAV_TYPE.ALARM,

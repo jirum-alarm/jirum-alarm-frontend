@@ -272,7 +272,7 @@ type Mutation {
     content: String!
     isNotice: Boolean
     parentId: Int
-    productId: Int!
+    productId: Int
     title: String
   ): Boolean!
   """
@@ -880,6 +880,7 @@ type Query {
     limit: Int!
     orderBy: CommentOrder!
     orderOption: OrderOptionType!
+    parentId: Int
     productId: Int
     searchAfter: [String!]
   ): [CommentOutput!]!
