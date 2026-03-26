@@ -17,19 +17,27 @@ export type TaggedProduct = {
   price?: string | null;
 };
 
-export default function usePostForm(editPostId?: number, initialContent?: string) {
+export default function usePostForm(
+  editPostId?: number,
+  initialContent?: string,
+  initialTitle?: string,
+) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(initialTitle ?? '');
   const [content, setContent] = useState(initialContent ?? '');
   const [taggedProduct, setTaggedProduct] = useState<TaggedProduct | null>(null);
 
   const { mutate: submitPost, isPending: isSubmitting } = useMutation({
     mutationFn: async () => {
       if (editPostId) {
-        return CommunityService.updatePost({ id: editPostId, content });
+        return CommunityService.updatePost({
+          id: editPostId,
+          content,
+          title: title || undefined,
+        });
       }
       return CommunityService.addPost({
         content,

@@ -10,7 +10,6 @@ import {
   ReportCommunityPostDocument,
   TypedDocumentString,
   UpdateCommentDocument,
-  UpdateCommunityPostDocument,
 } from '../gql/graphql';
 
 const AddCommunityCommentDocument = new TypedDocumentString<
@@ -70,6 +69,15 @@ const GetCommunityCommentsDocument = new TypedDocumentString<
   }
 `);
 
+const UpdateCommunityPostWithTitleDocument = new TypedDocumentString<
+  { updateComment: boolean },
+  { id: number; content: string; title?: string }
+>(`
+  mutation UpdateCommunityPost($id: Int!, $content: String!, $title: String) {
+    updateComment(id: $id, content: $content, title: $title)
+  }
+`);
+
 export type { CommunityPostQuery, CommunityPostsQuery } from '../gql/graphql';
 
 export class CommunityService {
@@ -92,8 +100,8 @@ export class CommunityService {
     return execute(AddCommunityPostDocument, variables as any).then((res) => res.data);
   }
 
-  static async updatePost(variables: { id: number; content: string }) {
-    return execute(UpdateCommunityPostDocument, variables).then((res) => res.data);
+  static async updatePost(variables: { id: number; content: string; title?: string }) {
+    return execute(UpdateCommunityPostWithTitleDocument, variables).then((res) => res.data);
   }
 
   static async removePost(id: number) {

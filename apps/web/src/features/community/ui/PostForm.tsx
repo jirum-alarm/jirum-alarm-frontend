@@ -30,7 +30,7 @@ export default function PostForm({
     isSubmitting,
     canSubmit,
     isEdit,
-  } = usePostForm(editPostId, initialContent);
+  } = usePostForm(editPostId, initialContent, existingTitle);
 
   return (
     <form
@@ -43,11 +43,10 @@ export default function PostForm({
     >
       <div className="flex flex-1 flex-col px-5 pt-4">
         <input
-          value={isEdit ? (existingTitle ?? '') : title}
-          onChange={(e) => !isEdit && setTitle(e.target.value)}
-          readOnly={isEdit}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해 주세요"
-          className="mb-3 w-full border-b border-gray-100 pb-3 text-base font-semibold text-gray-900 placeholder-gray-300 outline-none read-only:text-gray-500"
+          className="mb-3 w-full border-b border-gray-100 pb-3 text-base font-semibold text-gray-900 placeholder-gray-300 outline-none"
         />
 
         <textarea

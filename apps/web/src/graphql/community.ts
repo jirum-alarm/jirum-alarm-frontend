@@ -81,8 +81,8 @@ export const MutationAddCommunityPost = gql`
 `;
 
 export const MutationUpdateCommunityPost = gql`
-  mutation UpdateCommunityPost($id: Int!, $content: String!) {
-    updateComment(id: $id, content: $content)
+  mutation UpdateCommunityPost($id: Int!, $content: String!, $title: String) {
+    updateComment(id: $id, content: $content, title: $title)
   }
 `;
 
