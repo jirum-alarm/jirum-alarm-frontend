@@ -8,29 +8,12 @@ import { Drawer } from 'vaul';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product/product.service';
+import { getRecentViewedProducts } from '@/shared/lib/recentViewedProducts';
 import Close from '@/shared/ui/common/icons/Close';
 
 import { TaggedProduct } from '../model/usePostForm';
 
-const RECENT_KEY = 'community_recent_products';
-const MAX_RECENT = 9;
-
-function getRecentProducts(): TaggedProduct[] {
-  try {
-    return JSON.parse(localStorage.getItem(RECENT_KEY) ?? '[]');
-  } catch {
-    return [];
-  }
-}
-
-function saveRecentProduct(product: TaggedProduct) {
-  try {
-    const prev = getRecentProducts().filter((p) => p.id !== product.id);
-    localStorage.setItem(RECENT_KEY, JSON.stringify([product, ...prev].slice(0, MAX_RECENT)));
-  } catch {
-    // ignore localStorage errors (private mode, quota, etc.)
-  }
-}
+const DEFAULT_RECENT_LIMIT = 5;
 
 export default function ProductTagModal({
   selected,
@@ -47,7 +30,17 @@ export default function ProductTagModal({
   const [recentProducts, setRecentProducts] = useState<TaggedProduct[]>([]);
 
   useEffect(() => {
-    if (isOpen) setRecentProducts(getRecentProducts());
+    if (!isOpen) return;
+
+    const recent = getRecentViewedProducts()
+      .slice(0, DEFAULT_RECENT_LIMIT)
+      .map((p) => ({
+        id: p.id,
+        title: p.title,
+        thumbnail: p.thumbnail ?? undefined,
+        price: p.price ?? undefined,
+      }));
+    setRecentProducts(recent);
   }, [isOpen]);
 
   const { data, isFetching } = useQuery({
@@ -70,7 +63,6 @@ export default function ProductTagModal({
   };
 
   const handleSelect = (product: TaggedProduct) => {
-    saveRecentProduct(product);
     onSelect(product);
     setIsOpen(false);
     setKeyword('');

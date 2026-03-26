@@ -1,8 +1,10 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 import { cn } from '@/shared/lib/cn';
+import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
 import { parsePrice } from '@/shared/lib/utils/price';
 import Jirume from '@/shared/ui/common/icons/Jirume';
 import DisplayPrice from '@/shared/ui/DisplayPrice';
@@ -17,6 +19,15 @@ import HotdealGuideModal from '@/features/product-detail/ui/mobile/HotDealGuideM
 export default function ProductInfo({ productId }: { productId: number }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
   const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
+
+  useEffect(() => {
+    pushRecentViewedProduct({
+      id: Number(product.id),
+      title: product.title,
+      thumbnail: product.thumbnail ?? null,
+      price: product.price ?? null,
+    });
+  }, [product.id, product.price, product.thumbnail, product.title]);
 
   return (
     <section className="px-5 pb-9">

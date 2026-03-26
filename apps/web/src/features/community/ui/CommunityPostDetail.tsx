@@ -8,6 +8,7 @@ import { cn } from '@/shared/lib/cn';
 import { displayTime } from '@/shared/lib/utils/displayTime';
 import { Eye, ThumbsupFill } from '@/shared/ui/common/icons';
 import { useToast } from '@/shared/ui/common/Toast';
+import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
 import { CommunityQueries } from '@/entities/community';
@@ -88,10 +89,8 @@ export default function CommunityPostDetailClient({
 
       {/* 상품 태그 */}
       {hasTaggedProduct && (
-        <a
+        <Link
           href={`/products/${post.taggedProduct.id}`}
-          target="_blank"
-          rel="noopener noreferrer"
           className="mx-5 mb-4 block rounded-2xl bg-[#F3F7FF] p-4 hover:bg-[#e8effe] active:bg-[#e8effe]"
         >
           <span className="mb-3 inline-block rounded-full bg-[#dce8ff] px-2.5 py-0.5 text-xs font-medium text-[#4378f5]">
@@ -120,7 +119,7 @@ export default function CommunityPostDetailClient({
               )}
             </div>
           </div>
-        </a>
+        </Link>
       )}
 
       {/* 통계 + 추천 */}

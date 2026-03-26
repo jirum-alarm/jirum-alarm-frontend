@@ -1,9 +1,10 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import { cn } from '@/shared/lib/cn';
+import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
 import Button from '@/shared/ui/common/Button';
 import Jirume from '@/shared/ui/common/icons/Jirume';
 import DisplayPrice from '@/shared/ui/DisplayPrice';
@@ -25,6 +26,15 @@ export default function ProductInfo({
 }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
   const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
+
+  useEffect(() => {
+    pushRecentViewedProduct({
+      id: Number(product.id),
+      title: product.title,
+      thumbnail: product.thumbnail ?? null,
+      price: product.price ?? null,
+    });
+  }, [product.id, product.price, product.thumbnail, product.title]);
 
   const shareTitle = `${product.title} | 지름알림`;
 
