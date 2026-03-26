@@ -48,7 +48,7 @@ export default function CommunityList({ tab }: { tab: CommunityTab }) {
       {isUserLogin && (
         <Link
           href={PAGE.COMMUNITY_WRITE}
-          className="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 fixed right-5 bottom-20 z-50 flex items-center gap-x-1.5 rounded-full px-4 py-3 text-sm font-semibold text-white shadow-lg md:hidden"
+          className="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 fixed right-5 bottom-20 z-50 flex items-center gap-x-1.5 rounded-full px-4 py-3 text-sm font-semibold text-white shadow-lg transition-transform active:scale-95 md:hidden"
         >
           <span className="text-lg leading-none">+</span>
           <span>글쓰기</span>

@@ -31,7 +31,7 @@ function HotDealsList() {
         <Link
           key={product.id}
           href={`/products/${product.id}`}
-          className="flex w-28 flex-shrink-0 flex-col"
+          className="flex w-28 flex-shrink-0 flex-col transition-transform active:scale-[0.98]"
         >
           <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-100">
             {product.thumbnail && (
@@ -73,7 +73,10 @@ export default function CommunityHotDeals() {
     <section className="mt-2 border-t border-gray-100 pt-4">
       <div className="mb-3 flex items-center justify-between px-5">
         <h2 className="text-sm font-semibold text-gray-900">지름 랭킹</h2>
-        <Link href="/trending/ranking" className="text-xs text-gray-500">
+        <Link
+          href="/trending/ranking"
+          className="text-xs text-gray-500 transition-transform active:scale-95"
+        >
           더보기
         </Link>
       </div>

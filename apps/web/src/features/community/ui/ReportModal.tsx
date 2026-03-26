@@ -73,7 +73,7 @@ export default function ReportModal({
                 <button
                   key={reason.value}
                   onClick={() => setSelectedReason(reason.value)}
-                  className="flex items-center gap-x-3 text-left"
+                  className="flex items-center gap-x-3 text-left transition-transform active:scale-[0.99]"
                 >
                   <div
                     className={cn(
@@ -104,14 +104,14 @@ export default function ReportModal({
             <div className="mt-6 flex gap-x-3">
               <button
                 onClick={handleClose}
-                className="flex h-12 flex-1 items-center justify-center rounded-lg bg-gray-100 text-sm font-medium text-gray-700"
+                className="flex h-12 flex-1 items-center justify-center rounded-lg bg-gray-100 text-sm font-medium text-gray-700 transition-transform active:scale-95"
               >
                 취소
               </button>
               <button
                 onClick={() => report()}
                 disabled={!selectedReason || isPending}
-                className="bg-primary-500 flex h-12 flex-1 items-center justify-center rounded-lg text-sm font-medium text-white disabled:opacity-40"
+                className="bg-primary-500 flex h-12 flex-1 items-center justify-center rounded-lg text-sm font-medium text-white transition-transform active:scale-95 disabled:opacity-40"
               >
                 신고
               </button>

@@ -49,7 +49,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
     <>
       <Drawer.Root onOpenChange={setIsOpen} open={isOpen}>
         <Drawer.Trigger asChild>
-          <button className="h-6 w-6 bg-transparent">
+          <button className="h-6 w-6 bg-transparent transition-transform active:scale-95">
             <Dots width={24} height={24} />
           </button>
         </Drawer.Trigger>
@@ -63,7 +63,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
               {isMyPost ? (
                 <>
                   <button
-                    className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium"
+                    className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                     onClick={() => {
                       setIsOpen(false);
                       setIsDeleteConfirmOpen(true);
@@ -73,7 +73,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
                   </button>
                   <div className="mx-5 h-px w-full bg-gray-200" />
                   <button
-                    className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800"
+                    className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800 transition-transform active:scale-[0.98]"
                     onClick={() => {
                       setIsOpen(false);
                       router.push(`${PAGE.COMMUNITY_WRITE}?edit=${postId}`);
@@ -84,7 +84,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
                 </>
               ) : (
                 <button
-                  className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium"
+                  className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                   onClick={() => {
                     setIsOpen(false);
                     setIsReportOpen(true);

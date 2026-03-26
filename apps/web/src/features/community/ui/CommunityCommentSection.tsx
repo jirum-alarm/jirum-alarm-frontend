@@ -65,7 +65,7 @@ function CommentItem({
         {isMyComment && (
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="flex h-6 w-6 items-center justify-center text-gray-400"
+            className="flex h-6 w-6 items-center justify-center text-gray-400 transition-transform active:scale-95"
             aria-label="댓글 메뉴"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
@@ -81,7 +81,7 @@ function CommentItem({
         <button
           type="button"
           onClick={() => isUserLogin && onLike(comment.id, !!comment.isMyLike)}
-          className={`flex items-center gap-x-1 ${comment.isMyLike ? 'text-primary-500' : 'text-gray-400'} ${!isUserLogin ? 'opacity-40' : ''}`}
+          className={`flex items-center gap-x-1 transition-transform active:scale-95 ${comment.isMyLike ? 'text-primary-500' : 'text-gray-400'} ${!isUserLogin ? 'opacity-40' : ''}`}
         >
           <svg
             width="12"
@@ -107,7 +107,7 @@ function CommentItem({
           <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
             <div className="flex flex-col items-center pt-4 pb-8">
               <button
-                className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800"
+                className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800 transition-transform active:scale-[0.98]"
                 onClick={() => {
                   setIsMenuOpen(false);
                   onEdit(comment.id, comment.content);
@@ -117,7 +117,7 @@ function CommentItem({
               </button>
               <div className="mx-5 h-px w-full bg-gray-200" />
               <button
-                className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium"
+                className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                 onClick={() => {
                   setIsMenuOpen(false);
                   setIsDeleteConfirmOpen(true);
@@ -267,7 +267,7 @@ function CommunityCommentList({
               <div className="flex justify-end gap-x-2">
                 <button
                   onClick={() => setEditingId(null)}
-                  className="h-8 rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-700"
+                  className="h-8 rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-700 transition-transform active:scale-95"
                 >
                   취소
                 </button>
@@ -276,7 +276,7 @@ function CommunityCommentList({
                     updateComment({ id: Number(comment.id), content: editContent.trim() })
                   }
                   disabled={!editContent.trim() || isUpdating}
-                  className="h-8 rounded-lg bg-gray-800 px-4 text-sm font-semibold text-white disabled:bg-gray-400"
+                  className="h-8 rounded-lg bg-gray-800 px-4 text-sm font-semibold text-white transition-transform active:scale-95 disabled:bg-gray-400"
                 >
                   수정
                 </button>
@@ -354,7 +354,7 @@ function CommunityCommentInput({ postId, isUserLogin }: { postId: number; isUser
       <button
         type="submit"
         disabled={!content.trim() || isPending || !isUserLogin}
-        className="h-10 shrink-0 rounded-lg bg-gray-800 px-5 text-sm font-semibold text-white disabled:bg-gray-400"
+        className="h-10 shrink-0 rounded-lg bg-gray-800 px-5 text-sm font-semibold text-white transition-transform active:scale-95 disabled:bg-gray-400"
       >
         등록
       </button>

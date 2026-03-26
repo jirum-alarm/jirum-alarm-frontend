@@ -17,7 +17,7 @@ export default function CommunityPostCard({ post }: { post: Post }) {
   return (
     <Link
       href={`${PAGE.COMMUNITY}/${post.id}`}
-      className="flex flex-col border-b border-gray-100 px-5 py-4 hover:bg-gray-50 active:bg-gray-50"
+      className="flex flex-col border-b border-gray-100 px-5 py-4 transition-transform hover:bg-gray-50 active:scale-[0.98] active:bg-gray-50"
     >
       {/* 헤더: 유저 정보 */}
       <div className="flex items-center justify-between">

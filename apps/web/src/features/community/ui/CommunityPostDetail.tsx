@@ -91,7 +91,7 @@ export default function CommunityPostDetailClient({
       {hasTaggedProduct && (
         <Link
           href={`/products/${post.taggedProduct.id}`}
-          className="mx-5 mb-4 block rounded-2xl bg-[#F3F7FF] p-4 hover:bg-[#e8effe] active:bg-[#e8effe]"
+          className="mx-5 mb-4 block rounded-2xl bg-[#F3F7FF] p-4 transition-transform hover:bg-[#e8effe] active:scale-[0.98] active:bg-[#e8effe]"
         >
           <span className="mb-3 inline-block rounded-full bg-[#dce8ff] px-2.5 py-0.5 text-xs font-medium text-[#4378f5]">
             태그한 상품
@@ -138,6 +138,7 @@ export default function CommunityPostDetailClient({
           onClick={() => isUserLogin && likePost(post.isMyLike ? undefined : true)}
           className={cn(
             'flex items-center gap-x-2 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors',
+            'transition-transform active:scale-95',
             post.isMyLike
               ? 'border-primary-500 bg-primary-50 text-primary-500'
               : 'border-gray-200 text-gray-500 hover:border-gray-300',

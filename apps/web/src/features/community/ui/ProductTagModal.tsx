@@ -102,7 +102,7 @@ export default function ProductTagModal({
           <button
             type="button"
             onClick={onClear}
-            className="flex-shrink-0 p-1 text-gray-400"
+            className="flex-shrink-0 p-1 text-gray-400 transition-transform active:scale-95"
             aria-label="태그 제거"
           >
             <Close width={16} height={16} />
@@ -112,7 +112,7 @@ export default function ProductTagModal({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-x-2 text-sm text-gray-500"
+          className="flex items-center gap-x-2 text-sm text-gray-500 transition-transform active:scale-95"
         >
           <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-gray-400">
             <svg
@@ -140,7 +140,10 @@ export default function ProductTagModal({
             {/* 모달 헤더 */}
             <div className="flex items-center justify-between px-5 py-4">
               <h2 className="text-base font-semibold text-gray-900">상품 태그</h2>
-              <button onClick={() => setIsOpen(false)} className="p-1 text-gray-400">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1 text-gray-400 transition-transform active:scale-95"
+              >
                 <Close width={20} height={20} />
               </button>
             </div>
@@ -178,7 +181,7 @@ export default function ProductTagModal({
                       setInputValue('');
                       setKeyword('');
                     }}
-                    className="text-gray-400"
+                    className="text-gray-400 transition-transform active:scale-95"
                   >
                     <Close width={14} height={14} />
                   </button>
@@ -207,7 +210,7 @@ export default function ProductTagModal({
                         <button
                           key={p.id}
                           onClick={() => handleSelectFromSearch(p)}
-                          className="flex flex-col text-left"
+                          className="flex flex-col text-left transition-transform active:scale-[0.98]"
                         >
                           <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-gray-100">
                             {p.thumbnail && (
@@ -244,7 +247,7 @@ export default function ProductTagModal({
                           <button
                             key={p.id}
                             onClick={() => handleSelect(p)}
-                            className="flex flex-col text-left"
+                            className="flex flex-col text-left transition-transform active:scale-[0.98]"
                           >
                             <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-gray-100">
                               {p.thumbnail && (
