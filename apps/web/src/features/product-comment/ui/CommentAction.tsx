@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UserLikeTarget } from '@/shared/api/gql/graphql';
 import { LikeService } from '@/shared/api/like/like.service';
 import { cn } from '@/shared/lib/cn';
-import { BubbleChat, ThumbsupFill } from '@/shared/ui/common/icons';
+import { BubbleChat, BubbleChatFill, ThumbsupFill } from '@/shared/ui/common/icons';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { CommentQueries, defaultCommentsVariables } from '@/entities/comment';
@@ -88,7 +88,11 @@ export default function CommentAction({
           onClick={handleReply}
           disabled={!isUserLogin}
         >
-          <BubbleChat className="h-4 w-4" active={isReply} />
+          {isReply ? (
+            <BubbleChatFill className="h-4 w-4" aria-hidden />
+          ) : (
+            <BubbleChat className="h-4 w-4" aria-hidden />
+          )}
           <span className={cn('text-sm', isReply ? 'text-secondary-500' : 'text-gray-500')}>
             대댓글
           </span>

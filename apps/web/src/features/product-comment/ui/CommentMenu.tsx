@@ -53,8 +53,8 @@ export default function CommentMenu({ comment }: { comment: TComment }) {
         <VisuallyHidden.Root>
           <Drawer.Title>댓글 메뉴</Drawer.Title>
         </VisuallyHidden.Root>
-        <Drawer.Overlay className="fixed inset-0 z-9999 bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 right-0 bottom-0 left-0 z-9999 mx-auto h-fit bg-white outline-hidden">
+        <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
+        <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
           <div className="flex flex-col items-center pt-4 pb-8">
             <button
               className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium"

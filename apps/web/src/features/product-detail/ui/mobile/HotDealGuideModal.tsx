@@ -12,8 +12,8 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
     <Drawer.Root>
       <Drawer.Trigger asChild>{trigger}</Drawer.Trigger>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-9999 bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 bottom-0 z-9999 mx-auto h-fit w-full bg-white outline-hidden">
+        <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
+        <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white outline-hidden">
           <div className="flex flex-col items-center">
             <Drawer.Title asChild>
               <h3 className="pt-[32px] pb-[12px] text-xl font-bold">핫딜 기준 안내</h3>
