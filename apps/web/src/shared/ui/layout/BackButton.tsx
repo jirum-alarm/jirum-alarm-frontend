@@ -2,12 +2,11 @@
 
 import { motion } from 'motion/react';
 
-import { PAGE } from '@/shared/config/page';
 import useGoBack from '@/shared/hooks/useGoBack';
 
 import { ArrowLeft } from '../common/icons';
 
-const BackButton = ({ backTo, onClick }: { backTo?: PAGE; onClick?: () => void }) => {
+const BackButton = ({ backTo, onClick }: { backTo?: string; onClick?: () => void }) => {
   const goBack = useGoBack(backTo);
   const handleClick = () => {
     onClick?.();

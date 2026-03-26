@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { PAGE } from '@/shared/config/page';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 
-const useGoBack = (backTo: PAGE = PAGE.HOME) => {
+const useGoBack = (backTo: string = PAGE.HOME) => {
   const router = useMyRouter();
 
   const goBack = useCallback(() => {

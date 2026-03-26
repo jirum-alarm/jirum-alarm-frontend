@@ -6,7 +6,13 @@ import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/shared/lib/cn';
 import { ArrowRight } from '@/shared/ui/common/icons';
 
-const TopButton = ({ type = 'scrolling-up' }: { type?: 'scrolling-up' | 'scrolled' }) => {
+const TopButton = ({
+  type = 'scrolling-up',
+  className,
+}: {
+  type?: 'scrolling-up' | 'scrolled';
+  className?: string;
+}) => {
   const [isVisible, setIsVisible] = useState(false);
   const prevScrollPos = useRef(0);
 
@@ -51,10 +57,11 @@ const TopButton = ({ type = 'scrolling-up' }: { type?: 'scrolling-up' | 'scrolle
       onClick={scrollToTop}
       aria-label="스크롤 최상단 이동"
       className={cn(
-        `absolute -top-14 right-[16px] z-50 flex h-[40px] w-[40px] items-center justify-center rounded-full border border-gray-300 bg-white opacity-100 shadow-[0_2px_12px_0_rgba(0,0,0,0.08)] transition-opacity`,
+        'absolute -top-14 right-[16px] z-50 flex h-[40px] w-[40px] items-center justify-center rounded-full border border-gray-300 bg-white opacity-100 shadow-[0_2px_12px_0_rgba(0,0,0,0.08)] transition-opacity',
         {
           'opacity-0': !isVisible,
         },
+        className,
       )}
       whileTap={{ scale: 0.95 }}
       transition={{ duration: 0.1 }}

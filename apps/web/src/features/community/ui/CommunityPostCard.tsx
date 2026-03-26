@@ -7,16 +7,19 @@ import { CommunityPostsQuery } from '@/shared/api/community/community.service';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 import { displayTime } from '@/shared/lib/utils/displayTime';
+import { Eye, ThumbsupFill } from '@/shared/ui/common/icons';
+
+import { CommunityTab } from '@/entities/community';
 
 type Post = CommunityPostsQuery['comments'][number];
 
-export default function CommunityPostCard({ post }: { post: Post }) {
+export default function CommunityPostCard({ post, tab }: { post: Post; tab: CommunityTab }) {
   const isProductComment = !post.title && !!post.productId;
   const hasTaggedProduct = !!post.taggedProduct?.id && post.taggedProduct.id !== '0';
 
   return (
     <Link
-      href={`${PAGE.COMMUNITY}/${post.id}`}
+      href={{ pathname: `${PAGE.COMMUNITY}/${post.id}`, query: { tab } }}
       className="flex flex-col border-b border-gray-100 px-5 py-4 transition-transform hover:bg-gray-50 active:scale-[0.98] active:bg-gray-50"
     >
       {/* 헤더: 유저 정보 */}
@@ -74,37 +77,14 @@ export default function CommunityPostCard({ post }: { post: Post }) {
 
       {/* 통계 */}
       <div className="mt-2 flex items-center gap-x-3 text-xs text-gray-400">
-        {post.likeCount > 0 && (
-          <span className="flex items-center gap-x-0.5">
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.3"
-            >
-              <path d="M6 10.5S1 7.5 1 4a2.5 2.5 0 0 1 5-0c0 0 0 0 0 0a2.5 2.5 0 0 1 5 0c0 3.5-5 6.5-5 6.5z" />
-            </svg>
-            {post.likeCount}
-          </span>
-        )}
-        {post.viewCount > 0 && (
-          <span className="flex items-center gap-x-0.5">
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.3"
-            >
-              <ellipse cx="6" cy="6" rx="5" ry="3.5" />
-              <circle cx="6" cy="6" r="1.5" fill="currentColor" stroke="none" />
-            </svg>
-            {post.viewCount}
-          </span>
-        )}
+        <span className="flex items-center gap-x-1">
+          <ThumbsupFill className="h-3.5 w-3.5" aria-hidden />
+          {post.likeCount}
+        </span>
+        <span className="flex items-center gap-x-1">
+          <Eye className="h-3.5 w-3.5" width={14} height={14} aria-hidden />
+          {post.viewCount}
+        </span>
       </div>
     </Link>
   );

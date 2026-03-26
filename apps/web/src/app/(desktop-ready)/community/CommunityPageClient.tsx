@@ -1,6 +1,7 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { useQueryState } from 'nuqs';
+import { Suspense } from 'react';
 
 function CommunityListSkeleton() {
   return (
@@ -41,7 +42,16 @@ import { CommunityTab } from '@/entities/community';
 import { CommunityList, TabBar } from '@/features/community';
 
 export default function CommunityPageClient({ isUserLogin }: { isUserLogin?: boolean }) {
-  const [tab, setTab] = useState<CommunityTab>('all');
+  const [tab, setTab] = useQueryState<CommunityTab>('tab', {
+    defaultValue: 'all',
+    parse: (value) => {
+      if (value === 'all' || value === 'trending' || value === 'notice') return value;
+      return 'all';
+    },
+    serialize: String,
+    history: 'push',
+    clearOnDefault: false,
+  });
 
   return (
     <div>

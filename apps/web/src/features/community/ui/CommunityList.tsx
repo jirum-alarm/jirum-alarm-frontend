@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 import { PAGE } from '@/shared/config/page';
 
@@ -18,6 +19,43 @@ export default function CommunityList({ tab }: { tab: CommunityTab }) {
   const isUserLogin = !!authData?.me;
   const { posts, ref, isFetchingNextPage } = useCommunityViewModel(tab);
 
+  useEffect(() => {
+    const scrollKey = `community:scroll:${tab}`;
+    const savedScrollY = sessionStorage.getItem(scrollKey);
+
+    if (savedScrollY) {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, Number(savedScrollY));
+      });
+    }
+
+    let isTicking = false;
+
+    const saveScrollPosition = () => {
+      sessionStorage.setItem(scrollKey, String(window.scrollY));
+      isTicking = false;
+    };
+
+    const handleScroll = () => {
+      if (isTicking) return;
+      isTicking = true;
+      requestAnimationFrame(saveScrollPosition);
+    };
+
+    const handlePageHide = () => {
+      sessionStorage.setItem(scrollKey, String(window.scrollY));
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('pagehide', handlePageHide);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('pagehide', handlePageHide);
+      sessionStorage.setItem(scrollKey, String(window.scrollY));
+    };
+  }, [tab]);
+
   if (posts.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center py-20 text-gray-400">
@@ -31,9 +69,9 @@ export default function CommunityList({ tab }: { tab: CommunityTab }) {
       {posts.map((post, i) => {
         if (tab === 'notice') {
           const isNew = i === 0;
-          return <NoticePostCard key={post.id} post={post} isNew={isNew} />;
+          return <NoticePostCard key={post.id} post={post} isNew={isNew} tab={tab} />;
         }
-        return <CommunityPostCard key={post.id} post={post} />;
+        return <CommunityPostCard key={post.id} post={post} tab={tab} />;
       })}
 
       {/* 무한 스크롤 트리거 */}

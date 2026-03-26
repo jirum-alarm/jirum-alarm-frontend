@@ -79,8 +79,8 @@ const BottomNavList = [
 const BottomNavComponent = () => {
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
-  const scrollVisibility = useHeaderVisibility();
-  const isBottomNavVisible = pathName === PAGE.HOME ? true : scrollVisibility;
+  useHeaderVisibility();
+  const isBottomNavVisible = true;
 
   const isActiveNav = (nav: (typeof BottomNavList)[number]) => {
     return nav.isActive(pathName);
@@ -96,7 +96,9 @@ const BottomNavComponent = () => {
         },
       )}
     >
-      <TopButton />
+      <TopButton
+        className={pathName.startsWith(PAGE.COMMUNITY) ? '-top-[108px] right-5' : undefined}
+      />
       <ul className="flex items-center justify-around" ref={navRef}>
         {BottomNavList.map((nav, i) => (
           <li key={i} className="flex flex-1 items-center justify-center">
