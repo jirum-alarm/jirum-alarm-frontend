@@ -67,6 +67,7 @@ const HotdealScore = ({ productId }: { productId: number }) => {
                 maxValue={hotDealIndex.highestPrice}
                 minValue={hotDealIndex.lowestPrice}
                 currentValue={hotDealIndex.currentPrice}
+                visualConfig={hotDealIndex.visualConfig}
               />
             </div>
           </div>
@@ -78,15 +79,38 @@ const HotdealScore = ({ productId }: { productId: number }) => {
 
 export default HotdealScore;
 
+type VisualConfig =
+  | {
+      markerPct: number;
+      q1Pct: number;
+      q3Pct: number;
+      medianPct: number;
+      isClustered: boolean;
+    }
+  | null
+  | undefined;
+
 type HotdealScoreBarType = {
   maxValue: number;
   minValue: number;
   currentValue: number;
+  visualConfig?: VisualConfig;
 };
-const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarType) => {
+
+const HotdealScoreBar = ({
+  maxValue,
+  minValue,
+  currentValue,
+  visualConfig,
+}: HotdealScoreBarType) => {
   const controls = useAnimation();
   const ref = useRef<HTMLDivElement>(null);
-  const percentage = ((currentValue - minValue) / (maxValue - minValue)) * 100;
+
+  // visualConfig가 있으면 미리 계산된 % 사용, 없으면 raw 값으로 폴백
+  const percentage = visualConfig
+    ? visualConfig.markerPct
+    : ((currentValue - minValue) / (maxValue - minValue)) * 100;
+
   const iconWidth = 18;
 
   useEffect(() => {
@@ -121,6 +145,26 @@ const HotdealScoreBar = ({ maxValue, minValue, currentValue }: HotdealScoreBarTy
           {Array.from({ length: 5 }).map((_, index) => (
             <div key={index} className="h-[4px] w-[4px] rounded-full bg-gray-400" />
           ))}
+          {/* Q1~Q3 밀집 구간 오버레이 */}
+          {visualConfig && (
+            <div
+              className={cn(
+                'absolute h-full rounded-xl',
+                visualConfig.isClustered ? 'bg-primary-400/80' : 'bg-primary-400/50',
+              )}
+              style={{
+                left: `${visualConfig.q1Pct}%`,
+                width: `${Math.max(visualConfig.q3Pct - visualConfig.q1Pct, 0)}%`,
+              }}
+            />
+          )}
+          {/* median 마커 */}
+          {visualConfig && (
+            <div
+              className="bg-primary-600/60 absolute h-full w-[2px]"
+              style={{ left: `${visualConfig.medianPct}%` }}
+            />
+          )}
           <motion.div
             initial={{ left: '0%' }}
             animate={controls}

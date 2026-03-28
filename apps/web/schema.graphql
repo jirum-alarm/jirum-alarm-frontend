@@ -795,6 +795,14 @@ type ProductGuide {
   title: String!
 }
 
+type PriceVisualConfig {
+  isClustered: Boolean!
+  markerPct: Float!
+  medianPct: Float!
+  q1Pct: Float!
+  q3Pct: Float!
+}
+
 type ProductHotDealIndex {
   confidence: String
   currentPrice: Float!
@@ -806,6 +814,7 @@ type ProductHotDealIndex {
   message: String!
   productId: Int!
   score: Int
+  visualConfig: PriceVisualConfig
 }
 
 type ProductMapping {

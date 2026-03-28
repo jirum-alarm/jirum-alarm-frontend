@@ -930,6 +930,15 @@ export type ProductGuide = {
   title: Scalars['String']['output'];
 };
 
+export type PriceVisualConfig = {
+  __typename?: 'PriceVisualConfig';
+  isClustered: Scalars['Boolean']['output'];
+  markerPct: Scalars['Float']['output'];
+  medianPct: Scalars['Float']['output'];
+  q1Pct: Scalars['Float']['output'];
+  q3Pct: Scalars['Float']['output'];
+};
+
 export type ProductHotDealIndex = {
   __typename?: 'ProductHotDealIndex';
   confidence?: Maybe<Scalars['String']['output']>;
@@ -942,6 +951,7 @@ export type ProductHotDealIndex = {
   message: Scalars['String']['output'];
   productId: Scalars['Int']['output'];
   score?: Maybe<Scalars['Int']['output']>;
+  visualConfig?: Maybe<PriceVisualConfig>;
 };
 
 export type ProductMapping = {
@@ -2273,6 +2283,14 @@ export type ProductQuery = {
       highestPrice: number;
       currentPrice: number;
       lowestPrice: number;
+      visualConfig?: {
+        __typename?: 'PriceVisualConfig';
+        markerPct: number;
+        q1Pct: number;
+        q3Pct: number;
+        medianPct: number;
+        isClustered: boolean;
+      } | null;
     } | null;
   } | null;
 };
@@ -2306,6 +2324,14 @@ export type ProductAdditionalInfoFragment = {
     highestPrice: number;
     currentPrice: number;
     lowestPrice: number;
+    visualConfig?: {
+      __typename?: 'PriceVisualConfig';
+      markerPct: number;
+      q1Pct: number;
+      q3Pct: number;
+      medianPct: number;
+      isClustered: boolean;
+    } | null;
   } | null;
   commentSummary?: {
     __typename?: 'ProductCommentSummary';

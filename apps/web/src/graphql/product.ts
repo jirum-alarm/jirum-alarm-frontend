@@ -45,6 +45,13 @@ export const QueryProduct = gql`
         highestPrice
         currentPrice
         lowestPrice
+        visualConfig {
+          markerPct
+          q1Pct
+          q3Pct
+          medianPct
+          isClustered
+        }
       }
       isMyLike
       isMyReported
@@ -82,6 +89,13 @@ export const QueryProductAdditionalInfo = gql`
       highestPrice
       currentPrice
       lowestPrice
+      visualConfig {
+        markerPct
+        q1Pct
+        q3Pct
+        medianPct
+        isClustered
+      }
     }
     commentSummary {
       additionalInfo
