@@ -41,7 +41,17 @@ import { CommunityTab } from '@/entities/community';
 
 import { CommunityList, TabBar } from '@/features/community';
 
-export default function CommunityPageClient({ isUserLogin }: { isUserLogin?: boolean }) {
+interface Props {
+  isUserLogin?: boolean;
+  insertAfterIndex?: number;
+  insertContent?: React.ReactNode;
+}
+
+export default function CommunityPageClient({
+  isUserLogin,
+  insertAfterIndex,
+  insertContent,
+}: Props) {
   const [tab, setTab] = useQueryState<CommunityTab>('tab', {
     defaultValue: 'all',
     parse: (value) => {
@@ -68,7 +78,11 @@ export default function CommunityPageClient({ isUserLogin }: { isUserLogin?: boo
         )}
       </div>
       <Suspense fallback={<CommunityListSkeleton />}>
-        <CommunityList tab={tab} />
+        <CommunityList
+          tab={tab}
+          insertAfterIndex={insertAfterIndex}
+          insertContent={insertContent}
+        />
       </Suspense>
     </div>
   );

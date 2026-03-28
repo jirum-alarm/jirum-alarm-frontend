@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 
 import { PAGE } from '@/shared/config/page';
 
@@ -14,7 +14,13 @@ import useCommunityViewModel from '../model/useCommunityViewModel';
 import CommunityPostCard from './CommunityPostCard';
 import NoticePostCard from './NoticePostCard';
 
-export default function CommunityList({ tab }: { tab: CommunityTab }) {
+interface Props {
+  tab: CommunityTab;
+  insertAfterIndex?: number;
+  insertContent?: React.ReactNode;
+}
+
+export default function CommunityList({ tab, insertAfterIndex, insertContent }: Props) {
   const { data: authData } = useQuery(AuthQueries.me());
   const isUserLogin = !!authData?.me;
   const { posts, ref, isFetchingNextPage } = useCommunityViewModel(tab);
@@ -66,13 +72,26 @@ export default function CommunityList({ tab }: { tab: CommunityTab }) {
 
   return (
     <div className="relative flex flex-col">
-      {posts.map((post, i) => {
-        if (tab === 'notice') {
-          const isNew = i === 0;
-          return <NoticePostCard key={post.id} post={post} isNew={isNew} tab={tab} />;
-        }
-        return <CommunityPostCard key={post.id} post={post} tab={tab} />;
-      })}
+      <div className="grid grid-cols-1 items-start md:grid-cols-2">
+        {posts.map((post, i) => {
+          const card =
+            tab === 'notice' ? (
+              <NoticePostCard key={post.id} post={post} isNew={i === 0} tab={tab} />
+            ) : (
+              <CommunityPostCard key={post.id} post={post} tab={tab} />
+            );
+
+          if (insertContent && insertAfterIndex !== undefined && i === insertAfterIndex) {
+            return (
+              <Fragment key={post.id}>
+                {card}
+                <div className="col-span-full">{insertContent}</div>
+              </Fragment>
+            );
+          }
+          return card;
+        })}
+      </div>
 
       {/* 무한 스크롤 트리거 */}
       <div ref={ref} className="h-1" />
@@ -86,7 +105,8 @@ export default function CommunityList({ tab }: { tab: CommunityTab }) {
       {isUserLogin && (
         <Link
           href={PAGE.COMMUNITY_WRITE}
-          className="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 fixed right-5 bottom-20 z-50 flex items-center gap-x-1.5 rounded-full px-4 py-3 text-sm font-semibold text-white shadow-lg transition-transform active:scale-95 md:hidden"
+          className="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 fixed right-5 z-50 flex items-center gap-x-1.5 rounded-full px-4 py-3 text-sm font-semibold text-white shadow-lg transition-transform active:scale-95 md:hidden"
+          style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom))' }}
         >
           <span className="text-lg leading-none">+</span>
           <span>글쓰기</span>

@@ -2,7 +2,7 @@
 
 import { atom, useAtom } from 'jotai';
 import dynamic from 'next/dynamic';
-import { Fragment, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { Autoplay } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 import { AutoplayOptions, SwiperOptions } from 'swiper/types';
@@ -41,6 +41,14 @@ const BannerSwiper = () => {
   const initialSlide = 0; //Math.floor(Math.random() * 3);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [isInit, setIsInit] = useAtom(isInitAtom);
+
+  // 재방문 시 Swiper 미초기화 상태에서 표시되는 것을 방지
+  useEffect(() => {
+    setIsInit(false);
+    return () => {
+      setIsInit(false);
+    };
+  }, [setIsInit]);
 
   const canRenderAppDownload = isHydrated && type && link;
 
@@ -133,41 +141,43 @@ const BannerSwiper = () => {
         </div>
       )}
 
-      {/* Swiper: 클라이언트에서 초기화 후 표시 */}
-      <div
-        className={cn(
-          'transition-opacity duration-300',
-          isInit ? 'opacity-100' : 'absolute inset-0 opacity-0',
-        )}
-      >
-        <Swiper
-          className={cn('flex w-full')}
-          modules={[Autoplay]}
-          {...MOBILE_SWIPER_OPTIONS}
-          initialSlide={initialSlide}
-          onAfterInit={() => {
-            setIsInit(true);
-          }}
-          onAutoplayTimeLeft={(_, __, progress) => {
-            if (progressBarRef.current) {
-              progressBarRef.current.style.setProperty('--progress', `${1 - progress}`);
-            }
-          }}
+      {/* Swiper: hydration 완료 후에만 마운트하여 슬라이드 수 변경 방지 */}
+      {isHydrated && (
+        <div
+          className={cn(
+            'transition-opacity duration-300',
+            isInit ? 'opacity-100' : 'absolute inset-0 opacity-0',
+          )}
         >
-          {renderBanners()}
-        </Swiper>
-        <div className="absolute top-2 right-10 z-10 h-1 w-8">
-          <div className="h-full w-full overflow-hidden rounded-full bg-white/20">
-            <div
-              className="h-full bg-white"
-              style={{
-                width: `calc(100% * var(--progress))`,
-              }}
-              ref={progressBarRef}
-            />
+          <Swiper
+            className={cn('flex w-full')}
+            modules={[Autoplay]}
+            {...MOBILE_SWIPER_OPTIONS}
+            initialSlide={initialSlide}
+            onAfterInit={() => {
+              setIsInit(true);
+            }}
+            onAutoplayTimeLeft={(_, __, progress) => {
+              if (progressBarRef.current) {
+                progressBarRef.current.style.setProperty('--progress', `${1 - progress}`);
+              }
+            }}
+          >
+            {renderBanners()}
+          </Swiper>
+          <div className="absolute top-2 right-10 z-10 h-1 w-8">
+            <div className="h-full w-full overflow-hidden rounded-full bg-white/20">
+              <div
+                className="h-full bg-white"
+                style={{
+                  width: `calc(100% * var(--progress))`,
+                }}
+                ref={progressBarRef}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

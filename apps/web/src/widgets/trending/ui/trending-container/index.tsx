@@ -15,6 +15,9 @@ import {
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
+import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
+import { cn } from '@/shared/lib/cn';
+
 import { CategoryQueries } from '@/entities/category';
 import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
 
@@ -34,6 +37,7 @@ type Props = {
 
 export const TrendingContainer = ({ initialTab }: Props) => {
   const swiperRef = useRef<SwiperClass>(null);
+  const isHeaderVisible = useHeaderVisibility();
 
   const {
     data: { categories },
@@ -118,7 +122,12 @@ export const TrendingContainer = ({ initialTab }: Props) => {
           onTabClick={(id) => handleTabChange(id)}
         />
 
-        <div className="pc:mt-7 mt-29 overflow-hidden">
+        <div
+          className={cn(
+            'pc:mt-7 overflow-hidden transition-[margin-top] duration-300',
+            isHeaderVisible ? 'mt-[60px]' : 'mt-1',
+          )}
+        >
           <Swiper
             {...SWIPER_OPTIONS}
             initialSlide={categoryIds.indexOf(tabId)}

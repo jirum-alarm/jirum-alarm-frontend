@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { CommunityPostsQuery } from '@/shared/api/community/community.service';
 import { PAGE } from '@/shared/config/page';
 import { displayTime } from '@/shared/lib/utils/displayTime';
-import { Eye, ThumbsupFill } from '@/shared/ui/common/icons';
+import { BubbleChat, Eye, ThumbsupFill } from '@/shared/ui/common/icons';
 
 import { CommunityTab } from '@/entities/community';
 
@@ -50,6 +50,10 @@ export default function NoticePostCard({
         <span className="flex items-center gap-x-1">
           <Eye className="h-3.5 w-3.5" width={14} height={14} aria-hidden />
           {post.viewCount}
+        </span>
+        <span className="flex items-center gap-x-1">
+          <BubbleChat className="h-3.5 w-3.5" aria-hidden />
+          {/* TODO: API 개발 후 실제 댓글 수로 교체 */}0
         </span>
       </div>
     </Link>

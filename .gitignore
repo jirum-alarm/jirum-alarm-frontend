@@ -44,3 +44,4 @@
 .idea
 # Ignore Cursor project files
 .cursor/
+.claude/settings.local.json
