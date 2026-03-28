@@ -23,7 +23,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
       className="flex gap-x-3 border-b border-gray-100 px-5 py-4 transition-transform hover:bg-gray-50 active:scale-[0.98] active:bg-gray-50"
     >
       {/* 왼쪽: 헤더 + 텍스트 + 통계 */}
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-h-20 min-w-0 flex-1 flex-col">
         {/* 헤더: 유저 정보 */}
         <div className="flex items-center gap-x-2">
           {post.isNotice ? (
@@ -71,23 +71,25 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
         </div>
       </div>
 
-      {/* 오른쪽: 이미지 + 상품명 (닉네임과 같은 높이에서 시작) */}
-      {hasTaggedProduct && post.taggedProduct?.thumbnail && (
+      {/* 오른쪽: 이미지 + 상품명 */}
+      {hasTaggedProduct && post.taggedProduct?.thumbnail ? (
         <div className="flex w-20 flex-shrink-0 flex-col gap-y-1">
           <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-gray-100">
             <Image
-              src={post.taggedProduct?.thumbnail}
+              src={post.taggedProduct.thumbnail}
               alt={post.taggedProduct?.title ?? ''}
               fill
               className="object-cover"
               sizes="80px"
             />
           </div>
-          <p className="line-clamp-2 text-xs leading-tight text-gray-400">
-            {post.taggedProduct?.title}
-          </p>
+          {post.taggedProduct?.title && (
+            <p className="line-clamp-2 text-xs leading-tight text-gray-400">
+              {post.taggedProduct.title}
+            </p>
+          )}
         </div>
-      )}
+      ) : null}
     </Link>
   );
 }

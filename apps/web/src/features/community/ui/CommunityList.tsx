@@ -72,7 +72,7 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
 
   return (
     <div className="relative flex flex-col">
-      <div className="grid grid-cols-1 items-start md:grid-cols-2">
+      <div className="grid grid-cols-1 md:grid-cols-2">
         {posts.map((post, i) => {
           const card =
             tab === 'notice' ? (
