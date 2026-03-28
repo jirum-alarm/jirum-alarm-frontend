@@ -2745,6 +2745,13 @@ export const ProductAdditionalInfoFragmentDoc = new TypedDocumentString(
     highestPrice
     currentPrice
     lowestPrice
+    visualConfig {
+      markerPct
+      q1Pct
+      q3Pct
+      medianPct
+      isClustered
+    }
   }
   commentSummary {
     additionalInfo
@@ -3260,6 +3267,13 @@ export const ProductAdditionalInfoDocument = new TypedDocumentString(`
     highestPrice
     currentPrice
     lowestPrice
+    visualConfig {
+      markerPct
+      q1Pct
+      q3Pct
+      medianPct
+      isClustered
+    }
   }
   commentSummary {
     additionalInfo

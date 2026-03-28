@@ -4,7 +4,6 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion, useAnimation } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
-import { useIsHydrated } from '@/shared/hooks/useIsHydrated';
 import { cn } from '@/shared/lib/cn';
 import { Info } from '@/shared/ui/common/icons';
 import Tooltip from '@/shared/ui/common/Tooltip';
@@ -13,8 +12,6 @@ import HotdealBadge from '@/shared/ui/HotdealBadge';
 import { ProductQueries } from '@/entities/product';
 
 const HotdealScore = ({ productId }: { productId: number }) => {
-  const isHydrated = useIsHydrated();
-
   const { data: product } = useSuspenseQuery(
     ProductQueries.productAdditionalInfo({ id: productId }),
   );
@@ -138,33 +135,30 @@ const HotdealScoreBar = ({
     };
   }, [controls, percentage]);
 
+  const barStyle = visualConfig
+    ? {
+        background: `linear-gradient(to right,
+          #E4E7EC 0%,
+          #FFC39C calc(${visualConfig.q1Pct}% * 0.33),
+          #FF9651 calc(${visualConfig.q1Pct}% * 0.66),
+          #FF594D ${visualConfig.q1Pct}%,
+          #FF594D ${visualConfig.q3Pct}%,
+          #FF9651 calc(${visualConfig.q3Pct}% + (100% - ${visualConfig.q3Pct}%) * 0.33),
+          #FFC39C calc(${visualConfig.q3Pct}% + (100% - ${visualConfig.q3Pct}%) * 0.66),
+          #E4E7EC 100%)`,
+      }
+    : undefined;
+
   return (
     <div ref={ref} className="flex h-[83px] w-full flex-col justify-end">
       <div className="w-full gap-[8px]">
-        <div className="relative flex h-[14px] w-full items-center justify-between rounded-xl bg-gray-300 p-[5px]">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <div key={index} className="h-[4px] w-[4px] rounded-full bg-gray-400" />
-          ))}
-          {/* Q1~Q3 밀집 구간 오버레이 */}
-          {visualConfig && (
-            <div
-              className={cn(
-                'absolute h-full rounded-xl',
-                visualConfig.isClustered ? 'bg-primary-400/80' : 'bg-primary-400/50',
-              )}
-              style={{
-                left: `${visualConfig.q1Pct}%`,
-                width: `${Math.max(visualConfig.q3Pct - visualConfig.q1Pct, 0)}%`,
-              }}
-            />
+        <div
+          className={cn(
+            'relative flex h-[14px] w-full items-center justify-between rounded-xl p-[5px]',
+            !visualConfig && 'bg-gray-300',
           )}
-          {/* median 마커 */}
-          {visualConfig && (
-            <div
-              className="bg-primary-600/60 absolute h-full w-[2px]"
-              style={{ left: `${visualConfig.medianPct}%` }}
-            />
-          )}
+          style={barStyle}
+        >
           <motion.div
             initial={{ left: '0%' }}
             animate={controls}
