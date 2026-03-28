@@ -62,17 +62,36 @@ export type AdminUser = {
   name: Scalars['String']['output'];
 };
 
+export type AgeGroupCountOutput = {
+  __typename?: 'AgeGroupCountOutput';
+  /** 연령대 (예: 10대, 20대, 30대, 미설정) */
+  ageGroup: Scalars['String']['output'];
+  count: Scalars['Int']['output'];
+};
+
 export type ApiQuery = {
   __typename?: 'ApiQuery';
-  dependsOn?: Maybe<Scalars['String']['output']>;
-  query: Scalars['String']['output'];
+  queryName: Scalars['String']['output'];
+  type: DataSourceType;
   variables?: Maybe<Scalars['JSONObject']['output']>;
 };
 
 export type BaseSection = {
-  cta?: Maybe<Cta>;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
   title: Scalars['String']['output'];
-  type: Scalars['ID']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
+
+export type BrandItemMatchCountOutput = {
+  __typename?: 'BrandItemMatchCountOutput';
+  brandName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  pendingVerificationCount: Scalars['Int']['output'];
+  productName: Scalars['String']['output'];
+  searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  totalMatchCount: Scalars['Int']['output'];
 };
 
 export type BrandProductMatchCountOutput = {
@@ -110,6 +129,13 @@ export type Category = {
   name: Scalars['String']['output'];
 };
 
+export type CategoryCountOutput = {
+  __typename?: 'CategoryCountOutput';
+  categoryId: Scalars['Int']['output'];
+  categoryName: Scalars['String']['output'];
+  count: Scalars['Int']['output'];
+};
+
 export enum CommentOrder {
   Id = 'ID',
 }
@@ -126,19 +152,15 @@ export type CommentOutput = {
   isNotice: Scalars['Boolean']['output'];
   likeCount: Scalars['Int']['output'];
   parentId?: Maybe<Scalars['Float']['output']>;
-  productId: Scalars['Int']['output'];
+  productId?: Maybe<Scalars['Int']['output']>;
+  /** 댓글에 달린 대댓글 수 */
+  replyCount: Scalars['Int']['output'];
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
-  taggedProduct: ProductOutput;
+  taggedProduct?: Maybe<ProductOutput>;
   title?: Maybe<Scalars['String']['output']>;
   trendedAt?: Maybe<Scalars['DateTime']['output']>;
   userId: Scalars['Float']['output'];
   viewCount: Scalars['Int']['output'];
-};
-
-export type Cta = {
-  __typename?: 'Cta';
-  label: Scalars['String']['output'];
-  url: Scalars['String']['output'];
 };
 
 export enum CurrencyType {
@@ -157,6 +179,26 @@ export type DanawaProductOutput = {
   volume?: Maybe<Scalars['String']['output']>;
 };
 
+export enum DataSourceType {
+  GraphqlQuery = 'GRAPHQL_QUERY',
+}
+
+export type DateCountOutput = {
+  __typename?: 'DateCountOutput';
+  count: Scalars['Int']['output'];
+  date: Scalars['String']['output'];
+};
+
+/** 날짜 간격 */
+export enum DateInterval {
+  /** 일별 */
+  Daily = 'DAILY',
+  /** 월별 */
+  Monthly = 'MONTHLY',
+  /** 주별 */
+  Weekly = 'WEEKLY',
+}
+
 export type ExistsUserOutput = {
   __typename?: 'ExistsUserOutput';
   email: Scalars['Boolean']['output'];
@@ -168,31 +210,41 @@ export enum Gender {
   Male = 'MALE',
 }
 
-export type HomeHotDealSection = BaseSection & {
-  __typename?: 'HomeHotDealSection';
-  cta?: Maybe<Cta>;
-  dataSources: Array<ApiQuery>;
-  displayType: Scalars['String']['output'];
-  title: Scalars['String']['output'];
-  type: Scalars['ID']['output'];
+export type GenderCountOutput = {
+  __typename?: 'GenderCountOutput';
+  count: Scalars['Int']['output'];
+  gender?: Maybe<Gender>;
 };
 
-export type HomeRankingSection = BaseSection & {
-  __typename?: 'HomeRankingSection';
-  cta?: Maybe<Cta>;
-  dataSources: Array<ApiQuery>;
-  displayType: Scalars['String']['output'];
+export type GridTabbedSection = BaseSection & {
+  __typename?: 'GridTabbedSection';
+  dataSource: ApiQuery;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  tabs: Array<LayoutTab>;
   title: Scalars['String']['output'];
-  type: Scalars['ID']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
-export type HomeRecommendationSection = BaseSection & {
-  __typename?: 'HomeRecommendationSection';
-  cta?: Maybe<Cta>;
-  dataSources: Array<ApiQuery>;
-  displayType: Scalars['String']['output'];
+export type GroupSection = BaseSection & {
+  __typename?: 'GroupSection';
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  sections: Array<BaseSection>;
   title: Scalars['String']['output'];
-  type: Scalars['ID']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
+
+export type HorizontalScrollSection = BaseSection & {
+  __typename?: 'HorizontalScrollSection';
+  dataSource: ApiQuery;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
 export enum HotDealExcludeKeywordOrderType {
@@ -246,6 +298,14 @@ export enum HotDealKeywordType {
   Synonym = 'SYNONYM',
 }
 
+export type HotDealRatioOutput = {
+  __typename?: 'HotDealRatioOutput';
+  date: Scalars['String']['output'];
+  hotDealCount: Scalars['Int']['output'];
+  ratio: Scalars['Float']['output'];
+  totalCount: Scalars['Int']['output'];
+};
+
 /** 핫딜 타입 */
 export enum HotDealType {
   /** 핫딜 */
@@ -256,25 +316,60 @@ export enum HotDealType {
   UltraDeal = 'ULTRA_DEAL',
 }
 
-export type InstagramPost = {
-  __typename?: 'InstagramPost';
-  content: Scalars['String']['output'];
-  dagDefinition: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  reservedAt: Scalars['DateTime']['output'];
-  thumbnail: Scalars['String']['output'];
-  type: InstagramPostType;
+export type HotDealTypeCountOutput = {
+  __typename?: 'HotDealTypeCountOutput';
+  count: Scalars['Int']['output'];
+  hotDealType: HotDealType;
 };
 
-export enum InstagramPostType {
-  Normal = 'NORMAL',
+export type KeywordCountOutput = {
+  __typename?: 'KeywordCountOutput';
+  count: Scalars['Int']['output'];
+  keyword: Scalars['String']['output'];
+};
+
+export type KeywordMapEntry = {
+  __typename?: 'KeywordMapEntry';
+  groupId: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  keyword: Scalars['String']['output'];
+};
+
+export enum KeywordMapGroupOrderType {
+  Id = 'ID',
+  Name = 'NAME',
 }
 
-export type ItemUnion = HomeHotDealSection | HomeRankingSection | HomeRecommendationSection;
+export type KeywordMapGroupOutput = {
+  __typename?: 'KeywordMapGroupOutput';
+  description?: Maybe<Scalars['String']['output']>;
+  entries: Array<KeywordMapEntry>;
+  entryCount: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+};
 
 export enum KeywordProductOrderType {
   PostedAt = 'POSTED_AT',
 }
+
+export type LayoutTab = {
+  __typename?: 'LayoutTab';
+  id: Scalars['ID']['output'];
+  label: Scalars['String']['output'];
+  variables?: Maybe<Scalars['JSONObject']['output']>;
+};
+
+export type ListSection = BaseSection & {
+  __typename?: 'ListSection';
+  dataSource: ApiQuery;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
 
 export type MallGroup = {
   __typename?: 'MallGroup';
@@ -286,6 +381,36 @@ export type MallGroup = {
   title: Scalars['String']['output'];
 };
 
+export type MatchRun = {
+  __typename?: 'MatchRun';
+  createdAt: Scalars['DateTime']['output'];
+  errorMessage?: Maybe<Scalars['String']['output']>;
+  finishedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  productId: Scalars['Int']['output'];
+  /** 최종 선택된 다나와 pcode */
+  selectedPcode?: Maybe<Scalars['String']['output']>;
+  startedAt?: Maybe<Scalars['DateTime']['output']>;
+  status: MatchRunStatus;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export enum MatchRunStatus {
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Running = 'RUNNING',
+  Skipped = 'SKIPPED',
+  Success = 'SUCCESS',
+}
+
+export type MatchRunsByAdminOutput = {
+  __typename?: 'MatchRunsByAdminOutput';
+  /** 매칭 실행 목록 */
+  runs: Array<MatchRun>;
+  /** 전체 개수(페이징용) */
+  total: Scalars['Int']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addComment: Scalars['Boolean']['output'];
@@ -295,6 +420,12 @@ export type Mutation = {
   addHotDealKeywordByAdmin: Scalars['Int']['output'];
   /** 어드민) 핫딜 유의어 추가 */
   addHotDealKeywordSynonymByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 맵 엔트리 벌크 추가 */
+  addKeywordMapEntriesByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 맵 엔트리 추가 */
+  addKeywordMapEntryByAdmin: Scalars['Int']['output'];
+  /** 어드민) 키워드 맵 그룹 추가 */
+  addKeywordMapGroupByAdmin: Scalars['Int']['output'];
   /** 알림 키워드 추가 */
   addNotificationKeyword: Scalars['Boolean']['output'];
   /** 비회원 푸시 */
@@ -345,6 +476,10 @@ export type Mutation = {
   removeHotDealKeywordByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 유의어 제거 */
   removeHotDealKeywordSynonymByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 맵 엔트리 삭제 */
+  removeKeywordMapEntryByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 맵 그룹 삭제 */
+  removeKeywordMapGroupByAdmin: Scalars['Boolean']['output'];
   /** 단일 알림 삭제 */
   removeNotification: Scalars['Boolean']['output'];
   /** 알림 키워드 제거 */
@@ -356,8 +491,8 @@ export type Mutation = {
   removeWishlist: Scalars['Boolean']['output'];
   /** 종료된 상품 제보 */
   reportExpiredProduct: Scalars['Boolean']['output'];
-  /** 인스타그램 게시글 예약 */
-  reserveInstagramPost: Scalars['Boolean']['output'];
+  /** 어드민) 알림 발송 */
+  sendNotificationByAdmin: Scalars['Boolean']['output'];
   /** 회원가입 */
   signup: SignupOutput;
   /** 소셜 로그인 */
@@ -368,6 +503,8 @@ export type Mutation = {
   updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 맵 그룹 수정 */
+  updateKeywordMapGroupByAdmin: Scalars['Boolean']['output'];
   /** 알림 키워드 상태 수정 */
   updateNotificationKeywordStatus: Scalars['Boolean']['output'];
   /** 비밀번호 업데이트 */
@@ -376,8 +513,6 @@ export type Mutation = {
   updatePushSetting: Scalars['Boolean']['output'];
   /** 유저 프로필 수정 */
   updateUserProfile: Scalars['Boolean']['output'];
-  /** 인스타그램 게시글 업로드 */
-  uploadInstagramPost: Scalars['String']['output'];
   /** 매핑 검증 수행 (승인 또는 거부) */
   verifyProductMapping: Scalars['Boolean']['output'];
   /** 회원 탈퇴 */
@@ -407,6 +542,21 @@ export type MutationAddHotDealKeywordByAdminArgs = {
 export type MutationAddHotDealKeywordSynonymByAdminArgs = {
   hotDealKeywordId: Scalars['Int']['input'];
   keywords: Array<Scalars['String']['input']>;
+};
+
+export type MutationAddKeywordMapEntriesByAdminArgs = {
+  groupId: Scalars['Int']['input'];
+  keywords: Array<Scalars['String']['input']>;
+};
+
+export type MutationAddKeywordMapEntryByAdminArgs = {
+  groupId: Scalars['Int']['input'];
+  keyword: Scalars['String']['input'];
+};
+
+export type MutationAddKeywordMapGroupByAdminArgs = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
 };
 
 export type MutationAddNotificationKeywordArgs = {
@@ -542,6 +692,14 @@ export type MutationRemoveHotDealKeywordSynonymByAdminArgs = {
   ids: Array<Scalars['Int']['input']>;
 };
 
+export type MutationRemoveKeywordMapEntryByAdminArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type MutationRemoveKeywordMapGroupByAdminArgs = {
+  id: Scalars['Int']['input'];
+};
+
 export type MutationRemoveNotificationArgs = {
   id: Scalars['Int']['input'];
 };
@@ -566,8 +724,14 @@ export type MutationReportExpiredProductArgs = {
   productId: Scalars['Int']['input'];
 };
 
-export type MutationReserveInstagramPostArgs = {
-  id: Scalars['Int']['input'];
+export type MutationSendNotificationByAdminArgs = {
+  message: Scalars['String']['input'];
+  target?: InputMaybe<NotificationTarget>;
+  targetId?: InputMaybe<Scalars['Int']['input']>;
+  title: Scalars['String']['input'];
+  type: NotificationType;
+  url?: InputMaybe<Scalars['String']['input']>;
+  userIds?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
 export type MutationSignupArgs = {
@@ -611,8 +775,9 @@ export type MutationUpdateAdArgs = {
 };
 
 export type MutationUpdateCommentArgs = {
-  content: Scalars['String']['input'];
+  content?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['Int']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationUpdateHotDealKeywordByAdminArgs = {
@@ -620,6 +785,12 @@ export type MutationUpdateHotDealKeywordByAdminArgs = {
   isMajor?: InputMaybe<Scalars['Boolean']['input']>;
   keyword?: InputMaybe<Scalars['String']['input']>;
   weight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type MutationUpdateKeywordMapGroupByAdminArgs = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationUpdateNotificationKeywordStatusArgs = {
@@ -667,6 +838,17 @@ export type Notification = {
   url?: Maybe<Scalars['String']['output']>;
 };
 
+export type NotificationByAdminOutput = {
+  __typename?: 'NotificationByAdminOutput';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  message: Scalars['String']['output'];
+  searchAfter: Array<Scalars['String']['output']>;
+  target: Scalars['String']['output'];
+  targetId?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+};
+
 export type NotificationKeyword = {
   __typename?: 'NotificationKeyword';
   createdAt: Scalars['DateTime']['output'];
@@ -677,6 +859,7 @@ export type NotificationKeyword = {
 };
 
 export enum NotificationTarget {
+  Comment = 'COMMENT',
   Info = 'INFO',
   Notice = 'NOTICE',
   Product = 'PRODUCT',
@@ -706,10 +889,23 @@ export enum OrderOptionType {
   Desc = 'DESC',
 }
 
-export type PageSchema = {
-  __typename?: 'PageSchema';
-  items: Array<ItemUnion>;
-  schemaVersion: Scalars['String']['output'];
+export type PaginatedGridSection = BaseSection & {
+  __typename?: 'PaginatedGridSection';
+  dataSource: ApiQuery;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
+
+export type PriceRangeCountOutput = {
+  __typename?: 'PriceRangeCountOutput';
+  count: Scalars['Int']['output'];
+  maxPrice: Scalars['Float']['output'];
+  minPrice: Scalars['Float']['output'];
+  /** 가격 구간 라벨 (예: 1만~3만) */
+  priceRange: Scalars['String']['output'];
 };
 
 export type ProductCommentSummary = {
@@ -942,12 +1138,23 @@ export type Provider = {
   nameKr: Scalars['String']['output'];
 };
 
+export type ProviderCountOutput = {
+  __typename?: 'ProviderCountOutput';
+  count: Scalars['Int']['output'];
+  providerId: Scalars['Int']['output'];
+  providerName: Scalars['String']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   adStats: Array<AdStats>;
   adminMe: AdminUser;
   ads: Array<Ad>;
   analysisTitleByDanawa: Scalars['Boolean']['output'];
+  /** BrandItem 단위 매칭된 전체 개수 조회 */
+  brandItemsByMatchCountTotalCount: Scalars['Int']['output'];
+  /** BrandItem 단위 매칭 합산 목록 조회 (커서 기반 페이지네이션) */
+  brandItemsOrderByTotalMatchCount: Array<BrandItemMatchCountOutput>;
   /** 특정 브랜드 상품의 매핑 개수 조회 */
   brandProductMatchCount: Scalars['Int']['output'];
   /** 매칭된 브랜드 상품 전체 개수 조회 */
@@ -964,6 +1171,8 @@ export type Query = {
   communityProviders: Array<Provider>;
   /** 상품 랭킹 랜덤 조회 */
   communityRandomRankingProducts: Array<ProductOutput>;
+  /** 어드민) 일별 서비스 조회수 합계 */
+  dailyServiceViewStats: Array<DateCountOutput>;
   danawaProduct: DanawaProductOutput;
   danawaProducts: Array<DanawaProductOutput>;
   /** 안읽은 알림 존재 여부 조회 */
@@ -981,7 +1190,7 @@ export type Query = {
   getPersonalizedProductsByUserId: Array<RecommendedProductOutput>;
   /** 특정 상품과 유사한 상품 조회 */
   getSimilarProducts: Array<ProductOutput>;
-  homePage: PageSchema;
+  homePage: Array<BaseSection>;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
   /** 어드민) 핫딜 키워드 조회 */
@@ -992,16 +1201,29 @@ export type Query = {
   hotDealKeywordsByAdmin: Array<HotDealKeywordOutput>;
   /** 놓치면 아까운 핫딜 - 랭킹순 핫딜 상품 조회 */
   hotDealRankingProducts: Array<ProductOutput>;
-  instagramPost?: Maybe<InstagramPost>;
+  /** 어드민) 일별 핫딜 비율 추이 */
+  hotDealRatioStats: Array<HotDealRatioOutput>;
+  /** 어드민) 핫딜 유형별 분포 */
+  hotDealTypeDistribution: Array<HotDealTypeCountOutput>;
+  /** 어드민) 키워드 맵 그룹 조회 */
+  keywordMapGroupByAdmin?: Maybe<KeywordMapGroupOutput>;
+  /** 어드민) 키워드 맵 그룹 목록 조회 */
+  keywordMapGroupsByAdmin: Array<KeywordMapGroupOutput>;
   mallGroups: Array<MallGroup>;
+  /** 어드민) 매칭 실행 상세 조회 (스텝 포함) */
+  matchRunByAdmin?: Maybe<MatchRun>;
+  /** 어드민) 매칭 실행 목록 조회 (페이징) */
+  matchRunsByAdmin: MatchRunsByAdminOutput;
   /** 로그인한 유저 정보 조회 */
   me?: Maybe<User>;
   /** 유저 알림 키워드 목록 조회 */
   notificationKeywordsByMe: Array<NotificationKeyword>;
+  /** 어드민) 개별 알림 목록 조회 */
+  notificationListByAdmin: Array<Notification>;
   /** 알림 목록 조회 */
   notifications: Array<Notification>;
-  /** 어드민) 알림 목록 조회 */
-  notificationsByAdmin: Array<Notification>;
+  /** 어드민) 알림 발송 이력 조회 */
+  notificationsByAdmin: Array<NotificationByAdminOutput>;
   /** 검증 대기 중인 매핑 목록 조회 */
   pendingVerifications: Array<ProductMappingOutput>;
   /** 검증 대기 중인 매핑 전체 개수 조회 (필터 적용 가능) */
@@ -1010,14 +1232,24 @@ export type Query = {
   personalizedProducts: Array<RecommendedProductOutput>;
   /** 상품 조회 */
   product?: Maybe<ProductOutput>;
+  /** 어드민) 카테고리별 상품 수 */
+  productCountByCategory: Array<CategoryCountOutput>;
+  /** 어드민) 제공자별 상품 수 */
+  productCountByProvider: Array<ProviderCountOutput>;
   productGuides?: Maybe<Array<ProductGuide>>;
   productKeywords: Array<Scalars['String']['output']>;
+  /** 어드민) 가격대별 상품 분포 */
+  productPriceDistribution: Array<PriceRangeCountOutput>;
+  /** 어드민) 일별 신규 상품 등록 수 */
+  productRegistrationStats: Array<DateCountOutput>;
   /** 상품 목록 조회 */
   products: Array<ProductOutput>;
   /** 키워드로 상품 목록 조회 */
   productsByKeyword: Array<ProductOutput>;
   /** 푸시 세팅 조회 */
   pushSetting: UserPushSetting;
+  /** 최근에 본 상품 N개 조회 */
+  recentViewedProducts: Array<ProductOutput>;
   /** 알림 키워드 추천 목록 조회 */
   recommendedNotificationKeywords: Array<Scalars['String']['output']>;
   /** 신고한 사용자 목록 조회 (마스킹) */
@@ -1035,12 +1267,26 @@ export type Query = {
   test8: Scalars['Boolean']['output'];
   /** 같이 본 상품 목록 조회 */
   togetherViewedProducts: Array<ProductOutput>;
+  /** 어드민) 인기 관심 카테고리 TOP N */
+  topFavoriteCategories: Array<CategoryCountOutput>;
+  /** 어드민) 알림 키워드 TOP N */
+  topNotificationKeywords: Array<KeywordCountOutput>;
   /** 안읽은 알림 수 목록 조회 */
   unreadNotificationsCount: Scalars['Int']['output'];
   /** 유저 조회 */
   user: User;
+  /** 어드민) 사용자 상세 조회 */
+  userByAdmin: User;
   /** 이메일로 유저 조회 */
   userByEmail: User;
+  /** 어드민) 성별/연령대 분포 */
+  userDemographicStats: UserDemographicStatsOutput;
+  /** 어드민) 일별/주별/월별 가입자 수 추이 */
+  userRegistrationStats: Array<DateCountOutput>;
+  /** 어드민) 사용자 목록 조회 */
+  usersByAdmin: Array<UserByAdminOutput>;
+  /** 어드민) 사용자 총 인원수 조회 */
+  usersTotalCountByAdmin: Scalars['Int']['output'];
   /** 검증 완료/거부된 매핑 목록 조회 */
   verificationHistory: Array<ProductMappingOutput>;
   /** 검증 통계 조회 (대기/완료/거부 개수) */
@@ -1059,6 +1305,16 @@ export type QueryAdStatsArgs = {
 
 export type QueryAdsArgs = {
   slots: Array<AdSlotType>;
+};
+
+export type QueryBrandItemsByMatchCountTotalCountArgs = {
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryBrandItemsOrderByTotalMatchCountArgs = {
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryBrandProductMatchCountArgs = {
@@ -1091,6 +1347,7 @@ export type QueryCommentsArgs = {
   limit: Scalars['Int']['input'];
   orderBy: CommentOrder;
   orderOption: OrderOptionType;
+  parentId?: InputMaybe<Scalars['Int']['input']>;
   productId?: InputMaybe<Scalars['Int']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
@@ -1108,6 +1365,12 @@ export type QueryCommunityRandomRankingProductsArgs = {
   isGame?: InputMaybe<Scalars['Boolean']['input']>;
   isReward?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+};
+
+export type QueryDailyServiceViewStatsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
 };
 
 export type QueryDanawaProductArgs = {
@@ -1154,10 +1417,6 @@ export type QueryGetSimilarProductsArgs = {
   productId: Scalars['Int']['input'];
 };
 
-export type QueryHomePageArgs = {
-  version: Scalars['String']['input'];
-};
-
 export type QueryHotDealExcludeKeywordsByAdminArgs = {
   hotDealKeywordId: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
@@ -1191,13 +1450,53 @@ export type QueryHotDealRankingProductsArgs = {
   page: Scalars['Int']['input'];
 };
 
-export type QueryInstagramPostArgs = {
+export type QueryHotDealRatioStatsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryHotDealTypeDistributionArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryKeywordMapGroupByAdminArgs = {
   id: Scalars['Int']['input'];
+};
+
+export type QueryKeywordMapGroupsByAdminArgs = {
+  limit: Scalars['Int']['input'];
+  orderBy: KeywordMapGroupOrderType;
+  orderOption: OrderOptionType;
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryMatchRunByAdminArgs = {
+  runId: Scalars['Int']['input'];
+};
+
+export type QueryMatchRunsByAdminArgs = {
+  from?: InputMaybe<Scalars['DateTime']['input']>;
+  productId?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  status?: InputMaybe<MatchRunStatus>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  to?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type QueryNotificationKeywordsByMeArgs = {
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryNotificationListByAdminArgs = {
+  limit?: Scalars['Int']['input'];
+  offset?: Scalars['Int']['input'];
+  target?: InputMaybe<NotificationTarget>;
+  targetId?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryNotificationsArgs = {
@@ -1206,11 +1505,8 @@ export type QueryNotificationsArgs = {
 };
 
 export type QueryNotificationsByAdminArgs = {
-  limit?: Scalars['Int']['input'];
-  offset?: Scalars['Int']['input'];
-  target?: InputMaybe<NotificationTarget>;
-  targetId?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['Int']['input']>;
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type QueryPendingVerificationsArgs = {
@@ -1254,6 +1550,18 @@ export type QueryProductKeywordsArgs = {
   startedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+export type QueryProductPriceDistributionArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryProductRegistrationStatsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
+};
+
 export type QueryProductsArgs = {
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
   categoryId?: InputMaybe<Scalars['Int']['input']>;
@@ -1280,6 +1588,10 @@ export type QueryProductsByKeywordArgs = {
   orderBy: KeywordProductOrderType;
   orderOption: OrderOptionType;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryRecentViewedProductsArgs = {
+  limit?: Scalars['Int']['input'];
 };
 
 export type QueryReportUserNamesArgs = {
@@ -1313,12 +1625,41 @@ export type QueryTogetherViewedProductsArgs = {
   productId: Scalars['Int']['input'];
 };
 
+export type QueryTopFavoriteCategoriesArgs = {
+  limit?: Scalars['Int']['input'];
+};
+
+export type QueryTopNotificationKeywordsArgs = {
+  limit?: Scalars['Int']['input'];
+  since?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
 export type QueryUserArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type QueryUserByAdminArgs = {
   id: Scalars['Int']['input'];
 };
 
 export type QueryUserByEmailArgs = {
   email: Scalars['String']['input'];
+};
+
+export type QueryUserRegistrationStatsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryUsersByAdminArgs = {
+  keyword?: InputMaybe<Scalars['String']['input']>;
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryUsersTotalCountByAdminArgs = {
+  keyword?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryVerificationHistoryArgs = {
@@ -1349,6 +1690,14 @@ export type RecommendedProductOutput = {
 export enum Role {
   Admin = 'ADMIN',
   User = 'USER',
+}
+
+export enum SectionDisplayType {
+  GridTabbed = 'GRID_TABBED',
+  Group = 'GROUP',
+  HorizontalScroll = 'HORIZONTAL_SCROLL',
+  List = 'LIST',
+  PaginatedGrid = 'PAGINATED_GRID',
 }
 
 export type SignupOutput = {
@@ -1395,6 +1744,7 @@ export enum TokenType {
 export type User = {
   __typename?: 'User';
   birthYear?: Maybe<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   favoriteCategories?: Maybe<Array<Scalars['Int']['output']>>;
   gender?: Maybe<Gender>;
@@ -1402,6 +1752,23 @@ export type User = {
   lastReadNoticeAt?: Maybe<Scalars['DateTime']['output']>;
   linkedSocialProviders?: Maybe<Array<OauthProvider>>;
   nickname: Scalars['String']['output'];
+};
+
+export type UserByAdminOutput = {
+  __typename?: 'UserByAdminOutput';
+  birthYear?: Maybe<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  email: Scalars['String']['output'];
+  gender?: Maybe<Gender>;
+  id: Scalars['ID']['output'];
+  nickname?: Maybe<Scalars['String']['output']>;
+  searchAfter: Array<Scalars['String']['output']>;
+};
+
+export type UserDemographicStatsOutput = {
+  __typename?: 'UserDemographicStatsOutput';
+  ageDistribution: Array<AgeGroupCountOutput>;
+  genderDistribution: Array<GenderCountOutput>;
 };
 
 /** 좋아요 대상 */
@@ -1610,7 +1977,7 @@ export type CommentsQuery = {
   comments: Array<{
     __typename?: 'CommentOutput';
     id: string;
-    productId: number;
+    productId?: number | null;
     parentId?: number | null;
     content: string;
     createdAt: any;
@@ -1656,7 +2023,7 @@ export type CommunityPostsQuery = {
   comments: Array<{
     __typename?: 'CommentOutput';
     id: string;
-    productId: number;
+    productId?: number | null;
     parentId?: number | null;
     title?: string | null;
     content: string;
@@ -1664,11 +2031,12 @@ export type CommunityPostsQuery = {
     searchAfter?: Array<string> | null;
     isNotice: boolean;
     likeCount: number;
+    replyCount: number;
     viewCount: number;
     isMyLike?: boolean | null;
     isMyReported: boolean;
     author?: { __typename?: 'User'; id: string; nickname: string } | null;
-    taggedProduct: {
+    taggedProduct?: {
       __typename?: 'ProductOutput';
       id: string;
       title: string;
@@ -1676,7 +2044,7 @@ export type CommunityPostsQuery = {
       price?: string | null;
       postedAt: any;
       url?: string | null;
-    };
+    } | null;
   }>;
 };
 
@@ -1697,17 +2065,17 @@ export type CommunityPostQuery = {
     isMyLike?: boolean | null;
     isNotice: boolean;
     isMyReported: boolean;
-    productId: number;
+    productId?: number | null;
     author?: { __typename?: 'User'; id: string; nickname: string } | null;
-    taggedProduct: {
+    taggedProduct?: {
       __typename?: 'ProductOutput';
       id: string;
       title: string;
       thumbnail?: string | null;
       price?: string | null;
-      postedAt?: any | null;
+      postedAt: any;
       url?: string | null;
-    };
+    } | null;
   };
 };
 
@@ -1722,6 +2090,7 @@ export type AddCommunityPostMutation = { __typename?: 'Mutation'; addComment: bo
 export type UpdateCommunityPostMutationVariables = Exact<{
   id: Scalars['Int']['input'];
   content: Scalars['String']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type UpdateCommunityPostMutation = { __typename?: 'Mutation'; updateComment: boolean };
@@ -2603,6 +2972,7 @@ export const CommunityPostsDocument = new TypedDocumentString(`
     searchAfter
     isNotice
     likeCount
+    replyCount
     viewCount
     isMyLike
     isMyReported
@@ -2658,8 +3028,8 @@ export const AddCommunityPostDocument = new TypedDocumentString(`
   AddCommunityPostMutationVariables
 >;
 export const UpdateCommunityPostDocument = new TypedDocumentString(`
-    mutation UpdateCommunityPost($id: Int!, $content: String!) {
-  updateComment(id: $id, content: $content)
+    mutation UpdateCommunityPost($id: Int!, $content: String!, $title: String) {
+  updateComment(id: $id, content: $content, title: $title)
 }
     `) as unknown as TypedDocumentString<
   UpdateCommunityPostMutation,

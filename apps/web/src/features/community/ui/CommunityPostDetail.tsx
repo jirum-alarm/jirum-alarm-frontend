@@ -88,7 +88,7 @@ export default function CommunityPostDetailClient({
       <p className="px-5 pb-4 text-base leading-relaxed text-gray-800">{post.content}</p>
 
       {/* 상품 태그 */}
-      {hasTaggedProduct && (
+      {hasTaggedProduct && post.taggedProduct && (
         <Link
           href={`/products/${post.taggedProduct.id}`}
           className="mx-5 mb-4 block rounded-2xl bg-[#F3F7FF] p-4 transition-transform hover:bg-[#e8effe] active:scale-[0.98] active:bg-[#e8effe]"

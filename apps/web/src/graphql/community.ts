@@ -26,6 +26,7 @@ export const QueryCommunityPosts = gql`
       searchAfter
       isNotice
       likeCount
+      replyCount
       viewCount
       isMyLike
       isMyReported

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useQueryState } from 'nuqs';
 import { Suspense } from 'react';
 
@@ -33,7 +34,6 @@ function CommunityListSkeleton() {
     </div>
   );
 }
-import Link from 'next/link';
 
 import { PAGE } from '@/shared/config/page';
 

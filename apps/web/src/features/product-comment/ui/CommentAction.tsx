@@ -37,7 +37,7 @@ export default function CommentAction({
       // TODO: Need GTM Migration
       queryClient.invalidateQueries({
         queryKey: CommentQueries.infiniteComments({
-          productId: comment.productId,
+          productId: comment.productId!,
           ...defaultCommentsVariables,
         }).queryKey,
       });

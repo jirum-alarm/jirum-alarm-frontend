@@ -28,12 +28,12 @@ type Documents = {
   '\n  mutation addComment($productId: Int!, $content: String!, $parentId: Int) {\n    addComment(productId: $productId, content: $content, parentId: $parentId)\n  }\n': typeof types.AddCommentDocument;
   '\n  mutation updateComment($id: Int!, $content: String!) {\n    updateComment(id: $id, content: $content)\n  }\n': typeof types.UpdateCommentDocument;
   '\n  mutation removeComment($id: Int!) {\n    removeComment(id: $id)\n  }\n': typeof types.RemoveCommentDocument;
-  '\n  query CommunityPosts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $isNotice: Boolean\n    $isTrending: Boolean\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      isNotice: $isNotice\n      isTrending: $isTrending\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      title\n      content\n      createdAt\n      searchAfter\n      isNotice\n      likeCount\n      viewCount\n      isMyLike\n      isMyReported\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n': typeof types.CommunityPostsDocument;
-  '\n  query CommunityPost($id: Int!) {\n    comment(id: $id) {\n      id\n      title\n      content\n      createdAt\n      likeCount\n      viewCount\n      isMyLike\n      isNotice\n      isMyReported\n      productId\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        url\n      }\n    }\n  }\n': typeof types.CommunityPostDocument;
+  '\n  query CommunityPosts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $isNotice: Boolean\n    $isTrending: Boolean\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      isNotice: $isNotice\n      isTrending: $isTrending\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      title\n      content\n      createdAt\n      searchAfter\n      isNotice\n      likeCount\n      replyCount\n      viewCount\n      isMyLike\n      isMyReported\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n': typeof types.CommunityPostsDocument;
+  '\n  query CommunityPost($id: Int!) {\n    comment(id: $id) {\n      id\n      title\n      content\n      createdAt\n      likeCount\n      viewCount\n      isMyLike\n      isNotice\n      isMyReported\n      productId\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n': typeof types.CommunityPostDocument;
   '\n  mutation AddCommunityPost($content: String!, $title: String, $productId: Int) {\n    addComment(content: $content, title: $title, productId: $productId)\n  }\n': typeof types.AddCommunityPostDocument;
-  '\n  mutation UpdateCommunityPost($id: Int!, $content: String!) {\n    updateComment(id: $id, content: $content)\n  }\n': typeof types.UpdateCommunityPostDocument;
+  '\n  mutation UpdateCommunityPost($id: Int!, $content: String!, $title: String) {\n    updateComment(id: $id, content: $content, title: $title)\n  }\n': typeof types.UpdateCommunityPostDocument;
   '\n  mutation RemoveCommunityPost($id: Int!) {\n    removeComment(id: $id)\n  }\n': typeof types.RemoveCommunityPostDocument;
-  '\n  mutation ReportCommunityPost(\n    $targetId: Float!\n    $target: UserReportTarget!\n    $reason: UserReportReason!\n    $description: String\n  ) {\n    addUserReport(\n      target: $target\n      targetId: $targetId\n      reason: $reason\n      description: $description\n    )\n  }\n': typeof types.ReportCommunityPostDocument;
+  '\n  mutation ReportCommunityPost(\n    $targetId: Float!\n    $target: UserReportTarget!\n    $reason: UserReportReason!\n    $description: String\n  ) {\n    addUserReport(target: $target, targetId: $targetId, reason: $reason, description: $description)\n  }\n': typeof types.ReportCommunityPostDocument;
   '\n  mutation LikeCommunityPost($targetId: Int!, $isLike: Boolean) {\n    addUserLikeOrDislike(target: COMMENT, targetId: $targetId, isLike: $isLike)\n  }\n': typeof types.LikeCommunityPostDocument;
   '\n  mutation MutationAddNotificationKeyword($keyword: String!) {\n    addNotificationKeyword(keyword: $keyword)\n  }\n': typeof types.MutationAddNotificationKeywordDocument;
   '\n  mutation MutationRemoveNotificationKeyword($id: Float!) {\n    removeNotificationKeyword(id: $id)\n  }\n': typeof types.MutationRemoveNotificationKeywordDocument;
@@ -97,17 +97,17 @@ const documents: Documents = {
     types.UpdateCommentDocument,
   '\n  mutation removeComment($id: Int!) {\n    removeComment(id: $id)\n  }\n':
     types.RemoveCommentDocument,
-  '\n  query CommunityPosts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $isNotice: Boolean\n    $isTrending: Boolean\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      isNotice: $isNotice\n      isTrending: $isTrending\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      title\n      content\n      createdAt\n      searchAfter\n      isNotice\n      likeCount\n      viewCount\n      isMyLike\n      isMyReported\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n':
+  '\n  query CommunityPosts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $isNotice: Boolean\n    $isTrending: Boolean\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      isNotice: $isNotice\n      isTrending: $isTrending\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      title\n      content\n      createdAt\n      searchAfter\n      isNotice\n      likeCount\n      replyCount\n      viewCount\n      isMyLike\n      isMyReported\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n':
     types.CommunityPostsDocument,
-  '\n  query CommunityPost($id: Int!) {\n    comment(id: $id) {\n      id\n      title\n      content\n      createdAt\n      likeCount\n      viewCount\n      isMyLike\n      isNotice\n      isMyReported\n      productId\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        url\n      }\n    }\n  }\n':
+  '\n  query CommunityPost($id: Int!) {\n    comment(id: $id) {\n      id\n      title\n      content\n      createdAt\n      likeCount\n      viewCount\n      isMyLike\n      isNotice\n      isMyReported\n      productId\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n':
     types.CommunityPostDocument,
   '\n  mutation AddCommunityPost($content: String!, $title: String, $productId: Int) {\n    addComment(content: $content, title: $title, productId: $productId)\n  }\n':
     types.AddCommunityPostDocument,
-  '\n  mutation UpdateCommunityPost($id: Int!, $content: String!) {\n    updateComment(id: $id, content: $content)\n  }\n':
+  '\n  mutation UpdateCommunityPost($id: Int!, $content: String!, $title: String) {\n    updateComment(id: $id, content: $content, title: $title)\n  }\n':
     types.UpdateCommunityPostDocument,
   '\n  mutation RemoveCommunityPost($id: Int!) {\n    removeComment(id: $id)\n  }\n':
     types.RemoveCommunityPostDocument,
-  '\n  mutation ReportCommunityPost(\n    $targetId: Float!\n    $target: UserReportTarget!\n    $reason: UserReportReason!\n    $description: String\n  ) {\n    addUserReport(\n      target: $target\n      targetId: $targetId\n      reason: $reason\n      description: $description\n    )\n  }\n':
+  '\n  mutation ReportCommunityPost(\n    $targetId: Float!\n    $target: UserReportTarget!\n    $reason: UserReportReason!\n    $description: String\n  ) {\n    addUserReport(target: $target, targetId: $targetId, reason: $reason, description: $description)\n  }\n':
     types.ReportCommunityPostDocument,
   '\n  mutation LikeCommunityPost($targetId: Int!, $isLike: Boolean) {\n    addUserLikeOrDislike(target: COMMENT, targetId: $targetId, isLike: $isLike)\n  }\n':
     types.LikeCommunityPostDocument,
@@ -270,13 +270,13 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query CommunityPosts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $isNotice: Boolean\n    $isTrending: Boolean\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      isNotice: $isNotice\n      isTrending: $isTrending\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      title\n      content\n      createdAt\n      searchAfter\n      isNotice\n      likeCount\n      viewCount\n      isMyLike\n      isMyReported\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n',
+  source: '\n  query CommunityPosts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $isNotice: Boolean\n    $isTrending: Boolean\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      isNotice: $isNotice\n      isTrending: $isTrending\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      title\n      content\n      createdAt\n      searchAfter\n      isNotice\n      likeCount\n      replyCount\n      viewCount\n      isMyLike\n      isMyReported\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n',
 ): typeof import('./graphql').CommunityPostsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query CommunityPost($id: Int!) {\n    comment(id: $id) {\n      id\n      title\n      content\n      createdAt\n      likeCount\n      viewCount\n      isMyLike\n      isNotice\n      isMyReported\n      productId\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        url\n      }\n    }\n  }\n',
+  source: '\n  query CommunityPost($id: Int!) {\n    comment(id: $id) {\n      id\n      title\n      content\n      createdAt\n      likeCount\n      viewCount\n      isMyLike\n      isNotice\n      isMyReported\n      productId\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n',
 ): typeof import('./graphql').CommunityPostDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -288,7 +288,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation UpdateCommunityPost($id: Int!, $content: String!) {\n    updateComment(id: $id, content: $content)\n  }\n',
+  source: '\n  mutation UpdateCommunityPost($id: Int!, $content: String!, $title: String) {\n    updateComment(id: $id, content: $content, title: $title)\n  }\n',
 ): typeof import('./graphql').UpdateCommunityPostDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -300,7 +300,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation ReportCommunityPost(\n    $targetId: Float!\n    $target: UserReportTarget!\n    $reason: UserReportReason!\n    $description: String\n  ) {\n    addUserReport(\n      target: $target\n      targetId: $targetId\n      reason: $reason\n      description: $description\n    )\n  }\n',
+  source: '\n  mutation ReportCommunityPost(\n    $targetId: Float!\n    $target: UserReportTarget!\n    $reason: UserReportReason!\n    $description: String\n  ) {\n    addUserReport(target: $target, targetId: $targetId, reason: $reason, description: $description)\n  }\n',
 ): typeof import('./graphql').ReportCommunityPostDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

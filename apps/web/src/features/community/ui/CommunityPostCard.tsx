@@ -66,25 +66,25 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
           </span>
           <span className="flex items-center gap-x-1">
             <BubbleChat className="h-3.5 w-3.5" aria-hidden />
-            {/* TODO: API 개발 후 실제 댓글 수로 교체 */}0
+            {post.replyCount}
           </span>
         </div>
       </div>
 
       {/* 오른쪽: 이미지 + 상품명 (닉네임과 같은 높이에서 시작) */}
-      {hasTaggedProduct && post.taggedProduct.thumbnail && (
+      {hasTaggedProduct && post.taggedProduct?.thumbnail && (
         <div className="flex w-20 flex-shrink-0 flex-col gap-y-1">
           <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-gray-100">
             <Image
-              src={post.taggedProduct.thumbnail}
-              alt={post.taggedProduct.title}
+              src={post.taggedProduct?.thumbnail}
+              alt={post.taggedProduct?.title ?? ''}
               fill
               className="object-cover"
               sizes="80px"
             />
           </div>
           <p className="line-clamp-2 text-xs leading-tight text-gray-400">
-            {post.taggedProduct.title}
+            {post.taggedProduct?.title}
           </p>
         </div>
       )}

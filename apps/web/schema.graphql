@@ -40,16 +40,35 @@ type AdminUser {
   name: String!
 }
 
+type AgeGroupCountOutput {
+  """
+  연령대 (예: 10대, 20대, 30대, 미설정)
+  """
+  ageGroup: String!
+  count: Int!
+}
+
 type ApiQuery {
-  dependsOn: String
-  query: String!
+  queryName: String!
+  type: DataSourceType!
   variables: JSONObject
 }
 
 interface BaseSection {
-  cta: Cta
+  displayOrder: Float
+  id: ID!
   title: String!
-  type: ID!
+  type: SectionDisplayType!
+  viewMoreLink: String
+}
+
+type BrandItemMatchCountOutput {
+  brandName: String!
+  id: ID!
+  pendingVerificationCount: Int!
+  productName: String!
+  searchAfter: [String!]
+  totalMatchCount: Int!
 }
 
 type BrandProductMatchCountOutput {
@@ -83,6 +102,12 @@ type Category {
   name: String!
 }
 
+type CategoryCountOutput {
+  categoryId: Int!
+  categoryName: String!
+  count: Int!
+}
+
 enum CommentOrder {
   ID
 }
@@ -100,18 +125,17 @@ type CommentOutput {
   isNotice: Boolean!
   likeCount: Int!
   parentId: Float
-  productId: Int!
+  productId: Int
+  """
+  댓글에 달린 대댓글 수
+  """
+  replyCount: Int!
   searchAfter: [String!]
-  taggedProduct: ProductOutput!
+  taggedProduct: ProductOutput
   title: String
   trendedAt: DateTime
   userId: Float!
   viewCount: Int!
-}
-
-type Cta {
-  label: String!
-  url: String!
 }
 
 enum CurrencyType {
@@ -129,6 +153,33 @@ type DanawaProductOutput {
   volume: String
 }
 
+enum DataSourceType {
+  GRAPHQL_QUERY
+}
+
+type DateCountOutput {
+  count: Int!
+  date: String!
+}
+
+"""
+날짜 간격
+"""
+enum DateInterval {
+  """
+  일별
+  """
+  DAILY
+  """
+  월별
+  """
+  MONTHLY
+  """
+  주별
+  """
+  WEEKLY
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -144,28 +195,37 @@ enum Gender {
   MALE
 }
 
-type HomeHotDealSection implements BaseSection {
-  cta: Cta
-  dataSources: [ApiQuery!]!
-  displayType: String!
-  title: String!
-  type: ID!
+type GenderCountOutput {
+  count: Int!
+  gender: Gender
 }
 
-type HomeRankingSection implements BaseSection {
-  cta: Cta
-  dataSources: [ApiQuery!]!
-  displayType: String!
+type GridTabbedSection implements BaseSection {
+  dataSource: ApiQuery!
+  displayOrder: Float
+  id: ID!
+  tabs: [LayoutTab!]!
   title: String!
-  type: ID!
+  type: SectionDisplayType!
+  viewMoreLink: String
 }
 
-type HomeRecommendationSection implements BaseSection {
-  cta: Cta
-  dataSources: [ApiQuery!]!
-  displayType: String!
+type GroupSection implements BaseSection {
+  displayOrder: Float
+  id: ID!
+  sections: [BaseSection!]!
   title: String!
-  type: ID!
+  type: SectionDisplayType!
+  viewMoreLink: String
+}
+
+type HorizontalScrollSection implements BaseSection {
+  dataSource: ApiQuery!
+  displayOrder: Float
+  id: ID!
+  title: String!
+  type: SectionDisplayType!
+  viewMoreLink: String
 }
 
 enum HotDealExcludeKeywordOrderType {
@@ -216,6 +276,13 @@ enum HotDealKeywordType {
   SYNONYM
 }
 
+type HotDealRatioOutput {
+  date: String!
+  hotDealCount: Int!
+  ratio: Float!
+  totalCount: Int!
+}
+
 """
 핫딜 타입
 """
@@ -234,28 +301,58 @@ enum HotDealType {
   ULTRA_DEAL
 }
 
-type InstagramPost {
-  content: String!
-  dagDefinition: String!
-  id: ID!
-  reservedAt: DateTime!
-  thumbnail: String!
-  type: InstagramPostType!
+type HotDealTypeCountOutput {
+  count: Int!
+  hotDealType: HotDealType!
 }
-
-enum InstagramPostType {
-  NORMAL
-}
-
-union ItemUnion = HomeHotDealSection | HomeRankingSection | HomeRecommendationSection
 
 """
 The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
 scalar JSONObject
 
+type KeywordCountOutput {
+  count: Int!
+  keyword: String!
+}
+
+type KeywordMapEntry {
+  groupId: Int!
+  id: ID!
+  keyword: String!
+}
+
+enum KeywordMapGroupOrderType {
+  ID
+  NAME
+}
+
+type KeywordMapGroupOutput {
+  description: String
+  entries: [KeywordMapEntry!]!
+  entryCount: Int!
+  id: ID!
+  name: String!
+  searchAfter: [String!]
+}
+
 enum KeywordProductOrderType {
   POSTED_AT
+}
+
+type LayoutTab {
+  id: ID!
+  label: String!
+  variables: JSONObject
+}
+
+type ListSection implements BaseSection {
+  dataSource: ApiQuery!
+  displayOrder: Float
+  id: ID!
+  title: String!
+  type: SectionDisplayType!
+  viewMoreLink: String
 }
 
 type MallGroup {
@@ -265,6 +362,40 @@ type MallGroup {
   site: String
   sort: Float
   title: String!
+}
+
+type MatchRun {
+  createdAt: DateTime!
+  errorMessage: String
+  finishedAt: DateTime
+  id: ID!
+  productId: Int!
+  """
+  최종 선택된 다나와 pcode
+  """
+  selectedPcode: String
+  startedAt: DateTime
+  status: MatchRunStatus!
+  updatedAt: DateTime!
+}
+
+enum MatchRunStatus {
+  FAILED
+  PENDING
+  RUNNING
+  SKIPPED
+  SUCCESS
+}
+
+type MatchRunsByAdminOutput {
+  """
+  매칭 실행 목록
+  """
+  runs: [MatchRun!]!
+  """
+  전체 개수(페이징용)
+  """
+  total: Int!
 }
 
 type Mutation {
@@ -292,6 +423,18 @@ type Mutation {
   어드민) 핫딜 유의어 추가
   """
   addHotDealKeywordSynonymByAdmin(hotDealKeywordId: Int!, keywords: [String!]!): Boolean!
+  """
+  어드민) 키워드 맵 엔트리 벌크 추가
+  """
+  addKeywordMapEntriesByAdmin(groupId: Int!, keywords: [String!]!): Boolean!
+  """
+  어드민) 키워드 맵 엔트리 추가
+  """
+  addKeywordMapEntryByAdmin(groupId: Int!, keyword: String!): Int!
+  """
+  어드민) 키워드 맵 그룹 추가
+  """
+  addKeywordMapGroupByAdmin(description: String, name: String!): Int!
   """
   알림 키워드 추가
   """
@@ -425,6 +568,14 @@ type Mutation {
   """
   removeHotDealKeywordSynonymByAdmin(ids: [Int!]!): Boolean!
   """
+  어드민) 키워드 맵 엔트리 삭제
+  """
+  removeKeywordMapEntryByAdmin(id: Int!): Boolean!
+  """
+  어드민) 키워드 맵 그룹 삭제
+  """
+  removeKeywordMapGroupByAdmin(id: Int!): Boolean!
+  """
   단일 알림 삭제
   """
   removeNotification(id: Int!): Boolean!
@@ -446,9 +597,17 @@ type Mutation {
   """
   reportExpiredProduct(productId: Int!): Boolean!
   """
-  인스타그램 게시글 예약
+  어드민) 알림 발송
   """
-  reserveInstagramPost(id: Int!): Boolean!
+  sendNotificationByAdmin(
+    message: String!
+    target: NotificationTarget
+    targetId: Int
+    title: String!
+    type: NotificationType!
+    url: String
+    userIds: [Int!]
+  ): Boolean!
   """
   회원가입
   """
@@ -486,11 +645,15 @@ type Mutation {
     title: String
     weight: Int
   ): Ad!
-  updateComment(content: String!, id: Int!): Boolean!
+  updateComment(content: String, id: Int!, title: String): Boolean!
   """
   어드민) 핫딜 키워드 수정
   """
   updateHotDealKeywordByAdmin(id: Int!, isMajor: Boolean, keyword: String, weight: Float): Boolean!
+  """
+  어드민) 키워드 맵 그룹 수정
+  """
+  updateKeywordMapGroupByAdmin(description: String, id: Int!, name: String): Boolean!
   """
   알림 키워드 상태 수정
   """
@@ -512,10 +675,6 @@ type Mutation {
     gender: Gender
     nickname: String
   ): Boolean!
-  """
-  인스타그램 게시글 업로드
-  """
-  uploadInstagramPost: String!
   """
   매핑 검증 수행 (승인 또는 거부)
   """
@@ -548,6 +707,16 @@ type Notification {
   url: String
 }
 
+type NotificationByAdminOutput {
+  createdAt: DateTime!
+  id: ID!
+  message: String!
+  searchAfter: [String!]!
+  target: String!
+  targetId: String
+  title: String
+}
+
 type NotificationKeyword {
   createdAt: DateTime!
   id: ID!
@@ -557,6 +726,7 @@ type NotificationKeyword {
 }
 
 enum NotificationTarget {
+  COMMENT
   INFO
   NOTICE
   PRODUCT
@@ -586,9 +756,23 @@ enum OrderOptionType {
   DESC
 }
 
-type PageSchema {
-  items: [ItemUnion!]!
-  schemaVersion: String!
+type PaginatedGridSection implements BaseSection {
+  dataSource: ApiQuery!
+  displayOrder: Float
+  id: ID!
+  title: String!
+  type: SectionDisplayType!
+  viewMoreLink: String
+}
+
+type PriceRangeCountOutput {
+  count: Int!
+  maxPrice: Float!
+  minPrice: Float!
+  """
+  가격 구간 라벨 (예: 1만~3만)
+  """
+  priceRange: String!
 }
 
 type ProductCommentSummary {
@@ -837,11 +1021,37 @@ type Provider {
   nameKr: String!
 }
 
+type ProviderCountOutput {
+  count: Int!
+  providerId: Int!
+  providerName: String!
+}
+
 type Query {
   adStats(adId: Int, endDate: DateTime!, startDate: DateTime!): [AdStats!]!
   adminMe: AdminUser!
   ads(slots: [AdSlotType!]!): [Ad!]!
   analysisTitleByDanawa: Boolean!
+  """
+  BrandItem 단위 매칭된 전체 개수 조회
+  """
+  brandItemsByMatchCountTotalCount(
+    """
+    브랜드명 + 상품명 LIKE 검색
+    """
+    title: String
+  ): Int!
+  """
+  BrandItem 단위 매칭 합산 목록 조회 (커서 기반 페이지네이션)
+  """
+  brandItemsOrderByTotalMatchCount(
+    limit: Int!
+    searchAfter: [String!]
+    """
+    브랜드명 + 상품명 LIKE 검색
+    """
+    title: String
+  ): [BrandItemMatchCountOutput!]!
   """
   특정 브랜드 상품의 매핑 개수 조회
   """
@@ -880,6 +1090,9 @@ type Query {
     limit: Int!
     orderBy: CommentOrder!
     orderOption: OrderOptionType!
+    """
+    대댓글(커뮤니티에서는 댓글) 조회 시 부모 댓글 ID
+    """
     parentId: Int
     productId: Int
     searchAfter: [String!]
@@ -903,6 +1116,14 @@ type Query {
     isReward: Boolean
     limit: Int!
   ): [ProductOutput!]!
+  """
+  어드민) 일별 서비스 조회수 합계
+  """
+  dailyServiceViewStats(
+    endDate: DateTime!
+    interval: DateInterval! = DAILY
+    startDate: DateTime!
+  ): [DateCountOutput!]!
   danawaProduct(id: String!): DanawaProductOutput!
   danawaProducts(
     amount: String
@@ -956,7 +1177,7 @@ type Query {
   특정 상품과 유사한 상품 조회
   """
   getSimilarProducts(limit: Int = 10, productId: Int!): [ProductOutput!]!
-  homePage(version: String!): PageSchema!
+  homePage: [BaseSection!]!
   """
   어드민) 핫딜 제외 키워드 목록 조회
   """
@@ -1004,8 +1225,69 @@ type Query {
     """
     page: Int!
   ): [ProductOutput!]!
-  instagramPost(id: Int!): InstagramPost
+  """
+  어드민) 일별 핫딜 비율 추이
+  """
+  hotDealRatioStats(
+    endDate: DateTime!
+    interval: DateInterval! = DAILY
+    startDate: DateTime!
+  ): [HotDealRatioOutput!]!
+  """
+  어드민) 핫딜 유형별 분포
+  """
+  hotDealTypeDistribution(
+    endDate: DateTime!
+    interval: DateInterval! = DAILY
+    startDate: DateTime!
+  ): [HotDealTypeCountOutput!]!
+  """
+  어드민) 키워드 맵 그룹 조회
+  """
+  keywordMapGroupByAdmin(id: Int!): KeywordMapGroupOutput
+  """
+  어드민) 키워드 맵 그룹 목록 조회
+  """
+  keywordMapGroupsByAdmin(
+    limit: Int!
+    orderBy: KeywordMapGroupOrderType!
+    orderOption: OrderOptionType!
+    searchAfter: [String!]
+  ): [KeywordMapGroupOutput!]!
   mallGroups: [MallGroup!]!
+  """
+  어드민) 매칭 실행 상세 조회 (스텝 포함)
+  """
+  matchRunByAdmin(runId: Int!): MatchRun
+  """
+  어드민) 매칭 실행 목록 조회 (페이징)
+  """
+  matchRunsByAdmin(
+    """
+    시작일(from) - 이 시각 이후 실행
+    """
+    from: DateTime
+    """
+    상품 ID로 필터
+    """
+    productId: Int
+    """
+    건너뛸 개수
+    """
+    skip: Int = 0
+    """
+    실행 상태로 필터
+    """
+    status: MatchRunStatus
+    """
+    조회 개수
+    """
+    take: Int = 20
+    """
+    종료일(to) - 이 시각 이전 실행
+    """
+    to: DateTime
+  ): MatchRunsByAdminOutput!
   """
   로그인한 유저 정보 조회
   """
@@ -1015,19 +1297,23 @@ type Query {
   """
   notificationKeywordsByMe(limit: Int!, searchAfter: [String!]): [NotificationKeyword!]!
   """
-  알림 목록 조회
+  어드민) 개별 알림 목록 조회
   """
-  notifications(limit: Int! = 10, offset: Int! = 0): [Notification!]!
-  """
-  어드민) 알림 목록 조회
-  """
-  notificationsByAdmin(
+  notificationListByAdmin(
     limit: Int! = 10
     offset: Int! = 0
     target: NotificationTarget
     targetId: String
     userId: Int
   ): [Notification!]!
+  """
+  알림 목록 조회
+  """
+  notifications(limit: Int! = 10, offset: Int! = 0): [Notification!]!
+  """
+  어드민) 알림 발송 이력 조회
+  """
+  notificationsByAdmin(limit: Int!, searchAfter: [String!]): [NotificationByAdminOutput!]!
   """
   검증 대기 중인 매핑 목록 조회
   """
@@ -1081,8 +1367,32 @@ type Query {
   상품 조회
   """
   product(id: Int!): ProductOutput
+  """
+  어드민) 카테고리별 상품 수
+  """
+  productCountByCategory: [CategoryCountOutput!]!
+  """
+  어드민) 제공자별 상품 수
+  """
+  productCountByProvider: [ProviderCountOutput!]!
   productGuides(productId: Int!): [ProductGuide!]
   productKeywords(endedAt: DateTime, startedAt: DateTime): [String!]!
+  """
+  어드민) 가격대별 상품 분포
+  """
+  productPriceDistribution(
+    endDate: DateTime!
+    interval: DateInterval! = DAILY
+    startDate: DateTime!
+  ): [PriceRangeCountOutput!]!
+  """
+  어드민) 일별 신규 상품 등록 수
+  """
+  productRegistrationStats(
+    endDate: DateTime!
+    interval: DateInterval! = DAILY
+    startDate: DateTime!
+  ): [DateCountOutput!]!
   """
   상품 목록 조회
   """
@@ -1119,6 +1429,15 @@ type Query {
   푸시 세팅 조회
   """
   pushSetting: UserPushSetting!
+  """
+  최근에 본 상품 N개 조회
+  """
+  recentViewedProducts(
+    """
+    조회할 최근 본 상품 개수
+    """
+    limit: Int! = 10
+  ): [ProductOutput!]!
   """
   알림 키워드 추천 목록 조회
   """
@@ -1165,6 +1484,14 @@ type Query {
   """
   togetherViewedProducts(limit: Int!, productId: Int!): [ProductOutput!]!
   """
+  어드민) 인기 관심 카테고리 TOP N
+  """
+  topFavoriteCategories(limit: Int! = 10): [CategoryCountOutput!]!
+  """
+  어드민) 알림 키워드 TOP N
+  """
+  topNotificationKeywords(limit: Int! = 30, since: DateTime): [KeywordCountOutput!]!
+  """
   안읽은 알림 수 목록 조회
   """
   unreadNotificationsCount: Int!
@@ -1173,9 +1500,33 @@ type Query {
   """
   user(id: Int!): User!
   """
+  어드민) 사용자 상세 조회
+  """
+  userByAdmin(id: Int!): User!
+  """
   이메일로 유저 조회
   """
   userByEmail(email: String!): User!
+  """
+  어드민) 성별/연령대 분포
+  """
+  userDemographicStats: UserDemographicStatsOutput!
+  """
+  어드민) 일별/주별/월별 가입자 수 추이
+  """
+  userRegistrationStats(
+    endDate: DateTime!
+    interval: DateInterval! = DAILY
+    startDate: DateTime!
+  ): [DateCountOutput!]!
+  """
+  어드민) 사용자 목록 조회
+  """
+  usersByAdmin(keyword: String, limit: Int!, searchAfter: [String!]): [UserByAdminOutput!]!
+  """
+  어드민) 사용자 총 인원수 조회
+  """
+  usersTotalCountByAdmin(keyword: String): Int!
   """
   검증 완료/거부된 매핑 목록 조회
   """
@@ -1219,6 +1570,14 @@ enum Role {
   USER
 }
 
+enum SectionDisplayType {
+  GRID_TABBED
+  GROUP
+  HORIZONTAL_SCROLL
+  LIST
+  PAGINATED_GRID
+}
+
 type SignupOutput {
   accessToken: String!
   refreshToken: String
@@ -1257,6 +1616,7 @@ enum TokenType {
 
 type User {
   birthYear: Int
+  createdAt: DateTime!
   email: String!
   favoriteCategories: [Int!]
   gender: Gender
@@ -1264,6 +1624,21 @@ type User {
   lastReadNoticeAt: DateTime
   linkedSocialProviders: [OauthProvider!]
   nickname: String!
+}
+
+type UserByAdminOutput {
+  birthYear: Int
+  createdAt: DateTime!
+  email: String!
+  gender: Gender
+  id: ID!
+  nickname: String
+  searchAfter: [String!]!
+}
+
+type UserDemographicStatsOutput {
+  ageDistribution: [AgeGroupCountOutput!]!
+  genderDistribution: [GenderCountOutput!]!
 }
 
 """

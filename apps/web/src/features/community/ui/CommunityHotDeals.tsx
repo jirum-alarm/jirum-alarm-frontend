@@ -1,62 +1,65 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 import Link from 'next/link';
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { getDayBefore } from '@/shared/lib/utils/date';
 
 import { ProductQueries } from '@/entities/product';
+import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
-function HotDealsList() {
-  const { data } = useSuspenseQuery(
-    ProductQueries.products({
-      limit: 10,
-      orderBy: ProductOrderType.CommunityRanking,
-      startDate: getDayBefore(3),
-      categoryId: null,
-      orderOption: OrderOptionType.Desc,
-      isEnd: false,
-    }),
-  );
+type RankingOption =
+  | { label: string; type: 'hotdeal'; link: string }
+  | { label: string; type: 'ranking'; categoryId: number | null; link: string };
 
-  const products = data?.products ?? [];
-  if (products.length === 0) return null;
+const RANKING_OPTIONS: RankingOption[] = [
+  { label: '지금 인기 핫딜', type: 'hotdeal', link: '/curation/hotdeal' },
+  { label: '전체 랭킹', type: 'ranking', categoryId: null, link: '/trending/ranking' },
+  {
+    label: "'생활·식품' 인기 상품",
+    type: 'ranking',
+    categoryId: 2,
+    link: '/trending/ranking?tab=2',
+  },
+  {
+    label: "'컴퓨터' 인기 상품",
+    type: 'ranking',
+    categoryId: 1,
+    link: '/trending/ranking?tab=1',
+  },
+];
 
+// 날짜 기반 인덱스: 서버/클라이언트 동일한 값 보장
+const getDailyOptionIndex = () => new Date().getDate() % RANKING_OPTIONS.length;
+
+type ProductItem = {
+  id: string | number;
+  title: string;
+  thumbnail?: string | null;
+  price?: string | null;
+  categoryId?: number | null;
+};
+
+function ProductList({ products }: { products: ProductItem[] }) {
   return (
-    <div className="flex gap-x-3 overflow-x-auto px-5 pb-4" style={{ scrollbarWidth: 'none' }}>
-      {products.map((product, i) => (
+    <div className="smd:grid-cols-6 grid grid-cols-3 gap-x-2 gap-y-3 px-5 pb-4">
+      {products.map((product) => (
         <Link
           key={product.id}
           href={`/products/${product.id}`}
-          className="flex w-28 flex-shrink-0 flex-col transition-transform active:scale-[0.98]"
+          className="flex flex-col transition-transform active:scale-[0.98]"
         >
           <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-100">
-            {product.thumbnail && (
-              <Image
-                src={product.thumbnail}
-                alt={product.title}
-                fill
-                className="object-cover"
-                sizes="112px"
-              />
-            )}
-            <span
-              className={[
-                'absolute top-1.5 left-1.5 text-sm font-bold drop-shadow-sm',
-                i === 0
-                  ? 'text-red-500'
-                  : i === 1
-                    ? 'text-orange-400'
-                    : i === 2
-                      ? 'text-yellow-500'
-                      : 'text-white',
-              ].join(' ')}
-            >
-              {i + 1}
-            </span>
+            <ProductThumbnail
+              src={product.thumbnail ?? ''}
+              alt={product.title}
+              title={product.title}
+              categoryId={product.categoryId}
+              type="product"
+              sizes="(max-width: 550px) 30vw, 15vw"
+            />
           </div>
           <p className="mt-1.5 line-clamp-2 text-xs leading-tight text-gray-900">{product.title}</p>
           {product.price && (
@@ -68,31 +71,69 @@ function HotDealsList() {
   );
 }
 
+function HotDealRankingList() {
+  const { data } = useSuspenseQuery(
+    ProductQueries.hotDealRankingProducts({
+      page: 0,
+      limit: 6,
+    }),
+  );
+
+  const products = data?.hotDealRankingProducts ?? [];
+  if (products.length === 0) return null;
+
+  return <ProductList products={products} />;
+}
+
+function RankingList({ categoryId }: { categoryId: number | null }) {
+  const { data } = useSuspenseQuery(
+    ProductQueries.products({
+      limit: 6,
+      orderBy: ProductOrderType.CommunityRanking,
+      startDate: getDayBefore(3),
+      categoryId,
+      orderOption: OrderOptionType.Desc,
+      isEnd: false,
+    }),
+  );
+
+  const products = data?.products ?? [];
+  if (products.length === 0) return null;
+
+  return <ProductList products={products} />;
+}
+
+const Skeleton = () => (
+  <div className="smd:grid-cols-6 grid grid-cols-3 gap-x-2 gap-y-3 px-5 pb-4">
+    {Array.from({ length: 6 }).map((_, i) => (
+      <div key={i}>
+        <div className="aspect-square animate-pulse rounded-xl bg-gray-100" />
+        <div className="mt-1.5 h-3 w-full animate-pulse rounded bg-gray-100" />
+      </div>
+    ))}
+  </div>
+);
+
 export default function CommunityHotDeals() {
+  const option = useMemo(() => RANKING_OPTIONS[getDailyOptionIndex()], []);
+
   return (
     <section className="mt-2 border-t border-gray-100 pt-4">
       <div className="mb-3 flex items-center justify-between px-5">
-        <h2 className="text-sm font-semibold text-gray-900">지름 랭킹</h2>
+        <h2 className="text-sm font-semibold text-gray-900">{option.label}</h2>
         <Link
-          href="/trending/ranking"
+          href={option.link}
           className="text-xs text-gray-500 transition-transform active:scale-95"
         >
           더보기
         </Link>
       </div>
-      <Suspense
-        fallback={
-          <div className="flex gap-x-3 overflow-hidden px-5 pb-4">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="w-28 flex-shrink-0">
-                <div className="aspect-square animate-pulse rounded-xl bg-gray-100" />
-                <div className="mt-1.5 h-3 w-full animate-pulse rounded bg-gray-100" />
-              </div>
-            ))}
-          </div>
-        }
-      >
-        <HotDealsList />
+      <Suspense fallback={<Skeleton />}>
+        {option.type === 'hotdeal' ? (
+          <HotDealRankingList />
+        ) : (
+          <RankingList categoryId={option.categoryId} />
+        )}
       </Suspense>
     </section>
   );

@@ -53,7 +53,7 @@ export default function NoticePostCard({
         </span>
         <span className="flex items-center gap-x-1">
           <BubbleChat className="h-3.5 w-3.5" aria-hidden />
-          {/* TODO: API 개발 후 실제 댓글 수로 교체 */}0
+          {post.replyCount}
         </span>
       </div>
     </Link>

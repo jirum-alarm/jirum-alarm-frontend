@@ -24,7 +24,7 @@ export default function CommentMenu({ comment }: { comment: TComment }) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: CommentQueries.infiniteComments({
-          productId: comment.productId,
+          productId: comment.productId!,
           ...defaultCommentsVariables,
         }).queryKey,
       });
