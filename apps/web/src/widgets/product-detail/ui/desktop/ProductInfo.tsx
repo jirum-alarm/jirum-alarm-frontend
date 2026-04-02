@@ -15,6 +15,7 @@ import ShareButton from '@/shared/ui/ShareButton';
 import { ProductQueries } from '@/entities/product';
 
 import { LikeButton, RecommendButton } from '@/features/product-actions/ui';
+import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
 import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
 
 export default function ProductInfo({
@@ -35,6 +36,11 @@ export default function ProductInfo({
       price: product.price ?? null,
     });
   }, [product.id, product.price, product.thumbnail, product.title]);
+
+  useProductPurchaseStatusClarity({
+    productId: product.id,
+    isEnd: product.isEnd,
+  });
 
   const shareTitle = `${product.title} | 지름알림`;
 
