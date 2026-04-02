@@ -14,6 +14,7 @@ import HotdealBadge from '@/shared/ui/HotdealBadge';
 import { ProductQueries } from '@/entities/product';
 
 import { RecommendButton } from '@/features/product-actions/ui';
+import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
 import HotdealGuideModal from '@/features/product-detail/ui/mobile/HotDealGuideModal';
 
 export default function ProductInfo({ productId }: { productId: number }) {
@@ -28,6 +29,11 @@ export default function ProductInfo({ productId }: { productId: number }) {
       price: product.price ?? null,
     });
   }, [product.id, product.price, product.thumbnail, product.title]);
+
+  useProductPurchaseStatusClarity({
+    productId: product.id,
+    isEnd: product.isEnd,
+  });
 
   return (
     <section className="px-5 pb-9">
