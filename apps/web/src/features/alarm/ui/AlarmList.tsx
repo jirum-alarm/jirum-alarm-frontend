@@ -3,7 +3,9 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
 
+import { PAGE } from '@/shared/config/page';
 import { getLastAlarmReadAt, setLastAlarmReadAt } from '@/shared/lib/alarmReadState';
+import Link from '@/shared/ui/Link';
 
 import { alarmEditModeAtom } from '../model/alarmEditModeAtom';
 import { useNotificationsViewModel } from '../model/useNotificationsViewModel';
@@ -54,6 +56,21 @@ export default function AlarmList() {
             >
               완료
             </button>
+          </div>
+        </div>
+      )}
+      {!isEditMode && (
+        <div className="sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
+          <div className="flex h-11 items-center justify-between px-5">
+            <span className="text-sm font-medium text-gray-600">
+              지금 다양한 핫딜 알림을 받아보세요!
+            </span>
+            <Link
+              href={PAGE.MYPAGE_KEYWORD}
+              className="flex h-8 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-900"
+            >
+              키워드 알림
+            </Link>
           </div>
         </div>
       )}
