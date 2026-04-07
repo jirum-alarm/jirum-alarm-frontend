@@ -43,6 +43,8 @@ export { default as BubbleChat } from './BubbleChat';
 export { default as BubbleChatFill } from './BubbleChatFill';
 export { default as Shop } from './Shop';
 export { default as AIIcon } from './AI';
+export { default as TrashBin } from './TrashBin';
+export { default as XSmall } from './XSmall';
 
 export * as IllustIcons from './Illust';
 export * as CategoryIcons from './categories';

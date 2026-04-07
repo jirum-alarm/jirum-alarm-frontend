@@ -1,24 +1,31 @@
+import { useAtomValue } from 'jotai';
 import { memo } from 'react';
 
 import { QueryNotificationsQuery } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 import { convertToWebp } from '@/shared/lib/utils/image';
+import { XSmall } from '@/shared/ui/common/icons';
 import DisplayTime from '@/shared/ui/DisplayTime';
 import ImageComponent from '@/shared/ui/ImageComponent';
 import Link from '@/shared/ui/Link';
 
+import { alarmEditModeAtom } from '../model/alarmEditModeAtom';
+
 const AlarmItem = ({
   notification,
   onRead,
+  onDelete,
   isNew,
 }: {
   notification: QueryNotificationsQuery['notifications'][number];
   onRead: (id: number) => void;
+  onDelete: (id: number) => void;
   isNew: boolean;
 }) => {
   const { id, message, createdAt, product, keyword, readAt } = notification;
   const { thumbnail, price, isHot, isEnd, id: productId } = product ?? {};
+  const isEditMode = useAtomValue(alarmEditModeAtom);
 
   const handleClick = () => {
     if (!readAt) {
@@ -28,15 +35,35 @@ const AlarmItem = ({
 
   return (
     <li
-      className={cn('flex gap-x-3', {
+      className={cn('relative flex gap-x-3', {
         'bg-primary-50': isNew && !readAt,
         'opacity-60': !!readAt,
       })}
     >
+      {isEditMode && (
+        <button
+          type="button"
+          aria-label="알림 삭제"
+          className="absolute top-1/2 right-5 -translate-y-1/2"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onDelete(Number(id));
+          }}
+        >
+          <XSmall />
+        </button>
+      )}
       <Link
         href={PAGE.DETAIL + '/' + +productId!}
-        className="flex w-full p-5"
-        onClick={handleClick}
+        className={cn('flex w-full p-5', { 'pr-14': isEditMode })}
+        onClick={(e) => {
+          if (isEditMode) {
+            e.preventDefault();
+            return;
+          }
+          handleClick();
+        }}
       >
         <div className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">
           <ImageWithFallback

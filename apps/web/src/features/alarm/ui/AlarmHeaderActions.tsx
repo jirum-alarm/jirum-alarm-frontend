@@ -1,27 +1,36 @@
 'use client';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { useAtom } from 'jotai';
 
-import { NotificationService } from '@/shared/api/notification/notification.service';
+import { TrashBin } from '@/shared/ui/common/icons';
 
 import { NotificationQueries } from '@/entities/notification';
 
+import { alarmEditModeAtom } from '../model/alarmEditModeAtom';
+
 export default function AlarmHeaderActions() {
-  const queryClient = useQueryClient();
   const { data: unreadCount } = useQuery(NotificationQueries.unreadCount());
+  const { data: existsAny } = useQuery(NotificationQueries.existsAny());
+  const [isEditMode, setEditMode] = useAtom(alarmEditModeAtom);
 
-  const { mutate: readAll } = useMutation({
-    mutationFn: () => NotificationService.readAllNotifications(),
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: NotificationQueries.all() });
-    },
-  });
-
-  if (!unreadCount) return null;
+  if (unreadCount === undefined || existsAny === undefined) return null;
+  if (!existsAny) return null;
 
   return (
-    <button onClick={() => readAll()} className="ml-auto text-sm text-gray-400">
-      모두 읽음
-    </button>
+    <div className="ml-auto flex items-center">
+      {isEditMode ? (
+        <div className="h-10 w-10" />
+      ) : (
+        <button
+          type="button"
+          aria-label="알림 편집"
+          onClick={() => setEditMode(true)}
+          className="flex h-10 w-10 items-center justify-center"
+        >
+          <TrashBin />
+        </button>
+      )}
+    </div>
   );
 }

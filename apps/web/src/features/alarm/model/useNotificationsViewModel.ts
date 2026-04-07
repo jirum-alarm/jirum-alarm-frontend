@@ -102,6 +102,73 @@ export const useNotificationsViewModel = () => {
     },
   });
 
+  const { mutate: removeNotification } = useMutation({
+    mutationFn: (id: number) => NotificationService.removeNotification({ id }),
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: NotificationQueries.lists() });
+
+      const previousData = queryClient.getQueriesData({ queryKey: NotificationQueries.lists() });
+
+      queryClient.setQueriesData({ queryKey: NotificationQueries.lists() }, (old: typeof data) => {
+        if (!old) return old;
+        return {
+          ...old,
+          pages: old.pages.map((page) => page.filter((n) => Number(n.id) !== id)),
+        };
+      });
+
+      return { previousData };
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: NotificationQueries.lists() });
+      await queryClient.invalidateQueries({ queryKey: NotificationQueries.unreadCount().queryKey });
+      const unreadCount = await NotificationService.getUnreadCount();
+      setAlarmReadState(unreadCount ?? 0);
+      WebViewBridge.sendMessage(WebViewEventType.NOTIFICATION_READ, {
+        data: { unreadCount: unreadCount ?? 0 },
+      });
+    },
+    onError: (_err, _id, context) => {
+      if (context?.previousData) {
+        context.previousData.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+    },
+  });
+
+  const { mutate: removeAllNotifications } = useMutation({
+    mutationFn: () => NotificationService.removeAllNotifications(),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: NotificationQueries.lists() });
+
+      const previousData = queryClient.getQueriesData({ queryKey: NotificationQueries.lists() });
+
+      queryClient.setQueriesData({ queryKey: NotificationQueries.lists() }, (old: typeof data) => {
+        if (!old) return old;
+        return { ...old, pages: old.pages.map(() => []) };
+      });
+
+      return { previousData };
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: NotificationQueries.lists() });
+      await queryClient.invalidateQueries({ queryKey: NotificationQueries.unreadCount().queryKey });
+      const unreadCount = await NotificationService.getUnreadCount();
+      setAlarmReadState(unreadCount ?? 0);
+      WebViewBridge.sendMessage(WebViewEventType.NOTIFICATION_READ, {
+        data: { unreadCount: unreadCount ?? 0 },
+      });
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousData) {
+        context.previousData.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+    },
+  });
+
   return {
     notifications,
     loading: isLoading || isFetchingNextPage,
@@ -110,5 +177,7 @@ export const useNotificationsViewModel = () => {
     ref,
     onReadNotification: readNotification,
     onReadAll: readAllNotifications,
+    onRemoveNotification: removeNotification,
+    onRemoveAll: removeAllNotifications,
   };
 };

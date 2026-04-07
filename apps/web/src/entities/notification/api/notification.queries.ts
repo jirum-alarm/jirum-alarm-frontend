@@ -8,6 +8,15 @@ const NOTIFICATION_LIMIT = 20;
 export const NotificationQueries = {
   all: () => ['notification'],
   lists: () => [...NotificationQueries.all(), 'list'],
+  existsAny: () =>
+    queryOptions({
+      queryKey: [...NotificationQueries.all(), 'existsAny'],
+      queryFn: async () => {
+        const list = await NotificationService.getNotifications({ offset: 0, limit: 1 });
+        return list.length > 0;
+      },
+      staleTime: 0,
+    }),
   unreadCount: () =>
     queryOptions({
       queryKey: [...NotificationQueries.all(), 'unreadCount'],
