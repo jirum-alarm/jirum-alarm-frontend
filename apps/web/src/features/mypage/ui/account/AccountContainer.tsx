@@ -12,7 +12,7 @@ const AccountContainer = () => {
     data: { me },
   } = useSuspenseQuery(AuthQueries.me());
   return (
-    <div className="flex h-full flex-col px-5 pb-[calc(5rem+env(safe-area-inset-bottom))]">
+    <div className="flex h-full flex-col px-5 pb-4">
       <div className="border-b border-b-gray-300 pt-6 pb-8">
         <MovePage to="/mypage/account/nickname" title="닉네임" subtitle={me?.nickname} />
         <MovePage to="/mypage/account/personal" title="개인정보" />

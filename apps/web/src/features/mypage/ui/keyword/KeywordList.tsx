@@ -8,7 +8,7 @@ const KeywordList = () => {
   const { notificationKeywordsByMe, onDeleteKeyword } = useKeywordList();
 
   return (
-    <div className="pb-22">
+    <div className="pb-32">
       <div>
         <div className="flex justify-between text-sm font-medium text-gray-900">
           <span>나의 지름 키워드</span>

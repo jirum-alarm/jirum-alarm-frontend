@@ -3,7 +3,6 @@ import { Suspense } from 'react';
 
 import CustomerServiceBoot from '@/shared/lib/customerservice/CustomerServiceBoot';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
-import { NAV_TYPE } from '@/shared/ui/layout/BottomNav';
 
 import { AuthQueries } from '@/entities/auth';
 
@@ -16,7 +15,7 @@ const MyPage = async () => {
   await queryClient.prefetchQuery(AuthQueries.me());
 
   return (
-    <BasicLayout hasBottomNav navType={NAV_TYPE.MYPAGE} title="마이페이지" hasBackButton>
+    <BasicLayout title="마이페이지" hasBackButton>
       <Suspense>
         <MyProfileSection />
         <CustomerServiceBoot />

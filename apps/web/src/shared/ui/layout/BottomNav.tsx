@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
-import { createElement, useEffect, useRef } from 'react';
+import { createElement, useEffect, useLayoutEffect, useRef } from 'react';
 
 import { PAGE } from '@/shared/config/page';
 import { useDevice } from '@/shared/hooks/useDevice';
@@ -111,6 +111,13 @@ const BottomNavComponent = () => {
   useHeaderVisibility();
   const isBottomNavVisible = true;
   const hasNewAlarm = useHasNewAlarm();
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.bottomNav = 'true';
+    return () => {
+      delete document.documentElement.dataset.bottomNav;
+    };
+  }, []);
 
   const isActiveNav = (nav: (typeof BottomNavList)[number]) => {
     return nav.isActive(pathName);

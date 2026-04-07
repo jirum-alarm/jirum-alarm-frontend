@@ -33,6 +33,11 @@ html {
 
 html {
   font-synthesis: none !important;
+  --bottom-nav-padding: 0px;
+}
+
+html[data-bottom-nav='true'] {
+  --bottom-nav-padding: calc(56px + env(safe-area-inset-bottom));
 }
 
 /* ---- Tailwind v4 theme/variant/utilities migrated from tailwind.config.js ---- */
