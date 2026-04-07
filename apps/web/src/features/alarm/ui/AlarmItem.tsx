@@ -11,9 +11,11 @@ import Link from '@/shared/ui/Link';
 const AlarmItem = ({
   notification,
   onRead,
+  isNew,
 }: {
   notification: QueryNotificationsQuery['notifications'][number];
   onRead: (id: number) => void;
+  isNew: boolean;
 }) => {
   const { id, message, createdAt, product, keyword, readAt } = notification;
   const { thumbnail, price, isHot, isEnd, id: productId } = product ?? {};
@@ -25,7 +27,12 @@ const AlarmItem = ({
   };
 
   return (
-    <li className={cn('flex gap-x-3', { 'bg-primary-50': !readAt })}>
+    <li
+      className={cn('flex gap-x-3', {
+        'bg-primary-50': isNew && !readAt,
+        'opacity-60': !!readAt,
+      })}
+    >
       <Link
         href={PAGE.DETAIL + '/' + +productId!}
         className="flex w-full p-5"

@@ -1,12 +1,15 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
-import { createElement, useRef } from 'react';
+import { createElement, useEffect, useRef } from 'react';
 
 import { PAGE } from '@/shared/config/page';
 import { useDevice } from '@/shared/hooks/useDevice';
+import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
+import { getUnreadCountAfterLastRead, setUnreadCountSnapshot } from '@/shared/lib/alarmReadState';
 import { cn } from '@/shared/lib/cn';
 import {
   Alert,
@@ -21,6 +24,8 @@ import {
   MyFill,
 } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
+
+import { NotificationQueries } from '@/entities/notification';
 
 import TopButton from '../TopButton';
 
@@ -76,11 +81,36 @@ const BottomNavList = [
   },
 ];
 
+function useHasNewAlarm() {
+  const pathName = usePathname();
+  const { isLoggedIn } = useIsLoggedIn();
+  const { data: unreadCount } = useQuery({
+    ...NotificationQueries.unreadCount(),
+    enabled: isLoggedIn,
+  });
+
+  const isOnAlarmPage = pathName.startsWith(PAGE.ALARM);
+
+  useEffect(() => {
+    if (isOnAlarmPage && unreadCount !== undefined) {
+      setUnreadCountSnapshot(unreadCount);
+    }
+  }, [isOnAlarmPage, unreadCount]);
+
+  if (isOnAlarmPage) return false;
+
+  const storedCount = getUnreadCountAfterLastRead();
+  // storedCount === -1 means never read before → show dot if any unread
+  if (storedCount === -1) return (unreadCount ?? 0) > 0;
+  return (unreadCount ?? 0) > storedCount;
+}
+
 const BottomNavComponent = () => {
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
   useHeaderVisibility();
   const isBottomNavVisible = true;
+  const hasNewAlarm = useHasNewAlarm();
 
   const isActiveNav = (nav: (typeof BottomNavList)[number]) => {
     return nav.isActive(pathName);
@@ -118,10 +148,13 @@ const BottomNavComponent = () => {
                 transition={{ duration: 0.1 }}
               >
                 <div
-                  className="flex h-[36px] w-[48px] items-center justify-center"
+                  className="relative flex h-[36px] w-[48px] items-center justify-center"
                   aria-hidden="true"
                 >
                   {createElement(isActiveNav(nav) ? nav.activeIcon : nav.icon)}
+                  {nav.type === NAV_TYPE.ALARM && hasNewAlarm && (
+                    <span className="absolute top-1 right-2.5 h-2 w-2 rounded-full bg-[#EB001C]" />
+                  )}
                 </div>
                 <span
                   className={cn('text-xs', {

@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { NotificationService } from '@/shared/api/notification/notification.service';
+import { setAlarmReadState } from '@/shared/lib/alarmReadState';
 import { WebViewBridge } from '@/shared/lib/webview/sender';
 import { WebViewEventType } from '@/shared/lib/webview/type';
 
@@ -53,6 +54,7 @@ export const useNotificationsViewModel = () => {
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: NotificationQueries.unreadCount().queryKey });
       const unreadCount = await NotificationService.getUnreadCount();
+      setAlarmReadState(unreadCount ?? 0);
       WebViewBridge.sendMessage(WebViewEventType.NOTIFICATION_READ, {
         data: { unreadCount: unreadCount ?? 0 },
       });
@@ -86,6 +88,7 @@ export const useNotificationsViewModel = () => {
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: NotificationQueries.unreadCount().queryKey });
       const unreadCount = await NotificationService.getUnreadCount();
+      setAlarmReadState(unreadCount ?? 0);
       WebViewBridge.sendMessage(WebViewEventType.NOTIFICATION_READ, {
         data: { unreadCount: unreadCount ?? 0 },
       });
