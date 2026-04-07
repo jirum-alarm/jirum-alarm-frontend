@@ -125,9 +125,13 @@ type CommentOutput {
   isNotice: Boolean!
   likeCount: Int!
   parentId: Float
-  productId: Int!
+  productId: Int
+  """
+  댓글에 달린 대댓글 수
+  """
+  replyCount: Int!
   searchAfter: [String!]
-  taggedProduct: ProductOutput!
+  taggedProduct: ProductOutput
   title: String
   trendedAt: DateTime
   userId: Float!
@@ -399,7 +403,7 @@ type Mutation {
     content: String!
     isNotice: Boolean
     parentId: Int
-    productId: Int!
+    productId: Int
     title: String
   ): Boolean!
   """
@@ -651,7 +655,7 @@ type Mutation {
     title: String
     weight: Int
   ): Ad!
-  updateComment(content: String!, id: Int!): Boolean!
+  updateComment(content: String, id: Int!, title: String): Boolean!
   """
   어드민) 핫딜 키워드 수정
   """
@@ -741,6 +745,7 @@ type NotificationKeyword {
 }
 
 enum NotificationTarget {
+  COMMENT
   INFO
   NOTICE
   PRODUCT
@@ -789,6 +794,14 @@ type PriceRangeCountOutput {
   priceRange: String!
 }
 
+type PriceVisualConfig {
+  isClustered: Boolean!
+  markerPct: Float!
+  medianPct: Float!
+  q1Pct: Float!
+  q3Pct: Float!
+}
+
 type ProductCommentSummary {
   additionalInfo: String
   option: String
@@ -820,6 +833,7 @@ type ProductHotDealIndex {
   message: String!
   productId: Int!
   score: Int
+  visualConfig: PriceVisualConfig
 }
 
 type ProductMapping {
@@ -1105,6 +1119,10 @@ type Query {
     limit: Int!
     orderBy: CommentOrder!
     orderOption: OrderOptionType!
+    """
+    대댓글(커뮤니티에서는 댓글) 조회 시 부모 댓글 ID
+    """
+    parentId: Int
     productId: Int
     searchAfter: [String!]
   ): [CommentOutput!]!
@@ -1450,6 +1468,15 @@ type Query {
   푸시 세팅 조회
   """
   pushSetting: UserPushSetting!
+  """
+  최근에 본 상품 N개 조회
+  """
+  recentViewedProducts(
+    """
+    조회할 최근 본 상품 개수
+    """
+    limit: Int! = 10
+  ): [ProductOutput!]!
   """
   알림 키워드 추천 목록 조회
   """

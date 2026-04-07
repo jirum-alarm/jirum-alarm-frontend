@@ -96,7 +96,7 @@ const JirumAlarmWebViewAndroid = ({
         }}
       />
       <ScrollView
-        contentContainerStyle={{flex: 1}}
+        contentContainerStyle={styles.scrollViewContent}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -122,8 +122,8 @@ const JirumAlarmWebViewAndroid = ({
             webviewRef.current?.reload();
           }}
           onMessage={handleWebViewMessage}
-          onNavigationStateChange={navState =>
-            setNavState({url: navState.url, canGoBack: navState.canGoBack})
+          onNavigationStateChange={state =>
+            setNavState({url: state.url, canGoBack: state.canGoBack})
           }
           // allowsBackForwardNavigationGestures={true}
           onScroll={e => {
@@ -150,9 +150,7 @@ const JirumAlarmWebViewAndroid = ({
           <ActivityIndicator size="large" color="#101828" />
         </View>
       )}
-      <SafeAreaView
-        style={{backgroundColor: '#ffffff', height: insets.bottom}}
-      />
+      <SafeAreaView style={[styles.safeAreaBottom, {height: insets.bottom}]} />
     </View>
   );
 };
@@ -215,8 +213,8 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
           handleWebViewMessage(event);
           handleNavigationStateChange(event);
         }}
-        onNavigationStateChange={navState =>
-          setNavState({url: navState.url, canGoBack: navState.canGoBack})
+        onNavigationStateChange={state =>
+          setNavState({url: state.url, canGoBack: state.canGoBack})
         }
         allowsBackForwardNavigationGestures={true}
         onScroll={e => {
@@ -236,9 +234,7 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
           <ActivityIndicator size="large" color="#101828" />
         </View>
       )}
-      <SafeAreaView
-        style={{backgroundColor: '#ffffff', height: insets.bottom}}
-      />
+      <SafeAreaView style={[styles.safeAreaBottom, {height: insets.bottom}]} />
     </View>
   );
 };
@@ -255,6 +251,12 @@ export default JirumAlarmWebViewScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollViewContent: {
+    flex: 1,
+  },
+  safeAreaBottom: {
+    backgroundColor: '#ffffff',
   },
   loadingContainer: {
     position: 'absolute',

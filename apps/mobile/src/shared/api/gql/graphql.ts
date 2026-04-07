@@ -157,9 +157,11 @@ export type CommentOutput = {
   isNotice: Scalars['Boolean']['output'];
   likeCount: Scalars['Int']['output'];
   parentId?: Maybe<Scalars['Float']['output']>;
-  productId: Scalars['Int']['output'];
+  productId?: Maybe<Scalars['Int']['output']>;
+  /** 댓글에 달린 대댓글 수 */
+  replyCount: Scalars['Int']['output'];
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
-  taggedProduct: ProductOutput;
+  taggedProduct?: Maybe<ProductOutput>;
   title?: Maybe<Scalars['String']['output']>;
   trendedAt?: Maybe<Scalars['DateTime']['output']>;
   userId: Scalars['Float']['output'];
@@ -526,7 +528,7 @@ export type MutationAddCommentArgs = {
   content: Scalars['String']['input'];
   isNotice?: InputMaybe<Scalars['Boolean']['input']>;
   parentId?: InputMaybe<Scalars['Int']['input']>;
-  productId: Scalars['Int']['input'];
+  productId?: InputMaybe<Scalars['Int']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -778,8 +780,9 @@ export type MutationUpdateAdArgs = {
 };
 
 export type MutationUpdateCommentArgs = {
-  content: Scalars['String']['input'];
+  content?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['Int']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationUpdateHotDealKeywordByAdminArgs = {
@@ -861,6 +864,7 @@ export type NotificationKeyword = {
 };
 
 export enum NotificationTarget {
+  Comment = 'COMMENT',
   Info = 'INFO',
   Notice = 'NOTICE',
   Product = 'PRODUCT',
@@ -909,6 +913,15 @@ export type PriceRangeCountOutput = {
   priceRange: Scalars['String']['output'];
 };
 
+export type PriceVisualConfig = {
+  __typename?: 'PriceVisualConfig';
+  isClustered: Scalars['Boolean']['output'];
+  markerPct: Scalars['Float']['output'];
+  medianPct: Scalars['Float']['output'];
+  q1Pct: Scalars['Float']['output'];
+  q3Pct: Scalars['Float']['output'];
+};
+
 export type ProductCommentSummary = {
   __typename?: 'ProductCommentSummary';
   additionalInfo?: Maybe<Scalars['String']['output']>;
@@ -943,6 +956,7 @@ export type ProductHotDealIndex = {
   message: Scalars['String']['output'];
   productId: Scalars['Int']['output'];
   score?: Maybe<Scalars['Int']['output']>;
+  visualConfig?: Maybe<PriceVisualConfig>;
 };
 
 export type ProductMapping = {
@@ -1249,6 +1263,8 @@ export type Query = {
   productsByKeyword: Array<ProductOutput>;
   /** 푸시 세팅 조회 */
   pushSetting: UserPushSetting;
+  /** 최근에 본 상품 N개 조회 */
+  recentViewedProducts: Array<ProductOutput>;
   /** 알림 키워드 추천 목록 조회 */
   recommendedNotificationKeywords: Array<Scalars['String']['output']>;
   /** 신고한 사용자 목록 조회 (마스킹) */
@@ -1346,6 +1362,7 @@ export type QueryCommentsArgs = {
   limit: Scalars['Int']['input'];
   orderBy: CommentOrder;
   orderOption: OrderOptionType;
+  parentId?: InputMaybe<Scalars['Int']['input']>;
   productId?: InputMaybe<Scalars['Int']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
@@ -1586,6 +1603,10 @@ export type QueryProductsByKeywordArgs = {
   orderBy: KeywordProductOrderType;
   orderOption: OrderOptionType;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryRecentViewedProductsArgs = {
+  limit?: Scalars['Int']['input'];
 };
 
 export type QueryReportUserNamesArgs = {

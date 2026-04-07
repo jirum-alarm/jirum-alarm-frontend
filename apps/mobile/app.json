@@ -3,6 +3,7 @@
     "name": "지름알림",
     "slug": "jirum-alarm",
     "scheme": "jirumalarm",
+    "userInterfaceStyle": "automatic",
     "experiments": {
       "autolinkingModuleResolution": true
     },

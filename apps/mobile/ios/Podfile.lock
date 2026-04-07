@@ -2,6 +2,8 @@ PODS:
   - Alamofire (5.9.1)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
+  - EXApplication (55.0.13):
+    - ExpoModulesCore
   - EXConstants (18.0.13):
     - ExpoModulesCore
   - EXJSONUtils (0.15.0)
@@ -285,6 +287,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - ExpoNotifications (55.0.17):
+    - ExpoModulesCore
   - ExpoWebBrowser (15.0.10):
     - ExpoModulesCore
   - EXUpdatesInterface (2.0.0):
@@ -2944,11 +2948,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNNotifee (9.1.8):
-    - React-Core
-    - RNNotifee/NotifeeCore (= 9.1.8)
-  - RNNotifee/NotifeeCore (9.1.8):
-    - React-Core
   - RNReanimated (4.1.6):
     - boost
     - DoubleConversion
@@ -3252,6 +3251,7 @@ PODS:
 DEPENDENCIES:
   - boost (from `../../../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - EXApplication (from `../../../node_modules/expo-application/ios`)
   - EXConstants (from `../../../node_modules/expo-constants/ios`)
   - EXJSONUtils (from `../../../node_modules/expo-json-utils/ios`)
   - EXManifests (from `../../../node_modules/expo-manifests/ios`)
@@ -3266,6 +3266,7 @@ DEPENDENCIES:
   - ExpoFont (from `../../../node_modules/expo-font/ios`)
   - ExpoKeepAwake (from `../../../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../../../node_modules/expo-modules-core`)
+  - ExpoNotifications (from `../../../node_modules/expo-notifications/ios`)
   - ExpoWebBrowser (from `../../../node_modules/expo-web-browser/ios`)
   - EXUpdatesInterface (from `../../../node_modules/expo-updates-interface/ios`)
   - fast_float (from `../../../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
@@ -3350,7 +3351,6 @@ DEPENDENCIES:
   - "RNFBMessaging (from `../../../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../../../node_modules/react-native-gesture-handler`)
   - "RNNaverLogin (from `../../../node_modules/@react-native-seoul/naver-login`)"
-  - "RNNotifee (from `../../../node_modules/@notifee/react-native`)"
   - RNReanimated (from `../../../node_modules/react-native-reanimated`)
   - RNScreens (from `../../../node_modules/react-native-screens`)
   - RNSVG (from `../../../node_modules/react-native-svg`)
@@ -3382,6 +3382,8 @@ EXTERNAL SOURCES:
     :podspec: "../../../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
     :podspec: "../../../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  EXApplication:
+    :path: "../../../node_modules/expo-application/ios"
   EXConstants:
     :path: "../../../node_modules/expo-constants/ios"
   EXJSONUtils:
@@ -3410,6 +3412,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/expo-keep-awake/ios"
   ExpoModulesCore:
     :path: "../../../node_modules/expo-modules-core"
+  ExpoNotifications:
+    :path: "../../../node_modules/expo-notifications/ios"
   ExpoWebBrowser:
     :path: "../../../node_modules/expo-web-browser/ios"
   EXUpdatesInterface:
@@ -3577,8 +3581,6 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/react-native-gesture-handler"
   RNNaverLogin:
     :path: "../../../node_modules/@react-native-seoul/naver-login"
-  RNNotifee:
-    :path: "../../../node_modules/@notifee/react-native"
   RNReanimated:
     :path: "../../../node_modules/react-native-reanimated"
   RNScreens:
@@ -3594,6 +3596,7 @@ SPEC CHECKSUMS:
   Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
+  EXApplication: 0d08d28385eefde8182c1bb66c59189d9b2ad373
   EXConstants: fce59a631a06c4151602843667f7cfe35f81e271
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: a8d97683e5c7a3b026ffbd58559c64dc655b747b
@@ -3608,6 +3611,7 @@ SPEC CHECKSUMS:
   ExpoFont: f543ce20a228dd702813668b1a07b46f51878d47
   ExpoKeepAwake: 55f75eca6499bb9e4231ebad6f3e9cb8f99c0296
   ExpoModulesCore: 91a57f1d109cf53fe58d44fcf6b68a777561549a
+  ExpoNotifications: 1d552063bcd769c237c73dfada0abecdef097620
   ExpoWebBrowser: 17b064c621789e41d4816c95c93f429b84971f52
   EXUpdatesInterface: 5adf50cb41e079c861da6d9b4b954c3db9a50734
   fast_float: 914e00b8b67cb8ba184a778c7bbc2e9fe98d37b3
@@ -3705,7 +3709,6 @@ SPEC CHECKSUMS:
   RNFBMessaging: 0f0498a95c605e3afcf13ac5f349d0b201ea65f6
   RNGestureHandler: b8d2e75c2e88fc2a1f6be3b3beeeed80b88fa37d
   RNNaverLogin: 88655625a94d61dda7541107bfe360702a7bf07d
-  RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
   RNReanimated: 5e23919cd73a0b7b35100cbf2faf011edaeddd3e
   RNScreens: 2e9c41cd099b1ca50136af8d57c3594214d0086a
   RNSVG: 94a1be05fab4043354bcf7104f0f9b0e2231ef05

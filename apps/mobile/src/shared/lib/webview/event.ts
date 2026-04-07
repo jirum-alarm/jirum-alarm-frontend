@@ -3,7 +3,7 @@ import {
   WebViewEventType,
 } from '@/shared/lib/webview';
 import {BackHandler} from 'react-native';
-import notifee from '@notifee/react-native';
+import * as Notifications from 'expo-notifications';
 
 type EventHandler<T extends WebViewEventType> = (
   payload: WebViewEventPayloads[T],
@@ -22,6 +22,6 @@ export class EventBridge {
     };
   static notificationRead: EventHandler<WebViewEventType.NOTIFICATION_READ> =
     async payload => {
-      await notifee.setBadgeCount(payload.data.unreadCount);
+      await Notifications.setBadgeCountAsync(payload.data.unreadCount);
     };
 }

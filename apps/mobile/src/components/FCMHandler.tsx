@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import messaging from '@react-native-firebase/messaging';
-import notifee, {EventType} from '@notifee/react-native';
+import * as Notifications from 'expo-notifications';
 import useFCMTokenManager from '@/shared/hooks/useFCMTokenManager.ts';
 import {onForegroundMessageHandler} from '../shared/lib/fcm/index.ts';
 import {useWebviewContext} from '../provider/WebViewRefProvider.tsx';
@@ -59,12 +59,14 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
   };
 
   // ✅ 포그라운드에서 푸시 알람을 클릭했을 때 처리
-  const handleForegroundEvent = (event: any) => {
-    if (event.type === EventType.PRESS) {
-      const url = event.detail.notification?.data?.link;
-      if (url) {
-        webviewRef.current?.injectJavaScript(goProductDetail(url));
-      }
+  const handleForegroundEvent = (
+    response: Notifications.NotificationResponse,
+  ) => {
+    const url = response.notification.request.content.data?.link as
+      | string
+      | undefined;
+    if (url) {
+      webviewRef.current?.injectJavaScript(goProductDetail(url));
     }
   };
 
@@ -110,12 +112,12 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
 
   useEffect(() => {
     // ✅ 포그라운드 알림 클릭 이벤트 처리
-    const unsubscribeForegroundEvent = notifee.onForegroundEvent(
+    const subscription = Notifications.addNotificationResponseReceivedListener(
       handleForegroundEvent,
     );
 
     return () => {
-      unsubscribeForegroundEvent();
+      subscription.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

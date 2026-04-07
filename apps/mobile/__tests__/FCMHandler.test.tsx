@@ -1,4 +1,4 @@
-import notifee, {EventType} from '@notifee/react-native';
+import * as Notifications from 'expo-notifications';
 import messaging from '@react-native-firebase/messaging';
 import * as ReactTestRenderer from 'react-test-renderer';
 import FCMHandler from '../src/components/FCMHandler';
@@ -11,14 +11,14 @@ const mockOnMessage = jest.fn();
 const mockOnNotificationOpenedApp = jest.fn();
 const mockUnsubscribeMessage = jest.fn();
 const mockUnsubscribeOpenedApp = jest.fn();
-const mockOnForegroundEvent = jest.fn();
-const mockUnsubscribeForegroundEvent = jest.fn();
+const mockAddNotificationResponseReceivedListener = jest.fn();
+const mockRemoveNotificationSubscription = jest.fn();
 const mockUseFCMTokenManager = useFCMTokenManager as jest.Mock;
 const mockUseWebviewContext = useWebviewContext as jest.Mock;
 const mockForegroundMessageHandler = onForegroundMessageHandler as jest.Mock;
 const mockMessaging = messaging as unknown as jest.Mock;
-const mockNotifee = notifee as unknown as {
-  onForegroundEvent: jest.Mock;
+const mockNotifications = Notifications as unknown as {
+  addNotificationResponseReceivedListener: jest.Mock;
 };
 const mockInjectJavaScript = jest.fn();
 const mockWebviewRef = {
@@ -32,14 +32,9 @@ jest.mock('@react-native-firebase/messaging', () => ({
   default: jest.fn(),
 }));
 
-jest.mock('@notifee/react-native', () => ({
+jest.mock('expo-notifications', () => ({
   __esModule: true,
-  EventType: {
-    PRESS: 'PRESS',
-  },
-  default: {
-    onForegroundEvent: jest.fn(),
-  },
+  addNotificationResponseReceivedListener: jest.fn(),
 }));
 
 jest.mock('../src/shared/hooks/useFCMTokenManager.ts', () => jest.fn());
@@ -85,15 +80,17 @@ describe('FCMHandler', () => {
     mockOnNotificationOpenedApp.mockImplementation(
       () => mockUnsubscribeOpenedApp,
     );
-    mockOnForegroundEvent.mockImplementation(
-      () => mockUnsubscribeForegroundEvent,
-    );
+    mockAddNotificationResponseReceivedListener.mockImplementation(() => ({
+      remove: mockRemoveNotificationSubscription,
+    }));
     mockMessaging.mockImplementation(() => ({
       getInitialNotification: mockGetInitialNotification,
       onMessage: mockOnMessage,
       onNotificationOpenedApp: mockOnNotificationOpenedApp,
     }));
-    mockNotifee.onForegroundEvent.mockImplementation(mockOnForegroundEvent);
+    mockNotifications.addNotificationResponseReceivedListener.mockImplementation(
+      mockAddNotificationResponseReceivedListener,
+    );
     mockWebviewRef.current = {
       injectJavaScript: mockInjectJavaScript,
     };
@@ -132,7 +129,8 @@ describe('FCMHandler', () => {
   it('routes foreground and background notification clicks to the WebView', async () => {
     const renderer = await renderHandler();
     const openedAppHandler = mockOnNotificationOpenedApp.mock.calls[0][0];
-    const foregroundEventHandler = mockOnForegroundEvent.mock.calls[0][0];
+    const foregroundEventHandler =
+      mockAddNotificationResponseReceivedListener.mock.calls[0][0];
 
     ReactTestRenderer.act(() => {
       openedAppHandler({
@@ -141,14 +139,15 @@ describe('FCMHandler', () => {
         },
       });
       foregroundEventHandler({
-        detail: {
-          notification: {
-            data: {
-              link: '/products/3',
+        notification: {
+          request: {
+            content: {
+              data: {
+                link: '/products/3',
+              },
             },
           },
         },
-        type: EventType.PRESS,
       });
     });
 
@@ -174,19 +173,21 @@ describe('FCMHandler', () => {
 
     const renderer = await renderHandler();
     const openedAppHandler = mockOnNotificationOpenedApp.mock.calls[0][0];
-    const foregroundEventHandler = mockOnForegroundEvent.mock.calls[0][0];
+    const foregroundEventHandler =
+      mockAddNotificationResponseReceivedListener.mock.calls[0][0];
 
     await ReactTestRenderer.act(async () => {
       openedAppHandler({
         data: {},
       });
       foregroundEventHandler({
-        detail: {
-          notification: {
-            data: {},
+        notification: {
+          request: {
+            content: {
+              data: {},
+            },
           },
         },
-        type: EventType.PRESS,
       });
       jest.advanceTimersByTime(5000);
       await flushMicrotasks();
@@ -200,6 +201,6 @@ describe('FCMHandler', () => {
 
     expect(mockUnsubscribeMessage).toHaveBeenCalled();
     expect(mockUnsubscribeOpenedApp).toHaveBeenCalled();
-    expect(mockUnsubscribeForegroundEvent).toHaveBeenCalled();
+    expect(mockRemoveNotificationSubscription).toHaveBeenCalled();
   });
 });
