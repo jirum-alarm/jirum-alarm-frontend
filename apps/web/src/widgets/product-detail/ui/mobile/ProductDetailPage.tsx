@@ -31,7 +31,7 @@ function ProductDetailPage({
     <>
       <ViewerCount productId={productId} />
 
-      <main className="pt-14">
+      <main>
         <div className="sticky top-0 -mb-6">
           <div className="relative aspect-square w-full">
             <ProductDetailImage productId={productId} fill initialData={initialProduct} />

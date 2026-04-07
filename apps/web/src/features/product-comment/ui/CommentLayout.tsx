@@ -32,7 +32,7 @@ export default function CommentLayout({
     <>
       {comments.length > 0 ? (
         <>
-          <main className="flex grow flex-col divide-y divide-gray-200 pt-14 pb-[64px]">
+          <main className="flex grow flex-col divide-y divide-gray-200 pb-[64px]">
             {comments.map((comment) => {
               const editStatus =
                 editingComment?.status === 'update' && editingComment?.comment.id === comment.id
