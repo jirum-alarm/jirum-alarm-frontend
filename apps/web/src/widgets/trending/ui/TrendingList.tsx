@@ -3,8 +3,12 @@
 import { memo, useEffect, useRef } from 'react';
 import { useSwiper } from 'swiper/react';
 
+import { useDevice } from '@/shared/hooks/useDevice';
+
 import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
 import { ProductGridList } from '@/entities/product-list/ui/grid';
+
+import InFeedAd from '@/features/ad/ui/InFeedAd';
 
 import useTrendingViewModel from '../model/useTrendingViewModel';
 
@@ -18,6 +22,7 @@ const SIZE = 10;
 const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
   const swiper = useSwiper();
   const ref = useRef<HTMLDivElement>(null);
+  const { device } = useDevice();
 
   const { products, liveProducts, hotDeals } = useTrendingViewModel({
     categoryId,
@@ -36,13 +41,14 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
       </div>
       {liveProducts && (
         <CarouselProductsSection
-          title={`‘${categoryName}’ 실시간 핫딜`}
+          title={`'${categoryName}' 실시간 핫딜`}
           products={liveProducts}
           nested
           shouldShowMobileHeader={false}
           priorityCount={3}
         />
       )}
+      <InFeedAd type="TRENDING" isMobile={device.isMobile} className="px-5" />
       <div className="px-5">
         <ProductGridList products={products?.slice(SIZE) ?? []} rankFrom={SIZE + 1} />
       </div>
