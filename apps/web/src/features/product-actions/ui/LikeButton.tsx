@@ -8,7 +8,7 @@ import { PAGE } from '@/shared/config/page';
 import { useDevice } from '@/shared/hooks/useDevice';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
-import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
+import { triggerHaptic, WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 import Button from '@/shared/ui/common/Button';
 import { Heart } from '@/shared/ui/common/icons';
 import { useToast } from '@/shared/ui/common/Toast';
@@ -59,6 +59,8 @@ export default function LikeButton({
 
   const handleClickWishlist = () => {
     if (checkAndRedirect()) return;
+
+    triggerHaptic(isLiked ? 'light' : 'success');
 
     if (isLiked) {
       removeWishlist({ productId });
