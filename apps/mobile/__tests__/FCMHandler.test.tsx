@@ -74,7 +74,10 @@ describe('FCMHandler', () => {
     jest.useFakeTimers();
 
     mockUseFCMTokenManager.mockImplementation(() => undefined);
-    mockUseWebviewContext.mockReturnValue({webviewRef: mockWebviewRef});
+    mockUseWebviewContext.mockReturnValue({
+      webviewRef: mockWebviewRef,
+      getWebViewRefByUrl: jest.fn(() => null),
+    });
     mockGetInitialNotification.mockResolvedValue(null);
     mockOnMessage.mockImplementation(() => mockUnsubscribeMessage);
     mockOnNotificationOpenedApp.mockImplementation(
