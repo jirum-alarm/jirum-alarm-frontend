@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {authNavigations} from '@/shared/constant/nagivations';
+import {authNavigations} from '@/shared/constant/navigations';
 import AuthHomeScreen from '@/screens/auth/AuthHomeScreen';
 import EmailLoginNavigator from '@/navigations/stack/EmailLoginNavigator';
 export type AuthParamList = {

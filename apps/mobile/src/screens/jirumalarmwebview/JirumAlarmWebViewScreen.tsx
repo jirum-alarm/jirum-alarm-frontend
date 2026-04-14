@@ -17,7 +17,7 @@ import {SERVICE_URL} from '@/constants/env';
 import {SystemBars} from 'react-native-edge-to-edge';
 import {useCommonWebViewLogic} from './hooks/useCommonWebViewLogic';
 import {MainParamList} from '@/navigations/stack/MainNavigator';
-import {mainNavigations} from '@/shared/constant/nagivations';
+import {mainNavigations} from '@/shared/constant/navigations';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 type JirumAlarmWebViewScreenRouteProp = NativeStackScreenProps<

@@ -22,7 +22,7 @@ import {
 } from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainParamList} from '@/navigations/stack/MainNavigator';
-import {mainNavigations} from '@/shared/constant/nagivations';
+import {mainNavigations} from '@/shared/constant/navigations';
 
 const LOADING_INDICATOR_DELAY_MS = 1000;
 const LOADING_FALLBACK_TIMEOUT_MS = 15000;

@@ -8,7 +8,7 @@ import {
   NaverIcon,
 } from '../../shared/components/icons';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {authNavigations} from '@/shared/constant/nagivations.ts';
+import {authNavigations} from '@/shared/constant/navigations.ts';
 import {useSocialLogin} from './useSocialLogin';
 import {AuthParamList} from '@/navigations/stack/AuthNavigator';
 
