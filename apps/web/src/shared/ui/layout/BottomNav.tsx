@@ -11,6 +11,8 @@ import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
 import { getUnreadCountAfterLastRead, setUnreadCountSnapshot } from '@/shared/lib/alarmReadState';
 import { cn } from '@/shared/lib/cn';
+import { WebViewBridge } from '@/shared/lib/webview/sender';
+import { WebViewEventType } from '@/shared/lib/webview/type';
 import {
   Alert,
   AlertFill,
@@ -97,12 +99,19 @@ function useHasNewAlarm() {
     }
   }, [isOnAlarmPage, unreadCount]);
 
-  if (isOnAlarmPage) return false;
+  let hasNewAlarm = false;
+  if (!isOnAlarmPage) {
+    const storedCount = getUnreadCountAfterLastRead();
+    hasNewAlarm = storedCount === -1 ? (unreadCount ?? 0) > 0 : (unreadCount ?? 0) > storedCount;
+  }
 
-  const storedCount = getUnreadCountAfterLastRead();
-  // storedCount === -1 means never read before → show dot if any unread
-  if (storedCount === -1) return (unreadCount ?? 0) > 0;
-  return (unreadCount ?? 0) > storedCount;
+  useEffect(() => {
+    WebViewBridge.sendMessage(WebViewEventType.ALARM_DOT_CHANGED, {
+      data: { hasNewAlarm },
+    });
+  }, [hasNewAlarm]);
+
+  return hasNewAlarm;
 }
 
 const BottomNavComponent = () => {
