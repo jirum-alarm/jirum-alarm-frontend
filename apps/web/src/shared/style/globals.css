@@ -40,6 +40,15 @@ html[data-bottom-nav='true'] {
   --bottom-nav-padding: calc(56px + env(safe-area-inset-bottom));
 }
 
+/* 네이티브 앱에서 바텀 탭이 활성화되면 웹 바텀 내비를 숨김 */
+html[data-native-tabs='true'] {
+  --bottom-nav-padding: 0px;
+}
+
+html[data-native-tabs='true'] nav:has(ul > li > a[data-nav-type]) {
+  display: none !important;
+}
+
 /* ---- Tailwind v4 theme/variant/utilities migrated from tailwind.config.js ---- */
 
 @theme {

@@ -60,7 +60,7 @@ export default function CommunityPostDetailClient({
   const hasTaggedProduct = !!post.taggedProduct?.id && post.taggedProduct.id !== '0';
 
   return (
-    <div className="flex flex-col pb-32">
+    <div className="flex flex-col pb-20">
       {/* 헤더 */}
       <div className="flex items-center justify-between px-5 py-4">
         <div className="flex items-center gap-x-2">
