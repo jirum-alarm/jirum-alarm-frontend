@@ -6,7 +6,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 import {tabNavigations} from '@/shared/constant/navigations';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
-import {useUnreadNotifications} from '@/shared/hooks/useUnreadNotifications';
+import {useHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 import {getTabBaseUrl} from '@/shared/lib/navigation/tab-routing';
 import {SERVICE_URL} from '@/constants/env';
 import TabWebView from '@/screens/tabs/TabWebView';
@@ -123,7 +123,7 @@ function AnimatedTabBar(props: BottomTabBarProps) {
 
 function MainTabNavigator() {
   const {setActiveTab, getWebViewRef} = useWebviewContext();
-  const unreadCount = useUnreadNotifications();
+  const hasNewAlarm = useHasNewAlarm();
   const insets = useSafeAreaInsets();
 
   const handleScrollToTop = useCallback(
@@ -178,7 +178,7 @@ function MainTabNavigator() {
                     height={24}
                     color={focused ? '#101828' : '#667085'}
                   />
-                  {tab.name === tabNavigations.ALARM && unreadCount > 0 && (
+                  {tab.name === tabNavigations.ALARM && hasNewAlarm && (
                     <View style={styles.badgeDot} />
                   )}
                 </View>

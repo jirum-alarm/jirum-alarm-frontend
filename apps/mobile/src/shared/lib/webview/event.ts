@@ -7,6 +7,7 @@ import {BackHandler, Share} from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as Haptics from 'expo-haptics';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
+import {setHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 
 type EventHandler<T extends WebViewEventType> = (
   payload: WebViewEventPayloads[T],
@@ -51,5 +52,9 @@ export class EventBridge {
         url,
         message: message ?? `${title} ${url}`,
       });
+    };
+  static alarmDotChanged: EventHandler<WebViewEventType.ALARM_DOT_CHANGED> =
+    async payload => {
+      setHasNewAlarm(payload.data.hasNewAlarm);
     };
 }

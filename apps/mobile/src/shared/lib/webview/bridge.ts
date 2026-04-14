@@ -10,6 +10,7 @@ export enum WebViewEventType {
   NOTIFICATION_READ = 'NOTIFICATION_READ',
   HAPTIC_FEEDBACK = 'HAPTIC_FEEDBACK',
   SHARE_REQUEST = 'SHARE_REQUEST',
+  ALARM_DOT_CHANGED = 'ALARM_DOT_CHANGED',
 }
 
 export type HapticStyle =
@@ -35,6 +36,7 @@ export type WebViewEventPayloads = {
   [WebViewEventType.SHARE_REQUEST]: {
     data: {title: string; url: string; message?: string};
   };
+  [WebViewEventType.ALARM_DOT_CHANGED]: {data: {hasNewAlarm: boolean}};
 };
 
 export interface WebViewEvent<T extends WebViewEventType> {
@@ -53,6 +55,7 @@ const eventHandlers: {
   [WebViewEventType.NOTIFICATION_READ]: EventBridge.notificationRead,
   [WebViewEventType.HAPTIC_FEEDBACK]: EventBridge.hapticFeedback,
   [WebViewEventType.SHARE_REQUEST]: EventBridge.shareRequest,
+  [WebViewEventType.ALARM_DOT_CHANGED]: EventBridge.alarmDotChanged,
 };
 
 export const parsedWebViewMessage = (event: WebViewMessageEvent) => {
