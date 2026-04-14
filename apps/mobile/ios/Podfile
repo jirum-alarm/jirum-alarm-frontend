@@ -51,5 +51,20 @@ target 'jirumAlarmMobile' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # Xcode 26 beta: fmt 라이브러리의 consteval 호환성 이슈 워크어라운드
+    # FMT_CONSTEVAL을 consteval에서 constexpr로 변경
+    fmt_base_header = File.join(__dir__, 'Pods', 'fmt', 'include', 'fmt', 'base.h')
+    if File.exist?(fmt_base_header)
+      content = File.read(fmt_base_header)
+      patched = content.gsub(
+        '#  define FMT_CONSTEVAL consteval',
+        '#  define FMT_CONSTEVAL constexpr'
+      )
+      if content != patched
+        File.write(fmt_base_header, patched)
+        Pod::UI.puts "Patched fmt FMT_CONSTEVAL for Xcode 26 compatibility".yellow
+      end
+    end
   end
 end

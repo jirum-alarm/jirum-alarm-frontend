@@ -2,12 +2,14 @@ PODS:
   - Alamofire (5.9.1)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
-  - EXApplication (55.0.13):
+  - EXApplication (7.0.8):
     - ExpoModulesCore
   - EXConstants (18.0.13):
     - ExpoModulesCore
   - EXJSONUtils (0.15.0)
   - EXManifests (1.0.10):
+    - ExpoModulesCore
+  - EXNotifications (0.32.16):
     - ExpoModulesCore
   - Expo (54.0.33):
     - boost
@@ -256,6 +258,8 @@ PODS:
     - ExpoModulesCore
   - ExpoFont (14.0.11):
     - ExpoModulesCore
+  - ExpoHaptics (55.0.14):
+    - ExpoModulesCore
   - ExpoKeepAwake (15.0.8):
     - ExpoModulesCore
   - ExpoModulesCore (3.0.29):
@@ -287,8 +291,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - ExpoNotifications (55.0.17):
-    - ExpoModulesCore
   - ExpoWebBrowser (15.0.10):
     - ExpoModulesCore
   - EXUpdatesInterface (2.0.0):
@@ -3255,6 +3257,7 @@ DEPENDENCIES:
   - EXConstants (from `../../../node_modules/expo-constants/ios`)
   - EXJSONUtils (from `../../../node_modules/expo-json-utils/ios`)
   - EXManifests (from `../../../node_modules/expo-manifests/ios`)
+  - EXNotifications (from `../../../node_modules/expo-notifications/ios`)
   - Expo (from `../../../node_modules/expo`)
   - expo-dev-client (from `../../../node_modules/expo-dev-client/ios`)
   - expo-dev-launcher (from `../../../node_modules/expo-dev-launcher`)
@@ -3264,9 +3267,9 @@ DEPENDENCIES:
   - ExpoAsset (from `../../../node_modules/expo-asset/ios`)
   - ExpoFileSystem (from `../../../node_modules/expo-file-system/ios`)
   - ExpoFont (from `../../../node_modules/expo-font/ios`)
+  - ExpoHaptics (from `../../../node_modules/expo-haptics/ios`)
   - ExpoKeepAwake (from `../../../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../../../node_modules/expo-modules-core`)
-  - ExpoNotifications (from `../../../node_modules/expo-notifications/ios`)
   - ExpoWebBrowser (from `../../../node_modules/expo-web-browser/ios`)
   - EXUpdatesInterface (from `../../../node_modules/expo-updates-interface/ios`)
   - fast_float (from `../../../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
@@ -3390,6 +3393,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/expo-json-utils/ios"
   EXManifests:
     :path: "../../../node_modules/expo-manifests/ios"
+  EXNotifications:
+    :path: "../../../node_modules/expo-notifications/ios"
   Expo:
     :path: "../../../node_modules/expo"
   expo-dev-client:
@@ -3408,12 +3413,12 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/expo-file-system/ios"
   ExpoFont:
     :path: "../../../node_modules/expo-font/ios"
+  ExpoHaptics:
+    :path: "../../../node_modules/expo-haptics/ios"
   ExpoKeepAwake:
     :path: "../../../node_modules/expo-keep-awake/ios"
   ExpoModulesCore:
     :path: "../../../node_modules/expo-modules-core"
-  ExpoNotifications:
-    :path: "../../../node_modules/expo-notifications/ios"
   ExpoWebBrowser:
     :path: "../../../node_modules/expo-web-browser/ios"
   EXUpdatesInterface:
@@ -3596,10 +3601,11 @@ SPEC CHECKSUMS:
   Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
-  EXApplication: 0d08d28385eefde8182c1bb66c59189d9b2ad373
+  EXApplication: 1e98d4b1dccdf30627f92917f4b2c5a53c330e5f
   EXConstants: fce59a631a06c4151602843667f7cfe35f81e271
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: a8d97683e5c7a3b026ffbd58559c64dc655b747b
+  EXNotifications: 9eec98712cc814ceff916d876cb53859003b0597
   Expo: ec20d60a9ba93352323b8f773c0e59bc7aa1c492
   expo-dev-client: 425ee077d6754a98cfe3a2e2410d29b440b24c9d
   expo-dev-launcher: 2d033af33152dbe1fa55559fbad5e63aa7376bad
@@ -3609,12 +3615,12 @@ SPEC CHECKSUMS:
   ExpoAsset: f867e55ceb428aab99e1e8c082b5aee7c159ea18
   ExpoFileSystem: 858a44267a3e6e9057e0888ad7c7cfbf55d52063
   ExpoFont: f543ce20a228dd702813668b1a07b46f51878d47
+  ExpoHaptics: 679f09dc37d5981e619bc197732007a3334e80b8
   ExpoKeepAwake: 55f75eca6499bb9e4231ebad6f3e9cb8f99c0296
   ExpoModulesCore: 91a57f1d109cf53fe58d44fcf6b68a777561549a
-  ExpoNotifications: 1d552063bcd769c237c73dfada0abecdef097620
   ExpoWebBrowser: 17b064c621789e41d4816c95c93f429b84971f52
   EXUpdatesInterface: 5adf50cb41e079c861da6d9b4b954c3db9a50734
-  fast_float: 914e00b8b67cb8ba184a778c7bbc2e9fe98d37b3
+  fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
   FBLazyVector: 5beb8028d5a2e75dd9634917f23e23d3a061d2aa
   Firebase: 6a8f201c61eda24e98f1ce2b44b1b9c2caf525cc
   FirebaseCore: 2321536f9c423b1f857e047a82b8a42abc6d9e2c
@@ -3622,11 +3628,11 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: 31ee350d87b30a9349e907f84bf49ef8e6791e5a
   FirebaseInstallations: 781e0e37aa0e1c92b44d00e739aba79ad31b2dba
   FirebaseMessaging: c7be9357fd8ba33bc45b9a6c3cdff0b466e1e2a4
-  fmt: b85d977e8fe789fd71c77123f9f4920d88c4d170
-  glog: 682871fb30f4a65f657bf357581110656ea90b08
+  fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
+  glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
-  hermes-engine: 8bb0bdb1bf49c3bbc17cf4c2d02dcc2f706ab555
+  hermes-engine: 9f4dfe93326146a1c99eb535b1cb0b857a3cd172
   kakao-login: c7b882cd279ca11f5b3abd15d0e0fcb41a427108
   KakaoSDKAuth: 569b377eda622d93d4575240b8031cd658163eef
   KakaoSDKCommon: d57127c339fc79e73aa8b236a4c77211c29924f1
@@ -3634,7 +3640,7 @@ SPEC CHECKSUMS:
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   naveridlogin-sdk-ios: d9d46d02119d303023d7000cd5963864d5bb89e5
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  RCT-Folly: fb64616e25cfac1c3d10bfd784d68926325ae67f
+  RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: 5eb1d2eeff5fb91151e8a8eef45b6c7658b6c897
   RCTRequired: cebcf9442fc296c9b89ac791dfd463021d9f6f23
   RCTTypeSafety: b99aa872829ee18f6e777e0ef55852521c5a6788
@@ -3716,6 +3722,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: cc4a6600d61e4e9276e860d4d68eebb834a050ba
 
-PODFILE CHECKSUM: dac7001fa76af45f05bf64f4de2eec2dfebbbe53
+PODFILE CHECKSUM: 4386fb47a06e2586bdc11673a2e36d9c67996388
 
 COCOAPODS: 1.16.2

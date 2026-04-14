@@ -41,6 +41,7 @@
     "expo": "~54.0.33",
     "expo-apple-authentication": "~8.0.8",
     "expo-dev-client": "~6.0.20",
+    "expo-haptics": "^55.0.14",
     "expo-notifications": "^0.32.16",
     "expo-web-browser": "~15.0.10",
     "nativewind": "4.2.2",
