@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 
 import ReactQueryProvider from './src/provider/ReactQueryProvider.tsx';
 import {NavigationContainer} from '@react-navigation/native';
@@ -7,21 +7,23 @@ import './global.css';
 import {KeyboardProvider} from 'react-native-keyboard-controller';
 import Toast, {type ToastConfig} from 'react-native-toast-message';
 import {Text, View} from 'react-native';
-import {WebviewRefContext} from '@/provider/WebViewRefProvider.tsx';
-import WebView from 'react-native-webview';
+import {
+  WebviewRefContext,
+  useWebViewRefManager,
+} from '@/provider/WebViewRefProvider.tsx';
 import FcmHandler from '@/components/FCMHandler.tsx';
 import OfflineBanner from '@/shared/components/OfflineBanner.tsx';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 function App(): React.JSX.Element {
-  const webviewRef = useRef<WebView>(null);
+  const webViewRefManager = useWebViewRefManager();
 
   return (
     <SafeAreaProvider>
       <KeyboardProvider>
         <NavigationContainer>
           <ReactQueryProvider>
-            <WebviewRefContext.Provider value={{webviewRef}}>
+            <WebviewRefContext.Provider value={webViewRefManager}>
               <FcmHandler>
                 <RootNavigator />
               </FcmHandler>

@@ -8,7 +8,17 @@ export enum WebViewEventType {
   PRESS_BACKBUTTON = 'PRESS_BACKBUTTON',
   'ROUTE_CHANGED' = 'ROUTE_CHANGED',
   NOTIFICATION_READ = 'NOTIFICATION_READ',
+  HAPTIC_FEEDBACK = 'HAPTIC_FEEDBACK',
+  SHARE_REQUEST = 'SHARE_REQUEST',
 }
+
+export type HapticStyle =
+  | 'light'
+  | 'medium'
+  | 'heavy'
+  | 'success'
+  | 'warning'
+  | 'error';
 
 export type WebViewEventPayloads = {
   [WebViewEventType.LOGIN_SUCCESS]: {
@@ -21,6 +31,10 @@ export type WebViewEventPayloads = {
     data: {url: string; type: 'push' | 'replace'};
   };
   [WebViewEventType.NOTIFICATION_READ]: {data: {unreadCount: number}};
+  [WebViewEventType.HAPTIC_FEEDBACK]: {data: {style: HapticStyle}};
+  [WebViewEventType.SHARE_REQUEST]: {
+    data: {title: string; url: string; message?: string};
+  };
 };
 
 export interface WebViewEvent<T extends WebViewEventType> {
@@ -37,6 +51,8 @@ const eventHandlers: {
   [WebViewEventType.PRESS_BACKBUTTON]: EventBridge.pressBackButton,
   [WebViewEventType.ROUTE_CHANGED]: EventBridge.routeChanged,
   [WebViewEventType.NOTIFICATION_READ]: EventBridge.notificationRead,
+  [WebViewEventType.HAPTIC_FEEDBACK]: EventBridge.hapticFeedback,
+  [WebViewEventType.SHARE_REQUEST]: EventBridge.shareRequest,
 };
 
 export const parsedWebViewMessage = (event: WebViewMessageEvent) => {

@@ -14,3 +14,7 @@ export {default as CaretLeftIcon} from './caret_left.tsx';
 export {default as CircleXIcon} from './circle_x.tsx';
 export {default as EyeIcon} from './eye.tsx';
 export {default as EyeOffIcon} from './eye_off.tsx';
+export {default as FindIcon} from './find.tsx';
+export {default as FindFillIcon} from './find_fill.tsx';
+export {default as BubbleChatIcon} from './bubble_chat.tsx';
+export {default as BubbleChatFillIcon} from './bubble_chat_fill.tsx';
