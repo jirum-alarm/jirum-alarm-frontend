@@ -66,11 +66,11 @@ export default async function DesktopProductDetailPage({
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
                 <ProductInfo productId={productId} isUserLogin={isUserLogin} />
               </Suspense>
-              <InFeedAd type="PRODUCT_DETAIL" isMobile={false} />
             </div>
           </div>
           <div className="col-span-2 pt-5">
             <Hr />
+            <InFeedAd type="PRODUCT_DETAIL" isMobile={false} className="py-6" />
             <div className="space-y-11 overflow-x-hidden py-11">
               <div>
                 <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={false} />
