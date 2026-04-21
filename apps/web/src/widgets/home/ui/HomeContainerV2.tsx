@@ -7,8 +7,6 @@ import { Advertisement } from '@/shared/config/advertisement';
 
 import { getPromotionSections } from '@/entities/promotion/api/getPromotionSections';
 
-import InFeedAd from '@/features/ad/ui/InFeedAd';
-
 import PromotionSectionList from '@/widgets/home/ui/PromotionSectionList';
 import Footer from '@/widgets/layout/ui/desktop/Footer';
 
@@ -55,7 +53,6 @@ async function HomeContainerV2() {
       <main className="pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-[1.75rem] pc:pt-[72px] max-w-mobile-max relative z-10 mt-[160px] rounded-t-[1.25rem] bg-white pt-3">
         <div className="pc:mx-auto pc:max-w-layout-max">
           {!isMobile ? null : renderMobileRanking()}
-          <InFeedAd type="HOME_INFEED" isMobile={isMobile} className="px-5 pb-4" />
           <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-14">
             <div>
               <PromotionSectionList sections={sections} isMobile={isMobile} />

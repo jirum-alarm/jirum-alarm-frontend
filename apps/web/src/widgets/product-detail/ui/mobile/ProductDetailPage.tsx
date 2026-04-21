@@ -4,7 +4,6 @@ import { ProductInfoFragment } from '@/shared/api/gql/graphql';
 
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 
-import InFeedAd from '@/features/ad/ui/InFeedAd';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
@@ -43,8 +42,6 @@ function ProductDetailPage({
             <ProductInfo productId={productId} />
 
             <CoupangPartnerGuide productId={productId} />
-
-            <InFeedAd type="PRODUCT_DETAIL" isMobile={true} className="py-3" />
 
             {initialProduct && <ExpiredProductWarning product={initialProduct} isMobile={true} />}
 

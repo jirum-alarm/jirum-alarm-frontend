@@ -5,7 +5,6 @@ import { cn } from '@/shared/lib/cn';
 
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 
-import InFeedAd from '@/features/ad/ui/InFeedAd';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
@@ -70,7 +69,6 @@ export default async function DesktopProductDetailPage({
           </div>
           <div className="col-span-2 pt-5">
             <Hr />
-            <InFeedAd type="PRODUCT_DETAIL" isMobile={false} className="py-6" />
             <div className="space-y-11 overflow-x-hidden py-11">
               <div>
                 <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={false} />

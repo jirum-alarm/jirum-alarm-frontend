@@ -8,8 +8,6 @@ import { useDevice } from '@/shared/hooks/useDevice';
 import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
 import { ProductGridList } from '@/entities/product-list/ui/grid';
 
-import InFeedAd from '@/features/ad/ui/InFeedAd';
-
 import useTrendingViewModel from '../model/useTrendingViewModel';
 
 interface TrendingListProps {
@@ -48,7 +46,6 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
           priorityCount={3}
         />
       )}
-      <InFeedAd type="TRENDING" isMobile={device.isMobile} className="px-5" />
       <div className="px-5">
         <ProductGridList products={products?.slice(SIZE) ?? []} rankFrom={SIZE + 1} />
       </div>
