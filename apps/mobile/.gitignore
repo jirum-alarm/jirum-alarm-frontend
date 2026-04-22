@@ -20,6 +20,8 @@ android/.kotlin/
 android/app/.cxx/
 android/app/build
 android/build
+android/link-assets-manifest.json
+android/app/src/main/assets/fonts/
 android/local.properties
 android/keystore.properties
 android/app/google-services.json
@@ -30,10 +32,15 @@ android/**/*.keystore
 # iOS local/build artifacts
 ios/Pods
 ios/build
+ios/link-assets-manifest.json
+ios/jirumAlarmMobile/Images.xcassets/AppIcon.appiconset/_/
 ios/.xcode.env.local
 ios/GoogleService-Info.plist
 ios/**/xcuserdata/
 ios/**/*.xcuserstate
+
+# Store submission artifacts
+assets/ios/
 
 # Xcode and macOS state
 *.xcworkspace/xcuserdata/

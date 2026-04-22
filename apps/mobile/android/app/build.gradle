@@ -107,6 +107,11 @@ android {
         versionCode 21
         versionName "1.3.4"
     }
+    sourceSets {
+        main {
+            assets.srcDirs += ["../../src/shared/assets"]
+        }
+    }
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
