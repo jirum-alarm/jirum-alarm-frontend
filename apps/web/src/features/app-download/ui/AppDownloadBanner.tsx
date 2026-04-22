@@ -24,16 +24,21 @@ const AppDownloadBanner = (props: AppDownloadBannerProps) => {
   return (
     <>
       {type && link && (
-        <div className="from-secondary-50 to-secondary-100 flex h-[84px] w-full items-center bg-linear-to-b px-8">
-          <AppIcon />
-          <div className="ml-[14px]">
-            <p className="text-left">
-              <span className="text-secondary-800 font-semibold">지름알림 앱 다운받고</span>
-              <br />
-              <span className="text-s text-secondary-700">핫딜을 실시간으로 확인하세요!</span>
+        <div className="from-secondary-50 to-secondary-100 flex h-[84px] w-full items-center gap-3 overflow-hidden bg-linear-to-b px-5">
+          <div className="shrink-0">
+            <AppIcon />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-left leading-none">
+              <span className="text-secondary-800 block text-[14px] leading-[18px] font-semibold">
+                지름알림 앱 다운받고
+              </span>
+              <span className="text-secondary-700 block text-[13px] leading-[17px]">
+                핫딜을 실시간으로 확인하세요!
+              </span>
             </p>
           </div>
-          <div className="ml-auto">
+          <div className="shrink-0">
             <a
               href={link}
               onClick={handleAppDownloadClick}
