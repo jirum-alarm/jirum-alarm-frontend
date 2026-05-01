@@ -33,7 +33,7 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
   }, [swiper, ref]);
 
   return (
-    <div ref={ref} className="pc:space-y-10 space-y-8">
+    <div ref={ref} className="pc:space-y-10 pc:pb-0 space-y-8 pb-[var(--bottom-nav-padding,0px)]">
       <div className="px-5">
         <ProductGridList products={products?.slice(0, SIZE) ?? []} rankFrom={1} priorityCount={5} />
       </div>

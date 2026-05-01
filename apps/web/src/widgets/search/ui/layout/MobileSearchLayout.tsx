@@ -26,7 +26,7 @@ export default function MobileSearchLayout({ children }: { children: React.React
         </header>
       }
     >
-      <div className="mt-14 w-full pt-2">{children}</div>
+      <div className="w-full pt-2">{children}</div>
     </BasicLayout>
   );
 }

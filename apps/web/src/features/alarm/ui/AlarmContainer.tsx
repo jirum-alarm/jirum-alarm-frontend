@@ -76,7 +76,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
         />
       </div>
 
-      <div className="fixed right-0 bottom-0 left-0 m-auto w-full max-w-[600px] bg-white px-5 pt-4 pb-8">
+      <div className="fixed right-0 bottom-[var(--bottom-nav-padding,0px)] left-0 m-auto w-full max-w-[600px] bg-white px-5 pt-4 pb-8">
         <div className="flex flex-col items-center pb-6">
           <p className="pb-3 text-center text-sm text-gray-400">
             키워드 알림으로
@@ -85,7 +85,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
           </p>
           <ArrowDown color="#D0D5DD" />
         </div>
-        <div className="flex gap-x-2 pb-16">
+        <div className="flex gap-x-2">
           {platform === 'non-mobile' && (
             <>
               <AndroidDownloadButton />

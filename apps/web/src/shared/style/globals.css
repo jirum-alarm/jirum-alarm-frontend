@@ -191,7 +191,7 @@ html[data-native-tabs='true'] nav:has(ul > li > a[data-nav-type]) {
 }
 
 /* Channel Talk messenger position adjustment for bottom nav overlap */
-#ch-plugin {
+html[data-bottom-nav='true'] #ch-plugin {
   padding-bottom: calc(56px + env(safe-area-inset-bottom)) !important;
 }
 

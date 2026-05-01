@@ -56,7 +56,7 @@ const AlarmItem = ({
       )}
       <Link
         href={PAGE.DETAIL + '/' + +productId!}
-        className={cn('flex w-full p-5', { 'pr-14': isEditMode })}
+        className="flex w-full p-5 pr-14"
         onClick={(e) => {
           if (isEditMode) {
             e.preventDefault();

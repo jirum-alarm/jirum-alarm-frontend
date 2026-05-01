@@ -10,7 +10,7 @@ import CommunityPostPageHeader from '@/features/community/ui/CommunityPostPageHe
 
 function PostDetailSkeleton() {
   return (
-    <div className="flex flex-col pb-32">
+    <div className="flex flex-col">
       {/* 헤더 */}
       <div className="flex items-center gap-x-2 px-5 py-4">
         <div className="h-3.5 w-16 animate-pulse rounded bg-gray-100" />
