@@ -1,9 +1,6 @@
 'use client';
 
-import { memo, useEffect, useRef } from 'react';
-import { useSwiper } from 'swiper/react';
-
-import { useDevice } from '@/shared/hooks/useDevice';
+import { memo } from 'react';
 
 import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
 import { ProductGridList } from '@/entities/product-list/ui/grid';
@@ -18,22 +15,12 @@ interface TrendingListProps {
 const SIZE = 10;
 
 const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
-  const swiper = useSwiper();
-  const ref = useRef<HTMLDivElement>(null);
-  const { device } = useDevice();
-
   const { products, liveProducts, hotDeals } = useTrendingViewModel({
     categoryId,
   });
 
-  useEffect(() => {
-    if (!ref.current) return;
-    // FIX: Height 조절 필요
-    swiper.height = ref.current.scrollHeight;
-  }, [swiper, ref]);
-
   return (
-    <div ref={ref} className="pc:space-y-10 pc:pb-0 space-y-8 pb-[var(--bottom-nav-padding,0px)]">
+    <div className="pc:space-y-10 pc:pb-0 space-y-8 pb-[var(--bottom-nav-padding,0px)]">
       <div className="px-5">
         <ProductGridList products={products?.slice(0, SIZE) ?? []} rankFrom={1} priorityCount={5} />
       </div>

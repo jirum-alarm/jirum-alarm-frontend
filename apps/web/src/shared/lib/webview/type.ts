@@ -8,6 +8,7 @@ export enum WebViewEventType {
   'HAPTIC_FEEDBACK' = 'HAPTIC_FEEDBACK',
   'SHARE_REQUEST' = 'SHARE_REQUEST',
   'ALARM_DOT_CHANGED' = 'ALARM_DOT_CHANGED',
+  'CHANNEL_TALK_VISIBILITY' = 'CHANNEL_TALK_VISIBILITY',
 }
 
 export type HapticStyle = 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error';
@@ -24,6 +25,7 @@ export type WebViewEventPayloads = {
   [WebViewEventType.HAPTIC_FEEDBACK]: { data: { style: HapticStyle } };
   [WebViewEventType.SHARE_REQUEST]: { data: { title: string; url: string; message?: string } };
   [WebViewEventType.ALARM_DOT_CHANGED]: { data: { hasNewAlarm: boolean } };
+  [WebViewEventType.CHANNEL_TALK_VISIBILITY]: { data: { isOpen: boolean } };
 };
 export interface WebViewEvent<T extends WebViewEventType> {
   type: T;

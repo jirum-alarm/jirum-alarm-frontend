@@ -28,6 +28,7 @@ const SWIPER_OPTIONS: SwiperOptions = {
   slidesPerView: 1,
   spaceBetween: 0,
   loop: false,
+  autoHeight: true,
 };
 
 type Props = {

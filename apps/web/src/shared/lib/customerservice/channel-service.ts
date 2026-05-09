@@ -99,6 +99,14 @@ class ChannelService implements ICustomerService {
   showMessenger() {
     window.ChannelIO?.('showMessenger');
   }
+
+  onShowMessenger(callback: () => void) {
+    window.ChannelIO?.('onShowMessenger', callback);
+  }
+
+  onHideMessenger(callback: () => void) {
+    window.ChannelIO?.('onHideMessenger', callback);
+  }
 }
 
 export default ChannelService;

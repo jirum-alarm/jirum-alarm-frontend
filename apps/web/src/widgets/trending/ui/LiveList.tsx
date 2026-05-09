@@ -1,7 +1,6 @@
 'use client';
 
-import { memo, useEffect, useRef } from 'react';
-import { useSwiper } from 'swiper/react';
+import { memo } from 'react';
 
 import { ProductGridList, ProductGridListSkeleton } from '@/entities/product-list/ui/grid';
 
@@ -14,20 +13,12 @@ interface LiveListProps {
 const SIZE = 10;
 
 const LiveList = ({ categoryId }: LiveListProps) => {
-  const swiper = useSwiper();
-  const ref = useRef<HTMLDivElement>(null);
-
   const { products, loadingCallbackRef, isFetchingNextPage } = useLiveViewModel({
     categoryId,
   });
 
-  useEffect(() => {
-    if (!ref.current) return;
-    swiper.height = ref.current.scrollHeight;
-  }, [swiper, ref]);
-
   return (
-    <div ref={ref} className="pc:space-y-10 pc:pb-0 space-y-8 pb-[var(--bottom-nav-padding,0px)]">
+    <div className="pc:space-y-10 pc:pb-0 space-y-8 pb-[var(--bottom-nav-padding,0px)]">
       <div className="px-5">
         <ProductGridList products={products} />
       </div>

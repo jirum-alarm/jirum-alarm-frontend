@@ -8,6 +8,7 @@ import * as Notifications from 'expo-notifications';
 import * as Haptics from 'expo-haptics';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
 import {setHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
+import {setChannelTalkOpen} from '@/shared/hooks/useTabBarVisibility';
 
 type EventHandler<T extends WebViewEventType> = (
   payload: WebViewEventPayloads[T],
@@ -56,5 +57,9 @@ export class EventBridge {
   static alarmDotChanged: EventHandler<WebViewEventType.ALARM_DOT_CHANGED> =
     async payload => {
       setHasNewAlarm(payload.data.hasNewAlarm);
+    };
+  static channelTalkVisibility: EventHandler<WebViewEventType.CHANNEL_TALK_VISIBILITY> =
+    async payload => {
+      setChannelTalkOpen(payload.data.isOpen);
     };
 }
