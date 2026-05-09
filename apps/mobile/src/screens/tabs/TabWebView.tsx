@@ -1,6 +1,7 @@
 import WebView from 'react-native-webview';
 import {handleWebViewMessage} from '@/shared/lib/webview';
 import {
+  ActivityIndicator,
   Platform,
   StyleSheet,
   View,
@@ -17,7 +18,6 @@ import {tabNavigations} from '@/shared/constant/navigations';
 import {useTokenRemoveEffect} from '@/screens/jirumalarmwebview/hooks/useTokenRemoveEffect';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import * as Haptics from 'expo-haptics';
-import {TabSkeleton} from '@/shared/components/skeleton/TabSkeleton';
 import type {
   ShouldStartLoadRequest,
   WebViewProgressEvent,
@@ -296,6 +296,7 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
           source={{uri: `${SERVICE_URL}${baseUrl}`}}
           applicationNameForUserAgent={USER_AGENT}
           setSupportMultipleWindows={false}
+          webviewDebuggingEnabled={__DEV__}
           injectedJavaScript={INJECT_HIDE_WEB_BOTTOM_NAV}
           onLoadStart={handleLoadStart}
           onLoadEnd={handleLoadEnd}
@@ -317,7 +318,7 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
       </ScrollView>
       {isLoading && (
         <View style={styles.loadingContainer} pointerEvents="none">
-          <TabSkeleton tabName={tabName} />
+          <ActivityIndicator size="small" color="#667085" />
         </View>
       )}
     </View>
@@ -389,7 +390,7 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
       />
       {isLoading && (
         <View style={styles.loadingContainer} pointerEvents="none">
-          <TabSkeleton tabName={tabName} />
+          <ActivityIndicator size="small" color="#667085" />
         </View>
       )}
     </View>

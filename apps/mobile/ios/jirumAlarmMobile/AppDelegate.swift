@@ -7,6 +7,22 @@ import ReactAppDependencyProvider
 import RNBootSplash
 import NaverThirdPartyLogin
 import KakaoSDKAuth
+import WebKit
+import ObjectiveC
+
+// 모든 WKWebView의 키보드 액세서리 뷰(▲▼ Done 바)를 숨김.
+// react-native-webview의 hideKeyboardAccessoryView는 메인 webview에는 적용되나
+// 채널톡 등 iframe 내 input에는 영향이 적어 전역 swizzle로 처리.
+extension WKWebView {
+  static let removeInputAccessoryView: Void = {
+    let original = class_getInstanceMethod(WKWebView.self, #selector(getter: UIResponder.inputAccessoryView))
+    let block: @convention(block) (Any) -> UIView? = { _ in nil }
+    let imp = imp_implementationWithBlock(block)
+    if let original = original {
+      method_setImplementation(original, imp)
+    }
+  }()
+}
 
 @main
 class AppDelegate: RCTAppDelegate {
@@ -36,6 +52,9 @@ class AppDelegate: RCTAppDelegate {
 
   override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     FirebaseApp.configure()
+
+    // WKWebView 키보드 액세서리 바 전역 비활성화 (lazy var 트리거)
+    _ = WKWebView.removeInputAccessoryView
 
     self.moduleName = "jirumAlarmMobile"
     self.dependencyProvider = RCTAppDependencyProvider()

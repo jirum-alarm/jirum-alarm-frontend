@@ -40,9 +40,11 @@ html[data-bottom-nav='true'] {
   --bottom-nav-padding: calc(56px + env(safe-area-inset-bottom));
 }
 
-/* 네이티브 앱에서 바텀 탭이 활성화되면 웹 바텀 내비를 숨김 */
+/* 네이티브 앱에서 바텀 탭이 활성화되면 웹 바텀 내비는 숨기되,
+   네이티브 탭바 높이(56px + safe-area)만큼 컨텐츠 하단 여백은 유지해서
+   마지막 컨텐츠가 네이티브 탭바에 가려지지 않게 함 */
 html[data-native-tabs='true'] {
-  --bottom-nav-padding: 0px;
+  --bottom-nav-padding: calc(56px + env(safe-area-inset-bottom));
 }
 
 html[data-native-tabs='true'] nav:has(ul > li > a[data-nav-type]) {

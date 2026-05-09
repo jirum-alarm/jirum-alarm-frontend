@@ -15,7 +15,7 @@ const MyPage = async () => {
   await queryClient.prefetchQuery(AuthQueries.me());
 
   return (
-    <BasicLayout title="마이페이지" hasBackButton>
+    <BasicLayout title="마이페이지">
       <Suspense>
         <MyProfileSection />
         <CustomerServiceBoot />
