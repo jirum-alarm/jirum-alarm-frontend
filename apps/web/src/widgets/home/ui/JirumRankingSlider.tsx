@@ -5,9 +5,8 @@ import 'swiper/css';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
-import dynamic from 'next/dynamic';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { SwiperClass, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
@@ -25,10 +24,6 @@ import ProductRankingImageCard from '@/entities/product-list/ui/ranking/ProductR
 import { RankingPreview as DesktopRankingPreview } from './desktop/RankingSkeleton';
 import { RankingPreview as MobileRankingPreview } from './mobile/RankingSkeleton';
 import SliderDots from './SliderDots';
-
-const Swiper = dynamic(() => import('swiper/react').then((mod) => mod.Swiper), {
-  ssr: false,
-});
 
 const indexAtom = atom(0);
 const isInitAtom = atom(false);
@@ -188,7 +183,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
               className="pc:px-16 absolute inset-0 bottom-auto z-10"
               initial={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.2 }}
             >
               {isMobile ? (
                 <MobileRankingPreview products={products} />
