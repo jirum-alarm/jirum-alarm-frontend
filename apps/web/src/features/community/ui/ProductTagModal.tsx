@@ -1,7 +1,6 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 import { VisuallyHidden } from 'radix-ui';
 import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
@@ -10,6 +9,8 @@ import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product/product.service';
 import { getRecentViewedProducts } from '@/shared/lib/recentViewedProducts';
 import Close from '@/shared/ui/common/icons/Close';
+
+import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 import { TaggedProduct } from '../model/usePostForm';
 
@@ -84,11 +85,11 @@ export default function ProductTagModal({
         <div className="flex items-center gap-x-3 rounded-xl bg-gray-50 p-3">
           {selected.thumbnail && (
             <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200">
-              <Image
+              <ProductThumbnail
                 src={selected.thumbnail}
                 alt={selected.title}
-                fill
-                className="object-cover"
+                title={selected.title}
+                type="product"
                 sizes="48px"
               />
             </div>
@@ -214,11 +215,11 @@ export default function ProductTagModal({
                         >
                           <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-gray-100">
                             {p.thumbnail && (
-                              <Image
+                              <ProductThumbnail
                                 src={p.thumbnail}
                                 alt={p.title}
-                                fill
-                                className="object-cover"
+                                title={p.title}
+                                type="product"
                                 sizes="30vw"
                               />
                             )}
@@ -251,11 +252,11 @@ export default function ProductTagModal({
                           >
                             <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-gray-100">
                               {p.thumbnail && (
-                                <Image
+                                <ProductThumbnail
                                   src={p.thumbnail}
                                   alt={p.title}
-                                  fill
-                                  className="object-cover"
+                                  title={p.title}
+                                  type="product"
                                   sizes="30vw"
                                 />
                               )}

@@ -36,11 +36,9 @@ export default async function DesktopProductDetailPage({
           <div className="col-span-1 space-y-10">
             <div className="space-y-4">
               <div className="relative aspect-square overflow-hidden rounded-xl border border-gray-200">
-                <ProductDetailImage
-                  productId={productId}
-                  fill={false}
-                  initialData={initialProduct}
-                />
+                {initialProduct ? (
+                  <ProductDetailImage product={initialProduct} fill={false} />
+                ) : null}
               </div>
               <CoupangPartnerGuide productId={productId} />
             </div>

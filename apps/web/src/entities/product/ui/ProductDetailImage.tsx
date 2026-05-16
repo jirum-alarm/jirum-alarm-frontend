@@ -1,32 +1,22 @@
-'use client';
-
-import { useSuspenseQuery } from '@tanstack/react-query';
-
 import { ProductInfoFragment } from '@/shared/api/gql/graphql';
 import { convertToWebp } from '@/shared/lib/utils/image';
 import ImageComponent from '@/shared/ui/ImageComponent';
 import NoImage from '@/shared/ui/NoImage';
 
-import { ProductQueries } from '@/entities/product';
-
-export default function ProductDetailImage({
-  productId,
-  fill,
-  initialData,
-}: {
-  productId: number;
+type Props = {
+  product: Pick<ProductInfoFragment, 'thumbnail' | 'title' | 'categoryId'>;
   fill: boolean;
-  initialData?: ProductInfoFragment;
-}) {
-  const { data: product } = useSuspenseQuery({
-    ...ProductQueries.productInfo({ id: productId }),
-    initialData,
-  });
+};
 
+export default function ProductDetailImage({ product, fill }: Props) {
   const thumbnail = convertToWebp(product.thumbnail) ?? '';
   const originalThumbnail = product.thumbnail ?? '';
   const title = product.title ?? '';
   const categoryId = product.categoryId;
+
+  if (!thumbnail) {
+    return <NoImage type="product-detail" categoryId={categoryId} />;
+  }
 
   return (
     <ImageComponent
@@ -34,11 +24,11 @@ export default function ProductDetailImage({
       fallbackSrc={originalThumbnail}
       alt={title}
       fill={fill}
-      {...(!fill && { width: 512, height: 512, sizes: '512px' })}
+      {...(!fill && { width: 512, height: 512 })}
+      sizes={fill ? '(max-width: 768px) 100vw, 512px' : '512px'}
       fallback={<NoImage type="product-detail" categoryId={categoryId} />}
       priority
-      loading="eager"
-      fetchPriority="high"
+      quality={85}
       className="size-full object-cover"
     />
   );

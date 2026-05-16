@@ -1,41 +1,22 @@
-'use client';
-
 import Image, { ImageProps } from 'next/image';
-import { useState } from 'react';
 
-export default function ImageComponent({
-  src,
-  alt,
-  title,
-  className,
-  fallback,
-  fallbackSrc,
-  ...rest
-}: ImageProps & {
+import ImageWithFallback from './ImageWithFallback';
+
+type Props = ImageProps & {
   fallback?: React.ReactNode;
   fallbackSrc?: string;
-}) {
-  const [currentSrc, setCurrentSrc] = useState<any>(src);
-  const [hasError, setHasError] = useState<boolean>(false);
+};
 
-  if (!currentSrc || hasError) {
-    return fallback;
+export default function ImageComponent({ src, fallback, fallbackSrc, ...rest }: Props) {
+  if (!src) {
+    return fallback ?? null;
   }
 
-  return (
-    <Image
-      src={currentSrc}
-      alt={alt}
-      title={title}
-      className={className}
-      onError={() => {
-        if (fallbackSrc && typeof currentSrc === 'string' && currentSrc !== fallbackSrc) {
-          setCurrentSrc(fallbackSrc);
-        } else {
-          setHasError(true);
-        }
-      }}
-      {...rest}
-    />
-  );
+  // fallbackSrc/onError 처리가 필요 없으면 순수 SSR 경로로 next/image 직접 렌더
+  // → priority 시 head에 preload link가 안정적으로 inject됨
+  if (!fallbackSrc && !fallback) {
+    return <Image src={src} {...rest} />;
+  }
+
+  return <ImageWithFallback src={src} fallback={fallback} fallbackSrc={fallbackSrc} {...rest} />;
 }

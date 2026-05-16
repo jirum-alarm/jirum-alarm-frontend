@@ -46,11 +46,9 @@ export default function ProductRankingImageCard({
               type="product"
               categoryId={product.categoryId}
               alt={product.title}
-              width={252}
-              height={252}
               sizes="252px"
-              loading="eager"
               priority={priority}
+              quality={priority ? 85 : 75}
             />
           </div>
           <div className="pc:h-[110px] p-3 pb-0">

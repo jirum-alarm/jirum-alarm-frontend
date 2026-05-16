@@ -1,7 +1,6 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 
 import { CommunityService } from '@/shared/api/community/community.service';
 import { cn } from '@/shared/lib/cn';
@@ -12,6 +11,7 @@ import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
 import { CommunityQueries } from '@/entities/community';
+import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 import CommunityCommentSection from './CommunityCommentSection';
 import PostMenu from './PostMenu';
@@ -99,11 +99,11 @@ export default function CommunityPostDetailClient({
           <div className="flex items-center gap-x-3">
             {post.taggedProduct.thumbnail && (
               <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-indigo-100">
-                <Image
+                <ProductThumbnail
                   src={post.taggedProduct.thumbnail}
                   alt={post.taggedProduct.title}
-                  fill
-                  className="object-cover"
+                  title={post.taggedProduct.title}
+                  type="product"
                   sizes="80px"
                 />
               </div>

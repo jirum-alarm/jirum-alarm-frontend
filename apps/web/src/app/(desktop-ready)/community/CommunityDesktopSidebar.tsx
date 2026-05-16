@@ -1,9 +1,10 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product/product.service';
 import { getDayBefore } from '@/shared/lib/utils/date';
+
+import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 export default async function CommunityDesktopSidebar() {
   let data;
@@ -40,11 +41,12 @@ export default async function CommunityDesktopSidebar() {
           >
             <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-100">
               {product.thumbnail && (
-                <Image
+                <ProductThumbnail
                   src={product.thumbnail}
                   alt={product.title}
-                  fill
-                  className="object-cover"
+                  title={product.title}
+                  categoryId={product.categoryId}
+                  type="product"
                   sizes="128px"
                 />
               )}

@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 import usePostForm, { TaggedProduct } from '../model/usePostForm';
 
@@ -64,11 +64,11 @@ export default function PostForm({
             <div className="flex items-center gap-x-3 rounded-xl bg-gray-50 p-3">
               {existingTaggedProduct.thumbnail && (
                 <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200">
-                  <Image
+                  <ProductThumbnail
                     src={existingTaggedProduct.thumbnail}
                     alt={existingTaggedProduct.title}
-                    fill
-                    className="object-cover"
+                    title={existingTaggedProduct.title}
+                    type="product"
                     sizes="48px"
                   />
                 </div>

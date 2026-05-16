@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import { cache } from 'react';
+import { preload } from 'react-dom';
 
 import { checkDevice } from '@/app/actions/agent';
 import { collectProductAction } from '@/app/actions/product';
@@ -8,11 +10,19 @@ import { ProductService } from '@/shared/api/product';
 import { CATEGORY_MAP } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { defaultMetadata } from '@/shared/config/metadata';
+import { convertToWebp } from '@/shared/lib/utils/image';
 
 import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
 import DesktopProductDetailPage from '@/widgets/product-detail/ui/desktop/ProductDetailPage';
 import MobileProductDetailPage from '@/widgets/product-detail/ui/mobile/ProductDetailPage';
+
+// generateMetadata와 page에서 동일한 productId로 두 번 호출되므로
+// 요청 단위로 결과를 memoize한다. GraphQL POST는 Next.js fetch dedup 보장이 없음.
+const getProductInfoCached = cache((id: number) => ProductService.getProductInfo({ id }));
+const getProductGuidesCached = cache((productId: number) =>
+  ProductService.getProductGuides({ productId }),
+);
 
 function parseNumericPrice(rawPrice?: string | null) {
   if (!rawPrice) {
@@ -132,14 +142,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
 
-  const product = await ProductService.getProductInfo({ id: +id });
+  const product = await getProductInfoCached(+id);
   if (!product) {
     return defaultMetadata;
   }
 
-  const productGuides = await ProductService.getProductGuides({
-    productId: +product.id,
-  });
+  const productGuides = await getProductGuidesCached(+product.id);
 
   const title = `${product.title} | 지름알림`;
 
@@ -224,7 +232,8 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   const token = await getAccessToken();
   const isUserLogin = !!token;
 
-  await collectProductAction(+id).catch();
+  // 조회수 수집은 SSR 응답을 막을 필요가 없으니 fire-and-forget. unhandled rejection만 방지.
+  void collectProductAction(+id).catch(() => {});
 
   const { isMobile } = await checkDevice();
 
@@ -247,12 +256,32 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
     );
   };
 
-  /* JSON-LD 생성을 위한 상품 정보 조회 */
-  const product = await ProductService.getProductInfo({ id: +id });
-  const productGuides = product
-    ? await ProductService.getProductGuides({ productId: +product.id })
-    : null;
+  /* JSON-LD 생성을 위한 상품 정보 조회 (generateMetadata와 dedupe됨) */
+  const product = await getProductInfoCached(+id);
+  const productGuides = product ? await getProductGuidesCached(+product.id) : null;
   const jsonLd = generateProductJsonLd(product, productGuides ?? undefined);
+
+  // LCP 이미지 preload: 모바일은 100vw, 데스크톱은 512px 슬롯
+  const thumbnailForPreload = convertToWebp(product?.thumbnail) ?? product?.thumbnail;
+  if (thumbnailForPreload) {
+    const proxy = (w: number) =>
+      `/_next/image?url=${encodeURIComponent(thumbnailForPreload)}&w=${w}&q=85`;
+    if (isMobile) {
+      preload(proxy(640), {
+        as: 'image',
+        fetchPriority: 'high',
+        imageSizes: '100vw',
+        imageSrcSet: `${proxy(640)} 640w, ${proxy(750)} 750w, ${proxy(828)} 828w, ${proxy(1080)} 1080w`,
+      });
+    } else {
+      preload(proxy(640), {
+        as: 'image',
+        fetchPriority: 'high',
+        imageSizes: '512px',
+        imageSrcSet: `${proxy(640)} 1x, ${proxy(1080)} 2x`,
+      });
+    }
+  }
 
   return (
     <>

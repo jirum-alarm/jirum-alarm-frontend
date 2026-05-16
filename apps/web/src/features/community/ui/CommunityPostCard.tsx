@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { CommunityPostsQuery } from '@/shared/api/community/community.service';
@@ -10,6 +9,7 @@ import { displayTime } from '@/shared/lib/utils/displayTime';
 import { BubbleChat, Eye, ThumbsupFill } from '@/shared/ui/common/icons';
 
 import { CommunityTab } from '@/entities/community';
+import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 type Post = CommunityPostsQuery['comments'][number];
 
@@ -75,11 +75,11 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
       {hasTaggedProduct && post.taggedProduct?.thumbnail ? (
         <div className="flex w-20 flex-shrink-0 flex-col gap-y-1">
           <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-gray-100">
-            <Image
+            <ProductThumbnail
               src={post.taggedProduct.thumbnail}
               alt={post.taggedProduct?.title ?? ''}
-              fill
-              className="object-cover"
+              title={post.taggedProduct?.title ?? ''}
+              type="product"
               sizes="80px"
             />
           </div>

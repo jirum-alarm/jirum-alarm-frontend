@@ -25,9 +25,9 @@ export const RankingPreview = ({ products }: RankingPreviewProps) => {
   return (
     <div className="relative flex justify-center overflow-x-hidden">
       <div className="flex w-auto justify-center gap-x-1">
-        <PreviewCard product={lastProduct} rank={products.length} isActive={false} priority />
+        <PreviewCard product={lastProduct} rank={products.length} isActive={false} />
         <PreviewCard product={firstProduct} rank={1} isActive={true} priority />
-        <PreviewCard product={secondProduct} rank={2} isActive={false} priority />
+        <PreviewCard product={secondProduct} rank={2} isActive={false} />
       </div>
     </div>
   );
@@ -58,11 +58,9 @@ const PreviewCard = ({ product, rank, isActive, priority }: PreviewCardProps) =>
             type="product"
             categoryId={product.categoryId}
             alt={product.title}
-            width={252}
-            height={252}
             sizes="252px"
-            loading="eager"
             priority={priority}
+            quality={priority ? 85 : 75}
           />
         </div>
         <div className="p-3 pb-0">

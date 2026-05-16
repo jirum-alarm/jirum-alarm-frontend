@@ -34,7 +34,7 @@ function ProductDetailPage({
       <main>
         <div className="sticky top-0 -mb-6">
           <div className="relative aspect-square w-full">
-            <ProductDetailImage productId={productId} fill initialData={initialProduct} />
+            {initialProduct ? <ProductDetailImage product={initialProduct} fill /> : null}
           </div>
         </div>
         <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6">

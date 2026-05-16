@@ -144,6 +144,7 @@ const ImageWithFallback = memo(function ImageWithFallback({
       alt={title}
       width={56}
       height={56}
+      sizes="56px"
       fallback={<NoImage />}
     />
   );

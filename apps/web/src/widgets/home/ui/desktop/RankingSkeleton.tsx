@@ -20,7 +20,7 @@ export const RankingPreview = ({ products }: RankingPreviewProps) => {
   return (
     <div className="relative grid w-full grid-cols-4 justify-center gap-x-6 overflow-x-hidden pb-5">
       {products.slice(0, 4).map((product, i) => (
-        <PreviewCard key={product.id} product={product} rank={i + 1} priority={i < 4} />
+        <PreviewCard key={product.id} product={product} rank={i + 1} priority={i === 0} />
       ))}
     </div>
   );
@@ -45,11 +45,9 @@ const PreviewCard = ({ product, rank, priority }: PreviewCardProps) => (
           type="product"
           categoryId={product.categoryId}
           alt={product.title}
-          width={252}
-          height={252}
           sizes="252px"
-          loading="eager"
           priority={priority}
+          quality={priority ? 85 : 75}
         />
       </div>
       <div className="h-[110px] p-3 pb-0">

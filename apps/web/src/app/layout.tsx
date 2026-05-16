@@ -29,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko" className={`${pretendard.className} antialiased`}>
       <head>
         <PublicEnvScript />
+        <link rel="preconnect" href="https://cdn.jirum-alarm.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://api.mixpanel.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link

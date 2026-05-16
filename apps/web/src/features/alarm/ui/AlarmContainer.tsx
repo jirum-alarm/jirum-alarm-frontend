@@ -73,6 +73,9 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
           alt="download app guide"
           width={335}
           height={400}
+          sizes="335px"
+          priority
+          quality={85}
         />
       </div>
 
