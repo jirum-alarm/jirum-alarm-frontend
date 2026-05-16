@@ -6,7 +6,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 import dynamic from 'next/dynamic';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
@@ -35,29 +35,6 @@ const isInitAtom = atom(false);
 
 const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMobile: boolean }) => {
   const isHydrated = useIsHydrated();
-  const [shouldMountSwiper, setShouldMountSwiper] = useState(false);
-
-  // Swiper 마운트는 LCP 페인트 이후로 미룬다.
-  // requestIdleCallback이 있으면 idle 시점, 없으면 rAF 두 번 후 마운트.
-  useEffect(() => {
-    if (!isHydrated) return;
-    const w = window as Window & {
-      requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number;
-    };
-    if (typeof w.requestIdleCallback === 'function') {
-      const id = w.requestIdleCallback(() => setShouldMountSwiper(true), { timeout: 500 });
-      return () => {
-        if (typeof (w as any).cancelIdleCallback === 'function') {
-          (w as any).cancelIdleCallback(id);
-        }
-      };
-    }
-    const raf1 = requestAnimationFrame(() => {
-      const raf2 = requestAnimationFrame(() => setShouldMountSwiper(true));
-      return () => cancelAnimationFrame(raf2);
-    });
-    return () => cancelAnimationFrame(raf1);
-  }, [isHydrated]);
 
   const {
     data: { products },
@@ -75,7 +52,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   const [index, setIndex] = useAtom(indexAtom);
   const swiperRef = useRef<SwiperClass>(null);
   const [isInit, setIsInit] = useAtom(isInitAtom);
-  const canRender = useMemo(() => shouldMountSwiper && isInit, [shouldMountSwiper, isInit]);
+  const canRender = useMemo(() => isHydrated && isInit, [isHydrated, isInit]);
   const [visibleSlides, setVisibleSlides] = useState<number[]>([]);
 
   const handleAfterInit = (swiper: SwiperClass) => {
@@ -186,16 +163,14 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           animate={{ opacity: canRender ? 1 : 0 }}
           transition={{ duration: 0.3 }}
         >
-          {shouldMountSwiper && (
-            <Swiper
-              {...config}
-              onRealIndexChange={handleIndexChange}
-              onAfterInit={handleAfterInit}
-              initialSlide={index}
-            >
-              {renderProducts()}
-            </Swiper>
-          )}
+          <Swiper
+            {...config}
+            onRealIndexChange={handleIndexChange}
+            onAfterInit={handleAfterInit}
+            initialSlide={0}
+          >
+            {renderProducts()}
+          </Swiper>
         </motion.div>
         <motion.button
           className="pc:flex mb-5 hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
