@@ -1,3 +1,6 @@
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import { ErrorIllust } from '@/shared/ui/common/icons/Illust';
@@ -11,6 +14,16 @@ import { useHotDealsRandom } from '@/features/product-list/hooks';
 const ProductNotFound = () => {
   const router = useMyRouter();
   const { isLoggedIn } = useIsLoggedIn();
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get('keyword') ?? '';
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+      event: 'search_no_result',
+      keyword,
+    });
+  }, [keyword]);
 
   const { data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
 

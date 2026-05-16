@@ -16,6 +16,17 @@ const FCMConfig = () => {
 
     let unsubscribe: Unsubscribe | null = null;
 
+    const handleSwMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'push_notification_clicked') {
+        (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+          event: 'push_notification_clicked',
+          push_title: event.data.push_title,
+          push_body: event.data.push_body,
+        });
+      }
+    };
+    navigator.serviceWorker.addEventListener('message', handleSwMessage);
+
     const setupGranted = async () => {
       try {
         // 권한이 이미 허용된 경우에만 토큰 조회/구독
@@ -30,6 +41,12 @@ const FCMConfig = () => {
 
         unsubscribe = onMessage(messaging, (payload) => {
           console.log('Foreground : ', payload);
+          (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+            event: 'push_notification_received',
+            push_title: payload.notification?.title,
+            push_body: payload.notification?.body,
+            push_state: 'foreground',
+          });
         });
       } catch (err) {
         console.log('FCM setup error: ', err);
@@ -38,7 +55,10 @@ const FCMConfig = () => {
 
     setupGranted();
 
-    return () => unsubscribe?.();
+    return () => {
+      unsubscribe?.();
+      navigator.serviceWorker.removeEventListener('message', handleSwMessage);
+    };
   }, []);
 
   return null;

@@ -20,7 +20,33 @@ messaging.onBackgroundMessage(function (payload) {
   const notificationOptions = {
     body: payload.notification.body,
     icon: '/icon.png',
+    data: {
+      title: notificationTitle,
+      body: payload.notification.body,
+    },
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+self.addEventListener('notificationclick', function (event) {
+  event.notification.close();
+  const data = event.notification.data || {};
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (clients) {
+      const focused = clients.find(function (c) {
+        return c.focused;
+      });
+      const target = focused || clients[0];
+      if (target) {
+        target.postMessage({
+          type: 'push_notification_clicked',
+          push_title: data.title,
+          push_body: data.body,
+        });
+        return target.focus();
+      }
+      return self.clients.openWindow('/');
+    }),
+  );
 });

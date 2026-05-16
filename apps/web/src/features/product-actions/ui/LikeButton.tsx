@@ -62,6 +62,14 @@ export default function LikeButton({
 
     triggerHaptic(isLiked ? 'light' : 'success');
 
+    if (typeof window !== 'undefined') {
+      (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+        event: 'product_wish',
+        product_id: productId,
+        wish_action: isLiked ? 'remove' : 'add',
+      });
+    }
+
     if (isLiked) {
       removeWishlist({ productId });
       setIsLiked(false);

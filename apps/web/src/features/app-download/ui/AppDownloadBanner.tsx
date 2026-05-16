@@ -17,6 +17,13 @@ const AppDownloadBanner = (props: AppDownloadBannerProps) => {
 
   const handleAppDownloadClick = () => {
     if (!type) return;
+    if (typeof window !== 'undefined') {
+      (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+        event: 'app_download_click',
+        platform: type,
+        link,
+      });
+    }
   };
 
   if (type === null) return null;
