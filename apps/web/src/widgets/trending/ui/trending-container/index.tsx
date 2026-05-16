@@ -39,6 +39,13 @@ type Props = {
 export const TrendingContainer = ({ initialTab }: Props) => {
   const swiperRef = useRef<SwiperClass>(null);
   const isHeaderVisible = useHeaderVisibility();
+  // 뒤로가기 등으로 재진입할 때 헤더 가시성이 한 박자 늦게 결정되며 margin-top transition이
+  // 실행되는 문제(콘텐츠가 한 번 밀리는 현상) 방지를 위해 첫 페인트엔 transition 비활성화.
+  const [enableTransition, setEnableTransition] = useState(false);
+  useEffect(() => {
+    const id = window.setTimeout(() => setEnableTransition(true), 150);
+    return () => window.clearTimeout(id);
+  }, []);
 
   const {
     data: { categories },
@@ -125,7 +132,8 @@ export const TrendingContainer = ({ initialTab }: Props) => {
 
         <div
           className={cn(
-            'pc:mt-7 overflow-hidden transition-[margin-top] duration-300',
+            'pc:mt-7 overflow-hidden',
+            enableTransition && 'transition-[margin-top] duration-300',
             isHeaderVisible ? 'mt-[60px]' : 'mt-1',
           )}
         >
