@@ -167,7 +167,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             {...config}
             onRealIndexChange={handleIndexChange}
             onAfterInit={handleAfterInit}
-            initialSlide={0}
+            initialSlide={index}
           >
             {renderProducts()}
           </Swiper>
