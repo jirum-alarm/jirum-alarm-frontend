@@ -8,7 +8,6 @@ firebase.initializeApp({
   storageBucket: 'jirumalarm-b25f9.appspot.com',
   messagingSenderId: '570660841537',
   appId: '1:570660841537:web:f7b68d980e7a30daffbec0',
-  measurementId: 'G-BDBEZ4F35Z',
 });
 
 // Retrieve firebase messaging
