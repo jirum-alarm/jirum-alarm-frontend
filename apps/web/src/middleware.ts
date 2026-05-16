@@ -7,6 +7,25 @@ import { GRAPHQL_ENDPOINT } from '@/shared/config/graphql';
 import { PAGE } from '@/shared/config/page';
 import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/shared/config/token';
 
+const DEVICE_ID_COOKIE = 'jirum-alarm-device-id';
+const DEVICE_ID_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
+
+const ensureDeviceId = (req: NextRequest, res: NextResponse): void => {
+  if (req.cookies.get(DEVICE_ID_COOKIE)?.value) {
+    return;
+  }
+  const deviceId = crypto.randomUUID();
+  res.cookies.set({
+    name: DEVICE_ID_COOKIE,
+    value: deviceId,
+    path: '/',
+    maxAge: DEVICE_ID_MAX_AGE_SECONDS,
+    sameSite: 'lax',
+    secure: IS_PRD,
+  });
+  applySetCookie(req, res);
+};
+
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   // const response = await handlePostHog(request);
   const response = NextResponse.next({
@@ -14,6 +33,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       headers: new Headers(request.headers),
     },
   });
+  ensureDeviceId(request, response);
   return await routeGuard(request, response);
 }
 

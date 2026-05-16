@@ -56,9 +56,14 @@ export async function execute<TResult, TVariables>(
 
   if (isServer) {
     const { cookies } = await import('next/headers');
-    const token = (await cookies()).get('ACCESS_TOKEN')?.value;
+    const cookieStore = await cookies();
+    const token = cookieStore.get('ACCESS_TOKEN')?.value;
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
+    }
+    const deviceId = cookieStore.get('jirum-alarm-device-id')?.value;
+    if (deviceId) {
+      headers.set('X-Device-Id', deviceId);
     }
   } else {
     let deviceId = localStorage.getItem('jirum-alarm-device-id');
