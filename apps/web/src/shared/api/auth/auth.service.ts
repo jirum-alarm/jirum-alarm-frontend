@@ -17,6 +17,19 @@ import {
   QuerySocialAccessTokenQueryVariables,
 } from '../gql/graphql';
 
+const AUTH_ERROR_CODES = new Set(['UNAUTHENTICATED', 'FORBIDDEN']);
+
+const isAuthError = (error: unknown): boolean => {
+  if (!error || typeof error !== 'object') return false;
+  const status = (error as { response?: { status?: number } }).response?.status;
+  if (status === 401 || status === 403) return true;
+  const errors = (error as { data?: { errors?: Array<{ extensions?: { code?: string } }> } }).data
+    ?.errors;
+  return (
+    Array.isArray(errors) && errors.some((e) => AUTH_ERROR_CODES.has(e?.extensions?.code ?? ''))
+  );
+};
+
 export class AuthService {
   static async loginByRefreshTokenMutation() {
     return execute(MutationLoginByRefreshToken).then((res) => res.data);
@@ -25,8 +38,11 @@ export class AuthService {
   static async getMe() {
     return execute(QueryMe)
       .then((res) => res.data)
-      .catch(() => {
-        redirect(PAGE.LOGIN);
+      .catch((error) => {
+        if (isAuthError(error)) {
+          redirect(PAGE.LOGIN);
+        }
+        throw error;
       });
   }
 

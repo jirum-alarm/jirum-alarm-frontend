@@ -89,5 +89,9 @@ export async function execute<TResult, TVariables>(
 
   const responseData = await response.json();
 
+  if (Array.isArray(responseData?.errors) && responseData.errors.length > 0) {
+    throw new FetchError(response as customGraphqlResponse, responseData);
+  }
+
   return responseData as { data: TResult };
 }
