@@ -5,13 +5,14 @@ import { useToast } from '@/shared/ui/common/Toast';
 
 import { AuthQueries } from '@/entities/auth';
 
-export const useUpdateKeyword = () => {
+export const useUpdateKeyword = (options?: { onSuccess?: () => void }) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: AuthService.updateKeyword,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: AuthQueries.keyword() });
+      options?.onSuccess?.();
     },
     onError: () => {
       toast('키워드 저장에 실패했습니다.');

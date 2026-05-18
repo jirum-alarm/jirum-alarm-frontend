@@ -4,7 +4,8 @@ import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 
 import { useUpdateKeyword } from './update-keyword';
 
-const MAX_KETWORD_LENGTH = 20;
+const MIN_KEYWORD_LENGTH = 2;
+const MAX_KEYWORD_LENGTH = 20;
 
 export const useKeywordInput = () => {
   const { requestPermission } = useFcmPermission();
@@ -12,7 +13,9 @@ export const useKeywordInput = () => {
     error: false,
     value: '',
   });
-  const { mutate: addNotificationKeyword } = useUpdateKeyword();
+  const { mutate: addNotificationKeyword, isPending } = useUpdateKeyword({
+    onSuccess: () => reset(),
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
@@ -20,20 +23,20 @@ export const useKeywordInput = () => {
     setKeyword(() => ({ value, error }));
   };
   const isValidKeyword = (value: string) => {
-    const valueLength = [...new Intl.Segmenter().segment(value)].length;
-    const isValidLength = valueLength > 0 && valueLength <= MAX_KETWORD_LENGTH;
+    const valueLength = [...new Intl.Segmenter().segment(value.trim())].length;
+    const isValidLength = valueLength >= MIN_KEYWORD_LENGTH && valueLength <= MAX_KEYWORD_LENGTH;
 
     return isValidLength;
   };
   const reset = () => {
     setKeyword({ error: false, value: '' });
   };
-  const canSubmit = !!keyword.value && !keyword.error;
+  const canSubmit = !!keyword.value && !keyword.error && !isPending;
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addNotificationKeyword({ keyword: keyword.value });
+    if (!canSubmit) return;
+    addNotificationKeyword({ keyword: keyword.value.trim() });
     requestPermission();
-    reset();
   };
   return { handleInputChange, keyword, reset, handleSubmit, canSubmit };
 };

@@ -9,6 +9,12 @@ import { useKeywordInput } from '../../model/useKeywordInput';
 const KeywordInput = () => {
   const { keyword, handleInputChange, reset, handleSubmit, canSubmit } = useKeywordInput();
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && e.nativeEvent.isComposing) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <Input
@@ -16,9 +22,10 @@ const KeywordInput = () => {
         type="text"
         placeholder="키워드를 입력해주세요."
         error={keyword.error}
-        helperText={'키워드는 최대 20자까지만 입력할 수 있어요.'}
+        helperText={'키워드는 2자 이상 20자까지 입력할 수 있어요.'}
         value={keyword.value}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
         icon={
           !!keyword.value && (
             <button type="reset" onClick={reset}>
