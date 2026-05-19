@@ -42,8 +42,13 @@ export default function SearchAutocompleteDropdown({
             ref={isActive ? activeRef : null}
             role="option"
             aria-selected={isActive}
-            // mouseDown으로 처리해야 input blur 전에 선택이 잡힘
+            // PC: mouseDown으로 input blur 전에 잡고, 모바일: touchEnd로 선택
+            // (iOS Safari는 mouseDown emulation이 늦거나 누락되는 경우가 있음)
             onMouseDown={(e) => {
+              e.preventDefault();
+              onSelect(s);
+            }}
+            onTouchEnd={(e) => {
               e.preventDefault();
               onSelect(s);
             }}
