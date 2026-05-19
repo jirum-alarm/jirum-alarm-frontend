@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from 'react';
 import { SearchService } from '@/shared/api/search/search.service';
 
 const DEBOUNCE_MS = 200;
+// 한글 IME 조합 중에는 살짝 더 긴 디바운스로 조합 도중 폭주만 방지
+const DEBOUNCE_MS_COMPOSING = 350;
 const MIN_PREFIX_LENGTH_KOREAN = 1;
 const MIN_PREFIX_LENGTH_OTHER = 2;
 const SUGGESTION_LIMIT = 10;
@@ -41,11 +43,14 @@ export const useSearchAutocompleteViewModel = (params: UseSearchAutocompletePara
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (isComposing) return; // 조합 중에는 갱신 보류
+    // 한글 IME 조합 중에도 사용자가 잠시 멈추면 자동완성을 노출해야 한다.
+    // (compositionEnd를 기다리면 '에'만 치고 멈췄을 때 영원히 안 뜸)
+    // composition 중에는 약간 더 긴 디바운스를 적용해 조합 도중 폭주만 막는다.
     if (timerRef.current) clearTimeout(timerRef.current);
+    const delay = isComposing ? DEBOUNCE_MS_COMPOSING : DEBOUNCE_MS;
     timerRef.current = setTimeout(() => {
       setDebounced((value ?? '').trim());
-    }, DEBOUNCE_MS);
+    }, delay);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };

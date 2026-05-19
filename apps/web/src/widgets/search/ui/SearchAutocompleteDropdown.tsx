@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+
 import { cn } from '@/shared/lib/cn';
 import { Search } from '@/shared/ui/common/icons';
 
@@ -19,6 +21,14 @@ export default function SearchAutocompleteDropdown({
   onSelect,
   highlight,
 }: Props) {
+  const activeRef = useRef<HTMLLIElement | null>(null);
+
+  // 키보드로 활성 항목이 바뀌면 그 항목이 보이도록 스크롤
+  useEffect(() => {
+    if (activeIndex < 0) return;
+    activeRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [activeIndex]);
+
   return (
     <ul
       role="listbox"
@@ -29,6 +39,7 @@ export default function SearchAutocompleteDropdown({
         return (
           <li
             key={`${s}-${i}`}
+            ref={isActive ? activeRef : null}
             role="option"
             aria-selected={isActive}
             // mouseDown으로 처리해야 input blur 전에 선택이 잡힘
