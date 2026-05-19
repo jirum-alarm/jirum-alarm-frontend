@@ -69,7 +69,7 @@ const JirumRankingContainer = async () => {
           right={
             <InteractiveMoreLink
               className="px-3 text-sm text-gray-100"
-              href={PAGE.TRENDING}
+              href={PAGE.TRENDING_RANKING}
               aria-label="지름알림 랭킹 더보기"
             >
               더보기
