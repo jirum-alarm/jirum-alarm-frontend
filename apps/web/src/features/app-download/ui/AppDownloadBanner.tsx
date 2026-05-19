@@ -31,7 +31,7 @@ const AppDownloadBanner = (props: AppDownloadBannerProps) => {
   return (
     <>
       {type && link && (
-        <div className="from-secondary-50 to-secondary-100 flex h-[84px] w-full items-center gap-3 overflow-hidden bg-linear-to-b px-5">
+        <div className="from-secondary-50 to-secondary-100 flex h-[92px] w-full items-center gap-3 overflow-hidden rounded-lg border border-gray-600 bg-linear-to-b px-5">
           <div className="shrink-0">
             <AppIcon />
           </div>
