@@ -22,7 +22,10 @@ const LiveList = ({ categoryId }: LiveListProps) => {
       <div className="px-5">
         <ProductGridList products={products} />
       </div>
-      <div className="flex w-full items-center justify-center px-5" ref={loadingCallbackRef}>
+      <div
+        className="flex min-h-10 w-full items-center justify-center px-5"
+        ref={loadingCallbackRef}
+      >
         {isFetchingNextPage && <ProductGridListSkeleton length={SIZE} />}
       </div>
     </div>

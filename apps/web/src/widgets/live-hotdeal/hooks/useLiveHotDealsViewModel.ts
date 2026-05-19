@@ -1,4 +1,5 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
@@ -12,6 +13,7 @@ const useLiveHotDealsViewModel = () => {
     data: { pages },
     fetchNextPage,
     isFetchingNextPage,
+    hasNextPage,
   } = useSuspenseInfiniteQuery(
     ProductQueries.infiniteProducts({
       limit,
@@ -24,14 +26,14 @@ const useLiveHotDealsViewModel = () => {
     new Map(pages.flatMap((page) => page.products).map((p) => [p.id, p])).values(),
   );
 
-  const { ref: loadingCallbackRef } = useInView({
-    threshold: 0,
-    onChange: (inView) => {
-      if (inView && products.length >= limit) {
-        fetchNextPage();
-      }
-    },
-  });
+  const { ref: loadingCallbackRef, inView } = useInView({ threshold: 0 });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, pages.length, fetchNextPage]);
+
   return {
     products,
     loadingCallbackRef,

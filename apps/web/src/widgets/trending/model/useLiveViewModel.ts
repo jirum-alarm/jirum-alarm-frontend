@@ -1,4 +1,5 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
@@ -12,6 +13,7 @@ const useLiveViewModel = ({ categoryId }: { categoryId: number | null }) => {
     data: { pages },
     fetchNextPage,
     isFetchingNextPage,
+    hasNextPage,
   } = useSuspenseInfiniteQuery(
     ProductQueries.infiniteProducts({
       limit: LIVE_ITEMS_LIMIT,
@@ -23,14 +25,13 @@ const useLiveViewModel = ({ categoryId }: { categoryId: number | null }) => {
 
   const products = pages.flatMap((page) => page.products);
 
-  const { ref: loadingCallbackRef } = useInView({
-    threshold: 0,
-    onChange: (inView) => {
-      if (inView && products.length >= LIVE_ITEMS_LIMIT) {
-        fetchNextPage();
-      }
-    },
-  });
+  const { ref: loadingCallbackRef, inView } = useInView({ threshold: 0 });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, pages.length, fetchNextPage]);
 
   return {
     products,

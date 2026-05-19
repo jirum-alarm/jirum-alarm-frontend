@@ -25,7 +25,7 @@ const LiveHotDealList = ({ device }: { device: CheckDeviceResult }) => {
         {type && link && <AppDownloadBanner type={type} link={link} />}
       </div>
       <ProductGridList products={products.slice(size)} />
-      <div className="flex w-full items-center justify-center" ref={loadingCallbackRef}>
+      <div className="flex min-h-10 w-full items-center justify-center" ref={loadingCallbackRef}>
         {isFetchingNextPage && <ProductGridListSkeleton length={size} />}
       </div>
     </>
