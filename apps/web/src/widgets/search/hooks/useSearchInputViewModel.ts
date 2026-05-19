@@ -33,17 +33,19 @@ export const useSearchInputViewModel = () => {
     }
   };
 
+  const submitKeyword = (kw: string) => {
+    const trimmed = kw.trim();
+    if (!trimmed) return;
+    router.replace(`/search?keyword=${encodeURIComponent(trimmed)}`);
+    setRecentKeyord(trimmed);
+    setKeyword(trimmed);
+  };
+
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const keyword = event.currentTarget.value;
-
-    if (!keyword) {
-      return;
-    }
-
+    if (!keyword) return;
     if (event.key === 'Enter') {
-      router.replace(`/search?keyword=${keyword}`);
-
-      setRecentKeyord(keyword);
+      submitKeyword(keyword);
     }
   };
   const handleReset = () => {
@@ -67,6 +69,7 @@ export const useSearchInputViewModel = () => {
     handleChange,
     handleReset,
     handleGoHome,
+    submitKeyword,
   };
 };
 
