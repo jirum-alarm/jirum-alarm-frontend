@@ -18,6 +18,9 @@ const SearchInput = () => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // 자동완성 호출은 사용자가 실제로 입력한 원본 키워드 기준.
+  // 화살표 키로 항목을 옮길 때 input 표시값이 일시적으로 바뀌어도
+  // 서버 호출용 prefix는 원본을 유지한다.
   const { suggestions, hasPrefix } = useSearchAutocompleteViewModel({
     value: keyword,
     isComposing,
@@ -26,7 +29,13 @@ const SearchInput = () => {
 
   const dropdownOpen = isFocused && hasPrefix && suggestions.length > 0;
 
-  // 입력값이 바뀌면 active index 초기화
+  // 활성 항목이 있을 때는 input에 그 텍스트를 임시 표시, 없으면 원본 keyword
+  const displayValue =
+    dropdownOpen && activeIndex >= 0 && activeIndex < suggestions.length
+      ? suggestions[activeIndex]
+      : (keyword ?? '');
+
+  // 키워드가 사용자 입력으로 바뀌면 활성 인덱스 초기화
   useEffect(() => {
     setActiveIndex(-1);
   }, [keyword]);
@@ -48,6 +57,13 @@ const SearchInput = () => {
     };
   }, [isFocused]);
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // 사용자가 타이핑할 때마다 드롭다운이 다시 열리도록 보장
+    setIsFocused(true);
+    setActiveIndex(-1);
+    handleChange(event);
+  };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     // 한글 IME 조합 중 키 이벤트는 무시 (Safari/일부 브라우저에서 keyCode 229 또는 isComposing)
     if (event.nativeEvent.isComposing || event.keyCode === 229) {
@@ -62,7 +78,7 @@ const SearchInput = () => {
       setActiveIndex((prev) => (prev + 1) % suggestions.length);
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();
-      setActiveIndex((prev) => (prev <= 0 ? suggestions.length - 1 : prev - 1));
+      setActiveIndex((prev) => (prev <= -1 ? suggestions.length - 1 : prev === 0 ? -1 : prev - 1));
     } else if (event.key === 'Enter') {
       if (activeIndex >= 0 && activeIndex < suggestions.length) {
         event.preventDefault();
@@ -73,7 +89,12 @@ const SearchInput = () => {
       onKeyDown(event);
       setIsFocused(false);
     } else if (event.key === 'Escape') {
-      setIsFocused(false);
+      if (activeIndex >= 0) {
+        // 활성 항목 해제 (원본 입력값으로 복귀)
+        setActiveIndex(-1);
+      } else {
+        setIsFocused(false);
+      }
     }
   };
 
@@ -87,10 +108,10 @@ const SearchInput = () => {
       <div className="flex w-full items-center overflow-hidden rounded-sm bg-gray-50 pl-3 focus-within:outline-1 focus-within:outline-gray-900 focus-within:outline-solid">
         <Search color="#98A2B3" className="shrink-0" />
         <input
-          value={keyword ?? ''}
+          value={displayValue}
           className="h-10 w-full bg-gray-50 px-3 text-sm outline-hidden"
           onKeyDown={handleKeyDown}
-          onChange={handleChange}
+          onChange={handleInputChange}
           onFocus={() => setIsFocused(true)}
           onCompositionStart={() => setIsComposing(true)}
           onCompositionEnd={() => setIsComposing(false)}
