@@ -3,7 +3,7 @@ import {
   type HapticStyle,
   WebViewEventType,
 } from '@/shared/lib/webview';
-import {BackHandler, Share} from 'react-native';
+import {BackHandler, Platform, Share} from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as Haptics from 'expo-haptics';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
@@ -48,11 +48,18 @@ export class EventBridge {
   static shareRequest: EventHandler<WebViewEventType.SHARE_REQUEST> =
     async payload => {
       const {title, url, message} = payload.data;
-      await Share.share({
-        title,
-        url,
-        message: message ?? `${title} ${url}`,
-      });
+      if (Platform.OS === 'ios') {
+        await Share.share({
+          title,
+          url,
+          ...(message ? {message} : {}),
+        });
+      } else {
+        await Share.share({
+          title,
+          message: message ?? `${title}\n${url}`,
+        });
+      }
     };
   static alarmDotChanged: EventHandler<WebViewEventType.ALARM_DOT_CHANGED> =
     async payload => {
