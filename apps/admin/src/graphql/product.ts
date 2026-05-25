@@ -46,6 +46,12 @@ export const QueryProducts = gql`
   }
 `;
 
+export const MutationHardDeleteProductByAdmin = gql`
+  mutation MutationHardDeleteProductByAdmin($id: Int!) {
+    hardDeleteProductByAdmin(id: $id)
+  }
+`;
+
 export const QueryProduct = gql`
   query QueryProduct($id: Int!) {
     product(id: $id) {

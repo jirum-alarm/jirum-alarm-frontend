@@ -4,23 +4,82 @@ import Link from 'next/link';
 import { useState, useTransition } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { type GetProductsVariables, useGetProducts } from '@/hooks/graphql/product';
+import { QueryProducts } from '@/graphql/product';
+import {
+  type GetProductsVariables,
+  useGetProduct,
+  useGetProducts,
+  useHardDeleteProductByAdmin,
+} from '@/hooks/graphql/product';
 import { dateFormatter } from '@/utils/date';
 
 import ProductFilters from './ProductFilters';
 
 const ProductListTable = () => {
+  const [productId, setProductId] = useState('');
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
   const [isEnd, setIsEnd] = useState<boolean | undefined>(undefined);
   const [isHot, setIsHot] = useState<boolean | undefined>(undefined);
   const [searchVariables, setSearchVariables] = useState<GetProductsVariables>({});
+  const [searchProductId, setSearchProductId] = useState<number | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
 
-  const { data, loading, fetchMore } = useGetProducts(searchVariables);
-  const products = data?.products ?? [];
+  const {
+    data: listData,
+    loading: listLoading,
+    fetchMore,
+  } = useGetProducts(searchVariables, {
+    skip: searchProductId !== null,
+  });
+  const { data: singleData, loading: singleLoading } = useGetProduct(
+    { id: searchProductId ?? 0 },
+    { skip: searchProductId === null },
+  );
+
+  const isSingleMode = searchProductId !== null;
+  const loading = isSingleMode ? singleLoading : listLoading;
+  const products = isSingleMode
+    ? singleData?.product
+      ? [
+          {
+            id: singleData.product.id,
+            title: singleData.product.title,
+            mallId: singleData.product.mallId,
+            url: singleData.product.url,
+            isHot: singleData.product.isHot,
+            isEnd: singleData.product.isEnd,
+            price: singleData.product.price,
+            providerId: singleData.product.providerId,
+            categoryId: singleData.product.categoryId,
+            category: singleData.product.category,
+            thumbnail: singleData.product.thumbnail,
+            hotDealType: singleData.product.hotDealType,
+            provider: singleData.product.provider
+              ? { nameKr: singleData.product.provider.nameKr }
+              : null,
+            searchAfter: [],
+            postedAt: singleData.product.postedAt,
+          },
+        ]
+      : []
+    : (listData?.products ?? []);
+
+  const [hardDelete, { loading: deleting }] = useHardDeleteProductByAdmin({
+    refetchQueries: isSingleMode ? [] : [{ query: QueryProducts, variables: searchVariables }],
+    awaitRefetchQueries: true,
+  });
 
   const handleSearch = () => {
+    setDeleteError(null);
+    const idNum = productId.trim() ? Number(productId.trim()) : null;
+    if (idNum !== null && Number.isFinite(idNum) && idNum > 0) {
+      setSearchProductId(idNum);
+      return;
+    }
+    setSearchProductId(null);
     setSearchVariables({
       keyword: keyword || undefined,
       categoryId,
@@ -29,9 +88,25 @@ const ProductListTable = () => {
     });
   };
 
+  const handleConfirmDelete = async () => {
+    if (pendingDeleteId === null) return;
+    setDeleteError(null);
+    try {
+      await hardDelete({ variables: { id: pendingDeleteId } });
+      if (isSingleMode) {
+        setSearchProductId(null);
+        setProductId('');
+      }
+      setPendingDeleteId(null);
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : '삭제 중 오류가 발생했습니다.');
+    }
+  };
+
   const { ref: viewRef } = useInView({
     threshold: 0,
     onChange: (inView) => {
+      if (isSingleMode) return;
       if (!inView || loading || products.length === 0) return;
       const searchAfter = products[products.length - 1]?.searchAfter;
       if (!searchAfter) return;
@@ -52,10 +127,12 @@ const ProductListTable = () => {
   return (
     <>
       <ProductFilters
+        productId={productId}
         keyword={keyword}
         categoryId={categoryId}
         isEnd={isEnd}
         isHot={isHot}
+        onChangeProductId={setProductId}
         onChangeKeyword={setKeyword}
         onChangeCategoryId={setCategoryId}
         onChangeIsEnd={setIsEnd}
@@ -83,6 +160,9 @@ const ProductListTable = () => {
               </th>
               <th className="w-24 px-4 py-4 text-center text-sm font-medium text-bodydark2">
                 등록일
+              </th>
+              <th className="w-20 px-4 py-4 text-center text-sm font-medium text-bodydark2">
+                관리
               </th>
             </tr>
           </thead>
@@ -138,12 +218,24 @@ const ProductListTable = () => {
                 <td className="px-4 py-3 text-center text-xs text-bodydark2">
                   {product.postedAt ? dateFormatter(product.postedAt) : '-'}
                 </td>
+                <td className="px-4 py-3 text-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDeleteError(null);
+                      setPendingDeleteId(product.id);
+                    }}
+                    className="rounded-md border border-danger bg-transparent px-3 py-1 text-xs font-medium text-danger transition hover:bg-danger hover:text-white"
+                  >
+                    삭제
+                  </button>
+                </td>
               </tr>
             ))}
 
             {loading && (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center">
+                <td colSpan={8} className="px-4 py-8 text-center">
                   <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
                 </td>
               </tr>
@@ -155,8 +247,51 @@ const ProductListTable = () => {
           <div className="px-4 py-12 text-center text-sm text-bodydark2">검색 결과가 없습니다.</div>
         )}
 
-        <div ref={viewRef} className="h-4" />
+        {!isSingleMode && <div ref={viewRef} className="h-4" />}
       </div>
+
+      {pendingDeleteId !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-default dark:bg-boxdark">
+            <h3 className="mb-3 text-lg font-semibold text-black dark:text-white">상품 삭제</h3>
+            <p className="mb-2 text-sm text-bodydark2">
+              상품 ID{' '}
+              <span className="font-semibold text-black dark:text-white">{pendingDeleteId}</span>{' '}
+              을(를) 완전히 삭제합니다.
+            </p>
+            <p className="mb-4 text-sm text-danger">
+              이 작업은 되돌릴 수 없으며, 관련 매핑/메타데이터/위시리스트/댓글이 모두 함께
+              삭제됩니다.
+            </p>
+            {deleteError && (
+              <p className="mb-3 rounded border border-danger bg-danger bg-opacity-10 px-3 py-2 text-xs text-danger">
+                {deleteError}
+              </p>
+            )}
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setPendingDeleteId(null);
+                  setDeleteError(null);
+                }}
+                disabled={deleting}
+                className="rounded-md border border-stroke px-4 py-2 text-sm text-black transition hover:bg-gray-2 disabled:opacity-50 dark:border-strokedark dark:text-white dark:hover:bg-meta-4"
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                disabled={deleting}
+                className="rounded-md bg-danger px-4 py-2 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:opacity-50"
+              >
+                {deleting ? '삭제 중...' : '삭제'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

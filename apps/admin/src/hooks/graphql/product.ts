@@ -1,7 +1,7 @@
-import { QueryHookOptions, useQuery } from '@apollo/client';
+import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
 
 import { PAGE_LIMIT } from '@/constants/limit';
-import { QueryProduct, QueryProducts } from '@/graphql/product';
+import { MutationHardDeleteProductByAdmin, QueryProduct, QueryProducts } from '@/graphql/product';
 
 export interface ProductListItem {
   id: number;
@@ -95,4 +95,13 @@ export const useGetProduct = (
     fetchPolicy: 'network-only',
     ...options,
   });
+};
+
+export const useHardDeleteProductByAdmin = (
+  options?: MutationHookOptions<{ hardDeleteProductByAdmin: boolean }, { id: number }>,
+) => {
+  return useMutation<{ hardDeleteProductByAdmin: boolean }, { id: number }>(
+    MutationHardDeleteProductByAdmin,
+    options,
+  );
 };

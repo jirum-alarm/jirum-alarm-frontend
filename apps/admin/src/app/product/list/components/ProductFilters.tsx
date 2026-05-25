@@ -3,10 +3,12 @@
 import { useGetCategories } from '@/hooks/graphql/category';
 
 interface ProductFiltersProps {
+  productId: string;
   keyword: string;
   categoryId: number | undefined;
   isEnd: boolean | undefined;
   isHot: boolean | undefined;
+  onChangeProductId: (productId: string) => void;
   onChangeKeyword: (keyword: string) => void;
   onChangeCategoryId: (categoryId: number | undefined) => void;
   onChangeIsEnd: (isEnd: boolean | undefined) => void;
@@ -15,10 +17,12 @@ interface ProductFiltersProps {
 }
 
 const ProductFilters = ({
+  productId,
   keyword,
   categoryId,
   isEnd,
   isHot,
+  onChangeProductId,
   onChangeKeyword,
   onChangeCategoryId,
   onChangeIsEnd,
@@ -37,6 +41,21 @@ const ProductFilters = ({
   return (
     <div className="mb-6 rounded-lg border border-stroke bg-white px-5 py-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5">
       <div className="flex flex-wrap items-end gap-4">
+        <div className="w-32">
+          <label className="mb-1 block text-sm font-medium text-black dark:text-white">
+            상품 ID
+          </label>
+          <input
+            type="text"
+            inputMode="numeric"
+            placeholder="ID"
+            value={productId}
+            onChange={(e) => onChangeProductId(e.target.value.replace(/[^0-9]/g, ''))}
+            onKeyDown={handleKeyDown}
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+          />
+        </div>
+
         <div className="flex-1">
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
             검색어
@@ -47,7 +66,8 @@ const ProductFilters = ({
             value={keyword}
             onChange={(e) => onChangeKeyword(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            disabled={productId.length > 0}
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           />
         </div>
 
