@@ -46,14 +46,12 @@ RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfi
 COPY --from=pruner /app/out/full/ .
 
 RUN turbo build --filter=${PROJECT}
-RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store CI=true pnpm prune --prod --no-optional
-RUN rm -rf ./**/*/src
 
 
 # 4. Production dependencies
 FROM builder AS dependencies
 WORKDIR /app
-RUN pnpm --filter=$PROJECT deploy --prod --ignore-scripts --no-optional --legacy /dependencies
+RUN pnpm --filter=$PROJECT deploy --prod --ignore-scripts --legacy /dependencies
 
 # 5. Final image - runner stage to run the application
 FROM alpine AS runner
