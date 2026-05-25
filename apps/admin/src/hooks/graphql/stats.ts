@@ -8,6 +8,9 @@ import {
   QueryProductCountByProvider,
   QueryProductPriceDistribution,
   QueryProductRegistrationStats,
+  QueryProductRegistrationStatsByProvider,
+  QueryProviderHealthStatus,
+  QueryThumbnailStats,
   QueryTopFavoriteCategories,
   QueryTopNotificationKeywords,
   QueryUserDemographicStats,
@@ -22,6 +25,10 @@ import {
   KeywordCountOutput,
   PriceRangeCountOutput,
   ProviderCountOutput,
+  ProviderDateCountOutput,
+  ProviderHealthOutput,
+  ProviderType,
+  ThumbnailStatsOutput,
   UserDemographicStatsOutput,
 } from '@/types/stats';
 
@@ -148,4 +155,45 @@ export const useTopNotificationKeywords = (
     fetchPolicy: 'network-only',
     ...options,
   });
+};
+
+// 4. 크롤링 운영 통계
+
+interface ProviderTypeFilter {
+  providerType?: ProviderType;
+}
+
+type DateRangeWithProviderFilter = DateRangeVariables & ProviderTypeFilter;
+
+export const useProductRegistrationStatsByProvider = () => {
+  return useLazyQuery<
+    { productRegistrationStatsByProvider: ProviderDateCountOutput[] },
+    DateRangeWithProviderFilter
+  >(QueryProductRegistrationStatsByProvider, {
+    fetchPolicy: 'network-only',
+  });
+};
+
+export const useProviderHealthStatus = (
+  variables?: ProviderTypeFilter,
+  options?: QueryHookOptions<{ providerHealthStatus: ProviderHealthOutput[] }, ProviderTypeFilter>,
+) => {
+  return useQuery<{ providerHealthStatus: ProviderHealthOutput[] }, ProviderTypeFilter>(
+    QueryProviderHealthStatus,
+    {
+      variables,
+      fetchPolicy: 'network-only',
+      pollInterval: 60_000,
+      ...options,
+    },
+  );
+};
+
+export const useThumbnailStats = () => {
+  return useLazyQuery<{ thumbnailStats: ThumbnailStatsOutput }, DateRangeVariables>(
+    QueryThumbnailStats,
+    {
+      fetchPolicy: 'network-only',
+    },
+  );
 };

@@ -134,13 +134,23 @@ const Sidebar = ({
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
-              <SidebarLinkGroup activeCondition={pathname === '/' || pathname.startsWith('/stats')}>
+              <SidebarLinkGroup
+                activeCondition={
+                  pathname === '/' ||
+                  pathname.startsWith('/stats') ||
+                  pathname.startsWith('/crawling')
+                }
+              >
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
                       <MenuGroup
                         name="대시보드"
-                        isSelectedPath={pathname === '/' || pathname.startsWith('/stats')}
+                        isSelectedPath={
+                          pathname === '/' ||
+                          pathname.startsWith('/stats') ||
+                          pathname.startsWith('/crawling')
+                        }
                         open={open}
                         sidebarExpanded={sidebarExpanded}
                         openSidebar={openSidebar}
@@ -150,6 +160,7 @@ const Sidebar = ({
                       <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
                         <SubMenuItem name="홈" linkTo="/" pathname={pathname} />
                         <SubMenuItem name="통계" linkTo="/stats" pathname={pathname} />
+                        <SubMenuItem name="크롤링" linkTo="/crawling" pathname={pathname} />
                       </SubMenu>
                     </React.Fragment>
                   );

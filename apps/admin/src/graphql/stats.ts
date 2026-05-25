@@ -138,3 +138,58 @@ export const QueryTopNotificationKeywords = gql`
     }
   }
 `;
+
+// 4. 크롤링 운영 통계
+
+export const QueryProductRegistrationStatsByProvider = gql`
+  query QueryProductRegistrationStatsByProvider(
+    $startDate: DateTime!
+    $endDate: DateTime!
+    $interval: DateInterval!
+    $providerType: ProviderType
+  ) {
+    productRegistrationStatsByProvider(
+      startDate: $startDate
+      endDate: $endDate
+      interval: $interval
+      providerType: $providerType
+    ) {
+      date
+      providerId
+      providerName
+      count
+    }
+  }
+`;
+
+export const QueryProviderHealthStatus = gql`
+  query QueryProviderHealthStatus($providerType: ProviderType) {
+    providerHealthStatus(providerType: $providerType) {
+      providerId
+      providerName
+      providerType
+      last1hCount
+      last24hCount
+      last7dCount
+      latestCollectedAt
+      minutesSinceLatest
+    }
+  }
+`;
+
+export const QueryThumbnailStats = gql`
+  query QueryThumbnailStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
+    thumbnailStats(startDate: $startDate, endDate: $endDate, interval: $interval) {
+      typeDistribution {
+        thumbnailType
+        count
+      }
+      mallDistribution {
+        mallName
+        count
+      }
+      missingCount
+      totalCount
+    }
+  }
+`;
