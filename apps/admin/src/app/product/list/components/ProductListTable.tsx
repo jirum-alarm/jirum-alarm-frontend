@@ -92,7 +92,7 @@ const ProductListTable = () => {
     if (pendingDeleteId === null) return;
     setDeleteError(null);
     try {
-      await hardDelete({ variables: { id: pendingDeleteId } });
+      await hardDelete({ variables: { id: Number(pendingDeleteId) } });
       if (isSingleMode) {
         setSearchProductId(null);
         setProductId('');
