@@ -14,6 +14,7 @@ export const QueryCommunityPosts = gql`
       searchAfter: $searchAfter
       isNotice: $isNotice
       isTrending: $isTrending
+      isRoot: true
       orderBy: $orderBy
       orderOption: $orderOption
     ) {

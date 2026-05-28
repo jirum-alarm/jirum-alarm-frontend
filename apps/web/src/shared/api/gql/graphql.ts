@@ -2993,6 +2993,7 @@ export const CommunityPostsDocument = new TypedDocumentString(`
     searchAfter: $searchAfter
     isNotice: $isNotice
     isTrending: $isTrending
+    isRoot: true
     orderBy: $orderBy
     orderOption: $orderOption
   ) {
