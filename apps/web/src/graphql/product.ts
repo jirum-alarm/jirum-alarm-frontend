@@ -366,6 +366,30 @@ export const QueryHotDealRankingProducts = gql`
   }
 `;
 
+export const QueryGuestRecommendedHotDeals = gql`
+  query QueryGuestRecommendedHotDeals($page: Int!, $limit: Int!) {
+    guestRecommendedHotDeals(page: $page, limit: $limit) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      hotDealType
+      provider {
+        nameKr
+      }
+      searchAfter
+      postedAt
+    }
+  }
+`;
+
 export const QueryExpiringSoonHotDealProducts = gql`
   query QueryExpiringSoonHotDealProducts(
     $daysUntilExpiry: Int!

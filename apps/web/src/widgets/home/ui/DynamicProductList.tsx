@@ -31,6 +31,9 @@ const DynamicProductList = ({ section, isMobile, priorityCount = 0 }: DynamicPro
       case 'hotDealRankingProducts':
         products = (data as any).hotDealRankingProducts;
         break;
+      case 'guestRecommendedHotDeals':
+        products = (data as any).guestRecommendedHotDeals;
+        break;
       case 'productsByKeyword':
         products = (data as any).productsByKeyword;
         break;

@@ -19,6 +19,8 @@ import {
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryExpiringSoonHotDealProductsArgs,
   QueryExpiringSoonHotDealProductsQueryVariables,
+  QueryGuestRecommendedHotDealsArgs,
+  QueryGuestRecommendedHotDealsDocument,
   QueryHotDealRankingProductsArgs,
   QueryProductsByKeywordQueryVariables,
   QueryProductsQuery,
@@ -99,6 +101,10 @@ export class ProductService {
     return execute(QueryHotDealRankingProducts, variables).then((res) => res.data);
   }
 
+  static async getGuestRecommendedHotDeals(variables: QueryGuestRecommendedHotDealsArgs) {
+    return execute(QueryGuestRecommendedHotDealsDocument, variables).then((res) => res.data);
+  }
+
   static async getExpiringSoonHotDealProducts(
     variables: QueryExpiringSoonHotDealProductsQueryVariables,
   ) {
@@ -151,6 +157,13 @@ const QueryProduct = graphql(`
         highestPrice
         currentPrice
         lowestPrice
+        visualConfig {
+          markerPct
+          q1Pct
+          q3Pct
+          medianPct
+          isClustered
+        }
       }
       isMyLike
       isMyReported

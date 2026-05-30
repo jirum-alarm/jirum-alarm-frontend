@@ -157,6 +157,31 @@ const ByHotDeal = ({ section }: CurationProductListProps) => {
   return <ProductGridList products={products} />;
 };
 
+const ByGuestRecommended = ({ section }: CurationProductListProps) => {
+  const sectionWithLimit = {
+    ...section,
+    dataSource: {
+      ...section.dataSource,
+      variables: {
+        ...section.dataSource.variables,
+        limit: LIMIT,
+      },
+    },
+  };
+
+  const queryOptions = getPromotionQueryOptions(sectionWithLimit) as ReturnType<
+    typeof ProductQueries.guestRecommendedHotDeals
+  >;
+  const { data } = useSuspenseQuery(queryOptions);
+  const products = (data as any).guestRecommendedHotDeals ?? [];
+
+  if (products.length === 0) {
+    return <EmptyState />;
+  }
+
+  return <ProductGridList products={products} />;
+};
+
 const CurationProductList = ({ section }: CurationProductListProps) => {
   if (section.dataSource.type !== 'GRAPHQL_QUERY') {
     return <EmptyState />;
@@ -164,6 +189,10 @@ const CurationProductList = ({ section }: CurationProductListProps) => {
 
   if (section.dataSource.queryName === 'hotDealRankingProducts') {
     return <ByHotDeal section={section} />;
+  }
+
+  if (section.dataSource.queryName === 'guestRecommendedHotDeals') {
+    return <ByGuestRecommended section={section} />;
   }
 
   if (section.dataSource.queryName === 'expiringSoonHotDealProducts') {

@@ -10,6 +10,7 @@ import {
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryExpiringSoonHotDealProductsArgs,
   QueryExpiringSoonHotDealProductsQueryVariables,
+  QueryGuestRecommendedHotDealsQueryVariables,
   QueryHotDealRankingProductsQueryVariables,
   QueryProductsByKeywordQueryVariables,
   QueryReportUserNamesQueryVariables,
@@ -167,6 +168,12 @@ export const ProductQueries = {
     queryOptions({
       queryKey: [...ProductQueries.all(), 'hotDealRankingProducts', variables],
       queryFn: () => ProductService.getHotDealRankingProducts(variables),
+    }),
+
+  guestRecommendedHotDeals: (variables: QueryGuestRecommendedHotDealsQueryVariables) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'guestRecommendedHotDeals', variables],
+      queryFn: () => ProductService.getGuestRecommendedHotDeals(variables),
     }),
 
   expiringSoonHotDealProducts: (variables: QueryExpiringSoonHotDealProductsQueryVariables) =>

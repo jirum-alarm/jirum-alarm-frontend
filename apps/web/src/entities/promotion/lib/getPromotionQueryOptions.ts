@@ -10,6 +10,8 @@ export const getPromotionQueryOptions = (section: ContentPromotionSection) => {
     switch (queryName) {
       case 'hotDealRankingProducts':
         return ProductQueries.hotDealRankingProducts(variables as any);
+      case 'guestRecommendedHotDeals':
+        return ProductQueries.guestRecommendedHotDeals(variables as any);
       case 'productsByKeyword':
         return ProductQueries.productsByKeywords(variables as any);
       case 'products':

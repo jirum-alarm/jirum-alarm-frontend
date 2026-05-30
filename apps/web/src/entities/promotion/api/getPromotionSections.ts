@@ -68,6 +68,21 @@ export const getPromotionSections = async (): Promise<PromotionSection[]> => {
       viewMoreLink: '/curation/hotdeal',
     },
     {
+      id: 'guest-recommended',
+      title: '내 취향 저격 핫딜',
+      type: 'PAGINATED_GRID',
+      dataSource: {
+        type: 'GRAPHQL_QUERY',
+        queryName: 'guestRecommendedHotDeals',
+        variables: {
+          page: 0,
+          limit: 20,
+        },
+      },
+      displayOrder: 1.5,
+      viewMoreLink: '/curation/guest-recommended',
+    },
+    {
       id: 'under-10000',
       title: '부담없이 만원이하템',
       type: 'HORIZONTAL_SCROLL',
