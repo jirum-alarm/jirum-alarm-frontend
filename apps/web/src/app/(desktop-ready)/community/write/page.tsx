@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { checkDevice } from '@/app/actions/agent';
@@ -9,6 +10,12 @@ import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 import { POST_FORM_ID } from '@/features/community/ui/PostForm';
 import PostFormClient from '@/features/community/ui/PostFormClient';
+
+export const metadata: Metadata = {
+  title: '글쓰기 | 지름알림 커뮤니티',
+  // 로그인 필요 + 작성 페이지이므로 색인 제외
+  robots: { index: false, follow: false },
+};
 
 export default async function CommunityWritePage({
   searchParams,

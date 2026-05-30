@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title,
     description,
-    // images: `${URL_BASE}/opengraph-image.webp`,
+    images: `${URL_BASE}/opengraph-image.png`,
   },
   alternates: {
     canonical: URL_BASE,
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    "max-image-preview": "large",
+    'max-image-preview': 'large',
   },
 };
 

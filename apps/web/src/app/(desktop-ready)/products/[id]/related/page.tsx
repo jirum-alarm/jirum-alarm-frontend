@@ -2,8 +2,7 @@ import { Suspense } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
 
-import { ProductService } from '@/shared/api/product';
-
+import { getProductInfoCached } from './getProductInfoCached';
 import RelatedProductsView from './RelatedProductsView';
 
 export default async function RelatedProductsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -14,7 +13,7 @@ export default async function RelatedProductsPage({ params }: { params: Promise<
 
   // Prefetch product to get title/keyword for client component
   // We can just pass the necessary data to the client component
-  const product = await ProductService.getProductInfo({ id: productId });
+  const product = await getProductInfoCached(productId);
 
   if (!product) {
     return (

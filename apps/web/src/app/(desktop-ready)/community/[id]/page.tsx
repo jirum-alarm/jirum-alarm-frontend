@@ -1,12 +1,64 @@
-import { Suspense } from 'react';
+import { Metadata } from 'next';
+import { cache, Suspense } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
 import { getAccessToken } from '@/app/actions/token';
 
+import { CommunityService } from '@/shared/api/community/community.service';
+import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 import CommunityPostDetailClient from '@/features/community/ui/CommunityPostDetail';
 import CommunityPostPageHeader from '@/features/community/ui/CommunityPostPageHeader';
+
+// generateMetadata에서 글 정보를 한 번만 조회하도록 캐싱
+const getCommunityPostCached = cache((id: number) => CommunityService.getCommunityPost(id));
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+
+  const data = await getCommunityPostCached(Number(id)).catch(() => null);
+  const post = data?.comment;
+
+  if (!post) {
+    return { title: '게시글을 찾을 수 없습니다 | 지름알림' };
+  }
+
+  const rawTitle = post.title?.trim() || post.content.trim().slice(0, 30);
+  const title = `${rawTitle} | 지름알림 커뮤니티`;
+  const description =
+    post.content.replace(/\s+/g, ' ').trim().slice(0, 100) ||
+    '지름알림 커뮤니티에서 핫딜 정보를 나눠보세요.';
+  const url = `${METADATA_SERVICE_URL}/community/${id}`;
+  const ogImage = post.taggedProduct?.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: '지름알림',
+      locale: 'ko_KR',
+      type: 'article',
+      images: [{ url: ogImage, alt: rawTitle }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ogImage,
+    },
+    alternates: {
+      canonical: url,
+    },
+  };
+}
 
 function PostDetailSkeleton() {
   return (

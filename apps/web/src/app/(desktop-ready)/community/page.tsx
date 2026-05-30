@@ -1,14 +1,45 @@
+import { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
 import { getAccessToken } from '@/app/actions/token';
 
+import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import { NAV_TYPE } from '@/shared/ui/layout/BottomNav';
 
 import { CommunityHotDeals } from '@/features/community';
 
 import CommunityPageClient from './CommunityPageClient';
+
+const communityTitle = '커뮤니티 | 지름알림';
+const communityDescription =
+  '핫딜 정보와 쇼핑 꿀팁을 나누는 지름알림 커뮤니티. 다른 사람들이 발견한 특가 소식을 함께 확인하세요.';
+const communityUrl = `${METADATA_SERVICE_URL}/community`;
+const communityOgImage = `${METADATA_SERVICE_URL}/opengraph-image.webp`;
+
+export const metadata: Metadata = {
+  title: communityTitle,
+  description: communityDescription,
+  openGraph: {
+    title: communityTitle,
+    description: communityDescription,
+    url: communityUrl,
+    siteName: '지름알림',
+    locale: 'ko_KR',
+    type: 'website',
+    images: [{ url: communityOgImage, width: 1200, height: 630, alt: communityTitle }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: communityTitle,
+    description: communityDescription,
+    images: communityOgImage,
+  },
+  alternates: {
+    canonical: communityUrl,
+  },
+};
 
 export default async function CommunityPage() {
   const { isMobile } = await checkDevice();
