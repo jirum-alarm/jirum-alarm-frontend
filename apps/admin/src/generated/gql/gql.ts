@@ -18,18 +18,44 @@ type Documents = {
   '\n  query QuerySimilarProducts($id: Int!) {\n    similarProducts(id: $id) {\n      id\n      title\n      url\n      thumbnail\n      price\n      categoryId\n      providerId\n      provider {\n        name\n      }\n      postedAt\n    }\n  }\n': typeof types.QuerySimilarProductsDocument;
   '\n  query QueryBrandProductsByMatchCountTotalCount($brandItemId: Int, $title: String) {\n    brandProductsByMatchCountTotalCount(brandItemId: $brandItemId, title: $title)\n  }\n': typeof types.QueryBrandProductsByMatchCountTotalCountDocument;
   '\n  query QueryBrandProductMatchCount($brandProductId: Int!) {\n    brandProductMatchCount(brandProductId: $brandProductId)\n  }\n': typeof types.QueryBrandProductMatchCountDocument;
+  '\n  query QueryBrandItemsOrderByTotalMatchCount(\n    $limit: Int!\n    $searchAfter: [String!]\n    $title: String\n  ) {\n    brandItemsOrderByTotalMatchCount(limit: $limit, searchAfter: $searchAfter, title: $title) {\n      id\n      brandName\n      productName\n      totalMatchCount\n      pendingVerificationCount\n      searchAfter\n    }\n  }\n': typeof types.QueryBrandItemsOrderByTotalMatchCountDocument;
+  '\n  query QueryBrandItemsByMatchCountTotalCount($title: String) {\n    brandItemsByMatchCountTotalCount(title: $title)\n  }\n': typeof types.QueryBrandItemsByMatchCountTotalCountDocument;
   '\n  query QueryCategories {\n    categories {\n      id\n      name\n    }\n  }\n': typeof types.QueryCategoriesDocument;
   '\n  query commentsByAdmin($hotDealKeywordId: Int!, $synonyms: [String!], $excludes: [String!]) {\n    commentsByAdmin(hotDealKeywordId: $hotDealKeywordId, synonyms: $synonyms, excludes: $excludes)\n  }\n': typeof types.CommentsByAdminDocument;
+  '\n  query QueryGatedMappings(\n    $limit: Int!\n    $searchAfter: [String!]\n    $matchingSource: [String!]\n    $productTitle: String\n    $orderBy: OrderOptionType\n  ) {\n    gatedMappings(\n      limit: $limit\n      searchAfter: $searchAfter\n      matchingSource: $matchingSource\n      productTitle: $productTitle\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      product {\n        title\n        thumbnail\n        price\n        url\n        provider {\n          name\n        }\n      }\n      matchStatus\n      matchingSource\n      matchingReasoning\n      extractedProductInfo\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryGatedMappingsDocument;
   '\n  query QueryHotDealKeywordsByAdmin(\n    $type: HotDealKeywordType\n    $orderBy: HotDealKeywordOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    hotDealKeywordsByAdmin(\n      type: $type\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      type\n      keyword\n      weight\n      isMajor\n      lastUpdatedAt\n      synonymCount\n      excludeKeywordCount\n      searchAfter\n    }\n  }\n': typeof types.QueryHotDealKeywordsByAdminDocument;
   '\n  mutation MutationAddHotDealKeywordByAdmin(\n    $type: HotDealKeywordType!\n    $keyword: String!\n    $weight: Float!\n    $isMajor: Boolean!\n  ) {\n    addHotDealKeywordByAdmin(type: $type, keyword: $keyword, weight: $weight, isMajor: $isMajor)\n  }\n': typeof types.MutationAddHotDealKeywordByAdminDocument;
   '\n  mutation MutationRemoveHotDealKeywordByAdmin($id: Int!) {\n    removeHotDealKeywordByAdmin(id: $id)\n  }\n': typeof types.MutationRemoveHotDealKeywordByAdminDocument;
   '\n  mutation MutationUpdateHotDealKeywordByAdmin(\n    $id: Int!\n    $keyword: String\n    $weight: Float\n    $isMajor: Boolean\n  ) {\n    updateHotDealKeywordByAdmin(id: $id, keyword: $keyword, weight: $weight, isMajor: $isMajor)\n  }\n': typeof types.MutationUpdateHotDealKeywordByAdminDocument;
   '\n  query QueryHotDealKeywordByAdmin($id: Int!) {\n    hotDealKeywordByAdmin(id: $id) {\n      id\n      type\n      keyword\n      weight\n      isMajor\n      synonyms {\n        id\n        hotDealKeywordId\n        keyword\n      }\n      excludeKeywords {\n        id\n        hotDealKeywordId\n        excludeKeyword\n      }\n    }\n  }\n': typeof types.QueryHotDealKeywordByAdminDocument;
   '\n  query QueryHotDealKeywordDetailByAdmin($id: Int!) {\n    hotDealKeywordByAdmin(id: $id) {\n      id\n      type\n      keyword\n      weight\n      isMajor\n    }\n  }\n': typeof types.QueryHotDealKeywordDetailByAdminDocument;
+  '\n  query QueryKeywordMapGroupsByAdmin(\n    $orderBy: KeywordMapGroupOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    keywordMapGroupsByAdmin(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      name\n      description\n      entryCount\n      searchAfter\n    }\n  }\n': typeof types.QueryKeywordMapGroupsByAdminDocument;
+  '\n  query QueryKeywordMapGroupByAdmin($id: Int!) {\n    keywordMapGroupByAdmin(id: $id) {\n      id\n      name\n      description\n      entryCount\n      entries {\n        id\n        keyword\n      }\n    }\n  }\n': typeof types.QueryKeywordMapGroupByAdminDocument;
+  '\n  mutation MutationAddKeywordMapGroupByAdmin($name: String!, $description: String) {\n    addKeywordMapGroupByAdmin(name: $name, description: $description)\n  }\n': typeof types.MutationAddKeywordMapGroupByAdminDocument;
+  '\n  mutation MutationUpdateKeywordMapGroupByAdmin($id: Int!, $name: String, $description: String) {\n    updateKeywordMapGroupByAdmin(id: $id, name: $name, description: $description)\n  }\n': typeof types.MutationUpdateKeywordMapGroupByAdminDocument;
+  '\n  mutation MutationRemoveKeywordMapGroupByAdmin($id: Int!) {\n    removeKeywordMapGroupByAdmin(id: $id)\n  }\n': typeof types.MutationRemoveKeywordMapGroupByAdminDocument;
+  '\n  mutation MutationAddKeywordMapEntryByAdmin($groupId: Int!, $keyword: String!) {\n    addKeywordMapEntryByAdmin(groupId: $groupId, keyword: $keyword)\n  }\n': typeof types.MutationAddKeywordMapEntryByAdminDocument;
+  '\n  mutation MutationAddKeywordMapEntriesByAdmin($groupId: Int!, $keywords: [String!]!) {\n    addKeywordMapEntriesByAdmin(groupId: $groupId, keywords: $keywords)\n  }\n': typeof types.MutationAddKeywordMapEntriesByAdminDocument;
+  '\n  mutation MutationRemoveKeywordMapEntryByAdmin($id: Int!) {\n    removeKeywordMapEntryByAdmin(id: $id)\n  }\n': typeof types.MutationRemoveKeywordMapEntryByAdminDocument;
   '\n  query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {\n    notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {\n      id\n      title\n      message\n      target\n      targetId\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryNotificationsByAdminDocument;
   '\n  mutation MutationSendNotificationByAdmin(\n    $title: String!\n    $message: String!\n    $type: NotificationType!\n    $target: NotificationTarget\n    $targetId: Int\n    $url: String\n    $userIds: [Int!]\n  ) {\n    sendNotificationByAdmin(\n      title: $title\n      message: $message\n      type: $type\n      target: $target\n      targetId: $targetId\n      url: $url\n      userIds: $userIds\n    )\n  }\n': typeof types.MutationSendNotificationByAdminDocument;
   '\n  query QueryProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n    $categoryId: Int\n    $keyword: String\n    $thumbnailType: ThumbnailType\n    $isEnd: Boolean\n    $isHot: Boolean\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      orderOption: $orderOption\n      categoryId: $categoryId\n      keyword: $keyword\n      thumbnailType: $thumbnailType\n      isEnd: $isEnd\n      isHot: $isHot\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryProductsDocument;
+  '\n  mutation MutationHardDeleteProductByAdmin($id: Int!) {\n    hardDeleteProductByAdmin(id: $id)\n  }\n': typeof types.MutationHardDeleteProductByAdminDocument;
   '\n  query QueryProduct($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      categoryName\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      author {\n        id\n        nickname\n      }\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      hotDealType\n      hotDealIndex {\n        id\n        message\n        highestPrice\n        currentPrice\n        lowestPrice\n      }\n      likeCount\n      dislikeCount\n    }\n  }\n': typeof types.QueryProductDocument;
+  '\n  query QueryUserRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    userRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n': typeof types.QueryUserRegistrationStatsDocument;
+  '\n  query QueryUserDemographicStats {\n    userDemographicStats {\n      genderDistribution {\n        gender\n        count\n      }\n      ageDistribution {\n        ageGroup\n        count\n      }\n    }\n  }\n': typeof types.QueryUserDemographicStatsDocument;
+  '\n  query QueryTopFavoriteCategories($limit: Int) {\n    topFavoriteCategories(limit: $limit) {\n      categoryId\n      categoryName\n      count\n    }\n  }\n': typeof types.QueryTopFavoriteCategoriesDocument;
+  '\n  query QueryProductRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    productRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n': typeof types.QueryProductRegistrationStatsDocument;
+  '\n  query QueryHotDealRatioStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    hotDealRatioStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      totalCount\n      hotDealCount\n      ratio\n    }\n  }\n': typeof types.QueryHotDealRatioStatsDocument;
+  '\n  query QueryHotDealTypeDistribution(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    hotDealTypeDistribution(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      hotDealType\n      count\n    }\n  }\n': typeof types.QueryHotDealTypeDistributionDocument;
+  '\n  query QueryProductCountByCategory {\n    productCountByCategory {\n      categoryId\n      categoryName\n      count\n    }\n  }\n': typeof types.QueryProductCountByCategoryDocument;
+  '\n  query QueryProductCountByProvider {\n    productCountByProvider {\n      providerId\n      providerName\n      count\n    }\n  }\n': typeof types.QueryProductCountByProviderDocument;
+  '\n  query QueryProductPriceDistribution(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    productPriceDistribution(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      priceRange\n      minPrice\n      maxPrice\n      count\n    }\n  }\n': typeof types.QueryProductPriceDistributionDocument;
+  '\n  query QueryDailyServiceViewStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    dailyServiceViewStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n': typeof types.QueryDailyServiceViewStatsDocument;
+  '\n  query QueryTopNotificationKeywords($limit: Int, $since: DateTime) {\n    topNotificationKeywords(limit: $limit, since: $since) {\n      keyword\n      count\n    }\n  }\n': typeof types.QueryTopNotificationKeywordsDocument;
+  '\n  query QueryProductRegistrationStatsByProvider(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n    $providerType: ProviderType\n  ) {\n    productRegistrationStatsByProvider(\n      startDate: $startDate\n      endDate: $endDate\n      interval: $interval\n      providerType: $providerType\n    ) {\n      date\n      providerId\n      providerName\n      count\n    }\n  }\n': typeof types.QueryProductRegistrationStatsByProviderDocument;
+  '\n  query QueryProviderHealthStatus($providerType: ProviderType) {\n    providerHealthStatus(providerType: $providerType) {\n      providerId\n      providerName\n      providerType\n      last1hCount\n      last24hCount\n      last7dCount\n      latestCollectedAt\n      minutesSinceLatest\n    }\n  }\n': typeof types.QueryProviderHealthStatusDocument;
+  '\n  query QueryThumbnailStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {\n    thumbnailStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      typeDistribution {\n        thumbnailType\n        count\n      }\n      mallDistribution {\n        mallName\n        count\n      }\n      missingCount\n      totalCount\n    }\n  }\n': typeof types.QueryThumbnailStatsDocument;
   '\n  mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keywords: [String!]!) {\n    addHotDealKeywordSynonymByAdmin(hotDealKeywordId: $hotDealKeywordId, keywords: $keywords)\n  }\n': typeof types.MutationAddHotDealKeywordSynonymByAdminDocument;
   '\n  mutation MutationAddHotDealExcludeKeywordByAdmin(\n    $hotDealKeywordId: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    addHotDealExcludeKeywordByAdmin(\n      hotDealKeywordId: $hotDealKeywordId\n      excludeKeywords: $excludeKeywords\n    )\n  }\n': typeof types.MutationAddHotDealExcludeKeywordByAdminDocument;
   '\n  mutation MutationRemoveHotDealKeywordSynonymByAdmin($ids: [Int!]!) {\n    removeHotDealKeywordSynonymByAdmin(ids: $ids)\n  }\n': typeof types.MutationRemoveHotDealKeywordSynonymByAdminDocument;
@@ -59,10 +85,16 @@ const documents: Documents = {
     types.QueryBrandProductsByMatchCountTotalCountDocument,
   '\n  query QueryBrandProductMatchCount($brandProductId: Int!) {\n    brandProductMatchCount(brandProductId: $brandProductId)\n  }\n':
     types.QueryBrandProductMatchCountDocument,
+  '\n  query QueryBrandItemsOrderByTotalMatchCount(\n    $limit: Int!\n    $searchAfter: [String!]\n    $title: String\n  ) {\n    brandItemsOrderByTotalMatchCount(limit: $limit, searchAfter: $searchAfter, title: $title) {\n      id\n      brandName\n      productName\n      totalMatchCount\n      pendingVerificationCount\n      searchAfter\n    }\n  }\n':
+    types.QueryBrandItemsOrderByTotalMatchCountDocument,
+  '\n  query QueryBrandItemsByMatchCountTotalCount($title: String) {\n    brandItemsByMatchCountTotalCount(title: $title)\n  }\n':
+    types.QueryBrandItemsByMatchCountTotalCountDocument,
   '\n  query QueryCategories {\n    categories {\n      id\n      name\n    }\n  }\n':
     types.QueryCategoriesDocument,
   '\n  query commentsByAdmin($hotDealKeywordId: Int!, $synonyms: [String!], $excludes: [String!]) {\n    commentsByAdmin(hotDealKeywordId: $hotDealKeywordId, synonyms: $synonyms, excludes: $excludes)\n  }\n':
     types.CommentsByAdminDocument,
+  '\n  query QueryGatedMappings(\n    $limit: Int!\n    $searchAfter: [String!]\n    $matchingSource: [String!]\n    $productTitle: String\n    $orderBy: OrderOptionType\n  ) {\n    gatedMappings(\n      limit: $limit\n      searchAfter: $searchAfter\n      matchingSource: $matchingSource\n      productTitle: $productTitle\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      product {\n        title\n        thumbnail\n        price\n        url\n        provider {\n          name\n        }\n      }\n      matchStatus\n      matchingSource\n      matchingReasoning\n      extractedProductInfo\n      createdAt\n      searchAfter\n    }\n  }\n':
+    types.QueryGatedMappingsDocument,
   '\n  query QueryHotDealKeywordsByAdmin(\n    $type: HotDealKeywordType\n    $orderBy: HotDealKeywordOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    hotDealKeywordsByAdmin(\n      type: $type\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      type\n      keyword\n      weight\n      isMajor\n      lastUpdatedAt\n      synonymCount\n      excludeKeywordCount\n      searchAfter\n    }\n  }\n':
     types.QueryHotDealKeywordsByAdminDocument,
   '\n  mutation MutationAddHotDealKeywordByAdmin(\n    $type: HotDealKeywordType!\n    $keyword: String!\n    $weight: Float!\n    $isMajor: Boolean!\n  ) {\n    addHotDealKeywordByAdmin(type: $type, keyword: $keyword, weight: $weight, isMajor: $isMajor)\n  }\n':
@@ -75,14 +107,60 @@ const documents: Documents = {
     types.QueryHotDealKeywordByAdminDocument,
   '\n  query QueryHotDealKeywordDetailByAdmin($id: Int!) {\n    hotDealKeywordByAdmin(id: $id) {\n      id\n      type\n      keyword\n      weight\n      isMajor\n    }\n  }\n':
     types.QueryHotDealKeywordDetailByAdminDocument,
+  '\n  query QueryKeywordMapGroupsByAdmin(\n    $orderBy: KeywordMapGroupOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    keywordMapGroupsByAdmin(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      name\n      description\n      entryCount\n      searchAfter\n    }\n  }\n':
+    types.QueryKeywordMapGroupsByAdminDocument,
+  '\n  query QueryKeywordMapGroupByAdmin($id: Int!) {\n    keywordMapGroupByAdmin(id: $id) {\n      id\n      name\n      description\n      entryCount\n      entries {\n        id\n        keyword\n      }\n    }\n  }\n':
+    types.QueryKeywordMapGroupByAdminDocument,
+  '\n  mutation MutationAddKeywordMapGroupByAdmin($name: String!, $description: String) {\n    addKeywordMapGroupByAdmin(name: $name, description: $description)\n  }\n':
+    types.MutationAddKeywordMapGroupByAdminDocument,
+  '\n  mutation MutationUpdateKeywordMapGroupByAdmin($id: Int!, $name: String, $description: String) {\n    updateKeywordMapGroupByAdmin(id: $id, name: $name, description: $description)\n  }\n':
+    types.MutationUpdateKeywordMapGroupByAdminDocument,
+  '\n  mutation MutationRemoveKeywordMapGroupByAdmin($id: Int!) {\n    removeKeywordMapGroupByAdmin(id: $id)\n  }\n':
+    types.MutationRemoveKeywordMapGroupByAdminDocument,
+  '\n  mutation MutationAddKeywordMapEntryByAdmin($groupId: Int!, $keyword: String!) {\n    addKeywordMapEntryByAdmin(groupId: $groupId, keyword: $keyword)\n  }\n':
+    types.MutationAddKeywordMapEntryByAdminDocument,
+  '\n  mutation MutationAddKeywordMapEntriesByAdmin($groupId: Int!, $keywords: [String!]!) {\n    addKeywordMapEntriesByAdmin(groupId: $groupId, keywords: $keywords)\n  }\n':
+    types.MutationAddKeywordMapEntriesByAdminDocument,
+  '\n  mutation MutationRemoveKeywordMapEntryByAdmin($id: Int!) {\n    removeKeywordMapEntryByAdmin(id: $id)\n  }\n':
+    types.MutationRemoveKeywordMapEntryByAdminDocument,
   '\n  query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {\n    notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {\n      id\n      title\n      message\n      target\n      targetId\n      createdAt\n      searchAfter\n    }\n  }\n':
     types.QueryNotificationsByAdminDocument,
   '\n  mutation MutationSendNotificationByAdmin(\n    $title: String!\n    $message: String!\n    $type: NotificationType!\n    $target: NotificationTarget\n    $targetId: Int\n    $url: String\n    $userIds: [Int!]\n  ) {\n    sendNotificationByAdmin(\n      title: $title\n      message: $message\n      type: $type\n      target: $target\n      targetId: $targetId\n      url: $url\n      userIds: $userIds\n    )\n  }\n':
     types.MutationSendNotificationByAdminDocument,
   '\n  query QueryProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n    $categoryId: Int\n    $keyword: String\n    $thumbnailType: ThumbnailType\n    $isEnd: Boolean\n    $isHot: Boolean\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      orderOption: $orderOption\n      categoryId: $categoryId\n      keyword: $keyword\n      thumbnailType: $thumbnailType\n      isEnd: $isEnd\n      isHot: $isHot\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n':
     types.QueryProductsDocument,
+  '\n  mutation MutationHardDeleteProductByAdmin($id: Int!) {\n    hardDeleteProductByAdmin(id: $id)\n  }\n':
+    types.MutationHardDeleteProductByAdminDocument,
   '\n  query QueryProduct($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      categoryName\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      author {\n        id\n        nickname\n      }\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      hotDealType\n      hotDealIndex {\n        id\n        message\n        highestPrice\n        currentPrice\n        lowestPrice\n      }\n      likeCount\n      dislikeCount\n    }\n  }\n':
     types.QueryProductDocument,
+  '\n  query QueryUserRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    userRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n':
+    types.QueryUserRegistrationStatsDocument,
+  '\n  query QueryUserDemographicStats {\n    userDemographicStats {\n      genderDistribution {\n        gender\n        count\n      }\n      ageDistribution {\n        ageGroup\n        count\n      }\n    }\n  }\n':
+    types.QueryUserDemographicStatsDocument,
+  '\n  query QueryTopFavoriteCategories($limit: Int) {\n    topFavoriteCategories(limit: $limit) {\n      categoryId\n      categoryName\n      count\n    }\n  }\n':
+    types.QueryTopFavoriteCategoriesDocument,
+  '\n  query QueryProductRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    productRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n':
+    types.QueryProductRegistrationStatsDocument,
+  '\n  query QueryHotDealRatioStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    hotDealRatioStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      totalCount\n      hotDealCount\n      ratio\n    }\n  }\n':
+    types.QueryHotDealRatioStatsDocument,
+  '\n  query QueryHotDealTypeDistribution(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    hotDealTypeDistribution(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      hotDealType\n      count\n    }\n  }\n':
+    types.QueryHotDealTypeDistributionDocument,
+  '\n  query QueryProductCountByCategory {\n    productCountByCategory {\n      categoryId\n      categoryName\n      count\n    }\n  }\n':
+    types.QueryProductCountByCategoryDocument,
+  '\n  query QueryProductCountByProvider {\n    productCountByProvider {\n      providerId\n      providerName\n      count\n    }\n  }\n':
+    types.QueryProductCountByProviderDocument,
+  '\n  query QueryProductPriceDistribution(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    productPriceDistribution(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      priceRange\n      minPrice\n      maxPrice\n      count\n    }\n  }\n':
+    types.QueryProductPriceDistributionDocument,
+  '\n  query QueryDailyServiceViewStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    dailyServiceViewStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n':
+    types.QueryDailyServiceViewStatsDocument,
+  '\n  query QueryTopNotificationKeywords($limit: Int, $since: DateTime) {\n    topNotificationKeywords(limit: $limit, since: $since) {\n      keyword\n      count\n    }\n  }\n':
+    types.QueryTopNotificationKeywordsDocument,
+  '\n  query QueryProductRegistrationStatsByProvider(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n    $providerType: ProviderType\n  ) {\n    productRegistrationStatsByProvider(\n      startDate: $startDate\n      endDate: $endDate\n      interval: $interval\n      providerType: $providerType\n    ) {\n      date\n      providerId\n      providerName\n      count\n    }\n  }\n':
+    types.QueryProductRegistrationStatsByProviderDocument,
+  '\n  query QueryProviderHealthStatus($providerType: ProviderType) {\n    providerHealthStatus(providerType: $providerType) {\n      providerId\n      providerName\n      providerType\n      last1hCount\n      last24hCount\n      last7dCount\n      latestCollectedAt\n      minutesSinceLatest\n    }\n  }\n':
+    types.QueryProviderHealthStatusDocument,
+  '\n  query QueryThumbnailStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {\n    thumbnailStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      typeDistribution {\n        thumbnailType\n        count\n      }\n      mallDistribution {\n        mallName\n        count\n      }\n      missingCount\n      totalCount\n    }\n  }\n':
+    types.QueryThumbnailStatsDocument,
   '\n  mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keywords: [String!]!) {\n    addHotDealKeywordSynonymByAdmin(hotDealKeywordId: $hotDealKeywordId, keywords: $keywords)\n  }\n':
     types.MutationAddHotDealKeywordSynonymByAdminDocument,
   '\n  mutation MutationAddHotDealExcludeKeywordByAdmin(\n    $hotDealKeywordId: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    addHotDealExcludeKeywordByAdmin(\n      hotDealKeywordId: $hotDealKeywordId\n      excludeKeywords: $excludeKeywords\n    )\n  }\n':
@@ -155,6 +233,18 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: '\n  query QueryBrandItemsOrderByTotalMatchCount(\n    $limit: Int!\n    $searchAfter: [String!]\n    $title: String\n  ) {\n    brandItemsOrderByTotalMatchCount(limit: $limit, searchAfter: $searchAfter, title: $title) {\n      id\n      brandName\n      productName\n      totalMatchCount\n      pendingVerificationCount\n      searchAfter\n    }\n  }\n',
+): typeof import('./graphql').QueryBrandItemsOrderByTotalMatchCountDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryBrandItemsByMatchCountTotalCount($title: String) {\n    brandItemsByMatchCountTotalCount(title: $title)\n  }\n',
+): typeof import('./graphql').QueryBrandItemsByMatchCountTotalCountDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: '\n  query QueryCategories {\n    categories {\n      id\n      name\n    }\n  }\n',
 ): typeof import('./graphql').QueryCategoriesDocument;
 /**
@@ -163,6 +253,12 @@ export function graphql(
 export function graphql(
   source: '\n  query commentsByAdmin($hotDealKeywordId: Int!, $synonyms: [String!], $excludes: [String!]) {\n    commentsByAdmin(hotDealKeywordId: $hotDealKeywordId, synonyms: $synonyms, excludes: $excludes)\n  }\n',
 ): typeof import('./graphql').CommentsByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryGatedMappings(\n    $limit: Int!\n    $searchAfter: [String!]\n    $matchingSource: [String!]\n    $productTitle: String\n    $orderBy: OrderOptionType\n  ) {\n    gatedMappings(\n      limit: $limit\n      searchAfter: $searchAfter\n      matchingSource: $matchingSource\n      productTitle: $productTitle\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      product {\n        title\n        thumbnail\n        price\n        url\n        provider {\n          name\n        }\n      }\n      matchStatus\n      matchingSource\n      matchingReasoning\n      extractedProductInfo\n      createdAt\n      searchAfter\n    }\n  }\n',
+): typeof import('./graphql').QueryGatedMappingsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -203,6 +299,54 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: '\n  query QueryKeywordMapGroupsByAdmin(\n    $orderBy: KeywordMapGroupOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    keywordMapGroupsByAdmin(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      name\n      description\n      entryCount\n      searchAfter\n    }\n  }\n',
+): typeof import('./graphql').QueryKeywordMapGroupsByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryKeywordMapGroupByAdmin($id: Int!) {\n    keywordMapGroupByAdmin(id: $id) {\n      id\n      name\n      description\n      entryCount\n      entries {\n        id\n        keyword\n      }\n    }\n  }\n',
+): typeof import('./graphql').QueryKeywordMapGroupByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationAddKeywordMapGroupByAdmin($name: String!, $description: String) {\n    addKeywordMapGroupByAdmin(name: $name, description: $description)\n  }\n',
+): typeof import('./graphql').MutationAddKeywordMapGroupByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationUpdateKeywordMapGroupByAdmin($id: Int!, $name: String, $description: String) {\n    updateKeywordMapGroupByAdmin(id: $id, name: $name, description: $description)\n  }\n',
+): typeof import('./graphql').MutationUpdateKeywordMapGroupByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationRemoveKeywordMapGroupByAdmin($id: Int!) {\n    removeKeywordMapGroupByAdmin(id: $id)\n  }\n',
+): typeof import('./graphql').MutationRemoveKeywordMapGroupByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationAddKeywordMapEntryByAdmin($groupId: Int!, $keyword: String!) {\n    addKeywordMapEntryByAdmin(groupId: $groupId, keyword: $keyword)\n  }\n',
+): typeof import('./graphql').MutationAddKeywordMapEntryByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationAddKeywordMapEntriesByAdmin($groupId: Int!, $keywords: [String!]!) {\n    addKeywordMapEntriesByAdmin(groupId: $groupId, keywords: $keywords)\n  }\n',
+): typeof import('./graphql').MutationAddKeywordMapEntriesByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationRemoveKeywordMapEntryByAdmin($id: Int!) {\n    removeKeywordMapEntryByAdmin(id: $id)\n  }\n',
+): typeof import('./graphql').MutationRemoveKeywordMapEntryByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: '\n  query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {\n    notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {\n      id\n      title\n      message\n      target\n      targetId\n      createdAt\n      searchAfter\n    }\n  }\n',
 ): typeof import('./graphql').QueryNotificationsByAdminDocument;
 /**
@@ -221,8 +365,98 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: '\n  mutation MutationHardDeleteProductByAdmin($id: Int!) {\n    hardDeleteProductByAdmin(id: $id)\n  }\n',
+): typeof import('./graphql').MutationHardDeleteProductByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: '\n  query QueryProduct($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      categoryName\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      author {\n        id\n        nickname\n      }\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      hotDealType\n      hotDealIndex {\n        id\n        message\n        highestPrice\n        currentPrice\n        lowestPrice\n      }\n      likeCount\n      dislikeCount\n    }\n  }\n',
 ): typeof import('./graphql').QueryProductDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryUserRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    userRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n',
+): typeof import('./graphql').QueryUserRegistrationStatsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryUserDemographicStats {\n    userDemographicStats {\n      genderDistribution {\n        gender\n        count\n      }\n      ageDistribution {\n        ageGroup\n        count\n      }\n    }\n  }\n',
+): typeof import('./graphql').QueryUserDemographicStatsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryTopFavoriteCategories($limit: Int) {\n    topFavoriteCategories(limit: $limit) {\n      categoryId\n      categoryName\n      count\n    }\n  }\n',
+): typeof import('./graphql').QueryTopFavoriteCategoriesDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryProductRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    productRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n',
+): typeof import('./graphql').QueryProductRegistrationStatsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryHotDealRatioStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    hotDealRatioStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      totalCount\n      hotDealCount\n      ratio\n    }\n  }\n',
+): typeof import('./graphql').QueryHotDealRatioStatsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryHotDealTypeDistribution(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    hotDealTypeDistribution(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      hotDealType\n      count\n    }\n  }\n',
+): typeof import('./graphql').QueryHotDealTypeDistributionDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryProductCountByCategory {\n    productCountByCategory {\n      categoryId\n      categoryName\n      count\n    }\n  }\n',
+): typeof import('./graphql').QueryProductCountByCategoryDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryProductCountByProvider {\n    productCountByProvider {\n      providerId\n      providerName\n      count\n    }\n  }\n',
+): typeof import('./graphql').QueryProductCountByProviderDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryProductPriceDistribution(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    productPriceDistribution(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      priceRange\n      minPrice\n      maxPrice\n      count\n    }\n  }\n',
+): typeof import('./graphql').QueryProductPriceDistributionDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryDailyServiceViewStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    dailyServiceViewStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n',
+): typeof import('./graphql').QueryDailyServiceViewStatsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryTopNotificationKeywords($limit: Int, $since: DateTime) {\n    topNotificationKeywords(limit: $limit, since: $since) {\n      keyword\n      count\n    }\n  }\n',
+): typeof import('./graphql').QueryTopNotificationKeywordsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryProductRegistrationStatsByProvider(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n    $providerType: ProviderType\n  ) {\n    productRegistrationStatsByProvider(\n      startDate: $startDate\n      endDate: $endDate\n      interval: $interval\n      providerType: $providerType\n    ) {\n      date\n      providerId\n      providerName\n      count\n    }\n  }\n',
+): typeof import('./graphql').QueryProductRegistrationStatsByProviderDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryProviderHealthStatus($providerType: ProviderType) {\n    providerHealthStatus(providerType: $providerType) {\n      providerId\n      providerName\n      providerType\n      last1hCount\n      last24hCount\n      last7dCount\n      latestCollectedAt\n      minutesSinceLatest\n    }\n  }\n',
+): typeof import('./graphql').QueryProviderHealthStatusDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryThumbnailStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {\n    thumbnailStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      typeDistribution {\n        thumbnailType\n        count\n      }\n      mallDistribution {\n        mallName\n        count\n      }\n      missingCount\n      totalCount\n    }\n  }\n',
+): typeof import('./graphql').QueryThumbnailStatsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

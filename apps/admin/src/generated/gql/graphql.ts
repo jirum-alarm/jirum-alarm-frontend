@@ -62,6 +62,13 @@ export type AdminUser = {
   name: Scalars['String']['output'];
 };
 
+export type AgeGroupCountOutput = {
+  __typename?: 'AgeGroupCountOutput';
+  /** 연령대 (예: 10대, 20대, 30대, 미설정) */
+  ageGroup: Scalars['String']['output'];
+  count: Scalars['Int']['output'];
+};
+
 export type ApiQuery = {
   __typename?: 'ApiQuery';
   queryName: Scalars['String']['output'];
@@ -122,6 +129,13 @@ export type Category = {
   name: Scalars['String']['output'];
 };
 
+export type CategoryCountOutput = {
+  __typename?: 'CategoryCountOutput';
+  categoryId: Scalars['Int']['output'];
+  categoryName: Scalars['String']['output'];
+  count: Scalars['Int']['output'];
+};
+
 export enum CommentOrder {
   Id = 'ID',
 }
@@ -138,9 +152,11 @@ export type CommentOutput = {
   isNotice: Scalars['Boolean']['output'];
   likeCount: Scalars['Int']['output'];
   parentId?: Maybe<Scalars['Float']['output']>;
-  productId: Scalars['Int']['output'];
+  productId?: Maybe<Scalars['Int']['output']>;
+  /** 댓글에 달린 대댓글 수 */
+  replyCount: Scalars['Int']['output'];
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
-  taggedProduct: ProductOutput;
+  taggedProduct?: Maybe<ProductOutput>;
   title?: Maybe<Scalars['String']['output']>;
   trendedAt?: Maybe<Scalars['DateTime']['output']>;
   userId: Scalars['Float']['output'];
@@ -167,6 +183,22 @@ export enum DataSourceType {
   GraphqlQuery = 'GRAPHQL_QUERY',
 }
 
+export type DateCountOutput = {
+  __typename?: 'DateCountOutput';
+  count: Scalars['Int']['output'];
+  date: Scalars['String']['output'];
+};
+
+/** 날짜 간격 */
+export enum DateInterval {
+  /** 일별 */
+  Daily = 'DAILY',
+  /** 월별 */
+  Monthly = 'MONTHLY',
+  /** 주별 */
+  Weekly = 'WEEKLY',
+}
+
 export type ExistsUserOutput = {
   __typename?: 'ExistsUserOutput';
   email: Scalars['Boolean']['output'];
@@ -177,6 +209,12 @@ export enum Gender {
   Female = 'FEMALE',
   Male = 'MALE',
 }
+
+export type GenderCountOutput = {
+  __typename?: 'GenderCountOutput';
+  count: Scalars['Int']['output'];
+  gender?: Maybe<Gender>;
+};
 
 export type GridTabbedSection = BaseSection & {
   __typename?: 'GridTabbedSection';
@@ -221,6 +259,35 @@ export type HotDealExcludeKeywordOutput = {
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
 };
 
+export enum HotDealKeywordCandidateOrderType {
+  CreatedAt = 'CREATED_AT',
+  Frequency = 'FREQUENCY',
+  Id = 'ID',
+}
+
+export type HotDealKeywordCandidateOutput = {
+  __typename?: 'HotDealKeywordCandidateOutput';
+  approvedKeywordId?: Maybe<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  expression: Scalars['String']['output'];
+  frequency: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  reviewedAt?: Maybe<Scalars['DateTime']['output']>;
+  reviewedBy?: Maybe<Scalars['Int']['output']>;
+  sampleComments: Array<Scalars['String']['output']>;
+  searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+  status: HotDealKeywordCandidateStatus;
+  suggestedGroupId?: Maybe<Scalars['Int']['output']>;
+  suggestedType: HotDealKeywordType;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export enum HotDealKeywordCandidateStatus {
+  Approved = 'APPROVED',
+  Pending = 'PENDING',
+  Rejected = 'REJECTED',
+}
+
 export enum HotDealKeywordOrderType {
   Id = 'ID',
   Weight = 'WEIGHT',
@@ -260,6 +327,14 @@ export enum HotDealKeywordType {
   Synonym = 'SYNONYM',
 }
 
+export type HotDealRatioOutput = {
+  __typename?: 'HotDealRatioOutput';
+  date: Scalars['String']['output'];
+  hotDealCount: Scalars['Int']['output'];
+  ratio: Scalars['Float']['output'];
+  totalCount: Scalars['Int']['output'];
+};
+
 /** 핫딜 타입 */
 export enum HotDealType {
   /** 핫딜 */
@@ -270,19 +345,39 @@ export enum HotDealType {
   UltraDeal = 'ULTRA_DEAL',
 }
 
-export type InstagramPost = {
-  __typename?: 'InstagramPost';
-  content: Scalars['String']['output'];
-  dagDefinition: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  reservedAt: Scalars['DateTime']['output'];
-  thumbnail: Scalars['String']['output'];
-  type: InstagramPostType;
+export type HotDealTypeCountOutput = {
+  __typename?: 'HotDealTypeCountOutput';
+  count: Scalars['Int']['output'];
+  hotDealType: HotDealType;
 };
 
-export enum InstagramPostType {
-  Normal = 'NORMAL',
+export type KeywordCountOutput = {
+  __typename?: 'KeywordCountOutput';
+  count: Scalars['Int']['output'];
+  keyword: Scalars['String']['output'];
+};
+
+export type KeywordMapEntry = {
+  __typename?: 'KeywordMapEntry';
+  groupId: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  keyword: Scalars['String']['output'];
+};
+
+export enum KeywordMapGroupOrderType {
+  Id = 'ID',
+  Name = 'NAME',
 }
+
+export type KeywordMapGroupOutput = {
+  __typename?: 'KeywordMapGroupOutput';
+  description?: Maybe<Scalars['String']['output']>;
+  entries: Array<KeywordMapEntry>;
+  entryCount: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  searchAfter?: Maybe<Array<Scalars['String']['output']>>;
+};
 
 export enum KeywordProductOrderType {
   PostedAt = 'POSTED_AT',
@@ -315,6 +410,36 @@ export type MallGroup = {
   title: Scalars['String']['output'];
 };
 
+export type MatchRun = {
+  __typename?: 'MatchRun';
+  createdAt: Scalars['DateTime']['output'];
+  errorMessage?: Maybe<Scalars['String']['output']>;
+  finishedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  productId: Scalars['Int']['output'];
+  /** 최종 선택된 다나와 pcode */
+  selectedPcode?: Maybe<Scalars['String']['output']>;
+  startedAt?: Maybe<Scalars['DateTime']['output']>;
+  status: MatchRunStatus;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export enum MatchRunStatus {
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Running = 'RUNNING',
+  Skipped = 'SKIPPED',
+  Success = 'SUCCESS',
+}
+
+export type MatchRunsByAdminOutput = {
+  __typename?: 'MatchRunsByAdminOutput';
+  /** 매칭 실행 목록 */
+  runs: Array<MatchRun>;
+  /** 전체 개수(페이징용) */
+  total: Scalars['Int']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addComment: Scalars['Boolean']['output'];
@@ -324,6 +449,12 @@ export type Mutation = {
   addHotDealKeywordByAdmin: Scalars['Int']['output'];
   /** 어드민) 핫딜 유의어 추가 */
   addHotDealKeywordSynonymByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 맵 엔트리 벌크 추가 */
+  addKeywordMapEntriesByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 맵 엔트리 추가 */
+  addKeywordMapEntryByAdmin: Scalars['Int']['output'];
+  /** 어드민) 키워드 맵 그룹 추가 */
+  addKeywordMapGroupByAdmin: Scalars['Int']['output'];
   /** 알림 키워드 추가 */
   addNotificationKeyword: Scalars['Boolean']['output'];
   /** 비회원 푸시 */
@@ -343,6 +474,8 @@ export type Mutation = {
   addWishlist: Scalars['Boolean']['output'];
   /** 어드민) 로그인 */
   adminLogin: TokenOutput;
+  /** 어드민) 리액션 키워드 후보 승인 (synonym 으로 등록) */
+  approveHotDealKeywordCandidateByAdmin: Scalars['Boolean']['output'];
   /** 여러 매핑을 한 번에 검증 수행 */
   batchVerifyProductMapping: Scalars['Int']['output'];
   /** 검증 취소 (검증 완료/거부된 항목을 다시 대기 상태로 되돌림) */
@@ -354,6 +487,8 @@ export type Mutation = {
   collectThumbnail: Scalars['Boolean']['output'];
   createAd: Ad;
   deleteAd: Scalars['Boolean']['output'];
+  /** 어드민) 상품 hard delete */
+  hardDeleteProductByAdmin: Scalars['Boolean']['output'];
   /** 로그인 */
   login: TokenOutput;
   /** 리프레시 토큰으로 로그인 */
@@ -365,6 +500,8 @@ export type Mutation = {
   readAllNotifications: Scalars['Boolean']['output'];
   /** 모든 알림 읽음 처리 */
   readNotification: Scalars['Boolean']['output'];
+  /** 어드민) 리액션 키워드 후보 거절 */
+  rejectHotDealKeywordCandidateByAdmin: Scalars['Boolean']['output'];
   /** 모든 알림 삭제 */
   removeAllNotifications: Scalars['Boolean']['output'];
   removeComment: Scalars['Boolean']['output'];
@@ -374,6 +511,10 @@ export type Mutation = {
   removeHotDealKeywordByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 유의어 제거 */
   removeHotDealKeywordSynonymByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 맵 엔트리 삭제 */
+  removeKeywordMapEntryByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 맵 그룹 삭제 */
+  removeKeywordMapGroupByAdmin: Scalars['Boolean']['output'];
   /** 단일 알림 삭제 */
   removeNotification: Scalars['Boolean']['output'];
   /** 알림 키워드 제거 */
@@ -385,10 +526,10 @@ export type Mutation = {
   removeWishlist: Scalars['Boolean']['output'];
   /** 종료된 상품 제보 */
   reportExpiredProduct: Scalars['Boolean']['output'];
-  /** 인스타그램 게시글 예약 */
-  reserveInstagramPost: Scalars['Boolean']['output'];
   /** 어드민) 알림 발송 */
   sendNotificationByAdmin: Scalars['Boolean']['output'];
+  /** 대표 매핑 지정 (id 기준) */
+  setPrimaryProductMapping: Scalars['Boolean']['output'];
   /** 회원가입 */
   signup: SignupOutput;
   /** 소셜 로그인 */
@@ -399,6 +540,8 @@ export type Mutation = {
   updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 키워드 맵 그룹 수정 */
+  updateKeywordMapGroupByAdmin: Scalars['Boolean']['output'];
   /** 알림 키워드 상태 수정 */
   updateNotificationKeywordStatus: Scalars['Boolean']['output'];
   /** 비밀번호 업데이트 */
@@ -407,8 +550,6 @@ export type Mutation = {
   updatePushSetting: Scalars['Boolean']['output'];
   /** 유저 프로필 수정 */
   updateUserProfile: Scalars['Boolean']['output'];
-  /** 인스타그램 게시글 업로드 */
-  uploadInstagramPost: Scalars['String']['output'];
   /** 매핑 검증 수행 (승인 또는 거부) */
   verifyProductMapping: Scalars['Boolean']['output'];
   /** 회원 탈퇴 */
@@ -419,7 +560,7 @@ export type MutationAddCommentArgs = {
   content: Scalars['String']['input'];
   isNotice?: InputMaybe<Scalars['Boolean']['input']>;
   parentId?: InputMaybe<Scalars['Int']['input']>;
-  productId: Scalars['Int']['input'];
+  productId?: InputMaybe<Scalars['Int']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -438,6 +579,21 @@ export type MutationAddHotDealKeywordByAdminArgs = {
 export type MutationAddHotDealKeywordSynonymByAdminArgs = {
   hotDealKeywordId: Scalars['Int']['input'];
   keywords: Array<Scalars['String']['input']>;
+};
+
+export type MutationAddKeywordMapEntriesByAdminArgs = {
+  groupId: Scalars['Int']['input'];
+  keywords: Array<Scalars['String']['input']>;
+};
+
+export type MutationAddKeywordMapEntryByAdminArgs = {
+  groupId: Scalars['Int']['input'];
+  keyword: Scalars['String']['input'];
+};
+
+export type MutationAddKeywordMapGroupByAdminArgs = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
 };
 
 export type MutationAddNotificationKeywordArgs = {
@@ -505,6 +661,11 @@ export type MutationAdminLoginArgs = {
   password: Scalars['String']['input'];
 };
 
+export type MutationApproveHotDealKeywordCandidateByAdminArgs = {
+  hotDealKeywordId: Scalars['Int']['input'];
+  id: Scalars['Int']['input'];
+};
+
 export type MutationBatchVerifyProductMappingArgs = {
   feedback?: InputMaybe<Scalars['String']['input']>;
   productMappingIds: Array<Scalars['Int']['input']>;
@@ -544,6 +705,10 @@ export type MutationDeleteAdArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type MutationHardDeleteProductByAdminArgs = {
+  id: Scalars['Int']['input'];
+};
+
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -554,6 +719,10 @@ export type MutationMatchProductToDanawaProductArgs = {
 };
 
 export type MutationReadNotificationArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type MutationRejectHotDealKeywordCandidateByAdminArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -571,6 +740,14 @@ export type MutationRemoveHotDealKeywordByAdminArgs = {
 
 export type MutationRemoveHotDealKeywordSynonymByAdminArgs = {
   ids: Array<Scalars['Int']['input']>;
+};
+
+export type MutationRemoveKeywordMapEntryByAdminArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type MutationRemoveKeywordMapGroupByAdminArgs = {
+  id: Scalars['Int']['input'];
 };
 
 export type MutationRemoveNotificationArgs = {
@@ -597,10 +774,6 @@ export type MutationReportExpiredProductArgs = {
   productId: Scalars['Int']['input'];
 };
 
-export type MutationReserveInstagramPostArgs = {
-  id: Scalars['Int']['input'];
-};
-
 export type MutationSendNotificationByAdminArgs = {
   message: Scalars['String']['input'];
   target?: InputMaybe<NotificationTarget>;
@@ -611,12 +784,18 @@ export type MutationSendNotificationByAdminArgs = {
   userIds?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
+export type MutationSetPrimaryProductMappingArgs = {
+  productMappingId: Scalars['Int']['input'];
+};
+
 export type MutationSignupArgs = {
   birthYear?: InputMaybe<Scalars['Float']['input']>;
   email: Scalars['String']['input'];
   favoriteCategories?: InputMaybe<Array<Scalars['Int']['input']>>;
   gender?: InputMaybe<Gender>;
+  marketingAgreed?: InputMaybe<Scalars['Boolean']['input']>;
   nickname: Scalars['String']['input'];
+  nightAlertsAgreed?: InputMaybe<Scalars['Boolean']['input']>;
   password: Scalars['String']['input'];
 };
 
@@ -625,7 +804,9 @@ export type MutationSocialLoginArgs = {
   email?: InputMaybe<Scalars['String']['input']>;
   favoriteCategories?: InputMaybe<Array<Scalars['Int']['input']>>;
   gender?: InputMaybe<Gender>;
+  marketingAgreed?: InputMaybe<Scalars['Boolean']['input']>;
   nickname?: InputMaybe<Scalars['String']['input']>;
+  nightAlertsAgreed?: InputMaybe<Scalars['Boolean']['input']>;
   oauthProvider: OauthProvider;
   socialAccessToken: Scalars['String']['input'];
 };
@@ -652,8 +833,9 @@ export type MutationUpdateAdArgs = {
 };
 
 export type MutationUpdateCommentArgs = {
-  content: Scalars['String']['input'];
+  content?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['Int']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationUpdateHotDealKeywordByAdminArgs = {
@@ -661,6 +843,12 @@ export type MutationUpdateHotDealKeywordByAdminArgs = {
   isMajor?: InputMaybe<Scalars['Boolean']['input']>;
   keyword?: InputMaybe<Scalars['String']['input']>;
   weight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type MutationUpdateKeywordMapGroupByAdminArgs = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationUpdateNotificationKeywordStatusArgs = {
@@ -673,7 +861,12 @@ export type MutationUpdatePasswordArgs = {
 };
 
 export type MutationUpdatePushSettingArgs = {
+  communityAlert?: InputMaybe<Scalars['Boolean']['input']>;
+  hotDealAlert?: InputMaybe<Scalars['Boolean']['input']>;
   info?: InputMaybe<Scalars['Boolean']['input']>;
+  keywordAlert?: InputMaybe<Scalars['Boolean']['input']>;
+  marketing?: InputMaybe<Scalars['Boolean']['input']>;
+  nightAlerts?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type MutationUpdateUserProfileArgs = {
@@ -729,13 +922,17 @@ export type NotificationKeyword = {
 };
 
 export enum NotificationTarget {
+  Comment = 'COMMENT',
   Info = 'INFO',
   Notice = 'NOTICE',
   Product = 'PRODUCT',
 }
 
 export enum NotificationTopic {
+  CommunityAlert = 'COMMUNITY_ALERT',
+  HotDealAlert = 'HOT_DEAL_ALERT',
   Info = 'INFO',
+  KeywordAlert = 'KEYWORD_ALERT',
   Notice = 'NOTICE',
   Product = 'PRODUCT',
 }
@@ -766,6 +963,24 @@ export type PaginatedGridSection = BaseSection & {
   title: Scalars['String']['output'];
   type: SectionDisplayType;
   viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
+
+export type PriceRangeCountOutput = {
+  __typename?: 'PriceRangeCountOutput';
+  count: Scalars['Int']['output'];
+  maxPrice: Scalars['Float']['output'];
+  minPrice: Scalars['Float']['output'];
+  /** 가격 구간 라벨 (예: 1만~3만) */
+  priceRange: Scalars['String']['output'];
+};
+
+export type PriceVisualConfig = {
+  __typename?: 'PriceVisualConfig';
+  isClustered: Scalars['Boolean']['output'];
+  markerPct: Scalars['Float']['output'];
+  medianPct: Scalars['Float']['output'];
+  q1Pct: Scalars['Float']['output'];
+  q3Pct: Scalars['Float']['output'];
 };
 
 export type ProductCommentSummary = {
@@ -802,6 +1017,7 @@ export type ProductHotDealIndex = {
   message: Scalars['String']['output'];
   productId: Scalars['Int']['output'];
   score?: Maybe<Scalars['Int']['output']>;
+  visualConfig?: Maybe<PriceVisualConfig>;
 };
 
 export type ProductMapping = {
@@ -815,6 +1031,7 @@ export type ProductMapping = {
   feedbackReason?: Maybe<Scalars['String']['output']>;
   feedbackType?: Maybe<ProductMappingFeedbackType>;
   id: Scalars['ID']['output'];
+  isPrimary: Scalars['Boolean']['output'];
   matchStatus?: Maybe<ProductMappingMatchStatus>;
   matchingCandidates?: Maybe<Scalars['String']['output']>;
   matchingConfidence?: Maybe<Scalars['Int']['output']>;
@@ -867,6 +1084,7 @@ export type ProductMappingOutput = {
   feedbackReason?: Maybe<Scalars['String']['output']>;
   feedbackType?: Maybe<ProductMappingFeedbackType>;
   id: Scalars['ID']['output'];
+  isPrimary: Scalars['Boolean']['output'];
   matchStatus?: Maybe<ProductMappingMatchStatus>;
   matchingCandidates?: Maybe<Scalars['String']['output']>;
   matchingConfidence?: Maybe<Scalars['Int']['output']>;
@@ -998,6 +1216,40 @@ export type Provider = {
   nameKr: Scalars['String']['output'];
 };
 
+export type ProviderCountOutput = {
+  __typename?: 'ProviderCountOutput';
+  count: Scalars['Int']['output'];
+  providerId: Scalars['Int']['output'];
+  providerName: Scalars['String']['output'];
+};
+
+export type ProviderDateCountOutput = {
+  __typename?: 'ProviderDateCountOutput';
+  count: Scalars['Int']['output'];
+  date: Scalars['String']['output'];
+  providerId: Scalars['Int']['output'];
+  providerName: Scalars['String']['output'];
+};
+
+export type ProviderHealthOutput = {
+  __typename?: 'ProviderHealthOutput';
+  last1hCount: Scalars['Int']['output'];
+  last7dCount: Scalars['Int']['output'];
+  last24hCount: Scalars['Int']['output'];
+  latestCollectedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** 마지막 수집 후 경과 분. null이면 7일 내 수집 이력 없음 */
+  minutesSinceLatest?: Maybe<Scalars['Int']['output']>;
+  providerId: Scalars['Int']['output'];
+  providerName: Scalars['String']['output'];
+  providerType: ProviderType;
+};
+
+export enum ProviderType {
+  Community = 'COMMUNITY',
+  Danawa = 'DANAWA',
+  Mall = 'MALL',
+}
+
 export type Query = {
   __typename?: 'Query';
   adStats: Array<AdStats>;
@@ -1024,6 +1276,8 @@ export type Query = {
   communityProviders: Array<Provider>;
   /** 상품 랭킹 랜덤 조회 */
   communityRandomRankingProducts: Array<ProductOutput>;
+  /** 어드민) 일별 서비스 조회수 합계 */
+  dailyServiceViewStats: Array<DateCountOutput>;
   danawaProduct: DanawaProductOutput;
   danawaProducts: Array<DanawaProductOutput>;
   /** 안읽은 알림 존재 여부 조회 */
@@ -1037,6 +1291,8 @@ export type Query = {
   expireProductReports: Array<ProductExpireReport>;
   /** 유통기한 임박 특가 상품 조회 */
   expiringSoonHotDealProducts: Array<ProductOutput>;
+  /** 게이트 차단 매핑 목록 조회 (추출오염/묶음글 등, not_matchable) */
+  gatedMappings: Array<ProductMappingOutput>;
   /** 특정 사용자의 추천 상품 조회 (관리자용) */
   getPersonalizedProductsByUserId: Array<RecommendedProductOutput>;
   /** 특정 상품과 유사한 상품 조회 */
@@ -1046,14 +1302,27 @@ export type Query = {
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
   /** 어드민) 핫딜 키워드 조회 */
   hotDealKeywordByAdmin?: Maybe<HotDealKeywordOutput>;
+  /** 어드민) 리액션 키워드 후보 목록 조회 */
+  hotDealKeywordCandidatesByAdmin: Array<HotDealKeywordCandidateOutput>;
   /** 어드민) 핫딜 키워드 유의어 목록 조회 */
   hotDealKeywordSynonymsByAdmin: Array<HotDealKeywordSynonymOutput>;
   /** 어드민) 핫딜 키워드 목록 조회 */
   hotDealKeywordsByAdmin: Array<HotDealKeywordOutput>;
   /** 놓치면 아까운 핫딜 - 랭킹순 핫딜 상품 조회 */
   hotDealRankingProducts: Array<ProductOutput>;
-  instagramPost?: Maybe<InstagramPost>;
+  /** 어드민) 일별 핫딜 비율 추이 */
+  hotDealRatioStats: Array<HotDealRatioOutput>;
+  /** 어드민) 핫딜 유형별 분포 */
+  hotDealTypeDistribution: Array<HotDealTypeCountOutput>;
+  /** 어드민) 키워드 맵 그룹 조회 */
+  keywordMapGroupByAdmin?: Maybe<KeywordMapGroupOutput>;
+  /** 어드민) 키워드 맵 그룹 목록 조회 */
+  keywordMapGroupsByAdmin: Array<KeywordMapGroupOutput>;
   mallGroups: Array<MallGroup>;
+  /** 어드민) 매칭 실행 상세 조회 (스텝 포함) */
+  matchRunByAdmin?: Maybe<MatchRun>;
+  /** 어드민) 매칭 실행 목록 조회 (페이징) */
+  matchRunsByAdmin: MatchRunsByAdminOutput;
   /** 로그인한 유저 정보 조회 */
   me?: Maybe<User>;
   /** 유저 알림 키워드 목록 조회 */
@@ -1072,18 +1341,34 @@ export type Query = {
   personalizedProducts: Array<RecommendedProductOutput>;
   /** 상품 조회 */
   product?: Maybe<ProductOutput>;
+  /** 어드민) 카테고리별 상품 수 */
+  productCountByCategory: Array<CategoryCountOutput>;
+  /** 어드민) 제공자별 상품 수 */
+  productCountByProvider: Array<ProviderCountOutput>;
   productGuides?: Maybe<Array<ProductGuide>>;
   productKeywords: Array<Scalars['String']['output']>;
+  /** 어드민) 가격대별 상품 분포 */
+  productPriceDistribution: Array<PriceRangeCountOutput>;
+  /** 어드민) 일별 신규 상품 등록 수 */
+  productRegistrationStats: Array<DateCountOutput>;
+  /** 어드민) provider별 시계열 신규 상품 수 (커뮤니티 크롤러 health) */
+  productRegistrationStatsByProvider: Array<ProviderDateCountOutput>;
   /** 상품 목록 조회 */
   products: Array<ProductOutput>;
   /** 키워드로 상품 목록 조회 */
   productsByKeyword: Array<ProductOutput>;
+  /** 어드민) provider별 최근 수집 활동 (1h/24h/7d count + 마지막 수집 시각) */
+  providerHealthStatus: Array<ProviderHealthOutput>;
   /** 푸시 세팅 조회 */
   pushSetting: UserPushSetting;
+  /** 최근에 본 상품 N개 조회 */
+  recentViewedProducts: Array<ProductOutput>;
   /** 알림 키워드 추천 목록 조회 */
   recommendedNotificationKeywords: Array<Scalars['String']['output']>;
   /** 신고한 사용자 목록 조회 (마스킹) */
   reportUserNames: Array<Scalars['String']['output']>;
+  /** 자동완성용 추천 검색어 목록. prefix로 시작하는 인기 검색어 + 상품 title prefix 매칭. */
+  searchSuggestions: Array<Scalars['String']['output']>;
   /** 유사 상품 목록 조회 */
   similarProducts: Array<ProductOutput>;
   /** 제목으로 유사 상품 목록 조회 */
@@ -1095,8 +1380,14 @@ export type Query = {
   test6: Scalars['Int']['output'];
   test7: Scalars['Boolean']['output'];
   test8: Scalars['Boolean']['output'];
+  /** 어드민) 썸네일 수집 통계 (타입 분포 + mall별 분포 + 미수집 카운트) */
+  thumbnailStats: ThumbnailStatsOutput;
   /** 같이 본 상품 목록 조회 */
   togetherViewedProducts: Array<ProductOutput>;
+  /** 어드민) 인기 관심 카테고리 TOP N */
+  topFavoriteCategories: Array<CategoryCountOutput>;
+  /** 어드민) 알림 키워드 TOP N */
+  topNotificationKeywords: Array<KeywordCountOutput>;
   /** 안읽은 알림 수 목록 조회 */
   unreadNotificationsCount: Scalars['Int']['output'];
   /** 유저 조회 */
@@ -1105,6 +1396,10 @@ export type Query = {
   userByAdmin: User;
   /** 이메일로 유저 조회 */
   userByEmail: User;
+  /** 어드민) 성별/연령대 분포 */
+  userDemographicStats: UserDemographicStatsOutput;
+  /** 어드민) 일별/주별/월별 가입자 수 추이 */
+  userRegistrationStats: Array<DateCountOutput>;
   /** 어드민) 사용자 목록 조회 */
   usersByAdmin: Array<UserByAdminOutput>;
   /** 어드민) 사용자 총 인원수 조회 */
@@ -1165,10 +1460,12 @@ export type QueryCommentArgs = {
 
 export type QueryCommentsArgs = {
   isNotice?: InputMaybe<Scalars['Boolean']['input']>;
+  isRoot?: InputMaybe<Scalars['Boolean']['input']>;
   isTrending?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
   orderBy: CommentOrder;
   orderOption: OrderOptionType;
+  parentId?: InputMaybe<Scalars['Int']['input']>;
   productId?: InputMaybe<Scalars['Int']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
@@ -1186,6 +1483,12 @@ export type QueryCommunityRandomRankingProductsArgs = {
   isGame?: InputMaybe<Scalars['Boolean']['input']>;
   isReward?: InputMaybe<Scalars['Boolean']['input']>;
   limit: Scalars['Int']['input'];
+};
+
+export type QueryDailyServiceViewStatsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
 };
 
 export type QueryDanawaProductArgs = {
@@ -1221,6 +1524,14 @@ export type QueryExpiringSoonHotDealProductsArgs = {
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type QueryGatedMappingsArgs = {
+  limit: Scalars['Int']['input'];
+  matchingSource?: InputMaybe<Array<Scalars['String']['input']>>;
+  orderBy?: InputMaybe<OrderOptionType>;
+  productTitle?: InputMaybe<Scalars['String']['input']>;
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
 export type QueryGetPersonalizedProductsByUserIdArgs = {
   categoryId?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -1244,6 +1555,14 @@ export type QueryHotDealKeywordByAdminArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type QueryHotDealKeywordCandidatesByAdminArgs = {
+  limit: Scalars['Int']['input'];
+  orderBy: HotDealKeywordCandidateOrderType;
+  orderOption: OrderOptionType;
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+  status?: InputMaybe<HotDealKeywordCandidateStatus>;
+};
+
 export type QueryHotDealKeywordSynonymsByAdminArgs = {
   hotDealKeywordId: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
@@ -1265,8 +1584,40 @@ export type QueryHotDealRankingProductsArgs = {
   page: Scalars['Int']['input'];
 };
 
-export type QueryInstagramPostArgs = {
+export type QueryHotDealRatioStatsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryHotDealTypeDistributionArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryKeywordMapGroupByAdminArgs = {
   id: Scalars['Int']['input'];
+};
+
+export type QueryKeywordMapGroupsByAdminArgs = {
+  limit: Scalars['Int']['input'];
+  orderBy: KeywordMapGroupOrderType;
+  orderOption: OrderOptionType;
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type QueryMatchRunByAdminArgs = {
+  runId: Scalars['Int']['input'];
+};
+
+export type QueryMatchRunsByAdminArgs = {
+  from?: InputMaybe<Scalars['DateTime']['input']>;
+  productId?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  status?: InputMaybe<MatchRunStatus>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  to?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type QueryNotificationKeywordsByMeArgs = {
@@ -1333,6 +1684,25 @@ export type QueryProductKeywordsArgs = {
   startedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+export type QueryProductPriceDistributionArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryProductRegistrationStatsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryProductRegistrationStatsByProviderArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  providerType?: InputMaybe<ProviderType>;
+  startDate: Scalars['DateTime']['input'];
+};
+
 export type QueryProductsArgs = {
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
   categoryId?: InputMaybe<Scalars['Int']['input']>;
@@ -1361,8 +1731,21 @@ export type QueryProductsByKeywordArgs = {
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type QueryProviderHealthStatusArgs = {
+  providerType?: InputMaybe<ProviderType>;
+};
+
+export type QueryRecentViewedProductsArgs = {
+  limit?: Scalars['Int']['input'];
+};
+
 export type QueryReportUserNamesArgs = {
   productId: Scalars['Int']['input'];
+};
+
+export type QuerySearchSuggestionsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  prefix: Scalars['String']['input'];
 };
 
 export type QuerySimilarProductsArgs = {
@@ -1387,9 +1770,24 @@ export type QuerySocialInfoArgs = {
   socialAccessToken: Scalars['String']['input'];
 };
 
+export type QueryThumbnailStatsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
+};
+
 export type QueryTogetherViewedProductsArgs = {
   limit: Scalars['Int']['input'];
   productId: Scalars['Int']['input'];
+};
+
+export type QueryTopFavoriteCategoriesArgs = {
+  limit?: Scalars['Int']['input'];
+};
+
+export type QueryTopNotificationKeywordsArgs = {
+  limit?: Scalars['Int']['input'];
+  since?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type QueryUserArgs = {
@@ -1402,6 +1800,12 @@ export type QueryUserByAdminArgs = {
 
 export type QueryUserByEmailArgs = {
   email: Scalars['String']['input'];
+};
+
+export type QueryUserRegistrationStatsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  interval?: DateInterval;
+  startDate: Scalars['DateTime']['input'];
 };
 
 export type QueryUsersByAdminArgs = {
@@ -1477,10 +1881,34 @@ export type Subscription = {
   productAdded: ProductOutput;
 };
 
+export type ThumbnailMallCountOutput = {
+  __typename?: 'ThumbnailMallCountOutput';
+  count: Scalars['Int']['output'];
+  /** detailUrl 호스트의 second-level 도메인 (예: 11st, lotteon, gmarket) */
+  mallName: Scalars['String']['output'];
+};
+
+export type ThumbnailStatsOutput = {
+  __typename?: 'ThumbnailStatsOutput';
+  mallDistribution: Array<ThumbnailMallCountOutput>;
+  /** 전체 상품 중 thumbnailType=null(=수집 안 됨) 카운트 */
+  missingCount: Scalars['Int']['output'];
+  /** 전체 상품 카운트 */
+  totalCount: Scalars['Int']['output'];
+  typeDistribution: Array<ThumbnailTypeCountOutput>;
+};
+
 export enum ThumbnailType {
   Mall = 'MALL',
   Post = 'POST',
 }
+
+export type ThumbnailTypeCountOutput = {
+  __typename?: 'ThumbnailTypeCountOutput';
+  count: Scalars['Int']['output'];
+  /** post / mall / null(미수집) */
+  thumbnailType?: Maybe<Scalars['String']['output']>;
+};
 
 export type TokenOutput = {
   __typename?: 'TokenOutput';
@@ -1517,6 +1945,12 @@ export type UserByAdminOutput = {
   searchAfter: Array<Scalars['String']['output']>;
 };
 
+export type UserDemographicStatsOutput = {
+  __typename?: 'UserDemographicStatsOutput';
+  ageDistribution: Array<AgeGroupCountOutput>;
+  genderDistribution: Array<GenderCountOutput>;
+};
+
 /** 좋아요 대상 */
 export enum UserLikeTarget {
   Comment = 'COMMENT',
@@ -1525,9 +1959,16 @@ export enum UserLikeTarget {
 
 export type UserPushSetting = {
   __typename?: 'UserPushSetting';
+  communityAlert: Scalars['Boolean']['output'];
   createdAt: Scalars['DateTime']['output'];
+  hotDealAlert: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   info: Scalars['Boolean']['output'];
+  keywordAlert: Scalars['Boolean']['output'];
+  marketing: Scalars['Boolean']['output'];
+  marketingAgreedAt?: Maybe<Scalars['DateTime']['output']>;
+  nightAlerts: Scalars['Boolean']['output'];
+  nightAlertsAgreedAt?: Maybe<Scalars['DateTime']['output']>;
   userId: Scalars['Int']['output'];
 };
 
@@ -1657,6 +2098,34 @@ export type QueryBrandProductMatchCountQuery = {
   brandProductMatchCount: number;
 };
 
+export type QueryBrandItemsOrderByTotalMatchCountQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type QueryBrandItemsOrderByTotalMatchCountQuery = {
+  __typename?: 'Query';
+  brandItemsOrderByTotalMatchCount: Array<{
+    __typename?: 'BrandItemMatchCountOutput';
+    id: string;
+    brandName: string;
+    productName: string;
+    totalMatchCount: number;
+    pendingVerificationCount: number;
+    searchAfter?: Array<string> | null;
+  }>;
+};
+
+export type QueryBrandItemsByMatchCountTotalCountQueryVariables = Exact<{
+  title?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type QueryBrandItemsByMatchCountTotalCountQuery = {
+  __typename?: 'Query';
+  brandItemsByMatchCountTotalCount: number;
+};
+
 export type QueryCategoriesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type QueryCategoriesQuery = {
@@ -1671,6 +2140,37 @@ export type CommentsByAdminQueryVariables = Exact<{
 }>;
 
 export type CommentsByAdminQuery = { __typename?: 'Query'; commentsByAdmin: Array<string> };
+
+export type QueryGatedMappingsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  matchingSource?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  productTitle?: InputMaybe<Scalars['String']['input']>;
+  orderBy?: InputMaybe<OrderOptionType>;
+}>;
+
+export type QueryGatedMappingsQuery = {
+  __typename?: 'Query';
+  gatedMappings: Array<{
+    __typename?: 'ProductMappingOutput';
+    id: string;
+    productId: number;
+    matchStatus?: ProductMappingMatchStatus | null;
+    matchingSource?: string | null;
+    matchingReasoning?: string | null;
+    extractedProductInfo?: string | null;
+    createdAt: any;
+    searchAfter?: Array<string> | null;
+    product?: {
+      __typename?: 'ProductOutput';
+      title: string;
+      thumbnail?: string | null;
+      price?: string | null;
+      url?: string | null;
+      provider: { __typename?: 'Provider'; name: string };
+    } | null;
+  }>;
+};
 
 export type QueryHotDealKeywordsByAdminQueryVariables = Exact<{
   type?: InputMaybe<HotDealKeywordType>;
@@ -1773,6 +2273,100 @@ export type QueryHotDealKeywordDetailByAdminQuery = {
   } | null;
 };
 
+export type QueryKeywordMapGroupsByAdminQueryVariables = Exact<{
+  orderBy: KeywordMapGroupOrderType;
+  orderOption: OrderOptionType;
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+}>;
+
+export type QueryKeywordMapGroupsByAdminQuery = {
+  __typename?: 'Query';
+  keywordMapGroupsByAdmin: Array<{
+    __typename?: 'KeywordMapGroupOutput';
+    id: string;
+    name: string;
+    description?: string | null;
+    entryCount: number;
+    searchAfter?: Array<string> | null;
+  }>;
+};
+
+export type QueryKeywordMapGroupByAdminQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type QueryKeywordMapGroupByAdminQuery = {
+  __typename?: 'Query';
+  keywordMapGroupByAdmin?: {
+    __typename?: 'KeywordMapGroupOutput';
+    id: string;
+    name: string;
+    description?: string | null;
+    entryCount: number;
+    entries: Array<{ __typename?: 'KeywordMapEntry'; id: string; keyword: string }>;
+  } | null;
+};
+
+export type MutationAddKeywordMapGroupByAdminMutationVariables = Exact<{
+  name: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type MutationAddKeywordMapGroupByAdminMutation = {
+  __typename?: 'Mutation';
+  addKeywordMapGroupByAdmin: number;
+};
+
+export type MutationUpdateKeywordMapGroupByAdminMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type MutationUpdateKeywordMapGroupByAdminMutation = {
+  __typename?: 'Mutation';
+  updateKeywordMapGroupByAdmin: boolean;
+};
+
+export type MutationRemoveKeywordMapGroupByAdminMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type MutationRemoveKeywordMapGroupByAdminMutation = {
+  __typename?: 'Mutation';
+  removeKeywordMapGroupByAdmin: boolean;
+};
+
+export type MutationAddKeywordMapEntryByAdminMutationVariables = Exact<{
+  groupId: Scalars['Int']['input'];
+  keyword: Scalars['String']['input'];
+}>;
+
+export type MutationAddKeywordMapEntryByAdminMutation = {
+  __typename?: 'Mutation';
+  addKeywordMapEntryByAdmin: number;
+};
+
+export type MutationAddKeywordMapEntriesByAdminMutationVariables = Exact<{
+  groupId: Scalars['Int']['input'];
+  keywords: Array<Scalars['String']['input']> | Scalars['String']['input'];
+}>;
+
+export type MutationAddKeywordMapEntriesByAdminMutation = {
+  __typename?: 'Mutation';
+  addKeywordMapEntriesByAdmin: boolean;
+};
+
+export type MutationRemoveKeywordMapEntryByAdminMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type MutationRemoveKeywordMapEntryByAdminMutation = {
+  __typename?: 'Mutation';
+  removeKeywordMapEntryByAdmin: boolean;
+};
+
 export type QueryNotificationsByAdminQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
@@ -1842,6 +2436,15 @@ export type QueryProductsQuery = {
   }>;
 };
 
+export type MutationHardDeleteProductByAdminMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type MutationHardDeleteProductByAdminMutation = {
+  __typename?: 'Mutation';
+  hardDeleteProductByAdmin: boolean;
+};
+
 export type QueryProductQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
@@ -1897,6 +2500,217 @@ export type QueryProductQuery = {
       lowestPrice: number;
     } | null;
   } | null;
+};
+
+export type QueryUserRegistrationStatsQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+  interval: DateInterval;
+}>;
+
+export type QueryUserRegistrationStatsQuery = {
+  __typename?: 'Query';
+  userRegistrationStats: Array<{ __typename?: 'DateCountOutput'; date: string; count: number }>;
+};
+
+export type QueryUserDemographicStatsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryUserDemographicStatsQuery = {
+  __typename?: 'Query';
+  userDemographicStats: {
+    __typename?: 'UserDemographicStatsOutput';
+    genderDistribution: Array<{
+      __typename?: 'GenderCountOutput';
+      gender?: Gender | null;
+      count: number;
+    }>;
+    ageDistribution: Array<{ __typename?: 'AgeGroupCountOutput'; ageGroup: string; count: number }>;
+  };
+};
+
+export type QueryTopFavoriteCategoriesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type QueryTopFavoriteCategoriesQuery = {
+  __typename?: 'Query';
+  topFavoriteCategories: Array<{
+    __typename?: 'CategoryCountOutput';
+    categoryId: number;
+    categoryName: string;
+    count: number;
+  }>;
+};
+
+export type QueryProductRegistrationStatsQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+  interval: DateInterval;
+}>;
+
+export type QueryProductRegistrationStatsQuery = {
+  __typename?: 'Query';
+  productRegistrationStats: Array<{ __typename?: 'DateCountOutput'; date: string; count: number }>;
+};
+
+export type QueryHotDealRatioStatsQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+  interval: DateInterval;
+}>;
+
+export type QueryHotDealRatioStatsQuery = {
+  __typename?: 'Query';
+  hotDealRatioStats: Array<{
+    __typename?: 'HotDealRatioOutput';
+    date: string;
+    totalCount: number;
+    hotDealCount: number;
+    ratio: number;
+  }>;
+};
+
+export type QueryHotDealTypeDistributionQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+  interval: DateInterval;
+}>;
+
+export type QueryHotDealTypeDistributionQuery = {
+  __typename?: 'Query';
+  hotDealTypeDistribution: Array<{
+    __typename?: 'HotDealTypeCountOutput';
+    hotDealType: HotDealType;
+    count: number;
+  }>;
+};
+
+export type QueryProductCountByCategoryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryProductCountByCategoryQuery = {
+  __typename?: 'Query';
+  productCountByCategory: Array<{
+    __typename?: 'CategoryCountOutput';
+    categoryId: number;
+    categoryName: string;
+    count: number;
+  }>;
+};
+
+export type QueryProductCountByProviderQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryProductCountByProviderQuery = {
+  __typename?: 'Query';
+  productCountByProvider: Array<{
+    __typename?: 'ProviderCountOutput';
+    providerId: number;
+    providerName: string;
+    count: number;
+  }>;
+};
+
+export type QueryProductPriceDistributionQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+  interval: DateInterval;
+}>;
+
+export type QueryProductPriceDistributionQuery = {
+  __typename?: 'Query';
+  productPriceDistribution: Array<{
+    __typename?: 'PriceRangeCountOutput';
+    priceRange: string;
+    minPrice: number;
+    maxPrice: number;
+    count: number;
+  }>;
+};
+
+export type QueryDailyServiceViewStatsQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+  interval: DateInterval;
+}>;
+
+export type QueryDailyServiceViewStatsQuery = {
+  __typename?: 'Query';
+  dailyServiceViewStats: Array<{ __typename?: 'DateCountOutput'; date: string; count: number }>;
+};
+
+export type QueryTopNotificationKeywordsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  since?: InputMaybe<Scalars['DateTime']['input']>;
+}>;
+
+export type QueryTopNotificationKeywordsQuery = {
+  __typename?: 'Query';
+  topNotificationKeywords: Array<{
+    __typename?: 'KeywordCountOutput';
+    keyword: string;
+    count: number;
+  }>;
+};
+
+export type QueryProductRegistrationStatsByProviderQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+  interval: DateInterval;
+  providerType?: InputMaybe<ProviderType>;
+}>;
+
+export type QueryProductRegistrationStatsByProviderQuery = {
+  __typename?: 'Query';
+  productRegistrationStatsByProvider: Array<{
+    __typename?: 'ProviderDateCountOutput';
+    date: string;
+    providerId: number;
+    providerName: string;
+    count: number;
+  }>;
+};
+
+export type QueryProviderHealthStatusQueryVariables = Exact<{
+  providerType?: InputMaybe<ProviderType>;
+}>;
+
+export type QueryProviderHealthStatusQuery = {
+  __typename?: 'Query';
+  providerHealthStatus: Array<{
+    __typename?: 'ProviderHealthOutput';
+    providerId: number;
+    providerName: string;
+    providerType: ProviderType;
+    last1hCount: number;
+    last24hCount: number;
+    last7dCount: number;
+    latestCollectedAt?: any | null;
+    minutesSinceLatest?: number | null;
+  }>;
+};
+
+export type QueryThumbnailStatsQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+  interval: DateInterval;
+}>;
+
+export type QueryThumbnailStatsQuery = {
+  __typename?: 'Query';
+  thumbnailStats: {
+    __typename?: 'ThumbnailStatsOutput';
+    missingCount: number;
+    totalCount: number;
+    typeDistribution: Array<{
+      __typename?: 'ThumbnailTypeCountOutput';
+      thumbnailType?: string | null;
+      count: number;
+    }>;
+    mallDistribution: Array<{
+      __typename?: 'ThumbnailMallCountOutput';
+      mallName: string;
+      count: number;
+    }>;
+  };
 };
 
 export type MutationAddHotDealKeywordSynonymByAdminMutationVariables = Exact<{
@@ -2222,6 +3036,33 @@ export const QueryBrandProductMatchCountDocument = new TypedDocumentString(`
   QueryBrandProductMatchCountQuery,
   QueryBrandProductMatchCountQueryVariables
 >;
+export const QueryBrandItemsOrderByTotalMatchCountDocument = new TypedDocumentString(`
+    query QueryBrandItemsOrderByTotalMatchCount($limit: Int!, $searchAfter: [String!], $title: String) {
+  brandItemsOrderByTotalMatchCount(
+    limit: $limit
+    searchAfter: $searchAfter
+    title: $title
+  ) {
+    id
+    brandName
+    productName
+    totalMatchCount
+    pendingVerificationCount
+    searchAfter
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryBrandItemsOrderByTotalMatchCountQuery,
+  QueryBrandItemsOrderByTotalMatchCountQueryVariables
+>;
+export const QueryBrandItemsByMatchCountTotalCountDocument = new TypedDocumentString(`
+    query QueryBrandItemsByMatchCountTotalCount($title: String) {
+  brandItemsByMatchCountTotalCount(title: $title)
+}
+    `) as unknown as TypedDocumentString<
+  QueryBrandItemsByMatchCountTotalCountQuery,
+  QueryBrandItemsByMatchCountTotalCountQueryVariables
+>;
 export const QueryCategoriesDocument = new TypedDocumentString(`
     query QueryCategories {
   categories {
@@ -2239,6 +3080,35 @@ export const CommentsByAdminDocument = new TypedDocumentString(`
   )
 }
     `) as unknown as TypedDocumentString<CommentsByAdminQuery, CommentsByAdminQueryVariables>;
+export const QueryGatedMappingsDocument = new TypedDocumentString(`
+    query QueryGatedMappings($limit: Int!, $searchAfter: [String!], $matchingSource: [String!], $productTitle: String, $orderBy: OrderOptionType) {
+  gatedMappings(
+    limit: $limit
+    searchAfter: $searchAfter
+    matchingSource: $matchingSource
+    productTitle: $productTitle
+    orderBy: $orderBy
+  ) {
+    id
+    productId
+    product {
+      title
+      thumbnail
+      price
+      url
+      provider {
+        name
+      }
+    }
+    matchStatus
+    matchingSource
+    matchingReasoning
+    extractedProductInfo
+    createdAt
+    searchAfter
+  }
+}
+    `) as unknown as TypedDocumentString<QueryGatedMappingsQuery, QueryGatedMappingsQueryVariables>;
 export const QueryHotDealKeywordsByAdminDocument = new TypedDocumentString(`
     query QueryHotDealKeywordsByAdmin($type: HotDealKeywordType, $orderBy: HotDealKeywordOrderType!, $orderOption: OrderOptionType!, $limit: Int!, $searchAfter: [String!]) {
   hotDealKeywordsByAdmin(
@@ -2335,6 +3205,90 @@ export const QueryHotDealKeywordDetailByAdminDocument = new TypedDocumentString(
   QueryHotDealKeywordDetailByAdminQuery,
   QueryHotDealKeywordDetailByAdminQueryVariables
 >;
+export const QueryKeywordMapGroupsByAdminDocument = new TypedDocumentString(`
+    query QueryKeywordMapGroupsByAdmin($orderBy: KeywordMapGroupOrderType!, $orderOption: OrderOptionType!, $limit: Int!, $searchAfter: [String!]) {
+  keywordMapGroupsByAdmin(
+    orderBy: $orderBy
+    orderOption: $orderOption
+    limit: $limit
+    searchAfter: $searchAfter
+  ) {
+    id
+    name
+    description
+    entryCount
+    searchAfter
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryKeywordMapGroupsByAdminQuery,
+  QueryKeywordMapGroupsByAdminQueryVariables
+>;
+export const QueryKeywordMapGroupByAdminDocument = new TypedDocumentString(`
+    query QueryKeywordMapGroupByAdmin($id: Int!) {
+  keywordMapGroupByAdmin(id: $id) {
+    id
+    name
+    description
+    entryCount
+    entries {
+      id
+      keyword
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryKeywordMapGroupByAdminQuery,
+  QueryKeywordMapGroupByAdminQueryVariables
+>;
+export const MutationAddKeywordMapGroupByAdminDocument = new TypedDocumentString(`
+    mutation MutationAddKeywordMapGroupByAdmin($name: String!, $description: String) {
+  addKeywordMapGroupByAdmin(name: $name, description: $description)
+}
+    `) as unknown as TypedDocumentString<
+  MutationAddKeywordMapGroupByAdminMutation,
+  MutationAddKeywordMapGroupByAdminMutationVariables
+>;
+export const MutationUpdateKeywordMapGroupByAdminDocument = new TypedDocumentString(`
+    mutation MutationUpdateKeywordMapGroupByAdmin($id: Int!, $name: String, $description: String) {
+  updateKeywordMapGroupByAdmin(id: $id, name: $name, description: $description)
+}
+    `) as unknown as TypedDocumentString<
+  MutationUpdateKeywordMapGroupByAdminMutation,
+  MutationUpdateKeywordMapGroupByAdminMutationVariables
+>;
+export const MutationRemoveKeywordMapGroupByAdminDocument = new TypedDocumentString(`
+    mutation MutationRemoveKeywordMapGroupByAdmin($id: Int!) {
+  removeKeywordMapGroupByAdmin(id: $id)
+}
+    `) as unknown as TypedDocumentString<
+  MutationRemoveKeywordMapGroupByAdminMutation,
+  MutationRemoveKeywordMapGroupByAdminMutationVariables
+>;
+export const MutationAddKeywordMapEntryByAdminDocument = new TypedDocumentString(`
+    mutation MutationAddKeywordMapEntryByAdmin($groupId: Int!, $keyword: String!) {
+  addKeywordMapEntryByAdmin(groupId: $groupId, keyword: $keyword)
+}
+    `) as unknown as TypedDocumentString<
+  MutationAddKeywordMapEntryByAdminMutation,
+  MutationAddKeywordMapEntryByAdminMutationVariables
+>;
+export const MutationAddKeywordMapEntriesByAdminDocument = new TypedDocumentString(`
+    mutation MutationAddKeywordMapEntriesByAdmin($groupId: Int!, $keywords: [String!]!) {
+  addKeywordMapEntriesByAdmin(groupId: $groupId, keywords: $keywords)
+}
+    `) as unknown as TypedDocumentString<
+  MutationAddKeywordMapEntriesByAdminMutation,
+  MutationAddKeywordMapEntriesByAdminMutationVariables
+>;
+export const MutationRemoveKeywordMapEntryByAdminDocument = new TypedDocumentString(`
+    mutation MutationRemoveKeywordMapEntryByAdmin($id: Int!) {
+  removeKeywordMapEntryByAdmin(id: $id)
+}
+    `) as unknown as TypedDocumentString<
+  MutationRemoveKeywordMapEntryByAdminMutation,
+  MutationRemoveKeywordMapEntryByAdminMutationVariables
+>;
 export const QueryNotificationsByAdminDocument = new TypedDocumentString(`
     query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {
   notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {
@@ -2401,6 +3355,14 @@ export const QueryProductsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<QueryProductsQuery, QueryProductsQueryVariables>;
+export const MutationHardDeleteProductByAdminDocument = new TypedDocumentString(`
+    mutation MutationHardDeleteProductByAdmin($id: Int!) {
+  hardDeleteProductByAdmin(id: $id)
+}
+    `) as unknown as TypedDocumentString<
+  MutationHardDeleteProductByAdminMutation,
+  MutationHardDeleteProductByAdminMutationVariables
+>;
 export const QueryProductDocument = new TypedDocumentString(`
     query QueryProduct($id: Int!) {
   product(id: $id) {
@@ -2453,6 +3415,214 @@ export const QueryProductDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<QueryProductQuery, QueryProductQueryVariables>;
+export const QueryUserRegistrationStatsDocument = new TypedDocumentString(`
+    query QueryUserRegistrationStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
+  userRegistrationStats(
+    startDate: $startDate
+    endDate: $endDate
+    interval: $interval
+  ) {
+    date
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryUserRegistrationStatsQuery,
+  QueryUserRegistrationStatsQueryVariables
+>;
+export const QueryUserDemographicStatsDocument = new TypedDocumentString(`
+    query QueryUserDemographicStats {
+  userDemographicStats {
+    genderDistribution {
+      gender
+      count
+    }
+    ageDistribution {
+      ageGroup
+      count
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryUserDemographicStatsQuery,
+  QueryUserDemographicStatsQueryVariables
+>;
+export const QueryTopFavoriteCategoriesDocument = new TypedDocumentString(`
+    query QueryTopFavoriteCategories($limit: Int) {
+  topFavoriteCategories(limit: $limit) {
+    categoryId
+    categoryName
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryTopFavoriteCategoriesQuery,
+  QueryTopFavoriteCategoriesQueryVariables
+>;
+export const QueryProductRegistrationStatsDocument = new TypedDocumentString(`
+    query QueryProductRegistrationStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
+  productRegistrationStats(
+    startDate: $startDate
+    endDate: $endDate
+    interval: $interval
+  ) {
+    date
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryProductRegistrationStatsQuery,
+  QueryProductRegistrationStatsQueryVariables
+>;
+export const QueryHotDealRatioStatsDocument = new TypedDocumentString(`
+    query QueryHotDealRatioStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
+  hotDealRatioStats(startDate: $startDate, endDate: $endDate, interval: $interval) {
+    date
+    totalCount
+    hotDealCount
+    ratio
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryHotDealRatioStatsQuery,
+  QueryHotDealRatioStatsQueryVariables
+>;
+export const QueryHotDealTypeDistributionDocument = new TypedDocumentString(`
+    query QueryHotDealTypeDistribution($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
+  hotDealTypeDistribution(
+    startDate: $startDate
+    endDate: $endDate
+    interval: $interval
+  ) {
+    hotDealType
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryHotDealTypeDistributionQuery,
+  QueryHotDealTypeDistributionQueryVariables
+>;
+export const QueryProductCountByCategoryDocument = new TypedDocumentString(`
+    query QueryProductCountByCategory {
+  productCountByCategory {
+    categoryId
+    categoryName
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryProductCountByCategoryQuery,
+  QueryProductCountByCategoryQueryVariables
+>;
+export const QueryProductCountByProviderDocument = new TypedDocumentString(`
+    query QueryProductCountByProvider {
+  productCountByProvider {
+    providerId
+    providerName
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryProductCountByProviderQuery,
+  QueryProductCountByProviderQueryVariables
+>;
+export const QueryProductPriceDistributionDocument = new TypedDocumentString(`
+    query QueryProductPriceDistribution($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
+  productPriceDistribution(
+    startDate: $startDate
+    endDate: $endDate
+    interval: $interval
+  ) {
+    priceRange
+    minPrice
+    maxPrice
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryProductPriceDistributionQuery,
+  QueryProductPriceDistributionQueryVariables
+>;
+export const QueryDailyServiceViewStatsDocument = new TypedDocumentString(`
+    query QueryDailyServiceViewStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
+  dailyServiceViewStats(
+    startDate: $startDate
+    endDate: $endDate
+    interval: $interval
+  ) {
+    date
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryDailyServiceViewStatsQuery,
+  QueryDailyServiceViewStatsQueryVariables
+>;
+export const QueryTopNotificationKeywordsDocument = new TypedDocumentString(`
+    query QueryTopNotificationKeywords($limit: Int, $since: DateTime) {
+  topNotificationKeywords(limit: $limit, since: $since) {
+    keyword
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryTopNotificationKeywordsQuery,
+  QueryTopNotificationKeywordsQueryVariables
+>;
+export const QueryProductRegistrationStatsByProviderDocument = new TypedDocumentString(`
+    query QueryProductRegistrationStatsByProvider($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!, $providerType: ProviderType) {
+  productRegistrationStatsByProvider(
+    startDate: $startDate
+    endDate: $endDate
+    interval: $interval
+    providerType: $providerType
+  ) {
+    date
+    providerId
+    providerName
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryProductRegistrationStatsByProviderQuery,
+  QueryProductRegistrationStatsByProviderQueryVariables
+>;
+export const QueryProviderHealthStatusDocument = new TypedDocumentString(`
+    query QueryProviderHealthStatus($providerType: ProviderType) {
+  providerHealthStatus(providerType: $providerType) {
+    providerId
+    providerName
+    providerType
+    last1hCount
+    last24hCount
+    last7dCount
+    latestCollectedAt
+    minutesSinceLatest
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryProviderHealthStatusQuery,
+  QueryProviderHealthStatusQueryVariables
+>;
+export const QueryThumbnailStatsDocument = new TypedDocumentString(`
+    query QueryThumbnailStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
+  thumbnailStats(startDate: $startDate, endDate: $endDate, interval: $interval) {
+    typeDistribution {
+      thumbnailType
+      count
+    }
+    mallDistribution {
+      mallName
+      count
+    }
+    missingCount
+    totalCount
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryThumbnailStatsQuery,
+  QueryThumbnailStatsQueryVariables
+>;
 export const MutationAddHotDealKeywordSynonymByAdminDocument = new TypedDocumentString(`
     mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keywords: [String!]!) {
   addHotDealKeywordSynonymByAdmin(

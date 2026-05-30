@@ -203,6 +203,11 @@ const Sidebar = ({
                       <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
                         <SubMenuItem name="목록" linkTo="/product/list" pathname={pathname} />
                         <SubMenuItem name="매칭" linkTo="/product/matching" pathname={pathname} />
+                        <SubMenuItem
+                          name="게이트 차단"
+                          linkTo="/product/matching-gated"
+                          pathname={pathname}
+                        />
                       </SubMenu>
                     </React.Fragment>
                   );
