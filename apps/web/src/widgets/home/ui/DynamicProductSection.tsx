@@ -46,6 +46,17 @@ const DynamicProductSection = async ({
     return <TabbedDynamicProductSection section={section} isMobile={isMobile} />;
   }
 
+  // 게스트 추천 섹션은 개인화 결과가 없으면(빈 배열) 섹션 전체를 숨긴다.
+  // (선호 없음/부스트 OFF 시 백엔드가 [] 반환 → 메인 핫딜과 중복 노출 방지)
+  if (section.dataSource.queryName === 'guestRecommendedHotDeals') {
+    const prefetched = queryClient.getQueryData((queryOptions as any).queryKey) as
+      | { guestRecommendedHotDeals?: unknown[] }
+      | undefined;
+    if (!prefetched?.guestRecommendedHotDeals?.length) {
+      return null;
+    }
+  }
+
   return (
     <div className="pc:pt-7 pc:px-0 pc:space-y-4 space-y-2">
       <div className="px-5">
