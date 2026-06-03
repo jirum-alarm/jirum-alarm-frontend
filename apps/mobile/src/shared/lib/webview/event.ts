@@ -3,7 +3,7 @@ import {
   type HapticStyle,
   WebViewEventType,
 } from '@/shared/lib/webview';
-import {BackHandler, Platform, Share} from 'react-native';
+import {BackHandler, Share} from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as Haptics from 'expo-haptics';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
@@ -48,18 +48,12 @@ export class EventBridge {
   static shareRequest: EventHandler<WebViewEventType.SHARE_REQUEST> =
     async payload => {
       const {title, url, message} = payload.data;
-      if (Platform.OS === 'ios') {
-        await Share.share({
-          title,
-          url,
-          ...(message ? {message} : {}),
-        });
-      } else {
-        await Share.share({
-          title,
-          message: message ?? `${title}\n${url}`,
-        });
-      }
+      // iOS에서 title/url을 분리해 넘기면 카카오톡 등에서 별도 아이템으로
+      // 인식해 메시지가 2번 전송된다. 양 플랫폼 모두 단일 message로 합쳐 전달.
+      await Share.share({
+        title,
+        message: message ?? `${title}\n${url}`,
+      });
     };
   static alarmDotChanged: EventHandler<WebViewEventType.ALARM_DOT_CHANGED> =
     async payload => {
