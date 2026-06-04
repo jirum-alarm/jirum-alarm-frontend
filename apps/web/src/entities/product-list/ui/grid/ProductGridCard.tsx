@@ -20,6 +20,8 @@ export default function ProductGridCard({
   displayTime = true,
   priority,
   className,
+  onCardClick,
+  cardRef,
 }: {
   product: ProductCardType;
   rank?: number;
@@ -27,9 +29,17 @@ export default function ProductGridCard({
   displayTime?: boolean;
   priority?: boolean;
   className?: string;
+  // 노출/클릭 추적용 opt-in. 미지정 시 기존 동작과 동일.
+  onCardClick?: () => void;
+  cardRef?: React.Ref<HTMLAnchorElement>;
 }) {
   return (
-    <Link href={PAGE.DETAIL + '/' + product.id} className="w-full">
+    <Link
+      href={PAGE.DETAIL + '/' + product.id}
+      className="w-full"
+      ref={cardRef}
+      onClick={onCardClick}
+    >
       <motion.div
         className={cn('rounded-lg', className)}
         whileTap={{ scale: 0.95 }}

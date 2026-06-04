@@ -500,6 +500,8 @@ export type Mutation = {
   readAllNotifications: Scalars['Boolean']['output'];
   /** 모든 알림 읽음 처리 */
   readNotification: Scalars['Boolean']['output'];
+  /** 상품 노출(impression) 기록 — 프론트 viewport 가 보고. CTR 분모. */
+  recordProductImpressions: Scalars['Boolean']['output'];
   /** 어드민) 리액션 키워드 후보 거절 */
   rejectHotDealKeywordCandidateByAdmin: Scalars['Boolean']['output'];
   /** 모든 알림 삭제 */
@@ -682,11 +684,15 @@ export type MutationClearAdCacheArgs = {
 };
 
 export type MutationCollectProductArgs = {
+  position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationCollectThumbnailArgs = {
+  position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationCreateAdArgs = {
@@ -720,6 +726,11 @@ export type MutationMatchProductToDanawaProductArgs = {
 
 export type MutationReadNotificationArgs = {
   id: Scalars['Int']['input'];
+};
+
+export type MutationRecordProductImpressionsArgs = {
+  impressions: Array<ProductImpressionInput>;
+  source: Scalars['String']['input'];
 };
 
 export type MutationRejectHotDealKeywordCandidateByAdminArgs = {
@@ -1018,6 +1029,11 @@ export type ProductHotDealIndex = {
   productId: Scalars['Int']['output'];
   score?: Maybe<Scalars['Int']['output']>;
   visualConfig?: Maybe<PriceVisualConfig>;
+};
+
+export type ProductImpressionInput = {
+  position: Scalars['Int']['input'];
+  productId: Scalars['Int']['input'];
 };
 
 export type ProductMapping = {

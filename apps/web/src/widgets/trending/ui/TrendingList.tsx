@@ -3,9 +3,10 @@
 import { memo } from 'react';
 
 import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
-import { ProductGridList } from '@/entities/product-list/ui/grid';
 
 import useTrendingViewModel from '../model/useTrendingViewModel';
+
+import TrackedProductGridList from './TrackedProductGridList';
 
 interface TrendingListProps {
   categoryId: number | null;
@@ -13,6 +14,8 @@ interface TrendingListProps {
 }
 
 const SIZE = 10;
+// 랭킹 탭 노출/클릭 출처. 백엔드 CTR 집계가 이 값으로 필터한다.
+const RANKING_SOURCE = 'ranking_tab';
 
 const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
   const { products, liveProducts, hotDeals } = useTrendingViewModel({
@@ -22,7 +25,13 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
   return (
     <div className="pc:space-y-10 space-y-8">
       <div className="px-5">
-        <ProductGridList products={products?.slice(0, SIZE) ?? []} rankFrom={1} priorityCount={5} />
+        <TrackedProductGridList
+          products={products?.slice(0, SIZE) ?? []}
+          source={RANKING_SOURCE}
+          rankFrom={1}
+          positionFrom={0}
+          priorityCount={5}
+        />
       </div>
       {liveProducts && (
         <CarouselProductsSection
@@ -34,7 +43,12 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
         />
       )}
       <div className="px-5">
-        <ProductGridList products={products?.slice(SIZE) ?? []} rankFrom={SIZE + 1} />
+        <TrackedProductGridList
+          products={products?.slice(SIZE) ?? []}
+          source={RANKING_SOURCE}
+          rankFrom={SIZE + 1}
+          positionFrom={SIZE}
+        />
       </div>
 
       {hotDeals && (

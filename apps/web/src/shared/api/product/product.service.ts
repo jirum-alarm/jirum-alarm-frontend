@@ -2,7 +2,6 @@ import { execute } from '@/shared/lib/http-client';
 
 import { graphql, useFragment } from '../gql';
 import {
-  MutationCollectProductMutationVariables,
   MutationReportExpiredProductMutationVariables,
   ProductAdditionalInfoDocument,
   ProductAdditionalInfoFragmentDoc,
@@ -80,8 +79,19 @@ export class ProductService {
     return execute(QueryTogetherViewedProducts, variables).then((res) => res.data);
   }
 
-  static async collectProduct(variables: MutationCollectProductMutationVariables) {
+  static async collectProduct(variables: {
+    productId: number;
+    source?: string | null;
+    position?: number | null;
+  }) {
     return execute(MutationCollectProduct, variables).then((res) => res.data);
+  }
+
+  static async recordProductImpressions(variables: {
+    source: string;
+    impressions: { productId: number; position: number }[];
+  }) {
+    return execute(MutationRecordProductImpressions, variables).then((res) => res.data);
   }
   static async reportExpiredProduct(variables: MutationReportExpiredProductMutationVariables) {
     return execute(MutationReportExpiredProduct, variables).then((res) => res.data);
@@ -287,9 +297,27 @@ const QueryTogetherViewedProducts = graphql(`
   }
 `);
 
-const MutationCollectProduct = graphql(`
-  mutation MutationCollectProduct($productId: Int!) {
-    collectProduct(productId: $productId)
+// CTR 측정용 source/position 추가. codegen 전까지 변수 타입을 손으로 명시한 TypedDocumentString
+// 으로 두고, codegen 후 graphql() 로 치환 가능(동작 동일).
+const MutationCollectProduct = new TypedDocumentString<
+  { collectProduct: boolean },
+  { productId: number; source?: string | null; position?: number | null }
+>(`
+  mutation MutationCollectProduct($productId: Int!, $source: String, $position: Int) {
+    collectProduct(productId: $productId, source: $source, position: $position)
+  }
+`);
+
+// 프론트 viewport(IntersectionObserver) 가 보고하는 노출 기록 (CTR 분모).
+const MutationRecordProductImpressions = new TypedDocumentString<
+  { recordProductImpressions: boolean },
+  { source: string; impressions: { productId: number; position: number }[] }
+>(`
+  mutation MutationRecordProductImpressions(
+    $source: String!
+    $impressions: [ProductImpressionInput!]!
+  ) {
+    recordProductImpressions(source: $source, impressions: $impressions)
   }
 `);
 

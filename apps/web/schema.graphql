@@ -544,11 +544,31 @@ type Mutation {
   """
   상품 단건 수집
   """
-  collectProduct(productId: Int!): Boolean!
+  collectProduct(
+    """
+    클릭 위치(랭크, 0-based)
+    """
+    position: Int
+    productId: Int!
+    """
+    클릭 발생 화면 출처 (예: ranking_tab)
+    """
+    source: String
+  ): Boolean!
   """
   썸네일 단건 수집
   """
-  collectThumbnail(productId: Int!): Boolean!
+  collectThumbnail(
+    """
+    클릭 위치(랭크, 0-based)
+    """
+    position: Int
+    productId: Int!
+    """
+    클릭 발생 화면 출처 (예: ranking_tab)
+    """
+    source: String
+  ): Boolean!
   createAd(
     description: String
     endAt: DateTime!
@@ -586,6 +606,16 @@ type Mutation {
   모든 알림 읽음 처리
   """
   readNotification(id: Int!): Boolean!
+  """
+  상품 노출(impression) 기록 — 프론트 viewport 가 보고. CTR 분모.
+  """
+  recordProductImpressions(
+    impressions: [ProductImpressionInput!]!
+    """
+    노출 발생 화면 출처 (예: ranking_tab)
+    """
+    source: String!
+  ): Boolean!
   """
   어드민) 리액션 키워드 후보 거절
   """
@@ -903,6 +933,11 @@ type ProductHotDealIndex {
   productId: Int!
   score: Int
   visualConfig: PriceVisualConfig
+}
+
+input ProductImpressionInput {
+  position: Int!
+  productId: Int!
 }
 
 type ProductMapping {
