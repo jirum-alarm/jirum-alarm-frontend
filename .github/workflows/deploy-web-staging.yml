@@ -28,7 +28,9 @@ jobs:
       name: staging
       
     outputs:
-      image-tag: ${{ steps.meta.outputs.version }}
+      # main 같은 floating 태그가 아니라 커밋별 고유 태그를 매니페스트에 박는다.
+      # 매 배포마다 값이 달라져 ArgoCD 가 자연스럽게 rollout (어노테이션 트릭 불필요).
+      image-tag: ${{ steps.deploy-tag.outputs.tag }}
       image-digest: ${{ steps.build.outputs.digest }}
     
     env:
@@ -66,6 +68,18 @@ jobs:
             type=sha,prefix={{branch}}-,format=short
             type=raw,value=develop,enable={{is_default_branch}}
             type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Resolve deploy tag
+        id: deploy-tag
+        env:
+          META_TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          set -euo pipefail
+          # meta 가 만든 태그 중 커밋별 고유 태그(main-<sha>)를 추출해 매니페스트에 박는다.
+          # 매 배포마다 값이 달라져 ArgoCD 가 자연 rollout.
+          tag=$(printf '%s\n' "$META_TAGS" | sed 's#.*:##' | grep -E '^main-[0-9a-f]+$' | head -1)
+          if [ -z "$tag" ]; then echo "::error::could not resolve unique deploy tag from meta tags"; exit 1; fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
           labels: |
             org.opencontainers.image.title=Jirum Alarm Web Frontend
             org.opencontainers.image.description=Staging deployment
@@ -135,27 +149,22 @@ jobs:
 
       - name: Update Kubernetes manifest
         working-directory: infra
+        env:
+          NEW_TAG: ${{ needs.build-and-push.outputs.image-tag }}
         run: |
           set -euo pipefail
-          DEPLOYMENT_FILE="server/jirum-alarm-frontend-web/development/jirum-alarm-frontend-web-deployment.yaml"
-
-          # Build image url
-          export IMAGE_URL="${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web-dev:${{ needs.build-and-push.outputs.image-tag }}"
-          yq eval -i '.spec.template.spec.containers[0].image = strenv(IMAGE_URL)' "$DEPLOYMENT_FILE"
-
-          # Change cause
-          export CHANGE_CAUSE="Deployed by GitHub Actions - ${{ github.sha }}"
-          yq eval -i '.spec.template.metadata.annotations."kubernetes.io/change-cause" = strenv(CHANGE_CAUSE)' "$DEPLOYMENT_FILE"
-
-          # Timestamp to trigger rollout
-          export TIMESTAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          yq eval -i '.spec.template.metadata.annotations."deployment.kubernetes.io/revision-timestamp" = strenv(TIMESTAMP)' "$DEPLOYMENT_FILE"
+          # kustomize overlay 의 images[].newTag 한 곳만 갱신한다.
+          # (이전: server/.../deployment.yaml 의 image 라인 직접 치환 — 더는 ArgoCD 가 보지 않는 경로)
+          KUSTOMIZATION="apps/frontend-web/overlays/development/kustomization.yaml"
+          IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web"
+          export IMAGE_NAME NEW_TAG
+          yq eval -i '(.images[] | select(.name == strenv(IMAGE_NAME)) | .newTag) = strenv(NEW_TAG)' "$KUSTOMIZATION"
 
       - name: Validate Kubernetes manifest
         working-directory: infra
         run: |
           set -euo pipefail
-          yq eval '.' server/jirum-alarm-frontend-web/development/*.yaml > /dev/null
+          yq eval '.' apps/frontend-web/overlays/development/kustomization.yaml > /dev/null
 
       - name: Commit files
         working-directory: infra
