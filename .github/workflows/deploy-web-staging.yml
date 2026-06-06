@@ -39,7 +39,7 @@ jobs:
       
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -68,6 +68,11 @@ jobs:
             type=sha,prefix={{branch}}-,format=short
             type=raw,value=develop,enable={{is_default_branch}}
             type=raw,value=latest,enable={{is_default_branch}}
+          labels: |
+            org.opencontainers.image.title=Jirum Alarm Web Frontend
+            org.opencontainers.image.description=Staging deployment
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+            maintainer=${{ github.repository_owner }}
 
       - name: Resolve deploy tag
         id: deploy-tag
@@ -80,12 +85,6 @@ jobs:
           tag=$(printf '%s\n' "$META_TAGS" | sed 's#.*:##' | grep -E '^main-[0-9a-f]+$' | head -1)
           if [ -z "$tag" ]; then echo "::error::could not resolve unique deploy tag from meta tags"; exit 1; fi
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          labels: |
-            org.opencontainers.image.title=Jirum Alarm Web Frontend
-            org.opencontainers.image.description=Staging deployment
-            org.opencontainers.image.vendor=${{ github.repository_owner }}
-            maintainer=${{ github.repository_owner }}
-
 
       - name: Build and push Docker image
         id: build
@@ -132,7 +131,7 @@ jobs:
     
     steps:
       - name: Checkout infrastructure repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ secrets.INFRA_GITHUB_REPOSITORY }}
           ref: main
