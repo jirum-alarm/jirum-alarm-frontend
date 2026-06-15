@@ -10,6 +10,12 @@
     "build:ios:debug:sim": "rm -rf ios/build/debug-sim && xcodebuild -workspace ios/jirumAlarmMobile.xcworkspace -scheme jirumAlarmMobile -configuration Debug -destination 'generic/platform=iOS Simulator' build",
     "build:ios:release:sim": "rm -rf ios/build/release-sim && xcodebuild -workspace ios/jirumAlarmMobile.xcworkspace -scheme jirumAlarmMobile -configuration Release -destination 'generic/platform=iOS Simulator' build",
     "ios": "expo run:ios",
+    "deploy:init": "node scripts/deploy-init.mjs",
+    "deploy": "node scripts/deploy-using-eas-local.mjs",
+    "release:android:local": "node scripts/android-local-release.mjs",
+    "release:android:local:build": "node scripts/android-local-release.mjs --no-submit",
+    "release:ios:local": "node scripts/ios-local-release.mjs",
+    "release:ios:local:build": "node scripts/ios-local-release.mjs --no-submit",
     "clean-ios": "cd ios && rm -rf build && pod cache clean --all && pod deintegrate && rm Podfile.lock && pod install",
     "clean-android": "./android/gradlew -p android --stop && rm -rf android/app/.cxx && ./android/gradlew -p android clean && rm -rf android/.gradle android/build android/app/build",
     "generate": "graphql-codegen",
@@ -21,6 +27,7 @@
     "verify:migration": "pnpm generate && pnpm ts:check && pnpm lint && pnpm exec jest --runInBand && npx expo-doctor",
     "start": "expo start",
     "test": "jest",
+    "eas-build-pre-install": "node scripts/eas-restore-build-files.mjs",
     "postinstall": "patch-package"
   },
   "dependencies": {

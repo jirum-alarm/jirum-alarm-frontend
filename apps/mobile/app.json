@@ -7,13 +7,22 @@
     "experiments": {
       "autolinkingModuleResolution": true
     },
-    "plugins": ["expo-dev-client", "expo-web-browser"],
+    "plugins": [
+      "expo-dev-client",
+      "expo-web-browser"
+    ],
     "ios": {
       "bundleIdentifier": "com.jirum-alarm.jirumalarm",
       "usesAppleSignIn": true
     },
     "android": {
       "package": "com.solcode.jirmalam"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ec89e7ad-0f52-4777-a71c-50e5f596be58"
+      }
+    },
+    "owner": "jirumalarm"
   }
 }

@@ -7,6 +7,70 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "test-dev": {
+      "env": {
+        "APP_ENV": "development",
+        "EXPO_PUBLIC_APP_ENV": "development"
+      },
+      "android": {
+        "buildType": "app-bundle",
+        "credentialsSource": "remote"
+      },
+      "ios": {
+        "credentialsSource": "remote"
+      }
+    },
+    "test-prod": {
+      "env": {
+        "APP_ENV": "production",
+        "EXPO_PUBLIC_APP_ENV": "production"
+      },
+      "android": {
+        "buildType": "app-bundle",
+        "credentialsSource": "remote"
+      },
+      "ios": {
+        "credentialsSource": "remote"
+      }
+    },
+    "production": {
+      "env": {
+        "APP_ENV": "production",
+        "EXPO_PUBLIC_APP_ENV": "production"
+      },
+      "android": {
+        "buildType": "app-bundle",
+        "credentialsSource": "remote"
+      },
+      "ios": {
+        "credentialsSource": "remote"
+      }
+    }
+  },
+  "submit": {
+    "test-dev": {
+      "android": {
+        "track": "internal"
+      },
+      "ios": {
+        "ascAppId": "6474611420"
+      }
+    },
+    "test-prod": {
+      "android": {
+        "track": "internal"
+      },
+      "ios": {
+        "ascAppId": "6474611420"
+      }
+    },
+    "production": {
+      "android": {
+        "track": "production"
+      },
+      "ios": {
+        "ascAppId": "6474611420"
+      }
+    }
   }
 }
