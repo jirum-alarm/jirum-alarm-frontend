@@ -12,6 +12,8 @@
     "ios": "expo run:ios",
     "deploy:init": "node scripts/deploy-init.mjs",
     "deploy": "node scripts/deploy-using-eas-local.mjs",
+    "deploy:mobile:init": "pnpm run deploy:init",
+    "deploy:mobile": "pnpm run deploy",
     "release:android:local": "node scripts/android-local-release.mjs",
     "release:android:local:build": "node scripts/android-local-release.mjs --no-submit",
     "release:ios:local": "node scripts/ios-local-release.mjs",

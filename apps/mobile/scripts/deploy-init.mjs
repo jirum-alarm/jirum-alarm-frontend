@@ -45,6 +45,12 @@ function runCheck({label, command, args}) {
   }
 
   console.log(`✕ ${label}: ${command} ${args.join(' ')} failed`);
+  const output = `${result.stdout}${result.stderr}`.trim();
+  if (output) {
+    for (const line of output.split('\n').slice(0, 8)) {
+      console.log(`  ${line}`);
+    }
+  }
   if (result.signal === 'SIGTERM') {
     console.log('  timed out after 10 seconds');
   }
@@ -52,7 +58,8 @@ function runCheck({label, command, args}) {
     console.log(`  ${result.error.message}`);
   }
   if (label === 'CocoaPods') {
-    console.log('  Try: cd apps/mobile && bundle install');
+    console.log('  Try: gem install bundler:2.6.9');
+    console.log('  Then: cd apps/mobile && bundle install');
   }
   return false;
 }
