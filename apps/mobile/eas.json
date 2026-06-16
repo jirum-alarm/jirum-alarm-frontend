@@ -10,7 +10,8 @@
     "test-dev": {
       "env": {
         "APP_ENV": "development",
-        "EXPO_PUBLIC_APP_ENV": "development"
+        "EXPO_PUBLIC_APP_ENV": "development",
+        "NODE_ENV": "production"
       },
       "android": {
         "buildType": "app-bundle",
@@ -23,7 +24,8 @@
     "test-prod": {
       "env": {
         "APP_ENV": "production",
-        "EXPO_PUBLIC_APP_ENV": "production"
+        "EXPO_PUBLIC_APP_ENV": "production",
+        "NODE_ENV": "production"
       },
       "android": {
         "buildType": "app-bundle",
@@ -36,7 +38,8 @@
     "production": {
       "env": {
         "APP_ENV": "production",
-        "EXPO_PUBLIC_APP_ENV": "production"
+        "EXPO_PUBLIC_APP_ENV": "production",
+        "NODE_ENV": "production"
       },
       "android": {
         "buildType": "app-bundle",

@@ -273,7 +273,10 @@ if (options.submit && extname(outputPath).toLowerCase() !== '.aab') {
 
 mkdirSync(dirname(outputPath), {recursive: true});
 
+const profileEnv = buildProfile?.env ?? {};
 const localBuildEnv = {
+  ...profileEnv,
+  NODE_ENV: profileEnv.NODE_ENV ?? 'production',
   GOOGLE_SERVICES_JSON: googleServicesJson,
 };
 

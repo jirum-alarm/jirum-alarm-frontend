@@ -252,7 +252,12 @@ if (!options.build && !existsSync(outputPath)) {
 
 mkdirSync(dirname(outputPath), {recursive: true});
 
+const easJson = readJson(easJsonPath);
+const buildProfile = easJson.build?.[options.profile];
+const profileEnv = buildProfile?.env ?? {};
 const localBuildEnv = {
+  ...profileEnv,
+  NODE_ENV: profileEnv.NODE_ENV ?? 'production',
   GOOGLE_SERVICE_INFO_PLIST: googleServiceInfoPlist,
 };
 
