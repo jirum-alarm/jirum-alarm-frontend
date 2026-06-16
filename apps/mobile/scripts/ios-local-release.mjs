@@ -4,6 +4,7 @@ import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {spawnSync} from 'node:child_process';
 import {dirname, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {assertProjectNode} from './project-runtime.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDir, '..');
@@ -196,6 +197,13 @@ function ensureLocalPrerequisites() {
       `Missing submit.${options.profile}.ios.ascAppId in eas.json.`,
     );
   }
+}
+
+try {
+  assertProjectNode(projectRoot);
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
 }
 
 ensureLocalPrerequisites();

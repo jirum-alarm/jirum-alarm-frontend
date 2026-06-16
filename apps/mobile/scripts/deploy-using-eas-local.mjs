@@ -12,6 +12,7 @@ import {
   multiselect,
   select as clackSelect,
 } from '@clack/prompts';
+import {assertProjectNode} from './project-runtime.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDir, '..');
@@ -647,6 +648,8 @@ const purposeLabels = {
 };
 
 async function main() {
+  assertProjectNode(projectRoot);
+
   const purpose = await select('무엇을 할까요?', [
     {name: '테스트 배포', value: 'test-distribute'},
     {name: '실제 스토어 제출', value: 'store-submit'},

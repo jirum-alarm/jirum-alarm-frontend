@@ -4,6 +4,7 @@ import {existsSync} from 'node:fs';
 import {spawnSync} from 'node:child_process';
 import {dirname, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {getProjectNodeStatus} from './project-runtime.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDir, '..');
@@ -23,6 +24,7 @@ const checks = [
     label: 'EAS CLI',
     command: 'pnpm',
     args: ['exec', 'eas', '--version'],
+    requiresProjectNode: true,
   },
   {
     label: 'Java',
@@ -67,7 +69,26 @@ function runCheck({label, command, args}) {
 
 let ok = true;
 
+const nodeStatus = getProjectNodeStatus(projectRoot);
+if (nodeStatus.ok) {
+  console.log(`✓ Project Node: v${nodeStatus.currentVersion}`);
+} else {
+  console.log(
+    `✕ Project Node: current v${nodeStatus.currentVersion}, expected ${
+      nodeStatus.expectedVersion
+        ? `>=${nodeStatus.expectedVersion} <23`
+        : nodeStatus.engines
+    }`,
+  );
+  ok = false;
+}
+
 for (const check of checks) {
+  if (check.requiresProjectNode && !nodeStatus.ok) {
+    console.log(`- ${check.label}: skipped until Project Node matches`);
+    continue;
+  }
+
   ok = runCheck(check) && ok;
 }
 
@@ -95,42 +116,49 @@ if (existsSync(googleServicesJson)) {
   ok = false;
 }
 
-const iosReleaseCheck = spawnSync(
-  'node',
-  ['scripts/ios-local-release.mjs', '--check'],
-  {
-    cwd: projectRoot,
-    encoding: 'utf8',
-  },
-);
-
-if (iosReleaseCheck.status === 0) {
-  console.log('✓ Local iOS release config');
-  console.log(iosReleaseCheck.stdout.trim());
-} else {
-  console.log('✕ Local iOS release config');
-  console.log(`${iosReleaseCheck.stdout}${iosReleaseCheck.stderr}`.trim());
-  ok = false;
-}
-
-const androidReleaseCheck = spawnSync(
-  'node',
-  ['scripts/android-local-release.mjs', '--check'],
-  {
-    cwd: projectRoot,
-    encoding: 'utf8',
-  },
-);
-
-if (androidReleaseCheck.status === 0) {
-  console.log('✓ Local Android release config');
-  console.log(androidReleaseCheck.stdout.trim());
-} else {
-  console.log('✕ Local Android release config');
+if (!nodeStatus.ok) {
+  console.log('- Local iOS release config: skipped until Project Node matches');
   console.log(
-    `${androidReleaseCheck.stdout}${androidReleaseCheck.stderr}`.trim(),
+    '- Local Android release config: skipped until Project Node matches',
   );
-  ok = false;
+} else {
+  const iosReleaseCheck = spawnSync(
+    'node',
+    ['scripts/ios-local-release.mjs', '--check'],
+    {
+      cwd: projectRoot,
+      encoding: 'utf8',
+    },
+  );
+
+  if (iosReleaseCheck.status === 0) {
+    console.log('✓ Local iOS release config');
+    console.log(iosReleaseCheck.stdout.trim());
+  } else {
+    console.log('✕ Local iOS release config');
+    console.log(`${iosReleaseCheck.stdout}${iosReleaseCheck.stderr}`.trim());
+    ok = false;
+  }
+
+  const androidReleaseCheck = spawnSync(
+    'node',
+    ['scripts/android-local-release.mjs', '--check'],
+    {
+      cwd: projectRoot,
+      encoding: 'utf8',
+    },
+  );
+
+  if (androidReleaseCheck.status === 0) {
+    console.log('✓ Local Android release config');
+    console.log(androidReleaseCheck.stdout.trim());
+  } else {
+    console.log('✕ Local Android release config');
+    console.log(
+      `${androidReleaseCheck.stdout}${androidReleaseCheck.stderr}`.trim(),
+    );
+    ok = false;
+  }
 }
 
 if (!ok) {
