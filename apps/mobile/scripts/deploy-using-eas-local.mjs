@@ -6,11 +6,20 @@ import {createInterface} from 'node:readline/promises';
 import {stdin as input, stdout as output} from 'node:process';
 import {dirname, extname, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {
+  confirm as clackConfirm,
+  isCancel,
+  multiselect,
+  select as clackSelect,
+} from '@clack/prompts';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDir, '..');
 const releaseNotePath = resolve(projectRoot, 'release-note.txt');
-const iosProjectFile = resolve(projectRoot, 'ios/jirumAlarmMobile.xcodeproj/project.pbxproj');
+const iosProjectFile = resolve(
+  projectRoot,
+  'ios/jirumAlarmMobile.xcodeproj/project.pbxproj',
+);
 const androidBuildGradle = resolve(projectRoot, 'android/app/build.gradle');
 
 const semverRegExp = /^\d+\.\d+\.\d+$/u;
@@ -25,8 +34,12 @@ function ensureReleaseNote() {
 
 function readIosBuildInfo() {
   const project = readFileSync(iosProjectFile, 'utf8');
-  const buildNumbers = [...project.matchAll(/CURRENT_PROJECT_VERSION = ([0-9]+);/g)].map(match => Number(match[1]));
-  const marketingVersions = [...project.matchAll(/MARKETING_VERSION = ([^;]+);/g)].map(match => match[1].trim());
+  const buildNumbers = [
+    ...project.matchAll(/CURRENT_PROJECT_VERSION = ([0-9]+);/g),
+  ].map(match => Number(match[1]));
+  const marketingVersions = [
+    ...project.matchAll(/MARKETING_VERSION = ([^;]+);/g),
+  ].map(match => match[1].trim());
 
   return {
     buildNumber: buildNumbers.length > 0 ? Math.max(...buildNumbers) : null,
@@ -47,7 +60,9 @@ function readAndroidBuildInfo() {
 
 function bumpSemver(version, bumpType) {
   if (!semverRegExp.test(version)) {
-    throw new Error(`Cannot ${bumpType} bump non-semver app version: ${version}`);
+    throw new Error(
+      `Cannot ${bumpType} bump non-semver app version: ${version}`,
+    );
   }
 
   const [major, minor, patch] = version.split('.').map(Number);
@@ -128,8 +143,25 @@ async function ask(message, defaultValue = '') {
 }
 
 async function confirm(message, defaultValue = false) {
+  if (canUseInteractiveSelect()) {
+    const answer = await clackConfirm({
+      message,
+      active: '예',
+      inactive: '아니오',
+      initialValue: defaultValue,
+    });
+
+    if (isCancel(answer)) {
+      throw new Error('사용자가 선택을 취소했습니다.');
+    }
+
+    return answer;
+  }
+
   const suffix = defaultValue ? 'Y/n' : 'y/N';
-  const answer = (await rl.question(`${message} (${suffix}): `)).trim().toLowerCase();
+  const answer = (await rl.question(`${message} (${suffix}): `))
+    .trim()
+    .toLowerCase();
 
   if (!answer) {
     return defaultValue;
@@ -138,7 +170,15 @@ async function confirm(message, defaultValue = false) {
   return answer === 'y' || answer === 'yes';
 }
 
-async function select(message, choices) {
+function canUseInteractiveSelect() {
+  return Boolean(input.isTTY && output.isTTY);
+}
+
+async function selectManyWithNumber(
+  message,
+  choices,
+  {min = 1, max = choices.length} = {},
+) {
   console.log(`\n? ${message}`);
   choices.forEach((choice, index) => {
     const hint = choice.description ? ` - ${choice.description}` : '';
@@ -146,15 +186,110 @@ async function select(message, choices) {
   });
 
   while (true) {
-    const answer = await ask('선택');
-    const index = Number(answer) - 1;
+    const answer = await ask(max === 1 ? '선택' : '선택(쉼표로 구분)');
+    const indexes = [
+      ...new Set(
+        answer
+          .split(',')
+          .map(value => Number(value.trim()) - 1)
+          .filter(index => Number.isInteger(index)),
+      ),
+    ];
 
-    if (Number.isInteger(index) && choices[index]) {
-      return choices[index].value;
+    if (
+      indexes.length >= min &&
+      indexes.length <= max &&
+      indexes.every(index => choices[index])
+    ) {
+      return indexes.map(index => choices[index].value);
     }
 
-    console.log('목록에 있는 번호를 입력해 주세요.');
+    if (max === 1) {
+      console.log('목록에 있는 번호를 입력해 주세요.');
+    } else {
+      console.log(
+        `${min}개 이상 ${max}개 이하로 목록에 있는 번호를 입력해 주세요.`,
+      );
+    }
   }
+}
+
+async function selectMany(
+  message,
+  choices,
+  {min = 1, max = choices.length} = {},
+) {
+  if (choices.length === 0) {
+    throw new Error(`${message} 선택지가 없습니다.`);
+  }
+
+  if (!canUseInteractiveSelect()) {
+    return selectManyWithNumber(message, choices, {min, max});
+  }
+
+  while (true) {
+    const response = await multiselect({
+      message,
+      options: choices.map(choice => ({
+        label: choice.name,
+        hint: choice.description,
+        value: choice.value,
+      })),
+      required: min > 0,
+    });
+
+    if (isCancel(response)) {
+      throw new Error('사용자가 선택을 취소했습니다.');
+    }
+
+    if (response.length >= min && response.length <= max) {
+      return response;
+    }
+
+    if (max === 1) {
+      console.log('하나만 선택해 주세요.');
+    } else {
+      console.log(`${min}개 이상 ${max}개 이하로 선택해 주세요.`);
+    }
+  }
+}
+
+async function select(message, choices) {
+  if (choices.length === 0) {
+    throw new Error(`${message} 선택지가 없습니다.`);
+  }
+
+  if (!canUseInteractiveSelect()) {
+    const selectedValues = await selectManyWithNumber(message, choices, {
+      min: 1,
+      max: 1,
+    });
+    return selectedValues[0];
+  }
+
+  const response = await clackSelect({
+    message,
+    options: choices.map(choice => ({
+      label: choice.name,
+      hint: choice.description,
+      value: choice.value,
+    })),
+  });
+
+  if (isCancel(response)) {
+    throw new Error('사용자가 선택을 취소했습니다.');
+  }
+
+  return response;
+}
+
+async function selectPlatform() {
+  const platforms = await selectMany('플랫폼은?', [
+    {name: 'iOS', value: 'ios'},
+    {name: 'Android', value: 'android'},
+  ]);
+
+  return platforms.length === 2 ? 'all' : platforms[0];
 }
 
 async function editReleaseNoteWithEditor() {
@@ -165,7 +300,9 @@ async function editReleaseNoteWithEditor() {
 
 async function writeReleaseNoteFromPrompt() {
   ensureReleaseNote();
-  console.log('\n패치노트를 입력해 주세요. 빈 줄에서 Enter를 누르면 종료합니다.');
+  console.log(
+    '\n패치노트를 입력해 주세요. 빈 줄에서 Enter를 누르면 종료합니다.',
+  );
   const lines = [];
 
   while (true) {
@@ -202,7 +339,10 @@ async function handleReleaseNote() {
 
   const updatedNote = readFileSync(releaseNotePath, 'utf8').trim();
   if (!updatedNote) {
-    const shouldContinue = await confirm('패치노트가 비어 있습니다. 계속할까요?', false);
+    const shouldContinue = await confirm(
+      '패치노트가 비어 있습니다. 계속할까요?',
+      false,
+    );
     if (!shouldContinue) {
       process.exit(1);
     }
@@ -243,8 +383,14 @@ function buildPlannedVersionSummary(platform, versionPlan) {
   if (platform === 'ios' || platform === 'all') {
     const ios = readIosBuildInfo();
     const nextBuildNumber =
-      versionPlan?.buildNumberAction === 'keep' || ios.buildNumber === null ? ios.buildNumber : ios.buildNumber + 1;
-    lines.push(`iOS: ${versionPlan?.appVersion ?? ios.appVersion ?? 'unknown'} (${nextBuildNumber ?? 'unknown'})`);
+      versionPlan?.buildNumberAction === 'keep' || ios.buildNumber === null
+        ? ios.buildNumber
+        : ios.buildNumber + 1;
+    lines.push(
+      `iOS: ${versionPlan?.appVersion ?? ios.appVersion ?? 'unknown'} (${
+        nextBuildNumber ?? 'unknown'
+      })`,
+    );
   }
 
   if (platform === 'android' || platform === 'all') {
@@ -254,7 +400,9 @@ function buildPlannedVersionSummary(platform, versionPlan) {
         ? android.versionCode
         : android.versionCode + 1;
     lines.push(
-      `Android: ${versionPlan?.appVersion ?? android.appVersion ?? 'unknown'} (${nextVersionCode ?? 'unknown'})`,
+      `Android: ${
+        versionPlan?.appVersion ?? android.appVersion ?? 'unknown'
+      } (${nextVersionCode ?? 'unknown'})`,
     );
   }
 
@@ -265,18 +413,54 @@ async function selectVersionPlan({purpose, platform}) {
   const choices = [
     {
       name: '앱 버전 유지, 빌드 번호만 증가',
-      value: {appVersionAction: 'keep', buildNumberAction: 'bump', label: '앱 버전 유지, 빌드 번호만 증가'},
+      value: {
+        appVersionAction: 'keep',
+        buildNumberAction: 'bump',
+        label: '앱 버전 유지, 빌드 번호만 증가',
+      },
     },
-    {name: 'patch 증가', value: {appVersionAction: 'patch', buildNumberAction: 'bump', label: 'patch 증가'}},
-    {name: 'minor 증가', value: {appVersionAction: 'minor', buildNumberAction: 'bump', label: 'minor 증가'}},
-    {name: 'major 증가', value: {appVersionAction: 'major', buildNumberAction: 'bump', label: 'major 증가'}},
-    {name: '앱 버전 직접 입력', value: {appVersionAction: 'custom', buildNumberAction: 'bump', label: '직접 입력'}},
+    {
+      name: 'patch 증가',
+      value: {
+        appVersionAction: 'patch',
+        buildNumberAction: 'bump',
+        label: 'patch 증가',
+      },
+    },
+    {
+      name: 'minor 증가',
+      value: {
+        appVersionAction: 'minor',
+        buildNumberAction: 'bump',
+        label: 'minor 증가',
+      },
+    },
+    {
+      name: 'major 증가',
+      value: {
+        appVersionAction: 'major',
+        buildNumberAction: 'bump',
+        label: 'major 증가',
+      },
+    },
+    {
+      name: '앱 버전 직접 입력',
+      value: {
+        appVersionAction: 'custom',
+        buildNumberAction: 'bump',
+        label: '직접 입력',
+      },
+    },
   ];
 
   if (purpose === 'build-only') {
     choices.push({
       name: '앱 버전과 빌드 번호 모두 유지',
-      value: {appVersionAction: 'keep', buildNumberAction: 'keep', label: '앱 버전/빌드 번호 모두 유지'},
+      value: {
+        appVersionAction: 'keep',
+        buildNumberAction: 'keep',
+        label: '앱 버전/빌드 번호 모두 유지',
+      },
     });
   }
 
@@ -286,7 +470,11 @@ async function selectVersionPlan({purpose, platform}) {
     while (true) {
       const appVersion = await ask('앱 버전을 0.0.0 형식으로 입력해 주세요');
       if (semverRegExp.test(appVersion)) {
-        return {...versionPlan, appVersion, label: `앱 버전 ${appVersion} 직접 입력`};
+        return {
+          ...versionPlan,
+          appVersion,
+          label: `앱 버전 ${appVersion} 직접 입력`,
+        };
       }
 
       console.log('0.0.0 형식으로 입력해 주세요.');
@@ -300,11 +488,17 @@ async function selectVersionPlan({purpose, platform}) {
   const currentVersions = getCurrentAppVersions(platform);
   const baseVersion = currentVersions[0];
   if (!baseVersion) {
-    throw new Error('현재 앱 버전을 읽을 수 없어 major/minor/patch 증가를 계산할 수 없습니다.');
+    throw new Error(
+      '현재 앱 버전을 읽을 수 없어 major/minor/patch 증가를 계산할 수 없습니다.',
+    );
   }
 
   const appVersion = bumpSemver(baseVersion, versionPlan.appVersionAction);
-  return {...versionPlan, appVersion, label: `${versionPlan.label} -> ${appVersion}`};
+  return {
+    ...versionPlan,
+    appVersion,
+    label: `${versionPlan.label} -> ${appVersion}`,
+  };
 }
 
 async function selectExistingSubmitTarget() {
@@ -318,21 +512,37 @@ async function selectExistingBuildPaths(platform) {
   const paths = {};
 
   if (platform === 'ios' || platform === 'all') {
-    paths.ios = await ask('제출할 IPA 경로를 입력해 주세요', 'build/jirum-alarm-ios-1.3.5-10.ipa');
+    paths.ios = await ask(
+      '제출할 IPA 경로를 입력해 주세요',
+      'build/jirum-alarm-ios-1.3.5-10.ipa',
+    );
   }
 
   if (platform === 'android' || platform === 'all') {
-    paths.android = await ask('제출할 Android 빌드 경로를 입력해 주세요', 'build/jirum-alarm-android-1.3.5-23.aab');
+    paths.android = await ask(
+      '제출할 Android 빌드 경로를 입력해 주세요',
+      'build/jirum-alarm-android-1.3.5-23.aab',
+    );
   }
 
   return paths;
 }
 
-function printSummary({purpose, platform, environment, profile, versionPlan, existingSubmitTarget, existingBuildPaths}) {
+function printSummary({
+  purpose,
+  platform,
+  environment,
+  profile,
+  versionPlan,
+  existingSubmitTarget,
+  existingBuildPaths,
+}) {
   console.log('\n실행 요약:');
   console.log(`- 목적: ${purposeLabels[purpose]}`);
   console.log(`- 플랫폼: ${getPlatformLabels(platform).join(' + ')}`);
-  console.log(`- 환경: ${environment}${purpose === 'store-submit' ? ' 고정' : ''}`);
+  console.log(
+    `- 환경: ${environment}${purpose === 'store-submit' ? ' 고정' : ''}`,
+  );
   console.log(`- EAS profile: ${profile}`);
 
   if (purpose === 'test-distribute') {
@@ -340,7 +550,9 @@ function printSummary({purpose, platform, environment, profile, versionPlan, exi
       console.log('- iOS: EAS local build -> EAS Submit -> TestFlight');
     }
     if (platform === 'android' || platform === 'all') {
-      console.log('- Android: EAS local build -> Play Store internal track 제출');
+      console.log(
+        '- Android: EAS local build -> Play Store internal track 제출',
+      );
     }
   }
 
@@ -349,7 +561,9 @@ function printSummary({purpose, platform, environment, profile, versionPlan, exi
       console.log('- iOS: EAS local build -> App Store Connect 업로드');
     }
     if (platform === 'android' || platform === 'all') {
-      console.log('- Android: EAS local build -> Play Store production track 제출');
+      console.log(
+        '- Android: EAS local build -> Play Store production track 제출',
+      );
     }
   }
 
@@ -358,7 +572,11 @@ function printSummary({purpose, platform, environment, profile, versionPlan, exi
   }
 
   if (purpose === 'submit-only') {
-    console.log(`- 제출 대상: ${existingSubmitTarget === 'store' ? '실제 스토어 제출' : '테스트 배포'}`);
+    console.log(
+      `- 제출 대상: ${
+        existingSubmitTarget === 'store' ? '실제 스토어 제출' : '테스트 배포'
+      }`,
+    );
     if (existingBuildPaths?.ios) {
       console.log(`- IPA: ${existingBuildPaths.ios}`);
     }
@@ -399,7 +617,13 @@ function runIos({purpose, profile, versionPlan, outputPath}) {
   runReleaseScript('scripts/ios-local-release.mjs', args);
 }
 
-function runAndroid({purpose, profile, versionPlan, outputPath, existingSubmitTarget}) {
+function runAndroid({
+  purpose,
+  profile,
+  versionPlan,
+  outputPath,
+  existingSubmitTarget,
+}) {
   const args = ['--profile', profile, ...buildVersionArgs(versionPlan)];
 
   if (purpose === 'build-only') {
@@ -431,18 +655,22 @@ async function main() {
     {name: '사전 점검만 실행', value: 'check'},
   ]);
 
-  const platform = await select('플랫폼은?', [
-    {name: 'iOS', value: 'ios'},
-    {name: 'Android', value: 'android'},
-    {name: 'iOS + Android', value: 'all'},
-  ]);
+  const platform = await selectPlatform();
 
   if (purpose === 'check') {
     if (platform === 'ios' || platform === 'all') {
-      runReleaseScript('scripts/ios-local-release.mjs', ['--profile', 'production', '--check']);
+      runReleaseScript('scripts/ios-local-release.mjs', [
+        '--profile',
+        'production',
+        '--check',
+      ]);
     }
     if (platform === 'android' || platform === 'all') {
-      runReleaseScript('scripts/android-local-release.mjs', ['--profile', 'production', '--check']);
+      runReleaseScript('scripts/android-local-release.mjs', [
+        '--profile',
+        'production',
+        '--check',
+      ]);
     }
     return;
   }
@@ -452,7 +680,10 @@ async function main() {
     existingSubmitTarget = await selectExistingSubmitTarget();
   }
 
-  const shouldAskEnvironment = purpose === 'test-distribute' || purpose === 'build-only' || existingSubmitTarget === 'test';
+  const shouldAskEnvironment =
+    purpose === 'test-distribute' ||
+    purpose === 'build-only' ||
+    existingSubmitTarget === 'test';
   const selectedEnvironment = shouldAskEnvironment
     ? await select('환경은?', [
         {name: 'development', value: 'development'},
@@ -462,12 +693,19 @@ async function main() {
 
   const environment = resolveEnvironment({purpose, selectedEnvironment});
   const profile = resolveProfile({
-    purpose: purpose === 'submit-only' && existingSubmitTarget === 'store' ? 'store-submit' : purpose,
+    purpose:
+      purpose === 'submit-only' && existingSubmitTarget === 'store'
+        ? 'store-submit'
+        : purpose,
     environment,
   });
 
   let versionPlan = null;
-  if (purpose === 'test-distribute' || purpose === 'store-submit' || purpose === 'build-only') {
+  if (
+    purpose === 'test-distribute' ||
+    purpose === 'store-submit' ||
+    purpose === 'build-only'
+  ) {
     versionPlan = await selectVersionPlan({purpose, platform});
   }
 

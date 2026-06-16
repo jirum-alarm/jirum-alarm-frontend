@@ -39,7 +39,8 @@ function runCheck({label, command, args}) {
   });
 
   if (result.status === 0) {
-    const firstLine = `${result.stdout}${result.stderr}`.split('\n').find(Boolean) ?? 'ok';
+    const firstLine =
+      `${result.stdout}${result.stderr}`.split('\n').find(Boolean) ?? 'ok';
     console.log(`✓ ${label}: ${firstLine}`);
     return true;
   }
@@ -70,7 +71,10 @@ for (const check of checks) {
   ok = runCheck(check) && ok;
 }
 
-const googleServiceInfoPlist = resolve(projectRoot, 'ios/GoogleService-Info.plist');
+const googleServiceInfoPlist = resolve(
+  projectRoot,
+  'ios/GoogleService-Info.plist',
+);
 if (existsSync(googleServiceInfoPlist)) {
   console.log(`✓ Firebase iOS plist: ${googleServiceInfoPlist}`);
 } else {
@@ -78,18 +82,27 @@ if (existsSync(googleServiceInfoPlist)) {
   ok = false;
 }
 
-const googleServicesJson = resolve(projectRoot, 'android/app/google-services.json');
+const googleServicesJson = resolve(
+  projectRoot,
+  'android/app/google-services.json',
+);
 if (existsSync(googleServicesJson)) {
   console.log(`✓ Firebase Android google-services.json: ${googleServicesJson}`);
 } else {
-  console.log('✕ Firebase Android google-services.json: missing android/app/google-services.json');
+  console.log(
+    '✕ Firebase Android google-services.json: missing android/app/google-services.json',
+  );
   ok = false;
 }
 
-const iosReleaseCheck = spawnSync('pnpm', ['release:ios:local', '--', '--check'], {
-  cwd: projectRoot,
-  encoding: 'utf8',
-});
+const iosReleaseCheck = spawnSync(
+  'node',
+  ['scripts/ios-local-release.mjs', '--check'],
+  {
+    cwd: projectRoot,
+    encoding: 'utf8',
+  },
+);
 
 if (iosReleaseCheck.status === 0) {
   console.log('✓ Local iOS release config');
@@ -100,17 +113,23 @@ if (iosReleaseCheck.status === 0) {
   ok = false;
 }
 
-const androidReleaseCheck = spawnSync('pnpm', ['release:android:local', '--', '--check'], {
-  cwd: projectRoot,
-  encoding: 'utf8',
-});
+const androidReleaseCheck = spawnSync(
+  'node',
+  ['scripts/android-local-release.mjs', '--check'],
+  {
+    cwd: projectRoot,
+    encoding: 'utf8',
+  },
+);
 
 if (androidReleaseCheck.status === 0) {
   console.log('✓ Local Android release config');
   console.log(androidReleaseCheck.stdout.trim());
 } else {
   console.log('✕ Local Android release config');
-  console.log(`${androidReleaseCheck.stdout}${androidReleaseCheck.stderr}`.trim());
+  console.log(
+    `${androidReleaseCheck.stdout}${androidReleaseCheck.stderr}`.trim(),
+  );
   ok = false;
 }
 

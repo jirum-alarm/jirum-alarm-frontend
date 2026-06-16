@@ -7,8 +7,14 @@ import {fileURLToPath} from 'node:url';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDir, '..');
-const iosProjectFile = resolve(projectRoot, 'ios/jirumAlarmMobile.xcodeproj/project.pbxproj');
-const googleServiceInfoPlist = resolve(projectRoot, 'ios/GoogleService-Info.plist');
+const iosProjectFile = resolve(
+  projectRoot,
+  'ios/jirumAlarmMobile.xcodeproj/project.pbxproj',
+);
+const googleServiceInfoPlist = resolve(
+  projectRoot,
+  'ios/GoogleService-Info.plist',
+);
 const easJsonPath = resolve(projectRoot, 'eas.json');
 
 const args = process.argv.slice(2);
@@ -27,7 +33,7 @@ const options = {
 function printHelp() {
   console.log(`
 Usage:
-  pnpm release:ios:local [options]
+  node scripts/ios-local-release.mjs [options]
 
 Options:
   --profile <name>        EAS profile to use. Default: production
@@ -84,11 +90,18 @@ if (!options.profile) {
   throw new Error('Missing --profile value.');
 }
 
-if (options.targetBuildNumber !== null && (!Number.isInteger(options.targetBuildNumber) || options.targetBuildNumber < 1)) {
+if (
+  options.targetBuildNumber !== null &&
+  (!Number.isInteger(options.targetBuildNumber) ||
+    options.targetBuildNumber < 1)
+) {
   throw new Error('--build-number must be a positive integer.');
 }
 
-if (options.appVersion !== null && !/^\d+\.\d+\.\d+$/u.test(options.appVersion)) {
+if (
+  options.appVersion !== null &&
+  !/^\d+\.\d+\.\d+$/u.test(options.appVersion)
+) {
   throw new Error('--app-version must use x.y.z format.');
 }
 
@@ -98,11 +111,17 @@ function readJson(path) {
 
 function getIosBuildInfo() {
   const project = readFileSync(iosProjectFile, 'utf8');
-  const buildNumbers = [...project.matchAll(/CURRENT_PROJECT_VERSION = ([0-9]+);/g)].map(match => Number(match[1]));
-  const marketingVersions = [...project.matchAll(/MARKETING_VERSION = ([^;]+);/g)].map(match => match[1].trim());
+  const buildNumbers = [
+    ...project.matchAll(/CURRENT_PROJECT_VERSION = ([0-9]+);/g),
+  ].map(match => Number(match[1]));
+  const marketingVersions = [
+    ...project.matchAll(/MARKETING_VERSION = ([^;]+);/g),
+  ].map(match => match[1].trim());
 
   if (buildNumbers.length === 0) {
-    throw new Error('Could not find CURRENT_PROJECT_VERSION in the Xcode project.');
+    throw new Error(
+      'Could not find CURRENT_PROJECT_VERSION in the Xcode project.',
+    );
   }
 
   if (marketingVersions.length === 0) {
@@ -118,13 +137,19 @@ function getIosBuildInfo() {
 
 function setIosBuildNumber(buildNumber) {
   const {project} = getIosBuildInfo();
-  const updatedProject = project.replace(/CURRENT_PROJECT_VERSION = [0-9]+;/g, `CURRENT_PROJECT_VERSION = ${buildNumber};`);
+  const updatedProject = project.replace(
+    /CURRENT_PROJECT_VERSION = [0-9]+;/g,
+    `CURRENT_PROJECT_VERSION = ${buildNumber};`,
+  );
   writeFileSync(iosProjectFile, updatedProject);
 }
 
 function setIosMarketingVersion(marketingVersion) {
   const {project} = getIosBuildInfo();
-  const updatedProject = project.replace(/MARKETING_VERSION = [^;]+;/g, `MARKETING_VERSION = ${marketingVersion};`);
+  const updatedProject = project.replace(
+    /MARKETING_VERSION = [^;]+;/g,
+    `MARKETING_VERSION = ${marketingVersion};`,
+  );
   writeFileSync(iosProjectFile, updatedProject);
 }
 
@@ -147,7 +172,9 @@ function run(command, commandArgs, env = {}) {
 
 function ensureLocalPrerequisites() {
   if (!existsSync(googleServiceInfoPlist)) {
-    throw new Error('Missing ios/GoogleService-Info.plist. Restore it locally before running the iOS release.');
+    throw new Error(
+      'Missing ios/GoogleService-Info.plist. Restore it locally before running the iOS release.',
+    );
   }
 
   const easJson = readJson(easJsonPath);
@@ -159,11 +186,15 @@ function ensureLocalPrerequisites() {
   }
 
   if (buildProfile.ios?.credentialsSource !== 'remote') {
-    throw new Error(`Expected build.${options.profile}.ios.credentialsSource to be "remote".`);
+    throw new Error(
+      `Expected build.${options.profile}.ios.credentialsSource to be "remote".`,
+    );
   }
 
   if (options.submit && !submitProfile?.ios?.ascAppId) {
-    throw new Error(`Missing submit.${options.profile}.ios.ascAppId in eas.json.`);
+    throw new Error(
+      `Missing submit.${options.profile}.ios.ascAppId in eas.json.`,
+    );
   }
 }
 
@@ -171,8 +202,14 @@ ensureLocalPrerequisites();
 
 let {buildNumber, marketingVersion} = getIosBuildInfo();
 const plannedMarketingVersion = options.appVersion ?? marketingVersion;
-const plannedBuildNumber = options.targetBuildNumber ?? (options.build && options.bump ? buildNumber + 1 : buildNumber);
-const plannedOutput = resolve(projectRoot, options.output ?? `build/jirum-alarm-ios-${plannedMarketingVersion}-${plannedBuildNumber}.ipa`);
+const plannedBuildNumber =
+  options.targetBuildNumber ??
+  (options.build && options.bump ? buildNumber + 1 : buildNumber);
+const plannedOutput = resolve(
+  projectRoot,
+  options.output ??
+    `build/jirum-alarm-ios-${plannedMarketingVersion}-${plannedBuildNumber}.ipa`,
+);
 
 if (options.checkOnly) {
   console.log(`Local iOS release setup is ready.
@@ -203,7 +240,10 @@ if (options.build) {
   }
 }
 
-const defaultOutput = resolve(projectRoot, `build/jirum-alarm-ios-${marketingVersion}-${buildNumber}.ipa`);
+const defaultOutput = resolve(
+  projectRoot,
+  `build/jirum-alarm-ios-${marketingVersion}-${buildNumber}.ipa`,
+);
 const outputPath = resolve(projectRoot, options.output ?? defaultOutput);
 
 if (!options.build && !existsSync(outputPath)) {

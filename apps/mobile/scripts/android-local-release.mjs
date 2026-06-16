@@ -8,7 +8,10 @@ import {fileURLToPath} from 'node:url';
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDir, '..');
 const androidBuildGradle = resolve(projectRoot, 'android/app/build.gradle');
-const googleServicesJson = resolve(projectRoot, 'android/app/google-services.json');
+const googleServicesJson = resolve(
+  projectRoot,
+  'android/app/google-services.json',
+);
 const easJsonPath = resolve(projectRoot, 'eas.json');
 
 const args = process.argv.slice(2);
@@ -27,7 +30,7 @@ const options = {
 function printHelp() {
   console.log(`
 Usage:
-  pnpm release:android:local [options]
+  node scripts/android-local-release.mjs [options]
 
 Options:
   --profile <name>        EAS profile to use. Default: production
@@ -86,12 +89,16 @@ if (!options.profile) {
 
 if (
   options.targetVersionCode !== null &&
-  (!Number.isInteger(options.targetVersionCode) || options.targetVersionCode < 1)
+  (!Number.isInteger(options.targetVersionCode) ||
+    options.targetVersionCode < 1)
 ) {
   throw new Error('--version-code must be a positive integer.');
 }
 
-if (options.appVersion !== null && !/^\d+\.\d+\.\d+$/u.test(options.appVersion)) {
+if (
+  options.appVersion !== null &&
+  !/^\d+\.\d+\.\d+$/u.test(options.appVersion)
+) {
   throw new Error('--app-version must use x.y.z format.');
 }
 
@@ -121,13 +128,19 @@ function getAndroidBuildInfo() {
 
 function setAndroidVersionCode(versionCode) {
   const {gradle} = getAndroidBuildInfo();
-  const updatedGradle = gradle.replace(/^(\s*versionCode\s+)[0-9]+(\s*)$/m, `$1${versionCode}$2`);
+  const updatedGradle = gradle.replace(
+    /^(\s*versionCode\s+)[0-9]+(\s*)$/m,
+    `$1${versionCode}$2`,
+  );
   writeFileSync(androidBuildGradle, updatedGradle);
 }
 
 function setAndroidVersionName(versionName) {
   const {gradle} = getAndroidBuildInfo();
-  const updatedGradle = gradle.replace(/^(\s*versionName\s+)"[^"]+"(\s*)$/m, `$1"${versionName}"$2`);
+  const updatedGradle = gradle.replace(
+    /^(\s*versionName\s+)"[^"]+"(\s*)$/m,
+    `$1"${versionName}"$2`,
+  );
   writeFileSync(androidBuildGradle, updatedGradle);
 }
 
@@ -150,7 +163,9 @@ function run(command, commandArgs, env = {}) {
 
 function ensureLocalPrerequisites() {
   if (!existsSync(googleServicesJson)) {
-    throw new Error('Missing android/app/google-services.json. Restore it locally before running the Android release.');
+    throw new Error(
+      'Missing android/app/google-services.json. Restore it locally before running the Android release.',
+    );
   }
 
   const easJson = readJson(easJsonPath);
@@ -162,11 +177,15 @@ function ensureLocalPrerequisites() {
   }
 
   if (buildProfile.android?.credentialsSource !== 'remote') {
-    throw new Error(`Expected build.${options.profile}.android.credentialsSource to be "remote".`);
+    throw new Error(
+      `Expected build.${options.profile}.android.credentialsSource to be "remote".`,
+    );
   }
 
   if (options.submit && buildProfile.android?.buildType !== 'app-bundle') {
-    throw new Error(`Expected build.${options.profile}.android.buildType to be "app-bundle" for Play Store release.`);
+    throw new Error(
+      `Expected build.${options.profile}.android.buildType to be "app-bundle" for Play Store release.`,
+    );
   }
 
   if (options.submit && !submitProfile?.android) {
@@ -177,7 +196,9 @@ function ensureLocalPrerequisites() {
   if (options.submit && serviceAccountKeyPath) {
     const resolvedPath = resolve(projectRoot, serviceAccountKeyPath);
     if (!existsSync(resolvedPath)) {
-      throw new Error(`Missing Android service account key at ${resolvedPath}.`);
+      throw new Error(
+        `Missing Android service account key at ${resolvedPath}.`,
+      );
     }
   }
 }
@@ -187,12 +208,16 @@ ensureLocalPrerequisites();
 let {versionCode, versionName} = getAndroidBuildInfo();
 const easJson = readJson(easJsonPath);
 const buildProfile = easJson.build?.[options.profile];
-const outputExtension = buildProfile?.android?.buildType === 'apk' ? 'apk' : 'aab';
+const outputExtension =
+  buildProfile?.android?.buildType === 'apk' ? 'apk' : 'aab';
 const plannedVersionName = options.appVersion ?? versionName;
-const plannedVersionCode = options.targetVersionCode ?? (options.build && options.bump ? versionCode + 1 : versionCode);
+const plannedVersionCode =
+  options.targetVersionCode ??
+  (options.build && options.bump ? versionCode + 1 : versionCode);
 const plannedOutput = resolve(
   projectRoot,
-  options.output ?? `build/jirum-alarm-android-${plannedVersionName}-${plannedVersionCode}.${outputExtension}`,
+  options.output ??
+    `build/jirum-alarm-android-${plannedVersionName}-${plannedVersionCode}.${outputExtension}`,
 );
 
 if (options.checkOnly) {
@@ -208,7 +233,11 @@ Submit: ${options.submit ? 'yes' : 'no'}
 Build type: ${buildProfile?.android?.buildType ?? 'default'}
 Play track: ${submitProfile?.track ?? 'default'}
 Google services JSON: ${googleServicesJson}
-Play service account: ${submitProfile?.serviceAccountKeyPath ? submitProfile.serviceAccountKeyPath : 'EAS remote key expected'}`);
+Play service account: ${
+    submitProfile?.serviceAccountKeyPath
+      ? submitProfile.serviceAccountKeyPath
+      : 'EAS remote key expected'
+  }`);
   process.exit(0);
 }
 
@@ -228,7 +257,10 @@ if (options.build) {
   }
 }
 
-const defaultOutput = resolve(projectRoot, `build/jirum-alarm-android-${versionName}-${versionCode}.${outputExtension}`);
+const defaultOutput = resolve(
+  projectRoot,
+  `build/jirum-alarm-android-${versionName}-${versionCode}.${outputExtension}`,
+);
 const outputPath = resolve(projectRoot, options.output ?? defaultOutput);
 
 if (!options.build && !existsSync(outputPath)) {
