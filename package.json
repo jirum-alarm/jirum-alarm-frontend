@@ -10,6 +10,8 @@
     "check-types": "turbo check-types",
     "test": "turbo test",
     "verify:mobile": "turbo run verify:mobile --filter=mobile",
+    "mobile:deploy:init": "pnpm --filter mobile run deploy:init",
+    "mobile:deploy": "pnpm --filter mobile run deploy",
     "prettier-fix": "turbo prettier-fix",
     "lint-staged": "lint-staged"
   },
