@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { ProductInfoFragment } from '@/shared/api/gql/graphql';
+import { ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
 
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 
@@ -49,9 +49,12 @@ function ProductDetailPage({
               <Suspense>
                 <HotdealGuide productId={productId} />
               </Suspense>
-              <Suspense>
-                <CommunityReaction productId={productId} />
-              </Suspense>
+              {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김 */}
+              {initialProduct?.uploaderType !== UploaderType.User && (
+                <Suspense>
+                  <CommunityReaction productId={productId} />
+                </Suspense>
+              )}
               <Suspense>
                 <HotdealScore productId={productId} />
               </Suspense>

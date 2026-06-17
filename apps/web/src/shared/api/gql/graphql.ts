@@ -1184,6 +1184,8 @@ export type ProductOutput = {
   categoryName?: Maybe<Scalars['String']['output']>;
   commentSummary?: Maybe<ProductCommentSummary>;
   consumptionDate?: Maybe<Scalars['DateTime']['output']>;
+  /** 상품 설명(유저 등록 상품) */
+  content?: Maybe<Scalars['String']['output']>;
   detailUrl?: Maybe<Scalars['String']['output']>;
   dislikeCount: Scalars['Int']['output'];
   distributionDate?: Maybe<Scalars['DateTime']['output']>;
@@ -2609,6 +2611,7 @@ export type ProductInfoFragment = {
   postedAt: any;
   thumbnail?: string | null;
   uploaderType: UploaderType;
+  content?: string | null;
   hotDealType?: HotDealType | null;
   viewCount: number;
   mallName?: string | null;
@@ -3070,6 +3073,7 @@ export const ProductInfoFragmentDoc = new TypedDocumentString(
   postedAt
   thumbnail
   uploaderType
+  content
   author {
     id
     nickname
@@ -3605,6 +3609,7 @@ export const ProductInfoDocument = new TypedDocumentString(`
   postedAt
   thumbnail
   uploaderType
+  content
   author {
     id
     nickname

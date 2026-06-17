@@ -128,6 +128,7 @@ export const QueryProductInfo = gql`
     postedAt
     thumbnail
     uploaderType
+    content
     author {
       id
       nickname

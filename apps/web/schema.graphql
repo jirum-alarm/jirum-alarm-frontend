@@ -585,7 +585,7 @@ type Mutation {
   """
   createProductImageUploadUrl(
     """
-    이미지 MIME 타입 (image/jpeg|png|webp|gif)
+    이미지 MIME 타입 (image/jpeg|png|webp|gif|avif)
     """
     contentType: String!
   ): ProductImageUploadUrlOutput!
@@ -1122,6 +1122,10 @@ type ProductOutput {
   categoryName: String
   commentSummary: ProductCommentSummary
   consumptionDate: DateTime
+  """
+  상품 설명(유저 등록 상품)
+  """
+  content: String
   detailUrl: String
   dislikeCount: Int!
   distributionDate: DateTime

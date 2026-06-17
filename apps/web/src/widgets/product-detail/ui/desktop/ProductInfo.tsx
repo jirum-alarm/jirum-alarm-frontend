@@ -118,6 +118,14 @@ export default function ProductInfo({
             <span className="text-gray-500">{productStats.likeCount}개</span>
           </div>
         </div>
+        {product.content && (
+          <div className="my-6">
+            <h2 className="mb-2 text-sm font-medium text-gray-400">상품 설명</h2>
+            <p className="text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
+              {product.content}
+            </p>
+          </div>
+        )}
       </div>
       <div>
         <div className="flex w-full gap-x-4">

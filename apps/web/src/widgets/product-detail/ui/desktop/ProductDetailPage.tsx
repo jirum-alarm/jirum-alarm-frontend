@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { ProductInfoFragment } from '@/shared/api/gql/graphql';
+import { ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
@@ -52,9 +52,12 @@ export default async function DesktopProductDetailPage({
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
                 <HotdealScore productId={productId} />
               </Suspense>
-              <Suspense fallback={<div className="h-[400px] opacity-0" />}>
-                <CommunityReaction productId={productId} />
-              </Suspense>
+              {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김 */}
+              {initialProduct?.uploaderType !== UploaderType.User && (
+                <Suspense fallback={<div className="h-[400px] opacity-0" />}>
+                  <CommunityReaction productId={productId} />
+                </Suspense>
+              )}
             </div>
           </div>
 
