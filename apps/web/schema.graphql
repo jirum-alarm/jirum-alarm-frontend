@@ -581,6 +581,15 @@ type Mutation {
     weight: Int! = 1
   ): Ad!
   """
+  유저 등록 상품 썸네일 업로드용 presigned URL 발급
+  """
+  createProductImageUploadUrl(
+    """
+    이미지 MIME 타입 (image/jpeg|png|webp|gif)
+    """
+    contentType: String!
+  ): ProductImageUploadUrlOutput!
+  """
   유저가 직접 핫딜 상품 등록 (등록된 productId 반환)
   """
   createUserProduct(
@@ -962,6 +971,17 @@ type ProductHotDealIndex {
   productId: Int!
   score: Int
   visualConfig: PriceVisualConfig
+}
+
+type ProductImageUploadUrlOutput {
+  """
+  업로드 완료 후 상품 thumbnail 로 쓸 CDN URL
+  """
+  imageUrl: String!
+  """
+  이미지를 PUT 업로드할 presigned URL (1시간 만료)
+  """
+  uploadUrl: String!
 }
 
 input ProductImpressionInput {

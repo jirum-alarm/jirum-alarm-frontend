@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { Suspense } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
 import { getAccessToken } from '@/app/actions/token';
@@ -17,10 +16,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function ProductWritePage() {
+export default async function ProductNewPage() {
   const token = await getAccessToken();
   // 로그인 후 등록 페이지로 복귀하도록 rtnUrl 부착 (로그인 뷰모델이 rtnUrl 쿼리를 읽어 복귀).
-  if (!token) redirect(`${PAGE.LOGIN}?rtnUrl=${encodeURIComponent(PAGE.PRODUCT_WRITE)}`);
+  if (!token) redirect(`${PAGE.LOGIN}?rtnUrl=${encodeURIComponent(PAGE.PRODUCT_NEW)}`);
 
   const { isMobile } = await checkDevice();
 
@@ -36,9 +35,7 @@ export default async function ProductWritePage() {
         }
       >
         <div className="px-5 pt-4">
-          <Suspense>
-            <ProductCreateForm />
-          </Suspense>
+          <ProductCreateForm />
         </div>
       </BasicLayout>
     );
@@ -48,9 +45,7 @@ export default async function ProductWritePage() {
     <div className="max-w-layout-max mx-auto px-5 py-8">
       <div className="mx-auto w-full max-w-2xl">
         <h1 className="mb-6 text-xl font-bold text-gray-900">핫딜 등록</h1>
-        <Suspense>
-          <ProductCreateForm />
-        </Suspense>
+        <ProductCreateForm />
       </div>
     </div>
   );

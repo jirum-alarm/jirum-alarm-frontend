@@ -343,6 +343,15 @@ export const MutationCreateUserProduct = gql`
   }
 `;
 
+export const MutationCreateProductImageUploadUrl = gql`
+  mutation CreateProductImageUploadUrl($contentType: String!) {
+    createProductImageUploadUrl(contentType: $contentType) {
+      uploadUrl
+      imageUrl
+    }
+  }
+`;
+
 export const MutationReportExpiredProduct = gql`
   mutation MutationReportExpiredProduct($productId: Int!) {
     reportExpiredProduct(productId: $productId)

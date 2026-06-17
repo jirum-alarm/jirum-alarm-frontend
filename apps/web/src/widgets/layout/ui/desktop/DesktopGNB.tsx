@@ -85,7 +85,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
         </nav>
         <div className="flex items-center gap-x-5">
           <Link
-            href={PAGE.PRODUCT_WRITE}
+            href={PAGE.PRODUCT_NEW}
             className={cn(
               'rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors duration-300',
               {

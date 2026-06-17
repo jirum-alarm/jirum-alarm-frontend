@@ -486,6 +486,8 @@ export type Mutation = {
   /** 썸네일 단건 수집 */
   collectThumbnail: Scalars['Boolean']['output'];
   createAd: Ad;
+  /** 유저 등록 상품 썸네일 업로드용 presigned URL 발급 */
+  createProductImageUploadUrl: ProductImageUploadUrlOutput;
   /** 유저가 직접 핫딜 상품 등록 (등록된 productId 반환) */
   createUserProduct: Scalars['Int']['output'];
   deleteAd: Scalars['Boolean']['output'];
@@ -707,6 +709,10 @@ export type MutationCreateAdArgs = {
   startAt: Scalars['DateTime']['input'];
   title?: InputMaybe<Scalars['String']['input']>;
   weight?: Scalars['Int']['input'];
+};
+
+export type MutationCreateProductImageUploadUrlArgs = {
+  contentType: Scalars['String']['input'];
 };
 
 export type MutationCreateUserProductArgs = {
@@ -1040,6 +1046,14 @@ export type ProductHotDealIndex = {
   productId: Scalars['Int']['output'];
   score?: Maybe<Scalars['Int']['output']>;
   visualConfig?: Maybe<PriceVisualConfig>;
+};
+
+export type ProductImageUploadUrlOutput = {
+  __typename?: 'ProductImageUploadUrlOutput';
+  /** 업로드 완료 후 상품 thumbnail 로 쓸 CDN URL */
+  imageUrl: Scalars['String']['output'];
+  /** 이미지를 PUT 업로드할 presigned URL (1시간 만료) */
+  uploadUrl: Scalars['String']['output'];
 };
 
 export type ProductImpressionInput = {
@@ -2804,6 +2818,19 @@ export type CreateUserProductMutationVariables = Exact<{
 
 export type CreateUserProductMutation = { __typename?: 'Mutation'; createUserProduct: number };
 
+export type CreateProductImageUploadUrlMutationVariables = Exact<{
+  contentType: Scalars['String']['input'];
+}>;
+
+export type CreateProductImageUploadUrlMutation = {
+  __typename?: 'Mutation';
+  createProductImageUploadUrl: {
+    __typename?: 'ProductImageUploadUrlOutput';
+    uploadUrl: string;
+    imageUrl: string;
+  };
+};
+
 export type MutationReportExpiredProductMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -3771,6 +3798,17 @@ export const CreateUserProductDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   CreateUserProductMutation,
   CreateUserProductMutationVariables
+>;
+export const CreateProductImageUploadUrlDocument = new TypedDocumentString(`
+    mutation CreateProductImageUploadUrl($contentType: String!) {
+  createProductImageUploadUrl(contentType: $contentType) {
+    uploadUrl
+    imageUrl
+  }
+}
+    `) as unknown as TypedDocumentString<
+  CreateProductImageUploadUrlMutation,
+  CreateProductImageUploadUrlMutationVariables
 >;
 export const MutationReportExpiredProductDocument = new TypedDocumentString(`
     mutation MutationReportExpiredProduct($productId: Int!) {

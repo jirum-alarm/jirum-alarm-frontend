@@ -1,13 +1,13 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
-
+import { CATEGORIES } from '@/shared/config/categories';
+import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
 import Input from '@/shared/ui/common/Input';
 
-import { CategoryQueries } from '@/entities/category';
-
 import useProductCreateForm from '../model/useProductCreateForm';
+
+import ThumbnailUploader from './ThumbnailUploader';
 
 export default function ProductCreateForm() {
   const {
@@ -20,7 +20,8 @@ export default function ProductCreateForm() {
     setPrice,
     thumbnail,
     setThumbnail,
-    thumbnailError,
+    uploadThumbnail,
+    isUploadingThumbnail,
     content,
     setContent,
     categoryId,
@@ -29,9 +30,6 @@ export default function ProductCreateForm() {
     isSubmitting,
     canSubmit,
   } = useProductCreateForm();
-
-  const { data } = useSuspenseQuery(CategoryQueries.categories());
-  const categories = data.categories;
 
   // 숫자 상태를 천 단위 콤마로 표시 (입력은 모델 훅이 숫자만 남김).
   const priceDisplay = price ? Number(price).toLocaleString() : '';
@@ -42,79 +40,110 @@ export default function ProductCreateForm() {
         e.preventDefault();
         if (canSubmit) submit();
       }}
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-6"
     >
-      <Input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="상품명을 입력해 주세요"
-        maxLength={255}
-      />
+      <Field label="상품명" required>
+        <Input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="상품명을 입력해 주세요"
+          maxLength={255}
+        />
+      </Field>
 
-      <Input
-        type="url"
-        inputMode="url"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        placeholder="구매 링크(URL)를 입력해 주세요"
-        maxLength={2048}
-        error={urlError}
-        helperText={
-          urlError
-            ? '올바른 링크가 아니에요. http:// 또는 https:// 로 시작하는 주소여야 해요.'
-            : 'http:// 또는 https:// 로 시작하는 구매 페이지 주소를 입력해 주세요.'
-        }
-      />
+      <Field label="구매 링크" required>
+        <Input
+          type="url"
+          inputMode="url"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="구매 페이지 주소를 붙여넣어 주세요"
+          maxLength={2048}
+          error={urlError}
+          helperText={urlError ? 'http:// 또는 https:// 로 시작해야 해요.' : undefined}
+        />
+      </Field>
 
-      <select
-        value={categoryId ?? ''}
-        onChange={(e) => setCategoryId(e.target.value ? Number(e.target.value) : null)}
-        className="w-full border-b border-gray-100 bg-white pb-3 text-base text-gray-900 outline-none"
-      >
-        <option value="" disabled>
-          카테고리를 선택해 주세요
-        </option>
-        {categories.map((category) => (
-          <option key={category.id} value={category.id}>
-            {category.name}
-          </option>
-        ))}
-      </select>
+      <Field label="카테고리" required>
+        <ul className="grid grid-cols-3 gap-[10px]">
+          {CATEGORIES.map((category) => {
+            const selected = categoryId === category.value;
+            const Icon = selected ? category.iconComponent : category.offIconComponent;
+            return (
+              <li key={category.value}>
+                <button
+                  type="button"
+                  onClick={() => setCategoryId(category.value)}
+                  aria-pressed={selected}
+                  className={cn(
+                    'mouse-hover:hover:border-primary-500 inline-flex h-22 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-gray-300',
+                    {
+                      'border-primary-500 bg-primary-50': selected,
+                    },
+                  )}
+                >
+                  <Icon width={36} height={36} />
+                  <span className={cn('text-sm text-gray-700', { 'text-primary-700': selected })}>
+                    {category.text}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </Field>
 
-      <Input
-        inputMode="numeric"
-        value={priceDisplay}
-        onChange={(e) => setPrice(e.target.value)}
-        placeholder="가격 (선택, 원)"
-        helperText="숫자만 입력하면 원화로 표시됩니다."
-      />
+      <Field label="가격">
+        <Input
+          inputMode="numeric"
+          value={priceDisplay}
+          onChange={(e) => setPrice(e.target.value)}
+          placeholder="가격을 입력해 주세요 (원)"
+        />
+      </Field>
 
-      <Input
-        type="url"
-        inputMode="url"
-        value={thumbnail}
-        onChange={(e) => setThumbnail(e.target.value)}
-        placeholder="썸네일 이미지 URL (선택)"
-        maxLength={2048}
-        error={thumbnailError}
-        helperText={
-          thumbnailError
-            ? '올바른 이미지 링크가 아니에요. http:// 또는 https:// 로 시작해야 해요.'
-            : '이미지 주소가 있으면 입력해 주세요. (선택)'
-        }
-      />
+      <Field label="썸네일 이미지">
+        <ThumbnailUploader
+          thumbnail={thumbnail}
+          isUploading={isUploadingThumbnail}
+          onUpload={uploadThumbnail}
+          onRemove={() => setThumbnail('')}
+        />
+      </Field>
 
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="상품 설명을 입력해 주세요 (선택)"
-        className="min-h-[160px] resize-none text-sm leading-relaxed text-gray-900 placeholder-gray-400 outline-none"
-        maxLength={5000}
-      />
+      <Field label="상품 설명">
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="상품에 대한 설명을 자유롭게 적어 주세요"
+          className="min-h-[160px] w-full resize-none rounded-lg border border-gray-300 p-3 text-sm leading-relaxed text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900"
+          maxLength={5000}
+        />
+      </Field>
 
       <Button type="submit" disabled={!canSubmit} className="mt-2 w-full">
         {isSubmitting ? '등록 중...' : '핫딜 등록'}
       </Button>
     </form>
+  );
+}
+
+function Field({
+  label,
+  required,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="text-sm font-medium text-gray-700">
+        {label}
+        {required && <span className="text-error-500 ml-0.5">*</span>}
+      </label>
+      {children}
+    </div>
   );
 }

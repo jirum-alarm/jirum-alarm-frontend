@@ -19,7 +19,9 @@ export default function useProductCreateForm() {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [price, setPrice] = useState('');
+  // 업로드 완료된 썸네일 CDN URL (이미지 업로드 결과).
   const [thumbnail, setThumbnail] = useState('');
+  const [isUploadingThumbnail, setIsUploadingThumbnail] = useState(false);
   const [content, setContent] = useState('');
   const [categoryId, setCategoryId] = useState<number | null>(null);
 
@@ -29,9 +31,25 @@ export default function useProductCreateForm() {
     setPrice(digitsOnly);
   };
 
+  // 이미지 파일을 S3 에 업로드하고 thumbnail 을 업로드된 CDN URL 로 세팅.
+  const uploadThumbnail = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      toast('이미지 파일만 업로드할 수 있어요.');
+      return;
+    }
+    setIsUploadingThumbnail(true);
+    try {
+      const imageUrl = await ProductService.uploadProductImage(file);
+      setThumbnail(imageUrl);
+    } catch {
+      toast('이미지 업로드에 실패했어요.');
+    } finally {
+      setIsUploadingThumbnail(false);
+    }
+  };
+
   // 선택 입력이라 비어 있으면 에러 아님. 값이 있는데 형식이 틀리면 에러.
   const urlError = url.trim().length > 0 && !isHttpUrl(url);
-  const thumbnailError = thumbnail.trim().length > 0 && !isHttpUrl(thumbnail);
 
   const { mutate: submit, isPending: isSubmitting } = useMutation({
     mutationFn: async () => {
@@ -60,7 +78,7 @@ export default function useProductCreateForm() {
     title.trim().length > 0 &&
     isHttpUrl(url) &&
     categoryId !== null &&
-    !thumbnailError &&
+    !isUploadingThumbnail &&
     !isSubmitting;
 
   return {
@@ -73,7 +91,8 @@ export default function useProductCreateForm() {
     setPrice: handlePriceChange,
     thumbnail,
     setThumbnail,
-    thumbnailError,
+    uploadThumbnail,
+    isUploadingThumbnail,
     content,
     setContent,
     categoryId,
