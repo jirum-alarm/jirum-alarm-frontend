@@ -65,3 +65,89 @@
   /* shadow */
   --shadow-small: 0px 2px 12px 0px rgba(0, 0, 0, 0.08);
 }
+
+/* typography (Figma 스펙) — class 하나로 size/leading/weight 묶음 */
+@utility typography-headline-28sb {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  line-height: 38px;
+  font-weight: 600;
+}
+@utility typography-headline-24sb {
+  font-family: var(--font-sans);
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: 600;
+}
+@utility typography-headline-20sb {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  line-height: 32px;
+  font-weight: 600;
+}
+@utility typography-headline-20m {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  line-height: 32px;
+  font-weight: 500;
+}
+@utility typography-title-18b {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 32px;
+  font-weight: 700;
+}
+@utility typography-title-16sb {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+@utility typography-title-16m {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+}
+@utility typography-title-16r {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+@utility typography-body-14sb {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+@utility typography-body-14m {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+@utility typography-body-14r {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+@utility typography-caption-13m {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+}
+@utility typography-caption-13r {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+}
+@utility typography-caption-12m {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+}
