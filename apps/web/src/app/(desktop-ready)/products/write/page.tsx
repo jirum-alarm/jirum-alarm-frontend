@@ -19,7 +19,8 @@ export const metadata: Metadata = {
 
 export default async function ProductWritePage() {
   const token = await getAccessToken();
-  if (!token) redirect(PAGE.LOGIN);
+  // 로그인 후 등록 페이지로 복귀하도록 rtnUrl 부착 (로그인 뷰모델이 rtnUrl 쿼리를 읽어 복귀).
+  if (!token) redirect(`${PAGE.LOGIN}?rtnUrl=${encodeURIComponent(PAGE.PRODUCT_WRITE)}`);
 
   const { isMobile } = await checkDevice();
 
@@ -34,19 +35,23 @@ export default async function ProductWritePage() {
           </header>
         }
       >
-        <Suspense>
-          <ProductCreateForm />
-        </Suspense>
+        <div className="px-5 pt-4">
+          <Suspense>
+            <ProductCreateForm />
+          </Suspense>
+        </div>
       </BasicLayout>
     );
   }
 
   return (
-    <div className="max-w-2xl py-8">
-      <h1 className="mb-6 text-xl font-bold text-gray-900">핫딜 등록</h1>
-      <Suspense>
-        <ProductCreateForm />
-      </Suspense>
+    <div className="max-w-layout-max mx-auto px-5 py-8">
+      <div className="mx-auto w-full max-w-2xl">
+        <h1 className="mb-6 text-xl font-bold text-gray-900">핫딜 등록</h1>
+        <Suspense>
+          <ProductCreateForm />
+        </Suspense>
+      </div>
     </div>
   );
 }
