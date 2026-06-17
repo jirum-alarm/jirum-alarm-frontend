@@ -46,7 +46,7 @@ export default function RecommendButton({ productId }: { productId: number }) {
       variant={'outlined'}
       color={'secondary'}
       className={cn(
-        `flex h-[36px] items-center justify-center gap-x-1 rounded-full bg-white px-3.5 text-gray-700`,
+        `bg-surface-default flex h-[36px] items-center justify-center gap-x-1 rounded-full px-3.5 text-gray-700`,
         {
           'border-secondary-500 text-secondary-700 border font-semibold':
             productStats?.isMyLike !== null && productStats?.isMyLike,

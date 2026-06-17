@@ -32,7 +32,7 @@ export default function SearchAutocompleteDropdown({
   return (
     <ul
       role="listbox"
-      className="border-border-default absolute top-full right-0 left-0 z-[60] mt-1 max-h-80 overflow-y-auto rounded-sm border bg-white shadow-md"
+      className="border-border-default bg-surface-default absolute top-full right-0 left-0 z-[60] mt-1 max-h-80 overflow-y-auto rounded-sm border shadow-md"
     >
       {suggestions.map((s, i) => {
         const isActive = i === activeIndex;
@@ -55,7 +55,7 @@ export default function SearchAutocompleteDropdown({
             onMouseEnter={() => onHover(i)}
             className={cn(
               'flex cursor-pointer items-center gap-2 px-3 py-2 text-sm',
-              isActive ? 'bg-gray-100' : 'hover:bg-gray-50',
+              isActive ? 'bg-surface-muted' : 'hover:bg-surface-subtle',
             )}
           >
             <Search color="#98A2B3" className="shrink-0" />

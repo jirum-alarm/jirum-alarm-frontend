@@ -22,7 +22,7 @@ export default function CarouselProductCard({
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} className="pc:w-[192px] inline-block w-[120px]">
       <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
-        <div className="pc:h-[192px] border-border-default relative aspect-square h-[120px] overflow-hidden rounded-lg border bg-gray-50">
+        <div className="pc:h-[192px] border-border-default bg-surface-subtle relative aspect-square h-[120px] overflow-hidden rounded-lg border">
           <ProductThumbnail
             src={product?.thumbnail ?? ''}
             title={product.title}
@@ -33,7 +33,7 @@ export default function CarouselProductCard({
             priority={priority}
           />
           {product.isEnd ? (
-            <div className="text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">
+            <div className="text-semibold bg-surface-default absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg px-2 text-xs text-gray-700">
               판매종료
             </div>
           ) : (

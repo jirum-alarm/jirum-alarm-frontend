@@ -82,7 +82,7 @@ export default function ProductTagModal({
   return (
     <>
       {selected ? (
-        <div className="flex items-center gap-x-3 rounded-xl bg-gray-50 p-3">
+        <div className="bg-surface-subtle flex items-center gap-x-3 rounded-xl p-3">
           {selected.thumbnail && (
             <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200">
               <ProductThumbnail
@@ -137,7 +137,7 @@ export default function ProductTagModal({
             <Drawer.Title>상품 태그</Drawer.Title>
           </VisuallyHidden.Root>
           <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-          <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 bottom-0 z-[9999] mx-auto flex h-[88vh] flex-col bg-white outline-hidden">
+          <Drawer.Content className="max-w-mobile-max rounded-t-5 bg-surface-default fixed inset-x-0 bottom-0 z-[9999] mx-auto flex h-[88vh] flex-col outline-hidden">
             {/* 모달 헤더 */}
             <div className="flex items-center justify-between px-5 py-4">
               <h2 className="typography-title-16sb text-gray-900">상품 태그</h2>
@@ -151,7 +151,7 @@ export default function ProductTagModal({
 
             {/* 검색바 */}
             <div className="px-5 pb-4">
-              <div className="flex items-center gap-x-2 rounded-xl bg-gray-100 px-3 py-2.5">
+              <div className="bg-surface-muted flex items-center gap-x-2 rounded-xl px-3 py-2.5">
                 <svg
                   width="16"
                   height="16"
@@ -213,7 +213,7 @@ export default function ProductTagModal({
                           onClick={() => handleSelectFromSearch(p)}
                           className="flex flex-col text-left transition-transform active:scale-[0.98]"
                         >
-                          <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-gray-100">
+                          <div className="bg-surface-muted relative aspect-square w-full overflow-hidden rounded-xl">
                             {p.thumbnail && (
                               <ProductThumbnail
                                 src={p.thumbnail}
@@ -250,7 +250,7 @@ export default function ProductTagModal({
                             onClick={() => handleSelect(p)}
                             className="flex flex-col text-left transition-transform active:scale-[0.98]"
                           >
-                            <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-gray-100">
+                            <div className="bg-surface-muted relative aspect-square w-full overflow-hidden rounded-xl">
                               {p.thumbnail && (
                                 <ProductThumbnail
                                   src={p.thumbnail}

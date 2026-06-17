@@ -17,7 +17,9 @@ const ProductReport = ({ productId }: { productId: number }) => {
 
   return (
     <div
-      className={cn(`flex h-14 items-center justify-between rounded-lg border bg-white p-[16px]`)}
+      className={cn(
+        `bg-surface-default flex h-14 items-center justify-between rounded-lg border p-[16px]`,
+      )}
     >
       {product.isMyReported ? (
         <p className="flex items-center gap-2 text-sm text-gray-600">
@@ -71,7 +73,7 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit rounded-t-[20px] bg-white outline-hidden">
+        <Drawer.Content className="max-w-mobile-max bg-surface-default fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit rounded-t-[20px] outline-hidden">
           <div className="flex flex-col items-center">
             <Drawer.Title asChild>
               <h2 className="pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>

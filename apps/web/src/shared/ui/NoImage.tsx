@@ -17,7 +17,7 @@ export default function NoImage({
   const Icon = categoryId ? (CATEGORY_MAP[categoryId]?.iconComponent ?? IllustEmpty) : IllustEmpty;
 
   return (
-    <div className="flex h-full items-center justify-center bg-gray-50">
+    <div className="bg-surface-subtle flex h-full items-center justify-center">
       <Icon className={ICON_SIZE[type]} />
     </div>
   );

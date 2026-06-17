@@ -44,12 +44,12 @@ const PreviewCard = ({ product, rank, isActive, priority }: PreviewCardProps) =>
   <div className="w-[240px] shrink-0 pb-5">
     <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
       <div
-        className={`h-[340px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300 ${
+        className={`bg-surface-default h-[340px] w-full origin-center overflow-hidden rounded-lg shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300 ${
           isActive ? 'scale-100' : 'scale-90'
         }`}
       >
-        <div className="relative h-[240px] w-full bg-gray-50">
-          <div className="text-primary-500 typography-body-14m absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900">
+        <div className="bg-surface-subtle relative h-[240px] w-full">
+          <div className="text-primary-500 typography-body-14m bg-surface-inverse absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg">
             {rank}
           </div>
           <ProductThumbnail
@@ -90,20 +90,20 @@ export const RankingSkeleton = () => {
 const SkeletonCard = ({ isActive }: { isActive: boolean }) => (
   <div className="w-[240px] shrink-0 pb-5">
     <div
-      className={`h-[340px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300 ${
+      className={`bg-surface-default h-[340px] w-full origin-center overflow-hidden rounded-lg shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300 ${
         isActive ? 'scale-100' : 'scale-90'
       }`}
     >
-      <div className="relative h-[240px] w-full bg-gray-50">
-        <div className="absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900">
+      <div className="bg-surface-subtle relative h-[240px] w-full">
+        <div className="bg-surface-inverse absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg">
           <div className="h-3 w-2 animate-pulse rounded-sm bg-gray-600" />
         </div>
-        <div className="h-full w-full animate-pulse bg-gray-100" />
+        <div className="bg-surface-muted h-full w-full animate-pulse" />
       </div>
       <div className="p-3 pb-0">
-        <div className="mb-2 h-10 w-full animate-pulse rounded-sm bg-gray-100" />
+        <div className="bg-surface-muted mb-2 h-10 w-full animate-pulse rounded-sm" />
         <div className="pt-2">
-          <div className="h-6 w-1/2 animate-pulse rounded-sm bg-gray-100" />
+          <div className="bg-surface-muted h-6 w-1/2 animate-pulse rounded-sm" />
         </div>
       </div>
     </div>

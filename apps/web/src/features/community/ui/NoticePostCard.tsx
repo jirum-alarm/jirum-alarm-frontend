@@ -23,10 +23,10 @@ export default function NoticePostCard({
   return (
     <Link
       href={{ pathname: `${PAGE.COMMUNITY}/${post.id}`, query: { tab } }}
-      className="border-border-subtle flex flex-col border-b px-5 py-4 transition-transform hover:bg-gray-50 active:scale-[0.98] active:bg-gray-50"
+      className="border-border-subtle hover:bg-surface-subtle active:bg-surface-subtle flex flex-col border-b px-5 py-4 transition-transform active:scale-[0.98]"
     >
       <div className="flex items-center gap-x-2">
-        <span className="bg-primary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">
+        <span className="bg-surface-brand rounded px-1.5 py-0.5 text-xs font-semibold text-white">
           지름알림
         </span>
         <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>

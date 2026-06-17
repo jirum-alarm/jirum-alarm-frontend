@@ -71,7 +71,7 @@ function ExpiredProductRecommendations({
 
   return (
     <div className="mb-10">
-      <div className="typography-body-14m mb-6 flex h-11 w-full items-center justify-center bg-gray-100 text-gray-800">
+      <div className="typography-body-14m bg-surface-muted mb-6 flex h-11 w-full items-center justify-center text-gray-800">
         이 상품 판매종료 되었을 수 있어요!
       </div>
 

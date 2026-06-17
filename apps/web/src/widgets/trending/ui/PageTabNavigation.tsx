@@ -13,7 +13,7 @@ const PageTabNavigation = () => {
   const isRanking = pathname.includes('/ranking');
 
   return (
-    <div className="border-border-default w-full border-b bg-white">
+    <div className="border-border-default bg-surface-default w-full border-b">
       <div className="flex">
         <Link href="/trending/live" replace={true} className="relative flex-1 text-center">
           <motion.div
@@ -25,7 +25,9 @@ const PageTabNavigation = () => {
             transition={{ duration: 0.1 }}
           >
             실시간
-            {isLive && <div className="absolute right-0 bottom-0 left-0 h-0.5 bg-gray-900" />}
+            {isLive && (
+              <div className="bg-surface-inverse absolute right-0 bottom-0 left-0 h-0.5" />
+            )}
           </motion.div>
         </Link>
         <Link href="/trending/ranking" replace={true} className="relative flex-1 text-center">
@@ -38,7 +40,9 @@ const PageTabNavigation = () => {
             transition={{ duration: 0.1 }}
           >
             랭킹
-            {isRanking && <div className="absolute right-0 bottom-0 left-0 h-0.5 bg-gray-900" />}
+            {isRanking && (
+              <div className="bg-surface-inverse absolute right-0 bottom-0 left-0 h-0.5" />
+            )}
           </motion.div>
         </Link>
       </div>

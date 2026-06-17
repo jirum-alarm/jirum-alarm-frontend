@@ -19,7 +19,7 @@ export default function BottomCTA({
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
 
   return (
-    <div className="max-w-mobile-max pb-safe-bottom fixed bottom-0 left-1/2 z-50 mx-auto w-full -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white">
+    <div className="max-w-mobile-max pb-safe-bottom bg-surface-default fixed bottom-0 left-1/2 z-50 mx-auto w-full -translate-x-1/2 border-t border-t-[#D0D5DD]">
       <div className="flex w-full items-center gap-x-4 px-5 py-2">
         <TopButton />
         <div className="flex h-[48px] items-center">

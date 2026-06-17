@@ -61,7 +61,7 @@ export default function PostForm({
       <div className="border-border-subtle border-t px-5 py-4">
         {isEdit ? (
           existingTaggedProduct ? (
-            <div className="flex items-center gap-x-3 rounded-xl bg-gray-50 p-3">
+            <div className="bg-surface-subtle flex items-center gap-x-3 rounded-xl p-3">
               {existingTaggedProduct.thumbnail && (
                 <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200">
                   <ProductThumbnail
@@ -115,7 +115,7 @@ export default function PostForm({
         <button
           type="submit"
           disabled={!canSubmit}
-          className="bg-primary-500 typography-body-14sb w-full rounded-xl py-3.5 text-white transition-opacity disabled:opacity-40"
+          className="bg-surface-brand typography-body-14sb w-full rounded-xl py-3.5 text-white transition-opacity disabled:opacity-40"
         >
           {isSubmitting ? '처리 중...' : isEdit ? '수정 완료' : '글 등록하기'}
         </button>

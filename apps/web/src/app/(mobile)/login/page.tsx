@@ -159,7 +159,7 @@ const Login = () => {
         </div>
 
         {device.isMobileBrowser && isHydrated && (
-          <div className="bottom-safe-bottom fixed right-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between bg-white">
+          <div className="bottom-safe-bottom bg-surface-default fixed right-0 left-0 m-auto flex w-full max-w-[600px] flex-col justify-between">
             <AppDownloadBanner device={device} />
           </div>
         )}

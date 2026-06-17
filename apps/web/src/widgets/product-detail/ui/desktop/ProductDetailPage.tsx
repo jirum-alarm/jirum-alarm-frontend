@@ -90,5 +90,5 @@ export default async function DesktopProductDetailPage({
 }
 
 function Hr({ className }: { className?: string }) {
-  return <div className={cn('h-[8px] bg-gray-100', className)} />;
+  return <div className={cn('bg-surface-muted h-[8px]', className)} />;
 }

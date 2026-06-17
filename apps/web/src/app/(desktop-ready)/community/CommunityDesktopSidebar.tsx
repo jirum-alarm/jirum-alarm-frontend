@@ -39,7 +39,7 @@ export default async function CommunityDesktopSidebar() {
             href={`/products/${product.id}`}
             className="flex flex-col hover:opacity-90"
           >
-            <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-100">
+            <div className="bg-surface-muted relative aspect-square overflow-hidden rounded-xl">
               {product.thumbnail && (
                 <ProductThumbnail
                   src={product.thumbnail}

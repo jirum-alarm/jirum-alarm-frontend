@@ -23,7 +23,7 @@ const SUMMARY_DATA: {
 
 export function Reactions({ commentSummary }: { commentSummary: ProductCommentSummary }) {
   return (
-    <section className="rounded-lg bg-gray-50 p-4">
+    <section className="bg-surface-subtle rounded-lg p-4">
       <ul className="space-y-4">
         {commentSummary &&
           SUMMARY_DATA.map((item) => {

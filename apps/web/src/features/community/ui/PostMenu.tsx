@@ -58,7 +58,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
             <Drawer.Title>게시글 메뉴</Drawer.Title>
           </VisuallyHidden.Root>
           <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-          <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
+          <Drawer.Content className="max-w-mobile-max rounded-t-5 bg-surface-default fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit outline-hidden">
             <div className="flex flex-col items-center pt-4 pb-8">
               {isMyPost ? (
                 <>
@@ -113,7 +113,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
               </Description>
             </Header>
             <Footer>
-              <Cancel className="typography-body-14m flex h-11 flex-1 items-center justify-center rounded-lg bg-gray-100 text-gray-700">
+              <Cancel className="typography-body-14m bg-surface-muted flex h-11 flex-1 items-center justify-center rounded-lg text-gray-700">
                 취소
               </Cancel>
               <Action

@@ -34,8 +34,8 @@ interface PreviewCardProps {
 
 const PreviewCard = ({ product, rank, priority }: PreviewCardProps) => (
   <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
-    <div className="col-span-1 overflow-hidden rounded-lg border bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)]">
-      <div className="relative aspect-square w-full bg-gray-50">
+    <div className="bg-surface-default col-span-1 overflow-hidden rounded-lg border shadow-[0_2px_12px_rgba(0,0,0,0.08)]">
+      <div className="bg-surface-subtle relative aspect-square w-full">
         <div className="typography-body-14m absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-600/80 text-white">
           {rank}
         </div>
@@ -73,17 +73,17 @@ export const RankingSkeleton = () => {
 
 const SkeletonCard = () => {
   return (
-    <div className="col-span-1 overflow-hidden rounded-lg border bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)]">
-      <div className="relative aspect-square w-full bg-gray-50">
+    <div className="bg-surface-default col-span-1 overflow-hidden rounded-lg border shadow-[0_2px_12px_rgba(0,0,0,0.08)]">
+      <div className="bg-surface-subtle relative aspect-square w-full">
         <div className="absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-600/80">
           <div className="h-3 w-2 animate-pulse rounded-sm bg-gray-400" />
         </div>
-        <div className="h-full w-full animate-pulse bg-gray-100" />
+        <div className="bg-surface-muted h-full w-full animate-pulse" />
       </div>
       <div className="h-[110px] p-3 pb-0">
-        <div className="mb-2 h-10 w-full animate-pulse rounded-sm bg-gray-100" />
+        <div className="bg-surface-muted mb-2 h-10 w-full animate-pulse rounded-sm" />
         <div className="pt-0.5">
-          <div className="h-6 w-1/2 animate-pulse rounded-sm bg-gray-100" />
+          <div className="bg-surface-muted h-6 w-1/2 animate-pulse rounded-sm" />
         </div>
       </div>
     </div>

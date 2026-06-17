@@ -34,7 +34,7 @@ const CurationContainer = ({ section }: CurationContainerProps) => {
   return (
     <>
       {section.tabs && (
-        <div className="pc:flex pc:justify-center pc:py-3 sticky top-14 z-40 w-full bg-white px-5 py-2">
+        <div className="pc:flex pc:justify-center pc:py-3 bg-surface-default sticky top-14 z-40 w-full px-5 py-2">
           <div className="no-scrollbar flex gap-x-2 overflow-x-auto">
             {section.tabs.map((tab) => (
               <button
@@ -43,8 +43,8 @@ const CurationContainer = ({ section }: CurationContainerProps) => {
                 className={cn(
                   'typography-body-14m rounded-full px-4 py-2 whitespace-nowrap transition-colors',
                   activeTabId === tab.id
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
+                    ? 'bg-surface-inverse text-white'
+                    : 'bg-surface-muted text-gray-600 hover:bg-gray-200',
                 )}
               >
                 {tab.label}

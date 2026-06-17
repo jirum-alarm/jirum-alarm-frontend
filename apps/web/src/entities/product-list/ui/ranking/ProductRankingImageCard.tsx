@@ -27,7 +27,7 @@ export default function ProductRankingImageCard({
     <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
       <motion.div
         className={cn(
-          'pc:h-auto pc:scale-100 pc:border h-[340px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',
+          'pc:h-auto pc:scale-100 pc:border bg-surface-default h-[340px] w-full origin-center scale-90 overflow-hidden rounded-lg shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',
           activeIndex === index && 'scale-100',
         )}
       >
@@ -36,8 +36,8 @@ export default function ProductRankingImageCard({
           whileTap={{ scale: 0.96 }}
           transition={{ duration: 0.1 }}
         >
-          <div className="pc:aspect-square pc:h-auto relative h-[240px] w-full bg-gray-50">
-            <div className="text-primary-500 pc:text-white pc:bg-gray-600/80 typography-body-14m absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900">
+          <div className="pc:aspect-square pc:h-auto bg-surface-subtle relative h-[240px] w-full">
+            <div className="text-primary-500 pc:text-white pc:bg-gray-600/80 typography-body-14m bg-surface-inverse absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg">
               {rank ?? index + 1}
             </div>
             <ProductThumbnail

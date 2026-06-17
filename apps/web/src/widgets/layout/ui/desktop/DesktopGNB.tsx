@@ -54,10 +54,10 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   return (
     <div
       className={cn(
-        'fixed top-0 z-50 w-full min-w-5xl border-b bg-white shadow-xs transition-all duration-300',
+        'bg-surface-default fixed top-0 z-50 w-full min-w-5xl border-b shadow-xs transition-all duration-300',
         {
-          'border-b-border-default bg-white': !isInHomeHero,
-          'border-b-gray-700 bg-gray-900': isInHomeHero,
+          'border-b-border-default bg-surface-default': !isInHomeHero,
+          'bg-surface-inverse border-b-gray-700': isInHomeHero,
         },
       )}
     >

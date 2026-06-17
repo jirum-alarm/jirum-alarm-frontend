@@ -6,7 +6,7 @@ export const optionVaraint = cva(['w-full', 'cursor-pointer'], {
       md: ['py-3', 'px-5', 'text-base', 'h-full'],
     },
     color: {
-      black: ['text-gray-900', 'hover:bg-gray-100'],
+      black: ['text-gray-900', 'hover:bg-surface-muted'],
     },
     active: {
       true: [''],
@@ -16,7 +16,7 @@ export const optionVaraint = cva(['w-full', 'cursor-pointer'], {
     {
       color: ['black'],
       active: [true],
-      class: 'bg-gray-100',
+      class: 'bg-surface-muted',
     },
   ],
   defaultVariants: {

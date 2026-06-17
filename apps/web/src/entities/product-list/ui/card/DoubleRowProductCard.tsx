@@ -16,7 +16,7 @@ export default function DoubleRowProductCard({ product }: { product: ProductCard
     <Link href={PAGE.DETAIL + '/' + product.id}>
       <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="flex w-full flex-row items-start gap-2">
-          <div className="border-border-default relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg border bg-gray-50">
+          <div className="border-border-default bg-surface-subtle relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg border">
             <ProductThumbnail
               src={product?.thumbnail ?? ''}
               title={product.title}
@@ -26,7 +26,7 @@ export default function DoubleRowProductCard({ product }: { product: ProductCard
               sizes="120px"
             />
             {product.isEnd && (
-              <div className="text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">
+              <div className="text-semibold bg-surface-default absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg px-2 text-xs text-gray-700">
                 판매종료
               </div>
             )}

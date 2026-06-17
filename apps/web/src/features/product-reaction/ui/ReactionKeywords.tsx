@@ -26,7 +26,7 @@ function ReactionKeywords({ productId }: { productId: number }) {
         <li
           key={item.name}
           className={cn([
-            'flex gap-x-1 rounded-[40px] border bg-white px-3.5 py-2',
+            'bg-surface-default flex gap-x-1 rounded-[40px] border px-3.5 py-2',
             {
               'border-secondary-300': item.type === 'POSITIVE',
               'border-error-200': item.type === 'NEGATIVE',

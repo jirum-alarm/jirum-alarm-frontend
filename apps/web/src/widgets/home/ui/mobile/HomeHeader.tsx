@@ -22,7 +22,7 @@ const HomeHeader = () => {
   return (
     <div
       className={cn(
-        'max-w-mobile-max fixed top-0 z-50 w-full bg-white shadow-xs transition-all duration-300',
+        'max-w-mobile-max bg-surface-default fixed top-0 z-50 w-full shadow-xs transition-all duration-300',
         {
           'translate-y-0': isScrolled,
           '-translate-y-full': !isScrolled,

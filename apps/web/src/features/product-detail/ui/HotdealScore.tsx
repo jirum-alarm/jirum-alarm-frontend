@@ -45,7 +45,7 @@ const HotdealScore = ({ productId }: { productId: number }) => {
               </button>
             </Tooltip>
           </div>
-          <div className="mt-2 flex flex-col justify-between rounded-[12px] bg-gray-100 px-6 py-6">
+          <div className="bg-surface-muted mt-2 flex flex-col justify-between rounded-[12px] px-6 py-6">
             <div>
               <div className="flex w-full flex-col items-center justify-center pb-4">
                 <div>
@@ -182,13 +182,13 @@ const HotdealScoreBar = ({
                     : 'justify-center',
               )}
             >
-              <div className="absolute bottom-[34px] flex h-[32px] w-fit items-center justify-center rounded-full bg-gray-900 px-[10px] py-[6px] whitespace-nowrap">
+              <div className="bg-surface-inverse absolute bottom-[34px] flex h-[32px] w-fit items-center justify-center rounded-full px-[10px] py-[6px] whitespace-nowrap">
                 <span className="text-primary-500 typography-title-16sb">
                   {`${currentValue.toLocaleString()}원`}
                 </span>
               </div>
               <div className="flex h-[30px] items-center justify-center">
-                <div className="h-[18px] w-[18px] rounded-full border border-solid border-gray-400 bg-white" />
+                <div className="bg-surface-default h-[18px] w-[18px] rounded-full border border-solid border-gray-400" />
               </div>
             </div>
           </motion.div>

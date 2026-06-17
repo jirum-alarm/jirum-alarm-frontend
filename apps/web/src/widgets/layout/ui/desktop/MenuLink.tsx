@@ -36,7 +36,7 @@ export default function NavLink({
       >
         {label}
       </motion.div>
-      {isActive && <div className="bg-primary-500 absolute right-0 bottom-0 left-0 h-[2px]" />}
+      {isActive && <div className="bg-surface-brand absolute right-0 bottom-0 left-0 h-[2px]" />}
     </Link>
   );
 }

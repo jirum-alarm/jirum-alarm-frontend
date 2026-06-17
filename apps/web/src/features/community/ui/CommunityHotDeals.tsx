@@ -51,7 +51,7 @@ function ProductList({ products }: { products: ProductItem[] }) {
           href={`/products/${product.id}`}
           className="flex flex-col transition-transform active:scale-[0.98]"
         >
-          <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-100">
+          <div className="bg-surface-muted relative aspect-square overflow-hidden rounded-xl">
             <ProductThumbnail
               src={product.thumbnail ?? ''}
               alt={product.title}
@@ -107,8 +107,8 @@ const Skeleton = () => (
   <div className="smd:grid-cols-6 grid grid-cols-3 gap-x-2 gap-y-3 px-5 pb-4">
     {Array.from({ length: 6 }).map((_, i) => (
       <div key={i}>
-        <div className="aspect-square animate-pulse rounded-xl bg-gray-100" />
-        <div className="mt-1.5 h-3 w-full animate-pulse rounded bg-gray-100" />
+        <div className="bg-surface-muted aspect-square animate-pulse rounded-xl" />
+        <div className="bg-surface-muted mt-1.5 h-3 w-full animate-pulse rounded" />
       </div>
     ))}
   </div>

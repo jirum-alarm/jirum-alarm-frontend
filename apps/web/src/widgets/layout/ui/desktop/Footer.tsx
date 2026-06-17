@@ -5,7 +5,7 @@ import TalkLight from '@/shared/ui/common/icons/TalkLight';
 
 const Footer = () => {
   return (
-    <div className="relative flex w-full flex-col bg-gray-50">
+    <div className="bg-surface-subtle relative flex w-full flex-col">
       <div className="flex items-end">
         <footer className="max-w-8xl mx-auto flex w-full flex-1 flex-col justify-between px-5 py-15 lg:px-20 lg:py-12">
           <div className="mb-5 flex justify-between">

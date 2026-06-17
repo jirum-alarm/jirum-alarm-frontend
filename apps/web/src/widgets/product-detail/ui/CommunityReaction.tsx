@@ -77,7 +77,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
       />
       <div className="mt-2 space-y-4">
         <div className="bg-secondary-50 space-y-3 rounded-xl p-4">
-          <div className="space-y-1 rounded-xl bg-white pb-5">
+          <div className="bg-surface-default space-y-1 rounded-xl pb-5">
             <ReactionChartHeader
               url={product.url!}
               provider={product.provider.nameKr}

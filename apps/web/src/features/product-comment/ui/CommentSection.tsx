@@ -38,7 +38,9 @@ export default function CommentSection({
     return (
       <div className="mt-8 w-full px-12">
         <Link href={detailCommentPage(productId)}>
-          <Button className="bg-gray-100">{hasComments ? '댓글 보기' : '댓글 작성하기'}</Button>
+          <Button className="bg-surface-muted">
+            {hasComments ? '댓글 보기' : '댓글 작성하기'}
+          </Button>
         </Link>
       </div>
     );

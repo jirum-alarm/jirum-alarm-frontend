@@ -12,7 +12,7 @@ interface CurationPageHeaderProps {
 
 export default function CurationPageHeader({ title }: CurationPageHeaderProps) {
   return (
-    <header className="max-w-mobile-max fixed top-0 z-40 flex h-14 w-full items-center justify-between bg-white px-5">
+    <header className="max-w-mobile-max bg-surface-default fixed top-0 z-40 flex h-14 w-full items-center justify-between px-5">
       <div className="flex grow items-center gap-x-1">
         <BackButton backTo={PAGE.HOME} />
         <h2 className="line-clamp-1 text-lg font-semibold text-black">{title}</h2>

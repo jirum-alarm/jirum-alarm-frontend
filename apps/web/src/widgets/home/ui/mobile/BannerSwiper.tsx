@@ -166,9 +166,9 @@ const BannerSwiper = () => {
             {renderBanners()}
           </Swiper>
           <div className="absolute top-2 right-10 z-10 h-1 w-8">
-            <div className="h-full w-full overflow-hidden rounded-full bg-white/20">
+            <div className="bg-surface-default/20 h-full w-full overflow-hidden rounded-full">
               <div
-                className="h-full bg-white"
+                className="bg-surface-default h-full"
                 style={{
                   width: `calc(100% * var(--progress))`,
                 }}

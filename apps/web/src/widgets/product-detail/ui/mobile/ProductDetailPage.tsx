@@ -37,7 +37,7 @@ function ProductDetailPage({
             {initialProduct ? <ProductDetailImage product={initialProduct} fill /> : null}
           </div>
         </div>
-        <div className="border-border-subtle relative z-10 w-full rounded-t-3xl border-t bg-white pt-6">
+        <div className="border-border-subtle bg-surface-default relative z-10 w-full rounded-t-3xl border-t pt-6">
           <div className="flex flex-col">
             <ProductInfo productId={productId} />
 
@@ -73,7 +73,7 @@ function ProductDetailPage({
             <NoticeProfitLink productId={productId} />
           </div>
 
-          <div className="h-[64px] bg-gray-100" />
+          <div className="bg-surface-muted h-[64px]" />
           <BottomCTA productId={productId} isUserLogin={isUserLogin} />
         </div>
       </main>
@@ -83,5 +83,5 @@ function ProductDetailPage({
 export default ProductDetailPage;
 
 function Hr() {
-  return <div className="h-[8px] bg-gray-100" />;
+  return <div className="bg-surface-muted h-[8px]" />;
 }

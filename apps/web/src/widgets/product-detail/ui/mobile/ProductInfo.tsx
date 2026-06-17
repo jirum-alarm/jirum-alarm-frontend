@@ -41,7 +41,7 @@ export default function ProductInfo({ productId }: { productId: number }) {
         <div className="flex items-center gap-3 pb-2">
           {product.isEnd && (
             <div
-              className={cn('border border-gray-400 bg-white px-2 text-gray-700', {
+              className={cn('bg-surface-default border border-gray-400 px-2 text-gray-700', {
                 'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-5': true,
               })}
             >

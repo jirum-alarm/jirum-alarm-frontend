@@ -39,14 +39,14 @@ const BasicLayout = ({
     <>
       <div
         className={cn(
-          'max-w-mobile-max relative mx-auto box-border grid grid-cols-1 bg-white pb-[var(--bottom-nav-padding)]',
+          'max-w-mobile-max bg-surface-default relative mx-auto box-border grid grid-cols-1 pb-[var(--bottom-nav-padding)]',
           'mobile-max:before:fixed mobile-max:before:left-1/2 mobile-max:before:top-0 mobile-max:before:-ml-[300px] mobile-max:before:h-full mobile-max:before:w-px mobile-max:before:-translate-x-1/2 mobile-max:before:bg-gray-200',
           'mobile-max:after:fixed mobile-max:after:left-1/2 mobile-max:after:top-0 mobile-max:after:ml-[300px] mobile-max:after:h-full mobile-max:after:w-px mobile-max:after:-translate-x-1/2 mobile-max:after:bg-gray-200',
           fullScreen && 'min-h-screen',
         )}
       >
         {header ?? (
-          <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center gap-x-1 border-b border-white bg-white px-5 text-black">
+          <header className="max-w-mobile-max bg-surface-default fixed top-0 z-50 flex h-14 w-full items-center gap-x-1 border-b border-white px-5 text-black">
             {hasBackButton && <BackButton backTo={backTo} />}
             {title && <h1 className="typography-title-18b text-black">{title}</h1>}
           </header>

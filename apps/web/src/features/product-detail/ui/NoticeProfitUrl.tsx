@@ -14,7 +14,7 @@ export default function NoticeProfitLink({ productId }: { productId: number }) {
   }
 
   return (
-    <section className="pc:relative pc:inset-0 pc:top-auto bg-gray-100">
+    <section className="pc:relative pc:inset-0 pc:top-auto bg-surface-muted">
       <div className="pc:flex pc:items-center pc:justify-center pc:gap-x-3 pc:pb-5 p-5 pb-8">
         <p className="pc:mb-0 typography-body-14sb mb-1 text-gray-700">안내</p>
         <div className="pc:items-center flex text-sm text-gray-600">

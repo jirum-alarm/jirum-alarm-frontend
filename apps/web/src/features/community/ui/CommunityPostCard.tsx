@@ -20,18 +20,18 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
   return (
     <Link
       href={{ pathname: `${PAGE.COMMUNITY}/${post.id}`, query: { tab } }}
-      className="border-border-subtle flex gap-x-3 border-b px-5 py-4 transition-transform hover:bg-gray-50 active:scale-[0.98] active:bg-gray-50"
+      className="border-border-subtle hover:bg-surface-subtle active:bg-surface-subtle flex gap-x-3 border-b px-5 py-4 transition-transform active:scale-[0.98]"
     >
       {/* 왼쪽: 헤더 + 텍스트 + 통계 */}
       <div className="flex min-h-20 min-w-0 flex-1 flex-col">
         {/* 헤더: 유저 정보 */}
         <div className="flex items-center gap-x-2">
           {post.isNotice ? (
-            <span className="bg-primary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">
+            <span className="bg-surface-brand rounded px-1.5 py-0.5 text-xs font-semibold text-white">
               지름알림
             </span>
           ) : (
-            <span className="typography-caption-12m rounded bg-gray-100 px-1.5 py-0.5 text-gray-500">
+            <span className="typography-caption-12m bg-surface-muted rounded px-1.5 py-0.5 text-gray-500">
               {isProductComment ? '댓글' : '게시글'}
             </span>
           )}
@@ -74,7 +74,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
       {/* 오른쪽: 이미지 + 상품명 */}
       {hasTaggedProduct && post.taggedProduct?.thumbnail ? (
         <div className="flex w-20 flex-shrink-0 flex-col gap-y-1">
-          <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-gray-100">
+          <div className="bg-surface-muted relative h-20 w-20 overflow-hidden rounded-lg">
             <ProductThumbnail
               src={post.taggedProduct.thumbnail}
               alt={post.taggedProduct?.title ?? ''}

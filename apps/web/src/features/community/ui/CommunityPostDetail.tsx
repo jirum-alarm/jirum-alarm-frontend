@@ -65,7 +65,7 @@ export default function CommunityPostDetailClient({
       <div className="flex items-center justify-between px-5 py-4">
         <div className="flex items-center gap-x-2">
           {post.isNotice && (
-            <span className="bg-primary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">
+            <span className="bg-surface-brand rounded px-1.5 py-0.5 text-xs font-semibold text-white">
               지름알림
             </span>
           )}

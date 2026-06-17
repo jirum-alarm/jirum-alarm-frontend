@@ -45,7 +45,7 @@ export default function ProductGridCard({
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
-        <div className="border-border-default relative aspect-square overflow-hidden rounded-lg border bg-gray-50">
+        <div className="border-border-default bg-surface-subtle relative aspect-square overflow-hidden rounded-lg border">
           {actionIcon && <div className="absolute top-0 right-0 z-10">{actionIcon}</div>}
           <ProductThumbnail
             src={product?.thumbnail ?? ''}
@@ -57,12 +57,12 @@ export default function ProductGridCard({
             priority={priority}
           />
           {typeof rank === 'number' && (
-            <div className="text-primary-500 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900 text-sm">
+            <div className="text-primary-500 bg-surface-inverse absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg text-sm">
               {rank}
             </div>
           )}
           {product.isEnd ? (
-            <div className="text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">
+            <div className="text-semibold bg-surface-default absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg px-2 text-xs text-gray-700">
               판매종료
             </div>
           ) : (

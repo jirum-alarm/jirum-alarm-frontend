@@ -105,12 +105,12 @@ const SearchInput = () => {
 
   return (
     <div ref={containerRef} className="relative w-full">
-      <div className="flex w-full items-center overflow-hidden rounded-sm bg-gray-50 pl-3 focus-within:outline-1 focus-within:outline-gray-900 focus-within:outline-solid">
+      <div className="bg-surface-subtle flex w-full items-center overflow-hidden rounded-sm pl-3 focus-within:outline-1 focus-within:outline-gray-900 focus-within:outline-solid">
         <Search color="#98A2B3" className="shrink-0" />
         <input
           ref={inputRef}
           value={displayValue}
-          className="h-10 w-full bg-gray-50 px-3 text-sm outline-hidden"
+          className="bg-surface-subtle h-10 w-full px-3 text-sm outline-hidden"
           onKeyDown={handleKeyDown}
           onChange={handleInputChange}
           onFocus={() => setIsFocused(true)}

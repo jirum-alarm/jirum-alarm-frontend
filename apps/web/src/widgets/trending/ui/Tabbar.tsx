@@ -56,7 +56,8 @@ interface TabBarProps {
 
 // 기본 스타일 정의
 const defaultStyles: Required<TabBarStyles> = {
-  container: 'sticky top-0 z-30 overflow-hidden bg-white pl-4 pr-12 shadow-xs transition-transform',
+  container:
+    'sticky top-0 z-30 overflow-hidden bg-surface-default pl-4 pr-12 shadow-xs transition-transform',
   tabList: 'relative flex',
   tabTrigger: {
     base: 'relative h-[40px] shrink-0 whitespace-nowrap px-3 py-2 text-base transition-colors duration-200 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
@@ -242,7 +243,7 @@ const TabBar = ({
       {showSettings && (
         <div className={mergedStyles.settingsContainer}>
           <div className={mergedStyles.settingsGradient} />
-          <div className="flex h-full items-center justify-center bg-white pr-5">
+          <div className="bg-surface-default flex h-full items-center justify-center pr-5">
             <Link
               className={mergedStyles.settingsButton}
               href={settingsHref}

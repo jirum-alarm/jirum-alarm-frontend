@@ -42,10 +42,10 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
   return (
     <form
       onSubmit={handleSubmit}
-      className="pc:min-h-[80px] border-border-strong flex min-h-[64px] w-full items-end gap-x-3 border-t bg-white px-5 py-3"
+      className="pc:min-h-[80px] border-border-strong bg-surface-default flex min-h-[64px] w-full items-end gap-x-3 border-t px-5 py-3"
       onPointerDown={handlePointerDown}
     >
-      <div className="flex grow flex-col items-center overflow-hidden rounded-lg border border-transparent bg-gray-50 focus-within:border-gray-500">
+      <div className="bg-surface-subtle flex grow flex-col items-center overflow-hidden rounded-lg border border-transparent focus-within:border-gray-500">
         {editingComment?.status === 'reply' && (
           <div className="border-secondary-100 bg-secondary-50 text-secondary-700 flex h-[30px] w-full items-center justify-between border-b pr-2 pl-3 text-sm">
             <div className="flex items-center gap-x-1">

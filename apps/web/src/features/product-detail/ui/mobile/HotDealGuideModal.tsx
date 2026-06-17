@@ -13,7 +13,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
       <Drawer.Trigger asChild>{trigger}</Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white outline-hidden">
+        <Drawer.Content className="max-w-mobile-max rounded-t-5 bg-surface-default fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full outline-hidden">
           <div className="flex flex-col items-center">
             <Drawer.Title asChild>
               <h3 className="pt-[32px] pb-[12px] text-xl font-bold">핫딜 기준 안내</h3>
@@ -25,7 +25,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
             </p>
             <div className="w-[311px]">
               <div className="flex h-5 w-full items-center justify-around gap-[12px] rounded-[40px] bg-linear-to-r from-[#FFEEE0] from-0% via-[#FFC0B2] via-27% to-[#FF4639] to-100%">
-                <div className="relative h-[12px] w-[12px] rounded-full bg-white">
+                <div className="bg-surface-default relative h-[12px] w-[12px] rounded-full">
                   <div className="absolute -top-[calc(30px+12px)] -left-[calc(66px/2-6px)] inline-flex flex-col items-center">
                     <div
                       className={cn(
@@ -46,7 +46,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
                     </svg>
                   </div>
                 </div>
-                <div className="relative h-[12px] w-[12px] rounded-full bg-white">
+                <div className="bg-surface-default relative h-[12px] w-[12px] rounded-full">
                   <div className="absolute -top-[calc(30px+12px)] -left-[calc(57px/2-6px)] inline-flex flex-col items-center">
                     <HotdealBadge badgeVariant="page" hotdealType={HotDealType.HotDeal} />
                     <svg
@@ -62,7 +62,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
                   </div>
                 </div>
 
-                <div className="relative h-[12px] w-[12px] rounded-full bg-white">
+                <div className="bg-surface-default relative h-[12px] w-[12px] rounded-full">
                   <div className="absolute -top-[calc(30px+12px)] -left-[calc(57px/2-6px)] inline-flex flex-col items-center">
                     <HotdealBadge badgeVariant="page" hotdealType={HotDealType.SuperDeal} />
                     <svg
@@ -78,7 +78,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
                   </div>
                 </div>
 
-                <div className="relative h-[12px] w-[12px] rounded-full bg-white">
+                <div className="bg-surface-default relative h-[12px] w-[12px] rounded-full">
                   <div className="absolute -top-[calc(30px+12px)] -left-[calc(62px/2-6px)] inline-flex flex-col items-center">
                     <HotdealBadge badgeVariant="page" hotdealType={HotDealType.UltraDeal} />
                     <svg

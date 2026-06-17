@@ -82,7 +82,7 @@ const AlarmItem = ({
                 className={cn(
                   'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-normal',
                   {
-                    'border border-gray-400 bg-white px-2 text-gray-500': isEnd,
+                    'bg-surface-default border border-gray-400 px-2 text-gray-500': isEnd,
                     'bg-error-500 px-3 text-white': !isEnd && isHot,
                   },
                 )}
@@ -152,7 +152,9 @@ const ImageWithFallback = memo(function ImageWithFallback({
 
 function NoImage() {
   return (
-    <div className="flex h-full items-center justify-center bg-gray-50">{<IllustStanding />}</div>
+    <div className="bg-surface-subtle flex h-full items-center justify-center">
+      {<IllustStanding />}
+    </div>
   );
 }
 

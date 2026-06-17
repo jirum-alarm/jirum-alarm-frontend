@@ -104,7 +104,7 @@ function CommentItem({
             <Drawer.Title>댓글 메뉴</Drawer.Title>
           </VisuallyHidden.Root>
           <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-          <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
+          <Drawer.Content className="max-w-mobile-max rounded-t-5 bg-surface-default fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit outline-hidden">
             <div className="flex flex-col items-center pt-4 pb-8">
               <button
                 className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800 transition-transform active:scale-[0.98]"
@@ -145,7 +145,7 @@ function CommentItem({
               </Description>
             </Header>
             <Footer>
-              <Cancel className="typography-body-14m flex h-11 flex-1 items-center justify-center rounded-lg bg-gray-100 text-gray-700">
+              <Cancel className="typography-body-14m bg-surface-muted flex h-11 flex-1 items-center justify-center rounded-lg text-gray-700">
                 취소
               </Cancel>
               <Action
@@ -262,12 +262,12 @@ function CommunityCommentList({
                 onChange={(e) => setEditContent(e.target.value)}
                 maxLength={300}
                 rows={2}
-                className="border-border-strong w-full resize-none rounded-lg border bg-gray-50 px-3 py-2 text-sm outline-none focus:border-gray-500"
+                className="border-border-strong bg-surface-subtle w-full resize-none rounded-lg border px-3 py-2 text-sm outline-none focus:border-gray-500"
               />
               <div className="flex justify-end gap-x-2">
                 <button
                   onClick={() => setEditingId(null)}
-                  className="typography-body-14m h-8 rounded-lg bg-gray-100 px-4 text-gray-700 transition-transform active:scale-95"
+                  className="typography-body-14m bg-surface-muted h-8 rounded-lg px-4 text-gray-700 transition-transform active:scale-95"
                 >
                   취소
                 </button>
@@ -330,9 +330,9 @@ function CommunityCommentInput({ postId, isUserLogin }: { postId: number; isUser
         e.preventDefault();
         if (content.trim()) addComment();
       }}
-      className="border-border-strong sticky bottom-[var(--bottom-nav-padding,0px)] z-10 flex min-h-[64px] w-full items-end gap-x-3 border-t bg-white px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+      className="border-border-strong bg-surface-default sticky bottom-[var(--bottom-nav-padding,0px)] z-10 flex min-h-[64px] w-full items-end gap-x-3 border-t px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
     >
-      <div className="flex grow overflow-hidden rounded-lg border border-transparent bg-gray-50 focus-within:border-gray-500">
+      <div className="bg-surface-subtle flex grow overflow-hidden rounded-lg border border-transparent focus-within:border-gray-500">
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
@@ -383,12 +383,12 @@ export default function CommunityCommentSection({
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="flex flex-col gap-y-1.5 px-5 py-3">
                 <div className="flex items-center gap-x-2">
-                  <div className="h-3.5 w-14 animate-pulse rounded bg-gray-100" />
-                  <div className="h-3 w-8 animate-pulse rounded bg-gray-100" />
+                  <div className="bg-surface-muted h-3.5 w-14 animate-pulse rounded" />
+                  <div className="bg-surface-muted h-3 w-8 animate-pulse rounded" />
                 </div>
-                <div className="h-3.5 w-full animate-pulse rounded bg-gray-100" />
-                <div className="h-3.5 w-2/3 animate-pulse rounded bg-gray-100" />
-                <div className="h-3 w-12 animate-pulse rounded bg-gray-100" />
+                <div className="bg-surface-muted h-3.5 w-full animate-pulse rounded" />
+                <div className="bg-surface-muted h-3.5 w-2/3 animate-pulse rounded" />
+                <div className="bg-surface-muted h-3 w-12 animate-pulse rounded" />
               </div>
             ))}
           </div>

@@ -22,16 +22,16 @@ export default LikePage;
 const ProductLikeSkeleton = () => {
   return (
     <div>
-      <div className="mb-3 h-[17px] w-1/3 animate-pulse bg-gray-100" />
+      <div className="bg-surface-muted mb-3 h-[17px] w-1/3 animate-pulse" />
       <div className="grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
         {Array.from({ length: 12 }).map((item, i) => (
           <div key={i} className="w-full">
-            <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
+            <div className="bg-surface-muted flex aspect-square items-center justify-center rounded-lg">
               <SmallIllust />
             </div>
             <div className="flex flex-col gap-1 pt-2">
-              <div className="h-3 bg-gray-100"></div>
-              <div className="h-3 w-1/2 bg-gray-100"></div>
+              <div className="bg-surface-muted h-3"></div>
+              <div className="bg-surface-muted h-3 w-1/2"></div>
             </div>
           </div>
         ))}

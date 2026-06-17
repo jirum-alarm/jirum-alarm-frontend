@@ -33,7 +33,7 @@ const PromotionTabs = ({ tabs, activeTabId, onTabClick }: PromotionTabsProps) =>
           className={cn(`shrink-0 cursor-pointer rounded-[40px] border transition-all`, {
             'border-secondary-500 bg-secondary-50 text-secondary-800 font-semibold':
               activeTabId === tab.id,
-            'border-border-strong bg-white text-gray-700': activeTabId !== tab.id,
+            'border-border-strong bg-surface-default text-gray-700': activeTabId !== tab.id,
           })}
         >
           <motion.button

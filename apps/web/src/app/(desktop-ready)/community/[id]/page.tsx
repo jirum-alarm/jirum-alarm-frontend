@@ -65,16 +65,16 @@ function PostDetailSkeleton() {
     <div className="flex flex-col">
       {/* 헤더 */}
       <div className="flex items-center gap-x-2 px-5 py-4">
-        <div className="h-3.5 w-16 animate-pulse rounded bg-gray-100" />
-        <div className="h-3 w-10 animate-pulse rounded bg-gray-100" />
+        <div className="bg-surface-muted h-3.5 w-16 animate-pulse rounded" />
+        <div className="bg-surface-muted h-3 w-10 animate-pulse rounded" />
       </div>
       {/* 제목 */}
-      <div className="mx-5 mb-2 h-5 w-3/4 animate-pulse rounded bg-gray-100" />
+      <div className="bg-surface-muted mx-5 mb-2 h-5 w-3/4 animate-pulse rounded" />
       {/* 본문 */}
       <div className="mx-5 mb-1 flex flex-col gap-y-2">
-        <div className="h-4 w-full animate-pulse rounded bg-gray-100" />
-        <div className="h-4 w-full animate-pulse rounded bg-gray-100" />
-        <div className="h-4 w-2/3 animate-pulse rounded bg-gray-100" />
+        <div className="bg-surface-muted h-4 w-full animate-pulse rounded" />
+        <div className="bg-surface-muted h-4 w-full animate-pulse rounded" />
+        <div className="bg-surface-muted h-4 w-2/3 animate-pulse rounded" />
       </div>
       {/* 태그 상품 */}
       <div className="bg-secondary-50 mx-5 mt-2 mb-4 rounded-2xl p-4">
@@ -91,22 +91,22 @@ function PostDetailSkeleton() {
       {/* 통계 바 */}
       <div className="border-border-subtle flex items-center justify-between border-y px-5 py-3">
         <div className="flex gap-x-3">
-          <div className="h-3.5 w-8 animate-pulse rounded bg-gray-100" />
-          <div className="h-3.5 w-8 animate-pulse rounded bg-gray-100" />
+          <div className="bg-surface-muted h-3.5 w-8 animate-pulse rounded" />
+          <div className="bg-surface-muted h-3.5 w-8 animate-pulse rounded" />
         </div>
-        <div className="h-8 w-16 animate-pulse rounded-full bg-gray-100" />
+        <div className="bg-surface-muted h-8 w-16 animate-pulse rounded-full" />
       </div>
       {/* 댓글 */}
       <div className="mt-4 px-5">
-        <div className="mb-3 h-4 w-10 animate-pulse rounded bg-gray-100" />
+        <div className="bg-surface-muted mb-3 h-4 w-10 animate-pulse rounded" />
         {Array.from({ length: 3 }).map((_, i) => (
           <div key={i} className="border-border-subtle flex flex-col gap-y-1.5 border-b py-3">
             <div className="flex items-center gap-x-2">
-              <div className="h-3.5 w-14 animate-pulse rounded bg-gray-100" />
-              <div className="h-3 w-8 animate-pulse rounded bg-gray-100" />
+              <div className="bg-surface-muted h-3.5 w-14 animate-pulse rounded" />
+              <div className="bg-surface-muted h-3 w-8 animate-pulse rounded" />
             </div>
-            <div className="h-3.5 w-full animate-pulse rounded bg-gray-100" />
-            <div className="h-3 w-1/2 animate-pulse rounded bg-gray-100" />
+            <div className="bg-surface-muted h-3.5 w-full animate-pulse rounded" />
+            <div className="bg-surface-muted h-3 w-1/2 animate-pulse rounded" />
           </div>
         ))}
       </div>

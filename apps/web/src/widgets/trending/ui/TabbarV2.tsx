@@ -57,12 +57,12 @@ interface TabBarProps {
 // 기본 스타일 정의 (뱃지 형태)
 const defaultStyles: Required<TabBarStyles> = {
   container:
-    'fixed w-full max-w-mobile-max pc:max-w-none pc:sticky top-14 pc:top-14 z-30 overflow-hidden bg-white px-4 transition-transform pt-3 pb-3 pc:pb-2',
+    'fixed w-full max-w-mobile-max pc:max-w-none pc:sticky top-14 pc:top-14 z-30 overflow-hidden bg-surface-default px-4 transition-transform pt-3 pb-3 pc:pb-2',
   tabList: 'relative flex gap-2.5 pc:justify-center',
   tabTrigger: {
     base: 'relative pc:h-10 h-9 shrink-0 whitespace-nowrap px-3 py-2 pc:text-lg transition-all duration-400 rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 leading-none',
     active: 'font-bold text-primary-500 bg-gray-800',
-    inactive: 'font-medium text-gray-500 bg-gray-100 hover:bg-gray-200',
+    inactive: 'font-medium text-gray-500 bg-surface-muted hover:bg-gray-200',
   },
   settingsContainer: 'absolute bottom-0 right-0 flex h-full items-center',
   settingsGradient: 'h-full w-5 bg-linear-to-r from-transparent to-white pointer-events-none',
@@ -224,7 +224,7 @@ const TabBarV2 = ({
       {showSettings && (
         <div className={mergedStyles.settingsContainer}>
           <div className={mergedStyles.settingsGradient} />
-          <div className="flex h-full items-center justify-center bg-white pr-5 pl-2">
+          <div className="bg-surface-default flex h-full items-center justify-center pr-5 pl-2">
             <Link
               className={mergedStyles.settingsButton}
               href={settingsHref}

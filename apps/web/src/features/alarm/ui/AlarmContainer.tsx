@@ -64,10 +64,10 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
         </span>{' '}
         앱 다운받고
         <br /> 핫딜을 알림
-        <span className="bg-primary-500 inline-flex h-2 w-2 rounded-full align-text-top"></span>{' '}
+        <span className="bg-surface-brand inline-flex h-2 w-2 rounded-full align-text-top"></span>{' '}
         으로 받아보세요!
       </p>
-      <div className="animate-fade-in flex justify-center rounded-md bg-gray-100">
+      <div className="animate-fade-in bg-surface-muted flex justify-center rounded-md">
         <Image
           src={`https://cdn.jirum-alarm.com/assets/app_download_guide.webp`}
           alt="download app guide"
@@ -79,7 +79,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
         />
       </div>
 
-      <div className="fixed right-0 bottom-[var(--bottom-nav-padding,0px)] left-0 m-auto w-full max-w-[600px] bg-white px-5 pt-4 pb-8">
+      <div className="bg-surface-default fixed right-0 bottom-[var(--bottom-nav-padding,0px)] left-0 m-auto w-full max-w-[600px] px-5 pt-4 pb-8">
         <div className="flex flex-col items-center pb-6">
           <p className="pb-3 text-center text-sm text-gray-400">
             키워드 알림으로
@@ -121,7 +121,7 @@ function AndroidDownloadButton() {
       className="w-full"
     >
       <motion.button
-        className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
+        className="bg-surface-brand flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
@@ -148,7 +148,7 @@ function IosDownloadButton() {
       className="w-full"
     >
       <motion.button
-        className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
+        className="bg-surface-brand flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >

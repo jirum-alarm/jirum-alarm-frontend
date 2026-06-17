@@ -16,7 +16,7 @@ const EmailLoginForm = () => {
     <form onSubmit={handleSubmit} className="flex flex-1 flex-col justify-between pt-11">
       <EmailInput email={email} />
       <PasswordInput password={password} hideHelperText={true} />
-      <div className="bg-white py-9">
+      <div className="bg-surface-default py-9">
         {error && (
           <p className="text-error-500 pb-4 text-center text-sm">
             이메일 혹은 비밀번호가 올바르지 않아요.

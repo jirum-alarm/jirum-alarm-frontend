@@ -10,7 +10,7 @@ const Alarm = () => {
       hasBottomNav
       navType={NAV_TYPE.ALARM}
       header={
-        <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center gap-x-1 border-b border-white bg-white px-5 text-black">
+        <header className="max-w-mobile-max bg-surface-default fixed top-0 z-50 flex h-14 w-full items-center gap-x-1 border-b border-white px-5 text-black">
           <h1 className="typography-title-18b text-black">알림</h1>
           <AlarmHeaderActions />
         </header>

@@ -21,7 +21,7 @@ const DesktopReadyLayout = async ({ children }: { children: React.ReactNode }) =
   return (
     <div className={isMobile ? '' : 'pc min-w-5xl'}>
       {!isMobile && renderDesktop()}
-      <div className="min-h-screen bg-white">{children}</div>
+      <div className="bg-surface-default min-h-screen">{children}</div>
       {isMobile && renderMobile()}
       {!isMobile && (
         <>

@@ -35,7 +35,7 @@ const TermsLayout = ({
         'mobile-max:after:fixed mobile-max:after:left-1/2 mobile-max:after:top-0 mobile-max:after:ml-[300px] mobile-max:after:h-full mobile-max:after:w-px mobile-max:after:-translate-x-1/2 mobile-max:after:bg-gray-200',
       )}
     >
-      <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center justify-between bg-white px-5 py-2">
+      <header className="max-w-mobile-max bg-surface-default fixed top-0 z-50 flex h-14 w-full items-center justify-between px-5 py-2">
         <h1 className="typography-title-18b text-black">서비스 이용약관</h1>
         <button className="-m-2 flex items-center justify-center p-2" onClick={goBack}>
           <Close />

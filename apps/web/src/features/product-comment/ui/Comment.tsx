@@ -32,8 +32,8 @@ export default function Comment({
       ? 'bg-primary-100'
       : 'bg-primary-50'
     : hasParentComment
-      ? 'bg-gray-100'
-      : 'bg-white';
+      ? 'bg-surface-muted'
+      : 'bg-surface-default';
   const paddingClass = hasParentComment ? 'pl-8' : '';
 
   return (

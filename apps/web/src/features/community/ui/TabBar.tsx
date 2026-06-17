@@ -27,7 +27,9 @@ export default function TabBar({
             onClick={() => onChange(tab.value)}
             className={cn(
               'typography-body-14m rounded-full px-3 py-1 transition-colors transition-transform active:scale-95',
-              isActive ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
+              isActive
+                ? 'bg-surface-inverse text-white'
+                : 'bg-surface-muted text-gray-600 hover:bg-gray-200',
             )}
           >
             {tab.label}
