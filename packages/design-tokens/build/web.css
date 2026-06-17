@@ -70,16 +70,22 @@
   --color-fg-inverse: #ffffff;
   --color-fg-brand: #4ad11b;
   --color-fg-error: #eb001c;
+  --color-fg-error-strong: #bc0017;
+  --color-fg-secondary-strong: #344054;
   --color-fg-link: #587dff;
   --color-surface-default: #ffffff;
   --color-surface-subtle: #f9fafb;
   --color-surface-muted: #f2f4f7;
   --color-surface-brand: #9ef22e;
   --color-surface-inverse: #101828;
+  --color-surface-error: #ffe1e5;
+  --color-surface-disabled: #d0d5dd;
   --color-border-default: #e4e7ec;
   --color-border-strong: #d0d5dd;
   --color-border-subtle: #f2f4f7;
   --color-border-brand: #9ef22e;
+  --color-border-interactive: #98a2b3;
+  --color-border-focus: #101828;
 
   /* shadow */
   --shadow-small: 0px 2px 12px 0px rgba(0, 0, 0, 0.08);

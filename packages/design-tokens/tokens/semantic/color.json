@@ -9,6 +9,8 @@
     "inverse": { "$type": "color", "$value": "{color.white}" },
     "brand": { "$type": "color", "$value": "{color.primary.600}" },
     "error": { "$type": "color", "$value": "{color.error.500}" },
+    "error-strong": { "$type": "color", "$value": "{color.error.600}" },
+    "secondary-strong": { "$type": "color", "$value": "{color.gray.700}" },
     "link": { "$type": "color", "$value": "{color.link}" }
   },
 
@@ -17,13 +19,17 @@
     "subtle": { "$type": "color", "$value": "{color.gray.50}" },
     "muted": { "$type": "color", "$value": "{color.gray.100}" },
     "brand": { "$type": "color", "$value": "{color.primary.500}" },
-    "inverse": { "$type": "color", "$value": "{color.gray.900}" }
+    "inverse": { "$type": "color", "$value": "{color.gray.900}" },
+    "error": { "$type": "color", "$value": "{color.error.50}" },
+    "disabled": { "$type": "color", "$value": "{color.gray.300}" }
   },
 
   "border": {
     "default": { "$type": "color", "$value": "{color.gray.200}" },
     "strong": { "$type": "color", "$value": "{color.gray.300}" },
     "subtle": { "$type": "color", "$value": "{color.gray.100}" },
-    "brand": { "$type": "color", "$value": "{color.primary.500}" }
+    "brand": { "$type": "color", "$value": "{color.primary.500}" },
+    "interactive": { "$type": "color", "$value": "{color.gray.400}" },
+    "focus": { "$type": "color", "$value": "{color.gray.900}" }
   }
 }
