@@ -486,6 +486,8 @@ export type Mutation = {
   /** 썸네일 단건 수집 */
   collectThumbnail: Scalars['Boolean']['output'];
   createAd: Ad;
+  /** 유저가 직접 핫딜 상품 등록 (등록된 productId 반환) */
+  createUserProduct: Scalars['Int']['output'];
   deleteAd: Scalars['Boolean']['output'];
   /** 어드민) 상품 hard delete */
   hardDeleteProductByAdmin: Scalars['Boolean']['output'];
@@ -705,6 +707,15 @@ export type MutationCreateAdArgs = {
   startAt: Scalars['DateTime']['input'];
   title?: InputMaybe<Scalars['String']['input']>;
   weight?: Scalars['Int']['input'];
+};
+
+export type MutationCreateUserProductArgs = {
+  categoryId: Scalars['Int']['input'];
+  content?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['String']['input']>;
+  thumbnail?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  url: Scalars['String']['input'];
 };
 
 export type MutationDeleteAdArgs = {
@@ -2782,6 +2793,17 @@ export type MutationCollectProductMutationVariables = Exact<{
 
 export type MutationCollectProductMutation = { __typename?: 'Mutation'; collectProduct: boolean };
 
+export type CreateUserProductMutationVariables = Exact<{
+  title: Scalars['String']['input'];
+  url: Scalars['String']['input'];
+  categoryId: Scalars['Int']['input'];
+  price?: InputMaybe<Scalars['String']['input']>;
+  thumbnail?: InputMaybe<Scalars['String']['input']>;
+  content?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type CreateUserProductMutation = { __typename?: 'Mutation'; createUserProduct: number };
+
 export type MutationReportExpiredProductMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -3734,6 +3756,21 @@ export const MutationCollectProductDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationCollectProductMutation,
   MutationCollectProductMutationVariables
+>;
+export const CreateUserProductDocument = new TypedDocumentString(`
+    mutation CreateUserProduct($title: String!, $url: String!, $categoryId: Int!, $price: String, $thumbnail: String, $content: String) {
+  createUserProduct(
+    title: $title
+    url: $url
+    categoryId: $categoryId
+    price: $price
+    thumbnail: $thumbnail
+    content: $content
+  )
+}
+    `) as unknown as TypedDocumentString<
+  CreateUserProductMutation,
+  CreateUserProductMutationVariables
 >;
 export const MutationReportExpiredProductDocument = new TypedDocumentString(`
     mutation MutationReportExpiredProduct($productId: Int!) {

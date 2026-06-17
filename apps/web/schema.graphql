@@ -580,6 +580,35 @@ type Mutation {
     title: String
     weight: Int! = 1
   ): Ad!
+  """
+  유저가 직접 핫딜 상품 등록 (등록된 productId 반환)
+  """
+  createUserProduct(
+    """
+    카테고리 id
+    """
+    categoryId: Int!
+    """
+    상품 설명
+    """
+    content: String
+    """
+    가격
+    """
+    price: String
+    """
+    썸네일 이미지 URL
+    """
+    thumbnail: String
+    """
+    상품명
+    """
+    title: String!
+    """
+    구매 링크
+    """
+    url: String!
+  ): Int!
   deleteAd(id: Int!): Boolean!
   """
   어드민) 상품 hard delete

@@ -323,6 +323,26 @@ export const MutationCollectProduct = gql`
   }
 `;
 
+export const MutationCreateUserProduct = gql`
+  mutation CreateUserProduct(
+    $title: String!
+    $url: String!
+    $categoryId: Int!
+    $price: String
+    $thumbnail: String
+    $content: String
+  ) {
+    createUserProduct(
+      title: $title
+      url: $url
+      categoryId: $categoryId
+      price: $price
+      thumbnail: $thumbnail
+      content: $content
+    )
+  }
+`;
+
 export const MutationReportExpiredProduct = gql`
   mutation MutationReportExpiredProduct($productId: Int!) {
     reportExpiredProduct(productId: $productId)

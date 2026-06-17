@@ -80,11 +80,15 @@
 - 서비스에서 `IAddProduct`로 매핑하여 insert. **authorId = req.user.id**.
 - **`IAddProduct`에 `authorId?: number` 추가** ([add-product.interface.ts](../jirum-alarm-crawling-server/src/product/repository/interface/add-product.interface.ts)).
 
-#### ⚠️ 유니크 제약 처리 (설계 핵심)
-- Product는 `@Unique('unique_providerId_externalId', ['providerId', 'externalId'])` ([product.entity.ts:45](../jirum-alarm-crawling-server/src/product/entity/product.entity.ts)).
-- `providerId`/`externalId`는 크롤링 출처용. 유저 등록 상품은 출처가 없으므로:
-  - **"유저 직접등록"용 가상 provider를 신설** (예: `ProductProvider.USER_SUBMITTED`, type=`community` 또는 신규 type). [product-provider.enum.ts](../jirum-alarm-crawling-server/src/provider/enum/product-provider.enum.ts) + provider row seed.
-  - `externalId`는 유저 등록 시 충돌 안 나도록 생성 전략 필요(예: auto-increment 별도 시퀀스, 또는 productId 후처리 업데이트, 또는 timestamp 기반). → **중복 등록(같은 url) 정책도 함께 결정**.
+#### ⚠️ 유니크 제약 처리 (설계 핵심) — 결정됨
+- Product는 `@Unique('unique_providerId_externalId', ['providerId', 'externalId'])` ([product.entity.ts:45](../jirum-alarm-crawling-server/src/product/entity/product.entity.ts)). `externalId`는 `bigint NOT NULL`.
+- **provider: 전용 가상 provider 신설** (사용자 확정).
+  - `ProductProvider`에 `USER_SUBMITTED` 추가 ([product-provider.enum.ts](../jirum-alarm-crawling-server/src/provider/enum/product-provider.enum.ts)) + provider row 마이그레이션 insert (type=`community`, name=`USER_SUBMITTED`, nameKr=`직접등록`). provider seed는 기존에 마이그레이션 아닌 수동/시드였으나, 안정성을 위해 마이그레이션으로 row를 박는다.
+- **externalId: insert 후 productId 복사** (사용자 확정).
+  - 트랜잭션 내 2스텝: `externalId=0`(임시)로 insert → 발급된 `product.id`를 `externalId`로 UPDATE. providerId가 전용이라 임시 `externalId=0`은 첫 1건만 잠깐 점유하고 곧 덮어써지므로, 동시 등록 충돌을 막기 위해 **insert→update를 한 트랜잭션**으로 묶는다. (대안: insert 시 임시값을 음수 유니크로 두는 방법도 있으나 트랜잭션 묶음이 더 단순.)
+  - 동시성: 같은 트랜잭션에서 임시 0이 2건 충돌할 수 있으므로, 임시값을 `0`이 아니라 **insert 직후 LAST_INSERT_ID 기반**으로 즉시 UPDATE하거나, 트랜잭션 직렬화 고려. → 구현 시 검증.
+  - **구현 결과**: `externalId=0`으로 insert → 같은 트랜잭션에서 `product.id`로 UPDATE → content는 `product_content`에 insert → commit. 동시 등록 시 두 번째 `(100,0)` insert는 InnoDB 유니크 인덱스가 첫 트랜잭션 커밋까지 **블록**하고, 커밋 후엔 첫 건의 externalId가 0→productId로 바뀌어 충돌이 사라지므로 **직렬화되어 안전**. 유저 등록 빈도가 낮아 대기 부하는 무시 가능. (추후 동시성↑ 시 임시값을 음수 유니크로 바꾸는 최적화 여지.)
+  - 구현 위치: [product.service.ts `createUserProduct`](../jirum-alarm-crawling-server/src/product/product.service.ts), [product.resolver.ts](../jirum-alarm-crawling-server/src/product/product.resolver.ts) `@Roles(Role.USER) createUserProduct`, provider row 마이그레이션 [1779957000000](../jirum-alarm-crawling-server/src/migration/1779957000000-add-user-submitted-provider.ts).
 
 ### 4-4. 노출/랭킹 영향
 - 동일 테이블·동일 노출이므로 기존 리스트/랭킹/검색 파이프라인에 그대로 포함됨. 유저 상품이 `isHot`/랭킹 로직에 어떻게 잡히는지 확인 — 초기엔 `isHot=false`로 두고 일반 리스트에만 노출 권장.

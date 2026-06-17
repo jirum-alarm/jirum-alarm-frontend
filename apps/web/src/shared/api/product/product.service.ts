@@ -2,6 +2,7 @@ import { execute } from '@/shared/lib/http-client';
 
 import { graphql, useFragment } from '../gql';
 import {
+  CreateUserProductMutationVariables,
   MutationReportExpiredProductMutationVariables,
   ProductAdditionalInfoDocument,
   ProductAdditionalInfoFragmentDoc,
@@ -95,6 +96,9 @@ export class ProductService {
   }
   static async reportExpiredProduct(variables: MutationReportExpiredProductMutationVariables) {
     return execute(MutationReportExpiredProduct, variables).then((res) => res.data);
+  }
+  static async createUserProduct(variables: CreateUserProductMutationVariables) {
+    return execute(MutationCreateUserProduct, variables).then((res) => res.data.createUserProduct);
   }
   static async getProductKeywords() {
     return execute(QueryProductKeywords).then((res) => res.data);
@@ -324,6 +328,26 @@ const MutationRecordProductImpressions = new TypedDocumentString<
 const MutationReportExpiredProduct = graphql(`
   mutation MutationReportExpiredProduct($productId: Int!) {
     reportExpiredProduct(productId: $productId)
+  }
+`);
+
+const MutationCreateUserProduct = graphql(`
+  mutation CreateUserProduct(
+    $title: String!
+    $url: String!
+    $categoryId: Int!
+    $price: String
+    $thumbnail: String
+    $content: String
+  ) {
+    createUserProduct(
+      title: $title
+      url: $url
+      categoryId: $categoryId
+      price: $price
+      thumbnail: $thumbnail
+      content: $content
+    )
   }
 `);
 
