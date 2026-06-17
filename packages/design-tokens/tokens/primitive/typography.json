@@ -1,0 +1,35 @@
+{
+  "font": {
+    "family": {
+      "sans": { "$type": "fontFamily", "$value": "Pretendard" }
+    },
+    "weight": {
+      "regular": { "$type": "fontWeight", "$value": 400 },
+      "medium": { "$type": "fontWeight", "$value": 500 },
+      "semibold": { "$type": "fontWeight", "$value": 600 },
+      "bold": { "$type": "fontWeight", "$value": 700 }
+    }
+  },
+
+  "comment": "Figma Typography 18종. 아직 web.css로 방출하지 않음 — 컴포넌트 단계에서 유틸/CVA로 떨어뜨릴 때 소비. size/lineHeight px, weight는 font.weight 참조.",
+
+  "typography": {
+    "headline-28sb": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.semibold}", "fontSize": "28px", "lineHeight": "38px" } },
+    "headline-24sb": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.semibold}", "fontSize": "24px", "lineHeight": "36px" } },
+    "headline-20sb": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.semibold}", "fontSize": "20px", "lineHeight": "32px" } },
+    "headline-20m": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.medium}", "fontSize": "20px", "lineHeight": "32px" } },
+
+    "title-18b": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.bold}", "fontSize": "18px", "lineHeight": "32px" } },
+    "title-16sb": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.semibold}", "fontSize": "16px", "lineHeight": "24px" } },
+    "title-16m": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.medium}", "fontSize": "16px", "lineHeight": "24px" } },
+    "title-16r": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.regular}", "fontSize": "16px", "lineHeight": "24px" } },
+
+    "body-14sb": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.semibold}", "fontSize": "14px", "lineHeight": "20px" } },
+    "body-14m": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.medium}", "fontSize": "14px", "lineHeight": "20px" } },
+    "body-14r": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.regular}", "fontSize": "14px", "lineHeight": "20px" } },
+
+    "caption-13m": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.medium}", "fontSize": "13px", "lineHeight": "18px" } },
+    "caption-13r": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.regular}", "fontSize": "13px", "lineHeight": "18px" } },
+    "caption-12m": { "$type": "typography", "$value": { "fontFamily": "{font.family.sans}", "fontWeight": "{font.weight.medium}", "fontSize": "12px", "lineHeight": "16px" } }
+  }
+}

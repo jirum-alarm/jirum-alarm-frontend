@@ -1,0 +1,14 @@
+{
+  "shadow": {
+    "small": {
+      "$type": "shadow",
+      "$value": {
+        "offsetX": "0px",
+        "offsetY": "2px",
+        "blur": "12px",
+        "spread": "0px",
+        "color": "rgba(0, 0, 0, 0.08)"
+      }
+    }
+  }
+}

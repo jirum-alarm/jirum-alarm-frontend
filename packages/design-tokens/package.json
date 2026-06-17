@@ -1,0 +1,24 @@
+{
+  "name": "@jirum/design-tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "build/tokens.js",
+  "types": "build/tokens.d.ts",
+  "exports": {
+    "./web.css": "./build/web.css",
+    "./tailwind": "./build/tailwind.tokens.cjs",
+    "./tokens": "./build/tokens.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "style-dictionary build --config style-dictionary.config.js",
+    "verify": "node scripts/verify-no-drift.mjs"
+  },
+  "devDependencies": {
+    "style-dictionary": "^4.3.0"
+  }
+}

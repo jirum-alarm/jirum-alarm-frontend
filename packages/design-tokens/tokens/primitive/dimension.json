@@ -1,0 +1,19 @@
+{
+  "breakpoint": {
+    "txs": { "$type": "dimension", "$value": "320px" },
+    "xs": { "$type": "dimension", "$value": "375px" },
+    "smd": { "$type": "dimension", "$value": "550px" },
+    "3xl": { "$type": "dimension", "$value": "1440px" }
+  },
+  "container": {
+    "layout-max": { "$type": "dimension", "$value": "1280px" }
+  },
+  "text": {
+    "s": { "$type": "dimension", "$value": "0.8125rem" },
+    "lg": { "$type": "dimension", "$value": "1.125rem" }
+  },
+  "leading": {
+    "s": { "$type": "dimension", "$value": "1rem" },
+    "lg": { "$type": "dimension", "$value": "2rem" }
+  }
+}
