@@ -65,6 +65,7 @@
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.16",
+    "@jirum/design-tokens": "workspace:*",
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
