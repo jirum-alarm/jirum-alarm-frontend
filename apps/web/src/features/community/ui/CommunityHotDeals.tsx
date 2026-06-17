@@ -61,7 +61,9 @@ function ProductList({ products }: { products: ProductItem[] }) {
               sizes="(max-width: 550px) 30vw, 15vw"
             />
           </div>
-          <p className="mt-1.5 line-clamp-2 text-xs leading-tight text-gray-900">{product.title}</p>
+          <p className="text-fg-primary mt-1.5 line-clamp-2 text-xs leading-tight">
+            {product.title}
+          </p>
           {product.price && (
             <p className="mt-0.5 text-xs font-semibold text-gray-700">{product.price}</p>
           )}
@@ -120,10 +122,10 @@ export default function CommunityHotDeals() {
   return (
     <section className="border-border-subtle mt-2 border-t pt-4">
       <div className="mb-3 flex items-center justify-between px-5">
-        <h2 className="typography-body-14sb text-gray-900">{option.label}</h2>
+        <h2 className="typography-body-14sb text-fg-primary">{option.label}</h2>
         <Link
           href={option.link}
-          className="text-xs text-gray-500 transition-transform active:scale-95"
+          className="text-fg-secondary text-xs transition-transform active:scale-95"
         >
           더보기
         </Link>

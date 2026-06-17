@@ -69,7 +69,7 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
   return (
     <Drawer.Root onOpenChange={handleOpenChange} open={isModalOpen}>
       <Drawer.Trigger asChild>
-        <button className="-m-2 p-2 text-gray-900">제보하기</button>
+        <button className="text-fg-primary -m-2 p-2">제보하기</button>
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />

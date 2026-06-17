@@ -18,7 +18,7 @@ const SectionHeader = ({
       <div className={cn('hidden', { 'pc:block': !shouldShowMobileUI })} />
       <h2
         className={cn(
-          'typography-title-18b text-gray-900',
+          'typography-title-18b text-fg-primary',
           !shouldShowMobileUI && 'pc:absolute pc:left-1/2 pc:-translate-x-1/2 pc:text-[28px]',
           titleClassName,
         )}

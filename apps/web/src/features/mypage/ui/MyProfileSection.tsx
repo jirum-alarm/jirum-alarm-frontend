@@ -20,7 +20,7 @@ const MyProfileSection = () => {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="typography-title-18b">{me?.nickname}</h2>
-              <span className="text-xs text-gray-400">{me?.email}</span>
+              <span className="text-fg-tertiary text-xs">{me?.email}</span>
             </div>
             <div>
               <ArrowRight />

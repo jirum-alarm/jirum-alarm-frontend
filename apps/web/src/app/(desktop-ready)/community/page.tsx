@@ -53,7 +53,7 @@ export default async function CommunityPage() {
         navType={NAV_TYPE.COMMUNITY}
         header={
           <header className="max-w-mobile-max border-border-subtle bg-surface-default fixed top-0 z-50 flex h-14 w-full items-center gap-x-2 border-b px-5">
-            <h1 className="typography-title-18b text-gray-900">커뮤니티</h1>
+            <h1 className="typography-title-18b text-fg-primary">커뮤니티</h1>
           </header>
         }
       >
@@ -71,7 +71,7 @@ export default async function CommunityPage() {
 
   return (
     <div className="py-8">
-      <h1 className="px-5 pb-2 text-xl font-bold text-gray-900">커뮤니티</h1>
+      <h1 className="text-fg-primary px-5 pb-2 text-xl font-bold">커뮤니티</h1>
       <CommunityPageClient
         isUserLogin={isUserLogin}
         insertAfterIndex={5}

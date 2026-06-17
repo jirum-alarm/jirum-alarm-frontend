@@ -75,7 +75,7 @@ export default function ProductInfo({
           <ShareButton title={shareTitle} />
         </div>
         <div className="space-y-1 pt-3 pb-8">
-          <div className="h-5 text-sm text-gray-500">
+          <div className="text-fg-secondary h-5 text-sm">
             <DisplayTime time={product.postedAt} />
           </div>
           <div className="flex justify-between">
@@ -89,14 +89,14 @@ export default function ProductInfo({
         {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
         <div className="my-6 space-y-2">
           <div className="typography-body-14m flex">
-            <span className="inline-block w-[110px] text-gray-400">쇼핑몰</span>
-            <span className="text-gray-500">{product.mallName}</span>
+            <span className="text-fg-tertiary inline-block w-[110px]">쇼핑몰</span>
+            <span className="text-fg-secondary">{product.mallName}</span>
           </div>
           {product.author && (
             <div className="typography-body-14m flex">
-              <span className="inline-block w-[110px] text-gray-400">업로드</span>
+              <span className="text-fg-tertiary inline-block w-[110px]">업로드</span>
               <span
-                className={cn('flex items-center gap-1 text-gray-500', {
+                className={cn('text-fg-secondary flex items-center gap-1', {
                   'text-primary-800': product.author.id === 'admin',
                 })}
               >
@@ -107,8 +107,8 @@ export default function ProductInfo({
           )}
 
           <div className="typography-body-14m flex">
-            <span className="inline-block w-[110px] text-gray-400">추천수</span>
-            <span className="text-gray-500">{productStats.likeCount}개</span>
+            <span className="text-fg-tertiary inline-block w-[110px]">추천수</span>
+            <span className="text-fg-secondary">{productStats.likeCount}개</span>
           </div>
         </div>
       </div>

@@ -35,7 +35,7 @@ export default function ProductRankingImageCard({
           transition={{ duration: 0.1 }}
         >
           <div className="pc:aspect-square pc:h-auto bg-surface-subtle relative h-[240px] w-full">
-            <div className="text-primary-500 pc:text-white pc:bg-gray-600/80 typography-body-14m bg-surface-inverse absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg">
+            <div className="text-primary-500 pc:text-fg-inverse pc:bg-gray-600/80 typography-body-14m bg-surface-inverse absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg">
               AD
             </div>
 
@@ -52,7 +52,7 @@ export default function ProductRankingImageCard({
             <div className="xl:pc:text-base line-clamp-2 text-sm text-gray-700">
               {product.title}
             </div>
-            <div className="pc:h-[36px] pc:pt-0.5 xl:pc:text-[22px] typography-title-18b pt-2 text-gray-900">
+            <div className="pc:h-[36px] pc:pt-0.5 xl:pc:text-[22px] typography-title-18b text-fg-primary pt-2">
               <DisplayListPrice
                 price={product.price}
                 forceString

@@ -83,9 +83,9 @@ const ConsentAll = ({
     >
       <input type="checkbox" className="hidden" />
       {isAllConsented ? (
-        <CheckboxSelected className="text-primary-600" />
+        <CheckboxSelected className="text-fg-brand" />
       ) : (
-        <CheckboxSelected className="text-gray-300" />
+        <CheckboxSelected className="text-fg-disabled" />
       )}
       {CONSENT_ALL}
     </label>
@@ -112,9 +112,9 @@ const ConsentRequired = ({
       <label onChange={handleChange} className="flex cursor-pointer items-center gap-x-2">
         <input type="checkbox" id={id} className="hidden" />
         {isRequiredConsented(id) ? (
-          <CheckDefault className="text-primary-600" />
+          <CheckDefault className="text-fg-brand" />
         ) : (
-          <CheckDefault className="text-gray-300" />
+          <CheckDefault className="text-fg-disabled" />
         )}
         {CONSENT_REQUIRED[id]}
       </label>

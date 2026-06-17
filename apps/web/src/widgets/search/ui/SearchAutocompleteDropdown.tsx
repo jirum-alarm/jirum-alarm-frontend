@@ -76,7 +76,7 @@ function renderHighlighted(text: string, highlight: string) {
   return (
     <>
       {text.slice(0, idx)}
-      <span className="font-semibold text-gray-900">{text.slice(idx, idx + h.length)}</span>
+      <span className="text-fg-primary font-semibold">{text.slice(idx, idx + h.length)}</span>
       {text.slice(idx + h.length)}
     </>
   );

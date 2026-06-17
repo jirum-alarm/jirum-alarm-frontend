@@ -15,7 +15,7 @@ export default function ReactionChartHeader({
 }) {
   return (
     <div className="flex justify-between p-3">
-      <div className="flex items-center text-gray-500">{lastUpdatedAt}</div>
+      <div className="text-fg-secondary flex items-center">{lastUpdatedAt}</div>
 
       <div className="flex items-center gap-x-1.5">
         <motion.a

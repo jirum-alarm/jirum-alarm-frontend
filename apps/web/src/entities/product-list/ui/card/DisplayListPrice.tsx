@@ -29,15 +29,15 @@ export default function DisplayListPrice({
   return (
     <div className="flex items-center gap-x-2">
       {beforePrice && (
-        <span className="!typography-body-14sb line-clamp-1 text-gray-500 line-through">
+        <span className="!typography-body-14sb text-fg-secondary line-clamp-1 line-through">
           {beforePrice}
         </span>
       )}
       <span
         className={
           widthType === 'wide'
-            ? 'line-clamp-1 max-w-[120px] text-lg font-semibold text-gray-900'
-            : 'line-clamp-1 max-w-[120px] text-lg font-semibold text-gray-900'
+            ? 'text-fg-primary line-clamp-1 max-w-[120px] text-lg font-semibold'
+            : 'text-fg-primary line-clamp-1 max-w-[120px] text-lg font-semibold'
         }
       >
         {displayString}

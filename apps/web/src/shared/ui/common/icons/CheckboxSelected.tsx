@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 /** @example
- *  <CheckboxSelected className="text-primary-600" />
+ *  <CheckboxSelected className="text-fg-brand" />
  * */
 const SvgCheckboxSelected = (props: SVGProps<SVGSVGElement>) => {
   const { className, ...others } = props;

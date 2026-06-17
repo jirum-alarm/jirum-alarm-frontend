@@ -95,7 +95,7 @@ export default function ProductTagModal({
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <p className="typography-body-14m truncate text-gray-900">{selected.title}</p>
+            <p className="typography-body-14m text-fg-primary truncate">{selected.title}</p>
             {selected.price && (
               <p className="mt-0.5 text-xs font-semibold text-gray-700">{selected.price}</p>
             )}
@@ -103,7 +103,7 @@ export default function ProductTagModal({
           <button
             type="button"
             onClick={onClear}
-            className="flex-shrink-0 p-1 text-gray-400 transition-transform active:scale-95"
+            className="text-fg-tertiary flex-shrink-0 p-1 transition-transform active:scale-95"
             aria-label="태그 제거"
           >
             <Close width={16} height={16} />
@@ -113,9 +113,9 @@ export default function ProductTagModal({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-x-2 text-sm text-gray-500 transition-transform active:scale-95"
+          className="text-fg-secondary flex items-center gap-x-2 text-sm transition-transform active:scale-95"
         >
-          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-gray-400">
+          <span className="text-fg-tertiary flex h-6 w-6 items-center justify-center rounded-full border border-gray-400">
             <svg
               width="12"
               height="12"
@@ -140,10 +140,10 @@ export default function ProductTagModal({
           <Drawer.Content className="max-w-mobile-max rounded-t-5 bg-surface-default fixed inset-x-0 bottom-0 z-[9999] mx-auto flex h-[88vh] flex-col outline-hidden">
             {/* 모달 헤더 */}
             <div className="flex items-center justify-between px-5 py-4">
-              <h2 className="typography-title-16sb text-gray-900">상품 태그</h2>
+              <h2 className="typography-title-16sb text-fg-primary">상품 태그</h2>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 text-gray-400 transition-transform active:scale-95"
+                className="text-fg-tertiary p-1 transition-transform active:scale-95"
               >
                 <Close width={20} height={20} />
               </button>
@@ -174,7 +174,7 @@ export default function ProductTagModal({
                     }
                   }}
                   placeholder="핫딜 제품을 검색해 주세요"
-                  className="flex-1 bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none"
+                  className="text-fg-primary flex-1 bg-transparent text-sm placeholder-gray-400 outline-none"
                 />
                 {inputValue && (
                   <button
@@ -182,7 +182,7 @@ export default function ProductTagModal({
                       setInputValue('');
                       setKeyword('');
                     }}
-                    className="text-gray-400 transition-transform active:scale-95"
+                    className="text-fg-tertiary transition-transform active:scale-95"
                   >
                     <Close width={14} height={14} />
                   </button>
@@ -196,12 +196,12 @@ export default function ProductTagModal({
               {keyword && (
                 <>
                   {isFetching && (
-                    <div className="flex justify-center py-10 text-sm text-gray-400">
+                    <div className="text-fg-tertiary flex justify-center py-10 text-sm">
                       검색 중...
                     </div>
                   )}
                   {!isFetching && searchResults.length === 0 && (
-                    <div className="flex justify-center py-10 text-sm text-gray-400">
+                    <div className="text-fg-tertiary flex justify-center py-10 text-sm">
                       검색 결과가 없어요.
                     </div>
                   )}
@@ -224,7 +224,7 @@ export default function ProductTagModal({
                               />
                             )}
                           </div>
-                          <p className="mt-1.5 line-clamp-2 text-xs leading-tight text-gray-900">
+                          <p className="text-fg-primary mt-1.5 line-clamp-2 text-xs leading-tight">
                             {p.title}
                           </p>
                           {p.price && (
@@ -261,7 +261,7 @@ export default function ProductTagModal({
                                 />
                               )}
                             </div>
-                            <p className="mt-1.5 line-clamp-2 text-xs leading-tight text-gray-900">
+                            <p className="text-fg-primary mt-1.5 line-clamp-2 text-xs leading-tight">
                               {p.title}
                             </p>
                             {p.price && (
@@ -274,7 +274,7 @@ export default function ProductTagModal({
                       </div>
                     </>
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+                    <div className="text-fg-tertiary flex flex-col items-center justify-center py-16">
                       <p className="text-sm">검색어를 입력해 상품을 찾아보세요</p>
                     </div>
                   )}

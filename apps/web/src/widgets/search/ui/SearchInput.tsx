@@ -156,7 +156,7 @@ export default SearchInput;
 function ResetButton({ handleReset }: { handleReset: () => void }) {
   return (
     <button
-      className="-m-2 grid h-full w-14 cursor-pointer place-items-center p-2 text-gray-300"
+      className="text-fg-disabled -m-2 grid h-full w-14 cursor-pointer place-items-center p-2"
       type="reset"
       onClick={handleReset}
     >

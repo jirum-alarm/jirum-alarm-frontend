@@ -52,7 +52,7 @@ export default function AlarmList() {
             <button
               type="button"
               onClick={() => setEditMode(false)}
-              className="typography-body-14m border-border-strong bg-surface-default h-8 rounded-md border px-3 text-gray-900"
+              className="typography-body-14m border-border-strong bg-surface-default text-fg-primary h-8 rounded-md border px-3"
             >
               완료
             </button>
@@ -67,7 +67,7 @@ export default function AlarmList() {
             </span>
             <Link
               href={PAGE.MYPAGE_KEYWORD}
-              className="typography-body-14m border-border-strong bg-surface-default flex h-8 items-center justify-center rounded-md border px-3 text-gray-900"
+              className="typography-body-14m border-border-strong bg-surface-default text-fg-primary flex h-8 items-center justify-center rounded-md border px-3"
             >
               키워드 알림
             </Link>

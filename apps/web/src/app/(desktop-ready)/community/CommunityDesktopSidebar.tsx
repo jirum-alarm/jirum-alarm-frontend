@@ -27,8 +27,8 @@ export default async function CommunityDesktopSidebar() {
   return (
     <div className="sticky top-20">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="typography-body-14sb text-gray-900">지름 랭킹</h2>
-        <Link href="/trending/ranking" className="text-xs text-gray-500 hover:text-gray-700">
+        <h2 className="typography-body-14sb text-fg-primary">지름 랭킹</h2>
+        <Link href="/trending/ranking" className="text-fg-secondary text-xs hover:text-gray-700">
           더보기
         </Link>
       </div>
@@ -59,13 +59,13 @@ export default async function CommunityDesktopSidebar() {
                       ? 'text-orange-400'
                       : i === 2
                         ? 'text-yellow-500'
-                        : 'text-white',
+                        : 'text-fg-inverse',
                 ].join(' ')}
               >
                 {i + 1}
               </span>
             </div>
-            <p className="mt-1.5 line-clamp-2 text-xs leading-tight text-gray-900">
+            <p className="text-fg-primary mt-1.5 line-clamp-2 text-xs leading-tight">
               {product.title}
             </p>
             {product.price && (

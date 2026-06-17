@@ -86,18 +86,18 @@ export function ReactionChart({
       </div>
 
       <div className="absolute bottom-0 mx-auto mt-1 flex w-[217px] items-end justify-between">
-        <span className="typography-body-14m text-gray-500">
+        <span className="typography-body-14m text-fg-secondary">
           {disabled ? '-' : positiveCount}명
         </span>
         <div className="space-y-0.5">
           <div
             className={cn([
               'text-center text-[44px] leading-[44px] font-semibold text-gray-800',
-              disabled && 'text-gray-400',
+              disabled && 'text-fg-tertiary',
             ])}
           >
             {disabled ? '00' : positivePercent.toFixed(0)}
-            <span className="text-semibold ml-[1px] text-2xl text-gray-400">%</span>
+            <span className="text-semibold text-fg-tertiary ml-[1px] text-2xl">%</span>
           </div>
           <div className="flex items-center justify-center gap-x-0.5">
             {!disabled &&
@@ -112,10 +112,10 @@ export function ReactionChart({
                   <Thumbsdown className="size-4.5" active />
                 </>
               ))}
-            {disabled && <span className="text-sm text-gray-500">반응 수집중</span>}
+            {disabled && <span className="text-fg-secondary text-sm">반응 수집중</span>}
           </div>
         </div>
-        <span className="typography-body-14m text-gray-500">
+        <span className="typography-body-14m text-fg-secondary">
           {disabled ? '-' : negativeCount}명
         </span>
       </div>

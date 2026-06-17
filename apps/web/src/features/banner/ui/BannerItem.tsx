@@ -52,7 +52,7 @@ const BannerItem = ({
         transition={{ duration: 0.1 }}
       >
         <div>
-          <p className="pc:text-[22px] [&>strong]:text-primary-300 mb-[4px] font-bold text-white">
+          <p className="pc:text-[22px] [&>strong]:text-primary-300 text-fg-inverse mb-[4px] font-bold">
             {title}
           </p>
           <p className="pc:text-base text-[13px] text-gray-200">{description}</p>
@@ -71,7 +71,7 @@ const BannerItem = ({
       </motion.div>
 
       {isAd && (
-        <div className="bg-opacity-90 absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[7px] py-[3px] text-xs leading-none font-medium text-white">
+        <div className="bg-opacity-90 text-fg-inverse absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[7px] py-[3px] text-xs leading-none font-medium">
           AD
         </div>
       )}

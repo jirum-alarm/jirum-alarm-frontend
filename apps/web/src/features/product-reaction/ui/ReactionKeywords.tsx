@@ -34,15 +34,15 @@ function ReactionKeywords({ productId }: { productId: number }) {
             },
           ])}
         >
-          <span className="typography-body-14m text-gray-500">{item.tag}</span>
-          <span className="typography-body-14m text-gray-900">{item.name}</span>
+          <span className="typography-body-14m text-fg-secondary">{item.tag}</span>
+          <span className="typography-body-14m text-fg-primary">{item.name}</span>
           <span
             className={cn([
               'typography-body-14sb',
               {
                 'text-secondary-700': item.type === 'POSITIVE',
                 'text-error-400': item.type === 'NEGATIVE',
-                'text-gray-500': item.type === 'SYNONYM',
+                'text-fg-secondary': item.type === 'SYNONYM',
               },
             ])}
           >

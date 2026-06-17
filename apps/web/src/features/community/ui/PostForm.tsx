@@ -46,14 +46,14 @@ export default function PostForm({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해 주세요"
-          className="typography-title-16sb border-border-subtle mb-3 w-full border-b pb-3 text-gray-900 placeholder-gray-300 outline-none"
+          className="typography-title-16sb border-border-subtle text-fg-primary mb-3 w-full border-b pb-3 placeholder-gray-300 outline-none"
         />
 
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="내용을 입력해주세요"
-          className="min-h-[200px] flex-1 resize-none text-sm leading-relaxed text-gray-900 placeholder-gray-400 outline-none"
+          className="text-fg-primary min-h-[200px] flex-1 resize-none text-sm leading-relaxed placeholder-gray-400 outline-none"
         />
       </div>
 
@@ -74,7 +74,7 @@ export default function PostForm({
                 </div>
               )}
               <div className="min-w-0 flex-1">
-                <p className="typography-body-14m truncate text-gray-900">
+                <p className="typography-body-14m text-fg-primary truncate">
                   {existingTaggedProduct.title}
                 </p>
                 {existingTaggedProduct.price && (
@@ -85,8 +85,8 @@ export default function PostForm({
               </div>
             </div>
           ) : (
-            <span className="flex items-center gap-x-2 text-sm text-gray-300">
-              <span className="border-border-default flex h-6 w-6 items-center justify-center rounded-full border text-gray-300">
+            <span className="text-fg-disabled flex items-center gap-x-2 text-sm">
+              <span className="border-border-default text-fg-disabled flex h-6 w-6 items-center justify-center rounded-full border">
                 <svg
                   width="12"
                   height="12"
@@ -115,7 +115,7 @@ export default function PostForm({
         <button
           type="submit"
           disabled={!canSubmit}
-          className="bg-surface-brand typography-body-14sb w-full rounded-xl py-3.5 text-white transition-opacity disabled:opacity-40"
+          className="bg-surface-brand typography-body-14sb text-fg-inverse w-full rounded-xl py-3.5 transition-opacity disabled:opacity-40"
         >
           {isSubmitting ? '처리 중...' : isEdit ? '수정 완료' : '글 등록하기'}
         </button>

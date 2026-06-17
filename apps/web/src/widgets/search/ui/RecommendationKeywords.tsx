@@ -68,7 +68,7 @@ function Chip({ keyword }: { keyword: string }) {
   return (
     <div
       onClick={handleClick}
-      className="bg-surface-subtle rounded-[40px] px-3 py-2 text-gray-900 hover:cursor-pointer hover:bg-gray-200"
+      className="bg-surface-subtle text-fg-primary rounded-[40px] px-3 py-2 hover:cursor-pointer hover:bg-gray-200"
     >
       {keyword}
     </div>

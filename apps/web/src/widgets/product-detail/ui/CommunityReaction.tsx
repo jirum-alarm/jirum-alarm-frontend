@@ -61,7 +61,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
               align="right"
               polygonOffset={8}
               content={
-                <p className="text-[13px] text-white">
+                <p className="text-fg-inverse text-[13px]">
                   <strong className="font-semibold">실제 커뮤니티</strong> 사용자들의
                   <br />
                   핫딜 리뷰를 요약해 확인해요

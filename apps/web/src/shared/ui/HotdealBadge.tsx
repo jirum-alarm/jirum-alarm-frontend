@@ -12,7 +12,7 @@ const HotdealBadge = ({
   return (
     <div
       className={cn(
-        `typography-body-14sb flex h-6 w-[57px] items-center justify-center text-white`,
+        `typography-body-14sb text-fg-inverse flex h-6 w-[57px] items-center justify-center`,
         {
           'rounded-[8px]': badgeVariant === 'page',
           'rounded-tr-[8px] rounded-bl-[8px]': badgeVariant === 'card',

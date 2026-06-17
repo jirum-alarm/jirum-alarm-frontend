@@ -31,7 +31,7 @@ export default function DoubleRowProductCard({ product }: { product: ProductCard
               </div>
             )}
             {product.earliestExpiryDate && (
-              <div className="text-semibold absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg bg-gray-700/80 px-2 text-xs text-white">
+              <div className="text-semibold text-fg-inverse absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg bg-gray-700/80 px-2 text-xs">
                 유통기한 {formatDateToMMD(product.earliestExpiryDate)}
               </div>
             )}

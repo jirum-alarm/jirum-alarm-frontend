@@ -22,7 +22,9 @@ interface CurationProductListProps {
 
 const LIMIT = 20;
 
-const EmptyState = () => <div className="py-10 text-center text-gray-500">상품이 없습니다.</div>;
+const EmptyState = () => (
+  <div className="text-fg-secondary py-10 text-center">상품이 없습니다.</div>
+);
 
 const ByKeyword = ({ section }: CurationProductListProps) => {
   const queryVariables: QueryProductsByKeywordQueryVariables = {

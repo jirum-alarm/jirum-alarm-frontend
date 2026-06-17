@@ -73,7 +73,7 @@ const AlarmItem = ({
           />
         </div>
         <div className="flex-1 pl-3">
-          <p className="line-clamp-2 w-full text-sm text-gray-900">
+          <p className="text-fg-primary line-clamp-2 w-full text-sm">
             <HighlightText message={message} keyword={keyword?.split(' ')[0] ?? ''} />
           </p>
           <div className="flex items-center gap-x-3 pt-2">
@@ -82,8 +82,8 @@ const AlarmItem = ({
                 className={cn(
                   'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-normal',
                   {
-                    'bg-surface-default border border-gray-400 px-2 text-gray-500': isEnd,
-                    'bg-error-500 px-3 text-white': !isEnd && isHot,
+                    'bg-surface-default text-fg-secondary border border-gray-400 px-2': isEnd,
+                    'bg-error-500 text-fg-inverse px-3': !isEnd && isHot,
                   },
                 )}
               >
@@ -92,11 +92,11 @@ const AlarmItem = ({
             )}
             {price && (
               <>
-                <span className="line-clamp-1 max-w-56 font-semibold text-gray-900">{price}</span>
+                <span className="text-fg-primary line-clamp-1 max-w-56 font-semibold">{price}</span>
                 <span className="inline-block h-2.5 border-l border-gray-400"></span>
               </>
             )}
-            <span className="text-xs text-gray-400">
+            <span className="text-fg-tertiary text-xs">
               <DisplayTime time={createdAt} />
             </span>
           </div>

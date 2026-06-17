@@ -77,7 +77,7 @@ const Login = () => {
       name: '카카오로 시작하기',
       id: 'kakao-login-button',
       icon: <SvgKakao />,
-      style: 'bg-[#FBE84C] hover:bg-[#F5DC3D] text-gray-900',
+      style: 'bg-[#FBE84C] hover:bg-[#F5DC3D] text-fg-primary',
       action: handleKakaoLogin,
       type: LoginType.KAKAO,
     },
@@ -85,7 +85,7 @@ const Login = () => {
       name: '네이버로 시작하기',
       id: 'naver_id_login',
       icon: <SvgNaver />,
-      style: 'bg-[#02C75A] hover:bg-[#00B04F] text-white',
+      style: 'bg-[#02C75A] hover:bg-[#00B04F] text-fg-inverse',
       action: handleNaverLogin,
       type: LoginType.NAVER,
     },
@@ -93,7 +93,7 @@ const Login = () => {
       name: '이메일로 시작하기',
       id: 'email-login-button',
       icon: <SvgEmail />,
-      style: 'hover:bg-gray-200 border-[1px] border-border-default text-gray-900',
+      style: 'hover:bg-gray-200 border-[1px] border-border-default text-fg-primary',
       action: handleEmailLogin,
       type: LoginType.EMAIL,
     },
@@ -111,7 +111,7 @@ const Login = () => {
           {/* Title */}
           <div className="mb-12">
             <p className="text-[28px] leading-[130%] font-bold tracking-[-1%]">핫딜의 시작</p>
-            <p className="text-[38px] leading-[130%] font-bold tracking-[-1%] text-gray-900">
+            <p className="text-fg-primary text-[38px] leading-[130%] font-bold tracking-[-1%]">
               지름알림
             </p>
           </div>
@@ -151,7 +151,7 @@ const Login = () => {
             {/* Email Signup Link */}
             <Link
               href={PAGE.SIGNUP}
-              className="mt-2 text-sm text-gray-600 underline transition-colors hover:text-gray-900"
+              className="hover:text-fg-primary mt-2 text-sm text-gray-600 underline transition-colors"
             >
               이메일로 가입하기
             </Link>

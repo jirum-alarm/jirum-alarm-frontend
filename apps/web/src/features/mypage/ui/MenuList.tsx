@@ -50,7 +50,7 @@ const MenuList = () => {
                 <Link href={menu.url}>
                   <div className="flex items-center gap-3 py-3">
                     {menu.icon}
-                    <span className="text-gray-900">{menu.title}</span>
+                    <span className="text-fg-primary">{menu.title}</span>
                   </div>
                 </Link>
               </li>
@@ -67,7 +67,7 @@ const MenuList = () => {
                 onClick={handleShowChannelTalkClick}
               >
                 {<Headset />}
-                <span className="text-gray-900">고객센터</span>
+                <span className="text-fg-primary">고객센터</span>
               </div>
             </motion.button>
           </li>

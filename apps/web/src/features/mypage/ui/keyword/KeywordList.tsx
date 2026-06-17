@@ -10,7 +10,7 @@ const KeywordList = () => {
   return (
     <div className="pb-32">
       <div>
-        <div className="typography-body-14m flex justify-between text-gray-900">
+        <div className="typography-body-14m text-fg-primary flex justify-between">
           <span>나의 지름 키워드</span>
           <p>
             <span className="text-primary-500">{notificationKeywordsByMe?.length ?? 0}</span>
@@ -24,10 +24,10 @@ const KeywordList = () => {
         {notificationKeywordsByMe?.map((keyword) => (
           <li className="border-border-default border-b px-2 py-3" key={keyword.id}>
             <div className="flex w-full items-center justify-between">
-              <span className="text-sm text-gray-900">{keyword.keyword}</span>
+              <span className="text-fg-primary text-sm">{keyword.keyword}</span>
               <button
                 role="button"
-                className="-m-2 p-2 text-gray-400"
+                className="text-fg-tertiary -m-2 p-2"
                 aria-label="키워드 삭제"
                 onClick={() => onDeleteKeyword(keyword.id)}
               >

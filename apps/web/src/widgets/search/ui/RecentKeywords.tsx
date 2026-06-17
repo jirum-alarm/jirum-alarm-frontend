@@ -51,7 +51,7 @@ export default function RecentKeywords() {
                     />
                   ))
                 ) : (
-                  <span className="text-gray-400">검색 내역이 없어요.</span>
+                  <span className="text-fg-tertiary">검색 내역이 없어요.</span>
                 )}
               </div>
             )}
@@ -91,7 +91,7 @@ function Chip({
   return (
     <div
       onClick={handleClick}
-      className="border-border-default flex h-[40px] shrink-0 items-center gap-x-1 truncate rounded-[40px] border px-3 text-gray-900 hover:cursor-pointer hover:bg-gray-200"
+      className="border-border-default text-fg-primary flex h-[40px] shrink-0 items-center gap-x-1 truncate rounded-[40px] border px-3 hover:cursor-pointer hover:bg-gray-200"
     >
       {keyword.slice(0, 15)}
       {keyword.length > 15 ? '...' : ''}

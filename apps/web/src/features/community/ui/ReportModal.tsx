@@ -63,8 +63,8 @@ export default function ReportModal({
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
         <Drawer.Content className="max-w-mobile-max rounded-t-5 bg-surface-default fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit outline-hidden">
           <div className="flex flex-col px-5 pt-6 pb-8">
-            <h2 className="typography-title-16sb mb-4 text-gray-900">글 신고하기</h2>
-            <p className="mb-4 text-sm text-gray-500">
+            <h2 className="typography-title-16sb text-fg-primary mb-4">글 신고하기</h2>
+            <p className="text-fg-secondary mb-4 text-sm">
               신고 사유를 선택하면 운영팀이 검토 후 처리해드릴게요.
             </p>
 
@@ -97,7 +97,7 @@ export default function ReportModal({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="신고 내용을 입력해주세요"
-                className="border-border-default mt-3 h-24 w-full resize-none rounded-lg border p-3 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-gray-400"
+                className="border-border-default text-fg-primary mt-3 h-24 w-full resize-none rounded-lg border p-3 text-sm placeholder-gray-400 outline-none focus:border-gray-400"
               />
             )}
 
@@ -111,7 +111,7 @@ export default function ReportModal({
               <button
                 onClick={() => report()}
                 disabled={!selectedReason || isPending}
-                className="bg-surface-brand typography-body-14m flex h-12 flex-1 items-center justify-center rounded-lg text-white transition-transform active:scale-95 disabled:opacity-40"
+                className="bg-surface-brand typography-body-14m text-fg-inverse flex h-12 flex-1 items-center justify-center rounded-lg transition-transform active:scale-95 disabled:opacity-40"
               >
                 신고
               </button>

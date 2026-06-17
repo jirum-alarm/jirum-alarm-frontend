@@ -151,9 +151,9 @@ const BottomNavComponent = () => {
             <Link
               data-nav-type={nav.type}
               className={cn(
-                'flex w-full flex-col items-center justify-center rounded-lg py-2 text-gray-500',
+                'text-fg-secondary flex w-full flex-col items-center justify-center rounded-lg py-2',
                 {
-                  'text-gray-900': isActiveNav(nav),
+                  'text-fg-primary': isActiveNav(nav),
                 },
               )}
               href={nav.link ?? nav.getLink(pathName)}

@@ -31,7 +31,7 @@ const Description = () => {
       <p className="typography-headline-24sb">
         출생년도와 성별을
         <br />
-        알려주세요.<span className="pl-2 text-base text-gray-500">(선택)</span>
+        알려주세요.<span className="text-fg-secondary pl-2 text-base">(선택)</span>
       </p>
       <p className="pt-4 text-sm text-gray-700">
         나와 비슷한 사람들이 좋아하는

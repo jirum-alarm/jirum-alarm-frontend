@@ -63,9 +63,9 @@ const HelperText = ({
       <li
         className={cn(
           'transition-colors',
-          !value && 'text-gray-400',
-          value && !isInvalidLength && 'text-primary-600',
-          isInvalidLength && 'text-error-500',
+          !value && 'text-fg-tertiary',
+          value && !isInvalidLength && 'text-fg-brand',
+          isInvalidLength && 'text-fg-error',
         )}
       >
         8자 이상 30자 이하 입력
@@ -73,9 +73,9 @@ const HelperText = ({
       <li
         className={cn(
           'transition-colors',
-          !value && 'text-gray-400',
-          value && !isInvalidType && 'text-primary-600',
-          isInvalidType && 'text-error-500',
+          !value && 'text-fg-tertiary',
+          value && !isInvalidType && 'text-fg-brand',
+          isInvalidType && 'text-fg-error',
         )}
       >
         영어, 숫자, 특수문자 중 2가지 이상 조합
@@ -88,7 +88,7 @@ const ConfirmHelperText = ({ value, isInValid }: { value: string; isInValid: boo
   return (
     <>
       {value && isInValid && (
-        <p className="text-error-500">새 비밀번호와 일치하지 않아요. 다시 확인해주세요.</p>
+        <p className="text-fg-error">새 비밀번호와 일치하지 않아요. 다시 확인해주세요.</p>
       )}
     </>
   );

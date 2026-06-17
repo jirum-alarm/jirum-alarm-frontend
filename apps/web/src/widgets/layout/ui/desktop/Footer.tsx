@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="mb-5 flex justify-between">
             <div className="flex items-center gap-x-2.5">
               <IllustIcons.IconLogo />
-              <p className="text-2xl font-bold text-gray-900">지름알림</p>
+              <p className="text-fg-primary text-2xl font-bold">지름알림</p>
             </div>
             <Link
               href="https://open.kakao.com/o/gJZTWAAg"
@@ -34,7 +34,7 @@ const Footer = () => {
               <Link href="https://jirum-alarm.com/policies/terms" className="underline">
                 서비스 이용약관
               </Link>
-              <span className="text-gray-400">ㅣ</span>
+              <span className="text-fg-tertiary">ㅣ</span>
               <Link href="https://jirum-alarm.com/policies/privacy" className="underline">
                 개인정보 처리방침
               </Link>

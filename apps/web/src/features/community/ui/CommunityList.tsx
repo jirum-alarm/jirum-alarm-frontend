@@ -64,7 +64,7 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
 
   if (posts.length === 0) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center py-20 text-gray-400">
+      <div className="text-fg-tertiary flex flex-1 flex-col items-center justify-center py-20">
         <p className="text-sm">아직 게시글이 없어요.</p>
       </div>
     );
@@ -96,7 +96,7 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
       {/* 무한 스크롤 트리거 */}
       <div ref={ref} className="h-1" />
       {isFetchingNextPage && (
-        <div className="flex items-center justify-center py-4 text-sm text-gray-400">
+        <div className="text-fg-tertiary flex items-center justify-center py-4 text-sm">
           불러오는 중...
         </div>
       )}
@@ -105,7 +105,7 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
       {isUserLogin && (
         <Link
           href={PAGE.COMMUNITY_WRITE}
-          className="bg-surface-brand hover:bg-primary-600 active:bg-primary-700 typography-body-14sb fixed right-5 z-50 flex items-center gap-x-1.5 rounded-full px-4 py-3 text-white shadow-lg transition-transform active:scale-95 md:hidden"
+          className="bg-surface-brand hover:bg-primary-600 active:bg-primary-700 typography-body-14sb text-fg-inverse fixed right-5 z-50 flex items-center gap-x-1.5 rounded-full px-4 py-3 shadow-lg transition-transform active:scale-95 md:hidden"
           style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom))' }}
         >
           <span className="text-lg leading-none">+</span>

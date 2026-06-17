@@ -10,7 +10,7 @@ interface GenderRadioGroupProps {
 const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) => {
   return (
     <fieldset>
-      <legend className="text-sm text-gray-500">성별</legend>
+      <legend className="text-fg-secondary text-sm">성별</legend>
       <div className="h-4" />
       <ul className="grid grid-cols-2 gap-2">
         <li>

@@ -60,12 +60,12 @@ function CommentItem({
           <span className="typography-body-14m text-gray-700">
             {comment.author?.nickname ?? '알 수 없음'}
           </span>
-          <span className="text-xs text-gray-400">{displayTime(comment.createdAt)}</span>
+          <span className="text-fg-tertiary text-xs">{displayTime(comment.createdAt)}</span>
         </div>
         {isMyComment && (
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="flex h-6 w-6 items-center justify-center text-gray-400 transition-transform active:scale-95"
+            className="text-fg-tertiary flex h-6 w-6 items-center justify-center transition-transform active:scale-95"
             aria-label="댓글 메뉴"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
@@ -76,12 +76,12 @@ function CommentItem({
           </button>
         )}
       </div>
-      <p className="mt-1 text-sm text-gray-900">{comment.content}</p>
+      <p className="text-fg-primary mt-1 text-sm">{comment.content}</p>
       <div className="mt-2 flex items-center gap-x-3 text-xs">
         <button
           type="button"
           onClick={() => isUserLogin && onLike(comment.id, !!comment.isMyLike)}
-          className={`flex items-center gap-x-1 transition-transform active:scale-95 ${comment.isMyLike ? 'text-primary-500' : 'text-gray-400'} ${!isUserLogin ? 'opacity-40' : ''}`}
+          className={`flex items-center gap-x-1 transition-transform active:scale-95 ${comment.isMyLike ? 'text-primary-500' : 'text-fg-tertiary'} ${!isUserLogin ? 'opacity-40' : ''}`}
         >
           <svg
             width="12"
@@ -117,7 +117,7 @@ function CommentItem({
               </button>
               <div className="mx-5 h-px w-full bg-gray-200" />
               <button
-                className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+                className="text-fg-error flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                 onClick={() => {
                   setIsMenuOpen(false);
                   setIsDeleteConfirmOpen(true);
@@ -139,8 +139,8 @@ function CommentItem({
         >
           <AlertContent>
             <Header>
-              <Title className="typography-title-16sb text-gray-900">댓글을 삭제할까요?</Title>
-              <Description className="text-sm text-gray-500">
+              <Title className="typography-title-16sb text-fg-primary">댓글을 삭제할까요?</Title>
+              <Description className="text-fg-secondary text-sm">
                 댓글을 삭제하면 다시 복구할 수 없어요.
               </Description>
             </Header>
@@ -149,7 +149,7 @@ function CommentItem({
                 취소
               </Cancel>
               <Action
-                className="bg-error-500 typography-body-14m flex h-11 flex-1 items-center justify-center rounded-lg text-white"
+                className="bg-error-500 typography-body-14m text-fg-inverse flex h-11 flex-1 items-center justify-center rounded-lg"
                 onClick={() => onDelete(comment.id)}
               >
                 삭제
@@ -246,7 +246,9 @@ function CommunityCommentList({
   const comments = pages.flatMap((page) => page?.comments ?? []);
 
   if (comments.length === 0) {
-    return <div className="py-8 text-center text-sm text-gray-400">첫 번째 댓글을 남겨보세요</div>;
+    return (
+      <div className="text-fg-tertiary py-8 text-center text-sm">첫 번째 댓글을 남겨보세요</div>
+    );
   }
 
   return (
@@ -276,7 +278,7 @@ function CommunityCommentList({
                     updateComment({ id: Number(comment.id), content: editContent.trim() })
                   }
                   disabled={!editContent.trim() || isUpdating}
-                  className="typography-body-14sb h-8 rounded-lg bg-gray-800 px-4 text-white transition-transform active:scale-95 disabled:bg-gray-400"
+                  className="typography-body-14sb text-fg-inverse h-8 rounded-lg bg-gray-800 px-4 transition-transform active:scale-95 disabled:bg-gray-400"
                 >
                   수정
                 </button>
@@ -302,7 +304,7 @@ function CommunityCommentList({
       })}
       <div ref={ref} className="h-1" />
       {isFetchingNextPage && (
-        <div className="flex items-center justify-center py-4 text-sm text-gray-400">
+        <div className="text-fg-tertiary flex items-center justify-center py-4 text-sm">
           불러오는 중...
         </div>
       )}
@@ -354,7 +356,7 @@ function CommunityCommentInput({ postId, isUserLogin }: { postId: number; isUser
       <button
         type="submit"
         disabled={!content.trim() || isPending || !isUserLogin}
-        className="typography-body-14sb h-10 shrink-0 rounded-lg bg-gray-800 px-5 text-white transition-transform active:scale-95 disabled:bg-gray-400"
+        className="typography-body-14sb text-fg-inverse h-10 shrink-0 rounded-lg bg-gray-800 px-5 transition-transform active:scale-95 disabled:bg-gray-400"
       >
         등록
       </button>
@@ -375,7 +377,7 @@ export default function CommunityCommentSection({
   return (
     <section className="mt-4">
       <div className="px-5 pb-2">
-        <h2 className="typography-title-16sb text-gray-900">댓글</h2>
+        <h2 className="typography-title-16sb text-fg-primary">댓글</h2>
       </div>
       <Suspense
         fallback={

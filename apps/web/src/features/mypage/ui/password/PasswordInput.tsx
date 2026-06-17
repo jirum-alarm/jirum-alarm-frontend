@@ -32,7 +32,7 @@ const PasswordInput = ({
 
   return (
     <label>
-      <span className="text-sm text-gray-500">{labelText}</span>
+      <span className="text-fg-secondary text-sm">{labelText}</span>
       <Input
         type={masking ? 'password' : 'text'}
         id={id}

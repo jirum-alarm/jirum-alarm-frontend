@@ -15,7 +15,7 @@ const MovePage = ({ to, title, subtitle }: MovePageProps) => {
           <span className="text-sm text-gray-600">{title}</span>
         </div>
         <div className="flex items-center gap-2">
-          {subtitle && <span className="text-sm text-gray-900"> {subtitle}</span>}
+          {subtitle && <span className="text-fg-primary text-sm"> {subtitle}</span>}
           <ArrowRight />
         </div>
       </div>

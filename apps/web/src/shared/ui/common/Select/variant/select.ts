@@ -14,7 +14,7 @@ export const selectButtonVaraint = cva(['w-full', 'min-w-[220px]', 'flex', 'just
     {
       variant: 'outlined',
       color: 'black',
-      class: 'border-b-gray-900 text-gray-900',
+      class: 'border-b-gray-900 text-fg-primary',
     },
   ],
   defaultVariants: {

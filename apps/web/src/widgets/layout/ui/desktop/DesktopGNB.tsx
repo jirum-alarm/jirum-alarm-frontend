@@ -136,7 +136,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           ) : (
             <Link
               href={PAGE.LOGIN}
-              className="rounded-full bg-gray-700 px-4 py-1.5 font-semibold text-white transition-colors duration-300 hover:bg-gray-600"
+              className="text-fg-inverse rounded-full bg-gray-700 px-4 py-1.5 font-semibold transition-colors duration-300 hover:bg-gray-600"
             >
               <motion.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
                 로그인

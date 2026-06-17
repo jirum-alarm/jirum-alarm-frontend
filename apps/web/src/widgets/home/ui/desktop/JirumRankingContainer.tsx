@@ -65,7 +65,7 @@ const JirumRankingContainer = async () => {
       <div className="max-w-slider-max mx-auto mt-9">
         <SectionHeader
           title="지름알림 랭킹"
-          titleClassName="text-white"
+          titleClassName="text-fg-inverse"
           right={
             <InteractiveMoreLink
               className="px-3 text-sm text-gray-100"

@@ -172,7 +172,7 @@ function HotdealGuideItem({ guide }: { guide: ProductGuide }) {
         <HotdealGuideItemCheckIcon />
       </div>
       <div className="flex flex-col gap-y-1">
-        <span className="typography-title-16sb text-gray-900">{guide.title}</span>
+        <span className="typography-title-16sb text-fg-primary">{guide.title}</span>
         <LinkText content={guide.content} />
       </div>
     </div>

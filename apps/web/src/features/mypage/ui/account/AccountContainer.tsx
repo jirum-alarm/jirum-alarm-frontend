@@ -23,7 +23,7 @@ const AccountContainer = () => {
           <span className="text-sm text-gray-600">이메일 주소</span>
         </div>
         <div>
-          <span className="text-gray-900">{me?.email}</span>
+          <span className="text-fg-primary">{me?.email}</span>
         </div>
         <div className="flex flex-1 flex-col justify-end">
           <div className="flex justify-center">

@@ -36,7 +36,7 @@ const PreviewCard = ({ product, rank, priority }: PreviewCardProps) => (
   <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
     <div className="bg-surface-default col-span-1 overflow-hidden rounded-lg border shadow-[0_2px_12px_rgba(0,0,0,0.08)]">
       <div className="bg-surface-subtle relative aspect-square w-full">
-        <div className="typography-body-14m absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-600/80 text-white">
+        <div className="typography-body-14m text-fg-inverse absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-600/80">
           {rank}
         </div>
         <ProductThumbnail
@@ -52,7 +52,7 @@ const PreviewCard = ({ product, rank, priority }: PreviewCardProps) => (
       </div>
       <div className="h-[110px] p-3 pb-0">
         <div className="line-clamp-2 text-sm text-gray-700 xl:text-base">{product.title}</div>
-        <div className="typography-title-18b h-[36px] pt-0.5 text-gray-900 xl:text-[22px]">
+        <div className="typography-title-18b text-fg-primary h-[36px] pt-0.5 xl:text-[22px]">
           <DisplayListPrice price={product.price} />
         </div>
       </div>

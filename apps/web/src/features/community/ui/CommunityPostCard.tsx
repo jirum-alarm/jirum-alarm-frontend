@@ -27,20 +27,20 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
         {/* 헤더: 유저 정보 */}
         <div className="flex items-center gap-x-2">
           {post.isNotice ? (
-            <span className="bg-surface-brand rounded px-1.5 py-0.5 text-xs font-semibold text-white">
+            <span className="bg-surface-brand text-fg-inverse rounded px-1.5 py-0.5 text-xs font-semibold">
               지름알림
             </span>
           ) : (
-            <span className="typography-caption-12m bg-surface-muted rounded px-1.5 py-0.5 text-gray-500">
+            <span className="typography-caption-12m bg-surface-muted text-fg-secondary rounded px-1.5 py-0.5">
               {isProductComment ? '댓글' : '게시글'}
             </span>
           )}
           <span className="typography-body-14m text-gray-700">
             {post.author?.nickname ?? '알 수 없음'}
           </span>
-          <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
+          <span className="text-fg-tertiary text-xs">{displayTime(post.createdAt)}</span>
           {post.isNotice && (
-            <span className="bg-secondary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">
+            <span className="bg-secondary-500 text-fg-inverse rounded px-1.5 py-0.5 text-xs font-semibold">
               NEW
             </span>
           )}
@@ -48,14 +48,14 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
 
         {/* 본문 */}
         {post.title && (
-          <p className="typography-body-14sb mt-2 truncate text-gray-900">{post.title}</p>
+          <p className="typography-body-14sb text-fg-primary mt-2 truncate">{post.title}</p>
         )}
         <p className={cn('mt-1 text-sm text-gray-600', post.title ? 'truncate' : 'line-clamp-2')}>
           {post.content}
         </p>
 
         {/* 통계: 하단 고정 */}
-        <div className="mt-auto flex items-center gap-x-3 pt-2 text-xs text-gray-400">
+        <div className="text-fg-tertiary mt-auto flex items-center gap-x-3 pt-2 text-xs">
           <span className="flex items-center gap-x-1">
             <ThumbsupFill className="h-3.5 w-3.5" aria-hidden />
             {post.likeCount}
@@ -84,7 +84,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
             />
           </div>
           {post.taggedProduct?.title && (
-            <p className="line-clamp-2 text-xs leading-tight text-gray-400">
+            <p className="text-fg-tertiary line-clamp-2 text-xs leading-tight">
               {post.taggedProduct.title}
             </p>
           )}

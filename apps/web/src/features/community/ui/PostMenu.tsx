@@ -63,7 +63,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
               {isMyPost ? (
                 <>
                   <button
-                    className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+                    className="text-fg-error flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                     onClick={() => {
                       setIsOpen(false);
                       setIsDeleteConfirmOpen(true);
@@ -84,7 +84,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
                 </>
               ) : (
                 <button
-                  className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+                  className="text-fg-error flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                   onClick={() => {
                     setIsOpen(false);
                     setIsReportOpen(true);
@@ -107,8 +107,8 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
         >
           <Content>
             <Header>
-              <Title className="typography-title-16sb text-gray-900">글을 삭제할까요?</Title>
-              <Description className="text-sm text-gray-500">
+              <Title className="typography-title-16sb text-fg-primary">글을 삭제할까요?</Title>
+              <Description className="text-fg-secondary text-sm">
                 글을 삭제하면 다시 복구할 수 없어요.
               </Description>
             </Header>
@@ -117,7 +117,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
                 취소
               </Cancel>
               <Action
-                className="bg-error-500 typography-body-14m flex h-11 flex-1 items-center justify-center rounded-lg text-white"
+                className="bg-error-500 typography-body-14m text-fg-inverse flex h-11 flex-1 items-center justify-center rounded-lg"
                 onClick={() => removePost()}
               >
                 삭제

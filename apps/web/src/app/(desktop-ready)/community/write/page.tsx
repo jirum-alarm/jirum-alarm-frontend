@@ -37,7 +37,7 @@ export default async function CommunityWritePage({
           <header className="max-w-mobile-max border-border-subtle bg-surface-default fixed top-0 z-50 flex h-14 w-full items-center justify-between border-b px-3">
             <div className="flex items-center">
               <BackButton />
-              <span className="typography-title-16sb ml-1 text-gray-900">
+              <span className="typography-title-16sb text-fg-primary ml-1">
                 {editPostId ? '글 수정' : '글쓰기'}
               </span>
             </div>
@@ -58,7 +58,9 @@ export default async function CommunityWritePage({
 
   return (
     <div className="max-w-2xl py-8">
-      <h1 className="mb-6 text-xl font-bold text-gray-900">{editPostId ? '글 수정' : '글쓰기'}</h1>
+      <h1 className="text-fg-primary mb-6 text-xl font-bold">
+        {editPostId ? '글 수정' : '글쓰기'}
+      </h1>
       <PostFormClient editPostId={editPostId} />
     </div>
   );

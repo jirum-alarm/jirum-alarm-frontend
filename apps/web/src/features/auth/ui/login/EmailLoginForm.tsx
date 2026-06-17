@@ -18,7 +18,7 @@ const EmailLoginForm = () => {
       <PasswordInput password={password} hideHelperText={true} />
       <div className="bg-surface-default py-9">
         {error && (
-          <p className="text-error-500 pb-4 text-center text-sm">
+          <p className="text-fg-error pb-4 text-center text-sm">
             이메일 혹은 비밀번호가 올바르지 않아요.
           </p>
         )}
@@ -39,7 +39,7 @@ const EmailInput = ({
 }) => {
   return (
     <>
-      <label htmlFor="email" className="pb-2 text-sm text-gray-500">
+      <label htmlFor="email" className="text-fg-secondary pb-2 text-sm">
         이메일
       </label>
       <Input
@@ -85,7 +85,7 @@ const PasswordInput = ({
 
   return (
     <>
-      <label htmlFor="password" className="pt-11 pb-2 text-sm text-gray-500">
+      <label htmlFor="password" className="text-fg-secondary pt-11 pb-2 text-sm">
         비밀번호
       </label>
       <Input
@@ -99,7 +99,7 @@ const PasswordInput = ({
           masking ? (
             <EyeOff onClick={toggleMasking} className="cursor-pointer" />
           ) : (
-            <Eye onClick={toggleMasking} className="cursor-pointer text-gray-400" />
+            <Eye onClick={toggleMasking} className="text-fg-tertiary cursor-pointer" />
           )
         }
         helperText={
@@ -132,8 +132,8 @@ const HelperText = ({
       <li
         className={cn(
           'transition-colors',
-          value && !isInvalidLength && 'text-primary-600',
-          isInvalidLength && 'text-error-500',
+          value && !isInvalidLength && 'text-fg-brand',
+          isInvalidLength && 'text-fg-error',
         )}
       >
         8자 이상 30자 이하 입력
@@ -141,8 +141,8 @@ const HelperText = ({
       <li
         className={cn(
           'transition-colors',
-          value && !isInvalidType && 'text-primary-600',
-          isInvalidType && 'text-error-500',
+          value && !isInvalidType && 'text-fg-brand',
+          isInvalidType && 'text-fg-error',
         )}
       >
         영어, 숫자, 특수문자 중 2가지 이상 조합

@@ -26,23 +26,23 @@ export default function NoticePostCard({
       className="border-border-subtle hover:bg-surface-subtle active:bg-surface-subtle flex flex-col border-b px-5 py-4 transition-transform active:scale-[0.98]"
     >
       <div className="flex items-center gap-x-2">
-        <span className="bg-surface-brand rounded px-1.5 py-0.5 text-xs font-semibold text-white">
+        <span className="bg-surface-brand text-fg-inverse rounded px-1.5 py-0.5 text-xs font-semibold">
           지름알림
         </span>
-        <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
+        <span className="text-fg-tertiary text-xs">{displayTime(post.createdAt)}</span>
         {isNew && (
-          <span className="bg-secondary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">
+          <span className="bg-secondary-500 text-fg-inverse rounded px-1.5 py-0.5 text-xs font-semibold">
             NEW
           </span>
         )}
       </div>
 
-      <p className="typography-body-14sb mt-2 truncate text-gray-900">
+      <p className="typography-body-14sb text-fg-primary mt-2 truncate">
         {post.title ?? post.content}
       </p>
       {post.title && <p className="mt-0.5 truncate text-sm text-gray-600">{post.content}</p>}
 
-      <div className="mt-2 flex items-center gap-x-3 text-xs text-gray-400">
+      <div className="text-fg-tertiary mt-2 flex items-center gap-x-3 text-xs">
         <span className="flex items-center gap-x-1">
           <ThumbsupFill className="h-3.5 w-3.5" aria-hidden />
           {post.likeCount}

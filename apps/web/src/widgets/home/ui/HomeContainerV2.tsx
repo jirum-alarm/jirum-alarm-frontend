@@ -101,7 +101,7 @@ export default HomeContainerV2;
 //             height={81}
 //           />
 //         </div>
-//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium text-white">
+//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium text-fg-inverse">
 //           AD
 //         </div>
 //       </Link>
@@ -138,7 +138,7 @@ export default HomeContainerV2;
 //             height={81}
 //           />
 //         </div>
-//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium text-white">
+//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium text-fg-inverse">
 //           AD
 //         </div>
 //       </Link>
@@ -157,7 +157,7 @@ const AdPersilBanner20251124 = () => {
         <div className="relative z-20 mx-auto flex h-[100px] w-full max-w-[460px] shrink-0 justify-between px-4 py-3">
           <div className="flex flex-col justify-between overflow-hidden rounded-lg text-left">
             <div>
-              <div className="flex items-center text-lg text-white">
+              <div className="text-fg-inverse flex items-center text-lg">
                 <b className="mr-1.5 text-[22px]">{Advertisement.Persil_20251124.title}</b>
               </div>
               <div className="text-[13px] leading-[18px] font-medium text-[#DEEBFF]">
@@ -176,7 +176,7 @@ const AdPersilBanner20251124 = () => {
             height={81}
           />
         </div>
-        <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium text-white">
+        <div className="bg-opacity-90 text-fg-inverse absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium">
           AD
         </div>
       </Link>

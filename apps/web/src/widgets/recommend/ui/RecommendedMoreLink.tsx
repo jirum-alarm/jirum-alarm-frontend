@@ -19,7 +19,7 @@ const RecommendedMoreLink = ({
   };
 
   return (
-    <Link className="h-full text-sm text-gray-500" href={hrefObject} aria-label={ariaLabel}>
+    <Link className="text-fg-secondary h-full text-sm" href={hrefObject} aria-label={ariaLabel}>
       <motion.div
         className="rounded-lg px-2 py-1"
         whileTap={{ scale: 0.95 }}

@@ -6,7 +6,7 @@ export const optionVaraint = cva(['w-full', 'cursor-pointer'], {
       md: ['py-3', 'px-5', 'text-base', 'h-full'],
     },
     color: {
-      black: ['text-gray-900', 'hover:bg-surface-muted'],
+      black: ['text-fg-primary', 'hover:bg-surface-muted'],
     },
     active: {
       true: [''],

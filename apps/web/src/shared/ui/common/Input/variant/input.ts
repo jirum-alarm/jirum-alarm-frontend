@@ -40,13 +40,13 @@ export const inputVariant = cva(
   {
     variants: {
       variant: {
-        standard: ['border-b', 'placeholder:text-gray-400', 'rounded-none'],
+        standard: ['border-b', 'placeholder:text-fg-tertiary', 'rounded-none'],
       },
       size: {
         md: ['text-base', 'px-1', 'py-3'],
       },
       color: {
-        black: ['text-gray-900', 'border-gray-400', 'focus:border-gray-900'],
+        black: ['text-fg-primary', 'border-gray-400', 'focus:border-gray-900'],
       },
     },
 
@@ -75,8 +75,8 @@ export const helperVariant = cva('', {
       md: ['pt-2', 'text-xs'],
     },
     error: {
-      true: ['text-error-500'],
-      false: ['text-gray-400'],
+      true: ['text-fg-error'],
+      false: ['text-fg-tertiary'],
     },
   },
   defaultVariants: {

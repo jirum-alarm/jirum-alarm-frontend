@@ -57,7 +57,7 @@ export default function CommentMenu({ comment }: { comment: TComment }) {
         <Drawer.Content className="max-w-mobile-max rounded-t-5 bg-surface-default fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit outline-hidden">
           <div className="flex flex-col items-center pt-4 pb-8">
             <button
-              className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium"
+              className="text-fg-error flex h-14 w-full items-center justify-center text-lg font-medium"
               onClick={handleRemove}
             >
               삭제

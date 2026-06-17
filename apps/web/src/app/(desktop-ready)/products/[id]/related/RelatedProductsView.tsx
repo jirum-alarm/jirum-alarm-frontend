@@ -49,7 +49,7 @@ export default function RelatedProductsView({
 
   if (allProducts.length === 0) {
     return (
-      <div className="flex h-40 items-center justify-center text-gray-500">
+      <div className="text-fg-secondary flex h-40 items-center justify-center">
         유사한 상품이 없습니다.
       </div>
     );
@@ -63,7 +63,7 @@ export default function RelatedProductsView({
       />
       {hasMore && (
         <div ref={ref} className="flex h-20 items-center justify-center">
-          <div className="text-gray-400">로딩중...</div>
+          <div className="text-fg-tertiary">로딩중...</div>
         </div>
       )}
     </div>

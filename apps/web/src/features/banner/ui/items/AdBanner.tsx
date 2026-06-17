@@ -6,7 +6,7 @@ const props = {
   href: Advertisement.Persil_20251124.url,
   title: (
     <>
-      <span className="font-semibold text-white">{Advertisement.Persil_20251124.title}</span>
+      <span className="text-fg-inverse font-semibold">{Advertisement.Persil_20251124.title}</span>
       {/* <span>{Advertisement.Beproc.description}</span> */}
     </>
   ),

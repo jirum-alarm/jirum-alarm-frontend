@@ -41,13 +41,13 @@ export default function Comment({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-2">
           <span className="typography-body-14m text-gray-600">{comment.author?.nickname}</span>
-          <span className="text-sm text-gray-500">
+          <span className="text-fg-secondary text-sm">
             {editStatus === 'update' ? '수정중' : displayTime(comment.createdAt)}
           </span>
         </div>
         {isMyComment && <CommentMenu comment={comment} />}
       </div>
-      <p className="w-full pt-1 text-base text-gray-900">{comment.content}</p>
+      <p className="text-fg-primary w-full pt-1 text-base">{comment.content}</p>
       <div className="flex items-center gap-x-2 pt-2">
         <CommentAction
           comment={comment}

@@ -11,8 +11,8 @@ const NotFoundPage = () => {
           <IllustWarning />
         </div>
         <div className="pb-7 text-center">
-          <div className="typography-headline-24sb text-gray-900">페이지를 찾을 수 없어요</div>
-          <div className="text-gray-500">홈으로 이동해 다양한 핫딜을 확인해보세요</div>
+          <div className="typography-headline-24sb text-fg-primary">페이지를 찾을 수 없어요</div>
+          <div className="text-fg-secondary">홈으로 이동해 다양한 핫딜을 확인해보세요</div>
         </div>
         <Link href={PAGE.HOME}>
           <Button size="md">지름알림 홈</Button>

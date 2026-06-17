@@ -12,7 +12,7 @@ const Logout = () => {
     <AlertDialog>
       <AlertDialog.Trigger asChild>
         <motion.button
-          className="rounded-lg px-6 py-3 text-[13px] text-gray-500"
+          className="text-fg-secondary rounded-lg px-6 py-3 text-[13px]"
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}
         >
@@ -21,7 +21,7 @@ const Logout = () => {
       </AlertDialog.Trigger>
       <AlertDialog.Content>
         <AlertDialog.Header>
-          <AlertDialog.Title className="pt-3 font-semibold text-gray-900">
+          <AlertDialog.Title className="text-fg-primary pt-3 font-semibold">
             로그아웃
           </AlertDialog.Title>
           <AlertDialog.Description>

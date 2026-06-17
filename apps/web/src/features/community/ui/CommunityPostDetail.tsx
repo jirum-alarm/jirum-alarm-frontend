@@ -65,14 +65,14 @@ export default function CommunityPostDetailClient({
       <div className="flex items-center justify-between px-5 py-4">
         <div className="flex items-center gap-x-2">
           {post.isNotice && (
-            <span className="bg-surface-brand rounded px-1.5 py-0.5 text-xs font-semibold text-white">
+            <span className="bg-surface-brand text-fg-inverse rounded px-1.5 py-0.5 text-xs font-semibold">
               지름알림
             </span>
           )}
           <span className="typography-body-14m text-gray-700">
             {post.author?.nickname ?? '알 수 없음'}
           </span>
-          <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
+          <span className="text-fg-tertiary text-xs">{displayTime(post.createdAt)}</span>
         </div>
         {isUserLogin && (
           <div className="pc:block hidden">
@@ -82,7 +82,9 @@ export default function CommunityPostDetailClient({
       </div>
 
       {/* 제목 */}
-      {post.title && <h1 className="typography-title-18b px-5 pb-2 text-gray-900">{post.title}</h1>}
+      {post.title && (
+        <h1 className="typography-title-18b text-fg-primary px-5 pb-2">{post.title}</h1>
+      )}
 
       {/* 본문 */}
       <p className="px-5 pb-4 text-base leading-relaxed text-gray-800">{post.content}</p>
@@ -109,11 +111,11 @@ export default function CommunityPostDetailClient({
               </div>
             )}
             <div className="min-w-0 flex-1">
-              <p className="typography-body-14m line-clamp-2 text-gray-900">
+              <p className="typography-body-14m text-fg-primary line-clamp-2">
                 {post.taggedProduct.title}
               </p>
               {post.taggedProduct.price && (
-                <p className="mt-1.5 text-base font-bold text-gray-900">
+                <p className="text-fg-primary mt-1.5 text-base font-bold">
                   {post.taggedProduct.price}
                 </p>
               )}
@@ -124,7 +126,7 @@ export default function CommunityPostDetailClient({
 
       {/* 통계 + 추천 */}
       <div className="border-border-subtle flex items-center justify-between border-y px-5 py-3">
-        <div className="flex items-center gap-x-3 text-sm text-gray-400">
+        <div className="text-fg-tertiary flex items-center gap-x-3 text-sm">
           <span className="flex items-center gap-x-1">
             <ThumbsupFill className="h-4 w-4" aria-hidden />
             {post.likeCount}
@@ -141,7 +143,7 @@ export default function CommunityPostDetailClient({
             'transition-transform active:scale-95',
             post.isMyLike
               ? 'border-border-brand bg-primary-50 text-primary-500'
-              : 'border-border-default hover:border-border-strong text-gray-500',
+              : 'border-border-default hover:border-border-strong text-fg-secondary',
             !isUserLogin && 'opacity-40',
           )}
         >

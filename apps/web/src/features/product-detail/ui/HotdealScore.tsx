@@ -28,12 +28,12 @@ const HotdealScore = ({ productId }: { productId: number }) => {
       {hotDealIndex ? (
         <section>
           <div className="flex items-center justify-between gap-2 pb-4">
-            <h2 className="pc:text-[20px] font-semibold text-gray-900">핫딜 지수</h2>
+            <h2 className="pc:text-[20px] text-fg-primary font-semibold">핫딜 지수</h2>
             <Tooltip
               align="right"
               polygonOffset={8}
               content={
-                <p className="text-[13px] text-white">
+                <p className="text-fg-inverse text-[13px]">
                   <strong className="font-semibold">다나와 최저가</strong>와{' '}
                   <strong className="font-semibold">역대 최저가</strong>를 비교하여
                   <br /> 현재 핫딜 정도를 계산해 볼 수 있어요
@@ -194,8 +194,8 @@ const HotdealScoreBar = ({
           </motion.div>
         </div>
         <div className="mt-[8px] flex w-full items-center justify-between">
-          <span className="text-xs text-gray-500">{`${minValue.toLocaleString()}원`}</span>
-          <span className="text-xs text-gray-500">{`${maxValue.toLocaleString()}원`}</span>
+          <span className="text-fg-secondary text-xs">{`${minValue.toLocaleString()}원`}</span>
+          <span className="text-fg-secondary text-xs">{`${maxValue.toLocaleString()}원`}</span>
         </div>
       </div>
     </div>

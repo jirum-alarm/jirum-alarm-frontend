@@ -19,7 +19,7 @@ const PageTabNavigation = () => {
           <motion.div
             className={cn(
               'typography-title-16m py-3 transition-colors',
-              isLive ? 'text-gray-900' : 'text-gray-500',
+              isLive ? 'text-fg-primary' : 'text-fg-secondary',
             )}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.1 }}
@@ -34,7 +34,7 @@ const PageTabNavigation = () => {
           <motion.div
             className={cn(
               'typography-title-16m py-3 transition-colors',
-              isRanking ? 'text-gray-900' : 'text-gray-500',
+              isRanking ? 'text-fg-primary' : 'text-fg-secondary',
             )}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.1 }}

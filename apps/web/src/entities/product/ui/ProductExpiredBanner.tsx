@@ -59,7 +59,7 @@ export default function ProductExpiredBanner({ productId }: { productId: number 
               }}
             >
               <p className="font-medium text-gray-600">
-                {item}님이 <strong className="font-semibold text-gray-900">판매종료</strong>로
+                {item}님이 <strong className="text-fg-primary font-semibold">판매종료</strong>로
                 제보했어요!
               </p>
             </div>

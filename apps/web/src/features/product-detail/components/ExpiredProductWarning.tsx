@@ -77,11 +77,11 @@ function ExpiredProductRecommendations({
 
       <div className="pc:space-y-4 pc:px-0 space-y-2 px-4">
         <div className="flex items-center justify-between px-1">
-          <h2 className="pc:text-lg typography-title-18b text-gray-900">이런 상품은 어때요?</h2>
+          <h2 className="pc:text-lg typography-title-18b text-fg-primary">이런 상품은 어때요?</h2>
           {hasMore && (
             <InteractiveMoreLink
               href={`/products/${product.id}/related`}
-              className="typography-caption-12m text-gray-400 hover:text-gray-600"
+              className="typography-caption-12m text-fg-tertiary hover:text-gray-600"
             >
               더보기
             </InteractiveMoreLink>

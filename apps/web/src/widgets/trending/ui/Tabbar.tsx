@@ -61,8 +61,8 @@ const defaultStyles: Required<TabBarStyles> = {
   tabList: 'relative flex',
   tabTrigger: {
     base: 'relative h-[40px] shrink-0 whitespace-nowrap px-3 py-2 text-base transition-colors duration-200 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
-    active: 'font-semibold text-primary-600',
-    inactive: 'font-medium text-gray-500 hover:text-gray-900',
+    active: 'font-semibold text-fg-brand',
+    inactive: 'font-medium text-fg-secondary hover:text-fg-primary',
   },
   tabIndicator: 'absolute bottom-[0.1px] h-0.5 bg-primary-600',
   settingsContainer: 'absolute bottom-0 right-0 flex h-full w-16 items-center',

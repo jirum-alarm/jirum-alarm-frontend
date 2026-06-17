@@ -33,7 +33,7 @@ export function Reactions({ commentSummary }: { commentSummary: ProductCommentSu
               <li key={item.id}>
                 <div className="flex items-center gap-x-1 pb-1">
                   {item.icon}
-                  <span className="font-medium text-gray-900">{item.title}</span>
+                  <span className="text-fg-primary font-medium">{item.title}</span>
                 </div>
                 <span className="text-sm text-gray-600">{value}</span>
               </li>

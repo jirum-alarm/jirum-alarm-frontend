@@ -49,7 +49,7 @@ const AppDownloadBanner = (props: AppDownloadBannerProps) => {
             <a
               href={link}
               onClick={handleAppDownloadClick}
-              className="bg-secondary-600 typography-body-14sb flex h-[32px] w-20 items-center justify-center rounded-xl text-white"
+              className="bg-secondary-600 typography-body-14sb text-fg-inverse flex h-[32px] w-20 items-center justify-center rounded-xl"
             >
               다운받기
             </a>

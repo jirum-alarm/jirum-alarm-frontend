@@ -81,7 +81,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
 
       <div className="bg-surface-default fixed right-0 bottom-[var(--bottom-nav-padding,0px)] left-0 m-auto w-full max-w-[600px] px-5 pt-4 pb-8">
         <div className="flex flex-col items-center pb-6">
-          <p className="pb-3 text-center text-sm text-gray-400">
+          <p className="text-fg-tertiary pb-3 text-center text-sm">
             키워드 알림으로
             <br />
             누구보다 빠르게 핫딜 받기
@@ -121,7 +121,7 @@ function AndroidDownloadButton() {
       className="w-full"
     >
       <motion.button
-        className="bg-surface-brand flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
+        className="bg-surface-brand text-fg-primary flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
@@ -148,7 +148,7 @@ function IosDownloadButton() {
       className="w-full"
     >
       <motion.button
-        className="bg-surface-brand flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
+        className="bg-surface-brand text-fg-primary flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
@@ -172,7 +172,7 @@ function LoginGuide() {
           <Illust />
         </div>
         <div>
-          <p className="typography-headline-24sb pb-8 text-gray-900">
+          <p className="typography-headline-24sb text-fg-primary pb-8">
             키워드 알림은
             <br /> 로그인이 필요해요
           </p>

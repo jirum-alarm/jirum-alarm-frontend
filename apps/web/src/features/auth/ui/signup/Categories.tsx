@@ -32,7 +32,7 @@ const Description = () => {
     <legend>
       <p className="typography-headline-24sb">
         관심사를 알려주세요.
-        <span className="pl-2 text-base text-gray-500">(선택)</span>
+        <span className="text-fg-secondary pl-2 text-base">(선택)</span>
       </p>
       <p className="pt-4 text-sm text-gray-700">
         관심분야 핫딜이 올라오면

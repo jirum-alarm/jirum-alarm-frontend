@@ -138,7 +138,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}
         >
-          <ArrowLeft className="mr-1 size-8 text-white" color="white" />
+          <ArrowLeft className="text-fg-inverse mr-1 size-8" color="white" />
         </motion.button>
         {!canRender && (
           <div className="invisible">
@@ -174,7 +174,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}
         >
-          <ArrowLeft className="ml-1 size-8 -scale-x-100 text-white" color="white" />
+          <ArrowLeft className="text-fg-inverse ml-1 size-8 -scale-x-100" color="white" />
         </motion.button>
 
         <AnimatePresence>

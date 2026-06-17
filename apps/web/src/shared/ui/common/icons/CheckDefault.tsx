@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 /** @example
- *  <CheckDefault className="text-primary-600" />
+ *  <CheckDefault className="text-fg-brand" />
  * */
 const SvgCheckDefault = (props: SVGProps<SVGSVGElement>) => {
   const { className, ...others } = props;

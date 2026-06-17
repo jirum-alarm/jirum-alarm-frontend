@@ -43,7 +43,7 @@ const CurationContainer = ({ section }: CurationContainerProps) => {
                 className={cn(
                   'typography-body-14m rounded-full px-4 py-2 whitespace-nowrap transition-colors',
                   activeTabId === tab.id
-                    ? 'bg-surface-inverse text-white'
+                    ? 'bg-surface-inverse text-fg-inverse'
                     : 'bg-surface-muted text-gray-600 hover:bg-gray-200',
                 )}
               >
