@@ -45,3 +45,4 @@
 # Ignore Cursor project files
 .cursor/
 .claude/
+.gstack/

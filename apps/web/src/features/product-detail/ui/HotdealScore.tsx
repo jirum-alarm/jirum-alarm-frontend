@@ -1,12 +1,12 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
 import {
-  ColorHotdealGraphVeryLow,
-  ColorHotdealGraphLow,
   ColorHotdealGraphHigh,
+  ColorHotdealGraphLow,
   ColorHotdealGraphVeryHigh,
+  ColorHotdealGraphVeryLow,
 } from '@jirum/design-tokens/tokens';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion, useAnimation } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
