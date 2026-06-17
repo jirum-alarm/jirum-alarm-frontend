@@ -184,6 +184,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.0.1
         version: 5.2.2(react-hook-form@7.71.2(react@19.1.0))
+      '@jirum/design-tokens':
+        specifier: workspace:*
+        version: link:../../packages/design-tokens
       '@react-native-async-storage/async-storage':
         specifier: 2.2.0
         version: 2.2.0(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.5(@babel/core@7.28.5))(@types/react@19.1.17)(react@19.1.0))
@@ -317,9 +320,6 @@ importers:
       '@graphql-codegen/typed-document-node':
         specifier: ^5.0.13
         version: 5.1.2(graphql@16.12.0)
-      '@jirum/design-tokens':
-        specifier: workspace:*
-        version: link:../../packages/design-tokens
       '@parcel/watcher':
         specifier: ^2.5.1
         version: 2.5.1
