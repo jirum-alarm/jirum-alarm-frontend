@@ -88,6 +88,12 @@ const buildCheckTypesCommands = (filenames) => {
     packages.push("landing");
   }
 
+  // 앱(admin/mobile/web/landing) 파일이 하나도 없으면(예: packages/* 만 변경) 빈 배열 반환.
+  // 무조건 문자열을 돌려주면 `--filter=`(빈 값)로 turbo가 "selector not used" 에러.
+  if (packages.length === 0) {
+    return [];
+  }
+
   return `pnpm check-types --filter=${packages.join(" --filter=")}`;
 };
 

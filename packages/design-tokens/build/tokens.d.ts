@@ -56,6 +56,14 @@ export const Breakpoint3xl: string;
 export const ContainerLayoutMax: string;
 export const TextS: string;
 export const TextLg: string;
+export const TextPrimary: string;
+export const TextSecondary: string;
+export const TextTertiary: string;
+export const TextDisabled: string;
+export const TextInverse: string;
+export const TextBrand: string;
+export const TextError: string;
+export const TextLink: string;
 export const LeadingS: string;
 export const LeadingLg: string;
 export const ShadowSmall: {
@@ -154,3 +162,12 @@ export const TypographyCaption12m: {
   fontSize: string;
   lineHeight: string;
 };
+export const SurfaceDefault: string;
+export const SurfaceSubtle: string;
+export const SurfaceMuted: string;
+export const SurfaceBrand: string;
+export const SurfaceInverse: string;
+export const BorderDefault: string;
+export const BorderStrong: string;
+export const BorderSubtle: string;
+export const BorderBrand: string;

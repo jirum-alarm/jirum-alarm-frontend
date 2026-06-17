@@ -62,6 +62,25 @@
   --color-secondary-800: #1c3264;
   --color-secondary-900: #0e1932;
 
+  /* semantic colors */
+  --color-fg-primary: #101828;
+  --color-fg-secondary: #667085;
+  --color-fg-tertiary: #98a2b3;
+  --color-fg-disabled: #d0d5dd;
+  --color-fg-inverse: #ffffff;
+  --color-fg-brand: #4ad11b;
+  --color-fg-error: #eb001c;
+  --color-fg-link: #587dff;
+  --color-surface-default: #ffffff;
+  --color-surface-subtle: #f9fafb;
+  --color-surface-muted: #f2f4f7;
+  --color-surface-brand: #9ef22e;
+  --color-surface-inverse: #101828;
+  --color-border-default: #e4e7ec;
+  --color-border-strong: #d0d5dd;
+  --color-border-subtle: #f2f4f7;
+  --color-border-brand: #9ef22e;
+
   /* shadow */
   --shadow-small: 0px 2px 12px 0px rgba(0, 0, 0, 0.08);
 }

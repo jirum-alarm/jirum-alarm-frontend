@@ -56,6 +56,14 @@ export const Breakpoint3xl = "1440px";
 export const ContainerLayoutMax = "1280px";
 export const TextS = "0.8125rem";
 export const TextLg = "1.125rem";
+export const TextPrimary = "#101828";
+export const TextSecondary = "#667085";
+export const TextTertiary = "#98a2b3";
+export const TextDisabled = "#d0d5dd";
+export const TextInverse = "#ffffff";
+export const TextBrand = "#4ad11b";
+export const TextError = "#eb001c";
+export const TextLink = "#587dff";
 export const LeadingS = "1rem";
 export const LeadingLg = "2rem";
 export const ShadowSmall = {
@@ -154,3 +162,12 @@ export const TypographyCaption12m = {
   fontSize: "12px",
   lineHeight: "16px",
 };
+export const SurfaceDefault = "#ffffff";
+export const SurfaceSubtle = "#f9fafb";
+export const SurfaceMuted = "#f2f4f7";
+export const SurfaceBrand = "#9ef22e";
+export const SurfaceInverse = "#101828";
+export const BorderDefault = "#e4e7ec";
+export const BorderStrong = "#d0d5dd";
+export const BorderSubtle = "#f2f4f7";
+export const BorderBrand = "#9ef22e";

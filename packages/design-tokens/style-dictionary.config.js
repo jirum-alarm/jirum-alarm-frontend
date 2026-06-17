@@ -85,6 +85,19 @@ StyleDictionary.registerFormat({
     // hotdeal-graph는 현 단계 방출 제외 (컴포넌트 단계용) — 위 그룹 목록에 미포함이라 자동 제외됨.
     lines.push('');
 
+    // semantic colors (의미 레이어) — 원시 스케일을 의미 이름으로 방출.
+    //   text.* → --color-fg-*  (text-fg-primary 유틸; --color-text-* 는 text-text- 중복이라 fg로)
+    //   surface.* → --color-surface-*  /  border.* → --color-border-*
+    // css transformGroup이 참조({color.gray.900})를 hex로 이미 풀어준다(t.$value).
+    const semanticMap = { text: 'fg', surface: 'surface', border: 'border' };
+    lines.push('  /* semantic colors */');
+    for (const [group, prefix] of Object.entries(semanticMap)) {
+      for (const t of byType('color').filter((t) => t.path[0] === group)) {
+        lines.push(`  --color-${prefix}-${t.path.slice(1).join('-')}: ${t.$value};`);
+      }
+    }
+    lines.push('');
+
     // shadow — css transformGroup이 객체를 평탄화하므로 원본값(token.original.$value)에서 조립.
     lines.push('  /* shadow */');
     for (const t of byType('shadow')) {
@@ -120,7 +133,9 @@ StyleDictionary.registerFormat({
   name: 'jirum/tailwind-config-tokens',
   format: ({ dictionary }) => {
     const colors = {};
-    for (const t of dictionary.allTokens.filter((t) => (t.$type || t.type) === 'color')) {
+    // 원시 색만(color.*) — 시맨틱(text/surface/border.*)도 $type:color라 path[0]로 걸러야
+    // colors.primary 등을 덮어쓰지 않는다.
+    for (const t of dictionary.allTokens.filter((t) => (t.$type || t.type) === 'color' && t.path[0] === 'color')) {
       const [, group, shade] = t.path; // color.<group>.<shade> | color.<single>
       if (t.path.length === 2) {
         colors[t.path[1]] = t.$value;
@@ -153,9 +168,10 @@ StyleDictionary.registerFormat({
 });
 
 const PRIMITIVE = 'tokens/primitive/**/*.json';
+const SEMANTIC = 'tokens/semantic/**/*.json';
 
 export default {
-  source: [PRIMITIVE],
+  source: [PRIMITIVE, SEMANTIC],
   log: { verbosity: 'verbose' },
   platforms: {
     web: {

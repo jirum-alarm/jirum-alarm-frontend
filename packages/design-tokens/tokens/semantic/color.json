@@ -1,0 +1,29 @@
+{
+  "_comment": "시맨틱 색 레이어. 원시 스케일(primitive/color.json)을 의미 이름으로 한 겹 감싼다. 컴포넌트는 원시 대신 이 의미 토큰을 참조 → 다크모드/리브랜딩 시 여기 매핑만 교체. 매핑 근거 = apps/web 실제 사용 분포(가장 많이 쓰는 색이 그 의미).",
+
+  "text": {
+    "primary": { "$type": "color", "$value": "{color.gray.900}" },
+    "secondary": { "$type": "color", "$value": "{color.gray.500}" },
+    "tertiary": { "$type": "color", "$value": "{color.gray.400}" },
+    "disabled": { "$type": "color", "$value": "{color.gray.300}" },
+    "inverse": { "$type": "color", "$value": "{color.white}" },
+    "brand": { "$type": "color", "$value": "{color.primary.600}" },
+    "error": { "$type": "color", "$value": "{color.error.500}" },
+    "link": { "$type": "color", "$value": "{color.link}" }
+  },
+
+  "surface": {
+    "default": { "$type": "color", "$value": "{color.white}" },
+    "subtle": { "$type": "color", "$value": "{color.gray.50}" },
+    "muted": { "$type": "color", "$value": "{color.gray.100}" },
+    "brand": { "$type": "color", "$value": "{color.primary.500}" },
+    "inverse": { "$type": "color", "$value": "{color.gray.900}" }
+  },
+
+  "border": {
+    "default": { "$type": "color", "$value": "{color.gray.200}" },
+    "strong": { "$type": "color", "$value": "{color.gray.300}" },
+    "subtle": { "$type": "color", "$value": "{color.gray.100}" },
+    "brand": { "$type": "color", "$value": "{color.primary.500}" }
+  }
+}
