@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {COLORS} from '@/shared/constant/colors.ts';
+import {TYPOGRAPHY} from '@/shared/constant/typography.ts';
 import {
   AppleIcon,
   EmailIcon,
@@ -134,23 +135,19 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.GRAY_800,
   },
   kakaoButtonText: {
+    ...TYPOGRAPHY.title16sb,
     color: '#101828',
-    fontSize: 16,
-    fontFamily: 'Pretendard-SemiBold',
   },
   naverButtonText: {
+    ...TYPOGRAPHY.title16sb,
     color: COLORS.WHITE,
-    fontSize: 16,
-    fontFamily: 'Pretendard-SemiBold',
   },
   appleButtonText: {
+    ...TYPOGRAPHY.title16sb,
     color: COLORS.WHITE,
-    fontSize: 16,
-    fontFamily: 'Pretendard-SemiBold',
   },
   emailButtonText: {
+    ...TYPOGRAPHY.title16sb,
     color: '#101828',
-    fontSize: 16,
-    fontFamily: 'Pretendard-SemiBold',
   },
 });
