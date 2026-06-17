@@ -1203,6 +1203,8 @@ export type ProductOutput = {
   similarity?: Maybe<Scalars['Float']['output']>;
   thumbnail?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
+  /** 업로드 주체 */
+  uploaderType: UploaderType;
   url?: Maybe<Scalars['String']['output']>;
   /** 조회 수 */
   viewCount: Scalars['Int']['output'];
@@ -1944,6 +1946,16 @@ export enum TokenType {
   Fcm = 'FCM',
 }
 
+/** 상품 업로드 주체 */
+export enum UploaderType {
+  /** 크롤러가 수집한 상품 (기본값) */
+  Crawled = 'CRAWLED',
+  /** 지름알림 공식이 등록한 상품 */
+  Official = 'OFFICIAL',
+  /** 일반 유저가 직접 등록한 상품 */
+  User = 'USER',
+}
+
 export type User = {
   __typename?: 'User';
   birthYear?: Maybe<Scalars['Int']['output']>;
@@ -2571,6 +2583,7 @@ export type ProductInfoFragment = {
   price?: string | null;
   postedAt: any;
   thumbnail?: string | null;
+  uploaderType: UploaderType;
   hotDealType?: HotDealType | null;
   viewCount: number;
   mallName?: string | null;
@@ -3007,6 +3020,7 @@ export const ProductInfoFragmentDoc = new TypedDocumentString(
   price
   postedAt
   thumbnail
+  uploaderType
   author {
     id
     nickname
@@ -3541,6 +3555,7 @@ export const ProductInfoDocument = new TypedDocumentString(`
   price
   postedAt
   thumbnail
+  uploaderType
   author {
     id
     nickname

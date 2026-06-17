@@ -127,6 +127,7 @@ export const QueryProductInfo = gql`
     price
     postedAt
     thumbnail
+    uploaderType
     author {
       id
       nickname

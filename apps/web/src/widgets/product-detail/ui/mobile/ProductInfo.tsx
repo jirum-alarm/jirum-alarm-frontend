@@ -3,6 +3,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
+import { UploaderType } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
 import { parsePrice } from '@/shared/lib/utils/price';
@@ -81,16 +82,22 @@ export default function ProductInfo({ productId }: { productId: number }) {
             <span className="text-gray-400">쇼핑몰</span>
             <span className="text-gray-500">{product.mallName}</span>
           </div>
-          {product.author && (
+          {product.uploaderType !== UploaderType.Crawled && (
             <div className="flex justify-between text-sm font-medium">
               <span className="text-gray-400">업로드</span>
               <span
-                className={cn('flex items-center gap-1 text-gray-500', {
-                  'text-primary-800': product.author.id === 'admin',
+                className={cn('flex items-center gap-1 text-gray-600', {
+                  'text-primary-800': product.uploaderType === UploaderType.Official,
                 })}
               >
-                {product.author.id === 'admin' && <Jirume width={18} height={18} />}
-                {product.author.nickname}
+                {product.uploaderType === UploaderType.Official ? (
+                  <>
+                    <Jirume width={18} height={18} />
+                    지름알림
+                  </>
+                ) : (
+                  product.author?.nickname
+                )}
               </span>
             </div>
           )}

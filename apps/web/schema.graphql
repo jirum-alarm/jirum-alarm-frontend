@@ -1126,6 +1126,10 @@ type ProductOutput {
   similarity: Float
   thumbnail: String
   title: String!
+  """
+  업로드 주체
+  """
+  uploaderType: UploaderType!
   url: String
   """
   조회 수
@@ -1870,6 +1874,24 @@ type TokenOutput {
 enum TokenType {
   APNS
   FCM
+}
+
+"""
+상품 업로드 주체
+"""
+enum UploaderType {
+  """
+  크롤러가 수집한 상품 (기본값)
+  """
+  CRAWLED
+  """
+  지름알림 공식이 등록한 상품
+  """
+  OFFICIAL
+  """
+  일반 유저가 직접 등록한 상품
+  """
+  USER
 }
 
 type User {
