@@ -53,7 +53,7 @@ export default async function CommunityPage() {
         navType={NAV_TYPE.COMMUNITY}
         header={
           <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center gap-x-2 border-b border-gray-100 bg-white px-5">
-            <h1 className="text-lg font-bold text-gray-900">커뮤니티</h1>
+            <h1 className="typography-title-18b text-gray-900">커뮤니티</h1>
           </header>
         }
       >

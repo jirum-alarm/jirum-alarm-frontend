@@ -70,7 +70,7 @@ export default function ProductInfo({
               )}
             </div>
 
-            <h1 className="text-xl font-medium text-gray-800">{product.title}</h1>
+            <h1 className="typography-headline-20m text-gray-800">{product.title}</h1>
           </div>
           <ShareButton title={shareTitle} />
         </div>

@@ -12,7 +12,7 @@ const BackgroundHeader = async () => {
         <header className="flex h-14 w-full items-center justify-between px-5 py-3">
           <div className="flex items-center gap-2">
             <IconLogo />
-            <h2 className="text-lg font-bold text-slate-50">지름알림</h2>
+            <h2 className="typography-title-18b text-slate-50">지름알림</h2>
           </div>
           <SearchLinkButton color="#FFF" />
         </header>

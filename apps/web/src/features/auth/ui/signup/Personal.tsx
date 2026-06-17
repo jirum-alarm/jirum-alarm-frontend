@@ -28,7 +28,7 @@ export default Personal;
 const Description = () => {
   return (
     <div>
-      <p className="text-2xl font-semibold">
+      <p className="typography-headline-24sb">
         출생년도와 성별을
         <br />
         알려주세요.<span className="pl-2 text-base text-gray-500">(선택)</span>

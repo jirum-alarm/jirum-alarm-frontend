@@ -36,7 +36,7 @@ const TermsLayout = ({
       )}
     >
       <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center justify-between bg-white px-5 py-2">
-        <h1 className="text-lg font-bold text-black">서비스 이용약관</h1>
+        <h1 className="typography-title-18b text-black">서비스 이용약관</h1>
         <button className="-m-2 flex items-center justify-center p-2" onClick={goBack}>
           <Close />
         </button>

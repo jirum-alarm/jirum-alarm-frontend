@@ -8,7 +8,7 @@ const NickNamePage = () => {
   return (
     <BasicLayout hasBackButton title="닉네임 수정">
       <div className="flex h-full flex-col px-5 pt-9 pb-9">
-        <p className="text-2xl font-semibold">
+        <p className="typography-headline-24sb">
           변경할 닉네임을
           <br />
           입력해주세요.

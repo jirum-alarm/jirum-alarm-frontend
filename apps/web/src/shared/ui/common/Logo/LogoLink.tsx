@@ -20,7 +20,7 @@ export default function LogoLink({ inverted = false }: LogoLinkProps) {
       >
         <IconLogo />
         <h2
-          className={cn('relative text-lg font-bold', {
+          className={cn('typography-title-18b relative', {
             'text-white': inverted,
             'text-gray-800': !inverted,
           })}

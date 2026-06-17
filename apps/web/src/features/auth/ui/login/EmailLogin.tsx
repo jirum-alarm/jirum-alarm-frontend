@@ -13,7 +13,7 @@ export default EmailLogin;
 
 const Description = () => {
   return (
-    <p className="text-2xl font-semibold">
+    <p className="typography-headline-24sb">
       이메일과 비밀번호를
       <br />
       입력해주세요.

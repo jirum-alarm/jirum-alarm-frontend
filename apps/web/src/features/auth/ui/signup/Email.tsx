@@ -27,7 +27,7 @@ export default Email;
 
 const Description = () => {
   return (
-    <p className="text-2xl font-semibold">
+    <p className="typography-headline-24sb">
       이메일을
       <br />
       입력해주세요.

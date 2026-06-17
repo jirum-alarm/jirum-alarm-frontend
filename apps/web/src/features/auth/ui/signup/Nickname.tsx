@@ -27,7 +27,7 @@ export default Nickname;
 
 const Description = () => {
   return (
-    <p className="text-2xl font-semibold">
+    <p className="typography-headline-24sb">
       닉네임을
       <br />
       입력해주세요.

@@ -20,7 +20,7 @@ const TrendingPageHeader = () => {
       )}
     >
       <PageTabNavigation />
-      {/* <h1 className="text-lg font-bold">발견</h1>
+      {/* <h1 className="typography-title-18b">발견</h1>
       <SearchLinkButton color="#1d2939" /> */}
     </header>
   );

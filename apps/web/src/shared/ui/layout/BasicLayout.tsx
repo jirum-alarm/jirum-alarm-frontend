@@ -48,7 +48,7 @@ const BasicLayout = ({
         {header ?? (
           <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center gap-x-1 border-b border-white bg-white px-5 text-black">
             {hasBackButton && <BackButton backTo={backTo} />}
-            {title && <h1 className="text-lg font-bold text-black">{title}</h1>}
+            {title && <h1 className="typography-title-18b text-black">{title}</h1>}
           </header>
         )}
         <div

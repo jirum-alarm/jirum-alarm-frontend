@@ -27,7 +27,7 @@ export default TermsOfService;
 
 const Description = () => {
   return (
-    <p className="text-2xl font-semibold">
+    <p className="typography-headline-24sb">
       지름알림 서비스 이용약관에
       <br />
       동의해주세요.

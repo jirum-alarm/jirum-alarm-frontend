@@ -44,7 +44,7 @@ const ProductNotFound = () => {
         <div className="flex justify-center pb-4">
           <ErrorIllust className="size-25" />
         </div>
-        <p className="pb-2 text-2xl font-semibold text-gray-900">검색 결과가 없어요</p>
+        <p className="typography-headline-24sb pb-2 text-gray-900">검색 결과가 없어요</p>
         <p className="text-gray-500">
           {isLoggedIn ? '키워드를 등록하고 알림을 받아보세요' : '다른 키워드로 검색해보세요'}
         </p>

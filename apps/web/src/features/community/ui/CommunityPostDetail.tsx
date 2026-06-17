@@ -82,7 +82,7 @@ export default function CommunityPostDetailClient({
       </div>
 
       {/* 제목 */}
-      {post.title && <h1 className="px-5 pb-2 text-lg font-bold text-gray-900">{post.title}</h1>}
+      {post.title && <h1 className="typography-title-18b px-5 pb-2 text-gray-900">{post.title}</h1>}
 
       {/* 본문 */}
       <p className="px-5 pb-4 text-base leading-relaxed text-gray-800">{post.content}</p>

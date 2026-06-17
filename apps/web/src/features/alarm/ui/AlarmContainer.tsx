@@ -58,7 +58,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
 
   return (
     <div className="flex h-full flex-col px-5 pt-9 pb-8">
-      <p className="pb-7 text-2xl font-semibold">
+      <p className="typography-headline-24sb pb-7">
         <span className="shadow-primary-500 inline-block font-extrabold shadow-[inset_0-12px_0]">
           지름알림
         </span>{' '}
@@ -172,7 +172,7 @@ function LoginGuide() {
           <Illust />
         </div>
         <div>
-          <p className="pb-8 text-2xl font-semibold text-gray-900">
+          <p className="typography-headline-24sb pb-8 text-gray-900">
             키워드 알림은
             <br /> 로그인이 필요해요
           </p>

@@ -55,7 +55,7 @@ export default function ProductRankingImageCard({
             <div className="xl:pc:text-base line-clamp-2 text-sm text-gray-700">
               {product.title}
             </div>
-            <div className="pc:h-[36px] pc:pt-0.5 xl:pc:text-[22px] pt-2 text-lg font-bold text-gray-900">
+            <div className="pc:h-[36px] pc:pt-0.5 xl:pc:text-[22px] typography-title-18b pt-2 text-gray-900">
               <DisplayListPrice price={product.price} />
             </div>
           </div>

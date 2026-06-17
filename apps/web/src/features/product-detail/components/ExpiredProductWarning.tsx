@@ -77,7 +77,7 @@ function ExpiredProductRecommendations({
 
       <div className="pc:space-y-4 pc:px-0 space-y-2 px-4">
         <div className="flex items-center justify-between px-1">
-          <h2 className="pc:text-lg text-lg font-bold text-gray-900">이런 상품은 어때요?</h2>
+          <h2 className="pc:text-lg typography-title-18b text-gray-900">이런 상품은 어때요?</h2>
           {hasMore && (
             <InteractiveMoreLink
               href={`/products/${product.id}/related`}
