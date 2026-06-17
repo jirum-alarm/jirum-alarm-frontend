@@ -39,35 +39,21 @@ typography는 `typography-<스타일>` **@utility 클래스**로 나온다 (size
 <h1 class="typography-headline-28sb">…</h1>
 ```
 
-**mobile** (부분 연결): `tailwind.config.js`가 토큰과 hex가 **이미 동일한** 그룹만 연결했다 — `white`/`black`/`link`/`error`/`gray` (무손실). `primary`/`secondary`는 토큰과 틀어져 있어 하드코딩 유지 중 (아래 "틀어진 값" 표). typography(`tokens.fontSize`)는 아직 미연결.
+**mobile** (색 전체 연결): `tailwind.config.js`의 색 팔레트 전체(`white`/`black`/`link`/`error`/`gray`/`primary`/`secondary`)를 `tokens.colors`에서 받는다. `colors.ts`의 6색도 `tokens`(TS 상수)로 연결됨. typography(`tokens.fontSize`)는 아직 미연결.
 ```js
 const tokens = require('@jirum/design-tokens/tailwind');
-// colors: 동일 그룹만 tokens.colors.error / .gray / .white / .black / .link
-// theme.extend.fontSize = tokens.fontSize  // text-headline-28sb 등 typography 14종 (v3 fontSize 맵) — 연결 시 활성
+// theme.extend.colors = { primary: tokens.colors.primary, ... }  // 색 전체 토큰
+// theme.extend.fontSize = tokens.fontSize  // text-headline-28sb 등 typography 14종 — 연결 시 활성
 ```
 
 **admin** (미연결): TailAdmin 템플릿 기반(`primary: #3C50E0` 등)이라 토큰과 공유하는 팔레트가 없다. 토큰 연결 대상이 아니며, 통합하려면 디자인 체계 자체를 맞추는 별도 결정이 필요.
 
-## 틀어진 값 — 디자이너 확인 후 연결 (별도 PR)
+## 과거 틀어졌던 값 — 토큰으로 통일됨 (이력)
 
-mobile이 토큰(Figma=web 값)과 **다른** 색. 연결하면 시각 변화가 생기므로 미연결로 둔다. 디자이너가 "Figma 값으로 통일" 확정하면 토큰 require로 전환.
+전환 전 mobile `tailwind.config`가 토큰(Figma=web)과 달랐던 색. 모두 토큰으로 통일했고, **렌더 변화는 0**이었다 — 틀어진 shade(primary 600~900·secondary 50/400/500)를 쓰는 클래스 사용처가 실측 0(죽은 선언)이었고, 실제 쓰이던 `primary-300/500`은 토큰과 값이 같았기 때문. 통일로 신 값이 들어가 향후 `primary-600` 등을 쓰면 올바른 Figma 값이 나온다.
 
-**primary** (mobile이 옛 값에 멈춤):
-
-| shade | mobile (현재) | token (Figma) |
-| --- | --- | --- |
-| 600 | `#7fc125` | `#4ad11b` |
-| 700 | `#5f911c` | `#039100` |
-| 800 | `#3f6112` | `#025900` |
-| 900 | `#203009` | `#013200` |
-
-**secondary** (미세 차이):
-
-| shade | mobile (현재) | token (Figma) |
-| --- | --- | --- |
-| 50 | `#eff4ff` | `#f3f7ff` |
-| 400 | `#6c97fa` | `#6593fd` |
-| 500 | `#477df9` | `#467dfb` |
+**primary** (옛 값 → 토큰): 600 `#7fc125→#4ad11b` · 700 `#5f911c→#039100` · 800 `#3f6112→#025900` · 900 `#203009→#013200`
+**secondary** (미세 차이 → 토큰): 50 `#eff4ff→#f3f7ff` · 400 `#6c97fa→#6593fd` · 500 `#477df9→#467dfb`
 
 ## drift 가드
 
