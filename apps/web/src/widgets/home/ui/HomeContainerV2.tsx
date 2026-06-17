@@ -101,7 +101,7 @@ export default HomeContainerV2;
 //             height={81}
 //           />
 //         </div>
-//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[8px] py-[4px] text-xs leading-none font-medium text-white">
+//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium text-white">
 //           AD
 //         </div>
 //       </Link>
@@ -138,7 +138,7 @@ export default HomeContainerV2;
 //             height={81}
 //           />
 //         </div>
-//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[8px] py-[4px] text-xs leading-none font-medium text-white">
+//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium text-white">
 //           AD
 //         </div>
 //       </Link>
@@ -176,7 +176,7 @@ const AdPersilBanner20251124 = () => {
             height={81}
           />
         </div>
-        <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[8px] py-[4px] text-xs leading-none font-medium text-white">
+        <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium text-white">
           AD
         </div>
       </Link>

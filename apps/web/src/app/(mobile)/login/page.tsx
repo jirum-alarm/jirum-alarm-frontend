@@ -93,7 +93,7 @@ const Login = () => {
       name: '이메일로 시작하기',
       id: 'email-login-button',
       icon: <SvgEmail />,
-      style: 'hover:bg-[#E4E7EC] border-[1px] border-[#E4E7EC] text-gray-900',
+      style: 'hover:bg-gray-200 border-[1px] border-gray-200 text-gray-900',
       action: handleEmailLogin,
       type: LoginType.EMAIL,
     },

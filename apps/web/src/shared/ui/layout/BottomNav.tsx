@@ -169,7 +169,7 @@ const BottomNavComponent = () => {
                 >
                   {createElement(isActiveNav(nav) ? nav.activeIcon : nav.icon)}
                   {nav.type === NAV_TYPE.ALARM && hasNewAlarm && (
-                    <span className="absolute top-1 right-2.5 h-2 w-2 rounded-full bg-[#EB001C]" />
+                    <span className="bg-error-500 absolute top-1 right-2.5 h-2 w-2 rounded-full" />
                   )}
                 </div>
                 <span

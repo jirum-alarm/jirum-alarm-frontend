@@ -91,7 +91,7 @@ export default function CommunityPostDetailClient({
       {hasTaggedProduct && post.taggedProduct && (
         <Link
           href={`/products/${post.taggedProduct.id}`}
-          className="mx-5 mb-4 block rounded-2xl bg-[#F3F7FF] p-4 transition-transform hover:bg-[#e8effe] active:scale-[0.98] active:bg-[#e8effe]"
+          className="bg-secondary-50 mx-5 mb-4 block rounded-2xl p-4 transition-transform hover:bg-[#e8effe] active:scale-[0.98] active:bg-[#e8effe]"
         >
           <span className="typography-caption-12m mb-3 inline-block rounded-full bg-[#dce8ff] px-2.5 py-0.5 text-[#4378f5]">
             태그한 상품
