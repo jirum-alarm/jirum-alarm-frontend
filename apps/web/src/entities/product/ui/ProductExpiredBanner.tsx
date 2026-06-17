@@ -58,7 +58,7 @@ export default function ProductExpiredBanner({ productId }: { productId: number 
                 transition: 'transform 0.5s ease-in-out',
               }}
             >
-              <p className="font-medium text-gray-600">
+              <p className="text-fg-muted font-medium">
                 {item}님이 <strong className="text-fg-primary font-semibold">판매종료</strong>로
                 제보했어요!
               </p>

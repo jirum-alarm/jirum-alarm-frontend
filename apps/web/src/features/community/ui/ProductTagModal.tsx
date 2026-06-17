@@ -84,7 +84,7 @@ export default function ProductTagModal({
       {selected ? (
         <div className="bg-surface-subtle flex items-center gap-x-3 rounded-xl p-3">
           {selected.thumbnail && (
-            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200">
+            <div className="bg-surface-emphasis relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg">
               <ProductThumbnail
                 src={selected.thumbnail}
                 alt={selected.title}
@@ -97,7 +97,9 @@ export default function ProductTagModal({
           <div className="min-w-0 flex-1">
             <p className="typography-body-14m text-fg-primary truncate">{selected.title}</p>
             {selected.price && (
-              <p className="mt-0.5 text-xs font-semibold text-gray-700">{selected.price}</p>
+              <p className="text-fg-secondary-strong mt-0.5 text-xs font-semibold">
+                {selected.price}
+              </p>
             )}
           </div>
           <button
@@ -228,7 +230,9 @@ export default function ProductTagModal({
                             {p.title}
                           </p>
                           {p.price && (
-                            <p className="mt-0.5 text-xs font-semibold text-gray-700">{p.price}</p>
+                            <p className="text-fg-secondary-strong mt-0.5 text-xs font-semibold">
+                              {p.price}
+                            </p>
                           )}
                         </button>
                       ))}
@@ -242,7 +246,9 @@ export default function ProductTagModal({
                 <>
                   {recentProducts.length > 0 ? (
                     <>
-                      <p className="typography-body-14sb mb-3 text-gray-700">최근 본 상품</p>
+                      <p className="typography-body-14sb text-fg-secondary-strong mb-3">
+                        최근 본 상품
+                      </p>
                       <div className="grid grid-cols-3 gap-3 pb-6">
                         {recentProducts.map((p) => (
                           <button
@@ -265,7 +271,7 @@ export default function ProductTagModal({
                               {p.title}
                             </p>
                             {p.price && (
-                              <p className="mt-0.5 text-xs font-semibold text-gray-700">
+                              <p className="text-fg-secondary-strong mt-0.5 text-xs font-semibold">
                                 {p.price}
                               </p>
                             )}

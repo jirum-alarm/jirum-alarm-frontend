@@ -63,7 +63,7 @@ export default function PostForm({
           existingTaggedProduct ? (
             <div className="bg-surface-subtle flex items-center gap-x-3 rounded-xl p-3">
               {existingTaggedProduct.thumbnail && (
-                <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200">
+                <div className="bg-surface-emphasis relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg">
                   <ProductThumbnail
                     src={existingTaggedProduct.thumbnail}
                     alt={existingTaggedProduct.title}
@@ -78,7 +78,7 @@ export default function PostForm({
                   {existingTaggedProduct.title}
                 </p>
                 {existingTaggedProduct.price && (
-                  <p className="mt-0.5 text-xs font-semibold text-gray-700">
+                  <p className="text-fg-secondary-strong mt-0.5 text-xs font-semibold">
                     {existingTaggedProduct.price}
                   </p>
                 )}

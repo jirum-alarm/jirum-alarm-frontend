@@ -92,7 +92,7 @@ export function ReactionChart({
         <div className="space-y-0.5">
           <div
             className={cn([
-              'text-center text-[44px] leading-[44px] font-semibold text-gray-800',
+              'text-fg-strong text-center text-[44px] leading-[44px] font-semibold',
               disabled && 'text-fg-tertiary',
             ])}
           >
@@ -103,12 +103,12 @@ export function ReactionChart({
             {!disabled &&
               (isPositive ? (
                 <>
-                  <span className="text-gray-700">추천해요</span>
+                  <span className="text-fg-secondary-strong">추천해요</span>
                   <Thumbsup className="size-4.5" active />
                 </>
               ) : (
                 <>
-                  <span className="text-gray-700">비추천해요</span>
+                  <span className="text-fg-secondary-strong">비추천해요</span>
                   <Thumbsdown className="size-4.5" active />
                 </>
               ))}

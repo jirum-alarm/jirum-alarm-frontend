@@ -22,7 +22,7 @@ const Footer = () => {
               <TalkLight className="mt-0.5 mr-0.25" />
             </Link>
           </div>
-          <p className="typography-body-14m mb-4 whitespace-pre-line text-gray-700">
+          <p className="typography-body-14m text-fg-secondary-strong mb-4 whitespace-pre-line">
             지름알림{'\n'}
             고객센터 :{' '}
             <Link href="mailto:jirumalarm@gmail.com" className="font-medium underline">
@@ -30,7 +30,7 @@ const Footer = () => {
             </Link>
           </p>
           <div className="flex h-full flex-col justify-between lg:flex-row">
-            <div className="flex gap-x-2 text-sm text-gray-600">
+            <div className="text-fg-muted flex gap-x-2 text-sm">
               <Link href="https://jirum-alarm.com/policies/terms" className="underline">
                 서비스 이용약관
               </Link>
@@ -39,7 +39,7 @@ const Footer = () => {
                 개인정보 처리방침
               </Link>
             </div>
-            <p className="text-sm text-gray-600">Copyright 2025. 지름알림. All rights reserved.</p>
+            <p className="text-fg-muted text-sm">Copyright 2025. 지름알림. All rights reserved.</p>
           </div>
         </footer>
       </div>

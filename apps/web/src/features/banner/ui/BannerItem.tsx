@@ -71,7 +71,7 @@ const BannerItem = ({
       </motion.div>
 
       {isAd && (
-        <div className="bg-opacity-90 text-fg-inverse absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[7px] py-[3px] text-xs leading-none font-medium">
+        <div className="bg-opacity-90 text-fg-inverse bg-surface-disabled-strong absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white px-[7px] py-[3px] text-xs leading-none font-medium">
           AD
         </div>
       )}

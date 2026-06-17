@@ -80,7 +80,7 @@ export default function CommentAction({
         >
           좋아요
         </span>
-        <span className={cn('text-sm', comment.isMyLike ? 'text-primary-700' : 'text-gray-600')}>
+        <span className={cn('text-sm', comment.isMyLike ? 'text-primary-700' : 'text-fg-muted')}>
           {comment.likeCount}
         </span>
       </button>

@@ -16,7 +16,7 @@ export function ReactionSummary({
         <AIIcon className="size-4.5" />
         <span className="text-fg-primary font-medium">핫딜 추천 이유</span>
       </div>
-      <p className="p-1 text-sm text-gray-800">{commentSummary.summary}</p>
+      <p className="text-fg-strong p-1 text-sm">{commentSummary.summary}</p>
     </section>
   );
 }

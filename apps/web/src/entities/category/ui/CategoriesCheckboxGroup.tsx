@@ -22,7 +22,7 @@ const CategoriesCheckboxGroup = ({
           >
             <div className="flex flex-col items-center gap-2">
               <span className="text-2xl">{category.icon}</span>
-              <span className="text-sm text-gray-700">{category.text}</span>
+              <span className="text-fg-secondary-strong text-sm">{category.text}</span>
             </div>
           </Checkbox>
         </li>

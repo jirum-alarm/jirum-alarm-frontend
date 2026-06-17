@@ -69,7 +69,7 @@ export default function CommunityPostDetailClient({
               지름알림
             </span>
           )}
-          <span className="typography-body-14m text-gray-700">
+          <span className="typography-body-14m text-fg-secondary-strong">
             {post.author?.nickname ?? '알 수 없음'}
           </span>
           <span className="text-fg-tertiary text-xs">{displayTime(post.createdAt)}</span>
@@ -87,7 +87,7 @@ export default function CommunityPostDetailClient({
       )}
 
       {/* 본문 */}
-      <p className="px-5 pb-4 text-base leading-relaxed text-gray-800">{post.content}</p>
+      <p className="text-fg-strong px-5 pb-4 text-base leading-relaxed">{post.content}</p>
 
       {/* 상품 태그 */}
       {hasTaggedProduct && post.taggedProduct && (

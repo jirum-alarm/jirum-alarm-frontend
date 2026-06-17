@@ -71,9 +71,9 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
                   >
                     글 삭제하기
                   </button>
-                  <div className="mx-5 h-px w-full bg-gray-200" />
+                  <div className="bg-surface-emphasis mx-5 h-px w-full" />
                   <button
-                    className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800 transition-transform active:scale-[0.98]"
+                    className="text-fg-strong flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                     onClick={() => {
                       setIsOpen(false);
                       router.push(`${PAGE.COMMUNITY_WRITE}?edit=${postId}`);
@@ -113,7 +113,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
               </Description>
             </Header>
             <Footer>
-              <Cancel className="typography-body-14m bg-surface-muted flex h-11 flex-1 items-center justify-center rounded-lg text-gray-700">
+              <Cancel className="typography-body-14m bg-surface-muted text-fg-secondary-strong flex h-11 flex-1 items-center justify-center rounded-lg">
                 취소
               </Cancel>
               <Action

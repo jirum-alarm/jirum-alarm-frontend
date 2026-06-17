@@ -65,7 +65,7 @@ function ProductList({ products }: { products: ProductItem[] }) {
             {product.title}
           </p>
           {product.price && (
-            <p className="mt-0.5 text-xs font-semibold text-gray-700">{product.price}</p>
+            <p className="text-fg-secondary-strong mt-0.5 text-xs font-semibold">{product.price}</p>
           )}
         </Link>
       ))}

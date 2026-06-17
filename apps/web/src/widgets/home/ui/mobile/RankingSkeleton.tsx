@@ -64,7 +64,7 @@ const PreviewCard = ({ product, rank, isActive, priority }: PreviewCardProps) =>
           />
         </div>
         <div className="p-3 pb-0">
-          <div className="line-clamp-2 text-sm text-gray-700">{product.title}</div>
+          <div className="text-fg-secondary-strong line-clamp-2 text-sm">{product.title}</div>
           <div className="typography-title-18b text-fg-primary pt-2">
             <DisplayListPrice price={product.price} />
           </div>
@@ -96,7 +96,7 @@ const SkeletonCard = ({ isActive }: { isActive: boolean }) => (
     >
       <div className="bg-surface-subtle relative h-[240px] w-full">
         <div className="bg-surface-inverse absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg">
-          <div className="h-3 w-2 animate-pulse rounded-sm bg-gray-600" />
+          <div className="bg-surface-inverse-muted h-3 w-2 animate-pulse rounded-sm" />
         </div>
         <div className="bg-surface-muted h-full w-full animate-pulse" />
       </div>

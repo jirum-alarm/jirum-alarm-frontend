@@ -18,7 +18,7 @@ const CommentListSkeleton = () => {
         <div className="flex flex-col items-center gap-y-3">
           <BubbleChatEmpty />
           <div className="flex flex-col items-center gap-y-1">
-            <p className="font-semibold text-gray-700">첫 후기를 남겨주세요!</p>
+            <p className="text-fg-secondary-strong font-semibold">첫 후기를 남겨주세요!</p>
             <p className="typography-body-14m text-fg-secondary">댓글로 함께 소통해요</p>
           </div>
         </div>

@@ -87,7 +87,7 @@ export default function ReportModal({
                       <div className="bg-surface-default h-2 w-2 rounded-full" />
                     )}
                   </div>
-                  <span className="text-sm text-gray-800">{reason.label}</span>
+                  <span className="text-fg-strong text-sm">{reason.label}</span>
                 </button>
               ))}
             </div>
@@ -104,7 +104,7 @@ export default function ReportModal({
             <div className="mt-6 flex gap-x-3">
               <button
                 onClick={handleClose}
-                className="typography-body-14m bg-surface-muted flex h-12 flex-1 items-center justify-center rounded-lg text-gray-700 transition-transform active:scale-95"
+                className="typography-body-14m bg-surface-muted text-fg-secondary-strong flex h-12 flex-1 items-center justify-center rounded-lg transition-transform active:scale-95"
               >
                 취소
               </button>

@@ -31,8 +31,8 @@ const TermsLayout = ({
     <div
       className={cn(
         'flex w-full flex-col items-center pt-14',
-        'mobile-max:before:fixed mobile-max:before:left-1/2 mobile-max:before:top-0 mobile-max:before:-ml-[300px] mobile-max:before:h-full mobile-max:before:w-px mobile-max:before:-translate-x-1/2 mobile-max:before:bg-gray-200',
-        'mobile-max:after:fixed mobile-max:after:left-1/2 mobile-max:after:top-0 mobile-max:after:ml-[300px] mobile-max:after:h-full mobile-max:after:w-px mobile-max:after:-translate-x-1/2 mobile-max:after:bg-gray-200',
+        'mobile-max:before:fixed mobile-max:before:left-1/2 mobile-max:before:top-0 mobile-max:before:-ml-[300px] mobile-max:before:h-full mobile-max:before:w-px mobile-max:before:-translate-x-1/2 mobile-max:before:bg-surface-emphasis',
+        'mobile-max:after:fixed mobile-max:after:left-1/2 mobile-max:after:top-0 mobile-max:after:ml-[300px] mobile-max:after:h-full mobile-max:after:w-px mobile-max:after:-translate-x-1/2 mobile-max:after:bg-surface-emphasis',
       )}
     >
       <header className="max-w-mobile-max bg-surface-default fixed top-0 z-50 flex h-14 w-full items-center justify-between px-5 py-2">
@@ -46,7 +46,7 @@ const TermsLayout = ({
           <p>공고일자 : 2023년 12월 01일</p>
           <p>시행일자 : 2023년 12월 01일</p>
         </div>
-        <section className="text-sm text-gray-600">
+        <section className="text-fg-muted text-sm">
           <p>목차</p>
           <ol className="w-fit">
             {termsIndexData.map((data) => (

@@ -22,7 +22,7 @@ export const buttonVaraint = cva('w-full', {
       variant: 'outlined',
       color: 'primary',
       class:
-        'font-normal border-border-brand bg-transparent text-fg-primary disabled:border-none disabled:bg-surface-subtle disabled:text-gray-600',
+        'font-normal border-border-brand bg-transparent text-fg-primary disabled:border-none disabled:bg-surface-subtle disabled:text-fg-muted',
     },
     {
       variant: 'filled',
@@ -34,13 +34,13 @@ export const buttonVaraint = cva('w-full', {
       variant: 'filled',
       color: 'primary',
       size: 'md',
-      class: 'font-semibold bg-gray-800 text-primary-500 w-auto px-5 py-1.5 h-auto',
+      class: 'font-semibold bg-surface-inverse-strong text-primary-500 w-auto px-5 py-1.5 h-auto',
     },
     {
       variant: 'filled',
       color: 'primary',
       size: 'sm',
-      class: 'font-semibold bg-gray-800 text-primary-500 w-auto px-3 py-1 h-auto',
+      class: 'font-semibold bg-surface-inverse-strong text-primary-500 w-auto px-3 py-1 h-auto',
     },
     {
       variant: 'filled',

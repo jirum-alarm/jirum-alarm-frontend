@@ -57,7 +57,7 @@ const HotdealScore = ({ productId }: { productId: number }) => {
                     )}
                   </div>
                   <p
-                    className="text-center font-medium text-gray-800"
+                    className="text-fg-strong text-center font-medium"
                     dangerouslySetInnerHTML={{
                       __html: hotDealIndex.message.replace(/<b\/>/g, '</b>'),
                     }}

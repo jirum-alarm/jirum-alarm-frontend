@@ -42,7 +42,7 @@ const DeleteAccount = () => {
             회원탈퇴
           </AlertDialog.Title>
           <AlertDialog.Description>
-            <p className="text-gray-700">
+            <p className="text-fg-secondary-strong">
               회원탈퇴 시 모든 계정 정보가 삭제돼요.
               <br />
               지름알림에서 <span className="font-semibold">회원탈퇴</span>

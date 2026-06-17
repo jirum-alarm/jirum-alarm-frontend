@@ -45,7 +45,7 @@ export default function AlarmList() {
                 onRemoveAll();
                 setEditMode(false);
               }}
-              className="typography-body-14m px-1 text-gray-600"
+              className="typography-body-14m text-fg-muted px-1"
             >
               전체 삭제
             </button>
@@ -62,7 +62,7 @@ export default function AlarmList() {
       {!isEditMode && (
         <div className="border-border-default bg-surface-subtle sticky top-14 z-40 border-b">
           <div className="flex h-11 items-center justify-between px-5">
-            <span className="typography-body-14m text-gray-600">
+            <span className="typography-body-14m text-fg-muted">
               지금 다양한 핫딜 알림을 받아보세요!
             </span>
             <Link

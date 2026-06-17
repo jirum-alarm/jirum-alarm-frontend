@@ -29,7 +29,7 @@ export default function TabBar({
               'typography-body-14m rounded-full px-3 py-1 transition-colors transition-transform active:scale-95',
               isActive
                 ? 'bg-surface-inverse text-fg-inverse'
-                : 'bg-surface-muted text-gray-600 hover:bg-gray-200',
+                : 'bg-surface-muted text-fg-muted hover:bg-surface-emphasis',
             )}
           >
             {tab.label}

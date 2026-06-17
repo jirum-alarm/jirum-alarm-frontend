@@ -26,7 +26,7 @@ export default function NavLink({
         'text-fg-inverse': isActive,
         'text-gray-200': !isActive,
         'text-fg-primary': isActive && !isInverted,
-        'text-gray-700': !isActive && !isInverted,
+        'text-fg-secondary-strong': !isActive && !isInverted,
       })}
     >
       <motion.div

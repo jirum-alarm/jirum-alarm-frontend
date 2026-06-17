@@ -40,7 +40,7 @@ export default function NoticePostCard({
       <p className="typography-body-14sb text-fg-primary mt-2 truncate">
         {post.title ?? post.content}
       </p>
-      {post.title && <p className="mt-0.5 truncate text-sm text-gray-600">{post.content}</p>}
+      {post.title && <p className="text-fg-muted mt-0.5 truncate text-sm">{post.content}</p>}
 
       <div className="text-fg-tertiary mt-2 flex items-center gap-x-3 text-xs">
         <span className="flex items-center gap-x-1">

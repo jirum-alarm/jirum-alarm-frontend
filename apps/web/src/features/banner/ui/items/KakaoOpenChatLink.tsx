@@ -12,7 +12,7 @@ const props = {
   description: '오픈 카톡방에서 소식을 확인해보세요!',
   image: kakao,
   // eventName: EVENT.OPEN_KAKAO_TALK.NAME,
-  className: 'bg-gray-800 border-gray-600',
+  className: 'bg-surface-inverse-strong border-gray-600',
 };
 
 const KakaoOpenChatLink = ({ isMobile, priority }: { isMobile: boolean; priority?: boolean }) => {

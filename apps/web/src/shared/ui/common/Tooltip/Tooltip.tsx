@@ -70,9 +70,9 @@ const Tooltip = ({ content, children, align = 'left', polygonOffset = 28 }: Prop
             [align]: pos.x,
           }}
         >
-          <div className="rounded-lg bg-gray-600 px-[16px] py-[10px]">{content}</div>
+          <div className="bg-surface-inverse-muted rounded-lg px-[16px] py-[10px]">{content}</div>
           <span
-            className={cn('absolute -top-[8px] text-gray-600')}
+            className={cn('text-fg-muted absolute -top-[8px]')}
             style={{
               [align]: polygonOffset,
             }}

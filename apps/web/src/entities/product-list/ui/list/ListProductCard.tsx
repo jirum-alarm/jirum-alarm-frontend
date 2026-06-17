@@ -26,18 +26,20 @@ export default function ListProductCard({ product }: { product: ProductCardType 
               sizes="120px"
             />
             {product.isEnd && (
-              <div className="text-semibold bg-surface-default absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg px-2 text-xs text-gray-700">
+              <div className="text-semibold bg-surface-default text-fg-secondary-strong absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg px-2 text-xs">
                 판매종료
               </div>
             )}
             {product.earliestExpiryDate && (
-              <div className="text-semibold text-fg-inverse absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg bg-gray-700/80 px-2 text-xs">
+              <div className="text-semibold text-fg-inverse bg-surface-inverse-subtle/80 absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg px-2 text-xs">
                 유통기한 {formatDateToMMD(product.earliestExpiryDate)}
               </div>
             )}
           </div>
           <div className="flex h-full flex-col justify-between gap-1">
-            <span className="line-clamp-2 text-sm break-all text-gray-700">{product.title}</span>
+            <span className="text-fg-secondary-strong line-clamp-2 text-sm break-all">
+              {product.title}
+            </span>
             <div className="flex items-center gap-2">
               <DisplayListPrice price={product.price} widthType="wide" />
               {product.hotDealType && !product.isEnd && (

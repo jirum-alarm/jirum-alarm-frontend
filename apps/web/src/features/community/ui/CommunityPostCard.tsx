@@ -35,7 +35,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
               {isProductComment ? '댓글' : '게시글'}
             </span>
           )}
-          <span className="typography-body-14m text-gray-700">
+          <span className="typography-body-14m text-fg-secondary-strong">
             {post.author?.nickname ?? '알 수 없음'}
           </span>
           <span className="text-fg-tertiary text-xs">{displayTime(post.createdAt)}</span>
@@ -50,7 +50,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
         {post.title && (
           <p className="typography-body-14sb text-fg-primary mt-2 truncate">{post.title}</p>
         )}
-        <p className={cn('mt-1 text-sm text-gray-600', post.title ? 'truncate' : 'line-clamp-2')}>
+        <p className={cn('text-fg-muted mt-1 text-sm', post.title ? 'truncate' : 'line-clamp-2')}>
           {post.content}
         </p>
 

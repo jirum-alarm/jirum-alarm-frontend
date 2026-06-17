@@ -7,7 +7,7 @@ const AccountManagement = () => {
   return (
     <div className="flex items-center">
       <Logout />
-      <div className="h-3 w-px bg-gray-200" />
+      <div className="bg-surface-emphasis h-3 w-px" />
       <DeleteAccount />
     </div>
   );

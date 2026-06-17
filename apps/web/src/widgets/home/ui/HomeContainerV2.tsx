@@ -101,7 +101,7 @@ export default HomeContainerV2;
 //             height={81}
 //           />
 //         </div>
-//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium text-fg-inverse">
+//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-surface-disabled-strong px-[8px] py-[4px] text-xs leading-none font-medium text-fg-inverse">
 //           AD
 //         </div>
 //       </Link>
@@ -125,7 +125,7 @@ export default HomeContainerV2;
 //                   비프록 음식물 처리기 <b className="text-[#0036B1]">추석특가</b>
 //                 </span>
 //               </div>
-//               <div className="text-[13px] leading-[18px] font-medium text-gray-700">
+//               <div className="text-[13px] leading-[18px] font-medium text-fg-secondary-strong">
 //                 오직 <b>지름알림</b>에서만 <b className="text-secondary-600">70% 할인</b>
 //               </div>
 //             </div>
@@ -138,7 +138,7 @@ export default HomeContainerV2;
 //             height={81}
 //           />
 //         </div>
-//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium text-fg-inverse">
+//         <div className="bg-opacity-90 absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-surface-disabled-strong px-[8px] py-[4px] text-xs leading-none font-medium text-fg-inverse">
 //           AD
 //         </div>
 //       </Link>
@@ -176,7 +176,7 @@ const AdPersilBanner20251124 = () => {
             height={81}
           />
         </div>
-        <div className="bg-opacity-90 text-fg-inverse absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white bg-gray-400 px-[8px] py-[4px] text-xs leading-none font-medium">
+        <div className="bg-opacity-90 text-fg-inverse bg-surface-disabled-strong absolute right-[12px] bottom-[12px] z-30 w-fit rounded-[8px] border border-white px-[8px] py-[4px] text-xs leading-none font-medium">
           AD
         </div>
       </Link>

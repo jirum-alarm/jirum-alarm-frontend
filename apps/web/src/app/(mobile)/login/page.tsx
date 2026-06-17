@@ -93,7 +93,7 @@ const Login = () => {
       name: '이메일로 시작하기',
       id: 'email-login-button',
       icon: <SvgEmail />,
-      style: 'hover:bg-gray-200 border-[1px] border-border-default text-fg-primary',
+      style: 'hover:bg-surface-emphasis border-[1px] border-border-default text-fg-primary',
       action: handleEmailLogin,
       type: LoginType.EMAIL,
     },
@@ -151,7 +151,7 @@ const Login = () => {
             {/* Email Signup Link */}
             <Link
               href={PAGE.SIGNUP}
-              className="hover:text-fg-primary mt-2 text-sm text-gray-600 underline transition-colors"
+              className="hover:text-fg-primary text-fg-muted mt-2 text-sm underline transition-colors"
             >
               이메일로 가입하기
             </Link>

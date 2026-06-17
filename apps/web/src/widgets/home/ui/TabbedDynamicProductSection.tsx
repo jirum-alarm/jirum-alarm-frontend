@@ -55,7 +55,7 @@ const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProduct
               >
                 <Link
                   href={activeTab.viewMoreLink}
-                  className="text-fg-secondary px-2 py-1 text-sm hover:text-gray-700"
+                  className="text-fg-secondary hover:text-fg-secondary-strong px-2 py-1 text-sm"
                   aria-label={`${section.title} 더보기`}
                 >
                   더보기

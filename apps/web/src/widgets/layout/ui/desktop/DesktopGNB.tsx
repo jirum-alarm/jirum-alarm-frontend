@@ -88,7 +88,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           <Link
             href={talkroomLink}
             target="_blank"
-            className="group relative size-9 rounded-full duration-300 hover:bg-gray-400/20"
+            className="group hover:bg-surface-disabled-strong/20 relative size-9 rounded-full duration-300"
             aria-label="핫딜 카톡방 입장"
           >
             <motion.div
@@ -123,7 +123,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           {isLoggedIn ? (
             <Link
               href={PAGE.MYPAGE}
-              className="flex size-8 items-center justify-center rounded-full duration-300 hover:bg-gray-400/20"
+              className="hover:bg-surface-disabled-strong/20 flex size-8 items-center justify-center rounded-full duration-300"
             >
               <motion.div
                 whileTap={{ scale: 0.95 }}
@@ -136,7 +136,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           ) : (
             <Link
               href={PAGE.LOGIN}
-              className="text-fg-inverse rounded-full bg-gray-700 px-4 py-1.5 font-semibold transition-colors duration-300 hover:bg-gray-600"
+              className="text-fg-inverse bg-surface-inverse-subtle hover:bg-surface-inverse-muted rounded-full px-4 py-1.5 font-semibold transition-colors duration-300"
             >
               <motion.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
                 로그인

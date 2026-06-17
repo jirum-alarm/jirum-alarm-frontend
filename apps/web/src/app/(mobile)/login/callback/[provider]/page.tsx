@@ -108,7 +108,9 @@ const SocialLoginCallbackPage = () => {
     <BasicLayout fullScreen>
       <div className="flex h-full flex-col items-center justify-center">
         <LoadingSpinner className="mb-4 size-12" />
-        <p className="text-lg font-semibold text-gray-700">{providerName} 로그인 처리 중...</p>
+        <p className="text-fg-secondary-strong text-lg font-semibold">
+          {providerName} 로그인 처리 중...
+        </p>
       </div>
     </BasicLayout>
   );

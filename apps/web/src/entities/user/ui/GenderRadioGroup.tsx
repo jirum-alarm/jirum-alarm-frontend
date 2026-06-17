@@ -22,7 +22,7 @@ const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) 
           >
             <div className="flex flex-col gap-2">
               <span className="text-2xl">👩</span>
-              <span className="text-sm text-gray-700">여자</span>
+              <span className="text-fg-secondary-strong text-sm">여자</span>
             </div>
           </Radio>
         </li>
@@ -35,7 +35,7 @@ const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) 
           >
             <div className="flex flex-col gap-2">
               <span className="text-2xl">👨</span>
-              <span className="text-sm text-gray-700">남자</span>
+              <span className="text-fg-secondary-strong text-sm">남자</span>
             </div>
           </Radio>
         </li>

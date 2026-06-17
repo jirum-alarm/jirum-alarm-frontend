@@ -57,7 +57,7 @@ function CommentItem({
     <div className="flex flex-col px-5 py-3">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-x-2">
-          <span className="typography-body-14m text-gray-700">
+          <span className="typography-body-14m text-fg-secondary-strong">
             {comment.author?.nickname ?? '알 수 없음'}
           </span>
           <span className="text-fg-tertiary text-xs">{displayTime(comment.createdAt)}</span>
@@ -107,7 +107,7 @@ function CommentItem({
           <Drawer.Content className="max-w-mobile-max rounded-t-5 bg-surface-default fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit outline-hidden">
             <div className="flex flex-col items-center pt-4 pb-8">
               <button
-                className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800 transition-transform active:scale-[0.98]"
+                className="text-fg-strong flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                 onClick={() => {
                   setIsMenuOpen(false);
                   onEdit(comment.id, comment.content);
@@ -115,7 +115,7 @@ function CommentItem({
               >
                 댓글 수정하기
               </button>
-              <div className="mx-5 h-px w-full bg-gray-200" />
+              <div className="bg-surface-emphasis mx-5 h-px w-full" />
               <button
                 className="text-fg-error flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                 onClick={() => {
@@ -145,7 +145,7 @@ function CommentItem({
               </Description>
             </Header>
             <Footer>
-              <Cancel className="typography-body-14m bg-surface-muted flex h-11 flex-1 items-center justify-center rounded-lg text-gray-700">
+              <Cancel className="typography-body-14m bg-surface-muted text-fg-secondary-strong flex h-11 flex-1 items-center justify-center rounded-lg">
                 취소
               </Cancel>
               <Action
@@ -269,7 +269,7 @@ function CommunityCommentList({
               <div className="flex justify-end gap-x-2">
                 <button
                   onClick={() => setEditingId(null)}
-                  className="typography-body-14m bg-surface-muted h-8 rounded-lg px-4 text-gray-700 transition-transform active:scale-95"
+                  className="typography-body-14m bg-surface-muted text-fg-secondary-strong h-8 rounded-lg px-4 transition-transform active:scale-95"
                 >
                   취소
                 </button>
@@ -278,7 +278,7 @@ function CommunityCommentList({
                     updateComment({ id: Number(comment.id), content: editContent.trim() })
                   }
                   disabled={!editContent.trim() || isUpdating}
-                  className="typography-body-14sb text-fg-inverse h-8 rounded-lg bg-gray-800 px-4 transition-transform active:scale-95 disabled:bg-gray-400"
+                  className="typography-body-14sb text-fg-inverse bg-surface-inverse-strong disabled:bg-surface-disabled-strong h-8 rounded-lg px-4 transition-transform active:scale-95"
                 >
                   수정
                 </button>
@@ -356,7 +356,7 @@ function CommunityCommentInput({ postId, isUserLogin }: { postId: number; isUser
       <button
         type="submit"
         disabled={!content.trim() || isPending || !isUserLogin}
-        className="typography-body-14sb text-fg-inverse h-10 shrink-0 rounded-lg bg-gray-800 px-5 transition-transform active:scale-95 disabled:bg-gray-400"
+        className="typography-body-14sb text-fg-inverse bg-surface-inverse-strong disabled:bg-surface-disabled-strong h-10 shrink-0 rounded-lg px-5 transition-transform active:scale-95"
       >
         등록
       </button>

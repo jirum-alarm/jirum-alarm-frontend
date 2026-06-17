@@ -62,9 +62,9 @@ export default function CommentMenu({ comment }: { comment: TComment }) {
             >
               삭제
             </button>
-            <div className="mx-5 h-px w-full bg-gray-200" />
+            <div className="bg-surface-emphasis mx-5 h-px w-full" />
             <button
-              className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800"
+              className="text-fg-strong flex h-14 w-full items-center justify-center text-lg font-medium"
               onClick={handleEdit}
             >
               수정

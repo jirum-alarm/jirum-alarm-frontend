@@ -33,7 +33,7 @@ export default function CarouselProductCard({
             priority={priority}
           />
           {product.isEnd ? (
-            <div className="text-semibold bg-surface-default absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg px-2 text-xs text-gray-700">
+            <div className="text-semibold bg-surface-default text-fg-secondary-strong absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg px-2 text-xs">
               판매종료
             </div>
           ) : (
@@ -44,19 +44,19 @@ export default function CarouselProductCard({
             )
           )}
           {product.earliestExpiryDate && (
-            <div className="text-semibold text-fg-inverse absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg bg-gray-700/80 px-2 text-xs">
+            <div className="text-semibold text-fg-inverse bg-surface-inverse-subtle/80 absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg px-2 text-xs">
               유통기한 {formatDateToMMD(product.earliestExpiryDate)}
             </div>
           )}
         </div>
         <div className="flex flex-col">
-          <span className="line-clamp-2 h-12 w-full pt-2 text-sm break-words text-gray-700">
+          <span className="text-fg-secondary-strong line-clamp-2 h-12 w-full pt-2 text-sm break-words">
             {product.title}
           </span>
           <div className="flex items-center pt-1">
             <DisplayListPrice price={product.price} />
             <span className="w-2"></span>
-            <span className="pc:inline hidden text-sm text-gray-600">
+            <span className="pc:inline text-fg-muted hidden text-sm">
               <DisplayTime time={product.postedAt} />
             </span>
           </div>

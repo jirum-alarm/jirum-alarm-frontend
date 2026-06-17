@@ -41,9 +41,12 @@ export default function ProductInfo({ productId }: { productId: number }) {
         <div className="flex items-center gap-3 pb-2">
           {product.isEnd && (
             <div
-              className={cn('bg-surface-default border border-gray-400 px-2 text-gray-700', {
-                'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-5': true,
-              })}
+              className={cn(
+                'bg-surface-default text-fg-secondary-strong border border-gray-400 px-2',
+                {
+                  'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-5': true,
+                },
+              )}
             >
               판매종료
             </div>
@@ -60,9 +63,9 @@ export default function ProductInfo({ productId }: { productId: number }) {
             </div>
           )}
         </div>
-        <h1 className="font-medium text-gray-800">{product.title}</h1>
+        <h1 className="text-fg-strong font-medium">{product.title}</h1>
         <div className="flex flex-col gap-y-1 pt-3">
-          <div className="h-5 text-sm text-gray-600">
+          <div className="text-fg-muted h-5 text-sm">
             <DisplayTime time={product.postedAt} />
           </div>
           <div className="flex items-center justify-between">

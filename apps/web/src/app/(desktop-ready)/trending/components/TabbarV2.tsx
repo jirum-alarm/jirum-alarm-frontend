@@ -61,8 +61,8 @@ const defaultStyles: Required<TabBarStyles> = {
   tabList: 'relative flex gap-2.5 pc:justify-center',
   tabTrigger: {
     base: 'relative pc:h-10 h-9 shrink-0 whitespace-nowrap px-3 py-2 pc:text-lg transition-all duration-400 rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 leading-none',
-    active: 'font-bold text-primary-500 bg-gray-800',
-    inactive: 'font-medium text-fg-secondary bg-surface-muted hover:bg-gray-200',
+    active: 'font-bold text-primary-500 bg-surface-inverse-strong',
+    inactive: 'font-medium text-fg-secondary bg-surface-muted hover:bg-surface-emphasis',
   },
   settingsContainer: 'absolute bottom-0 right-0 flex h-full items-center',
   settingsGradient: 'h-full w-5 bg-linear-to-r from-transparent to-white pointer-events-none',

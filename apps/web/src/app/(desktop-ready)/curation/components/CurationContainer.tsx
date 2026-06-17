@@ -44,7 +44,7 @@ const CurationContainer = ({ section }: CurationContainerProps) => {
                   'typography-body-14m rounded-full px-4 py-2 whitespace-nowrap transition-colors',
                   activeTabId === tab.id
                     ? 'bg-surface-inverse text-fg-inverse'
-                    : 'bg-surface-muted text-gray-600 hover:bg-gray-200',
+                    : 'bg-surface-muted text-fg-muted hover:bg-surface-emphasis',
                 )}
               >
                 {tab.label}

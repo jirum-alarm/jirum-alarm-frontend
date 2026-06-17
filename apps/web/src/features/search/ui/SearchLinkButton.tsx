@@ -14,7 +14,7 @@ interface Props {
 const SearchLinkButton = ({ color, onClick }: Props) => {
   return (
     <Link
-      className="pc:m-0 pc:size-9 pc:p-0 pc:rounded-full pc:hover:bg-gray-400/20 -m-2 flex items-center justify-center p-2 duration-300"
+      className="pc:m-0 pc:size-9 pc:p-0 pc:rounded-full pc:hover:bg-surface-disabled-strong/20 -m-2 flex items-center justify-center p-2 duration-300"
       href={PAGE.SEARCH}
       onClick={onClick}
       aria-label="검색"

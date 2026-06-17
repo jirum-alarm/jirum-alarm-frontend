@@ -28,7 +28,10 @@ export default async function CommunityDesktopSidebar() {
     <div className="sticky top-20">
       <div className="mb-3 flex items-center justify-between">
         <h2 className="typography-body-14sb text-fg-primary">지름 랭킹</h2>
-        <Link href="/trending/ranking" className="text-fg-secondary text-xs hover:text-gray-700">
+        <Link
+          href="/trending/ranking"
+          className="text-fg-secondary hover:text-fg-secondary-strong text-xs"
+        >
           더보기
         </Link>
       </div>
@@ -69,7 +72,9 @@ export default async function CommunityDesktopSidebar() {
               {product.title}
             </p>
             {product.price && (
-              <p className="mt-0.5 text-xs font-semibold text-gray-700">{product.price}</p>
+              <p className="text-fg-secondary-strong mt-0.5 text-xs font-semibold">
+                {product.price}
+              </p>
             )}
           </Link>
         ))}

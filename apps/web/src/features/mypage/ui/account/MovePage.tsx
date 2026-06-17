@@ -12,7 +12,7 @@ const MovePage = ({ to, title, subtitle }: MovePageProps) => {
     <Link href={to}>
       <div className="flex justify-between py-3">
         <div>
-          <span className="text-sm text-gray-600">{title}</span>
+          <span className="text-fg-muted text-sm">{title}</span>
         </div>
         <div className="flex items-center gap-2">
           {subtitle && <span className="text-fg-primary text-sm"> {subtitle}</span>}

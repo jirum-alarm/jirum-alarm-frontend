@@ -47,15 +47,18 @@ export default function ProductInfo({
   return (
     <section className="flex h-full flex-col justify-between">
       <div>
-        <div className="h-0.5 w-full bg-gray-600" />
+        <div className="bg-surface-inverse-muted h-0.5 w-full" />
         <div className="flex items-start justify-between gap-x-5 pt-6 pb-4">
           <div className="space-y-4">
             <div className="flex gap-x-2">
               {product.isEnd && (
                 <div
-                  className={cn('bg-surface-default border border-gray-400 px-2 text-gray-700', {
-                    'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-5': true,
-                  })}
+                  className={cn(
+                    'bg-surface-default text-fg-secondary-strong border border-gray-400 px-2',
+                    {
+                      'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-5': true,
+                    },
+                  )}
                 >
                   판매종료
                 </div>
@@ -70,7 +73,7 @@ export default function ProductInfo({
               )}
             </div>
 
-            <h1 className="typography-headline-20m text-gray-800">{product.title}</h1>
+            <h1 className="typography-headline-20m text-fg-strong">{product.title}</h1>
           </div>
           <ShareButton title={shareTitle} />
         </div>

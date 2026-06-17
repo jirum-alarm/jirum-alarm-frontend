@@ -91,7 +91,7 @@ function Chip({
   return (
     <div
       onClick={handleClick}
-      className="border-border-default text-fg-primary flex h-[40px] shrink-0 items-center gap-x-1 truncate rounded-[40px] border px-3 hover:cursor-pointer hover:bg-gray-200"
+      className="border-border-default text-fg-primary hover:bg-surface-emphasis flex h-[40px] shrink-0 items-center gap-x-1 truncate rounded-[40px] border px-3 hover:cursor-pointer"
     >
       {keyword.slice(0, 15)}
       {keyword.length > 15 ? '...' : ''}

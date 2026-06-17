@@ -33,7 +33,7 @@ const Description = () => {
         <br />
         알려주세요.<span className="text-fg-secondary pl-2 text-base">(선택)</span>
       </p>
-      <p className="pt-4 text-sm text-gray-700">
+      <p className="text-fg-secondary-strong pt-4 text-sm">
         나와 비슷한 사람들이 좋아하는
         <br />
         물건들을 추천해줘요

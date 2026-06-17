@@ -40,7 +40,7 @@ export default function Comment({
     <div className={cn('flex flex-col px-5 py-4', bgClass, paddingClass)}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-2">
-          <span className="typography-body-14m text-gray-600">{comment.author?.nickname}</span>
+          <span className="typography-body-14m text-fg-muted">{comment.author?.nickname}</span>
           <span className="text-fg-secondary text-sm">
             {editStatus === 'update' ? '수정중' : displayTime(comment.createdAt)}
           </span>

@@ -35,7 +35,7 @@ export function Reactions({ commentSummary }: { commentSummary: ProductCommentSu
                   {item.icon}
                   <span className="text-fg-primary font-medium">{item.title}</span>
                 </div>
-                <span className="text-sm text-gray-600">{value}</span>
+                <span className="text-fg-muted text-sm">{value}</span>
               </li>
             );
           })}

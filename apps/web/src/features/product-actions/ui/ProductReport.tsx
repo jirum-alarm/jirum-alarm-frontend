@@ -22,12 +22,12 @@ const ProductReport = ({ productId }: { productId: number }) => {
       )}
     >
       {product.isMyReported ? (
-        <p className="flex items-center gap-2 text-sm text-gray-600">
+        <p className="text-fg-muted flex items-center gap-2 text-sm">
           종료된 상품으로 제보해주셔서 감사해요 <span className="text-lg">😄</span>
         </p>
       ) : (
         <>
-          <span className="text-sm text-gray-600">혹시 판매가 종료된 상품인가요?</span>
+          <span className="text-fg-muted text-sm">혹시 판매가 종료된 상품인가요?</span>
           <ProductReportModal productId={productId} />
         </>
       )}
@@ -79,7 +79,7 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
               <h2 className="pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>
             </Drawer.Title>
             <SoldOutIcon />
-            <p className="py-3 text-center text-gray-700">
+            <p className="text-fg-secondary-strong py-3 text-center">
               더 빠른 핫딜 확인을 위해
               <br />
               종료된 상품을 제보해 주세요!

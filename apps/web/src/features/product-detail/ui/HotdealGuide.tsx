@@ -55,7 +55,7 @@ export default function HotdealGuide({
             <div className="absolute right-0 bottom-0 left-0 z-10 h-16 w-full bg-linear-to-t from-white via-white/80 to-transparent" />
           )}
           {!isCollapsed && (
-            <small className="bg-secondary-50 mt-4 flex gap-x-1 p-3 text-[13px] leading-[16px] text-gray-600">
+            <small className="bg-secondary-50 text-fg-muted mt-4 flex gap-x-1 p-3 text-[13px] leading-[16px]">
               <span>*</span>
               <div>
                 <span>요약은 실제와 다를 수 있어요.</span>
@@ -130,7 +130,7 @@ function LinkText({ content }: { content: string }) {
             return part.content?.split('\n').map((text, i) => (
               <Fragment key={`${index}_text_${i}`}>
                 {i > 0 && <br />}
-                <span className="text-sm text-gray-600">{text}</span>
+                <span className="text-fg-muted text-sm">{text}</span>
               </Fragment>
             ));
           case 'markdown':

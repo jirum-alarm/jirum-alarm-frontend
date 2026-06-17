@@ -36,7 +36,7 @@ const PreviewCard = ({ product, rank, priority }: PreviewCardProps) => (
   <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
     <div className="bg-surface-default col-span-1 overflow-hidden rounded-lg border shadow-[0_2px_12px_rgba(0,0,0,0.08)]">
       <div className="bg-surface-subtle relative aspect-square w-full">
-        <div className="typography-body-14m text-fg-inverse absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-600/80">
+        <div className="typography-body-14m text-fg-inverse bg-surface-inverse-muted/80 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg">
           {rank}
         </div>
         <ProductThumbnail
@@ -51,7 +51,9 @@ const PreviewCard = ({ product, rank, priority }: PreviewCardProps) => (
         />
       </div>
       <div className="h-[110px] p-3 pb-0">
-        <div className="line-clamp-2 text-sm text-gray-700 xl:text-base">{product.title}</div>
+        <div className="text-fg-secondary-strong line-clamp-2 text-sm xl:text-base">
+          {product.title}
+        </div>
         <div className="typography-title-18b text-fg-primary h-[36px] pt-0.5 xl:text-[22px]">
           <DisplayListPrice price={product.price} />
         </div>
@@ -75,8 +77,8 @@ const SkeletonCard = () => {
   return (
     <div className="bg-surface-default col-span-1 overflow-hidden rounded-lg border shadow-[0_2px_12px_rgba(0,0,0,0.08)]">
       <div className="bg-surface-subtle relative aspect-square w-full">
-        <div className="absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-600/80">
-          <div className="h-3 w-2 animate-pulse rounded-sm bg-gray-400" />
+        <div className="bg-surface-inverse-muted/80 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg">
+          <div className="bg-surface-disabled-strong h-3 w-2 animate-pulse rounded-sm" />
         </div>
         <div className="bg-surface-muted h-full w-full animate-pulse" />
       </div>

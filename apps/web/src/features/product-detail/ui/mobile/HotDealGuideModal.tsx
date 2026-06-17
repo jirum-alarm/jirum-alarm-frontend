@@ -18,7 +18,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
             <Drawer.Title asChild>
               <h3 className="pt-[32px] pb-[12px] text-xl font-bold">핫딜 기준 안내</h3>
             </Drawer.Title>
-            <p className="pb-[90px] text-center text-gray-700">
+            <p className="text-fg-secondary-strong pb-[90px] text-center">
               AI를 활용해서 상품의 기존 가격과 할인된 가격을
               <br />
               비교해서 3단계로 구분해드려요!
@@ -29,7 +29,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
                   <div className="absolute -top-[calc(30px+12px)] -left-[calc(66px/2-6px)] inline-flex flex-col items-center">
                     <div
                       className={cn(
-                        `typography-body-14sb flex h-6 w-[66px] items-center justify-center rounded-[8px] bg-gray-200 text-gray-800`,
+                        `typography-body-14sb bg-surface-emphasis text-fg-strong flex h-6 w-[66px] items-center justify-center rounded-[8px]`,
                       )}
                     >
                       기존 가격
@@ -95,7 +95,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
                 </div>
               </div>
 
-              <div className="-mr-4 flex justify-end pt-[8px] text-sm text-gray-600">
+              <div className="text-fg-muted -mr-4 flex justify-end pt-[8px] text-sm">
                 할인율이 높아져요
               </div>
             </div>
