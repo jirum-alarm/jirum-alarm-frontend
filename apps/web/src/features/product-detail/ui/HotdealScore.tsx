@@ -1,6 +1,12 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
+import {
+  ColorHotdealGraphVeryLow,
+  ColorHotdealGraphLow,
+  ColorHotdealGraphHigh,
+  ColorHotdealGraphVeryHigh,
+} from '@jirum/design-tokens/tokens';
 import { motion, useAnimation } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
@@ -137,15 +143,16 @@ const HotdealScoreBar = ({
 
   const barStyle = visualConfig
     ? {
+        // 핫딜 강도 그래디언트 색 = 디자인 토큰 hotdeal-graph(@jirum/design-tokens). 값 동일(무손실).
         background: `linear-gradient(to right,
-          #E4E7EC 0%,
-          #FFC39C calc(${visualConfig.q1Pct}% * 0.33),
-          #FF9651 calc(${visualConfig.q1Pct}% * 0.66),
-          #FF594D ${visualConfig.q1Pct}%,
-          #FF594D ${visualConfig.q3Pct}%,
-          #FF9651 calc(${visualConfig.q3Pct}% + (100% - ${visualConfig.q3Pct}%) * 0.33),
-          #FFC39C calc(${visualConfig.q3Pct}% + (100% - ${visualConfig.q3Pct}%) * 0.66),
-          #E4E7EC 100%)`,
+          ${ColorHotdealGraphVeryLow} 0%,
+          ${ColorHotdealGraphLow} calc(${visualConfig.q1Pct}% * 0.33),
+          ${ColorHotdealGraphHigh} calc(${visualConfig.q1Pct}% * 0.66),
+          ${ColorHotdealGraphVeryHigh} ${visualConfig.q1Pct}%,
+          ${ColorHotdealGraphVeryHigh} ${visualConfig.q3Pct}%,
+          ${ColorHotdealGraphHigh} calc(${visualConfig.q3Pct}% + (100% - ${visualConfig.q3Pct}%) * 0.33),
+          ${ColorHotdealGraphLow} calc(${visualConfig.q3Pct}% + (100% - ${visualConfig.q3Pct}%) * 0.66),
+          ${ColorHotdealGraphVeryLow} 100%)`,
       }
     : undefined;
 
