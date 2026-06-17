@@ -59,7 +59,11 @@ export default function ProductCreateForm() {
         placeholder="구매 링크(URL)를 입력해 주세요"
         maxLength={2048}
         error={urlError}
-        helperText={urlError ? 'http(s):// 로 시작하는 올바른 링크를 입력해 주세요.' : undefined}
+        helperText={
+          urlError
+            ? '올바른 링크가 아니에요. http:// 또는 https:// 로 시작하는 주소여야 해요.'
+            : 'http:// 또는 https:// 로 시작하는 구매 페이지 주소를 입력해 주세요.'
+        }
       />
 
       <select
@@ -94,7 +98,9 @@ export default function ProductCreateForm() {
         maxLength={2048}
         error={thumbnailError}
         helperText={
-          thumbnailError ? 'http(s):// 로 시작하는 올바른 이미지 링크를 입력해 주세요.' : undefined
+          thumbnailError
+            ? '올바른 이미지 링크가 아니에요. http:// 또는 https:// 로 시작해야 해요.'
+            : '이미지 주소가 있으면 입력해 주세요. (선택)'
         }
       />
 
