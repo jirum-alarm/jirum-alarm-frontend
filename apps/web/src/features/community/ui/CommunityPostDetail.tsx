@@ -69,7 +69,7 @@ export default function CommunityPostDetailClient({
               지름알림
             </span>
           )}
-          <span className="text-sm font-medium text-gray-700">
+          <span className="typography-body-14m text-gray-700">
             {post.author?.nickname ?? '알 수 없음'}
           </span>
           <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
@@ -93,7 +93,7 @@ export default function CommunityPostDetailClient({
           href={`/products/${post.taggedProduct.id}`}
           className="mx-5 mb-4 block rounded-2xl bg-[#F3F7FF] p-4 transition-transform hover:bg-[#e8effe] active:scale-[0.98] active:bg-[#e8effe]"
         >
-          <span className="mb-3 inline-block rounded-full bg-[#dce8ff] px-2.5 py-0.5 text-xs font-medium text-[#4378f5]">
+          <span className="typography-caption-12m mb-3 inline-block rounded-full bg-[#dce8ff] px-2.5 py-0.5 text-[#4378f5]">
             태그한 상품
           </span>
           <div className="flex items-center gap-x-3">
@@ -109,7 +109,7 @@ export default function CommunityPostDetailClient({
               </div>
             )}
             <div className="min-w-0 flex-1">
-              <p className="line-clamp-2 text-sm font-medium text-gray-900">
+              <p className="typography-body-14m line-clamp-2 text-gray-900">
                 {post.taggedProduct.title}
               </p>
               {post.taggedProduct.price && (
@@ -137,7 +137,7 @@ export default function CommunityPostDetailClient({
         <button
           onClick={() => isUserLogin && likePost(post.isMyLike ? undefined : true)}
           className={cn(
-            'flex items-center gap-x-2 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors',
+            'typography-body-14m flex items-center gap-x-2 rounded-full border px-4 py-1.5 transition-colors',
             'transition-transform active:scale-95',
             post.isMyLike
               ? 'border-primary-500 bg-primary-50 text-primary-500'

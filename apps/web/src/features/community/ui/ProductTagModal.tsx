@@ -95,7 +95,7 @@ export default function ProductTagModal({
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-gray-900">{selected.title}</p>
+            <p className="typography-body-14m truncate text-gray-900">{selected.title}</p>
             {selected.price && (
               <p className="mt-0.5 text-xs font-semibold text-gray-700">{selected.price}</p>
             )}
@@ -140,7 +140,7 @@ export default function ProductTagModal({
           <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 bottom-0 z-[9999] mx-auto flex h-[88vh] flex-col bg-white outline-hidden">
             {/* 모달 헤더 */}
             <div className="flex items-center justify-between px-5 py-4">
-              <h2 className="text-base font-semibold text-gray-900">상품 태그</h2>
+              <h2 className="typography-title-16sb text-gray-900">상품 태그</h2>
               <button
                 onClick={() => setIsOpen(false)}
                 className="p-1 text-gray-400 transition-transform active:scale-95"
@@ -242,7 +242,7 @@ export default function ProductTagModal({
                 <>
                   {recentProducts.length > 0 ? (
                     <>
-                      <p className="mb-3 text-sm font-semibold text-gray-700">최근 본 상품</p>
+                      <p className="typography-body-14sb mb-3 text-gray-700">최근 본 상품</p>
                       <div className="grid grid-cols-3 gap-3 pb-6">
                         {recentProducts.map((p) => (
                           <button

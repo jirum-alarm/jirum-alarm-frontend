@@ -37,7 +37,7 @@ export default function DoubleRowProductCard({ product }: { product: ProductCard
             )}
           </div>
           <div className="flex flex-1 flex-col gap-2">
-            <span className="line-clamp-2 text-sm font-normal break-all text-gray-800">
+            <span className="typography-body-14r line-clamp-2 break-all text-gray-800">
               {product.title}
             </span>
             <div className="mt-auto flex items-center gap-2">

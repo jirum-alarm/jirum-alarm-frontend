@@ -71,7 +71,7 @@ function ExpiredProductRecommendations({
 
   return (
     <div className="mb-10">
-      <div className="mb-6 flex h-11 w-full items-center justify-center bg-gray-100 text-sm font-medium text-gray-800">
+      <div className="typography-body-14m mb-6 flex h-11 w-full items-center justify-center bg-gray-100 text-gray-800">
         이 상품 판매종료 되었을 수 있어요!
       </div>
 
@@ -81,7 +81,7 @@ function ExpiredProductRecommendations({
           {hasMore && (
             <InteractiveMoreLink
               href={`/products/${product.id}/related`}
-              className="text-xs font-medium text-gray-400 hover:text-gray-600"
+              className="typography-caption-12m text-gray-400 hover:text-gray-600"
             >
               더보기
             </InteractiveMoreLink>

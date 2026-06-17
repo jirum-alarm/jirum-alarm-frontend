@@ -43,7 +43,7 @@ export default function PaginatedProductGridList({
       <div className="flex justify-center">
         <button
           onClick={handleNextPage}
-          className="flex h-9 items-center gap-2.5 rounded-lg bg-gray-100 px-5 text-sm font-medium text-gray-900"
+          className="typography-body-14m flex h-9 items-center gap-2.5 rounded-lg bg-gray-100 px-5 text-gray-900"
         >
           추천 상품 더보기
           <span>

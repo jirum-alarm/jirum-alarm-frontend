@@ -70,7 +70,7 @@ export default function CommunityPageClient({
         {isUserLogin && (
           <Link
             href={PAGE.COMMUNITY_WRITE}
-            className="bg-primary-500 hover:bg-primary-600 hidden items-center gap-x-1 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-transform active:scale-95 md:flex"
+            className="bg-primary-500 hover:bg-primary-600 typography-body-14sb hidden items-center gap-x-1 rounded-lg px-4 py-2 text-white transition-transform active:scale-95 md:flex"
           >
             <span className="text-base leading-none">+</span>
             글쓰기

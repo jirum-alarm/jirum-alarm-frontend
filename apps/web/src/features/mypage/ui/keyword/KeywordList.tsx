@@ -10,7 +10,7 @@ const KeywordList = () => {
   return (
     <div className="pb-32">
       <div>
-        <div className="flex justify-between text-sm font-medium text-gray-900">
+        <div className="typography-body-14m flex justify-between text-gray-900">
           <span>나의 지름 키워드</span>
           <p>
             <span className="text-primary-500">{notificationKeywordsByMe?.length ?? 0}</span>

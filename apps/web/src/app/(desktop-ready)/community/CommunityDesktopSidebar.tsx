@@ -27,7 +27,7 @@ export default async function CommunityDesktopSidebar() {
   return (
     <div className="sticky top-20">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-gray-900">지름 랭킹</h2>
+        <h2 className="typography-body-14sb text-gray-900">지름 랭킹</h2>
         <Link href="/trending/ranking" className="text-xs text-gray-500 hover:text-gray-700">
           더보기
         </Link>

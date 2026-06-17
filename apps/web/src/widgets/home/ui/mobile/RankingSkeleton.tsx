@@ -49,7 +49,7 @@ const PreviewCard = ({ product, rank, isActive, priority }: PreviewCardProps) =>
         }`}
       >
         <div className="relative h-[240px] w-full bg-gray-50">
-          <div className="text-primary-500 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900 text-sm font-medium">
+          <div className="text-primary-500 typography-body-14m absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900">
             {rank}
           </div>
           <ProductThumbnail

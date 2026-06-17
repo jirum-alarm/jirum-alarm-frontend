@@ -29,7 +29,7 @@ export default function DisplayListPrice({
   return (
     <div className="flex items-center gap-x-2">
       {beforePrice && (
-        <span className="line-clamp-1 !text-sm font-semibold text-gray-500 line-through">
+        <span className="!typography-body-14sb line-clamp-1 text-gray-500 line-through">
           {beforePrice}
         </span>
       )}

@@ -107,17 +107,17 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
         >
           <Content>
             <Header>
-              <Title className="text-base font-semibold text-gray-900">글을 삭제할까요?</Title>
+              <Title className="typography-title-16sb text-gray-900">글을 삭제할까요?</Title>
               <Description className="text-sm text-gray-500">
                 글을 삭제하면 다시 복구할 수 없어요.
               </Description>
             </Header>
             <Footer>
-              <Cancel className="flex h-11 flex-1 items-center justify-center rounded-lg bg-gray-100 text-sm font-medium text-gray-700">
+              <Cancel className="typography-body-14m flex h-11 flex-1 items-center justify-center rounded-lg bg-gray-100 text-gray-700">
                 취소
               </Cancel>
               <Action
-                className="bg-error-500 flex h-11 flex-1 items-center justify-center rounded-lg text-sm font-medium text-white"
+                className="bg-error-500 typography-body-14m flex h-11 flex-1 items-center justify-center rounded-lg text-white"
                 onClick={() => removePost()}
               >
                 삭제

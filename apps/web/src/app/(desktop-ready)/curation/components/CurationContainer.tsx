@@ -41,7 +41,7 @@ const CurationContainer = ({ section }: CurationContainerProps) => {
                 key={tab.id}
                 onClick={() => setActiveTabId(tab.id)}
                 className={cn(
-                  'rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors',
+                  'typography-body-14m rounded-full px-4 py-2 whitespace-nowrap transition-colors',
                   activeTabId === tab.id
                     ? 'bg-gray-900 text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200',

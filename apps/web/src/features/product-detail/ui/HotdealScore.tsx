@@ -183,7 +183,7 @@ const HotdealScoreBar = ({
               )}
             >
               <div className="absolute bottom-[34px] flex h-[32px] w-fit items-center justify-center rounded-full bg-gray-900 px-[10px] py-[6px] whitespace-nowrap">
-                <span className="text-primary-500 text-base font-semibold">
+                <span className="text-primary-500 typography-title-16sb">
                   {`${currentValue.toLocaleString()}원`}
                 </span>
               </div>

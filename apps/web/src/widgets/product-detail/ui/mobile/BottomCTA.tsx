@@ -32,7 +32,7 @@ export default function BottomCTA({
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Button className="h-[48px] w-full px-6 text-base font-semibold">구매하러 가기</Button>
+          <Button className="typography-title-16sb h-[48px] w-full px-6">구매하러 가기</Button>
         </a>
       </div>
     </div>

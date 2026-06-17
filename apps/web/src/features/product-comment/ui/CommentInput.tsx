@@ -93,7 +93,7 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
       </div>
       <Button
         type="submit"
-        className="text-primary-500 h-10 w-auto shrink-0 bg-gray-800 px-6 text-base font-semibold disabled:bg-gray-400 disabled:text-white"
+        className="text-primary-500 typography-title-16sb h-10 w-auto shrink-0 bg-gray-800 px-6 disabled:bg-gray-400 disabled:text-white"
         disabled={!canSubmit}
       >
         등록

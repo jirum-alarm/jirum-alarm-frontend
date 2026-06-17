@@ -46,7 +46,7 @@ export default function PostForm({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해 주세요"
-          className="mb-3 w-full border-b border-gray-100 pb-3 text-base font-semibold text-gray-900 placeholder-gray-300 outline-none"
+          className="typography-title-16sb mb-3 w-full border-b border-gray-100 pb-3 text-gray-900 placeholder-gray-300 outline-none"
         />
 
         <textarea
@@ -74,7 +74,7 @@ export default function PostForm({
                 </div>
               )}
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-gray-900">
+                <p className="typography-body-14m truncate text-gray-900">
                   {existingTaggedProduct.title}
                 </p>
                 {existingTaggedProduct.price && (
@@ -115,7 +115,7 @@ export default function PostForm({
         <button
           type="submit"
           disabled={!canSubmit}
-          className="bg-primary-500 w-full rounded-xl py-3.5 text-sm font-semibold text-white transition-opacity disabled:opacity-40"
+          className="bg-primary-500 typography-body-14sb w-full rounded-xl py-3.5 text-white transition-opacity disabled:opacity-40"
         >
           {isSubmitting ? '처리 중...' : isEdit ? '수정 완료' : '글 등록하기'}
         </button>

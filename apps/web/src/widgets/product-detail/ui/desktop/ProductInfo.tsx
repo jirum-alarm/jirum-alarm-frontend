@@ -88,12 +88,12 @@ export default function ProductInfo({
         </div>
         {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
         <div className="my-6 space-y-2">
-          <div className="flex text-sm font-medium">
+          <div className="typography-body-14m flex">
             <span className="inline-block w-[110px] text-gray-400">쇼핑몰</span>
             <span className="text-gray-500">{product.mallName}</span>
           </div>
           {product.author && (
-            <div className="flex text-sm font-medium">
+            <div className="typography-body-14m flex">
               <span className="inline-block w-[110px] text-gray-400">업로드</span>
               <span
                 className={cn('flex items-center gap-1 text-gray-500', {
@@ -106,7 +106,7 @@ export default function ProductInfo({
             </div>
           )}
 
-          <div className="flex text-sm font-medium">
+          <div className="typography-body-14m flex">
             <span className="inline-block w-[110px] text-gray-400">추천수</span>
             <span className="text-gray-500">{productStats.likeCount}개</span>
           </div>
@@ -125,7 +125,7 @@ export default function ProductInfo({
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button className="h-[48px] w-full px-6 text-base font-semibold">구매하러 가기</Button>
+            <Button className="typography-title-16sb h-[48px] w-full px-6">구매하러 가기</Button>
           </a>
         </div>
       </div>

@@ -37,14 +37,14 @@ export default async function CommunityWritePage({
           <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center justify-between border-b border-gray-100 bg-white px-3">
             <div className="flex items-center">
               <BackButton />
-              <span className="ml-1 text-base font-semibold text-gray-900">
+              <span className="typography-title-16sb ml-1 text-gray-900">
                 {editPostId ? '글 수정' : '글쓰기'}
               </span>
             </div>
             <button
               type="submit"
               form={POST_FORM_ID}
-              className="text-primary-500 pr-2 text-sm font-semibold"
+              className="text-primary-500 typography-body-14sb pr-2"
             >
               {editPostId ? '수정 완료' : '올리기'}
             </button>

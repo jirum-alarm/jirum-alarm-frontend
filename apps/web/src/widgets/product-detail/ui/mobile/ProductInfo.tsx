@@ -77,12 +77,12 @@ export default function ProductInfo({ productId }: { productId: number }) {
       </div>
       <div className="pt-4">
         <div className="flex flex-col gap-[8px]">
-          <div className="flex justify-between text-sm font-medium">
+          <div className="typography-body-14m flex justify-between">
             <span className="text-gray-400">쇼핑몰</span>
             <span className="text-gray-500">{product.mallName}</span>
           </div>
           {product.author && (
-            <div className="flex justify-between text-sm font-medium">
+            <div className="typography-body-14m flex justify-between">
               <span className="text-gray-400">업로드</span>
               <span
                 className={cn('flex items-center gap-1 text-gray-500', {
@@ -95,7 +95,7 @@ export default function ProductInfo({ productId }: { productId: number }) {
             </div>
           )}
 
-          <div className="flex justify-between text-sm font-medium">
+          <div className="typography-body-14m flex justify-between">
             <span className="text-gray-400">추천수</span>
             <span className="text-gray-500">{productStats.likeCount}개</span>
           </div>

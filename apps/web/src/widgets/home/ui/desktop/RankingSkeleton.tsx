@@ -36,7 +36,7 @@ const PreviewCard = ({ product, rank, priority }: PreviewCardProps) => (
   <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
     <div className="col-span-1 overflow-hidden rounded-lg border bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)]">
       <div className="relative aspect-square w-full bg-gray-50">
-        <div className="absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-600/80 text-sm font-medium text-white">
+        <div className="typography-body-14m absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-600/80 text-white">
           {rank}
         </div>
         <ProductThumbnail

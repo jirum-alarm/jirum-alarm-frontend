@@ -18,7 +18,7 @@ const PageTabNavigation = () => {
         <Link href="/trending/live" replace={true} className="relative flex-1 text-center">
           <motion.div
             className={cn(
-              'py-3 text-base font-medium transition-colors',
+              'typography-title-16m py-3 transition-colors',
               isLive ? 'text-gray-900' : 'text-gray-500',
             )}
             whileTap={{ scale: 0.95 }}
@@ -31,7 +31,7 @@ const PageTabNavigation = () => {
         <Link href="/trending/ranking" replace={true} className="relative flex-1 text-center">
           <motion.div
             className={cn(
-              'py-3 text-base font-medium transition-colors',
+              'typography-title-16m py-3 transition-colors',
               isRanking ? 'text-gray-900' : 'text-gray-500',
             )}
             whileTap={{ scale: 0.95 }}

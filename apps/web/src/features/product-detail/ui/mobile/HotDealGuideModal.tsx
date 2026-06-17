@@ -29,7 +29,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
                   <div className="absolute -top-[calc(30px+12px)] -left-[calc(66px/2-6px)] inline-flex flex-col items-center">
                     <div
                       className={cn(
-                        `flex h-6 w-[66px] items-center justify-center rounded-[8px] bg-gray-200 text-sm font-semibold text-gray-800`,
+                        `typography-body-14sb flex h-6 w-[66px] items-center justify-center rounded-[8px] bg-gray-200 text-gray-800`,
                       )}
                     >
                       기존 가격

@@ -57,7 +57,7 @@ function CommentItem({
     <div className="flex flex-col px-5 py-3">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-x-2">
-          <span className="text-sm font-medium text-gray-700">
+          <span className="typography-body-14m text-gray-700">
             {comment.author?.nickname ?? '알 수 없음'}
           </span>
           <span className="text-xs text-gray-400">{displayTime(comment.createdAt)}</span>
@@ -139,17 +139,17 @@ function CommentItem({
         >
           <AlertContent>
             <Header>
-              <Title className="text-base font-semibold text-gray-900">댓글을 삭제할까요?</Title>
+              <Title className="typography-title-16sb text-gray-900">댓글을 삭제할까요?</Title>
               <Description className="text-sm text-gray-500">
                 댓글을 삭제하면 다시 복구할 수 없어요.
               </Description>
             </Header>
             <Footer>
-              <Cancel className="flex h-11 flex-1 items-center justify-center rounded-lg bg-gray-100 text-sm font-medium text-gray-700">
+              <Cancel className="typography-body-14m flex h-11 flex-1 items-center justify-center rounded-lg bg-gray-100 text-gray-700">
                 취소
               </Cancel>
               <Action
-                className="bg-error-500 flex h-11 flex-1 items-center justify-center rounded-lg text-sm font-medium text-white"
+                className="bg-error-500 typography-body-14m flex h-11 flex-1 items-center justify-center rounded-lg text-white"
                 onClick={() => onDelete(comment.id)}
               >
                 삭제
@@ -267,7 +267,7 @@ function CommunityCommentList({
               <div className="flex justify-end gap-x-2">
                 <button
                   onClick={() => setEditingId(null)}
-                  className="h-8 rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-700 transition-transform active:scale-95"
+                  className="typography-body-14m h-8 rounded-lg bg-gray-100 px-4 text-gray-700 transition-transform active:scale-95"
                 >
                   취소
                 </button>
@@ -276,7 +276,7 @@ function CommunityCommentList({
                     updateComment({ id: Number(comment.id), content: editContent.trim() })
                   }
                   disabled={!editContent.trim() || isUpdating}
-                  className="h-8 rounded-lg bg-gray-800 px-4 text-sm font-semibold text-white transition-transform active:scale-95 disabled:bg-gray-400"
+                  className="typography-body-14sb h-8 rounded-lg bg-gray-800 px-4 text-white transition-transform active:scale-95 disabled:bg-gray-400"
                 >
                   수정
                 </button>
@@ -354,7 +354,7 @@ function CommunityCommentInput({ postId, isUserLogin }: { postId: number; isUser
       <button
         type="submit"
         disabled={!content.trim() || isPending || !isUserLogin}
-        className="h-10 shrink-0 rounded-lg bg-gray-800 px-5 text-sm font-semibold text-white transition-transform active:scale-95 disabled:bg-gray-400"
+        className="typography-body-14sb h-10 shrink-0 rounded-lg bg-gray-800 px-5 text-white transition-transform active:scale-95 disabled:bg-gray-400"
       >
         등록
       </button>
@@ -375,7 +375,7 @@ export default function CommunityCommentSection({
   return (
     <section className="mt-4">
       <div className="px-5 pb-2">
-        <h2 className="text-base font-semibold text-gray-900">댓글</h2>
+        <h2 className="typography-title-16sb text-gray-900">댓글</h2>
       </div>
       <Suspense
         fallback={

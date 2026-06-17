@@ -86,7 +86,7 @@ export function ReactionChart({
       </div>
 
       <div className="absolute bottom-0 mx-auto mt-1 flex w-[217px] items-end justify-between">
-        <span className="text-sm font-medium text-gray-500">
+        <span className="typography-body-14m text-gray-500">
           {disabled ? '-' : positiveCount}명
         </span>
         <div className="space-y-0.5">
@@ -115,7 +115,7 @@ export function ReactionChart({
             {disabled && <span className="text-sm text-gray-500">반응 수집중</span>}
           </div>
         </div>
-        <span className="text-sm font-medium text-gray-500">
+        <span className="typography-body-14m text-gray-500">
           {disabled ? '-' : negativeCount}명
         </span>
       </div>

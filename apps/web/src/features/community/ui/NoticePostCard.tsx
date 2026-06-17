@@ -37,7 +37,7 @@ export default function NoticePostCard({
         )}
       </div>
 
-      <p className="mt-2 truncate text-sm font-semibold text-gray-900">
+      <p className="typography-body-14sb mt-2 truncate text-gray-900">
         {post.title ?? post.content}
       </p>
       {post.title && <p className="mt-0.5 truncate text-sm text-gray-600">{post.content}</p>}

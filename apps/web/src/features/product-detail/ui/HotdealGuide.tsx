@@ -75,7 +75,7 @@ export default function HotdealGuide({
             color="secondary"
             onClick={handleExpand}
             className={cn(
-              'h-[32px] w-[104px] text-sm font-medium transition-opacity duration-300 ease-in-out',
+              'typography-body-14m h-[32px] w-[104px] transition-opacity duration-300 ease-in-out',
               isCollapsed ? 'opacity-100' : 'pointer-events-none opacity-0',
             )}
             tabIndex={isCollapsed ? 0 : -1}
@@ -172,7 +172,7 @@ function HotdealGuideItem({ guide }: { guide: ProductGuide }) {
         <HotdealGuideItemCheckIcon />
       </div>
       <div className="flex flex-col gap-y-1">
-        <span className="text-base font-semibold text-gray-900">{guide.title}</span>
+        <span className="typography-title-16sb text-gray-900">{guide.title}</span>
         <LinkText content={guide.content} />
       </div>
     </div>

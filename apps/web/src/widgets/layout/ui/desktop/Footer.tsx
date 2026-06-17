@@ -22,7 +22,7 @@ const Footer = () => {
               <TalkLight className="mt-0.5 mr-0.25" />
             </Link>
           </div>
-          <p className="mb-4 text-sm font-medium whitespace-pre-line text-gray-700">
+          <p className="typography-body-14m mb-4 whitespace-pre-line text-gray-700">
             지름알림{'\n'}
             고객센터 :{' '}
             <Link href="mailto:jirumalarm@gmail.com" className="font-medium underline">

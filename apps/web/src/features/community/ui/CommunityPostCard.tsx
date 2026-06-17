@@ -31,11 +31,11 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
               지름알림
             </span>
           ) : (
-            <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-500">
+            <span className="typography-caption-12m rounded bg-gray-100 px-1.5 py-0.5 text-gray-500">
               {isProductComment ? '댓글' : '게시글'}
             </span>
           )}
-          <span className="text-sm font-medium text-gray-700">
+          <span className="typography-body-14m text-gray-700">
             {post.author?.nickname ?? '알 수 없음'}
           </span>
           <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
@@ -48,7 +48,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
 
         {/* 본문 */}
         {post.title && (
-          <p className="mt-2 truncate text-sm font-semibold text-gray-900">{post.title}</p>
+          <p className="typography-body-14sb mt-2 truncate text-gray-900">{post.title}</p>
         )}
         <p className={cn('mt-1 text-sm text-gray-600', post.title ? 'truncate' : 'line-clamp-2')}>
           {post.content}

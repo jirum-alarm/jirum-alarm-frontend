@@ -35,7 +35,7 @@ export default function ProductRankingImageCard({
           transition={{ duration: 0.1 }}
         >
           <div className="pc:aspect-square pc:h-auto relative h-[240px] w-full bg-gray-50">
-            <div className="text-primary-500 pc:text-white pc:bg-gray-600/80 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900 text-sm font-medium">
+            <div className="text-primary-500 pc:text-white pc:bg-gray-600/80 typography-body-14m absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900">
               AD
             </div>
 
