@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-// 디자인 토큰 SSOT: @jirum/design-tokens. mobile과 hex가 이미 동일한 그룹만 연결한다(무손실).
+// 디자인 토큰 SSOT: @jirum/design-tokens. mobile 팔레트 전체를 토큰에서 받는다.
 const tokens = require('@jirum/design-tokens/tailwind');
 
 module.exports = {
@@ -17,39 +17,17 @@ module.exports = {
         'pretendard-thin': ['Pretendard-Thin'],
       },
       colors: {
-        // 토큰과 hex가 이미 동일한 그룹 — SSOT 연결(무손실, 시각 변화 0). 소문자로 정규화됨.
+        // mobile 팔레트 전체를 토큰(Figma=web 값)에서 받는다 — SSOT 단일화.
+        // primary 600~900·secondary 50/400/500은 토큰이 옛 하드코딩과 다르지만,
+        // 그 shade를 쓰는 클래스 사용처가 0(실측)이라 렌더 변화 없음. 실제 사용 shade
+        // (primary-300/500)는 토큰과 값 동일. 죽은 선언을 제거하며 신 값으로 통일.
         white: tokens.colors.white,
         black: tokens.colors.black,
         link: tokens.colors.link,
         error: tokens.colors.error,
         gray: tokens.colors.gray,
-        // ⚠️ 미연결 — 토큰(Figma)과 값이 틀어져 있어 연결하면 시각 변화 발생. 디자이너 확인 후 별도 PR.
-        //   primary 600~900: 토큰은 #4ad11b/#039100/#025900/#013200, 여기는 옛 값에 멈춤.
-        //   secondary 50/400/500: 토큰과 미세 차이.
-        primary: {
-          50: '#F5FDEA',
-          100: '#ECFCD5',
-          200: '#D8FAAB',
-          300: '#C5F782',
-          400: '#B2F458',
-          500: '#9EF22E',
-          600: '#7FC125',
-          700: '#5F911C',
-          800: '#3F6112',
-          900: '#203009',
-        },
-        secondary: {
-          50: '#EFF4FF',
-          100: '#DAE5FE',
-          200: '#B5CBFD',
-          300: '#91B1FB',
-          400: '#6C97FA',
-          500: '#477DF9',
-          600: '#3964C7',
-          700: '#2B4B95',
-          800: '#1C3264',
-          900: '#0E1932',
-        },
+        primary: tokens.colors.primary,
+        secondary: tokens.colors.secondary,
       },
     },
   },
