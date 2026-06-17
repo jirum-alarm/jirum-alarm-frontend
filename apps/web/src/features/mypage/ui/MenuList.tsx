@@ -42,7 +42,7 @@ const MenuList = () => {
   };
   return (
     <div className="px-5">
-      <div className="border-b border-gray-300 py-4">
+      <div className="border-border-strong border-b py-4">
         <ul>
           {MENU_LIST.map((menu, i) => {
             return (

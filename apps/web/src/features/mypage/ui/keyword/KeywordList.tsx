@@ -22,7 +22,7 @@ const KeywordList = () => {
       <div className="h-4" />
       <ul>
         {notificationKeywordsByMe?.map((keyword) => (
-          <li className="border-b border-gray-200 px-2 py-3" key={keyword.id}>
+          <li className="border-border-default border-b px-2 py-3" key={keyword.id}>
             <div className="flex w-full items-center justify-between">
               <span className="text-sm text-gray-900">{keyword.keyword}</span>
               <button

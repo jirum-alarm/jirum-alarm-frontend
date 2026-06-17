@@ -32,7 +32,7 @@ export default function SearchAutocompleteDropdown({
   return (
     <ul
       role="listbox"
-      className="absolute top-full right-0 left-0 z-[60] mt-1 max-h-80 overflow-y-auto rounded-sm border border-gray-200 bg-white shadow-md"
+      className="border-border-default absolute top-full right-0 left-0 z-[60] mt-1 max-h-80 overflow-y-auto rounded-sm border bg-white shadow-md"
     >
       {suggestions.map((s, i) => {
         const isActive = i === activeIndex;

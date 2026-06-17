@@ -46,7 +46,7 @@ export default function PostForm({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해 주세요"
-          className="typography-title-16sb mb-3 w-full border-b border-gray-100 pb-3 text-gray-900 placeholder-gray-300 outline-none"
+          className="typography-title-16sb border-border-subtle mb-3 w-full border-b pb-3 text-gray-900 placeholder-gray-300 outline-none"
         />
 
         <textarea
@@ -58,7 +58,7 @@ export default function PostForm({
       </div>
 
       {/* 상품 태그 */}
-      <div className="border-t border-gray-100 px-5 py-4">
+      <div className="border-border-subtle border-t px-5 py-4">
         {isEdit ? (
           existingTaggedProduct ? (
             <div className="flex items-center gap-x-3 rounded-xl bg-gray-50 p-3">
@@ -86,7 +86,7 @@ export default function PostForm({
             </div>
           ) : (
             <span className="flex items-center gap-x-2 text-sm text-gray-300">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-gray-300">
+              <span className="border-border-default flex h-6 w-6 items-center justify-center rounded-full border text-gray-300">
                 <svg
                   width="12"
                   height="12"

@@ -118,7 +118,7 @@ export default function CommunityHotDeals() {
   const option = useMemo(() => RANKING_OPTIONS[getDailyOptionIndex()], []);
 
   return (
-    <section className="mt-2 border-t border-gray-100 pt-4">
+    <section className="border-border-subtle mt-2 border-t pt-4">
       <div className="mb-3 flex items-center justify-between px-5">
         <h2 className="typography-body-14sb text-gray-900">{option.label}</h2>
         <Link

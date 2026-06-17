@@ -16,7 +16,7 @@ export default function DoubleRowProductCard({ product }: { product: ProductCard
     <Link href={PAGE.DETAIL + '/' + product.id}>
       <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="flex w-full flex-row items-start gap-2">
-          <div className="relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+          <div className="border-border-default relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg border bg-gray-50">
             <ProductThumbnail
               src={product?.thumbnail ?? ''}
               title={product.title}

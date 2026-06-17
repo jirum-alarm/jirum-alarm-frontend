@@ -37,7 +37,7 @@ export default function AlarmList() {
   return (
     <>
       {isEditMode && (
-        <div className="sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
+        <div className="border-border-default sticky top-14 z-40 border-b bg-gray-50">
           <div className="flex h-11 items-center justify-end gap-x-3 px-5">
             <button
               type="button"
@@ -52,7 +52,7 @@ export default function AlarmList() {
             <button
               type="button"
               onClick={() => setEditMode(false)}
-              className="typography-body-14m h-8 rounded-md border border-gray-300 bg-white px-3 text-gray-900"
+              className="typography-body-14m border-border-strong h-8 rounded-md border bg-white px-3 text-gray-900"
             >
               완료
             </button>
@@ -60,14 +60,14 @@ export default function AlarmList() {
         </div>
       )}
       {!isEditMode && (
-        <div className="sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
+        <div className="border-border-default sticky top-14 z-40 border-b bg-gray-50">
           <div className="flex h-11 items-center justify-between px-5">
             <span className="typography-body-14m text-gray-600">
               지금 다양한 핫딜 알림을 받아보세요!
             </span>
             <Link
               href={PAGE.MYPAGE_KEYWORD}
-              className="typography-body-14m flex h-8 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-gray-900"
+              className="typography-body-14m border-border-strong flex h-8 items-center justify-center rounded-md border bg-white px-3 text-gray-900"
             >
               키워드 알림
             </Link>

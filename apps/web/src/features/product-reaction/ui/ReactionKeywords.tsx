@@ -30,7 +30,7 @@ function ReactionKeywords({ productId }: { productId: number }) {
             {
               'border-secondary-300': item.type === 'POSITIVE',
               'border-error-200': item.type === 'NEGATIVE',
-              'border-gray-300': item.type === 'SYNONYM',
+              'border-border-strong': item.type === 'SYNONYM',
             },
           ])}
         >

@@ -79,8 +79,8 @@ export default function ReportModal({
                     className={cn(
                       'flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors',
                       selectedReason === reason.value
-                        ? 'border-primary-500 bg-primary-500'
-                        : 'border-gray-300',
+                        ? 'border-border-brand bg-primary-500'
+                        : 'border-border-strong',
                     )}
                   >
                     {selectedReason === reason.value && (
@@ -97,7 +97,7 @@ export default function ReportModal({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="신고 내용을 입력해주세요"
-                className="mt-3 h-24 w-full resize-none rounded-lg border border-gray-200 p-3 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-gray-400"
+                className="border-border-default mt-3 h-24 w-full resize-none rounded-lg border p-3 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-gray-400"
               />
             )}
 

@@ -45,7 +45,7 @@ export default function ProductGridCard({
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
-        <div className="relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+        <div className="border-border-default relative aspect-square overflow-hidden rounded-lg border bg-gray-50">
           {actionIcon && <div className="absolute top-0 right-0 z-10">{actionIcon}</div>}
           <ProductThumbnail
             src={product?.thumbnail ?? ''}

@@ -65,7 +65,7 @@ const AlarmItem = ({
           handleClick();
         }}
       >
-        <div className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">
+        <div className="border-border-default h-14 w-14 overflow-hidden rounded-sm border">
           <ImageWithFallback
             src={convertToWebp(thumbnail)}
             fallbackSrc={thumbnail ?? ''}

@@ -56,7 +56,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       className={cn(
         'fixed top-0 z-50 w-full min-w-5xl border-b bg-white shadow-xs transition-all duration-300',
         {
-          'border-b-gray-200 bg-white': !isInHomeHero,
+          'border-b-border-default bg-white': !isInHomeHero,
           'border-b-gray-700 bg-gray-900': isInHomeHero,
         },
       )}

@@ -31,7 +31,7 @@ export default function CommunityPostPageHeader({
   const backTo = tab ? `${PAGE.COMMUNITY}?tab=${tab}` : PAGE.COMMUNITY;
 
   return (
-    <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center justify-between border-b border-gray-100 bg-white px-5">
+    <header className="max-w-mobile-max border-border-subtle fixed top-0 z-50 flex h-14 w-full items-center justify-between border-b bg-white px-5">
       <div className="flex items-center gap-x-1">
         <BackButton backTo={backTo} />
         <LogoLink />

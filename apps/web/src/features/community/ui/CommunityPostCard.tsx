@@ -20,7 +20,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
   return (
     <Link
       href={{ pathname: `${PAGE.COMMUNITY}/${post.id}`, query: { tab } }}
-      className="flex gap-x-3 border-b border-gray-100 px-5 py-4 transition-transform hover:bg-gray-50 active:scale-[0.98] active:bg-gray-50"
+      className="border-border-subtle flex gap-x-3 border-b px-5 py-4 transition-transform hover:bg-gray-50 active:scale-[0.98] active:bg-gray-50"
     >
       {/* 왼쪽: 헤더 + 텍스트 + 통계 */}
       <div className="flex min-h-20 min-w-0 flex-1 flex-col">

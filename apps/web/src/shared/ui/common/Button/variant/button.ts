@@ -22,7 +22,7 @@ export const buttonVaraint = cva('w-full', {
       variant: 'outlined',
       color: 'primary',
       class:
-        'font-normal border-primary-500 bg-transparent text-gray-900 disabled:border-none disabled:bg-gray-50 disabled:text-gray-600',
+        'font-normal border-border-brand bg-transparent text-gray-900 disabled:border-none disabled:bg-gray-50 disabled:text-gray-600',
     },
     {
       variant: 'filled',

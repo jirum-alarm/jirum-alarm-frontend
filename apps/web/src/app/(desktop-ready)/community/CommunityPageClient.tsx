@@ -8,7 +8,7 @@ function CommunityListSkeleton() {
   return (
     <div className="flex flex-col">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="flex flex-col gap-y-2 border-b border-gray-100 px-5 py-4">
+        <div key={i} className="border-border-subtle flex flex-col gap-y-2 border-b px-5 py-4">
           {/* 유저 정보 */}
           <div className="flex items-center gap-x-2">
             <div className="h-3.5 w-16 animate-pulse rounded bg-gray-100" />

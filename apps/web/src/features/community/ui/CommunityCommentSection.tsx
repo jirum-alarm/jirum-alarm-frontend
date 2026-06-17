@@ -262,7 +262,7 @@ function CommunityCommentList({
                 onChange={(e) => setEditContent(e.target.value)}
                 maxLength={300}
                 rows={2}
-                className="w-full resize-none rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm outline-none focus:border-gray-500"
+                className="border-border-strong w-full resize-none rounded-lg border bg-gray-50 px-3 py-2 text-sm outline-none focus:border-gray-500"
               />
               <div className="flex justify-end gap-x-2">
                 <button
@@ -330,7 +330,7 @@ function CommunityCommentInput({ postId, isUserLogin }: { postId: number; isUser
         e.preventDefault();
         if (content.trim()) addComment();
       }}
-      className="sticky bottom-[var(--bottom-nav-padding,0px)] z-10 flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+      className="border-border-strong sticky bottom-[var(--bottom-nav-padding,0px)] z-10 flex min-h-[64px] w-full items-end gap-x-3 border-t bg-white px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
     >
       <div className="flex grow overflow-hidden rounded-lg border border-transparent bg-gray-50 focus-within:border-gray-500">
         <textarea

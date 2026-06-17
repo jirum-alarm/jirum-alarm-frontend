@@ -89,7 +89,7 @@ function PostDetailSkeleton() {
         </div>
       </div>
       {/* 통계 바 */}
-      <div className="flex items-center justify-between border-y border-gray-100 px-5 py-3">
+      <div className="border-border-subtle flex items-center justify-between border-y px-5 py-3">
         <div className="flex gap-x-3">
           <div className="h-3.5 w-8 animate-pulse rounded bg-gray-100" />
           <div className="h-3.5 w-8 animate-pulse rounded bg-gray-100" />
@@ -100,7 +100,7 @@ function PostDetailSkeleton() {
       <div className="mt-4 px-5">
         <div className="mb-3 h-4 w-10 animate-pulse rounded bg-gray-100" />
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="flex flex-col gap-y-1.5 border-b border-gray-100 py-3">
+          <div key={i} className="border-border-subtle flex flex-col gap-y-1.5 border-b py-3">
             <div className="flex items-center gap-x-2">
               <div className="h-3.5 w-14 animate-pulse rounded bg-gray-100" />
               <div className="h-3 w-8 animate-pulse rounded bg-gray-100" />

@@ -16,7 +16,7 @@ export default function ListProductCard({ product }: { product: ProductCardType 
     <Link href={PAGE.DETAIL + '/' + product.id}>
       <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="flex items-center gap-4">
-          <div className="pc:h-25 pc:w-25 relative h-19 w-19 shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+          <div className="pc:h-25 pc:w-25 border-border-default relative h-19 w-19 shrink-0 overflow-hidden rounded-lg border bg-gray-50">
             <ProductThumbnail
               src={product?.thumbnail ?? ''}
               title={product.title}

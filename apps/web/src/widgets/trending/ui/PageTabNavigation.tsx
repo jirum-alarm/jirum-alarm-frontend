@@ -13,7 +13,7 @@ const PageTabNavigation = () => {
   const isRanking = pathname.includes('/ranking');
 
   return (
-    <div className="w-full border-b border-gray-200 bg-white">
+    <div className="border-border-default w-full border-b bg-white">
       <div className="flex">
         <Link href="/trending/live" replace={true} className="relative flex-1 text-center">
           <motion.div

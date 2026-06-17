@@ -123,7 +123,7 @@ export default function CommunityPostDetailClient({
       )}
 
       {/* 통계 + 추천 */}
-      <div className="flex items-center justify-between border-y border-gray-100 px-5 py-3">
+      <div className="border-border-subtle flex items-center justify-between border-y px-5 py-3">
         <div className="flex items-center gap-x-3 text-sm text-gray-400">
           <span className="flex items-center gap-x-1">
             <ThumbsupFill className="h-4 w-4" aria-hidden />
@@ -140,8 +140,8 @@ export default function CommunityPostDetailClient({
             'typography-body-14m flex items-center gap-x-2 rounded-full border px-4 py-1.5 transition-colors',
             'transition-transform active:scale-95',
             post.isMyLike
-              ? 'border-primary-500 bg-primary-50 text-primary-500'
-              : 'border-gray-200 text-gray-500 hover:border-gray-300',
+              ? 'border-border-brand bg-primary-50 text-primary-500'
+              : 'border-border-default hover:border-border-strong text-gray-500',
             !isUserLogin && 'opacity-40',
           )}
         >

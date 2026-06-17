@@ -23,7 +23,7 @@ export default function NoticePostCard({
   return (
     <Link
       href={{ pathname: `${PAGE.COMMUNITY}/${post.id}`, query: { tab } }}
-      className="flex flex-col border-b border-gray-100 px-5 py-4 transition-transform hover:bg-gray-50 active:scale-[0.98] active:bg-gray-50"
+      className="border-border-subtle flex flex-col border-b px-5 py-4 transition-transform hover:bg-gray-50 active:scale-[0.98] active:bg-gray-50"
     >
       <div className="flex items-center gap-x-2">
         <span className="bg-primary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">

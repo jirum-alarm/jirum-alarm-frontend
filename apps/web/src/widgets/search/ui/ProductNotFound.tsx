@@ -61,7 +61,7 @@ const ProductNotFound = () => {
       )}
       {hotDeals?.length ? (
         <>
-          <hr className="mx-5 mb-7 border-gray-300" />
+          <hr className="border-border-strong mx-5 mb-7" />
           <section className="w-full overflow-x-hidden">
             <div className="pc:px-0 w-full px-5">
               <SectionHeader
