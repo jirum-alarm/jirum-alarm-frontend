@@ -111,6 +111,9 @@ importers:
 
   apps/landing:
     dependencies:
+      '@jirum/design-tokens':
+        specifier: workspace:*
+        version: link:../../packages/design-tokens
       clsx:
         specifier: ^2.1.1
         version: 2.1.1

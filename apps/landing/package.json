@@ -11,6 +11,7 @@
     "prettier-fix": "prettier --write \"./**/*.{js,ts,tsx}\" --ignore-path .gitignore --ignore-path .prettierignore "
   },
   "dependencies": {
+    "@jirum/design-tokens": "workspace:*",
     "clsx": "^2.1.1",
     "motion": "^12.6.3",
     "next": "15.4.10",
