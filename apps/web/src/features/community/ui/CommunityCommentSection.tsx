@@ -6,10 +6,8 @@ import {
   useQueryClient,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
-import { VisuallyHidden } from 'radix-ui';
 import { Suspense, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Drawer } from 'vaul';
 
 import { CommunityService } from '@/shared/api/community/community.service';
 import { displayTime } from '@/shared/lib/utils/displayTime';
@@ -23,6 +21,7 @@ import {
   Header,
   Title,
 } from '@/shared/ui/common/AlertDialog/AlertDialog';
+import BottomSheet from '@/shared/ui/common/BottomSheet';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { AuthQueries } from '@/entities/auth';
@@ -98,37 +97,29 @@ function CommentItem({
         </button>
       </div>
 
-      <Drawer.Root open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-        <Drawer.Portal>
-          <VisuallyHidden.Root>
-            <Drawer.Title>댓글 메뉴</Drawer.Title>
-          </VisuallyHidden.Root>
-          <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-          <Drawer.Content className="max-w-mobile-max rounded-t-5 bg-surface-default fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit outline-hidden">
-            <div className="flex flex-col items-center pt-4 pb-8">
-              <button
-                className="text-fg-strong flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  onEdit(comment.id, comment.content);
-                }}
-              >
-                댓글 수정하기
-              </button>
-              <div className="bg-surface-emphasis mx-5 h-px w-full" />
-              <button
-                className="text-fg-error flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setIsDeleteConfirmOpen(true);
-                }}
-              >
-                댓글 삭제하기
-              </button>
-            </div>
-          </Drawer.Content>
-        </Drawer.Portal>
-      </Drawer.Root>
+      <BottomSheet open={isMenuOpen} onOpenChange={setIsMenuOpen} title="댓글 메뉴">
+        <div className="flex flex-col items-center pt-4 pb-8">
+          <button
+            className="text-fg-strong flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+            onClick={() => {
+              setIsMenuOpen(false);
+              onEdit(comment.id, comment.content);
+            }}
+          >
+            댓글 수정하기
+          </button>
+          <div className="bg-surface-emphasis mx-5 h-px w-full" />
+          <button
+            className="text-fg-error flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+            onClick={() => {
+              setIsMenuOpen(false);
+              setIsDeleteConfirmOpen(true);
+            }}
+          >
+            댓글 삭제하기
+          </button>
+        </div>
+      </BottomSheet>
 
       {isDeleteConfirmOpen && (
         <AlertDialog

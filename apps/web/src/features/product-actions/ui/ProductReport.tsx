@@ -2,11 +2,11 @@
 
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Drawer } from 'vaul';
 
 import { ProductService } from '@/shared/api/product';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
+import BottomSheet from '@/shared/ui/common/BottomSheet';
 import Button from '@/shared/ui/common/Button';
 import { useToast } from '@/shared/ui/common/Toast';
 
@@ -67,33 +67,29 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
     setIsModalOpen(open);
   };
   return (
-    <Drawer.Root onOpenChange={handleOpenChange} open={isModalOpen}>
-      <Drawer.Trigger asChild>
-        <button className="text-fg-primary -m-2 p-2">제보하기</button>
-      </Drawer.Trigger>
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max bg-surface-default fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit rounded-t-[20px] outline-hidden">
-          <div className="flex flex-col items-center">
-            <Drawer.Title asChild>
-              <h2 className="pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>
-            </Drawer.Title>
-            <SoldOutIcon />
-            <p className="text-fg-secondary-strong py-3 text-center">
-              더 빠른 핫딜 확인을 위해
-              <br />
-              종료된 상품을 제보해 주세요!
-            </p>
-            <div className="flex w-full gap-[12px] p-5">
-              <Drawer.Close asChild>
-                <Button color={'secondary'}>취소</Button>
-              </Drawer.Close>
-              <Button onClick={handleReportExpiredProductClick}>종료 제보하기</Button>
-            </div>
-          </div>
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
+    <BottomSheet
+      onOpenChange={handleOpenChange}
+      open={isModalOpen}
+      trigger={<button className="text-fg-primary -m-2 p-2">제보하기</button>}
+    >
+      <div className="flex flex-col items-center">
+        <BottomSheet.Title asChild>
+          <h2 className="pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>
+        </BottomSheet.Title>
+        <SoldOutIcon />
+        <p className="text-fg-secondary-strong py-3 text-center">
+          더 빠른 핫딜 확인을 위해
+          <br />
+          종료된 상품을 제보해 주세요!
+        </p>
+        <div className="flex w-full gap-[12px] p-5">
+          <BottomSheet.Close asChild>
+            <Button color={'secondary'}>취소</Button>
+          </BottomSheet.Close>
+          <Button onClick={handleReportExpiredProductClick}>종료 제보하기</Button>
+        </div>
+      </div>
+    </BottomSheet>
   );
 };
 

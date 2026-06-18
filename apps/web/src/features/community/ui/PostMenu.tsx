@@ -2,9 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { VisuallyHidden } from 'radix-ui';
 import { useState } from 'react';
-import { Drawer } from 'vaul';
 
 import { CommunityService } from '@/shared/api/community/community.service';
 import { PAGE } from '@/shared/config/page';
@@ -18,6 +16,7 @@ import {
   Header,
   Title,
 } from '@/shared/ui/common/AlertDialog/AlertDialog';
+import BottomSheet from '@/shared/ui/common/BottomSheet';
 import Dots from '@/shared/ui/common/icons/Dots';
 import { useToast } from '@/shared/ui/common/Toast';
 
@@ -47,56 +46,52 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
 
   return (
     <>
-      <Drawer.Root onOpenChange={setIsOpen} open={isOpen}>
-        <Drawer.Trigger asChild>
+      <BottomSheet
+        onOpenChange={setIsOpen}
+        open={isOpen}
+        title="게시글 메뉴"
+        trigger={
           <button className="h-6 w-6 bg-transparent transition-transform active:scale-95">
             <Dots width={24} height={24} />
           </button>
-        </Drawer.Trigger>
-        <Drawer.Portal>
-          <VisuallyHidden.Root>
-            <Drawer.Title>게시글 메뉴</Drawer.Title>
-          </VisuallyHidden.Root>
-          <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-          <Drawer.Content className="max-w-mobile-max rounded-t-5 bg-surface-default fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit outline-hidden">
-            <div className="flex flex-col items-center pt-4 pb-8">
-              {isMyPost ? (
-                <>
-                  <button
-                    className="text-fg-error flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
-                    onClick={() => {
-                      setIsOpen(false);
-                      setIsDeleteConfirmOpen(true);
-                    }}
-                  >
-                    글 삭제하기
-                  </button>
-                  <div className="bg-surface-emphasis mx-5 h-px w-full" />
-                  <button
-                    className="text-fg-strong flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push(`${PAGE.COMMUNITY_WRITE}?edit=${postId}`);
-                    }}
-                  >
-                    글 수정하기
-                  </button>
-                </>
-              ) : (
-                <button
-                  className="text-fg-error flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
-                  onClick={() => {
-                    setIsOpen(false);
-                    setIsReportOpen(true);
-                  }}
-                >
-                  글 신고하기
-                </button>
-              )}
-            </div>
-          </Drawer.Content>
-        </Drawer.Portal>
-      </Drawer.Root>
+        }
+      >
+        <div className="flex flex-col items-center pt-4 pb-8">
+          {isMyPost ? (
+            <>
+              <button
+                className="text-fg-error flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsDeleteConfirmOpen(true);
+                }}
+              >
+                글 삭제하기
+              </button>
+              <div className="bg-surface-emphasis mx-5 h-px w-full" />
+              <button
+                className="text-fg-strong flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+                onClick={() => {
+                  setIsOpen(false);
+                  router.push(`${PAGE.COMMUNITY_WRITE}?edit=${postId}`);
+                }}
+              >
+                글 수정하기
+              </button>
+            </>
+          ) : (
+            <button
+              className="text-fg-error flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+              onClick={() => {
+                setIsOpen(false);
+                setIsReportOpen(true);
+              }}
+            >
+              글 신고하기
+            </button>
+          )}
+        </div>
+      </BottomSheet>
 
       {isDeleteConfirmOpen && (
         <AlertDialog
