@@ -135,7 +135,7 @@ const BottomNavComponent = () => {
   return (
     <nav
       className={cn(
-        'max-w-mobile-max bg-surface-default fixed inset-x-0 bottom-0 z-[100] mx-auto min-h-[calc(56px+env(safe-area-inset-bottom))] w-full border-t border-t-[#D0D5DD] pb-[env(safe-area-inset-bottom)] transition-transform duration-300 will-change-transform',
+        'max-w-mobile-max bg-surface-default border-t-border-strong fixed inset-x-0 bottom-0 z-[100] mx-auto min-h-[calc(56px+env(safe-area-inset-bottom))] w-full border-t pb-[env(safe-area-inset-bottom)] transition-transform duration-300 will-change-transform',
         {
           'translate-y-full': !isBottomNavVisible,
           'translate-y-0': isBottomNavVisible,

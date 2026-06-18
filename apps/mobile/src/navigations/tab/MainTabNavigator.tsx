@@ -237,6 +237,6 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#EB001C',
+    backgroundColor: COLORS.ERROR_500,
   },
 });

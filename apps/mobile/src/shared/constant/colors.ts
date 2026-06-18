@@ -8,6 +8,7 @@ import {
   ColorGray500,
   ColorGray800,
   ColorGray900,
+  ColorError500,
 } from '@jirum/design-tokens/tokens';
 
 // 디자인 토큰 SSOT(@jirum/design-tokens). 전부 토큰 값과 동일(무손실).
@@ -22,4 +23,5 @@ export const COLORS = {
   GRAY_400: ColorGray400,
   GRAY_300: ColorGray300,
   GRAY_200: ColorGray200,
+  ERROR_500: ColorError500,
 };
