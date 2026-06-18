@@ -6,6 +6,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 import {tabNavigations} from '@/shared/constant/navigations';
 import {COLORS} from '@/shared/constant/colors.ts';
+import {TYPOGRAPHY} from '@/shared/constant/typography.ts';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 import {useHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 import {getTabBaseUrl} from '@/shared/lib/navigation/tab-routing';
@@ -219,8 +220,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   tabBarLabel: {
-    fontSize: 12,
-    fontWeight: '600',
+    ...TYPOGRAPHY.caption12m,
     marginTop: 0,
   },
   iconContainer: {

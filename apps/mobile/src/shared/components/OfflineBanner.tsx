@@ -2,6 +2,8 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useNetworkStatus from '@/shared/hooks/useNetworkStatus';
+import {COLORS} from '@/shared/constant/colors.ts';
+import {TYPOGRAPHY} from '@/shared/constant/typography.ts';
 
 const OfflineBanner = () => {
   const {isConnected} = useNetworkStatus();
@@ -30,9 +32,8 @@ const styles = StyleSheet.create({
     zIndex: 9999,
   },
   text: {
-    color: '#ffffff',
-    fontSize: 13,
-    fontWeight: '600',
+    ...TYPOGRAPHY.caption13m,
+    color: COLORS.WHITE,
   },
 });
 
