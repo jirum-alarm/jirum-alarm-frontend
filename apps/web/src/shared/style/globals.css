@@ -84,6 +84,11 @@ html[data-native-tabs='true'] nav:has(ul > li > a[data-nav-type]) {
 /* custom variants */
 @custom-variant pc (.pc &);
 
+/* 다크모드 — .dark 클래스 기반. 시맨틱 토큰(web.css의 .dark 블록)이 시맨틱 CSS 변수를
+   자동 override하므로 시맨틱 클래스를 쓰는 컴포넌트는 추가 작업 없이 전환된다.
+   dark 유틸리티(dark:bg-...)는 시맨틱 미적용 원시색 예외에만 사용. */
+@custom-variant dark (.dark &);
+
 /* animations */
 @keyframes fadeIn {
   0% {

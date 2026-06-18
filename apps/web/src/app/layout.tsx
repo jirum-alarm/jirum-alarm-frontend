@@ -28,6 +28,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={`${pretendard.className} antialiased`}>
       <head>
+        {/* 다크모드 FOUC 방지 — 첫 페인트 전 localStorage(theme) + 시스템 선호도로 .dark 적용.
+            'system'(기본)이면 prefers-color-scheme 따라가고, 'dark'/'light'면 명시값 사용. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||((!t||t==='system')&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);}catch(e){}})();`,
+          }}
+        />
         <PublicEnvScript />
         <link rel="preconnect" href="https://cdn.jirum-alarm.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://api.mixpanel.com" />
