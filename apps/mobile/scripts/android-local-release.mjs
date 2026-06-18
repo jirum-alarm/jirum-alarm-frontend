@@ -8,6 +8,7 @@ import {assertProjectNode} from './project-runtime.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDir, '..');
+const buildDir = resolve(projectRoot, 'build');
 const androidBuildGradle = resolve(projectRoot, 'android/app/build.gradle');
 const googleServicesJson = resolve(
   projectRoot,
@@ -22,6 +23,7 @@ const options = {
   bump: true,
   checkOnly: false,
   clearCache: false,
+  interactiveSubmit: false,
   output: null,
   profile: 'production',
   submit: true,
@@ -41,6 +43,7 @@ Options:
   --no-bump               Keep the current Android versionCode
   --no-submit             Build only, do not submit to Google Play
   --submit-only           Submit an existing build path, requires --output
+  --interactive-submit    Allow EAS Submit prompts for first-time credential setup
   --check                 Validate local release setup without building
   --clear-cache           Pass --clear-cache to EAS local build
   --help                  Show this help
@@ -75,6 +78,8 @@ for (let index = 0; index < args.length; index += 1) {
     options.build = false;
     options.bump = false;
     options.submit = true;
+  } else if (arg === '--interactive-submit') {
+    options.interactiveSubmit = true;
   } else if (arg === '--check') {
     options.checkOnly = true;
   } else if (arg === '--clear-cache') {
@@ -160,6 +165,26 @@ function run(command, commandArgs, env = {}) {
   if (result.status !== 0) {
     process.exit(result.status ?? 1);
   }
+}
+
+function resolveOutputPath(output, defaultOutput) {
+  if (!output) {
+    return defaultOutput;
+  }
+
+  const outputPath = resolve(projectRoot, output);
+  if (existsSync(outputPath)) {
+    return outputPath;
+  }
+
+  if (!output.includes('/') && !output.startsWith('~')) {
+    const buildOutputPath = resolve(buildDir, output);
+    if (existsSync(buildOutputPath)) {
+      return buildOutputPath;
+    }
+  }
+
+  return outputPath;
 }
 
 function ensureLocalPrerequisites() {
@@ -269,7 +294,7 @@ const defaultOutput = resolve(
   projectRoot,
   `build/jirum-alarm-android-${versionName}-${versionCode}.${outputExtension}`,
 );
-const outputPath = resolve(projectRoot, options.output ?? defaultOutput);
+const outputPath = resolveOutputPath(options.output, defaultOutput);
 
 if (!options.build && !existsSync(outputPath)) {
   throw new Error(`Missing Android build for --submit-only: ${outputPath}`);
@@ -311,7 +336,7 @@ if (options.build) {
 }
 
 if (options.submit) {
-  run('pnpm', [
+  const submitArgs = [
     'exec',
     'eas',
     'submit',
@@ -321,9 +346,14 @@ if (options.submit) {
     options.profile,
     '--path',
     outputPath,
-    '--non-interactive',
     '--wait',
-  ]);
+  ];
+
+  if (!options.interactiveSubmit) {
+    submitArgs.push('--non-interactive');
+  }
+
+  run('pnpm', submitArgs);
 }
 
 console.log(`\nDone. Android build: ${outputPath}`);

@@ -8,6 +8,7 @@ import {assertProjectNode} from './project-runtime.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDir, '..');
+const buildDir = resolve(projectRoot, 'build');
 const iosProjectFile = resolve(
   projectRoot,
   'ios/jirumAlarmMobile.xcodeproj/project.pbxproj',
@@ -29,6 +30,7 @@ const options = {
   profile: 'production',
   submit: true,
   targetBuildNumber: null,
+  whatToTest: null,
 };
 
 function printHelp() {
@@ -44,6 +46,7 @@ Options:
   --no-bump               Keep the current iOS build number
   --no-submit             Build only, do not submit to TestFlight
   --submit-only           Submit an existing IPA path, requires --output
+  --what-to-test <text>   Set TestFlight "What to Test" text during submit
   --check                 Validate local release setup without building
   --clear-cache           Pass --clear-cache to EAS local build
   --help                  Show this help
@@ -78,6 +81,8 @@ for (let index = 0; index < args.length; index += 1) {
     options.build = false;
     options.bump = false;
     options.submit = true;
+  } else if (arg === '--what-to-test') {
+    options.whatToTest = args[++index];
   } else if (arg === '--check') {
     options.checkOnly = true;
   } else if (arg === '--clear-cache') {
@@ -171,6 +176,26 @@ function run(command, commandArgs, env = {}) {
   }
 }
 
+function resolveOutputPath(output, defaultOutput) {
+  if (!output) {
+    return defaultOutput;
+  }
+
+  const outputPath = resolve(projectRoot, output);
+  if (existsSync(outputPath)) {
+    return outputPath;
+  }
+
+  if (!output.includes('/') && !output.startsWith('~')) {
+    const buildOutputPath = resolve(buildDir, output);
+    if (existsSync(buildOutputPath)) {
+      return buildOutputPath;
+    }
+  }
+
+  return outputPath;
+}
+
 function ensureLocalPrerequisites() {
   if (!existsSync(googleServiceInfoPlist)) {
     throw new Error(
@@ -252,7 +277,7 @@ const defaultOutput = resolve(
   projectRoot,
   `build/jirum-alarm-ios-${marketingVersion}-${buildNumber}.ipa`,
 );
-const outputPath = resolve(projectRoot, options.output ?? defaultOutput);
+const outputPath = resolveOutputPath(options.output, defaultOutput);
 
 if (!options.build && !existsSync(outputPath)) {
   throw new Error(`Missing IPA for --submit-only: ${outputPath}`);
@@ -292,7 +317,7 @@ if (options.build) {
 }
 
 if (options.submit) {
-  run('pnpm', [
+  const submitArgs = [
     'exec',
     'eas',
     'submit',
@@ -304,7 +329,13 @@ if (options.submit) {
     outputPath,
     '--non-interactive',
     '--wait',
-  ]);
+  ];
+
+  if (options.whatToTest) {
+    submitArgs.push('--what-to-test', options.whatToTest);
+  }
+
+  run('pnpm', submitArgs);
 }
 
 console.log(`\nDone. IPA: ${outputPath}`);

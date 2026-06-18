@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 
-import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import {spawnSync} from 'node:child_process';
 import {createInterface} from 'node:readline/promises';
 import {stdin as input, stdout as output} from 'node:process';
@@ -9,13 +16,16 @@ import {fileURLToPath} from 'node:url';
 import {
   confirm as clackConfirm,
   isCancel,
+  multiline as clackMultiline,
   multiselect,
   select as clackSelect,
+  text as clackText,
 } from '@clack/prompts';
 import {assertProjectNode} from './project-runtime.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDir, '..');
+const buildDir = resolve(projectRoot, 'build');
 const releaseNotePath = resolve(projectRoot, 'release-note.txt');
 const iosProjectFile = resolve(
   projectRoot,
@@ -25,7 +35,16 @@ const androidBuildGradle = resolve(projectRoot, 'android/app/build.gradle');
 
 const semverRegExp = /^\d+\.\d+\.\d+$/u;
 
-const rl = createInterface({input, output});
+let fallbackReadline = null;
+
+function getFallbackReadline() {
+  fallbackReadline ??= createInterface({input, output});
+  return fallbackReadline;
+}
+
+async function questionWithReadline(message) {
+  return getFallbackReadline().question(message);
+}
 
 function ensureReleaseNote() {
   if (!existsSync(releaseNotePath)) {
@@ -117,6 +136,39 @@ function buildVersionArgs(versionPlan) {
   return args;
 }
 
+function findLatestBuildArtifact({prefix, extension}) {
+  if (!existsSync(buildDir)) {
+    return '';
+  }
+
+  const latestArtifact = readdirSync(buildDir, {withFileTypes: true})
+    .filter(
+      entry =>
+        entry.isFile() &&
+        entry.name.startsWith(prefix) &&
+        extname(entry.name).toLowerCase() === extension,
+    )
+    .map(entry => {
+      const path = resolve(buildDir, entry.name);
+      return {
+        name: entry.name,
+        mtimeMs: statSync(path).mtimeMs,
+      };
+    })
+    .sort((left, right) => right.mtimeMs - left.mtimeMs)[0];
+
+  return latestArtifact ? `build/${latestArtifact.name}` : '';
+}
+
+function normalizeExistingBuildPath(path) {
+  if (!path || path.includes('/') || path.startsWith('~')) {
+    return path;
+  }
+
+  const buildPath = `build/${path}`;
+  return existsSync(resolve(projectRoot, buildPath)) ? buildPath : path;
+}
+
 function run(command, args) {
   console.log(`\n$ ${[command, ...args].join(' ')}`);
   const result = spawnSync(command, args, {
@@ -138,8 +190,22 @@ function runReleaseScript(scriptName, args) {
 }
 
 async function ask(message, defaultValue = '') {
+  if (canUseInteractiveSelect()) {
+    const answer = await clackText({
+      message,
+      placeholder: defaultValue || undefined,
+      defaultValue,
+    });
+
+    if (isCancel(answer)) {
+      throw new Error('사용자가 선택을 취소했습니다.');
+    }
+
+    return answer.trim() || defaultValue;
+  }
+
   const suffix = defaultValue ? ` (${defaultValue})` : '';
-  const answer = await rl.question(`${message}${suffix}: `);
+  const answer = await questionWithReadline(`${message}${suffix}: `);
   return answer.trim() || defaultValue;
 }
 
@@ -160,7 +226,7 @@ async function confirm(message, defaultValue = false) {
   }
 
   const suffix = defaultValue ? 'Y/n' : 'y/N';
-  const answer = (await rl.question(`${message} (${suffix}): `))
+  const answer = (await questionWithReadline(`${message} (${suffix}): `))
     .trim()
     .toLowerCase();
 
@@ -301,13 +367,29 @@ async function editReleaseNoteWithEditor() {
 
 async function writeReleaseNoteFromPrompt() {
   ensureReleaseNote();
+
+  if (canUseInteractiveSelect()) {
+    const note = await clackMultiline({
+      message: 'TestFlight 테스트 내용을 입력해 주세요.',
+      placeholder: '빈 값으로 제출하면 비어 있는 테스트 내용으로 처리됩니다.',
+      showSubmit: true,
+    });
+
+    if (isCancel(note)) {
+      throw new Error('사용자가 선택을 취소했습니다.');
+    }
+
+    writeFileSync(releaseNotePath, `${note.trim()}\n`, 'utf8');
+    return;
+  }
+
   console.log(
-    '\n패치노트를 입력해 주세요. 빈 줄에서 Enter를 누르면 종료합니다.',
+    '\nTestFlight 테스트 내용을 입력해 주세요. 빈 줄에서 Enter를 누르면 종료합니다.',
   );
   const lines = [];
 
   while (true) {
-    const line = await rl.question('> ');
+    const line = await questionWithReadline('> ');
     if (!line.trim()) {
       break;
     }
@@ -321,10 +403,10 @@ async function handleReleaseNote() {
   ensureReleaseNote();
   const currentNote = readFileSync(releaseNotePath, 'utf8').trim();
 
-  console.log('\n현재 패치노트:');
+  console.log('\n현재 TestFlight 테스트 내용:');
   console.log(currentNote || '(비어 있음)');
 
-  const action = await select('패치노트는 어떻게 할까요?', [
+  const action = await select('TestFlight 테스트 내용은 어떻게 할까요?', [
     {name: '현재 내용 사용', value: 'keep'},
     {name: '에디터로 수정', value: 'edit'},
     {name: '새로 작성', value: 'rewrite'},
@@ -341,13 +423,15 @@ async function handleReleaseNote() {
   const updatedNote = readFileSync(releaseNotePath, 'utf8').trim();
   if (!updatedNote) {
     const shouldContinue = await confirm(
-      '패치노트가 비어 있습니다. 계속할까요?',
+      'TestFlight 테스트 내용이 비어 있습니다. 계속할까요?',
       false,
     );
     if (!shouldContinue) {
       process.exit(1);
     }
   }
+
+  return updatedNote;
 }
 
 function resolveEnvironment({purpose, selectedEnvironment}) {
@@ -358,9 +442,13 @@ function resolveEnvironment({purpose, selectedEnvironment}) {
   return selectedEnvironment;
 }
 
-function resolveProfile({purpose, environment}) {
+function resolveProfile({purpose, environment, existingSubmitTarget}) {
   if (purpose === 'store-submit') {
     return 'production';
+  }
+
+  if (purpose === 'submit-only') {
+    return existingSubmitTarget === 'store' ? 'production' : 'test-dev';
   }
 
   if (environment === 'development') {
@@ -368,6 +456,19 @@ function resolveProfile({purpose, environment}) {
   }
 
   return 'test-prod';
+}
+
+function shouldUseTestFlightNote({purpose, platform, existingSubmitTarget}) {
+  const includesIos = platform === 'ios' || platform === 'all';
+
+  if (!includesIos) {
+    return false;
+  }
+
+  return (
+    purpose === 'test-distribute' ||
+    (purpose === 'submit-only' && existingSubmitTarget === 'test')
+  );
 }
 
 function getPlatformLabels(platform) {
@@ -410,7 +511,7 @@ function buildPlannedVersionSummary(platform, versionPlan) {
   return lines;
 }
 
-async function selectVersionPlan({purpose, platform}) {
+async function selectVersionPlan({platform}) {
   const choices = [
     {
       name: '앱 버전 유지, 빌드 번호만 증가',
@@ -453,17 +554,6 @@ async function selectVersionPlan({purpose, platform}) {
       },
     },
   ];
-
-  if (purpose === 'build-only') {
-    choices.push({
-      name: '앱 버전과 빌드 번호 모두 유지',
-      value: {
-        appVersionAction: 'keep',
-        buildNumberAction: 'keep',
-        label: '앱 버전/빌드 번호 모두 유지',
-      },
-    });
-  }
 
   const versionPlan = await select('버전 처리는 어떻게 할까요?', choices);
 
@@ -513,17 +603,23 @@ async function selectExistingBuildPaths(platform) {
   const paths = {};
 
   if (platform === 'ios' || platform === 'all') {
-    paths.ios = await ask(
+    paths.ios = normalizeExistingBuildPath(await ask(
       '제출할 IPA 경로를 입력해 주세요',
-      'build/jirum-alarm-ios-1.3.5-10.ipa',
-    );
+      findLatestBuildArtifact({
+        prefix: 'jirum-alarm-ios-',
+        extension: '.ipa',
+      }),
+    ));
   }
 
   if (platform === 'android' || platform === 'all') {
-    paths.android = await ask(
+    paths.android = normalizeExistingBuildPath(await ask(
       '제출할 Android 빌드 경로를 입력해 주세요',
-      'build/jirum-alarm-android-1.3.5-23.aab',
-    );
+      findLatestBuildArtifact({
+        prefix: 'jirum-alarm-android-',
+        extension: '.aab',
+      }),
+    ));
   }
 
   return paths;
@@ -537,13 +633,18 @@ function printSummary({
   versionPlan,
   existingSubmitTarget,
   existingBuildPaths,
+  testFlightNote,
 }) {
   console.log('\n실행 요약:');
   console.log(`- 목적: ${purposeLabels[purpose]}`);
   console.log(`- 플랫폼: ${getPlatformLabels(platform).join(' + ')}`);
-  console.log(
-    `- 환경: ${environment}${purpose === 'store-submit' ? ' 고정' : ''}`,
-  );
+  if (purpose === 'submit-only') {
+    console.log('- 환경: 기존 빌드에 포함된 값 사용');
+  } else {
+    console.log(
+      `- 환경: ${environment}${purpose === 'store-submit' ? ' 고정' : ''}`,
+    );
+  }
   console.log(`- EAS profile: ${profile}`);
 
   if (purpose === 'test-distribute') {
@@ -568,10 +669,6 @@ function printSummary({
     }
   }
 
-  if (purpose === 'build-only') {
-    console.log('- 제출: 하지 않음');
-  }
-
   if (purpose === 'submit-only') {
     console.log(
       `- 제출 대상: ${
@@ -593,7 +690,9 @@ function printSummary({
     }
   }
 
-  console.log(`- 패치노트: ${releaseNotePath}`);
+  if (testFlightNote !== null) {
+    console.log(`- TestFlight 테스트 내용: ${releaseNotePath}`);
+  }
 }
 
 function validateExistingAndroidPathForTarget(path, target) {
@@ -604,15 +703,15 @@ function validateExistingAndroidPathForTarget(path, target) {
   }
 }
 
-function runIos({purpose, profile, versionPlan, outputPath}) {
+function runIos({purpose, profile, versionPlan, outputPath, testFlightNote}) {
   const args = ['--profile', profile, ...buildVersionArgs(versionPlan)];
-
-  if (purpose === 'build-only') {
-    args.push('--no-submit');
-  }
 
   if (purpose === 'submit-only') {
     args.push('--submit-only', '--output', outputPath);
+  }
+
+  if (testFlightNote) {
+    args.push('--what-to-test', testFlightNote);
   }
 
   runReleaseScript('scripts/ios-local-release.mjs', args);
@@ -627,10 +726,6 @@ function runAndroid({
 }) {
   const args = ['--profile', profile, ...buildVersionArgs(versionPlan)];
 
-  if (purpose === 'build-only') {
-    args.push('--no-submit');
-  }
-
   if (purpose === 'submit-only') {
     validateExistingAndroidPathForTarget(outputPath, existingSubmitTarget);
     args.push('--submit-only', '--output', outputPath);
@@ -642,9 +737,7 @@ function runAndroid({
 const purposeLabels = {
   'test-distribute': '테스트 배포',
   'store-submit': '실제 스토어 제출',
-  'build-only': '빌드만 생성',
   'submit-only': '기존 빌드 제출',
-  check: '사전 점검만 실행',
 };
 
 async function main() {
@@ -653,40 +746,17 @@ async function main() {
   const purpose = await select('무엇을 할까요?', [
     {name: '테스트 배포', value: 'test-distribute'},
     {name: '실제 스토어 제출', value: 'store-submit'},
-    {name: '빌드만 생성', value: 'build-only'},
     {name: '기존 빌드 제출', value: 'submit-only'},
-    {name: '사전 점검만 실행', value: 'check'},
   ]);
 
   const platform = await selectPlatform();
-
-  if (purpose === 'check') {
-    if (platform === 'ios' || platform === 'all') {
-      runReleaseScript('scripts/ios-local-release.mjs', [
-        '--profile',
-        'production',
-        '--check',
-      ]);
-    }
-    if (platform === 'android' || platform === 'all') {
-      runReleaseScript('scripts/android-local-release.mjs', [
-        '--profile',
-        'production',
-        '--check',
-      ]);
-    }
-    return;
-  }
 
   let existingSubmitTarget = null;
   if (purpose === 'submit-only') {
     existingSubmitTarget = await selectExistingSubmitTarget();
   }
 
-  const shouldAskEnvironment =
-    purpose === 'test-distribute' ||
-    purpose === 'build-only' ||
-    existingSubmitTarget === 'test';
+  const shouldAskEnvironment = purpose === 'test-distribute';
   const selectedEnvironment = shouldAskEnvironment
     ? await select('환경은?', [
         {name: 'development', value: 'development'},
@@ -694,22 +764,22 @@ async function main() {
       ])
     : 'production';
 
-  const environment = resolveEnvironment({purpose, selectedEnvironment});
+  const environment =
+    purpose === 'submit-only'
+      ? null
+      : resolveEnvironment({purpose, selectedEnvironment});
   const profile = resolveProfile({
-    purpose:
-      purpose === 'submit-only' && existingSubmitTarget === 'store'
-        ? 'store-submit'
-        : purpose,
+    purpose,
     environment,
+    existingSubmitTarget,
   });
 
   let versionPlan = null;
   if (
     purpose === 'test-distribute' ||
-    purpose === 'store-submit' ||
-    purpose === 'build-only'
+    purpose === 'store-submit'
   ) {
-    versionPlan = await selectVersionPlan({purpose, platform});
+    versionPlan = await selectVersionPlan({platform});
   }
 
   let existingBuildPaths = null;
@@ -717,7 +787,12 @@ async function main() {
     existingBuildPaths = await selectExistingBuildPaths(platform);
   }
 
-  await handleReleaseNote();
+  const needsTestFlightNote = shouldUseTestFlightNote({
+    purpose,
+    platform,
+    existingSubmitTarget,
+  });
+  const testFlightNote = needsTestFlightNote ? await handleReleaseNote() : null;
 
   printSummary({
     purpose,
@@ -727,9 +802,10 @@ async function main() {
     versionPlan,
     existingSubmitTarget,
     existingBuildPaths,
+    testFlightNote,
   });
 
-  const shouldRun = await confirm('진행할까요?', false);
+  const shouldRun = await confirm('진행할까요?', true);
   if (!shouldRun) {
     console.log('배포를 취소했습니다.');
     return;
@@ -743,6 +819,7 @@ async function main() {
       profile,
       versionPlan,
       outputPath: existingBuildPaths?.ios,
+      testFlightNote,
     });
   }
 
@@ -763,5 +840,5 @@ main()
     process.exit(1);
   })
   .finally(() => {
-    rl.close();
+    fallbackReadline?.close();
   });
