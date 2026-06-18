@@ -14,6 +14,7 @@ import type {VariantProps} from 'class-variance-authority';
 import {cn} from '@/shared/lib/styling';
 import {composeEventHandlers} from '@/shared/lib/ui';
 import {COLORS} from '@/shared/constant/colors.ts';
+import {TYPOGRAPHY} from '@/shared/constant/typography.ts';
 
 interface Props extends TextInputProps, VariantProps<typeof textfieldVariant> {
   label?: string;
@@ -50,7 +51,7 @@ const TextField = forwardRef<TextInput, Props>(
       <Pressable>
         {label && (
           <View className="mb-[8px]">
-            <Text className="text-gray-500 text-[14px] font-semibold">
+            <Text className="text-gray-500" style={TYPOGRAPHY.body14sb}>
               {label}
             </Text>
           </View>

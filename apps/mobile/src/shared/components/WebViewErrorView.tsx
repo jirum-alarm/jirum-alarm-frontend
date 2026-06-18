@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 import {COLORS} from '@/shared/constant/colors.ts';
+import {TYPOGRAPHY} from '@/shared/constant/typography.ts';
 
 interface WebViewErrorViewProps {
   onRetry: () => void;
@@ -34,13 +35,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '700',
+    ...TYPOGRAPHY.title18b,
     color: COLORS.GRAY_900,
     marginBottom: 8,
   },
   description: {
-    fontSize: 14,
+    ...TYPOGRAPHY.body14r,
     color: COLORS.GRAY_500,
     textAlign: 'center',
     marginBottom: 24,
@@ -52,9 +52,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   buttonText: {
+    ...TYPOGRAPHY.body14sb,
     color: COLORS.WHITE,
-    fontSize: 14,
-    fontWeight: '600',
   },
 });
 
