@@ -65,7 +65,7 @@ export default function ProductInfo({ productId }: { productId: number }) {
         </div>
         <h1 className="text-fg-strong font-medium">{product.title}</h1>
         <div className="flex flex-col gap-y-1 pt-3">
-          <div className="text-fg-muted h-5 text-sm">
+          <div className="text-fg-muted typography-body-14r h-5">
             <DisplayTime time={product.postedAt} />
           </div>
           <div className="flex items-center justify-between">

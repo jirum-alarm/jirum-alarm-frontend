@@ -73,7 +73,7 @@ const AlarmItem = ({
           />
         </div>
         <div className="flex-1 pl-3">
-          <p className="text-fg-primary line-clamp-2 w-full text-sm">
+          <p className="text-fg-primary typography-body-14r line-clamp-2 w-full">
             <HighlightText message={message} keyword={keyword?.split(' ')[0] ?? ''} />
           </p>
           <div className="flex items-center gap-x-3 pt-2">

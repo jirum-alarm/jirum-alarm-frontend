@@ -76,11 +76,19 @@ export default function CommentAction({
       >
         <ThumbsupFill className="h-4 w-4" active={!!comment.isMyLike} />
         <span
-          className={cn('text-sm', comment.isMyLike ? 'text-primary-700' : 'text-fg-secondary')}
+          className={cn(
+            'typography-body-14r',
+            comment.isMyLike ? 'text-primary-700' : 'text-fg-secondary',
+          )}
         >
           좋아요
         </span>
-        <span className={cn('text-sm', comment.isMyLike ? 'text-primary-700' : 'text-fg-muted')}>
+        <span
+          className={cn(
+            'typography-body-14r',
+            comment.isMyLike ? 'text-primary-700' : 'text-fg-muted',
+          )}
+        >
           {comment.likeCount}
         </span>
       </button>
@@ -95,7 +103,12 @@ export default function CommentAction({
           ) : (
             <BubbleChat className="h-4 w-4" aria-hidden />
           )}
-          <span className={cn('text-sm', isReply ? 'text-secondary-500' : 'text-fg-secondary')}>
+          <span
+            className={cn(
+              'typography-body-14r',
+              isReply ? 'text-secondary-500' : 'text-fg-secondary',
+            )}
+          >
             대댓글
           </span>
         </button>

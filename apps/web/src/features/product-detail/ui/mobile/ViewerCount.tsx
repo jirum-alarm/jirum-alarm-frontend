@@ -59,7 +59,7 @@ export default function ViewerCount({ productId }: ViewerCountProps) {
                 borderColor: isInView ? '#F3F7FF' : '#B5CBFD',
               }}
             >
-              <span className="text-fg-secondary-strong text-sm">
+              <span className="text-fg-secondary-strong typography-body-14r">
                 <strong className="text-secondary-500 font-semibold" suppressHydrationWarning>
                   {count.toLocaleString('ko-kr')}명
                 </strong>

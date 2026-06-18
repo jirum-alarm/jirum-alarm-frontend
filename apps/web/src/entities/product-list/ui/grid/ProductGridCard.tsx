@@ -57,7 +57,7 @@ export default function ProductGridCard({
             priority={priority}
           />
           {typeof rank === 'number' && (
-            <div className="text-primary-500 bg-surface-inverse absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg text-sm">
+            <div className="text-primary-500 bg-surface-inverse typography-body-14r absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg">
               {rank}
             </div>
           )}
@@ -79,7 +79,7 @@ export default function ProductGridCard({
           )}
         </div>
         <div className="flex flex-col">
-          <span className="text-fg-secondary-strong line-clamp-2 h-12 pt-2 text-sm wrap-break-word">
+          <span className="text-fg-secondary-strong typography-body-14r line-clamp-2 h-12 pt-2 wrap-break-word">
             {product.title}
           </span>
           <div className="flex h-9 items-center pt-1">
@@ -87,7 +87,7 @@ export default function ProductGridCard({
             {displayTime && (
               <>
                 <span className="w-2"></span>
-                <span className="text-fg-muted text-sm">
+                <span className="text-fg-muted typography-body-14r">
                   <DisplayTime time={product.postedAt} />
                 </span>
               </>

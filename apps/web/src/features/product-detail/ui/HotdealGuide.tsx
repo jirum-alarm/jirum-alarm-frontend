@@ -130,7 +130,7 @@ function LinkText({ content }: { content: string }) {
             return part.content?.split('\n').map((text, i) => (
               <Fragment key={`${index}_text_${i}`}>
                 {i > 0 && <br />}
-                <span className="text-fg-muted text-sm">{text}</span>
+                <span className="text-fg-muted typography-body-14r">{text}</span>
               </Fragment>
             ));
           case 'markdown':
@@ -140,7 +140,7 @@ function LinkText({ content }: { content: string }) {
                 href={part.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-blue-500 underline hover:text-blue-700 hover:no-underline"
+                className="typography-body-14r text-blue-500 underline hover:text-blue-700 hover:no-underline"
               >
                 {part.text}
               </a>
@@ -152,7 +152,7 @@ function LinkText({ content }: { content: string }) {
                 href={part.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-blue-500 underline hover:text-blue-700 hover:no-underline"
+                className="typography-body-14r text-blue-500 underline hover:text-blue-700 hover:no-underline"
               >
                 {part.url}
               </a>

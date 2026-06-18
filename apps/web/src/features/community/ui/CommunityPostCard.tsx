@@ -50,7 +50,12 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
         {post.title && (
           <p className="typography-body-14sb text-fg-primary mt-2 truncate">{post.title}</p>
         )}
-        <p className={cn('text-fg-muted mt-1 text-sm', post.title ? 'truncate' : 'line-clamp-2')}>
+        <p
+          className={cn(
+            'text-fg-muted typography-body-14r mt-1',
+            post.title ? 'truncate' : 'line-clamp-2',
+          )}
+        >
           {post.content}
         </p>
 

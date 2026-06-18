@@ -37,7 +37,7 @@ export default function ListProductCard({ product }: { product: ProductCardType 
             )}
           </div>
           <div className="flex h-full flex-col justify-between gap-1">
-            <span className="text-fg-secondary-strong line-clamp-2 text-sm break-all">
+            <span className="text-fg-secondary-strong typography-body-14r line-clamp-2 break-all">
               {product.title}
             </span>
             <div className="flex items-center gap-2">

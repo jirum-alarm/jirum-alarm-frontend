@@ -10,7 +10,7 @@ const CategoriesPage = () => {
       <div className="h-full px-5 pt-6 pb-8">
         <fieldset className="flex h-full flex-col">
           <legend>
-            <p className="text-fg-secondary-strong pb-7 text-sm">
+            <p className="text-fg-secondary-strong typography-body-14r pb-7">
               내 관심사는 최대 5개까지
               <br /> 선택할 수 있어요.
             </p>

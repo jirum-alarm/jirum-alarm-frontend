@@ -22,12 +22,12 @@ const ProductReport = ({ productId }: { productId: number }) => {
       )}
     >
       {product.isMyReported ? (
-        <p className="text-fg-muted flex items-center gap-2 text-sm">
+        <p className="text-fg-muted typography-body-14r flex items-center gap-2">
           종료된 상품으로 제보해주셔서 감사해요 <span className="text-lg">😄</span>
         </p>
       ) : (
         <>
-          <span className="text-fg-muted text-sm">혹시 판매가 종료된 상품인가요?</span>
+          <span className="text-fg-muted typography-body-14r">혹시 판매가 종료된 상품인가요?</span>
           <ProductReportModal productId={productId} />
         </>
       )}

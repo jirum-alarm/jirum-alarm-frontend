@@ -18,7 +18,7 @@ const EmailLoginForm = () => {
       <PasswordInput password={password} hideHelperText={true} />
       <div className="bg-surface-default py-9">
         {error && (
-          <p className="text-fg-error pb-4 text-center text-sm">
+          <p className="text-fg-error typography-body-14r pb-4 text-center">
             이메일 혹은 비밀번호가 올바르지 않아요.
           </p>
         )}
@@ -39,7 +39,7 @@ const EmailInput = ({
 }) => {
   return (
     <>
-      <label htmlFor="email" className="text-fg-secondary pb-2 text-sm">
+      <label htmlFor="email" className="text-fg-secondary typography-body-14r pb-2">
         이메일
       </label>
       <Input
@@ -85,7 +85,7 @@ const PasswordInput = ({
 
   return (
     <>
-      <label htmlFor="password" className="text-fg-secondary pt-11 pb-2 text-sm">
+      <label htmlFor="password" className="text-fg-secondary typography-body-14r pt-11 pb-2">
         비밀번호
       </label>
       <Input

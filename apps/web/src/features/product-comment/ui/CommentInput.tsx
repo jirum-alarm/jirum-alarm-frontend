@@ -47,7 +47,7 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
     >
       <div className="bg-surface-subtle flex grow flex-col items-center overflow-hidden rounded-lg border border-transparent focus-within:border-gray-500">
         {editingComment?.status === 'reply' && (
-          <div className="border-secondary-100 bg-secondary-50 text-secondary-700 flex h-[30px] w-full items-center justify-between border-b pr-2 pl-3 text-sm">
+          <div className="border-secondary-100 bg-secondary-50 text-secondary-700 typography-body-14r flex h-[30px] w-full items-center justify-between border-b pr-2 pl-3">
             <div className="flex items-center gap-x-1">
               {editingComment.comment.author?.nickname ?? '?'}님에게 대댓글 남기는 중
             </div>
@@ -60,7 +60,7 @@ export default function CommentInput({ productId, isUserLogin }: BottomInputProp
           </div>
         )}
         {editingComment?.status === 'update' && (
-          <div className="border-primary-100 bg-primary-50 text-primary-700 flex h-[30px] w-full items-center justify-between border-b pr-2 pl-3 text-sm">
+          <div className="border-primary-100 bg-primary-50 text-primary-700 typography-body-14r flex h-[30px] w-full items-center justify-between border-b pr-2 pl-3">
             <div className="flex items-center gap-x-1">댓글 수정 중</div>
             <button
               className="-m-2 flex h-auto items-center gap-x-1 bg-transparent p-2"

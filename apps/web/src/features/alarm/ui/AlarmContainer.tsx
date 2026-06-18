@@ -81,7 +81,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
 
       <div className="bg-surface-default fixed right-0 bottom-[var(--bottom-nav-padding,0px)] left-0 m-auto w-full max-w-[600px] px-5 pt-4 pb-8">
         <div className="flex flex-col items-center pb-6">
-          <p className="text-fg-tertiary pb-3 text-center text-sm">
+          <p className="text-fg-tertiary typography-body-14r pb-3 text-center">
             키워드 알림으로
             <br />
             누구보다 빠르게 핫딜 받기
@@ -182,7 +182,7 @@ function LoginGuide() {
         <Button onClick={handleCTAButton} className="self-end">
           이메일로 시작하기
         </Button>
-        <p className="pt-6 text-sm">
+        <p className="typography-body-14r pt-6">
           이미 지름알림 회원이신가요?
           <Link href={PAGE.LOGIN_BY_EMAIL} className="text-primary-700 pl-3">
             로그인

@@ -34,7 +34,7 @@ const Description = () => {
         관심사를 알려주세요.
         <span className="text-fg-secondary pl-2 text-base">(선택)</span>
       </p>
-      <p className="text-fg-secondary-strong pt-4 text-sm">
+      <p className="text-fg-secondary-strong typography-body-14r pt-4">
         관심분야 핫딜이 올라오면
         <br /> 알림으로 알려드려요.
       </p>

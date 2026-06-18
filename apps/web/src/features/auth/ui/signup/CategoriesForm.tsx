@@ -37,7 +37,7 @@ export default CategoriesForm;
 
 const Description = () => {
   return (
-    <p className="text-fg-tertiary pt-12 pb-4 text-center text-sm">
+    <p className="text-fg-tertiary typography-body-14r pt-12 pb-4 text-center">
       관심 분야는 나중에 다시 변경할 수 있어요!
     </p>
   );

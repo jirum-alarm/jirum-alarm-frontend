@@ -78,7 +78,7 @@ export default function ProductInfo({
           <ShareButton title={shareTitle} />
         </div>
         <div className="space-y-1 pt-3 pb-8">
-          <div className="text-fg-secondary h-5 text-sm">
+          <div className="text-fg-secondary typography-body-14r h-5">
             <DisplayTime time={product.postedAt} />
           </div>
           <div className="flex justify-between">

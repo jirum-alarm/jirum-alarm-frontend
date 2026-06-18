@@ -76,7 +76,7 @@ function CommentItem({
           </button>
         )}
       </div>
-      <p className="text-fg-primary mt-1 text-sm">{comment.content}</p>
+      <p className="text-fg-primary typography-body-14r mt-1">{comment.content}</p>
       <div className="mt-2 flex items-center gap-x-3 text-xs">
         <button
           type="button"
@@ -140,7 +140,7 @@ function CommentItem({
           <AlertContent>
             <Header>
               <Title className="typography-title-16sb text-fg-primary">댓글을 삭제할까요?</Title>
-              <Description className="text-fg-secondary text-sm">
+              <Description className="text-fg-secondary typography-body-14r">
                 댓글을 삭제하면 다시 복구할 수 없어요.
               </Description>
             </Header>
@@ -247,7 +247,9 @@ function CommunityCommentList({
 
   if (comments.length === 0) {
     return (
-      <div className="text-fg-tertiary py-8 text-center text-sm">첫 번째 댓글을 남겨보세요</div>
+      <div className="text-fg-tertiary typography-body-14r py-8 text-center">
+        첫 번째 댓글을 남겨보세요
+      </div>
     );
   }
 
@@ -264,7 +266,7 @@ function CommunityCommentList({
                 onChange={(e) => setEditContent(e.target.value)}
                 maxLength={300}
                 rows={2}
-                className="border-border-strong bg-surface-subtle w-full resize-none rounded-lg border px-3 py-2 text-sm outline-none focus:border-gray-500"
+                className="border-border-strong bg-surface-subtle typography-body-14r w-full resize-none rounded-lg border px-3 py-2 outline-none focus:border-gray-500"
               />
               <div className="flex justify-end gap-x-2">
                 <button
@@ -304,7 +306,7 @@ function CommunityCommentList({
       })}
       <div ref={ref} className="h-1" />
       {isFetchingNextPage && (
-        <div className="text-fg-tertiary flex items-center justify-center py-4 text-sm">
+        <div className="text-fg-tertiary typography-body-14r flex items-center justify-center py-4">
           불러오는 중...
         </div>
       )}
@@ -342,7 +344,7 @@ function CommunityCommentInput({ postId, isUserLogin }: { postId: number; isUser
           disabled={!isUserLogin}
           maxLength={300}
           rows={1}
-          className="max-h-[100px] min-h-[40px] w-full resize-none bg-transparent px-3 py-2 text-sm outline-none"
+          className="typography-body-14r max-h-[100px] min-h-[40px] w-full resize-none bg-transparent px-3 py-2 outline-none"
           style={{ height: '40px' }}
           onInput={(e) => {
             const t = e.currentTarget;

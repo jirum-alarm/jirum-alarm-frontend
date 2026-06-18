@@ -30,7 +30,7 @@ const Footer = () => {
             </Link>
           </p>
           <div className="flex h-full flex-col justify-between lg:flex-row">
-            <div className="text-fg-muted flex gap-x-2 text-sm">
+            <div className="text-fg-muted typography-body-14r flex gap-x-2">
               <Link href="https://jirum-alarm.com/policies/terms" className="underline">
                 서비스 이용약관
               </Link>
@@ -39,7 +39,9 @@ const Footer = () => {
                 개인정보 처리방침
               </Link>
             </div>
-            <p className="text-fg-muted text-sm">Copyright 2025. 지름알림. All rights reserved.</p>
+            <p className="text-fg-muted typography-body-14r">
+              Copyright 2025. 지름알림. All rights reserved.
+            </p>
           </div>
         </footer>
       </div>

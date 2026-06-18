@@ -41,7 +41,7 @@ const ProductLikeContainer = () => {
 
   return (
     <div>
-      <div className="pb-3 text-sm">
+      <div className="typography-body-14r pb-3">
         전체 <span className="font-semibold">{wishlistCount}</span>개
       </div>
       <ProductLikeGridList products={wishlists.map((w) => w.product)} />

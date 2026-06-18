@@ -126,7 +126,7 @@ export default function CommunityPostDetailClient({
 
       {/* 통계 + 추천 */}
       <div className="border-border-subtle flex items-center justify-between border-y px-5 py-3">
-        <div className="text-fg-tertiary flex items-center gap-x-3 text-sm">
+        <div className="text-fg-tertiary typography-body-14r flex items-center gap-x-3">
           <span className="flex items-center gap-x-1">
             <ThumbsupFill className="h-4 w-4" aria-hidden />
             {post.likeCount}

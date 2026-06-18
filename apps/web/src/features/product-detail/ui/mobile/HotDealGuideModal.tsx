@@ -95,7 +95,7 @@ export default function HotdealGuideModal({ trigger }: { trigger: React.ReactNod
                 </div>
               </div>
 
-              <div className="text-fg-muted -mr-4 flex justify-end pt-[8px] text-sm">
+              <div className="text-fg-muted typography-body-14r -mr-4 flex justify-end pt-[8px]">
                 할인율이 높아져요
               </div>
             </div>

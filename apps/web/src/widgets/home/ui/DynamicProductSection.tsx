@@ -66,7 +66,7 @@ const DynamicProductSection = async ({
             section.viewMoreLink ? (
               <InteractiveMoreLink
                 href={section.viewMoreLink}
-                className="text-fg-secondary hover:text-fg-secondary-strong text-sm"
+                className="text-fg-secondary hover:text-fg-secondary-strong typography-body-14r"
                 aria-label={`${section.title} 더보기`}
               >
                 더보기

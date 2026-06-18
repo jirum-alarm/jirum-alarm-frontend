@@ -112,7 +112,7 @@ export function ReactionChart({
                   <Thumbsdown className="size-4.5" active />
                 </>
               ))}
-            {disabled && <span className="text-fg-secondary text-sm">반응 수집중</span>}
+            {disabled && <span className="text-fg-secondary typography-body-14r">반응 수집중</span>}
           </div>
         </div>
         <span className="typography-body-14m text-fg-secondary">

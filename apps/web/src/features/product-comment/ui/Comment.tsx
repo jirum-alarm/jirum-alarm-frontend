@@ -41,7 +41,7 @@ export default function Comment({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-2">
           <span className="typography-body-14m text-fg-muted">{comment.author?.nickname}</span>
-          <span className="text-fg-secondary text-sm">
+          <span className="text-fg-secondary typography-body-14r">
             {editStatus === 'update' ? '수정중' : displayTime(comment.createdAt)}
           </span>
         </div>

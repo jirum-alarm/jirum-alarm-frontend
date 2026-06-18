@@ -53,7 +53,7 @@ export default function PostForm({
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="내용을 입력해주세요"
-          className="text-fg-primary min-h-[200px] flex-1 resize-none text-sm leading-relaxed placeholder-gray-400 outline-none"
+          className="text-fg-primary typography-body-14r min-h-[200px] flex-1 resize-none leading-relaxed placeholder-gray-400 outline-none"
         />
       </div>
 
@@ -85,7 +85,7 @@ export default function PostForm({
               </div>
             </div>
           ) : (
-            <span className="text-fg-disabled flex items-center gap-x-2 text-sm">
+            <span className="text-fg-disabled typography-body-14r flex items-center gap-x-2">
               <span className="border-border-default text-fg-disabled flex h-6 w-6 items-center justify-center rounded-full border">
                 <svg
                   width="12"

@@ -17,7 +17,7 @@ export default function NoticeProfitLink({ productId }: { productId: number }) {
     <section className="pc:relative pc:inset-0 pc:top-auto bg-surface-muted">
       <div className="pc:flex pc:items-center pc:justify-center pc:gap-x-3 pc:pb-5 p-5 pb-8">
         <p className="pc:mb-0 typography-body-14sb text-fg-secondary-strong mb-1">안내</p>
-        <div className="pc:items-center text-fg-muted flex text-sm">
+        <div className="pc:items-center text-fg-muted typography-body-14r flex">
           <p>일부 링크는 제휴 마케팅이 적용되어 지름알림에 커미션이 지급될 수 있습니다.</p>
         </div>
       </div>

@@ -151,7 +151,7 @@ const Login = () => {
             {/* Email Signup Link */}
             <Link
               href={PAGE.SIGNUP}
-              className="hover:text-fg-primary text-fg-muted mt-2 text-sm underline transition-colors"
+              className="hover:text-fg-primary text-fg-muted typography-body-14r mt-2 underline transition-colors"
             >
               이메일로 가입하기
             </Link>

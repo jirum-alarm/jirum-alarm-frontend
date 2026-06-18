@@ -115,7 +115,7 @@ export default function ProductTagModal({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="text-fg-secondary flex items-center gap-x-2 text-sm transition-transform active:scale-95"
+          className="text-fg-secondary typography-body-14r flex items-center gap-x-2 transition-transform active:scale-95"
         >
           <span className="text-fg-tertiary flex h-6 w-6 items-center justify-center rounded-full border border-gray-400">
             <svg
@@ -176,7 +176,7 @@ export default function ProductTagModal({
                     }
                   }}
                   placeholder="핫딜 제품을 검색해 주세요"
-                  className="text-fg-primary flex-1 bg-transparent text-sm placeholder-gray-400 outline-none"
+                  className="text-fg-primary typography-body-14r flex-1 bg-transparent placeholder-gray-400 outline-none"
                 />
                 {inputValue && (
                   <button
@@ -198,12 +198,12 @@ export default function ProductTagModal({
               {keyword && (
                 <>
                   {isFetching && (
-                    <div className="text-fg-tertiary flex justify-center py-10 text-sm">
+                    <div className="text-fg-tertiary typography-body-14r flex justify-center py-10">
                       검색 중...
                     </div>
                   )}
                   {!isFetching && searchResults.length === 0 && (
-                    <div className="text-fg-tertiary flex justify-center py-10 text-sm">
+                    <div className="text-fg-tertiary typography-body-14r flex justify-center py-10">
                       검색 결과가 없어요.
                     </div>
                   )}
@@ -281,7 +281,7 @@ export default function ProductTagModal({
                     </>
                   ) : (
                     <div className="text-fg-tertiary flex flex-col items-center justify-center py-16">
-                      <p className="text-sm">검색어를 입력해 상품을 찾아보세요</p>
+                      <p className="typography-body-14r">검색어를 입력해 상품을 찾아보세요</p>
                     </div>
                   )}
                 </>

@@ -24,7 +24,7 @@ const KeywordList = () => {
         {notificationKeywordsByMe?.map((keyword) => (
           <li className="border-border-default border-b px-2 py-3" key={keyword.id}>
             <div className="flex w-full items-center justify-between">
-              <span className="text-fg-primary text-sm">{keyword.keyword}</span>
+              <span className="text-fg-primary typography-body-14r">{keyword.keyword}</span>
               <button
                 role="button"
                 className="text-fg-tertiary -m-2 p-2"

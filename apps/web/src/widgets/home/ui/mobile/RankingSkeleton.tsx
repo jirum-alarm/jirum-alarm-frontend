@@ -64,7 +64,9 @@ const PreviewCard = ({ product, rank, isActive, priority }: PreviewCardProps) =>
           />
         </div>
         <div className="p-3 pb-0">
-          <div className="text-fg-secondary-strong line-clamp-2 text-sm">{product.title}</div>
+          <div className="text-fg-secondary-strong typography-body-14r line-clamp-2">
+            {product.title}
+          </div>
           <div className="typography-title-18b text-fg-primary pt-2">
             <DisplayListPrice price={product.price} />
           </div>

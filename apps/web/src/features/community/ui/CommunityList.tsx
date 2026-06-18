@@ -65,7 +65,7 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
   if (posts.length === 0) {
     return (
       <div className="text-fg-tertiary flex flex-1 flex-col items-center justify-center py-20">
-        <p className="text-sm">아직 게시글이 없어요.</p>
+        <p className="typography-body-14r">아직 게시글이 없어요.</p>
       </div>
     );
   }
@@ -96,7 +96,7 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
       {/* 무한 스크롤 트리거 */}
       <div ref={ref} className="h-1" />
       {isFetchingNextPage && (
-        <div className="text-fg-tertiary flex items-center justify-center py-4 text-sm">
+        <div className="text-fg-tertiary typography-body-14r flex items-center justify-center py-4">
           불러오는 중...
         </div>
       )}

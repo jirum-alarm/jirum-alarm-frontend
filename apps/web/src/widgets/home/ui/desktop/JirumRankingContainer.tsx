@@ -68,7 +68,7 @@ const JirumRankingContainer = async () => {
           titleClassName="text-fg-inverse"
           right={
             <InteractiveMoreLink
-              className="px-3 text-sm text-gray-100"
+              className="typography-body-14r px-3 text-gray-100"
               href={PAGE.TRENDING_RANKING}
               aria-label="지름알림 랭킹 더보기"
             >

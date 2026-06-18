@@ -46,7 +46,7 @@ const TermsLayout = ({
           <p>공고일자 : 2023년 12월 01일</p>
           <p>시행일자 : 2023년 12월 01일</p>
         </div>
-        <section className="text-fg-muted text-sm">
+        <section className="text-fg-muted typography-body-14r">
           <p>목차</p>
           <ol className="w-fit">
             {termsIndexData.map((data) => (
@@ -69,7 +69,7 @@ const TermsLayout = ({
               <div className="flex flex-col gap-5">
                 {data.content.map((content, idx) => (
                   <p
-                    className="text-sm"
+                    className="typography-body-14r"
                     key={idx}
                     dangerouslySetInnerHTML={{
                       __html: content.text.replace(/\n/g, '<br/>'),

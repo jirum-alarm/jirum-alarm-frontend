@@ -110,7 +110,7 @@ const SearchInput = () => {
         <input
           ref={inputRef}
           value={displayValue}
-          className="bg-surface-subtle h-10 w-full px-3 text-sm outline-hidden"
+          className="bg-surface-subtle typography-body-14r h-10 w-full px-3 outline-hidden"
           onKeyDown={handleKeyDown}
           onChange={handleInputChange}
           onFocus={() => setIsFocused(true)}

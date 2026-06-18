@@ -50,13 +50,13 @@ export default function CarouselProductCard({
           )}
         </div>
         <div className="flex flex-col">
-          <span className="text-fg-secondary-strong line-clamp-2 h-12 w-full pt-2 text-sm break-words">
+          <span className="text-fg-secondary-strong typography-body-14r line-clamp-2 h-12 w-full pt-2 break-words">
             {product.title}
           </span>
           <div className="flex items-center pt-1">
             <DisplayListPrice price={product.price} />
             <span className="w-2"></span>
-            <span className="pc:inline text-fg-muted hidden text-sm">
+            <span className="pc:inline text-fg-muted typography-body-14r hidden">
               <DisplayTime time={product.postedAt} />
             </span>
           </div>

@@ -108,7 +108,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
           <Content>
             <Header>
               <Title className="typography-title-16sb text-fg-primary">글을 삭제할까요?</Title>
-              <Description className="text-fg-secondary text-sm">
+              <Description className="text-fg-secondary typography-body-14r">
                 글을 삭제하면 다시 복구할 수 없어요.
               </Description>
             </Header>

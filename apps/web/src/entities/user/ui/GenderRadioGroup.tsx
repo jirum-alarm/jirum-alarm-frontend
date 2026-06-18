@@ -10,7 +10,7 @@ interface GenderRadioGroupProps {
 const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) => {
   return (
     <fieldset>
-      <legend className="text-fg-secondary text-sm">성별</legend>
+      <legend className="text-fg-secondary typography-body-14r">성별</legend>
       <div className="h-4" />
       <ul className="grid grid-cols-2 gap-2">
         <li>
@@ -22,7 +22,7 @@ const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) 
           >
             <div className="flex flex-col gap-2">
               <span className="text-2xl">👩</span>
-              <span className="text-fg-secondary-strong text-sm">여자</span>
+              <span className="text-fg-secondary-strong typography-body-14r">여자</span>
             </div>
           </Radio>
         </li>
@@ -35,7 +35,7 @@ const GenderRadioGroup = ({ handleRadioChange, gender }: GenderRadioGroupProps) 
           >
             <div className="flex flex-col gap-2">
               <span className="text-2xl">👨</span>
-              <span className="text-fg-secondary-strong text-sm">남자</span>
+              <span className="text-fg-secondary-strong typography-body-14r">남자</span>
             </div>
           </Radio>
         </li>
