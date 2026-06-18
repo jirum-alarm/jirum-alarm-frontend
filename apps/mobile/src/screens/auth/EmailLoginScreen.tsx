@@ -17,6 +17,7 @@ import {AuthQueries} from '@/entities/auth';
 import useToast from '@/shared/hooks/useToast.ts';
 import {handleLoginError, handleLoginSuccess} from './useSocialLogin/lib';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {TYPOGRAPHY} from '@/shared/constant/typography.ts';
 
 const loginSchema = z.object({
   email: z
@@ -148,7 +149,9 @@ const EmailLoginScreen = () => {
       <KeyboardStickyView offset={{closed: -insets.bottom, opened: 0}}>
         <View className="px-[20px] pb-[20px] items-center bg-white">
           {isError && (
-            <Text className="text-error-500 text-[14px] font-pretendard pb-[16px]">
+            <Text
+              className="text-error-500 pb-[16px]"
+              style={TYPOGRAPHY.body14r}>
               이메일 혹은 비밀번호가 올바르지 않아요.
             </Text>
           )}
