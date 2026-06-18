@@ -1,5 +1,6 @@
 import * as WebBrowser from 'expo-web-browser';
 import {Alert, Linking, Platform} from 'react-native';
+import {COLORS} from '@/shared/constant/colors.ts';
 
 /** 앱 스토어 / 딥링크 등 특수 스킴 URL인지 확인 */
 const isSpecialScheme = (url: string) => {
@@ -78,7 +79,7 @@ export async function openInAppBrowser(url: string) {
 
 const inAppIosConfig = {
   dismissButtonStyle: 'close' as const,
-  controlsColor: '#101828',
+  controlsColor: COLORS.GRAY_900,
   readerMode: false,
   presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
   enableBarCollapsing: true,
@@ -86,8 +87,8 @@ const inAppIosConfig = {
 
 const inAppAndroidConfig = {
   showTitle: true,
-  toolbarColor: '#ffffff',
-  secondaryToolbarColor: '#101828',
+  toolbarColor: COLORS.WHITE,
+  secondaryToolbarColor: COLORS.GRAY_900,
   enableUrlBarHiding: true,
   enableDefaultShareMenuItem: true,
   showInRecents: true,

@@ -5,6 +5,7 @@ import {
   type BottomTabBarProps,
 } from '@react-navigation/bottom-tabs';
 import {tabNavigations} from '@/shared/constant/navigations';
+import {COLORS} from '@/shared/constant/colors.ts';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 import {useHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 import {getTabBaseUrl} from '@/shared/lib/navigation/tab-routing';
@@ -152,8 +153,8 @@ function MainTabNavigator() {
       tabBar={props => <AnimatedTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#101828',
-        tabBarInactiveTintColor: '#667085',
+        tabBarActiveTintColor: COLORS.GRAY_900,
+        tabBarInactiveTintColor: COLORS.GRAY_500,
         tabBarLabelStyle: styles.tabBarLabel,
         tabBarStyle: {
           ...styles.tabBar,
@@ -176,7 +177,7 @@ function MainTabNavigator() {
                   <IconComponent
                     width={24}
                     height={24}
-                    color={focused ? '#101828' : '#667085'}
+                    color={focused ? COLORS.GRAY_900 : COLORS.GRAY_500}
                   />
                   {tab.name === tabNavigations.ALARM && hasNewAlarm && (
                     <View style={styles.badgeDot} />
@@ -212,9 +213,9 @@ export default MainTabNavigator;
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.WHITE,
     borderTopWidth: 1,
-    borderTopColor: '#D0D5DD',
+    borderTopColor: COLORS.GRAY_300,
     paddingTop: 8,
   },
   tabBarLabel: {

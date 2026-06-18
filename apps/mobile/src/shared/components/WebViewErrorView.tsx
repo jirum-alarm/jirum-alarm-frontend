@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
+import {COLORS} from '@/shared/constant/colors.ts';
 
 interface WebViewErrorViewProps {
   onRetry: () => void;
@@ -35,23 +36,23 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#101828',
+    color: COLORS.GRAY_900,
     marginBottom: 8,
   },
   description: {
     fontSize: 14,
-    color: '#667085',
+    color: COLORS.GRAY_500,
     textAlign: 'center',
     marginBottom: 24,
   },
   button: {
-    backgroundColor: '#101828',
+    backgroundColor: COLORS.GRAY_900,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
   },
   buttonText: {
-    color: '#ffffff',
+    color: COLORS.WHITE,
     fontSize: 14,
     fontWeight: '600',
   },

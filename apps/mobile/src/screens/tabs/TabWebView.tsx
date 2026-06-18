@@ -1,5 +1,6 @@
 import WebView from 'react-native-webview';
 import {handleWebViewMessage} from '@/shared/lib/webview';
+import {COLORS} from '@/shared/constant/colors.ts';
 import {
   ActivityIndicator,
   Platform,
@@ -274,9 +275,9 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
           backgroundColor: isHomeTab
             ? bgAnimation.interpolate({
                 inputRange: [0, 1],
-                outputRange: ['#101828', '#ffffff'],
+                outputRange: [COLORS.GRAY_900, COLORS.WHITE],
               })
-            : '#ffffff',
+            : COLORS.WHITE,
         }}
       />
       <ScrollView
@@ -318,7 +319,7 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
       </ScrollView>
       {isLoading && (
         <View style={styles.loadingContainer} pointerEvents="none">
-          <ActivityIndicator size="small" color="#667085" />
+          <ActivityIndicator size="small" color={COLORS.GRAY_500} />
         </View>
       )}
     </View>
@@ -357,9 +358,9 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
           backgroundColor: isHomeTab
             ? bgAnimation.interpolate({
                 inputRange: [0, 1],
-                outputRange: ['#101828', '#ffffff'],
+                outputRange: [COLORS.GRAY_900, COLORS.WHITE],
               })
-            : '#ffffff',
+            : COLORS.WHITE,
         }}
       />
       <WebView
@@ -390,7 +391,7 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
       />
       {isLoading && (
         <View style={styles.loadingContainer} pointerEvents="none">
-          <ActivityIndicator size="small" color="#667085" />
+          <ActivityIndicator size="small" color={COLORS.GRAY_500} />
         </View>
       )}
     </View>

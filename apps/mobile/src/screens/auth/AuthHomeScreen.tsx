@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   kakaoButtonText: {
     ...TYPOGRAPHY.title16sb,
-    color: '#101828',
+    color: COLORS.GRAY_900,
   },
   naverButtonText: {
     ...TYPOGRAPHY.title16sb,
@@ -148,6 +148,6 @@ const styles = StyleSheet.create({
   },
   emailButtonText: {
     ...TYPOGRAPHY.title16sb,
-    color: '#101828',
+    color: COLORS.GRAY_900,
   },
 });

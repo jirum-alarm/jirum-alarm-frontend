@@ -1,5 +1,6 @@
 import WebView from 'react-native-webview';
 import {handleWebViewMessage} from '@/shared/lib/webview';
+import {COLORS} from '@/shared/constant/colors.ts';
 import {
   Platform,
   SafeAreaView,
@@ -91,7 +92,7 @@ const JirumAlarmWebViewAndroid = ({
           height: insets.top,
           backgroundColor: bgAnimation.interpolate({
             inputRange: [0, 1],
-            outputRange: ['#101828', '#ffffff'],
+            outputRange: [COLORS.GRAY_900, COLORS.WHITE],
           }),
         }}
       />
@@ -147,7 +148,7 @@ const JirumAlarmWebViewAndroid = ({
       </ScrollView>
       {isLoading && (
         <View style={styles.loadingContainer} pointerEvents="none">
-          <ActivityIndicator size="large" color="#101828" />
+          <ActivityIndicator size="large" color={COLORS.GRAY_900} />
         </View>
       )}
       <SafeAreaView style={[styles.safeAreaBottom, {height: insets.bottom}]} />
@@ -188,7 +189,7 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
           height: insets.top,
           backgroundColor: bgAnimation.interpolate({
             inputRange: [0, 1],
-            outputRange: ['#101828', '#ffffff'],
+            outputRange: [COLORS.GRAY_900, COLORS.WHITE],
           }),
         }}
       />
@@ -231,7 +232,7 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
       />
       {isLoading && (
         <View style={styles.loadingContainer} pointerEvents="none">
-          <ActivityIndicator size="large" color="#101828" />
+          <ActivityIndicator size="large" color={COLORS.GRAY_900} />
         </View>
       )}
       <SafeAreaView style={[styles.safeAreaBottom, {height: insets.bottom}]} />
