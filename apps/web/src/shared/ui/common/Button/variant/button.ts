@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority';
 export const buttonVaraint = cva('w-full', {
   variants: {
     size: {
-      lg: ['h-12 px-3 rounded-[8px] text-base'],
+      lg: ['h-12 px-3 rounded-[8px]'],
       md: ['rounded-[8px]'],
       sm: ['rounded-[8px]'],
     },
@@ -22,35 +22,38 @@ export const buttonVaraint = cva('w-full', {
       variant: 'outlined',
       color: 'primary',
       class:
-        'font-normal border-border-brand bg-transparent text-fg-primary disabled:border-none disabled:bg-surface-subtle disabled:text-fg-muted',
+        'typography-title-16r border-border-brand bg-transparent text-fg-primary disabled:border-none disabled:bg-surface-subtle disabled:text-fg-muted',
     },
     {
       variant: 'filled',
       color: 'primary',
       class:
-        'font-semibold bg-surface-brand text-fg-primary disabled:bg-surface-disabled disabled:text-fg-inverse',
+        'typography-title-16sb bg-surface-brand text-fg-primary disabled:bg-surface-disabled disabled:text-fg-inverse',
     },
     {
       variant: 'filled',
       color: 'primary',
       size: 'md',
-      class: 'font-semibold bg-surface-inverse-strong text-primary-500 w-auto px-5 py-1.5 h-auto',
+      class:
+        'typography-title-16sb bg-surface-inverse-strong text-primary-500 w-auto px-5 py-1.5 h-auto',
     },
     {
       variant: 'filled',
       color: 'primary',
       size: 'sm',
-      class: 'font-semibold bg-surface-inverse-strong text-primary-500 w-auto px-3 py-1 h-auto',
+      class:
+        'typography-title-16sb bg-surface-inverse-strong text-primary-500 w-auto px-3 py-1 h-auto',
     },
     {
       variant: 'filled',
       color: 'secondary',
-      class: 'font-semibold bg-surface-muted text-fg-secondary-strong active:text-fg-tertiary',
+      class:
+        'typography-title-16sb bg-surface-muted text-fg-secondary-strong active:text-fg-tertiary',
     },
     {
       variant: 'filled',
       color: 'error',
-      class: 'font-semibold bg-surface-error text-fg-error-strong',
+      class: 'typography-title-16sb bg-surface-error text-fg-error-strong',
     },
   ],
   defaultVariants: {
