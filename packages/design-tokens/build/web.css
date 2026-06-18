@@ -98,6 +98,40 @@
   --shadow-small: 0px 2px 12px 0px rgba(0, 0, 0, 0.08);
 }
 
+/* dark mode — .dark 클래스 시 시맨틱 색만 override (원시·typography 불변) */
+.dark {
+  --color-fg-primary: #f9fafb;
+  --color-fg-secondary: #98a2b3;
+  --color-fg-tertiary: #667085;
+  --color-fg-disabled: #475467;
+  --color-fg-inverse: #101828;
+  --color-fg-brand: #9ef22e;
+  --color-fg-error: #ef334a;
+  --color-fg-error-strong: #f36677;
+  --color-fg-strong: #f2f4f7;
+  --color-fg-secondary-strong: #e4e7ec;
+  --color-fg-muted: #98a2b3;
+  --color-fg-link: #587dff;
+  --color-surface-default: #101828;
+  --color-surface-subtle: #1d2939;
+  --color-surface-muted: #344054;
+  --color-surface-brand: #9ef22e;
+  --color-surface-inverse: #ffffff;
+  --color-surface-inverse-strong: #f2f4f7;
+  --color-surface-inverse-subtle: #e4e7ec;
+  --color-surface-inverse-muted: #98a2b3;
+  --color-surface-emphasis: #344054;
+  --color-surface-error: #2f0006;
+  --color-surface-disabled: #344054;
+  --color-surface-disabled-strong: #475467;
+  --color-border-default: #344054;
+  --color-border-strong: #475467;
+  --color-border-subtle: #1d2939;
+  --color-border-brand: #9ef22e;
+  --color-border-interactive: #667085;
+  --color-border-focus: #f2f4f7;
+}
+
 /* typography (Figma 스펙) — class 하나로 size/leading/weight 묶음 */
 @utility typography-headline-28sb {
   font-family: var(--font-sans);

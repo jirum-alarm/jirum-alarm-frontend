@@ -109,6 +109,23 @@ StyleDictionary.registerFormat({
     lines.push('}');
     lines.push('');
 
+    // dark mode — 시맨틱 변수만 .dark 스코프로 override (관습적 다크: gray 위계 뒤집기).
+    //   원시 스케일·typography는 라이트와 동일, fg/surface/border 시맨틱 매핑만 교체.
+    //   토큰 SSOT = tokens/semantic/color.dark.json (path[0]==='dark').
+    //   :root 기본은 위 @theme(라이트), .dark 클래스가 켜지면 아래 값으로 override.
+    const darkTokens = byType('color').filter((t) => t.path[0] === 'dark');
+    if (darkTokens.length) {
+      lines.push('/* dark mode — .dark 클래스 시 시맨틱 색만 override (원시·typography 불변) */');
+      lines.push('.dark {');
+      for (const [group, prefix] of Object.entries(semanticMap)) {
+        for (const t of darkTokens.filter((t) => t.path[1] === group)) {
+          lines.push(`  --color-${prefix}-${t.path.slice(2).join('-')}: ${t.$value};`);
+        }
+      }
+      lines.push('}');
+      lines.push('');
+    }
+
     // typography 18종 — @utility 클래스로 방출 (fontSize+lineHeight+fontWeight 묶음).
     // 컴포넌트에서 `typography-headline-28sb` 한 클래스로 소비. weight까지 담는다.
     // fontFamily는 앱 런타임 값(var(--font-sans) = var(--font-pretendard))을 쓴다 — 토큰 리터럴

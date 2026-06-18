@@ -166,6 +166,36 @@ export const TypographyCaption12m = {
   fontSize: "12px",
   lineHeight: "16px",
 };
+export const DarkTextPrimary = "#f9fafb";
+export const DarkTextSecondary = "#98a2b3";
+export const DarkTextTertiary = "#667085";
+export const DarkTextDisabled = "#475467";
+export const DarkTextInverse = "#101828";
+export const DarkTextBrand = "#9ef22e";
+export const DarkTextError = "#ef334a";
+export const DarkTextErrorStrong = "#f36677";
+export const DarkTextStrong = "#f2f4f7";
+export const DarkTextSecondaryStrong = "#e4e7ec";
+export const DarkTextMuted = "#98a2b3";
+export const DarkTextLink = "#587dff";
+export const DarkSurfaceDefault = "#101828";
+export const DarkSurfaceSubtle = "#1d2939";
+export const DarkSurfaceMuted = "#344054";
+export const DarkSurfaceBrand = "#9ef22e";
+export const DarkSurfaceInverse = "#ffffff";
+export const DarkSurfaceInverseStrong = "#f2f4f7";
+export const DarkSurfaceInverseSubtle = "#e4e7ec";
+export const DarkSurfaceInverseMuted = "#98a2b3";
+export const DarkSurfaceEmphasis = "#344054";
+export const DarkSurfaceError = "#2f0006";
+export const DarkSurfaceDisabled = "#344054";
+export const DarkSurfaceDisabledStrong = "#475467";
+export const DarkBorderDefault = "#344054";
+export const DarkBorderStrong = "#475467";
+export const DarkBorderSubtle = "#1d2939";
+export const DarkBorderBrand = "#9ef22e";
+export const DarkBorderInteractive = "#667085";
+export const DarkBorderFocus = "#f2f4f7";
 export const SurfaceDefault = "#ffffff";
 export const SurfaceSubtle = "#f9fafb";
 export const SurfaceMuted = "#f2f4f7";
