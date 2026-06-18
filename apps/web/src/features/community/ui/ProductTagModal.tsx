@@ -117,7 +117,7 @@ export default function ProductTagModal({
           onClick={() => setIsOpen(true)}
           className="text-fg-secondary typography-body-14r flex items-center gap-x-2 transition-transform active:scale-95"
         >
-          <span className="text-fg-tertiary flex h-6 w-6 items-center justify-center rounded-full border border-gray-400">
+          <span className="text-fg-tertiary border-border-interactive flex h-6 w-6 items-center justify-center rounded-full border">
             <svg
               width="12"
               height="12"

@@ -54,7 +54,7 @@ export default function ProductInfo({
               {product.isEnd && (
                 <div
                   className={cn(
-                    'bg-surface-default text-fg-secondary-strong border border-gray-400 px-2',
+                    'bg-surface-default text-fg-secondary-strong border-border-interactive border px-2',
                     {
                       'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-5': true,
                     },

@@ -82,7 +82,8 @@ const AlarmItem = ({
                 className={cn(
                   'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-normal',
                   {
-                    'bg-surface-default text-fg-secondary border border-gray-400 px-2': isEnd,
+                    'bg-surface-default text-fg-secondary border-border-interactive border px-2':
+                      isEnd,
                     'bg-error-500 text-fg-inverse px-3': !isEnd && isHot,
                   },
                 )}
@@ -93,7 +94,7 @@ const AlarmItem = ({
             {price && (
               <>
                 <span className="text-fg-primary line-clamp-1 max-w-56 font-semibold">{price}</span>
-                <span className="inline-block h-2.5 border-l border-gray-400"></span>
+                <span className="border-border-interactive inline-block h-2.5 border-l"></span>
               </>
             )}
             <span className="text-fg-tertiary text-xs">

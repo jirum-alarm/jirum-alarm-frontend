@@ -32,7 +32,7 @@ const SliderDots = ({ total, visibleSlides }: { total: number; visibleSlides: nu
             aria-label={`슬라이드 ${i + 1}`}
             className={cn(
               'pc:grow pc:bg-gray-500 bg-surface-disabled-strong h-[3px] w-[3px] transition-all',
-              isActive && 'pc:bg-gray-300 pc:h-[4px] pc:w-[4px] bg-surface-inverse-muted',
+              isActive && 'pc:bg-surface-disabled pc:h-[4px] pc:w-[4px] bg-surface-inverse-muted',
               marginClass,
             )}
           />

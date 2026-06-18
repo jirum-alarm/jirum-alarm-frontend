@@ -32,11 +32,11 @@ export const Default: Story = {
         </AlertDialog.Trigger>
         <AlertDialog.Content>
           <AlertDialog.Header>
-            <AlertDialog.Title className="pt-3 font-semibold text-gray-900">
+            <AlertDialog.Title className="text-fg-primary pt-3 font-semibold">
               로그아웃
             </AlertDialog.Title>
             <AlertDialog.Description>
-              <p className="text-gray-700">
+              <p className="text-fg-secondary-strong">
                 로그아웃 시 알림을 받을 수 없어요.
                 <br />
                 지름알림에서 <span className="font-semibold">로그아웃</span>

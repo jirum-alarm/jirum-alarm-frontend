@@ -162,7 +162,7 @@ const HotdealScoreBar = ({
         <div
           className={cn(
             'relative flex h-[14px] w-full items-center justify-between rounded-xl p-[5px]',
-            !visualConfig && 'bg-gray-300',
+            !visualConfig && 'bg-surface-disabled',
           )}
           style={barStyle}
         >
@@ -188,7 +188,7 @@ const HotdealScoreBar = ({
                 </span>
               </div>
               <div className="flex h-[30px] items-center justify-center">
-                <div className="bg-surface-default h-[18px] w-[18px] rounded-full border border-solid border-gray-400" />
+                <div className="bg-surface-default border-border-interactive h-[18px] w-[18px] rounded-full border border-solid" />
               </div>
             </div>
           </motion.div>
