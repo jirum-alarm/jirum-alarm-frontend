@@ -5,6 +5,8 @@ import { cn } from '@/shared/lib/cn';
 
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 
+import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
+import { ProductDetailSideAd } from '@/features/adsense/ui/ProductDetailSideAd';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
@@ -66,11 +68,13 @@ export default async function DesktopProductDetailPage({
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
                 <ProductInfo productId={productId} isUserLogin={isUserLogin} />
               </Suspense>
+              <ProductDetailSideAd productId={productId} />
             </div>
           </div>
           <div className="col-span-2 pt-5">
             <Hr />
             <div className="space-y-11 overflow-x-hidden py-11">
+              <ProductDetailAd productId={productId} isMobile={false} />
               <div>
                 <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={false} />
               </div>

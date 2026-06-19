@@ -32,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://cdn.jirum-alarm.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://api.mixpanel.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="" />
         <link
           rel="search"
           href="/opensearch.xml"

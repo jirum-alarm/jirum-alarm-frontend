@@ -4,6 +4,7 @@ import { ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
 
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 
+import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
@@ -60,6 +61,7 @@ function ProductDetailPage({
               </Suspense>
             </div>
 
+            <ProductDetailAd productId={productId} isMobile />
             <Hr />
             <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={true} />
             <Hr />

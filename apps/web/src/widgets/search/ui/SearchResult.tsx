@@ -4,14 +4,21 @@ import { cn } from '@/shared/lib/cn';
 
 import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
 
+import { SearchInFeedAd } from '@/features/adsense/ui/SearchInFeedAd';
+
 import { useProductListViewModel } from '../hooks/useProductListViewModel';
 
 import ProductNotFound from './ProductNotFound';
 
+// 첫 결과를 충분히 보여준 뒤 광고를 끼운다. 그리드 흐름이 깨지지 않도록
+// 이 지점에서 리스트를 둘로 나누고 사이에 풀폭 광고 1개만 넣는다.
+const AD_AFTER = 8;
+
 export default function SearchResult({ show }: { show: boolean }) {
-  const { products, hasNextPage, nextDataRef } = useProductListViewModel();
+  const { products, hasNextPage, nextDataRef, keyword } = useProductListViewModel();
 
   const isProductEmpty = !products || products.length === 0;
+  const showAd = !isProductEmpty && products.length > AD_AFTER;
 
   return (
     <div className={cn({ hidden: !show })}>
@@ -23,7 +30,15 @@ export default function SearchResult({ show }: { show: boolean }) {
         </div>
       ) : (
         <div className="pc:px-0 px-5">
-          <ProductGridList products={products} />
+          {showAd ? (
+            <>
+              <ProductGridList products={products.slice(0, AD_AFTER)} />
+              <SearchInFeedAd dedupeKey={keyword ?? ''} />
+              <ProductGridList products={products.slice(AD_AFTER)} />
+            </>
+          ) : (
+            <ProductGridList products={products} />
+          )}
         </div>
       )}
 
