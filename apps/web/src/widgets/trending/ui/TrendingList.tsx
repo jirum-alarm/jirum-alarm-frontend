@@ -40,6 +40,7 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
           nested
           shouldShowMobileHeader={false}
           priorityCount={3}
+          source="trending_live"
         />
       )}
       <div className="px-5">
@@ -58,6 +59,7 @@ const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
           nested
           shouldShowMobileHeader={false}
           priorityCount={3}
+          source="trending_recommend"
         />
       )}
     </div>

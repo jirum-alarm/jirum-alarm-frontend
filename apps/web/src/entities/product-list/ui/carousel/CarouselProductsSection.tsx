@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { cn } from '@/shared/lib/cn';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
+import { type ProductCardSource } from '@/entities/product-list/model/card-tracking';
 import { ProductCardType } from '@/entities/product-list/model/types';
 
 import CarouselProductList from './CarouselProductList';
@@ -15,6 +16,7 @@ export default function CarouselProductsSection({
   shouldShowMobileHeader = true,
   isFullWidth = false,
   priorityCount = 0,
+  source,
 }: {
   title: string;
   products: ProductCardType[];
@@ -22,6 +24,7 @@ export default function CarouselProductsSection({
   shouldShowMobileHeader?: boolean;
   isFullWidth?: boolean;
   priorityCount?: number;
+  source?: ProductCardSource;
 }) {
   return (
     <section>
@@ -30,7 +33,12 @@ export default function CarouselProductsSection({
       </div>
       <div className={cn({ 'pc:px-5': nested, 'pc:-px-5': isFullWidth })}>
         <Suspense fallback={<CarouselProductListSkeleton />}>
-          <CarouselProductList products={products} nested={nested} priorityCount={priorityCount} />
+          <CarouselProductList
+            products={products}
+            nested={nested}
+            priorityCount={priorityCount}
+            source={source}
+          />
         </Suspense>
       </div>
     </section>

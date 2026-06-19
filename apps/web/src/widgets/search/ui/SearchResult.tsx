@@ -32,12 +32,12 @@ export default function SearchResult({ show }: { show: boolean }) {
         <div className="pc:px-0 px-5">
           {showAd ? (
             <>
-              <ProductGridList products={products.slice(0, AD_AFTER)} />
+              <ProductGridList products={products.slice(0, AD_AFTER)} source="search" />
               <SearchInFeedAd dedupeKey={keyword ?? ''} />
-              <ProductGridList products={products.slice(AD_AFTER)} />
+              <ProductGridList products={products.slice(AD_AFTER)} source="search" />
             </>
           ) : (
-            <ProductGridList products={products} />
+            <ProductGridList products={products} source="search" />
           )}
         </div>
       )}

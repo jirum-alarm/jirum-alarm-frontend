@@ -51,13 +51,19 @@ const DynamicProductList = ({ section, isMobile, priorityCount = 0 }: DynamicPro
   if (section.type === 'GRID') {
     return (
       <div className="pc:px-0 px-5">
-        <ProductGridList products={products} priorityCount={priorityCount} />
+        <ProductGridList
+          products={products}
+          priorityCount={priorityCount}
+          source="home_promotion"
+        />
       </div>
     );
   }
 
   if (section.type === 'PAGINATED_GRID') {
-    return <PaginatedProductGridList products={products} isMobile={isMobile} />;
+    return (
+      <PaginatedProductGridList products={products} isMobile={isMobile} source="home_promotion" />
+    );
   }
 
   if (section.type === 'GRID_TABBED') {
@@ -67,23 +73,24 @@ const DynamicProductList = ({ section, isMobile, priorityCount = 0 }: DynamicPro
           products={products}
           className="pc:grid-cols-6 grid-cols-3"
           displayTime={false}
+          source="home_promotion"
         />
       </div>
     );
   }
 
   if (section.type === 'HORIZONTAL_SCROLL') {
-    return <CarouselProductList products={products} />;
+    return <CarouselProductList products={products} source="home_promotion" />;
   }
 
   if (section.type === 'DOUBLE_ROW') {
     if (isMobile) {
-      return <DoubleRowCarouselProductList products={products} />;
+      return <DoubleRowCarouselProductList products={products} source="home_promotion" />;
     }
 
     return (
       <div className="pc:px-0 px-5">
-        <ListProductList products={products} />
+        <ListProductList products={products} source="home_promotion" />
       </div>
     );
   }
@@ -91,7 +98,7 @@ const DynamicProductList = ({ section, isMobile, priorityCount = 0 }: DynamicPro
   if (section.type === 'LIST') {
     return (
       <div className="pc:px-0 px-5">
-        <ListProductList products={products} />
+        <ListProductList products={products} source="home_promotion" />
       </div>
     );
   }

@@ -36,7 +36,7 @@ const RecommendProductList = ({ keyword, limit }: ProductImageCardListProps) => 
 
   return (
     <>
-      <ProductGridList products={products} />
+      <ProductGridList products={products} source="keyword_recommend" />
       <div className="flex w-full items-center justify-center bg-white py-6" ref={ref}>
         {isFetchingNextPage && <ProductGridListSkeleton length={10} />}
       </div>

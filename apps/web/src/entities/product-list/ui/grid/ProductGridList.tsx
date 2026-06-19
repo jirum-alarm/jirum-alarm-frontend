@@ -3,6 +3,7 @@
 import { EVENT } from '@/shared/config/mixpanel';
 import { cn } from '@/shared/lib/cn';
 
+import { type ProductCardSource } from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 
 import ProductGridCard from './ProductGridCard';
@@ -15,6 +16,7 @@ type ProductGridListProps = {
   displayTime?: boolean;
   logging?: { page: keyof typeof EVENT.PAGE };
   priorityCount?: number;
+  source?: ProductCardSource;
 };
 
 export default function ProductGridList({
@@ -25,6 +27,7 @@ export default function ProductGridList({
   displayTime = true,
   logging,
   priorityCount = 0,
+  source,
 }: ProductGridListProps) {
   return (
     <div
@@ -41,6 +44,7 @@ export default function ProductGridList({
           displayTime={displayTime}
           priority={index < priorityCount}
           className={cardClassName}
+          source={source}
         />
       ))}
     </div>

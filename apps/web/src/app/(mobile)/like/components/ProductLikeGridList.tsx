@@ -22,6 +22,7 @@ export default function ProductLikeGridList({ products }: ProductGridListProps) 
           key={product.id}
           product={product}
           actionIcon={<ProductLikeAction productId={product.id} />}
+          source="wishlist"
         />
       ))}
     </div>

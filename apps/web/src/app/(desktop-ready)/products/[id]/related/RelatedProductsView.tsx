@@ -60,6 +60,7 @@ export default function RelatedProductsView({
       <ProductGridList
         products={displayedProducts}
         className="pc:grid-cols-5 grid-cols-2 sm:grid-cols-3"
+        source="related"
       />
       {hasMore && (
         <div ref={ref} className="flex h-20 items-center justify-center">

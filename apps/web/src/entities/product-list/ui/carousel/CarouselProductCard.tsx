@@ -8,6 +8,10 @@ import DisplayTime from '@/shared/ui/DisplayTime';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 import Link from '@/shared/ui/Link';
 
+import {
+  type ProductCardSource,
+  productCardTracking,
+} from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
@@ -15,12 +19,18 @@ import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 export default function CarouselProductCard({
   product,
   priority,
+  source,
 }: {
   product: ProductCardType;
   priority?: boolean;
+  source?: ProductCardSource;
 }) {
   return (
-    <Link href={PAGE.DETAIL + '/' + product.id} className="pc:w-[192px] inline-block w-[120px]">
+    <Link
+      href={PAGE.DETAIL + '/' + product.id}
+      className="pc:w-[192px] inline-block w-[120px]"
+      {...productCardTracking(source, product.id)}
+    >
       <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="pc:h-[192px] relative aspect-square h-[120px] overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
           <ProductThumbnail
