@@ -3,7 +3,6 @@ import { cache } from 'react';
 import { preload } from 'react-dom';
 
 import { checkDevice } from '@/app/actions/agent';
-import { collectProductAction } from '@/app/actions/product';
 import { getAccessToken } from '@/app/actions/token';
 
 import { ProductService } from '@/shared/api/product';
@@ -12,6 +11,7 @@ import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { defaultMetadata } from '@/shared/config/metadata';
 import { convertToWebp } from '@/shared/lib/utils/image';
 
+import { CollectProductOnView } from '@/features/product-actions/ui/CollectProductOnView';
 import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
 import DesktopProductDetailPage from '@/widgets/product-detail/ui/desktop/ProductDetailPage';
@@ -232,8 +232,10 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   const token = await getAccessToken();
   const isUserLogin = !!token;
 
-  // 조회수 수집은 SSR 응답을 막을 필요가 없으니 fire-and-forget. unhandled rejection만 방지.
-  void collectProductAction(+id).catch(() => {});
+  // post_view 수집은 클라이언트에서 한다(CollectProductOnView). SSR Server Action 경로는
+  // next/headers cookies() 로 deviceId 를 읽는데 미들웨어가 막 구운 쿠키가 같은 요청엔 안
+  // 보여서 매 페이지뷰 새 deviceId 가 발급됐다(91.9% 1상품/1이벤트 계측 붕괴). 클라 경로는
+  // localStorage 기반 안정 id 라 같은 사람이 같은 deviceId 로 누적된다.
 
   const { isMobile } = await checkDevice();
 
@@ -289,6 +291,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <CollectProductOnView productId={+id} />
       <ProductPrefetch productId={+id}>
         {!isMobile ? renderDesktop(product ?? undefined) : renderMobile(product ?? undefined)}
       </ProductPrefetch>
