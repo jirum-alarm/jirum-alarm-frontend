@@ -426,6 +426,17 @@ type MatchRunsByAdminOutput {
   total: Int!
 }
 
+type ModelPageListItemOutput {
+  brand: String
+  dealCount: Int!
+  heroImage: String
+  heroMinPrice: Int
+  modelName: String!
+  slug: String!
+  unitLabel: String
+  unitPrice: Int
+}
+
 type ModelPageOutput {
   brand: String
   dealCount: Int!
@@ -1710,6 +1721,7 @@ type Query {
   어드민) provider별 최근 수집 활동 (1h/24h/7d count + 마지막 수집 시각)
   """
   providerHealthStatus(providerType: ProviderType): [ProviderHealthOutput!]!
+  publishedModelPages: [ModelPageListItemOutput!]!
   """
   푸시 세팅 조회
   """

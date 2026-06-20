@@ -67,6 +67,7 @@ type Documents = {
   '\n  mutation RemoveWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n': typeof types.RemoveWishlistDocument;
   '\n  query QueryWishlists(\n    $orderBy: WishlistOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    wishlists(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      productId\n      searchAfter\n      product {\n        id\n        title\n        price\n        isHot\n        isEnd\n        isPrivate\n        postedAt\n        hotDealType\n        thumbnail\n        isMyWishlist\n        categoryId\n      }\n    }\n  }\n': typeof types.QueryWishlistsDocument;
   '\n  query QueryWishlistCount {\n    wishlistCount\n  }\n': typeof types.QueryWishlistCountDocument;
+  '\n  query publishedModelPages {\n    publishedModelPages {\n      slug\n      brand\n      modelName\n      dealCount\n      heroImage\n      heroMinPrice\n      unitLabel\n      unitPrice\n    }\n  }\n': typeof types.PublishedModelPagesDocument;
   '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n': typeof types.ModelPageDocument;
 };
 const documents: Documents = {
@@ -178,6 +179,8 @@ const documents: Documents = {
   '\n  query QueryWishlists(\n    $orderBy: WishlistOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    wishlists(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      productId\n      searchAfter\n      product {\n        id\n        title\n        price\n        isHot\n        isEnd\n        isPrivate\n        postedAt\n        hotDealType\n        thumbnail\n        isMyWishlist\n        categoryId\n      }\n    }\n  }\n':
     types.QueryWishlistsDocument,
   '\n  query QueryWishlistCount {\n    wishlistCount\n  }\n': types.QueryWishlistCountDocument,
+  '\n  query publishedModelPages {\n    publishedModelPages {\n      slug\n      brand\n      modelName\n      dealCount\n      heroImage\n      heroMinPrice\n      unitLabel\n      unitPrice\n    }\n  }\n':
+    types.PublishedModelPagesDocument,
   '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n':
     types.ModelPageDocument,
 };
@@ -512,6 +515,12 @@ export function graphql(
 export function graphql(
   source: '\n  query QueryWishlistCount {\n    wishlistCount\n  }\n',
 ): typeof import('./graphql').QueryWishlistCountDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query publishedModelPages {\n    publishedModelPages {\n      slug\n      brand\n      modelName\n      dealCount\n      heroImage\n      heroMinPrice\n      unitLabel\n      unitPrice\n    }\n  }\n',
+): typeof import('./graphql').PublishedModelPagesDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

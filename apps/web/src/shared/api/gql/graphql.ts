@@ -440,6 +440,18 @@ export type MatchRunsByAdminOutput = {
   total: Scalars['Int']['output'];
 };
 
+export type ModelPageListItemOutput = {
+  __typename?: 'ModelPageListItemOutput';
+  brand?: Maybe<Scalars['String']['output']>;
+  dealCount: Scalars['Int']['output'];
+  heroImage?: Maybe<Scalars['String']['output']>;
+  heroMinPrice?: Maybe<Scalars['Int']['output']>;
+  modelName: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+  unitLabel?: Maybe<Scalars['String']['output']>;
+  unitPrice?: Maybe<Scalars['Int']['output']>;
+};
+
 export type ModelPageOutput = {
   __typename?: 'ModelPageOutput';
   brand?: Maybe<Scalars['String']['output']>;
@@ -1418,6 +1430,7 @@ export type Query = {
   productsByKeyword: Array<ProductOutput>;
   /** 어드민) provider별 최근 수집 활동 (1h/24h/7d count + 마지막 수집 시각) */
   providerHealthStatus: Array<ProviderHealthOutput>;
+  publishedModelPages: Array<ModelPageListItemOutput>;
   /** 푸시 세팅 조회 */
   pushSetting: UserPushSetting;
   /** 최근에 본 상품 N개 조회 */
@@ -3008,6 +3021,23 @@ export type QueryWishlistCountQueryVariables = Exact<{ [key: string]: never }>;
 
 export type QueryWishlistCountQuery = { __typename?: 'Query'; wishlistCount: number };
 
+export type PublishedModelPagesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type PublishedModelPagesQuery = {
+  __typename?: 'Query';
+  publishedModelPages: Array<{
+    __typename?: 'ModelPageListItemOutput';
+    slug: string;
+    brand?: string | null;
+    modelName: string;
+    dealCount: number;
+    heroImage?: string | null;
+    heroMinPrice?: number | null;
+    unitLabel?: string | null;
+    unitPrice?: number | null;
+  }>;
+};
+
 export type ModelPageQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
@@ -3998,6 +4028,23 @@ export const QueryWishlistCountDocument = new TypedDocumentString(`
   wishlistCount
 }
     `) as unknown as TypedDocumentString<QueryWishlistCountQuery, QueryWishlistCountQueryVariables>;
+export const PublishedModelPagesDocument = new TypedDocumentString(`
+    query publishedModelPages {
+  publishedModelPages {
+    slug
+    brand
+    modelName
+    dealCount
+    heroImage
+    heroMinPrice
+    unitLabel
+    unitPrice
+  }
+}
+    `) as unknown as TypedDocumentString<
+  PublishedModelPagesQuery,
+  PublishedModelPagesQueryVariables
+>;
 export const ModelPageDocument = new TypedDocumentString(`
     query modelPage($slug: String!) {
   modelPage(slug: $slug) {

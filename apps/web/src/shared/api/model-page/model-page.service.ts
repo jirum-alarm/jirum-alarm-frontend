@@ -12,7 +12,27 @@ export class ModelPageService {
   static async getModelPage(variables: ModelPageQueryVariables) {
     return execute(ModelPageDocument, variables).then((res) => res.data.modelPage);
   }
+
+  /** /deals 인덱스 — 퍼블리시된 모델 페이지 목록(딜 많은 순). 카드 필드만. */
+  static async getPublishedModelPages() {
+    return execute(PublishedModelPagesDocument).then((res) => res.data.publishedModelPages);
+  }
 }
+
+const PublishedModelPagesDocument = graphql(`
+  query publishedModelPages {
+    publishedModelPages {
+      slug
+      brand
+      modelName
+      dealCount
+      heroImage
+      heroMinPrice
+      unitLabel
+      unitPrice
+    }
+  }
+`);
 
 const ModelPageDocument = graphql(`
   query modelPage($slug: String!) {
