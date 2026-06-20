@@ -27,8 +27,9 @@ export const revalidate = 600; // 10분 ISR — 목록은 자주 안 바뀜
 export default async function DealsIndexPage() {
   const pages = await ModelPageService.getPublishedModelPages();
 
+  // 폭: 모바일 600px 중앙 → PC layout-max(1280) 확장 (홈/랭킹과 동일 패턴).
   return (
-    <main className="max-w-mobile-max mx-auto w-full px-5 pt-20 pb-24">
+    <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-20 pb-24">
       <DealsMobileHeader title="핫딜 최저가 모음" />
 
       <header className="mb-5">
@@ -41,7 +42,8 @@ export default async function DealsIndexPage() {
       {pages.length === 0 ? (
         <p className="py-20 text-center text-gray-400">준비 중이에요.</p>
       ) : (
-        <ul className="grid grid-cols-2 gap-3">
+        // 열수: 모바일 2 → sm 3 → PC 5 (랭킹 TrackedProductGridList와 동일).
+        <ul className="pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
           {pages.map((p) => (
             <li key={p.slug}>
               <Link
