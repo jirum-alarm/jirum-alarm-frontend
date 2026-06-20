@@ -120,13 +120,20 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         }
       : null;
 
-  // 가격 추이 미니 막대 (의존성 없이 인라인, 높이 비율 div)
-  const histMax = histPoints.length ? Math.max(...histPoints.map((p) => p.price)) : 0;
+  // 가격 추이 — min~max 범위로 정규화해 차이를 도드라지게(절대0 기준이면 평탄해짐).
+  const histPrices = histPoints.map((p) => p.price);
+  const histMax = histPrices.length ? Math.max(...histPrices) : 0;
+  const histMin = histPrices.length ? Math.min(...histPrices) : 0;
+  // 막대 높이: 최저=20%, 최고=100% 사이로 스케일(범위 좁아도 차이 보이게). 단일값이면 전부 중간.
+  const histBarH = (price: number) => {
+    if (histMax === histMin) return 40;
+    return 20 + ((price - histMin) / (histMax - histMin)) * 52; // 20~72px
+  };
 
   return (
-    // 상단 패딩: 모바일은 fixed GNB(h-14) 보정 pt-14, 데스크톱은 pc:pt-7 (recommend 패턴과 일관).
+    // 상단 패딩: fixed GNB(h-14=56px) 보정. 모바일·데스크톱 둘 다 pt-14(GNB와 정확히 안 겹침).
     // 하단 pb-24 = 모바일 BottomNav 가림 방지. 좌우 px-5.
-    <main className="pc:pt-7 mx-auto w-full max-w-screen-md px-5 pt-14 pb-24">
+    <main className="mx-auto w-full max-w-screen-md px-5 pt-14 pb-24">
       {jsonLd && (
         <script
           type="application/ld+json"
@@ -187,25 +194,39 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         </a>
       )}
 
-      {/* 블록5: 월별 핫딜 최저가 추이 (통화 라벨 — 직구는 $) */}
+      {/* 블록5: 월별 핫딜 최저가 추이 — min~max 정규화 + 최저가 강조 */}
       {histPoints.length >= 2 && (
         <section className="mb-6">
-          <h2 className="mb-1 text-base font-semibold">월별 핫딜 최저가 추이</h2>
-          <p className="mb-3 text-xs text-gray-400">
-            {histCurrency === 'USD' ? '직구 가격($) 기준' : '원화 기준'}
+          <div className="mb-1 flex items-baseline justify-between">
+            <h2 className="text-base font-semibold">월별 핫딜 최저가 추이</h2>
+            <span className="text-xs text-gray-400">
+              {histCurrency === 'USD' ? '직구가($)' : '원화'}
+            </span>
+          </div>
+          <p className="mb-3 text-xs text-gray-500">
+            역대 최저 <span className="font-semibold text-rose-500">{fmtHist(histMin)}</span>
+            <span className="text-gray-300"> · </span>
+            최고 {fmtHist(histMax)}
           </p>
-          <div className="flex items-end gap-1" style={{ height: 88 }}>
-            {histPoints.map((p) => (
-              <div key={p.month} className="flex flex-1 flex-col items-center justify-end gap-1">
-                <span className="text-[10px] text-gray-500">{fmtHist(p.price)}</span>
-                <div
-                  className="w-full rounded-t bg-blue-300"
-                  style={{ height: `${histMax ? Math.max((p.price / histMax) * 56, 4) : 4}px` }}
-                  title={`${p.month}: ${fmtHist(p.price)}`}
-                />
-                <span className="text-[10px] text-gray-400">{p.month.slice(2)}</span>
-              </div>
-            ))}
+          <div className="flex items-end gap-1.5" style={{ height: 96 }}>
+            {histPoints.map((p) => {
+              const isLow = p.price === histMin;
+              return (
+                <div key={p.month} className="flex flex-1 flex-col items-center justify-end gap-1">
+                  <span
+                    className={`text-[10px] ${isLow ? 'font-semibold text-rose-500' : 'text-gray-400'}`}
+                  >
+                    {fmtHist(p.price)}
+                  </span>
+                  <div
+                    className={`w-full rounded-t ${isLow ? 'bg-rose-400' : 'bg-blue-300'}`}
+                    style={{ height: `${histBarH(p.price)}px` }}
+                    title={`${p.month}: ${fmtHist(p.price)}`}
+                  />
+                  <span className="text-[10px] text-gray-400">{p.month.slice(2)}</span>
+                </div>
+              );
+            })}
           </div>
         </section>
       )}
@@ -237,8 +258,8 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     {deal.postedAt && (
                       <span>{new Date(deal.postedAt).toLocaleDateString('ko-KR')}</span>
                     )}
-                    {deal.posReaction > 0 && <span>👍 {deal.posReaction}</span>}
-                    {deal.commentCount > 0 && <span>💬 {deal.commentCount}</span>}
+                    {deal.posReaction > 0 && <span>👍 추천 {deal.posReaction}</span>}
+                    {deal.commentCount > 0 && <span>💬 댓글 {deal.commentCount}</span>}
                   </div>
                 </div>
                 <span className="shrink-0 text-sm font-medium text-gray-700">
