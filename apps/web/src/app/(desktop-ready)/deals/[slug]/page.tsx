@@ -52,8 +52,19 @@ interface RelatedModel {
   dealCount: number;
 }
 
+interface Representative {
+  label: string; // "120g 40개" 등 수량/용량
+  danawaPrice: number | null;
+  mallCount: number | null;
+  priceRank: string | null; // "1위" 등 다나와 랭킹
+  danawaUrl: string | null;
+  activeDeals: number;
+  dealMinPrice: number | null;
+}
+
 interface ModelPagePayload {
   heroImage?: string | null;
+  representatives?: Representative[];
   deals?: Deal[];
   priceSummary?: PriceSummary;
   danawa?: DanawaInfo | null;
@@ -97,7 +108,15 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   if (!page) notFound();
 
   const payload = (page.payload ?? {}) as ModelPagePayload;
-  const { heroImage, deals = [], priceSummary, danawa, priceHistory, relatedModels = [] } = payload;
+  const {
+    heroImage,
+    representatives = [],
+    deals = [],
+    priceSummary,
+    danawa,
+    priceHistory,
+    relatedModels = [],
+  } = payload;
   const histPoints = priceHistory?.points ?? [];
   const histCurrency = priceHistory?.currency ?? 'KRW';
   const fmtHist = (n: number) =>
@@ -175,6 +194,36 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
           )}
         </div>
       </header>
+
+      {/* 블록0: 용량/수량별 대표 상품 맵 (다나와 판매처수 순, 핫딜 있는 수량만) */}
+      {representatives.length > 0 && (
+        <section className="mb-6">
+          <h2 className="mb-3 text-base font-semibold">용량·수량별 대표 상품</h2>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {representatives.map((rep, i) => (
+              <div key={i} className="flex flex-col gap-1 rounded-lg border border-gray-200 p-3">
+                <div className="flex items-center justify-between gap-1">
+                  <span className="text-sm font-medium">{rep.label}</span>
+                  {rep.priceRank && (
+                    <span className="shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">
+                      다나와 {rep.priceRank}
+                    </span>
+                  )}
+                </div>
+                {rep.dealMinPrice != null && (
+                  <span className="text-sm font-semibold text-rose-500">
+                    핫딜 {won(rep.dealMinPrice)}
+                  </span>
+                )}
+                <span className="text-xs text-gray-400">
+                  {rep.danawaPrice != null ? `다나와 ${won(rep.danawaPrice)}` : ''}
+                  {rep.mallCount ? ` · ${rep.mallCount}곳 판매` : ''}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* 블록2: 다나와 가격비교 (verified 일 때만) */}
       {danawa?.danawaUrl && (
