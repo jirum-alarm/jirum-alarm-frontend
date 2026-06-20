@@ -12,6 +12,7 @@ import FCMConfig from '@/shared/lib/firebase/FCMConfig';
 import { AdSenseProvider } from './adsenseProvider';
 import { ClarityProvider } from './clarityProvider';
 import { DeviceId } from './deviceId';
+import { MixpanelIdentifyProvider } from './mixpanelIdentifyProvider';
 import { ReactQueryProviders } from './ReactQueryProviders';
 
 const MSW = dynamic(() => import('@/shared/ui/MSW'), {
@@ -32,6 +33,7 @@ export const AppProvider = ({ children }: Props) => {
   return (
     <>
       <ClarityProvider />
+      <MixpanelIdentifyProvider />
       <AdSenseProvider />
       {IS_PRD ? <GoogleTagManager gtmId={GTM_ID} /> : <MSW />}
       <JotaiProvider>
