@@ -2,6 +2,7 @@
   "expo": {
     "name": "지름알림",
     "slug": "jirum-alarm",
+    "version": "1.3.6",
     "scheme": "jirumalarm",
     "userInterfaceStyle": "automatic",
     "experiments": {
@@ -14,6 +15,12 @@
     },
     "android": {
       "package": "com.solcode.jirmalam"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ec89e7ad-0f52-4777-a71c-50e5f596be58"
+      }
+    },
+    "owner": "jirumalarm"
   }
 }
