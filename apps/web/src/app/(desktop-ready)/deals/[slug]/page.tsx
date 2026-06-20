@@ -160,9 +160,9 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   };
 
   return (
-    // 상단 패딩: fixed GNB(56px) + 여백 24px = pt-20. (pt-14는 GNB와 딱 붙어 콘텐츠가 답답함.)
-    // 하단 pb-24 = 모바일 BottomNav 가림 방지. 좌우 px-5.
-    <main className="mx-auto w-full max-w-screen-md px-5 pt-20 pb-24">
+    // ★폭 = 사이트 표준 max-w-mobile-max(600px) 가운데 정렬. 기존 페이지(상세·홈)와 일관
+    //   (이 사이트는 모바일 우선, 데스크톱도 600px 콘텐츠 중앙). 상단 pt-20=fixed GNB(56)+여백.
+    <main className="max-w-mobile-max mx-auto w-full px-5 pt-20 pb-24">
       {jsonLd && (
         <script
           type="application/ld+json"
@@ -212,7 +212,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
       {representatives.length > 0 && (
         <section className="mb-6">
           <h2 className="mb-3 text-base font-semibold">용량·수량별 대표 상품</h2>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-2">
             {representatives.map((rep, i) => {
               // 다나와 링크 있으면 클릭 가능한 a, 없으면 div
               const Card = rep.danawaUrl ? 'a' : 'div';
@@ -287,22 +287,29 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             <span className="text-gray-300"> · </span>
             최고 {fmtHist(histMax)}
           </p>
-          <div className="flex items-end gap-1.5" style={{ height: 96 }}>
-            {histPoints.map((p) => {
+          {/* 막대 위 가격 라벨은 최저/최고만(겹침 방지, 나머지는 hover title). 월 라벨은 격월. */}
+          <div className="flex items-end gap-1" style={{ height: 96 }}>
+            {histPoints.map((p, i) => {
               const isLow = p.price === histMin;
+              const isHigh = p.price === histMax;
+              const showMonth = i % 2 === 0 || i === histPoints.length - 1;
               return (
                 <div key={p.month} className="flex flex-1 flex-col items-center justify-end gap-1">
-                  <span
-                    className={`text-[10px] ${isLow ? 'font-semibold text-rose-500' : 'text-gray-400'}`}
-                  >
-                    {fmtHist(p.price)}
-                  </span>
+                  {(isLow || isHigh) && (
+                    <span
+                      className={`text-[9px] whitespace-nowrap ${isLow ? 'font-semibold text-rose-500' : 'text-gray-400'}`}
+                    >
+                      {fmtHist(p.price)}
+                    </span>
+                  )}
                   <div
                     className={`w-full rounded-t ${isLow ? 'bg-rose-400' : 'bg-blue-300'}`}
                     style={{ height: `${histBarH(p.price)}px` }}
                     title={`${p.month}: ${fmtHist(p.price)}`}
                   />
-                  <span className="text-[10px] text-gray-400">{p.month.slice(2)}</span>
+                  <span className="h-3 text-[9px] text-gray-400">
+                    {showMonth ? p.month.slice(2) : ''}
+                  </span>
                 </div>
               );
             })}
