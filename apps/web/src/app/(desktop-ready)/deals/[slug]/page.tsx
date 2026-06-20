@@ -1,12 +1,14 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 import { ModelPageService } from '@/shared/api/model-page';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
-// 에버그린 모델 페이지 (/deals/{slug}). SEO 유입(CTR) 타깃.
-// 백엔드 model_page(isPublished=true)를 단일 slug 조회로 SSR.
-// ★현재 기존 화면 어디에서도 링크하지 않음(미연결) — URL 직접 접속으로만 확인 가능.
+// 에버그린 모델 페이지 (/deals/{slug}) — 상품별 정보 모음. SEO 유입(CTR) 타깃.
+// 백엔드 model_page(isPublished=true) precompute payload 를 단일 slug 조회로 SSR.
+// 6블록: 히어로(이미지) · 다나와비교 · 제품설명(LLM) · 가격추이 · 핫딜타임라인 · 관련모델.
+// ★현재 기존 화면 어디에서도 링크 안 함(미연결) — URL 직접 접속으로만 확인.
 
 interface Deal {
   productId: number;
@@ -15,6 +17,9 @@ interface Deal {
   url: string;
   providerId: number;
   postedAt: string | null;
+  thumbnail: string | null;
+  posReaction: number;
+  commentCount: number;
 }
 
 interface PriceSummary {
@@ -22,13 +27,38 @@ interface PriceSummary {
   min?: number;
   max?: number;
   median?: number;
-  q1?: number;
-  q3?: number;
+}
+
+interface DanawaInfo {
+  danawaPrice: number | null;
+  mallCount: number | null;
+  danawaUrl: string | null;
+}
+
+interface GuideItem {
+  title: string;
+  content: string;
+}
+
+interface PricePoint {
+  month: string;
+  price: number;
+}
+
+interface RelatedModel {
+  slug: string;
+  modelName: string;
+  dealCount: number;
 }
 
 interface ModelPagePayload {
+  heroImage?: string | null;
   deals?: Deal[];
   priceSummary?: PriceSummary;
+  danawa?: DanawaInfo | null;
+  guides?: GuideItem[];
+  priceHistory?: PricePoint[];
+  relatedModels?: RelatedModel[];
 }
 
 function won(n?: number | null): string {
@@ -45,17 +75,19 @@ export async function generateMetadata({
   const page = await ModelPageService.getModelPage({ slug: decodeURIComponent(slug) });
   if (!page) return { title: '핫딜 모음 | 지름알림' };
 
+  const payload = (page.payload ?? {}) as ModelPagePayload;
   const title = `${page.modelName} 핫딜 최저가 모음 | 지름알림`;
   const description =
     page.metaDescription ??
     `${page.modelName} 역대 핫딜 ${page.dealCount}건. 지름알림에서 가격 모아보기.`;
   const url = `${METADATA_SERVICE_URL}/deals/${slug}`;
+  const image = payload.heroImage ?? `${METADATA_SERVICE_URL}/opengraph-image.webp`;
 
   return {
     title,
     description,
     alternates: { canonical: url },
-    openGraph: { title, description, url, type: 'website' },
+    openGraph: { title, description, url, type: 'website', images: [{ url: image }] },
   };
 }
 
@@ -65,25 +97,36 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   if (!page) notFound();
 
   const payload = (page.payload ?? {}) as ModelPagePayload;
-  const deals = payload.deals ?? [];
-  const price = payload.priceSummary;
+  const {
+    heroImage,
+    deals = [],
+    priceSummary,
+    danawa,
+    guides = [],
+    priceHistory = [],
+    relatedModels = [],
+  } = payload;
 
   // JSON-LD: verified(danawa_stats) 가격일 때만 Product/offer schema (가짜 가격 페널티 회피)
   const jsonLd =
-    price?.source === 'danawa_stats' && price.min
+    priceSummary?.source === 'danawa_stats' && priceSummary.min
       ? {
           '@context': 'https://schema.org',
           '@type': 'Product',
           name: page.modelName,
+          image: heroImage ? [heroImage] : undefined,
           offers: {
             '@type': 'AggregateOffer',
             priceCurrency: 'KRW',
-            lowPrice: price.min,
-            highPrice: price.max,
+            lowPrice: priceSummary.min,
+            highPrice: priceSummary.max,
             offerCount: page.dealCount,
           },
         }
       : null;
+
+  // 가격 추이 미니 막대 (의존성 없이 인라인 SVG-free, 높이 비율 div)
+  const histMax = priceHistory.length ? Math.max(...priceHistory.map((p) => p.price)) : 0;
 
   return (
     <main className="mx-auto w-full max-w-screen-md px-4 py-6">
@@ -94,41 +137,124 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         />
       )}
 
-      <header className="mb-4">
-        <h1 className="text-xl font-bold">{page.modelName} 핫딜 최저가 모음</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          {page.brand ? `${page.brand} · ` : ''}최근 핫딜 {page.dealCount}건
-          {page.lastDealAt
-            ? ` · 마지막 ${new Date(page.lastDealAt).toLocaleDateString('ko-KR')}`
-            : ''}
-        </p>
+      {/* 블록1: 히어로 (대표 이미지 + 모델명 + 최저가) */}
+      <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+        {heroImage && (
+          <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-lg bg-gray-50">
+            <Image
+              src={heroImage}
+              alt={page.modelName}
+              fill
+              sizes="160px"
+              className="object-contain"
+            />
+          </div>
+        )}
+        <div className="min-w-0">
+          <h1 className="text-xl font-bold">{page.modelName} 핫딜 최저가 모음</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            {page.brand ? `${page.brand} · ` : ''}최근 핫딜 {page.dealCount}건
+            {page.lastDealAt
+              ? ` · 마지막 ${new Date(page.lastDealAt).toLocaleDateString('ko-KR')}`
+              : ''}
+          </p>
+          {priceSummary && priceSummary.source !== 'none' && (
+            <p className="mt-2 text-lg font-semibold">
+              {won(priceSummary.min)} ~ {won(priceSummary.max)}
+              {priceSummary.median != null && (
+                <span className="ml-2 text-sm font-normal text-gray-400">
+                  중간값 {won(priceSummary.median)}
+                </span>
+              )}
+            </p>
+          )}
+        </div>
       </header>
 
-      {price && price.source !== 'none' && (
-        <section className="mb-6 rounded-lg border border-gray-200 p-4">
-          <div className="text-sm text-gray-500">가격대</div>
-          <div className="mt-1 text-lg font-semibold">
-            {won(price.min)} ~ {won(price.max)}
+      {/* 블록2: 다나와 가격비교 (verified 일 때만) */}
+      {danawa?.danawaUrl && (
+        <a
+          href={danawa.danawaUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mb-6 flex items-center justify-between rounded-lg border border-gray-200 p-4 hover:bg-gray-50"
+        >
+          <div>
+            <div className="text-sm font-medium">다나와 최저가 비교</div>
+            <div className="mt-0.5 text-xs text-gray-500">
+              {danawa.mallCount ? `${danawa.mallCount}개 쇼핑몰` : ''}
+              {danawa.danawaPrice ? ` · ${won(danawa.danawaPrice)}` : ''}
+            </div>
           </div>
-          {price.median != null && (
-            <div className="mt-0.5 text-sm text-gray-500">중간값 {won(price.median)}</div>
-          )}
-          {price.source === 'danawa_stats' && (
-            <div className="mt-1 text-xs text-gray-400">다나와 가격비교 기준</div>
-          )}
+          <span className="text-sm text-gray-400">바로가기 →</span>
+        </a>
+      )}
+
+      {/* 블록3: 제품 설명 (product_guide LLM) */}
+      {guides.length > 0 && (
+        <section className="mb-6">
+          <h2 className="mb-3 text-base font-semibold">이 제품은</h2>
+          <ul className="flex flex-col gap-2">
+            {guides.map((g, i) => (
+              <li key={i} className="rounded-lg bg-gray-50 p-3">
+                <div className="text-sm font-medium">{g.title}</div>
+                {g.content && <div className="mt-0.5 text-sm text-gray-600">{g.content}</div>}
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
-      <section>
+      {/* 블록5: 가격 추이 (product_price 월별 최저가) */}
+      {priceHistory.length >= 2 && (
+        <section className="mb-6">
+          <h2 className="mb-3 text-base font-semibold">월별 핫딜 최저가 추이</h2>
+          <div className="flex items-end gap-1" style={{ height: 80 }}>
+            {priceHistory.map((p) => (
+              <div key={p.month} className="flex flex-1 flex-col items-center justify-end gap-1">
+                <div
+                  className="w-full rounded-t bg-blue-200"
+                  style={{ height: `${histMax ? (p.price / histMax) * 64 : 0}px` }}
+                  title={`${p.month}: ${won(p.price)}`}
+                />
+                <span className="text-[10px] text-gray-400">{p.month.slice(2)}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 블록4: 핫딜 타임라인 (이미지 + 반응) */}
+      <section className="mb-6">
         <h2 className="mb-3 text-base font-semibold">핫딜 목록</h2>
         <ul className="flex flex-col gap-2">
           {deals.map((deal) => (
             <li key={deal.productId}>
               <a
                 href={`/products/${deal.productId}`}
-                className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 p-3 hover:bg-gray-50"
+                className="flex items-center gap-3 rounded-lg border border-gray-100 p-3 hover:bg-gray-50"
               >
-                <span className="line-clamp-2 text-sm">{deal.title}</span>
+                {deal.thumbnail && (
+                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded bg-gray-50">
+                    <Image
+                      src={deal.thumbnail}
+                      alt=""
+                      fill
+                      sizes="56px"
+                      className="object-contain"
+                    />
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <div className="line-clamp-2 text-sm">{deal.title}</div>
+                  <div className="mt-1 flex items-center gap-2 text-xs text-gray-400">
+                    {deal.postedAt && (
+                      <span>{new Date(deal.postedAt).toLocaleDateString('ko-KR')}</span>
+                    )}
+                    {deal.posReaction > 0 && <span>👍 {deal.posReaction}</span>}
+                    {deal.commentCount > 0 && <span>💬 {deal.commentCount}</span>}
+                  </div>
+                </div>
                 <span className="shrink-0 text-sm font-medium text-gray-700">
                   {won(deal.price)}
                 </span>
@@ -138,6 +264,24 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         </ul>
         {deals.length === 0 && <p className="text-sm text-gray-400">표시할 핫딜이 없습니다.</p>}
       </section>
+
+      {/* 블록6: 관련 모델 (내부링크) */}
+      {relatedModels.length > 0 && (
+        <section>
+          <h2 className="mb-3 text-base font-semibold">{page.brand} 다른 모델</h2>
+          <div className="flex flex-wrap gap-2">
+            {relatedModels.map((m) => (
+              <a
+                key={m.slug}
+                href={`/deals/${m.slug}`}
+                className="rounded-full border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50"
+              >
+                {m.modelName} <span className="text-gray-400">({m.dealCount})</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   );
 }
