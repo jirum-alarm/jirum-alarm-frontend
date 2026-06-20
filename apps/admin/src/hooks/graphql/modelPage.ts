@@ -3,10 +3,16 @@ import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@a
 import {
   MutationSetModelPagePublishedByAdminMutation,
   MutationSetModelPagePublishedByAdminMutationVariables,
+  QueryModelPagePreviewByAdminQuery,
+  QueryModelPagePreviewByAdminQueryVariables,
   QueryModelPagesByAdminQuery,
   QueryModelPagesByAdminQueryVariables,
 } from '@/generated/gql/graphql';
-import { MutationSetModelPagePublishedByAdmin, QueryModelPagesByAdmin } from '@/graphql/modelPage';
+import {
+  MutationSetModelPagePublishedByAdmin,
+  QueryModelPagePreviewByAdmin,
+  QueryModelPagesByAdmin,
+} from '@/graphql/modelPage';
 
 export const useGetModelPagesByAdmin = (
   variables?: QueryModelPagesByAdminQueryVariables,
@@ -18,6 +24,23 @@ export const useGetModelPagesByAdmin = (
       variables: {
         onlyDrafts: variables?.onlyDrafts ?? false,
       },
+      fetchPolicy: 'network-only',
+      ...options,
+    },
+  );
+};
+
+export const useGetModelPagePreviewByAdmin = (
+  variables: QueryModelPagePreviewByAdminQueryVariables,
+  options?: QueryHookOptions<
+    QueryModelPagePreviewByAdminQuery,
+    QueryModelPagePreviewByAdminQueryVariables
+  >,
+) => {
+  return useQuery<QueryModelPagePreviewByAdminQuery, QueryModelPagePreviewByAdminQueryVariables>(
+    QueryModelPagePreviewByAdmin,
+    {
+      variables,
       fetchPolicy: 'network-only',
       ...options,
     },

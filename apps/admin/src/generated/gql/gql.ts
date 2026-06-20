@@ -38,6 +38,7 @@ type Documents = {
   '\n  mutation MutationAddKeywordMapEntriesByAdmin($groupId: Int!, $keywords: [String!]!) {\n    addKeywordMapEntriesByAdmin(groupId: $groupId, keywords: $keywords)\n  }\n': typeof types.MutationAddKeywordMapEntriesByAdminDocument;
   '\n  mutation MutationRemoveKeywordMapEntryByAdmin($id: Int!) {\n    removeKeywordMapEntryByAdmin(id: $id)\n  }\n': typeof types.MutationRemoveKeywordMapEntryByAdminDocument;
   '\n  query QueryModelPagesByAdmin($onlyDrafts: Boolean) {\n    modelPagesByAdmin(onlyDrafts: $onlyDrafts) {\n      id\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      heroImage\n      heroMinPrice\n      isPublished\n    }\n  }\n': typeof types.QueryModelPagesByAdminDocument;
+  '\n  query QueryModelPagePreviewByAdmin($slug: String!) {\n    modelPagePreviewByAdmin(slug: $slug) {\n      id\n      isPublished\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n': typeof types.QueryModelPagePreviewByAdminDocument;
   '\n  mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {\n    setModelPagePublishedByAdmin(id: $id, isPublished: $isPublished)\n  }\n': typeof types.MutationSetModelPagePublishedByAdminDocument;
   '\n  query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {\n    notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {\n      id\n      title\n      message\n      target\n      targetId\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryNotificationsByAdminDocument;
   '\n  mutation MutationSendNotificationByAdmin(\n    $title: String!\n    $message: String!\n    $type: NotificationType!\n    $target: NotificationTarget\n    $targetId: Int\n    $url: String\n    $userIds: [Int!]\n  ) {\n    sendNotificationByAdmin(\n      title: $title\n      message: $message\n      type: $type\n      target: $target\n      targetId: $targetId\n      url: $url\n      userIds: $userIds\n    )\n  }\n': typeof types.MutationSendNotificationByAdminDocument;
@@ -127,6 +128,8 @@ const documents: Documents = {
     types.MutationRemoveKeywordMapEntryByAdminDocument,
   '\n  query QueryModelPagesByAdmin($onlyDrafts: Boolean) {\n    modelPagesByAdmin(onlyDrafts: $onlyDrafts) {\n      id\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      heroImage\n      heroMinPrice\n      isPublished\n    }\n  }\n':
     types.QueryModelPagesByAdminDocument,
+  '\n  query QueryModelPagePreviewByAdmin($slug: String!) {\n    modelPagePreviewByAdmin(slug: $slug) {\n      id\n      isPublished\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n':
+    types.QueryModelPagePreviewByAdminDocument,
   '\n  mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {\n    setModelPagePublishedByAdmin(id: $id, isPublished: $isPublished)\n  }\n':
     types.MutationSetModelPagePublishedByAdminDocument,
   '\n  query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {\n    notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {\n      id\n      title\n      message\n      target\n      targetId\n      createdAt\n      searchAfter\n    }\n  }\n':
@@ -355,6 +358,12 @@ export function graphql(
 export function graphql(
   source: '\n  query QueryModelPagesByAdmin($onlyDrafts: Boolean) {\n    modelPagesByAdmin(onlyDrafts: $onlyDrafts) {\n      id\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      heroImage\n      heroMinPrice\n      isPublished\n    }\n  }\n',
 ): typeof import('./graphql').QueryModelPagesByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryModelPagePreviewByAdmin($slug: String!) {\n    modelPagePreviewByAdmin(slug: $slug) {\n      id\n      isPublished\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n',
+): typeof import('./graphql').QueryModelPagePreviewByAdminDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

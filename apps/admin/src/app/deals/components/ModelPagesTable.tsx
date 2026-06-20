@@ -2,6 +2,7 @@
 
 import dayjs from 'dayjs';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 import {
@@ -88,17 +89,28 @@ const ModelPagesTable = () => {
                         <div className="bg-gray-100 h-10 w-10 rounded" />
                       )}
                       <div className="min-w-0">
-                        <a
-                          href={`https://jirum-alarm.com/deals/${encodeURIComponent(p.slug)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        {/* 미리보기(초안도 열림) — 발행 전 실제 모양 검수 */}
+                        <Link
+                          href={`/deals/preview/${encodeURIComponent(p.slug)}`}
                           className="block truncate text-black hover:underline dark:text-white"
                         >
                           {p.modelName}
-                        </a>
-                        {p.brand && (
-                          <span className="block truncate text-xs text-bodydark2">{p.brand}</span>
-                        )}
+                        </Link>
+                        <div className="flex items-center gap-2">
+                          {p.brand && (
+                            <span className="truncate text-xs text-bodydark2">{p.brand}</span>
+                          )}
+                          {p.isPublished && (
+                            <a
+                              href={`https://jirum-alarm.com/deals/${encodeURIComponent(p.slug)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="shrink-0 text-xs text-primary hover:underline"
+                            >
+                              운영 ↗
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </td>

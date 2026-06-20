@@ -469,6 +469,8 @@ export type ModelPageOutput = {
   __typename?: 'ModelPageOutput';
   brand?: Maybe<Scalars['String']['output']>;
   dealCount: Scalars['Int']['output'];
+  id?: Maybe<Scalars['Int']['output']>;
+  isPublished?: Maybe<Scalars['Boolean']['output']>;
   lastDealAt?: Maybe<Scalars['DateTime']['output']>;
   metaDescription?: Maybe<Scalars['String']['output']>;
   modelName: Scalars['String']['output'];
@@ -1416,6 +1418,8 @@ export type Query = {
   /** 로그인한 유저 정보 조회 */
   me?: Maybe<User>;
   modelPage?: Maybe<ModelPageOutput>;
+  /** 어드민) 모델 페이지 미리보기 */
+  modelPagePreviewByAdmin?: Maybe<ModelPageOutput>;
   /** 어드민) 모델 페이지 검수 목록 */
   modelPagesByAdmin: Array<ModelPageAdminItemOutput>;
   /** 유저 알림 키워드 목록 조회 */
@@ -1720,6 +1724,10 @@ export type QueryMatchRunsByAdminArgs = {
 };
 
 export type QueryModelPageArgs = {
+  slug: Scalars['String']['input'];
+};
+
+export type QueryModelPagePreviewByAdminArgs = {
   slug: Scalars['String']['input'];
 };
 
@@ -2502,6 +2510,26 @@ export type QueryModelPagesByAdminQuery = {
     heroMinPrice?: number | null;
     isPublished: boolean;
   }>;
+};
+
+export type QueryModelPagePreviewByAdminQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+export type QueryModelPagePreviewByAdminQuery = {
+  __typename?: 'Query';
+  modelPagePreviewByAdmin?: {
+    __typename?: 'ModelPageOutput';
+    id?: number | null;
+    isPublished?: boolean | null;
+    slug: string;
+    brand?: string | null;
+    modelName: string;
+    dealCount: number;
+    lastDealAt?: any | null;
+    metaDescription?: string | null;
+    payload?: any | null;
+  } | null;
 };
 
 export type MutationSetModelPagePublishedByAdminMutationVariables = Exact<{
@@ -3453,6 +3481,24 @@ export const QueryModelPagesByAdminDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   QueryModelPagesByAdminQuery,
   QueryModelPagesByAdminQueryVariables
+>;
+export const QueryModelPagePreviewByAdminDocument = new TypedDocumentString(`
+    query QueryModelPagePreviewByAdmin($slug: String!) {
+  modelPagePreviewByAdmin(slug: $slug) {
+    id
+    isPublished
+    slug
+    brand
+    modelName
+    dealCount
+    lastDealAt
+    metaDescription
+    payload
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryModelPagePreviewByAdminQuery,
+  QueryModelPagePreviewByAdminQueryVariables
 >;
 export const MutationSetModelPagePublishedByAdminDocument = new TypedDocumentString(`
     mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {

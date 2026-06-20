@@ -452,6 +452,8 @@ type ModelPageListItemOutput {
 type ModelPageOutput {
   brand: String
   dealCount: Int!
+  id: Int
+  isPublished: Boolean
   lastDealAt: DateTime
   metaDescription: String
   modelName: String!
@@ -1591,6 +1593,10 @@ type Query {
   """
   me: User
   modelPage(slug: String!): ModelPageOutput
+  """
+  어드민) 모델 페이지 미리보기
+  """
+  modelPagePreviewByAdmin(slug: String!): ModelPageOutput
   """
   어드민) 모델 페이지 검수 목록
   """
