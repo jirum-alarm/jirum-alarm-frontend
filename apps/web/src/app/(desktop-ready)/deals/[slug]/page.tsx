@@ -132,9 +132,9 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   };
 
   return (
-    // 상단 패딩: fixed GNB(h-14=56px) 보정. 모바일·데스크톱 둘 다 pt-14(GNB와 정확히 안 겹침).
+    // 상단 패딩: fixed GNB(56px) + 여백 24px = pt-20. (pt-14는 GNB와 딱 붙어 콘텐츠가 답답함.)
     // 하단 pb-24 = 모바일 BottomNav 가림 방지. 좌우 px-5.
-    <main className="mx-auto w-full max-w-screen-md px-5 pt-14 pb-24">
+    <main className="mx-auto w-full max-w-screen-md px-5 pt-20 pb-24">
       {jsonLd && (
         <script
           type="application/ld+json"
