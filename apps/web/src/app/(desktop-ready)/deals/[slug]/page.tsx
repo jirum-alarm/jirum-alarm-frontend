@@ -62,8 +62,16 @@ interface Representative {
   unitLabel: string | null; // "개당"
 }
 
+interface HeroPrice {
+  minPrice: number | null; // 신뢰 가능한 핫딜 최저가(단위 명확)
+  label: string; // "210ml 30개" 등 그 가격의 수량
+  unitPrice: number | null;
+  unitLabel: string | null; // "100ml당" 등
+}
+
 interface ModelPagePayload {
   heroImage?: string | null;
+  heroPrice?: HeroPrice | null;
   representatives?: Representative[];
   deals?: Deal[];
   priceSummary?: PriceSummary;
@@ -110,6 +118,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const payload = (page.payload ?? {}) as ModelPagePayload;
   const {
     heroImage,
+    heroPrice,
     representatives = [],
     deals = [],
     priceSummary,
@@ -182,15 +191,19 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               ? ` · 마지막 ${new Date(page.lastDealAt).toLocaleDateString('ko-KR')}`
               : ''}
           </p>
-          {priceSummary && priceSummary.source !== 'none' && (
-            <p className="mt-2 text-lg font-semibold">
-              {won(priceSummary.min)} ~ {won(priceSummary.max)}
-              {priceSummary.median != null && (
-                <span className="ml-2 text-sm font-normal text-gray-400">
-                  중간값 {won(priceSummary.median)}
-                </span>
-              )}
-            </p>
+          {/* 핫딜 최저가 — 단위 명확하게(수량 + 단위가격). 단위 불명한 brand_item 통계 대신 heroPrice. */}
+          {heroPrice?.minPrice != null && (
+            <div className="mt-2">
+              <p className="text-lg font-semibold text-rose-500">
+                핫딜 최저 {won(heroPrice.minPrice)}
+              </p>
+              <p className="mt-0.5 text-sm text-gray-500">
+                {heroPrice.label}
+                {heroPrice.unitPrice != null && heroPrice.unitLabel
+                  ? ` · ${heroPrice.unitLabel} ${won(heroPrice.unitPrice)}`
+                  : ''}
+              </p>
+            </div>
           )}
         </div>
       </header>
