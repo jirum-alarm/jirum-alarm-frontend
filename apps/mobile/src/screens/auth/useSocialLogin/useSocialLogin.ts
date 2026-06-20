@@ -7,6 +7,8 @@ import {AuthQueries} from '@/entities/auth';
 import {AuthService} from '@/shared/api/auth/auth.service';
 import {OauthProvider} from '@/shared/api/gql/graphql';
 import {showToast} from '@/shared/lib/feedback';
+import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
+import {UserService} from '@/shared/api/user/user.service';
 import {handleLoginError, handleLoginSuccess} from './lib';
 
 const NAVER_CLIENT_ID = 'ipyjWS3C8WLZGkmCzoXd';
@@ -25,6 +27,22 @@ export const useSocialLogin = () => {
           token.socialLogin.accessToken,
           token.socialLogin.refreshToken,
         );
+
+        // 신규 가입은 web 과 동일하게 type==='SIGNUP' 으로 구분된다. 네이티브 가입은
+        // GTM 이 닿지 않아 영구 미측정이었던 공백을 여기서 직접 메운다.
+        // identify 는 가입/로그인 모두에서 호출해 익명↔회원 프로필을 병합한다.
+        try {
+          if (token.socialLogin.type === 'SIGNUP') {
+            MixpanelService.track('signup_complete');
+          }
+          const userId = await UserService.fetchMyId();
+          if (userId) {
+            MixpanelService.identify(userId);
+          }
+        } catch {
+          // 분석 실패는 로그인 흐름을 막지 않는다.
+        }
+
         await queryClient.refetchQueries({
           queryKey: AuthQueries.keys.loginByRefreshToken(),
         });
