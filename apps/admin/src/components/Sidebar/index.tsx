@@ -167,13 +167,17 @@ const Sidebar = ({
                 }}
               </SidebarLinkGroup>
 
-              <SidebarLinkGroup activeCondition={pathname.startsWith('/hotdeal')}>
+              <SidebarLinkGroup
+                activeCondition={pathname.startsWith('/hotdeal') || pathname.startsWith('/deals')}
+              >
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
                       <MenuGroup
                         name="핫딜"
-                        isSelectedPath={pathname.startsWith('/hotdeal')}
+                        isSelectedPath={
+                          pathname.startsWith('/hotdeal') || pathname.startsWith('/deals')
+                        }
                         open={open}
                         sidebarExpanded={sidebarExpanded}
                         openSidebar={openSidebar}
@@ -182,6 +186,7 @@ const Sidebar = ({
                       />
                       <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
                         <SubMenuItem name="키워드" linkTo="/hotdeal/keyword" pathname={pathname} />
+                        <SubMenuItem name="딜 페이지" linkTo="/deals" pathname={pathname} />
                       </SubMenu>
                     </React.Fragment>
                   );

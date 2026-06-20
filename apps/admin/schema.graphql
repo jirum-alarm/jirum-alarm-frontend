@@ -426,6 +426,39 @@ type MatchRunsByAdminOutput {
   total: Int!
 }
 
+type ModelPageAdminItemOutput {
+  brand: String
+  dealCount: Int!
+  heroImage: String
+  heroMinPrice: Int
+  id: Int!
+  isPublished: Boolean!
+  lastDealAt: DateTime
+  modelName: String!
+  slug: String!
+}
+
+type ModelPageListItemOutput {
+  brand: String
+  dealCount: Int!
+  heroImage: String
+  heroMinPrice: Int
+  modelName: String!
+  slug: String!
+  unitLabel: String
+  unitPrice: Int
+}
+
+type ModelPageOutput {
+  brand: String
+  dealCount: Int!
+  lastDealAt: DateTime
+  metaDescription: String
+  modelName: String!
+  payload: JSONObject
+  slug: String!
+}
+
 type Mutation {
   addComment(
     content: String!
@@ -544,11 +577,31 @@ type Mutation {
   """
   상품 단건 수집
   """
-  collectProduct(productId: Int!): Boolean!
+  collectProduct(
+    """
+    클릭 위치(랭크, 0-based)
+    """
+    position: Int
+    productId: Int!
+    """
+    클릭 발생 화면 출처 (예: ranking_tab)
+    """
+    source: String
+  ): Boolean!
   """
   썸네일 단건 수집
   """
-  collectThumbnail(productId: Int!): Boolean!
+  collectThumbnail(
+    """
+    클릭 위치(랭크, 0-based)
+    """
+    position: Int
+    productId: Int!
+    """
+    클릭 발생 화면 출처 (예: ranking_tab)
+    """
+    source: String
+  ): Boolean!
   createAd(
     description: String
     endAt: DateTime!
@@ -560,6 +613,44 @@ type Mutation {
     title: String
     weight: Int! = 1
   ): Ad!
+  """
+  유저 등록 상품 썸네일 업로드용 presigned URL 발급
+  """
+  createProductImageUploadUrl(
+    """
+    이미지 MIME 타입 (image/jpeg|png|webp|gif|avif)
+    """
+    contentType: String!
+  ): ProductImageUploadUrlOutput!
+  """
+  유저가 직접 핫딜 상품 등록 (등록된 productId 반환)
+  """
+  createUserProduct(
+    """
+    카테고리 id
+    """
+    categoryId: Int!
+    """
+    상품 설명
+    """
+    content: String
+    """
+    가격
+    """
+    price: String
+    """
+    썸네일 이미지 URL
+    """
+    thumbnail: String
+    """
+    상품명
+    """
+    title: String!
+    """
+    구매 링크
+    """
+    url: String!
+  ): Int!
   deleteAd(id: Int!): Boolean!
   """
   어드민) 상품 hard delete
@@ -586,6 +677,16 @@ type Mutation {
   모든 알림 읽음 처리
   """
   readNotification(id: Int!): Boolean!
+  """
+  상품 노출(impression) 기록 — 프론트 viewport 가 보고. CTR 분모.
+  """
+  recordProductImpressions(
+    impressions: [ProductImpressionInput!]!
+    """
+    노출 발생 화면 출처 (예: ranking_tab)
+    """
+    source: String!
+  ): Boolean!
   """
   어드민) 리액션 키워드 후보 거절
   """
@@ -648,6 +749,10 @@ type Mutation {
     url: String
     userIds: [Int!]
   ): Boolean!
+  """
+  어드민) 모델 페이지 발행 토글
+  """
+  setModelPagePublishedByAdmin(id: Int!, isPublished: Boolean!): Boolean!
   """
   대표 매핑 지정 (id 기준)
   """
@@ -905,6 +1010,22 @@ type ProductHotDealIndex {
   visualConfig: PriceVisualConfig
 }
 
+type ProductImageUploadUrlOutput {
+  """
+  업로드 완료 후 상품 thumbnail 로 쓸 CDN URL
+  """
+  imageUrl: String!
+  """
+  이미지를 PUT 업로드할 presigned URL (1시간 만료)
+  """
+  uploadUrl: String!
+}
+
+input ProductImpressionInput {
+  position: Int!
+  productId: Int!
+}
+
 type ProductMapping {
   correctPcode: String
   createdAt: DateTime!
@@ -1038,6 +1159,10 @@ type ProductOutput {
   categoryName: String
   commentSummary: ProductCommentSummary
   consumptionDate: DateTime
+  """
+  상품 설명(유저 등록 상품)
+  """
+  content: String
   detailUrl: String
   dislikeCount: Int!
   distributionDate: DateTime
@@ -1091,6 +1216,10 @@ type ProductOutput {
   similarity: Float
   thumbnail: String
   title: String!
+  """
+  업로드 주체
+  """
+  uploaderType: UploaderType!
   url: String
   """
   조회 수
@@ -1323,6 +1452,19 @@ type Query {
   특정 상품과 유사한 상품 조회
   """
   getSimilarProducts(limit: Int = 10, productId: Int!): [ProductOutput!]!
+  """
+  게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백)
+  """
+  guestRecommendedHotDeals(
+    """
+    한 페이지당 아이템 개수 (최대 20개)
+    """
+    limit: Int!
+    """
+    페이지 번호 (0부터 시작)
+    """
+    page: Int!
+  ): [ProductOutput!]!
   homePage: [BaseSection!]!
   """
   어드민) 핫딜 제외 키워드 목록 조회
@@ -1448,6 +1590,11 @@ type Query {
   로그인한 유저 정보 조회
   """
   me: User
+  modelPage(slug: String!): ModelPageOutput
+  """
+  어드민) 모델 페이지 검수 목록
+  """
+  modelPagesByAdmin(onlyDrafts: Boolean = false): [ModelPageAdminItemOutput!]!
   """
   유저 알림 키워드 목록 조회
   """
@@ -1594,6 +1741,7 @@ type Query {
   어드민) provider별 최근 수집 활동 (1h/24h/7d count + 마지막 수집 시각)
   """
   providerHealthStatus(providerType: ProviderType): [ProviderHealthOutput!]!
+  publishedModelPages: [ModelPageListItemOutput!]!
   """
   푸시 세팅 조회
   """
@@ -1822,6 +1970,24 @@ type TokenOutput {
 enum TokenType {
   APNS
   FCM
+}
+
+"""
+상품 업로드 주체
+"""
+enum UploaderType {
+  """
+  크롤러가 수집한 상품 (기본값)
+  """
+  CRAWLED
+  """
+  지름알림 공식이 등록한 상품
+  """
+  OFFICIAL
+  """
+  일반 유저가 직접 등록한 상품
+  """
+  USER
 }
 
 type User {

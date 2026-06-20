@@ -440,6 +440,42 @@ export type MatchRunsByAdminOutput = {
   total: Scalars['Int']['output'];
 };
 
+export type ModelPageAdminItemOutput = {
+  __typename?: 'ModelPageAdminItemOutput';
+  brand?: Maybe<Scalars['String']['output']>;
+  dealCount: Scalars['Int']['output'];
+  heroImage?: Maybe<Scalars['String']['output']>;
+  heroMinPrice?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['Int']['output'];
+  isPublished: Scalars['Boolean']['output'];
+  lastDealAt?: Maybe<Scalars['DateTime']['output']>;
+  modelName: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+};
+
+export type ModelPageListItemOutput = {
+  __typename?: 'ModelPageListItemOutput';
+  brand?: Maybe<Scalars['String']['output']>;
+  dealCount: Scalars['Int']['output'];
+  heroImage?: Maybe<Scalars['String']['output']>;
+  heroMinPrice?: Maybe<Scalars['Int']['output']>;
+  modelName: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+  unitLabel?: Maybe<Scalars['String']['output']>;
+  unitPrice?: Maybe<Scalars['Int']['output']>;
+};
+
+export type ModelPageOutput = {
+  __typename?: 'ModelPageOutput';
+  brand?: Maybe<Scalars['String']['output']>;
+  dealCount: Scalars['Int']['output'];
+  lastDealAt?: Maybe<Scalars['DateTime']['output']>;
+  metaDescription?: Maybe<Scalars['String']['output']>;
+  modelName: Scalars['String']['output'];
+  payload?: Maybe<Scalars['JSONObject']['output']>;
+  slug: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addComment: Scalars['Boolean']['output'];
@@ -486,6 +522,10 @@ export type Mutation = {
   /** 썸네일 단건 수집 */
   collectThumbnail: Scalars['Boolean']['output'];
   createAd: Ad;
+  /** 유저 등록 상품 썸네일 업로드용 presigned URL 발급 */
+  createProductImageUploadUrl: ProductImageUploadUrlOutput;
+  /** 유저가 직접 핫딜 상품 등록 (등록된 productId 반환) */
+  createUserProduct: Scalars['Int']['output'];
   deleteAd: Scalars['Boolean']['output'];
   /** 어드민) 상품 hard delete */
   hardDeleteProductByAdmin: Scalars['Boolean']['output'];
@@ -500,6 +540,8 @@ export type Mutation = {
   readAllNotifications: Scalars['Boolean']['output'];
   /** 모든 알림 읽음 처리 */
   readNotification: Scalars['Boolean']['output'];
+  /** 상품 노출(impression) 기록 — 프론트 viewport 가 보고. CTR 분모. */
+  recordProductImpressions: Scalars['Boolean']['output'];
   /** 어드민) 리액션 키워드 후보 거절 */
   rejectHotDealKeywordCandidateByAdmin: Scalars['Boolean']['output'];
   /** 모든 알림 삭제 */
@@ -528,6 +570,8 @@ export type Mutation = {
   reportExpiredProduct: Scalars['Boolean']['output'];
   /** 어드민) 알림 발송 */
   sendNotificationByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 모델 페이지 발행 토글 */
+  setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
   /** 대표 매핑 지정 (id 기준) */
   setPrimaryProductMapping: Scalars['Boolean']['output'];
   /** 회원가입 */
@@ -682,11 +726,15 @@ export type MutationClearAdCacheArgs = {
 };
 
 export type MutationCollectProductArgs = {
+  position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationCollectThumbnailArgs = {
+  position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationCreateAdArgs = {
@@ -699,6 +747,19 @@ export type MutationCreateAdArgs = {
   startAt: Scalars['DateTime']['input'];
   title?: InputMaybe<Scalars['String']['input']>;
   weight?: Scalars['Int']['input'];
+};
+
+export type MutationCreateProductImageUploadUrlArgs = {
+  contentType: Scalars['String']['input'];
+};
+
+export type MutationCreateUserProductArgs = {
+  categoryId: Scalars['Int']['input'];
+  content?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['String']['input']>;
+  thumbnail?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  url: Scalars['String']['input'];
 };
 
 export type MutationDeleteAdArgs = {
@@ -720,6 +781,11 @@ export type MutationMatchProductToDanawaProductArgs = {
 
 export type MutationReadNotificationArgs = {
   id: Scalars['Int']['input'];
+};
+
+export type MutationRecordProductImpressionsArgs = {
+  impressions: Array<ProductImpressionInput>;
+  source: Scalars['String']['input'];
 };
 
 export type MutationRejectHotDealKeywordCandidateByAdminArgs = {
@@ -782,6 +848,11 @@ export type MutationSendNotificationByAdminArgs = {
   type: NotificationType;
   url?: InputMaybe<Scalars['String']['input']>;
   userIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+};
+
+export type MutationSetModelPagePublishedByAdminArgs = {
+  id: Scalars['Int']['input'];
+  isPublished: Scalars['Boolean']['input'];
 };
 
 export type MutationSetPrimaryProductMappingArgs = {
@@ -1020,6 +1091,19 @@ export type ProductHotDealIndex = {
   visualConfig?: Maybe<PriceVisualConfig>;
 };
 
+export type ProductImageUploadUrlOutput = {
+  __typename?: 'ProductImageUploadUrlOutput';
+  /** 업로드 완료 후 상품 thumbnail 로 쓸 CDN URL */
+  imageUrl: Scalars['String']['output'];
+  /** 이미지를 PUT 업로드할 presigned URL (1시간 만료) */
+  uploadUrl: Scalars['String']['output'];
+};
+
+export type ProductImpressionInput = {
+  position: Scalars['Int']['input'];
+  productId: Scalars['Int']['input'];
+};
+
 export type ProductMapping = {
   __typename?: 'ProductMapping';
   correctPcode?: Maybe<Scalars['String']['output']>;
@@ -1143,6 +1227,8 @@ export type ProductOutput = {
   categoryName?: Maybe<Scalars['String']['output']>;
   commentSummary?: Maybe<ProductCommentSummary>;
   consumptionDate?: Maybe<Scalars['DateTime']['output']>;
+  /** 상품 설명(유저 등록 상품) */
+  content?: Maybe<Scalars['String']['output']>;
   detailUrl?: Maybe<Scalars['String']['output']>;
   dislikeCount: Scalars['Int']['output'];
   distributionDate?: Maybe<Scalars['DateTime']['output']>;
@@ -1187,6 +1273,8 @@ export type ProductOutput = {
   similarity?: Maybe<Scalars['Float']['output']>;
   thumbnail?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
+  /** 업로드 주체 */
+  uploaderType: UploaderType;
   url?: Maybe<Scalars['String']['output']>;
   /** 조회 수 */
   viewCount: Scalars['Int']['output'];
@@ -1297,6 +1385,8 @@ export type Query = {
   getPersonalizedProductsByUserId: Array<RecommendedProductOutput>;
   /** 특정 상품과 유사한 상품 조회 */
   getSimilarProducts: Array<ProductOutput>;
+  /** 게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백) */
+  guestRecommendedHotDeals: Array<ProductOutput>;
   homePage: Array<BaseSection>;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
@@ -1325,6 +1415,9 @@ export type Query = {
   matchRunsByAdmin: MatchRunsByAdminOutput;
   /** 로그인한 유저 정보 조회 */
   me?: Maybe<User>;
+  modelPage?: Maybe<ModelPageOutput>;
+  /** 어드민) 모델 페이지 검수 목록 */
+  modelPagesByAdmin: Array<ModelPageAdminItemOutput>;
   /** 유저 알림 키워드 목록 조회 */
   notificationKeywordsByMe: Array<NotificationKeyword>;
   /** 어드민) 개별 알림 목록 조회 */
@@ -1359,6 +1452,7 @@ export type Query = {
   productsByKeyword: Array<ProductOutput>;
   /** 어드민) provider별 최근 수집 활동 (1h/24h/7d count + 마지막 수집 시각) */
   providerHealthStatus: Array<ProviderHealthOutput>;
+  publishedModelPages: Array<ModelPageListItemOutput>;
   /** 푸시 세팅 조회 */
   pushSetting: UserPushSetting;
   /** 최근에 본 상품 N개 조회 */
@@ -1543,6 +1637,11 @@ export type QueryGetSimilarProductsArgs = {
   productId: Scalars['Int']['input'];
 };
 
+export type QueryGuestRecommendedHotDealsArgs = {
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+};
+
 export type QueryHotDealExcludeKeywordsByAdminArgs = {
   hotDealKeywordId: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
@@ -1618,6 +1717,14 @@ export type QueryMatchRunsByAdminArgs = {
   status?: InputMaybe<MatchRunStatus>;
   take?: InputMaybe<Scalars['Int']['input']>;
   to?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type QueryModelPageArgs = {
+  slug: Scalars['String']['input'];
+};
+
+export type QueryModelPagesByAdminArgs = {
+  onlyDrafts?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type QueryNotificationKeywordsByMeArgs = {
@@ -1919,6 +2026,16 @@ export type TokenOutput = {
 export enum TokenType {
   Apns = 'APNS',
   Fcm = 'FCM',
+}
+
+/** 상품 업로드 주체 */
+export enum UploaderType {
+  /** 크롤러가 수집한 상품 (기본값) */
+  Crawled = 'CRAWLED',
+  /** 지름알림 공식이 등록한 상품 */
+  Official = 'OFFICIAL',
+  /** 일반 유저가 직접 등록한 상품 */
+  User = 'USER',
 }
 
 export type User = {
@@ -2365,6 +2482,36 @@ export type MutationRemoveKeywordMapEntryByAdminMutationVariables = Exact<{
 export type MutationRemoveKeywordMapEntryByAdminMutation = {
   __typename?: 'Mutation';
   removeKeywordMapEntryByAdmin: boolean;
+};
+
+export type QueryModelPagesByAdminQueryVariables = Exact<{
+  onlyDrafts?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type QueryModelPagesByAdminQuery = {
+  __typename?: 'Query';
+  modelPagesByAdmin: Array<{
+    __typename?: 'ModelPageAdminItemOutput';
+    id: number;
+    slug: string;
+    brand?: string | null;
+    modelName: string;
+    dealCount: number;
+    lastDealAt?: any | null;
+    heroImage?: string | null;
+    heroMinPrice?: number | null;
+    isPublished: boolean;
+  }>;
+};
+
+export type MutationSetModelPagePublishedByAdminMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  isPublished: Scalars['Boolean']['input'];
+}>;
+
+export type MutationSetModelPagePublishedByAdminMutation = {
+  __typename?: 'Mutation';
+  setModelPagePublishedByAdmin: boolean;
 };
 
 export type QueryNotificationsByAdminQueryVariables = Exact<{
@@ -3288,6 +3435,32 @@ export const MutationRemoveKeywordMapEntryByAdminDocument = new TypedDocumentStr
     `) as unknown as TypedDocumentString<
   MutationRemoveKeywordMapEntryByAdminMutation,
   MutationRemoveKeywordMapEntryByAdminMutationVariables
+>;
+export const QueryModelPagesByAdminDocument = new TypedDocumentString(`
+    query QueryModelPagesByAdmin($onlyDrafts: Boolean) {
+  modelPagesByAdmin(onlyDrafts: $onlyDrafts) {
+    id
+    slug
+    brand
+    modelName
+    dealCount
+    lastDealAt
+    heroImage
+    heroMinPrice
+    isPublished
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryModelPagesByAdminQuery,
+  QueryModelPagesByAdminQueryVariables
+>;
+export const MutationSetModelPagePublishedByAdminDocument = new TypedDocumentString(`
+    mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {
+  setModelPagePublishedByAdmin(id: $id, isPublished: $isPublished)
+}
+    `) as unknown as TypedDocumentString<
+  MutationSetModelPagePublishedByAdminMutation,
+  MutationSetModelPagePublishedByAdminMutationVariables
 >;
 export const QueryNotificationsByAdminDocument = new TypedDocumentString(`
     query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {

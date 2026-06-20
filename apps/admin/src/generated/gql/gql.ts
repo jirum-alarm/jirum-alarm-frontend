@@ -37,6 +37,8 @@ type Documents = {
   '\n  mutation MutationAddKeywordMapEntryByAdmin($groupId: Int!, $keyword: String!) {\n    addKeywordMapEntryByAdmin(groupId: $groupId, keyword: $keyword)\n  }\n': typeof types.MutationAddKeywordMapEntryByAdminDocument;
   '\n  mutation MutationAddKeywordMapEntriesByAdmin($groupId: Int!, $keywords: [String!]!) {\n    addKeywordMapEntriesByAdmin(groupId: $groupId, keywords: $keywords)\n  }\n': typeof types.MutationAddKeywordMapEntriesByAdminDocument;
   '\n  mutation MutationRemoveKeywordMapEntryByAdmin($id: Int!) {\n    removeKeywordMapEntryByAdmin(id: $id)\n  }\n': typeof types.MutationRemoveKeywordMapEntryByAdminDocument;
+  '\n  query QueryModelPagesByAdmin($onlyDrafts: Boolean) {\n    modelPagesByAdmin(onlyDrafts: $onlyDrafts) {\n      id\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      heroImage\n      heroMinPrice\n      isPublished\n    }\n  }\n': typeof types.QueryModelPagesByAdminDocument;
+  '\n  mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {\n    setModelPagePublishedByAdmin(id: $id, isPublished: $isPublished)\n  }\n': typeof types.MutationSetModelPagePublishedByAdminDocument;
   '\n  query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {\n    notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {\n      id\n      title\n      message\n      target\n      targetId\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryNotificationsByAdminDocument;
   '\n  mutation MutationSendNotificationByAdmin(\n    $title: String!\n    $message: String!\n    $type: NotificationType!\n    $target: NotificationTarget\n    $targetId: Int\n    $url: String\n    $userIds: [Int!]\n  ) {\n    sendNotificationByAdmin(\n      title: $title\n      message: $message\n      type: $type\n      target: $target\n      targetId: $targetId\n      url: $url\n      userIds: $userIds\n    )\n  }\n': typeof types.MutationSendNotificationByAdminDocument;
   '\n  query QueryProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n    $categoryId: Int\n    $keyword: String\n    $thumbnailType: ThumbnailType\n    $isEnd: Boolean\n    $isHot: Boolean\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      orderOption: $orderOption\n      categoryId: $categoryId\n      keyword: $keyword\n      thumbnailType: $thumbnailType\n      isEnd: $isEnd\n      isHot: $isHot\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryProductsDocument;
@@ -123,6 +125,10 @@ const documents: Documents = {
     types.MutationAddKeywordMapEntriesByAdminDocument,
   '\n  mutation MutationRemoveKeywordMapEntryByAdmin($id: Int!) {\n    removeKeywordMapEntryByAdmin(id: $id)\n  }\n':
     types.MutationRemoveKeywordMapEntryByAdminDocument,
+  '\n  query QueryModelPagesByAdmin($onlyDrafts: Boolean) {\n    modelPagesByAdmin(onlyDrafts: $onlyDrafts) {\n      id\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      heroImage\n      heroMinPrice\n      isPublished\n    }\n  }\n':
+    types.QueryModelPagesByAdminDocument,
+  '\n  mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {\n    setModelPagePublishedByAdmin(id: $id, isPublished: $isPublished)\n  }\n':
+    types.MutationSetModelPagePublishedByAdminDocument,
   '\n  query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {\n    notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {\n      id\n      title\n      message\n      target\n      targetId\n      createdAt\n      searchAfter\n    }\n  }\n':
     types.QueryNotificationsByAdminDocument,
   '\n  mutation MutationSendNotificationByAdmin(\n    $title: String!\n    $message: String!\n    $type: NotificationType!\n    $target: NotificationTarget\n    $targetId: Int\n    $url: String\n    $userIds: [Int!]\n  ) {\n    sendNotificationByAdmin(\n      title: $title\n      message: $message\n      type: $type\n      target: $target\n      targetId: $targetId\n      url: $url\n      userIds: $userIds\n    )\n  }\n':
@@ -343,6 +349,18 @@ export function graphql(
 export function graphql(
   source: '\n  mutation MutationRemoveKeywordMapEntryByAdmin($id: Int!) {\n    removeKeywordMapEntryByAdmin(id: $id)\n  }\n',
 ): typeof import('./graphql').MutationRemoveKeywordMapEntryByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryModelPagesByAdmin($onlyDrafts: Boolean) {\n    modelPagesByAdmin(onlyDrafts: $onlyDrafts) {\n      id\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      heroImage\n      heroMinPrice\n      isPublished\n    }\n  }\n',
+): typeof import('./graphql').QueryModelPagesByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {\n    setModelPagePublishedByAdmin(id: $id, isPublished: $isPublished)\n  }\n',
+): typeof import('./graphql').MutationSetModelPagePublishedByAdminDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
