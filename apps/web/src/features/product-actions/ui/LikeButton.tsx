@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { WishlistService } from '@/shared/api/wishlist/wishlist.service';
 import { PAGE } from '@/shared/config/page';
 import { useDevice } from '@/shared/hooks/useDevice';
+import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { triggerHaptic, WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
@@ -27,6 +28,7 @@ export default function LikeButton({
   const { toast } = useToast();
 
   const { checkAndRedirect } = useRedirectIfNotLoggedIn();
+  const { isLoggedIn } = useIsLoggedIn();
   const { data: product } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
 
   const { device } = useDevice();
@@ -58,6 +60,15 @@ export default function LikeButton({
   });
 
   const handleClickWishlist = () => {
+    // 비로그인 유저가 찜을 누르면 로그인 게이트로 막혀 product_wish에 도달하지 못한다.
+    // 게이트 직전에 wishlist_intent를 쏴서 "막힌 찜 수요"를 측정한다. (Phase 1 익명→회원 전환)
+    if (!isLoggedIn && typeof window !== 'undefined') {
+      (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+        event: 'wishlist_intent',
+        product_id: productId,
+      });
+    }
+
     if (checkAndRedirect()) return;
 
     triggerHaptic(isLiked ? 'light' : 'success');
