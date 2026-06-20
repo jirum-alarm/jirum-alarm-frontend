@@ -123,6 +123,14 @@ export function useCommonWebViewLogic() {
         return true;
       }
 
+      // iOS는 메인 프레임뿐 아니라 iframe/서브리소스 로드에도 이 핸들러가 실행된다.
+      // AdSense 광고 iframe(googlesyndication·doubleclick 등)이 매번 화이트리스트에
+      // 안 걸려 openInAppBrowser를 트리거하면 탭 이동마다 모달 브라우저가 떴다.
+      // 메인 프레임이 아닌 로드는 WebView가 그대로 처리하도록 통과시킨다.
+      if (event.isTopFrame === false) {
+        return true;
+      }
+
       if (
         !event.url.includes('jirum-alarm') &&
         !event.url.startsWith(SERVICE_URL)
