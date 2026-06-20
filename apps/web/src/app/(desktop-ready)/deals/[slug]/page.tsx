@@ -18,6 +18,7 @@ interface Deal {
   providerId: number;
   postedAt: string | null;
   thumbnail: string | null;
+  // posReaction/commentCount: payload엔 오지만 화면 미표시(커뮤니티 반응 제거, 2026-06-20).
   posReaction: number;
   commentCount: number;
 }
@@ -254,13 +255,11 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                 )}
                 <div className="min-w-0 flex-1">
                   <div className="line-clamp-2 text-sm">{deal.title}</div>
-                  <div className="mt-1 flex items-center gap-2 text-xs text-gray-400">
-                    {deal.postedAt && (
-                      <span>{new Date(deal.postedAt).toLocaleDateString('ko-KR')}</span>
-                    )}
-                    {deal.posReaction > 0 && <span>👍 추천 {deal.posReaction}</span>}
-                    {deal.commentCount > 0 && <span>💬 댓글 {deal.commentCount}</span>}
-                  </div>
+                  {deal.postedAt && (
+                    <div className="mt-1 text-xs text-gray-400">
+                      {new Date(deal.postedAt).toLocaleDateString('ko-KR')}
+                    </div>
+                  )}
                 </div>
                 <span className="shrink-0 text-sm font-medium text-gray-700">
                   {won(deal.price)}
