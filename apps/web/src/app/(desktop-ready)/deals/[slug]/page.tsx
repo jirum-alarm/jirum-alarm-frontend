@@ -35,14 +35,14 @@ interface DanawaInfo {
   danawaUrl: string | null;
 }
 
-interface GuideItem {
-  title: string;
-  content: string;
-}
-
 interface PricePoint {
   month: string;
   price: number;
+}
+
+interface PriceHistory {
+  currency: 'KRW' | 'USD';
+  points: PricePoint[];
 }
 
 interface RelatedModel {
@@ -56,8 +56,7 @@ interface ModelPagePayload {
   deals?: Deal[];
   priceSummary?: PriceSummary;
   danawa?: DanawaInfo | null;
-  guides?: GuideItem[];
-  priceHistory?: PricePoint[];
+  priceHistory?: PriceHistory;
   relatedModels?: RelatedModel[];
 }
 
@@ -97,15 +96,11 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   if (!page) notFound();
 
   const payload = (page.payload ?? {}) as ModelPagePayload;
-  const {
-    heroImage,
-    deals = [],
-    priceSummary,
-    danawa,
-    guides = [],
-    priceHistory = [],
-    relatedModels = [],
-  } = payload;
+  const { heroImage, deals = [], priceSummary, danawa, priceHistory, relatedModels = [] } = payload;
+  const histPoints = priceHistory?.points ?? [];
+  const histCurrency = priceHistory?.currency ?? 'KRW';
+  const fmtHist = (n: number) =>
+    histCurrency === 'USD' ? `$${Math.round(n)}` : `${Math.round(n).toLocaleString()}원`;
 
   // JSON-LD: verified(danawa_stats) 가격일 때만 Product/offer schema (가짜 가격 페널티 회피)
   const jsonLd =
@@ -125,11 +120,13 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         }
       : null;
 
-  // 가격 추이 미니 막대 (의존성 없이 인라인 SVG-free, 높이 비율 div)
-  const histMax = priceHistory.length ? Math.max(...priceHistory.map((p) => p.price)) : 0;
+  // 가격 추이 미니 막대 (의존성 없이 인라인, 높이 비율 div)
+  const histMax = histPoints.length ? Math.max(...histPoints.map((p) => p.price)) : 0;
 
   return (
-    <main className="mx-auto w-full max-w-screen-md px-4 py-6">
+    // 상단 패딩: 모바일은 fixed GNB(h-14) 보정 pt-14, 데스크톱은 pc:pt-7 (recommend 패턴과 일관).
+    // 하단 pb-24 = 모바일 BottomNav 가림 방지. 좌우 px-5.
+    <main className="pc:pt-7 mx-auto w-full max-w-screen-md px-5 pt-14 pb-24">
       {jsonLd && (
         <script
           type="application/ld+json"
@@ -190,32 +187,21 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         </a>
       )}
 
-      {/* 블록3: 제품 설명 (product_guide LLM) */}
-      {guides.length > 0 && (
+      {/* 블록5: 월별 핫딜 최저가 추이 (통화 라벨 — 직구는 $) */}
+      {histPoints.length >= 2 && (
         <section className="mb-6">
-          <h2 className="mb-3 text-base font-semibold">이 제품은</h2>
-          <ul className="flex flex-col gap-2">
-            {guides.map((g, i) => (
-              <li key={i} className="rounded-lg bg-gray-50 p-3">
-                <div className="text-sm font-medium">{g.title}</div>
-                {g.content && <div className="mt-0.5 text-sm text-gray-600">{g.content}</div>}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {/* 블록5: 가격 추이 (product_price 월별 최저가) */}
-      {priceHistory.length >= 2 && (
-        <section className="mb-6">
-          <h2 className="mb-3 text-base font-semibold">월별 핫딜 최저가 추이</h2>
-          <div className="flex items-end gap-1" style={{ height: 80 }}>
-            {priceHistory.map((p) => (
+          <h2 className="mb-1 text-base font-semibold">월별 핫딜 최저가 추이</h2>
+          <p className="mb-3 text-xs text-gray-400">
+            {histCurrency === 'USD' ? '직구 가격($) 기준' : '원화 기준'}
+          </p>
+          <div className="flex items-end gap-1" style={{ height: 88 }}>
+            {histPoints.map((p) => (
               <div key={p.month} className="flex flex-1 flex-col items-center justify-end gap-1">
+                <span className="text-[10px] text-gray-500">{fmtHist(p.price)}</span>
                 <div
-                  className="w-full rounded-t bg-blue-200"
-                  style={{ height: `${histMax ? (p.price / histMax) * 64 : 0}px` }}
-                  title={`${p.month}: ${won(p.price)}`}
+                  className="w-full rounded-t bg-blue-300"
+                  style={{ height: `${histMax ? Math.max((p.price / histMax) * 56, 4) : 4}px` }}
+                  title={`${p.month}: ${fmtHist(p.price)}`}
                 />
                 <span className="text-[10px] text-gray-400">{p.month.slice(2)}</span>
               </div>
