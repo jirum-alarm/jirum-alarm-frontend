@@ -21,7 +21,8 @@
     "verify:migration": "pnpm generate && pnpm ts:check && pnpm lint && pnpm exec jest --runInBand && npx expo-doctor",
     "start": "expo start",
     "test": "jest",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "eas-build-pre-install": "if [ -n \"$GOOGLE_SERVICE_INFO_PLIST\" ]; then cp \"$GOOGLE_SERVICE_INFO_PLIST\" ./ios/GoogleService-Info.plist; fi"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
