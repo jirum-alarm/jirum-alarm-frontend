@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation';
 import { ModelPageService } from '@/shared/api/model-page';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
+import DealsMobileHeader from './DealsMobileHeader';
+
 // 에버그린 모델 페이지 (/deals/{slug}) — 상품별 정보 모음. SEO 유입(CTR) 타깃.
 // 백엔드 model_page(isPublished=true) precompute payload 를 단일 slug 조회로 SSR.
 // 블록: 히어로 · 용량/수량별 대표상품(단위가격·다나와링크) · 다나와비교 · 가격추이 · 핫딜목록(싼순) · 관련모델.
@@ -169,6 +171,9 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       )}
+
+      {/* 모바일 전용 상단 헤더(데스크톱은 GNB라 pc:hidden). pt-20이 이 fixed 헤더 높이 보정. */}
+      <DealsMobileHeader title={page.modelName} />
 
       {/* 블록1: 히어로 (대표 이미지 + 모델명 + 최저가) */}
       <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
