@@ -82,6 +82,10 @@ interface ModelPagePayload {
   relatedModels?: RelatedModel[];
 }
 
+// ISR — 발행 페이지를 10분 캐시(목록과 동일). http-client public 모드(cookies 미read)와 함께라야
+// 실제로 정적/ISR 렌더됨. revalidate 만으론 부족(cookies()가 동적 렌더 옵트아웃의 진범이었음).
+export const revalidate = 600;
+
 function won(n?: number | null): string {
   if (n == null) return '-';
   return `${Math.round(n).toLocaleString()}원`;
