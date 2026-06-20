@@ -63,10 +63,21 @@ const SocialLoginCallbackPage = () => {
       if (data.socialLogin.refreshToken) {
         await setRefreshToken(data.socialLogin.refreshToken);
       }
-      toast('로그인에 성공했어요.');
 
       const rtnUrl = extractRtnUrlFromState(state);
-      router.replace(rtnUrl && rtnUrl !== '' ? decodeURIComponent(rtnUrl) : PAGE.HOME);
+      const landing = rtnUrl && rtnUrl !== '' ? decodeURIComponent(rtnUrl) : PAGE.HOME;
+
+      // 신규 OAuth 가입은 /signup/complete 를 거쳐 보낸다. 이메일 가입과 동일한 GTM URL 트리거가
+      // 발화돼야 signup_complete 가 잡힌다(계측은 코드가 아닌 GTM DOM 트리거가 함). type 은
+      // 서버 social.service 가 신규=SIGNUP / 기존=LOGIN 으로 내려준다.
+      if (data.socialLogin.type === 'SIGNUP') {
+        toast('회원가입에 성공했어요.');
+        router.replace(`${PAGE.SIGNUP_COMPLETE}?rtnUrl=${encodeURIComponent(landing)}`);
+        return;
+      }
+
+      toast('로그인에 성공했어요.');
+      router.replace(landing);
     },
     onError: (error) => {
       console.error(`${providerName} 로그인 실패:`, error);

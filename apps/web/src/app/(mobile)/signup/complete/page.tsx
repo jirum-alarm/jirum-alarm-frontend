@@ -1,16 +1,21 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+
+import { PAGE } from '@/shared/config/page';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import Button from '@/shared/ui/common/Button';
 import { Illust } from '@/shared/ui/common/icons/Illust';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
-const HOME_ROUTE = '/';
-
 const Completed = () => {
   const router = useMyRouter();
+  const searchParams = useSearchParams();
   const handleCTAButton = () => {
-    router.replace(HOME_ROUTE);
+    // 소셜 가입은 가입 전 의도한 곳(rtnUrl)으로, 그 외엔 홈으로.
+    const rtnUrl = searchParams.get('rtnUrl');
+    router.replace(rtnUrl ? decodeURIComponent(rtnUrl) : PAGE.HOME);
   };
 
   return (
@@ -41,4 +46,12 @@ const Completed = () => {
   );
 };
 
-export default Completed;
+const CompletedPage = () => {
+  return (
+    <Suspense>
+      <Completed />
+    </Suspense>
+  );
+};
+
+export default CompletedPage;
