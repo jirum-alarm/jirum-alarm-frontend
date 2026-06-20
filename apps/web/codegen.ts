@@ -3,7 +3,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 const config: CodegenConfig = {
   overwrite: true,
   schema: 'https://jirum-dev-api.kyojs.com/graphql',
-  documents: ['./src/graphql/*.ts'],
+  documents: ['./src/graphql/*.ts', './src/shared/api/**/*.service.ts'],
   hooks: { afterOneFileWrite: ['prettier --write'] },
   ignoreNoDocuments: true,
   generates: {

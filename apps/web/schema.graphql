@@ -426,6 +426,16 @@ type MatchRunsByAdminOutput {
   total: Int!
 }
 
+type ModelPageOutput {
+  brand: String
+  dealCount: Int!
+  lastDealAt: DateTime
+  metaDescription: String
+  modelName: String!
+  payload: JSONObject
+  slug: String!
+}
+
 type Mutation {
   addComment(
     content: String!
@@ -1553,6 +1563,7 @@ type Query {
   로그인한 유저 정보 조회
   """
   me: User
+  modelPage(slug: String!): ModelPageOutput
   """
   유저 알림 키워드 목록 조회
   """

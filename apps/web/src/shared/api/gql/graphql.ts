@@ -440,6 +440,17 @@ export type MatchRunsByAdminOutput = {
   total: Scalars['Int']['output'];
 };
 
+export type ModelPageOutput = {
+  __typename?: 'ModelPageOutput';
+  brand?: Maybe<Scalars['String']['output']>;
+  dealCount: Scalars['Int']['output'];
+  lastDealAt?: Maybe<Scalars['DateTime']['output']>;
+  metaDescription?: Maybe<Scalars['String']['output']>;
+  modelName: Scalars['String']['output'];
+  payload?: Maybe<Scalars['JSONObject']['output']>;
+  slug: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addComment: Scalars['Boolean']['output'];
@@ -1372,6 +1383,7 @@ export type Query = {
   matchRunsByAdmin: MatchRunsByAdminOutput;
   /** 로그인한 유저 정보 조회 */
   me?: Maybe<User>;
+  modelPage?: Maybe<ModelPageOutput>;
   /** 유저 알림 키워드 목록 조회 */
   notificationKeywordsByMe: Array<NotificationKeyword>;
   /** 어드민) 개별 알림 목록 조회 */
@@ -1670,6 +1682,10 @@ export type QueryMatchRunsByAdminArgs = {
   status?: InputMaybe<MatchRunStatus>;
   take?: InputMaybe<Scalars['Int']['input']>;
   to?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type QueryModelPageArgs = {
+  slug: Scalars['String']['input'];
 };
 
 export type QueryNotificationKeywordsByMeArgs = {
@@ -2992,6 +3008,24 @@ export type QueryWishlistCountQueryVariables = Exact<{ [key: string]: never }>;
 
 export type QueryWishlistCountQuery = { __typename?: 'Query'; wishlistCount: number };
 
+export type ModelPageQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+export type ModelPageQuery = {
+  __typename?: 'Query';
+  modelPage?: {
+    __typename?: 'ModelPageOutput';
+    slug: string;
+    brand?: string | null;
+    modelName: string;
+    dealCount: number;
+    lastDealAt?: any | null;
+    metaDescription?: string | null;
+    payload?: any | null;
+  } | null;
+};
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -3964,3 +3998,16 @@ export const QueryWishlistCountDocument = new TypedDocumentString(`
   wishlistCount
 }
     `) as unknown as TypedDocumentString<QueryWishlistCountQuery, QueryWishlistCountQueryVariables>;
+export const ModelPageDocument = new TypedDocumentString(`
+    query modelPage($slug: String!) {
+  modelPage(slug: $slug) {
+    slug
+    brand
+    modelName
+    dealCount
+    lastDealAt
+    metaDescription
+    payload
+  }
+}
+    `) as unknown as TypedDocumentString<ModelPageQuery, ModelPageQueryVariables>;
