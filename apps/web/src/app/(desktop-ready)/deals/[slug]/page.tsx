@@ -7,7 +7,7 @@ import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
 // 에버그린 모델 페이지 (/deals/{slug}) — 상품별 정보 모음. SEO 유입(CTR) 타깃.
 // 백엔드 model_page(isPublished=true) precompute payload 를 단일 slug 조회로 SSR.
-// 6블록: 히어로(이미지) · 다나와비교 · 제품설명(LLM) · 가격추이 · 핫딜타임라인 · 관련모델.
+// 블록: 히어로 · 용량/수량별 대표상품(단위가격·다나와링크) · 다나와비교 · 가격추이 · 핫딜목록(싼순) · 관련모델.
 // ★현재 기존 화면 어디에서도 링크 안 함(미연결) — URL 직접 접속으로만 확인.
 
 interface Deal {
@@ -16,11 +16,9 @@ interface Deal {
   price: number | null;
   url: string;
   providerId: number;
+  mallName: string | null; // 출처(쇼핑몰명)
   postedAt: string | null;
   thumbnail: string | null;
-  // posReaction/commentCount: payload엔 오지만 화면 미표시(커뮤니티 반응 제거, 2026-06-20).
-  posReaction: number;
-  commentCount: number;
 }
 
 interface PriceSummary {
@@ -60,6 +58,8 @@ interface Representative {
   danawaUrl: string | null;
   activeDeals: number;
   dealMinPrice: number | null;
+  unitPrice: number | null; // 개당 가격
+  unitLabel: string | null; // "개당"
 }
 
 interface ModelPagePayload {
@@ -200,27 +200,43 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         <section className="mb-6">
           <h2 className="mb-3 text-base font-semibold">용량·수량별 대표 상품</h2>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {representatives.map((rep, i) => (
-              <div key={i} className="flex flex-col gap-1 rounded-lg border border-gray-200 p-3">
-                <div className="flex items-center justify-between gap-1">
-                  <span className="text-sm font-medium">{rep.label}</span>
-                  {rep.priceRank && (
-                    <span className="shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">
-                      다나와 {rep.priceRank}
+            {representatives.map((rep, i) => {
+              // 다나와 링크 있으면 클릭 가능한 a, 없으면 div
+              const Card = rep.danawaUrl ? 'a' : 'div';
+              return (
+                <Card
+                  key={i}
+                  {...(rep.danawaUrl
+                    ? { href: rep.danawaUrl, target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                  className="flex flex-col gap-1 rounded-lg border border-gray-200 p-3 hover:bg-gray-50"
+                >
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-sm font-medium">{rep.label}</span>
+                    {rep.priceRank && (
+                      <span className="shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">
+                        다나와 {rep.priceRank}
+                      </span>
+                    )}
+                  </div>
+                  {rep.dealMinPrice != null && (
+                    <span className="text-sm font-semibold text-rose-500">
+                      핫딜 {won(rep.dealMinPrice)}
                     </span>
                   )}
-                </div>
-                {rep.dealMinPrice != null && (
-                  <span className="text-sm font-semibold text-rose-500">
-                    핫딜 {won(rep.dealMinPrice)}
+                  {rep.unitPrice != null && (
+                    <span className="text-xs text-gray-500">
+                      {rep.unitLabel} {won(rep.unitPrice)}
+                    </span>
+                  )}
+                  <span className="text-xs text-gray-400">
+                    {rep.danawaPrice != null ? `다나와 ${won(rep.danawaPrice)}` : ''}
+                    {rep.mallCount ? ` · ${rep.mallCount}곳` : ''}
+                    {rep.danawaUrl ? ' ›' : ''}
                   </span>
-                )}
-                <span className="text-xs text-gray-400">
-                  {rep.danawaPrice != null ? `다나와 ${won(rep.danawaPrice)}` : ''}
-                  {rep.mallCount ? ` · ${rep.mallCount}곳 판매` : ''}
-                </span>
-              </div>
-            ))}
+                </Card>
+              );
+            })}
           </div>
         </section>
       )}
@@ -281,41 +297,51 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         </section>
       )}
 
-      {/* 블록4: 핫딜 타임라인 (이미지 + 반응) */}
+      {/* 블록4: 핫딜 목록 (싼 순). 역대 최저가 배지 + 출처 */}
       <section className="mb-6">
-        <h2 className="mb-3 text-base font-semibold">핫딜 목록</h2>
+        <h2 className="mb-3 text-base font-semibold">핫딜 목록 (싼 순)</h2>
         <ul className="flex flex-col gap-2">
-          {deals.map((deal) => (
-            <li key={deal.productId}>
-              <a
-                href={`/products/${deal.productId}`}
-                className="flex items-center gap-3 rounded-lg border border-gray-100 p-3 hover:bg-gray-50"
-              >
-                {deal.thumbnail && (
-                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded bg-gray-50">
-                    <Image
-                      src={deal.thumbnail}
-                      alt=""
-                      fill
-                      sizes="56px"
-                      className="object-contain"
-                    />
-                  </div>
-                )}
-                <div className="min-w-0 flex-1">
-                  <div className="line-clamp-2 text-sm">{deal.title}</div>
-                  {deal.postedAt && (
-                    <div className="mt-1 text-xs text-gray-400">
-                      {new Date(deal.postedAt).toLocaleDateString('ko-KR')}
+          {deals.map((deal) => {
+            // 역대 최저: 이 딜 가격이 가격추이 최저값 이하 (histMin>0 일 때만)
+            const isAllTimeLow = histMin > 0 && deal.price != null && deal.price <= histMin;
+            return (
+              <li key={deal.productId}>
+                <a
+                  href={`/products/${deal.productId}`}
+                  className="flex items-center gap-3 rounded-lg border border-gray-100 p-3 hover:bg-gray-50"
+                >
+                  {deal.thumbnail && (
+                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded bg-gray-50">
+                      <Image
+                        src={deal.thumbnail}
+                        alt=""
+                        fill
+                        sizes="56px"
+                        className="object-contain"
+                      />
                     </div>
                   )}
-                </div>
-                <span className="shrink-0 text-sm font-medium text-gray-700">
-                  {won(deal.price)}
-                </span>
-              </a>
-            </li>
-          ))}
+                  <div className="min-w-0 flex-1">
+                    <div className="line-clamp-2 text-sm">{deal.title}</div>
+                    <div className="mt-1 flex items-center gap-2 text-xs text-gray-400">
+                      {deal.mallName && <span className="text-gray-500">{deal.mallName}</span>}
+                      {deal.postedAt && (
+                        <span>{new Date(deal.postedAt).toLocaleDateString('ko-KR')}</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex shrink-0 flex-col items-end gap-0.5">
+                    {isAllTimeLow && (
+                      <span className="rounded bg-rose-100 px-1.5 py-0.5 text-[10px] font-semibold text-rose-600">
+                        역대 최저
+                      </span>
+                    )}
+                    <span className="text-sm font-medium text-gray-700">{won(deal.price)}</span>
+                  </div>
+                </a>
+              </li>
+            );
+          })}
         </ul>
         {deals.length === 0 && <p className="text-sm text-gray-400">표시할 핫딜이 없습니다.</p>}
       </section>
