@@ -12,6 +12,13 @@ type AdSenseUnitProps = {
   responsive?: boolean;
   className?: string;
   minHeight?: number;
+  /**
+   * AdSense 맞춤 채널 ID(쉼표 구분 다중 가능). AdSense 콘솔에서 만든 채널과 연결해
+   * 채널별 리포트·차단을 적용한다. 선정적/민감 카테고리 차단 자체는 콘솔
+   * (브랜드 안전성 → 콘텐츠 → 광고 차단 관리 → 민감한 카테고리)에서 하고,
+   * 이 채널은 그 차단·분석을 위치별로 분리하는 보조 수단이다.
+   */
+  channel?: string;
 };
 
 export function AdSenseUnit({
@@ -20,6 +27,7 @@ export function AdSenseUnit({
   responsive = true,
   className,
   minHeight = 250,
+  channel,
 }: AdSenseUnitProps) {
   const clientId = env('NEXT_PUBLIC_ADSENSE_CLIENT_ID') ?? '';
   const isPushed = useRef(false);
@@ -52,6 +60,7 @@ export function AdSenseUnit({
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive ? 'true' : 'false'}
+        {...(channel ? { 'data-ad-channel': channel } : {})}
       />
     </div>
   );
