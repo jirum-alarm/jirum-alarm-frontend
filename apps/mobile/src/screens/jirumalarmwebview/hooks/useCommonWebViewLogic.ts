@@ -27,6 +27,27 @@ import {mainNavigations} from '@/shared/constant/navigations';
 const LOADING_INDICATOR_DELAY_MS = 1000;
 const LOADING_FALLBACK_TIMEOUT_MS = 15000;
 
+/**
+ * AdSense 광고가 일으키는 호스트들. iOS는 onShouldStartLoadWithRequest가
+ * 광고 iframe 로드/리다이렉트(googlesyndication·doubleclick 등)에도 실행되는데,
+ * 이게 외부 URL로 분류돼 openInAppBrowser를 트리거하면 탭 이동마다 모달 브라우저가 떴다.
+ * 이 호스트들은 사용자가 누른 링크가 아니라 광고 스크립트의 내부 동작이므로
+ * WebView가 그대로 처리하도록 통과시키고 인앱 브라우저로 보내지 않는다.
+ */
+const AD_HOST_FRAGMENTS = [
+  'googlesyndication.com',
+  'doubleclick.net',
+  'googleadservices.com',
+  'googleads.g.doubleclick.net',
+  'google.com/pagead',
+  'google.com/ads',
+  'adservice.google',
+  'pagead2.googlesyndication.com',
+];
+
+const isAdRequestUrl = (url: string) =>
+  AD_HOST_FRAGMENTS.some(fragment => url.includes(fragment));
+
 export function useCommonWebViewLogic() {
   const insets = useSafeAreaInsets();
   const {webviewRef} = useWebviewContext();
@@ -123,11 +144,10 @@ export function useCommonWebViewLogic() {
         return true;
       }
 
-      // iOS는 메인 프레임뿐 아니라 iframe/서브리소스 로드에도 이 핸들러가 실행된다.
-      // AdSense 광고 iframe(googlesyndication·doubleclick 등)이 매번 화이트리스트에
-      // 안 걸려 openInAppBrowser를 트리거하면 탭 이동마다 모달 브라우저가 떴다.
-      // 메인 프레임이 아닌 로드는 WebView가 그대로 처리하도록 통과시킨다.
-      if (event.isTopFrame === false) {
+      // AdSense 광고가 일으키는 로드(googlesyndication·doubleclick 등)는
+      // 사용자가 누른 링크가 아니므로 인앱 브라우저로 보내지 않고 WebView가 처리한다.
+      // (이게 없으면 탭 이동마다 광고 로드가 외부 URL로 분류돼 모달 브라우저가 떴다.)
+      if (isAdRequestUrl(event.url)) {
         return true;
       }
 
