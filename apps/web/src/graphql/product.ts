@@ -82,6 +82,16 @@ export const QueryProductAdditionalInfo = gql`
       price
       createdAt
     }
+    priceContext {
+      dealPrice
+      danawaPrice
+      delta
+      normalPriceMin
+      normalPriceMax
+      normalPriceMedian
+      danawaProductName
+      verificationStatus
+    }
     hotDealType
     hotDealIndex {
       id

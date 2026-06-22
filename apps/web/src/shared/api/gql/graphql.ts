@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -440,6 +441,19 @@ export type MatchRunsByAdminOutput = {
   total: Scalars['Int']['output'];
 };
 
+export type ModelPageAdminItemOutput = {
+  __typename?: 'ModelPageAdminItemOutput';
+  brand?: Maybe<Scalars['String']['output']>;
+  dealCount: Scalars['Int']['output'];
+  heroImage?: Maybe<Scalars['String']['output']>;
+  heroMinPrice?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['Int']['output'];
+  isPublished: Scalars['Boolean']['output'];
+  lastDealAt?: Maybe<Scalars['DateTime']['output']>;
+  modelName: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+};
+
 export type ModelPageListItemOutput = {
   __typename?: 'ModelPageListItemOutput';
   brand?: Maybe<Scalars['String']['output']>;
@@ -456,6 +470,8 @@ export type ModelPageOutput = {
   __typename?: 'ModelPageOutput';
   brand?: Maybe<Scalars['String']['output']>;
   dealCount: Scalars['Int']['output'];
+  id?: Maybe<Scalars['Int']['output']>;
+  isPublished?: Maybe<Scalars['Boolean']['output']>;
   lastDealAt?: Maybe<Scalars['DateTime']['output']>;
   metaDescription?: Maybe<Scalars['String']['output']>;
   modelName: Scalars['String']['output'];
@@ -557,6 +573,8 @@ export type Mutation = {
   reportExpiredProduct: Scalars['Boolean']['output'];
   /** 어드민) 알림 발송 */
   sendNotificationByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 모델 페이지 발행 토글 */
+  setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
   /** 대표 매핑 지정 (id 기준) */
   setPrimaryProductMapping: Scalars['Boolean']['output'];
   /** 회원가입 */
@@ -835,6 +853,11 @@ export type MutationSendNotificationByAdminArgs = {
   userIds?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
+export type MutationSetModelPagePublishedByAdminArgs = {
+  id: Scalars['Int']['input'];
+  isPublished: Scalars['Boolean']['input'];
+};
+
 export type MutationSetPrimaryProductMappingArgs = {
   productMappingId: Scalars['Int']['input'];
 };
@@ -1014,6 +1037,18 @@ export type PaginatedGridSection = BaseSection & {
   title: Scalars['String']['output'];
   type: SectionDisplayType;
   viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
+
+export type PriceContext = {
+  __typename?: 'PriceContext';
+  danawaPrice: Scalars['Float']['output'];
+  danawaProductName?: Maybe<Scalars['String']['output']>;
+  dealPrice: Scalars['Float']['output'];
+  delta: Scalars['Float']['output'];
+  normalPriceMax?: Maybe<Scalars['Float']['output']>;
+  normalPriceMedian?: Maybe<Scalars['Float']['output']>;
+  normalPriceMin?: Maybe<Scalars['Float']['output']>;
+  verificationStatus?: Maybe<Scalars['String']['output']>;
 };
 
 export type PriceRangeCountOutput = {
@@ -1233,7 +1268,6 @@ export type ProductOutput = {
   isProfitUrl: Scalars['Boolean']['output'];
   likeCount: Scalars['Int']['output'];
   mallId?: Maybe<Scalars['Int']['output']>;
-  /** 쇼핑몰 이름 */
   mallName?: Maybe<Scalars['String']['output']>;
   mappingInfo?: Maybe<Array<ProductMappingInfoOutput>>;
   negativeCommunityReactionCount: Scalars['Int']['output'];
@@ -1242,6 +1276,9 @@ export type ProductOutput = {
   postedAt: Scalars['DateTime']['output'];
   precomputedRankingScore?: Maybe<Scalars['Float']['output']>;
   price?: Maybe<Scalars['String']['output']>;
+  /** 왜 핫딜인지 가격 컨텍스트 (게이트 통과 시에만, 상세 전용) */
+  priceContext?: Maybe<PriceContext>;
+  priceCurrency?: Maybe<Scalars['String']['output']>;
   /** 상품 가격 목록 */
   prices?: Maybe<Array<ProductPrice>>;
   productMapping?: Maybe<ProductMapping>;
@@ -1337,6 +1374,8 @@ export type Query = {
   categories: Array<Category>;
   /** 커뮤니티 반응 카테고리별 키워드 조회 */
   categorizedReactionKeywords: CategorizedReactionKeywordsResponse;
+  /** 같은 상품의 다른 커뮤니티 글 조회 (Track B 클러스터, 최저가순) */
+  clusteredProducts: Array<ProductOutput>;
   comment: CommentOutput;
   comments: Array<CommentOutput>;
   /** 어드민) 댓글 목록 조회 */
@@ -1396,6 +1435,10 @@ export type Query = {
   /** 로그인한 유저 정보 조회 */
   me?: Maybe<User>;
   modelPage?: Maybe<ModelPageOutput>;
+  /** 어드민) 모델 페이지 미리보기 */
+  modelPagePreviewByAdmin?: Maybe<ModelPageOutput>;
+  /** 어드민) 모델 페이지 검수 목록 */
+  modelPagesByAdmin: Array<ModelPageAdminItemOutput>;
   /** 유저 알림 키워드 목록 조회 */
   notificationKeywordsByMe: Array<NotificationKeyword>;
   /** 어드민) 개별 알림 목록 조회 */
@@ -1523,6 +1566,10 @@ export type QueryBrandProductsOrderByMatchCountArgs = {
 };
 
 export type QueryCategorizedReactionKeywordsArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type QueryClusteredProductsArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -1699,6 +1746,14 @@ export type QueryMatchRunsByAdminArgs = {
 
 export type QueryModelPageArgs = {
   slug: Scalars['String']['input'];
+};
+
+export type QueryModelPagePreviewByAdminArgs = {
+  slug: Scalars['String']['input'];
+};
+
+export type QueryModelPagesByAdminArgs = {
+  onlyDrafts?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type QueryNotificationKeywordsByMeArgs = {
@@ -2585,6 +2640,17 @@ export type ProductAdditionalInfoFragment = {
     price: number;
     createdAt: any;
   }> | null;
+  priceContext?: {
+    __typename?: 'PriceContext';
+    dealPrice: number;
+    danawaPrice: number;
+    delta: number;
+    normalPriceMin?: number | null;
+    normalPriceMax?: number | null;
+    normalPriceMedian?: number | null;
+    danawaProductName?: string | null;
+    verificationStatus?: string | null;
+  } | null;
   hotDealIndex?: {
     __typename?: 'ProductHotDealIndex';
     id: string;
@@ -3093,6 +3159,16 @@ export const ProductAdditionalInfoFragmentDoc = new TypedDocumentString(
     type
     price
     createdAt
+  }
+  priceContext {
+    dealPrice
+    danawaPrice
+    delta
+    normalPriceMin
+    normalPriceMax
+    normalPriceMedian
+    danawaProductName
+    verificationStatus
   }
   hotDealType
   hotDealIndex {
@@ -3625,6 +3701,16 @@ export const ProductAdditionalInfoDocument = new TypedDocumentString(`
     type
     price
     createdAt
+  }
+  priceContext {
+    dealPrice
+    danawaPrice
+    delta
+    normalPriceMin
+    normalPriceMax
+    normalPriceMedian
+    danawaProductName
+    verificationStatus
   }
   hotDealType
   hotDealIndex {

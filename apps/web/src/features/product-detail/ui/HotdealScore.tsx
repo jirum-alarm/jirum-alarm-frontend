@@ -11,12 +11,15 @@ import HotdealBadge from '@/shared/ui/HotdealBadge';
 
 import { ProductQueries } from '@/entities/product';
 
+import PriceContextBadge from '@/features/product-detail/ui/PriceContextBadge';
+
 const HotdealScore = ({ productId }: { productId: number }) => {
   const { data: product } = useSuspenseQuery(
     ProductQueries.productAdditionalInfo({ id: productId }),
   );
 
   const hotDealIndex = product.hotDealIndex;
+  const priceContext = product.priceContext;
   return (
     <>
       {hotDealIndex ? (
@@ -67,6 +70,16 @@ const HotdealScore = ({ productId }: { productId: number }) => {
                 visualConfig={hotDealIndex.visualConfig}
               />
             </div>
+            {/* 핫딜지수(역대가 기반) 안에 다나와 실시간 비교 한 줄 더 */}
+            <PriceContextBadge priceContext={priceContext} />
+          </div>
+        </section>
+      ) : priceContext ? (
+        // 역대가(hotDealIndex) 없는 신선딜이라도 다나와 비교가 있으면 배지만 단독 노출
+        <section>
+          <h2 className="pc:text-[20px] pb-4 font-semibold text-gray-900">가격 비교</h2>
+          <div className="mt-2 rounded-[12px] bg-gray-100 px-6 py-6">
+            <PriceContextBadge priceContext={priceContext} />
           </div>
         </section>
       ) : null}

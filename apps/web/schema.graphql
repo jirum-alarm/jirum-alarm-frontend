@@ -426,6 +426,18 @@ type MatchRunsByAdminOutput {
   total: Int!
 }
 
+type ModelPageAdminItemOutput {
+  brand: String
+  dealCount: Int!
+  heroImage: String
+  heroMinPrice: Int
+  id: Int!
+  isPublished: Boolean!
+  lastDealAt: DateTime
+  modelName: String!
+  slug: String!
+}
+
 type ModelPageListItemOutput {
   brand: String
   dealCount: Int!
@@ -440,6 +452,8 @@ type ModelPageListItemOutput {
 type ModelPageOutput {
   brand: String
   dealCount: Int!
+  id: Int
+  isPublished: Boolean
   lastDealAt: DateTime
   metaDescription: String
   modelName: String!
@@ -738,6 +752,10 @@ type Mutation {
     userIds: [Int!]
   ): Boolean!
   """
+  어드민) 모델 페이지 발행 토글
+  """
+  setModelPagePublishedByAdmin(id: Int!, isPublished: Boolean!): Boolean!
+  """
   대표 매핑 지정 (id 기준)
   """
   setPrimaryProductMapping(productMappingId: Int!): Boolean!
@@ -940,6 +958,17 @@ type PaginatedGridSection implements BaseSection {
   title: String!
   type: SectionDisplayType!
   viewMoreLink: String
+}
+
+type PriceContext {
+  danawaPrice: Float!
+  danawaProductName: String
+  dealPrice: Float!
+  delta: Float!
+  normalPriceMax: Float
+  normalPriceMedian: Float
+  normalPriceMin: Float
+  verificationStatus: String
 }
 
 type PriceRangeCountOutput {
@@ -1174,9 +1203,6 @@ type ProductOutput {
   isProfitUrl: Boolean!
   likeCount: Int!
   mallId: Int
-  """
-  쇼핑몰 이름
-  """
   mallName: String
   mappingInfo: [ProductMappingInfoOutput!]
   negativeCommunityReactionCount: Int!
@@ -1185,6 +1211,11 @@ type ProductOutput {
   postedAt: DateTime!
   precomputedRankingScore: Float
   price: String
+  """
+  왜 핫딜인지 가격 컨텍스트 (게이트 통과 시에만, 상세 전용)
+  """
+  priceContext: PriceContext
+  priceCurrency: String
   """
   상품 가격 목록
   """
@@ -1322,6 +1353,10 @@ type Query {
   커뮤니티 반응 카테고리별 키워드 조회
   """
   categorizedReactionKeywords(id: Int!): CategorizedReactionKeywordsResponse!
+  """
+  같은 상품의 다른 커뮤니티 글 조회 (Track B 클러스터, 최저가순)
+  """
+  clusteredProducts(id: Int!): [ProductOutput!]!
   comment(id: Int!): CommentOutput!
   comments(
     isNotice: Boolean
@@ -1575,6 +1610,14 @@ type Query {
   """
   me: User
   modelPage(slug: String!): ModelPageOutput
+  """
+  어드민) 모델 페이지 미리보기
+  """
+  modelPagePreviewByAdmin(slug: String!): ModelPageOutput
+  """
+  어드민) 모델 페이지 검수 목록
+  """
+  modelPagesByAdmin(onlyDrafts: Boolean = false): [ModelPageAdminItemOutput!]!
   """
   유저 알림 키워드 목록 조회
   """
