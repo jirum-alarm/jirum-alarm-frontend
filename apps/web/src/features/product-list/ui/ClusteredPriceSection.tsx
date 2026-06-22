@@ -20,10 +20,9 @@ function won(price: number | null, currency: string | null): string {
   return `${Math.round(price).toLocaleString()}원`;
 }
 
-export default function ClusteredPriceSection({
-  productId,
-  title = '다른 커뮤니티 가격 비교',
-}: Props) {
+const VISIBLE_COUNT = 5;
+
+export default function ClusteredPriceSection({ productId, title = '판매처별 최저가' }: Props) {
   // client 전용 조회 — SSR 에서 이 쿼리가 실행되면 서버 fetch 가 staging authentik 프록시로 가
   // 로그인 HTML 을 받아 'Unexpected token <' 로 SSR 이 깨진다. mounted 게이트로 SSR/하이드레이션
   // 중에는 쿼리를 막고(브라우저 마운트 후에만 enabled) 실행 → 로그인된 client 에서만 조회.
@@ -43,7 +42,11 @@ export default function ClusteredPriceSection({
   const min = prices.length ? Math.min(...prices) : null;
   const max = prices.length ? Math.max(...prices) : null;
   const savePct = min != null && max != null && max > 0 ? Math.round(((max - min) / max) * 100) : 0;
-  const providerCount = new Set(products.map((p) => p.providerId)).size;
+  // 출처를 쇼핑몰명으로 보여주므로 "판매처 수"도 mallName 기준(없으면 커뮤니티명 폴백).
+  const sellerCount = new Set(products.map((p) => p.mallName ?? p.provider?.nameKr)).size;
+  // 스크롤 줄이기 — 최저가 상위 5개만 노출(이미 가격 오름차순). 나머지는 "외 N개".
+  const visible = products.slice(0, VISIBLE_COUNT);
+  const restCount = products.length - visible.length;
 
   return (
     <section className="px-5 py-6">
@@ -56,11 +59,11 @@ export default function ClusteredPriceSection({
         )}
       </div>
       <p className="mb-3 text-xs text-gray-500">
-        다나와에 없는 상품이라 커뮤니티 {providerCount}곳의 핫딜을 모았어요
+        같은 상품을 판매처 {sellerCount}곳에서 모아 최저가순으로 보여드려요
       </p>
 
       <ul className="flex flex-col gap-2">
-        {products.map((p, i) => {
+        {visible.map((p) => {
           const isLowest = p.parsedPrice != null && p.parsedPrice === min;
           return (
             <li key={p.id}>
@@ -94,6 +97,9 @@ export default function ClusteredPriceSection({
           );
         })}
       </ul>
+      {restCount > 0 && (
+        <p className="mt-2 text-center text-xs text-gray-400">외 {restCount}곳 더</p>
+      )}
     </section>
   );
 }
