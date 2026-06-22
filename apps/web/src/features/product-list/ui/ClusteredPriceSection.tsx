@@ -1,6 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
 import { ProductQueries } from '@/entities/product';
 
@@ -23,9 +24,17 @@ export default function ClusteredPriceSection({
   productId,
   title = '다른 커뮤니티 가격 비교',
 }: Props) {
-  // client 전용 조회(useQuery) — SSR 에서 서버 fetch 가 일어나면 staging authentik 프록시가
-  // 로그인 HTML 을 돌려줘 'Unexpected token <' 로 깨진다. 하단 보조 블록이라 SSR/SEO 불필요.
-  const { data } = useQuery(ProductQueries.clusteredProducts({ id: productId }));
+  // client 전용 조회 — SSR 에서 이 쿼리가 실행되면 서버 fetch 가 staging authentik 프록시로 가
+  // 로그인 HTML 을 받아 'Unexpected token <' 로 SSR 이 깨진다. mounted 게이트로 SSR/하이드레이션
+  // 중에는 쿼리를 막고(브라우저 마운트 후에만 enabled) 실행 → 로그인된 client 에서만 조회.
+  // 하단 보조 블록이라 SSR/SEO 불필요.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const { data } = useQuery({
+    ...ProductQueries.clusteredProducts({ id: productId }),
+    enabled: mounted,
+  });
   const products = data?.clusteredProducts ?? [];
 
   if (products.length < 2) return null;
