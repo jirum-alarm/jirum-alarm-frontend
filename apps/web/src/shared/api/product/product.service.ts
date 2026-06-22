@@ -146,7 +146,52 @@ export class ProductService {
   ) {
     return execute(QueryExpiringSoonHotDealProducts, variables).then((res) => res.data);
   }
+
+  // Track B: 같은 상품의 다른 커뮤니티 글(다나와 미매칭, 클러스터). 최저가순.
+  static async getClusteredProducts(variables: { id: number }) {
+    return execute(QueryClusteredProducts, variables).then((res) => res.data);
+  }
 }
+
+// Track B 클러스터 — 상세 "다른 커뮤니티 가격" 블록.
+// ponytail: codegen 타입 생기기 전(dev-api 미배포)에도 빌드되도록 QueryProducts 와 같은
+// TypedDocumentString + 인라인 타입 패턴. develop 배포 후 graphql() 로 치환 가능(동작 동일).
+export interface ClusteredProduct {
+  id: number;
+  title: string;
+  url: string;
+  parsedPrice: number | null;
+  priceCurrency: string | null;
+  providerId: number;
+  mallName: string | null;
+  thumbnail: string | null;
+  postedAt: string | null;
+  provider: { nameKr: string | null } | null;
+}
+interface QueryClusteredProductsResult {
+  clusteredProducts: ClusteredProduct[];
+}
+const QueryClusteredProducts = new TypedDocumentString<
+  QueryClusteredProductsResult,
+  { id: number }
+>(`
+  query QueryClusteredProducts($id: Int!) {
+    clusteredProducts(id: $id) {
+      id
+      title
+      url
+      parsedPrice
+      priceCurrency
+      providerId
+      mallName
+      thumbnail
+      postedAt
+      provider {
+        nameKr
+      }
+    }
+  }
+`);
 
 const QueryProduct = graphql(`
   query product($id: Int!) {

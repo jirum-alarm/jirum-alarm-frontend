@@ -13,7 +13,11 @@ import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuid
 import HotdealGuide from '@/features/product-detail/ui/HotdealGuide';
 import HotdealScore from '@/features/product-detail/ui/HotdealScore';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
-import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list/ui';
+import {
+  CategoryPopularByProductSection,
+  ClusteredPriceSection,
+  TogetherViewedSection,
+} from '@/features/product-list/ui';
 
 import CommunityReaction from '../CommunityReaction';
 
@@ -75,6 +79,9 @@ export default async function DesktopProductDetailPage({
             <Hr />
             <div className="space-y-11 overflow-x-hidden py-11">
               <ProductDetailAd productId={productId} isMobile={false} />
+              <Suspense>
+                <ClusteredPriceSection productId={productId} />
+              </Suspense>
               <div>
                 <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={false} />
               </div>

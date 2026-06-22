@@ -12,7 +12,11 @@ import HotdealGuide from '@/features/product-detail/ui/HotdealGuide';
 import HotdealScore from '@/features/product-detail/ui/HotdealScore';
 import ViewerCount from '@/features/product-detail/ui/mobile/ViewerCount';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
-import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list/ui';
+import {
+  CategoryPopularByProductSection,
+  ClusteredPriceSection,
+  TogetherViewedSection,
+} from '@/features/product-list/ui';
 
 import CommunityReaction from '../CommunityReaction';
 
@@ -63,6 +67,9 @@ function ProductDetailPage({
 
             <ProductDetailAd productId={productId} isMobile />
             <Hr />
+            <Suspense>
+              <ClusteredPriceSection productId={productId} />
+            </Suspense>
             <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={true} />
             <Hr />
 
