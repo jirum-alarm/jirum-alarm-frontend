@@ -2,14 +2,12 @@ import {useWebviewContext} from '@/provider/WebViewRefProvider';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTokenRemoveEffect} from './useTokenRemoveEffect';
 import {SERVICE_URL} from '@/constants/env';
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {Alert, Animated, BackHandler, useAnimatedValue} from 'react-native';
 import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
 import type {WebViewMessageEvent} from 'react-native-webview';
-import {
-  ShouldStartLoadRequest,
-  WebViewProgressEvent,
-} from 'react-native-webview/lib/WebViewTypes';
+import {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
+import {useWebViewLoading} from './useWebViewLoading';
 import {
   parsedWebViewMessage,
   WebViewEventPayloads,
@@ -23,9 +21,6 @@ import {
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainParamList} from '@/navigations/stack/MainNavigator';
 import {mainNavigations} from '@/shared/constant/navigations';
-
-const LOADING_INDICATOR_DELAY_MS = 1000;
-const LOADING_FALLBACK_TIMEOUT_MS = 15000;
 
 export function useCommonWebViewLogic() {
   const insets = useSafeAreaInsets();
@@ -44,73 +39,13 @@ export function useCommonWebViewLogic() {
   const [navState, setNavState] = useState({url: '', canGoBack: false});
   const bgAnimation = useAnimatedValue(0);
   const [isScroll, setIsScroll] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const loadingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const loadingFallbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
-  const hasInitialLoadCompletedRef = useRef(false);
-
-  const clearLoadingState = useCallback(() => {
-    if (loadingTimerRef.current) {
-      clearTimeout(loadingTimerRef.current);
-      loadingTimerRef.current = null;
-    }
-    if (loadingFallbackTimerRef.current) {
-      clearTimeout(loadingFallbackTimerRef.current);
-      loadingFallbackTimerRef.current = null;
-    }
-    setIsLoading(false);
-  }, []);
-
-  const handleLoadStart = useCallback(() => {
-    // 첫 진입 로드에서만 전체 로딩 오버레이를 보여준다.
-    if (hasInitialLoadCompletedRef.current) {
-      return;
-    }
-
-    if (loadingTimerRef.current) {
-      clearTimeout(loadingTimerRef.current);
-    }
-    if (loadingFallbackTimerRef.current) {
-      clearTimeout(loadingFallbackTimerRef.current);
-      loadingFallbackTimerRef.current = null;
-    }
-
-    loadingTimerRef.current = setTimeout(() => {
-      setIsLoading(true);
-      loadingFallbackTimerRef.current = setTimeout(() => {
-        setIsLoading(false);
-        loadingFallbackTimerRef.current = null;
-      }, LOADING_FALLBACK_TIMEOUT_MS);
-    }, LOADING_INDICATOR_DELAY_MS);
-  }, []);
-
-  const handleLoadEnd = useCallback(() => {
-    hasInitialLoadCompletedRef.current = true;
-    clearLoadingState();
-  }, [clearLoadingState]);
-
-  const handleLoadProgress = useCallback(
-    (event: WebViewProgressEvent) => {
-      if (event.nativeEvent.progress >= 0.98) {
-        handleLoadEnd();
-      }
-    },
-    [handleLoadEnd],
-  );
-
-  // 컴포넌트 언마운트 시 타이머 정리
-  useEffect(() => {
-    return () => {
-      if (loadingTimerRef.current) {
-        clearTimeout(loadingTimerRef.current);
-      }
-      if (loadingFallbackTimerRef.current) {
-        clearTimeout(loadingFallbackTimerRef.current);
-      }
-    };
-  }, []);
+  const {
+    isLoading,
+    clearLoadingState,
+    handleLoadStart,
+    handleLoadEnd,
+    handleLoadProgress,
+  } = useWebViewLoading();
 
   /**
    * onShouldStartLoadWithRequest는 IOS의 경우 모든 URL 로드시에 실행

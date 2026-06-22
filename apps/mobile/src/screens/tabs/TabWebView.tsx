@@ -16,12 +16,10 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 import {tabNavigations} from '@/shared/constant/navigations';
 import {useTokenRemoveEffect} from '@/screens/jirumalarmwebview/hooks/useTokenRemoveEffect';
+import {useWebViewLoading} from '@/screens/jirumalarmwebview/hooks/useWebViewLoading';
 import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
 import * as Haptics from 'expo-haptics';
-import type {
-  ShouldStartLoadRequest,
-  WebViewProgressEvent,
-} from 'react-native-webview/lib/WebViewTypes';
+import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
 import {useIsFocused} from '@react-navigation/native';
 import {isTabRootUrl} from '@/shared/lib/navigation/tab-routing';
 import {setTabBarVisible} from '@/shared/hooks/useTabBarVisibility';
@@ -33,9 +31,6 @@ interface TabWebViewProps {
   baseUrl: string;
 }
 
-const LOADING_INDICATOR_DELAY_MS = 1000;
-const LOADING_FALLBACK_TIMEOUT_MS = 15000;
-
 /** 네이티브 탭에서 웹 바텀 내비를 숨기기 위해 주입하는 JS */
 const INJECT_HIDE_WEB_BOTTOM_NAV = `
   (function() {
@@ -46,80 +41,6 @@ const INJECT_HIDE_WEB_BOTTOM_NAV = `
   })();
   true;
 `;
-
-function useLoadingState() {
-  const [isLoading, setIsLoading] = useState(false);
-  const loadingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const loadingFallbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
-  const hasInitialLoadCompletedRef = useRef(false);
-
-  const clearLoadingState = useCallback(() => {
-    if (loadingTimerRef.current) {
-      clearTimeout(loadingTimerRef.current);
-      loadingTimerRef.current = null;
-    }
-    if (loadingFallbackTimerRef.current) {
-      clearTimeout(loadingFallbackTimerRef.current);
-      loadingFallbackTimerRef.current = null;
-    }
-    setIsLoading(false);
-  }, []);
-
-  const handleLoadStart = useCallback(() => {
-    if (hasInitialLoadCompletedRef.current) {
-      return;
-    }
-    if (loadingTimerRef.current) {
-      clearTimeout(loadingTimerRef.current);
-    }
-    if (loadingFallbackTimerRef.current) {
-      clearTimeout(loadingFallbackTimerRef.current);
-      loadingFallbackTimerRef.current = null;
-    }
-    loadingTimerRef.current = setTimeout(() => {
-      setIsLoading(true);
-      loadingFallbackTimerRef.current = setTimeout(() => {
-        setIsLoading(false);
-        loadingFallbackTimerRef.current = null;
-      }, LOADING_FALLBACK_TIMEOUT_MS);
-    }, LOADING_INDICATOR_DELAY_MS);
-  }, []);
-
-  const handleLoadEnd = useCallback(() => {
-    hasInitialLoadCompletedRef.current = true;
-    clearLoadingState();
-  }, [clearLoadingState]);
-
-  const handleLoadProgress = useCallback(
-    (event: WebViewProgressEvent) => {
-      if (event.nativeEvent.progress >= 0.98) {
-        handleLoadEnd();
-      }
-    },
-    [handleLoadEnd],
-  );
-
-  useEffect(() => {
-    return () => {
-      if (loadingTimerRef.current) {
-        clearTimeout(loadingTimerRef.current);
-      }
-      if (loadingFallbackTimerRef.current) {
-        clearTimeout(loadingFallbackTimerRef.current);
-      }
-    };
-  }, []);
-
-  return {
-    isLoading,
-    clearLoadingState,
-    handleLoadStart,
-    handleLoadEnd,
-    handleLoadProgress,
-  };
-}
 
 function useUrlFilter(clearLoadingState: () => void) {
   return useCallback(
@@ -153,7 +74,7 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
     handleLoadStart,
     handleLoadEnd,
     handleLoadProgress,
-  } = useLoadingState();
+  } = useWebViewLoading();
   const handleShouldStartLoadWithRequest = useUrlFilter(clearLoadingState);
 
   useEffect(() => {
