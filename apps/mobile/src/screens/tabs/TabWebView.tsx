@@ -17,6 +17,7 @@ import {useWebviewContext} from '@/provider/WebViewRefProvider';
 import {tabNavigations} from '@/shared/constant/navigations';
 import {useTokenRemoveEffect} from '@/screens/jirumalarmwebview/hooks/useTokenRemoveEffect';
 import {useWebViewLoading} from '@/screens/jirumalarmwebview/hooks/useWebViewLoading';
+import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
 import * as Haptics from 'expo-haptics';
 import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
@@ -71,11 +72,26 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
   const {
     isLoading,
     clearLoadingState,
-    handleLoadStart,
+    handleLoadStart: startLoading,
     handleLoadEnd,
     handleLoadProgress,
   } = useWebViewLoading();
   const handleShouldStartLoadWithRequest = useUrlFilter(clearLoadingState);
+
+  // 메인 프레임 로드 실패(네트워크 끊김 등)만 잡는다. HTTP 에러는 web이 렌더.
+  const [hasError, setHasError] = useState(false);
+  const handleLoadStart = useCallback(() => {
+    setHasError(false);
+    startLoading();
+  }, [startLoading]);
+  const handleError = useCallback(() => {
+    handleLoadEnd();
+    setHasError(true);
+  }, [handleLoadEnd]);
+  const retry = useCallback(() => {
+    setHasError(false);
+    webviewRef.current?.reload();
+  }, []);
 
   useEffect(() => {
     registerWebViewRef(tabName, webviewRef);
@@ -132,6 +148,9 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
     handleLoadProgress,
     handleShouldStartLoadWithRequest,
     handleScrollForHomeStatusBar,
+    hasError,
+    handleError,
+    retry,
   };
 }
 
@@ -164,6 +183,9 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
     handleLoadProgress,
     handleShouldStartLoadWithRequest,
     handleScrollForHomeStatusBar,
+    hasError,
+    handleError,
+    retry,
   } = useTabWebViewCommon({tabName});
 
   const {refreshing, enableRefresh, setEnableRefresh, onRefresh} =
@@ -211,7 +233,7 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
           onLoadStart={handleLoadStart}
           onLoadEnd={handleLoadEnd}
           onLoadProgress={handleLoadProgress}
-          onError={handleLoadEnd}
+          onError={handleError}
           onHttpError={handleLoadEnd}
           onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
           onContentProcessDidTerminate={() => webviewRef.current?.reload()}
@@ -231,6 +253,7 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
           <ActivityIndicator size="small" color="#667085" />
         </View>
       )}
+      {hasError && <WebViewErrorView onRetry={retry} />}
     </View>
   );
 };
@@ -250,6 +273,9 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
     handleLoadProgress,
     handleShouldStartLoadWithRequest,
     handleScrollForHomeStatusBar,
+    hasError,
+    handleError,
+    retry,
   } = useTabWebViewCommon({tabName});
 
   return (
@@ -284,7 +310,7 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
         onLoadStart={handleLoadStart}
         onLoadEnd={handleLoadEnd}
         onLoadProgress={handleLoadProgress}
-        onError={handleLoadEnd}
+        onError={handleError}
         onHttpError={handleLoadEnd}
         onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
         onContentProcessDidTerminate={() => webviewRef.current?.reload()}
@@ -303,6 +329,7 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
           <ActivityIndicator size="small" color="#667085" />
         </View>
       )}
+      {hasError && <WebViewErrorView onRetry={retry} />}
     </View>
   );
 };

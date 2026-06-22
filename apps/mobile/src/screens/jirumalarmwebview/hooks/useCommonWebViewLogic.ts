@@ -42,10 +42,30 @@ export function useCommonWebViewLogic() {
   const {
     isLoading,
     clearLoadingState,
-    handleLoadStart,
+    handleLoadStart: startLoading,
     handleLoadEnd,
     handleLoadProgress,
   } = useWebViewLoading();
+
+  // 메인 프레임 로드 자체가 실패한 경우(네트워크 끊김·DNS·타임아웃 등)만 잡는다.
+  // 이땐 web JS가 실행조차 안 돼 web의 에러 UI가 못 뜨고 빈 화면이 된다.
+  // 서버 HTTP 에러(onHttpError)는 web의 global-error/ServerError가 렌더하므로 건드리지 않는다.
+  const [hasError, setHasError] = useState(false);
+
+  const handleLoadStart = useCallback(() => {
+    setHasError(false);
+    startLoading();
+  }, [startLoading]);
+
+  const handleError = useCallback(() => {
+    handleLoadEnd();
+    setHasError(true);
+  }, [handleLoadEnd]);
+
+  const retry = useCallback(() => {
+    setHasError(false);
+    webviewRef?.current?.reload();
+  }, [webviewRef]);
 
   /**
    * onShouldStartLoadWithRequest는 IOS의 경우 모든 URL 로드시에 실행
@@ -141,5 +161,8 @@ export function useCommonWebViewLogic() {
     handleLoadStart,
     handleLoadEnd,
     handleLoadProgress,
+    hasError,
+    handleError,
+    retry,
   };
 }

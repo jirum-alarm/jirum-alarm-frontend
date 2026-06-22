@@ -16,6 +16,7 @@ import {SERVICE_URL} from '@/constants/env';
 
 import {SystemBars} from 'react-native-edge-to-edge';
 import {useCommonWebViewLogic} from './hooks/useCommonWebViewLogic';
+import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {MainParamList} from '@/navigations/stack/MainNavigator';
 import {mainNavigations} from '@/shared/constant/navigations';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -74,6 +75,9 @@ const JirumAlarmWebViewAndroid = ({
     handleLoadStart,
     handleLoadEnd,
     handleLoadProgress,
+    hasError,
+    handleError,
+    retry,
   } = useCommonWebViewLogic();
 
   const {refreshing, enableRefresh, setEnableRefresh, onRefresh} =
@@ -115,7 +119,7 @@ const JirumAlarmWebViewAndroid = ({
           onLoadStart={handleLoadStart}
           onLoadEnd={handleLoadEnd}
           onLoadProgress={handleLoadProgress}
-          onError={handleLoadEnd}
+          onError={handleError}
           onHttpError={handleLoadEnd}
           onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
           onContentProcessDidTerminate={() => {
@@ -150,6 +154,7 @@ const JirumAlarmWebViewAndroid = ({
           <ActivityIndicator size="large" color="#101828" />
         </View>
       )}
+      {hasError && <WebViewErrorView onRetry={retry} />}
       <SafeAreaView style={[styles.safeAreaBottom, {height: insets.bottom}]} />
     </View>
   );
@@ -174,6 +179,9 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
     handleLoadStart,
     handleLoadEnd,
     handleLoadProgress,
+    hasError,
+    handleError,
+    retry,
   } = useCommonWebViewLogic();
 
   return (
@@ -203,7 +211,7 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
         onLoadStart={handleLoadStart}
         onLoadEnd={handleLoadEnd}
         onLoadProgress={handleLoadProgress}
-        onError={handleLoadEnd}
+        onError={handleError}
         onHttpError={handleLoadEnd}
         onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
         onContentProcessDidTerminate={() => {
@@ -234,6 +242,7 @@ const JirumAlarmWebViewIOS = ({route}: JirumAlarmWebViewScreenRouteProp) => {
           <ActivityIndicator size="large" color="#101828" />
         </View>
       )}
+      {hasError && <WebViewErrorView onRetry={retry} />}
       <SafeAreaView style={[styles.safeAreaBottom, {height: insets.bottom}]} />
     </View>
   );
