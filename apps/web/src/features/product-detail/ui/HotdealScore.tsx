@@ -78,9 +78,7 @@ const HotdealScore = ({ productId }: { productId: number }) => {
         // 역대가(hotDealIndex) 없는 신선딜이라도 다나와 비교가 있으면 배지만 단독 노출
         <section>
           <h2 className="pc:text-[20px] pb-4 font-semibold text-gray-900">가격 비교</h2>
-          <div className="mt-2 rounded-[12px] bg-gray-100 px-6 py-6">
-            <PriceContextBadge priceContext={priceContext} />
-          </div>
+          <PriceContextBadge priceContext={priceContext} />
         </section>
       ) : null}
     </>
