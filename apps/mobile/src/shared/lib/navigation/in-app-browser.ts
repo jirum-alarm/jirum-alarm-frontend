@@ -1,5 +1,33 @@
 import * as WebBrowser from 'expo-web-browser';
 import {Alert, Linking, Platform} from 'react-native';
+import {SERVICE_URL} from '@/constants/env';
+import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
+
+/**
+ * WebView 요청을 인앱 브라우저로 내보내야 하는지 판정.
+ *
+ * iOS는 onShouldStartLoadWithRequest가 사용자 클릭뿐 아니라 광고 스크립트의
+ * 자동 네비게이션(AdSense 경유 cdn.mediago.io·doubleclick 등)에도 실행된다.
+ * 그 자동 로드는 navigationType이 'click'이 아니므로, iOS에서는 사용자가 실제로
+ * 누른 외부 링크('click')만 내보내고 나머지는 WebView가 그대로 처리하게 둔다.
+ * (Android는 navigationType이 항상 'other'이고 핸들러가 클릭 시에만 호출되므로 제외.)
+ */
+export const shouldOpenExternally = (
+  event: ShouldStartLoadRequest,
+): boolean => {
+  if (event.url === 'about:blank') {
+    return false;
+  }
+  if (Platform.OS === 'ios' && event.navigationType !== 'click') {
+    return false;
+  }
+  const isInternal =
+    event.url.includes('jirum-alarm') || event.url.startsWith(SERVICE_URL);
+  if (!isInternal) {
+    return true;
+  }
+  return event.url.startsWith('https://about-us.jirum-alarm.com');
+};
 
 /** 앱 스토어 / 딥링크 등 특수 스킴 URL인지 확인 */
 const isSpecialScheme = (url: string) => {

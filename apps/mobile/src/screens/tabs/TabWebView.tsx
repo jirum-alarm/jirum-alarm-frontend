@@ -16,7 +16,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 import {tabNavigations} from '@/shared/constant/navigations';
 import {useTokenRemoveEffect} from '@/screens/jirumalarmwebview/hooks/useTokenRemoveEffect';
-import {openInAppBrowser} from '@/shared/lib/navigation';
+import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
 import * as Haptics from 'expo-haptics';
 import type {
   ShouldStartLoadRequest,
@@ -124,18 +124,7 @@ function useLoadingState() {
 function useUrlFilter(clearLoadingState: () => void) {
   return useCallback(
     (event: ShouldStartLoadRequest) => {
-      if (event.url === 'about:blank') {
-        return true;
-      }
-      if (
-        !event.url.includes('jirum-alarm') &&
-        !event.url.startsWith(SERVICE_URL)
-      ) {
-        clearLoadingState();
-        openInAppBrowser(event.url);
-        return false;
-      }
-      if (event.url.startsWith('https://about-us.jirum-alarm.com')) {
+      if (shouldOpenExternally(event)) {
         clearLoadingState();
         openInAppBrowser(event.url);
         return false;
