@@ -1,4 +1,4 @@
-import { GRAPHQL_ENDPOINT_PROXY } from '@/shared/config/graphql';
+import { GRAPHQL_ENDPOINT, GRAPHQL_ENDPOINT_PROXY } from '@/shared/config/graphql';
 
 import { TypedDocumentString } from '../api/gql/graphql';
 
@@ -43,8 +43,6 @@ async function rejectIfNeeded(response: Response) {
   return response;
 }
 
-const baseUrl = GRAPHQL_ENDPOINT_PROXY;
-
 /**
  * fetch 옵션. 기본은 인증 포함 + no-store(요청별 동적). public 모드는 ★ISR 핵심:
  * 서버에서 cookies()를 읽지 않아(=동적 렌더 강제 해제) 라우트가 정적/ISR 캐시될 수 있고,
@@ -64,6 +62,10 @@ export async function execute<TResult, TVariables>(
     : [TVariables, ExecuteOptions?]
 ) {
   const isServer = typeof window === 'undefined';
+  // SSR은 내부 API를 직통(GRAPHQL_ENDPOINT)으로 부른다. 프록시(/api/graphql)는 자기 외부도메인이라
+  // dev/staging에선 그 왕복이 istio authentik 게이트에 막혀 302/로그인HTML을 받아 상세가 깨졌다.
+  // (브라우저는 쿠키가 자동 동봉돼 프록시 OK, 서버는 아래에서 쿠키→Authorization 직접 세팅한다.)
+  const baseUrl = isServer ? GRAPHQL_ENDPOINT : GRAPHQL_ENDPOINT_PROXY;
   const headers = new Headers();
   headers.set('Content-Type', 'application/json');
   headers.set('Accept', 'application/graphql-response+json');
