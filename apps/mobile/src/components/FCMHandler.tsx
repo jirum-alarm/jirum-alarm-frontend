@@ -4,12 +4,28 @@ import * as Notifications from 'expo-notifications';
 import useFCMTokenManager from '@/shared/hooks/useFCMTokenManager.ts';
 import {onForegroundMessageHandler} from '../shared/lib/fcm/index.ts';
 import {useWebviewContext} from '../provider/WebViewRefProvider.tsx';
+import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
 
 interface FcmHandlerProps {
   children?: React.ReactNode;
 }
 
 const goProductDetail = (url: string) => `window.location.href = "${url}";`;
+
+// 알림 클릭 추적 — 서버 notification_sent(발송)와 target/target_id/url 로 연결.
+// state: killed(종료) | background | foreground. push_history/Mixpanel 발송과 퍼널.
+const trackNotificationClick = (
+  data: {link?: unknown; target?: unknown; target_id?: unknown} | undefined,
+  state: 'killed' | 'background' | 'foreground',
+) => {
+  MixpanelService.track('notification_clicked', {
+    url: typeof data?.link === 'string' ? data.link : undefined,
+    target: data?.target,
+    target_id: data?.target_id,
+    platform: 'app',
+    state,
+  });
+};
 
 const FcmHandler = ({children}: FcmHandlerProps) => {
   const {getWebViewRefByUrl, webviewRef} = useWebviewContext();
@@ -58,6 +74,7 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
     if (initialNotification) {
       const url = initialNotification.data?.link;
       if (!!url && typeof url === 'string') {
+        trackNotificationClick(initialNotification.data, 'killed');
         pendingUrlRef.current = url;
         tryInjectPendingUrl();
       }
@@ -68,10 +85,10 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
   const handleForegroundEvent = (
     response: Notifications.NotificationResponse,
   ) => {
-    const url = response.notification.request.content.data?.link as
-      | string
-      | undefined;
+    const data = response.notification.request.content.data;
+    const url = data?.link as string | undefined;
     if (url) {
+      trackNotificationClick(data, 'foreground');
       const targetRef = getTargetWebViewRef(url);
       targetRef.current?.injectJavaScript(goProductDetail(url));
     }
@@ -81,6 +98,7 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
   const handleNotificationOpenedApp = (remoteMessage: any) => {
     const url = remoteMessage.data?.link;
     if (url) {
+      trackNotificationClick(remoteMessage.data, 'background');
       const targetRef = getTargetWebViewRef(url);
       targetRef.current?.injectJavaScript(goProductDetail(url));
     }

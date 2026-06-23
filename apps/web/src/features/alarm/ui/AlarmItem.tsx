@@ -28,6 +28,17 @@ const AlarmItem = ({
   const isEditMode = useAtomValue(alarmEditModeAtom);
 
   const handleClick = () => {
+    // 알림 클릭 추적 — 서버 notification_sent(발송)와 target_id(=productId)로 연결.
+    // 웹 계측은 GTM 경유(dataLayer customEvent 트리거). platform 으로 app/web 구분.
+    if (typeof window !== 'undefined') {
+      (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+        event: 'notification_clicked',
+        target: 'product',
+        target_id: productId,
+        platform: 'web',
+      });
+    }
+
     if (!readAt) {
       onRead(Number(id));
     }
