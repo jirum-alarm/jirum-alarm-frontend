@@ -32,6 +32,9 @@ export const QueryPendingVerifications = gql`
       danawaUrl
       matchingConfidence
       matchingReasoning
+      aiSuggestion
+      aiSuggestionConfidence
+      aiSuggestionReason
 
       verificationStatus
       verifiedBy {

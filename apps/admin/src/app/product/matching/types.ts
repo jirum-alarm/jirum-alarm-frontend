@@ -27,6 +27,10 @@ export interface PendingVerificationItem {
   verifiedAt: string | null;
   matchingConfidence: number | null;
   matchingReasoning: string | null;
+  /** AI 검증 추천 (매칭 시점 산출, 사람 확정과 별개) */
+  aiSuggestion: 'approve' | 'reject' | null;
+  aiSuggestionConfidence: number | null;
+  aiSuggestionReason: string | null;
 }
 
 /** Undo 스택 액션 */
