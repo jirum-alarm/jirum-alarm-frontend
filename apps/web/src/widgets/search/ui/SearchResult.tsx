@@ -30,15 +30,14 @@ export default function SearchResult({ show }: { show: boolean }) {
         </div>
       ) : (
         <div className="pc:px-0 px-5">
-          {showAd ? (
-            <>
-              <ProductGridList products={products.slice(0, AD_AFTER)} source="search" />
-              <SearchInFeedAd dedupeKey={keyword ?? ''} />
-              <ProductGridList products={products.slice(AD_AFTER)} source="search" />
-            </>
-          ) : (
-            <ProductGridList products={products} source="search" />
-          )}
+          {/* 그리드는 하나로 유지하고 광고만 한 줄(전체 폭)로 끼운다.
+              예전엔 그리드를 둘로 쪼개 8번째 뒤가 컬럼 수와 안 맞으면 빈칸이 생겼다. */}
+          <ProductGridList
+            products={products}
+            source="search"
+            slotAfter={showAd ? AD_AFTER : undefined}
+            slot={showAd ? <SearchInFeedAd dedupeKey={keyword ?? ''} /> : undefined}
+          />
         </div>
       )}
 

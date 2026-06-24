@@ -1,5 +1,7 @@
 'use client';
 
+import { Fragment, type ReactNode } from 'react';
+
 import { EVENT } from '@/shared/config/mixpanel';
 import { cn } from '@/shared/lib/cn';
 
@@ -17,6 +19,9 @@ type ProductGridListProps = {
   logging?: { page: keyof typeof EVENT.PAGE };
   priorityCount?: number;
   source?: ProductCardSource;
+  /** 이 개수만큼 카드를 렌더한 뒤 `slot`을 그리드 전체 폭(col-span-full)으로 끼운다. */
+  slotAfter?: number;
+  slot?: ReactNode;
 };
 
 export default function ProductGridList({
@@ -28,6 +33,8 @@ export default function ProductGridList({
   logging,
   priorityCount = 0,
   source,
+  slotAfter,
+  slot,
 }: ProductGridListProps) {
   return (
     <div
@@ -37,15 +44,20 @@ export default function ProductGridList({
       )}
     >
       {products.map((product, index) => (
-        <ProductGridCard
-          key={product.id}
-          product={product}
-          rank={rankFrom ? rankFrom + index : undefined}
-          displayTime={displayTime}
-          priority={index < priorityCount}
-          className={cardClassName}
-          source={source}
-        />
+        <Fragment key={product.id}>
+          <ProductGridCard
+            product={product}
+            rank={rankFrom ? rankFrom + index : undefined}
+            displayTime={displayTime}
+            priority={index < priorityCount}
+            className={cardClassName}
+            source={source}
+          />
+          {/* 단일 그리드 흐름을 유지한 채 광고를 한 줄(전체 폭)로 끼워 빈칸을 막는다 */}
+          {slot && slotAfter != null && index === slotAfter - 1 && (
+            <div className="col-span-full w-full">{slot}</div>
+          )}
+        </Fragment>
       ))}
     </div>
   );
