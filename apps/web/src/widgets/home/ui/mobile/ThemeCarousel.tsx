@@ -12,30 +12,23 @@ const ThemeCarousel = () => {
   if (!themes.length) return null;
 
   return (
-    <section className="py-2">
+    <section className="py-1">
       <div className="flex items-center justify-between px-5">
-        <h2 className="text-base font-bold text-gray-900">관심 묶음 알림 받기</h2>
+        <h2 className="text-sm font-bold text-gray-900">관심 묶음 알림 받기</h2>
         <Link href="/themes" className="text-xs text-gray-400">
           전체보기
         </Link>
       </div>
-      <p className="mt-0.5 px-5 text-xs text-gray-400">
-        한 번 구독하면 묶음 안 키워드 딜이 뜰 때 알려드려요.
-      </p>
-      <ul className="mt-3 flex gap-2.5 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/* 칩 형태(이모지+이름 한 줄)로 세로 높이 최소화 */}
+      <ul className="mt-2 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {themes.map((theme) => (
           <li key={theme.id} className="shrink-0">
             <Link
               href={`/themes/${theme.id}`}
-              className="flex w-[140px] flex-col gap-1 rounded-2xl border border-gray-200 p-3"
+              className="flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-sm text-gray-900"
             >
-              <span className="text-xl" aria-hidden>
-                {theme.emoji || '🔔'}
-              </span>
-              <span className="line-clamp-1 text-sm font-semibold text-gray-900">{theme.name}</span>
-              <span className="line-clamp-1 text-xs text-gray-400">
-                {theme.representativeKeywords.slice(0, 3).join('·')}
-              </span>
+              <span aria-hidden>{theme.emoji || '🔔'}</span>
+              <span className="whitespace-nowrap">{theme.name}</span>
             </Link>
           </li>
         ))}
