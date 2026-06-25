@@ -19,10 +19,10 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
       {themes.map((theme) => {
         const isSubscribed = subscribed.has(theme.id);
         return (
-          <li key={theme.id}>
+          <li key={theme.id} className="h-full">
             <Link
               href={`/themes/${theme.id}`}
-              className="block rounded-2xl border border-gray-200 p-4"
+              className="flex h-full flex-col rounded-2xl border border-gray-200 p-4"
             >
               <div className="flex items-start justify-between">
                 <div className="min-w-0 flex-1">

@@ -33,10 +33,12 @@ const MySubscribedThemes = () => {
             key={theme.id}
             className="flex items-center justify-between rounded-xl border border-gray-200 px-3 py-2.5"
           >
-            <Link href={`/themes/${theme.id}`} className="flex min-w-0 items-center gap-1.5">
-              {theme.emoji && <span aria-hidden>{theme.emoji}</span>}
-              <span className="truncate text-sm text-gray-900">{theme.name}</span>
-              <span className="bg-primary-50 text-primary-500 shrink-0 rounded px-1.5 py-0.5 text-[11px] font-medium">
+            <Link href={`/themes/${theme.id}`} className="flex min-w-0 flex-col gap-1">
+              <span className="flex min-w-0 items-center gap-1.5">
+                {theme.emoji && <span aria-hidden>{theme.emoji}</span>}
+                <span className="truncate text-sm text-gray-900">{theme.name}</span>
+              </span>
+              <span className="bg-primary-50 text-primary-500 w-fit rounded px-1.5 py-0.5 text-[11px] font-medium">
                 묶음
               </span>
             </Link>

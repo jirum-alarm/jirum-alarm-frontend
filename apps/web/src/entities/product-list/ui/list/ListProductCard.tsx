@@ -54,6 +54,9 @@ export default function ListProductCard({
                 <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />
               )}
             </div>
+            {product.postedAt && (
+              <span className="text-xs text-gray-400">{formatDateToMMD(product.postedAt)}</span>
+            )}
           </div>
         </div>
       </motion.div>
