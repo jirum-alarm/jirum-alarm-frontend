@@ -15,7 +15,7 @@ const ThemeCarousel = () => {
     <section className="py-2">
       <div className="flex items-center justify-between px-5">
         <h2 className="text-base font-bold text-gray-900">관심 묶음 알림 받기</h2>
-        <Link href="/mypage/themes" className="text-xs text-gray-400">
+        <Link href="/themes" className="text-xs text-gray-400">
           전체보기
         </Link>
       </div>
@@ -26,7 +26,7 @@ const ThemeCarousel = () => {
         {themes.map((theme) => (
           <li key={theme.id} className="shrink-0">
             <Link
-              href={`/mypage/themes/${theme.id}`}
+              href={`/themes/${theme.id}`}
               className="flex w-[140px] flex-col gap-1 rounded-2xl border border-gray-200 p-3"
             >
               <span className="text-xl" aria-hidden>

@@ -12,6 +12,7 @@ import PromotionSectionList from '@/widgets/home/ui/PromotionSectionList';
 import Footer from '@/widgets/layout/ui/desktop/Footer';
 
 import DesktopHeroSection from './desktop/HeroSection';
+import DesktopThemeSection from './desktop/ThemeSection';
 import MobileBackgroundHeader from './mobile/BackgroundHeader';
 import MobileHomeHeader from './mobile/HomeHeader';
 import MobileJirumRankingContainer from './mobile/JirumRankingContainer';
@@ -60,6 +61,11 @@ async function HomeContainerV2() {
         <div className="pc:mx-auto pc:max-w-layout-max">
           {!isMobile ? null : renderMobileRanking()}
           <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-14">
+            {!isMobile && (
+              <Suspense fallback={null}>
+                <DesktopThemeSection />
+              </Suspense>
+            )}
             <div>
               <PromotionSectionList sections={sections} isMobile={isMobile} />
             </div>

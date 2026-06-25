@@ -21,7 +21,7 @@ const ThemeList = () => {
         return (
           <li key={theme.id}>
             <Link
-              href={`/mypage/themes/${theme.id}`}
+              href={`/themes/${theme.id}`}
               className="block rounded-2xl border border-gray-200 p-4"
             >
               <div className="flex items-start justify-between">
