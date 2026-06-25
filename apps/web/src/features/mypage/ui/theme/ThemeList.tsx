@@ -15,7 +15,7 @@ const ThemeList = () => {
   const subscribed = new Set(subscribedIds);
 
   return (
-    <ul className="flex flex-col gap-3 pb-32">
+    <ul className="pc:grid pc:grid-cols-2 pc:gap-4 pc:pb-0 flex flex-col gap-3 pb-32">
       {themes.map((theme) => {
         const isSubscribed = subscribed.has(theme.id);
         return (

@@ -7,7 +7,7 @@ import { ThemeQueries } from '@/entities/notification';
 
 import { useThemeSubscription } from '../../model/useThemeSubscription';
 
-const ThemeDetail = ({ themeId }: { themeId: number }) => {
+const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?: boolean }) => {
   const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
   const { data: subscribedIds } = useSuspenseQuery(ThemeQueries.mySubscribedIds());
   const { data: deals } = useSuspenseQuery(ThemeQueries.liveDeals(themeId));
@@ -19,7 +19,7 @@ const ThemeDetail = ({ themeId }: { themeId: number }) => {
   const isSubscribed = new Set(subscribedIds).has(themeId);
 
   return (
-    <div className="pb-32">
+    <div className={isMobile ? 'pb-32' : ''}>
       {/* 헤더: 이모지 + 이름 + 설명 */}
       <div className="flex items-start gap-2">
         {theme.emoji && <span className="text-2xl">{theme.emoji}</span>}
@@ -49,7 +49,7 @@ const ThemeDetail = ({ themeId }: { themeId: number }) => {
         {deals.length === 0 ? (
           <p className="py-8 text-center text-sm text-gray-400">지금은 뜬 딜이 없어요.</p>
         ) : (
-          <ul className="flex flex-col gap-3">
+          <ul className="pc:grid pc:grid-cols-2 pc:gap-x-6 flex flex-col gap-3">
             {deals.map((deal) => (
               <li key={deal.id}>
                 <a
@@ -88,8 +88,14 @@ const ThemeDetail = ({ themeId }: { themeId: number }) => {
         )}
       </div>
 
-      {/* 하단 고정 구독 버튼 */}
-      <div className="fixed inset-x-0 bottom-0 mx-auto max-w-[480px] border-t border-gray-100 bg-white p-4">
+      {/* 구독 버튼: 모바일=하단 고정바, PC=상단 인라인(좁은 폭) */}
+      <div
+        className={
+          isMobile
+            ? 'max-w-mobile-max fixed inset-x-0 bottom-0 z-10 mx-auto border-t border-gray-100 bg-white p-4'
+            : 'mt-8'
+        }
+      >
         <button
           type="button"
           disabled={isPending}
@@ -97,9 +103,9 @@ const ThemeDetail = ({ themeId }: { themeId: number }) => {
             if (isSubscribed) unsubscribe(themeId);
             else subscribe(themeId);
           }}
-          className={`w-full rounded-xl py-3.5 text-base font-semibold disabled:opacity-50 ${
-            isSubscribed ? 'bg-gray-100 text-gray-500' : 'bg-primary-500 text-white'
-          }`}
+          className={`rounded-xl py-3.5 text-base font-semibold disabled:opacity-50 ${
+            isMobile ? 'w-full' : 'px-10'
+          } ${isSubscribed ? 'bg-gray-100 text-gray-500' : 'bg-primary-500 text-white'}`}
         >
           {isSubscribed ? '구독 중 (해지하기)' : '이 묶음 구독'}
         </button>
