@@ -13,13 +13,16 @@ export interface ThemeWithKeywords {
 }
 
 export interface ThemeLiveDeal {
-  id: number;
+  // 기존 상품 카드(ListProductCard, ProductCardType) 재사용 위해 동일 필드 셋으로 맞춤.
+  id: string;
   title: string;
-  url: string;
-  price: number | null;
-  priceCurrency: string | null;
   thumbnail: string | null;
-  provider: { nameKr: string | null } | null;
+  price: string | null;
+  postedAt: string;
+  categoryId: number | null;
+  isEnd: boolean | null;
+  isHot: boolean | null;
+  hotDealType: string | null;
 }
 
 const QueryNotificationThemes = new TypedDocumentString<
@@ -45,13 +48,13 @@ const QueryNotificationThemeLiveDeals = new TypedDocumentString<
     notificationThemeLiveDeals(themeId: $themeId) {
       id
       title
-      url
-      price
-      priceCurrency
       thumbnail
-      provider {
-        nameKr
-      }
+      price
+      postedAt
+      categoryId
+      isEnd
+      isHot
+      hotDealType
     }
   }
 `);

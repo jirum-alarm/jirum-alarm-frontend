@@ -21,7 +21,8 @@ export type ProductCardSource =
   | 'related' // 관련 상품
   | 'keyword_recommend' // 키워드 추천
   | 'together_viewed' // 함께 본 상품
-  | 'category_popular'; // 카테고리 인기
+  | 'category_popular' // 카테고리 인기
+  | 'notification_theme'; // 알림 묶음 상세 라이브딜
 
 export interface ProductCardTrackingAttrs {
   'data-track': 'product-card';

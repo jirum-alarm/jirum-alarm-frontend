@@ -1,11 +1,28 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import Image from 'next/image';
+
+import { HotDealType } from '@/shared/api/gql/graphql';
+import type { ThemeLiveDeal } from '@/shared/api/notification/theme.service';
 
 import { ThemeQueries } from '@/entities/notification';
+import { type ProductCardType } from '@/entities/product-list/model/types';
+import ListProductCard from '@/entities/product-list/ui/list/ListProductCard';
 
 import { useThemeSubscription } from '../../model/useThemeSubscription';
+
+// 라이브딜(ThemeLiveDeal) → 기존 상품 카드 타입(ProductCardType) 매핑.
+const toCard = (d: ThemeLiveDeal): ProductCardType => ({
+  id: d.id,
+  title: d.title,
+  thumbnail: d.thumbnail,
+  price: d.price,
+  postedAt: new Date(d.postedAt),
+  categoryId: d.categoryId,
+  isEnd: d.isEnd,
+  isHot: d.isHot,
+  hotDealType: (d.hotDealType as HotDealType) ?? null,
+});
 
 const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?: boolean }) => {
   const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
@@ -73,42 +90,11 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
         {deals.length === 0 ? (
           <p className="py-8 text-center text-sm text-gray-400">지금은 뜬 딜이 없어요.</p>
         ) : (
-          <ul className={isMobile ? 'flex flex-col gap-3' : 'grid grid-cols-2 gap-x-6 gap-y-3'}>
+          <div className={isMobile ? 'flex flex-col gap-4' : 'grid grid-cols-2 gap-x-8 gap-y-4'}>
             {deals.map((deal) => (
-              <li key={deal.id}>
-                <a
-                  href={deal.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3"
-                >
-                  {deal.thumbnail && (
-                    <Image
-                      src={deal.thumbnail}
-                      alt=""
-                      width={56}
-                      height={56}
-                      className="h-14 w-14 shrink-0 rounded-lg object-cover"
-                      unoptimized
-                    />
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <p className="line-clamp-2 text-sm text-gray-900">{deal.title}</p>
-                    <p className="mt-0.5 text-sm font-semibold text-gray-900">
-                      {deal.price
-                        ? `${deal.price.toLocaleString()}${deal.priceCurrency === 'USD' ? '달러' : '원'}`
-                        : ''}
-                      {deal.provider?.nameKr && (
-                        <span className="ml-1.5 text-xs font-normal text-gray-400">
-                          {deal.provider.nameKr}
-                        </span>
-                      )}
-                    </p>
-                  </div>
-                </a>
-              </li>
+              <ListProductCard key={deal.id} product={toCard(deal)} source="notification_theme" />
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </div>
