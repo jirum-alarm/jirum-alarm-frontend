@@ -18,19 +18,43 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
 
   const isSubscribed = new Set(subscribedIds).has(themeId);
 
+  // 구독↔해제 한 버튼 토글
+  const SubscribeButton = ({ className = '' }: { className?: string }) => (
+    <button
+      type="button"
+      disabled={isPending}
+      onClick={() => {
+        if (isSubscribed) unsubscribe(themeId);
+        else subscribe(themeId);
+      }}
+      className={`rounded-xl text-base font-semibold disabled:opacity-50 ${
+        isSubscribed ? 'bg-gray-100 text-gray-500' : 'bg-primary-500 text-white'
+      } ${className}`}
+    >
+      {isSubscribed ? '구독 중 (해제)' : '이 묶음 구독'}
+    </button>
+  );
+
   return (
-    <div className={isMobile ? 'pb-32' : ''}>
-      {/* 헤더: 이모지 + 이름 + 설명 */}
-      <div className="flex items-start gap-2">
-        {theme.emoji && <span className="text-2xl">{theme.emoji}</span>}
-        <div>
-          <h2 className="text-lg font-bold text-gray-900">{theme.name}</h2>
-          <p className="mt-1 text-sm text-gray-500">{theme.description}</p>
+    <div className={isMobile ? 'pb-10' : 'mx-auto max-w-3xl'}>
+      {/* 헤더: 이모지 + 이름 + 설명 / 구독 버튼 상단 우측 */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-2">
+          {theme.emoji && <span className="text-2xl">{theme.emoji}</span>}
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">{theme.name}</h2>
+            <p className="mt-1 text-sm text-gray-500">{theme.description}</p>
+          </div>
         </div>
+        {/* PC: 헤더 옆 인라인 / 모바일: 헤더 아래 전체폭은 키워드 아래로 */}
+        {!isMobile && <SubscribeButton className="shrink-0 px-8 py-3" />}
       </div>
 
-      {/* 포함 키워드 — 무엇이 묶였나 */}
-      <div className="mt-5">
+      {/* 모바일: 구독 버튼을 헤더 바로 아래 전체폭(상단) */}
+      {isMobile && <SubscribeButton className="mt-4 w-full py-3.5" />}
+
+      {/* 포함 키워드 */}
+      <div className="mt-6">
         <h3 className="mb-2 text-sm font-medium text-gray-900">포함 키워드</h3>
         <div className="flex flex-wrap gap-1.5">
           {theme.representativeKeywords.map((keyword) => (
@@ -41,7 +65,7 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
         </div>
       </div>
 
-      {/* 라이브 딜 — 지금 이 묶음에 뜬 딜 (구독 전 가치 증명) */}
+      {/* 라이브 딜 — 지금 이 묶음에 뜬 딜 */}
       <div className="mt-7">
         <h3 className="mb-3 text-sm font-medium text-gray-900">
           🔥 지금 이 묶음에 뜬 딜 <span className="text-primary-500">{deals.length}</span>
@@ -49,7 +73,7 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
         {deals.length === 0 ? (
           <p className="py-8 text-center text-sm text-gray-400">지금은 뜬 딜이 없어요.</p>
         ) : (
-          <ul className="pc:grid pc:grid-cols-2 pc:gap-x-6 flex flex-col gap-3">
+          <ul className={isMobile ? 'flex flex-col gap-3' : 'grid grid-cols-2 gap-x-6 gap-y-3'}>
             {deals.map((deal) => (
               <li key={deal.id}>
                 <a
@@ -86,29 +110,6 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
             ))}
           </ul>
         )}
-      </div>
-
-      {/* 구독 버튼: 모바일=하단 고정바, PC=상단 인라인(좁은 폭) */}
-      <div
-        className={
-          isMobile
-            ? 'max-w-mobile-max fixed inset-x-0 bottom-0 z-10 mx-auto border-t border-gray-100 bg-white p-4'
-            : 'mt-8'
-        }
-      >
-        <button
-          type="button"
-          disabled={isPending}
-          onClick={() => {
-            if (isSubscribed) unsubscribe(themeId);
-            else subscribe(themeId);
-          }}
-          className={`rounded-xl py-3.5 text-base font-semibold disabled:opacity-50 ${
-            isMobile ? 'w-full' : 'px-10'
-          } ${isSubscribed ? 'bg-gray-100 text-gray-500' : 'bg-primary-500 text-white'}`}
-        >
-          {isSubscribed ? '구독 중 (해지하기)' : '이 묶음 구독'}
-        </button>
       </div>
     </div>
   );

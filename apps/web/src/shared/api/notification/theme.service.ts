@@ -95,7 +95,10 @@ export class ThemeService {
   }
 
   static async getMySubscribedThemeIds() {
-    return execute(QueryMySubscribedThemeIds).then((res) => res.data.mySubscribedThemeIds);
+    // 비로그인은 403(Forbidden) → 빈 배열. L1 공유 링크 비로그인 미리보기가 깨지지 않게.
+    return execute(QueryMySubscribedThemeIds)
+      .then((res) => res.data.mySubscribedThemeIds)
+      .catch(() => [] as number[]);
   }
 
   static async subscribe(themeId: number) {

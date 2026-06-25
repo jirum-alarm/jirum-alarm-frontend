@@ -7,7 +7,7 @@ import { ThemeQueries } from '@/entities/notification';
 
 import { useThemeSubscription } from '../../model/useThemeSubscription';
 
-const ThemeList = () => {
+const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
   const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
   const { data: subscribedIds } = useSuspenseQuery(ThemeQueries.mySubscribedIds());
   const { subscribe, unsubscribe, isPending } = useThemeSubscription();
@@ -15,7 +15,7 @@ const ThemeList = () => {
   const subscribed = new Set(subscribedIds);
 
   return (
-    <ul className="pc:grid pc:grid-cols-2 pc:gap-4 pc:pb-0 flex flex-col gap-3 pb-32">
+    <ul className={isMobile ? 'flex flex-col gap-3 pb-32' : 'grid grid-cols-2 gap-4'}>
       {themes.map((theme) => {
         const isSubscribed = subscribed.has(theme.id);
         return (
