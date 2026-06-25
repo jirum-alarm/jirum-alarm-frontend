@@ -1,11 +1,14 @@
 'use client';
 
+import 'swiper/css';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ThemeQueries } from '@/entities/notification';
 
-// 홈 노출: 알림 묶음 가로 캐러셀. 신규가 마이페이지 안 들어가도 묶음을 발견 → 활성화 레버.
+// 홈 모바일: 알림 묶음 캐러셀. 랭킹/핫딜과 동일 Swiper 스와이프. 신규 발견 → 활성화 레버.
 const ThemeCarousel = () => {
   const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
 
@@ -19,20 +22,34 @@ const ThemeCarousel = () => {
           전체보기
         </Link>
       </div>
-      {/* 칩 형태(이모지+이름 한 줄)로 세로 높이 최소화 */}
-      <ul className="mt-2 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <Swiper
+        className="mt-2 w-full"
+        slidesPerView="auto"
+        spaceBetween={10}
+        slidesOffsetBefore={20}
+        slidesOffsetAfter={20}
+      >
         {themes.map((theme) => (
-          <li key={theme.id} className="shrink-0">
+          <SwiperSlide key={theme.id} className="!w-[180px]">
             <Link
               href={`/themes/${theme.id}`}
-              className="flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-sm text-gray-900"
+              className="flex h-full flex-col gap-1 rounded-2xl border border-gray-200 p-3"
             >
-              <span aria-hidden>{theme.emoji || '🔔'}</span>
-              <span className="whitespace-nowrap">{theme.name}</span>
+              <span className="flex items-center gap-1.5">
+                <span className="text-lg" aria-hidden>
+                  {theme.emoji || '🔔'}
+                </span>
+                <span className="line-clamp-1 text-sm font-semibold text-gray-900">
+                  {theme.name}
+                </span>
+              </span>
+              <span className="line-clamp-1 text-xs text-gray-400">
+                {theme.representativeKeywords.slice(0, 3).join('·')}
+              </span>
             </Link>
-          </li>
+          </SwiperSlide>
         ))}
-      </ul>
+      </Swiper>
     </section>
   );
 };
