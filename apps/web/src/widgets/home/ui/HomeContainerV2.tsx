@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
 
@@ -14,6 +15,7 @@ import DesktopHeroSection from './desktop/HeroSection';
 import MobileBackgroundHeader from './mobile/BackgroundHeader';
 import MobileHomeHeader from './mobile/HomeHeader';
 import MobileJirumRankingContainer from './mobile/JirumRankingContainer';
+import ThemeCarousel from './mobile/ThemeCarousel';
 
 async function HomeContainerV2() {
   const { isMobile } = await checkDevice();
@@ -42,6 +44,10 @@ async function HomeContainerV2() {
     return (
       <>
         <MobileJirumRankingContainer />
+        <div className="h-5" />
+        <Suspense fallback={null}>
+          <ThemeCarousel />
+        </Suspense>
         <div className="h-5" />
       </>
     );
