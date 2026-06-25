@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -581,8 +580,12 @@ export type Mutation = {
   signup: SignupOutput;
   /** 소셜 로그인 */
   socialLogin: SocialLoginOutput;
+  /** 알림 묶음(테마) 구독 — 키워드 시점 매칭, 멱등 */
+  subscribeNotificationTheme: Scalars['Boolean']['output'];
   trackAdClick: Scalars['Boolean']['output'];
   trackAdImpression: Scalars['Boolean']['output'];
+  /** 알림 묶음(테마) 구독 해지 */
+  unsubscribeNotificationTheme: Scalars['Boolean']['output'];
   updateAd: Ad;
   updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
@@ -885,12 +888,20 @@ export type MutationSocialLoginArgs = {
   socialAccessToken: Scalars['String']['input'];
 };
 
+export type MutationSubscribeNotificationThemeArgs = {
+  themeId: Scalars['Int']['input'];
+};
+
 export type MutationTrackAdClickArgs = {
   id: Scalars['Int']['input'];
 };
 
 export type MutationTrackAdImpressionArgs = {
   id: Scalars['Int']['input'];
+};
+
+export type MutationUnsubscribeNotificationThemeArgs = {
+  themeId: Scalars['Int']['input'];
 };
 
 export type MutationUpdateAdArgs = {
@@ -1039,6 +1050,27 @@ export type PaginatedGridSection = BaseSection & {
   viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
+export type PriceComparison = {
+  __typename?: 'PriceComparison';
+  /** 가격비교 출처(DANAWA | COMMUNITY_CLUSTER) */
+  basis: PriceComparisonBasis;
+  /** DANAWA 전용 상세 */
+  danawa?: Maybe<PriceContext>;
+  /** 우리 딜가(원) */
+  dealPrice: Scalars['Float']['output'];
+  /** 할인율 0~1 (1 - dealPrice/lowestPrice) */
+  delta: Scalars['Float']['output'];
+  /** 비교 최저가 — 다나와가 또는 클러스터 최저가 */
+  lowestPrice: Scalars['Float']['output'];
+  /** COMMUNITY_CLUSTER 전용 판매처별 글 */
+  sellers?: Maybe<Array<ProductOutput>>;
+};
+
+export enum PriceComparisonBasis {
+  CommunityCluster = 'COMMUNITY_CLUSTER',
+  Danawa = 'DANAWA',
+}
+
 export type PriceContext = {
   __typename?: 'PriceContext';
   danawaPrice: Scalars['Float']['output'];
@@ -1121,6 +1153,9 @@ export type ProductImpressionInput = {
 
 export type ProductMapping = {
   __typename?: 'ProductMapping';
+  aiSuggestion?: Maybe<ProductMappingAiSuggestion>;
+  aiSuggestionConfidence?: Maybe<Scalars['Int']['output']>;
+  aiSuggestionReason?: Maybe<Scalars['String']['output']>;
   correctPcode?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   danawaUrl?: Maybe<Scalars['String']['output']>;
@@ -1151,6 +1186,11 @@ export type ProductMapping = {
   verifiedById?: Maybe<Scalars['Int']['output']>;
 };
 
+export enum ProductMappingAiSuggestion {
+  Approve = 'APPROVE',
+  Reject = 'REJECT',
+}
+
 export enum ProductMappingFeedbackType {
   Confirmed = 'CONFIRMED',
   Corrected = 'CORRECTED',
@@ -1173,6 +1213,9 @@ export enum ProductMappingMatchStatus {
 
 export type ProductMappingOutput = {
   __typename?: 'ProductMappingOutput';
+  aiSuggestion?: Maybe<ProductMappingAiSuggestion>;
+  aiSuggestionConfidence?: Maybe<Scalars['Int']['output']>;
+  aiSuggestionReason?: Maybe<Scalars['String']['output']>;
   brandProduct?: Maybe<Scalars['String']['output']>;
   correctPcode?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
@@ -1276,6 +1319,8 @@ export type ProductOutput = {
   postedAt: Scalars['DateTime']['output'];
   precomputedRankingScore?: Maybe<Scalars['Float']['output']>;
   price?: Maybe<Scalars['String']['output']>;
+  /** 통합 가격비교(DANAWA 배지 또는 COMMUNITY_CLUSTER 블록, 상세 전용) */
+  priceComparison?: Maybe<PriceComparison>;
   /** 왜 핫딜인지 가격 컨텍스트 (게이트 통과 시에만, 상세 전용) */
   priceContext?: Maybe<PriceContext>;
   priceCurrency?: Maybe<Scalars['String']['output']>;
@@ -1439,10 +1484,16 @@ export type Query = {
   modelPagePreviewByAdmin?: Maybe<ModelPageOutput>;
   /** 어드민) 모델 페이지 검수 목록 */
   modelPagesByAdmin: Array<ModelPageAdminItemOutput>;
+  /** 내가 구독한 묶음(테마) id 목록 */
+  mySubscribedThemeIds: Array<Scalars['Int']['output']>;
   /** 유저 알림 키워드 목록 조회 */
   notificationKeywordsByMe: Array<NotificationKeyword>;
   /** 어드민) 개별 알림 목록 조회 */
   notificationListByAdmin: Array<Notification>;
+  /** 묶음 라이브 딜(상세 진입 시 실시간 조회) */
+  notificationThemeLiveDeals: Array<ProductOutput>;
+  /** 활성 알림 묶음(테마) 목록 + 대표 키워드 */
+  notificationThemes: Array<ThemeWithKeywords>;
   /** 알림 목록 조회 */
   notifications: Array<Notification>;
   /** 어드민) 알림 발송 이력 조회 */
@@ -1769,6 +1820,10 @@ export type QueryNotificationListByAdminArgs = {
   userId?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type QueryNotificationThemeLiveDealsArgs = {
+  themeId: Scalars['Int']['input'];
+};
+
 export type QueryNotificationsArgs = {
   limit?: Scalars['Int']['input'];
   offset?: Scalars['Int']['input'];
@@ -2015,6 +2070,15 @@ export type SocialLoginOutput = {
 export type Subscription = {
   __typename?: 'Subscription';
   productAdded: ProductOutput;
+};
+
+export type ThemeWithKeywords = {
+  __typename?: 'ThemeWithKeywords';
+  description: Scalars['String']['output'];
+  emoji?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  representativeKeywords: Array<Scalars['String']['output']>;
 };
 
 export type ThumbnailMallCountOutput = {

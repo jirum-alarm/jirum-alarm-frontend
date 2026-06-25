@@ -798,8 +798,16 @@ type Mutation {
     oauthProvider: OauthProvider!
     socialAccessToken: String!
   ): SocialLoginOutput!
+  """
+  알림 묶음(테마) 구독 — 키워드 시점 매칭, 멱등
+  """
+  subscribeNotificationTheme(themeId: Int!): Boolean!
   trackAdClick(id: Int!): Boolean!
   trackAdImpression(id: Int!): Boolean!
+  """
+  알림 묶음(테마) 구독 해지
+  """
+  unsubscribeNotificationTheme(themeId: Int!): Boolean!
   updateAd(
     description: String
     endAt: DateTime
@@ -960,6 +968,38 @@ type PaginatedGridSection implements BaseSection {
   viewMoreLink: String
 }
 
+type PriceComparison {
+  """
+  가격비교 출처(DANAWA | COMMUNITY_CLUSTER)
+  """
+  basis: PriceComparisonBasis!
+  """
+  DANAWA 전용 상세
+  """
+  danawa: PriceContext
+  """
+  우리 딜가(원)
+  """
+  dealPrice: Float!
+  """
+  할인율 0~1 (1 - dealPrice/lowestPrice)
+  """
+  delta: Float!
+  """
+  비교 최저가 — 다나와가 또는 클러스터 최저가
+  """
+  lowestPrice: Float!
+  """
+  COMMUNITY_CLUSTER 전용 판매처별 글
+  """
+  sellers: [ProductOutput!]
+}
+
+enum PriceComparisonBasis {
+  COMMUNITY_CLUSTER
+  DANAWA
+}
+
 type PriceContext {
   danawaPrice: Float!
   danawaProductName: String
@@ -1040,6 +1080,9 @@ input ProductImpressionInput {
 }
 
 type ProductMapping {
+  aiSuggestion: ProductMappingAiSuggestion
+  aiSuggestionConfidence: Int
+  aiSuggestionReason: String
   correctPcode: String
   createdAt: DateTime!
   danawaUrl: String
@@ -1072,6 +1115,11 @@ type ProductMapping {
   verifiedById: Int
 }
 
+enum ProductMappingAiSuggestion {
+  APPROVE
+  REJECT
+}
+
 enum ProductMappingFeedbackType {
   CONFIRMED
   CORRECTED
@@ -1092,6 +1140,9 @@ enum ProductMappingMatchStatus {
 }
 
 type ProductMappingOutput {
+  aiSuggestion: ProductMappingAiSuggestion
+  aiSuggestionConfidence: Int
+  aiSuggestionReason: String
   brandProduct: String
   correctPcode: String
   createdAt: DateTime!
@@ -1211,6 +1262,10 @@ type ProductOutput {
   postedAt: DateTime!
   precomputedRankingScore: Float
   price: String
+  """
+  통합 가격비교(DANAWA 배지 또는 COMMUNITY_CLUSTER 블록, 상세 전용)
+  """
+  priceComparison: PriceComparison
   """
   왜 핫딜인지 가격 컨텍스트 (게이트 통과 시에만, 상세 전용)
   """
@@ -1619,6 +1674,10 @@ type Query {
   """
   modelPagesByAdmin(onlyDrafts: Boolean = false): [ModelPageAdminItemOutput!]!
   """
+  내가 구독한 묶음(테마) id 목록
+  """
+  mySubscribedThemeIds: [Int!]!
+  """
   유저 알림 키워드 목록 조회
   """
   notificationKeywordsByMe(limit: Int!, searchAfter: [String!]): [NotificationKeyword!]!
@@ -1632,6 +1691,14 @@ type Query {
     targetId: String
     userId: Int
   ): [Notification!]!
+  """
+  묶음 라이브 딜(상세 진입 시 실시간 조회)
+  """
+  notificationThemeLiveDeals(themeId: Int!): [ProductOutput!]!
+  """
+  활성 알림 묶음(테마) 목록 + 대표 키워드
+  """
+  notificationThemes: [ThemeWithKeywords!]!
   """
   알림 목록 조회
   """
@@ -1949,6 +2016,14 @@ type SocialLoginOutput {
 
 type Subscription {
   productAdded: ProductOutput!
+}
+
+type ThemeWithKeywords {
+  description: String!
+  emoji: String
+  id: ID!
+  name: String!
+  representativeKeywords: [String!]!
 }
 
 type ThumbnailMallCountOutput {

@@ -30,6 +30,11 @@ const MENU_LIST: Array<{
     url: '/mypage/keyword',
   },
   {
+    icon: <Alert />,
+    title: '알림 묶음',
+    url: '/mypage/themes',
+  },
+  {
     icon: <Description />,
     title: '약관 및 정책',
     url: '/mypage/terms-policies',
