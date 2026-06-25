@@ -19,10 +19,10 @@ const ThemeSection = () => {
           전체보기
         </Link>
       </div>
-      {/* 칩 가로 wrap — 그리드 카드(2줄) 대신 한두 줄로 압축 */}
-      <ul className="mt-3 flex flex-wrap gap-2">
+      {/* 칩 1줄 가로스크롤 — 개수 많아도 높이 고정(모바일 캐러셀과 통일) */}
+      <ul className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {themes.map((theme) => (
-          <li key={theme.id}>
+          <li key={theme.id} className="shrink-0">
             <Link
               href={`/themes/${theme.id}`}
               className="flex items-center gap-1.5 rounded-full border border-gray-200 px-3.5 py-1.5 text-sm text-gray-900 transition-colors hover:border-gray-300"
