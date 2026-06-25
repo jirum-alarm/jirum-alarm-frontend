@@ -22,7 +22,11 @@ const ThemesPage = async () => {
   );
 
   if (!isMobile) {
-    return <div className="max-w-layout-max mx-auto px-5 py-12">{content}</div>;
+    return (
+      <div className="mt-14 pt-11">
+        <div className="max-w-layout-max mx-auto px-5 pb-16">{content}</div>
+      </div>
+    );
   }
 
   return (
