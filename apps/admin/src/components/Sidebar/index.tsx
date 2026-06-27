@@ -318,6 +318,31 @@ const Sidebar = ({
                   );
                 }}
               </SidebarLinkGroup>
+
+              <SidebarLinkGroup activeCondition={pathname.startsWith('/advertisement')}>
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <MenuGroup
+                        name="광고"
+                        isSelectedPath={pathname.startsWith('/advertisement')}
+                        open={open}
+                        sidebarExpanded={sidebarExpanded}
+                        openSidebar={openSidebar}
+                        handleClick={handleClick}
+                      />
+                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
+                        <SubMenuItem name="목록" linkTo="/advertisement" pathname={pathname} />
+                        <SubMenuItem
+                          name="등록"
+                          linkTo="/advertisement/register"
+                          pathname={pathname}
+                        />
+                      </SubMenu>
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
             </ul>
           </div>
 
