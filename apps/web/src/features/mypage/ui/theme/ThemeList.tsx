@@ -3,6 +3,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
+import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
+
 import { ThemeQueries } from '@/entities/notification';
 
 import { useThemeSubscription } from '../../model/useThemeSubscription';
@@ -11,6 +13,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
   const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
   const { data: subscribedIds } = useSuspenseQuery(ThemeQueries.mySubscribedIds());
   const { subscribe, unsubscribe, isPending } = useThemeSubscription();
+  const { checkAndRedirect } = useRedirectIfNotLoggedIn();
 
   const subscribed = new Set(subscribedIds);
 
@@ -37,6 +40,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
                   disabled={isPending}
                   onClick={(e) => {
                     e.preventDefault(); // 카드 링크 이동 막고 구독만
+                    if (checkAndRedirect()) return; // 비로그인은 로그인으로 유도
                     if (isSubscribed) unsubscribe(theme.id);
                     else subscribe(theme.id);
                   }}

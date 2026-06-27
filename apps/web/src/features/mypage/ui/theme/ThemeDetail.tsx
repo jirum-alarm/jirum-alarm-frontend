@@ -4,6 +4,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { HotDealType } from '@/shared/api/gql/graphql';
 import type { ThemeLiveDeal } from '@/shared/api/notification/theme.service';
+import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 
 import { ThemeQueries } from '@/entities/notification';
 import { type ProductCardType } from '@/entities/product-list/model/types';
@@ -29,6 +30,7 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
   const { data: subscribedIds } = useSuspenseQuery(ThemeQueries.mySubscribedIds());
   const { data: deals } = useSuspenseQuery(ThemeQueries.liveDeals(themeId));
   const { subscribe, unsubscribe, isPending } = useThemeSubscription();
+  const { checkAndRedirect } = useRedirectIfNotLoggedIn();
 
   const theme = themes.find((t) => Number(t.id) === themeId);
   if (!theme) return null;
@@ -41,6 +43,8 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
       type="button"
       disabled={isPending}
       onClick={() => {
+        // 비로그인은 구독 불가(서버 403) → 로그인으로 유도. 실패 토스트 대신 로그인 플로우.
+        if (checkAndRedirect()) return;
         if (isSubscribed) unsubscribe(themeId);
         else subscribe(themeId);
       }}
