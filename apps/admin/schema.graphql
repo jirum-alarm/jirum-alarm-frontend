@@ -15,9 +15,28 @@ type AdAssetUploadUrlOutput {
   uploadUrl: String!
 }
 
-type AdCreative {
+type AdReportRow {
+  clicks: Int!
+  creativeId: Int!
+  """
+  clicks / impressions (impressions=0 이면 0)
+  """
+  ctr: Float!
+  impressions: Int!
+  internalId: String!
+  slotLocation: String!
+}
+
+type AdminUser {
   createdAt: DateTime!
-  displayPrice: JSONObject
+  email: String!
+  id: ID!
+  name: String!
+}
+
+type AdvertiseCreative {
+  createdAt: DateTime!
+  displayPrice: AdvertisePrice
   displayTitle: String
   endAt: DateTime!
   """
@@ -37,12 +56,12 @@ type AdCreative {
   """
   노출 위치 (여러 곳 가능)
   """
-  slotLocation: [AdSlotLocation!]!
+  slotLocation: [AdvertiseSlotLocation!]!
   """
   높을수록 먼저 노출
   """
   slotPriority: Int!
-  slotType: AdSlotType!
+  slotType: AdvertiseSlotType!
   startAt: DateTime!
   """
   클릭 시 목적지 URL
@@ -50,40 +69,42 @@ type AdCreative {
   targetUrl: String!
 }
 
-input AdImpressionInput {
+input AdvertiseImpressionInput {
   creativeId: Int!
-  slotLocation: AdSlotLocation!
+  slotLocation: AdvertiseSlotLocation!
 }
 
-type AdReportRow {
-  clicks: Int!
-  creativeId: Int!
+type AdvertisePrice {
   """
-  clicks / impressions (impressions=0 이면 0)
+  예: "28% 할인"
   """
-  ctr: Float!
-  impressions: Int!
-  internalId: String!
-  slotLocation: String!
+  discountText: String
+  """
+  예: "299,000원" / "299,000원~" / "최대 30% 할인"
+  """
+  displayPrice: String!
+  """
+  예: "999,000원"
+  """
+  originalPrice: String
 }
 
-enum AdSlotLocation {
+input AdvertisePriceInput {
+  discountText: String
+  displayPrice: String!
+  originalPrice: String
+}
+
+enum AdvertiseSlotLocation {
   home_carousel_banner
   home_main_banner
   home_ranking_product
   product_main_banner
 }
 
-enum AdSlotType {
+enum AdvertiseSlotType {
   banner
   pinnedProduct
-}
-
-type AdminUser {
-  createdAt: DateTime!
-  email: String!
-  id: ID!
-  name: String!
 }
 
 type AgeGroupCountOutput {
@@ -184,8 +205,8 @@ type CommentOutput {
   viewCount: Int!
 }
 
-input CreateAdInput {
-  displayPrice: JSONObject
+input CreateAdvertiseInput {
+  displayPrice: AdvertisePriceInput
   displayTitle: String
   endAt: DateTime!
   """
@@ -194,9 +215,9 @@ input CreateAdInput {
   graphic: JSONObject!
   internalId: String!
   isActive: Boolean! = true
-  slotLocation: [AdSlotLocation!]!
+  slotLocation: [AdvertiseSlotLocation!]!
   slotPriority: Int! = 0
-  slotType: AdSlotType!
+  slotType: AdvertiseSlotType!
   startAt: DateTime!
   targetUrl: String!
 }
@@ -669,7 +690,7 @@ type Mutation {
   """
   어드민) 광고 생성 (생성된 id 반환)
   """
-  createAd(input: CreateAdInput!): Int!
+  createAd(input: CreateAdvertiseInput!): Int!
   """
   어드민) 광고 에셋 업로드 presigned URL
   """
@@ -745,11 +766,11 @@ type Mutation {
   """
   광고 클릭 계측
   """
-  recordAdClick(creativeId: Int!, slotLocation: AdSlotLocation!): Boolean!
+  recordAdClick(creativeId: Int!, slotLocation: AdvertiseSlotLocation!): Boolean!
   """
   광고 노출 계측 (bulk)
   """
-  recordAdImpressions(events: [AdImpressionInput!]!): Boolean!
+  recordAdImpressions(events: [AdvertiseImpressionInput!]!): Boolean!
   """
   상품 노출(impression) 기록 — 프론트 viewport 가 보고. CTR 분모.
   """
@@ -884,7 +905,7 @@ type Mutation {
   """
   어드민) 광고 수정
   """
-  updateAd(id: Int!, input: UpdateAdInput!): Boolean!
+  updateAd(id: Int!, input: UpdateAdvertiseInput!): Boolean!
   updateComment(content: String, id: Int!, title: String): Boolean!
   """
   어드민) 핫딜 키워드 수정
@@ -1421,7 +1442,7 @@ type Query {
   """
   슬롯 위치의 현재 노출 가능한 광고 (우선순위순)
   """
-  activeAds(slotLocation: AdSlotLocation!): [AdCreative!]!
+  activeAds(slotLocation: AdvertiseSlotLocation!): [AdvertiseCreative!]!
   """
   어드민) 광고 노출/클릭 정산 리포트
   """
@@ -1435,8 +1456,8 @@ type Query {
     미지정 시 전체
     """
     isActive: Boolean
-    slotLocation: AdSlotLocation
-  ): [AdCreative!]!
+    slotLocation: AdvertiseSlotLocation
+  ): [AdvertiseCreative!]!
   analysisTitleByDanawa: Boolean!
   """
   BrandItem 단위 매칭된 전체 개수 조회
@@ -2151,16 +2172,16 @@ enum TokenType {
   FCM
 }
 
-input UpdateAdInput {
-  displayPrice: JSONObject
+input UpdateAdvertiseInput {
+  displayPrice: AdvertisePriceInput
   displayTitle: String
   endAt: DateTime
   graphic: JSONObject
   internalId: String
   isActive: Boolean
-  slotLocation: [AdSlotLocation!]
+  slotLocation: [AdvertiseSlotLocation!]
   slotPriority: Int
-  slotType: AdSlotType
+  slotType: AdvertiseSlotType
   startAt: DateTime
   targetUrl: String
 }

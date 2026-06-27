@@ -9,7 +9,11 @@ const AD_CREATIVE_FIELDS = `
   slotLocation
   slotPriority
   graphic
-  displayPrice
+  displayPrice {
+    discountText
+    originalPrice
+    displayPrice
+  }
   displayTitle
   targetUrl
   isActive
@@ -18,7 +22,7 @@ const AD_CREATIVE_FIELDS = `
 `;
 
 export const QueryAdsByAdmin = gql`
-  query AdsByAdmin($slotLocation: AdSlotLocation, $isActive: Boolean) {
+  query AdsByAdmin($slotLocation: AdvertiseSlotLocation, $isActive: Boolean) {
     adsByAdmin(slotLocation: $slotLocation, isActive: $isActive) {
       ${AD_CREATIVE_FIELDS}
     }
@@ -48,13 +52,13 @@ export const MutationCreateAdAssetUploadUrl = gql`
 `;
 
 export const MutationCreateAd = gql`
-  mutation CreateAd($input: CreateAdInput!) {
+  mutation CreateAd($input: CreateAdvertiseInput!) {
     createAd(input: $input)
   }
 `;
 
 export const MutationUpdateAd = gql`
-  mutation UpdateAd($id: Int!, $input: UpdateAdInput!) {
+  mutation UpdateAd($id: Int!, $input: UpdateAdvertiseInput!) {
     updateAd(id: $id, input: $input)
   }
 `;

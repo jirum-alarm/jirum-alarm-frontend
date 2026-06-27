@@ -31,35 +31,6 @@ export type AdAssetUploadUrlOutput = {
   uploadUrl: Scalars['String']['output'];
 };
 
-export type AdCreative = {
-  __typename?: 'AdCreative';
-  createdAt: Scalars['DateTime']['output'];
-  displayPrice?: Maybe<Scalars['JSONObject']['output']>;
-  displayTitle?: Maybe<Scalars['String']['output']>;
-  endAt: Scalars['DateTime']['output'];
-  /** ResponsiveAdvertiseGraphic (프론트가 렌더) */
-  graphic: Scalars['JSONObject']['output'];
-  id: Scalars['ID']['output'];
-  /** 내부 식별자 (예: 얼라이브-260625-배너) */
-  internalId: Scalars['String']['output'];
-  /** 즉시 on/off 킬스위치 */
-  isActive: Scalars['Boolean']['output'];
-  modifiedAt: Scalars['DateTime']['output'];
-  /** 노출 위치 (여러 곳 가능) */
-  slotLocation: Array<AdSlotLocation>;
-  /** 높을수록 먼저 노출 */
-  slotPriority: Scalars['Int']['output'];
-  slotType: AdSlotType;
-  startAt: Scalars['DateTime']['output'];
-  /** 클릭 시 목적지 URL */
-  targetUrl: Scalars['String']['output'];
-};
-
-export type AdImpressionInput = {
-  creativeId: Scalars['Int']['input'];
-  slotLocation: AdSlotLocation;
-};
-
 export type AdReportRow = {
   __typename?: 'AdReportRow';
   clicks: Scalars['Int']['output'];
@@ -71,18 +42,6 @@ export type AdReportRow = {
   slotLocation: Scalars['String']['output'];
 };
 
-export enum AdSlotLocation {
-  HomeCarouselBanner = 'home_carousel_banner',
-  HomeMainBanner = 'home_main_banner',
-  HomeRankingProduct = 'home_ranking_product',
-  ProductMainBanner = 'product_main_banner',
-}
-
-export enum AdSlotType {
-  Banner = 'banner',
-  PinnedProduct = 'pinnedProduct',
-}
-
 export type AdminUser = {
   __typename?: 'AdminUser';
   createdAt: Scalars['DateTime']['output'];
@@ -90,6 +49,63 @@ export type AdminUser = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
 };
+
+export type AdvertiseCreative = {
+  __typename?: 'AdvertiseCreative';
+  createdAt: Scalars['DateTime']['output'];
+  displayPrice?: Maybe<AdvertisePrice>;
+  displayTitle?: Maybe<Scalars['String']['output']>;
+  endAt: Scalars['DateTime']['output'];
+  /** ResponsiveAdvertiseGraphic (프론트가 렌더) */
+  graphic: Scalars['JSONObject']['output'];
+  id: Scalars['ID']['output'];
+  /** 내부 식별자 (예: 얼라이브-260625-배너) */
+  internalId: Scalars['String']['output'];
+  /** 즉시 on/off 킬스위치 */
+  isActive: Scalars['Boolean']['output'];
+  modifiedAt: Scalars['DateTime']['output'];
+  /** 노출 위치 (여러 곳 가능) */
+  slotLocation: Array<AdvertiseSlotLocation>;
+  /** 높을수록 먼저 노출 */
+  slotPriority: Scalars['Int']['output'];
+  slotType: AdvertiseSlotType;
+  startAt: Scalars['DateTime']['output'];
+  /** 클릭 시 목적지 URL */
+  targetUrl: Scalars['String']['output'];
+};
+
+export type AdvertiseImpressionInput = {
+  creativeId: Scalars['Int']['input'];
+  slotLocation: AdvertiseSlotLocation;
+};
+
+export type AdvertisePrice = {
+  __typename?: 'AdvertisePrice';
+  /** 예: "28% 할인" */
+  discountText?: Maybe<Scalars['String']['output']>;
+  /** 예: "299,000원" / "299,000원~" / "최대 30% 할인" */
+  displayPrice: Scalars['String']['output'];
+  /** 예: "999,000원" */
+  originalPrice?: Maybe<Scalars['String']['output']>;
+};
+
+export type AdvertisePriceInput = {
+  discountText?: InputMaybe<Scalars['String']['input']>;
+  displayPrice: Scalars['String']['input'];
+  originalPrice?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum AdvertiseSlotLocation {
+  HomeCarouselBanner = 'home_carousel_banner',
+  HomeMainBanner = 'home_main_banner',
+  HomeRankingProduct = 'home_ranking_product',
+  ProductMainBanner = 'product_main_banner',
+}
+
+export enum AdvertiseSlotType {
+  Banner = 'banner',
+  PinnedProduct = 'pinnedProduct',
+}
 
 export type AgeGroupCountOutput = {
   __typename?: 'AgeGroupCountOutput';
@@ -192,17 +208,17 @@ export type CommentOutput = {
   viewCount: Scalars['Int']['output'];
 };
 
-export type CreateAdInput = {
-  displayPrice?: InputMaybe<Scalars['JSONObject']['input']>;
+export type CreateAdvertiseInput = {
+  displayPrice?: InputMaybe<AdvertisePriceInput>;
   displayTitle?: InputMaybe<Scalars['String']['input']>;
   endAt: Scalars['DateTime']['input'];
   /** ResponsiveAdvertiseGraphic */
   graphic: Scalars['JSONObject']['input'];
   internalId: Scalars['String']['input'];
   isActive?: Scalars['Boolean']['input'];
-  slotLocation: Array<AdSlotLocation>;
+  slotLocation: Array<AdvertiseSlotLocation>;
   slotPriority?: Scalars['Int']['input'];
-  slotType: AdSlotType;
+  slotType: AdvertiseSlotType;
   startAt: Scalars['DateTime']['input'];
   targetUrl: Scalars['String']['input'];
 };
@@ -790,7 +806,7 @@ export type MutationCollectThumbnailArgs = {
 };
 
 export type MutationCreateAdArgs = {
-  input: CreateAdInput;
+  input: CreateAdvertiseInput;
 };
 
 export type MutationCreateAdAssetUploadUrlArgs = {
@@ -829,11 +845,11 @@ export type MutationReadNotificationArgs = {
 
 export type MutationRecordAdClickArgs = {
   creativeId: Scalars['Int']['input'];
-  slotLocation: AdSlotLocation;
+  slotLocation: AdvertiseSlotLocation;
 };
 
 export type MutationRecordAdImpressionsArgs = {
-  events: Array<AdImpressionInput>;
+  events: Array<AdvertiseImpressionInput>;
 };
 
 export type MutationRecordProductImpressionsArgs = {
@@ -950,7 +966,7 @@ export type MutationUnsubscribeNotificationThemeArgs = {
 
 export type MutationUpdateAdArgs = {
   id: Scalars['Int']['input'];
-  input: UpdateAdInput;
+  input: UpdateAdvertiseInput;
 };
 
 export type MutationUpdateCommentArgs = {
@@ -1439,12 +1455,12 @@ export enum ProviderType {
 export type Query = {
   __typename?: 'Query';
   /** 슬롯 위치의 현재 노출 가능한 광고 (우선순위순) */
-  activeAds: Array<AdCreative>;
+  activeAds: Array<AdvertiseCreative>;
   /** 어드민) 광고 노출/클릭 정산 리포트 */
   adReport: Array<AdReportRow>;
   adminMe: AdminUser;
   /** 어드민) 광고 목록 */
-  adsByAdmin: Array<AdCreative>;
+  adsByAdmin: Array<AdvertiseCreative>;
   analysisTitleByDanawa: Scalars['Boolean']['output'];
   /** BrandItem 단위 매칭된 전체 개수 조회 */
   brandItemsByMatchCountTotalCount: Scalars['Int']['output'];
@@ -1621,7 +1637,7 @@ export type Query = {
 };
 
 export type QueryActiveAdsArgs = {
-  slotLocation: AdSlotLocation;
+  slotLocation: AdvertiseSlotLocation;
 };
 
 export type QueryAdReportArgs = {
@@ -1632,7 +1648,7 @@ export type QueryAdReportArgs = {
 
 export type QueryAdsByAdminArgs = {
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  slotLocation?: InputMaybe<AdSlotLocation>;
+  slotLocation?: InputMaybe<AdvertiseSlotLocation>;
 };
 
 export type QueryBrandItemsByMatchCountTotalCountArgs = {
@@ -2166,16 +2182,16 @@ export enum TokenType {
   Fcm = 'FCM',
 }
 
-export type UpdateAdInput = {
-  displayPrice?: InputMaybe<Scalars['JSONObject']['input']>;
+export type UpdateAdvertiseInput = {
+  displayPrice?: InputMaybe<AdvertisePriceInput>;
   displayTitle?: InputMaybe<Scalars['String']['input']>;
   endAt?: InputMaybe<Scalars['DateTime']['input']>;
   graphic?: InputMaybe<Scalars['JSONObject']['input']>;
   internalId?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  slotLocation?: InputMaybe<Array<AdSlotLocation>>;
+  slotLocation?: InputMaybe<Array<AdvertiseSlotLocation>>;
   slotPriority?: InputMaybe<Scalars['Int']['input']>;
-  slotType?: InputMaybe<AdSlotType>;
+  slotType?: InputMaybe<AdvertiseSlotType>;
   startAt?: InputMaybe<Scalars['DateTime']['input']>;
   targetUrl?: InputMaybe<Scalars['String']['input']>;
 };
