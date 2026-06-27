@@ -10,6 +10,7 @@ import DisplayTime from '@/shared/ui/DisplayTime';
 import ImageComponent from '@/shared/ui/ImageComponent';
 import Link from '@/shared/ui/Link';
 
+import { escapeRegExp } from '../lib/escapeRegExp';
 import { alarmEditModeAtom } from '../model/alarmEditModeAtom';
 
 const AlarmItem = ({
@@ -166,7 +167,9 @@ function ItemBody({
 }
 
 function HighlightText({ message, keyword }: { message: string; keyword: string }) {
-  const regex = new RegExp(`(${keyword})`, 'g');
+  if (!keyword) return <>{message}</>;
+
+  const regex = new RegExp(`(${escapeRegExp(keyword)})`, 'g');
 
   const parts = message.split(regex);
 
