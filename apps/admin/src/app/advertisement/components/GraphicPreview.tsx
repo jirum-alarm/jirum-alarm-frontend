@@ -95,44 +95,50 @@ const GraphicPreview = ({ graphic }: { graphic: ResponsiveAdvertiseGraphic | nul
           {cw}×{ch}
         </span>
       </div>
-      <div
-        className="relative w-full overflow-hidden rounded-lg border border-stroke bg-gray-2 dark:border-strokedark"
-        style={{ paddingBottom: `${aspect * 100}%` }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={graphic.background.assetUrl}
-          alt="background"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        {(graphic.foregroundElements ?? []).map((el, i) => {
-          if (!el?.assetUrl || !el.layoutByWidth) return null;
-          const layout = resolveResponsive(el.layoutByWidth, viewport);
-          if (!layout) return null;
-          const c: ElementConstraints = layout.constraints ?? {};
-          const sz: GraphicSize | undefined = layout.size;
-          return (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={i}
-              src={el.assetUrl}
-              alt={`element-${i}`}
-              className="absolute"
-              style={{
-                top: c.top !== undefined ? pct(c.top, ch) : undefined,
-                left: c.left !== undefined ? pct(c.left, cw) : undefined,
-                bottom: c.bottom !== undefined ? pct(c.bottom, ch) : undefined,
-                right: c.right !== undefined ? pct(c.right, cw) : undefined,
-                width: sz?.width !== undefined ? pct(sz.width, cw) : undefined,
-                height: sz?.height !== undefined ? pct(sz.height, ch) : undefined,
-                objectFit: 'contain',
-              }}
-            />
-          );
-        })}
+      {/* 선택 breakpoint의 실제 컨테이너 폭(cw)으로 제한해 "그 폭에서의 모습"을 보여줌.
+          default(wide)는 cw가 클 수 있어 부모 폭까지만(w-full+maxWidth). 좁은 bp는 그 픽셀폭으로. */}
+      <div className="w-full" style={{ maxWidth: `${cw}px` }}>
+        <div
+          className="relative w-full overflow-hidden rounded-lg border border-stroke bg-gray-2 dark:border-strokedark"
+          style={{ paddingBottom: `${aspect * 100}%` }}
+        >
+          {/* key에 assetUrl 포함 → src 교체 시 새 노드로 리마운트(이전 이미지 잔존 방지) */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            key={graphic.background.assetUrl}
+            src={graphic.background.assetUrl}
+            alt="background"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          {(graphic.foregroundElements ?? []).map((el, i) => {
+            if (!el?.assetUrl || !el.layoutByWidth) return null;
+            const layout = resolveResponsive(el.layoutByWidth, viewport);
+            if (!layout) return null;
+            const c: ElementConstraints = layout.constraints ?? {};
+            const sz: GraphicSize | undefined = layout.size;
+            return (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={`${i}-${el.assetUrl}`}
+                src={el.assetUrl}
+                alt={`element-${i}`}
+                className="absolute"
+                style={{
+                  top: c.top !== undefined ? pct(c.top, ch) : undefined,
+                  left: c.left !== undefined ? pct(c.left, cw) : undefined,
+                  bottom: c.bottom !== undefined ? pct(c.bottom, ch) : undefined,
+                  right: c.right !== undefined ? pct(c.right, cw) : undefined,
+                  width: sz?.width !== undefined ? pct(sz.width, cw) : undefined,
+                  height: sz?.height !== undefined ? pct(sz.height, ch) : undefined,
+                  objectFit: 'contain',
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
       <p className="mt-1 text-xs text-bodydark2">
-        ※ 근사 미리보기 — 실제 렌더는 프론트 광고 컴포넌트 기준. 레이아웃 검수용.
+        ※ 선택한 폭({cw}px)에서의 레이아웃. 실제 렌더는 프론트 광고 컴포넌트 기준 — 검수용.
       </p>
     </div>
   );
