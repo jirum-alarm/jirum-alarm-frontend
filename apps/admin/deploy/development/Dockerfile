@@ -75,3 +75,5 @@ COPY --from=dependencies --chown=remix:nodejs /dependencies/node_modules ./node_
 COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/public ./public
 
 CMD ["node", "/app/apps/admin/server.js"]
+
+# rebuild: standalone static 포함 정상 이미지 재배포 (낡은 develop 태그 교체)
