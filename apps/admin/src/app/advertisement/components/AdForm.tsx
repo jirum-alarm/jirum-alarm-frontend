@@ -26,10 +26,14 @@ const SAMPLE_GRAPHIC = `{
   "size": { "_default": { "width": 360, "height": 120 } },
   "background": {
     "designSize": { "width": 360, "height": 120 },
-    "assetUrl": "https://cdn.jirum-alarm.com/ad/bg.png"
+    "assetUrl": ""
   },
   "foregroundElements": []
 }`;
+
+// 입력 제한 (백엔드 검증과 일치)
+const LIMIT = { internalId: 255, displayTitle: 255, targetUrl: 2048 };
+const CDN_BASE = 'https://cdn.jirum-alarm.com';
 
 const inputClass =
   'w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary';
@@ -49,7 +53,22 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
   const [graphicText, setGraphicText] = useState(
     initial ? JSON.stringify(initial.graphic, null, 2) : SAMPLE_GRAPHIC,
   );
-  const [uploadedAsset, setUploadedAsset] = useState<string>('');
+
+  // 업로드한 assetUrl을 graphic.background.assetUrl에 자동 주입(파싱 가능할 때).
+  // 파싱 불가하면 textarea에 직접 넣도록 안내만.
+  const handleAssetUploaded = (assetUrl: string) => {
+    try {
+      const g = JSON.parse(graphicText);
+      g.background = { ...(g.background ?? {}), assetUrl };
+      if (!g.background.designSize)
+        g.background.designSize = g.size?._default ?? { width: 0, height: 0 };
+      setGraphicText(JSON.stringify(g, null, 2));
+    } catch {
+      alert(
+        `graphic JSON이 유효하지 않아 자동 주입 실패. 아래 URL을 background.assetUrl에 직접 넣으세요:\n${assetUrl}`,
+      );
+    }
+  };
 
   // graphic JSON 파싱 (프리뷰 + 제출 공용)
   const parsedGraphic = useMemo<{
@@ -85,11 +104,28 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
 
   const handleSubmit = () => {
     if (!internalId.trim()) return alert('internalId 를 입력하세요.');
+    if (internalId.length > LIMIT.internalId)
+      return alert(`internalId는 ${LIMIT.internalId}자 이하여야 합니다.`);
     if (slotLocation.length === 0) return alert('노출 위치를 1개 이상 선택하세요.');
     if (!startAt || !endAt) return alert('시작/종료 시각을 입력하세요.');
+    if (new Date(endAt) <= new Date(startAt))
+      return alert('종료 시각이 시작 시각보다 뒤여야 합니다.');
     if (!targetUrl.trim()) return alert('targetUrl 을 입력하세요.');
+    if (!/^https:\/\//.test(targetUrl)) return alert('targetUrl 은 https:// 로 시작해야 합니다.');
+    if (targetUrl.length > LIMIT.targetUrl)
+      return alert(`targetUrl은 ${LIMIT.targetUrl}자 이하여야 합니다.`);
+    if (displayTitle.length > LIMIT.displayTitle)
+      return alert(`displayTitle은 ${LIMIT.displayTitle}자 이하여야 합니다.`);
     if (parsedGraphic.error || !parsedGraphic.graphic)
       return alert(`graphic JSON 오류: ${parsedGraphic.error}`);
+    // 백엔드 validateAdGraphic와 동일: 필수 키 + assetUrl CDN origin
+    const g = parsedGraphic.graphic;
+    if (!g.size?._default) return alert('graphic.size._default 가 필요합니다.');
+    if (!g.background?.assetUrl)
+      return alert('배경 에셋을 업로드하거나 background.assetUrl 을 입력하세요.');
+    const urls = [g.background.assetUrl, ...(g.foregroundElements ?? []).map((e) => e?.assetUrl)];
+    const bad = urls.find((u) => !u || !u.startsWith(CDN_BASE));
+    if (bad !== undefined) return alert(`모든 assetUrl은 ${CDN_BASE} 도메인이어야 합니다: ${bad}`);
 
     const input: CreateAdInput = {
       internalId,
@@ -121,6 +157,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
           <input
             className={inputClass}
             value={internalId}
+            maxLength={LIMIT.internalId}
             onChange={(e) => setInternalId(e.target.value)}
           />
         </div>
@@ -147,7 +184,9 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
               type="number"
               className={inputClass}
               value={slotPriority}
-              onChange={(e) => setSlotPriority(Number(e.target.value))}
+              min={0}
+              max={1000}
+              onChange={(e) => setSlotPriority(Math.max(0, Number(e.target.value)))}
             />
           </div>
         </div>
@@ -207,6 +246,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
             type="url"
             className={inputClass}
             value={targetUrl}
+            maxLength={LIMIT.targetUrl}
             onChange={(e) => setTargetUrl(e.target.value)}
             placeholder="https://…"
           />
@@ -219,6 +259,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
           <input
             className={inputClass}
             value={displayTitle}
+            maxLength={LIMIT.displayTitle}
             onChange={(e) => setDisplayTitle(e.target.value)}
           />
         </div>
@@ -248,9 +289,9 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
       {/* 우: graphic 편집 + 프리뷰 */}
       <div className="flex flex-col gap-4 rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
         <AssetUploader
-          label="에셋 업로드 (S3) → 아래 JSON 의 assetUrl 에 붙여넣기"
-          value={uploadedAsset}
-          onUploaded={setUploadedAsset}
+          label="배경 에셋 업로드 (S3) → background.assetUrl 자동 입력"
+          value={parsedGraphic.graphic?.background?.assetUrl}
+          onUploaded={handleAssetUploaded}
         />
 
         <div>
