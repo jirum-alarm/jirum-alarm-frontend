@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai';
-import { memo } from 'react';
+import { memo, type ReactNode } from 'react';
 
 import { QueryNotificationsQuery } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
@@ -26,6 +26,9 @@ const AlarmItem = ({
   const { id, message, createdAt, product, keyword, readAt } = notification;
   const { thumbnail, price, isHot, isEnd, id: productId } = product ?? {};
   const isEditMode = useAtomValue(alarmEditModeAtom);
+  // 연결된 상품이 삭제/비공개면 서버가 product=null 을 준다(notification.resolver product 리졸버).
+  // 이 경우 상세 링크 없이 알림 텍스트만 보여준다. (NaN href 로 Link 가 깨지던 버그)
+  const hasProduct = productId != null;
 
   const handleClick = () => {
     // 알림 클릭 추적 — 서버 notification_sent(발송)와 target_id(=productId)로 연결.
@@ -65,16 +68,11 @@ const AlarmItem = ({
           <XSmall />
         </button>
       )}
-      <Link
-        href={PAGE.DETAIL + '/' + +productId!}
-        className="flex w-full p-5 pr-14"
-        onClick={(e) => {
-          if (isEditMode) {
-            e.preventDefault();
-            return;
-          }
-          handleClick();
-        }}
+      <ItemBody
+        hasProduct={hasProduct}
+        productId={productId}
+        isEditMode={isEditMode}
+        onActivate={handleClick}
       >
         <div className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">
           <ImageWithFallback
@@ -112,12 +110,60 @@ const AlarmItem = ({
             </span>
           </div>
         </div>
-      </Link>
+      </ItemBody>
     </li>
   );
 };
 
 export default AlarmItem;
+
+// 상품이 살아있으면 상세로 가는 Link, 삭제됐으면 클릭만 받는 div.
+function ItemBody({
+  hasProduct,
+  productId,
+  isEditMode,
+  onActivate,
+  children,
+}: {
+  hasProduct: boolean;
+  productId?: string | null;
+  isEditMode: boolean;
+  onActivate: () => void;
+  children: ReactNode;
+}) {
+  const className = 'flex w-full p-5 pr-14';
+
+  if (!hasProduct) {
+    // 상세 링크 없음: 읽음 처리만 (편집모드면 그것도 막음)
+    return (
+      <div
+        className={className}
+        onClick={() => {
+          if (isEditMode) return;
+          onActivate();
+        }}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={PAGE.DETAIL + '/' + Number(productId)}
+      className={className}
+      onClick={(e) => {
+        if (isEditMode) {
+          e.preventDefault();
+          return;
+        }
+        onActivate();
+      }}
+    >
+      {children}
+    </Link>
+  );
+}
 
 function HighlightText({ message, keyword }: { message: string; keyword: string }) {
   const regex = new RegExp(`(${keyword})`, 'g');
