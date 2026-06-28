@@ -22,7 +22,8 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
   return (
     <ul className={isMobile ? 'flex flex-col gap-3 pb-32' : 'grid grid-cols-2 gap-4'}>
       {themes.map((theme) => {
-        const isSubscribed = subscribed.has(theme.id);
+        const themeId = Number(theme.id);
+        const isSubscribed = subscribed.has(themeId);
         return (
           <li key={theme.id} className="h-full">
             <Link
@@ -43,8 +44,8 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
                   onClick={(e) => {
                     e.preventDefault(); // 카드 링크 이동 막고 구독만
                     if (checkAndRedirect()) return; // 비로그인은 로그인으로 유도
-                    if (isSubscribed) unsubscribe(theme.id);
-                    else subscribe(theme.id);
+                    if (isSubscribed) unsubscribe(themeId);
+                    else subscribe(themeId);
                   }}
                   className={`ml-3 shrink-0 rounded-full px-4 py-1.5 text-sm font-medium disabled:opacity-50 ${
                     isSubscribed ? 'bg-gray-100 text-gray-500' : 'bg-primary-500 text-white'
