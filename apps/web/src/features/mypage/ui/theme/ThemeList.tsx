@@ -1,6 +1,6 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
@@ -11,7 +11,9 @@ import { useThemeSubscription } from '../../model/useThemeSubscription';
 
 const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
   const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
-  const { data: subscribedIds } = useSuspenseQuery(ThemeQueries.mySubscribedIds());
+  // SSR에서는 인증 쿠키 없이 빈 배열로 dehydrate되어 클라이언트 re-fetch가 안 됨
+  // → useQuery + initialData:[] 로 클라이언트에서만 fetch
+  const { data: subscribedIds = [] } = useQuery(ThemeQueries.mySubscribedIds());
   const { subscribe, unsubscribe, isPending } = useThemeSubscription();
   const { checkAndRedirect } = useRedirectIfNotLoggedIn();
 

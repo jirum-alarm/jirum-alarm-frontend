@@ -1,6 +1,6 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 import { HotDealType } from '@/shared/api/gql/graphql';
 import type { ThemeLiveDeal } from '@/shared/api/notification/theme.service';
@@ -27,7 +27,7 @@ const toCard = (d: ThemeLiveDeal): ProductCardType => ({
 
 const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?: boolean }) => {
   const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
-  const { data: subscribedIds } = useSuspenseQuery(ThemeQueries.mySubscribedIds());
+  const { data: subscribedIds = [] } = useQuery(ThemeQueries.mySubscribedIds());
   const { data: deals } = useSuspenseQuery(ThemeQueries.liveDeals(themeId));
   const { subscribe, unsubscribe, isPending } = useThemeSubscription();
   const { checkAndRedirect } = useRedirectIfNotLoggedIn();
