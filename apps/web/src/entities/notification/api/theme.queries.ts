@@ -19,5 +19,6 @@ export const ThemeQueries = {
     queryOptions({
       queryKey: [...ThemeQueries.all(), 'my-subscribed'],
       queryFn: () => ThemeService.getMySubscribedThemeIds(),
+      staleTime: 0, // SSR에서 빈 배열로 캐싱되면 클라이언트가 re-fetch 안 함 → 항상 fresh fetch
     }),
 };
