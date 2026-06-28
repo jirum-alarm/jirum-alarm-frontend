@@ -47,7 +47,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
                     if (isSubscribed) unsubscribe(themeId);
                     else subscribe(themeId);
                   }}
-                  className={`ml-3 shrink-0 rounded-full px-4 py-1.5 text-sm font-medium disabled:opacity-50 ${
+                  className={`ml-3 w-16 shrink-0 rounded-full py-1.5 text-center text-sm font-medium disabled:opacity-50 ${
                     isSubscribed ? 'bg-gray-100 text-gray-500' : 'bg-primary-500 text-white'
                   }`}
                 >
