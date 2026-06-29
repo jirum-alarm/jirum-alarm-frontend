@@ -21,12 +21,10 @@ const EVENT_ENTRY_URL = 'https://www.yogeum.com/jirums';
 const KAKAO_TALKROOM_URL = 'https://open.kakao.com/o/gJZTWAAg';
 
 const pricePlans = [
-  { label: '100GB', period: '4개월간 월', price: '5,510원' },
-  { label: '매일 5GB+5Mbps', period: '4개월간 월', price: '5,510원' },
-  { label: '100GB', period: '4개월간 월', price: '5,510원' },
-  { label: '15GB', period: '평생 월', price: '2,200원' },
-  { label: '매일 5GB+5Mbps', period: '평생 월', price: '27,500원' },
-  { label: '매일 5GB', period: '평생 월', price: '24,200원' },
+  { label: '매일 11G+2GB', period: '4개월간', price: '0원' },
+  { label: '100GB+', period: '4개월간 월', price: '5,510원' },
+  { label: '통화기본매일5GB+', period: '4개월간 월', price: '5,510원' },
+  { label: '평생 기본 11GB+매일2GB', period: '월', price: '22,900원' },
 ];
 
 const steps = [
