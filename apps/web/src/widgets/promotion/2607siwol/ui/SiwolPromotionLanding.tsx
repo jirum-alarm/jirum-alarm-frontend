@@ -19,6 +19,9 @@ import { useAdSlot } from '@/features/ad/model/useAdSlot';
 const SECRET_CODE = 'jirums';
 const EVENT_ENTRY_URL = 'https://www.yogeum.com/jirums';
 const KAKAO_TALKROOM_URL = 'https://open.kakao.com/o/gJZTWAAg';
+const BYPASS_QUERY_PARAM = 't';
+const BYPASS_QUERY_VALUE = '1';
+const ACCESS_SESSION_KEY = 'jirum:promotion:2607siwol:access';
 
 const pricePlans = [
   { label: '매일 11G+2GB', period: '4개월간', price: '0원' },
@@ -40,7 +43,13 @@ export function SiwolPromotionLanding() {
   const rollingPlans = useMemo(() => [...pricePlans, ...pricePlans], []);
 
   useEffect(() => {
-    if (searchParams.get('t') === '1') {
+    if (searchParams.get(BYPASS_QUERY_PARAM) === BYPASS_QUERY_VALUE) {
+      allowPromotionAccessOnce();
+      removeBypassQueryParam();
+      return;
+    }
+
+    if (consumePromotionAccess()) {
       return;
     }
 
@@ -85,6 +94,33 @@ export function SiwolPromotionLanding() {
       </section>
     </main>
   );
+}
+
+function removeBypassQueryParam() {
+  const url = new URL(window.location.href);
+  url.searchParams.delete(BYPASS_QUERY_PARAM);
+  window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
+}
+
+function allowPromotionAccessOnce() {
+  try {
+    window.sessionStorage.setItem(ACCESS_SESSION_KEY, '1');
+  } catch {
+    // sessionStorage가 막힌 환경에서는 t=1이 붙은 최초 진입만 허용한다.
+  }
+}
+
+function consumePromotionAccess() {
+  try {
+    if (window.sessionStorage.getItem(ACCESS_SESSION_KEY) !== '1') {
+      return false;
+    }
+
+    window.sessionStorage.removeItem(ACCESS_SESSION_KEY);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // siwol_promotion_enter creative로 입장하기 노출/클릭 추적을 붙인 CodeCard.
