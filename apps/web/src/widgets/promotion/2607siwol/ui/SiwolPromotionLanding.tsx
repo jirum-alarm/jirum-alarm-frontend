@@ -2,8 +2,10 @@
 
 import { motion } from 'motion/react';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 
+import { AdvertiseSlotLocation } from '@/shared/api/gql/graphql';
 import { LANDING_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
@@ -11,6 +13,8 @@ import { Search } from '@/shared/ui/common/icons';
 import { IconLogo } from '@/shared/ui/common/icons/Illust';
 import TalkLight from '@/shared/ui/common/icons/TalkLight';
 import Link from '@/shared/ui/Link';
+
+import { useAdSlot } from '@/features/ad/model/useAdSlot';
 
 const SECRET_CODE = 'jirums';
 const EVENT_ENTRY_URL = 'https://www.yogeum.com/jirums';
@@ -73,11 +77,43 @@ export function SiwolPromotionLanding() {
 
         <div className="mt-7 flex flex-col gap-4">
           <EventCard plans={rollingPlans} />
-          <CodeCard copyState={copyState} onCopy={handleCopy} />
+          {/* 입장하기 노출/클릭 추적은 광고 creative 조회가 필요해 Suspense로 격리.
+              광고 미등록·로딩 중이어도 입장하기는 정상 동작(추적만 생략). */}
+          <Suspense fallback={<CodeCard copyState={copyState} onCopy={handleCopy} />}>
+            <TrackedCodeCard copyState={copyState} onCopy={handleCopy} />
+          </Suspense>
           <InfoCard />
         </div>
       </section>
     </main>
+  );
+}
+
+// siwol_promotion_enter creative로 입장하기 노출/클릭 추적을 붙인 CodeCard.
+function TrackedCodeCard({
+  copyState,
+  onCopy,
+}: {
+  copyState: 'idle' | 'copied' | 'failed';
+  onCopy: () => void;
+}) {
+  const { ads, recordImpression, recordClick } = useAdSlot(
+    AdvertiseSlotLocation.SiwolPromotionEnter,
+  );
+  const enterAdId = ads[0] ? Number(ads[0].id) : null;
+  const { ref, inView } = useInView({ threshold: 0.5, triggerOnce: true });
+
+  useEffect(() => {
+    if (inView && enterAdId != null) recordImpression(enterAdId);
+  }, [inView, enterAdId, recordImpression]);
+
+  return (
+    <CodeCard
+      copyState={copyState}
+      onCopy={onCopy}
+      enterRef={ref}
+      onEnter={() => enterAdId != null && recordClick(enterAdId)}
+    />
   );
 }
 
@@ -131,16 +167,16 @@ function PromotionHeader() {
             <span className="text-lg font-bold text-white">지름알림</span>
           </Link>
           <div className="hidden h-full items-center gap-10 text-sm font-semibold text-white md:flex">
-            <Link href={PAGE.TRENDING_LIVE} className="transition-colors hover:text-primary-400">
+            <Link href={PAGE.TRENDING_LIVE} className="hover:text-primary-400 transition-colors">
               실시간
             </Link>
-            <Link href={PAGE.TRENDING_RANKING} className="transition-colors hover:text-primary-400">
+            <Link href={PAGE.TRENDING_RANKING} className="hover:text-primary-400 transition-colors">
               랭킹
             </Link>
             <Link
               href={LANDING_URL}
               prefetch={false}
-              className="transition-colors hover:text-primary-400"
+              className="hover:text-primary-400 transition-colors"
             >
               소개
             </Link>
@@ -215,9 +251,13 @@ function PriceCard({ plan }: { plan: (typeof pricePlans)[number] }) {
 function CodeCard({
   copyState,
   onCopy,
+  enterRef,
+  onEnter,
 }: {
   copyState: 'idle' | 'copied' | 'failed';
   onCopy: () => void;
+  enterRef?: (node?: Element | null) => void;
+  onEnter?: () => void;
 }) {
   return (
     <article className="rounded-[18px] bg-white p-5 text-[#162034]">
@@ -247,10 +287,12 @@ function CodeCard({
         </button>
       </div>
       <motion.a
+        ref={enterRef}
         href={EVENT_ENTRY_URL}
-        className="mt-3 flex h-12 items-center justify-center rounded-lg bg-primary-500 text-sm font-extrabold text-black transition-colors hover:bg-primary-400"
+        className="bg-primary-500 hover:bg-primary-400 mt-3 flex h-12 items-center justify-center rounded-lg text-sm font-extrabold text-black transition-colors"
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.1 }}
+        onClick={onEnter}
       >
         입장하기
       </motion.a>

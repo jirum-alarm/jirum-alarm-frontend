@@ -23,35 +23,23 @@ export type Scalars = {
   JSONObject: { input: any; output: any };
 };
 
-export type Ad = {
-  __typename?: 'Ad';
-  createdAt: Scalars['DateTime']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  endAt: Scalars['DateTime']['output'];
-  id: Scalars['ID']['output'];
-  imageUrl?: Maybe<Scalars['String']['output']>;
-  isActive: Scalars['Boolean']['output'];
-  linkUrl?: Maybe<Scalars['String']['output']>;
-  slotType: AdSlotType;
-  startAt: Scalars['DateTime']['output'];
-  title?: Maybe<Scalars['String']['output']>;
-  updatedAt: Scalars['DateTime']['output'];
-  weight: Scalars['Int']['output'];
+export type AdAssetUploadUrlOutput = {
+  __typename?: 'AdAssetUploadUrlOutput';
+  /** 업로드 완료 후 graphic.assetUrl 로 쓸 CDN URL */
+  assetUrl: Scalars['String']['output'];
+  /** 이미지를 PUT 업로드할 presigned URL */
+  uploadUrl: Scalars['String']['output'];
 };
 
-export enum AdSlotType {
-  DetailPageBanner = 'DETAIL_PAGE_BANNER',
-  MainBanner = 'MAIN_BANNER',
-  MainRankingInfeed = 'MAIN_RANKING_INFEED',
-  MenuRankingInfeed = 'MENU_RANKING_INFEED',
-}
-
-export type AdStats = {
-  __typename?: 'AdStats';
-  adId: Scalars['Int']['output'];
+export type AdReportRow = {
+  __typename?: 'AdReportRow';
   clicks: Scalars['Int']['output'];
-  date: Scalars['String']['output'];
+  creativeId: Scalars['Int']['output'];
+  /** clicks / impressions (impressions=0 이면 0) */
+  ctr: Scalars['Float']['output'];
   impressions: Scalars['Int']['output'];
+  internalId: Scalars['String']['output'];
+  slotLocation: Scalars['String']['output'];
 };
 
 export type AdminUser = {
@@ -61,6 +49,64 @@ export type AdminUser = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
 };
+
+export type AdvertiseCreative = {
+  __typename?: 'AdvertiseCreative';
+  createdAt: Scalars['DateTime']['output'];
+  displayPrice?: Maybe<AdvertisePrice>;
+  displayTitle?: Maybe<Scalars['String']['output']>;
+  endAt: Scalars['DateTime']['output'];
+  /** ResponsiveAdvertiseGraphic (프론트가 렌더) */
+  graphic: Scalars['JSONObject']['output'];
+  id: Scalars['ID']['output'];
+  /** 내부 식별자 (예: 얼라이브-260625-배너) */
+  internalId: Scalars['String']['output'];
+  /** 즉시 on/off 킬스위치 */
+  isActive: Scalars['Boolean']['output'];
+  modifiedAt: Scalars['DateTime']['output'];
+  /** 노출 위치 (여러 곳 가능) */
+  slotLocation: Array<AdvertiseSlotLocation>;
+  /** 높을수록 먼저 노출 */
+  slotPriority: Scalars['Int']['output'];
+  slotType: AdvertiseSlotType;
+  startAt: Scalars['DateTime']['output'];
+  /** 클릭 시 목적지 URL */
+  targetUrl: Scalars['String']['output'];
+};
+
+export type AdvertiseImpressionInput = {
+  creativeId: Scalars['Int']['input'];
+  slotLocation: AdvertiseSlotLocation;
+};
+
+export type AdvertisePrice = {
+  __typename?: 'AdvertisePrice';
+  /** 예: "28% 할인" */
+  discountText?: Maybe<Scalars['String']['output']>;
+  /** 예: "299,000원" / "299,000원~" / "최대 30% 할인" */
+  displayPrice: Scalars['String']['output'];
+  /** 예: "999,000원" */
+  originalPrice?: Maybe<Scalars['String']['output']>;
+};
+
+export type AdvertisePriceInput = {
+  discountText?: InputMaybe<Scalars['String']['input']>;
+  displayPrice: Scalars['String']['input'];
+  originalPrice?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum AdvertiseSlotLocation {
+  HomeCarouselBanner = 'home_carousel_banner',
+  HomeMainBanner = 'home_main_banner',
+  HomeRankingProduct = 'home_ranking_product',
+  ProductMainBanner = 'product_main_banner',
+  SiwolPromotionEnter = 'siwol_promotion_enter',
+}
+
+export enum AdvertiseSlotType {
+  Banner = 'banner',
+  PinnedProduct = 'pinnedProduct',
+}
 
 export type AgeGroupCountOutput = {
   __typename?: 'AgeGroupCountOutput';
@@ -161,6 +207,21 @@ export type CommentOutput = {
   trendedAt?: Maybe<Scalars['DateTime']['output']>;
   userId: Scalars['Float']['output'];
   viewCount: Scalars['Int']['output'];
+};
+
+export type CreateAdvertiseInput = {
+  displayPrice?: InputMaybe<AdvertisePriceInput>;
+  displayTitle?: InputMaybe<Scalars['String']['input']>;
+  endAt: Scalars['DateTime']['input'];
+  /** ResponsiveAdvertiseGraphic */
+  graphic: Scalars['JSONObject']['input'];
+  internalId: Scalars['String']['input'];
+  isActive?: Scalars['Boolean']['input'];
+  slotLocation: Array<AdvertiseSlotLocation>;
+  slotPriority?: Scalars['Int']['input'];
+  slotType: AdvertiseSlotType;
+  startAt: Scalars['DateTime']['input'];
+  targetUrl: Scalars['String']['input'];
 };
 
 export enum CurrencyType {
@@ -518,17 +579,18 @@ export type Mutation = {
   batchVerifyProductMapping: Scalars['Int']['output'];
   /** 검증 취소 (검증 완료/거부된 항목을 다시 대기 상태로 되돌림) */
   cancelVerification: Scalars['Boolean']['output'];
-  clearAdCache: Scalars['Boolean']['output'];
   /** 상품 단건 수집 */
   collectProduct: Scalars['Boolean']['output'];
   /** 썸네일 단건 수집 */
   collectThumbnail: Scalars['Boolean']['output'];
-  createAd: Ad;
+  /** 어드민) 광고 생성 (생성된 id 반환) */
+  createAd: Scalars['Int']['output'];
+  /** 어드민) 광고 에셋 업로드 presigned URL */
+  createAdAssetUploadUrl: AdAssetUploadUrlOutput;
   /** 유저 등록 상품 썸네일 업로드용 presigned URL 발급 */
   createProductImageUploadUrl: ProductImageUploadUrlOutput;
   /** 유저가 직접 핫딜 상품 등록 (등록된 productId 반환) */
   createUserProduct: Scalars['Int']['output'];
-  deleteAd: Scalars['Boolean']['output'];
   /** 어드민) 상품 hard delete */
   hardDeleteProductByAdmin: Scalars['Boolean']['output'];
   /** 로그인 */
@@ -542,6 +604,10 @@ export type Mutation = {
   readAllNotifications: Scalars['Boolean']['output'];
   /** 모든 알림 읽음 처리 */
   readNotification: Scalars['Boolean']['output'];
+  /** 광고 클릭 계측 */
+  recordAdClick: Scalars['Boolean']['output'];
+  /** 광고 노출 계측 (bulk) */
+  recordAdImpressions: Scalars['Boolean']['output'];
   /** 상품 노출(impression) 기록 — 프론트 viewport 가 보고. CTR 분모. */
   recordProductImpressions: Scalars['Boolean']['output'];
   /** 어드민) 리액션 키워드 후보 거절 */
@@ -572,6 +638,8 @@ export type Mutation = {
   reportExpiredProduct: Scalars['Boolean']['output'];
   /** 어드민) 알림 발송 */
   sendNotificationByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 광고 on/off (킬스위치) */
+  setAdActive: Scalars['Boolean']['output'];
   /** 어드민) 모델 페이지 발행 토글 */
   setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
   /** 대표 매핑 지정 (id 기준) */
@@ -582,11 +650,10 @@ export type Mutation = {
   socialLogin: SocialLoginOutput;
   /** 알림 묶음(테마) 구독 — 키워드 시점 매칭, 멱등 */
   subscribeNotificationTheme: Scalars['Boolean']['output'];
-  trackAdClick: Scalars['Boolean']['output'];
-  trackAdImpression: Scalars['Boolean']['output'];
   /** 알림 묶음(테마) 구독 해지 */
   unsubscribeNotificationTheme: Scalars['Boolean']['output'];
-  updateAd: Ad;
+  /** 어드민) 광고 수정 */
+  updateAd: Scalars['Boolean']['output'];
   updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
@@ -727,10 +794,6 @@ export type MutationCancelVerificationArgs = {
   reason?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type MutationClearAdCacheArgs = {
-  slot: AdSlotType;
-};
-
 export type MutationCollectProductArgs = {
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
@@ -744,15 +807,11 @@ export type MutationCollectThumbnailArgs = {
 };
 
 export type MutationCreateAdArgs = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  endAt: Scalars['DateTime']['input'];
-  imageUrl?: InputMaybe<Scalars['String']['input']>;
-  isActive?: Scalars['Boolean']['input'];
-  linkUrl?: InputMaybe<Scalars['String']['input']>;
-  slotType: AdSlotType;
-  startAt: Scalars['DateTime']['input'];
-  title?: InputMaybe<Scalars['String']['input']>;
-  weight?: Scalars['Int']['input'];
+  input: CreateAdvertiseInput;
+};
+
+export type MutationCreateAdAssetUploadUrlArgs = {
+  contentType: Scalars['String']['input'];
 };
 
 export type MutationCreateProductImageUploadUrlArgs = {
@@ -766,10 +825,6 @@ export type MutationCreateUserProductArgs = {
   thumbnail?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
   url: Scalars['String']['input'];
-};
-
-export type MutationDeleteAdArgs = {
-  id: Scalars['Int']['input'];
 };
 
 export type MutationHardDeleteProductByAdminArgs = {
@@ -787,6 +842,15 @@ export type MutationMatchProductToDanawaProductArgs = {
 
 export type MutationReadNotificationArgs = {
   id: Scalars['Int']['input'];
+};
+
+export type MutationRecordAdClickArgs = {
+  creativeId: Scalars['Int']['input'];
+  slotLocation: AdvertiseSlotLocation;
+};
+
+export type MutationRecordAdImpressionsArgs = {
+  events: Array<AdvertiseImpressionInput>;
 };
 
 export type MutationRecordProductImpressionsArgs = {
@@ -856,6 +920,11 @@ export type MutationSendNotificationByAdminArgs = {
   userIds?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
+export type MutationSetAdActiveArgs = {
+  id: Scalars['Int']['input'];
+  isActive: Scalars['Boolean']['input'];
+};
+
 export type MutationSetModelPagePublishedByAdminArgs = {
   id: Scalars['Int']['input'];
   isPublished: Scalars['Boolean']['input'];
@@ -892,29 +961,13 @@ export type MutationSubscribeNotificationThemeArgs = {
   themeId: Scalars['Int']['input'];
 };
 
-export type MutationTrackAdClickArgs = {
-  id: Scalars['Int']['input'];
-};
-
-export type MutationTrackAdImpressionArgs = {
-  id: Scalars['Int']['input'];
-};
-
 export type MutationUnsubscribeNotificationThemeArgs = {
   themeId: Scalars['Int']['input'];
 };
 
 export type MutationUpdateAdArgs = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  endAt?: InputMaybe<Scalars['DateTime']['input']>;
   id: Scalars['Int']['input'];
-  imageUrl?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  linkUrl?: InputMaybe<Scalars['String']['input']>;
-  slotType?: InputMaybe<AdSlotType>;
-  startAt?: InputMaybe<Scalars['DateTime']['input']>;
-  title?: InputMaybe<Scalars['String']['input']>;
-  weight?: InputMaybe<Scalars['Int']['input']>;
+  input: UpdateAdvertiseInput;
 };
 
 export type MutationUpdateCommentArgs = {
@@ -1402,9 +1455,13 @@ export enum ProviderType {
 
 export type Query = {
   __typename?: 'Query';
-  adStats: Array<AdStats>;
+  /** 슬롯 위치의 현재 노출 가능한 광고 (우선순위순) */
+  activeAds: Array<AdvertiseCreative>;
+  /** 어드민) 광고 노출/클릭 정산 리포트 */
+  adReport: Array<AdReportRow>;
   adminMe: AdminUser;
-  ads: Array<Ad>;
+  /** 어드민) 광고 목록 */
+  adsByAdmin: Array<AdvertiseCreative>;
   analysisTitleByDanawa: Scalars['Boolean']['output'];
   /** BrandItem 단위 매칭된 전체 개수 조회 */
   brandItemsByMatchCountTotalCount: Scalars['Int']['output'];
@@ -1580,14 +1637,19 @@ export type Query = {
   wishlists: Array<WishlistOutput>;
 };
 
-export type QueryAdStatsArgs = {
-  adId?: InputMaybe<Scalars['Int']['input']>;
-  endDate: Scalars['DateTime']['input'];
-  startDate: Scalars['DateTime']['input'];
+export type QueryActiveAdsArgs = {
+  slotLocation: AdvertiseSlotLocation;
 };
 
-export type QueryAdsArgs = {
-  slots: Array<AdSlotType>;
+export type QueryAdReportArgs = {
+  creativeId?: InputMaybe<Scalars['Int']['input']>;
+  from: Scalars['DateTime']['input'];
+  to: Scalars['DateTime']['input'];
+};
+
+export type QueryAdsByAdminArgs = {
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  slotLocation?: InputMaybe<AdvertiseSlotLocation>;
 };
 
 export type QueryBrandItemsByMatchCountTotalCountArgs = {
@@ -2121,6 +2183,20 @@ export enum TokenType {
   Fcm = 'FCM',
 }
 
+export type UpdateAdvertiseInput = {
+  displayPrice?: InputMaybe<AdvertisePriceInput>;
+  displayTitle?: InputMaybe<Scalars['String']['input']>;
+  endAt?: InputMaybe<Scalars['DateTime']['input']>;
+  graphic?: InputMaybe<Scalars['JSONObject']['input']>;
+  internalId?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  slotLocation?: InputMaybe<Array<AdvertiseSlotLocation>>;
+  slotPriority?: InputMaybe<Scalars['Int']['input']>;
+  slotType?: InputMaybe<AdvertiseSlotType>;
+  startAt?: InputMaybe<Scalars['DateTime']['input']>;
+  targetUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** 상품 업로드 주체 */
 export enum UploaderType {
   /** 크롤러가 수집한 상품 (기본값) */
@@ -2226,6 +2302,43 @@ export type ProductExpireReport = {
   productId: Scalars['Int']['output'];
   userId: Scalars['Int']['output'];
 };
+
+export type ActiveAdsQueryVariables = Exact<{
+  slotLocation: AdvertiseSlotLocation;
+}>;
+
+export type ActiveAdsQuery = {
+  __typename?: 'Query';
+  activeAds: Array<{
+    __typename?: 'AdvertiseCreative';
+    id: string;
+    slotType: AdvertiseSlotType;
+    slotLocation: Array<AdvertiseSlotLocation>;
+    slotPriority: number;
+    graphic: any;
+    displayTitle?: string | null;
+    targetUrl: string;
+    displayPrice?: {
+      __typename?: 'AdvertisePrice';
+      discountText?: string | null;
+      originalPrice?: string | null;
+      displayPrice: string;
+    } | null;
+  }>;
+};
+
+export type RecordAdImpressionsMutationVariables = Exact<{
+  events: Array<AdvertiseImpressionInput> | AdvertiseImpressionInput;
+}>;
+
+export type RecordAdImpressionsMutation = { __typename?: 'Mutation'; recordAdImpressions: boolean };
+
+export type RecordAdClickMutationVariables = Exact<{
+  creativeId: Scalars['Int']['input'];
+  slotLocation: AdvertiseSlotLocation;
+}>;
+
+export type RecordAdClickMutation = { __typename?: 'Mutation'; recordAdClick: boolean };
 
 export type MutationLoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -3310,6 +3423,37 @@ export const ProductStatsFragmentDoc = new TypedDocumentString(
     `,
   { fragmentName: 'ProductStats' },
 ) as unknown as TypedDocumentString<ProductStatsFragment, unknown>;
+export const ActiveAdsDocument = new TypedDocumentString(`
+    query activeAds($slotLocation: AdvertiseSlotLocation!) {
+  activeAds(slotLocation: $slotLocation) {
+    id
+    slotType
+    slotLocation
+    slotPriority
+    graphic
+    displayPrice {
+      discountText
+      originalPrice
+      displayPrice
+    }
+    displayTitle
+    targetUrl
+  }
+}
+    `) as unknown as TypedDocumentString<ActiveAdsQuery, ActiveAdsQueryVariables>;
+export const RecordAdImpressionsDocument = new TypedDocumentString(`
+    mutation recordAdImpressions($events: [AdvertiseImpressionInput!]!) {
+  recordAdImpressions(events: $events)
+}
+    `) as unknown as TypedDocumentString<
+  RecordAdImpressionsMutation,
+  RecordAdImpressionsMutationVariables
+>;
+export const RecordAdClickDocument = new TypedDocumentString(`
+    mutation recordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {
+  recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)
+}
+    `) as unknown as TypedDocumentString<RecordAdClickMutation, RecordAdClickMutationVariables>;
 export const MutationLoginDocument = new TypedDocumentString(`
     mutation MutationLogin($email: String!, $password: String!) {
   login(email: $email, password: $password) {

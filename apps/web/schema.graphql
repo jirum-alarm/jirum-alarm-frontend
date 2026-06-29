@@ -4,33 +4,27 @@ schema {
   subscription: Subscription
 }
 
-type Ad {
-  createdAt: DateTime!
-  description: String
-  endAt: DateTime!
-  id: ID!
-  imageUrl: String
-  isActive: Boolean!
-  linkUrl: String
-  slotType: AdSlotType!
-  startAt: DateTime!
-  title: String
-  updatedAt: DateTime!
-  weight: Int!
+type AdAssetUploadUrlOutput {
+  """
+  업로드 완료 후 graphic.assetUrl 로 쓸 CDN URL
+  """
+  assetUrl: String!
+  """
+  이미지를 PUT 업로드할 presigned URL
+  """
+  uploadUrl: String!
 }
 
-enum AdSlotType {
-  DETAIL_PAGE_BANNER
-  MAIN_BANNER
-  MAIN_RANKING_INFEED
-  MENU_RANKING_INFEED
-}
-
-type AdStats {
-  adId: Int!
+type AdReportRow {
   clicks: Int!
-  date: String!
+  creativeId: Int!
+  """
+  clicks / impressions (impressions=0 이면 0)
+  """
+  ctr: Float!
   impressions: Int!
+  internalId: String!
+  slotLocation: String!
 }
 
 type AdminUser {
@@ -38,6 +32,80 @@ type AdminUser {
   email: String!
   id: ID!
   name: String!
+}
+
+type AdvertiseCreative {
+  createdAt: DateTime!
+  displayPrice: AdvertisePrice
+  displayTitle: String
+  endAt: DateTime!
+  """
+  ResponsiveAdvertiseGraphic (프론트가 렌더)
+  """
+  graphic: JSONObject!
+  id: ID!
+  """
+  내부 식별자 (예: 얼라이브-260625-배너)
+  """
+  internalId: String!
+  """
+  즉시 on/off 킬스위치
+  """
+  isActive: Boolean!
+  modifiedAt: DateTime!
+  """
+  노출 위치 (여러 곳 가능)
+  """
+  slotLocation: [AdvertiseSlotLocation!]!
+  """
+  높을수록 먼저 노출
+  """
+  slotPriority: Int!
+  slotType: AdvertiseSlotType!
+  startAt: DateTime!
+  """
+  클릭 시 목적지 URL
+  """
+  targetUrl: String!
+}
+
+input AdvertiseImpressionInput {
+  creativeId: Int!
+  slotLocation: AdvertiseSlotLocation!
+}
+
+type AdvertisePrice {
+  """
+  예: "28% 할인"
+  """
+  discountText: String
+  """
+  예: "299,000원" / "299,000원~" / "최대 30% 할인"
+  """
+  displayPrice: String!
+  """
+  예: "999,000원"
+  """
+  originalPrice: String
+}
+
+input AdvertisePriceInput {
+  discountText: String
+  displayPrice: String!
+  originalPrice: String
+}
+
+enum AdvertiseSlotLocation {
+  home_carousel_banner
+  home_main_banner
+  home_ranking_product
+  product_main_banner
+  siwol_promotion_enter
+}
+
+enum AdvertiseSlotType {
+  banner
+  pinnedProduct
 }
 
 type AgeGroupCountOutput {
@@ -136,6 +204,23 @@ type CommentOutput {
   trendedAt: DateTime
   userId: Float!
   viewCount: Int!
+}
+
+input CreateAdvertiseInput {
+  displayPrice: AdvertisePriceInput
+  displayTitle: String
+  endAt: DateTime!
+  """
+  ResponsiveAdvertiseGraphic
+  """
+  graphic: JSONObject!
+  internalId: String!
+  isActive: Boolean! = true
+  slotLocation: [AdvertiseSlotLocation!]!
+  slotPriority: Int! = 0
+  slotType: AdvertiseSlotType!
+  startAt: DateTime!
+  targetUrl: String!
 }
 
 enum CurrencyType {
@@ -575,7 +660,6 @@ type Mutation {
   검증 취소 (검증 완료/거부된 항목을 다시 대기 상태로 되돌림)
   """
   cancelVerification(productMappingId: Int!, reason: String): Boolean!
-  clearAdCache(slot: AdSlotType!): Boolean!
   """
   상품 단건 수집
   """
@@ -604,17 +688,19 @@ type Mutation {
     """
     source: String
   ): Boolean!
-  createAd(
-    description: String
-    endAt: DateTime!
-    imageUrl: String
-    isActive: Boolean! = true
-    linkUrl: String
-    slotType: AdSlotType!
-    startAt: DateTime!
-    title: String
-    weight: Int! = 1
-  ): Ad!
+  """
+  어드민) 광고 생성 (생성된 id 반환)
+  """
+  createAd(input: CreateAdvertiseInput!): Int!
+  """
+  어드민) 광고 에셋 업로드 presigned URL
+  """
+  createAdAssetUploadUrl(
+    """
+    image/png 등 MIME 타입
+    """
+    contentType: String!
+  ): AdAssetUploadUrlOutput!
   """
   유저 등록 상품 썸네일 업로드용 presigned URL 발급
   """
@@ -653,7 +739,6 @@ type Mutation {
     """
     url: String!
   ): Int!
-  deleteAd(id: Int!): Boolean!
   """
   어드민) 상품 hard delete
   """
@@ -679,6 +764,14 @@ type Mutation {
   모든 알림 읽음 처리
   """
   readNotification(id: Int!): Boolean!
+  """
+  광고 클릭 계측
+  """
+  recordAdClick(creativeId: Int!, slotLocation: AdvertiseSlotLocation!): Boolean!
+  """
+  광고 노출 계측 (bulk)
+  """
+  recordAdImpressions(events: [AdvertiseImpressionInput!]!): Boolean!
   """
   상품 노출(impression) 기록 — 프론트 viewport 가 보고. CTR 분모.
   """
@@ -752,6 +845,10 @@ type Mutation {
     userIds: [Int!]
   ): Boolean!
   """
+  어드민) 광고 on/off (킬스위치)
+  """
+  setAdActive(id: Int!, isActive: Boolean!): Boolean!
+  """
   어드민) 모델 페이지 발행 토글
   """
   setModelPagePublishedByAdmin(id: Int!, isPublished: Boolean!): Boolean!
@@ -802,24 +899,14 @@ type Mutation {
   알림 묶음(테마) 구독 — 키워드 시점 매칭, 멱등
   """
   subscribeNotificationTheme(themeId: Int!): Boolean!
-  trackAdClick(id: Int!): Boolean!
-  trackAdImpression(id: Int!): Boolean!
   """
   알림 묶음(테마) 구독 해지
   """
   unsubscribeNotificationTheme(themeId: Int!): Boolean!
-  updateAd(
-    description: String
-    endAt: DateTime
-    id: Int!
-    imageUrl: String
-    isActive: Boolean
-    linkUrl: String
-    slotType: AdSlotType
-    startAt: DateTime
-    title: String
-    weight: Int
-  ): Ad!
+  """
+  어드민) 광고 수정
+  """
+  updateAd(id: Int!, input: UpdateAdvertiseInput!): Boolean!
   updateComment(content: String, id: Int!, title: String): Boolean!
   """
   어드민) 핫딜 키워드 수정
@@ -1353,9 +1440,25 @@ enum ProviderType {
 }
 
 type Query {
-  adStats(adId: Int, endDate: DateTime!, startDate: DateTime!): [AdStats!]!
+  """
+  슬롯 위치의 현재 노출 가능한 광고 (우선순위순)
+  """
+  activeAds(slotLocation: AdvertiseSlotLocation!): [AdvertiseCreative!]!
+  """
+  어드민) 광고 노출/클릭 정산 리포트
+  """
+  adReport(creativeId: Int, from: DateTime!, to: DateTime!): [AdReportRow!]!
   adminMe: AdminUser!
-  ads(slots: [AdSlotType!]!): [Ad!]!
+  """
+  어드민) 광고 목록
+  """
+  adsByAdmin(
+    """
+    미지정 시 전체
+    """
+    isActive: Boolean
+    slotLocation: AdvertiseSlotLocation
+  ): [AdvertiseCreative!]!
   analysisTitleByDanawa: Boolean!
   """
   BrandItem 단위 매칭된 전체 개수 조회
@@ -2068,6 +2171,20 @@ type TokenOutput {
 enum TokenType {
   APNS
   FCM
+}
+
+input UpdateAdvertiseInput {
+  displayPrice: AdvertisePriceInput
+  displayTitle: String
+  endAt: DateTime
+  graphic: JSONObject
+  internalId: String
+  isActive: Boolean
+  slotLocation: [AdvertiseSlotLocation!]
+  slotPriority: Int
+  slotType: AdvertiseSlotType
+  startAt: DateTime
+  targetUrl: String
 }
 
 """
