@@ -5,6 +5,8 @@ import {
   type ElementConstraints,
   type GraphicSize,
   normalizeAdvertiseAssetUrl,
+  resolveAssetUrl,
+  resolveElementVisibility,
   resolveResponsiveValue,
   type ResponsiveAdvertiseGraphic,
 } from './advertise-graphic';
@@ -95,6 +97,7 @@ export default function AdvertiseGraphic({ graphic, priority }: AdvertiseGraphic
   const containerWidth = width || graphic.size._default.width;
   const containerSize =
     resolveResponsiveValue(graphic.size, containerWidth) ?? graphic.size._default;
+  const backgroundAssetUrl = resolveAssetUrl(graphic.background, containerWidth);
 
   return (
     <div
@@ -105,14 +108,16 @@ export default function AdvertiseGraphic({ graphic, priority }: AdvertiseGraphic
       {/* SVG/PNG/JPG/WebP 모두 같은 방식으로 렌더링하기 위해 next/image 대신 img를 사용한다. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={normalizeAdvertiseAssetUrl(graphic.background.assetUrl)}
+        src={normalizeAdvertiseAssetUrl(backgroundAssetUrl)}
         alt=""
         loading={priority ? 'eager' : 'lazy'}
         className="absolute inset-0 h-full w-full object-fill"
       />
 
       {graphic.foregroundElements.map((element, index) => {
-        if (!element.assetUrl) return null;
+        if (!resolveElementVisibility(element, containerWidth)) return null;
+        const elementAssetUrl = resolveAssetUrl(element, containerWidth);
+        if (!elementAssetUrl) return null;
         const style = getElementStyle(
           element,
           { width: containerWidth, height: containerSize.height },
@@ -121,10 +126,10 @@ export default function AdvertiseGraphic({ graphic, priority }: AdvertiseGraphic
         if (!style) return null;
 
         return (
-          <div key={`${index}-${element.assetUrl}`} className="absolute" style={style}>
+          <div key={`${index}-${elementAssetUrl}`} className="absolute" style={style}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={normalizeAdvertiseAssetUrl(element.assetUrl)}
+              src={normalizeAdvertiseAssetUrl(elementAssetUrl)}
               alt=""
               loading={priority ? 'eager' : 'lazy'}
               className="h-full w-full object-fill"
@@ -133,7 +138,7 @@ export default function AdvertiseGraphic({ graphic, priority }: AdvertiseGraphic
         );
       })}
 
-      <div className="bg-opacity-90 pointer-events-none absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[7px] py-[3px] text-xs leading-none font-medium text-white">
+      <div className="pointer-events-none absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs leading-none font-medium text-white">
         AD
       </div>
     </div>

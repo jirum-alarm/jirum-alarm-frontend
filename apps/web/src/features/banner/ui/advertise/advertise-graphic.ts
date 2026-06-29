@@ -20,12 +20,16 @@ export type ResponsiveValueMap<T> = {
   _default: T;
 } & Partial<Record<`${'>=' | '<='}${number}`, T>>;
 
+export type ResponsiveOverrideMap<T> = Partial<Record<'_default' | `${'>=' | '<='}${number}`, T>>;
+
 export interface AdvertiseAsset {
   designSize: GraphicSize;
   assetUrl: string;
+  assetByWidth?: ResponsiveOverrideMap<string>;
 }
 
 export type AdvertiseElementAsset = AdvertiseAsset & {
+  visibleByWidth?: ResponsiveOverrideMap<boolean>;
   layoutByWidth: ResponsiveValueMap<{
     constraints: ElementConstraints;
     size?: ElementLayoutSize;
@@ -66,6 +70,37 @@ export function resolveResponsiveValue<T>(
     })[0];
 
   return matched ? map[matched.key as `${'>=' | '<='}${number}`] : map._default;
+}
+
+export function resolveResponsiveOverride<T>(
+  map: ResponsiveOverrideMap<T> | undefined,
+  containerWidth: number,
+): T | undefined {
+  if (!map) return undefined;
+
+  const matched = Object.keys(map)
+    .map(parseBreakpoint)
+    .filter(
+      (entry): entry is { key: string; operator: '>=' | '<='; value: number } => entry !== null,
+    )
+    .filter((entry) =>
+      entry.operator === '>=' ? containerWidth >= entry.value : containerWidth <= entry.value,
+    )
+    .sort((a, b) => {
+      if (a.operator !== b.operator) return a.operator === '>=' ? -1 : 1;
+      return a.operator === '>=' ? b.value - a.value : a.value - b.value;
+    })[0];
+
+  if (matched) return map[matched.key as `${'>=' | '<='}${number}`];
+  return map._default;
+}
+
+export function resolveAssetUrl(asset: AdvertiseAsset, containerWidth: number) {
+  return resolveResponsiveOverride(asset.assetByWidth, containerWidth) ?? asset.assetUrl;
+}
+
+export function resolveElementVisibility(element: AdvertiseElementAsset, containerWidth: number) {
+  return resolveResponsiveOverride(element.visibleByWidth, containerWidth) ?? true;
 }
 
 function isNumber(value: unknown): value is number {

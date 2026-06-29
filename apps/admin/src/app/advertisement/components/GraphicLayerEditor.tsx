@@ -3,11 +3,13 @@
 import { type CSSProperties, type PointerEvent, useState } from 'react';
 
 import {
+  AdvertiseAsset,
   AdvertiseElementAsset,
   ElementConstraints,
   ElementLayoutSize,
   GraphicSize,
   ResponsiveAdvertiseGraphic,
+  ResponsiveOverrideMap,
 } from '@/hooks/graphql/advertisement';
 
 import AssetUploader, { UploadedAssetDesignSize } from './AssetUploader';
@@ -65,8 +67,13 @@ function getBreakpointKeys(graphic: ResponsiveAdvertiseGraphic): BreakpointKey[]
   const keys = new Set<BreakpointKey>(['_default']);
 
   Object.keys(graphic.size ?? {}).forEach((key) => keys.add(key as BreakpointKey));
+  Object.keys(graphic.background.assetByWidth ?? {}).forEach((key) =>
+    keys.add(key as BreakpointKey),
+  );
   graphic.foregroundElements.forEach((element) => {
     Object.keys(element.layoutByWidth ?? {}).forEach((key) => keys.add(key as BreakpointKey));
+    Object.keys(element.assetByWidth ?? {}).forEach((key) => keys.add(key as BreakpointKey));
+    Object.keys(element.visibleByWidth ?? {}).forEach((key) => keys.add(key as BreakpointKey));
   });
 
   return sortBreakpointKeys([...keys]);
@@ -122,6 +129,89 @@ function toDragPixel(value: number) {
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
+}
+
+function resolveResponsiveOverride<T>(
+  map: ResponsiveOverrideMap<T> | undefined,
+  canvasWidth: number,
+): T | undefined {
+  if (!map) return undefined;
+
+  const matched = Object.keys(map)
+    .map((key) => {
+      const breakpoint = parseBreakpoint(key);
+      return breakpoint ? { key: key as BreakpointKey, ...breakpoint } : null;
+    })
+    .filter(
+      (
+        entry,
+      ): entry is {
+        key: BreakpointKey;
+        operator: '>=' | '<=';
+        value: number;
+      } => entry !== null,
+    )
+    .filter((entry) =>
+      entry.operator === '>=' ? canvasWidth >= entry.value : canvasWidth <= entry.value,
+    )
+    .sort((a, b) => {
+      if (a.operator !== b.operator) return a.operator === '>=' ? -1 : 1;
+      return a.operator === '>=' ? b.value - a.value : a.value - b.value;
+    })[0];
+
+  if (matched) return map[matched.key];
+  return map._default;
+}
+
+function resolveAssetUrl(asset: AdvertiseAsset, canvasWidth: number) {
+  return resolveResponsiveOverride(asset.assetByWidth, canvasWidth) ?? asset.assetUrl;
+}
+
+function resolveElementVisibility(element: AdvertiseElementAsset, canvasWidth: number) {
+  return resolveResponsiveOverride(element.visibleByWidth, canvasWidth) ?? true;
+}
+
+function setOverride<T>(
+  map: ResponsiveOverrideMap<T> | undefined,
+  breakpoint: BreakpointKey,
+  value: T,
+) {
+  return {
+    ...(map ?? {}),
+    [breakpoint]: value,
+  };
+}
+
+function removeOverride<T>(map: ResponsiveOverrideMap<T> | undefined, breakpoint: BreakpointKey) {
+  const { [breakpoint]: _, ...next } = map ?? {};
+  return Object.keys(next).length > 0 ? next : undefined;
+}
+
+function renameResponsiveKey<T extends Partial<Record<BreakpointKey, unknown>>>(
+  map: T | undefined,
+  from: BreakpointKey,
+  to: BreakpointKey,
+) {
+  if (!map || from === to || !(from in map)) return map;
+
+  const { [from]: value, ...rest } = map;
+  return {
+    ...rest,
+    [to]: value,
+  } as T;
+}
+
+function getVariantCanvasSize(graphic: ResponsiveAdvertiseGraphic, breakpointKey: BreakpointKey) {
+  const explicitSize = graphic.size[breakpointKey];
+  if (explicitSize) return explicitSize;
+
+  const breakpoint = parseBreakpoint(breakpointKey);
+  if (!breakpoint) return graphic.size._default;
+
+  return {
+    width: breakpoint.value,
+    height: graphic.size._default.height,
+  };
 }
 
 function getElementAspectRatio(element: AdvertiseElementAsset) {
@@ -332,6 +422,37 @@ export default function GraphicLayerEditor({
     }));
   };
 
+  const updateBackgroundAssetForBreakpoint = (
+    breakpoint: BreakpointKey,
+    assetUrl: string,
+    designSize?: UploadedAssetDesignSize,
+  ) => {
+    if (breakpoint === '_default') {
+      onBackgroundUploaded(assetUrl, designSize);
+      return;
+    }
+
+    updateGraphic((current) => ({
+      ...current,
+      background: {
+        ...current.background,
+        assetByWidth: setOverride(current.background.assetByWidth, breakpoint, assetUrl),
+      },
+    }));
+  };
+
+  const clearBackgroundAssetOverride = (breakpoint: BreakpointKey) => {
+    if (breakpoint === '_default') return;
+
+    updateGraphic((current) => ({
+      ...current,
+      background: {
+        ...current.background,
+        assetByWidth: removeOverride(current.background.assetByWidth, breakpoint),
+      },
+    }));
+  };
+
   const addBreakpoint = (width: number) => {
     const key: BreakpointKey = `>=${width}`;
     if (breakpointKeys.includes(key)) return alert(`${key} variant가 이미 있습니다.`);
@@ -352,6 +473,31 @@ export default function GraphicLayerEditor({
     }));
   };
 
+  const renameBreakpoint = (from: BreakpointKey, width: number) => {
+    if (from === '_default') return;
+
+    const to: BreakpointKey = `>=${width}`;
+    if (from === to) return;
+    if (breakpointKeys.includes(to)) return alert(`${to} variant가 이미 있습니다.`);
+
+    updateGraphic((current) => ({
+      ...current,
+      size: renameResponsiveKey(current.size, from, to) ?? current.size,
+      background: {
+        ...current.background,
+        assetByWidth: renameResponsiveKey(current.background.assetByWidth, from, to),
+      },
+      foregroundElements: current.foregroundElements.map((element) => ({
+        ...element,
+        layoutByWidth:
+          renameResponsiveKey(element.layoutByWidth, from, to) ?? element.layoutByWidth,
+        assetByWidth: renameResponsiveKey(element.assetByWidth, from, to),
+        visibleByWidth: renameResponsiveKey(element.visibleByWidth, from, to),
+      })),
+    }));
+    setActiveBreakpoint(to);
+  };
+
   const removeBreakpoint = (key: BreakpointKey) => {
     if (key === '_default') return;
 
@@ -360,9 +506,18 @@ export default function GraphicLayerEditor({
       return {
         ...current,
         size,
+        background: {
+          ...current.background,
+          assetByWidth: removeOverride(current.background.assetByWidth, key),
+        },
         foregroundElements: current.foregroundElements.map((element) => {
           const { [key]: __, ...layoutByWidth } = element.layoutByWidth;
-          return { ...element, layoutByWidth };
+          return {
+            ...element,
+            layoutByWidth,
+            assetByWidth: removeOverride(element.assetByWidth, key),
+            visibleByWidth: removeOverride(element.visibleByWidth, key),
+          };
         }),
       };
     });
@@ -484,6 +639,13 @@ export default function GraphicLayerEditor({
     });
   };
 
+  const updateElementVisibility = (index: number, breakpoint: BreakpointKey, visible: boolean) => {
+    updateElement(index, (element) => ({
+      ...element,
+      visibleByWidth: setOverride(element.visibleByWidth, breakpoint, visible),
+    }));
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="border-b border-stroke pb-4 dark:border-strokedark">
@@ -506,11 +668,13 @@ export default function GraphicLayerEditor({
         onActiveBreakpointChange={setActiveBreakpoint}
         onSelectedElementChange={setSelectedElementIndex}
         onDragStateChange={setDragState}
-        onBackgroundUploaded={onBackgroundUploaded}
+        onBackgroundAssetUploadedForBreakpoint={updateBackgroundAssetForBreakpoint}
+        onClearBackgroundAssetOverride={clearBackgroundAssetOverride}
         onForegroundUploaded={onForegroundUploaded}
         onElementAssetUploaded={onElementAssetUploaded}
         onRemoveForegroundElement={onRemoveForegroundElement}
         onAddBreakpoint={addBreakpoint}
+        onRenameBreakpoint={renameBreakpoint}
         onRemoveBreakpoint={removeBreakpoint}
         onCanvasSizeChange={updateCanvasSize}
         onBackgroundDesignSizeChange={updateBackgroundDesignSize}
@@ -519,6 +683,7 @@ export default function GraphicLayerEditor({
         onElementConstraintsChange={updateElementConstraints}
         onElementLayoutChange={updateElementLayout}
         onElementLayoutSizeChange={updateElementLayoutSize}
+        onElementVisibilityChange={updateElementVisibility}
       />
     </div>
   );
@@ -533,7 +698,12 @@ interface VisualConstraintEditorProps {
   onActiveBreakpointChange: (breakpoint: BreakpointKey) => void;
   onSelectedElementChange: (index: number | null) => void;
   onDragStateChange: (state: DragState | null) => void;
-  onBackgroundUploaded: (assetUrl: string, designSize?: UploadedAssetDesignSize) => void;
+  onBackgroundAssetUploadedForBreakpoint: (
+    breakpoint: BreakpointKey,
+    assetUrl: string,
+    designSize?: UploadedAssetDesignSize,
+  ) => void;
+  onClearBackgroundAssetOverride: (breakpoint: BreakpointKey) => void;
   onForegroundUploaded: (assetUrl: string, designSize?: UploadedAssetDesignSize) => void;
   onElementAssetUploaded: (
     index: number,
@@ -542,6 +712,7 @@ interface VisualConstraintEditorProps {
   ) => void;
   onRemoveForegroundElement: (index: number) => void;
   onAddBreakpoint: (width: number) => void;
+  onRenameBreakpoint: (breakpoint: BreakpointKey, width: number) => void;
   onRemoveBreakpoint: (breakpoint: BreakpointKey) => void;
   onCanvasSizeChange: (breakpoint: BreakpointKey, field: keyof GraphicSize, value: number) => void;
   onBackgroundDesignSizeChange: (field: keyof GraphicSize, value: number) => void;
@@ -568,6 +739,7 @@ interface VisualConstraintEditorProps {
     field: keyof GraphicSize,
     value: number | undefined,
   ) => void;
+  onElementVisibilityChange: (index: number, breakpoint: BreakpointKey, visible: boolean) => void;
 }
 
 function VisualConstraintEditor({
@@ -579,11 +751,13 @@ function VisualConstraintEditor({
   onActiveBreakpointChange,
   onSelectedElementChange,
   onDragStateChange,
-  onBackgroundUploaded,
+  onBackgroundAssetUploadedForBreakpoint,
+  onClearBackgroundAssetOverride,
   onForegroundUploaded,
   onElementAssetUploaded,
   onRemoveForegroundElement,
   onAddBreakpoint,
+  onRenameBreakpoint,
   onRemoveBreakpoint,
   onCanvasSizeChange,
   onBackgroundDesignSizeChange,
@@ -592,8 +766,9 @@ function VisualConstraintEditor({
   onElementConstraintsChange,
   onElementLayoutChange,
   onElementLayoutSizeChange,
+  onElementVisibilityChange,
 }: VisualConstraintEditorProps) {
-  const selectedCanvasSize = graphic.size[activeBreakpoint] ?? graphic.size._default;
+  const selectedCanvasSize = getVariantCanvasSize(graphic, activeBreakpoint);
   const selectedElement =
     selectedElementIndex !== null && selectedElementIndex >= 0
       ? graphic.foregroundElements[selectedElementIndex]
@@ -606,6 +781,13 @@ function VisualConstraintEditor({
     selectedElement && selectedLayout
       ? getElementFrame(selectedElement, selectedLayout, selectedCanvasSize)
       : undefined;
+  const selectedBackgroundAssetUrl = resolveAssetUrl(graphic.background, selectedCanvasSize.width);
+  const selectedElementAssetUrl = selectedElement
+    ? resolveAssetUrl(selectedElement, selectedCanvasSize.width)
+    : '';
+  const selectedElementVisible = selectedElement
+    ? resolveElementVisibility(selectedElement, selectedCanvasSize.width)
+    : true;
 
   const applyPreset = (preset: 'left' | 'right' | 'top' | 'bottom' | 'stretchX' | 'stretchY') => {
     if (selectedElementIndex === null || !selectedFrame) return;
@@ -722,23 +904,80 @@ function VisualConstraintEditor({
               variant의 constraint를 편집합니다.
             </p>
           </div>
+        </div>
+      </div>
+
+      <div className="mb-4 rounded border border-stroke p-3 dark:border-strokedark">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex flex-wrap items-end gap-3">
+            <div>
+              <p className="mb-1 text-xs font-semibold text-black dark:text-white">
+                Render Width Variants
+              </p>
+              <AddBreakpointControl onAdd={onAddBreakpoint} />
+            </div>
+          </div>
           <div className="min-w-64">
-            <AssetUploader label="전경 element 추가" onUploaded={onForegroundUploaded} />
+            <AssetUploader label="Foreground Element 추가" onUploaded={onForegroundUploaded} />
           </div>
         </div>
       </div>
 
       <div className="mb-4 rounded border border-stroke p-3 dark:border-strokedark">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-xs font-semibold text-black dark:text-white">Render Width Variants</p>
-          <AddBreakpointControl onAdd={onAddBreakpoint} />
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <p className="text-xs font-semibold text-black dark:text-white">Layers</p>
+          <p className="text-[11px] text-bodydark2">{labelBreakpoint(activeBreakpoint)}</p>
+        </div>
+
+        <div className="overflow-hidden rounded border border-stroke dark:border-strokedark">
+          <button
+            type="button"
+            className={`flex h-8 w-full items-center justify-between gap-2 border-b border-stroke px-3 text-left text-xs transition last:border-b-0 dark:border-strokedark ${
+              selectedBackground
+                ? 'bg-primary/10 text-primary'
+                : 'bg-white text-black hover:bg-gray-2 dark:bg-boxdark dark:text-white dark:hover:bg-form-input'
+            }`}
+            onClick={() => onSelectedElementChange(-1)}
+          >
+            <span className="min-w-0 truncate font-medium">Background</span>
+            <span className="shrink-0 text-[10px] font-semibold text-bodydark2">BG</span>
+          </button>
+
+          {graphic.foregroundElements.map((element, index) => {
+            const elementAssetUrl = resolveAssetUrl(element, selectedCanvasSize.width);
+            const elementVisible = resolveElementVisibility(element, selectedCanvasSize.width);
+            const selected = index === selectedElementIndex;
+
+            return (
+              <button
+                key={`${activeBreakpoint}-${index}-${elementAssetUrl}`}
+                type="button"
+                className={`flex h-8 w-full items-center justify-between gap-2 border-b border-stroke px-3 text-left text-xs transition last:border-b-0 dark:border-strokedark ${
+                  selected
+                    ? 'bg-primary/10 text-primary'
+                    : 'bg-white text-black hover:bg-gray-2 dark:bg-boxdark dark:text-white dark:hover:bg-form-input'
+                }`}
+                onClick={() => onSelectedElementChange(index)}
+              >
+                <span className="min-w-0 truncate font-medium">Element {index + 1}</span>
+                <span
+                  className={`shrink-0 text-[10px] font-semibold ${
+                    elementVisible ? 'text-success' : 'text-danger'
+                  }`}
+                >
+                  {elementVisible ? 'visible' : 'hidden'}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
         {breakpointKeys.map((breakpoint) => {
-          const canvasSize = graphic.size[breakpoint] ?? graphic.size._default;
+          const canvasSize = getVariantCanvasSize(graphic, breakpoint);
           const selectedCanvas = breakpoint === activeBreakpoint;
+          const backgroundAssetUrl = resolveAssetUrl(graphic.background, canvasSize.width);
 
           return (
             <div
@@ -748,9 +987,16 @@ function VisualConstraintEditor({
               }`}
             >
               <div className="mb-2 flex items-center justify-between gap-2">
-                <span className="text-xs font-semibold text-black dark:text-white">
-                  {labelBreakpoint(breakpoint)}
-                </span>
+                {breakpoint === '_default' ? (
+                  <span className="text-xs font-semibold text-black dark:text-white">
+                    {labelBreakpoint(breakpoint)}
+                  </span>
+                ) : (
+                  <BreakpointWidthField
+                    breakpoint={breakpoint}
+                    onCommit={(width) => onRenameBreakpoint(breakpoint, width)}
+                  />
+                )}
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-bodydark2">
                     {canvasSize.width}×{canvasSize.height}
@@ -781,7 +1027,7 @@ function VisualConstraintEditor({
                   {graphic.background.assetUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={normalizeAssetUrl(graphic.background.assetUrl)}
+                      src={normalizeAssetUrl(backgroundAssetUrl)}
                       alt=""
                       className="absolute inset-0 h-full w-full object-fill"
                       draggable={false}
@@ -794,10 +1040,13 @@ function VisualConstraintEditor({
                     const layout = getElementLayout(element, breakpoint);
                     const selected = index === selectedElementIndex && selectedCanvas;
                     const style = getElementFrameStyle(element, layout, canvasSize);
+                    const elementVisible = resolveElementVisibility(element, canvasSize.width);
+                    const elementAssetUrl = resolveAssetUrl(element, canvasSize.width);
+                    if (!elementVisible) return null;
 
                     return (
                       <div
-                        key={`${index}-${breakpoint}-${element.assetUrl}`}
+                        key={`${index}-${breakpoint}-${elementAssetUrl}`}
                         className={`absolute cursor-move select-none border ${
                           selected
                             ? 'border-primary ring-2 ring-primary/30'
@@ -808,10 +1057,10 @@ function VisualConstraintEditor({
                           handleElementPointerDown(event, index, breakpoint, canvasSize)
                         }
                       >
-                        {element.assetUrl ? (
+                        {elementAssetUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={normalizeAssetUrl(element.assetUrl)}
+                            src={normalizeAssetUrl(elementAssetUrl)}
                             alt=""
                             className="h-full w-full object-fill"
                             draggable={false}
@@ -825,7 +1074,7 @@ function VisualConstraintEditor({
                     );
                   })}
 
-                  <div className="pointer-events-none absolute bottom-[8px] right-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] bg-opacity-90 px-[7px] py-[3px] text-xs font-medium leading-none text-white">
+                  <div className="pointer-events-none absolute bottom-[8px] right-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs font-medium leading-none text-white">
                     AD
                   </div>
                 </div>
@@ -844,15 +1093,31 @@ function VisualConstraintEditor({
                 {labelBreakpoint(activeBreakpoint)}
               </p>
               <p className="mt-1 break-all text-[11px] text-bodydark2">
-                {graphic.background.assetUrl || 'asset empty'}
+                {selectedBackgroundAssetUrl || 'asset empty'}
               </p>
               <div className="mt-3">
                 <AssetUploader
-                  label="BG asset 업로드/교체"
-                  value={graphic.background.assetUrl}
-                  onUploaded={onBackgroundUploaded}
+                  label={
+                    activeBreakpoint === '_default'
+                      ? 'BG asset 업로드/교체'
+                      : `${labelBreakpoint(activeBreakpoint)} BG asset 업로드/교체`
+                  }
+                  value={selectedBackgroundAssetUrl}
+                  onUploaded={(assetUrl, designSize) =>
+                    onBackgroundAssetUploadedForBreakpoint(activeBreakpoint, assetUrl, designSize)
+                  }
                 />
               </div>
+              {activeBreakpoint !== '_default' &&
+                graphic.background.assetByWidth?.[activeBreakpoint] && (
+                  <button
+                    type="button"
+                    className="mt-2 rounded border border-stroke px-2 py-1 text-[11px] text-black hover:border-danger hover:text-danger dark:border-strokedark dark:text-white"
+                    onClick={() => onClearBackgroundAssetOverride(activeBreakpoint)}
+                  >
+                    이 variant BG override 제거
+                  </button>
+                )}
             </div>
 
             <div>
@@ -900,7 +1165,7 @@ function VisualConstraintEditor({
                   {labelBreakpoint(activeBreakpoint)}
                 </p>
                 <p className="mt-1 break-all text-[11px] text-bodydark2">
-                  {selectedElement.assetUrl || 'asset empty'}
+                  {selectedElementAssetUrl || 'asset empty'}
                 </p>
               </div>
 
@@ -913,6 +1178,22 @@ function VisualConstraintEditor({
                   }
                 />
               </div>
+
+              <label className="mt-3 flex cursor-pointer items-center gap-2 text-xs font-medium text-black dark:text-white">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 accent-primary"
+                  checked={selectedElementVisible}
+                  onChange={(event) =>
+                    onElementVisibilityChange(
+                      selectedElementIndex,
+                      activeBreakpoint,
+                      event.target.checked,
+                    )
+                  }
+                />
+                이 variant에서 렌더
+              </label>
 
               <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] text-bodydark2">
                 <InfoCell label="x" value={selectedFrame.x} />
@@ -1190,6 +1471,42 @@ function OptionalPositiveNumberField({
         value={typeof value === 'number' ? value : ''}
         placeholder={value === null ? '0dp' : 'wrap'}
         onChange={(event) => onChange(toOptionalPositiveNumber(event.target.value))}
+      />
+    </label>
+  );
+}
+
+function BreakpointWidthField({
+  breakpoint,
+  onCommit,
+}: {
+  breakpoint: BreakpointKey;
+  onCommit: (width: number) => void;
+}) {
+  const currentValue = parseBreakpoint(breakpoint)?.value ?? DEFAULT_RENDER_WIDTH_BREAKPOINT;
+  const [value, setValue] = useState(String(currentValue));
+
+  const commit = () => {
+    const nextValue = toPositiveNumber(value, currentValue);
+    setValue(String(nextValue));
+    onCommit(nextValue);
+  };
+
+  return (
+    <label className="flex items-center gap-1 text-xs font-semibold text-black dark:text-white">
+      <span>&gt;=</span>
+      <input
+        type="number"
+        min={1}
+        className="w-20 rounded border border-stroke bg-white px-2 py-1 text-xs text-black outline-none focus:border-primary dark:border-strokedark dark:bg-boxdark dark:text-white"
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        onBlur={commit}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            event.currentTarget.blur();
+          }
+        }}
       />
     </label>
   );

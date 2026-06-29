@@ -3,10 +3,13 @@
 import { type CSSProperties, type PointerEvent, useMemo, useRef, useState } from 'react';
 
 import {
+  AdvertiseAsset,
+  AdvertiseElementAsset,
   ElementConstraints,
   ElementLayoutSize,
   GraphicSize,
   ResponsiveAdvertiseGraphic,
+  ResponsiveOverrideMap,
   ResponsiveValueMap,
 } from '@/hooks/graphql/advertisement';
 
@@ -44,14 +47,19 @@ const labelVariant = (key: VariantKey) => (key === '_default' ? 'default (else/b
 // graphic에 정의된 모든 variant 키 수집 (_default + >=N/<=N). 신규 DSL은 >=N 중심이다.
 function collectBreakpoints(graphic: ResponsiveAdvertiseGraphic): VariantKey[] {
   const set = new Set<VariantKey>(['_default']);
-  const scan = (m?: ResponsiveValueMap<unknown>) => {
+  const scan = (m?: ResponsiveValueMap<unknown> | ResponsiveOverrideMap<unknown>) => {
     if (!m) return;
     Object.keys(m).forEach((k) => {
       if (k === '_default' || parseBreakpoint(k)) set.add(k as VariantKey);
     });
   };
   scan(graphic.size);
-  (graphic.foregroundElements ?? []).forEach((el) => scan(el.layoutByWidth));
+  scan(graphic.background.assetByWidth);
+  (graphic.foregroundElements ?? []).forEach((el) => {
+    scan(el.layoutByWidth);
+    scan(el.assetByWidth);
+    scan(el.visibleByWidth);
+  });
   return sortVariantKeys([...set]);
 }
 
@@ -87,6 +95,46 @@ function resolveResponsiveEntry<T>(
   return { key: '_default', value: map._default };
 }
 
+function resolveResponsiveOverride<T>(
+  map: ResponsiveOverrideMap<T> | undefined,
+  containerWidth: number,
+): T | undefined {
+  if (!map) return undefined;
+
+  const matched = Object.keys(map)
+    .map((key) => {
+      const breakpoint = parseBreakpoint(key);
+      return breakpoint ? { key: key as VariantKey, ...breakpoint } : null;
+    })
+    .filter(
+      (
+        entry,
+      ): entry is {
+        key: VariantKey;
+        operator: '>=' | '<=';
+        value: number;
+      } => entry !== null,
+    )
+    .filter((entry) =>
+      entry.operator === '>=' ? containerWidth >= entry.value : containerWidth <= entry.value,
+    )
+    .sort((a, b) => {
+      if (a.operator !== b.operator) return a.operator === '>=' ? -1 : 1;
+      return a.operator === '>=' ? b.value - a.value : a.value - b.value;
+    })[0];
+
+  if (matched) return map[matched.key];
+  return map._default;
+}
+
+function resolveAssetUrl(asset: AdvertiseAsset, containerWidth: number) {
+  return resolveResponsiveOverride(asset.assetByWidth, containerWidth) ?? asset.assetUrl;
+}
+
+function resolveElementVisibility(element: AdvertiseElementAsset, containerWidth: number) {
+  return resolveResponsiveOverride(element.visibleByWidth, containerWidth) ?? true;
+}
+
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
@@ -106,6 +154,19 @@ function getSimulatorRange(graphic: ResponsiveAdvertiseGraphic) {
   return {
     min: 280,
     max: Math.max(1024, maxKnownWidth + 200),
+  };
+}
+
+function getVariantCanvasSize(graphic: ResponsiveAdvertiseGraphic, variantKey: VariantKey) {
+  const explicitSize = graphic.size[variantKey];
+  if (explicitSize) return explicitSize;
+
+  const breakpoint = parseBreakpoint(variantKey);
+  if (!breakpoint) return graphic.size._default;
+
+  return {
+    width: breakpoint.value,
+    height: graphic.size._default.height,
   };
 }
 
@@ -225,8 +286,9 @@ function GraphicPreviewCard({
   graphic: ResponsiveAdvertiseGraphic;
   variantKey: VariantKey;
 }) {
-  const containerSize: GraphicSize = graphic.size[variantKey] ?? graphic.size._default;
+  const containerSize = getVariantCanvasSize(graphic, variantKey);
   const { width: cw, height: ch } = containerSize;
+  const backgroundAssetUrl = resolveAssetUrl(graphic.background, cw);
 
   return (
     <div className="rounded-lg border border-stroke p-3 dark:border-strokedark">
@@ -245,13 +307,15 @@ function GraphicPreviewCard({
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            key={graphic.background.assetUrl}
-            src={normalizeAssetUrl(graphic.background.assetUrl)}
+            key={backgroundAssetUrl}
+            src={normalizeAssetUrl(backgroundAssetUrl)}
             alt="background"
             className="absolute inset-0 h-full w-full object-fill"
           />
           {(graphic.foregroundElements ?? []).map((el, i) => {
-            if (!el?.assetUrl || !el.layoutByWidth) return null;
+            if (!resolveElementVisibility(el, cw)) return null;
+            const elementAssetUrl = resolveAssetUrl(el, cw);
+            if (!elementAssetUrl || !el.layoutByWidth) return null;
             const layout = el.layoutByWidth[variantKey] ?? el.layoutByWidth._default;
             if (!layout) return null;
             const c: ElementConstraints = layout.constraints ?? {};
@@ -262,17 +326,17 @@ function GraphicPreviewCard({
               containerSize,
             });
             return (
-              <div key={`${i}-${el.assetUrl}`} className="absolute" style={frameStyle}>
+              <div key={`${i}-${elementAssetUrl}`} className="absolute" style={frameStyle}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={normalizeAssetUrl(el.assetUrl)}
+                  src={normalizeAssetUrl(elementAssetUrl)}
                   alt={`element-${i}`}
                   className="h-full w-full object-fill"
                 />
               </div>
             );
           })}
-          <div className="pointer-events-none absolute bottom-[8px] right-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] bg-opacity-90 px-[7px] py-[3px] text-xs font-medium leading-none text-white">
+          <div className="pointer-events-none absolute bottom-[8px] right-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs font-medium leading-none text-white">
             AD
           </div>
         </div>
@@ -383,17 +447,21 @@ function SimulatedGraphic({
   containerSize: GraphicSize;
   width: number;
 }) {
+  const backgroundAssetUrl = resolveAssetUrl(graphic.background, width);
+
   return (
     <div className="relative h-full w-full overflow-hidden rounded-lg border border-stroke bg-gray-2 dark:border-strokedark">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        key={graphic.background.assetUrl}
-        src={normalizeAssetUrl(graphic.background.assetUrl)}
+        key={backgroundAssetUrl}
+        src={normalizeAssetUrl(backgroundAssetUrl)}
         alt="background"
         className="absolute inset-0 h-full w-full object-fill"
       />
       {(graphic.foregroundElements ?? []).map((el, i) => {
-        if (!el?.assetUrl || !el.layoutByWidth) return null;
+        if (!resolveElementVisibility(el, width)) return null;
+        const elementAssetUrl = resolveAssetUrl(el, width);
+        if (!elementAssetUrl || !el.layoutByWidth) return null;
         const layout =
           resolveResponsiveEntry(el.layoutByWidth, width)?.value ?? el.layoutByWidth._default;
         if (!layout) return null;
@@ -404,17 +472,17 @@ function SimulatedGraphic({
           containerSize: { width, height: containerSize.height },
         });
         return (
-          <div key={`${i}-${el.assetUrl}`} className="absolute" style={frameStyle}>
+          <div key={`${i}-${elementAssetUrl}`} className="absolute" style={frameStyle}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={normalizeAssetUrl(el.assetUrl)}
+              src={normalizeAssetUrl(elementAssetUrl)}
               alt={`element-${i}`}
               className="h-full w-full object-fill"
             />
           </div>
         );
       })}
-      <div className="pointer-events-none absolute bottom-[8px] right-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] bg-opacity-90 px-[7px] py-[3px] text-xs font-medium leading-none text-white">
+      <div className="pointer-events-none absolute bottom-[8px] right-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs font-medium leading-none text-white">
         AD
       </div>
     </div>

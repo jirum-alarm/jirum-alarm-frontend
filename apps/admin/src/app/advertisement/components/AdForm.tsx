@@ -118,14 +118,41 @@ function normalizeGraphicAssetUrls(
     background: {
       ...graphic.background,
       assetUrl: normalizeAssetUrl(graphic.background.assetUrl),
+      assetByWidth: normalizeAssetByWidth(graphic.background.assetByWidth),
     },
     foregroundElements: (graphic.foregroundElements ?? [])
       .filter((element) => element.assetUrl?.trim())
       .map((element) => ({
         ...element,
         assetUrl: normalizeAssetUrl(element.assetUrl),
+        assetByWidth: normalizeAssetByWidth(element.assetByWidth),
       })),
   };
+}
+
+function normalizeAssetByWidth(
+  assetByWidth: Partial<Record<string, string | undefined>> | undefined,
+) {
+  if (!assetByWidth) return undefined;
+
+  const normalized = Object.fromEntries(
+    Object.entries(assetByWidth)
+      .filter(([, assetUrl]) => assetUrl?.trim())
+      .map(([key, assetUrl]) => [key, normalizeAssetUrl(assetUrl!)]),
+  );
+
+  return Object.keys(normalized).length > 0 ? normalized : undefined;
+}
+
+function collectGraphicAssetUrls(graphic: ResponsiveAdvertiseGraphic) {
+  return [
+    graphic.background.assetUrl,
+    ...Object.values(graphic.background.assetByWidth ?? {}),
+    ...(graphic.foregroundElements ?? []).flatMap((element) => [
+      element.assetUrl,
+      ...Object.values(element.assetByWidth ?? {}),
+    ]),
+  ].filter((url): url is string => Boolean(url));
 }
 
 function upsertUploadedForegroundElement(
@@ -340,10 +367,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
     if (!g.size?._default) return alert('graphic.size._default 가 필요합니다.');
     if (!g.background?.assetUrl)
       return alert('배경 에셋을 업로드하거나 background.assetUrl 을 입력하세요.');
-    const urls = [
-      g.background.assetUrl,
-      ...(g.foregroundElements ?? []).map((e) => e?.assetUrl).filter((url) => Boolean(url)),
-    ];
+    const urls = collectGraphicAssetUrls(g);
     const bad = urls.find((u) => !u || !u.startsWith(CDN_BASE));
     if (bad !== undefined) return alert(`모든 assetUrl은 ${CDN_BASE} 도메인이어야 합니다: ${bad}`);
 

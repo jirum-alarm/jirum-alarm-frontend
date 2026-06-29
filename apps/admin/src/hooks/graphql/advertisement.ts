@@ -32,12 +32,16 @@ export type ResponsiveValueMap<T> = {
   _default: T;
 } & Partial<Record<`${'>=' | '<='}${number}`, T>>;
 
+export type ResponsiveOverrideMap<T> = Partial<Record<'_default' | `${'>=' | '<='}${number}`, T>>;
+
 export interface AdvertiseAsset {
   designSize: GraphicSize;
   assetUrl: string;
+  assetByWidth?: ResponsiveOverrideMap<string>;
 }
 
 export type AdvertiseElementAsset = AdvertiseAsset & {
+  visibleByWidth?: ResponsiveOverrideMap<boolean>;
   layoutByWidth: ResponsiveValueMap<{
     constraints: ElementConstraints;
     size?: ElementLayoutSize;
