@@ -8,6 +8,8 @@ import { useAdReport, useAdsByAdmin, useSetAdActive } from '@/hooks/graphql/adve
 // 느려지면 광고 startAt 기준으로 좁히는 게 업그레이드 경로.
 const REPORT_FROM = '2020-01-01T00:00:00.000Z';
 const REPORT_TO = '2099-12-31T23:59:59.000Z';
+const actionButtonClass =
+  'inline-flex h-8 items-center justify-center whitespace-nowrap rounded-md px-2.5 text-xs font-semibold transition hover:bg-opacity-90';
 
 const AdListTable = () => {
   const { data, loading, error } = useAdsByAdmin();
@@ -84,18 +86,32 @@ const AdListTable = () => {
                 </td>
                 <td className="px-4 py-3 text-sm">
                   <button
+                    type="button"
                     onClick={() =>
                       setActive({ variables: { id: Number(ad.id), isActive: !ad.isActive } })
                     }
-                    className={ad.isActive ? 'text-success' : 'text-danger'}
+                    className={`${actionButtonClass} ${
+                      ad.isActive ? 'bg-success text-white' : 'bg-danger text-white'
+                    }`}
                   >
                     {ad.isActive ? '활성' : '비활성'}
                   </button>
                 </td>
                 <td className="px-4 py-3 text-sm">
-                  <Link href={`/advertisement/${ad.id}`} className="text-primary hover:underline">
-                    수정
-                  </Link>
+                  <div className="flex items-center gap-1.5">
+                    <Link
+                      href={`/advertisement/${ad.id}`}
+                      className={`${actionButtonClass} bg-primary text-white`}
+                    >
+                      수정
+                    </Link>
+                    <Link
+                      href={`/advertisement/clone/${ad.id}`}
+                      className={`${actionButtonClass} bg-gray-2 text-black hover:bg-stroke dark:bg-meta-4 dark:text-white`}
+                    >
+                      복제
+                    </Link>
+                  </div>
                 </td>
               </tr>
             );
