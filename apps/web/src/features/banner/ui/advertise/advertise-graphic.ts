@@ -7,6 +7,8 @@ export interface GraphicSize {
   height: number;
 }
 
+export type ElementLayoutSize = Partial<Record<keyof GraphicSize, number | null>>;
+
 export interface ElementConstraints {
   top?: number;
   left?: number;
@@ -26,7 +28,7 @@ export interface AdvertiseAsset {
 export type AdvertiseElementAsset = AdvertiseAsset & {
   layoutByWidth: ResponsiveValueMap<{
     constraints: ElementConstraints;
-    size?: Partial<GraphicSize>;
+    size?: ElementLayoutSize;
   }>;
 };
 

@@ -5,6 +5,7 @@ import { type CSSProperties, type PointerEvent, useState } from 'react';
 import {
   AdvertiseElementAsset,
   ElementConstraints,
+  ElementLayoutSize,
   GraphicSize,
   ResponsiveAdvertiseGraphic,
 } from '@/hooks/graphql/advertisement';
@@ -101,7 +102,7 @@ function setOptionalConstraint(
 }
 
 function setOptionalSize(
-  size: Partial<GraphicSize> | undefined,
+  size: ElementLayoutSize | undefined,
   key: keyof GraphicSize,
   value: number | undefined,
 ) {
@@ -123,6 +124,15 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
+function getElementAspectRatio(element: AdvertiseElementAsset) {
+  if (element.designSize.width <= 0 || element.designSize.height <= 0) return 1;
+  return element.designSize.width / element.designSize.height;
+}
+
+function getLayoutSizeValue(layout: ElementLayout, field: keyof GraphicSize) {
+  return layout.size?.[field];
+}
+
 function getElementLayout(element: AdvertiseElementAsset, breakpoint: BreakpointKey) {
   return (
     element.layoutByWidth[breakpoint] ?? element.layoutByWidth._default ?? createDefaultLayout()
@@ -135,26 +145,55 @@ function getElementFrame(
   canvasSize: GraphicSize,
 ): ElementFrame {
   const constraints = layout.constraints ?? {};
-  const width =
-    layout.size?.width ??
-    (constraints.left !== undefined && constraints.right !== undefined
-      ? canvasSize.width - constraints.left - constraints.right
-      : element.designSize.width);
-  const height =
-    layout.size?.height ??
-    (constraints.top !== undefined && constraints.bottom !== undefined
-      ? canvasSize.height - constraints.top - constraints.bottom
-      : element.designSize.height);
+  const hasHorizontalConstraints =
+    constraints.left !== undefined && constraints.right !== undefined;
+  const hasVerticalConstraints = constraints.top !== undefined && constraints.bottom !== undefined;
+  const widthValue = getLayoutSizeValue(layout, 'width');
+  const heightValue = getLayoutSizeValue(layout, 'height');
+  const aspectRatio = getElementAspectRatio(element);
+  const constrainedWidth =
+    widthValue === null && hasHorizontalConstraints
+      ? canvasSize.width - constraints.left! - constraints.right!
+      : undefined;
+  const constrainedHeight =
+    heightValue === null && hasVerticalConstraints
+      ? canvasSize.height - constraints.top! - constraints.bottom!
+      : undefined;
+  let width = typeof widthValue === 'number' ? widthValue : constrainedWidth;
+  let height = typeof heightValue === 'number' ? heightValue : constrainedHeight;
+
+  if (width === undefined && height === undefined) {
+    width = element.designSize.width;
+    height = element.designSize.height;
+  } else {
+    width ??= height! * aspectRatio;
+    height ??= width / aspectRatio;
+  }
+
   const normalizedWidth = Math.max(1, width);
   const normalizedHeight = Math.max(1, height);
-  const x =
-    constraints.left ??
-    (constraints.right !== undefined ? canvasSize.width - constraints.right - normalizedWidth : 0);
-  const y =
-    constraints.top ??
-    (constraints.bottom !== undefined
-      ? canvasSize.height - constraints.bottom - normalizedHeight
-      : 0);
+  let x = 0;
+  let y = 0;
+
+  if (constraints.left !== undefined && constraints.right !== undefined) {
+    x =
+      constraints.left +
+      (canvasSize.width - constraints.left - constraints.right - normalizedWidth) / 2;
+  } else if (constraints.left !== undefined) {
+    x = constraints.left;
+  } else if (constraints.right !== undefined) {
+    x = canvasSize.width - constraints.right - normalizedWidth;
+  }
+
+  if (constraints.top !== undefined && constraints.bottom !== undefined) {
+    y =
+      constraints.top +
+      (canvasSize.height - constraints.top - constraints.bottom - normalizedHeight) / 2;
+  } else if (constraints.top !== undefined) {
+    y = constraints.top;
+  } else if (constraints.bottom !== undefined) {
+    y = canvasSize.height - constraints.bottom - normalizedHeight;
+  }
 
   return {
     x: toFixedNumber(x),
@@ -167,28 +206,15 @@ function getElementFrame(
 function getElementFrameStyle(
   element: AdvertiseElementAsset,
   layout: ElementLayout,
+  canvasSize: GraphicSize,
 ): CSSProperties {
-  const constraints = layout.constraints ?? {};
-  const widthStretched = constraints.left !== undefined && constraints.right !== undefined;
-  const heightStretched = constraints.top !== undefined && constraints.bottom !== undefined;
+  const frame = getElementFrame(element, layout, canvasSize);
 
   return {
-    top: constraints.top,
-    left: constraints.left,
-    right: constraints.right,
-    bottom: constraints.bottom,
-    width:
-      layout.size?.width !== undefined
-        ? layout.size.width
-        : widthStretched
-          ? undefined
-          : element.designSize.width,
-    height:
-      layout.size?.height !== undefined
-        ? layout.size.height
-        : heightStretched
-          ? undefined
-          : element.designSize.height,
+    top: frame.y,
+    left: frame.x,
+    width: frame.width,
+    height: frame.height,
   };
 }
 
@@ -607,12 +633,12 @@ function VisualConstraintEditor({
       if (preset === 'stretchX') {
         nextConstraints.left = selectedFrame.x;
         nextConstraints.right = selectedCanvasSize.width - selectedFrame.x - selectedFrame.width;
-        delete nextSize.width;
+        nextSize.width = null;
       }
       if (preset === 'stretchY') {
         nextConstraints.top = selectedFrame.y;
         nextConstraints.bottom = selectedCanvasSize.height - selectedFrame.y - selectedFrame.height;
-        delete nextSize.height;
+        nextSize.height = null;
       }
 
       return {
@@ -767,7 +793,7 @@ function VisualConstraintEditor({
                   {graphic.foregroundElements.map((element, index) => {
                     const layout = getElementLayout(element, breakpoint);
                     const selected = index === selectedElementIndex && selectedCanvas;
-                    const style = getElementFrameStyle(element, layout);
+                    const style = getElementFrameStyle(element, layout, canvasSize);
 
                     return (
                       <div
@@ -787,7 +813,7 @@ function VisualConstraintEditor({
                           <img
                             src={normalizeAssetUrl(element.assetUrl)}
                             alt=""
-                            className="h-full w-full object-contain"
+                            className="h-full w-full object-fill"
                             draggable={false}
                           />
                         ) : (
@@ -932,7 +958,7 @@ function VisualConstraintEditor({
 
             <div>
               <p className="mb-2 text-xs font-semibold text-black dark:text-white">
-                Element Design Size
+                Design Size (wrap)
               </p>
               <div className="mb-3 grid grid-cols-2 gap-2">
                 <NumberField
@@ -1128,7 +1154,7 @@ function OptionalNumberField({
   onChange,
 }: {
   label: string;
-  value: number | undefined;
+  value: number | null | undefined;
   onChange: (value: number | undefined) => void;
 }) {
   return (
@@ -1151,7 +1177,7 @@ function OptionalPositiveNumberField({
   onChange,
 }: {
   label: string;
-  value: number | undefined;
+  value: number | null | undefined;
   onChange: (value: number | undefined) => void;
 }) {
   return (
@@ -1161,8 +1187,8 @@ function OptionalPositiveNumberField({
         type="number"
         min={1}
         className={inputClass}
-        value={value ?? ''}
-        placeholder="stretch"
+        value={typeof value === 'number' ? value : ''}
+        placeholder={value === null ? '0dp' : 'wrap'}
         onChange={(event) => onChange(toOptionalPositiveNumber(event.target.value))}
       />
     </label>

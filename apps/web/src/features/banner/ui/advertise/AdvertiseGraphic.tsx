@@ -3,6 +3,7 @@
 import {
   type AdvertiseElementAsset,
   type ElementConstraints,
+  type GraphicSize,
   normalizeAdvertiseAssetUrl,
   resolveResponsiveValue,
   type ResponsiveAdvertiseGraphic,
@@ -18,6 +19,7 @@ interface AdvertiseGraphicProps {
 
 function getElementStyle(
   element: AdvertiseElementAsset,
+  containerSize: GraphicSize,
   containerWidth: number,
 ): CSSProperties | null {
   const layout =
@@ -27,26 +29,64 @@ function getElementStyle(
 
   const constraints: ElementConstraints = layout.constraints ?? {};
   const size = layout.size;
-  const isWidthStretched = constraints.left !== undefined && constraints.right !== undefined;
-  const isHeightStretched = constraints.top !== undefined && constraints.bottom !== undefined;
+  const hasHorizontalConstraints =
+    constraints.left !== undefined && constraints.right !== undefined;
+  const hasVerticalConstraints = constraints.top !== undefined && constraints.bottom !== undefined;
+  const aspectRatio =
+    element.designSize.width > 0 && element.designSize.height > 0
+      ? element.designSize.width / element.designSize.height
+      : 1;
+  const widthValue = size?.width;
+  const heightValue = size?.height;
+  const constrainedWidth =
+    widthValue === null && hasHorizontalConstraints
+      ? containerSize.width - constraints.left! - constraints.right!
+      : undefined;
+  const constrainedHeight =
+    heightValue === null && hasVerticalConstraints
+      ? containerSize.height - constraints.top! - constraints.bottom!
+      : undefined;
+  let frameWidth = typeof widthValue === 'number' ? widthValue : constrainedWidth;
+  let frameHeight = typeof heightValue === 'number' ? heightValue : constrainedHeight;
+
+  if (frameWidth === undefined && frameHeight === undefined) {
+    frameWidth = element.designSize.width;
+    frameHeight = element.designSize.height;
+  } else {
+    frameWidth ??= frameHeight! * aspectRatio;
+    frameHeight ??= frameWidth / aspectRatio;
+  }
+
+  frameWidth = Math.max(1, frameWidth);
+  frameHeight = Math.max(1, frameHeight);
+  let left = 0;
+  let top = 0;
+
+  if (constraints.left !== undefined && constraints.right !== undefined) {
+    left =
+      constraints.left +
+      (containerSize.width - constraints.left - constraints.right - frameWidth) / 2;
+  } else if (constraints.left !== undefined) {
+    left = constraints.left;
+  } else if (constraints.right !== undefined) {
+    left = containerSize.width - constraints.right - frameWidth;
+  }
+
+  if (constraints.top !== undefined && constraints.bottom !== undefined) {
+    top =
+      constraints.top +
+      (containerSize.height - constraints.top - constraints.bottom - frameHeight) / 2;
+  } else if (constraints.top !== undefined) {
+    top = constraints.top;
+  } else if (constraints.bottom !== undefined) {
+    top = containerSize.height - constraints.bottom - frameHeight;
+  }
 
   return {
-    top: constraints.top,
-    left: constraints.left,
-    bottom: constraints.bottom,
-    right: constraints.right,
-    width:
-      size?.width !== undefined
-        ? size.width
-        : isWidthStretched
-          ? undefined
-          : element.designSize.width,
-    height:
-      size?.height !== undefined
-        ? size.height
-        : isHeightStretched
-          ? undefined
-          : element.designSize.height,
+    top,
+    left,
+    width: frameWidth,
+    height: frameHeight,
   };
 }
 
@@ -73,7 +113,11 @@ export default function AdvertiseGraphic({ graphic, priority }: AdvertiseGraphic
 
       {graphic.foregroundElements.map((element, index) => {
         if (!element.assetUrl) return null;
-        const style = getElementStyle(element, containerWidth);
+        const style = getElementStyle(
+          element,
+          { width: containerWidth, height: containerSize.height },
+          containerWidth,
+        );
         if (!style) return null;
 
         return (
@@ -83,7 +127,7 @@ export default function AdvertiseGraphic({ graphic, priority }: AdvertiseGraphic
               src={normalizeAdvertiseAssetUrl(element.assetUrl)}
               alt=""
               loading={priority ? 'eager' : 'lazy'}
-              className="h-full w-full object-contain"
+              className="h-full w-full object-fill"
             />
           </div>
         );

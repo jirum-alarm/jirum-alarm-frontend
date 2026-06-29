@@ -4,6 +4,7 @@ import { type CSSProperties, type PointerEvent, useMemo, useRef, useState } from
 
 import {
   ElementConstraints,
+  ElementLayoutSize,
   GraphicSize,
   ResponsiveAdvertiseGraphic,
   ResponsiveValueMap,
@@ -14,8 +15,8 @@ import { normalizeAssetUrl } from './assetUrl';
 /**
  * 광고 graphic 렌더러 — 프론트 타입 스펙(ResponsiveAdvertiseGraphic)을 온전히 반영.
  * - ResponsiveValueMap: 실제 렌더 width에 매칭되는 breakpoint 중 가장 큰 것, 없으면 _default.
- * - 컨테이너 = size[bp]. element = layoutByWidth[bp]의 constraints(절대배치) + optional size(크기 override).
- *   모든 좌표/크기는 해당 breakpoint의 컨테이너 size 좌표계(px) → 컨테이너 대비 %로 환산.
+ * - 컨테이너 = size[bp]. element = layoutByWidth[bp]의 constraints(절대배치) + optional size(고정 크기 override).
+ *   size override가 없는 축은 기본 wrap_content(designSize)이고, 양쪽 constraint가 모두 있으면 0dp처럼 stretch된다.
  * - 실서비스 web 렌더러가 생기면 이 컴포넌트를 그대로 공유(packages화) 가능.
  */
 
@@ -112,22 +113,69 @@ function getElementFrameStyle({
   constraints,
   size,
   designSize,
+  containerSize,
 }: {
   constraints: ElementConstraints;
-  size: Partial<GraphicSize> | undefined;
+  size: ElementLayoutSize | undefined;
   designSize: GraphicSize;
+  containerSize: GraphicSize;
 }): CSSProperties {
-  const isWidthStretched = constraints.left !== undefined && constraints.right !== undefined;
-  const isHeightStretched = constraints.top !== undefined && constraints.bottom !== undefined;
+  const hasHorizontalConstraints =
+    constraints.left !== undefined && constraints.right !== undefined;
+  const hasVerticalConstraints = constraints.top !== undefined && constraints.bottom !== undefined;
+  const aspectRatio =
+    designSize.width > 0 && designSize.height > 0 ? designSize.width / designSize.height : 1;
+  const widthValue = size?.width;
+  const heightValue = size?.height;
+  const constrainedWidth =
+    widthValue === null && hasHorizontalConstraints
+      ? containerSize.width - constraints.left! - constraints.right!
+      : undefined;
+  const constrainedHeight =
+    heightValue === null && hasVerticalConstraints
+      ? containerSize.height - constraints.top! - constraints.bottom!
+      : undefined;
+  let width = typeof widthValue === 'number' ? widthValue : constrainedWidth;
+  let height = typeof heightValue === 'number' ? heightValue : constrainedHeight;
+
+  if (width === undefined && height === undefined) {
+    width = designSize.width;
+    height = designSize.height;
+  } else {
+    width ??= height! * aspectRatio;
+    height ??= width / aspectRatio;
+  }
+
+  const frameWidth = Math.max(1, width);
+  const frameHeight = Math.max(1, height);
+  let left = 0;
+  let top = 0;
+
+  if (constraints.left !== undefined && constraints.right !== undefined) {
+    left =
+      constraints.left +
+      (containerSize.width - constraints.left - constraints.right - frameWidth) / 2;
+  } else if (constraints.left !== undefined) {
+    left = constraints.left;
+  } else if (constraints.right !== undefined) {
+    left = containerSize.width - constraints.right - frameWidth;
+  }
+
+  if (constraints.top !== undefined && constraints.bottom !== undefined) {
+    top =
+      constraints.top +
+      (containerSize.height - constraints.top - constraints.bottom - frameHeight) / 2;
+  } else if (constraints.top !== undefined) {
+    top = constraints.top;
+  } else if (constraints.bottom !== undefined) {
+    top = containerSize.height - constraints.bottom - frameHeight;
+  }
 
   return {
-    top: constraints.top,
-    left: constraints.left,
-    bottom: constraints.bottom,
-    right: constraints.right,
-    width: size?.width !== undefined ? size.width : isWidthStretched ? undefined : designSize.width,
-    height:
-      size?.height !== undefined ? size.height : isHeightStretched ? undefined : designSize.height,
+    top,
+    left,
+    width: frameWidth,
+    height: frameHeight,
   };
 }
 
@@ -211,6 +259,7 @@ function GraphicPreviewCard({
               constraints: c,
               size: layout.size,
               designSize: el.designSize,
+              containerSize,
             });
             return (
               <div key={`${i}-${el.assetUrl}`} className="absolute" style={frameStyle}>
@@ -218,7 +267,7 @@ function GraphicPreviewCard({
                 <img
                   src={normalizeAssetUrl(el.assetUrl)}
                   alt={`element-${i}`}
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-fill"
                 />
               </div>
             );
@@ -352,6 +401,7 @@ function SimulatedGraphic({
           constraints: layout.constraints ?? {},
           size: layout.size,
           designSize: el.designSize,
+          containerSize: { width, height: containerSize.height },
         });
         return (
           <div key={`${i}-${el.assetUrl}`} className="absolute" style={frameStyle}>
@@ -359,7 +409,7 @@ function SimulatedGraphic({
             <img
               src={normalizeAssetUrl(el.assetUrl)}
               alt={`element-${i}`}
-              className="h-full w-full object-contain"
+              className="h-full w-full object-fill"
             />
           </div>
         );
