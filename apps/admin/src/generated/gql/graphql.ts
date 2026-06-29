@@ -100,6 +100,7 @@ export enum AdvertiseSlotLocation {
   HomeMainBanner = 'home_main_banner',
   HomeRankingProduct = 'home_ranking_product',
   ProductMainBanner = 'product_main_banner',
+  SiwolPromotionEnter = 'siwol_promotion_enter',
 }
 
 export enum AdvertiseSlotType {

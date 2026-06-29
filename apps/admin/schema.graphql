@@ -100,6 +100,7 @@ enum AdvertiseSlotLocation {
   home_main_banner
   home_ranking_product
   product_main_banner
+  siwol_promotion_enter
 }
 
 enum AdvertiseSlotType {

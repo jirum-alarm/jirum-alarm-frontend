@@ -53,7 +53,8 @@ export type AdSlotLocation =
   | 'home_carousel_banner'
   | 'home_main_banner'
   | 'home_ranking_product'
-  | 'product_main_banner';
+  | 'product_main_banner'
+  | 'siwol_promotion_enter';
 
 export interface AdCreative {
   id: string;
