@@ -24,19 +24,17 @@ async function HomeContainerV2() {
   const sections = await getPromotionSections();
   const queryClient = getQueryClient();
 
-  if (isMobile) {
-    await queryClient.prefetchQuery(
-      AdvertisementQueries.activeAds({
-        slotLocation: AdvertiseSlotLocation.HomeCarouselBanner,
-      }),
-    );
-  }
+  await queryClient.prefetchQuery(
+    AdvertisementQueries.activeAds({
+      slotLocation: AdvertiseSlotLocation.HomeCarouselBanner,
+    }),
+  );
 
   const renderDesktop = () => {
     return (
-      <>
+      <HydrationBoundary state={dehydrate(queryClient)}>
         <DesktopHeroSection />
-      </>
+      </HydrationBoundary>
     );
   };
 
