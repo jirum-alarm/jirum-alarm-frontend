@@ -221,7 +221,7 @@ function CodeCard({
 }) {
   return (
     <article className="rounded-[18px] bg-white p-5 text-[#162034]">
-      <div className="rounded-lg bg-[#f1f3f6] px-6 py-5">
+      <div className="rounded-t-lg bg-[#f1f3f6] px-6 py-5">
         <ol className="mx-auto flex max-w-[228px] flex-col gap-2 text-sm leading-6 font-bold">
           {steps.map((step, index) => (
             <li key={step} className="flex items-start gap-3">
@@ -233,7 +233,7 @@ function CodeCard({
           ))}
         </ol>
       </div>
-      <div className="flex h-12 items-center justify-center gap-3 rounded-b bg-[#162034] px-4">
+      <div className="flex h-12 items-center justify-center gap-3 rounded-b-lg bg-[#162034] px-4">
         <span className="text-sm font-extrabold text-[#92ff1f]">비밀번호</span>
         <strong className="text-sm font-extrabold text-white">{SECRET_CODE}</strong>
         <button
