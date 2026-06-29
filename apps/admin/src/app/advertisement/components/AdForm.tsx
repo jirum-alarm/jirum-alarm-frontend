@@ -76,6 +76,40 @@ const CDN_BASE = 'https://cdn.jirum-alarm.com';
 const inputClass =
   'w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary';
 
+type NormalizedTargetUrl = { ok: true; targetUrl: string } | { ok: false; error: string };
+
+function normalizeTargetUrl(value: string): NormalizedTargetUrl {
+  const targetUrl = value.trim();
+
+  if (!targetUrl) return { ok: false, error: 'targetUrl 을 입력하세요.' };
+  if (targetUrl.length > LIMIT.targetUrl)
+    return { ok: false, error: `targetUrl은 ${LIMIT.targetUrl}자 이하여야 합니다.` };
+
+  if (targetUrl.startsWith('/')) {
+    if (targetUrl.startsWith('//')) {
+      return {
+        ok: false,
+        error: 'path-only targetUrl은 /promotion/something 또는 /product/34567 형태여야 합니다.',
+      };
+    }
+
+    return { ok: true, targetUrl };
+  }
+
+  try {
+    const url = new URL(targetUrl);
+    if (url.protocol !== 'https:')
+      return { ok: false, error: '외부 targetUrl 은 https:// 로 시작해야 합니다.' };
+    return { ok: true, targetUrl: url.toString() };
+  } catch {
+    return {
+      ok: false,
+      error:
+        'targetUrl 은 https:// 외부 URL 또는 /promotion/something 같은 path-only URL이어야 합니다.',
+    };
+  }
+}
+
 function normalizeGraphicAssetUrls(
   graphic: ResponsiveAdvertiseGraphic,
 ): ResponsiveAdvertiseGraphic {
@@ -295,10 +329,8 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
     if (!startAt || !endAt) return alert('시작/종료 시각을 입력하세요.');
     if (new Date(endAt) <= new Date(startAt))
       return alert('종료 시각이 시작 시각보다 뒤여야 합니다.');
-    if (!targetUrl.trim()) return alert('targetUrl 을 입력하세요.');
-    if (!/^https:\/\//.test(targetUrl)) return alert('targetUrl 은 https:// 로 시작해야 합니다.');
-    if (targetUrl.length > LIMIT.targetUrl)
-      return alert(`targetUrl은 ${LIMIT.targetUrl}자 이하여야 합니다.`);
+    const normalizedTargetUrl = normalizeTargetUrl(targetUrl);
+    if (!normalizedTargetUrl.ok) return alert(normalizedTargetUrl.error);
     if (displayTitle.length > LIMIT.displayTitle)
       return alert(`displayTitle은 ${LIMIT.displayTitle}자 이하여야 합니다.`);
     if (parsedGraphic.error || !parsedGraphic.graphic)
@@ -324,7 +356,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
       slotPriority,
       startAt: new Date(startAt).toISOString(),
       endAt: new Date(endAt).toISOString(),
-      targetUrl,
+      targetUrl: normalizedTargetUrl.targetUrl,
       displayTitle: displayTitle || undefined,
       isActive,
       graphic: normalizedGraphic,
@@ -434,12 +466,12 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
             targetUrl *
           </label>
           <input
-            type="url"
+            type="text"
             className={inputClass}
             value={targetUrl}
             maxLength={LIMIT.targetUrl}
             onChange={(e) => setTargetUrl(e.target.value)}
-            placeholder="https://…"
+            placeholder="https://… 또는 /promotion/something"
           />
         </div>
 

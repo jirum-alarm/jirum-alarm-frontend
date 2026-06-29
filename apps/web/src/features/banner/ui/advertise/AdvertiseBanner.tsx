@@ -39,6 +39,7 @@ export default function AdvertiseBanner({
       ref={ref}
       href={creative.targetUrl}
       target="_blank"
+      rel="noopener noreferrer"
       className={cn(
         'relative block w-full overflow-hidden rounded-lg border border-gray-200 bg-gray-100',
         className,
