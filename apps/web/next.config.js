@@ -63,6 +63,13 @@ const nextConfig = withPWA({
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  webpack(config) {
+    config.watchOptions = {
+      ...config.watchOptions,
+      ignored: ['**/.git/**', '**/.worktrees/**', '**/node_modules/**'],
+    };
+    return config;
+  },
   onDemandEntries: {
     maxInactiveAge: 60 * 60 * 1000,
     pagesBufferLength: 10,

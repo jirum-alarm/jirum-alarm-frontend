@@ -10,12 +10,12 @@ import {
   resolveResponsiveValue,
   type ResponsiveAdvertiseGraphic,
 } from './advertise-graphic';
-import { useElementWidth } from './useElementWidth';
 
 import type { CSSProperties } from 'react';
 
 interface AdvertiseGraphicProps {
   graphic: ResponsiveAdvertiseGraphic;
+  containerSize: GraphicSize;
   priority?: boolean;
 }
 
@@ -92,18 +92,18 @@ function getElementStyle(
   };
 }
 
-export default function AdvertiseGraphic({ graphic, priority }: AdvertiseGraphicProps) {
-  const { ref, width } = useElementWidth<HTMLDivElement>();
-  const containerWidth = width || graphic.size._default.width;
-  const containerSize =
-    resolveResponsiveValue(graphic.size, containerWidth) ?? graphic.size._default;
+export default function AdvertiseGraphic({
+  graphic,
+  containerSize,
+  priority,
+}: AdvertiseGraphicProps) {
+  const containerWidth = containerSize.width;
   const backgroundAssetUrl = resolveAssetUrl(graphic.background, containerWidth);
 
   return (
     <div
-      ref={ref}
-      className="relative w-full overflow-hidden"
-      style={{ height: containerSize.height }}
+      className="relative overflow-hidden"
+      style={{ width: containerSize.width, height: containerSize.height }}
     >
       {/* SVG/PNG/JPG/WebP 모두 같은 방식으로 렌더링하기 위해 next/image 대신 img를 사용한다. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}

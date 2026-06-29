@@ -1,10 +1,11 @@
 import { Suspense } from 'react';
 
-import { ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
+import { AdvertiseSlotLocation, ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
 
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 
 import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
+import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
@@ -45,6 +46,10 @@ function ProductDetailPage({
         <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <div className="flex flex-col">
             <ProductInfo productId={productId} />
+            <AdvertiseSlotBanner
+              slotLocation={AdvertiseSlotLocation.ProductMainBanner}
+              className="mx-5 mb-4 w-auto"
+            />
 
             <CoupangPartnerGuide productId={productId} />
 
