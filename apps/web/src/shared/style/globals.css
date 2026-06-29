@@ -178,6 +178,14 @@ html[data-native-tabs='true'] nav:has(ul > li > a[data-nav-type]) {
     opacity: 0;
   }
 }
+@keyframes promotion-price-roll {
+  0% {
+    transform: translateX(-12px);
+  }
+  100% {
+    transform: translateX(calc(-50% - 12px));
+  }
+}
 
 @utility animate-fade-in {
   animation: fadeIn 0.2s ease-in-out;
