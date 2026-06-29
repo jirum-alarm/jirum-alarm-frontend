@@ -27,6 +27,8 @@ const SLOT_LOCATIONS: { value: AdSlotLocation; label: string }[] = [
 const DEFAULT_BACKGROUND_SIZE = { width: 320, height: 92 };
 const DESKTOP_BACKGROUND_SIZE = { width: 548, height: 92 };
 const DEFAULT_ELEMENT_SIZE = { width: 100, height: 92 };
+const WIDE_RENDER_BREAKPOINT = 456;
+const WIDE_RENDER_BREAKPOINT_KEY = `>=${WIDE_RENDER_BREAKPOINT}` as const;
 
 const DEFAULT_FOREGROUND_ELEMENTS = [
   {
@@ -36,7 +38,7 @@ const DEFAULT_FOREGROUND_ELEMENTS = [
       _default: {
         constraints: { left: 16, top: 0, bottom: 0 },
       },
-      '>=768': {
+      [WIDE_RENDER_BREAKPOINT_KEY]: {
         constraints: { left: 16, top: 0, bottom: 0 },
       },
     },
@@ -48,7 +50,7 @@ const DEFAULT_FOREGROUND_ELEMENTS = [
       _default: {
         constraints: { right: 0, top: 0, bottom: 0 },
       },
-      '>=768': {
+      [WIDE_RENDER_BREAKPOINT_KEY]: {
         constraints: { right: 40, top: 0, bottom: 0 },
       },
     },
@@ -58,7 +60,7 @@ const DEFAULT_FOREGROUND_ELEMENTS = [
 const SAMPLE_GRAPHIC = `{
   "size": {
     "_default": { "width": ${DEFAULT_BACKGROUND_SIZE.width}, "height": ${DEFAULT_BACKGROUND_SIZE.height} },
-    ">=768": { "width": ${DESKTOP_BACKGROUND_SIZE.width}, "height": ${DESKTOP_BACKGROUND_SIZE.height} }
+    "${WIDE_RENDER_BREAKPOINT_KEY}": { "width": ${DESKTOP_BACKGROUND_SIZE.width}, "height": ${DESKTOP_BACKGROUND_SIZE.height} }
   },
   "background": {
     "designSize": { "width": ${DEFAULT_BACKGROUND_SIZE.width}, "height": ${DEFAULT_BACKGROUND_SIZE.height} },
@@ -160,7 +162,10 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
         const defaultSize = g.size?._default ?? DEFAULT_BACKGROUND_SIZE;
         return {
           ...g,
-          size: g.size ?? { _default: defaultSize, '>=768': DESKTOP_BACKGROUND_SIZE },
+          size: g.size ?? {
+            _default: defaultSize,
+            [WIDE_RENDER_BREAKPOINT_KEY]: DESKTOP_BACKGROUND_SIZE,
+          },
           background: {
             ...(g.background ?? {}),
             designSize: designSize ?? g.background?.designSize ?? defaultSize,
@@ -181,7 +186,10 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
         const defaultSize = g.size?._default ?? DEFAULT_BACKGROUND_SIZE;
         return {
           ...g,
-          size: g.size ?? { _default: defaultSize, '>=768': DESKTOP_BACKGROUND_SIZE },
+          size: g.size ?? {
+            _default: defaultSize,
+            [WIDE_RENDER_BREAKPOINT_KEY]: DESKTOP_BACKGROUND_SIZE,
+          },
           background: g.background ?? { designSize: defaultSize, assetUrl: '' },
           foregroundElements: upsertUploadedForegroundElement(
             g.foregroundElements,

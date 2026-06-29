@@ -49,9 +49,6 @@ export default function AdvertiseBanner({
       <motion.div whileTap={{ scale: 0.98 }} transition={{ duration: 0.1 }}>
         <AdvertiseGraphic graphic={graphic} priority={priority} />
       </motion.div>
-      <div className="bg-opacity-90 absolute right-2 bottom-2 z-30 rounded-[8px] border border-white bg-[#98A2B3] px-[7px] py-[3px] text-xs leading-none font-medium text-white">
-        AD
-      </div>
     </Link>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { type CSSProperties, useMemo } from 'react';
+import { type CSSProperties, type PointerEvent, useMemo, useRef, useState } from 'react';
 
 import {
   ElementConstraints,
@@ -13,7 +13,7 @@ import { normalizeAssetUrl } from './assetUrl';
 
 /**
  * 광고 graphic 렌더러 — 프론트 타입 스펙(ResponsiveAdvertiseGraphic)을 온전히 반영.
- * - ResponsiveValueMap: 선택 폭(viewport) 이하의 breakpoint 중 가장 큰 것, 없으면 _default.
+ * - ResponsiveValueMap: 실제 렌더 width에 매칭되는 breakpoint 중 가장 큰 것, 없으면 _default.
  * - 컨테이너 = size[bp]. element = layoutByWidth[bp]의 constraints(절대배치) + optional size(크기 override).
  *   모든 좌표/크기는 해당 breakpoint의 컨테이너 size 좌표계(px) → 컨테이너 대비 %로 환산.
  * - 실서비스 web 렌더러가 생기면 이 컴포넌트를 그대로 공유(packages화) 가능.
@@ -54,45 +54,86 @@ function collectBreakpoints(graphic: ResponsiveAdvertiseGraphic): VariantKey[] {
   return sortVariantKeys([...set]);
 }
 
-const pct = (v: number, base: number) => `${(v / base) * 100}%`;
+function resolveResponsiveEntry<T>(
+  map: ResponsiveValueMap<T> | undefined,
+  containerWidth: number,
+): { key: VariantKey; value: T } | undefined {
+  if (!map) return undefined;
+
+  const matched = Object.keys(map)
+    .map((key) => {
+      const breakpoint = parseBreakpoint(key);
+      return breakpoint ? { key: key as VariantKey, ...breakpoint } : null;
+    })
+    .filter(
+      (
+        entry,
+      ): entry is {
+        key: VariantKey;
+        operator: '>=' | '<=';
+        value: number;
+      } => entry !== null,
+    )
+    .filter((entry) =>
+      entry.operator === '>=' ? containerWidth >= entry.value : containerWidth <= entry.value,
+    )
+    .sort((a, b) => {
+      if (a.operator !== b.operator) return a.operator === '>=' ? -1 : 1;
+      return a.operator === '>=' ? b.value - a.value : a.value - b.value;
+    })[0];
+
+  if (matched) return { key: matched.key, value: map[matched.key] as T };
+  return { key: '_default', value: map._default };
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function getSimulatorRange(graphic: ResponsiveAdvertiseGraphic) {
+  const breakpointWidths = collectBreakpoints(graphic)
+    .map(parseBreakpoint)
+    .filter((breakpoint): breakpoint is { operator: '>=' | '<='; value: number } =>
+      Boolean(breakpoint),
+    )
+    .map((breakpoint) => breakpoint.value);
+  const designWidths = Object.values(graphic.size ?? {})
+    .map((size) => size?.width)
+    .filter((width): width is number => typeof width === 'number' && Number.isFinite(width));
+  const maxKnownWidth = Math.max(...breakpointWidths, ...designWidths, graphic.size._default.width);
+
+  return {
+    min: 280,
+    max: Math.max(1024, maxKnownWidth + 200),
+  };
+}
 
 function getElementFrameStyle({
   constraints,
   size,
   designSize,
-  containerSize,
 }: {
   constraints: ElementConstraints;
   size: Partial<GraphicSize> | undefined;
   designSize: GraphicSize;
-  containerSize: GraphicSize;
 }): CSSProperties {
-  const { width: cw, height: ch } = containerSize;
   const isWidthStretched = constraints.left !== undefined && constraints.right !== undefined;
   const isHeightStretched = constraints.top !== undefined && constraints.bottom !== undefined;
 
   return {
-    top: constraints.top !== undefined ? pct(constraints.top, ch) : undefined,
-    left: constraints.left !== undefined ? pct(constraints.left, cw) : undefined,
-    bottom: constraints.bottom !== undefined ? pct(constraints.bottom, ch) : undefined,
-    right: constraints.right !== undefined ? pct(constraints.right, cw) : undefined,
-    width:
-      size?.width !== undefined
-        ? pct(size.width, cw)
-        : isWidthStretched
-          ? undefined
-          : pct(designSize.width, cw),
+    top: constraints.top,
+    left: constraints.left,
+    bottom: constraints.bottom,
+    right: constraints.right,
+    width: size?.width !== undefined ? size.width : isWidthStretched ? undefined : designSize.width,
     height:
-      size?.height !== undefined
-        ? pct(size.height, ch)
-        : isHeightStretched
-          ? undefined
-          : pct(designSize.height, ch),
+      size?.height !== undefined ? size.height : isHeightStretched ? undefined : designSize.height,
   };
 }
 
 const GraphicPreview = ({ graphic }: { graphic: ResponsiveAdvertiseGraphic | null }) => {
   const breakpoints = useMemo(() => (graphic ? collectBreakpoints(graphic) : []), [graphic]);
+  const [simulatorWidth, setSimulatorWidth] = useState(graphic?.size?._default.width ?? 320);
 
   if (!graphic?.size?._default || !graphic.background?.assetUrl) {
     return (
@@ -102,17 +143,29 @@ const GraphicPreview = ({ graphic }: { graphic: ResponsiveAdvertiseGraphic | nul
     );
   }
 
+  const simulatorRange = getSimulatorRange(graphic);
+  const safeSimulatorWidth = clamp(simulatorWidth, simulatorRange.min, simulatorRange.max);
+
   return (
     <div>
       <div className="mb-3">
         <p className="text-sm font-semibold text-black dark:text-white">Variant Preview</p>
-        <p className="text-xs text-bodydark2">default와 기기 size variant를 동시에 렌더링합니다.</p>
+        <p className="text-xs text-bodydark2">
+          default와 render width variant를 동시에 렌더링합니다.
+        </p>
       </div>
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4">
         {breakpoints.map((variantKey) => (
           <GraphicPreviewCard key={variantKey} graphic={graphic} variantKey={variantKey} />
         ))}
       </div>
+      <WidthSimulator
+        graphic={graphic}
+        width={safeSimulatorWidth}
+        minWidth={simulatorRange.min}
+        maxWidth={simulatorRange.max}
+        onWidthChange={setSimulatorWidth}
+      />
     </div>
   );
 };
@@ -126,7 +179,6 @@ function GraphicPreviewCard({
 }) {
   const containerSize: GraphicSize = graphic.size[variantKey] ?? graphic.size._default;
   const { width: cw, height: ch } = containerSize;
-  const aspect = ch / cw;
 
   return (
     <div className="rounded-lg border border-stroke p-3 dark:border-strokedark">
@@ -138,10 +190,10 @@ function GraphicPreviewCard({
           {cw}×{ch}
         </span>
       </div>
-      <div className="w-full" style={{ maxWidth: `${cw}px` }}>
+      <div className="overflow-x-auto">
         <div
-          className="relative w-full overflow-hidden rounded-lg border border-stroke bg-gray-2 dark:border-strokedark"
-          style={{ paddingBottom: `${aspect * 100}%` }}
+          className="relative overflow-hidden rounded-lg border border-stroke bg-gray-2 dark:border-strokedark"
+          style={{ width: cw, height: ch }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -159,7 +211,6 @@ function GraphicPreviewCard({
               constraints: c,
               size: layout.size,
               designSize: el.designSize,
-              containerSize,
             });
             return (
               <div key={`${i}-${el.assetUrl}`} className="absolute" style={frameStyle}>
@@ -172,7 +223,149 @@ function GraphicPreviewCard({
               </div>
             );
           })}
+          <div className="pointer-events-none absolute bottom-[8px] right-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] bg-opacity-90 px-[7px] py-[3px] text-xs font-medium leading-none text-white">
+            AD
+          </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function WidthSimulator({
+  graphic,
+  width,
+  minWidth,
+  maxWidth,
+  onWidthChange,
+}: {
+  graphic: ResponsiveAdvertiseGraphic;
+  width: number;
+  minWidth: number;
+  maxWidth: number;
+  onWidthChange: (width: number) => void;
+}) {
+  const rulerRef = useRef<HTMLDivElement>(null);
+  const sizeEntry = resolveResponsiveEntry(graphic.size, width);
+  const containerSize = sizeEntry?.value ?? graphic.size._default;
+  const activeVariantKey = sizeEntry?.key ?? '_default';
+
+  const updateWidthFromPointer = (event: PointerEvent<HTMLDivElement>) => {
+    const rect = rulerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const nextWidth = Math.round(event.clientX - rect.left);
+    onWidthChange(clamp(nextWidth, minWidth, maxWidth));
+  };
+
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    updateWidthFromPointer(event);
+  };
+
+  return (
+    <section className="mt-4 rounded-lg border border-stroke p-3 dark:border-strokedark">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <p className="text-sm font-semibold text-black dark:text-white">Width Simulator</p>
+          <p className="text-xs text-bodydark2">
+            핸들을 드래그해서 실제 컨테이너 width를 바꿉니다.
+          </p>
+        </div>
+        <div className="text-right text-xs text-bodydark2">
+          <p className="font-semibold text-black dark:text-white">{width}px</p>
+          <p>
+            {labelVariant(activeVariantKey)} · {containerSize.width}×{containerSize.height}
+          </p>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto rounded border border-stroke bg-gray-2 p-3 dark:border-strokedark dark:bg-form-input">
+        <div
+          ref={rulerRef}
+          className="relative min-h-12 border-t border-dashed border-bodydark2/40"
+          style={{ width: maxWidth + 16 }}
+          onPointerDown={handlePointerDown}
+          onPointerMove={(event) => {
+            if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+              updateWidthFromPointer(event);
+            }
+          }}
+        >
+          <div
+            className="relative bg-white shadow-sm dark:bg-boxdark"
+            style={{ width, height: containerSize.height }}
+          >
+            <SimulatedGraphic graphic={graphic} containerSize={containerSize} width={width} />
+            <div
+              role="slider"
+              aria-label="preview width"
+              aria-valuemin={minWidth}
+              aria-valuemax={maxWidth}
+              aria-valuenow={width}
+              tabIndex={0}
+              className="absolute left-full top-0 z-40 h-full w-4 cursor-ew-resize touch-none rounded-r border border-primary bg-primary/15 outline-none ring-primary focus:ring-2"
+              onPointerDown={handlePointerDown}
+              onPointerMove={(event) => {
+                if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                  updateWidthFromPointer(event);
+                }
+              }}
+              onKeyDown={(event) => {
+                if (event.key === 'ArrowLeft') onWidthChange(clamp(width - 1, minWidth, maxWidth));
+                if (event.key === 'ArrowRight') onWidthChange(clamp(width + 1, minWidth, maxWidth));
+              }}
+            >
+              <span className="absolute left-1/2 top-1/2 h-8 w-1 -translate-x-1/2 -translate-y-1/2 rounded bg-primary" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SimulatedGraphic({
+  graphic,
+  containerSize,
+  width,
+}: {
+  graphic: ResponsiveAdvertiseGraphic;
+  containerSize: GraphicSize;
+  width: number;
+}) {
+  return (
+    <div className="relative h-full w-full overflow-hidden rounded-lg border border-stroke bg-gray-2 dark:border-strokedark">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        key={graphic.background.assetUrl}
+        src={normalizeAssetUrl(graphic.background.assetUrl)}
+        alt="background"
+        className="absolute inset-0 h-full w-full object-fill"
+      />
+      {(graphic.foregroundElements ?? []).map((el, i) => {
+        if (!el?.assetUrl || !el.layoutByWidth) return null;
+        const layout =
+          resolveResponsiveEntry(el.layoutByWidth, width)?.value ?? el.layoutByWidth._default;
+        if (!layout) return null;
+        const frameStyle = getElementFrameStyle({
+          constraints: layout.constraints ?? {},
+          size: layout.size,
+          designSize: el.designSize,
+        });
+        return (
+          <div key={`${i}-${el.assetUrl}`} className="absolute" style={frameStyle}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={normalizeAssetUrl(el.assetUrl)}
+              alt={`element-${i}`}
+              className="h-full w-full object-contain"
+            />
+          </div>
+        );
+      })}
+      <div className="pointer-events-none absolute bottom-[8px] right-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] bg-opacity-90 px-[7px] py-[3px] text-xs font-medium leading-none text-white">
+        AD
       </div>
     </div>
   );

@@ -3,11 +3,9 @@
 import {
   type AdvertiseElementAsset,
   type ElementConstraints,
-  type GraphicSize,
   normalizeAdvertiseAssetUrl,
   resolveResponsiveValue,
   type ResponsiveAdvertiseGraphic,
-  toPercent,
 } from './advertise-graphic';
 import { useElementWidth } from './useElementWidth';
 
@@ -20,7 +18,6 @@ interface AdvertiseGraphicProps {
 
 function getElementStyle(
   element: AdvertiseElementAsset,
-  containerSize: GraphicSize,
   containerWidth: number,
 ): CSSProperties | null {
   const layout =
@@ -30,27 +27,26 @@ function getElementStyle(
 
   const constraints: ElementConstraints = layout.constraints ?? {};
   const size = layout.size;
-  const { width: cw, height: ch } = containerSize;
   const isWidthStretched = constraints.left !== undefined && constraints.right !== undefined;
   const isHeightStretched = constraints.top !== undefined && constraints.bottom !== undefined;
 
   return {
-    top: constraints.top !== undefined ? toPercent(constraints.top, ch) : undefined,
-    left: constraints.left !== undefined ? toPercent(constraints.left, cw) : undefined,
-    bottom: constraints.bottom !== undefined ? toPercent(constraints.bottom, ch) : undefined,
-    right: constraints.right !== undefined ? toPercent(constraints.right, cw) : undefined,
+    top: constraints.top,
+    left: constraints.left,
+    bottom: constraints.bottom,
+    right: constraints.right,
     width:
       size?.width !== undefined
-        ? toPercent(size.width, cw)
+        ? size.width
         : isWidthStretched
           ? undefined
-          : toPercent(element.designSize.width, cw),
+          : element.designSize.width,
     height:
       size?.height !== undefined
-        ? toPercent(size.height, ch)
+        ? size.height
         : isHeightStretched
           ? undefined
-          : toPercent(element.designSize.height, ch),
+          : element.designSize.height,
   };
 }
 
@@ -64,7 +60,7 @@ export default function AdvertiseGraphic({ graphic, priority }: AdvertiseGraphic
     <div
       ref={ref}
       className="relative w-full overflow-hidden"
-      style={{ aspectRatio: `${containerSize.width} / ${containerSize.height}` }}
+      style={{ height: containerSize.height }}
     >
       {/* SVG/PNG/JPG/WebP 모두 같은 방식으로 렌더링하기 위해 next/image 대신 img를 사용한다. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -77,7 +73,7 @@ export default function AdvertiseGraphic({ graphic, priority }: AdvertiseGraphic
 
       {graphic.foregroundElements.map((element, index) => {
         if (!element.assetUrl) return null;
-        const style = getElementStyle(element, containerSize, containerWidth);
+        const style = getElementStyle(element, containerWidth);
         if (!style) return null;
 
         return (
@@ -92,6 +88,10 @@ export default function AdvertiseGraphic({ graphic, priority }: AdvertiseGraphic
           </div>
         );
       })}
+
+      <div className="bg-opacity-90 pointer-events-none absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[7px] py-[3px] text-xs leading-none font-medium text-white">
+        AD
+      </div>
     </div>
   );
 }

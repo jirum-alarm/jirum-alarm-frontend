@@ -11,7 +11,7 @@ export interface UploadedAssetDesignSize {
   height: number;
 }
 
-const DESIGN_SCALE = 4;
+const RASTER_DESIGN_SCALE = 4;
 
 function getUploadContentType(file: File) {
   if (file.type) return file.type;
@@ -74,9 +74,11 @@ async function getUploadedAssetDesignSize(
     : await getRasterSize(file);
   if (!intrinsicSize) return undefined;
 
+  const designScale = isSvg ? 1 : RASTER_DESIGN_SCALE;
+
   return {
-    width: Math.round((intrinsicSize.width / DESIGN_SCALE) * 100) / 100,
-    height: Math.round((intrinsicSize.height / DESIGN_SCALE) * 100) / 100,
+    width: Math.round((intrinsicSize.width / designScale) * 100) / 100,
+    height: Math.round((intrinsicSize.height / designScale) * 100) / 100,
   };
 }
 

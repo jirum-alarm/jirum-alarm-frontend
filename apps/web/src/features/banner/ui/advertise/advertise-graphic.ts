@@ -89,10 +89,6 @@ export function parseAdvertiseGraphic(value: unknown): ResponsiveAdvertiseGraphi
   };
 }
 
-export function toPercent(value: number, base: number) {
-  return `${(value / base) * 100}%`;
-}
-
 export function normalizeAdvertiseAssetUrl(source: string) {
   try {
     const url = new URL(source);
