@@ -35,9 +35,7 @@ export default function PriceContextBadge({ priceContext }: PriceContextBadgePro
       </div>
       <div className="mt-2.5 flex items-center justify-between border-t border-[#FFD6D0] pt-2.5">
         <span className="text-sm text-gray-500">다나와 최저가</span>
-        <span className="text-sm font-medium text-gray-700">
-          {danawaPrice.toLocaleString()}원
-        </span>
+        <span className="text-sm font-medium text-gray-700">{danawaPrice.toLocaleString()}원</span>
       </div>
       {hasRange && (
         <div className="mt-1.5 flex items-center justify-between">
