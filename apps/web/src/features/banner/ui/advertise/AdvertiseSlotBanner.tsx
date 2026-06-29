@@ -41,21 +41,29 @@ function releasePageViewId() {
 
 interface AdvertiseSlotBannerProps {
   slotLocation: AdvertiseSlotLocation;
+  creative?: AdvertiseCreative;
   className?: string;
+  surfaceClassName?: string;
   priority?: boolean;
 }
 
 export default function AdvertiseSlotBanner({
   slotLocation,
+  creative: creativeProp,
   className,
+  surfaceClassName,
   priority,
 }: AdvertiseSlotBannerProps) {
   const pathname = usePathname();
   const [pageViewId, setPageViewId] = useState<string | null>(null);
-  const { data: ads = [] } = useQuery(AdvertisementQueries.activeAds({ slotLocation }));
+  const activeAdsQuery = AdvertisementQueries.activeAds({ slotLocation });
+  const { data: ads = [] } = useQuery({
+    ...activeAdsQuery,
+    enabled: !creativeProp,
+  });
   const recordImpressions = useMutation(AdvertisementMutations.recordAdImpressions());
   const recordClick = useMutation(AdvertisementMutations.recordAdClick());
-  const creative = ads[0];
+  const creative = creativeProp ?? ads[0];
 
   useEffect(() => {
     setPageViewId(reservePageViewId(pathname));
@@ -103,6 +111,7 @@ export default function AdvertiseSlotBanner({
     <AdvertiseBanner
       creative={creative}
       className={className}
+      surfaceClassName={surfaceClassName}
       priority={priority}
       onImpression={handleImpression}
       onClickAd={handleClick}

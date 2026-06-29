@@ -1,10 +1,14 @@
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { getQueryClient } from '@/app/(app)/react-query/query-client';
 import { checkDevice } from '@/app/actions/agent';
 
+import { AdvertiseSlotLocation } from '@/shared/api/gql/graphql';
 import { Advertisement } from '@/shared/config/advertisement';
 
+import { AdvertisementQueries } from '@/entities/advertisement/api';
 import { getPromotionSections } from '@/entities/promotion/api/getPromotionSections';
 
 import PromotionSectionList from '@/widgets/home/ui/PromotionSectionList';
@@ -18,6 +22,15 @@ import MobileJirumRankingContainer from './mobile/JirumRankingContainer';
 async function HomeContainerV2() {
   const { isMobile } = await checkDevice();
   const sections = await getPromotionSections();
+  const queryClient = getQueryClient();
+
+  if (isMobile) {
+    await queryClient.prefetchQuery(
+      AdvertisementQueries.activeAds({
+        slotLocation: AdvertiseSlotLocation.HomeCarouselBanner,
+      }),
+    );
+  }
 
   const renderDesktop = () => {
     return (
@@ -32,7 +45,9 @@ async function HomeContainerV2() {
       return (
         <>
           <MobileHomeHeader />
-          <MobileBackgroundHeader />
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <MobileBackgroundHeader />
+          </HydrationBoundary>
         </>
       );
     }

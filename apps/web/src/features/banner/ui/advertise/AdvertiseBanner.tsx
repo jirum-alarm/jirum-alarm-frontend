@@ -18,6 +18,7 @@ import { useElementWidth } from './useElementWidth';
 interface AdvertiseBannerProps {
   creative: AdvertiseCreative;
   className?: string;
+  surfaceClassName?: string;
   priority?: boolean;
   onImpression?: (creative: AdvertiseCreative) => boolean | void;
   onClickAd?: (creative: AdvertiseCreative) => void;
@@ -26,6 +27,7 @@ interface AdvertiseBannerProps {
 export default function AdvertiseBanner({
   creative,
   className,
+  surfaceClassName,
   priority,
   onImpression,
   onClickAd,
@@ -55,7 +57,10 @@ export default function AdvertiseBanner({
       <Link
         ref={ref}
         href={creative.targetUrl}
-        className="relative block max-w-full overflow-hidden rounded-lg border border-gray-200 bg-gray-100"
+        className={cn(
+          'relative block max-w-full overflow-hidden rounded-lg border border-gray-200 bg-gray-100',
+          surfaceClassName,
+        )}
         style={{ width: widthStyle }}
         aria-label={creative.displayTitle ?? creative.internalId}
         onClick={() => onClickAd?.(creative)}
