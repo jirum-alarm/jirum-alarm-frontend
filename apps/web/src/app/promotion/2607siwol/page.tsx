@@ -14,6 +14,16 @@ const image = `${METADATA_SERVICE_URL}/opengraph-image.webp`;
 export const metadata: Metadata = {
   title,
   description,
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+    },
+  },
   alternates: {
     canonical: url,
   },
