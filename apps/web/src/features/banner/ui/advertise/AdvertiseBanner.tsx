@@ -19,7 +19,7 @@ interface AdvertiseBannerProps {
   creative: AdvertiseCreative;
   className?: string;
   priority?: boolean;
-  onImpression?: (creative: AdvertiseCreative) => void;
+  onImpression?: (creative: AdvertiseCreative) => boolean | void;
   onClickAd?: (creative: AdvertiseCreative) => void;
 }
 
@@ -38,8 +38,9 @@ export default function AdvertiseBanner({
   useEffect(() => {
     if (!inView) return;
     if (impressedCreativeIdRef.current === creative.id) return;
+    const didHandleImpression = onImpression?.(creative);
+    if (didHandleImpression === false) return;
     impressedCreativeIdRef.current = creative.id;
-    onImpression?.(creative);
   }, [creative, inView, onImpression]);
 
   if (!graphic) return null;
