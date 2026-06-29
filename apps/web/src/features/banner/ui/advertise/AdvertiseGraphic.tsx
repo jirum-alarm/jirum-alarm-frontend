@@ -16,6 +16,8 @@ import type { CSSProperties } from 'react';
 interface AdvertiseGraphicProps {
   graphic: ResponsiveAdvertiseGraphic;
   containerSize: GraphicSize;
+  widthStyle?: CSSProperties['width'];
+  isLayoutReady?: boolean;
   priority?: boolean;
 }
 
@@ -95,6 +97,8 @@ function getElementStyle(
 export default function AdvertiseGraphic({
   graphic,
   containerSize,
+  widthStyle,
+  isLayoutReady = true,
   priority,
 }: AdvertiseGraphicProps) {
   const containerWidth = containerSize.width;
@@ -103,7 +107,7 @@ export default function AdvertiseGraphic({
   return (
     <div
       className="relative overflow-hidden"
-      style={{ width: containerSize.width, height: containerSize.height }}
+      style={{ width: widthStyle ?? containerSize.width, height: containerSize.height }}
     >
       {/* SVG/PNG/JPG/WebP 모두 같은 방식으로 렌더링하기 위해 next/image 대신 img를 사용한다. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -114,29 +118,34 @@ export default function AdvertiseGraphic({
         className="absolute inset-0 h-full w-full object-fill"
       />
 
-      {graphic.foregroundElements.map((element, index) => {
-        if (!resolveElementVisibility(element, containerWidth)) return null;
-        const elementAssetUrl = resolveAssetUrl(element, containerWidth);
-        if (!elementAssetUrl) return null;
-        const style = getElementStyle(
-          element,
-          { width: containerWidth, height: containerSize.height },
-          containerWidth,
-        );
-        if (!style) return null;
+      <div
+        className="absolute inset-0 transition-opacity duration-300 ease-out"
+        style={{ opacity: isLayoutReady ? 1 : 0 }}
+      >
+        {graphic.foregroundElements.map((element, index) => {
+          if (!resolveElementVisibility(element, containerWidth)) return null;
+          const elementAssetUrl = resolveAssetUrl(element, containerWidth);
+          if (!elementAssetUrl) return null;
+          const style = getElementStyle(
+            element,
+            { width: containerWidth, height: containerSize.height },
+            containerWidth,
+          );
+          if (!style) return null;
 
-        return (
-          <div key={`${index}-${elementAssetUrl}`} className="absolute" style={style}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={normalizeAdvertiseAssetUrl(elementAssetUrl)}
-              alt=""
-              loading={priority ? 'eager' : 'lazy'}
-              className="h-full w-full object-fill"
-            />
-          </div>
-        );
-      })}
+          return (
+            <div key={`${index}-${elementAssetUrl}`} className="absolute" style={style}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={normalizeAdvertiseAssetUrl(elementAssetUrl)}
+                alt=""
+                loading={priority ? 'eager' : 'lazy'}
+                className="h-full w-full object-fill"
+              />
+            </div>
+          );
+        })}
+      </div>
 
       <div className="pointer-events-none absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs leading-none font-medium text-white">
         AD

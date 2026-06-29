@@ -43,24 +43,30 @@ export default function AdvertiseBanner({
   }, [creative, inView, onImpression]);
 
   if (!graphic) return null;
-  const measuredWidth = availableWidth || graphic.size._default.width;
-  const variantSize = resolveResponsiveValue(graphic.size, measuredWidth) ?? graphic.size._default;
-  const renderSize = { width: measuredWidth, height: variantSize.height };
+  const hasMeasuredWidth = availableWidth > 0;
+  const renderWidth = hasMeasuredWidth ? availableWidth : graphic.size._default.width;
+  const variantSize = resolveResponsiveValue(graphic.size, renderWidth) ?? graphic.size._default;
+  const renderSize = { width: renderWidth, height: variantSize.height };
+  const widthStyle = hasMeasuredWidth ? renderSize.width : '100%';
 
   return (
     <div ref={containerRef} className={cn('w-full', className)}>
       <Link
         ref={ref}
         href={creative.targetUrl}
-        target="_blank"
-        rel="noopener noreferrer"
         className="relative block max-w-full overflow-hidden rounded-lg border border-gray-200 bg-gray-100"
-        style={{ width: renderSize.width }}
+        style={{ width: widthStyle }}
         aria-label={creative.displayTitle ?? creative.internalId}
         onClick={() => onClickAd?.(creative)}
       >
         <motion.div whileTap={{ scale: 0.98 }} transition={{ duration: 0.1 }}>
-          <AdvertiseGraphic graphic={graphic} containerSize={renderSize} priority={priority} />
+          <AdvertiseGraphic
+            graphic={graphic}
+            containerSize={renderSize}
+            widthStyle={widthStyle}
+            isLayoutReady={hasMeasuredWidth}
+            priority={priority}
+          />
         </motion.div>
       </Link>
     </div>
