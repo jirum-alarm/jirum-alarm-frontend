@@ -7,12 +7,14 @@ import {
   AdSlotLocation,
   AdSlotType,
   CreateAdInput,
+  GraphicSize,
   ResponsiveAdvertiseGraphic,
   useCreateAd,
   useUpdateAd,
 } from '@/hooks/graphql/advertisement';
 
-import AssetUploader from './AssetUploader';
+import { normalizeAssetUrl } from './assetUrl';
+import GraphicLayerEditor from './GraphicLayerEditor';
 import GraphicPreview from './GraphicPreview';
 
 const SLOT_LOCATIONS: { value: AdSlotLocation; label: string }[] = [
@@ -22,13 +24,47 @@ const SLOT_LOCATIONS: { value: AdSlotLocation; label: string }[] = [
   { value: 'product_main_banner', label: '프로덕트 메인 배너' },
 ];
 
+const DEFAULT_BACKGROUND_SIZE = { width: 320, height: 92 };
+const DESKTOP_BACKGROUND_SIZE = { width: 548, height: 92 };
+const DEFAULT_ELEMENT_SIZE = { width: 100, height: 92 };
+
+const DEFAULT_FOREGROUND_ELEMENTS = [
+  {
+    designSize: DEFAULT_ELEMENT_SIZE,
+    assetUrl: '',
+    layoutByWidth: {
+      _default: {
+        constraints: { left: 16, top: 0, bottom: 0 },
+      },
+      '>=768': {
+        constraints: { left: 16, top: 0, bottom: 0 },
+      },
+    },
+  },
+  {
+    designSize: DEFAULT_ELEMENT_SIZE,
+    assetUrl: '',
+    layoutByWidth: {
+      _default: {
+        constraints: { right: 0, top: 0, bottom: 0 },
+      },
+      '>=768': {
+        constraints: { right: 40, top: 0, bottom: 0 },
+      },
+    },
+  },
+];
+
 const SAMPLE_GRAPHIC = `{
-  "size": { "_default": { "width": 360, "height": 120 } },
+  "size": {
+    "_default": { "width": ${DEFAULT_BACKGROUND_SIZE.width}, "height": ${DEFAULT_BACKGROUND_SIZE.height} },
+    ">=768": { "width": ${DESKTOP_BACKGROUND_SIZE.width}, "height": ${DESKTOP_BACKGROUND_SIZE.height} }
+  },
   "background": {
-    "designSize": { "width": 360, "height": 120 },
+    "designSize": { "width": ${DEFAULT_BACKGROUND_SIZE.width}, "height": ${DEFAULT_BACKGROUND_SIZE.height} },
     "assetUrl": ""
   },
-  "foregroundElements": []
+  "foregroundElements": ${JSON.stringify(DEFAULT_FOREGROUND_ELEMENTS, null, 4)}
 }`;
 
 // 입력 제한 (백엔드 검증과 일치)
@@ -37,6 +73,54 @@ const CDN_BASE = 'https://cdn.jirum-alarm.com';
 
 const inputClass =
   'w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary';
+
+function normalizeGraphicAssetUrls(
+  graphic: ResponsiveAdvertiseGraphic,
+): ResponsiveAdvertiseGraphic {
+  return {
+    ...graphic,
+    background: {
+      ...graphic.background,
+      assetUrl: normalizeAssetUrl(graphic.background.assetUrl),
+    },
+    foregroundElements: (graphic.foregroundElements ?? [])
+      .filter((element) => element.assetUrl?.trim())
+      .map((element) => ({
+        ...element,
+        assetUrl: normalizeAssetUrl(element.assetUrl),
+      })),
+  };
+}
+
+function upsertUploadedForegroundElement(
+  elements: ResponsiveAdvertiseGraphic['foregroundElements'] | undefined,
+  assetUrl: string,
+  designSize: GraphicSize | undefined,
+) {
+  const foregroundElements = elements ?? [];
+  const emptyIndex = foregroundElements.findIndex((element) => !element.assetUrl?.trim());
+
+  if (emptyIndex >= 0) {
+    return foregroundElements.map((element, index) =>
+      index === emptyIndex
+        ? { ...element, assetUrl, designSize: designSize ?? element.designSize }
+        : element,
+    );
+  }
+
+  return [
+    ...foregroundElements,
+    {
+      designSize: designSize ?? DEFAULT_ELEMENT_SIZE,
+      assetUrl,
+      layoutByWidth: {
+        _default: {
+          constraints: { top: 0, left: 0 },
+        },
+      },
+    },
+  ];
+}
 
 const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditInitial }) => {
   const router = useRouter();
@@ -54,20 +138,97 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
     initial ? JSON.stringify(initial.graphic, null, 2) : SAMPLE_GRAPHIC,
   );
 
-  // 업로드한 assetUrl을 graphic.background.assetUrl에 자동 주입(파싱 가능할 때).
-  // 파싱 불가하면 textarea에 직접 넣도록 안내만.
-  const handleAssetUploaded = (assetUrl: string) => {
+  const patchGraphicText = (
+    assetUrl: string,
+    patcher: (graphic: Partial<ResponsiveAdvertiseGraphic>) => Partial<ResponsiveAdvertiseGraphic>,
+    fallbackMessage: (assetUrl: string) => string,
+  ) => {
     try {
       const g = JSON.parse(graphicText);
-      g.background = { ...(g.background ?? {}), assetUrl };
-      if (!g.background.designSize)
-        g.background.designSize = g.size?._default ?? { width: 0, height: 0 };
-      setGraphicText(JSON.stringify(g, null, 2));
+      setGraphicText(JSON.stringify(patcher(g), null, 2));
     } catch {
-      alert(
-        `graphic JSON이 유효하지 않아 자동 주입 실패. 아래 URL을 background.assetUrl에 직접 넣으세요:\n${assetUrl}`,
-      );
+      alert(fallbackMessage(assetUrl));
     }
+  };
+
+  // 업로드한 assetUrl을 graphic.background.assetUrl에 자동 주입(파싱 가능할 때).
+  // 파싱 불가하면 textarea에 직접 넣도록 안내만.
+  const handleBackgroundAssetUploaded = (assetUrl: string, designSize?: GraphicSize) => {
+    patchGraphicText(
+      assetUrl,
+      (g) => {
+        const defaultSize = g.size?._default ?? DEFAULT_BACKGROUND_SIZE;
+        return {
+          ...g,
+          size: g.size ?? { _default: defaultSize, '>=768': DESKTOP_BACKGROUND_SIZE },
+          background: {
+            ...(g.background ?? {}),
+            designSize: designSize ?? g.background?.designSize ?? defaultSize,
+            assetUrl,
+          },
+          foregroundElements: g.foregroundElements ?? DEFAULT_FOREGROUND_ELEMENTS,
+        };
+      },
+      (url) =>
+        `graphic JSON이 유효하지 않아 자동 주입 실패. 아래 URL을 background.assetUrl에 직접 넣으세요:\n${url}`,
+    );
+  };
+
+  const handleForegroundAssetUploaded = (assetUrl: string, designSize?: GraphicSize) => {
+    patchGraphicText(
+      assetUrl,
+      (g) => {
+        const defaultSize = g.size?._default ?? DEFAULT_BACKGROUND_SIZE;
+        return {
+          ...g,
+          size: g.size ?? { _default: defaultSize, '>=768': DESKTOP_BACKGROUND_SIZE },
+          background: g.background ?? { designSize: defaultSize, assetUrl: '' },
+          foregroundElements: upsertUploadedForegroundElement(
+            g.foregroundElements,
+            assetUrl,
+            designSize,
+          ),
+        };
+      },
+      (url) =>
+        `graphic JSON이 유효하지 않아 자동 주입 실패. 아래 element를 foregroundElements에 직접 추가하세요:\n${JSON.stringify(
+          {
+            designSize: DEFAULT_ELEMENT_SIZE,
+            assetUrl: url,
+            layoutByWidth: {
+              _default: {
+                constraints: { top: 0, left: 0 },
+              },
+            },
+          },
+          null,
+          2,
+        )}`,
+    );
+  };
+
+  const handleElementAssetUploaded = (
+    index: number,
+    assetUrl: string,
+    designSize?: GraphicSize,
+  ) => {
+    if (!parsedGraphic.graphic) return;
+
+    setGraphicText(
+      JSON.stringify(
+        {
+          ...parsedGraphic.graphic,
+          foregroundElements: parsedGraphic.graphic.foregroundElements.map(
+            (element, elementIndex) =>
+              elementIndex === index
+                ? { ...element, assetUrl, designSize: designSize ?? element.designSize }
+                : element,
+          ),
+        },
+        null,
+        2,
+      ),
+    );
   };
 
   // graphic JSON 파싱 (프리뷰 + 제출 공용)
@@ -102,6 +263,22 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
       prev.includes(loc) ? prev.filter((l) => l !== loc) : [...prev, loc],
     );
 
+  const handleRemoveForegroundElement = (index: number) => {
+    if (!parsedGraphic.graphic) return;
+    setGraphicText(
+      JSON.stringify(
+        {
+          ...parsedGraphic.graphic,
+          foregroundElements: parsedGraphic.graphic.foregroundElements.filter(
+            (_, i) => i !== index,
+          ),
+        },
+        null,
+        2,
+      ),
+    );
+  };
+
   const handleSubmit = () => {
     if (!internalId.trim()) return alert('internalId 를 입력하세요.');
     if (internalId.length > LIMIT.internalId)
@@ -123,9 +300,14 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
     if (!g.size?._default) return alert('graphic.size._default 가 필요합니다.');
     if (!g.background?.assetUrl)
       return alert('배경 에셋을 업로드하거나 background.assetUrl 을 입력하세요.');
-    const urls = [g.background.assetUrl, ...(g.foregroundElements ?? []).map((e) => e?.assetUrl)];
+    const urls = [
+      g.background.assetUrl,
+      ...(g.foregroundElements ?? []).map((e) => e?.assetUrl).filter((url) => Boolean(url)),
+    ];
     const bad = urls.find((u) => !u || !u.startsWith(CDN_BASE));
     if (bad !== undefined) return alert(`모든 assetUrl은 ${CDN_BASE} 도메인이어야 합니다: ${bad}`);
+
+    const normalizedGraphic = normalizeGraphicAssetUrls(parsedGraphic.graphic);
 
     const input: CreateAdInput = {
       internalId,
@@ -137,7 +319,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
       targetUrl,
       displayTitle: displayTitle || undefined,
       isActive,
-      graphic: parsedGraphic.graphic,
+      graphic: normalizedGraphic,
     };
 
     if (mode === 'create') createAd({ variables: { input } });
@@ -145,6 +327,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
   };
 
   const loading = creating || updating;
+  const graphic = parsedGraphic.graphic;
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -286,13 +469,18 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
         </button>
       </div>
 
-      {/* 우: graphic 편집 + 프리뷰 */}
+      {/* 우: graphic 2Layer 편집 + 프리뷰 */}
       <div className="flex flex-col gap-4 rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
-        <AssetUploader
-          label="배경 에셋 업로드 (S3) → background.assetUrl 자동 입력"
-          value={parsedGraphic.graphic?.background?.assetUrl}
-          onUploaded={handleAssetUploaded}
+        <GraphicLayerEditor
+          graphic={graphic}
+          onGraphicChange={(nextGraphic) => setGraphicText(JSON.stringify(nextGraphic, null, 2))}
+          onBackgroundUploaded={handleBackgroundAssetUploaded}
+          onForegroundUploaded={handleForegroundAssetUploaded}
+          onElementAssetUploaded={handleElementAssetUploaded}
+          onRemoveForegroundElement={handleRemoveForegroundElement}
         />
+
+        <GraphicPreview graphic={graphic} />
 
         <div>
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
@@ -308,8 +496,6 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
             <p className="mt-1 text-xs text-danger">JSON 오류: {parsedGraphic.error}</p>
           )}
         </div>
-
-        <GraphicPreview graphic={parsedGraphic.graphic} />
       </div>
     </div>
   );

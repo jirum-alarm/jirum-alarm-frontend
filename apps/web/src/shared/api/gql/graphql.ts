@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -2312,12 +2313,18 @@ export type ActiveAdsQuery = {
   activeAds: Array<{
     __typename?: 'AdvertiseCreative';
     id: string;
+    internalId: string;
+    startAt: any;
+    endAt: any;
     slotType: AdvertiseSlotType;
     slotLocation: Array<AdvertiseSlotLocation>;
     slotPriority: number;
     graphic: any;
     displayTitle?: string | null;
     targetUrl: string;
+    isActive: boolean;
+    createdAt: any;
+    modifiedAt: any;
     displayPrice?: {
       __typename?: 'AdvertisePrice';
       discountText?: string | null;
@@ -3427,6 +3434,9 @@ export const ActiveAdsDocument = new TypedDocumentString(`
     query activeAds($slotLocation: AdvertiseSlotLocation!) {
   activeAds(slotLocation: $slotLocation) {
     id
+    internalId
+    startAt
+    endAt
     slotType
     slotLocation
     slotPriority
@@ -3438,6 +3448,9 @@ export const ActiveAdsDocument = new TypedDocumentString(`
     }
     displayTitle
     targetUrl
+    isActive
+    createdAt
+    modifiedAt
   }
 }
     `) as unknown as TypedDocumentString<ActiveAdsQuery, ActiveAdsQueryVariables>;

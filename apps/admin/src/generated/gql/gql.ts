@@ -12,6 +12,15 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+  '\n  query AdsByAdmin($slotLocation: AdvertiseSlotLocation, $isActive: Boolean) {\n    adsByAdmin(slotLocation: $slotLocation, isActive: $isActive) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n': typeof types.AdsByAdminDocument;
+  '\n  query AdReport($from: DateTime!, $to: DateTime!, $creativeId: Int) {\n    adReport(from: $from, to: $to, creativeId: $creativeId) {\n      creativeId\n      internalId\n      slotLocation\n      impressions\n      clicks\n      ctr\n    }\n  }\n': typeof types.AdReportDocument;
+  '\n  query ActiveAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n': typeof types.ActiveAdsDocument;
+  '\n  mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {\n    recordAdImpressions(events: $events)\n  }\n': typeof types.RecordAdImpressionsDocument;
+  '\n  mutation RecordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {\n    recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)\n  }\n': typeof types.RecordAdClickDocument;
+  '\n  mutation CreateAdAssetUploadUrl($contentType: String!) {\n    createAdAssetUploadUrl(contentType: $contentType) {\n      uploadUrl\n      assetUrl\n    }\n  }\n': typeof types.CreateAdAssetUploadUrlDocument;
+  '\n  mutation CreateAd($input: CreateAdvertiseInput!) {\n    createAd(input: $input)\n  }\n': typeof types.CreateAdDocument;
+  '\n  mutation UpdateAd($id: Int!, $input: UpdateAdvertiseInput!) {\n    updateAd(id: $id, input: $input)\n  }\n': typeof types.UpdateAdDocument;
+  '\n  mutation SetAdActive($id: Int!, $isActive: Boolean!) {\n    setAdActive(id: $id, isActive: $isActive)\n  }\n': typeof types.SetAdActiveDocument;
   '\n  mutation MutationAdminLogin($email: String!, $password: String!) {\n    adminLogin(email: $email, password: $password) {\n      accessToken\n      refreshToken\n    }\n  }\n': typeof types.MutationAdminLoginDocument;
   '\n  query QueryAdminMe {\n    adminMe {\n      id\n      name\n      email\n    }\n  }\n': typeof types.QueryAdminMeDocument;
   '\n  query QueryBrandProductsOrderByMatchCount(\n    $limit: Int!\n    $searchAfter: [String!]\n    $brandItemId: Int\n    $title: String\n  ) {\n    brandProductsOrderByMatchCount(\n      limit: $limit\n      searchAfter: $searchAfter\n      brandItemId: $brandItemId\n      title: $title\n    ) {\n      id\n      danawaProductId\n      brandItemId\n      brandName\n      productName\n      volume\n      amount\n      matchCount\n      pendingVerificationCount\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryBrandProductsOrderByMatchCountDocument;
@@ -76,6 +85,24 @@ type Documents = {
   '\n  query QueryPendingVerificationsTotalCount(\n    $brandProductId: Int\n    $matchStatus: [ProductMappingMatchStatus!]\n    $target: ProductMappingTarget\n    $verificationStatus: [ProductMappingVerificationStatus!]\n  ) {\n    pendingVerificationsTotalCount(\n      brandProductId: $brandProductId\n      matchStatus: $matchStatus\n      target: $target\n      verificationStatus: $verificationStatus\n    )\n  }\n': typeof types.QueryPendingVerificationsTotalCountDocument;
 };
 const documents: Documents = {
+  '\n  query AdsByAdmin($slotLocation: AdvertiseSlotLocation, $isActive: Boolean) {\n    adsByAdmin(slotLocation: $slotLocation, isActive: $isActive) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n':
+    types.AdsByAdminDocument,
+  '\n  query AdReport($from: DateTime!, $to: DateTime!, $creativeId: Int) {\n    adReport(from: $from, to: $to, creativeId: $creativeId) {\n      creativeId\n      internalId\n      slotLocation\n      impressions\n      clicks\n      ctr\n    }\n  }\n':
+    types.AdReportDocument,
+  '\n  query ActiveAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n':
+    types.ActiveAdsDocument,
+  '\n  mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {\n    recordAdImpressions(events: $events)\n  }\n':
+    types.RecordAdImpressionsDocument,
+  '\n  mutation RecordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {\n    recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)\n  }\n':
+    types.RecordAdClickDocument,
+  '\n  mutation CreateAdAssetUploadUrl($contentType: String!) {\n    createAdAssetUploadUrl(contentType: $contentType) {\n      uploadUrl\n      assetUrl\n    }\n  }\n':
+    types.CreateAdAssetUploadUrlDocument,
+  '\n  mutation CreateAd($input: CreateAdvertiseInput!) {\n    createAd(input: $input)\n  }\n':
+    types.CreateAdDocument,
+  '\n  mutation UpdateAd($id: Int!, $input: UpdateAdvertiseInput!) {\n    updateAd(id: $id, input: $input)\n  }\n':
+    types.UpdateAdDocument,
+  '\n  mutation SetAdActive($id: Int!, $isActive: Boolean!) {\n    setAdActive(id: $id, isActive: $isActive)\n  }\n':
+    types.SetAdActiveDocument,
   '\n  mutation MutationAdminLogin($email: String!, $password: String!) {\n    adminLogin(email: $email, password: $password) {\n      accessToken\n      refreshToken\n    }\n  }\n':
     types.MutationAdminLoginDocument,
   '\n  query QueryAdminMe {\n    adminMe {\n      id\n      name\n      email\n    }\n  }\n':
@@ -202,6 +229,60 @@ const documents: Documents = {
     types.QueryPendingVerificationsTotalCountDocument,
 };
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query AdsByAdmin($slotLocation: AdvertiseSlotLocation, $isActive: Boolean) {\n    adsByAdmin(slotLocation: $slotLocation, isActive: $isActive) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n',
+): typeof import('./graphql').AdsByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query AdReport($from: DateTime!, $to: DateTime!, $creativeId: Int) {\n    adReport(from: $from, to: $to, creativeId: $creativeId) {\n      creativeId\n      internalId\n      slotLocation\n      impressions\n      clicks\n      ctr\n    }\n  }\n',
+): typeof import('./graphql').AdReportDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query ActiveAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n',
+): typeof import('./graphql').ActiveAdsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {\n    recordAdImpressions(events: $events)\n  }\n',
+): typeof import('./graphql').RecordAdImpressionsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation RecordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {\n    recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)\n  }\n',
+): typeof import('./graphql').RecordAdClickDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation CreateAdAssetUploadUrl($contentType: String!) {\n    createAdAssetUploadUrl(contentType: $contentType) {\n      uploadUrl\n      assetUrl\n    }\n  }\n',
+): typeof import('./graphql').CreateAdAssetUploadUrlDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation CreateAd($input: CreateAdvertiseInput!) {\n    createAd(input: $input)\n  }\n',
+): typeof import('./graphql').CreateAdDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation UpdateAd($id: Int!, $input: UpdateAdvertiseInput!) {\n    updateAd(id: $id, input: $input)\n  }\n',
+): typeof import('./graphql').UpdateAdDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation SetAdActive($id: Int!, $isActive: Boolean!) {\n    setAdActive(id: $id, isActive: $isActive)\n  }\n',
+): typeof import('./graphql').SetAdActiveDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

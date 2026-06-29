@@ -1,30 +1,26 @@
 import { gql } from '@apollo/client';
 
-const AD_CREATIVE_FIELDS = `
-  id
-  internalId
-  startAt
-  endAt
-  slotType
-  slotLocation
-  slotPriority
-  graphic
-  displayPrice {
-    discountText
-    originalPrice
-    displayPrice
-  }
-  displayTitle
-  targetUrl
-  isActive
-  createdAt
-  modifiedAt
-`;
-
 export const QueryAdsByAdmin = gql`
   query AdsByAdmin($slotLocation: AdvertiseSlotLocation, $isActive: Boolean) {
     adsByAdmin(slotLocation: $slotLocation, isActive: $isActive) {
-      ${AD_CREATIVE_FIELDS}
+      id
+      internalId
+      startAt
+      endAt
+      slotType
+      slotLocation
+      slotPriority
+      graphic
+      displayPrice {
+        discountText
+        originalPrice
+        displayPrice
+      }
+      displayTitle
+      targetUrl
+      isActive
+      createdAt
+      modifiedAt
     }
   }
 `;
@@ -39,6 +35,43 @@ export const QueryAdReport = gql`
       clicks
       ctr
     }
+  }
+`;
+
+export const QueryActiveAds = gql`
+  query ActiveAds($slotLocation: AdvertiseSlotLocation!) {
+    activeAds(slotLocation: $slotLocation) {
+      id
+      internalId
+      startAt
+      endAt
+      slotType
+      slotLocation
+      slotPriority
+      graphic
+      displayPrice {
+        discountText
+        originalPrice
+        displayPrice
+      }
+      displayTitle
+      targetUrl
+      isActive
+      createdAt
+      modifiedAt
+    }
+  }
+`;
+
+export const MutationRecordAdImpressions = gql`
+  mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {
+    recordAdImpressions(events: $events)
+  }
+`;
+
+export const MutationRecordAdClick = gql`
+  mutation RecordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {
+    recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)
   }
 `;
 

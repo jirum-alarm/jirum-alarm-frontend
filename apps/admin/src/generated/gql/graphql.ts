@@ -2303,6 +2303,132 @@ export type ProductExpireReport = {
   userId: Scalars['Int']['output'];
 };
 
+export type AdsByAdminQueryVariables = Exact<{
+  slotLocation?: InputMaybe<AdvertiseSlotLocation>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type AdsByAdminQuery = {
+  __typename?: 'Query';
+  adsByAdmin: Array<{
+    __typename?: 'AdvertiseCreative';
+    id: string;
+    internalId: string;
+    startAt: any;
+    endAt: any;
+    slotType: AdvertiseSlotType;
+    slotLocation: Array<AdvertiseSlotLocation>;
+    slotPriority: number;
+    graphic: any;
+    displayTitle?: string | null;
+    targetUrl: string;
+    isActive: boolean;
+    createdAt: any;
+    modifiedAt: any;
+    displayPrice?: {
+      __typename?: 'AdvertisePrice';
+      discountText?: string | null;
+      originalPrice?: string | null;
+      displayPrice: string;
+    } | null;
+  }>;
+};
+
+export type AdReportQueryVariables = Exact<{
+  from: Scalars['DateTime']['input'];
+  to: Scalars['DateTime']['input'];
+  creativeId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type AdReportQuery = {
+  __typename?: 'Query';
+  adReport: Array<{
+    __typename?: 'AdReportRow';
+    creativeId: number;
+    internalId: string;
+    slotLocation: string;
+    impressions: number;
+    clicks: number;
+    ctr: number;
+  }>;
+};
+
+export type ActiveAdsQueryVariables = Exact<{
+  slotLocation: AdvertiseSlotLocation;
+}>;
+
+export type ActiveAdsQuery = {
+  __typename?: 'Query';
+  activeAds: Array<{
+    __typename?: 'AdvertiseCreative';
+    id: string;
+    internalId: string;
+    startAt: any;
+    endAt: any;
+    slotType: AdvertiseSlotType;
+    slotLocation: Array<AdvertiseSlotLocation>;
+    slotPriority: number;
+    graphic: any;
+    displayTitle?: string | null;
+    targetUrl: string;
+    isActive: boolean;
+    createdAt: any;
+    modifiedAt: any;
+    displayPrice?: {
+      __typename?: 'AdvertisePrice';
+      discountText?: string | null;
+      originalPrice?: string | null;
+      displayPrice: string;
+    } | null;
+  }>;
+};
+
+export type RecordAdImpressionsMutationVariables = Exact<{
+  events: Array<AdvertiseImpressionInput> | AdvertiseImpressionInput;
+}>;
+
+export type RecordAdImpressionsMutation = { __typename?: 'Mutation'; recordAdImpressions: boolean };
+
+export type RecordAdClickMutationVariables = Exact<{
+  creativeId: Scalars['Int']['input'];
+  slotLocation: AdvertiseSlotLocation;
+}>;
+
+export type RecordAdClickMutation = { __typename?: 'Mutation'; recordAdClick: boolean };
+
+export type CreateAdAssetUploadUrlMutationVariables = Exact<{
+  contentType: Scalars['String']['input'];
+}>;
+
+export type CreateAdAssetUploadUrlMutation = {
+  __typename?: 'Mutation';
+  createAdAssetUploadUrl: {
+    __typename?: 'AdAssetUploadUrlOutput';
+    uploadUrl: string;
+    assetUrl: string;
+  };
+};
+
+export type CreateAdMutationVariables = Exact<{
+  input: CreateAdvertiseInput;
+}>;
+
+export type CreateAdMutation = { __typename?: 'Mutation'; createAd: number };
+
+export type UpdateAdMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  input: UpdateAdvertiseInput;
+}>;
+
+export type UpdateAdMutation = { __typename?: 'Mutation'; updateAd: boolean };
+
+export type SetAdActiveMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  isActive: Scalars['Boolean']['input'];
+}>;
+
+export type SetAdActiveMutation = { __typename?: 'Mutation'; setAdActive: boolean };
+
 export type MutationAdminLoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -3294,6 +3420,105 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const AdsByAdminDocument = new TypedDocumentString(`
+    query AdsByAdmin($slotLocation: AdvertiseSlotLocation, $isActive: Boolean) {
+  adsByAdmin(slotLocation: $slotLocation, isActive: $isActive) {
+    id
+    internalId
+    startAt
+    endAt
+    slotType
+    slotLocation
+    slotPriority
+    graphic
+    displayPrice {
+      discountText
+      originalPrice
+      displayPrice
+    }
+    displayTitle
+    targetUrl
+    isActive
+    createdAt
+    modifiedAt
+  }
+}
+    `) as unknown as TypedDocumentString<AdsByAdminQuery, AdsByAdminQueryVariables>;
+export const AdReportDocument = new TypedDocumentString(`
+    query AdReport($from: DateTime!, $to: DateTime!, $creativeId: Int) {
+  adReport(from: $from, to: $to, creativeId: $creativeId) {
+    creativeId
+    internalId
+    slotLocation
+    impressions
+    clicks
+    ctr
+  }
+}
+    `) as unknown as TypedDocumentString<AdReportQuery, AdReportQueryVariables>;
+export const ActiveAdsDocument = new TypedDocumentString(`
+    query ActiveAds($slotLocation: AdvertiseSlotLocation!) {
+  activeAds(slotLocation: $slotLocation) {
+    id
+    internalId
+    startAt
+    endAt
+    slotType
+    slotLocation
+    slotPriority
+    graphic
+    displayPrice {
+      discountText
+      originalPrice
+      displayPrice
+    }
+    displayTitle
+    targetUrl
+    isActive
+    createdAt
+    modifiedAt
+  }
+}
+    `) as unknown as TypedDocumentString<ActiveAdsQuery, ActiveAdsQueryVariables>;
+export const RecordAdImpressionsDocument = new TypedDocumentString(`
+    mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {
+  recordAdImpressions(events: $events)
+}
+    `) as unknown as TypedDocumentString<
+  RecordAdImpressionsMutation,
+  RecordAdImpressionsMutationVariables
+>;
+export const RecordAdClickDocument = new TypedDocumentString(`
+    mutation RecordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {
+  recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)
+}
+    `) as unknown as TypedDocumentString<RecordAdClickMutation, RecordAdClickMutationVariables>;
+export const CreateAdAssetUploadUrlDocument = new TypedDocumentString(`
+    mutation CreateAdAssetUploadUrl($contentType: String!) {
+  createAdAssetUploadUrl(contentType: $contentType) {
+    uploadUrl
+    assetUrl
+  }
+}
+    `) as unknown as TypedDocumentString<
+  CreateAdAssetUploadUrlMutation,
+  CreateAdAssetUploadUrlMutationVariables
+>;
+export const CreateAdDocument = new TypedDocumentString(`
+    mutation CreateAd($input: CreateAdvertiseInput!) {
+  createAd(input: $input)
+}
+    `) as unknown as TypedDocumentString<CreateAdMutation, CreateAdMutationVariables>;
+export const UpdateAdDocument = new TypedDocumentString(`
+    mutation UpdateAd($id: Int!, $input: UpdateAdvertiseInput!) {
+  updateAd(id: $id, input: $input)
+}
+    `) as unknown as TypedDocumentString<UpdateAdMutation, UpdateAdMutationVariables>;
+export const SetAdActiveDocument = new TypedDocumentString(`
+    mutation SetAdActive($id: Int!, $isActive: Boolean!) {
+  setAdActive(id: $id, isActive: $isActive)
+}
+    `) as unknown as TypedDocumentString<SetAdActiveMutation, SetAdActiveMutationVariables>;
 export const MutationAdminLoginDocument = new TypedDocumentString(`
     mutation MutationAdminLogin($email: String!, $password: String!) {
   adminLogin(email: $email, password: $password) {

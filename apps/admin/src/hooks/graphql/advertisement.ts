@@ -3,8 +3,11 @@ import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@a
 import {
   MutationCreateAd,
   MutationCreateAdAssetUploadUrl,
+  MutationRecordAdClick,
+  MutationRecordAdImpressions,
   MutationSetAdActive,
   MutationUpdateAd,
+  QueryActiveAds,
   QueryAdReport,
   QueryAdsByAdmin,
 } from '@/graphql/advertisement';
@@ -25,7 +28,7 @@ export interface ElementConstraints {
 
 export type ResponsiveValueMap<T> = {
   _default: T;
-} & Partial<Record<`<=${number}`, T>>;
+} & Partial<Record<`${'>=' | '<='}${number}`, T>>;
 
 export interface AdvertiseAsset {
   designSize: GraphicSize;
@@ -33,7 +36,10 @@ export interface AdvertiseAsset {
 }
 
 export type AdvertiseElementAsset = AdvertiseAsset & {
-  layoutByWidth: ResponsiveValueMap<{ constraints: ElementConstraints; size: GraphicSize }>;
+  layoutByWidth: ResponsiveValueMap<{
+    constraints: ElementConstraints;
+    size?: Partial<GraphicSize>;
+  }>;
 };
 
 export interface ResponsiveAdvertiseGraphic {
@@ -98,7 +104,22 @@ export interface CreateAdInput {
 
 export type UpdateAdInput = Partial<CreateAdInput>;
 
+export interface AdvertiseImpressionInput {
+  creativeId: number;
+  slotLocation: AdSlotLocation;
+}
+
 // ── hooks ──
+
+export const useActiveAds = (
+  variables: { slotLocation: AdSlotLocation },
+  options?: QueryHookOptions,
+) =>
+  useQuery<{ activeAds: AdCreative[] }>(QueryActiveAds, {
+    variables,
+    fetchPolicy: 'network-only',
+    ...options,
+  });
 
 export const useAdsByAdmin = (
   variables?: { slotLocation?: AdSlotLocation; isActive?: boolean },
@@ -130,6 +151,28 @@ export const useCreateAdAssetUploadUrl = (
     { createAdAssetUploadUrl: { uploadUrl: string; assetUrl: string } },
     { contentType: string }
   >(MutationCreateAdAssetUploadUrl, options);
+
+export const useRecordAdImpressions = (
+  options?: MutationHookOptions<
+    { recordAdImpressions: boolean },
+    { events: AdvertiseImpressionInput[] }
+  >,
+) =>
+  useMutation<{ recordAdImpressions: boolean }, { events: AdvertiseImpressionInput[] }>(
+    MutationRecordAdImpressions,
+    options,
+  );
+
+export const useRecordAdClick = (
+  options?: MutationHookOptions<
+    { recordAdClick: boolean },
+    { creativeId: number; slotLocation: AdSlotLocation }
+  >,
+) =>
+  useMutation<{ recordAdClick: boolean }, { creativeId: number; slotLocation: AdSlotLocation }>(
+    MutationRecordAdClick,
+    options,
+  );
 
 export const useCreateAd = (
   options?: MutationHookOptions<{ createAd: number }, { input: CreateAdInput }>,

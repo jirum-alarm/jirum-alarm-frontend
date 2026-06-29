@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as types from './graphql';
 
 /**
@@ -12,7 +13,7 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-  '\n  query activeAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n    }\n  }\n': typeof types.ActiveAdsDocument;
+  '\n  query activeAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n': typeof types.ActiveAdsDocument;
   '\n  mutation recordAdImpressions($events: [AdvertiseImpressionInput!]!) {\n    recordAdImpressions(events: $events)\n  }\n': typeof types.RecordAdImpressionsDocument;
   '\n  mutation recordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {\n    recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)\n  }\n': typeof types.RecordAdClickDocument;
   '\n  mutation MutationLogin($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      accessToken\n      refreshToken\n    }\n  }\n': typeof types.MutationLoginDocument;
@@ -74,7 +75,7 @@ type Documents = {
   '\n  query modelPage($slug: String!) {\n    modelPage(slug: $slug) {\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n': typeof types.ModelPageDocument;
 };
 const documents: Documents = {
-  '\n  query activeAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n    }\n  }\n':
+  '\n  query activeAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n':
     types.ActiveAdsDocument,
   '\n  mutation recordAdImpressions($events: [AdvertiseImpressionInput!]!) {\n    recordAdImpressions(events: $events)\n  }\n':
     types.RecordAdImpressionsDocument,
@@ -198,7 +199,7 @@ const documents: Documents = {
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query activeAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n    }\n  }\n',
+  source: '\n  query activeAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n',
 ): typeof import('./graphql').ActiveAdsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

@@ -4,6 +4,9 @@ export const QueryActiveAds = gql`
   query activeAds($slotLocation: AdvertiseSlotLocation!) {
     activeAds(slotLocation: $slotLocation) {
       id
+      internalId
+      startAt
+      endAt
       slotType
       slotLocation
       slotPriority
@@ -15,6 +18,9 @@ export const QueryActiveAds = gql`
       }
       displayTitle
       targetUrl
+      isActive
+      createdAt
+      modifiedAt
     }
   }
 `;
