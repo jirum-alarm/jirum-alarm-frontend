@@ -63,6 +63,7 @@ export default function AdvertiseBanner({
         )}
         style={{ width: widthStyle }}
         aria-label={creative.displayTitle ?? creative.internalId}
+        data-google-vignette="false"
         onClick={() => onClickAd?.(creative)}
       >
         <motion.div whileTap={{ scale: 0.98 }} transition={{ duration: 0.1 }}>
