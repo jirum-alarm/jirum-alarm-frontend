@@ -9,6 +9,8 @@ import { IS_PRD } from '@/shared/config/env';
 import { GTM_ID } from '@/shared/config/gtm';
 import FCMConfig from '@/shared/lib/firebase/FCMConfig';
 
+import InterstitialPromotionAd from '@/widgets/ad/ui/InterstitialPromotionAd';
+
 import { AdSenseProvider } from './adsenseProvider';
 import { ClarityProvider } from './clarityProvider';
 import { DeviceId } from './deviceId';
@@ -40,7 +42,10 @@ export const AppProvider = ({ children }: Props) => {
         <ReactQueryProviders>
           {IS_PRD ? <DeviceId /> : null}
           {/* <PHProvider> */}
-          <NuqsAdapter>{children}</NuqsAdapter>
+          <NuqsAdapter>
+            {children}
+            <InterstitialPromotionAd />
+          </NuqsAdapter>
           {/* </PHProvider> */}
         </ReactQueryProviders>
       </JotaiProvider>
