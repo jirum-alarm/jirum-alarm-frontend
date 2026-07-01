@@ -24,10 +24,10 @@ const BYPASS_QUERY_VALUE = '1';
 const ACCESS_SESSION_KEY = 'jirum:promotion:2607siwol:access';
 
 const pricePlans = [
-  { label: '매일 11G+2GB', period: '4개월간', price: '0원' },
   { label: '100GB+', period: '4개월간 월', price: '5,510원' },
+  { label: '기본 11GB+매일2GB', period: '4개월간', price: '0원' },
+  { label: '평생 기본 11GB+매일2GB', period: '평생 월', price: '22,900원' },
   { label: '통화기본매일5GB+', period: '4개월간 월', price: '5,510원' },
-  { label: '평생 기본 11GB+매일2GB', period: '월', price: '22,900원' },
 ];
 
 const steps = [
