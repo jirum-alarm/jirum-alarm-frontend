@@ -4,10 +4,12 @@ import { usePathname } from 'next/navigation';
 import Script from 'next/script';
 import { env } from 'next-runtime-env';
 import { useCallback, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 import { IS_PRD } from '@/shared/config/env';
 
 const GOOGLE_VIGNETTE_HASH = '#google_vignette';
+const GOOGLE_VIGNETTE_Z_INDEX = 2147483647;
 
 export const AdSenseProvider = () => {
   const pathname = usePathname();
@@ -36,10 +38,16 @@ export const AdSenseProvider = () => {
 
 function GoogleVignetteCloseControl({ disabled }: { disabled: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
+  const portalHost = useGoogleVignettePortalHost(isOpen && !disabled);
 
   const syncOpenState = useCallback(() => {
-    setIsOpen(window.location.hash === GOOGLE_VIGNETTE_HASH);
-  }, []);
+    if (disabled) {
+      setIsOpen(false);
+      return;
+    }
+
+    setIsOpen(window.location.hash === GOOGLE_VIGNETTE_HASH || hasGoogleVignetteOverlay());
+  }, [disabled]);
 
   const closeGoogleVignette = useCallback(() => {
     if (window.location.hash !== GOOGLE_VIGNETTE_HASH) {
@@ -47,12 +55,7 @@ function GoogleVignetteCloseControl({ disabled }: { disabled: boolean }) {
       return;
     }
 
-    const oldUrl = window.location.href;
-    const nextUrl = `${window.location.pathname}${window.location.search}`;
-    window.history.replaceState(window.history.state, '', nextUrl);
-    window.dispatchEvent(
-      new HashChangeEvent('hashchange', { oldURL: oldUrl, newURL: window.location.href }),
-    );
+    window.history.back();
     setIsOpen(false);
   }, []);
 
@@ -61,10 +64,25 @@ function GoogleVignetteCloseControl({ disabled }: { disabled: boolean }) {
 
     window.addEventListener('hashchange', syncOpenState);
     window.addEventListener('popstate', syncOpenState);
+    window.addEventListener('pageshow', syncOpenState);
+    window.addEventListener('resize', syncOpenState);
+
+    const observer = new MutationObserver(syncOpenState);
+    observer.observe(document.body, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+
+    const intervalId = window.setInterval(syncOpenState, 500);
 
     return () => {
+      observer.disconnect();
+      window.clearInterval(intervalId);
       window.removeEventListener('hashchange', syncOpenState);
       window.removeEventListener('popstate', syncOpenState);
+      window.removeEventListener('pageshow', syncOpenState);
+      window.removeEventListener('resize', syncOpenState);
     };
   }, [syncOpenState]);
 
@@ -109,14 +127,18 @@ function GoogleVignetteCloseControl({ disabled }: { disabled: boolean }) {
     };
   }, [closeGoogleVignette, disabled, isOpen]);
 
-  if (!isOpen || disabled) {
+  if (!isOpen || disabled || !portalHost) {
     return null;
   }
 
-  return (
+  return createPortal(
     <div
-      className="pointer-events-none fixed inset-x-5 bottom-[max(16px,calc(16px+env(safe-area-inset-bottom)))] z-[2147483647] mx-auto max-w-[420px]"
+      className="pointer-events-none fixed inset-x-5 mx-auto max-w-[420px]"
       data-google-vignette-close-control
+      style={{
+        bottom: 'max(16px, calc(16px + env(safe-area-inset-bottom)))',
+        zIndex: GOOGLE_VIGNETTE_Z_INDEX,
+      }}
     >
       <button
         type="button"
@@ -125,6 +147,64 @@ function GoogleVignetteCloseControl({ disabled }: { disabled: boolean }) {
       >
         닫기
       </button>
-    </div>
+    </div>,
+    portalHost,
   );
+}
+
+function useGoogleVignettePortalHost(enabled: boolean) {
+  const [host, setHost] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!enabled) {
+      setHost(null);
+      return;
+    }
+
+    const portalElement = document.createElement('div');
+    portalElement.dataset.googleVignetteClosePortal = 'true';
+
+    const movePortalToEnd = () => {
+      if (document.body.lastElementChild !== portalElement) {
+        document.body.appendChild(portalElement);
+      }
+    };
+
+    movePortalToEnd();
+    setHost(portalElement);
+
+    const observer = new MutationObserver(movePortalToEnd);
+    observer.observe(document.body, { childList: true });
+
+    return () => {
+      observer.disconnect();
+      portalElement.remove();
+      setHost(null);
+    };
+  }, [enabled]);
+
+  return host;
+}
+
+function hasGoogleVignetteOverlay() {
+  const candidates = document.querySelectorAll<HTMLElement>(
+    'ins, iframe, [id^="aswift_"], [id^="google_ads_iframe"]',
+  );
+
+  return Array.from(candidates).some((element) => {
+    const style = window.getComputedStyle(element);
+    const zIndex = Number.parseInt(style.zIndex, 10);
+
+    if (
+      style.position !== 'fixed' ||
+      !Number.isFinite(zIndex) ||
+      zIndex < GOOGLE_VIGNETTE_Z_INDEX - 10
+    ) {
+      return false;
+    }
+
+    const rect = element.getBoundingClientRect();
+
+    return rect.width >= window.innerWidth * 0.9 && rect.height >= window.innerHeight * 0.9;
+  });
 }
