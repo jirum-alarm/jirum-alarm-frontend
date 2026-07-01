@@ -2,7 +2,7 @@
 
 import { motion } from 'motion/react';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { AdvertiseSlotLocation } from '@/shared/api/gql/graphql';
@@ -26,9 +26,13 @@ const ACCESS_SESSION_KEY = 'jirum:promotion:2607siwol:access';
 const pricePlans = [
   { label: '100GB+', period: '4개월간 월', price: '5,510원' },
   { label: '기본 11GB+매일2GB', period: '4개월간', price: '0원' },
-  { label: '평생 기본 11GB+매일2GB', period: '평생 월', price: '22,900원' },
   { label: '통화기본매일5GB+', period: '4개월간 월', price: '5,510원' },
+  { label: '평생 기본 11GB+매일2GB', period: '평생 월', price: '22,900원' },
+  { label: '평생 통화기본매일5GB+', period: '평생 월', price: '26,920원' },
+  { label: '평생 통화기본100GB+', period: '평생 월', price: '26,920원' },
 ];
+
+const pricePlanRows = [pricePlans.slice(0, 3), pricePlans.slice(3)];
 
 const steps = [
   '지름알림 시크릿 코드 복사하기',
@@ -39,8 +43,6 @@ const steps = [
 export function SiwolPromotionLanding() {
   const searchParams = useSearchParams();
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
-
-  const rollingPlans = useMemo(() => [...pricePlans, ...pricePlans], []);
 
   useEffect(() => {
     if (searchParams.get(BYPASS_QUERY_PARAM) === BYPASS_QUERY_VALUE) {
@@ -83,7 +85,7 @@ export function SiwolPromotionLanding() {
         </div>
 
         <div className="mt-7 flex flex-col gap-4">
-          <EventCard plans={rollingPlans} />
+          <EventCard planRows={pricePlanRows} />
           {/* 입장하기 노출/클릭 추적은 광고 creative 조회가 필요해 Suspense로 격리.
               광고 미등록·로딩 중이어도 입장하기는 정상 동작(추적만 생략). */}
           <Suspense fallback={<CodeCard copyState={copyState} onCopy={handleCopy} />}>
@@ -244,16 +246,20 @@ function PromotionHeader() {
   );
 }
 
-function EventCard({ plans }: { plans: typeof pricePlans }) {
+function EventCard({ planRows }: { planRows: (typeof pricePlans)[] }) {
   return (
     <article className="overflow-hidden rounded-[18px] bg-[#9c88ff] shadow-[0_18px_60px_rgba(47,32,126,0.3)]">
       <div className="flex h-12 items-center justify-center bg-[#9f8aff] text-sm font-bold text-white">
         지름알림 단독 이벤트
       </div>
       <div className="relative overflow-hidden bg-linear-to-b from-[#785cf4] to-[#a490ff] py-7">
-        <div className="flex w-max animate-[promotion-price-roll_22s_linear_infinite] gap-2.5">
-          {plans.map((plan, index) => (
-            <PriceCard key={`${plan.label}-${plan.period}-${index}`} plan={plan} />
+        <div className="flex flex-col gap-2.5">
+          {planRows.map((plans, index) => (
+            <PriceCardRow
+              key={plans.map((plan) => plan.label).join('-')}
+              plans={plans}
+              delayClassName={index === 1 ? '[animation-delay:-5.5s]' : undefined}
+            />
           ))}
         </div>
         <div className="mt-6 flex justify-center">
@@ -265,6 +271,27 @@ function EventCard({ plans }: { plans: typeof pricePlans }) {
         </div>
       </div>
     </article>
+  );
+}
+
+function PriceCardRow({
+  plans,
+  delayClassName,
+}: {
+  plans: typeof pricePlans;
+  delayClassName?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        'flex w-max animate-[promotion-price-roll_22s_linear_infinite] gap-2.5',
+        delayClassName,
+      )}
+    >
+      {[...plans, ...plans].map((plan, index) => (
+        <PriceCard key={`${plan.label}-${plan.period}-${index}`} plan={plan} />
+      ))}
+    </div>
   );
 }
 
