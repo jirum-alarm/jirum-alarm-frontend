@@ -9,7 +9,7 @@ const title = '프로 절약러를 위한 0원 이벤트 | 지름알림';
 const description =
   '지름알림 단독 이벤트 코드로 알뜰폰 0원 이벤트에 참여해보세요. 시크릿 코드를 복사하고 입장하기 버튼으로 바로 이동할 수 있습니다.';
 const url = `${METADATA_SERVICE_URL}/promotion/2607siwol`;
-const image = `${METADATA_SERVICE_URL}/opengraph-image.webp`;
+const image = `${METADATA_SERVICE_URL}/images/promotion/2607siwol/og-image.png`;
 
 export const metadata: Metadata = {
   title,
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     siteName: '지름알림',
     locale: 'ko_KR',
     type: 'website',
-    images: [{ url: image, width: 1200, height: 630, alt: title }],
+    images: [{ url: image, width: 1600, height: 800, alt: title }],
   },
   twitter: {
     card: 'summary_large_image',
