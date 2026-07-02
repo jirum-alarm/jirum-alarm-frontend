@@ -1,3 +1,5 @@
+import { cn } from '@/shared/lib/cn';
+
 import BannerItem from '../BannerItem';
 import kakao from '../images/kakao.png';
 
@@ -15,8 +17,23 @@ const props = {
   className: 'bg-gray-800 border-gray-600',
 };
 
-const KakaoOpenChatLink = ({ isMobile, priority }: { isMobile: boolean; priority?: boolean }) => {
-  return <BannerItem {...props} isMobile={isMobile} priority={priority} />;
+const KakaoOpenChatLink = ({
+  isMobile,
+  className,
+  priority,
+}: {
+  isMobile: boolean;
+  className?: string;
+  priority?: boolean;
+}) => {
+  return (
+    <BannerItem
+      {...props}
+      className={cn(props.className, className)}
+      isMobile={isMobile}
+      priority={priority}
+    />
+  );
 };
 
 export default KakaoOpenChatLink;

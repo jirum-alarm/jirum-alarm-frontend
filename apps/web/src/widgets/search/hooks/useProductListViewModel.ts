@@ -1,5 +1,6 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { ProductQueries } from '@/entities/product';
@@ -19,19 +20,16 @@ export const useProductListViewModel = () => {
     new Map(pages.flatMap((page) => page.products).map((p) => [p.id, p])).values(),
   );
 
-  const { ref } = useInView({
-    onChange(inView) {
-      if (inView && products && hasNextPage) {
-        fetchMoreProducts();
-      }
-    },
-  });
+  // 센티넬이 보이는 동안 다음 페이지를 연쇄 로드.
+  // onChange(inView 토글)에 의존하면 센티넬이 계속 보이는 상태(짧은 결과·빠른 로드)에서 재발동하지
+  // 않아 첫 페이지서 멈춘다 → inView 값을 effect로 감시해 hasNextPage/로딩완료마다 재시도.
+  const { ref, inView } = useInView();
 
-  const fetchMoreProducts = () => {
-    if (products && products.length >= limit) {
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  };
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return {
     products,

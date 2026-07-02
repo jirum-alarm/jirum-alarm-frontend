@@ -158,6 +158,12 @@ export const ProductQueries = {
       },
     }),
 
+  clusteredProducts: (variables: { id: number }) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'clustered'],
+      queryFn: () => ProductService.getClusteredProducts(variables),
+    }),
+
   reactionKeywords: (variables: QueryCategorizedReactionKeywordsArgs) =>
     queryOptions({
       queryKey: [...ProductQueries.all(), 'reactionKeywords', { id: variables.id }],

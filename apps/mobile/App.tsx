@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import ReactQueryProvider from './src/provider/ReactQueryProvider.tsx';
+import {MixpanelService} from '@/shared/lib/analytics/mixpanel.ts';
 import {NavigationContainer} from '@react-navigation/native';
 import RootNavigator from './src/navigations/root/RootNavigator.tsx';
 import './global.css';
@@ -17,6 +18,11 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 function App(): React.JSX.Element {
   const webViewRefManager = useWebViewRefManager();
+
+  useEffect(() => {
+    // 앱 진입 시 분석 SDK 초기화(토큰 없으면 no-op). identify/track 은 로그인 흐름에서.
+    MixpanelService.init();
+  }, []);
 
   return (
     <SafeAreaProvider>

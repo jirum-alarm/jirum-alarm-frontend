@@ -1,0 +1,105 @@
+'use client';
+
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+
+import { ProductQueries } from '@/entities/product';
+
+// Track B: 같은 상품인데 다나와에 없어 매칭 안 된 글들을, 여러 커뮤니티에서 모아 최저가 비교.
+// 백엔드(clusteredProducts)가 FP 방어 2겹(가격 있는 글만 + 2개 이상 커뮤니티일 때만) 후 최저가순으로 줌.
+// → 빈 배열이면 안 보임(섹션 자체 숨김). 거짓 최저가 노출 안 함.
+
+type Props = {
+  productId: number;
+  title?: string;
+};
+
+function won(price: number | null, currency: string | null): string {
+  if (price == null) return '-';
+  if (currency === 'USD') return `$${Math.round(price).toLocaleString()}`;
+  return `${Math.round(price).toLocaleString()}원`;
+}
+
+const VISIBLE_COUNT = 5;
+
+export default function ClusteredPriceSection({ productId, title = '판매처별 최저가' }: Props) {
+  // client 전용 조회 — SSR 에서 이 쿼리가 실행되면 서버 fetch 가 staging authentik 프록시로 가
+  // 로그인 HTML 을 받아 'Unexpected token <' 로 SSR 이 깨진다. mounted 게이트로 SSR/하이드레이션
+  // 중에는 쿼리를 막고(브라우저 마운트 후에만 enabled) 실행 → 로그인된 client 에서만 조회.
+  // 하단 보조 블록이라 SSR/SEO 불필요.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const { data } = useQuery({
+    ...ProductQueries.clusteredProducts({ id: productId }),
+    enabled: mounted,
+  });
+  const products = data?.clusteredProducts ?? [];
+
+  if (products.length < 2) return null;
+
+  const prices = products.map((p) => p.parsedPrice).filter((v): v is number => v != null);
+  const min = prices.length ? Math.min(...prices) : null;
+  const max = prices.length ? Math.max(...prices) : null;
+  const savePct = min != null && max != null && max > 0 ? Math.round(((max - min) / max) * 100) : 0;
+  // 출처를 쇼핑몰명으로 보여주므로 "판매처 수"도 mallName 기준(없으면 커뮤니티명 폴백).
+  const sellerCount = new Set(products.map((p) => p.mallName ?? p.provider?.nameKr)).size;
+  // 스크롤 줄이기 — 최저가 상위 5개만 노출(이미 가격 오름차순). 나머지는 "외 N개".
+  const visible = products.slice(0, VISIBLE_COUNT);
+  const restCount = products.length - visible.length;
+
+  return (
+    <section className="px-5 py-6">
+      <div className="mb-1 flex items-baseline justify-between">
+        <h2 className="text-base font-semibold">{title}</h2>
+        {savePct > 0 && (
+          <span className="rounded-full bg-rose-50 px-2 py-0.5 text-xs font-semibold text-rose-500">
+            최저가 {savePct}% 저렴
+          </span>
+        )}
+      </div>
+      <p className="mb-3 text-xs text-gray-500">
+        같은 상품을 판매처 {sellerCount}곳에서 모아 최저가순으로 보여드려요
+      </p>
+
+      <ul className="flex flex-col gap-2">
+        {visible.map((p) => {
+          const isLowest = p.parsedPrice != null && p.parsedPrice === min;
+          return (
+            <li key={p.id}>
+              <a
+                href={`/products/${p.id}`}
+                className="flex items-center gap-3 rounded-lg border border-gray-100 p-3 hover:bg-gray-50"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="line-clamp-1 text-sm">{p.title}</div>
+                  <div className="mt-1 flex items-center gap-2 text-xs text-gray-400">
+                    {(p.mallName || p.provider?.nameKr) && (
+                      <span className="text-gray-500">{p.mallName ?? p.provider?.nameKr}</span>
+                    )}
+                    {p.postedAt && <span>{new Date(p.postedAt).toLocaleDateString('ko-KR')}</span>}
+                  </div>
+                </div>
+                <div className="flex shrink-0 flex-col items-end gap-0.5">
+                  {isLowest && (
+                    <span className="rounded bg-rose-100 px-1.5 py-0.5 text-[10px] font-semibold text-rose-600">
+                      최저가
+                    </span>
+                  )}
+                  <span
+                    className={`text-sm font-semibold ${isLowest ? 'text-rose-500' : 'text-gray-700'}`}
+                  >
+                    {won(p.parsedPrice, p.priceCurrency)}
+                  </span>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      {restCount > 0 && (
+        <p className="mt-2 text-center text-xs text-gray-400">외 {restCount}곳 더</p>
+      )}
+    </section>
+  );
+}

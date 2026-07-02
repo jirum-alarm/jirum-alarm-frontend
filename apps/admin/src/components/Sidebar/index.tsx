@@ -167,13 +167,17 @@ const Sidebar = ({
                 }}
               </SidebarLinkGroup>
 
-              <SidebarLinkGroup activeCondition={pathname.startsWith('/hotdeal')}>
+              <SidebarLinkGroup
+                activeCondition={pathname.startsWith('/hotdeal') || pathname.startsWith('/deals')}
+              >
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
                       <MenuGroup
                         name="핫딜"
-                        isSelectedPath={pathname.startsWith('/hotdeal')}
+                        isSelectedPath={
+                          pathname.startsWith('/hotdeal') || pathname.startsWith('/deals')
+                        }
                         open={open}
                         sidebarExpanded={sidebarExpanded}
                         openSidebar={openSidebar}
@@ -182,6 +186,7 @@ const Sidebar = ({
                       />
                       <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
                         <SubMenuItem name="키워드" linkTo="/hotdeal/keyword" pathname={pathname} />
+                        <SubMenuItem name="딜 페이지" linkTo="/deals" pathname={pathname} />
                       </SubMenu>
                     </React.Fragment>
                   );
@@ -306,6 +311,31 @@ const Sidebar = ({
                         <SubMenuItem
                           name="발송 및 내역"
                           linkTo="/notification"
+                          pathname={pathname}
+                        />
+                      </SubMenu>
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+
+              <SidebarLinkGroup activeCondition={pathname.startsWith('/advertisement')}>
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <MenuGroup
+                        name="광고"
+                        isSelectedPath={pathname.startsWith('/advertisement')}
+                        open={open}
+                        sidebarExpanded={sidebarExpanded}
+                        openSidebar={openSidebar}
+                        handleClick={handleClick}
+                      />
+                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
+                        <SubMenuItem name="목록" linkTo="/advertisement" pathname={pathname} />
+                        <SubMenuItem
+                          name="등록"
+                          linkTo="/advertisement/register"
                           pathname={pathname}
                         />
                       </SubMenu>

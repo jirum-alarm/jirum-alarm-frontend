@@ -17,6 +17,7 @@ type Documents = {
   '\n  mutation MutationLoginByRefreshToken {\n    loginByRefreshToken {\n      accessToken\n      refreshToken\n    }\n  }\n': typeof types.MutationLoginByRefreshTokenDocument;
   '\n  mutation MutationSocialLogin(\n    $oauthProvider: OauthProvider!\n    $socialAccessToken: String!\n    $email: String\n    $nickname: String\n    $birthYear: Float\n    $gender: Gender\n    $favoriteCategories: [Int!]\n  ) {\n    socialLogin(\n      oauthProvider: $oauthProvider\n      socialAccessToken: $socialAccessToken\n      email: $email\n      nickname: $nickname\n      birthYear: $birthYear\n      gender: $gender\n      favoriteCategories: $favoriteCategories\n    ) {\n      accessToken\n      refreshToken\n      type\n    }\n  }\n': typeof types.MutationSocialLoginDocument;
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n': typeof types.MutationAddPushTokenDocument;
+  '\n  query QueryMe {\n    me {\n      id\n    }\n  }\n': typeof types.QueryMeDocument;
 };
 const documents: Documents = {
   '\n    mutation MutationLogin($email: String!, $password: String!) {\n      login(email: $email, password: $password) {\n        accessToken\n        refreshToken\n      }\n    }\n  ':
@@ -27,6 +28,8 @@ const documents: Documents = {
     types.MutationSocialLoginDocument,
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n':
     types.MutationAddPushTokenDocument,
+  '\n  query QueryMe {\n    me {\n      id\n    }\n  }\n':
+    types.QueryMeDocument,
 };
 
 /**
@@ -53,6 +56,12 @@ export function graphql(
 export function graphql(
   source: '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n',
 ): typeof import('./graphql').MutationAddPushTokenDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryMe {\n    me {\n      id\n    }\n  }\n',
+): typeof import('./graphql').QueryMeDocument;
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

@@ -7,13 +7,23 @@ import { formatDateToMMD } from '@/shared/lib/utils/date';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 import Link from '@/shared/ui/Link';
 
+import {
+  type ProductCardSource,
+  productCardTracking,
+} from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
-export default function ListProductCard({ product }: { product: ProductCardType }) {
+export default function ListProductCard({
+  product,
+  source,
+}: {
+  product: ProductCardType;
+  source?: ProductCardSource;
+}) {
   return (
-    <Link href={PAGE.DETAIL + '/' + product.id}>
+    <Link href={PAGE.DETAIL + '/' + product.id} {...productCardTracking(source, product.id)}>
       <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="flex items-center gap-4">
           <div className="pc:h-25 pc:w-25 relative h-19 w-19 shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
@@ -44,6 +54,9 @@ export default function ListProductCard({ product }: { product: ProductCardType 
                 <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />
               )}
             </div>
+            {product.postedAt && (
+              <span className="text-xs text-gray-400">{formatDateToMMD(product.postedAt)}</span>
+            )}
           </div>
         </div>
       </motion.div>

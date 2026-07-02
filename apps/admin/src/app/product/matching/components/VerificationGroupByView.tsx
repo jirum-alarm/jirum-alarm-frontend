@@ -167,6 +167,9 @@ const VerificationGroupByView = () => {
       verifiedAt: item.verifiedAt ?? null,
       matchingConfidence: item.matchingConfidence ?? null,
       matchingReasoning: item.matchingReasoning ?? null,
+      aiSuggestion: item.aiSuggestion ?? null,
+      aiSuggestionConfidence: item.aiSuggestionConfidence ?? null,
+      aiSuggestionReason: item.aiSuggestionReason ?? null,
     }),
     [],
   );

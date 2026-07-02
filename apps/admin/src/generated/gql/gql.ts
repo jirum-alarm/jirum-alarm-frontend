@@ -12,6 +12,15 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+  '\n  query AdsByAdmin($slotLocation: AdvertiseSlotLocation, $isActive: Boolean) {\n    adsByAdmin(slotLocation: $slotLocation, isActive: $isActive) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n': typeof types.AdsByAdminDocument;
+  '\n  query AdReport($from: DateTime!, $to: DateTime!, $creativeId: Int) {\n    adReport(from: $from, to: $to, creativeId: $creativeId) {\n      creativeId\n      internalId\n      slotLocation\n      impressions\n      clicks\n      ctr\n    }\n  }\n': typeof types.AdReportDocument;
+  '\n  query ActiveAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n': typeof types.ActiveAdsDocument;
+  '\n  mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {\n    recordAdImpressions(events: $events)\n  }\n': typeof types.RecordAdImpressionsDocument;
+  '\n  mutation RecordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {\n    recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)\n  }\n': typeof types.RecordAdClickDocument;
+  '\n  mutation CreateAdAssetUploadUrl($contentType: String!) {\n    createAdAssetUploadUrl(contentType: $contentType) {\n      uploadUrl\n      assetUrl\n    }\n  }\n': typeof types.CreateAdAssetUploadUrlDocument;
+  '\n  mutation CreateAd($input: CreateAdvertiseInput!) {\n    createAd(input: $input)\n  }\n': typeof types.CreateAdDocument;
+  '\n  mutation UpdateAd($id: Int!, $input: UpdateAdvertiseInput!) {\n    updateAd(id: $id, input: $input)\n  }\n': typeof types.UpdateAdDocument;
+  '\n  mutation SetAdActive($id: Int!, $isActive: Boolean!) {\n    setAdActive(id: $id, isActive: $isActive)\n  }\n': typeof types.SetAdActiveDocument;
   '\n  mutation MutationAdminLogin($email: String!, $password: String!) {\n    adminLogin(email: $email, password: $password) {\n      accessToken\n      refreshToken\n    }\n  }\n': typeof types.MutationAdminLoginDocument;
   '\n  query QueryAdminMe {\n    adminMe {\n      id\n      name\n      email\n    }\n  }\n': typeof types.QueryAdminMeDocument;
   '\n  query QueryBrandProductsOrderByMatchCount(\n    $limit: Int!\n    $searchAfter: [String!]\n    $brandItemId: Int\n    $title: String\n  ) {\n    brandProductsOrderByMatchCount(\n      limit: $limit\n      searchAfter: $searchAfter\n      brandItemId: $brandItemId\n      title: $title\n    ) {\n      id\n      danawaProductId\n      brandItemId\n      brandName\n      productName\n      volume\n      amount\n      matchCount\n      pendingVerificationCount\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryBrandProductsOrderByMatchCountDocument;
@@ -37,6 +46,9 @@ type Documents = {
   '\n  mutation MutationAddKeywordMapEntryByAdmin($groupId: Int!, $keyword: String!) {\n    addKeywordMapEntryByAdmin(groupId: $groupId, keyword: $keyword)\n  }\n': typeof types.MutationAddKeywordMapEntryByAdminDocument;
   '\n  mutation MutationAddKeywordMapEntriesByAdmin($groupId: Int!, $keywords: [String!]!) {\n    addKeywordMapEntriesByAdmin(groupId: $groupId, keywords: $keywords)\n  }\n': typeof types.MutationAddKeywordMapEntriesByAdminDocument;
   '\n  mutation MutationRemoveKeywordMapEntryByAdmin($id: Int!) {\n    removeKeywordMapEntryByAdmin(id: $id)\n  }\n': typeof types.MutationRemoveKeywordMapEntryByAdminDocument;
+  '\n  query QueryModelPagesByAdmin($onlyDrafts: Boolean) {\n    modelPagesByAdmin(onlyDrafts: $onlyDrafts) {\n      id\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      heroImage\n      heroMinPrice\n      isPublished\n    }\n  }\n': typeof types.QueryModelPagesByAdminDocument;
+  '\n  query QueryModelPagePreviewByAdmin($slug: String!) {\n    modelPagePreviewByAdmin(slug: $slug) {\n      id\n      isPublished\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n': typeof types.QueryModelPagePreviewByAdminDocument;
+  '\n  mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {\n    setModelPagePublishedByAdmin(id: $id, isPublished: $isPublished)\n  }\n': typeof types.MutationSetModelPagePublishedByAdminDocument;
   '\n  query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {\n    notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {\n      id\n      title\n      message\n      target\n      targetId\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryNotificationsByAdminDocument;
   '\n  mutation MutationSendNotificationByAdmin(\n    $title: String!\n    $message: String!\n    $type: NotificationType!\n    $target: NotificationTarget\n    $targetId: Int\n    $url: String\n    $userIds: [Int!]\n  ) {\n    sendNotificationByAdmin(\n      title: $title\n      message: $message\n      type: $type\n      target: $target\n      targetId: $targetId\n      url: $url\n      userIds: $userIds\n    )\n  }\n': typeof types.MutationSendNotificationByAdminDocument;
   '\n  query QueryProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n    $categoryId: Int\n    $keyword: String\n    $thumbnailType: ThumbnailType\n    $isEnd: Boolean\n    $isHot: Boolean\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      orderOption: $orderOption\n      categoryId: $categoryId\n      keyword: $keyword\n      thumbnailType: $thumbnailType\n      isEnd: $isEnd\n      isHot: $isHot\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryProductsDocument;
@@ -63,7 +75,7 @@ type Documents = {
   '\n  query QueryUsersByAdmin($limit: Int!, $searchAfter: [String!], $keyword: String) {\n    usersByAdmin(limit: $limit, searchAfter: $searchAfter, keyword: $keyword) {\n      id\n      email\n      nickname\n      birthYear\n      gender\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryUsersByAdminDocument;
   '\n  query QueryUserByAdmin($id: Int!) {\n    userByAdmin(id: $id) {\n      id\n      email\n      nickname\n      birthYear\n      gender\n      favoriteCategories\n      linkedSocialProviders\n      createdAt\n    }\n  }\n': typeof types.QueryUserByAdminDocument;
   '\n  query QueryUsersTotalCountByAdmin($keyword: String) {\n    usersTotalCountByAdmin(keyword: $keyword)\n  }\n': typeof types.QueryUsersTotalCountByAdminDocument;
-  '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n    $brandProductId: Int\n    $verificationStatus: [ProductMappingVerificationStatus!]\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n      brandProductId: $brandProductId\n      verificationStatus: $verificationStatus\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n        price\n        url\n        provider {\n          name\n        }\n      }\n      danawaUrl\n      matchingConfidence\n      matchingReasoning\n\n      verificationStatus\n      verifiedBy {\n        id\n        name\n        email\n      }\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryPendingVerificationsDocument;
+  '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n    $brandProductId: Int\n    $verificationStatus: [ProductMappingVerificationStatus!]\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n      brandProductId: $brandProductId\n      verificationStatus: $verificationStatus\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n        price\n        url\n        provider {\n          name\n        }\n      }\n      danawaUrl\n      matchingConfidence\n      matchingReasoning\n      aiSuggestion\n      aiSuggestionConfidence\n      aiSuggestionReason\n\n      verificationStatus\n      verifiedBy {\n        id\n        name\n        email\n      }\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryPendingVerificationsDocument;
   '\n  query QueryVerificationStatistics {\n    verificationStatistics {\n      pending\n      verified\n      rejected\n      total\n    }\n  }\n': typeof types.QueryVerificationStatisticsDocument;
   '\n  query QueryVerificationHistory(\n    $limit: Int!\n    $searchAfter: [String!]\n    $verificationStatus: [ProductMappingVerificationStatus!]\n    $matchStatus: [ProductMappingMatchStatus!]\n    $target: ProductMappingTarget\n    $productId: Int\n    $verifiedBy: Int\n    $orderBy: OrderOptionType\n  ) {\n    verificationHistory(\n      limit: $limit\n      searchAfter: $searchAfter\n      verificationStatus: $verificationStatus\n      matchStatus: $matchStatus\n      target: $target\n      productId: $productId\n      verifiedBy: $verifiedBy\n      orderBy: $orderBy\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n      }\n      danawaUrl\n\n      verificationStatus\n      verifiedBy {\n        id\n        name\n        email\n      }\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryVerificationHistoryDocument;
   '\n  mutation MutationVerifyProductMapping(\n    $productMappingId: Int!\n    $result: ProductMappingVerificationStatus!\n    $feedback: String\n  ) {\n    verifyProductMapping(productMappingId: $productMappingId, result: $result, feedback: $feedback)\n  }\n': typeof types.MutationVerifyProductMappingDocument;
@@ -73,6 +85,24 @@ type Documents = {
   '\n  query QueryPendingVerificationsTotalCount(\n    $brandProductId: Int\n    $matchStatus: [ProductMappingMatchStatus!]\n    $target: ProductMappingTarget\n    $verificationStatus: [ProductMappingVerificationStatus!]\n  ) {\n    pendingVerificationsTotalCount(\n      brandProductId: $brandProductId\n      matchStatus: $matchStatus\n      target: $target\n      verificationStatus: $verificationStatus\n    )\n  }\n': typeof types.QueryPendingVerificationsTotalCountDocument;
 };
 const documents: Documents = {
+  '\n  query AdsByAdmin($slotLocation: AdvertiseSlotLocation, $isActive: Boolean) {\n    adsByAdmin(slotLocation: $slotLocation, isActive: $isActive) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n':
+    types.AdsByAdminDocument,
+  '\n  query AdReport($from: DateTime!, $to: DateTime!, $creativeId: Int) {\n    adReport(from: $from, to: $to, creativeId: $creativeId) {\n      creativeId\n      internalId\n      slotLocation\n      impressions\n      clicks\n      ctr\n    }\n  }\n':
+    types.AdReportDocument,
+  '\n  query ActiveAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n':
+    types.ActiveAdsDocument,
+  '\n  mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {\n    recordAdImpressions(events: $events)\n  }\n':
+    types.RecordAdImpressionsDocument,
+  '\n  mutation RecordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {\n    recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)\n  }\n':
+    types.RecordAdClickDocument,
+  '\n  mutation CreateAdAssetUploadUrl($contentType: String!) {\n    createAdAssetUploadUrl(contentType: $contentType) {\n      uploadUrl\n      assetUrl\n    }\n  }\n':
+    types.CreateAdAssetUploadUrlDocument,
+  '\n  mutation CreateAd($input: CreateAdvertiseInput!) {\n    createAd(input: $input)\n  }\n':
+    types.CreateAdDocument,
+  '\n  mutation UpdateAd($id: Int!, $input: UpdateAdvertiseInput!) {\n    updateAd(id: $id, input: $input)\n  }\n':
+    types.UpdateAdDocument,
+  '\n  mutation SetAdActive($id: Int!, $isActive: Boolean!) {\n    setAdActive(id: $id, isActive: $isActive)\n  }\n':
+    types.SetAdActiveDocument,
   '\n  mutation MutationAdminLogin($email: String!, $password: String!) {\n    adminLogin(email: $email, password: $password) {\n      accessToken\n      refreshToken\n    }\n  }\n':
     types.MutationAdminLoginDocument,
   '\n  query QueryAdminMe {\n    adminMe {\n      id\n      name\n      email\n    }\n  }\n':
@@ -123,6 +153,12 @@ const documents: Documents = {
     types.MutationAddKeywordMapEntriesByAdminDocument,
   '\n  mutation MutationRemoveKeywordMapEntryByAdmin($id: Int!) {\n    removeKeywordMapEntryByAdmin(id: $id)\n  }\n':
     types.MutationRemoveKeywordMapEntryByAdminDocument,
+  '\n  query QueryModelPagesByAdmin($onlyDrafts: Boolean) {\n    modelPagesByAdmin(onlyDrafts: $onlyDrafts) {\n      id\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      heroImage\n      heroMinPrice\n      isPublished\n    }\n  }\n':
+    types.QueryModelPagesByAdminDocument,
+  '\n  query QueryModelPagePreviewByAdmin($slug: String!) {\n    modelPagePreviewByAdmin(slug: $slug) {\n      id\n      isPublished\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n':
+    types.QueryModelPagePreviewByAdminDocument,
+  '\n  mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {\n    setModelPagePublishedByAdmin(id: $id, isPublished: $isPublished)\n  }\n':
+    types.MutationSetModelPagePublishedByAdminDocument,
   '\n  query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {\n    notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {\n      id\n      title\n      message\n      target\n      targetId\n      createdAt\n      searchAfter\n    }\n  }\n':
     types.QueryNotificationsByAdminDocument,
   '\n  mutation MutationSendNotificationByAdmin(\n    $title: String!\n    $message: String!\n    $type: NotificationType!\n    $target: NotificationTarget\n    $targetId: Int\n    $url: String\n    $userIds: [Int!]\n  ) {\n    sendNotificationByAdmin(\n      title: $title\n      message: $message\n      type: $type\n      target: $target\n      targetId: $targetId\n      url: $url\n      userIds: $userIds\n    )\n  }\n':
@@ -175,7 +211,7 @@ const documents: Documents = {
     types.QueryUserByAdminDocument,
   '\n  query QueryUsersTotalCountByAdmin($keyword: String) {\n    usersTotalCountByAdmin(keyword: $keyword)\n  }\n':
     types.QueryUsersTotalCountByAdminDocument,
-  '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n    $brandProductId: Int\n    $verificationStatus: [ProductMappingVerificationStatus!]\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n      brandProductId: $brandProductId\n      verificationStatus: $verificationStatus\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n        price\n        url\n        provider {\n          name\n        }\n      }\n      danawaUrl\n      matchingConfidence\n      matchingReasoning\n\n      verificationStatus\n      verifiedBy {\n        id\n        name\n        email\n      }\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n':
+  '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n    $brandProductId: Int\n    $verificationStatus: [ProductMappingVerificationStatus!]\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n      brandProductId: $brandProductId\n      verificationStatus: $verificationStatus\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n        price\n        url\n        provider {\n          name\n        }\n      }\n      danawaUrl\n      matchingConfidence\n      matchingReasoning\n      aiSuggestion\n      aiSuggestionConfidence\n      aiSuggestionReason\n\n      verificationStatus\n      verifiedBy {\n        id\n        name\n        email\n      }\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n':
     types.QueryPendingVerificationsDocument,
   '\n  query QueryVerificationStatistics {\n    verificationStatistics {\n      pending\n      verified\n      rejected\n      total\n    }\n  }\n':
     types.QueryVerificationStatisticsDocument,
@@ -193,6 +229,60 @@ const documents: Documents = {
     types.QueryPendingVerificationsTotalCountDocument,
 };
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query AdsByAdmin($slotLocation: AdvertiseSlotLocation, $isActive: Boolean) {\n    adsByAdmin(slotLocation: $slotLocation, isActive: $isActive) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n',
+): typeof import('./graphql').AdsByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query AdReport($from: DateTime!, $to: DateTime!, $creativeId: Int) {\n    adReport(from: $from, to: $to, creativeId: $creativeId) {\n      creativeId\n      internalId\n      slotLocation\n      impressions\n      clicks\n      ctr\n    }\n  }\n',
+): typeof import('./graphql').AdReportDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query ActiveAds($slotLocation: AdvertiseSlotLocation!) {\n    activeAds(slotLocation: $slotLocation) {\n      id\n      internalId\n      startAt\n      endAt\n      slotType\n      slotLocation\n      slotPriority\n      graphic\n      displayPrice {\n        discountText\n        originalPrice\n        displayPrice\n      }\n      displayTitle\n      targetUrl\n      isActive\n      createdAt\n      modifiedAt\n    }\n  }\n',
+): typeof import('./graphql').ActiveAdsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {\n    recordAdImpressions(events: $events)\n  }\n',
+): typeof import('./graphql').RecordAdImpressionsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation RecordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {\n    recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)\n  }\n',
+): typeof import('./graphql').RecordAdClickDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation CreateAdAssetUploadUrl($contentType: String!) {\n    createAdAssetUploadUrl(contentType: $contentType) {\n      uploadUrl\n      assetUrl\n    }\n  }\n',
+): typeof import('./graphql').CreateAdAssetUploadUrlDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation CreateAd($input: CreateAdvertiseInput!) {\n    createAd(input: $input)\n  }\n',
+): typeof import('./graphql').CreateAdDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation UpdateAd($id: Int!, $input: UpdateAdvertiseInput!) {\n    updateAd(id: $id, input: $input)\n  }\n',
+): typeof import('./graphql').UpdateAdDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation SetAdActive($id: Int!, $isActive: Boolean!) {\n    setAdActive(id: $id, isActive: $isActive)\n  }\n',
+): typeof import('./graphql').SetAdActiveDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -343,6 +433,24 @@ export function graphql(
 export function graphql(
   source: '\n  mutation MutationRemoveKeywordMapEntryByAdmin($id: Int!) {\n    removeKeywordMapEntryByAdmin(id: $id)\n  }\n',
 ): typeof import('./graphql').MutationRemoveKeywordMapEntryByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryModelPagesByAdmin($onlyDrafts: Boolean) {\n    modelPagesByAdmin(onlyDrafts: $onlyDrafts) {\n      id\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      heroImage\n      heroMinPrice\n      isPublished\n    }\n  }\n',
+): typeof import('./graphql').QueryModelPagesByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryModelPagePreviewByAdmin($slug: String!) {\n    modelPagePreviewByAdmin(slug: $slug) {\n      id\n      isPublished\n      slug\n      brand\n      modelName\n      dealCount\n      lastDealAt\n      metaDescription\n      payload\n    }\n  }\n',
+): typeof import('./graphql').QueryModelPagePreviewByAdminDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {\n    setModelPagePublishedByAdmin(id: $id, isPublished: $isPublished)\n  }\n',
+): typeof import('./graphql').MutationSetModelPagePublishedByAdminDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -503,7 +611,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n    $brandProductId: Int\n    $verificationStatus: [ProductMappingVerificationStatus!]\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n      brandProductId: $brandProductId\n      verificationStatus: $verificationStatus\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n        price\n        url\n        provider {\n          name\n        }\n      }\n      danawaUrl\n      matchingConfidence\n      matchingReasoning\n\n      verificationStatus\n      verifiedBy {\n        id\n        name\n        email\n      }\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n',
+  source: '\n  query QueryPendingVerifications(\n    $limit: Int!\n    $searchAfter: [String!]\n    $prioritizeOld: Boolean\n    $orderBy: OrderOptionType\n    $brandProductId: Int\n    $verificationStatus: [ProductMappingVerificationStatus!]\n  ) {\n    pendingVerifications(\n      limit: $limit\n      searchAfter: $searchAfter\n      prioritizeOld: $prioritizeOld\n      orderBy: $orderBy\n      brandProductId: $brandProductId\n      verificationStatus: $verificationStatus\n    ) {\n      id\n      productId\n      brandProduct\n      product {\n        title\n        thumbnail\n        price\n        url\n        provider {\n          name\n        }\n      }\n      danawaUrl\n      matchingConfidence\n      matchingReasoning\n      aiSuggestion\n      aiSuggestionConfidence\n      aiSuggestionReason\n\n      verificationStatus\n      verifiedBy {\n        id\n        name\n        email\n      }\n      verifiedAt\n      verificationNote\n      createdAt\n      searchAfter\n    }\n  }\n',
 ): typeof import('./graphql').QueryPendingVerificationsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

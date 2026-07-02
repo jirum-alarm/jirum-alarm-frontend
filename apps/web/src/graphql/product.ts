@@ -82,6 +82,16 @@ export const QueryProductAdditionalInfo = gql`
       price
       createdAt
     }
+    priceContext {
+      dealPrice
+      danawaPrice
+      delta
+      normalPriceMin
+      normalPriceMax
+      normalPriceMedian
+      danawaProductName
+      verificationStatus
+    }
     hotDealType
     hotDealIndex {
       id
@@ -127,6 +137,8 @@ export const QueryProductInfo = gql`
     price
     postedAt
     thumbnail
+    uploaderType
+    content
     author {
       id
       nickname
@@ -319,6 +331,35 @@ export const QueryProductsByKeyword = gql`
 export const MutationCollectProduct = gql`
   mutation MutationCollectProduct($productId: Int!) {
     collectProduct(productId: $productId)
+  }
+`;
+
+export const MutationCreateUserProduct = gql`
+  mutation CreateUserProduct(
+    $title: String!
+    $url: String!
+    $categoryId: Int!
+    $price: String
+    $thumbnail: String
+    $content: String
+  ) {
+    createUserProduct(
+      title: $title
+      url: $url
+      categoryId: $categoryId
+      price: $price
+      thumbnail: $thumbnail
+      content: $content
+    )
+  }
+`;
+
+export const MutationCreateProductImageUploadUrl = gql`
+  mutation CreateProductImageUploadUrl($contentType: String!) {
+    createProductImageUploadUrl(contentType: $contentType) {
+      uploadUrl
+      imageUrl
+    }
   }
 `;
 

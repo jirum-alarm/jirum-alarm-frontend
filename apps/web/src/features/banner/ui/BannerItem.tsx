@@ -45,6 +45,7 @@ const BannerItem = ({
       )}
       href={href}
       target="_blank"
+      data-google-vignette={isAd ? 'false' : undefined}
     >
       <motion.div
         className="flex h-full w-full items-center justify-between"

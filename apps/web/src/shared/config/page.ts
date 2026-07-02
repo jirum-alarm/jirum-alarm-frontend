@@ -6,6 +6,7 @@ export enum PAGE {
   RECOMMEND = '/recommend',
 
   DETAIL = '/products',
+  PRODUCT_NEW = '/products/new',
   COMMENT = '/products/comment',
 
   LOGIN = '/login',

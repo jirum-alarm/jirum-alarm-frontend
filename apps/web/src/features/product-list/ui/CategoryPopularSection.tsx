@@ -37,5 +37,5 @@ export default function CategoryPopularSection({
 
   if (!products.length) return null;
 
-  return <CarouselProductsSection title={title} products={products} />;
+  return <CarouselProductsSection title={title} products={products} source="category_popular" />;
 }

@@ -6,5 +6,6 @@ declare global {
     ReactNativeWebView?: {
       postMessage: (message: string) => void;
     };
+    adsbygoogle?: Record<string, unknown>[];
   }
 }

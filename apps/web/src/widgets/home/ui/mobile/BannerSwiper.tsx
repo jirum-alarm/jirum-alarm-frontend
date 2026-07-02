@@ -1,5 +1,6 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
 import dynamic from 'next/dynamic';
 import { Fragment, useEffect, useRef } from 'react';
@@ -7,12 +8,16 @@ import { Autoplay } from 'swiper/modules';
 import { SwiperSlide } from 'swiper/react';
 import { AutoplayOptions, SwiperOptions } from 'swiper/types';
 
+import { AdvertiseSlotLocation } from '@/shared/api/gql/graphql';
 import { Advertisement } from '@/shared/config/advertisement';
 import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
 import { useDevice } from '@/shared/hooks/useDevice';
 import { cn } from '@/shared/lib/cn';
 
+import { AdvertisementQueries } from '@/entities/advertisement/api';
+
 import AppDownloadBanner from '@/features/app-download/ui/AppDownloadBanner';
+import { AdvertiseSlotBanner } from '@/features/banner';
 import AboutLink from '@/features/banner/ui/items/AboutLink';
 import AdBanner from '@/features/banner/ui/items/AdBanner';
 import KakaoOpenChatLink from '@/features/banner/ui/items/KakaoOpenChatLink';
@@ -37,6 +42,11 @@ const isInitAtom = atom(false);
 const BannerSwiper = () => {
   const { device, isHydrated } = useDevice();
   const { type, link } = useAppDownloadLink(device);
+  const { data: homeCarouselAds = [] } = useQuery(
+    AdvertisementQueries.activeAds({
+      slotLocation: AdvertiseSlotLocation.HomeCarouselBanner,
+    }),
+  );
 
   const initialSlide = 0; //Math.floor(Math.random() * 3);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -51,6 +61,7 @@ const BannerSwiper = () => {
   }, [setIsInit]);
 
   const canRenderAppDownload = isHydrated && type && link;
+  const hasHomeCarouselAds = homeCarouselAds.length > 0;
 
   // Persil 광고 기간일 때는 단일 배너만 렌더링
   if (Advertisement.Persil_20251124.isInPeriod()) {
@@ -84,16 +95,35 @@ const BannerSwiper = () => {
         )
       : undefined;
 
+    const homeCarouselAdSlides = homeCarouselAds.map((ad, index) => (
+      <SwiperSlide
+        key={`home-carousel-ad-${ad.id}`}
+        style={{ width: 'calc(100% - 50px)' }}
+        data-swiper-autoplay="6000"
+      >
+        <AdvertiseSlotBanner
+          slotLocation={AdvertiseSlotLocation.HomeCarouselBanner}
+          creative={ad}
+          surfaceClassName="border-0 bg-transparent"
+          priority={index === 0}
+        />
+      </SwiperSlide>
+    ));
+
     if (device.isJirumAlarmApp) {
       // KakaoOpenChatLink, AboutLink 반복 3회
       return (
         <>
+          {homeCarouselAdSlides}
           {[...Array(3)].map((_, i) => (
             <Fragment key={i}>
               {promoBannerGenerator?.(i)}
               <SwiperSlide key={`${i}-kakao-open-chat-link`} style={{ width: 'calc(100% - 50px)' }}>
                 {/* 만약 Persil 배너가 없고(undefined), i===0이면 첫 번째 */}
-                <KakaoOpenChatLink isMobile={true} priority={i === 0 && !promoBannerGenerator} />
+                <KakaoOpenChatLink
+                  isMobile={true}
+                  priority={i === 0 && !promoBannerGenerator && !hasHomeCarouselAds}
+                />
               </SwiperSlide>
               <SwiperSlide key={`${i}-about-link`} style={{ width: 'calc(100% - 50px)' }}>
                 <AboutLink isMobile={true} />
@@ -107,6 +137,7 @@ const BannerSwiper = () => {
     // AppDownloadCTA, KakaoOpenChatLink, AboutLink 반복 2회
     return (
       <>
+        {homeCarouselAdSlides}
         {[...Array(2)].map((_, i) => (
           <Fragment key={i}>
             {promoBannerGenerator?.(i)}
@@ -119,7 +150,9 @@ const BannerSwiper = () => {
               {/* Persil X, AppDownload X (type&&link false) 이면 Kakao가 첫번째 */}
               <KakaoOpenChatLink
                 isMobile={true}
-                priority={i === 0 && !promoBannerGenerator && !canRenderAppDownload}
+                priority={
+                  i === 0 && !promoBannerGenerator && !canRenderAppDownload && !hasHomeCarouselAds
+                }
               />
             </SwiperSlide>
             <SwiperSlide key={`${i}-about-link`} style={{ width: 'calc(100% - 50px)' }}>

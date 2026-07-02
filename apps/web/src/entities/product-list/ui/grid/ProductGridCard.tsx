@@ -9,6 +9,10 @@ import DisplayTime from '@/shared/ui/DisplayTime';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 import Link from '@/shared/ui/Link';
 
+import {
+  type ProductCardSource,
+  productCardTracking,
+} from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
@@ -22,6 +26,7 @@ export default function ProductGridCard({
   className,
   onCardClick,
   cardRef,
+  source,
 }: {
   product: ProductCardType;
   rank?: number;
@@ -32,6 +37,8 @@ export default function ProductGridCard({
   // 노출/클릭 추적용 opt-in. 미지정 시 기존 동작과 동일.
   onCardClick?: () => void;
   cardRef?: React.Ref<HTMLAnchorElement>;
+  // GTM 진입경로 추적용. 미지정 시 data 속성 미부착(추적 안 함).
+  source?: ProductCardSource;
 }) {
   return (
     <Link
@@ -39,6 +46,7 @@ export default function ProductGridCard({
       className="w-full"
       ref={cardRef}
       onClick={onCardClick}
+      {...productCardTracking(source, product.id, rank)}
     >
       <motion.div
         className={cn('rounded-lg', className)}

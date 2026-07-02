@@ -44,6 +44,7 @@
     "expo-haptics": "^15.0.8",
     "expo-notifications": "^0.32.17",
     "expo-web-browser": "~15.0.11",
+    "mixpanel-react-native": "^3.4.0",
     "nativewind": "4.2.2",
     "react": "19.1.0",
     "react-hook-form": "^7.55.0",

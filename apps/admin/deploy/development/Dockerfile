@@ -69,9 +69,12 @@ COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/package.json .
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
+# turbo monorepo standalone은 apps/admin/server.js 구조로 나오므로 static/public도
+# server.js 기준 경로(apps/admin/.next/static, apps/admin/public)에 둬야 런타임이 찾는다.
+# (이전: 루트 ./.next/static·./public 로 복사 → server.js가 못 찾아 모든 JS 404)
 COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/.next/standalone ./
-COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/.next/static ./.next/static
+COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/.next/static ./apps/${APP_DIRNAME}/.next/static
 COPY --from=dependencies --chown=remix:nodejs /dependencies/node_modules ./node_modules
-COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/public ./public
+COPY --from=builder --chown=next:nodejs /app/apps/${APP_DIRNAME}/public ./apps/${APP_DIRNAME}/public
 
 CMD ["node", "/app/apps/admin/server.js"]

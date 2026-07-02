@@ -2,6 +2,8 @@ import { execute } from '@/shared/lib/http-client';
 
 import { graphql, useFragment } from '../gql';
 import {
+  CreateProductImageUploadUrlMutationVariables,
+  CreateUserProductMutationVariables,
   MutationReportExpiredProductMutationVariables,
   ProductAdditionalInfoDocument,
   ProductAdditionalInfoFragmentDoc,
@@ -96,6 +98,30 @@ export class ProductService {
   static async reportExpiredProduct(variables: MutationReportExpiredProductMutationVariables) {
     return execute(MutationReportExpiredProduct, variables).then((res) => res.data);
   }
+  static async createUserProduct(variables: CreateUserProductMutationVariables) {
+    return execute(MutationCreateUserProduct, variables).then((res) => res.data.createUserProduct);
+  }
+  /**
+   * 상품 썸네일 이미지를 업로드한다.
+   * 1) 서버에서 presigned PUT URL 발급 → 2) S3 에 파일 직접 PUT → 3) CDN imageUrl 반환.
+   */
+  static async uploadProductImage(file: File): Promise<string> {
+    const variables: CreateProductImageUploadUrlMutationVariables = { contentType: file.type };
+    const { uploadUrl, imageUrl } = await execute(
+      MutationCreateProductImageUploadUrl,
+      variables,
+    ).then((res) => res.data.createProductImageUploadUrl);
+
+    const uploadRes = await fetch(uploadUrl, {
+      method: 'PUT',
+      body: file,
+      headers: { 'Content-Type': file.type },
+    });
+    if (!uploadRes.ok) {
+      throw new Error('이미지 업로드에 실패했어요.');
+    }
+    return imageUrl;
+  }
   static async getProductKeywords() {
     return execute(QueryProductKeywords).then((res) => res.data);
   }
@@ -120,7 +146,52 @@ export class ProductService {
   ) {
     return execute(QueryExpiringSoonHotDealProducts, variables).then((res) => res.data);
   }
+
+  // Track B: 같은 상품의 다른 커뮤니티 글(다나와 미매칭, 클러스터). 최저가순.
+  static async getClusteredProducts(variables: { id: number }) {
+    return execute(QueryClusteredProducts, variables).then((res) => res.data);
+  }
 }
+
+// Track B 클러스터 — 상세 "다른 커뮤니티 가격" 블록.
+// ponytail: codegen 타입 생기기 전(dev-api 미배포)에도 빌드되도록 QueryProducts 와 같은
+// TypedDocumentString + 인라인 타입 패턴. develop 배포 후 graphql() 로 치환 가능(동작 동일).
+export interface ClusteredProduct {
+  id: number;
+  title: string;
+  url: string;
+  parsedPrice: number | null;
+  priceCurrency: string | null;
+  providerId: number;
+  mallName: string | null;
+  thumbnail: string | null;
+  postedAt: string | null;
+  provider: { nameKr: string | null } | null;
+}
+interface QueryClusteredProductsResult {
+  clusteredProducts: ClusteredProduct[];
+}
+const QueryClusteredProducts = new TypedDocumentString<
+  QueryClusteredProductsResult,
+  { id: number }
+>(`
+  query QueryClusteredProducts($id: Int!) {
+    clusteredProducts(id: $id) {
+      id
+      title
+      url
+      parsedPrice
+      priceCurrency
+      providerId
+      mallName
+      thumbnail
+      postedAt
+      provider {
+        nameKr
+      }
+    }
+  }
+`);
 
 const QueryProduct = graphql(`
   query product($id: Int!) {
@@ -324,6 +395,35 @@ const MutationRecordProductImpressions = new TypedDocumentString<
 const MutationReportExpiredProduct = graphql(`
   mutation MutationReportExpiredProduct($productId: Int!) {
     reportExpiredProduct(productId: $productId)
+  }
+`);
+
+const MutationCreateUserProduct = graphql(`
+  mutation CreateUserProduct(
+    $title: String!
+    $url: String!
+    $categoryId: Int!
+    $price: String
+    $thumbnail: String
+    $content: String
+  ) {
+    createUserProduct(
+      title: $title
+      url: $url
+      categoryId: $categoryId
+      price: $price
+      thumbnail: $thumbnail
+      content: $content
+    )
+  }
+`);
+
+const MutationCreateProductImageUploadUrl = graphql(`
+  mutation CreateProductImageUploadUrl($contentType: String!) {
+    createProductImageUploadUrl(contentType: $contentType) {
+      uploadUrl
+      imageUrl
+    }
   }
 `);
 

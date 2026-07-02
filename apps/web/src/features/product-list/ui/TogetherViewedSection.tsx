@@ -21,5 +21,5 @@ export default function TogetherViewedSection({
 
   if (!products.length) return null;
 
-  return <CarouselProductsSection title={title} products={products} />;
+  return <CarouselProductsSection title={title} products={products} source="together_viewed" />;
 }

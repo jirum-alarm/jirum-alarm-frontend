@@ -46,6 +46,7 @@ export default function TrackedProductGridCard({
       displayTime={displayTime}
       className={className}
       cardRef={ref}
+      source="ranking_tab"
       onCardClick={() => {
         if (Number.isFinite(productId)) recordClick(productId, position);
       }}

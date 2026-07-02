@@ -16,12 +16,11 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 import {tabNavigations} from '@/shared/constant/navigations';
 import {useTokenRemoveEffect} from '@/screens/jirumalarmwebview/hooks/useTokenRemoveEffect';
-import {openInAppBrowser} from '@/shared/lib/navigation';
+import {useWebViewLoading} from '@/screens/jirumalarmwebview/hooks/useWebViewLoading';
+import WebViewErrorView from '@/shared/components/WebViewErrorView';
+import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
 import * as Haptics from 'expo-haptics';
-import type {
-  ShouldStartLoadRequest,
-  WebViewProgressEvent,
-} from 'react-native-webview/lib/WebViewTypes';
+import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
 import {useIsFocused} from '@react-navigation/native';
 import {isTabRootUrl} from '@/shared/lib/navigation/tab-routing';
 import {setTabBarVisible} from '@/shared/hooks/useTabBarVisibility';
@@ -32,9 +31,6 @@ interface TabWebViewProps {
   tabName: TabName;
   baseUrl: string;
 }
-
-const LOADING_INDICATOR_DELAY_MS = 1000;
-const LOADING_FALLBACK_TIMEOUT_MS = 15000;
 
 /** 네이티브 탭에서 웹 바텀 내비를 숨기기 위해 주입하는 JS */
 const INJECT_HIDE_WEB_BOTTOM_NAV = `
@@ -47,95 +43,10 @@ const INJECT_HIDE_WEB_BOTTOM_NAV = `
   true;
 `;
 
-function useLoadingState() {
-  const [isLoading, setIsLoading] = useState(false);
-  const loadingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const loadingFallbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
-  const hasInitialLoadCompletedRef = useRef(false);
-
-  const clearLoadingState = useCallback(() => {
-    if (loadingTimerRef.current) {
-      clearTimeout(loadingTimerRef.current);
-      loadingTimerRef.current = null;
-    }
-    if (loadingFallbackTimerRef.current) {
-      clearTimeout(loadingFallbackTimerRef.current);
-      loadingFallbackTimerRef.current = null;
-    }
-    setIsLoading(false);
-  }, []);
-
-  const handleLoadStart = useCallback(() => {
-    if (hasInitialLoadCompletedRef.current) {
-      return;
-    }
-    if (loadingTimerRef.current) {
-      clearTimeout(loadingTimerRef.current);
-    }
-    if (loadingFallbackTimerRef.current) {
-      clearTimeout(loadingFallbackTimerRef.current);
-      loadingFallbackTimerRef.current = null;
-    }
-    loadingTimerRef.current = setTimeout(() => {
-      setIsLoading(true);
-      loadingFallbackTimerRef.current = setTimeout(() => {
-        setIsLoading(false);
-        loadingFallbackTimerRef.current = null;
-      }, LOADING_FALLBACK_TIMEOUT_MS);
-    }, LOADING_INDICATOR_DELAY_MS);
-  }, []);
-
-  const handleLoadEnd = useCallback(() => {
-    hasInitialLoadCompletedRef.current = true;
-    clearLoadingState();
-  }, [clearLoadingState]);
-
-  const handleLoadProgress = useCallback(
-    (event: WebViewProgressEvent) => {
-      if (event.nativeEvent.progress >= 0.98) {
-        handleLoadEnd();
-      }
-    },
-    [handleLoadEnd],
-  );
-
-  useEffect(() => {
-    return () => {
-      if (loadingTimerRef.current) {
-        clearTimeout(loadingTimerRef.current);
-      }
-      if (loadingFallbackTimerRef.current) {
-        clearTimeout(loadingFallbackTimerRef.current);
-      }
-    };
-  }, []);
-
-  return {
-    isLoading,
-    clearLoadingState,
-    handleLoadStart,
-    handleLoadEnd,
-    handleLoadProgress,
-  };
-}
-
 function useUrlFilter(clearLoadingState: () => void) {
   return useCallback(
     (event: ShouldStartLoadRequest) => {
-      if (event.url === 'about:blank') {
-        return true;
-      }
-      if (
-        !event.url.includes('jirum-alarm') &&
-        !event.url.startsWith(SERVICE_URL)
-      ) {
-        clearLoadingState();
-        openInAppBrowser(event.url);
-        return false;
-      }
-      if (event.url.startsWith('https://about-us.jirum-alarm.com')) {
+      if (shouldOpenExternally(event)) {
         clearLoadingState();
         openInAppBrowser(event.url);
         return false;
@@ -161,11 +72,26 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
   const {
     isLoading,
     clearLoadingState,
-    handleLoadStart,
+    handleLoadStart: startLoading,
     handleLoadEnd,
     handleLoadProgress,
-  } = useLoadingState();
+  } = useWebViewLoading();
   const handleShouldStartLoadWithRequest = useUrlFilter(clearLoadingState);
+
+  // 메인 프레임 로드 실패(네트워크 끊김 등)만 잡는다. HTTP 에러는 web이 렌더.
+  const [hasError, setHasError] = useState(false);
+  const handleLoadStart = useCallback(() => {
+    setHasError(false);
+    startLoading();
+  }, [startLoading]);
+  const handleError = useCallback(() => {
+    handleLoadEnd();
+    setHasError(true);
+  }, [handleLoadEnd]);
+  const retry = useCallback(() => {
+    setHasError(false);
+    webviewRef.current?.reload();
+  }, []);
 
   useEffect(() => {
     registerWebViewRef(tabName, webviewRef);
@@ -222,6 +148,9 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
     handleLoadProgress,
     handleShouldStartLoadWithRequest,
     handleScrollForHomeStatusBar,
+    hasError,
+    handleError,
+    retry,
   };
 }
 
@@ -254,6 +183,9 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
     handleLoadProgress,
     handleShouldStartLoadWithRequest,
     handleScrollForHomeStatusBar,
+    hasError,
+    handleError,
+    retry,
   } = useTabWebViewCommon({tabName});
 
   const {refreshing, enableRefresh, setEnableRefresh, onRefresh} =
@@ -301,7 +233,7 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
           onLoadStart={handleLoadStart}
           onLoadEnd={handleLoadEnd}
           onLoadProgress={handleLoadProgress}
-          onError={handleLoadEnd}
+          onError={handleError}
           onHttpError={handleLoadEnd}
           onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
           onContentProcessDidTerminate={() => webviewRef.current?.reload()}
@@ -321,6 +253,7 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
           <ActivityIndicator size="small" color="#667085" />
         </View>
       )}
+      {hasError && <WebViewErrorView onRetry={retry} />}
     </View>
   );
 };
@@ -340,6 +273,9 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
     handleLoadProgress,
     handleShouldStartLoadWithRequest,
     handleScrollForHomeStatusBar,
+    hasError,
+    handleError,
+    retry,
   } = useTabWebViewCommon({tabName});
 
   return (
@@ -374,7 +310,7 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
         onLoadStart={handleLoadStart}
         onLoadEnd={handleLoadEnd}
         onLoadProgress={handleLoadProgress}
-        onError={handleLoadEnd}
+        onError={handleError}
         onHttpError={handleLoadEnd}
         onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
         onContentProcessDidTerminate={() => webviewRef.current?.reload()}
@@ -393,6 +329,7 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
           <ActivityIndicator size="small" color="#667085" />
         </View>
       )}
+      {hasError && <WebViewErrorView onRetry={retry} />}
     </View>
   );
 };

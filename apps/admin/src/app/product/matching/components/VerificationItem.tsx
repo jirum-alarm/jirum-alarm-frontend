@@ -106,6 +106,26 @@ const VerificationItem = memo(function VerificationItem({
     );
   };
 
+  // AI 검증 추천 뱃지 (매칭 시점에 LLM/CE가 낸 판정 — 사람 확정과 별개, 참고용)
+  const getAiSuggestionBadge = () => {
+    if (item.aiSuggestion == null) return null;
+    const isApprove = item.aiSuggestion === 'approve';
+    const reason =
+      item.aiSuggestionReason ||
+      `AI ${isApprove ? '승인' : '거절'} 추천` +
+        (item.aiSuggestionConfidence != null ? ` (${item.aiSuggestionConfidence}%)` : '');
+    return (
+      <span
+        className={`cursor-help rounded px-1 py-0.5 text-[10px] font-bold ${
+          isApprove ? 'bg-success/15 text-success' : 'bg-danger/15 text-danger'
+        }`}
+        title={reason}
+      >
+        🤖 {isApprove ? '승인추천' : '거절추천'}
+      </span>
+    );
+  };
+
   // #3: 키워드 하이라이팅이 적용된 제목 (브랜드명, 상품명, 용량, 개수)
   const renderTitle = () => {
     const title = item.product?.title || '제목 없음';
@@ -181,6 +201,7 @@ const VerificationItem = memo(function VerificationItem({
           {/* 상태 뱃지, 신뢰도, ID, 날짜, 검증자 */}
           <div className="mb-0.5 flex flex-wrap items-center gap-1.5">
             {getStatusBadge()}
+            {getAiSuggestionBadge()}
             {getConfidenceBadge()}
             <span className="text-gray-400 text-[10px]">ID: {item.productId}</span>
             <span className="text-gray-400 text-[10px]">

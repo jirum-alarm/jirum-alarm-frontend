@@ -9,6 +9,7 @@ import { SwiperOptions } from 'swiper/types';
 import { useDevice } from '@/shared/hooks/useDevice';
 import { cn } from '@/shared/lib/cn';
 
+import { type ProductCardSource } from '@/entities/product-list/model/card-tracking';
 import { ProductCardType } from '@/entities/product-list/model/types';
 
 import CarouselProductCard from './CarouselProductCard';
@@ -19,6 +20,7 @@ interface CarouselProductListProps {
   maxItems?: number;
   nested?: boolean;
   priorityCount?: number;
+  source?: ProductCardSource;
 }
 
 function CarouselProductList({
@@ -26,6 +28,7 @@ function CarouselProductList({
   maxItems,
   nested = false,
   priorityCount = 0,
+  source,
 }: CarouselProductListProps) {
   const { device } = useDevice();
 
@@ -82,7 +85,7 @@ function CarouselProductList({
           className={cn(!isInit && 'pc:pr-6 pc:first:pl-0 pr-3 first:pl-5')}
           style={{ width: 'fit-content' }}
         >
-          <CarouselProductCard product={product} priority={i < priorityCount} />
+          <CarouselProductCard product={product} priority={i < priorityCount} source={source} />
         </SwiperSlide>
       ))}
     </Swiper>

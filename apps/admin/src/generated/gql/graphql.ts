@@ -23,35 +23,23 @@ export type Scalars = {
   JSONObject: { input: any; output: any };
 };
 
-export type Ad = {
-  __typename?: 'Ad';
-  createdAt: Scalars['DateTime']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  endAt: Scalars['DateTime']['output'];
-  id: Scalars['ID']['output'];
-  imageUrl?: Maybe<Scalars['String']['output']>;
-  isActive: Scalars['Boolean']['output'];
-  linkUrl?: Maybe<Scalars['String']['output']>;
-  slotType: AdSlotType;
-  startAt: Scalars['DateTime']['output'];
-  title?: Maybe<Scalars['String']['output']>;
-  updatedAt: Scalars['DateTime']['output'];
-  weight: Scalars['Int']['output'];
+export type AdAssetUploadUrlOutput = {
+  __typename?: 'AdAssetUploadUrlOutput';
+  /** 업로드 완료 후 graphic.assetUrl 로 쓸 CDN URL */
+  assetUrl: Scalars['String']['output'];
+  /** 이미지를 PUT 업로드할 presigned URL */
+  uploadUrl: Scalars['String']['output'];
 };
 
-export enum AdSlotType {
-  DetailPageBanner = 'DETAIL_PAGE_BANNER',
-  MainBanner = 'MAIN_BANNER',
-  MainRankingInfeed = 'MAIN_RANKING_INFEED',
-  MenuRankingInfeed = 'MENU_RANKING_INFEED',
-}
-
-export type AdStats = {
-  __typename?: 'AdStats';
-  adId: Scalars['Int']['output'];
+export type AdReportRow = {
+  __typename?: 'AdReportRow';
   clicks: Scalars['Int']['output'];
-  date: Scalars['String']['output'];
+  creativeId: Scalars['Int']['output'];
+  /** clicks / impressions (impressions=0 이면 0) */
+  ctr: Scalars['Float']['output'];
   impressions: Scalars['Int']['output'];
+  internalId: Scalars['String']['output'];
+  slotLocation: Scalars['String']['output'];
 };
 
 export type AdminUser = {
@@ -61,6 +49,64 @@ export type AdminUser = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
 };
+
+export type AdvertiseCreative = {
+  __typename?: 'AdvertiseCreative';
+  createdAt: Scalars['DateTime']['output'];
+  displayPrice?: Maybe<AdvertisePrice>;
+  displayTitle?: Maybe<Scalars['String']['output']>;
+  endAt: Scalars['DateTime']['output'];
+  /** ResponsiveAdvertiseGraphic (프론트가 렌더) */
+  graphic: Scalars['JSONObject']['output'];
+  id: Scalars['ID']['output'];
+  /** 내부 식별자 (예: 얼라이브-260625-배너) */
+  internalId: Scalars['String']['output'];
+  /** 즉시 on/off 킬스위치 */
+  isActive: Scalars['Boolean']['output'];
+  modifiedAt: Scalars['DateTime']['output'];
+  /** 노출 위치 (여러 곳 가능) */
+  slotLocation: Array<AdvertiseSlotLocation>;
+  /** 높을수록 먼저 노출 */
+  slotPriority: Scalars['Int']['output'];
+  slotType: AdvertiseSlotType;
+  startAt: Scalars['DateTime']['output'];
+  /** 클릭 시 목적지 URL */
+  targetUrl: Scalars['String']['output'];
+};
+
+export type AdvertiseImpressionInput = {
+  creativeId: Scalars['Int']['input'];
+  slotLocation: AdvertiseSlotLocation;
+};
+
+export type AdvertisePrice = {
+  __typename?: 'AdvertisePrice';
+  /** 예: "28% 할인" */
+  discountText?: Maybe<Scalars['String']['output']>;
+  /** 예: "299,000원" / "299,000원~" / "최대 30% 할인" */
+  displayPrice: Scalars['String']['output'];
+  /** 예: "999,000원" */
+  originalPrice?: Maybe<Scalars['String']['output']>;
+};
+
+export type AdvertisePriceInput = {
+  discountText?: InputMaybe<Scalars['String']['input']>;
+  displayPrice: Scalars['String']['input'];
+  originalPrice?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum AdvertiseSlotLocation {
+  HomeCarouselBanner = 'home_carousel_banner',
+  HomeMainBanner = 'home_main_banner',
+  HomeRankingProduct = 'home_ranking_product',
+  ProductMainBanner = 'product_main_banner',
+  SiwolPromotionEnter = 'siwol_promotion_enter',
+}
+
+export enum AdvertiseSlotType {
+  Banner = 'banner',
+  PinnedProduct = 'pinnedProduct',
+}
 
 export type AgeGroupCountOutput = {
   __typename?: 'AgeGroupCountOutput';
@@ -161,6 +207,21 @@ export type CommentOutput = {
   trendedAt?: Maybe<Scalars['DateTime']['output']>;
   userId: Scalars['Float']['output'];
   viewCount: Scalars['Int']['output'];
+};
+
+export type CreateAdvertiseInput = {
+  displayPrice?: InputMaybe<AdvertisePriceInput>;
+  displayTitle?: InputMaybe<Scalars['String']['input']>;
+  endAt: Scalars['DateTime']['input'];
+  /** ResponsiveAdvertiseGraphic */
+  graphic: Scalars['JSONObject']['input'];
+  internalId: Scalars['String']['input'];
+  isActive?: Scalars['Boolean']['input'];
+  slotLocation: Array<AdvertiseSlotLocation>;
+  slotPriority?: Scalars['Int']['input'];
+  slotType: AdvertiseSlotType;
+  startAt: Scalars['DateTime']['input'];
+  targetUrl: Scalars['String']['input'];
 };
 
 export enum CurrencyType {
@@ -440,6 +501,44 @@ export type MatchRunsByAdminOutput = {
   total: Scalars['Int']['output'];
 };
 
+export type ModelPageAdminItemOutput = {
+  __typename?: 'ModelPageAdminItemOutput';
+  brand?: Maybe<Scalars['String']['output']>;
+  dealCount: Scalars['Int']['output'];
+  heroImage?: Maybe<Scalars['String']['output']>;
+  heroMinPrice?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['Int']['output'];
+  isPublished: Scalars['Boolean']['output'];
+  lastDealAt?: Maybe<Scalars['DateTime']['output']>;
+  modelName: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+};
+
+export type ModelPageListItemOutput = {
+  __typename?: 'ModelPageListItemOutput';
+  brand?: Maybe<Scalars['String']['output']>;
+  dealCount: Scalars['Int']['output'];
+  heroImage?: Maybe<Scalars['String']['output']>;
+  heroMinPrice?: Maybe<Scalars['Int']['output']>;
+  modelName: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+  unitLabel?: Maybe<Scalars['String']['output']>;
+  unitPrice?: Maybe<Scalars['Int']['output']>;
+};
+
+export type ModelPageOutput = {
+  __typename?: 'ModelPageOutput';
+  brand?: Maybe<Scalars['String']['output']>;
+  dealCount: Scalars['Int']['output'];
+  id?: Maybe<Scalars['Int']['output']>;
+  isPublished?: Maybe<Scalars['Boolean']['output']>;
+  lastDealAt?: Maybe<Scalars['DateTime']['output']>;
+  metaDescription?: Maybe<Scalars['String']['output']>;
+  modelName: Scalars['String']['output'];
+  payload?: Maybe<Scalars['JSONObject']['output']>;
+  slug: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addComment: Scalars['Boolean']['output'];
@@ -480,13 +579,18 @@ export type Mutation = {
   batchVerifyProductMapping: Scalars['Int']['output'];
   /** 검증 취소 (검증 완료/거부된 항목을 다시 대기 상태로 되돌림) */
   cancelVerification: Scalars['Boolean']['output'];
-  clearAdCache: Scalars['Boolean']['output'];
   /** 상품 단건 수집 */
   collectProduct: Scalars['Boolean']['output'];
   /** 썸네일 단건 수집 */
   collectThumbnail: Scalars['Boolean']['output'];
-  createAd: Ad;
-  deleteAd: Scalars['Boolean']['output'];
+  /** 어드민) 광고 생성 (생성된 id 반환) */
+  createAd: Scalars['Int']['output'];
+  /** 어드민) 광고 에셋 업로드 presigned URL */
+  createAdAssetUploadUrl: AdAssetUploadUrlOutput;
+  /** 유저 등록 상품 썸네일 업로드용 presigned URL 발급 */
+  createProductImageUploadUrl: ProductImageUploadUrlOutput;
+  /** 유저가 직접 핫딜 상품 등록 (등록된 productId 반환) */
+  createUserProduct: Scalars['Int']['output'];
   /** 어드민) 상품 hard delete */
   hardDeleteProductByAdmin: Scalars['Boolean']['output'];
   /** 로그인 */
@@ -500,6 +604,12 @@ export type Mutation = {
   readAllNotifications: Scalars['Boolean']['output'];
   /** 모든 알림 읽음 처리 */
   readNotification: Scalars['Boolean']['output'];
+  /** 광고 클릭 계측 */
+  recordAdClick: Scalars['Boolean']['output'];
+  /** 광고 노출 계측 (bulk) */
+  recordAdImpressions: Scalars['Boolean']['output'];
+  /** 상품 노출(impression) 기록 — 프론트 viewport 가 보고. CTR 분모. */
+  recordProductImpressions: Scalars['Boolean']['output'];
   /** 어드민) 리액션 키워드 후보 거절 */
   rejectHotDealKeywordCandidateByAdmin: Scalars['Boolean']['output'];
   /** 모든 알림 삭제 */
@@ -528,15 +638,22 @@ export type Mutation = {
   reportExpiredProduct: Scalars['Boolean']['output'];
   /** 어드민) 알림 발송 */
   sendNotificationByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 광고 on/off (킬스위치) */
+  setAdActive: Scalars['Boolean']['output'];
+  /** 어드민) 모델 페이지 발행 토글 */
+  setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
   /** 대표 매핑 지정 (id 기준) */
   setPrimaryProductMapping: Scalars['Boolean']['output'];
   /** 회원가입 */
   signup: SignupOutput;
   /** 소셜 로그인 */
   socialLogin: SocialLoginOutput;
-  trackAdClick: Scalars['Boolean']['output'];
-  trackAdImpression: Scalars['Boolean']['output'];
-  updateAd: Ad;
+  /** 알림 묶음(테마) 구독 — 키워드 시점 매칭, 멱등 */
+  subscribeNotificationTheme: Scalars['Boolean']['output'];
+  /** 알림 묶음(테마) 구독 해지 */
+  unsubscribeNotificationTheme: Scalars['Boolean']['output'];
+  /** 어드민) 광고 수정 */
+  updateAd: Scalars['Boolean']['output'];
   updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
@@ -677,32 +794,37 @@ export type MutationCancelVerificationArgs = {
   reason?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type MutationClearAdCacheArgs = {
-  slot: AdSlotType;
-};
-
 export type MutationCollectProductArgs = {
+  position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationCollectThumbnailArgs = {
+  position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationCreateAdArgs = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  endAt: Scalars['DateTime']['input'];
-  imageUrl?: InputMaybe<Scalars['String']['input']>;
-  isActive?: Scalars['Boolean']['input'];
-  linkUrl?: InputMaybe<Scalars['String']['input']>;
-  slotType: AdSlotType;
-  startAt: Scalars['DateTime']['input'];
-  title?: InputMaybe<Scalars['String']['input']>;
-  weight?: Scalars['Int']['input'];
+  input: CreateAdvertiseInput;
 };
 
-export type MutationDeleteAdArgs = {
-  id: Scalars['Int']['input'];
+export type MutationCreateAdAssetUploadUrlArgs = {
+  contentType: Scalars['String']['input'];
+};
+
+export type MutationCreateProductImageUploadUrlArgs = {
+  contentType: Scalars['String']['input'];
+};
+
+export type MutationCreateUserProductArgs = {
+  categoryId: Scalars['Int']['input'];
+  content?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['String']['input']>;
+  thumbnail?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  url: Scalars['String']['input'];
 };
 
 export type MutationHardDeleteProductByAdminArgs = {
@@ -720,6 +842,20 @@ export type MutationMatchProductToDanawaProductArgs = {
 
 export type MutationReadNotificationArgs = {
   id: Scalars['Int']['input'];
+};
+
+export type MutationRecordAdClickArgs = {
+  creativeId: Scalars['Int']['input'];
+  slotLocation: AdvertiseSlotLocation;
+};
+
+export type MutationRecordAdImpressionsArgs = {
+  events: Array<AdvertiseImpressionInput>;
+};
+
+export type MutationRecordProductImpressionsArgs = {
+  impressions: Array<ProductImpressionInput>;
+  source: Scalars['String']['input'];
 };
 
 export type MutationRejectHotDealKeywordCandidateByAdminArgs = {
@@ -784,6 +920,16 @@ export type MutationSendNotificationByAdminArgs = {
   userIds?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
+export type MutationSetAdActiveArgs = {
+  id: Scalars['Int']['input'];
+  isActive: Scalars['Boolean']['input'];
+};
+
+export type MutationSetModelPagePublishedByAdminArgs = {
+  id: Scalars['Int']['input'];
+  isPublished: Scalars['Boolean']['input'];
+};
+
 export type MutationSetPrimaryProductMappingArgs = {
   productMappingId: Scalars['Int']['input'];
 };
@@ -811,25 +957,17 @@ export type MutationSocialLoginArgs = {
   socialAccessToken: Scalars['String']['input'];
 };
 
-export type MutationTrackAdClickArgs = {
-  id: Scalars['Int']['input'];
+export type MutationSubscribeNotificationThemeArgs = {
+  themeId: Scalars['Int']['input'];
 };
 
-export type MutationTrackAdImpressionArgs = {
-  id: Scalars['Int']['input'];
+export type MutationUnsubscribeNotificationThemeArgs = {
+  themeId: Scalars['Int']['input'];
 };
 
 export type MutationUpdateAdArgs = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  endAt?: InputMaybe<Scalars['DateTime']['input']>;
   id: Scalars['Int']['input'];
-  imageUrl?: InputMaybe<Scalars['String']['input']>;
-  isActive?: InputMaybe<Scalars['Boolean']['input']>;
-  linkUrl?: InputMaybe<Scalars['String']['input']>;
-  slotType?: InputMaybe<AdSlotType>;
-  startAt?: InputMaybe<Scalars['DateTime']['input']>;
-  title?: InputMaybe<Scalars['String']['input']>;
-  weight?: InputMaybe<Scalars['Int']['input']>;
+  input: UpdateAdvertiseInput;
 };
 
 export type MutationUpdateCommentArgs = {
@@ -965,6 +1103,39 @@ export type PaginatedGridSection = BaseSection & {
   viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
+export type PriceComparison = {
+  __typename?: 'PriceComparison';
+  /** 가격비교 출처(DANAWA | COMMUNITY_CLUSTER) */
+  basis: PriceComparisonBasis;
+  /** DANAWA 전용 상세 */
+  danawa?: Maybe<PriceContext>;
+  /** 우리 딜가(원) */
+  dealPrice: Scalars['Float']['output'];
+  /** 할인율 0~1 (1 - dealPrice/lowestPrice) */
+  delta: Scalars['Float']['output'];
+  /** 비교 최저가 — 다나와가 또는 클러스터 최저가 */
+  lowestPrice: Scalars['Float']['output'];
+  /** COMMUNITY_CLUSTER 전용 판매처별 글 */
+  sellers?: Maybe<Array<ProductOutput>>;
+};
+
+export enum PriceComparisonBasis {
+  CommunityCluster = 'COMMUNITY_CLUSTER',
+  Danawa = 'DANAWA',
+}
+
+export type PriceContext = {
+  __typename?: 'PriceContext';
+  danawaPrice: Scalars['Float']['output'];
+  danawaProductName?: Maybe<Scalars['String']['output']>;
+  dealPrice: Scalars['Float']['output'];
+  delta: Scalars['Float']['output'];
+  normalPriceMax?: Maybe<Scalars['Float']['output']>;
+  normalPriceMedian?: Maybe<Scalars['Float']['output']>;
+  normalPriceMin?: Maybe<Scalars['Float']['output']>;
+  verificationStatus?: Maybe<Scalars['String']['output']>;
+};
+
 export type PriceRangeCountOutput = {
   __typename?: 'PriceRangeCountOutput';
   count: Scalars['Int']['output'];
@@ -1020,8 +1191,24 @@ export type ProductHotDealIndex = {
   visualConfig?: Maybe<PriceVisualConfig>;
 };
 
+export type ProductImageUploadUrlOutput = {
+  __typename?: 'ProductImageUploadUrlOutput';
+  /** 업로드 완료 후 상품 thumbnail 로 쓸 CDN URL */
+  imageUrl: Scalars['String']['output'];
+  /** 이미지를 PUT 업로드할 presigned URL (1시간 만료) */
+  uploadUrl: Scalars['String']['output'];
+};
+
+export type ProductImpressionInput = {
+  position: Scalars['Int']['input'];
+  productId: Scalars['Int']['input'];
+};
+
 export type ProductMapping = {
   __typename?: 'ProductMapping';
+  aiSuggestion?: Maybe<ProductMappingAiSuggestion>;
+  aiSuggestionConfidence?: Maybe<Scalars['Int']['output']>;
+  aiSuggestionReason?: Maybe<Scalars['String']['output']>;
   correctPcode?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   danawaUrl?: Maybe<Scalars['String']['output']>;
@@ -1052,6 +1239,11 @@ export type ProductMapping = {
   verifiedById?: Maybe<Scalars['Int']['output']>;
 };
 
+export enum ProductMappingAiSuggestion {
+  Approve = 'APPROVE',
+  Reject = 'REJECT',
+}
+
 export enum ProductMappingFeedbackType {
   Confirmed = 'CONFIRMED',
   Corrected = 'CORRECTED',
@@ -1074,6 +1266,9 @@ export enum ProductMappingMatchStatus {
 
 export type ProductMappingOutput = {
   __typename?: 'ProductMappingOutput';
+  aiSuggestion?: Maybe<ProductMappingAiSuggestion>;
+  aiSuggestionConfidence?: Maybe<Scalars['Int']['output']>;
+  aiSuggestionReason?: Maybe<Scalars['String']['output']>;
   brandProduct?: Maybe<Scalars['String']['output']>;
   correctPcode?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
@@ -1143,6 +1338,8 @@ export type ProductOutput = {
   categoryName?: Maybe<Scalars['String']['output']>;
   commentSummary?: Maybe<ProductCommentSummary>;
   consumptionDate?: Maybe<Scalars['DateTime']['output']>;
+  /** 상품 설명(유저 등록 상품) */
+  content?: Maybe<Scalars['String']['output']>;
   detailUrl?: Maybe<Scalars['String']['output']>;
   dislikeCount: Scalars['Int']['output'];
   distributionDate?: Maybe<Scalars['DateTime']['output']>;
@@ -1167,7 +1364,6 @@ export type ProductOutput = {
   isProfitUrl: Scalars['Boolean']['output'];
   likeCount: Scalars['Int']['output'];
   mallId?: Maybe<Scalars['Int']['output']>;
-  /** 쇼핑몰 이름 */
   mallName?: Maybe<Scalars['String']['output']>;
   mappingInfo?: Maybe<Array<ProductMappingInfoOutput>>;
   negativeCommunityReactionCount: Scalars['Int']['output'];
@@ -1176,6 +1372,11 @@ export type ProductOutput = {
   postedAt: Scalars['DateTime']['output'];
   precomputedRankingScore?: Maybe<Scalars['Float']['output']>;
   price?: Maybe<Scalars['String']['output']>;
+  /** 통합 가격비교(DANAWA 배지 또는 COMMUNITY_CLUSTER 블록, 상세 전용) */
+  priceComparison?: Maybe<PriceComparison>;
+  /** 왜 핫딜인지 가격 컨텍스트 (게이트 통과 시에만, 상세 전용) */
+  priceContext?: Maybe<PriceContext>;
+  priceCurrency?: Maybe<Scalars['String']['output']>;
   /** 상품 가격 목록 */
   prices?: Maybe<Array<ProductPrice>>;
   productMapping?: Maybe<ProductMapping>;
@@ -1187,6 +1388,8 @@ export type ProductOutput = {
   similarity?: Maybe<Scalars['Float']['output']>;
   thumbnail?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
+  /** 업로드 주체 */
+  uploaderType: UploaderType;
   url?: Maybe<Scalars['String']['output']>;
   /** 조회 수 */
   viewCount: Scalars['Int']['output'];
@@ -1252,9 +1455,13 @@ export enum ProviderType {
 
 export type Query = {
   __typename?: 'Query';
-  adStats: Array<AdStats>;
+  /** 슬롯 위치의 현재 노출 가능한 광고 (우선순위순) */
+  activeAds: Array<AdvertiseCreative>;
+  /** 어드민) 광고 노출/클릭 정산 리포트 */
+  adReport: Array<AdReportRow>;
   adminMe: AdminUser;
-  ads: Array<Ad>;
+  /** 어드민) 광고 목록 */
+  adsByAdmin: Array<AdvertiseCreative>;
   analysisTitleByDanawa: Scalars['Boolean']['output'];
   /** BrandItem 단위 매칭된 전체 개수 조회 */
   brandItemsByMatchCountTotalCount: Scalars['Int']['output'];
@@ -1269,6 +1476,8 @@ export type Query = {
   categories: Array<Category>;
   /** 커뮤니티 반응 카테고리별 키워드 조회 */
   categorizedReactionKeywords: CategorizedReactionKeywordsResponse;
+  /** 같은 상품의 다른 커뮤니티 글 조회 (Track B 클러스터, 최저가순) */
+  clusteredProducts: Array<ProductOutput>;
   comment: CommentOutput;
   comments: Array<CommentOutput>;
   /** 어드민) 댓글 목록 조회 */
@@ -1297,6 +1506,8 @@ export type Query = {
   getPersonalizedProductsByUserId: Array<RecommendedProductOutput>;
   /** 특정 상품과 유사한 상품 조회 */
   getSimilarProducts: Array<ProductOutput>;
+  /** 게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백) */
+  guestRecommendedHotDeals: Array<ProductOutput>;
   homePage: Array<BaseSection>;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
@@ -1325,10 +1536,21 @@ export type Query = {
   matchRunsByAdmin: MatchRunsByAdminOutput;
   /** 로그인한 유저 정보 조회 */
   me?: Maybe<User>;
+  modelPage?: Maybe<ModelPageOutput>;
+  /** 어드민) 모델 페이지 미리보기 */
+  modelPagePreviewByAdmin?: Maybe<ModelPageOutput>;
+  /** 어드민) 모델 페이지 검수 목록 */
+  modelPagesByAdmin: Array<ModelPageAdminItemOutput>;
+  /** 내가 구독한 묶음(테마) id 목록 */
+  mySubscribedThemeIds: Array<Scalars['Int']['output']>;
   /** 유저 알림 키워드 목록 조회 */
   notificationKeywordsByMe: Array<NotificationKeyword>;
   /** 어드민) 개별 알림 목록 조회 */
   notificationListByAdmin: Array<Notification>;
+  /** 묶음 라이브 딜(상세 진입 시 실시간 조회) */
+  notificationThemeLiveDeals: Array<ProductOutput>;
+  /** 활성 알림 묶음(테마) 목록 + 대표 키워드 */
+  notificationThemes: Array<ThemeWithKeywords>;
   /** 알림 목록 조회 */
   notifications: Array<Notification>;
   /** 어드민) 알림 발송 이력 조회 */
@@ -1359,6 +1581,7 @@ export type Query = {
   productsByKeyword: Array<ProductOutput>;
   /** 어드민) provider별 최근 수집 활동 (1h/24h/7d count + 마지막 수집 시각) */
   providerHealthStatus: Array<ProviderHealthOutput>;
+  publishedModelPages: Array<ModelPageListItemOutput>;
   /** 푸시 세팅 조회 */
   pushSetting: UserPushSetting;
   /** 최근에 본 상품 N개 조회 */
@@ -1414,14 +1637,19 @@ export type Query = {
   wishlists: Array<WishlistOutput>;
 };
 
-export type QueryAdStatsArgs = {
-  adId?: InputMaybe<Scalars['Int']['input']>;
-  endDate: Scalars['DateTime']['input'];
-  startDate: Scalars['DateTime']['input'];
+export type QueryActiveAdsArgs = {
+  slotLocation: AdvertiseSlotLocation;
 };
 
-export type QueryAdsArgs = {
-  slots: Array<AdSlotType>;
+export type QueryAdReportArgs = {
+  creativeId?: InputMaybe<Scalars['Int']['input']>;
+  from: Scalars['DateTime']['input'];
+  to: Scalars['DateTime']['input'];
+};
+
+export type QueryAdsByAdminArgs = {
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  slotLocation?: InputMaybe<AdvertiseSlotLocation>;
 };
 
 export type QueryBrandItemsByMatchCountTotalCountArgs = {
@@ -1451,6 +1679,10 @@ export type QueryBrandProductsOrderByMatchCountArgs = {
 };
 
 export type QueryCategorizedReactionKeywordsArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type QueryClusteredProductsArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -1543,6 +1775,11 @@ export type QueryGetSimilarProductsArgs = {
   productId: Scalars['Int']['input'];
 };
 
+export type QueryGuestRecommendedHotDealsArgs = {
+  limit: Scalars['Int']['input'];
+  page: Scalars['Int']['input'];
+};
+
 export type QueryHotDealExcludeKeywordsByAdminArgs = {
   hotDealKeywordId: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
@@ -1620,6 +1857,18 @@ export type QueryMatchRunsByAdminArgs = {
   to?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+export type QueryModelPageArgs = {
+  slug: Scalars['String']['input'];
+};
+
+export type QueryModelPagePreviewByAdminArgs = {
+  slug: Scalars['String']['input'];
+};
+
+export type QueryModelPagesByAdminArgs = {
+  onlyDrafts?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type QueryNotificationKeywordsByMeArgs = {
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -1631,6 +1880,10 @@ export type QueryNotificationListByAdminArgs = {
   target?: InputMaybe<NotificationTarget>;
   targetId?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type QueryNotificationThemeLiveDealsArgs = {
+  themeId: Scalars['Int']['input'];
 };
 
 export type QueryNotificationsArgs = {
@@ -1881,6 +2134,15 @@ export type Subscription = {
   productAdded: ProductOutput;
 };
 
+export type ThemeWithKeywords = {
+  __typename?: 'ThemeWithKeywords';
+  description: Scalars['String']['output'];
+  emoji?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  representativeKeywords: Array<Scalars['String']['output']>;
+};
+
 export type ThumbnailMallCountOutput = {
   __typename?: 'ThumbnailMallCountOutput';
   count: Scalars['Int']['output'];
@@ -1919,6 +2181,30 @@ export type TokenOutput = {
 export enum TokenType {
   Apns = 'APNS',
   Fcm = 'FCM',
+}
+
+export type UpdateAdvertiseInput = {
+  displayPrice?: InputMaybe<AdvertisePriceInput>;
+  displayTitle?: InputMaybe<Scalars['String']['input']>;
+  endAt?: InputMaybe<Scalars['DateTime']['input']>;
+  graphic?: InputMaybe<Scalars['JSONObject']['input']>;
+  internalId?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  slotLocation?: InputMaybe<Array<AdvertiseSlotLocation>>;
+  slotPriority?: InputMaybe<Scalars['Int']['input']>;
+  slotType?: InputMaybe<AdvertiseSlotType>;
+  startAt?: InputMaybe<Scalars['DateTime']['input']>;
+  targetUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** 상품 업로드 주체 */
+export enum UploaderType {
+  /** 크롤러가 수집한 상품 (기본값) */
+  Crawled = 'CRAWLED',
+  /** 지름알림 공식이 등록한 상품 */
+  Official = 'OFFICIAL',
+  /** 일반 유저가 직접 등록한 상품 */
+  User = 'USER',
 }
 
 export type User = {
@@ -2016,6 +2302,132 @@ export type ProductExpireReport = {
   productId: Scalars['Int']['output'];
   userId: Scalars['Int']['output'];
 };
+
+export type AdsByAdminQueryVariables = Exact<{
+  slotLocation?: InputMaybe<AdvertiseSlotLocation>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type AdsByAdminQuery = {
+  __typename?: 'Query';
+  adsByAdmin: Array<{
+    __typename?: 'AdvertiseCreative';
+    id: string;
+    internalId: string;
+    startAt: any;
+    endAt: any;
+    slotType: AdvertiseSlotType;
+    slotLocation: Array<AdvertiseSlotLocation>;
+    slotPriority: number;
+    graphic: any;
+    displayTitle?: string | null;
+    targetUrl: string;
+    isActive: boolean;
+    createdAt: any;
+    modifiedAt: any;
+    displayPrice?: {
+      __typename?: 'AdvertisePrice';
+      discountText?: string | null;
+      originalPrice?: string | null;
+      displayPrice: string;
+    } | null;
+  }>;
+};
+
+export type AdReportQueryVariables = Exact<{
+  from: Scalars['DateTime']['input'];
+  to: Scalars['DateTime']['input'];
+  creativeId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type AdReportQuery = {
+  __typename?: 'Query';
+  adReport: Array<{
+    __typename?: 'AdReportRow';
+    creativeId: number;
+    internalId: string;
+    slotLocation: string;
+    impressions: number;
+    clicks: number;
+    ctr: number;
+  }>;
+};
+
+export type ActiveAdsQueryVariables = Exact<{
+  slotLocation: AdvertiseSlotLocation;
+}>;
+
+export type ActiveAdsQuery = {
+  __typename?: 'Query';
+  activeAds: Array<{
+    __typename?: 'AdvertiseCreative';
+    id: string;
+    internalId: string;
+    startAt: any;
+    endAt: any;
+    slotType: AdvertiseSlotType;
+    slotLocation: Array<AdvertiseSlotLocation>;
+    slotPriority: number;
+    graphic: any;
+    displayTitle?: string | null;
+    targetUrl: string;
+    isActive: boolean;
+    createdAt: any;
+    modifiedAt: any;
+    displayPrice?: {
+      __typename?: 'AdvertisePrice';
+      discountText?: string | null;
+      originalPrice?: string | null;
+      displayPrice: string;
+    } | null;
+  }>;
+};
+
+export type RecordAdImpressionsMutationVariables = Exact<{
+  events: Array<AdvertiseImpressionInput> | AdvertiseImpressionInput;
+}>;
+
+export type RecordAdImpressionsMutation = { __typename?: 'Mutation'; recordAdImpressions: boolean };
+
+export type RecordAdClickMutationVariables = Exact<{
+  creativeId: Scalars['Int']['input'];
+  slotLocation: AdvertiseSlotLocation;
+}>;
+
+export type RecordAdClickMutation = { __typename?: 'Mutation'; recordAdClick: boolean };
+
+export type CreateAdAssetUploadUrlMutationVariables = Exact<{
+  contentType: Scalars['String']['input'];
+}>;
+
+export type CreateAdAssetUploadUrlMutation = {
+  __typename?: 'Mutation';
+  createAdAssetUploadUrl: {
+    __typename?: 'AdAssetUploadUrlOutput';
+    uploadUrl: string;
+    assetUrl: string;
+  };
+};
+
+export type CreateAdMutationVariables = Exact<{
+  input: CreateAdvertiseInput;
+}>;
+
+export type CreateAdMutation = { __typename?: 'Mutation'; createAd: number };
+
+export type UpdateAdMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  input: UpdateAdvertiseInput;
+}>;
+
+export type UpdateAdMutation = { __typename?: 'Mutation'; updateAd: boolean };
+
+export type SetAdActiveMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  isActive: Scalars['Boolean']['input'];
+}>;
+
+export type SetAdActiveMutation = { __typename?: 'Mutation'; setAdActive: boolean };
 
 export type MutationAdminLoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -2365,6 +2777,56 @@ export type MutationRemoveKeywordMapEntryByAdminMutationVariables = Exact<{
 export type MutationRemoveKeywordMapEntryByAdminMutation = {
   __typename?: 'Mutation';
   removeKeywordMapEntryByAdmin: boolean;
+};
+
+export type QueryModelPagesByAdminQueryVariables = Exact<{
+  onlyDrafts?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type QueryModelPagesByAdminQuery = {
+  __typename?: 'Query';
+  modelPagesByAdmin: Array<{
+    __typename?: 'ModelPageAdminItemOutput';
+    id: number;
+    slug: string;
+    brand?: string | null;
+    modelName: string;
+    dealCount: number;
+    lastDealAt?: any | null;
+    heroImage?: string | null;
+    heroMinPrice?: number | null;
+    isPublished: boolean;
+  }>;
+};
+
+export type QueryModelPagePreviewByAdminQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+export type QueryModelPagePreviewByAdminQuery = {
+  __typename?: 'Query';
+  modelPagePreviewByAdmin?: {
+    __typename?: 'ModelPageOutput';
+    id?: number | null;
+    isPublished?: boolean | null;
+    slug: string;
+    brand?: string | null;
+    modelName: string;
+    dealCount: number;
+    lastDealAt?: any | null;
+    metaDescription?: string | null;
+    payload?: any | null;
+  } | null;
+};
+
+export type MutationSetModelPagePublishedByAdminMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  isPublished: Scalars['Boolean']['input'];
+}>;
+
+export type MutationSetModelPagePublishedByAdminMutation = {
+  __typename?: 'Mutation';
+  setModelPagePublishedByAdmin: boolean;
 };
 
 export type QueryNotificationsByAdminQueryVariables = Exact<{
@@ -2820,6 +3282,9 @@ export type QueryPendingVerificationsQuery = {
     danawaUrl?: string | null;
     matchingConfidence?: number | null;
     matchingReasoning?: string | null;
+    aiSuggestion?: ProductMappingAiSuggestion | null;
+    aiSuggestionConfidence?: number | null;
+    aiSuggestionReason?: string | null;
     verificationStatus?: ProductMappingVerificationStatus | null;
     verifiedAt?: any | null;
     verificationNote?: string | null;
@@ -2955,6 +3420,105 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const AdsByAdminDocument = new TypedDocumentString(`
+    query AdsByAdmin($slotLocation: AdvertiseSlotLocation, $isActive: Boolean) {
+  adsByAdmin(slotLocation: $slotLocation, isActive: $isActive) {
+    id
+    internalId
+    startAt
+    endAt
+    slotType
+    slotLocation
+    slotPriority
+    graphic
+    displayPrice {
+      discountText
+      originalPrice
+      displayPrice
+    }
+    displayTitle
+    targetUrl
+    isActive
+    createdAt
+    modifiedAt
+  }
+}
+    `) as unknown as TypedDocumentString<AdsByAdminQuery, AdsByAdminQueryVariables>;
+export const AdReportDocument = new TypedDocumentString(`
+    query AdReport($from: DateTime!, $to: DateTime!, $creativeId: Int) {
+  adReport(from: $from, to: $to, creativeId: $creativeId) {
+    creativeId
+    internalId
+    slotLocation
+    impressions
+    clicks
+    ctr
+  }
+}
+    `) as unknown as TypedDocumentString<AdReportQuery, AdReportQueryVariables>;
+export const ActiveAdsDocument = new TypedDocumentString(`
+    query ActiveAds($slotLocation: AdvertiseSlotLocation!) {
+  activeAds(slotLocation: $slotLocation) {
+    id
+    internalId
+    startAt
+    endAt
+    slotType
+    slotLocation
+    slotPriority
+    graphic
+    displayPrice {
+      discountText
+      originalPrice
+      displayPrice
+    }
+    displayTitle
+    targetUrl
+    isActive
+    createdAt
+    modifiedAt
+  }
+}
+    `) as unknown as TypedDocumentString<ActiveAdsQuery, ActiveAdsQueryVariables>;
+export const RecordAdImpressionsDocument = new TypedDocumentString(`
+    mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {
+  recordAdImpressions(events: $events)
+}
+    `) as unknown as TypedDocumentString<
+  RecordAdImpressionsMutation,
+  RecordAdImpressionsMutationVariables
+>;
+export const RecordAdClickDocument = new TypedDocumentString(`
+    mutation RecordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {
+  recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)
+}
+    `) as unknown as TypedDocumentString<RecordAdClickMutation, RecordAdClickMutationVariables>;
+export const CreateAdAssetUploadUrlDocument = new TypedDocumentString(`
+    mutation CreateAdAssetUploadUrl($contentType: String!) {
+  createAdAssetUploadUrl(contentType: $contentType) {
+    uploadUrl
+    assetUrl
+  }
+}
+    `) as unknown as TypedDocumentString<
+  CreateAdAssetUploadUrlMutation,
+  CreateAdAssetUploadUrlMutationVariables
+>;
+export const CreateAdDocument = new TypedDocumentString(`
+    mutation CreateAd($input: CreateAdvertiseInput!) {
+  createAd(input: $input)
+}
+    `) as unknown as TypedDocumentString<CreateAdMutation, CreateAdMutationVariables>;
+export const UpdateAdDocument = new TypedDocumentString(`
+    mutation UpdateAd($id: Int!, $input: UpdateAdvertiseInput!) {
+  updateAd(id: $id, input: $input)
+}
+    `) as unknown as TypedDocumentString<UpdateAdMutation, UpdateAdMutationVariables>;
+export const SetAdActiveDocument = new TypedDocumentString(`
+    mutation SetAdActive($id: Int!, $isActive: Boolean!) {
+  setAdActive(id: $id, isActive: $isActive)
+}
+    `) as unknown as TypedDocumentString<SetAdActiveMutation, SetAdActiveMutationVariables>;
 export const MutationAdminLoginDocument = new TypedDocumentString(`
     mutation MutationAdminLogin($email: String!, $password: String!) {
   adminLogin(email: $email, password: $password) {
@@ -3288,6 +3852,50 @@ export const MutationRemoveKeywordMapEntryByAdminDocument = new TypedDocumentStr
     `) as unknown as TypedDocumentString<
   MutationRemoveKeywordMapEntryByAdminMutation,
   MutationRemoveKeywordMapEntryByAdminMutationVariables
+>;
+export const QueryModelPagesByAdminDocument = new TypedDocumentString(`
+    query QueryModelPagesByAdmin($onlyDrafts: Boolean) {
+  modelPagesByAdmin(onlyDrafts: $onlyDrafts) {
+    id
+    slug
+    brand
+    modelName
+    dealCount
+    lastDealAt
+    heroImage
+    heroMinPrice
+    isPublished
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryModelPagesByAdminQuery,
+  QueryModelPagesByAdminQueryVariables
+>;
+export const QueryModelPagePreviewByAdminDocument = new TypedDocumentString(`
+    query QueryModelPagePreviewByAdmin($slug: String!) {
+  modelPagePreviewByAdmin(slug: $slug) {
+    id
+    isPublished
+    slug
+    brand
+    modelName
+    dealCount
+    lastDealAt
+    metaDescription
+    payload
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryModelPagePreviewByAdminQuery,
+  QueryModelPagePreviewByAdminQueryVariables
+>;
+export const MutationSetModelPagePublishedByAdminDocument = new TypedDocumentString(`
+    mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {
+  setModelPagePublishedByAdmin(id: $id, isPublished: $isPublished)
+}
+    `) as unknown as TypedDocumentString<
+  MutationSetModelPagePublishedByAdminMutation,
+  MutationSetModelPagePublishedByAdminMutationVariables
 >;
 export const QueryNotificationsByAdminDocument = new TypedDocumentString(`
     query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {
@@ -3721,6 +4329,9 @@ export const QueryPendingVerificationsDocument = new TypedDocumentString(`
     danawaUrl
     matchingConfidence
     matchingReasoning
+    aiSuggestion
+    aiSuggestionConfidence
+    aiSuggestionReason
     verificationStatus
     verifiedBy {
       id

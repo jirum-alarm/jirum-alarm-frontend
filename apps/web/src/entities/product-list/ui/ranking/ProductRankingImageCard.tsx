@@ -6,6 +6,10 @@ import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 import Link from '@/shared/ui/Link';
 
+import {
+  type ProductCardSource,
+  productCardTracking,
+} from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
@@ -16,15 +20,21 @@ export default function ProductRankingImageCard({
   index,
   rank,
   priority,
+  source,
 }: {
   product: Omit<ProductCardType, 'postedAt'>;
   activeIndex: number;
   index: number;
   rank?: number;
   priority?: boolean;
+  source?: ProductCardSource;
 }) {
   return (
-    <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
+    <Link
+      href={PAGE.DETAIL + '/' + product.id}
+      rel="preload"
+      {...productCardTracking(source, product.id, rank ?? index + 1)}
+    >
       <motion.div
         className={cn(
           'pc:h-auto pc:scale-100 pc:border h-[340px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',

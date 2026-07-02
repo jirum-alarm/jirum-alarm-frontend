@@ -9,6 +9,7 @@ import { SwiperOptions } from 'swiper/types';
 import { useDevice } from '@/shared/hooks/useDevice';
 import { cn } from '@/shared/lib/cn';
 
+import { type ProductCardSource } from '@/entities/product-list/model/card-tracking';
 import { ProductCardType } from '@/entities/product-list/model/types';
 
 import DoubleRowProductCard from '../card/DoubleRowProductCard';
@@ -18,6 +19,7 @@ interface DoubleRowCarouselProductListProps {
   itemWidth?: string;
   maxItems?: number;
   nested?: boolean;
+  source?: ProductCardSource;
 }
 
 const DoubleRowCarouselProductList = ({
@@ -25,6 +27,7 @@ const DoubleRowCarouselProductList = ({
   itemWidth,
   maxItems,
   nested = false,
+  source,
 }: DoubleRowCarouselProductListProps) => {
   const { device } = useDevice();
   const [isInit, setIsInit] = useState(false);
@@ -88,7 +91,7 @@ const DoubleRowCarouselProductList = ({
         >
           <div className="flex flex-col gap-4">
             {chunk.map((product) => (
-              <DoubleRowProductCard key={product.id} product={product} />
+              <DoubleRowProductCard key={product.id} product={product} source={source} />
             ))}
           </div>
         </SwiperSlide>

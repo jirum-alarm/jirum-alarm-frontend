@@ -1,17 +1,24 @@
 import { Suspense } from 'react';
 
-import { ProductInfoFragment } from '@/shared/api/gql/graphql';
+import { AdvertiseSlotLocation, ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 
+import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
+import { ProductDetailSideAd } from '@/features/adsense/ui/ProductDetailSideAd';
+import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
 import HotdealGuide from '@/features/product-detail/ui/HotdealGuide';
 import HotdealScore from '@/features/product-detail/ui/HotdealScore';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
-import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list/ui';
+import {
+  CategoryPopularByProductSection,
+  ClusteredPriceSection,
+  TogetherViewedSection,
+} from '@/features/product-list/ui';
 
 import CommunityReaction from '../CommunityReaction';
 
@@ -40,6 +47,10 @@ export default async function DesktopProductDetailPage({
                   <ProductDetailImage product={initialProduct} fill={false} />
                 ) : null}
               </div>
+              <AdvertiseSlotBanner
+                slotLocation={AdvertiseSlotLocation.ProductMainBanner}
+                priority
+              />
               <CoupangPartnerGuide productId={productId} />
             </div>
 
@@ -52,9 +63,12 @@ export default async function DesktopProductDetailPage({
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
                 <HotdealScore productId={productId} />
               </Suspense>
-              <Suspense fallback={<div className="h-[400px] opacity-0" />}>
-                <CommunityReaction productId={productId} />
-              </Suspense>
+              {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김 */}
+              {initialProduct?.uploaderType !== UploaderType.User && (
+                <Suspense fallback={<div className="h-[400px] opacity-0" />}>
+                  <CommunityReaction productId={productId} />
+                </Suspense>
+              )}
             </div>
           </div>
 
@@ -63,11 +77,16 @@ export default async function DesktopProductDetailPage({
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
                 <ProductInfo productId={productId} isUserLogin={isUserLogin} />
               </Suspense>
+              <ProductDetailSideAd productId={productId} />
             </div>
           </div>
           <div className="col-span-2 pt-5">
             <Hr />
             <div className="space-y-11 overflow-x-hidden py-11">
+              <ProductDetailAd productId={productId} isMobile={false} />
+              <Suspense>
+                <ClusteredPriceSection productId={productId} />
+              </Suspense>
               <div>
                 <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={false} />
               </div>

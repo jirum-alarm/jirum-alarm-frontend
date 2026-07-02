@@ -1,10 +1,14 @@
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { getQueryClient } from '@/app/(app)/react-query/query-client';
 import { checkDevice } from '@/app/actions/agent';
 
+import { AdvertiseSlotLocation } from '@/shared/api/gql/graphql';
 import { Advertisement } from '@/shared/config/advertisement';
 
+import { AdvertisementQueries } from '@/entities/advertisement/api';
 import { getPromotionSections } from '@/entities/promotion/api/getPromotionSections';
 
 import PromotionSectionList from '@/widgets/home/ui/PromotionSectionList';
@@ -18,12 +22,19 @@ import MobileJirumRankingContainer from './mobile/JirumRankingContainer';
 async function HomeContainerV2() {
   const { isMobile } = await checkDevice();
   const sections = await getPromotionSections();
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery(
+    AdvertisementQueries.activeAds({
+      slotLocation: AdvertiseSlotLocation.HomeCarouselBanner,
+    }),
+  );
 
   const renderDesktop = () => {
     return (
-      <>
+      <HydrationBoundary state={dehydrate(queryClient)}>
         <DesktopHeroSection />
-      </>
+      </HydrationBoundary>
     );
   };
 
@@ -32,7 +43,9 @@ async function HomeContainerV2() {
       return (
         <>
           <MobileHomeHeader />
-          <MobileBackgroundHeader />
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <MobileBackgroundHeader />
+          </HydrationBoundary>
         </>
       );
     }
@@ -55,6 +68,7 @@ async function HomeContainerV2() {
           {!isMobile ? null : renderMobileRanking()}
           <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-14">
             <div>
+              {/* 묶음 섹션은 PromotionSectionList 내부에서 'under-10000'(만원이하템) 뒤에 렌더 */}
               <PromotionSectionList sections={sections} isMobile={isMobile} />
             </div>
           </div>

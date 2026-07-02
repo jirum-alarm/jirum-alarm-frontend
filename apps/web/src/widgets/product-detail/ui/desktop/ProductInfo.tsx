@@ -3,6 +3,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useEffect } from 'react';
 
+import { UploaderType } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
 import Button from '@/shared/ui/common/Button';
@@ -92,16 +93,22 @@ export default function ProductInfo({
             <span className="inline-block w-[110px] text-gray-400">쇼핑몰</span>
             <span className="text-gray-500">{product.mallName}</span>
           </div>
-          {product.author && (
+          {product.uploaderType !== UploaderType.Crawled && (
             <div className="flex text-sm font-medium">
               <span className="inline-block w-[110px] text-gray-400">업로드</span>
               <span
-                className={cn('flex items-center gap-1 text-gray-500', {
-                  'text-primary-800': product.author.id === 'admin',
+                className={cn('flex items-center gap-1 text-gray-600', {
+                  'text-primary-800': product.uploaderType === UploaderType.Official,
                 })}
               >
-                {product.author.id === 'admin' && <Jirume width={18} height={18} />}
-                {product.author.nickname}
+                {product.uploaderType === UploaderType.Official ? (
+                  <>
+                    <Jirume width={18} height={18} />
+                    지름알림
+                  </>
+                ) : (
+                  product.author?.nickname
+                )}
               </span>
             </div>
           )}
@@ -111,6 +118,14 @@ export default function ProductInfo({
             <span className="text-gray-500">{productStats.likeCount}개</span>
           </div>
         </div>
+        {product.uploaderType === UploaderType.User && product.content && (
+          <div className="my-6">
+            <h2 className="mb-2 text-sm font-medium text-gray-400">상품 설명</h2>
+            <p className="text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
+              {product.content}
+            </p>
+          </div>
+        )}
       </div>
       <div>
         <div className="flex w-full gap-x-4">

@@ -84,6 +84,20 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           </div>
         </nav>
         <div className="flex items-center gap-x-5">
+          <Link
+            href={PAGE.PRODUCT_NEW}
+            className={cn(
+              'rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors duration-300',
+              {
+                'border-white/40 text-white hover:bg-white/10': isInHomeHero,
+                'border-gray-300 text-gray-700 hover:bg-gray-50': !isInHomeHero,
+              },
+            )}
+          >
+            <motion.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
+              핫딜 등록
+            </motion.div>
+          </Link>
           <SearchLinkButton color={isInHomeHero ? '#FFFFFF' : '#101828'} />
           <Link
             href={talkroomLink}

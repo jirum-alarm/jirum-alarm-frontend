@@ -7,13 +7,23 @@ import { formatDateToMMD } from '@/shared/lib/utils/date';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 import Link from '@/shared/ui/Link';
 
+import {
+  type ProductCardSource,
+  productCardTracking,
+} from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
-export default function DoubleRowProductCard({ product }: { product: ProductCardType }) {
+export default function DoubleRowProductCard({
+  product,
+  source,
+}: {
+  product: ProductCardType;
+  source?: ProductCardSource;
+}) {
   return (
-    <Link href={PAGE.DETAIL + '/' + product.id}>
+    <Link href={PAGE.DETAIL + '/' + product.id} {...productCardTracking(source, product.id)}>
       <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="flex w-full flex-row items-start gap-2">
           <div className="relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">

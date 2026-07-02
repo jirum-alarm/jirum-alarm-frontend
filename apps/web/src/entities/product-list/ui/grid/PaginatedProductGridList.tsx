@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { useDevice } from '@/shared/hooks/useDevice';
 
+import { type ProductCardSource } from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 
 import ProductGridList from './ProductGridList';
@@ -13,6 +14,7 @@ type PaginatedProductGridListProps = {
   isMobile: boolean;
   itemsPerPage?: number;
   className?: string;
+  source?: ProductCardSource;
 };
 
 export default function PaginatedProductGridList({
@@ -20,6 +22,7 @@ export default function PaginatedProductGridList({
   isMobile,
   itemsPerPage: initialItemsPerPage,
   className,
+  source,
 }: PaginatedProductGridListProps) {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = initialItemsPerPage ?? (!isMobile ? 5 : 4);
@@ -37,7 +40,7 @@ export default function PaginatedProductGridList({
   return (
     <div className="flex flex-col gap-6">
       <div className="pc:px-0 px-5">
-        <ProductGridList products={currentProducts} className={className} />
+        <ProductGridList products={currentProducts} className={className} source={source} />
       </div>
 
       <div className="flex justify-center">
