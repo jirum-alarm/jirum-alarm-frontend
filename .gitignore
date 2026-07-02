@@ -18,7 +18,15 @@
 # mobile native local/generated artifacts
 /apps/mobile/.expo/
 /apps/mobile/.expo-shared/
+/apps/mobile/credentials.json
+/apps/mobile/*.p8
+/apps/mobile/*.p12
+/apps/mobile/*.mobileprovision
+/apps/mobile/*service-account*.json
+/apps/mobile/*service_account*.json
+/apps/mobile/play-store*.json
 /apps/mobile/coverage/
+/apps/mobile/build/
 /apps/mobile/dist/
 /apps/mobile/web-build/
 /apps/mobile/.bundle/
