@@ -8,6 +8,9 @@ export const QueryPendingVerifications = gql`
     $orderBy: OrderOptionType
     $brandProductId: Int
     $verificationStatus: [ProductMappingVerificationStatus!]
+    $aiSuggestion: ProductMappingAiSuggestion
+    $onlyActive: Boolean
+    $suspiciousFirst: Boolean
   ) {
     pendingVerifications(
       limit: $limit
@@ -16,6 +19,9 @@ export const QueryPendingVerifications = gql`
       orderBy: $orderBy
       brandProductId: $brandProductId
       verificationStatus: $verificationStatus
+      aiSuggestion: $aiSuggestion
+      onlyActive: $onlyActive
+      suspiciousFirst: $suspiciousFirst
     ) {
       id
       productId
@@ -147,12 +153,16 @@ export const QueryPendingVerificationsTotalCount = gql`
     $matchStatus: [ProductMappingMatchStatus!]
     $target: ProductMappingTarget
     $verificationStatus: [ProductMappingVerificationStatus!]
+    $aiSuggestion: ProductMappingAiSuggestion
+    $onlyActive: Boolean
   ) {
     pendingVerificationsTotalCount(
       brandProductId: $brandProductId
       matchStatus: $matchStatus
       target: $target
       verificationStatus: $verificationStatus
+      aiSuggestion: $aiSuggestion
+      onlyActive: $onlyActive
     )
   }
 `;

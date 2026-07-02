@@ -1815,11 +1815,19 @@ type Query {
   """
   pendingVerifications(
     """
+    AI 추천으로 필터 (reject = 사전분류가 오매칭 의심 플래그한 것만)
+    """
+    aiSuggestion: ProductMappingAiSuggestion
+    """
     브랜드 상품 ID로 필터링
     """
     brandProductId: Int
     limit: Int!
     matchStatus: [ProductMappingMatchStatus!]
+    """
+    활성 딜만 (isEnd=0) — 사용자에게 노출 중인 매핑 우선 검수용
+    """
+    onlyActive: Boolean
     orderBy: OrderOptionType = DESC
     """
     오래된 항목 우선 정렬 (true: 오래된 항목 우선, false: 최신 항목 우선)
@@ -1831,6 +1839,10 @@ type Query {
     """
     productTitle: String
     searchAfter: [String!]
+    """
+    의심스러운 것부터 — 매칭 confidence 낮은 순 정렬 (커서=[confidence,id], confidence NULL 인 legacy 행 제외)
+    """
+    suspiciousFirst: Boolean
     target: ProductMappingTarget
     verificationStatus: [ProductMappingVerificationStatus!]
   ): [ProductMappingOutput!]!
@@ -1839,10 +1851,18 @@ type Query {
   """
   pendingVerificationsTotalCount(
     """
+    AI 추천으로 필터 (reject = 사전분류가 오매칭 의심 플래그한 것만)
+    """
+    aiSuggestion: ProductMappingAiSuggestion
+    """
     브랜드 상품 ID로 필터링
     """
     brandProductId: Int
     matchStatus: [ProductMappingMatchStatus!]
+    """
+    활성 딜만 (isEnd=0) — 사용자에게 노출 중인 매핑 우선 검수용
+    """
+    onlyActive: Boolean
     productId: Int
     """
     상품명으로 검색 (부분 일치)

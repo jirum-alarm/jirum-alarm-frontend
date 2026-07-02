@@ -1897,21 +1897,26 @@ export type QueryNotificationsByAdminArgs = {
 };
 
 export type QueryPendingVerificationsArgs = {
+  aiSuggestion?: InputMaybe<ProductMappingAiSuggestion>;
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
   limit: Scalars['Int']['input'];
   matchStatus?: InputMaybe<Array<ProductMappingMatchStatus>>;
+  onlyActive?: InputMaybe<Scalars['Boolean']['input']>;
   orderBy?: InputMaybe<OrderOptionType>;
   prioritizeOld?: InputMaybe<Scalars['Boolean']['input']>;
   productId?: InputMaybe<Scalars['Int']['input']>;
   productTitle?: InputMaybe<Scalars['String']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+  suspiciousFirst?: InputMaybe<Scalars['Boolean']['input']>;
   target?: InputMaybe<ProductMappingTarget>;
   verificationStatus?: InputMaybe<Array<ProductMappingVerificationStatus>>;
 };
 
 export type QueryPendingVerificationsTotalCountArgs = {
+  aiSuggestion?: InputMaybe<ProductMappingAiSuggestion>;
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
   matchStatus?: InputMaybe<Array<ProductMappingMatchStatus>>;
+  onlyActive?: InputMaybe<Scalars['Boolean']['input']>;
   productId?: InputMaybe<Scalars['Int']['input']>;
   productTitle?: InputMaybe<Scalars['String']['input']>;
   target?: InputMaybe<ProductMappingTarget>;
@@ -3270,6 +3275,9 @@ export type QueryPendingVerificationsQueryVariables = Exact<{
   verificationStatus?: InputMaybe<
     Array<ProductMappingVerificationStatus> | ProductMappingVerificationStatus
   >;
+  aiSuggestion?: InputMaybe<ProductMappingAiSuggestion>;
+  onlyActive?: InputMaybe<Scalars['Boolean']['input']>;
+  suspiciousFirst?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type QueryPendingVerificationsQuery = {
@@ -3394,6 +3402,8 @@ export type QueryPendingVerificationsTotalCountQueryVariables = Exact<{
   verificationStatus?: InputMaybe<
     Array<ProductMappingVerificationStatus> | ProductMappingVerificationStatus
   >;
+  aiSuggestion?: InputMaybe<ProductMappingAiSuggestion>;
+  onlyActive?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type QueryPendingVerificationsTotalCountQuery = {
@@ -4305,7 +4315,7 @@ export const QueryUsersTotalCountByAdminDocument = new TypedDocumentString(`
   QueryUsersTotalCountByAdminQueryVariables
 >;
 export const QueryPendingVerificationsDocument = new TypedDocumentString(`
-    query QueryPendingVerifications($limit: Int!, $searchAfter: [String!], $prioritizeOld: Boolean, $orderBy: OrderOptionType, $brandProductId: Int, $verificationStatus: [ProductMappingVerificationStatus!]) {
+    query QueryPendingVerifications($limit: Int!, $searchAfter: [String!], $prioritizeOld: Boolean, $orderBy: OrderOptionType, $brandProductId: Int, $verificationStatus: [ProductMappingVerificationStatus!], $aiSuggestion: ProductMappingAiSuggestion, $onlyActive: Boolean, $suspiciousFirst: Boolean) {
   pendingVerifications(
     limit: $limit
     searchAfter: $searchAfter
@@ -4313,6 +4323,9 @@ export const QueryPendingVerificationsDocument = new TypedDocumentString(`
     orderBy: $orderBy
     brandProductId: $brandProductId
     verificationStatus: $verificationStatus
+    aiSuggestion: $aiSuggestion
+    onlyActive: $onlyActive
+    suspiciousFirst: $suspiciousFirst
   ) {
     id
     productId
@@ -4438,12 +4451,14 @@ export const MutationCancelVerificationDocument = new TypedDocumentString(`
   MutationCancelVerificationMutationVariables
 >;
 export const QueryPendingVerificationsTotalCountDocument = new TypedDocumentString(`
-    query QueryPendingVerificationsTotalCount($brandProductId: Int, $matchStatus: [ProductMappingMatchStatus!], $target: ProductMappingTarget, $verificationStatus: [ProductMappingVerificationStatus!]) {
+    query QueryPendingVerificationsTotalCount($brandProductId: Int, $matchStatus: [ProductMappingMatchStatus!], $target: ProductMappingTarget, $verificationStatus: [ProductMappingVerificationStatus!], $aiSuggestion: ProductMappingAiSuggestion, $onlyActive: Boolean) {
   pendingVerificationsTotalCount(
     brandProductId: $brandProductId
     matchStatus: $matchStatus
     target: $target
     verificationStatus: $verificationStatus
+    aiSuggestion: $aiSuggestion
+    onlyActive: $onlyActive
   )
 }
     `) as unknown as TypedDocumentString<
