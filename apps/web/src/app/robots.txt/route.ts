@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
+// ponytail: 동적 렌더. Next 풀라우트 캐시가 robots.txt를 빌드시 정적 prerender(s-maxage 1년)해
+// 배포해도 옛 값이 굳던 문제 방지 — sitemap 경로 바꾸면 즉시 반영. robots는 트래픽 적어 부담 없음.
+export const dynamic = 'force-dynamic';
+
 export function GET() {
   const robotsTxt = `User-agent: *
 Disallow: /admin/
