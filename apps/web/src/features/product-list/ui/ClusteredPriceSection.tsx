@@ -7,7 +7,11 @@ import { ProductQueries } from '@/entities/product';
 
 // Track B: 같은 상품인데 다나와에 없어 매칭 안 된 글들을, 여러 커뮤니티에서 모아 최저가 비교.
 // 백엔드(clusteredProducts)가 FP 방어 2겹(가격 있는 글만 + 2개 이상 커뮤니티일 때만) 후 최저가순으로 줌.
-// → 빈 배열이면 안 보임(섹션 자체 숨김). 거짓 최저가 노출 안 함.
+// → 빈 배열이면 similarProducts(Meili 유사검색)로 폴백. 그것도 없으면 섹션 자체 숨김.
+//
+// ponytail: Track B(정확·좁음) 우선, 없을 때만 similarProducts(넓음·"비슷한 상품")로 폴백.
+// 둘은 목적이 달라 제목·최저가강조를 구분한다(같은 상품 최저가 vs 비슷한 상품). 근거·설계 =
+// jirum vault domain/user-retention-first-visit-modal.
 
 type Props = {
   productId: number;
@@ -30,11 +34,23 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const { data } = useQuery({
+  const { data: clusteredData, isLoading: clusteredLoading } = useQuery({
     ...ProductQueries.clusteredProducts({ id: productId }),
     enabled: mounted,
   });
-  const products = data?.clusteredProducts ?? [];
+  const clustered = clusteredData?.clusteredProducts ?? [];
+  const hasClustered = clustered.length >= 2;
+
+  // Track B 클러스터가 없을 때만 Meili 유사검색 폴백 조회(불필요 요청 방지).
+  const { data: similarData } = useQuery({
+    ...ProductQueries.similarProducts({ id: productId }),
+    enabled: mounted && !clusteredLoading && !hasClustered,
+  });
+  const similar = similarData?.similarProducts ?? [];
+
+  // Track B 우선. 없으면 similar 폴백.
+  const isFallback = !hasClustered;
+  const products = hasClustered ? clustered : similar;
 
   if (products.length < 2) return null;
 
@@ -42,33 +58,39 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
   const min = prices.length ? Math.min(...prices) : null;
   const max = prices.length ? Math.max(...prices) : null;
   const savePct = min != null && max != null && max > 0 ? Math.round(((max - min) / max) * 100) : 0;
-  // 출처를 쇼핑몰명으로 보여주므로 "판매처 수"도 mallName 기준(없으면 커뮤니티명 폴백).
   const sellerCount = new Set(products.map((p) => p.mallName ?? p.provider?.nameKr)).size;
-  // 스크롤 줄이기 — 최저가 상위 5개만 노출(이미 가격 오름차순). 나머지는 "외 N개".
   const visible = products.slice(0, VISIBLE_COUNT);
   const restCount = products.length - visible.length;
+
+  // 폴백(비슷한 상품)은 "같은 상품 최저가"가 아니라 유사품 모음 → 제목 구분 + 최저가 강조 제거(오해 방지).
+  const sectionTitle = isFallback ? '비슷한 상품' : title;
+  const showLowestEmphasis = !isFallback;
+  const subtitle = isFallback
+    ? '이 상품과 비슷한 딜을 모아봤어요'
+    : `같은 상품을 판매처 ${sellerCount}곳에서 모아 최저가순으로 보여드려요`;
 
   return (
     <section className="px-5 py-6">
       <div className="mb-1 flex items-baseline justify-between">
-        <h2 className="text-base font-semibold">{title}</h2>
-        {savePct > 0 && (
+        <h2 className="text-base font-semibold">{sectionTitle}</h2>
+        {showLowestEmphasis && savePct > 0 && (
           <span className="rounded-full bg-rose-50 px-2 py-0.5 text-xs font-semibold text-rose-500">
             최저가 {savePct}% 저렴
           </span>
         )}
       </div>
-      <p className="mb-3 text-xs text-gray-500">
-        같은 상품을 판매처 {sellerCount}곳에서 모아 최저가순으로 보여드려요
-      </p>
+      <p className="mb-3 text-xs text-gray-500">{subtitle}</p>
 
       <ul className="flex flex-col gap-2">
         {visible.map((p) => {
-          const isLowest = p.parsedPrice != null && p.parsedPrice === min;
+          const isLowest = showLowestEmphasis && p.parsedPrice != null && p.parsedPrice === min;
           return (
             <li key={p.id}>
               <a
                 href={`/products/${p.id}`}
+                data-track="product-card"
+                data-source={isFallback ? 'similar_fallback' : 'clustered_price'}
+                data-product-id={p.id}
                 className="flex items-center gap-3 rounded-lg border border-gray-100 p-3 hover:bg-gray-50"
               >
                 <div className="min-w-0 flex-1">
@@ -98,7 +120,7 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
         })}
       </ul>
       {restCount > 0 && (
-        <p className="mt-2 text-center text-xs text-gray-400">외 {restCount}곳 더</p>
+        <p className="mt-2 text-center text-xs text-gray-400">외 {restCount}개 더</p>
       )}
     </section>
   );

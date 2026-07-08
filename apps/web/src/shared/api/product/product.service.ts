@@ -151,6 +151,11 @@ export class ProductService {
   static async getClusteredProducts(variables: { id: number }) {
     return execute(QueryClusteredProducts, variables).then((res) => res.data);
   }
+
+  // Meili 유사검색(상품명 기반 + 브랜드 충돌 필터). Track B 클러스터가 없을 때 폴백.
+  static async getSimilarProducts(variables: { id: number }) {
+    return execute(QuerySimilarProducts, variables).then((res) => res.data);
+  }
 }
 
 // Track B 클러스터 — 상세 "다른 커뮤니티 가격" 블록.
@@ -177,6 +182,30 @@ const QueryClusteredProducts = new TypedDocumentString<
 >(`
   query QueryClusteredProducts($id: Int!) {
     clusteredProducts(id: $id) {
+      id
+      title
+      url
+      parsedPrice
+      priceCurrency
+      providerId
+      mallName
+      thumbnail
+      postedAt
+      provider {
+        nameKr
+      }
+    }
+  }
+`);
+
+// Meili 유사검색 폴백 — ClusteredProduct 와 동일 카드 필드(같은 UI 재사용).
+// ponytail: ClusteredProduct 형태 그대로 재활용. url 은 similarProducts 리졸버가 안 줄 수 있어 옵셔널.
+interface QuerySimilarProductsResult {
+  similarProducts: ClusteredProduct[];
+}
+const QuerySimilarProducts = new TypedDocumentString<QuerySimilarProductsResult, { id: number }>(`
+  query QuerySimilarProducts($id: Int!) {
+    similarProducts(id: $id) {
       id
       title
       url
