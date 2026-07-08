@@ -6,6 +6,7 @@ import { ModelPageService } from '@/shared/api/model-page';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
 import DealsMobileHeader from './DealsMobileHeader';
+import DealsTracking from './DealsTracking';
 
 // 에버그린 모델 페이지 (/deals/{slug}) — 상품별 정보 모음. SEO 유입(CTR) 타깃.
 // 백엔드 model_page(isPublished=true) precompute payload 를 단일 slug 조회로 SSR.
@@ -137,13 +138,17 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const fmtHist = (n: number) =>
     histCurrency === 'USD' ? `$${Math.round(n)}` : `${Math.round(n).toLocaleString()}원`;
 
-  // JSON-LD: verified(danawa_stats) 가격일 때만 Product/offer schema (가짜 가격 페널티 회피)
+  // JSON-LD: verified(danawa_stats) 가격일 때만 Product/offer schema (가짜 가격 페널티 회피).
+  // brand/url/priceValidUntil 보강(2026-07-08): AI 검색 인용은 구조화 완성도에 좌우 —
+  // 인용 페이지의 65~71%가 스키마 보유, Product 필드 완결성이 상품 질의 노출 조건.
   const jsonLd =
     priceSummary?.source === 'danawa_stats' && priceSummary.min
       ? {
           '@context': 'https://schema.org',
           '@type': 'Product',
           name: page.modelName,
+          brand: page.brand ? { '@type': 'Brand', name: page.brand } : undefined,
+          url: `${METADATA_SERVICE_URL}/deals/${page.slug}`,
           image: heroImage ? [heroImage] : undefined,
           offers: {
             '@type': 'AggregateOffer',
@@ -151,6 +156,10 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             lowPrice: priceSummary.min,
             highPrice: priceSummary.max,
             offerCount: page.dealCount,
+            // 핫딜 가격의 유효기한 — ISR(10분) 재렌더마다 +7일로 갱신되는 롤링 윈도우.
+            priceValidUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+              .toISOString()
+              .slice(0, 10),
           },
         }
       : null;
@@ -175,6 +184,9 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       )}
+
+      {/* 판별 스프린트 계측 — 랜딩 cohort(referrer) + outbound/deal 클릭 (GTM dataLayer) */}
+      <DealsTracking slug={page.slug} />
 
       {/* 모바일 전용 상단 헤더(데스크톱은 GNB라 pc:hidden). pt-20이 이 fixed 헤더 높이 보정. */}
       <DealsMobileHeader title={page.modelName} />
