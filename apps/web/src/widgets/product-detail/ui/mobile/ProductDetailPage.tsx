@@ -1,10 +1,13 @@
 import { Suspense } from 'react';
 
+import { CheckDeviceResult } from '@/app/actions/agent.types';
+
 import { AdvertiseSlotLocation, ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
 
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 
 import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
+import FirstVisitAppAlertModal from '@/features/app-download/ui/FirstVisitAppAlertModal';
 import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
@@ -28,13 +31,16 @@ function ProductDetailPage({
   productId,
   isUserLogin,
   initialProduct,
+  device,
 }: {
   productId: number;
   isUserLogin: boolean;
   initialProduct?: ProductInfoFragment;
+  device?: CheckDeviceResult;
 }) {
   return (
     <>
+      {device && <FirstVisitAppAlertModal device={device} />}
       <ViewerCount productId={productId} />
 
       <main>

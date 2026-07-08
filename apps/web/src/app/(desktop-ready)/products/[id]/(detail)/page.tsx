@@ -237,7 +237,8 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   // 보여서 매 페이지뷰 새 deviceId 가 발급됐다(91.9% 1상품/1이벤트 계측 붕괴). 클라 경로는
   // localStorage 기반 안정 id 라 같은 사람이 같은 deviceId 로 누적된다.
 
-  const { isMobile } = await checkDevice();
+  const device = await checkDevice();
+  const { isMobile } = device;
 
   const renderMobile = (productData?: any) => {
     return (
@@ -245,6 +246,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
         productId={+id}
         isUserLogin={isUserLogin}
         initialProduct={productData}
+        device={device}
       />
     );
   };
@@ -254,6 +256,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
         productId={+id}
         isUserLogin={isUserLogin}
         initialProduct={productData}
+        device={device}
       />
     );
   };

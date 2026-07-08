@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
 
+import { CheckDeviceResult } from '@/app/actions/agent.types';
+
 import { AdvertiseSlotLocation, ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 
@@ -7,6 +9,7 @@ import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 
 import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
 import { ProductDetailSideAd } from '@/features/adsense/ui/ProductDetailSideAd';
+import FirstVisitAppAlertModal from '@/features/app-download/ui/FirstVisitAppAlertModal';
 import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
@@ -28,13 +31,16 @@ export default async function DesktopProductDetailPage({
   productId,
   isUserLogin,
   initialProduct,
+  device,
 }: {
   productId: number;
   isUserLogin: boolean;
   initialProduct?: ProductInfoFragment;
+  device?: CheckDeviceResult;
 }) {
   return (
     <>
+      {device && <FirstVisitAppAlertModal device={device} />}
       <div className="max-w-layout-max mx-auto grid grid-cols-12 gap-x-6">
         <div
           className="col-span-10 col-start-2 grid grid-cols-2 gap-x-12 gap-y-10"
