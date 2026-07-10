@@ -155,8 +155,26 @@ export default async function DealsIndexPage() {
 type DealItem = Awaited<ReturnType<typeof ModelPageService.getPublishedModelPages>>[number];
 
 /**
+ * 섹션 내부를 브랜드끼리 인접하게 정렬. 같은 브랜드(펩시 라임 5종 등)가 딜수 순으로 흩어지지 않고
+ * 한 덩어리로 붙는다. 블록 순서 = 그 브랜드 최다 딜수 순(인기 브랜드 위로), 블록 내부 = 딜수 순.
+ * brand 없는 항목은 각자 단독 블록으로 뒤쪽에.
+ */
+function sortByBrandAdjacency(items: DealItem[]): DealItem[] {
+  const blocks = new Map<string, DealItem[]>();
+  for (const it of items) {
+    // brand 없으면 slug로 유니크 키 — 단독 블록.
+    const key = it.brand ?? `__nobrand:${it.slug}`;
+    (blocks.get(key) ?? blocks.set(key, []).get(key)!).push(it);
+  }
+  return [...blocks.values()]
+    .map((block) => block.sort((a, b) => b.dealCount - a.dealCount)) // 블록 내부: 딜수 순
+    .sort((a, b) => b[0].dealCount - a[0].dealCount) // 블록 순서: 대표(최다) 딜수 순
+    .flat();
+}
+
+/**
  * 카테고리별 섹션으로 그룹핑. 섹션 순서 = 딜 총합 많은 순(가장 활발한 카테고리 위로).
- * categoryName 없는 항목은 '기타' 섹션으로 모아 맨 아래. 섹션 내부는 원본 순서(백엔드 dealCount desc) 유지.
+ * categoryName 없는 항목은 '기타' 섹션으로 모아 맨 아래. 섹션 내부는 브랜드 인접 정렬.
  */
 function groupByCategory(pages: DealItem[]) {
   const ETC = '기타';
@@ -171,7 +189,7 @@ function groupByCategory(pages: DealItem[]) {
     .map(([label, { items, categoryId }]) => ({
       key: label,
       label,
-      items,
+      items: sortByBrandAdjacency(items),
       // 앵커 id — 한글 라벨 대신 categoryId 기반(URL·href 안전). '기타'는 id 없어 'etc'.
       anchor: categoryId != null ? `cat-${categoryId}` : 'cat-etc',
       total: items.reduce((s, it) => s + it.dealCount, 0),
