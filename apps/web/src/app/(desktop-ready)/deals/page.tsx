@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ModelPageService } from '@/shared/api/model-page';
+import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
 import DealsMobileHeader from './[slug]/DealsMobileHeader';
 
@@ -27,9 +28,30 @@ export const revalidate = 600; // 10분 ISR — 목록은 자주 안 바뀜
 export default async function DealsIndexPage() {
   const pages = await ModelPageService.getPublishedModelPages();
 
+  const itemListLd =
+    pages.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: '핫딜 최저가 모음',
+          itemListElement: pages.map((p, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: p.modelName,
+            url: `${METADATA_SERVICE_URL}/deals/${p.slug}`,
+          })),
+        }
+      : null;
+
   // 폭: 모바일 600px 중앙 → PC layout-max(1280) 확장 (홈/랭킹과 동일 패턴).
   return (
     <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-20 pb-24">
+      {itemListLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
+        />
+      )}
       <DealsMobileHeader title="핫딜 최저가 모음" />
 
       <header className="mb-5">

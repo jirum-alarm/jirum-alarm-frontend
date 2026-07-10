@@ -110,6 +110,7 @@ function generateProductJsonLd(
   const description = productGuides
     ? generateDescription(productGuides, product, categoryName)
     : product.title;
+  const productUrl = `${METADATA_SERVICE_URL}/products/${product.id}`;
 
   return {
     '@context': 'https://schema.org',
@@ -122,17 +123,50 @@ function generateProductJsonLd(
       name: product.provider?.nameKr || '지름알림',
     },
     category: categoryName,
-    offers: {
-      '@type': 'Offer',
-      price: priceValue,
-      priceCurrency: 'KRW',
-      availability: 'https://schema.org/InStock',
-      url: `${METADATA_SERVICE_URL}/products/${product.id}`,
-      seller: {
-        '@type': 'Organization',
-        name: product.mallName || '지름알림',
+    // 가격 파싱 실패 시 Offer 자체를 생략한다(price:null 직렬화 방지 — 검색/AI 오인용 차단).
+    ...(priceValue
+      ? {
+          offers: {
+            '@type': 'Offer',
+            price: priceValue,
+            priceCurrency: 'KRW',
+            availability: product.isEnd
+              ? 'https://schema.org/Discontinued'
+              : 'https://schema.org/InStock',
+            url: productUrl,
+            seller: {
+              '@type': 'Organization',
+              name: product.mallName || '지름알림',
+            },
+          },
+        }
+      : {}),
+  };
+}
+
+// 홈 > 상품 breadcrumb. 카테고리 전용 URL이 없어 2단계로만 구성한다.
+function generateBreadcrumbJsonLd(
+  product: Awaited<ReturnType<typeof ProductService.getProductInfo>>,
+) {
+  if (!product) return null;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: '지름알림',
+        item: METADATA_SERVICE_URL,
       },
-    },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: product.title,
+        item: `${METADATA_SERVICE_URL}/products/${product.id}`,
+      },
+    ],
   };
 }
 
@@ -271,6 +305,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   }
   const productGuides = product ? await getProductGuidesCached(+product.id) : null;
   const jsonLd = generateProductJsonLd(product, productGuides ?? undefined);
+  const breadcrumbLd = generateBreadcrumbJsonLd(product);
 
   // LCP 이미지 preload: 모바일은 100vw, 데스크톱은 512px 슬롯
   const thumbnailForPreload = convertToWebp(product?.thumbnail) ?? product?.thumbnail;
@@ -300,6 +335,12 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {breadcrumbLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+        />
+      )}
       <CollectProductOnView productId={+id} />
       <ProductPrefetch productId={+id}>
         {!isMobile ? renderDesktop(product ?? undefined) : renderMobile(product ?? undefined)}
