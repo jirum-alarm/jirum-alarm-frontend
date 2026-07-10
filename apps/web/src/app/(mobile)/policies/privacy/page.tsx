@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: '개인정보처리방침 | 지름알림',
   description: '지름알림 개인정보처리방침 안내입니다.',
   alternates: { canonical: '/policies/privacy' },
+  robots: { index: true, follow: true }, // (mobile) 그룹 기본 noindex를 오버라이드(공개 색인)
 };
 
 const PrivacyPolicyPage = () => {

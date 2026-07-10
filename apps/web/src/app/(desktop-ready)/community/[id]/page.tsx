@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { cache, Suspense } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
@@ -116,6 +117,13 @@ function PostDetailSkeleton() {
 
 export default async function CommunityPostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+
+  // 없는 글은 soft 404(200+스켈레톤) 대신 진짜 404. generateMetadata와 cache 공유라 재조회 없음.
+  const data = await getCommunityPostCached(Number(id)).catch(() => null);
+  if (!data?.comment) {
+    notFound();
+  }
+
   const { isMobile } = await checkDevice();
   const token = await getAccessToken();
   const isUserLogin = !!token;

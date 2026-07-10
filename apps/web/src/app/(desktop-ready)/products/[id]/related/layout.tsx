@@ -29,7 +29,6 @@ export async function generateMetadata({
 
   const title = `${product.title} 관련 상품 | 지름알림`;
   const description = `'${product.title}'와(과) 함께 보면 좋은 관련 핫딜 상품을 모아봤어요.`;
-  const url = `${METADATA_SERVICE_URL}/products/${id}/related`;
   const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
 
   return {
@@ -38,7 +37,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url,
+      url: `${METADATA_SERVICE_URL}/products/${id}/related`,
       siteName: '지름알림',
       locale: 'ko_KR',
       type: 'website',
@@ -50,8 +49,10 @@ export async function generateMetadata({
       description,
       images: image,
     },
+    // 상세의 부분 뷰(비슷한 상품). 독립 색인 가치가 없어 noindex + canonical은 부모 상세로.
+    robots: { index: false, follow: true },
     alternates: {
-      canonical: url,
+      canonical: `${METADATA_SERVICE_URL}/products/${id}`,
     },
   };
 }
