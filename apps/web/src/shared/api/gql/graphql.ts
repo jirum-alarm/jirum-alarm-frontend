@@ -517,6 +517,8 @@ export type ModelPageAdminItemOutput = {
 export type ModelPageListItemOutput = {
   __typename?: 'ModelPageListItemOutput';
   brand?: Maybe<Scalars['String']['output']>;
+  categoryId?: Maybe<Scalars['Int']['output']>;
+  categoryName?: Maybe<Scalars['String']['output']>;
   dealCount: Scalars['Int']['output'];
   heroImage?: Maybe<Scalars['String']['output']>;
   heroMinPrice?: Maybe<Scalars['Int']['output']>;
@@ -1897,21 +1899,26 @@ export type QueryNotificationsByAdminArgs = {
 };
 
 export type QueryPendingVerificationsArgs = {
+  aiSuggestion?: InputMaybe<ProductMappingAiSuggestion>;
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
   limit: Scalars['Int']['input'];
   matchStatus?: InputMaybe<Array<ProductMappingMatchStatus>>;
+  onlyActive?: InputMaybe<Scalars['Boolean']['input']>;
   orderBy?: InputMaybe<OrderOptionType>;
   prioritizeOld?: InputMaybe<Scalars['Boolean']['input']>;
   productId?: InputMaybe<Scalars['Int']['input']>;
   productTitle?: InputMaybe<Scalars['String']['input']>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+  suspiciousFirst?: InputMaybe<Scalars['Boolean']['input']>;
   target?: InputMaybe<ProductMappingTarget>;
   verificationStatus?: InputMaybe<Array<ProductMappingVerificationStatus>>;
 };
 
 export type QueryPendingVerificationsTotalCountArgs = {
+  aiSuggestion?: InputMaybe<ProductMappingAiSuggestion>;
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
   matchStatus?: InputMaybe<Array<ProductMappingMatchStatus>>;
+  onlyActive?: InputMaybe<Scalars['Boolean']['input']>;
   productId?: InputMaybe<Scalars['Int']['input']>;
   productTitle?: InputMaybe<Scalars['String']['input']>;
   target?: InputMaybe<ProductMappingTarget>;
@@ -3274,6 +3281,8 @@ export type PublishedModelPagesQuery = {
     heroMinPrice?: number | null;
     unitLabel?: string | null;
     unitPrice?: number | null;
+    categoryId?: number | null;
+    categoryName?: string | null;
   }>;
 };
 
@@ -4326,6 +4335,8 @@ export const PublishedModelPagesDocument = new TypedDocumentString(`
     heroMinPrice
     unitLabel
     unitPrice
+    categoryId
+    categoryName
   }
 }
     `) as unknown as TypedDocumentString<

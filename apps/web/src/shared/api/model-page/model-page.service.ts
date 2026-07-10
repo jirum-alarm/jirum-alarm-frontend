@@ -35,6 +35,8 @@ const PublishedModelPagesDocument = graphql(`
       heroMinPrice
       unitLabel
       unitPrice
+      categoryId
+      categoryName
     }
   }
 `);

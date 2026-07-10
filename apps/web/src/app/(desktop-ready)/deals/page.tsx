@@ -64,51 +64,88 @@ export default async function DealsIndexPage() {
       {pages.length === 0 ? (
         <p className="py-20 text-center text-gray-400">준비 중이에요.</p>
       ) : (
-        // 열수: 모바일 2 → sm 3 → PC 5 (랭킹 TrackedProductGridList와 동일).
-        <ul className="pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {pages.map((p) => (
-            <li key={p.slug}>
-              <Link
-                href={`/deals/${p.slug}`}
-                className="flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition-shadow hover:shadow-md"
-              >
-                <div className="relative aspect-square w-full bg-gray-50">
-                  {p.heroImage ? (
-                    <Image
-                      src={p.heroImage}
-                      alt={p.modelName}
-                      fill
-                      sizes="(max-width: 600px) 50vw, 300px"
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-gray-300">
-                      이미지 없음
-                    </div>
-                  )}
-                </div>
-                <div className="flex grow flex-col gap-1 p-3">
-                  <h2 className="line-clamp-2 text-sm font-semibold text-black">{p.modelName}</h2>
-                  {p.heroMinPrice != null ? (
-                    <div className="mt-auto">
-                      <p className="text-base font-bold text-rose-500">
-                        {p.heroMinPrice.toLocaleString()}원
-                      </p>
-                      {p.unitLabel && p.unitPrice != null && (
-                        <p className="text-xs text-gray-400">
-                          {p.unitLabel} {p.unitPrice.toLocaleString()}원
-                        </p>
+        groupByCategory(pages).map((section) => (
+          <section key={section.key} className="mb-10">
+            <h2 className="mb-4 text-lg font-bold text-black">{section.label}</h2>
+            {/* 열수: 모바일 2 → sm 3 → PC 5 (랭킹 TrackedProductGridList와 동일). */}
+            <ul className="pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {section.items.map((p) => (
+                <li key={p.slug}>
+                  <Link
+                    href={`/deals/${p.slug}`}
+                    className="flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition-shadow hover:shadow-md"
+                  >
+                    <div className="relative aspect-square w-full bg-gray-50">
+                      {p.heroImage ? (
+                        <Image
+                          src={p.heroImage}
+                          alt={p.modelName}
+                          fill
+                          sizes="(max-width: 600px) 50vw, 300px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-gray-300">
+                          이미지 없음
+                        </div>
                       )}
                     </div>
-                  ) : (
-                    <p className="mt-auto text-xs text-gray-400">핫딜 {p.dealCount}건</p>
-                  )}
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
+                    <div className="flex grow flex-col gap-1 p-3">
+                      <h3 className="line-clamp-2 text-sm font-semibold text-black">
+                        {p.modelName}
+                      </h3>
+                      {p.heroMinPrice != null ? (
+                        <div className="mt-auto">
+                          <p className="text-base font-bold text-rose-500">
+                            {p.heroMinPrice.toLocaleString()}원
+                          </p>
+                          {p.unitLabel && p.unitPrice != null && (
+                            <p className="text-xs text-gray-400">
+                              {p.unitLabel} {p.unitPrice.toLocaleString()}원
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="mt-auto text-xs text-gray-400">핫딜 {p.dealCount}건</p>
+                      )}
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
       )}
     </main>
   );
+}
+
+type DealItem = Awaited<ReturnType<typeof ModelPageService.getPublishedModelPages>>[number];
+
+/**
+ * 카테고리별 섹션으로 그룹핑. 섹션 순서 = 딜 총합 많은 순(가장 활발한 카테고리 위로).
+ * categoryName 없는 항목은 '기타' 섹션으로 모아 맨 아래. 섹션 내부는 원본 순서(백엔드 dealCount desc) 유지.
+ */
+function groupByCategory(pages: DealItem[]) {
+  const ETC = '기타';
+  const groups = new Map<string, DealItem[]>();
+  for (const p of pages) {
+    const key = p.categoryName ?? ETC;
+    const bucket = groups.get(key);
+    if (bucket) bucket.push(p);
+    else groups.set(key, [p]);
+  }
+  return [...groups.entries()]
+    .map(([label, items]) => ({
+      key: label,
+      label,
+      items,
+      total: items.reduce((s, it) => s + it.dealCount, 0),
+    }))
+    .sort((a, b) => {
+      // '기타'는 항상 맨 아래, 나머지는 딜 총합 많은 순.
+      if (a.label === ETC) return 1;
+      if (b.label === ETC) return -1;
+      return b.total - a.total;
+    });
 }
