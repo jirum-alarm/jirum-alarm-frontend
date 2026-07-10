@@ -9,7 +9,11 @@ export const dynamic = 'force-dynamic';
 export function GET() {
   const robotsTxt = `User-agent: *
 Disallow: /admin/
-Disallow: /my/
+Disallow: /mypage
+Disallow: /like
+Disallow: /alarm
+Disallow: /login
+Disallow: /signup
 Allow: /
 
 Sitemap: https://cdn.jirum-alarm.com/sitemap/sitemap-index.xml

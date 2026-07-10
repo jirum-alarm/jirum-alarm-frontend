@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { preload } from 'react-dom';
 
@@ -263,6 +264,11 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
 
   /* JSON-LD 생성을 위한 상품 정보 조회 (generateMetadata와 dedupe됨) */
   const product = await getProductInfoCached(+id);
+  // 없는/종료된 상품은 soft 404(200+홈 폴백) 대신 진짜 404를 반환한다.
+  // 폴백 시 title이 홈과 동일해져 서치어드바이저 "동일 title 다수" 유발.
+  if (!product) {
+    notFound();
+  }
   const productGuides = product ? await getProductGuidesCached(+product.id) : null;
   const jsonLd = generateProductJsonLd(product, productGuides ?? undefined);
 

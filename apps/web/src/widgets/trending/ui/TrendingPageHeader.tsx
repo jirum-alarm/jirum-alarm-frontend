@@ -3,8 +3,6 @@
 import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
 import { cn } from '@/shared/lib/cn';
 
-import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
-
 import PageTabNavigation from './PageTabNavigation';
 
 const TrendingPageHeader = () => {
@@ -19,9 +17,9 @@ const TrendingPageHeader = () => {
         },
       )}
     >
+      <h1 className="sr-only">지금 뜨는 핫딜 · 실시간 인기 상품</h1>
       <PageTabNavigation />
-      {/* <h1 className="text-lg font-bold">발견</h1>
-      <SearchLinkButton color="#1d2939" /> */}
+      {/* <SearchLinkButton color="#1d2939" /> */}
     </header>
   );
 };

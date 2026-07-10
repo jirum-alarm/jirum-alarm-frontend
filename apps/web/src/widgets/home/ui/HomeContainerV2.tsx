@@ -64,6 +64,7 @@ async function HomeContainerV2() {
     <div className="pc:max-w-none pc:pb-0 max-w-mobile-max mx-auto h-full w-full overflow-x-hidden pb-8">
       {!isMobile ? renderDesktop() : renderMobile()}
       <main className="pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-[1.75rem] pc:pt-[72px] max-w-mobile-max relative z-10 mt-[160px] rounded-t-[1.25rem] bg-white pt-3">
+        <h1 className="sr-only">지름알림 · 실시간 초특가 핫딜 정보 모아보기</h1>
         <div className="pc:mx-auto pc:max-w-layout-max">
           {!isMobile ? null : renderMobileRanking()}
           <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-14">
