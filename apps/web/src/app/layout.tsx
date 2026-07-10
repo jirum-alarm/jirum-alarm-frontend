@@ -4,7 +4,7 @@ import { PublicEnvScript } from 'next-runtime-env';
 
 import { AppProvider } from '@/app/(app)/providers';
 
-import { defaultMetadata, jsonLd } from '@/shared/config/metadata';
+import { defaultMetadata, jsonLd, organizationLd } from '@/shared/config/metadata';
 import { pretendard } from '@/shared/lib/fonts';
 
 import type { Metadata, Viewport } from 'next';
@@ -42,6 +42,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
         />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="application-name" content="지름알림" />

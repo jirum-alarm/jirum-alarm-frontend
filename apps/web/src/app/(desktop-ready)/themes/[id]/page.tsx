@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import { checkDevice } from '@/app/actions/agent';
@@ -5,6 +6,19 @@ import { checkDevice } from '@/app/actions/agent';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 import ThemeDetail from '@/features/mypage/ui/theme/ThemeDetail';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  return {
+    title: '알림 묶음 | 지름알림',
+    description: '관심 묶음을 구독하면 그 안의 키워드 딜이 뜰 때 알림을 받아요.',
+    alternates: { canonical: `/themes/${id}` },
+  };
+}
 
 const ThemeDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;

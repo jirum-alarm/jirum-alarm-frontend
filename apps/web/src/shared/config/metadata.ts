@@ -146,7 +146,7 @@ export const organizationLd = {
   url: METADATA_SERVICE_URL,
   logo: {
     '@type': 'ImageObject',
-    url: ogImageUrl,
+    url: iconUrl,
   },
   contactPoint: [
     {
