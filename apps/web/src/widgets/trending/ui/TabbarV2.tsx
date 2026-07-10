@@ -47,6 +47,11 @@ interface TabBarProps {
   onTabClick: (id: number) => void;
   /** 비활성 카테고리 id — 회색 처리 + 클릭 무시. 기본 없음(랭킹은 안 넘김). */
   disabledIds?: number[];
+  /**
+   * 컨테이너 위치 클래스를 통째로 교체(기본 fixed/pc:sticky + 헤더연동 translate 대신).
+   * 넘기면 useHeaderVisibility translate도 끔 — trending 레이아웃(헤더 연동) 밖에서 쓸 때.
+   */
+  containerClassName?: string;
   styles?: TabBarStyles;
   animationConfig?: TabBarAnimationConfig;
   settingsHref?: string;
@@ -56,10 +61,13 @@ interface TabBarProps {
   isHeaderVisible?: boolean;
 }
 
+// 기본 위치 클래스 — trending 레이아웃(헤더 연동 fixed→sticky) 전용. 밖에서 쓸 땐 containerClassName로 교체.
+const DEFAULT_POSITION = 'fixed pc:sticky top-14 pc:top-14 transition-transform';
+
 // 기본 스타일 정의 (뱃지 형태)
 const defaultStyles: Required<TabBarStyles> = {
   container:
-    'fixed w-full max-w-mobile-max pc:max-w-none pc:sticky top-14 pc:top-14 z-30 overflow-hidden bg-white px-4 transition-transform pt-3 pb-3 pc:pb-2',
+    'w-full max-w-mobile-max pc:max-w-none z-30 overflow-hidden bg-white px-4 pt-3 pb-3 pc:pb-2',
   tabList: 'relative flex gap-2.5 pc:justify-center',
   tabTrigger: {
     base: 'relative pc:h-10 h-9 shrink-0 whitespace-nowrap px-3 py-2 pc:text-lg transition-all duration-400 rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 leading-none',
@@ -100,6 +108,7 @@ const TabBarV2 = ({
   settingsAriaLabel = '카테고리 설정 페이지로 이동',
   showSettings = false,
   disabledIds = [],
+  containerClassName,
 }: TabBarProps) => {
   const categoryIds = allCategories.map((c) => c.id);
   const disabledSet = new Set(disabledIds);
@@ -180,13 +189,17 @@ const TabBarV2 = ({
     }
   };
 
-  return (
-    <div
-      className={cn(mergedStyles.container, {
+  // containerClassName 주면 그 위치 클래스만 쓰고 헤더연동 translate 끔(trending 밖에서 사용).
+  const positionClass = containerClassName ?? DEFAULT_POSITION;
+  const headerLinkedTranslate = containerClassName
+    ? undefined
+    : {
         'pc:translate-y-0 -translate-y-14': !isHeaderVisible,
         'translate-y-0': isHeaderVisible,
-      })}
-    >
+      };
+
+  return (
+    <div className={cn(mergedStyles.container, positionClass, headerLinkedTranslate)}>
       <Tabs.List asChild>
         <motion.div
           ref={tabDragRef}

@@ -77,11 +77,9 @@ export default async function DealsIndexPage() {
           const disabledIds = CATEGORIES.map((c) => c.value).filter((v) => !activeIds.has(v));
           return (
             <>
-              {/* 카테고리 탭 — 랭킹 TabbarV2 그대로 재사용. published 없는 건 disabled. 클릭=앵커 스크롤. */}
+              {/* 카테고리 탭 — 랭킹 TabbarV2 재사용(sticky top-14). published 없는 건 disabled. 클릭=앵커 스크롤.
+                  sticky는 감싸면 부모 영역 벗어날 때 풀리므로 main 직계로 두고 spacer 없이. */}
               <DealsCategoryTabs categories={tabCategories} disabledIds={disabledIds} />
-              {/* TabbarV2가 모바일 fixed라 콘텐츠가 탭에 가리지 않게 여백(랭킹 mt-[60px]/pc:mt-7 근사).
-                  ponytail: 헤더연동 숨김까지 안 맞춤(콘텐츠 클라이언트화 회피). 겹치면 이 값만 조정. */}
-              <div className="pc:h-7 h-[60px]" aria-hidden />
               {sections.map((section) => (
                 <section
                   key={section.key}
