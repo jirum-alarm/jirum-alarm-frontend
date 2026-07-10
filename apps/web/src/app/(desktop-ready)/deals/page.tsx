@@ -90,7 +90,9 @@ export default async function DealsIndexPage() {
                 <section
                   key={section.key}
                   id={section.anchor}
-                  className="pc:scroll-mt-16 mb-10 scroll-mt-28"
+                  // 앵커 스크롤 시 상단 여백 = 헤더(h-14) + sticky 탭바 높이만큼 확보해야 타이틀이 탭에 안 가림.
+                  // ponytail: 헤더56+탭~56 기준값. 타이틀이 탭에 가리면 이 값만 키우면 됨.
+                  className="pc:scroll-mt-28 mb-10 scroll-mt-32"
                 >
                   <h2 className="mb-4 text-lg font-bold text-black">{section.label}</h2>
                   {/* 열수: 모바일 2 → sm 3 → PC 5 (랭킹 TrackedProductGridList와 동일). */}
