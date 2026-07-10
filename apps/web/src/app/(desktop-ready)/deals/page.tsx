@@ -68,13 +68,19 @@ export default async function DealsIndexPage() {
       ) : (
         (() => {
           const sections = groupByCategory(pages);
-          // published 있는 categoryId 집합 — 탭 활성/비활성 판정용.
-          const activeIds = new Set(
-            sections.map((s) => (s.anchor.startsWith('cat-') ? Number(s.anchor.slice(4)) : NaN)),
-          );
-          // 전체 카테고리(랭킹과 동일 노출), published 없는 건 disabled.
-          const tabCategories = CATEGORIES.map((c) => ({ id: c.value, name: c.text }));
+          // 활성 categoryId — 딜 총합순(섹션 순서 그대로). 탭 순서=섹션(스크롤) 순서 일치.
+          const activeIdOrder = sections
+            .map((s) => (s.anchor.startsWith('cat-') ? Number(s.anchor.slice(4)) : NaN))
+            .filter((id) => !Number.isNaN(id));
+          const activeIds = new Set(activeIdOrder);
+          // 라벨은 CATEGORIES.text 기준(섹션 label=DB categoryName과 표기 다름). id로 매핑.
+          const labelById = new Map<number, string>(CATEGORIES.map((c) => [c.value, c.text]));
+          // 탭 순서: 활성(딜순) 먼저 → 비활성(CATEGORIES 고정순) 뒤에. 비활성은 disabled.
           const disabledIds = CATEGORIES.map((c) => c.value).filter((v) => !activeIds.has(v));
+          const tabCategories = [...activeIdOrder, ...disabledIds].map((id) => ({
+            id,
+            name: labelById.get(id) ?? '기타',
+          }));
           return (
             <>
               {/* 카테고리 탭 — 랭킹 TabbarV2 재사용(sticky top-14). published 없는 건 disabled. 클릭=앵커 스크롤.
