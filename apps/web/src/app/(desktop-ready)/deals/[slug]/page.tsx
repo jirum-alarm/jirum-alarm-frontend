@@ -106,7 +106,8 @@ export async function generateMetadata({
   const description =
     page.metaDescription ??
     `${page.modelName} 역대 핫딜 ${page.dealCount}건. 지름알림에서 가격 모아보기.`;
-  const url = `${METADATA_SERVICE_URL}/deals/${slug}`;
+  // canonical·OG url은 page.slug(DB 원문) 기준으로 통일 — JSON-LD url과 동일 소스라 불일치 방지.
+  const url = `${METADATA_SERVICE_URL}/deals/${page.slug}`;
   const image = payload.heroImage ?? `${METADATA_SERVICE_URL}/opengraph-image.webp`;
 
   return {
@@ -114,6 +115,7 @@ export async function generateMetadata({
     description,
     alternates: { canonical: url },
     openGraph: { title, description, url, type: 'website', images: [{ url: image }] },
+    twitter: { card: 'summary_large_image', title, description, images: [image] },
   };
 }
 
@@ -138,11 +140,13 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const fmtHist = (n: number) =>
     histCurrency === 'USD' ? `$${Math.round(n)}` : `${Math.round(n).toLocaleString()}원`;
 
-  // JSON-LD: verified(danawa_stats) 가격일 때만 Product/offer schema (가짜 가격 페널티 회피).
-  // brand/url/priceValidUntil 보강(2026-07-08): AI 검색 인용은 구조화 완성도에 좌우 —
-  // 인용 페이지의 65~71%가 스키마 보유, Product 필드 완결성이 상품 질의 노출 조건.
-  const jsonLd =
-    priceSummary?.source === 'danawa_stats' && priceSummary.min
+  // JSON-LD Product: 화면에 실제 표시하는 heroPrice(단위 명확한 핫딜 최저가)를 마크업 가격으로 씀.
+  //   ★구글 정책: 표시가격=마크업가격 일치 필수. 이전엔 priceSummary.min(다나와 통계·단위불명,
+  //   80원 같은 비현실값 혼입)을 썼는데 화면(heroPrice)과 달라 정책 위반 소지 + 커버리지도 낮았음
+  //   (danawa_stats 42/85). heroPrice 기준으로 바꿔 표시가 일치 + 커버리지 73/85로 확대.
+  const offerPrice = heroPrice?.minPrice ?? null;
+  const productLd =
+    offerPrice != null
       ? {
           '@context': 'https://schema.org',
           '@type': 'Product',
@@ -151,11 +155,11 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
           url: `${METADATA_SERVICE_URL}/deals/${page.slug}`,
           image: heroImage ? [heroImage] : undefined,
           offers: {
-            '@type': 'AggregateOffer',
+            '@type': 'Offer',
             priceCurrency: 'KRW',
-            lowPrice: priceSummary.min,
-            highPrice: priceSummary.max,
-            offerCount: page.dealCount,
+            price: Math.round(offerPrice),
+            availability: 'https://schema.org/InStock',
+            url: `${METADATA_SERVICE_URL}/deals/${page.slug}`,
             // 핫딜 가격의 유효기한 — ISR(10분) 재렌더마다 +7일로 갱신되는 롤링 윈도우.
             priceValidUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
               .toISOString()
@@ -163,6 +167,23 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
           },
         }
       : null;
+
+  // BreadcrumbList: 홈 > 핫딜 최저가 모음 > 모델명. 리치결과 빵부스러기 + 계층 신호.
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '홈', item: METADATA_SERVICE_URL },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: '핫딜 최저가 모음',
+        item: `${METADATA_SERVICE_URL}/deals`,
+      },
+      { '@type': 'ListItem', position: 3, name: page.modelName },
+    ],
+  };
+  const jsonLd = productLd ? [productLd, breadcrumbLd] : [breadcrumbLd];
 
   // 가격 추이 — min~max 범위로 정규화해 차이를 도드라지게(절대0 기준이면 평탄해짐).
   const histPrices = histPoints.map((p) => p.price);
@@ -178,12 +199,13 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
     // ★폭: 모바일 600px 중앙(세로 흐름) → PC layout-max(1280) 2단(좌 본문 / 우 sticky 요약).
     //   PC 상품상세(grid-cols-12, 좌 본문·우 sticky 구매정보) 패턴 차용. 모바일은 pc: 무영향.
     <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-20 pb-24">
-      {jsonLd && (
+      {jsonLd.map((ld, i) => (
         <script
+          key={i}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
         />
-      )}
+      ))}
 
       {/* 판별 스프린트 계측 — 랜딩 cohort(referrer) + outbound/deal 클릭 (GTM dataLayer) */}
       <DealsTracking slug={page.slug} />
@@ -204,6 +226,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                   alt={page.modelName}
                   fill
                   sizes="160px"
+                  priority
                   className="object-contain"
                 />
               </div>

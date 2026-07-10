@@ -109,7 +109,8 @@ export default async function DealsIndexPage() {
                                 src={p.heroImage}
                                 alt={p.modelName}
                                 fill
-                                sizes="(max-width: 600px) 50vw, 300px"
+                                // 그리드 2열(모바일)/3열(sm)/5열(PC~1280) 실폭에 맞춤 — 과대 요청 방지.
+                                sizes="(max-width: 600px) 50vw, (max-width: 1024px) 33vw, 240px"
                                 className="object-cover"
                               />
                             ) : (
