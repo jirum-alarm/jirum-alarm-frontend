@@ -123,6 +123,14 @@ export default async function DealsIndexPage() {
                             <h3 className="line-clamp-2 text-sm font-semibold text-black">
                               {p.modelName}
                             </h3>
+                            {(() => {
+                              const fresh = freshnessLabel(p.lastDealAt);
+                              return fresh ? (
+                                <span className="w-fit rounded-full bg-rose-50 px-1.5 py-0.5 text-[11px] font-medium text-rose-500">
+                                  {fresh}
+                                </span>
+                              ) : null;
+                            })()}
                             {p.heroMinPrice != null ? (
                               <div className="mt-auto">
                                 <p className="text-base font-bold text-rose-500">
@@ -153,6 +161,21 @@ export default async function DealsIndexPage() {
 }
 
 type DealItem = Awaited<ReturnType<typeof ModelPageService.getPublishedModelPages>>[number];
+
+/**
+ * 신선도 라벨 — 최근 딜만 배지로("오늘"/"어제"/"N일 전"). 7일 초과는 null(노이즈 방지, 배지 안 띄움).
+ * lastDealAt 없으면 null. 서버 렌더라 KST 자정 경계는 근사(UTC 기준 일수차) — 배지 목적엔 충분.
+ */
+function freshnessLabel(lastDealAt?: string | null): string | null {
+  if (!lastDealAt) return null;
+  const then = new Date(lastDealAt).getTime();
+  if (Number.isNaN(then)) return null;
+  const days = Math.floor((Date.now() - then) / 86_400_000);
+  if (days <= 0) return '오늘';
+  if (days === 1) return '어제';
+  if (days <= 7) return `${days}일 전`;
+  return null;
+}
 
 /**
  * 섹션 내부를 브랜드끼리 인접하게 정렬. 같은 브랜드(펩시 라임 5종 등)가 딜수 순으로 흩어지지 않고

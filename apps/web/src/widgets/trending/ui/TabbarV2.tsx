@@ -189,6 +189,15 @@ const TabBarV2 = ({
     }
   };
 
+  // 키보드 접근성 — 클릭이 onPointerUp(드래그 판정)에만 걸려 있어 Enter/Space로는 동작 안 했음.
+  // pointer 경로와 중복 없이 키보드만 보완(마우스는 pointerUp, 키보드는 여기).
+  const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onTabClick(Number(id));
+    }
+  };
+
   // containerClassName 주면 그 위치 클래스만 쓰고 헤더연동 translate 끔(trending 밖에서 사용).
   const positionClass = containerClassName ?? DEFAULT_POSITION;
   const headerLinkedTranslate = containerClassName
@@ -227,6 +236,7 @@ const TabBarV2 = ({
                 onPointerUp={
                   isDisabled ? undefined : (e) => handlePointerUp(e, category.id.toString())
                 }
+                onKeyDown={isDisabled ? undefined : (e) => handleKeyDown(e, category.id.toString())}
                 className={cn(
                   mergedStyles.tabTrigger.base,
                   isDisabled

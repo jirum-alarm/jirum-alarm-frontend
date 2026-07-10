@@ -530,6 +530,7 @@ type ModelPageListItemOutput {
   dealCount: Int!
   heroImage: String
   heroMinPrice: Int
+  lastDealAt: DateTime
   modelName: String!
   slug: String!
   unitLabel: String

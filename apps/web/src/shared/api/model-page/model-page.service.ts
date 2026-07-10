@@ -37,6 +37,7 @@ const PublishedModelPagesDocument = graphql(`
       unitPrice
       categoryId
       categoryName
+      lastDealAt
     }
   }
 `);

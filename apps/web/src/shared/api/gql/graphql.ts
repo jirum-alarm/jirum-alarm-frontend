@@ -522,6 +522,7 @@ export type ModelPageListItemOutput = {
   dealCount: Scalars['Int']['output'];
   heroImage?: Maybe<Scalars['String']['output']>;
   heroMinPrice?: Maybe<Scalars['Int']['output']>;
+  lastDealAt?: Maybe<Scalars['DateTime']['output']>;
   modelName: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   unitLabel?: Maybe<Scalars['String']['output']>;
@@ -3283,6 +3284,7 @@ export type PublishedModelPagesQuery = {
     unitPrice?: number | null;
     categoryId?: number | null;
     categoryName?: string | null;
+    lastDealAt?: any | null;
   }>;
 };
 
@@ -4337,6 +4339,7 @@ export const PublishedModelPagesDocument = new TypedDocumentString(`
     unitPrice
     categoryId
     categoryName
+    lastDealAt
   }
 }
     `) as unknown as TypedDocumentString<
