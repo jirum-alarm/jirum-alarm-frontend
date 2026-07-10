@@ -85,6 +85,9 @@ export const defaultMetadata: Metadata = {
   },
   alternates: {
     canonical: METADATA_SERVICE_URL,
+    types: {
+      'application/rss+xml': `${METADATA_SERVICE_URL}/rss.xml`,
+    },
   },
   robots: {
     index: true,
