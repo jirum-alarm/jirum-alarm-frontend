@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ModelPageService } from '@/shared/api/model-page';
+import { CATEGORIES } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
 import DealsMobileHeader from './[slug]/DealsMobileHeader';
@@ -66,29 +67,45 @@ export default async function DealsIndexPage() {
       ) : (
         (() => {
           const sections = groupByCategory(pages);
+          // published 있는 categoryId 집합 — 탭 활성/비활성 판정용.
+          const activeIds = new Set(
+            sections.map((s) => (s.anchor.startsWith('cat-') ? s.anchor.slice(4) : null)),
+          );
           return (
             <>
-              {/* 카테고리 탭 — 앵커 점프. 섹션이 2개 이상일 때만 노출. sticky로 스크롤 중에도 고정.
-                  ponytail: top-14/pc:top-0 은 헤더 높이 가정값. 실물에서 겹치면 이 값만 조정. */}
-              {sections.length > 1 && (
-                <nav
-                  aria-label="카테고리 바로가기"
-                  className="pc:top-0 sticky top-14 z-10 -mx-5 mb-6 border-b border-gray-100 bg-white/90 px-5 py-2 backdrop-blur"
-                >
-                  <ul className="flex gap-2 overflow-x-auto">
-                    {sections.map((s) => (
-                      <li key={s.key}>
-                        <a
-                          href={`#${s.anchor}`}
-                          className="inline-block rounded-full border border-gray-200 px-3 py-1.5 text-sm whitespace-nowrap text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-50"
-                        >
-                          {s.label}
-                        </a>
+              {/* 카테고리 탭 — 전체 카테고리 항상 노출, published 없는 건 비활성. 앵커 점프.
+                  위치/스타일은 랭킹 TabbarV2(top-14 sticky·둥근 뱃지)와 맞춤. */}
+              <nav
+                aria-label="카테고리 바로가기"
+                className="max-w-mobile-max pc:max-w-none pc:sticky sticky top-14 z-30 -mx-5 mb-6 bg-white px-4 pt-3 pb-3"
+              >
+                <ul className="pc:justify-center flex gap-2.5 overflow-x-auto">
+                  {CATEGORIES.map((c) => {
+                    const isActive = activeIds.has(String(c.value));
+                    const base =
+                      'inline-block h-9 shrink-0 rounded-full px-3 py-2 text-sm leading-none whitespace-nowrap transition-colors';
+                    return (
+                      <li key={c.value}>
+                        {isActive ? (
+                          <a
+                            href={`#cat-${c.value}`}
+                            className={`${base} bg-gray-100 font-medium text-gray-700 hover:bg-gray-200`}
+                          >
+                            {c.text}
+                          </a>
+                        ) : (
+                          <span
+                            aria-disabled="true"
+                            className={`${base} cursor-not-allowed bg-gray-50 font-medium text-gray-300`}
+                          >
+                            {c.text}
+                          </span>
+                        )}
                       </li>
-                    ))}
-                  </ul>
-                </nav>
-              )}
+                    );
+                  })}
+                </ul>
+              </nav>
               {sections.map((section) => (
                 <section
                   key={section.key}
