@@ -7,6 +7,7 @@ import { CATEGORIES } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
 import DealsMobileHeader from './[slug]/DealsMobileHeader';
+import DealsCategoryTabs from './DealsCategoryTabs';
 
 // /deals 인덱스 — 퍼블리시된 모델 페이지(상품별 핫딜 최저가 모음)를 한눈에 모아보는 허브.
 // 각 카드 → /deals/{slug}. 모델 페이지들의 SEO 내부링크 허브이자 둘러보기 진입점.
@@ -69,43 +70,18 @@ export default async function DealsIndexPage() {
           const sections = groupByCategory(pages);
           // published 있는 categoryId 집합 — 탭 활성/비활성 판정용.
           const activeIds = new Set(
-            sections.map((s) => (s.anchor.startsWith('cat-') ? s.anchor.slice(4) : null)),
+            sections.map((s) => (s.anchor.startsWith('cat-') ? Number(s.anchor.slice(4)) : NaN)),
           );
+          // 전체 카테고리(랭킹과 동일 노출), published 없는 건 disabled.
+          const tabCategories = CATEGORIES.map((c) => ({ id: c.value, name: c.text }));
+          const disabledIds = CATEGORIES.map((c) => c.value).filter((v) => !activeIds.has(v));
           return (
             <>
-              {/* 카테고리 탭 — 전체 카테고리 항상 노출, published 없는 건 비활성. 앵커 점프.
-                  위치/스타일은 랭킹 TabbarV2(top-14 sticky·둥근 뱃지)와 맞춤. */}
-              <nav
-                aria-label="카테고리 바로가기"
-                className="max-w-mobile-max pc:max-w-none pc:sticky sticky top-14 z-30 -mx-5 mb-6 bg-white px-4 pt-3 pb-3"
-              >
-                <ul className="pc:justify-center flex gap-2.5 overflow-x-auto">
-                  {CATEGORIES.map((c) => {
-                    const isActive = activeIds.has(String(c.value));
-                    const base =
-                      'inline-block h-9 shrink-0 rounded-full px-3 py-2 text-sm leading-none whitespace-nowrap transition-colors';
-                    return (
-                      <li key={c.value}>
-                        {isActive ? (
-                          <a
-                            href={`#cat-${c.value}`}
-                            className={`${base} bg-gray-100 font-medium text-gray-700 hover:bg-gray-200`}
-                          >
-                            {c.text}
-                          </a>
-                        ) : (
-                          <span
-                            aria-disabled="true"
-                            className={`${base} cursor-not-allowed bg-gray-50 font-medium text-gray-300`}
-                          >
-                            {c.text}
-                          </span>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </nav>
+              {/* 카테고리 탭 — 랭킹 TabbarV2 그대로 재사용. published 없는 건 disabled. 클릭=앵커 스크롤. */}
+              <DealsCategoryTabs categories={tabCategories} disabledIds={disabledIds} />
+              {/* TabbarV2가 모바일 fixed라 콘텐츠가 탭에 가리지 않게 여백(랭킹 mt-[60px]/pc:mt-7 근사).
+                  ponytail: 헤더연동 숨김까지 안 맞춤(콘텐츠 클라이언트화 회피). 겹치면 이 값만 조정. */}
+              <div className="pc:h-7 h-[60px]" aria-hidden />
               {sections.map((section) => (
                 <section
                   key={section.key}

@@ -45,6 +45,8 @@ interface TabBarProps {
   allCategories: { id: number; name: string }[];
   tabIndex: number;
   onTabClick: (id: number) => void;
+  /** 비활성 카테고리 id — 회색 처리 + 클릭 무시. 기본 없음(랭킹은 안 넘김). */
+  disabledIds?: number[];
   styles?: TabBarStyles;
   animationConfig?: TabBarAnimationConfig;
   settingsHref?: string;
@@ -97,8 +99,10 @@ const TabBarV2 = ({
   settingsIcon = <Setting color="#467DFB" />,
   settingsAriaLabel = '카테고리 설정 페이지로 이동',
   showSettings = false,
+  disabledIds = [],
 }: TabBarProps) => {
   const categoryIds = allCategories.map((c) => c.id);
+  const disabledSet = new Set(disabledIds);
 
   const isHeaderVisible = useHeaderVisibility();
 
@@ -197,28 +201,38 @@ const TabBarV2 = ({
           }}
           className={mergedStyles.tabList}
         >
-          {allCategories.map((category) => (
-            <Tabs.Trigger
-              key={category.id}
-              value={`${category.id}`}
-              onPointerDown={(e) => handlePointerDown(e, category.id.toString())}
-              onPointerUp={(e) => handlePointerUp(e, category.id.toString())}
-              className={cn(
-                mergedStyles.tabTrigger.base,
-                tabIndex === categoryIds.indexOf(category.id)
-                  ? mergedStyles.tabTrigger.active
-                  : mergedStyles.tabTrigger.inactive,
-              )}
-            >
-              <motion.span
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.1 }}
-                className="inline-block"
+          {allCategories.map((category) => {
+            const isDisabled = disabledSet.has(category.id);
+            return (
+              <Tabs.Trigger
+                key={category.id}
+                value={`${category.id}`}
+                disabled={isDisabled}
+                onPointerDown={
+                  isDisabled ? undefined : (e) => handlePointerDown(e, category.id.toString())
+                }
+                onPointerUp={
+                  isDisabled ? undefined : (e) => handlePointerUp(e, category.id.toString())
+                }
+                className={cn(
+                  mergedStyles.tabTrigger.base,
+                  isDisabled
+                    ? 'cursor-not-allowed bg-gray-100 font-medium text-gray-300'
+                    : tabIndex === categoryIds.indexOf(category.id)
+                      ? mergedStyles.tabTrigger.active
+                      : mergedStyles.tabTrigger.inactive,
+                )}
               >
-                {category.name}
-              </motion.span>
-            </Tabs.Trigger>
-          ))}
+                <motion.span
+                  whileTap={isDisabled ? undefined : { scale: 0.95 }}
+                  transition={{ duration: 0.1 }}
+                  className="inline-block"
+                >
+                  {category.name}
+                </motion.span>
+              </Tabs.Trigger>
+            );
+          })}
         </motion.div>
       </Tabs.List>
       {showSettings && (
