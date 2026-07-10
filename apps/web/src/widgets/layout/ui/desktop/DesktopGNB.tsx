@@ -38,6 +38,11 @@ const NAV_LINKS = [
     isActive: (pathname: string) => pathname === PAGE.TRENDING_RANKING,
   },
   {
+    href: PAGE.DEALS,
+    label: '최저가',
+    isActive: (pathname: string) => pathname.startsWith(PAGE.DEALS),
+  },
+  {
     href: PAGE.COMMUNITY,
     label: '커뮤니티',
     isActive: (pathname: string) => pathname.startsWith(PAGE.COMMUNITY),

@@ -15,6 +15,8 @@ export enum PAGE {
   SIGNUP_COMPLETE = '/signup/complete',
   LOGOUT = '/logout',
 
+  DEALS = '/deals',
+
   COMMUNITY = '/community',
   COMMUNITY_WRITE = '/community/write',
 
