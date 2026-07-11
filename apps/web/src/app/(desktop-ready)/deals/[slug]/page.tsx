@@ -242,7 +242,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               {/* 핫딜 최저가 — 단위 명확하게(수량 + 단위가격). 단위 불명한 brand_item 통계 대신 heroPrice. */}
               {heroPrice?.minPrice != null && (
                 <div className="mt-2">
-                  <p className="text-lg font-semibold text-rose-500">
+                  <p className="text-lg font-semibold text-gray-900">
                     핫딜 최저 {won(heroPrice.minPrice)}
                   </p>
                   <p className="mt-0.5 text-sm text-gray-500">
@@ -281,7 +281,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                         )}
                       </div>
                       {rep.dealMinPrice != null && (
-                        <span className="text-sm font-semibold text-rose-500">
+                        <span className="text-sm font-semibold text-gray-900">
                           핫딜 {won(rep.dealMinPrice)}
                         </span>
                       )}
@@ -312,7 +312,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                 </span>
               </div>
               <p className="mb-3 text-xs text-gray-500">
-                역대 최저 <span className="font-semibold text-rose-500">{fmtHist(histMin)}</span>
+                역대 최저 <span className="text-error-500 font-semibold">{fmtHist(histMin)}</span>
                 <span className="text-gray-300"> · </span>
                 최고 {fmtHist(histMax)}
               </p>
@@ -329,13 +329,13 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     >
                       {(isLow || isHigh) && (
                         <span
-                          className={`text-[9px] whitespace-nowrap ${isLow ? 'font-semibold text-rose-500' : 'text-gray-400'}`}
+                          className={`text-[9px] whitespace-nowrap ${isLow ? 'text-error-500 font-semibold' : 'text-gray-400'}`}
                         >
                           {fmtHist(p.price)}
                         </span>
                       )}
                       <div
-                        className={`w-full rounded-t ${isLow ? 'bg-rose-400' : 'bg-blue-300'}`}
+                        className={`w-full rounded-t ${isLow ? 'bg-error-400' : 'bg-secondary-300'}`}
                         style={{ height: `${histBarH(p.price)}px` }}
                         title={`${p.month}: ${fmtHist(p.price)}`}
                       />
@@ -384,7 +384,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                       </div>
                       <div className="flex shrink-0 flex-col items-end gap-0.5">
                         {isAllTimeLow && (
-                          <span className="rounded bg-rose-100 px-1.5 py-0.5 text-[10px] font-semibold text-rose-600">
+                          <span className="bg-error-50 text-error-600 rounded px-1.5 py-0.5 text-[10px] font-semibold">
                             역대 최저
                           </span>
                         )}

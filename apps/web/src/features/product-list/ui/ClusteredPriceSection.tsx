@@ -74,7 +74,7 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
       <div className="mb-1 flex items-baseline justify-between">
         <h2 className="text-base font-semibold">{sectionTitle}</h2>
         {showLowestEmphasis && savePct > 0 && (
-          <span className="rounded-full bg-rose-50 px-2 py-0.5 text-xs font-semibold text-rose-500">
+          <span className="bg-error-50 text-error-500 rounded-full px-2 py-0.5 text-xs font-semibold">
             최저가 {savePct}% 저렴
           </span>
         )}
@@ -104,12 +104,12 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-0.5">
                   {isLowest && (
-                    <span className="rounded bg-rose-100 px-1.5 py-0.5 text-[10px] font-semibold text-rose-600">
+                    <span className="bg-error-50 text-error-600 rounded px-1.5 py-0.5 text-[10px] font-semibold">
                       최저가
                     </span>
                   )}
                   <span
-                    className={`text-sm font-semibold ${isLowest ? 'text-rose-500' : 'text-gray-700'}`}
+                    className={`text-sm font-semibold ${isLowest ? 'text-error-500' : 'text-gray-700'}`}
                   >
                     {won(p.parsedPrice, p.priceCurrency)}
                   </span>

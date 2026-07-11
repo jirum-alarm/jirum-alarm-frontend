@@ -126,14 +126,14 @@ export default async function DealsIndexPage() {
                             {(() => {
                               const fresh = freshnessLabel(p.lastDealAt);
                               return fresh ? (
-                                <span className="w-fit rounded-full bg-rose-50 px-1.5 py-0.5 text-[11px] font-medium text-rose-500">
+                                <span className="w-fit rounded-full bg-gray-100 px-1.5 py-0.5 text-[11px] font-medium text-gray-600">
                                   {fresh}
                                 </span>
                               ) : null;
                             })()}
                             {p.heroMinPrice != null ? (
                               <div className="mt-auto">
-                                <p className="text-base font-bold text-rose-500">
+                                <p className="text-lg font-semibold text-gray-900">
                                   {p.heroMinPrice.toLocaleString()}원
                                 </p>
                                 {p.unitLabel && p.unitPrice != null && (
