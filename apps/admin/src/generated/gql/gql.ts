@@ -54,6 +54,8 @@ type Documents = {
   '\n  query QueryProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n    $categoryId: Int\n    $keyword: String\n    $thumbnailType: ThumbnailType\n    $isEnd: Boolean\n    $isHot: Boolean\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      orderOption: $orderOption\n      categoryId: $categoryId\n      keyword: $keyword\n      thumbnailType: $thumbnailType\n      isEnd: $isEnd\n      isHot: $isHot\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryProductsDocument;
   '\n  mutation MutationHardDeleteProductByAdmin($id: Int!) {\n    hardDeleteProductByAdmin(id: $id)\n  }\n': typeof types.MutationHardDeleteProductByAdminDocument;
   '\n  query QueryProduct($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      categoryName\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      author {\n        id\n        nickname\n      }\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      hotDealType\n      hotDealIndex {\n        id\n        message\n        highestPrice\n        currentPrice\n        lowestPrice\n      }\n      likeCount\n      dislikeCount\n    }\n  }\n': typeof types.QueryProductDocument;
+  '\n  query HasTossSession {\n    hasTossSession\n  }\n': typeof types.HasTossSessionDocument;
+  '\n  mutation SetTossSession($token: String!) {\n    setTossSession(token: $token)\n  }\n': typeof types.SetTossSessionDocument;
   '\n  query QueryUserRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    userRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n': typeof types.QueryUserRegistrationStatsDocument;
   '\n  query QueryUserDemographicStats {\n    userDemographicStats {\n      genderDistribution {\n        gender\n        count\n      }\n      ageDistribution {\n        ageGroup\n        count\n      }\n    }\n  }\n': typeof types.QueryUserDemographicStatsDocument;
   '\n  query QueryTopFavoriteCategories($limit: Int) {\n    topFavoriteCategories(limit: $limit) {\n      categoryId\n      categoryName\n      count\n    }\n  }\n': typeof types.QueryTopFavoriteCategoriesDocument;
@@ -169,6 +171,9 @@ const documents: Documents = {
     types.MutationHardDeleteProductByAdminDocument,
   '\n  query QueryProduct($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      categoryName\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      author {\n        id\n        nickname\n      }\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      hotDealType\n      hotDealIndex {\n        id\n        message\n        highestPrice\n        currentPrice\n        lowestPrice\n      }\n      likeCount\n      dislikeCount\n    }\n  }\n':
     types.QueryProductDocument,
+  '\n  query HasTossSession {\n    hasTossSession\n  }\n': types.HasTossSessionDocument,
+  '\n  mutation SetTossSession($token: String!) {\n    setTossSession(token: $token)\n  }\n':
+    types.SetTossSessionDocument,
   '\n  query QueryUserRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    userRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n':
     types.QueryUserRegistrationStatsDocument,
   '\n  query QueryUserDemographicStats {\n    userDemographicStats {\n      genderDistribution {\n        gender\n        count\n      }\n      ageDistribution {\n        ageGroup\n        count\n      }\n    }\n  }\n':
@@ -481,6 +486,18 @@ export function graphql(
 export function graphql(
   source: '\n  query QueryProduct($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      categoryName\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      author {\n        id\n        nickname\n      }\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      hotDealType\n      hotDealIndex {\n        id\n        message\n        highestPrice\n        currentPrice\n        lowestPrice\n      }\n      likeCount\n      dislikeCount\n    }\n  }\n',
 ): typeof import('./graphql').QueryProductDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query HasTossSession {\n    hasTossSession\n  }\n',
+): typeof import('./graphql').HasTossSessionDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation SetTossSession($token: String!) {\n    setTossSession(token: $token)\n  }\n',
+): typeof import('./graphql').SetTossSessionDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

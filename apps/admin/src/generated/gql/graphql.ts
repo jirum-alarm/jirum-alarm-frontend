@@ -517,9 +517,12 @@ export type ModelPageAdminItemOutput = {
 export type ModelPageListItemOutput = {
   __typename?: 'ModelPageListItemOutput';
   brand?: Maybe<Scalars['String']['output']>;
+  categoryId?: Maybe<Scalars['Int']['output']>;
+  categoryName?: Maybe<Scalars['String']['output']>;
   dealCount: Scalars['Int']['output'];
   heroImage?: Maybe<Scalars['String']['output']>;
   heroMinPrice?: Maybe<Scalars['Int']['output']>;
+  lastDealAt?: Maybe<Scalars['DateTime']['output']>;
   modelName: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   unitLabel?: Maybe<Scalars['String']['output']>;
@@ -644,6 +647,8 @@ export type Mutation = {
   setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
   /** 대표 매핑 지정 (id 기준) */
   setPrimaryProductMapping: Scalars['Boolean']['output'];
+  /** 어드민) 토스 세션 토큰(TBIZAUTH) 갱신. sharelink.toss.im 로그인 → DevTools > Application > Cookies > TBIZAUTH 값(base64 원문) 붙여넣기. */
+  setTossSession: Scalars['Boolean']['output'];
   /** 회원가입 */
   signup: SignupOutput;
   /** 소셜 로그인 */
@@ -932,6 +937,10 @@ export type MutationSetModelPagePublishedByAdminArgs = {
 
 export type MutationSetPrimaryProductMappingArgs = {
   productMappingId: Scalars['Int']['input'];
+};
+
+export type MutationSetTossSessionArgs = {
+  token: Scalars['String']['input'];
 };
 
 export type MutationSignupArgs = {
@@ -1508,6 +1517,8 @@ export type Query = {
   getSimilarProducts: Array<ProductOutput>;
   /** 게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백) */
   guestRecommendedHotDeals: Array<ProductOutput>;
+  /** 어드민) 토스 세션 토큰 저장 여부(true면 발급 가동중) */
+  hasTossSession: Scalars['Boolean']['output'];
   homePage: Array<BaseSection>;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
@@ -2969,6 +2980,16 @@ export type QueryProductQuery = {
   } | null;
 };
 
+export type HasTossSessionQueryVariables = Exact<{ [key: string]: never }>;
+
+export type HasTossSessionQuery = { __typename?: 'Query'; hasTossSession: boolean };
+
+export type SetTossSessionMutationVariables = Exact<{
+  token: Scalars['String']['input'];
+}>;
+
+export type SetTossSessionMutation = { __typename?: 'Mutation'; setTossSession: boolean };
+
 export type QueryUserRegistrationStatsQueryVariables = Exact<{
   startDate: Scalars['DateTime']['input'];
   endDate: Scalars['DateTime']['input'];
@@ -4033,6 +4054,16 @@ export const QueryProductDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<QueryProductQuery, QueryProductQueryVariables>;
+export const HasTossSessionDocument = new TypedDocumentString(`
+    query HasTossSession {
+  hasTossSession
+}
+    `) as unknown as TypedDocumentString<HasTossSessionQuery, HasTossSessionQueryVariables>;
+export const SetTossSessionDocument = new TypedDocumentString(`
+    mutation SetTossSession($token: String!) {
+  setTossSession(token: $token)
+}
+    `) as unknown as TypedDocumentString<SetTossSessionMutation, SetTossSessionMutationVariables>;
 export const QueryUserRegistrationStatsDocument = new TypedDocumentString(`
     query QueryUserRegistrationStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
   userRegistrationStats(

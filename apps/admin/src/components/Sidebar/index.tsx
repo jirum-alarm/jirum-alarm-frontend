@@ -138,7 +138,8 @@ const Sidebar = ({
                 activeCondition={
                   pathname === '/' ||
                   pathname.startsWith('/stats') ||
-                  pathname.startsWith('/crawling')
+                  pathname.startsWith('/crawling') ||
+                  pathname.startsWith('/profit-link')
                 }
               >
                 {(handleClick, open) => {
@@ -149,7 +150,8 @@ const Sidebar = ({
                         isSelectedPath={
                           pathname === '/' ||
                           pathname.startsWith('/stats') ||
-                          pathname.startsWith('/crawling')
+                          pathname.startsWith('/crawling') ||
+                          pathname.startsWith('/profit-link')
                         }
                         open={open}
                         sidebarExpanded={sidebarExpanded}
@@ -161,6 +163,7 @@ const Sidebar = ({
                         <SubMenuItem name="홈" linkTo="/" pathname={pathname} />
                         <SubMenuItem name="통계" linkTo="/stats" pathname={pathname} />
                         <SubMenuItem name="크롤링" linkTo="/crawling" pathname={pathname} />
+                        <SubMenuItem name="수익 링크" linkTo="/profit-link" pathname={pathname} />
                       </SubMenu>
                     </React.Fragment>
                   );

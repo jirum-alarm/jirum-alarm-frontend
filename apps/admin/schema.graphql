@@ -525,9 +525,12 @@ type ModelPageAdminItemOutput {
 
 type ModelPageListItemOutput {
   brand: String
+  categoryId: Int
+  categoryName: String
   dealCount: Int!
   heroImage: String
   heroMinPrice: Int
+  lastDealAt: DateTime
   modelName: String!
   slug: String!
   unitLabel: String
@@ -856,6 +859,10 @@ type Mutation {
   대표 매핑 지정 (id 기준)
   """
   setPrimaryProductMapping(productMappingId: Int!): Boolean!
+  """
+  어드민) 토스 세션 토큰(TBIZAUTH) 갱신. sharelink.toss.im 로그인 → DevTools > Application > Cookies > TBIZAUTH 값(base64 원문) 붙여넣기.
+  """
+  setTossSession(token: String!): Boolean!
   """
   회원가입
   """
@@ -1642,6 +1649,10 @@ type Query {
     """
     page: Int!
   ): [ProductOutput!]!
+  """
+  어드민) 토스 세션 토큰 저장 여부(true면 발급 가동중)
+  """
+  hasTossSession: Boolean!
   homePage: [BaseSection!]!
   """
   어드민) 핫딜 제외 키워드 목록 조회
