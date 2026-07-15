@@ -3,18 +3,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { cn } from '@/shared/lib/cn';
-
 import PromotionTabs from '@/widgets/home/ui/PromotionTabs';
 
 import { TOSS_SECTIONS } from './mock';
 import { fetchTossCategoryLabels, fetchTossDeals } from './toss.api';
+import TossCategoryTabs from './TossCategoryTabs';
 import TossDealCard from './TossDealCard';
 
 const CATEGORY_SECTION_ID = 'category';
 
 // 토스 특가 상세. 탭 라벨은 고정(7섹션), 딜은 서버 실 조회.
-// '카테고리 인기' 탭은 2단 — 하위 카테고리(동적 categoryLabel) 탭이 추가로 뜬다.
+// '카테고리 인기' 탭은 2단 — 하위 카테고리(동적 categoryLabel) 탭이 섹션탭과 그리드 중간에 뜬다.
 export default function TossDailyContainer() {
   const router = useRouter();
   const params = useSearchParams();
@@ -25,20 +24,17 @@ export default function TossDailyContainer() {
   const isCategory = active.id === CATEGORY_SECTION_ID;
   const catParam = params.get('cat') ?? undefined;
 
-  // 카테고리 인기 하위 탭(동적). 카테고리 탭일 때만 조회.
+  // 카테고리 탭일 때만 하위 라벨 조회(첫 라벨 기본값 계산용).
   const { data: categoryLabels = [] } = useQuery({
     queryKey: ['toss-category-labels'],
     queryFn: fetchTossCategoryLabels,
     enabled: isCategory,
   });
-
-  // 카테고리 탭인데 하위 미선택이면 첫 카테고리로 기본.
   const activeCat = isCategory ? (catParam ?? categoryLabels[0]) : undefined;
 
   const { data: deals = [], isLoading } = useQuery({
     queryKey: ['toss-deals', active.id, activeCat ?? null],
     queryFn: () => fetchTossDeals({ section: active.id, categoryLabel: activeCat, limit: 20 }),
-    // 카테고리 탭인데 아직 하위 카테고리가 없으면 조회 보류(빈 상태 표시).
     enabled: !isCategory || !!activeCat,
   });
 
@@ -59,22 +55,8 @@ export default function TossDailyContainer() {
         />
       </div>
 
-      {/* 2단: 카테고리 인기 하위 탭 */}
-      {isCategory && categoryLabels.length > 0 && (
-        <div className="no-scrollbar flex gap-x-2 overflow-x-auto px-5 pb-2">
-          {categoryLabels.map((label) => (
-            <button
-              key={label}
-              onClick={() => setParam('cat', label)}
-              className={cn(
-                'shrink-0 rounded-full px-3 py-1.5 text-sm whitespace-nowrap transition-colors',
-                activeCat === label ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600',
-              )}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+      {isCategory && (
+        <TossCategoryTabs activeLabel={activeCat} onSelect={(l) => setParam('cat', l)} />
       )}
 
       <div className="pc:pt-7 px-5 py-14">
