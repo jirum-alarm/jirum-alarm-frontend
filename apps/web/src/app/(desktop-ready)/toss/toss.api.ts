@@ -27,8 +27,19 @@ interface TossExt {
   rating?: number;
   reviewCount?: number;
   bestSeller?: boolean;
-  unitPrice?: string;
+  // 서버가 문자열("100g당 2,092원") 또는 객체({unitName,unitAmount,unitPrice})로 줄 수 있어 둘 다 방어.
+  // 객체를 그대로 JSX 에 렌더하면 React #31 로 홈 전체가 크래시하므로 반드시 문자열로 정규화.
+  unitPrice?: string | { unitName?: string; unitAmount?: number; unitPrice?: number };
   badge?: string;
+}
+
+// unitPrice 를 항상 문자열로. 객체면 "N<unit>당 X원" 조립, 문자열이면 그대로, 그 외 undefined.
+function normalizeUnitPrice(u: TossExt['unitPrice']): string | undefined {
+  if (typeof u === 'string') return u;
+  if (u && typeof u === 'object' && u.unitPrice != null && u.unitName) {
+    return `${u.unitAmount ?? 1}${u.unitName}당 ${u.unitPrice.toLocaleString()}원`;
+  }
+  return undefined;
 }
 
 function toDeal(p: {
@@ -53,7 +64,7 @@ function toDeal(p: {
     reviewCount: t.reviewCount,
     bestSeller: t.bestSeller,
     badge: t.badge,
-    unitPrice: t.unitPrice,
+    unitPrice: normalizeUnitPrice(t.unitPrice),
   };
 }
 
