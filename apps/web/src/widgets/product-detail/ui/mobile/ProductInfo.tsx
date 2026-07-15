@@ -13,12 +13,19 @@ import DisplayTime from '@/shared/ui/DisplayTime';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 
 import { ProductQueries } from '@/entities/product';
+import TossIcon from '@/entities/product/ui/TossIcon';
 
 import { RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
 import HotdealGuideModal from '@/features/product-detail/ui/mobile/HotDealGuideModal';
 
-export default function ProductInfo({ productId }: { productId: number }) {
+export default function ProductInfo({
+  productId,
+  tossData,
+}: {
+  productId: number;
+  tossData?: import('@/entities/product/model/toss-data').TossProductData;
+}) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
   const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
 
@@ -68,7 +75,19 @@ export default function ProductInfo({ productId }: { productId: number }) {
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <DisplayPrice price={product.price} />
+              {tossData?.originalPrice && (
+                <span className="text-sm text-gray-400 line-through">
+                  {tossData.originalPrice.toLocaleString()}원
+                </span>
+              )}
+              <div className="flex items-baseline gap-x-2">
+                {typeof tossData?.discountRate === 'number' && (
+                  <span className="text-error-500 text-2xl font-bold">
+                    {tossData.discountRate}%
+                  </span>
+                )}
+                <DisplayPrice price={product.price} />
+              </div>
             </div>
             <div>
               <RecommendButton productId={productId} />
@@ -80,7 +99,10 @@ export default function ProductInfo({ productId }: { productId: number }) {
         <div className="flex flex-col gap-[8px]">
           <div className="flex justify-between text-sm font-medium">
             <span className="text-gray-400">쇼핑몰</span>
-            <span className="text-gray-500">{product.mallName}</span>
+            <span className="flex items-center gap-x-1 text-gray-500">
+              {tossData && <TossIcon size={20} />}
+              {tossData ? '토스' : product.mallName}
+            </span>
           </div>
           {product.uploaderType !== UploaderType.Crawled && (
             <div className="flex justify-between text-sm font-medium">
@@ -106,6 +128,25 @@ export default function ProductInfo({ productId }: { productId: number }) {
             <span className="text-gray-400">추천수</span>
             <span className="text-gray-500">{productStats.likeCount}개</span>
           </div>
+          {tossData?.sellerName && (
+            <div className="flex justify-between text-sm font-medium">
+              <span className="text-gray-400">판매자</span>
+              <span className="text-gray-500">{tossData.sellerName}</span>
+            </div>
+          )}
+          {tossData && (
+            <div className="flex justify-between text-sm font-medium">
+              <span className="text-gray-400">배송비</span>
+              <span className="text-gray-500">
+                {tossData.deliveryFee
+                  ? `${tossData.deliveryFee.toLocaleString()}원` +
+                    (tossData.freeShippingThreshold
+                      ? ` (${tossData.freeShippingThreshold.toLocaleString()}원 이상 무료배송)`
+                      : '')
+                  : '무료배송'}
+              </span>
+            </div>
+          )}
         </div>
         {product.uploaderType === UploaderType.User && product.content && (
           <div className="mt-6">

@@ -5,7 +5,9 @@ import { CheckDeviceResult } from '@/app/actions/agent.types';
 import { AdvertiseSlotLocation, ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 
+import { type ProductData } from '@/entities/product/model/toss-data';
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
+import TossDetailImages from '@/entities/product/ui/TossDetailImages';
 
 import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
 import { ProductDetailSideAd } from '@/features/adsense/ui/ProductDetailSideAd';
@@ -38,6 +40,9 @@ export default async function DesktopProductDetailPage({
   initialProduct?: ProductInfoFragment;
   device?: CheckDeviceResult;
 }) {
+  // 백엔드 product.data.toss (수집 배치가 채움). 없으면 토스 블록 미노출.
+  const tossData = (initialProduct?.data as ProductData | undefined)?.toss;
+
   return (
     <>
       {device && <FirstVisitAppAlertModal device={device} />}
@@ -81,7 +86,7 @@ export default async function DesktopProductDetailPage({
           <div className="col-span-1">
             <div className="sticky top-25 space-y-6">
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
-                <ProductInfo productId={productId} isUserLogin={isUserLogin} />
+                <ProductInfo productId={productId} isUserLogin={isUserLogin} tossData={tossData} />
               </Suspense>
               <ProductDetailSideAd productId={productId} />
             </div>
@@ -90,6 +95,7 @@ export default async function DesktopProductDetailPage({
             <Hr />
             <div className="space-y-11 overflow-x-hidden py-11">
               <ProductDetailAd productId={productId} isMobile={false} />
+              {tossData?.images && <TossDetailImages images={tossData.images} />}
               <Suspense>
                 <ClusteredPriceSection productId={productId} />
               </Suspense>

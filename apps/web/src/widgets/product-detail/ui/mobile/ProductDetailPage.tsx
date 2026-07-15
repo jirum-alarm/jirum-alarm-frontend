@@ -4,7 +4,9 @@ import { CheckDeviceResult } from '@/app/actions/agent.types';
 
 import { AdvertiseSlotLocation, ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
 
+import { type ProductData } from '@/entities/product/model/toss-data';
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
+import TossDetailImages from '@/entities/product/ui/TossDetailImages';
 
 import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
 import FirstVisitAppAlertModal from '@/features/app-download/ui/FirstVisitAppAlertModal';
@@ -38,6 +40,9 @@ function ProductDetailPage({
   initialProduct?: ProductInfoFragment;
   device?: CheckDeviceResult;
 }) {
+  // 백엔드 product.data.toss (수집 배치가 채움). 없으면 토스 블록 미노출.
+  const tossData = (initialProduct?.data as ProductData | undefined)?.toss;
+
   return (
     <>
       {device && <FirstVisitAppAlertModal device={device} />}
@@ -51,7 +56,7 @@ function ProductDetailPage({
         </div>
         <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <div className="flex flex-col">
-            <ProductInfo productId={productId} />
+            <ProductInfo productId={productId} tossData={tossData} />
             <AdvertiseSlotBanner
               slotLocation={AdvertiseSlotLocation.ProductMainBanner}
               className="mx-5 mb-4 w-auto"
@@ -78,6 +83,7 @@ function ProductDetailPage({
 
             <ProductDetailAd productId={productId} isMobile />
             <Hr />
+            {tossData?.images && <TossDetailImages images={tossData.images} />}
             <Suspense>
               <ClusteredPriceSection productId={productId} />
             </Suspense>

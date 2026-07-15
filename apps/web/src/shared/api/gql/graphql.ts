@@ -647,6 +647,8 @@ export type Mutation = {
   setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
   /** 대표 매핑 지정 (id 기준) */
   setPrimaryProductMapping: Scalars['Boolean']['output'];
+  /** 어드민) 토스 세션 토큰(TBIZAUTH) 갱신. sharelink.toss.im 로그인 → DevTools > Application > Cookies > TBIZAUTH 값(base64 원문) 붙여넣기. */
+  setTossSession: Scalars['Boolean']['output'];
   /** 회원가입 */
   signup: SignupOutput;
   /** 소셜 로그인 */
@@ -935,6 +937,10 @@ export type MutationSetModelPagePublishedByAdminArgs = {
 
 export type MutationSetPrimaryProductMappingArgs = {
   productMappingId: Scalars['Int']['input'];
+};
+
+export type MutationSetTossSessionArgs = {
+  token: Scalars['String']['input'];
 };
 
 export type MutationSignupArgs = {
@@ -1343,6 +1349,8 @@ export type ProductOutput = {
   consumptionDate?: Maybe<Scalars['DateTime']['output']>;
   /** 상품 설명(유저 등록 상품) */
   content?: Maybe<Scalars['String']['output']>;
+  /** 소스별 확장 정보(toss 등) */
+  data?: Maybe<Scalars['JSONObject']['output']>;
   detailUrl?: Maybe<Scalars['String']['output']>;
   dislikeCount: Scalars['Int']['output'];
   distributionDate?: Maybe<Scalars['DateTime']['output']>;
@@ -1511,6 +1519,8 @@ export type Query = {
   getSimilarProducts: Array<ProductOutput>;
   /** 게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백) */
   guestRecommendedHotDeals: Array<ProductOutput>;
+  /** 어드민) 토스 세션 토큰 저장 여부(true면 발급 가동중) */
+  hasTossSession: Scalars['Boolean']['output'];
   homePage: Array<BaseSection>;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
@@ -1614,6 +1624,8 @@ export type Query = {
   topFavoriteCategories: Array<CategoryCountOutput>;
   /** 어드민) 알림 키워드 TOP N */
   topNotificationKeywords: Array<KeywordCountOutput>;
+  /** 토스 카테고리 인기 하위 탭 목록(실제 존재하는 categoryLabel) */
+  tossCategoryLabels: Array<Scalars['String']['output']>;
   /** 안읽은 알림 수 목록 조회 */
   unreadNotificationsCount: Scalars['Int']['output'];
   /** 유저 조회 */
@@ -1990,6 +2002,7 @@ export type QueryProductsByKeywordArgs = {
   orderBy: KeywordProductOrderType;
   orderOption: OrderOptionType;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+  tossCategoryLabel?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryProviderHealthStatusArgs = {
@@ -2891,6 +2904,7 @@ export type ProductInfoFragment = {
   hotDealType?: HotDealType | null;
   viewCount: number;
   mallName?: string | null;
+  data?: any | null;
   author?: { __typename?: 'User'; id: string; nickname: string } | null;
   provider: {
     __typename?: 'Provider';
@@ -3221,6 +3235,36 @@ export type QueryExpiringSoonHotDealProductsQuery = {
   }>;
 };
 
+export type QueryTossCategoryLabelsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryTossCategoryLabelsQuery = {
+  __typename?: 'Query';
+  tossCategoryLabels: Array<string>;
+};
+
+export type QueryTossProductsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  keyword: Scalars['String']['input'];
+  orderBy: KeywordProductOrderType;
+  orderOption: OrderOptionType;
+  tossCategoryLabel?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type QueryTossProductsQuery = {
+  __typename?: 'Query';
+  productsByKeyword: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    price?: string | null;
+    thumbnail?: string | null;
+    data?: any | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+  }>;
+};
+
 export type AddWishlistMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -3411,6 +3455,7 @@ export const ProductInfoFragmentDoc = new TypedDocumentString(
   hotDealType
   viewCount
   mallName
+  data
 }
     `,
   { fragmentName: 'ProductInfo' },
@@ -3985,6 +4030,7 @@ export const ProductInfoDocument = new TypedDocumentString(`
   hotDealType
   viewCount
   mallName
+  data
 }`) as unknown as TypedDocumentString<ProductInfoQuery, ProductInfoQueryVariables>;
 export const ProductStatsDocument = new TypedDocumentString(`
     query ProductStats($id: Int!) {
@@ -4284,6 +4330,34 @@ export const QueryExpiringSoonHotDealProductsDocument = new TypedDocumentString(
   QueryExpiringSoonHotDealProductsQuery,
   QueryExpiringSoonHotDealProductsQueryVariables
 >;
+export const QueryTossCategoryLabelsDocument = new TypedDocumentString(`
+    query QueryTossCategoryLabels {
+  tossCategoryLabels
+}
+    `) as unknown as TypedDocumentString<
+  QueryTossCategoryLabelsQuery,
+  QueryTossCategoryLabelsQueryVariables
+>;
+export const QueryTossProductsDocument = new TypedDocumentString(`
+    query QueryTossProducts($limit: Int!, $searchAfter: [String!], $keyword: String!, $orderBy: KeywordProductOrderType!, $orderOption: OrderOptionType!, $tossCategoryLabel: String) {
+  productsByKeyword(
+    limit: $limit
+    searchAfter: $searchAfter
+    keyword: $keyword
+    orderBy: $orderBy
+    orderOption: $orderOption
+    tossCategoryLabel: $tossCategoryLabel
+  ) {
+    id
+    title
+    price
+    thumbnail
+    data
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<QueryTossProductsQuery, QueryTossProductsQueryVariables>;
 export const AddWishlistDocument = new TypedDocumentString(`
     mutation AddWishlist($productId: Int!) {
   addWishlist(productId: $productId)

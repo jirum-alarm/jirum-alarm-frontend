@@ -152,6 +152,7 @@ export const QueryProductInfo = gql`
     hotDealType
     viewCount
     mallName
+    data
   }
   query ProductInfo($id: Int!) {
     product(id: $id) {
