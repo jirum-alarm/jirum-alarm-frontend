@@ -71,7 +71,7 @@ export async function fetchTossDeals(opts: {
   const keyword = TOSS_SECTION_KEYWORD[opts.section ?? 'all'] ?? '토스';
   const res = await execute(QueryTossProducts, {
     keyword,
-    limit: opts.limit ?? 30,
+    limit: opts.limit ?? 20,
     orderBy: 'POSTED_AT' as never,
     orderOption: 'DESC' as never,
     tossCategoryLabel: opts.categoryLabel ?? null,

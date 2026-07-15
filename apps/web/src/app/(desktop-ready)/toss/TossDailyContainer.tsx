@@ -37,7 +37,7 @@ export default function TossDailyContainer() {
 
   const { data: deals = [], isLoading } = useQuery({
     queryKey: ['toss-deals', active.id, activeCat ?? null],
-    queryFn: () => fetchTossDeals({ section: active.id, categoryLabel: activeCat, limit: 30 }),
+    queryFn: () => fetchTossDeals({ section: active.id, categoryLabel: activeCat, limit: 20 }),
     // 카테고리 탭인데 아직 하위 카테고리가 없으면 조회 보류(빈 상태 표시).
     enabled: !isCategory || !!activeCat,
   });

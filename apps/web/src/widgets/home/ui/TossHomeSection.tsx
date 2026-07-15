@@ -18,13 +18,15 @@ export default function TossHomeSection() {
   const tabs = TOSS_SECTIONS.map((s) => ({ id: s.id, label: s.label, variables: {} }));
   const [activeId, setActiveId] = useState(tabs[0].id);
 
-  const { data: deals = [] } = useQuery({
+  const { data: deals = [], isFetched } = useQuery({
     queryKey: ['toss-home-deals', activeId],
     queryFn: () => fetchTossDeals({ section: activeId, limit: 6 }),
+    // 탭 전환 시 이전 데이터 유지 → 섹션이 사라졌다 뜨는 깜빡임 방지.
+    placeholderData: (prev) => prev,
   });
 
-  // 딜이 하나도 없으면 홈 섹션 자체를 숨긴다(게스트 추천 섹션과 동일 정책).
-  if (deals.length === 0) return null;
+  // 최초 로드에서 딜이 아예 없으면 섹션 숨김(게스트 추천 정책). 탭 전환 중엔 유지.
+  if (isFetched && deals.length === 0) return null;
 
   return (
     <div className="pc:pt-7 pc:px-0 pc:space-y-0 space-y-2">
