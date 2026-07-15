@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import { PromotionSection } from '@/entities/promotion/model/types';
 
 import DynamicProductSection from './DynamicProductSection';
+import TossHomeSection from './TossHomeSection';
 // 홈 노출 보류: 테마 섹션 import 임시 제거 (renderThemeSlot 되살릴 때 함께 복구)
 // import { Suspense } from 'react';
 // import DesktopThemeSection from './desktop/ThemeSection';
@@ -53,6 +54,7 @@ const PromotionSectionList = ({ sections, isMobile }: PromotionSectionListProps)
         isFirst = false;
         return (
           <Fragment key={section.id}>
+            {section.id === 'hotdeal' && <TossHomeSection />}
             <DynamicProductSection section={section} isMobile={isMobile} priorityCount={priority} />
             {renderThemeSlot(section.id)}
           </Fragment>
