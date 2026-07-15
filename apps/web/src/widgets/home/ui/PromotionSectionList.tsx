@@ -3,8 +3,9 @@ import { Fragment } from 'react';
 import { PromotionSection } from '@/entities/promotion/model/types';
 
 import DynamicProductSection from './DynamicProductSection';
-import TossHomeSection from './TossHomeSection';
 // 홈 노출 보류: 테마 섹션 import 임시 제거 (renderThemeSlot 되살릴 때 함께 복구)
+// 홈 토스 섹션 보류: TossHomeSection 컴포넌트는 있으나 홈 노출은 미배포(로컬만).
+// 되살리려면 import + 아래 hotdeal 위 렌더 복구.
 // import { Suspense } from 'react';
 // import DesktopThemeSection from './desktop/ThemeSection';
 // import ThemeCarousel from './mobile/ThemeCarousel';
@@ -54,7 +55,6 @@ const PromotionSectionList = ({ sections, isMobile }: PromotionSectionListProps)
         isFirst = false;
         return (
           <Fragment key={section.id}>
-            {section.id === 'hotdeal' && <TossHomeSection />}
             <DynamicProductSection section={section} isMobile={isMobile} priorityCount={priority} />
             {renderThemeSlot(section.id)}
           </Fragment>
