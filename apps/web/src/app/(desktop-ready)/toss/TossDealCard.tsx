@@ -62,25 +62,30 @@ export default function TossDealCard({
           {deal.title}
         </span>
 
-        <div className="flex items-baseline gap-x-1.5 pt-1">
-          <span className="text-lg font-semibold text-gray-900">
+        {/* 홈은 3열이라 카드폭 ~104px. 가격+배지가 한 줄에 안 들어가면 '15,900원'의 '원'까지
+            쪼개져 세로로 깨졌다(줄바꿈 버그). 각 조각은 nowrap로 안 쪼개고, 좁으면 배지만 줄내림. */}
+        <div className="flex flex-wrap items-baseline gap-x-1.5 pt-1">
+          <span className="text-lg font-semibold whitespace-nowrap text-gray-900">
             {deal.price.toLocaleString()}원
           </span>
           {deal.lowestIn30Days && (
-            <span className="text-error-500 text-xs font-bold">30일 최저가</span>
+            <span className="text-error-500 text-xs font-bold whitespace-nowrap">30일 최저가</span>
           )}
         </div>
 
         {deal.unitPrice && <span className="text-xs text-gray-500">{deal.unitPrice}</span>}
 
-        <div className="flex items-center gap-x-1.5 pt-1 text-xs text-gray-500">
+        {/* 좁은 카드에서 '무료배송'이 글자 단위로 쪼개지던 것 방지 — 각 조각 nowrap, 넘치면 배송만 줄내림 */}
+        <div className="flex flex-wrap items-center gap-x-1.5 pt-1 text-xs text-gray-500">
           {typeof deal.rating === 'number' && (
-            <span>
+            <span className="whitespace-nowrap">
               <span className="text-[#ffb200]">★</span> {deal.rating}
               {deal.reviewCount ? ` (${deal.reviewCount.toLocaleString()})` : ''}
             </span>
           )}
-          {deal.delivery && <span className="text-gray-400">· {deal.delivery}</span>}
+          {deal.delivery && (
+            <span className="whitespace-nowrap text-gray-400">· {deal.delivery}</span>
+          )}
         </div>
       </div>
     </motion.div>
