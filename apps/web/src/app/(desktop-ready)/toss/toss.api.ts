@@ -78,14 +78,21 @@ export async function fetchTossDeals(opts: {
   section?: string;
   categoryLabel?: string;
   limit?: number;
+  // 서버 SSR 진입점에서 넘긴다. public=true 면 cookies() 스킵 → 라우트 ISR 캐시 허용(/deals 동일 패턴).
+  public?: boolean;
+  revalidate?: number;
 }): Promise<TossDeal[]> {
   const keyword = TOSS_SECTION_KEYWORD[opts.section ?? 'all'] ?? '토스';
-  const res = await execute(QueryTossProducts, {
-    keyword,
-    limit: opts.limit ?? 20,
-    orderBy: 'POSTED_AT' as never,
-    orderOption: 'DESC' as never,
-    tossCategoryLabel: opts.categoryLabel ?? null,
-  });
+  const res = await execute(
+    QueryTossProducts,
+    {
+      keyword,
+      limit: opts.limit ?? 20,
+      orderBy: 'POSTED_AT' as never,
+      orderOption: 'DESC' as never,
+      tossCategoryLabel: opts.categoryLabel ?? null,
+    },
+    opts.public ? { public: true, revalidate: opts.revalidate ?? 600 } : undefined,
+  );
   return (res.data?.productsByKeyword ?? []).map(toDeal);
 }

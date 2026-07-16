@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import PromotionTabs from '@/widgets/home/ui/PromotionTabs';
 
-import { TOSS_SECTIONS } from './mock';
+import { TOSS_SECTIONS, type TossDeal } from './mock';
 import { fetchTossCategoryLabels, fetchTossDeals } from './toss.api';
 import TossCategoryTabs from './TossCategoryTabs';
 import TossDealCard from './TossDealCard';
@@ -14,7 +14,14 @@ const CATEGORY_SECTION_ID = 'category';
 
 // 토스 특가 상세. 탭 라벨은 고정(7섹션), 딜은 서버 실 조회.
 // '카테고리 인기' 탭은 2단 — 하위 카테고리(동적 categoryLabel) 탭이 섹션탭과 그리드 중간에 뜬다.
-export default function TossDailyContainer() {
+// initialDeals: 서버(page.tsx)가 기본 탭을 프리페치해 넘긴 값. 첫 페인트에 그대로 써 CSR 공백을 없앤다.
+export default function TossDailyContainer({
+  initialSectionId,
+  initialDeals,
+}: {
+  initialSectionId?: string;
+  initialDeals?: TossDeal[];
+} = {}) {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -32,10 +39,13 @@ export default function TossDailyContainer() {
   });
   const activeCat = isCategory ? (catParam ?? categoryLabels[0]) : undefined;
 
+  // 기본 탭이고 카테고리 하위선택이 없을 때만 서버 프리페치값을 초기 데이터로(SSR HTML 과 일치).
+  const useInitial = active.id === initialSectionId && !catParam;
   const { data: deals = [], isLoading } = useQuery({
     queryKey: ['toss-deals', active.id, activeCat ?? null],
     queryFn: () => fetchTossDeals({ section: active.id, categoryLabel: activeCat, limit: 20 }),
     enabled: !isCategory || !!activeCat,
+    initialData: useInitial ? initialDeals : undefined,
   });
 
   const setParam = (key: string, value: string) => {
