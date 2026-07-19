@@ -69,7 +69,8 @@ export default function TossDailyContainer({
         <TossCategoryTabs activeLabel={activeCat} onSelect={(l) => setParam('cat', l)} />
       )}
 
-      <div className="pc:pt-7 px-5 py-14">
+      {/* sticky 탭 바로 아래 그리드. 모바일은 탭이 붙어있어 상단 여백 최소(pt-6), 하단은 네비/푸터 클리어런스로 pb-14. PC는 pt-7 유지. */}
+      <div className="pc:pt-7 px-5 pt-6 pb-14">
         {!isLoading && deals.length === 0 ? (
           <p className="py-20 text-center text-sm text-gray-400">아직 준비된 특가가 없어요.</p>
         ) : (
