@@ -83,7 +83,7 @@ const RelatedProductsLayout = async ({
   const renderDesktop = () => {
     return (
       <div className="max-w-layout-max mx-auto">
-        <div className="mt-14 pt-11">
+        <div className="mt-14 pt-8">
           <SectionHeader title={displayTitle} />
           <div className="mt-4">{children}</div>
         </div>

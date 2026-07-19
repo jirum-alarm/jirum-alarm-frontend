@@ -198,7 +198,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   return (
     // ★폭: 모바일 600px 중앙(세로 흐름) → PC layout-max(1280) 2단(좌 본문 / 우 sticky 요약).
     //   PC 상품상세(grid-cols-12, 좌 본문·우 sticky 구매정보) 패턴 차용. 모바일은 pc: 무영향.
-    <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-20 pb-24">
+    <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
       {jsonLd.map((ld, i) => (
         <script
           key={i}
@@ -210,7 +210,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
       {/* 판별 스프린트 계측 — 랜딩 cohort(referrer) + outbound/deal 클릭 (GTM dataLayer) */}
       <DealsTracking slug={page.slug} />
 
-      {/* 모바일 전용 상단 헤더(데스크톱은 GNB라 pc:hidden). pt-20이 이 fixed 헤더 높이 보정. */}
+      {/* 모바일 전용 상단 헤더(데스크톱은 GNB라 pc:hidden). pt-14(=h-14)가 이 fixed 헤더 높이 보정. */}
       <DealsMobileHeader title={page.modelName} />
 
       {/* PC 2단 grid: 좌(본문 2/3)·우(sticky 요약 1/3). 모바일은 단일 컬럼 세로 흐름. */}
