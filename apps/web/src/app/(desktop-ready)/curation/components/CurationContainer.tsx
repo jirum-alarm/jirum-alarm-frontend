@@ -54,7 +54,8 @@ const CurationContainer = ({ section }: CurationContainerProps) => {
         </div>
       )}
 
-      <div className="pc:pt-7 px-5 py-14">
+      {/* sticky 탭 바로 아래 그리드. 모바일 상단 여백 최소(pt-6), 하단 pb-14, PC는 pt-7 유지 (toss/recommend와 동일 패턴) */}
+      <div className="pc:pt-7 px-5 pt-6 pb-14">
         <Suspense fallback={<ProductGridListSkeleton length={12} />}>
           <CurationProductList key={activeSection.id + activeTabId} section={activeSection} />
         </Suspense>
