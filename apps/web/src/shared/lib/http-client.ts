@@ -18,7 +18,7 @@ type customGraphqlResponse = Response & {
   }>;
 };
 
-class FetchError extends Error {
+export class FetchError extends Error {
   constructor(
     public response: customGraphqlResponse,
     public data: any,
@@ -27,6 +27,19 @@ class FetchError extends Error {
     this.name = 'FetchError';
     this.message = JSON.stringify({ data });
   }
+}
+
+// GraphQL은 "없는 리소스"를 HTTP 200 + errors[].extensions.status:404 로 준다(예: "존재하지 않는 상품입니다").
+// 이 경우 execute가 throw하므로, 호출부가 404를 정상 not-found로 흡수할 수 있게 판별 헬퍼를 제공한다.
+export function isNotFoundError(error: unknown): boolean {
+  if (!(error instanceof FetchError)) return false;
+  const errors = error.data?.errors ?? error.data?.data?.errors;
+  return (
+    Array.isArray(errors) &&
+    errors.some(
+      (e: any) => e?.extensions?.status === 404 || e?.extensions?.originalError?.statusCode === 404,
+    )
+  );
 }
 
 async function rejectIfNeeded(response: Response) {

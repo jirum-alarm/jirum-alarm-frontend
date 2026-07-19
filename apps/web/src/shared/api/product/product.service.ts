@@ -1,4 +1,4 @@
-import { execute } from '@/shared/lib/http-client';
+import { execute, isNotFoundError } from '@/shared/lib/http-client';
 
 import { graphql, useFragment } from '../gql';
 import {
@@ -42,9 +42,16 @@ export class ProductService {
   }
 
   static async getProductInfo(variables: ProductInfoQueryVariables) {
-    return execute(ProductInfoDocument, variables).then((res) =>
-      useFragment(ProductInfoFragmentDoc, res.data.product),
-    );
+    // 없는/만료 상품은 서버가 200+errors(status:404)로 주고 execute가 throw한다.
+    // 이걸 예외로 전파하면 상세페이지 SSR 렌더가 통째로 터져(generateMetadata엔 notFound 가드 없음)
+    // 무거운 에러 바운더리 재렌더로 CPU를 태운다. 404는 null로 흡수해 호출부 notFound() 경로로 보낸다.
+    // (.then 유지: useFragment는 codegen 헬퍼라 hook 아님. await 후 직접 호출 시 rules-of-hooks 오탐.)
+    return execute(ProductInfoDocument, variables)
+      .then((res) => useFragment(ProductInfoFragmentDoc, res.data.product))
+      .catch((error) => {
+        if (isNotFoundError(error)) return null;
+        throw error;
+      });
   }
 
   static async getProductStats(variables: ProductStatsQueryVariables) {
