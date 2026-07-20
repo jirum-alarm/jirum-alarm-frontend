@@ -13,7 +13,15 @@ const ShareButton = ({ title, page }: { title: string; page?: keyof typeof EVENT
   const handleShare = async () => {
     triggerHaptic('light');
 
-    const url = window.location.href;
+    // 유입 시 붙어 온 utm(예: 카톡방송의 utm_source=kakao)이 재공유로 전파되면 채널 귀속이
+    // 오염된다 — 기존 utm 을 제거하고 공유 채널 utm 으로 교체 (2026-07-20).
+    const shareUrl = new URL(window.location.href);
+    [...shareUrl.searchParams.keys()]
+      .filter((k) => k.startsWith('utm_'))
+      .forEach((k) => shareUrl.searchParams.delete(k));
+    shareUrl.searchParams.set('utm_source', 'share');
+    shareUrl.searchParams.set('utm_medium', 'native_share');
+    const url = shareUrl.toString();
 
     try {
       await shareNative({ title, url });

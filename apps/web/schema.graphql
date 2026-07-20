@@ -1374,6 +1374,7 @@ type ProductOutput {
   """
   prices: [ProductPrice!]
   productMapping: ProductMapping
+  profitLinkProvider: String
   provider: Provider!
   providerId: Int!
   searchAfter: [String!]

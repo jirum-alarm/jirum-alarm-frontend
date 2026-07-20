@@ -1391,6 +1391,7 @@ export type ProductOutput = {
   /** 상품 가격 목록 */
   prices?: Maybe<Array<ProductPrice>>;
   productMapping?: Maybe<ProductMapping>;
+  profitLinkProvider?: Maybe<Scalars['String']['output']>;
   provider: Provider;
   providerId: Scalars['Int']['output'];
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
@@ -2894,6 +2895,8 @@ export type ProductInfoFragment = {
   title: string;
   url?: string | null;
   detailUrl?: string | null;
+  isProfitUrl: boolean;
+  profitLinkProvider?: string | null;
   isHot?: boolean | null;
   isEnd?: boolean | null;
   price?: string | null;
@@ -3435,6 +3438,8 @@ export const ProductInfoFragmentDoc = new TypedDocumentString(
   title
   url
   detailUrl
+  isProfitUrl
+  profitLinkProvider
   isHot
   isEnd
   price
@@ -4010,6 +4015,8 @@ export const ProductInfoDocument = new TypedDocumentString(`
   title
   url
   detailUrl
+  isProfitUrl
+  profitLinkProvider
   isHot
   isEnd
   price

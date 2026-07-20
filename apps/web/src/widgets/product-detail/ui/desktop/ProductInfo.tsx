@@ -175,6 +175,17 @@ export default function ProductInfo({
           </div>
           <a
             href={product.detailUrl ?? ''}
+            // 모바일 BottomCTA 와 동일 — GTM Click URL 빈값 문제로 dataLayer 명시 전송 (2026-07-20)
+            onClick={() => {
+              if (typeof window === 'undefined') return;
+              (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+                event: 'purchase_link_click',
+                product_id: String(productId),
+                click_url: product.detailUrl ?? '',
+                monetized: product.isProfitUrl ?? false,
+                profit_provider: product.profitLinkProvider ?? null,
+              });
+            }}
             className="block flex-1"
             target="_blank"
             rel="noopener noreferrer"

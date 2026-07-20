@@ -38,6 +38,11 @@ const Footer = () => {
               <Link href="https://jirum-alarm.com/policies/privacy" className="underline">
                 개인정보 처리방침
               </Link>
+              <span className="text-gray-400">ㅣ</span>
+              {/* /deals 는 내부 링크 0개 고아 트리라 구글 미색인이었음(2026-07-20) — 유일한 상시 크롤 경로 */}
+              <Link href="/deals" className="underline">
+                핫딜 최저가 모음
+              </Link>
             </div>
             <p className="text-sm text-gray-600">Copyright 2025. 지름알림. All rights reserved.</p>
           </div>

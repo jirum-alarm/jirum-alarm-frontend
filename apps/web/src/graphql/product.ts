@@ -132,6 +132,8 @@ export const QueryProductInfo = gql`
     title
     url
     detailUrl
+    isProfitUrl
+    profitLinkProvider
     isHot
     isEnd
     price
