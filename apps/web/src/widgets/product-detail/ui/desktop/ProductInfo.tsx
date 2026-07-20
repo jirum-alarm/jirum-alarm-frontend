@@ -14,6 +14,7 @@ import HotdealBadge from '@/shared/ui/HotdealBadge';
 import ShareButton from '@/shared/ui/ShareButton';
 
 import { ProductQueries } from '@/entities/product';
+import NaverIcon from '@/entities/product/ui/NaverIcon';
 import TossIcon from '@/entities/product/ui/TossIcon';
 
 import { LikeButton, RecommendButton } from '@/features/product-actions/ui';
@@ -24,10 +25,12 @@ export default function ProductInfo({
   productId,
   isUserLogin,
   tossData,
+  naverbcData,
 }: {
   productId: number;
   isUserLogin: boolean;
   tossData?: import('@/entities/product/model/toss-data').TossProductData;
+  naverbcData?: import('@/entities/product/model/toss-data').NaverbcProductData;
 }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
   const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
@@ -110,6 +113,7 @@ export default function ProductInfo({
             <span className="inline-block w-[110px] text-gray-400">쇼핑몰</span>
             <span className="flex items-center gap-x-1 text-gray-500">
               {tossData && <TossIcon size={20} />}
+              {!tossData && naverbcData && <NaverIcon height={12} />}
               {tossData ? '토스' : product.mallName}
             </span>
           </div>

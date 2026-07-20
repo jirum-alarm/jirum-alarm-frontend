@@ -42,6 +42,7 @@ export default async function DesktopProductDetailPage({
 }) {
   // 백엔드 product.data.toss (수집 배치가 채움). 없으면 토스 블록 미노출.
   const tossData = (initialProduct?.data as ProductData | undefined)?.toss;
+  const naverbcData = (initialProduct?.data as ProductData | undefined)?.naverbc;
 
   return (
     <>
@@ -86,7 +87,12 @@ export default async function DesktopProductDetailPage({
           <div className="col-span-1">
             <div className="sticky top-25 space-y-6">
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
-                <ProductInfo productId={productId} isUserLogin={isUserLogin} tossData={tossData} />
+                <ProductInfo
+                  productId={productId}
+                  isUserLogin={isUserLogin}
+                  tossData={tossData}
+                  naverbcData={naverbcData}
+                />
               </Suspense>
               <ProductDetailSideAd productId={productId} />
             </div>

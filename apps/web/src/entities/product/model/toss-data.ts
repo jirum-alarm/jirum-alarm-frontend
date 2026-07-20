@@ -2,7 +2,21 @@
 // 사용: product.data?.toss?.images
 export interface ProductData {
   toss?: TossProductData;
+  naverbc?: NaverbcProductData;
   // 나중에: ohou?, ...
+}
+
+// 네이버 브랜드커넥트 소싱 상품의 추가 정보. crawler naverbc 드라이버가 채움.
+// ⚠️ affiliateProductId(발급 키)·수수료는 내부 정보 — 유저 화면에 쓰지 말 것.
+export interface NaverbcProductData {
+  storeName?: string; // 켄뷰 공식몰
+  categoryName?: string; // 생활/건강
+  salePrice?: number; // 판매가
+  originalPrice?: number; // 정가
+  discountRate?: number; // 45
+  rating?: number;
+  reviewCount?: number;
+  promotionBadge?: string; // 슈퍼적립 추천 등
 }
 
 // 토스 딜에서 온 상품의 추가 정보. 일반 크롤링/유저 상품엔 없음(옵셔널).
