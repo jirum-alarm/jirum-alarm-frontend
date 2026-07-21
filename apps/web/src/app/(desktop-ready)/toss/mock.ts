@@ -13,6 +13,9 @@ export interface TossDeal {
   rating?: number; // 4.7
   reviewCount?: number; // 1933
   bestSeller?: boolean; // "베스트판매자"
+  arrivalGuaranteed?: boolean; // "도착보장"
+  lowestPriceCompensation?: boolean; // "최저가 보상"
+  specialProduct?: boolean; // "토스 특가"
   badge?: string; // "역대급특가" 같은 마케팅 라벨
   unitPrice?: string; // "1개당 8,148원"
 }

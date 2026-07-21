@@ -29,4 +29,14 @@ export interface TossProductData {
   deliveryFee?: number; // 3000 (0 이면 무료)
   freeShippingThreshold?: number; // 20000 (이상 무료배송)
   images?: string[]; // 상세 상품 이미지 URL (썸네일과 별개, 원본 URL 참조)
+  rating?: number; // 4.8 (별점)
+  reviewCount?: number; // 3185
+  unitPrice?: string; // "100g당 2,092원"
+  delivery?: string; // "무료배송 · 오늘출발"
+  lowestIn30Days?: boolean; // 30일 최저가
+  bestSeller?: boolean; // 베스트판매자
+  arrivalGuaranteed?: boolean; // 도착보장
+  lowestPriceCompensation?: boolean; // 최저가 보상
+  specialProduct?: boolean; // 토스 특가
+  couponDiscount?: number; // 표시가 외 추가 쿠폰 할인액
 }

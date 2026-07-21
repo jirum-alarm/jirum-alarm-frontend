@@ -27,6 +27,9 @@ interface TossExt {
   rating?: number;
   reviewCount?: number;
   bestSeller?: boolean;
+  arrivalGuaranteed?: boolean;
+  lowestPriceCompensation?: boolean;
+  specialProduct?: boolean;
   // 서버가 문자열("100g당 2,092원") 또는 객체({unitName,unitAmount,unitPrice})로 줄 수 있어 둘 다 방어.
   // 객체를 그대로 JSX 에 렌더하면 React #31 로 홈 전체가 크래시하므로 반드시 문자열로 정규화.
   unitPrice?: string | { unitName?: string; unitAmount?: number; unitPrice?: number };
@@ -63,6 +66,9 @@ function toDeal(p: {
     rating: t.rating,
     reviewCount: t.reviewCount,
     bestSeller: t.bestSeller,
+    arrivalGuaranteed: t.arrivalGuaranteed,
+    lowestPriceCompensation: t.lowestPriceCompensation,
+    specialProduct: t.specialProduct,
     badge: t.badge,
     unitPrice: normalizeUnitPrice(t.unitPrice),
   };

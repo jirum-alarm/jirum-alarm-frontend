@@ -14,6 +14,7 @@ import HotdealBadge from '@/shared/ui/HotdealBadge';
 
 import { ProductQueries } from '@/entities/product';
 import NaverIcon from '@/entities/product/ui/NaverIcon';
+import TossBadges from '@/entities/product/ui/TossBadges';
 import TossIcon from '@/entities/product/ui/TossIcon';
 
 import { RecommendButton } from '@/features/product-actions/ui';
@@ -91,11 +92,27 @@ export default function ProductInfo({
                 )}
                 <DisplayPrice price={product.price} />
               </div>
+              {tossData && (typeof tossData.rating === 'number' || tossData.couponDiscount) && (
+                <div className="flex flex-wrap items-center gap-x-2 pt-1 text-sm text-gray-500">
+                  {typeof tossData.rating === 'number' && (
+                    <span>
+                      <span className="text-[#ffb200]">★</span> {tossData.rating}
+                      {tossData.reviewCount ? ` (${tossData.reviewCount.toLocaleString()})` : ''}
+                    </span>
+                  )}
+                  {tossData.couponDiscount ? (
+                    <span className="text-error-500">
+                      쿠폰 {tossData.couponDiscount.toLocaleString()}원 추가할인
+                    </span>
+                  ) : null}
+                </div>
+              )}
             </div>
             <div>
               <RecommendButton productId={productId} />
             </div>
           </div>
+          {tossData && <TossBadges toss={tossData} />}
         </div>
       </div>
       <div className="pt-4">

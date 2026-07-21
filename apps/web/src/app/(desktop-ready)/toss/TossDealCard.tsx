@@ -73,6 +73,27 @@ export default function TossDealCard({
           )}
         </div>
 
+        {/* 신뢰 배지: 희소할수록 가치 순으로 앞에. 좁은 카드라 각 조각 nowrap, 넘치면 줄내림. */}
+        {(deal.arrivalGuaranteed || deal.lowestPriceCompensation || deal.specialProduct) && (
+          <div className="flex flex-wrap gap-1 pt-1">
+            {deal.lowestPriceCompensation && (
+              <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[11px] font-medium whitespace-nowrap text-blue-600">
+                최저가 보상
+              </span>
+            )}
+            {deal.arrivalGuaranteed && (
+              <span className="rounded bg-green-50 px-1.5 py-0.5 text-[11px] font-medium whitespace-nowrap text-green-600">
+                도착보장
+              </span>
+            )}
+            {deal.specialProduct && (
+              <span className="bg-error-50 text-error-600 rounded px-1.5 py-0.5 text-[11px] font-medium whitespace-nowrap">
+                토스특가
+              </span>
+            )}
+          </div>
+        )}
+
         {deal.unitPrice && <span className="text-xs text-gray-500">{deal.unitPrice}</span>}
 
         {/* 좁은 카드에서 '무료배송'이 글자 단위로 쪼개지던 것 방지 — 각 조각 nowrap, 넘치면 배송만 줄내림 */}
