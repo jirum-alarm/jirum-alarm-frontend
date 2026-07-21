@@ -172,8 +172,54 @@ const FunnelSection = () => {
     limit: 15,
   });
 
-  const funnel = funnelData?.profitLinkFunnelDaily ?? [];
+  const funnel = useMemo(() => funnelData?.profitLinkFunnelDaily ?? [], [funnelData]);
   const errors = errorData?.profitLinkErrorStats ?? [];
+
+  const totals = useMemo(() => {
+    const sum = (pick: (d: (typeof funnel)[number]) => number) =>
+      funnel.reduce((acc, d) => acc + pick(d), 0);
+    const total = sum((d) => d.total);
+    const issued = sum((d) => d.issued);
+    const pending = sum((d) => d.pending);
+    const parked = sum((d) => d.parked);
+    const terminal = sum((d) => d.terminal);
+    const pct = (n: number) => (total > 0 ? `${((n / total) * 100).toFixed(1)}%` : '-');
+    return { total, issued, pending, parked, terminal, notIssued: total - issued, pct };
+  }, [funnel]);
+
+  const summaryCards = [
+    { label: `전체 (${days}일)`, value: totals.total, pctText: '', accent: '' },
+    {
+      label: '발급 완료',
+      value: totals.issued,
+      pctText: totals.pct(totals.issued),
+      accent: 'text-success',
+    },
+    {
+      label: '미발급',
+      value: totals.notIssued,
+      pctText: totals.pct(totals.notIssued),
+      accent: 'text-danger',
+    },
+    {
+      label: '└ 재시도 중 (pending)',
+      value: totals.pending,
+      pctText: totals.pct(totals.pending),
+      accent: '',
+    },
+    {
+      label: '└ 포기 (parked)',
+      value: totals.parked,
+      pctText: totals.pct(totals.parked),
+      accent: '',
+    },
+    {
+      label: '└ 발급불가 몰 (terminal)',
+      value: totals.terminal,
+      pctText: totals.pct(totals.terminal),
+      accent: '',
+    },
+  ];
 
   return (
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
@@ -192,6 +238,20 @@ const FunnelSection = () => {
               >
                 {option}일
               </button>
+            ))}
+          </div>
+          <div className="mb-4 grid grid-cols-3 gap-3 md:grid-cols-6">
+            {summaryCards.map((card) => (
+              <div
+                key={card.label}
+                className="rounded-lg border border-stroke p-3 dark:border-strokedark"
+              >
+                <p className="text-xs text-bodydark2">{card.label}</p>
+                <p className={`mt-1 text-lg font-bold text-black dark:text-white ${card.accent}`}>
+                  {card.value.toLocaleString()}
+                </p>
+                {card.pctText && <p className="text-xs text-bodydark2">{card.pctText}</p>}
+              </div>
             ))}
           </div>
           {funnel.length > 0 && (
