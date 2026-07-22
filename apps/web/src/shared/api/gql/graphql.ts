@@ -108,6 +108,15 @@ export enum AdvertiseSlotType {
   PinnedProduct = 'pinnedProduct',
 }
 
+export type AffiliateSalesDailyOutput = {
+  __typename?: 'AffiliateSalesDailyOutput';
+  /** localCommission 합 (KRW, GROSS 추정 — 추세용) */
+  commissionSum: Scalars['Float']['output'];
+  count: Scalars['Int']['output'];
+  date: Scalars['String']['output'];
+  provider: Scalars['String']['output'];
+};
+
 export type AgeGroupCountOutput = {
   __typename?: 'AgeGroupCountOutput';
   /** 연령대 (예: 10대, 20대, 30대, 미설정) */
@@ -120,6 +129,12 @@ export type ApiQuery = {
   queryName: Scalars['String']['output'];
   type: DataSourceType;
   variables?: Maybe<Scalars['JSONObject']['output']>;
+};
+
+export type AttemptsCountOutput = {
+  __typename?: 'AttemptsCountOutput';
+  attempts: Scalars['Int']['output'];
+  count: Scalars['Int']['output'];
 };
 
 export type BaseSection = {
@@ -645,6 +660,8 @@ export type Mutation = {
   setAdActive: Scalars['Boolean']['output'];
   /** 어드민) 모델 페이지 발행 토글 */
   setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 네이버 브랜드커넥트 세션 쿠키 갱신. brandconnect.naver.com 로그인 → DevTools 요청 Cookie 헤더 원문(NID_AUT/NID_SES 포함) 붙여넣기. */
+  setNaverBcSession: Scalars['Boolean']['output'];
   /** 대표 매핑 지정 (id 기준) */
   setPrimaryProductMapping: Scalars['Boolean']['output'];
   /** 어드민) 토스 세션 토큰(TBIZAUTH) 갱신. sharelink.toss.im 로그인 → DevTools > Application > Cookies > TBIZAUTH 값(base64 원문) 붙여넣기. */
@@ -933,6 +950,10 @@ export type MutationSetAdActiveArgs = {
 export type MutationSetModelPagePublishedByAdminArgs = {
   id: Scalars['Int']['input'];
   isPublished: Scalars['Boolean']['input'];
+};
+
+export type MutationSetNaverBcSessionArgs = {
+  cookie: Scalars['String']['input'];
 };
 
 export type MutationSetPrimaryProductMappingArgs = {
@@ -1332,6 +1353,7 @@ export enum ProductOrderType {
   Id = 'ID',
   PostedAt = 'POSTED_AT',
   Reaction = 'REACTION',
+  Relevance = 'RELEVANCE',
   ViewCount = 'VIEW_COUNT',
 }
 
@@ -1423,6 +1445,74 @@ export enum ProductPriceTarget {
   Mall = 'MALL',
 }
 
+export type ProfitLinkErrorCountOutput = {
+  __typename?: 'ProfitLinkErrorCountOutput';
+  count: Scalars['Int']['output'];
+  error: Scalars['String']['output'];
+};
+
+export type ProfitLinkFunnelDailyOutput = {
+  __typename?: 'ProfitLinkFunnelDailyOutput';
+  date: Scalars['String']['output'];
+  /** profitLink 발급 완료 */
+  issued: Scalars['Int']['output'];
+  /** 미발급 + attempts 소진 (영구 포기) */
+  parked: Scalars['Int']['output'];
+  /** 미발급 + 재시도 여지 있음 (attempts < MAX) */
+  pending: Scalars['Int']['output'];
+  /** 미발급 + lastError='disabled' (발급 불가 몰) */
+  terminal: Scalars['Int']['output'];
+  /** 해당 일 생성 딜 총수 */
+  total: Scalars['Int']['output'];
+};
+
+export type ProfitLinkMissedProductOutput = {
+  __typename?: 'ProfitLinkMissedProductOutput';
+  attempts: Scalars['Int']['output'];
+  categoryId: Scalars['Int']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  detailUrl?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  lastError?: Maybe<Scalars['String']['output']>;
+  mallName?: Maybe<Scalars['String']['output']>;
+  nextRetryAt?: Maybe<Scalars['DateTime']['output']>;
+  parsedPrice?: Maybe<Scalars['Int']['output']>;
+  rankingScore?: Maybe<Scalars['Float']['output']>;
+  title: Scalars['String']['output'];
+};
+
+export type ProfitLinkProviderHealthOutput = {
+  __typename?: 'ProfitLinkProviderHealthOutput';
+  /** 최근 7d localCommission 합 (KRW, GROSS 추정 — 추세용) */
+  commission7d?: Maybe<Scalars['Float']['output']>;
+  issued7d: Scalars['Int']['output'];
+  /** 최근 24h 발급 딜 수 (딜 생성시각 기준 근사) */
+  issued24h: Scalars['Int']['output'];
+  /** 발급 보유 딜의 마지막 생성 시각 */
+  lastIssuedProductAt?: Maybe<Scalars['DateTime']['output']>;
+  /** 마지막 판매 row 도착 시각 (postback 생존) */
+  lastSaleAt?: Maybe<Scalars['DateTime']['output']>;
+  provider: Scalars['String']['output'];
+  sales7d: Scalars['Int']['output'];
+  sales24h: Scalars['Int']['output'];
+  sales30d: Scalars['Int']['output'];
+};
+
+export type ProfitLinkQueueHealthOutput = {
+  __typename?: 'ProfitLinkQueueHealthOutput';
+  attemptsDistribution: Array<AttemptsCountOutput>;
+  /** 지금 재시도 가능 (미발급 + attempts<MAX + backoff 경과). host 제외 조건 미반영 근사치 */
+  eligibleNow: Scalars['Int']['output'];
+  /** 재시도 가능분 중 최고령 딜 생성 시각 */
+  oldestEligibleCreatedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** attempts 소진 영구 포기 */
+  parked: Scalars['Int']['output'];
+  /** lastError='disabled' 터미널 */
+  terminalDisabled: Scalars['Int']['output'];
+  /** backoff 대기 중 (nextRetryAt 미래) */
+  waitingBackoff: Scalars['Int']['output'];
+};
+
 export type Provider = {
   __typename?: 'Provider';
   host?: Maybe<Scalars['String']['output']>;
@@ -1474,6 +1564,8 @@ export type Query = {
   adminMe: AdminUser;
   /** 어드민) 광고 목록 */
   adsByAdmin: Array<AdvertiseCreative>;
+  /** 어드민) provider별 일간 판매 추이 (건수 + localCommission 합, 추세 감시용) */
+  affiliateSalesTrend: Array<AffiliateSalesDailyOutput>;
   analysisTitleByDanawa: Scalars['Boolean']['output'];
   /** BrandItem 단위 매칭된 전체 개수 조회 */
   brandItemsByMatchCountTotalCount: Scalars['Int']['output'];
@@ -1520,6 +1612,8 @@ export type Query = {
   getSimilarProducts: Array<ProductOutput>;
   /** 게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백) */
   guestRecommendedHotDeals: Array<ProductOutput>;
+  /** 어드민) 네이버 브랜드커넥트 세션 저장 여부(true면 발급 가동중) */
+  hasNaverBcSession: Scalars['Boolean']['output'];
   /** 어드민) 토스 세션 토큰 저장 여부(true면 발급 가동중) */
   hasTossSession: Scalars['Boolean']['output'];
   homePage: Array<BaseSection>;
@@ -1593,6 +1687,16 @@ export type Query = {
   products: Array<ProductOutput>;
   /** 키워드로 상품 목록 조회 */
   productsByKeyword: Array<ProductOutput>;
+  /** 어드민) 미발급 딜 lastError 사유 랭킹 */
+  profitLinkErrorStats: Array<ProfitLinkErrorCountOutput>;
+  /** 어드민) 일별 발급 퍼널 (생성 딜 → 발급/pending/parked/terminal) */
+  profitLinkFunnelDaily: Array<ProfitLinkFunnelDailyOutput>;
+  /** 어드민) 노출 가능(최근 30일·미종료)한데 수익링크 없는 딜 — 고가·랭킹 스코어 순 작업 큐 */
+  profitLinkMissedProducts: Array<ProfitLinkMissedProductOutput>;
+  /** 어드민) 수익링크 provider별 생존 신호 (발급 24h/7d + 판매 24h/7d/30d + 마지막 시각) */
+  profitLinkProviderHealth: Array<ProfitLinkProviderHealthOutput>;
+  /** 어드민) retry 큐 건강도 (깊이/backoff 대기/parked/terminal + attempts 분포) */
+  profitLinkQueueHealth: ProfitLinkQueueHealthOutput;
   /** 어드민) provider별 최근 수집 활동 (1h/24h/7d count + 마지막 수집 시각) */
   providerHealthStatus: Array<ProviderHealthOutput>;
   publishedModelPages: Array<ModelPageListItemOutput>;
@@ -1666,6 +1770,11 @@ export type QueryAdReportArgs = {
 export type QueryAdsByAdminArgs = {
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
   slotLocation?: InputMaybe<AdvertiseSlotLocation>;
+};
+
+export type QueryAffiliateSalesTrendArgs = {
+  endDate: Scalars['DateTime']['input'];
+  startDate: Scalars['DateTime']['input'];
 };
 
 export type QueryBrandItemsByMatchCountTotalCountArgs = {
@@ -2004,6 +2113,22 @@ export type QueryProductsByKeywordArgs = {
   orderOption: OrderOptionType;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
   tossCategoryLabel?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryProfitLinkErrorStatsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  limit?: Scalars['Int']['input'];
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryProfitLinkFunnelDailyArgs = {
+  endDate: Scalars['DateTime']['input'];
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryProfitLinkMissedProductsArgs = {
+  categoryIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+  limit?: Scalars['Int']['input'];
 };
 
 export type QueryProviderHealthStatusArgs = {

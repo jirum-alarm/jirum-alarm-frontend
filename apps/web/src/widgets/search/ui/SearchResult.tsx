@@ -9,6 +9,7 @@ import { SearchInFeedAd } from '@/features/adsense/ui/SearchInFeedAd';
 import { useProductListViewModel } from '../hooks/useProductListViewModel';
 
 import ProductNotFound from './ProductNotFound';
+import SearchFilterBar from './SearchFilterBar';
 
 // 광고를 보여줄 최소 상품 수. 결과가 너무 적으면 광고를 띄우지 않는다.
 const AD_MIN_PRODUCTS = 8;
@@ -21,6 +22,8 @@ export default function SearchResult({ show }: { show: boolean }) {
 
   return (
     <div className={cn({ hidden: !show })}>
+      {/* 필터 바는 빈 결과에서도 노출 — 필터를 풀 수 있어야 하므로 */}
+      <SearchFilterBar />
       {isProductEmpty ? (
         <div className="flex justify-center pt-5 pb-10">
           <Suspense fallback={<></>}>

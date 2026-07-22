@@ -108,6 +108,16 @@ enum AdvertiseSlotType {
   pinnedProduct
 }
 
+type AffiliateSalesDailyOutput {
+  """
+  localCommission 합 (KRW, GROSS 추정 — 추세용)
+  """
+  commissionSum: Float!
+  count: Int!
+  date: String!
+  provider: String!
+}
+
 type AgeGroupCountOutput {
   """
   연령대 (예: 10대, 20대, 30대, 미설정)
@@ -120,6 +130,11 @@ type ApiQuery {
   queryName: String!
   type: DataSourceType!
   variables: JSONObject
+}
+
+type AttemptsCountOutput {
+  attempts: Int!
+  count: Int!
 }
 
 interface BaseSection {
@@ -856,6 +871,10 @@ type Mutation {
   """
   setModelPagePublishedByAdmin(id: Int!, isPublished: Boolean!): Boolean!
   """
+  어드민) 네이버 브랜드커넥트 세션 쿠키 갱신. brandconnect.naver.com 로그인 → DevTools 요청 Cookie 헤더 원문(NID_AUT/NID_SES 포함) 붙여넣기.
+  """
+  setNaverBcSession(cookie: String!): Boolean!
+  """
   대표 매핑 지정 (id 기준)
   """
   setPrimaryProductMapping(productMappingId: Int!): Boolean!
@@ -1297,6 +1316,7 @@ enum ProductOrderType {
   ID
   POSTED_AT
   REACTION
+  RELEVANCE
   VIEW_COUNT
 }
 
@@ -1411,6 +1431,97 @@ enum ProductPriceTarget {
   MALL
 }
 
+type ProfitLinkErrorCountOutput {
+  count: Int!
+  error: String!
+}
+
+type ProfitLinkFunnelDailyOutput {
+  date: String!
+  """
+  profitLink 발급 완료
+  """
+  issued: Int!
+  """
+  미발급 + attempts 소진 (영구 포기)
+  """
+  parked: Int!
+  """
+  미발급 + 재시도 여지 있음 (attempts < MAX)
+  """
+  pending: Int!
+  """
+  미발급 + lastError='disabled' (발급 불가 몰)
+  """
+  terminal: Int!
+  """
+  해당 일 생성 딜 총수
+  """
+  total: Int!
+}
+
+type ProfitLinkMissedProductOutput {
+  attempts: Int!
+  categoryId: Int!
+  createdAt: DateTime!
+  detailUrl: String
+  id: Int!
+  lastError: String
+  mallName: String
+  nextRetryAt: DateTime
+  parsedPrice: Int
+  rankingScore: Float
+  title: String!
+}
+
+type ProfitLinkProviderHealthOutput {
+  """
+  최근 7d localCommission 합 (KRW, GROSS 추정 — 추세용)
+  """
+  commission7d: Float
+  issued7d: Int!
+  """
+  최근 24h 발급 딜 수 (딜 생성시각 기준 근사)
+  """
+  issued24h: Int!
+  """
+  발급 보유 딜의 마지막 생성 시각
+  """
+  lastIssuedProductAt: DateTime
+  """
+  마지막 판매 row 도착 시각 (postback 생존)
+  """
+  lastSaleAt: DateTime
+  provider: String!
+  sales7d: Int!
+  sales24h: Int!
+  sales30d: Int!
+}
+
+type ProfitLinkQueueHealthOutput {
+  attemptsDistribution: [AttemptsCountOutput!]!
+  """
+  지금 재시도 가능 (미발급 + attempts<MAX + backoff 경과). host 제외 조건 미반영 근사치
+  """
+  eligibleNow: Int!
+  """
+  재시도 가능분 중 최고령 딜 생성 시각
+  """
+  oldestEligibleCreatedAt: DateTime
+  """
+  attempts 소진 영구 포기
+  """
+  parked: Int!
+  """
+  lastError='disabled' 터미널
+  """
+  terminalDisabled: Int!
+  """
+  backoff 대기 중 (nextRetryAt 미래)
+  """
+  waitingBackoff: Int!
+}
+
 type Provider {
   host: String
   id: ID!
@@ -1471,6 +1582,10 @@ type Query {
     isActive: Boolean
     slotLocation: AdvertiseSlotLocation
   ): [AdvertiseCreative!]!
+  """
+  어드민) provider별 일간 판매 추이 (건수 + localCommission 합, 추세 감시용)
+  """
+  affiliateSalesTrend(endDate: DateTime!, startDate: DateTime!): [AffiliateSalesDailyOutput!]!
   analysisTitleByDanawa: Boolean!
   """
   BrandItem 단위 매칭된 전체 개수 조회
@@ -1654,6 +1769,10 @@ type Query {
     """
     page: Int!
   ): [ProductOutput!]!
+  """
+  어드민) 네이버 브랜드커넥트 세션 저장 여부(true면 발급 가동중)
+  """
+  hasNaverBcSession: Boolean!
   """
   어드민) 토스 세션 토큰 저장 여부(true면 발급 가동중)
   """
@@ -1967,6 +2086,30 @@ type Query {
     searchAfter: [String!]
     tossCategoryLabel: String
   ): [ProductOutput!]!
+  """
+  어드민) 미발급 딜 lastError 사유 랭킹
+  """
+  profitLinkErrorStats(
+    endDate: DateTime!
+    limit: Int! = 20
+    startDate: DateTime!
+  ): [ProfitLinkErrorCountOutput!]!
+  """
+  어드민) 일별 발급 퍼널 (생성 딜 → 발급/pending/parked/terminal)
+  """
+  profitLinkFunnelDaily(endDate: DateTime!, startDate: DateTime!): [ProfitLinkFunnelDailyOutput!]!
+  """
+  어드민) 노출 가능(최근 30일·미종료)한데 수익링크 없는 딜 — 고가·랭킹 스코어 순 작업 큐
+  """
+  profitLinkMissedProducts(categoryIds: [Int!], limit: Int! = 50): [ProfitLinkMissedProductOutput!]!
+  """
+  어드민) 수익링크 provider별 생존 신호 (발급 24h/7d + 판매 24h/7d/30d + 마지막 시각)
+  """
+  profitLinkProviderHealth: [ProfitLinkProviderHealthOutput!]!
+  """
+  어드민) retry 큐 건강도 (깊이/backoff 대기/parked/terminal + attempts 분포)
+  """
+  profitLinkQueueHealth: ProfitLinkQueueHealthOutput!
   """
   어드민) provider별 최근 수집 활동 (1h/24h/7d count + 마지막 수집 시각)
   """

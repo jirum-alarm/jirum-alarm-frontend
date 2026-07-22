@@ -3,17 +3,30 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
+import { ProductOrderType } from '@/shared/api/gql/graphql';
+
 import { ProductQueries } from '@/entities/product';
+
+import { useSearchFilters } from './useSearchFilters';
 
 const limit = 20;
 
 export const useProductListViewModel = () => {
   const searchParams = useSearchParams();
+  const { filters } = useSearchFilters();
 
   const keywordParam = searchParams.get('keyword');
 
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useSuspenseInfiniteQuery(
-    ProductQueries.infiniteProducts({ limit, keyword: keywordParam || undefined } as any),
+    ProductQueries.infiniteProducts({
+      limit,
+      keyword: keywordParam || undefined,
+      categoryId: filters.categoryId > 0 ? filters.categoryId : undefined,
+      providerId: filters.providerId > 0 ? filters.providerId : undefined,
+      // ended(품절 포함) ON일 때만 isEnd: true — 백엔드에서 true는 '종료 포함' 의미.
+      isEnd: filters.ended ? true : undefined,
+      orderBy: filters.sort === 'relevance' ? ProductOrderType.Relevance : undefined,
+    } as any),
   );
   const pages = data?.pages ?? [];
   const products = Array.from(
