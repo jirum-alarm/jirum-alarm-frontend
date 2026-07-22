@@ -7,11 +7,19 @@ import { cn } from '@/shared/lib/cn';
 import { CategoryQueries } from '@/entities/category';
 import { ProviderQueries } from '@/entities/provider';
 
-import { SEARCH_SORTS, SearchFiltersController } from '../hooks/useSearchFilters';
+import { SEARCH_PERIODS, SEARCH_SORTS, SearchFiltersController } from '../hooks/useSearchFilters';
 
 const SORT_LABELS: Record<(typeof SEARCH_SORTS)[number], string> = {
   recent: '최신순',
+  comments: '댓글 많은 순',
   relevance: '정확도순',
+};
+
+const PERIOD_LABELS: Record<(typeof SEARCH_PERIODS)[number], string> = {
+  all: '전체 기간',
+  '1d': '오늘',
+  '7d': '이번주',
+  '30d': '한달',
 };
 
 function Chip({
@@ -132,6 +140,18 @@ export default function SearchFilterBar({ controller }: { controller: SearchFilt
           })}
         </div>
       )}
+
+      <div className="scrollbar-hide pc:mx-0 pc:px-0 -mx-5 flex gap-1.5 overflow-x-auto px-5 py-0.5">
+        {SEARCH_PERIODS.map((period) => (
+          <Chip
+            key={period}
+            active={filters.period === period}
+            onClick={() => setFilters({ period: period === 'all' ? null : period })}
+          >
+            {PERIOD_LABELS[period]}
+          </Chip>
+        ))}
+      </div>
     </div>
   );
 }

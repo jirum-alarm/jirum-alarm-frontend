@@ -1,6 +1,6 @@
 import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { ProductOrderType } from '@/shared/api/gql/graphql';
@@ -10,6 +10,8 @@ import { ProductQueries } from '@/entities/product';
 import { SearchFiltersController } from './useSearchFilters';
 
 const limit = 20;
+
+const PERIOD_HOURS = { '1d': 24, '7d': 24 * 7, '30d': 24 * 30 } as const;
 
 /**
  * filters는 인자로 받는다 — 필터 상태 소유자는 SearchResult 하나뿐(인스턴스 중복 방지).
@@ -28,6 +30,12 @@ export const useProductListViewModel = ({
 
   const keywordParam = searchParams.get('keyword');
 
+  // period가 바뀔 때만 재계산 — 렌더마다 new Date()를 만들면 queryKey가 매번 달라져 무한 refetch.
+  const startDate = useMemo(() => {
+    if (filters.period === 'all') return undefined;
+    return new Date(Date.now() - PERIOD_HOURS[filters.period] * 60 * 60 * 1000).toISOString();
+  }, [filters.period]);
+
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading, isPlaceholderData } =
     useInfiniteQuery({
       ...ProductQueries.infiniteProducts({
@@ -35,9 +43,15 @@ export const useProductListViewModel = ({
         keyword: keywordParam || undefined,
         categoryId: filters.categoryId > 0 ? filters.categoryId : undefined,
         providerId: filters.providerId > 0 ? filters.providerId : undefined,
+        startDate,
         // ended(품절 포함) ON일 때만 isEnd: true — 백엔드에서 true는 '종료 포함' 의미.
         isEnd: filters.ended ? true : undefined,
-        orderBy: filters.sort === 'relevance' ? ProductOrderType.Relevance : undefined,
+        orderBy:
+          filters.sort === 'relevance'
+            ? ProductOrderType.Relevance
+            : filters.sort === 'comments'
+              ? ProductOrderType.CommentCount
+              : undefined,
       } as any),
       placeholderData: keepPreviousData,
     });
