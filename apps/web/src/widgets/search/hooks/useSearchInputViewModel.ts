@@ -36,6 +36,8 @@ export const useSearchInputViewModel = () => {
   const submitKeyword = (kw: string) => {
     const trimmed = kw.trim();
     if (!trimmed) return;
+    // 새 키워드 검색 시 필터·정렬 리셋은 의도된 동작 — 새 검색=새 의도, 잔존 필터로 0건 함정 방지
+    // (2026-07-22 디자인 리뷰 결정 6A).
     router.replace(`/search?keyword=${encodeURIComponent(trimmed)}`);
     setRecentKeyord(trimmed);
     setKeyword(trimmed);
