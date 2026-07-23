@@ -32,6 +32,7 @@ export default function SearchAutocompleteDropdown({
   return (
     <ul
       role="listbox"
+      id="search-suggestions"
       className="absolute top-full right-0 left-0 z-[60] mt-1 max-h-80 overflow-y-auto rounded-sm border border-gray-200 bg-white shadow-md"
     >
       {suggestions.map((s, i) => {
@@ -39,6 +40,7 @@ export default function SearchAutocompleteDropdown({
         return (
           <li
             key={`${s}-${i}`}
+            id={`search-suggestion-${i}`}
             ref={isActive ? activeRef : null}
             role="option"
             aria-selected={isActive}

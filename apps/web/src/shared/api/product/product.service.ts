@@ -337,6 +337,7 @@ const QueryProducts = new TypedDocumentString<QueryProductsQuery, ProductListQue
         nameKr
       }
       searchAfter
+      estimatedTotal
       postedAt
     }
   }

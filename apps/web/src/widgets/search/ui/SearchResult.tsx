@@ -15,17 +15,31 @@ import SearchFilterBar from './SearchFilterBar';
 
 // 광고를 보여줄 최소 상품 수. 결과가 너무 적으면 광고를 띄우지 않는다.
 const AD_MIN_PRODUCTS = 8;
+// 광고를 끼워 넣기 전 먼저 보여줄 유기 결과 수. 검색 첫인상은 상품이 지배해야 한다(광고판 인상 방지).
+// 그리드 컬럼 수(모바일2·sm3·pc5)의 공배수라 어느 뷰포트에서도 앞 블록 끝에 빈칸이 안 생긴다.
+const AD_AFTER_ROWS = 30;
 
 export default function SearchResult({ show }: { show: boolean }) {
   // 필터 상태의 소유자는 이 컴포넌트 하나 — setFilters의 transition isPending으로 그리드를 디밍하고,
   // viewModel/FilterBar에는 값을 내려보낸다(인스턴스 중복 시 transition이 깨짐, 훅 주석 참고).
   const filterController = useSearchFilters();
   const { filters, hasActiveFilters, resetFilters } = filterController;
-  const { products, hasNextPage, nextDataRef, keyword, isLoading, isPlaceholderData } =
-    useProductListViewModel({ filters });
+  const {
+    products,
+    hasNextPage,
+    nextDataRef,
+    keyword,
+    isLoading,
+    isPlaceholderData,
+    estimatedTotal,
+  } = useProductListViewModel({ filters });
 
   const isProductEmpty = !products || products.length === 0;
   const showAd = !isProductEmpty && products.length > AD_MIN_PRODUCTS;
+  // 광고를 첫 결과 위가 아니라 유기 결과 뒤에 끼운다. 결과가 AD_AFTER_ROWS보다 적으면 그 뒤에.
+  const adSplit = Math.min(AD_AFTER_ROWS, products.length);
+  const productsBeforeAd = products.slice(0, adSplit);
+  const productsAfterAd = products.slice(adSplit);
 
   return (
     <div className={cn({ hidden: !show })}>
@@ -65,11 +79,21 @@ export default function SearchResult({ show }: { show: boolean }) {
             isPlaceholderData && 'pointer-events-none opacity-50',
           )}
         >
-          {/* 광고는 그리드 '밖' 독립 블록으로 둔다. 그리드 안/사이에 끼우면 직전 카드 수가
-              컬럼 수(모바일2·sm3·pc5)의 배수가 아닐 때 그 행 끝에 빈칸이 생긴다(실측: pc 5열에서
-              8번째 뒤 = 빈칸 2개). 그리드를 통째로 렌더하면 항상 꽉 차고 빈칸이 없다. */}
+          {estimatedTotal != null && (
+            <p className="pb-3 text-sm text-gray-500">
+              약{' '}
+              <span className="font-semibold text-gray-900">{estimatedTotal.toLocaleString()}</span>
+              건{estimatedTotal >= 5000 && '+'}
+            </p>
+          )}
+          {/* 광고는 유기 결과 뒤 독립 블록. 그리드 안/사이에 끼우면 직전 카드 수가 컬럼 수
+              (모바일2·sm3·pc5)의 배수가 아닐 때 행 끝에 빈칸이 생기므로, 앞 블록은 AD_AFTER_ROWS(30,
+              공배수)로 끊어 어느 뷰포트에서도 꽉 차게 한다. */}
+          <ProductGridList products={productsBeforeAd} source="search" />
           {showAd && <SearchInFeedAd dedupeKey={keyword ?? ''} />}
-          <ProductGridList products={products} source="search" />
+          {productsAfterAd.length > 0 && (
+            <ProductGridList products={productsAfterAd} source="search" className="pc:mt-10 mt-5" />
+          )}
         </div>
       )}
 

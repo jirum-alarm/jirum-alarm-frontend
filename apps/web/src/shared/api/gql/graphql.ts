@@ -1377,6 +1377,8 @@ export type ProductOutput = {
   dislikeCount: Scalars['Int']['output'];
   distributionDate?: Maybe<Scalars['DateTime']['output']>;
   earliestExpiryDate?: Maybe<Scalars['DateTime']['output']>;
+  /** 검색 결과 총량 추정(Meilisearch estimatedTotalHits, 5000 캡). keyword 검색에서만 채워지며 searchAfter처럼 모든 행에 동일 값 주입. */
+  estimatedTotal?: Maybe<Scalars['Int']['output']>;
   /**
    * 핫딜 정보 요약
    * @deprecated productGuides 쿼리를 사용해주세요.

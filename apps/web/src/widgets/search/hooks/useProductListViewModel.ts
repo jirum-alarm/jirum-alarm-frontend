@@ -59,6 +59,11 @@ export const useProductListViewModel = ({
   const products = Array.from(
     new Map(pages.flatMap((page) => page.products).map((p) => [p.id, p])).values(),
   );
+  // 결과 총량 추정(Meili estimatedTotalHits, 5000 캡) — 모든 행에 동일 주입되므로 첫 행에서 읽음.
+  // QueryProducts는 인라인 TypedDocumentString이라 codegen이 estimatedTotal을 결과 타입에 안 넣음 → 좁은 캐스팅.
+  const estimatedTotal =
+    (pages[0]?.products[0] as { estimatedTotal?: number | null } | undefined)?.estimatedTotal ??
+    undefined;
 
   // 센티넬이 보이는 동안 다음 페이지를 연쇄 로드.
   // onChange(inView 토글)에 의존하면 센티넬이 계속 보이는 상태(짧은 결과·빠른 로드)에서 재발동하지
@@ -79,5 +84,6 @@ export const useProductListViewModel = ({
     isFetchingNextPage,
     isLoading,
     isPlaceholderData,
+    estimatedTotal,
   };
 };

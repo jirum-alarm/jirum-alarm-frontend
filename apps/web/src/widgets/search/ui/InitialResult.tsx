@@ -3,6 +3,7 @@
 import { cn } from '@/shared/lib/cn';
 
 import { CarouselProductsSection } from '@/entities/product-list/ui/carousel';
+import CarouselProductListSkeleton from '@/entities/product-list/ui/carousel/CarouselProductListSkeleton';
 
 import { useHotDealsRandom } from '@/features/product-list/hooks';
 
@@ -18,8 +19,9 @@ export default function InitialResult({ show }: { show: boolean }) {
         <RecentKeywords />
         <RecommendationKeywords />
         {!hotDeals?.length ? (
-          <div className="flex min-h-[500px]">
-            <></>
+          // 로딩 중 500px 빈 공간 대신 스켈레톤 — 화면 구조가 유지돼 완성도 인상 보존
+          <div className="min-h-[500px]">
+            <CarouselProductListSkeleton />
           </div>
         ) : (
           <CarouselProductsSection

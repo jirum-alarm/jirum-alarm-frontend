@@ -111,6 +111,13 @@ const SearchInput = () => {
           ref={inputRef}
           value={displayValue}
           className="h-10 w-full bg-gray-50 px-3 text-sm outline-hidden"
+          role="combobox"
+          aria-expanded={dropdownOpen}
+          aria-controls="search-suggestions"
+          aria-autocomplete="list"
+          aria-activedescendant={
+            showActiveOverride ? `search-suggestion-${activeIndex}` : undefined
+          }
           onKeyDown={handleKeyDown}
           onChange={handleInputChange}
           onFocus={() => setIsFocused(true)}
@@ -128,7 +135,9 @@ const SearchInput = () => {
           }}
           spellCheck={false}
           placeholder="핫딜 제품을 검색해 주세요"
-          autoFocus
+          // 결과 페이지(키워드 존재)에선 autoFocus 금지 — 공유 URL/뒤로가기 진입 시
+          // 포커스→제안어 드롭다운이 결과·필터를 가리고 모바일 키보드가 올라오는 결함(운영 실측).
+          autoFocus={!keyword}
           inputMode="search"
           autoComplete="off"
           autoCorrect="off"
