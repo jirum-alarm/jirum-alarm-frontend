@@ -22,6 +22,18 @@ const PERIOD_LABELS: Record<(typeof SEARCH_PERIODS)[number], string> = {
   '30d': '한달',
 };
 
+/** 필터 행 그룹 라벨 — 어떤 칩 줄이 어떤 필터인지 구분(전부 '전체'로 시작해 라벨 없인 식별 불가). */
+function FilterRow({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="w-11 shrink-0 text-xs text-gray-400">{label}</span>
+      <div className="scrollbar-hide pc:mr-0 pc:pr-0 -mr-5 flex min-w-0 flex-1 gap-1.5 overflow-x-auto py-0.5 pr-5">
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function Chip({
   active,
   onClick,
@@ -102,7 +114,7 @@ export default function SearchFilterBar({ controller }: { controller: SearchFilt
       </div>
 
       {categories.length > 0 && (
-        <div className="scrollbar-hide pc:mx-0 pc:px-0 -mx-5 flex gap-1.5 overflow-x-auto px-5 py-0.5">
+        <FilterRow label="카테고리">
           <Chip active={filters.categoryId === 0} onClick={() => setFilters({ categoryId: null })}>
             전체
           </Chip>
@@ -118,11 +130,11 @@ export default function SearchFilterBar({ controller }: { controller: SearchFilt
               </Chip>
             );
           })}
-        </div>
+        </FilterRow>
       )}
 
       {providers.length > 0 && (
-        <div className="scrollbar-hide pc:mx-0 pc:px-0 -mx-5 flex gap-1.5 overflow-x-auto px-5 py-0.5">
+        <FilterRow label="출처">
           <Chip active={filters.providerId === 0} onClick={() => setFilters({ providerId: null })}>
             전체
           </Chip>
@@ -138,10 +150,10 @@ export default function SearchFilterBar({ controller }: { controller: SearchFilt
               </Chip>
             );
           })}
-        </div>
+        </FilterRow>
       )}
 
-      <div className="scrollbar-hide pc:mx-0 pc:px-0 -mx-5 flex gap-1.5 overflow-x-auto px-5 py-0.5">
+      <FilterRow label="기간">
         {SEARCH_PERIODS.map((period) => (
           <Chip
             key={period}
@@ -151,7 +163,7 @@ export default function SearchFilterBar({ controller }: { controller: SearchFilt
             {PERIOD_LABELS[period]}
           </Chip>
         ))}
-      </div>
+      </FilterRow>
     </div>
   );
 }
