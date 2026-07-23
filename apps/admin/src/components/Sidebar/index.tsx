@@ -139,7 +139,8 @@ const Sidebar = ({
                   pathname === '/' ||
                   pathname.startsWith('/stats') ||
                   pathname.startsWith('/crawling') ||
-                  pathname.startsWith('/profit-link')
+                  pathname.startsWith('/profit-link') ||
+                  pathname.startsWith('/sns-publish')
                 }
               >
                 {(handleClick, open) => {
@@ -151,7 +152,8 @@ const Sidebar = ({
                           pathname === '/' ||
                           pathname.startsWith('/stats') ||
                           pathname.startsWith('/crawling') ||
-                          pathname.startsWith('/profit-link')
+                          pathname.startsWith('/profit-link') ||
+                          pathname.startsWith('/sns-publish')
                         }
                         open={open}
                         sidebarExpanded={sidebarExpanded}
@@ -164,6 +166,7 @@ const Sidebar = ({
                         <SubMenuItem name="통계" linkTo="/stats" pathname={pathname} />
                         <SubMenuItem name="크롤링" linkTo="/crawling" pathname={pathname} />
                         <SubMenuItem name="수익 링크" linkTo="/profit-link" pathname={pathname} />
+                        <SubMenuItem name="SNS 발행" linkTo="/sns-publish" pathname={pathname} />
                       </SubMenu>
                     </React.Fragment>
                   );
