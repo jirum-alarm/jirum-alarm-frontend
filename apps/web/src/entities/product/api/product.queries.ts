@@ -170,6 +170,18 @@ export const ProductQueries = {
       queryFn: () => ProductService.getSimilarProducts(variables),
     }),
 
+  priceHistory: (variables: { id: number; days?: number }) =>
+    queryOptions({
+      queryKey: [
+        ...ProductQueries.all(),
+        'detail',
+        { id: variables.id },
+        'priceHistory',
+        { days: variables.days ?? 90 },
+      ],
+      queryFn: () => ProductService.getPriceHistory(variables),
+    }),
+
   reactionKeywords: (variables: QueryCategorizedReactionKeywordsArgs) =>
     queryOptions({
       queryKey: [...ProductQueries.all(), 'reactionKeywords', { id: variables.id }],

@@ -18,6 +18,7 @@ import HotdealGuide from '@/features/product-detail/ui/HotdealGuide';
 import HotdealScore from '@/features/product-detail/ui/HotdealScore';
 import ViewerCount from '@/features/product-detail/ui/mobile/ViewerCount';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
+import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySection';
 import {
   CategoryPopularByProductSection,
   ClusteredPriceSection,
@@ -81,6 +82,10 @@ function ProductDetailPage({
                 <HotdealScore productId={productId} />
               </Suspense>
             </div>
+
+            <Suspense>
+              <PriceHistorySection productId={productId} />
+            </Suspense>
 
             <ProductDetailAd productId={productId} isMobile />
             <Hr />

@@ -19,6 +19,7 @@ import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuid
 import HotdealGuide from '@/features/product-detail/ui/HotdealGuide';
 import HotdealScore from '@/features/product-detail/ui/HotdealScore';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
+import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySection';
 import {
   CategoryPopularByProductSection,
   ClusteredPriceSection,
@@ -74,6 +75,9 @@ export default async function DesktopProductDetailPage({
               </Suspense>
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
                 <HotdealScore productId={productId} />
+              </Suspense>
+              <Suspense fallback={null}>
+                <PriceHistorySection productId={productId} />
               </Suspense>
               {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김 */}
               {initialProduct?.uploaderType !== UploaderType.User && (

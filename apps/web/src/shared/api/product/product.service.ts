@@ -163,6 +163,11 @@ export class ProductService {
   static async getSimilarProducts(variables: { id: number }) {
     return execute(QuerySimilarProducts, variables).then((res) => res.data);
   }
+
+  /** 상세 일별 핫딜가 추이. null 이면 섹션 숨김(점 부족·게이트 실패). */
+  static async getPriceHistory(variables: { id: number; days?: number }) {
+    return execute(QueryProductPriceHistory, variables).then((res) => res.data);
+  }
 }
 
 // Track B 클러스터 — 상세 "다른 커뮤니티 가격" 블록.
@@ -224,6 +229,99 @@ const QuerySimilarProducts = new TypedDocumentString<QuerySimilarProductsResult,
       postedAt
       provider {
         nameKr
+      }
+    }
+  }
+`);
+
+export type PriceHistoryBasis = 'MAPPING' | 'SIMILAR';
+export type PriceHistoryConfidence = 'HIGH' | 'LOW';
+
+export interface PriceHistoryDeal {
+  id: number;
+  title: string;
+  displayTitle: string | null;
+  parsedPrice: number;
+  price: string | null;
+  priceCurrency: string | null;
+  postedAt: string;
+  thumbnail: string | null;
+  providerId: number;
+  providerName: string | null;
+  url: string | null;
+  categoryId: number | null;
+  isSeed: boolean;
+}
+
+export interface PriceHistoryPoint {
+  date: string;
+  price: number;
+  deal: PriceHistoryDeal;
+  deals: PriceHistoryDeal[];
+}
+
+export interface ProductPriceHistory {
+  basis: PriceHistoryBasis;
+  confidence: PriceHistoryConfidence;
+  currency: string;
+  rangeDays: number;
+  pointCount: number;
+  sampleCount: number;
+  disclaimer: string | null;
+  points: PriceHistoryPoint[];
+}
+
+interface QueryProductPriceHistoryResult {
+  product: {
+    id: number;
+    priceHistory: ProductPriceHistory | null;
+  } | null;
+}
+
+const QueryProductPriceHistory = new TypedDocumentString<
+  QueryProductPriceHistoryResult,
+  { id: number; days?: number }
+>(`
+  query QueryProductPriceHistory($id: Int!, $days: Int) {
+    product(id: $id) {
+      id
+      priceHistory(days: $days) {
+        basis
+        confidence
+        currency
+        rangeDays
+        pointCount
+        sampleCount
+        disclaimer
+        points {
+          date
+          price
+          deal {
+            id
+            title
+            displayTitle
+            parsedPrice
+            price
+            priceCurrency
+            postedAt
+            thumbnail
+            providerId
+            providerName
+            url
+            categoryId
+            isSeed
+          }
+          deals {
+            id
+            title
+            displayTitle
+            parsedPrice
+            postedAt
+            thumbnail
+            providerName
+            isSeed
+          }
+        }
       }
     }
   }
