@@ -71,13 +71,10 @@ export default async function DesktopProductDetailPage({
 
             <div className="space-y-12">
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
-                <HotdealGuide fixExpanded={true} productId={productId} />
+                <HotdealGuide productId={productId} />
               </Suspense>
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
                 <HotdealScore productId={productId} />
-              </Suspense>
-              <Suspense fallback={null}>
-                <PriceHistorySection productId={productId} />
               </Suspense>
               {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김 */}
               {initialProduct?.uploaderType !== UploaderType.User && (
@@ -106,6 +103,9 @@ export default async function DesktopProductDetailPage({
             <div className="space-y-11 overflow-x-hidden py-11">
               <ProductDetailAd productId={productId} isMobile={false} />
               {tossData?.images && <TossDetailImages images={tossData.images} />}
+              <Suspense fallback={null}>
+                <PriceHistorySection productId={productId} />
+              </Suspense>
               <Suspense>
                 <ClusteredPriceSection productId={productId} />
               </Suspense>

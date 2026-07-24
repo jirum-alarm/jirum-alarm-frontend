@@ -42,13 +42,25 @@ export default function PriceHistorySection({ productId }: Props) {
 
   useEffect(() => setMounted(true), []);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     ...ProductQueries.priceHistory({ id: productId, days: 90 }),
     enabled: mounted,
   });
 
   const history = data?.product?.priceHistory ?? null;
   const points = history?.points ?? [];
+
+  // 개발 중 안 보이는 원인 파악용 — 쿼리 실패면 섹션을 숨기지 않고 표시
+  if (mounted && isError && process.env.NODE_ENV === 'development') {
+    return (
+      <section className="pc:px-0 px-5 py-6">
+        <h2 className="text-base font-semibold">핫딜가 추이</h2>
+        <p className="mt-2 text-xs text-red-500">
+          priceHistory 조회 실패: {error instanceof Error ? error.message : 'unknown'}
+        </p>
+      </section>
+    );
+  }
 
   if (!mounted || isLoading || isError || !history || points.length < 2) {
     return null;
