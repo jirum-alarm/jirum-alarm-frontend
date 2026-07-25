@@ -12,12 +12,15 @@ import { ProductQueries } from '@/entities/product';
 
 type Props = {
   productId: number;
-  /** 상세 현재가 — seed 점이 빠졌을 때 '지금' 폴백 */
+  /** 상세 현재가 — seed 점이 빠졌을 때 폴백 */
   currentPrice?: number | null;
+  /** 이 상품 게시일 — 기간 필터로 seed가 잘려도 오늘로 찍지 않기 위함 */
+  postedAt?: string | null;
 };
 
 /** API는 최대 구간 한 번만 받고, 탭은 FE에서 자른다 */
 const MAX_DAYS = 730;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 const PERIODS = [
   { label: '1개월', days: 30 },
@@ -93,15 +96,23 @@ type CurrentProductMarker = {
   deal: PriceHistoryDeal;
 };
 
+function postedAtToKstDate(postedAt?: string | null): string | null {
+  if (!postedAt) return null;
+  const ms = Date.parse(postedAt);
+  if (!Number.isFinite(ms)) return null;
+  return toKstDateString(ms);
+}
+
 /**
  * 라인(일별 최저)과 분리된 '지금 보는 상품' 마커.
  * 같은 날 다른 딜이 더 싸도 seed 실제가로 찍음.
+ * 과거 상품은 postedAt 날짜에 찍고, 오늘로 합성하지 않음.
  */
 function resolveCurrentProductMarker(
   points: PriceHistoryPoint[],
   productId: number,
   currentPrice: number | null | undefined,
-  nowMs: number,
+  postedAt?: string | null,
 ): CurrentProductMarker | null {
   for (const p of points) {
     if (isSeedDeal(p.deal, productId)) {
@@ -114,7 +125,8 @@ function resolveCurrentProductMarker(
   }
 
   if (typeof currentPrice === 'number' && currentPrice > 0) {
-    const date = toKstDateString(nowMs);
+    const date = postedAtToKstDate(postedAt);
+    if (!date) return null;
     const synthetic: PriceHistoryDeal = {
       id: productId,
       title: '',
@@ -122,7 +134,7 @@ function resolveCurrentProductMarker(
       parsedPrice: currentPrice,
       price: null,
       priceCurrency: null,
-      postedAt: new Date(nowMs).toISOString(),
+      postedAt: postedAt ?? date,
       thumbnail: null,
       providerId: 0,
       providerName: null,
@@ -136,16 +148,48 @@ function resolveCurrentProductMarker(
   return null;
 }
 
+function filterPointsByRange(
+  points: PriceHistoryPoint[],
+  rangeStartMs: number,
+  rangeEndMs: number,
+): PriceHistoryPoint[] {
+  return points.filter((p) => {
+    const t = parsePointDateMs(p.date);
+    return Number.isFinite(t) && t >= rangeStartMs && t <= rangeEndMs;
+  });
+}
+
 function filterPointsByDays(
   points: PriceHistoryPoint[],
   days: number,
   nowMs: number,
 ): PriceHistoryPoint[] {
-  const since = nowMs - days * 24 * 60 * 60 * 1000;
-  return points.filter((p) => {
-    const t = parsePointDateMs(p.date);
-    return Number.isFinite(t) && t >= since && t <= nowMs;
-  });
+  return filterPointsByRange(points, nowMs - days * DAY_MS, nowMs);
+}
+
+/** 이 상품(seed) 게시일 — 축을 '그때~오늘'로 잡을 때 사용 */
+function resolveSeedMs(
+  postedAt: string | null | undefined,
+  points: PriceHistoryPoint[],
+  productId: number,
+): number | null {
+  const fromPosted = postedAtToKstDate(postedAt);
+  if (fromPosted) {
+    const t = parsePointDateMs(fromPosted);
+    if (Number.isFinite(t)) return t;
+  }
+  for (const p of points) {
+    if (isSeedDeal(p.deal, productId)) {
+      const t = parsePointDateMs(p.date);
+      if (Number.isFinite(t)) return t;
+    }
+    const inDeals = p.deals.find((d) => isSeedDeal(d, productId));
+    if (inDeals) {
+      const t = parsePointDateMs(p.date);
+      if (Number.isFinite(t)) return t;
+    }
+  }
+  return null;
 }
 
 function pointDateKey(points: PriceHistoryPoint[]): string {
@@ -176,12 +220,39 @@ function computePeriodStates(allPoints: PriceHistoryPoint[], nowMs: number): Per
   });
 }
 
-/** 전 데이터가 들어오는 가장 짧은 활성 기간 */
-function pickDefaultDays(states: PeriodState[]): number {
+/**
+ * 기본 기간: 이 상품(seed)이 보이도록 '그때~오늘'을 덮는 가장 짧은 탭.
+ * seed가 없거나 이미 최근이면, 점 개수가 가장 많은 활성 기간.
+ */
+function pickDefaultDays(states: PeriodState[], nowMs: number, seedMs: number | null): number {
   const enabled = states.filter((s) => s.enabled);
   if (enabled.length === 0) return 90;
+
+  if (seedMs != null && Number.isFinite(seedMs) && seedMs < nowMs) {
+    const ageDays = Math.max(1, Math.ceil((nowMs - seedMs) / DAY_MS));
+    const covering = enabled.filter((s) => s.days >= ageDays).sort((a, b) => a.days - b.days);
+    if (covering.length > 0) return covering[0].days;
+    // 24개월보다도 오래된 딜 → 가장 긴 탭 (축은 seed까지 별도 확장)
+    return enabled[enabled.length - 1].days;
+  }
+
   const maxCount = Math.max(...enabled.map((s) => s.points.length));
   return enabled.find((s) => s.points.length === maxCount)?.days ?? enabled[0].days;
+}
+
+/** X축 시작: 기본/커버 기간이면 seed(그때)까지 확장, 짧은 기간 수동 확대면 오늘 기준 유지 */
+function resolveRangeStartMs(
+  nowMs: number,
+  days: number,
+  seedMs: number | null,
+  daysOverride: number | null,
+): number {
+  const nominalStart = nowMs - days * DAY_MS;
+  if (seedMs == null || !Number.isFinite(seedMs)) return nominalStart;
+
+  const ageDays = Math.max(1, Math.ceil((nowMs - seedMs) / DAY_MS));
+  const coversSeed = daysOverride == null || days >= ageDays;
+  return coversSeed ? Math.min(nominalStart, seedMs) : nominalStart;
 }
 
 function buildChartGeometry(
@@ -275,11 +346,16 @@ function buildChartGeometry(
 /**
  * 상세 핫딜가 추이 — 기간 탭 + 최저/지금/최고 + 라인 차트.
  */
-export default function PriceHistorySection({ productId, currentPrice: currentPriceProp }: Props) {
+export default function PriceHistorySection({
+  productId,
+  currentPrice: currentPriceProp,
+  postedAt,
+}: Props) {
   const [mounted, setMounted] = useState(false);
   /** null이면 데이터 기준 기본 기간 사용 */
   const [daysOverride, setDaysOverride] = useState<number | null>(null);
   const gradId = useId().replace(/:/g, '');
+  // 선택 기간 X축은 항상 '오늘'이 오른쪽 끝
   const nowMs = useMemo(() => Date.now(), [productId, mounted]);
 
   useEffect(() => setMounted(true), []);
@@ -295,25 +371,38 @@ export default function PriceHistorySection({ productId, currentPrice: currentPr
   const history = data?.product?.priceHistory ?? null;
   const allPoints = history?.points ?? [];
 
+  const seedMs = useMemo(
+    () => resolveSeedMs(postedAt, allPoints, productId),
+    [postedAt, allPoints, productId],
+  );
+
   const periodStates = useMemo(() => computePeriodStates(allPoints, nowMs), [allPoints, nowMs]);
 
-  const defaultDays = useMemo(() => pickDefaultDays(periodStates), [periodStates]);
+  const defaultDays = useMemo(
+    () => pickDefaultDays(periodStates, nowMs, seedMs),
+    [periodStates, nowMs, seedMs],
+  );
   const days = useMemo(() => {
     const preferred = daysOverride ?? defaultDays;
     if (periodStates.some((s) => s.days === preferred && s.enabled)) return preferred;
     return defaultDays;
   }, [daysOverride, defaultDays, periodStates]);
 
-  const points = useMemo(
-    () =>
-      periodStates.find((s) => s.days === days)?.points ??
-      filterPointsByDays(allPoints, days, nowMs),
-    [periodStates, days, allPoints, nowMs],
+  const rangeEndMs = nowMs;
+  const rangeStartMs = useMemo(
+    () => resolveRangeStartMs(nowMs, days, seedMs, daysOverride),
+    [nowMs, days, seedMs, daysOverride],
   );
 
+  const points = useMemo(
+    () => filterPointsByRange(allPoints, rangeStartMs, rangeEndMs),
+    [allPoints, rangeStartMs, rangeEndMs],
+  );
+
+  // seed는 전체 점에서 찾음 (과거 상품이 오늘로 잘못 찍히는 것 방지)
   const currentMarker = useMemo(
-    () => resolveCurrentProductMarker(points, productId, currentPriceProp, nowMs),
-    [points, productId, currentPriceProp, nowMs],
+    () => resolveCurrentProductMarker(allPoints, productId, currentPriceProp, postedAt),
+    [allPoints, productId, currentPriceProp, postedAt],
   );
 
   if (mounted && isError && process.env.NODE_ENV === 'development') {
@@ -357,10 +446,9 @@ export default function PriceHistorySection({ productId, currentPrice: currentPr
       : orderedForMeta[orderedForMeta.length - 1]?.price);
   const isPeriodLow = currentPrice <= minPrice;
   const isEstimated = history.confidence === 'LOW';
-  const rangeStartMs = nowMs - days * 24 * 60 * 60 * 1000;
-  const rangeEndMs = nowMs;
-  const firstDate = orderedForMeta[0]?.date;
-  const lastDate = orderedForMeta[orderedForMeta.length - 1]?.date;
+  // 축·문구: 오른쪽=오늘, 왼쪽=선택 기간(과거 딜이면 그때까지 확장)
+  const rangeFromLabel = toKstDateString(rangeStartMs);
+  const rangeToLabel = toKstDateString(rangeEndMs);
   const visiblePeriods = periodStates.filter((p) => p.enabled);
 
   const subtitle =
@@ -404,8 +492,7 @@ export default function PriceHistorySection({ productId, currentPrice: currentPr
       )}
 
       <p className="mt-2 text-xs text-gray-400">
-        이 기간 핫딜 {points.length}건
-        {firstDate && lastDate ? ` · ${formatRangeLabel(firstDate, lastDate)}` : ''}
+        이 기간 핫딜 {points.length}건{` · ${formatRangeLabel(rangeFromLabel, rangeToLabel)}`}
       </p>
 
       <div className="mt-3 grid grid-cols-3 gap-2 rounded-xl bg-gray-50 px-4 py-3.5">

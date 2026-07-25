@@ -78,6 +78,7 @@ export default async function DesktopProductDetailPage({
                       ? Number(String(initialProduct.price).replace(/[^0-9.]/g, ''))
                       : null
                   }
+                  postedAt={initialProduct?.postedAt}
                 />
               </Suspense>
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>

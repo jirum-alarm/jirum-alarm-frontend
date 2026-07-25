@@ -77,6 +77,7 @@ function ProductDetailPage({
                       ? Number(String(initialProduct.price).replace(/[^0-9.]/g, ''))
                       : null
                   }
+                  postedAt={initialProduct?.postedAt}
                 />
               </Suspense>
               <Suspense>
