@@ -1,3 +1,4 @@
+import { cn } from '@/shared/lib/cn';
 import { parsePrice } from '@/shared/lib/utils/price';
 
 type DisplayListPriceProps = {
@@ -5,6 +6,7 @@ type DisplayListPriceProps = {
   forceString?: boolean;
   widthType?: 'default' | 'wide';
   beforePrice?: string;
+  className?: string;
 };
 
 export default function DisplayListPrice({
@@ -12,6 +14,7 @@ export default function DisplayListPrice({
   forceString,
   widthType = 'default',
   beforePrice,
+  className,
 }: DisplayListPriceProps) {
   let displayString: string;
   if (forceString) {
@@ -27,17 +30,17 @@ export default function DisplayListPrice({
   // 3. forceString도 parsePrice의 동작을 바꾸었을 때 사이드이펙트 예측이 어렵기도 하고, 의도를 잘 모르겠어서 추가하였습니다.
   // 기본 동작은 모두 기존과 같으며 추가된 옵션들은 AdProductRakingImageCard에서만 한정적으로 사용하였습니다.
   return (
-    <div className="flex items-center gap-x-2">
+    <div className="flex min-w-0 items-center gap-x-2">
       {beforePrice && (
-        <span className="line-clamp-1 !text-sm font-semibold text-gray-500 line-through">
+        <span className="line-clamp-1 shrink-0 !text-sm font-semibold text-gray-500 line-through">
           {beforePrice}
         </span>
       )}
       <span
         className={
           widthType === 'wide'
-            ? 'line-clamp-1 max-w-[120px] text-lg font-semibold text-gray-900'
-            : 'line-clamp-1 max-w-[120px] text-lg font-semibold text-gray-900'
+            ? cn('truncate text-lg font-semibold text-gray-900', className)
+            : cn('truncate text-lg font-semibold text-gray-900', className)
         }
       >
         {displayString}

@@ -45,16 +45,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
       <SectionHeader
         shouldShowMobileUI={true}
         titleClassName="pc:text-[20px]"
-        title={
-          <>
-            커뮤니티 AI 요약
-            {!!product.positiveCommunityReactionCount && (
-              <span className="text-secondary-500 pl-2">
-                {product.positiveCommunityReactionCount}
-              </span>
-            )}
-          </>
-        }
+        title="커뮤니티 반응"
         right={
           <div>
             <Tooltip
@@ -64,7 +55,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
                 <p className="text-[13px] text-white">
                   <strong className="font-semibold">실제 커뮤니티</strong> 사용자들의
                   <br />
-                  핫딜 리뷰를 요약해 확인해요
+                  핫딜 반응을 요약해 확인해요
                 </p>
               }
             >
@@ -75,6 +66,9 @@ export default function CommunityReaction({ productId }: { productId: number }) 
           </div>
         }
       />
+      <p className="-mt-2 mb-2 text-sm text-gray-500">
+        실제 커뮤니티 반응을 AI로 요약한 내용이에요
+      </p>
       <div className="mt-2 space-y-4">
         <div className="bg-secondary-50 space-y-3 rounded-xl p-4">
           <div className="space-y-1 rounded-xl bg-white pb-5">

@@ -2,13 +2,10 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import Link from 'next/link';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 
 import { OrderOptionType, ProductInfoFragment, ProductOrderType } from '@/shared/api/gql/graphql';
-import { useDevice } from '@/shared/hooks/useDevice';
 import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
-import SectionHeader from '@/shared/ui/SectionHeader';
 
 import { ProductQueries } from '@/entities/product';
 import { ProductGridList } from '@/entities/product-list/ui/grid';
@@ -71,17 +68,20 @@ function ExpiredProductRecommendations({
 
   return (
     <div className="mb-10">
-      <div className="mb-6 flex h-11 w-full items-center justify-center bg-gray-100 text-sm font-medium text-gray-800">
-        이 상품 판매종료 되었을 수 있어요!
-      </div>
-
-      <div className="pc:space-y-4 pc:px-0 space-y-2 px-4">
-        <div className="flex items-center justify-between px-1">
-          <h2 className="pc:text-lg text-lg font-bold text-gray-900">이런 상품은 어때요?</h2>
+      <div className="pc:space-y-4 pc:px-0 space-y-3 px-4">
+        <div className="flex items-start justify-between gap-3 px-1">
+          <div className="min-w-0">
+            <h2 className="pc:text-lg text-lg font-bold text-gray-900">
+              최신 핫딜을 확인해 보세요
+            </h2>
+            <p className="mt-1 text-sm text-gray-500">
+              이 상품은 올라온 지 며칠 지나 품절·종료됐을 수 있어요
+            </p>
+          </div>
           {hasMore && (
             <InteractiveMoreLink
               href={`/products/${product.id}/related`}
-              className="text-xs font-medium text-gray-400 hover:text-gray-600"
+              className="mt-0.5 shrink-0 text-xs font-medium text-gray-400 hover:text-gray-600"
             >
               더보기
             </InteractiveMoreLink>
@@ -91,7 +91,7 @@ function ExpiredProductRecommendations({
           products={displayProducts}
           className="pc:grid-cols-4 pc:gap-3 grid-cols-3 gap-1.5 sm:grid-cols-3"
           cardClassName="p-0"
-          displayTime={false}
+          displayTime={true}
         />
       </div>
     </div>

@@ -90,15 +90,14 @@ export default function ProductGridCard({
           <span className="line-clamp-2 h-12 pt-2 text-sm wrap-break-word text-gray-700">
             {product.title}
           </span>
-          <div className="flex h-9 items-center pt-1">
-            <DisplayListPrice price={product.price} />
+          <div className="flex items-center gap-1.5 pt-1">
+            <div className="min-w-0 flex-1 overflow-hidden">
+              <DisplayListPrice price={product.price} className="text-sm" />
+            </div>
             {displayTime && (
-              <>
-                <span className="w-2"></span>
-                <span className="text-sm text-gray-600">
-                  <DisplayTime time={product.postedAt} />
-                </span>
-              </>
+              <span className="shrink-0 text-xs whitespace-nowrap text-gray-500">
+                <DisplayTime time={product.postedAt} />
+              </span>
             )}
           </div>
         </div>
