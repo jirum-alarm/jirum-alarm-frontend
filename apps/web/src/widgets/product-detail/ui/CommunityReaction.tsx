@@ -8,7 +8,7 @@ import { cn } from '@/shared/lib/cn';
 import { getFromNow } from '@/shared/lib/utils/date';
 import { ArrowRight, Info, Thumbsdown, Thumbsup } from '@/shared/ui/common/icons';
 import Tooltip from '@/shared/ui/common/Tooltip';
-import SectionHeader from '@/shared/ui/SectionHeader';
+import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 
 import { ProductQueries } from '@/entities/product';
 
@@ -126,10 +126,10 @@ export default function CommunityReaction({ productId }: { productId: number }) 
 
   return (
     <section>
-      <SectionHeader
-        shouldShowMobileUI={true}
-        titleClassName="pc:text-[20px]"
+      <DetailSectionHeader
+        className="mb-3"
         title="커뮤니티 반응"
+        subtitle="실제 커뮤니티 반응을 AI로 요약한 내용이에요"
         right={
           <Tooltip
             align="right"
@@ -148,9 +148,6 @@ export default function CommunityReaction({ productId }: { productId: number }) 
           </Tooltip>
         }
       />
-      <p className="-mt-2 mb-3 text-sm text-gray-500">
-        실제 커뮤니티 반응을 AI로 요약한 내용이에요
-      </p>
 
       <div className="space-y-4">
         <div className="bg-secondary-50 space-y-3 rounded-xl p-4">

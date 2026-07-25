@@ -7,6 +7,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import type { PriceHistoryDeal, PriceHistoryPoint } from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
+import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 
 import { ProductQueries } from '@/entities/product';
 
@@ -408,7 +409,7 @@ export default function PriceHistorySection({
   if (mounted && isError && process.env.NODE_ENV === 'development') {
     return (
       <section className="py-0">
-        <h2 className="text-lg font-semibold text-gray-900">가격 추이</h2>
+        <DetailSectionHeader title="가격 추이" />
         <p className="mt-2 text-xs text-red-500">
           priceHistory 조회 실패: {error instanceof Error ? error.message : 'unknown'}
         </p>
@@ -457,8 +458,7 @@ export default function PriceHistorySection({
 
   return (
     <section className="py-0">
-      <h2 className="text-lg font-semibold text-gray-900">가격 추이</h2>
-      <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
+      <DetailSectionHeader title="가격 추이" subtitle={subtitle} />
 
       {visiblePeriods.length > 1 && (
         <div className="mt-4 flex flex-wrap gap-1.5">

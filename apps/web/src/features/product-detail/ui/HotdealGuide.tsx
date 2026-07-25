@@ -7,7 +7,7 @@ import { type ProductGuide } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
 import HotdealGuideItemCheckIcon from '@/shared/ui/common/icons/HotdealGuideItemCheckIcon';
-import SectionHeader from '@/shared/ui/SectionHeader';
+import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 
 import { ProductQueries } from '@/entities/product';
 
@@ -40,7 +40,7 @@ export default function HotdealGuide({
 
   return (
     <section className="relative">
-      <SectionHeader shouldShowMobileUI title="구매 방법" titleClassName="pc:text-[20px]" />
+      <DetailSectionHeader title="구매 방법" />
       <div className={cn('border-secondary-300 mt-2 overflow-hidden rounded-2xl border pt-4')}>
         <div
           ref={guidesRef}

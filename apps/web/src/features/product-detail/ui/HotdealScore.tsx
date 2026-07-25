@@ -7,6 +7,7 @@ import { useEffect, useRef } from 'react';
 import { cn } from '@/shared/lib/cn';
 import { Info } from '@/shared/ui/common/icons';
 import Tooltip from '@/shared/ui/common/Tooltip';
+import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 
 import { ProductQueries } from '@/entities/product';
@@ -24,24 +25,31 @@ const HotdealScore = ({ productId }: { productId: number }) => {
     <>
       {hotDealIndex ? (
         <section>
-          <div className="flex items-center justify-between gap-2 pb-4">
-            <h2 className="pc:text-[20px] font-semibold text-gray-900">핫딜 지수</h2>
-            <Tooltip
-              align="right"
-              polygonOffset={8}
-              content={
-                <p className="text-[13px] text-white">
-                  <strong className="font-semibold">다나와 최저가</strong>와{' '}
-                  <strong className="font-semibold">역대 최저가</strong>를 비교하여
-                  <br /> 현재 핫딜 정도를 계산해 볼 수 있어요
-                </p>
-              }
-            >
-              <button aria-label="핫딜 지수 정보" title="핫딜 지수 정보" className="-m-2 flex p-2">
-                <Info />
-              </button>
-            </Tooltip>
-          </div>
+          <DetailSectionHeader
+            className="pb-4"
+            title="핫딜 지수"
+            right={
+              <Tooltip
+                align="right"
+                polygonOffset={8}
+                content={
+                  <p className="text-[13px] text-white">
+                    <strong className="font-semibold">다나와 최저가</strong>와{' '}
+                    <strong className="font-semibold">역대 최저가</strong>를 비교하여
+                    <br /> 현재 핫딜 정도를 계산해 볼 수 있어요
+                  </p>
+                }
+              >
+                <button
+                  aria-label="핫딜 지수 정보"
+                  title="핫딜 지수 정보"
+                  className="-m-2 flex p-2"
+                >
+                  <Info />
+                </button>
+              </Tooltip>
+            }
+          />
           <div className="mt-2 flex flex-col justify-between rounded-[12px] bg-gray-100 px-6 py-6">
             <div>
               <div className="flex w-full flex-col items-center justify-center pb-4">
@@ -77,7 +85,7 @@ const HotdealScore = ({ productId }: { productId: number }) => {
       ) : priceContext ? (
         // 역대가(hotDealIndex) 없는 신선딜이라도 다나와 비교가 있으면 배지만 단독 노출
         <section>
-          <h2 className="pc:text-[20px] pb-4 font-semibold text-gray-900">가격 비교</h2>
+          <DetailSectionHeader className="pb-4" title="가격 비교" />
           <PriceContextBadge priceContext={priceContext} />
         </section>
       ) : null}

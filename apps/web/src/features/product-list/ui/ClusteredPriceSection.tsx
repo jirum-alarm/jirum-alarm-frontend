@@ -3,6 +3,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
+
 import { ProductQueries } from '@/entities/product';
 
 // Track B: 같은 상품인데 다나와에 없어 매칭 안 된 글들을, 여러 커뮤니티에서 모아 최저가 비교.
@@ -71,15 +73,18 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
 
   return (
     <section className="px-5 py-6">
-      <div className="mb-1 flex items-baseline justify-between">
-        <h2 className="text-base font-semibold">{sectionTitle}</h2>
-        {showLowestEmphasis && savePct > 0 && (
-          <span className="bg-error-50 text-error-500 rounded-full px-2 py-0.5 text-xs font-semibold">
-            최저가 {savePct}% 저렴
-          </span>
-        )}
-      </div>
-      <p className="mb-3 text-xs text-gray-500">{subtitle}</p>
+      <DetailSectionHeader
+        className="mb-3"
+        title={sectionTitle}
+        subtitle={subtitle}
+        right={
+          showLowestEmphasis && savePct > 0 ? (
+            <span className="bg-error-50 text-error-500 rounded-full px-2 py-0.5 text-xs font-semibold">
+              최저가 {savePct}% 저렴
+            </span>
+          ) : null
+        }
+      />
 
       <ul className="flex flex-col gap-2">
         {visible.map((p) => {

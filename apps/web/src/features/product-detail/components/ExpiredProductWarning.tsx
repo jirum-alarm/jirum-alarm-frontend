@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { Suspense } from 'react';
 
 import { OrderOptionType, ProductInfoFragment, ProductOrderType } from '@/shared/api/gql/graphql';
+import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 
 import { ProductQueries } from '@/entities/product';
@@ -69,24 +70,21 @@ function ExpiredProductRecommendations({
   return (
     <div className="mb-10">
       <div className="pc:space-y-4 pc:px-0 space-y-3 px-4">
-        <div className="flex items-start justify-between gap-3 px-1">
-          <div className="min-w-0">
-            <h2 className="pc:text-lg text-lg font-bold text-gray-900">
-              최신 핫딜을 확인해 보세요
-            </h2>
-            <p className="mt-1 text-sm text-gray-500">
-              이 상품은 올라온 지 며칠 지나 품절·종료됐을 수 있어요
-            </p>
-          </div>
-          {hasMore && (
-            <InteractiveMoreLink
-              href={`/products/${product.id}/related`}
-              className="mt-0.5 shrink-0 text-xs font-medium text-gray-400 hover:text-gray-600"
-            >
-              더보기
-            </InteractiveMoreLink>
-          )}
-        </div>
+        <DetailSectionHeader
+          className="px-1"
+          title="최신 핫딜을 확인해 보세요"
+          subtitle="이 상품은 올라온 지 며칠 지나 품절·종료됐을 수 있어요"
+          right={
+            hasMore ? (
+              <InteractiveMoreLink
+                href={`/products/${product.id}/related`}
+                className="text-xs font-medium text-gray-400 hover:text-gray-600"
+              >
+                더보기
+              </InteractiveMoreLink>
+            ) : null
+          }
+        />
         <ProductGridList
           products={displayProducts}
           className="pc:grid-cols-4 pc:gap-3 grid-cols-3 gap-1.5 sm:grid-cols-3"
