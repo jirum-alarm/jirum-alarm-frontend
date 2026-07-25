@@ -24,6 +24,22 @@ const getProductInfoCached = cache((id: number) => ProductService.getProductInfo
 const getProductGuidesCached = cache((productId: number) =>
   ProductService.getProductGuides({ productId }),
 );
+/** SEO용 — UI 기본과 동일하게 90일. 실패해도 메타 생성은 막지 않음 */
+const getPriceHistoryCached = cache(async (id: number) => {
+  try {
+    return await ProductService.getPriceHistory({ id, days: 90 });
+  } catch {
+    return null;
+  }
+});
+
+type PriceHistorySeoSummary = {
+  minPrice: number;
+  maxPrice: number;
+  rangeDays: number;
+  pointCount: number;
+  confidence: 'HIGH' | 'LOW';
+};
 
 function parseNumericPrice(rawPrice?: string | null) {
   if (!rawPrice) {
@@ -39,6 +55,40 @@ function parseNumericPrice(rawPrice?: string | null) {
   const numericValue = Number(normalized);
 
   return Number.isNaN(numericValue) ? null : numericValue;
+}
+
+function summarizePriceHistoryForSeo(
+  data: Awaited<ReturnType<typeof ProductService.getPriceHistory>> | null | undefined,
+): PriceHistorySeoSummary | null {
+  const history = data?.product?.priceHistory;
+  const points = history?.points;
+  if (!history || !points || points.length < 2) return null;
+
+  const prices = points.map((p) => p.price).filter((p) => Number.isFinite(p) && p > 0);
+  if (prices.length < 2) return null;
+
+  return {
+    minPrice: Math.min(...prices),
+    maxPrice: Math.max(...prices),
+    rangeDays: history.rangeDays,
+    pointCount: points.length,
+    confidence: history.confidence,
+  };
+}
+
+function formatPriceHistorySeoText(summary: PriceHistorySeoSummary): string {
+  const periodLabel =
+    summary.rangeDays >= 360
+      ? `${Math.round(summary.rangeDays / 365)}년`
+      : `${Math.max(1, Math.round(summary.rangeDays / 30))}개월`;
+  const min = summary.minPrice.toLocaleString('ko-KR');
+  const max = summary.maxPrice.toLocaleString('ko-KR');
+
+  // LOW(유사상품)는 오인용 줄이도록 완곡 표기
+  if (summary.confidence === 'LOW') {
+    return `최근 ${periodLabel} 유사 핫딜가 ${min}~${max}원`;
+  }
+  return `최근 ${periodLabel} 핫딜 최저가 ${min}원 · 최고가 ${max}원`;
 }
 
 function resolveCategoryName(product: {
@@ -69,13 +119,16 @@ function generateDescription(
     provider?: { nameKr?: string | null } | null;
   },
   categoryName?: string,
+  priceHistorySeo?: PriceHistorySeoSummary | null,
 ): string {
+  const historyText = priceHistorySeo ? formatPriceHistorySeoText(priceHistorySeo) : '';
+
   const guideDescriptions = productGuides?.productGuides
     ?.map((guide) => `${guide.title}: ${guide.content}`)
     .join(', ');
 
   if (guideDescriptions) {
-    return guideDescriptions;
+    return historyText ? `${guideDescriptions} | ${historyText}` : guideDescriptions;
   }
 
   const resolvedCategoryName = categoryName ?? resolveCategoryName(product);
@@ -89,6 +142,7 @@ function generateDescription(
     categoryText,
     product.title,
     priceText ? `현재가 ${priceText}` : '',
+    historyText,
     mallText || providerText ? `구매처:${mallText || providerText}` : '',
   ].filter(Boolean);
 
@@ -101,6 +155,7 @@ function generateDescription(
 function generateProductJsonLd(
   product: Awaited<ReturnType<typeof ProductService.getProductInfo>>,
   productGuides?: { productGuides?: Array<{ title: string; content: string }> | null },
+  priceHistorySeo?: PriceHistorySeoSummary | null,
 ) {
   if (!product) return null;
 
@@ -108,9 +163,27 @@ function generateProductJsonLd(
   const priceValue = parseNumericPrice(product.price);
   const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
   const description = productGuides
-    ? generateDescription(productGuides, product, categoryName)
+    ? generateDescription(productGuides, product, categoryName, priceHistorySeo)
     : product.title;
   const productUrl = `${METADATA_SERVICE_URL}/products/${product.id}`;
+
+  // 시계열 Offer 배열은 Google 권장과 어긋나기 쉬워, 기간 최저/최고만 additionalProperty로 노출
+  const additionalProperty = priceHistorySeo
+    ? [
+        {
+          '@type': 'PropertyValue',
+          name: priceHistorySeo.confidence === 'LOW' ? '최근 유사 핫딜 최저가' : '최근 핫딜 최저가',
+          value: priceHistorySeo.minPrice,
+          unitCode: 'KRW',
+        },
+        {
+          '@type': 'PropertyValue',
+          name: priceHistorySeo.confidence === 'LOW' ? '최근 유사 핫딜 최고가' : '최근 핫딜 최고가',
+          value: priceHistorySeo.maxPrice,
+          unitCode: 'KRW',
+        },
+      ]
+    : undefined;
 
   return {
     '@context': 'https://schema.org',
@@ -123,6 +196,7 @@ function generateProductJsonLd(
       name: product.provider?.nameKr || '지름알림',
     },
     category: categoryName,
+    ...(additionalProperty ? { additionalProperty } : {}),
     // 가격 파싱 실패 시 Offer 자체를 생략한다(price:null 직렬화 방지 — 검색/AI 오인용 차단).
     ...(priceValue
       ? {
@@ -182,13 +256,17 @@ export async function generateMetadata({
     return defaultMetadata;
   }
 
-  const productGuides = await getProductGuidesCached(+product.id);
+  const [productGuides, priceHistoryData] = await Promise.all([
+    getProductGuidesCached(+product.id),
+    getPriceHistoryCached(+product.id),
+  ]);
+  const priceHistorySeo = summarizePriceHistoryForSeo(priceHistoryData);
 
   const title = `${product.title} | 지름알림`;
 
   const categoryName = resolveCategoryName(product);
   const priceValue = parseNumericPrice(product.price);
-  const description = generateDescription(productGuides, product, categoryName);
+  const description = generateDescription(productGuides, product, categoryName, priceHistorySeo);
 
   const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
   const url = `${METADATA_SERVICE_URL}/products/${id}`;
@@ -209,6 +287,11 @@ export async function generateMetadata({
   if (priceValue) {
     otherMeta['product:price:amount'] = priceValue;
     otherMeta['product:price:currency'] = 'KRW';
+  }
+
+  if (priceHistorySeo) {
+    otherMeta['product:price:low'] = priceHistorySeo.minPrice;
+    otherMeta['product:price:high'] = priceHistorySeo.maxPrice;
   }
 
   if (retailerName) {
@@ -303,8 +386,12 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   if (!product) {
     notFound();
   }
-  const productGuides = product ? await getProductGuidesCached(+product.id) : null;
-  const jsonLd = generateProductJsonLd(product, productGuides ?? undefined);
+  const [productGuides, priceHistoryData] = await Promise.all([
+    getProductGuidesCached(+product.id),
+    getPriceHistoryCached(+product.id),
+  ]);
+  const priceHistorySeo = summarizePriceHistoryForSeo(priceHistoryData);
+  const jsonLd = generateProductJsonLd(product, productGuides ?? undefined, priceHistorySeo);
   const breadcrumbLd = generateBreadcrumbJsonLd(product);
 
   // LCP 이미지 preload: 모바일은 100vw, 데스크톱은 512px 슬롯
