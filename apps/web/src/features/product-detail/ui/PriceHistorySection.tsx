@@ -797,19 +797,19 @@ function DealPreview({
   isCurrent: boolean;
 }) {
   const deal = point.deal;
-  const extras = point.deals.filter((d) => d.id !== deal.id);
-  const extraCount = extras.length;
 
   return (
     <div className="mt-3 rounded-xl border border-gray-200 bg-white p-2.5">
-      <div className="mb-1.5 flex items-center gap-2 text-[11px] text-gray-400">
-        {isCurrent && (
+      <div className="mb-1.5 flex h-4 items-center gap-2 text-[11px] text-gray-400">
+        {isCurrent ? (
           <span
             className="inline-block size-1.5 shrink-0 rounded-full"
             style={{ backgroundColor: CHART.current }}
           />
+        ) : (
+          <span className="inline-block size-1.5 shrink-0 opacity-0" aria-hidden />
         )}
-        <span>
+        <span className="truncate">
           {formatAxisDate(point.date, true)}
           {isCurrent ? ' · 이 상품' : ''}
         </span>
@@ -829,20 +829,15 @@ function DealPreview({
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="line-clamp-2 text-xs text-gray-900">{dealTitle(deal)}</div>
-          <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-gray-400">
-            {deal.providerName && <span>{deal.providerName}</span>}
-          </div>
+          <div className="truncate text-xs text-gray-900">{dealTitle(deal)}</div>
+          {deal.providerName && (
+            <div className="mt-0.5 truncate text-[11px] text-gray-400">{deal.providerName}</div>
+          )}
         </div>
-        <span className="text-error-500 shrink-0 text-xs font-semibold">
+        <span className="text-error-500 shrink-0 text-xs font-semibold tabular-nums">
           {won(deal.parsedPrice, deal.priceCurrency ?? currency)}
         </span>
       </Link>
-      {extraCount > 0 && (
-        <p className="mt-1.5 border-t border-gray-50 pt-1.5 text-[11px] text-gray-400">
-          같은 날 다른 핫딜 +{extraCount}
-        </p>
-      )}
     </div>
   );
 }

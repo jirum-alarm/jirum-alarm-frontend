@@ -56,8 +56,8 @@ export default function ProductInfo({
     <section className="flex h-full flex-col justify-between">
       <div>
         <div className="h-0.5 w-full bg-gray-600" />
-        <div className="flex items-start justify-between gap-x-5 pt-6 pb-4">
-          <div className="space-y-4">
+        <div className="space-y-4 pt-6 pb-4">
+          {(product.isEnd || (!product.isEnd && product.hotDealType)) && (
             <div className="flex gap-x-2">
               {product.isEnd && (
                 <div
@@ -77,10 +77,14 @@ export default function ProductInfo({
                 </div>
               )}
             </div>
+          )}
 
-            <h1 className="text-xl font-medium text-gray-800">{product.title}</h1>
+          <div className="flex items-start justify-between gap-x-5">
+            <h1 className="min-w-0 flex-1 text-xl font-medium text-gray-800">{product.title}</h1>
+            <div className="shrink-0 self-start">
+              <ShareButton title={shareTitle} />
+            </div>
           </div>
-          <ShareButton title={shareTitle} />
         </div>
         <div className="space-y-1 pt-3 pb-8">
           <div className="h-5 text-sm text-gray-500">
