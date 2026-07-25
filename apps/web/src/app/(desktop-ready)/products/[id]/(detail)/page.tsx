@@ -122,28 +122,36 @@ function generateDescription(
   priceHistorySeo?: PriceHistorySeoSummary | null,
 ): string {
   const historyText = priceHistorySeo ? formatPriceHistorySeoText(priceHistorySeo) : '';
+  const mallName = product.mallName?.trim() || product.provider?.nameKr?.trim() || '';
+  const numericPrice = parseNumericPrice(product.price);
+  const priceText = numericPrice ? `${numericPrice.toLocaleString('ko-KR')}원` : '';
 
-  const guideDescriptions = productGuides?.productGuides
-    ?.map((guide) => `${guide.title}: ${guide.content}`)
-    .join(', ');
+  const guideParts =
+    productGuides?.productGuides
+      ?.filter((g) => g.title?.trim() && g.content?.trim())
+      .map((g) => `${g.title.trim()}: ${g.content.trim().replace(/\s+/g, ' ')}`) ?? [];
 
-  if (guideDescriptions) {
-    return historyText ? `${guideDescriptions} | ${historyText}` : guideDescriptions;
+  // 쇼핑몰 · 가격 · productGuides (+ 추이) — description은 요약, 상세 구조는 JSON-LD
+  if (guideParts.length > 0) {
+    const head = [
+      mallName ? `쇼핑몰: ${mallName}` : '',
+      // guide에 가격 행이 없으면 상품 가격으로 보완
+      guideParts.some((p) => p.startsWith('가격:')) ? '' : priceText ? `가격: ${priceText}` : '',
+      ...guideParts,
+    ].filter(Boolean);
+
+    return historyText ? `${head.join(', ')} | ${historyText}` : head.join(', ');
   }
 
   const resolvedCategoryName = categoryName ?? resolveCategoryName(product);
-  const numericPrice = parseNumericPrice(product.price);
-  const priceText = numericPrice ? `${numericPrice.toLocaleString()}원` : '';
   const categoryText = resolvedCategoryName ? `[${resolvedCategoryName}]` : '';
-  const mallText = product.mallName ? ` ${product.mallName}` : '';
-  const providerText = product.provider?.nameKr ? ` ${product.provider.nameKr}` : '';
 
   const parts = [
     categoryText,
     product.title,
     priceText ? `현재가 ${priceText}` : '',
     historyText,
-    mallText || providerText ? `구매처:${mallText || providerText}` : '',
+    mallName ? `구매처: ${mallName}` : '',
   ].filter(Boolean);
 
   return parts.length > 0
@@ -151,7 +159,25 @@ function generateDescription(
     : `${product.title} | 지름알림에서 제공하는 초특가 핫딜 상품!`;
 }
 
+/** productGuides → schema.org PropertyValue (빈 title/content 제외) */
+function guidePropertiesToJsonLd(
+  productGuides?: { productGuides?: Array<{ title: string; content: string }> | null } | null,
+): Array<{ '@type': 'PropertyValue'; name: string; value: string }> {
+  return (
+    productGuides?.productGuides
+      ?.filter((g) => g.title?.trim() && g.content?.trim())
+      .map((g) => ({
+        '@type': 'PropertyValue' as const,
+        name: g.title.trim(),
+        value: g.content.trim().replace(/\s+/g, ' '),
+      })) ?? []
+  );
+}
+
 // Product 구조화 데이터 생성 함수
+// - 가격: offers.price
+// - 쇼핑몰: offers.seller
+// - productGuides(가격 상세·배송·프로모션 등): additionalProperty
 function generateProductJsonLd(
   product: Awaited<ReturnType<typeof ProductService.getProductInfo>>,
   productGuides?: { productGuides?: Array<{ title: string; content: string }> | null },
@@ -166,24 +192,29 @@ function generateProductJsonLd(
     ? generateDescription(productGuides, product, categoryName, priceHistorySeo)
     : product.title;
   const productUrl = `${METADATA_SERVICE_URL}/products/${product.id}`;
+  const mallName = product.mallName?.trim() || null;
+
+  const additionalProperty: Array<Record<string, unknown>> = [
+    ...guidePropertiesToJsonLd(productGuides),
+  ];
 
   // 시계열 Offer 배열은 Google 권장과 어긋나기 쉬워, 기간 최저/최고만 additionalProperty로 노출
-  const additionalProperty = priceHistorySeo
-    ? [
-        {
-          '@type': 'PropertyValue',
-          name: priceHistorySeo.confidence === 'LOW' ? '최근 유사 핫딜 최저가' : '최근 핫딜 최저가',
-          value: priceHistorySeo.minPrice,
-          unitCode: 'KRW',
-        },
-        {
-          '@type': 'PropertyValue',
-          name: priceHistorySeo.confidence === 'LOW' ? '최근 유사 핫딜 최고가' : '최근 핫딜 최고가',
-          value: priceHistorySeo.maxPrice,
-          unitCode: 'KRW',
-        },
-      ]
-    : undefined;
+  if (priceHistorySeo) {
+    additionalProperty.push(
+      {
+        '@type': 'PropertyValue',
+        name: priceHistorySeo.confidence === 'LOW' ? '최근 유사 핫딜 최저가' : '최근 핫딜 최저가',
+        value: priceHistorySeo.minPrice,
+        unitCode: 'KRW',
+      },
+      {
+        '@type': 'PropertyValue',
+        name: priceHistorySeo.confidence === 'LOW' ? '최근 유사 핫딜 최고가' : '최근 핫딜 최고가',
+        value: priceHistorySeo.maxPrice,
+        unitCode: 'KRW',
+      },
+    );
+  }
 
   return {
     '@context': 'https://schema.org',
@@ -196,7 +227,7 @@ function generateProductJsonLd(
       name: product.provider?.nameKr || '지름알림',
     },
     category: categoryName,
-    ...(additionalProperty ? { additionalProperty } : {}),
+    ...(additionalProperty.length ? { additionalProperty } : {}),
     // 가격 파싱 실패 시 Offer 자체를 생략한다(price:null 직렬화 방지 — 검색/AI 오인용 차단).
     ...(priceValue
       ? {
@@ -210,11 +241,27 @@ function generateProductJsonLd(
             url: productUrl,
             seller: {
               '@type': 'Organization',
-              name: product.mallName || '지름알림',
+              name: mallName || '지름알림',
             },
           },
         }
-      : {}),
+      : mallName
+        ? {
+            // 가격은 없지만 쇼핑몰만 있는 경우에도 seller를 남긴다
+            offers: {
+              '@type': 'Offer',
+              priceCurrency: 'KRW',
+              availability: product.isEnd
+                ? 'https://schema.org/Discontinued'
+                : 'https://schema.org/InStock',
+              url: productUrl,
+              seller: {
+                '@type': 'Organization',
+                name: mallName,
+              },
+            },
+          }
+        : {}),
   };
 }
 
