@@ -23,6 +23,11 @@ type Props = {
 const MAX_DAYS = 730;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+/** 기본 노출 기간 — 3개월 */
+const DEFAULT_PERIOD_DAYS = 90;
+/** 기본 탭 점 수가 이보다 적으면 더 긴 기간으로 확장 */
+const MIN_DEFAULT_POINTS = 5;
+
 const PERIODS = [
   { label: '1개월', days: 30 },
   { label: '3개월', days: 90 },
@@ -222,23 +227,21 @@ function computePeriodStates(allPoints: PriceHistoryPoint[], nowMs: number): Per
 }
 
 /**
- * 기본 기간: 이 상품(seed)이 보이도록 '그때~오늘'을 덮는 가장 짧은 탭.
- * seed가 없거나 이미 최근이면, 점 개수가 가장 많은 활성 기간.
+ * 기본 기간: 3개월.
+ * 점이 MIN_DEFAULT_POINTS 미만이면 충족될 때까지 더 긴 활성 탭으로 확장.
+ * 3개월+ 탭이 전부 비활성이면(데이터 희소) 남은 활성 탭 중 가장 긴 것.
  */
-function pickDefaultDays(states: PeriodState[], nowMs: number, seedMs: number | null): number {
-  const enabled = states.filter((s) => s.enabled);
-  if (enabled.length === 0) return 90;
+function pickDefaultDays(states: PeriodState[]): number {
+  const enabled = states.filter((s) => s.enabled).sort((a, b) => a.days - b.days);
+  if (enabled.length === 0) return DEFAULT_PERIOD_DAYS;
 
-  if (seedMs != null && Number.isFinite(seedMs) && seedMs < nowMs) {
-    const ageDays = Math.max(1, Math.ceil((nowMs - seedMs) / DAY_MS));
-    const covering = enabled.filter((s) => s.days >= ageDays).sort((a, b) => a.days - b.days);
-    if (covering.length > 0) return covering[0].days;
-    // 24개월보다도 오래된 딜 → 가장 긴 탭 (축은 seed까지 별도 확장)
-    return enabled[enabled.length - 1].days;
+  const fromDefault = enabled.filter((s) => s.days >= DEFAULT_PERIOD_DAYS);
+  const candidates = fromDefault.length > 0 ? fromDefault : enabled;
+
+  for (const s of candidates) {
+    if (s.points.length >= MIN_DEFAULT_POINTS) return s.days;
   }
-
-  const maxCount = Math.max(...enabled.map((s) => s.points.length));
-  return enabled.find((s) => s.points.length === maxCount)?.days ?? enabled[0].days;
+  return candidates[candidates.length - 1].days;
 }
 
 /** X축 시작: 기본/커버 기간이면 seed(그때)까지 확장, 짧은 기간 수동 확대면 오늘 기준 유지 */
@@ -379,10 +382,7 @@ export default function PriceHistorySection({
 
   const periodStates = useMemo(() => computePeriodStates(allPoints, nowMs), [allPoints, nowMs]);
 
-  const defaultDays = useMemo(
-    () => pickDefaultDays(periodStates, nowMs, seedMs),
-    [periodStates, nowMs, seedMs],
-  );
+  const defaultDays = useMemo(() => pickDefaultDays(periodStates), [periodStates]);
   const days = useMemo(() => {
     const preferred = daysOverride ?? defaultDays;
     if (periodStates.some((s) => s.days === preferred && s.enabled)) return preferred;

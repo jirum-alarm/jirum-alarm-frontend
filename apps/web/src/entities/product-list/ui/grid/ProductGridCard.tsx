@@ -92,7 +92,7 @@ export default function ProductGridCard({
           </span>
           <div className="flex items-center gap-1.5 pt-1">
             <div className="min-w-0 flex-1 overflow-hidden">
-              <DisplayListPrice price={product.price} className="text-sm" />
+              <DisplayListPrice price={product.price} className="text-base" />
             </div>
             {displayTime && (
               <span className="shrink-0 text-xs whitespace-nowrap text-gray-500">

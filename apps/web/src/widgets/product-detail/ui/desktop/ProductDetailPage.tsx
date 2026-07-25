@@ -10,7 +10,6 @@ import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
 import TossDetailImages from '@/entities/product/ui/TossDetailImages';
 
 import { ProductDetailAd } from '@/features/adsense/ui/ProductDetailAd';
-import { ProductDetailSideAd } from '@/features/adsense/ui/ProductDetailSideAd';
 import FirstVisitAppAlertModal from '@/features/app-download/ui/FirstVisitAppAlertModal';
 import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
@@ -94,7 +93,6 @@ export default async function DesktopProductDetailPage({
                   naverbcData={naverbcData}
                 />
               </Suspense>
-              <ProductDetailSideAd productId={productId} />
             </div>
           </div>
           <div className="col-span-2 pt-5">
