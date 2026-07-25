@@ -1,12 +1,11 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import { UploaderType } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
-import { parsePrice } from '@/shared/lib/utils/price';
 import Jirume from '@/shared/ui/common/icons/Jirume';
 import DisplayPrice from '@/shared/ui/DisplayPrice';
 import DisplayTime from '@/shared/ui/DisplayTime';
@@ -20,6 +19,7 @@ import TossIcon from '@/entities/product/ui/TossIcon';
 import { RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
 import HotdealGuideModal from '@/features/product-detail/ui/mobile/HotDealGuideModal';
+import ProductGuideMetaRows from '@/features/product-detail/ui/ProductGuideMetaRows';
 
 export default function ProductInfo({
   productId,
@@ -31,7 +31,6 @@ export default function ProductInfo({
   naverbcData?: import('@/entities/product/model/toss-data').NaverbcProductData;
 }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
-  const { data: productStats } = useSuspenseQuery(ProductQueries.productStats({ id: productId }));
 
   useEffect(() => {
     pushRecentViewedProduct({
@@ -125,6 +124,9 @@ export default function ProductInfo({
               {tossData ? '토스' : product.mallName}
             </span>
           </div>
+          <Suspense fallback={null}>
+            <ProductGuideMetaRows productId={productId} variant="mobile" />
+          </Suspense>
           {product.uploaderType !== UploaderType.Crawled && (
             <div className="flex justify-between text-sm font-medium">
               <span className="text-gray-400">업로드</span>
@@ -145,10 +147,6 @@ export default function ProductInfo({
             </div>
           )}
 
-          <div className="flex justify-between text-sm font-medium">
-            <span className="text-gray-400">추천수</span>
-            <span className="text-gray-500">{productStats.likeCount}개</span>
-          </div>
           {tossData?.sellerName && (
             <div className="flex justify-between text-sm font-medium">
               <span className="text-gray-400">판매자</span>

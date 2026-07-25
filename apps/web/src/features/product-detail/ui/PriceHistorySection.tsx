@@ -445,7 +445,6 @@ export default function PriceHistorySection({
       ? currentPriceProp
       : orderedForMeta[orderedForMeta.length - 1]?.price);
   const isPeriodLow = currentPrice <= minPrice;
-  const isEstimated = history.confidence === 'LOW';
   // 축·문구: 오른쪽=오늘, 왼쪽=선택 기간(과거 딜이면 그때까지 확장)
   const rangeFromLabel = toKstDateString(rangeStartMs);
   const rangeToLabel = toKstDateString(rangeEndMs);
@@ -458,14 +457,7 @@ export default function PriceHistorySection({
 
   return (
     <section className="py-0">
-      <div className="flex items-center gap-2">
-        <h2 className="text-lg font-semibold text-gray-900">가격 추이</h2>
-        {isEstimated && (
-          <span className="rounded-md bg-amber-50 px-1.5 py-0.5 text-[11px] font-medium text-amber-700">
-            추정
-          </span>
-        )}
-      </div>
+      <h2 className="text-lg font-semibold text-gray-900">가격 추이</h2>
       <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
 
       {visiblePeriods.length > 1 && (

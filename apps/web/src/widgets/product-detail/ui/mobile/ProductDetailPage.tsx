@@ -14,16 +14,10 @@ import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
-import HotdealGuide from '@/features/product-detail/ui/HotdealGuide';
-import HotdealScore from '@/features/product-detail/ui/HotdealScore';
 import ViewerCount from '@/features/product-detail/ui/mobile/ViewerCount';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
 import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySection';
-import {
-  CategoryPopularByProductSection,
-  ClusteredPriceSection,
-  TogetherViewedSection,
-} from '@/features/product-list/ui';
+import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list/ui';
 
 import CommunityReaction from '../CommunityReaction';
 
@@ -80,26 +74,17 @@ function ProductDetailPage({
                   postedAt={initialProduct?.postedAt}
                 />
               </Suspense>
-              <Suspense>
-                <HotdealGuide productId={productId} />
-              </Suspense>
               {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김 */}
               {initialProduct?.uploaderType !== UploaderType.User && (
                 <Suspense>
                   <CommunityReaction productId={productId} />
                 </Suspense>
               )}
-              <Suspense>
-                <HotdealScore productId={productId} />
-              </Suspense>
             </div>
 
             <ProductDetailAd productId={productId} isMobile />
             <Hr />
             {tossData?.images && <TossDetailImages images={tossData.images} />}
-            <Suspense>
-              <ClusteredPriceSection productId={productId} />
-            </Suspense>
             <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={true} />
             <Hr />
 

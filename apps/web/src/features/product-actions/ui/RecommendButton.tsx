@@ -55,6 +55,9 @@ export default function RecommendButton({ productId }: { productId: number }) {
       onClick={handleUserLikeClick}
     >
       <span>{productStats?.isMyLike ? '추천 완료' : '상품 추천'}</span>
+      {typeof productStats?.likeCount === 'number' && productStats.likeCount > 0 && (
+        <span className="tabular-nums">{productStats.likeCount}</span>
+      )}
       <Thumbsup width={18} height={18} fill="#F2F4F7" />
     </Button>
   );
