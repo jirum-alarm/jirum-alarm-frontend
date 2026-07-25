@@ -27,6 +27,8 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const DEFAULT_PERIOD_DAYS = 90;
 /** 기본 탭 점 수가 이보다 적으면 더 긴 기간으로 확장 */
 const MIN_DEFAULT_POINTS = 5;
+/** 차트 X축 좌우 여백 (콘텐츠 구간 대비) */
+const X_AXIS_BUFFER_RATIO = 0.08;
 
 const PERIODS = [
   { label: '1개월', days: 30 },
@@ -244,19 +246,36 @@ function pickDefaultDays(states: PeriodState[]): number {
   return candidates[candidates.length - 1].days;
 }
 
-/** X축 시작: 기본/커버 기간이면 seed(그때)까지 확장, 짧은 기간 수동 확대면 오늘 기준 유지 */
-function resolveRangeStartMs(
+/** 점 필터용 — 선택 기간의 왼쪽 경계(오늘 기준) */
+function resolvePeriodStartMs(nowMs: number, days: number): number {
+  return nowMs - days * DAY_MS;
+}
+
+/**
+ * 차트 콘텐츠 구간.
+ * - 오른쪽: 항상 오늘
+ * - 왼쪽: 선택 기간 시작, 이 상품(seed)이 더 과거면 그때까지 확장
+ */
+function resolveContentRangeMs(
   nowMs: number,
   days: number,
   seedMs: number | null,
-  daysOverride: number | null,
-): number {
-  const nominalStart = nowMs - days * DAY_MS;
-  if (seedMs == null || !Number.isFinite(seedMs)) return nominalStart;
+): { contentStartMs: number; contentEndMs: number } {
+  const periodStart = resolvePeriodStartMs(nowMs, days);
+  const contentEndMs = nowMs;
+  const contentStartMs =
+    seedMs != null && Number.isFinite(seedMs) ? Math.min(periodStart, seedMs) : periodStart;
+  return { contentStartMs, contentEndMs };
+}
 
-  const ageDays = Math.max(1, Math.ceil((nowMs - seedMs) / DAY_MS));
-  const coversSeed = daysOverride == null || days >= ageDays;
-  return coversSeed ? Math.min(nominalStart, seedMs) : nominalStart;
+/** 점이 축 끝에 붙지 않도록 콘텐츠 구간 양옆에 버퍼 */
+function withAxisBuffer(contentStartMs: number, contentEndMs: number) {
+  const span = Math.max(contentEndMs - contentStartMs, DAY_MS);
+  const buffer = span * X_AXIS_BUFFER_RATIO;
+  return {
+    axisStartMs: contentStartMs - buffer,
+    axisEndMs: contentEndMs + buffer,
+  };
 }
 
 function buildChartGeometry(
@@ -264,8 +283,10 @@ function buildChartGeometry(
   width: number,
   height: number,
   pad: { top: number; right: number; bottom: number; left: number },
-  rangeStartMs: number,
-  rangeEndMs: number,
+  axisStartMs: number,
+  axisEndMs: number,
+  contentStartMs: number,
+  contentEndMs: number,
   extraPrices: number[] = [],
 ) {
   const prices = [...points.map((p) => p.price), ...extraPrices];
@@ -277,14 +298,19 @@ function buildChartGeometry(
 
   const plotW = width - pad.left - pad.right;
   const plotH = height - pad.top - pad.bottom;
-  const spanMs = Math.max(rangeEndMs - rangeStartMs, 1);
+  const axisSpanMs = Math.max(axisEndMs - axisStartMs, 1);
+  const contentSpanMs = Math.max(contentEndMs - contentStartMs, 1);
 
-  const project = (date: string, price: number) => {
-    const t = parsePointDateMs(date);
-    const ratio = Number.isFinite(t) ? (t - rangeStartMs) / spanMs : 0;
+  const projectMs = (ms: number, price: number) => {
+    const ratio = (ms - axisStartMs) / axisSpanMs;
     const x = pad.left + Math.min(1, Math.max(0, ratio)) * plotW;
     const y = pad.top + (1 - (price - yMin) / (yMax - yMin)) * plotH;
     return { x, y };
+  };
+
+  const project = (date: string, price: number) => {
+    const t = parsePointDateMs(date);
+    return projectMs(Number.isFinite(t) ? t : axisStartMs, price);
   };
 
   const coords = points.map((p) => {
@@ -319,15 +345,16 @@ function buildChartGeometry(
     return { price, y };
   });
 
-  // X축: 선택 기간 타임라인 기준 라벨 (점과 무관). 1년 넘으면 연도 포함
+  // X축 라벨은 콘텐츠 구간 기준. 오른쪽 끝은 항상 '오늘'
   const xLabelCount = 4;
-  const withYear = spanMs > 370 * 24 * 60 * 60 * 1000;
+  const withYear = contentSpanMs > 370 * DAY_MS;
   const xLabels = Array.from({ length: xLabelCount }, (_, i) => {
     const ratio = i / (xLabelCount - 1);
-    const ms = rangeStartMs + ratio * spanMs;
+    const ms = contentStartMs + ratio * contentSpanMs;
+    const isLast = i === xLabelCount - 1;
     return {
-      x: pad.left + ratio * plotW,
-      label: formatAxisDateFromMs(ms, withYear),
+      x: pad.left + ((ms - axisStartMs) / axisSpanMs) * plotW,
+      label: isLast ? '오늘' : formatAxisDateFromMs(ms, withYear),
     };
   });
 
@@ -389,15 +416,20 @@ export default function PriceHistorySection({
     return defaultDays;
   }, [daysOverride, defaultDays, periodStates]);
 
-  const rangeEndMs = nowMs;
-  const rangeStartMs = useMemo(
-    () => resolveRangeStartMs(nowMs, days, seedMs, daysOverride),
-    [nowMs, days, seedMs, daysOverride],
+  // 점은 선택 기간으로 필터, 축은 이 상품(seed)~오늘을 포함해 잡는다
+  const periodStartMs = useMemo(() => resolvePeriodStartMs(nowMs, days), [nowMs, days]);
+  const { contentStartMs, contentEndMs } = useMemo(
+    () => resolveContentRangeMs(nowMs, days, seedMs),
+    [nowMs, days, seedMs],
+  );
+  const { axisStartMs, axisEndMs } = useMemo(
+    () => withAxisBuffer(contentStartMs, contentEndMs),
+    [contentStartMs, contentEndMs],
   );
 
   const points = useMemo(
-    () => filterPointsByRange(allPoints, rangeStartMs, rangeEndMs),
-    [allPoints, rangeStartMs, rangeEndMs],
+    () => filterPointsByRange(allPoints, periodStartMs, contentEndMs),
+    [allPoints, periodStartMs, contentEndMs],
   );
 
   // seed는 전체 점에서 찾음 (과거 상품이 오늘로 잘못 찍히는 것 방지)
@@ -431,7 +463,9 @@ export default function PriceHistorySection({
   }
 
   // 이 상품은 추이 데이터 없음 → 섹션 자체 숨김
-  if (isError || !history || allPoints.length < 2 || points.length < 2) return null;
+  // 기간 점 1개 + seed(기간 밖) 조합도 허용
+  if (isError || !history || allPoints.length < 2) return null;
+  if (points.length < 2 && !(currentMarker && points.length >= 1)) return null;
 
   const currency = history.currency;
   const orderedForMeta = [...points].sort(
@@ -446,9 +480,9 @@ export default function PriceHistorySection({
       ? currentPriceProp
       : orderedForMeta[orderedForMeta.length - 1]?.price);
   const isPeriodLow = currentPrice <= minPrice;
-  // 축·문구: 오른쪽=오늘, 왼쪽=선택 기간(과거 딜이면 그때까지 확장)
-  const rangeFromLabel = toKstDateString(rangeStartMs);
-  const rangeToLabel = toKstDateString(rangeEndMs);
+  // 축·문구: 오른쪽=오늘, 왼쪽=선택 기간(이 상품이 더 과거면 그때까지)
+  const rangeFromLabel = toKstDateString(contentStartMs);
+  const rangeToLabel = toKstDateString(contentEndMs);
   const visiblePeriods = periodStates.filter((p) => p.enabled);
 
   const subtitle =
@@ -523,8 +557,10 @@ export default function PriceHistorySection({
         minPrice={minPrice}
         maxPrice={maxPrice}
         gradId={gradId}
-        rangeStartMs={rangeStartMs}
-        rangeEndMs={rangeEndMs}
+        axisStartMs={axisStartMs}
+        axisEndMs={axisEndMs}
+        contentStartMs={contentStartMs}
+        contentEndMs={contentEndMs}
       />
     </section>
   );
@@ -547,8 +583,10 @@ function PriceLineChart({
   minPrice,
   maxPrice,
   gradId,
-  rangeStartMs,
-  rangeEndMs,
+  axisStartMs,
+  axisEndMs,
+  contentStartMs,
+  contentEndMs,
 }: {
   points: PriceHistoryPoint[];
   currentMarker: CurrentProductMarker | null;
@@ -556,12 +594,14 @@ function PriceLineChart({
   minPrice: number;
   maxPrice: number;
   gradId: string;
-  rangeStartMs: number;
-  rangeEndMs: number;
+  axisStartMs: number;
+  axisEndMs: number;
+  contentStartMs: number;
+  contentEndMs: number;
 }) {
   const width = 640;
-  const height = 248;
-  const pad = { top: 28, right: 16, bottom: 28, left: 44 };
+  const height = 260;
+  const pad = { top: 40, right: 20, bottom: 28, left: 44 };
   const svgRef = useRef<SVGSVGElement>(null);
 
   // hover: 가이드만 / click: 아래 카드 고정
@@ -576,11 +616,13 @@ function PriceLineChart({
         width,
         height,
         pad,
-        rangeStartMs,
-        rangeEndMs,
+        axisStartMs,
+        axisEndMs,
+        contentStartMs,
+        contentEndMs,
         currentMarker ? [currentMarker.price] : [],
       ),
-    [points, width, height, rangeStartMs, rangeEndMs, currentMarker],
+    [points, width, height, axisStartMs, axisEndMs, contentStartMs, contentEndMs, currentMarker],
   );
 
   const orderedPoints = geo.coords;
@@ -719,6 +761,9 @@ function PriceLineChart({
         <path d={geo.d} fill="none" stroke={CHART.line} strokeWidth={2.5} strokeLinejoin="round" />
 
         {orderedPoints.map((c, i) => {
+          // seed는 아래 전용 마커로만 그림 (이중 점 방지)
+          if (currentMarker && isSeedDeal(c.deal, currentMarker.deal.id)) return null;
+
           const isLow = c.price === minPrice;
           const isHigh = c.price === maxPrice && maxPrice !== minPrice;
           const isHovered = i === hoverIdx;
@@ -754,30 +799,56 @@ function PriceLineChart({
           );
         })}
 
-        {/* 이 상품 — 채운 점만 (링/문구 없음) */}
+        {/* 이 상품 — 채운 점 + 라벨 (한눈에 위치 파악) */}
         {seedCoord && (
-          <circle
-            cx={seedCoord.x}
-            cy={seedCoord.y}
-            r={6}
-            fill={CHART.current}
-            stroke="#fff"
-            strokeWidth={2}
-          />
+          <g>
+            <text
+              x={seedCoord.x}
+              y={Math.max(pad.top - 6, seedCoord.y - 28)}
+              textAnchor="middle"
+              fontSize={10}
+              fontWeight={700}
+              fill={CHART.current}
+            >
+              이 상품
+            </text>
+            <text
+              x={seedCoord.x}
+              y={Math.max(pad.top + 6, seedCoord.y - 14)}
+              textAnchor="middle"
+              fontSize={10}
+              fontWeight={600}
+              fill={CHART.current}
+            >
+              {won(seedCoord.price, currency)}
+            </text>
+            <circle
+              cx={seedCoord.x}
+              cy={seedCoord.y}
+              r={6.5}
+              fill={CHART.current}
+              stroke="#fff"
+              strokeWidth={2}
+            />
+          </g>
         )}
 
-        {geo.xLabels.map((label, i) => (
-          <text
-            key={i}
-            x={label.x}
-            y={height - 8}
-            textAnchor={i === 0 ? 'start' : i === geo.xLabels.length - 1 ? 'end' : 'middle'}
-            fontSize={10}
-            className="fill-gray-400"
-          >
-            {label.label}
-          </text>
-        ))}
+        {geo.xLabels.map((label, i) => {
+          const isToday = i === geo.xLabels.length - 1;
+          return (
+            <text
+              key={i}
+              x={label.x}
+              y={height - 8}
+              textAnchor={i === 0 ? 'start' : isToday ? 'end' : 'middle'}
+              fontSize={10}
+              fontWeight={isToday ? 600 : 400}
+              className={isToday ? 'fill-gray-600' : 'fill-gray-400'}
+            >
+              {label.label}
+            </text>
+          );
+        })}
       </svg>
 
       {selectedPoint && (
