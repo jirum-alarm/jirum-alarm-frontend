@@ -381,6 +381,7 @@ export const QueryCategorizedReactionKeywords = gql`
         name
         count
         tag
+        role
       }
     }
   }

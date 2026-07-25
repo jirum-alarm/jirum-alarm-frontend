@@ -13,6 +13,10 @@ import SectionHeader from '@/shared/ui/SectionHeader';
 import { ProductQueries } from '@/entities/product';
 
 import ProductReport from '@/features/product-actions/ui/ProductReport';
+import {
+  buildDealStatusSummary,
+  splitReactionKeywords,
+} from '@/features/product-detail/lib/deal-status-reaction';
 import { Reactions } from '@/features/product-reaction/ui/Reactions';
 
 type ReactionItem = {
@@ -20,6 +24,7 @@ type ReactionItem = {
   tag: string;
   count: number;
   type: 'POSITIVE' | 'NEGATIVE' | 'SYNONYM' | string;
+  role?: string | null;
 };
 
 function CommunityLink({ url, provider }: { url: string; provider: string }) {
@@ -90,8 +95,7 @@ function KeywordRow({
 }
 
 /**
- * 커뮤니티 반응 — 기존 secondary-50 / 흰 카드 골격 유지,
- * 반원 게이지·비율 바·중복 명수는 제거하고 한 줄 요약 + 긍정/부정 칩만.
+ * 커뮤니티 반응 — 품질 반응만 (품절·종료·가격변동 등 상태 신호 제외).
  */
 export default function CommunityReaction({ productId }: { productId: number }) {
   const { data: product } = useSuspenseQuery(
@@ -105,15 +109,19 @@ export default function CommunityReaction({ productId }: { productId: number }) 
     reactionKeywordsData.categorizedReactionKeywords;
   const lastUpdatedAt = lastUpdatedAtString ? getFromNow(lastUpdatedAtString) + ' 업데이트' : null;
 
-  const positiveCount = product?.positiveCommunityReactionCount ?? 0;
-  const negativeCount = product?.negativeCommunityReactionCount ?? 0;
+  const { quality, status } = splitReactionKeywords(items);
+  const positiveItems = quality.filter((item) => item.type === 'POSITIVE');
+  const negativeItems = quality.filter((item) => item.type === 'NEGATIVE');
+  const statusSummary = buildDealStatusSummary(status);
+
+  // QUALITY 칩 기준 % (서버 pos/neg도 DEAL_STATUS 제외와 동일 정책)
+  const positiveCount = positiveItems.reduce((sum, item) => sum + item.count, 0);
+  const negativeCount = negativeItems.reduce((sum, item) => sum + item.count, 0);
   const allCount = positiveCount + negativeCount;
   const positivePercent = allCount === 0 ? 0 : Math.round((positiveCount / allCount) * 100);
   const isPositive = positivePercent >= 50;
   const dominantPercent = isPositive ? positivePercent : 100 - positivePercent;
 
-  const positiveItems = items.filter((item) => item.type === 'POSITIVE');
-  const negativeItems = items.filter((item) => item.type === 'NEGATIVE');
   const commentSummary = product.commentSummary;
 
   return (
@@ -173,6 +181,8 @@ export default function CommunityReaction({ productId }: { productId: number }) 
                 <KeywordRow label="부정" labelClassName="text-error-400" items={negativeItems} />
               </div>
             )}
+
+            {statusSummary && <p className="text-xs text-gray-500">{statusSummary.message}</p>}
 
             <div className="flex items-center justify-between gap-2 border-t border-gray-100 pt-2.5">
               <span className="text-xs text-gray-400">{lastUpdatedAt ?? '\u00a0'}</span>

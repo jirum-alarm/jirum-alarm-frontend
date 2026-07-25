@@ -174,6 +174,7 @@ export type CategorizedReactionKeywords = {
   __typename?: 'CategorizedReactionKeywords';
   count: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  role: HotDealKeywordGroupRole;
   tag: Scalars['String']['output'];
   type: HotDealKeywordType;
 };
@@ -401,6 +402,11 @@ export enum HotDealKeywordType {
   Negative = 'NEGATIVE',
   Positive = 'POSITIVE',
   Synonym = 'SYNONYM',
+}
+
+export enum HotDealKeywordGroupRole {
+  DealStatus = 'DEAL_STATUS',
+  Quality = 'QUALITY',
 }
 
 export type HotDealRatioOutput = {
@@ -3278,6 +3284,7 @@ export type QueryCategorizedReactionKeywordsQuery = {
       name: string;
       count: number;
       tag: string;
+      role: HotDealKeywordGroupRole;
     }>;
   };
 };
@@ -4374,6 +4381,7 @@ export const QueryCategorizedReactionKeywordsDocument = new TypedDocumentString(
       name
       count
       tag
+      role
     }
   }
 }

@@ -613,6 +613,7 @@ const QueryCategorizedReactionKeywords = graphql(`
         name
         count
         tag
+        role
       }
     }
   }
