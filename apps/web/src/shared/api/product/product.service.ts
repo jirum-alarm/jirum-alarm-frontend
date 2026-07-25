@@ -234,7 +234,7 @@ const QuerySimilarProducts = new TypedDocumentString<QuerySimilarProductsResult,
   }
 `);
 
-export type PriceHistoryBasis = 'MAPPING' | 'SIMILAR';
+export type PriceHistoryBasis = 'MAPPING' | 'CLUSTER' | 'SIMILAR';
 export type PriceHistoryConfidence = 'HIGH' | 'LOW';
 
 export interface PriceHistoryDeal {

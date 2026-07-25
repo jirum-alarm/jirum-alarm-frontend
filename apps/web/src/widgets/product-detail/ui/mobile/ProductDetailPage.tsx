@@ -70,6 +70,16 @@ function ProductDetailPage({
 
             <div className="mt-4 mb-12 flex flex-col gap-y-9 px-5">
               <Suspense>
+                <PriceHistorySection
+                  productId={productId}
+                  currentPrice={
+                    initialProduct?.price
+                      ? Number(String(initialProduct.price).replace(/[^0-9.]/g, ''))
+                      : null
+                  }
+                />
+              </Suspense>
+              <Suspense>
                 <HotdealGuide productId={productId} />
               </Suspense>
               {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김 */}
@@ -82,10 +92,6 @@ function ProductDetailPage({
                 <HotdealScore productId={productId} />
               </Suspense>
             </div>
-
-            <Suspense>
-              <PriceHistorySection productId={productId} />
-            </Suspense>
 
             <ProductDetailAd productId={productId} isMobile />
             <Hr />

@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import type { PriceHistoryDeal, PriceHistoryPoint } from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
@@ -12,49 +12,314 @@ import { ProductQueries } from '@/entities/product';
 
 type Props = {
   productId: number;
+  /** 상세 현재가 — seed 점이 빠졌을 때 '지금' 폴백 */
+  currentPrice?: number | null;
 };
+
+/** API는 최대 구간 한 번만 받고, 탭은 FE에서 자른다 */
+const MAX_DAYS = 730;
+
+const PERIODS = [
+  { label: '1개월', days: 30 },
+  { label: '3개월', days: 90 },
+  { label: '6개월', days: 180 },
+  { label: '12개월', days: 365 },
+  { label: '24개월', days: 730 },
+] as const;
 
 function won(price: number, currency?: string | null): string {
   if (currency === 'USD') return `$${Math.round(price).toLocaleString()}`;
   return `${Math.round(price).toLocaleString()}원`;
 }
 
-function formatDateLabel(date: string): string {
-  // "2026-07-24" → "7/24"
-  const m = date.match(/^\d{4}-(\d{2})-(\d{2})$/);
-  if (!m) return date.slice(5);
-  return `${Number(m[1])}/${Number(m[2])}`;
+function shortWon(price: number, currency?: string | null): string {
+  if (currency === 'USD') return `$${Math.round(price).toLocaleString()}`;
+  if (price >= 10000) return `${Math.round(price / 1000).toLocaleString()}k`;
+  return `${Math.round(price).toLocaleString()}`;
+}
+
+function formatAxisDate(date: string, withYear = false): string {
+  const parts = date.split('-');
+  if (parts.length !== 3) return date;
+  const md = `${parts[1]}.${parts[2]}`;
+  return withYear ? `${parts[0].slice(2)}.${md}` : md;
+}
+
+function formatAxisDateFromMs(ms: number, withYear = false): string {
+  const d = new Date(ms);
+  const yy = String(d.getFullYear()).slice(2);
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return withYear ? `${yy}.${mm}.${dd}` : `${mm}.${dd}`;
+}
+
+function formatRangeLabel(from: string, to: string): string {
+  const crossYear = from.slice(0, 4) !== to.slice(0, 4);
+  return `${formatAxisDate(from, crossYear)} ~ ${formatAxisDate(to, crossYear)}`;
+}
+
+function parsePointDateMs(date: string): number {
+  // YYYY-MM-DD → local midnight
+  const parts = date.split('-').map(Number);
+  if (parts.length !== 3 || parts.some((n) => !Number.isFinite(n))) return NaN;
+  return new Date(parts[0], parts[1] - 1, parts[2]).getTime();
 }
 
 function dealTitle(deal: PriceHistoryDeal): string {
   return deal.displayTitle || deal.title || `상품 #${deal.id}`;
 }
 
+function sameProductId(a: number | string, b: number): boolean {
+  return Number(a) === b;
+}
+
+function isSeedDeal(deal: PriceHistoryDeal, productId: number): boolean {
+  return deal.isSeed || sameProductId(deal.id, productId);
+}
+
+function toKstDateString(ms: number): string {
+  // en-CA → YYYY-MM-DD
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Seoul',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date(ms));
+}
+
+type CurrentProductMarker = {
+  date: string;
+  price: number;
+  deal: PriceHistoryDeal;
+};
+
 /**
- * 상세 일별 핫딜가 추이.
- * - null / 점 부족이면 섹션 숨김
- * - 막대 hover/focus 시 대표 딜 카드 + 같은 날 다른 딜
- * - 카드 클릭 → 해당 딜 상세
+ * 라인(일별 최저)과 분리된 '지금 보는 상품' 마커.
+ * 같은 날 다른 딜이 더 싸도 seed 실제가로 찍음.
  */
-export default function PriceHistorySection({ productId }: Props) {
+function resolveCurrentProductMarker(
+  points: PriceHistoryPoint[],
+  productId: number,
+  currentPrice: number | null | undefined,
+  nowMs: number,
+): CurrentProductMarker | null {
+  for (const p of points) {
+    if (isSeedDeal(p.deal, productId)) {
+      return { date: p.date, price: p.deal.parsedPrice, deal: { ...p.deal, isSeed: true } };
+    }
+    const inDeals = p.deals.find((d) => isSeedDeal(d, productId));
+    if (inDeals) {
+      return { date: p.date, price: inDeals.parsedPrice, deal: { ...inDeals, isSeed: true } };
+    }
+  }
+
+  if (typeof currentPrice === 'number' && currentPrice > 0) {
+    const date = toKstDateString(nowMs);
+    const synthetic: PriceHistoryDeal = {
+      id: productId,
+      title: '',
+      displayTitle: null,
+      parsedPrice: currentPrice,
+      price: null,
+      priceCurrency: null,
+      postedAt: new Date(nowMs).toISOString(),
+      thumbnail: null,
+      providerId: 0,
+      providerName: null,
+      url: null,
+      categoryId: null,
+      isSeed: true,
+    };
+    return { date, price: currentPrice, deal: synthetic };
+  }
+
+  return null;
+}
+
+function filterPointsByDays(
+  points: PriceHistoryPoint[],
+  days: number,
+  nowMs: number,
+): PriceHistoryPoint[] {
+  const since = nowMs - days * 24 * 60 * 60 * 1000;
+  return points.filter((p) => {
+    const t = parsePointDateMs(p.date);
+    return Number.isFinite(t) && t >= since && t <= nowMs;
+  });
+}
+
+function pointDateKey(points: PriceHistoryPoint[]): string {
+  return points
+    .map((p) => p.date)
+    .sort()
+    .join('|');
+}
+
+type PeriodState = {
+  label: string;
+  days: number;
+  enabled: boolean;
+  points: PriceHistoryPoint[];
+};
+
+/**
+ * 점이 2개 미만이거나, 더 짧은 기간과 점이 동일하면(빈 칸만 늘어남) 비활성.
+ */
+function computePeriodStates(allPoints: PriceHistoryPoint[], nowMs: number): PeriodState[] {
+  let prevKey: string | null = null;
+  return PERIODS.map((p) => {
+    const points = filterPointsByDays(allPoints, p.days, nowMs);
+    const key = pointDateKey(points);
+    const enabled = points.length >= 2 && key !== prevKey;
+    if (enabled) prevKey = key;
+    return { label: p.label, days: p.days, enabled, points };
+  });
+}
+
+/** 전 데이터가 들어오는 가장 짧은 활성 기간 */
+function pickDefaultDays(states: PeriodState[]): number {
+  const enabled = states.filter((s) => s.enabled);
+  if (enabled.length === 0) return 90;
+  const maxCount = Math.max(...enabled.map((s) => s.points.length));
+  return enabled.find((s) => s.points.length === maxCount)?.days ?? enabled[0].days;
+}
+
+function buildChartGeometry(
+  points: PriceHistoryPoint[],
+  width: number,
+  height: number,
+  pad: { top: number; right: number; bottom: number; left: number },
+  rangeStartMs: number,
+  rangeEndMs: number,
+  extraPrices: number[] = [],
+) {
+  const prices = [...points.map((p) => p.price), ...extraPrices];
+  const minP = Math.min(...prices);
+  const maxP = Math.max(...prices);
+  const span = Math.max(maxP - minP, 1);
+  const yMin = minP - span * 0.12;
+  const yMax = maxP + span * 0.12;
+
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+  const spanMs = Math.max(rangeEndMs - rangeStartMs, 1);
+
+  const project = (date: string, price: number) => {
+    const t = parsePointDateMs(date);
+    const ratio = Number.isFinite(t) ? (t - rangeStartMs) / spanMs : 0;
+    const x = pad.left + Math.min(1, Math.max(0, ratio)) * plotW;
+    const y = pad.top + (1 - (price - yMin) / (yMax - yMin)) * plotH;
+    return { x, y };
+  };
+
+  const coords = points.map((p) => {
+    const { x, y } = project(p.date, p.price);
+    return { x, y, ...p };
+  });
+
+  // 시간순 정렬된 좌표로 곡선 (points는 보통 정렬되어 있지만 방어)
+  const ordered = [...coords].sort((a, b) => parsePointDateMs(a.date) - parsePointDateMs(b.date));
+
+  let d = '';
+  if (ordered.length > 0) {
+    d = `M ${ordered[0].x} ${ordered[0].y}`;
+    for (let i = 0; i < ordered.length - 1; i++) {
+      const p0 = ordered[i - 1] ?? ordered[i];
+      const p1 = ordered[i];
+      const p2 = ordered[i + 1];
+      const p3 = ordered[i + 2] ?? p2;
+      const cp1x = p1.x + (p2.x - p0.x) / 6;
+      const cp1y = p1.y + (p2.y - p0.y) / 6;
+      const cp2x = p2.x - (p3.x - p1.x) / 6;
+      const cp2y = p2.y - (p3.y - p1.y) / 6;
+      d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+    }
+  }
+
+  const yTicks = 5;
+  const ticks = Array.from({ length: yTicks }, (_, i) => {
+    const t = i / (yTicks - 1);
+    const price = yMax - t * (yMax - yMin);
+    const y = pad.top + t * plotH;
+    return { price, y };
+  });
+
+  // X축: 선택 기간 타임라인 기준 라벨 (점과 무관). 1년 넘으면 연도 포함
+  const xLabelCount = 4;
+  const withYear = spanMs > 370 * 24 * 60 * 60 * 1000;
+  const xLabels = Array.from({ length: xLabelCount }, (_, i) => {
+    const ratio = i / (xLabelCount - 1);
+    const ms = rangeStartMs + ratio * spanMs;
+    return {
+      x: pad.left + ratio * plotW,
+      label: formatAxisDateFromMs(ms, withYear),
+    };
+  });
+
+  return {
+    coords: ordered,
+    d,
+    ticks,
+    xLabels,
+    minP,
+    maxP,
+    pad,
+    plotW,
+    plotH,
+    width,
+    height,
+    project,
+  };
+}
+
+/**
+ * 상세 핫딜가 추이 — 기간 탭 + 최저/지금/최고 + 라인 차트.
+ */
+export default function PriceHistorySection({ productId, currentPrice: currentPriceProp }: Props) {
   const [mounted, setMounted] = useState(false);
-  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  /** null이면 데이터 기준 기본 기간 사용 */
+  const [daysOverride, setDaysOverride] = useState<number | null>(null);
+  const gradId = useId().replace(/:/g, '');
+  const nowMs = useMemo(() => Date.now(), [productId, mounted]);
 
   useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setDaysOverride(null);
+  }, [productId]);
 
   const { data, isLoading, isError, error } = useQuery({
-    ...ProductQueries.priceHistory({ id: productId, days: 90 }),
+    ...ProductQueries.priceHistory({ id: productId, days: MAX_DAYS }),
     enabled: mounted,
   });
 
   const history = data?.product?.priceHistory ?? null;
-  const points = history?.points ?? [];
+  const allPoints = history?.points ?? [];
 
-  // 개발 중 안 보이는 원인 파악용 — 쿼리 실패면 섹션을 숨기지 않고 표시
+  const periodStates = useMemo(() => computePeriodStates(allPoints, nowMs), [allPoints, nowMs]);
+
+  const defaultDays = useMemo(() => pickDefaultDays(periodStates), [periodStates]);
+  const days = useMemo(() => {
+    const preferred = daysOverride ?? defaultDays;
+    if (periodStates.some((s) => s.days === preferred && s.enabled)) return preferred;
+    return defaultDays;
+  }, [daysOverride, defaultDays, periodStates]);
+
+  const points = useMemo(
+    () =>
+      periodStates.find((s) => s.days === days)?.points ??
+      filterPointsByDays(allPoints, days, nowMs),
+    [periodStates, days, allPoints, nowMs],
+  );
+
+  const currentMarker = useMemo(
+    () => resolveCurrentProductMarker(points, productId, currentPriceProp, nowMs),
+    [points, productId, currentPriceProp, nowMs],
+  );
+
   if (mounted && isError && process.env.NODE_ENV === 'development') {
     return (
-      <section className="pc:px-0 px-5 py-6">
-        <h2 className="text-base font-semibold">핫딜가 추이</h2>
+      <section className="py-0">
+        <h2 className="text-lg font-semibold text-gray-900">가격 추이</h2>
         <p className="mt-2 text-xs text-red-500">
           priceHistory 조회 실패: {error instanceof Error ? error.message : 'unknown'}
         </p>
@@ -62,161 +327,442 @@ export default function PriceHistorySection({ productId }: Props) {
     );
   }
 
-  if (!mounted || isLoading || isError || !history || points.length < 2) {
-    return null;
+  if (!mounted) return null;
+
+  if (isLoading) {
+    return (
+      <section className="py-0">
+        <div className="h-7 w-28 animate-pulse rounded bg-gray-100" />
+        <div className="mt-3 h-9 animate-pulse rounded-lg bg-gray-50" />
+        <div className="mt-3 h-16 animate-pulse rounded-xl bg-gray-50" />
+        <div className="mt-3 h-52 animate-pulse rounded-xl bg-gray-50" />
+      </section>
+    );
   }
 
-  const prices = points.map((p) => p.price);
+  // 이 상품은 추이 데이터 없음 → 섹션 자체 숨김
+  if (isError || !history || allPoints.length < 2 || points.length < 2) return null;
+
+  const currency = history.currency;
+  const orderedForMeta = [...points].sort(
+    (a, b) => parsePointDateMs(a.date) - parsePointDateMs(b.date),
+  );
+  const prices = [...points.map((p) => p.price), ...(currentMarker ? [currentMarker.price] : [])];
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
-  const barH = (price: number) => {
-    if (maxPrice === minPrice) return 44;
-    return 22 + ((price - minPrice) / (maxPrice - minPrice)) * 54; // 22~76
-  };
+  const currentPrice =
+    currentMarker?.price ??
+    (typeof currentPriceProp === 'number' && currentPriceProp > 0
+      ? currentPriceProp
+      : orderedForMeta[orderedForMeta.length - 1]?.price);
+  const isPeriodLow = currentPrice <= minPrice;
+  const isEstimated = history.confidence === 'LOW';
+  const rangeStartMs = nowMs - days * 24 * 60 * 60 * 1000;
+  const rangeEndMs = nowMs;
+  const firstDate = orderedForMeta[0]?.date;
+  const lastDate = orderedForMeta[orderedForMeta.length - 1]?.date;
+  const visiblePeriods = periodStates.filter((p) => p.enabled);
 
-  const active: PriceHistoryPoint | null =
-    activeIdx != null && activeIdx >= 0 && activeIdx < points.length ? points[activeIdx] : null;
-  // 기본 선택은 최신 점(오른쪽) — 호버 전에도 카드가 보이면 모바일에서 바로 탭 가능
-  const selected = active ?? points[points.length - 1];
-  const currency = history.currency;
+  const subtitle =
+    history.basis === 'SIMILAR'
+      ? '비슷한 상품 핫딜을 모아 참고용으로 보여드려요'
+      : '같은 상품의 커뮤니티 핫딜가를 모아 보여드려요';
 
   return (
-    <section className="pc:px-0 px-5 py-6">
-      <div className="mb-1 flex items-baseline justify-between gap-2">
-        <h2 className="text-base font-semibold">핫딜가 추이</h2>
-        <span className="text-xs text-gray-400">최근 {history.rangeDays}일 · 일별 최저</span>
-      </div>
-      <p className="mb-3 text-xs text-gray-500">
-        역대 최저 <span className="text-error-500 font-semibold">{won(minPrice, currency)}</span>
-        <span className="text-gray-300"> · </span>
-        최고 {won(maxPrice, currency)}
-        {history.confidence === 'LOW' && (
-          <>
-            <span className="text-gray-300"> · </span>
-            <span className="text-gray-400">유사 상품 추정</span>
-          </>
+    <section className="py-0">
+      <div className="flex items-center gap-2">
+        <h2 className="text-lg font-semibold text-gray-900">가격 추이</h2>
+        {isEstimated && (
+          <span className="rounded-md bg-amber-50 px-1.5 py-0.5 text-[11px] font-medium text-amber-700">
+            추정
+          </span>
         )}
-      </p>
+      </div>
+      <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
 
-      {history.disclaimer && (
-        <p className="mb-3 rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-500">
-          {history.disclaimer}
-        </p>
+      {visiblePeriods.length > 1 && (
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {visiblePeriods.map((p) => {
+            const active = days === p.days;
+            return (
+              <button
+                key={p.days}
+                type="button"
+                onClick={() => setDaysOverride(p.days)}
+                className={cn(
+                  'rounded-lg border px-3 py-1.5 text-sm transition-colors',
+                  active
+                    ? 'border-gray-900 bg-gray-900 font-semibold text-white'
+                    : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50',
+                )}
+              >
+                {p.label}
+              </button>
+            );
+          })}
+        </div>
       )}
 
-      <div
-        className="flex items-end gap-1"
-        style={{ height: 112 }}
-        onMouseLeave={() => setActiveIdx(null)}
-      >
-        {points.map((p, i) => {
-          const isLow = p.price === minPrice;
-          const isActive = (activeIdx ?? points.length - 1) === i;
-          const isSeedDay = p.deal.isSeed;
-          const showLabel = i % Math.ceil(points.length / 6) === 0 || i === points.length - 1;
-          return (
-            <button
-              key={p.date}
-              type="button"
-              className="flex flex-1 flex-col items-center justify-end gap-1 focus:outline-none"
-              onMouseEnter={() => setActiveIdx(i)}
-              onFocus={() => setActiveIdx(i)}
-              onClick={() => setActiveIdx(i)}
-              aria-label={`${p.date} ${won(p.price, currency)}`}
-            >
-              {(isLow || isActive) && (
-                <span
-                  className={cn(
-                    'text-[9px] whitespace-nowrap',
-                    isLow ? 'text-error-500 font-semibold' : 'text-gray-500',
-                  )}
-                >
-                  {won(p.price, currency)}
-                </span>
-              )}
-              <div
-                className={cn(
-                  'w-full max-w-8 rounded-t transition-colors',
-                  isLow ? 'bg-error-400' : isActive ? 'bg-secondary-500' : 'bg-secondary-300',
-                  isSeedDay && 'ring-secondary-600 ring-2 ring-offset-1',
-                )}
-                style={{ height: `${barH(p.price)}px` }}
-              />
-              <span className="h-3 text-[9px] text-gray-400">
-                {showLabel ? formatDateLabel(p.date) : ''}
-              </span>
-            </button>
-          );
-        })}
+      <p className="mt-2 text-xs text-gray-400">
+        이 기간 핫딜 {points.length}건
+        {firstDate && lastDate ? ` · ${formatRangeLabel(firstDate, lastDate)}` : ''}
+      </p>
+
+      <div className="mt-3 grid grid-cols-3 gap-2 rounded-xl bg-gray-50 px-4 py-3.5">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xs text-gray-500">최저</span>
+          <span className="text-error-500 text-sm font-bold sm:text-base">
+            {won(minPrice, currency)}
+          </span>
+        </div>
+        <div className="flex flex-col items-center gap-0.5">
+          <span className="text-xs text-gray-500">현재가</span>
+          <span className="text-sm font-bold text-gray-900 sm:text-base">
+            {won(currentPrice, currency)}
+          </span>
+          {isPeriodLow ? (
+            <span className="text-[11px] font-medium text-emerald-600">기간 최저</span>
+          ) : minPrice > 0 ? (
+            <span className="text-[11px] text-gray-400">
+              최저 대비 +{Math.round(((currentPrice - minPrice) / minPrice) * 100)}%
+            </span>
+          ) : null}
+        </div>
+        <div className="flex flex-col items-end gap-0.5">
+          <span className="text-xs text-gray-500">최고</span>
+          <span className="text-secondary-600 text-sm font-bold sm:text-base">
+            {won(maxPrice, currency)}
+          </span>
+        </div>
       </div>
 
-      <DealCard point={selected} currency={currency} />
+      <PriceLineChart
+        key={`${productId}-${days}`}
+        points={points}
+        currentMarker={currentMarker}
+        currency={currency}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        gradId={gradId}
+        rangeStartMs={rangeStartMs}
+        rangeEndMs={rangeEndMs}
+      />
     </section>
   );
 }
 
-function DealCard({ point, currency }: { point: PriceHistoryPoint; currency: string }) {
-  const deal = point.deal;
-  const extras = point.deals.filter((d) => d.id !== deal.id).slice(0, 3);
+/** 라인/점은 동일 블루, 현재 상품만 채운 점으로 구분 */
+const CHART = {
+  line: '#3B82F6',
+  current: '#467DFB',
+  guide: '#93C5FD',
+  currentGuide: '#91B1FB',
+  low: '#EF4444',
+  high: '#2563EB',
+} as const;
+
+function PriceLineChart({
+  points,
+  currentMarker,
+  currency,
+  minPrice,
+  maxPrice,
+  gradId,
+  rangeStartMs,
+  rangeEndMs,
+}: {
+  points: PriceHistoryPoint[];
+  currentMarker: CurrentProductMarker | null;
+  currency: string;
+  minPrice: number;
+  maxPrice: number;
+  gradId: string;
+  rangeStartMs: number;
+  rangeEndMs: number;
+}) {
+  const width = 640;
+  const height = 248;
+  const pad = { top: 28, right: 16, bottom: 28, left: 44 };
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // hover: 가이드만 / click: 아래 카드 고정
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+  const [selectedSeed, setSelectedSeed] = useState(true);
+
+  const geo = useMemo(
+    () =>
+      buildChartGeometry(
+        points,
+        width,
+        height,
+        pad,
+        rangeStartMs,
+        rangeEndMs,
+        currentMarker ? [currentMarker.price] : [],
+      ),
+    [points, width, height, rangeStartMs, rangeEndMs, currentMarker],
+  );
+
+  const orderedPoints = geo.coords;
+  const seedCoord = useMemo(() => {
+    if (!currentMarker) return null;
+    const { x, y } = geo.project(currentMarker.date, currentMarker.price);
+    return { ...currentMarker, x, y };
+  }, [currentMarker, geo]);
+
+  const defaultIdx = Math.max(0, orderedPoints.length - 1);
+  const resolvedSelectedIdx = selectedIdx ?? defaultIdx;
+
+  const viewingCurrent = selectedSeed || !currentMarker;
+  const selectedPoint: PriceHistoryPoint | null =
+    viewingCurrent && currentMarker
+      ? {
+          date: currentMarker.date,
+          price: currentMarker.price,
+          deal: currentMarker.deal,
+          deals: [currentMarker.deal],
+        }
+      : (orderedPoints[resolvedSelectedIdx] ?? null);
+
+  const clientXToPlotX = (clientX: number) => {
+    const svg = svgRef.current;
+    if (!svg) return 0;
+    const rect = svg.getBoundingClientRect();
+    return ((clientX - rect.left) / rect.width) * width;
+  };
+
+  const nearestIdxFromClientX = (clientX: number) => {
+    if (orderedPoints.length === 0) return defaultIdx;
+    const x = clientXToPlotX(clientX);
+    let best = 0;
+    let bestDist = Infinity;
+    for (let i = 0; i < orderedPoints.length; i++) {
+      const dist = Math.abs(orderedPoints[i].x - x);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = i;
+      }
+    }
+    return best;
+  };
+
+  const selectAtClientX = (clientX: number) => {
+    const x = clientXToPlotX(clientX);
+    const idx = nearestIdxFromClientX(clientX);
+    const pointDist = orderedPoints[idx] != null ? Math.abs(orderedPoints[idx].x - x) : Infinity;
+    const seedDist = seedCoord ? Math.abs(seedCoord.x - x) : Infinity;
+    if (seedCoord && seedDist <= pointDist) {
+      setSelectedSeed(true);
+      return;
+    }
+    setSelectedSeed(false);
+    setSelectedIdx(idx);
+  };
+
+  const selectedCoord =
+    !viewingCurrent && orderedPoints[resolvedSelectedIdx]
+      ? orderedPoints[resolvedSelectedIdx]
+      : null;
 
   return (
-    <div className="mt-4 rounded-xl border border-gray-100 bg-white p-3">
-      <div className="mb-2 flex items-center justify-between text-xs text-gray-400">
-        <span>{point.date}</span>
-        {deal.isSeed && (
-          <span className="bg-secondary-50 text-secondary-700 rounded px-1.5 py-0.5 font-medium">
-            현재 딜
-          </span>
+    <div className="mt-4 w-full">
+      <svg
+        ref={svgRef}
+        viewBox={`0 0 ${width} ${height}`}
+        className="h-auto w-full cursor-pointer touch-pan-y"
+        role="img"
+        aria-label="가격 추이 그래프"
+        onMouseMove={(e) => setHoverIdx(nearestIdxFromClientX(e.clientX))}
+        onMouseLeave={() => setHoverIdx(null)}
+        onClick={(e) => selectAtClientX(e.clientX)}
+      >
+        <defs>
+          <linearGradient id={`fill-${gradId}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={CHART.line} stopOpacity="0.16" />
+            <stop offset="100%" stopColor={CHART.line} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {geo.ticks.map((t, i) => (
+          <g key={i}>
+            <line
+              x1={pad.left}
+              x2={width - pad.right}
+              y1={t.y}
+              y2={t.y}
+              stroke="#E5E7EB"
+              strokeWidth={1}
+            />
+            <text
+              x={pad.left - 8}
+              y={t.y + 3}
+              textAnchor="end"
+              className="fill-gray-400"
+              fontSize={10}
+            >
+              {shortWon(t.price, currency)}
+            </text>
+          </g>
+        ))}
+
+        {/* 가이드는 하나만: 호버 중이면 호버, 아니면 선택/현재 */}
+        {(() => {
+          const guide =
+            hoverIdx != null && orderedPoints[hoverIdx]
+              ? { x: orderedPoints[hoverIdx].x, color: CHART.guide, dash: false }
+              : selectedCoord
+                ? { x: selectedCoord.x, color: CHART.guide, dash: false }
+                : seedCoord
+                  ? { x: seedCoord.x, color: CHART.currentGuide, dash: true }
+                  : null;
+          if (!guide) return null;
+          return (
+            <line
+              x1={guide.x}
+              x2={guide.x}
+              y1={pad.top}
+              y2={height - pad.bottom}
+              stroke={guide.color}
+              strokeWidth={1.5}
+              strokeDasharray={guide.dash ? '4 3' : undefined}
+            />
+          );
+        })()}
+
+        {geo.d && orderedPoints.length > 0 && (
+          <path
+            d={`${geo.d} L ${orderedPoints[orderedPoints.length - 1].x} ${height - pad.bottom} L ${orderedPoints[0].x} ${height - pad.bottom} Z`}
+            fill={`url(#fill-${gradId})`}
+          />
         )}
+
+        <path d={geo.d} fill="none" stroke={CHART.line} strokeWidth={2.5} strokeLinejoin="round" />
+
+        {orderedPoints.map((c, i) => {
+          const isLow = c.price === minPrice;
+          const isHigh = c.price === maxPrice && maxPrice !== minPrice;
+          const isHovered = i === hoverIdx;
+          const isSelected = Boolean(selectedCoord && i === resolvedSelectedIdx);
+          // 라벨은 최저/최고 + 호버/선택만 (기본 전부 숨김)
+          const showPrice = isLow || isHigh || isHovered || isSelected;
+          const stroke = isLow ? CHART.low : CHART.line;
+          const labelFill = isLow ? CHART.low : isHigh ? CHART.high : '#6B7280';
+
+          return (
+            <g key={`${c.date}-${i}`}>
+              {showPrice && (
+                <text
+                  x={c.x}
+                  y={c.y - 12}
+                  textAnchor="middle"
+                  fontSize={10}
+                  fontWeight={isLow || isHigh ? 700 : 500}
+                  fill={labelFill}
+                >
+                  {won(c.price, currency)}
+                </text>
+              )}
+              <circle
+                cx={c.x}
+                cy={c.y}
+                r={isSelected || isHovered ? 5.5 : 4}
+                fill="#fff"
+                stroke={stroke}
+                strokeWidth={isSelected || isHovered ? 2.5 : 2}
+              />
+            </g>
+          );
+        })}
+
+        {/* 이 상품 — 채운 점만 (링/문구 없음) */}
+        {seedCoord && (
+          <circle
+            cx={seedCoord.x}
+            cy={seedCoord.y}
+            r={6}
+            fill={CHART.current}
+            stroke="#fff"
+            strokeWidth={2}
+          />
+        )}
+
+        {geo.xLabels.map((label, i) => (
+          <text
+            key={i}
+            x={label.x}
+            y={height - 8}
+            textAnchor={i === 0 ? 'start' : i === geo.xLabels.length - 1 ? 'end' : 'middle'}
+            fontSize={10}
+            className="fill-gray-400"
+          >
+            {label.label}
+          </text>
+        ))}
+      </svg>
+
+      {selectedPoint && (
+        <DealPreview point={selectedPoint} currency={currency} isCurrent={viewingCurrent} />
+      )}
+    </div>
+  );
+}
+
+function DealPreview({
+  point,
+  currency,
+  isCurrent,
+}: {
+  point: PriceHistoryPoint;
+  currency: string;
+  isCurrent: boolean;
+}) {
+  const deal = point.deal;
+  const extras = point.deals.filter((d) => d.id !== deal.id);
+  const extraCount = extras.length;
+
+  return (
+    <div className="mt-3 rounded-xl border border-gray-200 bg-white p-2.5">
+      <div className="mb-1.5 flex items-center gap-2 text-[11px] text-gray-400">
+        {isCurrent && (
+          <span
+            className="inline-block size-1.5 shrink-0 rounded-full"
+            style={{ backgroundColor: CHART.current }}
+          />
+        )}
+        <span>
+          {formatAxisDate(point.date, true)}
+          {isCurrent ? ' · 이 상품' : ''}
+        </span>
       </div>
       <Link
         href={`/products/${deal.id}`}
         data-track="product-card"
         data-source="price_history"
         data-product-id={deal.id}
-        className="flex items-center gap-3 hover:opacity-90"
+        className="flex items-center gap-2.5 hover:opacity-90"
       >
-        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-gray-50">
+        <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-md bg-gray-50">
           {deal.thumbnail ? (
-            <Image src={deal.thumbnail} alt="" fill sizes="56px" className="object-contain" />
+            <Image src={deal.thumbnail} alt="" fill sizes="44px" className="object-contain" />
           ) : (
             <div className="h-full w-full bg-gray-100" />
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="line-clamp-2 text-sm text-gray-900">{dealTitle(deal)}</div>
-          <div className="mt-1 flex items-center gap-2 text-xs text-gray-400">
-            {deal.providerName && <span className="text-gray-500">{deal.providerName}</span>}
-            <span>{new Date(deal.postedAt).toLocaleDateString('ko-KR')}</span>
+          <div className="line-clamp-2 text-xs text-gray-900">{dealTitle(deal)}</div>
+          <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-gray-400">
+            {deal.providerName && <span>{deal.providerName}</span>}
           </div>
         </div>
-        <span className="text-error-500 shrink-0 text-sm font-semibold">
+        <span className="text-error-500 shrink-0 text-xs font-semibold">
           {won(deal.parsedPrice, deal.priceCurrency ?? currency)}
         </span>
       </Link>
-
-      {extras.length > 0 && (
-        <ul className="mt-3 space-y-1.5 border-t border-gray-50 pt-2">
-          {extras.map((d) => (
-            <li key={d.id}>
-              <Link
-                href={`/products/${d.id}`}
-                data-track="product-card"
-                data-source="price_history_same_day"
-                data-product-id={d.id}
-                className="flex items-center justify-between gap-2 text-xs text-gray-500 hover:text-gray-800"
-              >
-                <span className="line-clamp-1">
-                  {d.providerName ? `${d.providerName} · ` : ''}
-                  {dealTitle(d)}
-                </span>
-                <span className="shrink-0 font-medium text-gray-700">
-                  {won(d.parsedPrice, currency)}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+      {extraCount > 0 && (
+        <p className="mt-1.5 border-t border-gray-50 pt-1.5 text-[11px] text-gray-400">
+          같은 날 다른 핫딜 +{extraCount}
+        </p>
       )}
     </div>
   );

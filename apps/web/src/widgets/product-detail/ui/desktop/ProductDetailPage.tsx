@@ -70,6 +70,16 @@ export default async function DesktopProductDetailPage({
             {initialProduct && <ExpiredProductWarning product={initialProduct} isMobile={false} />}
 
             <div className="space-y-12">
+              <Suspense fallback={null}>
+                <PriceHistorySection
+                  productId={productId}
+                  currentPrice={
+                    initialProduct?.price
+                      ? Number(String(initialProduct.price).replace(/[^0-9.]/g, ''))
+                      : null
+                  }
+                />
+              </Suspense>
               <Suspense fallback={<div className="h-[400px] opacity-0" />}>
                 <HotdealGuide productId={productId} />
               </Suspense>
@@ -103,9 +113,6 @@ export default async function DesktopProductDetailPage({
             <div className="space-y-11 overflow-x-hidden py-11">
               <ProductDetailAd productId={productId} isMobile={false} />
               {tossData?.images && <TossDetailImages images={tossData.images} />}
-              <Suspense fallback={null}>
-                <PriceHistorySection productId={productId} />
-              </Suspense>
               <Suspense>
                 <ClusteredPriceSection productId={productId} />
               </Suspense>
