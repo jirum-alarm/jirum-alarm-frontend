@@ -17,6 +17,8 @@ interface Deal {
   productId: number;
   title: string;
   price: number | null;
+  unitPrice?: number | null; // 단위가(100ml당 등). 없으면 총액만.
+  unitLabel?: string | null;
   url: string;
   providerId: number;
   mallName: string | null; // 출처(쇼핑몰명)
@@ -44,6 +46,9 @@ interface PricePoint {
 
 interface PriceHistory {
   currency: 'KRW' | 'USD';
+  /** unit=단위가 축, total(또는 생략)=총액 축. 구 payload 호환 위해 optional. */
+  basis?: 'unit' | 'total';
+  unitLabel?: string;
   points: PricePoint[];
 }
 
@@ -137,8 +142,15 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   } = payload;
   const histPoints = priceHistory?.points ?? [];
   const histCurrency = priceHistory?.currency ?? 'KRW';
-  const fmtHist = (n: number) =>
-    histCurrency === 'USD' ? `$${Math.round(n)}` : `${Math.round(n).toLocaleString()}원`;
+  const histBasis = priceHistory?.basis ?? 'total';
+  const histUnitLabel = priceHistory?.unitLabel;
+  const fmtHist = (n: number) => {
+    if (histBasis === 'unit') {
+      // 단위 축: "21원" + 섹션에 unitLabel 표기. USD 직구 단위축은 배치에서 안 씀.
+      return `${Math.round(n).toLocaleString()}원`;
+    }
+    return histCurrency === 'USD' ? `$${Math.round(n)}` : `${Math.round(n).toLocaleString()}원`;
+  };
 
   // JSON-LD Product: 화면에 실제 표시하는 heroPrice(단위 명확한 핫딜 최저가)를 마크업 가격으로 씀.
   //   ★구글 정책: 표시가격=마크업가격 일치 필수. 이전엔 priceSummary.min(다나와 통계·단위불명,
@@ -239,18 +251,32 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                   ? ` · 마지막 ${new Date(page.lastDealAt).toLocaleDateString('ko-KR')}`
                   : ''}
               </p>
-              {/* 핫딜 최저가 — 단위 명확하게(수량 + 단위가격). 단위 불명한 brand_item 통계 대신 heroPrice. */}
+              {/* 핫딜 최저가 — 단위 축(basis=unit)이면 단위가를 메인, 총액·팩라벨은 보조.
+                  총액 축/구 payload는 기존처럼 총액 메인. */}
               {heroPrice?.minPrice != null && (
                 <div className="mt-2">
-                  <p className="text-lg font-semibold text-gray-900">
-                    핫딜 최저 {won(heroPrice.minPrice)}
-                  </p>
-                  <p className="mt-0.5 text-sm text-gray-500">
-                    {heroPrice.label}
-                    {heroPrice.unitPrice != null && heroPrice.unitLabel
-                      ? ` · ${heroPrice.unitLabel} ${won(heroPrice.unitPrice)}`
-                      : ''}
-                  </p>
+                  {histBasis === 'unit' && heroPrice.unitPrice != null && heroPrice.unitLabel ? (
+                    <>
+                      <p className="text-lg font-semibold text-gray-900">
+                        핫딜 최저 {heroPrice.unitLabel} {won(heroPrice.unitPrice)}
+                      </p>
+                      <p className="mt-0.5 text-sm text-gray-500">
+                        {heroPrice.label} · 총액 {won(heroPrice.minPrice)}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-lg font-semibold text-gray-900">
+                        핫딜 최저 {won(heroPrice.minPrice)}
+                      </p>
+                      <p className="mt-0.5 text-sm text-gray-500">
+                        {heroPrice.label}
+                        {heroPrice.unitPrice != null && heroPrice.unitLabel
+                          ? ` · ${heroPrice.unitLabel} ${won(heroPrice.unitPrice)}`
+                          : ''}
+                      </p>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -302,13 +328,18 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             </section>
           )}
 
-          {/* 블록5: 월별 핫딜 최저가 추이 — min~max 정규화 + 최저가 강조 */}
+          {/* 블록5: 월별 핫딜 최저가 추이 — min~max 정규화 + 최저가 강조.
+              basis=unit 이면 Y축이 단위가(100ml당 등). 구 payload(basis 없음)는 총액. */}
           {histPoints.length >= 2 && (
             <section className="mb-6">
               <div className="mb-1 flex items-baseline justify-between">
                 <h2 className="text-base font-semibold">월별 핫딜 최저가 추이</h2>
                 <span className="text-xs text-gray-400">
-                  {histCurrency === 'USD' ? '직구가($)' : '원화'}
+                  {histBasis === 'unit' && histUnitLabel
+                    ? histUnitLabel
+                    : histCurrency === 'USD'
+                      ? '직구가($)'
+                      : '원화'}
                 </span>
               </div>
               <p className="mb-3 text-xs text-gray-500">
@@ -349,13 +380,20 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             </section>
           )}
 
-          {/* 블록4: 핫딜 목록 (싼 순). 역대 최저가 배지 + 출처 */}
+          {/* 블록4: 핫딜 목록 (싼 순). 역대 최저가 배지 + 출처.
+              단위 축이면 배지도 unitPrice↔histMin 비교(총액끼리 비교하면 항상 false). */}
           <section className="mb-6">
-            <h2 className="mb-3 text-base font-semibold">핫딜 목록 (싼 순)</h2>
+            <h2 className="mb-3 text-base font-semibold">
+              핫딜 목록 (
+              {histBasis === 'unit' && histUnitLabel ? `${histUnitLabel} 싼 순` : '싼 순'})
+            </h2>
             <ul className="flex flex-col gap-2">
               {deals.map((deal) => {
-                // 역대 최저: 이 딜 가격이 가격추이 최저값 이하 (histMin>0 일 때만)
-                const isAllTimeLow = histMin > 0 && deal.price != null && deal.price <= histMin;
+                const comparePrice =
+                  histBasis === 'unit' && histUnitLabel && deal.unitLabel === histUnitLabel
+                    ? deal.unitPrice
+                    : deal.price;
+                const isAllTimeLow = histMin > 0 && comparePrice != null && comparePrice <= histMin;
                 return (
                   <li key={deal.productId}>
                     <a
@@ -389,6 +427,11 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                           </span>
                         )}
                         <span className="text-sm font-medium text-gray-700">{won(deal.price)}</span>
+                        {deal.unitPrice != null && deal.unitLabel && (
+                          <span className="text-[11px] text-gray-400">
+                            {deal.unitLabel} {won(deal.unitPrice)}
+                          </span>
+                        )}
                       </div>
                     </a>
                   </li>
