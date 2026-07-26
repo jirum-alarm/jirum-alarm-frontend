@@ -5,27 +5,21 @@ import { notFound } from 'next/navigation';
 import { ModelPageService } from '@/shared/api/model-page';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
+import DealsListSection from './DealsListSection';
 import DealsMobileHeader from './DealsMobileHeader';
 import DealsTracking from './DealsTracking';
+import {
+  buildTimingInsight,
+  Deal,
+  HeroPrice,
+  rankRepresentatives,
+  Representative,
+  splitDealsForList,
+} from './model-page-insights';
 
-// 에버그린 모델 페이지 (/deals/{slug}) — 상품별 정보 모음. SEO 유입(CTR) 타깃.
+// 에버그린 모델 페이지 (/deals/{slug}) — 상품별 핫딜 구매 판단 허브. SEO + 상품상세 CTA 유입.
 // 백엔드 model_page(isPublished=true) precompute payload 를 단일 slug 조회로 SSR.
-// 블록: 히어로 · 용량/수량별 대표상품(단위가격·다나와링크) · 다나와비교 · 가격추이 · 핫딜목록(싼순) · 관련모델.
-// ★현재 기존 화면 어디에서도 링크 안 함(미연결) — URL 직접 접속으로만 확인.
-
-interface Deal {
-  productId: number;
-  title: string;
-  price: number | null;
-  unitPrice?: number | null; // 단위가(100ml당 등). 없으면 총액만.
-  unitLabel?: string | null;
-  isEnd?: boolean; // 종료 딜도 목록에 포함 — 배지로 표시
-  url: string;
-  providerId: number;
-  mallName: string | null; // 출처(쇼핑몰명)
-  postedAt: string | null;
-  thumbnail: string | null;
-}
+// 판정·진행중 우선·팩 추천은 payload에서 프론트 파생(슬러그 공통 템플릿).
 
 interface PriceSummary {
   source: 'danawa_stats' | 'parsed_price' | 'none';
@@ -58,16 +52,13 @@ interface PriceHistory {
 /** 추이 X축 라벨 — granularity 에 맞게 짧게. */
 function histPeriodLabel(period: string, granularity: 'day' | 'week' | 'month'): string {
   if (granularity === 'week') {
-    // 2026-W24 → W24
     const m = period.match(/W(\d+)$/i);
     return m ? `W${m[1]}` : period.slice(-3);
   }
   if (granularity === 'day') {
-    // 2026-06-14 → 6/14
     const m = period.match(/^\d{4}-(\d{2})-(\d{2})$/);
     if (m) return `${Number(m[1])}/${Number(m[2])}`;
   }
-  // month: 2026-06 → 26-06
   return period.length >= 7 ? period.slice(2) : period;
 }
 
@@ -75,25 +66,6 @@ interface RelatedModel {
   slug: string;
   modelName: string;
   dealCount: number;
-}
-
-interface Representative {
-  label: string; // "120g 40개" 등 수량/용량
-  danawaPrice: number | null;
-  mallCount: number | null;
-  priceRank: string | null; // "1위" 등 다나와 랭킹
-  danawaUrl: string | null;
-  activeDeals: number;
-  dealMinPrice: number | null;
-  unitPrice: number | null; // 개당 가격
-  unitLabel: string | null; // "개당"
-}
-
-interface HeroPrice {
-  minPrice: number | null; // 신뢰 가능한 핫딜 최저가(단위 명확)
-  label: string; // "210ml 30개" 등 그 가격의 수량
-  unitPrice: number | null;
-  unitLabel: string | null; // "100ml당" 등
 }
 
 interface ModelPagePayload {
@@ -107,8 +79,6 @@ interface ModelPagePayload {
   relatedModels?: RelatedModel[];
 }
 
-// ISR — 발행 페이지를 10분 캐시(목록과 동일). http-client public 모드(cookies 미read)와 함께라야
-// 실제로 정적/ISR 렌더됨. revalidate 만으론 부족(cookies()가 동적 렌더 옵트아웃의 진범이었음).
 export const revalidate = 600;
 
 function won(n?: number | null): string {
@@ -130,7 +100,6 @@ export async function generateMetadata({
   const description =
     page.metaDescription ??
     `${page.modelName} 역대 핫딜 ${page.dealCount}건. 지름알림에서 가격 모아보기.`;
-  // canonical·OG url은 page.slug(DB 원문) 기준으로 통일 — JSON-LD url과 동일 소스라 불일치 방지.
   const url = `${METADATA_SERVICE_URL}/deals/${page.slug}`;
   const image = payload.heroImage ?? `${METADATA_SERVICE_URL}/opengraph-image.webp`;
 
@@ -154,7 +123,6 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
     heroPrice,
     representatives = [],
     deals = [],
-    priceSummary,
     danawa,
     priceHistory,
     relatedModels = [],
@@ -172,16 +140,11 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         : '월별 핫딜 최저가 추이';
   const fmtHist = (n: number) => {
     if (histBasis === 'unit') {
-      // 단위 축: "21원" + 섹션에 unitLabel 표기. USD 직구 단위축은 배치에서 안 씀.
       return `${Math.round(n).toLocaleString()}원`;
     }
     return histCurrency === 'USD' ? `$${Math.round(n)}` : `${Math.round(n).toLocaleString()}원`;
   };
 
-  // JSON-LD Product: 화면에 실제 표시하는 heroPrice(단위 명확한 핫딜 최저가)를 마크업 가격으로 씀.
-  //   ★구글 정책: 표시가격=마크업가격 일치 필수. 이전엔 priceSummary.min(다나와 통계·단위불명,
-  //   80원 같은 비현실값 혼입)을 썼는데 화면(heroPrice)과 달라 정책 위반 소지 + 커버리지도 낮았음
-  //   (danawa_stats 42/85). heroPrice 기준으로 바꿔 표시가 일치 + 커버리지 73/85로 확대.
   const offerPrice = heroPrice?.minPrice ?? null;
   const productLd =
     offerPrice != null
@@ -198,7 +161,6 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             price: Math.round(offerPrice),
             availability: 'https://schema.org/InStock',
             url: `${METADATA_SERVICE_URL}/deals/${page.slug}`,
-            // 핫딜 가격의 유효기한 — ISR(10분) 재렌더마다 +7일로 갱신되는 롤링 윈도우.
             priceValidUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
               .toISOString()
               .slice(0, 10),
@@ -206,7 +168,6 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         }
       : null;
 
-  // BreadcrumbList: 홈 > 핫딜 최저가 모음 > 모델명. 리치결과 빵부스러기 + 계층 신호.
   const breadcrumbLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -223,19 +184,43 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   };
   const jsonLd = productLd ? [productLd, breadcrumbLd] : [breadcrumbLd];
 
-  // 가격 추이 — min~max 범위로 정규화해 차이를 도드라지게(절대0 기준이면 평탄해짐).
   const histPrices = histPoints.map((p) => p.price);
   const histMax = histPrices.length ? Math.max(...histPrices) : 0;
   const histMin = histPrices.length ? Math.min(...histPrices) : 0;
-  // 막대 높이: 최저=20%, 최고=100% 사이로 스케일(범위 좁아도 차이 보이게). 단일값이면 전부 중간.
   const histBarH = (price: number) => {
     if (histMax === histMin) return 40;
-    return 20 + ((price - histMin) / (histMax - histMin)) * 52; // 20~72px
+    return 20 + ((price - histMin) / (histMax - histMin)) * 52;
   };
 
+  const timing = buildTimingInsight({
+    deals,
+    histPrices,
+    histBasis,
+    histUnitLabel,
+    heroPrice,
+  });
+  const { active: activeDeals, history: historyDeals } = splitDealsForList(
+    deals,
+    histBasis,
+    histUnitLabel,
+  );
+  const rankedReps = rankRepresentatives(representatives);
+  const bestRep = rankedReps.find((r) => r.isBestUnit);
+
+  const timingToneClass =
+    timing.tone === 'good'
+      ? 'bg-emerald-50 text-emerald-700'
+      : timing.tone === 'high'
+        ? 'bg-amber-50 text-amber-800'
+        : 'bg-gray-100 text-gray-600';
+
+  const listTitleSuffix =
+    histBasis === 'unit' && histUnitLabel ? `${histUnitLabel} 싼 순` : '싼 순';
+
+  // 추이 막대에 "지금" 표시 — 현재가가 어느 막대에 가장 가까운지(없으면 라인만 설명).
+  const nowPrice = timing.current > 0 ? timing.current : null;
+
   return (
-    // ★폭: 모바일 600px 중앙(세로 흐름) → PC layout-max(1280) 2단(좌 본문 / 우 sticky 요약).
-    //   PC 상품상세(grid-cols-12, 좌 본문·우 sticky 구매정보) 패턴 차용. 모바일은 pc: 무영향.
     <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
       {jsonLd.map((ld, i) => (
         <script
@@ -245,18 +230,13 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
         />
       ))}
 
-      {/* 판별 스프린트 계측 — 랜딩 cohort(referrer) + outbound/deal 클릭 (GTM dataLayer) */}
       <DealsTracking slug={page.slug} />
-
-      {/* 모바일 전용 상단 헤더(데스크톱은 GNB라 pc:hidden). pt-14(=h-14)가 이 fixed 헤더 높이 보정. */}
       <DealsMobileHeader title={page.modelName} />
 
-      {/* PC 2단 grid: 좌(본문 2/3)·우(sticky 요약 1/3). 모바일은 단일 컬럼 세로 흐름. */}
       <div className="pc:grid pc:grid-cols-3 pc:items-start pc:gap-x-10">
-        {/* === 좌측 본문 (PC 2/3) === */}
         <div className="pc:col-span-2">
-          {/* 블록1: 히어로 (대표 이미지 + 모델명 + 최저가) */}
-          <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+          {/* 히어로 — 구매 판단 */}
+          <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start">
             {heroImage && (
               <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-lg bg-gray-50">
                 <Image
@@ -269,68 +249,144 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                 />
               </div>
             )}
-            <div className="min-w-0">
-              <h1 className="text-xl font-bold">{page.modelName} 핫딜 최저가 모음</h1>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl font-bold">{page.modelName}, 지금 사도 될까?</h1>
               <p className="mt-1 text-sm text-gray-500">
+                커뮤니티 핫딜을 단위가로 모아, 사도 되는 가격을 알려드립니다.
+              </p>
+              <p className="mt-1 text-xs text-gray-400">
                 {page.brand ? `${page.brand} · ` : ''}최근 핫딜 {page.dealCount}건
                 {page.lastDealAt
                   ? ` · 마지막 ${new Date(page.lastDealAt).toLocaleDateString('ko-KR')}`
                   : ''}
               </p>
-              {/* 핫딜 최저가 — 단위 축(basis=unit)이면 단위가를 메인, 총액·팩라벨은 보조.
-                  총액 축/구 payload는 기존처럼 총액 메인. */}
-              {heroPrice?.minPrice != null && (
-                <div className="mt-2">
-                  {histBasis === 'unit' && heroPrice.unitPrice != null && heroPrice.unitLabel ? (
-                    <>
-                      <p className="text-lg font-semibold text-gray-900">
-                        핫딜 최저 {heroPrice.unitLabel} {won(heroPrice.unitPrice)}
-                      </p>
-                      <p className="mt-0.5 text-sm text-gray-500">
-                        {heroPrice.label} · 총액 {won(heroPrice.minPrice)}
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-lg font-semibold text-gray-900">
-                        핫딜 최저 {won(heroPrice.minPrice)}
-                      </p>
-                      <p className="mt-0.5 text-sm text-gray-500">
-                        {heroPrice.label}
-                        {heroPrice.unitPrice != null && heroPrice.unitLabel
-                          ? ` · ${heroPrice.unitLabel} ${won(heroPrice.unitPrice)}`
+
+              {(timing.current > 0 || heroPrice?.minPrice != null) && (
+                <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50 p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {timing.tone !== 'unknown' && (
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${timingToneClass}`}
+                      >
+                        {timing.label}
+                      </span>
+                    )}
+                    {timing.activeDealCount > 0 && (
+                      <span className="text-[11px] text-gray-400">
+                        진행 중 {timing.activeDealCount}건 기준
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                    <div>
+                      <p className="text-[11px] text-gray-400">
+                        지금 진행 최저
+                        {timing.basis === 'unit' && timing.unitLabel
+                          ? ` (${timing.unitLabel})`
                           : ''}
                       </p>
-                    </>
+                      <p className="text-lg font-semibold text-gray-900">
+                        {timing.current > 0
+                          ? won(timing.current)
+                          : histBasis === 'unit' && heroPrice?.unitPrice != null
+                            ? won(heroPrice.unitPrice)
+                            : won(heroPrice?.minPrice)}
+                      </p>
+                      {heroPrice?.label && (
+                        <p className="text-xs text-gray-500">
+                          {heroPrice.label}
+                          {heroPrice.minPrice != null ? ` · 총액 ${won(heroPrice.minPrice)}` : ''}
+                        </p>
+                      )}
+                    </div>
+                    {timing.avg != null && (
+                      <div>
+                        <p className="text-[11px] text-gray-400">추이 평균 대비</p>
+                        <p className="text-lg font-semibold text-gray-900">
+                          {timing.savePct != null
+                            ? timing.savePct > 0
+                              ? `약 ${timing.savePct}% 저렴`
+                              : timing.savePct < 0
+                                ? `약 ${Math.abs(timing.savePct)}% 비쌈`
+                                : '평균 수준'
+                            : '-'}
+                        </p>
+                        <p className="text-xs text-gray-500">평균 {fmtHist(timing.avg)}</p>
+                      </div>
+                    )}
+                    {timing.buyLine != null && (
+                      <div>
+                        <p className="text-[11px] text-gray-400">이하면 사도 됨</p>
+                        <p className="text-lg font-semibold text-gray-900">
+                          {fmtHist(timing.buyLine)}
+                        </p>
+                        <p className="text-xs text-gray-500">추이 하위 구간 기준</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {activeDeals.length > 0 && (
+                    <a
+                      href="#deals-list"
+                      className="mt-3 inline-flex text-sm font-semibold text-gray-900 underline-offset-2 hover:underline"
+                    >
+                      지금 살 수 있는 딜 보기 →
+                    </a>
                   )}
                 </div>
               )}
             </div>
           </header>
 
-          {/* 블록0: 용량/수량별 대표 상품 맵 (다나와 판매처수 순, 핫딜 있는 수량만) */}
-          {representatives.length > 0 && (
+          {/* 용량·수량 — 추천 팩 */}
+          {rankedReps.length > 0 && (
             <section className="mb-6">
-              <h2 className="mb-3 text-base font-semibold">용량·수량별 대표 상품</h2>
+              <div className="mb-3 flex items-baseline justify-between gap-2">
+                <h2 className="text-base font-semibold">용량·수량별 대표 상품</h2>
+                {bestRep && (
+                  <span className="text-xs text-gray-400">
+                    가성비 1위 {bestRep.label}
+                    {bestRep.unitPrice != null && bestRep.unitLabel
+                      ? ` · ${bestRep.unitLabel} ${won(bestRep.unitPrice)}`
+                      : ''}
+                  </span>
+                )}
+              </div>
               <div className="grid grid-cols-2 gap-2">
-                {representatives.map((rep, i) => {
-                  // 다나와 링크 있으면 클릭 가능한 a, 없으면 div
+                {rankedReps.map((rep, i) => {
                   const Card = rep.danawaUrl ? 'a' : 'div';
+                  const danawaDisplay =
+                    rep.danawaPrice != null && rep.danawaPrice > 0 ? rep.danawaPrice : null;
                   return (
                     <Card
                       key={i}
                       {...(rep.danawaUrl
                         ? { href: rep.danawaUrl, target: '_blank', rel: 'noopener noreferrer' }
                         : {})}
-                      className="flex flex-col gap-1 rounded-lg border border-gray-200 p-3 hover:bg-gray-50"
+                      className={`flex flex-col gap-1 rounded-lg border p-3 hover:bg-gray-50 ${
+                        rep.isBestUnit ? 'border-emerald-300 bg-emerald-50/40' : 'border-gray-200'
+                      }`}
                     >
                       <div className="flex items-center justify-between gap-1">
                         <span className="text-sm font-medium">{rep.label}</span>
-                        {rep.priceRank && (
-                          <span className="shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">
-                            다나와 {rep.priceRank}
-                          </span>
-                        )}
+                        <div className="flex shrink-0 flex-wrap justify-end gap-1">
+                          {rep.isBestUnit && (
+                            <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">
+                              단위가 최저
+                            </span>
+                          )}
+                          {(rep.activeDeals > 0 || rep.dealMinPrice != null) && (
+                            <span className="rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-semibold text-sky-700">
+                              핫딜
+                            </span>
+                          )}
+                          {rep.priceRank && (
+                            <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">
+                              다나와 {rep.priceRank}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       {rep.dealMinPrice != null && (
                         <span className="text-sm font-semibold text-gray-900">
@@ -343,8 +399,9 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                         </span>
                       )}
                       <span className="text-xs text-gray-400">
-                        {rep.danawaPrice != null ? `다나와 ${won(rep.danawaPrice)}` : ''}
+                        {danawaDisplay != null ? `다나와 ${won(danawaDisplay)}` : ''}
                         {rep.mallCount ? ` · ${rep.mallCount}곳` : ''}
+                        {rep.danawaSaving != null ? ` · ${won(rep.danawaSaving)} 절약` : ''}
                         {rep.danawaUrl ? ' ›' : ''}
                       </span>
                     </Card>
@@ -354,7 +411,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             </section>
           )}
 
-          {/* 블록5: 핫딜 최저가 추이 — granularity(day/week/month) + basis(unit/total). */}
+          {/* 핫딜 최저가 추이 + 지금 위치 */}
           {histPoints.length >= 2 && (
             <section className="mb-6">
               <div className="mb-1 flex items-baseline justify-between">
@@ -368,118 +425,91 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                 </span>
               </div>
               <p className="mb-3 text-xs text-gray-500">
-                역대 최저 <span className="text-error-500 font-semibold">{fmtHist(histMin)}</span>
+                {nowPrice != null && (
+                  <>
+                    지금 <span className="font-semibold text-gray-800">{fmtHist(nowPrice)}</span>
+                    <span className="text-gray-300"> · </span>
+                  </>
+                )}
+                추이 최저 <span className="text-error-500 font-semibold">{fmtHist(histMin)}</span>
                 <span className="text-gray-300"> · </span>
                 최고 {fmtHist(histMax)}
+                {timing.buyLine != null && (
+                  <>
+                    <span className="text-gray-300"> · </span>
+                    기준 {fmtHist(timing.buyLine)}
+                  </>
+                )}
               </p>
-              {/* 막대 위 가격 라벨은 최저/최고만. X라벨은 격점(겹침 방지). */}
-              <div className="flex items-end gap-1" style={{ height: 96 }}>
-                {histPoints.map((p, i) => {
-                  const isLow = p.price === histMin;
-                  const isHigh = p.price === histMax;
-                  const showLabel = i % 2 === 0 || i === histPoints.length - 1;
-                  return (
-                    <div
-                      key={p.month}
-                      className="flex flex-1 flex-col items-center justify-end gap-1"
-                    >
-                      {(isLow || isHigh) && (
-                        <span
-                          className={`text-[9px] whitespace-nowrap ${isLow ? 'text-error-500 font-semibold' : 'text-gray-400'}`}
-                        >
-                          {fmtHist(p.price)}
-                        </span>
-                      )}
+              <div className="relative">
+                {timing.buyLine != null && histMax > histMin && (
+                  <div
+                    className="pointer-events-none absolute right-0 left-0 border-t border-dashed border-gray-300"
+                    style={{
+                      // 막대 영역 96px 중 라벨(~16) + 바(72 max) + x라벨. 바 bottom≈12px(x라벨).
+                      bottom: `${12 + histBarH(timing.buyLine)}px`,
+                    }}
+                    title={`기준 ${fmtHist(timing.buyLine)}`}
+                  />
+                )}
+                <div className="flex items-end gap-1" style={{ height: 96 }}>
+                  {histPoints.map((p, i) => {
+                    const isLow = p.price === histMin;
+                    const isHigh = p.price === histMax;
+                    const isNearNow =
+                      nowPrice != null && Math.abs(p.price - nowPrice) / (histMax || 1) < 0.02;
+                    const showLabel = i % 2 === 0 || i === histPoints.length - 1;
+                    return (
                       <div
-                        className={`w-full rounded-t ${isLow ? 'bg-error-400' : 'bg-secondary-300'}`}
-                        style={{ height: `${histBarH(p.price)}px` }}
-                        title={`${p.month}: ${fmtHist(p.price)}`}
-                      />
-                      <span className="h-3 text-[9px] text-gray-400">
-                        {showLabel ? histPeriodLabel(p.month, histGranularity) : ''}
-                      </span>
-                    </div>
-                  );
-                })}
+                        key={p.month}
+                        className="flex flex-1 flex-col items-center justify-end gap-1"
+                      >
+                        {(isLow || isHigh || isNearNow) && (
+                          <span
+                            className={`text-[9px] whitespace-nowrap ${
+                              isNearNow
+                                ? 'font-semibold text-emerald-600'
+                                : isLow
+                                  ? 'text-error-500 font-semibold'
+                                  : 'text-gray-400'
+                            }`}
+                          >
+                            {isNearNow ? `지금 ${fmtHist(p.price)}` : fmtHist(p.price)}
+                          </span>
+                        )}
+                        <div
+                          className={`w-full rounded-t ${
+                            isNearNow
+                              ? 'bg-emerald-500'
+                              : isLow
+                                ? 'bg-error-400'
+                                : 'bg-secondary-300'
+                          }`}
+                          style={{ height: `${histBarH(p.price)}px` }}
+                          title={`${p.month}: ${fmtHist(p.price)}`}
+                        />
+                        <span className="h-3 text-[9px] text-gray-400">
+                          {showLabel ? histPeriodLabel(p.month, histGranularity) : ''}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </section>
           )}
 
-          {/* 블록4: 핫딜 목록 (싼 순). 역대 최저가 배지 + 출처.
-              단위 축이면 배지도 unitPrice↔histMin 비교(총액끼리 비교하면 항상 false). */}
-          <section className="mb-6">
-            <h2 className="mb-3 text-base font-semibold">
-              핫딜 목록 (
-              {histBasis === 'unit' && histUnitLabel ? `${histUnitLabel} 싼 순` : '싼 순'})
-            </h2>
-            <ul className="flex flex-col gap-2">
-              {deals.map((deal) => {
-                const comparePrice =
-                  histBasis === 'unit' && histUnitLabel && deal.unitLabel === histUnitLabel
-                    ? deal.unitPrice
-                    : deal.price;
-                const isAllTimeLow = histMin > 0 && comparePrice != null && comparePrice <= histMin;
-                return (
-                  <li key={deal.productId}>
-                    <a
-                      href={`/products/${deal.productId}`}
-                      className="flex items-center gap-3 rounded-lg border border-gray-100 p-3 hover:bg-gray-50"
-                    >
-                      {deal.thumbnail && (
-                        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded bg-gray-50">
-                          <Image
-                            src={deal.thumbnail}
-                            alt=""
-                            fill
-                            sizes="56px"
-                            className="object-contain"
-                          />
-                        </div>
-                      )}
-                      <div className="min-w-0 flex-1">
-                        <div className="line-clamp-2 text-sm">{deal.title}</div>
-                        <div className="mt-1 flex items-center gap-2 text-xs text-gray-400">
-                          {deal.mallName && <span className="text-gray-500">{deal.mallName}</span>}
-                          {deal.postedAt && (
-                            <span>{new Date(deal.postedAt).toLocaleDateString('ko-KR')}</span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex shrink-0 flex-col items-end gap-0.5">
-                        {deal.isEnd && (
-                          <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold text-gray-500">
-                            종료
-                          </span>
-                        )}
-                        {isAllTimeLow && (
-                          <span className="bg-error-50 text-error-600 rounded px-1.5 py-0.5 text-[10px] font-semibold">
-                            역대 최저
-                          </span>
-                        )}
-                        <span
-                          className={`text-sm font-medium ${deal.isEnd ? 'text-gray-400 line-through' : 'text-gray-700'}`}
-                        >
-                          {won(deal.price)}
-                        </span>
-                        {deal.unitPrice != null && deal.unitLabel && (
-                          <span className="text-[11px] text-gray-400">
-                            {deal.unitLabel} {won(deal.unitPrice)}
-                          </span>
-                        )}
-                      </div>
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-            {deals.length === 0 && <p className="text-sm text-gray-400">표시할 핫딜이 없습니다.</p>}
-          </section>
+          <DealsListSection
+            activeDeals={activeDeals}
+            historyDeals={historyDeals}
+            histBasis={histBasis}
+            histUnitLabel={histUnitLabel}
+            histMin={histMin}
+            listTitleSuffix={listTitleSuffix}
+          />
         </div>
-        {/* === /좌측 본문 === */}
 
-        {/* === 우측 요약 (PC 1/3, sticky). 모바일은 본문 아래 세로로 이어짐 === */}
         <aside className="pc:sticky pc:top-24 pc:col-span-1 flex flex-col gap-4">
-          {/* 블록2: 다나와 가격비교 (verified 일 때만) */}
           {danawa?.danawaUrl && (
             <a
               href={danawa.danawaUrl}
@@ -490,7 +520,8 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               <div>
                 <div className="text-sm font-medium">다나와 최저가 비교</div>
                 <div className="mt-0.5 text-xs text-gray-500">
-                  {danawa.mallCount ? `${danawa.mallCount}개 쇼핑몰` : ''}
+                  상시몰 가격 검증
+                  {danawa.mallCount ? ` · ${danawa.mallCount}곳` : ''}
                   {danawa.danawaPrice ? ` · ${won(danawa.danawaPrice)}` : ''}
                 </div>
               </div>
@@ -498,7 +529,6 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             </a>
           )}
 
-          {/* 블록6: 관련 모델 (내부링크) */}
           {relatedModels.length > 0 && (
             <section className="rounded-lg border border-gray-100 p-4">
               <h2 className="mb-3 text-base font-semibold">{page.brand} 다른 모델</h2>
@@ -516,7 +546,6 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             </section>
           )}
         </aside>
-        {/* === /우측 요약 === */}
       </div>
     </main>
   );
