@@ -19,6 +19,7 @@
 /apps/mobile/.expo/
 /apps/mobile/.expo-shared/
 /apps/mobile/credentials.json
+/apps/mobile/credentials/
 /apps/mobile/*.p8
 /apps/mobile/*.p12
 /apps/mobile/*.mobileprovision
@@ -50,6 +51,8 @@
 /apps/mobile/ios/**/*.xcuserstate
 
 .idea
-# Ignore Cursor project files
+# Ignore Cursor / local agent files
 .cursor/
 .claude/
+.agents/
+.gstack/
