@@ -50,7 +50,25 @@ interface PriceHistory {
   /** unit=단위가 축, total(또는 생략)=총액 축. 구 payload 호환 위해 optional. */
   basis?: 'unit' | 'total';
   unitLabel?: string;
+  /** day/week/month. 구 payload 없으면 month. points[].month 에 기간 키. */
+  granularity?: 'day' | 'week' | 'month';
   points: PricePoint[];
+}
+
+/** 추이 X축 라벨 — granularity 에 맞게 짧게. */
+function histPeriodLabel(period: string, granularity: 'day' | 'week' | 'month'): string {
+  if (granularity === 'week') {
+    // 2026-W24 → W24
+    const m = period.match(/W(\d+)$/i);
+    return m ? `W${m[1]}` : period.slice(-3);
+  }
+  if (granularity === 'day') {
+    // 2026-06-14 → 6/14
+    const m = period.match(/^\d{4}-(\d{2})-(\d{2})$/);
+    if (m) return `${Number(m[1])}/${Number(m[2])}`;
+  }
+  // month: 2026-06 → 26-06
+  return period.length >= 7 ? period.slice(2) : period;
 }
 
 interface RelatedModel {
@@ -145,6 +163,13 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const histCurrency = priceHistory?.currency ?? 'KRW';
   const histBasis = priceHistory?.basis ?? 'total';
   const histUnitLabel = priceHistory?.unitLabel;
+  const histGranularity = priceHistory?.granularity ?? 'month';
+  const histTitle =
+    histGranularity === 'day'
+      ? '일별 핫딜 최저가 추이'
+      : histGranularity === 'week'
+        ? '주별 핫딜 최저가 추이'
+        : '월별 핫딜 최저가 추이';
   const fmtHist = (n: number) => {
     if (histBasis === 'unit') {
       // 단위 축: "21원" + 섹션에 unitLabel 표기. USD 직구 단위축은 배치에서 안 씀.
@@ -329,12 +354,11 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             </section>
           )}
 
-          {/* 블록5: 월별 핫딜 최저가 추이 — min~max 정규화 + 최저가 강조.
-              basis=unit 이면 Y축이 단위가(100ml당 등). 구 payload(basis 없음)는 총액. */}
+          {/* 블록5: 핫딜 최저가 추이 — granularity(day/week/month) + basis(unit/total). */}
           {histPoints.length >= 2 && (
             <section className="mb-6">
               <div className="mb-1 flex items-baseline justify-between">
-                <h2 className="text-base font-semibold">월별 핫딜 최저가 추이</h2>
+                <h2 className="text-base font-semibold">{histTitle}</h2>
                 <span className="text-xs text-gray-400">
                   {histBasis === 'unit' && histUnitLabel
                     ? histUnitLabel
@@ -348,12 +372,12 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                 <span className="text-gray-300"> · </span>
                 최고 {fmtHist(histMax)}
               </p>
-              {/* 막대 위 가격 라벨은 최저/최고만(겹침 방지, 나머지는 hover title). 월 라벨은 격월. */}
+              {/* 막대 위 가격 라벨은 최저/최고만. X라벨은 격점(겹침 방지). */}
               <div className="flex items-end gap-1" style={{ height: 96 }}>
                 {histPoints.map((p, i) => {
                   const isLow = p.price === histMin;
                   const isHigh = p.price === histMax;
-                  const showMonth = i % 2 === 0 || i === histPoints.length - 1;
+                  const showLabel = i % 2 === 0 || i === histPoints.length - 1;
                   return (
                     <div
                       key={p.month}
@@ -372,7 +396,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                         title={`${p.month}: ${fmtHist(p.price)}`}
                       />
                       <span className="h-3 text-[9px] text-gray-400">
-                        {showMonth ? p.month.slice(2) : ''}
+                        {showLabel ? histPeriodLabel(p.month, histGranularity) : ''}
                       </span>
                     </div>
                   );

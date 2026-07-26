@@ -131,16 +131,24 @@ export default async function DealsIndexPage() {
                                 </span>
                               ) : null;
                             })()}
-                            {p.heroMinPrice != null ? (
+                            {/* Step6·8: 단위 있으면 단위가 메인, 없으면 총액(또는 건수만).
+                                단위 줄을 억지로 만들지 않음. */}
+                            {p.unitLabel && p.unitPrice != null ? (
+                              <div className="mt-auto">
+                                <p className="text-lg font-semibold text-gray-900">
+                                  {p.unitLabel} {p.unitPrice.toLocaleString()}원
+                                </p>
+                                {p.heroMinPrice != null && (
+                                  <p className="text-xs text-gray-400">
+                                    총액 {p.heroMinPrice.toLocaleString()}원
+                                  </p>
+                                )}
+                              </div>
+                            ) : p.heroMinPrice != null ? (
                               <div className="mt-auto">
                                 <p className="text-lg font-semibold text-gray-900">
                                   {p.heroMinPrice.toLocaleString()}원
                                 </p>
-                                {p.unitLabel && p.unitPrice != null && (
-                                  <p className="text-xs text-gray-400">
-                                    {p.unitLabel} {p.unitPrice.toLocaleString()}원
-                                  </p>
-                                )}
                               </div>
                             ) : (
                               <p className="mt-auto text-xs text-gray-400">핫딜 {p.dealCount}건</p>
