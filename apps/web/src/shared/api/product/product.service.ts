@@ -268,6 +268,8 @@ export interface ProductPriceHistory {
   pointCount: number;
   sampleCount: number;
   disclaimer: string | null;
+  priceAxis?: string | null;
+  unitLabel?: string | null;
   points: PriceHistoryPoint[];
 }
 
@@ -302,6 +304,8 @@ const QueryProductPriceHistory = new TypedDocumentString<
         pointCount
         sampleCount
         disclaimer
+        priceAxis
+        unitLabel
         points {
           date
           price

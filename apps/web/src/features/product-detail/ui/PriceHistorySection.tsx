@@ -9,6 +9,7 @@ import type {
   PriceHistoryDeal,
   PriceHistoryPoint,
   ProductModelPageLink,
+  ProductPriceHistory,
 } from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
 import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
@@ -47,6 +48,38 @@ function won(price: number, currency?: string | null): string {
   return `${Math.round(price).toLocaleString()}원`;
 }
 
+/** 절약 카피 최소액 — 이하면 ‘N원 절약’이 초라해져 숨김 */
+const MIN_SAVE_AMOUNT = (currency?: string | null) => (currency === 'USD' ? 1 : 1000);
+/** 가격대 상위 구간(비싼 편) — 절약 카피 숨김 */
+const EXPENSIVE_RATIO = 0.7;
+
+/**
+ * 현재가 배지: 최저 대비(+)가 아니라 최고 대비 절약(−)으로 프레이밍.
+ * - 기간 최저 → 「기간 최저」
+ * - 비싼 구간 / 절약액 미미 → 숨김
+ * - 그 외 → 「최고 대비 N원 절약」
+ */
+function resolveCurrentPriceBadge(
+  currentPrice: number,
+  minPrice: number,
+  maxPrice: number,
+  currency?: string | null,
+): { text: string; tone: 'positive' } | null {
+  if (currentPrice <= minPrice) {
+    return { text: '기간 최저', tone: 'positive' };
+  }
+  if (maxPrice <= minPrice) return null;
+
+  const range = maxPrice - minPrice;
+  const ratio = (currentPrice - minPrice) / range;
+  if (ratio > EXPENSIVE_RATIO) return null;
+
+  const saveAmount = maxPrice - currentPrice;
+  if (saveAmount < MIN_SAVE_AMOUNT(currency)) return null;
+
+  return { text: `최고 대비 ${won(saveAmount, currency)} 절약`, tone: 'positive' };
+}
+
 function shortWon(price: number, currency?: string | null): string {
   if (currency === 'USD') return `$${Math.round(price).toLocaleString()}`;
   if (price >= 10000) return `${Math.round(price / 1000).toLocaleString()}k`;
@@ -82,6 +115,16 @@ function parsePointDateMs(date: string): number {
 
 function dealTitle(deal: PriceHistoryDeal): string {
   return deal.displayTitle || deal.title || `상품 #${deal.id}`;
+}
+
+function resolveSubtitle(history: ProductPriceHistory): string {
+  if (history.basis === 'SIMILAR') {
+    return '비슷한 상품 핫딜을 모아 참고용으로 보여드려요';
+  }
+  if (history.confidence === 'HIGH' && history.basis === 'MAPPING' && history.unitLabel) {
+    return `같은 모델 핫딜가(${history.unitLabel})를 모아 보여드려요`;
+  }
+  return '같은 상품의 커뮤니티 핫딜가를 모아 보여드려요';
 }
 
 function sameProductId(a: number | string, b: number): boolean {
@@ -484,16 +527,13 @@ export default function PriceHistorySection({
     (typeof currentPriceProp === 'number' && currentPriceProp > 0
       ? currentPriceProp
       : orderedForMeta[orderedForMeta.length - 1]?.price);
-  const isPeriodLow = currentPrice <= minPrice;
+  const currentPriceBadge = resolveCurrentPriceBadge(currentPrice, minPrice, maxPrice, currency);
   // 축·문구: 오른쪽=오늘, 왼쪽=선택 기간(이 상품이 더 과거면 그때까지)
   const rangeFromLabel = toKstDateString(contentStartMs);
   const rangeToLabel = toKstDateString(contentEndMs);
   const visiblePeriods = periodStates.filter((p) => p.enabled);
 
-  const subtitle =
-    history.basis === 'SIMILAR'
-      ? '비슷한 상품 핫딜을 모아 참고용으로 보여드려요'
-      : '같은 상품의 커뮤니티 핫딜가를 모아 보여드려요';
+  const subtitle = resolveSubtitle(history);
 
   // 유사(LOW) 추이에서는 모델 페이지로 보내지 않음 — 틀린 연결 방지.
   const showModelPageCta =
@@ -542,11 +582,9 @@ export default function PriceHistorySection({
           <span className="text-sm font-bold text-gray-900 sm:text-base">
             {won(currentPrice, currency)}
           </span>
-          {isPeriodLow ? (
-            <span className="text-[11px] font-medium text-emerald-600">기간 최저</span>
-          ) : minPrice > 0 ? (
-            <span className="text-[11px] text-gray-400">
-              최저 대비 +{Math.round(((currentPrice - minPrice) / minPrice) * 100)}%
+          {currentPriceBadge ? (
+            <span className="text-[11px] font-medium text-emerald-600">
+              {currentPriceBadge.text}
             </span>
           ) : null}
         </div>
