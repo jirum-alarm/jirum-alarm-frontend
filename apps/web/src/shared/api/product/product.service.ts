@@ -32,8 +32,10 @@ import {
 } from '../gql/graphql';
 
 export type ProductListQueryVariables = QueryProductsQueryVariables & {
-  providerId?: number;
-  mallGroupId?: number;
+  categoryIds?: number[] | null;
+  providerId?: number | null;
+  providerIds?: number[] | null;
+  mallGroupId?: number | null;
 };
 
 export class ProductService {
@@ -417,11 +419,13 @@ const QueryProducts = new TypedDocumentString<QueryProductsQuery, ProductListQue
     $orderBy: ProductOrderType
     $orderOption: OrderOptionType
     $categoryId: Int
+    $categoryIds: [Int!]
     $keyword: String
     $thumbnailType: ThumbnailType
     $isEnd: Boolean
     $isHot: Boolean
     $providerId: Int
+    $providerIds: [Int!]
     $mallGroupId: Int
   ) {
     products(
@@ -431,11 +435,13 @@ const QueryProducts = new TypedDocumentString<QueryProductsQuery, ProductListQue
       orderBy: $orderBy
       orderOption: $orderOption
       categoryId: $categoryId
+      categoryIds: $categoryIds
       keyword: $keyword
       thumbnailType: $thumbnailType
       isEnd: $isEnd
       isHot: $isHot
       providerId: $providerId
+      providerIds: $providerIds
       mallGroupId: $mallGroupId
     ) {
       id

@@ -41,8 +41,8 @@ export const useProductListViewModel = ({
       ...ProductQueries.infiniteProducts({
         limit,
         keyword: keywordParam || undefined,
-        categoryId: filters.categoryId > 0 ? filters.categoryId : undefined,
-        providerId: filters.providerId > 0 ? filters.providerId : undefined,
+        categoryIds: filters.categoryIds.length > 0 ? filters.categoryIds : undefined,
+        providerIds: filters.providerIds.length > 0 ? filters.providerIds : undefined,
         startDate,
         // ended(품절 포함) ON일 때만 isEnd: true — 백엔드에서 true는 '종료 포함' 의미.
         isEnd: filters.ended ? true : undefined,
@@ -52,7 +52,7 @@ export const useProductListViewModel = ({
             : filters.sort === 'comments'
               ? ProductOrderType.CommentCount
               : undefined,
-      } as any),
+      }),
       placeholderData: keepPreviousData,
     });
   const pages = data?.pages ?? [];

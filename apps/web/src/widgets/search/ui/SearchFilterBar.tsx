@@ -62,7 +62,14 @@ function Chip({
 }
 
 export default function SearchFilterBar({ controller }: { controller: SearchFiltersController }) {
-  const { filters, setFilters, resetFilters, hasActiveFilters } = controller;
+  const {
+    filters,
+    setFilters,
+    resetFilters,
+    hasActiveFilters,
+    toggleCategoryId,
+    toggleProviderId,
+  } = controller;
   const { data: categoryData } = useQuery(CategoryQueries.categories());
   const { data: providerData } = useQuery(ProviderQueries.communityProviders());
 
@@ -115,7 +122,10 @@ export default function SearchFilterBar({ controller }: { controller: SearchFilt
 
       {categories.length > 0 && (
         <FilterRow label="카테고리">
-          <Chip active={filters.categoryId === 0} onClick={() => setFilters({ categoryId: null })}>
+          <Chip
+            active={filters.categoryIds.length === 0}
+            onClick={() => setFilters({ categoryIds: null })}
+          >
             전체
           </Chip>
           {categories.map((category) => {
@@ -123,8 +133,8 @@ export default function SearchFilterBar({ controller }: { controller: SearchFilt
             return (
               <Chip
                 key={id}
-                active={filters.categoryId === id}
-                onClick={() => setFilters({ categoryId: id })}
+                active={filters.categoryIds.includes(id)}
+                onClick={() => toggleCategoryId(id)}
               >
                 {category.name}
               </Chip>
@@ -135,7 +145,10 @@ export default function SearchFilterBar({ controller }: { controller: SearchFilt
 
       {providers.length > 0 && (
         <FilterRow label="출처">
-          <Chip active={filters.providerId === 0} onClick={() => setFilters({ providerId: null })}>
+          <Chip
+            active={filters.providerIds.length === 0}
+            onClick={() => setFilters({ providerIds: null })}
+          >
             전체
           </Chip>
           {providers.map((provider) => {
@@ -143,8 +156,8 @@ export default function SearchFilterBar({ controller }: { controller: SearchFilt
             return (
               <Chip
                 key={id}
-                active={filters.providerId === id}
-                onClick={() => setFilters({ providerId: id })}
+                active={filters.providerIds.includes(id)}
+                onClick={() => toggleProviderId(id)}
               >
                 {provider.nameKr}
               </Chip>

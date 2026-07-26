@@ -2063,6 +2063,8 @@ type Query {
   products(
     brandProductId: Int
     categoryId: Int
+    """카테고리 다중 선택 (OR)"""
+    categoryIds: [Int!]
     endDate: DateTime
     isApp: Boolean
     isEnd: Boolean
@@ -2075,6 +2077,8 @@ type Query {
     orderBy: ProductOrderType
     orderOption: OrderOptionType
     providerId: Int
+    """출처 커뮤니티 다중 선택 (OR)"""
+    providerIds: [Int!]
     searchAfter: [String!]
     startDate: DateTime
     thumbnailType: ThumbnailType

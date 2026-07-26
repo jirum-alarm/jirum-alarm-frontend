@@ -2097,6 +2097,7 @@ export type QueryProductRegistrationStatsByProviderArgs = {
 export type QueryProductsArgs = {
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
   categoryId?: InputMaybe<Scalars['Int']['input']>;
+  categoryIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   endDate?: InputMaybe<Scalars['DateTime']['input']>;
   isApp?: InputMaybe<Scalars['Boolean']['input']>;
   isEnd?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2109,6 +2110,7 @@ export type QueryProductsArgs = {
   orderBy?: InputMaybe<ProductOrderType>;
   orderOption?: InputMaybe<OrderOptionType>;
   providerId?: InputMaybe<Scalars['Int']['input']>;
+  providerIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
   startDate?: InputMaybe<Scalars['DateTime']['input']>;
   thumbnailType?: InputMaybe<ThumbnailType>;
@@ -3116,10 +3118,14 @@ export type QueryProductsQueryVariables = Exact<{
   orderBy?: InputMaybe<ProductOrderType>;
   orderOption?: InputMaybe<OrderOptionType>;
   categoryId?: InputMaybe<Scalars['Int']['input']>;
+  categoryIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   keyword?: InputMaybe<Scalars['String']['input']>;
   thumbnailType?: InputMaybe<ThumbnailType>;
   isEnd?: InputMaybe<Scalars['Boolean']['input']>;
   isHot?: InputMaybe<Scalars['Boolean']['input']>;
+  providerId?: InputMaybe<Scalars['Int']['input']>;
+  providerIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+  mallGroupId?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 export type QueryProductsQuery = {
