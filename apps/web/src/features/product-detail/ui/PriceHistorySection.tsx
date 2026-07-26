@@ -277,21 +277,28 @@ function computePeriodStates(allPoints: PriceHistoryPoint[], nowMs: number): Per
 }
 
 /**
- * 기본 기간: 3개월.
- * 점이 MIN_DEFAULT_POINTS 미만이면 충족될 때까지 더 긴 활성 탭으로 확장.
- * 3개월+ 탭이 전부 비활성이면(데이터 희소) 남은 활성 탭 중 가장 긴 것.
+ * 기본 기간:
+ * 1) 이 상품(seed) 게시 나이를 덮는 가장 짧은 활성 탭 (예: ~20개월 전 → 24개월)
+ * 2) 없으면 활성 탭 중 가장 긴 것
+ * 3) 그래도 점이 MIN_DEFAULT_POINTS 미만이면 더 긴 탭으로 확장
  */
-function pickDefaultDays(states: PeriodState[]): number {
+function pickDefaultDays(states: PeriodState[], seedMs: number | null, nowMs: number): number {
   const enabled = states.filter((s) => s.enabled).sort((a, b) => a.days - b.days);
   if (enabled.length === 0) return DEFAULT_PERIOD_DAYS;
 
-  const fromDefault = enabled.filter((s) => s.days >= DEFAULT_PERIOD_DAYS);
-  const candidates = fromDefault.length > 0 ? fromDefault : enabled;
+  const ageDays =
+    seedMs != null && Number.isFinite(seedMs) ? Math.max(0, (nowMs - seedMs) / DAY_MS) : 0;
 
-  for (const s of candidates) {
+  // seed 나이를 덮는 탭 우선 (짧→긴). 없으면 최장 탭.
+  const covering = enabled.find((s) => s.days + 1 >= ageDays);
+  const preferred = covering?.days ?? enabled[enabled.length - 1].days;
+
+  // 그 탭 점이 너무 적으면 더 긴 활성 탭으로 확장
+  const fromPreferred = enabled.filter((s) => s.days >= preferred);
+  for (const s of fromPreferred) {
     if (s.points.length >= MIN_DEFAULT_POINTS) return s.days;
   }
-  return candidates[candidates.length - 1].days;
+  return fromPreferred[fromPreferred.length - 1]?.days ?? preferred;
 }
 
 /** 점 필터용 — 선택 기간의 왼쪽 경계(오늘 기준) */
@@ -300,20 +307,17 @@ function resolvePeriodStartMs(nowMs: number, days: number): number {
 }
 
 /**
- * 차트 콘텐츠 구간.
- * - 오른쪽: 항상 오늘
- * - 왼쪽: 선택 기간 시작, 이 상품(seed)이 더 과거면 그때까지 확장
+ * 차트 콘텐츠 구간 = 선택한 기간만.
+ * (과거 seed 때문에 축을 늘리지 않음 — 3개월 탭이면 최근 3개월만)
  */
 function resolveContentRangeMs(
   nowMs: number,
   days: number,
-  seedMs: number | null,
 ): { contentStartMs: number; contentEndMs: number } {
-  const periodStart = resolvePeriodStartMs(nowMs, days);
-  const contentEndMs = nowMs;
-  const contentStartMs =
-    seedMs != null && Number.isFinite(seedMs) ? Math.min(periodStart, seedMs) : periodStart;
-  return { contentStartMs, contentEndMs };
+  return {
+    contentStartMs: resolvePeriodStartMs(nowMs, days),
+    contentEndMs: nowMs,
+  };
 }
 
 /** 점이 축 끝에 붙지 않도록 콘텐츠 구간 양옆에 버퍼 */
@@ -458,18 +462,21 @@ export default function PriceHistorySection({
 
   const periodStates = useMemo(() => computePeriodStates(allPoints, nowMs), [allPoints, nowMs]);
 
-  const defaultDays = useMemo(() => pickDefaultDays(periodStates), [periodStates]);
+  const defaultDays = useMemo(
+    () => pickDefaultDays(periodStates, seedMs, nowMs),
+    [periodStates, seedMs, nowMs],
+  );
   const days = useMemo(() => {
     const preferred = daysOverride ?? defaultDays;
     if (periodStates.some((s) => s.days === preferred && s.enabled)) return preferred;
     return defaultDays;
   }, [daysOverride, defaultDays, periodStates]);
 
-  // 점은 선택 기간으로 필터, 축은 이 상품(seed)~오늘을 포함해 잡는다
+  // 선택 기간만 표시 (seed가 더 과거여도 축을 늘리지 않음)
   const periodStartMs = useMemo(() => resolvePeriodStartMs(nowMs, days), [nowMs, days]);
   const { contentStartMs, contentEndMs } = useMemo(
-    () => resolveContentRangeMs(nowMs, days, seedMs),
-    [nowMs, days, seedMs],
+    () => resolveContentRangeMs(nowMs, days),
+    [nowMs, days],
   );
   const { axisStartMs, axisEndMs } = useMemo(
     () => withAxisBuffer(contentStartMs, contentEndMs),
@@ -481,11 +488,14 @@ export default function PriceHistorySection({
     [allPoints, periodStartMs, contentEndMs],
   );
 
-  // seed는 전체 점에서 찾음 (과거 상품이 오늘로 잘못 찍히는 것 방지)
-  const currentMarker = useMemo(
-    () => resolveCurrentProductMarker(allPoints, productId, currentPriceProp, postedAt),
-    [allPoints, productId, currentPriceProp, postedAt],
-  );
+  // 선택 기간 안에 있는 seed만 마커로 표시 (기간 밖 과거 상품은 축을 잡아먹지 않음)
+  const currentMarker = useMemo(() => {
+    const marker = resolveCurrentProductMarker(allPoints, productId, currentPriceProp, postedAt);
+    if (!marker) return null;
+    const t = parsePointDateMs(marker.date);
+    if (!Number.isFinite(t) || t < periodStartMs || t > contentEndMs) return null;
+    return marker;
+  }, [allPoints, productId, currentPriceProp, postedAt, periodStartMs, contentEndMs]);
 
   if (mounted && isError && process.env.NODE_ENV === 'development') {
     return (
@@ -512,24 +522,23 @@ export default function PriceHistorySection({
   }
 
   // 이 상품은 추이 데이터 없음 → 섹션 자체 숨김
-  // 기간 점 1개 + seed(기간 밖) 조합도 허용
   if (isError || !history || allPoints.length < 2) return null;
-  if (points.length < 2 && !(currentMarker && points.length >= 1)) return null;
+  if (points.length < 2) return null;
 
   const currency = history.currency;
   const orderedForMeta = [...points].sort(
     (a, b) => parsePointDateMs(a.date) - parsePointDateMs(b.date),
   );
-  const prices = [...points.map((p) => p.price), ...(currentMarker ? [currentMarker.price] : [])];
+  // 최저/최고는 선택 기간 점만. 현재가는 이 상품가(기간 밖이어도 표시).
+  const prices = points.map((p) => p.price);
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
   const currentPrice =
-    currentMarker?.price ??
-    (typeof currentPriceProp === 'number' && currentPriceProp > 0
+    typeof currentPriceProp === 'number' && currentPriceProp > 0
       ? currentPriceProp
-      : orderedForMeta[orderedForMeta.length - 1]?.price);
+      : (currentMarker?.price ?? orderedForMeta[orderedForMeta.length - 1]?.price);
   const currentPriceBadge = resolveCurrentPriceBadge(currentPrice, minPrice, maxPrice, currency);
-  // 축·문구: 오른쪽=오늘, 왼쪽=선택 기간(이 상품이 더 과거면 그때까지)
+  // 축·문구: 선택한 기간만 (왼쪽=기간 시작, 오른쪽=오늘)
   const rangeFromLabel = toKstDateString(contentStartMs);
   const rangeToLabel = toKstDateString(contentEndMs);
   const visiblePeriods = periodStates.filter((p) => p.enabled);
