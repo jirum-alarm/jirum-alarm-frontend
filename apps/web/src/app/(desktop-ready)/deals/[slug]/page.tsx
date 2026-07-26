@@ -19,6 +19,7 @@ interface Deal {
   price: number | null;
   unitPrice?: number | null; // 단위가(100ml당 등). 없으면 총액만.
   unitLabel?: string | null;
+  isEnd?: boolean; // 종료 딜도 목록에 포함 — 배지로 표시
   url: string;
   providerId: number;
   mallName: string | null; // 출처(쇼핑몰명)
@@ -421,12 +422,21 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                         </div>
                       </div>
                       <div className="flex shrink-0 flex-col items-end gap-0.5">
+                        {deal.isEnd && (
+                          <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold text-gray-500">
+                            종료
+                          </span>
+                        )}
                         {isAllTimeLow && (
                           <span className="bg-error-50 text-error-600 rounded px-1.5 py-0.5 text-[10px] font-semibold">
                             역대 최저
                           </span>
                         )}
-                        <span className="text-sm font-medium text-gray-700">{won(deal.price)}</span>
+                        <span
+                          className={`text-sm font-medium ${deal.isEnd ? 'text-gray-400 line-through' : 'text-gray-700'}`}
+                        >
+                          {won(deal.price)}
+                        </span>
                         {deal.unitPrice != null && deal.unitLabel && (
                           <span className="text-[11px] text-gray-400">
                             {deal.unitLabel} {won(deal.unitPrice)}
