@@ -4,6 +4,7 @@ import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 import usePostForm, { TaggedProduct } from '../model/usePostForm';
 
+import PostImageUploader from './PostImageUploader';
 import ProductTagModal from './ProductTagModal';
 
 export const POST_FORM_ID = 'community-post-form';
@@ -24,6 +25,10 @@ export default function PostForm({
     setTitle,
     content,
     setContent,
+    images,
+    uploadImages,
+    removeImage,
+    isUploadingImages,
     taggedProduct,
     setTaggedProduct,
     submitPost,
@@ -56,6 +61,13 @@ export default function PostForm({
           className="min-h-[200px] flex-1 resize-none text-sm leading-relaxed text-gray-900 placeholder-gray-400 outline-none"
         />
       </div>
+
+      <PostImageUploader
+        images={images}
+        isUploading={isUploadingImages}
+        onUpload={uploadImages}
+        onRemove={removeImage}
+      />
 
       {/* 상품 태그 */}
       <div className="border-t border-gray-100 px-5 py-4">

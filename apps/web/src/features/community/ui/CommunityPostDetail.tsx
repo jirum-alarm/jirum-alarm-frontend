@@ -13,7 +13,10 @@ import { AuthQueries } from '@/entities/auth';
 import { CommunityQueries } from '@/entities/community';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
+import { parsePostContent } from '../lib/postContent';
+
 import CommunityCommentSection from './CommunityCommentSection';
+import PostImages from './PostImages';
 import PostMenu from './PostMenu';
 
 export default function CommunityPostDetailClient({
@@ -58,6 +61,7 @@ export default function CommunityPostDetailClient({
 
   const isMyPost = `${post.author?.id ?? ''}` === `${authData?.me?.id ?? '##'}`;
   const hasTaggedProduct = !!post.taggedProduct?.id && post.taggedProduct.id !== '0';
+  const { content: displayContent, images } = parsePostContent(post.content);
 
   return (
     <div className="flex flex-col">
@@ -85,7 +89,13 @@ export default function CommunityPostDetailClient({
       {post.title && <h1 className="px-5 pb-2 text-lg font-bold text-gray-900">{post.title}</h1>}
 
       {/* 본문 */}
-      <p className="px-5 pb-4 text-base leading-relaxed text-gray-800">{post.content}</p>
+      {displayContent && (
+        <p className="px-5 pb-4 text-base leading-relaxed whitespace-pre-wrap text-gray-800">
+          {displayContent}
+        </p>
+      )}
+
+      <PostImages images={images} />
 
       {/* 상품 태그 */}
       {hasTaggedProduct && post.taggedProduct && (

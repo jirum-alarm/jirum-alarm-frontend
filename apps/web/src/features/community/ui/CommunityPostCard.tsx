@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { CommunityPostsQuery } from '@/shared/api/community/community.service';
@@ -11,11 +12,16 @@ import { BubbleChat, Eye, ThumbsupFill } from '@/shared/ui/common/icons';
 import { CommunityTab } from '@/entities/community';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
+import { parsePostContent } from '../lib/postContent';
+
 type Post = CommunityPostsQuery['comments'][number];
 
 export default function CommunityPostCard({ post, tab }: { post: Post; tab: CommunityTab }) {
   const isProductComment = !post.title && !!post.productId;
   const hasTaggedProduct = !!post.taggedProduct?.id && post.taggedProduct.id !== '0';
+  const { content: displayContent, images } = parsePostContent(post.content);
+  const previewImage = hasTaggedProduct ? post.taggedProduct?.thumbnail : images[0];
+  const showProductTitle = hasTaggedProduct && !!post.taggedProduct?.title;
 
   return (
     <Link
@@ -50,9 +56,11 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
         {post.title && (
           <p className="mt-2 truncate text-sm font-semibold text-gray-900">{post.title}</p>
         )}
-        <p className={cn('mt-1 text-sm text-gray-600', post.title ? 'truncate' : 'line-clamp-2')}>
-          {post.content}
-        </p>
+        {displayContent && (
+          <p className={cn('mt-1 text-sm text-gray-600', post.title ? 'truncate' : 'line-clamp-2')}>
+            {displayContent}
+          </p>
+        )}
 
         {/* 통계: 하단 고정 */}
         <div className="mt-auto flex items-center gap-x-3 pt-2 text-xs text-gray-400">
@@ -71,21 +79,32 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
         </div>
       </div>
 
-      {/* 오른쪽: 이미지 + 상품명 */}
-      {hasTaggedProduct && post.taggedProduct?.thumbnail ? (
+      {/* 오른쪽: 태그 상품 썸네일 또는 첨부 이미지 */}
+      {previewImage ? (
         <div className="flex w-20 flex-shrink-0 flex-col gap-y-1">
           <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-gray-100">
-            <ProductThumbnail
-              src={post.taggedProduct.thumbnail}
-              alt={post.taggedProduct?.title ?? ''}
-              title={post.taggedProduct?.title ?? ''}
-              type="product"
-              sizes="80px"
-            />
+            {hasTaggedProduct && post.taggedProduct?.thumbnail ? (
+              <ProductThumbnail
+                src={post.taggedProduct.thumbnail}
+                alt={post.taggedProduct?.title ?? ''}
+                title={post.taggedProduct?.title ?? ''}
+                type="product"
+                sizes="80px"
+              />
+            ) : (
+              <>
+                <Image src={previewImage} alt="" fill className="object-cover" sizes="80px" />
+                {images.length > 1 && (
+                  <span className="absolute right-1 bottom-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-medium text-white">
+                    +{images.length - 1}
+                  </span>
+                )}
+              </>
+            )}
           </div>
-          {post.taggedProduct?.title && (
+          {showProductTitle && (
             <p className="line-clamp-2 text-xs leading-tight text-gray-400">
-              {post.taggedProduct.title}
+              {post.taggedProduct!.title}
             </p>
           )}
         </div>

@@ -9,6 +9,7 @@ import { CommunityService } from '@/shared/api/community/community.service';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
+import { getPostDisplayContent, getPostImages } from '@/features/community/lib/postContent';
 import CommunityPostDetailClient from '@/features/community/ui/CommunityPostDetail';
 import CommunityPostPageHeader from '@/features/community/ui/CommunityPostPageHeader';
 
@@ -29,13 +30,18 @@ export async function generateMetadata({
     return { title: '게시글을 찾을 수 없습니다 | 지름알림' };
   }
 
-  const rawTitle = post.title?.trim() || post.content.trim().slice(0, 30);
+  const displayContent = getPostDisplayContent(post.content);
+  const postImages = getPostImages(post.content);
+  const rawTitle = post.title?.trim() || displayContent.trim().slice(0, 30) || '커뮤니티 게시글';
   const title = `${rawTitle} | 지름알림 커뮤니티`;
   const description =
-    post.content.replace(/\s+/g, ' ').trim().slice(0, 100) ||
+    displayContent.replace(/\s+/g, ' ').trim().slice(0, 100) ||
     '지름알림 커뮤니티에서 핫딜 정보를 나눠보세요.';
   const url = `${METADATA_SERVICE_URL}/community/${id}`;
-  const ogImage = post.taggedProduct?.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
+  const ogImage =
+    post.taggedProduct?.thumbnail ||
+    postImages[0] ||
+    `${METADATA_SERVICE_URL}/opengraph-image.webp`;
 
   return {
     title,

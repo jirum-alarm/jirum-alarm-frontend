@@ -9,6 +9,8 @@ import { BubbleChat, Eye, ThumbsupFill } from '@/shared/ui/common/icons';
 
 import { CommunityTab } from '@/entities/community';
 
+import { getPostDisplayContent } from '../lib/postContent';
+
 type Post = CommunityPostsQuery['comments'][number];
 
 export default function NoticePostCard({
@@ -20,6 +22,8 @@ export default function NoticePostCard({
   isNew?: boolean;
   tab: CommunityTab;
 }) {
+  const displayContent = getPostDisplayContent(post.content);
+
   return (
     <Link
       href={{ pathname: `${PAGE.COMMUNITY}/${post.id}`, query: { tab } }}
@@ -38,9 +42,11 @@ export default function NoticePostCard({
       </div>
 
       <p className="mt-2 truncate text-sm font-semibold text-gray-900">
-        {post.title ?? post.content}
+        {post.title ?? displayContent}
       </p>
-      {post.title && <p className="mt-0.5 truncate text-sm text-gray-600">{post.content}</p>}
+      {post.title && displayContent && (
+        <p className="mt-0.5 truncate text-sm text-gray-600">{displayContent}</p>
+      )}
 
       <div className="mt-2 flex items-center gap-x-3 text-xs text-gray-400">
         <span className="flex items-center gap-x-1">
