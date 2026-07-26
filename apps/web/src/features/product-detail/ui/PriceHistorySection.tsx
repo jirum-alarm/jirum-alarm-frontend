@@ -121,8 +121,9 @@ function resolveSubtitle(history: ProductPriceHistory): string {
   if (history.basis === 'SIMILAR') {
     return '비슷한 상품 핫딜을 모아 참고용으로 보여드려요';
   }
-  if (history.confidence === 'HIGH' && history.basis === 'MAPPING' && history.unitLabel) {
-    return `같은 모델 핫딜가(${history.unitLabel})를 모아 보여드려요`;
+  // brand_item SSOT(MAPPING HIGH)는 모델 라인 모음. 단위가 축은 /deals 전용이라 상세에선 안 씀.
+  if (history.confidence === 'HIGH' && history.basis === 'MAPPING') {
+    return '같은 모델의 커뮤니티 핫딜가를 모아 보여드려요';
   }
   return '같은 상품의 커뮤니티 핫딜가를 모아 보여드려요';
 }
