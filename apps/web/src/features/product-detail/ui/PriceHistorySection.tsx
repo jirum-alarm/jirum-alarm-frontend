@@ -5,7 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
-import type { PriceHistoryDeal, PriceHistoryPoint } from '@/shared/api/product/product.service';
+import type {
+  PriceHistoryDeal,
+  PriceHistoryPoint,
+  ProductModelPageLink,
+} from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
 import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 
@@ -400,6 +404,7 @@ export default function PriceHistorySection({
   });
 
   const history = data?.product?.priceHistory ?? null;
+  const modelPage = data?.product?.modelPage ?? null;
   const allPoints = history?.points ?? [];
 
   const seedMs = useMemo(
@@ -490,6 +495,10 @@ export default function PriceHistorySection({
       ? '비슷한 상품 핫딜을 모아 참고용으로 보여드려요'
       : '같은 상품의 커뮤니티 핫딜가를 모아 보여드려요';
 
+  // 유사(LOW) 추이에서는 모델 페이지로 보내지 않음 — 틀린 연결 방지.
+  const showModelPageCta =
+    !!modelPage?.slug && history.confidence === 'HIGH' && history.basis !== 'SIMILAR';
+
   return (
     <section className="py-0">
       <DetailSectionHeader title="가격 추이" subtitle={subtitle} />
@@ -562,7 +571,38 @@ export default function PriceHistorySection({
         contentStartMs={contentStartMs}
         contentEndMs={contentEndMs}
       />
+
+      {showModelPageCta && modelPage ? <ModelPageCta modelPage={modelPage} /> : null}
     </section>
+  );
+}
+
+function ModelPageCta({ modelPage }: { modelPage: ProductModelPageLink }) {
+  const meta = [
+    modelPage.brand?.trim() || null,
+    modelPage.dealCount > 0 ? `최근 핫딜 ${modelPage.dealCount}건` : null,
+  ]
+    .filter(Boolean)
+    .join(' · ');
+
+  return (
+    <Link
+      href={`/deals/${modelPage.slug}`}
+      data-track="model-page-cta"
+      data-source="price_history"
+      data-slug={modelPage.slug}
+      className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3.5 transition-colors hover:border-gray-300 hover:bg-gray-50"
+    >
+      <div className="min-w-0">
+        <p className="truncate text-sm font-semibold text-gray-900">
+          {modelPage.modelName} 핫딜 모음 보기
+        </p>
+        {meta ? <p className="mt-0.5 truncate text-xs text-gray-500">{meta}</p> : null}
+      </div>
+      <span className="shrink-0 text-sm text-gray-400" aria-hidden>
+        →
+      </span>
+    </Link>
   );
 }
 

@@ -271,10 +271,19 @@ export interface ProductPriceHistory {
   points: PriceHistoryPoint[];
 }
 
+/** 상품 상세 → /deals/{slug} CTA 용 (발행된 모델 페이지만). */
+export interface ProductModelPageLink {
+  slug: string;
+  modelName: string;
+  brand: string | null;
+  dealCount: number;
+}
+
 interface QueryProductPriceHistoryResult {
   product: {
     id: number;
     priceHistory: ProductPriceHistory | null;
+    modelPage: ProductModelPageLink | null;
   } | null;
 }
 
@@ -322,6 +331,12 @@ const QueryProductPriceHistory = new TypedDocumentString<
             isSeed
           }
         }
+      }
+      modelPage {
+        slug
+        modelName
+        brand
+        dealCount
       }
     }
   }
