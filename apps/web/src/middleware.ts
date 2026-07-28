@@ -2,6 +2,7 @@ import { RequestCookies, ResponseCookies } from 'next/dist/server/web/spec-exten
 import { NextRequest, NextResponse } from 'next/server';
 
 import { graphql } from '@/shared/api/gql';
+import { decideAuthAction, isProtectedPath } from '@/shared/config/auth-route';
 import { IS_PRD } from '@/shared/config/env';
 import { GRAPHQL_ENDPOINT } from '@/shared/config/graphql';
 import { PAGE } from '@/shared/config/page';
@@ -37,29 +38,21 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   return await routeGuard(request, response);
 }
 
-const protectedPaths = [PAGE.MYPAGE, PAGE.LIKE];
-const onlyRefreshTokenPaths = [PAGE.TRENDING];
-
 const routeGuard = async (req: NextRequest, res: NextResponse) => {
-  const { pathname } = req.nextUrl;
+  const action = decideAuthAction({
+    pathname: req.nextUrl.pathname,
+    hasAccessToken: Boolean(req.cookies.get('ACCESS_TOKEN')?.value),
+    hasRefreshToken: Boolean(req.cookies.get('REFRESH_TOKEN')?.value),
+  });
 
-  const isProtectedPath = protectedPaths.some((path) => pathname.startsWith(path));
-  const isOnlyRefreshTokenPaths = onlyRefreshTokenPaths.some((path) => pathname.startsWith(path));
-
-  if (isProtectedPath) {
-    const { status } = await refreshAndVerifyToken(req, res);
-    if (status === 'valid') {
-      return res;
-    }
-    if (status === 'invalid') {
-      return NextResponse.redirect(new URL(PAGE.LOGIN, req.url));
-    }
+  if (action === 'redirect') {
+    return NextResponse.redirect(new URL(PAGE.LOGIN, req.url));
   }
 
-  if (isOnlyRefreshTokenPaths) {
-    const { status } = await refreshAndVerifyToken(req, res);
-    if (status === 'valid') {
-      return res;
+  if (action === 'refresh') {
+    const { status } = await refreshToken(req, res);
+    if (status === 'invalid' && isProtectedPath(req.nextUrl.pathname)) {
+      return NextResponse.redirect(new URL(PAGE.LOGIN, req.url));
     }
   }
 
@@ -118,20 +111,6 @@ const routeGuard = async (req: NextRequest, res: NextResponse) => {
 //   return response;
 // };
 
-const tokenVerify = async (accessToken?: string) => {
-  const response = await fetch(GRAPHQL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: accessToken ? `Bearer ${accessToken}` : '',
-    },
-    body: JSON.stringify({
-      query: QueryMe,
-    }),
-  });
-  return await response.json();
-};
-
 const getNewToken = async (refreshToken?: string) => {
   const response = await fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
@@ -146,45 +125,45 @@ const getNewToken = async (refreshToken?: string) => {
   return await response.json();
 };
 
-const refreshAndVerifyToken = async (
+const refreshToken = async (
   req: NextRequest,
   res: NextResponse,
 ): Promise<{ status: 'invalid' | 'valid' }> => {
-  const accessToken = req.cookies.get('ACCESS_TOKEN')?.value;
-  const refreshToken = req.cookies.get('REFRESH_TOKEN')?.value;
+  const currentRefreshToken = req.cookies.get('REFRESH_TOKEN')?.value;
 
-  const result = await tokenVerify(accessToken);
-  if (!result.data?.me) {
-    if (!refreshToken) {
-      return { status: 'invalid' };
-    }
-    const result = await getNewToken(refreshToken);
-    if (result.data) {
-      const { accessToken, refreshToken } = result.data.loginByRefreshToken;
-      const access_token = {
-        name: 'ACCESS_TOKEN',
-        expires: new Date(Date.now() + accessTokenExpiresAt),
-        httpOnly: true,
-        sameSite: 'lax' as const,
-        secure: IS_PRD,
-        value: accessToken,
-      };
-      const refresh_token = {
-        name: 'REFRESH_TOKEN',
-        expires: new Date(Date.now() + refreshTokenExpiresAt),
-        httpOnly: true,
-        sameSite: 'lax' as const,
-        secure: IS_PRD,
-        value: refreshToken,
-      };
-      res.cookies.set(access_token);
-      res.cookies.set(refresh_token);
-      applySetCookie(req, res);
-    }
-    if (result.errors) {
-      return { status: 'invalid' };
-    }
+  const result = await getNewToken(currentRefreshToken).catch(() => null);
+  const tokens = result?.data?.loginByRefreshToken;
+
+  // accessToken 이 없으면 갱신 실패. 기존 쿠키는 절대 건드리지 않는다 —
+  // 예전 코드는 `result.data` 만 보고 구조분해했다가 refreshToken:undefined 로
+  // 멀쩡한 리프레시 토큰을 덮어써서 완전 로그아웃을 만들었다.
+  if (!tokens?.accessToken) {
+    return { status: 'invalid' };
   }
+
+  res.cookies.set({
+    name: 'ACCESS_TOKEN',
+    expires: new Date(Date.now() + accessTokenExpiresAt),
+    httpOnly: true,
+    sameSite: 'lax' as const,
+    secure: IS_PRD,
+    value: tokens.accessToken,
+  });
+
+  // 백엔드는 슬라이딩 갱신이 필요할 때만 refreshToken 을 함께 준다(auth.service.ts
+  // loginByRefreshToken). 없을 때 세팅하면 유효한 토큰을 지우는 셈이라 반드시 가드.
+  if (tokens.refreshToken) {
+    res.cookies.set({
+      name: 'REFRESH_TOKEN',
+      expires: new Date(Date.now() + refreshTokenExpiresAt),
+      httpOnly: true,
+      sameSite: 'lax' as const,
+      secure: IS_PRD,
+      value: tokens.refreshToken,
+    });
+  }
+
+  applySetCookie(req, res);
   return { status: 'valid' };
 };
 
@@ -209,19 +188,6 @@ function applySetCookie(req: NextRequest, res: NextResponse): void {
   });
 }
 
-const QueryMe = graphql(`
-  query QueryMe {
-    me {
-      id
-      email
-      nickname
-      birthYear
-      gender
-      favoriteCategories
-    }
-  }
-`);
-
 const MutationLoginByRefreshToken = graphql(`
   mutation QueryLoginByRefreshToken {
     loginByRefreshToken {
@@ -231,7 +197,9 @@ const MutationLoginByRefreshToken = graphql(`
   }
 `);
 
-//'/mypage/:path*',
+// _next 전체와 정적 파일을 제외한다. 갱신이 전 경로로 넓어졌으므로(decideAuthAction),
+// _next/image 같은 서브리소스가 매처에 걸리면 한 페이지에서 이미지 수만큼 refresh 가
+// 동시에 터진다. 예전엔 3개 경로에서만 갱신해서 드러나지 않았던 함정.
 export const config = {
-  matcher: ['/((?!api|_next/static|favicon.ico|vercel.svg|next.svg).*)'],
+  matcher: ['/((?!api|_next|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml)$).*)'],
 };

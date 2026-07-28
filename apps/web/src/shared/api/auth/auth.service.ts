@@ -19,10 +19,13 @@ import {
 
 const AUTH_ERROR_CODES = new Set(['UNAUTHENTICATED', 'FORBIDDEN']);
 
+// 5xx·네트워크 오류를 인증 실패로 오인하면 서버가 잠깐 흔들릴 때마다 로그아웃된다.
+// UNAUTHENTICATED/FORBIDDEN 또는 401/403 일 때만 인증 오류로 판정한다.
 const isAuthError = (error: unknown): boolean => {
   if (!error || typeof error !== 'object') return false;
   const status = (error as { response?: { status?: number } }).response?.status;
   if (status === 401 || status === 403) return true;
+  if (typeof status === 'number' && status >= 500) return false;
   const errors = (error as { data?: { errors?: Array<{ extensions?: { code?: string } }> } }).data
     ?.errors;
   return (
