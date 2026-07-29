@@ -1,8 +1,8 @@
 import { WebViewBridge } from './sender';
 import { type HapticStyle, WebViewEventType } from './type';
 
-function isInApp(): boolean {
-  return !!window.ReactNativeWebView;
+export function isInApp(): boolean {
+  return typeof window !== 'undefined' && !!window.ReactNativeWebView;
 }
 
 /**
@@ -29,9 +29,13 @@ export async function shareNative(params: { title: string; url: string; message?
     return;
   }
 
-  // 웹 폴백
+  // 웹 폴백. message 는 앱 전용 필드라 Web Share API 엔 text 로 넘겨야 설명이 살아남는다.
   if (navigator.share) {
-    await navigator.share({ title: params.title, url: params.url });
+    await navigator.share({
+      title: params.title,
+      url: params.url,
+      ...(params.message ? { text: params.message } : {}),
+    });
     return;
   }
 

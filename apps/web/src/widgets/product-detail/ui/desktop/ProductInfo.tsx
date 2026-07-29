@@ -82,7 +82,13 @@ export default function ProductInfo({
           <div className="flex items-start justify-between gap-x-5">
             <h1 className="min-w-0 flex-1 text-xl font-medium text-gray-800">{product.title}</h1>
             <div className="shrink-0 self-start">
-              <ShareButton title={shareTitle} />
+              <ShareButton
+                title={shareTitle}
+                description={
+                  [product.price, product.mallName].filter(Boolean).join(' · ') || undefined
+                }
+                imageUrl={product.thumbnail ?? undefined}
+              />
             </div>
           </div>
         </div>

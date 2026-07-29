@@ -19,6 +19,15 @@ export default function ProductShareButton({ productId }: { productId: number })
   }
 
   const title = `${product.title} | 지름알림`;
+  // 가격·판매처·썸네일은 이미 productInfo 로 받아온 값 — 있는 것만 붙인다.
+  const description = [product.price, product.mallName].filter(Boolean).join(' · ') || undefined;
 
-  return <ShareButton title={title} page="DETAIL" />;
+  return (
+    <ShareButton
+      title={title}
+      page="DETAIL"
+      description={description}
+      imageUrl={product.thumbnail ?? undefined}
+    />
+  );
 }

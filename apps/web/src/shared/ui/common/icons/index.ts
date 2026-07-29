@@ -1,6 +1,9 @@
 export { default as Apple } from './Apple';
 export { default as Google } from './Google';
 export { default as Share } from './Share';
+export { default as ShareX } from './share/X';
+export { default as ShareThreads } from './share/Threads';
+export { default as ShareLink } from './share/Link';
 export { default as AlarmIllustError } from './AlarmIllustError';
 export { default as Alert } from './Alert';
 export { default as AlertFill } from './AlertFill';
