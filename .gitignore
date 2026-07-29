@@ -56,3 +56,7 @@
 .claude/
 .agents/
 .gstack/
+
+# 로컬 git worktree 디렉토리. 커밋되면 .gitmodules 없는 gitlink가 되어
+# CI의 Post Checkout 단계에서 git exit 128을 낸다.
+.worktrees/
