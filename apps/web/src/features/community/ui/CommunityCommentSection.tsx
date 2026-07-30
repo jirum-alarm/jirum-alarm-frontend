@@ -330,7 +330,7 @@ function CommunityCommentInput({ postId, isUserLogin }: { postId: number; isUser
         e.preventDefault();
         if (content.trim()) addComment();
       }}
-      className="sticky bottom-[var(--bottom-nav-padding,0px)] z-10 flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+      className="max-w-mobile-max pc:static pc:mx-0 pc:max-w-none pc:pb-3 fixed inset-x-0 bottom-[var(--bottom-nav-padding,0px)] z-40 mx-auto flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
     >
       <div className="flex grow overflow-hidden rounded-lg border border-transparent bg-gray-50 focus-within:border-gray-500">
         <textarea
@@ -373,7 +373,9 @@ export default function CommunityCommentSection({
   const myUserId = authData?.me?.id ? `${authData.me.id}` : undefined;
 
   return (
-    <section className="mt-4">
+    // 모바일은 입력창이 fixed 라 마지막 댓글이 가려지지 않게 입력창 높이(64px)만큼 하단 여백 확보.
+    // PC 는 입력창이 일반 흐름(pc:static)이므로 여백 불필요.
+    <section className="pc:pb-0 mt-4 pb-[calc(64px+var(--bottom-nav-padding,0px))]">
       <div className="px-5 pb-2">
         <h2 className="text-base font-semibold text-gray-900">댓글</h2>
       </div>

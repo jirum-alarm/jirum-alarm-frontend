@@ -40,7 +40,7 @@ export default function PostImageUploader({
               src={src}
               alt={`첨부 이미지 ${index + 1}`}
               fill
-              className="object-cover"
+              className="object-contain"
               sizes="80px"
             />
             <button
