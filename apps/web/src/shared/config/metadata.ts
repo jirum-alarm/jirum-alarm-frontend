@@ -96,6 +96,9 @@ export const defaultMetadata: Metadata = {
   other: {
     'platform:name': siteName,
     'platform:contact': contactEmail,
+    // iOS 사파리 네이티브 Smart App Banner. 미설치=받기 / 설치=열기 를 OS 가 알아서 처리.
+    // ponytail: 메타 한 줄. 커스텀 배너 컴포넌트 불필요. 사파리 전용(카톡 인앱·안드로이드는 안 뜸).
+    'apple-itunes-app': 'app-id=6474611420',
   },
 };
 
