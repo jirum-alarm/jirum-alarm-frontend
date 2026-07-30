@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 
 import { ProductService } from '@/shared/api/product';
-import { pushViewedProductId } from '@/shared/lib/viewedProducts';
 
 /**
  * 상세 진입 시 post_view 수집을 "클라이언트"에서 1회 호출한다.
@@ -22,8 +21,6 @@ export const CollectProductOnView = ({ productId }: { productId: number }) => {
   useEffect(() => {
     if (collectedRef.current) return;
     collectedRef.current = true;
-    // 목록에서 "확인한 핫딜" 흐리게 표시하는 용도. 수집 성공 여부와 무관하게 기록.
-    pushViewedProductId(productId);
     // fire-and-forget. 실패해도 UX 영향 없음.
     void ProductService.collectProduct({ productId }).catch(() => {});
   }, [productId]);

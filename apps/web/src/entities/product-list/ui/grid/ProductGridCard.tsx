@@ -3,7 +3,6 @@
 import { motion } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
-import { useViewedProducts } from '@/shared/hooks/useViewedProducts';
 import { cn } from '@/shared/lib/cn';
 import { formatDateToMMD } from '@/shared/lib/utils/date';
 import DisplayTime from '@/shared/ui/DisplayTime';
@@ -41,9 +40,6 @@ export default function ProductGridCard({
   // GTM 진입경로 추적용. 미지정 시 data 속성 미부착(추적 안 함).
   source?: ProductCardSource;
 }) {
-  const isViewed = useViewedProducts();
-  const viewed = isViewed(product.id);
-
   return (
     <Link
       href={PAGE.DETAIL + '/' + product.id}
@@ -59,19 +55,15 @@ export default function ProductGridCard({
       >
         <div className="relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
           {actionIcon && <div className="absolute top-0 right-0 z-10">{actionIcon}</div>}
-          {/* 이미 본 상품은 흐리게. 뱃지(판매종료·유통기한·핫딜)는 알아야 하는
-              정보라 흐리지 않고, 썸네일과 아래 제목/가격만 흐려진다. */}
-          <div className={cn('h-full w-full', viewed && 'opacity-40')}>
-            <ProductThumbnail
-              src={product?.thumbnail ?? ''}
-              title={product.title}
-              categoryId={product.categoryId}
-              type="product"
-              alt={product.title}
-              sizes="(max-width: 768px) 160px, 252px"
-              priority={priority}
-            />
-          </div>
+          <ProductThumbnail
+            src={product?.thumbnail ?? ''}
+            title={product.title}
+            categoryId={product.categoryId}
+            type="product"
+            alt={product.title}
+            sizes="(max-width: 768px) 160px, 252px"
+            priority={priority}
+          />
           {typeof rank === 'number' && (
             <div className="text-primary-500 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900 text-sm">
               {rank}
@@ -94,7 +86,7 @@ export default function ProductGridCard({
             </div>
           )}
         </div>
-        <div className={cn('flex flex-col', viewed && 'opacity-40')}>
+        <div className="flex flex-col">
           <span className="line-clamp-2 h-12 pt-2 text-sm wrap-break-word text-gray-700">
             {product.title}
           </span>
