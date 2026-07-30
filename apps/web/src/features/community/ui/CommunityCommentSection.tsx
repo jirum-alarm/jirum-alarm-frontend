@@ -373,9 +373,11 @@ export default function CommunityCommentSection({
   const myUserId = authData?.me?.id ? `${authData.me.id}` : undefined;
 
   return (
-    // 모바일은 입력창이 fixed 라 마지막 댓글이 가려지지 않게 입력창 높이(64px)만큼 하단 여백 확보.
+    // 모바일은 입력창이 fixed 라 마지막 댓글이 가려지지 않게 입력창 높이(64px)만큼만 확보.
+    // ⚠️ --bottom-nav-padding 을 여기서 더하면 안 된다 — BasicLayout.tsx:42 가 이미 갖고 있어
+    // 56px 이 이중으로 들어가고(실측 176px), 댓글이 없을 때 입력창 위로 빈 공백이 크게 뜬다.
     // PC 는 입력창이 일반 흐름(pc:static)이므로 여백 불필요.
-    <section className="pc:pb-0 mt-4 pb-[calc(64px+var(--bottom-nav-padding,0px))]">
+    <section className="pc:pb-0 mt-4 pb-16">
       <div className="px-5 pb-2">
         <h2 className="text-base font-semibold text-gray-900">댓글</h2>
       </div>
