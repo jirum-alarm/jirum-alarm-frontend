@@ -1,5 +1,6 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
@@ -7,6 +8,8 @@ import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { useToast } from '@/shared/ui/common/Toast';
+
+import { AuthQueries } from '@/entities/auth';
 
 import { useUpdateKeyword } from '@/features/mypage/model';
 
@@ -80,7 +83,27 @@ export default function PostPurchaseKeywordPrompt({
 
   const keyword = deriveKeyword(title);
   const segments = [...new Intl.Segmenter().segment(keyword)].length;
-  const visible = show && segments >= MIN_KEYWORD_LENGTH;
+  const hasKeyword = segments >= MIN_KEYWORD_LENGTH;
+
+  // 이미 등록된 키워드면 권유 자체를 띄우지 않는다. 눌러야 알려주는 것보다 안 보이는 게
+  // 낫고, 노출/클릭 지표도 "등록 가능한 경우"만 세게 되어 등록률이 정확해진다.
+  //
+  // useQuery(useSuspenseQuery 아님) — 배너는 구매 클릭 직후에 떠야 하는데 suspense 면
+  // 목록을 기다리느라 노출이 밀린다. 마이페이지와 같은 queryKey 라 캐시를 공유하고,
+  // 등록 뮤테이션이 이 키를 invalidate 하므로 따로 갱신할 필요도 없다.
+  const { data: keywordData } = useQuery({
+    ...AuthQueries.myKeywords({ limit: 20 }),
+    enabled: show && isLoggedIn && hasKeyword,
+  });
+
+  const alreadyRegistered = (keywordData?.notificationKeywordsByMe ?? []).some(
+    // 서버가 저장할 때 toLowerCase() 하므로 비교도 소문자로 맞춘다.
+    (item) => item?.keyword?.toLowerCase() === keyword.toLowerCase(),
+  );
+
+  // done 이면 alreadyRegistered 를 무시한다. 방금 등록해서 목록에 들어간 것이므로
+  // 여기서 숨기면 사용자가 누른 직후 배너가 사라져 등록됐는지 알 수 없다.
+  const visible = show && hasKeyword && (done || !alreadyRegistered);
 
   // 상품이 바뀌면 이전 상품의 완료 상태가 남지 않도록 초기화.
   useEffect(() => {
