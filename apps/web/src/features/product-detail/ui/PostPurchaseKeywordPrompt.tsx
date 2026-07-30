@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-import { PAGE } from '@/shared/config/page';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
-import useMyRouter from '@/shared/hooks/useMyRouter';
+import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { useToast } from '@/shared/ui/common/Toast';
@@ -43,7 +42,7 @@ export default function PostPurchaseKeywordPrompt({
 }) {
   const { toast } = useToast();
   const { isLoggedIn } = useIsLoggedIn();
-  const router = useMyRouter();
+  const { checkAndRedirect } = useRedirectIfNotLoggedIn();
   const { requestPermission } = useFcmPermission();
   const [done, setDone] = useState(false);
 
@@ -85,11 +84,11 @@ export default function PostPurchaseKeywordPrompt({
       });
     }
 
-    // 게스트가 트래픽의 97%다. 로그인으로 보내되 돌아올 곳을 남긴다.
-    if (!isLoggedIn) {
-      router.push(PAGE.LOGIN);
-      return;
-    }
+    // 게스트가 트래픽의 97%다. rtnUrl 을 붙여 로그인 후 이 상품으로 되돌아오게 하고,
+    // 앱(WebView)에서는 네이티브 라우팅으로 보낸다 — 둘 다 checkAndRedirect 가 처리한다.
+    // 직접 router.push(PAGE.LOGIN) 하면 rtnUrl 이 빠져 로그인 후 상품으로 못 돌아온다.
+    if (checkAndRedirect()) return;
+
     addNotificationKeyword({ keyword });
   };
 
