@@ -60,7 +60,16 @@ const BannerSwiper = () => {
     };
   }, [setIsInit]);
 
-  const canRenderAppDownload = isHydrated && type && link;
+  // 사파리는 네이티브 Smart App Banner(apple-itunes-app 메타)가 같은 역할을 해서
+  // 슬라이드까지 넣으면 "앱 받으세요"가 화면에 두 번 뜬다. 사파리에서만 뺀다.
+  // 카톡·인스타 등 인앱 브라우저는 UA 에 Safari 가 붙어 isSafari 로 잡히지만
+  // 네이티브 배너가 뜨지 않으므로 슬라이드를 남겨야 한다(iOS 크롬도 동일).
+  // ponytail: 인앱 UA 정규식 한 줄. 브라우저별 정책 테이블 불필요.
+  const isInAppBrowser = /KAKAOTALK|Instagram|Threads|FB[AS]V|Line\/|NAVER|DaumApps/i.test(
+    typeof navigator === 'undefined' ? '' : navigator.userAgent,
+  );
+  const hasNativeAppBanner = device.isSafari && !isInAppBrowser;
+  const canRenderAppDownload = isHydrated && type && link && !hasNativeAppBanner;
   const hasHomeCarouselAds = homeCarouselAds.length > 0;
 
   // Persil 광고 기간일 때는 단일 배너만 렌더링
