@@ -6,7 +6,6 @@ import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
-import { useToast } from '@/shared/ui/common/Toast';
 
 import { useUpdateKeyword } from '@/features/mypage/model';
 
@@ -40,7 +39,6 @@ export default function PostPurchaseKeywordPrompt({
   onClose: () => void;
   className?: string;
 }) {
-  const { toast } = useToast();
   const { isLoggedIn } = useIsLoggedIn();
   const { checkAndRedirect } = useRedirectIfNotLoggedIn();
   const { requestPermission } = useFcmPermission();
@@ -48,15 +46,16 @@ export default function PostPurchaseKeywordPrompt({
 
   const { mutate: addNotificationKeyword, isPending } = useUpdateKeyword({
     onSuccess: () => {
+      // 등록되면 배너가 사라지는 게 아니라 안내 문구로 바뀐다. 사라지면 등록이 된 건지
+      // 눌림이 씹힌 건지 알 수 없다 — 결과를 남겨두는 쪽이 신뢰를 만든다.
       setDone(true);
-      toast(<>이제 &lsquo;{keyword}&rsquo; 새 딜이 올라오면 알려드릴게요.</>);
       requestPermission();
     },
   });
 
   const keyword = deriveKeyword(title);
   const segments = [...new Intl.Segmenter().segment(keyword)].length;
-  const visible = show && !done && segments >= MIN_KEYWORD_LENGTH;
+  const visible = show && segments >= MIN_KEYWORD_LENGTH;
 
   // 상품이 바뀌면 이전 상품의 완료 상태가 남지 않도록 초기화.
   useEffect(() => {
@@ -64,13 +63,15 @@ export default function PostPurchaseKeywordPrompt({
   }, [title]);
 
   // 클릭만 재면 "안 눌렸다"가 배너 탓인지 노출이 적어서인지 못 가른다. 노출도 같이 보낸다.
+  // done 은 제외 — 등록 완료 문구는 새로운 권유 노출이 아니라 같은 배너의 결과 상태라
+  // 여기서 세면 노출이 부풀어 등록률(클릭/노출)이 실제보다 낮게 나온다.
   useEffect(() => {
-    if (!visible || typeof window === 'undefined') return;
+    if (!visible || done || typeof window === 'undefined') return;
     (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
       event: 'keyword_prompt_view',
       keyword,
     });
-  }, [visible, keyword]);
+  }, [visible, done, keyword]);
 
   if (!visible) return null;
 
@@ -91,6 +92,32 @@ export default function PostPurchaseKeywordPrompt({
 
     addNotificationKeyword({ keyword });
   };
+
+  // 등록 완료 상태. 레포의 안내 배경 관례(bg-secondary-50 + text-secondary-700)를 따른다
+  // — ViewerCount·CommentInput·HotdealGuide 가 같은 조합을 쓴다.
+  if (done) {
+    return (
+      <div
+        role="status"
+        className={cn(
+          'bg-secondary-50 text-secondary-700 flex items-center gap-x-3 py-3',
+          className,
+        )}
+      >
+        <p className="min-w-0 flex-1 truncate text-sm font-semibold">
+          &lsquo;{keyword}&rsquo; 새 딜이 올라오면 알려드릴게요
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="알림 안내 닫기"
+          className="flex h-11 shrink-0 items-center px-2 text-xs text-gray-400"
+        >
+          닫기
+        </button>
+      </div>
+    );
+  }
 
   return (
     // 컨테이너 모양은 호출부가 정한다. 모바일은 고정 바 위에 얹히는 띠(border-b, px-5),

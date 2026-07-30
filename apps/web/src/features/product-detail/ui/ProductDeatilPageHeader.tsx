@@ -27,14 +27,18 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
             로고만으로는 "여기가 뭐 하는 곳인지" 전달되지 않아 서비스 인지가 안 생긴다.
             fixed 헤더는 상세에서 100% 노출되는 두 자리 중 하나라 여기에 한 줄을 붙인다.
 
-            로고 아래에 세로로 쌓으면 h-14(56px) 안에서 위아래 여백이 4.5px 밖에 안 남고,
-            LogoLink 안쪽 패딩·아이콘 폭 때문에 로고 글자와 왼쪽선도 어긋난다. 옆에 두면
-            둘 다 해소되고 헤더 높이도 그대로 유지된다(sticky top-14 계산이 안 깨진다). */}
-        <LogoLink />
-        {/* 375px 화면에서 태그라인이 쓸 수 있는 폭은 ~129px. "커뮤니티 핫딜 모아보기"는
-            ~132px 라 소형폰에서 말줄임으로 잘린다. 잘린 문구는 의도가 아니라 고장으로
-            읽히므로 온전히 들어가는 길이로 줄였다. */}
-        <span className="truncate text-[11px] text-gray-500">핫딜 모아보기</span>
+            세로로 쌓되 LogoLink 의 py-1(위아래 4px)을 상쇄해 공간을 되찾는다. 그냥 쌓으면
+            로고블록 36px + 태그라인 11px = 47px 라 h-14(56px) 안에서 위아래 4.5px 밖에
+            안 남아 답답하다. -my-1 로 8px 을 회수하면 39px 이 되어 여유가 17px 로 늘어난다.
+            헤더 높이 자체는 그대로라 sticky top-14 계산이 안 깨진다. */}
+        <div className="-my-1 flex min-w-0 flex-col">
+          <LogoLink />
+          {/* 로고 글자는 LogoLink 안쪽 px-2(8px) + 아이콘(24px) + gap-2(8px) 만큼 들어가 있다.
+              태그라인도 같은 40px 을 들여써야 두 줄의 왼쪽선이 맞는다. */}
+          <span className="truncate pl-10 text-[11px] leading-none text-gray-500">
+            커뮤니티 핫딜 모아보기
+          </span>
+        </div>
       </div>
       <div className="flex items-center gap-x-4">
         <Link
