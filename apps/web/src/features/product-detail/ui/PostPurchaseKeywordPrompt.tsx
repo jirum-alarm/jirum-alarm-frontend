@@ -104,9 +104,13 @@ export default function PostPurchaseKeywordPrompt({
           className,
         )}
       >
-        <p className="min-w-0 flex-1 truncate text-sm font-semibold">
-          &lsquo;{keyword}&rsquo; 새 딜이 올라오면 알려드릴게요
-        </p>
+        {/* 권유 상태와 같은 2줄 구조 — 안내 문장은 온전히, 키워드만 줄인다. */}
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold">알림을 등록했어요</p>
+          <p className="mt-1 truncate text-xs">
+            &lsquo;{keyword}&rsquo; 새 딜이 올라오면 알려드릴게요
+          </p>
+        </div>
         <button
           type="button"
           onClick={onClose}
@@ -124,11 +128,11 @@ export default function PostPurchaseKeywordPrompt({
     // 데스크톱은 본문 안에 놓이는 카드(rounded, border)라 테두리 규칙이 서로 다르다.
     <div className={cn('flex items-center gap-x-3 bg-gray-50 py-3', className)}>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold text-gray-800">
-          &lsquo;{keyword}&rsquo; 더 싸지면 알려드릴까요?
-        </p>
-        <p className="mt-1 text-xs text-gray-500">
-          지름알림이 커뮤니티 핫딜을 계속 지켜보고 있어요.
+        {/* 375px 에서 텍스트 가용폭은 ~215px 인데 "더 싸지면 알려드릴까요?" 만 ~182px 라
+            키워드와 한 줄에 넣으면 키워드가 2자로 잘린다. 줄을 나눠 각자 온전히 보여준다. */}
+        <p className="text-sm font-semibold text-gray-800">더 싸지면 알려드릴까요?</p>
+        <p className="mt-1 truncate text-xs text-gray-500">
+          &lsquo;{keyword}&rsquo; 새 딜을 지켜볼게요
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-x-1">
