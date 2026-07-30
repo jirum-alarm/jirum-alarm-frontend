@@ -93,22 +93,23 @@ export default function PostPurchaseKeywordPrompt({
     addNotificationKeyword({ keyword });
   };
 
-  // 등록 완료 상태. 레포의 안내 배경 관례(bg-secondary-50 + text-secondary-700)를 따른다
-  // — ViewerCount·CommentInput·HotdealGuide 가 같은 조합을 쓴다.
+  // 등록 완료 상태. 배경·글자색·크기를 권유 상태와 동일하게 둔다 — 배경까지 바뀌면
+  // 같은 배너의 상태 변화가 아니라 다른 컴포넌트가 뜬 것처럼 보인다. 상태가 바뀐 신호는
+  // 체크 아이콘 하나로만 준다(색은 accent, 나머지 톤은 그대로).
   if (done) {
     return (
-      <div
-        role="status"
-        className={cn(
-          'bg-secondary-50 text-secondary-700 flex items-center gap-x-3 py-3',
-          className,
-        )}
-      >
-        {/* 권유 상태와 같은 2줄 구조 — 안내 문장은 온전히, 키워드만 줄인다. */}
+      <div role="status" className={cn('flex items-center gap-x-3 bg-gray-50 py-3', className)}>
+        <span
+          aria-hidden
+          className="bg-secondary-500 flex size-5 shrink-0 items-center justify-center rounded-3xl text-[11px] leading-none font-bold text-white"
+        >
+          ✓
+        </span>
+        {/* 권유 상태와 같은 2줄 구조·같은 크기 — 안내 문장은 온전히, 키워드만 줄인다. */}
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold">알림을 등록했어요</p>
-          <p className="mt-1 truncate text-xs">
-            &lsquo;{keyword}&rsquo; 새 딜이 올라오면 알려드릴게요
+          <p className="text-sm font-semibold text-gray-800">알림을 등록했어요</p>
+          <p className="mt-1 truncate text-xs text-gray-500">
+            &lsquo;{keyword}&rsquo; 새 딜이 나오면 알려드려요
           </p>
         </div>
         <button
@@ -132,7 +133,7 @@ export default function PostPurchaseKeywordPrompt({
             키워드와 한 줄에 넣으면 키워드가 2자로 잘린다. 줄을 나눠 각자 온전히 보여준다. */}
         <p className="text-sm font-semibold text-gray-800">더 싸지면 알려드릴까요?</p>
         <p className="mt-1 truncate text-xs text-gray-500">
-          &lsquo;{keyword}&rsquo; 새 딜을 지켜볼게요
+          &lsquo;{keyword}&rsquo; 가격을 지켜볼게요
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-x-1">
