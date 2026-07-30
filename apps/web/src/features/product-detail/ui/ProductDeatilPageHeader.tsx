@@ -31,11 +31,14 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
             로고블록 36px + 태그라인 11px = 47px 라 h-14(56px) 안에서 위아래 4.5px 밖에
             안 남아 답답하다. -my-1 로 8px 을 회수하면 39px 이 되어 여유가 17px 로 늘어난다.
             헤더 높이 자체는 그대로라 sticky top-14 계산이 안 깨진다. */}
-        <div className="-my-1 flex min-w-0 flex-col">
+        {/* whitespace-nowrap 은 필수다. 로고("지름알림")도 태그라인도 폭이 좁아지면
+            줄바꿈돼서 헤더 높이를 밀어버린다. shrink-0 로 좌측 블록이 눌리지 않게 하고,
+            줄어들 여지는 우측 아이콘 쪽이 아니라 이 블록 밖에서 흡수한다. */}
+        <div className="-my-1 flex shrink-0 flex-col whitespace-nowrap">
           <LogoLink />
           {/* 로고 글자는 LogoLink 안쪽 px-2(8px) + 아이콘(24px) + gap-2(8px) 만큼 들어가 있다.
               태그라인도 같은 40px 을 들여써야 두 줄의 왼쪽선이 맞는다. */}
-          <span className="truncate pl-10 text-[11px] leading-none text-gray-500">
+          <span className="pl-10 text-[11px] leading-none text-gray-500">
             커뮤니티 핫딜 모아보기
           </span>
         </div>
