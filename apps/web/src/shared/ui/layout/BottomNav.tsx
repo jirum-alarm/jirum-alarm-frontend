@@ -83,6 +83,31 @@ const BottomNavList = [
   },
 ];
 
+/**
+ * 바텀네비는 탭 루트에서만 보인다 — 앱(RN 네이티브 탭바)과 같은 규칙.
+ *
+ * 앱은 `apps/mobile/src/shared/lib/navigation/tab-routing.ts` 의 `isTabRootUrl` 이
+ * 이 목록과 동일하게 판정해, 하위 페이지(가입 정보·편집 폼·글 상세 등)에서는 탭바를 감춘다.
+ * 웹은 각 탭의 isActive(startsWith)로 렌더를 결정해서 하위 경로까지 네비가 남았고,
+ * 같은 화면이 웹에선 나오고 앱에선 안 나와 동작이 갈렸다.
+ *
+ * ⚠️ 목록을 고칠 땐 앱의 `tabRootPaths` 도 같이 고쳐야 한다(두 곳이 짝).
+ */
+const TAB_ROOT_PATHS: string[] = [
+  PAGE.HOME,
+  PAGE.TRENDING_RANKING,
+  PAGE.TRENDING_LIVE,
+  PAGE.COMMUNITY,
+  PAGE.ALARM,
+  PAGE.MYPAGE,
+];
+
+function isTabRootPath(pathName: string) {
+  // 트레일링 슬래시 정규화('/mypage/' 도 루트). '/' 자체는 그대로 둔다.
+  const path = pathName.length > 1 ? pathName.replace(/\/+$/, '') : pathName;
+  return TAB_ROOT_PATHS.includes(path);
+}
+
 function useHasNewAlarm() {
   const pathName = usePathname();
   const { isLoggedIn } = useIsLoggedIn();
@@ -198,6 +223,6 @@ export default function BottomNav() {
   // 앱 환경에서도 웹 바텀 네비게이션을 표시하도록 수정 (사용자 요청 대응)
   // if (isHydrated && isJirumAlarmApp) return null;
 
-  if (!BottomNavList.some((nav) => nav.isActive(pathName))) return null;
+  if (!isTabRootPath(pathName)) return null;
   return <BottomNavComponent />;
 }
