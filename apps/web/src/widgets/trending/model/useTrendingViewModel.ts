@@ -19,21 +19,24 @@ const adjustStartDate = (categoryId: number | null) => {
 
 const useTrendingViewModel = ({ categoryId }: { categoryId: number | null }) => {
   const isHotCategory = categoryId === null;
+  // '전체' 탭은 id 0인 합성 카테고리다. 0을 그대로 넘기면 백엔드가 실제 카테고리 필터로 취급해
+  // 결과가 항상 비므로 반드시 null(=필터 없음)로 바꿔 보낸다.
+  const effectiveCategoryId = categoryId === 0 ? null : categoryId;
 
   const [products, live, hotDeals] = useSuspenseQueries({
     queries: [
       ProductQueries.products({
         limit: TRENDING_ITEMS_LIMIT,
         orderBy: ProductOrderType.CommunityRanking,
-        startDate: adjustStartDate(categoryId),
-        categoryId: categoryId,
+        startDate: adjustStartDate(effectiveCategoryId),
+        categoryId: effectiveCategoryId,
         orderOption: OrderOptionType.Desc,
         isEnd: false,
       }),
       ProductQueries.products({
         limit: 10,
         orderBy: ProductOrderType.PostedAt,
-        categoryId: isHotCategory ? null : categoryId,
+        categoryId: isHotCategory ? null : effectiveCategoryId,
       }),
       ProductQueries.hotdealProductsRandom({
         count: HOT_DEAL_COUNT_RANDOM,
