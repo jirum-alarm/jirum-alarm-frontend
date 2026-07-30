@@ -53,16 +53,35 @@ export default function PostPurchaseKeywordPrompt({
   });
 
   const keyword = deriveKeyword(title);
+  const segments = [...new Intl.Segmenter().segment(keyword)].length;
+  const visible = show && !done && segments >= MIN_KEYWORD_LENGTH;
 
   // 상품이 바뀌면 이전 상품의 완료 상태가 남지 않도록 초기화.
   useEffect(() => {
     setDone(false);
   }, [title]);
 
-  const segments = [...new Intl.Segmenter().segment(keyword)].length;
-  if (!show || done || segments < MIN_KEYWORD_LENGTH) return null;
+  // 클릭만 재면 "안 눌렸다"가 배너 탓인지 노출이 적어서인지 못 가른다. 노출도 같이 보낸다.
+  useEffect(() => {
+    if (!visible || typeof window === 'undefined') return;
+    (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+      event: 'keyword_prompt_view',
+      keyword,
+    });
+  }, [visible, keyword]);
+
+  if (!visible) return null;
 
   const handleRegister = () => {
+    if (typeof window !== 'undefined') {
+      (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+        event: 'keyword_prompt_click',
+        keyword,
+        // 게스트는 로그인으로 튕기고 등록까지 못 간다. 등록률과 의향을 갈라 보려고 남긴다.
+        logged_in: isLoggedIn,
+      });
+    }
+
     // 게스트가 트래픽의 97%다. 로그인으로 보내되 돌아올 곳을 남긴다.
     if (!isLoggedIn) {
       router.push(PAGE.LOGIN);
