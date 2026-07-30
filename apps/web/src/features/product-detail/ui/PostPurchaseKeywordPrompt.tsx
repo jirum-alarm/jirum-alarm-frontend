@@ -6,6 +6,7 @@ import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
+import { useToast } from '@/shared/ui/common/Toast';
 
 import { useUpdateKeyword } from '@/features/mypage/model';
 
@@ -28,6 +29,17 @@ import { deriveKeyword } from '../lib/deriveKeyword';
 /** 키워드 등록 최소 길이. useKeywordInput 의 MIN_KEYWORD_LENGTH 와 맞춘다. */
 const MIN_KEYWORD_LENGTH = 2;
 
+/**
+ * GraphQL 에러에서 서버가 준 메시지를 꺼낸다. graphql-request 는 응답 에러를
+ * `response.errors[].message` 에 담고, 그 외 예외는 Error.message 에 담는다.
+ */
+function getErrorMessage(error: unknown): string {
+  const gql = error as { response?: { errors?: { message?: string }[] } };
+  const fromResponse = gql?.response?.errors?.[0]?.message;
+  if (fromResponse) return fromResponse;
+  return error instanceof Error ? error.message : '';
+}
+
 export default function PostPurchaseKeywordPrompt({
   show,
   title,
@@ -39,6 +51,7 @@ export default function PostPurchaseKeywordPrompt({
   onClose: () => void;
   className?: string;
 }) {
+  const { toast } = useToast();
   const { isLoggedIn } = useIsLoggedIn();
   const { checkAndRedirect } = useRedirectIfNotLoggedIn();
   const { requestPermission } = useFcmPermission();
@@ -50,6 +63,18 @@ export default function PostPurchaseKeywordPrompt({
       // 눌림이 씹힌 건지 알 수 없다 — 결과를 남겨두는 쪽이 신뢰를 만든다.
       setDone(true);
       requestPermission();
+    },
+    onError: (error) => {
+      // '이미 등록된 키워드'는 사용자 입장에선 실패가 아니라 이미 목적이 달성된 상태다.
+      // 제목에서 자동 추출한 키워드라 흔한 브랜드명이면 이미 등록돼 있을 확률이 높은데,
+      // 여기서 '저장 실패' 토스트를 띄우면 멀쩡히 알림을 받고 있는데도 고장으로 읽힌다.
+      const message = getErrorMessage(error);
+      if (message.includes('이미 등록된')) {
+        setDone(true);
+        return;
+      }
+      // 나머지(최대 20개 초과 등)는 서버가 준 이유를 그대로 보여준다.
+      toast(message || '키워드 저장에 실패했습니다.');
     },
   });
 
