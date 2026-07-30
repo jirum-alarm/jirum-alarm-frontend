@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { PAGE } from '@/shared/config/page';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
+import { cn } from '@/shared/lib/cn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { useToast } from '@/shared/ui/common/Toast';
 
@@ -33,10 +34,12 @@ export default function PostPurchaseKeywordPrompt({
   show,
   title,
   onClose,
+  className,
 }: {
   show: boolean;
   title: string;
   onClose: () => void;
+  className?: string;
 }) {
   const { toast } = useToast();
   const { isLoggedIn } = useIsLoggedIn();
@@ -91,29 +94,32 @@ export default function PostPurchaseKeywordPrompt({
   };
 
   return (
-    <div className="flex items-start gap-x-3 border-b border-gray-100 bg-gray-50 px-5 py-3">
+    // 컨테이너 모양은 호출부가 정한다. 모바일은 고정 바 위에 얹히는 띠(border-b, px-5),
+    // 데스크톱은 본문 안에 놓이는 카드(rounded, border)라 테두리 규칙이 서로 다르다.
+    <div className={cn('flex items-center gap-x-3 bg-gray-50 py-3', className)}>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-gray-800">
+        <p className="truncate text-sm font-semibold text-gray-800">
           &lsquo;{keyword}&rsquo; 더 싸지면 알려드릴까요?
         </p>
-        <p className="mt-0.5 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-gray-500">
           지름알림이 커뮤니티 핫딜을 계속 지켜보고 있어요.
         </p>
       </div>
-      <div className="flex shrink-0 items-center gap-x-2">
+      <div className="flex shrink-0 items-center gap-x-1">
         <button
           type="button"
           onClick={handleRegister}
           disabled={isPending}
-          className="bg-secondary-500 rounded-lg px-3 py-2 text-xs font-semibold text-white disabled:opacity-60"
+          className="bg-secondary-500 flex h-11 items-center rounded-lg px-3 text-xs font-semibold text-white disabled:opacity-60"
         >
           {isPending ? '등록 중' : '알림 받기'}
         </button>
+        {/* 터치 타겟 44px 확보 — 글자는 작아도 누를 면적은 손가락 크기여야 한다. */}
         <button
           type="button"
           onClick={onClose}
           aria-label="알림 안내 닫기"
-          className="px-2 py-2 text-xs text-gray-400"
+          className="flex h-11 items-center px-2 text-xs text-gray-400"
         >
           닫기
         </button>

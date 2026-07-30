@@ -25,13 +25,16 @@ export default function ProductDetailPageHeader({ productId }: { productId: numb
         <BackButton backTo={PAGE.HOME} />
         {/* 상세로 유입된 사람의 90%가 이 한 장만 보고 이탈하고, 홈·랭킹 도달은 0.4%다.
             로고만으로는 "여기가 뭐 하는 곳인지" 전달되지 않아 서비스 인지가 안 생긴다.
-            fixed 헤더는 상세에서 100% 노출되는 두 자리 중 하나라 여기에 한 줄을 붙인다. */}
-        <div className="flex min-w-0 flex-col">
-          <LogoLink />
-          <span className="truncate pl-2 text-[11px] leading-none text-gray-500">
-            커뮤니티 핫딜 모아보기
-          </span>
-        </div>
+            fixed 헤더는 상세에서 100% 노출되는 두 자리 중 하나라 여기에 한 줄을 붙인다.
+
+            로고 아래에 세로로 쌓으면 h-14(56px) 안에서 위아래 여백이 4.5px 밖에 안 남고,
+            LogoLink 안쪽 패딩·아이콘 폭 때문에 로고 글자와 왼쪽선도 어긋난다. 옆에 두면
+            둘 다 해소되고 헤더 높이도 그대로 유지된다(sticky top-14 계산이 안 깨진다). */}
+        <LogoLink />
+        {/* 375px 화면에서 태그라인이 쓸 수 있는 폭은 ~129px. "커뮤니티 핫딜 모아보기"는
+            ~132px 라 소형폰에서 말줄임으로 잘린다. 잘린 문구는 의도가 아니라 고장으로
+            읽히므로 온전히 들어가는 길이로 줄였다. */}
+        <span className="truncate text-[11px] text-gray-500">핫딜 모아보기</span>
       </div>
       <div className="flex items-center gap-x-4">
         <Link

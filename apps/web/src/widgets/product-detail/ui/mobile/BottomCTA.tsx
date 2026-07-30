@@ -43,6 +43,7 @@ export default function BottomCTA({
         show={showKeywordPrompt}
         title={product?.title ?? ''}
         onClose={() => setShowKeywordPrompt(false)}
+        className="border-b border-gray-100 px-5"
       />
       <div className="flex w-full items-center gap-x-4 px-5 py-2">
         <TopButton />

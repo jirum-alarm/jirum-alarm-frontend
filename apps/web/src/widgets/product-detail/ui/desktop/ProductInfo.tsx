@@ -1,7 +1,7 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { UploaderType } from '@/shared/api/gql/graphql';
 import { cn } from '@/shared/lib/cn';
@@ -21,6 +21,7 @@ import TossIcon from '@/entities/product/ui/TossIcon';
 import { LikeButton, RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
 import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
+import PostPurchaseKeywordPrompt from '@/features/product-detail/ui/PostPurchaseKeywordPrompt';
 import ProductGuideMetaRows from '@/features/product-detail/ui/ProductGuideMetaRows';
 
 export default function ProductInfo({
@@ -35,6 +36,7 @@ export default function ProductInfo({
   naverbcData?: import('@/entities/product/model/toss-data').NaverbcProductData;
 }) {
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+  const [showKeywordPrompt, setShowKeywordPrompt] = useState(false);
 
   useEffect(() => {
     pushRecentViewedProduct({
@@ -207,6 +209,8 @@ export default function ProductInfo({
             href={product.detailUrl ?? ''}
             // 모바일 BottomCTA 와 동일 — GTM Click URL 빈값 문제로 dataLayer 명시 전송 (2026-07-20)
             onClick={() => {
+              setShowKeywordPrompt(true);
+
               if (typeof window === 'undefined') return;
               (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
                 event: 'purchase_link_click',
@@ -222,6 +226,16 @@ export default function ProductInfo({
           >
             <Button className="h-[48px] w-full px-6 text-base font-semibold">구매하러 가기</Button>
           </a>
+        </div>
+        {/* 데스크톱은 fixed 하단 바가 없어 모바일 BottomCTA 를 그대로 못 옮긴다.
+            구매 버튼 바로 아래에 두어 "구매 클릭 직후"라는 같은 맥락을 유지한다. */}
+        <div className="mt-3">
+          <PostPurchaseKeywordPrompt
+            show={showKeywordPrompt}
+            title={product.title ?? ''}
+            onClose={() => setShowKeywordPrompt(false)}
+            className="rounded-lg border border-gray-100 px-4"
+          />
         </div>
       </div>
     </section>
