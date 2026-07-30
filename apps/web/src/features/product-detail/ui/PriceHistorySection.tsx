@@ -34,6 +34,12 @@ const DEFAULT_PERIOD_DAYS = 90;
 const MIN_DEFAULT_POINTS = 5;
 /** 차트 X축 좌우 여백 (콘텐츠 구간 대비) */
 const X_AXIS_BUFFER_RATIO = 0.08;
+/**
+ * Y축 최소 스팬 — 가격대의 15%.
+ * 실제 변동폭이 이보다 작으면 축을 15%로 벌려 소폭 변동이 폭락처럼 안 보이게 한다.
+ * ponytail: 고정 비율. 카테고리별(고가 가전 vs 생활용품) 튜닝이 필요하면 그때 분기.
+ */
+const MIN_Y_SPAN_RATIO = 0.15;
 
 const PERIODS = [
   { label: '1개월', days: 30 },
@@ -80,9 +86,25 @@ function resolveCurrentPriceBadge(
   return { text: `최고 대비 ${won(saveAmount, currency)} 절약`, tone: 'positive' };
 }
 
-function shortWon(price: number, currency?: string | null): string {
+/**
+ * Y축 눈금 라벨.
+ * - k 표기 여부는 축 최댓값(axisMax)으로 한 번에 결정 — 한 축에 10.6k와 9,700이 섞이지 않게.
+ * - step(눈금 간격)이 1000원 미만이면 k 반올림이 같은 라벨을 반복하므로(98k,98k…) 소수 한 자리.
+ */
+function shortWon(
+  price: number,
+  currency?: string | null,
+  step?: number,
+  axisMax?: number,
+): string {
   if (currency === 'USD') return `$${Math.round(price).toLocaleString()}`;
-  if (price >= 10000) return `${Math.round(price / 1000).toLocaleString()}k`;
+  // 0은 'k'를 붙이지 않는다 (축 하단 클램프로 생기는 '0k' 방지)
+  if (price === 0) return '0';
+  if ((axisMax ?? price) >= 10000) {
+    const k = price / 1000;
+    if (step != null && step < 1000) return `${k.toFixed(1)}k`;
+    return `${Math.round(k).toLocaleString()}k`;
+  }
   return `${Math.round(price).toLocaleString()}`;
 }
 
@@ -344,9 +366,14 @@ function buildChartGeometry(
   const prices = [...points.map((p) => p.price), ...extraPrices];
   const minP = Math.min(...prices);
   const maxP = Math.max(...prices);
-  const span = Math.max(maxP - minP, 1);
-  const yMin = minP - span * 0.12;
-  const yMax = maxP + span * 0.12;
+  // 변동폭이 가격대의 MIN_Y_SPAN_RATIO 미만이면 축을 그만큼 넓혀 완만하게 보이게 한다.
+  // (9600→9800 같은 2% 변동이 화면 전체를 쓰며 폭락처럼 보이는 것 방지)
+  const mid = (minP + maxP) / 2;
+  const span = Math.max(maxP - minP, mid * MIN_Y_SPAN_RATIO, 1);
+  // 가격은 음수가 될 수 없다. 변동폭이 큰 상품(예: 3,000~32,960원)에서 아래 여백이
+  // 0을 파고들어 축에 '-1k'가 찍히던 것 방지 — 잘린 만큼 위로 넘기지 않고 0에서 멈춘다.
+  const yMin = Math.max(0, mid - span / 2 - span * 0.12);
+  const yMax = mid + span / 2 + span * 0.12;
 
   const plotW = width - pad.left - pad.right;
   const plotH = height - pad.top - pad.bottom;
@@ -390,6 +417,7 @@ function buildChartGeometry(
   }
 
   const yTicks = 5;
+  const tickStep = (yMax - yMin) / (yTicks - 1);
   const ticks = Array.from({ length: yTicks }, (_, i) => {
     const t = i / (yTicks - 1);
     const price = yMax - t * (yMax - yMin);
@@ -414,6 +442,8 @@ function buildChartGeometry(
     coords: ordered,
     d,
     ticks,
+    tickStep,
+    yMax,
     xLabels,
     minP,
     maxP,
@@ -810,7 +840,7 @@ function PriceLineChart({
               className="fill-gray-400"
               fontSize={10}
             >
-              {shortWon(t.price, currency)}
+              {shortWon(t.price, currency, geo.tickStep, geo.yMax)}
             </text>
           </g>
         ))}
