@@ -121,12 +121,18 @@ export const TrendingContainer = ({ initialTab }: Props) => {
     });
   }, [tabId, categoryIds]);
 
+  // ponytail: indexOf가 -1이면 어떤 탭도 active로 안 걸려 탭바가 통째로 회색이 되고,
+  // TabbarV2의 children[-1]이 undefined라 스트립 스크롤도 안 잡힌다.
+  // tabId가 목록에 없는 창(로그인 상태 변화·선호 카테고리 수정으로 categoryIds가 줄어들 때
+  // nuqs parse가 옛 클로저로 이미 통과시킨 값)에 대비해 0('전체')으로 떨어뜨린다.
+  const activeIndex = Math.max(0, categoryIds.indexOf(tabId));
+
   return (
     <Tabs.Root value={`${tabId}`} asChild>
       <div>
         <TabBarV2
           allCategories={allCategories}
-          tabIndex={categoryIds.indexOf(tabId)}
+          tabIndex={activeIndex}
           onTabClick={(id) => handleTabChange(id)}
         />
 
@@ -139,14 +145,13 @@ export const TrendingContainer = ({ initialTab }: Props) => {
         >
           <Swiper
             {...SWIPER_OPTIONS}
-            initialSlide={categoryIds.indexOf(tabId)}
+            initialSlide={activeIndex}
             onSlideChange={handleSlideChange}
             onSwiper={handleInitSwiper}
           >
             {allCategories.map((category) => {
               const isFetched = fetchedTabIds.has(category.id);
               const currentIndex = categoryIds.indexOf(category.id);
-              const activeIndex = categoryIds.indexOf(tabId);
               const isWithinRange = Math.abs(currentIndex - activeIndex) <= 1;
               return (
                 <SwiperSlide key={category.id} className="w-full flex-[0_0_100%]">
