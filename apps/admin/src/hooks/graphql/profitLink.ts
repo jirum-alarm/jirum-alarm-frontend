@@ -1,8 +1,10 @@
 import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
 
 import {
+  MutationSetThreeHaSession,
   MutationSetTossSession,
   QueryAffiliateSalesTrend,
+  QueryHasThreeHaSession,
   QueryHasTossSession,
   QueryProfitLinkErrorStats,
   QueryProfitLinkFunnelDaily,
@@ -32,6 +34,24 @@ export const useMutationSetTossSession = (
   return useMutation<{ setTossSession: boolean }, { token: string }>(MutationSetTossSession, {
     ...options,
   });
+};
+
+export const useQueryHasThreeHaSession = (
+  options?: QueryHookOptions<{ hasThreeHaSession: boolean }>,
+) => {
+  return useQuery<{ hasThreeHaSession: boolean }>(QueryHasThreeHaSession, {
+    fetchPolicy: 'network-only',
+    ...options,
+  });
+};
+
+export const useMutationSetThreeHaSession = (
+  options?: MutationHookOptions<{ setThreeHaSession: boolean }, { cookie: string }>,
+) => {
+  return useMutation<{ setThreeHaSession: boolean }, { cookie: string }>(
+    MutationSetThreeHaSession,
+    { ...options },
+  );
 };
 
 // ─── 수익링크 대시보드 ───

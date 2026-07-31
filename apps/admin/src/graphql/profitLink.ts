@@ -12,6 +12,18 @@ export const MutationSetTossSession = gql`
   }
 `;
 
+export const QueryHasThreeHaSession = gql`
+  query HasThreeHaSession {
+    hasThreeHaSession
+  }
+`;
+
+export const MutationSetThreeHaSession = gql`
+  mutation SetThreeHaSession($cookie: String!) {
+    setThreeHaSession(cookie: $cookie)
+  }
+`;
+
 // ─── 수익링크 대시보드 ───
 
 export const QueryProfitLinkProviderHealth = gql`

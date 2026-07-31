@@ -3,13 +3,15 @@
 import { useState } from 'react';
 
 import ProfitLinkDashboard from './ProfitLinkDashboard';
+import ThreeHaSessionPanel from './ThreeHaSessionPanel';
 import TossSessionPanel from './TossSessionPanel';
 
-type ProfitLinkTab = 'dashboard' | 'toss';
+type ProfitLinkTab = 'dashboard' | 'toss' | 'threeHa';
 
 const tabs: { key: ProfitLinkTab; label: string }[] = [
   { key: 'dashboard', label: '대시보드' },
   { key: 'toss', label: '토스 세션' },
+  { key: 'threeHa', label: '세시간전 세션' },
 ];
 
 const ProfitLinkTabs = () => {
@@ -35,6 +37,7 @@ const ProfitLinkTabs = () => {
 
       {activeTab === 'dashboard' && <ProfitLinkDashboard />}
       {activeTab === 'toss' && <TossSessionPanel />}
+      {activeTab === 'threeHa' && <ThreeHaSessionPanel />}
     </div>
   );
 };
