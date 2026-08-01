@@ -128,11 +128,24 @@ const MutationLoginByRefreshToken = graphql(`
   }
 `);
 
-const QueryMypageKeyword = graphql(`
+/**
+ * 수기 TypedDocumentString — `priceDropOnly` 가 codegen 생성 타입에 없다.
+ * dev 엔드포인트 사망으로 스키마 재생성이 막혀 있다(shared/api/keyword 주석 참고).
+ *
+ * ★`src/graphql/keyword.ts` 의 동명 Apollo gql 문서는 **쓰이지 않는다**(레거시).
+ * 실제 목록 조회는 이 문서다 — 필드를 추가할 땐 여기를 고쳐야 한다.
+ */
+const QueryMypageKeyword = new TypedDocumentString<
+  {
+    notificationKeywordsByMe: { id: string; keyword: string; priceDropOnly: boolean }[];
+  },
+  QueryMypageKeywordQueryVariables
+>(`
   query QueryMypageKeyword($limit: Int!, $searchAfter: [String!]) {
     notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {
       id
       keyword
+      priceDropOnly
     }
   }
 `);
