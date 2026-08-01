@@ -7,15 +7,12 @@ import { useRef, useState } from 'react';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
+import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { AuthQueries } from '@/entities/auth';
 
-import { usePendingAction } from '@/features/auth/model/login/usePendingAction';
 import { useUpdateKeyword } from '@/features/mypage/model';
-
-/** 로그인 후 이어서 실행할 동작 식별자. usePendingAction 과 짝을 맞춘다. */
-const PENDING_ADD_KEYWORD = 'notification-keyword-add';
 
 /**
  * 홈의 인기 키워드 추천 섹션. `under-10000`(만원이하템) 뒤에 들어간다.
@@ -101,7 +98,7 @@ export default function RecommendedKeywordSection() {
 
   // 게스트가 칩을 눌러 로그인하고 돌아왔으면 그 키워드를 이어서 등록한다.
   // ★훅이므로 아래 early return 보다 위에 있어야 한다.
-  usePendingAction<string>(PENDING_ADD_KEYWORD, (keyword) => {
+  usePendingAction<string>(PendingActionType.NOTIFICATION_KEYWORD_ADD, (keyword) => {
     if (keyword) runAdd(keyword);
   });
 
@@ -119,7 +116,7 @@ export default function RecommendedKeywordSection() {
           title: '키워드 알림은 로그인이 필요해요',
           description: `로그인하고 '${keyword}' 알림을 받아보세요`,
         },
-        { type: PENDING_ADD_KEYWORD, payload: keyword },
+        { type: PendingActionType.NOTIFICATION_KEYWORD_ADD, payload: keyword },
       )
     )
       return;

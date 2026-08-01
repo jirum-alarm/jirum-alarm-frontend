@@ -10,6 +10,19 @@
  * 복귀 후 그 이름으로 핸들러를 찾아 실행한다.
  */
 
+/**
+ * 이어하기 액션 종류. 저장하는 쪽(checkAndRedirect)과 실행하는 쪽(usePendingAction)이
+ * 같은 값을 써야 하므로 여기 모아둔다. 문자열을 각자 적으면 오타로 조용히 안 이어진다.
+ */
+export const PendingActionType = {
+  /** payload: 키워드 문자열 */
+  NOTIFICATION_KEYWORD_ADD: 'notification-keyword-add',
+  /** payload: productId */
+  WISHLIST_ADD: 'wishlist-add',
+  /** payload: productId */
+  PRODUCT_LIKE: 'product-like',
+} as const;
+
 const STORAGE_KEY = 'pending-login-action';
 /** 오래된 의도는 실행하지 않는다. 로그인 왕복은 길어야 몇 분이다. */
 const MAX_AGE_MS = 10 * 60 * 1000;
