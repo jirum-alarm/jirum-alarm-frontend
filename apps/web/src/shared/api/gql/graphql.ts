@@ -2782,11 +2782,19 @@ export type LikeCommunityPostMutation = { __typename?: 'Mutation'; addUserLikeOr
 
 export type MutationAddNotificationKeywordMutationVariables = Exact<{
   keyword: Scalars['String']['input'];
+  fromRecommendation?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type MutationAddNotificationKeywordMutation = {
   __typename?: 'Mutation';
   addNotificationKeyword: boolean;
+};
+
+export type QueryRecommendedNotificationKeywordsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryRecommendedNotificationKeywordsQuery = {
+  __typename?: 'Query';
+  recommendedNotificationKeywords: Array<string>;
 };
 
 export type MutationRemoveNotificationKeywordMutationVariables = Exact<{
@@ -3935,12 +3943,20 @@ export const LikeCommunityPostDocument = new TypedDocumentString(`
   LikeCommunityPostMutationVariables
 >;
 export const MutationAddNotificationKeywordDocument = new TypedDocumentString(`
-    mutation MutationAddNotificationKeyword($keyword: String!) {
-  addNotificationKeyword(keyword: $keyword)
+    mutation MutationAddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {
+  addNotificationKeyword(keyword: $keyword, fromRecommendation: $fromRecommendation)
 }
     `) as unknown as TypedDocumentString<
   MutationAddNotificationKeywordMutation,
   MutationAddNotificationKeywordMutationVariables
+>;
+export const QueryRecommendedNotificationKeywordsDocument = new TypedDocumentString(`
+    query QueryRecommendedNotificationKeywords {
+  recommendedNotificationKeywords
+}
+    `) as unknown as TypedDocumentString<
+  QueryRecommendedNotificationKeywordsQuery,
+  QueryRecommendedNotificationKeywordsQueryVariables
 >;
 export const MutationRemoveNotificationKeywordDocument = new TypedDocumentString(`
     mutation MutationRemoveNotificationKeyword($id: Float!) {

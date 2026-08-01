@@ -38,7 +38,8 @@ type Documents = {
   '\n  mutation RemoveCommunityPost($id: Int!) {\n    removeComment(id: $id)\n  }\n': typeof types.RemoveCommunityPostDocument;
   '\n  mutation ReportCommunityPost(\n    $targetId: Float!\n    $target: UserReportTarget!\n    $reason: UserReportReason!\n    $description: String\n  ) {\n    addUserReport(target: $target, targetId: $targetId, reason: $reason, description: $description)\n  }\n': typeof types.ReportCommunityPostDocument;
   '\n  mutation LikeCommunityPost($targetId: Int!, $isLike: Boolean) {\n    addUserLikeOrDislike(target: COMMENT, targetId: $targetId, isLike: $isLike)\n  }\n': typeof types.LikeCommunityPostDocument;
-  '\n  mutation MutationAddNotificationKeyword($keyword: String!) {\n    addNotificationKeyword(keyword: $keyword)\n  }\n': typeof types.MutationAddNotificationKeywordDocument;
+  '\n  mutation MutationAddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {\n    addNotificationKeyword(keyword: $keyword, fromRecommendation: $fromRecommendation)\n  }\n': typeof types.MutationAddNotificationKeywordDocument;
+  '\n  query QueryRecommendedNotificationKeywords {\n    recommendedNotificationKeywords\n  }\n': typeof types.QueryRecommendedNotificationKeywordsDocument;
   '\n  mutation MutationRemoveNotificationKeyword($id: Float!) {\n    removeNotificationKeyword(id: $id)\n  }\n': typeof types.MutationRemoveNotificationKeywordDocument;
   '\n  query QueryMypageKeyword($limit: Int!, $searchAfter: [String!]) {\n    notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {\n      id\n      keyword\n    }\n  }\n': typeof types.QueryMypageKeywordDocument;
   '\n  mutation AddUserLikeOrDislike($target: UserLikeTarget!, $targetId: Int!, $isLike: Boolean) {\n    addUserLikeOrDislike(target: $target, targetId: $targetId, isLike: $isLike)\n  }\n': typeof types.AddUserLikeOrDislikeDocument;
@@ -127,8 +128,10 @@ const documents: Documents = {
     types.ReportCommunityPostDocument,
   '\n  mutation LikeCommunityPost($targetId: Int!, $isLike: Boolean) {\n    addUserLikeOrDislike(target: COMMENT, targetId: $targetId, isLike: $isLike)\n  }\n':
     types.LikeCommunityPostDocument,
-  '\n  mutation MutationAddNotificationKeyword($keyword: String!) {\n    addNotificationKeyword(keyword: $keyword)\n  }\n':
+  '\n  mutation MutationAddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {\n    addNotificationKeyword(keyword: $keyword, fromRecommendation: $fromRecommendation)\n  }\n':
     types.MutationAddNotificationKeywordDocument,
+  '\n  query QueryRecommendedNotificationKeywords {\n    recommendedNotificationKeywords\n  }\n':
+    types.QueryRecommendedNotificationKeywordsDocument,
   '\n  mutation MutationRemoveNotificationKeyword($id: Float!) {\n    removeNotificationKeyword(id: $id)\n  }\n':
     types.MutationRemoveNotificationKeywordDocument,
   '\n  query QueryMypageKeyword($limit: Int!, $searchAfter: [String!]) {\n    notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {\n      id\n      keyword\n    }\n  }\n':
@@ -360,8 +363,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation MutationAddNotificationKeyword($keyword: String!) {\n    addNotificationKeyword(keyword: $keyword)\n  }\n',
+  source: '\n  mutation MutationAddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {\n    addNotificationKeyword(keyword: $keyword, fromRecommendation: $fromRecommendation)\n  }\n',
 ): typeof import('./graphql').MutationAddNotificationKeywordDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryRecommendedNotificationKeywords {\n    recommendedNotificationKeywords\n  }\n',
+): typeof import('./graphql').QueryRecommendedNotificationKeywordsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

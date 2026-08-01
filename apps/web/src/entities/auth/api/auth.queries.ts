@@ -19,4 +19,13 @@ export const AuthQueries = {
       ],
       queryFn: () => AuthService.getMyKeyword(variables),
     }),
+  recommendedKeywords: () =>
+    queryOptions({
+      queryKey: [...AuthQueries.all(), 'recommended-keywords'],
+      queryFn: () => AuthService.getRecommendedKeywords(),
+      // 배치(1일 1회)가 만드는 값이라 재요청은 아껴도 되지만, staleTime 을 길게 잡으면
+      // 배치가 품질을 고친 뒤에도 열어둔 탭이 옛 추천을 계속 보여준다(실제로 겪음).
+      // 1분이면 재요청 부담은 사실상 없고 갱신은 바로 따라온다.
+      staleTime: 1000 * 60,
+    }),
 };

@@ -2,9 +2,11 @@ import { API_URL, IS_PRD, IS_STAGING, NEXT_PUBLIC_SERVICE_URL } from './env';
 
 const IS_INTERNAL_NETWORK = IS_PRD || IS_STAGING;
 
+// 로컬 개발은 dev API 가 기본이지만, GRAPHQL_ENDPOINT 를 주면 그걸 쓴다.
+// (dev API 가 죽었거나 운영에만 배포된 스키마를 로컬에서 확인해야 할 때 필요)
 export const GRAPHQL_ENDPOINT = IS_INTERNAL_NETWORK
   ? `${API_URL}/graphql`
-  : 'https://jirum-dev-api.kyojs.com/graphql';
+  : (process.env.GRAPHQL_ENDPOINT ?? 'https://jirum-dev-api.kyojs.com/graphql');
 
 // 브라우저는 항상 같은 origin 의 /api/graphql 로.
 // localhost:3000 고정이면 (포트가 3001로 떠도) 다른 next 프로세스로 가서 쿼리가 깨지고

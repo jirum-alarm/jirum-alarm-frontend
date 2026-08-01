@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const MutationAddNotificationKeyword = gql`
-  mutation MutationAddNotificationKeyword($keyword: String!) {
-    addNotificationKeyword(keyword: $keyword)
+  mutation MutationAddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {
+    addNotificationKeyword(keyword: $keyword, fromRecommendation: $fromRecommendation)
   }
 `;
 

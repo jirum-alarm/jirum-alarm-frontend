@@ -53,6 +53,10 @@ export class AuthService {
     return execute(QueryMypageKeyword, variables).then((res) => res.data);
   }
 
+  static async getRecommendedKeywords() {
+    return execute(QueryRecommendedNotificationKeywords).then((res) => res.data);
+  }
+
   static async updateMe(variables: MutationUpdateUserProfileMutationVariables) {
     return execute(MutationUpdateUserProfile, variables).then((res) => res.data);
   }
@@ -197,9 +201,15 @@ const MutationWithdraw = graphql(`
   }
 `);
 
+const QueryRecommendedNotificationKeywords = graphql(`
+  query QueryRecommendedNotificationKeywords {
+    recommendedNotificationKeywords
+  }
+`);
+
 const MutationAddNotificationKeyword = graphql(`
-  mutation MutationAddNotificationKeyword($keyword: String!) {
-    addNotificationKeyword(keyword: $keyword)
+  mutation MutationAddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {
+    addNotificationKeyword(keyword: $keyword, fromRecommendation: $fromRecommendation)
   }
 `);
 

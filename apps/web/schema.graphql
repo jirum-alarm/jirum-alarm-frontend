@@ -604,7 +604,11 @@ type Mutation {
   """
   알림 키워드 추가
   """
-  addNotificationKeyword(keyword: String!): Boolean!
+  addNotificationKeyword(
+    """추천 키워드에서 등록했는지 여부"""
+    fromRecommendation: Boolean
+    keyword: String!
+  ): Boolean!
   """
   비회원 푸시
   """
