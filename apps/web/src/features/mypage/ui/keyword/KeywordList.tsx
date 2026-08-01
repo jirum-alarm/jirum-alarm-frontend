@@ -21,7 +21,7 @@ const KeywordList = () => {
           </p>
         </div>
         <p className="mt-1 text-xs text-gray-500">
-          &lsquo;가격 하락 알림&rsquo;을 켜면 등록했을 때보다 싸게 올라온 딜만 알려드려요
+          &lsquo;가격 하락 알림&rsquo;을 켜면 평소 시세보다 싸게 뜬 딜만 알려드려요
         </p>
       </div>
       <div className="h-4" />
