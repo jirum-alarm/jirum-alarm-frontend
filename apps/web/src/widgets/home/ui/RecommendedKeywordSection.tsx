@@ -42,20 +42,14 @@ function getErrorMessage(error: unknown): string {
 
 export default function RecommendedKeywordSection() {
   const { toast } = useToast();
-  const { isLoggedIn } = useIsLoggedIn();
   const { checkAndRedirect } = useRedirectIfNotLoggedIn();
   const { requestPermission } = useFcmPermission();
 
+  // 이미 등록한 키워드 제외는 서버가 한다(recommendedNotificationKeywords 가 로그인
+  // 사용자면 걸러서 준다). 클라이언트에서 거르려면 notificationKeywordsByMe 를 따로
+  // 받아야 하는데, 그 쿼리는 게스트에게 403 이라 홈처럼 로그인/비로그인이 섞이는
+  // 화면에서 다루기 번거롭다.
   const { data } = useQuery(AuthQueries.recommendedKeywords());
-  // ★enabled: isLoggedIn 이 필수다. notificationKeywordsByMe 는 게스트에게 403 을
-  // 주는데, AuthService.getMyKeyword 는 인증 에러를 만나면 redirect(PAGE.LOGIN) 을
-  // 호출한다. 홈 트래픽 대부분이 게스트라 이 가드가 없으면 홈에서 로그인으로 튄다.
-  // useQuery(useSuspenseQuery 아님) — 홈 렌더를 이 섹션이 붙잡으면 안 된다.
-  const { data: keywordData } = useQuery({
-    ...AuthQueries.myKeywords({ limit: 20 }),
-    enabled: isLoggedIn,
-    retry: false,
-  });
 
   // 이번 화면에서 등록한 키워드. 등록 직후 칩을 목록에서 빼지 않고 체크 표시로만 바꾼다.
   const [justAdded, setJustAdded] = useState<string[]>([]);
@@ -80,14 +74,7 @@ export default function RecommendedKeywordSection() {
     },
   });
 
-  // 이미 등록한 키워드는 뺀다 — 눌러도 '이미 등록됨' 에러만 나기 때문.
-  // 서버가 소문자로 저장하므로 비교도 소문자로 맞춘다.
-  const registered = new Set(
-    keywordData?.notificationKeywordsByMe?.map((item) => item.keyword.toLowerCase()) ?? [],
-  );
-  const keywords = (data?.recommendedNotificationKeywords ?? []).filter(
-    (keyword) => !registered.has(keyword.toLowerCase()),
-  );
+  const keywords = data?.recommendedNotificationKeywords ?? [];
 
   // ★표시 목록은 추천이 처음 도착한 시점에 고정하고 이후 갱신하지 않는다. 등록하면
   // mutation 이 myKeywords 를 invalidate 해서 그 키워드가 registered 로 들어가는데,
