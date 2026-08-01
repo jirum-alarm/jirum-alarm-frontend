@@ -69,7 +69,13 @@ export default function LikeButton({
       });
     }
 
-    if (checkAndRedirect()) return;
+    if (
+      checkAndRedirect({
+        title: '찜하려면 로그인이 필요해요',
+        description: '로그인하고 찜한 상품을 마이페이지에서 모아보세요',
+      })
+    )
+      return;
 
     triggerHaptic(isLiked ? 'light' : 'success');
 

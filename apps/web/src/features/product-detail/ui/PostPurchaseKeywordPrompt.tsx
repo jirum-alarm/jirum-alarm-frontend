@@ -133,10 +133,15 @@ export default function PostPurchaseKeywordPrompt({
       });
     }
 
-    // 게스트가 트래픽의 97%다. rtnUrl 을 붙여 로그인 후 이 상품으로 되돌아오게 하고,
-    // 앱(WebView)에서는 네이티브 라우팅으로 보낸다 — 둘 다 checkAndRedirect 가 처리한다.
-    // 직접 router.push(PAGE.LOGIN) 하면 rtnUrl 이 빠져 로그인 후 상품으로 못 돌아온다.
-    if (checkAndRedirect()) return;
+    // 게스트가 트래픽의 97%다. 웹은 로그인 모달, 앱(WebView)은 네이티브 라우팅 —
+    // 둘 다 checkAndRedirect 가 처리한다.
+    if (
+      checkAndRedirect({
+        title: '키워드 알림은 로그인이 필요해요',
+        description: `로그인하고 '${keyword}' 알림을 받아보세요`,
+      })
+    )
+      return;
 
     addNotificationKeyword({ keyword });
   };

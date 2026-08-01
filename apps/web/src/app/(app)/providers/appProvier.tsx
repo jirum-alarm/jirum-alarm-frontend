@@ -9,6 +9,8 @@ import { IS_PRD } from '@/shared/config/env';
 import { GTM_ID } from '@/shared/config/gtm';
 import FCMConfig from '@/shared/lib/firebase/FCMConfig';
 
+import LoginModal from '@/features/auth/ui/login/LoginModal';
+
 import { AdSenseProvider } from './adsenseProvider';
 import { ClarityProvider } from './clarityProvider';
 import { DeviceId } from './deviceId';
@@ -42,6 +44,7 @@ export const AppProvider = ({ children }: Props) => {
           {/* <PHProvider> */}
           <NuqsAdapter>{children}</NuqsAdapter>
           {/* </PHProvider> */}
+          <LoginModal />
         </ReactQueryProviders>
       </JotaiProvider>
       <Toaster />

@@ -14,6 +14,8 @@ import LoadingSpinner from '@/shared/ui/common/icons/LoadingSpinner';
 import { useToast } from '@/shared/ui/common/Toast';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
+import { setRecentLoginMethod } from '@/features/auth/model/login';
+
 const PROVIDER_MAP: Record<string, OauthProvider> = {
   kakao: OauthProvider.Kakao,
   naver: OauthProvider.Naver,
@@ -62,6 +64,9 @@ const SocialLoginCallbackPage = () => {
       await setAccessToken(data.socialLogin.accessToken);
       if (data.socialLogin.refreshToken) {
         await setRefreshToken(data.socialLogin.refreshToken);
+      }
+      if (provider === 'kakao' || provider === 'naver') {
+        setRecentLoginMethod(provider);
       }
 
       const rtnUrl = extractRtnUrlFromState(state);

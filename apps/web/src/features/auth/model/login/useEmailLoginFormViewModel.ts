@@ -10,6 +10,8 @@ import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { WebViewBridge, WebViewEventType } from '@/shared/lib/webview';
 import { useToast } from '@/shared/ui/common/Toast';
 
+import { setRecentLoginMethod } from './recentLoginMethod';
+
 interface Input {
   value: string;
   error: boolean;
@@ -61,6 +63,7 @@ const useEmailLoginFormViewModel = () => {
         await setRefreshToken(data.login.refreshToken);
       }
       requestPermission();
+      setRecentLoginMethod('email');
 
       toast('로그인에 성공했어요.');
       const redirectUrl = rtnUrl ? decodeURIComponent(rtnUrl) : PAGE.HOME;
