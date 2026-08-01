@@ -79,40 +79,37 @@ export default function LoginModal() {
           <AlertDialog.Description className="text-sm text-gray-500">
             {message.description}
           </AlertDialog.Description>
+          {recentMethod && (
+            <p className="text-xs text-gray-400">
+              최근에 {RECENT_METHOD_LABEL[recentMethod]}으로 로그인했어요
+            </p>
+          )}
         </AlertDialog.Header>
         <div className="flex flex-col gap-2">
           <LoginOptionButton
+            icon={<SvgKakao />}
+            label="카카오로 시작하기"
             method="kakao"
             isLoading={loadingMethod === 'kakao'}
             disabled={loadingMethod !== null}
             onClick={handleKakaoLogin}
-          >
-            <SvgKakao />
-            카카오로 시작하기
-          </LoginOptionButton>
+          />
           <LoginOptionButton
+            icon={<SvgNaver />}
+            label="네이버로 시작하기"
             method="naver"
             isLoading={loadingMethod === 'naver'}
             disabled={loadingMethod !== null}
             onClick={handleNaverLogin}
-          >
-            <SvgNaver />
-            네이버로 시작하기
-          </LoginOptionButton>
+          />
           <LoginOptionButton
+            icon={<SvgEmail />}
+            label="이메일로 시작하기"
             method="email"
             isLoading={false}
             disabled={loadingMethod !== null}
             onClick={handleEmailLogin}
-          >
-            <SvgEmail />
-            이메일로 시작하기
-          </LoginOptionButton>
-          {recentMethod && (
-            <p className="text-center text-xs text-gray-400">
-              최근에 {RECENT_METHOD_LABEL[recentMethod]}으로 로그인했어요
-            </p>
-          )}
+          />
         </div>
         <AlertDialog.Cancel asChild>
           <button type="button" className="h-10 text-sm text-gray-500">
@@ -126,16 +123,18 @@ export default function LoginModal() {
 
 function LoginOptionButton({
   method,
+  icon,
+  label,
   isLoading,
   disabled,
   onClick,
-  children,
 }: {
   method: LoginMethod;
+  icon: React.ReactNode;
+  label: string;
   isLoading: boolean;
   disabled: boolean;
   onClick: () => void;
-  children: React.ReactNode;
 }) {
   return (
     <button
@@ -144,7 +143,14 @@ function LoginOptionButton({
       disabled={disabled}
       className={`flex h-12 w-full items-center justify-center gap-2 rounded-[230px] font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-50 ${LOGIN_BUTTON_STYLE[method]}`}
     >
-      {isLoading ? <LoadingSpinner className="size-5" /> : children}
+      {isLoading ? (
+        <LoadingSpinner className="size-5" />
+      ) : (
+        <>
+          {icon}
+          {label}
+        </>
+      )}
     </button>
   );
 }
