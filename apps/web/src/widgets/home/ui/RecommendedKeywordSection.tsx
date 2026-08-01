@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
+import { useRef, useState } from 'react';
 
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
@@ -56,12 +57,24 @@ export default function RecommendedKeywordSection() {
     retry: false,
   });
 
+  // 이번 화면에서 등록한 키워드. 등록 직후 칩을 목록에서 빼지 않고 체크 표시로만 바꾼다.
+  const [justAdded, setJustAdded] = useState<string[]>([]);
+
+  // 실패 시 되돌릴 대상. onError 가 variables 를 안 주므로 마지막 시도를 기억해 둔다.
+  const inFlight = useRef<string | null>(null);
+
   const { mutate: addNotificationKeyword, isPending } = useUpdateKeyword({
     onSuccess: () => {
-      toast('알림 키워드로 등록했어요.');
+      // 칩이 체크로 바뀌는 것과 별개로 토스트도 띄운다. 칩은 스크롤 밖으로 나갈 수 있고,
+      // "등록됐다"는 사실은 화면 어디를 보고 있든 전달돼야 한다.
+      const added = inFlight.current;
+      toast(added ? `'${added}' 키워드 알림을 등록했어요.` : '키워드 알림을 등록했어요.');
       requestPermission();
     },
     onError: (error) => {
+      // 낙관적으로 켜둔 체크를 되돌린다.
+      const failed = inFlight.current;
+      if (failed) setJustAdded((prev) => prev.filter((k) => k !== failed));
       // 서버가 '이미 등록된 키워드', '최대 20개 초과' 같은 구체적 이유를 준다.
       toast(getErrorMessage(error) || '키워드 저장에 실패했습니다.');
     },
@@ -72,18 +85,38 @@ export default function RecommendedKeywordSection() {
   const registered = new Set(
     keywordData?.notificationKeywordsByMe?.map((item) => item.keyword.toLowerCase()) ?? [],
   );
-  const keywords = (data?.recommendedNotificationKeywords ?? [])
-    .filter((keyword) => !registered.has(keyword.toLowerCase()))
-    .slice(0, MAX_CHIPS);
+  const keywords = (data?.recommendedNotificationKeywords ?? []).filter(
+    (keyword) => !registered.has(keyword.toLowerCase()),
+  );
+
+  // ★표시 목록은 추천이 처음 도착한 시점에 고정하고 이후 갱신하지 않는다. 등록하면
+  // mutation 이 myKeywords 를 invalidate 해서 그 키워드가 registered 로 들어가는데,
+  // 목록을 따라가게 두면 누른 칩이 사라지고 뒤 키워드가 앞으로 밀려온다 — 뭘 눌렀는지도,
+  // 성공했는지도 알 수 없다. 등록한 칩은 자리에 남겨 체크로만 바꾸고(justAdded),
+  // 새 추천은 다음 방문(새로고침)에 받는다.
+  const pinned = useRef<string[] | null>(null);
+  if (pinned.current === null && keywords.length > 0) {
+    pinned.current = keywords.slice(0, MAX_CHIPS);
+  }
+  const chips = pinned.current ?? [];
 
   // 추천이 없으면 섹션을 통째로 숨긴다. 홈은 딜을 보러 오는 곳이라 빈 박스나
   // 스켈레톤이 오히려 노이즈다 (TossHomeSection 과 같은 판단).
-  if (keywords.length === 0) return null;
+  if (chips.length === 0) return null;
 
   const handleSelect = (keyword: string) => {
-    if (isPending) return;
+    if (isPending || justAdded.includes(keyword)) return;
     // 게스트면 로그인으로 보낸다. checkAndRedirect 가 true 를 반환하면 이동한 것.
-    if (checkAndRedirect()) return;
+    if (
+      checkAndRedirect({
+        title: '키워드 알림은 로그인이 필요해요',
+        description: `로그인하고 '${keyword}' 알림을 받아보세요`,
+      })
+    )
+      return;
+    // 낙관적으로 먼저 체크를 켠다. 실패하면 onError 가 되돌린다.
+    inFlight.current = keyword;
+    setJustAdded((prev) => [...prev, keyword]);
     addNotificationKeyword({ keyword, fromRecommendation: true });
   };
 
@@ -106,27 +139,40 @@ export default function RecommendedKeywordSection() {
       {/* 칩 5개는 데스크톱 layout-max(1240px) 를 못 채워서 그대로 두면 휑하게 흩어진다.
           묶음 자체에 최대 폭을 줘 가운데로 모으고, 모바일에선 2줄로 접히게 둔다. */}
       <ul className="mx-auto mt-4 flex max-w-[32rem] flex-wrap justify-center gap-2">
-        {keywords.map((keyword) => (
-          <li key={keyword}>
-            <motion.button
-              type="button"
-              disabled={isPending}
-              onClick={() => handleSelect(keyword)}
-              aria-label={`${keyword} 키워드 알림 등록`}
-              // 눌림 인터랙션은 레포 공통값(상품 카드·탭과 동일): scale 0.95 / 0.1s
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.1 }}
-              // 칩 자체는 내용에 맞춰 36px 로 두고(그래야 안 붕 뜬다), 터치 타겟 44px 는
-              // before 의 투명 영역으로 채운다. 보이는 높이와 누를 수 있는 높이를 분리.
-              className="relative flex items-center gap-2 rounded-full border border-gray-100 bg-white px-4 py-2 text-sm font-medium text-gray-900 shadow-[0_1px_2px_rgba(0,0,0,0.04)] before:absolute before:inset-x-0 before:top-1/2 before:h-11 before:-translate-y-1/2 before:content-[''] disabled:opacity-50"
-            >
-              {keyword}
-              <span aria-hidden className="text-base leading-none font-normal text-gray-400">
-                +
-              </span>
-            </motion.button>
-          </li>
-        ))}
+        {chips.map((keyword) => {
+          const added = justAdded.includes(keyword);
+          return (
+            <li key={keyword}>
+              <motion.button
+                type="button"
+                disabled={isPending || added}
+                onClick={() => handleSelect(keyword)}
+                aria-label={added ? `${keyword} 키워드 알림 등록됨` : `${keyword} 키워드 알림 등록`}
+                // 눌림 인터랙션은 레포 공통값(상품 카드·탭과 동일): scale 0.95 / 0.1s
+                whileTap={added ? undefined : { scale: 0.95 }}
+                transition={{ duration: 0.1 }}
+                // 칩 자체는 내용에 맞춰 36px 로 두고(그래야 안 붕 뜬다), 터치 타겟 44px 는
+                // before 의 투명 영역으로 채운다. 보이는 높이와 누를 수 있는 높이를 분리.
+                //
+                // 등록됨 상태는 disabled 지만 흐리게 하지 않는다 — 방금 성공한 결과라
+                // 또렷하게 보여야 한다(그래서 disabled:opacity-50 대신 분기).
+                className={`relative flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium shadow-[0_1px_2px_rgba(0,0,0,0.04)] before:absolute before:inset-x-0 before:top-1/2 before:h-11 before:-translate-y-1/2 before:content-[''] ${
+                  added
+                    ? 'border-primary-200 bg-primary-50 text-primary-700'
+                    : 'border-gray-100 bg-white text-gray-900 disabled:opacity-50'
+                }`}
+              >
+                {keyword}
+                <span
+                  aria-hidden
+                  className={`leading-none font-normal ${added ? 'text-primary-600 text-sm' : 'text-base text-gray-400'}`}
+                >
+                  {added ? '✓' : '+'}
+                </span>
+              </motion.button>
+            </li>
+          );
+        })}
       </ul>
     </section>
   );
