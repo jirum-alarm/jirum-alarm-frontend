@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { WindowLocation } from '@/shared/lib/window-location';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
+import SvgClose from '@/shared/ui/common/icons/Close';
 import LoadingSpinner from '@/shared/ui/common/icons/LoadingSpinner';
 import SvgEmail from '@/shared/ui/common/icons/login/Email';
 import SvgKakao from '@/shared/ui/common/icons/login/Kakao';
@@ -71,21 +72,30 @@ export default function LoginModal() {
 
   return (
     <AlertDialog defaultOpen onOpenChange={(open) => !open && setMessage(null)}>
-      <AlertDialog.Content className="max-w-[320px] gap-5">
-        <AlertDialog.Header className="gap-1.5">
-          <AlertDialog.Title className="text-lg font-semibold text-gray-900">
+      <AlertDialog.Content className="max-w-[335px] gap-8 px-6 py-7">
+        <AlertDialog.Cancel asChild>
+          <button
+            type="button"
+            aria-label="닫기"
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+          >
+            <SvgClose className="size-5" />
+          </button>
+        </AlertDialog.Cancel>
+        <AlertDialog.Header className="min-w-0 gap-2">
+          <AlertDialog.Title className="text-lg font-semibold break-keep text-gray-900">
             {message.title}
           </AlertDialog.Title>
-          <AlertDialog.Description className="text-sm text-gray-500">
+          <AlertDialog.Description className="text-sm break-keep text-gray-500">
             {message.description}
           </AlertDialog.Description>
           {recentMethod && (
-            <p className="text-xs text-gray-400">
+            <p className="shrink-0 text-xs whitespace-nowrap text-gray-400">
               최근에 {RECENT_METHOD_LABEL[recentMethod]}으로 로그인했어요
             </p>
           )}
         </AlertDialog.Header>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <LoginOptionButton
             icon={<SvgKakao />}
             label="카카오로 시작하기"
@@ -112,7 +122,7 @@ export default function LoginModal() {
           />
         </div>
         <AlertDialog.Cancel asChild>
-          <button type="button" className="h-10 text-sm text-gray-500">
+          <button type="button" className="h-10 text-sm text-gray-500 hover:text-gray-700">
             다음에 할게요
           </button>
         </AlertDialog.Cancel>
@@ -141,13 +151,13 @@ function LoginOptionButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`flex h-12 w-full items-center justify-center gap-2 rounded-[230px] font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-50 ${LOGIN_BUTTON_STYLE[method]}`}
+      className={`flex h-12 w-full items-center justify-center gap-2 rounded-[230px] font-semibold whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-50 ${LOGIN_BUTTON_STYLE[method]}`}
     >
       {isLoading ? (
-        <LoadingSpinner className="size-5" />
+        <LoadingSpinner className="size-5 shrink-0" />
       ) : (
         <>
-          {icon}
+          <span className="size-5 shrink-0 [&>svg]:size-full">{icon}</span>
           {label}
         </>
       )}
