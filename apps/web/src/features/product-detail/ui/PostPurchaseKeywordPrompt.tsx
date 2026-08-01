@@ -143,7 +143,9 @@ export default function PostPurchaseKeywordPrompt({
     )
       return;
 
-    addNotificationKeyword({ keyword });
+    // 이 배너의 문구가 "더 싸지면" 이므로 하락 전용으로 등록한다.
+    // 마이페이지에서 직접 입력하는 경로는 기본값(전부 받기)을 그대로 쓴다.
+    addNotificationKeyword({ keyword, priceDropOnly: true });
   };
 
   // 등록 완료 상태. 배경·글자색·크기를 권유 상태와 동일하게 둔다 — 배경까지 바뀌면

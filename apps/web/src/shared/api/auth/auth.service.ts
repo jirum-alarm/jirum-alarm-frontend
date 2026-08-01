@@ -5,7 +5,6 @@ import { execute } from '@/shared/lib/http-client';
 
 import { graphql } from '../gql';
 import {
-  MutationAddNotificationKeywordMutationVariables,
   MutationAddUserDeviceMutationVariables,
   MutationLoginMutationVariables,
   MutationRemoveNotificationKeywordMutationVariables,
@@ -15,6 +14,7 @@ import {
   MutationUpdateUserProfileMutationVariables,
   QueryMypageKeywordQueryVariables,
   QuerySocialAccessTokenQueryVariables,
+  TypedDocumentString,
 } from '../gql/graphql';
 
 const AUTH_ERROR_CODES = new Set(['UNAUTHENTICATED', 'FORBIDDEN']);
@@ -77,7 +77,11 @@ export class AuthService {
     return execute(UpdatePassword, variables).then((res) => res.data);
   }
 
-  static async updateKeyword(variables: MutationAddNotificationKeywordMutationVariables) {
+  static async updateKeyword(variables: {
+    keyword: string;
+    fromRecommendation?: boolean;
+    priceDropOnly?: boolean;
+  }) {
     return execute(MutationAddNotificationKeyword, variables).then((res) => res.data);
   }
 
@@ -207,9 +211,25 @@ const QueryRecommendedNotificationKeywords = graphql(`
   }
 `);
 
-const MutationAddNotificationKeyword = graphql(`
-  mutation MutationAddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {
-    addNotificationKeyword(keyword: $keyword, fromRecommendation: $fromRecommendation)
+/**
+ * 수기 TypedDocumentString — `priceDropOnly` 인자가 codegen 생성 타입에 없다.
+ * dev 엔드포인트가 죽어 스키마 재생성이 막혀 있기 때문(shared/api/keyword 주석 참고).
+ * dev 복구 후 codegen 을 돌리면 graphql() 로 되돌릴 수 있다.
+ */
+const MutationAddNotificationKeyword = new TypedDocumentString<
+  { addNotificationKeyword: boolean },
+  { keyword: string; fromRecommendation?: boolean; priceDropOnly?: boolean }
+>(`
+  mutation MutationAddNotificationKeyword(
+    $keyword: String!
+    $fromRecommendation: Boolean
+    $priceDropOnly: Boolean
+  ) {
+    addNotificationKeyword(
+      keyword: $keyword
+      fromRecommendation: $fromRecommendation
+      priceDropOnly: $priceDropOnly
+    )
   }
 `);
 

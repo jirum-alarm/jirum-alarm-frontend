@@ -5,7 +5,7 @@ import { useId } from 'react';
 import { useUpdateKeywordPriceDropOnly } from '../../model/update-price-drop-only';
 
 /**
- * 키워드 한 줄에 붙는 "가격 내려가면" 토글.
+ * 키워드 한 줄에 붙는 "가격 하락 알림" 토글.
  *
  * 유저 전역이 아니라 **키워드별** 설정이다 — "삼다수는 싸질 때만, 노트북은 전부"를
  * 표현할 수 있어야 하고, 기준가(basePrice)도 키워드별로 저장된다.
@@ -26,7 +26,7 @@ const PriceDropOnlyToggle = ({
   return (
     <div className="flex shrink-0 items-center gap-1.5">
       <label htmlFor={`drop-${id}`} className="cursor-pointer text-xs text-gray-500">
-        가격 내려가면
+        가격 하락 알림
       </label>
       <input
         id={`drop-${id}`}
