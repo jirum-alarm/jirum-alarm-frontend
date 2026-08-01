@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { ThumbnailType } from '@/shared/api/gql/graphql';
+import { OrderOptionType, ProductOrderType, ThumbnailType } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
 
 import { ProductQueries } from '@/entities/product';
@@ -28,6 +28,8 @@ export default function CategoryPopularSection({
       categoryId: categoryId ?? 0,
       thumbnailType: ThumbnailType.Mall,
       isEnd: false,
+      orderBy: ProductOrderType.CommunityRanking,
+      orderOption: OrderOptionType.Desc,
     }),
   );
 
