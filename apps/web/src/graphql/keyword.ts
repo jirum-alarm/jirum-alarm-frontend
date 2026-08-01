@@ -17,6 +17,7 @@ export const QueryMypageKeyword = gql`
     notificationKeywordsByMe(limit: $limit, searchAfter: $searchAfter) {
       id
       keyword
+      priceDropOnly
     }
   }
 `;

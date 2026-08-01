@@ -1,52 +1,47 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { useId } from 'react';
 
-import { SettingQueries } from '@/entities/notification';
-
-import { useUpdatePriceDropOnly } from '../../model/update-price-drop-only';
+import { useUpdateKeywordPriceDropOnly } from '../../model/update-price-drop-only';
 
 /**
- * "가격이 내려갔을 때만 알림 받기" 토글.
+ * 키워드 한 줄에 붙는 "가격 내려가면" 토글.
  *
- * 등록 시점 기준가보다 싸게 올라온 딜만 골라 보낸다(백엔드 `priceDropOnly`).
- * 별도 알림 종류가 아니라 키워드 알림의 필터라서 이 화면에 둔다.
+ * 유저 전역이 아니라 **키워드별** 설정이다 — "삼다수는 싸질 때만, 노트북은 전부"를
+ * 표현할 수 있어야 하고, 기준가(basePrice)도 키워드별로 저장된다.
  *
- * ponytail: 레포에 Switch primitive 가 없다. 새로 만들지 않고 기존
- * hidden checkbox + peer-checked 패턴(CategoriesCheckboxGroup)으로 스위치 모양만 낸다.
- * 토글이 여러 개 생기면 그때 primitive 로 승격.
+ * ponytail: 레포에 Switch primitive 가 없다. 새로 만들지 않고 hidden checkbox +
+ * peer-checked 패턴(CategoriesCheckboxGroup)으로 스위치 모양만 낸다.
  */
-const PriceDropOnlyToggle = () => {
+const PriceDropOnlyToggle = ({
+  keywordId,
+  priceDropOnly,
+}: {
+  keywordId: number;
+  priceDropOnly: boolean;
+}) => {
   const id = useId();
-  const { data } = useQuery(SettingQueries.pushSetting());
-  const { mutate, isPending } = useUpdatePriceDropOnly();
-
-  const checked = data?.pushSetting?.priceDropOnly ?? false;
+  const { mutate, isPending } = useUpdateKeywordPriceDropOnly();
 
   return (
-    <div className="flex items-center justify-between gap-4 rounded-lg bg-gray-50 px-4 py-3">
-      <label htmlFor={`price-drop-${id}`} className="cursor-pointer">
-        <p className="text-sm font-medium text-gray-900">가격이 내려갔을 때만 알림 받기</p>
-        <p className="mt-0.5 text-xs text-gray-500">
-          등록했을 때보다 싸게 올라온 딜만 골라서 알려줘요
-        </p>
+    <div className="flex shrink-0 items-center gap-1.5">
+      <label htmlFor={`drop-${id}`} className="cursor-pointer text-xs text-gray-500">
+        가격 내려가면
       </label>
-
       <input
-        id={`price-drop-${id}`}
+        id={`drop-${id}`}
         type="checkbox"
         className="peer hidden"
-        checked={checked}
+        checked={priceDropOnly}
         disabled={isPending}
-        onChange={(e) => mutate(e.target.checked)}
+        onChange={(e) => mutate({ id: keywordId, priceDropOnly: e.target.checked })}
       />
       <label
-        htmlFor={`price-drop-${id}`}
-        aria-hidden
-        className="peer-checked:bg-primary-500 relative h-6 w-10 shrink-0 cursor-pointer rounded-full bg-gray-300 transition-colors peer-disabled:opacity-50 peer-checked:[&>span]:translate-x-4"
+        htmlFor={`drop-${id}`}
+        aria-label="가격 내려갔을 때만 알림 받기"
+        className="peer-checked:bg-primary-500 relative h-5 w-9 shrink-0 cursor-pointer rounded-full bg-gray-300 transition-colors peer-disabled:opacity-50 peer-checked:[&>span]:translate-x-4"
       >
-        <span className="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform" />
+        <span className="absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform" />
       </label>
     </div>
   );
