@@ -29,12 +29,17 @@ export default function ProductInfo({
   isUserLogin,
   tossData,
   naverbcData,
+  ohouData,
 }: {
   productId: number;
   isUserLogin: boolean;
   tossData?: import('@/entities/product/model/toss-data').TossProductData;
   naverbcData?: import('@/entities/product/model/toss-data').NaverbcProductData;
+  ohouData?: import('@/entities/product/model/toss-data').OhouProductData;
 }) {
+  // 가격/할인율/평점/쿠폰 UI는 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 공유한다.
+  // 배송비(deliveryFee)·단위가격(unitPrice) 등 토스 전용 필드는 tossData 에서만 그대로 쓴다.
+  const displayData = tossData ?? ohouData;
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
   const [showKeywordPrompt, setShowKeywordPrompt] = useState(false);
 
@@ -100,34 +105,40 @@ export default function ProductInfo({
           </div>
           <div className="flex justify-between">
             <div>
-              {tossData?.originalPrice && (
+              {displayData?.originalPrice && (
                 <span className="text-sm text-gray-400 line-through">
-                  {tossData.originalPrice.toLocaleString()}원
+                  {displayData.originalPrice.toLocaleString()}원
                 </span>
               )}
               <div className="flex items-baseline gap-x-2">
-                {typeof tossData?.discountRate === 'number' && (
+                {typeof displayData?.discountRate === 'number' && (
                   <span className="text-error-500 text-2xl font-bold">
-                    {tossData.discountRate}%
+                    {displayData.discountRate}%
                   </span>
                 )}
                 <DisplayPrice price={product.price} />
               </div>
-              {tossData && (typeof tossData.rating === 'number' || tossData.couponDiscount) && (
-                <div className="flex flex-wrap items-center gap-x-2 pt-1 text-sm text-gray-500">
-                  {typeof tossData.rating === 'number' && (
-                    <span>
-                      <span className="text-[#ffb200]">★</span> {tossData.rating}
-                      {tossData.reviewCount ? ` (${tossData.reviewCount.toLocaleString()})` : ''}
-                    </span>
-                  )}
-                  {tossData.couponDiscount ? (
-                    <span className="text-error-500">
-                      쿠폰 {tossData.couponDiscount.toLocaleString()}원 추가할인
-                    </span>
-                  ) : null}
-                </div>
-              )}
+              {displayData &&
+                (typeof displayData.rating === 'number' || displayData.couponDiscount) && (
+                  <div className="flex flex-wrap items-center gap-x-2 pt-1 text-sm text-gray-500">
+                    {typeof displayData.rating === 'number' && (
+                      <span>
+                        <span className="text-[#ffb200]">★</span> {displayData.rating}
+                        {displayData.reviewCount
+                          ? ` (${displayData.reviewCount.toLocaleString()})`
+                          : ''}
+                      </span>
+                    )}
+                    {displayData.couponDiscount ? (
+                      <span className="text-error-500">
+                        쿠폰{' '}
+                        {typeof displayData.couponDiscount === 'number'
+                          ? `${displayData.couponDiscount.toLocaleString()}원 추가할인`
+                          : displayData.couponDiscount}
+                      </span>
+                    ) : null}
+                  </div>
+                )}
             </div>
 
             <div>
@@ -143,7 +154,7 @@ export default function ProductInfo({
             <span className="flex items-center gap-x-1 text-gray-500">
               {tossData && <TossIcon size={20} />}
               {!tossData && naverbcData && <NaverIcon height={12} />}
-              {tossData ? '토스' : product.mallName}
+              {tossData ? '토스' : ohouData ? '오늘의집' : product.mallName}
             </span>
           </div>
           <Suspense fallback={null}>
@@ -169,10 +180,10 @@ export default function ProductInfo({
             </div>
           )}
 
-          {tossData?.sellerName && (
+          {displayData?.sellerName && (
             <div className="flex text-sm font-medium">
               <span className="inline-block w-[110px] text-gray-400">판매자</span>
-              <span className="text-gray-500">{tossData.sellerName}</span>
+              <span className="text-gray-500">{displayData.sellerName}</span>
             </div>
           )}
           {tossData && (
@@ -186,6 +197,12 @@ export default function ProductInfo({
                       : '')
                   : '무료배송'}
               </span>
+            </div>
+          )}
+          {!tossData && ohouData?.delivery && (
+            <div className="flex text-sm font-medium">
+              <span className="inline-block w-[110px] text-gray-400">배송비</span>
+              <span className="text-gray-500">{ohouData.delivery}</span>
             </div>
           )}
         </div>

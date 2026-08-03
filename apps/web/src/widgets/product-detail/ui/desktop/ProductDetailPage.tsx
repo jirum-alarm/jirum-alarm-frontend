@@ -37,6 +37,7 @@ export default async function DesktopProductDetailPage({
   // 백엔드 product.data.toss (수집 배치가 채움). 없으면 토스 블록 미노출.
   const tossData = (initialProduct?.data as ProductData | undefined)?.toss;
   const naverbcData = (initialProduct?.data as ProductData | undefined)?.naverbc;
+  const ohouData = (initialProduct?.data as ProductData | undefined)?.ohou;
 
   return (
     <>
@@ -91,6 +92,7 @@ export default async function DesktopProductDetailPage({
                   isUserLogin={isUserLogin}
                   tossData={tossData}
                   naverbcData={naverbcData}
+                  ohouData={ohouData}
                 />
               </Suspense>
             </div>

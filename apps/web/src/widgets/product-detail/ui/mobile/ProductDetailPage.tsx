@@ -38,6 +38,7 @@ function ProductDetailPage({
   // 백엔드 product.data.toss (수집 배치가 채움). 없으면 토스 블록 미노출.
   const tossData = (initialProduct?.data as ProductData | undefined)?.toss;
   const naverbcData = (initialProduct?.data as ProductData | undefined)?.naverbc;
+  const ohouData = (initialProduct?.data as ProductData | undefined)?.ohou;
 
   return (
     <>
@@ -52,7 +53,12 @@ function ProductDetailPage({
         </div>
         <div className="relative z-10 w-full rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <div className="flex flex-col">
-            <ProductInfo productId={productId} tossData={tossData} naverbcData={naverbcData} />
+            <ProductInfo
+              productId={productId}
+              tossData={tossData}
+              naverbcData={naverbcData}
+              ohouData={ohouData}
+            />
             <AdvertiseSlotBanner
               slotLocation={AdvertiseSlotLocation.ProductMainBanner}
               className="mx-5 mb-4 w-auto"

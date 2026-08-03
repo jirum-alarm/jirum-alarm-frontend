@@ -3,7 +3,7 @@
 export interface ProductData {
   toss?: TossProductData;
   naverbc?: NaverbcProductData;
-  // 나중에: ohou?, ...
+  ohou?: OhouProductData;
 }
 
 // 네이버 브랜드커넥트 소싱 상품의 추가 정보. crawler naverbc 드라이버가 채움.
@@ -39,4 +39,19 @@ export interface TossProductData {
   lowestPriceCompensation?: boolean; // 최저가 보상
   specialProduct?: boolean; // 토스 특가
   couponDiscount?: number; // 표시가 외 추가 쿠폰 할인액
+}
+
+// 오늘의집(store.ohou.se) 기획전 소싱 상품의 추가 정보. crawler ohou 드라이버가 채움.
+// 오늘의집 API 자체가 수수료 정보를 제공하지 않아(토스와 달리) 내부정보 노출 리스크 없음.
+export interface OhouProductData {
+  sellerName?: string; // 브랜드명
+  salePrice?: number; // 판매가
+  originalPrice?: number; // 정가
+  discountRate?: number; // 62
+  rating?: number; // 4.8 (별점, 5점 만점)
+  reviewCount?: number;
+  delivery?: string; // "무료배송"
+  scrapCount?: number; // 찜 수
+  couponDiscount?: string; // "최대 10% 쿠폰" (쿠폰 배지 문구)
+  benefitBadges?: string[]; // ["최대 10% 결제할인"] 등 혜택 배지 문구
 }
