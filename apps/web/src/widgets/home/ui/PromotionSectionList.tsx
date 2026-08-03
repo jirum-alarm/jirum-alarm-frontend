@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import { PromotionSection } from '@/entities/promotion/model/types';
 
 import DynamicProductSection from './DynamicProductSection';
+import HomeEndCta from './HomeEndCta';
 import RecommendedKeywordSection from './RecommendedKeywordSection';
 import TossHomeSection from './TossHomeSection';
 // 홈 노출 보류: 테마 섹션 import 임시 제거 (renderThemeSlot 되살릴 때 함께 복구)
@@ -69,6 +70,7 @@ const PromotionSectionList = ({ sections, isMobile }: PromotionSectionListProps)
           </Fragment>
         );
       })}
+      <HomeEndCta />
     </div>
   );
 };
