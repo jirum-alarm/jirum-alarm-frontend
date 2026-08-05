@@ -158,7 +158,10 @@ jobs:
           set -euo pipefail
           # kustomize overlay 의 images[].newTag 한 곳만 갱신한다.
           # (이전: server/.../deployment.yaml 의 image 라인 직접 치환 — 더는 ArgoCD 가 보지 않는 경로)
-          KUSTOMIZATION="apps/frontend-web/overlays/development/kustomization.yaml"
+          # 2026-08-05: apps/frontend-web/overlays/development → apps/frontend-web-dev/overlays/prod.
+          #   appset 배포경로가 'apps/<app>/overlays/<cluster>' 라 overlays/development 는 애초에
+          #   ArgoCD sync 대상이 될 수 없었다(그래서 dev 가 안 떴다). dev 를 별개 앱으로 분리.
+          KUSTOMIZATION="apps/frontend-web-dev/overlays/prod/kustomization.yaml"
           IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web"
           export IMAGE_NAME NEW_TAG
           yq eval -i '(.images[] | select(.name == strenv(IMAGE_NAME)) | .newTag) = strenv(NEW_TAG)' "$KUSTOMIZATION"
@@ -167,7 +170,7 @@ jobs:
         working-directory: infra
         run: |
           set -euo pipefail
-          yq eval '.' apps/frontend-web/overlays/development/kustomization.yaml > /dev/null
+          yq eval '.' apps/frontend-web-dev/overlays/prod/kustomization.yaml > /dev/null
 
       - name: Commit files
         working-directory: infra
