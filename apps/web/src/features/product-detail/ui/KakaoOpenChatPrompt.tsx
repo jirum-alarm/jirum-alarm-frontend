@@ -26,25 +26,26 @@ export default function KakaoOpenChatPrompt({
       href={href}
       target="_blank"
       className={cn(
-        'flex items-center gap-x-3 rounded-lg bg-gray-50 px-4 py-3 transition-colors hover:bg-gray-100',
+        'bg-secondary-50 hover:bg-secondary-100 flex items-center gap-x-3 rounded-lg px-4 py-3 transition-colors',
         className,
       )}
     >
       {/* size-5 는 PostPurchaseKeywordPrompt 의 아이콘 자리와 같은 치수다.
-          둘은 같은 패턴(연한 회색 면 + 아이콘 + 2줄 + 작은 액션)이라
+          둘은 같은 패턴(연한 면 + 아이콘 + 2줄 + 작은 액션)이라
           아이콘만 1.8배 크면 같은 계층으로 안 읽힌다. */}
       <span aria-hidden className="flex size-5 shrink-0 items-center justify-center">
         <TalkDark width={20} height={20} />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-sm font-semibold text-gray-800">핫딜 카톡방에서 먼저 받기</span>
+        <span className="block text-sm font-semibold text-gray-800">지름알림이 엄선한 핫딜만</span>
         <span className="mt-0.5 block truncate text-xs text-gray-500">
-          새 특가가 뜨면 카톡으로 알려드려요
+          카톡 핫딜방에서 받아보세요
         </span>
       </span>
-      {/* 이 줄이 클릭 가능하다는 유일한 신호라 gray-400(2.46:1)으로는 안 된다.
-          gray-500 이면 4.76:1 로 WCAG AA(4.5:1)를 넘긴다. */}
-      <span aria-hidden className="shrink-0 text-xs font-semibold text-gray-500">
+      {/* 이 줄이 클릭 가능하다는 유일한 신호라 대비를 지켜야 한다.
+          secondary-500 은 이 연한 파란 면 위에서 3.50:1 로 AA 미달 —
+          한 단계 진한 secondary-600 이 5.11:1. PriceHistorySection 도 텍스트엔 600을 쓴다. */}
+      <span aria-hidden className="text-secondary-600 shrink-0 text-xs font-semibold">
         입장
       </span>
     </Link>
