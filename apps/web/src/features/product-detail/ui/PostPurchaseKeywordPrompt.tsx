@@ -7,6 +7,7 @@ import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
+import { Alert } from '@/shared/ui/common/icons';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { AuthQueries } from '@/entities/auth';
@@ -148,22 +149,40 @@ export default function PostPurchaseKeywordPrompt({
     addNotificationKeyword({ keyword, priceDropOnly: true });
   };
 
-  // 등록 완료 상태. 배경·글자색·크기를 권유 상태와 동일하게 둔다 — 배경까지 바뀌면
-  // 같은 배너의 상태 변화가 아니라 다른 컴포넌트가 뜬 것처럼 보인다. 상태가 바뀐 신호는
-  // 체크 아이콘 하나로만 준다(색은 accent, 나머지 톤은 그대로).
+  // 등록 완료 상태. 아이콘 자리(28px 원)·텍스트 2줄 구조·닫기 위치를 권유 상태와
+  // 똑같이 두고, 원 안의 아이콘만 벨→체크로 바꾼다. 요소가 새로 생겨나지 않으니
+  // 같은 카드가 상태를 바꿨다고 읽힌다.
+  //
+  // 면만 gray-50 → secondary-50 으로 옮긴다. 권유 상태(C안)는 색을 거의 안 쓰는
+  // 조용한 카드라 그대로면 눌렀을 때 뭔가 일어났다는 느낌이 약하다. 두 회색의 차이는
+  // #f9fafb → #f3f7ff 로 4포인트 파랑이라 "다른 배너가 떴다"까진 안 가고,
+  // 성공에 무게만 얹는다.
   if (done) {
     return (
-      <div role="status" className={cn('flex items-center gap-x-3 bg-gray-50 py-3', className)}>
+      <div
+        role="status"
+        className={cn('bg-secondary-50 flex items-center gap-x-3 py-3', className)}
+      >
+        {/* 권유 상태의 벨과 같은 28px 원. 면이 진해졌으므로 원은 secondary-500 으로
+            채워 대비를 지킨다. ✓ 글리프 대신 SVG — 글꼴에 U+2713 이 없으면 두부가 된다. */}
         <span
           aria-hidden
-          className="bg-secondary-500 flex size-5 shrink-0 items-center justify-center rounded-3xl text-[11px] leading-none font-bold text-white"
+          className="bg-secondary-500 flex size-7 shrink-0 items-center justify-center rounded-full text-white"
         >
-          ✓
+          <svg width={15} height={15} viewBox="0 0 20 20" fill="none">
+            <path
+              d="M4 10.5l4 4 8-8.5"
+              stroke="currentColor"
+              strokeWidth={2.2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </span>
         {/* 권유 상태와 같은 2줄 구조·같은 크기 — 안내 문장은 온전히, 키워드만 줄인다. */}
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-gray-800">알림을 등록했어요</p>
-          <p className="mt-1 truncate text-xs text-gray-500">
+          <p className="mt-0.5 truncate text-xs text-gray-500">
             &lsquo;{keyword}&rsquo; 새 딜이 나오면 알려드려요
           </p>
         </div>
@@ -171,7 +190,7 @@ export default function PostPurchaseKeywordPrompt({
           type="button"
           onClick={onClose}
           aria-label="알림 안내 닫기"
-          className="flex h-11 shrink-0 items-center px-2 text-xs text-gray-400"
+          className="flex h-11 shrink-0 items-center px-2 text-xs text-gray-500"
         >
           닫기
         </button>
@@ -183,29 +202,46 @@ export default function PostPurchaseKeywordPrompt({
     // 컨테이너 모양은 호출부가 정한다. 모바일은 고정 바 위에 얹히는 띠(border-b, px-5),
     // 데스크톱은 본문 안에 놓이는 카드(rounded, border)라 테두리 규칙이 서로 다르다.
     <div className={cn('flex items-center gap-x-3 bg-gray-50 py-3', className)}>
+      {/* 왼쪽 앵커. 이게 없으면 카드가 "텍스트 + 버튼" 두 덩어리로만 서서 아직 스타일이
+          안 입혀진 줄로 읽힌다(같은 페이지 KakaoOpenChatPrompt 도 같은 자리에 28px 원을 쓴다).
+          Alert 는 stroke=currentColor 라 면 색에 맞춰 톤을 맞출 수 있다 — AlertFill 은
+          #9EF22E 가 박혀 있어 이 연회색 면에서 뜬다. */}
+      <span
+        aria-hidden
+        className="bg-secondary-100 text-secondary-600 flex size-7 shrink-0 items-center justify-center rounded-full"
+      >
+        <Alert width={17} height={17} />
+      </span>
       <div className="min-w-0 flex-1">
         {/* 375px 에서 텍스트 가용폭은 ~215px 인데 "더 싸지면 알려드릴까요?" 만 ~182px 라
-            키워드와 한 줄에 넣으면 키워드가 2자로 잘린다. 줄을 나눠 각자 온전히 보여준다. */}
+            키워드와 한 줄에 넣으면 키워드가 2자로 잘린다. 줄을 나눠 각자 온전히 보여준다.
+            아이콘(28px+gap 12px)이 생겨 가용폭이 그만큼 더 줄었으므로 truncate 는 유지한다. */}
         <p className="text-sm font-semibold text-gray-800">더 싸지면 알려드릴까요?</p>
-        <p className="mt-1 truncate text-xs text-gray-500">
+        <p className="mt-0.5 truncate text-xs text-gray-500">
           &lsquo;{keyword}&rsquo; 가격을 지켜볼게요
         </p>
       </div>
-      <div className="flex shrink-0 items-center gap-x-1">
+      {/* 채운 pill 을 쓰지 않는다 — 바로 아래 구매 버튼(primary-500)과 같은 화면에서
+          채운 블록 둘이 색으로 경합하면 상세의 제1 CTA 가 흐려진다. 대신 옆
+          KakaoOpenChatPrompt 의 "입장"과 같은 문법(secondary-600 텍스트)을 쓴다.
+          위계는 색·굵기로만 만든다: 알림 받기=secondary-600 bold, 닫기=gray-500 regular.
+          gap-x-2 로 띄워 둘이 한 쌍의 토글처럼 보이지 않게 한다. */}
+      <div className="flex shrink-0 items-center gap-x-2">
         <button
           type="button"
           onClick={handleRegister}
           disabled={isPending}
-          className="bg-secondary-500 flex h-11 items-center rounded-lg px-3 text-xs font-semibold text-white disabled:opacity-60"
+          className="text-secondary-600 flex h-11 items-center px-1 text-xs font-bold disabled:opacity-60"
         >
           {isPending ? '등록 중' : '알림 받기'}
         </button>
-        {/* 터치 타겟 44px 확보 — 글자는 작아도 누를 면적은 손가락 크기여야 한다. */}
+        {/* 터치 타겟 44px 확보 — 글자는 작아도 누를 면적은 손가락 크기여야 한다.
+            gray-400 은 이 면에서 2.84:1 로 AA 미달이라 500(4.61:1)으로 올린다. */}
         <button
           type="button"
           onClick={onClose}
           aria-label="알림 안내 닫기"
-          className="flex h-11 items-center px-2 text-xs text-gray-400"
+          className="flex h-11 items-center px-1 text-xs text-gray-500"
         >
           닫기
         </button>
