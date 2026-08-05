@@ -1,5 +1,5 @@
 import { cn } from '@/shared/lib/cn';
-import TalkDark from '@/shared/ui/common/icons/TalkDark';
+import TalkLight from '@/shared/ui/common/icons/TalkLight';
 import Link from '@/shared/ui/Link';
 
 /**
@@ -30,16 +30,21 @@ export default function KakaoOpenChatPrompt({
         className,
       )}
     >
-      {/* size-5 는 PostPurchaseKeywordPrompt 의 아이콘 자리와 같은 치수다.
-          둘은 같은 패턴(연한 면 + 아이콘 + 2줄 + 작은 액션)이라
-          아이콘만 1.8배 크면 같은 계층으로 안 읽힌다. */}
-      <span aria-hidden className="flex size-5 shrink-0 items-center justify-center">
-        <TalkDark width={20} height={20} />
+      {/* 카톡 마크는 노란 원 위의 말풍선으로 읽힌다 — 푸터(Footer.tsx)와 같은 조합.
+          TalkDark 를 그냥 얹으면 노란 말풍선이 연한 파란 면에 묻히고,
+          20px 에서는 안에 든 'TALK' 글자가 뭉개져 노이즈가 된다. */}
+      <span
+        aria-hidden
+        className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#FAE300]"
+      >
+        <TalkLight width={18} height={18} className="mt-0.5" />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-sm font-semibold text-gray-800">지름알림이 엄선한 핫딜만</span>
+        <span className="block text-sm font-semibold text-gray-800">
+          핫딜 Only 오픈 카톡방 입장하기
+        </span>
         <span className="mt-0.5 block truncate text-xs text-gray-500">
-          카톡 핫딜방에서 받아보세요
+          지름알림이 엄선한 핫딜만 골라 받아보세요!
         </span>
       </span>
       {/* 이 줄이 클릭 가능하다는 유일한 신호라 대비를 지켜야 한다.
