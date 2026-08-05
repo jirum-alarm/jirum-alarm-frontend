@@ -30,8 +30,11 @@ export default function KakaoOpenChatPrompt({
         className,
       )}
     >
-      <span aria-hidden className="flex size-9 shrink-0 items-center justify-center">
-        <TalkDark width={28} height={28} />
+      {/* size-5 는 PostPurchaseKeywordPrompt 의 아이콘 자리와 같은 치수다.
+          둘은 같은 패턴(연한 회색 면 + 아이콘 + 2줄 + 작은 액션)이라
+          아이콘만 1.8배 크면 같은 계층으로 안 읽힌다. */}
+      <span aria-hidden className="flex size-5 shrink-0 items-center justify-center">
+        <TalkDark width={20} height={20} />
       </span>
       <span className="min-w-0 flex-1">
         <span className="block text-sm font-semibold text-gray-800">핫딜 카톡방에서 먼저 받기</span>
