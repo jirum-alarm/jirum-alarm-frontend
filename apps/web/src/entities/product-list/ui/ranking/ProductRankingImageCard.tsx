@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
+import DisplayTime from '@/shared/ui/DisplayTime';
 import Link from '@/shared/ui/Link';
 
 import {
@@ -12,6 +13,7 @@ import {
 } from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
+import DisplayProductSource from '@/entities/product-list/ui/card/DisplayProductSource';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 export default function ProductRankingImageCard({
@@ -22,7 +24,7 @@ export default function ProductRankingImageCard({
   priority,
   source,
 }: {
-  product: Omit<ProductCardType, 'postedAt'>;
+  product: ProductCardType;
   activeIndex: number;
   index: number;
   rank?: number;
@@ -37,7 +39,7 @@ export default function ProductRankingImageCard({
     >
       <motion.div
         className={cn(
-          'pc:h-auto pc:scale-100 pc:border h-[340px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',
+          'pc:h-auto pc:scale-100 pc:border h-[364px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',
           activeIndex === index && 'scale-100',
         )}
       >
@@ -61,10 +63,16 @@ export default function ProductRankingImageCard({
               quality={priority ? 85 : 75}
             />
           </div>
-          <div className="pc:h-[110px] p-3 pb-0">
+          <div className="pc:h-[132px] p-3 pb-0">
             <div className="xl:pc:text-base line-clamp-2 text-sm text-gray-700">
               {product.title}
             </div>
+            <DisplayProductSource
+              mallName={product.mallName}
+              provider={product.provider}
+              time={product.postedAt ? <DisplayTime time={product.postedAt} /> : undefined}
+              className="pt-1"
+            />
             <div className="pc:h-[36px] pc:pt-0.5 xl:pc:text-[22px] pt-2 text-lg font-bold text-gray-900">
               <DisplayListPrice price={product.price} />
             </div>

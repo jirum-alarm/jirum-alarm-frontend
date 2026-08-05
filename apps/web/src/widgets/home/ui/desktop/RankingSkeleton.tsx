@@ -50,7 +50,7 @@ const PreviewCard = ({ product, rank, priority }: PreviewCardProps) => (
           quality={priority ? 85 : 75}
         />
       </div>
-      <div className="h-[110px] p-3 pb-0">
+      <div className="h-[132px] p-3 pb-0">
         <div className="line-clamp-2 text-sm text-gray-700 xl:text-base">{product.title}</div>
         <div className="h-[36px] pt-0.5 text-lg font-bold text-gray-900 xl:text-[22px]">
           <DisplayListPrice price={product.price} />
@@ -80,7 +80,7 @@ const SkeletonCard = () => {
         </div>
         <div className="h-full w-full animate-pulse bg-gray-100" />
       </div>
-      <div className="h-[110px] p-3 pb-0">
+      <div className="h-[132px] p-3 pb-0">
         <div className="mb-2 h-10 w-full animate-pulse rounded-sm bg-gray-100" />
         <div className="pt-0.5">
           <div className="h-6 w-1/2 animate-pulse rounded-sm bg-gray-100" />

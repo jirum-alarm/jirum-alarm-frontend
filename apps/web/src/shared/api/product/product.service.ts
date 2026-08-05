@@ -38,6 +38,16 @@ export type ProductListQueryVariables = QueryProductsQueryVariables & {
   mallGroupId?: number | null;
 };
 
+// ponytail: 카드에 판매처를 노출하려고 목록 쿼리에 mallName 을 추가했다. codegen 이 이 레포에서
+// 깨끗하게 돌지 않아(dev-api 는 운영보다 뒤처져 mallGroupId/providerIds 가 없고, 커밋된
+// schema.graphql 은 반대로 priceDropOnly/role 이 없다) 생성 타입엔 mallName 이 없다.
+// 위 ProductListQueryVariables 가 변수 쪽에 하는 것과 같은 보강을 결과 쪽에 한다.
+// codegen 이 복구되면 지우면 된다. (graphql() 로 만든 나머지 목록 쿼리는 문서 문자열이
+// 생성 맵에 박혀 있어 손댈 수 없다 — 그래서 판매처는 이 쿼리를 쓰는 화면에만 나온다.)
+type ProductListResult = Omit<QueryProductsQuery, 'products'> & {
+  products: (QueryProductsQuery['products'][number] & { mallName?: string | null })[];
+};
+
 export class ProductService {
   static async getProduct(variables: ProductQueryVariables) {
     return execute(QueryProduct, variables).then((res) => res.data);
@@ -411,7 +421,7 @@ const QueryProduct = graphql(`
   }
 `);
 
-const QueryProducts = new TypedDocumentString<QueryProductsQuery, ProductListQueryVariables>(`
+const QueryProducts = new TypedDocumentString<ProductListResult, ProductListQueryVariables>(`
   query QueryProducts(
     $limit: Int!
     $searchAfter: [String!]
@@ -455,6 +465,7 @@ const QueryProducts = new TypedDocumentString<QueryProductsQuery, ProductListQue
       categoryId
       category
       thumbnail
+      mallName
       hotDealType
       provider {
         nameKr

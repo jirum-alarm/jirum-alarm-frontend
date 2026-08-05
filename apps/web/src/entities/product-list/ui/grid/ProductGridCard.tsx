@@ -15,6 +15,7 @@ import {
 } from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
+import DisplayProductSource from '@/entities/product-list/ui/card/DisplayProductSource';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 export default function ProductGridCard({
@@ -80,7 +81,7 @@ export default function ProductGridCard({
               </div>
             )
           )}
-          {product.earliestExpiryDate && (
+          {product.earliestExpiryDate && !product.isEnd && (
             <div className="text-semibold absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg bg-gray-700/80 px-2 text-xs text-white">
               유통기한 {formatDateToMMD(product.earliestExpiryDate)}
             </div>
@@ -90,15 +91,16 @@ export default function ProductGridCard({
           <span className="line-clamp-2 h-12 pt-2 text-sm wrap-break-word text-gray-700">
             {product.title}
           </span>
+          <DisplayProductSource
+            mallName={product.mallName}
+            provider={product.provider}
+            time={displayTime ? <DisplayTime time={product.postedAt} /> : undefined}
+            className="pt-1"
+          />
           <div className="flex items-center gap-1.5 pt-1">
             <div className="min-w-0 flex-1 overflow-hidden">
               <DisplayListPrice price={product.price} className="text-base" />
             </div>
-            {displayTime && (
-              <span className="shrink-0 text-xs whitespace-nowrap text-gray-500">
-                <DisplayTime time={product.postedAt} />
-              </span>
-            )}
           </div>
         </div>
       </motion.div>

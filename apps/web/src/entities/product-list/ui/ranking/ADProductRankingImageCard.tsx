@@ -25,7 +25,7 @@ export default function ProductRankingImageCard({
     <Link href={url} target="_blank" id="ad-pirsil-ranking-20250917">
       <motion.div
         className={cn(
-          'pc:h-auto pc:scale-100 pc:border h-[340px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',
+          'pc:h-auto pc:scale-100 pc:border h-[364px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',
           activeIndex === index && 'scale-100',
         )}
       >
@@ -48,7 +48,7 @@ export default function ProductRankingImageCard({
               sizes="252px"
             />
           </div>
-          <div className="pc:h-[110px] p-3 pb-0">
+          <div className="pc:h-[132px] p-3 pb-0">
             <div className="xl:pc:text-base line-clamp-2 text-sm text-gray-700">
               {product.title}
             </div>

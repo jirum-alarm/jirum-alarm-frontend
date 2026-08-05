@@ -13,6 +13,7 @@ import {
 } from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
+import DisplayProductSource from '@/entities/product-list/ui/card/DisplayProductSource';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 export default function ListProductCard({
@@ -40,7 +41,7 @@ export default function ListProductCard({
                 판매종료
               </div>
             )}
-            {product.earliestExpiryDate && (
+            {product.earliestExpiryDate && !product.isEnd && (
               <div className="text-semibold absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg bg-gray-700/80 px-2 text-xs text-white">
                 유통기한 {formatDateToMMD(product.earliestExpiryDate)}
               </div>
@@ -54,9 +55,11 @@ export default function ListProductCard({
                 <HotdealBadge badgeVariant="page" hotdealType={product.hotDealType} />
               )}
             </div>
-            {product.postedAt && (
-              <span className="text-xs text-gray-400">{formatDateToMMD(product.postedAt)}</span>
-            )}
+            <DisplayProductSource
+              mallName={product.mallName}
+              provider={product.provider}
+              time={product.postedAt ? formatDateToMMD(product.postedAt) : undefined}
+            />
           </div>
         </div>
       </motion.div>

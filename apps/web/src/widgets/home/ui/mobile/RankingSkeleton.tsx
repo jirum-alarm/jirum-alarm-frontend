@@ -44,7 +44,7 @@ const PreviewCard = ({ product, rank, isActive, priority }: PreviewCardProps) =>
   <div className="w-[240px] shrink-0 pb-5">
     <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
       <div
-        className={`h-[340px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300 ${
+        className={`h-[364px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300 ${
           isActive ? 'scale-100' : 'scale-90'
         }`}
       >
@@ -90,7 +90,7 @@ export const RankingSkeleton = () => {
 const SkeletonCard = ({ isActive }: { isActive: boolean }) => (
   <div className="w-[240px] shrink-0 pb-5">
     <div
-      className={`h-[340px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300 ${
+      className={`h-[364px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300 ${
         isActive ? 'scale-100' : 'scale-90'
       }`}
     >
