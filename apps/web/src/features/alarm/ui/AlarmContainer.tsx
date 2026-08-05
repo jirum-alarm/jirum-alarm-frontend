@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import Image from 'next/image';
 import { useEffect } from 'react';
 
+import { ANDROID_STORE_LINK, IOS_STORE_LINK } from '@/shared/config/appStore';
 import { PAGE } from '@/shared/config/page';
 import { useDevice } from '@/shared/hooks/useDevice';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
@@ -12,6 +13,9 @@ import Button from '@/shared/ui/common/Button';
 import { Apple, ArrowDown, Google, LoadingSpinner } from '@/shared/ui/common/icons';
 import { Illust } from '@/shared/ui/common/icons/Illust';
 import Link from '@/shared/ui/Link';
+
+import { resolveAppDownloadPlatform } from '@/features/app-download/model/resolvePlatform';
+import AppDownloadQr from '@/features/app-download/ui/AppDownloadQr';
 
 import AlarmList from './AlarmList';
 
@@ -31,11 +35,7 @@ const AlarmContainer = () => {
   }
 
   if (!isLoggedIn && !device.isJirumAlarmApp) {
-    return (
-      <AppDownloadGuide
-        platform={device.isApple ? 'apple' : device.isAndroid ? 'android' : 'non-mobile'}
-      />
-    );
+    return <AppDownloadGuide platform={resolveAppDownloadPlatform(device)} />;
   }
 
   if (!isLoggedIn && device.isJirumAlarmApp) {
@@ -58,7 +58,11 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
 
   return (
     <div className="flex h-full flex-col px-5 pt-9 pb-8">
-      <p className="pb-7 text-2xl font-semibold">
+      <p
+        className={
+          platform === 'non-mobile' ? 'text-2xl font-semibold' : 'pb-7 text-2xl font-semibold'
+        }
+      >
         <span className="shadow-primary-500 inline-block font-extrabold shadow-[inset_0-12px_0]">
           지름알림
         </span>{' '}
@@ -67,40 +71,49 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
         <span className="bg-primary-500 inline-flex h-2 w-2 rounded-full align-text-top"></span>{' '}
         으로 받아보세요!
       </p>
-      <div className="animate-fade-in flex justify-center rounded-md bg-gray-100">
+      {platform === 'non-mobile' && (
+        // 하단 문구를 걷어냈으니 "왜 받아야 하는지"는 제목 바로 아래 한 줄로 남긴다.
+        <p className="pt-2 pb-6 text-sm text-gray-500">
+          키워드를 등록하고 누구보다 빠르게 핫딜을 받아보세요
+        </p>
+      )}
+      {/* 원본 에셋은 600x301(2:1). 335x400으로 선언하면 이미지가 눌려서 폰 목업이 잘린다. */}
+      <div className="animate-fade-in overflow-hidden rounded-md bg-gray-100">
         <Image
           src={`https://cdn.jirum-alarm.com/assets/app_download_guide.webp`}
           alt="download app guide"
-          width={335}
-          height={400}
-          sizes="335px"
+          width={600}
+          height={301}
+          sizes="(min-width: 600px) 600px, 100vw"
+          className="h-auto w-full"
           priority
           quality={85}
         />
       </div>
 
-      <div className="fixed right-0 bottom-[var(--bottom-nav-padding,0px)] left-0 m-auto w-full max-w-[600px] bg-white px-5 pt-4 pb-8">
-        <div className="flex flex-col items-center pb-6">
-          <p className="pb-3 text-center text-sm text-gray-400">
-            키워드 알림으로
-            <br />
-            누구보다 빠르게 핫딜 받기
-          </p>
-          <ArrowDown color="#D0D5DD" />
+      {platform === 'non-mobile' ? (
+        // PC는 QR 카드가 안내문 역할까지 하므로 위쪽 문구·화살표를 반복하지 않는다.
+        // 하단 고정도 불필요 — 스토어 버튼처럼 탭 위에 띄워야 하는 요소가 아니다.
+        <div className="pt-4">
+          <AppDownloadQr />
         </div>
-        <div className="flex gap-x-2">
-          {platform === 'non-mobile' && (
-            <>
-              <AndroidDownloadButton />
-              <IosDownloadButton />
-            </>
-          )}
+      ) : (
+        <div className="fixed right-0 bottom-[var(--bottom-nav-padding,0px)] left-0 m-auto w-full max-w-[600px] bg-white px-5 pt-4 pb-8">
+          <div className="flex flex-col items-center pb-6">
+            <p className="pb-3 text-center text-sm text-gray-400">
+              키워드를 등록하고
+              <br />
+              누구보다 빠르게 받아보세요
+            </p>
+            <ArrowDown color="#D0D5DD" />
+          </div>
+          <div className="flex gap-x-2">
+            {platform === 'android' && <AndroidDownloadButton />}
 
-          {platform === 'android' && <AndroidDownloadButton />}
-
-          {platform === 'apple' && <IosDownloadButton />}
+            {platform === 'apple' && <IosDownloadButton />}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -115,11 +128,7 @@ function AndroidDownloadButton() {
   };
 
   return (
-    <a
-      href="https://play.google.com/store/apps/details?id=com.solcode.jirmalam"
-      onClick={handleClick}
-      className="w-full"
-    >
+    <a href={ANDROID_STORE_LINK} onClick={handleClick} className="w-full">
       <motion.button
         className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
         whileTap={{ scale: 0.95 }}
@@ -142,11 +151,7 @@ function IosDownloadButton() {
   };
 
   return (
-    <a
-      href="https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420"
-      onClick={handleClick}
-      className="w-full"
-    >
+    <a href={IOS_STORE_LINK} onClick={handleClick} className="w-full">
       <motion.button
         className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
         whileTap={{ scale: 0.95 }}

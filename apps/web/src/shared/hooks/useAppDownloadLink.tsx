@@ -2,9 +2,10 @@
 
 import { CheckDeviceResult } from '@/app/actions/agent.types';
 
-const GooglePlayLink = 'https://play.google.com/store/apps/details?id=com.solcode.jirmalam';
-const AppStoreLink =
-  'https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420';
+import {
+  ANDROID_STORE_LINK as GooglePlayLink,
+  IOS_STORE_LINK as AppStoreLink,
+} from '@/shared/config/appStore';
 
 const useAppDownloadLink = (device: CheckDeviceResult) => {
   if (!device) {

@@ -6,13 +6,16 @@ import { useEffect, useState } from 'react';
 
 import { CheckDeviceResult } from '@/app/actions/agent.types';
 
+import { ANDROID_STORE_LINK, IOS_STORE_LINK } from '@/shared/config/appStore';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
 import { Apple, Google } from '@/shared/ui/common/icons';
 
+import { resolveAppDownloadPlatform } from '../model/resolvePlatform';
+
+import AppDownloadQr from './AppDownloadQr';
+
 // ponytail: 전역 1회 노출. 상품별로 반복 노출하면 이탈만 키움. 재노출 원하면 이 키 삭제 or 만료 추가.
 const SEEN_KEY = 'jirum:app-alert-hook-seen';
-const ANDROID_LINK = 'https://play.google.com/store/apps/details?id=com.solcode.jirmalam';
-const IOS_LINK = 'https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420';
 // AlarmContainer 의 AppDownloadGuide 와 동일 에셋.
 const APP_GUIDE_IMAGE = 'https://cdn.jirum-alarm.com/assets/app_download_guide.webp';
 
@@ -35,13 +38,7 @@ function pushEvent(event: string, props: Record<string, unknown>) {
  */
 export default function FirstVisitAppAlertModal({ device }: { device: CheckDeviceResult }) {
   // 알림탭 AppDownloadGuide 와 동일한 platform 판정.
-  const platform: 'apple' | 'android' | 'non-mobile' | null = device?.isJirumAlarmApp
-    ? null
-    : device?.isApple
-      ? 'apple'
-      : device?.isAndroid
-        ? 'android'
-        : 'non-mobile';
+  const platform = device?.isJirumAlarmApp ? null : resolveAppDownloadPlatform(device);
 
   // 트리거 없이 첫 진입 시 자동 오픈.
   const [show, setShow] = useState(false);
@@ -70,29 +67,38 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
             으로 받아보세요!
           </AlertDialog.Title>
           <AlertDialog.Description>
-            <div className="animate-fade-in mt-4 flex justify-center rounded-md bg-gray-100">
+            {/* 원본 에셋은 600x301(2:1). 280x334로 선언하면 확대·잘려서 폰 목업을 알아볼 수 없다. */}
+            <div className="animate-fade-in mt-4 overflow-hidden rounded-md bg-gray-100">
               <Image
                 src={APP_GUIDE_IMAGE}
                 alt="지름알림 앱 다운로드 안내"
-                width={280}
-                height={334}
+                width={600}
+                height={301}
                 sizes="280px"
+                className="h-auto w-full"
                 quality={85}
               />
             </div>
           </AlertDialog.Description>
         </AlertDialog.Header>
-        <div className="mt-6 flex flex-col items-center">
-          <p className="pb-3 text-center text-sm text-gray-400">
-            키워드 알림으로
-            <br />
-            누구보다 빠르게 핫딜 받기
-          </p>
+        <div className="mt-4 flex flex-col items-center">
+          {/* PC는 QR 카드가 "스캔 → 알림"을 다 말하므로 리드문을 두면 같은 말이 두 번 나온다. */}
+          {platform !== 'non-mobile' && (
+            <p className="pb-3 text-center text-sm text-gray-400">
+              키워드를 등록하고
+              <br />
+              누구보다 빠르게 받아보세요
+            </p>
+          )}
           <div className="flex w-full gap-x-2">
-            {(platform === 'android' || platform === 'non-mobile') && (
-              <StoreButton kind="android" />
+            {platform === 'non-mobile' ? (
+              <AppDownloadQr compact />
+            ) : (
+              <>
+                {platform === 'android' && <StoreButton kind="android" />}
+                {platform === 'apple' && <StoreButton kind="apple" />}
+              </>
             )}
-            {(platform === 'apple' || platform === 'non-mobile') && <StoreButton kind="apple" />}
           </div>
           <AlertDialog.Cancel asChild>
             <button type="button" className="mt-3 h-10 text-sm text-gray-500">
@@ -106,7 +112,7 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
 }
 
 function StoreButton({ kind }: { kind: 'android' | 'apple' }) {
-  const link = kind === 'android' ? ANDROID_LINK : IOS_LINK;
+  const link = kind === 'android' ? ANDROID_STORE_LINK : IOS_STORE_LINK;
   return (
     <AlertDialog.Action
       asChild
