@@ -12,6 +12,7 @@
     "clean-ios": "cd ios && rm -rf build && pod cache clean --all && pod deintegrate && rm Podfile.lock && pod install",
     "clean-android": "./android/gradlew -p android --stop && rm -rf android/app/.cxx && ./android/gradlew -p android clean && rm -rf android/.gradle android/build android/app/build",
     "generate": "graphql-codegen",
+    "generate:schema": "graphql-codegen --config codegen.schema.ts",
     "check-types": "tsc --noEmit",
     "ts:check": "pnpm run check-types",
     "lint": "eslint App.tsx index.js src __tests__ babel.config.js metro.config.js react-native.config.js jest.config.js",
