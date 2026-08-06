@@ -9,7 +9,7 @@ import {useWebviewContext} from '@/provider/WebViewRefProvider';
 import {useHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 import {getTabBaseUrl} from '@/shared/lib/navigation/tab-routing';
 import {SERVICE_URL} from '@/constants/env';
-import TabWebView from '@/screens/tabs/TabWebView';
+import {createTabStack} from '@/navigations/tab/TabStackNavigator';
 import {
   HomeIcon,
   HomeFillIcon,
@@ -97,18 +97,13 @@ const TAB_CONFIG = [
   },
 ] as const;
 
-function createTabScreen(tabName: TabName) {
-  return function TabScreen() {
-    const baseUrl = getTabBaseUrl(tabName);
-    return <TabWebView tabName={tabName} baseUrl={baseUrl} />;
-  };
-}
-
-const HomeScreen = createTabScreen(tabNavigations.HOME);
-const DiscoverScreen = createTabScreen(tabNavigations.DISCOVER);
-const CommunityScreen = createTabScreen(tabNavigations.COMMUNITY);
-const AlarmScreen = createTabScreen(tabNavigations.ALARM);
-const MyPageScreen = createTabScreen(tabNavigations.MYPAGE);
+// 탭마다 자기 스택을 갖는다. 루트는 기존 WebView, 상세는 그 위에 push 되어
+// 네이티브 전환을 타므로 전환 중 흰 화면이 생기지 않는다.
+const HomeScreen = createTabStack(tabNavigations.HOME);
+const DiscoverScreen = createTabStack(tabNavigations.DISCOVER);
+const CommunityScreen = createTabStack(tabNavigations.COMMUNITY);
+const AlarmScreen = createTabStack(tabNavigations.ALARM);
+const MyPageScreen = createTabStack(tabNavigations.MYPAGE);
 
 const TAB_SCREENS: Record<TabName, React.ComponentType> = {
   [tabNavigations.HOME]: HomeScreen,
