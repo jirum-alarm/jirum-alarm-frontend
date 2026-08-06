@@ -58,24 +58,6 @@ export function isTabRootUrl(url: string): boolean {
 }
 
 /**
- * 탭 안에서 네이티브 스택으로 push 할 경로인지 판정한다.
- *
- * 같은 WebView 에서 URL 만 바꾸면 이전 화면이 즉시 지워져 흰 화면이 뜬다.
- * 상세처럼 "들어갔다 나오는" 화면은 스택에 올려 네이티브 전환을 태운다.
- * 반환값은 push 에 넘길 경로(쿼리·해시 포함), 아니면 null.
- */
-export function getPushablePath(url: string): string | null {
-  const path = extractPath(url);
-
-  // 상품 상세만. /products/123/comment 같은 하위도 같은 스택에 쌓는다.
-  if (/^\/products\/\d+(\/|$)/.test(path)) {
-    return extractPathWithQuery(url);
-  }
-
-  return null;
-}
-
-/**
  * 각 탭의 기본 URL 경로를 반환합니다.
  */
 export function getTabBaseUrl(tabName: TabName): string {
@@ -93,15 +75,6 @@ export function getTabBaseUrl(tabName: TabName): string {
     default:
       return '/';
   }
-}
-
-/** extractPath 는 쿼리·해시를 버린다. push 경로는 그대로 살려야 한다. */
-function extractPathWithQuery(url: string): string {
-  if (url.startsWith('http')) {
-    const match = url.match(/^https?:\/\/[^/]+(\/.*)?$/);
-    return match?.[1] || '/';
-  }
-  return url.startsWith('/') ? url : `/${url}`;
 }
 
 function extractPath(url: string): string {

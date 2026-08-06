@@ -19,16 +19,9 @@ const tabWebViewNavigations = {
   TAB_WEBVIEW: 'TabWebView',
 } as const;
 
-/** 탭 안쪽 스택 화면. 탭 루트 위에 상세를 push 한다. */
-const tabStackNavigations = {
-  ROOT: 'TabRoot',
-  DETAIL: 'ProductDetail',
-} as const;
-
 export {
   authNavigations,
   mainNavigations,
   tabNavigations,
   tabWebViewNavigations,
-  tabStackNavigations,
 };
