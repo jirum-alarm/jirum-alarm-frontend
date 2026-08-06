@@ -1,5 +1,6 @@
 'use client';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { Suspense, useState } from 'react';
 
@@ -7,6 +8,10 @@ import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
 import ProductImageCardSkeleton from '@/entities/product-list/ui/card/ProductImageCardSkeleton';
+import {
+  getPromotionQueryOptions,
+  selectPromotionProducts,
+} from '@/entities/promotion/lib/getPromotionQueryOptions';
 import { ContentPromotionSection, PromotionTab } from '@/entities/promotion/model/types';
 
 import DynamicProductList from './DynamicProductList';
@@ -16,6 +21,25 @@ interface TabbedDynamicProductSectionProps {
   section: ContentPromotionSection;
   isMobile: boolean;
 }
+
+// Suspense 경계 안쪽에서만 쿼리를 걸어야 탭 전환 시 탭바까지 스켈레톤으로 대체되지 않는다.
+const TabProductList = ({
+  section,
+  isMobile,
+}: {
+  section: ContentPromotionSection;
+  isMobile: boolean;
+}) => {
+  const { data } = useSuspenseQuery(getPromotionQueryOptions(section) as any);
+
+  return (
+    <DynamicProductList
+      type={section.type}
+      products={selectPromotionProducts(section, data)}
+      isMobile={isMobile}
+    />
+  );
+};
 
 const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProductSectionProps) => {
   const tabs = section.tabs || [];
@@ -80,7 +104,7 @@ const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProduct
           </div>
         }
       >
-        <DynamicProductList section={activeSection} isMobile={isMobile} />
+        <TabProductList section={activeSection} isMobile={isMobile} />
       </Suspense>
     </div>
   );

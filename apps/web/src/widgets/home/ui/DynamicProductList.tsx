@@ -1,54 +1,26 @@
-'use client';
-
-import { useSuspenseQuery } from '@tanstack/react-query';
-
 import { CarouselProductList } from '@/entities/product-list/ui/carousel';
 import DoubleRowCarouselProductList from '@/entities/product-list/ui/carousel/DoubleRowCarouselProductList';
 import PaginatedProductGridList from '@/entities/product-list/ui/grid/PaginatedProductGridList';
 import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
 import ListProductList from '@/entities/product-list/ui/list/ListProductList';
-import { getPromotionQueryOptions } from '@/entities/promotion/lib/getPromotionQueryOptions';
-import { ContentPromotionSection } from '@/entities/promotion/model/types';
+import { ContentPromotionSectionType } from '@/entities/promotion/model/types';
 
 interface DynamicProductListProps {
-  section: ContentPromotionSection;
+  type: ContentPromotionSectionType;
+  products: any[];
   isMobile: boolean;
   priorityCount?: number;
 }
 
-const DynamicProductList = ({ section, isMobile, priorityCount = 0 }: DynamicProductListProps) => {
-  const queryOptions = getPromotionQueryOptions(section);
-  const { data } = useSuspenseQuery(queryOptions as any);
-
-  let products: any[] = [];
-
-  if (data === null) {
-    return null;
-  }
-
-  if (section.dataSource.type === 'GRAPHQL_QUERY') {
-    switch (section.dataSource.queryName) {
-      case 'hotDealRankingProducts':
-        products = (data as any).hotDealRankingProducts;
-        break;
-      case 'guestRecommendedHotDeals':
-        products = (data as any).guestRecommendedHotDeals;
-        break;
-      case 'productsByKeyword':
-        products = (data as any).productsByKeyword;
-        break;
-      case 'products':
-        products = (data as any).products;
-        break;
-      case 'expiringSoonHotDealProducts':
-        products = (data as any).expiringSoonHotDealProducts;
-        break;
-      default:
-        products = [];
-    }
-  }
-
-  if (section.type === 'GRID') {
+// 데이터를 스스로 가져오지 않는다. 탭 없는 섹션은 서버(DynamicProductSection)가,
+// 탭 섹션은 클라이언트(TabbedDynamicProductSection)가 각각 products를 내려준다.
+const DynamicProductList = ({
+  type,
+  products,
+  isMobile,
+  priorityCount = 0,
+}: DynamicProductListProps) => {
+  if (type === 'GRID') {
     return (
       <div className="pc:px-0 px-5">
         <ProductGridList
@@ -60,13 +32,13 @@ const DynamicProductList = ({ section, isMobile, priorityCount = 0 }: DynamicPro
     );
   }
 
-  if (section.type === 'PAGINATED_GRID') {
+  if (type === 'PAGINATED_GRID') {
     return (
       <PaginatedProductGridList products={products} isMobile={isMobile} source="home_promotion" />
     );
   }
 
-  if (section.type === 'GRID_TABBED') {
+  if (type === 'GRID_TABBED') {
     return (
       <div className="pc:py-4 pc:px-0 px-5">
         <ProductGridList
@@ -79,11 +51,11 @@ const DynamicProductList = ({ section, isMobile, priorityCount = 0 }: DynamicPro
     );
   }
 
-  if (section.type === 'HORIZONTAL_SCROLL') {
+  if (type === 'HORIZONTAL_SCROLL') {
     return <CarouselProductList products={products} source="home_promotion" />;
   }
 
-  if (section.type === 'DOUBLE_ROW') {
+  if (type === 'DOUBLE_ROW') {
     if (isMobile) {
       return <DoubleRowCarouselProductList products={products} source="home_promotion" />;
     }
@@ -95,7 +67,7 @@ const DynamicProductList = ({ section, isMobile, priorityCount = 0 }: DynamicPro
     );
   }
 
-  if (section.type === 'LIST') {
+  if (type === 'LIST') {
     return (
       <div className="pc:px-0 px-5">
         <ListProductList products={products} source="home_promotion" />

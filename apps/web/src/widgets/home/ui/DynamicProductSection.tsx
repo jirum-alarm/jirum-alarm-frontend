@@ -1,12 +1,14 @@
-import { Suspense } from 'react';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
 
 import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
-import ProductGridListSkeleton from '@/entities/product-list/ui/grid/ProductGridListSkeleton';
-import { getPromotionQueryOptions } from '@/entities/promotion/lib/getPromotionQueryOptions';
+import {
+  fetchPromotionProducts,
+  getPromotionQueryOptions,
+} from '@/entities/promotion/lib/getPromotionQueryOptions';
 import { ContentPromotionSection } from '@/entities/promotion/model/types';
 
 import DynamicProductList from './DynamicProductList';
@@ -23,38 +25,32 @@ const DynamicProductSection = async ({
   isMobile,
   priorityCount = 0,
 }: DynamicProductSectionProps) => {
-  const queryClient = getQueryClient();
-
-  let sectionToPrefetch = section;
+  // 탭 섹션은 탭 전환마다 다른 쿼리가 필요해 클라이언트가 데이터를 소유한다.
+  // 첫 탭만 서버에서 프리페치해 HydrationBoundary로 넘긴다(첫 탭 재요청 방지).
   if (section.tabs && section.tabs.length > 0) {
-    sectionToPrefetch = {
+    const queryClient = getQueryClient();
+    const firstTabSection: ContentPromotionSection = {
       ...section,
       dataSource: {
         ...section.dataSource,
-        variables: {
-          ...section.dataSource.variables,
-          ...section.tabs[0].variables,
-        },
+        variables: { ...section.dataSource.variables, ...section.tabs[0].variables },
       },
     };
+    await queryClient.prefetchQuery(getPromotionQueryOptions(firstTabSection) as any);
+
+    return (
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <TabbedDynamicProductSection section={section} isMobile={isMobile} />
+      </HydrationBoundary>
+    );
   }
 
-  const queryOptions = getPromotionQueryOptions(sectionToPrefetch);
-  await queryClient.prefetchQuery(queryOptions as any);
-
-  if (section.tabs && section.tabs.length > 0) {
-    return <TabbedDynamicProductSection section={section} isMobile={isMobile} />;
-  }
+  const products = await fetchPromotionProducts(section);
 
   // 게스트 추천 섹션은 개인화 결과가 없으면(빈 배열) 섹션 전체를 숨긴다.
   // (선호 없음/부스트 OFF 시 백엔드가 [] 반환 → 메인 핫딜과 중복 노출 방지)
-  if (section.dataSource.queryName === 'guestRecommendedHotDeals') {
-    const prefetched = queryClient.getQueryData((queryOptions as any).queryKey) as
-      | { guestRecommendedHotDeals?: unknown[] }
-      | undefined;
-    if (!prefetched?.guestRecommendedHotDeals?.length) {
-      return null;
-    }
+  if (section.dataSource.queryName === 'guestRecommendedHotDeals' && products.length === 0) {
+    return null;
   }
 
   return (
@@ -75,15 +71,12 @@ const DynamicProductSection = async ({
           }
         />
       </div>
-      <Suspense
-        fallback={
-          <div className="px-5">
-            <ProductGridListSkeleton length={4} />
-          </div>
-        }
-      >
-        <DynamicProductList section={section} isMobile={isMobile} priorityCount={priorityCount} />
-      </Suspense>
+      <DynamicProductList
+        type={section.type}
+        products={products}
+        isMobile={isMobile}
+        priorityCount={priorityCount}
+      />
     </div>
   );
 };
