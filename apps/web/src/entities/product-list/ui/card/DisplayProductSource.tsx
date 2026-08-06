@@ -9,10 +9,9 @@ import { type ProductCardType } from '@/entities/product-list/model/types';
  * 불일치한다(롯데온 vs 에펨코리아). 상세 페이지처럼 `mallName || provider` 로 폴백하면
  * "판매처" 자리에 커뮤니티 이름이 들어가므로 각각 독립 슬롯으로 둔다.
  *
- * 커버리지가 달라서 노출 범위도 다르다:
- * - provider: 홈 SDUI 5개 쿼리 전부가 이미 select 중 → 전 카드 공통 노출 가능
- * - mallName: `products` 쿼리에만 있고(나머지는 codegen 봉쇄로 추가 불가) 전수 ~70%
- * 그래서 mall 이 없으면 자리표시자 없이 슬롯을 생략한다 — 커뮤니티만 남아도 줄은 성립한다.
+ * 홈 SDUI 5개 쿼리 모두 mallName·provider 를 select 한다. 다만 mallName 은 상품에 따라
+ * 비어 있을 수 있어(다나와 미매칭 등) 없으면 자리표시자 없이 슬롯을 생략한다 —
+ * 커뮤니티만 남아도 줄은 성립한다.
  *
  * time 은 문자열로 받는다(카드마다 DisplayTime/formatDateToMMD 포맷이 달라 상위에서 결정).
  */
@@ -26,7 +25,10 @@ export default function DisplayProductSource({
   className?: string;
 }) {
   const mall = mallName?.trim();
-  const community = provider?.nameKr?.trim();
+  const rawCommunity = provider?.nameKr?.trim();
+  // 유통기한 임박 특가처럼 몰이 직접 제보하는 상품은 판매처와 제보처가 같은 이름이다.
+  // 그대로 두면 "알토란마켓 · 알토란마켓"으로 같은 값이 두 번 찍히므로 한 번만 보여준다.
+  const community = rawCommunity === mall ? undefined : rawCommunity;
 
   if (!mall && !community && !time) return null;
 

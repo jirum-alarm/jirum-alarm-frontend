@@ -19,6 +19,7 @@ import {
   QueryCategorizedReactionKeywordsArgs,
   QueryCommunityRandomRankingProductsQueryVariables,
   QueryExpiringSoonHotDealProductsArgs,
+  QueryExpiringSoonHotDealProductsQuery,
   QueryExpiringSoonHotDealProductsQueryVariables,
   QueryGuestRecommendedHotDealsArgs,
   QueryGuestRecommendedHotDealsDocument,
@@ -42,8 +43,8 @@ export type ProductListQueryVariables = QueryProductsQueryVariables & {
 // 깨끗하게 돌지 않아(dev-api 는 운영보다 뒤처져 mallGroupId/providerIds 가 없고, 커밋된
 // schema.graphql 은 반대로 priceDropOnly/role 이 없다) 생성 타입엔 mallName 이 없다.
 // 위 ProductListQueryVariables 가 변수 쪽에 하는 것과 같은 보강을 결과 쪽에 한다.
-// codegen 이 복구되면 지우면 된다. (graphql() 로 만든 나머지 목록 쿼리는 문서 문자열이
-// 생성 맵에 박혀 있어 손댈 수 없다 — 그래서 판매처는 이 쿼리를 쓰는 화면에만 나온다.)
+// codegen 이 복구되면 지우면 된다. graphql() 로 만든 쿼리도 TypedDocumentString 으로 바꾸면
+// 문서 문자열을 직접 소유해 같은 보강을 할 수 있다(아래 QueryExpiringSoonHotDealProducts).
 type ProductListResult = Omit<QueryProductsQuery, 'products'> & {
   products: (QueryProductsQuery['products'][number] & { mallName?: string | null })[];
 };
@@ -679,7 +680,19 @@ const QueryHotDealRankingProducts = graphql(`
   }
 `);
 
-const QueryExpiringSoonHotDealProducts = graphql(`
+// mallName 을 넣으려면 문서 문자열을 고쳐야 하는데 graphql() 로는 생성 맵 lookup 이 깨진다.
+// 위 QueryProducts·QueryClusteredProducts 와 같은 TypedDocumentString + 인라인 타입 패턴으로
+// 바꿔 문자열을 직접 소유한다. codegen 이 복구되면 graphql() 로 되돌릴 수 있다.
+type ExpiringSoonResult = {
+  expiringSoonHotDealProducts: (QueryExpiringSoonHotDealProductsQuery['expiringSoonHotDealProducts'][number] & {
+    mallName?: string | null;
+  })[];
+};
+
+const QueryExpiringSoonHotDealProducts = new TypedDocumentString<
+  ExpiringSoonResult,
+  QueryExpiringSoonHotDealProductsQueryVariables
+>(`
   query QueryExpiringSoonHotDealProducts(
     $daysUntilExpiry: Int!
     $limit: Int!
@@ -693,6 +706,7 @@ const QueryExpiringSoonHotDealProducts = graphql(`
       id
       title
       mallId
+      mallName
       url
       isHot
       isEnd
