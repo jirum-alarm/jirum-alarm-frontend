@@ -7,6 +7,7 @@ import { getAccessToken } from '@/app/actions/token';
 import { PAGE } from '@/shared/config/page';
 import BackButton from '@/shared/ui/layout/BackButton';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
+import PageHeader from '@/shared/ui/layout/PageHeader';
 
 import { POST_FORM_ID } from '@/features/community/ui/PostForm';
 import PostFormClient from '@/features/community/ui/PostFormClient';
@@ -34,21 +35,19 @@ export default async function CommunityWritePage({
       <BasicLayout
         hasBackButton
         header={
-          <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center justify-between border-b border-gray-100 bg-white px-3">
-            <div className="flex items-center">
-              <BackButton />
-              <span className="ml-1 text-base font-semibold text-gray-900">
-                {editPostId ? '글 수정' : '글쓰기'}
-              </span>
-            </div>
-            <button
-              type="submit"
-              form={POST_FORM_ID}
-              className="text-primary-500 pr-2 text-sm font-semibold"
-            >
-              {editPostId ? '수정 완료' : '올리기'}
-            </button>
-          </header>
+          <PageHeader
+            leading={<BackButton />}
+            title={editPostId ? '글 수정' : '글쓰기'}
+            actions={
+              <button
+                type="submit"
+                form={POST_FORM_ID}
+                className="text-primary-500 text-sm font-semibold"
+              >
+                {editPostId ? '수정 완료' : '올리기'}
+              </button>
+            }
+          />
         }
       >
         <PostFormClient editPostId={editPostId} />

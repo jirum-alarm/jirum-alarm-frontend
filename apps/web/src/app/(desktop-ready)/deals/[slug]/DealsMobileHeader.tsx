@@ -1,6 +1,7 @@
 'use client';
 
 import BackButton from '@/shared/ui/layout/BackButton';
+import PageHeader from '@/shared/ui/layout/PageHeader';
 import ShareButton from '@/shared/ui/ShareButton';
 
 // 모바일 전용 상단 헤더 (뒤로가기 + 모델명 + 공유).
@@ -9,12 +10,11 @@ import ShareButton from '@/shared/ui/ShareButton';
 // pc:hidden 으로 데스크톱(GNB 있음)에선 숨김.
 export default function DealsMobileHeader({ title }: { title: string }) {
   return (
-    <header className="max-w-mobile-max pc:hidden fixed top-0 z-40 flex h-14 w-full items-center justify-between gap-2 bg-white px-5">
-      <div className="flex min-w-0 grow items-center gap-x-1">
-        <BackButton />
-        <h2 className="truncate text-lg font-semibold text-black">{title}</h2>
-      </div>
-      <ShareButton title={title} />
-    </header>
+    <PageHeader
+      className="pc:hidden"
+      leading={<BackButton />}
+      title={title}
+      actions={<ShareButton title={title} />}
+    />
   );
 }

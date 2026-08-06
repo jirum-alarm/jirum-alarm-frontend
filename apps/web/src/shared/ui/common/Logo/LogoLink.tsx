@@ -6,16 +6,19 @@ import { cn } from '@/shared/lib/cn';
 import { IconLogo } from '@/shared/ui/common/icons/Illust';
 import Link from '@/shared/ui/Link';
 
+/** 로고 아래 붙는 서비스 한 줄 설명. 로고가 보이는 곳이면 어디서든 같은 문구를 쓴다. */
+export const LOGO_SUBTITLE = '커뮤니티 핫딜 모아보기';
+
 interface LogoLinkProps {
   inverted?: boolean;
   /**
-   * 로고 이름 아래 붙는 부제. 상세 페이지처럼 "여기가 뭐 하는 곳인지" 알려야 하는
-   * 유입면에서만 쓴다. 없으면 기존과 완전히 동일하게 렌더된다.
+   * 로고 이름 아래 붙는 부제. 기본값은 LOGO_SUBTITLE 이라 로고를 쓰는 곳은 별도 지정 없이
+   * 같은 문구를 얻는다. 높이가 빠듯한 자리(데스크톱 GNB 등)는 null 을 넘겨 한 줄로 되돌린다.
    */
-  subtitle?: string;
+  subtitle?: string | null;
 }
 
-export default function LogoLink({ inverted = false, subtitle }: LogoLinkProps) {
+export default function LogoLink({ inverted = false, subtitle = LOGO_SUBTITLE }: LogoLinkProps) {
   return (
     <Link href="/" className="flex items-center gap-2">
       <motion.div

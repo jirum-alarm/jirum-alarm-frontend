@@ -6,6 +6,7 @@ import { PAGE } from '@/shared/config/page';
 import { Search } from '@/shared/ui/common/icons';
 import BackButton from '@/shared/ui/layout/BackButton';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
+import PageHeader from '@/shared/ui/layout/PageHeader';
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
 import ShareButton from '@/shared/ui/ShareButton';
@@ -21,18 +22,18 @@ export default async function Layout({ children }: { children: ReactNode }) {
     return (
       <BasicLayout
         header={
-          <header className="max-w-mobile-max fixed top-0 z-40 flex h-14 w-full items-center justify-between bg-white px-5">
-            <div className="flex grow items-center gap-x-1">
-              <BackButton backTo={PAGE.HOME} />
-              <h2 className="line-clamp-1 text-lg font-semibold text-black">{TITLE}</h2>
-            </div>
-            <div className="flex items-center gap-x-4">
-              <Link href={PAGE.SEARCH} aria-label="검색" title="검색" className="py-2">
-                <Search />
-              </Link>
-              <ShareButton title={`${TITLE} | 지름알림`} />
-            </div>
-          </header>
+          <PageHeader
+            leading={<BackButton backTo={PAGE.HOME} />}
+            title={TITLE}
+            actions={
+              <>
+                <Link href={PAGE.SEARCH} aria-label="검색" title="검색" className="-m-2 p-2">
+                  <Search />
+                </Link>
+                <ShareButton title={`${TITLE} | 지름알림`} />
+              </>
+            }
+          />
         }
       >
         {children}

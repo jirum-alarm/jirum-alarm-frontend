@@ -68,7 +68,8 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     >
       <header className="max-w-layout-max mx-auto flex h-14 w-full items-center justify-between px-5">
         <nav className="flex h-full items-center gap-x-11">
-          <LogoLink inverted={isInHomeHero} />
+          {/* GNB 는 h-14 안에 네비 링크까지 들어가야 해서 로고는 한 줄로 둔다. */}
+          <LogoLink inverted={isInHomeHero} subtitle={null} />
           <div className="flex h-full items-center gap-x-10">
             {NAV_LINKS.map((nav) => (
               <NavLink

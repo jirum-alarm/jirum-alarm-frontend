@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 import { PAGE } from '@/shared/config/page';
 import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 import BackButton from '@/shared/ui/layout/BackButton';
+import PageHeader from '@/shared/ui/layout/PageHeader';
 
 import { AuthQueries } from '@/entities/auth';
 import { CommunityQueries } from '@/entities/community';
@@ -31,17 +32,17 @@ export default function CommunityPostPageHeader({
   const backTo = tab ? `${PAGE.COMMUNITY}?tab=${tab}` : PAGE.COMMUNITY;
 
   return (
-    <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center justify-between border-b border-gray-100 bg-white px-5">
-      <div className="flex items-center gap-x-1">
-        <BackButton backTo={backTo} />
-        <LogoLink />
-      </div>
-      <div className="flex items-center gap-x-4">
-        <Suspense>
-          <CommunityShareButton postId={postId} />
-        </Suspense>
-        {isUserLogin && <PostMenu postId={postId} isMyPost={isMyPost} />}
-      </div>
-    </header>
+    <PageHeader
+      leading={<BackButton backTo={backTo} />}
+      logo={<LogoLink />}
+      actions={
+        <>
+          <Suspense>
+            <CommunityShareButton postId={postId} />
+          </Suspense>
+          {isUserLogin && <PostMenu postId={postId} isMyPost={isMyPost} />}
+        </>
+      }
+    />
   );
 }

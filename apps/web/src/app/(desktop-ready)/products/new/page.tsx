@@ -7,6 +7,7 @@ import { getAccessToken } from '@/app/actions/token';
 import { PAGE } from '@/shared/config/page';
 import BackButton from '@/shared/ui/layout/BackButton';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
+import PageHeader from '@/shared/ui/layout/PageHeader';
 
 import ProductCreateForm from '@/features/product-create/ui/ProductCreateForm';
 
@@ -25,15 +26,7 @@ export default async function ProductNewPage() {
 
   if (isMobile) {
     return (
-      <BasicLayout
-        hasBackButton
-        header={
-          <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center border-b border-gray-100 bg-white px-3">
-            <BackButton />
-            <span className="ml-1 text-base font-semibold text-gray-900">핫딜 등록</span>
-          </header>
-        }
-      >
+      <BasicLayout hasBackButton header={<PageHeader leading={<BackButton />} title="핫딜 등록" />}>
         <div className="px-5 pt-4">
           <ProductCreateForm />
         </div>

@@ -7,6 +7,7 @@ import { getAccessToken } from '@/app/actions/token';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import { NAV_TYPE } from '@/shared/ui/layout/BottomNav';
+import PageHeader from '@/shared/ui/layout/PageHeader';
 
 import { CommunityHotDeals } from '@/features/community';
 
@@ -51,11 +52,7 @@ export default async function CommunityPage() {
       <BasicLayout
         hasBottomNav
         navType={NAV_TYPE.COMMUNITY}
-        header={
-          <header className="max-w-mobile-max fixed top-0 z-50 flex h-14 w-full items-center gap-x-2 border-b border-gray-100 bg-white px-5">
-            <h1 className="text-lg font-bold text-gray-900">커뮤니티</h1>
-          </header>
-        }
+        header={<PageHeader title="커뮤니티" />}
       >
         <CommunityPageClient isUserLogin={isUserLogin} />
         <CommunityHotDeals />
