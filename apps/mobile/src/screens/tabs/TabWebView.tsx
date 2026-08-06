@@ -14,19 +14,29 @@ import {SERVICE_URL, USER_AGENT} from '@/constants/env';
 import {SystemBars} from 'react-native-edge-to-edge';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
-import {tabNavigations} from '@/shared/constant/navigations';
+import {
+  tabNavigations,
+  tabStackNavigations,
+} from '@/shared/constant/navigations';
 import {useTokenRemoveEffect} from '@/screens/jirumalarmwebview/hooks/useTokenRemoveEffect';
 import {useWebViewLoading} from '@/screens/jirumalarmwebview/hooks/useWebViewLoading';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
 import * as Haptics from 'expo-haptics';
 import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
-import {useIsFocused} from '@react-navigation/native';
-import {isTabRootUrl} from '@/shared/lib/navigation/tab-routing';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  getPushablePath,
+  isTabRootUrl,
+} from '@/shared/lib/navigation/tab-routing';
+import type {TabStackParamList} from '@/navigations/tab/types';
 import {setTabBarVisible} from '@/shared/hooks/useTabBarVisibility';
 import {getReservedBottomPx} from '@/navigations/tab/MainTabNavigator';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
+
+type TabStackNavigationProp = NativeStackNavigationProp<TabStackParamList>;
 
 interface TabWebViewProps {
   tabName: TabName;
@@ -61,6 +71,8 @@ const buildHideWebBottomNavJs = (reservedBottomPx: number) => `
 `;
 
 function useUrlFilter(clearLoadingState: () => void) {
+  const navigation = useNavigation<TabStackNavigationProp>();
+
   return useCallback(
     (event: ShouldStartLoadRequest) => {
       if (shouldOpenExternally(event)) {
@@ -68,9 +80,27 @@ function useUrlFilter(clearLoadingState: () => void) {
         openInAppBrowser(event.url);
         return false;
       }
+
+      // 상세는 같은 WebView 에서 URL 을 갈아끼우지 않고 스택에 push 한다.
+      // 그래야 전환 중 이전 화면이 남아 흰 화면이 안 뜬다.
+      // iOS 는 사용자 탭이 아닌 로드(리다이렉트 등)까지 잡히면 곤란하므로
+      // 메인 프레임 클릭만 대상으로 한다.
+      // Android 는 navigationType 이 항상 'other' 라 click 을 요구하면 영영 안 걸린다.
+      // iOS 만 사용자 탭 여부를 구분할 수 있다(in-app-browser 와 같은 패턴).
+      const isUserInitiated =
+        Platform.OS !== 'ios' || event.navigationType === 'click';
+      if (event.isTopFrame !== false && isUserInitiated) {
+        const pushablePath = getPushablePath(event.url);
+        if (pushablePath) {
+          clearLoadingState();
+          navigation.push(tabStackNavigations.DETAIL, {path: pushablePath});
+          return false;
+        }
+      }
+
       return true;
     },
-    [clearLoadingState],
+    [clearLoadingState, navigation],
   );
 }
 
