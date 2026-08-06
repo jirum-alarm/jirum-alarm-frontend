@@ -57,6 +57,25 @@ const extractIntentFallbackUrl = (url: string): string | null => {
 };
 
 /**
+ * SNS 공유 intent URL 인지 판정.
+ *
+ * 인앱 브라우저(SFSafariViewController·Chrome Custom Tabs)는 설치된 앱으로 넘겨주지
+ * 않아서, 공유하려고 X·스레드를 눌러도 웹뷰 안에 웹페이지가 뜬다. 이 URL 들은
+ * Linking.openURL 로 OS 에 위임해야 "앱 있으면 앱 / 없으면 기본 브라우저"가 된다.
+ * (앱 설치 여부는 웹에서 알 수 없고, 알아낼 필요도 없다 — OS 가 판단한다.)
+ *
+ * 상품 구매 링크는 반대로 인앱 브라우저가 맞다(이탈 방지). 그래서 공유 intent 만 예외.
+ */
+const isShareIntent = (url: string) => {
+  return (
+    url.startsWith('https://twitter.com/intent/') ||
+    url.startsWith('https://x.com/intent/') ||
+    url.startsWith('https://www.threads.net/intent/') ||
+    url.startsWith('https://threads.net/intent/')
+  );
+};
+
+/**
  * Opens a URL in the in-app browser
  *
  * Falls back to system browser if in-app browser is unavailable
@@ -65,6 +84,17 @@ const extractIntentFallbackUrl = (url: string): string | null => {
  */
 export async function openInAppBrowser(url: string) {
   try {
+    // 공유 intent 는 OS 에 위임 — 인앱 브라우저는 앱으로 넘기지 못한다.
+    // 실패하면 아래 인앱 브라우저로 흘려보낸다(공유를 조용히 죽이지 않게).
+    if (isShareIntent(url)) {
+      try {
+        await Linking.openURL(url);
+        return;
+      } catch {
+        // fall through
+      }
+    }
+
     // Android intent:// 스킴 처리
     if (Platform.OS === 'android' && url.startsWith('intent:')) {
       const fallbackUrl = extractIntentFallbackUrl(url);

@@ -86,6 +86,41 @@ describe('openInAppBrowser', () => {
     expect(Linking.openURL).toHaveBeenCalledWith('https://example.com');
   });
 
+  // 공유 intent 를 인앱 브라우저로 열면 앱이 깔려 있어도 웹페이지가 떠서 공유가 안 된다.
+  // OS 위임이라 설치 여부 판별이 필요 없다 — 없으면 OS 가 기본 브라우저로 보낸다.
+  it.each([
+    'https://twitter.com/intent/tweet?text=hi&url=https%3A%2F%2Fjirum-alarm.com',
+    'https://x.com/intent/tweet?text=hi',
+    'https://www.threads.net/intent/post?text=hi',
+  ])('delegates share intents to the OS: %s', async url => {
+    Object.defineProperty(Platform, 'OS', {value: 'ios'});
+
+    await openInAppBrowser(url);
+
+    expect(Linking.openURL).toHaveBeenCalledWith(url);
+    expect(WebBrowser.openBrowserAsync).not.toHaveBeenCalled();
+  });
+
+  it('keeps product links in the in-app browser (share-only exception)', async () => {
+    Object.defineProperty(Platform, 'OS', {value: 'ios'});
+
+    await openInAppBrowser('https://smartstore.naver.com/some/product');
+
+    expect(WebBrowser.openBrowserAsync).toHaveBeenCalled();
+    expect(Linking.openURL).not.toHaveBeenCalled();
+  });
+
+  it('falls back to the in-app browser when share intent linking fails', async () => {
+    Object.defineProperty(Platform, 'OS', {value: 'ios'});
+    jest
+      .spyOn(Linking, 'openURL')
+      .mockRejectedValueOnce(new Error('no handler'));
+
+    await openInAppBrowser('https://x.com/intent/tweet?text=hi');
+
+    expect(WebBrowser.openBrowserAsync).toHaveBeenCalled();
+  });
+
   it('shows an alert when fallback linking also fails', async () => {
     Object.defineProperty(Platform, 'OS', {value: 'ios'});
     jest
