@@ -73,6 +73,16 @@ describe('소스 계약', () => {
     );
   });
 
+  it('앱(웹뷰)에서는 웹 네비를 그리지 않는다 — 네이티브 탭바와 두 겹 방지', () => {
+    assert.match(
+      SOURCE,
+      /if \(isJirumAlarmApp\) return null;/,
+      '앱 게이트가 없다 — 앱에서 네이티브 탭바 위에 웹 네비가 겹친다',
+    );
+    // isHydrated 를 AND 로 걸면 하이드레이션 전에 네비가 떴다 사라진다.
+    assert.doesNotMatch(SOURCE, /if \(isHydrated && isJirumAlarmApp\) return null;/);
+  });
+
   it('TAB_ROOT_PATHS 가 앱과 같은 6개 경로를 담는다', () => {
     const block = SOURCE.match(/const TAB_ROOT_PATHS[^=]*=\s*\[([\s\S]*?)\]/)?.[1] ?? '';
     for (const token of [

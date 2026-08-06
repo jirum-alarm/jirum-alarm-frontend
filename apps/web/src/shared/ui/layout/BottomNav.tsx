@@ -216,12 +216,13 @@ const BottomNavComponent = () => {
 export default function BottomNav() {
   const {
     device: { isJirumAlarmApp },
-    isHydrated,
   } = useDevice();
   const pathName = usePathname();
 
-  // 앱 환경에서도 웹 바텀 네비게이션을 표시하도록 수정 (사용자 요청 대응)
-  // if (isHydrated && isJirumAlarmApp) return null;
+  // 앱은 네이티브 탭바를 같은 6개 경로에서 띄운다 → 웹 네비까지 그리면 두 겹으로 쌓인다.
+  // ponytail: isHydrated 를 안 본다. UA 판정 전(SSR·첫 페인트)엔 false 라 웹 네비가
+  // 잠깐 떴다 사라지는데, isHydrated 를 AND 로 걸면 그 깜빡임이 오히려 보장된다.
+  if (isJirumAlarmApp) return null;
 
   if (!isTabRootPath(pathName)) return null;
   return <BottomNavComponent />;
