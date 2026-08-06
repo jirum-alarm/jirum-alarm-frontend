@@ -25,7 +25,32 @@ import {
 import {Animated, StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import {GlassView, isLiquidGlassAvailable} from 'expo-glass-effect';
 import {useTabBarVisibility} from '@/shared/hooks/useTabBarVisibility';
+
+/** 유리 탭바 높이. iOS 26 탭바는 캡슐형이라 반경은 높이의 절반. */
+export const TAB_BAR_HEIGHT = 64;
+/** safe-area 가 없는 기기에서 탭바를 바닥에서 띄우는 간격 */
+export const GLASS_BOTTOM_GAP = 12;
+/** 캡슐 좌우 인셋 — iOS 26 탭바는 화면 폭을 꽉 채우지 않는다 */
+const GLASS_SIDE_INSET = 16;
+
+/**
+ * 웹 콘텐츠가 탭바에 가리지 않도록 확보해야 할 하단 여백(px).
+ *
+ * 유리 캡슐은 바닥에서 떠 있어 기존(56 + safe-area)보다 더 차지한다.
+ * 폴백(일반 탭바)일 때는 예전 값을 그대로 쓴다.
+ */
+export function getReservedBottomPx(safeAreaBottom: number): number {
+  if (!isLiquidGlassAvailable()) {
+    return 56 + (safeAreaBottom > 0 ? safeAreaBottom : 8);
+  }
+  return (
+    TAB_BAR_HEIGHT +
+    (safeAreaBottom > 0 ? safeAreaBottom : GLASS_BOTTOM_GAP) +
+    GLASS_BOTTOM_GAP
+  );
+}
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
@@ -96,27 +121,42 @@ const TAB_SCREENS: Record<TabName, React.ComponentType> = {
 function AnimatedTabBar(props: BottomTabBarProps) {
   const tabBarVisible = useTabBarVisibility();
   const insets = useSafeAreaInsets();
-  const tabBarHeight = 56 + (insets.bottom > 0 ? insets.bottom : 8);
+  const bottomGap = insets.bottom > 0 ? insets.bottom : GLASS_BOTTOM_GAP;
+  // 유리 탭바는 떠 있으므로 아래 간격까지 더해야 완전히 화면 밖으로 숨는다.
+  const hiddenOffset = TAB_BAR_HEIGHT + bottomGap;
   const translateY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(translateY, {
-      toValue: tabBarVisible ? 0 : tabBarHeight,
+      toValue: tabBarVisible ? 0 : hiddenOffset,
       duration: 250,
       useNativeDriver: true,
     }).start();
-  }, [tabBarVisible, tabBarHeight, translateY]);
+  }, [tabBarVisible, hiddenOffset, translateY]);
+
+  // iOS 26 미만·안드로이드에서는 GlassView 가 일반 View 로 폴백된다.
+  // 그때는 유리가 없으니 기존처럼 꽉 찬 흰 배경 탭바를 그대로 쓴다.
+  if (!isLiquidGlassAvailable()) {
+    return (
+      <Animated.View style={[styles.barWrapper, {transform: [{translateY}]}]}>
+        <BottomTabBar {...props} />
+      </Animated.View>
+    );
+  }
 
   return (
     <Animated.View
-      style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        transform: [{translateY}],
-      }}>
-      <BottomTabBar {...props} />
+      style={[
+        styles.barWrapper,
+        styles.glassWrapper,
+        {bottom: bottomGap, transform: [{translateY}]},
+      ]}>
+      <GlassView
+        glassEffectStyle="regular"
+        isInteractive
+        style={[styles.glassBar, {height: TAB_BAR_HEIGHT}]}>
+        <BottomTabBar {...props} />
+      </GlassView>
     </Animated.View>
   );
 }
@@ -125,6 +165,7 @@ function MainTabNavigator() {
   const {setActiveTab, getWebViewRef} = useWebviewContext();
   const hasNewAlarm = useHasNewAlarm();
   const insets = useSafeAreaInsets();
+  const glassEnabled = isLiquidGlassAvailable();
 
   const handleScrollToTop = useCallback(
     (tabName: TabName) => {
@@ -155,11 +196,16 @@ function MainTabNavigator() {
         tabBarActiveTintColor: '#101828',
         tabBarInactiveTintColor: '#667085',
         tabBarLabelStyle: styles.tabBarLabel,
-        tabBarStyle: {
-          ...styles.tabBar,
-          paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
-          height: 56 + (insets.bottom > 0 ? insets.bottom : 8),
-        },
+        // 유리를 쓸 땐 안쪽 탭바가 투명해야 뒤가 비친다. 흰 배경·상단 테두리를
+        // 그대로 두면 유리를 덮어 그냥 흰 캡슐이 된다.
+        // 높이·하단 여백도 유리 캡슐이 대신 잡으므로 여기서는 빼야 이중이 안 된다.
+        tabBarStyle: glassEnabled
+          ? styles.glassInnerTabBar
+          : {
+              ...styles.tabBar,
+              paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
+              height: 56 + (insets.bottom > 0 ? insets.bottom : 8),
+            },
         lazy: true,
       }}>
       {TAB_CONFIG.map(tab => (
@@ -211,6 +257,29 @@ function MainTabNavigator() {
 export default MainTabNavigator;
 
 const styles = StyleSheet.create({
+  barWrapper: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  glassWrapper: {
+    left: GLASS_SIDE_INSET,
+    right: GLASS_SIDE_INSET,
+  },
+  glassBar: {
+    borderRadius: TAB_BAR_HEIGHT / 2,
+    overflow: 'hidden',
+  },
+  glassInnerTabBar: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    elevation: 0,
+    position: 'relative',
+    height: TAB_BAR_HEIGHT,
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
   tabBar: {
     backgroundColor: '#ffffff',
     borderTopWidth: 1,
