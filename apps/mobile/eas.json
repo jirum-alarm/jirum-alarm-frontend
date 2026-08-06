@@ -39,6 +39,7 @@
       }
     },
     "production": {
+      "autoIncrement": true,
       "env": {
         "APP_ENV": "production",
         "EXPO_PUBLIC_APP_ENV": "production",
@@ -49,6 +50,7 @@
         "credentialsSource": "remote"
       },
       "ios": {
+        "scheme": "jirumAlarmMobile",
         "credentialsSource": "remote"
       }
     }
