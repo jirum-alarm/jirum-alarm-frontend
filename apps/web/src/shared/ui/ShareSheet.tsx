@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog } from 'radix-ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 
 import useScreen from '@/shared/hooks/useScreenSize';
@@ -13,8 +13,8 @@ import {
   buildShareUrl,
   type ShareChannel,
 } from '@/shared/lib/share';
-import { triggerHaptic } from '@/shared/lib/webview';
-import { ShareLink, ShareThreads, ShareX } from '@/shared/ui/common/icons';
+import { isInApp, shareNative, triggerHaptic } from '@/shared/lib/webview';
+import { Share, ShareLink, ShareThreads, ShareX } from '@/shared/ui/common/icons';
 import SvgKakao from '@/shared/ui/common/icons/login/Kakao';
 import { useToast } from '@/shared/ui/common/Toast';
 
@@ -43,6 +43,9 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
   const [pending, setPending] = useState<ShareChannel | null>(null);
   // md(768px) 이상 = PC. useScreen 은 초기값 false 라 SSR 안전.
   const { md: isDesktop } = useScreen();
+  // SSR 엔 window 가 없어 마운트 후 판정해야 hydration mismatch 가 안 난다(ShareButton 관용구).
+  const [canNativeShare, setCanNativeShare] = useState(false);
+  useEffect(() => setCanNativeShare(isInApp() || !!navigator.share), []);
 
   const copyLink = async (url: string) => {
     try {
@@ -70,6 +73,9 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
         // 완비돼 있으므로(page.tsx), sendDefault 로 content 를 손조립하면 규격이 이중화되고
         // OG 가 바뀔 때마다 어긋난다. 규격은 OG 한 곳에서만 관리한다.
         window.Kakao.Share.sendScrap({ requestUrl: url });
+      } else if (channel === 'native') {
+        // 앱은 RN 브릿지, 웹은 Web Share API — shareNative 가 알아서 갈린다.
+        await shareNative({ title, url, message: buildShareMessage(title, url, description) });
       } else if (channel === 'x' || channel === 'threads') {
         const opened = window.open(buildIntentUrl(channel, caption, url), '_blank', 'noopener');
         // 팝업 차단 시 공유가 조용히 죽지 않게 복사로 폴백.
@@ -112,6 +118,18 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
       icon: <ShareLink width={20} height={20} className="text-gray-600" />,
       badge: 'bg-gray-100',
     },
+    // OS 시트 폴백(문자·인스타DM 등). 지원 안 하는 환경(데스크톱 대부분)에선 빼야
+    // 눌러도 아무 일 없는 타일이 안 생긴다. Share 글리프 재사용 — 전용 아이콘 없음.
+    ...(canNativeShare
+      ? ([
+          {
+            c: 'native' as const,
+            label: '기타',
+            icon: <Share width={20} height={20} className="text-gray-600" />,
+            badge: 'bg-gray-100',
+          },
+        ] as const)
+      : []),
   ];
 
   // 무엇을 공유하는지 보여주는 프리뷰. 링크만 있으면 뭘 보내는지 알 수 없다.
