@@ -1,0 +1,19 @@
+{
+  "extends": "@jirum/tsconfig/nextjs.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    // bare `node --test --experimental-strip-types` 는 번들러가 없어 확장자 없는
+    // 상대 import 를 못 찾는다. noEmit:true 라 이 옵션이 안전하게 허용된다.
+    "allowImportingTsExtensions": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

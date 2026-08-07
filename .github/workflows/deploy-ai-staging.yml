@@ -1,0 +1,126 @@
+name: deploy-ai-staging
+
+# apps/ai — dev-ai.jirum-alarm.com
+#
+# 트리거: main push (dev)
+# 이미지: jirum-alarm-frontend-ai-dev
+# dev 는 crawling-server-dev 를 본다(dev Dockerfile ARG 기본값).
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - apps/ai/**
+      - packages/**
+  workflow_dispatch:
+
+concurrency:
+  group: ai-staging-deployment
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: staging
+    outputs:
+      image-tag: ${{ steps.deploy-tag.outputs.tag }}
+    env:
+      DOCKER_BUILDKIT: 1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-ai-dev
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-,format=short
+
+      - name: Resolve deploy tag
+        id: deploy-tag
+        env:
+          META_TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          set -euo pipefail
+          # 커밋별 고유 태그를 매니페스트에 박는다 — floating 태그면 ArgoCD 가 rollout 을 못 본다.
+          tag=$(printf '%s\n' "$META_TAGS" | sed 's#.*:##' | grep -E '^main-[0-9a-f]+$' | head -1)
+          if [ -z "$tag" ]; then echo "::error::could not resolve unique deploy tag"; exit 1; fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/ai/deploy/development/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Kubernetes
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: staging
+    steps:
+      - name: Checkout infrastructure repository
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ secrets.INFRA_GITHUB_REPOSITORY }}
+          ref: main
+          token: ${{ secrets.ACTION_TOKEN }}
+          path: infra
+
+      - name: Install yq
+        run: |
+          set -euo pipefail
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Update Kubernetes manifest
+        working-directory: infra
+        env:
+          NEW_TAG: ${{ needs.build-and-push.outputs.image-tag }}
+        run: |
+          set -euo pipefail
+          KUSTOMIZATION="apps/frontend-ai-dev/overlays/prod/kustomization.yaml"
+          IMAGE_NAME="${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-ai"
+          export IMAGE_NAME NEW_TAG
+          yq eval -i '(.images[] | select(.name == strenv(IMAGE_NAME)) | .newTag) = strenv(NEW_TAG)' "$KUSTOMIZATION"
+          yq eval '.' "$KUSTOMIZATION" > /dev/null
+
+      - name: Commit files
+        working-directory: infra
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+          git add .
+          git diff --staged --quiet || git commit -m "chore(ai-staging): image tag ${{ needs.build-and-push.outputs.image-tag }}"
+          git push -u origin main

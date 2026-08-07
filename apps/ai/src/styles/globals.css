@@ -1,0 +1,183 @@
+@import 'tailwindcss';
+
+@theme color {
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f2f4f7;
+  --color-gray-200: #e4e7ec;
+  --color-gray-300: #d0d5dd;
+  --color-gray-400: #98a2b3;
+  --color-gray-500: #667085;
+  --color-gray-600: #475467;
+  --color-gray-700: #344054;
+  --color-gray-800: #1d2939;
+  --color-gray-900: #101828;
+
+  --color-error-50: #ffe1e5;
+  --color-error-100: #fbccd2;
+  --color-error-200: #f799a4;
+  --color-error-300: #f36677;
+  --color-error-400: #ef334a;
+  --color-error-500: #eb001c;
+  --color-error-600: #bc0017;
+  --color-error-700: #8d0011;
+  --color-error-800: #5e000b;
+  --color-error-900: #2f0006;
+
+  --color-primary-500: #9ef22e;
+  --color-primary-700: #039100;
+
+  --color-secondary-50: #f3f7ff;
+  --color-secondary-100: #dae5fe;
+  --color-secondary-200: #b5cbfd;
+  --color-secondary-300: #91b1fb;
+  --color-secondary-400: #6593fd;
+  --color-secondary-500: #467dfb;
+  --color-secondary-600: #3964c7;
+  --color-secondary-700: #2b4b95;
+
+  --color-warning-50: #fef6e7;
+  --color-warning-600: #b45309;
+}
+
+@theme {
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: var(--color-gray-900);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-synthesis: none;
+}
+
+/*
+ * Google AI 검색류의 앰비언트 배경.
+ * 고정 레이어 + blur 라 스크롤해도 따라오지 않는다(콘텐츠와 경쟁하지 않게).
+ * 지름알람 토큰(error=빨강, secondary=파랑, primary=라임)만 사용.
+ */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: #fff;
+}
+
+/*
+ * 블룸을 뷰포트 모서리가 아니라 콘텐츠 컬럼(480px) 기준으로 앉힌다.
+ * 뷰포트 기준으로 두면 데스크톱에서 본문과 멀어져 얼룩처럼 보인다.
+ */
+.ambient::before,
+.ambient::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  left: 50%;
+}
+
+.ambient::before {
+  width: 440px;
+  height: 440px;
+  top: -200px;
+  margin-left: -360px;
+  background: radial-gradient(circle, #f799a4 0%, #dae5fe 55%, transparent 72%);
+  opacity: 0.45;
+}
+
+.ambient::after {
+  width: 360px;
+  height: 360px;
+  top: -120px;
+  margin-left: 60px;
+  background: radial-gradient(circle, #b5cbfd 0%, #d8faab 60%, transparent 75%);
+  opacity: 0.38;
+}
+
+/* 답변이 도착할 때 한 번만. 스크롤 트리거 없음 — 과하면 AI 티가 난다. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.28s ease-out both;
+}
+
+/* 생각 중 점 3개 */
+@keyframes blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+.dot {
+  animation: blink 1.2s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .dot {
+    animation: none;
+  }
+}
+
+/*
+ * 클릭 인터랙션 공통.
+ *
+ * 모든 눌리는 요소는 (1) 눌림 피드백 (2) 키보드 포커스 링 (3) 탭 하이라이트 제거를
+ * 갖는다. 모바일에선 hover 가 없으므로 `active:` 가 유일한 "눌렸다" 신호다.
+ * reduced-motion 이면 transform 만 끄고 색 변화는 남긴다(피드백 자체는 접근성이다).
+ */
+.tappable {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    transform 0.12s ease,
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    opacity 0.12s ease;
+}
+
+.tappable:active {
+  transform: scale(0.97);
+}
+
+.tappable:focus-visible {
+  outline: 2px solid var(--color-secondary-500);
+  outline-offset: 2px;
+}
+
+/* 카드처럼 큰 면적은 축소보다 눌림 배경이 자연스럽다 */
+.tappable-surface:active {
+  transform: scale(0.995);
+  background-color: var(--color-gray-50);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tappable,
+  .tappable-surface {
+    transition: background-color 0.12s ease;
+  }
+  .tappable:active,
+  .tappable-surface:active {
+    transform: none;
+  }
+}

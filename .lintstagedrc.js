@@ -1,94 +1,26 @@
 const path = require("node:path");
 
-const buildEslintCommands = (filenames) => {
-  const relFilenames = filenames.map((f) => path.relative(process.cwd(), f));
+// 워크스페이스 앱 목록. 새 앱을 추가하면 **여기만** 고친다.
+// (이전엔 세 함수가 각자 4개를 하드코딩해서 apps/ai 추가 시 check-types 가
+//  `--filter=` 빈 셀렉터로 죽었다 — turbo 가 "selector must have a reference" 로 거부.)
+const APPS = ["admin", "mobile", "web", "landing", "ai"];
 
-  const adminFiles = relFilenames.filter((f) => f.startsWith("apps/admin/"));
-  const mobileFiles = relFilenames.filter((f) => f.startsWith("apps/mobile/"));
-  const webFiles = relFilenames.filter((f) => f.startsWith("apps/web/"));
-  const landingFiles = relFilenames.filter((f) =>
-    f.startsWith("apps/landing/")
-  );
-
-  const commands = [];
-
-  if (adminFiles.length > 0) {
-    commands.push(`pnpm lint --filter=admin -- --fix`);
-  }
-
-  if (mobileFiles.length > 0) {
-    commands.push(`pnpm lint --filter=mobile -- --fix`);
-  }
-
-  if (webFiles.length > 0) {
-    commands.push(`pnpm lint --filter=web -- --fix`);
-  }
-
-  if (landingFiles.length > 0) {
-    commands.push(`pnpm lint --filter=landing -- --fix`);
-  }
-
-  return commands;
+const matchedApps = (filenames) => {
+  const rel = filenames.map((f) => path.relative(process.cwd(), f));
+  return APPS.filter((app) => rel.some((f) => f.startsWith(`apps/${app}/`)));
 };
 
-const buildPrettierCommands = (filenames) => {
-  const relFilenames = filenames.map((f) => path.relative(process.cwd(), f));
-  const adminFiles = relFilenames.filter((f) => f.startsWith("apps/admin/"));
-  const mobileFiles = relFilenames.filter((f) => f.startsWith("apps/mobile/"));
-  const webFiles = relFilenames.filter((f) => f.startsWith("apps/web/"));
-  const landingFiles = relFilenames.filter((f) =>
-    f.startsWith("apps/landing/")
-  );
+const buildEslintCommands = (filenames) =>
+  matchedApps(filenames).map((app) => `pnpm lint --filter=${app} -- --fix`);
 
-  const commands = [];
-
-  if (adminFiles.length > 0) {
-    commands.push(`pnpm --filter=admin prettier-fix`);
-  }
-
-  if (mobileFiles.length > 0) {
-    commands.push(`pnpm --filter=mobile prettier-fix`);
-  }
-
-  if (webFiles.length > 0) {
-    commands.push(`pnpm --filter=web prettier-fix`);
-  }
-
-  if (landingFiles.length > 0) {
-    commands.push(`pnpm --filter=landing prettier-fix`);
-  }
-
-  return commands;
-};
+const buildPrettierCommands = (filenames) =>
+  matchedApps(filenames).map((app) => `pnpm --filter=${app} prettier-fix`);
 
 const buildCheckTypesCommands = (filenames) => {
-  const relFilenames = filenames.map((f) => path.relative(process.cwd(), f));
-  const adminFiles = relFilenames.filter((f) => f.startsWith("apps/admin/"));
-  const mobileFiles = relFilenames.filter((f) => f.startsWith("apps/mobile/"));
-  const webFiles = relFilenames.filter((f) => f.startsWith("apps/web/"));
-  const landingFiles = relFilenames.filter((f) =>
-    f.startsWith("apps/landing/")
-  );
-
-  const packages = [];
-
-  if (adminFiles.length > 0) {
-    packages.push("admin");
-  }
-
-  if (mobileFiles.length > 0) {
-    packages.push("mobile");
-  }
-
-  if (webFiles.length > 0) {
-    packages.push("web");
-  }
-
-  if (landingFiles.length > 0) {
-    packages.push("landing");
-  }
-
-  return `pnpm check-types --filter=${packages.join(" --filter=")}`;
+  const apps = matchedApps(filenames);
+  // 매칭 0개면 명령을 만들지 않는다. 빈 배열을 반환하면 lint-staged 가 그냥 건너뛴다.
+  if (apps.length === 0) return [];
+  return [`pnpm check-types ${apps.map((a) => `--filter=${a}`).join(" ")}`];
 };
 
 module.exports = {
