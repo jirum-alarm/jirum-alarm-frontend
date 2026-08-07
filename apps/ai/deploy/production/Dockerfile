@@ -28,8 +28,10 @@ FROM node:${NODE_VERSION}-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# GraphQL 엔드포인트는 런타임 env — 이미지를 재빌드하지 않고 prod/dev 를 가른다.
-ARG GRAPHQL_ENDPOINT
+# GraphQL 엔드포인트. ⚠️ 기본값 없이 `ARG GRAPHQL_ENDPOINT` 만 두면 ENV 가 **빈 문자열**로
+# 구워지고, 코드의 `?? 기본값` 은 빈 문자열을 잡지 못해(?? 는 null/undefined 만) ERR_INVALID_URL
+# 이 난다 — 운영 배포 후 실측된 함정(2026-08-07).
+ARG GRAPHQL_ENDPOINT=https://jirum-alarm.com/api/graphql
 ENV GRAPHQL_ENDPOINT=${GRAPHQL_ENDPOINT}
 
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs

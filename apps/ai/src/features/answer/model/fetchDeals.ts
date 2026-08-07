@@ -9,7 +9,9 @@ import type { Deal } from './types';
  *
  * 서버에서만 읽는다(라우트 핸들러). 클라이언트로 새지 않게 NEXT_PUBLIC_ 접두어를 쓰지 않는다.
  */
-const ENDPOINT = process.env.GRAPHQL_ENDPOINT ?? 'https://jirum-alarm.com/api/graphql';
+// ⚠️ `??` 가 아니라 truthy 검사여야 한다 — Docker ARG 에 기본값이 없으면 ENV 가 빈 문자열로
+// 구워지고 `??` 는 그걸 통과시켜 ERR_INVALID_URL 이 난다(운영 실측 2026-08-07).
+const ENDPOINT = process.env.GRAPHQL_ENDPOINT || 'https://jirum-alarm.com/api/graphql';
 
 /** products.limit 은 50 초과하면 400. orderBy 는 enum 이라 따옴표 금지. */
 const MAX_LIMIT = 50;
