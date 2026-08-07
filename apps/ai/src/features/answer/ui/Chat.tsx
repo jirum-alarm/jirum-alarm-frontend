@@ -2,223 +2,160 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import { isBlocked } from '../model/quota';
+import { readQuota, spendQuota } from '../model/quotaStore';
+
 import AnswerBubble from './AnswerBubble';
+import AnswerSkeleton from './AnswerSkeleton';
+import Composer from './Composer';
+import QuotaWall from './QuotaWall';
 import Stages from './Stages';
 
 import type { AnswerBlock } from '../model/answer';
+import type { QuotaState, Tier } from '../model/quota';
 import type { AskEvent } from '@/app/api/ask/route';
 
-const EXAMPLES = ['콜라 요즘 얼마', '라면 시세', '기저귀 최저가', '무선이어폰', '생수'] as const;
-
-type Turn = {
-  id: number;
-  question: string;
-  stages: string[];
-  blocks: AnswerBlock[];
-  done: boolean;
-};
-
-/** 이 정도 안쪽이면 "바닥을 보고 있다"고 본다. */
-const NEAR_BOTTOM_PX = 120;
-
-const isNearBottom = () =>
-  window.innerHeight + window.scrollY >= document.body.scrollHeight - NEAR_BOTTOM_PX;
-
-export default function Chat() {
-  const [turns, setTurns] = useState<Turn[]>([]);
-  const [draft, setDraft] = useState('');
-  const [busy, setBusy] = useState(false);
+/**
+ * 한 방 = 한 질문. 질문을 또 하면 Composer 가 새 URL 로 push 하고
+ * 이 컴포넌트는 key 로 리마운트된다 — 뒤로가기가 직전 질문으로 돌아간다.
+ *
+ * 답변은 저장하지 않는다. 앞으로가기로 돌아오면 같은 질문을 다시 스트리밍한다.
+ */
+export default function Chat({ question, tier }: { question: string; tier: Tier }) {
+  const [stages, setStages] = useState<string[]>([]);
+  const [blocks, setBlocks] = useState<AnswerBlock[]>([]);
+  const [done, setDone] = useState(false);
   const tailRef = useRef<HTMLDivElement>(null);
-  const seq = useRef(0);
-  /** 새 질문을 보낸 직후 한 번만 강제 스크롤. 블록마다 끌어내리지 않는다. */
-  const jumpToTail = useRef(false);
-
-  const started = turns.length > 0;
 
   /**
-   * 스크롤 정책 (블록 스트리밍 UI 의 핵심 UX):
-   * - 새 질문 → 질문 말풍선이 보이도록 한 번 이동
-   * - 블록 도착 → **유저가 이미 바닥 근처일 때만** 따라간다.
-   *   위로 올려 읽고 있으면 건드리지 않는다(읽는 중에 끌어내리면 최악).
-   *
-   * 이전 구현은 `[turns]` 에 의존해 블록마다(답변당 6회 이상) 강제 스크롤했고,
-   * 사용자가 "너무 빠르게 내려간다"고 지적한 원인이었다.
+   * 쿼터. null 은 "아직 안 읽음" — localStorage 는 서버에 없으므로
+   * 첫 렌더에서 읽으면 hydration 이 어긋난다. 마운트 후에 채운다.
    */
-  useEffect(() => {
-    if (!started) return;
-    const el = tailRef.current;
-    if (!el) return;
+  const [quota, setQuota] = useState<QuotaState | null>(null);
+  const walled = quota != null && isBlocked(quota);
 
-    if (jumpToTail.current) {
-      jumpToTail.current = false;
-      el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  /**
+   * 스크롤 정책.
+   *
+   * ★이전 구현은 `isNearBottom()` 으로 "유저가 위로 올려 읽는 중인지"를 추정했는데,
+   * smooth 스크롤이 비동기라 scrollY 가 아직 안 움직인 사이 scrollHeight 만 커진다.
+   * 그래서 첫 블록 도착 순간 조건이 false 로 뒤집히고 **영구히 복구되지 않았다**
+   * (실측: 533px 스크롤 가능한데 scrollY 0 고정 — 2번째 질문은 답이 통째로 화면 밖).
+   *
+   * 위치를 추정하지 말고 **유저의 실제 개입만** 신호로 쓴다.
+   */
+  const userScrolledUp = useRef(false);
+
+  useEffect(() => {
+    const onIntervene = (e: Event) => {
+      // 휠은 위로 굴린 것만, 터치는 방향을 못 보므로 개입으로 친다
+      if (e.type === 'wheel' && (e as WheelEvent).deltaY >= 0) return;
+      userScrolledUp.current = true;
+    };
+    addEventListener('wheel', onIntervene, { passive: true });
+    addEventListener('touchmove', onIntervene, { passive: true });
+    return () => {
+      removeEventListener('wheel', onIntervene);
+      removeEventListener('touchmove', onIntervene);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (userScrolledUp.current) return;
+    tailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, [stages, blocks, done]);
+
+  useEffect(() => {
+    if (!question) return;
+
+    /*
+     * 소비는 스트림 시작 **전에** 한 번. 남아 있으면 쓰고, 없으면 벽을 세우고 끝낸다.
+     * 여기서 `spendQuota` 가 돌려준 상태를 그대로 쓰는 이유: 소비 직후의 값이라
+     * 이 질문이 마지막 1회였는지를 같은 렌더에서 알 수 있다.
+     */
+    const before = readQuota(tier);
+    if (isBlocked(before)) {
+      setQuota(before);
+      setDone(true);
       return;
     }
-    if (isNearBottom()) el.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, [turns, started]);
+    setQuota(spendQuota(tier));
 
-  const patch = (id: number, fn: (t: Turn) => Turn) =>
-    setTurns((prev) => prev.map((t) => (t.id === id ? fn(t) : t)));
+    const ac = new AbortController();
 
-  const send = async (raw: string) => {
-    const q = raw.trim().slice(0, 40);
-    if (!q || busy) return;
+    (async () => {
+      try {
+        const res = await fetch('/api/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ keyword: question }),
+          signal: ac.signal,
+        });
+        if (!res.body) throw new Error('no stream');
 
-    const id = ++seq.current;
-    jumpToTail.current = true; // 새 질문은 한 번 강제로 보여준다
-    setTurns((prev) => [...prev, { id, question: q, stages: [], blocks: [], done: false }]);
-    setDraft('');
-    setBusy(true);
+        const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+        let buf = '';
 
-    try {
-      const res = await fetch('/api/ask', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ keyword: q }),
-      });
-      if (!res.body) throw new Error('no stream');
+        for (;;) {
+          const { value, done: streamDone } = await reader.read();
+          if (streamDone) break;
+          buf += value;
 
-      const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
-      let buf = '';
+          // NDJSON — 완성된 줄만 처리하고 잘린 꼬리는 버퍼에 남긴다
+          const lines = buf.split('\n');
+          buf = lines.pop() ?? '';
 
-      for (;;) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buf += value;
-
-        // NDJSON — 완성된 줄만 처리하고 잘린 꼬리는 버퍼에 남긴다
-        const lines = buf.split('\n');
-        buf = lines.pop() ?? '';
-
-        for (const line of lines) {
-          if (!line.trim()) continue;
-          const ev = JSON.parse(line) as AskEvent;
-          if (ev.type === 'stage') {
-            patch(id, (t) => ({ ...t, stages: [...t.stages, ev.label] }));
-          } else if (ev.type === 'block') {
-            patch(id, (t) => ({ ...t, blocks: [...t.blocks, ev.block] }));
-          } else if (ev.type === 'done') {
-            patch(id, (t) => ({ ...t, done: true }));
-          } else {
-            patch(id, (t) => ({
-              ...t,
-              blocks: [...t.blocks, { kind: 'failure', message: ev.message }],
-              done: true,
-            }));
+          for (const line of lines) {
+            if (!line.trim()) continue;
+            const ev = JSON.parse(line) as AskEvent;
+            if (ev.type === 'stage') {
+              setStages((prev) => [...prev, ev.label]);
+            } else if (ev.type === 'block') {
+              setBlocks((prev) => [...prev, ev.block]);
+            } else if (ev.type === 'done') {
+              setDone(true);
+            } else {
+              setBlocks((prev) => [...prev, { kind: 'failure', message: ev.message }]);
+              setDone(true);
+            }
           }
         }
+      } catch (e) {
+        // 언마운트로 인한 abort 는 에러가 아니다
+        if (ac.signal.aborted) return;
+        console.error('[ai] ask stream failed:', e);
+        setBlocks((prev) => [
+          ...prev,
+          { kind: 'failure', message: '연결이 끊겼어요. 다시 시도해 주세요.' },
+        ]);
+        setDone(true);
       }
-    } catch {
-      patch(id, (t) => ({
-        ...t,
-        blocks: [...t.blocks, { kind: 'failure', message: '연결이 끊겼어요. 다시 시도해 주세요.' }],
-        done: true,
-      }));
-    } finally {
-      setBusy(false);
-    }
-  };
+    })();
+
+    return () => ac.abort();
+  }, [question, tier]);
 
   return (
     <>
-      {!started && (
-        <header className="pt-16 pb-7 text-center md:pt-24">
-          <p className="mb-2 text-[13px] font-medium text-gray-500">지름알람</p>
-          <h1 className="text-[26px] leading-tight font-bold tracking-tight text-gray-900 md:text-[34px]">
-            뭐가 싼지 물어보세요
-          </h1>
-          <p className="mt-2 text-[13.5px] text-gray-500">
-            최근 핫딜 데이터로 시세를 계산해서 알려드려요
-          </p>
-        </header>
-      )}
-
-      {started && (
-        <div className="flex flex-1 flex-col gap-7 pt-6 pb-2">
-          {turns.map((t) => (
-            <div key={t.id} className="flex flex-col gap-3.5">
-              <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-gray-900 px-4 py-2.5 text-[14.5px] font-medium text-white md:max-w-[70%]">
-                {t.question}
-              </p>
-              <Stages stages={t.stages} done={t.done} />
-              <AnswerBubble blocks={t.blocks} />
-            </div>
-          ))}
-          <div ref={tailRef} className="h-4" />
-        </div>
-      )}
-
-      <div
-        className={
-          started
-            ? 'sticky bottom-0 -mx-4 bg-white/85 px-4 pt-3 pb-5 backdrop-blur md:-mx-6 md:rounded-t-2xl md:px-6'
-            : ''
-        }
-      >
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            void send(draft);
-          }}
-          className="relative"
-        >
-          <input
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            placeholder="예) 콜라 요즘 얼마"
-            aria-label="검색어"
-            maxLength={40}
-            enterKeyHint="send"
-            className="focus-visible:outline-secondary-400 h-[52px] w-full rounded-full border border-gray-300 bg-white pr-[52px] pl-[46px] text-[15px] shadow-sm placeholder:text-gray-400 focus-visible:border-gray-400 focus-visible:outline-2 focus-visible:outline-offset-1"
-          />
-          <svg
-            className="pointer-events-none absolute top-[17px] left-4 size-[18px] text-gray-400"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            aria-hidden
-          >
-            <circle cx="11" cy="11" r="7" />
-            <path d="m20 20-3.5-3.5" />
-          </svg>
-          <button
-            type="submit"
-            disabled={busy || draft.trim().length === 0}
-            aria-label="물어보기"
-            className="tappable absolute top-2 right-2 flex size-9 items-center justify-center rounded-full bg-gray-900 text-white disabled:opacity-25"
-          >
-            <svg
-              className="size-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2.5}
-              aria-hidden
-            >
-              <path d="M12 19V5M5 12l7-7 7 7" />
-            </svg>
-          </button>
-        </form>
-
-        {!started && (
-          <div className="mt-5">
-            <p className="mb-2.5 text-xs font-medium text-gray-400">이렇게 물어보세요</p>
-            <ul className="flex flex-wrap gap-2">
-              {EXAMPLES.map((e) => (
-                <li key={e}>
-                  <button
-                    type="button"
-                    onClick={() => void send(e)}
-                    className="tappable rounded-full border border-gray-200 bg-white/70 px-3.5 py-2 text-[13px] text-gray-700 active:border-gray-400 active:bg-gray-50"
-                  >
-                    {e}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className="flex flex-1 flex-col gap-3.5 pt-4 pb-2">
+        <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-gray-900 px-4 py-2.5 text-[14.5px] font-medium text-white md:max-w-[70%]">
+          {question}
+        </p>
+        {!walled && <Stages stages={stages} done={done} />}
+        {walled ? (
+          <QuotaWall tier={quota.tier} />
+        ) : blocks.length === 0 && !done ? (
+          <AnswerSkeleton />
+        ) : (
+          <AnswerBubble blocks={blocks} />
         )}
+        {/* scroll-mb: 하단 sticky 입력바(약 88px) 뒤에 마지막 블록이 가리지 않게 */}
+        <div ref={tailRef} className="h-4 scroll-mb-24" />
+      </div>
+
+      {/* 헤더와 같은 이유로 배경만 전폭. 데스크톱에서 흰 띠가 잘려 보이지 않게 */}
+      <div className="sticky bottom-0 -mx-[50vw] w-screen self-center bg-white/85 px-[calc(50vw-min(50vw,240px)+1rem)] pt-3 pb-5 backdrop-blur md:px-[calc(50vw-min(50vw,360px)+1.5rem)]">
+        <Composer busy={!done} quota={quota} />
       </div>
     </>
   );
