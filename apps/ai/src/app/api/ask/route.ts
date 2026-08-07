@@ -94,7 +94,9 @@ export async function POST(req: Request) {
         await settle(findStart, STAGE_MIN_MS);
 
         const filterStart = Date.now();
-        emit({ type: 'stage', label: `${deals.length}건에서 다른 상품을 걸러내는 중` });
+        // "걸러낸다"는 우리 쪽 파이프라인 동작이지 사용자 관심사가 아니다.
+        // 사용자 관점 = "엉뚱한 게 섞여서 빼는 중".
+        emit({ type: 'stage', label: `${term} 아닌 상품 골라내는 중` });
 
         const state = gateAnswer(deals, term);
         const shown = state.kind === 'REFUSED' ? [] : state.deals;
@@ -119,8 +121,8 @@ export async function POST(req: Request) {
             type: 'stage',
             label:
               removed > 0
-                ? `${removed}건 걸러내고 ${prices.length}건으로 시세를 계산하는 중`
-                : `${prices.length}건으로 시세를 계산하는 중`,
+                ? `${removed}개 빼고 ${prices.length}개로 시세 계산하는 중`
+                : `${prices.length}개로 시세 계산하는 중`,
           });
           await settle(calcStart, STAGE_MIN_MS);
           block({ kind: 'distribution', prices });

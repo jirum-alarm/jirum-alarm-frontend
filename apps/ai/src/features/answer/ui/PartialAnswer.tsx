@@ -9,23 +9,25 @@ import type { PartialReason, RefusalReason } from '../model/types';
  */
 const copyFor = (reason: PartialReason | RefusalReason): { title: string; detail: string } => {
   switch (reason.code) {
+    // ★제목이 곧 원인이어야 한다. 예전엔 POLLUTION·BUNDLE 이 둘 다
+    // "시세를 계산하지 않았어요" 라 제목만 스캔하면 두 상황이 구분되지 않았다.
     case 'KEYWORD_POLLUTION':
       return {
-        title: '시세를 계산하지 않았어요',
-        detail: `검색 결과 ${reason.total}건 중 절반 이상이 이름만 비슷한 다른 상품이에요 (${reason.polluted
+        title: '이름만 비슷한 다른 상품이 섞였어요',
+        detail: `검색 결과 ${reason.total}개 중 절반 이상이 다른 상품이에요 (${reason.polluted
           .slice(0, 2)
           .map((t) => t.slice(0, 14))
-          .join(' · ')} 등). 섞어서 평균을 내면 엉뚱한 값이 나와서, 걸러낸 딜만 보여드려요.`,
+          .join(' · ')} 등). 섞어서 평균을 내면 엉뚱한 값이 나와서, 걸러낸 것만 보여드려요.`,
       };
     case 'MIXED_BUNDLE':
       return {
-        title: '시세를 계산하지 않았어요',
-        detail: `${reason.total}건 중 ${reason.bundleCount}건이 여러 품목을 묶어 파는 딜이에요. 묶음 가격은 단일 상품 시세와 섞을 수 없어서, 단일 상품만 보여드려요.`,
+        title: '묶음 상품이 많아 시세를 못 냈어요',
+        detail: `${reason.total}개 중 ${reason.bundleCount}개가 여러 품목을 묶어 파는 딜이에요. 묶음 가격은 단일 상품 시세와 섞을 수 없어서, 단일 상품만 보여드려요.`,
       };
     case 'SMALL_SAMPLE':
       return {
         title: '아직 시세를 말하기엔 딜이 적어요',
-        detail: `가격이 있는 딜이 ${reason.sampleSize}건이에요. 이 정도로 "보통 얼마"를 말하면 틀리기 쉬워서, 올라온 딜만 그대로 보여드려요.`,
+        detail: `가격이 있는 딜이 ${reason.sampleSize}개예요. 이 정도로 "보통 얼마"를 말하면 틀리기 쉬워서, 올라온 딜만 그대로 보여드려요.`,
       };
     case 'OUT_OF_WINDOW':
       return {
