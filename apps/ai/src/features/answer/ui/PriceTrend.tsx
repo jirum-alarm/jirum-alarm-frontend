@@ -6,7 +6,7 @@ const won = (n: number) => n.toLocaleString('ko-KR');
 const TICKS = 3;
 
 /**
- * 90일 가격 추이.
+ * 가격 추이(창 길이는 데이터에서 계산 — 아래 spanLabel).
  *
  * ★왜 Position 과 별개인가: Position 은 "싼가"에, 추이는 **"더 싸질까"** 에 답한다.
  * 같은 `points` 를 쓰지만 질문이 다르다 — 위치만 있으면 "지금이 하위 20%" 는 알아도
@@ -130,7 +130,7 @@ export default function PriceTrend({
             className="h-[110px] w-full overflow-visible"
             preserveAspectRatio="none"
             role="img"
-            aria-label={`90일 가격 추이. 최저 ${won(lowest)}원, 현재 ${won(current)}원.`}
+            aria-label={`${spanLabel} 가격 흐름. 최저 ${won(lowest)}원, 현재 ${won(current)}원.`}
           >
             {tickValues.map((v) => (
               <line
