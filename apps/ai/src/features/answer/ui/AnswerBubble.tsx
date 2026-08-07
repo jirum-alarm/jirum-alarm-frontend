@@ -2,7 +2,10 @@ import CommunityReview from './CommunityReview';
 import DealList from './DealList';
 import Distribution from './Distribution';
 import ExampleChips from './ExampleChips';
+import FollowUp from './FollowUp';
 import PartialAnswer from './PartialAnswer';
+import PricePosition from './PricePosition';
+import PriceTrend from './PriceTrend';
 
 import type { AnswerBlock } from '../model/answer';
 
@@ -70,6 +73,17 @@ function Block({ block }: { block: AnswerBlock }) {
     case 'distribution':
       return <Distribution prices={block.prices} />;
 
+    case 'position':
+      return <PricePosition position={block.position} title={block.title} />;
+
+    case 'trend':
+      return (
+        <PriceTrend points={block.points} current={block.current} confidence={block.confidence} />
+      );
+
+    case 'followUp':
+      return <FollowUp suggestions={block.suggestions} />;
+
     case 'review':
       return (
         <div>
@@ -121,6 +135,15 @@ function Block({ block }: { block: AnswerBlock }) {
           {block.message}
         </p>
       );
+
+    /*
+     * 배포가 겹치는 몇 초 동안 구 클라가 신 서버의 새 블록을 받을 수 있다. 그때 조용히 버린다.
+     * never 로 받는 이유: 블록을 추가하고 case 를 빼먹으면 여기서 컴파일이 깨져야 한다
+     * (default 를 그냥 두면 유니온이 늘어나도 타입 검사가 통과해버린다).
+     */
+    default:
+      block satisfies never;
+      return null;
   }
 }
 

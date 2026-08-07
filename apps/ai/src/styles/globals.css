@@ -197,3 +197,102 @@ body {
     transform: none;
   }
 }
+
+/*
+ * 홈 → 대화방 전환 애니메이션 (View Transitions).
+ *
+ * 페이지가 통째로 교체되는 게 아니라, 가운데 있던 입력창이 하단으로
+ * 내려앉으면서 채팅 화면이 펼쳐지는 것처럼 보이게 한다. URL 은 그대로 바뀐다.
+ *
+ * 핵심은 `view-transition-name` — 양쪽 페이지에서 같은 이름을 가진 요소를
+ * 브라우저가 "같은 것"으로 보고 위치·크기를 보간한다. 이름은 한 시점에
+ * 문서 전체에서 유일해야 하므로 입력창처럼 화면에 하나뿐인 요소에만 붙인다.
+ */
+.vt-composer {
+  view-transition-name: composer;
+}
+
+/* 기본 크로스페이드는 유지하되 조금 빠르게 — 길면 전환이 무겁게 느껴진다 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+  animation-timing-function: ease;
+}
+
+/*
+ * 입력창은 페이드 없이 위치만 이동시킨다. old/new 를 같이 페이드하면
+ * 이동 중에 입력창이 두 겹으로 흐려 보인다(morph 가 아니라 유령처럼 됨).
+ */
+::view-transition-group(composer) {
+  animation-duration: 0.34s;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+::view-transition-old(composer),
+::view-transition-new(composer) {
+  /* 높이가 같은 요소라 크로스페이드가 불필요 — 새 것만 그린다 */
+  animation: none;
+  mix-blend-mode: normal;
+  height: 100%;
+}
+
+::view-transition-old(composer) {
+  opacity: 0;
+}
+
+/* 대화방 콘텐츠(질문 버블·답변)는 아래에서 올라오며 펼쳐진다 */
+@keyframes room-unfold {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.vt-room {
+  view-transition-name: room;
+}
+
+::view-transition-new(room) {
+  animation: room-unfold 0.34s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+::view-transition-old(room) {
+  animation: none;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/*
+ * hero: 예시 칩 → 질문 버블.
+ *
+ * 칩(흰 배경/회색 글씨)과 버블(검은 배경/흰 글씨)은 색도 크기도 다르다.
+ * 그래서 입력창(composer)처럼 페이드를 죽이면 안 된다 — 여기선 두 모습이
+ * 겹쳐 섞이는 게 "같은 것이 변신했다"는 인상을 만든다.
+ */
+.vt-bubble {
+  view-transition-name: bubble;
+}
+
+::view-transition-group(bubble) {
+  animation-duration: 0.38s;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+::view-transition-old(bubble),
+::view-transition-new(bubble) {
+  /* 위치·크기는 그룹이 보간하고, 여기선 모양 차이만 부드럽게 덮는다 */
+  height: 100%;
+  animation-duration: 0.38s;
+  animation-timing-function: ease;
+}

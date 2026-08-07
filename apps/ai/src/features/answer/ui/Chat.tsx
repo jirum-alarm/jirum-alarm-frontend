@@ -120,6 +120,10 @@ export default function Chat({ question, tier }: { question: string; tier: Tier 
             }
           }
         }
+
+        // 서버가 예외로 죽어도 finally 가 스트림을 정상 종료시킨다 — 그 경우 done 이벤트가 없다.
+        // 여기서 풀어주지 않으면 Composer 가 busy 인 채로 영구히 잠긴다.
+        setDone(true);
       } catch (e) {
         // 언마운트로 인한 abort 는 에러가 아니다
         if (ac.signal.aborted) return;
@@ -137,8 +141,9 @@ export default function Chat({ question, tier }: { question: string; tier: Tier 
 
   return (
     <>
-      <div className="flex flex-1 flex-col gap-3.5 pt-4 pb-2">
-        <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-gray-900 px-4 py-2.5 text-[14.5px] font-medium text-white md:max-w-[70%]">
+      <div className="vt-room flex flex-1 flex-col gap-3.5 pt-4 pb-2">
+        {/* vt-bubble: 홈에서 누른 예시 칩이 이 버블로 날아와 앉는다(hero) */}
+        <p className="vt-bubble ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-gray-900 px-4 py-2.5 text-[14.5px] font-medium text-white md:max-w-[70%]">
           {question}
         </p>
         {!walled && <Stages stages={stages} done={done} />}
@@ -155,7 +160,7 @@ export default function Chat({ question, tier }: { question: string; tier: Tier 
 
       {/* 헤더와 같은 이유로 배경만 전폭. 데스크톱에서 흰 띠가 잘려 보이지 않게 */}
       <div className="sticky bottom-0 -mx-[50vw] w-screen self-center bg-white/85 px-[calc(50vw-min(50vw,240px)+1rem)] pt-3 pb-5 backdrop-blur md:px-[calc(50vw-min(50vw,360px)+1.5rem)]">
-        <Composer busy={!done} quota={quota} />
+        <Composer busy={!done} quota={quota} inRoom />
       </div>
     </>
   );

@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { isBlocked, QUOTA, remaining, shouldWarn } from '../model/quota';
 
 import { roomHref } from './examples';
+import { startRoomTransition } from './transition';
 
 import type { QuotaState } from '../model/quota';
 
@@ -18,9 +19,12 @@ import type { QuotaState } from '../model/quota';
 export default function Composer({
   busy = false,
   quota = null,
+  inRoom = false,
 }: {
   busy?: boolean;
   quota?: QuotaState | null;
+  /** 대화방(하단 고정) 쪽 입력창인지. 전환 애니메이션이 이 마커를 기다린다. */
+  inRoom?: boolean;
 }) {
   const [draft, setDraft] = useState('');
   const router = useRouter();
@@ -32,7 +36,7 @@ export default function Composer({
     const q = draft.trim().slice(0, 40);
     if (!q || busy || walled) return;
     setDraft('');
-    router.push(roomHref(q));
+    startRoomTransition(() => router.push(roomHref(q)));
   };
 
   return (
@@ -54,7 +58,8 @@ export default function Composer({
        * (실측: input.top 772 인데 button.top 754). 오버레이의 기준은
        * "폼 전체"가 아니라 "입력창"이다.
        */}
-      <div className="relative">
+      {/* vt-composer: 홈/대화방 양쪽 입력창을 같은 요소로 묶어 morph 시킨다 */}
+      <div className="vt-composer relative" data-room-composer={inRoom || undefined}>
         <input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}

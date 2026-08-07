@@ -1,8 +1,6 @@
-import Link from 'next/link';
-
 import { getSession } from '@/features/answer/model/session';
 import Composer from '@/features/answer/ui/Composer';
-import { EXAMPLES } from '@/features/answer/ui/examples';
+import ExampleChips from '@/features/answer/ui/ExampleChips';
 import QuotaDevBar from '@/features/answer/ui/QuotaDevBar';
 
 export default async function Page() {
@@ -31,18 +29,7 @@ export default async function Page() {
 
           <div className="mt-5">
             <p className="mb-2.5 text-xs font-medium text-gray-500">이렇게 물어보세요</p>
-            <ul className="flex flex-wrap gap-2">
-              {EXAMPLES.map((e) => (
-                <li key={e}>
-                  <Link
-                    href={`/c/${encodeURIComponent(e)}`}
-                    className="tappable block rounded-full border border-gray-200 bg-white/70 px-3.5 py-2 text-[13px] text-gray-700 active:border-gray-400 active:bg-gray-50"
-                  >
-                    {e}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <ExampleChips />
           </div>
 
           {/* 목업 조작 바 — 배포본에는 안 나간다 */}
