@@ -29,8 +29,10 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # GraphQL 엔드포인트는 런타임 env — 이미지를 재빌드하지 않고 prod/dev 를 가른다.
-# dev 는 클러스터 내부 crawling-server-dev 를 본다(frontend-web dev 와 동일 배선).
-ARG GRAPHQL_ENDPOINT=http://crawling-server-lb.crawling-server-dev.svc.cluster.local:3100/graphql
+# dev 는 클러스터 내부 crawling-server-dev 를 본다.
+# ⚠️ 서비스명은 crawling-SERVICE-lb 다(crawling-server-lb 아님). apps/web dev Dockerfile 의
+#    주소는 stale — 실측(2026-08-07): kubectl get svc -n crawling-server-dev → crawling-service-lb.
+ARG GRAPHQL_ENDPOINT=http://crawling-service-lb.crawling-server-dev.svc.cluster.local:3100/graphql
 ENV GRAPHQL_ENDPOINT=${GRAPHQL_ENDPOINT}
 
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
