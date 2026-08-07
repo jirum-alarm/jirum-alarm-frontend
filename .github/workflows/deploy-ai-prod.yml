@@ -67,7 +67,9 @@ jobs:
         run: |
           set -euo pipefail
           # 커밋별 고유 태그를 매니페스트에 박는다 — floating 태그면 ArgoCD 가 rollout 을 못 본다.
-          tag=$(printf '%s\n' "$META_TAGS" | sed 's#.*:##' | grep -E '^v[0-9]' | head -1)
+          # semver 는 v 없이 '1.14.0' 을 낸다. 커밋별 고유 태그는 sha prefix 쪽('v-<sha>').
+          # floating 태그(latest)를 박으면 ArgoCD 가 rollout 을 못 본다.
+          tag=$(printf '%s\n' "$META_TAGS" | sed 's#.*:##' | grep -E '^v-[0-9a-f]+$' | head -1)
           if [ -z "$tag" ]; then echo "::error::could not resolve unique deploy tag"; exit 1; fi
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
