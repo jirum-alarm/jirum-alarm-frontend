@@ -6,7 +6,11 @@ import { decideAuthAction, isProtectedPath } from '@/shared/config/auth-route';
 import { IS_PRD } from '@/shared/config/env';
 import { GRAPHQL_ENDPOINT } from '@/shared/config/graphql';
 import { PAGE } from '@/shared/config/page';
-import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/shared/config/token';
+import {
+  accessTokenExpiresAt,
+  AUTH_COOKIE_DOMAIN,
+  refreshTokenExpiresAt,
+} from '@/shared/config/token';
 
 const DEVICE_ID_COOKIE = 'jirum-alarm-device-id';
 const DEVICE_ID_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
@@ -141,12 +145,15 @@ const refreshToken = async (
     return { status: 'invalid' };
   }
 
+  // ⚠️ domain 은 여기도 반드시 — 빠지면 갱신 시 host-only 로 되돌아가서
+  // 1시간 뒤 ai 서브도메인 로그인만 조용히 풀린다.
   res.cookies.set({
     name: 'ACCESS_TOKEN',
     expires: new Date(Date.now() + accessTokenExpiresAt),
     httpOnly: true,
     sameSite: 'lax' as const,
     secure: IS_PRD,
+    domain: AUTH_COOKIE_DOMAIN,
     value: tokens.accessToken,
   });
 
@@ -159,6 +166,7 @@ const refreshToken = async (
       httpOnly: true,
       sameSite: 'lax' as const,
       secure: IS_PRD,
+      domain: AUTH_COOKIE_DOMAIN,
       value: tokens.refreshToken,
     });
   }

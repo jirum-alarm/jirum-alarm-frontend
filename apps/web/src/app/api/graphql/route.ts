@@ -1,7 +1,11 @@
 import { NextRequest } from 'next/server';
 
 import { GRAPHQL_ENDPOINT } from '@/shared/config/graphql';
-import { accessTokenExpiresAt, refreshTokenExpiresAt } from '@/shared/config/token';
+import {
+  accessTokenExpiresAt,
+  AUTH_COOKIE_DOMAIN,
+  refreshTokenExpiresAt,
+} from '@/shared/config/token';
 import { customFetch } from '@/shared/lib/http-client-node';
 
 // Node.js Runtime으로 변경하여 HTTP Agent 사용 가능하도록 설정
@@ -76,6 +80,8 @@ export async function POST(req: NextRequest) {
           [
             `${name}=${value}`,
             'Path=/',
+            // 서브도메인(ai.jirum-alarm.com) 공유용. 로컬은 undefined 라 빠진다
+            AUTH_COOKIE_DOMAIN ? `Domain=${AUTH_COOKIE_DOMAIN}` : '',
             `Expires=${new Date(Date.now() + ms).toUTCString()}`,
             httpOnly ? 'HttpOnly' : '',
             'SameSite=Lax',
