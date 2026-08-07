@@ -49,8 +49,8 @@ export default function Distribution({ prices }: { prices: number[] }) {
     <div className="rounded-2xl border border-gray-200 bg-white p-4">
       <div className="mb-3 flex items-baseline justify-between gap-2">
         <span className="text-sm font-bold text-gray-900">가격대</span>
-        <span className="shrink-0 text-[11px] text-gray-400 tabular-nums">
-          최근 {sorted.length}건
+        <span className="shrink-0 text-[11px] text-gray-500 tabular-nums">
+          최근 {sorted.length}개
         </span>
       </div>
 
@@ -75,12 +75,13 @@ export default function Distribution({ prices }: { prices: number[] }) {
       </dl>
 
       {!enough && (
-        <p className="mt-2.5 text-[11px] leading-snug text-gray-400">
-          {sorted.length}건은 표본이 적어서 평균이나 구간을 말하지 않았어요.
+        <p className="mt-2.5 text-[11px] leading-snug text-gray-500">
+          {/* "표본"은 통계 용어라 일상어로. 뜻은 그대로 전달된다 */}
+          {sorted.length}개는 너무 적어서 평균이나 구간을 말하지 않았어요.
         </p>
       )}
       {enough && tooWide && (
-        <p className="mt-2.5 text-[11px] leading-snug text-gray-400">
+        <p className="mt-2.5 text-[11px] leading-snug text-gray-500">
           용량·수량이 섞여 있어 가격대가 넓어요. 같은 규격끼리 비교하세요.
         </p>
       )}

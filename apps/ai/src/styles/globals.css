@@ -58,7 +58,7 @@ body {
 /*
  * Google AI 검색류의 앰비언트 배경.
  * 고정 레이어 + blur 라 스크롤해도 따라오지 않는다(콘텐츠와 경쟁하지 않게).
- * 지름알람 토큰(error=빨강, secondary=파랑, primary=라임)만 사용.
+ * 지름알림 토큰(error=빨강, secondary=파랑, primary=라임)만 사용.
  */
 .ambient {
   position: fixed;
@@ -116,6 +116,21 @@ body {
   animation: rise 0.28s ease-out both;
 }
 
+/* 스켈레톤 — 은은하게만. 번쩍이면 로딩이 더 길게 느껴진다. */
+@keyframes skeleton {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.skeleton {
+  animation: skeleton 1.4s ease-in-out infinite;
+}
+
 /* 생각 중 점 3개 */
 @keyframes blink {
   0%,
@@ -134,7 +149,8 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .rise,
-  .dot {
+  .dot,
+  .skeleton {
     animation: none;
   }
 }

@@ -78,7 +78,7 @@ export default function DealList({ deals, lowest }: { deals: Deal[]; lowest: num
                       최저가
                     </span>
                   )}
-                  <span className="text-[11px] text-gray-400">
+                  <span className="text-[11px] text-gray-500">
                     {[d.mallName, daysAgo(d.postedAt)].filter(Boolean).join(' · ')}
                   </span>
                 </div>
@@ -110,16 +110,16 @@ export default function DealList({ deals, lowest }: { deals: Deal[]; lowest: num
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="tappable rounded-xl border border-gray-200 bg-white py-2.5 text-[13px] font-medium text-gray-600 active:bg-gray-50"
+          className="tappable min-h-11 rounded-xl border border-gray-200 bg-white py-2.5 text-[13px] font-medium text-gray-600 active:bg-gray-50"
         >
-          {hidden}건 더 보기
+          {hidden}개 더 보기
         </button>
       )}
       {expanded && deals.length > preview && (
         <button
           type="button"
           onClick={() => setExpanded(false)}
-          className="tappable rounded-xl border border-gray-200 bg-white py-2.5 text-[13px] font-medium text-gray-500 active:bg-gray-50"
+          className="tappable min-h-11 rounded-xl border border-gray-200 bg-white py-2.5 text-[13px] font-medium text-gray-500 active:bg-gray-50"
         >
           접기
         </button>

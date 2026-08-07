@@ -21,7 +21,7 @@ export default function CommunityReview({
 
   return (
     <div className="rounded-2xl border border-gray-200 p-4">
-      <p className="mb-2.5 line-clamp-1 text-[11px] text-gray-400">{title}</p>
+      <p className="mb-2.5 line-clamp-1 text-[11px] text-gray-500">{title}</p>
       <div className="mb-3 flex items-start gap-2.5">
         <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-gray-100">
           <svg
@@ -42,14 +42,14 @@ export default function CommunityReview({
         <dl className="grid grid-cols-2 gap-2 border-t border-gray-100 pt-3 md:grid-cols-4">
           {facets.map((f) => (
             <div key={f.k} className="rounded-lg bg-gray-50 px-2.5 py-2">
-              <dt className="text-[10px] text-gray-400">{f.k}</dt>
+              <dt className="text-[10px] text-gray-500">{f.k}</dt>
               <dd className="line-clamp-2 text-[12px] font-medium text-gray-800">{f.v}</dd>
             </div>
           ))}
         </dl>
       )}
 
-      <p className="mt-2.5 text-[10.5px] text-gray-400">원 커뮤니티 댓글을 요약한 내용이에요</p>
+      <p className="mt-2.5 text-[10.5px] text-gray-500">원 커뮤니티 댓글을 요약한 내용이에요</p>
     </div>
   );
 }

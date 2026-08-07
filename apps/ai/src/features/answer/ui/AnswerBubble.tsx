@@ -1,6 +1,7 @@
 import CommunityReview from './CommunityReview';
 import DealList from './DealList';
 import Distribution from './Distribution';
+import ExampleChips from './ExampleChips';
 import PartialAnswer from './PartialAnswer';
 
 import type { AnswerBlock } from '../model/answer';
@@ -52,9 +53,15 @@ function Block({ block }: { block: AnswerBlock }) {
     case 'partial':
       return (
         <PartialAnswer reason={block.reason}>
-          {block.filteredCount > 0 ? (
+          {/*
+           * NO_RESULTS 는 막다른 길이다 — 카피가 "아래 예시를 눌러보세요" 라고 약속하므로
+           * 실제로 예시를 놓는다. 다른 사유는 아래에 걸러낸 딜이 이어지므로 불필요.
+           */}
+          {block.reason.code === 'NO_RESULTS' ? (
+            <ExampleChips />
+          ) : block.filteredCount > 0 ? (
             <p className="text-[12px] text-gray-600">
-              걸러낸 딜 {block.filteredCount}건은 아래에 있어요.
+              걸러낸 딜 {block.filteredCount}개는 아래에 있어요.
             </p>
           ) : null}
         </PartialAnswer>
@@ -71,15 +78,42 @@ function Block({ block }: { block: AnswerBlock }) {
         </div>
       );
 
-    case 'deals':
+    case 'deals': {
+      /*
+       * ★"이 가격대 딜" 이라고 해놓고 원화가 아닌 딜을 섞으면 헤더가 거짓이 된다.
+       * 실측(무선이어폰, 데스크톱): 보이는 4건 중 2건이 USD 인데 가격대는
+       * 4,159~99,000원 기준이었다. 생수는 "가격 미확인" 이 같은 자리에 섞였다.
+       * 가격대 계산에서 이미 제외한 것들이므로, 목록에서도 분리하되 버리지는 않는다.
+       */
+      const comparable = block.deals.filter(
+        (d) => d.parsedPrice != null && d.parsedPrice > 0 && (d.priceCurrency ?? 'KRW') === 'KRW',
+      );
+      const aside = block.deals.filter((d) => !comparable.includes(d));
+
       return (
-        <div>
-          <p className="mb-2 text-[12px] font-medium text-gray-500">
-            이 가격대 딜 {block.deals.length}건
-          </p>
-          <DealList deals={block.deals} lowest={block.lowest} />
+        <div className="flex flex-col gap-4">
+          {comparable.length > 0 && (
+            <div>
+              <p className="mb-2 text-[12px] font-medium text-gray-500">
+                이 가격대 딜 {comparable.length}개
+              </p>
+              <DealList deals={comparable} lowest={block.lowest} />
+            </div>
+          )}
+          {aside.length > 0 && (
+            <div>
+              <p className="mb-2 text-[12px] font-medium text-gray-500">
+                가격 비교에서 뺀 딜 {aside.length}개{' '}
+                <span className="font-normal text-gray-500">
+                  · 해외 통화이거나 가격을 못 읽었어요
+                </span>
+              </p>
+              <DealList deals={aside} lowest={null} />
+            </div>
+          )}
         </div>
       );
+    }
 
     case 'failure':
       return (
