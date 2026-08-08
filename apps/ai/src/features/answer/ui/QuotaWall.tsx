@@ -1,6 +1,10 @@
 'use client';
 
+import { useState } from 'react';
+
 import { nextTier, QUOTA } from '../model/quota';
+
+import PlanSheet from './PlanSheet';
 
 import type { Tier } from '../model/quota';
 
@@ -42,6 +46,7 @@ const COPY: Record<Tier, { title: string; body: string; cta: string }> = {
 
 export default function QuotaWall({ tier }: { tier: Tier }) {
   const { title, body, cta } = COPY[tier];
+  const [planOpen, setPlanOpen] = useState(false);
 
   return (
     <div className="rounded-2xl rounded-tl-sm border border-gray-200 bg-white px-4 py-3.5">
@@ -59,12 +64,16 @@ export default function QuotaWall({ tier }: { tier: Tier }) {
           {cta}
         </a>
       ) : nextTier(tier) ? (
-        <button
-          type="button"
-          className="tappable mt-3 h-10 w-full rounded-full bg-gray-900 text-[14px] font-medium text-white"
-        >
-          {cta}
-        </button>
+        <>
+          <button
+            type="button"
+            onClick={() => setPlanOpen(true)}
+            className="tappable mt-3 h-10 w-full rounded-full bg-gray-900 text-[14px] font-medium text-white"
+          >
+            {cta}
+          </button>
+          <PlanSheet tier={tier} open={planOpen} onClose={() => setPlanOpen(false)} />
+        </>
       ) : null}
     </div>
   );

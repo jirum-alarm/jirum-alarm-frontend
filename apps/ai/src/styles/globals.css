@@ -296,3 +296,21 @@ body {
   animation-duration: 0.38s;
   animation-timing-function: ease;
 }
+
+/* 플랜 시트: 모바일에선 아래에서 올라온다(md 이상은 가운데 모달이라 페이드만) */
+@keyframes sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog[open] {
+    animation: none !important;
+  }
+}
