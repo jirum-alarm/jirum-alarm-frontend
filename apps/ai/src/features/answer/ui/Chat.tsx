@@ -74,7 +74,20 @@ export default function Chat({
    * 로컬 카운터는 지우면 리셋되므로 방어가 아니다.
    */
   const [quota, setQuota] = useState<QuotaState | null>(null);
-  const walled = quota != null && isBlocked(quota);
+
+  /**
+   * ★★벽은 **카운터에서 파생시키지 않는다.**
+   *
+   * 예전엔 `walled = isBlocked(quota)` 였는데, 마지막 1회를 쓰는 순간 서버가
+   * `used = limit` 을 보내므로 **그 답변이 스트리밍되는 중에 벽이 같이 떴다**
+   * (사용자 제보 3회. 증상만 두 번 고치고 원인을 못 짚었던 게 이 파생 관계다).
+   *
+   * 벽의 의미는 "카운터가 0이다"가 아니라 **"방금 질문이 거절됐다"** 이므로,
+   * 실제로 막힌 순간에만 세운다. 다음 질문을 하면 다시 판정된다.
+   * 남은 횟수 표시(`quota`)는 계속 카운터를 쓴다 — 그건 상태가 맞다.
+   */
+  const [blockedTier, setBlockedTier] = useState<Tier | null>(null);
+  const walled = blockedTier != null;
 
   /*
    * 방에 들어오면 서버에서 진짜 쿼터를 읽는다(소비 없음).
@@ -190,9 +203,13 @@ export default function Chat({
 
       if (pre && pre.used >= pre.limit) {
         setQuota({ tier: pre.tier, used: pre.used });
+        setBlockedTier(pre.tier);
         return; // 턴을 만들지 않는다 — 벽만 뜬다
       }
       if (pre) setQuota({ tier: pre.tier, used: pre.used });
+
+      // 새 질문이 통과했으면 이전 벽은 걷는다(로그인·리셋 후 재시도 등)
+      setBlockedTier(null);
 
       // 유저 턴 + 빈 assistant 턴을 먼저 세운다 — 답이 들어올 자리를 만들어야
       // putBlock 이 "마지막 턴"을 찾을 수 있다.
@@ -220,8 +237,9 @@ export default function Chat({
             tier?: Tier;
             limit?: number;
           } | null;
-          setTurns((prev) => prev.slice(0, -1));
+          setTurns((prev) => prev.slice(0, -2)); // 유저 턴 + 빈 assistant 턴 둘 다 걷는다
           setQuota({ tier: body?.tier ?? tier, used: body?.limit ?? QUOTA[tier].limit });
+          setBlockedTier(body?.tier ?? tier);
           return;
         }
         if (!res.body) throw new Error('no stream');
@@ -377,7 +395,7 @@ export default function Chat({
           ),
         )}
 
-        {walled && <QuotaWall tier={quota.tier} />}
+        {walled && <QuotaWall tier={blockedTier} />}
 
         {/* scroll-mb: 하단 sticky 입력바(약 88px) 뒤에 마지막 블록이 가리지 않게 */}
         <div ref={tailRef} className="h-4 scroll-mb-24" />
