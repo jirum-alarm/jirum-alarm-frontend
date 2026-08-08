@@ -54,6 +54,12 @@ const PREVIEW_DESKTOP = 4;
 
 const won = (n: number) => `${n.toLocaleString('ko-KR')}원`;
 
+/**
+ * 커뮤니티 원문(d.url) 대신 지름알림 상품 상세로 보낸다.
+ * ai.jirum-alarm.com 은 별도 도메인이라 절대 URL이 필요하다.
+ */
+const detailUrl = (id: number) => `https://jirum-alarm.com/products/${id}`;
+
 const priceOf = (d: Deal) => {
   if (d.parsedPrice == null) return '가격 미확인';
   if (d.priceCurrency && d.priceCurrency !== 'KRW') return `${d.parsedPrice} ${d.priceCurrency}`;
@@ -103,14 +109,10 @@ export default function DealList({ deals, lowest }: { deals: Deal[]; lowest: num
           return (
             <li key={d.id}>
               <a
-                href={d.url ?? undefined}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-disabled={d.url ? undefined : true}
+                href={detailUrl(d.id)}
                 className={[
                   'tappable tappable-surface block rounded-xl border p-3',
                   isLowest ? 'border-error-500 bg-error-50/40' : 'border-gray-200 bg-white',
-                  d.url ? '' : 'pointer-events-none opacity-70',
                 ].join(' ')}
               >
                 <div className="flex gap-2.5">
@@ -131,18 +133,16 @@ export default function DealList({ deals, lowest }: { deals: Deal[]; lowest: num
                       <span className="text-[15px] font-bold text-gray-900 tabular-nums">
                         {priceOf(d)}
                       </span>
-                      {d.url && (
-                        <svg
-                          className="size-3.5 shrink-0 text-gray-300"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={2.5}
-                          aria-hidden
-                        >
-                          <path d="m9 18 6-6-6-6" />
-                        </svg>
-                      )}
+                      <svg
+                        className="size-3.5 shrink-0 text-gray-300"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                        aria-hidden
+                      >
+                        <path d="m9 18 6-6-6-6" />
+                      </svg>
                     </div>
                   </div>
                 </div>
