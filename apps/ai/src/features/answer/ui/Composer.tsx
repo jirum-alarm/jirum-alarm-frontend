@@ -11,8 +11,11 @@ import { startRoomTransition } from './transition';
 import type { QuotaState } from '../model/quota';
 
 /**
- * 입력창. 제출은 항상 **라우팅**이다 — 여기서 fetch 하지 않는다.
- * 질문 하나 = URL 하나라, 뒤로가기가 "직전 질문"으로 한 단계씩 돌아간다.
+ * 입력창. 제출 방식이 **두 갈래**다:
+ *
+ * - `onSubmit` 이 있으면(대화방 안) 그걸 부른다 — 같은 방에 턴을 쌓는 게 멀티턴이므로
+ *   라우팅하면 안 된다(리마운트되면 앞 대화가 화면에서 사라진다).
+ * - 없으면(홈) 새 방으로 라우팅한다. 전환 애니메이션은 그때만 의미가 있다.
  *
  * `quota` 가 null 이면 아직 안 읽은 것(홈 화면 등) — 아무것도 표시하지 않는다.
  */
@@ -20,11 +23,14 @@ export default function Composer({
   busy = false,
   quota = null,
   inRoom = false,
+  onSubmit,
 }: {
   busy?: boolean;
   quota?: QuotaState | null;
   /** 대화방(하단 고정) 쪽 입력창인지. 전환 애니메이션이 이 마커를 기다린다. */
   inRoom?: boolean;
+  /** 있으면 라우팅 대신 이걸 부른다(멀티턴). */
+  onSubmit?: (question: string) => void;
 }) {
   const [draft, setDraft] = useState('');
   const router = useRouter();
@@ -33,9 +39,15 @@ export default function Composer({
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    const q = draft.trim().slice(0, 40);
+    // 질문은 서버 DTO 가 200자까지 받는다 — 여기서 40자로 깎으면 문장형 질문이 잘린다
+    const q = draft.trim().slice(0, 200);
     if (!q || busy || walled) return;
     setDraft('');
+
+    if (onSubmit) {
+      onSubmit(q);
+      return;
+    }
     startRoomTransition(() => router.push(roomHref(q)));
   };
 

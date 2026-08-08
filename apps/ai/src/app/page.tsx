@@ -1,14 +1,8 @@
-import { getSession } from '@/features/answer/model/session';
 import Composer from '@/features/answer/ui/Composer';
 import ExampleChips from '@/features/answer/ui/ExampleChips';
 import QuotaDevBar from '@/features/answer/ui/QuotaDevBar';
 
 export default async function Page() {
-  // 로그인 유저는 목업 티어를 이긴다(session.ts). 비로그인이면 undefined 를 넘겨
-  // 목업 바가 티어를 자유롭게 바꾸도록 둔다.
-  const session = await getSession();
-  const serverTier = session.userId ? session.tier : undefined;
-
   return (
     <>
       <div className="ambient" aria-hidden />
@@ -33,7 +27,7 @@ export default async function Page() {
           </div>
 
           {/* 목업 조작 바 — 배포본에는 안 나간다 */}
-          {process.env.NODE_ENV !== 'production' && <QuotaDevBar serverTier={serverTier} />}
+          {process.env.NODE_ENV !== 'production' && <QuotaDevBar />}
         </div>
       </main>
     </>

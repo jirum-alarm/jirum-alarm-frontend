@@ -50,7 +50,35 @@ const INTENT_WORDS = [
   '이하',
   '이상',
   '정도',
+  /*
+   * ★평판 축(2026-08-08 추가). 되묻기 제안이 "<상품> 후기 어때" 를 만드는데 '후기' 가
+   * 여기 없어서 term 이 "콜라 후기" 가 됐다 — 어떤 제목에도 그 문자열이 없으니
+   * `isPolluted` 가 **조용히 무효화**된다(실측: 게이트작동=false). 앱이 스스로 만든
+   * 제안이 앱의 정직성 게이트를 끄는 경로였다.
+   */
+  '후기',
+  '리뷰',
+  '평가',
+  '평판',
+  '어떰',
+  '어떤가',
+  '괜찮',
+  '괜찮아',
+  '괜찮나',
+  '살까',
+  '살까요',
+  '좋아',
+  '좋은',
+  '좋나',
 ];
+
+/**
+ * 의존명사·대명사 — 단독으로는 상품이 아니다.
+ *
+ * ★"콜라 싼 거 추천" → term "콜라 거" 가 되어 게이트가 죽었다(실측 2026-08-08).
+ * '싼'·'추천' 은 INTENT_WORDS 에 있는데 '거' 가 남아 붙었다.
+ */
+const EMPTY_NOUNS = ['거', '것', '게', '걸', '거요', '것들', '수', '데', '점'];
 
 /** 조사 — 토큰 끝에 붙어 매칭을 방해한다. 짧은 것부터 지우면 안 되므로 길이 역순. */
 const PARTICLES = [
@@ -98,7 +126,7 @@ export const extractProductTerm = (raw: string): string => {
     .split(/\s+/)
     .filter(Boolean)
     .map(stripParticle)
-    .filter((t) => t.length > 0 && !INTENT_WORDS.includes(t));
+    .filter((t) => t.length > 0 && !INTENT_WORDS.includes(t) && !EMPTY_NOUNS.includes(t));
 
   return kept.length > 0 ? kept.join(' ') : cleaned || raw.trim();
 };

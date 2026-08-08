@@ -1,3 +1,4 @@
+import AnswerText from './AnswerText';
 import CommunityReview from './CommunityReview';
 import DealList from './DealList';
 import Distribution from './Distribution';
@@ -81,6 +82,9 @@ function Block({ block }: { block: AnswerBlock }) {
         <PriceTrend points={block.points} current={block.current} confidence={block.confidence} />
       );
 
+    case 'text':
+      return <AnswerText markdown={block.markdown} />;
+
     case 'followUp':
       return <FollowUp suggestions={block.suggestions} />;
 
@@ -147,17 +151,28 @@ function Block({ block }: { block: AnswerBlock }) {
   }
 }
 
-export default function AnswerBubble({ blocks }: { blocks: AnswerBlock[] }) {
+/** 서버가 준 id 를 들고 있는 블록. id 가 React key 이자 `patch` 대상이다. */
+export type KeyedBlock = { id: string; block: AnswerBlock };
+
+/**
+ * ★키를 index 에서 **서버 id** 로 바꿨다.
+ *
+ * 왜: `patch` 로 토큰이 붙으면 블록은 더 이상 append-only 가 아니다 —
+ * "이미 있는 블록의 내용이 바뀐다". index 키를 쓰면 내용이 바뀐 블록과 새로 온 블록을
+ * React 가 구분할 근거가 없다. id 를 쓰면 patch 는 리렌더, 새 블록은 마운트가 된다.
+ *
+ * 복원된 대화(저장된 턴)는 서버 id 가 없으므로 호출부가 `t{turn}-{i}` 를 만들어 넣는다.
+ */
+export default function AnswerBubble({ blocks }: { blocks: KeyedBlock[] }) {
   if (blocks.length === 0) return null;
 
   return (
     <div className="flex gap-2.5">
       <Avatar />
       <div className="flex min-w-0 flex-1 flex-col gap-3">
-        {blocks.map((b, i) => (
-          // 블록은 append-only 라 index 키가 안정적이다
-          <div key={`${b.kind}-${i}`} className="rise">
-            <Block block={b} />
+        {blocks.map(({ id, block }) => (
+          <div key={id} className="rise">
+            <Block block={block} />
           </div>
         ))}
       </div>

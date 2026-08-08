@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 
+import { useAsk } from './AskContext';
 import { roomHref } from './examples';
 
 /**
@@ -10,10 +13,16 @@ import { roomHref } from './examples';
  * 다음 질문을 눌러볼 수 있게 놓으면, 답할 수 있는 것만 골라 제안하므로
  * 오라우팅(못 답하는 질문)도 같이 줄어든다.
  *
- * 제출은 `roomHref` 로 라우팅한다 — Composer 와 **같은 경로**라
- * "질문 하나 = URL 하나"(뒤로가기 한 단계) 규칙이 깨지지 않는다.
+ * ★제출은 **같은 대화에 턴을 쌓는다**(멀티턴). 라우팅하면 리마운트돼 앞 대화가 사라진다 —
+ * 그게 이 칩의 요점(맥락 이어가기)과 정반대다.
+ * 대화 밖(context 없음)에서는 링크로 폴백해 새 방을 연다.
+ *
+ * ⚠️ 제안 문장은 `buildFollowUps` 가 만들고, 그 문장이 `extractProductTerm` 을 통과할 때
+ * 상품 토큰만 남아야 한다 — '후기'·'거' 가 남으면 오염 게이트가 조용히 죽는다
+ * (실측 2026-08-08, intent.test.ts 의 왕복 테스트가 이걸 지킨다).
  */
 export default function FollowUp({ suggestions }: { suggestions: string[] }) {
+  const ask = useAsk();
   if (suggestions.length === 0) return null;
 
   return (
@@ -22,12 +31,22 @@ export default function FollowUp({ suggestions }: { suggestions: string[] }) {
       <ul className="flex flex-wrap gap-2">
         {suggestions.map((s) => (
           <li key={s}>
-            <Link
-              href={roomHref(s)}
-              className="tappable block rounded-full border border-gray-300 bg-white px-3.5 py-2 text-[13px] text-gray-700 active:border-gray-400 active:bg-gray-50"
-            >
-              {s}
-            </Link>
+            {ask ? (
+              <button
+                type="button"
+                onClick={() => ask(s)}
+                className="tappable block rounded-full border border-gray-300 bg-white px-3.5 py-2 text-[13px] text-gray-700 active:border-gray-400 active:bg-gray-50"
+              >
+                {s}
+              </button>
+            ) : (
+              <Link
+                href={roomHref(s)}
+                className="tappable block rounded-full border border-gray-300 bg-white px-3.5 py-2 text-[13px] text-gray-700 active:border-gray-400 active:bg-gray-50"
+              >
+                {s}
+              </Link>
+            )}
           </li>
         ))}
       </ul>
