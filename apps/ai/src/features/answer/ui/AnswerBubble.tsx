@@ -36,6 +36,20 @@ const Card = ({ children }: { children: React.ReactNode }) => (
 );
 
 /**
+ * 카드형이 아닌 블록(deals, review)의 헤더를 Distribution/PricePosition/PriceTrend 와
+ * 같은 자리·같은 굵기로 맞춘다. 헤더 스타일이 블록마다 제각각이면 카드 사이에
+ * 낀 무정형 텍스트로 보여 섹션 경계가 사라진다.
+ */
+const SectionLabel = ({ title, aside }: { title: string; aside?: React.ReactNode }) => (
+  <div className="mb-2 flex items-baseline justify-between gap-2">
+    <span className="text-sm font-bold text-gray-900">{title}</span>
+    {aside != null && (
+      <span className="shrink-0 text-[11px] text-gray-500 tabular-nums">{aside}</span>
+    )}
+  </div>
+);
+
+/**
  * 블록 하나를 렌더한다. 도착한 블록만 그려지므로
  * 서버가 계산하는 순서대로 화면이 채워진다.
  */
@@ -91,7 +105,7 @@ function Block({ block }: { block: AnswerBlock }) {
     case 'review':
       return (
         <div>
-          <p className="mb-2 text-[13px] font-bold text-gray-900">사람들은 뭐라고 했나</p>
+          <SectionLabel title="사람들은 뭐라고 했나" />
           <CommunityReview summary={block.summary} title={block.title} />
         </div>
       );
@@ -112,20 +126,20 @@ function Block({ block }: { block: AnswerBlock }) {
         <div className="flex flex-col gap-4">
           {comparable.length > 0 && (
             <div>
-              <p className="mb-2 text-[12px] font-medium text-gray-500">
-                이 가격대 딜 {comparable.length}개
-              </p>
+              <SectionLabel title="이 가격대 딜" aside={`${comparable.length}개`} />
               <DealList deals={comparable} lowest={block.lowest} />
             </div>
           )}
           {aside.length > 0 && (
             <div>
-              <p className="mb-2 text-[12px] font-medium text-gray-500">
-                가격 비교에서 뺀 딜 {aside.length}개{' '}
-                <span className="font-normal text-gray-500">
-                  · 해외 통화이거나 가격을 못 읽었어요
-                </span>
-              </p>
+              <SectionLabel
+                title="가격 비교에서 뺀 딜"
+                aside={
+                  <span className="font-normal normal-case">
+                    {aside.length}개 · 해외 통화·가격 미확인
+                  </span>
+                }
+              />
               <DealList deals={aside} lowest={null} />
             </div>
           )}

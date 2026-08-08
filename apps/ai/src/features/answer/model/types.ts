@@ -2,6 +2,7 @@ export type Deal = {
   id: number;
   title: string;
   url: string | null;
+  thumbnail: string | null;
   parsedPrice: number | null;
   priceCurrency: string | null;
   mallName: string | null;

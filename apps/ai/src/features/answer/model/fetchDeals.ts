@@ -50,6 +50,7 @@ const QUERY = `
       id
       title
       url
+      thumbnail
       parsedPrice
       priceCurrency
       mallName

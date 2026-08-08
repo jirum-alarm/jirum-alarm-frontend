@@ -1,8 +1,49 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import type { Deal } from '../model/types';
+
+const convertToWebp = (url?: string | null): string | undefined => {
+  if (!url) return undefined;
+  return url.replace(/\.(jpg|jpeg|png)(\?.*)?$/i, '.webp$2');
+};
+
+function Thumbnail({ src, alt }: { src: string | null; alt: string }) {
+  const [broken, setBroken] = useState(false);
+  const webpSrc = convertToWebp(src);
+
+  if (!webpSrc || broken) {
+    return (
+      <div className="flex size-14 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+        <svg
+          className="size-5 text-gray-300"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+          aria-hidden
+        >
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <path d="m21 15-5-5L5 21" />
+        </svg>
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={webpSrc}
+      alt={alt}
+      width={56}
+      height={56}
+      className="size-14 shrink-0 rounded-lg object-cover"
+      onError={() => setBroken(true)}
+    />
+  );
+}
 
 /**
  * 미리보기 개수. 모바일 1열이면 3건, PC 2열이면 4건(2x2)이 빈칸 없이 맞는다.
@@ -72,33 +113,38 @@ export default function DealList({ deals, lowest }: { deals: Deal[]; lowest: num
                   d.url ? '' : 'pointer-events-none opacity-70',
                 ].join(' ')}
               >
-                <div className="mb-1 flex flex-wrap items-center gap-1.5">
-                  {isLowest && (
-                    <span className="bg-error-500 rounded px-1.5 py-0.5 text-[10px] font-bold text-white">
-                      최저가
-                    </span>
-                  )}
-                  <span className="text-[11px] text-gray-500">
-                    {[d.mallName, daysAgo(d.postedAt)].filter(Boolean).join(' · ')}
-                  </span>
-                </div>
-                <p className="line-clamp-2 text-[13px] leading-snug text-gray-700">{d.title}</p>
-                <div className="mt-0.5 flex items-baseline justify-between gap-2">
-                  <span className="text-[15px] font-bold text-gray-900 tabular-nums">
-                    {priceOf(d)}
-                  </span>
-                  {d.url && (
-                    <svg
-                      className="size-3.5 shrink-0 text-gray-300"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2.5}
-                      aria-hidden
-                    >
-                      <path d="m9 18 6-6-6-6" />
-                    </svg>
-                  )}
+                <div className="flex gap-2.5">
+                  <Thumbnail src={d.thumbnail} alt={d.title} />
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-1 flex flex-wrap items-center gap-1.5">
+                      {isLowest && (
+                        <span className="bg-error-500 rounded px-1.5 py-0.5 text-[10px] font-bold text-white">
+                          최저가
+                        </span>
+                      )}
+                      <span className="text-[11px] text-gray-500">
+                        {[d.mallName, daysAgo(d.postedAt)].filter(Boolean).join(' · ')}
+                      </span>
+                    </div>
+                    <p className="line-clamp-2 text-[13px] leading-snug text-gray-700">{d.title}</p>
+                    <div className="mt-0.5 flex items-baseline justify-between gap-2">
+                      <span className="text-[15px] font-bold text-gray-900 tabular-nums">
+                        {priceOf(d)}
+                      </span>
+                      {d.url && (
+                        <svg
+                          className="size-3.5 shrink-0 text-gray-300"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2.5}
+                          aria-hidden
+                        >
+                          <path d="m9 18 6-6-6-6" />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </a>
             </li>

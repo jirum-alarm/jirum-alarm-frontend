@@ -30,6 +30,7 @@ const deal = (
   id: Math.floor(Math.random() * 1e6),
   title,
   url: 'https://example.com/deal',
+  thumbnail: null,
   parsedPrice,
   priceCurrency,
   mallName: '쿠팡',
