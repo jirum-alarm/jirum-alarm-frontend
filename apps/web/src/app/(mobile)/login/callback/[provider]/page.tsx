@@ -10,10 +10,12 @@ import { AuthService } from '@/shared/api/auth';
 import { OauthProvider } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
 import useMyRouter from '@/shared/hooks/useMyRouter';
+import { WindowLocation } from '@/shared/lib/window-location';
 import LoadingSpinner from '@/shared/ui/common/icons/LoadingSpinner';
 import { useToast } from '@/shared/ui/common/Toast';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
+import { resolveReturnUrl } from '@/features/auth/lib/return-url';
 import { setRecentLoginMethod } from '@/features/auth/model/login';
 
 const PROVIDER_MAP: Record<string, OauthProvider> = {
@@ -69,8 +71,13 @@ const SocialLoginCallbackPage = () => {
         setRecentLoginMethod(provider);
       }
 
-      const rtnUrl = extractRtnUrlFromState(state);
-      const landing = rtnUrl && rtnUrl !== '' ? decodeURIComponent(rtnUrl) : PAGE.HOME;
+      // rtnUrl 은 다른 오리진(ai.jirum-alarm.com 등)일 수 있다. 라우터는 앱 안의 경로만
+      // 다루므로 외부면 브라우저 이동을 써야 한다 — 안 그러면 앱 에러가 뜨고 복귀도 실패한다.
+      const target = resolveReturnUrl(
+        extractRtnUrlFromState(state),
+        WindowLocation.getCurrentOrigin(),
+      );
+      const landing = target.kind === 'external' ? target.url : target.path;
 
       // 신규 OAuth 가입은 /signup/complete 를 거쳐 보낸다. 이메일 가입과 동일한 GTM URL 트리거가
       // 발화돼야 signup_complete 가 잡힌다(계측은 코드가 아닌 GTM DOM 트리거가 함). type 은
@@ -82,7 +89,12 @@ const SocialLoginCallbackPage = () => {
       }
 
       toast('로그인에 성공했어요.');
-      router.replace(landing);
+      if (target.kind === 'external') {
+        // 다른 오리진이라 라우터로는 못 간다. replace 로 넣어 뒤로가기에 콜백이 남지 않게 한다.
+        window.location.replace(target.url);
+        return;
+      }
+      router.replace(target.path);
     },
     onError: (error) => {
       console.error(`${providerName} 로그인 실패:`, error);

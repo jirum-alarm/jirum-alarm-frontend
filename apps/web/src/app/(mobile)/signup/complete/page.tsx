@@ -3,19 +3,26 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
-import { PAGE } from '@/shared/config/page';
 import useMyRouter from '@/shared/hooks/useMyRouter';
+import { WindowLocation } from '@/shared/lib/window-location';
 import Button from '@/shared/ui/common/Button';
 import { Illust } from '@/shared/ui/common/icons/Illust';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
+
+import { resolveReturnUrl } from '@/features/auth/lib/return-url';
 
 const Completed = () => {
   const router = useMyRouter();
   const searchParams = useSearchParams();
   const handleCTAButton = () => {
     // 소셜 가입은 가입 전 의도한 곳(rtnUrl)으로, 그 외엔 홈으로.
-    const rtnUrl = searchParams.get('rtnUrl');
-    router.replace(rtnUrl ? decodeURIComponent(rtnUrl) : PAGE.HOME);
+    // rtnUrl 이 다른 오리진(ai.jirum-alarm.com 등)이면 라우터가 못 가므로 브라우저 이동을 쓴다.
+    const target = resolveReturnUrl(searchParams.get('rtnUrl'), WindowLocation.getCurrentOrigin());
+    if (target.kind === 'external') {
+      window.location.replace(target.url);
+      return;
+    }
+    router.replace(target.path);
   };
 
   return (
