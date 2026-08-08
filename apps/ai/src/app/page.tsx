@@ -1,17 +1,14 @@
 import Composer from '@/features/answer/ui/Composer';
 import ExampleChips from '@/features/answer/ui/ExampleChips';
 import QuotaDevBar from '@/features/answer/ui/QuotaDevBar';
-import LogoIcon from '@/shared/ui/LogoIcon';
+import AppHeader from '@/shared/ui/AppHeader';
 
 export default async function Page() {
   return (
     <>
       <div className="ambient" aria-hidden />
       <div className="mx-auto flex min-h-svh w-full max-w-[480px] flex-col px-4 md:max-w-[720px] md:px-6">
-        <div className="flex h-14 items-center gap-1.5">
-          <LogoIcon size={24} />
-          <span className="text-[15px] font-bold text-gray-900">지름알림</span>
-        </div>
+        <AppHeader />
 
         {/* 시작 화면은 세로 가운데. pt 로 위에 붙이면 아래 2/3 가 빈 화면으로 남는다. */}
         <main className="my-auto py-10">

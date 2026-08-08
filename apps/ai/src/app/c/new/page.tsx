@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { getSession } from '@/features/answer/model/session';
 import Chat from '@/features/answer/ui/Chat';
+import HeaderActions from '@/shared/ui/HeaderActions';
 
 import type { Metadata } from 'next';
 
@@ -54,6 +55,7 @@ export default async function NewConversationPage({ searchParams }: Search) {
             </svg>
           </Link>
           <p className="truncate text-[13px] font-medium text-gray-500">{question}</p>
+          <HeaderActions compact className="ml-auto shrink-0" tier={session.tier} />
         </header>
 
         {/*

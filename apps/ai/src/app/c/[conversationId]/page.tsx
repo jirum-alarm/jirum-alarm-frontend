@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { fetchConversation } from '@/features/answer/model/conversation';
 import { getSession } from '@/features/answer/model/session';
 import Chat from '@/features/answer/ui/Chat';
+import HeaderActions from '@/shared/ui/HeaderActions';
 
 import type { Metadata } from 'next';
 
@@ -63,6 +64,7 @@ export default async function ConversationPage({ params }: Params) {
             </svg>
           </Link>
           <p className="truncate text-[13px] font-medium text-gray-500">{convo.title}</p>
+          <HeaderActions compact className="ml-auto shrink-0" tier={session.tier} />
         </header>
 
         <Chat tier={session.tier} conversationId={convo.id} initialTurns={convo.turns} />
