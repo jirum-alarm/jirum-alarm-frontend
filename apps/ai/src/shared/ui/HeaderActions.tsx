@@ -28,23 +28,35 @@ export default function HeaderActions({
 
   if (compact) {
     return (
-      <nav className={`flex items-center ${className}`}>
+      <nav className={`flex items-center gap-0.5 ${className}`}>
         <a
           href={WEB_ORIGIN}
-          aria-label="지름알림 핫딜 보기"
-          title="지름알림 핫딜 보기"
-          className="tappable flex size-9 items-center justify-center rounded-full text-gray-500 active:bg-gray-100"
+          className="tappable flex h-9 items-center rounded-full px-2 text-[13px] font-medium text-gray-500 active:bg-gray-100"
         >
-          <TagIcon />
+          핫딜
         </a>
-        <a
-          href={accountHref}
-          aria-label={accountLabel}
-          title={accountLabel}
-          className="tappable flex size-9 items-center justify-center rounded-full text-gray-500 active:bg-gray-100"
-        >
-          <UserIcon />
-        </a>
+        {/*
+         * ★비로그인은 아이콘이 아니라 글자다. 아이콘만 두면 로그인·내 정보가
+         * 같은 사람 모양이라 로그인 상태로 오해된다(실제 지적받음 2026-08-08).
+         * 로그인은 여기서 제일 중요한 행동이라 애매하게 두면 안 된다.
+         */}
+        {isAnon ? (
+          <a
+            href={accountHref}
+            className="tappable flex h-9 items-center rounded-full bg-gray-900 px-2.5 text-[13px] font-semibold text-white active:bg-gray-700"
+          >
+            로그인
+          </a>
+        ) : (
+          <a
+            href={accountHref}
+            aria-label={accountLabel}
+            title={accountLabel}
+            className="tappable flex size-9 items-center justify-center rounded-full text-gray-500 active:bg-gray-100"
+          >
+            <UserIcon />
+          </a>
+        )}
       </nav>
     );
   }
@@ -70,22 +82,6 @@ export default function HeaderActions({
     </nav>
   );
 }
-
-const TagIcon = () => (
-  <svg
-    className="size-5"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={1.8}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden
-  >
-    <path d="M3 11V4a1 1 0 0 1 1-1h7l9 9-8 8-9-9Z" />
-    <circle cx="7.5" cy="7.5" r="1.25" fill="currentColor" stroke="none" />
-  </svg>
-);
 
 const UserIcon = () => (
   <svg
