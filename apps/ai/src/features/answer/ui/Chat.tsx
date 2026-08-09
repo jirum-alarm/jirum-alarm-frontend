@@ -170,11 +170,39 @@ export default function Chat({
     setTurns((prev) => {
       const last = prev[prev.length - 1];
       if (last?.role !== 'assistant') return prev;
-      const blocks = last.blocks.map((kb) =>
-        kb.id === id && kb.block.kind === 'text'
-          ? { ...kb, block: { ...kb.block, markdown: kb.block.markdown + delta } }
-          : kb,
-      );
+      const blocks = last.blocks.map((kb) => {
+        if (kb.id !== id) return kb;
+        if (kb.block.kind === 'text') {
+          return { ...kb, block: { ...kb.block, markdown: kb.block.markdown + delta } };
+        }
+        if (kb.block.kind === 'json-render') {
+          const spec = kb.block.spec;
+          const root = spec.root;
+          const element = spec.elements[root];
+          if (element && element.type === 'AnswerText') {
+            return {
+              ...kb,
+              block: {
+                ...kb.block,
+                spec: {
+                  ...spec,
+                  elements: {
+                    ...spec.elements,
+                    [root]: {
+                      ...element,
+                      props: {
+                        ...element.props,
+                        markdown: ((element.props?.markdown as string) || '') + delta,
+                      },
+                    },
+                  },
+                },
+              },
+            };
+          }
+        }
+        return kb;
+      });
       return [...prev.slice(0, -1), { ...last, blocks }];
     });
   }, []);

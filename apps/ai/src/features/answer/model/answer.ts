@@ -17,7 +17,13 @@ import type {
  * 새 블록(예: 가격추이)을 추가할 때 기존 컴포넌트를 건드리지 않는다.
  */
 export type AnswerBlock =
-  | { kind: 'verdict'; dealCount: number; lowest: number | null }
+  | {
+      kind: 'verdict';
+      dealCount: number;
+      lowest: number | null;
+      tier?: 'S' | 'A' | 'B' | 'C';
+      average?: number;
+    }
   | { kind: 'partial'; reason: PartialReason | RefusalReason; filteredCount: number }
   | { kind: 'distribution'; prices: number[] }
   /** "지금 사도 되나" — 같은 상품 과거 딜 대비 위치. 근거가 약하면 애초에 안 온다. */
@@ -30,6 +36,7 @@ export type AnswerBlock =
   | { kind: 'text'; markdown: string }
   /** 되묻기 제안. 답이 끝난 자리에 다음 질문을 놓는다 — 답할 수 있는 것만. */
   | { kind: 'followUp'; suggestions: string[] }
+  | { kind: 'json-render'; spec: any }
   | { kind: 'failure'; message: string };
 
 /**

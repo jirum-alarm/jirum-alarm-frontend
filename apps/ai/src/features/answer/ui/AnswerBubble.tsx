@@ -1,3 +1,7 @@
+import { JSONUIProvider, Renderer } from '@json-render/react';
+
+import { registry } from '../../../catalog/registry';
+
 import AnswerText from './AnswerText';
 import CommunityReview from './CommunityReview';
 import DealList from './DealList';
@@ -111,40 +115,8 @@ function Block({ block }: { block: AnswerBlock }) {
       );
 
     case 'deals': {
-      /*
-       * ★"이 가격대 딜" 이라고 해놓고 원화가 아닌 딜을 섞으면 헤더가 거짓이 된다.
-       * 실측(무선이어폰, 데스크톱): 보이는 4건 중 2건이 USD 인데 가격대는
-       * 4,159~99,000원 기준이었다. 생수는 "가격 미확인" 이 같은 자리에 섞였다.
-       * 가격대 계산에서 이미 제외한 것들이므로, 목록에서도 분리하되 버리지는 않는다.
-       */
-      const comparable = block.deals.filter(
-        (d) => d.parsedPrice != null && d.parsedPrice > 0 && (d.priceCurrency ?? 'KRW') === 'KRW',
-      );
-      const aside = block.deals.filter((d) => !comparable.includes(d));
-
-      return (
-        <div className="flex flex-col gap-4">
-          {comparable.length > 0 && (
-            <div>
-              <SectionLabel title="이 가격대 딜" aside={`${comparable.length}개`} />
-              <DealList deals={comparable} lowest={block.lowest} />
-            </div>
-          )}
-          {aside.length > 0 && (
-            <div>
-              <SectionLabel
-                title="가격 비교에서 뺀 딜"
-                aside={
-                  <span className="font-normal normal-case">
-                    {aside.length}개 · 해외 통화·가격 미확인
-                  </span>
-                }
-              />
-              <DealList deals={aside} lowest={null} />
-            </div>
-          )}
-        </div>
-      );
+      // Legacy deals block is now handled by json-render
+      return null;
     }
 
     case 'failure':
@@ -152,6 +124,13 @@ function Block({ block }: { block: AnswerBlock }) {
         <p className="rounded-2xl rounded-tl-sm border border-gray-200 bg-white px-4 py-3 text-[13.5px] text-gray-600">
           {block.message}
         </p>
+      );
+
+    case 'json-render':
+      return (
+        <JSONUIProvider registry={registry}>
+          <Renderer spec={block.spec} registry={registry} />
+        </JSONUIProvider>
       );
 
     /*
