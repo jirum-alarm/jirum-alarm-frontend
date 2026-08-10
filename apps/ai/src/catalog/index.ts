@@ -45,7 +45,7 @@ export const dealCatalog = schema.createCatalog({
       props: z.object({
         points: z.array(z.any()),
         current: z.number(),
-        confidence: z.string(),
+        confidence: z.enum(['HIGH', 'LOW']),
       }),
     },
     AnswerText: {

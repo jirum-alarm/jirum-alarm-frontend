@@ -17,7 +17,7 @@ import { dealCatalog } from './index';
 export function PartialAnswer({ props }: { props: { reason?: any; filteredCount: number } }) {
   return (
     <NativePartialAnswer reason={props.reason}>
-      {props.reason.code === 'NO_RESULTS' ? (
+      {props.reason?.code === 'NO_RESULTS' ? (
         <ExampleChips />
       ) : props.filteredCount > 0 ? (
         <p className="text-[12px] text-gray-600">
