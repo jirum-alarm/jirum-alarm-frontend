@@ -575,9 +575,11 @@ export default function PriceHistorySection({
 
   const subtitle = resolveSubtitle(history);
 
-  // 유사(LOW) 추이에서는 모델 페이지로 보내지 않음 — 틀린 연결 방지.
-  const showModelPageCta =
-    !!modelPage?.slug && history.confidence === 'HIGH' && history.basis !== 'SIMILAR';
+  // 유사(SIMILAR) 추이에서는 모델 페이지로 보내지 않음 — 틀린 연결 방지.
+  // confidence 게이트는 뺐다: HIGH 를 요구하니 발행 85개가 커버하는 딜 2,469건 중 극소수만
+  // CTA 가 떠서 /deals/ 노출이 23페이지(GSC 실측)에 갇혀 있었다. CTA 는 "핫딜 모음" 링크라
+  // 가격추이 차트의 신뢰도와 직접 상관이 없고, 오연결 위험은 basis 검사로 이미 막힌다.
+  const showModelPageCta = !!modelPage?.slug && history.basis !== 'SIMILAR';
 
   return (
     <section className="py-0">
