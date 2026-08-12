@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import ReactQueryProvider from './src/provider/ReactQueryProvider.tsx';
 import {MixpanelService} from '@/shared/lib/analytics/mixpanel.ts';
 import {NavigationContainer} from '@react-navigation/native';
+import {navigationRef} from '@/navigations/navigation-ref.ts';
 import RootNavigator from './src/navigations/root/RootNavigator.tsx';
 import './global.css';
 import {KeyboardProvider} from 'react-native-keyboard-controller';
@@ -27,7 +28,7 @@ function App(): React.JSX.Element {
   return (
     <SafeAreaProvider>
       <KeyboardProvider>
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
           <ReactQueryProvider>
             <WebviewRefContext.Provider value={webViewRefManager}>
               <FcmHandler>

@@ -47,6 +47,15 @@ jest.mock('../src/provider/WebViewRefProvider.tsx', () => ({
   useWebviewContext: jest.fn(),
 }));
 
+// 이 스위트는 "웹뷰 주입" 경로를 검사한다. 네비게이터가 준비 안 된 것으로 두면
+// navigateToProductDetail 이 false 를 반환해 기존 폴백 경로가 그대로 돈다.
+jest.mock('@react-navigation/native', () => ({
+  createNavigationContainerRef: () => ({
+    isReady: () => false,
+    navigate: jest.fn(),
+  }),
+}));
+
 const flushMicrotasks = async (cycles = 5) => {
   for (let index = 0; index < cycles; index += 1) {
     await Promise.resolve();

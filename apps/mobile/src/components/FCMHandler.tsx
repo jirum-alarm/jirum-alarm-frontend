@@ -5,6 +5,7 @@ import useFCMTokenManager from '@/shared/hooks/useFCMTokenManager.ts';
 import {onForegroundMessageHandler} from '../shared/lib/fcm/index.ts';
 import {useWebviewContext} from '../provider/WebViewRefProvider.tsx';
 import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
+import {navigateToProductDetail} from '@/navigations/navigation-ref.ts';
 
 interface FcmHandlerProps {
   children?: React.ReactNode;
@@ -48,6 +49,17 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
         }
 
         setTimeout(() => {
+          // 콜드 스타트에서는 네비게이터가 아직 안 떠 있을 수 있으므로
+          // 재시도 루프 안에서 매번 확인한다. 루프 밖에서 한 번만 보면
+          // 첫 시도에 실패해 웹뷰로 새고, iOS 에선 상세가 안 뜬다.
+          if (
+            pendingUrlRef.current &&
+            navigateToProductDetail(pendingUrlRef.current)
+          ) {
+            pendingUrlRef.current = null;
+            return;
+          }
+
           if (targetRef.current && pendingUrlRef.current) {
             targetRef.current.injectJavaScript(`
               if (document.readyState === 'complete') {
@@ -81,6 +93,18 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
     }
   };
 
+  /**
+   * 상품 상세면 네이티브로 push 하고, 아니면 기존 웹뷰 주입으로 넘긴다.
+   *
+   * 웹뷰 주입만 쓰면 iOS 에서 네이티브 상세가 안 뜬다 — 주입된 이동은
+   * TabWebView URL 필터의 navigationType === 'click' 게이트를 못 통과한다.
+   */
+  const openNotificationUrl = (url: string) => {
+    if (navigateToProductDetail(url)) return;
+    const targetRef = getTargetWebViewRef(url);
+    targetRef.current?.injectJavaScript(goProductDetail(url));
+  };
+
   // ✅ 포그라운드에서 푸시 알람을 클릭했을 때 처리
   const handleForegroundEvent = (
     response: Notifications.NotificationResponse,
@@ -89,8 +113,7 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
     const url = data?.link as string | undefined;
     if (url) {
       trackNotificationClick(data, 'foreground');
-      const targetRef = getTargetWebViewRef(url);
-      targetRef.current?.injectJavaScript(goProductDetail(url));
+      openNotificationUrl(url);
     }
   };
 
@@ -99,8 +122,7 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
     const url = remoteMessage.data?.link;
     if (url) {
       trackNotificationClick(remoteMessage.data, 'background');
-      const targetRef = getTargetWebViewRef(url);
-      targetRef.current?.injectJavaScript(goProductDetail(url));
+      openNotificationUrl(url);
     }
   };
 

@@ -8,6 +8,11 @@ import * as ReactTestRenderer from 'react-test-renderer';
 jest.mock('../global.css', () => ({}));
 jest.mock('@react-navigation/native', () => ({
   NavigationContainer: ({children}: {children: React.ReactNode}) => children,
+  // App 이 navigationRef 를 NavigationContainer 에 넘긴다(푸시 → 네이티브 상세).
+  createNavigationContainerRef: () => ({
+    isReady: () => false,
+    navigate: jest.fn(),
+  }),
 }));
 jest.mock('react-native-keyboard-controller', () => ({
   KeyboardProvider: ({children}: {children: React.ReactNode}) => children,
