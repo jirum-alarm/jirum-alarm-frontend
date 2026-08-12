@@ -51,28 +51,35 @@ export default function ProductInfo({
         ) : null}
       </View>
 
-      <Text className="font-medium text-gray-800">{product.title}</Text>
+      {/* 핫딜 앱에서 가격은 첫 1초에 찾는 정보다. 제목보다 위·크게 둔다
+          (디자인 리뷰 2026-08-12: 위계 2/10 → 가격이 스크롤 아래 있었음). */}
+      <View className="pb-2">
+        {display?.originalPrice ? (
+          <Text className="text-sm text-gray-500 line-through">
+            {display.originalPrice.toLocaleString()}원
+          </Text>
+        ) : null}
+        <View className="flex-row items-baseline gap-x-2">
+          {typeof display?.discountRate === 'number' ? (
+            <Text className="text-2xl font-bold text-error-500">
+              {display.discountRate}%
+            </Text>
+          ) : null}
+          <DisplayPrice price={product.price} />
+        </View>
+      </View>
 
-      <View className="gap-y-1 pt-3">
+      <Text className="text-base font-medium text-gray-800">
+        {product.title}
+      </Text>
+
+      <View className="gap-y-1 pt-2">
         <Text className="text-sm text-gray-600">
           {displayTime(product.postedAt)}
         </Text>
 
         <View className="flex-row items-center justify-between">
           <View>
-            {display?.originalPrice ? (
-              <Text className="text-sm text-gray-500 line-through">
-                {display.originalPrice.toLocaleString()}원
-              </Text>
-            ) : null}
-            <View className="flex-row items-baseline gap-x-2">
-              {typeof display?.discountRate === 'number' ? (
-                <Text className="text-2xl font-bold text-error-500">
-                  {display.discountRate}%
-                </Text>
-              ) : null}
-              <DisplayPrice price={product.price} />
-            </View>
             {display &&
             (typeof display.rating === 'number' || display.couponDiscount) ? (
               <View className="flex-row flex-wrap items-center gap-x-2 pt-1">

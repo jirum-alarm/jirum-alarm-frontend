@@ -4,6 +4,7 @@ import {ActivityIndicator, FlatList, Text, View} from 'react-native';
 import ProductCard, {
   type ProductCardItem,
 } from '@/shared/components/product/ProductCard';
+import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
 /**
  * 가로 캐러셀 섹션.
@@ -15,11 +16,15 @@ export default function ProductCarouselSection({
   title,
   products,
   isPending,
+  isError,
+  onRetry,
   onPressProduct,
 }: {
   title: string;
   products: ProductCardItem[] | undefined;
   isPending?: boolean;
+  isError?: boolean;
+  onRetry?: () => void;
   onPressProduct: (id: number) => void;
 }) {
   const renderItem = useCallback(
@@ -28,6 +33,18 @@ export default function ProductCarouselSection({
     ),
     [onPressProduct],
   );
+
+  // 실패는 숨기지 않는다 — 빈 것과 구별돼야 사용자가 재시도할 수 있다.
+  if (isError && onRetry) {
+    return (
+      <View className="pt-7">
+        <Text className="px-5 pb-1 text-lg font-semibold text-gray-900">
+          {title}
+        </Text>
+        <SectionErrorRow label={title} onRetry={onRetry} />
+      </View>
+    );
+  }
 
   // 빈 섹션을 제목만 남기고 보여주면 "로딩이 멈춘 것"처럼 보인다. 통째로 숨긴다.
   if (!isPending && (!products || products.length === 0)) return null;

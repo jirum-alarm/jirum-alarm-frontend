@@ -15,10 +15,12 @@ import {
   withAxisBuffer,
   won,
 } from '../model/chart-geometry';
+import SectionErrorRow from '@/shared/components/SectionErrorRow';
+
 import PriceChart from './PriceChart';
 
 export default function PriceHistorySection({productId}: {productId: number}) {
-  const {data, isPending} = useQuery(
+  const {data, isPending, isError, refetch} = useQuery(
     ProductQueries.priceHistory({id: productId, days: MAX_DAYS}),
   );
 
@@ -70,6 +72,10 @@ export default function PriceHistorySection({productId}: {productId: number}) {
     );
   }
 
+  if (isError) {
+    return <SectionErrorRow label="가격 추이" onRetry={refetch} />;
+  }
+
   // 가격 이력은 매핑된 상품에만 있다. 대부분은 null 이므로 조용히 숨긴다.
   if (!data || points.length < 2) return null;
 
@@ -100,11 +106,15 @@ export default function PriceHistorySection({productId}: {productId: number}) {
                 setDays(period.days);
                 setSelectedIndex(null);
               }}
+              // iOS HIG 최소 44px. 기존 py-1 은 약 26px 이라 오탭이 났다.
+              style={{minHeight: 44}}
               className={cn(
-                'rounded-full px-3 py-1',
+                'justify-center rounded-full px-4',
                 active ? 'bg-gray-900' : 'bg-gray-100',
               )}
-              accessibilityRole="button">
+              accessibilityRole="button"
+              accessibilityState={{selected: active}}
+              accessibilityLabel={`${period.label} 기간`}>
               <Text
                 className={cn(
                   'text-xs font-medium',

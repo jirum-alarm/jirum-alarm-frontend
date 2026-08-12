@@ -1,5 +1,12 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {ActivityIndicator, Image, ScrollView, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SystemBars} from 'react-native-edge-to-edge';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -22,6 +29,7 @@ import ProductDetailWebViewScreen from './ProductDetailWebViewScreen';
 import {parseSourceData} from './model/types';
 import BottomCTA from './ui/BottomCTA';
 import ProductInfo from './ui/ProductInfo';
+import AffiliateNotice from './ui/AffiliateNotice';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -59,9 +67,12 @@ function NativeDetail({productId}: {productId: number}) {
 
   const {data: myUserId} = useQuery(UserQueries.me());
 
-  const {data: togetherViewed, isPending: isTogetherViewedPending} = useQuery(
-    ProductQueries.togetherViewed({productId, limit: 10}),
-  );
+  const {
+    data: togetherViewed,
+    isPending: isTogetherViewedPending,
+    isError: isTogetherViewedError,
+    refetch: refetchTogetherViewed,
+  } = useQuery(ProductQueries.togetherViewed({productId, limit: 10}));
 
   // 카드를 누르면 같은 스택에 상세를 하나 더 쌓는다(웹 링크와 같은 동선).
   const pushProduct = useCallback(
@@ -122,6 +133,17 @@ function NativeDetail({productId}: {productId: number}) {
     <View className="flex-1 bg-white">
       <SystemBars style="dark" hidden={false} />
       <View style={{height: insets.top}} className="bg-white" />
+      {/* 스와이프 뒤로가기를 모르는 사용자를 위한 명시적 출구. */}
+      <View className="flex-row items-center bg-white px-2 py-1">
+        <Pressable
+          onPress={() => navigation.goBack()}
+          style={{minWidth: 44, minHeight: 44}}
+          className="items-center justify-center"
+          accessibilityRole="button"
+          accessibilityLabel="뒤로">
+          <Text className="text-2xl text-gray-800">‹</Text>
+        </Pressable>
+      </View>
       <ScrollView
         className="flex-1"
         contentContainerStyle={{paddingBottom: 24}}
@@ -129,13 +151,14 @@ function NativeDetail({productId}: {productId: number}) {
         {product.thumbnail ? (
           <Image
             source={{uri: product.thumbnail}}
-            className="aspect-square w-full"
-            resizeMode="cover"
+            className="aspect-[4/3] w-full"
+            resizeMode="contain"
           />
         ) : null}
         <View className="rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <ProductInfo product={product} source={source} />
         </View>
+        <AffiliateNotice mallName={product.mallName} variant="coupang" />
         <PriceHistorySection productId={productId} />
         <CommentSection
           productId={productId}
@@ -148,11 +171,14 @@ function NativeDetail({productId}: {productId: number}) {
           title="다른 고객이 함께 본 상품"
           products={togetherViewed}
           isPending={isTogetherViewedPending}
+          isError={isTogetherViewedError}
+          onRetry={refetchTogetherViewed}
           onPressProduct={pushProduct}
         />
-        {/* ponytail: 댓글·차트는 후속 커밋에서 네이티브로 붙인다. */}
+        {/* 제휴 고지는 콘텐츠 끝에. 쿠팡 상품이면 위 상단 배너가 대신 뜬다. */}
+        <AffiliateNotice mallName={product.mallName} variant="general" />
       </ScrollView>
-      <BottomCTA product={product} />
+      <BottomCTA product={product} isUserLogin={!!myUserId} />
     </View>
   );
 }

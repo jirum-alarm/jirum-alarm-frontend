@@ -1,15 +1,62 @@
 import React, {useCallback} from 'react';
-import {Text, View} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
+import {UserLikeTarget} from '@/shared/api/gql/graphql';
+import {ProductQueries} from '@/entities/product/product.queries';
+import {ProductService} from '@/shared/api/product/product.service';
 import Button from '@/shared/components/ui/Button';
 import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
+import {showToast} from '@/shared/lib/feedback';
 import {openInAppBrowser} from '@/shared/lib/navigation';
+import {cn} from '@/shared/lib/styling';
 
 import type {ProductDetail} from '../model/types';
 
-export default function BottomCTA({product}: {product: ProductDetail}) {
+/** iOS HIG 최소 터치 타깃. */
+const MIN_TAP = 44;
+
+export default function BottomCTA({
+  product,
+  isUserLogin,
+}: {
+  product: ProductDetail;
+  isUserLogin: boolean;
+}) {
   const insets = useSafeAreaInsets();
+  const queryClient = useQueryClient();
+  const productId = Number(product.id);
+
+  // 찜/추천 상태는 로그인 여부로 값이 바뀌므로 ProductInfo 와 캐시를 나눠 둔 stats 를 쓴다.
+  const {data: stats} = useQuery(ProductQueries.stats({id: productId}));
+
+  const invalidate = () =>
+    queryClient.invalidateQueries({
+      queryKey: ProductQueries.keys.stats(productId),
+    });
+
+  const {mutate: toggleWishlist, isPending: isWishlistPending} = useMutation({
+    mutationFn: (next: boolean) =>
+      next
+        ? ProductService.addWishlist({productId})
+        : ProductService.removeWishlist({productId}),
+    onSuccess: invalidate,
+  });
+
+  const {mutate: toggleRecommend, isPending: isRecommendPending} = useMutation({
+    mutationFn: (next: boolean) =>
+      ProductService.addUserLikeOrDislike({
+        target: UserLikeTarget.Product,
+        targetId: productId,
+        isLike: next,
+      }),
+    onSuccess: invalidate,
+  });
+
+  const requireLogin = () => {
+    showToast.info('로그인 후 이용해주세요.');
+  };
 
   const handlePurchase = useCallback(() => {
     if (!product.detailUrl) return;
@@ -31,14 +78,59 @@ export default function BottomCTA({product}: {product: ProductDetail}) {
     product.profitLinkProvider,
   ]);
 
+  const isWishlisted = !!stats?.isMyWishlist;
+  const isRecommended = !!stats?.isMyLike;
+
   return (
     <View
-      className="border-t border-t-[#D0D5DD] bg-white px-5 pt-2"
+      className="flex-row items-center gap-x-3 border-t border-t-gray-200 bg-white px-5 pt-2"
       style={{paddingBottom: Math.max(insets.bottom, 8)}}>
+      <Pressable
+        onPress={() =>
+          isUserLogin ? toggleWishlist(!isWishlisted) : requireLogin()
+        }
+        disabled={isWishlistPending}
+        style={{minWidth: MIN_TAP, minHeight: MIN_TAP}}
+        className="items-center justify-center"
+        accessibilityRole="button"
+        accessibilityState={{selected: isWishlisted}}
+        accessibilityLabel={isWishlisted ? '찜 해제' : '찜하기'}>
+        <Text className="text-xl">{isWishlisted ? '♥' : '♡'}</Text>
+        <Text
+          className={cn(
+            'text-[11px]',
+            isWishlisted ? 'text-error-500' : 'text-gray-500',
+          )}>
+          찜하기
+        </Text>
+      </Pressable>
+
+      <Pressable
+        onPress={() =>
+          isUserLogin ? toggleRecommend(!isRecommended) : requireLogin()
+        }
+        disabled={isRecommendPending}
+        style={{minWidth: MIN_TAP, minHeight: MIN_TAP}}
+        className="items-center justify-center"
+        accessibilityRole="button"
+        accessibilityState={{selected: isRecommended}}
+        accessibilityLabel={isRecommended ? '추천 취소' : '상품 추천'}>
+        <Text className="text-xl">{isRecommended ? '👍' : '👍'}</Text>
+        <Text
+          className={cn(
+            'text-[11px]',
+            isRecommended ? 'text-primary-700' : 'text-gray-500',
+          )}>
+          추천
+        </Text>
+      </Pressable>
+
       <Button
-        className="h-[48px] w-full"
+        className="h-[48px] flex-1"
         onPress={handlePurchase}
-        disabled={!product.detailUrl}>
+        disabled={!product.detailUrl}
+        accessibilityRole="button"
+        accessibilityLabel="구매하러 가기">
         <Text className="text-base font-semibold text-white">
           구매하러 가기
         </Text>

@@ -2824,6 +2824,24 @@ export type CollectProductMutation = {
   collectProduct: boolean;
 };
 
+export type AddWishlistMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+}>;
+
+export type AddWishlistMutation = {
+  __typename?: 'Mutation';
+  addWishlist: boolean;
+};
+
+export type RemoveWishlistMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+}>;
+
+export type RemoveWishlistMutation = {
+  __typename?: 'Mutation';
+  removeWishlist: boolean;
+};
+
 export type ReportExpiredProductMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -3122,6 +3140,22 @@ export const CollectProductDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   CollectProductMutation,
   CollectProductMutationVariables
+>;
+export const AddWishlistDocument = new TypedDocumentString(`
+    mutation AddWishlist($productId: Int!) {
+  addWishlist(productId: $productId)
+}
+    `) as unknown as TypedDocumentString<
+  AddWishlistMutation,
+  AddWishlistMutationVariables
+>;
+export const RemoveWishlistDocument = new TypedDocumentString(`
+    mutation RemoveWishlist($productId: Int!) {
+  removeWishlist(productId: $productId)
+}
+    `) as unknown as TypedDocumentString<
+  RemoveWishlistMutation,
+  RemoveWishlistMutationVariables
 >;
 export const ReportExpiredProductDocument = new TypedDocumentString(`
     mutation ReportExpiredProduct($productId: Int!) {

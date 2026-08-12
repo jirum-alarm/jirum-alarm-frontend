@@ -4,6 +4,8 @@ import {useInfiniteQuery} from '@tanstack/react-query';
 
 import {CommentQueries} from '@/entities/comment/comment.queries';
 
+import SectionErrorRow from '@/shared/components/SectionErrorRow';
+
 import Comment from './Comment';
 
 const PREVIEW_COUNT = 3;
@@ -23,7 +25,7 @@ export default function CommentSection({
   myUserId?: string | null;
   onPressMore: () => void;
 }) {
-  const {data, isPending} = useInfiniteQuery(
+  const {data, isPending, isError, refetch} = useInfiniteQuery(
     CommentQueries.infiniteComments(productId),
   );
 
@@ -36,7 +38,9 @@ export default function CommentSection({
         댓글
       </Text>
 
-      {isPending ? (
+      {isError ? (
+        <SectionErrorRow label="댓글" onRetry={refetch} />
+      ) : isPending ? (
         <View className="h-[80px] items-center justify-center">
           <ActivityIndicator size="small" color="#667085" />
         </View>

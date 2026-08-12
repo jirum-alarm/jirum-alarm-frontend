@@ -182,6 +182,19 @@ export const MutationCollectProduct = graphql(`
   }
 `);
 
+/** 찜하기(위시리스트). 좋아요(addUserLikeOrDislike)와는 별개 뮤테이션이다. */
+export const MutationAddWishlist = graphql(`
+  mutation AddWishlist($productId: Int!) {
+    addWishlist(productId: $productId)
+  }
+`);
+
+export const MutationRemoveWishlist = graphql(`
+  mutation RemoveWishlist($productId: Int!) {
+    removeWishlist(productId: $productId)
+  }
+`);
+
 /** 만료 상품 신고. */
 export const MutationReportExpiredProduct = graphql(`
   mutation ReportExpiredProduct($productId: Int!) {
