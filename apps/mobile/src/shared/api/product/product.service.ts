@@ -1,5 +1,6 @@
 import {
   MutationAddUserLikeOrDislike,
+  MutationCollectProduct,
   QueryProductGuides,
   QueryProductInfo,
   QueryProductStats,
@@ -7,6 +8,7 @@ import {
 import {HttpClient} from '@/shared/lib/client';
 import type {
   AddUserLikeOrDislikeMutationVariables,
+  CollectProductMutationVariables,
   ProductGuidesQueryVariables,
   ProductInfoQueryVariables,
   ProductStatsQueryVariables,
@@ -41,6 +43,18 @@ export class ProductService {
       variables,
     );
     return res.data?.productGuides ?? [];
+  }
+
+  /**
+   * 상세 조회 수집. fire-and-forget — 실패해도 화면 흐름을 막지 않는다.
+   * X-Device-Id 헤더는 HttpClient 가 붙인다.
+   */
+  static async collectProduct(variables: CollectProductMutationVariables) {
+    const res = await HttpClient.withAccessToken().execute(
+      MutationCollectProduct,
+      variables,
+    );
+    return res.data?.collectProduct ?? null;
   }
 
   static async addUserLikeOrDislike(

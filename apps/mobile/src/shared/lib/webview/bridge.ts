@@ -12,6 +12,12 @@ export enum WebViewEventType {
   SHARE_REQUEST = 'SHARE_REQUEST',
   ALARM_DOT_CHANGED = 'ALARM_DOT_CHANGED',
   CHANNEL_TALK_VISIBILITY = 'CHANNEL_TALK_VISIBILITY',
+  /**
+   * 웹뷰 localStorage 의 deviceId 를 네이티브로 넘긴다.
+   * 네이티브 상세가 조회 수집을 직접 하므로 같은 식별자를 써야 집계가 안 쪼개진다.
+   * (web 이 보내는 게 아니라 네이티브가 주입한 스크립트가 보낸다)
+   */
+  DEVICE_ID_SYNC = 'DEVICE_ID_SYNC',
 }
 
 export type HapticStyle =
@@ -39,6 +45,7 @@ export type WebViewEventPayloads = {
   };
   [WebViewEventType.ALARM_DOT_CHANGED]: {data: {hasNewAlarm: boolean}};
   [WebViewEventType.CHANNEL_TALK_VISIBILITY]: {data: {isOpen: boolean}};
+  [WebViewEventType.DEVICE_ID_SYNC]: {data: {deviceId: string}};
 };
 
 export interface WebViewEvent<T extends WebViewEventType> {
@@ -59,6 +66,7 @@ const eventHandlers: {
   [WebViewEventType.SHARE_REQUEST]: EventBridge.shareRequest,
   [WebViewEventType.ALARM_DOT_CHANGED]: EventBridge.alarmDotChanged,
   [WebViewEventType.CHANNEL_TALK_VISIBILITY]: EventBridge.channelTalkVisibility,
+  [WebViewEventType.DEVICE_ID_SYNC]: EventBridge.deviceIdSync,
 };
 
 export const parsedWebViewMessage = (event: WebViewMessageEvent) => {

@@ -33,6 +33,7 @@ import {
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {setTabBarVisible} from '@/shared/hooks/useTabBarVisibility';
 import {getReservedBottomPx} from '@/navigations/tab/MainTabNavigator';
+import {DEVICE_ID_SYNC_SCRIPT} from '@/shared/lib/device/device-id';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
@@ -181,8 +182,12 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
   );
 
   // 웹이 확보해야 할 하단 여백. 네이티브 탭바 높이와 짝이라 여기서 한 번만 계산한다.
+  // deviceId 동기화도 같이 태운다 — 네이티브 상세가 조회 수집을 직접 하므로
+  // 웹뷰가 쓰던 것과 같은 식별자를 받아와야 집계가 둘로 쪼개지지 않는다.
   const injectedHideWebBottomNavJs = useMemo(
-    () => buildHideWebBottomNavJs(getReservedBottomPx(insets.bottom)),
+    () =>
+      buildHideWebBottomNavJs(getReservedBottomPx(insets.bottom)) +
+      DEVICE_ID_SYNC_SCRIPT,
     [insets.bottom],
   );
 

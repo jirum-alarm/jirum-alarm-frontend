@@ -9,6 +9,7 @@ import * as Haptics from 'expo-haptics';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
 import {setHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 import {setChannelTalkOpen} from '@/shared/hooks/useTabBarVisibility';
+import {syncDeviceIdFromWeb} from '@/shared/lib/device/device-id';
 
 type EventHandler<T extends WebViewEventType> = (
   payload: WebViewEventPayloads[T],
@@ -62,5 +63,9 @@ export class EventBridge {
   static channelTalkVisibility: EventHandler<WebViewEventType.CHANNEL_TALK_VISIBILITY> =
     async payload => {
       setChannelTalkOpen(payload.data.isOpen);
+    };
+  static deviceIdSync: EventHandler<WebViewEventType.DEVICE_ID_SYNC> =
+    async payload => {
+      await syncDeviceIdFromWeb(payload.data.deviceId);
     };
 }

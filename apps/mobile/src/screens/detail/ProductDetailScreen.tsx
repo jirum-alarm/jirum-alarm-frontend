@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {ActivityIndicator, Image, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SystemBars} from 'react-native-edge-to-edge';
@@ -7,6 +7,8 @@ import {useQuery} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import {ProductQueries} from '@/entities/product/product.queries';
+import {ProductService} from '@/shared/api/product/product.service';
+import {pushRecentViewedProduct} from '@/shared/lib/device/recent-viewed';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {tabStackNavigations} from '@/shared/constant/navigations';
@@ -57,9 +59,29 @@ function NativeDetail({productId}: {productId: number}) {
     }, []),
   );
 
+  // 조회 수집. 웹은 CollectProductOnView 가 하던 일로, 네이티브가 안 쏘면
+  // 랭킹이 조회수를 먹는 만큼 조용히 왜곡된다.
+  // StrictMode 이중 마운트·리렌더 중복 호출은 ref 로 막는다(web 과 같은 방식).
+  const collectedRef = useRef<number | null>(null);
   useEffect(() => {
-    // TODO(다음 커밋): 조회수 기록·최근 본 상품 저장. 빠지면 랭킹이 조용히 왜곡된다.
+    if (collectedRef.current === productId) return;
+    collectedRef.current = productId;
+    void ProductService.collectProduct({
+      productId,
+      source: 'app_detail',
+    }).catch(() => {});
   }, [productId]);
+
+  // 최근 본 상품 — 안 쌓으면 웹뷰 홈의 "최근 본 상품"이 빈다.
+  useEffect(() => {
+    if (!product) return;
+    void pushRecentViewedProduct({
+      id: Number(product.id),
+      title: product.title,
+      thumbnail: product.thumbnail ?? null,
+      price: product.price ?? null,
+    });
+  }, [product]);
 
   if (isPending) {
     return (

@@ -2813,6 +2813,17 @@ export type TogetherViewedProductsQuery = {
   }>;
 };
 
+export type CollectProductMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
+  position?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type CollectProductMutation = {
+  __typename?: 'Mutation';
+  collectProduct: boolean;
+};
+
 export type ReportExpiredProductMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -3103,6 +3114,14 @@ export const TogetherViewedProductsDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   TogetherViewedProductsQuery,
   TogetherViewedProductsQueryVariables
+>;
+export const CollectProductDocument = new TypedDocumentString(`
+    mutation CollectProduct($productId: Int!, $source: String, $position: Int) {
+  collectProduct(productId: $productId, source: $source, position: $position)
+}
+    `) as unknown as TypedDocumentString<
+  CollectProductMutation,
+  CollectProductMutationVariables
 >;
 export const ReportExpiredProductDocument = new TypedDocumentString(`
     mutation ReportExpiredProduct($productId: Int!) {

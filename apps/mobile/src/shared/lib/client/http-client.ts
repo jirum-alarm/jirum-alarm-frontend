@@ -1,5 +1,6 @@
 import type {TypedDocumentString} from '@/shared/api/gql/graphql.ts';
 import {getAsyncStorage} from '@/shared/lib/persistence';
+import {getDeviceId} from '@/shared/lib/device/device-id';
 import {StorageKey} from '@/shared/constant/storage-key.ts';
 import {GRAPHQL_ENDPOINT} from '@/shared/constant/endpoint.ts';
 
@@ -54,11 +55,16 @@ export class HttpClient {
       token = await getAsyncStorage(StorageKey.REFRESH_TOKEN);
     }
 
+    const deviceId = await getDeviceId();
+
     const response = await fetch(url, {
       ...options,
       headers: {
         ...options.headers,
         Authorization: token ? `Bearer ${token}` : '',
+        // 조회 수집(collectProduct)의 사용자 식별. web 도 같은 헤더를 쓴다.
+        // 없으면 안 보낸다 — 틀린 id 를 만들어 보내면 집계가 쪼개진다.
+        ...(deviceId ? {'X-Device-Id': deviceId} : {}),
       },
     });
     const res = await response.json();

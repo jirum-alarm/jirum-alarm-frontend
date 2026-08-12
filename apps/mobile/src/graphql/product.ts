@@ -172,6 +172,16 @@ export const QueryTogetherViewedProducts = graphql(`
   }
 `);
 
+/**
+ * 상세 조회 수집. 랭킹이 조회수를 먹으므로 네이티브가 대신 쏘지 않으면
+ * 조용히 랭킹이 왜곡된다.
+ */
+export const MutationCollectProduct = graphql(`
+  mutation CollectProduct($productId: Int!, $source: String, $position: Int) {
+    collectProduct(productId: $productId, source: $source, position: $position)
+  }
+`);
+
 /** 만료 상품 신고. */
 export const MutationReportExpiredProduct = graphql(`
   mutation ReportExpiredProduct($productId: Int!) {
