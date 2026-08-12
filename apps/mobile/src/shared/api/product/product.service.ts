@@ -3,6 +3,7 @@ import {
   MutationAddWishlist,
   MutationCollectProduct,
   MutationRemoveWishlist,
+  QueryCategorizedReactionKeywords,
   QueryCategoryProducts,
   QueryProductPriceHistory,
   QueryTogetherViewedProducts,
@@ -16,6 +17,7 @@ import type {
   AddWishlistMutationVariables,
   CollectProductMutationVariables,
   RemoveWishlistMutationVariables,
+  CategorizedReactionKeywordsQueryVariables,
   CategoryProductsQueryVariables,
   ProductPriceHistoryQueryVariables,
   TogetherViewedProductsQueryVariables,
@@ -83,6 +85,16 @@ export class ProductService {
       variables,
     );
     return res.data?.product?.priceHistory ?? null;
+  }
+
+  static async getReactionKeywords(
+    variables: CategorizedReactionKeywordsQueryVariables,
+  ) {
+    const res = await HttpClient.withAccessToken().execute(
+      QueryCategorizedReactionKeywords,
+      variables,
+    );
+    return res.data?.categorizedReactionKeywords ?? null;
   }
 
   static async getCategoryProducts(variables: CategoryProductsQueryVariables) {

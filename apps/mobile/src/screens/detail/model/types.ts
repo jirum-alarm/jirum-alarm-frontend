@@ -16,6 +16,12 @@ export type TossData = {
   deliveryFee?: number | null;
   freeShippingThreshold?: number | null;
   images?: string[] | null;
+  /** 신뢰 배지 — web toss-data.ts 와 같은 필드명. */
+  lowestIn30Days?: boolean | null;
+  bestSeller?: boolean | null;
+  arrivalGuaranteed?: boolean | null;
+  lowestPriceCompensation?: boolean | null;
+  specialProduct?: boolean | null;
 };
 
 export type OhouData = Omit<

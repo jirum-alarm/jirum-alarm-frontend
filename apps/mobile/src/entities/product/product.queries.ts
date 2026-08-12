@@ -5,6 +5,7 @@ import type {
   ProductGuidesQueryVariables,
   ProductInfoQueryVariables,
   ProductStatsQueryVariables,
+  CategorizedReactionKeywordsQueryVariables,
   CategoryProductsQueryVariables,
   ProductPriceHistoryQueryVariables,
   TogetherViewedProductsQueryVariables,
@@ -26,6 +27,8 @@ export class ProductQueries {
     guides: (id: number) => [...this.keys.detail(id), 'guides'] as const,
     priceHistory: (id: number, days?: number | null) =>
       [...this.keys.detail(id), 'priceHistory', days ?? 'all'] as const,
+    reactionKeywords: (id: number) =>
+      [...this.keys.detail(id), 'reactionKeywords'] as const,
     categoryPopular: (categoryId: number) =>
       [...this.keys.all, 'categoryPopular', categoryId] as const,
     togetherViewed: (id: number) =>
@@ -60,6 +63,16 @@ export class ProductQueries {
     return queryOptions({
       queryKey: this.keys.priceHistory(variables.id, variables.days),
       queryFn: () => ProductService.getPriceHistory(variables),
+      retry: RETRY,
+    });
+  }
+
+  static reactionKeywords(
+    variables: CategorizedReactionKeywordsQueryVariables,
+  ) {
+    return queryOptions({
+      queryKey: this.keys.reactionKeywords(variables.id),
+      queryFn: () => ProductService.getReactionKeywords(variables),
       retry: RETRY,
     });
   }

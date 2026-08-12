@@ -6,6 +6,9 @@ import DisplayPrice from '@/shared/components/product/DisplayPrice';
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import {displayTime} from '@/shared/lib/format/price';
 
+import ProductGuideMetaRows from './ProductGuideMetaRows';
+import TossBadges from './TossBadges';
+
 import type {ProductDetail, SourceData} from '../model/types';
 
 /** 라벨/값 한 줄. web 은 라벨에 gray-400 을 쓰지만 대비 2.58:1 로 AA 미달이라 gray-500. */
@@ -27,9 +30,11 @@ function MetaRow({
 export default function ProductInfo({
   product,
   source,
+  productId,
 }: {
   product: ProductDetail;
   source: SourceData;
+  productId: number;
 }) {
   // 가격/할인율/평점/쿠폰은 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 쓴다.
   const display = source.toss ?? source.ohou;
@@ -105,12 +110,16 @@ export default function ProductInfo({
         </View>
       </View>
 
+      {source.toss ? <TossBadges toss={source.toss} /> : null}
+
       <View className="gap-y-2 pt-4">
         <MetaRow label="쇼핑몰">
           <Text className="text-sm font-medium text-gray-600">
             {source.toss ? '토스' : source.ohou ? '오늘의집' : product.mallName}
           </Text>
         </MetaRow>
+
+        <ProductGuideMetaRows productId={productId} />
 
         {product.uploaderType !== UploaderType.Crawled ? (
           <MetaRow label="업로드">

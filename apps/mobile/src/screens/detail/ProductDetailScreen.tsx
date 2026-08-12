@@ -13,7 +13,11 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useQuery} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-import {OrderOptionType, ProductOrderType} from '@/shared/api/gql/graphql';
+import {
+  OrderOptionType,
+  ProductOrderType,
+  UploaderType,
+} from '@/shared/api/gql/graphql';
 import {ProductQueries} from '@/entities/product/product.queries';
 import ProductCarouselSection from '@/shared/components/product/ProductCarouselSection';
 import CommentSection from '@/features/comment/ui/CommentSection';
@@ -31,6 +35,9 @@ import {parseSourceData} from './model/types';
 import BottomCTA from './ui/BottomCTA';
 import ProductInfo from './ui/ProductInfo';
 import AffiliateNotice from './ui/AffiliateNotice';
+import KakaoOpenChatPrompt from './ui/KakaoOpenChatPrompt';
+import TossDetailImages from './ui/TossDetailImages';
+import CommunityReaction from '@/features/community-reaction/ui/CommunityReaction';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -38,6 +45,9 @@ type Props = NativeStackScreenProps<
 >;
 
 type DetailNavigationProp = Props['navigation'];
+
+/** web ProductDetailPage 와 같은 방. */
+const TALKROOM_LINK = 'https://open.kakao.com/o/gJZTWAAg';
 
 /** `/products/123` 만 네이티브가 맡는다. 하위 경로(`/comment` 등)는 웹뷰로 넘긴다. */
 function parseProductId(path: string): number | null {
@@ -184,10 +194,20 @@ function NativeDetail({productId}: {productId: number}) {
           </View>
         ) : null}
         <View className="rounded-t-3xl border-t border-gray-100 bg-white pt-6">
-          <ProductInfo product={product} source={source} />
+          <ProductInfo
+            product={product}
+            source={source}
+            productId={productId}
+          />
         </View>
         <AffiliateNotice mallName={product.mallName} variant="coupang" />
+        <KakaoOpenChatPrompt href={TALKROOM_LINK} />
         <PriceHistorySection productId={productId} />
+        {/* 유저 직접 등록 상품은 크롤링 출처가 없어 커뮤니티 반응도 없다(web 과 동일). */}
+        {product.uploaderType !== UploaderType.User ? (
+          <CommunityReaction productId={productId} />
+        ) : null}
+        <TossDetailImages images={source.toss?.images} />
         <CommentSection
           productId={productId}
           myUserId={myUserId}
