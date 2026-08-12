@@ -171,6 +171,7 @@ function NativeDetail({productId}: {productId: number}) {
         productId={productId}
         title={product.title}
         onBack={() => navigation.goBack()}
+        onPressLogo={() => navigation.popToTop()}
       />
       <ScrollView
         className="flex-1"

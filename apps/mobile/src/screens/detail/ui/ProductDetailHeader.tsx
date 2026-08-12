@@ -28,10 +28,12 @@ export default function ProductDetailHeader({
   productId,
   title,
   onBack,
+  onPressLogo,
 }: {
   productId: number;
   title?: string | null;
   onBack: () => void;
+  onPressLogo: () => void;
 }) {
   const [shareOpen, setShareOpen] = useState(false);
   const url = `${SERVICE_URL}/products/${productId}`;
@@ -53,7 +55,13 @@ export default function ProductDetailHeader({
           </View>
         </PressableScale>
 
-        <View className="min-w-0 flex-1 flex-row items-center gap-2 pl-1">
+        {/* web LogoLink 처럼 로고를 누르면 홈으로. 눌림 반응도 web(whileTap)과 같다. */}
+        <PressableScale
+          onPress={onPressLogo}
+          className="min-w-0 flex-row items-center gap-2"
+          style={{flex: 1}}
+          accessibilityRole="button"
+          accessibilityLabel="지름알림 홈으로">
           <IconLogo size={32} />
           <View className="min-w-0 shrink">
             <Text
@@ -65,7 +73,7 @@ export default function ProductDetailHeader({
               {LOGO_SUBTITLE}
             </Text>
           </View>
-        </View>
+        </PressableScale>
       </View>
 
       <View className="flex-row items-center">

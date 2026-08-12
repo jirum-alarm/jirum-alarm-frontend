@@ -1,5 +1,7 @@
 import React from 'react';
-import {ActivityIndicator, Pressable, Text, View} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
+
+import PressableScale from '@/shared/components/PressableScale';
 import {useInfiniteQuery} from '@tanstack/react-query';
 
 import {CommentQueries} from '@/entities/comment/comment.queries';
@@ -31,6 +33,7 @@ export default function CommentSection({
 
   const comments = data?.pages.flat() ?? [];
   const preview = comments.slice(0, PREVIEW_COUNT);
+  const hasComments = comments.length > 0;
 
   return (
     <View className="pt-7">
@@ -47,16 +50,10 @@ export default function CommentSection({
         <View className="h-[80px] items-center justify-center">
           <ActivityIndicator size="small" color="#667085" />
         </View>
-      ) : preview.length === 0 ? (
-        <Pressable
-          onPress={onPressMore}
-          className="mx-5 rounded-lg bg-gray-50 py-6">
-          <Text className="text-center text-sm text-gray-500">
-            첫 댓글을 남겨보세요
-          </Text>
-        </Pressable>
       ) : (
         <>
+          {/* web CommentList 는 댓글이 없으면 목록 자체를 안 그린다 —
+              "첫 댓글을 남겨보세요" 같은 빈 상태 박스는 web 에 없다(내가 넣었던 것). */}
           {preview.map(comment => (
             <Comment
               key={String(comment.id)}
@@ -66,14 +63,17 @@ export default function CommentSection({
               canReply={false}
             />
           ))}
-          <Pressable
-            onPress={onPressMore}
-            className="mx-5 mt-3 rounded-lg bg-gray-100 py-3"
-            accessibilityRole="button">
-            <Text className="text-center text-sm font-medium text-gray-700">
-              {comments.length > 0 ? '댓글 보기' : '댓글 작성하기'}
-            </Text>
-          </Pressable>
+          {/* 버튼은 댓글 유무와 무관하게 항상 뜨고 문구만 갈린다(web renderMobile). */}
+          <View className="mt-8 px-12">
+            <PressableScale
+              onPress={onPressMore}
+              className="rounded-lg bg-gray-100 py-3"
+              accessibilityRole="button">
+              <Text className="text-center text-sm font-medium text-gray-700">
+                {hasComments ? '댓글 보기' : '댓글 작성하기'}
+              </Text>
+            </PressableScale>
+          </View>
         </>
       )}
     </View>

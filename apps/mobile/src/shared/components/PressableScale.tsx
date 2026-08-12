@@ -25,21 +25,31 @@ export default function PressableScale({
   children: React.ReactNode;
 }) {
   const scale = useRef(new Animated.Value(1)).current;
+  const opacity = useRef(new Animated.Value(1)).current;
 
-  const animate = (to: number) =>
-    Animated.timing(scale, {
-      toValue: to,
-      duration: 100,
-      useNativeDriver: true,
-    }).start();
+  const animate = (pressed: boolean) =>
+    Animated.parallel([
+      Animated.timing(scale, {
+        toValue: pressed ? scaleTo : 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity, {
+        toValue: pressed ? 0.6 : 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
 
   return (
     <Pressable
-      onPressIn={() => animate(scaleTo)}
-      onPressOut={() => animate(1)}
+      onPressIn={() => animate(true)}
+      onPressOut={() => animate(false)}
       style={style}
       {...rest}>
-      <Animated.View style={{transform: [{scale}]}}>
+      {/* scale 만으로는 작은 요소에서 변화가 잘 안 보인다. web 도 tap 시
+          시각 변화가 분명하므로 opacity 를 함께 준다. */}
+      <Animated.View style={{transform: [{scale}], opacity}}>
         <View className={className}>{children}</View>
       </Animated.View>
     </Pressable>
