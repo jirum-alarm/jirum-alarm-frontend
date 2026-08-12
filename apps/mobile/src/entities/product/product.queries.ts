@@ -6,6 +6,7 @@ import type {
   ProductInfoQueryVariables,
   ProductStatsQueryVariables,
   CategorizedReactionKeywordsQueryVariables,
+  ProductAdditionalInfoQueryVariables,
   CategoryProductsQueryVariables,
   ProductPriceHistoryQueryVariables,
   TogetherViewedProductsQueryVariables,
@@ -27,6 +28,8 @@ export class ProductQueries {
     guides: (id: number) => [...this.keys.detail(id), 'guides'] as const,
     priceHistory: (id: number, days?: number | null) =>
       [...this.keys.detail(id), 'priceHistory', days ?? 'all'] as const,
+    additionalInfo: (id: number) =>
+      [...this.keys.detail(id), 'additionalInfo'] as const,
     reactionKeywords: (id: number) =>
       [...this.keys.detail(id), 'reactionKeywords'] as const,
     categoryPopular: (categoryId: number) =>
@@ -63,6 +66,14 @@ export class ProductQueries {
     return queryOptions({
       queryKey: this.keys.priceHistory(variables.id, variables.days),
       queryFn: () => ProductService.getPriceHistory(variables),
+      retry: RETRY,
+    });
+  }
+
+  static additionalInfo(variables: ProductAdditionalInfoQueryVariables) {
+    return queryOptions({
+      queryKey: this.keys.additionalInfo(variables.id),
+      queryFn: () => ProductService.getProductAdditionalInfo(variables),
       retry: RETRY,
     });
   }

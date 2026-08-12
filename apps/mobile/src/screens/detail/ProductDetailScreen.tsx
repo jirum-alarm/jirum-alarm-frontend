@@ -190,7 +190,14 @@ function NativeDetail({productId}: {productId: number}) {
         </View>
         <AffiliateNotice mallName={product.mallName} variant="coupang" />
         <KakaoOpenChatPrompt href={TALKROOM_LINK} />
-        <PriceHistorySection productId={productId} />
+        <PriceHistorySection
+          productId={productId}
+          currentPrice={
+            product.price
+              ? Number(String(product.price).replace(/[^0-9.]/g, '')) || null
+              : null
+          }
+        />
         {/* 유저 직접 등록 상품은 크롤링 출처가 없어 커뮤니티 반응도 없다(web 과 동일). */}
         {product.uploaderType !== UploaderType.User ? (
           <CommunityReaction productId={productId} />

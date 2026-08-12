@@ -2770,6 +2770,20 @@ export type ProductPriceHistoryQuery = {
   } | null;
 };
 
+export type ProductAdditionalInfoQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type ProductAdditionalInfoQuery = {
+  __typename?: 'Query';
+  product?: {
+    __typename?: 'ProductOutput';
+    id: string;
+    url?: string | null;
+    provider: {__typename?: 'Provider'; id: string; nameKr: string};
+  } | null;
+};
+
 export type CategorizedReactionKeywordsQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
@@ -3119,6 +3133,21 @@ export const ProductPriceHistoryDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   ProductPriceHistoryQuery,
   ProductPriceHistoryQueryVariables
+>;
+export const ProductAdditionalInfoDocument = new TypedDocumentString(`
+    query ProductAdditionalInfo($id: Int!) {
+  product(id: $id) {
+    id
+    url
+    provider {
+      id
+      nameKr
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  ProductAdditionalInfoQuery,
+  ProductAdditionalInfoQueryVariables
 >;
 export const CategorizedReactionKeywordsDocument = new TypedDocumentString(`
     query CategorizedReactionKeywords($id: Int!) {

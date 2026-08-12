@@ -19,7 +19,14 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
 import PriceChart from './PriceChart';
 
-export default function PriceHistorySection({productId}: {productId: number}) {
+export default function PriceHistorySection({
+  productId,
+  currentPrice,
+}: {
+  productId: number;
+  /** 상세의 현재가. web 은 요약 카드 가운데에 이걸 띄운다. */
+  currentPrice?: number | null;
+}) {
   const {data, isPending, isError, refetch} = useQuery(
     ProductQueries.priceHistory({id: productId, days: MAX_DAYS}),
   );
@@ -127,19 +134,26 @@ export default function PriceHistorySection({productId}: {productId: number}) {
         })}
       </View>
 
-      <View className="flex-row justify-between px-5 pt-4">
-        <Text className="text-sm text-gray-500">
-          최저{' '}
-          <Text className="font-semibold text-gray-900">
+      {/* web 과 같은 3열 요약 카드. 최저=error, 최고=secondary 로 색을 나눈다. */}
+      <View className="mx-5 mt-3 flex-row rounded-xl bg-gray-50 px-4 py-3.5">
+        <View className="flex-1 gap-y-0.5">
+          <Text className="text-xs text-gray-500">최저</Text>
+          <Text className="text-sm font-bold text-error-500">
             {won(minPrice, currency)}
           </Text>
-        </Text>
-        <Text className="text-sm text-gray-500">
-          최고{' '}
-          <Text className="font-semibold text-gray-900">
+        </View>
+        <View className="flex-1 items-center gap-y-0.5">
+          <Text className="text-xs text-gray-500">현재가</Text>
+          <Text className="text-sm font-bold text-gray-900">
+            {currentPrice != null ? won(currentPrice, currency) : '-'}
+          </Text>
+        </View>
+        <View className="flex-1 items-end gap-y-0.5">
+          <Text className="text-xs text-gray-500">최고</Text>
+          <Text className="text-sm font-bold text-secondary-600">
             {won(maxPrice, currency)}
           </Text>
-        </Text>
+        </View>
       </View>
 
       <View className="px-2 pt-2">

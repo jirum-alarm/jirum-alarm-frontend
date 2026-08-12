@@ -134,6 +134,20 @@ export const QueryProductPriceHistory = graphql(`
   }
 `);
 
+/** 커뮤니티 반응 하단의 원문 링크(출처 커뮤니티)용. */
+export const QueryProductAdditionalInfo = graphql(`
+  query ProductAdditionalInfo($id: Int!) {
+    product(id: $id) {
+      id
+      url
+      provider {
+        id
+        nameKr
+      }
+    }
+  }
+`);
+
 /** 커뮤니티 반응 — 긍정/부정 키워드 칩. */
 export const QueryCategorizedReactionKeywords = graphql(`
   query CategorizedReactionKeywords($id: Int!) {

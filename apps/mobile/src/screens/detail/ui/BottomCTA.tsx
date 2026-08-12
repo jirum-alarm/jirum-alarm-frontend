@@ -83,7 +83,7 @@ export default function BottomCTA({
 
   return (
     <View
-      className="flex-row items-center gap-x-3 border-t border-t-gray-200 bg-white px-5 pt-2"
+      className="flex-row items-center gap-x-3 border-t border-t-gray-300 bg-white px-5 pt-2"
       style={{paddingBottom: Math.max(insets.bottom, 8)}}>
       <Pressable
         onPress={() =>

@@ -35,7 +35,10 @@ export default function CommentSection({
   return (
     <View className="pt-7">
       <Text className="px-5 pb-3 text-lg font-semibold text-gray-900">
-        댓글
+        지름알림 댓글
+        {comments.length > 0 ? (
+          <Text className="text-secondary-500"> {comments.length}개</Text>
+        ) : null}
       </Text>
 
       {isError ? (
@@ -65,10 +68,10 @@ export default function CommentSection({
           ))}
           <Pressable
             onPress={onPressMore}
-            className="mx-5 mt-3 rounded-lg border border-gray-200 py-3"
+            className="mx-5 mt-3 rounded-lg bg-gray-100 py-3"
             accessibilityRole="button">
             <Text className="text-center text-sm font-medium text-gray-700">
-              댓글 {comments.length >= PREVIEW_COUNT ? '전체 ' : ''}보기
+              {comments.length > 0 ? '댓글 보기' : '댓글 작성하기'}
             </Text>
           </Pressable>
         </>

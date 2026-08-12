@@ -1,10 +1,11 @@
 import React from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {ActivityIndicator, Pressable, Text, View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 
 import {ProductQueries} from '@/entities/product/product.queries';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {displayTime} from '@/shared/lib/format/price';
+import {openInAppBrowser} from '@/shared/lib/navigation';
 import {cn} from '@/shared/lib/styling';
 
 import {
@@ -13,39 +14,93 @@ import {
   type ReactionKeywordItem,
 } from '../model/deal-status-reaction';
 
-function KeywordChip({
-  item,
-  positive,
-}: {
-  item: ReactionKeywordItem;
-  positive: boolean;
-}) {
+/** web KeywordChip 과 같은 테두리/글자색 규칙. */
+function KeywordChip({item}: {item: ReactionKeywordItem}) {
+  const positive = item.type === 'POSITIVE';
+  const negative = item.type === 'NEGATIVE';
+
   return (
     <View
       className={cn(
-        'rounded-full px-2.5 py-1',
-        positive ? 'bg-primary-50' : 'bg-gray-100',
+        'flex-row gap-x-1 rounded-[40px] border bg-white px-3 py-1.5',
+        positive
+          ? 'border-secondary-300'
+          : negative
+          ? 'border-error-200'
+          : 'border-gray-300',
       )}>
+      {item.tag ? (
+        <Text className="text-xs font-medium text-gray-500">{item.tag}</Text>
+      ) : null}
+      <Text className="text-xs font-medium text-gray-900">{item.name}</Text>
       <Text
         className={cn(
-          'text-xs font-medium',
-          positive ? 'text-primary-800' : 'text-gray-600',
+          'text-xs font-semibold',
+          positive
+            ? 'text-secondary-700'
+            : negative
+            ? 'text-error-400'
+            : 'text-gray-500',
         )}>
-        {item.name} {item.count}
+        {item.count}
       </Text>
     </View>
   );
 }
 
+function KeywordRow({
+  label,
+  labelClassName,
+  items,
+}: {
+  label: string;
+  labelClassName: string;
+  items: ReactionKeywordItem[];
+}) {
+  if (!items.length) return null;
+
+  return (
+    <View className="flex-row items-start gap-2">
+      <Text className={cn('mt-1.5 w-8 text-xs font-semibold', labelClassName)}>
+        {label}
+      </Text>
+      <View className="min-w-0 flex-1 flex-row flex-wrap gap-1.5">
+        {items.map(item => (
+          <KeywordChip key={`${item.type}-${item.name}`} item={item} />
+        ))}
+      </View>
+    </View>
+  );
+}
+
+/** 출처 커뮤니티 원문으로 나가는 링크. web CommunityLink 와 같은 색·문구. */
+function CommunityLink({url, provider}: {url: string; provider: string}) {
+  return (
+    <Pressable
+      onPress={() => openInAppBrowser(url)}
+      className="flex-row items-center gap-x-1"
+      accessibilityRole="button"
+      accessibilityLabel={`${provider} 반응 보기`}>
+      <Text className="text-xs font-semibold text-secondary-500">
+        {provider} 반응 보기
+      </Text>
+      <View className="h-4 w-4 items-center justify-center rounded-full bg-secondary-500">
+        <Text className="text-[10px] text-white">›</Text>
+      </View>
+    </Pressable>
+  );
+}
+
 /**
- * 커뮤니티 반응 — 실제 댓글을 AI 로 요약한 칩.
- *
- * 퍼센트 계산은 QUALITY 칩만 쓴다(DEAL_STATUS 는 품절·종료 같은 상태라
- * 추천/비추천이 아니다). web 과 같은 정책.
+ * 커뮤니티 반응 — 품질 반응만(품절·종료·가격변동 등 상태 신호 제외).
+ * 레이아웃·색은 web CommunityReaction 과 맞춘다.
  */
 export default function CommunityReaction({productId}: {productId: number}) {
   const {data, isPending, isError, refetch} = useQuery(
     ProductQueries.reactionKeywords({id: productId}),
+  );
+  const {data: additional} = useQuery(
+    ProductQueries.additionalInfo({id: productId}),
   );
 
   if (isError) {
@@ -74,55 +129,68 @@ export default function CommunityReaction({productId}: {productId: number}) {
     allCount === 0 ? 0 : Math.round((positiveCount / allCount) * 100);
   const isPositive = positivePercent >= 50;
   const dominantPercent = isPositive ? positivePercent : 100 - positivePercent;
+  const lastUpdatedAt = data?.lastUpdatedAt
+    ? `${displayTime(data.lastUpdatedAt)} 업데이트`
+    : null;
 
   return (
-    <View className="pt-7">
-      <Text className="px-5 text-lg font-semibold text-gray-900">
-        커뮤니티 반응
-      </Text>
-      <Text className="px-5 pt-1 text-xs text-gray-500">
+    <View className="px-5 pt-7">
+      <Text className="text-lg font-semibold text-gray-900">커뮤니티 반응</Text>
+      <Text className="pt-1 pb-3 text-xs text-gray-500">
         실제 커뮤니티 반응을 AI로 요약한 내용이에요
       </Text>
 
-      <View className="mx-5 mt-3 rounded-xl bg-gray-50 p-4">
-        {allCount > 0 ? (
-          <Text className="pb-3 text-base font-semibold text-gray-900">
-            <Text
-              className={isPositive ? 'text-primary-800' : 'text-error-500'}>
-              {dominantPercent}%
+      <View className="rounded-xl bg-secondary-50 p-4">
+        <View className="gap-y-3 rounded-xl bg-white px-3 py-3">
+          {allCount > 0 ? (
+            <View className="flex-row items-center gap-1.5">
+              <Text className="text-base">{isPositive ? '👍' : '👎'}</Text>
+              <Text className="text-base font-semibold text-gray-800">
+                {isPositive ? '추천해요' : '아쉬워요'}
+              </Text>
+              <Text className="text-sm text-gray-400">
+                · {dominantPercent}%
+              </Text>
+            </View>
+          ) : (
+            <Text className="text-sm text-gray-500">
+              아직 모은 반응이 없어요
             </Text>
-            <Text className="text-gray-700">
-              {isPositive ? '가 추천해요' : '가 아쉬워했어요'}
+          )}
+
+          {positiveItems.length > 0 || negativeItems.length > 0 ? (
+            <View className="gap-y-2">
+              <KeywordRow
+                label="긍정"
+                labelClassName="text-secondary-600"
+                items={positiveItems}
+              />
+              <KeywordRow
+                label="부정"
+                labelClassName="text-error-400"
+                items={negativeItems}
+              />
+            </View>
+          ) : null}
+
+          {statusSummary ? (
+            <Text className="text-xs text-gray-500">
+              {statusSummary.message}
             </Text>
-          </Text>
-        ) : null}
+          ) : null}
 
-        {positiveItems.length ? (
-          <View className="flex-row flex-wrap gap-1.5 pb-2">
-            {positiveItems.map(i => (
-              <KeywordChip key={i.tag ?? i.name} item={i} positive />
-            ))}
+          <View className="flex-row items-center justify-between gap-2 border-t border-gray-100 pt-2.5">
+            <Text className="text-xs text-gray-400">
+              {lastUpdatedAt ?? ' '}
+            </Text>
+            {additional?.url && additional.provider?.nameKr ? (
+              <CommunityLink
+                url={additional.url}
+                provider={additional.provider.nameKr}
+              />
+            ) : null}
           </View>
-        ) : null}
-        {negativeItems.length ? (
-          <View className="flex-row flex-wrap gap-1.5">
-            {negativeItems.map(i => (
-              <KeywordChip key={i.tag ?? i.name} item={i} positive={false} />
-            ))}
-          </View>
-        ) : null}
-
-        {statusSummary ? (
-          <Text className="pt-3 text-sm text-error-500">
-            {statusSummary.message}
-          </Text>
-        ) : null}
-
-        {data?.lastUpdatedAt ? (
-          <Text className="pt-3 text-xs text-gray-500">
-            {displayTime(data.lastUpdatedAt)} 업데이트
-          </Text>
-        ) : null}
+        </View>
       </View>
     </View>
   );
