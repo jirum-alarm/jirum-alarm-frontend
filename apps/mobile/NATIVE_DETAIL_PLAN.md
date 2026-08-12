@@ -491,7 +491,128 @@ mobile 은 500 에서 **기계적으로 어둡게 보간한 값**이고, web 은
 
 ## 6. 안 하는 것
 
-- 상세 전체 네이티브화 — 광고·댓글은 웹뷰가 맞다
-- 네이티브 상품 카드 컴포넌트 — Phase 2 로 미룸, 착수 전 재판단
-- 딥링크 경로 변경 — 현재 웹뷰 주입 방식 그대로
+> ⚠️ 아래 첫 두 줄은 **폐기됨**(2026-08-12 방침 변경). 전면 네이티브로 갔고
+> 카드도 만들었다. 기록으로만 남긴다.
+>
+> - ~~상세 전체 네이티브화 — 광고·댓글은 웹뷰가 맞다~~
+> - ~~네이티브 상품 카드 컴포넌트 — Phase 2 로 미룸~~
+
 - `path` 파라미터를 `{productId: number}` 로 바꾸기 — 호출부·폴백이 다 깨진다
+- DESIGN.md 신설 — 이번 범위 밖(§11 TODO 참조)
+
+---
+
+## 11. 디자인 리뷰 결과 (2026-08-12, /plan-design-review)
+
+실기 스크린샷 기준 초기 점수 **3/10**. 웹 기능 15개 중 3개만 옮겨진
+"옮기다 만 상태"였다. 방침은 **앱답게 리디자인**(D2)이되 기능은 전부 살린다(D3).
+
+### 확정된 결정 7건
+
+| # | 결정 | 근거 |
+| --- | --- | --- |
+| D2 | **앱답게 리디자인** | 이미 호버→드래그, 카드→FlatList 로 앱 문법 채택 |
+| D3 | **법적 고지 + 상호작용 전부 복원** | 아래 ★ 참조 |
+| D4 | 이미지 **정사각→4:3**, 가격을 제목 위로 | 첫 화면에 가격이 없어 3초 스캔 실패 |
+| D5 | 실패 시에만 재시도 줄 | "빈 것"과 "못 불러온 것"이 구별 안 됨 |
+| D6 | 토큰 대체 + primary 램프 교정 | 하드코딩 8종, 램프 600~900 불일치 |
+| D7 | 터치타깃 44px + 핵심 라벨 | 차트 기간탭 26px, 구매 버튼 라벨 0개 |
+| D8 | NoImage **카테고리별 일러스트** | 웹과 동일 수준 |
+
+### ★ 반드시 복원할 것 — 수익링크 고지
+
+웹은 **모든 상품**에 둘 중 하나를 띄운다(상호 배타):
+- 쿠팡 계열 → "쿠팡 파트너스 활동으로 지름알림이 일정 금액의 수수료를 지급 받습니다"
+- 그 외 → "일부 링크는 제휴 마케팅이 적용되어 지름알림에 커미션이 지급될 수 있습니다"
+
+현재 네이티브 화면엔 **둘 다 없다 = 100% 누락**. 제휴 표시 의무 문제라
+장식성 기능과 같은 급으로 다루면 안 된다.
+
+### 기능 회귀 — 웹뷰에선 되던 것
+
+좋아요(찜하기)·상품 추천 버튼이 네이티브 전환으로 **사라졌다**.
+사용자 입장에선 앱 업데이트로 기능이 없어진 것이라 회귀로 읽힌다.
+
+### 패스별 점수
+
+| 패스 | 전 | 후(목표) | 남은 것 |
+| --- | --- | --- | --- |
+| 1 정보 위계 | 2 | 9 | 가격 부상·뒤로가기 |
+| 2 상태 커버리지 | 4 | 9 | 에러 3곳 |
+| 3 사용자 여정 | 5 | 9 | D4·D3 로 해소 |
+| 4 AI slop | 8 | 9 | 위반 없음(Pretendard·그린) |
+| 5 디자인 시스템 | 3 | 8 | DESIGN.md 는 TODO |
+| 6 반응형·접근성 | 4 | 9 | 44px·라벨 |
+| 7 미해결 | — | 0건 | 전부 결정됨 |
+
+### NOT in scope
+
+- **DESIGN.md 신설** — 색·타이포·간격 문서화. 이번 범위 밖, TODO 로 이월
+- **다크모드** — 앱에 아직 없음. 토큰 정리가 선행 조건
+- **태블릿 레이아웃** — 현재 타깃 아님
+
+### What already exists (재사용할 것)
+
+- `tailwind.config.js` 색 램프 (primary 600~900 만 교정 필요)
+- `shared/components/ui/Button`, `TextField`
+- `react-native-svg` (뱃지 그라디언트·차트), `react-native-keyboard-controller`
+- `shared/lib/format/price.ts` — parsePrice/displayTime (웹과 규칙 동일)
+
+---
+
+## Implementation Tasks
+
+디자인 리뷰 findings 에서 뽑은 것. P1 은 출시 전 필수.
+
+- [ ] **T1 (P1, human: ~1h / CC: ~10min)** — ProductInfo — 수익링크 고지 2종 복원(쿠팡/일반 상호배타)
+  - Surfaced by: Pass 1 — 모든 상품에 뜨는 제휴 고지가 100% 누락, 제휴 표시 의무
+  - Files: `screens/detail/ui/ProductInfo.tsx`
+  - Verify: 쿠팡 상품/비쿠팡 상품 각 1건에서 문구가 하나씩 뜨는지
+- [ ] **T2 (P1, human: ~2h / CC: ~20min)** — BottomCTA — 좋아요·상품추천 버튼 복원
+  - Surfaced by: Pass 1 — 웹뷰에선 되던 기능이 네이티브 전환으로 사라짐(기능 회귀)
+  - Files: `screens/detail/ui/BottomCTA.tsx`
+  - Verify: 좋아요 토글 후 재진입 시 상태 유지
+- [ ] **T3 (P1, human: ~30min / CC: ~5min)** — ProductDetailScreen — 뒤로가기 버튼 추가
+  - Surfaced by: Pass 1 — 스와이프만 있어 학습된 사용자만 나갈 수 있음
+  - Files: `screens/detail/ProductDetailScreen.tsx`
+  - Verify: 실기에서 버튼 탭으로 탭 루트 복귀
+- [ ] **T4 (P1, human: ~1h / CC: ~10min)** — ProductInfo — 이미지 4:3 + 가격 제목 위로 24px
+  - Surfaced by: Pass 1 — 가격이 첫 화면에 없어 3초 스캔 실패(2/10)
+  - Files: `screens/detail/ProductDetailScreen.tsx`, `screens/detail/ui/ProductInfo.tsx`
+  - Verify: 스크롤 0 에서 가격·제목·뱃지가 보이는지 스크린샷
+- [ ] **T5 (P2, human: ~1h / CC: ~10min)** — 차트·캐러셀·댓글 — 에러 상태 + 재시도
+  - Surfaced by: Pass 2 — `isError` 미처리로 "빈 것"과 "실패"가 구별 안 됨
+  - Files: `features/price-history/ui/PriceHistorySection.tsx`, `shared/components/product/ProductCarouselSection.tsx`, `features/comment/ui/CommentSection.tsx`
+  - Verify: 네트워크 차단 후 재시도 줄 노출
+- [ ] **T6 (P2, human: ~30min / CC: ~5min)** — 차트/CTA — 터치타깃 44px + a11y 라벨
+  - Surfaced by: Pass 6 — 기간탭 26px(HIG 44px 미달), BottomCTA 라벨 0개
+  - Files: `features/price-history/ui/PriceHistorySection.tsx`, `screens/detail/ui/BottomCTA.tsx`
+  - Verify: VoiceOver 로 구매 버튼이 "버튼"으로 읽히는지
+- [ ] **T7 (P2, human: ~30min / CC: ~5min)** — tailwind — 하드코딩 색 토큰화 + primary 램프 교정
+  - Surfaced by: Pass 5 — 하드코딩 8종, primary 600~900 이 웹과 불일치
+  - Files: `tailwind.config.js`, `shared/constant/colors.ts`
+  - Verify: 교정 후 로그인·회원가입 화면 눈으로 확인
+- [ ] **T8 (P2, human: ~2h / CC: ~20min)** — ProductCard — NoImage 카테고리별 일러스트
+  - Surfaced by: Pass 7 / D8 — 현재 회색 판 텍스트라 목록이 미완성으로 읽힘
+  - Files: `shared/components/product/ProductCard.tsx`
+  - Verify: 썸네일 없는 상품에서 카테고리 일러스트 노출
+- [ ] **T9 (P3, human: ~2h / CC: ~20min)** — ViewerCount·커뮤니티반응·카테고리인기 복원
+  - Surfaced by: D3 — "상호작용 전부 살리기" 선택
+  - Files: `screens/detail/ProductDetailScreen.tsx`
+  - Verify: 조회수 10 이상 상품에서 노출
+
+## GSTACK REVIEW REPORT
+
+| Review | Trigger | Why | Runs | Status | Findings |
+|--------|---------|-----|------|--------|----------|
+| CEO Review | `/plan-ceo-review` | Scope & strategy | 0 | — | — |
+| Codex Review | `/codex review` | Independent 2nd opinion | 0 | — | — |
+| Eng Review | `/plan-eng-review` | Architecture & tests (required) | 1 | ISSUES_OPEN | 6 issues, 1 critical gap (2026-08-07, 이 작업 이전) |
+| Design Review | `/plan-design-review` | UI/UX gaps | 1 | ISSUES_OPEN | score: 3/10 → 9/10, 7 decisions |
+| DX Review | `/plan-devex-review` | Developer experience gaps | 0 | — | — |
+
+**VERDICT:** DESIGN REVIEWED — 결정 7건 확정, 구현 태스크 9건(P1 4건) 도출.
+Eng Review 는 2026-08-07 기록이 이번 네이티브 전환(커밋 10개) 이전이라 stale.
+출시 전 `/plan-eng-review` 재실행 권장.
+
+NO UNRESOLVED DECISIONS
