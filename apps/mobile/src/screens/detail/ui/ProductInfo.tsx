@@ -11,7 +11,7 @@ import TossBadges from './TossBadges';
 
 import type {ProductDetail, SourceData} from '../model/types';
 
-/** 라벨/값 한 줄. web 은 라벨에 gray-400 을 쓰지만 대비 2.58:1 로 AA 미달이라 gray-500. */
+/** 라벨/값 한 줄. 색은 web ProductInfo 와 동일하게 맞춘다(사용자 결정 2026-08-12). */
 function MetaRow({
   label,
   children,
@@ -21,7 +21,7 @@ function MetaRow({
 }) {
   return (
     <View className="flex-row justify-between">
-      <Text className="text-sm font-medium text-gray-500">{label}</Text>
+      <Text className="text-sm font-medium text-gray-400">{label}</Text>
       <View className="flex-row items-center gap-x-1">{children}</View>
     </View>
   );
@@ -60,7 +60,7 @@ export default function ProductInfo({
           (디자인 리뷰 2026-08-12: 위계 2/10 → 가격이 스크롤 아래 있었음). */}
       <View className="pb-2">
         {display?.originalPrice ? (
-          <Text className="text-sm text-gray-500 line-through">
+          <Text className="text-sm text-gray-400 line-through">
             {display.originalPrice.toLocaleString()}원
           </Text>
         ) : null}
@@ -74,9 +74,7 @@ export default function ProductInfo({
         </View>
       </View>
 
-      <Text className="text-base font-medium text-gray-800">
-        {product.title}
-      </Text>
+      <Text className="font-medium text-gray-800">{product.title}</Text>
 
       <View className="gap-y-1 pt-2">
         <Text className="text-sm text-gray-600">
@@ -114,7 +112,7 @@ export default function ProductInfo({
 
       <View className="gap-y-2 pt-4">
         <MetaRow label="쇼핑몰">
-          <Text className="text-sm font-medium text-gray-600">
+          <Text className="text-sm font-medium text-gray-500">
             {source.toss ? '토스' : source.ohou ? '오늘의집' : product.mallName}
           </Text>
         </MetaRow>
@@ -138,7 +136,7 @@ export default function ProductInfo({
 
         {display?.sellerName ? (
           <MetaRow label="판매자">
-            <Text className="text-sm font-medium text-gray-600">
+            <Text className="text-sm font-medium text-gray-500">
               {display.sellerName}
             </Text>
           </MetaRow>
@@ -146,7 +144,7 @@ export default function ProductInfo({
 
         {source.toss ? (
           <MetaRow label="배송비">
-            <Text className="text-sm font-medium text-gray-600">
+            <Text className="text-sm font-medium text-gray-500">
               {source.toss.deliveryFee
                 ? `${source.toss.deliveryFee.toLocaleString()}원` +
                   (source.toss.freeShippingThreshold
@@ -157,7 +155,7 @@ export default function ProductInfo({
           </MetaRow>
         ) : source.ohou?.delivery ? (
           <MetaRow label="배송비">
-            <Text className="text-sm font-medium text-gray-600">
+            <Text className="text-sm font-medium text-gray-500">
               {source.ohou.delivery}
             </Text>
           </MetaRow>
@@ -166,7 +164,7 @@ export default function ProductInfo({
 
       {product.uploaderType === UploaderType.User && product.content ? (
         <View className="mt-6">
-          <Text className="mb-2 text-sm font-medium text-gray-500">
+          <Text className="mb-2 text-sm font-medium text-gray-400">
             상품 설명
           </Text>
           <Text className="text-sm leading-relaxed text-gray-700">

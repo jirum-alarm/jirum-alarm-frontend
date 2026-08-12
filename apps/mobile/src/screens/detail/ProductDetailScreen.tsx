@@ -1,12 +1,5 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, Image, ScrollView, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SystemBars} from 'react-native-edge-to-edge';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -35,6 +28,7 @@ import {parseSourceData} from './model/types';
 import BottomCTA from './ui/BottomCTA';
 import ProductInfo from './ui/ProductInfo';
 import AffiliateNotice from './ui/AffiliateNotice';
+import ProductDetailHeader from './ui/ProductDetailHeader';
 import KakaoOpenChatPrompt from './ui/KakaoOpenChatPrompt';
 import TossDetailImages from './ui/TossDetailImages';
 import CommunityReaction from '@/features/community-reaction/ui/CommunityReaction';
@@ -161,17 +155,11 @@ function NativeDetail({productId}: {productId: number}) {
     <View className="flex-1 bg-white">
       <SystemBars style="dark" hidden={false} />
       <View style={{height: insets.top}} className="bg-white" />
-      {/* 스와이프 뒤로가기를 모르는 사용자를 위한 명시적 출구. */}
-      <View className="flex-row items-center bg-white px-2 py-1">
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={{minWidth: 44, minHeight: 44}}
-          className="items-center justify-center"
-          accessibilityRole="button"
-          accessibilityLabel="뒤로">
-          <Text className="text-2xl text-gray-800">‹</Text>
-        </Pressable>
-      </View>
+      <ProductDetailHeader
+        productId={productId}
+        title={product.title}
+        onBack={() => navigation.goBack()}
+      />
       <ScrollView
         className="flex-1"
         contentContainerStyle={{paddingBottom: 24}}
