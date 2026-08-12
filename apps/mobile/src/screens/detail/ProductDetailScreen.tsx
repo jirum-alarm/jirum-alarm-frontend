@@ -2,11 +2,12 @@ import React, {useCallback, useEffect, useRef} from 'react';
 import {ActivityIndicator, Image, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SystemBars} from 'react-native-edge-to-edge';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useQuery} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import {ProductQueries} from '@/entities/product/product.queries';
+import ProductCarouselSection from '@/shared/components/product/ProductCarouselSection';
 import {ProductService} from '@/shared/api/product/product.service';
 import {pushRecentViewedProduct} from '@/shared/lib/device/recent-viewed';
 import type {TabStackParamList} from '@/navigations/tab/types';
@@ -23,6 +24,8 @@ type Props = NativeStackScreenProps<
   TabStackParamList,
   typeof tabStackNavigations.DETAIL
 >;
+
+type DetailNavigationProp = Props['navigation'];
 
 /** `/products/123` 만 네이티브가 맡는다. 하위 경로(`/comment` 등)는 웹뷰로 넘긴다. */
 function parseProductId(path: string): number | null {
@@ -43,12 +46,25 @@ export default function ProductDetailScreen(props: Props) {
 
 function NativeDetail({productId}: {productId: number}) {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<DetailNavigationProp>();
   const {
     data: product,
     isPending,
     isError,
     refetch,
   } = useQuery(ProductQueries.info({id: productId}));
+
+  const {data: togetherViewed, isPending: isTogetherViewedPending} = useQuery(
+    ProductQueries.togetherViewed({productId, limit: 10}),
+  );
+
+  // 카드를 누르면 같은 스택에 상세를 하나 더 쌓는다(웹 링크와 같은 동선).
+  const pushProduct = useCallback(
+    (id: number) => {
+      navigation.push(tabStackNavigations.DETAIL, {path: `/products/${id}`});
+    },
+    [navigation],
+  );
 
   // 웹뷰 화면과 달리 onNavigationStateChange 가 없으므로 직접 숨기고 되돌린다.
   // 안 하면 탭바가 하단 CTA 를 덮는다.
@@ -115,7 +131,13 @@ function NativeDetail({productId}: {productId: number}) {
         <View className="rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <ProductInfo product={product} source={source} />
         </View>
-        {/* ponytail: 아래 블록(댓글·추천·차트)은 후속 커밋에서 네이티브로 붙인다. */}
+        <ProductCarouselSection
+          title="다른 고객이 함께 본 상품"
+          products={togetherViewed}
+          isPending={isTogetherViewedPending}
+          onPressProduct={pushProduct}
+        />
+        {/* ponytail: 댓글·차트는 후속 커밋에서 네이티브로 붙인다. */}
       </ScrollView>
       <BottomCTA product={product} />
     </View>

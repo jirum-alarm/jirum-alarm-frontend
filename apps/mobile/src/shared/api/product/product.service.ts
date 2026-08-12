@@ -1,6 +1,7 @@
 import {
   MutationAddUserLikeOrDislike,
   MutationCollectProduct,
+  QueryTogetherViewedProducts,
   QueryProductGuides,
   QueryProductInfo,
   QueryProductStats,
@@ -9,6 +10,7 @@ import {HttpClient} from '@/shared/lib/client';
 import type {
   AddUserLikeOrDislikeMutationVariables,
   CollectProductMutationVariables,
+  TogetherViewedProductsQueryVariables,
   ProductGuidesQueryVariables,
   ProductInfoQueryVariables,
   ProductStatsQueryVariables,
@@ -55,6 +57,16 @@ export class ProductService {
       variables,
     );
     return res.data?.collectProduct ?? null;
+  }
+
+  static async getTogetherViewedProducts(
+    variables: TogetherViewedProductsQueryVariables,
+  ) {
+    const res = await HttpClient.withAccessToken().execute(
+      QueryTogetherViewedProducts,
+      variables,
+    );
+    return res.data?.togetherViewedProducts ?? [];
   }
 
   static async addUserLikeOrDislike(

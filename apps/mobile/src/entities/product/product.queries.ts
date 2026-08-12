@@ -5,6 +5,7 @@ import type {
   ProductGuidesQueryVariables,
   ProductInfoQueryVariables,
   ProductStatsQueryVariables,
+  TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql.ts';
 
 /**
@@ -21,6 +22,8 @@ export class ProductQueries {
     info: (id: number) => [...this.keys.detail(id), 'info'] as const,
     stats: (id: number) => [...this.keys.detail(id), 'stats'] as const,
     guides: (id: number) => [...this.keys.detail(id), 'guides'] as const,
+    togetherViewed: (id: number) =>
+      [...this.keys.detail(id), 'togetherViewed'] as const,
   };
 
   static info(variables: ProductInfoQueryVariables) {
@@ -35,6 +38,14 @@ export class ProductQueries {
     return queryOptions({
       queryKey: this.keys.stats(variables.id),
       queryFn: () => ProductService.getProductStats(variables),
+      retry: RETRY,
+    });
+  }
+
+  static togetherViewed(variables: TogetherViewedProductsQueryVariables) {
+    return queryOptions({
+      queryKey: this.keys.togetherViewed(variables.productId),
+      queryFn: () => ProductService.getTogetherViewedProducts(variables),
       retry: RETRY,
     });
   }
