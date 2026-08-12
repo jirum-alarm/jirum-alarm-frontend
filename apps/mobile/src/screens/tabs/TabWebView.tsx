@@ -71,6 +71,39 @@ const buildHideWebBottomNavJs = (reservedBottomPx: number) => `
   true;
 `;
 
+/**
+ * SPA(Next.js) 클라이언트 라우팅으로 상세에 들어간 경우를 잡아 네이티브로 올린다.
+ *
+ * onShouldStartLoadWithRequest 는 "문서 로드"에만 발화한다. 웹이 pushState 로
+ * URL 만 바꾸면 그 필터를 타지 않아 상세가 웹뷰 안에서 그려진다 — 광고까지 그대로.
+ * onNavigationStateChange 는 pushState 도 잡으므로 여기서 한 번 더 건진다.
+ *
+ * 이미 push 한 경로는 다시 올리지 않는다(뒤로가기로 돌아왔을 때 무한 push 방지).
+ */
+function useSpaDetailPush(webviewRef: React.RefObject<WebView | null>) {
+  const navigation = useNavigation<TabStackNavigationProp>();
+  const lastPushedRef = useRef<string | null>(null);
+
+  return useCallback(
+    (url: string) => {
+      const pushablePath = getPushablePath(url);
+      if (!pushablePath) {
+        // 상세를 벗어나면 기록을 비워 다음 진입을 허용한다.
+        lastPushedRef.current = null;
+        return;
+      }
+      if (lastPushedRef.current === pushablePath) return;
+      lastPushedRef.current = pushablePath;
+
+      // 웹뷰는 상세로 이동한 상태다. 네이티브를 띄우고 웹뷰는 뒤로 돌려
+      // 탭 루트가 남게 한다(뒤로가기 시 상세가 두 번 나오지 않도록).
+      navigation.push(tabStackNavigations.DETAIL, {path: pushablePath});
+      webviewRef.current?.goBack();
+    },
+    [navigation, webviewRef],
+  );
+}
+
 function useUrlFilter(clearLoadingState: () => void) {
   const navigation = useNavigation<TabStackNavigationProp>();
 
@@ -125,6 +158,7 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
     handleLoadProgress,
   } = useWebViewLoading();
   const handleShouldStartLoadWithRequest = useUrlFilter(clearLoadingState);
+  const handleSpaDetailPush = useSpaDetailPush(webviewRef);
 
   // 메인 프레임 로드 실패(네트워크 끊김 등)만 잡는다. HTTP 에러는 web이 렌더.
   const [hasError, setHasError] = useState(false);
@@ -206,6 +240,7 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
     handleLoadEnd,
     handleLoadProgress,
     handleShouldStartLoadWithRequest,
+    handleSpaDetailPush,
     handleScrollForHomeStatusBar,
     hasError,
     handleError,
@@ -242,6 +277,7 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
     handleLoadEnd,
     handleLoadProgress,
     handleShouldStartLoadWithRequest,
+    handleSpaDetailPush,
     handleScrollForHomeStatusBar,
     hasError,
     handleError,
@@ -299,9 +335,10 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
           onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
           onContentProcessDidTerminate={() => webviewRef.current?.reload()}
           onMessage={handleWebViewMessage}
-          onNavigationStateChange={state =>
-            setNavState({url: state.url, canGoBack: state.canGoBack})
-          }
+          onNavigationStateChange={state => {
+            setNavState({url: state.url, canGoBack: state.canGoBack});
+            handleSpaDetailPush(state.url);
+          }}
           onScroll={e => {
             const scrollY = e.nativeEvent.contentOffset.y;
             setEnableRefresh(scrollY === 0);
@@ -334,6 +371,7 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
     handleLoadEnd,
     handleLoadProgress,
     handleShouldStartLoadWithRequest,
+    handleSpaDetailPush,
     handleScrollForHomeStatusBar,
     hasError,
     handleError,
@@ -378,9 +416,10 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
         onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
         onContentProcessDidTerminate={() => webviewRef.current?.reload()}
         onMessage={handleWebViewMessage}
-        onNavigationStateChange={state =>
-          setNavState({url: state.url, canGoBack: state.canGoBack})
-        }
+        onNavigationStateChange={state => {
+          setNavState({url: state.url, canGoBack: state.canGoBack});
+          handleSpaDetailPush(state.url);
+        }}
         allowsBackForwardNavigationGestures={true}
         onScroll={e => {
           const scrollY = e.nativeEvent.contentOffset.y;
