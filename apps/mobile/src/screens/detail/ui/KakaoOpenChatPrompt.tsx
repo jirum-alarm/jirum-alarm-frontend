@@ -1,5 +1,7 @@
 import React from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
+
+import PressableScale from '@/shared/components/PressableScale';
 
 import {openInAppBrowser} from '@/shared/lib/navigation';
 
@@ -12,18 +14,27 @@ import {openInAppBrowser} from '@/shared/lib/navigation';
  */
 export default function KakaoOpenChatPrompt({href}: {href: string}) {
   return (
-    <Pressable
+    <PressableScale
       onPress={() => openInAppBrowser(href)}
       className="mx-5 mb-4 flex-row items-center gap-x-3 rounded-lg bg-secondary-50 px-4 py-3"
       accessibilityRole="button"
       accessibilityLabel="핫딜 카톡방 입장">
-      <View className="h-7 w-7 items-center justify-center rounded-full bg-[#FEE500]">
-        <Text className="text-sm">💬</Text>
+      {/* 카톡 마크는 노란 원 위의 말풍선. web 과 같은 조합(#FAE300). */}
+      <View className="h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FAE300]">
+        <Text className="text-xs">💬</Text>
       </View>
-      <Text className="flex-1 text-sm text-gray-700">
-        핫딜 카톡방에서 실시간으로 받아보세요
+      <View className="min-w-0 flex-1">
+        <Text className="text-sm font-semibold text-gray-800">
+          핫딜 Only 오픈 카톡방 입장하기
+        </Text>
+        <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
+          지름알림이 엄선한 핫딜만 골라 받아보세요!
+        </Text>
+      </View>
+      {/* secondary-500 은 이 연한 파란 면에서 3.50:1 로 AA 미달 — 600 이 5.11:1. */}
+      <Text className="shrink-0 text-xs font-semibold text-secondary-600">
+        입장
       </Text>
-      <Text className="text-sm font-medium text-gray-500">입장</Text>
-    </Pressable>
+    </PressableScale>
   );
 }

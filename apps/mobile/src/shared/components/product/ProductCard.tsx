@@ -1,5 +1,7 @@
 import React from 'react';
-import {Image, Pressable, Text, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
+
+import PressableScale from '@/shared/components/PressableScale';
 
 import {HotDealType} from '@/shared/api/gql/graphql';
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
@@ -43,13 +45,13 @@ export default function ProductCard({
   const priceText = hasWon ? `${priceWithoutWon}원` : priceWithoutWon;
 
   return (
-    <Pressable
+    <PressableScale
       style={{width: CARD_WIDTH}}
       onPress={() => onPress(Number(product.id))}
       accessibilityRole="button"
       accessibilityLabel={product.title}>
-      {({pressed}) => (
-        <View style={{opacity: pressed ? 0.85 : 1}}>
+      {
+        <View>
           <View
             className="overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
             style={{width: CARD_WIDTH, height: CARD_WIDTH}}>
@@ -105,7 +107,7 @@ export default function ProductCard({
             {priceText}
           </Text>
         </View>
-      )}
-    </Pressable>
+      }
+    </PressableScale>
   );
 }

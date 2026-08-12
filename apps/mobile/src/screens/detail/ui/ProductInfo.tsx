@@ -7,6 +7,7 @@ import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import {displayTime} from '@/shared/lib/format/price';
 
 import ProductGuideMetaRows from './ProductGuideMetaRows';
+import RecommendButton from './RecommendButton';
 import TossBadges from './TossBadges';
 
 import type {ProductDetail, SourceData} from '../model/types';
@@ -31,10 +32,12 @@ export default function ProductInfo({
   product,
   source,
   productId,
+  isUserLogin,
 }: {
   product: ProductDetail;
   source: SourceData;
   productId: number;
+  isUserLogin: boolean;
 }) {
   // 가격/할인율/평점/쿠폰은 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 쓴다.
   const display = source.toss ?? source.ohou;
@@ -106,6 +109,10 @@ export default function ProductInfo({
             ) : null}
           </View>
         </View>
+      </View>
+
+      <View className="flex-row items-center justify-end pt-1">
+        <RecommendButton productId={productId} isUserLogin={isUserLogin} />
       </View>
 
       {source.toss ? <TossBadges toss={source.toss} /> : null}

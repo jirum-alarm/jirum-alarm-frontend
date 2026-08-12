@@ -60,6 +60,9 @@ export default function ProductDetailScreen(props: Props) {
   return <NativeDetail productId={productId} />;
 }
 
+/** 지금 포커스된 상세 화면이 있는지. 상세→상세 이동 때 바텀바가 깜빡이지 않게 한다. */
+const isDetailFocusedRef = {current: false};
+
 function NativeDetail({productId}: {productId: number}) {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<DetailNavigationProp>();
@@ -108,8 +111,17 @@ function NativeDetail({productId}: {productId: number}) {
   // 안 하면 탭바가 하단 CTA 를 덮는다.
   useFocusEffect(
     useCallback(() => {
+      isDetailFocusedRef.current = true;
       setTabBarVisible(false);
-      return () => setTabBarVisible(true);
+      // ★ cleanup 에서 무조건 true 로 되돌리면, 상세 A → 상세 B 로 갈 때
+      // B 가 숨긴 직후 A 의 cleanup 이 다시 켜서 바텀바가 나타난다.
+      // 다음 화면이 뜬 뒤에 판단하도록 미루고, 그때도 상세면 그대로 둔다.
+      return () => {
+        isDetailFocusedRef.current = false;
+        setTimeout(() => {
+          if (!isDetailFocusedRef.current) setTabBarVisible(true);
+        }, 0);
+      };
     }, []),
   );
 
@@ -186,6 +198,7 @@ function NativeDetail({productId}: {productId: number}) {
             product={product}
             source={source}
             productId={productId}
+            isUserLogin={!!myUserId}
           />
         </View>
         <AffiliateNotice mallName={product.mallName} variant="coupang" />

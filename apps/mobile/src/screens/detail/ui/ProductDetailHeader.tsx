@@ -1,9 +1,12 @@
-import React from 'react';
-import {Pressable, Share, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {Text, View} from 'react-native';
 
 import CaretLeft from '@/shared/components/icons/caret_left';
 import IconLogo from '@/shared/components/icons/IconLogo';
 import {SERVICE_URL} from '@/constants/env';
+import PressableScale from '@/shared/components/PressableScale';
+
+import ShareSheet from './ShareSheet';
 
 /** 로고 아래 붙는 서비스 한 줄 설명. web LOGO_SUBTITLE 과 같은 문구. */
 const LOGO_SUBTITLE = '커뮤니티 핫딜 모아보기';
@@ -24,37 +27,30 @@ export default function ProductDetailHeader({
   productId,
   title,
   onBack,
-  onPressSearch,
 }: {
   productId: number;
   title?: string | null;
   onBack: () => void;
-  onPressSearch?: () => void;
 }) {
-  const handleShare = async () => {
-    const url = `${SERVICE_URL}/products/${productId}`;
-    try {
-      // iOS 는 title/url 을 분리하면 카톡 등에서 2번 전송된다(웹뷰 브리지와 같은 이유).
-      await Share.share({message: title ? `${title}\n${url}` : url});
-    } catch {
-      // 사용자가 공유 시트를 닫은 것도 여기로 온다. 조용히 무시.
-    }
-  };
+  const [shareOpen, setShareOpen] = useState(false);
+  const url = `${SERVICE_URL}/products/${productId}`;
 
   return (
     <View
       className="w-full flex-row items-center justify-between gap-2 bg-white px-5"
       style={{height: HEADER_HEIGHT}}>
       <View className="min-w-0 flex-1 flex-row items-center">
-        <Pressable
+        <PressableScale
           onPress={onBack}
           hitSlop={8}
           style={{minWidth: MIN_TAP, minHeight: MIN_TAP}}
           className="-ml-2 justify-center"
           accessibilityRole="button"
           accessibilityLabel="뒤로">
-          <CaretLeft width={24} height={24} />
-        </Pressable>
+          <View className="h-11 justify-center">
+            <CaretLeft width={24} height={24} />
+          </View>
+        </PressableScale>
 
         <View className="min-w-0 flex-1 flex-row items-center gap-2 pl-1">
           <IconLogo size={32} />
@@ -72,27 +68,23 @@ export default function ProductDetailHeader({
       </View>
 
       <View className="flex-row items-center">
-        {onPressSearch ? (
-          <Pressable
-            onPress={onPressSearch}
-            hitSlop={8}
-            style={{minWidth: MIN_TAP, minHeight: MIN_TAP}}
-            className="items-center justify-center"
-            accessibilityRole="button"
-            accessibilityLabel="검색">
-            <Text className="text-lg text-gray-700">⌕</Text>
-          </Pressable>
-        ) : null}
-        <Pressable
-          onPress={handleShare}
+        <PressableScale
+          onPress={() => setShareOpen(true)}
           hitSlop={8}
           style={{minWidth: MIN_TAP, minHeight: MIN_TAP}}
-          className="items-center justify-center"
           accessibilityRole="button"
-          accessibilityLabel="공유">
-          <Text className="text-lg text-gray-700">↗</Text>
-        </Pressable>
+          accessibilityLabel="공유하기">
+          <View className="h-11 items-center justify-center">
+            <Text className="text-lg text-gray-700">↗</Text>
+          </View>
+        </PressableScale>
       </View>
+      <ShareSheet
+        visible={shareOpen}
+        onClose={() => setShareOpen(false)}
+        title={`${title ?? ''} | 지름알림`.trim()}
+        url={url}
+      />
     </View>
   );
 }

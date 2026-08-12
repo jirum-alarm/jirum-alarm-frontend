@@ -1,5 +1,7 @@
 import React from 'react';
-import {ActivityIndicator, Pressable, Text, View} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
+
+import PressableScale from '@/shared/components/PressableScale';
 import {useQuery} from '@tanstack/react-query';
 
 import {ProductQueries} from '@/entities/product/product.queries';
@@ -76,7 +78,7 @@ function KeywordRow({
 /** 출처 커뮤니티 원문으로 나가는 링크. web CommunityLink 와 같은 색·문구. */
 function CommunityLink({url, provider}: {url: string; provider: string}) {
   return (
-    <Pressable
+    <PressableScale
       onPress={() => openInAppBrowser(url)}
       className="flex-row items-center gap-x-1"
       accessibilityRole="button"
@@ -87,7 +89,7 @@ function CommunityLink({url, provider}: {url: string; provider: string}) {
       <View className="h-4 w-4 items-center justify-center rounded-full bg-secondary-500">
         <Text className="text-[10px] text-white">›</Text>
       </View>
-    </Pressable>
+    </PressableScale>
   );
 }
 

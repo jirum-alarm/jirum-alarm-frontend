@@ -3,7 +3,6 @@ import {Pressable, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
-import {UserLikeTarget} from '@/shared/api/gql/graphql';
 import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
 import Button from '@/shared/components/ui/Button';
@@ -44,16 +43,6 @@ export default function BottomCTA({
     onSuccess: invalidate,
   });
 
-  const {mutate: toggleRecommend, isPending: isRecommendPending} = useMutation({
-    mutationFn: (next: boolean) =>
-      ProductService.addUserLikeOrDislike({
-        target: UserLikeTarget.Product,
-        targetId: productId,
-        isLike: next,
-      }),
-    onSuccess: invalidate,
-  });
-
   const requireLogin = () => {
     showToast.info('로그인 후 이용해주세요.');
   };
@@ -79,7 +68,6 @@ export default function BottomCTA({
   ]);
 
   const isWishlisted = !!stats?.isMyWishlist;
-  const isRecommended = !!stats?.isMyLike;
 
   return (
     <View
@@ -102,26 +90,6 @@ export default function BottomCTA({
             isWishlisted ? 'text-error-500' : 'text-gray-500',
           )}>
           찜하기
-        </Text>
-      </Pressable>
-
-      <Pressable
-        onPress={() =>
-          isUserLogin ? toggleRecommend(!isRecommended) : requireLogin()
-        }
-        disabled={isRecommendPending}
-        style={{minWidth: MIN_TAP, minHeight: MIN_TAP}}
-        className="items-center justify-center"
-        accessibilityRole="button"
-        accessibilityState={{selected: isRecommended}}
-        accessibilityLabel={isRecommended ? '추천 취소' : '상품 추천'}>
-        <Text className="text-xl">{isRecommended ? '👍' : '👍'}</Text>
-        <Text
-          className={cn(
-            'text-[11px]',
-            isRecommended ? 'text-primary-700' : 'text-gray-500',
-          )}>
-          추천
         </Text>
       </Pressable>
 
