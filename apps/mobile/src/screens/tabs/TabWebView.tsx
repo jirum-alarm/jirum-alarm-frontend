@@ -88,18 +88,23 @@ const buildHideWebBottomNavJs = (reservedBottomPx: number) => `
  */
 function useSpaDetailPush() {
   const navigation = useNavigation<TabStackNavigationProp>();
-  const lastPushedRef = useRef<string | null>(null);
+  const lastPushedRef = useRef<{path: string; at: number} | null>(null);
 
   return useCallback(
     (url: string) => {
       const pushablePath = getPushablePath(url);
       if (!pushablePath) {
-        // 상세를 벗어나면 기록을 비워 다음 진입을 허용한다.
         lastPushedRef.current = null;
         return;
       }
-      if (lastPushedRef.current === pushablePath) return;
-      lastPushedRef.current = pushablePath;
+      // ★ 시간 기반 dedup.
+      // 경로만으로 막으면 같은 상품을 다시 못 연다 — 클릭 가로채기가 웹 이동을
+      // 막아서 "상세를 벗어났다"는 통지가 영영 안 오고 기록이 안 지워지기 때문.
+      // 중복 통지는 수백 ms 안에 몰려 오므로 짧은 창으로만 막으면 충분하다.
+      const now = Date.now();
+      const last = lastPushedRef.current;
+      if (last && last.path === pushablePath && now - last.at < 700) return;
+      lastPushedRef.current = {path: pushablePath, at: now};
 
       // 클릭 가로채기(INTERCEPT_DETAIL_LINK_SCRIPT)가 이미 웹 이동을 막았으면
       // 웹뷰는 탭 루트 그대로다. 여기서 goBack 을 부르면 오히려 한 단계 더

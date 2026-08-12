@@ -52,16 +52,28 @@ export default function CommentSection({
         </View>
       ) : (
         <>
-          {/* web CommentList 는 댓글이 없으면 목록 자체를 안 그린다 —
-              "첫 댓글을 남겨보세요" 같은 빈 상태 박스는 web 에 없다(내가 넣었던 것). */}
-          {preview.map(comment => (
-            <Comment
+          {/* web 은 빈 목록에 아무것도 안 그리지만, 앱에서는 헤더와 버튼 사이가
+              텅 비어 "로딩이 안 끝난 것"처럼 보인다(사용자 요청 2026-08-12). */}
+          {!hasComments ? (
+            <View className="items-center py-8">
+              <Text className="pb-2 text-2xl">💬</Text>
+              <Text className="text-sm text-gray-400">
+                첫 번째 댓글을 남겨보세요
+              </Text>
+            </View>
+          ) : null}
+          {/* web CommentList 의 divide-y divide-gray-200 대응 — 댓글 사이에만 선. */}
+          {preview.map((comment, i) => (
+            <View
               key={String(comment.id)}
-              comment={comment}
-              productId={productId}
-              myUserId={myUserId}
-              canReply={false}
-            />
+              className={i > 0 ? 'border-t border-gray-200' : undefined}>
+              <Comment
+                comment={comment}
+                productId={productId}
+                myUserId={myUserId}
+                canReply={false}
+              />
+            </View>
           ))}
           {/* 버튼은 댓글 유무와 무관하게 항상 뜨고 문구만 갈린다(web renderMobile). */}
           <View className="mt-8 px-12">

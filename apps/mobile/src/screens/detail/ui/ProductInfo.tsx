@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View} from 'react-native';
 
 import {HotDealType, UploaderType} from '@/shared/api/gql/graphql';
@@ -7,6 +7,8 @@ import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import {displayTime} from '@/shared/lib/format/price';
 
 import ProductGuideMetaRows from './ProductGuideMetaRows';
+import HotdealGuideModal from './HotdealGuideModal';
+import PressableScale from '@/shared/components/PressableScale';
 import RecommendButton from './RecommendButton';
 import TossBadges from './TossBadges';
 
@@ -41,6 +43,7 @@ export default function ProductInfo({
 }) {
   // 가격/할인율/평점/쿠폰은 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 쓴다.
   const display = source.toss ?? source.ohou;
+  const [guideOpen, setGuideOpen] = useState(false);
 
   return (
     <View className="px-5 pb-9">
@@ -52,10 +55,15 @@ export default function ProductInfo({
             </Text>
           </View>
         ) : product.hotDealType ? (
-          <HotdealBadge
-            hotdealType={product.hotDealType as HotDealType}
-            badgeVariant="page"
-          />
+          <PressableScale
+            onPress={() => setGuideOpen(true)}
+            accessibilityRole="button"
+            accessibilityLabel="핫딜 기준 안내">
+            <HotdealBadge
+              hotdealType={product.hotDealType as HotDealType}
+              badgeVariant="page"
+            />
+          </PressableScale>
         ) : null}
       </View>
 
@@ -179,6 +187,11 @@ export default function ProductInfo({
           </Text>
         </View>
       ) : null}
+
+      <HotdealGuideModal
+        visible={guideOpen}
+        onClose={() => setGuideOpen(false)}
+      />
     </View>
   );
 }

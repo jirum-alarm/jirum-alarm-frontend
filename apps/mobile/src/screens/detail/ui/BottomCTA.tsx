@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
@@ -11,6 +11,10 @@ import {showToast} from '@/shared/lib/feedback';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {cn} from '@/shared/lib/styling';
 
+import PressableScale from '@/shared/components/PressableScale';
+
+import TopButton from './TopButton';
+
 import type {ProductDetail} from '../model/types';
 
 /** iOS HIG 최소 터치 타깃. */
@@ -19,9 +23,11 @@ const MIN_TAP = 44;
 export default function BottomCTA({
   product,
   isUserLogin,
+  onPressTop,
 }: {
   product: ProductDetail;
   isUserLogin: boolean;
+  onPressTop?: () => void;
 }) {
   const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
@@ -73,7 +79,9 @@ export default function BottomCTA({
     <View
       className="flex-row items-center gap-x-3 border-t border-t-gray-300 bg-white px-5 pt-2"
       style={{paddingBottom: Math.max(insets.bottom, 8)}}>
-      <Pressable
+      {onPressTop ? <TopButton onPress={onPressTop} /> : null}
+
+      <PressableScale
         onPress={() =>
           isUserLogin ? toggleWishlist(!isWishlisted) : requireLogin()
         }
@@ -91,7 +99,7 @@ export default function BottomCTA({
           )}>
           찜하기
         </Text>
-      </Pressable>
+      </PressableScale>
 
       <Button
         className="h-[48px] flex-1"

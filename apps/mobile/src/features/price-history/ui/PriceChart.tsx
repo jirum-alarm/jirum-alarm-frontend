@@ -105,7 +105,12 @@ export default function PriceChart({
       <View
         onLayout={e => setLayoutWidth(e.nativeEvent.layout.width)}
         accessibilityLabel="가격 추이 그래프">
-        <Svg width="100%" height={200} viewBox={`0 0 ${WIDTH} ${HEIGHT}`}>
+        {/* web 과 같은 viewBox 비율(640:260)을 유지한다. 고정 height 를 주면
+            세로로 눌려 선·라벨이 다 작아진다(그래프가 안 보이던 원인). */}
+        <Svg
+          width="100%"
+          height={layoutWidth ? (layoutWidth * HEIGHT) / WIDTH : 0}
+          viewBox={`0 0 ${WIDTH} ${HEIGHT}`}>
           <Defs>
             <LinearGradient id="priceFill" x1="0" y1="0" x2="0" y2="1">
               <Stop offset="0" stopColor={LINE} stopOpacity="0.16" />
