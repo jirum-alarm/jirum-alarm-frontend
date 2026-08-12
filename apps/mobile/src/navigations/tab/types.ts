@@ -7,4 +7,5 @@ import type {tabStackNavigations} from '@/shared/constant/navigations';
 export type TabStackParamList = {
   [tabStackNavigations.ROOT]: undefined;
   [tabStackNavigations.DETAIL]: {path: string};
+  [tabStackNavigations.COMMENTS]: {productId: number};
 };

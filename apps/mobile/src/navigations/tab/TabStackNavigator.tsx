@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import TabWebView from '@/screens/tabs/TabWebView';
 import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
+import ProductCommentsScreen from '@/screens/comment/ProductCommentsScreen';
 import {
   tabStackNavigations,
   tabNavigations,
@@ -37,6 +38,10 @@ export function createTabStack(tabName: TabName) {
         <Stack.Screen
           name={tabStackNavigations.DETAIL}
           component={ProductDetailScreen}
+        />
+        <Stack.Screen
+          name={tabStackNavigations.COMMENTS}
+          component={ProductCommentsScreen}
         />
       </Stack.Navigator>
     );

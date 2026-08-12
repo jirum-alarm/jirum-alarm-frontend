@@ -8,6 +8,8 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import {ProductQueries} from '@/entities/product/product.queries';
 import ProductCarouselSection from '@/shared/components/product/ProductCarouselSection';
+import CommentSection from '@/features/comment/ui/CommentSection';
+import {UserQueries} from '@/entities/user/user.queries';
 import {ProductService} from '@/shared/api/product/product.service';
 import {pushRecentViewedProduct} from '@/shared/lib/device/recent-viewed';
 import type {TabStackParamList} from '@/navigations/tab/types';
@@ -53,6 +55,8 @@ function NativeDetail({productId}: {productId: number}) {
     isError,
     refetch,
   } = useQuery(ProductQueries.info({id: productId}));
+
+  const {data: myUserId} = useQuery(UserQueries.me());
 
   const {data: togetherViewed, isPending: isTogetherViewedPending} = useQuery(
     ProductQueries.togetherViewed({productId, limit: 10}),
@@ -131,6 +135,13 @@ function NativeDetail({productId}: {productId: number}) {
         <View className="rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <ProductInfo product={product} source={source} />
         </View>
+        <CommentSection
+          productId={productId}
+          myUserId={myUserId}
+          onPressMore={() =>
+            navigation.navigate(tabStackNavigations.COMMENTS, {productId})
+          }
+        />
         <ProductCarouselSection
           title="다른 고객이 함께 본 상품"
           products={togetherViewed}

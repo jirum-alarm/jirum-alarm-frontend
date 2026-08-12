@@ -23,6 +23,7 @@ const tabWebViewNavigations = {
 const tabStackNavigations = {
   ROOT: 'TabRoot',
   DETAIL: 'ProductDetail',
+  COMMENTS: 'ProductComments',
 } as const;
 
 export {
