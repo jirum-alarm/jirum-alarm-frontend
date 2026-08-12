@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Text, View} from 'react-native';
 
 import CaretLeft from '@/shared/components/icons/caret_left';
+import ShareIcon from '@/shared/components/icons/share';
 import IconLogo from '@/shared/components/icons/IconLogo';
 import {SERVICE_URL} from '@/constants/env';
 import PressableScale from '@/shared/components/PressableScale';
@@ -75,7 +76,7 @@ export default function ProductDetailHeader({
           accessibilityRole="button"
           accessibilityLabel="공유하기">
           <View className="h-11 items-center justify-center">
-            <Text className="text-lg text-gray-700">↗</Text>
+            <ShareIcon width={24} height={24} />
           </View>
         </PressableScale>
       </View>

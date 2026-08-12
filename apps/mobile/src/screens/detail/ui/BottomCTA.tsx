@@ -99,7 +99,7 @@ export default function BottomCTA({
         disabled={!product.detailUrl}
         accessibilityRole="button"
         accessibilityLabel="구매하러 가기">
-        <Text className="text-base font-semibold text-white">
+        <Text className="text-base font-semibold text-gray-900">
           구매하러 가기
         </Text>
       </Button>
