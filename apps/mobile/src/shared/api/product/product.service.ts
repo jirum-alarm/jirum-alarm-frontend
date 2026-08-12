@@ -1,6 +1,7 @@
 import {
   MutationAddUserLikeOrDislike,
   MutationCollectProduct,
+  QueryProductPriceHistory,
   QueryTogetherViewedProducts,
   QueryProductGuides,
   QueryProductInfo,
@@ -10,6 +11,7 @@ import {HttpClient} from '@/shared/lib/client';
 import type {
   AddUserLikeOrDislikeMutationVariables,
   CollectProductMutationVariables,
+  ProductPriceHistoryQueryVariables,
   TogetherViewedProductsQueryVariables,
   ProductGuidesQueryVariables,
   ProductInfoQueryVariables,
@@ -67,6 +69,14 @@ export class ProductService {
       variables,
     );
     return res.data?.togetherViewedProducts ?? [];
+  }
+
+  static async getPriceHistory(variables: ProductPriceHistoryQueryVariables) {
+    const res = await HttpClient.withAccessToken().execute(
+      QueryProductPriceHistory,
+      variables,
+    );
+    return res.data?.product?.priceHistory ?? null;
   }
 
   static async addUserLikeOrDislike(

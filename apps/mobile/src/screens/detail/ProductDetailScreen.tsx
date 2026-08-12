@@ -9,6 +9,7 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ProductQueries} from '@/entities/product/product.queries';
 import ProductCarouselSection from '@/shared/components/product/ProductCarouselSection';
 import CommentSection from '@/features/comment/ui/CommentSection';
+import PriceHistorySection from '@/features/price-history/ui/PriceHistorySection';
 import {UserQueries} from '@/entities/user/user.queries';
 import {ProductService} from '@/shared/api/product/product.service';
 import {pushRecentViewedProduct} from '@/shared/lib/device/recent-viewed';
@@ -135,6 +136,7 @@ function NativeDetail({productId}: {productId: number}) {
         <View className="rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <ProductInfo product={product} source={source} />
         </View>
+        <PriceHistorySection productId={productId} />
         <CommentSection
           productId={productId}
           myUserId={myUserId}
