@@ -89,3 +89,92 @@ export const MutationAddUserLikeOrDislike = graphql(`
     addUserLikeOrDislike(target: $target, targetId: $targetId, isLike: $isLike)
   }
 `);
+
+/**
+ * 가격 추이 차트.
+ *
+ * ⚠️ priceHistory 는 루트 쿼리가 아니라 ProductOutput 의 필드다.
+ * (계획서에 루트로 잘못 적었다가 스키마 실측에서 잡혔다)
+ */
+export const QueryProductPriceHistory = graphql(`
+  query ProductPriceHistory($id: Int!, $days: Int) {
+    product(id: $id) {
+      id
+      priceHistory(days: $days) {
+        basis
+        confidence
+        currency
+        disclaimer
+        pointCount
+        rangeDays
+        sampleCount
+        priceAxis
+        unitLabel
+        points {
+          date
+          price
+          deal {
+            id
+            title
+            displayTitle
+            parsedPrice
+            price
+            priceCurrency
+            postedAt
+            providerId
+            providerName
+            thumbnail
+            url
+            isSeed
+            categoryId
+          }
+        }
+      }
+    }
+  }
+`);
+
+/** 커뮤니티 반응 — 긍정/부정 키워드 칩. */
+export const QueryCategorizedReactionKeywords = graphql(`
+  query CategorizedReactionKeywords($id: Int!) {
+    categorizedReactionKeywords(id: $id) {
+      items {
+        name
+        count
+        type
+        role
+        tag
+      }
+      lastUpdatedAt
+    }
+  }
+`);
+
+/** 함께 본 상품 캐러셀. */
+export const QueryTogetherViewedProducts = graphql(`
+  query TogetherViewedProducts($productId: Int!, $limit: Int!) {
+    togetherViewedProducts(productId: $productId, limit: $limit) {
+      id
+      title
+      price
+      thumbnail
+      isEnd
+      hotDealType
+      categoryId
+      mallName
+      postedAt
+      earliestExpiryDate
+      provider {
+        id
+        nameKr
+      }
+    }
+  }
+`);
+
+/** 만료 상품 신고. */
+export const MutationReportExpiredProduct = graphql(`
+  mutation ReportExpiredProduct($productId: Int!) {
+    reportExpiredProduct(productId: $productId)
+  }
+`);

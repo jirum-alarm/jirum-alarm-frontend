@@ -2578,6 +2578,60 @@ export type MutationSocialLoginMutation = {
   };
 };
 
+export type CommentsQueryVariables = Exact<{
+  productId: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
+  orderBy: CommentOrder;
+  orderOption: OrderOptionType;
+}>;
+
+export type CommentsQuery = {
+  __typename?: 'Query';
+  comments: Array<{
+    __typename?: 'CommentOutput';
+    id: string;
+    productId?: number | null;
+    parentId?: number | null;
+    content: string;
+    createdAt: any;
+    searchAfter?: Array<string> | null;
+    likeCount: number;
+    isMyLike?: boolean | null;
+    replyCount: number;
+    author?: {__typename?: 'User'; id: string; nickname: string} | null;
+  }>;
+};
+
+export type AddCommentMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+  parentId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type AddCommentMutation = {__typename?: 'Mutation'; addComment: boolean};
+
+export type UpdateCommentMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  content?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type UpdateCommentMutation = {
+  __typename?: 'Mutation';
+  updateComment: boolean;
+};
+
+export type RemoveCommentMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type RemoveCommentMutation = {
+  __typename?: 'Mutation';
+  removeComment: boolean;
+};
+
 export type MutationAddPushTokenMutationVariables = Exact<{
   token: Scalars['String']['input'];
   tokenType: TokenType;
@@ -2670,6 +2724,104 @@ export type AddUserLikeOrDislikeMutation = {
   addUserLikeOrDislike: boolean;
 };
 
+export type ProductPriceHistoryQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+  days?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type ProductPriceHistoryQuery = {
+  __typename?: 'Query';
+  product?: {
+    __typename?: 'ProductOutput';
+    id: string;
+    priceHistory?: {
+      __typename?: 'ProductPriceHistory';
+      basis: PriceHistoryBasis;
+      confidence: PriceHistoryConfidence;
+      currency: string;
+      disclaimer?: string | null;
+      pointCount: number;
+      rangeDays: number;
+      sampleCount: number;
+      priceAxis?: string | null;
+      unitLabel?: string | null;
+      points: Array<{
+        __typename?: 'PriceHistoryPoint';
+        date: string;
+        price: number;
+        deal: {
+          __typename?: 'PriceHistoryDeal';
+          id: number;
+          title: string;
+          displayTitle?: string | null;
+          parsedPrice: number;
+          price?: string | null;
+          priceCurrency?: string | null;
+          postedAt: any;
+          providerId: number;
+          providerName?: string | null;
+          thumbnail?: string | null;
+          url?: string | null;
+          isSeed: boolean;
+          categoryId?: number | null;
+        };
+      }>;
+    } | null;
+  } | null;
+};
+
+export type CategorizedReactionKeywordsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type CategorizedReactionKeywordsQuery = {
+  __typename?: 'Query';
+  categorizedReactionKeywords: {
+    __typename?: 'CategorizedReactionKeywordsResponse';
+    lastUpdatedAt?: any | null;
+    items: Array<{
+      __typename?: 'CategorizedReactionKeywords';
+      name: string;
+      count: number;
+      type: HotDealKeywordType;
+      role: HotDealKeywordGroupRole;
+      tag: string;
+    }>;
+  };
+};
+
+export type TogetherViewedProductsQueryVariables = Exact<{
+  productId: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+}>;
+
+export type TogetherViewedProductsQuery = {
+  __typename?: 'Query';
+  togetherViewedProducts: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    price?: string | null;
+    thumbnail?: string | null;
+    isEnd?: boolean | null;
+    hotDealType?: HotDealType | null;
+    categoryId: number;
+    mallName?: string | null;
+    postedAt: any;
+    earliestExpiryDate?: any | null;
+    provider: {__typename?: 'Provider'; id: string; nameKr: string};
+  }>;
+};
+
+export type ReportExpiredProductMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+}>;
+
+export type ReportExpiredProductMutation = {
+  __typename?: 'Mutation';
+  reportExpiredProduct: boolean;
+};
+
 export type QueryMeQueryVariables = Exact<{[key: string]: never}>;
 
 export type QueryMeQuery = {
@@ -2739,6 +2891,55 @@ export const MutationSocialLoginDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationSocialLoginMutation,
   MutationSocialLoginMutationVariables
+>;
+export const CommentsDocument = new TypedDocumentString(`
+    query Comments($productId: Int!, $limit: Int!, $searchAfter: [String!], $orderBy: CommentOrder!, $orderOption: OrderOptionType!) {
+  comments(
+    productId: $productId
+    limit: $limit
+    searchAfter: $searchAfter
+    orderBy: $orderBy
+    orderOption: $orderOption
+  ) {
+    id
+    productId
+    parentId
+    content
+    createdAt
+    searchAfter
+    likeCount
+    isMyLike
+    replyCount
+    author {
+      id
+      nickname
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<CommentsQuery, CommentsQueryVariables>;
+export const AddCommentDocument = new TypedDocumentString(`
+    mutation AddComment($productId: Int!, $content: String!, $parentId: Int) {
+  addComment(productId: $productId, content: $content, parentId: $parentId)
+}
+    `) as unknown as TypedDocumentString<
+  AddCommentMutation,
+  AddCommentMutationVariables
+>;
+export const UpdateCommentDocument = new TypedDocumentString(`
+    mutation UpdateComment($id: Int!, $content: String) {
+  updateComment(id: $id, content: $content)
+}
+    `) as unknown as TypedDocumentString<
+  UpdateCommentMutation,
+  UpdateCommentMutationVariables
+>;
+export const RemoveCommentDocument = new TypedDocumentString(`
+    mutation RemoveComment($id: Int!) {
+  removeComment(id: $id)
+}
+    `) as unknown as TypedDocumentString<
+  RemoveCommentMutation,
+  RemoveCommentMutationVariables
 >;
 export const MutationAddPushTokenDocument = new TypedDocumentString(`
     mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {
@@ -2822,6 +3023,94 @@ export const AddUserLikeOrDislikeDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   AddUserLikeOrDislikeMutation,
   AddUserLikeOrDislikeMutationVariables
+>;
+export const ProductPriceHistoryDocument = new TypedDocumentString(`
+    query ProductPriceHistory($id: Int!, $days: Int) {
+  product(id: $id) {
+    id
+    priceHistory(days: $days) {
+      basis
+      confidence
+      currency
+      disclaimer
+      pointCount
+      rangeDays
+      sampleCount
+      priceAxis
+      unitLabel
+      points {
+        date
+        price
+        deal {
+          id
+          title
+          displayTitle
+          parsedPrice
+          price
+          priceCurrency
+          postedAt
+          providerId
+          providerName
+          thumbnail
+          url
+          isSeed
+          categoryId
+        }
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  ProductPriceHistoryQuery,
+  ProductPriceHistoryQueryVariables
+>;
+export const CategorizedReactionKeywordsDocument = new TypedDocumentString(`
+    query CategorizedReactionKeywords($id: Int!) {
+  categorizedReactionKeywords(id: $id) {
+    items {
+      name
+      count
+      type
+      role
+      tag
+    }
+    lastUpdatedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  CategorizedReactionKeywordsQuery,
+  CategorizedReactionKeywordsQueryVariables
+>;
+export const TogetherViewedProductsDocument = new TypedDocumentString(`
+    query TogetherViewedProducts($productId: Int!, $limit: Int!) {
+  togetherViewedProducts(productId: $productId, limit: $limit) {
+    id
+    title
+    price
+    thumbnail
+    isEnd
+    hotDealType
+    categoryId
+    mallName
+    postedAt
+    earliestExpiryDate
+    provider {
+      id
+      nameKr
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  TogetherViewedProductsQuery,
+  TogetherViewedProductsQueryVariables
+>;
+export const ReportExpiredProductDocument = new TypedDocumentString(`
+    mutation ReportExpiredProduct($productId: Int!) {
+  reportExpiredProduct(productId: $productId)
+}
+    `) as unknown as TypedDocumentString<
+  ReportExpiredProductMutation,
+  ReportExpiredProductMutationVariables
 >;
 export const QueryMeDocument = new TypedDocumentString(`
     query QueryMe {
