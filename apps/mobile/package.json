@@ -2,6 +2,7 @@
   "name": "mobile",
   "version": "0.0.1",
   "private": true,
+  "main": "index.js",
   "scripts": {
     "android": "pnpm run app-run:android",
     "ios": "pnpm run app-run:ios",
