@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, Image, ScrollView, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SystemBars} from 'react-native-edge-to-edge';
@@ -72,6 +72,8 @@ const detailFocusCount = {current: 0};
 function NativeDetail({productId}: {productId: number}) {
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
+  const lastScrollY = useRef(0);
+  const [showTopButton, setShowTopButton] = useState(false);
   const navigation = useNavigation<DetailNavigationProp>();
   const {
     data: product,
@@ -179,6 +181,11 @@ function NativeDetail({productId}: {productId: number}) {
         productId={productId}
         title={product.title}
         onBack={() => navigation.goBack()}
+        onPressSearch={() => {
+          // 검색은 네이티브 화면이 없다. DETAIL 스크린은 /products/ 가 아닌
+          // path 를 받으면 웹뷰로 폴백하므로, 그 경로로 검색 페이지를 띄운다.
+          navigation.push(tabStackNavigations.DETAIL, {path: '/search'});
+        }}
         onPressLogo={() => {
           // popToTop 은 이 탭 스택의 상세를 전부 걷어내고 루트(웹뷰)만 남긴다.
           // 상세가 여러 겹 쌓였어도 한 번에 정리된다.
@@ -190,7 +197,14 @@ function NativeDetail({productId}: {productId: number}) {
         className="flex-1"
         // 하단 여백은 아래 64px 회색 면(web 과 동일)이 담당한다. 여기서 또 주면 겹친다.
         contentContainerStyle={{paddingBottom: 0}}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={e => {
+          // web TopButton 과 같은 규칙: 위로 스크롤할 때만 보인다.
+          const y = e.nativeEvent.contentOffset.y;
+          setShowTopButton(y > 200 && y < lastScrollY.current);
+          lastScrollY.current = y;
+        }}>
         {product.thumbnail ? (
           <Image
             source={{uri: product.thumbnail}}
@@ -263,12 +277,15 @@ function NativeDetail({productId}: {productId: number}) {
         />
         {/* 제휴 고지는 콘텐츠 끝에. 쿠팡 상품이면 위 상단 배너가 대신 뜬다. */}
         <AffiliateNotice mallName={product.mallName} variant="general" />
-        {/* web 은 CTA 위에 64px 회색 면을 둬 마지막 섹션이 버튼에 붙지 않게 한다. */}
-        <View className="h-[64px] bg-gray-100" />
+        {/* CTA 위 여백. web 은 64px 이지만 그건 fixed CTA 가 콘텐츠를 덮기 때문이고,
+            여기 CTA 는 ScrollView 밖이라 겹치지 않는다 — 그만큼이 빈 공간으로 남아
+            "커미션 안내 아래가 너무 비어 보인다". 시각적 숨통만 남긴다. */}
+        <View className="h-[24px] bg-gray-100" />
       </ScrollView>
       <BottomCTA
         product={product}
         isUserLogin={!!myUserId}
+        showTopButton={showTopButton}
         onPressTop={() => scrollRef.current?.scrollTo({y: 0, animated: true})}
       />
     </View>

@@ -34,7 +34,7 @@ type Documents = {
   '\n  query CategoryProducts(\n    $categoryIds: [Int!]\n    $limit: Int!\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n  ) {\n    products(\n      categoryIds: $categoryIds\n      limit: $limit\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n': typeof types.CategoryProductsDocument;
   '\n  mutation AddWishlist($productId: Int!) {\n    addWishlist(productId: $productId)\n  }\n': typeof types.AddWishlistDocument;
   '\n  mutation RemoveWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n': typeof types.RemoveWishlistDocument;
-  '\n  mutation AddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {\n    addNotificationKeyword(\n      keyword: $keyword\n      fromRecommendation: $fromRecommendation\n    )\n  }\n': typeof types.AddNotificationKeywordDocument;
+  '\n  mutation AddNotificationKeyword(\n    $keyword: String!\n    $fromRecommendation: Boolean\n  ) {\n    addNotificationKeyword(\n      keyword: $keyword\n      fromRecommendation: $fromRecommendation\n    )\n  }\n': typeof types.AddNotificationKeywordDocument;
   '\n  query MyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n    }\n  }\n': typeof types.MyNotificationKeywordsDocument;
   '\n  mutation ReportExpiredProduct($productId: Int!) {\n    reportExpiredProduct(productId: $productId)\n  }\n': typeof types.ReportExpiredProductDocument;
   '\n  query QueryMe {\n    me {\n      id\n    }\n  }\n': typeof types.QueryMeDocument;
@@ -82,7 +82,7 @@ const documents: Documents = {
     types.AddWishlistDocument,
   '\n  mutation RemoveWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n':
     types.RemoveWishlistDocument,
-  '\n  mutation AddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {\n    addNotificationKeyword(\n      keyword: $keyword\n      fromRecommendation: $fromRecommendation\n    )\n  }\n':
+  '\n  mutation AddNotificationKeyword(\n    $keyword: String!\n    $fromRecommendation: Boolean\n  ) {\n    addNotificationKeyword(\n      keyword: $keyword\n      fromRecommendation: $fromRecommendation\n    )\n  }\n':
     types.AddNotificationKeywordDocument,
   '\n  query MyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n    }\n  }\n':
     types.MyNotificationKeywordsDocument,
@@ -222,7 +222,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation AddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {\n    addNotificationKeyword(\n      keyword: $keyword\n      fromRecommendation: $fromRecommendation\n    )\n  }\n',
+  source: '\n  mutation AddNotificationKeyword(\n    $keyword: String!\n    $fromRecommendation: Boolean\n  ) {\n    addNotificationKeyword(\n      keyword: $keyword\n      fromRecommendation: $fromRecommendation\n    )\n  }\n',
 ): typeof import('./graphql').AddNotificationKeywordDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

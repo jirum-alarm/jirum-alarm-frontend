@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Text, View} from 'react-native';
 
 import CaretLeft from '@/shared/components/icons/caret_left';
+import SearchIcon from '@/shared/components/icons/search';
 import ShareIcon from '@/shared/components/icons/share';
 import IconLogo from '@/shared/components/icons/IconLogo';
 import {SERVICE_URL} from '@/constants/env';
@@ -29,11 +30,13 @@ export default function ProductDetailHeader({
   title,
   onBack,
   onPressLogo,
+  onPressSearch,
 }: {
   productId: number;
   title?: string | null;
   onBack: () => void;
   onPressLogo: () => void;
+  onPressSearch: () => void;
 }) {
   const [shareOpen, setShareOpen] = useState(false);
   const url = `${SERVICE_URL}/products/${productId}`;
@@ -77,6 +80,16 @@ export default function ProductDetailHeader({
       </View>
 
       <View className="flex-row items-center">
+        <PressableScale
+          onPress={onPressSearch}
+          hitSlop={8}
+          style={{minWidth: MIN_TAP, minHeight: MIN_TAP}}
+          accessibilityRole="button"
+          accessibilityLabel="검색">
+          <View className="h-11 items-center justify-center">
+            <SearchIcon width={24} height={24} />
+          </View>
+        </PressableScale>
         <PressableScale
           onPress={() => setShareOpen(true)}
           hitSlop={8}

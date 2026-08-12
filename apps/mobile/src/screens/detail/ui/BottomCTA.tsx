@@ -25,10 +25,13 @@ export default function BottomCTA({
   product,
   isUserLogin,
   onPressTop,
+  showTopButton,
 }: {
   product: ProductDetail;
   isUserLogin: boolean;
   onPressTop?: () => void;
+  /** 스크롤을 올리는 중일 때만 맨위로 버튼을 띄운다(web 과 동일). */
+  showTopButton?: boolean;
 }) {
   const insets = useSafeAreaInsets();
   const [showKeywordPrompt, setShowKeywordPrompt] = useState(false);
@@ -81,6 +84,9 @@ export default function BottomCTA({
 
   return (
     <View className="border-t border-t-gray-300 bg-white">
+      {onPressTop ? (
+        <TopButton visible={!!showTopButton} onPress={onPressTop} />
+      ) : null}
       <PostPurchaseKeywordPrompt
         show={showKeywordPrompt}
         title={product.title}
@@ -90,8 +96,6 @@ export default function BottomCTA({
       <View
         className="flex-row items-center gap-x-3 px-5 pt-2"
         style={{paddingBottom: Math.max(insets.bottom, 8)}}>
-        {onPressTop ? <TopButton onPress={onPressTop} /> : null}
-
         <PressableScale
           onPress={() =>
             isUserLogin ? toggleWishlist(!isWishlisted) : requireLogin()
