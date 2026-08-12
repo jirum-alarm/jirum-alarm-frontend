@@ -3,6 +3,7 @@ import {
   MutationAddWishlist,
   MutationCollectProduct,
   MutationRemoveWishlist,
+  QueryCategoryProducts,
   QueryProductPriceHistory,
   QueryTogetherViewedProducts,
   QueryProductGuides,
@@ -15,6 +16,7 @@ import type {
   AddWishlistMutationVariables,
   CollectProductMutationVariables,
   RemoveWishlistMutationVariables,
+  CategoryProductsQueryVariables,
   ProductPriceHistoryQueryVariables,
   TogetherViewedProductsQueryVariables,
   ProductGuidesQueryVariables,
@@ -81,6 +83,14 @@ export class ProductService {
       variables,
     );
     return res.data?.product?.priceHistory ?? null;
+  }
+
+  static async getCategoryProducts(variables: CategoryProductsQueryVariables) {
+    const res = await HttpClient.withAccessToken().execute(
+      QueryCategoryProducts,
+      variables,
+    );
+    return res.data?.products ?? [];
   }
 
   static async addWishlist(variables: AddWishlistMutationVariables) {

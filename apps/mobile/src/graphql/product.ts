@@ -182,6 +182,38 @@ export const MutationCollectProduct = graphql(`
   }
 `);
 
+/** 카테고리 인기 상품. 스키마 인자는 categoryIds(배열)다. */
+export const QueryCategoryProducts = graphql(`
+  query CategoryProducts(
+    $categoryIds: [Int!]
+    $limit: Int!
+    $orderBy: ProductOrderType
+    $orderOption: OrderOptionType
+  ) {
+    products(
+      categoryIds: $categoryIds
+      limit: $limit
+      orderBy: $orderBy
+      orderOption: $orderOption
+    ) {
+      id
+      title
+      price
+      thumbnail
+      isEnd
+      hotDealType
+      categoryId
+      mallName
+      postedAt
+      earliestExpiryDate
+      provider {
+        id
+        nameKr
+      }
+    }
+  }
+`);
+
 /** 찜하기(위시리스트). 좋아요(addUserLikeOrDislike)와는 별개 뮤테이션이다. */
 export const MutationAddWishlist = graphql(`
   mutation AddWishlist($productId: Int!) {

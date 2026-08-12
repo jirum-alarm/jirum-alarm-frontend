@@ -5,6 +5,7 @@ import type {
   ProductGuidesQueryVariables,
   ProductInfoQueryVariables,
   ProductStatsQueryVariables,
+  CategoryProductsQueryVariables,
   ProductPriceHistoryQueryVariables,
   TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql.ts';
@@ -25,6 +26,8 @@ export class ProductQueries {
     guides: (id: number) => [...this.keys.detail(id), 'guides'] as const,
     priceHistory: (id: number, days?: number | null) =>
       [...this.keys.detail(id), 'priceHistory', days ?? 'all'] as const,
+    categoryPopular: (categoryId: number) =>
+      [...this.keys.all, 'categoryPopular', categoryId] as const,
     togetherViewed: (id: number) =>
       [...this.keys.detail(id), 'togetherViewed'] as const,
   };
@@ -57,6 +60,19 @@ export class ProductQueries {
     return queryOptions({
       queryKey: this.keys.priceHistory(variables.id, variables.days),
       queryFn: () => ProductService.getPriceHistory(variables),
+      retry: RETRY,
+    });
+  }
+
+  static categoryPopular(variables: CategoryProductsQueryVariables) {
+    return queryOptions({
+      // codegen 이 categoryIds 를 number | number[] 로 낸다(InputMaybe 특성).
+      queryKey: this.keys.categoryPopular(
+        Array.isArray(variables.categoryIds)
+          ? variables.categoryIds[0] ?? 0
+          : variables.categoryIds ?? 0,
+      ),
+      queryFn: () => ProductService.getCategoryProducts(variables),
       retry: RETRY,
     });
   }

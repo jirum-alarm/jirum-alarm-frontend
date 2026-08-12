@@ -13,6 +13,7 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useQuery} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
+import {OrderOptionType, ProductOrderType} from '@/shared/api/gql/graphql';
 import {ProductQueries} from '@/entities/product/product.queries';
 import ProductCarouselSection from '@/shared/components/product/ProductCarouselSection';
 import CommentSection from '@/features/comment/ui/CommentSection';
@@ -73,6 +74,23 @@ function NativeDetail({productId}: {productId: number}) {
     isError: isTogetherViewedError,
     refetch: refetchTogetherViewed,
   } = useQuery(ProductQueries.togetherViewed({productId, limit: 10}));
+
+  const {
+    data: categoryPopular,
+    isPending: isCategoryPending,
+    isError: isCategoryError,
+    refetch: refetchCategory,
+  } = useQuery({
+    ...ProductQueries.categoryPopular({
+      categoryIds: product?.categoryId ? [product.categoryId] : [],
+      limit: 20,
+      // web CategoryPopularSection 과 같은 정렬.
+      orderBy: ProductOrderType.CommunityRanking,
+      orderOption: OrderOptionType.Desc,
+    }),
+    // categoryId 는 상세를 받아야 알 수 있다.
+    enabled: !!product?.categoryId,
+  });
 
   // 카드를 누르면 같은 스택에 상세를 하나 더 쌓는다(웹 링크와 같은 동선).
   const pushProduct = useCallback(
@@ -155,6 +173,16 @@ function NativeDetail({productId}: {productId: number}) {
             resizeMode="contain"
           />
         ) : null}
+        {typeof product.viewCount === 'number' && product.viewCount >= 10 ? (
+          <View className="items-center bg-primary-50 py-2">
+            <Text className="text-sm text-gray-700">
+              <Text className="font-semibold text-primary-800">
+                {product.viewCount.toLocaleString()}명
+              </Text>
+              이 살펴본 상품
+            </Text>
+          </View>
+        ) : null}
         <View className="rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <ProductInfo product={product} source={source} />
         </View>
@@ -173,6 +201,16 @@ function NativeDetail({productId}: {productId: number}) {
           isPending={isTogetherViewedPending}
           isError={isTogetherViewedError}
           onRetry={refetchTogetherViewed}
+          onPressProduct={pushProduct}
+        />
+        <ProductCarouselSection
+          title={`${product.categoryName ?? '기타'} 인기 상품`}
+          products={categoryPopular?.filter(
+            p => String(p.id) !== String(product.id),
+          )}
+          isPending={isCategoryPending}
+          isError={isCategoryError}
+          onRetry={refetchCategory}
           onPressProduct={pushProduct}
         />
         {/* 제휴 고지는 콘텐츠 끝에. 쿠팡 상품이면 위 상단 배너가 대신 뜬다. */}

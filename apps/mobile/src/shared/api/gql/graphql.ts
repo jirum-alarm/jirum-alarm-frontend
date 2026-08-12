@@ -2824,6 +2824,33 @@ export type CollectProductMutation = {
   collectProduct: boolean;
 };
 
+export type CategoryProductsQueryVariables = Exact<{
+  categoryIds?: InputMaybe<
+    Array<Scalars['Int']['input']> | Scalars['Int']['input']
+  >;
+  limit: Scalars['Int']['input'];
+  orderBy?: InputMaybe<ProductOrderType>;
+  orderOption?: InputMaybe<OrderOptionType>;
+}>;
+
+export type CategoryProductsQuery = {
+  __typename?: 'Query';
+  products: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    price?: string | null;
+    thumbnail?: string | null;
+    isEnd?: boolean | null;
+    hotDealType?: HotDealType | null;
+    categoryId: number;
+    mallName?: string | null;
+    postedAt: any;
+    earliestExpiryDate?: any | null;
+    provider: {__typename?: 'Provider'; id: string; nameKr: string};
+  }>;
+};
+
 export type AddWishlistMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -3140,6 +3167,34 @@ export const CollectProductDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   CollectProductMutation,
   CollectProductMutationVariables
+>;
+export const CategoryProductsDocument = new TypedDocumentString(`
+    query CategoryProducts($categoryIds: [Int!], $limit: Int!, $orderBy: ProductOrderType, $orderOption: OrderOptionType) {
+  products(
+    categoryIds: $categoryIds
+    limit: $limit
+    orderBy: $orderBy
+    orderOption: $orderOption
+  ) {
+    id
+    title
+    price
+    thumbnail
+    isEnd
+    hotDealType
+    categoryId
+    mallName
+    postedAt
+    earliestExpiryDate
+    provider {
+      id
+      nameKr
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  CategoryProductsQuery,
+  CategoryProductsQueryVariables
 >;
 export const AddWishlistDocument = new TypedDocumentString(`
     mutation AddWishlist($productId: Int!) {

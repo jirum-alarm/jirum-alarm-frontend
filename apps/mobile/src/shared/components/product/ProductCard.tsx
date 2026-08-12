@@ -4,6 +4,7 @@ import {Image, Pressable, Text, View} from 'react-native';
 import {HotDealType} from '@/shared/api/gql/graphql';
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import DisplayProductSource from '@/shared/components/product/DisplayProductSource';
+import NoImage from '@/shared/components/product/NoImage';
 import {displayTime, parsePrice} from '@/shared/lib/format/price';
 
 export type ProductCardItem = {
@@ -11,6 +12,7 @@ export type ProductCardItem = {
   title: string;
   price?: string | null;
   thumbnail?: string | null;
+  categoryId?: number | null;
   isEnd?: boolean | null;
   hotDealType?: HotDealType | null;
   mallName?: string | null;
@@ -58,11 +60,7 @@ export default function ProductCard({
                 resizeMode="cover"
               />
             ) : (
-              // web 은 카테고리별 NoImage 일러스트를 쓴다. 앱엔 아직 그 에셋이 없어
-              // 회색 판으로 대신한다. ponytail: 에셋 옮길 때 교체.
-              <View className="h-full w-full items-center justify-center">
-                <Text className="text-xs text-gray-400">이미지 없음</Text>
-              </View>
+              <NoImage categoryId={product.categoryId} type="hotDeal" />
             )}
 
             {product.isEnd ? (
