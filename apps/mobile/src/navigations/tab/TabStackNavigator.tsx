@@ -2,7 +2,7 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import TabWebView from '@/screens/tabs/TabWebView';
-import ProductDetailWebViewScreen from '@/screens/detail/ProductDetailWebViewScreen';
+import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
 import {
   tabStackNavigations,
   tabNavigations,
@@ -30,9 +30,13 @@ export function createTabStack(tabName: TabName) {
             <TabWebView tabName={tabName} baseUrl={getTabBaseUrl(tabName)} />
           )}
         </Stack.Screen>
+        {/*
+          상세는 네이티브. `/products/123` 본체만 네이티브가 그리고,
+          하위 경로(`/comment` 등)는 화면 안에서 웹뷰로 폴백한다.
+        */}
         <Stack.Screen
           name={tabStackNavigations.DETAIL}
-          component={ProductDetailWebViewScreen}
+          component={ProductDetailScreen}
         />
       </Stack.Navigator>
     );
