@@ -24,7 +24,11 @@ import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
 import * as Haptics from 'expo-haptics';
 import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   getPushablePath,
@@ -34,6 +38,8 @@ import type {TabStackParamList} from '@/navigations/tab/types';
 import {setTabBarVisible} from '@/shared/hooks/useTabBarVisibility';
 import {getReservedBottomPx} from '@/navigations/tab/MainTabNavigator';
 import {DEVICE_ID_SYNC_SCRIPT} from '@/shared/lib/device/device-id';
+import {INTERCEPT_DETAIL_LINK_SCRIPT} from '@/shared/lib/webview/intercept-detail-link';
+import {setOpenDetailListener} from '@/shared/lib/webview/event';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
@@ -80,7 +86,7 @@ const buildHideWebBottomNavJs = (reservedBottomPx: number) => `
  *
  * 이미 push 한 경로는 다시 올리지 않는다(뒤로가기로 돌아왔을 때 무한 push 방지).
  */
-function useSpaDetailPush(webviewRef: React.RefObject<WebView | null>) {
+function useSpaDetailPush() {
   const navigation = useNavigation<TabStackNavigationProp>();
   const lastPushedRef = useRef<string | null>(null);
 
@@ -95,12 +101,12 @@ function useSpaDetailPush(webviewRef: React.RefObject<WebView | null>) {
       if (lastPushedRef.current === pushablePath) return;
       lastPushedRef.current = pushablePath;
 
-      // 웹뷰는 상세로 이동한 상태다. 네이티브를 띄우고 웹뷰는 뒤로 돌려
-      // 탭 루트가 남게 한다(뒤로가기 시 상세가 두 번 나오지 않도록).
+      // 클릭 가로채기(INTERCEPT_DETAIL_LINK_SCRIPT)가 이미 웹 이동을 막았으면
+      // 웹뷰는 탭 루트 그대로다. 여기서 goBack 을 부르면 오히려 한 단계 더
+      // 뒤로 가버린다 — 폴백 경로에서만 웹이 움직였을 수 있어 URL 로 판별한다.
       navigation.push(tabStackNavigations.DETAIL, {path: pushablePath});
-      webviewRef.current?.goBack();
     },
-    [navigation, webviewRef],
+    [navigation],
   );
 }
 
@@ -158,7 +164,15 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
     handleLoadProgress,
   } = useWebViewLoading();
   const handleShouldStartLoadWithRequest = useUrlFilter(clearLoadingState);
-  const handleSpaDetailPush = useSpaDetailPush(webviewRef);
+  const handleSpaDetailPush = useSpaDetailPush();
+
+  // 웹뷰 안에서 가로챈 상세 클릭을 이 탭의 스택으로 보낸다.
+  useFocusEffect(
+    useCallback(() => {
+      setOpenDetailListener(handleSpaDetailPush);
+      return () => setOpenDetailListener(null);
+    }, [handleSpaDetailPush]),
+  );
 
   // 메인 프레임 로드 실패(네트워크 끊김 등)만 잡는다. HTTP 에러는 web이 렌더.
   const [hasError, setHasError] = useState(false);
@@ -221,7 +235,8 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
   const injectedHideWebBottomNavJs = useMemo(
     () =>
       buildHideWebBottomNavJs(getReservedBottomPx(insets.bottom)) +
-      DEVICE_ID_SYNC_SCRIPT,
+      DEVICE_ID_SYNC_SCRIPT +
+      INTERCEPT_DETAIL_LINK_SCRIPT,
     [insets.bottom],
   );
 

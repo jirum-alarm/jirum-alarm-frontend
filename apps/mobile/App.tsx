@@ -16,6 +16,7 @@ import {
 import FcmHandler from '@/components/FCMHandler.tsx';
 import OfflineBanner from '@/shared/components/OfflineBanner.tsx';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 function App(): React.JSX.Element {
   const webViewRefManager = useWebViewRefManager();
@@ -26,21 +27,23 @@ function App(): React.JSX.Element {
   }, []);
 
   return (
-    <SafeAreaProvider>
-      <KeyboardProvider>
-        <NavigationContainer ref={navigationRef}>
-          <ReactQueryProvider>
-            <WebviewRefContext.Provider value={webViewRefManager}>
-              <FcmHandler>
-                <RootNavigator />
-              </FcmHandler>
-              <OfflineBanner />
-            </WebviewRefContext.Provider>
-            <Toast config={toastConfig} />
-          </ReactQueryProvider>
-        </NavigationContainer>
-      </KeyboardProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <SafeAreaProvider>
+        <KeyboardProvider>
+          <NavigationContainer ref={navigationRef}>
+            <ReactQueryProvider>
+              <WebviewRefContext.Provider value={webViewRefManager}>
+                <FcmHandler>
+                  <RootNavigator />
+                </FcmHandler>
+                <OfflineBanner />
+              </WebviewRefContext.Provider>
+              <Toast config={toastConfig} />
+            </ReactQueryProvider>
+          </NavigationContainer>
+        </KeyboardProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 

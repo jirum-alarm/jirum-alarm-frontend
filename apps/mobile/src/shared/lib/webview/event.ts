@@ -11,6 +11,13 @@ import {setHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 import {setChannelTalkOpen} from '@/shared/hooks/useTabBarVisibility';
 import {syncDeviceIdFromWeb} from '@/shared/lib/device/device-id';
 
+let openDetailListener: ((path: string) => void) | null = null;
+
+/** 현재 포커스된 탭이 자기 navigation 을 걸어둔다. */
+export function setOpenDetailListener(fn: ((path: string) => void) | null) {
+  openDetailListener = fn;
+}
+
 type EventHandler<T extends WebViewEventType> = (
   payload: WebViewEventPayloads[T],
 ) => void;
@@ -63,6 +70,14 @@ export class EventBridge {
   static channelTalkVisibility: EventHandler<WebViewEventType.CHANNEL_TALK_VISIBILITY> =
     async payload => {
       setChannelTalkOpen(payload.data.isOpen);
+    };
+  /**
+   * 상세 열기 요청. 네비게이션은 화면이 쥐고 있으므로 여기서는 등록된
+   * 리스너에게 넘기기만 한다(TabWebView 가 등록).
+   */
+  static openProductDetail: EventHandler<WebViewEventType.OPEN_PRODUCT_DETAIL> =
+    async payload => {
+      openDetailListener?.(payload.data.path);
     };
   static deviceIdSync: EventHandler<WebViewEventType.DEVICE_ID_SYNC> =
     async payload => {

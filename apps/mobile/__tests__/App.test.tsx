@@ -6,6 +6,10 @@ import * as React from 'react';
 import * as ReactTestRenderer from 'react-test-renderer';
 
 jest.mock('../global.css', () => ({}));
+// 네이티브 모듈이라 jest 에서 로드가 안 된다. 래퍼는 children 을 그대로 통과시키면 충분.
+jest.mock('react-native-gesture-handler', () => ({
+  GestureHandlerRootView: ({children}: {children: React.ReactNode}) => children,
+}));
 jest.mock('@react-navigation/native', () => ({
   NavigationContainer: ({children}: {children: React.ReactNode}) => children,
   // App 이 navigationRef 를 NavigationContainer 에 넘긴다(푸시 → 네이티브 상세).

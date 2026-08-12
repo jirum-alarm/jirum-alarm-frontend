@@ -18,6 +18,8 @@ export enum WebViewEventType {
    * (web 이 보내는 게 아니라 네이티브가 주입한 스크립트가 보낸다)
    */
   DEVICE_ID_SYNC = 'DEVICE_ID_SYNC',
+  /** 웹뷰에서 상세 링크 클릭을 가로챈 결과. TabWebView 가 네이티브로 push 한다. */
+  OPEN_PRODUCT_DETAIL = 'OPEN_PRODUCT_DETAIL',
 }
 
 export type HapticStyle =
@@ -46,6 +48,7 @@ export type WebViewEventPayloads = {
   [WebViewEventType.ALARM_DOT_CHANGED]: {data: {hasNewAlarm: boolean}};
   [WebViewEventType.CHANNEL_TALK_VISIBILITY]: {data: {isOpen: boolean}};
   [WebViewEventType.DEVICE_ID_SYNC]: {data: {deviceId: string}};
+  [WebViewEventType.OPEN_PRODUCT_DETAIL]: {data: {path: string}};
 };
 
 export interface WebViewEvent<T extends WebViewEventType> {
@@ -67,6 +70,7 @@ const eventHandlers: {
   [WebViewEventType.ALARM_DOT_CHANGED]: EventBridge.alarmDotChanged,
   [WebViewEventType.CHANNEL_TALK_VISIBILITY]: EventBridge.channelTalkVisibility,
   [WebViewEventType.DEVICE_ID_SYNC]: EventBridge.deviceIdSync,
+  [WebViewEventType.OPEN_PRODUCT_DETAIL]: EventBridge.openProductDetail,
 };
 
 export const parsedWebViewMessage = (event: WebViewMessageEvent) => {
