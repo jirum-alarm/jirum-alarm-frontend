@@ -26,12 +26,17 @@ import {Animated, StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import {GlassView, isLiquidGlassAvailable} from 'expo-glass-effect';
+
+import {
+  GLASS_BOTTOM_GAP,
+  TAB_BAR_HEIGHT,
+} from '@/navigations/tab/tab-bar-metrics';
 import {useTabBarVisibility} from '@/shared/hooks/useTabBarVisibility';
 
 /** 유리 탭바 높이. iOS 26 탭바는 캡슐형이라 반경은 높이의 절반. */
-export const TAB_BAR_HEIGHT = 64;
+
 /** safe-area 가 없는 기기에서 탭바를 바닥에서 띄우는 간격 */
-export const GLASS_BOTTOM_GAP = 12;
+
 /** 캡슐 좌우 인셋 — iOS 26 탭바는 화면 폭을 꽉 채우지 않는다 */
 const GLASS_SIDE_INSET = 16;
 
@@ -41,17 +46,6 @@ const GLASS_SIDE_INSET = 16;
  * 유리 캡슐은 바닥에서 떠 있어 기존(56 + safe-area)보다 더 차지한다.
  * 폴백(일반 탭바)일 때는 예전 값을 그대로 쓴다.
  */
-export function getReservedBottomPx(safeAreaBottom: number): number {
-  if (!isLiquidGlassAvailable()) {
-    return 56 + (safeAreaBottom > 0 ? safeAreaBottom : 8);
-  }
-  return (
-    TAB_BAR_HEIGHT +
-    (safeAreaBottom > 0 ? safeAreaBottom : GLASS_BOTTOM_GAP) +
-    GLASS_BOTTOM_GAP
-  );
-}
-
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
 export type MainTabParamList = {

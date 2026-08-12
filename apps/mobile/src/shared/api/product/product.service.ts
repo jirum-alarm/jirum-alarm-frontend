@@ -6,6 +6,7 @@ import {
   QueryCategorizedReactionKeywords,
   QueryProductAdditionalInfo,
   QueryCategoryProducts,
+  QueryKeywordProducts,
   QueryProductPriceHistory,
   QueryTogetherViewedProducts,
   QueryProductGuides,
@@ -21,6 +22,7 @@ import type {
   CategorizedReactionKeywordsQueryVariables,
   ProductAdditionalInfoQueryVariables,
   CategoryProductsQueryVariables,
+  KeywordProductsQueryVariables,
   ProductPriceHistoryQueryVariables,
   TogetherViewedProductsQueryVariables,
   ProductGuidesQueryVariables,
@@ -112,6 +114,14 @@ export class ProductService {
   static async getCategoryProducts(variables: CategoryProductsQueryVariables) {
     const res = await HttpClient.withAccessToken().execute(
       QueryCategoryProducts,
+      variables,
+    );
+    return res.data?.products ?? [];
+  }
+
+  static async getKeywordProducts(variables: KeywordProductsQueryVariables) {
+    const res = await HttpClient.withAccessToken().execute(
+      QueryKeywordProducts,
       variables,
     );
     return res.data?.products ?? [];

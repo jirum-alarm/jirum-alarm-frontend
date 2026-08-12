@@ -28,6 +28,7 @@ import {parseSourceData} from './model/types';
 import BottomCTA from './ui/BottomCTA';
 import ProductInfo from './ui/ProductInfo';
 import AffiliateNotice from './ui/AffiliateNotice';
+import ExpiredProductWarning from './ui/ExpiredProductWarning';
 import ProductDetailHeader from './ui/ProductDetailHeader';
 import KakaoOpenChatPrompt from './ui/KakaoOpenChatPrompt';
 import TossDetailImages from './ui/TossDetailImages';
@@ -178,12 +179,17 @@ function NativeDetail({productId}: {productId: number}) {
         productId={productId}
         title={product.title}
         onBack={() => navigation.goBack()}
-        onPressLogo={() => navigation.popToTop()}
+        onPressLogo={() => {
+          // popToTop 은 이 탭 스택의 상세를 전부 걷어내고 루트(웹뷰)만 남긴다.
+          // 상세가 여러 겹 쌓였어도 한 번에 정리된다.
+          navigation.popToTop();
+        }}
       />
       <ScrollView
         ref={scrollRef}
         className="flex-1"
-        contentContainerStyle={{paddingBottom: 24}}
+        // 하단 여백은 아래 64px 회색 면(web 과 동일)이 담당한다. 여기서 또 주면 겹친다.
+        contentContainerStyle={{paddingBottom: 0}}
         showsVerticalScrollIndicator={false}>
         {product.thumbnail ? (
           <Image
@@ -193,9 +199,11 @@ function NativeDetail({productId}: {productId: number}) {
           />
         ) : null}
         {typeof product.viewCount === 'number' && product.viewCount >= 10 ? (
-          <View className="items-center bg-primary-50 py-2">
+          // web: bg-secondary-50 면에 h-[48px], 강조는 secondary-500.
+          // (내가 흰 배경으로 지웠던 것 — 웹은 연한 파란 띠다)
+          <View className="h-[48px] w-full items-center justify-center bg-secondary-50">
             <Text className="text-sm text-gray-700">
-              <Text className="font-semibold text-primary-800">
+              <Text className="font-semibold text-secondary-500">
                 {product.viewCount.toLocaleString()}명
               </Text>
               이 살펴본 상품
@@ -233,6 +241,7 @@ function NativeDetail({productId}: {productId: number}) {
             navigation.navigate(tabStackNavigations.COMMENTS, {productId})
           }
         />
+        <ExpiredProductWarning product={product} onPressProduct={pushProduct} />
         <Hr />
         <ProductCarouselSection
           title="다른 고객이 함께 본 상품"
@@ -266,9 +275,13 @@ function NativeDetail({productId}: {productId: number}) {
   );
 }
 
-/** 섹션 구분선. web 의 Hr 과 같은 8px 회색 바. */
+/**
+ * 섹션 구분선. web 의 Hr 과 같은 8px 회색 바.
+ * web 은 바 앞 섹션이 자기 아래 여백(mb)을 갖는데 내 섹션들은 위 여백(pt)만
+ * 있어 바 위쪽이 붙어 보였다. 바에 위 여백을 줘서 양쪽을 띄운다.
+ */
 function Hr() {
-  return <View className="h-[8px] bg-gray-100" />;
+  return <View className="mt-7 h-[8px] bg-gray-100" />;
 }
 
 export {parseProductId};

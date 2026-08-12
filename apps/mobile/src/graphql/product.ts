@@ -196,6 +196,38 @@ export const MutationCollectProduct = graphql(`
   }
 `);
 
+/** 만료 경고용 유사 상품(제목 키워드 검색). */
+export const QueryKeywordProducts = graphql(`
+  query KeywordProducts(
+    $keyword: String
+    $limit: Int!
+    $orderBy: ProductOrderType
+    $orderOption: OrderOptionType
+  ) {
+    products(
+      keyword: $keyword
+      limit: $limit
+      orderBy: $orderBy
+      orderOption: $orderOption
+    ) {
+      id
+      title
+      price
+      thumbnail
+      isEnd
+      hotDealType
+      categoryId
+      mallName
+      postedAt
+      earliestExpiryDate
+      provider {
+        id
+        nameKr
+      }
+    }
+  }
+`);
+
 /** 카테고리 인기 상품. 스키마 인자는 categoryIds(배열)다. */
 export const QueryCategoryProducts = graphql(`
   query CategoryProducts(

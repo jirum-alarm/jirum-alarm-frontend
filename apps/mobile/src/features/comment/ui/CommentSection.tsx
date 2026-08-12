@@ -55,9 +55,9 @@ export default function CommentSection({
           {/* web 은 빈 목록에 아무것도 안 그리지만, 앱에서는 헤더와 버튼 사이가
               텅 비어 "로딩이 안 끝난 것"처럼 보인다(사용자 요청 2026-08-12). */}
           {!hasComments ? (
-            <View className="items-center py-8">
-              <Text className="pb-2 text-2xl">💬</Text>
-              <Text className="text-sm text-gray-400">
+            // web 과 동일: 아이콘 없이 문구만(내가 이모지를 넣었던 것).
+            <View className="py-8">
+              <Text className="text-center text-sm text-gray-400">
                 첫 번째 댓글을 남겨보세요
               </Text>
             </View>

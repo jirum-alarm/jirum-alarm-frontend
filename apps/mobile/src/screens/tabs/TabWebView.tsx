@@ -36,7 +36,7 @@ import {
 } from '@/shared/lib/navigation/tab-routing';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {setTabBarVisible} from '@/shared/hooks/useTabBarVisibility';
-import {getReservedBottomPx} from '@/navigations/tab/MainTabNavigator';
+import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import {DEVICE_ID_SYNC_SCRIPT} from '@/shared/lib/device/device-id';
 import {INTERCEPT_DETAIL_LINK_SCRIPT} from '@/shared/lib/webview/intercept-detail-link';
 import {setOpenDetailListener} from '@/shared/lib/webview/event';

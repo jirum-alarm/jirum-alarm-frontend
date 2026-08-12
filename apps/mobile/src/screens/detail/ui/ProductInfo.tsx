@@ -67,33 +67,30 @@ export default function ProductInfo({
         ) : null}
       </View>
 
-      {/* 핫딜 앱에서 가격은 첫 1초에 찾는 정보다. 제목보다 위·크게 둔다
-          (디자인 리뷰 2026-08-12: 위계 2/10 → 가격이 스크롤 아래 있었음). */}
-      <View className="pb-2">
-        {display?.originalPrice ? (
-          <Text className="text-sm text-gray-400 line-through">
-            {display.originalPrice.toLocaleString()}원
-          </Text>
-        ) : null}
-        <View className="flex-row items-baseline gap-x-2">
-          {typeof display?.discountRate === 'number' ? (
-            <Text className="text-2xl font-bold text-error-500">
-              {display.discountRate}%
-            </Text>
-          ) : null}
-          <DisplayPrice price={product.price} />
-        </View>
-      </View>
-
+      {/* web ProductInfo 순서: 제목 → 시간 → (가격+평점 | 추천버튼).
+          한때 가격을 제목 위로 올렸었지만 "웹과 동일" 방침으로 되돌렸다. */}
       <Text className="font-medium text-gray-800">{product.title}</Text>
 
-      <View className="gap-y-1 pt-2">
-        <Text className="text-sm text-gray-600">
+      <View className="gap-y-1 pt-3">
+        <Text className="h-5 text-sm text-gray-600">
           {displayTime(product.postedAt)}
         </Text>
 
         <View className="flex-row items-center justify-between">
-          <View>
+          <View className="shrink">
+            {display?.originalPrice ? (
+              <Text className="text-sm text-gray-400 line-through">
+                {display.originalPrice.toLocaleString()}원
+              </Text>
+            ) : null}
+            <View className="flex-row items-baseline gap-x-2">
+              {typeof display?.discountRate === 'number' ? (
+                <Text className="text-2xl font-bold text-error-500">
+                  {display.discountRate}%
+                </Text>
+              ) : null}
+              <DisplayPrice price={product.price} />
+            </View>
             {display &&
             (typeof display.rating === 'number' || display.couponDiscount) ? (
               <View className="flex-row flex-wrap items-center gap-x-2 pt-1">
@@ -116,11 +113,8 @@ export default function ProductInfo({
               </View>
             ) : null}
           </View>
+          <RecommendButton productId={productId} isUserLogin={isUserLogin} />
         </View>
-      </View>
-
-      <View className="flex-row items-center justify-end pt-1">
-        <RecommendButton productId={productId} isUserLogin={isUserLogin} />
       </View>
 
       {source.toss ? <TossBadges toss={source.toss} /> : null}

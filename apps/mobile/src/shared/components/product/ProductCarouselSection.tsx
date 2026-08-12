@@ -50,10 +50,13 @@ export default function ProductCarouselSection({
   if (!isPending && (!products || products.length === 0)) return null;
 
   return (
-    <View className="pt-7">
-      <Text className="px-5 pb-3 text-lg font-semibold text-gray-900">
-        {title}
-      </Text>
+    <View className={title ? 'pt-7' : 'pt-3'}>
+      {/* 제목 없이 캐러셀만 쓰는 자리가 있다(만료 경고). 빈 헤더를 그리지 않는다. */}
+      {title ? (
+        <Text className="px-5 pb-3 text-lg font-semibold text-gray-900">
+          {title}
+        </Text>
+      ) : null}
       {isPending ? (
         <View className="h-[200px] items-center justify-center">
           <ActivityIndicator size="small" color="#667085" />

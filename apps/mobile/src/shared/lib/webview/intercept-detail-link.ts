@@ -19,6 +19,21 @@ export const INTERCEPT_DETAIL_LINK_SCRIPT = `
     if (window.__jirumDetailIntercept) { return; }
     window.__jirumDetailIntercept = true;
 
+    // 클릭 훅과 pushState 가드가 같은 이동을 각각 보내면 상세가 두 번 쌓인다
+    // (로고를 눌러도 한 겹만 벗겨져 상세가 또 보이던 원인).
+    var lastSent = {path: '', at: 0};
+    function send(path) {
+      var now = Date.now();
+      if (path === lastSent.path && now - lastSent.at < 700) { return; }
+      lastSent = {path: path, at: now};
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: 'OPEN_PRODUCT_DETAIL',
+          payload: {data: {path: path}},
+        }));
+      }
+    }
+
     document.addEventListener('click', function(e) {
       // 새 탭·다운로드·수정키 조합은 웹 기본 동작을 존중한다.
       if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return; }
@@ -36,13 +51,26 @@ export const INTERCEPT_DETAIL_LINK_SCRIPT = `
 
       e.preventDefault();
       e.stopPropagation();
-      if (window.ReactNativeWebView) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'OPEN_PRODUCT_DETAIL',
-          payload: {data: {path: m[1]}},
-        }));
-      }
+      send(m[1]);
     }, true);
+
+    // ★ 2차 방어: Next 의 클라이언트 라우팅 자체를 막는다.
+    // 카드가 <a> 가 아니거나(버튼·div + router.push), Next 가 자기 리스너를
+    // 먼저 처리해 버리는 경우 위 클릭 훅만으로는 못 막는다. 그때 웹이 상세를
+    // 그렸다가 네이티브가 덮어써서 "뭔가 생겼다가 상세가 뜨는" 잔상이 남는다.
+    // history.pushState 를 감싸 상세 경로면 웹 이동을 취소하고 네이티브에만 알린다.
+    var origPush = history.pushState;
+    history.pushState = function(state, title, url) {
+      try {
+        var u = String(url || '');
+        var m = u.match(/^(?:https?:\/\/[^\/]+)?(\/products\/\d+(?:[\/?#][^\s]*)?)$/);
+        if (m) {
+          send(m[1]);
+          return; // 웹은 이동하지 않는다 — 화면이 바뀌지 않으므로 잔상이 없다.
+        }
+      } catch (err) {}
+      return origPush.apply(history, arguments);
+    };
   })();
   true;
 `;
