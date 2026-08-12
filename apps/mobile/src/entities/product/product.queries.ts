@@ -9,6 +9,7 @@ import type {
   ProductAdditionalInfoQueryVariables,
   CategoryProductsQueryVariables,
   KeywordProductsQueryVariables,
+  MyNotificationKeywordsQueryVariables,
   ProductPriceHistoryQueryVariables,
   TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql.ts';
@@ -33,6 +34,7 @@ export class ProductQueries {
       [...this.keys.detail(id), 'additionalInfo'] as const,
     reactionKeywords: (id: number) =>
       [...this.keys.detail(id), 'reactionKeywords'] as const,
+    myKeywords: () => ['user', 'notificationKeywords'] as const,
     keywordProducts: (keyword: string) =>
       [...this.keys.all, 'keyword', keyword] as const,
     categoryPopular: (categoryId: number) =>
@@ -87,6 +89,14 @@ export class ProductQueries {
     return queryOptions({
       queryKey: this.keys.reactionKeywords(variables.id),
       queryFn: () => ProductService.getReactionKeywords(variables),
+      retry: RETRY,
+    });
+  }
+
+  static myKeywords(variables: MyNotificationKeywordsQueryVariables) {
+    return queryOptions({
+      queryKey: this.keys.myKeywords(),
+      queryFn: () => ProductService.getMyNotificationKeywords(variables),
       retry: RETRY,
     });
   }

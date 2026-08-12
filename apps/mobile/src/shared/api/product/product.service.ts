@@ -1,5 +1,6 @@
 import {
   MutationAddUserLikeOrDislike,
+  MutationAddNotificationKeyword,
   MutationAddWishlist,
   MutationCollectProduct,
   MutationRemoveWishlist,
@@ -7,6 +8,7 @@ import {
   QueryProductAdditionalInfo,
   QueryCategoryProducts,
   QueryKeywordProducts,
+  QueryMyNotificationKeywords,
   QueryProductPriceHistory,
   QueryTogetherViewedProducts,
   QueryProductGuides,
@@ -16,7 +18,9 @@ import {
 import {HttpClient} from '@/shared/lib/client';
 import type {
   AddUserLikeOrDislikeMutationVariables,
+  AddNotificationKeywordMutationVariables,
   AddWishlistMutationVariables,
+  MyNotificationKeywordsQueryVariables,
   CollectProductMutationVariables,
   RemoveWishlistMutationVariables,
   CategorizedReactionKeywordsQueryVariables,
@@ -125,6 +129,26 @@ export class ProductService {
       variables,
     );
     return res.data?.products ?? [];
+  }
+
+  static async addNotificationKeyword(
+    variables: AddNotificationKeywordMutationVariables,
+  ) {
+    const res = await HttpClient.withAccessToken().execute(
+      MutationAddNotificationKeyword,
+      variables,
+    );
+    return res.data?.addNotificationKeyword ?? null;
+  }
+
+  static async getMyNotificationKeywords(
+    variables: MyNotificationKeywordsQueryVariables,
+  ) {
+    const res = await HttpClient.withAccessToken().execute(
+      QueryMyNotificationKeywords,
+      variables,
+    );
+    return res.data?.notificationKeywordsByMe ?? [];
   }
 
   static async addWishlist(variables: AddWishlistMutationVariables) {

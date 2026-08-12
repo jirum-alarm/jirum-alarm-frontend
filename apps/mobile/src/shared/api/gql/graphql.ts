@@ -2908,6 +2908,29 @@ export type RemoveWishlistMutation = {
   removeWishlist: boolean;
 };
 
+export type AddNotificationKeywordMutationVariables = Exact<{
+  keyword: Scalars['String']['input'];
+  fromRecommendation?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type AddNotificationKeywordMutation = {
+  __typename?: 'Mutation';
+  addNotificationKeyword: boolean;
+};
+
+export type MyNotificationKeywordsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+}>;
+
+export type MyNotificationKeywordsQuery = {
+  __typename?: 'Query';
+  notificationKeywordsByMe: Array<{
+    __typename?: 'NotificationKeyword';
+    id: string;
+    keyword: string;
+  }>;
+};
+
 export type ReportExpiredProductMutationVariables = Exact<{
   productId: Scalars['Int']['input'];
 }>;
@@ -3293,6 +3316,28 @@ export const RemoveWishlistDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   RemoveWishlistMutation,
   RemoveWishlistMutationVariables
+>;
+export const AddNotificationKeywordDocument = new TypedDocumentString(`
+    mutation AddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {
+  addNotificationKeyword(
+    keyword: $keyword
+    fromRecommendation: $fromRecommendation
+  )
+}
+    `) as unknown as TypedDocumentString<
+  AddNotificationKeywordMutation,
+  AddNotificationKeywordMutationVariables
+>;
+export const MyNotificationKeywordsDocument = new TypedDocumentString(`
+    query MyNotificationKeywords($limit: Int!) {
+  notificationKeywordsByMe(limit: $limit) {
+    id
+    keyword
+  }
+}
+    `) as unknown as TypedDocumentString<
+  MyNotificationKeywordsQuery,
+  MyNotificationKeywordsQueryVariables
 >;
 export const ReportExpiredProductDocument = new TypedDocumentString(`
     mutation ReportExpiredProduct($productId: Int!) {

@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
@@ -13,6 +13,7 @@ import {cn} from '@/shared/lib/styling';
 
 import PressableScale from '@/shared/components/PressableScale';
 
+import PostPurchaseKeywordPrompt from './PostPurchaseKeywordPrompt';
 import TopButton from './TopButton';
 
 import type {ProductDetail} from '../model/types';
@@ -30,6 +31,7 @@ export default function BottomCTA({
   onPressTop?: () => void;
 }) {
   const insets = useSafeAreaInsets();
+  const [showKeywordPrompt, setShowKeywordPrompt] = useState(false);
   const queryClient = useQueryClient();
   const productId = Number(product.id);
 
@@ -65,6 +67,8 @@ export default function BottomCTA({
       profit_provider: product.profitLinkProvider ?? null,
     });
 
+    // 구매 링크는 인앱 브라우저로 열려 유저는 이 화면에 남는다. 그 순간에만 권한다.
+    setShowKeywordPrompt(true);
     openInAppBrowser(product.detailUrl);
   }, [
     product.detailUrl,
@@ -76,41 +80,49 @@ export default function BottomCTA({
   const isWishlisted = !!stats?.isMyWishlist;
 
   return (
-    <View
-      className="flex-row items-center gap-x-3 border-t border-t-gray-300 bg-white px-5 pt-2"
-      style={{paddingBottom: Math.max(insets.bottom, 8)}}>
-      {onPressTop ? <TopButton onPress={onPressTop} /> : null}
+    <View className="border-t border-t-gray-300 bg-white">
+      <PostPurchaseKeywordPrompt
+        show={showKeywordPrompt}
+        title={product.title}
+        isUserLogin={isUserLogin}
+        onClose={() => setShowKeywordPrompt(false)}
+      />
+      <View
+        className="flex-row items-center gap-x-3 px-5 pt-2"
+        style={{paddingBottom: Math.max(insets.bottom, 8)}}>
+        {onPressTop ? <TopButton onPress={onPressTop} /> : null}
 
-      <PressableScale
-        onPress={() =>
-          isUserLogin ? toggleWishlist(!isWishlisted) : requireLogin()
-        }
-        disabled={isWishlistPending}
-        style={{minWidth: MIN_TAP, minHeight: MIN_TAP}}
-        className="items-center justify-center"
-        accessibilityRole="button"
-        accessibilityState={{selected: isWishlisted}}
-        accessibilityLabel={isWishlisted ? '찜 해제' : '찜하기'}>
-        <Text className="text-xl">{isWishlisted ? '♥' : '♡'}</Text>
-        <Text
-          className={cn(
-            'text-[11px]',
-            isWishlisted ? 'text-error-500' : 'text-gray-500',
-          )}>
-          찜하기
-        </Text>
-      </PressableScale>
+        <PressableScale
+          onPress={() =>
+            isUserLogin ? toggleWishlist(!isWishlisted) : requireLogin()
+          }
+          disabled={isWishlistPending}
+          style={{minWidth: MIN_TAP, minHeight: MIN_TAP}}
+          className="items-center justify-center"
+          accessibilityRole="button"
+          accessibilityState={{selected: isWishlisted}}
+          accessibilityLabel={isWishlisted ? '찜 해제' : '찜하기'}>
+          <Text className="text-xl">{isWishlisted ? '♥' : '♡'}</Text>
+          <Text
+            className={cn(
+              'text-[11px]',
+              isWishlisted ? 'text-error-500' : 'text-gray-500',
+            )}>
+            찜하기
+          </Text>
+        </PressableScale>
 
-      <Button
-        className="h-[48px] flex-1"
-        onPress={handlePurchase}
-        disabled={!product.detailUrl}
-        accessibilityRole="button"
-        accessibilityLabel="구매하러 가기">
-        <Text className="text-base font-semibold text-gray-900">
-          구매하러 가기
-        </Text>
-      </Button>
+        <Button
+          className="h-[48px] flex-1"
+          onPress={handlePurchase}
+          disabled={!product.detailUrl}
+          accessibilityRole="button"
+          accessibilityLabel="구매하러 가기">
+          <Text className="text-base font-semibold text-gray-900">
+            구매하러 가기
+          </Text>
+        </Button>
+      </View>
     </View>
   );
 }

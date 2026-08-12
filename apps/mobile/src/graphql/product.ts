@@ -273,6 +273,29 @@ export const MutationRemoveWishlist = graphql(`
   }
 `);
 
+/** 구매 후 알림 키워드 등록. */
+export const MutationAddNotificationKeyword = graphql(`
+  mutation AddNotificationKeyword(
+    $keyword: String!
+    $fromRecommendation: Boolean
+  ) {
+    addNotificationKeyword(
+      keyword: $keyword
+      fromRecommendation: $fromRecommendation
+    )
+  }
+`);
+
+/** 내 알림 키워드(이미 등록됐는지 판정용). */
+export const QueryMyNotificationKeywords = graphql(`
+  query MyNotificationKeywords($limit: Int!) {
+    notificationKeywordsByMe(limit: $limit) {
+      id
+      keyword
+    }
+  }
+`);
+
 /** 만료 상품 신고. */
 export const MutationReportExpiredProduct = graphql(`
   mutation ReportExpiredProduct($productId: Int!) {
