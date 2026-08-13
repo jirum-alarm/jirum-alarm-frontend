@@ -397,7 +397,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = WGCX9LX3N8;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = jirumAlarmMobile/Info.plist;
@@ -433,7 +433,7 @@
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = WGCX9LX3N8;
 				INFOPLIST_FILE = jirumAlarmMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
