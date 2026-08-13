@@ -36,10 +36,15 @@ import {
 } from '@/shared/lib/navigation/tab-routing';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {setTabBarVisible} from '@/shared/hooks/useTabBarVisibility';
-import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
+import {
+  buildNativeTabsInjectJs,
+  getFabPaddingPx,
+  getReservedBottomPx,
+  getWebBottomNavVars,
+} from '@/navigations/tab/tab-bar-metrics';
 import {DEVICE_ID_SYNC_SCRIPT} from '@/shared/lib/device/device-id';
 import {INTERCEPT_DETAIL_LINK_SCRIPT} from '@/shared/lib/webview/intercept-detail-link';
-import {setOpenDetailListener} from '@/shared/lib/webview/event';
+import {subscribeOpenDetail} from '@/shared/lib/webview/event';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
@@ -49,33 +54,6 @@ interface TabWebViewProps {
   tabName: TabName;
   baseUrl: string;
 }
-
-/**
- * 네이티브 탭에서 웹 바텀 내비를 숨기기 위해 주입하는 JS.
- *
- * 유리 탭바(iOS 26)는 캡슐이 바닥에서 떠 있어 웹 기본값(56px + safe-area)보다
- * 더 높은 자리를 차지한다. 그대로 두면 마지막 콘텐츠가 캡슐 밑으로 들어가므로
- * 실제 탭바 높이를 --bottom-nav-padding 으로 넘겨 웹이 여백을 맞추게 한다.
- *
- * ⚠️ 첫 페인트 전에 스타일이 박혀야 한다. 로드 완료 후에 넣으면 웹 네비가
- * 한 프레임 그려졌다 사라지는 깜빡임이 보인다(injectedJavaScriptBeforeContentLoaded
- * 로도 함께 주입하는 이유). 그 시점엔 <head> 가 아직 없을 수 있어
- * documentElement 에 붙이고, 중복 주입은 id 로 막는다.
- */
-const buildHideWebBottomNavJs = (reservedBottomPx: number) => `
-  (function() {
-    var STYLE_ID = 'jirum-native-tabs';
-    document.documentElement.dataset.nativeTabs = 'true';
-    if (document.getElementById(STYLE_ID)) { return; }
-    var style = document.createElement('style');
-    style.id = STYLE_ID;
-    style.textContent =
-      '[data-native-tabs="true"] nav { display: none !important; }' +
-      ':root { --bottom-nav-padding: ${reservedBottomPx}px !important; }';
-    (document.head || document.documentElement).appendChild(style);
-  })();
-  true;
-`;
 
 /**
  * SPA(Next.js) 클라이언트 라우팅으로 상세에 들어간 경우를 잡아 네이티브로 올린다.
@@ -174,8 +152,8 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
   // 웹뷰 안에서 가로챈 상세 클릭을 이 탭의 스택으로 보낸다.
   useFocusEffect(
     useCallback(() => {
-      setOpenDetailListener(handleSpaDetailPush);
-      return () => setOpenDetailListener(null);
+      const unsubscribe = subscribeOpenDetail(handleSpaDetailPush);
+      return unsubscribe;
     }, [handleSpaDetailPush]),
   );
 
@@ -234,16 +212,34 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
     [isHomeTab, isHomePage, isScroll],
   );
 
-  // 웹이 확보해야 할 하단 여백. 네이티브 탭바 높이와 짝이라 여기서 한 번만 계산한다.
-  // deviceId 동기화도 같이 태운다 — 네이티브 상세가 조회 수집을 직접 하므로
-  // 웹뷰가 쓰던 것과 같은 식별자를 받아와야 집계가 둘로 쪼개지지 않는다.
+  const reservedBottomPx = getReservedBottomPx(insets.bottom);
+  const tabBarVisible = !navState.url || isTabRootUrl(navState.url);
+  const fabPaddingPx = tabBarVisible ? getFabPaddingPx(insets.bottom) : 0;
+  const bottomNavVars = useMemo(
+    () =>
+      getWebBottomNavVars({
+        tabBarVisible,
+        reservedBottomPx,
+        safeAreaBottom: insets.bottom,
+        fabPaddingPx,
+      }),
+    [tabBarVisible, reservedBottomPx, insets.bottom, fabPaddingPx],
+  );
+
   const injectedHideWebBottomNavJs = useMemo(
     () =>
-      buildHideWebBottomNavJs(getReservedBottomPx(insets.bottom)) +
+      buildNativeTabsInjectJs(bottomNavVars) +
       DEVICE_ID_SYNC_SCRIPT +
       INTERCEPT_DETAIL_LINK_SCRIPT,
-    [insets.bottom],
+    [bottomNavVars],
   );
+
+  useEffect(() => {
+    if (!navState.url) return;
+    webviewRef.current?.injectJavaScript(
+      buildNativeTabsInjectJs(bottomNavVars),
+    );
+  }, [navState.url, bottomNavVars]);
 
   return {
     insets,

@@ -330,7 +330,7 @@ function CommunityCommentInput({ postId, isUserLogin }: { postId: number; isUser
         e.preventDefault();
         if (content.trim()) addComment();
       }}
-      className="max-w-mobile-max pc:static pc:mx-0 pc:max-w-none pc:pb-3 fixed inset-x-0 bottom-[var(--bottom-nav-padding,0px)] z-40 mx-auto flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+      className="max-w-mobile-max pc:static pc:mx-0 pc:max-w-none pc:pb-3 fixed inset-x-0 bottom-[var(--bottom-nav-padding,0px)] z-40 mx-auto flex min-h-[64px] w-full items-end gap-x-3 border-t border-gray-300 bg-white px-5 pt-3 pb-[var(--bottom-chrome-padding)]"
     >
       <div className="flex grow overflow-hidden rounded-lg border border-transparent bg-gray-50 focus-within:border-gray-500">
         <textarea
@@ -373,11 +373,13 @@ export default function CommunityCommentSection({
   const myUserId = authData?.me?.id ? `${authData.me.id}` : undefined;
 
   return (
-    // 모바일은 입력창이 fixed 라 마지막 댓글이 가려지지 않게 입력창 높이(64px)만큼만 확보.
-    // ⚠️ --bottom-nav-padding 을 여기서 더하면 안 된다 — BasicLayout.tsx:42 가 이미 갖고 있어
-    // 56px 이 이중으로 들어가고(실측 176px), 댓글이 없을 때 입력창 위로 빈 공백이 크게 뜬다.
+    // 모바일은 입력창이 fixed 라 마지막 댓글이 가려지지 않게 입력창 높이만큼 확보.
+    // 64px(min-h) + chrome padding 에서 기본 0.75rem 을 빼면, 내비가 있을 땐 64px,
+    // 없을 땐 home indicator 까지 포함한 실제 입력창 높이가 된다.
+    // ⚠️ --bottom-nav-padding 을 여기서 더하면 안 된다 — BasicLayout 이 이미 갖고 있어
+    // 탭바 높이가 이중으로 들어가고, 댓글이 없을 때 입력창 위로 빈 공백이 크게 뜬다.
     // PC 는 입력창이 일반 흐름(pc:static)이므로 여백 불필요.
-    <section className="pc:pb-0 mt-4 pb-16">
+    <section className="pc:pb-0 mt-4 pb-[calc(4rem+var(--bottom-chrome-padding,0.75rem)-0.75rem)]">
       <div className="px-5 pb-2">
         <h2 className="text-base font-semibold text-gray-900">댓글</h2>
       </div>

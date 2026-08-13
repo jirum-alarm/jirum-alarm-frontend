@@ -33,19 +33,26 @@ html {
 
 html {
   font-synthesis: none !important;
+  /* 지금 보이는 하단 내비/탭바가 가리는 높이. 숨겨져 있으면 0. */
   --bottom-nav-padding: 0px;
+  /* fixed 하단 크롬(댓글 입력 등)의 padding-bottom.
+     내비가 없으면 home indicator 를 여기가 맡고,
+     내비가 있으면 내비 쪽이 이미 갖고 있으므로 0.75rem 만. */
+  --bottom-chrome-padding: max(0.75rem, env(safe-area-inset-bottom));
+  /* 글쓰기 FAB. 웹은 내비 높이+1rem. 앱은 JS 가 캡슐 높이만 넣는다. */
+  --bottom-fab-padding: var(--bottom-nav-padding);
+  --bottom-fab-gap: 1rem;
 }
 
 html[data-bottom-nav='true'] {
   --bottom-nav-padding: calc(56px + env(safe-area-inset-bottom));
+  --bottom-chrome-padding: 0.75rem;
 }
 
-/* 네이티브 앱(TabWebView) 탭 환경에서, 네이티브 탭바 높이(56px + safe-area)만큼
-   컨텐츠 하단 여백을 유지해 마지막 컨텐츠가 네이티브 탭바에 가려지지 않게 함.
-   웹 바텀 내비 숨김은 앱이 주입하는 JS(nav{display:none})가 담당 — 여기선 여백만. */
-html[data-native-tabs='true'] {
-  --bottom-nav-padding: calc(56px + env(safe-area-inset-bottom));
-}
+/* 앱 TabWebView 는 data-native-tabs 를 심고, --bottom-nav-padding 은
+   URL(탭바 표시 여부)에 따라 JS 로만 넣는다.
+   여기에 탭바 높이를 박으면 게시글 상세처럼 탭바를 숨긴 페이지에도
+   그 높이만큼 빈 여백이 남는다. */
 
 /* ---- Tailwind v4 theme/variant/utilities migrated from tailwind.config.js ---- */
 

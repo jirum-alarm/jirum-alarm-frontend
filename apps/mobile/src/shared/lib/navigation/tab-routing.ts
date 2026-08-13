@@ -43,7 +43,8 @@ export function getTabNameFromUrl(url: string): TabName {
  * 기본 URL이면 탭 전환만 하고, 아니면 탭 내에서 push합니다.
  */
 export function isTabRootUrl(url: string): boolean {
-  const path = extractPath(url);
+  const raw = extractPath(url);
+  const path = raw.length > 1 ? raw.replace(/\/+$/, '') : raw;
 
   const tabRootPaths = [
     '/',

@@ -1,4 +1,7 @@
-import {getPushablePath} from '../src/shared/lib/navigation/tab-routing';
+import {
+  getPushablePath,
+  isTabRootUrl,
+} from '../src/shared/lib/navigation/tab-routing';
 
 describe('getPushablePath', () => {
   it('상품 상세는 push 경로를 돌려준다', () => {
@@ -36,6 +39,23 @@ describe('getPushablePath', () => {
   });
 });
 
+describe('isTabRootUrl', () => {
+  it('커뮤니티 목록은 루트다', () => {
+    expect(isTabRootUrl('https://jirum-alarm.com/community')).toBe(true);
+    expect(isTabRootUrl('https://jirum-alarm.com/community?tab=all')).toBe(
+      true,
+    );
+  });
+
+  it('트레일링 슬래시도 루트로 본다 — 아니면 탭바가 숨고 safe-area 가 빠진다', () => {
+    expect(isTabRootUrl('https://jirum-alarm.com/community/')).toBe(true);
+  });
+
+  it('게시글 상세는 루트가 아니다', () => {
+    expect(isTabRootUrl('https://jirum-alarm.com/community/77')).toBe(false);
+  });
+});
+
 /**
  * push 조건의 플랫폼 분기 회귀 가드.
  *
@@ -60,5 +80,46 @@ describe('상세 push 조건', () => {
     expect(src).not.toMatch(
       /if\s*\([^)]*event\.navigationType\s*===\s*'click'\s*\)/,
     );
+  });
+
+  it('탭 루트가 아니면 --bottom-nav-padding 을 0 으로 덮어쓴다', () => {
+    expect(src).toMatch(/isTabRootUrl\(navState\.url\)/);
+    expect(src).toMatch(/buildNativeTabsInjectJs\(bottomNavVars\)/);
+    expect(src).toMatch(/navState\.url, bottomNavVars/);
+  });
+
+  it('웹뷰는 clip 높이로 입력창을 올리지 않는다', () => {
+    expect(src).not.toMatch(/getTabBarClipPx/);
+  });
+});
+
+describe('iOS 26 탭바 clip', () => {
+  const stackSrc: string = require('fs').readFileSync(
+    require('path').resolve(
+      process.cwd(),
+      'src/navigations/tab/TabStackNavigator.tsx',
+    ),
+    'utf8',
+  );
+  const nativeSrc: string = require('fs').readFileSync(
+    require('path').resolve(
+      process.cwd(),
+      'src/navigations/tab/createNativeBottomTabNavigator.tsx',
+    ),
+    'utf8',
+  );
+
+  it('웹뷰 루트는 clip 하지 않고, 네이티브 push 화면만 자른다', () => {
+    expect(stackSrc).toMatch(
+      /tabBarClipWhenHidden:\s*!visible && clipWhenHidden/,
+    );
+    expect(stackSrc).toMatch(
+      /apply\(routeName !== tabStackNavigations\.ROOT\)/,
+    );
+  });
+
+  it('숨겼다고 무조건 자르지 않는다', () => {
+    expect(nativeSrc).toMatch(/hidden && options\?\.tabBarClipWhenHidden/);
+    expect(nativeSrc).not.toMatch(/const clipPx = hidden \? getTabBarClipPx/);
   });
 });
