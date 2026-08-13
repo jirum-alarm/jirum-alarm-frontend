@@ -9,6 +9,7 @@ import AnswerSkeleton from './AnswerSkeleton';
 import { AskContext } from './AskContext';
 import Composer from './Composer';
 import QuotaWall from './QuotaWall';
+import RestrictedNotice from './RestrictedNotice';
 import Stages from './Stages';
 
 import type { AskEvent } from '../model/answer';
@@ -88,6 +89,8 @@ export default function Chat({
    */
   const [blockedTier, setBlockedTier] = useState<Tier | null>(null);
   const walled = blockedTier != null;
+  /** 임시 허용 목록 밖. QuotaWall 과 다른 카피라 따로 둔다. */
+  const [restricted, setRestricted] = useState(false);
 
   /*
    * 방에 들어오면 서버에서 진짜 쿼터를 읽는다(소비 없음).
@@ -97,8 +100,9 @@ export default function Chat({
     let alive = true;
     fetch('/api/quota')
       .then((r) => (r.ok ? r.json() : null))
-      .then((q: { tier: Tier; used: number } | null) => {
+      .then((q: { tier: Tier; used: number; allowed?: boolean } | null) => {
         if (!alive || !q) return;
+        if (q.allowed === false) setRestricted(true);
         /*
          * ⚠️ 스트림이 준 값을 덮어쓰지 않는다. 이 조회는 마운트 직후 나가는데
          * 질문도 동시에 나가므로, 응답이 **스트림의 `quota` 이벤트보다 늦게** 도착하면
@@ -225,10 +229,21 @@ export default function Chat({
        */
       const pre = await fetch('/api/quota', { cache: 'no-store', signal })
         .then((r) =>
-          r.ok ? (r.json() as Promise<{ tier: Tier; used: number; limit: number }>) : null,
+          r.ok
+            ? (r.json() as Promise<{
+                tier: Tier;
+                used: number;
+                limit: number;
+                allowed?: boolean;
+              }>)
+            : null,
         )
         .catch(() => null);
 
+      if (pre?.allowed === false) {
+        setRestricted(true);
+        return;
+      }
       if (pre && pre.used >= pre.limit) {
         setQuota({ tier: pre.tier, used: pre.used });
         setBlockedTier(pre.tier);
@@ -256,6 +271,11 @@ export default function Chat({
           signal,
         });
 
+        if (res.status === 403) {
+          setTurns((prev) => prev.slice(0, -2));
+          setRestricted(true);
+          return;
+        }
         if (res.status === 429) {
           /*
            * 서버가 막았다 = 진짜 소진. 방금 세운 빈 assistant 턴을 걷어내고 벽을 세운다
@@ -423,16 +443,18 @@ export default function Chat({
           ),
         )}
 
+        {restricted && <RestrictedNotice />}
         {walled && <QuotaWall tier={blockedTier} />}
 
         {/* scroll-mb: 하단 sticky 입력바(약 88px) 뒤에 마지막 블록이 가리지 않게 */}
         <div ref={tailRef} className="h-4 scroll-mb-24" />
       </div>
 
-      {/* 헤더와 같은 이유로 배경만 전폭. 데스크톱에서 흰 띠가 잘려 보이지 않게 */}
-      <div className="sticky bottom-0 -mx-[50vw] w-screen self-center bg-white/85 px-[calc(50vw-min(50vw,240px)+1rem)] pt-3 pb-5 backdrop-blur md:px-[calc(50vw-min(50vw,360px)+1.5rem)]">
-        <Composer busy={busy} quota={quota} inRoom onSubmit={submit} />
-      </div>
+      {!restricted && (
+        <div className="sticky bottom-0 -mx-[50vw] w-screen self-center bg-white/85 px-[calc(50vw-min(50vw,240px)+1rem)] pt-3 pb-5 backdrop-blur md:px-[calc(50vw-min(50vw,360px)+1.5rem)]">
+          <Composer busy={busy} quota={quota} inRoom onSubmit={submit} />
+        </div>
+      )}
     </AskContext.Provider>
   );
 }

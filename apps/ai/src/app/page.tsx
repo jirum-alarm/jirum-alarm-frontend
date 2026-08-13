@@ -1,3 +1,4 @@
+import AskLock from '@/features/answer/ui/AskLock';
 import Composer from '@/features/answer/ui/Composer';
 import ExampleChips from '@/features/answer/ui/ExampleChips';
 import QuotaDevBar from '@/features/answer/ui/QuotaDevBar';
@@ -21,12 +22,14 @@ export default async function Page() {
             </p>
           </header>
 
-          <Composer />
+          <AskLock>
+            <Composer />
 
-          <div className="mt-5">
-            <p className="mb-2.5 text-xs font-medium text-gray-500">이렇게 물어보세요</p>
-            <ExampleChips />
-          </div>
+            <div className="mt-5">
+              <p className="mb-2.5 text-xs font-medium text-gray-500">이렇게 물어보세요</p>
+              <ExampleChips />
+            </div>
+          </AskLock>
 
           {/* 목업 조작 바 — 배포본에는 안 나간다 */}
           {process.env.NODE_ENV !== 'production' && <QuotaDevBar />}
