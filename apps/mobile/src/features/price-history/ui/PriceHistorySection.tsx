@@ -59,6 +59,25 @@ export default function PriceHistorySection({
     return MAX_DAYS;
   }, [days, allPoints]);
 
+  /**
+   * 기간 탭 활성 여부. web buildPeriodStates 와 같은 규칙 —
+   * 점이 2개 미만이면 비활성, 앞 탭과 데이터가 같으면(더 넓혀도 같은 점들)
+   * 중복이라 비활성. 이걸 안 하면 1개월을 눌렀을 때 points<2 로 섹션 전체가
+   * 사라진다(사용자 신고 2026-08-13).
+   */
+  const periodStates = useMemo(() => {
+    const nowMs = Date.now();
+    let prevKey = '';
+    return PERIODS.map(p => {
+      const from = nowMs - p.days * 24 * 60 * 60 * 1000;
+      const pts = allPoints.filter(x => parsePointDateMs(x.date) >= from);
+      const key = pts.map(x => x.date).join('|');
+      const enabled = pts.length >= 2 && key !== prevKey;
+      if (enabled) prevKey = key;
+      return {...p, enabled, count: pts.length};
+    });
+  }, [allPoints]);
+
   const {points, axis, content} = useMemo(() => {
     const nowMs = Date.now();
     const range = resolveContentRangeMs(nowMs, resolvedDays);
@@ -104,20 +123,24 @@ export default function PriceHistorySection({
       ) : null}
 
       <View className="flex-row gap-x-2 px-5 pt-3">
-        {PERIODS.map(period => {
+        {periodStates.map(period => {
           const active = resolvedDays === period.days;
+          const disabled = !period.enabled;
           return (
             <Pressable
               key={period.days}
               onPress={() => {
+                if (disabled) return;
                 setDays(period.days);
                 setSelectedIndex(null);
               }}
+              disabled={disabled}
               // iOS HIG 최소 44px. 기존 py-1 은 약 26px 이라 오탭이 났다.
               style={{minHeight: 44}}
               className={cn(
                 'justify-center rounded-full px-4',
                 active ? 'bg-gray-900' : 'bg-gray-100',
+                disabled && 'opacity-40',
               )}
               accessibilityRole="button"
               accessibilityState={{selected: active}}

@@ -8,6 +8,7 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {UserQueries} from '@/entities/user/user.queries';
 import {CommentQueries} from '@/entities/comment/comment.queries';
 import {clearEditingComment} from '@/entities/comment/editing-comment';
+import {useHideTabBar} from '@/shared/hooks/useHideTabBar';
 import Comment from '@/features/comment/ui/Comment';
 import CommentInput from '@/features/comment/ui/CommentInput';
 import type {TabStackParamList} from '@/navigations/tab/types';
@@ -22,6 +23,8 @@ type Props = NativeStackScreenProps<
 export default function ProductCommentsScreen({route, navigation}: Props) {
   const {productId} = route.params;
   const insets = useSafeAreaInsets();
+  // 하단 입력창을 탭바가 덮지 않게 한다(전수조사에서 누락 발견).
+  useHideTabBar();
 
   const {data: myUserId} = useQuery(UserQueries.me());
 

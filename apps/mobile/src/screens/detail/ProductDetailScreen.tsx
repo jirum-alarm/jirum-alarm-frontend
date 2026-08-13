@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, Image, ScrollView, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SystemBars} from 'react-native-edge-to-edge';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {useQuery} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
@@ -21,7 +21,7 @@ import {pushRecentViewedProduct} from '@/shared/lib/device/recent-viewed';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {tabStackNavigations} from '@/shared/constant/navigations';
-import {setTabBarVisible} from '@/shared/hooks/useTabBarVisibility';
+import {useHideTabBar} from '@/shared/hooks/useHideTabBar';
 
 import ProductDetailWebViewScreen from './ProductDetailWebViewScreen';
 import {parseSourceData} from './model/types';
@@ -60,14 +60,6 @@ export default function ProductDetailScreen(props: Props) {
   }
   return <NativeDetail productId={productId} />;
 }
-
-/**
- * 지금 살아있는 상세 화면 수. 상세 A → 상세 B 로 갈 때 바텀바가 올라오지 않게 한다.
- *
- * ★ boolean 으로는 안 된다: 실행 순서가 (B focus → true) → (A cleanup → false) 라
- * A 의 cleanup 이 B 가 세운 값을 지워버린다. 카운터면 1 이 남아 정확하다.
- */
-const detailFocusCount = {current: 0};
 
 function NativeDetail({productId}: {productId: number}) {
   const insets = useSafeAreaInsets();
@@ -116,24 +108,7 @@ function NativeDetail({productId}: {productId: number}) {
     [navigation],
   );
 
-  // 웹뷰 화면과 달리 onNavigationStateChange 가 없으므로 직접 숨기고 되돌린다.
-  // 안 하면 탭바가 하단 CTA 를 덮는다.
-  useFocusEffect(
-    useCallback(() => {
-      detailFocusCount.current += 1;
-      setTabBarVisible(false);
-      // ★ cleanup 에서 무조건 true 로 되돌리면, 상세 A → 상세 B 로 갈 때
-      // B 가 숨긴 직후 A 의 cleanup 이 다시 켜서 바텀바가 나타난다.
-      // 다음 화면이 뜬 뒤에 판단하도록 미루고, 그때도 상세면 그대로 둔다.
-      return () => {
-        detailFocusCount.current = Math.max(0, detailFocusCount.current - 1);
-        // 다음 화면의 focus 가 먼저 돌 수 있으므로 한 틱 뒤에 판단한다.
-        setTimeout(() => {
-          if (detailFocusCount.current === 0) setTabBarVisible(true);
-        }, 0);
-      };
-    }, []),
-  );
+  useHideTabBar();
 
   // 조회 수집. 웹은 CollectProductOnView 가 하던 일로, 네이티브가 안 쏘면
   // 랭킹이 조회수를 먹는 만큼 조용히 왜곡된다.
