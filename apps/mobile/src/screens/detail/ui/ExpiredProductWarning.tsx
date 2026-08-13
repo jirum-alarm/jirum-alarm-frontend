@@ -1,10 +1,11 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 
 import {OrderOptionType, ProductOrderType} from '@/shared/api/gql/graphql';
 import {ProductQueries} from '@/entities/product/product.queries';
-import ProductCarouselSection from '@/shared/components/product/ProductCarouselSection';
+import ProductCard from '@/shared/components/product/ProductCard';
+import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
 import type {ProductDetail} from '../model/types';
 
@@ -25,10 +26,7 @@ function deriveSearchKeyword(title: string): string {
 
 /**
  * 오래된 상품에 최신 핫딜을 권하는 블록.
- *
- * web 은 그리드로 9개를 깔지만 여기서는 이미 있는 가로 캐러셀을 쓴다 —
- * 두 번째 리스트 UI 를 새로 만들 만큼의 차이가 없고, 앱에서는 세로 그리드가
- * 상세 흐름을 끊는다.
+ * web 모바일과 같이 3열 그리드, 최대 9개.
  */
 export default function ExpiredProductWarning({
   product,
@@ -80,14 +78,31 @@ export default function ExpiredProductWarning({
       <Text className="px-5 pt-1 text-xs text-gray-500">
         이 상품은 올라온 지 며칠 지나 품절·종료됐을 수 있어요
       </Text>
-      <ProductCarouselSection
-        title=""
-        products={similar}
-        isPending={isPending}
-        isError={isError}
-        onRetry={refetch}
-        onPressProduct={onPressProduct}
-      />
+      {isError ? (
+        <SectionErrorRow label="최신 핫딜" onRetry={refetch} />
+      ) : isPending ? (
+        <View className="h-[220px] items-center justify-center">
+          <ActivityIndicator size="small" color="#667085" />
+        </View>
+      ) : (
+        <View className="flex-row flex-wrap px-[17px] pt-3">
+          {similar.map(item => (
+            <View
+              key={String(item.id)}
+              style={{
+                width: '33.333%',
+                paddingHorizontal: 3,
+                paddingBottom: 12,
+              }}>
+              <ProductCard
+                product={item}
+                layout="grid"
+                onPress={onPressProduct}
+              />
+            </View>
+          ))}
+        </View>
+      )}
     </View>
   );
 }

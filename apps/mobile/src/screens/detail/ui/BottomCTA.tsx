@@ -3,15 +3,23 @@ import {Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
+import * as Haptics from 'expo-haptics';
+
 import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
 import Button from '@/shared/components/ui/Button';
+import Heart from '@/shared/components/icons/Heart';
 import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
 import {showToast} from '@/shared/lib/feedback';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {cn} from '@/shared/lib/styling';
 
 import PressableScale from '@/shared/components/PressableScale';
+import {
+  usePendingAction,
+  useRequireLogin,
+} from '@/shared/hooks/useRequireLogin';
+import {PendingActionType} from '@/shared/lib/pending-action';
 
 import PostPurchaseKeywordPrompt from './PostPurchaseKeywordPrompt';
 import TopButton from './TopButton';
@@ -37,6 +45,7 @@ export default function BottomCTA({
   const [showKeywordPrompt, setShowKeywordPrompt] = useState(false);
   const queryClient = useQueryClient();
   const productId = Number(product.id);
+  const {requireLogin} = useRequireLogin(`/products/${productId}`);
 
   // 찜/추천 상태는 로그인 여부로 값이 바뀌므로 ProductInfo 와 캐시를 나눠 둔 stats 를 쓴다.
   const {data: stats} = useQuery(ProductQueries.stats({id: productId}));
@@ -51,12 +60,11 @@ export default function BottomCTA({
       next
         ? ProductService.addWishlist({productId})
         : ProductService.removeWishlist({productId}),
-    onSuccess: invalidate,
+    onSuccess: (_data, next) => {
+      invalidate();
+      if (next) showToast.info('찜 목록에 추가되었어요.');
+    },
   });
-
-  const requireLogin = () => {
-    showToast.info('로그인 후 이용해주세요.');
-  };
 
   const handlePurchase = useCallback(() => {
     if (!product.detailUrl) return;
@@ -81,6 +89,11 @@ export default function BottomCTA({
   ]);
 
   const isWishlisted = !!stats?.isMyWishlist;
+  const paddingBottom = Math.max(insets.bottom, 8);
+
+  usePendingAction(PendingActionType.WISHLIST_ADD, () => {
+    if (!isWishlisted) toggleWishlist(true);
+  });
 
   return (
     <View className="border-t border-t-gray-300 bg-white">
@@ -90,27 +103,38 @@ export default function BottomCTA({
       <PostPurchaseKeywordPrompt
         show={showKeywordPrompt}
         title={product.title}
+        productId={productId}
         isUserLogin={isUserLogin}
         onClose={() => setShowKeywordPrompt(false)}
       />
       <View
         className="flex-row items-center gap-x-3 px-5 pt-2"
-        style={{paddingBottom: Math.max(insets.bottom, 8)}}>
+        style={{paddingBottom}}>
         <PressableScale
-          onPress={() =>
-            isUserLogin ? toggleWishlist(!isWishlisted) : requireLogin()
-          }
+          onPress={() => {
+            if (requireLogin(PendingActionType.WISHLIST_ADD)) return;
+            Haptics.impactAsync(
+              isWishlisted
+                ? Haptics.ImpactFeedbackStyle.Light
+                : Haptics.ImpactFeedbackStyle.Medium,
+            ).catch(() => {});
+            MixpanelService.track('product_wish', {
+              product_id: productId,
+              wish_action: isWishlisted ? 'remove' : 'add',
+            });
+            toggleWishlist(!isWishlisted);
+          }}
           disabled={isWishlistPending}
           style={{minWidth: MIN_TAP, minHeight: MIN_TAP}}
           className="items-center justify-center"
           accessibilityRole="button"
           accessibilityState={{selected: isWishlisted}}
           accessibilityLabel={isWishlisted ? '찜 해제' : '찜하기'}>
-          <Text className="text-xl">{isWishlisted ? '♥' : '♡'}</Text>
+          <Heart liked={isWishlisted} width={24} height={24} />
           <Text
             className={cn(
               'text-[11px]',
-              isWishlisted ? 'text-error-500' : 'text-gray-500',
+              isWishlisted ? 'text-error-500' : 'text-gray-800',
             )}>
             찜하기
           </Text>

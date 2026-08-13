@@ -6,7 +6,11 @@ import {UserLikeTarget} from '@/shared/api/gql/graphql';
 import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
 import PressableScale from '@/shared/components/PressableScale';
-import {showToast} from '@/shared/lib/feedback';
+import {
+  usePendingAction,
+  useRequireLogin,
+} from '@/shared/hooks/useRequireLogin';
+import {PendingActionType} from '@/shared/lib/pending-action';
 import {cn} from '@/shared/lib/styling';
 
 /**
@@ -15,12 +19,12 @@ import {cn} from '@/shared/lib/styling';
  */
 export default function RecommendButton({
   productId,
-  isUserLogin,
 }: {
   productId: number;
   isUserLogin: boolean;
 }) {
   const queryClient = useQueryClient();
+  const {requireLogin} = useRequireLogin(`/products/${productId}`);
   const {data: stats} = useQuery(ProductQueries.stats({id: productId}));
 
   const {mutate: toggle, isPending} = useMutation({
@@ -38,11 +42,12 @@ export default function RecommendButton({
 
   const isRecommended = !!stats?.isMyLike;
 
+  usePendingAction(PendingActionType.PRODUCT_LIKE, () => {
+    if (!isRecommended) toggle(true);
+  });
+
   const handlePress = () => {
-    if (!isUserLogin) {
-      showToast.info('로그인 후 이용해주세요.');
-      return;
-    }
+    if (requireLogin(PendingActionType.PRODUCT_LIKE)) return;
     // ★ 해제는 false 가 아니라 null 이다(web 과 동일). false 는 "비추천"이라
     // 별개 의미라, 해제 대신 비추천이 눌린 것으로 기록된다.
     toggle(isRecommended ? null : true);

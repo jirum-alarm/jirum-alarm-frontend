@@ -32,9 +32,9 @@ export default function ProductGuideMetaRows({productId}: {productId: number}) {
     <>
       {rows.map(row => (
         <View key={row.id} className="flex-row justify-between gap-x-4">
-          <Text className="text-sm font-medium text-gray-500">{row.title}</Text>
+          <Text className="text-sm font-medium text-gray-400">{row.title}</Text>
           <Text
-            className="shrink text-right text-sm font-medium text-gray-600"
+            className="shrink text-right text-sm font-medium text-gray-500"
             numberOfLines={2}>
             {row.content}
           </Text>

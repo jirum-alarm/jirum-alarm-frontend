@@ -15,6 +15,8 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 const {
   pushRecentViewedProduct,
   getRecentViewedProducts,
+  buildRecentViewedInjectScript,
+  WEB_RECENT_VIEWED_KEY,
 } = require('../src/shared/lib/device/recent-viewed');
 
 const item = (id: number) => ({
@@ -60,5 +62,19 @@ describe('최근 본 상품 — 웹뷰 홈이 읽던 목록을 네이티브가 �
     expect(await getRecentViewedProducts()).toEqual([]);
     store.recentViewedProducts = '{"a":1}';
     expect(await getRecentViewedProducts()).toEqual([]);
+  });
+
+  it('웹뷰 주입 스크립트는 web localStorage 키를 쓴다', () => {
+    const script = buildRecentViewedInjectScript([item(1), item(2)]);
+    expect(script).toContain(WEB_RECENT_VIEWED_KEY);
+    expect(script).toContain('localStorage.setItem');
+    expect(script).toMatch(/\\"id\\":1/);
+  });
+
+  it('웹뷰에는 5건만 심는다(web 상한)', () => {
+    const many = Array.from({length: 8}, (_, i) => item(i + 1));
+    const script = buildRecentViewedInjectScript(many);
+    expect(script).toMatch(/\\"id\\":5/);
+    expect(script).not.toMatch(/\\"id\\":6/);
   });
 });

@@ -37,77 +37,83 @@ const CARD_WIDTH = 120;
 export default function ProductCard({
   product,
   onPress,
+  layout = 'fixed',
 }: {
   product: ProductCardItem;
   onPress: (id: number) => void;
+  /** fixed: 캐러셀용 120px. grid: 만료 추천 3열. */
+  layout?: 'fixed' | 'grid';
 }) {
   const {hasWon, priceWithoutWon} = parsePrice(product.price);
   const priceText = hasWon ? `${priceWithoutWon}원` : priceWithoutWon;
+  const isGrid = layout === 'grid';
 
   return (
     <PressableScale
-      style={{width: CARD_WIDTH}}
+      style={isGrid ? {width: '100%'} : {width: CARD_WIDTH}}
       onPress={() => onPress(Number(product.id))}
       accessibilityRole="button"
       accessibilityLabel={product.title}>
-      {
-        <View>
-          <View
-            className="overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
-            style={{width: CARD_WIDTH, height: CARD_WIDTH}}>
-            {product.thumbnail ? (
-              <Image
-                source={{uri: product.thumbnail}}
-                style={{width: '100%', height: '100%'}}
-                resizeMode="cover"
+      <View>
+        <View
+          className="overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
+          style={
+            isGrid
+              ? {width: '100%', aspectRatio: 1}
+              : {width: CARD_WIDTH, height: CARD_WIDTH}
+          }>
+          {product.thumbnail ? (
+            <Image
+              source={{uri: product.thumbnail}}
+              style={{width: '100%', height: '100%'}}
+              resizeMode="cover"
+            />
+          ) : (
+            <NoImage categoryId={product.categoryId} type="hotDeal" />
+          )}
+
+          {product.isEnd ? (
+            <View className="absolute bottom-0 left-0 h-[22px] items-center justify-center rounded-tr-lg rounded-bl-lg bg-white px-2">
+              <Text className="text-xs font-semibold text-gray-700">
+                판매종료
+              </Text>
+            </View>
+          ) : product.hotDealType ? (
+            <View className="absolute bottom-0 left-0">
+              <HotdealBadge
+                hotdealType={product.hotDealType}
+                badgeVariant="card"
               />
-            ) : (
-              <NoImage categoryId={product.categoryId} type="hotDeal" />
-            )}
+            </View>
+          ) : null}
 
-            {product.isEnd ? (
-              <View className="absolute bottom-0 left-0 h-[22px] items-center justify-center rounded-tr-lg rounded-bl-lg bg-white px-2">
-                <Text className="text-xs font-semibold text-gray-700">
-                  판매종료
-                </Text>
-              </View>
-            ) : product.hotDealType ? (
-              <View className="absolute bottom-0 left-0">
-                <HotdealBadge
-                  hotdealType={product.hotDealType}
-                  badgeVariant="card"
-                />
-              </View>
-            ) : null}
-
-            {product.earliestExpiryDate && !product.isEnd ? (
-              <View className="absolute inset-x-0 bottom-0 h-[22px] items-center justify-center bg-gray-700/80 px-2">
-                <Text className="text-xs font-semibold text-white">
-                  유통기한 {formatMMD(product.earliestExpiryDate)}
-                </Text>
-              </View>
-            ) : null}
-          </View>
-
-          {/* 제목은 2줄 고정 — 높이를 안 잡으면 아래 가격 줄이 카드마다 어긋난다. */}
-          <Text
-            className="pt-2 text-sm text-gray-700"
-            style={{height: 40}}
-            numberOfLines={2}>
-            {product.title}
-          </Text>
-          <DisplayProductSource
-            mallName={product.mallName}
-            providerName={product.provider?.nameKr}
-            time={product.postedAt ? displayTime(product.postedAt) : undefined}
-          />
-          <Text
-            className="pt-1 text-lg font-semibold text-gray-900"
-            numberOfLines={1}>
-            {priceText}
-          </Text>
+          {product.earliestExpiryDate && !product.isEnd ? (
+            <View className="absolute inset-x-0 bottom-0 h-[22px] items-center justify-center bg-gray-700/80 px-2">
+              <Text className="text-xs font-semibold text-white">
+                유통기한 {formatMMD(product.earliestExpiryDate)}
+              </Text>
+            </View>
+          ) : null}
         </View>
-      }
+
+        {/* 제목은 2줄 고정 — 높이를 안 잡으면 아래 가격 줄이 카드마다 어긋난다. */}
+        <Text
+          className="pt-2 text-sm text-gray-700"
+          style={{height: 40}}
+          numberOfLines={2}>
+          {product.title}
+        </Text>
+        <DisplayProductSource
+          mallName={product.mallName}
+          providerName={product.provider?.nameKr}
+          time={product.postedAt ? displayTime(product.postedAt) : undefined}
+        />
+        <Text
+          className="pt-1 text-lg font-semibold text-gray-900"
+          numberOfLines={1}>
+          {priceText}
+        </Text>
+      </View>
     </PressableScale>
   );
 }

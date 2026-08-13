@@ -8,8 +8,12 @@ export type RecentViewedProduct = {
   price: string | null;
 };
 
-/** web 과 같은 상한. 넘으면 오래된 것부터 버린다. */
+/** 네이티브 쪽 상한. 웹뷰 홈/커뮤니티 태그는 WEB_LIMIT 만 본다. */
 const MAX = 20;
+
+/** web `recentViewedProducts.ts` 와 같은 키·상한. 커뮤니티 상품 태그가 이걸 읽는다. */
+export const WEB_RECENT_VIEWED_KEY = 'gr-recent-viewed-products';
+export const WEB_RECENT_VIEWED_LIMIT = 5;
 
 /**
  * 최근 본 상품.
@@ -47,4 +51,27 @@ export async function getRecentViewedProducts(): Promise<
   } catch {
     return [];
   }
+}
+
+/**
+ * 웹뷰 localStorage 에 최근 본 상품을 심는 스크립트.
+ *
+ * 네이티브 상세는 AsyncStorage 에만 쌓이므로, 그대로 두면 웹뷰 커뮤니티의
+ * "최근 본 상품" 태그 모달이 빈다. 웹이 읽는 키·상한(5건)으로 맞춰 주입한다.
+ */
+export function buildRecentViewedInjectScript(
+  products: RecentViewedProduct[],
+): string {
+  const payload = JSON.stringify(products.slice(0, WEB_RECENT_VIEWED_LIMIT));
+  return `
+    (function() {
+      try {
+        localStorage.setItem(
+          ${JSON.stringify(WEB_RECENT_VIEWED_KEY)},
+          ${JSON.stringify(payload)}
+        );
+      } catch (e) {}
+    })();
+    true;
+  `;
 }

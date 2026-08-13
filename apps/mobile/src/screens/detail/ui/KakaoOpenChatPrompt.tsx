@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, View} from 'react-native';
 
 import PressableScale from '@/shared/components/PressableScale';
+import TalkLight from '@/shared/components/icons/TalkLight';
 
 import {openInAppBrowser} from '@/shared/lib/navigation';
 
@@ -19,9 +20,8 @@ export default function KakaoOpenChatPrompt({href}: {href: string}) {
       className="mx-5 mb-4 flex-row items-center gap-x-3 rounded-lg bg-secondary-50 px-4 py-3"
       accessibilityRole="button"
       accessibilityLabel="핫딜 카톡방 입장">
-      {/* 카톡 마크는 노란 원 위의 말풍선. web 과 같은 조합(#FAE300). */}
       <View className="h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FAE300]">
-        <Text className="text-xs">💬</Text>
+        <TalkLight width={18} height={18} style={{marginTop: 2}} />
       </View>
       <View className="min-w-0 flex-1">
         <Text className="text-sm font-semibold text-gray-800">

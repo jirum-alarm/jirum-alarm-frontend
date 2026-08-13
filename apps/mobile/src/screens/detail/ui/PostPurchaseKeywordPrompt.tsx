@@ -6,7 +6,13 @@ import Svg, {Path} from 'react-native-svg';
 import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
 import PressableScale from '@/shared/components/PressableScale';
+import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
 import {showToast} from '@/shared/lib/feedback';
+import {
+  usePendingAction,
+  useRequireLogin,
+} from '@/shared/hooks/useRequireLogin';
+import {PendingActionType} from '@/shared/lib/pending-action';
 
 import {deriveKeyword} from '@/features/keyword-prompt/model/deriveKeyword';
 
@@ -23,16 +29,19 @@ const MIN_KEYWORD_LENGTH = 2;
 export default function PostPurchaseKeywordPrompt({
   show,
   title,
+  productId,
   isUserLogin,
   onClose,
 }: {
   show: boolean;
   title: string;
+  productId: number;
   isUserLogin: boolean;
   onClose: () => void;
 }) {
   const queryClient = useQueryClient();
   const [done, setDone] = useState(false);
+  const {requireLogin} = useRequireLogin(`/products/${productId}`);
 
   const keyword = deriveKeyword(title);
   const hasKeyword = Array.from(keyword).length >= MIN_KEYWORD_LENGTH;
@@ -54,6 +63,7 @@ export default function PostPurchaseKeywordPrompt({
       ProductService.addNotificationKeyword({
         keyword,
         fromRecommendation: true,
+        priceDropOnly: true,
       }),
     onSuccess: () => {
       // 배너를 없애지 않고 안내 문구로 바꾼다. 사라지면 등록된 건지 눌림이
@@ -63,17 +73,33 @@ export default function PostPurchaseKeywordPrompt({
         queryKey: ProductQueries.keys.myKeywords(),
       });
     },
-    onError: () => showToast.info('키워드 저장에 실패했습니다.'),
+    onError: error => {
+      const message =
+        error instanceof Error ? error.message : String(error ?? '');
+      if (message.includes('이미 등록된')) {
+        setDone(true);
+        return;
+      }
+      showToast.info(message || '키워드 저장에 실패했습니다.');
+    },
   });
+
+  usePendingAction(PendingActionType.NOTIFICATION_KEYWORD_ADD, () => {
+    addKeyword();
+  });
+
+  const visible = show && hasKeyword && (done || !alreadyRegistered);
 
   // 상품이 바뀌면 이전 상품의 완료 상태가 남지 않도록 초기화.
   useEffect(() => {
     setDone(false);
   }, [title]);
 
-  // done 이면 alreadyRegistered 를 무시한다. 방금 등록해 목록에 들어간 것이라
-  // 여기서 숨기면 누른 직후 배너가 사라져 등록됐는지 알 수 없다.
-  const visible = show && hasKeyword && (done || !alreadyRegistered);
+  useEffect(() => {
+    if (!visible || done) return;
+    MixpanelService.track('keyword_prompt_view', {keyword});
+  }, [visible, done, keyword]);
+
   if (!visible) return null;
 
   if (done) {
@@ -117,23 +143,39 @@ export default function PostPurchaseKeywordPrompt({
       </View>
       <View className="min-w-0 flex-1">
         <Text className="text-sm font-semibold text-gray-800">
-          이 상품 알림 받을까요?
+          더 싸지면 알려드릴까요?
         </Text>
         <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
-          ‘{keyword}’ 새 딜이 나오면 알려드려요
+          ‘{keyword}’ 가격을 지켜볼게요
         </Text>
       </View>
-      <PressableScale
-        onPress={() =>
-          isUserLogin ? addKeyword() : showToast.info('로그인 후 이용해주세요.')
-        }
-        disabled={isPending}
-        accessibilityRole="button"
-        accessibilityLabel="알림 등록">
-        <View className="h-11 justify-center px-2">
-          <Text className="text-xs font-semibold text-secondary-600">등록</Text>
-        </View>
-      </PressableScale>
+      <View className="flex-row items-center">
+        <PressableScale
+          onPress={() => {
+            MixpanelService.track('keyword_prompt_click', {
+              keyword,
+              logged_in: isUserLogin,
+            });
+            if (requireLogin(PendingActionType.NOTIFICATION_KEYWORD_ADD)) {
+              return;
+            }
+            addKeyword();
+          }}
+          disabled={isPending}
+          accessibilityRole="button"
+          accessibilityLabel="알림 받기">
+          <View className="h-11 justify-center px-2">
+            <Text className="text-xs font-semibold text-secondary-600">
+              {isPending ? '등록 중' : '알림 받기'}
+            </Text>
+          </View>
+        </PressableScale>
+        <PressableScale onPress={onClose} accessibilityLabel="알림 안내 닫기">
+          <View className="h-11 justify-center px-2">
+            <Text className="text-xs text-gray-500">닫기</Text>
+          </View>
+        </PressableScale>
+      </View>
     </View>
   );
 }
