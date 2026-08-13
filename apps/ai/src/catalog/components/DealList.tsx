@@ -16,7 +16,7 @@ export function DealList({ children }: { children?: React.ReactNode }) {
           <span className="flex size-5 items-center justify-center rounded-full bg-blue-100 text-[10px]">
             🔥
           </span>
-          핫딜 목록
+          몰별 핫딜
         </h3>
       </div>
       <div className="grid grid-cols-2 gap-2.5">

@@ -64,6 +64,12 @@ export const dealCatalog = schema.createCatalog({
         title: z.string(),
       }),
     },
+    DanawaFloor: {
+      props: z.object({
+        title: z.string(),
+        price: z.number(),
+      }),
+    },
     Failure: {
       props: z.object({
         message: z.string(),

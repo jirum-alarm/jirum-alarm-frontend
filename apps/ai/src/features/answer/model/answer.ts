@@ -32,6 +32,8 @@ export type AnswerBlock =
   | { kind: 'trend'; points: PricePoint[]; current: number; confidence: PriceConfidence }
   | { kind: 'review'; summary: CommentSummary; title: string }
   | { kind: 'deals'; deals: Deal[]; lowest: number | null }
+  /** 다나와 공식 최저가. 서버가 대표를 확신할 때만 온다. */
+  | { kind: 'danawaFloor'; title: string; price: number }
   /** LLM 생성 문장. `patch` 이벤트로 토큰이 이어붙는다(처음엔 빈 문자열로 온다). */
   | { kind: 'text'; markdown: string }
   /** 되묻기 제안. 답이 끝난 자리에 다음 질문을 놓는다 — 답할 수 있는 것만. */

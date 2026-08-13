@@ -114,6 +114,17 @@ function Block({ block }: { block: AnswerBlock }) {
         </div>
       );
 
+    case 'danawaFloor':
+      return (
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5">
+          <SectionLabel title="다나와 공식 최저가" />
+          <p className="line-clamp-2 text-[13px] leading-snug text-slate-800">{block.title}</p>
+          <p className="mt-1.5 text-[22px] font-extrabold tracking-tight text-slate-900 tabular-nums">
+            {won(block.price)}
+          </p>
+        </div>
+      );
+
     case 'deals': {
       // Legacy deals block is now handled by json-render
       return null;

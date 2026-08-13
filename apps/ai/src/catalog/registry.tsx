@@ -8,6 +8,7 @@ import NativePartialAnswer from '../features/answer/ui/PartialAnswer';
 import NativePricePosition from '../features/answer/ui/PricePosition';
 import NativePriceTrend from '../features/answer/ui/PriceTrend';
 
+import { DanawaFloor } from './components/DanawaFloor';
 import { DealCard } from './components/DealCard';
 import { DealList } from './components/DealList';
 import { Failure, Review, Verdict } from './components/Wrappers';
@@ -70,6 +71,7 @@ export const { registry } = defineRegistry(dealCatalog, {
     AnswerText,
     FollowUp,
     Review,
+    DanawaFloor,
     Failure,
   },
   actions: {},
