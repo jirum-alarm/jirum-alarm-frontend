@@ -1,15 +1,21 @@
-import React from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {ActivityIndicator, Pressable, Text, View} from 'react-native';
 
 import PressableScale from '@/shared/components/PressableScale';
 import {useQuery} from '@tanstack/react-query';
 
 import {ProductQueries} from '@/entities/product/product.queries';
+import ArrowRight from '@/shared/components/icons/ArrowRight';
+import Info from '@/shared/components/icons/Info';
+import Thumbsdown from '@/shared/components/icons/Thumbsdown';
+import Thumbsup from '@/shared/components/icons/Thumbsup';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {displayTime} from '@/shared/lib/format/price';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {cn} from '@/shared/lib/styling';
 
+import ProductReport from './ProductReport';
+import Reactions from './Reactions';
 import {
   buildDealStatusSummary,
   splitReactionKeywords,
@@ -87,9 +93,39 @@ function CommunityLink({url, provider}: {url: string; provider: string}) {
         {provider} 반응 보기
       </Text>
       <View className="h-4 w-4 items-center justify-center rounded-full bg-secondary-500">
-        <Text className="text-[10px] text-white">›</Text>
+        <ArrowRight color="#FFFFFF" width={12} height={12} strokeWidth={1.5} />
       </View>
     </PressableScale>
+  );
+}
+
+/** web CommunityReaction 헤더 Info 툴팁. */
+function InfoTooltip() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View className="relative mt-0.5">
+      <Pressable
+        onPress={() => setOpen(v => !v)}
+        hitSlop={8}
+        accessibilityRole="button"
+        accessibilityLabel="커뮤니티 반응">
+        <Info />
+      </Pressable>
+      {open ? (
+        <Pressable
+          onPress={() => setOpen(false)}
+          className="absolute right-0 top-7 z-50"
+          accessibilityRole="button">
+          <View className="rounded-lg bg-gray-600 px-4 py-2.5">
+            <Text className="text-[13px] text-white">
+              <Text className="font-semibold text-white">실제 커뮤니티</Text>
+              {' 사용자들의\n핫딜 반응을 요약해 확인해요'}
+            </Text>
+          </View>
+        </Pressable>
+      ) : null}
+    </View>
   );
 }
 
@@ -97,7 +133,13 @@ function CommunityLink({url, provider}: {url: string; provider: string}) {
  * 커뮤니티 반응 — 품질 반응만(품절·종료·가격변동 등 상태 신호 제외).
  * 레이아웃·색은 web CommunityReaction 과 맞춘다.
  */
-export default function CommunityReaction({productId}: {productId: number}) {
+export default function CommunityReaction({
+  productId,
+  isUserLogin,
+}: {
+  productId: number;
+  isUserLogin: boolean;
+}) {
   const {data, isPending, isError, refetch} = useQuery(
     ProductQueries.reactionKeywords({id: productId}),
   );
@@ -117,8 +159,6 @@ export default function CommunityReaction({productId}: {productId: number}) {
   }
 
   const items = (data?.items ?? []) as ReactionKeywordItem[];
-  if (!items.length) return null;
-
   const {quality, status} = splitReactionKeywords(items);
   const positiveItems = quality.filter(i => i.type === 'POSITIVE');
   const negativeItems = quality.filter(i => i.type === 'NEGATIVE');
@@ -137,7 +177,12 @@ export default function CommunityReaction({productId}: {productId: number}) {
 
   return (
     <View className="px-5 pt-7">
-      <Text className="text-lg font-semibold text-gray-900">커뮤니티 반응</Text>
+      <View className="flex-row items-start justify-between gap-3">
+        <Text className="min-w-0 text-lg font-semibold text-gray-900">
+          커뮤니티 반응
+        </Text>
+        <InfoTooltip />
+      </View>
       <Text className="pt-1 pb-3 text-xs text-gray-500">
         실제 커뮤니티 반응을 AI로 요약한 내용이에요
       </Text>
@@ -146,7 +191,11 @@ export default function CommunityReaction({productId}: {productId: number}) {
         <View className="gap-y-3 rounded-xl bg-white px-3 py-3">
           {allCount > 0 ? (
             <View className="flex-row items-center gap-1.5">
-              <Text className="text-base">{isPositive ? '👍' : '👎'}</Text>
+              {isPositive ? (
+                <Thumbsup width={18} height={18} active />
+              ) : (
+                <Thumbsdown width={18} height={18} active />
+              )}
               <Text className="text-base font-semibold text-gray-800">
                 {isPositive ? '추천해요' : '아쉬워요'}
               </Text>
@@ -192,6 +241,14 @@ export default function CommunityReaction({productId}: {productId: number}) {
               />
             ) : null}
           </View>
+        </View>
+        {additional?.commentSummary ? (
+          <View className="pt-3">
+            <Reactions commentSummary={additional.commentSummary} />
+          </View>
+        ) : null}
+        <View className="pt-3">
+          <ProductReport productId={productId} isUserLogin={isUserLogin} />
         </View>
       </View>
     </View>

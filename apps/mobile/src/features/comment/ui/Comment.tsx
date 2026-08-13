@@ -18,6 +18,10 @@ import {
 import {displayTime} from '@/shared/lib/format/price';
 import {cn} from '@/shared/lib/styling';
 import {showToast} from '@/shared/lib/feedback';
+import BubbleChat from '@/shared/components/icons/bubble_chat';
+import BubbleChatFill from '@/shared/components/icons/bubble_chat_fill';
+import Dots from '@/shared/components/icons/Dots';
+import ThumbsupFill from '@/shared/components/icons/ThumbsupFill';
 
 import CommentMenu from './CommentMenu';
 
@@ -109,32 +113,46 @@ export default function Comment({
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="댓글 메뉴">
-            <Text className="text-lg text-gray-500">⋯</Text>
+            <Dots width={24} height={24} />
           </Pressable>
         ) : null}
       </View>
 
       <Text className="pt-1 text-base text-gray-900">{comment.content}</Text>
 
-      <View className="flex-row items-center gap-x-4 pt-2">
+      <View className="flex-row items-center gap-x-2 pt-2">
         <Pressable
           onPress={handleLike}
           disabled={!isLoggedIn}
           accessibilityRole="button"
           className="flex-row items-center gap-x-1">
+          <ThumbsupFill width={16} height={16} active={!!comment.isMyLike} />
           <Text
             className={cn(
               'text-sm',
               comment.isMyLike ? 'text-primary-700' : 'text-gray-500',
             )}>
-            좋아요 {comment.likeCount}
+            좋아요
+          </Text>
+          <Text
+            className={cn(
+              'text-sm',
+              comment.isMyLike ? 'text-primary-700' : 'text-gray-600',
+            )}>
+            {comment.likeCount}
           </Text>
         </Pressable>
         {canReply && !hasParent ? (
           <Pressable
             onPress={handleReply}
             disabled={!isLoggedIn}
-            accessibilityRole="button">
+            accessibilityRole="button"
+            className="flex-row items-center gap-x-1">
+            {editStatus === 'reply' ? (
+              <BubbleChatFill width={16} height={16} />
+            ) : (
+              <BubbleChat width={16} height={16} color="#667085" />
+            )}
             <Text
               className={cn(
                 'text-sm',

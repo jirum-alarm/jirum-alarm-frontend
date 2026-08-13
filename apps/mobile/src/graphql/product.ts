@@ -134,7 +134,7 @@ export const QueryProductPriceHistory = graphql(`
   }
 `);
 
-/** 커뮤니티 반응 하단의 원문 링크(출처 커뮤니티)용. */
+/** 커뮤니티 반응 하단의 원문 링크·댓글 요약용. */
 export const QueryProductAdditionalInfo = graphql(`
   query ProductAdditionalInfo($id: Int!) {
     product(id: $id) {
@@ -143,6 +143,15 @@ export const QueryProductAdditionalInfo = graphql(`
       provider {
         id
         nameKr
+      }
+      commentSummary {
+        additionalInfo
+        option
+        price
+        productId
+        purchaseMethod
+        satisfaction
+        summary
       }
     }
   }
@@ -273,15 +282,17 @@ export const MutationRemoveWishlist = graphql(`
   }
 `);
 
-/** 구매 후 알림 키워드 등록. */
+/** 구매 후 알림 키워드 등록. web 과 같이 하락 전용(priceDropOnly)으로 넣는다. */
 export const MutationAddNotificationKeyword = graphql(`
   mutation AddNotificationKeyword(
     $keyword: String!
     $fromRecommendation: Boolean
+    $priceDropOnly: Boolean
   ) {
     addNotificationKeyword(
       keyword: $keyword
       fromRecommendation: $fromRecommendation
+      priceDropOnly: $priceDropOnly
     )
   }
 `);

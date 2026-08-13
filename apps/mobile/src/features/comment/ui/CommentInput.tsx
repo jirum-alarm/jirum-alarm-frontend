@@ -9,6 +9,7 @@ import {
   useEditingComment,
 } from '@/entities/comment/editing-comment';
 import {showToast} from '@/shared/lib/feedback';
+import Close from '@/shared/components/icons/Close';
 
 const MAX_INPUT_HEIGHT = 120;
 
@@ -92,7 +93,7 @@ export default function CommentInput({
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="취소">
-            <Text className="text-sm text-gray-500">취소</Text>
+            <Close width={16} height={16} color="#667085" />
           </Pressable>
         </View>
       ) : null}

@@ -9,6 +9,7 @@ import {CommentQueries} from '@/entities/comment/comment.queries';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
 import Comment from './Comment';
+import CommentEmpty from './CommentEmpty';
 
 const PREVIEW_COUNT = 3;
 
@@ -52,16 +53,7 @@ export default function CommentSection({
         </View>
       ) : (
         <>
-          {/* web 은 빈 목록에 아무것도 안 그리지만, 앱에서는 헤더와 버튼 사이가
-              텅 비어 "로딩이 안 끝난 것"처럼 보인다(사용자 요청 2026-08-12). */}
-          {!hasComments ? (
-            // web 과 동일: 아이콘 없이 문구만(내가 이모지를 넣었던 것).
-            <View className="py-8">
-              <Text className="text-center text-sm text-gray-400">
-                첫 번째 댓글을 남겨보세요
-              </Text>
-            </View>
-          ) : null}
+          {!hasComments ? <CommentEmpty /> : null}
           {/* web CommentList 의 divide-y divide-gray-200 대응 — 댓글 사이에만 선. */}
           {preview.map((comment, i) => (
             <View

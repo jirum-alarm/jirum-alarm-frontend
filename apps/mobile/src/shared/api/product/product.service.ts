@@ -4,6 +4,7 @@ import {
   MutationAddWishlist,
   MutationCollectProduct,
   MutationRemoveWishlist,
+  MutationReportExpiredProduct,
   QueryCategorizedReactionKeywords,
   QueryProductAdditionalInfo,
   QueryCategoryProducts,
@@ -23,6 +24,7 @@ import type {
   MyNotificationKeywordsQueryVariables,
   CollectProductMutationVariables,
   RemoveWishlistMutationVariables,
+  ReportExpiredProductMutationVariables,
   CategorizedReactionKeywordsQueryVariables,
   ProductAdditionalInfoQueryVariables,
   CategoryProductsQueryVariables,
@@ -175,5 +177,15 @@ export class ProductService {
       variables,
     );
     return res.data?.addUserLikeOrDislike ?? null;
+  }
+
+  static async reportExpiredProduct(
+    variables: ReportExpiredProductMutationVariables,
+  ) {
+    const res = await HttpClient.withAccessToken().execute(
+      MutationReportExpiredProduct,
+      variables,
+    );
+    return res.data?.reportExpiredProduct ?? null;
   }
 }

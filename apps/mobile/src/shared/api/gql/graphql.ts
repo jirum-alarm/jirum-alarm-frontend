@@ -2781,6 +2781,16 @@ export type ProductAdditionalInfoQuery = {
     id: string;
     url?: string | null;
     provider: {__typename?: 'Provider'; id: string; nameKr: string};
+    commentSummary?: {
+      __typename?: 'ProductCommentSummary';
+      additionalInfo?: string | null;
+      option?: string | null;
+      price?: string | null;
+      productId: string;
+      purchaseMethod?: string | null;
+      satisfaction?: string | null;
+      summary?: string | null;
+    } | null;
   } | null;
 };
 
@@ -2911,6 +2921,7 @@ export type RemoveWishlistMutation = {
 export type AddNotificationKeywordMutationVariables = Exact<{
   keyword: Scalars['String']['input'];
   fromRecommendation?: InputMaybe<Scalars['Boolean']['input']>;
+  priceDropOnly?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type AddNotificationKeywordMutation = {
@@ -3191,6 +3202,15 @@ export const ProductAdditionalInfoDocument = new TypedDocumentString(`
       id
       nameKr
     }
+    commentSummary {
+      additionalInfo
+      option
+      price
+      productId
+      purchaseMethod
+      satisfaction
+      summary
+    }
   }
 }
     `) as unknown as TypedDocumentString<
@@ -3318,10 +3338,11 @@ export const RemoveWishlistDocument = new TypedDocumentString(`
   RemoveWishlistMutationVariables
 >;
 export const AddNotificationKeywordDocument = new TypedDocumentString(`
-    mutation AddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean) {
+    mutation AddNotificationKeyword($keyword: String!, $fromRecommendation: Boolean, $priceDropOnly: Boolean) {
   addNotificationKeyword(
     keyword: $keyword
     fromRecommendation: $fromRecommendation
+    priceDropOnly: $priceDropOnly
   )
 }
     `) as unknown as TypedDocumentString<
