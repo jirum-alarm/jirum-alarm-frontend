@@ -58,7 +58,9 @@ export default function RecommendButton({
       <View
         className={cn(
           'h-[36px] flex-row items-center justify-center gap-x-1 rounded-full border bg-white px-3.5',
-          isRecommended ? 'border-secondary-500' : 'border-gray-200',
+          // web 은 선택됐을 때만 테두리에 색을 준다(기본은 border 만, 색 없음).
+          // gray-200 을 상시로 두면 회색 링이 보여 눌린 상태와 구분이 흐려진다.
+          isRecommended ? 'border-secondary-500' : 'border-gray-100',
         )}>
         <Text
           className={cn(
