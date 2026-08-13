@@ -1,6 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
   <uses-permission android:name="android.permission.INTERNET" />
 
+  <!-- Android 11+ 패키지 가시성. 공유 시 카톡·X·스레드를 직접 연다. -->
+  <queries>
+    <package android:name="com.kakao.talk" />
+    <package android:name="com.twitter.android" />
+    <package android:name="com.instagram.barcelona" />
+  </queries>
+
   <application
     android:name="com.solcode.jirmalam.MainApplication"
     android:label="@string/app_name"

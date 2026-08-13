@@ -76,6 +76,9 @@
 		<string>kakaokompassauth</string>
 		<string>storykompassauth</string>
 		<string>kakaolink</string>
+		<string>kakaotalk</string>
+		<string>twitter</string>
+		<string>barcelona</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
