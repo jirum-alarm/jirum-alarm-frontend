@@ -21,6 +21,28 @@ export const INTERCEPT_DETAIL_LINK_SCRIPT = `
 
     // 클릭 훅과 pushState 가드가 같은 이동을 각각 보내면 상세가 두 번 쌓인다
     // (로고를 눌러도 한 겹만 벗겨져 상세가 또 보이던 원인).
+    // ★ 정규식 리터럴을 쓰지 않는다.
+    // 이 문자열은 TS 템플릿 리터럴 → WebView eval 로 두 번 해석돼서
+    // /\\/products/ 같은 이스케이프가 깨진다(실제로 "Invalid regular expression
+    // flags" 로 스크립트 전체가 죽어 가로채기가 통째로 동작하지 않았다).
+    // 경로 판정은 문자열 조작으로 충분하다.
+    function detailPath(href) {
+      if (!href) { return null; }
+      var path = href;
+      if (path.indexOf('http') === 0) {
+        var i = path.indexOf('/', path.indexOf('//') + 2);
+        path = i === -1 ? '/' : path.slice(i);
+      }
+      if (path.indexOf('/products/') !== 0) { return null; }
+      var rest = path.slice('/products/'.length);
+      var idEnd = 0;
+      while (idEnd < rest.length && rest[idEnd] >= '0' && rest[idEnd] <= '9') { idEnd++; }
+      if (idEnd === 0) { return null; }
+      var after = rest[idEnd];
+      if (after && after !== '/' && after !== '?' && after !== '#') { return null; }
+      return path;
+    }
+
     var lastSent = {path: '', at: 0};
     function send(path) {
       var now = Date.now();
@@ -46,12 +68,12 @@ export const INTERCEPT_DETAIL_LINK_SCRIPT = `
 
       var href = el.getAttribute('href') || '';
       // 절대/상대 모두 허용. 쿼리·해시는 살려서 넘긴다.
-      var m = href.match(/^(?:https?:\\/\\/[^\\/]+)?(\\/products\\/\\d+(?:[\\/?#][^\\s]*)?)$/);
+      var m = detailPath(href);
       if (!m) { return; }
 
       e.preventDefault();
       e.stopPropagation();
-      send(m[1]);
+      send(m);
     }, true);
 
     // ★ 2차 방어: Next 의 클라이언트 라우팅 자체를 막는다.
@@ -63,9 +85,9 @@ export const INTERCEPT_DETAIL_LINK_SCRIPT = `
     history.pushState = function(state, title, url) {
       try {
         var u = String(url || '');
-        var m = u.match(/^(?:https?:\/\/[^\/]+)?(\/products\/\d+(?:[\/?#][^\s]*)?)$/);
+        var m = detailPath(u);
         if (m) {
-          send(m[1]);
+          send(m);
           return; // 웹은 이동하지 않는다 — 화면이 바뀌지 않으므로 잔상이 없다.
         }
       } catch (err) {}

@@ -43,6 +43,29 @@ describe('상세 링크 가로채기 판정', () => {
     expect(match('https://coupang.com/vp/products/999?x=1')).toBeNull();
   });
 
+  // ★ 이 스크립트는 TS 템플릿 → WebView eval 로 두 번 해석된다. 정규식 리터럴을
+  // 쓰면 이스케이프가 깨져 "Invalid regular expression flags" 로 스크립트 전체가
+  // 죽는다 — 가로채기가 통째로 동작하지 않았던 실제 원인이다.
+  it('주입 스크립트가 문법적으로 유효하다', () => {
+    const src: string = require('fs').readFileSync(
+      'src/shared/lib/webview/intercept-detail-link.ts',
+      'utf8',
+    );
+    const body = src.match(/[=] `([\s\S]*?)`;/)![1];
+    // eval 계열(new Function)은 lint 가 막으므로 babel 파서로 문법만 검사한다.
+    const {parse} = require('@babel/core');
+    expect(() => parse(body, {filename: 'injected.js'})).not.toThrow();
+  });
+
+  it('경로 판정에 정규식 리터럴을 쓰지 않는다', () => {
+    const src: string = require('fs').readFileSync(
+      'src/shared/lib/webview/intercept-detail-link.ts',
+      'utf8',
+    );
+    const body = src.match(/[=] `([\s\S]*?)`;/)![1];
+    expect(body).not.toMatch(/\.match\(\//);
+  });
+
   it('스크립트가 캡처 단계로 등록돼 있다', () => {
     const src: string = require('fs').readFileSync(
       'src/shared/lib/webview/intercept-detail-link.ts',
