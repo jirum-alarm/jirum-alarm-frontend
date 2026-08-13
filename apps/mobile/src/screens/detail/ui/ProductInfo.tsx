@@ -11,6 +11,8 @@ import HotdealGuideModal from './HotdealGuideModal';
 import PressableScale from '@/shared/components/PressableScale';
 import RecommendButton from './RecommendButton';
 import TossBadges from './TossBadges';
+import TossIcon from './TossIcon';
+import NaverIcon from './NaverIcon';
 
 import type {ProductDetail, SourceData} from '../model/types';
 
@@ -121,6 +123,8 @@ export default function ProductInfo({
 
       <View className="gap-y-2 pt-4">
         <MetaRow label="쇼핑몰">
+          {source.toss ? <TossIcon size={20} /> : null}
+          {!source.toss && source.naverbc ? <NaverIcon height={12} /> : null}
           <Text className="text-sm font-medium text-gray-500">
             {source.toss ? '토스' : source.ohou ? '오늘의집' : product.mallName}
           </Text>
