@@ -76,3 +76,28 @@ describe('상세 링크 가로채기 판정', () => {
     expect(src).toContain('e.preventDefault();');
   });
 });
+
+describe('폴백 웹뷰도 같은 가로채기를 쓴다', () => {
+  it('ProductDetailWebViewScreen 이 주입 스크립트를 넣는다', () => {
+    const src: string = require('fs').readFileSync(
+      'src/screens/detail/ProductDetailWebViewScreen.tsx',
+      'utf8',
+    );
+    expect(src).toContain('INTERCEPT_DETAIL_LINK_SCRIPT');
+    expect(src).toContain('subscribeOpenDetail');
+  });
+
+  it('검색은 탭 스택의 중첩 플로우로 등록돼 있다', () => {
+    const nav: string = require('fs').readFileSync(
+      'src/navigations/tab/TabStackNavigator.tsx',
+      'utf8',
+    );
+    const detail: string = require('fs').readFileSync(
+      'src/screens/detail/ProductDetailScreen.tsx',
+      'utf8',
+    );
+    expect(nav).toContain('SearchStackNavigator');
+    expect(detail).toContain('openSearch');
+    expect(detail).not.toContain("{path: '/search'}");
+  });
+});

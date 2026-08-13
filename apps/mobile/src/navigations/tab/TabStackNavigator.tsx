@@ -1,19 +1,62 @@
-import React from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
 
 import TabWebView from '@/screens/tabs/TabWebView';
 import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
+import SearchStackNavigator from './SearchStackNavigator';
 import ProductCommentsScreen from '@/screens/comment/ProductCommentsScreen';
 import {
   tabStackNavigations,
   tabNavigations,
 } from '@/shared/constant/navigations';
 import {getTabBaseUrl} from '@/shared/lib/navigation/tab-routing';
+import {useTabBarVisibility} from '@/shared/hooks/useTabBarVisibility';
 import type {TabStackParamList} from './types';
+import {
+  commentsHeaderOptions,
+  productDetailHeaderOptions,
+} from './native-headers';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
 const Stack = createNativeStackNavigator<TabStackParamList>();
+
+/**
+ * 이 탭의 탭바 표시를 숨김 카운터와 맞춘다.
+ * JS 탭바는 AnimatedTabBar 가 translateY 로도 숨기지만,
+ * tabBarStyle.display 를 같이 맞춰 두면 레이아웃 여백이 안 남는다.
+ *
+ * iOS 26 clip 은 네이티브로 push 한 화면만 켠다. 웹뷰 안 SPA 는
+ * 자르면 댓글 입력창 아래가 빈다.
+ */
+function useSyncNativeTabBarHidden() {
+  const visible = useTabBarVisibility();
+  const navigation = useNavigation();
+  const clipWhenHiddenRef = useRef(false);
+
+  const apply = useCallback(
+    (clipWhenHidden: boolean) => {
+      clipWhenHiddenRef.current = clipWhenHidden;
+      navigation.setOptions({
+        tabBarStyle: {display: visible ? 'flex' : 'none'},
+        tabBarClipWhenHidden: !visible && clipWhenHidden,
+      });
+    },
+    [visible, navigation],
+  );
+
+  useEffect(() => {
+    apply(clipWhenHiddenRef.current);
+  }, [apply]);
+
+  return useCallback(
+    (routeName: string | undefined) => {
+      apply(routeName !== tabStackNavigations.ROOT);
+    },
+    [apply],
+  );
+}
 
 /**
  * 탭 하나를 감싸는 네이티브 스택.
@@ -24,24 +67,35 @@ const Stack = createNativeStackNavigator<TabStackParamList>();
  */
 export function createTabStack(tabName: TabName) {
   return function TabStack() {
+    const onFocusedRoute = useSyncNativeTabBarHidden();
+
     return (
-      <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Navigator
+        screenOptions={{headerShown: false}}
+        screenListeners={{
+          state: e => {
+            const stack = e.data.state;
+            onFocusedRoute(stack.routes[stack.index]?.name);
+          },
+        }}>
         <Stack.Screen name={tabStackNavigations.ROOT}>
           {() => (
             <TabWebView tabName={tabName} baseUrl={getTabBaseUrl(tabName)} />
           )}
         </Stack.Screen>
-        {/*
-          상세는 네이티브. `/products/123` 본체만 네이티브가 그리고,
-          하위 경로(`/comment` 등)는 화면 안에서 웹뷰로 폴백한다.
-        */}
         <Stack.Screen
           name={tabStackNavigations.DETAIL}
           component={ProductDetailScreen}
+          options={productDetailHeaderOptions}
+        />
+        <Stack.Screen
+          name={tabStackNavigations.SEARCH}
+          component={SearchStackNavigator}
         />
         <Stack.Screen
           name={tabStackNavigations.COMMENTS}
           component={ProductCommentsScreen}
+          options={commentsHeaderOptions}
         />
       </Stack.Navigator>
     );

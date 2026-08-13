@@ -1,39 +1,125 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {ActivityIndicator, Platform, StyleSheet, View} from 'react-native';
 import WebView from 'react-native-webview';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SystemBars} from 'react-native-edge-to-edge';
+import {useFocusEffect} from '@react-navigation/native';
+import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
 
 import {SERVICE_URL, USER_AGENT} from '@/constants/env';
-import {handleWebViewMessage} from '@/shared/lib/webview';
+import {
+  handleWebViewMessage,
+  parsedWebViewMessage,
+  WebViewEventType,
+} from '@/shared/lib/webview';
+import {subscribeOpenDetail} from '@/shared/lib/webview/event';
+import {INTERCEPT_DETAIL_LINK_SCRIPT} from '@/shared/lib/webview/intercept-detail-link';
 import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
+import {getPushablePath} from '@/shared/lib/navigation/tab-routing';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {useTokenRemoveEffect} from '@/screens/jirumalarmwebview/hooks/useTokenRemoveEffect';
-import type {TabStackParamList} from '@/navigations/tab/types';
+import {
+  useHideTabBar,
+  useHiddenTabBarClipPadding,
+} from '@/shared/hooks/useHideTabBar';
+import type {ProductFlowParamList} from '@/navigations/tab/types';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 
-type Props = NativeStackScreenProps<
-  TabStackParamList,
-  typeof tabStackNavigations.DETAIL
+type StackNav = Pick<
+  NativeStackNavigationProp<ProductFlowParamList>,
+  'push' | 'goBack'
 >;
 
+function isProductPath(path: string): boolean {
+  return /^\/products\/\d+/.test(path.split(/[?#]/)[0]);
+}
+
+const NATIVE_STACK_SCRIPT = `
+  (function() {
+    document.documentElement.dataset.nativeStack = 'true';
+    if (window.__jirumNativeStackBack) { return; }
+    window.__jirumNativeStackBack = true;
+    document.addEventListener('click', function(e) {
+      var t = e.target;
+      if (!t || !t.closest) { return; }
+      var btn = t.closest('button[aria-label="뒤로 가기"]');
+      if (!btn) { return; }
+      e.preventDefault();
+      e.stopPropagation();
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: 'PRESS_BACKBUTTON',
+          payload: null
+        }));
+      }
+    }, true);
+  })();
+  true;
+`;
+
+const HIDE_WEB_BOTTOM_NAV = `
+  (function() {
+    document.documentElement.dataset.nativeTabs = 'true';
+    if (document.getElementById('jirum-native-tabs')) { return; }
+    var style = document.createElement('style');
+    style.id = 'jirum-native-tabs';
+    style.textContent =
+      '[data-native-tabs="true"] nav { display: none !important; }' +
+      '[data-native-tabs="true"] [data-bottom-nav] { display: none !important; }';
+    (document.head || document.documentElement).appendChild(style);
+  })();
+  true;
+`;
+
 /**
- * 탭 안에서 push 되는 상세 WebView.
- *
- * 탭 루트와 달리 자기 WebView 를 새로 띄운다. 네이티브 스택이 전환을 맡으므로
- * 이전 화면이 뒤에 남아 있어 흰 화면 구간이 없다.
+ * 탭 스택 위에 올리는 웹뷰. 상세 하위 경로 폴백과 검색이 같이 쓴다.
+ * 상품 링크는 네이티브 상세로 넘긴다.
  */
-function ProductDetailWebViewScreen({route}: Props) {
-  const {path} = route.params;
+export function StackWebView({
+  path,
+  navigation,
+  hideTabBar,
+  hideWebNav,
+  header,
+}: {
+  path: string;
+  navigation: StackNav;
+  hideTabBar: boolean;
+  hideWebNav: boolean;
+  header?: React.ReactNode;
+}) {
   const insets = useSafeAreaInsets();
   const webviewRef = useRef<WebView>(null);
 
   useTokenRemoveEffect();
+  useHideTabBar(hideTabBar);
+  const tabBarClipPad = useHiddenTabBarClipPadding();
 
-  // 첫 페인트까지만 덮는다. 스택 전환 애니메이션이 이 위를 지나가므로
-  // 지연 없이 바로 띄워야 빈 화면이 스쳐 보이지 않는다.
+  useFocusEffect(
+    useCallback(() => {
+      const unsubscribe = subscribeOpenDetail(nextPath => {
+        navigation.push(tabStackNavigations.DETAIL, {path: nextPath});
+      });
+      return unsubscribe;
+    }, [navigation]),
+  );
+
+  const injected = useMemo(
+    () =>
+      INTERCEPT_DETAIL_LINK_SCRIPT +
+      NATIVE_STACK_SCRIPT +
+      (hideWebNav ? HIDE_WEB_BOTTOM_NAV : ''),
+    [hideWebNav],
+  );
+
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
@@ -54,50 +140,98 @@ function ProductDetailWebViewScreen({route}: Props) {
         openInAppBrowser(event.url);
         return false;
       }
-      return true;
+      const pushable = getPushablePath(event.url);
+      if (!pushable) return true;
+      const current = path.split(/[?#]/)[0];
+      const next = pushable.split(/[?#]/)[0];
+      if (next === current) return true;
+      navigation.push(tabStackNavigations.DETAIL, {path: pushable});
+      return false;
     },
-    [],
+    [navigation, path],
+  );
+
+  const handleMessage = useCallback(
+    (event: Parameters<typeof handleWebViewMessage>[0]) => {
+      try {
+        const parsed = parsedWebViewMessage(event);
+        if (parsed.type === WebViewEventType.PRESS_BACKBUTTON) {
+          navigation.goBack();
+          return;
+        }
+      } catch {
+        // 형식이 다른 메시지는 기존 브리지로.
+      }
+      handleWebViewMessage(event);
+    },
+    [navigation],
   );
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        hideTabBar ? {paddingBottom: tabBarClipPad} : null,
+      ]}>
       <SystemBars style="dark" hidden={false} />
       <View style={[styles.statusBarSpacer, {height: insets.top}]} />
-      <WebView
-        ref={webviewRef}
-        sharedCookiesEnabled={true}
-        pullToRefreshEnabled={true}
-        decelerationRate={Platform.OS === 'ios' ? 1.0 : 0.998}
-        source={{uri: `${SERVICE_URL}${path}`}}
-        applicationNameForUserAgent={USER_AGENT}
-        setSupportMultipleWindows={false}
-        webviewDebuggingEnabled={__DEV__}
-        // 웹 CTA 는 네이티브 accessory 가 대신 그린다. 첫 페인트 전에 숨겨
-        // 깜빡임을 없애고, SPA 라우팅 후에도 다시 적용되도록 둘 다 건다.
-        onLoadEnd={handleLoadEnd}
-        onLoadProgress={e => {
-          if (e.nativeEvent.progress >= 0.98) {
-            setIsLoading(false);
-          }
-        }}
-        onError={handleError}
-        onHttpError={handleLoadEnd}
-        onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
-        onContentProcessDidTerminate={() => webviewRef.current?.reload()}
-        onMessage={handleWebViewMessage}
-        allowsBackForwardNavigationGestures={false}
-      />
-      {isLoading && (
-        <View style={styles.loadingContainer} pointerEvents="none">
-          <ActivityIndicator size="small" color="#667085" />
-        </View>
-      )}
-      {hasError && <WebViewErrorView onRetry={retry} />}
-      {/*
-        탭바가 숨은 자리를 이 CTA 가 대신한다(MainTabNavigator 의 tabBarHidden).
-        네이티브 유리라 iOS 26 에서는 뒤 콘텐츠가 비친다.
-      */}
+      {header}
+      <View style={styles.webviewWrap}>
+        <WebView
+          ref={webviewRef}
+          sharedCookiesEnabled={true}
+          pullToRefreshEnabled={true}
+          decelerationRate={Platform.OS === 'ios' ? 1.0 : 0.998}
+          source={{uri: `${SERVICE_URL}${path}`}}
+          applicationNameForUserAgent={USER_AGENT}
+          setSupportMultipleWindows={false}
+          webviewDebuggingEnabled={__DEV__}
+          injectedJavaScriptBeforeContentLoaded={injected}
+          injectedJavaScript={injected}
+          onLoadEnd={handleLoadEnd}
+          onLoadProgress={e => {
+            if (e.nativeEvent.progress >= 0.98) {
+              setIsLoading(false);
+            }
+          }}
+          onError={handleError}
+          onHttpError={handleLoadEnd}
+          onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
+          onContentProcessDidTerminate={() => webviewRef.current?.reload()}
+          onMessage={handleMessage}
+          allowsBackForwardNavigationGestures={false}
+        />
+        {isLoading && (
+          <View style={styles.loadingContainer} pointerEvents="none">
+            <ActivityIndicator size="small" color="#667085" />
+          </View>
+        )}
+        {hasError && <WebViewErrorView onRetry={retry} />}
+      </View>
     </View>
+  );
+}
+
+type Props = NativeStackScreenProps<
+  ProductFlowParamList,
+  typeof tabStackNavigations.DETAIL
+>;
+
+/** `/products/123/comment` 등 네이티브가 안 그리는 상세 하위 경로. */
+function ProductDetailWebViewScreen({route, navigation}: Props) {
+  const {path} = route.params;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({headerShown: false});
+  }, [navigation]);
+
+  return (
+    <StackWebView
+      path={path}
+      navigation={navigation}
+      hideTabBar={isProductPath(path)}
+      hideWebNav={!isProductPath(path)}
+    />
   );
 }
 
@@ -110,6 +244,9 @@ const styles = StyleSheet.create({
   },
   statusBarSpacer: {
     backgroundColor: '#ffffff',
+  },
+  webviewWrap: {
+    flex: 1,
   },
   loadingContainer: {
     position: 'absolute',

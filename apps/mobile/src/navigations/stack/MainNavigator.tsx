@@ -1,5 +1,6 @@
 import React from 'react';
 import MainTabNavigator from '@/navigations/tab/MainTabNavigator';
+import {PendingLoginRestore} from '@/shared/hooks/PendingLoginRestore';
 import {mainNavigations} from '@/shared/constant/navigations';
 
 /** @deprecated 기존 단일 WebView 화면에서 사용하던 타입. 호환성 유지용. */
@@ -8,7 +9,12 @@ export type MainParamList = {
 };
 
 function MainStackNavigator() {
-  return <MainTabNavigator />;
+  return (
+    <>
+      <PendingLoginRestore />
+      <MainTabNavigator />
+    </>
+  );
 }
 
 export default MainStackNavigator;

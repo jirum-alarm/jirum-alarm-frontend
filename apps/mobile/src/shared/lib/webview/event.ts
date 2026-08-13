@@ -11,11 +11,30 @@ import {setHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 import {setChannelTalkOpen} from '@/shared/hooks/useTabBarVisibility';
 import {syncDeviceIdFromWeb} from '@/shared/lib/device/device-id';
 
-let openDetailListener: ((path: string) => void) | null = null;
+let openDetailListeners: Array<(path: string) => void> = [];
 
-/** 현재 포커스된 탭이 자기 navigation 을 걸어둔다. */
+/**
+ * 지금 포커스된 화면의 상세 열기 핸들러를 쌓는다.
+ *
+ * 하나만 갈아끼우면 안 된다: 포커스 순서가 (새 화면 focus) → (이전 cleanup)
+ * 이라, cleanup 이 `null` 을 넣으면 방금 등록한 리스너를 지운다.
+ * 상세 → 검색 → 홈으로 돌아왔을 때 상품 탭이 네이티브 상세로 안 열리던 원인.
+ */
+export function subscribeOpenDetail(fn: (path: string) => void) {
+  openDetailListeners.push(fn);
+  return () => {
+    const i = openDetailListeners.lastIndexOf(fn);
+    if (i >= 0) openDetailListeners.splice(i, 1);
+  };
+}
+
+/** @deprecated subscribeOpenDetail 을 쓴다. 테스트·구코드 호환용. */
 export function setOpenDetailListener(fn: ((path: string) => void) | null) {
-  openDetailListener = fn;
+  if (fn) {
+    openDetailListeners = [fn];
+    return;
+  }
+  openDetailListeners = [];
 }
 
 type EventHandler<T extends WebViewEventType> = (
@@ -77,7 +96,7 @@ export class EventBridge {
    */
   static openProductDetail: EventHandler<WebViewEventType.OPEN_PRODUCT_DETAIL> =
     async payload => {
-      openDetailListener?.(payload.data.path);
+      openDetailListeners.at(-1)?.(payload.data.path);
     };
   static deviceIdSync: EventHandler<WebViewEventType.DEVICE_ID_SYNC> =
     async payload => {

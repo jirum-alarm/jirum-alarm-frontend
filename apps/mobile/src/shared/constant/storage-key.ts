@@ -6,4 +6,6 @@ export const StorageKey = {
   DEVICE_ID: 'deviceId',
   /** 최근 본 상품(웹뷰 홈이 읽던 것을 네이티브가 대신 쌓는다). */
   RECENT_VIEWED_PRODUCTS: 'recentViewedProducts',
+  /** 로그인 전에 하려던 동작. 로그인 복귀 후 한 번만 실행한다. */
+  PENDING_LOGIN_ACTION: 'pendingLoginAction',
 } as const;
