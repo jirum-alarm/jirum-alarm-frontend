@@ -16,7 +16,9 @@ import {
   buildChartGeometry,
   type ChartPoint,
   shortWon,
+  won,
 } from '../model/chart-geometry';
+import type {CurrentProductMarker} from '../model/seed-marker';
 
 const WIDTH = 640;
 const HEIGHT = 260;
@@ -25,6 +27,8 @@ const PAD = {top: 40, right: 20, bottom: 28, left: 44};
 const LINE = '#7FC125';
 const GRID = '#EAECF0';
 const AXIS_TEXT = '#667085';
+/** web PriceHistorySection CHART.current — 이 상품 마커. */
+const SEED = '#467DFB';
 
 export default function PriceChart({
   points,
@@ -35,6 +39,7 @@ export default function PriceChart({
   contentEndMs,
   selectedIndex,
   onSelectIndex,
+  currentMarker,
 }: {
   points: ChartPoint[];
   currency?: string | null;
@@ -44,6 +49,7 @@ export default function PriceChart({
   contentEndMs: number;
   selectedIndex: number | null;
   onSelectIndex: (index: number) => void;
+  currentMarker?: CurrentProductMarker | null;
 }) {
   // viewBox 는 640 고정이고 실제 폭은 화면마다 다르다. 제스처 x 를 뷰박스
   // 좌표로 되돌리려면 실측 폭이 필요하다(web 의 getBoundingClientRect 대응).
@@ -60,9 +66,23 @@ export default function PriceChart({
         axisEndMs,
         contentStartMs,
         contentEndMs,
+        currentMarker ? [currentMarker.price] : [],
       ),
-    [points, axisStartMs, axisEndMs, contentStartMs, contentEndMs],
+    [
+      points,
+      axisStartMs,
+      axisEndMs,
+      contentStartMs,
+      contentEndMs,
+      currentMarker,
+    ],
   );
+
+  const seedCoord = useMemo(() => {
+    if (!currentMarker) return null;
+    const {x, y} = geo.project(currentMarker.date, currentMarker.price);
+    return {...currentMarker, x, y};
+  }, [currentMarker, geo]);
 
   const nearestIndex = (gestureX: number) => {
     if (!layoutWidth || geo.coords.length === 0) return 0;
@@ -151,17 +171,51 @@ export default function PriceChart({
             />
           ) : null}
 
-          {geo.coords.map((c, i) => (
-            <Circle
-              key={`p-${i}`}
-              cx={c.x}
-              cy={c.y}
-              r={i === selectedIndex ? 5 : 3}
-              fill={i === selectedIndex ? LINE : '#ffffff'}
-              stroke={LINE}
-              strokeWidth={2}
-            />
-          ))}
+          {geo.coords.map((c, i) => {
+            // seed 날짜·가는 아래 전용 마커로만 그린다(이중 점 방지).
+            if (
+              currentMarker &&
+              c.date === currentMarker.date &&
+              c.price === currentMarker.price
+            ) {
+              return null;
+            }
+            return (
+              <Circle
+                key={`p-${i}`}
+                cx={c.x}
+                cy={c.y}
+                r={i === selectedIndex ? 5 : 3}
+                fill={i === selectedIndex ? LINE : '#ffffff'}
+                stroke={LINE}
+                strokeWidth={2}
+              />
+            );
+          })}
+
+          {seedCoord ? (
+            <G>
+              <SvgText
+                x={seedCoord.x}
+                y={Math.max(PAD.top - 6, seedCoord.y - 28)}
+                fontSize={10}
+                fontWeight="700"
+                fill={SEED}
+                textAnchor="middle">
+                이 상품
+              </SvgText>
+              <SvgText
+                x={seedCoord.x}
+                y={Math.max(PAD.top + 6, seedCoord.y - 14)}
+                fontSize={10}
+                fontWeight="600"
+                fill={SEED}
+                textAnchor="middle">
+                {won(seedCoord.price, currency)}
+              </SvgText>
+              <Circle cx={seedCoord.x} cy={seedCoord.y} r={6.5} fill={SEED} />
+            </G>
+          ) : null}
 
           {selected ? (
             <G>

@@ -15,6 +15,7 @@ import {
   withAxisBuffer,
   won,
 } from '../model/chart-geometry';
+import {resolveCurrentProductMarker} from '../model/seed-marker';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
 import PriceChart from './PriceChart';
@@ -22,10 +23,13 @@ import PriceChart from './PriceChart';
 export default function PriceHistorySection({
   productId,
   currentPrice,
+  postedAt,
 }: {
   productId: number;
   /** 상세의 현재가. web 은 요약 카드 가운데에 이걸 띄운다. */
   currentPrice?: number | null;
+  /** 이 상품 게시일 — seed 마커를 오늘로 합성하지 않기 위해 쓴다. */
+  postedAt?: string | null;
 }) {
   const {data, isPending, isError, refetch} = useQuery(
     ProductQueries.priceHistory({id: productId, days: MAX_DAYS}),
@@ -40,8 +44,21 @@ export default function PriceHistorySection({
         date: p.date,
         price: p.price,
         dealTitle: p.deal?.displayTitle || p.deal?.title || '',
+        deal: p.deal
+          ? {
+              id: p.deal.id,
+              isSeed: p.deal.isSeed,
+              parsedPrice: p.deal.parsedPrice,
+            }
+          : null,
       })),
     [data],
+  );
+
+  const currentMarker = useMemo(
+    () =>
+      resolveCurrentProductMarker(allPoints, productId, currentPrice, postedAt),
+    [allPoints, productId, currentPrice, postedAt],
   );
 
   // 기본 기간에 점이 너무 적으면 더 긴 기간으로 확장한다(빈 차트 방지).
@@ -189,6 +206,7 @@ export default function PriceHistorySection({
           contentEndMs={content.contentEndMs}
           selectedIndex={selectedIndex}
           onSelectIndex={setSelectedIndex}
+          currentMarker={currentMarker}
         />
       </View>
 
