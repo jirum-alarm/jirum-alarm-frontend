@@ -16,12 +16,6 @@
     android:allowBackup="false"
     android:theme="@style/AppTheme"
     android:supportsRtl="true">
-    <!-- expo-updates(OTA). runtimeVersion 은 fingerprint 정책이라 빌드 시 계산돼
-         assets 로 주입된다 — 여기에 버전을 박지 말 것(박으면 네이티브 불일치 번들이 꽂힌다). -->
-    <meta-data android:name="expo.modules.updates.ENABLED" android:value="true" />
-    <meta-data android:name="expo.modules.updates.EXPO_UPDATE_URL" android:value="https://u.expo.dev/ec89e7ad-0f52-4777-a71c-50e5f596be58" />
-    <meta-data android:name="expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH" android:value="ALWAYS" />
-    <meta-data android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS" android:value="0" />
     <activity
       android:name="com.solcode.jirmalam.MainActivity"
       android:label="@string/app_name"

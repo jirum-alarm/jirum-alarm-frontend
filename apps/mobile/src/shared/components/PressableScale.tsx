@@ -1,5 +1,12 @@
-import React, {useRef} from 'react';
-import {Animated, Pressable, View, type PressableProps} from 'react-native';
+import React, {useCallback, useEffect, useRef} from 'react';
+import {
+  Animated,
+  AppState,
+  Pressable,
+  View,
+  type GestureResponderEvent,
+  type PressableProps,
+} from 'react-native';
 
 /**
  * 누르면 살짝 줄어드는 Pressable. web 의 motion whileTap={{scale:0.95}} 대응.
@@ -18,6 +25,7 @@ export default function PressableScale({
   scaleTo = 0.95,
   style,
   className,
+  onPress,
   ...rest
 }: PressableProps & {
   scaleTo?: number;
@@ -25,17 +33,57 @@ export default function PressableScale({
   children: React.ReactNode;
 }) {
   const scale = useRef(new Animated.Value(1)).current;
-  const animate = (pressed: boolean) =>
-    Animated.timing(scale, {
-      toValue: pressed ? scaleTo : 1,
-      duration: 100,
-      useNativeDriver: true,
-    }).start();
+
+  const animate = useCallback(
+    (pressed: boolean) =>
+      Animated.timing(scale, {
+        toValue: pressed ? scaleTo : 1,
+        duration: 100,
+        useNativeDriver: true,
+      }).start(),
+    [scale, scaleTo],
+  );
+
+  /** 애니메이션 없이 즉시 원상복구. 화면 복귀처럼 "이미 지나간" 상황용. */
+  const reset = useCallback(() => {
+    scale.stopAnimation();
+    scale.setValue(1);
+  }, [scale]);
+
+  /**
+   * ★눌림 상태가 남는 걸 막는다.
+   *
+   * onPress 에서 상세로 push 하면 그 전환이 onPressOut 을 삼켜서 scale 이
+   * 0.95 에 갇힌다 — 카드가 "좁아진 채 멈췄다가" 상세로 넘어가고, 뒤로 돌아오면
+   * 여전히 좁아져 있다(사용자 지적). onPress 에서도 직접 되돌린다.
+   */
+  const handlePress = useCallback(
+    (e: GestureResponderEvent) => {
+      animate(false);
+      onPress?.(e);
+    },
+    [animate, onPress],
+  );
+
+  /**
+   * 안전망. 앱이 백그라운드에 갔다 오면 눌림이 남아 있을 수 있다.
+   *
+   * ★`useFocusEffect` 를 쓰지 않는다 — PressableScale 은 네비게이션 컨텍스트
+   * 밖(테스트·독립 렌더)에서도 쓰이므로 그 훅을 넣으면 렌더가 통째로 터진다.
+   * AppState 는 어디서든 안전하다.
+   */
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', state => {
+      if (state === 'active') reset();
+    });
+    return () => sub.remove();
+  }, [reset]);
 
   return (
     <Pressable
       onPressIn={() => animate(true)}
       onPressOut={() => animate(false)}
+      onPress={handlePress}
       style={style}
       {...rest}>
       {/* ★scale 만. web 은 `whileTap={{scale:0.95}}` 뿐이고 opacity 를 건드리지

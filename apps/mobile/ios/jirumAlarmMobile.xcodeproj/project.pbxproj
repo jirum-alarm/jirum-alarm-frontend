@@ -22,7 +22,6 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		86519CAB4CF59254EDB9F860 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		994F2B732DBE4EDF005B1327 /* SwiftBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994F2B722DBE4EDF005B1327 /* SwiftBridge.swift */; };
-		A1E0DA110001000000000002 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = A1E0DA110001000000000001 /* Expo.plist */; };
 		AB7E6451F40EB28ADD5F8459 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50FEB904ABFF219A16CBE2 /* ExpoModulesProvider.swift */; };
 		B5313F0BA7764272969844EE /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8632361B2254DE0A91D6ABD /* Pretendard-ExtraLight.otf */; };
 		D6333391A6714250AF71E797 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8E44C7F3ED0F44E68FF0573F /* Pretendard-Regular.otf */; };
@@ -46,7 +45,6 @@
 		9765307C2FC11DDDA0C530F9 /* Pods_jirumAlarmMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_jirumAlarmMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		990B678E2DC613AE00BC5E0A /* jirumAlarmMobileDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = jirumAlarmMobileDebug.entitlements; path = jirumAlarmMobile/jirumAlarmMobileDebug.entitlements; sourceTree = "<group>"; };
 		994F2B722DBE4EDF005B1327 /* SwiftBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftBridge.swift; sourceTree = "<group>"; };
-		A1E0DA110001000000000001 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Expo.plist; path = jirumAlarmMobile/Expo.plist; sourceTree = "<group>"; };
 		A85B92C02B58FE30759EE4F7 /* Pods-jirumAlarmMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jirumAlarmMobile.release.xcconfig"; path = "Target Support Files/Pods-jirumAlarmMobile/Pods-jirumAlarmMobile.release.xcconfig"; sourceTree = "<group>"; };
 		C3F4F2B70D8F4D13B8A3C4A5 /* Pretendard-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Black.otf"; path = "../src/shared/assets/fonts/Pretendard-Black.otf"; sourceTree = "<group>"; };
 		C8632361B2254DE0A91D6ABD /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-ExtraLight.otf"; path = "../src/shared/assets/fonts/Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
@@ -79,7 +77,6 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				A1E0DA110001000000000001 /* Expo.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 				994F2B722DBE4EDF005B1327 /* SwiftBridge.swift */,
@@ -235,7 +232,6 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				FE3073402D490453001A29D5 /* GoogleService-Info.plist in Resources */,
-				A1E0DA110001000000000002 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				86519CAB4CF59254EDB9F860 /* PrivacyInfo.xcprivacy in Resources */,
 				7835F4FDA3EC4CA9B71F33A5 /* Pretendard-Black.otf in Resources */,
