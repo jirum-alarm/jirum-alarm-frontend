@@ -79,6 +79,22 @@ export function useShowTabBar() {
   }, [isFocused]);
 }
 
+/**
+ * 탭 루트 웹뷰가 URL 로 판단해 켜고 끌 때 쓴다.
+ *
+ * ★`setTabBarVisible` 을 직접 부르면 hideCount 를 무시한다. 숨김 화면이
+ * 살아 있는데 웹뷰가 켜버리거나, 반대로 웹뷰가 꺼둔 걸 아무도 못 되돌린다
+ * (더보기 웹뷰 → 홈 복귀 시 탭바가 안 돌아오던 원인).
+ */
+export function setTabBarVisibleFromUrl(visible: boolean) {
+  if (!visible) {
+    setTabBarVisible(false);
+    return;
+  }
+  // 켜는 건 숨기는 화면이 하나도 없을 때만.
+  if (hideCount.current === 0) setTabBarVisible(true);
+}
+
 export function useHideTabBar(enabled = true) {
   useFocusEffect(
     useCallback(() => {

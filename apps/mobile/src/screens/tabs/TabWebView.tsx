@@ -35,7 +35,7 @@ import {
   isTabRootUrl,
 } from '@/shared/lib/navigation/tab-routing';
 import type {TabStackParamList} from '@/navigations/tab/types';
-import {setTabBarVisible} from '@/shared/hooks/useTabBarVisibility';
+import {setTabBarVisibleFromUrl} from '@/shared/hooks/useHideTabBar';
 import {
   buildNativeTabsInjectJs,
   getFabPaddingPx,
@@ -181,10 +181,12 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
   const isHomeTab = tabName === tabNavigations.HOME;
   const shouldDarkStatusBar = isHomeTab && isHomePage && !isScroll;
 
-  // 포커스된 탭의 URL에 따라 탭바 표시/숨김
+  // 포커스된 탭의 URL에 따라 탭바 표시/숨김.
+  // ★setTabBarVisible 을 직접 부르면 hideCount 를 무시해서, 숨김 화면이
+  // 남아 있는데 켜버리거나 웹뷰가 꺼둔 걸 아무도 못 되돌린다.
   useEffect(() => {
     if (isFocused && navState.url) {
-      setTabBarVisible(isTabRootUrl(navState.url));
+      setTabBarVisibleFromUrl(isTabRootUrl(navState.url));
     }
   }, [isFocused, navState.url]);
 

@@ -45,6 +45,29 @@ describe('★탭 루트는 hideCount 를 구독한다', () => {
   });
 });
 
+describe('★setTabBarVisible 직접 호출 금지', () => {
+  it('훅 파일 밖에서는 아무도 직접 부르지 않는다', () => {
+    // 직접 부르면 hideCount 를 무시한다. 탭 웹뷰가 그랬더니 더보기 웹뷰에서
+    // 홈으로 돌아왔을 때 탭바가 영영 안 돌아왔다(사용자 지적).
+    const {execSync} = require('child_process');
+    const out = execSync(
+      "grep -rn 'setTabBarVisible(' src/ | grep -v 'useHideTabBar.ts' " +
+        "| grep -v 'useTabBarVisibility.ts' | grep -v '^\\s*\\*' || true",
+      {cwd: path.join(__dirname, '..'), encoding: 'utf8'},
+    );
+    // 주석 줄(★... 설명)은 허용, 실제 호출은 0 이어야 한다
+    const calls = out
+      .split('\n')
+      .filter((l: string) => l.trim() && !/:\s*\*/.test(l));
+    expect(calls).toEqual([]);
+  });
+
+  it('탭 웹뷰는 hideCount 를 존중하는 setter 를 쓴다', () => {
+    const webview = read('src/screens/tabs/TabWebView.tsx');
+    expect(webview).toContain('setTabBarVisibleFromUrl');
+  });
+});
+
 describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', () => {
   it('내비게이터는 display:none && tabBarClipWhenHidden 일 때만 자른다', () => {
     expect(navigator).toContain("display === 'none'");
