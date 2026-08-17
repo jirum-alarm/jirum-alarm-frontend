@@ -151,7 +151,15 @@ export function ChipRow({
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{paddingHorizontal: 20, paddingBottom: 8, gap: 8}}>
+      // ★높이를 고정한다. ScrollView 는 안 주면 콘텐츠보다 큰 영역을 잡아
+      // 칩 위아래에 빈 띠가 생긴다(사용자 지적: "뱃지 영역에 여백이 크다").
+      // 칩 실제 높이 = text-sm(20) + py-1.5(6*2) + border(2) ≈ 34px.
+      style={{flexGrow: 0, height: variant === 'sub' ? 30 : 34}}
+      contentContainerStyle={{
+        paddingHorizontal: 20,
+        alignItems: 'center',
+        gap: 8,
+      }}>
       {items.map(item => {
         const isActive = item.id === activeId;
         return (

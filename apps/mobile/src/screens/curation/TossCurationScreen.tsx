@@ -101,7 +101,9 @@ export default function TossCurationScreen({
     TOSS_SECTIONS.find(s => s.id === activeId)?.label ?? '토스 특가';
 
   return (
-    <View className="flex-1 bg-white">
+    // gap-2: 칩 줄과 그리드 사이 8px (홈 섹션과 같은 값).
+    // ChipRow 는 이제 높이를 고정하므로 자체 여백이 없다.
+    <View className="flex-1 gap-2 bg-white pt-2">
       <ChipRow
         items={TOSS_SECTIONS.map(s => ({id: s.id, label: s.label}))}
         activeId={activeId}
@@ -127,6 +129,7 @@ export default function TossCurationScreen({
           <TossDealCard deal={item} onPress={handlePressProduct} />
         )}
         columns={3}
+        topSpacing="tight"
         isPending={isPending}
         isError={isError}
         label={activeLabel}

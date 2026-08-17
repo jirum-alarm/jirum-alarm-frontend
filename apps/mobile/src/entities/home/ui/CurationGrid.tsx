@@ -27,6 +27,11 @@ export default function CurationGrid<T>({
   onRetry,
   onEndReached,
   footer,
+  /**
+   * 위쪽 여백. 칩 줄이 위에 있는 화면(토스)은 컨테이너 gap 이 간격을 잡으므로
+   * 'tight'(0)로 둔다. 칩이 없는 화면(큐레이션)은 기본 16px.
+   */
+  topSpacing = 'normal',
 }: {
   items: T[];
   keyOf: (item: T) => string;
@@ -39,6 +44,7 @@ export default function CurationGrid<T>({
   onRetry: () => void;
   onEndReached?: () => void;
   footer?: React.ReactNode;
+  topSpacing?: 'normal' | 'tight';
 }) {
   if (isPending) {
     return (
@@ -73,7 +79,8 @@ export default function CurationGrid<T>({
       numColumns={columns}
       contentContainerStyle={{
         paddingHorizontal: HORIZONTAL_PADDING - GRID_GAP_X / 2,
-        paddingVertical: 16,
+        paddingTop: topSpacing === 'tight' ? 0 : 16,
+        paddingBottom: 16,
       }}
       columnWrapperStyle={{gap: GRID_GAP_X}}
       ItemSeparatorComponent={() => <View style={{height: GRID_GAP_Y}} />}
