@@ -20,3 +20,4 @@ export { default as HotDealGuideModal } from './ui/mobile/HotDealGuideModal';
 export { default as HotdealGuide } from './ui/HotdealGuide';
 export { default as HotdealScore } from './ui/HotdealScore';
 export { default as PriceHistorySection } from './ui/PriceHistorySection';
+export { default as PriceVerdictHero } from './ui/PriceVerdictHero';

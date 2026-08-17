@@ -181,6 +181,11 @@ export class ProductService {
   static async getPriceHistory(variables: { id: number; days?: number }) {
     return execute(QueryProductPriceHistory, variables).then((res) => res.data);
   }
+
+  /** 상세 히어로 가격 판정. READY+STRONG 만 렌더. */
+  static async getPriceVerdict(variables: { id: number }) {
+    return execute(QueryProductPriceVerdict, variables).then((res) => res.data);
+  }
 }
 
 // Track B 클러스터 — 상세 "다른 커뮤니티 가격" 블록.
@@ -354,6 +359,74 @@ const QueryProductPriceHistory = new TypedDocumentString<
         modelName
         brand
         dealCount
+      }
+    }
+  }
+`);
+
+export interface ProductPriceVerdict {
+  status: 'READY' | 'UNAVAILABLE';
+  nullReason:
+    | 'PRIVATE_OR_MISSING_SEED'
+    | 'SEED_PRICE_MISSING'
+    | 'NO_HISTORY'
+    | 'NO_MAPPING'
+    | 'BASIS_NOT_ALLOWED'
+    | 'LOW_CONFIDENCE'
+    | 'TOO_FEW_POINTS'
+    | 'CURRENCY_MISMATCH'
+    | 'INCONSISTENT_PRICE'
+    | 'UNIT_AXIS'
+    | null;
+  displayTier: 'STRONG' | 'NEUTRAL' | 'HIDDEN';
+  basis: string | null;
+  confidence: string | null;
+  currency: string | null;
+  rangeDays: number | null;
+  seedPrice: number | null;
+  windowMinPrice: number | null;
+  windowMinDate: string | null;
+  deltaWon: number | null;
+  savingsWon: number | null;
+  percentile: number | null;
+  labelKey: 'NEAR_LOWEST' | 'BELOW_TYPICAL' | 'TYPICAL' | 'ABOVE_TYPICAL' | 'NEAR_HIGH' | null;
+  headline: string | null;
+  subline: string | null;
+  historyPointCount: number | null;
+}
+
+interface QueryProductPriceVerdictResult {
+  product: {
+    id: number;
+    priceVerdict: ProductPriceVerdict | null;
+  } | null;
+}
+
+const QueryProductPriceVerdict = new TypedDocumentString<
+  QueryProductPriceVerdictResult,
+  { id: number }
+>(`
+  query QueryProductPriceVerdict($id: Int!) {
+    product(id: $id) {
+      id
+      priceVerdict {
+        status
+        nullReason
+        displayTier
+        basis
+        confidence
+        currency
+        rangeDays
+        seedPrice
+        windowMinPrice
+        windowMinDate
+        deltaWon
+        savingsWon
+        percentile
+        labelKey
+        headline
+        subline
+        historyPointCount
       }
     }
   }

@@ -182,6 +182,12 @@ export const ProductQueries = {
       queryFn: () => ProductService.getPriceHistory(variables),
     }),
 
+  priceVerdict: (variables: { id: number }) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'priceVerdict'],
+      queryFn: () => ProductService.getPriceVerdict(variables),
+    }),
+
   reactionKeywords: (variables: QueryCategorizedReactionKeywordsArgs) =>
     queryOptions({
       queryKey: [...ProductQueries.all(), 'reactionKeywords', { id: variables.id }],

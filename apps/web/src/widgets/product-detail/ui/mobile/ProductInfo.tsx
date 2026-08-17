@@ -19,6 +19,7 @@ import TossIcon from '@/entities/product/ui/TossIcon';
 import { RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
 import HotdealGuideModal from '@/features/product-detail/ui/mobile/HotDealGuideModal';
+import PriceVerdictHero from '@/features/product-detail/ui/PriceVerdictHero';
 import ProductGuideMetaRows from '@/features/product-detail/ui/ProductGuideMetaRows';
 
 export default function ProductInfo({
@@ -121,6 +122,7 @@ export default function ProductInfo({
               <RecommendButton productId={productId} />
             </div>
           </div>
+          <PriceVerdictHero productId={productId} />
           {tossData && <TossBadges toss={tossData} />}
         </div>
       </div>

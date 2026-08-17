@@ -582,7 +582,7 @@ export default function PriceHistorySection({
   const showModelPageCta = !!modelPage?.slug && history.basis !== 'SIMILAR';
 
   return (
-    <section className="py-0">
+    <section id="price-history" className="py-0">
       <DetailSectionHeader title="가격 추이" subtitle={subtitle} />
 
       {visiblePeriods.length > 1 && (
