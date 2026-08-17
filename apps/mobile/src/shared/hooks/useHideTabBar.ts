@@ -1,5 +1,5 @@
-import {useCallback} from 'react';
-import {useFocusEffect} from '@react-navigation/native';
+import {useCallback, useEffect, useSyncExternalStore} from 'react';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {
@@ -21,6 +21,24 @@ import {
 const hideCount = {current: 0};
 
 /**
+ * hideCount 가 바뀔 때 알린다. 탭 루트(useShowTabBar)가 이걸 구독해서
+ * "숨기는 화면이 다 빠졌다"는 시점을 놓치지 않는다.
+ */
+const hideCountListeners = new Set<() => void>();
+
+function setHideCount(next: number) {
+  hideCount.current = Math.max(0, next);
+  hideCountListeners.forEach(listener => listener());
+}
+
+function subscribeHideCount(listener: () => void) {
+  hideCountListeners.add(listener);
+  return () => {
+    hideCountListeners.delete(listener);
+  };
+}
+
+/**
  * 이 화면에 있는 동안 탭바를 숨긴다.
  *
  * 탭바가 떠야 할 곳 / 안 떠야 할 곳:
@@ -37,32 +55,39 @@ const hideCount = {current: 0};
  * 이 화면에 있는 동안 탭바를 **보인다**(탭 루트용).
  *
  * ★`setTabBarVisible(true)` 를 직접 부르면 안 된다 — hideCount 를 무시해서
- * 숨김 화면과 상태가 어긋난다. 홈이 그렇게 했더니 홈에서 탭바가 안 보이고
- * 상세 하단이 밀리는 증상이 났다(사용자 지적).
+ * 숨김 화면과 상태가 어긋난다.
  *
- * 카운터가 0 일 때만(=숨기는 화면이 하나도 없을 때만) 켠다.
+ * ★★한 번만 확인하면 안 된다. 탭을 왔다갔다 하면 화면이 언마운트되지 않고
+ * focus/blur 만 반복되는데, 그 사이 다른 화면이 hideCount 를 올렸다 내리므로
+ * **포커스된 동안 계속 지켜봐야** 한다. 타이머 한 발로 끝내면 타이밍이
+ * 어긋난 순간 탭바가 영구히 사라진다(사용자 지적: "왔다갔다 하다보니 사라짐").
  */
 export function useShowTabBar() {
-  useFocusEffect(
-    useCallback(() => {
-      // 다른 화면의 cleanup 이 아직 안 돌았을 수 있어 한 틱 뒤에 판단한다.
-      const timer = setTimeout(() => {
-        if (hideCount.current === 0) setTabBarVisible(true);
-      }, 0);
-      return () => clearTimeout(timer);
-    }, []),
-  );
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (!isFocused) return;
+
+    // 즉시 한 번 + 이후 hideCount 변화를 따라간다.
+    const sync = () => {
+      if (hideCount.current === 0) setTabBarVisible(true);
+    };
+    sync();
+
+    const unsubscribe = subscribeHideCount(sync);
+    return unsubscribe;
+  }, [isFocused]);
 }
 
 export function useHideTabBar(enabled = true) {
   useFocusEffect(
     useCallback(() => {
       if (!enabled) return;
-      hideCount.current += 1;
+      setHideCount(hideCount.current + 1);
       setTabBarVisible(false);
 
       return () => {
-        hideCount.current = Math.max(0, hideCount.current - 1);
+        setHideCount(hideCount.current - 1);
         // 다음 화면의 focus 가 먼저 돌 수 있으므로 한 틱 뒤에 판단한다.
         setTimeout(() => {
           if (hideCount.current === 0) setTabBarVisible(true);
@@ -87,8 +112,16 @@ export function useHideTabBar(enabled = true) {
 export function useHiddenTabBarClipPadding() {
   const insets = useSafeAreaInsets();
   const tabBarVisible = useTabBarVisibility();
+  // ★hideCount 를 렌더 중에 그냥 읽으면 값이 바뀌어도 리렌더가 안 돌아
+  // 패딩이 한 프레임 늦는다 — 상세에서 "여백이 생겼다 사라지는" 원인.
+  // 구독해서 값이 바뀌는 순간 다시 그린다.
+  const hiding = useSyncExternalStore(
+    subscribeHideCount,
+    () => hideCount.current > 0,
+  );
+
   if (!isIos26SystemTabBar()) return 0;
   // 탭바가 보이거나, 숨기는 화면이 하나도 없으면 clip 이 안 걸려 있다.
-  if (tabBarVisible || hideCount.current === 0) return 0;
+  if (tabBarVisible || !hiding) return 0;
   return getTabBarClipPx(insets.bottom);
 }
