@@ -39,7 +39,7 @@ export default function ProductRankingImageCard({
     >
       <motion.div
         className={cn(
-          'pc:h-auto pc:scale-100 pc:border h-[364px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',
+          'pc:h-auto pc:scale-100 pc:border h-[352px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',
           activeIndex === index && 'scale-100',
         )}
       >

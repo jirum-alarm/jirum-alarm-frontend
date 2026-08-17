@@ -10,11 +10,32 @@ const w = web('entities/product-list/ui/ranking/ProductRankingImageCard.tsx');
 const n = native('src/entities/home/ui/JirumRankingSlider.tsx');
 
 describe('랭킹 카드 — web 대조', () => {
-  it('카드 364 / 썸네일 240', () => {
-    expect(w).toContain('h-[364px]');
+  it('카드 352 / 썸네일 240 — web·앱 동일', () => {
+    // 240(썸네일)+12(p-3)+40(제목2줄)+20(메타)+36(가격) = 348.
+    // p-3 하단 대칭분 4px 만 남기고 352 로 줄였다(원래 364 는 16px 이 떴다).
+    expect(w).toContain('h-[352px]');
     expect(w).toContain('h-[240px]');
-    expect(n).toContain('CARD_HEIGHT = 364');
+    expect(n).toContain('CARD_HEIGHT = 352');
     expect(n).toContain('THUMB_HEIGHT = 240');
+  });
+
+  it('★카드 높이를 쓰는 web 3곳이 전부 같다', () => {
+    // 카드·AD변형·스켈레톤이 갈리면 캐러셀에서 높이가 어긋나고
+    // 스켈레톤→로드 전환에 슬라이더가 튄다.
+    for (const f of [
+      'entities/product-list/ui/ranking/ProductRankingImageCard.tsx',
+      'entities/product-list/ui/ranking/ADProductRankingImageCard.tsx',
+      'widgets/home/ui/mobile/RankingSkeleton.tsx',
+    ]) {
+      expect(web(f)).toContain('h-[352px]');
+      expect(web(f)).not.toContain('h-[364px]');
+    }
+  });
+
+  it('앱 스켈레톤도 카드와 같은 높이', () => {
+    expect(native('src/screens/home/ui/HomeSkeletons.tsx')).toContain(
+      'height: 352',
+    );
   });
 
   it('순위칩 26px + text-sm font-medium', () => {

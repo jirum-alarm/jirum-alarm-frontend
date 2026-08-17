@@ -52,7 +52,7 @@ import {DisplayListPrice} from './cards/HomeCardPrimitives';
  *   기간 만료 배너라 옮기지 않는다. 자체 광고 슬롯(ActiveAds)과는 다른 물건이다.
  */
 
-const CARD_HEIGHT = 364; // web h-[364px]
+const CARD_HEIGHT = 352; // web h-[352px]
 const THUMB_HEIGHT = 240; // web h-[240px]
 const CARD_WIDTH = 240; // web style width 240px (mobile)
 const GAP = 4; // web spaceBetween: 4

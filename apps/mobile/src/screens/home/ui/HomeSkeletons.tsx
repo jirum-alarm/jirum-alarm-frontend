@@ -57,7 +57,7 @@ export function BannerSkeleton() {
   );
 }
 
-/** JirumRankingSlider 와 같은 크기(카드 240×364 + 도트 줄 20). */
+/** JirumRankingSlider 와 같은 크기(카드 240×352 + 도트 줄 20). */
 export function RankingSkeleton() {
   const opacity = useShimmer();
   const screenWidth = Dimensions.get('window').width;
@@ -74,7 +74,7 @@ export function RankingSkeleton() {
             key={i}
             style={{
               width: 240,
-              height: 364,
+              height: 352,
               marginRight: 4,
               // 가운데 카드만 100%, 옆은 90% — 실제 슬라이더와 같은 비율
               transform: [{scale: i === 0 ? 1 : 0.9}],
