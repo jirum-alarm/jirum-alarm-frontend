@@ -39,7 +39,7 @@ import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import {setTabBarVisible} from '@/shared/hooks/useTabBarVisibility';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {SERVICE_URL} from '@/constants/env';
-import {openInAppBrowser} from '@/shared/lib/navigation';
+import {useWebviewContext} from '@/provider/WebViewRefProvider';
 
 /**
  * 네이티브 홈. web: app/(desktop-ready)/(home)/page.tsx → HomeContainerV2
@@ -62,6 +62,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeNavigationProp>();
   const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
+  const {getWebViewRef, setActiveTab} = useWebviewContext();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -108,12 +109,42 @@ export default function HomeScreen() {
   );
 
   /**
-   * 더보기 링크. /curation/* 은 아직 네이티브 화면이 없어 웹뷰로 띄운다.
-   * ponytail: 인앱 브라우저. 큐레이션까지 네이티브로 옮기면 그때 push 로 바꾼다.
+   * 섹션 더보기(/curation/*). 네이티브 화면이 아직 없어 웹으로 보여주되,
+   * **탭 스택에 쌓는다** — 인앱 브라우저로 띄우면 앱 밖으로 나간 것처럼 보이고
+   * 탭바·뒤로가기가 사라진다(사용자 지적).
    */
-  const handlePressViewMore = useCallback((link: string) => {
-    openInAppBrowser(`${SERVICE_URL}${link}`);
-  }, []);
+  const handlePressViewMore = useCallback(
+    (link: string, title: string) => {
+      navigation.push(tabStackNavigations.WEBVIEW, {
+        uri: `${SERVICE_URL}${link}`,
+        title,
+      });
+    },
+    [navigation],
+  );
+
+  /**
+   * "실시간 특가 더 보기" → 발견 탭의 **실시간** 화면.
+   *
+   * 탭만 바꾸면 그 탭의 기본 URL(`/trending/ranking`)이라 랭킹이 뜬다
+   * (사용자 지적). 탭을 전환하고 그 탭 웹뷰의 URL 을 live 로 갈아끼운다 —
+   * MainTabNavigator 의 handleNavigateToRoot 와 같은 방식.
+   */
+  const handlePressLiveDeals = useCallback(() => {
+    const tabs = navigation.getParent(MAIN_TABS_ID as never) as
+      | {navigate: (name: string) => void}
+      | undefined;
+    tabs?.navigate(tabNavigations.DISCOVER);
+    setActiveTab(tabNavigations.DISCOVER);
+
+    const target = `${SERVICE_URL}/trending/live`;
+    // 탭 전환 직후엔 웹뷰가 아직 마운트 전일 수 있어 한 틱 뒤에 주입한다.
+    setTimeout(() => {
+      getWebViewRef(tabNavigations.DISCOVER)?.current?.injectJavaScript(
+        `if (window.location.href !== '${target}') { window.location.href = '${target}'; } true;`,
+      );
+    }, 0);
+  }, [navigation, setActiveTab, getWebViewRef]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -239,7 +270,7 @@ export default function HomeScreen() {
                 );
               })}
 
-              <HomeEndCta />
+              <HomeEndCta onPress={handlePressLiveDeals} />
             </View>
           )}
         </View>
@@ -253,23 +284,14 @@ export default function HomeScreen() {
  * 실시간 특가(/trending/live)는 발견 탭 소속이라 그 탭으로 보낸다 —
  * 웹뷰를 새로 띄우면 탭 구조 밖으로 나가버린다.
  */
-function HomeEndCta() {
-  const navigation = useNavigation();
-
+function HomeEndCta({onPress}: {onPress: () => void}) {
   return (
     <View className="items-center gap-y-3 border-t border-gray-100 py-12">
       <Text className="text-sm font-medium text-gray-500">
         추천 핫딜을 모두 확인했어요
       </Text>
       <PressableScale
-        onPress={() => {
-          // 탭 네비게이터를 id 로 찾아 발견 탭으로. 웹뷰를 새로 띄우면
-          // 탭 구조 밖으로 나가버린다.
-          const tabs = navigation.getParent(MAIN_TABS_ID as never) as
-            | {navigate: (name: string) => void}
-            | undefined;
-          tabs?.navigate(tabNavigations.DISCOVER);
-        }}
+        onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel="실시간 특가 더 보기"
         className="bg-secondary-600 flex-row items-center gap-x-1 rounded-full px-6 py-3">

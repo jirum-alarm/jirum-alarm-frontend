@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import TabWebView from '@/screens/tabs/TabWebView';
 import HomeScreen from '@/screens/home/HomeScreen';
+import JirumAlarmWebViewScreen from '@/screens/jirumalarmwebview/JirumAlarmWebViewScreen';
 import {NATIVE_HOME} from '@/constants/feature-flags';
 import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
 import SearchStackNavigator from './SearchStackNavigator';
@@ -67,6 +68,22 @@ function useSyncNativeTabBarHidden() {
  * 전환을 탄다 — 전환 중 이전 화면이 뒤에 남으므로 흰 화면이 안 생긴다.
  * iOS 스와이프 뒤로가기도 스택이 알아서 붙여준다.
  */
+/**
+ * 큐레이션 등 웹 페이지를 탭 스택에 쌓는 화면.
+ * JirumAlarmWebViewScreen 은 MainParamList 로 타이핑돼 있어 그대로 못 넣는다 —
+ * params 모양({uri})이 같으므로 얇게 감싼다.
+ */
+function TabWebViewPage({
+  route,
+}: {
+  route: {params: {uri: string; title?: string}};
+}) {
+  const Screen = JirumAlarmWebViewScreen as unknown as React.ComponentType<{
+    route: {params: {uri: string}};
+  }>;
+  return <Screen route={{params: {uri: route.params.uri}}} />;
+}
+
 export function createTabStack(tabName: TabName) {
   return function TabStack() {
     const onFocusedRoute = useSyncNativeTabBarHidden();
@@ -100,6 +117,18 @@ export function createTabStack(tabName: TabName) {
         <Stack.Screen
           name={tabStackNavigations.SEARCH}
           component={SearchStackNavigator}
+        />
+        <Stack.Screen
+          name={tabStackNavigations.WEBVIEW}
+          component={TabWebViewPage}
+          options={({route}) => ({
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTintColor: '#101828',
+            headerBackButtonDisplayMode: 'minimal',
+            headerStyle: {backgroundColor: '#ffffff'},
+            title: route.params?.title ?? '',
+          })}
         />
         <Stack.Screen
           name={tabStackNavigations.COMMENTS}

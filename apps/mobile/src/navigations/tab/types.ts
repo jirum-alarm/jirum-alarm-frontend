@@ -16,6 +16,7 @@ export type ProductFlowParamList = {
 export type TabStackParamList = ProductFlowParamList & {
   [tabStackNavigations.ROOT]: undefined;
   [tabStackNavigations.SEARCH]: undefined;
+  [tabStackNavigations.WEBVIEW]: {uri: string; title?: string};
 };
 
 /** 검색 한 판 + 그 검색에서 연 상세. */

@@ -135,11 +135,15 @@ export default function RecommendedKeywordSection() {
                 )}>
                 {keyword}
               </Text>
+              {/* ★기호 자리를 고정한다. web 은 `+`(text-base)와 `✓`(text-sm)로
+                  크기가 다른데, RN 에선 그게 칩 높이·폭을 바꿔서 등록하는 순간
+                  칩이 커졌다 작아진다(사용자 지적). 폭·줄높이를 박아
+                  기호만 갈아끼운다. */}
               <Text
+                style={{width: 12, lineHeight: 18, textAlign: 'center'}}
                 className={cn(
-                  added
-                    ? 'text-primary-600 text-sm'
-                    : 'text-base text-gray-400',
+                  'text-sm',
+                  added ? 'text-primary-600' : 'text-gray-400',
                 )}>
                 {added ? '✓' : '+'}
               </Text>

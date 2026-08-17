@@ -88,24 +88,54 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
   const step = slideWidth + GAP; // 스냅 간격은 간격까지 포함해야 어긋나지 않는다
   const sidePadding = (screenWidth - slideWidth) / 2;
 
+  const count = slides.length;
+
+  /**
+   * ★web `loop: true` 구현. 앞뒤로 한 벌씩 덧대고(=3배) 가운데 블록에서 시작한다.
+   *
+   * 인덱스만 `% count` 로 순환시키면 마지막 → 첫 슬라이드에서 scrollTo(0) 이라
+   * 오른쪽으로 계속 도는 대신 **왼쪽으로 확 되감긴다** — 무한 롤링이 아니다
+   * (사용자 지적). 실제 슬라이드를 복제해 두고, 가장자리에 닿으면 같은 배너가
+   * 보이는 가운데 위치로 애니메이션 없이 점프한다(랭킹 슬라이더와 같은 방식).
+   */
+  const looped = useMemo(
+    () =>
+      count === 0
+        ? []
+        : Array.from({length: count * 3}, (_, i) => ({
+            slide: slides[i % count],
+            realIndex: i % count,
+            key: `${slides[i % count].kind}-${i}`,
+          })),
+    [slides, count],
+  );
+
   const scrollRef = useRef<Animated.ScrollView>(null);
-  const [index, setIndex] = useState(0);
-  const indexRef = useRef(0);
+  // 가운데 블록 기준 위치.
+  const [scrollIndex, setScrollIndex] = useState(count);
+  const indexRef = useRef(count);
   const interactedRef = useRef(false);
   const progress = useSharedValue(0);
 
-  const count = slides.length;
+  const index = count > 0 ? scrollIndex % count : 0;
   const currentDelay =
     slides[index]?.kind === 'ad' ? AD_AUTOPLAY_MS : AUTOPLAY_MS;
 
+  // 첫 로드 시 가운데 블록으로.
+  useEffect(() => {
+    if (count === 0) return;
+    indexRef.current = count;
+    setScrollIndex(count);
+    scrollRef.current?.scrollTo({x: count * step, animated: false});
+  }, [count, step]);
+
   const goTo = useCallback(
-    (next: number, animated = true) => {
-      const clamped = ((next % count) + count) % count;
-      indexRef.current = clamped;
-      setIndex(clamped);
-      scrollRef.current?.scrollTo({x: clamped * step, animated});
+    (next: number) => {
+      indexRef.current = next;
+      setScrollIndex(next);
+      scrollRef.current?.scrollTo({x: next * step, animated: true});
     },
-    [count, step],
+    [step],
   );
 
   /**
@@ -136,9 +166,19 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
   }));
 
   const onMomentumEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (count === 0) return;
     const next = Math.round(e.nativeEvent.contentOffset.x / step);
     indexRef.current = next;
-    setIndex(next);
+    setScrollIndex(next);
+
+    // 가장자리 블록이면 같은 배너가 보이는 가운데로 순간이동.
+    // 스크롤이 멈춘 뒤라 사용자는 점프를 느끼지 못한다.
+    if (next < count || next >= count * 2) {
+      const middle = count + (((next % count) + count) % count);
+      indexRef.current = middle;
+      setScrollIndex(middle);
+      scrollRef.current?.scrollTo({x: middle * step, animated: false});
+    }
   };
 
   if (count === 0) return null;
@@ -157,16 +197,16 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
         }}
         onMomentumScrollEnd={onMomentumEnd}
         contentContainerStyle={{paddingHorizontal: sidePadding, gap: GAP}}>
-        {slides.map((slide, i) => (
-          <View key={`${slide.kind}-${i}`} style={{width: slideWidth}}>
-            <BannerSlideView slide={slide} isVisible={i === index} />
+        {looped.map((item, i) => (
+          <View key={item.key} style={{width: slideWidth}}>
+            <BannerSlideView slide={item.slide} isVisible={i === scrollIndex} />
             {/*
               진행바는 슬라이드 안에 둔다 — 배너와 같이 움직여야 한다.
               web 은 캐러셀 컨테이너에 absolute 로 붙여 화면에 고정하는데,
               그러면 스크롤 중 배너만 지나가고 바는 제자리라 따로 논다.
               활성 슬라이드에만 그려서 "지금 이 배너의 남은 시간"으로 읽히게 한다.
             */}
-            {i === index ? (
+            {i === scrollIndex ? (
               <View className="absolute top-2 right-3 h-1 w-8">
                 <View className="h-full w-full overflow-hidden rounded-full bg-white/20">
                   <Animated.View
