@@ -25,21 +25,12 @@ export default function PressableScale({
   children: React.ReactNode;
 }) {
   const scale = useRef(new Animated.Value(1)).current;
-  const opacity = useRef(new Animated.Value(1)).current;
-
   const animate = (pressed: boolean) =>
-    Animated.parallel([
-      Animated.timing(scale, {
-        toValue: pressed ? scaleTo : 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: pressed ? 0.6 : 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    Animated.timing(scale, {
+      toValue: pressed ? scaleTo : 1,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
 
   return (
     <Pressable
@@ -47,9 +38,9 @@ export default function PressableScale({
       onPressOut={() => animate(false)}
       style={style}
       {...rest}>
-      {/* scale 만으로는 작은 요소에서 변화가 잘 안 보인다. web 도 tap 시
-          시각 변화가 분명하므로 opacity 를 함께 준다. */}
-      <Animated.View style={{transform: [{scale}], opacity}}>
+      {/* ★scale 만. web 은 `whileTap={{scale:0.95}}` 뿐이고 opacity 를 건드리지
+          않는다. 0.6 까지 흐려지면 카드가 순간 사라지는 것처럼 보여 과하다. */}
+      <Animated.View style={{transform: [{scale}]}}>
         <View className={className}>{children}</View>
       </Animated.View>
     </Pressable>
