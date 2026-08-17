@@ -116,10 +116,10 @@ export default function HomeScreen() {
    */
   const handlePressViewMore = useCallback(
     (link: string, title: string) => {
-      navigation.push(tabStackNavigations.WEBVIEW, {
-        uri: `${SERVICE_URL}${link}`,
-        title,
-      });
+      // ★경로만 넘긴다. JirumAlarmWebViewScreen 이 자체적으로
+      // `${SERVICE_URL}${uri}` 로 조립하므로 여기서 또 붙이면 URL 이 두 번
+      // 겹쳐서("...comhttps://...") 페이지를 못 불러온다.
+      navigation.push(tabStackNavigations.WEBVIEW, {uri: link, title});
     },
     [navigation],
   );

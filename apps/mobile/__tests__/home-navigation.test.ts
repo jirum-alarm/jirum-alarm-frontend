@@ -26,6 +26,17 @@ describe('섹션 더보기 — 탭 스택에 쌓는다', () => {
     expect(screen).toContain('navigation.push');
   });
 
+  it('★uri 는 경로만 — SERVICE_URL 을 붙이지 않는다', () => {
+    // JirumAlarmWebViewScreen 이 `${SERVICE_URL}${uri}` 로 조립한다.
+    // 호출부에서 또 붙이면 "...comhttps://..." 가 되어 페이지를 못 불러온다.
+    const webviewScreen = read(
+      'src/screens/jirumalarmwebview/JirumAlarmWebViewScreen.tsx',
+    );
+    expect(webviewScreen).toContain('${SERVICE_URL}${uri}');
+    expect(screen).toContain('{uri: link, title}');
+    expect(screen).not.toContain('uri: `${SERVICE_URL}${link}`');
+  });
+
   it('WEBVIEW 라우트가 탭 스택에 등록돼 있다', () => {
     expect(routes).toContain('WEBVIEW:');
     expect(stack).toContain('tabStackNavigations.WEBVIEW');
