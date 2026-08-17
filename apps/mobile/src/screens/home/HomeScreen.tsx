@@ -19,6 +19,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SystemBars} from 'react-native-edge-to-edge';
 
 import {HomeQueries} from '@/entities/home/api/home.queries';
+import {AdvertiseSlotLocation} from '@/shared/api/gql/graphql';
 import {buildPromotionSections} from '@/entities/home/model/promotion-sections';
 import DynamicProductSection from '@/entities/home/ui/DynamicProductSection';
 import HomeBannerCarousel from '@/entities/home/ui/HomeBannerCarousel';
@@ -26,6 +27,7 @@ import JirumRankingSlider from '@/entities/home/ui/JirumRankingSlider';
 import RecommendedKeywordSection from '@/entities/home/ui/RecommendedKeywordSection';
 import TossHomeSection from '@/entities/home/ui/TossHomeSection';
 import HomeHeader from '@/screens/home/ui/HomeHeader';
+import {BannerSkeleton, RankingSkeleton} from '@/screens/home/ui/HomeSkeletons';
 import PressableScale from '@/shared/components/PressableScale';
 import {ArrowRightIcon} from '@/shared/components/icons';
 import {
@@ -67,6 +69,23 @@ export default function HomeScreen() {
   const {data: tabSources, isPending: isTabSourcesPending} = useQuery(
     HomeQueries.tabSources(),
   );
+
+  /**
+   * ★첫 화면(above-the-fold)은 한번에 그린다.
+   *
+   * RN 엔 SSR 이 없어서 각 쿼리가 끝나는 대로 UI 가 순차로 바뀐다 — 배너가
+   * 뜨고, 랭킹이 뜨고, 섹션이 뜨는 게 다 보여서 "데이터 페칭 후 UI 가 바뀐다"로
+   * 읽힌다(사용자 지적).
+   *
+   * 화면에 처음 보이는 건 배너 + 랭킹뿐이므로 **그 둘만** 기다렸다가 함께
+   * 보여준다. 아래 섹션은 스크롤해야 보이므로 각자 채워도 짤깁임이 안 보인다.
+   * (전체를 기다리면 가장 느린 섹션이 첫 화면 속도를 정해 오히려 느려진다.)
+   */
+  const {isPending: isRankingPending} = useQuery(HomeQueries.ranking());
+  const {isPending: isAdsPending} = useQuery(
+    HomeQueries.activeAds(AdvertiseSlotLocation.HomeCarouselBanner),
+  );
+  const isAboveFoldPending = isRankingPending || isAdsPending;
 
   /**
    * 섹션 구성. 탭 소스가 아직 없으면 빈 배열로 만들어 키워드 폴백 탭을 쓴다
@@ -166,12 +185,16 @@ export default function HomeScreen() {
           pb-6(24px)만 주면 실제로 4px 만 남아 배너가 흰 면에 닿는다.
         */}
         <View className="bg-gray-900 pt-2 pb-11">
-          <HomeBannerCarousel />
+          {isAboveFoldPending ? <BannerSkeleton /> : <HomeBannerCarousel />}
         </View>
 
         {/* 본문 — web 은 rounded-t-[1.25rem] 로 다크 헤더 위에 올라탄다 */}
         <View className="-mt-5 rounded-t-[20px] bg-white pt-3">
-          <JirumRankingSlider onPressProduct={handlePressProduct} />
+          {isAboveFoldPending ? (
+            <RankingSkeleton />
+          ) : (
+            <JirumRankingSlider onPressProduct={handlePressProduct} />
+          )}
           <View className="h-5" />
 
           {isTabSourcesPending ? (
