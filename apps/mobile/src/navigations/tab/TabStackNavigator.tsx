@@ -75,7 +75,9 @@ function useSyncNativeTabBarHidden() {
  */
 function hidesTabBar(routeName: string | undefined): boolean {
   return (
-    routeName === tabStackNavigations.DETAIL ||
+    // ★상세는 숨기지 않는다(2026-08-17 사용자 지시). 찜/구매 CTA 가 탭바
+    // 위에 얹히므로 BottomCTA 가 탭바 높이만큼 더 띄운다.
+    // web 은 상세에서 BottomNav 를 아예 렌더하지 않지만 앱은 다르게 간다.
     routeName === tabStackNavigations.COMMENTS ||
     routeName === tabStackNavigations.SEARCH ||
     routeName === tabStackNavigations.CURATION ||

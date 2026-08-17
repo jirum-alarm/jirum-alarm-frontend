@@ -83,7 +83,7 @@ describe('더보기 웹뷰 안에서 상품을 눌렀을 때', () => {
     expect(stack).toContain('hidesTabBar');
     const fn = stack.slice(
       stack.indexOf('function hidesTabBar'),
-      stack.indexOf('function hidesTabBar') + 400,
+      stack.indexOf('function hidesTabBar') + 700,
     );
     expect(fn).toContain('tabStackNavigations.WEBVIEW');
   });

@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 import * as Haptics from 'expo-haptics';
@@ -99,7 +100,10 @@ export default function BottomCTA({
   ]);
 
   const isWishlisted = !!stats?.isMyWishlist;
-  const paddingBottom = Math.max(insets.bottom, 8);
+  // ★상세에서도 탭바가 보이므로(2026-08-17 지시) 그 높이만큼 더 띄운다.
+  // 안 그러면 구매 CTA 가 탭바에 가린다. 탭바가 없는 경우(안드로이드 등)는
+  // getReservedBottomPx 가 safe area 만 돌려주므로 그대로 안전하다.
+  const paddingBottom = getReservedBottomPx(insets.bottom);
 
   usePendingAction(PendingActionType.WISHLIST_ADD, () => {
     if (!isWishlisted) toggleWishlist(true);

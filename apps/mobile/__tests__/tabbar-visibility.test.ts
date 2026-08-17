@@ -125,9 +125,10 @@ describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', (
     ]) {
       expect(read(f)).not.toContain('useHiddenTabBarClipPadding');
     }
-    // 하단 UI 가 safe area 를 직접 본다(그래서 패딩이 필요 없다)
+    // 하단 UI 가 여백을 직접 계산한다(그래서 상쇄 패딩이 필요 없다).
+    // 상세에선 탭바도 보이므로 탭바 높이까지 포함한다.
     expect(read('src/screens/detail/ui/BottomCTA.tsx')).toContain(
-      'Math.max(insets.bottom',
+      'getReservedBottomPx(insets.bottom)',
     );
   });
 
