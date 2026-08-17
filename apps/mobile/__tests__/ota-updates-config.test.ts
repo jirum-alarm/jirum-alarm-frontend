@@ -106,10 +106,34 @@ describe('OTA 설정 — 앱 버전 3곳 정렬 (appVersion 정책의 안전장�
   });
 });
 
-describe('OTA 설정 — 생성물은 커밋하지 않는다', () => {
-  it('플러그인이 만드는 Expo.plist 는 gitignore 돼 있다', () => {
-    // 커밋되면 머신마다 다른 값이 박혀 들어간다.
-    expect(read('../../.gitignore')).toContain('Supporting/Expo.plist');
+describe('OTA 설정 — Supporting/Expo.plist 는 반드시 커밋돼 있어야 한다', () => {
+  /**
+   * ★빌드 7회 실패의 진짜 원인. EAS 로그의 err 필드에 있었다:
+   *   Error: .../ios/jirumAlarmMobile/Supporting/Expo.plist does not exist
+   *     at iosSetChannelNativelyAsync
+   *
+   * EAS 는 이 파일이 **이미 있어야** 그 안에 채널(expo-channel-name)을 써넣는다.
+   * 그런데 ios/ 가 커밋된 bare 프로젝트에서는 EAS 가 prebuild 를 skip 하므로
+   * (로그: "Skipped running expo prebuild because the ios directory already exists")
+   * 플러그인이 EAS 쪽에서 이 파일을 만들어주지 않는다 → 커밋이 유일한 공급 경로.
+   *
+   * 로컬은 pnpm install 때 플러그인이 만들어주므로 "있으니 됐다"고 착각하기 쉽다.
+   */
+  const plistPath = 'ios/jirumAlarmMobile/Supporting/Expo.plist';
+
+  it('파일이 존재한다', () => {
+    expect(exists(plistPath)).toBe(true);
+  });
+
+  it('gitignore 되지 않는다 (되면 EAS 트리에서 사라진다)', () => {
+    expect(read('../../.gitignore')).not.toContain('Supporting/Expo.plist');
+  });
+
+  it('URL·runtimeVersion 이 app.json 과 일치한다', () => {
+    // 플러그인 생성물이라 app.json 에서 파생된다. 갈리면 app.json 을 고치고 재생성.
+    const plist = read(plistPath);
+    expect(plist).toContain(EXPECTED_URL);
+    expect(plist).toContain(`<string>${appJson.expo.runtimeVersion}</string>`);
   });
 });
 

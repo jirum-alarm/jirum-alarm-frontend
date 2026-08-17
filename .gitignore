@@ -49,8 +49,6 @@
 /apps/mobile/ios/GoogleService-Info.plist
 /apps/mobile/ios/**/xcuserdata/
 /apps/mobile/ios/**/*.xcuserstate
-# expo-updates config plugin 이 생성한다(pnpm install/prebuild 시). 커밋하면 안 됨.
-/apps/mobile/ios/**/Supporting/Expo.plist
 
 .idea
 # Ignore Cursor / local agent files
