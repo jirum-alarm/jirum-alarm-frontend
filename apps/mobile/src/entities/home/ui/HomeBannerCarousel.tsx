@@ -160,16 +160,25 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
         {slides.map((slide, i) => (
           <View key={`${slide.kind}-${i}`} style={{width: slideWidth}}>
             <BannerSlideView slide={slide} isVisible={i === index} />
+            {/*
+              진행바는 슬라이드 안에 둔다 — 배너와 같이 움직여야 한다.
+              web 은 캐러셀 컨테이너에 absolute 로 붙여 화면에 고정하는데,
+              그러면 스크롤 중 배너만 지나가고 바는 제자리라 따로 논다.
+              활성 슬라이드에만 그려서 "지금 이 배너의 남은 시간"으로 읽히게 한다.
+            */}
+            {i === index ? (
+              <View className="absolute top-2 right-3 h-1 w-8">
+                <View className="h-full w-full overflow-hidden rounded-full bg-white/20">
+                  <Animated.View
+                    className="h-full bg-white"
+                    style={progressStyle}
+                  />
+                </View>
+              </View>
+            ) : null}
           </View>
         ))}
       </Animated.ScrollView>
-
-      {/* web: 우상단 진행바 (h-1 w-8, 흰색 20% 위에 흰색) */}
-      <View className="absolute top-2 right-10 z-10 h-1 w-8">
-        <View className="h-full w-full overflow-hidden rounded-full bg-white/20">
-          <Animated.View className="h-full bg-white" style={progressStyle} />
-        </View>
-      </View>
     </View>
   );
 }
@@ -284,7 +293,12 @@ function BannerCard({
 
       {isAd ? (
         <View className="absolute right-2 bottom-2 rounded-lg border border-white bg-[#98A2B3] px-[7px] py-[3px]">
-          <Text className="text-xs font-medium text-white">AD</Text>
+          {/* web `leading-none` — 기본 line-height 면 뱃지가 4~6px 커진다. */}
+          <Text
+            className="text-xs font-medium text-white"
+            style={{lineHeight: 12}}>
+            AD
+          </Text>
         </View>
       ) : null}
     </PressableScale>

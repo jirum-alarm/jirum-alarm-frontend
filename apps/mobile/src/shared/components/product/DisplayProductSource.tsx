@@ -12,10 +12,17 @@ export default function DisplayProductSource({
   mallName,
   providerName,
   time,
+  spacing = 'top',
 }: {
   mallName?: string | null;
   providerName?: string | null;
   time?: string;
+  /**
+   * 위 여백. web 은 호출부가 className 으로 정한다 —
+   * Grid/Carousel 은 pt-1, List/DoubleRow 는 부모 gap 에 맡기고 0.
+   * 여기에 하드코딩하면 gap 을 쓰는 카드에서 4px 씩 덧나온다.
+   */
+  spacing?: 'top' | 'none';
 }) {
   const mall = mallName?.trim();
   const rawCommunity = providerName?.trim();
@@ -28,7 +35,12 @@ export default function DisplayProductSource({
   const dot = <Text className="text-xs text-gray-300"> · </Text>;
 
   return (
-    <View className="flex-row items-center pt-1">
+    <View
+      className={
+        spacing === 'top'
+          ? 'flex-row items-center pt-1'
+          : 'flex-row items-center'
+      }>
       <Text className="shrink text-xs text-gray-500" numberOfLines={1}>
         {mall ? (
           <Text className="font-medium text-gray-600">{mall}</Text>

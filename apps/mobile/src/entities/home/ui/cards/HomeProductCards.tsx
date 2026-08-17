@@ -116,7 +116,8 @@ export function ListCard({product, onPress}: CardProps) {
           style={{width: 76, height: 76}}
           thumbnailType="product"
         />
-        <View className="flex-1 gap-1">
+        {/* web `h-full justify-between` — 76px 안에서 제목/가격/출처를 벌린다. */}
+        <View className="h-[76px] flex-1 justify-between gap-1">
           <Text className="text-sm text-gray-700" numberOfLines={2}>
             {product.title}
           </Text>
@@ -129,10 +130,12 @@ export function ListCard({product, onPress}: CardProps) {
               />
             ) : null}
           </View>
+          {/* web 은 부모 gap-1 이 간격을 잡는다 — pt-1 을 더하면 4px 덧난다. */}
           <DisplayProductSource
             mallName={product.mallName}
             providerName={product.provider?.nameKr}
             time={product.postedAt ? formatMMD(product.postedAt) : undefined}
+            spacing="none"
           />
         </View>
       </View>
@@ -156,15 +159,20 @@ export function DoubleRowCard({product, onPress}: CardProps) {
           style={{width: 120, height: 120}}
           thumbnailType="product"
         />
-        <View className="flex-1 gap-2">
+        {/* h-[120px] = 썸네일 높이. mt-auto 는 부모에 높이가 있어야 먹는다. */}
+        <View className="h-[120px] flex-1 gap-2">
           <Text className="text-sm text-gray-800" numberOfLines={2}>
             {product.title}
           </Text>
+          {/* web 은 부모 gap-2 가 간격을 잡는다. */}
           <DisplayProductSource
             mallName={product.mallName}
             providerName={product.provider?.nameKr}
+            spacing="none"
           />
-          <View className="flex-row items-center gap-2">
+          {/* web `mt-auto` — 120px 썸네일 높이 안에서 가격을 바닥에 붙인다.
+              없으면 제목 줄 수에 따라 카드마다 가격 높이가 들쭉날쭉해진다. */}
+          <View className="mt-auto flex-row items-center gap-2">
             <DisplayListPrice price={product.price} />
             {product.hotDealType && !product.isEnd ? (
               <HotdealBadge

@@ -72,7 +72,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    maxWidth: 220,
+    // ★뒤로가기 버튼과 같은 headerLeft 안에 들어간다. 220 이면 우측 액션
+    // (검색·공유 72px)까지 더해 폭이 모자라 **뒤로가기가 밀려나 안 보인다.**
+    // 로고+부제는 줄여도 읽히므로 여기서 양보한다.
+    maxWidth: 150,
+    flexShrink: 1,
   },
   titleText: {
     minWidth: 0,

@@ -138,8 +138,14 @@ export default function HomeScreen() {
         contentContainerStyle={{paddingBottom: reservedBottom}}>
         <HomeHeader isScrolled={isScrolled} />
 
-        {/* 다크 배경 헤더 + 배너 캐러셀 (web BackgroundHeader) */}
-        <View className="bg-gray-900 pb-6">
+        {/*
+          다크 배경 헤더 + 배너 캐러셀 (web BackgroundHeader).
+          위 여백: web 은 헤더가 py-3 뒤 배너가 바로 오지만, 네이티브는 헤더가
+          sticky 라 붙어 보인다 → pt-2 로 숨통을 준다.
+          아래 여백: 본문이 -mt-5(20px)로 올라타므로 그만큼 더 준다.
+          pb-6(24px)만 주면 실제로 4px 만 남아 배너가 흰 면에 닿는다.
+        */}
+        <View className="bg-gray-900 pt-2 pb-11">
           <HomeBannerCarousel />
         </View>
 

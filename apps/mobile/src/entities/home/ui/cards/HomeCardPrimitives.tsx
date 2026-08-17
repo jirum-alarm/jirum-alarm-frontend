@@ -57,7 +57,10 @@ export function CardThumbnail({
 
       {product.isEnd ? (
         <View className="absolute bottom-0 left-0 h-[22px] justify-center rounded-tr-lg rounded-bl-lg bg-white px-2">
-          <Text className="text-xs font-semibold text-gray-700">판매종료</Text>
+          {/* ★web 은 `text-semibold` 라고 썼는데 Tailwind 에 없는 클래스라
+              아무것도 적용되지 않는다 → 실제 렌더는 400(normal).
+              600 으로 "고쳐" 옮기면 네이티브 뱃지만 혼자 굵어 뭉개져 보인다. */}
+          <Text className="text-xs text-gray-700">판매종료</Text>
         </View>
       ) : product.hotDealType ? (
         <View className="absolute bottom-0 left-0">
@@ -70,7 +73,8 @@ export function CardThumbnail({
 
       {product.earliestExpiryDate && !product.isEnd ? (
         <View className="absolute inset-x-0 bottom-0 h-[22px] items-center justify-center rounded-b-lg bg-gray-700/80 px-2">
-          <Text className="text-xs font-semibold text-white">
+          {/* web 의 `text-semibold` 는 무효 클래스 → 실렌더 400. 위 주석 참조. */}
+          <Text className="text-xs text-white">
             유통기한 {formatMMD(product.earliestExpiryDate)}
           </Text>
         </View>

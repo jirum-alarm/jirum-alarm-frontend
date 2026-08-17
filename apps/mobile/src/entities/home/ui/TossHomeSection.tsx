@@ -198,7 +198,7 @@ function TossDealCard({
           <NoImage categoryId={null} type="product" />
         )}
         {label ? (
-          <View className="bg-error-500 absolute top-0 right-0 z-10 h-6 justify-center rounded-tr-lg rounded-bl-lg px-2">
+          <View className="bg-error-500 absolute top-0 right-0 z-10 h-6 items-center justify-center rounded-tr-lg rounded-bl-lg px-2">
             <Text className="text-xs font-semibold text-white">{label}</Text>
           </View>
         ) : null}
@@ -289,7 +289,10 @@ function Badge({
 }) {
   return (
     <View className={cn('rounded px-1.5 py-0.5', className)}>
-      <Text className={cn('text-[11px] font-medium', textClassName)}>
+      {/* web `whitespace-nowrap` — 3열 좁은 카드에서 "최저가 보상"이 쪼개지지 않게. */}
+      <Text
+        className={cn('text-[11px] font-medium', textClassName)}
+        numberOfLines={1}>
         {children}
       </Text>
     </View>

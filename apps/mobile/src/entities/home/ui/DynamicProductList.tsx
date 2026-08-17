@@ -119,6 +119,9 @@ function ProductGrid({
   onPressProduct: (id: number) => void;
 }) {
   const widthPercent = `${100 / columns}%` as const;
+  // web `gap-y-5` 는 행 **사이**에만 붙는다. 모든 셀에 marginBottom 을 주면
+  // 마지막 행 아래에 20px 이 남아 섹션 간격이 web 보다 넓어진다.
+  const lastRowStart = Math.floor((products.length - 1) / columns) * columns;
 
   return (
     <View
@@ -127,13 +130,13 @@ function ProductGrid({
         flexWrap: 'wrap',
         marginHorizontal: -GRID_GAP_X / 2,
       }}>
-      {products.map(product => (
+      {products.map((product, i) => (
         <View
           key={product.id}
           style={{
             width: widthPercent,
             paddingHorizontal: GRID_GAP_X / 2,
-            marginBottom: GRID_GAP_Y,
+            marginBottom: i >= lastRowStart ? 0 : GRID_GAP_Y,
           }}>
           <GridCard
             product={product}
