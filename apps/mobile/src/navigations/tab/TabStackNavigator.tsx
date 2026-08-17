@@ -121,14 +121,11 @@ export function createTabStack(tabName: TabName) {
         <Stack.Screen
           name={tabStackNavigations.WEBVIEW}
           component={TabWebViewPage}
-          options={({route}) => ({
-            headerShown: true,
-            headerShadowVisible: false,
-            headerTintColor: '#101828',
-            headerBackButtonDisplayMode: 'minimal',
-            headerStyle: {backgroundColor: '#ffffff'},
-            title: route.params?.title ?? '',
-          })}
+          // ★네이티브 헤더를 띄우지 않는다. 여기서 여는 web 페이지
+          // (/toss·/curation)는 **자체 헤더**(제목·뒤로가기·검색·공유)를
+          // 갖고 있어 헤더가 두 개로 겹친다. 뒤로가기는 웹 헤더와
+          // iOS 스와이프가 담당한다.
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name={tabStackNavigations.COMMENTS}

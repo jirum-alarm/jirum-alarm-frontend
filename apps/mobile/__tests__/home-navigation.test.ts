@@ -41,6 +41,16 @@ describe('섹션 더보기 — 탭 스택에 쌓는다', () => {
     expect(routes).toContain('WEBVIEW:');
     expect(stack).toContain('tabStackNavigations.WEBVIEW');
   });
+
+  it('★네이티브 헤더를 띄우지 않는다 — web 이 자체 헤더를 갖는다', () => {
+    // /toss·/curation 은 제목·뒤로가기·검색·공유를 web 이 그린다.
+    // headerShown: true 로 두면 헤더가 두 개로 겹친다.
+    const block = stack.slice(
+      stack.indexOf('tabStackNavigations.WEBVIEW'),
+      stack.indexOf('tabStackNavigations.COMMENTS'),
+    );
+    expect(block).toContain('headerShown: false');
+  });
 });
 
 describe('실시간 특가 더 보기 — 발견 탭의 live 화면', () => {
