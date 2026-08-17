@@ -2,7 +2,10 @@ import {useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-import {setTabBarVisible} from '@/shared/hooks/useTabBarVisibility';
+import {
+  setTabBarVisible,
+  useTabBarVisibility,
+} from '@/shared/hooks/useTabBarVisibility';
 import {
   getTabBarClipPx,
   isIos26SystemTabBar,
@@ -51,9 +54,17 @@ export function useHideTabBar(enabled = true) {
 /**
  * iOS 26 네이티브 탭바를 숨길 때 화면 하단이 잘린다.
  * 그 잘린 높이만큼 콘텐츠를 올려야 찜/구매·댓글 입력이 안 사라진다.
+ *
+ * ★탭바가 **실제로 숨은 뒤에만** 패딩을 준다.
+ * useHideTabBar 는 useFocusEffect(포커스 후)에 도는데 이 훅이 첫 렌더부터
+ * 패딩을 주면, 진입 순간 "탭바 보임 + 패딩 있음"이 겹쳐 하단에 98px 여백이
+ * 생겼다가 탭바가 잘리면서 사라진다(사용자 지적: "여백이 있다가 사라진다").
+ * 같은 신호(useTabBarVisibility)를 보면 둘이 항상 같은 프레임에 맞는다.
  */
 export function useHiddenTabBarClipPadding() {
   const insets = useSafeAreaInsets();
+  const tabBarVisible = useTabBarVisibility();
   if (!isIos26SystemTabBar()) return 0;
+  if (tabBarVisible) return 0;
   return getTabBarClipPx(insets.bottom);
 }

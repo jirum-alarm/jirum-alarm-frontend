@@ -6,9 +6,14 @@ export {};
  * 이 설정이 틀리면 잘못된 JS 번들이 네이티브와 안 맞는 앱에 꽂혀 부팅 불가가 되고,
  * 그건 OTA 로 복구가 안 된다(스토어 재심사). 그래서 설정 자체를 테스트로 묶는다.
  *
- * 특히 runtimeVersion 정책: 이 레포는 앱 버전이 app.json / ios pbxproj / android gradle
- * 3곳에서 갈려 있었다(1.3.9 / 1.4.1 / 1.3.7). appVersion 정책은 네이티브 값을 읽고
- * app.json 을 안 보므로 플랫폼별로 다른 runtimeVersion 이 나온다 → fingerprint 만 허용.
+ * runtimeVersion 은 appVersion 정책을 쓴다. fingerprint 정책은 EAS 에서 수렴하지
+ * 않아 못 쓴다 — ios/ 가 byte 단위로 동일한 두 빌드(e28dcbb1, 74188bee)에서도
+ * EAS 가 계산한 ios 해시가 085d92a1 / 79247b59 로 달랐다(빌드 3회 연속 실패).
+ *
+ * appVersion 정책의 위험은 "버전이 여러 곳에서 갈리는 것"이다. 네이티브 값을 읽고
+ * app.json 은 안 보므로, 세 곳이 갈리면 플랫폼별로 다른 runtimeVersion 이 나오고
+ * 네이티브와 안 맞는 번들이 꽂혀 부팅 불가(=OTA 로 복구 불가, 심사 재시작)가 된다.
+ * 그래서 아래 "버전 정렬" 테스트가 이 정책의 안전장치다.
  */
 
 // @types/node 를 이 앱에 넣지 않으므로 인라인 require 를 쓴다(기존 테스트와 동일).
@@ -26,8 +31,8 @@ const easJson = JSON.parse(read('eas.json'));
 const EXPECTED_URL = `https://u.expo.dev/${appJson.expo.extra.eas.projectId}`;
 
 describe('OTA 설정 — app.json', () => {
-  it('runtimeVersion 은 fingerprint 정책이다 (appVersion 은 크래시 함정)', () => {
-    expect(appJson.expo.runtimeVersion).toEqual({policy: 'fingerprint'});
+  it('runtimeVersion 은 appVersion 정책이다 (fingerprint 는 EAS 에서 수렴 안 함)', () => {
+    expect(appJson.expo.runtimeVersion).toEqual({policy: 'appVersion'});
   });
 
   it('업데이트 URL 은 EAS projectId 와 일치한다', () => {
@@ -55,33 +60,37 @@ describe('OTA 설정 — eas.json 채널', () => {
   });
 });
 
-describe('OTA 설정 — fingerprint 재현성', () => {
+describe('OTA 설정 — 앱 버전 3곳 정렬 (appVersion 정책의 안전장치)', () => {
   /**
-   * 실제로 빌드를 깨뜨린 회귀(빌드 730a92fe):
-   * eas-build-pre-install 훅이 EAS 에서 시크릿을 ios/·android/ 안에 복원하는데,
-   * 그 파일들은 gitignore 라 로컬엔 없다 → ios 디렉토리 해시가 갈리고
-   * CONFIGURE_EXPO_UPDATES 단계에서 "Runtime version mismatch" 로 빌드 실패.
-   *
-   * 훅이 복원하는 모든 경로는 .fingerprintignore 에 있어야 한다.
+   * appVersion 정책은 runtimeVersion = 앱 버전이다. 세 소스가 갈리면
+   * 플랫폼별로 다른 runtimeVersion 이 나와서, 업데이트가 엉뚱한 빌드에 꽂힌다.
+   * 과거 실제로 갈려 있었다: app.json 1.3.9 / ios 1.4.1 / android 1.3.7.
    */
-  const ignore = read('.fingerprintignore');
-  const restoreScript = read('scripts/eas-restore-build-files.mjs');
+  const pbxproj = read('ios/jirumAlarmMobile.xcodeproj/project.pbxproj');
+  const gradle = read('android/app/build.gradle');
 
-  const RESTORED_PATHS = [
-    'ios/GoogleService-Info.plist',
-    'android/app/google-services.json',
-  ];
+  const iosVersions = [
+    ...pbxproj.matchAll(/MARKETING_VERSION = ([^;]+);/g),
+  ].map(m => m[1].trim());
+  const androidVersion = gradle.match(/versionName "([^"]+)"/)?.[1];
+  const appJsonVersion = appJson.expo.version;
 
-  it('복원 스크립트가 실제로 그 경로들을 쓴다 (테스트가 현실과 안 갈리게)', () => {
-    for (const p of RESTORED_PATHS) {
-      expect(restoreScript).toContain(p);
-    }
+  it('iOS 의 모든 configuration 이 같은 버전이다', () => {
+    // Debug/Release 중 하나만 올리는 실수가 잦다.
+    expect(iosVersions.length).toBeGreaterThan(0);
+    expect(new Set(iosVersions).size).toBe(1);
   });
 
-  it('훅이 복원하는 경로는 모두 fingerprint 에서 제외된다', () => {
-    for (const p of RESTORED_PATHS) {
-      expect(ignore).toContain(p);
-    }
+  it('app.json / ios / android 가 모두 같은 버전이다', () => {
+    expect(androidVersion).toBe(appJsonVersion);
+    expect(iosVersions[0]).toBe(appJsonVersion);
+  });
+});
+
+describe('OTA 설정 — 생성물은 커밋하지 않는다', () => {
+  it('플러그인이 만드는 Expo.plist 는 gitignore 돼 있다', () => {
+    // 커밋되면 머신마다 다른 값이 박혀 들어간다.
+    expect(read('../../.gitignore')).toContain('Supporting/Expo.plist');
   });
 });
 
@@ -107,11 +116,5 @@ describe('OTA 설정 — 네이티브 배선은 손으로 하지 않는다', () 
   it('Android: manifest 에 updates meta-data 를 수동으로 넣지 않는다', () => {
     const manifest = read('android/app/src/main/AndroidManifest.xml');
     expect(manifest).not.toContain('expo.modules.updates');
-  });
-
-  it('생성물은 커밋되지 않도록 gitignore 돼 있다', () => {
-    // 커밋되면 머신마다 다른 값이 박혀 들어가 fingerprint 가 갈린다.
-    const gitignore = read('../../.gitignore');
-    expect(gitignore).toContain('Supporting/Expo.plist');
   });
 });

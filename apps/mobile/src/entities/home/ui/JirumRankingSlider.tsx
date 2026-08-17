@@ -268,10 +268,10 @@ function RankingCard({
             <NoImage categoryId={product.categoryId} type="product" />
           )}
         </View>
-        {/* web `p-3 pb-0`. 364-240=124px 이 텍스트 몫인데 제목 2줄+메타+가격은
-            ~88px 이라 아래가 뜬다 — web 도 같은 구조지만 카드가 늘 scale-90 이라
-            덜 보인다. justify-between 으로 남는 높이를 콘텐츠 사이에 분배한다. */}
-        <View className="flex-1 justify-between px-3 pt-3 pb-3">
+        {/* web `p-3 pb-0` — 위에서부터 쌓고 하단 패딩은 없다.
+            ★앞서 justify-between + pb-3 을 넣었더니 제목·메타·가격 사이가
+            벌어져 어색했다(사용자 지적). web 처럼 붙여 쌓는 게 맞다. */}
+        <View className="px-3 pt-3">
           <Text className="text-sm text-gray-700" numberOfLines={2}>
             {product.title}
           </Text>
