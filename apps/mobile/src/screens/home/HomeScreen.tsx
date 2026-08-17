@@ -126,7 +126,16 @@ export default function HomeScreen() {
         return;
       }
 
-      // 나머지(토스 등)는 아직 web 이다. 경로만 넘긴다 —
+      // 토스 특가도 네이티브 화면이 있다(카드가 달라 별 화면).
+      const tossTab = link.match(/^\/toss(?:\?tab=(.+))?$/)?.[1];
+      if (link.startsWith('/toss')) {
+        navigation.push(tabStackNavigations.TOSS_CURATION, {
+          sectionId: tossTab,
+        });
+        return;
+      }
+
+      // 나머지는 아직 web 이다. 경로만 넘긴다 —
       // JirumAlarmWebViewScreen 이 `${SERVICE_URL}${uri}` 로 조립하므로
       // 여기서 또 붙이면 URL 이 두 번 겹친다.
       navigation.push(tabStackNavigations.WEBVIEW, {uri: link, title});

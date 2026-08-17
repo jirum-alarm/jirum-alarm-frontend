@@ -275,3 +275,44 @@ export function curationSingleQuery(section: ContentPromotionSection) {
     staleTime: STALE_TIME,
   });
 }
+
+/**
+ * 토스 특가 더보기 — 섹션별 무한 목록.
+ *
+ * 큐레이션(curationInfiniteQuery)과 같은 커서 방식이지만 응답이
+ * `productsByKeyword` 전용이고 `data.toss` 확장정보를 담아야 하므로 따로 둔다.
+ * (카드가 다르다 — curation-toss-theme-are-not-interchangeable)
+ */
+export function tossInfiniteQuery(
+  sectionId: string,
+  tossCategoryLabel: string | null,
+) {
+  const keyword = TOSS_SECTION_KEYWORD[sectionId] ?? TOSS_SECTION_KEYWORD.all;
+
+  return infiniteQueryOptions({
+    queryKey: [
+      ...HomeQueries.keys.all,
+      'toss-curation',
+      sectionId,
+      tossCategoryLabel ?? 'all',
+    ],
+    initialPageParam: null as string[] | null,
+    queryFn: ({pageParam}) =>
+      HomeService.getTossProducts({
+        limit: CURATION_LIMIT,
+        keyword,
+        orderBy: 'POSTED_AT' as never,
+        orderOption: 'DESC' as never,
+        tossCategoryLabel,
+        searchAfter: pageParam,
+      }),
+    getNextPageParam: lastPage => {
+      if (lastPage.length < CURATION_LIMIT) return undefined;
+      const cursor = (lastPage.at(-1) as {searchAfter?: string[]} | undefined)
+        ?.searchAfter;
+      return cursor && cursor.length > 0 ? cursor : undefined;
+    },
+    retry: RETRY,
+    staleTime: STALE_TIME,
+  });
+}

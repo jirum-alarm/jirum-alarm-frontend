@@ -17,6 +17,7 @@ export type TabStackParamList = ProductFlowParamList & {
   [tabStackNavigations.ROOT]: undefined;
   [tabStackNavigations.SEARCH]: undefined;
   [tabStackNavigations.CURATION]: {sectionId: string; title?: string};
+  [tabStackNavigations.TOSS_CURATION]: {sectionId?: string};
   [tabStackNavigations.WEBVIEW]: {uri: string; title?: string};
 };
 

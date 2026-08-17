@@ -1,5 +1,5 @@
 import React, {useCallback, useLayoutEffect, useMemo} from 'react';
-import {ActivityIndicator, FlatList, Text, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
 import {HeaderBackButton} from '@react-navigation/elements';
@@ -16,8 +16,8 @@ import {
   findPromotionSectionById,
 } from '@/entities/home/model/promotion-sections';
 import type {ProductCardType} from '@/entities/home/model/types';
+import CurationGrid from '@/entities/home/ui/CurationGrid';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
-import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {
@@ -37,11 +37,6 @@ import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
  *   productsByKeyword · products · expiringSoonHotDealProducts → 무한스크롤
  *   hotDealRankingProducts · guestRecommendedHotDeals → 단일 조회
  */
-
-const GRID_GAP_X = 12; // web gap-x-3
-const GRID_GAP_Y = 20; // web gap-y-5
-const HORIZONTAL_PADDING = 20; // web px-5
-const COLUMNS = 2;
 
 type CurationNavigationProp = NativeStackNavigationProp<TabStackParamList>;
 
@@ -136,13 +131,14 @@ function InfiniteList({section, onPressProduct}: ListProps) {
   );
 
   return (
-    <ProductGrid
-      products={products}
+    <CurationGrid
+      items={products}
+      keyOf={item => String(item.id)}
+      renderCard={item => <GridCard product={item} onPress={onPressProduct} />}
       isPending={isPending}
       isError={isError}
       label={section.title}
       onRetry={refetch}
-      onPressProduct={onPressProduct}
       onEndReached={() => {
         if (hasNextPage && !isFetchingNextPage) fetchNextPage();
       }}
@@ -164,82 +160,14 @@ function SingleList({section, onPressProduct}: ListProps) {
   );
 
   return (
-    <ProductGrid
-      products={data ?? []}
+    <CurationGrid
+      items={data ?? []}
+      keyOf={item => String(item.id)}
+      renderCard={item => <GridCard product={item} onPress={onPressProduct} />}
       isPending={isPending}
       isError={isError}
       label={section.title}
       onRetry={refetch}
-      onPressProduct={onPressProduct}
-    />
-  );
-}
-
-/** 2열 그리드. 홈 GRID 섹션과 같은 간격·같은 카드. */
-function ProductGrid({
-  products,
-  isPending,
-  isError,
-  label,
-  onRetry,
-  onPressProduct,
-  onEndReached,
-  footer,
-}: {
-  products: ProductCardType[];
-  isPending: boolean;
-  isError: boolean;
-  label: string;
-  onRetry: () => void;
-  onPressProduct: (id: number) => void;
-  onEndReached?: () => void;
-  footer?: React.ReactNode;
-}) {
-  if (isPending) {
-    return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="small" color="#667085" />
-      </View>
-    );
-  }
-
-  if (isError) {
-    return (
-      <View className="flex-1 bg-white pt-4">
-        <SectionErrorRow label={label} onRetry={onRetry} />
-      </View>
-    );
-  }
-
-  if (products.length === 0) {
-    // web EmptyState — "상품이 없습니다."
-    return (
-      <View className="flex-1 items-center bg-white py-10">
-        <Text className="text-sm text-gray-500">상품이 없습니다.</Text>
-      </View>
-    );
-  }
-
-  return (
-    <FlatList
-      className="flex-1 bg-white"
-      data={products}
-      keyExtractor={item => String(item.id)}
-      numColumns={COLUMNS}
-      contentContainerStyle={{
-        paddingHorizontal: HORIZONTAL_PADDING - GRID_GAP_X / 2,
-        paddingVertical: 16,
-      }}
-      columnWrapperStyle={{gap: GRID_GAP_X}}
-      ItemSeparatorComponent={() => <View style={{height: GRID_GAP_Y}} />}
-      onEndReached={onEndReached}
-      onEndReachedThreshold={0.5}
-      ListFooterComponent={footer as React.ReactElement}
-      renderItem={({item}) => (
-        <View style={{flex: 1 / COLUMNS}}>
-          <GridCard product={item} onPress={onPressProduct} />
-        </View>
-      )}
     />
   );
 }

@@ -6,6 +6,7 @@ import TabWebView from '@/screens/tabs/TabWebView';
 import HomeScreen from '@/screens/home/HomeScreen';
 import JirumAlarmWebViewScreen from '@/screens/jirumalarmwebview/JirumAlarmWebViewScreen';
 import CurationScreen from '@/screens/curation/CurationScreen';
+import TossCurationScreen from '@/screens/curation/TossCurationScreen';
 import {NATIVE_HOME} from '@/constants/feature-flags';
 import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
 import SearchStackNavigator from './SearchStackNavigator';
@@ -81,6 +82,7 @@ function hidesTabBar(routeName: string | undefined): boolean {
     routeName === tabStackNavigations.COMMENTS ||
     routeName === tabStackNavigations.SEARCH ||
     routeName === tabStackNavigations.CURATION ||
+    routeName === tabStackNavigations.TOSS_CURATION ||
     routeName === tabStackNavigations.WEBVIEW
   );
 }
@@ -177,6 +179,18 @@ export function createTabStack(tabName: TabName) {
             headerStyle: {backgroundColor: '#ffffff'},
             title: route.params?.title ?? '',
           })}
+        />
+        <Stack.Screen
+          name={tabStackNavigations.TOSS_CURATION}
+          component={TossCurationScreen}
+          options={{
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTintColor: '#101828',
+            headerBackButtonDisplayMode: 'minimal',
+            headerStyle: {backgroundColor: '#ffffff'},
+            title: '',
+          }}
         />
         <Stack.Screen
           name={tabStackNavigations.WEBVIEW}
