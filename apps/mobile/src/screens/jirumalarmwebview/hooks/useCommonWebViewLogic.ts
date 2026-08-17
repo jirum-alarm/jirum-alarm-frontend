@@ -3,7 +3,13 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTokenRemoveEffect} from './useTokenRemoveEffect';
 import {SERVICE_URL} from '@/constants/env';
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {Alert, Animated, BackHandler, useAnimatedValue} from 'react-native';
+import {
+  Alert,
+  Animated,
+  BackHandler,
+  Platform,
+  useAnimatedValue,
+} from 'react-native';
 import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
 import type {WebViewMessageEvent} from 'react-native-webview';
 import {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
@@ -25,6 +31,7 @@ import {
   tabStackNavigations,
 } from '@/shared/constant/navigations';
 import {isInTabStack} from '@/shared/lib/navigation/search-flow';
+import {getPushablePath} from '@/shared/lib/navigation/tab-routing';
 
 export function useCommonWebViewLogic() {
   const insets = useSafeAreaInsets();
@@ -82,9 +89,29 @@ export function useCommonWebViewLogic() {
         openInAppBrowser(event.url);
         return false;
       }
+
+      // ★문서 로드로 상품 상세에 가는 경우도 네이티브로 올린다.
+      // (위 ROUTE_CHANGED 는 web 의 SPA 라우팅만 잡는다)
+      // iOS 는 사용자 탭이 아닌 로드까지 잡히면 곤란해 click 만 대상으로 한다 —
+      // Android 는 navigationType 이 항상 'other' 라 구분이 안 된다.
+      const isUserInitiated =
+        Platform.OS !== 'ios' || event.navigationType === 'click';
+      if (event.isTopFrame !== false && isUserInitiated) {
+        const pushablePath = getPushablePath(event.url);
+        if (pushablePath && isInTabStack(navigation)) {
+          clearLoadingState();
+          navigation.dispatch(
+            StackActions.push(tabStackNavigations.DETAIL, {
+              path: pushablePath,
+            }),
+          );
+          return false;
+        }
+      }
+
       return true;
     },
-    [clearLoadingState],
+    [clearLoadingState, navigation],
   );
 
   const closeApp = useCallback(() => {
@@ -130,6 +157,20 @@ export function useCommonWebViewLogic() {
       if (parsedMessage.payload?.data) {
         const {url, type} = parsedMessage.payload
           .data as WebViewEventPayloads[WebViewEventType.ROUTE_CHANGED]['data'];
+
+        // ★상품 상세는 웹뷰로 쌓지 않고 **네이티브 상세**로 올린다.
+        // 토스 특가 웹뷰에서 상품을 누르면 웹뷰가 또 쌓여서 네이티브 상세의
+        // CTA·차트·공유가 전부 사라진다(사용자 지적). TabWebView 가 이미
+        // 같은 판정을 쓴다(getPushablePath).
+        const pushablePath = getPushablePath(url);
+        if (pushablePath && isInTabStack(navigation)) {
+          navigation.dispatch(
+            StackActions.push(tabStackNavigations.DETAIL, {
+              path: pushablePath,
+            }),
+          );
+          return;
+        }
 
         // ★어느 스택에서 열렸느냐에 따라 라우트 이름이 다르다.
         // 탭 스택 안(더보기로 들어온 /toss·/curation)이면 탭 스택 라우트로

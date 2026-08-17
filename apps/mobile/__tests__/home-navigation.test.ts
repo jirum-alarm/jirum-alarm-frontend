@@ -72,6 +72,21 @@ describe('더보기 웹뷰 안에서 상품을 눌렀을 때', () => {
     'src/screens/jirumalarmwebview/hooks/useCommonWebViewLogic.ts',
   );
 
+  it('★★상품 상세는 웹뷰가 아니라 네이티브로 올린다', () => {
+    // 토스 특가 웹뷰에서 상품을 누르면 웹뷰가 또 쌓여 네이티브 상세의
+    // CTA·차트·공유가 전부 사라졌다(사용자 지적).
+    expect(logic).toContain('getPushablePath');
+    expect(logic).toContain('tabStackNavigations.DETAIL');
+  });
+
+  it('SPA 라우팅과 문서 로드 두 경로 모두 잡는다', () => {
+    // ROUTE_CHANGED(web pushState) + onShouldStartLoadWithRequest(문서 로드)
+    expect(logic).toContain('ROUTE_CHANGED');
+    expect(logic).toContain('handleShouldStartLoadWithRequest');
+    // 두 곳에서 각각 판정한다
+    expect(logic.match(/getPushablePath/g)?.length).toBeGreaterThanOrEqual(2);
+  });
+
   it('★탭 스택 안이면 탭 스택 라우트로 쌓는다', () => {
     // MainStack 라우트로 쌓으면 탭 밖으로 나가 하단 탭바가 다시 뜬다.
     expect(logic).toContain('isInTabStack');
