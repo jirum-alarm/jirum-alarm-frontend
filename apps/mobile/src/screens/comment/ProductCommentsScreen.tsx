@@ -8,10 +8,7 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {UserQueries} from '@/entities/user/user.queries';
 import {CommentQueries} from '@/entities/comment/comment.queries';
 import {clearEditingComment} from '@/entities/comment/editing-comment';
-import {
-  useHideTabBar,
-  useHiddenTabBarClipPadding,
-} from '@/shared/hooks/useHideTabBar';
+import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import Comment from '@/features/comment/ui/Comment';
 import CommentEmpty from '@/features/comment/ui/CommentEmpty';
 import CommentInput from '@/features/comment/ui/CommentInput';
@@ -27,8 +24,6 @@ type Props = NativeStackScreenProps<
 export default function ProductCommentsScreen({route, navigation}: Props) {
   const {productId} = route.params;
   const insets = useSafeAreaInsets();
-  // 하단 입력창을 탭바가 덮지 않게 한다.
-  useHideTabBar();
   const tabBarClipPad = useHiddenTabBarClipPadding();
 
   useEffect(() => {

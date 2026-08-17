@@ -2,6 +2,7 @@ import React, {useCallback, useLayoutEffect, useMemo} from 'react';
 import {ActivityIndicator, FlatList, Text, View} from 'react-native';
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
+import {HeaderBackButton} from '@react-navigation/elements';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {
@@ -19,6 +20,11 @@ import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {TabStackParamList} from '@/navigations/tab/types';
+import {
+  DetailHeaderActions,
+  DetailHeaderTitle,
+} from '@/screens/detail/ui/ProductDetailHeader';
+import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
 
 /**
  * 더보기(큐레이션) 화면. web: app/(desktop-ready)/curation/[id]
@@ -57,9 +63,32 @@ export default function CurationScreen({
     return findPromotionSectionById(sections, sectionId);
   }, [tabSources, sectionId]);
 
+  /**
+   * 상단 바를 상세 화면과 같은 모양으로 — 로고+부제(왼쪽), 검색·공유(오른쪽).
+   * 제목만 있는 기본 헤더보다 앱 안이라는 게 분명하고, 상세로 들어갔다
+   * 나올 때 헤더가 바뀌지 않아 흐름이 끊기지 않는다.
+   */
   useLayoutEffect(() => {
-    navigation.setOptions({title: section?.title ?? route.params.title ?? ''});
-  }, [navigation, section?.title, route.params.title]);
+    navigation.setOptions({
+      headerTitle: () => null,
+      headerLeft: ({tintColor, canGoBack}) => (
+        <View className="flex-row items-center">
+          {canGoBack ? (
+            <HeaderBackButton
+              tintColor={tintColor}
+              displayMode="minimal"
+              onPress={() => navigation.goBack()}
+            />
+          ) : null}
+          <DetailHeaderTitle onPress={() => goTabHome(navigation)} />
+        </View>
+      ),
+      // ★공유는 뺀다. ShareSheet 는 productId 전용이라 목록엔 맞지 않는다.
+      headerRight: () => (
+        <DetailHeaderActions onPressSearch={() => openSearch(navigation)} />
+      ),
+    });
+  }, [navigation]);
 
   const handlePressProduct = useCallback(
     (id: number) => {

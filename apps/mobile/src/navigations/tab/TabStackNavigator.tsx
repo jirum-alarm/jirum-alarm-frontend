@@ -15,8 +15,10 @@ import {
   tabNavigations,
 } from '@/shared/constant/navigations';
 import {getTabBaseUrl} from '@/shared/lib/navigation/tab-routing';
-import {useTabBarVisibility} from '@/shared/hooks/useTabBarVisibility';
-import {useHideTabBar} from '@/shared/hooks/useHideTabBar';
+import {
+  setTabBarVisible,
+  useTabBarVisibility,
+} from '@/shared/hooks/useTabBarVisibility';
 import type {TabStackParamList} from './types';
 import {
   commentsHeaderOptions,
@@ -64,6 +66,24 @@ function useSyncNativeTabBarHidden() {
 }
 
 /**
+ * 이 라우트에서 탭바를 숨기나.
+ *
+ * ★화면마다 useHideTabBar 를 거는 대신 **라우트 이름 하나로** 판단한다.
+ * 화면별 훅은 focus/cleanup 순서에 의존해서 카운터가 새기 쉬웠다 —
+ * 탭 5개가 각자 같은 스택을 갖고 있어 특히 그렇다(탭바가 사라져 안 돌아오던
+ * 증상의 뿌리). 라우트는 언제나 정확히 하나이므로 어긋날 수가 없다.
+ */
+function hidesTabBar(routeName: string | undefined): boolean {
+  return (
+    routeName === tabStackNavigations.DETAIL ||
+    routeName === tabStackNavigations.COMMENTS ||
+    routeName === tabStackNavigations.SEARCH ||
+    routeName === tabStackNavigations.CURATION ||
+    routeName === tabStackNavigations.WEBVIEW
+  );
+}
+
+/**
  * 탭 하나를 감싸는 네이티브 스택.
  *
  * 루트는 기존 탭 WebView 그대로. 상세는 그 위에 push 되어 네이티브 슬라이드
@@ -80,11 +100,6 @@ function TabWebViewPage({
 }: {
   route: {params: {uri: string; title?: string}};
 }) {
-  // ★탭바를 숨긴다. web 페이지가 자체 하단 UI(구매 CTA·찜하기)를 갖고 있어
-  // 탭바가 그 위에 겹친다 — useHideTabBar 주석의 "상세 하위 웹뷰" 사례.
-  // 상세·댓글·검색은 이미 이 훅을 쓰는데 이 화면만 빠져 있었다.
-  useHideTabBar();
-
   const Screen = JirumAlarmWebViewScreen as unknown as React.ComponentType<{
     route: {params: {uri: string}};
   }>;
@@ -101,7 +116,10 @@ export function createTabStack(tabName: TabName) {
         screenListeners={{
           state: e => {
             const stack = e.data.state;
-            onFocusedRoute(stack.routes[stack.index]?.name);
+            const focused = stack.routes[stack.index]?.name;
+            onFocusedRoute(focused);
+            // ★탭바 표시는 여기서 한 곳으로 정한다(화면별 훅 대신).
+            setTabBarVisible(!hidesTabBar(focused));
           },
         }}>
         <Stack.Screen name={tabStackNavigations.ROOT}>

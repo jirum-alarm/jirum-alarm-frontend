@@ -43,7 +43,8 @@ export function DetailHeaderActions({
   onPressShare,
 }: {
   onPressSearch: () => void;
-  onPressShare: () => void;
+  /** 목록 화면처럼 공유할 대상이 없으면 생략한다. */
+  onPressShare?: () => void;
 }) {
   return (
     <View style={styles.actions}>
@@ -55,14 +56,16 @@ export function DetailHeaderActions({
         style={styles.iconBtn}>
         <SearchIcon width={22} height={22} />
       </Pressable>
-      <Pressable
-        onPress={onPressShare}
-        hitSlop={8}
-        accessibilityRole="button"
-        accessibilityLabel="공유하기"
-        style={styles.iconBtn}>
-        <ShareIcon width={22} height={22} />
-      </Pressable>
+      {onPressShare ? (
+        <Pressable
+          onPress={onPressShare}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="공유하기"
+          style={styles.iconBtn}>
+          <ShareIcon width={22} height={22} />
+        </Pressable>
+      ) : null}
     </View>
   );
 }

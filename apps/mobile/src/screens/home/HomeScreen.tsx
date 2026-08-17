@@ -37,7 +37,6 @@ import {
   tabStackNavigations,
 } from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
-import {useShowTabBar} from '@/shared/hooks/useHideTabBar';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {SERVICE_URL} from '@/constants/env';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
@@ -194,16 +193,6 @@ export default function HomeScreen() {
     },
     [isScrolled],
   );
-
-  /**
-   * 탭바 표시는 전역 상태다. 웹뷰 탭이 상세로 들어가며 꺼둔 채로 홈에 오면
-   * 네이티브 홈은 onNavigationStateChange 를 안 쏘므로 영영 숨은 채 남는다
-   * (웹뷰 시절엔 TabWebView 의 useEffect 가 URL 로 되살렸다).
-   *
-   * ★setTabBarVisible(true) 를 직접 부르면 hideCount 를 무시해 상세 화면과
-   * 상태가 어긋난다 — useShowTabBar 가 카운터를 보고 켠다.
-   */
-  useShowTabBar();
 
   // 헤더 크로스페이드(300ms)의 중간에 상태바를 바꾼다. SystemBars 는 애니메이션이
   // 안 되므로, 즉시 바꾸면 아직 다크 헤더인데 글씨가 검어 안 보이고,

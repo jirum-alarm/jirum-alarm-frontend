@@ -45,10 +45,8 @@ describe('섹션 더보기 — 탭 스택에 쌓는다', () => {
   it('★네이티브 헤더를 띄우지 않는다 — web 이 자체 헤더를 갖는다', () => {
     // /toss·/curation 은 제목·뒤로가기·검색·공유를 web 이 그린다.
     // headerShown: true 로 두면 헤더가 두 개로 겹친다.
-    const block = stack.slice(
-      stack.indexOf('tabStackNavigations.WEBVIEW'),
-      stack.indexOf('tabStackNavigations.COMMENTS'),
-    );
+    const start = stack.indexOf('name={tabStackNavigations.WEBVIEW}');
+    const block = stack.slice(start, start + 400);
     expect(block).toContain('headerShown: false');
   });
 });
@@ -80,9 +78,14 @@ describe('더보기 웹뷰 안에서 상품을 눌렀을 때', () => {
     expect(logic).toContain('tabStackNavigations.WEBVIEW');
   });
 
-  it('WEBVIEW 화면이 탭바를 숨긴다', () => {
-    // useHideTabBar 주석의 "상세 하위 웹뷰 → 안 떠야 함" 사례.
-    expect(stack).toContain('useHideTabBar()');
+  it('WEBVIEW 라우트가 탭바 숨김 목록에 있다', () => {
+    // 화면별 훅이 아니라 라우트 이름으로 정한다(hidesTabBar).
+    expect(stack).toContain('hidesTabBar');
+    const fn = stack.slice(
+      stack.indexOf('function hidesTabBar'),
+      stack.indexOf('function hidesTabBar') + 400,
+    );
+    expect(fn).toContain('tabStackNavigations.WEBVIEW');
   });
 });
 

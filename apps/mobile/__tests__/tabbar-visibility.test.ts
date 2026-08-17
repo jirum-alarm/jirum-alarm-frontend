@@ -31,22 +31,37 @@ describe('hideCount 는 카운터다', () => {
   });
 });
 
-describe('★탭 루트는 hideCount 를 구독한다', () => {
-  it('한 번만 확인하지 않는다 — 탭 왕복 중 변화를 놓치면 영구히 사라진다', () => {
-    // 타이머 한 발로 끝내면 타이밍이 어긋난 순간 탭바가 안 돌아온다.
-    expect(hook).toContain('subscribeHideCount');
-    expect(hook).toContain('useShowTabBar');
+describe('★★탭바 표시는 라우트 이름 하나로 정한다', () => {
+  const stack = read('src/navigations/tab/TabStackNavigator.tsx');
+
+  it('스택 리스너가 포커스된 라우트로 결정한다', () => {
+    // 화면마다 useHideTabBar 를 걸면 focus/cleanup 순서에 의존해 카운터가
+    // 샌다 — 탭 5개가 같은 스택을 각자 갖고 있어 특히 그렇다.
+    // 라우트는 언제나 정확히 하나라 어긋날 수 없다.
+    expect(stack).toContain('hidesTabBar');
+    expect(stack).toContain('setTabBarVisible(!hidesTabBar(focused))');
   });
 
-  it('홈은 setTabBarVisible 을 직접 부르지 않는다', () => {
-    expect(home).toContain('useShowTabBar()');
-    // 주석에는 등장할 수 있으므로 import 여부로 판정한다.
+  it('숨기는 라우트 5개가 빠짐없이 들어 있다', () => {
+    for (const name of [
+      'DETAIL',
+      'COMMENTS',
+      'SEARCH',
+      'CURATION',
+      'WEBVIEW',
+    ]) {
+      expect(stack).toContain(`tabStackNavigations.${name}`);
+    }
+  });
+
+  it('화면별 훅은 더 이상 쓰지 않는다', () => {
+    expect(home).not.toContain('useShowTabBar()');
     expect(home).not.toMatch(/^import .*setTabBarVisible/m);
   });
 });
 
 describe('★setTabBarVisible 직접 호출 금지', () => {
-  it('훅 파일 밖에서는 아무도 직접 부르지 않는다', () => {
+  it('직접 호출은 스택 리스너 한 곳으로 제한된다', () => {
     // 직접 부르면 hideCount 를 무시한다. 탭 웹뷰가 그랬더니 더보기 웹뷰에서
     // 홈으로 돌아왔을 때 탭바가 영영 안 돌아왔다(사용자 지적).
     const {execSync} = require('child_process');
@@ -55,10 +70,12 @@ describe('★setTabBarVisible 직접 호출 금지', () => {
         "| grep -v 'useTabBarVisibility.ts' | grep -v '^\\s*\\*' || true",
       {cwd: path.join(__dirname, '..'), encoding: 'utf8'},
     );
-    // 주석 줄(★... 설명)은 허용, 실제 호출은 0 이어야 한다
+    // 라우트 기반으로 바꾼 뒤 정당한 호출처는 TabStackNavigator 한 곳뿐이다
+    // (거기가 포커스된 라우트로 판단하는 단일 지점). 나머지는 0.
     const calls = out
       .split('\n')
-      .filter((l: string) => l.trim() && !/:\s*\*/.test(l));
+      .filter((l: string) => l.trim() && !/:\s*\*/.test(l))
+      .filter((l: string) => !l.includes('TabStackNavigator.tsx'));
     expect(calls).toEqual([]);
   });
 

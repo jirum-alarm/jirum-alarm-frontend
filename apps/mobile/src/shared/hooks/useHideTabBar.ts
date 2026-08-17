@@ -1,5 +1,5 @@
-import {useCallback, useEffect, useSyncExternalStore} from 'react';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {useCallback, useSyncExternalStore} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {
@@ -51,34 +51,6 @@ function subscribeHideCount(listener: () => void) {
  * 상세 → 댓글처럼 숨기는 화면끼리 이동할 때 중간에 탭바가 번쩍이지 않도록
  * 카운터로 관리하고, 마지막 화면이 빠질 때만 되돌린다.
  */
-/**
- * 이 화면에 있는 동안 탭바를 **보인다**(탭 루트용).
- *
- * ★`setTabBarVisible(true)` 를 직접 부르면 안 된다 — hideCount 를 무시해서
- * 숨김 화면과 상태가 어긋난다.
- *
- * ★★한 번만 확인하면 안 된다. 탭을 왔다갔다 하면 화면이 언마운트되지 않고
- * focus/blur 만 반복되는데, 그 사이 다른 화면이 hideCount 를 올렸다 내리므로
- * **포커스된 동안 계속 지켜봐야** 한다. 타이머 한 발로 끝내면 타이밍이
- * 어긋난 순간 탭바가 영구히 사라진다(사용자 지적: "왔다갔다 하다보니 사라짐").
- */
-export function useShowTabBar() {
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
-    if (!isFocused) return;
-
-    // 즉시 한 번 + 이후 hideCount 변화를 따라간다.
-    const sync = () => {
-      if (hideCount.current === 0) setTabBarVisible(true);
-    };
-    sync();
-
-    const unsubscribe = subscribeHideCount(sync);
-    return unsubscribe;
-  }, [isFocused]);
-}
-
 /**
  * 탭 루트 웹뷰가 URL 로 판단해 켜고 끌 때 쓴다.
  *

@@ -35,10 +35,7 @@ import {
   tabStackNavigations,
 } from '@/shared/constant/navigations';
 import {useAuth} from '@/shared/hooks/useAuth';
-import {
-  useHideTabBar,
-  useHiddenTabBarClipPadding,
-} from '@/shared/hooks/useHideTabBar';
+import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 
@@ -84,8 +81,6 @@ function NativeDetail({productId}: {productId: number}) {
   const [showTopButton, setShowTopButton] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const navigation = useNavigation<DetailNavigationProp>();
-  // 상세 하단은 찜/구매 CTA 가 탭바를 대신한다.
-  useHideTabBar();
   const tabBarClipPad = useHiddenTabBarClipPadding();
   const {getWebViewRef} = useWebviewContext();
   const {
