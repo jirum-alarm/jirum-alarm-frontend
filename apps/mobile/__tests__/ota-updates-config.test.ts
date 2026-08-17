@@ -64,6 +64,14 @@ describe('OTA 설정 — eas.json 채널', () => {
     const channels = Object.values<any>(easJson.build).map(p => p.channel);
     expect(new Set(channels).size).toBe(channels.length);
   });
+
+  it('스토어 배포 프로필은 ios.scheme 를 명시한다', () => {
+    // 이 프로젝트엔 스킴이 2개(jirumAlarmMobile, jirumAlarmMobileDebug)라
+    // 명시하지 않으면 EAS 가 추측한다 → Debug 스킴이 잡히면 스토어 아카이브가 안 된다.
+    for (const name of ['test-prod', 'production']) {
+      expect(easJson.build[name].ios.scheme).toBe('jirumAlarmMobile');
+    }
+  });
 });
 
 describe('OTA 설정 — 앱 버전 3곳 정렬 (appVersion 정책의 안전장치)', () => {

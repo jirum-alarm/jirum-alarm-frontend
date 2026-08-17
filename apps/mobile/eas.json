@@ -39,6 +39,7 @@
         "credentialsSource": "remote"
       },
       "ios": {
+        "scheme": "jirumAlarmMobile",
         "credentialsSource": "remote"
       }
     },
