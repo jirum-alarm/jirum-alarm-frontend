@@ -1,5 +1,7 @@
 import { Fragment } from 'react';
 
+import { type TossDeal } from '@/app/(desktop-ready)/toss/mock';
+
 import { PromotionSection } from '@/entities/promotion/model/types';
 
 import DynamicProductSection from './DynamicProductSection';
@@ -14,6 +16,8 @@ import TossHomeSection from './TossHomeSection';
 interface PromotionSectionListProps {
   sections: PromotionSection[];
   isMobile: boolean;
+  /** 토스 특가 첫 탭 — 서버에서 받아 첫 렌더에 그린다 */
+  tossInitialDeals?: TossDeal[];
 }
 
 // 알림 묶음 섹션을 이 프로모션 섹션 id 뒤에 끼운다. (홈 노출 보류로 현재 미사용)
@@ -23,7 +27,11 @@ interface PromotionSectionListProps {
 // 지나 딜을 충분히 둘러본 뒤라 "이런 거 놓치기 싫으면 알림" 제안이 맥락에 맞는다.
 const KEYWORD_AFTER_SECTION_ID = 'under-10000';
 
-const PromotionSectionList = ({ sections, isMobile }: PromotionSectionListProps) => {
+const PromotionSectionList = ({
+  sections,
+  isMobile,
+  tossInitialDeals,
+}: PromotionSectionListProps) => {
   let isFirst = true;
 
   const renderKeywordSlot = (sectionId: string) =>
@@ -63,7 +71,7 @@ const PromotionSectionList = ({ sections, isMobile }: PromotionSectionListProps)
         isFirst = false;
         return (
           <Fragment key={section.id}>
-            {section.id === 'hotdeal' && <TossHomeSection />}
+            {section.id === 'hotdeal' && <TossHomeSection initialDeals={tossInitialDeals} />}
             <DynamicProductSection section={section} isMobile={isMobile} priorityCount={priority} />
             {renderKeywordSlot(section.id)}
             {renderThemeSlot(section.id)}

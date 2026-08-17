@@ -3,6 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
+import { TOSS_SECTIONS } from '@/app/(desktop-ready)/toss/mock';
+import { fetchTossDeals } from '@/app/(desktop-ready)/toss/toss.api';
 import { checkDevice } from '@/app/actions/agent';
 
 import { AdvertiseSlotLocation } from '@/shared/api/gql/graphql';
@@ -21,7 +23,12 @@ import MobileJirumRankingContainer from './mobile/JirumRankingContainer';
 
 async function HomeContainerV2() {
   const { isMobile } = await checkDevice();
-  const sections = await getPromotionSections();
+  // 토스 첫 탭은 public 요청이라 cookies() 를 안 타고 ISR 캐시를 탄다.
+  // 실패해도 홈 전체를 죽이지 않고 클라이언트 fetch 로 넘긴다.
+  const [sections, tossInitialDeals] = await Promise.all([
+    getPromotionSections(),
+    fetchTossDeals({ section: TOSS_SECTIONS[0].id, limit: 6, public: true }).catch(() => undefined),
+  ]);
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery(
@@ -72,7 +79,11 @@ async function HomeContainerV2() {
           <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-14">
             <div>
               {/* 묶음 섹션은 PromotionSectionList 내부에서 'under-10000'(만원이하템) 뒤에 렌더 */}
-              <PromotionSectionList sections={sections} isMobile={isMobile} />
+              <PromotionSectionList
+                sections={sections}
+                isMobile={isMobile}
+                tossInitialDeals={tossInitialDeals}
+              />
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { TOSS_SECTIONS } from '@/app/(desktop-ready)/toss/mock';
+import { TOSS_SECTIONS, type TossDeal } from '@/app/(desktop-ready)/toss/mock';
 import { fetchTossCategoryLabels, fetchTossDeals } from '@/app/(desktop-ready)/toss/toss.api';
 import TossCategoryTabs from '@/app/(desktop-ready)/toss/TossCategoryTabs';
 import TossDealCard from '@/app/(desktop-ready)/toss/TossDealCard';
@@ -17,7 +17,7 @@ const CATEGORY_SECTION_ID = 'category';
 
 // 홈의 토스 특가 섹션. "쇼핑몰별 모아보기"(GRID_TABBED)와 동일 구조.
 // 카테고리 인기 탭은 2단 — 하위 카테고리 탭이 섹션탭과 그리드 중간에 뜬다(목록과 공통).
-export default function TossHomeSection() {
+export default function TossHomeSection({ initialDeals }: { initialDeals?: TossDeal[] }) {
   const tabs = TOSS_SECTIONS.map((s) => ({ id: s.id, label: s.label, variables: {} }));
   const [activeId, setActiveId] = useState(tabs[0].id);
   const [activeCat, setActiveCat] = useState<string | undefined>(undefined);
@@ -30,13 +30,19 @@ export default function TossHomeSection() {
   });
   const cat = isCategory ? (activeCat ?? categoryLabels[0]) : undefined;
 
+  // 첫 탭은 서버가 채운 initialDeals 로 첫 렌더에 그린다(HTML 에 카드가 박힘).
+  // 다른 탭/카테고리는 그대로 클라이언트가 소유.
+  const isFirstTab = activeId === tabs[0].id && !isCategory;
   const { data: deals = [], isFetched } = useQuery({
     queryKey: ['toss-home-deals', activeId, cat ?? null],
     queryFn: () => fetchTossDeals({ section: activeId, categoryLabel: cat, limit: 6 }),
     enabled: !isCategory || !!cat,
     placeholderData: (prev) => prev,
+    initialData: isFirstTab ? initialDeals : undefined,
   });
 
+  // 서버가 빈 배열을 줬으면 첫 렌더부터 숨긴다(레이아웃 시프트 방지).
+  if (isFirstTab && initialDeals?.length === 0) return null;
   if (isFetched && deals.length === 0) return null;
 
   const selectTab = (id: string) => {
