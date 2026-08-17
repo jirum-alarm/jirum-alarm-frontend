@@ -132,6 +132,16 @@ describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', (
     );
   });
 
+  it('★★상세 두 갈래가 같은 탭바 정책을 쓴다', () => {
+    // /products/123 은 네이티브, 하위 경로는 웹뷰 폴백이 맡는다.
+    // 한쪽만 탭바를 숨기면 같은 상세인데 진입 경로에 따라 하단이 달라진다
+    // (사용자 지적: "웹뷰에서 갔을 때랑 홈에서 갔을 때가 다르다").
+    const fallback = read('src/screens/detail/ProductDetailWebViewScreen.tsx');
+    expect(fallback).toContain('hideTabBar={false}');
+    // 웹 자체 하단바는 항상 숨긴다 — 네이티브 탭바와 두 겹이 된다
+    expect(fallback).toMatch(/hideWebNav\s*\n/);
+  });
+
   it('★탭바가 보일 때도 하단 여백을 준다', () => {
     // 숨길 때만 패딩을 주면, 탭바가 보이는 경우 웹 콘텐츠가 홈 인디케이터에
     // 붙는다(폴백 상세 웹뷰에서 실제로 그랬다).

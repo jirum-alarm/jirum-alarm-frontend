@@ -39,10 +39,6 @@ type StackNav = Pick<
   'push' | 'goBack'
 >;
 
-function isProductPath(path: string): boolean {
-  return /^\/products\/\d+/.test(path.split(/[?#]/)[0]);
-}
-
 const NATIVE_STACK_SCRIPT = `
   (function() {
     document.documentElement.dataset.nativeStack = 'true';
@@ -234,8 +230,14 @@ function ProductDetailWebViewScreen({route, navigation}: Props) {
     <StackWebView
       path={path}
       navigation={navigation}
-      hideTabBar={isProductPath(path)}
-      hideWebNav={!isProductPath(path)}
+      // ★탭바를 숨기지 않는다 — 네이티브 상세와 정책을 맞춘다(2026-08-17 지시).
+      // 같은 상세인데 진입 경로에 따라 하단이 달라 보이던 원인(사용자 지적):
+      // 네이티브는 탭바 보임, 이 폴백만 숨김이었다.
+      hideTabBar={false}
+      // ★웹 자체 하단바는 **항상** 숨긴다. 네이티브 탭바가 이제 늘 보이므로
+      // 웹 하단바까지 나오면 두 겹이 된다(예전엔 탭바를 숨기는 대신 웹 것을
+      // 살렸다).
+      hideWebNav
     />
   );
 }
