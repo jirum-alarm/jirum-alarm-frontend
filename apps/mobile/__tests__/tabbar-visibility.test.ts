@@ -91,14 +91,24 @@ describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', (
     expect(navigator).toContain('tabBarClipWhenHidden');
   });
 
-  it('패딩도 hideCount 를 본다(tabBarVisible 만으로는 부족)', () => {
-    expect(hook).toContain('useHiddenTabBarClipPadding');
-    expect(hook).toContain('!hiding');
-  });
-
-  it('★hideCount 를 구독한다 — 렌더 중 직접 읽으면 한 프레임 늦다', () => {
-    // 그냥 읽으면 값이 바뀌어도 리렌더가 안 돌아 "여백이 생겼다 사라진다".
-    expect(hook).toContain('useSyncExternalStore');
+  it('★패딩은 tabBarVisible 하나만 본다 — 내비게이터와 같은 신호', () => {
+    // 내비게이터는 tabBarStyle.display 로 자르고, 그 값은 useTabBarVisibility
+    // 가 정한다. 패딩도 같은 신호를 봐야 같은 프레임에 맞는다.
+    //
+    // 예전엔 hideCount 도 함께 봤는데, 라우트 기반 전환 후 네이티브 상세가
+    // useHideTabBar 를 안 쓰게 되어 hideCount 가 늘 0 → 패딩이 영영 0 이었다.
+    const fn = hook.slice(
+      hook.indexOf('export function useHiddenTabBarClipPadding'),
+      hook.indexOf('export function useHiddenTabBarClipPadding') + 700,
+    );
+    expect(fn).toContain('useTabBarVisibility()');
+    // 주석엔 경위 설명으로 등장하므로 실제 코드 줄만 검사한다.
+    const code = fn
+      .split('\n')
+      .filter((l: string) => !/^\s*(\/\/|\*|\/\*)/.test(l))
+      .join('\n');
+    expect(code).not.toContain('hideCount');
+    expect(code).not.toContain('useSyncExternalStore');
   });
 
   it('★탭바가 보일 때도 하단 여백을 준다', () => {

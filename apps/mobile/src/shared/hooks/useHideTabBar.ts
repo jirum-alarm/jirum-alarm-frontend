@@ -1,4 +1,4 @@
-import {useCallback, useSyncExternalStore} from 'react';
+import {useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -20,22 +20,8 @@ import {
  */
 const hideCount = {current: 0};
 
-/**
- * hideCount 가 바뀔 때 알린다. 탭 루트(useShowTabBar)가 이걸 구독해서
- * "숨기는 화면이 다 빠졌다"는 시점을 놓치지 않는다.
- */
-const hideCountListeners = new Set<() => void>();
-
 function setHideCount(next: number) {
   hideCount.current = Math.max(0, next);
-  hideCountListeners.forEach(listener => listener());
-}
-
-function subscribeHideCount(listener: () => void) {
-  hideCountListeners.add(listener);
-  return () => {
-    hideCountListeners.delete(listener);
-  };
 }
 
 /**
@@ -99,17 +85,17 @@ export function useHideTabBar(enabled = true) {
  */
 export function useHiddenTabBarClipPadding() {
   const insets = useSafeAreaInsets();
+  // ★탭바가 숨겨졌으면 곧 clip 도 걸린다 — 이 값 하나만 본다.
+  //
+  // 예전엔 hideCount 도 함께 봤는데, 라우트 기반으로 바꾸면서 네이티브 상세가
+  // useHideTabBar 를 안 쓰게 됐다 → hideCount 가 늘 0 이라 패딩이 영영 0.
+  // 그 상태에서 tabBarVisible 만 뒤늦게 false 가 되니 값이 한 번 흔들려
+  // "여백이 생겼다 사라지는" 것처럼 보였다(사용자 지적).
+  //
+  // 내비게이터도 같은 tabBarStyle.display 로 자르므로 신호가 일치한다.
   const tabBarVisible = useTabBarVisibility();
-  // ★hideCount 를 렌더 중에 그냥 읽으면 값이 바뀌어도 리렌더가 안 돌아
-  // 패딩이 한 프레임 늦는다 — 상세에서 "여백이 생겼다 사라지는" 원인.
-  // 구독해서 값이 바뀌는 순간 다시 그린다.
-  const hiding = useSyncExternalStore(
-    subscribeHideCount,
-    () => hideCount.current > 0,
-  );
 
   if (!isIos26SystemTabBar()) return 0;
-  // 탭바가 보이거나, 숨기는 화면이 하나도 없으면 clip 이 안 걸려 있다.
-  if (tabBarVisible || !hiding) return 0;
+  if (tabBarVisible) return 0;
   return getTabBarClipPx(insets.bottom);
 }
