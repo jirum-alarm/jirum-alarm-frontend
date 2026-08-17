@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import {
   ActivityIndicator,
+  Pressable,
   RefreshControl,
   ScrollView,
   Text,
@@ -221,6 +222,24 @@ export default function HomeScreen() {
 
         {/* 본문 — web 은 rounded-t-[1.25rem] 로 다크 헤더 위에 올라탄다 */}
         <View className="-mt-5 rounded-t-[20px] bg-white pt-3">
+          {/* web mobile/JirumRankingContainer — 제목 + 더보기(/trending/ranking).
+              슬라이더만 옮기고 이 헤더를 빠뜨렸었다. */}
+          <View
+            className="h-14 w-full flex-row items-center justify-between"
+            style={{paddingHorizontal: 20}}>
+            <Text className="text-lg font-bold text-gray-900">
+              지름알림 랭킹
+            </Text>
+            <Pressable
+              onPress={() =>
+                handlePressViewMore('/trending/ranking', '지름알림 랭킹')
+              }
+              hitSlop={12}
+              accessibilityRole="button"
+              accessibilityLabel="지름알림 랭킹 더보기">
+              <Text className="text-sm text-gray-500">더보기</Text>
+            </Pressable>
+          </View>
           {isAboveFoldPending ? (
             <RankingSkeleton />
           ) : (
@@ -256,7 +275,10 @@ export default function HomeScreen() {
                   <Fragment key={section.id}>
                     {/* web: hotdeal 섹션 앞에 토스 특가를 끼운다 */}
                     {section.id === 'hotdeal' && (
-                      <TossHomeSection onPressProduct={handlePressProduct} />
+                      <TossHomeSection
+                        onPressProduct={handlePressProduct}
+                        onPressViewMore={handlePressViewMore}
+                      />
                     )}
                     <DynamicProductSection
                       section={section}

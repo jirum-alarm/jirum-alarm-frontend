@@ -1,5 +1,12 @@
 import React, {useMemo, useState} from 'react';
-import {ActivityIndicator, Image, ScrollView, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 
 import PressableScale from '@/shared/components/PressableScale';
@@ -33,8 +40,11 @@ const TOSS_SECTIONS = [
 
 export default function TossHomeSection({
   onPressProduct,
+  onPressViewMore,
 }: {
   onPressProduct: (id: number) => void;
+  /** web `/toss?tab={activeId}` — 지금 보고 있는 탭 그대로 연다. */
+  onPressViewMore?: (link: string, title: string) => void;
 }) {
   const [activeId, setActiveId] = useState<string>(TOSS_SECTIONS[0].id);
   const [activeCat, setActiveCat] = useState<string | undefined>(undefined);
@@ -69,6 +79,17 @@ export default function TossHomeSection({
         className="h-14 w-full flex-row items-center justify-between"
         style={{paddingHorizontal: 20}}>
         <Text className="text-lg font-bold text-gray-900">토스 특가</Text>
+        {onPressViewMore ? (
+          <Pressable
+            onPress={() =>
+              onPressViewMore(`/toss?tab=${activeId}`, '토스 특가')
+            }
+            hitSlop={12}
+            accessibilityRole="button"
+            accessibilityLabel="토스 특가 더보기">
+            <Text className="text-sm text-gray-500">더보기</Text>
+          </Pressable>
+        ) : null}
       </View>
 
       <ChipRow
