@@ -1,0 +1,216 @@
+import React, {useCallback, useLayoutEffect, useMemo} from 'react';
+import {ActivityIndicator, FlatList, Text, View} from 'react-native';
+import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
+import {useNavigation} from '@react-navigation/native';
+import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
+import {
+  curationInfiniteQuery,
+  curationSingleQuery,
+  HomeQueries,
+} from '@/entities/home/api/home.queries';
+import {supportsInfinite} from '@/entities/home/lib/curation';
+import {
+  buildPromotionSections,
+  findPromotionSectionById,
+} from '@/entities/home/model/promotion-sections';
+import type {ProductCardType} from '@/entities/home/model/types';
+import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
+import SectionErrorRow from '@/shared/components/SectionErrorRow';
+import {tabStackNavigations} from '@/shared/constant/navigations';
+import type {TabStackParamList} from '@/navigations/tab/types';
+
+/**
+ * 더보기(큐레이션) 화면. web: app/(desktop-ready)/curation/[id]
+ *
+ * ★웹뷰 대신 네이티브로 만든 이유: 웹 페이지를 탭 스택에 끼우니 접합부에서
+ * 버그가 계속 났다(URL 이중접두·헤더 중복·탭바 소실·상세 유실 등 5건).
+ * 홈과 **같은 데이터·같은 카드**를 쓰므로 화면 껍데기만 있으면 된다.
+ *
+ * ★queryName 5종 중 3종만 커서 페이지네이션을 지원한다(web 과 동일):
+ *   productsByKeyword · products · expiringSoonHotDealProducts → 무한스크롤
+ *   hotDealRankingProducts · guestRecommendedHotDeals → 단일 조회
+ */
+
+const GRID_GAP_X = 12; // web gap-x-3
+const GRID_GAP_Y = 20; // web gap-y-5
+const HORIZONTAL_PADDING = 20; // web px-5
+const COLUMNS = 2;
+
+type CurationNavigationProp = NativeStackNavigationProp<TabStackParamList>;
+
+export default function CurationScreen({
+  route,
+}: {
+  route: {params: {sectionId: string; title?: string}};
+}) {
+  const navigation = useNavigation<CurationNavigationProp>();
+  const {sectionId} = route.params;
+
+  // 섹션 구성은 홈과 같은 소스에서 만든다(탭 소스 포함).
+  const {data: tabSources} = useQuery(HomeQueries.tabSources());
+  const section = useMemo(() => {
+    const sections = buildPromotionSections({
+      communityProviders: tabSources?.communityProviders ?? [],
+      mallGroups: tabSources?.mallGroups ?? [],
+    });
+    return findPromotionSectionById(sections, sectionId);
+  }, [tabSources, sectionId]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({title: section?.title ?? route.params.title ?? ''});
+  }, [navigation, section?.title, route.params.title]);
+
+  const handlePressProduct = useCallback(
+    (id: number) => {
+      navigation.push(tabStackNavigations.DETAIL, {path: `/products/${id}`});
+    },
+    [navigation],
+  );
+
+  if (!section) {
+    // 섹션 목록이 아직 안 왔거나 없는 id.
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <ActivityIndicator size="small" color="#667085" />
+      </View>
+    );
+  }
+
+  return supportsInfinite(section.dataSource.queryName) ? (
+    <InfiniteList section={section} onPressProduct={handlePressProduct} />
+  ) : (
+    <SingleList section={section} onPressProduct={handlePressProduct} />
+  );
+}
+
+type ListProps = {
+  section: NonNullable<ReturnType<typeof findPromotionSectionById>>;
+  onPressProduct: (id: number) => void;
+};
+
+/** 커서 페이지네이션 — web 의 useInView 센티넬을 onEndReached 로 대체. */
+function InfiniteList({section, onPressProduct}: ListProps) {
+  const {
+    data,
+    isPending,
+    isError,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(curationInfiniteQuery(section));
+
+  const products = useMemo(
+    () => (data?.pages ?? []).flat() as ProductCardType[],
+    [data?.pages],
+  );
+
+  return (
+    <ProductGrid
+      products={products}
+      isPending={isPending}
+      isError={isError}
+      label={section.title}
+      onRetry={refetch}
+      onPressProduct={onPressProduct}
+      onEndReached={() => {
+        if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+      }}
+      footer={
+        isFetchingNextPage ? (
+          <View className="items-center py-6">
+            <ActivityIndicator size="small" color="#667085" />
+          </View>
+        ) : null
+      }
+    />
+  );
+}
+
+/** 커서를 지원하지 않는 섹션(랭킹·취향저격). web 도 단일 조회다. */
+function SingleList({section, onPressProduct}: ListProps) {
+  const {data, isPending, isError, refetch} = useQuery(
+    curationSingleQuery(section),
+  );
+
+  return (
+    <ProductGrid
+      products={data ?? []}
+      isPending={isPending}
+      isError={isError}
+      label={section.title}
+      onRetry={refetch}
+      onPressProduct={onPressProduct}
+    />
+  );
+}
+
+/** 2열 그리드. 홈 GRID 섹션과 같은 간격·같은 카드. */
+function ProductGrid({
+  products,
+  isPending,
+  isError,
+  label,
+  onRetry,
+  onPressProduct,
+  onEndReached,
+  footer,
+}: {
+  products: ProductCardType[];
+  isPending: boolean;
+  isError: boolean;
+  label: string;
+  onRetry: () => void;
+  onPressProduct: (id: number) => void;
+  onEndReached?: () => void;
+  footer?: React.ReactNode;
+}) {
+  if (isPending) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <ActivityIndicator size="small" color="#667085" />
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View className="flex-1 bg-white pt-4">
+        <SectionErrorRow label={label} onRetry={onRetry} />
+      </View>
+    );
+  }
+
+  if (products.length === 0) {
+    // web EmptyState — "상품이 없습니다."
+    return (
+      <View className="flex-1 items-center bg-white py-10">
+        <Text className="text-sm text-gray-500">상품이 없습니다.</Text>
+      </View>
+    );
+  }
+
+  return (
+    <FlatList
+      className="flex-1 bg-white"
+      data={products}
+      keyExtractor={item => String(item.id)}
+      numColumns={COLUMNS}
+      contentContainerStyle={{
+        paddingHorizontal: HORIZONTAL_PADDING - GRID_GAP_X / 2,
+        paddingVertical: 16,
+      }}
+      columnWrapperStyle={{gap: GRID_GAP_X}}
+      ItemSeparatorComponent={() => <View style={{height: GRID_GAP_Y}} />}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={footer as React.ReactElement}
+      renderItem={({item}) => (
+        <View style={{flex: 1 / COLUMNS}}>
+          <GridCard product={item} onPress={onPressProduct} />
+        </View>
+      )}
+    />
+  );
+}

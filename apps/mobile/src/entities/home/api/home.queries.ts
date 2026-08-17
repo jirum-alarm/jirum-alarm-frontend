@@ -1,7 +1,8 @@
-import {queryOptions} from '@tanstack/react-query';
+import {infiniteQueryOptions, queryOptions} from '@tanstack/react-query';
 
 import {HomeService} from '@/shared/api/home/home.service';
 import {TOSS_SECTION_KEYWORD} from '../lib/toss';
+import {CURATION_LIMIT} from '../lib/curation';
 import type {AdvertiseSlotLocation} from '@/shared/api/gql/graphql.ts';
 
 import type {ContentPromotionSection, ProductCardType} from '../model/types';
@@ -219,4 +220,58 @@ async function fetchSectionProducts(
       throw new Error(`Unknown query name: ${String(exhaustive)}`);
     }
   }
+}
+
+/**
+ * 큐레이션(더보기) 화면용 무한 목록.
+ *
+ * web CurationProductList 와 같은 구조 — queryName 5종 중 **3종만** 커서
+ * 페이지네이션을 지원한다(`searchAfter`). hotDealRankingProducts 와
+ * guestRecommendedHotDeals 는 page 인자를 받지만 web 도 단일 조회로 쓰므로
+ * 그대로 맞춘다(더 불러올 커서가 없다).
+ */
+export function curationInfiniteQuery(section: ContentPromotionSection) {
+  const variables = {
+    ...section.dataSource.variables,
+    limit: CURATION_LIMIT,
+  };
+
+  return infiniteQueryOptions({
+    queryKey: [...HomeQueries.keys.all, 'curation', section.id, variables],
+    initialPageParam: null as string[] | null,
+    queryFn: ({pageParam}) =>
+      fetchSectionProducts(section, {
+        ...variables,
+        searchAfter: pageParam,
+      }),
+    // web: lastPage.at(-1)?.searchAfter?.[0] — 마지막 행의 커서를 다음 시작점으로.
+    // 배열째 넘긴다(스키마가 [String!] 를 받는다).
+    getNextPageParam: (lastPage: ProductCardType[]) => {
+      if (lastPage.length < CURATION_LIMIT) return undefined;
+      const cursor = (lastPage.at(-1) as {searchAfter?: string[]} | undefined)
+        ?.searchAfter;
+      return cursor && cursor.length > 0 ? cursor : undefined;
+    },
+    retry: RETRY,
+    staleTime: STALE_TIME,
+  });
+}
+
+/** 커서를 지원하지 않는 섹션(랭킹·취향저격)의 단일 조회. */
+export function curationSingleQuery(section: ContentPromotionSection) {
+  const variables = {
+    ...section.dataSource.variables,
+    limit: CURATION_LIMIT,
+  };
+  return queryOptions({
+    queryKey: [
+      ...HomeQueries.keys.all,
+      'curation-single',
+      section.id,
+      variables,
+    ],
+    queryFn: () => fetchSectionProducts(section, variables),
+    retry: RETRY,
+    staleTime: STALE_TIME,
+  });
 }

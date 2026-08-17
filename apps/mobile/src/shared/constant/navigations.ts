@@ -27,7 +27,9 @@ const tabStackNavigations = {
   ROOT: 'TabRoot',
   DETAIL: 'ProductDetail',
   SEARCH: 'Search',
-  /** 큐레이션 등 네이티브 화면이 아직 없는 웹 페이지를 탭 스택에 쌓는다. */
+  /** 더보기(큐레이션) — 네이티브 목록. */
+  CURATION: 'Curation',
+  /** 네이티브 화면이 아직 없는 web 페이지(토스 등)를 탭 스택에 쌓는다. */
   WEBVIEW: 'TabWebViewPage',
   COMMENTS: 'ProductComments',
 } as const;

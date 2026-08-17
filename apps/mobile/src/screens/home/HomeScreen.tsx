@@ -116,9 +116,20 @@ export default function HomeScreen() {
    */
   const handlePressViewMore = useCallback(
     (link: string, title: string) => {
-      // ★경로만 넘긴다. JirumAlarmWebViewScreen 이 자체적으로
-      // `${SERVICE_URL}${uri}` 로 조립하므로 여기서 또 붙이면 URL 이 두 번
-      // 겹쳐서("...comhttps://...") 페이지를 못 불러온다.
+      // ★/curation/* 은 네이티브 화면이 있다. 웹뷰를 탭 스택에 끼우면
+      // 접합부에서 버그가 계속 났다(URL 이중접두·헤더 중복·탭바 소실·상세 유실).
+      const curationId = link.match(/^\/curation\/(.+)$/)?.[1];
+      if (curationId) {
+        navigation.push(tabStackNavigations.CURATION, {
+          sectionId: curationId,
+          title,
+        });
+        return;
+      }
+
+      // 나머지(토스 등)는 아직 web 이다. 경로만 넘긴다 —
+      // JirumAlarmWebViewScreen 이 `${SERVICE_URL}${uri}` 로 조립하므로
+      // 여기서 또 붙이면 URL 이 두 번 겹친다.
       navigation.push(tabStackNavigations.WEBVIEW, {uri: link, title});
     },
     [navigation],

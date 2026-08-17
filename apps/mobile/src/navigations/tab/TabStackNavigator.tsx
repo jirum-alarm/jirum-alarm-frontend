@@ -5,6 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import TabWebView from '@/screens/tabs/TabWebView';
 import HomeScreen from '@/screens/home/HomeScreen';
 import JirumAlarmWebViewScreen from '@/screens/jirumalarmwebview/JirumAlarmWebViewScreen';
+import CurationScreen from '@/screens/curation/CurationScreen';
 import {NATIVE_HOME} from '@/constants/feature-flags';
 import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
 import SearchStackNavigator from './SearchStackNavigator';
@@ -123,6 +124,18 @@ export function createTabStack(tabName: TabName) {
         <Stack.Screen
           name={tabStackNavigations.SEARCH}
           component={SearchStackNavigator}
+        />
+        <Stack.Screen
+          name={tabStackNavigations.CURATION}
+          component={CurationScreen}
+          options={({route}) => ({
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTintColor: '#101828',
+            headerBackButtonDisplayMode: 'minimal',
+            headerStyle: {backgroundColor: '#ffffff'},
+            title: route.params?.title ?? '',
+          })}
         />
         <Stack.Screen
           name={tabStackNavigations.WEBVIEW}

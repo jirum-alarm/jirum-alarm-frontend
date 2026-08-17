@@ -4,7 +4,11 @@ import {
   ProductOrderType,
 } from '@/shared/api/gql/graphql.ts';
 
-import type {PromotionSection, PromotionTab} from './types';
+import type {
+  ContentPromotionSection,
+  PromotionSection,
+  PromotionTab,
+} from './types';
 
 /**
  * 홈 섹션 구성. web 을 1:1 로 옮겼다.
@@ -236,4 +240,43 @@ export function buildPromotionSections({
       viewMoreLink: '/curation/community',
     },
   ];
+}
+
+/**
+ * 섹션 id 로 하나를 찾는다(더보기 화면용).
+ * web getPromotionSectionById 와 동일 — GROUP 안쪽과 **탭까지** 뒤진다.
+ * 탭이 맞으면 그 탭의 variables 를 섞은 GRID 섹션으로 만들어 준다.
+ */
+export function findPromotionSectionById(
+  sections: PromotionSection[],
+  id: string,
+): ContentPromotionSection | undefined {
+  for (const section of sections) {
+    if (section.type === 'GROUP') {
+      const found = section.sections.find(s => s.id === id);
+      if (found) return found;
+      continue;
+    }
+
+    if (section.id === id) return section;
+
+    const matchedTab = section.tabs?.find(tab => tab.id === id);
+    if (matchedTab) {
+      return {
+        id: matchedTab.id,
+        title: matchedTab.label,
+        type: 'GRID',
+        dataSource: {
+          ...section.dataSource,
+          variables: {
+            ...section.dataSource.variables,
+            ...matchedTab.variables,
+          },
+        },
+        displayOrder: section.displayOrder,
+        viewMoreLink: matchedTab.viewMoreLink,
+      };
+    }
+  }
+  return undefined;
 }
