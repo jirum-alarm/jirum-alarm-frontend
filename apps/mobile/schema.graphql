@@ -146,6 +146,16 @@ type BrandProductMatchCountOutput {
   volume: String!
 }
 
+type CatalogProductOutput {
+  """다나와 공식 최저가(원). 없으면 이 타입 자체가 안 내려간다."""
+  danawaPrice: Int!
+  """brand_product.id"""
+  id: Int!
+  """Meilisearch 관련도 점수 0~1"""
+  rankingScore: Float
+  title: String!
+}
+
 type CategorizedReactionKeywords {
   count: Int!
   name: String!
@@ -721,6 +731,14 @@ type Mutation {
   updateKeywordMapGroupByAdmin(description: String, id: Int!, name: String): Boolean!
   """이 키워드는 등록 시점보다 가격이 내려간 딜만 알림 받기"""
   updateNotificationKeywordPriceDropOnly(id: Int!, priceDropOnly: Boolean!): Boolean!
+  """이 키워드는 지정한 가격 범위 안의 딜만 알림 받기 (null = 그 방향 해제)"""
+  updateNotificationKeywordPriceRange(
+    id: Int!
+    """이 가격 이하만 알림. null=상한 해제"""
+    maxPrice: Int
+    """이 가격 이상만 알림. null=하한 해제"""
+    minPrice: Int
+  ): Boolean!
   """알림 키워드 상태 수정"""
   updateNotificationKeywordStatus(id: Int!, isActive: Boolean!): Boolean!
   """비밀번호 업데이트"""
@@ -781,6 +799,8 @@ type NotificationKeyword {
   id: ID!
   isActive: Boolean!
   keyword: String!
+  maxPrice: Int
+  minPrice: Int
   priceDropOnly: Boolean!
   updatedAt: DateTime!
   userId: Int!
@@ -1339,6 +1359,13 @@ type Query {
     """브랜드명 + 상품명 + 용량 + 수량 LIKE 검색"""
     title: String
   ): [BrandProductMatchCountOutput!]!
+  """브랜드 카탈로그에서 다나와 공식 최저가를 찾는다. 대표가 확실할 때만 돌려주고, 아니면 빈 배열."""
+  catalogSearch(
+    """찾을 상품명. 브랜드·모델·용량이 있으면 같이 넣는다."""
+    keyword: String!
+    """자신 있는 대표만 돌려준다. 기본 1, 최대 3. 자신 없으면 빈 배열."""
+    limit: Int! = 1
+  ): [CatalogProductOutput!]!
   categories: [Category!]!
   """커뮤니티 반응 카테고리별 키워드 조회"""
   categorizedReactionKeywords(id: Int!): CategorizedReactionKeywordsResponse!

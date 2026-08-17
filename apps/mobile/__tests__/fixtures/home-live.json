@@ -1,0 +1,945 @@
+{
+ "hotdeal": [
+  {
+   "id": "28351243",
+   "title": "쓱 삼성카드전용 5만이상 1만 쿠폰 받으세요",
+   "price": null,
+   "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14817801.png",
+   "mallName": "ssg",
+   "categoryId": 8,
+   "hotDealType": "HOT_DEAL",
+   "isEnd": false,
+   "isHot": true,
+   "provider": {
+    "nameKr": "맘이베베"
+   },
+   "postedAt": "2026-08-15T10:43:12.000Z"
+  },
+  {
+   "id": "28516520",
+   "title": "태블릿 할인 모음 (샤오신패드, Y700, iPlay80 mini Pro, GT, Y900, 빅미 이북리더기)",
+   "price": "제품별상이",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10219294014.jpg",
+   "mallName": "알리",
+   "categoryId": 1,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-16T12:49:00.000Z"
+  },
+  {
+   "id": "28584642",
+   "title": "타임딜 풀무원 워터루틴 생수 2L 24개",
+   "price": "8,720원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10222705778.webp",
+   "mallName": "지마켓",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-17T04:18:00.000Z"
+  },
+  {
+   "id": "28580276",
+   "title": "매직캔 히포2크롬 오토실링 27L + 리필3롤",
+   "price": "45,076원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10222395212.jpg",
+   "mallName": "마켓컬리",
+   "categoryId": 6,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-17T02:31:00.000Z"
+  },
+  {
+   "id": "28584072",
+   "title": "밀레 남성  루트업 구스헤비다운 (144,050원/무배) 외 2개 역시즌",
+   "price": "144,050원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/727429.png",
+   "mallName": "롯데온",
+   "categoryId": 4,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "뽐뿌"
+   },
+   "postedAt": "2026-08-17T03:49:00.000Z"
+  },
+  {
+   "id": "28581754",
+   "title": "기능성 충격 완화 아치깔창, 270mm, 3개",
+   "price": "7,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2332968949.jpeg",
+   "mallName": "토스",
+   "categoryId": 7,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "토스쇼핑"
+   },
+   "postedAt": "2026-08-17T03:03:32.000Z"
+  },
+  {
+   "id": "28579341",
+   "title": "poco x8 pro max 12GB 256GB 589,880원",
+   "price": "589,880원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/ruliweb/106421.webp",
+   "mallName": "쿠팡",
+   "categoryId": 9,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "루리웹"
+   },
+   "postedAt": "2026-08-17T00:44:32.000Z"
+  },
+  {
+   "id": "28538420",
+   "title": "버즈4PRO (206,450원/무료)",
+   "price": "206,450원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/arca/180115491.png",
+   "mallName": "지마켓",
+   "categoryId": 9,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "아카"
+   },
+   "postedAt": "2026-08-16T16:49:06.000Z"
+  },
+  {
+   "id": "28579887",
+   "title": "/통신사할인 가능",
+   "price": null,
+   "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14820307.jpg",
+   "mallName": "gs25",
+   "categoryId": 9,
+   "hotDealType": "HOT_DEAL",
+   "isEnd": false,
+   "isHot": true,
+   "provider": {
+    "nameKr": "맘이베베"
+   },
+   "postedAt": "2026-08-17T02:13:28.000Z"
+  },
+  {
+   "id": "28558333",
+   "title": "부산행 4K (~8/17 오늘까지) (0원/무료)",
+   "price": "0원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/arca/180124023.png",
+   "mallName": "쿠쿠",
+   "categoryId": 11,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "아카"
+   },
+   "postedAt": "2026-08-16T22:07:19.000Z"
+  },
+  {
+   "id": "28584640",
+   "title": "토코보 코코넛 클레이 클렌징 폼 150mL",
+   "price": "3,150원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10222670328.jpg",
+   "mallName": "무신사",
+   "categoryId": 3,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-17T04:05:00.000Z"
+  },
+  {
+   "id": "28582152",
+   "title": "듀오덤 스팟패치 단일형, 12mm, 120매입, 1개 (11,510원/무료)",
+   "price": "11,510원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/727426.jpeg",
+   "mallName": "토스",
+   "categoryId": 3,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "뽐뿌"
+   },
+   "postedAt": "2026-08-17T02:59:00.000Z"
+  },
+  {
+   "id": "28554295",
+   "title": "미니PC 할인 모음 (N95, 7430U, 7640HS, H255)",
+   "price": "제품별상이",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10219350448.webp",
+   "mallName": "알리",
+   "categoryId": 1,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-16T18:56:00.000Z"
+  },
+  {
+   "id": "28578940",
+   "title": "샤크 에보파워 시스템 부스트+ 스틱청소기",
+   "price": "606,190원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10222210216.webp",
+   "mallName": "쿠팡",
+   "categoryId": 6,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-17T01:38:00.000Z"
+  },
+  {
+   "id": "28538042",
+   "title": "올센느 룸스프레이 섬유 탈취제 향수 300ml 5900원 무배",
+   "price": "5,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/198324354.jpg",
+   "mallName": "네이버",
+   "categoryId": 3,
+   "hotDealType": "HOT_DEAL",
+   "isEnd": false,
+   "isHot": true,
+   "provider": {
+    "nameKr": "어미새"
+   },
+   "postedAt": "2026-08-16T17:00:34.000Z"
+  },
+  {
+   "id": "28491881",
+   "title": "해태에이스 씬 솔티카라멜, 291g, 4개",
+   "price": "9,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10220198336.webp",
+   "mallName": "쿠팡",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-16T11:41:00.000Z"
+  },
+  {
+   "id": "28571402",
+   "title": "기가바이트 RX 9070 XT",
+   "price": "1,120,000원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10222084149.webp",
+   "mallName": "지마켓",
+   "categoryId": 9,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-17T00:23:00.000Z"
+  },
+  {
+   "id": "28581164",
+   "title": "센티베르 바질 앤 캐모마일 모이스처 샴푸, 화이트머스크, 1L, 2개",
+   "price": "10,190원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/121250331.jpeg",
+   "mallName": "토스",
+   "categoryId": 3,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "토스쇼핑"
+   },
+   "postedAt": "2026-08-17T03:03:37.000Z"
+  },
+  {
+   "id": "28596600",
+   "title": "Qhd 입문용 가성비 pc",
+   "price": "1,450,000원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10223038626.webp",
+   "mallName": "지마켓",
+   "categoryId": 1,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-17T06:13:00.000Z"
+  },
+  {
+   "id": "28490636",
+   "title": "풀무원 얇은피 꽉찬속 김치만두 (냉동), 1kg, 2개",
+   "price": "13,100원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10219823620.webp",
+   "mallName": "쿠팡",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-16T10:22:00.000Z"
+  }
+ ],
+ "under10000": [
+  {
+   "id": "28603849",
+   "title": "아보카도 대과 20개 9290원",
+   "price": "9,290원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14820944.jpg",
+   "mallName": "네이버",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "맘이베베"
+   },
+   "postedAt": "2026-08-17T07:27:29.000Z"
+  },
+  {
+   "id": "28603559",
+   "title": "지프스피릿 기능성 티셔츠",
+   "price": "9,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10223209350.webp",
+   "mallName": "지마켓",
+   "categoryId": 4,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-17T07:08:00.000Z"
+  },
+  {
+   "id": "28603347",
+   "title": "국내산 방울토마토, 2kg, 6,900원(200박스 한정)",
+   "price": "6,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/eomisae/198363588.png",
+   "mallName": "토스",
+   "categoryId": 2,
+   "hotDealType": "HOT_DEAL",
+   "isEnd": false,
+   "isHot": true,
+   "provider": {
+    "nameKr": "어미새"
+   },
+   "postedAt": "2026-08-17T07:00:28.000Z"
+  },
+  {
+   "id": "28602047",
+   "title": "가벼운 우양산 경량 미니 암막 초미니 양우산 양산 우산",
+   "price": "9,000원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/naverbc/13352045077.jpg",
+   "mallName": "네이버",
+   "categoryId": 4,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "네이버쇼핑"
+   },
+   "postedAt": "2026-08-17T06:32:08.000Z"
+  },
+  {
+   "id": "28596610",
+   "title": "다이소 2천원권 또는 메가커피 아이스 아메리카노 천원",
+   "price": "2,000원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/mommybebe/14820826.jpg",
+   "mallName": "띵샵",
+   "categoryId": 8,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "맘이베베"
+   },
+   "postedAt": "2026-08-17T06:25:19.000Z"
+  },
+  {
+   "id": "28596312",
+   "title": "켈로그 그래놀라 시리얼 900g (8,720원 / 무료)",
+   "price": "8,720원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/727453.jpg",
+   "mallName": "쿠팡",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "뽐뿌"
+   },
+   "postedAt": "2026-08-17T06:04:00.000Z"
+  },
+  {
+   "id": "28587261",
+   "title": "아이스쿨 시어서커 여름 쿨토시, 핑크",
+   "price": "7,200원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/642208743.jpeg",
+   "mallName": "토스",
+   "categoryId": 4,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "토스쇼핑"
+   },
+   "postedAt": "2026-08-17T06:02:33.000Z"
+  },
+  {
+   "id": "28587646",
+   "title": "온담핏 복부 커버 보정 하이웨이스트 팬티, 블랙+스킨, XL, 2개",
+   "price": "9,590원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2396945201.png",
+   "mallName": "토스",
+   "categoryId": 4,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "토스쇼핑"
+   },
+   "postedAt": "2026-08-17T06:02:18.000Z"
+  },
+  {
+   "id": "28587618",
+   "title": "스카트 올인원 타블렛형 식기세척기 세제, 유자향, 10g, 60개입, 1팩",
+   "price": "7,580원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2332581421.jpeg",
+   "mallName": "토스",
+   "categoryId": 6,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "토스쇼핑"
+   },
+   "postedAt": "2026-08-17T06:01:43.000Z"
+  },
+  {
+   "id": "28586885",
+   "title": "인비저블 여름 여성 덧신, 스킨, 220-250mm, 5개",
+   "price": "3,140원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/94240547.jpeg",
+   "mallName": "토스",
+   "categoryId": 4,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "토스쇼핑"
+   },
+   "postedAt": "2026-08-17T06:01:42.000Z"
+  }
+ ],
+ "premium": [
+  {
+   "id": "28596600",
+   "title": "Qhd 입문용 가성비 pc",
+   "price": "1,450,000원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10223038626.webp",
+   "mallName": "지마켓",
+   "categoryId": 1,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-17T06:13:00.000Z"
+  },
+  {
+   "id": "28578353",
+   "title": "MANLI RTX 5080 Nebula D7 16GB 인텍앤컴퍼니  (2,093,562원/무료)",
+   "price": "2,093,562원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/arca/180127738.jpg",
+   "mallName": "알리",
+   "categoryId": 1,
+   "hotDealType": null,
+   "isEnd": true,
+   "isHot": false,
+   "provider": {
+    "nameKr": "아카"
+   },
+   "postedAt": "2026-08-17T00:32:04.000Z"
+  },
+  {
+   "id": "28571402",
+   "title": "기가바이트 RX 9070 XT",
+   "price": "1,120,000원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10222084149.webp",
+   "mallName": "지마켓",
+   "categoryId": 9,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-17T00:23:00.000Z"
+  },
+  {
+   "id": "28559479",
+   "title": "인천-바르셀로나 0824-0831 아시아나(직항) 롯데카드",
+   "price": "1,166,000원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/fmkorea/10221011217.jpg",
+   "mallName": "네이버",
+   "categoryId": 11,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": null,
+   "provider": {
+    "nameKr": "에펨코리아"
+   },
+   "postedAt": "2026-08-16T22:49:00.000Z"
+  }
+ ],
+ "impending": [
+  {
+   "id": "25374900",
+   "title": "초저분자 콜라겐 앰플샷 21g*7입",
+   "price": "1,990원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/altoranmarket/1000004201.jpg",
+   "mallName": "알토란마켓",
+   "categoryId": 3,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "알토란마켓"
+   },
+   "postedAt": "2026-07-04T07:03:21.000Z",
+   "earliestExpiryDate": "2026-08-17T15:00:00.000Z"
+  },
+  {
+   "id": "25374901",
+   "title": "초저분자 콜라겐 앰플샷 21g*7입 x 1박스",
+   "price": "590원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/altoranmarket/1000004202.jpg",
+   "mallName": "알토란마켓",
+   "categoryId": 3,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "알토란마켓"
+   },
+   "postedAt": "2026-07-04T07:03:21.000Z",
+   "earliestExpiryDate": "2026-08-17T15:00:00.000Z"
+  },
+  {
+   "id": "25464520",
+   "title": "[코로브카] 웨이퍼 헤이즐넛/레몬/우유 75g*32개 x 1박스 골라담기 (무료배송)",
+   "price": "6,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/altoranmarket/1000004485.jpg",
+   "mallName": "알토란마켓",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "알토란마켓"
+   },
+   "postedAt": "2026-07-07T08:00:16.000Z",
+   "earliestExpiryDate": "2026-08-17T15:00:00.000Z"
+  },
+  {
+   "id": "25794320",
+   "title": "",
+   "price": "24500",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/132409143.webp",
+   "mallName": "떠리몰",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "떠리몰"
+   },
+   "postedAt": "2026-07-17T18:00:47.000Z",
+   "earliestExpiryDate": "2026-08-17T15:00:00.000Z"
+  },
+  {
+   "id": "25794324",
+   "title": "",
+   "price": "10990",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/133265537.webp",
+   "mallName": "떠리몰",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "떠리몰"
+   },
+   "postedAt": "2026-07-17T18:00:47.000Z",
+   "earliestExpiryDate": "2026-08-17T15:00:00.000Z"
+  },
+  {
+   "id": "26418372",
+   "title": "언양식 불고기 720g(180g*4입) x 2개 (무료배송)",
+   "price": "18,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/altoranmarket/1000004629.png",
+   "mallName": "알토란마켓",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "알토란마켓"
+   },
+   "postedAt": "2026-07-29T08:00:18.000Z",
+   "earliestExpiryDate": "2026-08-17T15:00:00.000Z"
+  },
+  {
+   "id": "26857952",
+   "title": "한끼 컵도시락 오징어제육 300g외 2종 (10개단위 구매가능)(업체별도 무료배송)",
+   "price": null,
+   "thumbnail": "https://cdn.jirum-alarm.com/community/thirtymall/122820220.jpg",
+   "mallName": "떠리몰",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "떠리몰"
+   },
+   "postedAt": "2026-08-04T12:00:34.000Z",
+   "earliestExpiryDate": "2026-08-17T15:00:00.000Z"
+  },
+  {
+   "id": "15692435",
+   "title": "막대과자 16g 48개 참깨 우유 김맛 랜덤발송",
+   "price": "16,800원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/altoranmarket/1000001752.jpg",
+   "mallName": "알토란마켓",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "알토란마켓"
+   },
+   "postedAt": "2025-11-06T06:28:20.000Z",
+   "earliestExpiryDate": "2026-08-18T15:00:00.000Z"
+  },
+  {
+   "id": "15692566",
+   "title": "팻버닝 레드 CLA 다이어트 600mg 30캡슐 1박스",
+   "price": "14,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/altoranmarket/1000002287.jpg",
+   "mallName": "알토란마켓",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "알토란마켓"
+   },
+   "postedAt": "2025-11-06T06:28:20.000Z",
+   "earliestExpiryDate": "2026-08-18T15:00:00.000Z"
+  },
+  {
+   "id": "25374857",
+   "title": "훅스 유기농 콘후레이크/코코아쉘 275g 택1",
+   "price": "590원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/altoranmarket/1000004143.jpg",
+   "mallName": "알토란마켓",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "알토란마켓"
+   },
+   "postedAt": "2026-07-04T07:03:22.000Z",
+   "earliestExpiryDate": "2026-08-18T15:00:00.000Z"
+  }
+ ],
+ "mall": [
+  {
+   "id": "4265051",
+   "title": "전투용 백팩 (16110, 무료)",
+   "price": null,
+   "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/562076.jpg",
+   "mallName": "티몬",
+   "categoryId": 11,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "뽐뿌"
+   },
+   "postedAt": "2024-07-23T08:38:28.000Z"
+  },
+  {
+   "id": "4261146",
+   "title": "해신탕 밀키트 (생닭 800g (냉동) + 문어 600g + 새우 4미 + 전복 7미 + 약재 1팩) (22,000원/무료)",
+   "price": "22,000원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/562038.jpg",
+   "mallName": "티몬",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "뽐뿌"
+   },
+   "postedAt": "2024-07-23T05:40:28.000Z"
+  },
+  {
+   "id": "4256673",
+   "title": "팔팔쭈꾸미 500g 5팩 (36,200원 / 무료배송)",
+   "price": "36,200원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/561991.jpg",
+   "mallName": "티몬",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "뽐뿌"
+   },
+   "postedAt": "2024-07-23T02:10:33.000Z"
+  },
+  {
+   "id": "4256480",
+   "title": "물냉면 / 비빔냉면 10인분 (8,940원/무료)",
+   "price": "8,940원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/561988.jpg",
+   "mallName": "티몬",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "뽐뿌"
+   },
+   "postedAt": "2024-07-23T02:07:18.000Z"
+  },
+  {
+   "id": "4256477",
+   "title": "활전복 크기 별 모음전 8-10미(농카 18,460원/무배)",
+   "price": "18,460원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/561985.jpg",
+   "mallName": "티몬",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "뽐뿌"
+   },
+   "postedAt": "2024-07-23T02:03:42.000Z"
+  },
+  {
+   "id": "4255172",
+   "title": "슈페리어등급 노르웨이 생연어 1kg (29,900원/무배)",
+   "price": "29,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/ppomppu/561953.jpg",
+   "mallName": "티몬",
+   "categoryId": 2,
+   "hotDealType": null,
+   "isEnd": false,
+   "isHot": false,
+   "provider": {
+    "nameKr": "뽐뿌"
+   },
+   "postedAt": "2024-07-23T01:02:41.000Z"
+  }
+ ],
+ "toss": [
+  {
+   "id": "28587416",
+   "title": "단비주 덱스판테놀 마데카 고농축 세럼, 30ml, 1개",
+   "price": "12,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1585580257.png",
+   "data": {
+    "toss": {
+     "images": [
+      "https://cdn.jirum-alarm.com/community/toss/1585580257_0.png",
+      "https://cdn.jirum-alarm.com/community/toss/1585580257_1.png",
+      "https://cdn.jirum-alarm.com/community/toss/1585580257_2.png",
+      "https://cdn.jirum-alarm.com/community/toss/1585580257_3.png",
+      "https://cdn.jirum-alarm.com/community/toss/1585580257_4.png",
+      "https://cdn.jirum-alarm.com/community/toss/1585580257_5.png",
+      "https://cdn.jirum-alarm.com/community/toss/1585580257_6.png",
+      "https://cdn.jirum-alarm.com/community/toss/1585580257_7.png",
+      "https://cdn.jirum-alarm.com/community/toss/1585580257_8.png",
+      "https://cdn.jirum-alarm.com/community/toss/1585580257_9.png",
+      "https://cdn.jirum-alarm.com/community/toss/1585580257_10.png"
+     ],
+     "section": "daily",
+     "delivery": "무료배송",
+     "salePrice": 12900,
+     "unitPrice": "10ml당 4,300원",
+     "sellerName": "단비주",
+     "deliveryFee": 0,
+     "discountRate": 38,
+     "campaignEndAt": "2026-08-17T23:59:59",
+     "originalPrice": 21000
+    }
+   },
+   "postedAt": "2026-08-17T06:00:36.000Z"
+  },
+  {
+   "id": "28587444",
+   "title": "엘칸토 마쯔 여성 펀칭디테일 케이지 오픈 슈즈 LCWC93M613, 화이트, 245mm",
+   "price": "32,490원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/1878555071.png",
+   "data": {
+    "toss": {
+     "rating": 4.2,
+     "section": "daily",
+     "delivery": "무료배송 · 내일도착",
+     "salePrice": 32490,
+     "sellerName": "(주)엘칸토",
+     "deliveryFee": 0,
+     "reviewCount": 5,
+     "discountRate": 79,
+     "campaignEndAt": "2026-08-17T23:59:59",
+     "originalPrice": 159000,
+     "couponDiscount": 3610,
+     "lowestIn30Days": true,
+     "freeShippingThreshold": "10,000원 이상 무료배송"
+    }
+   },
+   "postedAt": "2026-08-17T06:00:26.000Z"
+  },
+  {
+   "id": "28535012",
+   "title": "한월당 밀가루 제로 찰보리빵, 국산팥, 28g, 30개",
+   "price": "11,500원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/379717593.jpeg",
+   "data": {
+    "toss": {
+     "images": [
+      "https://cdn.jirum-alarm.com/community/toss/379717593_0.jpeg"
+     ],
+     "rating": 4.5,
+     "section": "daily",
+     "delivery": "내일도착",
+     "salePrice": 11500,
+     "unitPrice": "10g당 137원",
+     "sellerName": "밀가루 제로",
+     "reviewCount": 240,
+     "discountRate": 42,
+     "campaignEndAt": "2026-08-17T23:59:59",
+     "originalPrice": 19900,
+     "lowestIn30Days": true
+    }
+   },
+   "postedAt": "2026-08-16T15:02:22.000Z"
+  },
+  {
+   "id": "28534912",
+   "title": "오에스알 미드나잇 EGF 리페어 크림, 70ml, 1개",
+   "price": "12,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/172057585.jpeg",
+   "data": {
+    "toss": {
+     "images": [
+      "https://cdn.jirum-alarm.com/community/toss/172057585_0.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_1.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_2.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_3.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_4.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_5.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_6.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_7.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_8.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_9.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_10.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_11.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_12.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_13.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/172057585_14.jpeg"
+     ],
+     "rating": 4.6,
+     "section": "daily",
+     "salePrice": 12900,
+     "unitPrice": "10ml당 1,843원",
+     "sellerName": "역대급 특가",
+     "reviewCount": 8,
+     "discountRate": 75,
+     "campaignEndAt": "2026-08-17T23:59:59",
+     "originalPrice": 40000
+    }
+   },
+   "postedAt": "2026-08-16T15:02:15.000Z"
+  },
+  {
+   "id": "28535551",
+   "title": "티르티르 콜라겐 코어 리프팅 마스크, 80ml, 2개",
+   "price": "8,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2589691029.jpeg",
+   "data": {
+    "toss": {
+     "section": "daily",
+     "delivery": "무료배송 · 내일도착",
+     "salePrice": 8900,
+     "unitPrice": "10ml당 557원",
+     "sellerName": "주식회사 지피솔루션",
+     "deliveryFee": 0,
+     "discountRate": 91,
+     "campaignEndAt": "2026-08-17T23:59:59",
+     "originalPrice": 108000,
+     "lowestIn30Days": true
+    }
+   },
+   "postedAt": "2026-08-16T15:02:10.000Z"
+  },
+  {
+   "id": "28535560",
+   "title": "아이디티 남녀공용 프린팅 라운드넥 오버핏 반팔 티셔츠, 01_BT-09 블랙, L, 1개",
+   "price": "14,900원",
+   "thumbnail": "https://cdn.jirum-alarm.com/community/toss/2594627581.jpeg",
+   "data": {
+    "toss": {
+     "images": [
+      "https://cdn.jirum-alarm.com/community/toss/2594627581_0.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/2594627581_1.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/2594627581_2.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/2594627581_3.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/2594627581_4.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/2594627581_5.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/2594627581_6.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/2594627581_7.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/2594627581_8.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/2594627581_9.jpeg",
+      "https://cdn.jirum-alarm.com/community/toss/2594627581_10.jpeg"
+     ],
+     "section": "daily",
+     "delivery": "내일도착",
+     "salePrice": 14900,
+     "sellerName": "하루특가",
+     "discountRate": 69,
+     "campaignEndAt": "2026-08-17T23:59:59",
+     "originalPrice": 48900
+    }
+   },
+   "postedAt": "2026-08-16T15:02:10.000Z"
+  }
+ ]
+}

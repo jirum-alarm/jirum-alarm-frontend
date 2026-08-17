@@ -3,6 +3,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 
 import TabWebView from '@/screens/tabs/TabWebView';
+import HomeScreen from '@/screens/home/HomeScreen';
+import {NATIVE_HOME} from '@/constants/feature-flags';
 import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
 import SearchStackNavigator from './SearchStackNavigator';
 import ProductCommentsScreen from '@/screens/comment/ProductCommentsScreen';
@@ -79,9 +81,16 @@ export function createTabStack(tabName: TabName) {
           },
         }}>
         <Stack.Screen name={tabStackNavigations.ROOT}>
-          {() => (
-            <TabWebView tabName={tabName} baseUrl={getTabBaseUrl(tabName)} />
-          )}
+          {() =>
+            // 홈만 네이티브. 나머지 4개 탭은 웹뷰 그대로라 영향이 없다.
+            // OTA 가 없어 원격 킬스위치가 아니라 빌드 스위치다
+            // (mobile-no-ota-store-review-required).
+            NATIVE_HOME && tabName === tabNavigations.HOME ? (
+              <HomeScreen />
+            ) : (
+              <TabWebView tabName={tabName} baseUrl={getTabBaseUrl(tabName)} />
+            )
+          }
         </Stack.Screen>
         <Stack.Screen
           name={tabStackNavigations.DETAIL}

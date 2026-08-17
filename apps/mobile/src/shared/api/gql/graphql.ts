@@ -175,6 +175,17 @@ export type BrandProductMatchCountOutput = {
   volume: Scalars['String']['output'];
 };
 
+export type CatalogProductOutput = {
+  __typename?: 'CatalogProductOutput';
+  /** 다나와 공식 최저가(원). 없으면 이 타입 자체가 안 내려간다. */
+  danawaPrice: Scalars['Int']['output'];
+  /** brand_product.id */
+  id: Scalars['Int']['output'];
+  /** Meilisearch 관련도 점수 0~1 */
+  rankingScore?: Maybe<Scalars['Float']['output']>;
+  title: Scalars['String']['output'];
+};
+
 export type CategorizedReactionKeywords = {
   __typename?: 'CategorizedReactionKeywords';
   count: Scalars['Int']['output'];
@@ -685,6 +696,8 @@ export type Mutation = {
   updateKeywordMapGroupByAdmin: Scalars['Boolean']['output'];
   /** 이 키워드는 등록 시점보다 가격이 내려간 딜만 알림 받기 */
   updateNotificationKeywordPriceDropOnly: Scalars['Boolean']['output'];
+  /** 이 키워드는 지정한 가격 범위 안의 딜만 알림 받기 (null = 그 방향 해제) */
+  updateNotificationKeywordPriceRange: Scalars['Boolean']['output'];
   /** 알림 키워드 상태 수정 */
   updateNotificationKeywordStatus: Scalars['Boolean']['output'];
   /** 비밀번호 업데이트 */
@@ -1034,6 +1047,12 @@ export type MutationUpdateNotificationKeywordPriceDropOnlyArgs = {
   priceDropOnly: Scalars['Boolean']['input'];
 };
 
+export type MutationUpdateNotificationKeywordPriceRangeArgs = {
+  id: Scalars['Int']['input'];
+  maxPrice?: InputMaybe<Scalars['Int']['input']>;
+  minPrice?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type MutationUpdateNotificationKeywordStatusArgs = {
   id: Scalars['Int']['input'];
   isActive: Scalars['Boolean']['input'];
@@ -1101,6 +1120,8 @@ export type NotificationKeyword = {
   id: Scalars['ID']['output'];
   isActive: Scalars['Boolean']['output'];
   keyword: Scalars['String']['output'];
+  maxPrice?: Maybe<Scalars['Int']['output']>;
+  minPrice?: Maybe<Scalars['Int']['output']>;
   priceDropOnly: Scalars['Boolean']['output'];
   updatedAt: Scalars['DateTime']['output'];
   userId: Scalars['Int']['output'];
@@ -1667,6 +1688,8 @@ export type Query = {
   brandProductsByMatchCountTotalCount: Scalars['Int']['output'];
   /** 매칭된 개수가 많은 순으로 브랜드 상품 목록 조회 (커서 기반 페이지네이션) */
   brandProductsOrderByMatchCount: Array<BrandProductMatchCountOutput>;
+  /** 브랜드 카탈로그에서 다나와 공식 최저가를 찾는다. 대표가 확실할 때만 돌려주고, 아니면 빈 배열. */
+  catalogSearch: Array<CatalogProductOutput>;
   categories: Array<Category>;
   /** 커뮤니티 반응 카테고리별 키워드 조회 */
   categorizedReactionKeywords: CategorizedReactionKeywordsResponse;
@@ -1891,6 +1914,11 @@ export type QueryBrandProductsOrderByMatchCountArgs = {
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
   title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryCatalogSearchArgs = {
+  keyword: Scalars['String']['input'];
+  limit?: Scalars['Int']['input'];
 };
 
 export type QueryCategorizedReactionKeywordsArgs = {
@@ -2529,6 +2557,45 @@ export type ProductExpireReport = {
   userId: Scalars['Int']['output'];
 };
 
+export type ActiveAdsQueryVariables = Exact<{
+  slotLocation: AdvertiseSlotLocation;
+}>;
+
+export type ActiveAdsQuery = {
+  __typename?: 'Query';
+  activeAds: Array<{
+    __typename?: 'AdvertiseCreative';
+    id: string;
+    internalId: string;
+    slotType: AdvertiseSlotType;
+    slotLocation: Array<AdvertiseSlotLocation>;
+    slotPriority: number;
+    graphic: any;
+    displayTitle?: string | null;
+    targetUrl: string;
+    isActive: boolean;
+  }>;
+};
+
+export type RecordAdImpressionsMutationVariables = Exact<{
+  events: Array<AdvertiseImpressionInput> | AdvertiseImpressionInput;
+}>;
+
+export type RecordAdImpressionsMutation = {
+  __typename?: 'Mutation';
+  recordAdImpressions: boolean;
+};
+
+export type RecordAdClickMutationVariables = Exact<{
+  creativeId: Scalars['Int']['input'];
+  slotLocation: AdvertiseSlotLocation;
+}>;
+
+export type RecordAdClickMutation = {
+  __typename?: 'Mutation';
+  recordAdClick: boolean;
+};
+
 export type MutationLoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -2630,6 +2697,234 @@ export type RemoveCommentMutationVariables = Exact<{
 export type RemoveCommentMutation = {
   __typename?: 'Mutation';
   removeComment: boolean;
+};
+
+export type HotDealRankingProductsQueryVariables = Exact<{
+  page: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+}>;
+
+export type HotDealRankingProductsQuery = {
+  __typename?: 'Query';
+  hotDealRankingProducts: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+    provider: {__typename?: 'Provider'; nameKr: string};
+  }>;
+};
+
+export type GuestRecommendedHotDealsQueryVariables = Exact<{
+  page: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+}>;
+
+export type GuestRecommendedHotDealsQuery = {
+  __typename?: 'Query';
+  guestRecommendedHotDeals: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+    provider: {__typename?: 'Provider'; nameKr: string};
+  }>;
+};
+
+export type HomeProductsByKeywordQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
+  keyword: Scalars['String']['input'];
+  orderBy: KeywordProductOrderType;
+  orderOption: OrderOptionType;
+}>;
+
+export type HomeProductsByKeywordQuery = {
+  __typename?: 'Query';
+  productsByKeyword: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+    provider: {__typename?: 'Provider'; nameKr: string};
+  }>;
+};
+
+export type HomeProductsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+  orderBy?: InputMaybe<ProductOrderType>;
+  orderOption?: InputMaybe<OrderOptionType>;
+  categoryIds?: InputMaybe<
+    Array<Scalars['Int']['input']> | Scalars['Int']['input']
+  >;
+  keyword?: InputMaybe<Scalars['String']['input']>;
+  thumbnailType?: InputMaybe<ThumbnailType>;
+  isEnd?: InputMaybe<Scalars['Boolean']['input']>;
+  isHot?: InputMaybe<Scalars['Boolean']['input']>;
+  providerIds?: InputMaybe<
+    Array<Scalars['Int']['input']> | Scalars['Int']['input']
+  >;
+  mallGroupId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type HomeProductsQuery = {
+  __typename?: 'Query';
+  products: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    mallName?: string | null;
+    hotDealType?: HotDealType | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+    provider: {__typename?: 'Provider'; nameKr: string};
+  }>;
+};
+
+export type ExpiringSoonHotDealProductsQueryVariables = Exact<{
+  daysUntilExpiry: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
+}>;
+
+export type ExpiringSoonHotDealProductsQuery = {
+  __typename?: 'Query';
+  expiringSoonHotDealProducts: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    mallName?: string | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+    earliestExpiryDate?: any | null;
+    provider: {__typename?: 'Provider'; nameKr: string};
+  }>;
+};
+
+export type CommunityProvidersQueryVariables = Exact<{[key: string]: never}>;
+
+export type CommunityProvidersQuery = {
+  __typename?: 'Query';
+  communityProviders: Array<{
+    __typename?: 'Provider';
+    id: string;
+    name: string;
+    nameKr: string;
+  }>;
+};
+
+export type MallGroupsQueryVariables = Exact<{[key: string]: never}>;
+
+export type MallGroupsQuery = {
+  __typename?: 'Query';
+  mallGroups: Array<{
+    __typename?: 'MallGroup';
+    id: number;
+    title: string;
+    isActive: boolean;
+    sort?: number | null;
+  }>;
+};
+
+export type RecommendedNotificationKeywordsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type RecommendedNotificationKeywordsQuery = {
+  __typename?: 'Query';
+  recommendedNotificationKeywords: Array<string>;
+};
+
+export type TossCategoryLabelsQueryVariables = Exact<{[key: string]: never}>;
+
+export type TossCategoryLabelsQuery = {
+  __typename?: 'Query';
+  tossCategoryLabels: Array<string>;
+};
+
+export type TossProductsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
+  keyword: Scalars['String']['input'];
+  orderBy: KeywordProductOrderType;
+  orderOption: OrderOptionType;
+  tossCategoryLabel?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type TossProductsQuery = {
+  __typename?: 'Query';
+  productsByKeyword: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    price?: string | null;
+    thumbnail?: string | null;
+    data?: any | null;
+    searchAfter?: Array<string> | null;
+    postedAt: any;
+  }>;
 };
 
 export type MutationAddPushTokenMutationVariables = Exact<{
@@ -2979,6 +3274,40 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const ActiveAdsDocument = new TypedDocumentString(`
+    query ActiveAds($slotLocation: AdvertiseSlotLocation!) {
+  activeAds(slotLocation: $slotLocation) {
+    id
+    internalId
+    slotType
+    slotLocation
+    slotPriority
+    graphic
+    displayTitle
+    targetUrl
+    isActive
+  }
+}
+    `) as unknown as TypedDocumentString<
+  ActiveAdsQuery,
+  ActiveAdsQueryVariables
+>;
+export const RecordAdImpressionsDocument = new TypedDocumentString(`
+    mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {
+  recordAdImpressions(events: $events)
+}
+    `) as unknown as TypedDocumentString<
+  RecordAdImpressionsMutation,
+  RecordAdImpressionsMutationVariables
+>;
+export const RecordAdClickDocument = new TypedDocumentString(`
+    mutation RecordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {
+  recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)
+}
+    `) as unknown as TypedDocumentString<
+  RecordAdClickMutation,
+  RecordAdClickMutationVariables
+>;
 export const MutationLoginDocument = new TypedDocumentString(`
     mutation MutationLogin($email: String!, $password: String!) {
   login(email: $email, password: $password) {
@@ -3069,6 +3398,226 @@ export const RemoveCommentDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   RemoveCommentMutation,
   RemoveCommentMutationVariables
+>;
+export const HotDealRankingProductsDocument = new TypedDocumentString(`
+    query HotDealRankingProducts($page: Int!, $limit: Int!) {
+  hotDealRankingProducts(page: $page, limit: $limit) {
+    id
+    title
+    mallId
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    hotDealType
+    provider {
+      nameKr
+    }
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  HotDealRankingProductsQuery,
+  HotDealRankingProductsQueryVariables
+>;
+export const GuestRecommendedHotDealsDocument = new TypedDocumentString(`
+    query GuestRecommendedHotDeals($page: Int!, $limit: Int!) {
+  guestRecommendedHotDeals(page: $page, limit: $limit) {
+    id
+    title
+    mallId
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    hotDealType
+    provider {
+      nameKr
+    }
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  GuestRecommendedHotDealsQuery,
+  GuestRecommendedHotDealsQueryVariables
+>;
+export const HomeProductsByKeywordDocument = new TypedDocumentString(`
+    query HomeProductsByKeyword($limit: Int!, $searchAfter: [String!], $keyword: String!, $orderBy: KeywordProductOrderType!, $orderOption: OrderOptionType!) {
+  productsByKeyword(
+    limit: $limit
+    searchAfter: $searchAfter
+    keyword: $keyword
+    orderBy: $orderBy
+    orderOption: $orderOption
+  ) {
+    id
+    title
+    mallId
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    hotDealType
+    provider {
+      nameKr
+    }
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  HomeProductsByKeywordQuery,
+  HomeProductsByKeywordQueryVariables
+>;
+export const HomeProductsDocument = new TypedDocumentString(`
+    query HomeProducts($limit: Int!, $searchAfter: [String!], $startDate: DateTime, $orderBy: ProductOrderType, $orderOption: OrderOptionType, $categoryIds: [Int!], $keyword: String, $thumbnailType: ThumbnailType, $isEnd: Boolean, $isHot: Boolean, $providerIds: [Int!], $mallGroupId: Int) {
+  products(
+    limit: $limit
+    searchAfter: $searchAfter
+    startDate: $startDate
+    orderBy: $orderBy
+    orderOption: $orderOption
+    categoryIds: $categoryIds
+    keyword: $keyword
+    thumbnailType: $thumbnailType
+    isEnd: $isEnd
+    isHot: $isHot
+    providerIds: $providerIds
+    mallGroupId: $mallGroupId
+  ) {
+    id
+    title
+    mallId
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    mallName
+    hotDealType
+    provider {
+      nameKr
+    }
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  HomeProductsQuery,
+  HomeProductsQueryVariables
+>;
+export const ExpiringSoonHotDealProductsDocument = new TypedDocumentString(`
+    query ExpiringSoonHotDealProducts($daysUntilExpiry: Int!, $limit: Int!, $searchAfter: [String!]) {
+  expiringSoonHotDealProducts(
+    daysUntilExpiry: $daysUntilExpiry
+    limit: $limit
+    searchAfter: $searchAfter
+  ) {
+    id
+    title
+    mallId
+    mallName
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    hotDealType
+    provider {
+      nameKr
+    }
+    searchAfter
+    postedAt
+    earliestExpiryDate
+  }
+}
+    `) as unknown as TypedDocumentString<
+  ExpiringSoonHotDealProductsQuery,
+  ExpiringSoonHotDealProductsQueryVariables
+>;
+export const CommunityProvidersDocument = new TypedDocumentString(`
+    query CommunityProviders {
+  communityProviders {
+    id
+    name
+    nameKr
+  }
+}
+    `) as unknown as TypedDocumentString<
+  CommunityProvidersQuery,
+  CommunityProvidersQueryVariables
+>;
+export const MallGroupsDocument = new TypedDocumentString(`
+    query MallGroups {
+  mallGroups {
+    id
+    title
+    isActive
+    sort
+  }
+}
+    `) as unknown as TypedDocumentString<
+  MallGroupsQuery,
+  MallGroupsQueryVariables
+>;
+export const RecommendedNotificationKeywordsDocument = new TypedDocumentString(`
+    query RecommendedNotificationKeywords {
+  recommendedNotificationKeywords
+}
+    `) as unknown as TypedDocumentString<
+  RecommendedNotificationKeywordsQuery,
+  RecommendedNotificationKeywordsQueryVariables
+>;
+export const TossCategoryLabelsDocument = new TypedDocumentString(`
+    query TossCategoryLabels {
+  tossCategoryLabels
+}
+    `) as unknown as TypedDocumentString<
+  TossCategoryLabelsQuery,
+  TossCategoryLabelsQueryVariables
+>;
+export const TossProductsDocument = new TypedDocumentString(`
+    query TossProducts($limit: Int!, $searchAfter: [String!], $keyword: String!, $orderBy: KeywordProductOrderType!, $orderOption: OrderOptionType!, $tossCategoryLabel: String) {
+  productsByKeyword(
+    limit: $limit
+    searchAfter: $searchAfter
+    keyword: $keyword
+    orderBy: $orderBy
+    orderOption: $orderOption
+    tossCategoryLabel: $tossCategoryLabel
+  ) {
+    id
+    title
+    price
+    thumbnail
+    data
+    searchAfter
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  TossProductsQuery,
+  TossProductsQueryVariables
 >;
 export const MutationAddPushTokenDocument = new TypedDocumentString(`
     mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {
