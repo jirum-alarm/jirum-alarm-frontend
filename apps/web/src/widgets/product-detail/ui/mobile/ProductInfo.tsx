@@ -18,20 +18,27 @@ import TossIcon from '@/entities/product/ui/TossIcon';
 
 import { RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
+import type { ProductPriceVerdict } from '@/features/product-detail/lib/price-verdict';
 import HotdealGuideModal from '@/features/product-detail/ui/mobile/HotDealGuideModal';
 import PriceVerdictHero from '@/features/product-detail/ui/PriceVerdictHero';
-import ProductGuideMetaRows from '@/features/product-detail/ui/ProductGuideMetaRows';
+import ProductGuideMetaRows, {
+  type GuideRow as ProductGuideRow,
+} from '@/features/product-detail/ui/ProductGuideMetaRows';
 
 export default function ProductInfo({
   productId,
   tossData,
   naverbcData,
   ohouData,
+  initialGuides,
+  initialVerdict,
 }: {
   productId: number;
   tossData?: import('@/entities/product/model/toss-data').TossProductData;
   naverbcData?: import('@/entities/product/model/toss-data').NaverbcProductData;
   ohouData?: import('@/entities/product/model/toss-data').OhouProductData;
+  initialGuides?: ProductGuideRow[] | null;
+  initialVerdict?: ProductPriceVerdict | null;
 }) {
   // 가격/할인율/평점/쿠폰 UI는 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 공유한다.
   const displayData = tossData ?? ohouData;
@@ -122,7 +129,7 @@ export default function ProductInfo({
               <RecommendButton productId={productId} />
             </div>
           </div>
-          <PriceVerdictHero productId={productId} />
+          <PriceVerdictHero productId={productId} verdict={initialVerdict} />
           {tossData && <TossBadges toss={tossData} />}
         </div>
       </div>
@@ -136,9 +143,19 @@ export default function ProductInfo({
               {tossData ? '토스' : ohouData ? '오늘의집' : product.mallName}
             </span>
           </div>
-          <Suspense fallback={null}>
-            <ProductGuideMetaRows productId={productId} variant="mobile" />
-          </Suspense>
+          {/* 서버가 가이드를 넘겨줬으면 Suspense 없이 첫 렌더에 그린다(깜빡임·CLS 제거).
+              못 받았을 때만 기존 쿼리 경로로 폴백. */}
+          {initialGuides ? (
+            <ProductGuideMetaRows
+              productId={productId}
+              variant="mobile"
+              initialGuides={initialGuides}
+            />
+          ) : (
+            <Suspense fallback={null}>
+              <ProductGuideMetaRows productId={productId} variant="mobile" />
+            </Suspense>
+          )}
           {product.uploaderType !== UploaderType.Crawled && (
             <div className="flex justify-between text-sm font-medium">
               <span className="text-gray-400">업로드</span>

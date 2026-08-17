@@ -14,9 +14,11 @@ import FirstVisitAppAlertModal from '@/features/app-download/ui/FirstVisitAppAle
 import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
+import type { ProductPriceVerdict } from '@/features/product-detail/lib/price-verdict';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
 import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySection';
+import type { GuideRow as ProductGuideRow } from '@/features/product-detail/ui/ProductGuideMetaRows';
 import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenChatPrompt';
 import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list/ui';
 
@@ -29,11 +31,15 @@ export default async function DesktopProductDetailPage({
   isUserLogin,
   initialProduct,
   device,
+  initialGuides,
+  initialVerdict,
 }: {
   productId: number;
   isUserLogin: boolean;
   initialProduct?: ProductInfoFragment;
   device?: CheckDeviceResult;
+  initialGuides?: ProductGuideRow[] | null;
+  initialVerdict?: ProductPriceVerdict | null;
 }) {
   // 백엔드 product.data.toss (수집 배치가 채움). 없으면 토스 블록 미노출.
   const tossData = (initialProduct?.data as ProductData | undefined)?.toss;
@@ -78,26 +84,28 @@ export default async function DesktopProductDetailPage({
                   postedAt={initialProduct?.postedAt}
                 />
               </Suspense>
-              {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김 */}
+              {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김.
+                  ProductPrefetch 가 서버에서 데이터를 다 받아두므로 Suspense 로 감싸지 않는다.
+                  감싸면 React 가 별도 스트리밍 단위로 떼어내 첫 페인트에 "없다가 생긴다". */}
               {initialProduct?.uploaderType !== UploaderType.User && (
-                <Suspense fallback={<div className="h-[400px] opacity-0" />}>
-                  <CommunityReaction productId={productId} />
-                </Suspense>
+                <CommunityReaction productId={productId} />
               )}
             </div>
           </div>
 
           <div className="col-span-1">
             <div className="sticky top-25 space-y-6">
-              <Suspense fallback={<div className="h-[400px] opacity-0" />}>
-                <ProductInfo
-                  productId={productId}
-                  isUserLogin={isUserLogin}
-                  tossData={tossData}
-                  naverbcData={naverbcData}
-                  ohouData={ohouData}
-                />
-              </Suspense>
+              {/* 상품명·가격·가이드 = 첫 화면 핵심. 데이터가 전부 프리페치돼 있어
+                  Suspense 로 떼어내면 우측 컬럼이 통째로 늦게 그려진다. */}
+              <ProductInfo
+                productId={productId}
+                isUserLogin={isUserLogin}
+                tossData={tossData}
+                naverbcData={naverbcData}
+                ohouData={ohouData}
+                initialGuides={initialGuides}
+                initialVerdict={initialVerdict}
+              />
             </div>
           </div>
           <div className="col-span-2 pt-5">

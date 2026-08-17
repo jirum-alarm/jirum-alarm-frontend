@@ -24,11 +24,14 @@ import {
   buildPostPurchasePromptQueue,
   type PostPurchasePromptKind,
 } from '@/features/product-detail/lib/okachat';
+import type { ProductPriceVerdict } from '@/features/product-detail/lib/price-verdict';
 import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
 import PostPurchaseKakaoPrompt from '@/features/product-detail/ui/PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from '@/features/product-detail/ui/PostPurchaseKeywordPrompt';
 import PriceVerdictHero from '@/features/product-detail/ui/PriceVerdictHero';
-import ProductGuideMetaRows from '@/features/product-detail/ui/ProductGuideMetaRows';
+import ProductGuideMetaRows, {
+  type GuideRow as ProductGuideRow,
+} from '@/features/product-detail/ui/ProductGuideMetaRows';
 
 export default function ProductInfo({
   productId,
@@ -36,12 +39,16 @@ export default function ProductInfo({
   tossData,
   naverbcData,
   ohouData,
+  initialGuides,
+  initialVerdict,
 }: {
   productId: number;
   isUserLogin: boolean;
   tossData?: import('@/entities/product/model/toss-data').TossProductData;
   naverbcData?: import('@/entities/product/model/toss-data').NaverbcProductData;
   ohouData?: import('@/entities/product/model/toss-data').OhouProductData;
+  initialGuides?: ProductGuideRow[] | null;
+  initialVerdict?: ProductPriceVerdict | null;
 }) {
   // 가격/할인율/평점/쿠폰 UI는 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 공유한다.
   // 배송비(deliveryFee)·단위가격(unitPrice) 등 토스 전용 필드는 tossData 에서만 그대로 쓴다.
@@ -153,7 +160,7 @@ export default function ProductInfo({
               <RecommendButton productId={productId} />
             </div>
           </div>
-          <PriceVerdictHero productId={productId} />
+          <PriceVerdictHero productId={productId} verdict={initialVerdict} />
           {tossData && <TossBadges toss={tossData} />}
         </div>
         {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
@@ -166,9 +173,18 @@ export default function ProductInfo({
               {tossData ? '토스' : ohouData ? '오늘의집' : product.mallName}
             </span>
           </div>
-          <Suspense fallback={null}>
-            <ProductGuideMetaRows productId={productId} variant="desktop" />
-          </Suspense>
+          {/* 서버가 가이드를 넘겨줬으면 Suspense 없이 첫 렌더에 그린다(깜빡임·CLS 제거). */}
+          {initialGuides ? (
+            <ProductGuideMetaRows
+              productId={productId}
+              variant="desktop"
+              initialGuides={initialGuides}
+            />
+          ) : (
+            <Suspense fallback={null}>
+              <ProductGuideMetaRows productId={productId} variant="desktop" />
+            </Suspense>
+          )}
           {product.uploaderType !== UploaderType.Crawled && (
             <div className="flex text-sm font-medium">
               <span className="inline-block w-[110px] text-gray-400">업로드</span>

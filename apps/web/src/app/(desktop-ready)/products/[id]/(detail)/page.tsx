@@ -32,6 +32,15 @@ const getPriceHistoryCached = cache(async (id: number) => {
     return null;
   }
 });
+/** 히어로용 — 실패해도 상세는 막지 않음. generateMetadata 는 안 기다린다. */
+const getPriceVerdictCached = cache(async (id: number) => {
+  try {
+    const data = await ProductService.getPriceVerdict({ id });
+    return data?.product?.priceVerdict ?? null;
+  } catch {
+    return null;
+  }
+});
 
 type PriceHistorySeoSummary = {
   minPrice: number;
@@ -405,23 +414,27 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   const device = await checkDevice();
   const { isMobile } = device;
 
-  const renderMobile = (productData?: any) => {
+  const renderMobile = (productData?: any, guides?: any, verdict?: any) => {
     return (
       <MobileProductDetailPage
         productId={+id}
         isUserLogin={isUserLogin}
         initialProduct={productData}
         device={device}
+        initialGuides={guides}
+        initialVerdict={verdict}
       />
     );
   };
-  const renderDesktop = (productData?: any) => {
+  const renderDesktop = (productData?: any, guides?: any, verdict?: any) => {
     return (
       <DesktopProductDetailPage
         productId={+id}
         isUserLogin={isUserLogin}
         initialProduct={productData}
         device={device}
+        initialGuides={guides}
+        initialVerdict={verdict}
       />
     );
   };
@@ -433,9 +446,10 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
   if (!product) {
     notFound();
   }
-  const [productGuides, priceHistoryData] = await Promise.all([
+  const [productGuides, priceHistoryData, priceVerdict] = await Promise.all([
     getProductGuidesCached(+product.id),
     getPriceHistoryCached(+product.id),
+    getPriceVerdictCached(+product.id),
   ]);
   const priceHistorySeo = summarizePriceHistoryForSeo(priceHistoryData);
   const jsonLd = generateProductJsonLd(product, productGuides ?? undefined, priceHistorySeo);
@@ -477,7 +491,17 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
       )}
       <CollectProductOnView productId={+id} />
       <ProductPrefetch productId={+id}>
-        {!isMobile ? renderDesktop(product ?? undefined) : renderMobile(product ?? undefined)}
+        {!isMobile
+          ? renderDesktop(
+              product ?? undefined,
+              productGuides?.productGuides ?? undefined,
+              priceVerdict,
+            )
+          : renderMobile(
+              product ?? undefined,
+              productGuides?.productGuides ?? undefined,
+              priceVerdict,
+            )}
       </ProductPrefetch>
     </>
   );

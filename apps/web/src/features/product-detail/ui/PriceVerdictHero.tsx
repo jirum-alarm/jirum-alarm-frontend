@@ -1,11 +1,11 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
-import { ProductQueries } from '@/entities/product';
-
-import { PRICE_VERDICT_HERO_ENABLED } from '@/features/product-detail/lib/price-verdict';
+import {
+  isStrongPriceVerdict,
+  type ProductPriceVerdict,
+} from '@/features/product-detail/lib/price-verdict';
 
 function pushEvent(event: string, props: Record<string, unknown>) {
   if (typeof window === 'undefined') return;
@@ -15,25 +15,21 @@ function pushEvent(event: string, props: Record<string, unknown>) {
   });
 }
 
-type Props = { productId: number };
+type Props = {
+  productId: number;
+  /**
+   * 서버(page.tsx)가 이미 받아둔 판정. 쿼리를 타지 않아 첫 HTML 에 박힌다
+   * ("없다가 생기는" 깜빡임 제거). null 이면 미노출.
+   */
+  verdict?: ProductPriceVerdict | null;
+};
 
 /**
  * 상세 가격 아래 히어로. READY+STRONG 만 노출.
  * "기준 보기" → #price-history 로 스크롤.
  */
-export default function PriceVerdictHero({ productId }: Props) {
-  const enabled = PRICE_VERDICT_HERO_ENABLED;
-  const { data } = useQuery({
-    ...ProductQueries.priceVerdict({ id: productId }),
-    enabled,
-  });
-
-  const verdict = data?.product?.priceVerdict;
-  const visible =
-    enabled &&
-    verdict?.status === 'READY' &&
-    verdict.displayTier === 'STRONG' &&
-    !!verdict.headline;
+export default function PriceVerdictHero({ productId, verdict }: Props) {
+  const visible = isStrongPriceVerdict(verdict);
 
   useEffect(() => {
     if (!visible || !verdict) return;
