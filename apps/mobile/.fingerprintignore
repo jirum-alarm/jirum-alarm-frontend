@@ -1,0 +1,10 @@
+# expo-updates 의 runtimeVersion(fingerprint) 계산에서 제외할 경로.
+#
+# 여기 없는 파일이 "로컬엔 없고 EAS 빌드 서버엔 있는" 상태면 fingerprint 가 갈리고,
+# CONFIGURE_EXPO_UPDATES 단계에서 runtime version mismatch 로 빌드가 실패한다.
+# (Pods/·build/ 는 @expo/fingerprint 기본 제외 목록에 이미 있어 여기 적지 않는다.)
+
+# 시크릿이라 gitignore 돼 있고, EAS 에서는 eas-build-pre-install 훅이
+# EAS file env 로부터 복원한다 → 로컬엔 없고 빌드 서버엔 있어 해시가 갈린다.
+ios/GoogleService-Info.plist
+android/app/google-services.json

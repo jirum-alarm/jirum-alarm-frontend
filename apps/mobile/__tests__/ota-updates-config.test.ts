@@ -53,6 +53,36 @@ describe('OTA 설정 — eas.json 채널', () => {
   });
 });
 
+describe('OTA 설정 — fingerprint 재현성', () => {
+  /**
+   * 실제로 빌드를 깨뜨린 회귀(빌드 730a92fe):
+   * eas-build-pre-install 훅이 EAS 에서 시크릿을 ios/·android/ 안에 복원하는데,
+   * 그 파일들은 gitignore 라 로컬엔 없다 → ios 디렉토리 해시가 갈리고
+   * CONFIGURE_EXPO_UPDATES 단계에서 "Runtime version mismatch" 로 빌드 실패.
+   *
+   * 훅이 복원하는 모든 경로는 .fingerprintignore 에 있어야 한다.
+   */
+  const ignore = read('.fingerprintignore');
+  const restoreScript = read('scripts/eas-restore-build-files.mjs');
+
+  const RESTORED_PATHS = [
+    'ios/GoogleService-Info.plist',
+    'android/app/google-services.json',
+  ];
+
+  it('복원 스크립트가 실제로 그 경로들을 쓴다 (테스트가 현실과 안 갈리게)', () => {
+    for (const p of RESTORED_PATHS) {
+      expect(restoreScript).toContain(p);
+    }
+  });
+
+  it('훅이 복원하는 경로는 모두 fingerprint 에서 제외된다', () => {
+    for (const p of RESTORED_PATHS) {
+      expect(ignore).toContain(p);
+    }
+  });
+});
+
 describe('OTA 설정 — 네이티브 배선', () => {
   const plist = read('ios/jirumAlarmMobile/Expo.plist');
   const manifest = read('android/app/src/main/AndroidManifest.xml');
