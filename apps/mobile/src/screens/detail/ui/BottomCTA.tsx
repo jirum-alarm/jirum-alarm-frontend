@@ -21,6 +21,12 @@ import {
 } from '@/shared/hooks/useRequireLogin';
 import {PendingActionType} from '@/shared/lib/pending-action';
 
+import {
+  buildPostPurchasePromptQueue,
+  hasJoinedOkachat,
+  type PostPurchasePromptKind,
+} from '../lib/okachat';
+import PostPurchaseKakaoPrompt from './PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from './PostPurchaseKeywordPrompt';
 import TopButton from './TopButton';
 
@@ -42,10 +48,13 @@ export default function BottomCTA({
   showTopButton?: boolean;
 }) {
   const insets = useSafeAreaInsets();
-  const [showKeywordPrompt, setShowKeywordPrompt] = useState(false);
+  const [promptQueue, setPromptQueue] = useState<PostPurchasePromptKind[]>([]);
   const queryClient = useQueryClient();
   const productId = Number(product.id);
   const {requireLogin} = useRequireLogin(`/products/${productId}`);
+
+  const phase = promptQueue[0] ?? null;
+  const advancePrompt = () => setPromptQueue(q => q.slice(1));
 
   // 찜/추천 상태는 로그인 여부로 값이 바뀌므로 ProductInfo 와 캐시를 나눠 둔 stats 를 쓴다.
   const {data: stats} = useQuery(ProductQueries.stats({id: productId}));
@@ -66,7 +75,7 @@ export default function BottomCTA({
     },
   });
 
-  const handlePurchase = useCallback(() => {
+  const handlePurchase = useCallback(async () => {
     if (!product.detailUrl) return;
 
     // web 은 GTM dataLayer 로 보낸다. RN 에는 GTM 이 없으므로 Mixpanel 로 대체 —
@@ -78,14 +87,15 @@ export default function BottomCTA({
       profit_provider: product.profitLinkProvider ?? null,
     });
 
-    // 구매 링크는 인앱 브라우저로 열려 유저는 이 화면에 남는다. 그 순간에만 권한다.
-    setShowKeywordPrompt(true);
+    const joined = await hasJoinedOkachat();
+    setPromptQueue(buildPostPurchasePromptQueue(isUserLogin, joined));
     openInAppBrowser(product.detailUrl);
   }, [
     product.detailUrl,
     product.id,
     product.isProfitUrl,
     product.profitLinkProvider,
+    isUserLogin,
   ]);
 
   const isWishlisted = !!stats?.isMyWishlist;
@@ -100,12 +110,16 @@ export default function BottomCTA({
       {onPressTop ? (
         <TopButton visible={!!showTopButton} onPress={onPressTop} />
       ) : null}
+      <PostPurchaseKakaoPrompt
+        show={phase === 'kakao'}
+        onClose={advancePrompt}
+      />
       <PostPurchaseKeywordPrompt
-        show={showKeywordPrompt}
+        show={phase === 'keyword'}
         title={product.title}
         productId={productId}
         isUserLogin={isUserLogin}
-        onClose={() => setShowKeywordPrompt(false)}
+        onClose={advancePrompt}
       />
       <View
         className="flex-row items-center gap-x-3 px-5 pt-2"

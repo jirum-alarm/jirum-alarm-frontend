@@ -61,9 +61,6 @@ type Props = NativeStackScreenProps<
 
 type DetailNavigationProp = Props['navigation'];
 
-/** web ProductDetailPage 와 같은 방. */
-const TALKROOM_LINK = 'https://open.kakao.com/o/gJZTWAAg';
-
 /** `/products/123` 만 네이티브가 맡는다. 하위 경로(`/comment` 등)는 웹뷰로 넘긴다. */
 function parseProductId(path: string): number | null {
   const pathname = path.split(/[?#]/)[0];
@@ -254,7 +251,7 @@ function NativeDetail({productId}: {productId: number}) {
           />
         </View>
         {/* web 순서: 카톡방 → 쿠팡 고지 → 만료 경고 → 가격추이. 광고는 앱에서 제거. */}
-        <KakaoOpenChatPrompt href={TALKROOM_LINK} />
+        <KakaoOpenChatPrompt />
         <AffiliateNotice mallName={product.mallName} variant="coupang" />
         <ExpiredProductWarning product={product} onPressProduct={pushProduct} />
         <PriceHistorySection

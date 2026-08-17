@@ -20,7 +20,12 @@ import TossIcon from '@/entities/product/ui/TossIcon';
 
 import { LikeButton, RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
+import {
+  buildPostPurchasePromptQueue,
+  type PostPurchasePromptKind,
+} from '@/features/product-detail/lib/okachat';
 import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
+import PostPurchaseKakaoPrompt from '@/features/product-detail/ui/PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from '@/features/product-detail/ui/PostPurchaseKeywordPrompt';
 import ProductGuideMetaRows from '@/features/product-detail/ui/ProductGuideMetaRows';
 
@@ -41,7 +46,9 @@ export default function ProductInfo({
   // 배송비(deliveryFee)·단위가격(unitPrice) 등 토스 전용 필드는 tossData 에서만 그대로 쓴다.
   const displayData = tossData ?? ohouData;
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
-  const [showKeywordPrompt, setShowKeywordPrompt] = useState(false);
+  const [promptQueue, setPromptQueue] = useState<PostPurchasePromptKind[]>([]);
+  const phase = promptQueue[0] ?? null;
+  const advancePrompt = () => setPromptQueue((q) => q.slice(1));
 
   useEffect(() => {
     pushRecentViewedProduct({
@@ -226,7 +233,7 @@ export default function ProductInfo({
             href={product.detailUrl ?? ''}
             // 모바일 BottomCTA 와 동일 — GTM Click URL 빈값 문제로 dataLayer 명시 전송 (2026-07-20)
             onClick={() => {
-              setShowKeywordPrompt(true);
+              setPromptQueue(buildPostPurchasePromptQueue(isUserLogin));
 
               if (typeof window === 'undefined') return;
               (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
@@ -247,10 +254,15 @@ export default function ProductInfo({
         {/* 데스크톱은 fixed 하단 바가 없어 모바일 BottomCTA 를 그대로 못 옮긴다.
             구매 버튼 바로 아래에 두어 "구매 클릭 직후"라는 같은 맥락을 유지한다. */}
         <div className="mt-3">
+          <PostPurchaseKakaoPrompt
+            show={phase === 'kakao'}
+            onClose={advancePrompt}
+            className="rounded-lg border border-gray-100 px-4"
+          />
           <PostPurchaseKeywordPrompt
-            show={showKeywordPrompt}
+            show={phase === 'keyword'}
             title={product.title ?? ''}
-            onClose={() => setShowKeywordPrompt(false)}
+            onClose={advancePrompt}
             className="rounded-lg border border-gray-100 px-4"
           />
         </div>

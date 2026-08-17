@@ -14,18 +14,16 @@ import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
-import KakaoOpenChatPrompt from '@/features/product-detail/ui/KakaoOpenChatPrompt';
 import ViewerCount from '@/features/product-detail/ui/mobile/ViewerCount';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
 import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySection';
+import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenChatPrompt';
 import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list/ui';
 
 import CommunityReaction from '../CommunityReaction';
 
 import BottomCTA from './BottomCTA';
 import ProductInfo from './ProductInfo';
-
-const TALKROOM_LINK = 'https://open.kakao.com/o/gJZTWAAg';
 
 function ProductDetailPage({
   productId,
@@ -67,10 +65,9 @@ function ProductDetailPage({
               className="mx-5 mb-4 w-auto"
             />
 
-            {/* 주 유입 경로가 핫딜 단톡방이라 상세에도 방으로 돌아가는 문을 둔다.
-                광고가 팔리면 AdvertiseSlotBanner 와 세로로 겹치지만, 지금 이 슬롯은
-                비어 있는 시간이 대부분이라 상품 정보 바로 아래 = 실제로 보이는 자리다. */}
-            <KakaoOpenChatPrompt href={TALKROOM_LINK} className="mx-5 mb-4" />
+            {/* 비오카방 유입만 soft 안내. 오카방 UTM·이미 입장한 유저는 SoftKakao 가 숨김.
+                광고 슬롯이 비어 있는 시간이 대부분이라 상품 정보 바로 아래 = 보이는 자리. */}
+            <SoftKakaoOpenChatPrompt className="mx-5 mb-4" />
 
             <CoupangPartnerGuide productId={productId} />
 

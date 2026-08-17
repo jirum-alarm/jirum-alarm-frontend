@@ -17,14 +17,18 @@ import Link from '@/shared/ui/Link';
 export default function KakaoOpenChatPrompt({
   href,
   className,
+  onNavigate,
 }: {
   href: string;
   className?: string;
+  /** soft/구매후 공통 — 입장 클릭 시 joined 플래그·계측용 */
+  onNavigate?: () => void;
 }) {
   return (
     <Link
       href={href}
       target="_blank"
+      onClick={onNavigate}
       className={cn(
         'bg-secondary-50 hover:bg-secondary-100 flex items-center gap-x-3 rounded-lg px-4 py-3 transition-colors',
         className,

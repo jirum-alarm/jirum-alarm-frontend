@@ -15,16 +15,14 @@ import { AdvertiseSlotBanner } from '@/features/banner';
 import CommentSection from '@/features/product-comment/ui/CommentSection';
 import { ExpiredProductWarning } from '@/features/product-detail/components';
 import CoupangPartnerGuide from '@/features/product-detail/ui/CoupangPartnerGuide';
-import KakaoOpenChatPrompt from '@/features/product-detail/ui/KakaoOpenChatPrompt';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
 import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySection';
+import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenChatPrompt';
 import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list/ui';
 
 import CommunityReaction from '../CommunityReaction';
 
 import ProductInfo from './ProductInfo';
-
-const TALKROOM_LINK = 'https://open.kakao.com/o/gJZTWAAg';
 
 export default async function DesktopProductDetailPage({
   productId,
@@ -61,10 +59,8 @@ export default async function DesktopProductDetailPage({
                 slotLocation={AdvertiseSlotLocation.ProductMainBanner}
                 priority
               />
-              {/* 주 유입 경로가 핫딜 단톡방이라 상세에도 방으로 돌아가는 문을 둔다.
-                  헤더 아이콘·푸터 링크가 이미 있지만 둘 다 라벨 없는 아이콘/작은 글씨라
-                  방이 있다는 사실 자체가 전달되지 않는다. */}
-              <KakaoOpenChatPrompt href={TALKROOM_LINK} />
+              {/* 비오카방 유입만 soft 안내. 헤더/푸터 아이콘만으로는 방 존재가 안 전달된다. */}
+              <SoftKakaoOpenChatPrompt />
               <CoupangPartnerGuide productId={productId} />
             </div>
 
