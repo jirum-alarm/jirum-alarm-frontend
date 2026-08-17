@@ -6,14 +6,18 @@ export {};
  * 이 설정이 틀리면 잘못된 JS 번들이 네이티브와 안 맞는 앱에 꽂혀 부팅 불가가 되고,
  * 그건 OTA 로 복구가 안 된다(스토어 재심사). 그래서 설정 자체를 테스트로 묶는다.
  *
- * runtimeVersion 은 appVersion 정책을 쓴다. fingerprint 정책은 EAS 에서 수렴하지
- * 않아 못 쓴다 — ios/ 가 byte 단위로 동일한 두 빌드(e28dcbb1, 74188bee)에서도
- * EAS 가 계산한 ios 해시가 085d92a1 / 79247b59 로 달랐다(빌드 3회 연속 실패).
+ * ★ bare workflow 는 runtimeVersion "정책"을 아예 지원하지 않는다. EAS CLI 가
+ * 업로드 후 거부한다:
+ *   "You're currently using the bare workflow, where runtime version policies
+ *    are not supported. You must set your runtime version manually."
+ * 이것이 빌드 4회 실패의 진짜 이유다. fingerprint 로 3회(730a92fe·aa1fd56c·
+ * 4a8ab160) 실패하며 해시 불일치를 쫓았는데, 애초에 정책 자체가 안 되는 환경이었다.
+ * → runtimeVersion 은 반드시 리터럴 문자열.
  *
- * appVersion 정책의 위험은 "버전이 여러 곳에서 갈리는 것"이다. 네이티브 값을 읽고
- * app.json 은 안 보므로, 세 곳이 갈리면 플랫폼별로 다른 runtimeVersion 이 나오고
- * 네이티브와 안 맞는 번들이 꽂혀 부팅 불가(=OTA 로 복구 불가, 심사 재시작)가 된다.
- * 그래서 아래 "버전 정렬" 테스트가 이 정책의 안전장치다.
+ * 그 대가로 정렬이 사람 책임이 된다. runtimeVersion 이 앱 버전과 갈리면
+ * 업데이트가 엉뚱한 빌드에 꽂히거나 아무 빌드에도 안 꽂힌다. 과거 실제로
+ * 세 곳이 갈려 있었다(app.json 1.3.9 / ios 1.4.1 / android 1.3.7).
+ * 그래서 아래 "버전 정렬" 테스트가 유일한 안전장치다.
  */
 
 // @types/node 를 이 앱에 넣지 않으므로 인라인 require 를 쓴다(기존 테스트와 동일).
@@ -31,8 +35,10 @@ const easJson = JSON.parse(read('eas.json'));
 const EXPECTED_URL = `https://u.expo.dev/${appJson.expo.extra.eas.projectId}`;
 
 describe('OTA 설정 — app.json', () => {
-  it('runtimeVersion 은 appVersion 정책이다 (fingerprint 는 EAS 에서 수렴 안 함)', () => {
-    expect(appJson.expo.runtimeVersion).toEqual({policy: 'appVersion'});
+  it('runtimeVersion 은 리터럴 문자열이다 (bare 는 정책 미지원)', () => {
+    // 객체({policy:...})면 EAS CLI 가 빌드를 거부한다.
+    expect(typeof appJson.expo.runtimeVersion).toBe('string');
+    expect(appJson.expo.runtimeVersion).toMatch(/^\d+\.\d+\.\d+$/);
   });
 
   it('업데이트 URL 은 EAS projectId 와 일치한다', () => {
@@ -84,6 +90,11 @@ describe('OTA 설정 — 앱 버전 3곳 정렬 (appVersion 정책의 안전장�
   it('app.json / ios / android 가 모두 같은 버전이다', () => {
     expect(androidVersion).toBe(appJsonVersion);
     expect(iosVersions[0]).toBe(appJsonVersion);
+  });
+
+  it('runtimeVersion 이 앱 버전과 일치한다 (수동 관리라 갈리기 쉽다)', () => {
+    // 갈리면 업데이트가 엉뚱한 빌드에 꽂히거나 아무 빌드에도 안 꽂힌다.
+    expect(appJson.expo.runtimeVersion).toBe(appJsonVersion);
   });
 });
 

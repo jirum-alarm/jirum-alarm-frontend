@@ -8,9 +8,7 @@
     "experiments": {
       "autolinkingModuleResolution": true
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.4.2",
     "updates": {
       "url": "https://u.expo.dev/ec89e7ad-0f52-4777-a71c-50e5f596be58",
       "fallbackToCacheTimeout": 0
