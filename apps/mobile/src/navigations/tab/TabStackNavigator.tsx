@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 import TabWebView from '@/screens/tabs/TabWebView';
 import HomeScreen from '@/screens/home/HomeScreen';
@@ -109,6 +109,21 @@ function TabWebViewPage({
 export function createTabStack(tabName: TabName) {
   return function TabStack() {
     const onFocusedRoute = useSyncNativeTabBarHidden();
+    // 이 탭이 지금 화면에 보이는 탭인가. 리스너 안에서 최신값을 읽어야 하므로
+    // ref 로 들고 있는다(리스너는 재생성되지 않는다).
+    const isTabFocused = useIsFocused();
+    const isFocusedRef = useRef(isTabFocused);
+    isFocusedRef.current = isTabFocused;
+
+    // 이 탭으로 돌아왔을 때 자기 스택 최상단 기준으로 다시 맞춘다.
+    // (다른 탭에 있는 동안 이 탭의 리스너는 위 가드로 막혀 있었다)
+    const navigation = useNavigation();
+    useEffect(() => {
+      if (!isTabFocused) return;
+      const state = navigation.getState();
+      const focused = state?.routes?.[state.index]?.name;
+      setTabBarVisible(!hidesTabBar(focused));
+    }, [isTabFocused, navigation]);
 
     return (
       <Stack.Navigator
@@ -119,7 +134,13 @@ export function createTabStack(tabName: TabName) {
             const focused = stack.routes[stack.index]?.name;
             onFocusedRoute(focused);
             // ★탭바 표시는 여기서 한 곳으로 정한다(화면별 훅 대신).
-            setTabBarVisible(!hidesTabBar(focused));
+            //
+            // ★★단 **이 탭이 지금 보고 있는 탭일 때만**. 이 리스너는 탭 5개의
+            // 스택에서 각각 돌기 때문에, 발견 탭에 상세를 열어둔 채 홈으로 오면
+            // 발견 탭 리스너가 false 로 덮어써 홈에서도 탭바가 사라진다.
+            if (isFocusedRef.current) {
+              setTabBarVisible(!hidesTabBar(focused));
+            }
           },
         }}>
         <Stack.Screen name={tabStackNavigations.ROOT}>
