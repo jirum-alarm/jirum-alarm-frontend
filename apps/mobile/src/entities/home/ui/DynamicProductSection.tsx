@@ -1,12 +1,6 @@
 import React, {useMemo, useRef, useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, ScrollView, Text, View} from 'react-native';
 
 import PressableScale from '@/shared/components/PressableScale';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
@@ -163,14 +157,15 @@ function SectionHeader({
       <Text className="text-lg font-bold text-gray-900" numberOfLines={1}>
         {title}
       </Text>
+      {/* web InteractiveMoreLink — whileTap scale 0.95. */}
       {viewMoreLink && onPressViewMore ? (
-        <Pressable
+        <PressableScale
           onPress={() => onPressViewMore(viewMoreLink, title)}
           hitSlop={12}
           accessibilityRole="button"
           accessibilityLabel={`${title} 더보기`}>
           <Text className="text-sm text-gray-500">더보기</Text>
-        </Pressable>
+        </PressableScale>
       ) : null}
     </View>
   );

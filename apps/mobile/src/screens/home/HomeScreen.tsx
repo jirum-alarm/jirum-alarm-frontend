@@ -8,7 +8,6 @@ import React, {
 } from 'react';
 import {
   ActivityIndicator,
-  Pressable,
   RefreshControl,
   ScrollView,
   Text,
@@ -266,13 +265,14 @@ export default function HomeScreen() {
             <Text className="text-lg font-bold text-gray-900">
               지름알림 랭킹
             </Text>
-            <Pressable
+            {/* web InteractiveMoreLink — whileTap scale 0.95. */}
+            <PressableScale
               onPress={handlePressRanking}
               hitSlop={12}
               accessibilityRole="button"
               accessibilityLabel="지름알림 랭킹 더보기">
               <Text className="text-sm text-gray-500">더보기</Text>
-            </Pressable>
+            </PressableScale>
           </View>
           {isAboveFoldPending ? (
             <RankingSkeleton />

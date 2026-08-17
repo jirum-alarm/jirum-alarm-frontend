@@ -1,11 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, ScrollView, Text, View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 
 import PressableScale from '@/shared/components/PressableScale';
@@ -78,8 +72,9 @@ export default function TossHomeSection({
         className="h-14 w-full flex-row items-center justify-between"
         style={{paddingHorizontal: 20}}>
         <Text className="text-lg font-bold text-gray-900">토스 특가</Text>
+        {/* web InteractiveMoreLink — whileTap scale 0.95. */}
         {onPressViewMore ? (
-          <Pressable
+          <PressableScale
             onPress={() =>
               onPressViewMore(`/toss?tab=${activeId}`, '토스 특가')
             }
@@ -87,7 +82,7 @@ export default function TossHomeSection({
             accessibilityRole="button"
             accessibilityLabel="토스 특가 더보기">
             <Text className="text-sm text-gray-500">더보기</Text>
-          </Pressable>
+          </PressableScale>
         ) : null}
       </View>
 

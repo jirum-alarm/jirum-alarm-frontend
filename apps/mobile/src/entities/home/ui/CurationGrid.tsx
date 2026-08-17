@@ -1,5 +1,11 @@
-import React from 'react';
-import {ActivityIndicator, FlatList, Text, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
 
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
@@ -41,11 +47,23 @@ export default function CurationGrid<T>({
   isError: boolean;
   /** 에러 문구에 쓰는 섹션 이름. */
   label: string;
-  onRetry: () => void;
+  /** 에러 재시도 + pull-to-refresh 공용. react-query refetch 를 그대로 받는다. */
+  onRetry: () => void | Promise<unknown>;
   onEndReached?: () => void;
   footer?: React.ReactNode;
   topSpacing?: 'normal' | 'tight';
 }) {
+  // pull-to-refresh. 홈(HomeScreen)과 같은 패턴 — 스피너는 당기는 동안만.
+  // isRefetching 을 그대로 쓰면 백그라운드 리페치에도 스피너가 떠서 분리한다.
+  const [refreshing, setRefreshing] = useState(false);
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await onRetry();
+    } finally {
+      setRefreshing(false);
+    }
+  }, [onRetry]);
   if (isPending) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
@@ -83,6 +101,9 @@ export default function CurationGrid<T>({
         paddingBottom: 16,
       }}
       columnWrapperStyle={{gap: GRID_GAP_X}}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
       ItemSeparatorComponent={() => <View style={{height: GRID_GAP_Y}} />}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
