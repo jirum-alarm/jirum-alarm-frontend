@@ -29,7 +29,14 @@ const TRANSITION_MS = 300;
  * ★ 로고 크기는 상세 헤더(28)와 맞춘다 — IconLogo 는 viewBox 32 중 잉크가 21.6뿐이라
  * size 를 그대로 믿으면 실제보다 작게 보인다(logo-size-prop-lies-viewbox-slack).
  */
-export default function HomeHeader({isScrolled}: {isScrolled: boolean}) {
+export default function HomeHeader({
+  isScrolled,
+  onPressLogo,
+}: {
+  isScrolled: boolean;
+  /** 로고 탭 — 맨 위로. web 은 `/` 링크라 홈에선 같은 체감이다. */
+  onPressLogo?: () => void;
+}) {
   const insets = useSafeAreaInsets();
   // 0 = 다크(맨 위), 1 = 흰 헤더
   const progress = useRef(new Animated.Value(isScrolled ? 1 : 0)).current;
@@ -49,27 +56,40 @@ export default function HomeHeader({isScrolled}: {isScrolled: boolean}) {
       <View
         className="absolute inset-0 bg-gray-900"
         style={{paddingTop: insets.top}}>
-        <HeaderRow inverted />
+        <HeaderRow inverted onPressLogo={onPressLogo} />
       </View>
 
       {/* 위 겹: 흰 헤더. 제자리에서 opacity 만 올라온다(슬라이드 없음). */}
       <Animated.View
         className="absolute inset-0 bg-white"
         style={{paddingTop: insets.top, opacity: progress}}>
-        <HeaderRow inverted={false} />
+        <HeaderRow inverted={false} onPressLogo={onPressLogo} />
       </Animated.View>
     </View>
   );
 }
 
 /** 로고·부제·검색 한 줄. 두 겹이 같은 내용을 각자의 색으로 그린다. */
-function HeaderRow({inverted}: {inverted: boolean}) {
+function HeaderRow({
+  inverted,
+  onPressLogo,
+}: {
+  inverted: boolean;
+  onPressLogo?: () => void;
+}) {
   const navigation =
     useNavigation<NativeStackNavigationProp<TabStackParamList>>();
 
   return (
     <View className="h-14 w-full flex-row items-center justify-between px-5">
-      <View className="max-w-[220px] flex-row items-center gap-2">
+      {/* 로고 탭 = 맨 위로. hitSlop 으로 터치 영역을 넓힌다. */}
+      <Pressable
+        onPress={onPressLogo}
+        disabled={!onPressLogo}
+        hitSlop={8}
+        accessibilityRole="button"
+        accessibilityLabel="지름알림 홈, 맨 위로"
+        className="max-w-[220px] flex-row items-center gap-2">
         <IconLogo size={28} />
         <View className="min-w-0 shrink">
           <Text
@@ -91,7 +111,7 @@ function HeaderRow({inverted}: {inverted: boolean}) {
             {LOGO_SUBTITLE}
           </Text>
         </View>
-      </View>
+      </Pressable>
 
       <Pressable
         onPress={() => navigation.push(tabStackNavigations.SEARCH)}

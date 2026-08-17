@@ -21,6 +21,29 @@ const readWeb = (p: string) =>
 const header = read('src/screens/home/ui/HomeHeader.tsx');
 const screen = read('src/screens/home/HomeScreen.tsx');
 
+describe('로고 탭', () => {
+  it('로고가 눌린다 — 맨 위로 스크롤', () => {
+    // web 은 로고가 `/` 링크라 홈에선 맨 위로 가는 체감이다.
+    expect(header).toContain('onPressLogo');
+    expect(header).toContain('accessibilityLabel="지름알림 홈, 맨 위로"');
+  });
+
+  it('두 겹 모두에 전달된다(투명한 겹도 눌려야)', () => {
+    expect(header).toContain(
+      '<HeaderRow inverted onPressLogo={onPressLogo} />',
+    );
+    expect(header).toContain(
+      '<HeaderRow inverted={false} onPressLogo={onPressLogo} />',
+    );
+  });
+
+  it('홈이 ScrollView ref 로 맨 위로 보낸다', () => {
+    expect(screen).toContain('scrollRef');
+    expect(screen).toContain('scrollTo({y: 0, animated: true})');
+    expect(screen).toContain('onPressLogo={scrollToTop}');
+  });
+});
+
 describe('상단바 전환 — web 과 같은 방식', () => {
   it('전환 시간은 web 과 같은 300ms', () => {
     const web = readWeb('widgets/home/ui/mobile/HomeHeader.tsx');

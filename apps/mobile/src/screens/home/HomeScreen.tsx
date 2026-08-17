@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -63,6 +64,11 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
   const {getWebViewRef, setActiveTab} = useWebviewContext();
+
+  const scrollRef = useRef<ScrollView>(null);
+  const scrollToTop = useCallback(() => {
+    scrollRef.current?.scrollTo({y: 0, animated: true});
+  }, []);
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -229,6 +235,7 @@ export default function HomeScreen() {
       <SystemBars style={statusBarStyle} hidden={false} />
 
       <ScrollView
+        ref={scrollRef}
         stickyHeaderIndices={[0]}
         scrollEventThrottle={16}
         onScroll={e => handleScroll(e.nativeEvent.contentOffset.y)}
@@ -236,7 +243,7 @@ export default function HomeScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         contentContainerStyle={{paddingBottom: reservedBottom}}>
-        <HomeHeader isScrolled={isScrolled} />
+        <HomeHeader isScrolled={isScrolled} onPressLogo={scrollToTop} />
 
         {/*
           다크 배경 헤더 + 배너 캐러셀 (web BackgroundHeader).
