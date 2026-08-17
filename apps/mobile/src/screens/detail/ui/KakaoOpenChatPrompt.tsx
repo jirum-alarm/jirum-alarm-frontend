@@ -45,8 +45,9 @@ export default function KakaoOpenChatPrompt({href}: {href?: string}) {
         <TalkLight width={18} height={18} style={{marginTop: 2}} />
       </View>
       <View className="min-w-0 flex-1">
+        {/* "핫딜 Only"는 UTM 캠페인명·봇 설정값이 새어 나온 내부 용어. web 과 같이 간다. */}
         <Text className="text-sm font-semibold text-gray-800">
-          핫딜 Only 오픈 카톡방 입장하기
+          핫딜 오픈 카톡방 입장하기
         </Text>
         <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
           지름알림이 엄선한 핫딜만 골라 받아보세요!

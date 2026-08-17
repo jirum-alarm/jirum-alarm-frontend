@@ -44,9 +44,9 @@ export default function KakaoOpenChatPrompt({
         <TalkLight width={18} height={18} className="mt-0.5" />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-sm font-semibold text-gray-800">
-          핫딜 Only 오픈 카톡방 입장하기
-        </span>
+        {/* "핫딜 Only"는 UTM 캠페인명(hotdeal_only)·봇 설정값이 새어 나온 내부 용어라
+            유저에겐 정체불명 고유명사로 읽힌다. 방 성격은 아래 줄이 이미 말한다. */}
+        <span className="block text-sm font-semibold text-gray-800">핫딜 오픈 카톡방 입장하기</span>
         <span className="mt-0.5 block truncate text-xs text-gray-500">
           지름알림이 엄선한 핫딜만 골라 받아보세요!
         </span>

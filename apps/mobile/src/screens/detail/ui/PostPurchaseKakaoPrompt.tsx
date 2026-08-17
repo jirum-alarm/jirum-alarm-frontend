@@ -25,11 +25,12 @@ export default function PostPurchaseKakaoPrompt({
         <TalkLight width={18} height={18} style={{marginTop: 2}} />
       </View>
       <View className="min-w-0 flex-1">
+        {/* 문구는 web PostPurchaseKakaoPrompt 와 같이 간다 — 같은 방을 가리키는 카드다. */}
         <Text className="text-sm font-semibold text-gray-800">
-          이런 핫딜, 카톡으로 받아볼까요?
+          카톡으로 핫딜 먼저 받아보세요
         </Text>
         <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
-          로그인 없이 핫딜 Only 방에 입장해요
+          지름알림이 엄선한 핫딜만 골라 보내드려요
         </Text>
       </View>
       <PressableScale

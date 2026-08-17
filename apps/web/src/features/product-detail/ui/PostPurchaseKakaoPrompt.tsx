@@ -43,8 +43,14 @@ export default function PostPurchaseKakaoPrompt({
         <TalkLight width={18} height={18} className="mt-0.5" />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-gray-800">이런 핫딜, 카톡으로 받아볼까요?</p>
-        <p className="mt-0.5 truncate text-xs text-gray-500">로그인 없이 핫딜 Only 방에 입장해요</p>
+        {/* "이런 핫딜"은 방금 본 상품을 가리키는 지시어인데 이 방은 카테고리 무관한
+            전체 큐레이션 스트림이다 — 상품 특정은 옆 PostPurchaseKeywordPrompt 담당.
+            2행은 soft 배너(KakaoOpenChatPrompt)와 같은 문구를 써서 두 카드가 방을
+            같은 이름·같은 가치로 부르게 한다. */}
+        <p className="text-sm font-semibold text-gray-800">카톡으로 핫딜 먼저 받아보세요</p>
+        <p className="mt-0.5 truncate text-xs text-gray-500">
+          지름알림이 엄선한 핫딜만 골라 보내드려요
+        </p>
       </div>
       <div className="flex shrink-0 items-center gap-x-2">
         <button
