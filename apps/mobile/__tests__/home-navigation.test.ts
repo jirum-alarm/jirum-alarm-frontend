@@ -53,6 +53,23 @@ describe('섹션 더보기 — 탭 스택에 쌓는다', () => {
   });
 });
 
+describe('더보기 웹뷰 안에서 상품을 눌렀을 때', () => {
+  const logic = read(
+    'src/screens/jirumalarmwebview/hooks/useCommonWebViewLogic.ts',
+  );
+
+  it('★탭 스택 안이면 탭 스택 라우트로 쌓는다', () => {
+    // MainStack 라우트로 쌓으면 탭 밖으로 나가 하단 탭바가 다시 뜬다.
+    expect(logic).toContain('isInTabStack');
+    expect(logic).toContain('tabStackNavigations.WEBVIEW');
+  });
+
+  it('WEBVIEW 화면이 탭바를 숨긴다', () => {
+    // useHideTabBar 주석의 "상세 하위 웹뷰 → 안 떠야 함" 사례.
+    expect(stack).toContain('useHideTabBar()');
+  });
+});
+
 describe('실시간 특가 더 보기 — 발견 탭의 live 화면', () => {
   it('★탭만 바꾸지 않는다 — 그 탭 기본 URL 은 랭킹이다', () => {
     // getTabBaseUrl(DISCOVER) === '/trending/ranking' 이라

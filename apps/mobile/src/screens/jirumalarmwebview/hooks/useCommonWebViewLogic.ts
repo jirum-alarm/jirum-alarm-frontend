@@ -20,7 +20,11 @@ import {
 } from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainParamList} from '@/navigations/stack/MainNavigator';
-import {mainNavigations} from '@/shared/constant/navigations';
+import {
+  mainNavigations,
+  tabStackNavigations,
+} from '@/shared/constant/navigations';
+import {isInTabStack} from '@/shared/lib/navigation/search-flow';
 
 export function useCommonWebViewLogic() {
   const insets = useSafeAreaInsets();
@@ -127,16 +131,18 @@ export function useCommonWebViewLogic() {
         const {url, type} = parsedMessage.payload
           .data as WebViewEventPayloads[WebViewEventType.ROUTE_CHANGED]['data'];
 
+        // ★어느 스택에서 열렸느냐에 따라 라우트 이름이 다르다.
+        // 탭 스택 안(더보기로 들어온 /toss·/curation)이면 탭 스택 라우트로
+        // 쌓아야 탭바 숨김·뒤로가기가 탭 구조를 따른다. MainStack 라우트로
+        // 쌓으면 탭 밖으로 나가 **하단 탭바가 다시 뜬다**(사용자 지적).
+        const routeName = isInTabStack(navigation)
+          ? tabStackNavigations.WEBVIEW
+          : mainNavigations.JIRUM_ALARM_WEBVIEW;
+
         if (type === 'push') {
-          navigation.dispatch(
-            StackActions.push(mainNavigations.JIRUM_ALARM_WEBVIEW, {uri: url}),
-          );
+          navigation.dispatch(StackActions.push(routeName, {uri: url}));
         } else if (type === 'replace') {
-          navigation.dispatch(
-            CommonActions.navigate(mainNavigations.JIRUM_ALARM_WEBVIEW, {
-              uri: url,
-            }),
-          );
+          navigation.dispatch(CommonActions.navigate(routeName, {uri: url}));
         }
       }
     }

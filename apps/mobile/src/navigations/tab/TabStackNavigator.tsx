@@ -15,6 +15,7 @@ import {
 } from '@/shared/constant/navigations';
 import {getTabBaseUrl} from '@/shared/lib/navigation/tab-routing';
 import {useTabBarVisibility} from '@/shared/hooks/useTabBarVisibility';
+import {useHideTabBar} from '@/shared/hooks/useHideTabBar';
 import type {TabStackParamList} from './types';
 import {
   commentsHeaderOptions,
@@ -78,6 +79,11 @@ function TabWebViewPage({
 }: {
   route: {params: {uri: string; title?: string}};
 }) {
+  // ★탭바를 숨긴다. web 페이지가 자체 하단 UI(구매 CTA·찜하기)를 갖고 있어
+  // 탭바가 그 위에 겹친다 — useHideTabBar 주석의 "상세 하위 웹뷰" 사례.
+  // 상세·댓글·검색은 이미 이 훅을 쓰는데 이 화면만 빠져 있었다.
+  useHideTabBar();
+
   const Screen = JirumAlarmWebViewScreen as unknown as React.ComponentType<{
     route: {params: {uri: string}};
   }>;
