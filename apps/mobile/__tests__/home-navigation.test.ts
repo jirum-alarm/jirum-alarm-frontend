@@ -53,6 +53,22 @@ describe('섹션 더보기 — 탭 스택에 쌓는다', () => {
   });
 });
 
+describe('★탭이 이미 가진 화면은 스택에 쌓지 않는다', () => {
+  it('랭킹 더보기 = 발견 탭 이동(스택 push 아님)', () => {
+    // /trending/* 은 발견 탭의 화면이다. /curation/* 처럼 스택에 쌓으면
+    // 같은 화면이 두 겹으로 존재하고 탭 구조가 어긋난다(사용자 지적).
+    expect(screen).toContain('handlePressRanking');
+    expect(screen).toContain('goDiscoverTab');
+    // 랭킹을 WEBVIEW 로 push 하지 않는다
+    expect(screen).not.toContain("handlePressViewMore('/trending/ranking'");
+  });
+
+  it('실시간·랭킹이 같은 헬퍼를 쓴다', () => {
+    expect(screen).toContain("goDiscoverTab('/trending/live')");
+    expect(screen).toContain("goDiscoverTab('/trending/ranking')");
+  });
+});
+
 describe('더보기 웹뷰 안에서 상품을 눌렀을 때', () => {
   const logic = read(
     'src/screens/jirumalarmwebview/hooks/useCommonWebViewLogic.ts',

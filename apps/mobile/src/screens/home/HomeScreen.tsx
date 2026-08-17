@@ -131,21 +131,43 @@ export default function HomeScreen() {
    * (사용자 지적). 탭을 전환하고 그 탭 웹뷰의 URL 을 live 로 갈아끼운다 —
    * MainTabNavigator 의 handleNavigateToRoot 와 같은 방식.
    */
-  const handlePressLiveDeals = useCallback(() => {
-    const tabs = navigation.getParent(MAIN_TABS_ID as never) as
-      | {navigate: (name: string) => void}
-      | undefined;
-    tabs?.navigate(tabNavigations.DISCOVER);
-    setActiveTab(tabNavigations.DISCOVER);
+  const goDiscoverTab = useCallback(
+    (path: string) => {
+      const tabs = navigation.getParent(MAIN_TABS_ID as never) as
+        | {navigate: (name: string) => void}
+        | undefined;
+      tabs?.navigate(tabNavigations.DISCOVER);
+      setActiveTab(tabNavigations.DISCOVER);
 
-    const target = `${SERVICE_URL}/trending/live`;
-    // 탭 전환 직후엔 웹뷰가 아직 마운트 전일 수 있어 한 틱 뒤에 주입한다.
-    setTimeout(() => {
-      getWebViewRef(tabNavigations.DISCOVER)?.current?.injectJavaScript(
-        `if (window.location.href !== '${target}') { window.location.href = '${target}'; } true;`,
-      );
-    }, 0);
-  }, [navigation, setActiveTab, getWebViewRef]);
+      const target = `${SERVICE_URL}${path}`;
+      // 탭 전환 직후엔 웹뷰가 아직 마운트 전일 수 있어 한 틱 뒤에 주입한다.
+      setTimeout(() => {
+        getWebViewRef(tabNavigations.DISCOVER)?.current?.injectJavaScript(
+          `if (window.location.href !== '${target}') { window.location.href = '${target}'; } true;`,
+        );
+      }, 0);
+    },
+    [navigation, setActiveTab, getWebViewRef],
+  );
+
+  /** "실시간 특가 더 보기" → 발견 탭의 실시간 화면. */
+  const handlePressLiveDeals = useCallback(
+    () => goDiscoverTab('/trending/live'),
+    [goDiscoverTab],
+  );
+
+  /**
+   * "지름알림 랭킹 더보기" → 발견 탭의 **랭킹** 화면.
+   *
+   * ★일반 섹션 더보기(/curation/*)처럼 스택에 쌓으면 안 된다 — 랭킹은
+   * 발견 탭이 이미 갖고 있는 화면이라 탭으로 보내야 한다(사용자 지적).
+   * `/trending/ranking` 은 발견 탭의 기본 URL 이라 주입이 없어도 대개 맞지만,
+   * 사용자가 그 탭에서 live 를 보던 중이면 그대로 남으므로 명시 주입한다.
+   */
+  const handlePressRanking = useCallback(
+    () => goDiscoverTab('/trending/ranking'),
+    [goDiscoverTab],
+  );
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -229,9 +251,7 @@ export default function HomeScreen() {
               지름알림 랭킹
             </Text>
             <Pressable
-              onPress={() =>
-                handlePressViewMore('/trending/ranking', '지름알림 랭킹')
-              }
+              onPress={handlePressRanking}
               hitSlop={12}
               accessibilityRole="button"
               accessibilityLabel="지름알림 랭킹 더보기">
