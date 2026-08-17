@@ -17,6 +17,8 @@ const path = require('path');
 
 const read = (p: string): string =>
   fs.readFileSync(path.resolve(process.cwd(), p), 'utf8');
+const exists = (p: string): boolean =>
+  fs.existsSync(path.resolve(process.cwd(), p));
 
 const appJson = JSON.parse(read('app.json'));
 const easJson = JSON.parse(read('eas.json'));
@@ -83,37 +85,33 @@ describe('OTA 설정 — fingerprint 재현성', () => {
   });
 });
 
-describe('OTA 설정 — 네이티브 배선', () => {
-  const plist = read('ios/jirumAlarmMobile/Expo.plist');
-  const manifest = read('android/app/src/main/AndroidManifest.xml');
-
-  it('iOS: Expo.plist 가 fingerprint sentinel 을 쓴다 (버전 하드코딩 금지)', () => {
-    // "file:fingerprint" 는 expo-updates sentinel — 빌드 시 실제 해시로 채워진다.
-    expect(plist).toContain('<key>EXUpdatesRuntimeVersion</key>');
-    expect(plist).toMatch(
-      /EXUpdatesRuntimeVersion<\/key>\s*<string>file:fingerprint<\/string>/,
-    );
+describe('OTA 설정 — 네이티브 배선은 손으로 하지 않는다', () => {
+  /**
+   * expo-updates 는 app.plugin.js 를 자동 등록하고, 그 플러그인이
+   * IOSConfig.Updates.withUpdates / AndroidConfig.Updates.withUpdates 로
+   * ios/<target>/Supporting/Expo.plist 와 AndroidManifest meta-data 를 생성한다.
+   *
+   * 손으로 같은 값을 또 넣으면 생성물과 경쟁해 ios 디렉토리 해시가 흔들리고,
+   * runtime version mismatch 로 빌드가 죽는다(빌드 730a92fe·aa1fd56c).
+   * 그래서 "있어야 한다"가 아니라 "없어야 한다"를 검사한다.
+   */
+  it('iOS: 손으로 만든 Expo.plist 가 없다 (플러그인 생성물과 경쟁)', () => {
+    expect(exists('ios/jirumAlarmMobile/Expo.plist')).toBe(false);
   });
 
-  it('iOS: Expo.plist 의 URL 이 app.json 과 일치한다', () => {
-    expect(plist).toContain(EXPECTED_URL);
-  });
-
-  it('iOS: Expo.plist 가 Xcode 타깃 리소스로 등록돼 있다', () => {
-    // Bundle.main 에서 읽으므로 Resources 빌드 페이즈에 없으면 런타임에 못 찾는다.
+  it('iOS: pbxproj 에 Expo.plist 를 수동 등록하지 않는다', () => {
     const pbxproj = read('ios/jirumAlarmMobile.xcodeproj/project.pbxproj');
-    expect(pbxproj).toContain('Expo.plist in Resources');
-    expect(pbxproj).toMatch(/path = jirumAlarmMobile\/Expo\.plist/);
+    expect(pbxproj).not.toContain('Expo.plist in Resources');
   });
 
-  it('Android: manifest 에 URL 과 ENABLED 가 있다', () => {
-    expect(manifest).toContain('expo.modules.updates.ENABLED');
-    expect(manifest).toContain('expo.modules.updates.EXPO_UPDATE_URL');
-    expect(manifest).toContain(EXPECTED_URL);
+  it('Android: manifest 에 updates meta-data 를 수동으로 넣지 않는다', () => {
+    const manifest = read('android/app/src/main/AndroidManifest.xml');
+    expect(manifest).not.toContain('expo.modules.updates');
   });
 
-  it('Android: manifest 에 runtimeVersion 을 박지 않는다 (fingerprint 를 덮어버린다)', () => {
-    // EXPO_RUNTIME_VERSION 이 있으면 fingerprint 대신 그 값이 쓰인다 → 불일치 위험.
-    expect(manifest).not.toContain('EXPO_RUNTIME_VERSION');
+  it('생성물은 커밋되지 않도록 gitignore 돼 있다', () => {
+    // 커밋되면 머신마다 다른 값이 박혀 들어가 fingerprint 가 갈린다.
+    const gitignore = read('../../.gitignore');
+    expect(gitignore).toContain('Supporting/Expo.plist');
   });
 });
