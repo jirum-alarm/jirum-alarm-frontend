@@ -35,7 +35,6 @@ import {
   tabStackNavigations,
 } from '@/shared/constant/navigations';
 import {useAuth} from '@/shared/hooks/useAuth';
-import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 
@@ -81,7 +80,6 @@ function NativeDetail({productId}: {productId: number}) {
   const [showTopButton, setShowTopButton] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const navigation = useNavigation<DetailNavigationProp>();
-  const tabBarClipPad = useHiddenTabBarClipPadding();
   const {getWebViewRef} = useWebviewContext();
   const {
     data: product,
@@ -216,7 +214,7 @@ function NativeDetail({productId}: {productId: number}) {
   const source = parseSourceData(product.data);
 
   return (
-    <View className="flex-1 bg-white" style={{paddingBottom: tabBarClipPad}}>
+    <View className="flex-1 bg-white">
       <SystemBars style="dark" hidden={false} />
       <ScrollView
         ref={scrollRef}

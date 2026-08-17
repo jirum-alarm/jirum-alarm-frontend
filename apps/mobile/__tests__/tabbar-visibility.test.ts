@@ -111,6 +111,26 @@ describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', (
     expect(code).not.toContain('useSyncExternalStore');
   });
 
+  it('★★네이티브 화면은 상쇄 패딩을 쓰지 않는다', () => {
+    // 내비게이터가 marginBottom: -clipPx 로 화면을 당기고, 화면이
+    // paddingBottom: clipPx 로 되미는 구조였다. 두 값이 서로 다른 경로로
+    // 오기 때문에(전역 store vs 네비 options) 한 프레임 어긋나면
+    // 그 사이 여백이 보인다 — "생겼다 사라지는" 정체.
+    //
+    // 네이티브 화면의 하단 UI(BottomCTA·댓글 입력)는 자체적으로
+    // insets.bottom 을 처리하므로 상쇄 패딩이 애초에 불필요하다.
+    for (const f of [
+      'src/screens/detail/ProductDetailScreen.tsx',
+      'src/screens/comment/ProductCommentsScreen.tsx',
+    ]) {
+      expect(read(f)).not.toContain('useHiddenTabBarClipPadding');
+    }
+    // 하단 UI 가 safe area 를 직접 본다(그래서 패딩이 필요 없다)
+    expect(read('src/screens/detail/ui/BottomCTA.tsx')).toContain(
+      'Math.max(insets.bottom',
+    );
+  });
+
   it('★탭바가 보일 때도 하단 여백을 준다', () => {
     // 숨길 때만 패딩을 주면, 탭바가 보이는 경우 웹 콘텐츠가 홈 인디케이터에
     // 붙는다(폴백 상세 웹뷰에서 실제로 그랬다).
