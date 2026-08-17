@@ -1,4 +1,10 @@
-import React, {Fragment, useCallback, useMemo, useState} from 'react';
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   ActivityIndicator,
   RefreshControl,
@@ -117,6 +123,20 @@ export default function HomeScreen() {
     }, []),
   );
 
+  // 헤더 크로스페이드(300ms)의 중간에 상태바를 바꾼다. SystemBars 는 애니메이션이
+  // 안 되므로, 즉시 바꾸면 아직 다크 헤더인데 글씨가 검어 안 보이고,
+  // 끝나고 바꾸면 흰 헤더에 흰 글씨가 된다.
+  const [statusBarStyle, setStatusBarStyle] = useState<'light' | 'dark'>(
+    isScrolled ? 'dark' : 'light',
+  );
+  useEffect(() => {
+    const timer = setTimeout(
+      () => setStatusBarStyle(isScrolled ? 'dark' : 'light'),
+      150,
+    );
+    return () => clearTimeout(timer);
+  }, [isScrolled]);
+
   const reservedBottom = getReservedBottomPx(insets.bottom);
 
   return (
@@ -126,7 +146,7 @@ export default function HomeScreen() {
         handleScrollForHomeStatusBar 가 하던 일이라 네이티브에서 직접 배선한다
         (안 하면 다크 헤더에서 상태바가 안 보인다).
       */}
-      <SystemBars style={isScrolled ? 'dark' : 'light'} hidden={false} />
+      <SystemBars style={statusBarStyle} hidden={false} />
 
       <ScrollView
         stickyHeaderIndices={[0]}

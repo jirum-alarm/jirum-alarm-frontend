@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {FlatList, Pressable, Text, View} from 'react-native';
+import {Dimensions, FlatList, Pressable, Text, View} from 'react-native';
 
 import type {
   ContentPromotionSectionType,
@@ -248,6 +248,14 @@ function DoubleRowCarousel({
   products: ProductCardType[];
   onPressProduct: (id: number) => void;
 }) {
+  // ★ 슬라이드 폭은 절대값이어야 한다.
+  // '85%' 는 FlatList 안에서 콘텐츠 컨테이너 기준으로 풀려 실제 폭이 어긋나고,
+  // 그러면 카드 히트영역이 화면 위치와 밀려서 **엉뚱한 카드가 눌린다**
+  // (사용자 지적: "유통기한 임박 특가 클릭하면 이상하게 된다").
+  const slideWidth = Math.round(
+    (Dimensions.get('window').width - HORIZONTAL_PADDING * 2) * 0.85,
+  );
+
   const pairs = useMemo(() => {
     const chunks: ProductCardType[][] = [];
     for (let i = 0; i < products.length; i += 2) {
@@ -265,7 +273,7 @@ function DoubleRowCarousel({
       contentContainerStyle={{paddingHorizontal: HORIZONTAL_PADDING}}
       ItemSeparatorComponent={() => <View style={{width: 12}} />}
       renderItem={({item}) => (
-        <View style={{width: '85%', gap: 16}}>
+        <View style={{width: slideWidth, gap: 16}}>
           {item.map(product => (
             <DoubleRowCard
               key={product.id}

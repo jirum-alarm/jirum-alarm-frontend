@@ -109,8 +109,11 @@ export function ListCard({product, onPress}: CardProps) {
     <PressableScale
       onPress={() => onPress(Number(product.id))}
       accessibilityRole="button"
-      accessibilityLabel={product.title}>
-      <View className="flex-row items-center gap-4">
+      accessibilityLabel={product.title}
+      // ★className 은 PressableScale 안쪽 View 가 받는다. 안 넘기면 스타일 없는
+      // 래퍼가 끼어 flex-row 가 안 걸리고 세로로 쌓인다(PressableScale 주석 참조).
+      className="flex-row items-center gap-4">
+      <>
         <CardThumbnail
           product={product}
           style={{width: 76, height: 76}}
@@ -138,7 +141,7 @@ export function ListCard({product, onPress}: CardProps) {
             spacing="none"
           />
         </View>
-      </View>
+      </>
     </PressableScale>
   );
 }
@@ -152,8 +155,10 @@ export function DoubleRowCard({product, onPress}: CardProps) {
     <PressableScale
       onPress={() => onPress(Number(product.id))}
       accessibilityRole="button"
-      accessibilityLabel={product.title}>
-      <View className="w-full flex-row items-start gap-2">
+      accessibilityLabel={product.title}
+      // ★위 ListCard 와 같은 이유 — className 을 PressableScale 에 넘겨야 한다.
+      className="w-full flex-row items-start gap-2">
+      <>
         <CardThumbnail
           product={product}
           style={{width: 120, height: 120}}
@@ -182,7 +187,7 @@ export function DoubleRowCard({product, onPress}: CardProps) {
             ) : null}
           </View>
         </View>
-      </View>
+      </>
     </PressableScale>
   );
 }
