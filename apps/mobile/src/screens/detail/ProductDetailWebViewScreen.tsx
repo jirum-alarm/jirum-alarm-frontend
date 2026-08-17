@@ -32,6 +32,7 @@ import {
 } from '@/shared/hooks/useHideTabBar';
 import type {ProductFlowParamList} from '@/navigations/tab/types';
 import {tabStackNavigations} from '@/shared/constant/navigations';
+import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 
 type StackNav = Pick<
   NativeStackNavigationProp<ProductFlowParamList>,
@@ -102,6 +103,8 @@ export function StackWebView({
   useTokenRemoveEffect();
   useHideTabBar(hideTabBar);
   const tabBarClipPad = useHiddenTabBarClipPadding();
+  // 탭바가 보일 때 확보해야 할 하단 여백(탭바 높이 + safe area).
+  const reservedBottom = getReservedBottomPx(insets.bottom);
 
   useFocusEffect(
     useCallback(() => {
@@ -171,7 +174,9 @@ export function StackWebView({
     <View
       style={[
         styles.container,
-        hideTabBar ? {paddingBottom: tabBarClipPad} : null,
+        // ★탭바를 숨길 땐 잘린 만큼 올리고, 보일 땐 탭바 높이만큼 비운다.
+        // 후자를 빼먹어서 웹 콘텐츠가 홈 인디케이터에 붙었다(사용자 지적).
+        {paddingBottom: hideTabBar ? tabBarClipPad : reservedBottom},
       ]}>
       <SystemBars style="dark" hidden={false} />
       <View style={[styles.statusBarSpacer, {height: insets.top}]} />

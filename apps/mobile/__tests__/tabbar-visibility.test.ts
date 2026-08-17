@@ -101,6 +101,18 @@ describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', (
     expect(hook).toContain('useSyncExternalStore');
   });
 
+  it('★탭바가 보일 때도 하단 여백을 준다', () => {
+    // 숨길 때만 패딩을 주면, 탭바가 보이는 경우 웹 콘텐츠가 홈 인디케이터에
+    // 붙는다(폴백 상세 웹뷰에서 실제로 그랬다).
+    const webviewDetail = read(
+      'src/screens/detail/ProductDetailWebViewScreen.tsx',
+    );
+    expect(webviewDetail).toContain('getReservedBottomPx');
+    expect(webviewDetail).toContain(
+      'hideTabBar ? tabBarClipPad : reservedBottom',
+    );
+  });
+
   it('양쪽이 같은 getTabBarClipPx 를 쓴다', () => {
     expect(navigator).toContain('getTabBarClipPx');
     expect(hook).toContain('getTabBarClipPx');
