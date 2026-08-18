@@ -21,7 +21,14 @@ export function getTabNameFromUrl(url: string): TabName {
   if (path.startsWith('/alarm')) {
     return tabNavigations.ALARM;
   }
-  if (path.startsWith('/mypage') || path.startsWith('/like')) {
+  // `/themes` 는 내정보 소속이다 — 구독 테마 목록(`MySubscribedThemes`)·
+  // `/mypage/keyword` 에서 들어온다. 분기가 없으면 아래 기본값(HOME)으로
+  // 떨어져서 테마를 누르는 순간 내정보 탭 밖으로 튕긴다.
+  if (
+    path.startsWith('/mypage') ||
+    path.startsWith('/like') ||
+    path.startsWith('/themes')
+  ) {
     return tabNavigations.MYPAGE;
   }
   // 상품 상세, 검색, 추천 등은 홈 탭에서 처리

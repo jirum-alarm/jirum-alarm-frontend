@@ -1,7 +1,9 @@
 import {
   getPushablePath,
+  getTabNameFromUrl,
   isTabRootUrl,
 } from '../src/shared/lib/navigation/tab-routing';
+import {tabNavigations} from '../src/shared/constant/navigations';
 
 describe('getPushablePath', () => {
   it('상품 상세는 push 경로를 돌려준다', () => {
@@ -121,5 +123,26 @@ describe('iOS 26 탭바 clip', () => {
   it('숨겼다고 무조건 자르지 않는다', () => {
     expect(nativeSrc).toMatch(/hidden && options\?\.tabBarClipWhenHidden/);
     expect(nativeSrc).not.toMatch(/const clipPx = hidden \? getTabBarClipPx/);
+  });
+});
+
+describe('getTabNameFromUrl — 탭 귀속', () => {
+  const at = (path: string) =>
+    getTabNameFromUrl(`https://jirum-alarm.com${path}`);
+
+  it('/themes 는 내정보 소속이다 — 기본값(HOME)으로 떨어지면 탭 밖으로 튕긴다', () => {
+    expect(at('/themes')).toBe(tabNavigations.MYPAGE);
+    expect(at('/themes/12')).toBe(tabNavigations.MYPAGE);
+  });
+
+  it('기존 귀속은 그대로', () => {
+    expect(at('/')).toBe(tabNavigations.HOME);
+    expect(at('/trending/ranking')).toBe(tabNavigations.DISCOVER);
+    expect(at('/community')).toBe(tabNavigations.COMMUNITY);
+    expect(at('/alarm')).toBe(tabNavigations.ALARM);
+    expect(at('/mypage')).toBe(tabNavigations.MYPAGE);
+    expect(at('/mypage/keyword')).toBe(tabNavigations.MYPAGE);
+    expect(at('/like')).toBe(tabNavigations.MYPAGE);
+    expect(at('/products/123')).toBe(tabNavigations.HOME);
   });
 });
