@@ -49,6 +49,7 @@
 		C3F4F2B70D8F4D13B8A3C4A5 /* Pretendard-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Black.otf"; path = "../src/shared/assets/fonts/Pretendard-Black.otf"; sourceTree = "<group>"; };
 		C8632361B2254DE0A91D6ABD /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-ExtraLight.otf"; path = "../src/shared/assets/fonts/Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		CE50FEB904ABFF219A16CBE2 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-jirumAlarmMobile/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		D293CD03A1A3487582643802 /* SplashScreen.storyboard */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = SplashScreen.storyboard; path = jirumAlarmMobile/SplashScreen.storyboard; sourceTree = "<group>"; };
 		DC9FDE7B711E41008E76D69F /* Pretendard-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Thin.otf"; path = "../src/shared/assets/fonts/Pretendard-Thin.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F6277274F6544998805430CD /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = jirumAlarmMobile/Colors.xcassets; sourceTree = "<group>"; };
@@ -82,6 +83,7 @@
 				994F2B722DBE4EDF005B1327 /* SwiftBridge.swift */,
 				00818B1D71FA4F5D97326555 /* BootSplash.storyboard */,
 				F6277274F6544998805430CD /* Colors.xcassets */,
+				D293CD03A1A3487582643802 /* SplashScreen.storyboard */,
 			);
 			name = jirumAlarmMobile;
 			sourceTree = "<group>";
@@ -404,10 +406,11 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jirum-alarm.jirumalarm";
-				PRODUCT_NAME = jirumAlarmMobile;
+				PRODUCT_NAME = app;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -439,9 +442,10 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jirum-alarm.jirumalarm";
-				PRODUCT_NAME = jirumAlarmMobile;
+				PRODUCT_NAME = app;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
