@@ -3,6 +3,7 @@ import {
   MutationAddNotificationKeyword,
   MutationAddWishlist,
   MutationCollectProduct,
+  MutationRecordProductImpressions,
   MutationRemoveWishlist,
   MutationReportExpiredProduct,
   QueryCategorizedReactionKeywords,
@@ -23,6 +24,7 @@ import type {
   AddWishlistMutationVariables,
   MyNotificationKeywordsQueryVariables,
   CollectProductMutationVariables,
+  RecordProductImpressionsMutationVariables,
   RemoveWishlistMutationVariables,
   ReportExpiredProductMutationVariables,
   CategorizedReactionKeywordsQueryVariables,
@@ -77,6 +79,19 @@ export class ProductService {
       variables,
     );
     return res.data?.collectProduct ?? null;
+  }
+
+  /**
+   * 랭킹 노출 기록(CTR 분모). fire-and-forget — collectProduct 와 같은 취급.
+   */
+  static async recordProductImpressions(
+    variables: RecordProductImpressionsMutationVariables,
+  ) {
+    const res = await HttpClient.withAccessToken().execute(
+      MutationRecordProductImpressions,
+      variables,
+    );
+    return res.data?.recordProductImpressions ?? null;
   }
 
   static async getTogetherViewedProducts(

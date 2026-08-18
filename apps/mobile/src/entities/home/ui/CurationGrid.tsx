@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -22,6 +22,9 @@ const GRID_GAP_X = 12; // web gap-x-3
 const GRID_GAP_Y = 20; // web gap-y-5
 const HORIZONTAL_PADDING = 20; // web px-5
 
+/** web 은 카드가 50% 보이면 노출로 셌다(useInView threshold 0.5). */
+const VIEWABILITY_CONFIG = {itemVisiblePercentThreshold: 50};
+
 export default function CurationGrid<T>({
   items,
   keyOf,
@@ -33,6 +36,8 @@ export default function CurationGrid<T>({
   onRetry,
   onEndReached,
   footer,
+  onViewableIndexes,
+  bottomInset = 0,
   /**
    * 위쪽 여백. 칩 줄이 위에 있는 화면(토스)은 컨테이너 gap 이 간격을 잡으므로
    * 'tight'(0)로 둔다. 칩이 없는 화면(큐레이션)은 기본 16px.
@@ -41,7 +46,8 @@ export default function CurationGrid<T>({
 }: {
   items: T[];
   keyOf: (item: T) => string;
-  renderCard: (item: T) => React.ReactElement;
+  /** index 는 발견 탭이 노출 position 으로 쓴다. 기존 호출부는 무시하면 된다. */
+  renderCard: (item: T, index: number) => React.ReactElement;
   columns?: 2 | 3;
   isPending: boolean;
   isError: boolean;
@@ -51,8 +57,31 @@ export default function CurationGrid<T>({
   onRetry: () => void | Promise<unknown>;
   onEndReached?: () => void;
   footer?: React.ReactNode;
+  /**
+   * 화면에 실제로 보인 카드의 index 를 알려준다(CTR 분모).
+   * RN 엔 IntersectionObserver 가 없어 FlatList 만 이걸 알 수 있다.
+   */
+  onViewableIndexes?: (indexes: number[]) => void;
+  /**
+   * 탭바가 보이는 화면(발견 탭)이 비워야 할 하단 높이.
+   * 큐레이션·토스는 탭바를 숨기므로 기본 0 이다.
+   */
+  bottomInset?: number;
   topSpacing?: 'normal' | 'tight';
 }) {
+  // onViewableItemsChanged 는 FlatList 가 첫 렌더의 함수만 쓴다(교체하면 예외).
+  // 최신 콜백을 ref 로 읽어 안정된 핸들러 하나를 유지한다.
+  const onViewableIndexesRef = useRef(onViewableIndexes);
+  onViewableIndexesRef.current = onViewableIndexes;
+  const handleViewableItemsChanged = useRef(
+    ({viewableItems}: {viewableItems: {index: number | null}[]}) => {
+      const indexes = viewableItems
+        .map(v => v.index)
+        .filter((i): i is number => i !== null);
+      if (indexes.length > 0) onViewableIndexesRef.current?.(indexes);
+    },
+  ).current;
+
   // pull-to-refresh. 홈(HomeScreen)과 같은 패턴 — 스피너는 당기는 동안만.
   // isRefetching 을 그대로 쓰면 백그라운드 리페치에도 스피너가 떠서 분리한다.
   const [refreshing, setRefreshing] = useState(false);
@@ -98,7 +127,7 @@ export default function CurationGrid<T>({
       contentContainerStyle={{
         paddingHorizontal: HORIZONTAL_PADDING - GRID_GAP_X / 2,
         paddingTop: topSpacing === 'tight' ? 0 : 16,
-        paddingBottom: 16,
+        paddingBottom: 16 + bottomInset,
       }}
       columnWrapperStyle={{gap: GRID_GAP_X}}
       refreshControl={
@@ -107,9 +136,16 @@ export default function CurationGrid<T>({
       ItemSeparatorComponent={() => <View style={{height: GRID_GAP_Y}} />}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
+      // ★viewabilityConfig 는 ref 로 고정한다. 매 렌더 새 객체를 주면
+      // FlatList 가 "Changing viewabilityConfig on the fly is not supported" 로
+      // 죽는다(onViewableItemsChanged 도 같은 제약이라 ref 로 감싼다).
+      viewabilityConfig={VIEWABILITY_CONFIG}
+      onViewableItemsChanged={
+        onViewableIndexes ? handleViewableItemsChanged : undefined
+      }
       ListFooterComponent={footer as React.ReactElement}
-      renderItem={({item}) => (
-        <View style={{flex: 1 / columns}}>{renderCard(item)}</View>
+      renderItem={({item, index}) => (
+        <View style={{flex: 1 / columns}}>{renderCard(item, index)}</View>
       )}
     />
   );

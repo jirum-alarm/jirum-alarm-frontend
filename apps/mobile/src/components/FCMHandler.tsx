@@ -5,7 +5,10 @@ import useFCMTokenManager from '@/shared/hooks/useFCMTokenManager.ts';
 import {onForegroundMessageHandler} from '../shared/lib/fcm/index.ts';
 import {useWebviewContext} from '../provider/WebViewRefProvider.tsx';
 import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
-import {navigateToProductDetail} from '@/navigations/navigation-ref.ts';
+import {
+  navigateToProductDetail,
+  navigateToTrending,
+} from '@/navigations/navigation-ref.ts';
 import useDeepLink from '@/shared/hooks/useDeepLink.ts';
 
 interface FcmHandlerProps {
@@ -42,6 +45,8 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
   // 딥링크(공유 링크·유니버설 링크)도 푸시와 같은 열기 경로를 탄다.
   // 상세는 navigateToProductDetail 이 가져가고, 나머지만 여기로 떨어진다.
   useDeepLink((url: string) => {
+    // 발견 탭은 네이티브라 웹뷰 주입 대상이 없다. 먼저 가져가게 한다.
+    if (navigateToTrending(url)) return;
     getTargetWebViewRef(url).current?.injectJavaScript(goProductDetail(url));
   });
 
@@ -61,7 +66,8 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
           // 첫 시도에 실패해 웹뷰로 새고, iOS 에선 상세가 안 뜬다.
           if (
             pendingUrlRef.current &&
-            navigateToProductDetail(pendingUrlRef.current)
+            (navigateToProductDetail(pendingUrlRef.current) ||
+              navigateToTrending(pendingUrlRef.current))
           ) {
             pendingUrlRef.current = null;
             return;
@@ -108,6 +114,8 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
    */
   const openNotificationUrl = (url: string) => {
     if (navigateToProductDetail(url)) return;
+    // 발견 탭(`/trending/*`)도 네이티브다 — 웹뷰 폴백으로 새면 엉뚱한 탭에 뜬다.
+    if (navigateToTrending(url)) return;
     const targetRef = getTargetWebViewRef(url);
     targetRef.current?.injectJavaScript(goProductDetail(url));
   };

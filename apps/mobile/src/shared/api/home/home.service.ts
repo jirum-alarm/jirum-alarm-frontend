@@ -1,5 +1,6 @@
 import {
   QueryCommunityProviders,
+  QueryCommunityRandomRankingProducts,
   QueryExpiringSoonHotDealProducts,
   QueryGuestRecommendedHotDeals,
   QueryHomeProducts,
@@ -18,6 +19,7 @@ import {
 import {HttpClient} from '@/shared/lib/client';
 import type {
   ActiveAdsQueryVariables,
+  CommunityRandomRankingProductsQueryVariables,
   ExpiringSoonHotDealProductsQueryVariables,
   GuestRecommendedHotDealsQueryVariables,
   HomeProductsByKeywordQueryVariables,
@@ -99,6 +101,17 @@ export class HomeService {
       QueryRecommendedNotificationKeywords,
     );
     return res.data?.recommendedNotificationKeywords ?? [];
+  }
+
+  /** 랭킹 탭 '추천 핫딜' 캐러셀. */
+  static async getCommunityRandomRankingProducts(
+    variables: CommunityRandomRankingProductsQueryVariables,
+  ) {
+    const res = await HttpClient.withNoAuth().execute(
+      QueryCommunityRandomRankingProducts,
+      variables,
+    );
+    return res.data?.communityRandomRankingProducts ?? [];
   }
 
   static async getTossCategoryLabels() {

@@ -38,18 +38,31 @@ export function GridCard({
   product,
   onPress,
   showTime = true,
-}: CardProps & {showTime?: boolean}) {
+  rank,
+}: CardProps & {
+  showTime?: boolean;
+  /** 랭킹 뱃지(1-based). 발견 탭 랭킹에서만 쓴다 — 없으면 안 그린다. */
+  rank?: number;
+}) {
   return (
     <PressableScale
       style={{width: '100%'}}
       onPress={() => onPress(Number(product.id))}
       accessibilityRole="button"
       accessibilityLabel={product.title}>
-      <CardThumbnail
-        product={product}
-        style={{width: '100%', aspectRatio: 1}}
-        thumbnailType="product"
-      />
+      <View>
+        <CardThumbnail
+          product={product}
+          style={{width: '100%', aspectRatio: 1}}
+          thumbnailType="product"
+        />
+        {typeof rank === 'number' && (
+          // web ProductGridCard: 좌상단 h-6.5 w-6.5 (26px), 우하단만 둥글다.
+          <View className="absolute top-0 left-0 h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900">
+            <Text className="text-primary-500 text-sm">{rank}</Text>
+          </View>
+        )}
+      </View>
       <View>
         <CardTitle title={product.title} />
         <DisplayProductSource

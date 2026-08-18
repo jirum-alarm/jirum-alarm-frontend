@@ -30,6 +30,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {navigateToTrending} from '@/navigations/navigation-ref';
 import {
   getPushablePath,
   isTabRootUrl,
@@ -74,6 +75,8 @@ function useSpaDetailPush() {
       const pushablePath = getPushablePath(url);
       if (!pushablePath) {
         lastPushedRef.current = null;
+        // SPA 로 발견 탭에 들어간 경우도 네이티브로 올린다(위 URL 필터와 짝).
+        navigateToTrending(url);
         return;
       }
       // ★ 시간 기반 dedup.
@@ -118,6 +121,14 @@ function useUrlFilter(clearLoadingState: () => void) {
         if (pushablePath) {
           clearLoadingState();
           navigation.push(tabStackNavigations.DETAIL, {path: pushablePath});
+          return false;
+        }
+
+        // ★발견 탭(`/trending/*`)은 네이티브 화면이다. 웹뷰 안에서 열게 두면
+        // 같은 목록이 두 벌로 보이고(웹 버전은 이제 낡는다) 탭 아이콘과
+        // 내용이 어긋난다 — 유저는 이걸 버그로 읽는다.
+        if (navigateToTrending(event.url)) {
+          clearLoadingState();
           return false;
         }
       }

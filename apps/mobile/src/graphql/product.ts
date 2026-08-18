@@ -313,3 +313,16 @@ export const MutationReportExpiredProduct = graphql(`
     reportExpiredProduct(productId: $productId)
   }
 `);
+
+/**
+ * 랭킹 노출 기록(CTR 분모). 실제로 화면에 보인 카드만 보고한다 —
+ * fetch 한 50개를 다 세면 CTR 이 과소계상된다.
+ */
+export const MutationRecordProductImpressions = graphql(`
+  mutation RecordProductImpressions(
+    $source: String!
+    $impressions: [ProductImpressionInput!]!
+  ) {
+    recordProductImpressions(source: $source, impressions: $impressions)
+  }
+`);

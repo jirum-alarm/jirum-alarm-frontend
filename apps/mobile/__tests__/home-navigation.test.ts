@@ -62,8 +62,9 @@ describe('★탭이 이미 가진 화면은 스택에 쌓지 않는다', () => {
   });
 
   it('실시간·랭킹이 같은 헬퍼를 쓴다', () => {
-    expect(screen).toContain("goDiscoverTab('/trending/live')");
-    expect(screen).toContain("goDiscoverTab('/trending/ranking')");
+    // 발견 탭이 네이티브가 된 뒤로는 URL 이 아니라 화면 이름을 넘긴다.
+    expect(screen).toContain("goDiscoverTab('live')");
+    expect(screen).toContain("goDiscoverTab('ranking')");
   });
 });
 
@@ -105,17 +106,29 @@ describe('더보기 웹뷰 안에서 상품을 눌렀을 때', () => {
 });
 
 describe('실시간 특가 더 보기 — 발견 탭의 live 화면', () => {
-  it('★탭만 바꾸지 않는다 — 그 탭 기본 URL 은 랭킹이다', () => {
-    // getTabBaseUrl(DISCOVER) === '/trending/ranking' 이라
-    // 탭 전환만 하면 랭킹이 뜬다.
-    const routing = read('src/shared/lib/navigation/tab-routing.ts');
-    expect(routing).toContain("'/trending/ranking'");
-    expect(screen).toContain('/trending/live');
+  it('★탭만 바꾸지 않는다 — 발견 탭은 마지막에 보던 화면을 유지한다', () => {
+    // 발견 탭이 네이티브가 된 뒤에도 "어느 화면으로" 를 정해줘야 한다.
+    // 탭만 바꾸면 유저가 마지막에 보던 실시간/랭킹이 그대로 뜬다.
+    expect(screen).toContain('requestTrendingView');
+    expect(screen).toContain('tabNavigations.DISCOVER');
   });
 
-  it('발견 탭으로 전환한 뒤 URL 을 주입한다', () => {
-    expect(screen).toContain('tabNavigations.DISCOVER');
-    expect(screen).toContain('injectJavaScript');
+  it('★요청을 먼저 넣고 탭을 바꾼다 — 순서가 바뀌면 화면이 깜빡인다', () => {
+    // 탭을 먼저 바꾸면 화면이 이전 view 로 한 번 렌더된 뒤 바뀐다.
+    const body = screen.slice(
+      screen.indexOf('const goDiscoverTab'),
+      screen.indexOf('const handlePressLiveDeals'),
+    );
+    expect(body.indexOf('requestTrendingView')).toBeGreaterThan(-1);
+    expect(body.indexOf('requestTrendingView')).toBeLessThan(
+      body.indexOf('tabs?.navigate'),
+    );
+  });
+
+  it('★웹뷰 주입은 더 이상 쓰지 않는다 — 주입할 웹뷰가 없다', () => {
+    // 주석의 경위 설명은 남아 있어도 되지만 **호출**은 없어야 한다.
+    expect(screen).not.toContain('.injectJavaScript(');
+    expect(screen).not.toContain('getWebViewRef(');
   });
 });
 

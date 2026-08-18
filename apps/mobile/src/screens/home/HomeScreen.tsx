@@ -38,8 +38,11 @@ import {
 } from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import type {TabStackParamList} from '@/navigations/tab/types';
-import {SERVICE_URL} from '@/constants/env';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
+import {
+  requestTrendingView,
+  type TrendingView,
+} from '@/screens/trending/trending-view-store';
 
 /**
  * 네이티브 홈. web: app/(desktop-ready)/(home)/page.tsx → HomeContainerV2
@@ -62,7 +65,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeNavigationProp>();
   const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
-  const {getWebViewRef, setActiveTab} = useWebviewContext();
+  const {setActiveTab} = useWebviewContext();
 
   const scrollRef = useRef<ScrollView>(null);
   const scrollToTop = useCallback(() => {
@@ -149,34 +152,31 @@ export default function HomeScreen() {
   );
 
   /**
-   * "실시간 특가 더 보기" → 발견 탭의 **실시간** 화면.
+   * 발견 탭의 특정 화면으로 보낸다.
    *
-   * 탭만 바꾸면 그 탭의 기본 URL(`/trending/ranking`)이라 랭킹이 뜬다
-   * (사용자 지적). 탭을 전환하고 그 탭 웹뷰의 URL 을 live 로 갈아끼운다 —
-   * MainTabNavigator 의 handleNavigateToRoot 와 같은 방식.
+   * 탭만 바꾸면 발견 탭이 마지막에 보던 화면이 그대로라(실시간/랭킹) 어느
+   * 쪽으로 갈지 정해줘야 한다. 웹뷰 시절엔 그 탭 웹뷰의 URL 을
+   * injectJavaScript 로 갈아끼웠지만, 발견 탭이 네이티브가 된 뒤로는
+   * 주입할 웹뷰가 없어 store 로 요청을 넣는다(trending-view-store).
+   *
+   * ★ 요청을 **먼저** 넣고 탭을 바꾼다 — 화면이 마운트되기 전에 값이 있어야
+   * 첫 렌더부터 맞는 화면이 뜬다(뒤에 넣으면 실시간이 한 번 깜빡인다).
    */
   const goDiscoverTab = useCallback(
-    (path: string) => {
+    (view: TrendingView) => {
+      requestTrendingView(view);
       const tabs = navigation.getParent(MAIN_TABS_ID as never) as
         | {navigate: (name: string) => void}
         | undefined;
       tabs?.navigate(tabNavigations.DISCOVER);
       setActiveTab(tabNavigations.DISCOVER);
-
-      const target = `${SERVICE_URL}${path}`;
-      // 탭 전환 직후엔 웹뷰가 아직 마운트 전일 수 있어 한 틱 뒤에 주입한다.
-      setTimeout(() => {
-        getWebViewRef(tabNavigations.DISCOVER)?.current?.injectJavaScript(
-          `if (window.location.href !== '${target}') { window.location.href = '${target}'; } true;`,
-        );
-      }, 0);
     },
-    [navigation, setActiveTab, getWebViewRef],
+    [navigation, setActiveTab],
   );
 
   /** "실시간 특가 더 보기" → 발견 탭의 실시간 화면. */
   const handlePressLiveDeals = useCallback(
-    () => goDiscoverTab('/trending/live'),
+    () => goDiscoverTab('live'),
     [goDiscoverTab],
   );
 
@@ -185,11 +185,10 @@ export default function HomeScreen() {
    *
    * ★일반 섹션 더보기(/curation/*)처럼 스택에 쌓으면 안 된다 — 랭킹은
    * 발견 탭이 이미 갖고 있는 화면이라 탭으로 보내야 한다(사용자 지적).
-   * `/trending/ranking` 은 발견 탭의 기본 URL 이라 주입이 없어도 대개 맞지만,
-   * 사용자가 그 탭에서 live 를 보던 중이면 그대로 남으므로 명시 주입한다.
+   * 발견 탭이 실시간을 보던 중일 수 있으므로 화면을 명시해 보낸다.
    */
   const handlePressRanking = useCallback(
-    () => goDiscoverTab('/trending/ranking'),
+    () => goDiscoverTab('ranking'),
     [goDiscoverTab],
   );
 

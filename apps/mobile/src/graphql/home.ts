@@ -270,3 +270,31 @@ export const QueryTossProducts = graphql(`
     }
   }
 `);
+
+/**
+ * 랭킹 탭의 '추천 핫딜' 캐러셀. web useTrendingViewModel 의
+ * hotdealProductsRandom 과 같은 쿼리다(count 중에서 limit 개를 무작위로).
+ */
+export const QueryCommunityRandomRankingProducts = graphql(`
+  query CommunityRandomRankingProducts($count: Int!, $limit: Int!) {
+    communityRandomRankingProducts(count: $count, limit: $limit) {
+      id
+      title
+      mallId
+      mallName
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      hotDealType
+      provider {
+        nameKr
+      }
+      postedAt
+    }
+  }
+`);

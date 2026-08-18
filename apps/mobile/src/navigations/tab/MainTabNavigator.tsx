@@ -6,6 +6,7 @@ import {
   type BottomTabBarProps,
 } from '@react-navigation/bottom-tabs';
 import {
+  isTabStackDeep,
   popTabStackToRoot,
   type TabPressNavigation,
 } from '@/navigations/tab/tab-press';
@@ -39,6 +40,11 @@ import {
   TAB_BAR_HEIGHT,
 } from '@/navigations/tab/tab-bar-metrics';
 import {useTabBarVisibility} from '@/shared/hooks/useTabBarVisibility';
+import {NATIVE_DISCOVER} from '@/constants/feature-flags';
+import {
+  requestTrendingView,
+  toggleTrendingView,
+} from '@/screens/trending/trending-view-store';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
@@ -132,8 +138,22 @@ function nativeTabIcon(source: number): NativeTabIcon {
 function useTabActions() {
   const {setActiveTab, getWebViewRef} = useWebviewContext();
 
+  /**
+   * 같은 탭을 다시 누름 → 맨 위로.
+   *
+   * ★네이티브 탭은 웹뷰 ref 가 없어 injectJavaScript 가 조용히 아무 일도
+   * 하지 않는다. 발견 탭은 store 로 요청을 넣는다(trending-view-store).
+   *
+   * ★★발견 탭만 예외 — 맨 위로가 아니라 **실시간 ↔ 랭킹 전환**이다
+   * (사용자 지시 2026-08-18). 두 화면을 오가는 게 목록 상단으로 가는 것보다
+   * 자주 쓰는 동작이라 재탭을 그쪽에 준다. 맨 위로는 스크롤로 하면 된다.
+   */
   const handleScrollToTop = useCallback(
     (tabName: TabName) => {
+      if (NATIVE_DISCOVER && tabName === tabNavigations.DISCOVER) {
+        toggleTrendingView();
+        return;
+      }
       const ref = getWebViewRef(tabName);
       ref?.current?.injectJavaScript(
         "window.scrollTo({ top: 0, behavior: 'smooth' }); true;",
@@ -142,8 +162,17 @@ function useTabActions() {
     [getWebViewRef],
   );
 
+  /**
+   * 다른 탭에서 넘어옴 → 그 탭의 기본 화면으로.
+   *
+   * 발견 탭의 기본은 실시간이다(web /trending → /trending/live 리다이렉트와 같다).
+   */
   const handleNavigateToRoot = useCallback(
     (tabName: TabName) => {
+      if (NATIVE_DISCOVER && tabName === tabNavigations.DISCOVER) {
+        requestTrendingView('live');
+        return;
+      }
       const ref = getWebViewRef(tabName);
       const baseUrl = `${SERVICE_URL}${getTabBaseUrl(tabName)}`;
       ref?.current?.injectJavaScript(
@@ -160,6 +189,13 @@ function useTabActions() {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       setActiveTab(tabName);
       if (isFocused) {
+        // ★상세 등이 쌓여 있으면 먼저 목록으로 돌아온다.
+        // 발견 탭 재탭은 실시간↔랭킹 전환인데, 상세를 보는 중에 전환하면
+        // 화면은 그대로고 **뒤에 가려진 목록만** 바뀐다(뒤로 나오면 엉뚱한 탭).
+        if (isTabStackDeep(navigation, tabName)) {
+          popTabStackToRoot(navigation, tabName);
+          return;
+        }
         handleScrollToTop(tabName);
       } else {
         popTabStackToRoot(navigation, tabName);

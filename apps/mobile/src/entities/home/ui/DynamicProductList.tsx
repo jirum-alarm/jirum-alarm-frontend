@@ -205,8 +205,11 @@ function PaginatedProductGrid({
   );
 }
 
-/** HORIZONTAL_SCROLL — swiper → FlatList. 상세의 ProductCarouselSection 과 같은 매핑. */
-function CarouselList({
+/**
+ * HORIZONTAL_SCROLL — swiper → FlatList. 상세의 ProductCarouselSection 과 같은 매핑.
+ * 발견 탭 랭킹 화면도 이 캐러셀을 그대로 쓴다(export).
+ */
+export function CarouselList({
   products,
   onPressProduct,
 }: {

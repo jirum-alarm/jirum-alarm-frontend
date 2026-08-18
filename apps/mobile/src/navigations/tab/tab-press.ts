@@ -27,3 +27,20 @@ export function popTabStackToRoot(
   if (!nested?.key || (nested.index ?? 0) === 0) return;
   navigation.dispatch({...StackActions.popToTop(), target: nested.key});
 }
+
+/**
+ * 이 탭 스택에 루트 위로 쌓인 화면이 있나(상세·검색·큐레이션 등).
+ *
+ * 재탭 동작을 가를 때 쓴다 — 상세를 보고 있는데 "탭 안에서의 동작"
+ * (발견 탭의 실시간↔랭킹 전환)을 해버리면, 유저 눈에는 아무 일도 안 일어나고
+ * **가려진 화면만 바뀐다**(뒤로 나오면 엉뚱한 탭이 열려 있다).
+ */
+export function isTabStackDeep(
+  navigation: TabPressNavigation,
+  tabName: string,
+): boolean {
+  const nested = navigation
+    .getState()
+    .routes.find(route => route.name === tabName)?.state;
+  return (nested?.index ?? 0) > 0;
+}

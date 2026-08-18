@@ -2645,6 +2645,24 @@ export type MutationSocialLoginMutation = {
   };
 };
 
+export type CategoriesQueryVariables = Exact<{[key: string]: never}>;
+
+export type CategoriesQuery = {
+  __typename?: 'Query';
+  categories: Array<{__typename?: 'Category'; id: string; name: string}>;
+};
+
+export type MyFavoriteCategoriesQueryVariables = Exact<{[key: string]: never}>;
+
+export type MyFavoriteCategoriesQuery = {
+  __typename?: 'Query';
+  me?: {
+    __typename?: 'User';
+    id: string;
+    favoriteCategories?: Array<number> | null;
+  } | null;
+};
+
 export type CommentsQueryVariables = Exact<{
   productId: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
@@ -2924,6 +2942,33 @@ export type TossProductsQuery = {
     data?: any | null;
     searchAfter?: Array<string> | null;
     postedAt: any;
+  }>;
+};
+
+export type CommunityRandomRankingProductsQueryVariables = Exact<{
+  count: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+}>;
+
+export type CommunityRandomRankingProductsQuery = {
+  __typename?: 'Query';
+  communityRandomRankingProducts: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    mallName?: string | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    hotDealType?: HotDealType | null;
+    postedAt: any;
+    provider: {__typename?: 'Provider'; nameKr: string};
   }>;
 };
 
@@ -3246,6 +3291,16 @@ export type ReportExpiredProductMutation = {
   reportExpiredProduct: boolean;
 };
 
+export type RecordProductImpressionsMutationVariables = Exact<{
+  source: Scalars['String']['input'];
+  impressions: Array<ProductImpressionInput> | ProductImpressionInput;
+}>;
+
+export type RecordProductImpressionsMutation = {
+  __typename?: 'Mutation';
+  recordProductImpressions: boolean;
+};
+
 export type QueryMeQueryVariables = Exact<{[key: string]: never}>;
 
 export type QueryMeQuery = {
@@ -3349,6 +3404,28 @@ export const MutationSocialLoginDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationSocialLoginMutation,
   MutationSocialLoginMutationVariables
+>;
+export const CategoriesDocument = new TypedDocumentString(`
+    query Categories {
+  categories {
+    id
+    name
+  }
+}
+    `) as unknown as TypedDocumentString<
+  CategoriesQuery,
+  CategoriesQueryVariables
+>;
+export const MyFavoriteCategoriesDocument = new TypedDocumentString(`
+    query MyFavoriteCategories {
+  me {
+    id
+    favoriteCategories
+  }
+}
+    `) as unknown as TypedDocumentString<
+  MyFavoriteCategoriesQuery,
+  MyFavoriteCategoriesQueryVariables
 >;
 export const CommentsDocument = new TypedDocumentString(`
     query Comments($productId: Int!, $limit: Int!, $searchAfter: [String!], $orderBy: CommentOrder!, $orderOption: OrderOptionType!) {
@@ -3618,6 +3695,32 @@ export const TossProductsDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   TossProductsQuery,
   TossProductsQueryVariables
+>;
+export const CommunityRandomRankingProductsDocument = new TypedDocumentString(`
+    query CommunityRandomRankingProducts($count: Int!, $limit: Int!) {
+  communityRandomRankingProducts(count: $count, limit: $limit) {
+    id
+    title
+    mallId
+    mallName
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    hotDealType
+    provider {
+      nameKr
+    }
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  CommunityRandomRankingProductsQuery,
+  CommunityRandomRankingProductsQueryVariables
 >;
 export const MutationAddPushTokenDocument = new TypedDocumentString(`
     mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {
@@ -3916,6 +4019,14 @@ export const ReportExpiredProductDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   ReportExpiredProductMutation,
   ReportExpiredProductMutationVariables
+>;
+export const RecordProductImpressionsDocument = new TypedDocumentString(`
+    mutation RecordProductImpressions($source: String!, $impressions: [ProductImpressionInput!]!) {
+  recordProductImpressions(source: $source, impressions: $impressions)
+}
+    `) as unknown as TypedDocumentString<
+  RecordProductImpressionsMutation,
+  RecordProductImpressionsMutationVariables
 >;
 export const QueryMeDocument = new TypedDocumentString(`
     query QueryMe {
