@@ -24,8 +24,10 @@ function resolveSource(mallName?: string | null, providerName?: string | null) {
 
 describe('formatMMD — web formatDateToMMD(MM.DD) 와 같아야 한다', () => {
   it('한 자리 월·일에 0 을 채운다', () => {
-    expect(formatMMD('2026-01-05T00:00:00+09:00')).toBe('01.05');
-    expect(formatMMD('2026-12-31T00:00:00+09:00')).toBe('12.31');
+    // ★오프셋 없는 date-time 은 어느 머신에서든 "로컬 자정"으로 파싱된다.
+    // +09:00 을 박으면 UTC 인 CI 에서 전날로 밀려 실패한다(로컬 KST 만 통과).
+    expect(formatMMD('2026-01-05T00:00:00')).toBe('01.05');
+    expect(formatMMD('2026-12-31T00:00:00')).toBe('12.31');
   });
 
   it('잘못된 날짜는 빈 문자열', () => {
