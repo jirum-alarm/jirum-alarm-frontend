@@ -6,6 +6,7 @@ import {onForegroundMessageHandler} from '../shared/lib/fcm/index.ts';
 import {useWebviewContext} from '../provider/WebViewRefProvider.tsx';
 import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
 import {navigateToProductDetail} from '@/navigations/navigation-ref.ts';
+import useDeepLink from '@/shared/hooks/useDeepLink.ts';
 
 interface FcmHandlerProps {
   children?: React.ReactNode;
@@ -37,6 +38,12 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
   const getTargetWebViewRef = (url: string) => {
     return getWebViewRefByUrl(url) ?? webviewRef;
   };
+
+  // 딥링크(공유 링크·유니버설 링크)도 푸시와 같은 열기 경로를 탄다.
+  // 상세는 navigateToProductDetail 이 가져가고, 나머지만 여기로 떨어진다.
+  useDeepLink((url: string) => {
+    getTargetWebViewRef(url).current?.injectJavaScript(goProductDetail(url));
+  });
 
   // ✅ 앱이 종료된 상태에서 푸시 알람을 클릭했을 때 처리
   const tryInjectPendingUrl = () => {

@@ -29,6 +29,12 @@ const nextConfig = withPWA({
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }],
       },
       {
+        // 유니버설/앱 링크 검증 파일. AASA 는 확장자가 없어 기본 Content-Type 이
+        // application/octet-stream 으로 나가는데, iOS 는 그러면 검증을 건너뛴다.
+        source: '/.well-known/apple-app-site-association',
+        headers: [{ key: 'Content-Type', value: 'application/json' }],
+      },
+      {
         source: '/(fonts|images|icons)/(.*)',
         headers: [
           {

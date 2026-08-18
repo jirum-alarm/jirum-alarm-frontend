@@ -1,0 +1,48 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["WGCX9LX3N8.com.jirum-alarm.jirumalarm"],
+        "components": [
+          {
+            "/": "/products/*",
+            "comment": "상품 상세 — 공유 링크의 대부분"
+          },
+          {
+            "/": "/community/*",
+            "comment": "커뮤니티 글"
+          },
+          {
+            "/": "/trending/*",
+            "comment": "랭킹·실시간"
+          },
+          {
+            "/": "/curation/*",
+            "comment": "큐레이션 목록"
+          },
+          {
+            "/": "/toss/*",
+            "comment": "토스 특가"
+          },
+          {
+            "/": "/deals/*",
+            "comment": "에버그린 모델 페이지"
+          },
+          {
+            "/": "/api/*",
+            "exclude": true,
+            "comment": "API 는 앱이 가로채면 안 된다"
+          },
+          {
+            "/": "/monitoring/*",
+            "exclude": true,
+            "comment": "Sentry 터널 경로"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["WGCX9LX3N8.com.jirum-alarm.jirumalarm"]
+  }
+}
