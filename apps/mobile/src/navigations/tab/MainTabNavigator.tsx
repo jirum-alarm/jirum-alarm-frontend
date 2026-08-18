@@ -5,6 +5,10 @@ import {
   BottomTabBar,
   type BottomTabBarProps,
 } from '@react-navigation/bottom-tabs';
+import {
+  popTabStackToRoot,
+  type TabPressNavigation,
+} from '@/navigations/tab/tab-press';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 
@@ -150,12 +154,15 @@ function useTabActions() {
   );
 
   const onTabPress = useCallback(
-    (tabName: TabName, isFocused: boolean) => {
+    (tabName: TabName, navigation: TabPressNavigation) => {
+      const state = navigation.getState();
+      const isFocused = state.routes[state.index]?.name === tabName;
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       setActiveTab(tabName);
       if (isFocused) {
         handleScrollToTop(tabName);
       } else {
+        popTabStackToRoot(navigation, tabName);
         handleNavigateToRoot(tabName);
       }
     },
@@ -218,18 +225,8 @@ function NativeSystemTabNavigator() {
             tabBarIcon: ({focused}: {focused: boolean}) =>
               nativeTabIcon(focused ? tab.activePng : tab.idlePng),
           }}
-          listeners={({
-            navigation,
-          }: {
-            navigation: {
-              getState: () => {index: number; routes: {name: string}[]};
-            };
-          }) => ({
-            tabPress: () => {
-              const state = navigation.getState();
-              const currentRoute = state.routes[state.index];
-              onTabPress(tab.name, currentRoute?.name === tab.name);
-            },
+          listeners={({navigation}: {navigation: TabPressNavigation}) => ({
+            tabPress: () => onTabPress(tab.name, navigation),
           })}
         />
       ))}
@@ -282,11 +279,7 @@ function JsTabNavigator() {
             },
           }}
           listeners={({navigation}) => ({
-            tabPress: () => {
-              const state = navigation.getState();
-              const currentRoute = state.routes[state.index];
-              onTabPress(tab.name, currentRoute?.name === tab.name);
-            },
+            tabPress: () => onTabPress(tab.name, navigation),
           })}
         />
       ))}
