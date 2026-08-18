@@ -13,7 +13,7 @@ PODS:
     - ExpoModulesCore
   - EXNotifications (0.32.17):
     - ExpoModulesCore
-  - Expo (54.0.36):
+  - Expo (54.0.37):
     - boost
     - DoubleConversion
     - ExpoModulesCore
@@ -256,7 +256,7 @@ PODS:
     - ExpoModulesCore
   - ExpoAsset (12.0.13):
     - ExpoModulesCore
-  - ExpoFileSystem (19.0.23):
+  - ExpoFileSystem (19.0.24):
     - ExpoModulesCore
   - ExpoFont (14.0.12):
     - ExpoModulesCore
@@ -298,7 +298,7 @@ PODS:
   - ExpoWebBrowser (15.0.11):
     - ExpoModulesCore
   - EXStructuredHeaders (5.0.0)
-  - EXUpdates (29.0.19):
+  - EXUpdates (29.0.20):
     - boost
     - DoubleConversion
     - EASClient
@@ -3721,14 +3721,14 @@ SPEC CHECKSUMS:
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: 378c7742de02a8605093b1c82b5774d8f9875cec
   EXNotifications: c67e92b9fdfe785ff9dbdc5f4c0ff935de357da7
-  Expo: 0aa4ad3ed4731e92dca5f15dad436e202954f942
+  Expo: c3473549eabe0d0dbe3a4ed23610147bd6301c72
   expo-dev-client: b8adef5e6847b5335a3b95a1fd2edc731d4331ee
   expo-dev-launcher: 4e02f66d36292f2d29864cd61658448d9de20d2c
   expo-dev-menu: c464455bdf1bf1590e1335e053892b98f3a33dab
   expo-dev-menu-interface: 600df12ea01efecdd822daaf13cc0ac091775533
   ExpoAppleAuthentication: 9413ae9a5e631a424cc04c1b13b0694dbab7d594
   ExpoAsset: 9e5a7c9c0a9fb83ad5b2bb365141f2bd7f289b66
-  ExpoFileSystem: a8e7fb1e958471764fb48d281cf9fa81a9e4d77c
+  ExpoFileSystem: 8e87545aef1d8d31f244edbfdd0780df4e5bac2e
   ExpoFont: dfb7c572372b610da45b41e3b436321fd6a97215
   ExpoGlassEffect: 2fd78765fb4633fc2575779a521ca6adb3488881
   ExpoHaptics: d3a6375d8dcc3a1083d003bc2298ff654fafb536
@@ -3736,7 +3736,7 @@ SPEC CHECKSUMS:
   ExpoModulesCore: 6294d9712874e86423c9f899c04ac1de9d468e1b
   ExpoWebBrowser: 970dd4c64c29c955c3af664c8058ba768a4c9187
   EXStructuredHeaders: c951e77f2d936f88637421e9588c976da5827368
-  EXUpdates: c4f0cbe4b7050312f23dee4489f55d6239e89d5c
+  EXUpdates: 8e78ff868bca96cbb338bb817db4475bd56f4075
   EXUpdatesInterface: 5adf50cb41e079c861da6d9b4b954c3db9a50734
   fast_float: 914e00b8b67cb8ba184a778c7bbc2e9fe98d37b3
   FBLazyVector: 5beb8028d5a2e75dd9634917f23e23d3a061d2aa
