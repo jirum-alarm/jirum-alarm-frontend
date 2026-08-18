@@ -13,7 +13,17 @@
       "url": "https://u.expo.dev/ec89e7ad-0f52-4777-a71c-50e5f596be58",
       "fallbackToCacheTimeout": 0
     },
-    "plugins": ["expo-dev-client", "expo-web-browser"],
+    "plugins": [
+      "expo-dev-client",
+      "expo-web-browser",
+      [
+        "@sentry/react-native",
+        {
+          "organization": "jirumalarm",
+          "project": "jirum-alarm-app"
+        }
+      ]
+    ],
     "ios": {
       "bundleIdentifier": "com.jirum-alarm.jirumalarm",
       "usesAppleSignIn": true

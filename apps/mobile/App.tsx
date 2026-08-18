@@ -15,8 +15,13 @@ import {
 } from '@/provider/WebViewRefProvider.tsx';
 import FcmHandler from '@/components/FCMHandler.tsx';
 import OfflineBanner from '@/shared/components/OfflineBanner.tsx';
+import AppErrorFallback from '@/shared/components/AppErrorFallback.tsx';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {Sentry, initSentry} from '@/shared/lib/monitoring/sentry.ts';
+
+// init 은 컴포넌트 밖에서 — 렌더 시작 전에 나는 에러도 잡아야 한다.
+initSentry();
 
 function App(): React.JSX.Element {
   const webViewRefManager = useWebViewRefManager();
@@ -29,25 +34,31 @@ function App(): React.JSX.Element {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaProvider>
-        <KeyboardProvider>
-          <NavigationContainer ref={navigationRef}>
-            <ReactQueryProvider>
-              <WebviewRefContext.Provider value={webViewRefManager}>
-                <FcmHandler>
-                  <RootNavigator />
-                </FcmHandler>
-                <OfflineBanner />
-              </WebviewRefContext.Provider>
-              <Toast config={toastConfig} />
-            </ReactQueryProvider>
-          </NavigationContainer>
-        </KeyboardProvider>
+        <Sentry.ErrorBoundary
+          fallback={({resetError}) => (
+            <AppErrorFallback onRetry={resetError} />
+          )}>
+          <KeyboardProvider>
+            <NavigationContainer ref={navigationRef}>
+              <ReactQueryProvider>
+                <WebviewRefContext.Provider value={webViewRefManager}>
+                  <FcmHandler>
+                    <RootNavigator />
+                  </FcmHandler>
+                  <OfflineBanner />
+                </WebviewRefContext.Provider>
+                <Toast config={toastConfig} />
+              </ReactQueryProvider>
+            </NavigationContainer>
+          </KeyboardProvider>
+        </Sentry.ErrorBoundary>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
 
-export default App;
+// Sentry.wrap: 네이티브 크래시·앱 시작 성능 계측을 위해 루트를 감싼다.
+export default Sentry.wrap(App);
 
 export const toastConfig: ToastConfig = {
   info: ({text1}) => (

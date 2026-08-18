@@ -43,6 +43,16 @@ jest.mock('../src/navigations/root/RootNavigator.tsx', () => ({
   __esModule: true,
   default: () => null,
 }));
+// Sentry/expo-updates 도 네이티브 모듈. init 은 no-op, ErrorBoundary·wrap 은 그대로 통과시킨다.
+jest.mock('../src/shared/lib/monitoring/sentry.ts', () => ({
+  __esModule: true,
+  initSentry: jest.fn(),
+  setSentryUser: jest.fn(),
+  Sentry: {
+    wrap: (c: unknown) => c,
+    ErrorBoundary: ({children}: {children: React.ReactNode}) => children,
+  },
+}));
 
 import App from '../App';
 
