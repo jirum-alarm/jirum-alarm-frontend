@@ -23,6 +23,7 @@ import {
 } from '@/shared/hooks/useTabBarVisibility';
 import type {TabStackParamList} from './types';
 import {
+  baseHeaderOptions,
   commentsHeaderOptions,
   productDetailHeaderOptions,
 } from './native-headers';
@@ -177,11 +178,7 @@ export function createTabStack(tabName: TabName) {
           name={tabStackNavigations.CURATION}
           component={CurationScreen}
           options={({route}) => ({
-            headerShown: true,
-            headerShadowVisible: false,
-            headerTintColor: '#101828',
-            headerBackButtonDisplayMode: 'minimal',
-            headerStyle: {backgroundColor: '#ffffff'},
+            ...baseHeaderOptions,
             title: route.params?.title ?? '',
           })}
         />
@@ -189,11 +186,7 @@ export function createTabStack(tabName: TabName) {
           name={tabStackNavigations.TOSS_CURATION}
           component={TossCurationScreen}
           options={{
-            headerShown: true,
-            headerShadowVisible: false,
-            headerTintColor: '#101828',
-            headerBackButtonDisplayMode: 'minimal',
-            headerStyle: {backgroundColor: '#ffffff'},
+            ...baseHeaderOptions,
             title: '',
           }}
         />

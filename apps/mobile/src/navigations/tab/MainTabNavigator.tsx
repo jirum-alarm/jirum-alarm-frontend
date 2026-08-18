@@ -41,6 +41,7 @@ import {
 } from '@/navigations/tab/tab-bar-metrics';
 import {useTabBarVisibility} from '@/shared/hooks/useTabBarVisibility';
 import {NATIVE_DISCOVER} from '@/constants/feature-flags';
+import {TAB_BAR_BACKGROUND_COLOR, TAB_BAR_BORDER_COLOR} from './native-headers';
 import {
   requestTrendingView,
   toggleTrendingView,
@@ -340,9 +341,9 @@ const styles = StyleSheet.create({
     right: 0,
   },
   tabBar: {
-    backgroundColor: '#ffffff',
+    backgroundColor: TAB_BAR_BACKGROUND_COLOR,
     borderTopWidth: 1,
-    borderTopColor: '#D0D5DD',
+    borderTopColor: TAB_BAR_BORDER_COLOR,
     paddingTop: 8,
   },
   tabBarLabel: {

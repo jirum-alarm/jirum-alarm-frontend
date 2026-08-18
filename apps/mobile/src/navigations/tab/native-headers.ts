@@ -1,22 +1,40 @@
 import type {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 
-/** 상품 상세 — 시스템 UINavigationBar. 타이틀·검색·공유는 화면이 setOptions 로 채운다. */
-export const productDetailHeaderOptions: NativeStackNavigationOptions = {
+/**
+ * 시스템 네이티브 헤더의 색. **className 이 안 먹는 자리라** 여기 상수가 정본이다.
+ * 다크모드 착수 시 고칠 곳도 여기 한 곳 — 화면별로 흩어 두지 말 것.
+ * ponytail: 지금은 라이트 고정값. `useColorScheme()` 분기는 웹뷰 탭 3개가
+ * 네이티브로 넘어와 앱 전체가 다크를 지원할 때 (gray-900 / gray-50) 로 확장한다.
+ */
+export const HEADER_TINT_COLOR = '#101828'; // gray-900
+export const HEADER_BACKGROUND_COLOR = '#ffffff';
+
+/**
+ * 하단 탭바 표면색. ⚠️**JS 탭바(`MainTabNavigator`)와 네이티브 탭바
+ * (`createNativeBottomTabNavigator`) 두 벌이 같은 값을 써야 한다** — 어긋나면
+ * 탭바만 다른 색으로 갈린다. 여기서 한 번 정하고 양쪽이 가져간다.
+ */
+export const TAB_BAR_BACKGROUND_COLOR = '#ffffff';
+export const TAB_BAR_BORDER_COLOR = '#D0D5DD'; // gray-300
+
+/** 모든 시스템 헤더가 공유하는 바탕. 개별 옵션은 이걸 펼치고 title 만 덧붙인다. */
+export const baseHeaderOptions: NativeStackNavigationOptions = {
   headerShown: true,
   headerShadowVisible: false,
-  headerTintColor: '#101828',
+  headerTintColor: HEADER_TINT_COLOR,
   headerBackButtonDisplayMode: 'minimal',
+  headerStyle: {backgroundColor: HEADER_BACKGROUND_COLOR},
+};
+
+/** 상품 상세 — 시스템 UINavigationBar. 타이틀·검색·공유는 화면이 setOptions 로 채운다. */
+export const productDetailHeaderOptions: NativeStackNavigationOptions = {
+  ...baseHeaderOptions,
   headerTitleAlign: 'left',
-  headerStyle: {backgroundColor: '#ffffff'},
   title: '',
 };
 
 /** 댓글 — 시스템 헤더. */
 export const commentsHeaderOptions: NativeStackNavigationOptions = {
-  headerShown: true,
-  headerShadowVisible: false,
-  headerTintColor: '#101828',
-  headerBackButtonDisplayMode: 'minimal',
-  headerStyle: {backgroundColor: '#ffffff'},
+  ...baseHeaderOptions,
   title: '댓글',
 };

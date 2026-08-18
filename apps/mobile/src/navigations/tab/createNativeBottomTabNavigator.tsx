@@ -17,6 +17,7 @@ import {BottomTabs, BottomTabsScreen} from 'react-native-screens';
 import type {ColorValue, ImageSourcePropType} from 'react-native';
 
 import {getTabBarClipPx} from './tab-bar-metrics';
+import {TAB_BAR_BACKGROUND_COLOR} from './native-headers';
 
 export type NativeTabIcon =
   | {type: 'sfSymbol'; name: string}
@@ -122,7 +123,7 @@ function titleAppearance(
   React.ComponentProps<typeof BottomTabsScreen>['standardAppearance']
 > {
   return {
-    tabBarBackgroundColor: '#ffffff',
+    tabBarBackgroundColor: TAB_BAR_BACKGROUND_COLOR,
     stacked: {
       normal: {tabBarItemTitleFontColor: titleColor},
       selected: {tabBarItemTitleFontColor: titleColorActive},
@@ -191,7 +192,8 @@ function NativeBottomTabNavigator({
               tabBarItemLabelVisibilityMode={options?.tabBarLabelVisibilityMode}
               tabBarMinimizeBehavior={minimize}
               tabBarBackgroundColor={
-                options?.tabBarStyle?.backgroundColor ?? '#ffffff'
+                options?.tabBarStyle?.backgroundColor ??
+                TAB_BAR_BACKGROUND_COLOR
               }
               experimentalControlNavigationStateInJS
               onNativeFocusChange={event => {
