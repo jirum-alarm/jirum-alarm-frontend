@@ -41,6 +41,7 @@ import {
   getFabPaddingPx,
   getReservedBottomPx,
   getWebBottomNavVars,
+  isIos26SystemTabBar,
 } from '@/navigations/tab/tab-bar-metrics';
 import {DEVICE_ID_SYNC_SCRIPT} from '@/shared/lib/device/device-id';
 import {INTERCEPT_DETAIL_LINK_SCRIPT} from '@/shared/lib/webview/intercept-detail-link';
@@ -215,7 +216,12 @@ function useTabWebViewCommon({tabName}: {tabName: TabName}) {
   );
 
   const reservedBottomPx = getReservedBottomPx(insets.bottom);
-  const tabBarVisible = !navState.url || isTabRootUrl(navState.url);
+  // ★iOS 26 시스템 탭바는 웹뷰 위에서 실제로 사라지지 않는다.
+  // 숨김은 clip(화면을 탭바 높이만큼 내려 잘라내기)으로만 되는데, 웹뷰 안 SPA 는
+  // tabBarClipWhenHidden 을 끈 상태다(자르면 댓글 입력창 아래가 빈다).
+  // 그래서 여백을 0 으로 알려주면 커뮤니티 글 댓글 입력창이 탭바 뒤로 깔린다.
+  const tabBarVisible =
+    isIos26SystemTabBar() || !navState.url || isTabRootUrl(navState.url);
   const fabPaddingPx = tabBarVisible ? getFabPaddingPx(insets.bottom) : 0;
   const bottomNavVars = useMemo(
     () =>
