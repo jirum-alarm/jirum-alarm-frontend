@@ -8,7 +8,6 @@ import React, {
 import {ActivityIndicator, Image, ScrollView, View} from 'react-native';
 import {SystemBars} from 'react-native-edge-to-edge';
 import {useNavigation} from '@react-navigation/native';
-import {HeaderBackButton} from '@react-navigation/elements';
 import {useQuery} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
@@ -44,7 +43,11 @@ import BottomCTA from './ui/BottomCTA';
 import ProductInfo from './ui/ProductInfo';
 import AffiliateNotice from './ui/AffiliateNotice';
 import ExpiredProductWarning from './ui/ExpiredProductWarning';
-import {DetailHeaderActions, DetailHeaderTitle} from './ui/ProductDetailHeader';
+import {
+  DetailHeaderActions,
+  DetailHeaderBackButton,
+  DetailHeaderTitle,
+} from './ui/ProductDetailHeader';
 import ShareSheet from './ui/ShareSheet';
 import KakaoOpenChatPrompt from './ui/KakaoOpenChatPrompt';
 import TossDetailImages from './ui/TossDetailImages';
@@ -88,6 +91,13 @@ function NativeDetail({productId}: {productId: number}) {
     refetch,
   } = useQuery(ProductQueries.info({id: productId}));
 
+  // 가이드 메타행(쇼핑몰 아래)을 상세와 같이 받는다. ProductGuideMetaRows 안에서만
+  // 받으면 상세가 그려진 뒤에 도착해 행이 "없다가 생기며" 아래 내용을 밀어낸다.
+  // 여기서 먼저 걸어두면 같은 queryKey 라 화면이 뜰 때부터 채워져 있다.
+  const {isPending: isGuidesPending} = useQuery(
+    ProductQueries.guides({productId}),
+  );
+
   const {data: myUserId} = useQuery(UserQueries.me());
   const {isLogin} = useAuth();
 
@@ -126,14 +136,10 @@ function NativeDetail({productId}: {productId: number}) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => null,
-      headerLeft: ({tintColor, canGoBack}) => (
+      headerLeft: ({canGoBack}) => (
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           {canGoBack ? (
-            <HeaderBackButton
-              tintColor={tintColor}
-              displayMode="minimal"
-              onPress={() => navigation.goBack()}
-            />
+            <DetailHeaderBackButton onPress={() => navigation.goBack()} />
           ) : null}
           <DetailHeaderTitle onPress={() => goTabHome(navigation)} />
         </View>
@@ -193,7 +199,7 @@ function NativeDetail({productId}: {productId: number}) {
     />
   );
 
-  if (isPending) {
+  if (isPending || isGuidesPending) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
         <ActivityIndicator size="small" color="#667085" />

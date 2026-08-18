@@ -2,7 +2,6 @@ import React, {useCallback, useLayoutEffect, useMemo, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
-import {HeaderBackButton} from '@react-navigation/elements';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {HomeQueries, tossInfiniteQuery} from '@/entities/home/api/home.queries';
@@ -12,6 +11,7 @@ import TossDealCard from '@/entities/home/ui/cards/TossDealCard';
 import {ChipRow, TOSS_SECTIONS} from '@/entities/home/ui/TossHomeSection';
 import {
   DetailHeaderActions,
+  DetailHeaderBackButton,
   DetailHeaderTitle,
 } from '@/screens/detail/ui/ProductDetailHeader';
 import {tabStackNavigations} from '@/shared/constant/navigations';
@@ -48,14 +48,10 @@ export default function TossCurationScreen({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => null,
-      headerLeft: ({tintColor, canGoBack}) => (
+      headerLeft: ({canGoBack}) => (
         <View className="flex-row items-center">
           {canGoBack ? (
-            <HeaderBackButton
-              tintColor={tintColor}
-              displayMode="minimal"
-              onPress={() => navigation.goBack()}
-            />
+            <DetailHeaderBackButton onPress={() => navigation.goBack()} />
           ) : null}
           <DetailHeaderTitle onPress={() => goTabHome(navigation)} />
         </View>

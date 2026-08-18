@@ -2,7 +2,6 @@ import React, {useCallback, useLayoutEffect, useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
-import {HeaderBackButton} from '@react-navigation/elements';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {
@@ -22,6 +21,7 @@ import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {
   DetailHeaderActions,
+  DetailHeaderBackButton,
   DetailHeaderTitle,
 } from '@/screens/detail/ui/ProductDetailHeader';
 import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
@@ -66,14 +66,10 @@ export default function CurationScreen({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => null,
-      headerLeft: ({tintColor, canGoBack}) => (
+      headerLeft: ({canGoBack}) => (
         <View className="flex-row items-center">
           {canGoBack ? (
-            <HeaderBackButton
-              tintColor={tintColor}
-              displayMode="minimal"
-              onPress={() => navigation.goBack()}
-            />
+            <DetailHeaderBackButton onPress={() => navigation.goBack()} />
           ) : null}
           <DetailHeaderTitle onPress={() => goTabHome(navigation)} />
         </View>

@@ -4,6 +4,7 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import SearchIcon from '@/shared/components/icons/search';
 import ShareIcon from '@/shared/components/icons/share';
 import IconLogo from '@/shared/components/icons/IconLogo';
+import CaretLeftIcon from '@/shared/components/icons/caret_left';
 
 /** 로고 아래 붙는 서비스 한 줄 설명. web LOGO_SUBTITLE 과 같은 문구. */
 const LOGO_SUBTITLE = '커뮤니티 핫딜 모아보기';
@@ -33,6 +34,25 @@ export function DetailHeaderTitle({onPress}: {onPress: () => void}) {
           {LOGO_SUBTITLE}
         </Text>
       </View>
+    </Pressable>
+  );
+}
+
+/**
+ * 시스템 헤더 왼쪽 뒤로가기.
+ *
+ * ★시스템 back(HeaderBackButton)은 선이 굵어 옆의 검색·공유(stroke 1.5)와
+ * 눈에 띄게 어긋난다. 같은 규격 아이콘으로 맞춘다.
+ */
+export function DetailHeaderBackButton({onPress}: {onPress: () => void}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      hitSlop={8}
+      accessibilityRole="button"
+      accessibilityLabel="뒤로"
+      style={styles.iconBtn}>
+      <CaretLeftIcon width={22} height={22} color="#101828" />
     </Pressable>
   );
 }
