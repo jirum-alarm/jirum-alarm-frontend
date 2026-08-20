@@ -8,6 +8,7 @@ import {
   buildProductShareUrl,
   buildShareMessage,
   buildShareUrl,
+  KAKAO_NATIVE_APP_KEY,
 } from '../src/shared/lib/share';
 
 function queryParam(url: string, key: string) {
@@ -98,26 +99,29 @@ describe('kakao native schemes', () => {
     );
   });
 
-  it('kakaolink 는 앱키와 템플릿을 담는다', () => {
+  it('kakaolink 는 앱키와 request_url 을 담는다 (scrap)', () => {
     Object.defineProperty(Platform, 'OS', {value: 'ios'});
     const out = buildKakaoLinkUrl({
-      title: '에어팟 | 지름알림',
-      description: '129,000원',
-      imageUrl: 'https://cdn.example/t.png',
       url: 'https://jirum-alarm.com/products/1',
     });
     expect(out.startsWith('kakaolink://send?')).toBe(true);
-    expect(out.includes('appkey=')).toBe(true);
-    expect(out.includes('template_json=')).toBe(true);
-    expect(decodeURIComponent(out)).toContain('object_type');
-    expect(decodeURIComponent(out)).toContain('feed');
+    expect(queryParam(out, 'appkey')).toBe(KAKAO_NATIVE_APP_KEY);
+    expect(queryParam(out, 'request_url')).toBe(
+      'https://jirum-alarm.com/products/1',
+    );
   });
 
-  it('썸네일이 없으면 텍스트 템플릿', () => {
+  /**
+   * 🔴 회귀 가드: template_json 에 손으로 만든 카드를 실어 보내면 카톡이
+   * "core parameter(s) missing" 으로 거부한다(실제 사고). kakaolink 규격에
+   * template_json 이라는 파라미터는 없다.
+   */
+  it('template_json 을 쓰지 않는다 — 카톡이 거부하는 파라미터', () => {
     const out = buildKakaoLinkUrl({
-      title: '에어팟 | 지름알림',
       url: 'https://jirum-alarm.com/products/1',
     });
-    expect(decodeURIComponent(out)).toContain('"object_type":"text"');
+    expect(out).not.toContain('template_json');
+    // 카드를 손조립하지 않으므로 템플릿 본문도 실리지 않는다.
+    expect(decodeURIComponent(out)).not.toContain('object_type');
   });
 });

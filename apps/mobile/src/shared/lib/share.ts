@@ -86,38 +86,21 @@ export const buildKakaoAndroidSendIntent = (message: string): string =>
 
 /**
  * iOS 카톡 공유. kakaolink:// 는 로그인 SDK 가 이미 Info.plist 에 등록돼 있다.
- * 피드(이미지 있을 때) / 텍스트 템플릿으로 친구 선택 화면을 연다.
+ *
+ * ★ scrap 방식 = 카톡이 requestUrl 의 OG 태그를 직접 긁어 카드를 만든다.
+ * 상세 페이지엔 og:title/description/image 가 상품별로 완비돼 있으므로
+ * (web 의 generateMetadata) 카드 규격을 앱에서 손으로 조립하지 않는다.
+ * web ShareSheet 이 쓰는 `Kakao.Share.sendScrap({requestUrl})` 과 같은 방식.
+ *
+ * 🔴 이전 구현은 `template_json` 파라미터에 손으로 만든 카드를 실어 보냈고
+ * 카톡이 "core parameter(s) missing" 으로 거부했다. kakaolink 규격의 파라미터는
+ * `template_json` 이 아니라 아래 세 조합 중 하나다:
+ *   - scrap:   template_id 없이 `request_url` (OG 스크랩)
+ *   - custom:  `template_id` (+ `template_args`) — 카카오 콘솔에 등록한 템플릿
+ *   - default: `template_object` — 카드를 직접 조립
+ * 손조립(default)은 규격이 바뀌면 조용히 깨지고 OG 와 이중관리가 되므로 scrap 을 쓴다.
  */
-export const buildKakaoLinkUrl = ({
-  title,
-  description,
-  imageUrl,
-  url,
-}: {
-  title: string;
-  description?: string;
-  imageUrl?: string;
-  url: string;
-}): string => {
-  const link = {web_url: url, mobile_web_url: url};
-  const template = imageUrl
-    ? {
-        object_type: 'feed',
-        content: {
-          title,
-          description: description ?? '',
-          image_url: imageUrl,
-          link,
-        },
-        buttons: [{title: '자세히 보기', link}],
-      }
-    : {
-        object_type: 'text',
-        text: description ? `${title}\n${description}` : title,
-        link,
-        button_title: '자세히 보기',
-      };
-
+export const buildKakaoLinkUrl = ({url}: {url: string}): string => {
   const extras = JSON.stringify({
     ka: `sdk/2.7.0 os/${Platform.OS} lang/ko-KR device/phone`,
   });
@@ -125,7 +108,7 @@ export const buildKakaoLinkUrl = ({
   return (
     `kakaolink://send?appkey=${KAKAO_NATIVE_APP_KEY}` +
     `&appver=1.0.0&apiver=10.0&linkver=4.0` +
-    `&template_json=${encodeURIComponent(JSON.stringify(template))}` +
+    `&request_url=${encodeURIComponent(url)}` +
     `&extras=${encodeURIComponent(extras)}`
   );
 };

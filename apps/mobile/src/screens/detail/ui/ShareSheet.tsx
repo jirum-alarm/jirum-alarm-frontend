@@ -147,12 +147,8 @@ export default function ShareSheet({
         const kakaoUrl =
           Platform.OS === 'android'
             ? buildKakaoAndroidSendIntent(message)
-            : buildKakaoLinkUrl({
-                title: shareTitle,
-                description,
-                imageUrl,
-                url,
-              });
+            : // 카드는 카톡이 상세 페이지의 OG 를 긁어 만든다(scrap).
+              buildKakaoLinkUrl({url});
         await Linking.openURL(kakaoUrl);
       } else if (channel === 'x' || channel === 'threads') {
         await openInAppBrowser(buildIntentUrl(channel, caption, url));
