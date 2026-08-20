@@ -1,5 +1,6 @@
 import Firebase
 import Expo
+import EXUpdates
 import UIKit
 import React
 import React_RCTAppDelegate
@@ -55,6 +56,18 @@ class AppDelegate: RCTAppDelegate {
 
     // WKWebView 키보드 액세서리 바 전역 비활성화 (lazy var 트리거)
     _ = WKWebView.removeInputAccessoryView
+
+    // ★expo-updates 모듈 초기화.
+    //
+    // 이 AppDelegate 는 ExpoAppDelegate 가 아니라 RCTAppDelegate 를 상속하므로
+    // Expo 의 react delegate handler(ExpoUpdatesReactDelegateHandler)가 돌지 않는다.
+    // 그 핸들러가 하던 initializeWithoutStarting() 을 여기서 직접 부른다.
+    //
+    // 없으면 JS 가 시작되기도 전에 네이티브가 죽는다 —
+    // UpdatesModule 이 상수를 내보낼 때 AppController.sharedInstance 를 읽고,
+    // 초기화 전이면 assert 로 SIGTRAP(EXC_BREAKPOINT). Expo.plist 의
+    // EXUpdatesEnabled=true 가 모듈을 활성화해 두기 때문에 Debug 에서도 걸린다.
+    AppController.initializeWithoutStarting()
 
     self.moduleName = "jirumAlarmMobile"
     self.dependencyProvider = RCTAppDependencyProvider()
