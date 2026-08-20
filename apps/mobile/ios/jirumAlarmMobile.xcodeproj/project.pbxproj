@@ -26,6 +26,7 @@
 		B5313F0BA7764272969844EE /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8632361B2254DE0A91D6ABD /* Pretendard-ExtraLight.otf */; };
 		D6333391A6714250AF71E797 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8E44C7F3ED0F44E68FF0573F /* Pretendard-Regular.otf */; };
 		FE3073402D490453001A29D5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE30733F2D490453001A29D5 /* GoogleService-Info.plist */; };
+		A1B2C3D40002EXPOPLIST000 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40001EXPOPLIST000 /* Expo.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 		FDC8B67C4068A971431B7FC1 /* Pods-jirumAlarmMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jirumAlarmMobile.debug.xcconfig"; path = "Target Support Files/Pods-jirumAlarmMobile/Pods-jirumAlarmMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		FE30733D2D48FB1B001A29D5 /* jirumAlarmMobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = jirumAlarmMobile.entitlements; path = jirumAlarmMobile/jirumAlarmMobile.entitlements; sourceTree = "<group>"; };
 		FE30733F2D490453001A29D5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A1B2C3D40001EXPOPLIST000 /* Expo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Expo.plist; path = jirumAlarmMobile/Supporting/Expo.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				FE30733F2D490453001A29D5 /* GoogleService-Info.plist */,
+				A1B2C3D40001EXPOPLIST000 /* Expo.plist */,
 				13B07FAE1A68108700A75B9A /* jirumAlarmMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -232,6 +235,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				FE3073402D490453001A29D5 /* GoogleService-Info.plist in Resources */,
+				A1B2C3D40002EXPOPLIST000 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				86519CAB4CF59254EDB9F860 /* PrivacyInfo.xcprivacy in Resources */,
 				7835F4FDA3EC4CA9B71F33A5 /* Pretendard-Black.otf in Resources */,

@@ -163,23 +163,42 @@ describe('OTA 설정 — Supporting/Expo.plist 는 반드시 커밋돼 있어야
   });
 });
 
-describe('OTA 설정 — 네이티브 배선은 손으로 하지 않는다', () => {
+describe('OTA 설정 — Expo.plist 는 번들에 실려야 한다', () => {
   /**
-   * expo-updates 는 app.plugin.js 를 자동 등록하고, 그 플러그인이
-   * IOSConfig.Updates.withUpdates / AndroidConfig.Updates.withUpdates 로
-   * ios/<target>/Supporting/Expo.plist 와 AndroidManifest meta-data 를 생성한다.
+   * 🔴🔴 2026-08-20 정정. 여기 있던 "pbxproj 에 수동 등록하지 않는다" 는 **틀렸고,
+   * 그 단정이 깨진 상태를 3개 빌드(23·24·25) 동안 고정했다.**
    *
-   * 손으로 같은 값을 또 넣으면 생성물과 경쟁해 ios 디렉토리 해시가 흔들리고,
-   * runtime version mismatch 로 빌드가 죽는다(빌드 730a92fe·aa1fd56c).
-   * 그래서 "있어야 한다"가 아니라 "없어야 한다"를 검사한다.
+   * 착각: expo-updates 플러그인이 빌드 때 Expo.plist 를 만들어 등록해 준다.
+   * 실제: 이 레포는 **bare workflow**(ios/ 가 커밋됨)라 EAS 빌드에서 prebuild 가
+   * 돌지 않는다 → 플러그인도 안 돈다. 파일은 레포에 있지만 **Xcode 프로젝트에
+   * 등록돼 있지 않아 번들에 복사되지 않았다.**
+   *
+   * 결과: build 26 IPA 를 열어보니 EXUpdates* 키가 **하나도 없었다**
+   * (앱 Info.plist·번들 전체에 `expo-channel-name` 문자열조차 없음).
+   * 채널이 없으니 서버가 매니페스트 요청을 400 으로 거절 → OTA 영구 불가.
+   *
+   * ★ 교훈: "플러그인이 알아서 해 준다" 는 managed workflow 전제다.
+   * bare 에서는 **생성물을 커밋하고 프로젝트에 등록까지** 해야 한다.
+   * 검증은 pbxproj 가 아니라 **IPA 안에 실제로 있는지**로 해야 한다.
    */
-  it('iOS: 손으로 만든 Expo.plist 가 없다 (플러그인 생성물과 경쟁)', () => {
-    expect(exists('ios/jirumAlarmMobile/Expo.plist')).toBe(false);
+  it('iOS: Expo.plist 가 Resources 빌드 페이즈에 등록돼 있다', () => {
+    // 등록이 없으면 Xcode 가 번들에 복사하지 않아 설정이 통째로 사라진다.
+    const pbxproj = read('ios/jirumAlarmMobile.xcodeproj/project.pbxproj');
+    expect(pbxproj).toContain('Expo.plist in Resources');
   });
 
-  it('iOS: pbxproj 에 Expo.plist 를 수동 등록하지 않는다', () => {
+  it('iOS: 등록된 경로가 실제 파일을 가리킨다', () => {
     const pbxproj = read('ios/jirumAlarmMobile.xcodeproj/project.pbxproj');
-    expect(pbxproj).not.toContain('Expo.plist in Resources');
+    const path = pbxproj.match(
+      /path = (jirumAlarmMobile\/Supporting\/Expo\.plist);/,
+    )?.[1];
+    expect(path).toBeTruthy();
+    expect(exists(`ios/${path}`)).toBe(true);
+  });
+
+  it('iOS: 타겟 루트에 경쟁하는 Expo.plist 가 없다', () => {
+    // Supporting/ 이 정본. 루트에 또 있으면 어느 쪽이 실릴지 불명확해진다.
+    expect(exists('ios/jirumAlarmMobile/Expo.plist')).toBe(false);
   });
 
   it('Android: manifest 에 updates meta-data 를 수동으로 넣지 않는다', () => {
