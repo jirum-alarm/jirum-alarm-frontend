@@ -244,6 +244,13 @@ function NativeBottomTabNavigator({
                       titleColor,
                       titleColorActive,
                     )}
+                    // iOS 는 콘텐츠가 끝까지 스크롤된 상태에서 scrollEdgeAppearance 를
+                    // 쓴다. 비워 두면 시스템 기본값이 적용돼 **다크모드에서 탭바만
+                    // 검게** 뜬다(홈처럼 스크롤 화면에서 재현). 같은 값을 준다.
+                    scrollEdgeAppearance={titleAppearance(
+                      titleColor,
+                      titleColorActive,
+                    )}
                     badgeValue={screen.tabBarBadge?.toString()}
                     overrideScrollViewContentInsetAdjustmentBehavior={
                       screen.overrideScrollViewContentInsetAdjustmentBehavior
