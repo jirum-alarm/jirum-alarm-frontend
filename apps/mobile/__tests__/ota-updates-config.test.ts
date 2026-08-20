@@ -135,6 +135,32 @@ describe('OTA 설정 — Supporting/Expo.plist 는 반드시 커밋돼 있어야
     expect(plist).toContain(EXPECTED_URL);
     expect(plist).toContain(`<string>${appJson.expo.runtimeVersion}</string>`);
   });
+
+  /**
+   * 🔴 채널이 없으면 OTA 는 **영구히 도달하지 않는다**(2026-08-20 실측).
+   * 앱은 매니페스트를 받을 때 `expo-channel-name` 헤더를 보내야 하고,
+   * 그 값의 출처가 EXUpdatesRequestHeaders 다. 없으면 서버가 400 을 준다:
+   *   "channel-name": Required. The headers "expo-runtime-version",
+   *   "expo-channel-name", and "expo-platform" are required.
+   *
+   * ★ 증상이 "업데이트가 안 온다" 뿐이라 발행 쪽을 의심하게 된다 —
+   * eas update 는 성공하고 update:list 에도 뜨는데 기기만 못 받는다.
+   * build 25 가 이 상태로 스토어 심사까지 올라갔다.
+   */
+  it('채널 헤더가 박혀 있다 — 없으면 서버가 400 을 준다', () => {
+    const plist = read(plistPath);
+    expect(plist).toContain('EXUpdatesRequestHeaders');
+    expect(plist).toContain('expo-channel-name');
+  });
+
+  it('채널이 eas.json production 프로필과 일치한다', () => {
+    // 갈리면 발행한 브랜치와 앱이 보는 채널이 어긋나 업데이트가 안 꽂힌다.
+    const plist = read(plistPath);
+    const channel = easJson.build.production.channel;
+    const after = plist.split('expo-channel-name')[1];
+    expect(after).toBeTruthy();
+    expect(after.match(/<string>([^<]*)<\/string>/)?.[1]).toBe(channel);
+  });
 });
 
 describe('OTA 설정 — 네이티브 배선은 손으로 하지 않는다', () => {
