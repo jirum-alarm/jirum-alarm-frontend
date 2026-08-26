@@ -195,6 +195,7 @@ export interface QueryPendingVerificationsTotalCountQueryVariables {
   matchStatus?: ProductMappingMatchStatus[];
   target?: ProductMappingTarget;
   verificationStatus?: ProductMappingVerificationStatus[];
+  suspiciousFirst?: boolean;
 }
 
 export const useGetPendingVerificationsTotalCount = (
@@ -213,6 +214,7 @@ export const useGetPendingVerificationsTotalCount = (
       matchStatus: variables?.matchStatus ?? undefined,
       target: variables?.target ?? undefined,
       verificationStatus: variables?.verificationStatus ?? undefined,
+      suspiciousFirst: variables?.suspiciousFirst ?? undefined,
     },
     fetchPolicy: 'network-only',
     ...options,

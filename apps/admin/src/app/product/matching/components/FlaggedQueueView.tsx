@@ -53,7 +53,13 @@ export default function FlaggedQueueView() {
     QueryPendingVerificationsTotalCountQuery,
     QueryPendingVerificationsTotalCountQueryVariables
   >(QueryPendingVerificationsTotalCount, {
-    variables: { aiSuggestion: ProductMappingAiSuggestion.Reject, onlyActive },
+    variables: {
+      aiSuggestion: ProductMappingAiSuggestion.Reject,
+      onlyActive,
+      // items 쿼리와 동일 모집단을 세야 한다 — 없으면 confidence NULL 행이 count 에만 섞여
+      // "개수는 나오는데 목록은 비어있음" 이 재현된다.
+      suspiciousFirst: true,
+    },
     fetchPolicy: 'network-only',
   });
 

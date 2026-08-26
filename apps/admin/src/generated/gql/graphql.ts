@@ -3425,6 +3425,7 @@ export type QueryPendingVerificationsTotalCountQueryVariables = Exact<{
   >;
   aiSuggestion?: InputMaybe<ProductMappingAiSuggestion>;
   onlyActive?: InputMaybe<Scalars['Boolean']['input']>;
+  suspiciousFirst?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type QueryPendingVerificationsTotalCountQuery = {

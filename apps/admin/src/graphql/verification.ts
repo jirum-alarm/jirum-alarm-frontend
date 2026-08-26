@@ -155,6 +155,7 @@ export const QueryPendingVerificationsTotalCount = gql`
     $verificationStatus: [ProductMappingVerificationStatus!]
     $aiSuggestion: ProductMappingAiSuggestion
     $onlyActive: Boolean
+    $suspiciousFirst: Boolean
   ) {
     pendingVerificationsTotalCount(
       brandProductId: $brandProductId
@@ -163,6 +164,7 @@ export const QueryPendingVerificationsTotalCount = gql`
       verificationStatus: $verificationStatus
       aiSuggestion: $aiSuggestion
       onlyActive: $onlyActive
+      suspiciousFirst: $suspiciousFirst
     )
   }
 `;
