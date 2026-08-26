@@ -32,6 +32,12 @@ import Toast from './Toast';
 import VerificationItem from './VerificationItem';
 
 const PAGE_LIMIT = 20;
+// 서버(matching-api)는 verificationStatus 가 비면 pending 만 돌려준다 — "검증 완료 포함"은 명시적으로 3종을 보내야 한다.
+const ALL_VERIFICATION_STATUSES = [
+  ProductMappingVerificationStatus.PendingVerification,
+  ProductMappingVerificationStatus.Verified,
+  ProductMappingVerificationStatus.Rejected,
+];
 
 // ─────────────────────────────────────────────
 // 메인 컴포넌트
@@ -46,6 +52,8 @@ const VerificationGroupByView = () => {
 
   // ── 우측: 검증 대기 목록 상태 ──
   const [verificationItems, setVerificationItems] = useState<PendingVerificationItem[]>([]);
+  // GraphQL 에러가 "매칭 항목이 없습니다"로 위장되지 않게 — 에러면 빈 목록 대신 사유를 띄운다.
+  const [verificationError, setVerificationError] = useState<string | null>(null);
   const [verificationSearchAfter, setVerificationSearchAfter] = useState<string[] | null>(null);
   const [hasVerificationMore, setHasVerificationMore] = useState(true);
   const [isLoadingVerificationMore, setIsLoadingVerificationMore] = useState(false);
@@ -242,16 +250,21 @@ const VerificationGroupByView = () => {
     async (brandProductId: number) => {
       setVerificationSearchAfter(null);
       setHasVerificationMore(true);
+      setVerificationError(null);
       try {
         const result = await fetchPendingVerifications({
           variables: {
             limit: PAGE_LIMIT,
             brandProductId,
             verificationStatus: includeVerified
-              ? undefined
+              ? ALL_VERIFICATION_STATUSES
               : [ProductMappingVerificationStatus.PendingVerification],
           },
         });
+        if (result.error) {
+          setVerificationError(result.error.message);
+          setVerificationItems([]);
+        }
         if (result.data?.pendingVerifications) {
           const items = result.data.pendingVerifications.map(mapVerificationItem);
           setVerificationItems(items);
@@ -271,6 +284,8 @@ const VerificationGroupByView = () => {
         }
       } catch (error) {
         console.error('Failed to load verifications:', error);
+        setVerificationError((error as Error).message);
+        setVerificationItems([]);
       }
     },
     [fetchPendingVerifications, includeVerified, mapVerificationItem],
@@ -283,7 +298,7 @@ const VerificationGroupByView = () => {
         variables: {
           brandProductId: parseInt(selectedBrandProduct.id),
           verificationStatus: includeVerified
-            ? undefined
+            ? ALL_VERIFICATION_STATUSES
             : [ProductMappingVerificationStatus.PendingVerification],
         },
       });
@@ -350,7 +365,7 @@ const VerificationGroupByView = () => {
           searchAfter: verificationSearchAfter,
           brandProductId: parseInt(selectedBrandProduct.id),
           verificationStatus: includeVerified
-            ? undefined
+            ? ALL_VERIFICATION_STATUSES
             : [ProductMappingVerificationStatus.PendingVerification],
         },
       });
@@ -1428,11 +1443,17 @@ const VerificationGroupByView = () => {
                             />
                           </svg>
                         </div>
-                        <p className="text-gray-500 text-sm">매칭 항목이 없습니다</p>
+                        <p className="text-gray-500 text-sm">
+                          {verificationError
+                            ? '목록을 불러오지 못했습니다'
+                            : '매칭 항목이 없습니다'}
+                        </p>
                         <p className="text-gray-400 mt-1 text-xs">
-                          {!includeVerified
-                            ? '검증 완료된 항목은 필터에서 숨겨져 있습니다'
-                            : '이 상품에 매칭된 게시물이 없습니다'}
+                          {verificationError
+                            ? verificationError
+                            : !includeVerified
+                              ? '검증 완료된 항목은 필터에서 숨겨져 있습니다'
+                              : '이 상품에 매칭된 게시물이 없습니다'}
                         </p>
                       </div>
                     )}
