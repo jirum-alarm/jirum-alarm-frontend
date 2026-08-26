@@ -32,3 +32,6 @@ export {default as ArrowRightIcon} from './ArrowRight';
 export {default as DotsIcon} from './Dots';
 export {default as CloseIcon} from './Close';
 export {default as BubbleChatEmptyIcon} from './BubbleChatEmpty';
+export {default as AlarmIllustError} from './AlarmIllustError';
+export {default as XSmall} from './XSmall';
+export {default as TrashBin} from './TrashBin';

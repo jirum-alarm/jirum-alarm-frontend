@@ -12,3 +12,6 @@ export const NATIVE_HOME = true;
 
 /** 발견 탭(실시간·랭킹)을 네이티브 화면으로. false 면 기존 웹뷰로 되돌아간다. */
 export const NATIVE_DISCOVER = true;
+
+/** 알림 탭을 네이티브 화면으로. false 면 기존 웹뷰(TabWebView)로 되돌아간다. */
+export const NATIVE_ALARM = true;

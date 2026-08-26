@@ -5,10 +5,15 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import TabWebView from '@/screens/tabs/TabWebView';
 import HomeScreen from '@/screens/home/HomeScreen';
 import TrendingScreen from '@/screens/trending/TrendingScreen';
+import AlarmScreen from '@/screens/alarm/AlarmScreen';
 import JirumAlarmWebViewScreen from '@/screens/jirumalarmwebview/JirumAlarmWebViewScreen';
 import CurationScreen from '@/screens/curation/CurationScreen';
 import TossCurationScreen from '@/screens/curation/TossCurationScreen';
-import {NATIVE_DISCOVER, NATIVE_HOME} from '@/constants/feature-flags';
+import {
+  NATIVE_ALARM,
+  NATIVE_DISCOVER,
+  NATIVE_HOME,
+} from '@/constants/feature-flags';
 import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
 import SearchStackNavigator from './SearchStackNavigator';
 import ProductCommentsScreen from '@/screens/comment/ProductCommentsScreen';
@@ -151,7 +156,7 @@ export function createTabStack(tabName: TabName) {
         }}>
         <Stack.Screen name={tabStackNavigations.ROOT}>
           {() => {
-            // 홈·발견만 네이티브. 남은 3개 탭은 웹뷰 그대로라 영향이 없다.
+            // 홈·발견·알림만 네이티브. 남은 2개 탭은 웹뷰 그대로라 영향이 없다.
             // OTA 가 배선돼 있어 플래그를 `eas update` 로 되돌릴 수 있다
             // (feature-flags.ts 주석 참조).
             if (NATIVE_HOME && tabName === tabNavigations.HOME) {
@@ -159,6 +164,9 @@ export function createTabStack(tabName: TabName) {
             }
             if (NATIVE_DISCOVER && tabName === tabNavigations.DISCOVER) {
               return <TrendingScreen />;
+            }
+            if (NATIVE_ALARM && tabName === tabNavigations.ALARM) {
+              return <AlarmScreen />;
             }
             return (
               <TabWebView tabName={tabName} baseUrl={getTabBaseUrl(tabName)} />

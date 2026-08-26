@@ -10,4 +10,9 @@ export const StorageKey = {
   PENDING_LOGIN_ACTION: 'pendingLoginAction',
   /** 오카방 입장 클릭 후 soft/구매후 권유 재노출 방지. web `jirum:okachat-joined` 와 같은 역할. */
   OKACHAT_JOINED: 'okachatJoined',
+  /**
+   * 알림 목록을 마지막으로 열어본 시각(ms). 이보다 나중에 온 미읽음 알림에만
+   * 배경 강조를 준다 — web `gr-alarm-last-read-at` 과 같은 역할.
+   */
+  ALARM_LAST_READ_AT: 'alarmLastReadAt',
 } as const;

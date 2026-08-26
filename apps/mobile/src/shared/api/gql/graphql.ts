@@ -2982,6 +2982,76 @@ export type MutationAddPushTokenMutation = {
   addPushToken: boolean;
 };
 
+export type QueryNotificationsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+}>;
+
+export type QueryNotificationsQuery = {
+  __typename?: 'Query';
+  notifications: Array<{
+    __typename?: 'Notification';
+    id: string;
+    message: string;
+    createdAt: any;
+    readAt?: any | null;
+    keyword?: string | null;
+    product?: {
+      __typename?: 'ProductOutput';
+      id: string;
+      thumbnail?: string | null;
+      price?: string | null;
+      isHot?: boolean | null;
+      isEnd?: boolean | null;
+    } | null;
+  }>;
+};
+
+export type QueryUnreadNotificationsCountQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type QueryUnreadNotificationsCountQuery = {
+  __typename?: 'Query';
+  unreadNotificationsCount: number;
+};
+
+export type MutationReadNotificationMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type MutationReadNotificationMutation = {
+  __typename?: 'Mutation';
+  readNotification: boolean;
+};
+
+export type MutationReadAllNotificationsMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type MutationReadAllNotificationsMutation = {
+  __typename?: 'Mutation';
+  readAllNotifications: boolean;
+};
+
+export type MutationRemoveNotificationMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type MutationRemoveNotificationMutation = {
+  __typename?: 'Mutation';
+  removeNotification: boolean;
+};
+
+export type MutationRemoveAllNotificationsMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type MutationRemoveAllNotificationsMutation = {
+  __typename?: 'Mutation';
+  removeAllNotifications: boolean;
+};
+
 export type ProductInfoQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
@@ -3729,6 +3799,67 @@ export const MutationAddPushTokenDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationAddPushTokenMutation,
   MutationAddPushTokenMutationVariables
+>;
+export const QueryNotificationsDocument = new TypedDocumentString(`
+    query QueryNotifications($limit: Int!, $offset: Int!) {
+  notifications(limit: $limit, offset: $offset) {
+    id
+    message
+    createdAt
+    readAt
+    keyword
+    product {
+      id
+      thumbnail
+      price
+      isHot
+      isEnd
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryNotificationsQuery,
+  QueryNotificationsQueryVariables
+>;
+export const QueryUnreadNotificationsCountDocument = new TypedDocumentString(`
+    query QueryUnreadNotificationsCount {
+  unreadNotificationsCount
+}
+    `) as unknown as TypedDocumentString<
+  QueryUnreadNotificationsCountQuery,
+  QueryUnreadNotificationsCountQueryVariables
+>;
+export const MutationReadNotificationDocument = new TypedDocumentString(`
+    mutation MutationReadNotification($id: Int!) {
+  readNotification(id: $id)
+}
+    `) as unknown as TypedDocumentString<
+  MutationReadNotificationMutation,
+  MutationReadNotificationMutationVariables
+>;
+export const MutationReadAllNotificationsDocument = new TypedDocumentString(`
+    mutation MutationReadAllNotifications {
+  readAllNotifications
+}
+    `) as unknown as TypedDocumentString<
+  MutationReadAllNotificationsMutation,
+  MutationReadAllNotificationsMutationVariables
+>;
+export const MutationRemoveNotificationDocument = new TypedDocumentString(`
+    mutation MutationRemoveNotification($id: Int!) {
+  removeNotification(id: $id)
+}
+    `) as unknown as TypedDocumentString<
+  MutationRemoveNotificationMutation,
+  MutationRemoveNotificationMutationVariables
+>;
+export const MutationRemoveAllNotificationsDocument = new TypedDocumentString(`
+    mutation MutationRemoveAllNotifications {
+  removeAllNotifications
+}
+    `) as unknown as TypedDocumentString<
+  MutationRemoveAllNotificationsMutation,
+  MutationRemoveAllNotificationsMutationVariables
 >;
 export const ProductInfoDocument = new TypedDocumentString(`
     query ProductInfo($id: Int!) {

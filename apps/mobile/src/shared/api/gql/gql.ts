@@ -37,6 +37,12 @@ type Documents = {
   '\n  query TossProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n    $tossCategoryLabel: String\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n      tossCategoryLabel: $tossCategoryLabel\n    ) {\n      id\n      title\n      price\n      thumbnail\n      data\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.TossProductsDocument;
   '\n  query CommunityRandomRankingProducts($count: Int!, $limit: Int!) {\n    communityRandomRankingProducts(count: $count, limit: $limit) {\n      id\n      title\n      mallId\n      mallName\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      postedAt\n    }\n  }\n': typeof types.CommunityRandomRankingProductsDocument;
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n': typeof types.MutationAddPushTokenDocument;
+  '\n  query QueryNotifications($limit: Int!, $offset: Int!) {\n    notifications(limit: $limit, offset: $offset) {\n      id\n      message\n      createdAt\n      readAt\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n': typeof types.QueryNotificationsDocument;
+  '\n  query QueryUnreadNotificationsCount {\n    unreadNotificationsCount\n  }\n': typeof types.QueryUnreadNotificationsCountDocument;
+  '\n  mutation MutationReadNotification($id: Int!) {\n    readNotification(id: $id)\n  }\n': typeof types.MutationReadNotificationDocument;
+  '\n  mutation MutationReadAllNotifications {\n    readAllNotifications\n  }\n': typeof types.MutationReadAllNotificationsDocument;
+  '\n  mutation MutationRemoveNotification($id: Int!) {\n    removeNotification(id: $id)\n  }\n': typeof types.MutationRemoveNotificationDocument;
+  '\n  mutation MutationRemoveAllNotifications {\n    removeAllNotifications\n  }\n': typeof types.MutationRemoveAllNotificationsDocument;
   '\n  query ProductInfo($id: Int!) {\n    product(id: $id) {\n      id\n      categoryId\n      categoryName\n      title\n      url\n      detailUrl\n      isProfitUrl\n      profitLinkProvider\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      uploaderType\n      content\n      author {\n        id\n        nickname\n      }\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      hotDealType\n      viewCount\n      mallName\n      data\n    }\n  }\n': typeof types.ProductInfoDocument;
   '\n  query ProductStats($id: Int!) {\n    product(id: $id) {\n      id\n      isHot\n      isEnd\n      wishlistCount\n      isMyLike\n      isMyReported\n      likeCount\n      isMyWishlist\n    }\n  }\n': typeof types.ProductStatsDocument;
   '\n  query ProductGuides($productId: Int!) {\n    productGuides(productId: $productId) {\n      id\n      title\n      content\n    }\n  }\n': typeof types.ProductGuidesDocument;
@@ -105,6 +111,18 @@ const documents: Documents = {
     types.CommunityRandomRankingProductsDocument,
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n':
     types.MutationAddPushTokenDocument,
+  '\n  query QueryNotifications($limit: Int!, $offset: Int!) {\n    notifications(limit: $limit, offset: $offset) {\n      id\n      message\n      createdAt\n      readAt\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n':
+    types.QueryNotificationsDocument,
+  '\n  query QueryUnreadNotificationsCount {\n    unreadNotificationsCount\n  }\n':
+    types.QueryUnreadNotificationsCountDocument,
+  '\n  mutation MutationReadNotification($id: Int!) {\n    readNotification(id: $id)\n  }\n':
+    types.MutationReadNotificationDocument,
+  '\n  mutation MutationReadAllNotifications {\n    readAllNotifications\n  }\n':
+    types.MutationReadAllNotificationsDocument,
+  '\n  mutation MutationRemoveNotification($id: Int!) {\n    removeNotification(id: $id)\n  }\n':
+    types.MutationRemoveNotificationDocument,
+  '\n  mutation MutationRemoveAllNotifications {\n    removeAllNotifications\n  }\n':
+    types.MutationRemoveAllNotificationsDocument,
   '\n  query ProductInfo($id: Int!) {\n    product(id: $id) {\n      id\n      categoryId\n      categoryName\n      title\n      url\n      detailUrl\n      isProfitUrl\n      profitLinkProvider\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      uploaderType\n      content\n      author {\n        id\n        nickname\n      }\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      hotDealType\n      viewCount\n      mallName\n      data\n    }\n  }\n':
     types.ProductInfoDocument,
   '\n  query ProductStats($id: Int!) {\n    product(id: $id) {\n      id\n      isHot\n      isEnd\n      wishlistCount\n      isMyLike\n      isMyReported\n      likeCount\n      isMyWishlist\n    }\n  }\n':
@@ -287,6 +305,42 @@ export function graphql(
 export function graphql(
   source: '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n',
 ): typeof import('./graphql').MutationAddPushTokenDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryNotifications($limit: Int!, $offset: Int!) {\n    notifications(limit: $limit, offset: $offset) {\n      id\n      message\n      createdAt\n      readAt\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n',
+): typeof import('./graphql').QueryNotificationsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryUnreadNotificationsCount {\n    unreadNotificationsCount\n  }\n',
+): typeof import('./graphql').QueryUnreadNotificationsCountDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationReadNotification($id: Int!) {\n    readNotification(id: $id)\n  }\n',
+): typeof import('./graphql').MutationReadNotificationDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationReadAllNotifications {\n    readAllNotifications\n  }\n',
+): typeof import('./graphql').MutationReadAllNotificationsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationRemoveNotification($id: Int!) {\n    removeNotification(id: $id)\n  }\n',
+): typeof import('./graphql').MutationRemoveNotificationDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationRemoveAllNotifications {\n    removeAllNotifications\n  }\n',
+): typeof import('./graphql').MutationRemoveAllNotificationsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
