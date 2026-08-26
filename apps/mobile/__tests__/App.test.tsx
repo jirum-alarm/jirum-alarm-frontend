@@ -47,6 +47,8 @@ jest.mock('../src/navigations/root/RootNavigator.tsx', () => ({
 jest.mock('../src/shared/lib/monitoring/sentry.ts', () => ({
   __esModule: true,
   initSentry: jest.fn(),
+  // init 이 안 돌면 wrap 도 안 건다 — 실제 구현과 같이 원본을 그대로 통과시킨다.
+  wrapApp: (c: unknown) => c,
   setSentryUser: jest.fn(),
   Sentry: {
     wrap: (c: unknown) => c,

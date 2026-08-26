@@ -47,6 +47,22 @@ export function initSentry() {
   }
 }
 
+/**
+ * 루트 컴포넌트를 Sentry 로 감싼다 — **단 init 이 실제로 돈 경우에만.**
+ *
+ * 🔴`Sentry.wrap()` 은 init 없이 부르면 안 된다. 계측(App Start Span)이 켜지는데
+ * 받아줄 클라이언트가 없어서 SDK 가 경고를 뱉고, 릴리스 빌드에선 시작 시점에
+ * 앱이 죽는 원인이 된다(`App Start Span could not be finished. Sentry.wrap was
+ * called before Sentry.init`).
+ *
+ * DSN 을 env 로 뺀 구조라 **DSN 미설정이 기본값에 가깝다** — 그 경우 wrap 도 같이
+ * 건너뛰어야 짝이 맞는다. init 과 wrap 은 **항상 같은 조건으로 켜고 끈다.**
+ */
+export function wrapApp<T>(app: T): T {
+  if (!isEnabled()) return app;
+  return Sentry.wrap(app as never) as T;
+}
+
 /** 로그인 유저를 에러에 붙인다 — 특정 유저만 겪는 버그를 가리기 위함. */
 export function setSentryUser(userId: string | null) {
   if (!isEnabled()) return;

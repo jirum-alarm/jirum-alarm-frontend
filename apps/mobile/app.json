@@ -2,13 +2,13 @@
   "expo": {
     "name": "지름알림",
     "slug": "jirum-alarm",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "scheme": "jirumalarm",
     "userInterfaceStyle": "automatic",
     "experiments": {
       "autolinkingModuleResolution": true
     },
-    "runtimeVersion": "1.4.4",
+    "runtimeVersion": "1.4.5",
     "updates": {
       "url": "https://u.expo.dev/ec89e7ad-0f52-4777-a71c-50e5f596be58",
       "fallbackToCacheTimeout": 0

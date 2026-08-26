@@ -18,7 +18,7 @@ import OfflineBanner from '@/shared/components/OfflineBanner.tsx';
 import AppErrorFallback from '@/shared/components/AppErrorFallback.tsx';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {Sentry, initSentry} from '@/shared/lib/monitoring/sentry.ts';
+import {Sentry, initSentry, wrapApp} from '@/shared/lib/monitoring/sentry.ts';
 
 // init 은 컴포넌트 밖에서 — 렌더 시작 전에 나는 에러도 잡아야 한다.
 initSentry();
@@ -57,8 +57,9 @@ function App(): React.JSX.Element {
   );
 }
 
-// Sentry.wrap: 네이티브 크래시·앱 시작 성능 계측을 위해 루트를 감싼다.
-export default Sentry.wrap(App);
+// Sentry.wrap 은 **init 이 실제로 돈 경우에만** 건다(wrapApp 이 그 판단을 한다).
+// init 없이 wrap 하면 앱 시작 계측이 받아줄 클라이언트를 못 찾아 릴리스에서 죽는다.
+export default wrapApp(App);
 
 export const toastConfig: ToastConfig = {
   info: ({text1}) => (
