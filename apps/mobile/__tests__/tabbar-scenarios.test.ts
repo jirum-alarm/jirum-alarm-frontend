@@ -113,6 +113,38 @@ describe('★왕복 시나리오 — 이전 상태가 남지 않는가', () => {
     ]);
   });
 
+  /**
+   * 알림 탭(2026-08-20 네이티브 전환). 나가는 경로는 상세와 키워드 웹뷰 둘뿐.
+   * 키워드는 web 페이지라 WEBVIEW 로 쌓이고 탭바를 숨긴다.
+   */
+  it('알림 → 상세 → 알림 (상세에서도 보인다)', () => {
+    expect(walk([ROUTES.ROOT, ROUTES.DETAIL, ROUTES.ROOT])).toEqual([
+      true,
+      true,
+      true,
+    ]);
+  });
+
+  it('알림 → 키워드 알림(WEBVIEW) → 알림', () => {
+    expect(walk([ROUTES.ROOT, ROUTES.WEBVIEW, ROUTES.ROOT])).toEqual([
+      true,
+      false,
+      true,
+    ]);
+  });
+
+  it('알림 → 상세 → 댓글 → 상세 → 알림', () => {
+    expect(
+      walk([
+        ROUTES.ROOT,
+        ROUTES.DETAIL,
+        ROUTES.COMMENTS,
+        ROUTES.DETAIL,
+        ROUTES.ROOT,
+      ]),
+    ).toEqual([true, true, false, true, true]);
+  });
+
   it('홈 → 더보기 → 상세 → 더보기 → 홈', () => {
     expect(
       walk([

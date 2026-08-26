@@ -17,6 +17,7 @@ import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes
 import {SERVICE_URL, USER_AGENT} from '@/constants/env';
 import {
   handleWebViewMessage,
+  NATIVE_STACK_SCRIPT,
   parsedWebViewMessage,
   WebViewEventType,
 } from '@/shared/lib/webview';
@@ -38,29 +39,6 @@ type StackNav = Pick<
   NativeStackNavigationProp<ProductFlowParamList>,
   'push' | 'goBack'
 >;
-
-const NATIVE_STACK_SCRIPT = `
-  (function() {
-    document.documentElement.dataset.nativeStack = 'true';
-    if (window.__jirumNativeStackBack) { return; }
-    window.__jirumNativeStackBack = true;
-    document.addEventListener('click', function(e) {
-      var t = e.target;
-      if (!t || !t.closest) { return; }
-      var btn = t.closest('button[aria-label="뒤로 가기"]');
-      if (!btn) { return; }
-      e.preventDefault();
-      e.stopPropagation();
-      if (window.ReactNativeWebView) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'PRESS_BACKBUTTON',
-          payload: null
-        }));
-      }
-    }, true);
-  })();
-  true;
-`;
 
 const HIDE_WEB_BOTTOM_NAV = `
   (function() {
