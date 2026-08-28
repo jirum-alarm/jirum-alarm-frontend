@@ -7,11 +7,17 @@ import type {TossData} from '../model/types';
  * 토스 딜 신뢰 배지. web entities/product/ui/TossBadges.tsx 와 동일.
  * 희소할수록 앞에. bestSeller 는 27/30 로 흔해 제외(카드 오버레이 전용).
  */
-export default function TossBadges({toss}: {toss?: TossData}) {
+export default function TossBadges({
+  toss,
+  hidePriceSignals,
+}: {
+  toss?: TossData;
+  hidePriceSignals?: boolean;
+}) {
   if (!toss) return null;
 
   const badges: {key: string; label: string; bg: string; fg: string}[] = [];
-  if (toss.lowestPriceCompensation) {
+  if (!hidePriceSignals && toss.lowestPriceCompensation) {
     badges.push({
       key: 'lpc',
       label: '최저가 보상',
@@ -35,7 +41,7 @@ export default function TossBadges({toss}: {toss?: TossData}) {
       fg: 'text-error-600',
     });
   }
-  if (toss.lowestIn30Days) {
+  if (!hidePriceSignals && toss.lowestIn30Days) {
     badges.push({
       key: 'l30',
       label: '30일 최저가',

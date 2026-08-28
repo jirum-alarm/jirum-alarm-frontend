@@ -3,6 +3,7 @@ import {Text, View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 
 import {ProductQueries} from '@/entities/product/product.queries';
+import {isPriceGuideTitle} from '@/entities/home/lib/toss';
 
 /** 마크다운 링크·URL 을 걷어낸 평문. web ProductGuideMetaRows 와 동일 규칙. */
 function plainGuideContent(content: string): string {
@@ -14,11 +15,18 @@ function plainGuideContent(content: string): string {
 }
 
 /** productGuides 를 쇼핑몰·배송비와 같은 메타 행으로 렌더. */
-export default function ProductGuideMetaRows({productId}: {productId: number}) {
+export default function ProductGuideMetaRows({
+  productId,
+  hidePrice,
+}: {
+  productId: number;
+  hidePrice?: boolean;
+}) {
   const {data: guides} = useQuery(ProductQueries.guides({productId}));
 
   const rows = (guides ?? [])
     .filter(g => g.title && g.content)
+    .filter(g => !hidePrice || !isPriceGuideTitle(g.title as string))
     .map(g => ({
       id: String(g.id),
       title: g.title as string,

@@ -15,6 +15,7 @@ import TossIcon from './TossIcon';
 import NaverIcon from './NaverIcon';
 
 import type {ProductDetail, SourceData} from '../model/types';
+import {stripPriceFromTitle} from '@/entities/home/lib/toss';
 
 /** 라벨/값 한 줄. 색은 web ProductInfo 와 동일하게 맞춘다(사용자 결정 2026-08-12). */
 function MetaRow({
@@ -37,14 +38,19 @@ export default function ProductInfo({
   source,
   productId,
   isUserLogin,
+  hidePrice,
 }: {
   product: ProductDetail;
   source: SourceData;
   productId: number;
   isUserLogin: boolean;
+  hidePrice?: boolean;
 }) {
   // 가격/할인율/평점/쿠폰은 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 쓴다.
   const display = source.toss ?? source.ohou;
+  const displayTitle = hidePrice
+    ? stripPriceFromTitle(product.title)
+    : product.title;
   const [guideOpen, setGuideOpen] = useState(false);
 
   return (
@@ -71,7 +77,7 @@ export default function ProductInfo({
 
       {/* web ProductInfo 순서: 제목 → 시간 → (가격+평점 | 추천버튼).
           한때 가격을 제목 위로 올렸었지만 "웹과 동일" 방침으로 되돌렸다. */}
-      <Text className="font-medium text-gray-800">{product.title}</Text>
+      <Text className="font-medium text-gray-800">{displayTitle}</Text>
 
       <View className="gap-y-1 pt-3">
         <Text className="h-5 text-sm text-gray-600">
@@ -80,21 +86,30 @@ export default function ProductInfo({
 
         <View className="flex-row items-center justify-between">
           <View className="shrink">
-            {display?.originalPrice ? (
-              <Text className="text-sm text-gray-400 line-through">
-                {display.originalPrice.toLocaleString()}원
+            {hidePrice ? (
+              <Text className="text-lg font-semibold text-gray-900">
+                토스에서 가격 확인
               </Text>
-            ) : null}
-            <View className="flex-row items-baseline gap-x-2">
-              {typeof display?.discountRate === 'number' ? (
-                <Text className="text-2xl font-bold text-error-500">
-                  {display.discountRate}%
-                </Text>
-              ) : null}
-              <DisplayPrice price={product.price} />
-            </View>
+            ) : (
+              <>
+                {display?.originalPrice ? (
+                  <Text className="text-sm text-gray-400 line-through">
+                    {display.originalPrice.toLocaleString()}원
+                  </Text>
+                ) : null}
+                <View className="flex-row items-baseline gap-x-2">
+                  {typeof display?.discountRate === 'number' ? (
+                    <Text className="text-2xl font-bold text-error-500">
+                      {display.discountRate}%
+                    </Text>
+                  ) : null}
+                  <DisplayPrice price={product.price} />
+                </View>
+              </>
+            )}
             {display &&
-            (typeof display.rating === 'number' || display.couponDiscount) ? (
+            (typeof display.rating === 'number' ||
+              (!hidePrice && display.couponDiscount)) ? (
               <View className="flex-row flex-wrap items-center gap-x-2 pt-1">
                 {typeof display.rating === 'number' ? (
                   <Text className="text-sm text-gray-500">
@@ -104,7 +119,7 @@ export default function ProductInfo({
                       : ''}
                   </Text>
                 ) : null}
-                {display.couponDiscount ? (
+                {!hidePrice && display.couponDiscount ? (
                   <Text className="text-sm text-error-500">
                     쿠폰{' '}
                     {typeof display.couponDiscount === 'number'
@@ -119,7 +134,9 @@ export default function ProductInfo({
         </View>
       </View>
 
-      {source.toss ? <TossBadges toss={source.toss} /> : null}
+      {source.toss ? (
+        <TossBadges toss={source.toss} hidePriceSignals={hidePrice} />
+      ) : null}
 
       <View className="gap-y-2 pt-4">
         <MetaRow label="쇼핑몰">
@@ -130,7 +147,7 @@ export default function ProductInfo({
           </Text>
         </MetaRow>
 
-        <ProductGuideMetaRows productId={productId} />
+        <ProductGuideMetaRows productId={productId} hidePrice={hidePrice} />
 
         {product.uploaderType !== UploaderType.Crawled ? (
           <MetaRow label="업로드">

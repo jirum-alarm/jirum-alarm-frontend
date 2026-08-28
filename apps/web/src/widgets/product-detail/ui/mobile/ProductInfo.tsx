@@ -12,6 +12,7 @@ import DisplayTime from '@/shared/ui/DisplayTime';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 
 import { ProductQueries } from '@/entities/product';
+import { stripPriceFromTitle } from '@/entities/product/lib/from-toss';
 import NaverIcon from '@/entities/product/ui/NaverIcon';
 import TossBadges from '@/entities/product/ui/TossBadges';
 import TossIcon from '@/entities/product/ui/TossIcon';
@@ -32,6 +33,7 @@ export default function ProductInfo({
   ohouData,
   initialGuides,
   initialVerdict,
+  hidePrice,
 }: {
   productId: number;
   tossData?: import('@/entities/product/model/toss-data').TossProductData;
@@ -39,10 +41,13 @@ export default function ProductInfo({
   ohouData?: import('@/entities/product/model/toss-data').OhouProductData;
   initialGuides?: ProductGuideRow[] | null;
   initialVerdict?: ProductPriceVerdict | null;
+  /** 토스 특가 코너에서 들어온 경우 판매가를 숨긴다. */
+  hidePrice?: boolean;
 }) {
   // 가격/할인율/평점/쿠폰 UI는 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 공유한다.
   const displayData = tossData ?? ohouData;
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+  const displayTitle = hidePrice ? stripPriceFromTitle(product.title) : product.title;
 
   useEffect(() => {
     pushRecentViewedProduct({
@@ -83,28 +88,35 @@ export default function ProductInfo({
             </div>
           )}
         </div>
-        <h1 className="font-medium text-gray-800">{product.title}</h1>
+        <h1 className="font-medium text-gray-800">{displayTitle}</h1>
         <div className="flex flex-col gap-y-1 pt-3">
           <div className="h-5 text-sm text-gray-600">
             <DisplayTime time={product.postedAt} />
           </div>
           <div className="flex items-center justify-between">
             <div>
-              {displayData?.originalPrice && (
-                <span className="text-sm text-gray-400 line-through">
-                  {displayData.originalPrice.toLocaleString()}원
-                </span>
+              {hidePrice ? (
+                <p className="text-lg font-semibold text-gray-900">토스에서 가격 확인</p>
+              ) : (
+                <>
+                  {displayData?.originalPrice && (
+                    <span className="text-sm text-gray-400 line-through">
+                      {displayData.originalPrice.toLocaleString()}원
+                    </span>
+                  )}
+                  <div className="flex items-baseline gap-x-2">
+                    {typeof displayData?.discountRate === 'number' && (
+                      <span className="text-error-500 text-2xl font-bold">
+                        {displayData.discountRate}%
+                      </span>
+                    )}
+                    <DisplayPrice price={product.price} />
+                  </div>
+                </>
               )}
-              <div className="flex items-baseline gap-x-2">
-                {typeof displayData?.discountRate === 'number' && (
-                  <span className="text-error-500 text-2xl font-bold">
-                    {displayData.discountRate}%
-                  </span>
-                )}
-                <DisplayPrice price={product.price} />
-              </div>
               {displayData &&
-                (typeof displayData.rating === 'number' || displayData.couponDiscount) && (
+                (typeof displayData.rating === 'number' ||
+                  (!hidePrice && displayData.couponDiscount)) && (
                   <div className="flex flex-wrap items-center gap-x-2 pt-1 text-sm text-gray-500">
                     {typeof displayData.rating === 'number' && (
                       <span>
@@ -114,7 +126,7 @@ export default function ProductInfo({
                           : ''}
                       </span>
                     )}
-                    {displayData.couponDiscount ? (
+                    {!hidePrice && displayData.couponDiscount ? (
                       <span className="text-error-500">
                         쿠폰{' '}
                         {typeof displayData.couponDiscount === 'number'
@@ -129,8 +141,8 @@ export default function ProductInfo({
               <RecommendButton productId={productId} />
             </div>
           </div>
-          <PriceVerdictHero productId={productId} verdict={initialVerdict} />
-          {tossData && <TossBadges toss={tossData} />}
+          {!hidePrice && <PriceVerdictHero productId={productId} verdict={initialVerdict} />}
+          {tossData && <TossBadges toss={tossData} hidePriceSignals={hidePrice} />}
         </div>
       </div>
       <div className="pt-4">
@@ -150,10 +162,11 @@ export default function ProductInfo({
               productId={productId}
               variant="mobile"
               initialGuides={initialGuides}
+              hidePrice={hidePrice}
             />
           ) : (
             <Suspense fallback={null}>
-              <ProductGuideMetaRows productId={productId} variant="mobile" />
+              <ProductGuideMetaRows productId={productId} variant="mobile" hidePrice={hidePrice} />
             </Suspense>
           )}
           {product.uploaderType !== UploaderType.Crawled && (

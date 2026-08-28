@@ -14,6 +14,7 @@ import HotdealBadge from '@/shared/ui/HotdealBadge';
 import ShareButton from '@/shared/ui/ShareButton';
 
 import { ProductQueries } from '@/entities/product';
+import { stripPriceFromTitle } from '@/entities/product/lib/from-toss';
 import NaverIcon from '@/entities/product/ui/NaverIcon';
 import TossBadges from '@/entities/product/ui/TossBadges';
 import TossIcon from '@/entities/product/ui/TossIcon';
@@ -41,6 +42,7 @@ export default function ProductInfo({
   ohouData,
   initialGuides,
   initialVerdict,
+  hidePrice,
 }: {
   productId: number;
   isUserLogin: boolean;
@@ -49,11 +51,13 @@ export default function ProductInfo({
   ohouData?: import('@/entities/product/model/toss-data').OhouProductData;
   initialGuides?: ProductGuideRow[] | null;
   initialVerdict?: ProductPriceVerdict | null;
+  hidePrice?: boolean;
 }) {
   // 가격/할인율/평점/쿠폰 UI는 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 공유한다.
   // 배송비(deliveryFee)·단위가격(unitPrice) 등 토스 전용 필드는 tossData 에서만 그대로 쓴다.
   const displayData = tossData ?? ohouData;
   const { data: product } = useSuspenseQuery(ProductQueries.productInfo({ id: productId }));
+  const displayTitle = hidePrice ? stripPriceFromTitle(product.title) : product.title;
   const [promptQueue, setPromptQueue] = useState<PostPurchasePromptKind[]>([]);
   const phase = promptQueue[0] ?? null;
   const advancePrompt = () => setPromptQueue((q) => q.slice(1));
@@ -72,7 +76,7 @@ export default function ProductInfo({
     isEnd: product.isEnd,
   });
 
-  const shareTitle = `${product.title} | 지름알림`;
+  const shareTitle = `${displayTitle} | 지름알림`;
 
   return (
     <section className="flex h-full flex-col justify-between">
@@ -102,12 +106,14 @@ export default function ProductInfo({
           )}
 
           <div className="flex items-start justify-between gap-x-5">
-            <h1 className="min-w-0 flex-1 text-xl font-medium text-gray-800">{product.title}</h1>
+            <h1 className="min-w-0 flex-1 text-xl font-medium text-gray-800">{displayTitle}</h1>
             <div className="shrink-0 self-start">
               <ShareButton
                 title={shareTitle}
                 description={
-                  [product.price, product.mallName].filter(Boolean).join(' · ') || undefined
+                  [hidePrice ? undefined : product.price, product.mallName]
+                    .filter(Boolean)
+                    .join(' · ') || undefined
                 }
                 imageUrl={product.thumbnail ?? undefined}
               />
@@ -120,21 +126,28 @@ export default function ProductInfo({
           </div>
           <div className="flex justify-between">
             <div>
-              {displayData?.originalPrice && (
-                <span className="text-sm text-gray-400 line-through">
-                  {displayData.originalPrice.toLocaleString()}원
-                </span>
+              {hidePrice ? (
+                <p className="text-lg font-semibold text-gray-900">토스에서 가격 확인</p>
+              ) : (
+                <>
+                  {displayData?.originalPrice && (
+                    <span className="text-sm text-gray-400 line-through">
+                      {displayData.originalPrice.toLocaleString()}원
+                    </span>
+                  )}
+                  <div className="flex items-baseline gap-x-2">
+                    {typeof displayData?.discountRate === 'number' && (
+                      <span className="text-error-500 text-2xl font-bold">
+                        {displayData.discountRate}%
+                      </span>
+                    )}
+                    <DisplayPrice price={product.price} />
+                  </div>
+                </>
               )}
-              <div className="flex items-baseline gap-x-2">
-                {typeof displayData?.discountRate === 'number' && (
-                  <span className="text-error-500 text-2xl font-bold">
-                    {displayData.discountRate}%
-                  </span>
-                )}
-                <DisplayPrice price={product.price} />
-              </div>
               {displayData &&
-                (typeof displayData.rating === 'number' || displayData.couponDiscount) && (
+                (typeof displayData.rating === 'number' ||
+                  (!hidePrice && displayData.couponDiscount)) && (
                   <div className="flex flex-wrap items-center gap-x-2 pt-1 text-sm text-gray-500">
                     {typeof displayData.rating === 'number' && (
                       <span>
@@ -144,7 +157,7 @@ export default function ProductInfo({
                           : ''}
                       </span>
                     )}
-                    {displayData.couponDiscount ? (
+                    {!hidePrice && displayData.couponDiscount ? (
                       <span className="text-error-500">
                         쿠폰{' '}
                         {typeof displayData.couponDiscount === 'number'
@@ -160,8 +173,8 @@ export default function ProductInfo({
               <RecommendButton productId={productId} />
             </div>
           </div>
-          <PriceVerdictHero productId={productId} verdict={initialVerdict} />
-          {tossData && <TossBadges toss={tossData} />}
+          {!hidePrice && <PriceVerdictHero productId={productId} verdict={initialVerdict} />}
+          {tossData && <TossBadges toss={tossData} hidePriceSignals={hidePrice} />}
         </div>
         {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}
         <div className="my-6 space-y-2">
@@ -179,10 +192,11 @@ export default function ProductInfo({
               productId={productId}
               variant="desktop"
               initialGuides={initialGuides}
+              hidePrice={hidePrice}
             />
           ) : (
             <Suspense fallback={null}>
-              <ProductGuideMetaRows productId={productId} variant="desktop" />
+              <ProductGuideMetaRows productId={productId} variant="desktop" hidePrice={hidePrice} />
             </Suspense>
           )}
           {product.uploaderType !== UploaderType.Crawled && (

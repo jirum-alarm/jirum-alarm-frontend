@@ -12,6 +12,8 @@ import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { defaultMetadata } from '@/shared/config/metadata';
 import { convertToWebp } from '@/shared/lib/utils/image';
 
+import { isFromToss, stripPriceFromTitle } from '@/entities/product/lib/from-toss';
+
 import { CollectProductOnView } from '@/features/product-actions/ui/CollectProductOnView';
 import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
@@ -191,21 +193,24 @@ function generateProductJsonLd(
   product: Awaited<ReturnType<typeof ProductService.getProductInfo>>,
   productGuides?: { productGuides?: Array<{ title: string; content: string }> | null },
   priceHistorySeo?: PriceHistorySeoSummary | null,
+  hidePrice?: boolean,
 ) {
   if (!product) return null;
 
   const categoryName = resolveCategoryName(product);
-  const priceValue = parseNumericPrice(product.price);
+  const priceValue = hidePrice ? null : parseNumericPrice(product.price);
   const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
-  const description = productGuides
-    ? generateDescription(productGuides, product, categoryName, priceHistorySeo)
-    : product.title;
+  const description = hidePrice
+    ? product.title
+    : productGuides
+      ? generateDescription(productGuides, product, categoryName, priceHistorySeo)
+      : product.title;
   const productUrl = `${METADATA_SERVICE_URL}/products/${product.id}`;
   const mallName = product.mallName?.trim() || null;
 
-  const additionalProperty: Array<Record<string, unknown>> = [
-    ...guidePropertiesToJsonLd(productGuides),
-  ];
+  const additionalProperty: Array<Record<string, unknown>> = hidePrice
+    ? []
+    : [...guidePropertiesToJsonLd(productGuides)];
 
   // 시계열 Offer 배열은 Google 권장과 어긋나기 쉬워, 기간 최저/최고만 additionalProperty로 노출
   if (priceHistorySeo) {
@@ -302,10 +307,14 @@ function generateBreadcrumbJsonLd(
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ from?: string | string[] }>;
 }): Promise<Metadata> {
   const { id } = await params;
+  const { from } = await searchParams;
+  const hidePrice = isFromToss(from);
 
   const product = await getProductInfoCached(+id);
   if (!product) {
@@ -316,20 +325,23 @@ export async function generateMetadata({
     getProductGuidesCached(+product.id),
     getPriceHistoryCached(+product.id),
   ]);
-  const priceHistorySeo = summarizePriceHistoryForSeo(priceHistoryData);
+  const priceHistorySeo = hidePrice ? null : summarizePriceHistoryForSeo(priceHistoryData);
 
-  const title = `${product.title} | 지름알림`;
+  const displayTitle = hidePrice ? stripPriceFromTitle(product.title) : product.title;
+  const title = `${displayTitle} | 지름알림`;
 
   const categoryName = resolveCategoryName(product);
-  const priceValue = parseNumericPrice(product.price);
-  const description = generateDescription(productGuides, product, categoryName, priceHistorySeo);
+  const priceValue = hidePrice ? null : parseNumericPrice(product.price);
+  const description = hidePrice
+    ? displayTitle
+    : generateDescription(productGuides, product, categoryName, priceHistorySeo);
 
   const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
   const url = `${METADATA_SERVICE_URL}/products/${id}`;
 
   const defaultKeywords =
     '실시간, 핫딜, 할인, 초특가, 최저가, 알뜰, 알뜰쇼핑, 쿠폰, 이벤트, 지름알림, 핫딜알림';
-  const keywords = `${product.title}${categoryName ? `, ${categoryName}` : ''}, ${defaultKeywords}`;
+  const keywords = `${displayTitle}${categoryName ? `, ${categoryName}` : ''}, ${defaultKeywords}`;
 
   const retailerName = product.mallName?.trim();
   const otherMeta: Record<string, string | number> = {
@@ -400,8 +412,16 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
+export default async function ProductDetail({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ from?: string | string[] }>;
+}) {
   const { id } = await params;
+  const { from } = await searchParams;
+  const hidePrice = isFromToss(from);
 
   const token = await getAccessToken();
   const isUserLogin = !!token;
@@ -423,6 +443,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
         device={device}
         initialGuides={guides}
         initialVerdict={verdict}
+        hidePrice={hidePrice}
       />
     );
   };
@@ -435,6 +456,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
         device={device}
         initialGuides={guides}
         initialVerdict={verdict}
+        hidePrice={hidePrice}
       />
     );
   };
@@ -452,7 +474,12 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
     getPriceVerdictCached(+product.id),
   ]);
   const priceHistorySeo = summarizePriceHistoryForSeo(priceHistoryData);
-  const jsonLd = generateProductJsonLd(product, productGuides ?? undefined, priceHistorySeo);
+  const jsonLd = generateProductJsonLd(
+    product,
+    productGuides ?? undefined,
+    hidePrice ? null : priceHistorySeo,
+    hidePrice,
+  );
   const breadcrumbLd = generateBreadcrumbJsonLd(product);
 
   // LCP 이미지 preload: 모바일은 100vw, 데스크톱은 512px 슬롯

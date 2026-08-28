@@ -2,16 +2,16 @@
 
 import { motion } from 'motion/react';
 
-import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 import Link from '@/shared/ui/Link';
 
+import { tossDetailHref } from '@/entities/product/lib/from-toss';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 import { type TossDeal } from './mock';
 
 // 토스 전용 카드. ProductGridCard 스타일(rounded-lg / aspect-square / gray 팔레트)을 따르되
-// 토스가 주는 정보(할인율·30일최저가·평점·리뷰·배송·베스트판매자·마케팅뱃지)를 모두 노출.
+// 토스 특가 코너에서는 판매가·할인율을 숨기고 상세는 ?from=toss 로 연다.
 export default function TossDealCard({
   deal,
   rank,
@@ -23,11 +23,11 @@ export default function TossDealCard({
   priority?: boolean;
   className?: string;
 }) {
-  const label = deal.badge ?? (deal.discountRate ? `${deal.discountRate}% 특가` : undefined);
+  // %특가는 가격 신호라 코너에서는 빼 둔다. '역대급특가' 같은 마케팅 뱃지는 유지.
+  const label = deal.badge;
 
-  // 토스 딜은 product 로 등록되므로 기존 상세(/products/{id})로 간다.
-  // 목업엔 productId 가 없어 클릭 비활성(백엔드 등록되면 자동 연결).
-  const href = deal.productId ? `${PAGE.DETAIL}/${deal.productId}` : undefined;
+  // 토스 딜은 product 로 등록되므로 기존 상세로 가되, 코너 유입임을 쿼리에 남긴다.
+  const href = deal.productId ? tossDetailHref(deal.productId) : undefined;
 
   const inner = (
     <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
@@ -62,25 +62,9 @@ export default function TossDealCard({
           {deal.title}
         </span>
 
-        {/* 홈은 3열이라 카드폭 ~104px. 가격+배지가 한 줄에 안 들어가면 '15,900원'의 '원'까지
-            쪼개져 세로로 깨졌다(줄바꿈 버그). 각 조각은 nowrap로 안 쪼개고, 좁으면 배지만 줄내림. */}
-        <div className="flex flex-wrap items-baseline gap-x-1.5 pt-1">
-          <span className="text-lg font-semibold whitespace-nowrap text-gray-900">
-            {deal.price.toLocaleString()}원
-          </span>
-          {deal.lowestIn30Days && (
-            <span className="text-error-500 text-xs font-bold whitespace-nowrap">30일 최저가</span>
-          )}
-        </div>
-
-        {/* 신뢰 배지: 희소할수록 가치 순으로 앞에. 좁은 카드라 각 조각 nowrap, 넘치면 줄내림. */}
-        {(deal.arrivalGuaranteed || deal.lowestPriceCompensation || deal.specialProduct) && (
+        {/* 신뢰 배지: 가격 신호(최저가 보상)는 빼고 배송·토스특가만. */}
+        {(deal.arrivalGuaranteed || deal.specialProduct) && (
           <div className="flex flex-wrap gap-1 pt-1">
-            {deal.lowestPriceCompensation && (
-              <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[11px] font-medium whitespace-nowrap text-blue-600">
-                최저가 보상
-              </span>
-            )}
             {deal.arrivalGuaranteed && (
               <span className="rounded bg-green-50 px-1.5 py-0.5 text-[11px] font-medium whitespace-nowrap text-green-600">
                 도착보장
@@ -93,8 +77,6 @@ export default function TossDealCard({
             )}
           </div>
         )}
-
-        {deal.unitPrice && <span className="text-xs text-gray-500">{deal.unitPrice}</span>}
 
         {/* 좁은 카드에서 '무료배송'이 글자 단위로 쪼개지던 것 방지 — 각 조각 nowrap, 넘치면 배송만 줄내림 */}
         <div className="flex flex-wrap items-center gap-x-1.5 pt-1 text-xs text-gray-500">

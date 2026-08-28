@@ -29,6 +29,7 @@ import {
 } from '@/shared/lib/device/recent-viewed';
 import type {ProductFlowParamList} from '@/navigations/tab/types';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
+import {isFromTossPath} from '@/entities/home/lib/toss';
 import {
   tabNavigations,
   tabStackNavigations,
@@ -74,10 +75,21 @@ export default function ProductDetailScreen(props: Props) {
   if (productId === null) {
     return <ProductDetailWebViewScreen {...props} />;
   }
-  return <NativeDetail productId={productId} />;
+  return (
+    <NativeDetail
+      productId={productId}
+      hidePrice={isFromTossPath(props.route.params.path)}
+    />
+  );
 }
 
-function NativeDetail({productId}: {productId: number}) {
+function NativeDetail({
+  productId,
+  hidePrice,
+}: {
+  productId: number;
+  hidePrice: boolean;
+}) {
   const scrollRef = useRef<ScrollView>(null);
   const lastScrollY = useRef(0);
   const [showTopButton, setShowTopButton] = useState(false);
@@ -247,21 +259,24 @@ function NativeDetail({productId}: {productId: number}) {
             source={source}
             productId={productId}
             isUserLogin={isLogin}
+            hidePrice={hidePrice}
           />
         </View>
         {/* web 순서: 카톡방 → 쿠팡 고지 → 만료 경고 → 가격추이. 광고는 앱에서 제거. */}
         <KakaoOpenChatPrompt />
         <AffiliateNotice mallName={product.mallName} variant="coupang" />
         <ExpiredProductWarning product={product} onPressProduct={pushProduct} />
-        <PriceHistorySection
-          productId={productId}
-          postedAt={product.postedAt}
-          currentPrice={
-            product.price
-              ? Number(String(product.price).replace(/[^0-9.]/g, '')) || null
-              : null
-          }
-        />
+        {!hidePrice ? (
+          <PriceHistorySection
+            productId={productId}
+            postedAt={product.postedAt}
+            currentPrice={
+              product.price
+                ? Number(String(product.price).replace(/[^0-9.]/g, '')) || null
+                : null
+            }
+          />
+        ) : null}
         {/* 유저 직접 등록 상품은 크롤링 출처가 없어 커뮤니티 반응도 없다(web 과 동일). */}
         {product.uploaderType !== UploaderType.User ? (
           <CommunityReaction productId={productId} isUserLogin={isLogin} />

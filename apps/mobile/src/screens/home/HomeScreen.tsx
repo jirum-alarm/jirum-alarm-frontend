@@ -27,6 +27,7 @@ import HomeBannerCarousel from '@/entities/home/ui/HomeBannerCarousel';
 import JirumRankingSlider from '@/entities/home/ui/JirumRankingSlider';
 import RecommendedKeywordSection from '@/entities/home/ui/RecommendedKeywordSection';
 import TossHomeSection from '@/entities/home/ui/TossHomeSection';
+import {tossDetailPath} from '@/entities/home/lib/toss';
 import HomeHeader from '@/screens/home/ui/HomeHeader';
 import {BannerSkeleton, RankingSkeleton} from '@/screens/home/ui/HomeSkeletons';
 import PressableScale from '@/shared/components/PressableScale';
@@ -112,6 +113,13 @@ export default function HomeScreen() {
   const handlePressProduct = useCallback(
     (id: number) => {
       navigation.push(tabStackNavigations.DETAIL, {path: `/products/${id}`});
+    },
+    [navigation],
+  );
+
+  const handlePressTossProduct = useCallback(
+    (id: number) => {
+      navigation.push(tabStackNavigations.DETAIL, {path: tossDetailPath(id)});
     },
     [navigation],
   );
@@ -309,7 +317,7 @@ export default function HomeScreen() {
                     {/* web: hotdeal 섹션 앞에 토스 특가를 끼운다 */}
                     {section.id === 'hotdeal' && (
                       <TossHomeSection
-                        onPressProduct={handlePressProduct}
+                        onPressProduct={handlePressTossProduct}
                         onPressViewMore={handlePressViewMore}
                       />
                     )}

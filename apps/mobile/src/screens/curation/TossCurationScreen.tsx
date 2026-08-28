@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {HomeQueries, tossInfiniteQuery} from '@/entities/home/api/home.queries';
-import {toTossDeal} from '@/entities/home/lib/toss';
+import {toTossDeal, tossDetailPath} from '@/entities/home/lib/toss';
 import CurationGrid from '@/entities/home/ui/CurationGrid';
 import TossDealCard from '@/entities/home/ui/cards/TossDealCard';
 import {ChipRow, TOSS_SECTIONS} from '@/entities/home/ui/TossHomeSection';
@@ -24,8 +24,8 @@ import type {TabStackParamList} from '@/navigations/tab/types';
  * ★홈의 TossHomeSection 과 카드·탭·변환 로직을 공유하고, 그리드 껍데기는
  * 큐레이션과 공유한다(CurationGrid). 화면이 하는 일은 "섹션 탭 + 무한스크롤"뿐.
  *
- * ★카드는 큐레이션과 공유하지 않는다 — 토스는 `data.toss` 전용 정보(할인율·
- * 평점·배송·신뢰뱃지)를 보여줘서 일반 카드와 공유 필드가 title·price 뿐이다.
+ * ★카드는 큐레이션과 공유하지 않는다 — 토스는 `data.toss` 전용 카드다.
+ * 코너에서는 판매가를 숨기고 상세는 ?from=toss 로 연다.
  */
 
 const CATEGORY_SECTION_ID = 'category';
@@ -88,7 +88,7 @@ export default function TossCurationScreen({
 
   const handlePressProduct = useCallback(
     (id: number) => {
-      navigation.push(tabStackNavigations.DETAIL, {path: `/products/${id}`});
+      navigation.push(tabStackNavigations.DETAIL, {path: tossDetailPath(id)});
     },
     [navigation],
   );

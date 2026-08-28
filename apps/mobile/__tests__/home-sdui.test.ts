@@ -20,6 +20,7 @@ const {
 const {
   toTossDeal,
   TOSS_SECTION_KEYWORD,
+  stripPriceFromTitle,
 } = require('../src/entities/home/lib/toss');
 
 const WEB = path.join(__dirname, '../../web/src');
@@ -241,5 +242,28 @@ describe('토스 딜 변환 — web toss.api.ts 와 동일', () => {
     const deal = toTossDeal({id: '7', title: 'a', price: null, data: null});
     expect(deal.productId).toBe(7);
     expect(deal.price).toBe(0);
+  });
+
+  it('제목에 붙은 판매가를 뗀다', () => {
+    expect(
+      toTossDeal({
+        id: '1',
+        title: '숫꽃게 중짜 1kg당 4-6미 2kg 1개 23,800원',
+        data: null,
+      }).title,
+    ).toBe('숫꽃게 중짜 1kg당 4-6미 2kg 1개');
+  });
+});
+
+describe('stripPriceFromTitle', () => {
+  it('쉼표 가격·단위가를 떼고 원피스는 남긴다', () => {
+    expect(stripPriceFromTitle('돈까스 420g 2팩 14,800원')).toBe(
+      '돈까스 420g 2팩',
+    );
+    expect(stripPriceFromTitle('두부과자 110g 5개 100g당 2,092원')).toBe(
+      '두부과자 110g 5개',
+    );
+    expect(stripPriceFromTitle('원피스 블랙')).toBe('원피스 블랙');
+    expect(stripPriceFromTitle('치약 9900원')).toBe('치약');
   });
 });

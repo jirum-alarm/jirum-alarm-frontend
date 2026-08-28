@@ -10,6 +10,8 @@ declare const __dirname: string;
 
 const read = (p: string) =>
   fs.readFileSync(path.join(__dirname, '..', p), 'utf8');
+const readWeb = (p: string) =>
+  fs.readFileSync(path.join(__dirname, '../../web/src', p), 'utf8');
 
 const {TOSS_SECTION_KEYWORD} = require('../src/entities/home/lib/toss');
 
@@ -76,6 +78,47 @@ describe('토스 섹션·무한스크롤', () => {
   it('무한스크롤은 onEndReached', () => {
     expect(tossScreen).toContain('fetchNextPage');
     expect(grid).toContain('onEndReached');
+  });
+});
+
+describe('토스 특가 코너 가격 미노출', () => {
+  it('웹·앱 카드에 판매가·확인 CTA가 없다', () => {
+    const webCard = readWeb('app/(desktop-ready)/toss/TossDealCard.tsx');
+    expect(webCard).not.toContain('토스에서 가격 확인');
+    expect(webCard).not.toContain('toLocaleString()}원');
+    expect(webCard).toContain('tossDetailHref');
+
+    const nativeCard = read('src/entities/home/ui/cards/TossDealCard.tsx');
+    expect(nativeCard).not.toContain('토스에서 가격 확인');
+    expect(nativeCard).not.toContain('toLocaleString()}원');
+  });
+
+  it('확인 CTA는 상세(from=toss)에만 있다', () => {
+    expect(
+      readWeb('widgets/product-detail/ui/mobile/ProductInfo.tsx'),
+    ).toContain('토스에서 가격 확인');
+    expect(read('src/screens/detail/ui/ProductInfo.tsx')).toContain(
+      '토스에서 가격 확인',
+    );
+  });
+
+  it('토스 코너 → 상세는 ?from=toss', () => {
+    expect(tossScreen).toContain('tossDetailPath');
+    const home = read('src/screens/home/HomeScreen.tsx');
+    expect(home).toContain('handlePressTossProduct');
+    expect(home).toContain('tossDetailPath');
+    expect(read('src/screens/detail/ProductDetailScreen.tsx')).toContain(
+      'isFromTossPath',
+    );
+  });
+
+  it('목록 변환에서 제목 가격을 뗀다', () => {
+    expect(read('src/entities/home/lib/toss.ts')).toContain(
+      'stripPriceFromTitle(p.title)',
+    );
+    expect(readWeb('app/(desktop-ready)/toss/toss.api.ts')).toContain(
+      'stripPriceFromTitle(p.title)',
+    );
   });
 });
 

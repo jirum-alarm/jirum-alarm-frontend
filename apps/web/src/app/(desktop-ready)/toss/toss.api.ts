@@ -2,6 +2,8 @@ import { QueryTossCategoryLabels, QueryTossProducts } from '@/graphql/toss';
 
 import { execute } from '@/shared/lib/http-client';
 
+import { stripPriceFromTitle } from '@/entities/product/lib/from-toss';
+
 import { type TossDeal } from './mock';
 
 // 섹션 id → 서버 keyword 매핑. 서버 ProductKeywordCollection 과 일치해야 함.
@@ -57,7 +59,7 @@ function toDeal(p: {
   return {
     id: p.id,
     productId: Number(p.id),
-    title: p.title,
+    title: stripPriceFromTitle(p.title),
     price: t.salePrice ?? priceNum,
     image: p.thumbnail ?? undefined,
     discountRate: t.discountRate,

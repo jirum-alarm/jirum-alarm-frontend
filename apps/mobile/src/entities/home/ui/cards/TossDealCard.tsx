@@ -9,8 +9,7 @@ import type {TossDeal} from '../../lib/toss';
 
 /**
  * 토스 전용 카드. web TossDealCard.
- * 3열이라 카드폭이 좁다 — web 이 겪은 줄바꿈 버그(가격의 '원'까지 쪼개짐)는
- * RN 에선 numberOfLines 로 방지된다.
+ * 코너에서는 판매가·할인율을 숨긴다. 상세 경로는 호출측이 ?from=toss 를 붙인다.
  */
 export default function TossDealCard({
   deal,
@@ -19,9 +18,7 @@ export default function TossDealCard({
   deal: TossDeal;
   onPress: (id: number) => void;
 }) {
-  const label =
-    deal.badge ??
-    (deal.discountRate ? `${deal.discountRate}% 특가` : undefined);
+  const label = deal.badge;
 
   return (
     <PressableScale
@@ -62,28 +59,8 @@ export default function TossDealCard({
           {deal.title}
         </Text>
 
-        <View className="flex-row flex-wrap items-baseline gap-x-1.5 pt-1">
-          <Text
-            className="text-lg font-semibold text-gray-900"
-            numberOfLines={1}>
-            {deal.price.toLocaleString()}원
-          </Text>
-          {deal.lowestIn30Days ? (
-            <Text className="text-error-500 text-xs font-bold">
-              30일 최저가
-            </Text>
-          ) : null}
-        </View>
-
-        {deal.lowestPriceCompensation ||
-        deal.arrivalGuaranteed ||
-        deal.specialProduct ? (
+        {deal.arrivalGuaranteed || deal.specialProduct ? (
           <View className="flex-row flex-wrap gap-1 pt-1">
-            {deal.lowestPriceCompensation ? (
-              <Badge className="bg-blue-50" textClassName="text-blue-600">
-                최저가 보상
-              </Badge>
-            ) : null}
             {deal.arrivalGuaranteed ? (
               <Badge className="bg-green-50" textClassName="text-green-600">
                 도착보장
@@ -95,12 +72,6 @@ export default function TossDealCard({
               </Badge>
             ) : null}
           </View>
-        ) : null}
-
-        {deal.unitPrice ? (
-          <Text className="text-xs text-gray-500" numberOfLines={1}>
-            {deal.unitPrice}
-          </Text>
         ) : null}
 
         <View className="flex-row flex-wrap items-center gap-x-1.5 pt-1">

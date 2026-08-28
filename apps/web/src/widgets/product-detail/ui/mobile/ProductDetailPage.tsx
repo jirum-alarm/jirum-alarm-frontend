@@ -34,6 +34,7 @@ function ProductDetailPage({
   device,
   initialGuides,
   initialVerdict,
+  hidePrice,
 }: {
   productId: number;
   isUserLogin: boolean;
@@ -41,6 +42,7 @@ function ProductDetailPage({
   device?: CheckDeviceResult;
   initialGuides?: ProductGuideRow[] | null;
   initialVerdict?: ProductPriceVerdict | null;
+  hidePrice?: boolean;
 }) {
   // 백엔드 product.data.toss (수집 배치가 채움). 없으면 토스 블록 미노출.
   const tossData = (initialProduct?.data as ProductData | undefined)?.toss;
@@ -67,6 +69,7 @@ function ProductDetailPage({
               ohouData={ohouData}
               initialGuides={initialGuides}
               initialVerdict={initialVerdict}
+              hidePrice={hidePrice}
             />
             <AdvertiseSlotBanner
               slotLocation={AdvertiseSlotLocation.ProductMainBanner}
@@ -83,15 +86,17 @@ function ProductDetailPage({
 
             <div className="mt-4 mb-12 flex flex-col gap-y-9 px-5">
               <Suspense>
-                <PriceHistorySection
-                  productId={productId}
-                  currentPrice={
-                    initialProduct?.price
-                      ? Number(String(initialProduct.price).replace(/[^0-9.]/g, ''))
-                      : null
-                  }
-                  postedAt={initialProduct?.postedAt}
-                />
+                {!hidePrice && (
+                  <PriceHistorySection
+                    productId={productId}
+                    currentPrice={
+                      initialProduct?.price
+                        ? Number(String(initialProduct.price).replace(/[^0-9.]/g, ''))
+                        : null
+                    }
+                    postedAt={initialProduct?.postedAt}
+                  />
+                )}
               </Suspense>
               {/* 유저 직접 등록 상품은 크롤링 출처(커뮤니티 반응)가 없으므로 숨김.
                   ProductPrefetch 가 서버에서 데이터를 다 받아두므로 Suspense 로 감싸지 않는다.
