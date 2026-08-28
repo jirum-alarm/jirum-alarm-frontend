@@ -4,7 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { TOSS_SECTIONS, type TossDeal } from '@/app/(desktop-ready)/toss/mock';
-import { fetchTossCategoryLabels, fetchTossDeals } from '@/app/(desktop-ready)/toss/toss.api';
+import {
+  fetchTossCategoryLabels,
+  fetchTossDeals,
+  TOSS_HOME_SECTION_IDS,
+} from '@/app/(desktop-ready)/toss/toss.api';
 import TossCategoryTabs from '@/app/(desktop-ready)/toss/TossCategoryTabs';
 import TossDealCard from '@/app/(desktop-ready)/toss/TossDealCard';
 
@@ -14,25 +18,32 @@ import SectionHeader from '@/shared/ui/SectionHeader';
 import PromotionTabs from './PromotionTabs';
 
 const CATEGORY_SECTION_ID = 'category';
+const HOME_SECTION_ID_SET = new Set<string>(TOSS_HOME_SECTION_IDS);
 
 // 홈의 토스 특가 섹션. "쇼핑몰별 모아보기"(GRID_TABBED)와 동일 구조.
 // 카테고리 인기 탭은 2단 — 하위 카테고리 탭이 섹션탭과 그리드 중간에 뜬다(목록과 공통).
 export default function TossHomeSection({ initialDeals }: { initialDeals?: TossDeal[] }) {
-  const tabs = TOSS_SECTIONS.map((s) => ({ id: s.id, label: s.label, variables: {} }));
-  const [activeId, setActiveId] = useState(tabs[0].id);
+  const [activeId, setActiveId] = useState<string>(TOSS_HOME_SECTION_IDS[0]);
   const [activeCat, setActiveCat] = useState<string | undefined>(undefined);
   const isCategory = activeId === CATEGORY_SECTION_ID;
 
-  const { data: categoryLabels = [] } = useQuery({
+  const { data: categoryLabels = [], isFetched: labelsFetched } = useQuery({
     queryKey: ['toss-category-labels'],
     queryFn: fetchTossCategoryLabels,
-    enabled: isCategory,
   });
+
+  const tabs = TOSS_SECTIONS.filter((s) => {
+    if (!HOME_SECTION_ID_SET.has(s.id)) return false;
+    if (s.id === CATEGORY_SECTION_ID && labelsFetched && categoryLabels.length === 0) {
+      return false;
+    }
+    return true;
+  }).map((s) => ({ id: s.id, label: s.label, variables: {} }));
   const cat = isCategory ? (activeCat ?? categoryLabels[0]) : undefined;
 
   // 첫 탭은 서버가 채운 initialDeals 로 첫 렌더에 그린다(HTML 에 카드가 박힘).
   // 다른 탭/카테고리는 그대로 클라이언트가 소유.
-  const isFirstTab = activeId === tabs[0].id && !isCategory;
+  const isFirstTab = activeId === TOSS_HOME_SECTION_IDS[0] && !isCategory;
   const { data: deals = [], isFetched } = useQuery({
     queryKey: ['toss-home-deals', activeId, cat ?? null],
     queryFn: () => fetchTossDeals({ section: activeId, categoryLabel: cat, limit: 6 }),

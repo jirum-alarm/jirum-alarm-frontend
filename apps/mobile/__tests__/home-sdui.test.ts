@@ -20,6 +20,7 @@ const {
 const {
   toTossDeal,
   TOSS_SECTION_KEYWORD,
+  TOSS_HOME_SECTION_IDS,
   stripPriceFromTitle,
 } = require('../src/entities/home/lib/toss');
 
@@ -165,6 +166,22 @@ describe('web 소스와 직접 대조', () => {
     for (const [id, keyword] of Object.entries(TOSS_SECTION_KEYWORD)) {
       expect(block).toContain(`${id}: '${keyword}'`);
     }
+  });
+
+  it('홈 토스 섹션은 공식 Open API 3탭만 노출한다', () => {
+    expect([...TOSS_HOME_SECTION_IDS]).toEqual(['daily', 'best', 'category']);
+    expect(readWeb('app/(desktop-ready)/toss/toss.api.ts')).toContain(
+      "TOSS_HOME_SECTION_IDS = ['daily', 'best', 'category']",
+    );
+    expect(readWeb('widgets/home/ui/TossHomeSection.tsx')).toContain(
+      'TOSS_HOME_SECTION_IDS',
+    );
+    expect(
+      fs.readFileSync(
+        path.join(__dirname, '../src/entities/home/ui/TossHomeSection.tsx'),
+        'utf8',
+      ),
+    ).toContain('homeSections');
   });
 
   it('LIST 는 web 처럼 4개까지만 그린다', () => {

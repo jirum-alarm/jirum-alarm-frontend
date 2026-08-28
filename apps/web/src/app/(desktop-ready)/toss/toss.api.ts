@@ -18,6 +18,12 @@ export const TOSS_SECTION_KEYWORD: Record<string, string> = {
   conversion: '토스_전환율',
 };
 
+/** 홈 토스 섹션에 노출하는 탭. 공식 Open API 피드만.
+ *  today-deals / best-selling / best-categories.
+ *  rising·creator·lowest·conversion 은 비공식 크롤이라 홈에서는 빼 둔다.
+ */
+export const TOSS_HOME_SECTION_IDS = ['daily', 'best', 'category'] as const;
+
 interface TossExt {
   section?: string;
   sellerName?: string;

@@ -6,7 +6,7 @@ import PressableScale from '@/shared/components/PressableScale';
 import {cn} from '@/shared/lib/styling';
 
 import {HomeQueries} from '../api/home.queries';
-import {toTossDeal} from '../lib/toss';
+import {toTossDeal, TOSS_HOME_SECTION_IDS} from '../lib/toss';
 import TossDealCard from './cards/TossDealCard';
 
 /**
@@ -14,13 +14,14 @@ import TossDealCard from './cards/TossDealCard';
  * "쇼핑몰별 모아보기"(GRID_TABBED)와 같은 구조 — 3열 그리드 + 탭.
  *
  * ★ 카테고리 인기 탭만 2단이다 — 하위 카테고리 탭이 섹션탭과 그리드 사이에 뜬다.
- * ★ 실데이터다(8개 섹션 전부 실측 확인). web 의 `mock.ts` 에서 오는 건 타입과
- *   섹션 목록뿐이고 딜은 API 다.
+ * ★ 홈 탭은 공식 Open API 3종(하루특가·BEST·카테고리인기)만.
+ *   나머지는 /toss 목록에서만 보인다.
  */
 
 const CATEGORY_SECTION_ID = 'category';
+const HOME_SECTION_ID_SET = new Set<string>(TOSS_HOME_SECTION_IDS);
 
-/** web TOSS_SECTIONS 의 id/label. 딜 데이터는 API 에서 온다. */
+/** web TOSS_SECTIONS 의 id/label. 딜 데이터는 API 에서 온다. /toss 목록은 전체. */
 export const TOSS_SECTIONS = [
   {id: 'daily', label: '하루특가'},
   {id: 'best', label: '지금인기'},
@@ -39,13 +40,24 @@ export default function TossHomeSection({
   /** web `/toss?tab={activeId}` — 지금 보고 있는 탭 그대로 연다. */
   onPressViewMore?: (link: string, title: string) => void;
 }) {
-  const [activeId, setActiveId] = useState<string>(TOSS_SECTIONS[0].id);
+  const [activeId, setActiveId] = useState<string>(TOSS_HOME_SECTION_IDS[0]);
   const [activeCat, setActiveCat] = useState<string | undefined>(undefined);
   const isCategory = activeId === CATEGORY_SECTION_ID;
 
-  const {data: categoryLabels = []} = useQuery({
+  const {data: categoryLabels = [], isFetched: labelsFetched} = useQuery({
     ...HomeQueries.tossLabels(),
-    enabled: isCategory,
+  });
+
+  const homeSections = TOSS_SECTIONS.filter(s => {
+    if (!HOME_SECTION_ID_SET.has(s.id)) return false;
+    if (
+      s.id === CATEGORY_SECTION_ID &&
+      labelsFetched &&
+      categoryLabels.length === 0
+    ) {
+      return false;
+    }
+    return true;
   });
 
   const cat = isCategory ? activeCat ?? categoryLabels[0] : undefined;
@@ -87,7 +99,7 @@ export default function TossHomeSection({
       </View>
 
       <ChipRow
-        items={TOSS_SECTIONS.map(s => ({id: s.id, label: s.label}))}
+        items={homeSections.map(s => ({id: s.id, label: s.label}))}
         activeId={activeId}
         onSelect={selectTab}
       />

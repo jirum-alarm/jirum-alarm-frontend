@@ -55,6 +55,9 @@ export const TOSS_SECTION_KEYWORD: Record<string, string> = {
   conversion: '토스_전환율',
 };
 
+/** 홈 토스 섹션에 노출하는 탭. 공식 Open API 피드만. web toss.api.ts 와 동일. */
+export const TOSS_HOME_SECTION_IDS = ['daily', 'best', 'category'] as const;
+
 /**
  * unitPrice 를 항상 문자열로 만든다.
  *
