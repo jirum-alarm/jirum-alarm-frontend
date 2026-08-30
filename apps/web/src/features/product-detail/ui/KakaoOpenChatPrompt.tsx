@@ -30,7 +30,9 @@ export default function KakaoOpenChatPrompt({
       target="_blank"
       onClick={onNavigate}
       className={cn(
-        'bg-secondary-50 hover:bg-secondary-100 flex items-center gap-x-3 rounded-lg px-4 py-3 transition-colors',
+        // ponytail: 면 색은 그대로 두고 테두리+채운 버튼으로만 눈에 띄게 한다.
+        // 진한 면으로 올리면 상세에서 가장 강한 요소가 되어 구매 CTA와 경합한다.
+        'border-secondary-200 bg-secondary-50 hover:bg-secondary-100 flex items-center gap-x-3 rounded-lg border px-4 py-3 transition-colors',
         className,
       )}
     >
@@ -46,15 +48,18 @@ export default function KakaoOpenChatPrompt({
       <span className="min-w-0 flex-1">
         {/* "핫딜 Only"는 UTM 캠페인명(hotdeal_only)·봇 설정값이 새어 나온 내부 용어라
             유저에겐 정체불명 고유명사로 읽힌다. 방 성격은 아래 줄이 이미 말한다. */}
-        <span className="block text-sm font-semibold text-gray-800">핫딜 오픈 카톡방 입장하기</span>
+        <span className="block text-sm font-semibold text-gray-800">핫딜 오픈 채팅방 입장하기</span>
         <span className="mt-0.5 block truncate text-xs text-gray-500">
           지름알림이 엄선한 핫딜만 골라 받아보세요!
         </span>
       </span>
-      {/* 이 줄이 클릭 가능하다는 유일한 신호라 대비를 지켜야 한다.
-          secondary-500 은 이 연한 파란 면 위에서 3.50:1 로 AA 미달 —
-          한 단계 진한 secondary-600 이 5.11:1. PriceHistorySection 도 텍스트엔 600을 쓴다. */}
-      <span aria-hidden className="text-secondary-600 shrink-0 text-xs font-semibold">
+      {/* 이 줄이 클릭 가능하다는 유일한 신호였는데 평문이라 그냥 라벨로 읽혔다.
+          다만 카드 전체가 이미 링크라 알약이 "카드 안의 또 다른 버튼"으로 읽히면
+          어색하다 — 그래서 채우지 않고 테두리만 준다(secondary-600 글씨 5.11:1). */}
+      <span
+        aria-hidden
+        className="border-secondary-300 text-secondary-600 shrink-0 rounded-full border bg-white px-3 py-1.5 text-xs font-semibold"
+      >
         입장
       </span>
     </Link>
