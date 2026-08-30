@@ -12,7 +12,7 @@ const TossSessionPanel = () => {
   const [setSession, { loading: saving }] = useMutationSetTossSession({
     onCompleted: (res) => {
       if (res.setTossSession) {
-        setMessage({ type: 'ok', text: '토스 세션이 갱신되었습니다. 발급이 재개됩니다.' });
+        setMessage({ type: 'ok', text: '토스 세션이 갱신되었습니다. 정산 폴링이 재개됩니다.' });
         setToken('');
         refetch();
       } else {
@@ -42,18 +42,24 @@ const TossSessionPanel = () => {
         {statusLoading ? (
           <p className="text-sm text-bodydark2">확인 중...</p>
         ) : (
-          <div className="flex items-center gap-2">
-            <span
-              className={`inline-block h-3 w-3 rounded-full ${
-                hasSession ? 'bg-success' : 'bg-danger'
-              }`}
-            />
-            <span className="text-sm font-medium text-black dark:text-white">
-              {hasSession
-                ? '세션 있음 — 토스 발급 가동 중'
-                : '세션 없음 — 토스 발급 중단됨 (아래에서 갱신 필요)'}
-            </span>
-          </div>
+          <>
+            <div className="flex items-center gap-2">
+              <span
+                className={`inline-block h-3 w-3 rounded-full ${
+                  hasSession ? 'bg-success' : 'bg-danger'
+                }`}
+              />
+              <span className="text-sm font-medium text-black dark:text-white">
+                {hasSession
+                  ? '세션 유효 — 정산 폴링 가능'
+                  : '세션 없음/만료 — 정산 폴링 중단 (아래에서 갱신 필요)'}
+              </span>
+            </div>
+            <p className="mt-2 text-xs text-bodydark2">
+              Redis 키 존재가 아니라 토스 정산 API에 실제로 물어봅니다. 링크 발급은 공식 OAuth2라 이
+              세션과 무관합니다.
+            </p>
+          </>
         )}
       </div>
 
