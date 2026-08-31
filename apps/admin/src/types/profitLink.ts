@@ -63,3 +63,5 @@ export interface TossProfitLinkOutput {
   profitLink?: string | null;
   error?: string | null;
 }
+
+export type OhouProfitLinkOutput = TossProfitLinkOutput;

@@ -33,6 +33,27 @@ export const MutationIssueTossProfitLink = gql`
   }
 `;
 
+export const QueryHasOhouSession = gql`
+  query HasOhouSession {
+    hasOhouSession
+  }
+`;
+
+export const MutationSetOhouSession = gql`
+  mutation SetOhouSession($curl: String!) {
+    setOhouSession(curl: $curl)
+  }
+`;
+
+export const MutationIssueOhouProfitLink = gql`
+  mutation IssueOhouProfitLink($url: String!) {
+    issueOhouProfitLink(url: $url) {
+      profitLink
+      error
+    }
+  }
+`;
+
 // ─── 수익링크 대시보드 ───
 
 export const QueryProfitLinkProviderHealth = gql`

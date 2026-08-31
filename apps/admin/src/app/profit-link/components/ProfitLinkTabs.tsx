@@ -2,15 +2,17 @@
 
 import { useState } from 'react';
 
+import OhouSessionPanel from './OhouSessionPanel';
 import ProfitLinkDashboard from './ProfitLinkDashboard';
 import ThreeHaSessionPanel from './ThreeHaSessionPanel';
 import TossSessionPanel from './TossSessionPanel';
 
-type ProfitLinkTab = 'dashboard' | 'toss' | 'threeHa';
+type ProfitLinkTab = 'dashboard' | 'toss' | 'ohou' | 'threeHa';
 
 const tabs: { key: ProfitLinkTab; label: string }[] = [
   { key: 'dashboard', label: '대시보드' },
   { key: 'toss', label: '토스' },
+  { key: 'ohou', label: '오늘의집' },
   { key: 'threeHa', label: '세시간전 세션' },
 ];
 
@@ -37,6 +39,7 @@ const ProfitLinkTabs = () => {
 
       {activeTab === 'dashboard' && <ProfitLinkDashboard />}
       {activeTab === 'toss' && <TossSessionPanel />}
+      {activeTab === 'ohou' && <OhouSessionPanel />}
       {activeTab === 'threeHa' && <ThreeHaSessionPanel />}
     </div>
   );

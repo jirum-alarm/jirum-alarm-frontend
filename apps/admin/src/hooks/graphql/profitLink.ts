@@ -1,10 +1,13 @@
 import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
 
 import {
+  MutationIssueOhouProfitLink,
   MutationIssueTossProfitLink,
+  MutationSetOhouSession,
   MutationSetThreeHaSession,
   MutationSetTossSession,
   QueryAffiliateSalesTrend,
+  QueryHasOhouSession,
   QueryHasThreeHaSession,
   QueryHasTossSession,
   QueryProfitLinkErrorStats,
@@ -15,6 +18,7 @@ import {
 } from '@/graphql/profitLink';
 import {
   AffiliateSalesDailyOutput,
+  OhouProfitLinkOutput,
   ProfitLinkErrorCountOutput,
   ProfitLinkFunnelDailyOutput,
   ProfitLinkMissedProductOutput,
@@ -61,6 +65,30 @@ export const useMutationIssueTossProfitLink = (
 ) => {
   return useMutation<{ issueTossProfitLink: TossProfitLinkOutput }, { url: string }>(
     MutationIssueTossProfitLink,
+    { ...options },
+  );
+};
+
+export const useQueryHasOhouSession = (options?: QueryHookOptions<{ hasOhouSession: boolean }>) => {
+  return useQuery<{ hasOhouSession: boolean }>(QueryHasOhouSession, {
+    fetchPolicy: 'network-only',
+    ...options,
+  });
+};
+
+export const useMutationSetOhouSession = (
+  options?: MutationHookOptions<{ setOhouSession: boolean }, { curl: string }>,
+) => {
+  return useMutation<{ setOhouSession: boolean }, { curl: string }>(MutationSetOhouSession, {
+    ...options,
+  });
+};
+
+export const useMutationIssueOhouProfitLink = (
+  options?: MutationHookOptions<{ issueOhouProfitLink: OhouProfitLinkOutput }, { url: string }>,
+) => {
+  return useMutation<{ issueOhouProfitLink: OhouProfitLinkOutput }, { url: string }>(
+    MutationIssueOhouProfitLink,
     { ...options },
   );
 };
