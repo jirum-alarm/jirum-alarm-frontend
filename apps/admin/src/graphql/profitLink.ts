@@ -54,6 +54,27 @@ export const MutationIssueOhouProfitLink = gql`
   }
 `;
 
+export const QueryHasKakaoSession = gql`
+  query HasKakaoSession {
+    hasKakaoSession
+  }
+`;
+
+export const MutationSetKakaoSession = gql`
+  mutation SetKakaoSession($curl: String!) {
+    setKakaoSession(curl: $curl)
+  }
+`;
+
+export const MutationIssueKakaoProfitLink = gql`
+  mutation IssueKakaoProfitLink($url: String!) {
+    issueKakaoProfitLink(url: $url) {
+      profitLink
+      error
+    }
+  }
+`;
+
 // ─── 수익링크 대시보드 ───
 
 export const QueryProfitLinkProviderHealth = gql`

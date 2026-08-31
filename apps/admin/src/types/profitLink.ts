@@ -65,3 +65,4 @@ export interface TossProfitLinkOutput {
 }
 
 export type OhouProfitLinkOutput = TossProfitLinkOutput;
+export type KakaoProfitLinkOutput = TossProfitLinkOutput;

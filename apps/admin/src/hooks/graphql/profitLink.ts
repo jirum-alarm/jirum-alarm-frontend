@@ -1,12 +1,15 @@
 import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
 
 import {
+  MutationIssueKakaoProfitLink,
   MutationIssueOhouProfitLink,
   MutationIssueTossProfitLink,
+  MutationSetKakaoSession,
   MutationSetOhouSession,
   MutationSetThreeHaSession,
   MutationSetTossSession,
   QueryAffiliateSalesTrend,
+  QueryHasKakaoSession,
   QueryHasOhouSession,
   QueryHasThreeHaSession,
   QueryHasTossSession,
@@ -18,6 +21,7 @@ import {
 } from '@/graphql/profitLink';
 import {
   AffiliateSalesDailyOutput,
+  KakaoProfitLinkOutput,
   OhouProfitLinkOutput,
   ProfitLinkErrorCountOutput,
   ProfitLinkFunnelDailyOutput,
@@ -89,6 +93,32 @@ export const useMutationIssueOhouProfitLink = (
 ) => {
   return useMutation<{ issueOhouProfitLink: OhouProfitLinkOutput }, { url: string }>(
     MutationIssueOhouProfitLink,
+    { ...options },
+  );
+};
+
+export const useQueryHasKakaoSession = (
+  options?: QueryHookOptions<{ hasKakaoSession: boolean }>,
+) => {
+  return useQuery<{ hasKakaoSession: boolean }>(QueryHasKakaoSession, {
+    fetchPolicy: 'network-only',
+    ...options,
+  });
+};
+
+export const useMutationSetKakaoSession = (
+  options?: MutationHookOptions<{ setKakaoSession: boolean }, { curl: string }>,
+) => {
+  return useMutation<{ setKakaoSession: boolean }, { curl: string }>(MutationSetKakaoSession, {
+    ...options,
+  });
+};
+
+export const useMutationIssueKakaoProfitLink = (
+  options?: MutationHookOptions<{ issueKakaoProfitLink: KakaoProfitLinkOutput }, { url: string }>,
+) => {
+  return useMutation<{ issueKakaoProfitLink: KakaoProfitLinkOutput }, { url: string }>(
+    MutationIssueKakaoProfitLink,
     { ...options },
   );
 };
