@@ -3,6 +3,16 @@ import Button from '@/shared/ui/common/Button';
 import { IllustWarning } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
+export const metadata = {
+  title: '페이지를 찾을 수 없어요 | 지름알림',
+  description: '요청하신 페이지를 찾을 수 없습니다.',
+  robots: { index: false, follow: true },
+  openGraph: {
+    title: '페이지를 찾을 수 없어요 | 지름알림',
+    description: '요청하신 페이지를 찾을 수 없습니다.',
+  },
+};
+
 const NotFoundPage = () => {
   return (
     <div className="max-w-mobile-max mx-auto flex h-[calc(100dvh)] flex-col items-center justify-center">

@@ -9,12 +9,20 @@ import { getAccessToken } from '@/app/actions/token';
 import { ProductService } from '@/shared/api/product';
 import { CATEGORY_MAP } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
-import { defaultMetadata } from '@/shared/config/metadata';
 import { convertToWebp } from '@/shared/lib/utils/image';
 
 import { isFromToss, stripPriceFromTitle } from '@/entities/product/lib/from-toss';
 
 import { CollectProductOnView } from '@/features/product-actions/ui/CollectProductOnView';
+import {
+  buildProductSeoTitle,
+  clipMetaDescription,
+  generateDescription,
+  MISSING_PRODUCT_METADATA,
+  parseNumericPrice,
+  type PriceHistorySeoSummary,
+  summarizePriceHistoryForSeo,
+} from '@/features/product-detail/lib/product-seo';
 import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
 import DesktopProductDetailPage from '@/widgets/product-detail/ui/desktop/ProductDetailPage';
@@ -43,64 +51,14 @@ const getPriceVerdictCached = cache(async (id: number) => {
     return null;
   }
 });
-
-type PriceHistorySeoSummary = {
-  minPrice: number;
-  maxPrice: number;
-  rangeDays: number;
-  pointCount: number;
-  confidence: 'HIGH' | 'LOW';
-};
-
-function parseNumericPrice(rawPrice?: string | null) {
-  if (!rawPrice) {
+/** 댓글 요약 SEO용 — 실패·미생성(커버리지 낮음)이어도 메타는 막지 않음 */
+const getProductAdditionalInfoCached = cache(async (id: number) => {
+  try {
+    return await ProductService.getProductAdditionalInfo({ id });
+  } catch {
     return null;
   }
-
-  const normalized = rawPrice.replace(/[^0-9]/g, '');
-
-  if (!normalized) {
-    return null;
-  }
-
-  const numericValue = Number(normalized);
-
-  return Number.isNaN(numericValue) ? null : numericValue;
-}
-
-function summarizePriceHistoryForSeo(
-  data: Awaited<ReturnType<typeof ProductService.getPriceHistory>> | null | undefined,
-): PriceHistorySeoSummary | null {
-  const history = data?.product?.priceHistory;
-  const points = history?.points;
-  if (!history || !points || points.length < 2) return null;
-
-  const prices = points.map((p) => p.price).filter((p) => Number.isFinite(p) && p > 0);
-  if (prices.length < 2) return null;
-
-  return {
-    minPrice: Math.min(...prices),
-    maxPrice: Math.max(...prices),
-    rangeDays: history.rangeDays,
-    pointCount: points.length,
-    confidence: history.confidence,
-  };
-}
-
-function formatPriceHistorySeoText(summary: PriceHistorySeoSummary): string {
-  const periodLabel =
-    summary.rangeDays >= 360
-      ? `${Math.round(summary.rangeDays / 365)}년`
-      : `${Math.max(1, Math.round(summary.rangeDays / 30))}개월`;
-  const min = summary.minPrice.toLocaleString('ko-KR');
-  const max = summary.maxPrice.toLocaleString('ko-KR');
-
-  // LOW(유사상품)는 오인용 줄이도록 완곡 표기
-  if (summary.confidence === 'LOW') {
-    return `최근 ${periodLabel} 유사 핫딜가 ${min}~${max}원`;
-  }
-  return `최근 ${periodLabel} 핫딜 최저가 ${min}원 · 최고가 ${max}원`;
-}
+});
 
 function resolveCategoryName(product: {
   categoryId?: number | null;
@@ -116,58 +74,10 @@ function resolveCategoryName(product: {
   return product.categoryName ?? undefined;
 }
 
-function generateDescription(
-  productGuides:
-    | { productGuides?: Array<{ title: string; content: string }> | null }
-    | null
-    | undefined,
-  product: {
-    title: string;
-    categoryId?: number | null;
-    categoryName?: string | null;
-    price?: string | null;
-    mallName?: string | null;
-    provider?: { nameKr?: string | null } | null;
-  },
-  categoryName?: string,
-  priceHistorySeo?: PriceHistorySeoSummary | null,
-): string {
-  const historyText = priceHistorySeo ? formatPriceHistorySeoText(priceHistorySeo) : '';
-  const mallName = product.mallName?.trim() || product.provider?.nameKr?.trim() || '';
-  const numericPrice = parseNumericPrice(product.price);
-  const priceText = numericPrice ? `${numericPrice.toLocaleString('ko-KR')}원` : '';
-
-  const guideParts =
-    productGuides?.productGuides
-      ?.filter((g) => g.title?.trim() && g.content?.trim())
-      .map((g) => `${g.title.trim()}: ${g.content.trim().replace(/\s+/g, ' ')}`) ?? [];
-
-  // 쇼핑몰 · 가격 · productGuides (+ 추이) — description은 요약, 상세 구조는 JSON-LD
-  if (guideParts.length > 0) {
-    const head = [
-      mallName ? `쇼핑몰: ${mallName}` : '',
-      // guide에 가격 행이 없으면 상품 가격으로 보완
-      guideParts.some((p) => p.startsWith('가격:')) ? '' : priceText ? `가격: ${priceText}` : '',
-      ...guideParts,
-    ].filter(Boolean);
-
-    return historyText ? `${head.join(', ')} | ${historyText}` : head.join(', ');
-  }
-
-  const resolvedCategoryName = categoryName ?? resolveCategoryName(product);
-  const categoryText = resolvedCategoryName ? `[${resolvedCategoryName}]` : '';
-
-  const parts = [
-    categoryText,
-    product.title,
-    priceText ? `현재가 ${priceText}` : '',
-    historyText,
-    mallName ? `구매처: ${mallName}` : '',
-  ].filter(Boolean);
-
-  return parts.length > 0
-    ? `${parts.join(' | ')} | 지름알림에서 제공하는 초특가 핫딜 상품!`
-    : `${product.title} | 지름알림에서 제공하는 초특가 핫딜 상품!`;
+function priceHistoryFromProduct(
+  data: Awaited<ReturnType<typeof ProductService.getPriceHistory>> | null | undefined,
+): PriceHistorySeoSummary | null {
+  return summarizePriceHistoryForSeo(data?.product?.priceHistory ?? null);
 }
 
 /** productGuides → schema.org PropertyValue (빈 title/content 제외) */
@@ -194,6 +104,7 @@ function generateProductJsonLd(
   productGuides?: { productGuides?: Array<{ title: string; content: string }> | null },
   priceHistorySeo?: PriceHistorySeoSummary | null,
   hidePrice?: boolean,
+  commentSummary?: string | null,
 ) {
   if (!product) return null;
 
@@ -202,9 +113,7 @@ function generateProductJsonLd(
   const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
   const description = hidePrice
     ? product.title
-    : productGuides
-      ? generateDescription(productGuides, product, categoryName, priceHistorySeo)
-      : product.title;
+    : generateDescription(productGuides, product, categoryName, priceHistorySeo, commentSummary);
   const productUrl = `${METADATA_SERVICE_URL}/products/${product.id}`;
   const mallName = product.mallName?.trim() || null;
 
@@ -212,8 +121,17 @@ function generateProductJsonLd(
     ? []
     : [...guidePropertiesToJsonLd(productGuides)];
 
+  const summaryText = commentSummary?.trim();
+  if (summaryText) {
+    additionalProperty.push({
+      '@type': 'PropertyValue',
+      name: '커뮤니티 댓글 요약',
+      value: summaryText,
+    });
+  }
+
   // 시계열 Offer 배열은 Google 권장과 어긋나기 쉬워, 기간 최저/최고만 additionalProperty로 노출
-  if (priceHistorySeo) {
+  if (!hidePrice && priceHistorySeo) {
     additionalProperty.push(
       {
         '@type': 'PropertyValue',
@@ -234,6 +152,7 @@ function generateProductJsonLd(
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.title,
+    url: productUrl,
     image: [image],
     description,
     brand: {
@@ -318,23 +237,27 @@ export async function generateMetadata({
 
   const product = await getProductInfoCached(+id);
   if (!product) {
-    return defaultMetadata;
+    return { ...MISSING_PRODUCT_METADATA };
   }
 
-  const [productGuides, priceHistoryData] = await Promise.all([
+  const [productGuides, priceHistoryData, additionalInfo] = await Promise.all([
     getProductGuidesCached(+product.id),
     getPriceHistoryCached(+product.id),
+    getProductAdditionalInfoCached(+product.id),
   ]);
-  const priceHistorySeo = hidePrice ? null : summarizePriceHistoryForSeo(priceHistoryData);
+  const priceHistorySeo = hidePrice ? null : priceHistoryFromProduct(priceHistoryData);
+  const commentSummary = additionalInfo?.commentSummary?.summary ?? null;
 
   const displayTitle = hidePrice ? stripPriceFromTitle(product.title) : product.title;
-  const title = `${displayTitle} | 지름알림`;
+  const title = buildProductSeoTitle(displayTitle, product.isEnd);
 
   const categoryName = resolveCategoryName(product);
   const priceValue = hidePrice ? null : parseNumericPrice(product.price);
   const description = hidePrice
     ? displayTitle
-    : generateDescription(productGuides, product, categoryName, priceHistorySeo);
+    : clipMetaDescription(
+        generateDescription(productGuides, product, categoryName, priceHistorySeo, commentSummary),
+      );
 
   const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
   const url = `${METADATA_SERVICE_URL}/products/${id}`;
@@ -468,17 +391,20 @@ export default async function ProductDetail({
   if (!product) {
     notFound();
   }
-  const [productGuides, priceHistoryData, priceVerdict] = await Promise.all([
+  const [productGuides, priceHistoryData, priceVerdict, additionalInfo] = await Promise.all([
     getProductGuidesCached(+product.id),
     getPriceHistoryCached(+product.id),
     getPriceVerdictCached(+product.id),
+    getProductAdditionalInfoCached(+product.id),
   ]);
-  const priceHistorySeo = summarizePriceHistoryForSeo(priceHistoryData);
+  const priceHistorySeo = priceHistoryFromProduct(priceHistoryData);
+  const commentSummary = additionalInfo?.commentSummary?.summary ?? null;
   const jsonLd = generateProductJsonLd(
     product,
     productGuides ?? undefined,
     hidePrice ? null : priceHistorySeo,
     hidePrice,
+    commentSummary,
   );
   const breadcrumbLd = generateBreadcrumbJsonLd(product);
 
