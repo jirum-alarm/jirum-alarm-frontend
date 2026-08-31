@@ -48,6 +48,14 @@ const PromotionSectionList = ({
   return (
     <div className="flex flex-col gap-y-8">
       {sections.map((section) => {
+        if (section.type === 'TOSS') {
+          isFirst = false;
+          return (
+            <Fragment key={section.id}>
+              <TossHomeSection initialDeals={tossInitialDeals} />
+            </Fragment>
+          );
+        }
         if (section.type === 'GROUP') {
           const priority = isFirst ? 4 : 0;
           isFirst = false;
@@ -71,7 +79,6 @@ const PromotionSectionList = ({
         isFirst = false;
         return (
           <Fragment key={section.id}>
-            {section.id === 'hotdeal' && <TossHomeSection initialDeals={tossInitialDeals} />}
             <DynamicProductSection section={section} isMobile={isMobile} priorityCount={priority} />
             {renderKeywordSlot(section.id)}
             {renderThemeSlot(section.id)}

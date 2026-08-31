@@ -22,6 +22,7 @@ import {SystemBars} from 'react-native-edge-to-edge';
 import {HomeQueries} from '@/entities/home/api/home.queries';
 import {AdvertiseSlotLocation} from '@/shared/api/gql/graphql';
 import {buildPromotionSections} from '@/entities/home/model/promotion-sections';
+import {mapHomePageSections} from '@/entities/home/lib/map-home-page';
 import DynamicProductSection from '@/entities/home/ui/DynamicProductSection';
 import HomeBannerCarousel from '@/entities/home/ui/HomeBannerCarousel';
 import JirumRankingSlider from '@/entities/home/ui/JirumRankingSlider';
@@ -52,9 +53,8 @@ import {
  * prefetch/dehydrate 를 하지만 RN 엔 서버가 없다. 전부 클라이언트 useQuery 로
  * 내려오고, `isMobile` 은 상수라 데스크톱 분기(`pc:`)가 통째로 사라진다.
  *
- * ★ 섹션 순서는 web PromotionSectionList 와 동일:
- *   [랭킹] → hotdeal(앞에 토스 특가 끼움) → guest-recommended → under-10000
- *   → (키워드 추천) → GROUP(impending·premium) → mall → community → 끝 CTA
+ * ★ 섹션 순서는 서버 homePage 가 내려준다(히어로 슬롯 A/B).
+ *   쿼리 실패 시에만 로컬 카탈로그: toss → hotdeal → guest-recommended → ...
  */
 
 type HomeNavigationProp = NativeStackNavigationProp<TabStackParamList>;
@@ -76,8 +76,9 @@ export default function HomeScreen() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  const {data: tabSources, isPending: isTabSourcesPending} = useQuery(
-    HomeQueries.tabSources(),
+  const {data: tabSources} = useQuery(HomeQueries.tabSources());
+  const {data: homePage, isPending: isHomePagePending} = useQuery(
+    HomeQueries.homePage(),
   );
 
   /**
@@ -101,14 +102,14 @@ export default function HomeScreen() {
    * 섹션 구성. 탭 소스가 아직 없으면 빈 배열로 만들어 키워드 폴백 탭을 쓴다
    * (web 의 Promise.allSettled 실패 경로와 같은 결과).
    */
-  const sections = useMemo(
-    () =>
-      buildPromotionSections({
-        communityProviders: tabSources?.communityProviders ?? [],
-        mallGroups: tabSources?.mallGroups ?? [],
-      }),
-    [tabSources],
-  );
+  const sections = useMemo(() => {
+    const fromServer = mapHomePageSections(homePage?.sections);
+    if (fromServer.length > 0) return fromServer;
+    return buildPromotionSections({
+      communityProviders: tabSources?.communityProviders ?? [],
+      mallGroups: tabSources?.mallGroups ?? [],
+    });
+  }, [homePage, tabSources]);
 
   const handlePressProduct = useCallback(
     (id: number) => {
@@ -288,7 +289,7 @@ export default function HomeScreen() {
           )}
           <View className="h-5" />
 
-          {isTabSourcesPending ? (
+          {isHomePagePending ? (
             <View className="h-40 items-center justify-center">
               <ActivityIndicator size="small" color="#667085" />
             </View>
@@ -312,15 +313,18 @@ export default function HomeScreen() {
                   );
                 }
 
+                if (section.type === 'TOSS') {
+                  return (
+                    <TossHomeSection
+                      key={section.id}
+                      onPressProduct={handlePressTossProduct}
+                      onPressViewMore={handlePressViewMore}
+                    />
+                  );
+                }
+
                 return (
                   <Fragment key={section.id}>
-                    {/* web: hotdeal 섹션 앞에 토스 특가를 끼운다 */}
-                    {section.id === 'hotdeal' && (
-                      <TossHomeSection
-                        onPressProduct={handlePressTossProduct}
-                        onPressViewMore={handlePressViewMore}
-                      />
-                    )}
                     <DynamicProductSection
                       section={section}
                       onPressProduct={handlePressProduct}

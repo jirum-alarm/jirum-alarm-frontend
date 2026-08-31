@@ -46,6 +46,7 @@ export class HomeQueries {
     activeAds: (slotLocation: string) =>
       [...this.keys.all, 'activeAds', slotLocation] as const,
     ranking: () => [...this.keys.all, 'ranking'] as const,
+    homePage: () => [...this.keys.all, 'homePage'] as const,
   };
 
   /**
@@ -66,6 +67,18 @@ export class HomeQueries {
             providers.status === 'fulfilled' ? providers.value : [],
           mallGroups: malls.status === 'fulfilled' ? malls.value : [],
         };
+      },
+      retry: RETRY,
+      staleTime: STALE_TIME,
+    });
+  }
+
+  static homePage() {
+    return queryOptions({
+      queryKey: this.keys.homePage(),
+      queryFn: async () => {
+        const page = await HomeService.getHomePage();
+        return page;
       },
       retry: RETRY,
       staleTime: STALE_TIME,

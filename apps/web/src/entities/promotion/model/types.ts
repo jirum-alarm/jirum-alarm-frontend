@@ -7,7 +7,7 @@ export type ContentPromotionSectionType =
   | 'GRID_TABBED'
   | 'PAGINATED_GRID';
 
-export type PromotionSectionType = ContentPromotionSectionType | 'GROUP';
+export type PromotionSectionType = ContentPromotionSectionType | 'GROUP' | 'TOSS';
 
 export type PromotionDataSourceType = 'GRAPHQL_QUERY' | 'STATIC_LIST';
 
@@ -43,4 +43,12 @@ export interface GroupPromotionSection extends BasePromotionSection {
   sections: ContentPromotionSection[];
 }
 
-export type PromotionSection = ContentPromotionSection | GroupPromotionSection;
+export interface TossPromotionSection extends BasePromotionSection {
+  type: 'TOSS';
+  viewMoreLink?: string;
+}
+
+export type PromotionSection =
+  | ContentPromotionSection
+  | GroupPromotionSection
+  | TossPromotionSection;

@@ -33,6 +33,7 @@ describe('섹션 구성 — web getPromotionSections 와 동일', () => {
   it('섹션 id 와 순서가 web 과 같다', () => {
     const ids = buildPromotionSections(empty).map((s: {id: string}) => s.id);
     expect(ids).toEqual([
+      'toss',
       'hotdeal',
       'guest-recommended',
       'under-10000',
@@ -48,6 +49,7 @@ describe('섹션 구성 — web getPromotionSections 와 동일', () => {
       sections.map((s: {id: string; type: string}) => [s.id, s.type]),
     );
     expect(byId).toMatchObject({
+      toss: 'TOSS',
       hotdeal: 'PAGINATED_GRID',
       'guest-recommended': 'PAGINATED_GRID',
       'under-10000': 'HORIZONTAL_SCROLL',

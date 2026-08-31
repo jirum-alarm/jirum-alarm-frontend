@@ -17,6 +17,8 @@ import {
   QueryActiveAds,
 } from '@/graphql/ad';
 import {HttpClient} from '@/shared/lib/client';
+import {TypedDocumentString} from '@/shared/api/gql/graphql.ts';
+import type {ServerHomeSection} from '@/entities/home/lib/map-home-page';
 import type {
   ActiveAdsQueryVariables,
   CommunityRandomRankingProductsQueryVariables,
@@ -29,6 +31,58 @@ import type {
   RecordAdImpressionsMutationVariables,
   TossProductsQueryVariables,
 } from '@/shared/api/gql/graphql.ts';
+
+type HomePageQuery = {
+  homePage: {
+    experimentId: string;
+    variant: string;
+    sections: ServerHomeSection[];
+  };
+};
+
+const HOME_SECTION_FIELDS = `
+  id
+  title
+  type
+  displayOrder
+  viewMoreLink
+  ... on PaginatedGridSection {
+    dataSource { type queryName variables }
+  }
+  ... on HorizontalScrollSection {
+    dataSource { type queryName variables }
+  }
+  ... on ListSection {
+    dataSource { type queryName variables }
+  }
+  ... on DoubleRowSection {
+    dataSource { type queryName variables }
+  }
+  ... on GridTabbedSection {
+    dataSource { type queryName variables }
+    tabs { id label variables viewMoreLink }
+  }
+`;
+
+const QueryHomePage = new TypedDocumentString<
+  HomePageQuery,
+  Record<string, never>
+>(`
+  query HomePage {
+    homePage {
+      experimentId
+      variant
+      sections {
+        ${HOME_SECTION_FIELDS}
+        ... on GroupSection {
+          sections {
+            ${HOME_SECTION_FIELDS}
+          }
+        }
+      }
+    }
+  }
+`);
 
 /**
  * 홈(SDUI) 데이터 접근.
@@ -94,6 +148,11 @@ export class HomeService {
   static async getMallGroups() {
     const res = await HttpClient.withNoAuth().execute(QueryMallGroups);
     return res.data?.mallGroups ?? [];
+  }
+
+  static async getHomePage() {
+    const res = await HttpClient.withAccessToken().execute(QueryHomePage);
+    return res.data?.homePage ?? null;
   }
 
   static async getRecommendedKeywords() {

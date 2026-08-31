@@ -69,6 +69,13 @@ export function buildPromotionSections({
 
   return [
     {
+      id: 'toss',
+      title: '토스 특가',
+      type: 'TOSS',
+      displayOrder: 0,
+      viewMoreLink: '/toss',
+    },
+    {
       id: 'hotdeal',
       title: '놓치면 아까운 핫딜',
       type: 'PAGINATED_GRID',
@@ -252,6 +259,7 @@ export function findPromotionSectionById(
   id: string,
 ): ContentPromotionSection | undefined {
   for (const section of sections) {
+    if (section.type === 'TOSS') continue;
     if (section.type === 'GROUP') {
       const found = section.sections.find(s => s.id === id);
       if (found) return found;

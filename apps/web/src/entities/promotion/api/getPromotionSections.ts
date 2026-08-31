@@ -5,9 +5,21 @@ import {
 } from '@/shared/api/gql/graphql';
 import { PromotionService } from '@/shared/api/promotion';
 
+import { mapHomePageSections } from '../lib/map-home-page';
 import { ContentPromotionSection, PromotionSection, PromotionTab } from '../model/types';
 
 export const getPromotionSections = async (): Promise<PromotionSection[]> => {
+  try {
+    const page = await PromotionService.getHomePage();
+    const sections = mapHomePageSections(page.sections);
+    if (sections.length > 0) return sections;
+  } catch {
+    // 구스키마/일시 오류면 로컬 카탈로그로 폴백
+  }
+  return getLocalPromotionSections();
+};
+
+const getLocalPromotionSections = async (): Promise<PromotionSection[]> => {
   const [providersResult, mallGroupsResult] = await Promise.allSettled([
     PromotionService.getCommunityProviders(),
     PromotionService.getMallGroups(),
@@ -52,6 +64,13 @@ export const getPromotionSections = async (): Promise<PromotionSection[]> => {
   const hasMallGroupTabs = mallGroupTabs.length > 0;
 
   return [
+    {
+      id: 'toss',
+      title: '토스 특가',
+      type: 'TOSS',
+      displayOrder: 0,
+      viewMoreLink: '/toss',
+    },
     {
       id: 'hotdeal',
       title: '놓치면 아까운 핫딜',
@@ -249,6 +268,7 @@ export const getPromotionSectionById = async (
 ): Promise<ContentPromotionSection | undefined> => {
   const sections = await getPromotionSections();
   for (const section of sections) {
+    if (section.type === 'TOSS') continue;
     if (section.type === 'GROUP') {
       const found = section.sections.find((s) => s.id === id);
       if (found) return found;
