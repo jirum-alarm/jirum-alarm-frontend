@@ -58,3 +58,8 @@ export interface AffiliateSalesDailyOutput {
   count: number;
   commissionSum: number;
 }
+
+export interface TossProfitLinkOutput {
+  profitLink?: string | null;
+  error?: string | null;
+}

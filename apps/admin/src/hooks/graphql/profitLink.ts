@@ -1,6 +1,7 @@
 import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
 
 import {
+  MutationIssueTossProfitLink,
   MutationSetThreeHaSession,
   MutationSetTossSession,
   QueryAffiliateSalesTrend,
@@ -19,6 +20,7 @@ import {
   ProfitLinkMissedProductOutput,
   ProfitLinkProviderHealthOutput,
   ProfitLinkQueueHealthOutput,
+  TossProfitLinkOutput,
 } from '@/types/profitLink';
 
 export const useQueryHasTossSession = (options?: QueryHookOptions<{ hasTossSession: boolean }>) => {
@@ -50,6 +52,15 @@ export const useMutationSetThreeHaSession = (
 ) => {
   return useMutation<{ setThreeHaSession: boolean }, { cookie: string }>(
     MutationSetThreeHaSession,
+    { ...options },
+  );
+};
+
+export const useMutationIssueTossProfitLink = (
+  options?: MutationHookOptions<{ issueTossProfitLink: TossProfitLinkOutput }, { url: string }>,
+) => {
+  return useMutation<{ issueTossProfitLink: TossProfitLinkOutput }, { url: string }>(
+    MutationIssueTossProfitLink,
     { ...options },
   );
 };

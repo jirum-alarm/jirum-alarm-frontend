@@ -11,8 +11,8 @@ const ProfitLinkPageRoute = async () => {
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-black dark:text-white">수익 링크</h2>
         <p className="mt-1 text-sm text-bodydark2">
-          발급·판매 생존 신호, 발급 퍼널, 노출 대비 누락 딜, retry 큐 상태를 한눈에. 토스
-          세션(TBIZAUTH) 갱신은 토스 세션 탭에서.
+          발급·판매 생존 신호, 발급 퍼널, 노출 대비 누락 딜, retry 큐 상태를 한눈에. 토스 상품 URL →
+          수익링크 변환·세션 갱신은 토스 탭에서.
         </p>
       </div>
       <ProfitLinkTabs />

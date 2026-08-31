@@ -24,6 +24,15 @@ export const MutationSetThreeHaSession = gql`
   }
 `;
 
+export const MutationIssueTossProfitLink = gql`
+  mutation IssueTossProfitLink($url: String!) {
+    issueTossProfitLink(url: $url) {
+      profitLink
+      error
+    }
+  }
+`;
+
 // ─── 수익링크 대시보드 ───
 
 export const QueryProfitLinkProviderHealth = gql`

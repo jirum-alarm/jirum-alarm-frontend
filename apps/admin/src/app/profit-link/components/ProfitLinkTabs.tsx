@@ -10,7 +10,7 @@ type ProfitLinkTab = 'dashboard' | 'toss' | 'threeHa';
 
 const tabs: { key: ProfitLinkTab; label: string }[] = [
   { key: 'dashboard', label: '대시보드' },
-  { key: 'toss', label: '토스 세션' },
+  { key: 'toss', label: '토스' },
   { key: 'threeHa', label: '세시간전 세션' },
 ];
 
