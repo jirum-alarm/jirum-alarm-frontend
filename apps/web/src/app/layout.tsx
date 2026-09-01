@@ -39,6 +39,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           title="지름알림"
           type="application/opensearchdescription+xml"
         />
+        {/* ponytail: JSX 로 직접. metadata.alternates 로 두면 라우트가 alternates 를 덮을 때
+            (canonical 만 지정해도) types 가 통째로 날아가 RSS 링크가 사라진다 — Next 메타데이터는
+            top-level key 단위 shallow merge. rel=search 와 같은 방식. */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="지름알림 - 실시간 핫딜"
+          href="/rss.xml"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

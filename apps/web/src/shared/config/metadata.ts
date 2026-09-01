@@ -85,9 +85,8 @@ export const defaultMetadata: Metadata = {
   },
   alternates: {
     canonical: METADATA_SERVICE_URL,
-    types: {
-      'application/rss+xml': `${METADATA_SERVICE_URL}/rss.xml`,
-    },
+    // RSS 링크는 여기 두지 않는다 — 라우트가 alternates 를 덮으면 같이 날아감(shallow merge).
+    // app/layout.tsx 의 <link rel="alternate"> 가 정본.
   },
   robots: {
     index: true,
