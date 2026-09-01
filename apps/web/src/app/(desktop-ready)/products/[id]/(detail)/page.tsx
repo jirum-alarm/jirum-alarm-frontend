@@ -249,10 +249,11 @@ export async function generateMetadata({
   const commentSummary = additionalInfo?.commentSummary?.summary ?? null;
 
   const displayTitle = hidePrice ? stripPriceFromTitle(product.title) : product.title;
-  const title = buildProductSeoTitle(displayTitle, product.isEnd);
 
   const categoryName = resolveCategoryName(product);
   const priceValue = hidePrice ? null : parseNumericPrice(product.price);
+  // 토스 유입(hidePrice)은 가격 노출 금지라 priceValue 가 null → 제목에도 안 붙는다.
+  const title = buildProductSeoTitle(displayTitle, product.isEnd, priceValue);
   const description = hidePrice
     ? displayTitle
     : clipMetaDescription(

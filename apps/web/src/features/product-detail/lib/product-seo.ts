@@ -81,10 +81,47 @@ export function clipMetaDescription(text: string, max: number = META_DESCRIPTION
   return `${t.slice(0, max - 1).trimEnd()}…`;
 }
 
-export function buildProductSeoTitle(displayTitle: string, isEnd?: boolean | null): string {
+/** 제목에 이미 가격이 적혀 있나 — "8,900원", "(8900/무료)", "89000원" 등 커뮤니티 원문 관행. */
+function hasPriceInTitle(title: string): boolean {
+  return /[0-9][0-9,.]{2,}\s*원|\([0-9][0-9,]{2,}/.test(title);
+}
+
+/** 제목에 이미 구매 의도어가 있나. 네이버 실측상 의도어 검색의 CTR 이 2.9배 높다. */
+function hasDealIntentWord(title: string): boolean {
+  return /핫딜|최저가|특가|할인|쿠폰|무료|무배|파지|공구|이벤트/.test(title);
+}
+
+/**
+ * 상품 상세 <title>.
+ *
+ * 가격이 있고 제목이 "그냥 상품명"일 때만 `최저가 N원 핫딜` 을 덧붙인다.
+ * 근거(2026-09-01 네이버 서치어드바이저 report/expose 30일 실측):
+ * 의도어 포함 검색어 CTR 17.1% vs 순수 상품명 5.9% — 2.9배. 전체 CTR 은 1.0%.
+ * 표본 50개 중 56%가 "가격·의도어 둘 다 없는" 제목이라 여기가 개선 여지.
+ *
+ * ponytail: 이미 가격/의도어가 있으면 건드리지 않는다 — 중복 표기가 되레 지저분해지고,
+ * 커뮤니티 원문 제목이 이미 "(2,550원/무료)" 형태를 자주 포함한다.
+ */
+export function buildProductSeoTitle(
+  displayTitle: string,
+  isEnd?: boolean | null,
+  price?: number | null,
+): string {
   const alreadyEnded = /판매종료/.test(displayTitle);
   const suffix = isEnd && !alreadyEnded ? ' (판매종료)' : '';
-  return `${displayTitle}${suffix} | 지름알림`;
+
+  const canAnnotate =
+    !isEnd &&
+    !alreadyEnded &&
+    typeof price === 'number' &&
+    Number.isFinite(price) &&
+    price > 0 &&
+    !hasPriceInTitle(displayTitle) &&
+    !hasDealIntentWord(displayTitle);
+
+  const dealHint = canAnnotate ? ` 최저가 ${price.toLocaleString('ko-KR')}원 핫딜` : '';
+
+  return `${displayTitle}${suffix}${dealHint} | 지름알림`;
 }
 
 type GuideInput =

@@ -79,6 +79,39 @@ describe('buildProductSeoTitle', () => {
       '에어팟 프로 판매종료 | 지름알림',
     );
   });
+
+  it('가격이 있고 제목이 그냥 상품명이면 최저가 핫딜을 붙인다', () => {
+    assert.equal(
+      buildProductSeoTitle('기가바이트 B650M K 메인보드', false, 89000),
+      '기가바이트 B650M K 메인보드 최저가 89,000원 핫딜 | 지름알림',
+    );
+  });
+
+  it('제목에 이미 가격이 있으면 붙이지 않는다', () => {
+    assert.equal(
+      buildProductSeoTitle('메가커피 더블따아세트 (2,550원/무료)', false, 2550),
+      '메가커피 더블따아세트 (2,550원/무료) | 지름알림',
+    );
+  });
+
+  it('제목에 이미 의도어가 있으면 붙이지 않는다', () => {
+    assert.equal(
+      buildProductSeoTitle('경주월드 연간회원권 초핫딜', false, 65400),
+      '경주월드 연간회원권 초핫딜 | 지름알림',
+    );
+  });
+
+  it('종료 상품에는 붙이지 않는다', () => {
+    assert.equal(
+      buildProductSeoTitle('기가바이트 B650M K 메인보드', true, 89000),
+      '기가바이트 B650M K 메인보드 (판매종료) | 지름알림',
+    );
+  });
+
+  it('가격이 없으면(토스 유입 등) 기존과 동일하다', () => {
+    assert.equal(buildProductSeoTitle('에어팟 프로', false, null), '에어팟 프로 | 지름알림');
+    assert.equal(buildProductSeoTitle('에어팟 프로', false, 0), '에어팟 프로 | 지름알림');
+  });
 });
 
 describe('generateDescription', () => {
