@@ -11,6 +11,8 @@ import { CommunityTab } from '@/entities/community';
 
 import { getPostDisplayContent } from '../lib/postContent';
 
+import NoticeAuthor from './NoticeAuthor';
+
 type Post = CommunityPostsQuery['comments'][number];
 
 export default function NoticePostCard({
@@ -30,9 +32,7 @@ export default function NoticePostCard({
       className="flex flex-col border-b border-gray-100 px-5 py-4 transition-transform hover:bg-gray-50 active:scale-[0.98] active:bg-gray-50"
     >
       <div className="flex items-center gap-x-2">
-        <span className="bg-primary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">
-          지름알림
-        </span>
+        <NoticeAuthor />
         <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
         {isNew && (
           <span className="bg-secondary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">

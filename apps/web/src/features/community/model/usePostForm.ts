@@ -42,6 +42,7 @@ export default function usePostForm(
   const [images, setImages] = useState<string[]>(initial.images);
   const [taggedProduct, setTaggedProduct] = useState<TaggedProduct | null>(null);
   const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [isNotice, setIsNotice] = useState(false);
 
   const uploadImages = async (files: FileList | null) => {
     if (!files?.length) return;
@@ -101,6 +102,7 @@ export default function usePostForm(
         content: serialized,
         title: title || undefined,
         productId: taggedProduct?.id,
+        isNotice: isNotice || undefined,
       });
     },
     onSuccess: () => {
@@ -132,6 +134,8 @@ export default function usePostForm(
     isUploadingImages,
     taggedProduct,
     setTaggedProduct,
+    isNotice,
+    setIsNotice,
     submitPost,
     isSubmitting,
     canSubmit,

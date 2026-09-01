@@ -1,7 +1,6 @@
 import { execute } from '@/shared/lib/http-client';
 
 import {
-  AddCommunityPostDocument,
   CommunityPostDocument,
   CommunityPostsDocument,
   LikeCommunityPostDocument,
@@ -69,6 +68,21 @@ const GetCommunityCommentsDocument = new TypedDocumentString<
   }
 `);
 
+// 공지 등록은 어드민(서버 adminUserIds)만 서버가 허용 — 프론트는 옵션만 넘긴다.
+const AddCommunityPostWithNoticeDocument = new TypedDocumentString<
+  { addComment: boolean },
+  { content: string; title?: string; productId?: number; isNotice?: boolean }
+>(`
+  mutation AddCommunityPostWithNotice(
+    $content: String!
+    $title: String
+    $productId: Int
+    $isNotice: Boolean
+  ) {
+    addComment(content: $content, title: $title, productId: $productId, isNotice: $isNotice)
+  }
+`);
+
 const UpdateCommunityPostWithTitleDocument = new TypedDocumentString<
   { updateComment: boolean },
   { id: number; content: string; title?: string }
@@ -96,8 +110,13 @@ export class CommunityService {
     return execute(CommunityPostDocument, { id }).then((res) => res.data);
   }
 
-  static async addPost(variables: { content: string; title?: string; productId?: number }) {
-    return execute(AddCommunityPostDocument, variables as any).then((res) => res.data);
+  static async addPost(variables: {
+    content: string;
+    title?: string;
+    productId?: number;
+    isNotice?: boolean;
+  }) {
+    return execute(AddCommunityPostWithNoticeDocument, variables).then((res) => res.data);
   }
 
   static async updatePost(variables: { id: number; content: string; title?: string }) {

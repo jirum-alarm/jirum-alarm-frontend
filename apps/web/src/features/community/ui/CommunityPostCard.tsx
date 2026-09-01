@@ -14,6 +14,8 @@ import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 import { parsePostContent } from '../lib/postContent';
 
+import NoticeAuthor from './NoticeAuthor';
+
 type Post = CommunityPostsQuery['comments'][number];
 
 export default function CommunityPostCard({ post, tab }: { post: Post; tab: CommunityTab }) {
@@ -33,17 +35,18 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
         {/* 헤더: 유저 정보 */}
         <div className="flex items-center gap-x-2">
           {post.isNotice ? (
-            <span className="bg-primary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">
-              지름알림
-            </span>
+            // 공지는 개인 닉네임 대신 공식 계정으로 표시
+            <NoticeAuthor />
           ) : (
-            <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-500">
-              {isProductComment ? '댓글' : '게시글'}
-            </span>
+            <>
+              <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-500">
+                {isProductComment ? '댓글' : '게시글'}
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                {post.author?.nickname ?? '알 수 없음'}
+              </span>
+            </>
           )}
-          <span className="text-sm font-medium text-gray-700">
-            {post.author?.nickname ?? '알 수 없음'}
-          </span>
           <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
           {post.isNotice && (
             <span className="bg-secondary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">

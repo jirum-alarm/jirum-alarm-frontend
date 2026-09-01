@@ -16,6 +16,7 @@ import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 import { parsePostContent } from '../lib/postContent';
 
 import CommunityCommentSection from './CommunityCommentSection';
+import NoticeAuthor from './NoticeAuthor';
 import PostImages from './PostImages';
 import PostMenu from './PostMenu';
 
@@ -68,14 +69,14 @@ export default function CommunityPostDetailClient({
       {/* 헤더 */}
       <div className="flex items-center justify-between px-5 py-4">
         <div className="flex items-center gap-x-2">
-          {post.isNotice && (
-            <span className="bg-primary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">
-              지름알림
+          {post.isNotice ? (
+            // 공지는 개인 닉네임 대신 공식 계정으로 표시
+            <NoticeAuthor size={24} />
+          ) : (
+            <span className="text-sm font-medium text-gray-700">
+              {post.author?.nickname ?? '알 수 없음'}
             </span>
           )}
-          <span className="text-sm font-medium text-gray-700">
-            {post.author?.nickname ?? '알 수 없음'}
-          </span>
           <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
         </div>
         {isUserLogin && (

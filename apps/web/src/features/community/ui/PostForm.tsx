@@ -1,5 +1,8 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
+
+import { AuthQueries } from '@/entities/auth';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
 
 import usePostForm, { TaggedProduct } from '../model/usePostForm';
@@ -8,6 +11,9 @@ import PostImageUploader from './PostImageUploader';
 import ProductTagModal from './ProductTagModal';
 
 export const POST_FORM_ID = 'community-post-form';
+
+// 서버 CommentService.adminUserIds 와 동일 — 노출용 게이트일 뿐, 최종 검증은 서버가 한다.
+const NOTICE_ADMIN_USER_IDS = ['9'];
 
 export default function PostForm({
   editPostId,
@@ -31,11 +37,16 @@ export default function PostForm({
     isUploadingImages,
     taggedProduct,
     setTaggedProduct,
+    isNotice,
+    setIsNotice,
     submitPost,
     isSubmitting,
     canSubmit,
     isEdit,
   } = usePostForm(editPostId, initialContent, existingTitle);
+
+  const { data: meData } = useQuery(AuthQueries.me());
+  const canWriteNotice = NOTICE_ADMIN_USER_IDS.includes(String(meData?.me?.id));
 
   return (
     <form
@@ -68,6 +79,21 @@ export default function PostForm({
         onUpload={uploadImages}
         onRemove={removeImage}
       />
+
+      {/* 공지 등록 (어드민 전용, 신규 작성만 — 수정에서는 isNotice 변경 불가) */}
+      {!isEdit && canWriteNotice && (
+        <div className="border-t border-gray-100 px-5 py-4">
+          <label className="flex items-center gap-x-2 text-sm font-medium text-gray-700">
+            <input
+              type="checkbox"
+              checked={isNotice}
+              onChange={(e) => setIsNotice(e.target.checked)}
+              className="accent-primary-500 h-4 w-4"
+            />
+            공지로 등록
+          </label>
+        </div>
+      )}
 
       {/* 상품 태그 */}
       <div className="border-t border-gray-100 px-5 py-4">
