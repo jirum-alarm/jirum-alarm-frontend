@@ -82,8 +82,18 @@ export function clipMetaDescription(text: string, max: number = META_DESCRIPTION
 }
 
 /** 제목에 이미 가격이 적혀 있나 — "8,900원", "(8900/무료)", "89000원" 등 커뮤니티 원문 관행. */
-function hasPriceInTitle(title: string): boolean {
+export function hasPriceInTitle(title: string): boolean {
   return /[0-9][0-9,.]{2,}\s*원|\([0-9][0-9,]{2,}/.test(title);
+}
+
+/**
+ * RSS 아이템 제목. 제목에 가격이 없을 때만 덧붙인다.
+ * 커뮤니티 원문이 이미 "(600원)" 을 포함하는 경우가 많아, 무조건 붙이면
+ * "Limbo (600원) (600원)" 처럼 중복된다(2026-09-02 운영 피드 실측).
+ */
+export function buildRssItemTitle(title: string, price?: string | null): string {
+  if (!price?.trim() || hasPriceInTitle(title)) return title;
+  return `${title} (${price})`;
 }
 
 /** 제목에 이미 구매 의도어가 있나. 네이버 실측상 의도어 검색의 CTR 이 2.9배 높다. */

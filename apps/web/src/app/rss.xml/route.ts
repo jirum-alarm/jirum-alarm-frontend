@@ -4,7 +4,10 @@ import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 
-import { buildRssItemDescription } from '@/features/product-detail/lib/product-seo';
+import {
+  buildRssItemDescription,
+  buildRssItemTitle,
+} from '@/features/product-detail/lib/product-seo';
 
 // ponytail: 네이버 서치어드바이저 RSS 수집용. 네이버는 sitemap보다 RSS 수집이 빠르고
 // 핫딜처럼 신선도가 생명인 콘텐츠에 유리. force-dynamic — 최신 핫딜이 즉시 반영돼야 함.
@@ -50,7 +53,7 @@ export async function GET() {
   const items = products
     .map((p) => {
       const link = `${base}/products/${p.id}`;
-      const title = p.price ? `${p.title} (${p.price})` : p.title;
+      const title = buildRssItemTitle(p.title, p.price);
       const pubDate = p.postedAt ? new Date(p.postedAt).toUTCString() : undefined;
       const desc = buildRssItemDescription(p);
       return `    <item>

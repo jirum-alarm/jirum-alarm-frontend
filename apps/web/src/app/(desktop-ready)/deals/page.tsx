@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     title: '핫딜 최저가 모음 | 지름알림',
     description: '인기 상품별 핫딜 최저가를 한곳에 모아 비교하세요.',
     url: '/deals',
+    // openGraph 를 라우트가 지정하면 루트의 images 까지 통째로 교체된다(top-level key shallow merge).
+    // 없으면 네이버·카톡 공유 썸네일이 빈다 — 2026-09-02 운영 HTML 에서 og:image 0개 실측.
+    images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
   },
 };
 

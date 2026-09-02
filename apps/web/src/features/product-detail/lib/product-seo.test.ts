@@ -13,6 +13,7 @@ const {
   buildProductSeoTitle,
   generateDescription,
   buildRssItemDescription,
+  buildRssItemTitle,
 } = require('./product-seo.ts') as typeof import('./product-seo');
 
 describe('parseNumericPrice', () => {
@@ -177,5 +178,25 @@ describe('buildRssItemDescription', () => {
     assert.match(desc, /현재가 89,000원/);
     assert.match(desc, /구매처 쿠팡/);
     assert.match(desc, /지름알림/);
+  });
+});
+
+describe('buildRssItemTitle', () => {
+  it('제목에 가격이 없으면 가격을 덧붙인다', () => {
+    assert.equal(buildRssItemTitle('에어팟 프로', '89,000원'), '에어팟 프로 (89,000원)');
+  });
+
+  it('제목에 이미 가격이 있으면 덧붙이지 않는다', () => {
+    // 운영 피드 실측 사례: "Limbo (600원) (600원)"
+    assert.equal(buildRssItemTitle('Limbo (600원)', '600원'), 'Limbo (600원)');
+    assert.equal(
+      buildRssItemTitle('스팸 클래식 340g x 8개 (26,000원/무배)', '26,000원'),
+      '스팸 클래식 340g x 8개 (26,000원/무배)',
+    );
+  });
+
+  it('가격이 없으면 제목만 쓴다', () => {
+    assert.equal(buildRssItemTitle('8월 세일', null), '8월 세일');
+    assert.equal(buildRssItemTitle('8월 세일', '  '), '8월 세일');
   });
 });

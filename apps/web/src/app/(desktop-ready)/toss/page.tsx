@@ -15,6 +15,8 @@ export const metadata: Metadata = {
     title: '토스 하루특가 | 지름알림',
     description: '오늘만 이 가격, 토스 하루특가를 지름알림에서 한눈에.',
     url: '/toss',
+    // 라우트가 openGraph 를 지정하면 루트 images 가 같이 날아간다 → 공유 썸네일이 빈다.
+    images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
   },
 };
 
@@ -54,6 +56,9 @@ export default async function TossDailyPage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
         />
       )}
+      {/* 페이지 주제를 h1 으로 한 번 선언한다. 본문은 탭부터 시작해 h1 이 없었음(2026-09-02 실측).
+          themes/page.tsx 와 같은 sr-only 관행 — 화면 레이아웃은 그대로 두고 문서 구조만 채운다. */}
+      <h1 className="sr-only">토스 하루특가</h1>
       {/* useSearchParams 는 Suspense 경계 필요(App Router). */}
       <Suspense>
         <TossDailyContainer initialSectionId={initialSection.id} initialDeals={initialDeals} />

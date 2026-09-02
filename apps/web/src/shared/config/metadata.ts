@@ -107,6 +107,9 @@ export const jsonLd = {
   name: siteName,
   description,
   url: METADATA_SERVICE_URL,
+  // 구글은 사이트링크 검색창을 2024-11 에 종료했다. 남겨둔 이유 = 네이버·AI 크롤러가
+  // 사이트 내 검색 진입점으로 읽을 여지가 있고, 틀린 정보가 아니라서 해가 없음.
+  // ponytail: 삭제해도 손해 없고 남겨도 손해 없다 → 건드리지 않는다.
   potentialAction: [
     {
       '@type': 'SearchAction',

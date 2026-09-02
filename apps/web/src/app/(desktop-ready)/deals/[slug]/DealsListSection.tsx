@@ -93,7 +93,7 @@ export default function DealsListSection({
                   <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded bg-gray-50">
                     <Image
                       src={deal.thumbnail}
-                      alt=""
+                      alt={deal.title}
                       fill
                       sizes="56px"
                       className="object-contain"

@@ -155,10 +155,9 @@ function generateProductJsonLd(
     url: productUrl,
     image: [image],
     description,
-    brand: {
-      '@type': 'Brand',
-      name: product.provider?.nameKr || '지름알림',
-    },
+    // brand 는 넣지 않는다. 여기서 쓸 수 있는 값은 provider.nameKr(제보 커뮤니티 = 뽐뿌·맘이베베)
+    // 뿐이고, 그건 제조사가 아니라 출처다 — 구조화 데이터가 화면과 어긋나면 신뢰만 깎인다.
+    // ponytail: 실제 브랜드 컬럼이 상품에 붙으면 그때 채운다.
     category: categoryName,
     ...(additionalProperty.length ? { additionalProperty } : {}),
     // 가격 파싱 실패 시 Offer 자체를 생략한다(price:null 직렬화 방지 — 검색/AI 오인용 차단).
