@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 import { ModelPageService } from '@/shared/api/model-page';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
+import { convertToWebp } from '@/shared/lib/utils/image';
+import ImageComponent from '@/shared/ui/ImageComponent';
 
 import DealsListSection from './DealsListSection';
 import DealsMobileHeader from './DealsMobileHeader';
@@ -239,8 +240,14 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
           <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start">
             {heroImage && (
               <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-lg bg-gray-50">
-                <Image
-                  src={heroImage}
+                {/* webp 우선 + 없으면 원본 폴백. S3 webp 변환 커버리지가 91.8% 라
+                    (2026-09-02 전수 실측: 원본 87.5만 중 7.1만 누락) 폴백 없이 webp 를 쓰면
+                    8% 가 403 으로 깨진다 — CDN 은 폴백을 안 해준다(실측 403).
+                    ImageComponent 는 fallbackSrc 가 있으면 클라 컴포넌트로 가서 priority
+                    preload 가 빠지는데, 히어로 1장 preload 보다 안 깨지는 게 우선. */}
+                <ImageComponent
+                  src={convertToWebp(heroImage) ?? heroImage}
+                  fallbackSrc={heroImage}
                   alt={page.modelName}
                   fill
                   sizes="160px"

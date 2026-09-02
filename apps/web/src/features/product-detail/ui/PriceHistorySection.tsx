@@ -1,7 +1,6 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
@@ -12,7 +11,9 @@ import type {
   ProductPriceHistory,
 } from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
+import { convertToWebp } from '@/shared/lib/utils/image';
 import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
+import ImageComponent from '@/shared/ui/ImageComponent';
 
 import { ProductQueries } from '@/entities/product';
 
@@ -1014,7 +1015,15 @@ function DealPreview({
       >
         <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-md bg-gray-50">
           {deal.thumbnail ? (
-            <Image src={deal.thumbnail} alt="" fill sizes="44px" className="object-contain" />
+            /* webp 우선 + 원본 폴백 (S3 webp 커버리지 91.8%, CDN 은 폴백 안 해줌) */
+            <ImageComponent
+              src={convertToWebp(deal.thumbnail) ?? deal.thumbnail}
+              fallbackSrc={deal.thumbnail}
+              alt=""
+              fill
+              sizes="44px"
+              className="object-contain"
+            />
           ) : (
             <div className="h-full w-full bg-gray-100" />
           )}

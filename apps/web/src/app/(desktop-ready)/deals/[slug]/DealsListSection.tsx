@@ -1,9 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import { useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
+import { convertToWebp } from '@/shared/lib/utils/image';
+import ImageComponent from '@/shared/ui/ImageComponent';
 
 import { Deal, dealComparePrice, HistBasis, isLikelyBundleDeal } from './model-page-insights';
 
@@ -91,8 +92,12 @@ export default function DealsListSection({
               >
                 {deal.thumbnail && (
                   <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded bg-gray-50">
-                    <Image
-                      src={deal.thumbnail}
+                    {/* webp 를 먼저 요청하고, 없으면(S3 변환 누락 8%) 원본으로 폴백한다.
+                        같은 이미지가 원본 169KB vs webp 15KB — 11배 차이(2026-09-02 실측).
+                        이 목록은 한 페이지에 딜이 수백 개라 여기가 모델페이지 전송량의 대부분. */}
+                    <ImageComponent
+                      src={convertToWebp(deal.thumbnail) ?? deal.thumbnail}
+                      fallbackSrc={deal.thumbnail}
                       alt={deal.title}
                       fill
                       sizes="56px"
