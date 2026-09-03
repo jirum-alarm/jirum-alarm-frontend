@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
 import { test } from 'node:test';
 
-import { resolveReturnUrl } from './return-url';
+// tsc 는 '.ts' 확장자 import 를 거부하고(allowImportingTsExtensions off), node --test 는
+// 확장자 없는 ESM 경로를 못 찾는다 → 이 레포의 다른 테스트와 같은 createRequire 패턴을 쓴다.
+// (이 파일은 확장자 없는 import 때문에 그동안 조용히 실패하고 있었다.)
+const require = createRequire(import.meta.url);
+const { resolveReturnUrl } = require('./return-url.ts') as typeof import('./return-url');
 
 const ORIGIN = 'https://jirum-alarm.com';
 

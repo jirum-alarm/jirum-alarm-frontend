@@ -75,6 +75,87 @@ export function formatPriceHistorySeoText(summary: PriceHistorySeoSummary): stri
   return `최근 ${periodLabel} 핫딜 최저가 ${min}원 · 최고가 ${max}원`;
 }
 
+/** 핫딜 가격을 "아직 유효하다"고 주장할 수 있는 기간. 커뮤니티 핫딜 수명은 며칠 단위다. */
+export const OFFER_VALID_DAYS = 7;
+/** 이 일수를 넘긴 딜은 재고 상태를 아예 주장하지 않는다. */
+export const STALE_AFTER_DAYS = 30;
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export type OfferFreshness = {
+  /** schema.org Offer.availability. undefined = 주장하지 않음(필드 생략). */
+  availability?: string;
+  /** schema.org Offer.priceValidUntil (YYYY-MM-DD). */
+  priceValidUntil?: string;
+};
+
+/**
+ * 게시일로 Offer 의 재고·가격 유효기간을 정한다.
+ *
+ * 왜 필요한가: 종료 경로가 사용자 제보와 제목 "종료/품절" 둘뿐이라 시간이 지나도 `isEnd` 가
+ * 안 켜진다(2026-09-02 실측: 1년 이상 지난 딜 60건 중 `isEnd=true` 0건). 그래서 2024년 딜도
+ * `InStock` + 옛 가격으로 나가고, AI 가 그걸 "지금 가격"으로 인용한다.
+ *
+ * 백엔드 자동 종료가 들어오기 전까지의 **완화**다 — 데이터를 고치는 게 아니라 주장을 줄인다.
+ * - 종료 확정: Discontinued (가격 유효기간은 의미 없어 생략)
+ * - 게시일 모름: 현행 유지(InStock) — 근거 없이 상태를 바꾸지 않는다
+ * - 신선(≤30일): InStock + 게시일+7일까지 유효
+ * - 오래됨(>30일): **availability 생략** + 과거 날짜 priceValidUntil
+ *   → OutOfStock 으로 단정하지 않는다(팔릴 수도 있다). 없는 주장이 틀린 주장보다 낫다.
+ */
+export function buildOfferFreshness(
+  postedAt?: string | Date | null,
+  isEnd?: boolean | null,
+  now: number = Date.now(),
+): OfferFreshness {
+  if (isEnd) {
+    return { availability: 'https://schema.org/Discontinued' };
+  }
+
+  const posted = postedAt ? new Date(postedAt) : null;
+  if (!posted || Number.isNaN(posted.getTime())) {
+    return { availability: 'https://schema.org/InStock' };
+  }
+
+  const priceValidUntil = new Date(posted.getTime() + OFFER_VALID_DAYS * DAY_MS)
+    .toISOString()
+    .slice(0, 10);
+  const ageDays = (now - posted.getTime()) / DAY_MS;
+
+  if (ageDays > STALE_AFTER_DAYS) {
+    return { priceValidUntil };
+  }
+
+  return { availability: 'https://schema.org/InStock', priceValidUntil };
+}
+
+/**
+ * 오래된 딜에 붙는 본문 안내 문구. `buildOfferFreshness` 와 **같은 임계**를 써서
+ * 구조화 데이터(availability 생략)와 화면이 같은 말을 하게 한다.
+ *
+ * 종료 확정 상품은 이미 "판매종료" 배지가 있으므로 중복하지 않는다.
+ */
+export function formatDealAgeNotice(
+  postedAt?: string | Date | null,
+  isEnd?: boolean | null,
+  now: number = Date.now(),
+): string | null {
+  if (isEnd) return null;
+
+  const posted = postedAt ? new Date(postedAt) : null;
+  if (!posted || Number.isNaN(posted.getTime())) return null;
+
+  const ageDays = (now - posted.getTime()) / DAY_MS;
+  if (ageDays <= STALE_AFTER_DAYS) return null;
+
+  const label =
+    ageDays >= 365
+      ? `${Math.floor(ageDays / 365)}년 전`
+      : `${Math.max(1, Math.floor(ageDays / 30))}개월 전`;
+
+  return `${label}에 올라온 핫딜이에요. 가격·재고가 지금과 다를 수 있어요.`;
+}
+
 export function clipMetaDescription(text: string, max: number = META_DESCRIPTION_MAX): string {
   const t = text.replace(/\s+/g, ' ').trim();
   if (t.length <= max) return t;

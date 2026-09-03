@@ -1,5 +1,19 @@
 import dayjs from 'dayjs';
 
+/**
+ * `<time datetime>` 에 넣을 절대 시각(UTC ISO). 파싱 실패 시 null.
+ *
+ * 순간(instant)이라 타임존 해석 여지가 없어 서버·클라이언트가 같은 값을 만든다.
+ * 날짜만 잘라 쓰면 KST 기준 자정 근처 딜이 하루 밀리므로 자르지 않는다.
+ */
+export function toIsoInstant(time: string | Date): string | null {
+  if (!time) return null;
+
+  const date = time instanceof Date ? time : new Date(time);
+
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
 export function displayTime(createdAt: string | Date) {
   if (!createdAt) return '';
 

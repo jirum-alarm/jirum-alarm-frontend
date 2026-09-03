@@ -7,16 +7,21 @@ import { checkDevice } from '@/app/actions/agent';
 import { getAccessToken } from '@/app/actions/token';
 
 import { ProductService } from '@/shared/api/product';
+import type { ProductModelPageLink } from '@/shared/api/product/product.service';
 import { CATEGORY_MAP } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
+import { robotsDirective } from '@/shared/config/metadata';
 import { convertToWebp } from '@/shared/lib/utils/image';
 
 import { isFromToss, stripPriceFromTitle } from '@/entities/product/lib/from-toss';
 
 import { CollectProductOnView } from '@/features/product-actions/ui/CollectProductOnView';
 import {
+  buildOfferFreshness,
   buildProductSeoTitle,
   clipMetaDescription,
+  formatDealAgeNotice,
+  formatPriceHistorySeoText,
   generateDescription,
   MISSING_PRODUCT_METADATA,
   parseNumericPrice,
@@ -80,6 +85,20 @@ function priceHistoryFromProduct(
   return summarizePriceHistoryForSeo(data?.product?.priceHistory ?? null);
 }
 
+/**
+ * 서버 HTML 에 넣을 모델 페이지 링크. `basis === 'SIMILAR'` 는 이 상품의 이력이 아니라
+ * 유사 상품 이력이라 모델 페이지와 대응이 약해 링크하지 않는다(기존 CTA 조건과 동일).
+ */
+function modelPageLinkFromProduct(
+  data: Awaited<ReturnType<typeof ProductService.getPriceHistory>> | null | undefined,
+): ProductModelPageLink | null {
+  const modelPage = data?.product?.modelPage ?? null;
+  if (!modelPage?.slug) return null;
+  if (data?.product?.priceHistory?.basis === 'SIMILAR') return null;
+
+  return modelPage;
+}
+
 /** productGuides → schema.org PropertyValue (빈 title/content 제외) */
 function guidePropertiesToJsonLd(
   productGuides?: { productGuides?: Array<{ title: string; content: string }> | null } | null,
@@ -116,6 +135,8 @@ function generateProductJsonLd(
     : generateDescription(productGuides, product, categoryName, priceHistorySeo, commentSummary);
   const productUrl = `${METADATA_SERVICE_URL}/products/${product.id}`;
   const mallName = product.mallName?.trim() || null;
+  // 게시일 기준 재고·가격 유효기간. 오래된 딜을 InStock 으로 단정하지 않는다.
+  const freshness = buildOfferFreshness(product.postedAt, product.isEnd);
 
   const additionalProperty: Array<Record<string, unknown>> = hidePrice
     ? []
@@ -167,9 +188,7 @@ function generateProductJsonLd(
             '@type': 'Offer',
             price: priceValue,
             priceCurrency: 'KRW',
-            availability: product.isEnd
-              ? 'https://schema.org/Discontinued'
-              : 'https://schema.org/InStock',
+            ...freshness,
             url: productUrl,
             seller: {
               '@type': 'Organization',
@@ -183,9 +202,7 @@ function generateProductJsonLd(
             offers: {
               '@type': 'Offer',
               priceCurrency: 'KRW',
-              availability: product.isEnd
-                ? 'https://schema.org/Discontinued'
-                : 'https://schema.org/InStock',
+              ...freshness,
               url: productUrl,
               seller: {
                 '@type': 'Organization',
@@ -327,10 +344,9 @@ export async function generateMetadata({
     alternates: {
       canonical: url,
     },
-    robots: {
-      index: true,
-      follow: true,
-    },
+    // dev 배포는 noindex 로 내려간다 — 여기 하드코딩된 `index: true` 때문에 dev 상품 페이지가
+    // Bing 인덱스와 학습 코퍼스에 들어갔다.
+    robots: robotsDirective,
     other,
   };
 }
@@ -357,7 +373,14 @@ export default async function ProductDetail({
   const device = await checkDevice();
   const { isMobile } = device;
 
-  const renderMobile = (productData?: any, guides?: any, verdict?: any) => {
+  const renderMobile = (
+    productData?: any,
+    guides?: any,
+    verdict?: any,
+    priceRangeText?: string | null,
+    modelPage?: ProductModelPageLink | null,
+    dealAgeNotice?: string | null,
+  ) => {
     return (
       <MobileProductDetailPage
         productId={+id}
@@ -367,10 +390,20 @@ export default async function ProductDetail({
         initialGuides={guides}
         initialVerdict={verdict}
         hidePrice={hidePrice}
+        priceRangeText={priceRangeText}
+        modelPage={modelPage}
+        ageNotice={dealAgeNotice}
       />
     );
   };
-  const renderDesktop = (productData?: any, guides?: any, verdict?: any) => {
+  const renderDesktop = (
+    productData?: any,
+    guides?: any,
+    verdict?: any,
+    priceRangeText?: string | null,
+    modelPage?: ProductModelPageLink | null,
+    dealAgeNotice?: string | null,
+  ) => {
     return (
       <DesktopProductDetailPage
         productId={+id}
@@ -380,6 +413,9 @@ export default async function ProductDetail({
         initialGuides={guides}
         initialVerdict={verdict}
         hidePrice={hidePrice}
+        priceRangeText={priceRangeText}
+        modelPage={modelPage}
+        ageNotice={dealAgeNotice}
       />
     );
   };
@@ -399,6 +435,12 @@ export default async function ProductDetail({
   ]);
   const priceHistorySeo = priceHistoryFromProduct(priceHistoryData);
   const commentSummary = additionalInfo?.commentSummary?.summary ?? null;
+  // 서버 HTML 에 박을 가격 문맥. meta·JSON-LD 와 같은 함수를 써서 문구가 갈리지 않게 한다.
+  const priceRangeText =
+    !hidePrice && priceHistorySeo ? formatPriceHistorySeoText(priceHistorySeo) : null;
+  const modelPageLink = modelPageLinkFromProduct(priceHistoryData);
+  // JSON-LD 가 availability 를 생략하는 것과 같은 임계(30일)로 화면에도 안내를 낸다.
+  const ageNotice = hidePrice ? null : formatDealAgeNotice(product.postedAt, product.isEnd);
   const jsonLd = generateProductJsonLd(
     product,
     productGuides ?? undefined,
@@ -449,11 +491,17 @@ export default async function ProductDetail({
               product ?? undefined,
               productGuides?.productGuides ?? undefined,
               priceVerdict,
+              priceRangeText,
+              modelPageLink,
+              ageNotice,
             )
           : renderMobile(
               product ?? undefined,
               productGuides?.productGuides ?? undefined,
               priceVerdict,
+              priceRangeText,
+              modelPageLink,
+              ageNotice,
             )}
       </ProductPrefetch>
     </>

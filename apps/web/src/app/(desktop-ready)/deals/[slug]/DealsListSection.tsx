@@ -6,7 +6,12 @@ import { cn } from '@/shared/lib/cn';
 import { convertToWebp } from '@/shared/lib/utils/image';
 import ImageComponent from '@/shared/ui/ImageComponent';
 
-import { Deal, dealComparePrice, HistBasis, isLikelyBundleDeal } from './model-page-insights';
+import {
+  Deal,
+  dealComparePrice,
+  HistBasis,
+  isLikelyBundleDeal,
+} from '@/features/deals/lib/model-page-insights';
 
 function won(n?: number | null): string {
   if (n == null) return '-';

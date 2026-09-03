@@ -6,17 +6,19 @@ import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { convertToWebp } from '@/shared/lib/utils/image';
 import ImageComponent from '@/shared/ui/ImageComponent';
 
-import DealsListSection from './DealsListSection';
-import DealsMobileHeader from './DealsMobileHeader';
-import DealsTracking from './DealsTracking';
 import {
+  buildDealsLeadSentence,
   buildTimingInsight,
   Deal,
   HeroPrice,
   rankRepresentatives,
   Representative,
   splitDealsForList,
-} from './model-page-insights';
+} from '@/features/deals/lib/model-page-insights';
+
+import DealsListSection from './DealsListSection';
+import DealsMobileHeader from './DealsMobileHeader';
+import DealsTracking from './DealsTracking';
 
 // 에버그린 모델 페이지 (/deals/{slug}) — 상품별 핫딜 구매 판단 허브. SEO + 상품상세 CTA 유입.
 // 백엔드 model_page(isPublished=true) precompute payload 를 단일 slug 조회로 SSR.
@@ -146,13 +148,56 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
     return histCurrency === 'USD' ? `$${Math.round(n)}` : `${Math.round(n).toLocaleString()}원`;
   };
 
+  const histPrices = histPoints.map((p) => p.price);
+  const histMax = histPrices.length ? Math.max(...histPrices) : 0;
+  const histMin = histPrices.length ? Math.min(...histPrices) : 0;
+  const histBarH = (price: number) => {
+    if (histMax === histMin) return 40;
+    return 20 + ((price - histMin) / (histMax - histMin)) * 52;
+  };
+
+  const timing = buildTimingInsight({
+    deals,
+    histPrices,
+    histBasis,
+    histUnitLabel,
+    heroPrice,
+  });
+  const { active: activeDeals, history: historyDeals } = splitDealsForList(
+    deals,
+    histBasis,
+    histUnitLabel,
+  );
+
+  // 리드 문장 — 본문 첫 문단과 JSON-LD description 이 같은 문장을 쓴다.
+  // 단위가 페이지는 "100ml당 73원" 처럼 단위를 문장 안에 넣어야 뜻이 통한다.
+  const fmtWithUnit = (price: number) =>
+    histBasis === 'unit' && histUnitLabel ? `${histUnitLabel} ${fmtHist(price)}` : fmtHist(price);
+  const leadSentence = buildDealsLeadSentence({
+    modelName: page.modelName,
+    timing,
+    dealCount: page.dealCount,
+    formatPrice: fmtWithUnit,
+  });
+
   const offerPrice = heroPrice?.minPrice ?? null;
+  // 진행 중인 딜이 없으면 재고를 주장하지 않고, 가격 유효기간도 마지막 딜 기준으로 잡는다.
+  // 예전엔 항상 InStock + `오늘+7일` 이라 3년째 딜이 없는 모델도 "지금 살 수 있다"고 말했다.
+  const hasActiveDeal = timing.activeDealCount > 0;
+  const lastDealMs = page.lastDealAt ? Date.parse(page.lastDealAt) : NaN;
+  const priceValidFrom = hasActiveDeal
+    ? Date.now()
+    : Number.isFinite(lastDealMs)
+      ? lastDealMs
+      : Date.now();
   const productLd =
     offerPrice != null
       ? {
           '@context': 'https://schema.org',
           '@type': 'Product',
           name: page.modelName,
+          // 본문 첫 문단과 같은 문장. AI 답변 엔진이 인용할 근거 문장을 구조화 데이터에도 남긴다.
+          description: leadSentence ?? page.metaDescription ?? undefined,
           brand: page.brand ? { '@type': 'Brand', name: page.brand } : undefined,
           url: `${METADATA_SERVICE_URL}/deals/${page.slug}`,
           image: heroImage ? [heroImage] : undefined,
@@ -160,9 +205,9 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             '@type': 'Offer',
             priceCurrency: 'KRW',
             price: Math.round(offerPrice),
-            availability: 'https://schema.org/InStock',
+            ...(hasActiveDeal ? { availability: 'https://schema.org/InStock' } : {}),
             url: `${METADATA_SERVICE_URL}/deals/${page.slug}`,
-            priceValidUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+            priceValidUntil: new Date(priceValidFrom + 7 * 24 * 60 * 60 * 1000)
               .toISOString()
               .slice(0, 10),
           },
@@ -184,27 +229,6 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
     ],
   };
   const jsonLd = productLd ? [productLd, breadcrumbLd] : [breadcrumbLd];
-
-  const histPrices = histPoints.map((p) => p.price);
-  const histMax = histPrices.length ? Math.max(...histPrices) : 0;
-  const histMin = histPrices.length ? Math.min(...histPrices) : 0;
-  const histBarH = (price: number) => {
-    if (histMax === histMin) return 40;
-    return 20 + ((price - histMin) / (histMax - histMin)) * 52;
-  };
-
-  const timing = buildTimingInsight({
-    deals,
-    histPrices,
-    histBasis,
-    histUnitLabel,
-    heroPrice,
-  });
-  const { active: activeDeals, history: historyDeals } = splitDealsForList(
-    deals,
-    histBasis,
-    histUnitLabel,
-  );
   const rankedReps = rankRepresentatives(representatives);
   const bestRep = rankedReps.find((r) => r.isBestUnit);
 
@@ -258,8 +282,10 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             )}
             <div className="min-w-0 flex-1">
               <h1 className="text-xl font-bold">{page.modelName}, 지금 사도 될까?</h1>
-              <p className="mt-1 text-sm text-gray-500">
-                커뮤니티 핫딜을 단위가로 모아, 사도 되는 가격을 알려드립니다.
+              {/* h1 다음 첫 문단 = 답. 수치가 UI 토큰으로만 흩어져 있으면 AI 가 인용할 문장이
+                  없다. 아래 카드와 같은 값을 문장으로 한 번 더 쓴다(JSON-LD description 도 동일). */}
+              <p className="mt-1 text-sm text-gray-600">
+                {leadSentence ?? '커뮤니티 핫딜을 단위가로 모아, 사도 되는 가격을 알려드립니다.'}
               </p>
               <p className="mt-1 text-xs text-gray-400">
                 {page.brand ? `${page.brand} · ` : ''}최근 핫딜 {page.dealCount}건

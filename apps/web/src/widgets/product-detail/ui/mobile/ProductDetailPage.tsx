@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { CheckDeviceResult } from '@/app/actions/agent.types';
 
 import { AdvertiseSlotLocation, ProductInfoFragment, UploaderType } from '@/shared/api/gql/graphql';
+import type { ProductModelPageLink } from '@/shared/api/product/product.service';
 
 import { type ProductData } from '@/entities/product/model/toss-data';
 import ProductDetailImage from '@/entities/product/ui/ProductDetailImage';
@@ -19,6 +20,7 @@ import ViewerCount from '@/features/product-detail/ui/mobile/ViewerCount';
 import NoticeProfitLink from '@/features/product-detail/ui/NoticeProfitUrl';
 import PriceHistorySection from '@/features/product-detail/ui/PriceHistorySection';
 import type { GuideRow as ProductGuideRow } from '@/features/product-detail/ui/ProductGuideMetaRows';
+import ProductPriceContext from '@/features/product-detail/ui/ProductPriceContext';
 import SoftKakaoOpenChatPrompt from '@/features/product-detail/ui/SoftKakaoOpenChatPrompt';
 import { CategoryPopularByProductSection, TogetherViewedSection } from '@/features/product-list/ui';
 
@@ -35,6 +37,9 @@ function ProductDetailPage({
   initialGuides,
   initialVerdict,
   hidePrice,
+  priceRangeText,
+  modelPage,
+  ageNotice,
 }: {
   productId: number;
   isUserLogin: boolean;
@@ -43,6 +48,9 @@ function ProductDetailPage({
   initialGuides?: ProductGuideRow[] | null;
   initialVerdict?: ProductPriceVerdict | null;
   hidePrice?: boolean;
+  priceRangeText?: string | null;
+  modelPage?: ProductModelPageLink | null;
+  ageNotice?: string | null;
 }) {
   // 백엔드 product.data.toss (수집 배치가 채움). 없으면 토스 블록 미노출.
   const tossData = (initialProduct?.data as ProductData | undefined)?.toss;
@@ -70,6 +78,13 @@ function ProductDetailPage({
               initialGuides={initialGuides}
               initialVerdict={initialVerdict}
               hidePrice={hidePrice}
+            />
+            {/* 서버 렌더 — 가격대·모델 페이지 링크. ProductInfo(클라이언트) 바로 아래. */}
+            <ProductPriceContext
+              priceRangeText={hidePrice ? null : priceRangeText}
+              ageNotice={hidePrice ? null : ageNotice}
+              modelPage={hidePrice ? null : modelPage}
+              className="mx-5 mb-6"
             />
             <AdvertiseSlotBanner
               slotLocation={AdvertiseSlotLocation.ProductMainBanner}

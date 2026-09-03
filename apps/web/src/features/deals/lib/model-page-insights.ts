@@ -229,3 +229,82 @@ export function splitDealsForList(
 
   return { active: activeSorted, history: [...history].sort(byPrice) };
 }
+
+/** 숫자 읽기의 종성 유무 — "4060은"(영=ㅇ), "삼다수는". 조사 선택에만 쓴다. */
+const DIGIT_HAS_FINAL: Record<string, boolean> = {
+  '0': true, // 영
+  '1': true, // 일
+  '2': false, // 이
+  '3': true, // 삼
+  '4': false, // 사
+  '5': false, // 오
+  '6': true, // 육
+  '7': true, // 칠
+  '8': true, // 팔
+  '9': false, // 구
+};
+
+/**
+ * 은/는 조사를 붙인다. 361개 모델 페이지의 첫 문장에 쓰이므로 틀리면 바로 눈에 띈다.
+ * 한글 음절은 종성 유무로, 숫자는 읽는 소리로 판단. 그 외(영문 등)는 "는".
+ */
+export function withTopicParticle(word: string): string {
+  const trimmed = word.trim();
+  const last = trimmed.slice(-1);
+  if (!last) return trimmed;
+
+  const code = last.charCodeAt(0);
+  if (code >= 0xac00 && code <= 0xd7a3) {
+    return (code - 0xac00) % 28 === 0 ? `${trimmed}는` : `${trimmed}은`;
+  }
+  if (last in DIGIT_HAS_FINAL) {
+    return DIGIT_HAS_FINAL[last] ? `${trimmed}은` : `${trimmed}는`;
+  }
+  return `${trimmed}는`;
+}
+
+/**
+ * 모델 페이지 리드 문장 — "답을 먼저, 근거를 뒤에".
+ *
+ * 왜: 이 페이지의 판단 근거(적정가·평균·현재 최저가)가 전부 UI 토큰으로만 흩어져 있어서
+ * 문장으로 추출되지 않았다. AI 답변 엔진은 인용할 **문장**이 필요하고, 네이버 AI 브리핑은
+ * 정보형 질의에서 "첫 문단 정의문"을 인용한다. 같은 문장을 JSON-LD `description` 에도 쓴다.
+ *
+ * 가격 표기는 호출자가 넘긴 `formatPrice` 로만 한다 — 단위가/총액·통화 규칙이 페이지에 있다.
+ */
+export function buildDealsLeadSentence(input: {
+  modelName: string;
+  timing: TimingInsight;
+  dealCount: number;
+  formatPrice: (price: number) => string;
+}): string | null {
+  const { modelName, timing, dealCount, formatPrice } = input;
+  const name = modelName.trim();
+  if (!name) return null;
+
+  const sentences: string[] = [];
+
+  if (timing.buyLine != null && timing.buyLine > 0) {
+    sentences.push(
+      `${withTopicParticle(name)} ${formatPrice(timing.buyLine)} 이하면 사도 되는 가격입니다.`,
+    );
+  }
+
+  const evidence: string[] = [];
+  if (dealCount > 0) {
+    evidence.push(`최근 핫딜 ${dealCount.toLocaleString('ko-KR')}건`);
+  }
+  if (timing.avg != null && timing.avg > 0) {
+    evidence.push(`추이 평균 ${formatPrice(timing.avg)}`);
+  }
+  if (timing.current > 0) {
+    const cheaper =
+      timing.savePct != null && timing.savePct > 0 ? ` (평균보다 약 ${timing.savePct}% 저렴)` : '';
+    evidence.push(`지금 진행 중 최저가 ${formatPrice(timing.current)}${cheaper}`);
+  }
+  if (evidence.length > 0) {
+    sentences.push(`${evidence.join(' · ')}.`);
+  }
+
+  return sentences.length > 0 ? sentences.join(' ') : null;
+}

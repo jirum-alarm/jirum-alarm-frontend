@@ -1,6 +1,15 @@
 import { Metadata } from 'next';
 
-import { METADATA_SERVICE_URL } from './env';
+import { IS_INDEXABLE_DEPLOYMENT, METADATA_SERVICE_URL } from './env';
+
+/**
+ * 전 라우트 공통 robots 지시. **라우트가 `robots` 를 직접 쓸 때도 이걸 써야 한다** —
+ * 상품 상세가 `{ index: true }` 를 하드코딩해서 dev 에서도 색인 허용으로 나갔다.
+ * 헤더 쪽 정본은 middleware 의 `X-Robots-Tag`(모든 응답을 덮는다).
+ */
+export const robotsDirective = IS_INDEXABLE_DEPLOYMENT
+  ? { index: true, follow: true }
+  : { index: false, follow: false };
 
 const title = '지름알림: 실시간 초특가 핫딜 정보 모아보기 | 지금 놓치면 끝!';
 const description =
@@ -88,10 +97,7 @@ export const defaultMetadata: Metadata = {
     // RSS 링크는 여기 두지 않는다 — 라우트가 alternates 를 덮으면 같이 날아감(shallow merge).
     // app/layout.tsx 의 <link rel="alternate"> 가 정본.
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: robotsDirective,
   other: {
     'platform:name': siteName,
     'platform:contact': contactEmail,

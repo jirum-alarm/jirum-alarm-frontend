@@ -33,12 +33,21 @@ export const revalidate = 600; // 10분 ISR — 목록은 자주 안 바뀜
 export default async function DealsIndexPage() {
   const pages = await ModelPageService.getPublishedModelPages();
 
+  // 구체 수치 = AI 답변 엔진이 인용할 수 있는 유일한 형태. "여러 상품"은 인용되지 않는다.
+  const totalDeals = pages.reduce((sum, p) => sum + (p.dealCount ?? 0), 0);
+  const leadSentence =
+    pages.length > 0
+      ? `상품 ${pages.length.toLocaleString('ko-KR')}개 · 커뮤니티 핫딜 ${totalDeals.toLocaleString('ko-KR')}건을 단위가로 비교해, 상품마다 사도 되는 가격을 알려드립니다.`
+      : null;
+
   const itemListLd =
     pages.length > 0
       ? {
           '@context': 'https://schema.org',
           '@type': 'ItemList',
           name: '핫딜 최저가 모음',
+          description: leadSentence ?? undefined,
+          numberOfItems: pages.length,
           itemListElement: pages.map((p, i) => ({
             '@type': 'ListItem',
             position: i + 1,
@@ -61,8 +70,8 @@ export default async function DealsIndexPage() {
 
       <header className="mb-5">
         <h1 className="text-2xl font-bold text-black">핫딜 최저가 모음</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          인기 상품별로 커뮤니티 핫딜과 다나와 최저가를 모았어요.
+        <p className="mt-1 text-sm text-gray-600">
+          {leadSentence ?? '인기 상품별로 커뮤니티 핫딜과 다나와 최저가를 모았어요.'}
         </p>
       </header>
 

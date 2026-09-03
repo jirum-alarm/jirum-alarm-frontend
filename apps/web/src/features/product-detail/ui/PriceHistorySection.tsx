@@ -7,7 +7,6 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type {
   PriceHistoryDeal,
   PriceHistoryPoint,
-  ProductModelPageLink,
   ProductPriceHistory,
 } from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
@@ -483,7 +482,6 @@ export default function PriceHistorySection({
   });
 
   const history = data?.product?.priceHistory ?? null;
-  const modelPage = data?.product?.modelPage ?? null;
   const allPoints = history?.points ?? [];
 
   const seedMs = useMemo(
@@ -580,8 +578,6 @@ export default function PriceHistorySection({
   // confidence 게이트는 뺐다: HIGH 를 요구하니 발행 85개가 커버하는 딜 2,469건 중 극소수만
   // CTA 가 떠서 /deals/ 노출이 23페이지(GSC 실측)에 갇혀 있었다. CTA 는 "핫딜 모음" 링크라
   // 가격추이 차트의 신뢰도와 직접 상관이 없고, 오연결 위험은 basis 검사로 이미 막힌다.
-  const showModelPageCta = !!modelPage?.slug && history.basis !== 'SIMILAR';
-
   return (
     <section id="price-history" className="py-0">
       <DetailSectionHeader title="가격 추이" subtitle={subtitle} />
@@ -652,38 +648,7 @@ export default function PriceHistorySection({
         contentStartMs={contentStartMs}
         contentEndMs={contentEndMs}
       />
-
-      {showModelPageCta && modelPage ? <ModelPageCta modelPage={modelPage} /> : null}
     </section>
-  );
-}
-
-function ModelPageCta({ modelPage }: { modelPage: ProductModelPageLink }) {
-  const meta = [
-    modelPage.brand?.trim() || null,
-    modelPage.dealCount > 0 ? `최근 핫딜 ${modelPage.dealCount}건` : null,
-  ]
-    .filter(Boolean)
-    .join(' · ');
-
-  return (
-    <Link
-      href={`/deals/${modelPage.slug}`}
-      data-track="model-page-cta"
-      data-source="price_history"
-      data-slug={modelPage.slug}
-      className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-gray-200 px-4 py-3.5 transition-colors hover:border-gray-300 hover:bg-gray-50"
-    >
-      <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-gray-900">
-          {modelPage.modelName} 핫딜 모음 보기
-        </p>
-        {meta ? <p className="mt-0.5 truncate text-xs text-gray-500">{meta}</p> : null}
-      </div>
-      <span className="shrink-0 text-sm text-gray-400" aria-hidden>
-        →
-      </span>
-    </Link>
   );
 }
 

@@ -14,6 +14,10 @@ const {
   generateDescription,
   buildRssItemDescription,
   buildRssItemTitle,
+  buildOfferFreshness,
+  formatDealAgeNotice,
+  OFFER_VALID_DAYS,
+  STALE_AFTER_DAYS,
 } = require('./product-seo.ts') as typeof import('./product-seo');
 
 describe('parseNumericPrice', () => {
@@ -198,5 +202,108 @@ describe('buildRssItemTitle', () => {
   it('가격이 없으면 제목만 쓴다', () => {
     assert.equal(buildRssItemTitle('8월 세일', null), '8월 세일');
     assert.equal(buildRssItemTitle('8월 세일', '  '), '8월 세일');
+  });
+});
+
+describe('buildOfferFreshness', () => {
+  const DAY = 24 * 60 * 60 * 1000;
+  const now = Date.parse('2026-09-03T00:00:00.000Z');
+  const daysAgo = (n: number) => new Date(now - n * DAY).toISOString();
+
+  it('종료 상품은 Discontinued 이고 가격 유효기간을 주장하지 않는다', () => {
+    const r = buildOfferFreshness(daysAgo(1), true, now);
+    assert.equal(r.availability, 'https://schema.org/Discontinued');
+    assert.equal(r.priceValidUntil, undefined);
+  });
+
+  it('게시일을 모르면 현행(InStock) 을 유지한다 — 근거 없이 상태를 바꾸지 않는다', () => {
+    assert.deepEqual(buildOfferFreshness(null, false, now), {
+      availability: 'https://schema.org/InStock',
+    });
+    assert.deepEqual(buildOfferFreshness('not-a-date', false, now), {
+      availability: 'https://schema.org/InStock',
+    });
+  });
+
+  it('신선한 딜은 InStock + 게시일 기준 유효기간을 함께 낸다', () => {
+    const r = buildOfferFreshness(daysAgo(2), false, now);
+    assert.equal(r.availability, 'https://schema.org/InStock');
+    // 2일 전 게시 + 7일 = 오늘로부터 5일 뒤
+    assert.equal(r.priceValidUntil, '2026-09-08');
+  });
+
+  it('오래된 딜은 availability 를 아예 생략한다(품절로 단정하지 않음)', () => {
+    const r = buildOfferFreshness(daysAgo(STALE_AFTER_DAYS + 1), false, now);
+    assert.equal(r.availability, undefined);
+    assert.ok(r.priceValidUntil);
+    // 과거 날짜가 나가는 것이 의도 — "이 가격은 이미 만료됐다"는 신호
+    assert.ok(Date.parse(r.priceValidUntil!) < now);
+  });
+
+  it('경계: 정확히 STALE_AFTER_DAYS 면 아직 InStock', () => {
+    const r = buildOfferFreshness(daysAgo(STALE_AFTER_DAYS), false, now);
+    assert.equal(r.availability, 'https://schema.org/InStock');
+  });
+
+  it('2024년 딜(실측 회귀): InStock 을 주장하지 않는다', () => {
+    // ChatGPT-User 가 실제로 가져간 /products/2195048 = 2024-04-19 게시, isEnd=false
+    const r = buildOfferFreshness('2024-04-19T00:00:00.000Z', false, now);
+    assert.equal(r.availability, undefined);
+    assert.equal(r.priceValidUntil, '2024-04-26');
+  });
+
+  it('OFFER_VALID_DAYS 만큼 더한다', () => {
+    const r = buildOfferFreshness('2026-09-01T00:00:00.000Z', false, now);
+    const expected = new Date(Date.parse('2026-09-01T00:00:00.000Z') + OFFER_VALID_DAYS * DAY)
+      .toISOString()
+      .slice(0, 10);
+    assert.equal(r.priceValidUntil, expected);
+  });
+});
+
+describe('formatDealAgeNotice', () => {
+  const DAY = 24 * 60 * 60 * 1000;
+  const now = Date.parse('2026-09-03T00:00:00.000Z');
+  const daysAgo = (n: number) => new Date(now - n * DAY).toISOString();
+
+  it('신선한 딜엔 안내를 붙이지 않는다', () => {
+    assert.equal(formatDealAgeNotice(daysAgo(3), false, now), null);
+    assert.equal(formatDealAgeNotice(daysAgo(STALE_AFTER_DAYS), false, now), null);
+  });
+
+  it('종료 확정 상품은 판매종료 배지가 있으므로 중복하지 않는다', () => {
+    assert.equal(formatDealAgeNotice(daysAgo(400), true, now), null);
+  });
+
+  it('게시일을 모르면 아무 말도 하지 않는다', () => {
+    assert.equal(formatDealAgeNotice(null, false, now), null);
+    assert.equal(formatDealAgeNotice('nope', false, now), null);
+  });
+
+  it('한 달 넘으면 개월 단위로 알린다', () => {
+    assert.equal(
+      formatDealAgeNotice(daysAgo(65), false, now),
+      '2개월 전에 올라온 핫딜이에요. 가격·재고가 지금과 다를 수 있어요.',
+    );
+  });
+
+  it('1년 넘으면 연 단위로 알린다 — 2024년 딜(실측 회귀)', () => {
+    const notice = formatDealAgeNotice('2024-04-19T00:00:00.000Z', false, now);
+    assert.equal(notice, '2년 전에 올라온 핫딜이에요. 가격·재고가 지금과 다를 수 있어요.');
+  });
+
+  it('임계를 갓 넘기면 최소 1개월로 표기한다(0개월 금지)', () => {
+    const notice = formatDealAgeNotice(daysAgo(STALE_AFTER_DAYS + 1), false, now);
+    assert.ok(notice?.startsWith('1개월 전'), notice ?? '');
+  });
+
+  it('buildOfferFreshness 와 임계가 같다 — 화면과 구조화 데이터가 어긋나지 않게', () => {
+    const stale = daysAgo(STALE_AFTER_DAYS + 5);
+    assert.ok(formatDealAgeNotice(stale, false, now));
+    assert.equal(buildOfferFreshness(stale, false, now).availability, undefined);
+
+    const fresh = daysAgo(STALE_AFTER_DAYS - 5);
+    assert.equal(formatDealAgeNotice(fresh, false, now), null);
+    assert.equal(buildOfferFreshness(fresh, false, now).availability, 'https://schema.org/InStock');
   });
 });

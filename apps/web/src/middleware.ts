@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { graphql } from '@/shared/api/gql';
 import { decideAuthAction, isProtectedPath } from '@/shared/config/auth-route';
-import { IS_PRD } from '@/shared/config/env';
+import { IS_INDEXABLE_DEPLOYMENT, IS_PRD } from '@/shared/config/env';
 import { GRAPHQL_ENDPOINT } from '@/shared/config/graphql';
 import { PAGE } from '@/shared/config/page';
 import {
@@ -39,6 +39,11 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     },
   });
   ensureDeviceId(request, response);
+  // ⚠️ robots.txt 로 막지 않는다. Disallow 하면 크롤러가 페이지를 못 읽어서 noindex 도 못 보고,
+  // 이미 색인된 dev URL 이 영구히 남는다. 색인에서 빼려면 "크롤 허용 + noindex" 가 정답.
+  if (!IS_INDEXABLE_DEPLOYMENT) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+  }
   return await routeGuard(request, response);
 }
 
