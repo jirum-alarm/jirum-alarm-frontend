@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
-import { redirect, RedirectType } from 'next/navigation';
+import { notFound, redirect, RedirectType } from 'next/navigation';
 
 import { checkDevice } from '@/app/actions/agent';
 
 import { ProductService } from '@/shared/api/product';
+
+import { parseProductId } from '@/entities/product/lib/product-id';
 
 import CommentContainerServer from '@/features/product-comment/ui/CommentContainerServer';
 
@@ -26,11 +28,17 @@ export async function generateMetadata({
 export default async function CommentPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
+  // 상세·related 와 같은 가드. NaN 이 클라이언트로 흘러가면 조회가 조용히 깨진다.
+  const productId = parseProductId(id);
+  if (productId === null) {
+    notFound();
+  }
+
   const { isMobile } = await checkDevice();
 
   if (!isMobile) {
-    redirect(`/products/${id}`, RedirectType.replace);
+    redirect(`/products/${productId}`, RedirectType.replace);
   }
 
-  return <CommentContainerServer productId={+id} />;
+  return <CommentContainerServer productId={productId} />;
 }

@@ -14,6 +14,7 @@ import { robotsDirective } from '@/shared/config/metadata';
 import { convertToWebp } from '@/shared/lib/utils/image';
 
 import { isFromToss, stripPriceFromTitle } from '@/entities/product/lib/from-toss';
+import { parseProductId } from '@/entities/product/lib/product-id';
 
 import { CollectProductOnView } from '@/features/product-actions/ui/CollectProductOnView';
 import {
@@ -251,7 +252,13 @@ export async function generateMetadata({
   const { from } = await searchParams;
   const hidePrice = isFromToss(from);
 
-  const product = await getProductInfoCached(+id);
+  // `/products/null` 처럼 id 가 숫자가 아니면 조회를 던져 500 이 나갔다. 404 로 내린다.
+  const productId = parseProductId(id);
+  if (productId === null) {
+    return { ...MISSING_PRODUCT_METADATA };
+  }
+
+  const product = await getProductInfoCached(productId);
   if (!product) {
     return { ...MISSING_PRODUCT_METADATA };
   }
@@ -277,7 +284,7 @@ export async function generateMetadata({
       );
 
   const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
-  const url = `${METADATA_SERVICE_URL}/products/${id}`;
+  const url = `${METADATA_SERVICE_URL}/products/${productId}`;
 
   const defaultKeywords =
     '실시간, 핫딜, 할인, 초특가, 최저가, 알뜰, 알뜰쇼핑, 쿠폰, 이벤트, 지름알림, 핫딜알림';
@@ -362,6 +369,12 @@ export default async function ProductDetail({
   const { from } = await searchParams;
   const hidePrice = isFromToss(from);
 
+  // generateMetadata 와 같은 가드. 숫자가 아닌 id 는 진짜 404.
+  const productId = parseProductId(id);
+  if (productId === null) {
+    notFound();
+  }
+
   const token = await getAccessToken();
   const isUserLogin = !!token;
 
@@ -383,7 +396,7 @@ export default async function ProductDetail({
   ) => {
     return (
       <MobileProductDetailPage
-        productId={+id}
+        productId={productId}
         isUserLogin={isUserLogin}
         initialProduct={productData}
         device={device}
@@ -406,7 +419,7 @@ export default async function ProductDetail({
   ) => {
     return (
       <DesktopProductDetailPage
-        productId={+id}
+        productId={productId}
         isUserLogin={isUserLogin}
         initialProduct={productData}
         device={device}
@@ -421,7 +434,7 @@ export default async function ProductDetail({
   };
 
   /* JSON-LD 생성을 위한 상품 정보 조회 (generateMetadata와 dedupe됨) */
-  const product = await getProductInfoCached(+id);
+  const product = await getProductInfoCached(productId);
   // 없는/종료된 상품은 soft 404(200+홈 폴백) 대신 진짜 404를 반환한다.
   // 폴백 시 title이 홈과 동일해져 서치어드바이저 "동일 title 다수" 유발.
   if (!product) {
@@ -484,8 +497,8 @@ export default async function ProductDetail({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
         />
       )}
-      <CollectProductOnView productId={+id} />
-      <ProductPrefetch productId={+id}>
+      <CollectProductOnView productId={productId} />
+      <ProductPrefetch productId={productId}>
         {!isMobile
           ? renderDesktop(
               product ?? undefined,

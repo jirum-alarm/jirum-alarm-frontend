@@ -1,10 +1,13 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import { checkDevice } from '@/app/actions/agent';
 
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import SectionHeader from '@/shared/ui/SectionHeader';
+
+import { parseProductId } from '@/entities/product/lib/product-id';
 
 import Footer from '@/widgets/layout/ui/desktop/Footer';
 
@@ -65,9 +68,16 @@ const RelatedProductsLayout = async ({
   children: React.ReactNode;
 }) => {
   const { id } = await params;
+  // ★레이아웃이 페이지보다 먼저 돈다 — 여기서 던지면 page.tsx 의 notFound() 가 실행되기 전에
+  // 500 이 나간다(`/products/null/related` 가 그렇게 500 이었다).
+  const productId = parseProductId(id);
+  if (productId === null) {
+    notFound();
+  }
+
   const { isMobile } = await checkDevice();
 
-  const product = await getProductInfoCached(+id);
+  const product = await getProductInfoCached(productId);
   const displayTitle = product
     ? `${truncateTitle(product.title, isMobile ? 15 : 20)} 관련 상품`
     : '관련 상품';
