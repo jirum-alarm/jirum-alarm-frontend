@@ -15,7 +15,7 @@ const PageTabNavigation = () => {
   return (
     <div className="w-full border-b border-gray-200 bg-white">
       <div className="flex">
-        <Link href="/trending/live" replace={true} className="relative flex-1 text-center">
+        <Link href="/trending/live" className="relative flex-1 text-center">
           <motion.div
             className={cn(
               'py-3 text-base font-medium transition-colors',
@@ -28,7 +28,7 @@ const PageTabNavigation = () => {
             {isLive && <div className="absolute right-0 bottom-0 left-0 h-0.5 bg-gray-900" />}
           </motion.div>
         </Link>
-        <Link href="/trending/ranking" replace={true} className="relative flex-1 text-center">
+        <Link href="/trending/ranking" className="relative flex-1 text-center">
           <motion.div
             className={cn(
               'py-3 text-base font-medium transition-colors',
