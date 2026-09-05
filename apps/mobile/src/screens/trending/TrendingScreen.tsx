@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -19,6 +19,7 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import type {TabStackParamList} from '@/navigations/tab/types';
+import {ChipRowSkeleton, ListRowsSkeleton} from '@/shared/components/Skeletons';
 
 /**
  * 발견 탭. web: app/(desktop-ready)/trending/{live,ranking}
@@ -95,8 +96,10 @@ export default function TrendingScreen() {
       <TrendingTopTabs active={view} onSelect={requestTrendingView} />
 
       {isPending ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="small" color="#667085" />
+        // 빈 화면 + 점 하나 대신 실제 골격(카테고리 칩 + 상품 행)을 그린다.
+        <View className="flex-1" style={{gap: 8, paddingTop: 12}}>
+          <ChipRowSkeleton />
+          <ListRowsSkeleton />
         </View>
       ) : isError ? (
         <View className="flex-1 pt-4">

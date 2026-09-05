@@ -24,6 +24,7 @@ import type {NotificationItem} from '@/shared/api/notification';
 import {useNotificationsViewModel} from './model/useNotificationsViewModel';
 import AlarmItem from './ui/AlarmItem';
 import NoAlerts from './ui/NoAlerts';
+import {ListRowsSkeleton} from '@/shared/components/Skeletons';
 
 /** web PageHeader 와 같은 높이(h-14)·색·경계선. */
 const HEADER_HEIGHT = 56;
@@ -165,9 +166,8 @@ export default function AlarmScreen() {
       {isError ? (
         <SectionErrorRow label="알림" onRetry={refetch} />
       ) : isPending ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="small" color="#667085" />
-        </View>
+        // 빈 화면 + 점 하나 대신 알림 행 골격을 그린다.
+        <ListRowsSkeleton count={7} />
       ) : noData ? (
         <NoAlerts onPressKeyword={goKeywordSettings} />
       ) : (

@@ -1,5 +1,7 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {Animated, Dimensions, View} from 'react-native';
+
+import {useShimmer} from '@/shared/components/Skeletons';
 
 /**
  * 첫 화면 스켈레톤. 배너·랭킹이 준비될 때까지 자리를 잡아 둔다.
@@ -11,32 +13,6 @@ import {Animated, Dimensions, View} from 'react-native';
  * web 은 SSR 로 실제 카드를 미리 그리지만(RankingSkeleton 의 RankingPreview)
  * RN 엔 그 데이터가 없어 형태만 같은 회색 판으로 둔다.
  */
-
-/** 은은한 깜빡임. 정지된 회색 판은 "멈춘 화면"처럼 보인다. */
-function useShimmer() {
-  const opacity = useRef(new Animated.Value(0.5)).current;
-
-  useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 700,
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 0.5,
-          duration: 700,
-          useNativeDriver: true,
-        }),
-      ]),
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [opacity]);
-
-  return opacity;
-}
 
 /** HomeBannerCarousel 과 같은 크기(높이 92, 폭 화면-50). */
 export function BannerSkeleton() {
