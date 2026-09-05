@@ -119,8 +119,9 @@ function useHasNewAlarm() {
 const BottomNavComponent = () => {
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
-  useHeaderVisibility();
-  const isBottomNavVisible = true;
+  const scrollVisibility = useHeaderVisibility();
+  // ponytail: 홈은 항상 노출 — 나머지 탭 루트에서만 아래로 스크롤 시 숨긴다.
+  const isBottomNavVisible = pathName === PAGE.HOME ? true : scrollVisibility;
   const hasNewAlarm = useHasNewAlarm();
 
   // data-bottom-nav 는 root layout 이 서버에서 심는다 — 여기서 useLayoutEffect 로

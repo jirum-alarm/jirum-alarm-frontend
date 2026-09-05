@@ -88,6 +88,16 @@ describe('소스 계약', () => {
     assert.doesNotMatch(SOURCE, /if \(isHydrated && isJirumAlarmApp\) return <TabScrollTopButton/);
   });
 
+  it('아래로 스크롤하면 숨는다 — isBottomNavVisible 하드코딩 금지', () => {
+    // 2026-03-27 커뮤니티 수정 커밋에서 `const isBottomNavVisible = true;` 로 굳어
+    // 스크롤 숨김이 조용히 죽었다. 홈만 예외로 항상 노출.
+    assert.doesNotMatch(SOURCE, /isBottomNavVisible = true;/);
+    assert.match(
+      SOURCE,
+      /const isBottomNavVisible = pathName === PAGE\.HOME \? true : scrollVisibility;/,
+    );
+  });
+
   it('TAB_ROOT_PATHS 가 앱과 같은 6개 경로를 담는다', () => {
     const block = TAB_ROOT_SOURCE.match(/TAB_ROOT_PATHS[^=]*=\s*\[([\s\S]*?)\]/)?.[1] ?? '';
     for (const token of [
