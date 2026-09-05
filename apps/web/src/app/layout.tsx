@@ -1,11 +1,18 @@
 import '@/shared/style/globals.css';
 
+import { headers } from 'next/headers';
 import { PublicEnvScript } from 'next-runtime-env';
 
 import { AppProvider } from '@/app/(app)/providers';
 
 import { defaultMetadata, jsonLd, organizationLd } from '@/shared/config/metadata';
+import { isTabRootPath } from '@/shared/config/tab-root';
 import { pretendard } from '@/shared/lib/fonts';
+
+import { PATHNAME_HEADER } from '../proxy';
+
+import { checkDevice } from './actions/agent';
+import { getAccessToken } from './actions/token';
 
 import type { Metadata, Viewport } from 'next';
 
@@ -24,9 +31,25 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [device, accessToken, headersList] = await Promise.all([
+    checkDevice(),
+    getAccessToken(),
+    headers(),
+  ]);
+
+  // 웹 바텀네비는 앱이 아니면서 탭 루트 경로일 때만 뜬다. 그 조건을 서버에서
+  // 확정해 <html> 에 심어야 첫 페인트부터 하단 여백이 잡힌다 — 예전엔
+  // BottomNav 의 useLayoutEffect 가 하이드레이션 후에 붙여 56px 이 밀렸다.
+  const pathname = headersList.get(PATHNAME_HEADER) ?? '';
+  const hasWebBottomNav = !device.isJirumAlarmApp && isTabRootPath(pathname);
+
   return (
-    <html lang="ko" className={`${pretendard.className} antialiased`}>
+    <html
+      lang="ko"
+      className={`${pretendard.className} antialiased`}
+      data-bottom-nav={hasWebBottomNav ? 'true' : undefined}
+    >
       <head>
         <PublicEnvScript />
         <link rel="preconnect" href="https://cdn.jirum-alarm.com" crossOrigin="" />
@@ -61,7 +84,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="author" content="지름알림" />
       </head>
       <body>
-        <AppProvider>{children}</AppProvider>
+        <AppProvider device={device} isLoggedIn={!!accessToken}>
+          {children}
+        </AppProvider>
       </body>
     </html>
   );

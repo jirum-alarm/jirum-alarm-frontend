@@ -3,9 +3,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { usePathname } from 'next/navigation';
-import { createElement, useEffect, useLayoutEffect, useRef } from 'react';
+import { createElement, useEffect, useRef } from 'react';
 
 import { PAGE } from '@/shared/config/page';
+import { isTabRootPath } from '@/shared/config/tab-root';
 import { useDevice } from '@/shared/hooks/useDevice';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
@@ -84,31 +85,6 @@ const BottomNavList = [
   },
 ];
 
-/**
- * 바텀네비는 탭 루트에서만 보인다 — 앱(RN 네이티브 탭바)과 같은 규칙.
- *
- * 앱은 `apps/mobile/src/shared/lib/navigation/tab-routing.ts` 의 `isTabRootUrl` 이
- * 이 목록과 동일하게 판정해, 하위 페이지(가입 정보·편집 폼·글 상세 등)에서는 탭바를 감춘다.
- * 웹은 각 탭의 isActive(startsWith)로 렌더를 결정해서 하위 경로까지 네비가 남았고,
- * 같은 화면이 웹에선 나오고 앱에선 안 나와 동작이 갈렸다.
- *
- * ⚠️ 목록을 고칠 땐 앱의 `tabRootPaths` 도 같이 고쳐야 한다(두 곳이 짝).
- */
-const TAB_ROOT_PATHS: string[] = [
-  PAGE.HOME,
-  PAGE.TRENDING_RANKING,
-  PAGE.TRENDING_LIVE,
-  PAGE.COMMUNITY,
-  PAGE.ALARM,
-  PAGE.MYPAGE,
-];
-
-function isTabRootPath(pathName: string) {
-  // 트레일링 슬래시 정규화('/mypage/' 도 루트). '/' 자체는 그대로 둔다.
-  const path = pathName.length > 1 ? pathName.replace(/\/+$/, '') : pathName;
-  return TAB_ROOT_PATHS.includes(path);
-}
-
 function useHasNewAlarm() {
   const pathName = usePathname();
   const { isLoggedIn } = useIsLoggedIn();
@@ -147,12 +123,8 @@ const BottomNavComponent = () => {
   const isBottomNavVisible = true;
   const hasNewAlarm = useHasNewAlarm();
 
-  useLayoutEffect(() => {
-    document.documentElement.dataset.bottomNav = 'true';
-    return () => {
-      delete document.documentElement.dataset.bottomNav;
-    };
-  }, []);
+  // data-bottom-nav 는 root layout 이 서버에서 심는다 — 여기서 useLayoutEffect 로
+  // 붙이면 SSR 첫 페인트가 여백 0 으로 그려진 뒤 56px 밀린다.
 
   const isActiveNav = (nav: (typeof BottomNavList)[number]) => {
     return nav.isActive(pathName);
@@ -221,8 +193,9 @@ export default function BottomNav() {
   const pathName = usePathname();
 
   // 앱은 네이티브 탭바를 같은 6개 경로에서 띄운다 → 웹 네비까지 그리면 두 겹으로 쌓인다.
-  // ponytail: isHydrated 를 안 본다. UA 판정 전(SSR·첫 페인트)엔 false 라 웹 네비가
-  // 잠깐 떴다 사라지는데, isHydrated 를 AND 로 걸면 그 깜빡임이 오히려 보장된다.
+  // device 는 root layout 이 서버 UA 판정 결과를 atom 에 심어주므로 첫 렌더부터
+  // 정답이다 — 예전엔 useEffect 2단(useIsHydrated → setDevice)을 거치느라
+  // 앱에서도 웹 네비가 한 프레임 떴다 사라졌다.
   if (isJirumAlarmApp) return <TabScrollTopButton />;
 
   if (!isTabRootPath(pathName)) return null;

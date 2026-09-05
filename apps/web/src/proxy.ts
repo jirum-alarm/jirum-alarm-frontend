@@ -31,8 +31,21 @@ const ensureDeviceId = (req: NextRequest, res: NextResponse): void => {
   applySetCookie(req, res);
 };
 
+/**
+ * 서버 컴포넌트는 요청 경로를 알 수 없다(headers()만 있고 pathname 은 없음).
+ * root layout 이 첫 페인트에 바텀네비 여백을 미리 잡으려면 경로가 필요해서
+ * 여기서 헤더로 심어 넘긴다.
+ */
+export const PATHNAME_HEADER = 'x-jirum-pathname';
+
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   // const response = await handlePostHog(request);
+
+  // ⚠️ request.headers 자체에 심는다. applySetCookie 가 req.headers 를 원본으로
+  // 새 override 를 만들어 통째로 덮어쓰기 때문에, NextResponse.next({request:{headers}})
+  // 로만 넘기면 토큰 리프레시 경로에서 이 헤더가 조용히 사라진다.
+  request.headers.set(PATHNAME_HEADER, request.nextUrl.pathname);
+
   const response = NextResponse.next({
     request: {
       headers: new Headers(request.headers),

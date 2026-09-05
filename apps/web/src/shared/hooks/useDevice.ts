@@ -1,9 +1,7 @@
 'use client';
 
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { useEffect } from 'react';
-
-import { useIsHydrated } from './useIsHydrated';
 
 type DeviceInfo = {
   isMobile: boolean;
@@ -16,19 +14,20 @@ type DeviceInfo = {
   isMobileBrowser: boolean;
 };
 
+const EMPTY_DEVICE: DeviceInfo = {
+  isMobile: false,
+  isSafari: false,
+  isJirumAlarmIOSApp: false,
+  isJirumAlarmAndroidApp: false,
+  isJirumAlarmApp: false,
+  isApple: false,
+  isAndroid: false,
+  isMobileBrowser: false,
+};
+
 const getDeviceInfo = (): DeviceInfo => {
   if (typeof window === 'undefined' || typeof navigator === 'undefined') {
-    // SSR 환경에서는 기본값 반환
-    return {
-      isMobile: false,
-      isSafari: false,
-      isJirumAlarmIOSApp: false,
-      isJirumAlarmAndroidApp: false,
-      isJirumAlarmApp: false,
-      isApple: false,
-      isAndroid: false,
-      isMobileBrowser: false,
-    };
+    return EMPTY_DEVICE;
   }
 
   const ua = navigator.userAgent || '';
@@ -70,18 +69,25 @@ const getDeviceInfo = (): DeviceInfo => {
   };
 };
 
-const deviceAtom = atom<DeviceInfo>(getDeviceInfo());
+/**
+ * 서버(app/actions/agent.ts 의 checkDevice)가 같은 UA 를 이미 파싱해서 넘겨준다.
+ * ServerStateProvider 가 이 atom 을 하이드레이션 시점에 심으므로, 클라이언트는
+ * 첫 렌더부터 정답을 들고 시작한다 — useEffect 로 다시 계산해서 한 프레임
+ * 오답을 그리던 게 첫 페인트 깜빡임의 원인이었다.
+ */
+export const deviceAtom = atom<DeviceInfo>(EMPTY_DEVICE);
+
+/** 서버값이 심겼는지. 심겼으면 클라이언트 재계산을 건너뛴다. */
+export const isDeviceResolvedAtom = atom(false);
 
 export const useDevice = () => {
-  const isHydrated = useIsHydrated();
-
   const [device, setDevice] = useAtom(deviceAtom);
+  const isResolved = useAtomValue(isDeviceResolvedAtom);
 
+  // ponytail: 서버값이 없을 때만(스토리북·테스트 등 Provider 밖) 클라이언트에서 채운다.
   useEffect(() => {
-    if (isHydrated) {
-      setDevice(getDeviceInfo());
-    }
-  }, [setDevice, isHydrated]);
+    if (!isResolved) setDevice(getDeviceInfo());
+  }, [isResolved, setDevice]);
 
-  return { device, isHydrated };
+  return { device, isHydrated: isResolved };
 };

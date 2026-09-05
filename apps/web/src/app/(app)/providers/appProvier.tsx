@@ -16,6 +16,9 @@ import { ClarityProvider } from './clarityProvider';
 import { DeviceId } from './deviceId';
 import { MixpanelIdentifyProvider } from './mixpanelIdentifyProvider';
 import { ReactQueryProviders } from './ReactQueryProviders';
+import ServerStateProvider from './ServerStateProvider';
+
+import type { CheckDeviceResult } from '@/app/actions/agent.types';
 
 const MSW = dynamic(() => import('@/shared/ui/MSW'), {
   ssr: false,
@@ -29,9 +32,12 @@ const Toaster = dynamic(() => import('@/shared/ui/common/Toast/Toaster'), {
 
 interface Props {
   children: React.ReactNode;
+  /** 서버(root layout)가 UA·쿠키로 판정한 값. 클라이언트 atom 초깃값이 된다. */
+  device: CheckDeviceResult;
+  isLoggedIn: boolean;
 }
 
-export const AppProvider = ({ children }: Props) => {
+export const AppProvider = ({ children, device, isLoggedIn }: Props) => {
   return (
     <>
       <ClarityProvider />
@@ -39,13 +45,15 @@ export const AppProvider = ({ children }: Props) => {
       <AdSenseProvider />
       {IS_PRD ? <GoogleTagManager gtmId={GTM_ID} /> : <MSW />}
       <JotaiProvider>
-        <ReactQueryProviders>
-          {IS_PRD ? <DeviceId /> : null}
-          {/* <PHProvider> */}
-          <NuqsAdapter>{children}</NuqsAdapter>
-          {/* </PHProvider> */}
-          <LoginModal />
-        </ReactQueryProviders>
+        <ServerStateProvider device={device} isLoggedIn={isLoggedIn}>
+          <ReactQueryProviders>
+            {IS_PRD ? <DeviceId /> : null}
+            {/* <PHProvider> */}
+            <NuqsAdapter>{children}</NuqsAdapter>
+            {/* </PHProvider> */}
+            <LoginModal />
+          </ReactQueryProviders>
+        </ServerStateProvider>
       </JotaiProvider>
       <Toaster />
       <FCMConfig />
