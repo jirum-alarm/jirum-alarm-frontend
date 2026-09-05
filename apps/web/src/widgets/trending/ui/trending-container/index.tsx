@@ -15,7 +15,6 @@ import {
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
-import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
 import { cn } from '@/shared/lib/cn';
 
 import { CategoryQueries } from '@/entities/category';
@@ -38,14 +37,6 @@ type Props = {
 
 export const TrendingContainer = ({ initialTab }: Props) => {
   const swiperRef = useRef<SwiperClass>(null);
-  const isHeaderVisible = useHeaderVisibility();
-  // 뒤로가기 등으로 재진입할 때 헤더 가시성이 한 박자 늦게 결정되며 margin-top transition이
-  // 실행되는 문제(콘텐츠가 한 번 밀리는 현상) 방지를 위해 첫 페인트엔 transition 비활성화.
-  const [enableTransition, setEnableTransition] = useState(false);
-  useEffect(() => {
-    const id = window.setTimeout(() => setEnableTransition(true), 150);
-    return () => window.clearTimeout(id);
-  }, []);
 
   const {
     data: { categories },
@@ -137,11 +128,13 @@ export const TrendingContainer = ({ initialTab }: Props) => {
         />
 
         <div
-          className={cn(
-            'pc:mt-7 overflow-hidden',
-            enableTransition && 'transition-[margin-top] duration-300',
-            isHeaderVisible ? 'mt-[60px]' : 'mt-1',
-          )}
+          // ponytail: 헤더 높이만큼의 여백은 **고정**이다.
+          // 예전엔 스크롤 방향에 따라 mt-[60px] ↔ mt-1 로 접었는데, 헤더 자리는 이미
+          // BasicLayout 의 pt-14(56px)가 잡고 있어 같은 값을 두 곳에서 관리하는 꼴이었다.
+          // 둘이 어긋나는 순간이 곧 흔들림이다 — 상세로 가면 스크롤이 0 이 되어 살아있는
+          // 이 컨테이너가 60px 로 폈다가, 뒤로 오면 복원된 스크롤(2000)을 보고 4px 로
+          // 되돌리며 화면 전체가 56px 왕복했다. 접힘 UX 대신 안정성을 택한다.
+          className={cn('pc:mt-7 overflow-hidden', 'mt-[60px]')}
         >
           <Swiper
             {...SWIPER_OPTIONS}

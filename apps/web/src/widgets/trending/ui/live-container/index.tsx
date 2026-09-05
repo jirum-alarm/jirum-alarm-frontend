@@ -15,7 +15,6 @@ import {
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
-import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
 import { cn } from '@/shared/lib/cn';
 
 import { CategoryQueries } from '@/entities/category';
@@ -37,7 +36,6 @@ type Props = {
 
 export const LiveContainer = ({ initialTab }: Props) => {
   const swiperRef = useRef<SwiperClass>(null);
-  const isHeaderVisible = useHeaderVisibility();
 
   const {
     data: { categories },
@@ -126,10 +124,8 @@ export const LiveContainer = ({ initialTab }: Props) => {
         />
 
         <div
-          className={cn(
-            'pc:mt-7 overflow-hidden transition-[margin-top] duration-300',
-            isHeaderVisible ? 'mt-[60px]' : 'mt-1',
-          )}
+          // ponytail: trending-container 와 같은 이유로 여백 고정(흔들림 축 제거).
+          className={cn('pc:mt-7 overflow-hidden', 'mt-[60px]')}
         >
           <Swiper
             {...SWIPER_OPTIONS}
