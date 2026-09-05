@@ -1,5 +1,6 @@
 import { memo } from 'react';
 
+import { REMOTE_IMAGE_PLACEHOLDER } from '@/shared/config/image-placeholder';
 import { cn } from '@/shared/lib/cn';
 import { convertToWebp } from '@/shared/lib/utils/image';
 import ImageComponent from '@/shared/ui/ImageComponent';
@@ -56,6 +57,10 @@ const ProductThumbnail = memo(function ProductThumbnail({
       title={titleText}
       fallback={<NoImage type={type} categoryId={categoryId} />}
       fill
+      // 원격 썸네일이라 blurDataURL 자동생성이 안 된다 → 단색 placeholder 로
+      // 빈 칸에서 그림으로 툭 바뀌는 것을 덮는다. next/image 가 내부에서
+      // img.complete 를 확인하므로 하이드레이션 경쟁도 알아서 처리된다.
+      placeholder={REMOTE_IMAGE_PLACEHOLDER}
       sizes={sizes}
       priority={priority}
       loading={loading}
