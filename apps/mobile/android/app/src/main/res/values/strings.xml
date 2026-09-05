@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">지름알림</string>
     <string name="kakao_app_key">a14549f2c54214ea2a05669c34a3f11f</string>
+    <!-- OTA runtimeVersion. app.json 의 runtimeVersion 과 반드시 같아야 한다
+         (갈리면 업데이트가 엉뚱한 빌드에 꽂히거나 아무 빌드에도 안 꽂힌다).
+         가드: __tests__/ota-updates-config.test.ts -->
+    <string name="expo_runtime_version">1.4.5</string>
 </resources>

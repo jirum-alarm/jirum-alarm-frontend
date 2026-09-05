@@ -201,8 +201,68 @@ describe('OTA 설정 — Expo.plist 는 번들에 실려야 한다', () => {
     expect(exists('ios/jirumAlarmMobile/Expo.plist')).toBe(false);
   });
 
-  it('Android: manifest 에 updates meta-data 를 수동으로 넣지 않는다', () => {
+  /**
+   * 🔴🔴 2026-09-05 정정. 여기 있던 "Android 는 수동으로 넣지 않는다" 는 **틀렸고,
+   * 그 단정이 Android OTA 를 통째로 꺼진 상태로 고정하고 있었다.**
+   *
+   * 착각: config plugin 이 빌드 때 meta-data 를 넣어준다.
+   * 실제: iOS Expo.plist 와 **완전히 같은 이유**로 안 넣어진다 — 이 레포는 bare
+   * (android/ 가 커밋됨)라 EAS 빌드에서 prebuild 가 skip 되고, plugin 도 안 돈다.
+   *
+   * 결과: 출고된 AAB(1.3.7 build 25) 매니페스트에 `expo.modules.updates` 문자열이
+   * **하나도 없었다**. expo-updates 는 URL meta-data 가 없으면 설정을 INVALID 로 보고
+   * 업데이트를 끈다(UpdatesConfiguration.kt:205). 즉 Android 는 OTA 가 처음부터
+   * 배선된 적이 없다 — 8/20 에 android 대상으로 발행한 업데이트도 받을 빌드가 없었다.
+   *
+   * ★ 채널(expo-channel-name)까지 손으로 박는 이유: config-plugins 의
+   * setUpdatesConfigAsync 는 app.json 에 requestHeaders 가 없으면 이 meta-data 를
+   * 넣지 않고 오히려 **제거**한다. iOS 에서 이 누락으로 빌드 3개가 OTA 를 영구히
+   * 못 받았다(690e893b). 같은 실패를 Android 에서 반복하지 않는다.
+   */
+  it('Android: manifest 에 updates meta-data 가 있다 — 없으면 OTA 가 통째로 꺼진다', () => {
     const manifest = read('android/app/src/main/AndroidManifest.xml');
-    expect(manifest).not.toContain('expo.modules.updates');
+    expect(manifest).toContain('expo.modules.updates.ENABLED');
+    expect(manifest).toContain('expo.modules.updates.EXPO_UPDATE_URL');
+    expect(manifest).toContain('expo.modules.updates.EXPO_RUNTIME_VERSION');
+  });
+
+  it('Android: 업데이트 URL 이 app.json 과 일치한다', () => {
+    const manifest = read('android/app/src/main/AndroidManifest.xml');
+    expect(manifest).toContain(EXPECTED_URL);
+  });
+
+  it('Android: 채널 헤더가 박혀 있다 — 없으면 서버가 400 을 준다', () => {
+    // plugin 이 넣어주지 않는 값이다. iOS Expo.plist 와 같은 이유로 손으로 박는다.
+    const manifest = read('android/app/src/main/AndroidManifest.xml');
+    expect(manifest).toContain('UPDATES_CONFIGURATION_REQUEST_HEADERS_KEY');
+    expect(manifest).toContain('expo-channel-name');
+  });
+
+  it('Android: 채널이 eas.json production 프로필과 일치한다', () => {
+    const manifest = read('android/app/src/main/AndroidManifest.xml');
+    const channel = easJson.build.production.channel;
+    // XML 이라 따옴표가 &quot; 로 이스케이프돼 있다.
+    expect(manifest).toContain(
+      `&quot;expo-channel-name&quot;:&quot;${channel}&quot;`,
+    );
+  });
+
+  it('Android: strings.xml 의 runtimeVersion 이 app.json 과 일치한다', () => {
+    // manifest 는 @string/expo_runtime_version 을 참조만 한다 — 실값은 여기 있다.
+    // 갈리면 업데이트가 엉뚱한 빌드에 꽂히거나 아무 빌드에도 안 꽂힌다.
+    const strings = read('android/app/src/main/res/values/strings.xml');
+    const value = strings.match(
+      /<string name="expo_runtime_version">([^<]+)<\/string>/,
+    )?.[1];
+    expect(value).toBe(appJson.expo.runtimeVersion);
+  });
+
+  it('Android: manifest 가 참조하는 string 리소스가 실제로 존재한다', () => {
+    // 참조만 있고 리소스가 없으면 빌드가 깨진다.
+    const manifest = read('android/app/src/main/AndroidManifest.xml');
+    const strings = read('android/app/src/main/res/values/strings.xml');
+    if (manifest.includes('@string/expo_runtime_version')) {
+      expect(strings).toContain('name="expo_runtime_version"');
+    }
   });
 });

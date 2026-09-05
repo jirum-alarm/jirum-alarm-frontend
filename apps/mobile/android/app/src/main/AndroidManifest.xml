@@ -16,6 +16,22 @@
     android:allowBackup="false"
     android:theme="@style/AppTheme"
     android:supportsRtl="true">
+
+    <!-- OTA(expo-updates). iOS 는 Supporting/Expo.plist 가 같은 역할을 한다.
+         ⚠️ 이 레포는 bare(android/ 커밋됨) — EAS 빌드에서 prebuild 도, config plugin 도
+         돌지 않는다. 즉 여기 없으면 앱은 URL 을 못 찾아 OTA 가 통째로 꺼진다
+         (UpdatesConfiguration.kt:205 가 이 meta-data 를 읽는다).
+         ★ expo-channel-name 은 setUpdatesConfigAsync 가 넣어주지 않는다 —
+         없으면 서버가 400 을 준다("channel-name: Required"). iOS 에서 이 누락으로
+         빌드 3개(23·24·25)가 OTA 를 영구히 못 받았다. 그래서 값을 여기 박는다.
+         값의 정본은 app.json(url·runtimeVersion)·eas.json(channel) — 가드 테스트가 대조한다. -->
+    <meta-data android:name="expo.modules.updates.ENABLED" android:value="true" />
+    <meta-data android:name="expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH" android:value="ALWAYS" />
+    <meta-data android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS" android:value="0" />
+    <meta-data android:name="expo.modules.updates.EXPO_UPDATE_URL" android:value="https://u.expo.dev/ec89e7ad-0f52-4777-a71c-50e5f596be58" />
+    <meta-data android:name="expo.modules.updates.EXPO_RUNTIME_VERSION" android:value="@string/expo_runtime_version" />
+    <meta-data android:name="expo.modules.updates.UPDATES_CONFIGURATION_REQUEST_HEADERS_KEY" android:value="{&quot;expo-channel-name&quot;:&quot;production&quot;}" />
+
     <activity
       android:name="com.solcode.jirmalam.MainActivity"
       android:label="@string/app_name"
