@@ -119,9 +119,10 @@ function useHasNewAlarm() {
 const BottomNavComponent = () => {
   const pathName = usePathname();
   const navRef = useRef<HTMLUListElement>(null);
-  const scrollVisibility = useHeaderVisibility();
-  // ponytail: 홈은 항상 노출 — 나머지 탭 루트에서만 아래로 스크롤 시 숨긴다.
-  const isBottomNavVisible = pathName === PAGE.HOME ? true : scrollVisibility;
+  // 홈 예외(항상 노출)는 24ac472c 에서 "네비가 안 올라오는 현상" 우회로 들어갔던
+  // 잔재다. 진짜 원인은 같은 커밋이 함께 고친 transform 충돌(-translate-x-1/2 가
+  // translate-y 를 덮어씀)이라 예외는 더 필요 없다 — 모든 탭 루트에서 동일하게 숨긴다.
+  const isBottomNavVisible = useHeaderVisibility();
   const hasNewAlarm = useHasNewAlarm();
 
   // data-bottom-nav 는 root layout 이 서버에서 심는다 — 여기서 useLayoutEffect 로

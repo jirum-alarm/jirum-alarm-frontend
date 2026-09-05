@@ -90,12 +90,15 @@ describe('소스 계약', () => {
 
   it('아래로 스크롤하면 숨는다 — isBottomNavVisible 하드코딩 금지', () => {
     // 2026-03-27 커뮤니티 수정 커밋에서 `const isBottomNavVisible = true;` 로 굳어
-    // 스크롤 숨김이 조용히 죽었다. 홈만 예외로 항상 노출.
+    // 스크롤 숨김이 조용히 죽었다. 훅 호출은 남아 있어 grep 으로는 살아 보였다.
     assert.doesNotMatch(SOURCE, /isBottomNavVisible = true;/);
-    assert.match(
-      SOURCE,
-      /const isBottomNavVisible = pathName === PAGE\.HOME \? true : scrollVisibility;/,
-    );
+    assert.match(SOURCE, /const isBottomNavVisible = useHeaderVisibility\(\);/);
+  });
+
+  it('홈도 예외 없이 같은 규칙을 쓴다', () => {
+    // 홈 예외는 24ac472c 에서 transform 충돌 버그 우회로 들어갔던 잔재다.
+    // 원인이 고쳐졌으므로 홈만 다르게 두지 않는다.
+    assert.doesNotMatch(SOURCE, /pathName === PAGE\.HOME \? true/);
   });
 
   it('TAB_ROOT_PATHS 가 앱과 같은 6개 경로를 담는다', () => {
