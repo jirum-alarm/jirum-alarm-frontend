@@ -7,6 +7,10 @@ import { describe, it } from 'node:test';
 // 소스 텍스트로 계약을 고정한다.
 const SOURCE = readFileSync(new URL('./BottomNav.tsx', import.meta.url), 'utf8');
 
+// 탭 루트 목록은 shared/config/tab-root 로 옮겼다 — root layout(서버)도 같은
+// 판정을 해야 하는데 BottomNav 는 'use client' 라 서버에서 못 읽기 때문.
+const TAB_ROOT_SOURCE = readFileSync(new URL('../../config/tab-root.ts', import.meta.url), 'utf8');
+
 // 앱(apps/mobile/.../tab-routing.ts isTabRootUrl)의 tabRootPaths 와 짝을 이루는 목록.
 const TAB_ROOT_PATHS = [
   '/',
@@ -85,7 +89,7 @@ describe('소스 계약', () => {
   });
 
   it('TAB_ROOT_PATHS 가 앱과 같은 6개 경로를 담는다', () => {
-    const block = SOURCE.match(/const TAB_ROOT_PATHS[^=]*=\s*\[([\s\S]*?)\]/)?.[1] ?? '';
+    const block = TAB_ROOT_SOURCE.match(/TAB_ROOT_PATHS[^=]*=\s*\[([\s\S]*?)\]/)?.[1] ?? '';
     for (const token of [
       'PAGE.HOME',
       'PAGE.TRENDING_RANKING',
@@ -96,5 +100,16 @@ describe('소스 계약', () => {
     ]) {
       assert.ok(block.includes(token), `${token} 누락`);
     }
+  });
+
+  it('BottomNav 와 root layout 이 같은 목록을 쓴다 — 두 벌로 갈리면 여백과 렌더가 어긋난다', () => {
+    // BottomNav 는 렌더를, root layout 은 하단 여백(data-bottom-nav)을 같은
+    // 판정으로 정한다. 한쪽이 자기 목록을 다시 정의하면 여백만 남거나 그 반대가 된다.
+    assert.match(SOURCE, /from '@\/shared\/config\/tab-root'/);
+    assert.doesNotMatch(SOURCE, /const TAB_ROOT_PATHS/);
+
+    const LAYOUT = readFileSync(new URL('../../../app/layout.tsx', import.meta.url), 'utf8');
+    assert.match(LAYOUT, /isTabRootPath/);
+    assert.match(LAYOUT, /data-bottom-nav/);
   });
 });
