@@ -34,6 +34,7 @@ import {
 import type {ProductFlowParamList} from '@/navigations/tab/types';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
+import {SCREEN_BACKGROUND_COLOR} from '@/navigations/tab/native-headers';
 
 type StackNav = Pick<
   NativeStackNavigationProp<ProductFlowParamList>,
@@ -225,10 +226,10 @@ export default ProductDetailWebViewScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: SCREEN_BACKGROUND_COLOR,
   },
   statusBarSpacer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: SCREEN_BACKGROUND_COLOR,
   },
   webviewWrap: {
     flex: 1,
@@ -241,6 +242,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: SCREEN_BACKGROUND_COLOR,
   },
 });

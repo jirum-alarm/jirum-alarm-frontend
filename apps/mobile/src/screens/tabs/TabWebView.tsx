@@ -47,6 +47,7 @@ import {
 import {DEVICE_ID_SYNC_SCRIPT} from '@/shared/lib/device/device-id';
 import {INTERCEPT_DETAIL_LINK_SCRIPT} from '@/shared/lib/webview/intercept-detail-link';
 import {subscribeOpenDetail} from '@/shared/lib/webview/event';
+import {SCREEN_BACKGROUND_COLOR} from '@/navigations/tab/native-headers';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
@@ -482,6 +483,7 @@ export default TabWebView;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: SCREEN_BACKGROUND_COLOR,
   },
   scrollViewContent: {
     flex: 1,
@@ -494,6 +496,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    // 반투명이면 아직 아무것도 안 그린 WebView 가 비쳐서 덮는 의미가 없다.
+    backgroundColor: SCREEN_BACKGROUND_COLOR,
   },
 });

@@ -28,6 +28,7 @@ import {
 } from '@/shared/hooks/useTabBarVisibility';
 import type {TabStackParamList} from './types';
 import {
+  SCREEN_BACKGROUND_COLOR,
   baseHeaderOptions,
   commentsHeaderOptions,
   productDetailHeaderOptions,
@@ -138,7 +139,12 @@ export function createTabStack(tabName: TabName) {
 
     return (
       <Stack.Navigator
-        screenOptions={{headerShown: false}}
+        screenOptions={{
+          headerShown: false,
+          // 지정 안 하면 전환 애니메이션 동안 시스템 기본 배경이 보인다.
+          // 아직 아무것도 안 그린 WebView 가 올라올 때 특히 티가 난다.
+          contentStyle: {backgroundColor: SCREEN_BACKGROUND_COLOR},
+        }}
         screenListeners={{
           state: e => {
             const stack = e.data.state;

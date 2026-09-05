@@ -17,6 +17,15 @@ export const HEADER_BACKGROUND_COLOR = '#ffffff';
 export const TAB_BAR_BACKGROUND_COLOR = '#ffffff';
 export const TAB_BAR_BORDER_COLOR = '#D0D5DD'; // gray-300
 
+/**
+ * 화면 본문 바탕 — 네이티브 스택 `contentStyle` 과 WebView 로딩 오버레이가 쓴다.
+ * 이걸 안 주면 화면 전환 애니메이션 동안, 그리고 아직 아무것도 안 그린 WebView
+ * 위로 시스템 기본 배경이 그대로 보인다(흰 화면의 정체).
+ * 헤더·탭바와 값은 같지만 의미가 다른 자리라 상수를 따로 둔다 — 다크모드 때
+ * 크롬과 본문은 다른 톤으로 갈릴 수 있다.
+ */
+export const SCREEN_BACKGROUND_COLOR = '#ffffff';
+
 /** 모든 시스템 헤더가 공유하는 바탕. 개별 옵션은 이걸 펼치고 title 만 덧붙인다. */
 export const baseHeaderOptions: NativeStackNavigationOptions = {
   headerShown: true,
