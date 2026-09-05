@@ -31,7 +31,7 @@ const ensureDeviceId = (req: NextRequest, res: NextResponse): void => {
   applySetCookie(req, res);
 };
 
-export async function middleware(request: NextRequest): Promise<NextResponse> {
+export async function proxy(request: NextRequest): Promise<NextResponse> {
   // const response = await handlePostHog(request);
   const response = NextResponse.next({
     request: {

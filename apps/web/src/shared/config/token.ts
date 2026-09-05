@@ -14,7 +14,7 @@ export const refreshTokenExpiresAt = 7 * 24 * 60 * 60 * 1000; // 7day
  * ⚠️ 이 쿠키는 이제 **모든 jirum-alarm.com 서브도메인에 딸려간다.** 새 서브도메인을
  * 붙일 때(외부 도구·실험용 포함) 토큰이 거기까지 간다는 걸 전제로 판단할 것.
  *
- * 쿠키를 심는 곳이 3군데(actions/token.ts, api/graphql/route.ts, middleware.ts)라
+ * 쿠키를 심는 곳이 3군데(actions/token.ts, api/graphql/route.ts, proxy.ts)라
  * 상수로 묶는다 — 한 곳만 빠지면 그 경로의 로그인만 조용히 안 넘어간다.
  */
 export const AUTH_COOKIE_DOMAIN =

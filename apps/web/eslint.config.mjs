@@ -3,7 +3,19 @@ import jirum from '@jirum/eslint-config-jirum';
 const config = [
   ...jirum,
   {
-    ignores: ['node_modules/', 'dist/', '.next/', 'public/'],
+    // Next 16 에서 `next lint` 가 사라져 eslint CLI 를 직접 부른다. next lint 는
+    // 앱 소스만 훑었기 때문에, 그때 검사 대상이 아니던 설정 파일·스토리북을
+    // 여기서 명시적으로 뺀다. 안 빼면 require() 금지·경로 미해결로 에러가 난다.
+    ignores: [
+      'node_modules/',
+      'dist/',
+      '.next/',
+      'public/',
+      '.storybook/',
+      '*.config.cjs',
+      '*.config.js',
+      '*.config.mjs',
+    ],
   },
   {
     files: ['src/**/*.{ts,tsx}'],
