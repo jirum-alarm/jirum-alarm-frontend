@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 
@@ -100,9 +100,9 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               },
             )}
           >
-            <motion.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
+            <m.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
               핫딜 등록
-            </motion.div>
+            </m.div>
           </Link>
           <SearchLinkButton color={isInHomeHero ? '#FFFFFF' : '#101828'} />
           <Link
@@ -111,7 +111,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             className="group relative size-9 rounded-full duration-300 hover:bg-gray-400/20"
             aria-label="핫딜 카톡방 입장"
           >
-            <motion.div
+            <m.div
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.1 }}
               className="flex h-full w-full items-center justify-center"
@@ -138,29 +138,29 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               >
                 <TalkLight className="mt-0.25 size-full p-0.5" />
               </div>
-            </motion.div>
+            </m.div>
           </Link>
           {isLoggedIn ? (
             <Link
               href={PAGE.MYPAGE}
               className="flex size-8 items-center justify-center rounded-full duration-300 hover:bg-gray-400/20"
             >
-              <motion.div
+              <m.div
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.1 }}
                 className="flex items-center justify-center"
               >
                 <My width={28} height={28} color={isInHomeHero ? '#FFFFFF' : '#101828'} />
-              </motion.div>
+              </m.div>
             </Link>
           ) : (
             <Link
               href={PAGE.LOGIN}
               className="rounded-full bg-gray-700 px-4 py-1.5 font-semibold text-white transition-colors duration-300 hover:bg-gray-600"
             >
-              <motion.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
+              <m.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
                 로그인
-              </motion.div>
+              </m.div>
             </Link>
           )}
         </div>

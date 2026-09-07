@@ -1,6 +1,6 @@
 'use client';
 
-import { animate, motion, useMotionValue } from 'motion/react';
+import { animate, m, useMotionValue } from 'motion/react';
 import { Tabs } from 'radix-ui';
 import { useEffect, useRef, useState } from 'react';
 
@@ -210,7 +210,7 @@ const TabBarV2 = ({
   return (
     <div className={cn(mergedStyles.container, positionClass, headerLinkedTranslate)}>
       <Tabs.List asChild>
-        <motion.div
+        <m.div
           ref={tabDragRef}
           style={{ x }}
           drag="x"
@@ -246,17 +246,17 @@ const TabBarV2 = ({
                       : mergedStyles.tabTrigger.inactive,
                 )}
               >
-                <motion.span
+                <m.span
                   whileTap={isDisabled ? undefined : { scale: 0.95 }}
                   transition={{ duration: 0.1 }}
                   className="inline-block"
                 >
                   {category.name}
-                </motion.span>
+                </m.span>
               </Tabs.Trigger>
             );
           })}
-        </motion.div>
+        </m.div>
       </Tabs.List>
       {showSettings && (
         <div className={mergedStyles.settingsContainer}>

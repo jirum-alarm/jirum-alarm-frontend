@@ -87,9 +87,9 @@ export const defaultMetadata: Metadata = {
     description,
     images: ogImageUrl,
   },
+  // icon/shortcut 은 두지 않는다 — 512px icon.png(121KB) 가 파비콘으로 매 페이지 내려갔다(홈은 2회).
+  // src/app/favicon.ico(15KB) 를 Next 가 자동 링크한다. icon.png 는 JSON-LD 로고로만 쓴다.
   icons: {
-    icon: iconUrl,
-    shortcut: iconUrl,
     apple: [{ url: appleTouchIconUrl }],
   },
   alternates: {

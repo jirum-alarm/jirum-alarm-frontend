@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -48,7 +48,7 @@ export default function TabScrollTopButton() {
   if (!isScrollTopTabPath(pathName)) return null;
 
   return (
-    <motion.button
+    <m.button
       type="button"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="맨 위로"
@@ -67,6 +67,6 @@ export default function TabScrollTopButton() {
       transition={{ duration: 0.1 }}
     >
       <ArrowRight color="#475467" className="-rotate-90" />
-    </motion.button>
+    </m.button>
   );
 }

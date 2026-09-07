@@ -1,20 +1,16 @@
 'use client';
 
-import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken, onMessage, Unsubscribe } from 'firebase/messaging';
 import { useEffect } from 'react';
 
 import { setFcmToken as setFcmTokenAction } from '@/app/actions/token';
 
 import { firebaseConfig } from '@/shared/config/firebase';
 
-const firebaseApp = initializeApp(firebaseConfig);
-
 const FCMConfig = () => {
   useEffect(() => {
     if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
 
-    let unsubscribe: Unsubscribe | null = null;
+    let unsubscribe: (() => void) | null = null;
 
     const handleSwMessage = (event: MessageEvent) => {
       if (event.data?.type === 'push_notification_clicked') {
@@ -32,7 +28,12 @@ const FCMConfig = () => {
         // 권한이 이미 허용된 경우에만 토큰 조회/구독
         if (Notification.permission !== 'granted') return;
 
-        const messaging = getMessaging(firebaseApp);
+        // firebase 는 이 분기에서만 필요하다. 정적 import 였을 땐 모든 페이지 초기 번들에 실려
+        // 알림을 켠 적 없는 방문자도 매번 받았다(13KB gz).
+        const [{ getApps, initializeApp }, { getMessaging, getToken, onMessage }] =
+          await Promise.all([import('firebase/app'), import('firebase/messaging')]);
+        const app = getApps()[0] ?? initializeApp(firebaseConfig);
+        const messaging = getMessaging(app);
         const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
         const token = await getToken(messaging, { vapidKey });
         if (token) {

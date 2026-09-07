@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { createElement, useEffect, useRef } from 'react';
 
@@ -158,7 +158,7 @@ const BottomNavComponent = () => {
               )}
               href={nav.link ?? nav.getLink(pathName)}
             >
-              <motion.div
+              <m.div
                 className="flex w-full flex-col items-center justify-center rounded-lg"
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.1 }}
@@ -179,7 +179,7 @@ const BottomNavComponent = () => {
                 >
                   {nav.text}
                 </span>
-              </motion.div>
+              </m.div>
             </Link>
           </li>
         ))}

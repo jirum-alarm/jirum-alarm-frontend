@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import useGoBack from '@/shared/hooks/useGoBack';
 
@@ -14,7 +14,7 @@ const BackButton = ({ backTo, onClick }: { backTo?: string; onClick?: () => void
   };
 
   return (
-    <motion.button
+    <m.button
       className="relative -m-2 rounded-full p-2"
       onClick={handleClick}
       aria-label="뒤로 가기"
@@ -23,7 +23,7 @@ const BackButton = ({ backTo, onClick }: { backTo?: string; onClick?: () => void
       transition={{ duration: 0.1 }}
     >
       <ArrowLeft width={28} height={28} className="relative -left-2" />
-    </motion.button>
+    </m.button>
   );
 };
 

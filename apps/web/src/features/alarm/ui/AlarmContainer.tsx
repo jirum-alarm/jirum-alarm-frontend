@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import Image from 'next/image';
 import { useEffect } from 'react';
 
@@ -129,14 +129,14 @@ function AndroidDownloadButton() {
 
   return (
     <a href={ANDROID_STORE_LINK} onClick={handleClick} className="w-full">
-      <motion.button
+      <m.button
         className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
         <Google />
         Google Play
-      </motion.button>
+      </m.button>
     </a>
   );
 }
@@ -152,14 +152,14 @@ function IosDownloadButton() {
 
   return (
     <a href={IOS_STORE_LINK} onClick={handleClick} className="w-full">
-      <motion.button
+      <m.button
         className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
         <Apple />
         App Store
-      </motion.button>
+      </m.button>
     </a>
   );
 }

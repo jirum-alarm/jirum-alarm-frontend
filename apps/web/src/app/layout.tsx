@@ -5,6 +5,7 @@ import { PublicEnvScript } from 'next-runtime-env';
 
 import { AppProvider } from '@/app/(app)/providers';
 
+import { IS_PRD } from '@/shared/config/env';
 import { defaultMetadata, jsonLd, organizationLd } from '@/shared/config/metadata';
 import { isTabRootPath } from '@/shared/config/tab-root';
 import { pretendard } from '@/shared/lib/fonts';
@@ -53,9 +54,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <PublicEnvScript />
         <link rel="preconnect" href="https://cdn.jirum-alarm.com" crossOrigin="" />
-        <link rel="dns-prefetch" href="https://api.mixpanel.com" />
-        <link rel="preconnect" href="https://www.google-analytics.com" />
-        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="" />
+        {/* GTM 컨테이너(GTM_ID)는 load 이후 lazyOnload 로 붙는다(AppProvider). dataLayer 는 그보다 먼저
+            있어야 그 사이의 push(identify·view_item…)가 큐에 남는다. 표준 스니펫의 gtm.start 도 여기서. */}
+        {IS_PRD && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.dataLayer=window.dataLayer||[];window.dataLayer.push({'gtm.start':Date.now(),event:'gtm.js'});`,
+            }}
+          />
+        )}
         <link
           rel="search"
           href="/opensearch.xml"

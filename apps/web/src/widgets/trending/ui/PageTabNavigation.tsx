@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { usePathname } from 'next/navigation';
 
 import { cn } from '@/shared/lib/cn';
@@ -16,7 +16,7 @@ const PageTabNavigation = () => {
     <div className="w-full border-b border-gray-200 bg-white">
       <div className="flex">
         <Link href="/trending/live" className="relative flex-1 text-center">
-          <motion.div
+          <m.div
             className={cn(
               'py-3 text-base font-medium transition-colors',
               isLive ? 'text-gray-900' : 'text-gray-500',
@@ -26,10 +26,10 @@ const PageTabNavigation = () => {
           >
             실시간
             {isLive && <div className="absolute right-0 bottom-0 left-0 h-0.5 bg-gray-900" />}
-          </motion.div>
+          </m.div>
         </Link>
         <Link href="/trending/ranking" className="relative flex-1 text-center">
-          <motion.div
+          <m.div
             className={cn(
               'py-3 text-base font-medium transition-colors',
               isRanking ? 'text-gray-900' : 'text-gray-500',
@@ -39,7 +39,7 @@ const PageTabNavigation = () => {
           >
             랭킹
             {isRanking && <div className="absolute right-0 bottom-0 left-0 h-0.5 bg-gray-900" />}
-          </motion.div>
+          </m.div>
         </Link>
       </div>
     </div>

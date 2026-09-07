@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useInView } from 'motion/react';
+import { m, useInView } from 'motion/react';
 import { useRef } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -61,7 +61,7 @@ export function ReactionChart({
             {/* 진행 반원 */}
             {isInView && (
               <g transform={!isPositive ? 'translate(208, 0) scale(-1,1)' : undefined}>
-                <motion.path
+                <m.path
                   d="M7.20996 95.9719C10.9267 46.2193 52.7747 7 103.852 7C154.929 7 196.777 46.2193 200.494 95.9719"
                   fill="transparent"
                   stroke={disabled ? DISABLED_COLOR : color}

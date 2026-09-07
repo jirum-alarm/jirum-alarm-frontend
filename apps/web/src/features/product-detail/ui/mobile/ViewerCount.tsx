@@ -1,7 +1,7 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { motion, useInView } from 'motion/react';
+import { m, useInView } from 'motion/react';
 import { useRef } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -27,7 +27,7 @@ export default function ViewerCount({ productId }: ViewerCountProps) {
       <div ref={ref} className="relative top-0 h-0 w-full translate-y-7" />
       <div className="sticky top-14 z-50 h-[48px] w-full">
         <div className="flex w-full items-center justify-center">
-          <motion.div
+          <m.div
             layout
             initial={{
               opacity: 0,
@@ -44,7 +44,7 @@ export default function ViewerCount({ productId }: ViewerCountProps) {
               ease: 'easeOut',
             }}
           >
-            <motion.div
+            <m.div
               layout
               className={cn(
                 `bg-secondary-50 flex h-[48px] items-center justify-center border px-5`,
@@ -65,8 +65,8 @@ export default function ViewerCount({ productId }: ViewerCountProps) {
                 </strong>
                 이 살펴본 상품
               </span>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         </div>
       </div>
     </>

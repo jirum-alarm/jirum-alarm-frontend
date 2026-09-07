@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { cn } from '@/shared/lib/cn';
 import { IconLogo } from '@/shared/ui/common/icons/Illust';
@@ -21,7 +21,7 @@ interface LogoLinkProps {
 export default function LogoLink({ inverted = false, subtitle = LOGO_SUBTITLE }: LogoLinkProps) {
   return (
     <Link href="/" className="flex items-center gap-2">
-      <motion.div
+      <m.div
         className="flex items-center gap-2 rounded-lg px-2 py-1"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
@@ -50,7 +50,7 @@ export default function LogoLink({ inverted = false, subtitle = LOGO_SUBTITLE }:
             </span>
           )}
         </span>
-      </motion.div>
+      </m.div>
     </Link>
   );
 }

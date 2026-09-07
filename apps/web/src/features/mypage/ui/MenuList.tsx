@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import customerService from '@/shared/lib/customerservice/customer-service';
 import { Alert, Description, Filter, Headset, Heart } from '@/shared/ui/common/icons';
@@ -57,7 +57,7 @@ const MenuList = () => {
             );
           })}
           <li>
-            <motion.button
+            <m.button
               className="w-full rounded-lg"
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.1 }}
@@ -69,7 +69,7 @@ const MenuList = () => {
                 {<Headset />}
                 <span className="text-gray-900">고객센터</span>
               </div>
-            </motion.button>
+            </m.button>
           </li>
         </ul>
       </div>

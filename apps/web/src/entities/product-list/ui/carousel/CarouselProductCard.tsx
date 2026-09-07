@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
 import { formatDateToMMD } from '@/shared/lib/utils/date';
@@ -32,7 +32,7 @@ export default function CarouselProductCard({
       className="pc:w-[192px] inline-block w-[120px]"
       {...productCardTracking(source, product.id)}
     >
-      <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
+      <m.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="pc:h-[192px] relative aspect-square h-[120px] overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
           <ProductThumbnail
             src={product?.thumbnail ?? ''}
@@ -74,7 +74,7 @@ export default function CarouselProductCard({
             <DisplayListPrice price={product.price} />
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </Link>
   );
 }

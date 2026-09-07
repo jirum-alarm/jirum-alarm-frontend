@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { cn } from '@/shared/lib/cn';
 import Link from '@/shared/ui/Link';
@@ -30,7 +30,7 @@ export default function TossDealCard({
   const href = deal.productId ? tossDetailHref(deal.productId) : undefined;
 
   const inner = (
-    <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
+    <m.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
       <div className="relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
         <ProductThumbnail
           src={deal.image ?? ''}
@@ -91,7 +91,7 @@ export default function TossDealCard({
           )}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 
   return href ? (

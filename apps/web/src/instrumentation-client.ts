@@ -13,26 +13,11 @@ Sentry.init({
   // development 환경에서는 센트리 비활성화
   enabled: !isDevelopment,
 
-  // Add optional integrations for additional features
-  integrations: [
-    Sentry.replayIntegration({
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-  ],
-
+  // Replay 는 넣지 않는다 — 번들 143KB(gz) 청크의 대부분이었고, 세션 리플레이는 Clarity 가 이미 한다.
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 0.1,
   // Enable logs to be sent to Sentry
   enableLogs: false,
-
-  // Define how likely Replay events are sampled.
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
-  replaysSessionSampleRate: 0.02,
-
-  // Define how likely Replay events are sampled when an error occurs.
-  replaysOnErrorSampleRate: 1.0,
 
   // Enable sending user PII (Personally Identifiable Information)
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/#sendDefaultPii

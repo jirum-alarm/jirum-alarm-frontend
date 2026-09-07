@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
-import { preload } from 'react-dom';
 
 import { checkDevice } from '@/app/actions/agent';
 import { getAccessToken } from '@/app/actions/token';
@@ -11,7 +10,6 @@ import type { ProductModelPageLink } from '@/shared/api/product/product.service'
 import { CATEGORY_MAP } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { robotsDirective } from '@/shared/config/metadata';
-import { convertToWebp } from '@/shared/lib/utils/image';
 
 import { isFromToss, stripPriceFromTitle } from '@/entities/product/lib/from-toss';
 import { parseProductId } from '@/entities/product/lib/product-id';
@@ -463,27 +461,9 @@ export default async function ProductDetail({
   );
   const breadcrumbLd = generateBreadcrumbJsonLd(product);
 
-  // LCP 이미지 preload: 모바일은 100vw, 데스크톱은 512px 슬롯
-  const thumbnailForPreload = convertToWebp(product?.thumbnail) ?? product?.thumbnail;
-  if (thumbnailForPreload) {
-    const proxy = (w: number) =>
-      `/_next/image?url=${encodeURIComponent(thumbnailForPreload)}&w=${w}&q=85`;
-    if (isMobile) {
-      preload(proxy(640), {
-        as: 'image',
-        fetchPriority: 'high',
-        imageSizes: '100vw',
-        imageSrcSet: `${proxy(640)} 640w, ${proxy(750)} 750w, ${proxy(828)} 828w, ${proxy(1080)} 1080w`,
-      });
-    } else {
-      preload(proxy(640), {
-        as: 'image',
-        fetchPriority: 'high',
-        imageSizes: '512px',
-        imageSrcSet: `${proxy(640)} 1x, ${proxy(1080)} 2x`,
-      });
-    }
-  }
+  // LCP 이미지 preload 는 ProductDetailImage 의 next/image `priority` 가 head 에 만든다. 여기서
+  // react-dom preload() 를 부르면 RSC HL 힌트로 나가 JS 로드 뒤에나 실행되고(Slow 4G 7.4s) URL 도 달라
+  // 히어로를 두 번 받았다.
 
   return (
     <>
@@ -498,7 +478,7 @@ export default async function ProductDetail({
         />
       )}
       <CollectProductOnView productId={productId} />
-      <ProductPrefetch productId={productId}>
+      <ProductPrefetch productId={productId} initial={{ product, productGuides, additionalInfo }}>
         {!isMobile
           ? renderDesktop(
               product ?? undefined,

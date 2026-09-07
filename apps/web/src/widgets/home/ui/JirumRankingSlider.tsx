@@ -4,7 +4,7 @@ import 'swiper/css';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
@@ -132,7 +132,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
   return (
     <>
       <div className="relative flex w-full items-center gap-x-5 gap-y-3">
-        <motion.button
+        <m.button
           className="pc:flex mb-5 hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
           onClick={handleSlidePrev}
           name="이전"
@@ -140,7 +140,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           transition={{ duration: 0.1 }}
         >
           <ArrowLeft className="mr-1 size-8 text-white" color="white" />
-        </motion.button>
+        </m.button>
         {!canRender && (
           <div className="invisible">
             {isMobile ? (
@@ -150,7 +150,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             )}
           </div>
         )}
-        <motion.div
+        <m.div
           className={cn(
             'pc:max-w-slider-max max-w-mobile-max w-full overflow-visible',
             !canRender && 'pc:hidden',
@@ -167,8 +167,8 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           >
             {renderProducts()}
           </Swiper>
-        </motion.div>
-        <motion.button
+        </m.div>
+        <m.button
           className="pc:flex mb-5 hidden size-11 shrink-0 items-center justify-center rounded-full bg-gray-800 disabled:opacity-0"
           onClick={handleSlideNext}
           name="다음"
@@ -176,11 +176,11 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           transition={{ duration: 0.1 }}
         >
           <ArrowLeft className="ml-1 size-8 -scale-x-100 text-white" color="white" />
-        </motion.button>
+        </m.button>
 
         <AnimatePresence>
           {!canRender && (
-            <motion.div
+            <m.div
               className="pc:px-16 absolute inset-0 bottom-auto z-10"
               initial={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -191,7 +191,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
               ) : (
                 <DesktopRankingPreview products={products} />
               )}
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>

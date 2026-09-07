@@ -1,7 +1,7 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { motion, useAnimation } from 'motion/react';
+import { m, useAnimation } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -178,7 +178,7 @@ const HotdealScoreBar = ({
           )}
           style={barStyle}
         >
-          <motion.div
+          <m.div
             initial={{ left: '0%' }}
             animate={controls}
             transition={{ duration: 1, ease: 'easeOut' }}
@@ -203,7 +203,7 @@ const HotdealScoreBar = ({
                 <div className="h-[18px] w-[18px] rounded-full border border-solid border-gray-400 bg-white" />
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
         <div className="mt-[8px] flex w-full items-center justify-between">
           <span className="text-xs text-gray-500">{`${minValue.toLocaleString()}원`}</span>

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -347,7 +347,7 @@ function CodeCard({
           {copyState === 'copied' ? '복사됨' : copyState === 'failed' ? '실패' : '복사하기'}
         </button>
       </div>
-      <motion.a
+      <m.a
         ref={enterRef}
         href={EVENT_ENTRY_URL}
         className="bg-primary-500 hover:bg-primary-400 mt-3 flex h-12 items-center justify-center rounded-lg text-sm font-extrabold text-black transition-colors"
@@ -356,7 +356,7 @@ function CodeCard({
         onClick={onEnter}
       >
         입장하기
-      </motion.a>
+      </m.a>
     </article>
   );
 }

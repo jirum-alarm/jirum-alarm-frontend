@@ -1,6 +1,6 @@
 'use client';
 import { type VariantProps } from 'class-variance-authority';
-import { type HTMLMotionProps, motion } from 'motion/react';
+import { type HTMLMotionProps, m } from 'motion/react';
 
 import { cn } from '@/shared/lib/cn';
 
@@ -14,7 +14,7 @@ interface ButtonProps
 
 export const Button = ({ size, variant, color, className, children, ...rest }: ButtonProps) => {
   return (
-    <motion.button
+    <m.button
       {...rest}
       type={rest.type ?? 'button'}
       className={cn(buttonVaraint({ size, variant, color }), className)}
@@ -22,7 +22,7 @@ export const Button = ({ size, variant, color, className, children, ...rest }: B
       transition={{ duration: 0.1 }}
     >
       {children}
-    </motion.button>
+    </m.button>
   );
 };
 

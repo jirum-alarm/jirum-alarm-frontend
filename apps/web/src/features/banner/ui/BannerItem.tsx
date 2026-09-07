@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import Image, { StaticImageData } from 'next/image';
 import { ReactNode } from 'react';
 
@@ -47,7 +47,7 @@ const BannerItem = ({
       target="_blank"
       data-google-vignette={isAd ? 'false' : undefined}
     >
-      <motion.div
+      <m.div
         className="flex h-full w-full items-center justify-between"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
@@ -69,7 +69,7 @@ const BannerItem = ({
             height={isMobile ? 56 : 84}
           />
         </div>
-      </motion.div>
+      </m.div>
 
       {isAd && (
         <div className="bg-opacity-90 absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#98A2B3] px-[7px] py-[3px] text-xs leading-none font-medium text-white">

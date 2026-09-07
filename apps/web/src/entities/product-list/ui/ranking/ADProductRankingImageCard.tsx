@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
@@ -23,17 +23,13 @@ export default function ProductRankingImageCard({
 }) {
   return (
     <Link href={url} target="_blank" id="ad-pirsil-ranking-20250917">
-      <motion.div
+      <m.div
         className={cn(
           'pc:h-auto pc:scale-100 pc:border h-[352px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',
           activeIndex === index && 'scale-100',
         )}
       >
-        <motion.div
-          className="h-full w-full"
-          whileTap={{ scale: 0.96 }}
-          transition={{ duration: 0.1 }}
-        >
+        <m.div className="h-full w-full" whileTap={{ scale: 0.96 }} transition={{ duration: 0.1 }}>
           <div className="pc:aspect-square pc:h-auto relative h-[240px] w-full bg-gray-50">
             <div className="text-primary-500 pc:text-white pc:bg-gray-600/80 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900 text-sm font-medium">
               AD
@@ -61,8 +57,8 @@ export default function ProductRankingImageCard({
               />
             </div>
           </div>
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </Link>
   );
 }

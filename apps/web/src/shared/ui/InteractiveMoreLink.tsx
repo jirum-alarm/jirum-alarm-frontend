@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { ReactNode } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -20,10 +20,10 @@ export default function InteractiveMoreLink({
   'aria-label': ariaLabel,
 }: InteractiveMoreLinkProps) {
   return (
-    <motion.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }} className="rounded-lg">
+    <m.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }} className="rounded-lg">
       <Link href={href} className={cn('px-2 py-1', className)} aria-label={ariaLabel}>
         {children}
       </Link>
-    </motion.div>
+    </m.div>
   );
 }

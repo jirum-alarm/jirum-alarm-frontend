@@ -28,7 +28,6 @@ export default function ProductDetailImage({ product, fill }: Props) {
       sizes={fill ? '(max-width: 768px) 100vw, 512px' : '512px'}
       fallback={<NoImage type="product-detail" categoryId={categoryId} />}
       priority
-      quality={85}
       className="size-full object-cover"
     />
   );

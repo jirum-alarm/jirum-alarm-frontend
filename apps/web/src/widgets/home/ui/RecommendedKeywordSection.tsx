@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { useRef, useState } from 'react';
 
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
@@ -146,7 +146,7 @@ export default function RecommendedKeywordSection() {
           const added = justAdded.includes(keyword);
           return (
             <li key={keyword}>
-              <motion.button
+              <m.button
                 type="button"
                 disabled={isPending || added}
                 onClick={() => handleSelect(keyword)}
@@ -172,7 +172,7 @@ export default function RecommendedKeywordSection() {
                 >
                   {added ? '✓' : '+'}
                 </span>
-              </motion.button>
+              </m.button>
             </li>
           );
         })}

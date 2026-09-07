@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
@@ -49,7 +49,7 @@ export default function ProductGridCard({
       onClick={onCardClick}
       {...productCardTracking(source, product.id, rank)}
     >
-      <motion.div
+      <m.div
         className={cn('rounded-lg', className)}
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
@@ -103,7 +103,7 @@ export default function ProductGridCard({
             </div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </Link>
   );
 }

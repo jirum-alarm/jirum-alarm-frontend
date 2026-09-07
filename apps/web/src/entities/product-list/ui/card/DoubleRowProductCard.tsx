@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
 import { formatDateToMMD } from '@/shared/lib/utils/date';
@@ -25,7 +25,7 @@ export default function DoubleRowProductCard({
 }) {
   return (
     <Link href={PAGE.DETAIL + '/' + product.id} {...productCardTracking(source, product.id)}>
-      <motion.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
+      <m.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="flex w-full flex-row items-start gap-2">
           <div className="relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
             <ProductThumbnail
@@ -60,7 +60,7 @@ export default function DoubleRowProductCard({
             </div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </Link>
   );
 }

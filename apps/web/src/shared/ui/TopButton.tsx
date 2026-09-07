@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -53,7 +53,7 @@ const TopButton = ({
   }, [type]);
 
   return (
-    <motion.button
+    <m.button
       onClick={scrollToTop}
       aria-label="스크롤 최상단 이동"
       className={cn(
@@ -67,7 +67,7 @@ const TopButton = ({
       transition={{ duration: 0.1 }}
     >
       <ArrowRight color="#475467" className="-rotate-90" />
-    </motion.button>
+    </m.button>
   );
 };
 

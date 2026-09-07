@@ -1,5 +1,6 @@
 'use client';
 
+import Script from 'next/script';
 import { env } from 'next-runtime-env';
 import { useEffect, useRef } from 'react';
 
@@ -53,6 +54,15 @@ export function AdSenseUnit({
 
   return (
     <div className={cn('overflow-hidden', className)} style={{ minHeight }}>
+      {/* 스크립트는 슬롯이 실제로 그려질 때, 그리고 load 이후에 받는다. 루트 프로바이더의 afterInteractive 는
+          preload 로 High 우선순위가 붙어 LCP 창에 56KB+162KB 가 들어갔고, 슬롯 없는 홈에서도 받았다.
+          push({}) 는 로드 전에도 큐에 쌓이고(adsbygoogle 배열 패턴), 같은 src 는 Next 가 한 번만 로드한다. */}
+      <Script
+        id="adsense"
+        strategy="lazyOnload"
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`}
+        crossOrigin="anonymous"
+      />
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}

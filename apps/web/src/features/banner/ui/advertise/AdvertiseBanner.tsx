@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -66,7 +66,7 @@ export default function AdvertiseBanner({
         data-google-vignette="false"
         onClick={() => onClickAd?.(creative)}
       >
-        <motion.div whileTap={{ scale: 0.98 }} transition={{ duration: 0.1 }}>
+        <m.div whileTap={{ scale: 0.98 }} transition={{ duration: 0.1 }}>
           <AdvertiseGraphic
             graphic={graphic}
             containerSize={renderSize}
@@ -74,7 +74,7 @@ export default function AdvertiseBanner({
             isLayoutReady={hasMeasuredWidth}
             priority={priority}
           />
-        </motion.div>
+        </m.div>
       </Link>
     </div>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { Suspense } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -29,7 +29,7 @@ type ReactionItem = {
 
 function CommunityLink({ url, provider }: { url: string; provider: string }) {
   return (
-    <motion.a
+    <m.a
       className="text-secondary-500 flex items-center gap-x-1 text-xs font-semibold"
       href={url}
       target="_blank"
@@ -41,7 +41,7 @@ function CommunityLink({ url, provider }: { url: string; provider: string }) {
       <span className="bg-secondary-500 flex size-4 items-center justify-center rounded-full">
         <ArrowRight color="#FFFFFF" width={12} height={12} strokeWidth={1.5} />
       </span>
-    </motion.a>
+    </m.a>
   );
 }
 

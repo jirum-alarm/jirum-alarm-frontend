@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -119,14 +119,14 @@ function StoreButton({ kind }: { kind: 'android' | 'apple' }) {
       onClick={() => pushEvent('app_download_click', { platform: kind, link })}
     >
       <a href={link} className="w-full">
-        <motion.span
+        <m.span
           className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}
         >
           {kind === 'android' ? <Google /> : <Apple />}
           {kind === 'android' ? 'Google Play' : 'App Store'}
-        </motion.span>
+        </m.span>
       </a>
     </AlertDialog.Action>
   );

@@ -1,19 +1,12 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  disable: process.env.NODE_ENV === 'development',
-  register: true,
-  skipWaiting: true,
-  buildExcludes: [/middleware-manifest.json$/],
-  disableDevLogs: true,
-});
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: false,
 });
 
 /** @type {import('next').NextConfig} */
-const nextConfig = withPWA({
+const nextConfig = {
   output: 'standalone',
   httpAgentOptions: {
     keepAlive: true,
@@ -52,6 +45,8 @@ const nextConfig = withPWA({
     // Product thumbnails are displayed at 120, 160, 192, 252px.
     // Adding these sizes prevents Next.js from over-serving larger variants (e.g., 384→320, 640→550).
     imageSizes: [120, 160, 192, 256, 320, 384, 420, 550],
+    // 기본값의 2048·3840 을 뺀다. 원본 상품 이미지가 그만큼 크지 않고, fill 이미지 srcset·preload 만 길어졌다.
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     remotePatterns: [
       {
         protocol: 'https',
@@ -80,7 +75,7 @@ const nextConfig = withPWA({
     maxInactiveAge: 60 * 60 * 1000,
     pagesBufferLength: 10,
   },
-});
+};
 
 module.exports = withBundleAnalyzer(nextConfig);
 
@@ -112,6 +107,14 @@ module.exports = withSentryConfig(module.exports, {
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
+
+  // Replay 를 안 쓴다(instrumentation-client). rrweb 의 iframe·shadowDOM·worker 코드까지 빌드 타임에 잘라낸다.
+  bundleSizeOptimizations: {
+    excludeDebugStatements: true,
+    excludeReplayIframe: true,
+    excludeReplayShadowDom: true,
+    excludeReplayWorker: true,
+  },
 
   // See the following for more information:
   // https://docs.sentry.io/product/crons/

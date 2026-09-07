@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { cn } from '@/shared/lib/cn';
 
@@ -38,13 +38,13 @@ const RecommendedProductTabs = ({
             'border-gray-300 bg-white text-gray-700': selectedKeyword !== keyword,
           })}
         >
-          <motion.button
+          <m.button
             className="px-[16px] py-[6px]"
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.1 }}
           >
             {keyword}
-          </motion.button>
+          </m.button>
         </li>
       ))}
     </ul>

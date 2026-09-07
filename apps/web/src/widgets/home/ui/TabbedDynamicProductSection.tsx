@@ -1,7 +1,7 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { Suspense, useState } from 'react';
 
 import Link from '@/shared/ui/Link';
@@ -72,7 +72,7 @@ const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProduct
           title={section.title}
           right={
             activeTab.viewMoreLink ? (
-              <motion.div
+              <m.div
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.1 }}
                 className="rounded-lg"
@@ -84,7 +84,7 @@ const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProduct
                 >
                   더보기
                 </Link>
-              </motion.div>
+              </m.div>
             ) : undefined
           }
         />
