@@ -63,6 +63,9 @@ const ProductThumbnail = memo(function ProductThumbnail({
       placeholder={REMOTE_IMAGE_PLACEHOLDER}
       sizes={sizes}
       priority={priority}
+      // Next 16 의 priority 는 preload·eager 만 주고 fetchpriority 는 안 붙인다 → 크롬은 LCP 후보를
+      // 나머지 25장과 같은 Low 로 받는다(홈 실측: 랭킹 1번 카드 15KB 가 Slow 4G 에서 2.2s). 명시한다.
+      fetchPriority={priority ? 'high' : undefined}
       loading={loading}
       quality={quality}
       className={cn('object-cover', className)}
