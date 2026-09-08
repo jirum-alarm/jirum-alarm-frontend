@@ -111,25 +111,35 @@ describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', (
     expect(code).not.toContain('useSyncExternalStore');
   });
 
-  it('★★네이티브 화면은 상쇄 패딩을 쓰지 않는다', () => {
-    // 내비게이터가 marginBottom: -clipPx 로 화면을 당기고, 화면이
-    // paddingBottom: clipPx 로 되미는 구조였다. 두 값이 서로 다른 경로로
-    // 오기 때문에(전역 store vs 네비 options) 한 프레임 어긋나면
-    // 그 사이 여백이 보인다 — "생겼다 사라지는" 정체.
-    //
-    // 네이티브 화면의 하단 UI(BottomCTA·댓글 입력)는 자체적으로
-    // insets.bottom 을 처리하므로 상쇄 패딩이 애초에 불필요하다.
-    for (const f of [
-      'src/screens/detail/ProductDetailScreen.tsx',
-      'src/screens/comment/ProductCommentsScreen.tsx',
-    ]) {
-      expect(read(f)).not.toContain('useHiddenTabBarClipPadding');
-    }
-    // 하단 UI 가 여백을 직접 계산한다(그래서 상쇄 패딩이 필요 없다).
-    // 상세에선 탭바도 보이므로 탭바 높이까지 포함한다.
+  it('★★탭바를 숨기지 않는 화면만 상쇄 패딩을 쓰지 않는다', () => {
+    // 상세는 탭바를 **숨기지 않으므로**(2026-08-17 사용자 지시) clip 이 0 이다
+    // → 상쇄할 것이 없다. BottomCTA 가 탭바 높이를 직접 비운다.
+    expect(read('src/screens/detail/ProductDetailScreen.tsx')).not.toContain(
+      'useHiddenTabBarClipPadding',
+    );
     expect(read('src/screens/detail/ui/BottomCTA.tsx')).toContain(
       'getReservedBottomPx(insets.bottom)',
     );
+  });
+
+  it('★★탭바를 숨기는 화면의 하단 고정 UI 는 반드시 상쇄한다', () => {
+    // 🔴예전 이 테스트는 상쇄 패딩을 **금지**했다. 그 근거("하단 UI 는
+    // insets.bottom 만으로 충분하다")가 iOS 26 실측에서 틀렸다:
+    // 탭바를 숨기는 유일한 수단이 화면째로 clipPx 내려서 잘라내기라
+    // (`BottomTabs` 에 숨기는 prop 이 없다) 바닥에 붙은 입력창이 잘린
+    // 영역으로 들어가 통째로 사라졌다(사용자 지적 2회: "댓글 입력하는게
+    // 사라지네" → clip 을 끄니 "바텀 네비랑 겹쳐있어").
+    //
+    // 깜빡임 우려는 훅이 hideCount(항상 0)를 보던 시절의 것이고, 지금은
+    // 내비게이터와 **같은 신호**(tabBarVisible)를 본다 — 위 테스트가 고정.
+    for (const f of [
+      'src/screens/comment/ProductCommentsScreen.tsx',
+      'src/screens/community/CommunityPostScreen.tsx',
+    ]) {
+      const src = read(f);
+      expect(src).toContain('useHiddenTabBarClipPadding');
+      expect(src).toContain('Math.max(insets.bottom, 4) + bottomClip');
+    }
   });
 
   it('★★상세 두 갈래가 같은 탭바 정책을 쓴다', () => {
@@ -157,6 +167,32 @@ describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', (
   it('양쪽이 같은 getTabBarClipPx 를 쓴다', () => {
     expect(navigator).toContain('getTabBarClipPx');
     expect(hook).toContain('getTabBarClipPx');
+  });
+});
+
+describe('★★탭바를 숨기는 수단이 clip 하나뿐임을 못 박는다', () => {
+  it('BottomTabs 에 숨기는 prop 이 없어 clip 이 곧 숨김이다', () => {
+    // display:'none' 은 이 래퍼가 해석하는 우리 규약일 뿐이고, 실제 동작은
+    // marginBottom: -clipPx + 바깥 overflow:hidden 이다. 그래서 clip 을 끄면
+    // **탭바가 그대로 보인다** — 한 번 그렇게 고쳤다가 사용자가 잡았다.
+    expect(navigator).toContain("overflow: 'hidden'");
+    expect(navigator).toContain('marginBottom: -clipPx');
+    expect(navigator).not.toContain('tabBarHidden');
+  });
+});
+
+describe('★네이티브 FAB 은 safe-area 를 포함한 여백을 쓴다', () => {
+  it('커뮤니티 글쓰기 버튼은 getFabPaddingPx 를 쓰지 않는다', () => {
+    // getFabPaddingPx 는 **웹뷰 주입용**이라 iOS 26 에서 safe-area 를 일부러
+    // 뺀다(web 이 자기 1rem 을 더한다). 네이티브의 bottom:0 은 홈 인디케이터
+    // 아래라 그 값을 쓰면 글래스 탭바와 겹친다(사용자 지적).
+    const community = read('src/screens/community/CommunityScreen.tsx');
+    const code = community
+      .split('\n')
+      .filter((l: string) => !/^\s*(\/\/|\*|\/\*)/.test(l))
+      .join('\n');
+    expect(code).not.toContain('getFabPaddingPx');
+    expect(code).toContain('reservedBottom + GLASS_BOTTOM_GAP');
   });
 });
 

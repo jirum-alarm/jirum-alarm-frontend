@@ -1,6 +1,8 @@
 import React, {useCallback, useEffect} from 'react';
 import {ActivityIndicator, FlatList, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
+import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -23,6 +25,7 @@ type Props = NativeStackScreenProps<
 export default function ProductCommentsScreen({route, navigation}: Props) {
   const {productId} = route.params;
   const insets = useSafeAreaInsets();
+  const bottomClip = useHiddenTabBarClipPadding();
 
   useEffect(() => {
     const unsub = navigation.addListener('beforeRemove', () => {
@@ -82,7 +85,14 @@ export default function ProductCommentsScreen({route, navigation}: Props) {
             }
           />
         )}
-        <View style={{paddingBottom: Math.max(insets.bottom, 4)}}>
+        {/*
+          ★clip 보정. 탭바를 숨기는 유일한 수단이 화면째로 clipPx 만큼 내려서
+          잘라내는 것이라(`createNativeBottomTabNavigator`), 바닥에 붙은 이
+          입력창이 그 잘린 영역으로 들어가 **통째로 사라졌다**(iOS 26 실측:
+          마지막 1px 만 보였다 — 사용자 지적 2회). 내정보 하위 화면 11개는
+          이미 같은 훅으로 되돌리고 있다.
+        */}
+        <View style={{paddingBottom: Math.max(insets.bottom, 4) + bottomClip}}>
           <CommentInput productId={productId} isUserLogin={!!myUserId} />
         </View>
       </KeyboardAvoidingView>

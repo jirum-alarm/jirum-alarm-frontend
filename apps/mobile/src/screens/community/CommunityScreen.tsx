@@ -20,7 +20,7 @@ import CommunityPostCard from '@/features/community/ui/CommunityPostCard';
 import CommunityTabBar from '@/features/community/ui/CommunityTabBar';
 import NoticePostCard from '@/features/community/ui/NoticePostCard';
 import {
-  getFabPaddingPx,
+  GLASS_BOTTOM_GAP,
   getReservedBottomPx,
 } from '@/navigations/tab/tab-bar-metrics';
 import {useRegisterScrollToTop} from '@/navigations/tab/scroll-to-top-store';
@@ -179,7 +179,15 @@ export default function CommunityScreen() {
       <View
         // 버튼 바깥은 목록이 계속 스크롤돼야 한다.
         pointerEvents="box-none"
-        style={[styles.fabWrap, {bottom: getFabPaddingPx(insets.bottom) + 8}]}>
+        style={[
+          styles.fabWrap,
+          // 🔴`getFabPaddingPx` 를 쓰지 않는다. 그건 **웹뷰**에 주입하는 값이라
+          // iOS 26 에서 safe-area 를 일부러 뺀다(web 이 자기 1rem 을 더한다).
+          // 네이티브 화면의 `bottom: 0` 은 홈 인디케이터 **아래**라 safe-area 를
+          // 포함해야 한다 — 안 하면 글래스 탭바와 겹친다(실측: 탭바 상단이
+          // 바닥에서 87pt 인데 FAB 은 69pt 에 있어 21pt 만 보였다).
+          {bottom: reservedBottom + GLASS_BOTTOM_GAP},
+        ]}>
         <Pressable
           onPress={openWrite}
           accessibilityRole="button"

@@ -11,6 +11,8 @@ import {
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
+import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
 
 import {UserQueries} from '@/entities/user/user.queries';
@@ -48,6 +50,7 @@ type Props = NativeStackScreenProps<
 export default function CommunityPostScreen({route, navigation}: Props) {
   const {postId} = route.params;
   const insets = useSafeAreaInsets();
+  const bottomClip = useHiddenTabBarClipPadding();
   const [menuOpen, setMenuOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -215,7 +218,14 @@ export default function CommunityPostScreen({route, navigation}: Props) {
             서로 다른 경로로 와서 한 프레임 어긋날 때 여백이 보인다(폐기된 방식,
             __tests__/tabbar-visibility.test.ts 가 고정). 입력창이 가려 보였던 건
             딥링크로 탭 전환+push 할 때 **탭바가 안 숨던 버그**였다. */}
-        <View style={{paddingBottom: Math.max(insets.bottom, 4)}}>
+        {/*
+          ★clip 보정. 탭바를 숨기는 유일한 수단이 화면째로 clipPx 만큼 내려서
+          잘라내는 것이라(`createNativeBottomTabNavigator`), 바닥에 붙은 이
+          입력창이 그 잘린 영역으로 들어가 **통째로 사라졌다**(iOS 26 실측:
+          마지막 1px 만 보였다 — 사용자 지적 2회). 내정보 하위 화면 11개는
+          이미 같은 훅으로 되돌리고 있다.
+        */}
+        <View style={{paddingBottom: Math.max(insets.bottom, 4) + bottomClip}}>
           <CommunityCommentInput onSubmit={addComment} isPending={isAdding} />
         </View>
       </KeyboardAvoidingView>
