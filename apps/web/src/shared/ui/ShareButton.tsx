@@ -1,13 +1,12 @@
 'use client';
 
-import { EVENT } from '@/shared/config/mixpanel';
 import { Share } from '@/shared/ui/common/icons';
 import ShareSheet from '@/shared/ui/ShareSheet';
 
 type Props = {
   title: string;
   /** 계측이 GTM DOM 트리거였던 시절의 잔재(미사용) — 호출처 호환용. */
-  page?: keyof typeof EVENT.PAGE;
+  page?: string;
   description?: string;
   imageUrl?: string;
 };

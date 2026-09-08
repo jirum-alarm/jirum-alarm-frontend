@@ -3,7 +3,7 @@
  *
  * 계측은 GTM이 한다(코드가 직접 push하지 않음). 카드 상세링크에 아래 data 속성을
  * 박아두면, GTM Click 트리거가 `data-track="product-card"`를 보고 발화하면서
- * source/product-id/rank를 읽어 `product_card_click` 이벤트로 GA4·Mixpanel에 보낸다.
+ * source/product-id/rank를 읽어 `product_card_click` 이벤트로 GA4 에 보낸다.
  *
  * 진입 경로(source)별 전환율(= 어디서 클릭한 게 구매까지 가나)을 보기 위한 것.
  */

@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 // dataLayer(GTM) push — 프로젝트 전 이벤트가 이 경로 (FirstVisitAppAlertModal 패턴).
-// ★GTM 컨테이너에 이벤트를 등록해야 Mixpanel 에 도달함 — 배선만으로는 미도달 (2026-07-08 실증).
+// ★GTM 컨테이너에 이벤트를 등록해야 분석 도구에 도달함 — 배선만으로는 미도달 (2026-07-08 실증).
 function pushEvent(event: string, props: Record<string, unknown>) {
   if (typeof window === 'undefined') return;
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({

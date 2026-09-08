@@ -1,6 +1,5 @@
 'use client';
 
-import { EVENT } from '@/shared/config/mixpanel';
 import { cn } from '@/shared/lib/cn';
 
 import { type ProductCardSource } from '@/entities/product-list/model/card-tracking';
@@ -14,7 +13,7 @@ type ProductGridListProps = {
   className?: string;
   cardClassName?: string;
   displayTime?: boolean;
-  logging?: { page: keyof typeof EVENT.PAGE };
+  logging?: { page: string };
   priorityCount?: number;
   source?: ProductCardSource;
 };

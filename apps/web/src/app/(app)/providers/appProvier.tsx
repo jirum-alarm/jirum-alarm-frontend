@@ -43,7 +43,8 @@ export const AppProvider = ({ children, device, isLoggedIn }: Props) => {
   return (
     <>
       {/* GTM 은 load 이후. @next/third-parties 의 afterInteractive 는 App Router 에서 preload 를 만들어
-          139KB 가 High 우선순위로 LCP 창에 들어갔다(그 뒤 gtag 191KB·mixpanel 33KB 가 따라온다).
+          139KB 가 High 우선순위로 LCP 창에 들어갔다(그 뒤 gtag 191KB 가 따라온다).
+          ⚠️ Mixpanel 은 코드에 없다 — 운영에서 cdn.mxpnl.com 33KB 가 보이면 GTM 컨테이너의 태그다.
           dataLayer 는 root layout <head> 인라인 스크립트가 먼저 만들어 두므로 그 사이 push 는 큐에 남는다. */}
       {IS_PRD ? (
         <Script

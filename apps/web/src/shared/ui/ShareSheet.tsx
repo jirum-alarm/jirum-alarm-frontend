@@ -28,7 +28,7 @@ type Props = {
 };
 
 // dataLayer(GTM) push — DealsTracking 패턴.
-// ★GTM 컨테이너에 share_channel_click 을 등록해야 Mixpanel 에 도달한다(배선만으론 미도달).
+// ★GTM 컨테이너에 share_channel_click 을 등록해야 분석 도구에 도달한다(배선만으론 미도달).
 const track = (channel: ShareChannel) => {
   if (typeof window === 'undefined') return;
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
