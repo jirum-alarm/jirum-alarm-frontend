@@ -20,26 +20,46 @@ const toParams = (
   return out;
 };
 
-// 분석 실패가 앱 흐름을 막지 않는다 — 전부 fire-and-forget + 로그.
+/**
+ * 분석 실패가 앱 흐름을 막지 않는다 — 전부 fire-and-forget + 로그.
+ *
+ * 🔴`.catch()` 만으로는 그 약속이 지켜지지 않는다. `analytics()` 자체가 **동기로
+ * 던진다** — 네이티브 모듈이 없는 앱에서는 프라미스가 만들어지기도 전에 예외가
+ * 나서 호출부까지 올라간다:
+ *
+ *   Uncaught Error: You attempted to use a Firebase module that's not installed
+ *   natively ... have rebuilt your native application.
+ *     at Analytics.track → open (useDeepLink) → Linking.addEventListener
+ *
+ * iOS 26 시뮬레이터 실측: 딥링크를 열면 **앱이 레드스크린으로 죽었다.** 네이티브
+ * 모듈이 추가된 커밋 이전에 만들어진 빌드가 그렇고, ⚠️**JS 만 나가는 OTA
+ * 업데이트**를 받은 설치 앱도 같다(스토어 빌드가 나가기 전까지).
+ * 그래서 호출 자체를 try/catch 로 감싼다.
+ */
+const safely = (label: string, run: () => Promise<unknown>) => {
+  try {
+    run().catch(e => console.error(`[GA4] ${label} 실패:`, e));
+  } catch (e) {
+    // 네이티브 모듈 부재 등 동기 예외. 로그만 남기고 흐름은 그대로 진행한다.
+    console.error(`[GA4] ${label} 불가:`, e);
+  }
+};
+
 export const Analytics = {
   // 로그인 유저 식별 — 웹의 user_id 와 같은 키로 크로스 플랫폼 유저 병합.
   identify(userId: string) {
     if (!userId) return;
-    analytics()
-      .setUserId(userId)
-      .catch(e => console.error('[GA4] identify 실패:', e));
+    safely('identify', () => analytics().setUserId(userId));
   },
 
   track(event: string, props?: Record<string, unknown>) {
-    analytics()
-      .logEvent(event, toParams(props))
-      .catch(e => console.error(`[GA4] track(${event}) 실패:`, e));
+    safely(`track(${event})`, () =>
+      analytics().logEvent(event, toParams(props)),
+    );
   },
 
   // 로그아웃 시 user_id 해제(다음 유저와 섞이지 않도록).
   reset() {
-    analytics()
-      .setUserId(null)
-      .catch(e => console.error('[GA4] reset 실패:', e));
+    safely('reset', () => analytics().setUserId(null));
   },
 };
