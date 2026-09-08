@@ -23,7 +23,7 @@ import ShareIcon from '@/shared/components/icons/share';
 import ShareLink from '@/shared/components/icons/share-link';
 import ShareThreads from '@/shared/components/icons/share-threads';
 import ShareX from '@/shared/components/icons/share-x';
-import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {showToast} from '@/shared/lib/feedback';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {
@@ -136,7 +136,7 @@ export default function ShareSheet({
     if (pending || copied) return;
     setPending(channel);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-    MixpanelService.track('share_channel_click', {share_channel: channel});
+    Analytics.track('share_channel_click', {share_channel: channel});
 
     const url = buildProductShareUrl(productId, channel);
     const caption = buildCaption(shareTitle, description);

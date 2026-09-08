@@ -6,7 +6,7 @@ import Svg, {Path} from 'react-native-svg';
 import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
 import PressableScale from '@/shared/components/PressableScale';
-import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {showToast} from '@/shared/lib/feedback';
 import {
   usePendingAction,
@@ -97,7 +97,7 @@ export default function PostPurchaseKeywordPrompt({
 
   useEffect(() => {
     if (!visible || done) return;
-    MixpanelService.track('keyword_prompt_view', {keyword});
+    Analytics.track('keyword_prompt_view', {keyword});
   }, [visible, done, keyword]);
 
   if (!visible) return null;
@@ -152,7 +152,7 @@ export default function PostPurchaseKeywordPrompt({
       <View className="flex-row items-center">
         <PressableScale
           onPress={() => {
-            MixpanelService.track('keyword_prompt_click', {
+            Analytics.track('keyword_prompt_click', {
               keyword,
               logged_in: isUserLogin,
             });

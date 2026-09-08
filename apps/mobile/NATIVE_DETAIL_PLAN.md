@@ -156,7 +156,7 @@ codegen documents 글롭이 `./src/graphql/*.ts` 라 파일만 만들면 자동�
 **BottomCTA 주의**
 - 웹은 `<a target="_blank">` → 네이티브는 `openInAppBrowser(product.detailUrl)`
   (`shared/lib/navigation` 에 이미 있음)
-- `dataLayer.push` 는 GTM 이라 RN 에 없다 → `mixpanel.ts` 로 대체.
+- `dataLayer.push` 는 GTM 이라 RN 에 없다 → `analytics/ga4.ts`(Firebase Analytics = GA4 앱 스트림) 로 대체.
   **그냥 지우면 구매 클릭 추적이 사라진다** — 수익 지표라 반드시 갈아끼울 것.
 - 하단 safe-area 는 `useSafeAreaInsets()`
 
@@ -243,7 +243,7 @@ codegen documents 글롭이 `./src/graphql/*.ts` 라 파일만 만들면 자동�
 2. `entities/product/product.queries.ts` — react-query 옵션, `retry` 개별 지정
 3. `ProductDetailScreen.tsx` — 상단 네이티브 + 폴백 분기, 아래는 웹뷰
 4. `TabStackNavigator` 스위치 + 탭바 visibility focus/blur 배선
-5. 조회수·최근본상품·구매클릭(mixpanel) 배선
+5. 조회수·최근본상품·구매클릭(GA4) 배선
 6. FCM 딥링크를 `navigation.push` 로 분기 (함정 6)
 7. `__tests__/product-detail-route.test.ts` — path→id 파싱과 폴백 분기만 테스트
    (기존 `tab-routing.test.ts` 옆에)

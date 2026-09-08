@@ -7,7 +7,7 @@ import {AuthQueries} from '@/entities/auth';
 import {AuthService} from '@/shared/api/auth/auth.service';
 import {OauthProvider} from '@/shared/api/gql/graphql';
 import {showToast} from '@/shared/lib/feedback';
-import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {UserService} from '@/shared/api/user/user.service';
 import {handleLoginError, handleLoginSuccess} from './lib';
 
@@ -33,11 +33,11 @@ export const useSocialLogin = () => {
         // identify 는 가입/로그인 모두에서 호출해 익명↔회원 프로필을 병합한다.
         try {
           if (token.socialLogin.type === 'SIGNUP') {
-            MixpanelService.track('signup_complete');
+            Analytics.track('signup_complete');
           }
           const userId = await UserService.fetchMyId();
           if (userId) {
-            MixpanelService.identify(userId);
+            Analytics.identify(userId);
           }
         } catch {
           // 분석 실패는 로그인 흐름을 막지 않는다.

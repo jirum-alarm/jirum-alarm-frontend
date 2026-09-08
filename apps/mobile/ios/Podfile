@@ -19,6 +19,8 @@ target 'jirumAlarmMobile' do
   use_expo_modules!
   use_frameworks! :linkage => :static
   $RNFirebaseAsStaticFramework = true
+  # 광고식별자(IDFA) 없는 Analytics — ATT 프롬프트 없이 GA4 이벤트만 보낸다.
+  $RNFirebaseAnalyticsWithoutAdIdSupport = true
 
   if ENV['EXPO_USE_COMMUNITY_AUTOLINKING'] == '1'
     config_command = ['node', '-e', "process.argv=['', '', 'config'];require('@react-native-community/cli').run()"];

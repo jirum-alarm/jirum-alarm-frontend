@@ -6,7 +6,7 @@ import {
   areNativeTabsMounted,
   navigateToNativeRoute,
 } from '@/navigations/navigation-ref';
-import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 
 /**
  * 외부 딥링크(카톡 공유·유니버설 링크·커스텀 스킴)로 앱을 여는 경로.
@@ -30,7 +30,7 @@ export default function useDeepLink(openInWebView: (url: string) => void) {
       const url = normalizeDeepLink(rawUrl);
       if (!url) return;
 
-      MixpanelService.track('deeplink_opened', {
+      Analytics.track('deeplink_opened', {
         url,
         platform: 'app',
         state: from,

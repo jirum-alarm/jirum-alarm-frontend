@@ -10,7 +10,7 @@ import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
 import Button from '@/shared/components/ui/Button';
 import Heart from '@/shared/components/icons/Heart';
-import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {showToast} from '@/shared/lib/feedback';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {cn} from '@/shared/lib/styling';
@@ -79,9 +79,9 @@ export default function BottomCTA({
   const handlePurchase = useCallback(async () => {
     if (!product.detailUrl) return;
 
-    // web 은 GTM dataLayer 로 보낸다. RN 에는 GTM 이 없으므로 Mixpanel 로 대체 —
+    // web 은 GTM dataLayer 로 보낸다. RN 에는 GTM 이 없으므로 GA4(Firebase Analytics) 로 직접 보낸다 —
     // 그냥 지우면 구매 클릭 추적(수익 지표)이 사라진다.
-    MixpanelService.track('purchase_link_click', {
+    Analytics.track('purchase_link_click', {
       product_id: String(product.id),
       click_url: product.detailUrl,
       monetized: product.isProfitUrl ?? false,
@@ -136,7 +136,7 @@ export default function BottomCTA({
                 ? Haptics.ImpactFeedbackStyle.Light
                 : Haptics.ImpactFeedbackStyle.Medium,
             ).catch(() => {});
-            MixpanelService.track('product_wish', {
+            Analytics.track('product_wish', {
               product_id: productId,
               wish_action: isWishlisted ? 'remove' : 'add',
             });

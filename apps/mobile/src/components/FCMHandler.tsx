@@ -4,7 +4,7 @@ import * as Notifications from 'expo-notifications';
 import useFCMTokenManager from '@/shared/hooks/useFCMTokenManager.ts';
 import {onForegroundMessageHandler} from '../shared/lib/fcm/index.ts';
 import {useWebviewContext} from '../provider/WebViewRefProvider.tsx';
-import {MixpanelService} from '@/shared/lib/analytics/mixpanel';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {navigateToNativeRoute} from '@/navigations/navigation-ref.ts';
 import useDeepLink from '@/shared/hooks/useDeepLink.ts';
 import {queryClient} from '@/provider/ReactQueryProvider.tsx';
@@ -17,12 +17,12 @@ interface FcmHandlerProps {
 const goProductDetail = (url: string) => `window.location.href = "${url}";`;
 
 // 알림 클릭 추적 — 서버 notification_sent(발송)와 target/target_id/url 로 연결.
-// state: killed(종료) | background | foreground. push_history/Mixpanel 발송과 퍼널.
+// state: killed(종료) | background | foreground. push_history/GA4 발송과 퍼널.
 const trackNotificationClick = (
   data: {link?: unknown; target?: unknown; target_id?: unknown} | undefined,
   state: 'killed' | 'background' | 'foreground',
 ) => {
-  MixpanelService.track('notification_clicked', {
+  Analytics.track('notification_clicked', {
     url: typeof data?.link === 'string' ? data.link : undefined,
     target: data?.target,
     target_id: data?.target_id,

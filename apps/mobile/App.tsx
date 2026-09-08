@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 
 import ReactQueryProvider from './src/provider/ReactQueryProvider.tsx';
-import {MixpanelService} from '@/shared/lib/analytics/mixpanel.ts';
 import {NavigationContainer} from '@react-navigation/native';
 import {navigationRef} from '@/navigations/navigation-ref.ts';
 import RootNavigator from './src/navigations/root/RootNavigator.tsx';
@@ -25,11 +24,6 @@ initSentry();
 
 function App(): React.JSX.Element {
   const webViewRefManager = useWebViewRefManager();
-
-  useEffect(() => {
-    // 앱 진입 시 분석 SDK 초기화(토큰 없으면 no-op). identify/track 은 로그인 흐름에서.
-    MixpanelService.init();
-  }, []);
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
