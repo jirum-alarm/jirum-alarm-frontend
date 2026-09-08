@@ -25,6 +25,11 @@ type Documents = {
   '\n  mutation AddComment($productId: Int!, $content: String!, $parentId: Int) {\n    addComment(productId: $productId, content: $content, parentId: $parentId)\n  }\n': typeof types.AddCommentDocument;
   '\n  mutation UpdateComment($id: Int!, $content: String) {\n    updateComment(id: $id, content: $content)\n  }\n': typeof types.UpdateCommentDocument;
   '\n  mutation RemoveComment($id: Int!) {\n    removeComment(id: $id)\n  }\n': typeof types.RemoveCommentDocument;
+  '\n  query CommunityPosts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $isNotice: Boolean\n    $isTrending: Boolean\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      isNotice: $isNotice\n      isTrending: $isTrending\n      isRoot: true\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      title\n      content\n      createdAt\n      searchAfter\n      isNotice\n      likeCount\n      replyCount\n      viewCount\n      isMyLike\n      isMyReported\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n': typeof types.CommunityPostsDocument;
+  '\n  query CommunityPost($id: Int!) {\n    comment(id: $id) {\n      id\n      title\n      content\n      createdAt\n      likeCount\n      viewCount\n      isMyLike\n      isNotice\n      isMyReported\n      productId\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n': typeof types.CommunityPostDocument;
+  '\n  query CommunityPostComments(\n    $parentId: Int!\n    $limit: Int!\n    $searchAfter: [String!]\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      parentId: $parentId\n      limit: $limit\n      searchAfter: $searchAfter\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      content\n      createdAt\n      searchAfter\n      likeCount\n      isMyLike\n      author {\n        id\n        nickname\n      }\n    }\n  }\n': typeof types.CommunityPostCommentsDocument;
+  '\n  mutation AddCommunityComment($parentId: Int!, $content: String!) {\n    addComment(parentId: $parentId, content: $content)\n  }\n': typeof types.AddCommunityCommentDocument;
+  '\n  mutation AddUserReport(\n    $target: UserReportTarget!\n    $targetId: Float!\n    $reason: UserReportReason!\n    $description: String\n  ) {\n    addUserReport(\n      target: $target\n      targetId: $targetId\n      reason: $reason\n      description: $description\n    )\n  }\n': typeof types.AddUserReportDocument;
   '\n  query HotDealRankingProducts($page: Int!, $limit: Int!) {\n    hotDealRankingProducts(page: $page, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.HotDealRankingProductsDocument;
   '\n  query GuestRecommendedHotDeals($page: Int!, $limit: Int!) {\n    guestRecommendedHotDeals(page: $page, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.GuestRecommendedHotDealsDocument;
   '\n  query HomeProductsByKeyword(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.HomeProductsByKeywordDocument;
@@ -36,6 +41,23 @@ type Documents = {
   '\n  query TossCategoryLabels {\n    tossCategoryLabels\n  }\n': typeof types.TossCategoryLabelsDocument;
   '\n  query TossProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $keyword: String!\n    $orderBy: KeywordProductOrderType!\n    $orderOption: OrderOptionType!\n    $tossCategoryLabel: String\n  ) {\n    productsByKeyword(\n      limit: $limit\n      searchAfter: $searchAfter\n      keyword: $keyword\n      orderBy: $orderBy\n      orderOption: $orderOption\n      tossCategoryLabel: $tossCategoryLabel\n    ) {\n      id\n      title\n      price\n      thumbnail\n      data\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.TossProductsDocument;
   '\n  query CommunityRandomRankingProducts($count: Int!, $limit: Int!) {\n    communityRandomRankingProducts(count: $count, limit: $limit) {\n      id\n      title\n      mallId\n      mallName\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      postedAt\n    }\n  }\n': typeof types.CommunityRandomRankingProductsDocument;
+  '\n  query QueryMyProfile {\n    me {\n      id\n      email\n      nickname\n      birthYear\n      gender\n      favoriteCategories\n    }\n  }\n': typeof types.QueryMyProfileDocument;
+  '\n  mutation MutationUpdateMyProfile(\n    $nickname: String\n    $birthYear: Float\n    $gender: Gender\n    $favoriteCategories: [Int!]\n  ) {\n    updateUserProfile(\n      nickname: $nickname\n      birthYear: $birthYear\n      gender: $gender\n      favoriteCategories: $favoriteCategories\n    )\n  }\n': typeof types.MutationUpdateMyProfileDocument;
+  '\n  mutation MutationUpdateMyPassword($password: String!) {\n    updatePassword(password: $password)\n  }\n': typeof types.MutationUpdateMyPasswordDocument;
+  '\n  mutation MutationWithdraw {\n    withdraw\n  }\n': typeof types.MutationWithdrawDocument;
+  '\n  query QueryMyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n      priceDropOnly\n    }\n  }\n': typeof types.QueryMyNotificationKeywordsDocument;
+  '\n  mutation MutationAddMyNotificationKeyword(\n    $keyword: String!\n    $fromRecommendation: Boolean\n    $priceDropOnly: Boolean\n  ) {\n    addNotificationKeyword(\n      keyword: $keyword\n      fromRecommendation: $fromRecommendation\n      priceDropOnly: $priceDropOnly\n    )\n  }\n': typeof types.MutationAddMyNotificationKeywordDocument;
+  '\n  mutation MutationRemoveMyNotificationKeyword($id: Float!) {\n    removeNotificationKeyword(id: $id)\n  }\n': typeof types.MutationRemoveMyNotificationKeywordDocument;
+  '\n  mutation MutationUpdateKeywordPriceDropOnly(\n    $id: Int!\n    $priceDropOnly: Boolean!\n  ) {\n    updateNotificationKeywordPriceDropOnly(\n      id: $id\n      priceDropOnly: $priceDropOnly\n    )\n  }\n': typeof types.MutationUpdateKeywordPriceDropOnlyDocument;
+  '\n  query QueryMyWishlists(\n    $orderBy: WishlistOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    wishlists(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      productId\n      searchAfter\n      product {\n        id\n        title\n        price\n        isHot\n        isEnd\n        isPrivate\n        postedAt\n        hotDealType\n        thumbnail\n        isMyWishlist\n        categoryId\n        mallName\n        provider {\n          nameKr\n        }\n      }\n    }\n  }\n': typeof types.QueryMyWishlistsDocument;
+  '\n  query QueryMyWishlistCount {\n    wishlistCount\n  }\n': typeof types.QueryMyWishlistCountDocument;
+  '\n  mutation MutationAddMyWishlist($productId: Int!) {\n    addWishlist(productId: $productId)\n  }\n': typeof types.MutationAddMyWishlistDocument;
+  '\n  mutation MutationRemoveMyWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n': typeof types.MutationRemoveMyWishlistDocument;
+  '\n  query QueryNotificationThemes {\n    notificationThemes {\n      id\n      name\n      description\n      emoji\n      representativeKeywords\n    }\n  }\n': typeof types.QueryNotificationThemesDocument;
+  '\n  query QueryMySubscribedThemeIds {\n    mySubscribedThemeIds\n  }\n': typeof types.QueryMySubscribedThemeIdsDocument;
+  '\n  query QueryNotificationThemeLiveDeals($themeId: Int!) {\n    notificationThemeLiveDeals(themeId: $themeId) {\n      id\n      title\n      thumbnail\n      price\n      postedAt\n      categoryId\n      isEnd\n      isHot\n      hotDealType\n      mallName\n      provider {\n        nameKr\n      }\n    }\n  }\n': typeof types.QueryNotificationThemeLiveDealsDocument;
+  '\n  mutation MutationSubscribeNotificationTheme($themeId: Int!) {\n    subscribeNotificationTheme(themeId: $themeId)\n  }\n': typeof types.MutationSubscribeNotificationThemeDocument;
+  '\n  mutation MutationUnsubscribeNotificationTheme($themeId: Int!) {\n    unsubscribeNotificationTheme(themeId: $themeId)\n  }\n': typeof types.MutationUnsubscribeNotificationThemeDocument;
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n': typeof types.MutationAddPushTokenDocument;
   '\n  query QueryNotifications($limit: Int!, $offset: Int!) {\n    notifications(limit: $limit, offset: $offset) {\n      id\n      message\n      createdAt\n      readAt\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n': typeof types.QueryNotificationsDocument;
   '\n  query QueryUnreadNotificationsCount {\n    unreadNotificationsCount\n  }\n': typeof types.QueryUnreadNotificationsCountDocument;
@@ -87,6 +109,16 @@ const documents: Documents = {
     types.UpdateCommentDocument,
   '\n  mutation RemoveComment($id: Int!) {\n    removeComment(id: $id)\n  }\n':
     types.RemoveCommentDocument,
+  '\n  query CommunityPosts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $isNotice: Boolean\n    $isTrending: Boolean\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      isNotice: $isNotice\n      isTrending: $isTrending\n      isRoot: true\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      title\n      content\n      createdAt\n      searchAfter\n      isNotice\n      likeCount\n      replyCount\n      viewCount\n      isMyLike\n      isMyReported\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n':
+    types.CommunityPostsDocument,
+  '\n  query CommunityPost($id: Int!) {\n    comment(id: $id) {\n      id\n      title\n      content\n      createdAt\n      likeCount\n      viewCount\n      isMyLike\n      isNotice\n      isMyReported\n      productId\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n':
+    types.CommunityPostDocument,
+  '\n  query CommunityPostComments(\n    $parentId: Int!\n    $limit: Int!\n    $searchAfter: [String!]\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      parentId: $parentId\n      limit: $limit\n      searchAfter: $searchAfter\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      content\n      createdAt\n      searchAfter\n      likeCount\n      isMyLike\n      author {\n        id\n        nickname\n      }\n    }\n  }\n':
+    types.CommunityPostCommentsDocument,
+  '\n  mutation AddCommunityComment($parentId: Int!, $content: String!) {\n    addComment(parentId: $parentId, content: $content)\n  }\n':
+    types.AddCommunityCommentDocument,
+  '\n  mutation AddUserReport(\n    $target: UserReportTarget!\n    $targetId: Float!\n    $reason: UserReportReason!\n    $description: String\n  ) {\n    addUserReport(\n      target: $target\n      targetId: $targetId\n      reason: $reason\n      description: $description\n    )\n  }\n':
+    types.AddUserReportDocument,
   '\n  query HotDealRankingProducts($page: Int!, $limit: Int!) {\n    hotDealRankingProducts(page: $page, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n':
     types.HotDealRankingProductsDocument,
   '\n  query GuestRecommendedHotDeals($page: Int!, $limit: Int!) {\n    guestRecommendedHotDeals(page: $page, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n':
@@ -109,6 +141,40 @@ const documents: Documents = {
     types.TossProductsDocument,
   '\n  query CommunityRandomRankingProducts($count: Int!, $limit: Int!) {\n    communityRandomRankingProducts(count: $count, limit: $limit) {\n      id\n      title\n      mallId\n      mallName\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      postedAt\n    }\n  }\n':
     types.CommunityRandomRankingProductsDocument,
+  '\n  query QueryMyProfile {\n    me {\n      id\n      email\n      nickname\n      birthYear\n      gender\n      favoriteCategories\n    }\n  }\n':
+    types.QueryMyProfileDocument,
+  '\n  mutation MutationUpdateMyProfile(\n    $nickname: String\n    $birthYear: Float\n    $gender: Gender\n    $favoriteCategories: [Int!]\n  ) {\n    updateUserProfile(\n      nickname: $nickname\n      birthYear: $birthYear\n      gender: $gender\n      favoriteCategories: $favoriteCategories\n    )\n  }\n':
+    types.MutationUpdateMyProfileDocument,
+  '\n  mutation MutationUpdateMyPassword($password: String!) {\n    updatePassword(password: $password)\n  }\n':
+    types.MutationUpdateMyPasswordDocument,
+  '\n  mutation MutationWithdraw {\n    withdraw\n  }\n':
+    types.MutationWithdrawDocument,
+  '\n  query QueryMyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n      priceDropOnly\n    }\n  }\n':
+    types.QueryMyNotificationKeywordsDocument,
+  '\n  mutation MutationAddMyNotificationKeyword(\n    $keyword: String!\n    $fromRecommendation: Boolean\n    $priceDropOnly: Boolean\n  ) {\n    addNotificationKeyword(\n      keyword: $keyword\n      fromRecommendation: $fromRecommendation\n      priceDropOnly: $priceDropOnly\n    )\n  }\n':
+    types.MutationAddMyNotificationKeywordDocument,
+  '\n  mutation MutationRemoveMyNotificationKeyword($id: Float!) {\n    removeNotificationKeyword(id: $id)\n  }\n':
+    types.MutationRemoveMyNotificationKeywordDocument,
+  '\n  mutation MutationUpdateKeywordPriceDropOnly(\n    $id: Int!\n    $priceDropOnly: Boolean!\n  ) {\n    updateNotificationKeywordPriceDropOnly(\n      id: $id\n      priceDropOnly: $priceDropOnly\n    )\n  }\n':
+    types.MutationUpdateKeywordPriceDropOnlyDocument,
+  '\n  query QueryMyWishlists(\n    $orderBy: WishlistOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    wishlists(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      productId\n      searchAfter\n      product {\n        id\n        title\n        price\n        isHot\n        isEnd\n        isPrivate\n        postedAt\n        hotDealType\n        thumbnail\n        isMyWishlist\n        categoryId\n        mallName\n        provider {\n          nameKr\n        }\n      }\n    }\n  }\n':
+    types.QueryMyWishlistsDocument,
+  '\n  query QueryMyWishlistCount {\n    wishlistCount\n  }\n':
+    types.QueryMyWishlistCountDocument,
+  '\n  mutation MutationAddMyWishlist($productId: Int!) {\n    addWishlist(productId: $productId)\n  }\n':
+    types.MutationAddMyWishlistDocument,
+  '\n  mutation MutationRemoveMyWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n':
+    types.MutationRemoveMyWishlistDocument,
+  '\n  query QueryNotificationThemes {\n    notificationThemes {\n      id\n      name\n      description\n      emoji\n      representativeKeywords\n    }\n  }\n':
+    types.QueryNotificationThemesDocument,
+  '\n  query QueryMySubscribedThemeIds {\n    mySubscribedThemeIds\n  }\n':
+    types.QueryMySubscribedThemeIdsDocument,
+  '\n  query QueryNotificationThemeLiveDeals($themeId: Int!) {\n    notificationThemeLiveDeals(themeId: $themeId) {\n      id\n      title\n      thumbnail\n      price\n      postedAt\n      categoryId\n      isEnd\n      isHot\n      hotDealType\n      mallName\n      provider {\n        nameKr\n      }\n    }\n  }\n':
+    types.QueryNotificationThemeLiveDealsDocument,
+  '\n  mutation MutationSubscribeNotificationTheme($themeId: Int!) {\n    subscribeNotificationTheme(themeId: $themeId)\n  }\n':
+    types.MutationSubscribeNotificationThemeDocument,
+  '\n  mutation MutationUnsubscribeNotificationTheme($themeId: Int!) {\n    unsubscribeNotificationTheme(themeId: $themeId)\n  }\n':
+    types.MutationUnsubscribeNotificationThemeDocument,
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n':
     types.MutationAddPushTokenDocument,
   '\n  query QueryNotifications($limit: Int!, $offset: Int!) {\n    notifications(limit: $limit, offset: $offset) {\n      id\n      message\n      createdAt\n      readAt\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n':
@@ -237,6 +303,36 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: '\n  query CommunityPosts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $isNotice: Boolean\n    $isTrending: Boolean\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      limit: $limit\n      searchAfter: $searchAfter\n      isNotice: $isNotice\n      isTrending: $isTrending\n      isRoot: true\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      productId\n      parentId\n      title\n      content\n      createdAt\n      searchAfter\n      isNotice\n      likeCount\n      replyCount\n      viewCount\n      isMyLike\n      isMyReported\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n',
+): typeof import('./graphql').CommunityPostsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query CommunityPost($id: Int!) {\n    comment(id: $id) {\n      id\n      title\n      content\n      createdAt\n      likeCount\n      viewCount\n      isMyLike\n      isNotice\n      isMyReported\n      productId\n      author {\n        id\n        nickname\n      }\n      taggedProduct {\n        id\n        title\n        thumbnail\n        price\n        postedAt\n        url\n      }\n    }\n  }\n',
+): typeof import('./graphql').CommunityPostDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query CommunityPostComments(\n    $parentId: Int!\n    $limit: Int!\n    $searchAfter: [String!]\n    $orderBy: CommentOrder!\n    $orderOption: OrderOptionType!\n  ) {\n    comments(\n      parentId: $parentId\n      limit: $limit\n      searchAfter: $searchAfter\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      content\n      createdAt\n      searchAfter\n      likeCount\n      isMyLike\n      author {\n        id\n        nickname\n      }\n    }\n  }\n',
+): typeof import('./graphql').CommunityPostCommentsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation AddCommunityComment($parentId: Int!, $content: String!) {\n    addComment(parentId: $parentId, content: $content)\n  }\n',
+): typeof import('./graphql').AddCommunityCommentDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation AddUserReport(\n    $target: UserReportTarget!\n    $targetId: Float!\n    $reason: UserReportReason!\n    $description: String\n  ) {\n    addUserReport(\n      target: $target\n      targetId: $targetId\n      reason: $reason\n      description: $description\n    )\n  }\n',
+): typeof import('./graphql').AddUserReportDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: '\n  query HotDealRankingProducts($page: Int!, $limit: Int!) {\n    hotDealRankingProducts(page: $page, limit: $limit) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n',
 ): typeof import('./graphql').HotDealRankingProductsDocument;
 /**
@@ -299,6 +395,108 @@ export function graphql(
 export function graphql(
   source: '\n  query CommunityRandomRankingProducts($count: Int!, $limit: Int!) {\n    communityRandomRankingProducts(count: $count, limit: $limit) {\n      id\n      title\n      mallId\n      mallName\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      postedAt\n    }\n  }\n',
 ): typeof import('./graphql').CommunityRandomRankingProductsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryMyProfile {\n    me {\n      id\n      email\n      nickname\n      birthYear\n      gender\n      favoriteCategories\n    }\n  }\n',
+): typeof import('./graphql').QueryMyProfileDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationUpdateMyProfile(\n    $nickname: String\n    $birthYear: Float\n    $gender: Gender\n    $favoriteCategories: [Int!]\n  ) {\n    updateUserProfile(\n      nickname: $nickname\n      birthYear: $birthYear\n      gender: $gender\n      favoriteCategories: $favoriteCategories\n    )\n  }\n',
+): typeof import('./graphql').MutationUpdateMyProfileDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationUpdateMyPassword($password: String!) {\n    updatePassword(password: $password)\n  }\n',
+): typeof import('./graphql').MutationUpdateMyPasswordDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationWithdraw {\n    withdraw\n  }\n',
+): typeof import('./graphql').MutationWithdrawDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryMyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n      priceDropOnly\n    }\n  }\n',
+): typeof import('./graphql').QueryMyNotificationKeywordsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationAddMyNotificationKeyword(\n    $keyword: String!\n    $fromRecommendation: Boolean\n    $priceDropOnly: Boolean\n  ) {\n    addNotificationKeyword(\n      keyword: $keyword\n      fromRecommendation: $fromRecommendation\n      priceDropOnly: $priceDropOnly\n    )\n  }\n',
+): typeof import('./graphql').MutationAddMyNotificationKeywordDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationRemoveMyNotificationKeyword($id: Float!) {\n    removeNotificationKeyword(id: $id)\n  }\n',
+): typeof import('./graphql').MutationRemoveMyNotificationKeywordDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationUpdateKeywordPriceDropOnly(\n    $id: Int!\n    $priceDropOnly: Boolean!\n  ) {\n    updateNotificationKeywordPriceDropOnly(\n      id: $id\n      priceDropOnly: $priceDropOnly\n    )\n  }\n',
+): typeof import('./graphql').MutationUpdateKeywordPriceDropOnlyDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryMyWishlists(\n    $orderBy: WishlistOrderType!\n    $orderOption: OrderOptionType!\n    $limit: Int!\n    $searchAfter: [String!]\n  ) {\n    wishlists(\n      orderBy: $orderBy\n      orderOption: $orderOption\n      limit: $limit\n      searchAfter: $searchAfter\n    ) {\n      id\n      productId\n      searchAfter\n      product {\n        id\n        title\n        price\n        isHot\n        isEnd\n        isPrivate\n        postedAt\n        hotDealType\n        thumbnail\n        isMyWishlist\n        categoryId\n        mallName\n        provider {\n          nameKr\n        }\n      }\n    }\n  }\n',
+): typeof import('./graphql').QueryMyWishlistsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryMyWishlistCount {\n    wishlistCount\n  }\n',
+): typeof import('./graphql').QueryMyWishlistCountDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationAddMyWishlist($productId: Int!) {\n    addWishlist(productId: $productId)\n  }\n',
+): typeof import('./graphql').MutationAddMyWishlistDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationRemoveMyWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n',
+): typeof import('./graphql').MutationRemoveMyWishlistDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryNotificationThemes {\n    notificationThemes {\n      id\n      name\n      description\n      emoji\n      representativeKeywords\n    }\n  }\n',
+): typeof import('./graphql').QueryNotificationThemesDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryMySubscribedThemeIds {\n    mySubscribedThemeIds\n  }\n',
+): typeof import('./graphql').QueryMySubscribedThemeIdsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryNotificationThemeLiveDeals($themeId: Int!) {\n    notificationThemeLiveDeals(themeId: $themeId) {\n      id\n      title\n      thumbnail\n      price\n      postedAt\n      categoryId\n      isEnd\n      isHot\n      hotDealType\n      mallName\n      provider {\n        nameKr\n      }\n    }\n  }\n',
+): typeof import('./graphql').QueryNotificationThemeLiveDealsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationSubscribeNotificationTheme($themeId: Int!) {\n    subscribeNotificationTheme(themeId: $themeId)\n  }\n',
+): typeof import('./graphql').MutationSubscribeNotificationThemeDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationUnsubscribeNotificationTheme($themeId: Int!) {\n    unsubscribeNotificationTheme(themeId: $themeId)\n  }\n',
+): typeof import('./graphql').MutationUnsubscribeNotificationThemeDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

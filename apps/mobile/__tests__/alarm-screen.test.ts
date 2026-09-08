@@ -25,7 +25,6 @@ const {
 const screen = read('src/screens/alarm/AlarmScreen.tsx');
 const viewModel = read('src/screens/alarm/model/useNotificationsViewModel.ts');
 const item = read('src/screens/alarm/ui/AlarmItem.tsx');
-const flags = read('src/constants/feature-flags.ts');
 const navigator = read('src/navigations/tab/TabStackNavigator.tsx');
 
 describe('키워드 강조 — web HighlightText 와 같은 분할', () => {
@@ -195,9 +194,11 @@ describe('접합부 — 상품 없는 알림·화면 이동', () => {
     expect(screen).toMatch(/!notification\.readAt/);
   });
 
-  it('키워드 관리는 아직 web 이라 웹뷰로 push 한다', () => {
-    expect(screen).toContain('/mypage/keyword');
-    expect(screen).toMatch(/tabStackNavigations\.WEBVIEW/);
+  it('키워드 관리는 네이티브 화면으로 push 한다(2026-09-08)', () => {
+    // 내정보 탭이 네이티브가 된 뒤 web 경로로 웹뷰를 띄우면 같은 화면이 두 벌이 된다.
+    expect(screen).toMatch(/tabStackNavigations\.MYPAGE_KEYWORD/);
+    expect(screen).not.toContain('/mypage/keyword');
+    expect(screen).not.toMatch(/tabStackNavigations\.WEBVIEW/);
   });
 
   it('상세는 네이티브 스택으로 push 한다', () => {
@@ -205,16 +206,14 @@ describe('접합부 — 상품 없는 알림·화면 이동', () => {
   });
 });
 
-describe('플래그 배선 — 되돌릴 수 있나', () => {
-  it('NATIVE_ALARM 플래그가 있다', () => {
-    expect(flags).toMatch(/export const NATIVE_ALARM/);
+describe('탭 배선', () => {
+  it('알림 탭 루트는 네이티브 화면이다', () => {
+    // 플래그(constants/feature-flags.ts)는 2026-09-07 에 지웠다.
+    expect(navigator).toMatch(/case tabNavigations\.ALARM:/);
+    expect(navigator).toMatch(/<AlarmScreen \/>/);
   });
 
-  it('네비게이터가 플래그로 분기해 웹뷰 폴백을 남긴다', () => {
-    expect(navigator).toMatch(
-      /NATIVE_ALARM && tabName === tabNavigations\.ALARM/,
-    );
-    // 플래그가 false 면 기존 TabWebView 로 떨어진다
+  it('웹뷰 폴백은 남아 있다 — 커뮤니티·내정보가 아직 쓴다', () => {
     expect(navigator).toMatch(/<TabWebView/);
   });
 });

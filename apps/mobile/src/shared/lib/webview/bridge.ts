@@ -10,8 +10,11 @@ export enum WebViewEventType {
   NOTIFICATION_READ = 'NOTIFICATION_READ',
   HAPTIC_FEEDBACK = 'HAPTIC_FEEDBACK',
   SHARE_REQUEST = 'SHARE_REQUEST',
-  ALARM_DOT_CHANGED = 'ALARM_DOT_CHANGED',
   CHANNEL_TALK_VISIBILITY = 'CHANNEL_TALK_VISIBILITY',
+  // ★삭제된 이벤트: ALARM_DOT_CHANGED. 탭바 알림 점은 이제 네이티브가 직접
+  // 판정한다(useHasNewAlarm). 유일한 송신자였던 web BottomNav 는 앱에서
+  // isJirumAlarmApp 조기 반환에 걸려 렌더 자체가 안 돼 이 메시지가 앱에 온 적이
+  // 없다 — 되살리면 네이티브 판정을 남의 boolean 으로 덮어쓰게 된다.
   /**
    * 웹뷰 localStorage 의 deviceId 를 네이티브로 넘긴다.
    * 네이티브 상세가 조회 수집을 직접 하므로 같은 식별자를 써야 집계가 안 쪼개진다.
@@ -45,7 +48,6 @@ export type WebViewEventPayloads = {
   [WebViewEventType.SHARE_REQUEST]: {
     data: {title: string; url: string; message?: string};
   };
-  [WebViewEventType.ALARM_DOT_CHANGED]: {data: {hasNewAlarm: boolean}};
   [WebViewEventType.CHANNEL_TALK_VISIBILITY]: {data: {isOpen: boolean}};
   [WebViewEventType.DEVICE_ID_SYNC]: {data: {deviceId: string}};
   [WebViewEventType.OPEN_PRODUCT_DETAIL]: {data: {path: string}};
@@ -67,7 +69,6 @@ const eventHandlers: {
   [WebViewEventType.NOTIFICATION_READ]: EventBridge.notificationRead,
   [WebViewEventType.HAPTIC_FEEDBACK]: EventBridge.hapticFeedback,
   [WebViewEventType.SHARE_REQUEST]: EventBridge.shareRequest,
-  [WebViewEventType.ALARM_DOT_CHANGED]: EventBridge.alarmDotChanged,
   [WebViewEventType.CHANNEL_TALK_VISIBILITY]: EventBridge.channelTalkVisibility,
   [WebViewEventType.DEVICE_ID_SYNC]: EventBridge.deviceIdSync,
   [WebViewEventType.OPEN_PRODUCT_DETAIL]: EventBridge.openProductDetail,

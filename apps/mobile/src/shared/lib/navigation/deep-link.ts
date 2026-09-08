@@ -36,6 +36,11 @@ export function normalizeDeepLink(url: string): string | null {
     // 소셜 로그인 콜백(kakao/naver 등)은 각 SDK 가 가져간다. 여기서 삼키면 안 된다.
     if (rest.startsWith('oauth')) return null;
 
+    // ★expo-dev-client 가 Metro 를 지정할 때 쓰는 URL 도 우리 경로가 아니다.
+    // 그대로 통과시키면 `/expo-development-client/?url=...` 를 서비스 경로로 보고
+    // 웹뷰 화면을 띄우려 한다(로컬 개발에서 실제로 그랬다).
+    if (rest.startsWith('expo-development-client')) return null;
+
     const path = rest.startsWith('/') ? rest : `/${rest}`;
     return `${SERVICE_URL}${path}`;
   }

@@ -19,6 +19,24 @@ export type TabStackParamList = ProductFlowParamList & {
   [tabStackNavigations.CURATION]: {sectionId: string; title?: string};
   [tabStackNavigations.TOSS_CURATION]: {sectionId?: string};
   [tabStackNavigations.WEBVIEW]: {uri: string; title?: string};
+
+  // 내정보 — 대부분 파라미터가 없다(넓고 얕은 설정 화면들).
+  [tabStackNavigations.MYPAGE_ACCOUNT]: undefined;
+  [tabStackNavigations.MYPAGE_NICKNAME]: undefined;
+  [tabStackNavigations.MYPAGE_PASSWORD]: undefined;
+  [tabStackNavigations.MYPAGE_PERSONAL]: undefined;
+  [tabStackNavigations.MYPAGE_CATEGORIES]: undefined;
+  [tabStackNavigations.MYPAGE_KEYWORD]: undefined;
+  [tabStackNavigations.MYPAGE_TERMS]: undefined;
+  [tabStackNavigations.POLICY]: {kind: 'privacy' | 'terms'};
+  [tabStackNavigations.LIKE]: undefined;
+  [tabStackNavigations.THEMES]: undefined;
+  [tabStackNavigations.THEME_DETAIL]: {themeId: string; title?: string};
+
+  // 커뮤니티
+  [tabStackNavigations.COMMUNITY_POST]: {postId: number};
+  /** postId 가 있으면 수정, 없으면 새 글. */
+  [tabStackNavigations.COMMUNITY_WRITE]: {postId?: number};
 };
 
 /** 검색 한 판 + 그 검색에서 연 상세. */

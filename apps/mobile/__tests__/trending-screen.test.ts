@@ -20,19 +20,19 @@ const queries = read('src/entities/trending/api/trending.queries.ts');
 const rankingList = read('src/entities/trending/ui/RankingList.tsx');
 const liveList = read('src/entities/trending/ui/LiveList.tsx');
 const stack = read('src/navigations/tab/TabStackNavigator.tsx');
-const flags = read('src/constants/feature-flags.ts');
 
 describe('탭 배선', () => {
-  it('발견 탭 루트가 플래그로 네이티브/웹뷰를 고른다', () => {
-    expect(flags).toContain('NATIVE_DISCOVER');
-    expect(stack).toContain(
-      'NATIVE_DISCOVER && tabName === tabNavigations.DISCOVER',
-    );
+  it('발견 탭 루트는 네이티브 화면이다', () => {
+    // 플래그(constants/feature-flags.ts)는 2026-09-07 에 지웠다 — 탭 이름으로
+    // 직접 고른다. 되돌릴 일이 생기면 해당 커밋을 eas update 로 내보낸다.
+    expect(stack).toContain('case tabNavigations.DISCOVER:');
     expect(stack).toContain('<TrendingScreen />');
   });
 
-  it('★웹뷰 폴백이 남아 있다 — 플래그를 되돌릴 수 있어야 한다', () => {
-    expect(stack).toContain('<TabWebView tabName={tabName}');
+  it('★웹뷰 폴백이 남아 있다 — 커뮤니티·내정보는 아직 웹뷰다', () => {
+    // ⚠️한 줄 문자열로 검사하면 포맷(줄바꿈)만 바뀌어도 깨진다 — 존재로 본다.
+    expect(stack).toMatch(/<TabWebView/);
+    expect(stack).toMatch(/tabName=\{tabName\}/);
   });
 });
 
@@ -64,10 +64,18 @@ describe('★웹뷰 주입에 기대던 경로를 전부 옮겼다', () => {
     // trending 페이지를 띄운다(탭 아이콘은 홈, 내용은 랭킹).
     const ref = read('src/navigations/navigation-ref.ts');
     const fcm = read('src/components/FCMHandler.tsx');
-    expect(ref).toContain('export function navigateToTrending');
-    expect(fcm).toContain('navigateToTrending');
+    const routing = read('src/shared/lib/navigation/tab-routing.ts');
+    // 판정은 resolveNativeRoute 한 곳, 실행은 navigateToNativeRoute.
+    expect(routing).toContain("path.startsWith('/trending')");
+    expect(routing).toContain('trendingView');
+    expect(ref).toContain('export function navigateToNativeRoute');
+    expect(fcm).toContain('navigateToNativeRoute');
     // 콜드스타트·포그라운드·딥링크 3경로 모두
-    expect(fcm.match(/navigateToTrending/g)?.length).toBeGreaterThanOrEqual(3);
+    expect(fcm.match(/navigateToNativeRoute/g)?.length).toBeGreaterThanOrEqual(
+      3,
+    );
+    // 웹뷰 안 링크 클릭용 입구는 따로 남아 있다(TabWebView 가 쓴다).
+    expect(ref).toContain('export function navigateToTrending');
   });
 
   it('다른 탭 웹뷰 안의 /trending 링크도 네이티브로 올린다', () => {

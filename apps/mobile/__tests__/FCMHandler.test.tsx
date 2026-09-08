@@ -37,6 +37,15 @@ jest.mock('expo-notifications', () => ({
   addNotificationResponseReceivedListener: jest.fn(),
 }));
 
+// ★알림 쿼리 키를 실제 정의(NotificationQueries)에서 가져오므로 그 import 사슬이
+// AsyncStorage(네이티브 모듈)까지 닿는다. 이 레포 관행대로 mock 으로 끊는다 —
+// 키를 문자열로 복제하면 정의와 갈라져서 무효화가 조용히 빗나간다.
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn(async () => null),
+  setItem: jest.fn(async () => {}),
+  removeItem: jest.fn(async () => {}),
+}));
+
 jest.mock('../src/shared/hooks/useFCMTokenManager.ts', () => jest.fn());
 
 jest.mock('../src/shared/lib/fcm/index.ts', () => ({
@@ -48,7 +57,7 @@ jest.mock('../src/provider/WebViewRefProvider.tsx', () => ({
 }));
 
 // 이 스위트는 "웹뷰 주입" 경로를 검사한다. 네비게이터가 준비 안 된 것으로 두면
-// navigateToProductDetail 이 false 를 반환해 기존 폴백 경로가 그대로 돈다.
+// navigateToNativeRoute 가 false 를 반환해 기존 폴백 경로가 그대로 돈다.
 jest.mock('@react-navigation/native', () => ({
   createNavigationContainerRef: () => ({
     isReady: () => false,

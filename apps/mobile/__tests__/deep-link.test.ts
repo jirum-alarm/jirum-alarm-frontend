@@ -63,4 +63,14 @@ describe('normalizeDeepLink', () => {
       'https://jirum-alarm.com/',
     );
   });
+
+  it('expo-dev-client 의 Metro 지정 URL 은 우리 경로가 아니다', () => {
+    // 통과시키면 `/expo-development-client/?url=...` 를 서비스 경로로 보고
+    // 웹뷰 화면을 띄우려 한다(로컬 개발에서 실제로 그랬다).
+    expect(
+      normalizeDeepLink(
+        'jirumalarm://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081',
+      ),
+    ).toBeNull();
+  });
 });

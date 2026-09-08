@@ -40,12 +40,12 @@ import {
   TAB_BAR_HEIGHT,
 } from '@/navigations/tab/tab-bar-metrics';
 import {useTabBarVisibility} from '@/shared/hooks/useTabBarVisibility';
-import {NATIVE_DISCOVER} from '@/constants/feature-flags';
 import {TAB_BAR_BACKGROUND_COLOR, TAB_BAR_BORDER_COLOR} from './native-headers';
 import {
   requestTrendingView,
   toggleTrendingView,
 } from '@/screens/trending/trending-view-store';
+import {scrollTabToTop} from '@/navigations/tab/scroll-to-top-store';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
@@ -99,6 +99,13 @@ const TAB_CONFIG = [
     activeIcon: AlertFillIcon,
     idlePng: require('../../shared/assets/tab-icons/alert.png'),
     activePng: require('../../shared/assets/tab-icons/alert-fill.png'),
+    // 미읽음이 있을 때 쓰는 변형. iOS 26 시스템 뱃지는 크기를 못 줄여
+    // (지름 ~20pt) "너무 크다"는 지적을 받았고, 빈 문자열은 iOS 에서
+    // 뱃지가 아예 안 뜬다(작은 점은 Android 전용 동작).
+    // 그래서 web·JS 탭바와 같은 8pt 점을 아이콘에 그려 넣는다.
+    // 재생성 방법은 assets/tab-icons/README.md.
+    idleDotPng: require('../../shared/assets/tab-icons/alert-dot.png'),
+    activeDotPng: require('../../shared/assets/tab-icons/alert-fill-dot.png'),
   },
   {
     name: tabNavigations.MYPAGE,
@@ -143,7 +150,9 @@ function useTabActions() {
    * 같은 탭을 다시 누름 → 맨 위로.
    *
    * ★네이티브 탭은 웹뷰 ref 가 없어 injectJavaScript 가 조용히 아무 일도
-   * 하지 않는다. 발견 탭은 store 로 요청을 넣는다(trending-view-store).
+   * 하지 않는다(optional chaining 이 삼켜 예외도 로그도 없다 — 홈·알림 탭이
+   * 재탭해도 맨 위로 안 가던 원인). 그래서 **네이티브 등록 콜백을 먼저**
+   * 시도하고, 없을 때만 웹뷰 주입으로 폴백한다(커뮤니티·내정보는 아직 웹뷰).
    *
    * ★★발견 탭만 예외 — 맨 위로가 아니라 **실시간 ↔ 랭킹 전환**이다
    * (사용자 지시 2026-08-18). 두 화면을 오가는 게 목록 상단으로 가는 것보다
@@ -151,10 +160,11 @@ function useTabActions() {
    */
   const handleScrollToTop = useCallback(
     (tabName: TabName) => {
-      if (NATIVE_DISCOVER && tabName === tabNavigations.DISCOVER) {
+      if (tabName === tabNavigations.DISCOVER) {
         toggleTrendingView();
         return;
       }
+      if (scrollTabToTop(tabName)) return;
       const ref = getWebViewRef(tabName);
       ref?.current?.injectJavaScript(
         "window.scrollTo({ top: 0, behavior: 'smooth' }); true;",
@@ -167,10 +177,16 @@ function useTabActions() {
    * 다른 탭에서 넘어옴 → 그 탭의 기본 화면으로.
    *
    * 발견 탭의 기본은 실시간이다(web /trending → /trending/live 리다이렉트와 같다).
+   *
+   * ponytail: 홈·알림은 여기서 아무것도 안 한다 — 라우트가 1개라 "기본 화면"이
+   * 곧 루트이고, 스택 되돌리기는 앞선 popTabStackToRoot 가 이미 했다.
+   * 스크롤 초기화도 붙이지 않는다: 웹뷰 주입도 `href !== baseUrl` 가드가 있어
+   * **이미 기본 URL 인 탭으로 돌아올 때는 리로드하지 않는다**(=스크롤 유지).
+   * 즉 탭 전환마다 맨 위로 가는 건 web 에도 없는 동작이라 붙이면 오히려 어긋난다.
    */
   const handleNavigateToRoot = useCallback(
     (tabName: TabName) => {
-      if (NATIVE_DISCOVER && tabName === tabNavigations.DISCOVER) {
+      if (tabName === tabNavigations.DISCOVER) {
         requestTrendingView('live');
         return;
       }
@@ -255,12 +271,20 @@ function NativeSystemTabNavigator() {
           options={{
             title: tab.label,
             tabBarLabel: tab.label,
-            tabBarBadge:
-              tab.name === tabNavigations.ALARM && hasNewAlarm
-                ? ' '
-                : undefined,
-            tabBarIcon: ({focused}: {focused: boolean}) =>
-              nativeTabIcon(focused ? tab.activePng : tab.idlePng),
+            // ★시스템 뱃지를 쓰지 않는다 — 크기를 못 줄여 web·JS 의 8pt 점보다
+            // 훨씬 크게 뜬다(지적받음). 점은 아이콘에 그려 넣은 변형으로 낸다.
+            tabBarIcon: ({focused}: {focused: boolean}) => {
+              const dot =
+                tab.name === tabNavigations.ALARM &&
+                hasNewAlarm &&
+                'idleDotPng' in tab;
+              if (dot) {
+                return nativeTabIcon(
+                  focused ? tab.activeDotPng : tab.idleDotPng,
+                );
+              }
+              return nativeTabIcon(focused ? tab.activePng : tab.idlePng);
+            },
           }}
           listeners={({navigation}: {navigation: TabPressNavigation}) => ({
             tabPress: () => onTabPress(tab.name, navigation),

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -14,7 +14,11 @@ import {NotificationQueries} from '@/entities/notification';
 import PressableScale from '@/shared/components/PressableScale';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import TrashBin from '@/shared/components/icons/TrashBin';
-import {tabStackNavigations} from '@/shared/constant/navigations';
+import {
+  tabNavigations,
+  tabStackNavigations,
+} from '@/shared/constant/navigations';
+import {useRegisterScrollToTop} from '@/navigations/tab/scroll-to-top-store';
 import {
   getLastAlarmReadAt,
   setLastAlarmReadAt,
@@ -28,8 +32,6 @@ import {ListRowsSkeleton} from '@/shared/components/Skeletons';
 
 /** web PageHeader 와 같은 높이(h-14)·색·경계선. */
 const HEADER_HEIGHT = 56;
-
-const KEYWORD_PATH = '/mypage/keyword';
 
 type Navigation = {
   push: (name: string, params?: object) => void;
@@ -62,6 +64,18 @@ export default function AlarmScreen() {
   } = useNotificationsViewModel();
 
   const [isEditMode, setEditMode] = useState(false);
+
+  /**
+   * 알림 탭 재탭 → 목록 맨 위로. (웹뷰 시절 injectJavaScript 를 대체)
+   *
+   * 리스트는 에러·로딩·빈 목록 분기에선 렌더되지 않으므로 ref 가 비어 있을 수
+   * 있다 — 그때는 올릴 것도 없으니 optional chaining 으로 흘려보낸다.
+   */
+  const listRef = useRef<FlatList>(null);
+  const scrollToTop = useCallback(() => {
+    listRef.current?.scrollToOffset({offset: 0, animated: true});
+  }, []);
+  useRegisterScrollToTop(tabNavigations.ALARM, scrollToTop);
 
   // 편집 버튼 노출 판단(web AlarmHeaderActions: 알림이 1건이라도 있어야 뜬다).
   const {data: existsAny} = useQuery(NotificationQueries.existsAny());
@@ -98,11 +112,10 @@ export default function AlarmScreen() {
   );
 
   const goKeywordSettings = useCallback(() => {
-    // 키워드 관리는 아직 web 이다(내정보 탭 소속). 경로만 넘기면 웹뷰가 조립한다.
-    navigation.push(tabStackNavigations.WEBVIEW, {
-      uri: KEYWORD_PATH,
-      title: '키워드 알림',
-    });
+    // ★2026-09-08 로 키워드 관리가 네이티브 화면이 됐다(내정보 탭 소속).
+    // 예전처럼 web 을 웹뷰로 띄우면 **같은 화면이 두 벌**이 되고, 그 web 버전은
+    // 이제부터 낡는다. 라우트는 모든 탭 스택에 등록돼 있어 알림 탭 안에 쌓인다.
+    navigation.push(tabStackNavigations.MYPAGE_KEYWORD);
   }, [navigation]);
 
   const showEditButton = !!existsAny && !isEditMode;
@@ -172,6 +185,7 @@ export default function AlarmScreen() {
         <NoAlerts onPressKeyword={goKeywordSettings} />
       ) : (
         <FlatList
+          ref={listRef}
           data={notifications}
           keyExtractor={item => String(item.id)}
           refreshControl={

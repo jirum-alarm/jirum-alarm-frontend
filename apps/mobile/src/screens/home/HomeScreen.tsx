@@ -39,6 +39,7 @@ import {
   tabStackNavigations,
 } from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
+import {useRegisterScrollToTop} from '@/navigations/tab/scroll-to-top-store';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 import {
@@ -72,6 +73,9 @@ export default function HomeScreen() {
   const scrollToTop = useCallback(() => {
     scrollRef.current?.scrollTo({y: 0, animated: true});
   }, []);
+  // 로고 탭 말고 **홈 탭 재탭**도 같은 동작이어야 한다(웹뷰 시절 injectJavaScript).
+  // 탭바는 이 화면의 부모가 아니라 ref 를 내려줄 수 없어 store 로 등록한다.
+  useRegisterScrollToTop(tabNavigations.HOME, scrollToTop);
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [refreshing, setRefreshing] = useState(false);

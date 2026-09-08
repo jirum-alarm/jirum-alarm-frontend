@@ -59,3 +59,44 @@ describe('네이티브 탭바 appearance', () => {
     expect(body).toContain('TAB_BAR_BACKGROUND_COLOR');
   });
 });
+
+/**
+ * 알림 미읽음 표시는 **아이콘 변형**으로 낸다.
+ *
+ * 🔴iOS 26 시스템 뱃지는 크기를 줄일 수 없어(지름 ~20pt) web·JS 의 8pt 점보다
+ * 훨씬 크게 뜬다(지적받음). 빈 문자열로 "작은 점"을 만드는 건 Android 전용
+ * 동작이라 iOS 에선 뱃지가 아예 사라진다(실측). 그래서 점을 그려 넣은 PNG 를 쓴다.
+ */
+describe('알림 점 — 시스템 뱃지를 쓰지 않는다', () => {
+  // 상위 스코프의 fs·path·read 를 그대로 쓴다(같은 이름을 다시 선언하면 shadow).
+  const mainTab = read('src/navigations/tab/MainTabNavigator.tsx');
+  const ICON_DIR = 'src/shared/assets/tab-icons';
+
+  it('tabBarBadge 로 돌아가지 않았다', () => {
+    // 주석에 경위가 남아 있으므로 코드 줄만 본다.
+    const code = mainTab
+      .split('\n')
+      .filter((l: string) => !/^\s*(\/\/|\*|\/\*)/.test(l))
+      .join('\n');
+    expect(code).not.toContain('tabBarBadge');
+  });
+
+  it('미읽음이면 점 붙은 아이콘으로 갈아탄다', () => {
+    expect(mainTab).toContain('idleDotPng');
+    expect(mainTab).toContain('activeDotPng');
+    expect(mainTab).toContain('alert-dot.png');
+    expect(mainTab).toContain('alert-fill-dot.png');
+  });
+
+  it('생성물이 실제로 있다 — 원본과 같은 72×72', () => {
+    for (const f of ['alert-dot@3x.png', 'alert-fill-dot@3x.png']) {
+      expect(
+        fs.existsSync(path.resolve(process.cwd(), `${ICON_DIR}/${f}`)),
+      ).toBe(true);
+    }
+    // 재생성 방법이 문서로 남아 있어야 원본이 바뀔 때 따라갈 수 있다.
+    const readme = read(`${ICON_DIR}/README.md`);
+    expect(readme).toContain('alert-dot@3x.png');
+    expect(readme).toContain('#EB001C');
+  });
+});

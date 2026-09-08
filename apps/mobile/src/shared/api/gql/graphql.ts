@@ -2717,6 +2717,124 @@ export type RemoveCommentMutation = {
   removeComment: boolean;
 };
 
+export type CommunityPostsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
+  isNotice?: InputMaybe<Scalars['Boolean']['input']>;
+  isTrending?: InputMaybe<Scalars['Boolean']['input']>;
+  orderBy: CommentOrder;
+  orderOption: OrderOptionType;
+}>;
+
+export type CommunityPostsQuery = {
+  __typename?: 'Query';
+  comments: Array<{
+    __typename?: 'CommentOutput';
+    id: string;
+    productId?: number | null;
+    parentId?: number | null;
+    title?: string | null;
+    content: string;
+    createdAt: any;
+    searchAfter?: Array<string> | null;
+    isNotice: boolean;
+    likeCount: number;
+    replyCount: number;
+    viewCount: number;
+    isMyLike?: boolean | null;
+    isMyReported: boolean;
+    author?: {__typename?: 'User'; id: string; nickname: string} | null;
+    taggedProduct?: {
+      __typename?: 'ProductOutput';
+      id: string;
+      title: string;
+      thumbnail?: string | null;
+      price?: string | null;
+      postedAt: any;
+      url?: string | null;
+    } | null;
+  }>;
+};
+
+export type CommunityPostQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type CommunityPostQuery = {
+  __typename?: 'Query';
+  comment: {
+    __typename?: 'CommentOutput';
+    id: string;
+    title?: string | null;
+    content: string;
+    createdAt: any;
+    likeCount: number;
+    viewCount: number;
+    isMyLike?: boolean | null;
+    isNotice: boolean;
+    isMyReported: boolean;
+    productId?: number | null;
+    author?: {__typename?: 'User'; id: string; nickname: string} | null;
+    taggedProduct?: {
+      __typename?: 'ProductOutput';
+      id: string;
+      title: string;
+      thumbnail?: string | null;
+      price?: string | null;
+      postedAt: any;
+      url?: string | null;
+    } | null;
+  };
+};
+
+export type CommunityPostCommentsQueryVariables = Exact<{
+  parentId: Scalars['Int']['input'];
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
+  orderBy: CommentOrder;
+  orderOption: OrderOptionType;
+}>;
+
+export type CommunityPostCommentsQuery = {
+  __typename?: 'Query';
+  comments: Array<{
+    __typename?: 'CommentOutput';
+    id: string;
+    content: string;
+    createdAt: any;
+    searchAfter?: Array<string> | null;
+    likeCount: number;
+    isMyLike?: boolean | null;
+    author?: {__typename?: 'User'; id: string; nickname: string} | null;
+  }>;
+};
+
+export type AddCommunityCommentMutationVariables = Exact<{
+  parentId: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+export type AddCommunityCommentMutation = {
+  __typename?: 'Mutation';
+  addComment: boolean;
+};
+
+export type AddUserReportMutationVariables = Exact<{
+  target: UserReportTarget;
+  targetId: Scalars['Float']['input'];
+  reason: UserReportReason;
+  description?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type AddUserReportMutation = {
+  __typename?: 'Mutation';
+  addUserReport: boolean;
+};
+
 export type HotDealRankingProductsQueryVariables = Exact<{
   page: Scalars['Int']['input'];
   limit: Scalars['Int']['input'];
@@ -2970,6 +3088,220 @@ export type CommunityRandomRankingProductsQuery = {
     postedAt: any;
     provider: {__typename?: 'Provider'; nameKr: string};
   }>;
+};
+
+export type QueryMyProfileQueryVariables = Exact<{[key: string]: never}>;
+
+export type QueryMyProfileQuery = {
+  __typename?: 'Query';
+  me?: {
+    __typename?: 'User';
+    id: string;
+    email: string;
+    nickname: string;
+    birthYear?: number | null;
+    gender?: Gender | null;
+    favoriteCategories?: Array<number> | null;
+  } | null;
+};
+
+export type MutationUpdateMyProfileMutationVariables = Exact<{
+  nickname?: InputMaybe<Scalars['String']['input']>;
+  birthYear?: InputMaybe<Scalars['Float']['input']>;
+  gender?: InputMaybe<Gender>;
+  favoriteCategories?: InputMaybe<
+    Array<Scalars['Int']['input']> | Scalars['Int']['input']
+  >;
+}>;
+
+export type MutationUpdateMyProfileMutation = {
+  __typename?: 'Mutation';
+  updateUserProfile: boolean;
+};
+
+export type MutationUpdateMyPasswordMutationVariables = Exact<{
+  password: Scalars['String']['input'];
+}>;
+
+export type MutationUpdateMyPasswordMutation = {
+  __typename?: 'Mutation';
+  updatePassword: boolean;
+};
+
+export type MutationWithdrawMutationVariables = Exact<{[key: string]: never}>;
+
+export type MutationWithdrawMutation = {
+  __typename?: 'Mutation';
+  withdraw: boolean;
+};
+
+export type QueryMyNotificationKeywordsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+}>;
+
+export type QueryMyNotificationKeywordsQuery = {
+  __typename?: 'Query';
+  notificationKeywordsByMe: Array<{
+    __typename?: 'NotificationKeyword';
+    id: string;
+    keyword: string;
+    priceDropOnly: boolean;
+  }>;
+};
+
+export type MutationAddMyNotificationKeywordMutationVariables = Exact<{
+  keyword: Scalars['String']['input'];
+  fromRecommendation?: InputMaybe<Scalars['Boolean']['input']>;
+  priceDropOnly?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type MutationAddMyNotificationKeywordMutation = {
+  __typename?: 'Mutation';
+  addNotificationKeyword: boolean;
+};
+
+export type MutationRemoveMyNotificationKeywordMutationVariables = Exact<{
+  id: Scalars['Float']['input'];
+}>;
+
+export type MutationRemoveMyNotificationKeywordMutation = {
+  __typename?: 'Mutation';
+  removeNotificationKeyword: boolean;
+};
+
+export type MutationUpdateKeywordPriceDropOnlyMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  priceDropOnly: Scalars['Boolean']['input'];
+}>;
+
+export type MutationUpdateKeywordPriceDropOnlyMutation = {
+  __typename?: 'Mutation';
+  updateNotificationKeywordPriceDropOnly: boolean;
+};
+
+export type QueryMyWishlistsQueryVariables = Exact<{
+  orderBy: WishlistOrderType;
+  orderOption: OrderOptionType;
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
+}>;
+
+export type QueryMyWishlistsQuery = {
+  __typename?: 'Query';
+  wishlists: Array<{
+    __typename?: 'WishlistOutput';
+    id: string;
+    productId: number;
+    searchAfter?: Array<string> | null;
+    product: {
+      __typename?: 'ProductOutput';
+      id: string;
+      title: string;
+      price?: string | null;
+      isHot?: boolean | null;
+      isEnd?: boolean | null;
+      isPrivate: boolean;
+      postedAt: any;
+      hotDealType?: HotDealType | null;
+      thumbnail?: string | null;
+      isMyWishlist?: boolean | null;
+      categoryId: number;
+      mallName?: string | null;
+      provider: {__typename?: 'Provider'; nameKr: string};
+    };
+  }>;
+};
+
+export type QueryMyWishlistCountQueryVariables = Exact<{[key: string]: never}>;
+
+export type QueryMyWishlistCountQuery = {
+  __typename?: 'Query';
+  wishlistCount: number;
+};
+
+export type MutationAddMyWishlistMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+}>;
+
+export type MutationAddMyWishlistMutation = {
+  __typename?: 'Mutation';
+  addWishlist: boolean;
+};
+
+export type MutationRemoveMyWishlistMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+}>;
+
+export type MutationRemoveMyWishlistMutation = {
+  __typename?: 'Mutation';
+  removeWishlist: boolean;
+};
+
+export type QueryNotificationThemesQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type QueryNotificationThemesQuery = {
+  __typename?: 'Query';
+  notificationThemes: Array<{
+    __typename?: 'ThemeWithKeywords';
+    id: string;
+    name: string;
+    description: string;
+    emoji?: string | null;
+    representativeKeywords: Array<string>;
+  }>;
+};
+
+export type QueryMySubscribedThemeIdsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type QueryMySubscribedThemeIdsQuery = {
+  __typename?: 'Query';
+  mySubscribedThemeIds: Array<number>;
+};
+
+export type QueryNotificationThemeLiveDealsQueryVariables = Exact<{
+  themeId: Scalars['Int']['input'];
+}>;
+
+export type QueryNotificationThemeLiveDealsQuery = {
+  __typename?: 'Query';
+  notificationThemeLiveDeals: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    thumbnail?: string | null;
+    price?: string | null;
+    postedAt: any;
+    categoryId: number;
+    isEnd?: boolean | null;
+    isHot?: boolean | null;
+    hotDealType?: HotDealType | null;
+    mallName?: string | null;
+    provider: {__typename?: 'Provider'; nameKr: string};
+  }>;
+};
+
+export type MutationSubscribeNotificationThemeMutationVariables = Exact<{
+  themeId: Scalars['Int']['input'];
+}>;
+
+export type MutationSubscribeNotificationThemeMutation = {
+  __typename?: 'Mutation';
+  subscribeNotificationTheme: boolean;
+};
+
+export type MutationUnsubscribeNotificationThemeMutationVariables = Exact<{
+  themeId: Scalars['Int']['input'];
+}>;
+
+export type MutationUnsubscribeNotificationThemeMutation = {
+  __typename?: 'Mutation';
+  unsubscribeNotificationTheme: boolean;
 };
 
 export type MutationAddPushTokenMutationVariables = Exact<{
@@ -3546,6 +3878,125 @@ export const RemoveCommentDocument = new TypedDocumentString(`
   RemoveCommentMutation,
   RemoveCommentMutationVariables
 >;
+export const CommunityPostsDocument = new TypedDocumentString(`
+    query CommunityPosts($limit: Int!, $searchAfter: [String!], $isNotice: Boolean, $isTrending: Boolean, $orderBy: CommentOrder!, $orderOption: OrderOptionType!) {
+  comments(
+    limit: $limit
+    searchAfter: $searchAfter
+    isNotice: $isNotice
+    isTrending: $isTrending
+    isRoot: true
+    orderBy: $orderBy
+    orderOption: $orderOption
+  ) {
+    id
+    productId
+    parentId
+    title
+    content
+    createdAt
+    searchAfter
+    isNotice
+    likeCount
+    replyCount
+    viewCount
+    isMyLike
+    isMyReported
+    author {
+      id
+      nickname
+    }
+    taggedProduct {
+      id
+      title
+      thumbnail
+      price
+      postedAt
+      url
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  CommunityPostsQuery,
+  CommunityPostsQueryVariables
+>;
+export const CommunityPostDocument = new TypedDocumentString(`
+    query CommunityPost($id: Int!) {
+  comment(id: $id) {
+    id
+    title
+    content
+    createdAt
+    likeCount
+    viewCount
+    isMyLike
+    isNotice
+    isMyReported
+    productId
+    author {
+      id
+      nickname
+    }
+    taggedProduct {
+      id
+      title
+      thumbnail
+      price
+      postedAt
+      url
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  CommunityPostQuery,
+  CommunityPostQueryVariables
+>;
+export const CommunityPostCommentsDocument = new TypedDocumentString(`
+    query CommunityPostComments($parentId: Int!, $limit: Int!, $searchAfter: [String!], $orderBy: CommentOrder!, $orderOption: OrderOptionType!) {
+  comments(
+    parentId: $parentId
+    limit: $limit
+    searchAfter: $searchAfter
+    orderBy: $orderBy
+    orderOption: $orderOption
+  ) {
+    id
+    content
+    createdAt
+    searchAfter
+    likeCount
+    isMyLike
+    author {
+      id
+      nickname
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  CommunityPostCommentsQuery,
+  CommunityPostCommentsQueryVariables
+>;
+export const AddCommunityCommentDocument = new TypedDocumentString(`
+    mutation AddCommunityComment($parentId: Int!, $content: String!) {
+  addComment(parentId: $parentId, content: $content)
+}
+    `) as unknown as TypedDocumentString<
+  AddCommunityCommentMutation,
+  AddCommunityCommentMutationVariables
+>;
+export const AddUserReportDocument = new TypedDocumentString(`
+    mutation AddUserReport($target: UserReportTarget!, $targetId: Float!, $reason: UserReportReason!, $description: String) {
+  addUserReport(
+    target: $target
+    targetId: $targetId
+    reason: $reason
+    description: $description
+  )
+}
+    `) as unknown as TypedDocumentString<
+  AddUserReportMutation,
+  AddUserReportMutationVariables
+>;
 export const HotDealRankingProductsDocument = new TypedDocumentString(`
     query HotDealRankingProducts($page: Int!, $limit: Int!) {
   hotDealRankingProducts(page: $page, limit: $limit) {
@@ -3792,6 +4243,213 @@ export const CommunityRandomRankingProductsDocument = new TypedDocumentString(`
   CommunityRandomRankingProductsQuery,
   CommunityRandomRankingProductsQueryVariables
 >;
+export const QueryMyProfileDocument = new TypedDocumentString(`
+    query QueryMyProfile {
+  me {
+    id
+    email
+    nickname
+    birthYear
+    gender
+    favoriteCategories
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryMyProfileQuery,
+  QueryMyProfileQueryVariables
+>;
+export const MutationUpdateMyProfileDocument = new TypedDocumentString(`
+    mutation MutationUpdateMyProfile($nickname: String, $birthYear: Float, $gender: Gender, $favoriteCategories: [Int!]) {
+  updateUserProfile(
+    nickname: $nickname
+    birthYear: $birthYear
+    gender: $gender
+    favoriteCategories: $favoriteCategories
+  )
+}
+    `) as unknown as TypedDocumentString<
+  MutationUpdateMyProfileMutation,
+  MutationUpdateMyProfileMutationVariables
+>;
+export const MutationUpdateMyPasswordDocument = new TypedDocumentString(`
+    mutation MutationUpdateMyPassword($password: String!) {
+  updatePassword(password: $password)
+}
+    `) as unknown as TypedDocumentString<
+  MutationUpdateMyPasswordMutation,
+  MutationUpdateMyPasswordMutationVariables
+>;
+export const MutationWithdrawDocument = new TypedDocumentString(`
+    mutation MutationWithdraw {
+  withdraw
+}
+    `) as unknown as TypedDocumentString<
+  MutationWithdrawMutation,
+  MutationWithdrawMutationVariables
+>;
+export const QueryMyNotificationKeywordsDocument = new TypedDocumentString(`
+    query QueryMyNotificationKeywords($limit: Int!) {
+  notificationKeywordsByMe(limit: $limit) {
+    id
+    keyword
+    priceDropOnly
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryMyNotificationKeywordsQuery,
+  QueryMyNotificationKeywordsQueryVariables
+>;
+export const MutationAddMyNotificationKeywordDocument =
+  new TypedDocumentString(`
+    mutation MutationAddMyNotificationKeyword($keyword: String!, $fromRecommendation: Boolean, $priceDropOnly: Boolean) {
+  addNotificationKeyword(
+    keyword: $keyword
+    fromRecommendation: $fromRecommendation
+    priceDropOnly: $priceDropOnly
+  )
+}
+    `) as unknown as TypedDocumentString<
+    MutationAddMyNotificationKeywordMutation,
+    MutationAddMyNotificationKeywordMutationVariables
+  >;
+export const MutationRemoveMyNotificationKeywordDocument =
+  new TypedDocumentString(`
+    mutation MutationRemoveMyNotificationKeyword($id: Float!) {
+  removeNotificationKeyword(id: $id)
+}
+    `) as unknown as TypedDocumentString<
+    MutationRemoveMyNotificationKeywordMutation,
+    MutationRemoveMyNotificationKeywordMutationVariables
+  >;
+export const MutationUpdateKeywordPriceDropOnlyDocument =
+  new TypedDocumentString(`
+    mutation MutationUpdateKeywordPriceDropOnly($id: Int!, $priceDropOnly: Boolean!) {
+  updateNotificationKeywordPriceDropOnly(id: $id, priceDropOnly: $priceDropOnly)
+}
+    `) as unknown as TypedDocumentString<
+    MutationUpdateKeywordPriceDropOnlyMutation,
+    MutationUpdateKeywordPriceDropOnlyMutationVariables
+  >;
+export const QueryMyWishlistsDocument = new TypedDocumentString(`
+    query QueryMyWishlists($orderBy: WishlistOrderType!, $orderOption: OrderOptionType!, $limit: Int!, $searchAfter: [String!]) {
+  wishlists(
+    orderBy: $orderBy
+    orderOption: $orderOption
+    limit: $limit
+    searchAfter: $searchAfter
+  ) {
+    id
+    productId
+    searchAfter
+    product {
+      id
+      title
+      price
+      isHot
+      isEnd
+      isPrivate
+      postedAt
+      hotDealType
+      thumbnail
+      isMyWishlist
+      categoryId
+      mallName
+      provider {
+        nameKr
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryMyWishlistsQuery,
+  QueryMyWishlistsQueryVariables
+>;
+export const QueryMyWishlistCountDocument = new TypedDocumentString(`
+    query QueryMyWishlistCount {
+  wishlistCount
+}
+    `) as unknown as TypedDocumentString<
+  QueryMyWishlistCountQuery,
+  QueryMyWishlistCountQueryVariables
+>;
+export const MutationAddMyWishlistDocument = new TypedDocumentString(`
+    mutation MutationAddMyWishlist($productId: Int!) {
+  addWishlist(productId: $productId)
+}
+    `) as unknown as TypedDocumentString<
+  MutationAddMyWishlistMutation,
+  MutationAddMyWishlistMutationVariables
+>;
+export const MutationRemoveMyWishlistDocument = new TypedDocumentString(`
+    mutation MutationRemoveMyWishlist($productId: Int!) {
+  removeWishlist(productId: $productId)
+}
+    `) as unknown as TypedDocumentString<
+  MutationRemoveMyWishlistMutation,
+  MutationRemoveMyWishlistMutationVariables
+>;
+export const QueryNotificationThemesDocument = new TypedDocumentString(`
+    query QueryNotificationThemes {
+  notificationThemes {
+    id
+    name
+    description
+    emoji
+    representativeKeywords
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryNotificationThemesQuery,
+  QueryNotificationThemesQueryVariables
+>;
+export const QueryMySubscribedThemeIdsDocument = new TypedDocumentString(`
+    query QueryMySubscribedThemeIds {
+  mySubscribedThemeIds
+}
+    `) as unknown as TypedDocumentString<
+  QueryMySubscribedThemeIdsQuery,
+  QueryMySubscribedThemeIdsQueryVariables
+>;
+export const QueryNotificationThemeLiveDealsDocument = new TypedDocumentString(`
+    query QueryNotificationThemeLiveDeals($themeId: Int!) {
+  notificationThemeLiveDeals(themeId: $themeId) {
+    id
+    title
+    thumbnail
+    price
+    postedAt
+    categoryId
+    isEnd
+    isHot
+    hotDealType
+    mallName
+    provider {
+      nameKr
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryNotificationThemeLiveDealsQuery,
+  QueryNotificationThemeLiveDealsQueryVariables
+>;
+export const MutationSubscribeNotificationThemeDocument =
+  new TypedDocumentString(`
+    mutation MutationSubscribeNotificationTheme($themeId: Int!) {
+  subscribeNotificationTheme(themeId: $themeId)
+}
+    `) as unknown as TypedDocumentString<
+    MutationSubscribeNotificationThemeMutation,
+    MutationSubscribeNotificationThemeMutationVariables
+  >;
+export const MutationUnsubscribeNotificationThemeDocument =
+  new TypedDocumentString(`
+    mutation MutationUnsubscribeNotificationTheme($themeId: Int!) {
+  unsubscribeNotificationTheme(themeId: $themeId)
+}
+    `) as unknown as TypedDocumentString<
+    MutationUnsubscribeNotificationThemeMutation,
+    MutationUnsubscribeNotificationThemeMutationVariables
+  >;
 export const MutationAddPushTokenDocument = new TypedDocumentString(`
     mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {
   addPushToken(token: $token, tokenType: $tokenType)

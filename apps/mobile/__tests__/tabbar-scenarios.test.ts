@@ -38,6 +38,113 @@ function hidesTabBar(routeName: string): boolean {
   ].includes(routeName);
 }
 
+/**
+ * 내정보·커뮤니티 하위 화면은 탭바를 숨긴다 — web 과 같은 규칙.
+ *
+ * web `isTabRootPath` 는 탭 루트 6개(`/`·`/trending/*`·`/community`·`/alarm`·
+ * `/mypage`)에서만 하단바를 그린다. 하위 설정 화면·글 상세에서 하단바가 남으면
+ * 같은 화면인데 web 과 앱이 달라진다. 상세(DETAIL)만 의도적 예외다.
+ */
+describe('내정보·커뮤니티 하위 라우트는 탭바를 숨긴다', () => {
+  const MYPAGE_SUBS = [
+    'MYPAGE_ACCOUNT',
+    'MYPAGE_NICKNAME',
+    'MYPAGE_PASSWORD',
+    'MYPAGE_PERSONAL',
+    'MYPAGE_CATEGORIES',
+    'MYPAGE_KEYWORD',
+    'MYPAGE_TERMS',
+    'POLICY',
+    'LIKE',
+    'THEMES',
+    'THEME_DETAIL',
+  ];
+  const COMMUNITY_SUBS = ['COMMUNITY_POST', 'COMMUNITY_WRITE'];
+
+  it('11개 내정보 하위 라우트가 숨김 집합에 전부 있다', () => {
+    // ★하나라도 빠지면 그 화면에서만 탭바가 남는다 — "같은 정책을 한 곳에만
+    // 적용"이 이 레포에서 4번 재발한 실패 모양이다.
+    const set = stack.slice(
+      stack.indexOf('const MYPAGE_SUB_ROUTES'),
+      stack.indexOf('const COMMUNITY_SUB_ROUTES'),
+    );
+    expect(set.length).toBeGreaterThan(0);
+    for (const key of MYPAGE_SUBS) {
+      expect(set).toContain(`tabStackNavigations.${key}`);
+    }
+  });
+
+  it('커뮤니티 하위 라우트 2개가 숨김 집합에 있다', () => {
+    const set = stack.slice(stack.indexOf('const COMMUNITY_SUB_ROUTES'));
+    for (const key of COMMUNITY_SUBS) {
+      expect(set.slice(0, 400)).toContain(`tabStackNavigations.${key}`);
+    }
+  });
+
+  it('hidesTabBar 가 두 집합을 실제로 검사한다', () => {
+    // 집합만 선언하고 hidesTabBar 에서 안 쓰면 조용히 아무 효과가 없다.
+    const fn = stack.slice(
+      stack.indexOf('function hidesTabBar'),
+      stack.indexOf('function hidesTabBar') + 900,
+    );
+    expect(fn).toContain('MYPAGE_SUB_ROUTES.has');
+    expect(fn).toContain('COMMUNITY_SUB_ROUTES.has');
+  });
+
+  it('탭 루트(`/mypage`·`/community`)는 숨김 대상이 아니다', () => {
+    // 탭 루트는 ROOT 라우트로 뜬다. 하위 집합에 탭 루트를 넣으면 탭바가 사라진다.
+    const both =
+      stack.slice(
+        stack.indexOf('const MYPAGE_SUB_ROUTES'),
+        stack.indexOf('/**\n * 탭 하나를 감싸는'),
+      ) || '';
+    expect(both).not.toContain('tabStackNavigations.ROOT');
+  });
+});
+
+/**
+ * 탭으로 돌아올 때 무엇을 기준으로 판단하나.
+ *
+ * 🔴이 자리에 실제 버그가 있었다(2026-09-08 iOS 26 실측). 포커스 효과가
+ * `navigation.getState()` 를 읽었는데, `TabStack` 은 Stack.Navigator **밖**이라
+ * 그 navigation 은 탭 네비게이터를 가리킨다 → focused 가 'CommunityTab' 같은
+ * **탭 이름**이었다. hidesTabBar 는 라우트 이름을 기대하므로 항상 false 가 되어
+ * **리스너가 방금 숨긴 탭바를 다시 켰다**(글 상세에서 댓글 입력창이 가려짐).
+ */
+describe('탭 복귀 시 판단 기준은 스택 라우트다', () => {
+  it('탭 이름은 숨김 규칙에 걸리지 않는다 — 그래서 탭 상태를 읽으면 틀린다', () => {
+    for (const tab of [
+      'HomeTab',
+      'DiscoverTab',
+      'CommunityTab',
+      'AlarmTab',
+      'MyPageTab',
+    ]) {
+      expect(hidesTabBar(tab)).toBe(false);
+    }
+  });
+
+  it('포커스 효과는 탭 네비게이터 상태를 읽지 않는다', () => {
+    const start = stack.indexOf('if (!isTabFocused) return;');
+    expect(start).toBeGreaterThan(-1);
+    // ⚠️주석에 'navigation.getState()' 가 설명으로 등장하므로 **코드 줄만** 본다
+    // (런북이 경고한 거짓 양성 — 실제로 여기서 한 번 걸렸다).
+    const code = stack
+      .slice(start, start + 900)
+      .split('\n')
+      .filter((l: string) => !/^\s*(\/\/|\*|\/\*)/.test(l))
+      .join('\n');
+    expect(code).toContain('focusedRouteRef.current');
+    // getState() 를 다시 넣으면 같은 버그가 재발한다.
+    expect(code).not.toContain('navigation.getState()');
+  });
+
+  it('스택 리스너가 focusedRouteRef 를 갱신한다 — 유일한 갱신자', () => {
+    // 갱신자가 없으면 ref 가 ROOT 에 고정돼 상세에서도 탭바가 남는다.
+    expect(stack).toContain('focusedRouteRef.current = focused;');
+  });
+});
+
 describe('소스의 규칙과 이 테스트가 일치하는가', () => {
   it('hidesTabBar 가 검사하는 라우트가 4개 그대로다', () => {
     const fn = stack.slice(
@@ -70,19 +177,24 @@ describe('★★리스너는 포커스된 탭에서만 반영한다', () => {
   it('탭 5개 스택에서 각각 도는 리스너에 가드가 있다', () => {
     // 이 리스너는 탭마다 하나씩 있다. 가드가 없으면 발견 탭에 상세를 열어둔 채
     // 홈으로 왔을 때 발견 탭 리스너가 false 로 덮어써 홈에서도 사라진다.
-    expect(stack).toContain('isFocusedRef.current');
+    //
+    // ★판정은 ref 가 아니라 **호출 시점**에 직접 묻는다. 딥링크가 탭 전환과
+    // push 를 한 번에 하면 ref 가 갱신되기 전에 리스너가 돈다.
     const listener = stack.slice(
       stack.indexOf('screenListeners'),
-      stack.indexOf('screenListeners') + 800,
+      stack.indexOf('screenListeners') + 1400,
     );
-    expect(listener).toContain('if (isFocusedRef.current)');
+    expect(listener).toContain('if (navigation.isFocused())');
+    expect(stack).not.toContain('isFocusedRef');
   });
 
   it('탭 복귀 시 자기 스택 최상단으로 다시 맞춘다', () => {
     // 다른 탭에 있는 동안 이 탭 리스너는 막혀 있었으므로,
     // 돌아올 때 한 번 재계산해야 한다.
+    // ★기준은 **스택 라우트**다 — 탭 네비게이터 상태를 읽으면 탭 이름이 와서
+    // 규칙에 걸리지 않는다(아래 describe 가 그 버그를 고정한다).
     expect(stack).toContain('useIsFocused');
-    expect(stack).toContain('state?.routes?.[state.index]?.name');
+    expect(stack).toContain('focusedRouteRef.current');
   });
 });
 

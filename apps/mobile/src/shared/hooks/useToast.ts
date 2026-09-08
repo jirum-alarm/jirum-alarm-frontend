@@ -6,7 +6,6 @@ const offset = 10;
 
 const useToast = () => {
   const insets = useSafeAreaInsets();
-  console.log(insets.bottom + 10);
   const showToast = {
     info: (message: string) => {
       Toast.show({

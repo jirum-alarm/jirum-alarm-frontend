@@ -15,6 +15,15 @@
  */
 export const NATIVE_STACK_SCRIPT = `
   (function() {
+  // 🔴 Android WebView 의 injectedJavaScriptBeforeContentLoaded 는
+  // **documentElement 가 아직 null 인** 시점에 돈다 → 아래 dataset 접근이 예외를
+  // 던지고 **주입 전체가 죽는다**(logcat 실측: "Cannot read properties of null
+  // (reading 'dataset')"). 그러면 로드 후 주입만 살아남아, 이 스크립트를 로드 전에
+  // 넣은 목적(하이드레이션 전에 dataset 을 깔아 web useGoBack 이 ③ router.push('/')
+  // 로 떨어지지 않게 하기)이 Android 에서만 사라진다.
+  // DOM 이 생길 때까지 미뤄서 두 플랫폼이 같게 동작하게 한다.
+  function start() {
+    if (!document.documentElement) { setTimeout(start, 50); return; }
     document.documentElement.dataset.nativeStack = 'true';
     // ★중복 등록 가드를 **DOM(dataset)** 에 둔다.
     //
@@ -41,6 +50,8 @@ export const NATIVE_STACK_SCRIPT = `
         }));
       }
     }, true);
+  }
+  start();
   })();
   true;
 `;

@@ -34,6 +34,26 @@ const tabStackNavigations = {
   /** 네이티브 화면이 아직 없는 web 페이지(토스 등)를 탭 스택에 쌓는다. */
   WEBVIEW: 'TabWebViewPage',
   COMMENTS: 'ProductComments',
+
+  // ── 내정보 탭 (web /mypage/** · /like · /themes · /policies) ──
+  // ★8개 라우트를 한 번에 내야 한다 — 절반만 네이티브면 같은 설정 화면이
+  // 두 벌로 보인다.
+  MYPAGE_ACCOUNT: 'MyPageAccount',
+  MYPAGE_NICKNAME: 'MyPageNickname',
+  MYPAGE_PASSWORD: 'MyPagePassword',
+  MYPAGE_PERSONAL: 'MyPagePersonal',
+  MYPAGE_CATEGORIES: 'MyPageCategories',
+  MYPAGE_KEYWORD: 'MyPageKeyword',
+  MYPAGE_TERMS: 'MyPageTerms',
+  /** 약관·개인정보 본문. web /policies/privacy · /policies/terms */
+  POLICY: 'Policy',
+  LIKE: 'Like',
+  THEMES: 'Themes',
+  THEME_DETAIL: 'ThemeDetail',
+
+  // ── 커뮤니티 탭 (web /community/**) ──
+  COMMUNITY_POST: 'CommunityPost',
+  COMMUNITY_WRITE: 'CommunityWrite',
 } as const;
 
 /**
