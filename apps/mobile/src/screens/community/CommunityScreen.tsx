@@ -169,20 +169,32 @@ export default function CommunityScreen() {
         />
       )}
 
-      {/* 글쓰기 FAB — web CommunityList 의 모바일 전용 fixed 버튼. */}
-      <Pressable
-        onPress={openWrite}
-        accessibilityRole="button"
-        accessibilityLabel="글쓰기"
-        style={({pressed}) => [
-          styles.fab,
-          {bottom: getFabPaddingPx(insets.bottom) + 8},
-          pressed ? {opacity: 0.85} : null,
-        ]}
-        className="bg-primary-500 flex-row items-center rounded-full px-4 py-3">
-        <Text className="text-lg leading-5 text-white">+</Text>
-        <Text className="pl-1.5 text-sm font-semibold text-white">글쓰기</Text>
-      </Pressable>
+      {/* 글쓰기 FAB — web CommunityList 의 모바일 전용 fixed 버튼.
+          🔴위치를 **감싸는 View** 가 잡는다. 예전엔 Pressable 하나에
+          함수형 `style`(absolute·right) 과 `className` 을 같이 줬는데 위치가
+          적용되지 않아 버튼이 **화면 폭을 꽉 채운 초록 띠**가 되어 탭바 뒤로
+          깔렸다(사용자 지적). 이 레포에서 세 번째로 나온 모양이다 —
+          "web 은 인라인 요소라 글자 폭만 차지하는데 RN 은 블록이라 늘어난다".
+          위치·크기는 style 만 있는 뷰가, 색·padding·모양은 className 이 맡는다. */}
+      <View
+        // 버튼 바깥은 목록이 계속 스크롤돼야 한다.
+        pointerEvents="box-none"
+        style={[styles.fabWrap, {bottom: getFabPaddingPx(insets.bottom) + 8}]}>
+        <Pressable
+          onPress={openWrite}
+          accessibilityRole="button"
+          accessibilityLabel="글쓰기"
+          style={({pressed}) => [
+            styles.fabShadow,
+            pressed ? styles.fabPressed : null,
+          ]}
+          className="bg-primary-500 flex-row items-center rounded-full px-4 py-3">
+          <Text className="text-lg leading-5 text-white">+</Text>
+          <Text className="pl-1.5 text-sm font-semibold text-white">
+            글쓰기
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -193,13 +205,18 @@ const styles = StyleSheet.create({
    * 그림자는 iOS 에서 overflow:hidden 과 공존하지 못하므로 이 뷰에는
    * overflow 를 주지 않는다.
    */
-  fab: {
+  /** 위치만. 오른쪽 정렬은 `alignItems` 로 — 폭을 주지 않아 버튼이 내용만큼만 된다. */
+  fabWrap: {
     position: 'absolute',
     right: 20, // web right-5
+    alignItems: 'flex-end',
+  },
+  fabShadow: {
     shadowColor: '#101828',
     shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.18,
     shadowRadius: 12,
     elevation: 6,
   },
+  fabPressed: {opacity: 0.85},
 });
