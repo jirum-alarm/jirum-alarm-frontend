@@ -20,7 +20,6 @@ import {
   buildProductSeoTitle,
   clipMetaDescription,
   formatDealAgeNotice,
-  formatPriceHistorySeoText,
   generateDescription,
   MISSING_PRODUCT_METADATA,
   parseNumericPrice,
@@ -388,7 +387,6 @@ export default async function ProductDetail({
     productData?: any,
     guides?: any,
     verdict?: any,
-    priceRangeText?: string | null,
     modelPage?: ProductModelPageLink | null,
     dealAgeNotice?: string | null,
   ) => {
@@ -401,7 +399,6 @@ export default async function ProductDetail({
         initialGuides={guides}
         initialVerdict={verdict}
         hidePrice={hidePrice}
-        priceRangeText={priceRangeText}
         modelPage={modelPage}
         ageNotice={dealAgeNotice}
       />
@@ -411,7 +408,6 @@ export default async function ProductDetail({
     productData?: any,
     guides?: any,
     verdict?: any,
-    priceRangeText?: string | null,
     modelPage?: ProductModelPageLink | null,
     dealAgeNotice?: string | null,
   ) => {
@@ -424,7 +420,6 @@ export default async function ProductDetail({
         initialGuides={guides}
         initialVerdict={verdict}
         hidePrice={hidePrice}
-        priceRangeText={priceRangeText}
         modelPage={modelPage}
         ageNotice={dealAgeNotice}
       />
@@ -446,9 +441,6 @@ export default async function ProductDetail({
   ]);
   const priceHistorySeo = priceHistoryFromProduct(priceHistoryData);
   const commentSummary = additionalInfo?.commentSummary?.summary ?? null;
-  // 서버 HTML 에 박을 가격 문맥. meta·JSON-LD 와 같은 함수를 써서 문구가 갈리지 않게 한다.
-  const priceRangeText =
-    !hidePrice && priceHistorySeo ? formatPriceHistorySeoText(priceHistorySeo) : null;
   const modelPageLink = modelPageLinkFromProduct(priceHistoryData);
   // JSON-LD 가 availability 를 생략하는 것과 같은 임계(30일)로 화면에도 안내를 낸다.
   const ageNotice = hidePrice ? null : formatDealAgeNotice(product.postedAt, product.isEnd);
@@ -484,7 +476,6 @@ export default async function ProductDetail({
               product ?? undefined,
               productGuides?.productGuides ?? undefined,
               priceVerdict,
-              priceRangeText,
               modelPageLink,
               ageNotice,
             )
@@ -492,7 +483,6 @@ export default async function ProductDetail({
               product ?? undefined,
               productGuides?.productGuides ?? undefined,
               priceVerdict,
-              priceRangeText,
               modelPageLink,
               ageNotice,
             )}

@@ -4,8 +4,6 @@ import type { ProductModelPageLink } from '@/shared/api/product/product.service'
 import { cn } from '@/shared/lib/cn';
 
 type Props = {
-  /** `formatPriceHistorySeoText` 결과. meta·JSON-LD 와 **같은 문구**를 쓴다. */
-  priceRangeText?: string | null;
   /** `formatDealAgeNotice` 결과. JSON-LD 가 재고를 주장하지 않는 것과 짝이다. */
   ageNotice?: string | null;
   modelPage?: ProductModelPageLink | null;
@@ -13,7 +11,11 @@ type Props = {
 };
 
 /**
- * 상세 가격 아래 SSR 블록 — 가격대 한 줄 + 모델 페이지 링크.
+ * 상세 가격 아래 SSR 블록 — 게시일 안내 + 모델 페이지 링크.
+ *
+ * "최근 3개월 유사 핫딜가 9,550~10,682원" 가격대 한 줄은 2026-09-08 사용자 요청으로 뺐다(구매 버튼 아래에
+ * 붙어 거슬림). 그 문구는 meta description·JSON-LD additionalProperty 에는 남아 있다 — 아래 SEO 정합
+ * 이야기는 그 시점의 배경이다.
  *
  * 클라이언트 컴포넌트가 아니다(=첫 HTML 에 박힌다). 이게 요점:
  * - 가격 이력은 meta description·JSON-LD `additionalProperty` 에만 있고 **본문엔 없었다**.
@@ -25,18 +27,11 @@ type Props = {
  *
  * 가격 추이 섹션에 있던 CTA 를 여기로 올렸다(링크 중복 방지 + 첫 화면 노출).
  */
-export default function ProductPriceContext({
-  priceRangeText,
-  ageNotice,
-  modelPage,
-  className,
-}: Props) {
-  if (!priceRangeText && !ageNotice && !modelPage) return null;
+export default function ProductPriceContext({ ageNotice, modelPage, className }: Props) {
+  if (!ageNotice && !modelPage) return null;
 
   return (
     <section className={cn('flex flex-col gap-2', className)}>
-      {priceRangeText ? <p className="text-sm text-gray-600">{priceRangeText}</p> : null}
-
       {ageNotice ? <p className="text-sm text-gray-500">{ageNotice}</p> : null}
 
       {modelPage ? (

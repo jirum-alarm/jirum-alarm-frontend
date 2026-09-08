@@ -36,7 +36,6 @@ export default async function DesktopProductDetailPage({
   initialGuides,
   initialVerdict,
   hidePrice,
-  priceRangeText,
   modelPage,
   ageNotice,
 }: {
@@ -47,7 +46,6 @@ export default async function DesktopProductDetailPage({
   initialGuides?: ProductGuideRow[] | null;
   initialVerdict?: ProductPriceVerdict | null;
   hidePrice?: boolean;
-  priceRangeText?: string | null;
   modelPage?: ProductModelPageLink | null;
   ageNotice?: string | null;
 }) {
@@ -121,7 +119,6 @@ export default async function DesktopProductDetailPage({
               />
               {/* 서버 렌더 — 가격대·모델 페이지 링크. ProductInfo(클라이언트) 바로 아래. */}
               <ProductPriceContext
-                priceRangeText={hidePrice ? null : priceRangeText}
                 ageNotice={hidePrice ? null : ageNotice}
                 modelPage={hidePrice ? null : modelPage}
               />
