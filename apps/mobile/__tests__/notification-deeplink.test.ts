@@ -66,6 +66,27 @@ const expectScreen = (tab: string, screen: string, params?: unknown) => {
   ]);
 };
 
+/** 중첩 네비게이터(검색) 목적지. 부모 라우트 안의 자식 state 를 본다. */
+const expectNested = (
+  tab: string,
+  screen: string,
+  child: string,
+  childParams?: unknown,
+) => {
+  const call = mockDispatch.mock.calls.at(-1)?.[0] as {
+    arg?: {name?: string; params?: {state?: {routes?: unknown[]}}};
+  };
+  expect(call?.arg?.name).toBe(tab);
+  expect(call?.arg?.params?.state?.routes).toEqual([
+    {name: 'TabRoot'},
+    {
+      name: screen,
+      params: undefined,
+      state: {routes: [{name: child, params: childParams}]},
+    },
+  ]);
+};
+
 const reset = () => {
   mockNavigate.mockClear();
   mockDispatch.mockClear();
@@ -80,6 +101,25 @@ describe('푸시·딥링크 → 네이티브 화면', () => {
   it('상품 상세는 URL 이 정한 탭의 스택에 쌓는다', () => {
     expect(navigateToNativeRoute(url('/products/123'))).toBe(true);
     expectScreen('HomeTab', 'ProductDetail', {path: '/products/123'});
+  });
+
+  // 🔴상세보다 먼저 판정해야 한다. `getPushablePath` 가 `/comment` 까지 잡아서
+  // 상세로 보내면 상세 화면이 `/products/\d+$` 만 네이티브로 그려 **웹뷰 폴백**으로
+  // 떨어졌다 — 네이티브 댓글 화면이 있는데 공유·푸시로 온 사람만 web 을 봤다.
+  it('상품 댓글은 네이티브 댓글 화면으로 — 상세 폴백으로 새지 않는다', () => {
+    expect(navigateToNativeRoute(url('/products/123/comment'))).toBe(true);
+    expectScreen('HomeTab', 'ProductComments', {productId: 123});
+  });
+
+  it('끝 슬래시도 같은 화면', () => {
+    navigateToNativeRoute(url('/products/123/comment/'));
+    expectScreen('HomeTab', 'ProductComments', {productId: 123});
+  });
+
+  it('네이티브 화면이 없는 하위 경로는 그대로 상세가 받는다', () => {
+    // `/related` 는 아직 네이티브가 없다 — 상세 화면의 웹뷰 폴백이 맡는다.
+    expect(navigateToNativeRoute(url('/products/123/related'))).toBe(true);
+    expectScreen('HomeTab', 'ProductDetail', {path: '/products/123/related'});
   });
 
   it('쿼리스트링을 살려서 넘긴다', () => {
@@ -202,6 +242,36 @@ describe('커뮤니티·내정보 딥링크 (2026-09-08 네이티브 전환)', (
     reset();
     navigateToNativeRoute(url('/policies/privacy'));
     expectScreen('MyPageTab', 'Policy', {kind: 'privacy'});
+  });
+});
+
+// 🔴검색은 2026-09-08 로 본문까지 네이티브가 됐다. 매핑이 없으면 이 경로가 웹뷰
+// 폴백으로 떨어져 **이제 낡은 web 검색 페이지**가 떴다.
+describe('검색 딥링크', () => {
+  beforeEach(reset);
+
+  it('검색어 없이 열면 초기 화면으로', () => {
+    expect(navigateToNativeRoute(url('/search'))).toBe(true);
+    expectNested('HomeTab', 'Search', 'SearchHome', undefined);
+  });
+
+  it('keyword 를 중첩 자식까지 넘긴다', () => {
+    // 중첩 네비게이터 라우트에 params 만 얹으면 자식 화면엔 안 닿는다.
+    expect(navigateToNativeRoute(url('/search?keyword=%EB%9E%A8'))).toBe(true);
+    expectNested('HomeTab', 'Search', 'SearchHome', {keyword: '램'});
+  });
+
+  it('`+` 는 공백으로 읽는다 — web URLSearchParams 와 같은 규칙', () => {
+    // 안 맞추면 "갤럭시 워치" 가 `+` 를 품은 채로 조회된다.
+    navigateToNativeRoute(
+      url('/search?keyword=%EA%B0%A4%EB%9F%AD%EC%8B%9C+%EC%9B%8C%EC%B9%98'),
+    );
+    expectNested('HomeTab', 'Search', 'SearchHome', {keyword: '갤럭시 워치'});
+  });
+
+  it('빈 keyword 는 초기 화면으로 — 빈 문자열로 조회하지 않는다', () => {
+    navigateToNativeRoute(url('/search?keyword='));
+    expectNested('HomeTab', 'Search', 'SearchHome', undefined);
   });
 });
 

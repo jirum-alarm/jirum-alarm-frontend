@@ -136,7 +136,24 @@ function navigateToRoute(route: NativeRoute): boolean {
             index: 1,
             routes: [
               {name: tabStackNavigations.ROOT},
-              {name: route.screen, params: route.params},
+              {
+                name: route.screen,
+                params: route.params,
+                // 중첩 네비게이터(검색)면 자식 라우트까지 지정한다 — params 만
+                // 얹으면 부모가 들고만 있어 자식 화면엔 닿지 않는다.
+                ...(route.nested
+                  ? {
+                      state: {
+                        routes: [
+                          {
+                            name: route.nested.screen,
+                            params: route.nested.params,
+                          },
+                        ],
+                      },
+                    }
+                  : {}),
+              },
             ],
           },
         },

@@ -82,6 +82,8 @@ type Documents = {
   '\n  query MyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n    }\n  }\n': typeof types.MyNotificationKeywordsDocument;
   '\n  mutation ReportExpiredProduct($productId: Int!) {\n    reportExpiredProduct(productId: $productId)\n  }\n': typeof types.ReportExpiredProductDocument;
   '\n  mutation RecordProductImpressions(\n    $source: String!\n    $impressions: [ProductImpressionInput!]!\n  ) {\n    recordProductImpressions(source: $source, impressions: $impressions)\n  }\n': typeof types.RecordProductImpressionsDocument;
+  '\n  query SearchProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $categoryIds: [Int!]\n    $keyword: String\n    $isEnd: Boolean\n    $providerIds: [Int!]\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      categoryIds: $categoryIds\n      keyword: $keyword\n      isEnd: $isEnd\n      providerIds: $providerIds\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      mallName\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      estimatedTotal\n      postedAt\n    }\n  }\n': typeof types.SearchProductsDocument;
+  '\n  query SearchSuggestions($prefix: String!, $limit: Int) {\n    searchSuggestions(prefix: $prefix, limit: $limit)\n  }\n': typeof types.SearchSuggestionsDocument;
   '\n  query QueryMe {\n    me {\n      id\n    }\n  }\n': typeof types.QueryMeDocument;
 };
 const documents: Documents = {
@@ -223,6 +225,10 @@ const documents: Documents = {
     types.ReportExpiredProductDocument,
   '\n  mutation RecordProductImpressions(\n    $source: String!\n    $impressions: [ProductImpressionInput!]!\n  ) {\n    recordProductImpressions(source: $source, impressions: $impressions)\n  }\n':
     types.RecordProductImpressionsDocument,
+  '\n  query SearchProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $categoryIds: [Int!]\n    $keyword: String\n    $isEnd: Boolean\n    $providerIds: [Int!]\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      categoryIds: $categoryIds\n      keyword: $keyword\n      isEnd: $isEnd\n      providerIds: $providerIds\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      mallName\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      estimatedTotal\n      postedAt\n    }\n  }\n':
+    types.SearchProductsDocument,
+  '\n  query SearchSuggestions($prefix: String!, $limit: Int) {\n    searchSuggestions(prefix: $prefix, limit: $limit)\n  }\n':
+    types.SearchSuggestionsDocument,
   '\n  query QueryMe {\n    me {\n      id\n    }\n  }\n':
     types.QueryMeDocument,
 };
@@ -641,6 +647,18 @@ export function graphql(
 export function graphql(
   source: '\n  mutation RecordProductImpressions(\n    $source: String!\n    $impressions: [ProductImpressionInput!]!\n  ) {\n    recordProductImpressions(source: $source, impressions: $impressions)\n  }\n',
 ): typeof import('./graphql').RecordProductImpressionsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query SearchProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $categoryIds: [Int!]\n    $keyword: String\n    $isEnd: Boolean\n    $providerIds: [Int!]\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      categoryIds: $categoryIds\n      keyword: $keyword\n      isEnd: $isEnd\n      providerIds: $providerIds\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      mallName\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      estimatedTotal\n      postedAt\n    }\n  }\n',
+): typeof import('./graphql').SearchProductsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query SearchSuggestions($prefix: String!, $limit: Int) {\n    searchSuggestions(prefix: $prefix, limit: $limit)\n  }\n',
+): typeof import('./graphql').SearchSuggestionsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

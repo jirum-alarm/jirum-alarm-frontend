@@ -3703,6 +3703,57 @@ export type RecordProductImpressionsMutation = {
   recordProductImpressions: boolean;
 };
 
+export type SearchProductsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  searchAfter?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+  orderBy?: InputMaybe<ProductOrderType>;
+  categoryIds?: InputMaybe<
+    Array<Scalars['Int']['input']> | Scalars['Int']['input']
+  >;
+  keyword?: InputMaybe<Scalars['String']['input']>;
+  isEnd?: InputMaybe<Scalars['Boolean']['input']>;
+  providerIds?: InputMaybe<
+    Array<Scalars['Int']['input']> | Scalars['Int']['input']
+  >;
+}>;
+
+export type SearchProductsQuery = {
+  __typename?: 'Query';
+  products: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    mallId?: number | null;
+    url?: string | null;
+    isHot?: boolean | null;
+    isEnd?: boolean | null;
+    price?: string | null;
+    providerId: number;
+    categoryId: number;
+    category?: string | null;
+    thumbnail?: string | null;
+    mallName?: string | null;
+    hotDealType?: HotDealType | null;
+    searchAfter?: Array<string> | null;
+    estimatedTotal?: number | null;
+    postedAt: any;
+    provider: {__typename?: 'Provider'; nameKr: string};
+  }>;
+};
+
+export type SearchSuggestionsQueryVariables = Exact<{
+  prefix: Scalars['String']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type SearchSuggestionsQuery = {
+  __typename?: 'Query';
+  searchSuggestions: Array<string>;
+};
+
 export type QueryMeQueryVariables = Exact<{[key: string]: never}>;
 
 export type QueryMeQuery = {
@@ -4816,6 +4867,51 @@ export const RecordProductImpressionsDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   RecordProductImpressionsMutation,
   RecordProductImpressionsMutationVariables
+>;
+export const SearchProductsDocument = new TypedDocumentString(`
+    query SearchProducts($limit: Int!, $searchAfter: [String!], $startDate: DateTime, $orderBy: ProductOrderType, $categoryIds: [Int!], $keyword: String, $isEnd: Boolean, $providerIds: [Int!]) {
+  products(
+    limit: $limit
+    searchAfter: $searchAfter
+    startDate: $startDate
+    orderBy: $orderBy
+    categoryIds: $categoryIds
+    keyword: $keyword
+    isEnd: $isEnd
+    providerIds: $providerIds
+  ) {
+    id
+    title
+    mallId
+    url
+    isHot
+    isEnd
+    price
+    providerId
+    categoryId
+    category
+    thumbnail
+    mallName
+    hotDealType
+    provider {
+      nameKr
+    }
+    searchAfter
+    estimatedTotal
+    postedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+  SearchProductsQuery,
+  SearchProductsQueryVariables
+>;
+export const SearchSuggestionsDocument = new TypedDocumentString(`
+    query SearchSuggestions($prefix: String!, $limit: Int) {
+  searchSuggestions(prefix: $prefix, limit: $limit)
+}
+    `) as unknown as TypedDocumentString<
+  SearchSuggestionsQuery,
+  SearchSuggestionsQueryVariables
 >;
 export const QueryMeDocument = new TypedDocumentString(`
     query QueryMe {

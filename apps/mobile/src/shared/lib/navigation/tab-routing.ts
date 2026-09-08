@@ -1,4 +1,5 @@
 import {
+  searchStackNavigations,
   tabNavigations,
   tabStackNavigations,
 } from '@/shared/constant/navigations';
@@ -184,6 +185,14 @@ export type NativeRoute = {
   params?: Record<string, unknown>;
   /** 발견 탭 전용 — 실시간·랭킹 중 어느 화면으로 열지. */
   trendingView?: 'live' | 'ranking';
+  /**
+   * `screen` 이 **중첩 네비게이터**일 때 그 안에서 열 화면.
+   *
+   * ★검색이 유일한 경우다(`Search` → `SearchStackNavigator` → `SearchHome`).
+   * 중첩 네비게이터 라우트에 params 를 그냥 얹으면 **자식 화면엔 닿지 않는다** —
+   * 부모가 들고만 있는다. 그래서 자식 라우트를 따로 지정한다.
+   */
+  nested?: {screen: string; params?: Record<string, unknown>};
 };
 
 /**
@@ -204,8 +213,21 @@ export function resolveNativeRoute(
 ): NativeRoute | null {
   const path = extractPath(url);
 
+  // 상품 댓글. **상세보다 먼저 본다** — `getPushablePath` 가 `/products/123/comment`
+  // 까지 잡아서 상세로 보내면, 상세 화면이 `/products/\d+$` 만 네이티브로 그리므로
+  // 웹뷰 폴백으로 떨어졌다. 네이티브 댓글 화면(`COMMENTS`)이 이미 있는데도
+  // 공유 링크·푸시로 들어온 사람만 web 버전을 보고 있었다.
+  const commentProductId = path.match(/^\/products\/(\d+)\/comment\/?$/)?.[1];
+  if (commentProductId) {
+    return {
+      tab: getTabNameFromUrl(url),
+      screen: tabStackNavigations.COMMENTS,
+      params: {productId: Number(commentProductId)},
+    };
+  }
+
   // 상품 상세. 어느 탭에 쌓을지는 URL 이 정한다(웹뷰 시절 규칙 그대로 —
-  // 뒤로가기 동선이 유지된다). 하위 경로(`/comment`)는 상세 화면이 웹뷰로 넘긴다.
+  // 뒤로가기 동선이 유지된다). 남은 하위 경로(`/related`)는 상세 화면이 웹뷰로 넘긴다.
   const detailPath = getPushablePath(url);
   if (detailPath) {
     return {
@@ -270,6 +292,23 @@ export function resolveNativeRoute(
       tab: tabNavigations.HOME,
       screen: tabStackNavigations.TOSS_CURATION,
       params: tossTab ? {sectionId: decodeURIComponent(tossTab)} : {},
+    };
+  }
+
+  // 검색. 2026-09-08 로 본문까지 네이티브가 됐다 — 그전엔 이 경로가 아래 웹뷰
+  // 폴백으로 떨어져 **이제 낡은 web 검색 페이지**가 떴다.
+  if (path === '/search') {
+    const raw = url.match(/[?&]keyword=([^&#]*)/)?.[1];
+    // web 은 URLSearchParams 를 쓰므로 `+` 가 공백이다. 그 규칙을 맞춘다 —
+    // 안 맞추면 "갤럭시 워치" 같은 두 단어 검색어가 `+` 를 품고 조회된다.
+    const keyword = raw ? decodeURIComponent(raw.replace(/\+/g, ' ')) : '';
+    return {
+      tab: getTabNameFromUrl(url),
+      screen: tabStackNavigations.SEARCH,
+      nested: {
+        screen: searchStackNavigations.HOME,
+        params: keyword ? {keyword} : undefined,
+      },
     };
   }
 

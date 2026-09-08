@@ -15,7 +15,7 @@ export type ProductFlowParamList = {
  */
 export type TabStackParamList = ProductFlowParamList & {
   [tabStackNavigations.ROOT]: undefined;
-  [tabStackNavigations.SEARCH]: undefined;
+  [tabStackNavigations.SEARCH]: {keyword?: string} | undefined;
   [tabStackNavigations.CURATION]: {sectionId: string; title?: string};
   [tabStackNavigations.TOSS_CURATION]: {sectionId?: string};
   [tabStackNavigations.WEBVIEW]: {uri: string; title?: string};
@@ -41,5 +41,6 @@ export type TabStackParamList = ProductFlowParamList & {
 
 /** 검색 한 판 + 그 검색에서 연 상세. */
 export type SearchStackParamList = ProductFlowParamList & {
-  [searchStackNavigations.HOME]: undefined;
+  /** 딥링크(`/search?keyword=…`)로 들어오면 검색어를 들고 시작한다. */
+  [searchStackNavigations.HOME]: {keyword?: string} | undefined;
 };
