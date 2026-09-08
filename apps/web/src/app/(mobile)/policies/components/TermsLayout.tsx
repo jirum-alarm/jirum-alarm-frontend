@@ -21,9 +21,13 @@ type TermsContentData = {
 }[];
 
 const TermsLayout = ({
+  title,
   termsIndexData,
   termsContentData,
 }: {
+  /** 이 레이아웃은 약관·개인정보 두 페이지가 공유한다 — 제목을 하드코딩하면
+   *  개인정보 페이지에도 "서비스 이용약관"이 뜬다(실제로 그랬다). */
+  title: string;
   termsIndexData: TermsIndexData;
   termsContentData: TermsContentData;
 }) => {
@@ -38,7 +42,7 @@ const TermsLayout = ({
     >
       {/* 약관은 모달처럼 닫는 흐름이라 뒤로가기 화살표 대신 X 를 오른쪽에 둔다. */}
       <PageHeader
-        title="서비스 이용약관"
+        title={title}
         actions={
           <button
             className="-m-2 flex items-center justify-center p-2"

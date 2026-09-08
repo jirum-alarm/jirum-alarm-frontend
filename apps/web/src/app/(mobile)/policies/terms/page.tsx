@@ -12,7 +12,13 @@ export const metadata: Metadata = {
 };
 
 const TermsOfUsePage = () => {
-  return <TermsLayout termsIndexData={TERMS_INDEX_DATA} termsContentData={TERMS_CONTENT_DATA} />;
+  return (
+    <TermsLayout
+      title="서비스 이용약관"
+      termsIndexData={TERMS_INDEX_DATA}
+      termsContentData={TERMS_CONTENT_DATA}
+    />
+  );
 };
 
 export default TermsOfUsePage;

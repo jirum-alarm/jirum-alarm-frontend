@@ -13,7 +13,11 @@ export const metadata: Metadata = {
 
 const PrivacyPolicyPage = () => {
   return (
-    <TermsLayout termsIndexData={PRIVACY_INDEX_DATA} termsContentData={PRIVACY_CONTENT_DATA} />
+    <TermsLayout
+      title="개인정보 처리방침"
+      termsIndexData={PRIVACY_INDEX_DATA}
+      termsContentData={PRIVACY_CONTENT_DATA}
+    />
   );
 };
 
