@@ -12,8 +12,6 @@ import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
 import { getUnreadCountAfterLastRead, setUnreadCountSnapshot } from '@/shared/lib/alarmReadState';
 import { cn } from '@/shared/lib/cn';
-import { WebViewBridge } from '@/shared/lib/webview/sender';
-import { WebViewEventType } from '@/shared/lib/webview/type';
 import {
   Alert,
   AlertFill,
@@ -107,11 +105,10 @@ function useHasNewAlarm() {
     hasNewAlarm = storedCount === -1 ? (unreadCount ?? 0) > 0 : (unreadCount ?? 0) > storedCount;
   }
 
-  useEffect(() => {
-    WebViewBridge.sendMessage(WebViewEventType.ALARM_DOT_CHANGED, {
-      data: { hasNewAlarm },
-    });
-  }, [hasNewAlarm]);
+  // ★ALARM_DOT_CHANGED 송신을 제거했다. 이 훅은 BottomNavComponent 안에서만
+  // 돌고, 그 컴포넌트는 앱에서 아래 `isJirumAlarmApp` 조기 반환에 걸려 렌더되지
+  // 않는다 → 앱에 이 메시지가 온 적이 없어 네이티브 탭바 점이 영구히 꺼져 있었다.
+  // 이제 점 판정은 네이티브가 직접 한다(mobile useHasNewAlarm).
 
   return hasNewAlarm;
 }

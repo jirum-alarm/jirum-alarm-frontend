@@ -7,6 +7,9 @@ import { useState } from 'react';
 import { CommunityService } from '@/shared/api/community/community.service';
 import { ProductService } from '@/shared/api/product/product.service';
 import { PAGE } from '@/shared/config/page';
+import { isInApp } from '@/shared/lib/webview/native';
+import { WebViewBridge } from '@/shared/lib/webview/sender';
+import { WebViewEventType } from '@/shared/lib/webview/type';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { CommunityQueries } from '@/entities/community';
@@ -107,11 +110,28 @@ export default function usePostForm(
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CommunityQueries.all() });
+      toast(editPostId ? '게시글이 수정되었어요.' : '게시글이 등록되었어요.');
+
+      // ★앱의 네이티브 스택 위에 얹힌 웹뷰면 웹 라우팅을 하지 않는다.
+      // 커뮤니티 탭이 네이티브가 된 뒤(2026-09-08) 이 폼만 웹뷰로 남았는데,
+      //   - push(COMMUNITY) 는 **웹뷰 안에 web 커뮤니티 목록**을 그려 두 벌이 되고
+      //     (iOS 스와이프 말고는 탈출구가 없다)
+      //   - back() 은 새 웹뷰라 history 가 비어 **아무 일도 안 일어난다**
+      // 대신 네이티브에 뒤로가기를 올려 글쓰기 화면을 닫는다 — 목록 갱신은
+      // 앱의 CommunityWriteScreen 이 언마운트에서 캐시를 무효화해 처리한다.
+      // useGoBack 이 쓰는 것과 같은 판정·같은 브릿지다.
+      if (
+        typeof document !== 'undefined' &&
+        document.documentElement.dataset.nativeStack === 'true' &&
+        isInApp()
+      ) {
+        WebViewBridge.sendMessage(WebViewEventType.PRESS_BACKBUTTON, null);
+        return;
+      }
+
       if (editPostId) {
-        toast('게시글이 수정되었어요.');
         router.back();
       } else {
-        toast('게시글이 등록되었어요.');
         router.push(PAGE.COMMUNITY);
       }
     },
