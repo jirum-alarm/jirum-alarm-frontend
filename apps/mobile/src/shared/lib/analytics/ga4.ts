@@ -36,12 +36,22 @@ const toParams = (
  * 업데이트**를 받은 설치 앱도 같다(스토어 빌드가 나가기 전까지).
  * 그래서 호출 자체를 try/catch 로 감싼다.
  */
+// 네이티브 모듈 부재는 **실행 내내 유지되는 조건**이라 호출마다 찍으면 로그가
+// 흐른다(dev 에선 LogBox 토스트가 화면 하단을 계속 덮어 시뮬레이터 검증까지
+// 막았다). 라벨당 한 번만 남긴다 — 두 번째 로그가 알려주는 새 사실이 없다.
+const logged = new Set<string>();
+const logOnce = (key: string, message: string, error: unknown) => {
+  if (logged.has(key)) return;
+  logged.add(key);
+  console.error(message, error);
+};
+
 const safely = (label: string, run: () => Promise<unknown>) => {
   try {
-    run().catch(e => console.error(`[GA4] ${label} 실패:`, e));
+    run().catch(e => logOnce(`fail:${label}`, `[GA4] ${label} 실패:`, e));
   } catch (e) {
     // 네이티브 모듈 부재 등 동기 예외. 로그만 남기고 흐름은 그대로 진행한다.
-    console.error(`[GA4] ${label} 불가:`, e);
+    logOnce(`sync:${label}`, `[GA4] ${label} 불가:`, e);
   }
 };
 

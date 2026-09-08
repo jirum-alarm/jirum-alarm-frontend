@@ -56,6 +56,18 @@ describe('Analytics — 실패가 흐름을 막지 않는다', () => {
     expect(errorSpy).toHaveBeenCalled();
   });
 
+  it('★같은 실패는 한 번만 로그한다 — 호출마다 찍으면 로그가 흐른다', () => {
+    // 네이티브 모듈 부재는 실행 내내 유지되는 조건이다. dev 에선 LogBox
+    // 토스트가 화면 하단을 덮어 시뮬레이터 검증까지 막았다.
+    mockImpl = throwing;
+    Analytics.track('repeat_me');
+    Analytics.track('repeat_me');
+    Analytics.track('repeat_me');
+    expect(errorSpy).toHaveBeenCalledTimes(1);
+    // 로그만 줄인다 — 호출 자체는 매번 시도한다(모듈이 나중에 붙을 수 있다).
+    expect(throwing).toHaveBeenCalledTimes(3);
+  });
+
   it('userId 가 비면 아무것도 부르지 않는다', () => {
     mockImpl = throwing;
     Analytics.identify('');
