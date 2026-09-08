@@ -68,7 +68,8 @@ export default function BottomCTA({
           onClick={handlePurchaseClick}
           className="block flex-1"
           target="_blank"
-          rel="noopener noreferrer"
+          // 제휴 아웃바운드 — 크롤러가 따라가 봇클릭을 만들지 않게 nofollow/sponsored
+          rel="nofollow sponsored noopener noreferrer"
         >
           <Button className="h-[48px] w-full px-6 text-base font-semibold">구매하러 가기</Button>
         </a>
