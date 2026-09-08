@@ -95,7 +95,7 @@ export default function TossDealCard({
   );
 
   return href ? (
-    <Link href={href} className={cn('w-full', className)}>
+    <Link prefetch={!!priority} href={href} className={cn('w-full', className)}>
       {inner}
     </Link>
   ) : (

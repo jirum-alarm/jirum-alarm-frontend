@@ -70,7 +70,11 @@ const DynamicProductList = ({
   if (type === 'LIST') {
     return (
       <div className="pc:px-0 px-5">
-        <ListProductList products={products} source="home_promotion" />
+        <ListProductList
+          products={products}
+          priorityCount={priorityCount}
+          source="home_promotion"
+        />
       </div>
     );
   }

@@ -24,7 +24,11 @@ export default function DoubleRowProductCard({
   source?: ProductCardSource;
 }) {
   return (
-    <Link href={PAGE.DETAIL + '/' + product.id} {...productCardTracking(source, product.id)}>
+    <Link
+      prefetch={false}
+      href={PAGE.DETAIL + '/' + product.id}
+      {...productCardTracking(source, product.id)}
+    >
       <m.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="flex w-full flex-row items-start gap-2">
           <div className="relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">

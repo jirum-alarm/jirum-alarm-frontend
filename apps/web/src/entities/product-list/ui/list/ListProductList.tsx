@@ -11,13 +11,25 @@ type ListProductListProps = {
   products: ProductCardType[];
   className?: string;
   source?: ProductCardSource;
+  /** 앞에서 몇 장을 첫 화면 카드로 볼지. 홈 첫 섹션이 4 를 넘기는데 여기서 버려지고 있었다. */
+  priorityCount?: number;
 };
 
-export default function ListProductList({ products, className, source }: ListProductListProps) {
+export default function ListProductList({
+  products,
+  className,
+  source,
+  priorityCount = 0,
+}: ListProductListProps) {
   return (
     <div className={cn('flex flex-col gap-4', className)}>
-      {products.slice(0, 4).map((product) => (
-        <ListProductCard key={product.id} product={product} source={source} />
+      {products.slice(0, 4).map((product, index) => (
+        <ListProductCard
+          key={product.id}
+          product={product}
+          source={source}
+          priority={index < priorityCount}
+        />
       ))}
     </div>
   );

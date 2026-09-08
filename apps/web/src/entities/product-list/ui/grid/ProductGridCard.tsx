@@ -41,8 +41,11 @@ export default function ProductGridCard({
   // GTM 진입경로 추적용. 미지정 시 data 속성 미부착(추적 안 함).
   source?: ProductCardSource;
 }) {
+  // 첫 화면(priority) 카드만 상세를 통째로 미리 받는다(탭 즉시 전환). 나머지는 뷰포트 프리페치를 끈다 —
+  // 상세에 loading.tsx 가 없어 auto 프리페치(레이아웃 조각 ~600B)가 아무것도 안 주는데 서버만 때렸다.
   return (
     <Link
+      prefetch={!!priority}
       href={PAGE.DETAIL + '/' + product.id}
       className="w-full"
       ref={cardRef}

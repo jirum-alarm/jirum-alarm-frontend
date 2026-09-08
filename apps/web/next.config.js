@@ -58,6 +58,11 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     scrollRestoration: true,
+    // 라우터 캐시(브라우저 탭 안) 수명. 기본 0 이면 prefetch={true} 로 받아둔 상세 본문도 탐색 때 안 쓰고
+    // 다시 받는다(실측: 완전 프리페치된 카드를 탭해도 본문 680ms). 5분이면 홈에 머무는 시간을 덮는다.
+    // 트레이드오프 = 그 사이 상세 서버 문구(게시일 안내 등)가 최대 5분 낡음. 가격·댓글은 react-query
+    // staleTime 60s 로 마운트 후 스스로 갱신된다. 뒤로가기도 5분 안엔 캐시로 즉시.
+    staleTimes: { dynamic: 300 },
   },
   poweredByHeader: false,
   reactStrictMode: true,
