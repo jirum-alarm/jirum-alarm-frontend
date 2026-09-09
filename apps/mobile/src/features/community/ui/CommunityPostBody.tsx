@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Pressable, Text, View} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 
 import {parsePostContent} from '@/entities/community';
 import ThumbsupFill from '@/shared/components/icons/ThumbsupFill';
@@ -8,6 +8,7 @@ import {cn} from '@/shared/lib/styling';
 import type {CommunityPostDetail} from '@/shared/api/community';
 
 import NoticeAuthor from './NoticeAuthor';
+import Thumbnail from '@/shared/components/product/Thumbnail';
 import PostImages from './PostImages';
 import PostStats from './PostStats';
 import {gaps} from './community-styles';
@@ -90,12 +91,7 @@ export default function CommunityPostBody({
           <View className="flex-row items-center pt-3">
             {post.taggedProduct.thumbnail ? (
               <View className="h-20 w-20 overflow-hidden rounded-xl bg-white">
-                <Image
-                  source={{uri: post.taggedProduct.thumbnail}}
-                  className="h-full w-full"
-                  resizeMode="cover"
-                  accessibilityIgnoresInvertColors
-                />
+                <Thumbnail uri={post.taggedProduct.thumbnail} />
               </View>
             ) : null}
             <View className="min-w-0 flex-1 pl-3">

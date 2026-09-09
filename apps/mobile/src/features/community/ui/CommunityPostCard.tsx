@@ -1,6 +1,7 @@
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 
+import Thumbnail from '@/shared/components/product/Thumbnail';
 import {displayTime} from '@/shared/lib/format/price';
 import type {CommunityPost} from '@/shared/api/community';
 
@@ -98,12 +99,9 @@ export default function CommunityPostCard({
           <View
             className="overflow-hidden rounded-lg bg-gray-100"
             style={{width: THUMBNAIL_SIZE, height: THUMBNAIL_SIZE}}>
-            <Image
-              source={{uri: view.previewImage}}
-              className="h-full w-full"
-              resizeMode="cover"
-              accessibilityIgnoresInvertColors
-            />
+            {/* CDN 은 webp 만 갖고 있고 마커는 원본 확장자를 준다 → Thumbnail 이
+                webp 먼저, 실패하면 원본, 그래도 안 되면 대체 그림. */}
+            <Thumbnail uri={view.previewImage} />
             {view.extraImageCount > 0 ? (
               <View className="absolute bottom-1 right-1 rounded bg-black/60 px-1.5 py-0.5">
                 <Text className="text-[10px] font-medium text-white">

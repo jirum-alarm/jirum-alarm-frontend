@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 
+import {convertToWebp} from '@/shared/lib/format/image';
+
 /**
  * 상세 본문의 첨부 이미지. web `features/community/ui/PostImages` 대응.
  *
@@ -73,7 +75,13 @@ function SingleImage({uri}: {uri: string}) {
 }
 
 export default function PostImages({images}: {images: string[]}) {
-  const list = images.slice(0, MAX_IMAGES);
+  // ★CDN 은 webp 만 갖고 있고 마커는 원본 확장자(.jpg/.png)를 준다 → 그대로
+  // 쓰면 403 이 와서 첨부가 통째로 안 보인다(실측: 최근 글의 cdn URL 26/29 가
+  // 403, 같은 경로의 .webp 는 전부 200). `Image.getSize` 도 같은 URL 을 재야
+  // 비율이 나오므로 여기서 한 번에 바꾼다.
+  const list = images
+    .slice(0, MAX_IMAGES)
+    .map(uri => convertToWebp(uri) ?? uri);
   if (list.length === 0) return null;
 
   if (list.length === 1) {

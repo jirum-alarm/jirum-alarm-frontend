@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {Image} from 'react-native';
 import type {ImageResizeMode, ImageStyle, StyleProp} from 'react-native';
 
+import {convertToWebp} from '@/shared/lib/format/image';
+
 import NoImage from './NoImage';
 
 /**
@@ -34,18 +36,32 @@ export default function Thumbnail({
   /** NoImage 대신 쓸 대체 그림(알림 카드처럼 자체 폴백이 있는 곳). */
   fallback?: React.ReactNode;
 }) {
-  const [failedUri, setFailedUri] = useState<string | null>(null);
+  // 어느 후보까지 실패했는지. uri 가 바뀌면 리셋한다 — 안 하면 목록
+  // 재사용(FlatList)에서 한 번 실패한 자리가 다음 상품에도 폴백을 그린다.
+  const [failed, setFailed] = useState<{uri?: string | null; step: number}>({
+    uri,
+    step: 0,
+  });
+  const step = failed.uri === uri ? failed.step : 0;
 
-  if (!uri || failedUri === uri) {
+  // ★webp 를 먼저, 실패하면 원본. web `ImageComponent`(fallbackSrc)와 같은
+  // 순서다. CDN 이 webp 만 갖고 있어 원본 확장자는 403 이 온다(convertToWebp
+  // 주석 참조). 변환만 하고 폴백이 없으면 webp 가 아닌 외부 이미지
+  // (쿠팡·알리 썸네일)를 되레 깨뜨린다.
+  const webp = convertToWebp(uri);
+  const candidates = !uri ? [] : webp && webp !== uri ? [webp, uri] : [uri];
+  const current = candidates[step];
+
+  if (!current) {
     return <>{fallback ?? <NoImage categoryId={categoryId} type={type} />}</>;
   }
 
   return (
     <Image
-      source={{uri}}
+      source={{uri: current}}
       style={style ?? {width: '100%', height: '100%'}}
       resizeMode={resizeMode}
-      onError={() => setFailedUri(uri)}
+      onError={() => setFailed({uri, step: step + 1})}
     />
   );
 }
