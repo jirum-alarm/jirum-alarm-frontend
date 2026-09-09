@@ -1,8 +1,8 @@
 import React from 'react';
-import {Image, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
-import NoImage from '@/shared/components/product/NoImage';
+import Thumbnail from '@/shared/components/product/Thumbnail';
 import {parsePrice} from '@/shared/lib/format/price';
 import {cn} from '@/shared/lib/styling';
 import type {HotDealType} from '@/shared/api/gql/graphql';
@@ -36,24 +36,27 @@ export function CardThumbnail({
   product,
   style,
   thumbnailType = 'product',
+  showHotdealBadge = true,
 }: {
   product: ProductCardType;
   style: {width: number | `${number}%`; height?: number; aspectRatio?: number};
   thumbnailType?: 'product' | 'hotDeal';
+  /**
+   * 썸네일 좌하단 핫딜 뱃지. **목록형 카드는 끈다** — 거기선 가격 옆에
+   * `badgeVariant="page"` 뱃지가 이미 붙어 한 행에 같은 뱃지가 두 번 나온다
+   * (web `ListProductCard` 는 썸네일에 핫딜 뱃지를 안 그린다).
+   */
+  showHotdealBadge?: boolean;
 }) {
   return (
     <View
       className="overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
       style={style}>
-      {product.thumbnail ? (
-        <Image
-          source={{uri: product.thumbnail}}
-          style={{width: '100%', height: '100%'}}
-          resizeMode="cover"
-        />
-      ) : (
-        <NoImage categoryId={product.categoryId} type={thumbnailType} />
-      )}
+      <Thumbnail
+        uri={product.thumbnail}
+        categoryId={product.categoryId}
+        type={thumbnailType}
+      />
 
       {product.isEnd ? (
         <View className="absolute bottom-0 left-0 h-[22px] justify-center rounded-tr-lg rounded-bl-lg bg-white px-2">
@@ -62,7 +65,7 @@ export function CardThumbnail({
               600 으로 "고쳐" 옮기면 네이티브 뱃지만 혼자 굵어 뭉개져 보인다. */}
           <Text className="text-xs text-gray-700">판매종료</Text>
         </View>
-      ) : product.hotDealType ? (
+      ) : product.hotDealType && showHotdealBadge ? (
         <View className="absolute bottom-0 left-0">
           <HotdealBadge
             hotdealType={product.hotDealType as HotDealType}

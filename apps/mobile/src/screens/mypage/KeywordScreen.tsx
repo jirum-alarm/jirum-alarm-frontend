@@ -26,6 +26,7 @@ import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import PriceDropSwitch from '@/features/mypage/ui/PriceDropSwitch';
 import StackHeader from '@/features/mypage/ui/StackHeader';
+import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {SubscribedThemeRow} from '@/features/mypage/ui/ThemeCards';
 import {useKeywordViewModel} from '@/features/mypage/model/useKeywordViewModel';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
@@ -122,6 +123,14 @@ export default function KeywordScreen({navigation}: Props) {
           </View>
           <View className="h-4" />
 
+          {/* ★스위치 열 제목을 한 번만 둔다 — 행마다 붙이면 문구가 반복돼
+              키워드가 묻힌다. 위 안내문이 이미 뜻을 설명한다. */}
+          {!isError && !isPending && keywords.length > 0 ? (
+            <View className="flex-row justify-end px-2 pb-1">
+              <Text className="text-xs text-gray-500">가격 하락 알림</Text>
+            </View>
+          ) : null}
+
           {isError ? (
             <SectionErrorRow label="키워드" onRetry={refetch} />
           ) : isPending ? (
@@ -144,6 +153,7 @@ export default function KeywordScreen({navigation}: Props) {
                     value={keyword.priceDropOnly ?? false}
                     disabled={isTogglingPriceDrop}
                     onChange={next => updatePriceDropOnly(keyword.id, next)}
+                    showLabel={false}
                   />
                   <Pressable
                     onPress={() => removeKeyword(keyword.id)}
@@ -164,7 +174,7 @@ export default function KeywordScreen({navigation}: Props) {
       <KeyboardStickyView offset={{closed: -insets.bottom, opened: 0}}>
         <View
           className="bg-white px-5 pt-6"
-          style={{paddingBottom: 24 + bottomClip}}>
+          style={{paddingBottom: FORM_CTA_BOTTOM + bottomClip}}>
           <Button onPress={submit} disabled={!canSubmit}>
             등록
           </Button>

@@ -16,6 +16,7 @@ import TextField from '@/shared/components/ui/Text/TextField';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import StackHeader from '@/features/mypage/ui/StackHeader';
+import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {useUpdateNickname} from '@/features/mypage/model/mutations';
 import {
   isValidNickname,
@@ -96,7 +97,7 @@ export default function NicknameScreen({navigation}: Props) {
       <KeyboardStickyView offset={{closed: -insets.bottom, opened: 0}}>
         <View
           className="bg-white px-5"
-          style={{paddingBottom: 20 + bottomClip}}>
+          style={{paddingBottom: FORM_CTA_BOTTOM + bottomClip}}>
           <Button
             onPress={() => mutate({nickname: value})}
             disabled={!isValid || isPending}

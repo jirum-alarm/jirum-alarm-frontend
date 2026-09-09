@@ -1,12 +1,12 @@
 import React from 'react';
-import {Image, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 
 import PressableScale from '@/shared/components/PressableScale';
 
 import {HotDealType} from '@/shared/api/gql/graphql';
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import DisplayProductSource from '@/shared/components/product/DisplayProductSource';
-import NoImage from '@/shared/components/product/NoImage';
+import Thumbnail from '@/shared/components/product/Thumbnail';
 import {displayTime, parsePrice} from '@/shared/lib/format/price';
 
 export type ProductCardItem = {
@@ -62,15 +62,11 @@ export default function ProductCard({
               ? {width: '100%', aspectRatio: 1}
               : {width: CARD_WIDTH, height: CARD_WIDTH}
           }>
-          {product.thumbnail ? (
-            <Image
-              source={{uri: product.thumbnail}}
-              style={{width: '100%', height: '100%'}}
-              resizeMode="cover"
-            />
-          ) : (
-            <NoImage categoryId={product.categoryId} type="hotDeal" />
-          )}
+          <Thumbnail
+            uri={product.thumbnail}
+            categoryId={product.categoryId}
+            type="hotDeal"
+          />
 
           {product.isEnd ? (
             <View className="absolute bottom-0 left-0 h-[22px] items-center justify-center rounded-tr-lg rounded-bl-lg bg-white px-2">

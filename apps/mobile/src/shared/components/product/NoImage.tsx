@@ -19,7 +19,7 @@ type IconComponent = React.ComponentType<{width?: number; height?: number}>;
  * categoryId → 일러스트. web shared/config/categories.ts 의 value 와 같은 번호다.
  * 번호가 어긋나면 엉뚱한 그림이 뜨므로 web 을 고칠 때 같이 고쳐야 한다.
  */
-const CATEGORY_ICON: Record<number, IconComponent> = {
+export const CATEGORY_ICON: Record<number, IconComponent> = {
   1: ComputerOnIcon, // 컴퓨터
   2: CartOnIcon, // 생활/식품
   3: CosmeticsOnIcon, // 화장품

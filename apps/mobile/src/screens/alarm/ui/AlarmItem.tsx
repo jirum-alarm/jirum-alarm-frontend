@@ -1,11 +1,13 @@
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 import XSmall from '@/shared/components/icons/XSmall';
 import {cn} from '@/shared/lib/styling';
 import {firstKeyword, splitByKeyword} from '../lib/highlight';
 import {displayTime} from '@/shared/lib/format/price';
 import type {NotificationItem} from '@/shared/api/notification';
+
+import Thumbnail from '@/shared/components/product/Thumbnail';
 
 import AlarmItemNoImage from './AlarmItemNoImage';
 
@@ -80,15 +82,7 @@ export default function AlarmItem({
           onPress(productId);
         }}>
         <View className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">
-          {thumbnail ? (
-            <Image
-              source={{uri: thumbnail}}
-              className="h-full w-full"
-              resizeMode="cover"
-            />
-          ) : (
-            <AlarmItemNoImage />
-          )}
+          <Thumbnail uri={thumbnail} fallback={<AlarmItemNoImage />} />
         </View>
         <View className="flex-1 pl-3">
           <HighlightedMessage message={message} keyword={highlightKeyword} />

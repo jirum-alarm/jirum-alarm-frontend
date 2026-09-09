@@ -14,9 +14,12 @@ import type {TabStackParamList} from '@/navigations/tab/types';
 import Button from '@/shared/components/ui/Button';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import CategoryCheckboxGroup from '@/features/mypage/ui/CategoryCheckboxGroup';
 import StackHeader from '@/features/mypage/ui/StackHeader';
+import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {useUpdateCategories} from '@/features/mypage/model/mutations';
 import {MAX_SELECTION_COUNT} from '@/features/mypage/lib/categories';
 
@@ -33,6 +36,7 @@ type Props = NativeStackScreenProps<
  * (반대로 짜면 5개에서 아무것도 못 바꾸는 화면이 된다).
  */
 export default function CategoriesScreen({navigation}: Props) {
+  const insets = useSafeAreaInsets();
   const bottomClip = useHiddenTabBarClipPadding();
   const {data: me, isPending, isError, refetch} = useQuery(MyPageQueries.me());
 
@@ -46,7 +50,11 @@ export default function CategoriesScreen({navigation}: Props) {
 
   const {mutate, isPending: isSaving} = useUpdateCategories(navigation.goBack);
 
-  const contentStyle = [styles.content, {paddingBottom: 32 + bottomClip}];
+  // ★위 PersonalScreen 과 같은 이유로 safe area 를 직접 더한다(실측 32pt).
+  const contentStyle = [
+    styles.content,
+    {paddingBottom: FORM_CTA_BOTTOM + insets.bottom + bottomClip},
+  ];
 
   const toggle = (value: number, next: boolean) => {
     setTouched(true);
@@ -82,7 +90,9 @@ export default function CategoriesScreen({navigation}: Props) {
                     favoriteCategories: [...selected].sort((a, b) => a - b),
                   })
                 }
-                disabled={isSaving}
+                // ★0개는 저장할 게 없다 — 형제 화면(키워드 `등록`)은 이미
+                // 비활성 회색을 쓰는데 여기만 활성 초록이었다.
+                disabled={isSaving || selected.size === 0}
                 loading={isSaving}>
                 {`저장 (${selected.size}/${MAX_SELECTION_COUNT})`}
               </Button>

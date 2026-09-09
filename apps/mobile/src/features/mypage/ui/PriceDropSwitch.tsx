@@ -15,10 +15,17 @@ export default function PriceDropSwitch({
   value,
   disabled,
   onChange,
+  showLabel = true,
 }: {
   value: boolean;
   disabled?: boolean;
   onChange: (next: boolean) => void;
+  /**
+   * 행마다 "가격 하락 알림" 을 붙일지. **목록에서는 끈다** — 키워드가 20개면
+   * 같은 문구가 20번 반복돼 정작 키워드가 안 읽힌다. 목록은 열 제목을 한 번만
+   * 두고, 스크린리더용 라벨은 `accessibilityLabel` 에 그대로 남는다.
+   */
+  showLabel?: boolean;
 }) {
   return (
     <Pressable
@@ -31,7 +38,9 @@ export default function PriceDropSwitch({
       // ★flex·크기는 style, 색·정렬은 className (NativeWind 규칙).
       style={disabled ? styles.dimmed : undefined}
       className="shrink-0 flex-row items-center gap-1.5">
-      <Text className="text-xs text-gray-500">가격 하락 알림</Text>
+      {showLabel ? (
+        <Text className="text-xs text-gray-500">가격 하락 알림</Text>
+      ) : null}
       {/* 트랙 — web h-5 w-9 (20x36) */}
       <View
         className={

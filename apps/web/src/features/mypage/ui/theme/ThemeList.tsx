@@ -48,7 +48,10 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
                     else subscribe(themeId);
                   }}
                   className={`ml-3 w-16 shrink-0 rounded-full py-1.5 text-center text-sm font-medium disabled:opacity-50 ${
-                    isSubscribed ? 'bg-gray-100 text-gray-500' : 'bg-primary-500 text-white'
+                    // primary-500 은 밝은 라임(#9DF02E 계열)이라 흰 글씨는 대비
+                    // 1.4:1 로 WCAG AA 를 크게 밑돈다. gray-900 은 12.6:1.
+                    // 앱(`ThemeCards`)이 이미 gray-900 을 쓰고 있어 표기도 갈렸다.
+                    isSubscribed ? 'bg-gray-100 text-gray-500' : 'bg-primary-500 text-gray-900'
                   }`}
                 >
                   {isSubscribed ? '구독중' : '구독'}

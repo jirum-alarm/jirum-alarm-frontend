@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 
 import ArrowRight from '@/shared/components/icons/ArrowRight';
 
@@ -47,7 +47,12 @@ export function MenuRow({
     <Row onPress={onPress} accessibilityLabel={title}>
       <View className="flex-row items-center gap-3 py-3">
         <View className="h-7 w-7 items-center justify-center">{icon}</View>
-        <Text className="text-gray-900">{title}</Text>
+        {/* ★이동하는 행은 chevron 을 준다 — 같은 화면에서 프로필 행만 있고
+            메뉴 행엔 없어서 어디를 누를 수 있는지가 행마다 달라 보였다. */}
+        <Text className="text-gray-900" style={styles.grow}>
+          {title}
+        </Text>
+        <ArrowRight />
       </View>
     </Row>
   );
@@ -90,9 +95,27 @@ export function TextRow({
 }) {
   return (
     <Row onPress={onPress} accessibilityLabel={title}>
-      <View className="px-5 py-4">
-        <Text className="text-gray-900">{title}</Text>
+      {/* MenuRow 와 같은 이유로 chevron. 아이콘이 없어 제목이 왼쪽 끝이다. */}
+      <View className="flex-row items-center px-5 py-4">
+        <Text className="text-gray-900" style={styles.grow}>
+          {title}
+        </Text>
+        <ArrowRight />
       </View>
     </Row>
   );
 }
+
+/**
+ * 마이페이지 폼 화면의 하단 CTA 여백(safe area·clip 제외한 순수 여백).
+ *
+ * ★한 곳에서 정한다 — 예전엔 화면마다 리터럴(20·24·32)을 써서 같은 저장 버튼이
+ * 다섯 높이에 앉았다(iOS 26 실측 하단여백 54.3 / 54.3 / 58.3 / 32.0 / 20.3pt).
+ * safe area 는 `KeyboardStickyView offset={{closed: -insets.bottom}}` 가 있는
+ * 화면은 그게, 없는 화면은 `insets.bottom` 을 직접 더해 맞춘다.
+ */
+export const FORM_CTA_BOTTOM = 20;
+
+const styles = StyleSheet.create({
+  grow: {flex: 1},
+});

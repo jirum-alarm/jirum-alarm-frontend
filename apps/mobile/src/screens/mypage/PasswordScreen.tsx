@@ -15,6 +15,7 @@ import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import PasswordField from '@/features/mypage/ui/PasswordField';
 import StackHeader from '@/features/mypage/ui/StackHeader';
+import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {useUpdatePassword} from '@/features/mypage/model/mutations';
 import {usePasswordCheck} from '@/features/mypage/model/usePasswordCheck';
 import {validatePassword} from '@/features/mypage/lib/validation';
@@ -129,7 +130,7 @@ function CurrentPasswordStep({
       <KeyboardStickyView offset={{closed: -insetBottom, opened: 0}}>
         <View
           className="bg-white px-5"
-          style={{paddingBottom: 20 + bottomClip}}>
+          style={{paddingBottom: FORM_CTA_BOTTOM + bottomClip}}>
           <Button onPress={submit} disabled={isPending} loading={isPending}>
             다음
           </Button>
@@ -222,7 +223,7 @@ function ChangePasswordStep({
       <KeyboardStickyView offset={{closed: -insetBottom, opened: 0}}>
         <View
           className="bg-white px-5"
-          style={{paddingBottom: 20 + bottomClip}}>
+          style={{paddingBottom: FORM_CTA_BOTTOM + bottomClip}}>
           {/*
             ★web 은 저장 버튼에 disabled 를 걸지 않는다(규칙 위반이면 서버가
             거절). 같은 동작을 유지한다 — 앱만 막으면 "왜 안 눌리지"가 된다.

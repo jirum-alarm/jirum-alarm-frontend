@@ -1,6 +1,9 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
+import {CATEGORY_ICON} from '@/shared/components/product/NoImage';
+import EtcOnIcon from '@/shared/components/icons/categories/EtcOnIcon';
+
 import {CATEGORIES} from '../lib/categories';
 
 /**
@@ -34,7 +37,14 @@ export default function CategoryCheckboxGroup({
                 : 'h-[88px] items-center justify-center rounded-lg border border-gray-300'
             }>
             <View className="items-center gap-2">
-              <Text className="text-2xl">{category.icon}</Text>
+              {/*
+                ★이모지 대신 앱이 이미 갖고 있는 카테고리 라인 아이콘을 쓴다.
+                이모지는 OS·폰트마다 모양이 달라지고 나머지 라인 아이콘 체계와
+                섞여 보였다. 특히 `상품권=💵`·`기타=🔍`(검색 아이콘과 혼동)가
+                뜻을 잘못 전했다. 표는 `NoImage` 것을 그대로 쓴다 — 새로 만들면
+                번호가 어긋날 수 있다.
+              */}
+              <CategoryIcon value={category.value} />
               <Text className="text-sm text-gray-700">{category.text}</Text>
             </View>
           </Pressable>
@@ -42,6 +52,11 @@ export default function CategoryCheckboxGroup({
       })}
     </View>
   );
+}
+
+function CategoryIcon({value}: {value: number}) {
+  const Icon = CATEGORY_ICON[value] ?? EtcOnIcon;
+  return <Icon width={32} height={32} />;
 }
 
 const styles = StyleSheet.create({

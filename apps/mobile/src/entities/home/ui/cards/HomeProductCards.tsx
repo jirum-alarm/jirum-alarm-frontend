@@ -131,6 +131,9 @@ export function ListCard({product, onPress}: CardProps) {
           product={product}
           style={{width: 76, height: 76}}
           thumbnailType="product"
+          // 가격 옆에 `badgeVariant="page"` 핫딜 뱃지가 이미 붙는다 — 켜 두면
+          // 한 행에 같은 뱃지가 두 번(web ListProductCard 는 안 그린다).
+          showHotdealBadge={false}
         />
         {/* web `h-full justify-between` — 76px 안에서 제목/가격/출처를 벌린다. */}
         <View className="h-[76px] flex-1 justify-between gap-1">

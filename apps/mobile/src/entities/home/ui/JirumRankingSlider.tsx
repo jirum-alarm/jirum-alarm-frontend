@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
-  Image,
   Text,
   View,
   type NativeScrollEvent,
@@ -20,7 +19,7 @@ import {useQuery} from '@tanstack/react-query';
 
 import PressableScale from '@/shared/components/PressableScale';
 import DisplayProductSource from '@/shared/components/product/DisplayProductSource';
-import NoImage from '@/shared/components/product/NoImage';
+import Thumbnail from '@/shared/components/product/Thumbnail';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {displayTime} from '@/shared/lib/format/price';
 import {cn} from '@/shared/lib/styling';
@@ -258,15 +257,11 @@ function RankingCard({
           <View className="absolute top-0 left-0 z-10 h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900">
             <Text className="text-primary-500 text-sm font-medium">{rank}</Text>
           </View>
-          {product.thumbnail ? (
-            <Image
-              source={{uri: product.thumbnail}}
-              style={{width: '100%', height: '100%'}}
-              resizeMode="cover"
-            />
-          ) : (
-            <NoImage categoryId={product.categoryId} type="product" />
-          )}
+          <Thumbnail
+            uri={product.thumbnail}
+            categoryId={product.categoryId}
+            type="product"
+          />
         </View>
         {/* web `p-3 pb-0` — 위에서부터 쌓고 하단 패딩은 없다.
             ★앞서 justify-between + pb-3 을 넣었더니 제목·메타·가격 사이가

@@ -74,7 +74,14 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
 
   return (
     <View className="flex-1 bg-white">
-      <StackHeader title="알림 묶음" onBack={navigation.goBack} />
+      {/*
+        ★목록 화면도 "알림 묶음" 이라 같은 제목이면 목록/상세가 구분되지 않는다.
+        묶음이 아직 안 왔을 때만 총칭으로 떨어진다.
+      */}
+      <StackHeader
+        title={theme?.name ?? '알림 묶음'}
+        onBack={navigation.goBack}
+      />
       {isThemesError ? (
         <View className="pt-4">
           <SectionErrorRow label="알림 묶음" onRetry={refetchThemes} />

@@ -14,9 +14,11 @@ import {MyPageQueries} from '@/entities/mypage';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import ConfirmModal from '@/features/mypage/ui/ConfirmModal';
-import {MovePageRow} from '@/features/mypage/ui/Rows';
+import {FORM_CTA_BOTTOM, MovePageRow} from '@/features/mypage/ui/Rows';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {useLogout} from '@/features/mypage/model/useLogout';
 import {useWithdraw} from '@/features/mypage/model/mutations';
@@ -37,6 +39,7 @@ type Props = NativeStackScreenProps<
  */
 export default function AccountScreen({navigation}: Props) {
   const {data: me, isPending, isError, refetch} = useQuery(MyPageQueries.me());
+  const insets = useSafeAreaInsets();
   const bottomClip = useHiddenTabBarClipPadding();
 
   const logout = useLogout();
@@ -44,7 +47,12 @@ export default function AccountScreen({navigation}: Props) {
   const [dialog, setDialog] = useState<null | 'logout' | 'withdraw'>(null);
 
   // 동적(safe area·clip) 값만 여기서 합친다. 나머지는 아래 StyleSheet.
-  const contentStyle = [styles.content, {paddingBottom: 16 + bottomClip}];
+  // ★safe area 를 더한다 — 하단 고정 행(로그아웃·회원탈퇴)이 홈 인디케이터
+  // 안으로 들어간다(실측: 여백 16pt, safe area 는 34pt).
+  const contentStyle = [
+    styles.content,
+    {paddingBottom: FORM_CTA_BOTTOM + insets.bottom + bottomClip},
+  ];
 
   return (
     <View className="flex-1 bg-white">
@@ -86,10 +94,15 @@ export default function AccountScreen({navigation}: Props) {
               </View>
               <Text className="text-gray-900">{me?.email}</Text>
 
-              {/* 로그아웃 · 회원탈퇴 — web AccountManagement(가운데, 세로 구분선) */}
-              <View
-                className="items-end justify-center pt-10"
-                style={styles.grow}>
+              {/*
+                로그아웃 · 회원탈퇴 — web AccountManagement(하단, 가로 가운데).
+                🔴web 의 `flex items-end justify-center` 를 그대로 옮기면 안 된다.
+                web 은 flex-direction:row 라 `items-end` 가 **하단 정렬**이지만,
+                RN 기본은 column 이라 `items-end` = 우측 정렬,
+                `justify-center` = **수직 가운데**가 된다 → 실측 653pt(창 874pt)로
+                화면 중앙에 떠 있었다. 하단 정렬은 `justify-end` 다.
+              */}
+              <View className="justify-end pt-10" style={styles.grow}>
                 <View className="w-full flex-row items-center justify-center">
                   <Pressable
                     onPress={() => setDialog('logout')}

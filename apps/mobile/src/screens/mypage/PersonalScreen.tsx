@@ -8,10 +8,13 @@ import type {TabStackParamList} from '@/navigations/tab/types';
 import {Gender} from '@/shared/api/gql/graphql';
 import Button from '@/shared/components/ui/Button';
 import {tabStackNavigations} from '@/shared/constant/navigations';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import BirthYearSelect from '@/features/mypage/ui/BirthYearSelect';
 import GenderRadioGroup from '@/features/mypage/ui/GenderRadioGroup';
 import StackHeader from '@/features/mypage/ui/StackHeader';
+import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {useUpdatePersonal} from '@/features/mypage/model/mutations';
 
 type Props = NativeStackScreenProps<
@@ -27,6 +30,7 @@ type Props = NativeStackScreenProps<
  * disabled 를 아예 안 건다. 옮기지 않는다(옮기면 web 과 다른 화면이 된다).
  */
 export default function PersonalScreen({navigation}: Props) {
+  const insets = useSafeAreaInsets();
   const bottomClip = useHiddenTabBarClipPadding();
   const {data: me} = useQuery(MyPageQueries.me());
 
@@ -42,7 +46,14 @@ export default function PersonalScreen({navigation}: Props) {
 
   const {mutate, isPending} = useUpdatePersonal(navigation.goBack);
 
-  const contentStyle = [styles.content, {paddingBottom: 20 + bottomClip}];
+  // ★CTA 하단 여백 = FORM_CTA_BOTTOM + safe area. 닉네임·비밀번호는
+  // `KeyboardStickyView offset={{closed: -insets.bottom}}` 가 safe area 를
+  // 대신 확보하지만 이 화면은 그게 없다 → 직접 더한다. 안 더하면 저장
+  // 버튼이 홈 인디케이터 위 20pt 에 앉는다(실측 20.3pt, safe area 는 34pt).
+  const contentStyle = [
+    styles.content,
+    {paddingBottom: FORM_CTA_BOTTOM + insets.bottom + bottomClip},
+  ];
 
   return (
     <View className="flex-1 bg-white">

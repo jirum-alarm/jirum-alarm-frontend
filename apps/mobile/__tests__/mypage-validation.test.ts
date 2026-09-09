@@ -128,8 +128,27 @@ describe('관심 카테고리 — web shared/config/categories.ts 와 id·순서
     expect(web).toContain('MAX_SELECTION_COUNT = 5');
   });
 
-  it('이모지가 모두 채워져 있다(카드에 그리는 값이다)', () => {
-    CATEGORIES.forEach((c: {icon: string}) => expect(c.icon).toBeTruthy());
+  it('★그림은 이모지가 아니라 카테고리 라인 아이콘이다', () => {
+    // 이모지는 OS·폰트마다 모양이 달라지고 나머지 라인 아이콘 체계와 섞였다
+    // (특히 상품권=💵, 기타=🔍 는 검색 아이콘과 혼동됐다).
+    // 그림은 `NoImage.CATEGORY_ICON`(categoryId → 아이콘)을 재사용한다 —
+    // 새 표를 만들면 번호가 어긋나 엉뚱한 그림이 뜬다.
+    CATEGORIES.forEach((c: {icon?: string}) => expect(c.icon).toBeUndefined());
+
+    // 컴포넌트를 import 하면 RN SVG 까지 끌려온다 → 소스 텍스트로 대조한다
+    // (이 레포의 관행. `tabbar-visibility.test.ts` 와 같은 방식).
+    const read = (rel: string) =>
+      fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
+    const group = read('src/features/mypage/ui/CategoryCheckboxGroup.tsx');
+    expect(group).toContain('CATEGORY_ICON');
+    expect(group).not.toContain('category.icon');
+
+    // NoImage 의 표가 카테고리 11개를 빠짐없이 덮는지 — 빠지면 조용히
+    // EtcOnIcon 으로 떨어져 "왜 다 기타 아이콘이지"가 된다.
+    const noImage = read('src/shared/components/product/NoImage.tsx');
+    for (const c of CATEGORIES as ReadonlyArray<{value: number}>) {
+      expect(noImage).toMatch(new RegExp(`^\\s*${c.value}: \\w+Icon,`, 'm'));
+    }
   });
 });
 

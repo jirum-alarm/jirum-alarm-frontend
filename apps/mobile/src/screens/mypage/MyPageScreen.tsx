@@ -89,7 +89,12 @@ export default function MyPageScreen() {
         }}>
         {/* 프로필 — web MyProfileSection. 누르면 가입 정보. */}
         <View className="px-5">
-          <View className="border-b-2 border-gray-600 py-8">
+          {/*
+            ★구분선을 한 종류로 맞춘다. 예전엔 프로필 아래가
+            `border-b-2 border-gray-600`(2px 진회색), 메뉴 아래가
+            `border-b border-gray-300`(1px) 이라 같은 화면에 두 굵기가 섞였다.
+          */}
+          <View className="border-b border-gray-200 py-8">
             {isError ? (
               <SectionErrorRow label="내 정보" onRetry={refetch} />
             ) : isPending ? (
@@ -127,7 +132,9 @@ export default function MyPageScreen() {
 
         {/* 메뉴 — web MenuList(찜 목록 · 관심 카테고리 · 키워드 알림 · 약관 · 고객센터) */}
         <View className="px-5">
-          <View className="border-b border-gray-300 py-4">
+          {/* ★아래에 아무것도 없는 자리의 구분선은 뺀다 — 목록이 끊긴
+              것처럼 보였다(마지막 행 밑에 회색 선 + 빈 화면). */}
+          <View className="py-4">
             <MenuRow
               icon={<Heart width={24} height={24} />}
               title="찜 목록"
