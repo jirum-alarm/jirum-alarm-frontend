@@ -299,6 +299,85 @@ describe('옮기면 안 되는 web 분기 — 옮기면 영원히 안 뜨는 죽
   });
 });
 
+describe('★디자인 점검 2026-09-09 — 고친 것이 되돌아가지 않게', () => {
+  it('로그아웃·회원탈퇴는 justify-end 로 하단에 붙인다', () => {
+    // 🔴web `flex items-end justify-center` 를 그대로 옮기면 안 된다.
+    // web 은 flex-direction:row 라 items-end 가 **하단**이지만 RN 기본은
+    // column 이라 우측 정렬 + 수직 가운데가 된다(실측 653pt, 창 874pt).
+    const code = stripComments(SCREENS.account);
+    expect(code).toContain('justify-end');
+    expect(code).not.toContain('items-end justify-center');
+  });
+
+  it('폼 CTA 하단 여백은 FORM_CTA_BOTTOM 한 곳에서 정한다', () => {
+    // 화면마다 리터럴을 쓰면 같은 저장 버튼이 다섯 높이에 앉는다
+    // (실측 54.3 / 54.3 / 58.3 / 32.0 / 20.3pt, safe area 는 34pt).
+    for (const file of [
+      'src/screens/mypage/NicknameScreen.tsx',
+      'src/screens/mypage/PasswordScreen.tsx',
+      'src/screens/mypage/PersonalScreen.tsx',
+      'src/screens/mypage/CategoriesScreen.tsx',
+      'src/screens/mypage/KeywordScreen.tsx',
+      'src/screens/mypage/AccountScreen.tsx',
+    ]) {
+      expect(read(file)).toContain('FORM_CTA_BOTTOM');
+    }
+    // KeyboardStickyView 가 없는 화면은 safe area 를 직접 더해야 한다 —
+    // 안 더하면 CTA 가 홈 인디케이터 안으로 들어간다.
+    for (const file of [
+      'src/screens/mypage/PersonalScreen.tsx',
+      'src/screens/mypage/CategoriesScreen.tsx',
+      'src/screens/mypage/AccountScreen.tsx',
+    ]) {
+      const code = stripComments(read(file));
+      expect(code).not.toContain('KeyboardStickyView');
+      expect(code).toContain('FORM_CTA_BOTTOM + insets.bottom + bottomClip');
+    }
+  });
+
+  it('이동하는 행은 chevron 을 갖는다', () => {
+    const rows = read('src/features/mypage/ui/Rows.tsx');
+    // MenuRow · MovePageRow · TextRow 세 곳 모두.
+    expect(rows.match(/<ArrowRight \/>/g)?.length).toBe(3);
+  });
+
+  it('구분선은 한 굵기 — 목록 꼬리 구분선은 두지 않는다', () => {
+    const code = stripComments(SCREENS.root);
+    expect(code).not.toContain('border-b-2');
+    expect(code).not.toContain('border-gray-300');
+  });
+
+  it('묶음 상세 헤더는 묶음 이름이다 — 목록과 같은 제목이면 구분이 안 된다', () => {
+    expect(
+      stripComments(read('src/screens/mypage/ThemeDetailScreen.tsx')),
+    ).toContain("title={theme?.name ?? '알림 묶음'}");
+  });
+
+  it('카테고리 저장은 0개 선택이면 비활성', () => {
+    expect(
+      stripComments(read('src/screens/mypage/CategoriesScreen.tsx')),
+    ).toContain('selected.size === 0');
+  });
+
+  it('"가격 하락 알림" 은 행마다 반복하지 않는다', () => {
+    // 키워드가 20개면 같은 문구가 20번 반복돼 정작 키워드가 안 읽힌다.
+    expect(stripComments(SCREENS.keyword)).toContain('showLabel={false}');
+  });
+
+  it('고객센터는 상담창이 뜨면 네이티브 헤더를 접는다 — 닫기 2개 방지', () => {
+    // 채널톡이 자체 헤더(✕)와 하단 탭을 갖고 있다. web 은 `onShowMessenger()`
+    // 로 채널톡만 띄워 크롬이 하나다 — 그쪽에 맞춘다.
+    // ⚠️로딩 중에는 브릿지가 없으므로 네이티브 ✕ 를 남긴다(20초 타임아웃).
+    const sheet = read('src/features/mypage/ui/CustomerServiceSheet.tsx');
+    const header = sheet.slice(
+      sheet.indexOf('{!isReady ? ('),
+      sheet.indexOf('<View style={styles.body}>'),
+    );
+    expect(header).toContain('고객센터');
+    expect(header).toContain('<Close />');
+  });
+});
+
 describe('레포 함정 가드', () => {
   /**
    * 🔴`PressableScale` 에 크기 클래스를 주면 바깥 Pressable 폭이 0 이 되어

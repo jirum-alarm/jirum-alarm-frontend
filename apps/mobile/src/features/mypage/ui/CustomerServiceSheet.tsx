@@ -137,17 +137,33 @@ export default function CustomerServiceSheet({
       onRequestClose={close}
       onDismiss={() => setReady(false)}>
       <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
-        <View className="h-14 flex-row items-center justify-between border-b border-gray-100 px-5">
-          <Text className="text-lg font-semibold text-gray-900">고객센터</Text>
-          <Pressable
-            onPress={close}
-            hitSlop={12}
-            accessibilityRole="button"
-            accessibilityLabel="닫기"
-            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-            <Close />
-          </Pressable>
-        </View>
+        {/*
+          ★상담창이 뜨기 **전에만** 네이티브 헤더를 둔다.
+          채널톡은 자체 헤더(오른쪽 ✕)와 하단 탭을 갖고 있어, 뜬 뒤에도 이걸
+          남기면 **닫기 버튼이 두 개**가 된다(web 은 `onShowMessenger()` 로
+          채널톡만 띄우므로 크롬이 하나다 — 그쪽에 맞춘다).
+
+          ⚠️뜬 뒤의 탈출구는 채널톡 ✕ → `CHANNEL_TALK_VISIBILITY {isOpen:false}`
+          브릿지다. **이미 이 시트가 닫히는 경로가 그것뿐**이므로(위 handleMessage)
+          새로 생긴 의존이 아니다. 안드로이드는 `onRequestClose` 도 받는다.
+          로딩 중에는 브릿지가 아직 없으니 그때만 네이티브 ✕ 를 남긴다 —
+          20초 타임아웃 전에 유저가 빠져나갈 길이 필요하다.
+        */}
+        {!isReady ? (
+          <View className="h-14 flex-row items-center justify-between border-b border-gray-100 px-5">
+            <Text className="text-lg font-semibold text-gray-900">
+              고객센터
+            </Text>
+            <Pressable
+              onPress={close}
+              hitSlop={12}
+              accessibilityRole="button"
+              accessibilityLabel="닫기"
+              style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+              <Close />
+            </Pressable>
+          </View>
+        ) : null}
         <View style={styles.body}>
           {visible ? (
             <WebView
