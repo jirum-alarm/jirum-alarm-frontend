@@ -312,7 +312,20 @@ export function resolveNativeRoute(
     };
   }
 
-  // 네이티브 화면이 아직 없는 경로(`/deals/*`·`/recommend`·`/policies/*` 등).
+  // ★핫딜 최저가(`/deals`·`/deals/{slug}`)는 **앱에서 열지 않는다**
+  // (2026-09-09 사용자 지시: "모바일에서는 핫딜 최저가 페이지 만들지 말자").
+  // 데스크톱 폭을 전제로 만든 페이지라 앱 웹뷰(402pt)에서 레이아웃이 깨졌다.
+  // web 의 진입점도 데스크톱 GNB·푸터뿐이라 앱에는 원래 링크가 없다 — 남은
+  // 유입은 외부에서 온 딥링크·푸시뿐이므로 여기서 **탭 루트로 흘린다**.
+  //
+  // 🔴`null` 을 주면 안 된다. 호출부(`useDeepLink`·`FCMHandler`)가 그걸
+  // "네이티브가 못 받았다"로 읽고 **옛 웹뷰 주입으로 넘겨** 결국 그 페이지를
+  // 띄운다 — 막으려던 것이 그대로 열린다.
+  if (/^\/deals(\/|$)/.test(path)) {
+    return {tab: getTabNameFromUrl(url)};
+  }
+
+  // 네이티브 화면이 아직 없는 경로(`/recommend`·`/policies/*` 등).
   const tab = getTabNameFromUrl(url);
   if (allowWebViewRoute && NATIVE_TAB_ROOTS.has(tab)) {
     // ★경로만 넘긴다 — JirumAlarmWebViewScreen 이 `${SERVICE_URL}${uri}` 로

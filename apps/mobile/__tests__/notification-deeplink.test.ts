@@ -275,17 +275,43 @@ describe('검색 딥링크', () => {
   });
 });
 
+describe('★핫딜 최저가(/deals)는 앱에서 열지 않는다', () => {
+  beforeEach(reset);
+
+  // 2026-09-09 사용자 지시. 데스크톱 폭 전제로 만든 페이지라 앱 웹뷰(402pt)에서
+  // 레이아웃이 깨졌다. web 진입점도 데스크톱 GNB·푸터뿐이라 앱엔 링크가 없다 —
+  // 외부에서 온 딥링크·푸시만 남으므로 홈 탭 루트로 흘린다.
+  for (const path of ['/deals', '/deals/', '/deals/apple-2026?from=push']) {
+    it(`${path} → 홈 탭 루트 (웹뷰로 쌓지 않는다)`, () => {
+      // 🔴폴백 on/off 둘 다 막아야 한다. off 에서 false 를 주면 호출부가
+      // **옛 웹뷰 주입으로 넘겨** 결국 그 페이지가 열린다.
+      for (const opts of [webViewOn, undefined]) {
+        reset();
+        expect(navigateToNativeRoute(url(path), opts)).toBe(true);
+        // 탭만 바꾸는 게 아니라 **루트로** 보낸다(하위 화면이 쌓여 있어도).
+        expect(mockNavigate).toHaveBeenCalledWith('HomeTab', {
+          screen: 'TabRoot',
+        });
+        expect(mockDispatch).not.toHaveBeenCalled();
+      }
+    });
+  }
+
+  it('/dealsomething 처럼 앞부분만 같은 경로는 막지 않는다', () => {
+    navigateToNativeRoute(url('/dealsomething'), webViewOn);
+    expectScreen('HomeTab', 'TabWebViewPage', {uri: '/dealsomething'});
+  });
+});
+
 describe('네이티브 화면이 없는 경로', () => {
   beforeEach(reset);
 
   // 네이티브 탭엔 주입할 웹뷰가 없다 → 그 탭 스택에 웹 페이지를 쌓아 반드시 보이게.
   it('푸시·딥링크는 그 탭 스택의 웹뷰 화면으로 쌓는다', () => {
-    expect(navigateToNativeRoute(url('/deals/apple-2026'), webViewOn)).toBe(
-      true,
-    );
+    expect(navigateToNativeRoute(url('/recommend'), webViewOn)).toBe(true);
     // ★경로만. JirumAlarmWebViewScreen 이 SERVICE_URL 을 붙이므로
     // 절대 URL 을 넘기면 두 번 겹친다.
-    expectScreen('HomeTab', 'TabWebViewPage', {uri: '/deals/apple-2026'});
+    expectScreen('HomeTab', 'TabWebViewPage', {uri: '/recommend'});
   });
 
   it('쿼리도 살린다', () => {
@@ -295,7 +321,7 @@ describe('네이티브 화면이 없는 경로', () => {
 
   // 웹뷰 안 링크 클릭은 폴백을 끈다 — 켜면 링크를 눌렀을 뿐인데 탭이 바뀐다.
   it('폴백을 끄면 false 를 돌려 호출부 판단에 맡긴다', () => {
-    expect(navigateToNativeRoute(url('/deals/apple-2026'))).toBe(false);
+    expect(navigateToNativeRoute(url('/recommend'))).toBe(false);
     expect(mockNavigate).not.toHaveBeenCalled();
     expect(mockDispatch).not.toHaveBeenCalled();
   });
