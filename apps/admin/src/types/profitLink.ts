@@ -8,6 +8,12 @@ export interface ProfitLinkProviderHealthOutput {
   sales30d: number;
   lastSaleAt?: string;
   commission7d?: number;
+  issued30d: number;
+  commission30d?: number;
+  daysSinceLastSale?: number;
+  activeDays90d: number;
+  /** 서버가 배치 알람과 같은 기준으로 내린 판정 — 프론트는 렌더만 한다 */
+  salesHealth: 'ok' | 'silent' | 'sparse';
 }
 
 export interface ProfitLinkFunnelDailyOutput {

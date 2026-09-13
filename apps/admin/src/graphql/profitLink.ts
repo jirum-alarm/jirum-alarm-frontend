@@ -89,6 +89,11 @@ export const QueryProfitLinkProviderHealth = gql`
       sales30d
       lastSaleAt
       commission7d
+      issued30d
+      commission30d
+      daysSinceLastSale
+      activeDays90d
+      salesHealth
     }
   }
 `;

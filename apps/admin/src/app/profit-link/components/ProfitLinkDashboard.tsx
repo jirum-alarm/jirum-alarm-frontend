@@ -42,10 +42,16 @@ const formatAgo = (iso?: string) => {
 const formatKrw = (value?: number) =>
   value == null ? '-' : `${Math.round(value).toLocaleString()}원`;
 
-const StatusDot = ({ level }: { level: 'ok' | 'warn' | 'danger' }) => (
+const StatusDot = ({ level }: { level: 'ok' | 'warn' | 'danger' | 'muted' }) => (
   <span
     className={`inline-block h-2.5 w-2.5 rounded-full ${
-      level === 'ok' ? 'bg-success' : level === 'warn' ? 'bg-warning' : 'bg-danger'
+      level === 'ok'
+        ? 'bg-success'
+        : level === 'warn'
+          ? 'bg-warning'
+          : level === 'muted'
+            ? 'bg-bodydark2'
+            : 'bg-danger'
     }`}
   />
 );
@@ -61,8 +67,16 @@ const ProviderHealthSection = () => {
 
   const issueLevel = (issued24h: number, issued7d: number) =>
     issued24h > 0 ? 'ok' : issued7d > 0 ? 'warn' : 'danger';
-  const saleLevel = (sales7d: number, sales30d: number) =>
-    sales7d > 0 ? 'ok' : sales30d > 0 ? 'warn' : 'danger';
+
+  // 판매 판정은 서버(salesHealth)가 배치 알람과 같은 기준으로 내린다 — 여기서 다시
+  // 판정하지 않는다. 예전엔 `sales7d > 0` 이라는 자체 기준이라, 원래 드문 쿠팡(90일 중
+  // 판매일 5일)이 상시 노란불이었고 사람이 매번 "쿠팡은 원래 저래" 하고 넘겨야 했다.
+  const saleDotLevel = { ok: 'ok', silent: 'danger', sparse: 'muted' } as const;
+
+  // 발급당 커미션 — 어디에 발급/노출을 더 쓸지의 지표. 판매 수신이 뭉텅이로 들어와서
+  // 7d 는 출렁이므로 30d 로 본다.
+  const revenuePerIssue = (commission30d?: number, issued30d?: number) =>
+    commission30d != null && issued30d ? commission30d / issued30d : null;
 
   return (
     <ChartCard title="Provider 생존 신호 — 발급·판매 비대칭이 사고 신호" loading={loading}>
@@ -78,7 +92,8 @@ const ProviderHealthSection = () => {
               <th className={thClass}>판매 7d</th>
               <th className={thClass}>판매 30d</th>
               <th className={thClass}>마지막 판매 수신</th>
-              <th className={thClass}>7d 커미션(GROSS)</th>
+              <th className={thClass}>30d 커미션(GROSS)</th>
+              <th className={thClass}>원/발급 (30d)</th>
             </tr>
           </thead>
           <tbody>
@@ -95,23 +110,38 @@ const ProviderHealthSection = () => {
                 <td className={tdClass}>{formatAgo(row.lastIssuedProductAt)}</td>
                 <td className={tdClass}>
                   <span className="flex items-center gap-2">
-                    <StatusDot level={saleLevel(row.sales7d, row.sales30d)} />
+                    <StatusDot level={saleDotLevel[row.salesHealth] ?? 'muted'} />
                     {row.sales24h.toLocaleString()}
                   </span>
                 </td>
                 <td className={tdClass}>{row.sales7d.toLocaleString()}</td>
                 <td className={tdClass}>{row.sales30d.toLocaleString()}</td>
-                <td className={tdClass}>{formatAgo(row.lastSaleAt)}</td>
-                <td className={tdClass}>{formatKrw(row.commission7d)}</td>
+                <td className={tdClass}>
+                  {formatAgo(row.lastSaleAt)}
+                  {row.salesHealth === 'sparse' && (
+                    <span className="ml-1 text-xs text-bodydark2">
+                      (희소 {row.activeDays90d}일/90d)
+                    </span>
+                  )}
+                </td>
+                <td className={tdClass}>{formatKrw(row.commission30d)}</td>
+                <td className={tdClass}>
+                  {(() => {
+                    const v = revenuePerIssue(row.commission30d, row.issued30d);
+                    return v == null ? '-' : `${v.toFixed(1)}원`;
+                  })()}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       <p className="mt-3 text-xs text-bodydark2">
-        판매 시각은 postback/폴링 <b>수신</b> 기준 — 발급은 도는데 판매 수신이 오래 침묵하면 (알리
-        postback 사망 패턴) provider 콘솔부터 확인. provider별 정상 판매 주기가 다름 (토스 폴링
-        ~4일, 쿠팡 ~30일 정산).
+        판매 시각은 postback/폴링 <b>수신</b> 기준. 점 색은 서버가 배치 알람과 같은 기준으로
+        판정한다 — <b>빨강</b>=콜백 {'>'}14일 침묵(사고, provider 콘솔 확인), <b>회색</b>=원래
+        드물어 판정 불가(감시 제외). 2026-09-13 실측 정상 최대 공백: linkprice 2일 · adpick/toss/
+        naver 6일 · 알리 7일 · 쿠팡 17일(희소). 「원/발급」은 발급 1건이 30일간 번 커미션 —
+        발급·노출을 어디에 더 쓸지의 지표다.
       </p>
     </ChartCard>
   );
