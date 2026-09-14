@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 
@@ -20,8 +20,9 @@ const AD_MIN_PRODUCTS = 8;
 const AD_AFTER_ROWS = 30;
 
 export default function SearchResult({ show }: { show: boolean }) {
-  // 필터 상태의 소유자는 이 컴포넌트 하나 — setFilters의 transition isPending으로 그리드를 디밍하고,
-  // viewModel/FilterBar에는 값을 내려보낸다(인스턴스 중복 시 transition이 깨짐, 훅 주석 참고).
+  // 필터 상태의 소유자는 이 컴포넌트 하나 — viewModel/FilterBar에는 값을 내려보낸다
+  // (인스턴스 중복 시 필터 전환이 깨짐, 훅 주석 참고). 전환 중 그리드 디밍은
+  // keepPreviousData 의 isPlaceholderData 가 담당한다.
   const filterController = useSearchFilters();
   const { filters, hasActiveFilters, resetFilters } = filterController;
   const {
@@ -33,6 +34,19 @@ export default function SearchResult({ show }: { show: boolean }) {
     isPlaceholderData,
     estimatedTotal,
   } = useProductListViewModel({ filters });
+
+  // 스크롤된 채로 필터만 바뀌면 화면이 그대로라 "안 바뀐 것처럼" 보인다.
+  // 첫 마운트(공유 URL·뒤로가기)는 스크롤을 유지하고, 이후 필터 조작만 맨 위로.
+  const isFirstFilterRender = useRef(true);
+  const filterSignature = `${filters.sort}|${filters.period}|${filters.ended}|${filters.categoryIds.join(',')}|${filters.providerIds.join(',')}`;
+  useEffect(() => {
+    if (!show) return;
+    if (isFirstFilterRender.current) {
+      isFirstFilterRender.current = false;
+      return;
+    }
+    window.scrollTo({ top: 0 });
+  }, [filterSignature, show]);
 
   const isProductEmpty = !products || products.length === 0;
   const showAd = !isProductEmpty && products.length > AD_MIN_PRODUCTS;

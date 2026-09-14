@@ -147,8 +147,10 @@ describe('딥링크 keyword 인수', () => {
   });
 
   it('딥링크로 들어온 검색어도 최근 검색어에 남는다(web 과 같은 규칙)', () => {
-    // web 은 searchParams 가 바뀔 때마다 setRecentKeyord 를 부른다.
-    expect(webInputVm).toContain("setRecentKeyord(keyword ? keyword : '')");
+    // web 은 keyword 쿼리만 바뀌었을 때 최근 검색어에 남긴다(필터 클릭마다 다시 쓰지 않음).
+    expect(webInputVm).toContain(
+      "setRecentKeyord(keywordParam ? keywordParam : '')",
+    );
     expect(screen).toContain('if (initialKeyword) recent.push(initialKeyword)');
   });
 
@@ -267,6 +269,21 @@ describe('쿼리 변수 — web 이 실제로 보내는 것과 같다', () => {
     // 커서 페이지네이션
     expect(gqlDoc).toContain('$searchAfter');
     expect(queries).toContain('searchAfter: pageParam');
+  });
+
+  it('web 목록 queryKey 에 categoryIds/providerIds 가 들어간다', () => {
+    // 변수만 바꾸고 키에서 빼면 React Query 가 같은 캐시를 재사용해서
+    // 칩만 바뀌고 목록은 그대로다.
+    const webProductQueries = code(
+      web('entities/product/api/product.queries.ts'),
+    );
+    expect(webProductQueries).toContain('categoryIds: variables.categoryIds');
+    expect(webProductQueries).toContain('providerIds: variables.providerIds');
+  });
+
+  it('키워드 없을 땐 검색 쿼리를 안 쏜다', () => {
+    expect(webListVm).toContain('enabled: !!keywordParam');
+    expect(queries).toContain('enabled: keyword.trim().length > 0');
   });
 
   it('총량(estimatedTotal)을 결과에서 읽는다 — 홈 쿼리엔 없는 필드다', () => {

@@ -52,6 +52,9 @@ export const useSearchInputViewModel = () => {
   };
   const handleReset = () => {
     setKeyword('');
+    if (!isJirumAlarmApp) {
+      router.replace('/search');
+    }
   };
 
   const handleGoHome = () => {
@@ -59,11 +62,9 @@ export const useSearchInputViewModel = () => {
   };
 
   useEffect(() => {
-    const keyword = searchParams.get('keyword');
-
-    setKeyword(keyword);
-    setRecentKeyord(keyword ? keyword : '');
-  }, [searchParams]);
+    setKeyword(keywordParam);
+    setRecentKeyord(keywordParam ? keywordParam : '');
+  }, [keywordParam]);
 
   return {
     keyword,

@@ -54,6 +54,9 @@ export const useProductListViewModel = ({
               : undefined,
       }),
       placeholderData: keepPreviousData,
+      // 키워드 없는 /search 랜딩에서도 SearchResult 가 마운트된다. 이때까지 켜 두면
+      // 전체 상품을 받아 두고, 검색 직후 keepPreviousData 가 그 목록을 잠깐 보여준다.
+      enabled: !!keywordParam,
     });
   const pages = data?.pages ?? [];
   const products = Array.from(

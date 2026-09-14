@@ -19,6 +19,7 @@ export type SearchPeriod = (typeof SEARCH_PERIODS)[number];
  * categoryIds/providerIds 빈 배열 = 전체(미적용). history replace라 필터 조작이 브라우저 히스토리를 오염시키지 않는다.
  * 소유자는 SearchResult 하나 — FilterBar/viewModel에는 값·setter를 내려보낸다.
  * 필터 변경 시 화면 유지는 viewModel의 keepPreviousData가 담당(훅 주석 참고).
+ * shallow+scroll:false — 필터 클릭이 Next 내비게이션/스크롤 점프로 안 보이게 막고, 칩·목록은 클라이언트에서 즉시 갱신한다.
  */
 export const useSearchFilters = () => {
   const [filters, setFilters] = useQueryStates(
@@ -29,7 +30,7 @@ export const useSearchFilters = () => {
       period: parseAsStringLiteral(SEARCH_PERIODS).withDefault('all'),
       ended: parseAsBoolean.withDefault(false),
     },
-    { history: 'replace' },
+    { history: 'replace', shallow: true, scroll: false },
   );
 
   const hasActiveFilters =
@@ -48,17 +49,21 @@ export const useSearchFilters = () => {
     });
 
   const toggleCategoryId = (id: number) => {
-    const next = filters.categoryIds.includes(id)
-      ? filters.categoryIds.filter((x) => x !== id)
-      : [...filters.categoryIds, id];
-    setFilters({ categoryIds: next.length > 0 ? next : null });
+    setFilters((prev) => {
+      const next = prev.categoryIds.includes(id)
+        ? prev.categoryIds.filter((x) => x !== id)
+        : [...prev.categoryIds, id];
+      return { categoryIds: next.length > 0 ? next : null };
+    });
   };
 
   const toggleProviderId = (id: number) => {
-    const next = filters.providerIds.includes(id)
-      ? filters.providerIds.filter((x) => x !== id)
-      : [...filters.providerIds, id];
-    setFilters({ providerIds: next.length > 0 ? next : null });
+    setFilters((prev) => {
+      const next = prev.providerIds.includes(id)
+        ? prev.providerIds.filter((x) => x !== id)
+        : [...prev.providerIds, id];
+      return { providerIds: next.length > 0 ? next : null };
+    });
   };
 
   return {
