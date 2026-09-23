@@ -18,6 +18,7 @@ const {
   formatDealAgeNotice,
   OFFER_VALID_DAYS,
   STALE_AFTER_DAYS,
+  toSeoImageUrl,
 } = require('./product-seo.ts') as typeof import('./product-seo');
 
 describe('parseNumericPrice', () => {
@@ -85,10 +86,33 @@ describe('buildProductSeoTitle', () => {
     );
   });
 
-  it('가격이 있고 제목이 그냥 상품명이면 최저가 핫딜을 붙인다', () => {
+  it('가격이 있고 제목이 그냥 상품명이면 N원 핫딜을 붙인다(이력 없으면 "최저가" 없이)', () => {
     assert.equal(
       buildProductSeoTitle('기가바이트 B650M K 메인보드', false, 89000),
+      '기가바이트 B650M K 메인보드 89,000원 핫딜 | 지름알림',
+    );
+  });
+
+  it('현재가가 이력 최저가 이하일 때만 "최저가" 라고 부른다', () => {
+    assert.equal(
+      buildProductSeoTitle('기가바이트 B650M K 메인보드', false, 89000, { historyMinPrice: 89000 }),
       '기가바이트 B650M K 메인보드 최저가 89,000원 핫딜 | 지름알림',
+    );
+    assert.equal(
+      buildProductSeoTitle('가젤 로우 프로 IH1929', false, 94640, { historyMinPrice: 69036 }),
+      '가젤 로우 프로 IH1929 94,640원 핫딜 | 지름알림',
+    );
+  });
+
+  it('30일 넘은 딜엔 가격 문구를 붙이지 않는다(본문 노후 안내와 모순)', () => {
+    const now = Date.parse('2026-09-23T00:00:00Z');
+    assert.equal(
+      buildProductSeoTitle('나이키 레볼루션8 블랙', false, 45012, { postedAt: '2025-09-30', now }),
+      '나이키 레볼루션8 블랙 | 지름알림',
+    );
+    assert.equal(
+      buildProductSeoTitle('나이키 레볼루션8 블랙', false, 45012, { postedAt: '2026-09-20', now }),
+      '나이키 레볼루션8 블랙 45,012원 핫딜 | 지름알림',
     );
   });
 
@@ -305,5 +329,43 @@ describe('formatDealAgeNotice', () => {
     const fresh = daysAgo(STALE_AFTER_DAYS - 5);
     assert.equal(formatDealAgeNotice(fresh, false, now), null);
     assert.equal(buildOfferFreshness(fresh, false, now).availability, 'https://schema.org/InStock');
+  });
+});
+
+describe('summarizePriceHistoryForSeo 이상치 가드', () => {
+  const hist = (prices: number[]) => ({
+    points: prices.map((price) => ({ price })),
+    rangeDays: 90,
+    confidence: 'HIGH' as const,
+  });
+
+  it('이력이 현재가와 자릿수가 다르면 버린다(699,000원 청소기에 107원)', () => {
+    assert.equal(summarizePriceHistoryForSeo(hist([107, 120]), 699000), null);
+  });
+
+  it('최고가가 현재가의 2.5배를 넘어도 버린다', () => {
+    assert.equal(summarizePriceHistoryForSeo(hist([10000, 300000]), 10000), null);
+  });
+
+  it('정상 범위면 그대로, 현재가를 모르면 가드를 건너뛴다', () => {
+    assert.equal(summarizePriceHistoryForSeo(hist([69036, 94640]), 94640)?.minPrice, 69036);
+    assert.equal(summarizePriceHistoryForSeo(hist([107, 120]))?.minPrice, 107);
+  });
+});
+
+describe('toSeoImageUrl', () => {
+  it('우리 CDN 의 원본 확장자는 webp 로(원본은 403)', () => {
+    assert.equal(
+      toSeoImageUrl('https://cdn.jirum-alarm.com/community/ppomppu/654626.jpeg'),
+      'https://cdn.jirum-alarm.com/community/ppomppu/654626.webp',
+    );
+  });
+
+  it('외부 이미지·webp·빈 값은 건드리지 않는다', () => {
+    const coupang = 'https://thumbnail.coupangcdn.com/a/b.jpg';
+    assert.equal(toSeoImageUrl(coupang), coupang);
+    const webp = 'https://cdn.jirum-alarm.com/community/toss/1.webp';
+    assert.equal(toSeoImageUrl(webp), webp);
+    assert.equal(toSeoImageUrl(null), null);
   });
 });

@@ -36,6 +36,9 @@ export function parseNumericPrice(rawPrice?: string | null) {
   return Number.isNaN(numericValue) ? null : numericValue;
 }
 
+/** 이력 최저가가 현재가의 이 배율 미만(또는 최고가가 역수 배 초과)이면 다른 상품이 섞인 것으로 본다. */
+const HISTORY_MIN_RATIO = 0.4;
+
 export function summarizePriceHistoryForSeo(
   history:
     | {
@@ -45,6 +48,7 @@ export function summarizePriceHistoryForSeo(
       }
     | null
     | undefined,
+  currentPrice?: number | null,
 ): PriceHistorySeoSummary | null {
   const points = history?.points;
   if (!history || !points || points.length < 2) return null;
@@ -52,9 +56,22 @@ export function summarizePriceHistoryForSeo(
   const prices = points.map((p) => p.price).filter((p) => Number.isFinite(p) && p > 0);
   if (prices.length < 2) return null;
 
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+  // 이상치 가드: 이력이 현재가와 자릿수가 다르면 다른 상품(액세서리·직구 $)이 섞인 것이다.
+  // 2026-09-23 실측: 699,000원 청소기에 "3개월 최저 107원". 모델 페이지의 "다나와가 40% 미만 = 오염"
+  // 규칙과 같은 배율로 자른다. 틀린 숫자를 내느니 이력 문구를 생략한다.
+  if (
+    currentPrice &&
+    currentPrice > 0 &&
+    (minPrice < currentPrice * HISTORY_MIN_RATIO || maxPrice > currentPrice / HISTORY_MIN_RATIO)
+  ) {
+    return null;
+  }
+
   return {
-    minPrice: Math.min(...prices),
-    maxPrice: Math.max(...prices),
+    minPrice,
+    maxPrice,
     rangeDays: history.rangeDays,
     pointCount: points.length,
     confidence: history.confidence,
@@ -197,22 +214,62 @@ export function buildProductSeoTitle(
   displayTitle: string,
   isEnd?: boolean | null,
   price?: number | null,
+  opts: {
+    postedAt?: string | Date | null;
+    /** 이상치 가드를 통과한 최근 핫딜 최저가. 이 값 이하일 때만 "최저가" 라고 부른다. */
+    historyMinPrice?: number | null;
+    now?: number;
+  } = {},
 ): string {
   const alreadyEnded = /판매종료/.test(displayTitle);
   const suffix = isEnd && !alreadyEnded ? ' (판매종료)' : '';
 
+  // 30일 넘은 딜에 "N원 핫딜" 을 붙이면 본문의 "N개월 전 핫딜이에요" 와 정면으로 어긋난다 —
+  // 네이버 스팸 기준(2026-07 개정)의 "제목·설명이 내용과 다름"에 걸린다. 2026-09-23 실측:
+  // 1년 된 딜 10건 중 7건이 "최저가 N원 핫딜" 을 달고 있었다.
+  const posted = opts.postedAt ? new Date(opts.postedAt) : null;
+  const ageDays =
+    posted && !Number.isNaN(posted.getTime())
+      ? ((opts.now ?? Date.now()) - posted.getTime()) / DAY_MS
+      : 0;
+
   const canAnnotate =
     !isEnd &&
     !alreadyEnded &&
+    ageDays <= STALE_AFTER_DAYS &&
     typeof price === 'number' &&
     Number.isFinite(price) &&
     price > 0 &&
     !hasPriceInTitle(displayTitle) &&
     !hasDealIntentWord(displayTitle);
 
-  const dealHint = canAnnotate ? ` 최저가 ${price.toLocaleString('ko-KR')}원 핫딜` : '';
+  // "최저가" 는 근거가 있을 때만: 이력이 있고 현재가가 그 최저가 이하일 때.
+  // 현재가가 3개월 범위 맨 위인데 "최저가" 라고 붙던 걸 막는다(가젤 94,640원 / 범위 69,036~94,640).
+  const isLowest =
+    typeof opts.historyMinPrice === 'number' && price != null && price <= opts.historyMinPrice;
+  const dealHint = canAnnotate
+    ? ` ${isLowest ? '최저가 ' : ''}${price.toLocaleString('ko-KR')}원 핫딜`
+    : '';
 
   return `${displayTitle}${suffix}${dealHint} | 지름알림`;
+}
+
+const JIRUM_CDN_HOST = 'cdn.jirum-alarm.com';
+
+/**
+ * og:image·JSON-LD 용 이미지 URL. 우리 CDN 은 webp 만 저장해서 원본 확장자(.jpg/.png)는 403 이다
+ * (2026-09-23 실측: 2025-09 딜 10/10 이 403 → 네이버 카드에 썸네일이 안 붙는다).
+ * 화면은 `convertToWebp` 로 이미 고쳤고, 이건 메타 경로용 같은 변환이다.
+ * 외부 썸네일(쿠팡·알리)은 원본 그대로 둔다 — 그쪽엔 webp 사본이 없다.
+ */
+export function toSeoImageUrl(url?: string | null): string | null {
+  if (!url) return null;
+  try {
+    if (new URL(url).host !== JIRUM_CDN_HOST) return url;
+  } catch {
+    return url;
+  }
+  return url.replace(/\.(jpg|jpeg|png)(\?.*)?$/i, '.webp$2');
 }
 
 type GuideInput =

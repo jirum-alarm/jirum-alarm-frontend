@@ -9,6 +9,8 @@ import SectionHeader from '@/shared/ui/SectionHeader';
 
 import { parseProductId } from '@/entities/product/lib/product-id';
 
+import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
+
 import Footer from '@/widgets/layout/ui/desktop/Footer';
 
 import { getProductInfoCached } from './getProductInfoCached';
@@ -32,7 +34,7 @@ export async function generateMetadata({
 
   const title = `${product.title} 관련 상품 | 지름알림`;
   const description = `'${product.title}'와(과) 함께 보면 좋은 관련 핫딜 상품을 모아봤어요.`;
-  const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
+  const image = toSeoImageUrl(product.thumbnail) ?? `${METADATA_SERVICE_URL}/opengraph-image.webp`;
 
   return {
     title,

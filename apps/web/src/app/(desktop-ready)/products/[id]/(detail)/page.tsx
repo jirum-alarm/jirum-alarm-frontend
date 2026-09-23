@@ -14,6 +14,7 @@ import { robotsDirective } from '@/shared/config/metadata';
 import { isFromToss, stripPriceFromTitle } from '@/entities/product/lib/from-toss';
 import { parseProductId } from '@/entities/product/lib/product-id';
 
+import { buildModelDisplayName } from '@/features/deals/lib/model-page-insights';
 import { CollectProductOnView } from '@/features/product-actions/ui/CollectProductOnView';
 import {
   buildOfferFreshness,
@@ -25,6 +26,7 @@ import {
   parseNumericPrice,
   type PriceHistorySeoSummary,
   summarizePriceHistoryForSeo,
+  toSeoImageUrl,
 } from '@/features/product-detail/lib/product-seo';
 import { ProductPrefetch } from '@/features/product-detail/prefetch';
 
@@ -79,9 +81,12 @@ function resolveCategoryName(product: {
 
 function priceHistoryFromProduct(
   data: Awaited<ReturnType<typeof ProductService.getPriceHistory>> | null | undefined,
+  currentPrice: number | null,
 ): PriceHistorySeoSummary | null {
-  return summarizePriceHistoryForSeo(data?.product?.priceHistory ?? null);
+  return summarizePriceHistoryForSeo(data?.product?.priceHistory ?? null, currentPrice);
 }
+
+const DEFAULT_OG_IMAGE = `${METADATA_SERVICE_URL}/opengraph-image.webp`;
 
 /**
  * 서버 HTML 에 넣을 모델 페이지 링크. `basis === 'SIMILAR'` 는 이 상품의 이력이 아니라
@@ -127,7 +132,7 @@ function generateProductJsonLd(
 
   const categoryName = resolveCategoryName(product);
   const priceValue = hidePrice ? null : parseNumericPrice(product.price);
-  const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
+  const image = toSeoImageUrl(product.thumbnail) ?? DEFAULT_OG_IMAGE;
   const description = hidePrice
     ? product.title
     : generateDescription(productGuides, product, categoryName, priceHistorySeo, commentSummary);
@@ -212,29 +217,31 @@ function generateProductJsonLd(
   };
 }
 
-// 홈 > 상품 breadcrumb. 카테고리 전용 URL이 없어 2단계로만 구성한다.
+// 지름알림 > (모델 페이지) > 상품. 카테고리 전용 URL 이 없어, 모델 페이지가 있을 때만 3단계다.
+// 네이버는 검색결과에 이 경로를 그대로 찍는다 — 2단이면 "지름알림 > 상품명" 이라 주제가 안 보인다.
 function generateBreadcrumbJsonLd(
   product: Awaited<ReturnType<typeof ProductService.getProductInfo>>,
+  modelPage?: ProductModelPageLink | null,
 ) {
   if (!product) return null;
+
+  const items = [
+    { name: '지름알림', item: METADATA_SERVICE_URL },
+    ...(modelPage
+      ? [
+          {
+            name: `${buildModelDisplayName(modelPage.brand, modelPage.modelName)} 핫딜 모음`,
+            item: `${METADATA_SERVICE_URL}/deals/${modelPage.slug}`,
+          },
+        ]
+      : []),
+    { name: product.title, item: `${METADATA_SERVICE_URL}/products/${product.id}` },
+  ];
 
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: '지름알림',
-        item: METADATA_SERVICE_URL,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: product.title,
-        item: `${METADATA_SERVICE_URL}/products/${product.id}`,
-      },
-    ],
+    itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, ...it })),
   };
 }
 
@@ -265,22 +272,25 @@ export async function generateMetadata({
     getPriceHistoryCached(+product.id),
     getProductAdditionalInfoCached(+product.id),
   ]);
-  const priceHistorySeo = hidePrice ? null : priceHistoryFromProduct(priceHistoryData);
+  const priceValue = hidePrice ? null : parseNumericPrice(product.price);
+  const priceHistorySeo = hidePrice ? null : priceHistoryFromProduct(priceHistoryData, priceValue);
   const commentSummary = additionalInfo?.commentSummary?.summary ?? null;
 
   const displayTitle = hidePrice ? stripPriceFromTitle(product.title) : product.title;
 
   const categoryName = resolveCategoryName(product);
-  const priceValue = hidePrice ? null : parseNumericPrice(product.price);
   // 토스 유입(hidePrice)은 가격 노출 금지라 priceValue 가 null → 제목에도 안 붙는다.
-  const title = buildProductSeoTitle(displayTitle, product.isEnd, priceValue);
+  const title = buildProductSeoTitle(displayTitle, product.isEnd, priceValue, {
+    postedAt: product.postedAt,
+    historyMinPrice: priceHistorySeo?.minPrice ?? null,
+  });
   const description = hidePrice
     ? displayTitle
     : clipMetaDescription(
         generateDescription(productGuides, product, categoryName, priceHistorySeo, commentSummary),
       );
 
-  const image = product.thumbnail || `${METADATA_SERVICE_URL}/opengraph-image.webp`;
+  const image = toSeoImageUrl(product.thumbnail) ?? DEFAULT_OG_IMAGE;
   const url = `${METADATA_SERVICE_URL}/products/${productId}`;
 
   const defaultKeywords =
@@ -308,10 +318,6 @@ export async function generateMetadata({
 
   if (retailerName) {
     otherMeta['product:retailer'] = retailerName;
-  }
-
-  if (product.provider?.nameKr) {
-    otherMeta['product:brand'] = product.provider.nameKr;
   }
 
   const other = Object.keys(otherMeta).length ? otherMeta : undefined;
@@ -439,7 +445,10 @@ export default async function ProductDetail({
     getPriceVerdictCached(+product.id),
     getProductAdditionalInfoCached(+product.id),
   ]);
-  const priceHistorySeo = priceHistoryFromProduct(priceHistoryData);
+  const priceHistorySeo = priceHistoryFromProduct(
+    priceHistoryData,
+    parseNumericPrice(product.price),
+  );
   const commentSummary = additionalInfo?.commentSummary?.summary ?? null;
   const modelPageLink = modelPageLinkFromProduct(priceHistoryData);
   // JSON-LD 가 availability 를 생략하는 것과 같은 임계(30일)로 화면에도 안내를 낸다.
@@ -451,7 +460,7 @@ export default async function ProductDetail({
     hidePrice,
     commentSummary,
   );
-  const breadcrumbLd = generateBreadcrumbJsonLd(product);
+  const breadcrumbLd = generateBreadcrumbJsonLd(product, modelPageLink);
 
   // LCP 이미지 preload 는 ProductDetailImage 의 next/image `priority` 가 head 에 만든다. 여기서
   // react-dom preload() 를 부르면 RSC HL 힌트로 나가 JS 로드 뒤에나 실행되고(Slow 4G 7.4s) URL 도 달라

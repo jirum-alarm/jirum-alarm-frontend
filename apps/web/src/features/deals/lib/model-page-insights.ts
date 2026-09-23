@@ -308,3 +308,30 @@ export function buildDealsLeadSentence(input: {
 
   return sentences.length > 0 ? sentences.join(' ') : null;
 }
+
+/**
+ * 모델 페이지의 보이는 이름 = 제목·h1·빵부스러기·JSON-LD 이름.
+ *
+ * modelName(brand_item.name)엔 브랜드가 빠진 게 많다 — "M90", "포터블 SSD T7", "생수".
+ * 네이버는 제목 문서 주제로 매칭하는데 "생수 핫딜 최저가 모음" 으론 무슨 생수인지 모른다(2026-09-23 실측).
+ * 그래서 브랜드가 이름에 없으면 앞에 붙이고, 수집 노이즈인 연속 중복 토큰("제로 제로")을 줄인다.
+ *
+ * ponytail: 브랜드가 이미 들어 있는지는 포함 여부 + "브랜드가 모델 첫 토큰으로 시작"(코카콜라음료 ↔ 코카콜라) 두 가지만 본다.
+ */
+export function buildModelDisplayName(brand: string | null | undefined, modelName: string): string {
+  const tokens = modelName.trim().split(/\s+/).filter(Boolean);
+  const deduped = tokens.filter(
+    (t, i) => i === 0 || t.toLowerCase() !== tokens[i - 1].toLowerCase(),
+  );
+  const name = deduped.join(' ');
+
+  const b = brand?.trim();
+  if (!b || !name) return name;
+
+  const lowerName = name.toLowerCase();
+  const lowerBrand = b.toLowerCase();
+  const firstToken = deduped[0].toLowerCase();
+  if (lowerName.includes(lowerBrand) || lowerBrand.startsWith(firstToken)) return name;
+
+  return `${b} ${name}`;
+}

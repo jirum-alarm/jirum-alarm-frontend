@@ -117,3 +117,30 @@ describe('buildDealsLeadSentence', () => {
     assert.ok(s?.includes('최근 핫딜 1,234건'), s ?? '');
   });
 });
+
+describe('buildModelDisplayName', () => {
+  const { buildModelDisplayName } =
+    require('./model-page-insights.ts') as typeof import('./model-page-insights');
+
+  it('브랜드가 이름에 없으면 앞에 붙인다', () => {
+    assert.equal(buildModelDisplayName('에디파이어', 'M90'), '에디파이어 M90');
+    assert.equal(buildModelDisplayName('삼성전자', '포터블 SSD T7'), '삼성전자 포터블 SSD T7');
+  });
+
+  it('이미 들어 있으면 그대로(대소문자 무시)', () => {
+    assert.equal(buildModelDisplayName('농심', '농심 신라면'), '농심 신라면');
+    assert.equal(buildModelDisplayName('JONR', 'jonr P20 Pro'), 'jonr P20 Pro');
+  });
+
+  it('브랜드가 모델 첫 토큰으로 시작하면 중복으로 본다', () => {
+    assert.equal(buildModelDisplayName('코카콜라음료', '코카콜라 제로'), '코카콜라 제로');
+  });
+
+  it('연속 중복 토큰을 줄인다', () => {
+    assert.equal(buildModelDisplayName(null, '코카콜라 제로 제로'), '코카콜라 제로');
+  });
+
+  it('브랜드가 없으면 이름만', () => {
+    assert.equal(buildModelDisplayName(null, 'L10s Ultra GEN2'), 'L10s Ultra GEN2');
+  });
+});
