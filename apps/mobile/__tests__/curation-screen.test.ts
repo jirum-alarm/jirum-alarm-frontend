@@ -86,6 +86,45 @@ describe('섹션 id 조회 — GROUP 안쪽과 탭까지 뒤진다', () => {
   });
 });
 
+describe('web /curation/[id] 와 같은 화면 구성', () => {
+  it('섹션 탭 칩 — 첫 탭 기본, 탭 variables 를 섹션 위에 덮는다(web CurationContainer)', () => {
+    expect(screen).toContain('<ChipRow');
+    expect(screen).toContain('section?.tabs?.[0]');
+    expect(screen).toMatch(
+      /\.\.\.section\.dataSource\.variables,\s*\.\.\.activeTab\.variables/,
+    );
+    // 탭을 바꾸면 목록을 갈아끼운다
+    expect(screen).toContain('key={listKey}');
+  });
+
+  it('헤더에 섹션 제목(web CurationPageHeader title)', () => {
+    expect(screen).toContain("const title = section?.title ?? ''");
+    expect(screen).toMatch(/setOptions\(\{\s*title,/);
+  });
+
+  it('★없는 id 는 스피너에 멈추지 않고 안내를 띄운다(web notFound)', () => {
+    expect(screen).toContain('isTabSourcesPending');
+    expect(screen).toContain('페이지를 찾을 수 없어요');
+  });
+});
+
+describe('커뮤니티 핫딜 더보기', () => {
+  const hotDeals = read('src/features/community/ui/CommunityHotDeals.tsx');
+
+  it('★큐레이션은 지금 탭(커뮤니티) 스택에 쌓는다 — 홈 탭으로 튕기지 않는다', () => {
+    expect(hotDeals).toContain(
+      'navigation.push(tabStackNavigations.CURATION, {sectionId: curationId})',
+    );
+    // 'hotdeal' 은 실제로 있는 섹션 id 다(없으면 빈 안내로 떨어진다).
+    expect(
+      findPromotionSectionById(
+        buildPromotionSections({communityProviders: [], mallGroups: []}),
+        'hotdeal',
+      ),
+    ).toBeDefined();
+  });
+});
+
 describe('홈에서 더보기 라우팅', () => {
   it('/curation/* 은 네이티브 화면으로', () => {
     expect(home).toContain('tabStackNavigations.CURATION');

@@ -12,6 +12,7 @@ import {
   QueryKeywordProducts,
   QueryMyNotificationKeywords,
   QueryProductPriceHistory,
+  QueryProductPriceVerdict,
   QueryTogetherViewedProducts,
   QueryProductGuides,
   QueryProductInfo,
@@ -32,11 +33,15 @@ import type {
   CategoryProductsQueryVariables,
   KeywordProductsQueryVariables,
   ProductPriceHistoryQueryVariables,
+  ProductPriceVerdictQueryVariables,
   TogetherViewedProductsQueryVariables,
   ProductGuidesQueryVariables,
   ProductInfoQueryVariables,
   ProductStatsQueryVariables,
 } from '@/shared/api/gql/graphql.ts';
+
+/** 가격 판정 대기 상한. 운영 실측 응답은 0.2초 안팎이라 넉넉히 잡았다. */
+const PRICE_VERDICT_TIMEOUT_MS = 1500;
 
 export class ProductService {
   /**
@@ -110,6 +115,27 @@ export class ProductService {
       variables,
     );
     return res.data?.product?.priceHistory ?? null;
+  }
+
+  /**
+   * 가격 판정 카드용. 실패는 null 로 삼킨다 — web page.tsx(getPriceVerdictCached)처럼
+   * 판정이 없다고 상세가 에러 화면이 되면 안 된다.
+   */
+  static async getPriceVerdict(variables: ProductPriceVerdictQueryVariables) {
+    try {
+      const request = HttpClient.withAccessToken()
+        .execute(QueryProductPriceVerdict, variables)
+        .then(res => res.data?.product?.priceVerdict ?? null);
+      // 상세 첫 화면이 이 응답을 기다린다(카드가 늦게 끼어들어 화면을 미는 것 방지).
+      // HttpClient 엔 타임아웃이 없어, 응답이 안 오면 상세 전체가 스피너에 묶인다 —
+      // 판정은 없어도 되는 정보라 기다림에 상한을 둔다.
+      const timeout = new Promise<null>(resolve =>
+        setTimeout(() => resolve(null), PRICE_VERDICT_TIMEOUT_MS),
+      );
+      return await Promise.race([request, timeout]);
+    } catch {
+      return null;
+    }
   }
 
   static async getProductAdditionalInfo(

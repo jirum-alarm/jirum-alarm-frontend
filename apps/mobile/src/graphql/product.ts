@@ -134,6 +134,29 @@ export const QueryProductPriceHistory = graphql(`
   }
 `);
 
+/**
+ * 상세 가격 아래 판정 카드(PriceVerdictHero). web `QueryProductPriceVerdict` 와 같은 필드.
+ * 가격 추이와 쿼리를 나눈 이유도 web 과 같다 — 판정은 서버가 따로 계산한다.
+ */
+export const QueryProductPriceVerdict = graphql(`
+  query ProductPriceVerdict($id: Int!) {
+    product(id: $id) {
+      id
+      priceVerdict {
+        status
+        nullReason
+        displayTier
+        basis
+        rangeDays
+        labelKey
+        headline
+        subline
+        historyPointCount
+      }
+    }
+  }
+`);
+
 /** 커뮤니티 반응 하단의 원문 링크·댓글 요약용. */
 export const QueryProductAdditionalInfo = graphql(`
   query ProductAdditionalInfo($id: Int!) {

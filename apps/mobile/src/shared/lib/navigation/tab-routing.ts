@@ -185,6 +185,8 @@ export type NativeRoute = {
   params?: Record<string, unknown>;
   /** 발견 탭 전용 — 실시간·랭킹 중 어느 화면으로 열지. */
   trendingView?: 'live' | 'ranking';
+  /** 발견 탭 전용 — 어느 카테고리로 열지(web `?tab=`). 0 = '전체'. */
+  trendingCategoryId?: number;
   /**
    * `screen` 이 **중첩 네비게이터**일 때 그 안에서 열 화면.
    *
@@ -247,9 +249,13 @@ export function resolveNativeRoute(
 
   if (path.startsWith('/trending')) {
     // web 은 `/trending` → `/trending/live` 로 리다이렉트한다. 같은 기본값을 쓴다.
+    // 카테고리는 `?tab=N`. web(nuqs parse)처럼 없거나 숫자가 아니면 '전체'(0)로 연다 —
+    // 안 넣으면 이전에 보던 카테고리가 남아 "전체 랭킹 더보기"가 다른 카테고리를 보여준다.
+    const tab = Number(url.match(/[?&]tab=([^&#]*)/)?.[1]);
     return {
       tab: tabNavigations.DISCOVER,
       trendingView: path.startsWith('/trending/ranking') ? 'ranking' : 'live',
+      trendingCategoryId: Number.isInteger(tab) && tab > 0 ? tab : 0,
     };
   }
 
@@ -276,9 +282,7 @@ export function resolveNativeRoute(
   const curationId = path.match(/^\/curation\/(.+)$/)?.[1];
   if (curationId) {
     // 제목은 넘기지 않는다 — CurationScreen 이 섹션을 조회해 자기 헤더를 그린다.
-    // ⚠️없는 sectionId 로 들어오면 그 화면은 스피너에서 멈춘다("아직 안 옴"과
-    // "없는 id"를 구분하지 않는다). 홈 더보기 경로는 서버가 준 id 만 쓰므로
-    // 안 걸리지만, 딥링크는 낡은 id 를 들고 올 수 있다. 뒤로가기는 살아 있다.
+    // 없는 sectionId(낡은 딥링크)면 그 화면이 "찾을 수 없어요" 안내를 그린다.
     return {
       tab: tabNavigations.HOME,
       screen: tabStackNavigations.CURATION,
@@ -325,7 +329,8 @@ export function resolveNativeRoute(
     return {tab: getTabNameFromUrl(url)};
   }
 
-  // 네이티브 화면이 아직 없는 경로(`/recommend`·`/policies/*` 등).
+  // 네이티브 화면이 아직 없는 경로(`/recommend` 등). 약관(`/policies/privacy`·
+  // `/policies/terms`)·약관 목차(`/mypage/terms-policies`)는 위 표가 네이티브로 잡는다.
   const tab = getTabNameFromUrl(url);
   if (allowWebViewRoute && NATIVE_TAB_ROOTS.has(tab)) {
     // ★경로만 넘긴다 — JirumAlarmWebViewScreen 이 `${SERVICE_URL}${uri}` 로

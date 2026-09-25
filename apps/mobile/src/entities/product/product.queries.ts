@@ -11,6 +11,7 @@ import type {
   KeywordProductsQueryVariables,
   MyNotificationKeywordsQueryVariables,
   ProductPriceHistoryQueryVariables,
+  ProductPriceVerdictQueryVariables,
   TogetherViewedProductsQueryVariables,
 } from '@/shared/api/gql/graphql.ts';
 
@@ -30,6 +31,8 @@ export class ProductQueries {
     guides: (id: number) => [...this.keys.detail(id), 'guides'] as const,
     priceHistory: (id: number, days?: number | null) =>
       [...this.keys.detail(id), 'priceHistory', days ?? 'all'] as const,
+    priceVerdict: (id: number) =>
+      [...this.keys.detail(id), 'priceVerdict'] as const,
     additionalInfo: (id: number) =>
       [...this.keys.detail(id), 'additionalInfo'] as const,
     reactionKeywords: (id: number) =>
@@ -72,6 +75,13 @@ export class ProductQueries {
       queryKey: this.keys.priceHistory(variables.id, variables.days),
       queryFn: () => ProductService.getPriceHistory(variables),
       retry: RETRY,
+    });
+  }
+
+  static priceVerdict(variables: ProductPriceVerdictQueryVariables) {
+    return queryOptions({
+      queryKey: this.keys.priceVerdict(variables.id),
+      queryFn: () => ProductService.getPriceVerdict(variables),
     });
   }
 

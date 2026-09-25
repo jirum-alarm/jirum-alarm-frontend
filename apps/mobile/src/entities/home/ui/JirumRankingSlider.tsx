@@ -21,6 +21,7 @@ import PressableScale from '@/shared/components/PressableScale';
 import DisplayProductSource from '@/shared/components/product/DisplayProductSource';
 import Thumbnail from '@/shared/components/product/Thumbnail';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
+import {trackProductCardClick} from '@/shared/lib/analytics/card-tracking';
 import {displayTime} from '@/shared/lib/format/price';
 import {cn} from '@/shared/lib/styling';
 
@@ -246,7 +247,11 @@ function RankingCard({
       <PressableScale
         scaleTo={0.96}
         style={{width: CARD_WIDTH, height: CARD_HEIGHT}}
-        onPress={() => onPress(Number(product.id))}
+        onPress={() => {
+          // web ProductRankingImageCard: source="home_ranking", rank 1-based.
+          trackProductCardClick('home_ranking', product.id, rank);
+          onPress(Number(product.id));
+        }}
         accessibilityRole="button"
         accessibilityLabel={`${rank}위 ${product.title}`}
         // ★className 은 안쪽 View 가 받는다(PressableScale 주석 참조).

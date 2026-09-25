@@ -4,6 +4,7 @@ import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {MyPageQueries} from '@/entities/mypage';
 import {MyPageService, type MyKeyword} from '@/shared/api/mypage';
 import {showToast} from '@/shared/lib/feedback';
+import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
 
 import {isValidKeyword} from '../lib/validation';
 
@@ -12,11 +13,10 @@ import {isValidKeyword} from '../lib/validation';
  * `useKeywordInput` · `useKeywordList` · `update-keyword` · `remove-keyword` ·
  * `update-price-drop-only` 를 한 뷰모델로 합쳤다(화면이 하나라 나눌 이유가 없다).
  *
- * ★web 은 등록 성공 뒤 `useFcmPermission().requestPermission()` 을 부른다.
- * 앱은 **옮기지 않는다** — 알림 권한은 `useFCMTokenManager`(FCMHandler)가 앱
- * 진입 때 이미 요청하고 토큰까지 서버에 등록한다. 여기서 또 요청하면 이미
- * 결정된 권한이라 아무 일도 안 나거나(권한 허용) OS 가 무시한다(거부).
- * 웹 전용 보상 로직이지 앱에서 잃는 동작이 아니다.
+ * ★web 처럼 등록 성공 뒤 알림 권한을 묻는다(`requestPushPermissionIfNeeded`).
+ * "앱 진입 때 이미 요청한다"는 iOS 에서만 맞다 — RNFirebase `requestPermission`
+ * 은 Android 에서 no-op 이라 Android 13+ 는 POST_NOTIFICATIONS 를 물은 적이 없다.
+ * 이미 허용이거나 다시 물을 수 없으면(iOS 거부 확정) 아무것도 안 한다.
  */
 export function useKeywordViewModel() {
   const queryClient = useQueryClient();
@@ -45,6 +45,7 @@ export function useKeywordViewModel() {
     mutationFn: MyPageService.addKeyword,
     onSuccess: () => {
       reset();
+      requestPushPermissionIfNeeded();
       return invalidate();
     },
     onError: () => showToast.info('키워드 저장에 실패했습니다.'),

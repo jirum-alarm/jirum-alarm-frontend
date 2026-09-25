@@ -198,13 +198,17 @@ describe('web 과 같아야 하는 상수', () => {
     );
   });
 
-  it('기간 구간이 web PERIOD_HOURS 와 같은 길이다(시간 → 일)', () => {
+  it('기간 구간이 web PERIOD_HOURS 와 같은 값·같은 계산이다', () => {
     expect(webListVm).toContain(
       "const PERIOD_HOURS = { '1d': 24, '7d': 24 * 7, '30d': 24 * 30 }",
     );
-    expect(filters).toContain("'1d': 1");
-    expect(filters).toContain("'7d': 7");
-    expect(filters).toContain("'30d': 30");
+    expect(filters).toContain("'1d': 24");
+    expect(filters).toContain("'7d': 24 * 7");
+    expect(filters).toContain("'30d': 24 * 30");
+    // 둘 다 지금부터 N시간 전(롤링). 자정 절단이 다시 들어오면 web 과 갈린다.
+    expect(webListVm).toContain('Date.now() - PERIOD_HOURS');
+    expect(filters).toContain('now - PERIOD_HOURS[period] * 60 * 60 * 1000');
+    expect(filters).not.toContain('setHours(0, 0, 0, 0)');
   });
 
   it('한 페이지 20개', () => {

@@ -8,6 +8,7 @@ import {ProductService} from '@/shared/api/product/product.service';
 import PressableScale from '@/shared/components/PressableScale';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {showToast} from '@/shared/lib/feedback';
+import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
 import {
   usePendingAction,
   useRequireLogin,
@@ -72,6 +73,8 @@ export default function PostPurchaseKeywordPrompt({
       queryClient.invalidateQueries({
         queryKey: ProductQueries.keys.myKeywords(),
       });
+      // web 과 같은 자리 — 알림 권한이 아직 없고 물어볼 수 있을 때만 묻는다.
+      requestPushPermissionIfNeeded();
     },
     onError: error => {
       const message =

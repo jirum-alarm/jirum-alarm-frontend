@@ -183,6 +183,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
                     key={deal.id}
                     product={deal as ProductCardType}
                     onPress={openDetail}
+                    trackingSource="notification_theme"
                   />
                 ))}
               </View>

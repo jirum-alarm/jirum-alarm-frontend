@@ -5,6 +5,7 @@ import {useMutation, useQuery} from '@tanstack/react-query';
 import PressableScale from '@/shared/components/PressableScale';
 import {ProductService} from '@/shared/api/product/product.service';
 import {showToast} from '@/shared/lib/feedback';
+import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
 import {PendingActionType} from '@/shared/lib/pending-action';
 import {
   usePendingAction,
@@ -49,6 +50,8 @@ export default function RecommendedKeywordSection() {
           ? `'${added}' 키워드 알림을 등록했어요.`
           : '키워드 알림을 등록했어요.',
       );
+      // web 과 같은 자리 — 알림 권한이 아직 없고 물어볼 수 있을 때만 묻는다.
+      requestPushPermissionIfNeeded();
     },
     onError: (error: unknown) => {
       // 낙관적으로 켜둔 체크를 되돌린다.

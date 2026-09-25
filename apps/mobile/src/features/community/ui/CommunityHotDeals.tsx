@@ -92,14 +92,21 @@ export default function CommunityHotDeals() {
   );
 
   /**
-   * 더보기. **판정은 `resolveNativeRoute` 한 곳에서** 한다 —
-   * `/curation/hotdeal` 은 네이티브 큐레이션 화면, `/trending/ranking` 은
-   * 발견 탭(랭킹)으로 간다. 네이티브가 못 그리는 경로만 웹뷰로 떨어진다.
-   *
-   * ⚠️ `?tab=2` 같은 카테고리는 그 판정기가 아직 안 옮긴다 — 랭킹의 '전체'로
-   * 열린다(카테고리까지 살리려면 tab-routing 에 파라미터를 실어야 한다).
+   * 더보기.
+   * - 핫딜(`/curation/hotdeal`) → **이 탭(커뮤니티) 스택에** 큐레이션을 쌓는다.
+   *   `resolveNativeRoute` 는 `/curation/*` 을 홈 탭에 귀속시키므로(딥링크 규칙),
+   *   그걸 타면 커뮤니티에서 누른 더보기가 홈 탭으로 튕긴다 — web 은 같은 자리에서
+   *   페이지만 바뀐다. CURATION 은 모든 탭 스택에 등록돼 있다(TabStackNavigator).
+   * - 랭킹(`/trending/ranking?tab=N`) → 발견 탭 랭킹의 **그 카테고리**
+   *   (판정·카테고리 파싱은 `resolveNativeRoute`).
+   * 네이티브가 못 그리는 경로만 웹뷰로 떨어진다.
    */
   const handlePressMore = useCallback(() => {
+    const curationId = option.link.match(/^\/curation\/([^/?#]+)/)?.[1];
+    if (curationId) {
+      navigation.push(tabStackNavigations.CURATION, {sectionId: curationId});
+      return;
+    }
     if (navigateToNativeRoute(option.link)) return;
     navigation.push(tabStackNavigations.WEBVIEW, {
       uri: option.link,

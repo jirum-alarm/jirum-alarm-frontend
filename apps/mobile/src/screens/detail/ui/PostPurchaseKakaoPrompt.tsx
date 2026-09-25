@@ -1,11 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
 
 import PressableScale from '@/shared/components/PressableScale';
 import TalkLight from '@/shared/components/icons/TalkLight';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 
-import {OKACHAT_LINK, markOkachatJoined} from '../lib/okachat';
+import {
+  OKACHAT_LINK,
+  markOkachatJoined,
+  trackOkachatEvent,
+} from '../lib/okachat';
 
 /**
  * 구매 직후 오카방 입장 권유. web PostPurchaseKakaoPrompt 와 같은 자리·어투.
@@ -17,6 +21,12 @@ export default function PostPurchaseKakaoPrompt({
   show: boolean;
   onClose: () => void;
 }) {
+  // web PostPurchaseKakaoPrompt: show 가 켜질 때마다(구매 클릭 후 큐 차례).
+  useEffect(() => {
+    if (!show) return;
+    trackOkachatEvent('okachat_prompt_view', 'after_purchase');
+  }, [show]);
+
   if (!show) return null;
 
   return (
@@ -35,6 +45,7 @@ export default function PostPurchaseKakaoPrompt({
       </View>
       <PressableScale
         onPress={async () => {
+          trackOkachatEvent('okachat_prompt_click', 'after_purchase');
           await markOkachatJoined();
           openInAppBrowser(OKACHAT_LINK);
           onClose();

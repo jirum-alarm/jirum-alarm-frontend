@@ -7,6 +7,10 @@ import {HotDealType} from '@/shared/api/gql/graphql';
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import DisplayProductSource from '@/shared/components/product/DisplayProductSource';
 import Thumbnail from '@/shared/components/product/Thumbnail';
+import {
+  trackProductCardClick,
+  type ProductCardSource,
+} from '@/shared/lib/analytics/card-tracking';
 import {displayTime, parsePrice} from '@/shared/lib/format/price';
 
 export type ProductCardItem = {
@@ -38,11 +42,14 @@ export default function ProductCard({
   product,
   onPress,
   layout = 'fixed',
+  trackingSource,
 }: {
   product: ProductCardItem;
   onPress: (id: number) => void;
   /** fixed: 캐러셀용 120px. grid: 만료 추천 3열. */
   layout?: 'fixed' | 'grid';
+  /** GA4 `product_card_click` 진입 경로(web 카드 `source`). 없으면 추적 안 함. */
+  trackingSource?: ProductCardSource;
 }) {
   const {hasWon, priceWithoutWon} = parsePrice(product.price);
   const priceText = hasWon ? `${priceWithoutWon}원` : priceWithoutWon;
@@ -51,7 +58,10 @@ export default function ProductCard({
   return (
     <PressableScale
       style={isGrid ? {width: '100%'} : {width: CARD_WIDTH}}
-      onPress={() => onPress(Number(product.id))}
+      onPress={() => {
+        trackProductCardClick(trackingSource, product.id);
+        onPress(Number(product.id));
+      }}
       accessibilityRole="button"
       accessibilityLabel={product.title}>
       <View>

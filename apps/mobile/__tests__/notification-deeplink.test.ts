@@ -3,6 +3,7 @@ export {};
 const mockNavigate = jest.fn();
 const mockDispatch = jest.fn();
 const mockRequestTrendingView = jest.fn();
+const mockRequestTrendingCategory = jest.fn();
 let mockReady = true;
 
 /** 로그인 상태 = 탭 네비게이터가 루트. 비로그인은 AuthNavigator 라 탭이 없다. */
@@ -32,6 +33,8 @@ jest.mock('@react-navigation/native', () => ({
 
 jest.mock('../src/screens/trending/trending-view-store', () => ({
   requestTrendingView: (...args: unknown[]) => mockRequestTrendingView(...args),
+  requestTrendingCategory: (...args: unknown[]) =>
+    mockRequestTrendingCategory(...args),
 }));
 
 const {
@@ -91,6 +94,7 @@ const reset = () => {
   mockNavigate.mockClear();
   mockDispatch.mockClear();
   mockRequestTrendingView.mockClear();
+  mockRequestTrendingCategory.mockClear();
   mockReady = true;
   mockRootState = TAB_STATE;
 };
@@ -152,6 +156,23 @@ describe('푸시·딥링크 → 네이티브 화면', () => {
   it('/trending 은 web 리다이렉트와 같이 실시간이 기본', () => {
     navigateToNativeRoute(url('/trending'));
     expect(mockRequestTrendingView).toHaveBeenCalledWith('live');
+  });
+
+  it('★?tab=N 은 그 카테고리로 연다 (커뮤니티 "\'컴퓨터\' 인기 상품 더보기")', () => {
+    navigateToNativeRoute(url('/trending/ranking?tab=1'));
+    expect(mockRequestTrendingView).toHaveBeenCalledWith('ranking');
+    expect(mockRequestTrendingCategory).toHaveBeenCalledWith(1);
+    // 카테고리도 탭 전환보다 먼저 — 첫 렌더가 '전체'로 한 번 나오면 깜빡인다.
+    expect(
+      mockRequestTrendingCategory.mock.invocationCallOrder[0],
+    ).toBeLessThan(mockNavigate.mock.invocationCallOrder[0]);
+  });
+
+  it("?tab 이 없거나 이상하면 '전체'(0) — web nuqs parse 와 같다", () => {
+    navigateToNativeRoute(url('/trending/ranking'));
+    expect(mockRequestTrendingCategory).toHaveBeenLastCalledWith(0);
+    navigateToNativeRoute(url('/trending/live?tab=abc'));
+    expect(mockRequestTrendingCategory).toHaveBeenLastCalledWith(0);
   });
 
   it('큐레이션 더보기는 네이티브 목록으로', () => {

@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
@@ -14,7 +14,12 @@ import CategoryTabBar from '@/entities/trending/ui/CategoryTabBar';
 import LiveList from '@/entities/trending/ui/LiveList';
 import RankingList from '@/entities/trending/ui/RankingList';
 import TrendingTopTabs from '@/entities/trending/ui/TrendingTopTabs';
-import {requestTrendingView, useTrendingView} from './trending-view-store';
+import {
+  requestTrendingCategory,
+  requestTrendingView,
+  useTrendingCategory,
+  useTrendingView,
+} from './trending-view-store';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
@@ -40,7 +45,8 @@ type Nav = NativeStackNavigationProp<TabStackParamList>;
 export default function TrendingScreen() {
   const navigation = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
-  const [categoryId, setCategoryId] = useState<number>(ALL_CATEGORY.id);
+  // 카테고리도 store 가 정본 — 밖(`/trending/ranking?tab=N`)에서 지정할 수 있어야 한다.
+  const categoryId = useTrendingCategory();
 
   /**
    * 지금 보여줄 화면.
@@ -110,7 +116,7 @@ export default function TrendingScreen() {
           <CategoryTabBar
             categories={allCategories}
             activeId={activeCategoryId}
-            onSelect={setCategoryId}
+            onSelect={requestTrendingCategory}
           />
 
           {/*

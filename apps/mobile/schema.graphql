@@ -250,6 +250,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type DoubleRowSection implements BaseSection {
+  dataSource: ApiQuery!
+  displayOrder: Float
+  id: ID!
+  title: String!
+  type: SectionDisplayType!
+  viewMoreLink: String
+}
+
 type ExistsUserOutput {
   email: Boolean!
   social: Boolean!
@@ -282,6 +291,14 @@ type GroupSection implements BaseSection {
   title: String!
   type: SectionDisplayType!
   viewMoreLink: String
+}
+
+type HomePage {
+  """실험 ID (예: home_hero_v1)"""
+  experimentId: String!
+  sections: [BaseSection!]!
+  """배정 변인: control | hotdeal | under10000 | mall"""
+  variant: String!
 }
 
 type HorizontalScrollSection implements BaseSection {
@@ -401,6 +418,13 @@ The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](
 """
 scalar JSONObject
 
+type KakaoProfitLinkOutput {
+  """실패 시 사유. 성공이면 null."""
+  error: String
+  """발급된 카카오쇼핑 추천리워드 링크 (clink.kakao.com/sp/…)"""
+  profitLink: String
+}
+
 type KeywordCountOutput {
   count: Int!
   keyword: String!
@@ -434,6 +458,7 @@ type LayoutTab {
   id: ID!
   label: String!
   variables: JSONObject
+  viewMoreLink: String
 }
 
 type ListSection implements BaseSection {
@@ -624,13 +649,22 @@ type Mutation {
   ): Int!
   """어드민) 상품 hard delete"""
   hardDeleteProductByAdmin(id: Int!): Boolean!
+  """
+  어드민) 카카오쇼핑 상품 URL을 추천리워드 링크(clink.kakao.com/sp/…)로 발급. product 에는 쓰지 않고 링크만 반환.
+  """
+  issueKakaoProfitLink(url: String!): KakaoProfitLinkOutput!
+  """어드민) 오늘의집 상품 URL을 큐레이터 제휴 링크(?af)로 발급. product 에는 쓰지 않고 링크만 반환."""
+  issueOhouProfitLink(url: String!): OhouProfitLinkOutput!
+  """
+  어드민) 토스 상품 URL(또는 tacaItemId)을 우리 publisher 수익링크로 발급. product 에는 쓰지 않고 링크만 반환. /c/{id}·/t/{id}·toss.im/_m/… 지원, /p/ 불가.
+  """
+  issueTossProfitLink(url: String!): TossProfitLinkOutput!
   """로그인"""
   login(email: String!, password: String!): TokenOutput!
   """리프레시 토큰으로 로그인"""
   loginByRefreshToken: TokenOutput!
   """로그아웃"""
   logout: Boolean!
-  matchProductToDanawaProduct(productId: Int!): Boolean!
   """모든 알림 읽음 처리"""
   readAllNotifications: Boolean!
   """모든 알림 읽음 처리"""
@@ -675,12 +709,20 @@ type Mutation {
   sendNotificationByAdmin(message: String!, target: NotificationTarget, targetId: Int, title: String!, type: NotificationType!, url: String, userIds: [Int!]): Boolean!
   """어드민) 광고 on/off (킬스위치)"""
   setAdActive(id: Int!, isActive: Boolean!): Boolean!
+  """
+  어드민) 카카오쇼핑 추천리워드 세션 갱신. store.kakao.com 로그인 후 공유하기 → affiliate-link 요청 Copy as cURL. 성공 시 kakao:no_session·기존 disabled(store.kakao.com) 미발급건을 retry 큐에 재진입시킨다.
+  """
+  setKakaoSession(curl: String!): Boolean!
   """어드민) 모델 페이지 발행 토글"""
   setModelPagePublishedByAdmin(id: Int!, isPublished: Boolean!): Boolean!
   """
   어드민) 네이버 브랜드커넥트 세션 쿠키 갱신. brandconnect.naver.com 로그인 → DevTools 요청 Cookie 헤더 원문(NID_AUT/NID_SES 포함) 붙여넣기. 성공 시 nv:no_token 미발급건을 retry 큐에 재진입시킨다.
   """
   setNaverBcSession(cookie: String!): Boolean!
+  """
+  어드민) 오늘의집 큐레이터 세션 갱신. 로그인 후 상품 공유하기 → sharelink 요청 Copy as cURL. cookie+userId 를 저장하고, curl에 contentId가 있으면 ?af 발급으로 검증한다.
+  """
+  setOhouSession(curl: String!): Boolean!
   """대표 매핑 지정 (id 기준)"""
   setPrimaryProductMapping(productMappingId: Int!): Boolean!
   """
@@ -688,7 +730,7 @@ type Mutation {
   """
   setThreeHaSession(cookie: String!): Boolean!
   """
-  어드민) 토스 세션 토큰(TBIZAUTH) 갱신. sharelink.toss.im 로그인 → DevTools > Application > Cookies > TBIZAUTH 값(base64 원문) 붙여넣기. 성공 시 toss:no_token 미발급건을 retry 큐에 재진입시킨다.
+  어드민) 토스 세션 토큰(TBIZAUTH) 갱신. TBIZAUTH 원문, Cookie 헤더, 또는 curl(-b/-H cookie)을 붙여넣으면 TBIZAUTH만 저장. 성공 시 toss:no_token 미발급건을 retry 큐에 재진입시킨다.
   """
   setTossSession(token: String!): Boolean!
   """회원가입"""
@@ -835,6 +877,13 @@ enum OauthProvider {
   NAVER
 }
 
+type OhouProfitLinkOutput {
+  """실패 시 사유. 성공이면 null."""
+  error: String
+  """발급된 오늘의집 큐레이터 링크 (ozip.me/…?af)"""
+  profitLink: String
+}
+
 enum OrderOptionType {
   ASC
   DESC
@@ -928,6 +977,38 @@ type PriceRangeCountOutput {
   minPrice: Float!
   """가격 구간 라벨 (예: 1만~3만)"""
   priceRange: String!
+}
+
+enum PriceVerdictDisplayTier {
+  HIDDEN
+  NEUTRAL
+  STRONG
+}
+
+enum PriceVerdictLabelKey {
+  ABOVE_TYPICAL
+  BELOW_TYPICAL
+  NEAR_HIGH
+  NEAR_LOWEST
+  TYPICAL
+}
+
+enum PriceVerdictNullReason {
+  BASIS_NOT_ALLOWED
+  CURRENCY_MISMATCH
+  INCONSISTENT_PRICE
+  LOW_CONFIDENCE
+  NO_HISTORY
+  NO_MAPPING
+  PRIVATE_OR_MISSING_SEED
+  SEED_PRICE_MISSING
+  TOO_FEW_POINTS
+  UNIT_AXIS
+}
+
+enum PriceVerdictStatus {
+  READY
+  UNAVAILABLE
 }
 
 type PriceVisualConfig {
@@ -1161,8 +1242,14 @@ type ProductOutput {
   """왜 핫딜인지 가격 컨텍스트 (게이트 통과 시에만, 상세 전용)"""
   priceContext: PriceContext
   priceCurrency: String
-  """일별 핫딜가 추이. 매핑(HIGH) 우선, 없으면 유사상품+가격게이트(LOW). 점 부족 시 null"""
+  """
+  일별 핫딜가 추이. brand_item/매핑∪클러스터(HIGH) 우선, 점 부족 시 유사 폴백(LOW). 2점 미만이면 null
+  """
   priceHistory(days: Int = 90): ProductPriceHistory
+  """
+  상세 히어로 가격 판정(지금 사도 되나). 30일 MAPPING HIGH만 READY. 프론트는 READY+STRONG만 렌더. 실패해도 객체를 내려 nullReason 계측.
+  """
+  priceVerdict: ProductPriceVerdict
   """상품 가격 목록"""
   prices: [ProductPrice!]
   productMapping: ProductMapping
@@ -1216,6 +1303,35 @@ enum ProductPriceTarget {
   MALL
 }
 
+"""
+상세 히어로 가격 판정. v1 프론트는 status=READY && displayTier=STRONG 만 렌더. UNAVAILABLE 이어도 객체를 내려 nullReason 을 계측한다.
+"""
+type ProductPriceVerdict {
+  """MAPPING | CLUSTER"""
+  basis: String
+  """HIGH only in v1 READY"""
+  confidence: String
+  """KRW | USD"""
+  currency: String
+  """seedPrice - windowMinPrice. 음수 = 지금이 더 쌈"""
+  deltaWon: Float
+  displayTier: PriceVerdictDisplayTier!
+  headline: String
+  historyPointCount: Int
+  labelKey: PriceVerdictLabelKey
+  nullReason: PriceVerdictNullReason
+  percentile: Float
+  rangeDays: Int
+  """max(0, -deltaWon)"""
+  savingsWon: Float
+  seedPrice: Float
+  status: PriceVerdictStatus!
+  subline: String
+  """KST YYYY-MM-DD"""
+  windowMinDate: String
+  windowMinPrice: Float
+}
+
 type ProfitLinkErrorCountOutput {
   count: Int!
   error: String!
@@ -1250,11 +1366,21 @@ type ProfitLinkMissedProductOutput {
 }
 
 type ProfitLinkProviderHealthOutput {
+  """90일 중 판매가 있던 날 수 — 희소 provider 판별"""
+  activeDays90d: Int!
   """최근 7d localCommission 합 (KRW, GROSS 추정 — 추세용)"""
   commission7d: Float
+  """
+  최근 30d localCommission 합 (KRW, GROSS 추정). 7d 는 희소 provider 를 0원으로 보이게 해서(쿠팡 7d 0원 / 30d 26,537원) 표시 기본값은 이쪽.
+  """
+  commission30d: Float
+  """마지막 판매 row 도착 이후 경과일 — 침묵 판정 입력"""
+  daysSinceLastSale: Float
   issued7d: Int!
   """최근 24h 발급 딜 수 (딜 생성시각 기준 근사)"""
   issued24h: Int!
+  """최근 30d 발급 딜 수 — 발급당 수익 분모"""
+  issued30d: Int!
   """발급 보유 딜의 마지막 생성 시각"""
   lastIssuedProductAt: DateTime
   """마지막 판매 row 도착 시각 (postback 생존)"""
@@ -1263,6 +1389,10 @@ type ProfitLinkProviderHealthOutput {
   sales7d: Int!
   sales24h: Int!
   sales30d: Int!
+  """
+  판매 파이프 판정: ok | silent(콜백 끊김=사고) | sparse(원래 드물어 감시 제외). 배치 알람과 같은 기준(common/lib/affiliate-sales-health) — 프론트가 자체 판정하지 않는다.
+  """
+  salesHealth: String!
 }
 
 type ProfitLinkQueueHealthOutput {
@@ -1439,13 +1569,22 @@ type Query {
     """페이지 번호 (0부터 시작)"""
     page: Int!
   ): [ProductOutput!]!
+  """어드민) 카카오쇼핑 추천리워드 세션 저장 여부(true면 발급 가동중)"""
+  hasKakaoSession: Boolean!
   """어드민) 네이버 브랜드커넥트 세션 저장 여부(true면 발급 가동중)"""
   hasNaverBcSession: Boolean!
+  """어드민) 오늘의집 큐레이터 세션이 실제로 ?af 링크를 주는지"""
+  hasOhouSession: Boolean!
   """어드민) 세시간전 세션 저장 여부(true면 폴백 발급 가동중)"""
   hasThreeHaSession: Boolean!
-  """어드민) 토스 세션 토큰 저장 여부(true면 발급 가동중)"""
+  """
+  어드민) 토스 TBIZAUTH 가 정산 API 에 실제 유효한지. 키만 있고 AUTH_EXPIRED 면 false(키 삭제). 발급은 공식 OAuth2 라 이 값과 무관.
+  """
   hasTossSession: Boolean!
-  homePage: [BaseSection!]!
+  """
+  홈 섹션 목록 + 히어로 슬롯 실험 배정. deviceId(X-Device-Id) 기준 고정 해시. 프론트는 sections 순서를 그대로 그린다.
+  """
+  homePage: HomePage!
   """어드민) 핫딜 제외 키워드 목록 조회"""
   hotDealExcludeKeywordsByAdmin(hotDealKeywordId: Int!, limit: Int!, orderBy: HotDealExcludeKeywordOrderType!, orderOption: OrderOptionType!, searchAfter: [String!]): [HotDealExcludeKeywordOutput!]!
   """어드민) 핫딜 키워드 조회"""
@@ -1546,6 +1685,10 @@ type Query {
     productId: Int
     """상품명으로 검색 (부분 일치)"""
     productTitle: String
+    """
+    의심스러운 것부터 — pendingVerifications 의 suspiciousFirst 와 동일 필터(confidence NULL 제외)로 카운트해야 목록과 개수가 같은 모집단을 센다
+    """
+    suspiciousFirst: Boolean
     target: ProductMappingTarget
     verificationStatus: [ProductMappingVerificationStatus!]
   ): Int!
@@ -1682,11 +1825,13 @@ enum Role {
 }
 
 enum SectionDisplayType {
+  DOUBLE_ROW
   GRID_TABBED
   GROUP
   HORIZONTAL_SCROLL
   LIST
   PAGINATED_GRID
+  TOSS
 }
 
 type SignupOutput {
@@ -1752,6 +1897,21 @@ type TokenOutput {
 enum TokenType {
   APNS
   FCM
+}
+
+type TossProfitLinkOutput {
+  """실패 시 사유. 성공이면 null. 끝에 [toss:…] trace 가 붙을 수 있다."""
+  error: String
+  """발급된 토스 수익링크 (toss.im/_m/…)"""
+  profitLink: String
+}
+
+type TossSection implements BaseSection {
+  displayOrder: Float
+  id: ID!
+  title: String!
+  type: SectionDisplayType!
+  viewMoreLink: String
 }
 
 input UpdateAdvertiseInput {

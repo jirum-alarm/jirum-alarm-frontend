@@ -11,6 +11,7 @@ import {useQuery} from '@tanstack/react-query';
 import type {ProductCardType} from '@/entities/home/model/types';
 import {CarouselList} from '@/entities/home/ui/DynamicProductList';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
+import type {ProductCardSource} from '@/shared/lib/analytics/card-tracking';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
 import {RANKING_SPLIT, TrendingQueries} from '../api/trending.queries';
@@ -156,6 +157,7 @@ export default function RankingList({
           title={`'${categoryName}' 실시간 핫딜`}
           products={live.data}
           onPressProduct={onPressProduct}
+          trackingSource="trending_live"
         />
       )}
 
@@ -172,6 +174,7 @@ export default function RankingList({
           title="추천 핫딜"
           products={recommended.data}
           onPressProduct={onPressProduct}
+          trackingSource="trending_recommend"
         />
       )}
     </ScrollView>
@@ -239,6 +242,7 @@ function RankedGrid({
               product={product}
               rank={rankFrom + i}
               onPress={id => onPress(id, position)}
+              trackingSource="ranking_tab"
             />
           </View>
         );
@@ -252,17 +256,23 @@ function CarouselSection({
   title,
   products,
   onPressProduct,
+  trackingSource,
 }: {
   title: string;
   products: ProductCardType[];
   onPressProduct: (id: number) => void;
+  trackingSource: ProductCardSource;
 }) {
   return (
     <View style={{gap: 8}}>
       <View style={{paddingHorizontal: H_PADDING}}>
         <Text className="text-lg font-bold text-gray-900">{title}</Text>
       </View>
-      <CarouselList products={products} onPressProduct={onPressProduct} />
+      <CarouselList
+        products={products}
+        onPressProduct={onPressProduct}
+        trackingSource={trackingSource}
+      />
     </View>
   );
 }

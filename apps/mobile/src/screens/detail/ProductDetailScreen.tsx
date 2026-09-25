@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {ActivityIndicator, Image, ScrollView, View} from 'react-native';
+import {ActivityIndicator, ScrollView, Text, View} from 'react-native';
 import {SystemBars} from 'react-native-edge-to-edge';
 import {useNavigation} from '@react-navigation/native';
 import {useQuery} from '@tanstack/react-query';
@@ -18,6 +18,7 @@ import {
 } from '@/shared/api/gql/graphql';
 import {ProductQueries} from '@/entities/product/product.queries';
 import ProductCarouselSection from '@/shared/components/product/ProductCarouselSection';
+import Thumbnail from '@/shared/components/product/Thumbnail';
 import CommentSection from '@/features/comment/ui/CommentSection';
 import PriceHistorySection from '@/features/price-history/ui/PriceHistorySection';
 import {UserQueries} from '@/entities/user/user.queries';
@@ -40,6 +41,7 @@ import {useWebviewContext} from '@/provider/WebViewRefProvider';
 
 import ProductDetailWebViewScreen from './ProductDetailWebViewScreen';
 import {parseSourceData} from './model/types';
+import {formatDealAgeNotice} from './lib/price-signals';
 import BottomCTA from './ui/BottomCTA';
 import ProductInfo from './ui/ProductInfo';
 import AffiliateNotice from './ui/AffiliateNotice';
@@ -52,6 +54,10 @@ import {
 import ShareSheet from './ui/ShareSheet';
 import KakaoOpenChatPrompt from './ui/KakaoOpenChatPrompt';
 import TossDetailImages from './ui/TossDetailImages';
+import ViewerCount, {
+  MIN_VIEWER_COUNT,
+  VIEWER_COUNT_HEIGHT,
+} from './ui/ViewerCount';
 import CommunityReaction from '@/features/community-reaction/ui/CommunityReaction';
 
 type Props = NativeStackScreenProps<
@@ -92,7 +98,11 @@ function NativeDetail({
 }) {
   const scrollRef = useRef<ScrollView>(null);
   const lastScrollY = useRef(0);
+  // 가격 추이 섹션의 스크롤 위치 — 판정 카드 "기준 보기"가 여기로 간다.
+  const priceHistoryY = useRef<number | null>(null);
   const [showTopButton, setShowTopButton] = useState(false);
+  // 조회수 띠가 꽉 찬 띠 → 떠 있는 알약으로 바뀌는 기준(web 의 센티널 translate-y-7 = 28px).
+  const [viewerCollapsed, setViewerCollapsed] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const navigation = useNavigation<DetailNavigationProp>();
   const {getWebViewRef} = useWebviewContext();
@@ -109,6 +119,12 @@ function NativeDetail({
   const {isPending: isGuidesPending} = useQuery(
     ProductQueries.guides({productId}),
   );
+  // 가격 판정도 같은 이유로 먼저 건다. web 은 서버(page.tsx)가 받아 첫 HTML 에 박는다 —
+  // 늦게 오면 가격 바로 아래 카드가 "없다가 생기며" 화면을 민다. 실패는 null(서비스가 삼킴).
+  const {data: verdict, isPending: isVerdictPending} = useQuery({
+    ...ProductQueries.priceVerdict({id: productId}),
+    enabled: !hidePrice,
+  });
 
   const {data: myUserId} = useQuery(UserQueries.me());
   const {isLogin} = useAuth();
@@ -211,7 +227,7 @@ function NativeDetail({
     />
   );
 
-  if (isPending || isGuidesPending) {
+  if (isPending || isGuidesPending || (!hidePrice && isVerdictPending)) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
         <ActivityIndicator size="small" color="#667085" />
@@ -230,6 +246,10 @@ function NativeDetail({
   }
 
   const source = parseSourceData(product.data);
+  const ageNotice = hidePrice
+    ? null
+    : formatDealAgeNotice(product.postedAt, product.isEnd);
+  const showViewerCount = (product.viewCount ?? 0) >= MIN_VIEWER_COUNT;
 
   return (
     <View className="flex-1 bg-white">
@@ -241,35 +261,78 @@ function NativeDetail({
         contentInsetAdjustmentBehavior="never"
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
+        stickyHeaderIndices={showViewerCount ? [0] : undefined}
         onScroll={e => {
           const y = e.nativeEvent.contentOffset.y;
           setShowTopButton(y > 200 && y < lastScrollY.current);
+          setViewerCollapsed(y > 28);
           lastScrollY.current = y;
         }}>
-        {product.thumbnail ? (
-          <Image
-            source={{uri: product.thumbnail}}
-            className="aspect-square w-full"
-            resizeMode="contain"
+        {showViewerCount ? (
+          <ViewerCount
+            count={product.viewCount ?? 0}
+            collapsed={viewerCollapsed}
           />
         ) : null}
-        <View className="rounded-t-3xl border-t border-gray-100 bg-white pt-6">
+        {/* web ProductDetailImage 와 같이 webp → 원본 → 카테고리 대체 그림 순서.
+            CDN 은 webp 만 갖고 있어 원본 확장자 URL 은 403 이다. */}
+        <View className="aspect-square w-full bg-gray-50">
+          <Thumbnail
+            uri={product.thumbnail}
+            categoryId={product.categoryId}
+            resizeMode="cover"
+          />
+        </View>
+        {/* web 처럼 카드가 이미지 아래쪽 24px 을 덮어 둥근 모서리 뒤로 이미지가 보인다. */}
+        <View className="-mt-6 rounded-t-3xl border-t border-gray-100 bg-white pt-6">
           <ProductInfo
             product={product}
             source={source}
             productId={productId}
             isUserLogin={isLogin}
             hidePrice={hidePrice}
+            verdict={verdict}
+            onPressVerdictHistory={() => {
+              if (priceHistoryY.current == null) return;
+              // sticky 조회수 띠가 섹션 제목을 덮지 않게 그 높이만큼 덜 내린다.
+              scrollRef.current?.scrollTo({
+                y:
+                  priceHistoryY.current -
+                  (showViewerCount ? VIEWER_COUNT_HEIGHT : 0),
+                animated: true,
+              });
+            }}
           />
+          {/* web ProductPriceContext — 오래된 딜 안내. 모델 페이지 링크는 앱에서
+              /deals 를 열지 않으므로(2026-09-09 결정) 뺐다. */}
+          {ageNotice ? (
+            <Text className="mx-5 mb-6 text-sm text-gray-500">{ageNotice}</Text>
+          ) : null}
         </View>
         {/* web 순서: 카톡방 → 쿠팡 고지 → 만료 경고 → 가격추이. 광고는 앱에서 제거. */}
         <KakaoOpenChatPrompt />
         <AffiliateNotice mallName={product.mallName} variant="coupang" />
-        <ExpiredProductWarning product={product} onPressProduct={pushProduct} />
+        <ExpiredProductWarning
+          product={product}
+          onPressProduct={pushProduct}
+          // 하위 경로는 ProductDetailScreen 이 웹뷰로 넘긴다 — 탭 스택·검색 스택
+          // 어디서 열려도 같은 라우트(DETAIL)로 간다(검색 스택엔 WEBVIEW 가 없다).
+          onPressMore={() =>
+            navigation.push(tabStackNavigations.DETAIL, {
+              path: `/products/${productId}/related`,
+            })
+          }
+        />
         {!hidePrice ? (
           <PriceHistorySection
             productId={productId}
             postedAt={product.postedAt}
+            productTitle={product.title}
+            productThumbnail={product.thumbnail}
+            onPressProduct={pushProduct}
+            onLayout={e => {
+              priceHistoryY.current = e.nativeEvent.layout.y;
+            }}
             currentPrice={
               product.price
                 ? Number(String(product.price).replace(/[^0-9.]/g, '')) || null
@@ -298,6 +361,7 @@ function NativeDetail({
           isError={isTogetherViewedError}
           onRetry={refetchTogetherViewed}
           onPressProduct={pushProduct}
+          trackingSource="together_viewed"
         />
         <ProductCarouselSection
           title={`${product.categoryName ?? '기타'} 인기 상품`}
@@ -308,6 +372,7 @@ function NativeDetail({
           isError={isCategoryError}
           onRetry={refetchCategory}
           onPressProduct={pushProduct}
+          trackingSource="category_popular"
         />
         <AffiliateNotice mallName={product.mallName} variant="general" />
         <View className="h-[24px] bg-gray-100" />

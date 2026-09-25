@@ -13,8 +13,10 @@ import RecommendButton from './RecommendButton';
 import TossBadges from './TossBadges';
 import TossIcon from './TossIcon';
 import NaverIcon from './NaverIcon';
+import PriceVerdictHero from './PriceVerdictHero';
 
 import type {ProductDetail, SourceData} from '../model/types';
+import type {PriceVerdict} from '../lib/price-signals';
 import {stripPriceFromTitle} from '@/entities/home/lib/toss';
 
 /** 라벨/값 한 줄. 색은 web ProductInfo 와 동일하게 맞춘다(사용자 결정 2026-08-12). */
@@ -39,12 +41,17 @@ export default function ProductInfo({
   productId,
   isUserLogin,
   hidePrice,
+  verdict,
+  onPressVerdictHistory,
 }: {
   product: ProductDetail;
   source: SourceData;
   productId: number;
   isUserLogin: boolean;
   hidePrice?: boolean;
+  /** 가격 판정(web PriceVerdictHero). READY+STRONG 일 때만 그려진다. */
+  verdict?: PriceVerdict | null;
+  onPressVerdictHistory?: () => void;
 }) {
   // 가격/할인율/평점/쿠폰은 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 쓴다.
   const display = source.toss ?? source.ohou;
@@ -133,6 +140,15 @@ export default function ProductInfo({
           <RecommendButton productId={productId} isUserLogin={isUserLogin} />
         </View>
       </View>
+
+      {/* web 순서: 추천 버튼 줄 → 가격 판정 → 토스 뱃지. */}
+      {!hidePrice ? (
+        <PriceVerdictHero
+          productId={productId}
+          verdict={verdict}
+          onPressHistory={() => onPressVerdictHistory?.()}
+        />
+      ) : null}
 
       {source.toss ? (
         <TossBadges toss={source.toss} hidePriceSignals={hidePrice} />

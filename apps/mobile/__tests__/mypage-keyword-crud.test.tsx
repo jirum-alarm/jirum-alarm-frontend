@@ -23,7 +23,13 @@ jest.mock('../src/shared/lib/persistence', () => ({
   removeAsyncStorage: jest.fn(() => Promise.resolve()),
 }));
 
+// 권한 요청은 네이티브 모듈(firebase·expo-notifications)을 끌어온다 — 호출 여부만 본다.
+jest.mock('../src/shared/lib/fcm/push-permission', () => ({
+  requestPushPermissionIfNeeded: jest.fn(() => Promise.resolve()),
+}));
+
 import {MyPageService} from '../src/shared/api/mypage';
+import {requestPushPermissionIfNeeded} from '../src/shared/lib/fcm/push-permission';
 import {useKeywordViewModel} from '../src/features/mypage/model/useKeywordViewModel';
 
 type ViewModel = ReturnType<typeof useKeywordViewModel>;
@@ -138,6 +144,8 @@ describe('키워드 목록 · 입력 검증', () => {
     // (react-query 가 mutationFn 에 두 번째 인자로 context 를 넘기므로 첫 인자만 본다)
     expect(add.mock.calls[0][0]).toEqual({keyword: '갤럭시'});
     expect(latest?.value).toBe('');
+    // web useKeywordInput 처럼 등록 성공 뒤 알림 권한을 묻는다(필요할 때만 — 판정은 유틸이).
+    expect(requestPushPermissionIfNeeded).toHaveBeenCalledTimes(1);
   });
 
   it('규칙 위반 상태에서 submit 해도 요청이 안 나간다', async () => {
@@ -151,6 +159,7 @@ describe('키워드 목록 · 입력 검증', () => {
       await flush();
     });
     expect(add).not.toHaveBeenCalled();
+    expect(requestPushPermissionIfNeeded).not.toHaveBeenCalled();
   });
 });
 

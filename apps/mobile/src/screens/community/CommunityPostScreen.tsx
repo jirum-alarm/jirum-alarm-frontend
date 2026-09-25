@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   FlatList,
   Pressable,
-  Share,
   StyleSheet,
   Text,
   View,
@@ -27,8 +26,7 @@ import type {TabStackParamList} from '@/navigations/tab/types';
 import Dots from '@/shared/components/icons/Dots';
 import ShareIcon from '@/shared/components/icons/share';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
-import {SERVICE_URL} from '@/constants/env';
-import {buildShareMessage, buildShareUrl} from '@/shared/lib/share';
+import ShareSheet from '@/screens/detail/ui/ShareSheet';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {CommunityComment} from '@/shared/api/community';
 
@@ -75,20 +73,12 @@ export default function CommunityPostScreen({route, navigation}: Props) {
     !!myUserId && String(post?.author?.id ?? '#none') === String(myUserId);
 
   /**
-   * 공유. web 은 채널 선택 시트(`ShareSheet`)를 쓰지만, 앱의 그 시트는
-   * `screens/detail/ui/ShareSheet` 로 **상품 전용**이다(URL 을 productId 로
-   * 조립한다). 커뮤니티 글 URL 을 받게 하려면 그 파일을 고쳐야 하므로,
-   * 지금은 OS 공유 시트로 같은 문구를 보낸다(shareRequest 브릿지가 하던 일과
-   * 동일 — `event.ts` 도 `Share.share` 로 처리한다).
+   * 공유 — web 과 같은 채널 시트(카톡·X·스레드·더보기·링크 복사)를 연다.
+   * 상세의 ShareSheet 를 `sharePath` 로 재사용한다(채널 클릭 이벤트
+   * `share_channel_click` 도 그 시트가 보낸다). 제목 뒤 " | 지름알림" 은 시트가 붙인다.
    */
-  const handleShare = useCallback(() => {
-    const title = `${post?.title || '커뮤니티'} | 지름알림`;
-    const url = buildShareUrl(`${SERVICE_URL}/community/${postId}`, 'native');
-    Share.share({
-      title,
-      message: buildShareMessage(title, url),
-    }).catch(() => {});
-  }, [post?.title, postId]);
+  const [shareOpen, setShareOpen] = useState(false);
+  const handleShare = useCallback(() => setShareOpen(true), []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -239,6 +229,13 @@ export default function CommunityPostScreen({route, navigation}: Props) {
           navigation.push(tabStackNavigations.COMMUNITY_WRITE, {postId})
         }
         onDeleted={() => navigation.goBack()}
+      />
+
+      <ShareSheet
+        visible={shareOpen}
+        onClose={() => setShareOpen(false)}
+        sharePath={`/community/${postId}`}
+        title={post.title || '커뮤니티'}
       />
     </View>
   );

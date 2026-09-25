@@ -4,6 +4,10 @@ import {Text, View} from 'react-native';
 import PressableScale from '@/shared/components/PressableScale';
 import DisplayProductSource from '@/shared/components/product/DisplayProductSource';
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
+import {
+  trackProductCardClick,
+  type ProductCardSource,
+} from '@/shared/lib/analytics/card-tracking';
 import {displayTime} from '@/shared/lib/format/price';
 import type {HotDealType} from '@/shared/api/gql/graphql';
 
@@ -31,6 +35,11 @@ import {
 type CardProps = {
   product: ProductCardType;
   onPress: (id: number) => void;
+  /**
+   * GA4 `product_card_click` 의 진입 경로. web 카드의 `source` prop 과 같다 —
+   * 없으면 추적하지 않는다(web 도 source 없는 목록은 안 보낸다).
+   */
+  trackingSource?: ProductCardSource;
 };
 
 /** GRID · PAGINATED_GRID · GRID_TABBED. 정사각 썸네일, 가격만 text-base 로 작다. */
@@ -39,6 +48,7 @@ export function GridCard({
   onPress,
   showTime = true,
   rank,
+  trackingSource,
 }: CardProps & {
   showTime?: boolean;
   /** 랭킹 뱃지(1-based). 발견 탭 랭킹에서만 쓴다 — 없으면 안 그린다. */
@@ -47,7 +57,11 @@ export function GridCard({
   return (
     <PressableScale
       style={{width: '100%'}}
-      onPress={() => onPress(Number(product.id))}
+      onPress={() => {
+        // web ProductGridCard: 뱃지와 같은 rank 를 추적에도 싣는다.
+        trackProductCardClick(trackingSource, product.id, rank);
+        onPress(Number(product.id));
+      }}
       accessibilityRole="button"
       accessibilityLabel={product.title}>
       <View>
@@ -86,11 +100,14 @@ export function GridCard({
 /** HORIZONTAL_SCROLL. 120px 고정 폭. */
 export const CAROUSEL_CARD_WIDTH = 120;
 
-export function CarouselCard({product, onPress}: CardProps) {
+export function CarouselCard({product, onPress, trackingSource}: CardProps) {
   return (
     <PressableScale
       style={{width: CAROUSEL_CARD_WIDTH}}
-      onPress={() => onPress(Number(product.id))}
+      onPress={() => {
+        trackProductCardClick(trackingSource, product.id);
+        onPress(Number(product.id));
+      }}
       accessibilityRole="button"
       accessibilityLabel={product.title}>
       <CardThumbnail
@@ -117,10 +134,13 @@ export function CarouselCard({product, onPress}: CardProps) {
  * LIST(프리미엄 핫딜). 가로 배치 76px 썸네일.
  * ★ web 은 시간을 displayTime 이 아니라 **formatDateToMMD** 로 쓴다(카드마다 다름).
  */
-export function ListCard({product, onPress}: CardProps) {
+export function ListCard({product, onPress, trackingSource}: CardProps) {
   return (
     <PressableScale
-      onPress={() => onPress(Number(product.id))}
+      onPress={() => {
+        trackProductCardClick(trackingSource, product.id);
+        onPress(Number(product.id));
+      }}
       accessibilityRole="button"
       accessibilityLabel={product.title}
       // ★className 은 PressableScale 안쪽 View 가 받는다. 안 넘기면 스타일 없는
@@ -166,10 +186,13 @@ export function ListCard({product, onPress}: CardProps) {
  * DOUBLE_ROW(유통기한 임박). 가로 배치 120px 썸네일, 시간 표기 없음.
  * web 은 이 카드에서 DisplayProductSource 에 time 을 안 넘긴다.
  */
-export function DoubleRowCard({product, onPress}: CardProps) {
+export function DoubleRowCard({product, onPress, trackingSource}: CardProps) {
   return (
     <PressableScale
-      onPress={() => onPress(Number(product.id))}
+      onPress={() => {
+        trackProductCardClick(trackingSource, product.id);
+        onPress(Number(product.id));
+      }}
       accessibilityRole="button"
       accessibilityLabel={product.title}
       // ★위 ListCard 와 같은 이유 — className 을 PressableScale 에 넘겨야 한다.

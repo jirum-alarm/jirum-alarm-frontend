@@ -11,7 +11,10 @@ import {
   resolveNativeRoute,
   type NativeRoute,
 } from '@/shared/lib/navigation/tab-routing';
-import {requestTrendingView} from '@/screens/trending/trending-view-store';
+import {
+  requestTrendingCategory,
+  requestTrendingView,
+} from '@/screens/trending/trending-view-store';
 
 export const navigationRef = createNavigationContainerRef();
 
@@ -108,6 +111,9 @@ function navigateToRoute(route: NativeRoute): boolean {
     // 넣으면 첫 렌더가 이전 view 로 한 번 나온 뒤 바뀌어 깜빡인다.
     if (route.trendingView) {
       requestTrendingView(route.trendingView);
+    }
+    if (route.trendingCategoryId !== undefined) {
+      requestTrendingCategory(route.trendingCategoryId);
     }
 
     if (!route.screen) {

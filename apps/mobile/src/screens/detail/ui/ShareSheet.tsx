@@ -6,7 +6,6 @@ import {
   Image,
   Linking,
   Modal,
-  Platform,
   Pressable,
   Share,
   StyleSheet,
@@ -23,27 +22,35 @@ import ShareIcon from '@/shared/components/icons/share';
 import ShareLink from '@/shared/components/icons/share-link';
 import ShareThreads from '@/shared/components/icons/share-threads';
 import ShareX from '@/shared/components/icons/share-x';
+import {SERVICE_URL} from '@/constants/env';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {showToast} from '@/shared/lib/feedback';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {
   buildCaption,
   buildIntentUrl,
-  buildKakaoAndroidSendIntent,
   buildKakaoLinkUrl,
   buildProductShareUrl,
   buildShareMessage,
+  buildShareUrl,
   type ShareChannel,
 } from '@/shared/lib/share';
+
+/**
+ * 무엇을 공유하나 — 상품(`productId`) 또는 임의 서비스 경로(`sharePath`, 예: `/community/12`).
+ * 커뮤니티 글도 web 과 같은 채널 시트를 쓰도록 경로를 받게 넓혔다(상품 호출부는 그대로).
+ */
+type ShareTarget =
+  | {productId: number; sharePath?: never}
+  | {sharePath: string; productId?: never};
 
 type Props = {
   visible: boolean;
   onClose: () => void;
-  productId: number;
   title: string;
   description?: string;
   imageUrl?: string;
-};
+} & ShareTarget;
 
 /** 시트 높이보다 크게 — 화면 아래에서 올라오게. */
 const SLIDE_DISTANCE = 420;
@@ -62,6 +69,7 @@ export default function ShareSheet({
   visible,
   onClose,
   productId,
+  sharePath,
   title,
   description,
   imageUrl,
@@ -138,18 +146,23 @@ export default function ShareSheet({
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
     Analytics.track('share_channel_click', {share_channel: channel});
 
-    const url = buildProductShareUrl(productId, channel);
+    const url =
+      sharePath !== undefined
+        ? buildShareUrl(`${SERVICE_URL}${sharePath}`, channel)
+        : buildProductShareUrl(productId, channel);
     const caption = buildCaption(shareTitle, description);
     const message = buildShareMessage(shareTitle, url, description);
 
     try {
       if (channel === 'kakao') {
-        const kakaoUrl =
-          Platform.OS === 'android'
-            ? buildKakaoAndroidSendIntent(message)
-            : // 카드는 카톡이 상세 페이지의 OG 를 긁어 만든다(scrap).
-              buildKakaoLinkUrl({url});
-        await Linking.openURL(kakaoUrl);
+        // 카드는 카톡이 공유 URL 의 OG 를 긁어 만든다(scrap). **두 플랫폼 공통.**
+        // ★Android 도 같은 kakaolink:// 로 보낸다. 예전 Android 경로는
+        // `intent:#Intent;action=SEND;...` 문자열을 Linking.openURL 에 넘겼는데,
+        // RN Android 의 openURL 은 `Intent(ACTION_VIEW, Uri.parse(url))` 로만 열어
+        // `intent:` 를 **파싱하지 않는다** — 받을 앱이 없어 예외 → "카톡을 열지 못했어요"
+        // 토스트로 떨어졌다(카드는커녕 텍스트도 안 갔다). kakaolink://send 는 카톡이
+        // ACTION_VIEW 로 받는 스킴이다(카카오 JS SDK 도 Android 에서 이 스킴 intent 로 보낸다).
+        await Linking.openURL(buildKakaoLinkUrl({url}));
       } else if (channel === 'x' || channel === 'threads') {
         await openInAppBrowser(buildIntentUrl(channel, caption, url));
       } else if (channel === 'copy') {

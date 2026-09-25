@@ -272,12 +272,16 @@ describe('웹이 하던 일의 인수 — 조용히 사라지는 것들', () => 
     expect(listScreen).toMatch(/RefreshControl/);
   });
 
-  it('공유는 네이티브가 직접 처리한다(웹 브릿지 SHARE_REQUEST 대체)', () => {
-    // web 은 ShareSheet → 브릿지 → event.ts 가 Share.share 를 불렀다.
-    // 네이티브 화면에는 그 브릿지가 안 오므로 화면이 직접 부른다.
-    expect(postScreen).toMatch(/Share\.share\(/);
-    expect(postScreen).toMatch(/buildShareUrl\(/);
-    expect(postScreen).toMatch(/\/community\/\$\{postId\}/);
+  it('공유는 web 과 같은 채널 시트(카톡·X·스레드·링크) — OS 시트만 띄우지 않는다', () => {
+    // web 커뮤니티 글은 ShareSheet(채널 선택 + share_channel_click)를 쓴다.
+    // 앱은 상세의 ShareSheet 를 sharePath 로 재사용한다(이벤트도 그 시트가 보낸다).
+    expect(postScreen).toContain("from '@/screens/detail/ui/ShareSheet'");
+    expect(postScreen).toMatch(/sharePath=\{`\/community\/\$\{postId\}`\}/);
+    expect(postScreen).not.toMatch(/Share\.share\(/);
+    const sheet = read('src/screens/detail/ui/ShareSheet.tsx');
+    expect(sheet).toContain(
+      "Analytics.track('share_channel_click', {share_channel: channel})",
+    );
   });
 });
 

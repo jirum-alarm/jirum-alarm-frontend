@@ -73,19 +73,9 @@ export const buildIntentUrl = (
 };
 
 /**
- * Android 에서 OS 시트 없이 카톡 패키지로 바로 SEND.
- * 카톡이 메시지를 받아 친구 선택 화면을 연다. URL 은 카톡이 OG 로 펼친다.
- */
-export const buildKakaoAndroidSendIntent = (message: string): string =>
-  'intent:#Intent;' +
-  'action=android.intent.action.SEND;' +
-  'type=text/plain;' +
-  'package=com.kakao.talk;' +
-  `S.android.intent.extra.TEXT=${encodeURIComponent(message)};` +
-  'end';
-
-/**
- * iOS 카톡 공유. kakaolink:// 는 로그인 SDK 가 이미 Info.plist 에 등록돼 있다.
+ * 카톡 공유(iOS·Android 공통). iOS 는 kakaolink:// 가 로그인 SDK 로 Info.plist 에
+ * 이미 등록돼 있고, Android 는 카톡이 ACTION_VIEW 로 이 스킴을 받는다
+ * (`<queries>` 에 com.kakao.talk 이 있어 패키지 가시성도 된다).
  *
  * ★ scrap 방식 = 카톡이 requestUrl 의 OG 태그를 직접 긁어 카드를 만든다.
  * 상세 페이지엔 og:title/description/image 가 상품별로 완비돼 있으므로

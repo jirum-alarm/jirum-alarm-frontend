@@ -25,11 +25,11 @@ export const PERIOD_LABELS: Record<SearchPeriod, string> = {
   '30d': '한달',
 };
 
-/** web PERIOD_HOURS(24·168·720)를 일 단위로 옮긴 것. 'all' 은 기간 필터 없음. */
-export const PERIOD_DAYS: Record<Exclude<SearchPeriod, 'all'>, number> = {
-  '1d': 1,
-  '7d': 7,
-  '30d': 30,
+/** web PERIOD_HOURS 와 같은 값. 'all' 은 기간 필터 없음. */
+export const PERIOD_HOURS: Record<Exclude<SearchPeriod, 'all'>, number> = {
+  '1d': 24,
+  '7d': 24 * 7,
+  '30d': 24 * 30,
 };
 
 export type SearchFilters = {
@@ -60,20 +60,19 @@ export function hasActiveFilters(filters: SearchFilters): boolean {
 }
 
 /**
- * 기간 → startDate.
+ * 기간 → startDate. web 과 같은 계산 — **지금부터 N시간 전**(롤링).
  *
- * ★web 은 `Date.now() - N시간` 으로 **매 렌더 새 값**을 만들고 useMemo 로 막는다.
- * 앱은 자정으로 끊는다 — 시각이 들어가면 queryKey 가 계속 바뀌어 캐시가 죽고
- * 무한 리페치가 된다(querykey-time-granularity-trap). 하루 한 번만 바뀐다.
- *
- * ★N일 전 **자정**이라 web 의 롤링 N일보다 최대 하루 넓다. 좁히는(오늘 자정)
- * 쪽을 고르면 00:10 에 '오늘'을 누른 사람이 10분치만 보게 된다 — 목록이 비어
- * 보이는 쪽이 조금 넓은 쪽보다 나쁘다(발견 탭 startDate 도 같은 규칙).
+ * ★예전엔 "N일 전 자정"으로 끊었다(queryKey 에 시각이 들어가면 캐시가 죽는다는
+ * 이유). 그런데 startDate 는 queryKey 에 **들어가지 않는다** — 키는
+ * `(keyword, filters)` 이고 startDate 는 queryFn 클로저가 조회 시점에 읽는다.
+ * 그래서 롤링으로 바꿔도 키는 그대로이고, 자정 절단은 web 보다 최대 하루 넓은
+ * 결과만 남겼다('오늘' 을 누르면 어제 0시부터가 나왔다).
+ * ⚠️startDate 를 queryKey 에 넣지 말 것 — 그 순간 렌더마다 키가 바뀐다.
  */
-export function periodStartDate(period: SearchPeriod): string | undefined {
+export function periodStartDate(
+  period: SearchPeriod,
+  now: number = Date.now(),
+): string | undefined {
   if (period === 'all') return undefined;
-  const d = new Date();
-  d.setDate(d.getDate() - PERIOD_DAYS[period]);
-  d.setHours(0, 0, 0, 0);
-  return d.toISOString();
+  return new Date(now - PERIOD_HOURS[period] * 60 * 60 * 1000).toISOString();
 }

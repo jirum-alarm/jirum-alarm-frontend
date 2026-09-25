@@ -3,13 +3,14 @@ import {Platform} from 'react-native';
 import {
   buildCaption,
   buildIntentUrl,
-  buildKakaoAndroidSendIntent,
   buildKakaoLinkUrl,
   buildProductShareUrl,
   buildShareMessage,
   buildShareUrl,
   KAKAO_NATIVE_APP_KEY,
 } from '../src/shared/lib/share';
+
+declare const __dirname: string;
 
 function queryParam(url: string, key: string) {
   const match = url.match(new RegExp(`[?&]${key}=([^&#]*)`));
@@ -89,14 +90,19 @@ describe('buildIntentUrl', () => {
 });
 
 describe('kakao native schemes', () => {
-  it('Android SEND 인텐트는 카톡 패키지로 바로 간다', () => {
-    const out = buildKakaoAndroidSendIntent('제목\nhttps://a.com/1');
-    expect(out.startsWith('intent:#Intent;')).toBe(true);
-    expect(out.includes('package=com.kakao.talk')).toBe(true);
-    expect(out.includes('android.intent.action.SEND')).toBe(true);
-    expect(out.includes(encodeURIComponent('제목\nhttps://a.com/1'))).toBe(
-      true,
+  it('★Android 도 kakaolink scrap 으로 보낸다 — intent: 문자열은 RN openURL 이 못 연다', () => {
+    // RN Android Linking.openURL = Intent(ACTION_VIEW, Uri.parse(url)). `intent:#Intent;...`
+    // 를 파싱하지 않아 받을 앱이 없다(예전 Android 경로가 토스트로만 떨어진 원인).
+    const fs = require('fs');
+    const path = require('path');
+    const sheet: string = fs.readFileSync(
+      path.join(__dirname, '../src/screens/detail/ui/ShareSheet.tsx'),
+      'utf8',
     );
+    expect(sheet).toContain('await Linking.openURL(buildKakaoLinkUrl({url}))');
+    // 주석엔 이유 설명으로 남아 있으므로 빌더 이름으로 본다.
+    expect(sheet).not.toContain('buildKakaoAndroidSendIntent');
+    expect(sheet).not.toContain("Platform.OS === 'android'");
   });
 
   it('kakaolink 는 앱키와 request_url 을 담는다 (scrap)', () => {

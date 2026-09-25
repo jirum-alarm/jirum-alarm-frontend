@@ -5,6 +5,7 @@ import ProductCard, {
   type ProductCardItem,
 } from '@/shared/components/product/ProductCard';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
+import type {ProductCardSource} from '@/shared/lib/analytics/card-tracking';
 
 /**
  * 가로 캐러셀 섹션.
@@ -19,6 +20,7 @@ export default function ProductCarouselSection({
   isError,
   onRetry,
   onPressProduct,
+  trackingSource,
 }: {
   title: string;
   products: ProductCardItem[] | undefined;
@@ -26,12 +28,18 @@ export default function ProductCarouselSection({
   isError?: boolean;
   onRetry?: () => void;
   onPressProduct: (id: number) => void;
+  /** GA4 `product_card_click` 진입 경로(web CarouselProductsSection `source`). */
+  trackingSource?: ProductCardSource;
 }) {
   const renderItem = useCallback(
     ({item}: {item: ProductCardItem}) => (
-      <ProductCard product={item} onPress={onPressProduct} />
+      <ProductCard
+        product={item}
+        onPress={onPressProduct}
+        trackingSource={trackingSource}
+      />
     ),
-    [onPressProduct],
+    [onPressProduct, trackingSource],
   );
 
   // 실패는 숨기지 않는다 — 빈 것과 구별돼야 사용자가 재시도할 수 있다.

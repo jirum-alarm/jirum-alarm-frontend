@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {ActivityIndicator, Pressable, Text, View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 
 import {OrderOptionType, ProductOrderType} from '@/shared/api/gql/graphql';
@@ -31,9 +31,12 @@ function deriveSearchKeyword(title: string): string {
 export default function ExpiredProductWarning({
   product,
   onPressProduct,
+  onPressMore,
 }: {
   product: ProductDetail;
   onPressProduct: (id: number) => void;
+  /** 더보기 → 관련 상품 전체(web `/products/{id}/related`). */
+  onPressMore?: () => void;
 }) {
   const postedAt = product.postedAt ? new Date(product.postedAt) : null;
   const days = postedAt
@@ -66,15 +69,28 @@ export default function ExpiredProductWarning({
       seen.add(k);
       return true;
     })
-    .slice(0, DISPLAY_LIMIT);
+    .slice(0, DISPLAY_LIMIT + 1);
+  // web 과 같은 판정: 거른 뒤에도 조회 한도만큼 남아야 "더 있다"고 본다.
+  const hasMore = similar.length >= FETCH_LIMIT;
 
   if (!isPending && !isError && similar.length === 0) return null;
 
   return (
     <View className="pt-7">
-      <Text className="px-5 text-lg font-semibold text-gray-900">
-        최신 핫딜을 확인해 보세요
-      </Text>
+      <View className="flex-row items-center justify-between px-5">
+        <Text className="text-lg font-semibold text-gray-900">
+          최신 핫딜을 확인해 보세요
+        </Text>
+        {hasMore && onPressMore ? (
+          <Pressable
+            onPress={onPressMore}
+            hitSlop={12}
+            accessibilityRole="link"
+            accessibilityLabel="최신 핫딜 더보기">
+            <Text className="text-xs font-medium text-gray-400">더보기</Text>
+          </Pressable>
+        ) : null}
+      </View>
       <Text className="px-5 pt-1 text-xs text-gray-500">
         이 상품은 올라온 지 며칠 지나 품절·종료됐을 수 있어요
       </Text>
@@ -86,7 +102,7 @@ export default function ExpiredProductWarning({
         </View>
       ) : (
         <View className="flex-row flex-wrap px-[17px] pt-3">
-          {similar.map(item => (
+          {similar.slice(0, DISPLAY_LIMIT).map(item => (
             <View
               key={String(item.id)}
               style={{

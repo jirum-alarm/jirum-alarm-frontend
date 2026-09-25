@@ -176,7 +176,13 @@ function useTabActions() {
   /**
    * 다른 탭에서 넘어옴 → 그 탭의 기본 화면으로.
    *
-   * 발견 탭의 기본은 실시간이다(web /trending → /trending/live 리다이렉트와 같다).
+   * 발견 탭은 **랭킹**으로 연다 — web 하단 네비가 다른 페이지에서 발견을 누르면
+   * `/trending/ranking` 으로 보내는 것과 같다(BottomNav getLink).
+   * (예전엔 web `/trending` → `/trending/live` 리다이렉트를 기준으로 실시간을
+   * 골랐는데, 그건 주소창·딥링크 경로의 규칙이지 탭 버튼의 규칙이 아니었다.)
+   * 딥링크·홈 CTA 처럼 화면을 지정하는 진입은 탭 press 를 거치지 않으므로
+   * 이 기본값과 무관하게 자기 view 를 넣는다(navigateToRoute·goDiscoverTab).
+   * 카테고리는 건드리지 않는다 — 탭을 오가도 고른 카테고리가 유지된다.
    *
    * ponytail: 홈·알림은 여기서 아무것도 안 한다 — 라우트가 1개라 "기본 화면"이
    * 곧 루트이고, 스택 되돌리기는 앞선 popTabStackToRoot 가 이미 했다.
@@ -187,7 +193,7 @@ function useTabActions() {
   const handleNavigateToRoot = useCallback(
     (tabName: TabName) => {
       if (tabName === tabNavigations.DISCOVER) {
-        requestTrendingView('live');
+        requestTrendingView('ranking');
         return;
       }
       const ref = getWebViewRef(tabName);

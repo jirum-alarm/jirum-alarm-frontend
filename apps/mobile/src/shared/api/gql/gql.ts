@@ -70,6 +70,7 @@ type Documents = {
   '\n  query ProductGuides($productId: Int!) {\n    productGuides(productId: $productId) {\n      id\n      title\n      content\n    }\n  }\n': typeof types.ProductGuidesDocument;
   '\n  mutation AddUserLikeOrDislike(\n    $target: UserLikeTarget!\n    $targetId: Int!\n    $isLike: Boolean\n  ) {\n    addUserLikeOrDislike(target: $target, targetId: $targetId, isLike: $isLike)\n  }\n': typeof types.AddUserLikeOrDislikeDocument;
   '\n  query ProductPriceHistory($id: Int!, $days: Int) {\n    product(id: $id) {\n      id\n      priceHistory(days: $days) {\n        basis\n        confidence\n        currency\n        disclaimer\n        pointCount\n        rangeDays\n        sampleCount\n        priceAxis\n        unitLabel\n        points {\n          date\n          price\n          deal {\n            id\n            title\n            displayTitle\n            parsedPrice\n            price\n            priceCurrency\n            postedAt\n            providerId\n            providerName\n            thumbnail\n            url\n            isSeed\n            categoryId\n          }\n        }\n      }\n    }\n  }\n': typeof types.ProductPriceHistoryDocument;
+  '\n  query ProductPriceVerdict($id: Int!) {\n    product(id: $id) {\n      id\n      priceVerdict {\n        status\n        nullReason\n        displayTier\n        basis\n        rangeDays\n        labelKey\n        headline\n        subline\n        historyPointCount\n      }\n    }\n  }\n': typeof types.ProductPriceVerdictDocument;
   '\n  query ProductAdditionalInfo($id: Int!) {\n    product(id: $id) {\n      id\n      url\n      provider {\n        id\n        nameKr\n      }\n      commentSummary {\n        additionalInfo\n        option\n        price\n        productId\n        purchaseMethod\n        satisfaction\n        summary\n      }\n    }\n  }\n': typeof types.ProductAdditionalInfoDocument;
   '\n  query CategorizedReactionKeywords($id: Int!) {\n    categorizedReactionKeywords(id: $id) {\n      items {\n        name\n        count\n        type\n        role\n        tag\n      }\n      lastUpdatedAt\n    }\n  }\n': typeof types.CategorizedReactionKeywordsDocument;
   '\n  query TogetherViewedProducts($productId: Int!, $limit: Int!) {\n    togetherViewedProducts(productId: $productId, limit: $limit) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n': typeof types.TogetherViewedProductsDocument;
@@ -201,6 +202,8 @@ const documents: Documents = {
     types.AddUserLikeOrDislikeDocument,
   '\n  query ProductPriceHistory($id: Int!, $days: Int) {\n    product(id: $id) {\n      id\n      priceHistory(days: $days) {\n        basis\n        confidence\n        currency\n        disclaimer\n        pointCount\n        rangeDays\n        sampleCount\n        priceAxis\n        unitLabel\n        points {\n          date\n          price\n          deal {\n            id\n            title\n            displayTitle\n            parsedPrice\n            price\n            priceCurrency\n            postedAt\n            providerId\n            providerName\n            thumbnail\n            url\n            isSeed\n            categoryId\n          }\n        }\n      }\n    }\n  }\n':
     types.ProductPriceHistoryDocument,
+  '\n  query ProductPriceVerdict($id: Int!) {\n    product(id: $id) {\n      id\n      priceVerdict {\n        status\n        nullReason\n        displayTier\n        basis\n        rangeDays\n        labelKey\n        headline\n        subline\n        historyPointCount\n      }\n    }\n  }\n':
+    types.ProductPriceVerdictDocument,
   '\n  query ProductAdditionalInfo($id: Int!) {\n    product(id: $id) {\n      id\n      url\n      provider {\n        id\n        nameKr\n      }\n      commentSummary {\n        additionalInfo\n        option\n        price\n        productId\n        purchaseMethod\n        satisfaction\n        summary\n      }\n    }\n  }\n':
     types.ProductAdditionalInfoDocument,
   '\n  query CategorizedReactionKeywords($id: Int!) {\n    categorizedReactionKeywords(id: $id) {\n      items {\n        name\n        count\n        type\n        role\n        tag\n      }\n      lastUpdatedAt\n    }\n  }\n':
@@ -575,6 +578,12 @@ export function graphql(
 export function graphql(
   source: '\n  query ProductPriceHistory($id: Int!, $days: Int) {\n    product(id: $id) {\n      id\n      priceHistory(days: $days) {\n        basis\n        confidence\n        currency\n        disclaimer\n        pointCount\n        rangeDays\n        sampleCount\n        priceAxis\n        unitLabel\n        points {\n          date\n          price\n          deal {\n            id\n            title\n            displayTitle\n            parsedPrice\n            price\n            priceCurrency\n            postedAt\n            providerId\n            providerName\n            thumbnail\n            url\n            isSeed\n            categoryId\n          }\n        }\n      }\n    }\n  }\n',
 ): typeof import('./graphql').ProductPriceHistoryDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query ProductPriceVerdict($id: Int!) {\n    product(id: $id) {\n      id\n      priceVerdict {\n        status\n        nullReason\n        displayTier\n        basis\n        rangeDays\n        labelKey\n        headline\n        subline\n        historyPointCount\n      }\n    }\n  }\n',
+): typeof import('./graphql').ProductPriceVerdictDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -72,7 +72,11 @@ export default function LikeScreen({navigation}: Props) {
         keyOf={item => String(item.id)}
         renderCard={item => (
           <View>
-            <GridCard product={item} onPress={openDetail} />
+            <GridCard
+              product={item}
+              onPress={openDetail}
+              trackingSource="wishlist"
+            />
             {/* web 은 썸네일 우상단에 하트를 얹는다(ProductGridCard actionIcon). */}
             <View className="absolute top-0 right-0">
               <WishlistHeart

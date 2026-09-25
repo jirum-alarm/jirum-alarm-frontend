@@ -1,13 +1,15 @@
 export {};
 
+declare const __dirname: string;
+
 /**
- * 검색 필터의 순수 로직. 특히 `startDate` 는 **자정으로 끊혀야** 한다 —
- * 시각이 들어가면 queryKey 가 렌더마다 바뀌어 무한 리페치가 된다
- * (querykey-time-granularity-trap). 소스텍스트 검사로는 못 잡는다.
+ * 검색 필터의 순수 로직. `startDate` 는 web 과 같은 **지금부터 N시간 전**이다.
+ * (queryKey 는 filters 로 잡으므로 시각이 들어가도 키가 흔들리지 않는다 —
+ * 아래 '키 안정' 테스트가 그 전제를 고정한다.)
  */
 const {
   DEFAULT_SEARCH_FILTERS,
-  PERIOD_DAYS,
+  PERIOD_HOURS,
   hasActiveFilters,
   periodStartDate,
 } = require('../src/entities/search/model/filters');
@@ -17,38 +19,37 @@ describe('기간 → startDate', () => {
     expect(periodStartDate('all')).toBeUndefined();
   });
 
-  it('자정으로 끊는다 — 같은 날 두 번 불러도 값이 같다(queryKey 안정)', () => {
-    const first = periodStartDate('7d');
-    const second = periodStartDate('7d');
-    expect(first).toBe(second);
-    // 로컬 자정이라 시각 성분이 0 이다.
-    const d = new Date(first);
-    expect(d.getHours()).toBe(0);
-    expect(d.getMinutes()).toBe(0);
-    expect(d.getSeconds()).toBe(0);
-    expect(d.getMilliseconds()).toBe(0);
+  it('web 과 같은 롤링 계산 — now - N시간 (자정 절단 아님)', () => {
+    // 로컬 시각 00:10 같은 경계에서도 '오늘'은 24시간 전이다(어제 0시가 아니다).
+    const now = Date.UTC(2026, 8, 25, 15, 10, 30, 123);
+    const HOUR = 60 * 60 * 1000;
+    expect(periodStartDate('1d', now)).toBe(
+      new Date(now - 24 * HOUR).toISOString(),
+    );
+    expect(periodStartDate('7d', now)).toBe(
+      new Date(now - 7 * 24 * HOUR).toISOString(),
+    );
+    expect(periodStartDate('30d', now)).toBe(
+      new Date(now - 30 * 24 * HOUR).toISOString(),
+    );
   });
 
-  it('기간이 길수록 더 과거를 가리킨다', () => {
-    const day = periodStartDate('1d');
-    const week = periodStartDate('7d');
-    const month = periodStartDate('30d');
-    expect(new Date(week).getTime()).toBeLessThan(new Date(day).getTime());
-    expect(new Date(month).getTime()).toBeLessThan(new Date(week).getTime());
+  it('web PERIOD_HOURS(24·168·720)와 같은 값이다', () => {
+    expect(PERIOD_HOURS).toEqual({'1d': 24, '7d': 168, '30d': 720});
   });
 
-  it('web PERIOD_HOURS(24·168·720)와 같은 길이다', () => {
-    expect(PERIOD_DAYS).toEqual({'1d': 1, '7d': 7, '30d': 30});
-    // N일 전 자정이므로 오늘 자정보다는 과거, N+1일 전보다는 미래다.
-    const midnightToday = new Date();
-    midnightToday.setHours(0, 0, 0, 0);
-    for (const [period, days] of Object.entries(PERIOD_DAYS)) {
-      const value = new Date(periodStartDate(period)).getTime();
-      const expected = new Date(midnightToday).setDate(
-        midnightToday.getDate() - (days as number),
-      );
-      expect(value).toBe(expected);
-    }
+  it('★startDate 는 queryKey 에 들어가지 않는다 — 렌더마다 키가 바뀌면 무한 리페치', () => {
+    // search.queries 를 require 하면 네이티브 모듈 사슬(async-storage)이 따라와 소스로 본다.
+    const fs = require('fs');
+    const path = require('path');
+    const queries: string = fs.readFileSync(
+      path.join(__dirname, '../src/entities/search/api/search.queries.ts'),
+      'utf8',
+    );
+    expect(queries).toContain(
+      'products: (keyword: string, filters: SearchFilters) =>',
+    );
+    expect(queries).toContain('queryKey: this.keys.products(keyword, filters)');
   });
 });
 

@@ -1,6 +1,8 @@
 import React, {useMemo, useState} from 'react';
 import {Dimensions, FlatList, Pressable, Text, View} from 'react-native';
 
+import type {ProductCardSource} from '@/shared/lib/analytics/card-tracking';
+
 import type {
   ContentPromotionSectionType,
   ProductCardType,
@@ -32,6 +34,9 @@ import {
 const HORIZONTAL_PADDING = 20; // web px-5
 const GRID_GAP_X = 12; // web gap-x-3
 const GRID_GAP_Y = 20; // web gap-y-5
+// GA4 product_card_click 진입 경로. web DynamicProductList 도 모든 레이아웃에
+// source="home_promotion" 을 박는다 — 이 디스패처는 홈 SDUI 전용이다.
+const SOURCE: ProductCardSource = 'home_promotion';
 
 type Props = {
   type: ContentPromotionSectionType;
@@ -79,7 +84,11 @@ export default function DynamicProductList({
 
     case 'HORIZONTAL_SCROLL':
       return (
-        <CarouselList products={products} onPressProduct={onPressProduct} />
+        <CarouselList
+          products={products}
+          onPressProduct={onPressProduct}
+          trackingSource={SOURCE}
+        />
       );
 
     case 'DOUBLE_ROW':
@@ -142,6 +151,7 @@ function ProductGrid({
             product={product}
             showTime={showTime}
             onPress={onPressProduct}
+            trackingSource={SOURCE}
           />
         </View>
       ))}
@@ -212,9 +222,12 @@ function PaginatedProductGrid({
 export function CarouselList({
   products,
   onPressProduct,
+  trackingSource,
 }: {
   products: ProductCardType[];
   onPressProduct: (id: number) => void;
+  /** GA4 `product_card_click` 진입 경로. 재사용처마다 다르다(web 도 호출처가 준다). */
+  trackingSource?: ProductCardSource;
 }) {
   return (
     <FlatList
@@ -225,7 +238,11 @@ export function CarouselList({
       contentContainerStyle={{paddingHorizontal: HORIZONTAL_PADDING}}
       ItemSeparatorComponent={() => <View style={{width: 12}} />}
       renderItem={({item}) => (
-        <CarouselCard product={item} onPress={onPressProduct} />
+        <CarouselCard
+          product={item}
+          onPress={onPressProduct}
+          trackingSource={trackingSource}
+        />
       )}
       // 카드 폭이 고정이라 미리 알려주면 초기 렌더가 빨라진다.
       getItemLayout={(_, index) => ({
@@ -282,6 +299,7 @@ function DoubleRowCarousel({
               key={product.id}
               product={product}
               onPress={onPressProduct}
+              trackingSource={SOURCE}
             />
           ))}
         </View>
@@ -305,7 +323,12 @@ function ProductList({
   return (
     <View style={{gap: 16}}>
       {products.slice(0, 4).map(product => (
-        <ListCard key={product.id} product={product} onPress={onPressProduct} />
+        <ListCard
+          key={product.id}
+          product={product}
+          onPress={onPressProduct}
+          trackingSource={SOURCE}
+        />
       ))}
     </View>
   );

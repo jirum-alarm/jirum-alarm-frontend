@@ -56,7 +56,11 @@ export default function SearchInitial({
       <View style={styles.section}>
         <SectionTitle title="추천 핫딜" />
         {hotDeals && hotDeals.length > 0 ? (
-          <CarouselList products={hotDeals} onPressProduct={onPressProduct} />
+          <CarouselList
+            products={hotDeals}
+            onPressProduct={onPressProduct}
+            trackingSource="search_recommend"
+          />
         ) : (
           // web 과 같은 이유로 빈 공간 대신 스켈레톤을 둔다 — 화면 구조가
           // 유지돼야 로딩이 "덜 만들어진 화면"으로 보이지 않는다.

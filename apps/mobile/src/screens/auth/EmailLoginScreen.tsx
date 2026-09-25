@@ -14,7 +14,8 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {AuthService} from '@/shared/api/auth/auth.service.ts';
 import {AuthQueries} from '@/entities/auth';
-import useToast from '@/shared/hooks/useToast.ts';
+import {Analytics} from '@/shared/lib/analytics/ga4';
+import {UserService} from '@/shared/api/user/user.service';
 import {handleLoginError, handleLoginSuccess} from './useSocialLogin/lib';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -35,7 +36,6 @@ const EmailLoginScreen = () => {
   const {mutate, isPending, isError} = useMutation({
     mutationFn: AuthService.loginUser,
   });
-  const {showToast} = useToast();
   const queryClient = useQueryClient();
   const {
     control,
@@ -51,14 +51,17 @@ const EmailLoginScreen = () => {
       {email: data.email, password: data.password},
       {
         onSuccess: async token => {
+          // 성공 토스트는 handleLoginSuccess 가 띄운다(여기서 또 띄우면 두 번 뜬다).
           await handleLoginSuccess(
             token.login.accessToken,
             token.login.refreshToken,
           );
+          // 소셜 로그인(useSocialLogin)과 같은 identify — 익명↔회원 프로필 병합.
+          const userId = await UserService.fetchMyId();
+          if (userId) Analytics.identify(userId);
           await queryClient.refetchQueries({
             queryKey: AuthQueries.keys.loginByRefreshToken(),
           });
-          showToast.info('로그인 성공! 알림 설정하고 핫딜을 받아보세요!');
         },
         onError: async () => {
           await handleLoginError();

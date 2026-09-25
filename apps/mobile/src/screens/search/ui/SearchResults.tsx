@@ -119,6 +119,7 @@ export default function SearchResults({
               renderCard={(item, index) => (
                 <GridCard
                   product={item}
+                  trackingSource="search"
                   onPress={id => {
                     recordClick(id, index);
                     onPressProduct(id);

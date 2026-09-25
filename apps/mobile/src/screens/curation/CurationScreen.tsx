@@ -1,5 +1,5 @@
-import React, {useCallback, useLayoutEffect, useMemo} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import React, {useCallback, useLayoutEffect, useMemo, useState} from 'react';
+import {ActivityIndicator, Text, View} from 'react-native';
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -14,17 +14,20 @@ import {
   buildPromotionSections,
   findPromotionSectionById,
 } from '@/entities/home/model/promotion-sections';
-import type {ProductCardType} from '@/entities/home/model/types';
+import type {
+  ContentPromotionSection,
+  ProductCardType,
+} from '@/entities/home/model/types';
 import CurationGrid from '@/entities/home/ui/CurationGrid';
+import {ChipRow} from '@/entities/home/ui/TossHomeSection';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {
   DetailHeaderActions,
   DetailHeaderBackButton,
-  DetailHeaderTitle,
 } from '@/screens/detail/ui/ProductDetailHeader';
-import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
+import {openSearch} from '@/shared/lib/navigation/search-flow';
 
 /**
  * 더보기(큐레이션) 화면. web: app/(desktop-ready)/curation/[id]
@@ -49,7 +52,9 @@ export default function CurationScreen({
   const {sectionId} = route.params;
 
   // 섹션 구성은 홈과 같은 소스에서 만든다(탭 소스 포함).
-  const {data: tabSources} = useQuery(HomeQueries.tabSources());
+  const {data: tabSources, isPending: isTabSourcesPending} = useQuery(
+    HomeQueries.tabSources(),
+  );
   const section = useMemo(() => {
     const sections = buildPromotionSections({
       communityProviders: tabSources?.communityProviders ?? [],
@@ -59,27 +64,49 @@ export default function CurationScreen({
   }, [tabSources, sectionId]);
 
   /**
-   * 상단 바를 상세 화면과 같은 모양으로 — 로고+부제(왼쪽), 검색·공유(오른쪽).
-   * 제목만 있는 기본 헤더보다 앱 안이라는 게 분명하고, 상세로 들어갔다
-   * 나올 때 헤더가 바뀌지 않아 흐름이 끊기지 않는다.
+   * 섹션 탭 칩. web CurationContainer 와 같다 — 첫 탭이 기본이고, 탭의
+   * variables 를 섹션 variables 위에 덮어 조회한다.
+   * ★탭 목록이 늦게 오면(tabSources) 첫 렌더엔 폴백 탭이라 id 가 바뀐다.
+   * 그래서 고른 id 가 목록에 없으면 첫 탭으로 떨어뜨린다(state 를 되돌리지 않는다).
    */
+  const [pickedTabId, setPickedTabId] = useState<string | undefined>();
+  const activeTab =
+    section?.tabs?.find(tab => tab.id === pickedTabId) ?? section?.tabs?.[0];
+  const activeSection = useMemo<ContentPromotionSection | undefined>(
+    () =>
+      section && activeTab
+        ? {
+            ...section,
+            dataSource: {
+              ...section.dataSource,
+              variables: {
+                ...section.dataSource.variables,
+                ...activeTab.variables,
+              },
+            },
+          }
+        : section,
+    [section, activeTab],
+  );
+
+  /**
+   * 상단 바 — 뒤로 · 섹션 제목 · 검색 (web CurationPageHeader 와 같은 구성).
+   * 뒤로가기·검색은 상세와 같은 규격 아이콘을 쓴다.
+   */
+  const title = section?.title ?? '';
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: () => null,
-      headerLeft: ({canGoBack}) => (
-        <View className="flex-row items-center">
-          {canGoBack ? (
-            <DetailHeaderBackButton onPress={() => navigation.goBack()} />
-          ) : null}
-          <DetailHeaderTitle onPress={() => goTabHome(navigation)} />
-        </View>
-      ),
-      // ★공유는 뺀다. ShareSheet 는 productId 전용이라 목록엔 맞지 않는다.
+      title,
+      headerLeft: ({canGoBack}) =>
+        canGoBack ? (
+          <DetailHeaderBackButton onPress={() => navigation.goBack()} />
+        ) : null,
+      // ⚠️web 헤더엔 공유 버튼이 있다 — 아직 안 옮겼다(ShareSheet 가 sharePath 를 받으므로 붙일 수 있다).
       headerRight: () => (
         <DetailHeaderActions onPressSearch={() => openSearch(navigation)} />
       ),
     });
-  }, [navigation]);
+  }, [navigation, title]);
 
   const handlePressProduct = useCallback(
     (id: number) => {
@@ -88,29 +115,70 @@ export default function CurationScreen({
     [navigation],
   );
 
-  if (!section) {
-    // 섹션 목록이 아직 안 왔거나 없는 id.
+  if (!section || !activeSection) {
+    // 탭 소스(커뮤니티·쇼핑몰 id)가 아직 오는 중이면 기다린다.
+    if (isTabSourcesPending) {
+      return (
+        <View className="flex-1 items-center justify-center bg-white">
+          <ActivityIndicator size="small" color="#667085" />
+        </View>
+      );
+    }
+    // 없는 id(낡은 딥링크 등). web 은 notFound() — 스피너에 멈춰 두지 않는다.
     return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="small" color="#667085" />
+      <View className="flex-1 items-center justify-center bg-white px-5">
+        <Text className="text-base font-semibold text-gray-900">
+          페이지를 찾을 수 없어요
+        </Text>
+        <Text className="mt-2 text-center text-sm text-gray-500">
+          종료되었거나 주소가 바뀐 모아보기예요.
+        </Text>
       </View>
     );
   }
 
-  return supportsInfinite(section.dataSource.queryName) ? (
-    <InfiniteList section={section} onPressProduct={handlePressProduct} />
+  // 탭을 바꾸면 목록을 갈아끼운다(스크롤 위치가 이전 탭에서 넘어오지 않게).
+  const listKey = `${activeSection.id}-${activeTab?.id ?? ''}`;
+  // 칩 줄이 있으면 컨테이너 gap 이 간격을 잡는다(토스 더보기와 같은 규칙).
+  const topSpacing = section.tabs?.length ? 'tight' : 'normal';
+  const list = supportsInfinite(activeSection.dataSource.queryName) ? (
+    <InfiniteList
+      key={listKey}
+      section={activeSection}
+      onPressProduct={handlePressProduct}
+      topSpacing={topSpacing}
+    />
   ) : (
-    <SingleList section={section} onPressProduct={handlePressProduct} />
+    <SingleList
+      key={listKey}
+      section={activeSection}
+      onPressProduct={handlePressProduct}
+      topSpacing={topSpacing}
+    />
+  );
+
+  if (!section.tabs?.length) return list;
+
+  return (
+    <View className="flex-1 gap-2 bg-white pt-2">
+      <ChipRow
+        items={section.tabs.map(tab => ({id: tab.id, label: tab.label}))}
+        activeId={activeTab?.id ?? ''}
+        onSelect={setPickedTabId}
+      />
+      {list}
+    </View>
   );
 }
 
 type ListProps = {
-  section: NonNullable<ReturnType<typeof findPromotionSectionById>>;
+  section: ContentPromotionSection;
   onPressProduct: (id: number) => void;
+  topSpacing: 'normal' | 'tight';
 };
 
 /** 커서 페이지네이션 — web 의 useInView 센티넬을 onEndReached 로 대체. */
-function InfiniteList({section, onPressProduct}: ListProps) {
+function InfiniteList({section, onPressProduct, topSpacing}: ListProps) {
   const {
     data,
     isPending,
@@ -135,6 +203,7 @@ function InfiniteList({section, onPressProduct}: ListProps) {
       isError={isError}
       label={section.title}
       onRetry={refetch}
+      topSpacing={topSpacing}
       onEndReached={() => {
         if (hasNextPage && !isFetchingNextPage) fetchNextPage();
       }}
@@ -150,7 +219,7 @@ function InfiniteList({section, onPressProduct}: ListProps) {
 }
 
 /** 커서를 지원하지 않는 섹션(랭킹·취향저격). web 도 단일 조회다. */
-function SingleList({section, onPressProduct}: ListProps) {
+function SingleList({section, onPressProduct, topSpacing}: ListProps) {
   const {data, isPending, isError, refetch} = useQuery(
     curationSingleQuery(section),
   );
@@ -164,6 +233,7 @@ function SingleList({section, onPressProduct}: ListProps) {
       isError={isError}
       label={section.title}
       onRetry={refetch}
+      topSpacing={topSpacing}
     />
   );
 }

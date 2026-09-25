@@ -42,8 +42,27 @@ describe('★웹뷰 주입에 기대던 경로를 전부 옮겼다', () => {
     // 발견 탭 재탭은 맨 위로가 아니라 화면 전환이다(사용자 지시 2026-08-18).
     const nav = read('src/navigations/tab/MainTabNavigator.tsx');
     expect(nav).toContain('toggleTrendingView');
-    // 다른 탭에서 넘어올 때는 기본 화면(실시간)으로
-    expect(nav).toContain('requestTrendingView');
+  });
+
+  it('★다른 탭에서 발견 탭을 누르면 랭킹 — web 하단 네비(/trending/ranking)와 같다', () => {
+    const nav = read('src/navigations/tab/MainTabNavigator.tsx');
+    const webNav = web('shared/ui/layout/BottomNav.tsx');
+    // web: 발견이 아닌 페이지에서 누르면 TRENDING_RANKING
+    expect(webNav).toContain(
+      'pathName === PAGE.TRENDING_RANKING ? PAGE.TRENDING_LIVE : PAGE.TRENDING_RANKING',
+    );
+    const block = nav.slice(
+      nav.indexOf('const handleNavigateToRoot'),
+      nav.indexOf('const onTabPress'),
+    );
+    expect(block).toContain("requestTrendingView('ranking')");
+    expect(block).not.toContain("requestTrendingView('live')");
+  });
+
+  it('★카테고리도 store 가 정본 — 밖(?tab=N)에서 지정할 수 있다', () => {
+    expect(screen).toContain('useTrendingCategory()');
+    expect(screen).toContain('onSelect={requestTrendingCategory}');
+    expect(screen).not.toContain('useState<number>(ALL_CATEGORY.id)');
   });
 
   it('★view 는 store 가 정본 — 화면이 useState 로 갖지 않는다', () => {

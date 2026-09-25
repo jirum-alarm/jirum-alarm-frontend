@@ -9,6 +9,7 @@ import {
   OKACHAT_LINK,
   hasJoinedOkachat,
   markOkachatJoined,
+  trackOkachatEvent,
 } from '../lib/okachat';
 
 /**
@@ -29,11 +30,18 @@ export default function KakaoOpenChatPrompt({href}: {href?: string}) {
     };
   }, []);
 
+  // web SoftKakaoOpenChatPrompt: 노출 조건을 통과해 보이게 된 순간 한 번.
+  useEffect(() => {
+    if (!visible) return;
+    trackOkachatEvent('okachat_prompt_view', 'soft');
+  }, [visible]);
+
   if (!visible) return null;
 
   return (
     <PressableScale
       onPress={async () => {
+        trackOkachatEvent('okachat_prompt_click', 'soft');
         await markOkachatJoined();
         setVisible(false);
         openInAppBrowser(link);

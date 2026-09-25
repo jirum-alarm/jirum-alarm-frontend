@@ -281,6 +281,16 @@ export enum DateInterval {
   Weekly = 'WEEKLY',
 }
 
+export type DoubleRowSection = BaseSection & {
+  __typename?: 'DoubleRowSection';
+  dataSource: ApiQuery;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
+
 export type ExistsUserOutput = {
   __typename?: 'ExistsUserOutput';
   email: Scalars['Boolean']['output'];
@@ -317,6 +327,15 @@ export type GroupSection = BaseSection & {
   title: Scalars['String']['output'];
   type: SectionDisplayType;
   viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
+
+export type HomePage = {
+  __typename?: 'HomePage';
+  /** 실험 ID (예: home_hero_v1) */
+  experimentId: Scalars['String']['output'];
+  sections: Array<BaseSection>;
+  /** 배정 변인: control | hotdeal | under10000 | mall */
+  variant: Scalars['String']['output'];
 };
 
 export type HorizontalScrollSection = BaseSection & {
@@ -438,6 +457,14 @@ export type HotDealTypeCountOutput = {
   hotDealType: HotDealType;
 };
 
+export type KakaoProfitLinkOutput = {
+  __typename?: 'KakaoProfitLinkOutput';
+  /** 실패 시 사유. 성공이면 null. */
+  error?: Maybe<Scalars['String']['output']>;
+  /** 발급된 카카오쇼핑 추천리워드 링크 (clink.kakao.com/sp/…) */
+  profitLink?: Maybe<Scalars['String']['output']>;
+};
+
 export type KeywordCountOutput = {
   __typename?: 'KeywordCountOutput';
   count: Scalars['Int']['output'];
@@ -475,6 +502,7 @@ export type LayoutTab = {
   id: Scalars['ID']['output'];
   label: Scalars['String']['output'];
   variables?: Maybe<Scalars['JSONObject']['output']>;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
 export type ListSection = BaseSection & {
@@ -622,13 +650,18 @@ export type Mutation = {
   createUserProduct: Scalars['Int']['output'];
   /** 어드민) 상품 hard delete */
   hardDeleteProductByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 카카오쇼핑 상품 URL을 추천리워드 링크(clink.kakao.com/sp/…)로 발급. product 에는 쓰지 않고 링크만 반환. */
+  issueKakaoProfitLink: KakaoProfitLinkOutput;
+  /** 어드민) 오늘의집 상품 URL을 큐레이터 제휴 링크(?af)로 발급. product 에는 쓰지 않고 링크만 반환. */
+  issueOhouProfitLink: OhouProfitLinkOutput;
+  /** 어드민) 토스 상품 URL(또는 tacaItemId)을 우리 publisher 수익링크로 발급. product 에는 쓰지 않고 링크만 반환. /c/{id}·/t/{id}·toss.im/_m/… 지원, /p/ 불가. */
+  issueTossProfitLink: TossProfitLinkOutput;
   /** 로그인 */
   login: TokenOutput;
   /** 리프레시 토큰으로 로그인 */
   loginByRefreshToken: TokenOutput;
   /** 로그아웃 */
   logout: Scalars['Boolean']['output'];
-  matchProductToDanawaProduct: Scalars['Boolean']['output'];
   /** 모든 알림 읽음 처리 */
   readAllNotifications: Scalars['Boolean']['output'];
   /** 모든 알림 읽음 처리 */
@@ -669,15 +702,19 @@ export type Mutation = {
   sendNotificationByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 광고 on/off (킬스위치) */
   setAdActive: Scalars['Boolean']['output'];
+  /** 어드민) 카카오쇼핑 추천리워드 세션 갱신. store.kakao.com 로그인 후 공유하기 → affiliate-link 요청 Copy as cURL. 성공 시 kakao:no_session·기존 disabled(store.kakao.com) 미발급건을 retry 큐에 재진입시킨다. */
+  setKakaoSession: Scalars['Boolean']['output'];
   /** 어드민) 모델 페이지 발행 토글 */
   setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 네이버 브랜드커넥트 세션 쿠키 갱신. brandconnect.naver.com 로그인 → DevTools 요청 Cookie 헤더 원문(NID_AUT/NID_SES 포함) 붙여넣기. 성공 시 nv:no_token 미발급건을 retry 큐에 재진입시킨다. */
   setNaverBcSession: Scalars['Boolean']['output'];
+  /** 어드민) 오늘의집 큐레이터 세션 갱신. 로그인 후 상품 공유하기 → sharelink 요청 Copy as cURL. cookie+userId 를 저장하고, curl에 contentId가 있으면 ?af 발급으로 검증한다. */
+  setOhouSession: Scalars['Boolean']['output'];
   /** 대표 매핑 지정 (id 기준) */
   setPrimaryProductMapping: Scalars['Boolean']['output'];
   /** 어드민) 세시간전(3hoursahead) refresh 쿠키 갱신. 3hoursahead.com 구글 로그인 → DevTools > Application > Cookies 의 `r` 값(JWT 원문) 붙여넣기. 쿠키는 7일 만료라 주 1회 갱신 필요. 성공 시 3ha:no_token 미발급건을 retry 큐에 재진입시킨다. */
   setThreeHaSession: Scalars['Boolean']['output'];
-  /** 어드민) 토스 세션 토큰(TBIZAUTH) 갱신. sharelink.toss.im 로그인 → DevTools > Application > Cookies > TBIZAUTH 값(base64 원문) 붙여넣기. 성공 시 toss:no_token 미발급건을 retry 큐에 재진입시킨다. */
+  /** 어드민) 토스 세션 토큰(TBIZAUTH) 갱신. TBIZAUTH 원문, Cookie 헤더, 또는 curl(-b/-H cookie)을 붙여넣으면 TBIZAUTH만 저장. 성공 시 toss:no_token 미발급건을 retry 큐에 재진입시킨다. */
   setTossSession: Scalars['Boolean']['output'];
   /** 회원가입 */
   signup: SignupOutput;
@@ -872,13 +909,21 @@ export type MutationHardDeleteProductByAdminArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type MutationIssueKakaoProfitLinkArgs = {
+  url: Scalars['String']['input'];
+};
+
+export type MutationIssueOhouProfitLinkArgs = {
+  url: Scalars['String']['input'];
+};
+
+export type MutationIssueTossProfitLinkArgs = {
+  url: Scalars['String']['input'];
+};
+
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
-};
-
-export type MutationMatchProductToDanawaProductArgs = {
-  productId: Scalars['Int']['input'];
 };
 
 export type MutationReadNotificationArgs = {
@@ -966,6 +1011,10 @@ export type MutationSetAdActiveArgs = {
   isActive: Scalars['Boolean']['input'];
 };
 
+export type MutationSetKakaoSessionArgs = {
+  curl: Scalars['String']['input'];
+};
+
 export type MutationSetModelPagePublishedByAdminArgs = {
   id: Scalars['Int']['input'];
   isPublished: Scalars['Boolean']['input'];
@@ -973,6 +1022,10 @@ export type MutationSetModelPagePublishedByAdminArgs = {
 
 export type MutationSetNaverBcSessionArgs = {
   cookie: Scalars['String']['input'];
+};
+
+export type MutationSetOhouSessionArgs = {
+  curl: Scalars['String']['input'];
 };
 
 export type MutationSetPrimaryProductMappingArgs = {
@@ -1156,6 +1209,14 @@ export enum OauthProvider {
   Naver = 'NAVER',
 }
 
+export type OhouProfitLinkOutput = {
+  __typename?: 'OhouProfitLinkOutput';
+  /** 실패 시 사유. 성공이면 null. */
+  error?: Maybe<Scalars['String']['output']>;
+  /** 발급된 오늘의집 큐레이터 링크 (ozip.me/…?af) */
+  profitLink?: Maybe<Scalars['String']['output']>;
+};
+
 export enum OrderOptionType {
   Asc = 'ASC',
   Desc = 'DESC',
@@ -1256,6 +1317,38 @@ export type PriceRangeCountOutput = {
   /** 가격 구간 라벨 (예: 1만~3만) */
   priceRange: Scalars['String']['output'];
 };
+
+export enum PriceVerdictDisplayTier {
+  Hidden = 'HIDDEN',
+  Neutral = 'NEUTRAL',
+  Strong = 'STRONG',
+}
+
+export enum PriceVerdictLabelKey {
+  AboveTypical = 'ABOVE_TYPICAL',
+  BelowTypical = 'BELOW_TYPICAL',
+  NearHigh = 'NEAR_HIGH',
+  NearLowest = 'NEAR_LOWEST',
+  Typical = 'TYPICAL',
+}
+
+export enum PriceVerdictNullReason {
+  BasisNotAllowed = 'BASIS_NOT_ALLOWED',
+  CurrencyMismatch = 'CURRENCY_MISMATCH',
+  InconsistentPrice = 'INCONSISTENT_PRICE',
+  LowConfidence = 'LOW_CONFIDENCE',
+  NoHistory = 'NO_HISTORY',
+  NoMapping = 'NO_MAPPING',
+  PrivateOrMissingSeed = 'PRIVATE_OR_MISSING_SEED',
+  SeedPriceMissing = 'SEED_PRICE_MISSING',
+  TooFewPoints = 'TOO_FEW_POINTS',
+  UnitAxis = 'UNIT_AXIS',
+}
+
+export enum PriceVerdictStatus {
+  Ready = 'READY',
+  Unavailable = 'UNAVAILABLE',
+}
 
 export type PriceVisualConfig = {
   __typename?: 'PriceVisualConfig';
@@ -1496,8 +1589,10 @@ export type ProductOutput = {
   /** 왜 핫딜인지 가격 컨텍스트 (게이트 통과 시에만, 상세 전용) */
   priceContext?: Maybe<PriceContext>;
   priceCurrency?: Maybe<Scalars['String']['output']>;
-  /** 일별 핫딜가 추이. 매핑(HIGH) 우선, 없으면 유사상품+가격게이트(LOW). 점 부족 시 null */
+  /** 일별 핫딜가 추이. brand_item/매핑∪클러스터(HIGH) 우선, 점 부족 시 유사 폴백(LOW). 2점 미만이면 null */
   priceHistory?: Maybe<ProductPriceHistory>;
+  /** 상세 히어로 가격 판정(지금 사도 되나). 30일 MAPPING HIGH만 READY. 프론트는 READY+STRONG만 렌더. 실패해도 객체를 내려 nullReason 계측. */
+  priceVerdict?: Maybe<ProductPriceVerdict>;
   /** 상품 가격 목록 */
   prices?: Maybe<Array<ProductPrice>>;
   productMapping?: Maybe<ProductMapping>;
@@ -1557,6 +1652,34 @@ export enum ProductPriceTarget {
   Mall = 'MALL',
 }
 
+/** 상세 히어로 가격 판정. v1 프론트는 status=READY && displayTier=STRONG 만 렌더. UNAVAILABLE 이어도 객체를 내려 nullReason 을 계측한다. */
+export type ProductPriceVerdict = {
+  __typename?: 'ProductPriceVerdict';
+  /** MAPPING | CLUSTER */
+  basis?: Maybe<Scalars['String']['output']>;
+  /** HIGH only in v1 READY */
+  confidence?: Maybe<Scalars['String']['output']>;
+  /** KRW | USD */
+  currency?: Maybe<Scalars['String']['output']>;
+  /** seedPrice - windowMinPrice. 음수 = 지금이 더 쌈 */
+  deltaWon?: Maybe<Scalars['Float']['output']>;
+  displayTier: PriceVerdictDisplayTier;
+  headline?: Maybe<Scalars['String']['output']>;
+  historyPointCount?: Maybe<Scalars['Int']['output']>;
+  labelKey?: Maybe<PriceVerdictLabelKey>;
+  nullReason?: Maybe<PriceVerdictNullReason>;
+  percentile?: Maybe<Scalars['Float']['output']>;
+  rangeDays?: Maybe<Scalars['Int']['output']>;
+  /** max(0, -deltaWon) */
+  savingsWon?: Maybe<Scalars['Float']['output']>;
+  seedPrice?: Maybe<Scalars['Float']['output']>;
+  status: PriceVerdictStatus;
+  subline?: Maybe<Scalars['String']['output']>;
+  /** KST YYYY-MM-DD */
+  windowMinDate?: Maybe<Scalars['String']['output']>;
+  windowMinPrice?: Maybe<Scalars['Float']['output']>;
+};
+
 export type ProfitLinkErrorCountOutput = {
   __typename?: 'ProfitLinkErrorCountOutput';
   count: Scalars['Int']['output'];
@@ -1595,11 +1718,19 @@ export type ProfitLinkMissedProductOutput = {
 
 export type ProfitLinkProviderHealthOutput = {
   __typename?: 'ProfitLinkProviderHealthOutput';
+  /** 90일 중 판매가 있던 날 수 — 희소 provider 판별 */
+  activeDays90d: Scalars['Int']['output'];
   /** 최근 7d localCommission 합 (KRW, GROSS 추정 — 추세용) */
   commission7d?: Maybe<Scalars['Float']['output']>;
+  /** 최근 30d localCommission 합 (KRW, GROSS 추정). 7d 는 희소 provider 를 0원으로 보이게 해서(쿠팡 7d 0원 / 30d 26,537원) 표시 기본값은 이쪽. */
+  commission30d?: Maybe<Scalars['Float']['output']>;
+  /** 마지막 판매 row 도착 이후 경과일 — 침묵 판정 입력 */
+  daysSinceLastSale?: Maybe<Scalars['Float']['output']>;
   issued7d: Scalars['Int']['output'];
   /** 최근 24h 발급 딜 수 (딜 생성시각 기준 근사) */
   issued24h: Scalars['Int']['output'];
+  /** 최근 30d 발급 딜 수 — 발급당 수익 분모 */
+  issued30d: Scalars['Int']['output'];
   /** 발급 보유 딜의 마지막 생성 시각 */
   lastIssuedProductAt?: Maybe<Scalars['DateTime']['output']>;
   /** 마지막 판매 row 도착 시각 (postback 생존) */
@@ -1608,6 +1739,8 @@ export type ProfitLinkProviderHealthOutput = {
   sales7d: Scalars['Int']['output'];
   sales24h: Scalars['Int']['output'];
   sales30d: Scalars['Int']['output'];
+  /** 판매 파이프 판정: ok | silent(콜백 끊김=사고) | sparse(원래 드물어 감시 제외). 배치 알람과 같은 기준(common/lib/affiliate-sales-health) — 프론트가 자체 판정하지 않는다. */
+  salesHealth: Scalars['String']['output'];
 };
 
 export type ProfitLinkQueueHealthOutput = {
@@ -1723,13 +1856,18 @@ export type Query = {
   getSimilarProducts: Array<ProductOutput>;
   /** 게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백) */
   guestRecommendedHotDeals: Array<ProductOutput>;
+  /** 어드민) 카카오쇼핑 추천리워드 세션 저장 여부(true면 발급 가동중) */
+  hasKakaoSession: Scalars['Boolean']['output'];
   /** 어드민) 네이버 브랜드커넥트 세션 저장 여부(true면 발급 가동중) */
   hasNaverBcSession: Scalars['Boolean']['output'];
+  /** 어드민) 오늘의집 큐레이터 세션이 실제로 ?af 링크를 주는지 */
+  hasOhouSession: Scalars['Boolean']['output'];
   /** 어드민) 세시간전 세션 저장 여부(true면 폴백 발급 가동중) */
   hasThreeHaSession: Scalars['Boolean']['output'];
-  /** 어드민) 토스 세션 토큰 저장 여부(true면 발급 가동중) */
+  /** 어드민) 토스 TBIZAUTH 가 정산 API 에 실제 유효한지. 키만 있고 AUTH_EXPIRED 면 false(키 삭제). 발급은 공식 OAuth2 라 이 값과 무관. */
   hasTossSession: Scalars['Boolean']['output'];
-  homePage: Array<BaseSection>;
+  /** 홈 섹션 목록 + 히어로 슬롯 실험 배정. deviceId(X-Device-Id) 기준 고정 해시. 프론트는 sections 순서를 그대로 그린다. */
+  homePage: HomePage;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
   /** 어드민) 핫딜 키워드 조회 */
@@ -2151,6 +2289,7 @@ export type QueryPendingVerificationsTotalCountArgs = {
   onlyActive?: InputMaybe<Scalars['Boolean']['input']>;
   productId?: InputMaybe<Scalars['Int']['input']>;
   productTitle?: InputMaybe<Scalars['String']['input']>;
+  suspiciousFirst?: InputMaybe<Scalars['Boolean']['input']>;
   target?: InputMaybe<ProductMappingTarget>;
   verificationStatus?: InputMaybe<Array<ProductMappingVerificationStatus>>;
 };
@@ -2356,11 +2495,13 @@ export enum Role {
 }
 
 export enum SectionDisplayType {
+  DoubleRow = 'DOUBLE_ROW',
   GridTabbed = 'GRID_TABBED',
   Group = 'GROUP',
   HorizontalScroll = 'HORIZONTAL_SCROLL',
   List = 'LIST',
   PaginatedGrid = 'PAGINATED_GRID',
+  Toss = 'TOSS',
 }
 
 export type SignupOutput = {
@@ -2436,6 +2577,23 @@ export enum TokenType {
   Apns = 'APNS',
   Fcm = 'FCM',
 }
+
+export type TossProfitLinkOutput = {
+  __typename?: 'TossProfitLinkOutput';
+  /** 실패 시 사유. 성공이면 null. 끝에 [toss:…] trace 가 붙을 수 있다. */
+  error?: Maybe<Scalars['String']['output']>;
+  /** 발급된 토스 수익링크 (toss.im/_m/…) */
+  profitLink?: Maybe<Scalars['String']['output']>;
+};
+
+export type TossSection = BaseSection & {
+  __typename?: 'TossSection';
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
 
 export type UpdateAdvertiseInput = {
   displayPrice?: InputMaybe<AdvertisePriceInput>;
@@ -3508,6 +3666,30 @@ export type ProductPriceHistoryQuery = {
           categoryId?: number | null;
         };
       }>;
+    } | null;
+  } | null;
+};
+
+export type ProductPriceVerdictQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type ProductPriceVerdictQuery = {
+  __typename?: 'Query';
+  product?: {
+    __typename?: 'ProductOutput';
+    id: string;
+    priceVerdict?: {
+      __typename?: 'ProductPriceVerdict';
+      status: PriceVerdictStatus;
+      nullReason?: PriceVerdictNullReason | null;
+      displayTier: PriceVerdictDisplayTier;
+      basis?: string | null;
+      rangeDays?: number | null;
+      labelKey?: PriceVerdictLabelKey | null;
+      headline?: string | null;
+      subline?: string | null;
+      historyPointCount?: number | null;
     } | null;
   } | null;
 };
@@ -4684,6 +4866,27 @@ export const ProductPriceHistoryDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   ProductPriceHistoryQuery,
   ProductPriceHistoryQueryVariables
+>;
+export const ProductPriceVerdictDocument = new TypedDocumentString(`
+    query ProductPriceVerdict($id: Int!) {
+  product(id: $id) {
+    id
+    priceVerdict {
+      status
+      nullReason
+      displayTier
+      basis
+      rangeDays
+      labelKey
+      headline
+      subline
+      historyPointCount
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  ProductPriceVerdictQuery,
+  ProductPriceVerdictQueryVariables
 >;
 export const ProductAdditionalInfoDocument = new TypedDocumentString(`
     query ProductAdditionalInfo($id: Int!) {

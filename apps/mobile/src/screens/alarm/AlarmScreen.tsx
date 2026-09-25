@@ -24,6 +24,7 @@ import {
   setLastAlarmReadAt,
 } from '@/shared/lib/alarm-read-state';
 import type {NotificationItem} from '@/shared/api/notification';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 
 import {useNotificationsViewModel} from './model/useNotificationsViewModel';
 import AlarmItem from './ui/AlarmItem';
@@ -99,6 +100,14 @@ export default function AlarmScreen() {
 
   const handlePressItem = useCallback(
     (notification: NotificationItem, productId: number | null) => {
+      // 알림 목록 클릭 추적 — web features/alarm/ui/AlarmItem 과 같은 파라미터.
+      // 푸시 클릭(FCMHandler)은 같은 이벤트에 url·state 가 더 붙는다 — state 가
+      // 없는 app 행이 목록 클릭이다. 상품이 없는 알림도 web 처럼 보낸다(target_id 만 빠짐).
+      Analytics.track('notification_clicked', {
+        target: 'product',
+        target_id: notification.product?.id,
+        platform: 'app',
+      });
       if (!notification.readAt) {
         onReadNotification(Number(notification.id));
       }
