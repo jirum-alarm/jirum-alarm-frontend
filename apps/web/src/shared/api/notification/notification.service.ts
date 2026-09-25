@@ -34,6 +34,18 @@ const MutationRemoveAllNotificationsDocument = new TypedDocumentString<
   }
 `);
 
+type RemoveTokenLinkageResult = { removeTokenLinkage: boolean };
+type RemoveTokenLinkageVariables = { token: string };
+
+const MutationRemoveTokenLinkageDocument = new TypedDocumentString<
+  RemoveTokenLinkageResult,
+  RemoveTokenLinkageVariables
+>(`
+  mutation MutationRemoveTokenLinkage($token: String!) {
+    removeTokenLinkage(token: $token)
+  }
+`);
+
 export class NotificationService {
   static async addPushToken(variables: MutationAddPushTokenMutationVariables) {
     return execute(MutationAddPushTokenDocument, variables);
@@ -63,5 +75,9 @@ export class NotificationService {
 
   static async removeAllNotifications() {
     return execute(MutationRemoveAllNotificationsDocument);
+  }
+
+  static async removeTokenLinkage(variables: RemoveTokenLinkageVariables) {
+    return execute(MutationRemoveTokenLinkageDocument, variables);
   }
 }
