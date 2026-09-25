@@ -67,29 +67,17 @@ export async function onForegroundMessageHandler(
 }
 
 /**
- * Handle FCM messages when app is in background
+ * Handle FCM messages when app is in background — **아무것도 띄우지 않는다.**
  *
- * @param message - FCM remote message
+ * 🔴예전엔 여기서 로컬 알림을 또 예약해 백그라운드 푸시가 두 번 떴다.
+ * RNFB 는 백그라운드·종료 상태면 payload 종류와 무관하게 이 핸들러를 부르고
+ * (ReactNativeFirebaseMessagingReceiver → HeadlessService), 동시에 FCM SDK(Android)·
+ * APNs(iOS, content-available)가 notification 을 트레이에 이미 올린다.
+ * 서버(sns.ts)는 항상 notification + data 로 보낸다. data-only 는 제목이 없어
+ * 로컬로 띄워도 빈 알림이다.
+ *
+ * 핸들러 자체는 남겨야 한다 — 없으면 RNFB 가 경고를 내고 headless task 가 실패한다.
  */
 export async function onBackgroundMessageHandler(
-  message: FirebaseMessagingTypes.RemoteMessage,
-) {
-  if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('alarm', {
-      name: '지름 알림',
-      importance: Notifications.AndroidImportance.HIGH,
-    });
-  }
-  try {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: message.notification?.title || null,
-        body: message.notification?.body || null,
-        data: message.data || {},
-      },
-      trigger: null,
-    });
-  } catch (error) {
-    console.log('FCM background notification error:', error);
-  }
-}
+  _message: FirebaseMessagingTypes.RemoteMessage,
+) {}
