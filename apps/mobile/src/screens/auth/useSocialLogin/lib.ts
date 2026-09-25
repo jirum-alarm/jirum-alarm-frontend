@@ -1,6 +1,7 @@
 import {removeAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
 import {showToast} from '@/shared/lib/feedback';
 import {StorageKey} from '@/shared/constant/storage-key';
+import {bindFcmTokenToUser} from '@/shared/lib/fcm/push-permission';
 
 export const handleLoginSuccess = async (
   accessToken?: string,
@@ -15,6 +16,8 @@ export const handleLoginSuccess = async (
   try {
     await setAsyncStorage(StorageKey.ACCESS_TOKEN, accessToken);
     await setAsyncStorage(StorageKey.REFRESH_TOKEN, refreshToken);
+    // 기다리지 않는다 — 네트워크 한 번 때문에 로그인 전환이 늦어질 이유가 없다.
+    bindFcmTokenToUser();
     showToast.info('로그인 성공! 알림 설정하고 핫딜을 받아보세요!');
   } catch (storageError) {
     console.error('Error saving tokens:', storageError);

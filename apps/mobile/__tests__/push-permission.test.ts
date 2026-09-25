@@ -24,12 +24,18 @@ jest.mock('@react-native-firebase/messaging', () => ({
   }),
 }));
 
-const mockAddToken = jest.fn(() => Promise.resolve({}));
+const mockAddToken = jest.fn((_: {token: string; tokenType: string}) =>
+  Promise.resolve({}),
+);
 jest.mock('../src/shared/api/notification', () => ({
-  NotificationService: {addToken: () => mockAddToken()},
+  NotificationService: {
+    addToken: (v: {token: string; tokenType: string}) => mockAddToken(v),
+  },
 }));
+const mockGetAsyncStorage = jest.fn<Promise<string | null>, [string]>();
 jest.mock('../src/shared/lib/persistence', () => ({
   setAsyncStorage: jest.fn(() => Promise.resolve()),
+  getAsyncStorage: (key: string) => mockGetAsyncStorage(key),
 }));
 jest.mock('../src/shared/lib/device/device-id', () => ({
   waitForDeviceId: jest.fn(() => Promise.resolve()),
@@ -37,6 +43,7 @@ jest.mock('../src/shared/lib/device/device-id', () => ({
 
 const {
   requestPushPermissionIfNeeded,
+  bindFcmTokenToUser,
 } = require('../src/shared/lib/fcm/push-permission');
 
 beforeEach(() => {
@@ -83,6 +90,36 @@ describe('requestPushPermissionIfNeeded', () => {
     const log = jest.spyOn(console, 'log').mockImplementation(() => {});
     mockGetPermissions.mockRejectedValue(new Error('native'));
     await expect(requestPushPermissionIfNeeded()).resolves.toBeUndefined();
+    log.mockRestore();
+  });
+});
+
+/**
+ * 네이티브 로그인 직후 — 진입 때 익명으로 올린 토큰을 로그인 계정에 다시 묶는다.
+ * 이게 없으면 새로 깔고 로그인한 유저는 앱을 재시작하기 전까지 키워드 알림을 못 받는다.
+ */
+describe('bindFcmTokenToUser', () => {
+  it('저장된 토큰을 그대로 다시 등록한다(로그인 토큰이 붙은 요청으로)', async () => {
+    mockGetAsyncStorage.mockResolvedValue('stored-token');
+    await bindFcmTokenToUser();
+    expect(mockGetAsyncStorage).toHaveBeenCalledWith('fcmDeviceToken');
+    expect(mockAddToken).toHaveBeenCalledWith({
+      token: 'stored-token',
+      tokenType: 'FCM',
+    });
+  });
+
+  it('저장된 토큰이 없으면 등록하지 않는다(권한은 다른 경로가 맡는다)', async () => {
+    mockGetAsyncStorage.mockResolvedValue(null);
+    await bindFcmTokenToUser();
+    expect(mockAddToken).not.toHaveBeenCalled();
+  });
+
+  it('실패는 삼킨다 — 로그인은 이미 성공했다', async () => {
+    const log = jest.spyOn(console, 'log').mockImplementation(() => {});
+    mockGetAsyncStorage.mockResolvedValue('stored-token');
+    mockAddToken.mockRejectedValueOnce(new Error('network'));
+    await expect(bindFcmTokenToUser()).resolves.toBeUndefined();
     log.mockRestore();
   });
 });

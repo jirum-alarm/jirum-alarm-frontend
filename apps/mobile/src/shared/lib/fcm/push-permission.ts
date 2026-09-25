@@ -5,7 +5,7 @@ import {NotificationService} from '@/shared/api/notification';
 import {TokenType} from '@/shared/api/gql/graphql.ts';
 import {StorageKey} from '@/shared/constant/storage-key.ts';
 import {waitForDeviceId} from '@/shared/lib/device/device-id';
-import {setAsyncStorage} from '@/shared/lib/persistence';
+import {getAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
 
 /**
  * FCM 토큰을 받아 서버에 등록한다. 앱 진입(useFCMTokenManager)과
@@ -20,6 +20,30 @@ export async function registerFcmToken(): Promise<void> {
   // (타임아웃되면 그대로 등록한다 — 중복 푸시보다 미등록이 더 큰 사고다.)
   await waitForDeviceId();
   await NotificationService.addToken({token, tokenType: TokenType.Fcm});
+}
+
+/**
+ * 앱 진입 때 등록해 둔 FCM 토큰을 **방금 로그인한 계정**에 다시 묶는다.
+ *
+ * 앱 진입 등록(useFCMTokenManager)은 로그인 게이트 밖에서 한 번만 돈다 — 로그아웃
+ * 상태로 켰다면 토큰은 익명으로 올라가 있다. 웹뷰 로그인 시절엔 AuthBridge.login 이
+ * 이 재등록을 했는데 네이티브 로그인 화면은 안 해서, 새로 깔고 로그인한 유저는
+ * 앱을 껐다 켜기 전까지 키워드 알림을 못 받았다.
+ *
+ * 저장된 토큰이 없으면(= 진입 때 등록을 안 했으면) 아무것도 안 한다 — 권한은
+ * 진입·키워드 등록 경로가 맡는다. 실패는 삼킨다(로그인은 이미 성공했다).
+ */
+export async function bindFcmTokenToUser(): Promise<void> {
+  try {
+    const token: string | null = await getAsyncStorage(
+      StorageKey.FCM_DEVICE_TOKEN,
+    );
+    if (!token) return;
+    await waitForDeviceId();
+    await NotificationService.addToken({token, tokenType: TokenType.Fcm});
+  } catch (error) {
+    console.log('bind fcm token error:', error);
+  }
 }
 
 /**
