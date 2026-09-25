@@ -35,6 +35,11 @@ jest.mock('../src/components/FCMHandler.tsx', () => ({
   __esModule: true,
   default: ({children}: {children: React.ReactNode}) => children,
 }));
+// expo-updates 는 ESM 이라 jest 가 못 읽는다. 복귀 시 OTA 동작은 ota-resume.test 가 본다.
+jest.mock('../src/shared/hooks/useOtaUpdateOnResume.ts', () => ({
+  __esModule: true,
+  default: () => {},
+}));
 jest.mock('../src/shared/components/OfflineBanner.tsx', () => ({
   __esModule: true,
   default: () => null,

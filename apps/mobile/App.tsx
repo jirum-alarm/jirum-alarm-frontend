@@ -18,12 +18,14 @@ import AppErrorFallback from '@/shared/components/AppErrorFallback.tsx';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Sentry, initSentry, wrapApp} from '@/shared/lib/monitoring/sentry.ts';
+import useOtaUpdateOnResume from '@/shared/hooks/useOtaUpdateOnResume.ts';
 
 // init 은 컴포넌트 밖에서 — 렌더 시작 전에 나는 에러도 잡아야 한다.
 initSentry();
 
 function App(): React.JSX.Element {
   const webViewRefManager = useWebViewRefManager();
+  useOtaUpdateOnResume();
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
