@@ -25,13 +25,13 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: ^3.10.4
-        version: 3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+        version: 3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@apollo/experimental-nextjs-app-support':
         specifier: ^0.11.0
-        version: 0.11.11(@apollo/client@3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2))(graphql@16.12.0)(next@15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2))(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+        version: 0.11.11(@apollo/client@3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(graphql@16.12.0)(next@15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@tanstack/react-virtual':
         specifier: ^3.13.8
-        version: 3.13.12(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+        version: 3.13.12(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       apexcharts:
         specifier: ^3.45.2
         version: 3.54.1
@@ -46,19 +46,19 @@ importers:
         version: 16.12.0
       next:
         specifier: 15.5.21
-        version: 15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+        version: 15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react:
-        specifier: ^19.1.2
-        version: 19.1.2
+        specifier: 19.2.8
+        version: 19.2.8
       react-apexcharts:
         specifier: ^1.4.1
-        version: 1.8.0(apexcharts@3.54.1)(react@19.1.2)
+        version: 1.8.0(apexcharts@3.54.1)(react@19.2.8)
       react-dom:
-        specifier: ^19.1.2
-        version: 19.1.2(react@19.1.2)
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
       react-intersection-observer:
         specifier: ^9.10.3
-        version: 9.16.0(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+        version: 9.16.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
     devDependencies:
       '@graphql-codegen/cli':
         specifier: ^5.0.5
@@ -113,19 +113,19 @@ importers:
     dependencies:
       '@json-render/react':
         specifier: ^0.19.0
-        version: 0.19.0(react@19.1.2)(zod@3.25.76)
+        version: 0.19.0(react@19.2.8)(zod@3.25.76)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
       next:
         specifier: 15.5.21
-        version: 15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+        version: 15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react:
-        specifier: ^19.1.2
-        version: 19.1.2
+        specifier: 19.2.8
+        version: 19.2.8
       react-dom:
-        specifier: ^19.1.2
-        version: 19.1.2(react@19.1.2)
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.4.0
@@ -180,16 +180,16 @@ importers:
         version: 2.1.1
       motion:
         specifier: ^12.6.3
-        version: 12.23.24(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+        version: 12.23.24(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next:
         specifier: 15.5.21
-        version: 15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+        version: 15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react:
-        specifier: ^19.1.2
-        version: 19.1.2
+        specifier: 19.2.8
+        version: 19.2.8
       react-dom:
-        specifier: ^19.1.2
-        version: 19.1.2(react@19.1.2)
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.0
@@ -11213,11 +11213,6 @@ packages:
     resolution: {integrity: sha512-hlSJDQ2synMPKFZOsKo9Hi8WWZTC7POR8EmWvTSjow+VDgKzkmjQvFm2fk0tmRw+f0vTOIYKlarR0iL4996pdg==}
     engines: {node: '>=16.14.0'}
 
-  react-dom@19.1.2:
-    resolution: {integrity: sha512-dEoydsCp50i7kS1xHOmPXq4zQYoGWedUsvqv9H6zdif2r7yLHygyfP9qou71TulRN0d6ng9EbRVsQhSqfUc19g==}
-    peerDependencies:
-      react: ^19.1.2
-
   react-dom@19.2.8:
     resolution: {integrity: sha512-rVprimfGBG3DR+Tq0IQG2DT5PxKth1WIGDmj5yPmlzr4YBe7uyE+Du4oVqTDXZSHGGGXRtTJEGSSePyQCMBglQ==}
     peerDependencies:
@@ -11412,10 +11407,6 @@ packages:
 
   react@19.1.0:
     resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
-    engines: {node: '>=0.10.0'}
-
-  react@19.1.2:
-    resolution: {integrity: sha512-MdWVitvLbQULD+4DP8GYjZUrepGW7d+GQkNVqJEzNxE+e9WIa4egVFE/RDfVb1u9u/Jw7dNMmPB4IqxzbFYJ0w==}
     engines: {node: '>=0.10.0'}
 
   react@19.2.8:
@@ -13113,13 +13104,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@apollo/client-react-streaming@0.11.11(@apollo/client@3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2))(graphql@16.12.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)':
+  '@apollo/client-react-streaming@0.11.11(@apollo/client@3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@apollo/client': 3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
+      '@apollo/client': 3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@wry/equality': 0.5.7
       graphql: 16.12.0
-      react: 19.1.2
-      react-dom: 19.1.2(react@19.1.2)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
       ts-invariant: 0.10.3
 
   '@apollo/client-react-streaming@0.11.11(@apollo/client@3.14.0(@types/react@19.2.18)(graphql-ws@5.16.2(graphql@16.12.0))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
@@ -13131,7 +13122,7 @@ snapshots:
       react-dom: 19.2.8(react@19.2.8)
       ts-invariant: 0.10.3
 
-  '@apollo/client@3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)':
+  '@apollo/client@3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.12.0)
       '@wry/caches': 1.0.1
@@ -13142,15 +13133,15 @@ snapshots:
       hoist-non-react-statics: 3.3.2
       optimism: 0.18.1
       prop-types: 15.8.1
-      rehackt: 0.1.0(@types/react@19.1.17)(react@19.1.2)
+      rehackt: 0.1.0(@types/react@19.1.17)(react@19.2.8)
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
       tslib: 2.8.1
       zen-observable-ts: 1.2.5
     optionalDependencies:
       graphql-ws: 6.0.6(graphql@16.12.0)(ws@8.18.3)
-      react: 19.1.2
-      react-dom: 19.1.2(react@19.1.2)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -13177,12 +13168,12 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@apollo/experimental-nextjs-app-support@0.11.11(@apollo/client@3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2))(graphql@16.12.0)(next@15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2))(react-dom@19.1.2(react@19.1.2))(react@19.1.2)':
+  '@apollo/experimental-nextjs-app-support@0.11.11(@apollo/client@3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(graphql@16.12.0)(next@15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@apollo/client': 3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
-      '@apollo/client-react-streaming': 0.11.11(@apollo/client@3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2))(graphql@16.12.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
-      next: 15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
-      react: 19.1.2
+      '@apollo/client': 3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@apollo/client-react-streaming': 0.11.11(@apollo/client@3.14.0(@types/react@19.1.17)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(graphql@16.12.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      react: 19.2.8
     transitivePeerDependencies:
       - graphql
       - react-dom
@@ -16820,10 +16811,10 @@ snapshots:
     dependencies:
       zod: 3.25.76
 
-  '@json-render/react@0.19.0(react@19.1.2)(zod@3.25.76)':
+  '@json-render/react@0.19.0(react@19.2.8)(zod@3.25.76)':
     dependencies:
       '@json-render/core': 0.19.0(zod@3.25.76)
-      react: 19.1.2
+      react: 19.2.8
     transitivePeerDependencies:
       - zod
 
@@ -19652,11 +19643,11 @@ snapshots:
       '@tanstack/query-core': 5.90.9
       react: 19.1.0
 
-  '@tanstack/react-virtual@3.13.12(react-dom@19.1.2(react@19.1.2))(react@19.1.2)':
+  '@tanstack/react-virtual@3.13.12(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@tanstack/virtual-core': 3.13.12
-      react: 19.1.2
-      react-dom: 19.1.2(react@19.1.2)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
   '@tanstack/virtual-core@3.13.12': {}
 
@@ -23193,15 +23184,6 @@ snapshots:
 
   fraction.js@5.3.4: {}
 
-  framer-motion@12.23.24(react-dom@19.1.2(react@19.1.2))(react@19.1.2):
-    dependencies:
-      motion-dom: 12.23.23
-      motion-utils: 12.23.6
-      tslib: 2.8.1
-    optionalDependencies:
-      react: 19.1.2
-      react-dom: 19.1.2(react@19.1.2)
-
   framer-motion@12.23.24(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       motion-dom: 12.23.23
@@ -25320,14 +25302,6 @@ snapshots:
 
   motion-utils@12.23.6: {}
 
-  motion@12.23.24(react-dom@19.1.2(react@19.1.2))(react@19.1.2):
-    dependencies:
-      framer-motion: 12.23.24(react-dom@19.1.2(react@19.1.2))(react@19.1.2)
-      tslib: 2.8.1
-    optionalDependencies:
-      react: 19.1.2
-      react-dom: 19.1.2(react@19.1.2)
-
   motion@12.23.24(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       framer-motion: 12.23.24(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -25435,15 +25409,15 @@ snapshots:
       next: 16.3.4(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(@types/node@20.19.25)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react: 19.2.8
 
-  next@15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.2(react@19.1.2))(react@19.1.2):
+  next@15.5.21(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       '@next/env': 15.5.21
       '@swc/helpers': 0.5.15
       caniuse-lite: 1.0.30001754
       postcss: 8.4.31
-      react: 19.1.2
-      react-dom: 19.1.2(react@19.1.2)
-      styled-jsx: 5.1.6(@babel/core@7.28.5)(react@19.1.2)
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
+      styled-jsx: 5.1.6(@babel/core@7.28.5)(react@19.2.8)
     optionalDependencies:
       '@next/swc-darwin-arm64': 15.5.21
       '@next/swc-darwin-x64': 15.5.21
@@ -26366,11 +26340,11 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  react-apexcharts@1.8.0(apexcharts@3.54.1)(react@19.1.2):
+  react-apexcharts@1.8.0(apexcharts@3.54.1)(react@19.2.8):
     dependencies:
       apexcharts: 3.54.1
       prop-types: 15.8.1
-      react: 19.1.2
+      react: 19.2.8
 
   react-devtools-core@6.1.5:
     dependencies:
@@ -26399,11 +26373,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  react-dom@19.1.2(react@19.1.2):
-    dependencies:
-      react: 19.1.2
-      scheduler: 0.26.0
-
   react-dom@19.2.8(react@19.2.8):
     dependencies:
       react: 19.2.8
@@ -26421,12 +26390,6 @@ snapshots:
   react-hook-form@7.71.2(react@19.1.0):
     dependencies:
       react: 19.1.0
-
-  react-intersection-observer@9.16.0(react-dom@19.1.2(react@19.1.2))(react@19.1.2):
-    dependencies:
-      react: 19.1.2
-    optionalDependencies:
-      react-dom: 19.1.2(react@19.1.2)
 
   react-intersection-observer@9.16.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
@@ -26661,8 +26624,6 @@ snapshots:
 
   react@19.1.0: {}
 
-  react@19.1.2: {}
-
   react@19.2.8: {}
 
   read-cache@1.0.0:
@@ -26759,10 +26720,10 @@ snapshots:
     dependencies:
       jsesc: 3.1.0
 
-  rehackt@0.1.0(@types/react@19.1.17)(react@19.1.2):
+  rehackt@0.1.0(@types/react@19.1.17)(react@19.2.8):
     optionalDependencies:
       '@types/react': 19.1.17
-      react: 19.1.2
+      react: 19.2.8
 
   rehackt@0.1.0(@types/react@19.2.18)(react@19.2.8):
     optionalDependencies:
@@ -27527,13 +27488,6 @@ snapshots:
   style-loader@3.3.4(webpack@5.102.1(esbuild@0.25.12)):
     dependencies:
       webpack: 5.102.1(esbuild@0.25.12)
-
-  styled-jsx@5.1.6(@babel/core@7.28.5)(react@19.1.2):
-    dependencies:
-      client-only: 0.0.1
-      react: 19.1.2
-    optionalDependencies:
-      '@babel/core': 7.28.5
 
   styled-jsx@5.1.6(@babel/core@7.28.5)(react@19.2.8):
     dependencies:
