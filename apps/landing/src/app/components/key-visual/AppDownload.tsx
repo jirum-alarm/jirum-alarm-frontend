@@ -32,9 +32,26 @@ const AppDownload = ({ type }: { type: Position }) => {
   const single = type === 'key-visual' && downloadType !== null;
   return (
     <div className="pt-6 lg:pt-8">
-      <div className="hidden gap-x-6 lg:flex">
-        <AppStoreDownload position={type} />
-        <GooglePlayDownload position={type} />
+      {/* PC 에서 스토어 버튼은 데스크톱 웹 스토어를 열 뿐 설치로 안 이어진다 → 폰으로 찍는 QR 을 앞세운다.
+          QR 은 web /app(스캔한 폰 UA 로 스토어 분기)에 착지하고 utm_source=about-us 로 소개 페이지발을 가른다. */}
+      <div
+        className={`hidden flex-col gap-y-3 lg:flex ${type === 'footer' ? 'items-start' : 'items-center'}`}
+      >
+        <div className="flex items-center gap-x-4">
+          <Image
+            unoptimized
+            src="/assets/images/app-qr.svg"
+            alt="지름알림 앱 설치 QR 코드"
+            width={100}
+            height={100}
+            className="size-25 rounded-lg bg-white p-1.5"
+          />
+          <div className="flex flex-col gap-y-3">
+            <AppStoreDownload position={type} />
+            <GooglePlayDownload position={type} />
+          </div>
+        </div>
+        <p className="text-sm text-gray-400">휴대폰 카메라로 QR 을 찍으면 바로 설치할 수 있어요</p>
       </div>
       {single && (
         <Link

@@ -1,0 +1,41 @@
+name: landing-build
+
+# 소개 페이지(about-us)는 Cloudflare Pages git 연동으로 배포돼 실패가 GitHub 에 안 뜬다.
+# 9/3~9/25 web 의 React 업그레이드(락파일 변경)로 빌드가 3주 동안 조용히 실패했다.
+# Cloudflare 와 같은 방식(모노레포 전체 설치 + filter 빌드)으로 돌려 여기서 빨간불을 켠다.
+
+on:
+  pull_request:
+    paths: &paths
+      - .github/workflows/landing-build.yml
+      - .npmrc
+      - apps/landing/**
+      - packages/**
+      - package.json
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+  push:
+    branches: [main]
+    paths: *paths
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.18.0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.30.3
+          run_install: false
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter landing build
