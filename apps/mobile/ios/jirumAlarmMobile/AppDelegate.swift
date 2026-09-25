@@ -1,9 +1,7 @@
 import Firebase
 import Expo
-import EXUpdates
 import UIKit
 import React
-import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import RNBootSplash
 import NaverThirdPartyLogin
@@ -25,69 +23,90 @@ extension WKWebView {
   }()
 }
 
+// ★Expo SDK 54 표준 AppDelegate(ExpoAppDelegate + ExpoReactNativeFactory).
+//
+// 예전엔 RCTAppDelegate 를 상속해서 Expo 의 react delegate handler·AppDelegate subscriber 가
+// 하나도 돌지 않았다. 그 결과 expo-updates 는 initializeWithoutStarting() 만 되고 start() 가
+// 불리지 않아, JS 가 Updates 상수를 읽는 순간 startupProcedure(IUO) nil 로 SIGTRAP —
+// Release 에서 실행 즉시 크래시(App Store 심사 2.1(a) 거절, 1.4.3 build 27). 번들도 늘
+// 내장 main.jsbundle 이라 iOS OTA 가 한 번도 적용된 적 없었다.
+// 표준 구조로 두면 ExpoUpdatesReactDelegateHandler 가 start()·번들 URL·루트뷰 교체를 전부 한다.
 @main
-class AppDelegate: RCTAppDelegate {
+class AppDelegate: ExpoAppDelegate {
+  var window: UIWindow?
+
+  var reactNativeDelegate: ExpoReactNativeFactoryDelegate?
+  var reactNativeFactory: RCTReactNativeFactory?
 
   override func application(
-        _ application: UIApplication,
-        open url: URL,
-        options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
-        // 네이버 로그인 핸들링
-        if url.scheme == "jirumalarmnaver" {
-            return NaverThirdPartyLoginConnection.getSharedInstance().application(application, open: url, options: options)
-        }
-
-        // 카카오 로그인 핸들링
-        if url.scheme?.hasPrefix("kakao") == true && url.host == "oauth" {
-            return AuthController.handleOpenUrl(url: url)
-        }
-
-        // 기본 React Native 딥링크 핸들링
-        if RCTLinkingManager.application(application, open: url, options: options) {
-            return true
-        }
-
-        return false
-  }
-
-  override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     FirebaseApp.configure()
 
     // WKWebView 키보드 액세서리 바 전역 비활성화 (lazy var 트리거)
     _ = WKWebView.removeInputAccessoryView
 
-    // ★expo-updates 모듈 초기화.
-    //
-    // 이 AppDelegate 는 ExpoAppDelegate 가 아니라 RCTAppDelegate 를 상속하므로
-    // Expo 의 react delegate handler(ExpoUpdatesReactDelegateHandler)가 돌지 않는다.
-    // 그 핸들러가 하던 initializeWithoutStarting() 을 여기서 직접 부른다.
-    //
-    // 없으면 JS 가 시작되기도 전에 네이티브가 죽는다 —
-    // UpdatesModule 이 상수를 내보낼 때 AppController.sharedInstance 를 읽고,
-    // 초기화 전이면 assert 로 SIGTRAP(EXC_BREAKPOINT). Expo.plist 의
-    // EXUpdatesEnabled=true 가 모듈을 활성화해 두기 때문에 Debug 에서도 걸린다.
-    AppController.initializeWithoutStarting()
+    let delegate = ReactNativeDelegate()
+    let factory = ExpoReactNativeFactory(delegate: delegate)
+    delegate.dependencyProvider = RCTAppDependencyProvider()
 
-    self.moduleName = "jirumAlarmMobile"
-    self.dependencyProvider = RCTAppDependencyProvider()
+    reactNativeDelegate = delegate
+    reactNativeFactory = factory
+    bindReactNativeFactory(factory)
 
-    // You can add your custom initial props in the dictionary below.
-    // They will be passed down to the ViewController used by React Native.
-    self.initialProps = [:]
+    window = UIWindow(frame: UIScreen.main.bounds)
+    factory.startReactNative(
+      withModuleName: "jirumAlarmMobile",
+      in: window,
+      launchOptions: launchOptions
+    )
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
-  override func customize(_ rootView: RCTRootView!) {
+  override func application(
+    _ app: UIApplication,
+    open url: URL,
+    options: [UIApplication.OpenURLOptionsKey: Any] = [:]
+  ) -> Bool {
+    // 네이버 로그인 핸들링
+    if url.scheme == "jirumalarmnaver" {
+      return NaverThirdPartyLoginConnection.getSharedInstance().application(app, open: url, options: options)
+    }
+
+    // 카카오 로그인 핸들링
+    if url.scheme?.hasPrefix("kakao") == true && url.host == "oauth" {
+      return AuthController.handleOpenUrl(url: url)
+    }
+
+    // Expo subscriber → React Native 딥링크
+    return super.application(app, open: url, options: options) || RCTLinkingManager.application(app, open: url, options: options)
+  }
+
+  // Universal Links
+  override func application(
+    _ application: UIApplication,
+    continue userActivity: NSUserActivity,
+    restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
+  ) -> Bool {
+    let result = RCTLinkingManager.application(application, continue: userActivity, restorationHandler: restorationHandler)
+    return super.application(application, continue: userActivity, restorationHandler: restorationHandler) || result
+  }
+}
+
+class ReactNativeDelegate: ExpoReactNativeFactoryDelegate {
+  override func customize(_ rootView: UIView) {
     super.customize(rootView)
     RNBootSplash.initWithStoryboard("BootSplash", rootView: rootView)
   }
 
   override func sourceURL(for bridge: RCTBridge) -> URL? {
+    // expo-dev-client 가 올바른 URL 을 받으려면 필요하다.
     bridge.bundleURL ?? bundleURL()
   }
 
+  // Release 에선 expo-updates 가 이 값을 launchAssetUrl() 로 덮는다(OTA 번들).
   override func bundleURL() -> URL? {
 #if DEBUG
     RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: ".expo/.virtual-metro-entry")

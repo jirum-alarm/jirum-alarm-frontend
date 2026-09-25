@@ -111,6 +111,24 @@ describe('iOS Info.plist — 스플래시', () => {
   });
 });
 
+describe('iOS AppDelegate — expo-updates 가 시작돼야 한다', () => {
+  /**
+   * 실제 사고(App Store 심사 2.1(a) 거절, 1.4.3 build 27, 2026-08-22): RCTAppDelegate 를
+   * 상속하면 ExpoUpdatesReactDelegateHandler 가 안 돌아 AppController.start() 가 불리지
+   * 않는다. Expo.plist 가 updates 를 켜 두면 JS 가 Updates 상수를 읽는 순간
+   * EnabledAppController.getConstantsForModule 의 startupProcedure! 가 nil → 실행 즉시 SIGTRAP.
+   * Release 에서만 나서(dev client 는 updates 꺼짐) tsc·jest·시뮬레이터 검증을 다 통과했다.
+   */
+  it('Expo.plist 가 updates 를 켜면 AppDelegate 는 ExpoAppDelegate + ExpoReactNativeFactory 다', () => {
+    const expoPlist = read('ios/jirumAlarmMobile/Supporting/Expo.plist');
+    const appDelegate = read('ios/jirumAlarmMobile/AppDelegate.swift');
+
+    expect(expoPlist).toMatch(/<key>EXUpdatesEnabled<\/key>\s*<true\/>/);
+    expect(appDelegate).toMatch(/class AppDelegate:\s*ExpoAppDelegate\b/);
+    expect(appDelegate).toContain('ExpoReactNativeFactory(');
+  });
+});
+
 describe('iOS pbxproj', () => {
   it('PRODUCT_NAME 이 eas.json 의 scheme 과 일치한다', () => {
     // 불일치하면 빌드 산출물 이름이 갈려 스킴 지정 빌드가 엉뚱한 걸 집는다.
