@@ -4,6 +4,7 @@ import * as ReactTestRenderer from 'react-test-renderer';
 import {SERVICE_URL} from '../src/constants/env';
 import {StorageKey} from '../src/shared/constant/storage-key';
 import {useAuth} from '../src/shared/hooks/useAuth';
+import {FetchError} from '../src/shared/lib/client/http-client';
 import {
   removeAsyncStorage,
   setAsyncStorage,
@@ -149,9 +150,20 @@ describe('useAuth', () => {
     });
   });
 
-  it('clears persisted auth state when refresh-token login fails', async () => {
+  it('clears persisted auth state when the server rejects the refresh token', async () => {
     mockUseQuery.mockReturnValue({
       data: undefined,
+      error: new FetchError({
+        message: 'Forbidden resource',
+        extensions: {
+          code: 'FORBIDDEN',
+          originalError: {
+            error: 'Forbidden',
+            message: 'Forbidden resource',
+            statusCode: 403,
+          },
+        },
+      }),
       isError: true,
       isLoading: false,
       isSuccess: false,
@@ -172,6 +184,44 @@ describe('useAuth', () => {
       isLoading: false,
       isLogin: false,
     });
+
+    await ReactTestRenderer.act(async () => {
+      renderer.unmount();
+    });
+  });
+
+  // 주기 갱신이 네트워크 오류로 실패해도 로그아웃되면 안 된다 — 직전 data 로 버틴다.
+  it('keeps the session when a later background refresh fails on the network', async () => {
+    const data = {
+      loginByRefreshToken: {
+        accessToken: 'access-token',
+        refreshToken: 'refresh-token',
+      },
+    };
+    mockUseQuery.mockReturnValue({
+      data,
+      isError: false,
+      isLoading: false,
+      isSuccess: true,
+    });
+    const renderer = await renderUseAuth();
+    expect(latestAuthState?.isLogin).toBe(true);
+
+    // react-query 는 refetch 가 실패해도 직전 data 를 남기고 status 만 error 로 바꾼다.
+    mockUseQuery.mockReturnValue({
+      data,
+      error: new TypeError('Network request failed'),
+      isError: true,
+      isLoading: false,
+      isSuccess: false,
+    });
+    await ReactTestRenderer.act(async () => {
+      renderer.update(<AuthConsumer />);
+      await flushMicrotasks();
+    });
+
+    expect(mockRemoveAsyncStorage).not.toHaveBeenCalled();
+    expect(latestAuthState?.isLogin).toBe(true);
 
     await ReactTestRenderer.act(async () => {
       renderer.unmount();

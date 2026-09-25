@@ -86,6 +86,17 @@ export class FetchError extends Error {
   }
 }
 
+/**
+ * 서버가 "이 토큰은 안 된다"고 답한 실패인가. 잘못된·만료된 refresh token 에
+ * 서버는 FORBIDDEN(403)을 준다(운영 실측 2026-09-25). 네트워크 실패는 fetch 가
+ * TypeError 를 던지므로 여기 걸리지 않는다 — 둘을 섞으면 연결이 잠깐 끊겨도 로그아웃된다.
+ */
+export function isAuthFailure(error: unknown): boolean {
+  return (
+    error instanceof FetchError && (error.code === 401 || error.code === 403)
+  );
+}
+
 async function rejectIfNeeded(response: GraphQLErrorResponse) {
   if (response.errors) {
     for (const error of response.errors) {
