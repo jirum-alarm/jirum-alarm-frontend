@@ -101,9 +101,16 @@ export default function PriceChart({
 
   // web 은 hover(가이드)와 click(고정)이 따로지만 모바일엔 hover 가 없다.
   // 드래그 스크럽 하나로 합친다 — 누른 채 움직이면 선택이 따라온다.
+  //
+  // 🔴`.runOnJS(true)` 필수. reanimated 가 깔려 있으면 babel 플러그인이 이 콜백을
+  // worklet 으로 바꿔 **UI 스레드**에서 돌린다 — 거기서 JS 함수(nearestIndex·
+  // onSelectIndex)를 부르면 `[Worklets] Tried to synchronously call a non-worklet
+  // function` 으로 **앱이 통째로 죽는다**(안드로이드 에뮬레이터 실측 2026-09-25:
+  // 차트를 한 번 누르자 FATAL EXCEPTION). 선택은 React state 라 JS 스레드가 맞다.
   const pan = useMemo(
     () =>
       Gesture.Pan()
+        .runOnJS(true)
         .minDistance(0)
         .onBegin(e => onSelectIndex(nearestIndex(e.x)))
         .onUpdate(e => onSelectIndex(nearestIndex(e.x))),
