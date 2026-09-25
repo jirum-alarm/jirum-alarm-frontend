@@ -16,6 +16,7 @@ const BannerItem = ({
   className,
   isAd,
   priority,
+  onClick,
 }: {
   isMobile: boolean;
   href: string;
@@ -27,8 +28,10 @@ const BannerItem = ({
   eventName?: string;
   isAd?: boolean;
   priority?: boolean;
+  onClick?: () => void;
 }) => {
   const handleClick = () => {
+    onClick?.();
     // TODO: Need GTM Migration
     // mp?.track(eventName, {
     //   page: EVENT.PAGE.HOME,

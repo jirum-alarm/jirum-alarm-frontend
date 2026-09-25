@@ -22,6 +22,7 @@ import {LANDING_URL} from '@/constants/env';
 
 import {HomeQueries} from '../api/home.queries';
 import {useAdTracking} from '../lib/useAdTracking';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 
 /**
  * 홈 상단 다크 헤더의 배너 캐러셀. web: widgets/home/ui/mobile/BannerSwiper.tsx
@@ -269,7 +270,11 @@ function BannerSlideView({
         description="오픈 카톡방에서 소식을 확인해보세요!"
         image={KAKAO_IMAGE}
         backgroundClassName="bg-gray-800 border-gray-600"
-        onPress={() => openInAppBrowser(KAKAO_OPEN_CHAT_URL)}
+        onPress={() => {
+          // 상세 오카방 카드와 같은 이벤트 — placement 로 위치를 가른다.
+          Analytics.track('okachat_prompt_click', {placement: 'home_banner'});
+          openInAppBrowser(KAKAO_OPEN_CHAT_URL);
+        }}
       />
     );
   }

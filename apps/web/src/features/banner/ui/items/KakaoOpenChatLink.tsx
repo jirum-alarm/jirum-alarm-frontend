@@ -17,6 +17,14 @@ const props = {
   className: 'bg-gray-800 border-gray-600',
 };
 
+// 상세 오카방 카드와 같은 이벤트·파라미터(features/product-detail/lib/okachat.ts) — placement 로 위치를 가른다.
+const trackClick = () => {
+  (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+    event: 'okachat_prompt_click',
+    placement: 'home_banner',
+  });
+};
+
 const KakaoOpenChatLink = ({
   isMobile,
   className,
@@ -32,6 +40,7 @@ const KakaoOpenChatLink = ({
       className={cn(props.className, className)}
       isMobile={isMobile}
       priority={priority}
+      onClick={trackClick}
     />
   );
 };
