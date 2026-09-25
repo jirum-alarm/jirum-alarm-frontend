@@ -5,52 +5,60 @@ import Link from 'next/link';
 
 import { useDevice } from '@/hooks/useDevice';
 
+type Position = 'key-visual' | 'footer';
+
 const GooglePlayLink = 'https://play.google.com/store/apps/details?id=com.solcode.jirmalam';
 const AppStoreLink =
-  'https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420';
+  'https://apps.apple.com/kr/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420';
 
-const useAppDownloadLink = () => {
+// 소개 페이지발 설치를 스토어 콘솔에서 가르기 위한 캠페인 값. Play 는 referrer 가 그대로 획득 보고서에 잡힌다.
+// ponytail: App Store 는 pt(provider token) 없이 ct 만으론 App Analytics 에 안 잡힌다 — GA4 link_url 구분용. pt 받으면 추가.
+const googlePlayLink = (position: Position) =>
+  `${GooglePlayLink}&referrer=${encodeURIComponent(`utm_source=about-us&utm_medium=landing&utm_content=${position}`)}`;
+const appStoreLink = (position: Position) => `${AppStoreLink}?ct=about-us-${position}`;
+
+const useDownloadType = () => {
   const { isApple, isAndroid, isMounted } = useDevice();
 
-  if (!isMounted) {
-    return { type: undefined, link: '#' } as const;
-  }
-
-  if (isApple) {
-    return { type: 'apple', link: AppStoreLink } as const;
-  }
-  if (isAndroid) {
-    return { type: 'android', link: GooglePlayLink } as const;
-  }
-
-  return { type: null, link: '#' } as const;
+  if (!isMounted) return undefined;
+  if (isApple) return 'apple';
+  if (isAndroid) return 'android';
+  return null;
 };
 
-const AppDownload = ({ type }: { type: 'key-visual' | 'footer' }) => {
-  const { link, type: downloadType } = useAppDownloadLink();
+const AppDownload = ({ type }: { type: Position }) => {
+  const downloadType = useDownloadType();
+  // 판별 불가(null, 데스크톱 좁은 창 등)면 '#' 버튼 대신 두 스토어를 다 보여준다.
+  const single = type === 'key-visual' && downloadType !== null;
   return (
     <div className="pt-6 lg:pt-8">
       <div className="hidden gap-x-6 lg:flex">
-        <AppStoreDownload />
-        <GooglePlayDownload />
+        <AppStoreDownload position={type} />
+        <GooglePlayDownload position={type} />
       </div>
-      {type === 'key-visual' && (
+      {single && (
         <Link
-          href={link}
+          href={
+            downloadType === 'apple'
+              ? appStoreLink(type)
+              : downloadType === 'android'
+                ? googlePlayLink(type)
+                : '#'
+          }
           target="_blank"
           className="mt-5 w-full rounded-full border border-white/40 bg-white/10 px-8.75 py-3 text-center text-lg leading-none font-bold text-gray-300 lg:hidden"
         >
           앱 다운로드
         </Link>
       )}
-      {type === 'footer' && (
+      {!single && (
         <div className="lg:hidden">
-          {downloadType === 'apple' && <AppStoreDownload />}
-          {downloadType === 'android' && <GooglePlayDownload />}
+          {downloadType === 'apple' && <AppStoreDownload position={type} />}
+          {downloadType === 'android' && <GooglePlayDownload position={type} />}
           {downloadType === null && (
             <div className="flex gap-x-6">
-              <AppStoreDownload />
-              <GooglePlayDownload />
+              <AppStoreDownload position={type} />
+              <GooglePlayDownload position={type} />
             </div>
           )}
         </div>
@@ -61,10 +69,10 @@ const AppDownload = ({ type }: { type: 'key-visual' | 'footer' }) => {
 
 export default AppDownload;
 
-const AppStoreDownload = () => {
+const AppStoreDownload = ({ position }: { position: Position }) => {
   return (
     <Link
-      href={AppStoreLink}
+      href={appStoreLink(position)}
       target="_blank"
       className="flex h-11 w-38.5 items-center justify-center gap-x-1 rounded-lg border border-white/40 bg-white/10 text-gray-300"
     >
@@ -76,10 +84,10 @@ const AppStoreDownload = () => {
   );
 };
 
-const GooglePlayDownload = () => {
+const GooglePlayDownload = ({ position }: { position: Position }) => {
   return (
     <Link
-      href={GooglePlayLink}
+      href={googlePlayLink(position)}
       target="_blank"
       className="flex h-11 w-38.5 items-center justify-center gap-x-1 rounded-lg border border-white/40 bg-white/10 text-gray-300"
     >
