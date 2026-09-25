@@ -9,7 +9,7 @@ type Position = 'key-visual' | 'footer';
 
 const GooglePlayLink = 'https://play.google.com/store/apps/details?id=com.solcode.jirmalam';
 const AppStoreLink =
-  'https://apps.apple.com/kr/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420';
+  'https://apps.apple.com/sg/app/%EC%A7%80%EB%A6%84%EC%95%8C%EB%A6%BC/id6474611420';
 
 // 소개 페이지발 설치를 스토어 콘솔에서 가르기 위한 캠페인 값. Play 는 referrer 가 그대로 획득 보고서에 잡힌다.
 // ponytail: App Store 는 pt(provider token) 없이 ct 만으론 App Analytics 에 안 잡힌다 — GA4 link_url 구분용. pt 받으면 추가.
