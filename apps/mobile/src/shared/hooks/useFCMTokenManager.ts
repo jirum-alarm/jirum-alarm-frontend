@@ -1,7 +1,10 @@
 import React from 'react';
 import messaging from '@react-native-firebase/messaging';
 
-import {registerFcmToken} from '../lib/fcm/push-permission';
+import {
+  registerFcmToken,
+  saveAndRegisterFcmToken,
+} from '../lib/fcm/push-permission';
 
 const useFCMTokenManager = () => {
   React.useEffect(() => {
@@ -22,6 +25,13 @@ const useFCMTokenManager = () => {
         console.log('error:', error);
       }
     })();
+
+    const unsubscribe = messaging().onTokenRefresh(token => {
+      saveAndRegisterFcmToken(token).catch(error =>
+        console.log('fcm token refresh error:', error),
+      );
+    });
+    return unsubscribe;
   }, []);
 };
 

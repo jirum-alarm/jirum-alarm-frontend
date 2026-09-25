@@ -13,7 +13,15 @@ import {getAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
  */
 export async function registerFcmToken(): Promise<void> {
   await messaging().registerDeviceForRemoteMessages();
-  const token = await messaging().getToken();
+  await saveAndRegisterFcmToken(await messaging().getToken());
+}
+
+/**
+ * 받은 토큰을 저장하고 서버에 등록한다. FCM 이 토큰을 교체했을 때(onTokenRefresh)도
+ * 이걸 탄다 — 안 그러면 교체된 뒤 다음 콜드 스타트까지 푸시가 옛(죽은) 토큰으로 간다.
+ * 옛 토큰 row 는 서버가 같은 기기(X-Device-Id) 기준으로 회수한다.
+ */
+export async function saveAndRegisterFcmToken(token: string): Promise<void> {
   await setAsyncStorage(StorageKey.FCM_DEVICE_TOKEN, token);
   // X-Device-Id 없이 등록하면 서버가 deviceId=NULL 로 저장하고, 그 토큰은 기기 단위
   // 옛 토큰 회수에서 영구 제외돼 알림이 중복된다. 헤더가 붙을 때까지만 잠깐 기다린다.
