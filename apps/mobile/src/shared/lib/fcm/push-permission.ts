@@ -47,6 +47,28 @@ export async function bindFcmTokenToUser(): Promise<void> {
 }
 
 /**
+ * 이 기기의 FCM 토큰을 **로그인 계정에서 뗀다** — 로그아웃 때, access token 을 지우기 전에.
+ *
+ * 서버는 푸시 토큰을 userId 에 묶어 두고, logout 뮤테이션은 이력만 남긴다. 떼지 않으면
+ * 로그아웃한 기기(또는 다른 계정으로 바꾼 기기)로 이전 계정의 키워드 알림이 계속 간다.
+ * 서버 removeTokenLinkage 가 연결 해제 + 동의 기반 토픽 구독 해지까지 한다.
+ *
+ * 실패는 삼킨다 — 로그아웃 자체를 막으면 안 된다.
+ * ponytail: 네트워크 실패 시 재시도 없음. 다음 로그인의 bindFcmTokenToUser 가 덮어쓴다.
+ */
+export async function unbindFcmTokenFromUser(): Promise<void> {
+  try {
+    const token: string | null = await getAsyncStorage(
+      StorageKey.FCM_DEVICE_TOKEN,
+    );
+    if (!token) return;
+    await NotificationService.removeTokenLinkage({token});
+  } catch (error) {
+    console.log('unbind fcm token error:', error);
+  }
+}
+
+/**
  * 키워드(알림 대상)를 등록한 직후 — 알림 권한이 **아직 없고 물어볼 수 있으면** 묻는다.
  * web `useFcmPermission().requestPermission()` 과 같은 자리.
  *

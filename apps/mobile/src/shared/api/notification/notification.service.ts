@@ -1,5 +1,6 @@
 import type {
   MutationAddPushTokenMutationVariables,
+  MutationRemoveTokenLinkageMutationVariables,
   QueryNotificationsQuery,
   QueryNotificationsQueryVariables,
 } from '../gql/graphql.ts';
@@ -10,6 +11,7 @@ import {
   MutationReadNotification,
   MutationRemoveAllNotifications,
   MutationRemoveNotification,
+  MutationRemoveTokenLinkage,
   QueryNotifications,
   QueryUnreadNotificationsCount,
 } from '../../../graphql/notification.ts';
@@ -20,6 +22,14 @@ export class NotificationService {
   static async addToken(variables: MutationAddPushTokenMutationVariables) {
     return HttpClient.withAccessToken()
       .execute(MutationAddPushToken, variables)
+      .then(res => res.data);
+  }
+
+  static async removeTokenLinkage(
+    variables: MutationRemoveTokenLinkageMutationVariables,
+  ) {
+    return HttpClient.withAccessToken()
+      .execute(MutationRemoveTokenLinkage, variables)
       .then(res => res.data);
   }
 

@@ -10,6 +10,7 @@ import {ThemeQueries} from '@/entities/theme';
 import {StorageKey} from '@/shared/constant/storage-key';
 import {removeAsyncStorage} from '@/shared/lib/persistence';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
+import {unbindFcmTokenFromUser} from '@/shared/lib/fcm/push-permission';
 
 /**
  * 로그아웃. **웹뷰가 대신 해주던 일을 이 화면이 인수한 자리다.**
@@ -25,6 +26,8 @@ import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
  * `TOKEN_REMOVE` 를 흉내내 쏴도 그 화면이 살아 있지 않으면 아무 일도 안 난다.
  * 그래서 여기서 **직접** 한다:
  *
+ *   0) 푸시 토큰을 계정에서 뗀다 — 인증이 필요해서 토큰 삭제보다 **먼저**. 안 떼면
+ *      로그아웃한 기기로 이전 계정의 키워드 알림이 계속 간다(서버 logout 은 이력만 남긴다).
  *   1) AsyncStorage 의 access/refresh 토큰 삭제
  *   2) 쿠키 삭제 — `useAuth` 가 WebView 용으로 심어둔 ACCESS_TOKEN/REFRESH_TOKEN.
  *      안 지우면 커뮤니티 탭 웹뷰가 계속 로그인 상태로 보인다.
@@ -41,6 +44,7 @@ export function useLogout() {
   const queryClient = useQueryClient();
 
   return useCallback(async () => {
+    await unbindFcmTokenFromUser();
     await removeAsyncStorage(StorageKey.ACCESS_TOKEN).catch(() => {});
     await removeAsyncStorage(StorageKey.REFRESH_TOKEN).catch(() => {});
 

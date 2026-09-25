@@ -6,6 +6,12 @@ export const MutationAddPushToken = graphql(`
   }
 `);
 
+export const MutationRemoveTokenLinkage = graphql(`
+  mutation MutationRemoveTokenLinkage($token: String!) {
+    removeTokenLinkage(token: $token)
+  }
+`);
+
 export const QueryNotifications = graphql(`
   query QueryNotifications($limit: Int!, $offset: Int!) {
     notifications(limit: $limit, offset: $offset) {

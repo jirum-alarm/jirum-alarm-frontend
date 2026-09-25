@@ -23,6 +23,12 @@ jest.mock('@react-native-cookies/cookies', () => ({
   default: {clearAll: jest.fn(() => Promise.resolve(true))},
 }));
 
+// useLogout → push-permission 이 끌고 오는 네이티브 모듈(여기선 안 쓴다).
+jest.mock('@react-native-firebase/messaging', () => ({
+  __esModule: true,
+  default: () => ({}),
+}));
+
 jest.mock('expo-notifications', () => ({
   setBadgeCountAsync: jest.fn(() => Promise.resolve(true)),
 }));
@@ -33,6 +39,16 @@ jest.mock('../src/shared/lib/persistence', () => ({
   getAsyncStorage: jest.fn(() => Promise.resolve(null)),
 }));
 
+const mockRemoveTokenLinkage = jest.fn((_: {token: string}) =>
+  Promise.resolve({}),
+);
+jest.mock('../src/shared/api/notification', () => ({
+  NotificationService: {
+    removeTokenLinkage: (v: {token: string}) => mockRemoveTokenLinkage(v),
+  },
+}));
+
+import {getAsyncStorage} from '../src/shared/lib/persistence';
 import {useLogout} from '../src/features/mypage/model/useLogout';
 import {MyPageQueries} from '../src/entities/mypage';
 import {ThemeQueries} from '../src/entities/theme';
@@ -45,6 +61,7 @@ import {
 const mockClearAll = CookieManager.clearAll as jest.Mock;
 const mockSetBadge = Notifications.setBadgeCountAsync as jest.Mock;
 const mockRemoveAsyncStorage = removeAsyncStorage as jest.Mock;
+const mockGetAsyncStorage = getAsyncStorage as jest.Mock;
 
 /**
  * react-query 를 통째로 mock 해서 removeQueries/invalidateQueries 호출만 본다.
@@ -78,7 +95,7 @@ async function runLogout() {
   });
 }
 
-describe('useLogout — 인수한 부수효과 5가지', () => {
+describe('useLogout — 인수한 부수효과 6가지', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     setUnreadCount(7);
@@ -133,6 +150,41 @@ describe('useLogout — 인수한 부수효과 5가지', () => {
       (call: unknown[]) => (call[0] as {queryKey?: unknown})?.queryKey,
     );
     expect(invalidated).toContainEqual(AuthQueries.keys.loginByRefreshToken());
+  });
+
+  /**
+   * 서버는 푸시 토큰을 userId 에 묶어 두고 logout 뮤테이션은 이력만 남긴다.
+   * 떼지 않으면 로그아웃한 기기로 이전 계정의 키워드 알림이 계속 간다.
+   * 떼기는 인증이 필요한 요청이라 access token 을 지우기 **전에** 돌아야 한다.
+   */
+  it('⑥ 푸시 토큰을 계정에서 뗀다 — access token 을 지우기 전에', async () => {
+    mockGetAsyncStorage.mockImplementation((key: string) =>
+      Promise.resolve(key === StorageKey.FCM_DEVICE_TOKEN ? 'fcm-token' : null),
+    );
+    await runLogout();
+    expect(mockRemoveTokenLinkage).toHaveBeenCalledWith({token: 'fcm-token'});
+    const removeAccessOrder =
+      mockRemoveAsyncStorage.mock.invocationCallOrder[
+        mockRemoveAsyncStorage.mock.calls.findIndex(
+          call => call[0] === StorageKey.ACCESS_TOKEN,
+        )
+      ];
+    expect(mockRemoveTokenLinkage.mock.invocationCallOrder[0]).toBeLessThan(
+      removeAccessOrder,
+    );
+    mockGetAsyncStorage.mockImplementation(() => Promise.resolve(null));
+  });
+
+  it('푸시 토큰 떼기가 실패해도 로그아웃은 끝까지 간다', async () => {
+    const log = jest.spyOn(console, 'log').mockImplementation(() => {});
+    mockGetAsyncStorage.mockResolvedValueOnce('fcm-token');
+    mockRemoveTokenLinkage.mockRejectedValueOnce(new Error('network'));
+    await runLogout();
+    expect(mockRemoveAsyncStorage).toHaveBeenCalledWith(
+      StorageKey.ACCESS_TOKEN,
+    );
+    expect(mockInvalidateQueries).toHaveBeenCalled();
+    log.mockRestore();
   });
 
   /** 정리 하나가 실패해도 ⑤(화면 전환)는 반드시 돈다. */

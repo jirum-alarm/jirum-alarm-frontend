@@ -3472,6 +3472,15 @@ export type MutationAddPushTokenMutation = {
   addPushToken: boolean;
 };
 
+export type MutationRemoveTokenLinkageMutationVariables = Exact<{
+  token: Scalars['String']['input'];
+}>;
+
+export type MutationRemoveTokenLinkageMutation = {
+  __typename?: 'Mutation';
+  removeTokenLinkage: boolean;
+};
+
 export type QueryNotificationsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   offset: Scalars['Int']['input'];
@@ -4690,6 +4699,14 @@ export const MutationAddPushTokenDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   MutationAddPushTokenMutation,
   MutationAddPushTokenMutationVariables
+>;
+export const MutationRemoveTokenLinkageDocument = new TypedDocumentString(`
+    mutation MutationRemoveTokenLinkage($token: String!) {
+  removeTokenLinkage(token: $token)
+}
+    `) as unknown as TypedDocumentString<
+  MutationRemoveTokenLinkageMutation,
+  MutationRemoveTokenLinkageMutationVariables
 >;
 export const QueryNotificationsDocument = new TypedDocumentString(`
     query QueryNotifications($limit: Int!, $offset: Int!) {
