@@ -53,14 +53,15 @@ const ServiceIntroduction = () => {
         </Content.Wrapper>
       </Content>
       <Content>
-        <Content.Image src="/assets/images/intro-4.webp" alt="최저가" />
+        <Content.Image src="/assets/images/intro-4.webp" alt="가격 추이" />
         <Content.Wrapper>
-          <Content.Keyword>최저가</Content.Keyword>
-          <Content.Title>여기가 제일 저렴해요</Content.Title>
+          <Content.Keyword>가격 추이</Content.Keyword>
+          <Content.Title>지금 가격, 싼 편일까?</Content.Title>
+          {/* 상세의 가격 추이는 "비슷한 상품 핫딜을 모아 참고용" 이다 — 최저가를 단정하지 않는다. */}
           <Content.Description>
-            어디서 사야 가장 저렴할까? 고민할 필요 없어요.
+            비슷한 상품의 지난 핫딜 가격을 모아
             <br />
-            할인 지수로 최저가를 확인해보세요.
+            최저가·최고가와 지금 가격을 비교해 드려요.
           </Content.Description>
         </Content.Wrapper>
       </Content>
