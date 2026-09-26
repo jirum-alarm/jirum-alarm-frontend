@@ -60,7 +60,8 @@ function ProductDetailPage({
       {device && <FirstVisitAppAlertModal device={device} />}
       <ViewerCount productId={productId} />
 
-      <main>
+      {/* google-anno-skip: desktop ProductDetailPage 와 같은 이유 — UI 글자에 광고 인텐트 링크·칩이 끼지 않게. */}
+      <main className="google-anno-skip">
         <div className="sticky top-0 -mb-6">
           <div className="relative aspect-square w-full">
             {initialProduct ? <ProductDetailImage product={initialProduct} fill /> : null}

@@ -57,7 +57,9 @@ export default async function DesktopProductDetailPage({
   return (
     <>
       {device && <FirstVisitAppAlertModal device={device} />}
-      <div className="max-w-layout-max mx-auto grid grid-cols-12 gap-x-6">
+      {/* google-anno-skip: 애드센스 '광고 인텐트'가 UI 글자("가격 추이"의 "가격" 등)를 광고 링크로 바꾸고
+          부제 사이에 검색어 칩("제조 공장 견적받기")을 끼웠다. 구글 문서의 제외 클래스 — 하단 앵커 광고는 그대로다. */}
+      <div className="max-w-layout-max google-anno-skip mx-auto grid grid-cols-12 gap-x-6">
         <div
           className="col-span-10 col-start-2 grid grid-cols-2 gap-x-12 gap-y-10"
           style={{ gridTemplateRows: 'min-content 1fr' }}
