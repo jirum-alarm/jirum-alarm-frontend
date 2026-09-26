@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -283,6 +283,26 @@ function main() {
   );
 
   assertEqual(landingNav, webNav, 'Landing header nav (web DesktopGNB NAV_LINKS)');
+
+  // 2026-08-18 prebuild 산출물 커밋이 app.json 에 icon 이 없다고 흰 1024 PNG(5.8KB)를 넣어,
+  // iOS 빌드 27~31 의 앱 아이콘이 전부 흰색이었다(IPA 실물로 확인). 참조된 아이콘이 비었으면 막는다.
+  // ponytail: 파일 크기로만 본다(흰 단색 PNG 는 수 KB, 실제 아이콘은 수백 KB). 작은 단색 디자인을 쓰게 되면 픽셀 검사로 바꾼다.
+  const iconSetDir = 'apps/mobile/ios/jirumAlarmMobile/Images.xcassets/AppIcon.appiconset';
+  const iconFiles = JSON.parse(readRepoFile(`${iconSetDir}/Contents.json`))
+    .images.map((image) => image.filename)
+    .filter(Boolean);
+
+  if (iconFiles.length === 0) {
+    throw new Error(`No iOS app icon referenced in ${iconSetDir}/Contents.json`);
+  }
+
+  for (const file of iconFiles) {
+    const size = statSync(path.join(repoRoot, iconSetDir, file)).size;
+
+    if (size < 50_000) {
+      throw new Error(`iOS app icon ${file} is ${size} bytes — looks blank (expected hundreds of KB)`);
+    }
+  }
 
   console.log('Public contracts verified.');
   console.log(`- web/landing nav: ${webNav}`);
