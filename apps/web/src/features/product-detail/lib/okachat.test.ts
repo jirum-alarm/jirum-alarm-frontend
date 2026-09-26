@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { buildPostPurchasePromptQueue, shouldShowOkachatSoftPrompt } =
+const { buildPostPurchasePromptQueue, pickLiveDeal, shouldShowOkachatSoftPrompt } =
   require('./okachat.ts') as typeof import('./okachat');
 
 describe('shouldShowOkachatSoftPrompt', () => {
@@ -45,5 +45,22 @@ describe('buildPostPurchasePromptQueue', () => {
       'keyword',
       'kakao',
     ]);
+  });
+});
+
+describe('pickLiveDeal', () => {
+  it('가격 없음·0원 이벤트를 건너뛰고 "N원" 꼴 첫 딜을 고른다', () => {
+    const deals: { id: number; price: string | null }[] = [
+      { id: 1, price: null },
+      { id: 2, price: '￦ 0 (KRW)' },
+      { id: 3, price: '0원' },
+      { id: 4, price: '8,620원' },
+      { id: 5, price: '100원' },
+    ];
+    assert.equal(pickLiveDeal(deals)?.id, 4);
+  });
+
+  it('쓸 만한 딜이 없으면 undefined', () => {
+    assert.equal(pickLiveDeal([{ price: null }]), undefined);
   });
 });

@@ -68,6 +68,16 @@ export function buildPostPurchasePromptQueue(
   return ['keyword', 'kakao'];
 }
 
+/**
+ * soft 카드에 보여줄 "방금 방에 올라온 딜" 한 건.
+ * 방 봇은 isHot 딜을 보내므로(crawling-server updateProductToHot) 최신 isHot 목록이 곧 방 피드다.
+ * 가격이 "N원" 꼴인 첫 딜만 — 가격 없음·'￦ 0 (KRW)' 이벤트·0원은 "싸다"를 못 판다.
+ * ponytail: 모음전 가격 파싱 오류('10,550원'→'550원')는 못 거른다 — 목록 카드와 같은 한계.
+ */
+export function pickLiveDeal<T extends { price?: string | null }>(deals: T[]): T | undefined {
+  return deals.find((deal) => /^[1-9][\d,]*원$/.test(deal.price ?? ''));
+}
+
 export function pushOkachatEvent(
   event: 'okachat_prompt_view' | 'okachat_prompt_click',
   placement: OkachatPlacement,

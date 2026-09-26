@@ -18,11 +18,14 @@ export default function KakaoOpenChatPrompt({
   href,
   className,
   onNavigate,
+  liveDeal,
 }: {
   href: string;
   className?: string;
   /** soft/구매후 공통 — 입장 클릭 시 joined 플래그·계측용 */
   onNavigate?: () => void;
+  /** 방에 방금 올라온 딜. 있으면 방 소개 대신 이 딜을 판다. */
+  liveDeal?: { title: string; price?: string | null };
 }) {
   return (
     <Link
@@ -48,9 +51,22 @@ export default function KakaoOpenChatPrompt({
       <span className="min-w-0 flex-1">
         {/* "핫딜 Only"는 UTM 캠페인명(hotdeal_only)·봇 설정값이 새어 나온 내부 용어라
             유저에겐 정체불명 고유명사로 읽힌다. 방 성격은 아래 줄이 이미 말한다. */}
-        <span className="block text-sm font-semibold text-gray-800">핫딜 오픈 채팅방 입장하기</span>
+        <span className="block text-sm font-semibold text-gray-800">
+          {liveDeal ? '방금 카톡방에 올라온 핫딜' : '핫딜 오픈 채팅방 입장하기'}
+        </span>
+        {/* 모바일 한 줄은 16자 남짓 — 가격을 앞에 둬야 truncate 에 안 잘린다. */}
         <span className="mt-0.5 block truncate text-xs text-gray-500">
-          지름알림이 엄선한 핫딜만 골라 받아보세요!
+          {liveDeal ? (
+            <>
+              <span className="font-semibold text-gray-800">{liveDeal.price}</span>{' '}
+              {/* 커뮤니티 제목은 끝에 가격을 또 붙인 게 많다("로키팬츠 39,240원") — 앞에 이미 있다. */}
+              {liveDeal.price && liveDeal.title.endsWith(liveDeal.price)
+                ? liveDeal.title.slice(0, -liveDeal.price.length).trimEnd()
+                : liveDeal.title}
+            </>
+          ) : (
+            '지름알림이 엄선한 핫딜만 골라 받아보세요!'
+          )}
         </span>
       </span>
       {/* 이 줄이 클릭 가능하다는 유일한 신호였는데 평문이라 그냥 라벨로 읽혔다.
