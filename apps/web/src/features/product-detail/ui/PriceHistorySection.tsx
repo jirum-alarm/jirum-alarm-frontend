@@ -621,8 +621,10 @@ export default function PriceHistorySection({
           <span className="text-sm font-bold text-gray-900 sm:text-base">
             {won(currentPrice, currency)}
           </span>
+          {/* 3칸 그리드의 가운데 칸(≈100px)엔 안 들어가 390px 이하에서 "절/약" 으로 깨졌다.
+              양옆 칸은 두 줄이라 이 세 번째 줄은 칸 밖으로 넘쳐도 겹칠 게 없다. */}
           {currentPriceBadge ? (
-            <span className="text-[11px] font-medium text-emerald-600">
+            <span className="text-[11px] font-medium whitespace-nowrap text-emerald-600">
               {currentPriceBadge.text}
             </span>
           ) : null}
