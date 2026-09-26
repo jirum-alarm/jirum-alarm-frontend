@@ -272,30 +272,36 @@ export default function PriceHistorySection({
       </Text>
 
       {/* web 과 같은 3열 요약 카드. 최저=error, 최고=secondary 로 색을 나눈다. */}
-      <View className="mx-5 mt-3 flex-row rounded-xl bg-gray-50 px-4 py-3.5">
-        <View className="flex-1 gap-y-0.5">
-          <Text className="text-xs text-gray-500">최저</Text>
-          <Text className="text-sm font-bold text-error-500">
-            {won(minPrice, currency)}
-          </Text>
-        </View>
-        <View className="flex-1 items-center gap-y-0.5">
-          <Text className="text-xs text-gray-500">현재가</Text>
-          <Text className="text-sm font-bold text-gray-900">
-            {shownCurrentPrice != null ? won(shownCurrentPrice, currency) : '-'}
-          </Text>
-          {currentBadge ? (
-            <Text className="text-[11px] font-medium text-emerald-600">
-              {currentBadge}
+      <View className="mx-5 mt-3 rounded-xl bg-gray-50 px-4 py-3.5">
+        <View className="flex-row">
+          <View className="flex-1 gap-y-0.5">
+            <Text className="text-xs text-gray-500">최저</Text>
+            <Text className="text-sm font-bold text-error-500">
+              {won(minPrice, currency)}
             </Text>
-          ) : null}
+          </View>
+          <View className="flex-1 items-center gap-y-0.5">
+            <Text className="text-xs text-gray-500">현재가</Text>
+            <Text className="text-sm font-bold text-gray-900">
+              {shownCurrentPrice != null
+                ? won(shownCurrentPrice, currency)
+                : '-'}
+            </Text>
+          </View>
+          <View className="flex-1 items-end gap-y-0.5">
+            <Text className="text-xs text-gray-500">최고</Text>
+            <Text className="text-sm font-bold text-secondary-600">
+              {won(maxPrice, currency)}
+            </Text>
+          </View>
         </View>
-        <View className="flex-1 items-end gap-y-0.5">
-          <Text className="text-xs text-gray-500">최고</Text>
-          <Text className="text-sm font-bold text-secondary-600">
-            {won(maxPrice, currency)}
+        {/* 가운데 칸(≈100px)엔 "최고 대비 N원 절약"(≈103px)이 안 들어가 두 줄로 꺾였다(web 은 v1.22.16 에서 수정).
+            RN Text 는 칸 밖으로 넘칠 수 없어 카드 폭 전체에 가운데 정렬로 뺀다 — 가운데 칸도 가운데 정렬이라 위치는 같다. */}
+        {currentBadge ? (
+          <Text className="mt-0.5 text-center text-[11px] font-medium text-emerald-600">
+            {currentBadge}
           </Text>
-        </View>
+        ) : null}
       </View>
 
       <View className="px-2 pt-2">
