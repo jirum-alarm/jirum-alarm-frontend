@@ -1,25 +1,9 @@
 import Image from 'next/image';
 
-import { cn } from '@/shared/libs/cn';
-
-const Content = ({
-  children,
-  className,
-  isLast,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  isLast?: boolean;
-}) => {
+const Content = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div
-      className={cn(
-        'z-0 flex h-screen max-h-lvh w-full snap-start justify-center pt-56.5 pb-11 lg:pt-82',
-        className,
-        isLast && 'z-7',
-      )}
-    >
-      <div className={cn('flex flex-col lg:flex-row', isLast && 'z-7 bg-gray-50')}>{children}</div>
+    <div className="flex w-full justify-center py-8 lg:py-14">
+      <div className="flex flex-col lg:flex-row lg:items-center">{children}</div>
     </div>
   );
 };

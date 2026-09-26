@@ -63,7 +63,7 @@ const AppDownload = ({ type }: { type: Position }) => {
                 : '#'
           }
           target="_blank"
-          className="mt-5 w-full rounded-full border border-white/40 bg-white/10 px-8.75 py-3 text-center text-lg leading-none font-bold text-gray-300 lg:hidden"
+          className="bg-primary-500 mt-5 w-full rounded-full px-8.75 py-3 text-center text-lg leading-none font-bold text-gray-900 lg:hidden"
         >
           앱 다운로드
         </Link>
@@ -94,7 +94,7 @@ const AppStoreDownload = ({ position }: { position: Position }) => {
       className="flex h-11 w-38.5 items-center justify-center gap-x-1 rounded-lg border border-white/40 bg-white/10 text-gray-300"
     >
       <div className="-ml-1 flex size-8 items-center justify-center">
-        <Image src="/assets/icons/apple.svg" alt="apple" unoptimized width={20} height={26} />
+        <Image src="/assets/icons/apple.svg" alt="" unoptimized width={20} height={26} />
       </div>
       App Store
     </Link>
@@ -111,7 +111,7 @@ const GooglePlayDownload = ({ position }: { position: Position }) => {
       <Image
         unoptimized
         src="/assets/icons/google-play.png"
-        alt="google"
+        alt=""
         className="size-8"
         width={32}
         height={32}

@@ -22,6 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: '지름알림',
+    url: URL_BASE,
   },
   twitter: {
     card: 'summary_large_image',
@@ -39,18 +40,31 @@ export const metadata: Metadata = {
   },
 };
 
+// ponytail: 평점(aggregateRating)이 없어 구글 앱 리치결과 대상은 아니다 — 검색·AI 엔진이 "무슨 앱인지" 읽는 용도.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MobileApplication',
+  name: '지름알림',
+  url: URL_BASE,
+  description,
+  operatingSystem: 'Android, iOS',
+  applicationCategory: 'ShoppingApplication',
+  offers: { '@type': 'Offer', price: 0, priceCurrency: 'KRW' },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="ko"
-      className={`${PretendardVariable.className} relative max-h-lvh min-h-svh snap-y snap-mandatory antialiased`}
-    >
+    <html lang="ko" className={`${PretendardVariable.className} antialiased`}>
       <body>
         {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
         <Script id="gtag-init">
           {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}');`}

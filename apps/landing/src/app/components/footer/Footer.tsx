@@ -5,7 +5,7 @@ import Banner from './Banner';
 
 const Footer = () => {
   return (
-    <div className="relative flex w-full snap-start flex-col">
+    <div className="relative flex w-full flex-col">
       <div className="to-landing-background pointer-events-none absolute bottom-0 -z-1 h-full max-h-lvh min-h-svh w-full bg-linear-to-b from-gray-900" />
       <Banner />
       <div className="flex items-end lg:h-[30vh]">
@@ -24,9 +24,10 @@ const Footer = () => {
             <Link
               href="https://open.kakao.com/o/gJZTWAAg"
               target="_blank"
+              aria-label="핫딜 카톡방 입장"
               className="flex size-9 items-center justify-center rounded-full bg-[#FAE300]"
             >
-              <Image src="/assets/icons/katalk2.svg" alt="katalk" width={30} height={31} />
+              <Image src="/assets/icons/katalk2.svg" alt="" width={30} height={31} />
             </Link>
           </div>
           <p className="mb-4 text-sm font-medium whitespace-pre-line text-white">
@@ -46,7 +47,9 @@ const Footer = () => {
                 개인정보 처리방침
               </Link>
             </div>
-            <p className="text-sm text-gray-400">Copyright 2025. 지름알림. All rights reserved.</p>
+            <p className="text-sm text-gray-400">
+              Copyright {new Date().getFullYear()}. 지름알림. All rights reserved.
+            </p>
           </div>
         </footer>
       </div>

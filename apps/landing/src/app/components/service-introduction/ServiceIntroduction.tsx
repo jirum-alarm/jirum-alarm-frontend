@@ -4,7 +4,7 @@ import Content from './ContentPage';
 
 const ServiceIntroduction = () => {
   return (
-    <section className="flex w-full flex-col items-center justify-center bg-gray-50">
+    <section className="flex w-full flex-col items-center justify-center bg-gray-50 pt-20 pb-12 lg:pt-32 lg:pb-24">
       <SectionHeader
         keyword="서비스 소개"
         title={
@@ -14,11 +14,10 @@ const ServiceIntroduction = () => {
             <span>핫딜 쇼핑이 쉬워져요</span>
           </>
         }
-        className="z-5 bg-gray-50 pt-10 pb-8 lg:pt-22 lg:pb-7"
-        sticky
+        className="pb-4 lg:pb-10"
       />
       <Content>
-        <Content.Image src="/assets/images/intro-1.png" alt="핫딜 카테고리" />
+        <Content.Image src="/assets/images/intro-1.webp" alt="핫딜 카테고리" />
         <Content.Wrapper>
           <Content.Keyword>핫딜 카테고리</Content.Keyword>
           <Content.Title>원하는 상품만 간편하게</Content.Title>
@@ -30,7 +29,7 @@ const ServiceIntroduction = () => {
         </Content.Wrapper>
       </Content>
       <Content>
-        <Content.Image src="/assets/images/intro-2.png" alt="키워드 알림" />
+        <Content.Image src="/assets/images/intro-2.webp" alt="키워드 알림" />
         <Content.Wrapper>
           <Content.Keyword>키워드 알림</Content.Keyword>
           <Content.Title>찾던 상품 실시간 알림으로</Content.Title>
@@ -42,7 +41,7 @@ const ServiceIntroduction = () => {
         </Content.Wrapper>
       </Content>
       <Content>
-        <Content.Image src="/assets/images/intro-3.png" alt="AI요약" />
+        <Content.Image src="/assets/images/intro-3.webp" alt="AI요약" />
         <Content.Wrapper>
           <Content.Keyword>AI요약</Content.Keyword>
           <Content.Title>생생한 반응을 한눈에</Content.Title>
@@ -53,11 +52,8 @@ const ServiceIntroduction = () => {
           </Content.Description>
         </Content.Wrapper>
       </Content>
-      <Content
-        isLast
-        className="relative z-1 before:absolute before:bottom-0 before:z-6 before:h-1/2 before:w-full before:bg-gray-50 before:content-['']"
-      >
-        <Content.Image src="/assets/images/intro-4.png" alt="최저가" />
+      <Content>
+        <Content.Image src="/assets/images/intro-4.webp" alt="최저가" />
         <Content.Wrapper>
           <Content.Keyword>최저가</Content.Keyword>
           <Content.Title>여기가 제일 저렴해요</Content.Title>
