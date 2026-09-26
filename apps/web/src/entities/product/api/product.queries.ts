@@ -166,6 +166,12 @@ export const ProductQueries = {
       queryFn: () => ProductService.getClusteredProducts(variables),
     }),
 
+  sameProductDeals: (variables: { id: number }) =>
+    queryOptions({
+      queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'same-product'],
+      queryFn: () => ProductService.getSameProductDeals(variables),
+    }),
+
   similarProducts: (variables: { id: number }) =>
     queryOptions({
       queryKey: [...ProductQueries.all(), 'detail', { id: variables.id }, 'similar'],

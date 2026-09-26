@@ -172,6 +172,15 @@ export class ProductService {
     return execute(QueryClusteredProducts, variables).then((res) => res.data);
   }
 
+  // 동일상품 그룹의 진행 중 딜(최신순). 같은 그룹이면 어느 상세에서 열어도 같은 목록.
+  // 부가 블록이라 실패는 빈 목록 — 백엔드 배포 전이거나 오류여도 키워드 결과는 그대로 뜬다.
+  static async getSameProductDeals(variables: { id: number }) {
+    const empty = { sameProductDeals: [] as ProductListResult['products'] };
+    return execute(QuerySameProductDeals, variables)
+      .then((res) => res.data ?? empty)
+      .catch(() => empty);
+  }
+
   // Meili 유사검색(상품명 기반 + 브랜드 충돌 필터). Track B 클러스터가 없을 때 폴백.
   static async getSimilarProducts(variables: { id: number }) {
     return execute(QuerySimilarProducts, variables).then((res) => res.data);
@@ -528,6 +537,35 @@ const QueryProducts = new TypedDocumentString<ProductListResult, ProductListQuer
       providerIds: $providerIds
       mallGroupId: $mallGroupId
     ) {
+      id
+      title
+      mallId
+      url
+      isHot
+      isEnd
+      price
+      providerId
+      categoryId
+      category
+      thumbnail
+      mallName
+      hotDealType
+      provider {
+        nameKr
+      }
+      searchAfter
+      estimatedTotal
+      postedAt
+    }
+  }
+`);
+
+const QuerySameProductDeals = new TypedDocumentString<
+  { sameProductDeals: ProductListResult['products'] },
+  { id: number }
+>(`
+  query QuerySameProductDeals($id: Int!) {
+    sameProductDeals(id: $id) {
       id
       title
       mallId

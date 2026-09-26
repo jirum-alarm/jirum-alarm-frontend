@@ -1,6 +1,6 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { Suspense } from 'react';
 
@@ -46,19 +46,26 @@ function ExpiredProductRecommendations({
   const fetchLimit = isMobile ? 10 : 9;
   const displayLimit = isMobile ? 9 : 8;
 
-  const { data } = useSuspenseQuery(
-    ProductQueries.products({
-      keyword,
-      limit: fetchLimit,
-      orderBy: ProductOrderType.Id,
-      orderOption: OrderOptionType.Desc,
-    }),
-  );
-
   const currentProductId = Number(product.id);
+  const [{ data: sameData }, { data }] = useSuspenseQueries({
+    queries: [
+      ProductQueries.sameProductDeals({ id: currentProductId }),
+      ProductQueries.products({
+        keyword,
+        limit: fetchLimit,
+        orderBy: ProductOrderType.Id,
+        orderOption: OrderOptionType.Desc,
+      }),
+    ],
+  });
+
+  // 동일상품 그룹(어느 멤버 상세든 같은 목록) 먼저, 모자라면 제목 키워드의 더 최신 글로 채운다.
   const similarProducts = Array.from(
     new Map(
-      (data.products ?? []).filter((p) => Number(p.id) > currentProductId).map((p) => [p.id, p]),
+      [
+        ...(sameData.sameProductDeals ?? []).filter((p) => Number(p.id) !== currentProductId),
+        ...(data.products ?? []).filter((p) => Number(p.id) > currentProductId),
+      ].map((p) => [p.id, p]),
     ).values(),
   );
 
