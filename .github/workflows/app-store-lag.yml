@@ -1,0 +1,55 @@
+name: app-store-lag
+
+# 레포의 앱 버전이 App Store 에 실제로 떠 있는지 매일 본다.
+# EAS submit 이 FINISHED 여도, 설정 테스트가 초록이어도 사용자에게 안 닿은 적이 여러 번이다:
+#   - build 27~30(1.4.4) 실행 즉시 크래시 → 심사 거절로 알았다
+#   - 2026-09-26 확인 시 App Store 는 1.4.1(8/8 출시)인데 레포는 9/9 부터 1.4.6 — iOS 사용자가 7주째 옛 버전
+# 버전은 빌드 직전에 올리므로, 올린 지 LAG_DAYS 가 지나도 스토어가 그 버전이 아니면
+# 심사 거절·대기 장기화·제출 누락 중 하나다.
+# ponytail: iOS 만 본다 — 공개 lookup API 라 자격증명이 필요 없다. Android 는 Play Developer API(서비스 계정)가 있어야 한다.
+
+on:
+  schedule:
+    - cron: '30 0 * * *' # 09:30 KST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  LAG_DAYS: 7
+
+jobs:
+  ios:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 버전을 올린 커밋 날짜를 git log 로 찾는다
+          filter: blob:none
+
+      - name: Compare repo version with App Store
+        env:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+          app=apps/mobile/app.json
+          version=$(jq -r .expo.version "$app")
+          bundle=$(jq -r .expo.ios.bundleIdentifier "$app")
+          since=$(git log -S"\"version\": \"$version\"" --format=%ct --reverse -- "$app" | head -1)
+          days=$(( ($(date +%s) - since) / 86400 ))
+
+          res=$(curl -fsS "https://itunes.apple.com/lookup?bundleId=$bundle&country=kr")
+          live=$(jq -r '.results[0].version // "(조회 안 됨)"' <<<"$res")
+          released=$(jq -r '.results[0].currentVersionReleaseDate // "-"' <<<"$res" | cut -c1-10)
+          echo "repo=$version (set ${days}d ago) live=$live (released $released)"
+
+          if [ "$live" = "$version" ] || [ "$days" -le "$LAG_DAYS" ]; then
+            exit 0
+          fi
+
+          msg="📱 App Store 에 ${version} 이 아직 없습니다 — 레포에서 올린 지 ${days}일, 스토어는 ${live}(출시 ${released}). 심사 거절·대기·미제출을 App Store Connect 에서 확인하세요. ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
+            | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
+          echo "::error::$msg"
+          exit 1
