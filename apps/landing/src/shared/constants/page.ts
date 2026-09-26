@@ -2,8 +2,11 @@ export enum PAGE {
   BASE = 'https://jirum-alarm.com',
 
   HOME = '/',
-  TRENDING = '/trending',
-  RECOMMEND = '/recommend',
+  TRENDING_LIVE = '/trending/live',
+  TRENDING_RANKING = '/trending/ranking',
+  DEALS = '/deals',
+  COMMUNITY = '/community',
+  PRODUCT_NEW = '/products/new',
 
   DETAIL = '/products',
   COMMENT = '/products/comment',
