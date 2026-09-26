@@ -3,6 +3,7 @@ name: landing-build
 # 소개 페이지(about-us)는 Cloudflare Pages git 연동으로 배포돼 실패가 GitHub 에 안 뜬다.
 # 9/3~9/25 web 의 React 업그레이드(락파일 변경)로 빌드가 3주 동안 조용히 실패했다.
 # Cloudflare 와 같은 방식(모노레포 전체 설치 + filter 빌드)으로 돌려 여기서 빨간불을 켠다.
+# 공개 계약(스토어 URL·web 과 같은 상단 메뉴)도 여기서 본다 — mobile-validation 은 macOS 빌드까지 돌아 무겁다.
 
 on:
   pull_request:
@@ -10,6 +11,9 @@ on:
       - .github/workflows/landing-build.yml
       - .npmrc
       - apps/landing/**
+      - apps/mobile/scripts/verify-public-contracts.mjs
+      - apps/web/src/widgets/layout/ui/desktop/DesktopGNB.tsx
+      - apps/web/src/shared/config/page.ts
       - packages/**
       - package.json
       - pnpm-lock.yaml
@@ -30,6 +34,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.18.0
+
+      # 파일만 읽는 검사라 설치 전에 돌려 빨리 실패시킨다.
+      - run: node apps/mobile/scripts/verify-public-contracts.mjs
 
       - uses: pnpm/action-setup@v4
         with:

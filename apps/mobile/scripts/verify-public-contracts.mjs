@@ -105,6 +105,24 @@ function collectStoreIds(relativeDir) {
   };
 }
 
+// "라벨 경로" 목록. 경로는 그 앱의 PAGE enum 에서 실제 값으로 풀어 비교한다(키 이름만 같고 값이 다르면 잡도록).
+function readNavLinks(navPath, keyName, pagePath) {
+  const routes = Object.fromEntries(
+    [...readRepoFile(pagePath).matchAll(/^\s*([A-Z_]+) = '([^']*)'/gmu)].map((m) => [m[1], m[2]]),
+  );
+  const links = [
+    ...readRepoFile(navPath).matchAll(
+      new RegExp(`${keyName}: PAGE\\.([A-Z_]+),\\s*label: '([^']+)'`, 'gu'),
+    ),
+  ].map((m) => `${m[2]}(${routes[m[1]]})`);
+
+  if (links.length === 0) {
+    throw new Error(`Could not find nav links in ${navPath}`);
+  }
+
+  return links.join(' · ');
+}
+
 function main() {
   const mobileEnvPath = 'apps/mobile/src/constants/env.ts';
   const mobileEndpointPath = 'apps/mobile/src/shared/constant/endpoint.ts';
@@ -251,7 +269,23 @@ function main() {
     'Public App Store app ids',
   );
 
+  // 소개 페이지 헤더는 web GNB 의 손 복제본이다(앱이 달라 코드 공유 불가).
+  // 2026-09 까지 web 에서 빠진 "추천" 이 소개 페이지에만 남아 있었다 — 이름·순서·경로가 어긋나면 막는다.
+  const webNav = readNavLinks(
+    'apps/web/src/widgets/layout/ui/desktop/DesktopGNB.tsx',
+    'href',
+    'apps/web/src/shared/config/page.ts',
+  );
+  const landingNav = readNavLinks(
+    'apps/landing/src/app/components/header/Header.tsx',
+    'path',
+    'apps/landing/src/shared/constants/page.ts',
+  );
+
+  assertEqual(landingNav, webNav, 'Landing header nav (web DesktopGNB NAV_LINKS)');
+
   console.log('Public contracts verified.');
+  console.log(`- web/landing nav: ${webNav}`);
   console.log(`- service URL: ${CURRENT_SERVICE_URL}`);
   console.log(`- GraphQL endpoint: ${CURRENT_GRAPHQL_ENDPOINT}`);
   console.log(`- WebView user agents: ${CURRENT_WEBVIEW_USER_AGENTS.join(', ')}`);
