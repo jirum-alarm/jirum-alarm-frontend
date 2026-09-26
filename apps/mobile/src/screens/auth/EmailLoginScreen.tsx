@@ -57,8 +57,13 @@ const EmailLoginScreen = () => {
             token.login.refreshToken,
           );
           // 소셜 로그인(useSocialLogin)과 같은 identify — 익명↔회원 프로필 병합.
-          const userId = await UserService.fetchMyId();
-          if (userId) Analytics.identify(userId);
+          // try 로 감싼다 — 여기서 throw 하면 아래 refetch 가 안 돌아 로그인 화면에 갇힌다.
+          try {
+            const userId = await UserService.fetchMyId();
+            if (userId) Analytics.identify(userId);
+          } catch {
+            // 분석 실패는 로그인 흐름을 막지 않는다.
+          }
           await queryClient.refetchQueries({
             queryKey: AuthQueries.keys.loginByRefreshToken(),
           });

@@ -116,6 +116,37 @@ describe('useAuth', () => {
     });
   });
 
+  // 1.4.6 심사 거절(2026-09-26, iPadOS 27): "로그인 성공" 토스트만 뜨고 로그인 화면에 갇혔다.
+  // 쿠키 동기화가 throw 하면 isCookieReady 가 영원히 false 였다 — 쿠키 실패가 로그인을 막으면 안 된다.
+  it('still logs in when mirroring tokens into cookies fails', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    mockCookieSet.mockRejectedValue(new Error('cookie store unavailable'));
+    mockUseQuery.mockReturnValue({
+      data: {
+        loginByRefreshToken: {
+          accessToken: 'access-token',
+          refreshToken: 'refresh-token',
+        },
+      },
+      isError: false,
+      isLoading: false,
+      isSuccess: true,
+    });
+
+    const renderer = await renderUseAuth();
+
+    expect(latestAuthState).toEqual({
+      isLoading: false,
+      isLogin: true,
+    });
+    expect(warn).toHaveBeenCalled();
+
+    await ReactTestRenderer.act(async () => {
+      renderer.unmount();
+    });
+    warn.mockRestore();
+  });
+
   it('skips the refresh-token cookie when the refresh token is missing', async () => {
     mockUseQuery.mockReturnValue({
       data: {

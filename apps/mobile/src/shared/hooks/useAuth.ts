@@ -26,20 +26,31 @@ export const useAuth = () => {
     (async () => {
       if (isSuccess && data) {
         const {accessToken, refreshToken} = data.loginByRefreshToken;
-        await setAsyncStorage(StorageKey.ACCESS_TOKEN, accessToken);
-        await setAsyncStorage(StorageKey.REFRESH_TOKEN, refreshToken);
+        // 🔴 여기서 하나라도 throw 하면 isCookieReady 가 영원히 false 라 로그인 화면에 갇힌다
+        // ("로그인 성공" 토스트만 뜨고 안 넘어감 — 1.4.6 심사 거절 2026-09-26, iPadOS 27).
+        // 쿠키는 웹뷰 세션 동기화용이다 — 실패해도 네이티브 로그인은 막지 않는다.
+        try {
+          await setAsyncStorage(StorageKey.ACCESS_TOKEN, accessToken);
+          await setAsyncStorage(StorageKey.REFRESH_TOKEN, refreshToken);
 
-        await CookieManager.set(SERVICE_URL, {
-          name: 'ACCESS_TOKEN',
-          value: accessToken,
-        });
-        if (refreshToken) {
           await CookieManager.set(SERVICE_URL, {
-            name: 'REFRESH_TOKEN',
-            value: refreshToken,
+            name: 'ACCESS_TOKEN',
+            value: accessToken,
           });
+          if (refreshToken) {
+            await CookieManager.set(SERVICE_URL, {
+              name: 'REFRESH_TOKEN',
+              value: refreshToken,
+            });
+          }
+        } catch (e) {
+          console.warn(
+            '[useAuth] 토큰·쿠키 동기화 실패 — 로그인은 계속한다',
+            e,
+          );
+        } finally {
+          setIsCookieReady(true);
         }
-        setIsCookieReady(true);
       }
     })();
   }, [isSuccess, data]);
