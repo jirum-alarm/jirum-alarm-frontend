@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 import Panel from '@/components/Panel';
 import { useToast } from '@/components/Toast';
 import { ProductMappingVerificationStatus } from '@/generated/gql/graphql';
-import { useGetGatedMappings } from '@/hooks/graphql/gated-mappings';
+import { useGetGatedMappings, useRematchGatedMapping } from '@/hooks/graphql/gated-mappings';
 import { useVerifyProductMapping } from '@/hooks/graphql/verification';
 import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
 
@@ -43,7 +43,7 @@ const GatedMappingList = () => {
   const [appliedTitle, setAppliedTitle] = useState('');
   const toast = useToast();
   // 낙관적 처리 표시 (id → 처리 결과). GraphQL id 는 string(ID).
-  const [handled, setHandled] = useState<Record<string, 'verified' | 'rejected'>>({});
+  const [handled, setHandled] = useState<Record<string, 'rematch' | 'rejected'>>({});
 
   // limit 은 서버 상한 20(SearchAfterArgs) — 50 을 보내 Bad Request 로 목록이 통째로 안 떴다. 나머지는 스크롤로 이어 받는다
   const { data, loading, error, refetch, fetchMore } = useGetGatedMappings({
@@ -53,6 +53,7 @@ const GatedMappingList = () => {
   const viewRef = useLoadMoreOnView({ field: 'gatedMappings', data, loading, fetchMore });
 
   const [verifyMapping] = useVerifyProductMapping();
+  const [rematchMapping] = useRematchGatedMapping();
 
   // 서버가 이미 판정된 행을 걸러주지 않아 새로고침하면 처리한 항목이 다시 떴다(서버 제외는 matching-api 에서 따로 진행).
   // 그 전까지 안전망: 판정 끝난 행은 숨긴다. 방금 이 화면에서 처리한 행은 결과 표시를 위해 남긴다
@@ -73,23 +74,35 @@ const GatedMappingList = () => {
     );
   };
 
-  const handleVerify = async (id: string, result: ProductMappingVerificationStatus) => {
+  // 게이트 맞음 = 거절(REJECTED) 기록. 행은 not_matchable 로 남고 다시 매칭되지 않는다
+  const handleConfirmGate = async (id: string) => {
     try {
       await verifyMapping({
-        variables: { productMappingId: Number(id), result },
+        variables: {
+          productMappingId: Number(id),
+          result: ProductMappingVerificationStatus.Rejected,
+        },
       });
-      setHandled((prev) => ({
-        ...prev,
-        [id]: result === ProductMappingVerificationStatus.Verified ? 'verified' : 'rejected',
-      }));
-      toast.success(
-        result === ProductMappingVerificationStatus.Verified
-          ? // 승인 뒤 재매칭이 실제로 도는지는 확인되지 않았다 — 한 일만 말한다
-            '승인 처리했습니다.'
-          : '거절 유지했습니다.',
-      );
+      setHandled((prev) => ({ ...prev, [id]: 'rejected' }));
+      toast.success('게이트 판정을 확정했습니다.');
     } catch (e) {
       toast.error(`처리 실패: ${(e as Error).message}`);
+    }
+  };
+
+  // 오판 = 게이트 행을 지우고 게이트만 끈 채 1회 재매칭. 예전 "승인"은 오히려 상품을 매칭 불가로 영구 고정했다
+  const handleRematch = async (id: string) => {
+    try {
+      const { data: res } = await rematchMapping({ variables: { productMappingId: Number(id) } });
+      const status = res?.rematchGatedMapping.status;
+      setHandled((prev) => ({ ...prev, [id]: 'rematch' }));
+      if (status === 'requeued')
+        toast.success('재매칭을 시작했습니다. 결과는 매칭 검수(대기)에 올라옵니다.');
+      else if (status === 'already_mapped')
+        toast.info('이미 다른 매핑이 있는 상품이라 게이트 행만 지웠습니다.');
+      else toast.error(`재매칭하지 못했습니다 (${status ?? '응답 없음'})`);
+    } catch (e) {
+      toast.error(`재매칭 실패: ${(e as Error).message}`);
     }
   };
 
@@ -221,25 +234,21 @@ const GatedMappingList = () => {
               <div className="flex flex-shrink-0 flex-col justify-center gap-2">
                 {done ? (
                   <span className="text-xs text-gray-400">
-                    {done === 'verified' ? '승인됨' : '거절됨'}
+                    {done === 'rematch' ? '재매칭 요청됨' : '게이트 확정'}
                   </span>
                 ) : (
                   <>
                     <button
-                      onClick={() =>
-                        handleVerify(item.id, ProductMappingVerificationStatus.Rejected)
-                      }
+                      onClick={() => handleConfirmGate(item.id)}
                       className="rounded-md bg-meta-1 px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
                     >
-                      거절 유지
+                      게이트 맞음
                     </button>
                     <button
-                      onClick={() =>
-                        handleVerify(item.id, ProductMappingVerificationStatus.Verified)
-                      }
+                      onClick={() => handleRematch(item.id)}
                       className="rounded-md border border-stroke px-3 py-1.5 text-xs font-medium dark:border-strokedark"
                     >
-                      승인(오판)
+                      오판 → 재매칭
                     </button>
                   </>
                 )}

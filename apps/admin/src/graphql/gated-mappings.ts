@@ -43,3 +43,13 @@ export const QueryGatedMappings = gql`
     }
   }
 `;
+
+/** 게이트 오판 → 게이트 행 삭제 후 게이트만 끄고 1회 재매칭(결과는 pending 검수 큐로). status: requeued | already_mapped | unavailable */
+export const MutationRematchGatedMapping = gql`
+  mutation MutationRematchGatedMapping($productMappingId: Int!) {
+    rematchGatedMapping(productMappingId: $productMappingId) {
+      status
+      productId
+    }
+  }
+`;

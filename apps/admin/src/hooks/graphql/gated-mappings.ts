@@ -1,8 +1,13 @@
-import { QueryHookOptions, useQuery } from '@apollo/client';
+import { QueryHookOptions, useMutation, useQuery } from '@apollo/client';
 
 import { PAGE_LIMIT } from '@/constants/limit';
-import { QueryGatedMappingsQuery, QueryGatedMappingsQueryVariables } from '@/generated/gql/graphql';
-import { QueryGatedMappings } from '@/graphql/gated-mappings';
+import {
+  MutationRematchGatedMappingMutation,
+  MutationRematchGatedMappingMutationVariables,
+  QueryGatedMappingsQuery,
+  QueryGatedMappingsQueryVariables,
+} from '@/generated/gql/graphql';
+import { MutationRematchGatedMapping, QueryGatedMappings } from '@/graphql/gated-mappings';
 
 /**
  * 게이트 차단 매핑(추출 오염 / 묶음글 등) 목록 조회.
@@ -25,3 +30,8 @@ export const useGetGatedMappings = (
     ...options,
   });
 };
+
+export const useRematchGatedMapping = () =>
+  useMutation<MutationRematchGatedMappingMutation, MutationRematchGatedMappingMutationVariables>(
+    MutationRematchGatedMapping,
+  );

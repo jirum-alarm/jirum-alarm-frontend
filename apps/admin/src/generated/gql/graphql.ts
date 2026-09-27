@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -290,6 +291,13 @@ export type ExistsUserOutput = {
   __typename?: 'ExistsUserOutput';
   email: Scalars['Boolean']['output'];
   social: Scalars['Boolean']['output'];
+};
+
+export type GatedMappingRematchOutput = {
+  __typename?: 'GatedMappingRematchOutput';
+  productId?: Maybe<Scalars['Int']['output']>;
+  /** requeued = 게이트 행 삭제 후 게이트 없이 재매칭 시작(결과는 검수 대기로) / already_mapped = 다른 matched·verified 매핑이 있어 게이트 행만 삭제 / unavailable = matching-api 미설정 */
+  status: Scalars['String']['output'];
 };
 
 export enum Gender {
@@ -671,6 +679,8 @@ export type Mutation = {
   recordProductImpressions: Scalars['Boolean']['output'];
   /** 어드민) 리액션 키워드 후보 거절 */
   rejectHotDealKeywordCandidateByAdmin: Scalars['Boolean']['output'];
+  /** 게이트 차단 매핑 오판 → 게이트 행 삭제 후 재매칭 (결과는 검수 대기로) */
+  rematchGatedMapping: GatedMappingRematchOutput;
   /** 모든 알림 삭제 */
   removeAllNotifications: Scalars['Boolean']['output'];
   removeComment: Scalars['Boolean']['output'];
@@ -949,6 +959,10 @@ export type MutationRecordProductImpressionsArgs = {
 
 export type MutationRejectHotDealKeywordCandidateByAdminArgs = {
   id: Scalars['Int']['input'];
+};
+
+export type MutationRematchGatedMappingArgs = {
+  productMappingId: Scalars['Int']['input'];
 };
 
 export type MutationRemoveCommentArgs = {
@@ -1838,7 +1852,7 @@ export type Query = {
   communityProviders: Array<Provider>;
   /** 상품 랭킹 랜덤 조회 */
   communityRandomRankingProducts: Array<ProductOutput>;
-  /** 어드민) 일별 서비스 조회수 합계 */
+  /** 어드민) 일별/주별/월별 서비스 조회수 합계 */
   dailyServiceViewStats: Array<DateCountOutput>;
   /** 안읽은 알림 존재 여부 조회 */
   existUnreadNotification: Scalars['Boolean']['output'];
@@ -1883,7 +1897,7 @@ export type Query = {
   hotDealKeywordsByAdmin: Array<HotDealKeywordOutput>;
   /** 놓치면 아까운 핫딜 - 랭킹순 핫딜 상품 조회 */
   hotDealRankingProducts: Array<ProductOutput>;
-  /** 어드민) 일별 핫딜 비율 추이 */
+  /** 어드민) 일별/주별/월별 핫딜 비율 추이 */
   hotDealRatioStats: Array<HotDealRatioOutput>;
   /** 어드민) 핫딜 유형별 분포 */
   hotDealTypeDistribution: Array<HotDealTypeCountOutput>;
@@ -1935,7 +1949,7 @@ export type Query = {
   productKeywords: Array<Scalars['String']['output']>;
   /** 어드민) 가격대별 상품 분포 */
   productPriceDistribution: Array<PriceRangeCountOutput>;
-  /** 어드민) 일별 신규 상품 등록 수 */
+  /** 어드민) 일별/주별/월별 신규 상품 등록 수 */
   productRegistrationStats: Array<DateCountOutput>;
   /** 어드민) provider별 시계열 신규 상품 수 (커뮤니티 크롤러 health) */
   productRegistrationStatsByProvider: Array<ProviderDateCountOutput>;
@@ -2968,6 +2982,19 @@ export type QueryGatedMappingsQuery = {
       provider: { __typename?: 'Provider'; name: string };
     } | null;
   }>;
+};
+
+export type MutationRematchGatedMappingMutationVariables = Exact<{
+  productMappingId: Scalars['Int']['input'];
+}>;
+
+export type MutationRematchGatedMappingMutation = {
+  __typename?: 'Mutation';
+  rematchGatedMapping: {
+    __typename?: 'GatedMappingRematchOutput';
+    status: string;
+    productId?: number | null;
+  };
 };
 
 export type QueryHotDealKeywordsByAdminQueryVariables = Exact<{
@@ -4210,6 +4237,17 @@ export const QueryGatedMappingsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<QueryGatedMappingsQuery, QueryGatedMappingsQueryVariables>;
+export const MutationRematchGatedMappingDocument = new TypedDocumentString(`
+    mutation MutationRematchGatedMapping($productMappingId: Int!) {
+  rematchGatedMapping(productMappingId: $productMappingId) {
+    status
+    productId
+  }
+}
+    `) as unknown as TypedDocumentString<
+  MutationRematchGatedMappingMutation,
+  MutationRematchGatedMappingMutationVariables
+>;
 export const QueryHotDealKeywordsByAdminDocument = new TypedDocumentString(`
     query QueryHotDealKeywordsByAdmin($type: HotDealKeywordType, $orderBy: HotDealKeywordOrderType!, $orderOption: OrderOptionType!, $limit: Int!, $searchAfter: [String!]) {
   hotDealKeywordsByAdmin(
