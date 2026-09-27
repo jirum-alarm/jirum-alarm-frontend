@@ -108,6 +108,15 @@ export enum AdvertiseSlotType {
   PinnedProduct = 'pinnedProduct',
 }
 
+export type AffiliateSalesDailyOutput = {
+  __typename?: 'AffiliateSalesDailyOutput';
+  /** localCommission 합 (KRW, GROSS 추정 — 추세용) */
+  commissionSum: Scalars['Float']['output'];
+  count: Scalars['Int']['output'];
+  date: Scalars['String']['output'];
+  provider: Scalars['String']['output'];
+};
+
 export type AgeGroupCountOutput = {
   __typename?: 'AgeGroupCountOutput';
   /** 연령대 (예: 10대, 20대, 30대, 미설정) */
@@ -120,6 +129,12 @@ export type ApiQuery = {
   queryName: Scalars['String']['output'];
   type: DataSourceType;
   variables?: Maybe<Scalars['JSONObject']['output']>;
+};
+
+export type AttemptsCountOutput = {
+  __typename?: 'AttemptsCountOutput';
+  attempts: Scalars['Int']['output'];
+  count: Scalars['Int']['output'];
 };
 
 export type BaseSection = {
@@ -155,10 +170,22 @@ export type BrandProductMatchCountOutput = {
   volume: Scalars['String']['output'];
 };
 
+export type CatalogProductOutput = {
+  __typename?: 'CatalogProductOutput';
+  /** 다나와 공식 최저가(원). 없으면 이 타입 자체가 안 내려간다. */
+  danawaPrice: Scalars['Int']['output'];
+  /** brand_product.id */
+  id: Scalars['Int']['output'];
+  /** Meilisearch 관련도 점수 0~1 */
+  rankingScore?: Maybe<Scalars['Float']['output']>;
+  title: Scalars['String']['output'];
+};
+
 export type CategorizedReactionKeywords = {
   __typename?: 'CategorizedReactionKeywords';
   count: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  role: HotDealKeywordGroupRole;
   tag: Scalars['String']['output'];
   type: HotDealKeywordType;
 };
@@ -229,17 +256,6 @@ export enum CurrencyType {
   Won = 'WON',
 }
 
-export type DanawaProductOutput = {
-  __typename?: 'DanawaProductOutput';
-  amount?: Maybe<Scalars['String']['output']>;
-  brandName: Scalars['String']['output'];
-  brandProductId: Scalars['Int']['output'];
-  id: Scalars['ID']['output'];
-  mallCount: Scalars['Float']['output'];
-  productName: Scalars['String']['output'];
-  volume?: Maybe<Scalars['String']['output']>;
-};
-
 export enum DataSourceType {
   GraphqlQuery = 'GRAPHQL_QUERY',
 }
@@ -259,6 +275,16 @@ export enum DateInterval {
   /** 주별 */
   Weekly = 'WEEKLY',
 }
+
+export type DoubleRowSection = BaseSection & {
+  __typename?: 'DoubleRowSection';
+  dataSource: ApiQuery;
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
 
 export type ExistsUserOutput = {
   __typename?: 'ExistsUserOutput';
@@ -296,6 +322,15 @@ export type GroupSection = BaseSection & {
   title: Scalars['String']['output'];
   type: SectionDisplayType;
   viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
+
+export type HomePage = {
+  __typename?: 'HomePage';
+  /** 실험 ID (예: home_hero_v1) */
+  experimentId: Scalars['String']['output'];
+  sections: Array<BaseSection>;
+  /** 배정 변인: control | hotdeal | under10000 | mall */
+  variant: Scalars['String']['output'];
 };
 
 export type HorizontalScrollSection = BaseSection & {
@@ -347,6 +382,11 @@ export enum HotDealKeywordCandidateStatus {
   Approved = 'APPROVED',
   Pending = 'PENDING',
   Rejected = 'REJECTED',
+}
+
+export enum HotDealKeywordGroupRole {
+  DealStatus = 'DEAL_STATUS',
+  Quality = 'QUALITY',
 }
 
 export enum HotDealKeywordOrderType {
@@ -412,6 +452,14 @@ export type HotDealTypeCountOutput = {
   hotDealType: HotDealType;
 };
 
+export type KakaoProfitLinkOutput = {
+  __typename?: 'KakaoProfitLinkOutput';
+  /** 실패 시 사유. 성공이면 null. */
+  error?: Maybe<Scalars['String']['output']>;
+  /** 발급된 카카오쇼핑 추천리워드 링크 (clink.kakao.com/sp/…) */
+  profitLink?: Maybe<Scalars['String']['output']>;
+};
+
 export type KeywordCountOutput = {
   __typename?: 'KeywordCountOutput';
   count: Scalars['Int']['output'];
@@ -449,6 +497,7 @@ export type LayoutTab = {
   id: Scalars['ID']['output'];
   label: Scalars['String']['output'];
   variables?: Maybe<Scalars['JSONObject']['output']>;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
 };
 
 export type ListSection = BaseSection & {
@@ -584,6 +633,8 @@ export type Mutation = {
   cancelVerification: Scalars['Boolean']['output'];
   /** 상품 단건 수집 */
   collectProduct: Scalars['Boolean']['output'];
+  /** 구매(수익링크) 버튼 클릭 기록 — source 에 화면(예: detail_mobile) */
+  collectPurchaseClick: Scalars['Boolean']['output'];
   /** 썸네일 단건 수집 */
   collectThumbnail: Scalars['Boolean']['output'];
   /** 어드민) 광고 생성 (생성된 id 반환) */
@@ -596,13 +647,18 @@ export type Mutation = {
   createUserProduct: Scalars['Int']['output'];
   /** 어드민) 상품 hard delete */
   hardDeleteProductByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 카카오쇼핑 상품 URL을 추천리워드 링크(clink.kakao.com/sp/…)로 발급. product 에는 쓰지 않고 링크만 반환. */
+  issueKakaoProfitLink: KakaoProfitLinkOutput;
+  /** 어드민) 오늘의집 상품 URL을 큐레이터 제휴 링크(?af)로 발급. product 에는 쓰지 않고 링크만 반환. */
+  issueOhouProfitLink: OhouProfitLinkOutput;
+  /** 어드민) 토스 상품 URL(또는 tacaItemId)을 우리 publisher 수익링크로 발급. product 에는 쓰지 않고 링크만 반환. /c/{id}·/t/{id}·toss.im/_m/… 지원, /p/ 불가. */
+  issueTossProfitLink: TossProfitLinkOutput;
   /** 로그인 */
   login: TokenOutput;
   /** 리프레시 토큰으로 로그인 */
   loginByRefreshToken: TokenOutput;
   /** 로그아웃 */
   logout: Scalars['Boolean']['output'];
-  matchProductToDanawaProduct: Scalars['Boolean']['output'];
   /** 모든 알림 읽음 처리 */
   readAllNotifications: Scalars['Boolean']['output'];
   /** 모든 알림 읽음 처리 */
@@ -643,11 +699,19 @@ export type Mutation = {
   sendNotificationByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 광고 on/off (킬스위치) */
   setAdActive: Scalars['Boolean']['output'];
+  /** 어드민) 카카오쇼핑 추천리워드 세션 갱신. store.kakao.com 로그인 후 공유하기 → affiliate-link 요청 Copy as cURL. 성공 시 kakao:no_session·기존 disabled(store.kakao.com) 미발급건을 retry 큐에 재진입시킨다. */
+  setKakaoSession: Scalars['Boolean']['output'];
   /** 어드민) 모델 페이지 발행 토글 */
   setModelPagePublishedByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 네이버 브랜드커넥트 세션 쿠키 갱신. brandconnect.naver.com 로그인 → DevTools 요청 Cookie 헤더 원문(NID_AUT/NID_SES 포함) 붙여넣기. 성공 시 nv:no_token 미발급건을 retry 큐에 재진입시킨다. */
+  setNaverBcSession: Scalars['Boolean']['output'];
+  /** 어드민) 오늘의집 큐레이터 세션 갱신. 로그인 후 상품 공유하기 → sharelink 요청 Copy as cURL. cookie+userId 를 저장하고, curl에 contentId가 있으면 ?af 발급으로 검증한다. */
+  setOhouSession: Scalars['Boolean']['output'];
   /** 대표 매핑 지정 (id 기준) */
   setPrimaryProductMapping: Scalars['Boolean']['output'];
-  /** 어드민) 토스 세션 토큰(TBIZAUTH) 갱신. sharelink.toss.im 로그인 → DevTools > Application > Cookies > TBIZAUTH 값(base64 원문) 붙여넣기. */
+  /** 어드민) 세시간전(3hoursahead) refresh 쿠키 갱신. 3hoursahead.com 구글 로그인 → DevTools > Application > Cookies 의 `r` 값(JWT 원문) 붙여넣기. 쿠키는 7일 만료라 주 1회 갱신 필요. 성공 시 3ha:no_token 미발급건을 retry 큐에 재진입시킨다. */
+  setThreeHaSession: Scalars['Boolean']['output'];
+  /** 어드민) 토스 세션 토큰(TBIZAUTH) 갱신. TBIZAUTH 원문, Cookie 헤더, 또는 curl(-b/-H cookie)을 붙여넣으면 TBIZAUTH만 저장. 성공 시 toss:no_token 미발급건을 retry 큐에 재진입시킨다. */
   setTossSession: Scalars['Boolean']['output'];
   /** 회원가입 */
   signup: SignupOutput;
@@ -664,6 +728,10 @@ export type Mutation = {
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 키워드 맵 그룹 수정 */
   updateKeywordMapGroupByAdmin: Scalars['Boolean']['output'];
+  /** 이 키워드는 등록 시점보다 가격이 내려간 딜만 알림 받기 */
+  updateNotificationKeywordPriceDropOnly: Scalars['Boolean']['output'];
+  /** 이 키워드는 지정한 가격 범위 안의 딜만 알림 받기 (null = 그 방향 해제) */
+  updateNotificationKeywordPriceRange: Scalars['Boolean']['output'];
   /** 알림 키워드 상태 수정 */
   updateNotificationKeywordStatus: Scalars['Boolean']['output'];
   /** 비밀번호 업데이트 */
@@ -719,7 +787,9 @@ export type MutationAddKeywordMapGroupByAdminArgs = {
 };
 
 export type MutationAddNotificationKeywordArgs = {
+  fromRecommendation?: InputMaybe<Scalars['Boolean']['input']>;
   keyword: Scalars['String']['input'];
+  priceDropOnly?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type MutationAddNotificationToNonUsersArgs = {
@@ -805,6 +875,12 @@ export type MutationCollectProductArgs = {
   source?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type MutationCollectPurchaseClickArgs = {
+  position?: InputMaybe<Scalars['Int']['input']>;
+  productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type MutationCollectThumbnailArgs = {
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
@@ -836,13 +912,21 @@ export type MutationHardDeleteProductByAdminArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type MutationIssueKakaoProfitLinkArgs = {
+  url: Scalars['String']['input'];
+};
+
+export type MutationIssueOhouProfitLinkArgs = {
+  url: Scalars['String']['input'];
+};
+
+export type MutationIssueTossProfitLinkArgs = {
+  url: Scalars['String']['input'];
+};
+
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
-};
-
-export type MutationMatchProductToDanawaProductArgs = {
-  productId: Scalars['Int']['input'];
 };
 
 export type MutationReadNotificationArgs = {
@@ -930,13 +1014,29 @@ export type MutationSetAdActiveArgs = {
   isActive: Scalars['Boolean']['input'];
 };
 
+export type MutationSetKakaoSessionArgs = {
+  curl: Scalars['String']['input'];
+};
+
 export type MutationSetModelPagePublishedByAdminArgs = {
   id: Scalars['Int']['input'];
   isPublished: Scalars['Boolean']['input'];
 };
 
+export type MutationSetNaverBcSessionArgs = {
+  cookie: Scalars['String']['input'];
+};
+
+export type MutationSetOhouSessionArgs = {
+  curl: Scalars['String']['input'];
+};
+
 export type MutationSetPrimaryProductMappingArgs = {
   productMappingId: Scalars['Int']['input'];
+};
+
+export type MutationSetThreeHaSessionArgs = {
+  cookie: Scalars['String']['input'];
 };
 
 export type MutationSetTossSessionArgs = {
@@ -996,6 +1096,17 @@ export type MutationUpdateKeywordMapGroupByAdminArgs = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['Int']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationUpdateNotificationKeywordPriceDropOnlyArgs = {
+  id: Scalars['Int']['input'];
+  priceDropOnly: Scalars['Boolean']['input'];
+};
+
+export type MutationUpdateNotificationKeywordPriceRangeArgs = {
+  id: Scalars['Int']['input'];
+  maxPrice?: InputMaybe<Scalars['Int']['input']>;
+  minPrice?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type MutationUpdateNotificationKeywordStatusArgs = {
@@ -1065,6 +1176,10 @@ export type NotificationKeyword = {
   id: Scalars['ID']['output'];
   isActive: Scalars['Boolean']['output'];
   keyword: Scalars['String']['output'];
+  maxPrice?: Maybe<Scalars['Int']['output']>;
+  minPrice?: Maybe<Scalars['Int']['output']>;
+  priceDropOnly: Scalars['Boolean']['output'];
+  updatedAt: Scalars['DateTime']['output'];
   userId: Scalars['Int']['output'];
 };
 
@@ -1096,6 +1211,14 @@ export enum OauthProvider {
   Kakao = 'KAKAO',
   Naver = 'NAVER',
 }
+
+export type OhouProfitLinkOutput = {
+  __typename?: 'OhouProfitLinkOutput';
+  /** 실패 시 사유. 성공이면 null. */
+  error?: Maybe<Scalars['String']['output']>;
+  /** 발급된 오늘의집 큐레이터 링크 (ozip.me/…?af) */
+  profitLink?: Maybe<Scalars['String']['output']>;
+};
 
 export enum OrderOptionType {
   Asc = 'ASC',
@@ -1142,7 +1265,51 @@ export type PriceContext = {
   normalPriceMax?: Maybe<Scalars['Float']['output']>;
   normalPriceMedian?: Maybe<Scalars['Float']['output']>;
   normalPriceMin?: Maybe<Scalars['Float']['output']>;
+  shippingIncluded?: Maybe<Scalars['Boolean']['output']>;
   verificationStatus?: Maybe<Scalars['String']['output']>;
+};
+
+export enum PriceHistoryBasis {
+  Cluster = 'CLUSTER',
+  Mapping = 'MAPPING',
+  Similar = 'SIMILAR',
+}
+
+export enum PriceHistoryConfidence {
+  High = 'HIGH',
+  Low = 'LOW',
+}
+
+/** 가격 추이 점의 대표/동시 딜 정보 (호버용) */
+export type PriceHistoryDeal = {
+  __typename?: 'PriceHistoryDeal';
+  categoryId?: Maybe<Scalars['Int']['output']>;
+  displayTitle?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  /** 현재 상세 seed 딜이면 true */
+  isSeed: Scalars['Boolean']['output'];
+  parsedPrice: Scalars['Float']['output'];
+  postedAt: Scalars['DateTime']['output'];
+  price?: Maybe<Scalars['String']['output']>;
+  priceCurrency?: Maybe<Scalars['String']['output']>;
+  providerId: Scalars['Int']['output'];
+  providerName?: Maybe<Scalars['String']['output']>;
+  thumbnail?: Maybe<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
+  url?: Maybe<Scalars['String']['output']>;
+};
+
+/** 날짜별 핫딜가 1점 (+ 그날 딜들) */
+export type PriceHistoryPoint = {
+  __typename?: 'PriceHistoryPoint';
+  /** KST YYYY-MM-DD */
+  date: Scalars['String']['output'];
+  /** 대표 딜(최저가) */
+  deal: PriceHistoryDeal;
+  /** 같은 날 다른 딜(최대 N) */
+  deals: Array<PriceHistoryDeal>;
+  /** 그날 대표가(최저) */
+  price: Scalars['Float']['output'];
 };
 
 export type PriceRangeCountOutput = {
@@ -1153,6 +1320,38 @@ export type PriceRangeCountOutput = {
   /** 가격 구간 라벨 (예: 1만~3만) */
   priceRange: Scalars['String']['output'];
 };
+
+export enum PriceVerdictDisplayTier {
+  Hidden = 'HIDDEN',
+  Neutral = 'NEUTRAL',
+  Strong = 'STRONG',
+}
+
+export enum PriceVerdictLabelKey {
+  AboveTypical = 'ABOVE_TYPICAL',
+  BelowTypical = 'BELOW_TYPICAL',
+  NearHigh = 'NEAR_HIGH',
+  NearLowest = 'NEAR_LOWEST',
+  Typical = 'TYPICAL',
+}
+
+export enum PriceVerdictNullReason {
+  BasisNotAllowed = 'BASIS_NOT_ALLOWED',
+  CurrencyMismatch = 'CURRENCY_MISMATCH',
+  InconsistentPrice = 'INCONSISTENT_PRICE',
+  LowConfidence = 'LOW_CONFIDENCE',
+  NoHistory = 'NO_HISTORY',
+  NoMapping = 'NO_MAPPING',
+  PrivateOrMissingSeed = 'PRIVATE_OR_MISSING_SEED',
+  SeedPriceMissing = 'SEED_PRICE_MISSING',
+  TooFewPoints = 'TOO_FEW_POINTS',
+  UnitAxis = 'UNIT_AXIS',
+}
+
+export enum PriceVerdictStatus {
+  Ready = 'READY',
+  Unavailable = 'UNAVAILABLE',
+}
 
 export type PriceVisualConfig = {
   __typename?: 'PriceVisualConfig';
@@ -1332,6 +1531,7 @@ export enum ProductOrderType {
   Id = 'ID',
   PostedAt = 'POSTED_AT',
   Reaction = 'REACTION',
+  Relevance = 'RELEVANCE',
   ViewCount = 'VIEW_COUNT',
 }
 
@@ -1349,10 +1549,14 @@ export type ProductOutput = {
   consumptionDate?: Maybe<Scalars['DateTime']['output']>;
   /** 상품 설명(유저 등록 상품) */
   content?: Maybe<Scalars['String']['output']>;
+  /** 소스별 확장 정보(toss 등) */
+  data?: Maybe<Scalars['JSONObject']['output']>;
   detailUrl?: Maybe<Scalars['String']['output']>;
   dislikeCount: Scalars['Int']['output'];
   distributionDate?: Maybe<Scalars['DateTime']['output']>;
   earliestExpiryDate?: Maybe<Scalars['DateTime']['output']>;
+  /** 검색 결과 총량 추정(Meilisearch estimatedTotalHits, 5000 캡). keyword 검색에서만 채워지며 searchAfter처럼 모든 행에 동일 값 주입. */
+  estimatedTotal?: Maybe<Scalars['Int']['output']>;
   /**
    * 핫딜 정보 요약
    * @deprecated productGuides 쿼리를 사용해주세요.
@@ -1375,6 +1579,8 @@ export type ProductOutput = {
   mallId?: Maybe<Scalars['Int']['output']>;
   mallName?: Maybe<Scalars['String']['output']>;
   mappingInfo?: Maybe<Array<ProductMappingInfoOutput>>;
+  /** 연결된 발행 모델 페이지(/deals/{slug}). trusted 매핑→brand_item→isPublished=true 일 때만 */
+  modelPage?: Maybe<ModelPageOutput>;
   negativeCommunityReactionCount: Scalars['Int']['output'];
   parsedPrice?: Maybe<Scalars['Float']['output']>;
   positiveCommunityReactionCount: Scalars['Int']['output'];
@@ -1386,9 +1592,14 @@ export type ProductOutput = {
   /** 왜 핫딜인지 가격 컨텍스트 (게이트 통과 시에만, 상세 전용) */
   priceContext?: Maybe<PriceContext>;
   priceCurrency?: Maybe<Scalars['String']['output']>;
+  /** 일별 핫딜가 추이. brand_item/매핑∪클러스터(HIGH) 우선, 점 부족 시 유사 폴백(LOW). 2점 미만이면 null */
+  priceHistory?: Maybe<ProductPriceHistory>;
+  /** 상세 히어로 가격 판정(지금 사도 되나). 30일 MAPPING HIGH만 READY. 프론트는 READY+STRONG만 렌더. 실패해도 객체를 내려 nullReason 계측. */
+  priceVerdict?: Maybe<ProductPriceVerdict>;
   /** 상품 가격 목록 */
   prices?: Maybe<Array<ProductPrice>>;
   productMapping?: Maybe<ProductMapping>;
+  profitLinkProvider?: Maybe<Scalars['String']['output']>;
   provider: Provider;
   providerId: Scalars['Int']['output'];
   searchAfter?: Maybe<Array<Scalars['String']['output']>>;
@@ -1405,6 +1616,10 @@ export type ProductOutput = {
   wishlistCount: Scalars['Int']['output'];
 };
 
+export type ProductOutputPriceHistoryArgs = {
+  days?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type ProductPrice = {
   __typename?: 'ProductPrice';
   createdAt: Scalars['DateTime']['output'];
@@ -1414,11 +1629,137 @@ export type ProductPrice = {
   type: CurrencyType;
 };
 
+/** 상품 상세 가격 추이 (일별 핫딜가) */
+export type ProductPriceHistory = {
+  __typename?: 'ProductPriceHistory';
+  basis: PriceHistoryBasis;
+  confidence: PriceHistoryConfidence;
+  /** KRW | USD */
+  currency: Scalars['String']['output'];
+  /** LOW confidence 안내 문구 */
+  disclaimer?: Maybe<Scalars['String']['output']>;
+  pointCount: Scalars['Int']['output'];
+  points: Array<PriceHistoryPoint>;
+  /** TOTAL | UNIT — brand_item 추이 축 */
+  priceAxis?: Maybe<Scalars['String']['output']>;
+  rangeDays: Scalars['Int']['output'];
+  /** 필터 통과 원본 딜 수 */
+  sampleCount: Scalars['Int']['output'];
+  /** 단위 라벨 (100ml당 등) — brand_item 추이 */
+  unitLabel?: Maybe<Scalars['String']['output']>;
+};
+
 export enum ProductPriceTarget {
   Danawa = 'DANAWA',
   JirumAlarm = 'JIRUM_ALARM',
   Mall = 'MALL',
 }
+
+/** 상세 히어로 가격 판정. v1 프론트는 status=READY && displayTier=STRONG 만 렌더. UNAVAILABLE 이어도 객체를 내려 nullReason 을 계측한다. */
+export type ProductPriceVerdict = {
+  __typename?: 'ProductPriceVerdict';
+  /** MAPPING | CLUSTER */
+  basis?: Maybe<Scalars['String']['output']>;
+  /** HIGH only in v1 READY */
+  confidence?: Maybe<Scalars['String']['output']>;
+  /** KRW | USD */
+  currency?: Maybe<Scalars['String']['output']>;
+  /** seedPrice - windowMinPrice. 음수 = 지금이 더 쌈 */
+  deltaWon?: Maybe<Scalars['Float']['output']>;
+  displayTier: PriceVerdictDisplayTier;
+  headline?: Maybe<Scalars['String']['output']>;
+  historyPointCount?: Maybe<Scalars['Int']['output']>;
+  labelKey?: Maybe<PriceVerdictLabelKey>;
+  nullReason?: Maybe<PriceVerdictNullReason>;
+  percentile?: Maybe<Scalars['Float']['output']>;
+  rangeDays?: Maybe<Scalars['Int']['output']>;
+  /** max(0, -deltaWon) */
+  savingsWon?: Maybe<Scalars['Float']['output']>;
+  seedPrice?: Maybe<Scalars['Float']['output']>;
+  status: PriceVerdictStatus;
+  subline?: Maybe<Scalars['String']['output']>;
+  /** KST YYYY-MM-DD */
+  windowMinDate?: Maybe<Scalars['String']['output']>;
+  windowMinPrice?: Maybe<Scalars['Float']['output']>;
+};
+
+export type ProfitLinkErrorCountOutput = {
+  __typename?: 'ProfitLinkErrorCountOutput';
+  count: Scalars['Int']['output'];
+  error: Scalars['String']['output'];
+};
+
+export type ProfitLinkFunnelDailyOutput = {
+  __typename?: 'ProfitLinkFunnelDailyOutput';
+  date: Scalars['String']['output'];
+  /** profitLink 발급 완료 */
+  issued: Scalars['Int']['output'];
+  /** 미발급 + attempts 소진 (영구 포기) */
+  parked: Scalars['Int']['output'];
+  /** 미발급 + 재시도 여지 있음 (attempts < MAX) */
+  pending: Scalars['Int']['output'];
+  /** 미발급 + lastError='disabled' (발급 불가 몰) */
+  terminal: Scalars['Int']['output'];
+  /** 해당 일 생성 딜 총수 */
+  total: Scalars['Int']['output'];
+};
+
+export type ProfitLinkMissedProductOutput = {
+  __typename?: 'ProfitLinkMissedProductOutput';
+  attempts: Scalars['Int']['output'];
+  categoryId: Scalars['Int']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  detailUrl?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  lastError?: Maybe<Scalars['String']['output']>;
+  mallName?: Maybe<Scalars['String']['output']>;
+  nextRetryAt?: Maybe<Scalars['DateTime']['output']>;
+  parsedPrice?: Maybe<Scalars['Int']['output']>;
+  rankingScore?: Maybe<Scalars['Float']['output']>;
+  title: Scalars['String']['output'];
+};
+
+export type ProfitLinkProviderHealthOutput = {
+  __typename?: 'ProfitLinkProviderHealthOutput';
+  /** 90일 중 판매가 있던 날 수 — 희소 provider 판별 */
+  activeDays90d: Scalars['Int']['output'];
+  /** 최근 7d localCommission 합 (KRW, GROSS 추정 — 추세용) */
+  commission7d?: Maybe<Scalars['Float']['output']>;
+  /** 최근 30d localCommission 합 (KRW, GROSS 추정). 7d 는 희소 provider 를 0원으로 보이게 해서(쿠팡 7d 0원 / 30d 26,537원) 표시 기본값은 이쪽. */
+  commission30d?: Maybe<Scalars['Float']['output']>;
+  /** 마지막 판매 row 도착 이후 경과일 — 침묵 판정 입력 */
+  daysSinceLastSale?: Maybe<Scalars['Float']['output']>;
+  issued7d: Scalars['Int']['output'];
+  /** 최근 24h 발급 딜 수 (딜 생성시각 기준 근사) */
+  issued24h: Scalars['Int']['output'];
+  /** 최근 30d 발급 딜 수 — 발급당 수익 분모 */
+  issued30d: Scalars['Int']['output'];
+  /** 발급 보유 딜의 마지막 생성 시각 */
+  lastIssuedProductAt?: Maybe<Scalars['DateTime']['output']>;
+  /** 마지막 판매 row 도착 시각 (postback 생존) */
+  lastSaleAt?: Maybe<Scalars['DateTime']['output']>;
+  provider: Scalars['String']['output'];
+  sales7d: Scalars['Int']['output'];
+  sales24h: Scalars['Int']['output'];
+  sales30d: Scalars['Int']['output'];
+  /** 판매 파이프 판정: ok | silent(콜백 끊김=사고) | sparse(원래 드물어 감시 제외). 배치 알람과 같은 기준(common/lib/affiliate-sales-health) — 프론트가 자체 판정하지 않는다. */
+  salesHealth: Scalars['String']['output'];
+};
+
+export type ProfitLinkQueueHealthOutput = {
+  __typename?: 'ProfitLinkQueueHealthOutput';
+  attemptsDistribution: Array<AttemptsCountOutput>;
+  /** 지금 재시도 가능 (미발급 + attempts<MAX + backoff 경과). host 제외 조건 미반영 근사치 */
+  eligibleNow: Scalars['Int']['output'];
+  /** 재시도 가능분 중 최고령 딜 생성 시각 */
+  oldestEligibleCreatedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** attempts 소진 영구 포기 */
+  parked: Scalars['Int']['output'];
+  /** lastError='disabled' 터미널 */
+  terminalDisabled: Scalars['Int']['output'];
+  /** backoff 대기 중 (nextRetryAt 미래) */
+  waitingBackoff: Scalars['Int']['output'];
+};
 
 export type Provider = {
   __typename?: 'Provider';
@@ -1471,7 +1812,8 @@ export type Query = {
   adminMe: AdminUser;
   /** 어드민) 광고 목록 */
   adsByAdmin: Array<AdvertiseCreative>;
-  analysisTitleByDanawa: Scalars['Boolean']['output'];
+  /** 어드민) provider별 일간 판매 추이 (건수 + localCommission 합, 추세 감시용) */
+  affiliateSalesTrend: Array<AffiliateSalesDailyOutput>;
   /** BrandItem 단위 매칭된 전체 개수 조회 */
   brandItemsByMatchCountTotalCount: Scalars['Int']['output'];
   /** BrandItem 단위 매칭 합산 목록 조회 (커서 기반 페이지네이션) */
@@ -1482,6 +1824,8 @@ export type Query = {
   brandProductsByMatchCountTotalCount: Scalars['Int']['output'];
   /** 매칭된 개수가 많은 순으로 브랜드 상품 목록 조회 (커서 기반 페이지네이션) */
   brandProductsOrderByMatchCount: Array<BrandProductMatchCountOutput>;
+  /** 브랜드 카탈로그에서 다나와 공식 최저가를 찾는다. 대표가 확실할 때만 돌려주고, 아니면 빈 배열. */
+  catalogSearch: Array<CatalogProductOutput>;
   categories: Array<Category>;
   /** 커뮤니티 반응 카테고리별 키워드 조회 */
   categorizedReactionKeywords: CategorizedReactionKeywordsResponse;
@@ -1496,8 +1840,6 @@ export type Query = {
   communityRandomRankingProducts: Array<ProductOutput>;
   /** 어드민) 일별 서비스 조회수 합계 */
   dailyServiceViewStats: Array<DateCountOutput>;
-  danawaProduct: DanawaProductOutput;
-  danawaProducts: Array<DanawaProductOutput>;
   /** 안읽은 알림 존재 여부 조회 */
   existUnreadNotification: Scalars['Boolean']['output'];
   existsUnreadNotice: Scalars['Boolean']['output'];
@@ -1517,9 +1859,18 @@ export type Query = {
   getSimilarProducts: Array<ProductOutput>;
   /** 게스트 카테고리 선호 기반 추천 핫딜 (비로그인 허용, 선호 없으면 인기순 폴백) */
   guestRecommendedHotDeals: Array<ProductOutput>;
-  /** 어드민) 토스 세션 토큰 저장 여부(true면 발급 가동중) */
+  /** 어드민) 카카오쇼핑 추천리워드 세션 저장 여부(true면 발급 가동중) */
+  hasKakaoSession: Scalars['Boolean']['output'];
+  /** 어드민) 네이버 브랜드커넥트 세션 저장 여부(true면 발급 가동중) */
+  hasNaverBcSession: Scalars['Boolean']['output'];
+  /** 어드민) 오늘의집 큐레이터 세션이 실제로 ?af 링크를 주는지 */
+  hasOhouSession: Scalars['Boolean']['output'];
+  /** 어드민) 세시간전 세션 저장 여부(true면 폴백 발급 가동중) */
+  hasThreeHaSession: Scalars['Boolean']['output'];
+  /** 어드민) 토스 TBIZAUTH 가 정산 API 에 실제 유효한지. 키만 있고 AUTH_EXPIRED 면 false(키 삭제). 발급은 공식 OAuth2 라 이 값과 무관. */
   hasTossSession: Scalars['Boolean']['output'];
-  homePage: Array<BaseSection>;
+  /** 홈 섹션 목록 + 히어로 슬롯 실험 배정. deviceId(X-Device-Id) 기준 고정 해시. 프론트는 sections 순서를 그대로 그린다. */
+  homePage: HomePage;
   /** 어드민) 핫딜 제외 키워드 목록 조회 */
   hotDealExcludeKeywordsByAdmin: Array<HotDealExcludeKeywordOutput>;
   /** 어드민) 핫딜 키워드 조회 */
@@ -1558,7 +1909,7 @@ export type Query = {
   notificationKeywordsByMe: Array<NotificationKeyword>;
   /** 어드민) 개별 알림 목록 조회 */
   notificationListByAdmin: Array<Notification>;
-  /** 묶음 라이브 딜(상세 진입 시 실시간 조회) */
+  /** 묶음 미리보기 — 지난 7일 이 묶음을 구독했다면 받았을 알림 딜(최근순) */
   notificationThemeLiveDeals: Array<ProductOutput>;
   /** 활성 알림 묶음(테마) 목록 + 대표 키워드 */
   notificationThemes: Array<ThemeWithKeywords>;
@@ -1590,6 +1941,16 @@ export type Query = {
   products: Array<ProductOutput>;
   /** 키워드로 상품 목록 조회 */
   productsByKeyword: Array<ProductOutput>;
+  /** 어드민) 미발급 딜 lastError 사유 랭킹 */
+  profitLinkErrorStats: Array<ProfitLinkErrorCountOutput>;
+  /** 어드민) 일별 발급 퍼널 (생성 딜 → 발급/pending/parked/terminal) */
+  profitLinkFunnelDaily: Array<ProfitLinkFunnelDailyOutput>;
+  /** 어드민) 노출 가능(최근 30일·미종료)한데 수익링크 없는 딜 — 고가·랭킹 스코어 순 작업 큐 */
+  profitLinkMissedProducts: Array<ProfitLinkMissedProductOutput>;
+  /** 어드민) 수익링크 provider별 생존 신호 (발급 24h/7d + 판매 24h/7d/30d + 마지막 시각) */
+  profitLinkProviderHealth: Array<ProfitLinkProviderHealthOutput>;
+  /** 어드민) retry 큐 건강도 (깊이/backoff 대기/parked/terminal + attempts 분포) */
+  profitLinkQueueHealth: ProfitLinkQueueHealthOutput;
   /** 어드민) provider별 최근 수집 활동 (1h/24h/7d count + 마지막 수집 시각) */
   providerHealthStatus: Array<ProviderHealthOutput>;
   publishedModelPages: Array<ModelPageListItemOutput>;
@@ -1601,6 +1962,8 @@ export type Query = {
   recommendedNotificationKeywords: Array<Scalars['String']['output']>;
   /** 신고한 사용자 목록 조회 (마스킹) */
   reportUserNames: Array<Scalars['String']['output']>;
+  /** 같은 상품(동일상품 그룹)의 진행 중 딜 조회 (최신순, 최대 20) */
+  sameProductDeals: Array<ProductOutput>;
   /** 자동완성용 추천 검색어 목록. prefix로 시작하는 인기 검색어 + 상품 title prefix 매칭. */
   searchSuggestions: Array<Scalars['String']['output']>;
   /** 유사 상품 목록 조회 */
@@ -1611,9 +1974,6 @@ export type Query = {
   socialAccessToken: Scalars['String']['output'];
   /** 소셜 정보 조회 */
   socialInfo: SocialInfoOutput;
-  test6: Scalars['Int']['output'];
-  test7: Scalars['Boolean']['output'];
-  test8: Scalars['Boolean']['output'];
   /** 어드민) 썸네일 수집 통계 (타입 분포 + mall별 분포 + 미수집 카운트) */
   thumbnailStats: ThumbnailStatsOutput;
   /** 같이 본 상품 목록 조회 */
@@ -1622,6 +1982,8 @@ export type Query = {
   topFavoriteCategories: Array<CategoryCountOutput>;
   /** 어드민) 알림 키워드 TOP N */
   topNotificationKeywords: Array<KeywordCountOutput>;
+  /** 토스 카테고리 인기 하위 탭 목록(실제 존재하는 categoryLabel) */
+  tossCategoryLabels: Array<Scalars['String']['output']>;
   /** 안읽은 알림 수 목록 조회 */
   unreadNotificationsCount: Scalars['Int']['output'];
   /** 유저 조회 */
@@ -1663,6 +2025,11 @@ export type QueryAdsByAdminArgs = {
   slotLocation?: InputMaybe<AdvertiseSlotLocation>;
 };
 
+export type QueryAffiliateSalesTrendArgs = {
+  endDate: Scalars['DateTime']['input'];
+  startDate: Scalars['DateTime']['input'];
+};
+
 export type QueryBrandItemsByMatchCountTotalCountArgs = {
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1687,6 +2054,11 @@ export type QueryBrandProductsOrderByMatchCountArgs = {
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
   title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryCatalogSearchArgs = {
+  keyword: Scalars['String']['input'];
+  limit?: Scalars['Int']['input'];
 };
 
 export type QueryCategorizedReactionKeywordsArgs = {
@@ -1732,17 +2104,6 @@ export type QueryDailyServiceViewStatsArgs = {
   endDate: Scalars['DateTime']['input'];
   interval?: DateInterval;
   startDate: Scalars['DateTime']['input'];
-};
-
-export type QueryDanawaProductArgs = {
-  id: Scalars['String']['input'];
-};
-
-export type QueryDanawaProductsArgs = {
-  amount?: InputMaybe<Scalars['String']['input']>;
-  brandName: Scalars['String']['input'];
-  productName: Scalars['String']['input'];
-  volume?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryExistsUserArgs = {
@@ -1930,6 +2291,7 @@ export type QueryPendingVerificationsTotalCountArgs = {
   onlyActive?: InputMaybe<Scalars['Boolean']['input']>;
   productId?: InputMaybe<Scalars['Int']['input']>;
   productTitle?: InputMaybe<Scalars['String']['input']>;
+  suspiciousFirst?: InputMaybe<Scalars['Boolean']['input']>;
   target?: InputMaybe<ProductMappingTarget>;
   verificationStatus?: InputMaybe<Array<ProductMappingVerificationStatus>>;
 };
@@ -1974,7 +2336,7 @@ export type QueryProductRegistrationStatsByProviderArgs = {
 
 export type QueryProductsArgs = {
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
-  categoryId?: InputMaybe<Scalars['Int']['input']>;
+  categoryIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   endDate?: InputMaybe<Scalars['DateTime']['input']>;
   isApp?: InputMaybe<Scalars['Boolean']['input']>;
   isEnd?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1986,7 +2348,7 @@ export type QueryProductsArgs = {
   mallGroupId?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<ProductOrderType>;
   orderOption?: InputMaybe<OrderOptionType>;
-  providerId?: InputMaybe<Scalars['Int']['input']>;
+  providerIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
   startDate?: InputMaybe<Scalars['DateTime']['input']>;
   thumbnailType?: InputMaybe<ThumbnailType>;
@@ -1998,6 +2360,23 @@ export type QueryProductsByKeywordArgs = {
   orderBy: KeywordProductOrderType;
   orderOption: OrderOptionType;
   searchAfter?: InputMaybe<Array<Scalars['String']['input']>>;
+  tossCategoryLabel?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryProfitLinkErrorStatsArgs = {
+  endDate: Scalars['DateTime']['input'];
+  limit?: Scalars['Int']['input'];
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryProfitLinkFunnelDailyArgs = {
+  endDate: Scalars['DateTime']['input'];
+  startDate: Scalars['DateTime']['input'];
+};
+
+export type QueryProfitLinkMissedProductsArgs = {
+  categoryIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+  limit?: Scalars['Int']['input'];
 };
 
 export type QueryProviderHealthStatusArgs = {
@@ -2010,6 +2389,10 @@ export type QueryRecentViewedProductsArgs = {
 
 export type QueryReportUserNamesArgs = {
   productId: Scalars['Int']['input'];
+};
+
+export type QuerySameProductDealsArgs = {
+  id: Scalars['Int']['input'];
 };
 
 export type QuerySearchSuggestionsArgs = {
@@ -2118,11 +2501,13 @@ export enum Role {
 }
 
 export enum SectionDisplayType {
+  DoubleRow = 'DOUBLE_ROW',
   GridTabbed = 'GRID_TABBED',
   Group = 'GROUP',
   HorizontalScroll = 'HORIZONTAL_SCROLL',
   List = 'LIST',
   PaginatedGrid = 'PAGINATED_GRID',
+  Toss = 'TOSS',
 }
 
 export type SignupOutput = {
@@ -2157,6 +2542,10 @@ export type ThemeWithKeywords = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   representativeKeywords: Array<Scalars['String']['output']>;
+  /** 구독자 수 */
+  subscriberCount: Scalars['Int']['output'];
+  /** 지난 7일 이 묶음을 구독했다면 받았을 알림 수 */
+  weeklyAlertCount: Scalars['Int']['output'];
 };
 
 export type ThumbnailMallCountOutput = {
@@ -2198,6 +2587,23 @@ export enum TokenType {
   Apns = 'APNS',
   Fcm = 'FCM',
 }
+
+export type TossProfitLinkOutput = {
+  __typename?: 'TossProfitLinkOutput';
+  /** 실패 시 사유. 성공이면 null. 끝에 [toss:…] trace 가 붙을 수 있다. */
+  error?: Maybe<Scalars['String']['output']>;
+  /** 발급된 토스 수익링크 (toss.im/_m/…) */
+  profitLink?: Maybe<Scalars['String']['output']>;
+};
+
+export type TossSection = BaseSection & {
+  __typename?: 'TossSection';
+  displayOrder?: Maybe<Scalars['Float']['output']>;
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+  type: SectionDisplayType;
+  viewMoreLink?: Maybe<Scalars['String']['output']>;
+};
 
 export type UpdateAdvertiseInput = {
   displayPrice?: InputMaybe<AdvertisePriceInput>;
@@ -2369,49 +2775,6 @@ export type AdReportQuery = {
   }>;
 };
 
-export type ActiveAdsQueryVariables = Exact<{
-  slotLocation: AdvertiseSlotLocation;
-}>;
-
-export type ActiveAdsQuery = {
-  __typename?: 'Query';
-  activeAds: Array<{
-    __typename?: 'AdvertiseCreative';
-    id: string;
-    internalId: string;
-    startAt: any;
-    endAt: any;
-    slotType: AdvertiseSlotType;
-    slotLocation: Array<AdvertiseSlotLocation>;
-    slotPriority: number;
-    graphic: any;
-    displayTitle?: string | null;
-    targetUrl: string;
-    isActive: boolean;
-    createdAt: any;
-    modifiedAt: any;
-    displayPrice?: {
-      __typename?: 'AdvertisePrice';
-      discountText?: string | null;
-      originalPrice?: string | null;
-      displayPrice: string;
-    } | null;
-  }>;
-};
-
-export type RecordAdImpressionsMutationVariables = Exact<{
-  events: Array<AdvertiseImpressionInput> | AdvertiseImpressionInput;
-}>;
-
-export type RecordAdImpressionsMutation = { __typename?: 'Mutation'; recordAdImpressions: boolean };
-
-export type RecordAdClickMutationVariables = Exact<{
-  creativeId: Scalars['Int']['input'];
-  slotLocation: AdvertiseSlotLocation;
-}>;
-
-export type RecordAdClickMutation = { __typename?: 'Mutation'; recordAdClick: boolean };
-
 export type CreateAdAssetUploadUrlMutationVariables = Exact<{
   contentType: Scalars['String']['input'];
 }>;
@@ -2487,45 +2850,6 @@ export type QueryBrandProductsOrderByMatchCountQuery = {
   }>;
 };
 
-export type QuerySimilarProductsQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
-}>;
-
-export type QuerySimilarProductsQuery = {
-  __typename?: 'Query';
-  similarProducts: Array<{
-    __typename?: 'ProductOutput';
-    id: string;
-    title: string;
-    url?: string | null;
-    thumbnail?: string | null;
-    price?: string | null;
-    categoryId: number;
-    providerId: number;
-    postedAt: any;
-    provider: { __typename?: 'Provider'; name: string };
-  }>;
-};
-
-export type QueryBrandProductsByMatchCountTotalCountQueryVariables = Exact<{
-  brandItemId?: InputMaybe<Scalars['Int']['input']>;
-  title?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-export type QueryBrandProductsByMatchCountTotalCountQuery = {
-  __typename?: 'Query';
-  brandProductsByMatchCountTotalCount: number;
-};
-
-export type QueryBrandProductMatchCountQueryVariables = Exact<{
-  brandProductId: Scalars['Int']['input'];
-}>;
-
-export type QueryBrandProductMatchCountQuery = {
-  __typename?: 'Query';
-  brandProductMatchCount: number;
-};
-
 export type QueryBrandItemsOrderByTotalMatchCountQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
@@ -2552,6 +2876,41 @@ export type QueryBrandItemsByMatchCountTotalCountQueryVariables = Exact<{
 export type QueryBrandItemsByMatchCountTotalCountQuery = {
   __typename?: 'Query';
   brandItemsByMatchCountTotalCount: number;
+};
+
+export type QuerySimilarProductsByTitleQueryVariables = Exact<{
+  title: Scalars['String']['input'];
+  limit: Scalars['Int']['input'];
+}>;
+
+export type QuerySimilarProductsByTitleQuery = {
+  __typename?: 'Query';
+  similarProductsByTitle: Array<{
+    __typename?: 'ProductOutput';
+    id: string;
+    title: string;
+    url?: string | null;
+    thumbnail?: string | null;
+    price?: string | null;
+    similarity?: number | null;
+    provider: { __typename?: 'Provider'; name: string };
+    productMapping?: {
+      __typename?: 'ProductMapping';
+      target?: ProductMappingTarget | null;
+      targetId?: number | null;
+      verificationStatus?: ProductMappingVerificationStatus | null;
+    } | null;
+  }>;
+};
+
+export type MutationAddProductMappingMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+  brandProductId: Scalars['Int']['input'];
+}>;
+
+export type MutationAddProductMappingMutation = {
+  __typename?: 'Mutation';
+  addProductMapping: boolean;
 };
 
 export type QueryCategoriesQueryVariables = Exact<{ [key: string]: never }>;
@@ -2885,7 +3244,7 @@ export type QueryProductsQueryVariables = Exact<{
   startDate?: InputMaybe<Scalars['DateTime']['input']>;
   orderBy?: InputMaybe<ProductOrderType>;
   orderOption?: InputMaybe<OrderOptionType>;
-  categoryId?: InputMaybe<Scalars['Int']['input']>;
+  categoryIds?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
   keyword?: InputMaybe<Scalars['String']['input']>;
   thumbnailType?: InputMaybe<ThumbnailType>;
   isEnd?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2989,6 +3348,189 @@ export type SetTossSessionMutationVariables = Exact<{
 }>;
 
 export type SetTossSessionMutation = { __typename?: 'Mutation'; setTossSession: boolean };
+
+export type HasThreeHaSessionQueryVariables = Exact<{ [key: string]: never }>;
+
+export type HasThreeHaSessionQuery = { __typename?: 'Query'; hasThreeHaSession: boolean };
+
+export type SetThreeHaSessionMutationVariables = Exact<{
+  cookie: Scalars['String']['input'];
+}>;
+
+export type SetThreeHaSessionMutation = { __typename?: 'Mutation'; setThreeHaSession: boolean };
+
+export type IssueTossProfitLinkMutationVariables = Exact<{
+  url: Scalars['String']['input'];
+}>;
+
+export type IssueTossProfitLinkMutation = {
+  __typename?: 'Mutation';
+  issueTossProfitLink: {
+    __typename?: 'TossProfitLinkOutput';
+    profitLink?: string | null;
+    error?: string | null;
+  };
+};
+
+export type HasOhouSessionQueryVariables = Exact<{ [key: string]: never }>;
+
+export type HasOhouSessionQuery = { __typename?: 'Query'; hasOhouSession: boolean };
+
+export type SetOhouSessionMutationVariables = Exact<{
+  curl: Scalars['String']['input'];
+}>;
+
+export type SetOhouSessionMutation = { __typename?: 'Mutation'; setOhouSession: boolean };
+
+export type IssueOhouProfitLinkMutationVariables = Exact<{
+  url: Scalars['String']['input'];
+}>;
+
+export type IssueOhouProfitLinkMutation = {
+  __typename?: 'Mutation';
+  issueOhouProfitLink: {
+    __typename?: 'OhouProfitLinkOutput';
+    profitLink?: string | null;
+    error?: string | null;
+  };
+};
+
+export type HasKakaoSessionQueryVariables = Exact<{ [key: string]: never }>;
+
+export type HasKakaoSessionQuery = { __typename?: 'Query'; hasKakaoSession: boolean };
+
+export type SetKakaoSessionMutationVariables = Exact<{
+  curl: Scalars['String']['input'];
+}>;
+
+export type SetKakaoSessionMutation = { __typename?: 'Mutation'; setKakaoSession: boolean };
+
+export type IssueKakaoProfitLinkMutationVariables = Exact<{
+  url: Scalars['String']['input'];
+}>;
+
+export type IssueKakaoProfitLinkMutation = {
+  __typename?: 'Mutation';
+  issueKakaoProfitLink: {
+    __typename?: 'KakaoProfitLinkOutput';
+    profitLink?: string | null;
+    error?: string | null;
+  };
+};
+
+export type ProfitLinkProviderHealthQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ProfitLinkProviderHealthQuery = {
+  __typename?: 'Query';
+  profitLinkProviderHealth: Array<{
+    __typename?: 'ProfitLinkProviderHealthOutput';
+    provider: string;
+    issued24h: number;
+    issued7d: number;
+    lastIssuedProductAt?: any | null;
+    sales24h: number;
+    sales7d: number;
+    sales30d: number;
+    lastSaleAt?: any | null;
+    commission7d?: number | null;
+    issued30d: number;
+    commission30d?: number | null;
+    daysSinceLastSale?: number | null;
+    activeDays90d: number;
+    salesHealth: string;
+  }>;
+};
+
+export type ProfitLinkFunnelDailyQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+}>;
+
+export type ProfitLinkFunnelDailyQuery = {
+  __typename?: 'Query';
+  profitLinkFunnelDaily: Array<{
+    __typename?: 'ProfitLinkFunnelDailyOutput';
+    date: string;
+    total: number;
+    issued: number;
+    pending: number;
+    parked: number;
+    terminal: number;
+  }>;
+};
+
+export type ProfitLinkErrorStatsQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type ProfitLinkErrorStatsQuery = {
+  __typename?: 'Query';
+  profitLinkErrorStats: Array<{
+    __typename?: 'ProfitLinkErrorCountOutput';
+    error: string;
+    count: number;
+  }>;
+};
+
+export type ProfitLinkMissedProductsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  categoryIds?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
+}>;
+
+export type ProfitLinkMissedProductsQuery = {
+  __typename?: 'Query';
+  profitLinkMissedProducts: Array<{
+    __typename?: 'ProfitLinkMissedProductOutput';
+    id: number;
+    title: string;
+    mallName?: string | null;
+    parsedPrice?: number | null;
+    categoryId: number;
+    createdAt: any;
+    attempts: number;
+    lastError?: string | null;
+    nextRetryAt?: any | null;
+    rankingScore?: number | null;
+    detailUrl?: string | null;
+  }>;
+};
+
+export type ProfitLinkQueueHealthQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ProfitLinkQueueHealthQuery = {
+  __typename?: 'Query';
+  profitLinkQueueHealth: {
+    __typename?: 'ProfitLinkQueueHealthOutput';
+    eligibleNow: number;
+    waitingBackoff: number;
+    parked: number;
+    terminalDisabled: number;
+    oldestEligibleCreatedAt?: any | null;
+    attemptsDistribution: Array<{
+      __typename?: 'AttemptsCountOutput';
+      attempts: number;
+      count: number;
+    }>;
+  };
+};
+
+export type AffiliateSalesTrendQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+}>;
+
+export type AffiliateSalesTrendQuery = {
+  __typename?: 'Query';
+  affiliateSalesTrend: Array<{
+    __typename?: 'AffiliateSalesDailyOutput';
+    date: string;
+    provider: string;
+    count: number;
+    commissionSum: number;
+  }>;
+};
 
 export type QueryUserRegistrationStatsQueryVariables = Exact<{
   startDate: Scalars['DateTime']['input'];
@@ -3278,15 +3820,6 @@ export type QueryUserByAdminQuery = {
   };
 };
 
-export type QueryUsersTotalCountByAdminQueryVariables = Exact<{
-  keyword?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-export type QueryUsersTotalCountByAdminQuery = {
-  __typename?: 'Query';
-  usersTotalCountByAdmin: number;
-};
-
 export type QueryPendingVerificationsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
@@ -3488,43 +4021,6 @@ export const AdReportDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AdReportQuery, AdReportQueryVariables>;
-export const ActiveAdsDocument = new TypedDocumentString(`
-    query ActiveAds($slotLocation: AdvertiseSlotLocation!) {
-  activeAds(slotLocation: $slotLocation) {
-    id
-    internalId
-    startAt
-    endAt
-    slotType
-    slotLocation
-    slotPriority
-    graphic
-    displayPrice {
-      discountText
-      originalPrice
-      displayPrice
-    }
-    displayTitle
-    targetUrl
-    isActive
-    createdAt
-    modifiedAt
-  }
-}
-    `) as unknown as TypedDocumentString<ActiveAdsQuery, ActiveAdsQueryVariables>;
-export const RecordAdImpressionsDocument = new TypedDocumentString(`
-    mutation RecordAdImpressions($events: [AdvertiseImpressionInput!]!) {
-  recordAdImpressions(events: $events)
-}
-    `) as unknown as TypedDocumentString<
-  RecordAdImpressionsMutation,
-  RecordAdImpressionsMutationVariables
->;
-export const RecordAdClickDocument = new TypedDocumentString(`
-    mutation RecordAdClick($creativeId: Int!, $slotLocation: AdvertiseSlotLocation!) {
-  recordAdClick(creativeId: $creativeId, slotLocation: $slotLocation)
-}
-    `) as unknown as TypedDocumentString<RecordAdClickMutation, RecordAdClickMutationVariables>;
 export const CreateAdAssetUploadUrlDocument = new TypedDocumentString(`
     mutation CreateAdAssetUploadUrl($contentType: String!) {
   createAdAssetUploadUrl(contentType: $contentType) {
@@ -3596,42 +4092,6 @@ export const QueryBrandProductsOrderByMatchCountDocument = new TypedDocumentStri
   QueryBrandProductsOrderByMatchCountQuery,
   QueryBrandProductsOrderByMatchCountQueryVariables
 >;
-export const QuerySimilarProductsDocument = new TypedDocumentString(`
-    query QuerySimilarProducts($id: Int!) {
-  similarProducts(id: $id) {
-    id
-    title
-    url
-    thumbnail
-    price
-    categoryId
-    providerId
-    provider {
-      name
-    }
-    postedAt
-  }
-}
-    `) as unknown as TypedDocumentString<
-  QuerySimilarProductsQuery,
-  QuerySimilarProductsQueryVariables
->;
-export const QueryBrandProductsByMatchCountTotalCountDocument = new TypedDocumentString(`
-    query QueryBrandProductsByMatchCountTotalCount($brandItemId: Int, $title: String) {
-  brandProductsByMatchCountTotalCount(brandItemId: $brandItemId, title: $title)
-}
-    `) as unknown as TypedDocumentString<
-  QueryBrandProductsByMatchCountTotalCountQuery,
-  QueryBrandProductsByMatchCountTotalCountQueryVariables
->;
-export const QueryBrandProductMatchCountDocument = new TypedDocumentString(`
-    query QueryBrandProductMatchCount($brandProductId: Int!) {
-  brandProductMatchCount(brandProductId: $brandProductId)
-}
-    `) as unknown as TypedDocumentString<
-  QueryBrandProductMatchCountQuery,
-  QueryBrandProductMatchCountQueryVariables
->;
 export const QueryBrandItemsOrderByTotalMatchCountDocument = new TypedDocumentString(`
     query QueryBrandItemsOrderByTotalMatchCount($limit: Int!, $searchAfter: [String!], $title: String) {
   brandItemsOrderByTotalMatchCount(
@@ -3658,6 +4118,37 @@ export const QueryBrandItemsByMatchCountTotalCountDocument = new TypedDocumentSt
     `) as unknown as TypedDocumentString<
   QueryBrandItemsByMatchCountTotalCountQuery,
   QueryBrandItemsByMatchCountTotalCountQueryVariables
+>;
+export const QuerySimilarProductsByTitleDocument = new TypedDocumentString(`
+    query QuerySimilarProductsByTitle($title: String!, $limit: Int!) {
+  similarProductsByTitle(title: $title, limit: $limit) {
+    id
+    title
+    url
+    thumbnail
+    price
+    similarity
+    provider {
+      name
+    }
+    productMapping {
+      target
+      targetId
+      verificationStatus
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QuerySimilarProductsByTitleQuery,
+  QuerySimilarProductsByTitleQueryVariables
+>;
+export const MutationAddProductMappingDocument = new TypedDocumentString(`
+    mutation MutationAddProductMapping($productId: Int!, $brandProductId: Int!) {
+  addProductMapping(productId: $productId, brandProductId: $brandProductId)
+}
+    `) as unknown as TypedDocumentString<
+  MutationAddProductMappingMutation,
+  MutationAddProductMappingMutationVariables
 >;
 export const QueryCategoriesDocument = new TypedDocumentString(`
     query QueryCategories {
@@ -3962,14 +4453,14 @@ export const MutationSendNotificationByAdminDocument = new TypedDocumentString(`
   MutationSendNotificationByAdminMutationVariables
 >;
 export const QueryProductsDocument = new TypedDocumentString(`
-    query QueryProducts($limit: Int!, $searchAfter: [String!], $startDate: DateTime, $orderBy: ProductOrderType, $orderOption: OrderOptionType, $categoryId: Int, $keyword: String, $thumbnailType: ThumbnailType, $isEnd: Boolean, $isHot: Boolean) {
+    query QueryProducts($limit: Int!, $searchAfter: [String!], $startDate: DateTime, $orderBy: ProductOrderType, $orderOption: OrderOptionType, $categoryIds: [Int!], $keyword: String, $thumbnailType: ThumbnailType, $isEnd: Boolean, $isHot: Boolean) {
   products(
     limit: $limit
     searchAfter: $searchAfter
     startDate: $startDate
     orderBy: $orderBy
     orderOption: $orderOption
-    categoryId: $categoryId
+    categoryIds: $categoryIds
     keyword: $keyword
     thumbnailType: $thumbnailType
     isEnd: $isEnd
@@ -4065,6 +4556,172 @@ export const SetTossSessionDocument = new TypedDocumentString(`
   setTossSession(token: $token)
 }
     `) as unknown as TypedDocumentString<SetTossSessionMutation, SetTossSessionMutationVariables>;
+export const HasThreeHaSessionDocument = new TypedDocumentString(`
+    query HasThreeHaSession {
+  hasThreeHaSession
+}
+    `) as unknown as TypedDocumentString<HasThreeHaSessionQuery, HasThreeHaSessionQueryVariables>;
+export const SetThreeHaSessionDocument = new TypedDocumentString(`
+    mutation SetThreeHaSession($cookie: String!) {
+  setThreeHaSession(cookie: $cookie)
+}
+    `) as unknown as TypedDocumentString<
+  SetThreeHaSessionMutation,
+  SetThreeHaSessionMutationVariables
+>;
+export const IssueTossProfitLinkDocument = new TypedDocumentString(`
+    mutation IssueTossProfitLink($url: String!) {
+  issueTossProfitLink(url: $url) {
+    profitLink
+    error
+  }
+}
+    `) as unknown as TypedDocumentString<
+  IssueTossProfitLinkMutation,
+  IssueTossProfitLinkMutationVariables
+>;
+export const HasOhouSessionDocument = new TypedDocumentString(`
+    query HasOhouSession {
+  hasOhouSession
+}
+    `) as unknown as TypedDocumentString<HasOhouSessionQuery, HasOhouSessionQueryVariables>;
+export const SetOhouSessionDocument = new TypedDocumentString(`
+    mutation SetOhouSession($curl: String!) {
+  setOhouSession(curl: $curl)
+}
+    `) as unknown as TypedDocumentString<SetOhouSessionMutation, SetOhouSessionMutationVariables>;
+export const IssueOhouProfitLinkDocument = new TypedDocumentString(`
+    mutation IssueOhouProfitLink($url: String!) {
+  issueOhouProfitLink(url: $url) {
+    profitLink
+    error
+  }
+}
+    `) as unknown as TypedDocumentString<
+  IssueOhouProfitLinkMutation,
+  IssueOhouProfitLinkMutationVariables
+>;
+export const HasKakaoSessionDocument = new TypedDocumentString(`
+    query HasKakaoSession {
+  hasKakaoSession
+}
+    `) as unknown as TypedDocumentString<HasKakaoSessionQuery, HasKakaoSessionQueryVariables>;
+export const SetKakaoSessionDocument = new TypedDocumentString(`
+    mutation SetKakaoSession($curl: String!) {
+  setKakaoSession(curl: $curl)
+}
+    `) as unknown as TypedDocumentString<SetKakaoSessionMutation, SetKakaoSessionMutationVariables>;
+export const IssueKakaoProfitLinkDocument = new TypedDocumentString(`
+    mutation IssueKakaoProfitLink($url: String!) {
+  issueKakaoProfitLink(url: $url) {
+    profitLink
+    error
+  }
+}
+    `) as unknown as TypedDocumentString<
+  IssueKakaoProfitLinkMutation,
+  IssueKakaoProfitLinkMutationVariables
+>;
+export const ProfitLinkProviderHealthDocument = new TypedDocumentString(`
+    query ProfitLinkProviderHealth {
+  profitLinkProviderHealth {
+    provider
+    issued24h
+    issued7d
+    lastIssuedProductAt
+    sales24h
+    sales7d
+    sales30d
+    lastSaleAt
+    commission7d
+    issued30d
+    commission30d
+    daysSinceLastSale
+    activeDays90d
+    salesHealth
+  }
+}
+    `) as unknown as TypedDocumentString<
+  ProfitLinkProviderHealthQuery,
+  ProfitLinkProviderHealthQueryVariables
+>;
+export const ProfitLinkFunnelDailyDocument = new TypedDocumentString(`
+    query ProfitLinkFunnelDaily($startDate: DateTime!, $endDate: DateTime!) {
+  profitLinkFunnelDaily(startDate: $startDate, endDate: $endDate) {
+    date
+    total
+    issued
+    pending
+    parked
+    terminal
+  }
+}
+    `) as unknown as TypedDocumentString<
+  ProfitLinkFunnelDailyQuery,
+  ProfitLinkFunnelDailyQueryVariables
+>;
+export const ProfitLinkErrorStatsDocument = new TypedDocumentString(`
+    query ProfitLinkErrorStats($startDate: DateTime!, $endDate: DateTime!, $limit: Int) {
+  profitLinkErrorStats(startDate: $startDate, endDate: $endDate, limit: $limit) {
+    error
+    count
+  }
+}
+    `) as unknown as TypedDocumentString<
+  ProfitLinkErrorStatsQuery,
+  ProfitLinkErrorStatsQueryVariables
+>;
+export const ProfitLinkMissedProductsDocument = new TypedDocumentString(`
+    query ProfitLinkMissedProducts($limit: Int, $categoryIds: [Int!]) {
+  profitLinkMissedProducts(limit: $limit, categoryIds: $categoryIds) {
+    id
+    title
+    mallName
+    parsedPrice
+    categoryId
+    createdAt
+    attempts
+    lastError
+    nextRetryAt
+    rankingScore
+    detailUrl
+  }
+}
+    `) as unknown as TypedDocumentString<
+  ProfitLinkMissedProductsQuery,
+  ProfitLinkMissedProductsQueryVariables
+>;
+export const ProfitLinkQueueHealthDocument = new TypedDocumentString(`
+    query ProfitLinkQueueHealth {
+  profitLinkQueueHealth {
+    eligibleNow
+    waitingBackoff
+    parked
+    terminalDisabled
+    oldestEligibleCreatedAt
+    attemptsDistribution {
+      attempts
+      count
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+  ProfitLinkQueueHealthQuery,
+  ProfitLinkQueueHealthQueryVariables
+>;
+export const AffiliateSalesTrendDocument = new TypedDocumentString(`
+    query AffiliateSalesTrend($startDate: DateTime!, $endDate: DateTime!) {
+  affiliateSalesTrend(startDate: $startDate, endDate: $endDate) {
+    date
+    provider
+    count
+    commissionSum
+  }
+}
+    `) as unknown as TypedDocumentString<
+  AffiliateSalesTrendQuery,
+  AffiliateSalesTrendQueryVariables
+>;
 export const QueryUserRegistrationStatsDocument = new TypedDocumentString(`
     query QueryUserRegistrationStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
   userRegistrationStats(
@@ -4338,14 +4995,6 @@ export const QueryUserByAdminDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<QueryUserByAdminQuery, QueryUserByAdminQueryVariables>;
-export const QueryUsersTotalCountByAdminDocument = new TypedDocumentString(`
-    query QueryUsersTotalCountByAdmin($keyword: String) {
-  usersTotalCountByAdmin(keyword: $keyword)
-}
-    `) as unknown as TypedDocumentString<
-  QueryUsersTotalCountByAdminQuery,
-  QueryUsersTotalCountByAdminQueryVariables
->;
 export const QueryPendingVerificationsDocument = new TypedDocumentString(`
     query QueryPendingVerifications($limit: Int!, $searchAfter: [String!], $prioritizeOld: Boolean, $orderBy: OrderOptionType, $brandProductId: Int, $verificationStatus: [ProductMappingVerificationStatus!], $aiSuggestion: ProductMappingAiSuggestion, $onlyActive: Boolean, $suspiciousFirst: Boolean) {
   pendingVerifications(
@@ -4483,7 +5132,7 @@ export const MutationCancelVerificationDocument = new TypedDocumentString(`
   MutationCancelVerificationMutationVariables
 >;
 export const QueryPendingVerificationsTotalCountDocument = new TypedDocumentString(`
-    query QueryPendingVerificationsTotalCount($brandProductId: Int, $matchStatus: [ProductMappingMatchStatus!], $target: ProductMappingTarget, $verificationStatus: [ProductMappingVerificationStatus!], $aiSuggestion: ProductMappingAiSuggestion, $onlyActive: Boolean) {
+    query QueryPendingVerificationsTotalCount($brandProductId: Int, $matchStatus: [ProductMappingMatchStatus!], $target: ProductMappingTarget, $verificationStatus: [ProductMappingVerificationStatus!], $aiSuggestion: ProductMappingAiSuggestion, $onlyActive: Boolean, $suspiciousFirst: Boolean) {
   pendingVerificationsTotalCount(
     brandProductId: $brandProductId
     matchStatus: $matchStatus
@@ -4491,6 +5140,7 @@ export const QueryPendingVerificationsTotalCountDocument = new TypedDocumentStri
     verificationStatus: $verificationStatus
     aiSuggestion: $aiSuggestion
     onlyActive: $onlyActive
+    suspiciousFirst: $suspiciousFirst
   )
 }
     `) as unknown as TypedDocumentString<
