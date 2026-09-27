@@ -6,6 +6,7 @@ export const QueryPendingVerifications = gql`
     $searchAfter: [String!]
     $prioritizeOld: Boolean
     $orderBy: OrderOptionType
+    $target: ProductMappingTarget
     $brandProductId: Int
     $verificationStatus: [ProductMappingVerificationStatus!]
     $aiSuggestion: ProductMappingAiSuggestion
@@ -17,6 +18,7 @@ export const QueryPendingVerifications = gql`
       searchAfter: $searchAfter
       prioritizeOld: $prioritizeOld
       orderBy: $orderBy
+      target: $target
       brandProductId: $brandProductId
       verificationStatus: $verificationStatus
       aiSuggestion: $aiSuggestion

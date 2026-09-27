@@ -2271,6 +2271,17 @@ type Query {
     userId: Int
   ): [Notification!]!
   """
+  묶음 상세 무한 스크롤 — 기간 제한 없이 이 묶음을 구독했다면 받았을 알림 딜(최근순, before 커서)
+  """
+  notificationThemeDeals(
+    """
+    커서: 앞 페이지 마지막 딜의 postedAt(ms). 없으면 최신부터
+    """
+    before: Float
+    limit: Int! = 20
+    themeId: Int!
+  ): [ProductOutput!]!
+  """
   묶음 미리보기 — 지난 7일 이 묶음을 구독했다면 받았을 알림 딜(최근순)
   """
   notificationThemeLiveDeals(themeId: Int!): [ProductOutput!]!
@@ -2665,6 +2676,10 @@ type ThemeWithKeywords {
   id: ID!
   name: String!
   representativeKeywords: [String!]!
+  """
+  URL slug(/themes/{slug}). 없으면 id 로 링크
+  """
+  slug: String
   """
   구독자 수
   """

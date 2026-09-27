@@ -1909,6 +1909,8 @@ export type Query = {
   notificationKeywordsByMe: Array<NotificationKeyword>;
   /** 어드민) 개별 알림 목록 조회 */
   notificationListByAdmin: Array<Notification>;
+  /** 묶음 상세 무한 스크롤 — 기간 제한 없이 이 묶음을 구독했다면 받았을 알림 딜(최근순, before 커서) */
+  notificationThemeDeals: Array<ProductOutput>;
   /** 묶음 미리보기 — 지난 7일 이 묶음을 구독했다면 받았을 알림 딜(최근순) */
   notificationThemeLiveDeals: Array<ProductOutput>;
   /** 활성 알림 묶음(테마) 목록 + 대표 키워드 */
@@ -2254,6 +2256,12 @@ export type QueryNotificationListByAdminArgs = {
   userId?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type QueryNotificationThemeDealsArgs = {
+  before?: InputMaybe<Scalars['Float']['input']>;
+  limit?: Scalars['Int']['input'];
+  themeId: Scalars['Int']['input'];
+};
+
 export type QueryNotificationThemeLiveDealsArgs = {
   themeId: Scalars['Int']['input'];
 };
@@ -2542,6 +2550,8 @@ export type ThemeWithKeywords = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   representativeKeywords: Array<Scalars['String']['output']>;
+  /** URL slug(/themes/{slug}). 없으면 id 로 링크 */
+  slug?: Maybe<Scalars['String']['output']>;
   /** 구독자 수 */
   subscriberCount: Scalars['Int']['output'];
   /** 지난 7일 이 묶음을 구독했다면 받았을 알림 수 */
@@ -3825,6 +3835,7 @@ export type QueryPendingVerificationsQueryVariables = Exact<{
   searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
   prioritizeOld?: InputMaybe<Scalars['Boolean']['input']>;
   orderBy?: InputMaybe<OrderOptionType>;
+  target?: InputMaybe<ProductMappingTarget>;
   brandProductId?: InputMaybe<Scalars['Int']['input']>;
   verificationStatus?: InputMaybe<
     Array<ProductMappingVerificationStatus> | ProductMappingVerificationStatus
@@ -4996,12 +5007,13 @@ export const QueryUserByAdminDocument = new TypedDocumentString(`
 }
     `) as unknown as TypedDocumentString<QueryUserByAdminQuery, QueryUserByAdminQueryVariables>;
 export const QueryPendingVerificationsDocument = new TypedDocumentString(`
-    query QueryPendingVerifications($limit: Int!, $searchAfter: [String!], $prioritizeOld: Boolean, $orderBy: OrderOptionType, $brandProductId: Int, $verificationStatus: [ProductMappingVerificationStatus!], $aiSuggestion: ProductMappingAiSuggestion, $onlyActive: Boolean, $suspiciousFirst: Boolean) {
+    query QueryPendingVerifications($limit: Int!, $searchAfter: [String!], $prioritizeOld: Boolean, $orderBy: OrderOptionType, $target: ProductMappingTarget, $brandProductId: Int, $verificationStatus: [ProductMappingVerificationStatus!], $aiSuggestion: ProductMappingAiSuggestion, $onlyActive: Boolean, $suspiciousFirst: Boolean) {
   pendingVerifications(
     limit: $limit
     searchAfter: $searchAfter
     prioritizeOld: $prioritizeOld
     orderBy: $orderBy
+    target: $target
     brandProductId: $brandProductId
     verificationStatus: $verificationStatus
     aiSuggestion: $aiSuggestion

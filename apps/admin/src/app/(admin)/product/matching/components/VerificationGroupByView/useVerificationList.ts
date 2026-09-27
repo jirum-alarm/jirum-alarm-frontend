@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { ProductMappingVerificationStatus } from '@/generated/gql/graphql';
+import { ProductMappingTarget, ProductMappingVerificationStatus } from '@/generated/gql/graphql';
 import { BrandProduct } from '@/hooks/graphql/brandProduct';
 
 import { PendingVerificationItem } from '../../types';
@@ -96,6 +96,9 @@ export function useVerificationList({
         const result = await fetchPendingVerifications({
           variables: {
             limit: PAGE_LIMIT,
+            // brandProductId 는 서버에서 targetId 만 비교한다 — target 없이 보내면 같은 번호의
+            // BRAND_ITEM 매핑이 섞인다(전체 개수 쿼리처럼 target 을 같이 준다)
+            target: ProductMappingTarget.BrandProduct,
             brandProductId,
             verificationStatus: includeVerified
               ? ALL_VERIFICATION_STATUSES
@@ -137,6 +140,7 @@ export function useVerificationList({
       loadVerificationsForBrandProduct(parseInt(selectedBrandProduct.id));
       fetchPendingVerificationsTotalCountByBrandProduct({
         variables: {
+          target: ProductMappingTarget.BrandProduct,
           brandProductId: parseInt(selectedBrandProduct.id),
           verificationStatus: includeVerified
             ? ALL_VERIFICATION_STATUSES
@@ -169,6 +173,7 @@ export function useVerificationList({
         variables: {
           limit: PAGE_LIMIT,
           searchAfter: verificationSearchAfter,
+          target: ProductMappingTarget.BrandProduct,
           brandProductId: parseInt(selectedBrandProduct.id),
           verificationStatus: includeVerified
             ? ALL_VERIFICATION_STATUSES
