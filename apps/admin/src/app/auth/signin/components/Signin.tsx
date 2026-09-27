@@ -22,11 +22,20 @@ const Signin = () => {
       router.push('/');
     },
     onError: (e) => {
-      if (e.graphQLErrors[0]?.extensions?.code === '404') {
+      const ext = e.graphQLErrors[0]?.extensions;
+      // @nestjs/apollo 는 404 를 code 가 아니라 status 로 싣는다(code 는 INTERNAL_SERVER_ERROR)
+      if (ext?.status === 404) {
         toast.error('존재하지 않는 아이디입니다.');
-      } else {
-        toast.error('에러가 발생했습니다.');
+        return;
       }
+      if (ext?.code === 'BAD_REQUEST') {
+        const detail = (ext.originalError as { message?: unknown } | undefined)?.message;
+        // 검증 실패(LoginArgs)는 메시지 배열로 온다 → 그대로 보여준다.
+        // 문자열 400 은 비밀번호 불일치뿐인데 서버가 가입용 문구(invalidPassword)를 재사용해 따로 적는다.
+        toast.error(Array.isArray(detail) ? detail.join('\n') : '비밀번호가 올바르지 않습니다.');
+        return;
+      }
+      toast.error(e.graphQLErrors[0]?.message ?? '에러가 발생했습니다.');
     },
   });
 
@@ -60,6 +69,8 @@ const Signin = () => {
                     type="email"
                     name="email"
                     placeholder="Enter your email"
+                    autoComplete="username"
+                    required
                     onChange={handleInputChange}
                   />
 
@@ -92,7 +103,9 @@ const Signin = () => {
                     className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     type="password"
                     name="password"
-                    placeholder="Enter yout password"
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
+                    required
                     onChange={handleInputChange}
                   />
 
