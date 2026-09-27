@@ -37,7 +37,7 @@ const toCard = (d: ThemeLiveDeal): ProductCardType => ({
   provider: d.provider,
 });
 
-// 발송 배치와 같은 기준으로 고른 "알림을 켰다면 받았을" 딜. 최근 30일을 무한 스크롤(큐레이션과 같은 방식).
+// 발송 배치와 같은 기준으로 고른 "알림을 켰다면 받았을" 딜. 기간 제한 없이 무한 스크롤(큐레이션과 같은 방식).
 const ThemeDealList = ({ themeId }: { themeId: number }) => {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
     ThemeQueries.deals(themeId),
@@ -52,7 +52,7 @@ const ThemeDealList = ({ themeId }: { themeId: number }) => {
   if (deals.length === 0) {
     return (
       <p className="py-10 text-center text-sm text-gray-500">
-        최근 30일엔 이 관심사에 맞는 딜이 없었어요.
+        아직 이 관심사에 맞는 딜이 없었어요.
       </p>
     );
   }
@@ -135,7 +135,7 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
         <DetailSectionHeader
           as="h3"
           title="알림을 켰다면 이런 딜을 받았어요"
-          subtitle={`최근 7일 동안 ${theme.weeklyAlertCount}건 · 최신순`}
+          subtitle="반응 좋은 딜만 하루 최대 3건 · 최신순"
         />
         <div className="mt-4">
           <ThemeDealList themeId={themeId} />
