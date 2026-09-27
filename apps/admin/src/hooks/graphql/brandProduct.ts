@@ -1,13 +1,15 @@
-import { QueryHookOptions, useLazyQuery, useQuery } from '@apollo/client';
+import { QueryHookOptions, useLazyQuery, useMutation, useQuery } from '@apollo/client';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
+  MutationAddProductMapping,
   QueryBrandItemsByMatchCountTotalCount,
   QueryBrandItemsOrderByTotalMatchCount,
   QueryBrandProductMatchCount,
   QueryBrandProductsByMatchCountTotalCount,
   QueryBrandProductsOrderByMatchCount,
   QuerySimilarProducts,
+  QuerySimilarProductsByTitle,
 } from '@/graphql/brandProduct';
 
 // 타입 정의 (codegen 전까지 임시 사용)
@@ -264,4 +266,52 @@ export const useGetBrandItemsByMatchCountTotalCountLazy = () => {
   >(QueryBrandItemsByMatchCountTotalCount, {
     fetchPolicy: 'network-only',
   });
+};
+
+export interface SimilarProductByTitle {
+  id: string;
+  title: string;
+  url: string;
+  thumbnail: string | null;
+  price: string | null;
+  similarity: number | null;
+  provider: { name: string } | null;
+  /** 서빙되는(verified) 매핑만 온다 — null 이면 미매핑이거나 pending 뿐인 딜 */
+  productMapping: {
+    target: string | null;
+    targetId: number | null;
+    verificationStatus: string | null;
+  } | null;
+}
+
+export interface QuerySimilarProductsByTitleQuery {
+  similarProductsByTitle: SimilarProductByTitle[];
+}
+
+export interface QuerySimilarProductsByTitleQueryVariables {
+  title: string;
+  limit: number;
+}
+
+export const useGetSimilarProductsByTitleLazy = () => {
+  return useLazyQuery<QuerySimilarProductsByTitleQuery, QuerySimilarProductsByTitleQueryVariables>(
+    QuerySimilarProductsByTitle,
+    { fetchPolicy: 'network-only' },
+  );
+};
+
+export interface MutationAddProductMappingMutation {
+  addProductMapping: boolean;
+}
+
+export interface MutationAddProductMappingMutationVariables {
+  productId: number;
+  brandProductId: number;
+}
+
+/** 어드민 수동 매핑 — 서버가 matched+verified 로 넣는다 (matching-api adminAddMapping) */
+export const useAddProductMapping = () => {
+  return useMutation<MutationAddProductMappingMutation, MutationAddProductMappingMutationVariables>(
+    MutationAddProductMapping,
+  );
 };

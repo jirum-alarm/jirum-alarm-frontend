@@ -21,6 +21,8 @@ interface VerificationItemProps {
   onItemClick: (index: number) => void;
   onToggleSelection: (id: string) => void;
   onImageClick: (thumbnail: string, title: string) => void;
+  /** 승인완료 매핑 해제 */
+  onRemove?: (item: PendingVerificationItem) => void;
 }
 
 /**
@@ -45,6 +47,7 @@ const VerificationItem = memo(function VerificationItem({
   onItemClick,
   onToggleSelection,
   onImageClick,
+  onRemove,
 }: VerificationItemProps) {
   const verifierName = item.verifiedBy?.name;
 
@@ -211,6 +214,17 @@ const VerificationItem = memo(function VerificationItem({
               <span className="rounded bg-blue-50 px-1 py-0.5 text-[10px] text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                 검증: {verifierName}
               </span>
+            )}
+            {item.verificationStatus === 'VERIFIED' && onRemove && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRemove(item);
+                }}
+                className="ml-auto rounded border border-danger/40 px-1.5 py-0.5 text-[10px] text-danger hover:bg-danger/10"
+              >
+                매핑 해제
+              </button>
             )}
           </div>
 

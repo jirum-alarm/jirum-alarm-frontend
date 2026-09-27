@@ -80,3 +80,30 @@ export const QueryBrandItemsByMatchCountTotalCount = gql`
     brandItemsByMatchCountTotalCount(title: $title)
   }
 `;
+
+export const QuerySimilarProductsByTitle = gql`
+  query QuerySimilarProductsByTitle($title: String!, $limit: Int!) {
+    similarProductsByTitle(title: $title, limit: $limit) {
+      id
+      title
+      url
+      thumbnail
+      price
+      similarity
+      provider {
+        name
+      }
+      productMapping {
+        target
+        targetId
+        verificationStatus
+      }
+    }
+  }
+`;
+
+export const MutationAddProductMapping = gql`
+  mutation MutationAddProductMapping($productId: Int!, $brandProductId: Int!) {
+    addProductMapping(productId: $productId, brandProductId: $brandProductId)
+  }
+`;

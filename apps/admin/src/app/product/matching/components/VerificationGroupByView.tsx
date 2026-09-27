@@ -21,6 +21,7 @@ import {
   useGetPendingVerificationsLazy,
   useGetPendingVerificationsTotalCount,
   useGetPendingVerificationsTotalCountLazy,
+  useRemoveProductMapping,
 } from '@/hooks/graphql/verification';
 
 import { useUndoStack } from '../hooks/useUndoStack';
@@ -28,6 +29,7 @@ import { ImageModalState, PendingVerificationItem, ToastState } from '../types';
 
 import ImageCompareModal from './ImageCompareModal';
 import KeyboardShortcutModal from './KeyboardShortcutModal';
+import SimilarDealsPanel from './SimilarDealsPanel';
 import Toast from './Toast';
 import VerificationItem from './VerificationItem';
 
@@ -79,6 +81,7 @@ const VerificationGroupByView = () => {
   // ── 탭 / 필터 상태 ──
   const [activeTab, setActiveTab] = useState<'brands' | 'details'>('brands');
   const [includeVerified, setIncludeVerified] = useState(true);
+  const [isSimilarOpen, setIsSimilarOpen] = useState(false);
 
   // ── 모달 / 토스트 상태 ──
   const [imageModalData, setImageModalData] = useState<ImageModalState>({
@@ -114,6 +117,7 @@ const VerificationGroupByView = () => {
   const [fetchMoreBrandProducts] = useGetBrandProductsOrderByMatchCountLazy();
   const [fetchPendingVerifications, { loading: pendingLoading }] = useGetPendingVerificationsLazy();
   const [batchVerifyMutation] = useBatchVerifyProductMapping();
+  const [removeMappingMutation] = useRemoveProductMapping();
 
   // Total count hooks
   const { data: brandItemsTotalCountData } = useGetBrandItemsByMatchCountTotalCount();
@@ -652,6 +656,30 @@ const VerificationGroupByView = () => {
       }
     },
     [currentItems.length, hasVerificationMore, isLoadingVerificationMore, loadMoreVerifications],
+  );
+
+  // 매핑 해제 — 서버는 product 단위로 매핑 행을 전부 지운다(matching-api adminRemoveMapping)
+  const handleRemoveMapping = useCallback(
+    async (item: PendingVerificationItem) => {
+      if (!window.confirm(`이 딜의 매핑을 해제할까요?\n${item.product?.title ?? item.productId}`))
+        return;
+      try {
+        await removeMappingMutation({ variables: { productId: item.productId } });
+        setVerificationItems((prev) => prev.filter((v) => v.id !== item.id));
+        showToast('매핑을 해제했습니다.');
+      } catch (error) {
+        showToast(`해제 실패: ${(error as Error).message}`, 'error');
+      }
+    },
+    [removeMappingMutation, showToast],
+  );
+
+  const handleSimilarMapped = useCallback(
+    (count: number) => {
+      showToast(`${count}건 매핑 완료 (승인완료)`);
+      if (selectedBrandProduct) loadVerificationsForBrandProduct(parseInt(selectedBrandProduct.id));
+    },
+    [showToast, selectedBrandProduct, loadVerificationsForBrandProduct],
   );
 
   // #1: danawaUrl도 같이 전달
@@ -1374,22 +1402,46 @@ const VerificationGroupByView = () => {
                     거절 <span className="font-bold">{stats.deselected}</span>
                   </span>
                 </div>
-                <label className="text-gray-500 dark:text-gray-400 flex cursor-pointer items-center gap-1.5 text-[11px]">
-                  <input
-                    type="checkbox"
-                    checked={!includeVerified}
-                    onChange={(e) => setIncludeVerified(!e.target.checked)}
-                    className="border-gray-300 h-3.5 w-3.5 rounded text-blue-500 focus:ring-blue-500"
-                  />
-                  <span
-                    className={
-                      !includeVerified ? 'font-medium text-blue-600 dark:text-blue-400' : ''
-                    }
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setIsSimilarOpen((v) => !v)}
+                    className={`rounded px-2 py-0.5 text-[11px] font-medium ${
+                      isSimilarOpen
+                        ? 'bg-primary text-white'
+                        : 'bg-primary/10 text-primary hover:bg-primary/20'
+                    }`}
                   >
-                    대기만
-                  </span>
-                </label>
+                    유사 딜 찾기
+                  </button>
+                  <label className="text-gray-500 dark:text-gray-400 flex cursor-pointer items-center gap-1.5 text-[11px]">
+                    <input
+                      type="checkbox"
+                      checked={!includeVerified}
+                      onChange={(e) => setIncludeVerified(!e.target.checked)}
+                      className="border-gray-300 h-3.5 w-3.5 rounded text-blue-500 focus:ring-blue-500"
+                    />
+                    <span
+                      className={
+                        !includeVerified ? 'font-medium text-blue-600 dark:text-blue-400' : ''
+                      }
+                    >
+                      대기만
+                    </span>
+                  </label>
+                </div>
               </div>
+
+              {isSimilarOpen && (
+                <SimilarDealsPanel
+                  key={selectedBrandProduct.id}
+                  brandProduct={selectedBrandProduct}
+                  seedTitles={verificationItems
+                    .filter((v) => v.verificationStatus === 'VERIFIED' && v.product?.title)
+                    .map((v) => v.product!.title)}
+                  listedProductIds={new Set(verificationItems.map((v) => v.productId))}
+                  onMapped={handleSimilarMapped}
+                />
+              )}
 
               {/* 검증 항목 목록 */}
               <div ref={rightScrollRef} className="flex-1 overflow-y-auto p-2">
@@ -1417,6 +1469,7 @@ const VerificationGroupByView = () => {
                             onItemClick={handleItemClick}
                             onToggleSelection={toggleItemSelection}
                             onImageClick={handleImageClick}
+                            onRemove={handleRemoveMapping}
                           />
                         ))}
                         {isLoadingVerificationMore && (
