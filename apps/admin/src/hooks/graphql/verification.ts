@@ -24,7 +24,6 @@ import {
   QueryPendingVerificationsQueryVariables,
   QueryVerificationHistoryQuery,
   QueryVerificationHistoryQueryVariables,
-  QueryVerificationStatisticsQuery,
 } from '@/generated/gql/graphql';
 import {
   MutationBatchVerifyProductMapping,
@@ -36,31 +35,6 @@ import {
   QueryVerificationHistory,
   QueryVerificationStatistics,
 } from '@/graphql/verification';
-
-export const useGetPendingVerifications = (
-  variables?: Partial<QueryPendingVerificationsQueryVariables> & { brandProductId?: number },
-  options?: QueryHookOptions<
-    QueryPendingVerificationsQuery,
-    QueryPendingVerificationsQueryVariables
-  >,
-) => {
-  return useQuery<QueryPendingVerificationsQuery, QueryPendingVerificationsQueryVariables>(
-    QueryPendingVerifications,
-    {
-      variables: {
-        limit: variables?.limit ?? PAGE_LIMIT,
-        searchAfter: variables?.searchAfter ?? undefined,
-        prioritizeOld: variables?.prioritizeOld ?? false,
-        orderBy:
-          variables?.orderBy ??
-          (variables?.prioritizeOld ? OrderOptionType.Asc : OrderOptionType.Desc),
-        brandProductId: variables?.brandProductId ?? undefined,
-      },
-      fetchPolicy: 'network-only',
-      ...options,
-    },
-  );
-};
 
 export const useGetPendingVerificationsLazy = (
   options?: QueryHookOptions<
@@ -75,16 +49,6 @@ export const useGetPendingVerificationsLazy = (
       ...options,
     },
   );
-};
-
-export const useGetVerificationStatistics = (
-  options?: QueryHookOptions<QueryVerificationStatisticsQuery>,
-) => {
-  return useQuery<QueryVerificationStatisticsQuery>(QueryVerificationStatistics, {
-    fetchPolicy: 'network-only',
-    pollInterval: 30000, // 30초마다 자동 갱신
-    ...options,
-  });
 };
 
 export const useGetVerificationHistory = (

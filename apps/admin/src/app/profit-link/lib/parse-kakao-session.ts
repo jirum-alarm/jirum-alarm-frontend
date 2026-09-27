@@ -36,7 +36,7 @@ const extractCurlJsonBody = (raw: string): Record<string, unknown> | undefined =
   return undefined;
 };
 
-export const extractKakaoProductId = (raw: string): string | undefined => {
+const extractKakaoProductId = (raw: string): string | undefined => {
   const fromPath = raw.match(/\/products\/(\d+)/)?.[1];
   if (fromPath) return fromPath;
   const fromBody = raw.match(/"shareTargetId"\s*:\s*"(\d+)"/)?.[1];

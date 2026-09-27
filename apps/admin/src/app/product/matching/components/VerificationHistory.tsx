@@ -3,25 +3,21 @@
 import Link from 'next/link';
 import { useCallback, useRef, useState } from 'react';
 
+import { OrderOptionType, ProductMappingVerificationStatus } from '@/generated/gql/graphql';
 import { useAdminMe } from '@/hooks/graphql/auth';
 import { useCancelVerification, useGetVerificationHistory } from '@/hooks/graphql/verification';
-import {
-  OrderOptionType,
-  ProductMappingVerificationStatus,
-  VerificationStatus,
-} from '@/types/verification';
 import { dateFormatter } from '@/utils/date';
 
-const VerificationStatusMap: Record<VerificationStatus, string> = {
-  [VerificationStatus.PendingVerification]: '검증 대기',
-  [VerificationStatus.Verified]: '승인됨',
-  [VerificationStatus.Rejected]: '거부됨',
+const VerificationStatusMap: Record<ProductMappingVerificationStatus, string> = {
+  [ProductMappingVerificationStatus.PendingVerification]: '검증 대기',
+  [ProductMappingVerificationStatus.Verified]: '승인됨',
+  [ProductMappingVerificationStatus.Rejected]: '거부됨',
 };
 
-const VerificationStatusColorMap: Record<VerificationStatus, string> = {
-  [VerificationStatus.PendingVerification]: 'bg-warning text-warning bg-opacity-10',
-  [VerificationStatus.Verified]: 'bg-success text-success bg-opacity-10',
-  [VerificationStatus.Rejected]: 'bg-danger text-danger bg-opacity-10',
+const VerificationStatusColorMap: Record<ProductMappingVerificationStatus, string> = {
+  [ProductMappingVerificationStatus.PendingVerification]: 'bg-warning text-warning bg-opacity-10',
+  [ProductMappingVerificationStatus.Verified]: 'bg-success text-success bg-opacity-10',
+  [ProductMappingVerificationStatus.Rejected]: 'bg-danger text-danger bg-opacity-10',
 };
 
 const VerificationHistory = () => {
@@ -182,7 +178,7 @@ const VerificationHistory = () => {
             오래된순
           </button>
         </div>
-        <div className="bg-gray-300 dark:bg-gray-600 h-6 w-px" />
+        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
         <button
           className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
             onlyMine
@@ -220,16 +216,16 @@ const VerificationHistory = () => {
           )}
         </button>
         {adminMeData?.adminMe && (
-          <span className="text-gray-400 dark:text-gray-500 text-xs">
+          <span className="text-xs text-gray-400 dark:text-gray-500">
             ({adminMeData.adminMe.name})
           </span>
         )}
       </div>
 
       {loading && historyItems.length === 0 ? (
-        <div className="text-gray-500 dark:text-gray-400 py-10 text-center">로딩 중...</div>
+        <div className="py-10 text-center text-gray-500 dark:text-gray-400">로딩 중...</div>
       ) : historyItems.length === 0 ? (
-        <div className="text-gray-500 dark:text-gray-400 py-10 text-center">
+        <div className="py-10 text-center text-gray-500 dark:text-gray-400">
           {onlyMine ? '내가 검증한 이력이 없습니다.' : '검증 이력이 없습니다.'}
         </div>
       ) : (
@@ -337,13 +333,14 @@ const VerificationHistory = () => {
                     </td>
                     <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
                       {item.verificationStatus &&
-                      item.verificationStatus !== VerificationStatus.PendingVerification ? (
+                      item.verificationStatus !==
+                        ProductMappingVerificationStatus.PendingVerification ? (
                         <button
                           onClick={() => handleCancelVerification(item.id)}
                           disabled={cancellingId === item.id}
                           className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors ${
                             cancellingId === item.id
-                              ? 'bg-gray-100 text-gray-400 dark:text-gray-600 cursor-not-allowed dark:bg-meta-4'
+                              ? 'cursor-not-allowed bg-gray-100 text-gray-400 dark:bg-meta-4 dark:text-gray-600'
                               : 'bg-warning/10 text-warning hover:bg-warning/20'
                           }`}
                           title="검증을 취소하고 대기 상태로 되돌립니다"
@@ -373,7 +370,7 @@ const VerificationHistory = () => {
                           )}
                         </button>
                       ) : (
-                        <span className="text-gray-300 dark:text-gray-600 text-xs">-</span>
+                        <span className="text-xs text-gray-300 dark:text-gray-600">-</span>
                       )}
                     </td>
                   </tr>

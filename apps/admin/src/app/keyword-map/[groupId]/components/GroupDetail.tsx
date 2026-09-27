@@ -19,14 +19,14 @@ const GroupDetail = ({ groupId }: Props) => {
   if (loading) {
     return (
       <div className="animate-pulse space-y-4">
-        <div className="bg-gray-200 h-20 rounded" />
-        <div className="bg-gray-200 h-40 rounded" />
+        <div className="h-20 rounded bg-gray-200" />
+        <div className="h-40 rounded bg-gray-200" />
       </div>
     );
   }
 
   if (!data?.keywordMapGroupByAdmin) {
-    return <div className="text-gray-500 text-center">그룹을 찾을 수 없습니다.</div>;
+    return <div className="text-center text-gray-500">그룹을 찾을 수 없습니다.</div>;
   }
 
   const group = data.keywordMapGroupByAdmin;

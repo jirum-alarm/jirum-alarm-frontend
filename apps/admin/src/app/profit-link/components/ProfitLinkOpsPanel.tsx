@@ -138,7 +138,7 @@ const ProfitLinkOpsPanel = () => {
                 href={issuedLink}
                 target="_blank"
                 rel="noreferrer"
-                className="font-mono flex-1 break-all text-sm text-primary underline"
+                className="flex-1 break-all font-mono text-sm text-primary underline"
               >
                 {issuedLink}
               </a>

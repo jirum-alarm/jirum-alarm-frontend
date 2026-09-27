@@ -114,7 +114,7 @@ const ImageCompareModal = ({
                     <p className="mb-1 text-sm font-semibold text-black dark:text-white">
                       {danawaTitle}
                     </p>
-                    <p className="text-gray-400 text-xs">다나와 이미지를 불러올 수 없습니다</p>
+                    <p className="text-xs text-gray-400">다나와 이미지를 불러올 수 없습니다</p>
                   </div>
                   {danawaUrl && (
                     <a
@@ -142,7 +142,7 @@ const ImageCompareModal = ({
                 </div>
               )}
             </div>
-            <div className="bg-gray-50 flex items-center justify-between px-4 py-3 dark:bg-meta-4">
+            <div className="flex items-center justify-between bg-gray-50 px-4 py-3 dark:bg-meta-4">
               <p className="truncate text-sm font-medium text-black dark:text-white">
                 {danawaTitle}
               </p>
@@ -180,7 +180,7 @@ const ImageCompareModal = ({
                   }}
                 />
               ) : (
-                <div className="text-gray-400 flex flex-col items-center justify-center">
+                <div className="flex flex-col items-center justify-center text-gray-400">
                   <svg
                     className="mb-2 h-16 w-16"
                     fill="none"

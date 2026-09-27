@@ -94,9 +94,9 @@ const KeyboardShortcutModal = ({ isOpen, onClose }: KeyboardShortcutModalProps) 
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:bg-gray-100 hover:text-gray-600 flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm transition-colors dark:hover:bg-meta-4"
+            className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-meta-4"
           >
-            <kbd className="bg-gray-50 font-mono rounded border border-stroke px-1.5 py-0.5 text-xs dark:border-strokedark dark:bg-meta-4">
+            <kbd className="rounded border border-stroke bg-gray-50 px-1.5 py-0.5 font-mono text-xs dark:border-strokedark dark:bg-meta-4">
               ESC
             </kbd>
             <span>닫기</span>
@@ -107,14 +107,14 @@ const KeyboardShortcutModal = ({ isOpen, onClose }: KeyboardShortcutModalProps) 
         <div className="max-h-[60vh] overflow-y-auto px-6 py-4">
           {SHORTCUT_GROUPS.map((group, groupIndex) => (
             <div key={group.title} className={groupIndex > 0 ? 'mt-5' : ''}>
-              <h4 className="text-gray-500 dark:text-gray-400 mb-2 text-xs font-semibold uppercase tracking-wider">
+              <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                 {group.title}
               </h4>
               <div className="space-y-1">
                 {group.shortcuts.map((shortcut, i) => (
                   <div
                     key={i}
-                    className="hover:bg-gray-50 flex items-center justify-between rounded-lg px-2 py-2 transition-colors dark:hover:bg-meta-4"
+                    className="flex items-center justify-between rounded-lg px-2 py-2 transition-colors hover:bg-gray-50 dark:hover:bg-meta-4"
                   >
                     <span className="text-sm text-black dark:text-white">
                       {shortcut.description}
@@ -123,9 +123,9 @@ const KeyboardShortcutModal = ({ isOpen, onClose }: KeyboardShortcutModalProps) 
                       {shortcut.keys.map((key, keyIndex) => (
                         <span key={keyIndex} className="flex items-center gap-1">
                           {keyIndex > 0 && (
-                            <span className="text-gray-300 dark:text-gray-600 text-xs">+</span>
+                            <span className="text-xs text-gray-300 dark:text-gray-600">+</span>
                           )}
-                          <kbd className="bg-gray-50 font-mono inline-flex min-w-[28px] items-center justify-center rounded-md border border-stroke px-2 py-1 text-xs font-medium text-black shadow-sm dark:border-strokedark dark:bg-meta-4 dark:text-white">
+                          <kbd className="inline-flex min-w-[28px] items-center justify-center rounded-md border border-stroke bg-gray-50 px-2 py-1 font-mono text-xs font-medium text-black shadow-sm dark:border-strokedark dark:bg-meta-4 dark:text-white">
                             {key}
                           </kbd>
                         </span>
@@ -140,8 +140,8 @@ const KeyboardShortcutModal = ({ isOpen, onClose }: KeyboardShortcutModalProps) 
 
         {/* Footer */}
         <div className="border-t border-stroke px-6 py-3 dark:border-strokedark">
-          <p className="text-gray-400 dark:text-gray-500 text-center text-xs">
-            <kbd className="bg-gray-50 font-mono rounded border border-stroke px-1.5 py-0.5 text-xs dark:border-strokedark dark:bg-meta-4">
+          <p className="text-center text-xs text-gray-400 dark:text-gray-500">
+            <kbd className="rounded border border-stroke bg-gray-50 px-1.5 py-0.5 font-mono text-xs dark:border-strokedark dark:bg-meta-4">
               ?
             </kbd>{' '}
             키를 눌러 이 도움말을 열거나 닫을 수 있습니다

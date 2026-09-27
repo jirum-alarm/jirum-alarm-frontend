@@ -28,9 +28,3 @@ export const QueryUserByAdmin = gql`
     }
   }
 `;
-
-export const QueryUsersTotalCountByAdmin = gql`
-  query QueryUsersTotalCountByAdmin($keyword: String) {
-    usersTotalCountByAdmin(keyword: $keyword)
-  }
-`;

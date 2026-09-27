@@ -28,36 +28,6 @@ export const QueryBrandProductsOrderByMatchCount = gql`
   }
 `;
 
-export const QuerySimilarProducts = gql`
-  query QuerySimilarProducts($id: Int!) {
-    similarProducts(id: $id) {
-      id
-      title
-      url
-      thumbnail
-      price
-      categoryId
-      providerId
-      provider {
-        name
-      }
-      postedAt
-    }
-  }
-`;
-
-export const QueryBrandProductsByMatchCountTotalCount = gql`
-  query QueryBrandProductsByMatchCountTotalCount($brandItemId: Int, $title: String) {
-    brandProductsByMatchCountTotalCount(brandItemId: $brandItemId, title: $title)
-  }
-`;
-
-export const QueryBrandProductMatchCount = gql`
-  query QueryBrandProductMatchCount($brandProductId: Int!) {
-    brandProductMatchCount(brandProductId: $brandProductId)
-  }
-`;
-
 export const QueryBrandItemsOrderByTotalMatchCount = gql`
   query QueryBrandItemsOrderByTotalMatchCount(
     $limit: Int!

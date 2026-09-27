@@ -206,8 +206,8 @@ const VerificationItem = memo(function VerificationItem({
             {getStatusBadge()}
             {getAiSuggestionBadge()}
             {getConfidenceBadge()}
-            <span className="text-gray-400 text-[10px]">ID: {item.productId}</span>
-            <span className="text-gray-400 text-[10px]">
+            <span className="text-[10px] text-gray-400">ID: {item.productId}</span>
+            <span className="text-[10px] text-gray-400">
               {new Date(item.createdAt).toLocaleDateString()}
             </span>
             {item.verificationStatus === 'VERIFIED' && verifierName && (
@@ -253,7 +253,7 @@ const VerificationItem = memo(function VerificationItem({
                 <span className="text-[10px] font-bold text-primary">{item.product.price}</span>
               )}
               {item.product?.provider?.name && (
-                <span className="text-gray-400 text-[10px]">{item.product.provider.name}</span>
+                <span className="text-[10px] text-gray-400">{item.product.provider.name}</span>
               )}
               {item.product?.url && (
                 <a

@@ -46,7 +46,7 @@ const KeywordMapGroupsTable = () => {
       <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <div className="animate-pulse space-y-4 p-4">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="bg-gray-200 h-10 rounded" />
+            <div key={i} className="h-10 rounded bg-gray-200" />
           ))}
         </div>
       </div>

@@ -107,7 +107,7 @@ export default function FlaggedQueueView() {
               </span>
             )}
           </span>
-          <span className="text-gray-400 text-xs">
+          <span className="text-xs text-gray-400">
             사전분류(26b)가 오매칭으로 의심한 것만 — 근거 확인 후 확정
           </span>
         </div>
@@ -123,9 +123,9 @@ export default function FlaggedQueueView() {
 
       {/* 리스트 */}
       {loading && items.length === 0 ? (
-        <div className="text-gray-400 py-10 text-center text-sm">불러오는 중…</div>
+        <div className="py-10 text-center text-sm text-gray-400">불러오는 중…</div>
       ) : items.length === 0 ? (
-        <div className="text-gray-400 py-10 text-center text-sm">
+        <div className="py-10 text-center text-sm text-gray-400">
           거절추천 매핑이 없습니다. (사전분류 배치가 매일 새벽 02:00 갱신)
         </div>
       ) : (
@@ -158,7 +158,7 @@ export default function FlaggedQueueView() {
                         (item.product?.title ?? '(제목 없음)')
                       )}
                     </div>
-                    <div className="text-gray-500 dark:text-gray-400 truncate text-xs">
+                    <div className="truncate text-xs text-gray-500 dark:text-gray-400">
                       ↔{' '}
                       {item.danawaUrl ? (
                         <a
@@ -223,7 +223,7 @@ export default function FlaggedQueueView() {
                 setDecided({});
                 refetch();
               }}
-              className="text-gray-500 rounded border border-stroke px-4 py-1.5 text-xs dark:border-strokedark"
+              className="rounded border border-stroke px-4 py-1.5 text-xs text-gray-500 dark:border-strokedark"
             >
               새로고침
             </button>

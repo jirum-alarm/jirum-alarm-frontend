@@ -1032,12 +1032,12 @@ const VerificationGroupByView = () => {
               <input
                 type="text"
                 placeholder="브랜드/상품명 검색..."
-                className="bg-gray-50 w-full rounded-lg border border-stroke py-2.5 pl-10 pr-4 text-sm outline-none transition-colors focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                className="w-full rounded-lg border border-stroke bg-gray-50 py-2.5 pl-10 pr-4 text-sm outline-none transition-colors focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
               />
               <svg
-                className="text-gray-400 absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
+                className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -1050,7 +1050,7 @@ const VerificationGroupByView = () => {
                 />
               </svg>
             </div>
-            <div className="text-gray-500 mt-1.5 flex items-center justify-between text-[10px]">
+            <div className="mt-1.5 flex items-center justify-between text-[10px] text-gray-500">
               <span>
                 {isSearching ? (
                   <span className="flex items-center gap-1">
@@ -1095,7 +1095,7 @@ const VerificationGroupByView = () => {
                 className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
                   activeTab === 'brands'
                     ? 'bg-primary text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:bg-meta-4 dark:hover:bg-meta-3'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-meta-4 dark:text-gray-300 dark:hover:bg-meta-3'
                 }`}
               >
                 브랜드 아이템
@@ -1105,7 +1105,7 @@ const VerificationGroupByView = () => {
                 className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
                   activeTab === 'details'
                     ? 'bg-primary text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:bg-meta-4 dark:hover:bg-meta-3'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-meta-4 dark:text-gray-300 dark:hover:bg-meta-3'
                 }`}
               >
                 상세 상품 ({expandedItems.length > 0 ? expandedItems.length : '-'})
@@ -1134,7 +1134,7 @@ const VerificationGroupByView = () => {
                             loadMoreBrandItems();
                           }
                         }}
-                        className={`hover:bg-gray-50 flex w-full items-center gap-2 p-2 text-left transition-all dark:hover:bg-meta-4 ${
+                        className={`flex w-full items-center gap-2 p-2 text-left transition-all hover:bg-gray-50 dark:hover:bg-meta-4 ${
                           selectedBrandItem?.id === item.id
                             ? 'border-r-4 border-primary bg-primary/5'
                             : ''
@@ -1177,7 +1177,7 @@ const VerificationGroupByView = () => {
                           >
                             {item.brandName} {item.productName}
                           </p>
-                          <p className="text-gray-400 mt-0.5 text-[9px]">
+                          <p className="mt-0.5 text-[9px] text-gray-400">
                             매칭 {item.totalMatchCount}건
                           </p>
                         </div>
@@ -1187,12 +1187,12 @@ const VerificationGroupByView = () => {
                   {isLoadingBrandItemMore && (
                     <div className="flex items-center justify-center py-4">
                       <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                      <span className="text-gray-500 ml-2 text-xs">불러오는 중...</span>
+                      <span className="ml-2 text-xs text-gray-500">불러오는 중...</span>
                     </div>
                   )}
                 </>
               ) : (
-                <div className="text-gray-500 flex flex-col items-center justify-center py-20">
+                <div className="flex flex-col items-center justify-center py-20 text-gray-500">
                   <p>브랜드 아이템이 없습니다.</p>
                 </div>
               )}
@@ -1206,7 +1206,7 @@ const VerificationGroupByView = () => {
                       setActiveTab('brands');
                       setIsLeftPanelFocused(true);
                     }}
-                    className="hover:bg-gray-50 flex w-full items-center gap-2 rounded border border-stroke p-2 text-left transition-all dark:border-strokedark dark:hover:bg-meta-4"
+                    className="flex w-full items-center gap-2 rounded border border-stroke p-2 text-left transition-all hover:bg-gray-50 dark:border-strokedark dark:hover:bg-meta-4"
                   >
                     <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
                       ←
@@ -1215,7 +1215,7 @@ const VerificationGroupByView = () => {
                       <p className="text-xs font-semibold text-primary">
                         {selectedBrandItem.brandName} {selectedBrandItem.productName}
                       </p>
-                      <p className="text-gray-400 mt-0.5 text-[9px]">
+                      <p className="mt-0.5 text-[9px] text-gray-400">
                         매칭 {selectedBrandItem.totalMatchCount}건
                       </p>
                     </div>
@@ -1232,7 +1232,7 @@ const VerificationGroupByView = () => {
                       setSelectedBrandProduct(expandedBp);
                       setIsLeftPanelFocused(true);
                     }}
-                    className={`hover:bg-gray-100 mb-1 flex w-full items-center gap-1.5 px-2 py-1.5 text-left transition-all dark:hover:bg-meta-4 ${
+                    className={`mb-1 flex w-full items-center gap-1.5 px-2 py-1.5 text-left transition-all hover:bg-gray-100 dark:hover:bg-meta-4 ${
                       selectedBrandProduct?.id === expandedBp.id
                         ? 'border-r-3 border-primary bg-primary/10'
                         : ''
@@ -1281,7 +1281,7 @@ const VerificationGroupByView = () => {
                   </button>
                 ))
               ) : (
-                <div className="text-gray-500 flex flex-col items-center justify-center py-10">
+                <div className="flex flex-col items-center justify-center py-10 text-gray-500">
                   <p className="text-xs">스페이스바로 브랜드 상품을 선택하여</p>
                   <p className="text-xs">상세 상품 목록을 확인하세요.</p>
                 </div>
@@ -1291,7 +1291,7 @@ const VerificationGroupByView = () => {
         </div>
 
         {/* ───── 우측 패널: 검증 항목 ───── */}
-        <div className="bg-gray-50 flex flex-1 flex-col overflow-hidden dark:bg-black">
+        <div className="flex flex-1 flex-col overflow-hidden bg-gray-50 dark:bg-black">
           {selectedBrandProduct ? (
             <>
               {/* 헤더 */}
@@ -1300,7 +1300,7 @@ const VerificationGroupByView = () => {
                   <h3 className="text-sm font-bold text-black dark:text-white">
                     {selectedBrandProduct.brandName} {selectedBrandProduct.productName}
                     {(selectedBrandProduct.volume || selectedBrandProduct.amount) && (
-                      <span className="text-gray-400 ml-2 text-xs font-normal">
+                      <span className="ml-2 text-xs font-normal text-gray-400">
                         {selectedBrandProduct.volume}
                         {selectedBrandProduct.volume && selectedBrandProduct.amount && ' · '}
                         {selectedBrandProduct.amount}
@@ -1315,8 +1315,8 @@ const VerificationGroupByView = () => {
                     disabled={!canUndo}
                     className={`rounded px-2 py-1 text-[11px] font-medium transition-colors ${
                       canUndo
-                        ? 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:bg-meta-4'
-                        : 'bg-gray-50 text-gray-300 dark:text-gray-600 cursor-not-allowed dark:bg-meta-4/50'
+                        ? 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-meta-4 dark:text-gray-300'
+                        : 'cursor-not-allowed bg-gray-50 text-gray-300 dark:bg-meta-4/50 dark:text-gray-600'
                     }`}
                     title="Ctrl+Z"
                   >
@@ -1344,7 +1344,7 @@ const VerificationGroupByView = () => {
                       </span>
                     )}
                   </button>
-                  <div className="bg-gray-200 mx-0.5 h-4 w-px dark:bg-strokedark" />
+                  <div className="mx-0.5 h-4 w-px bg-gray-200 dark:bg-strokedark" />
                   <button
                     onClick={selectAll}
                     className="rounded bg-success/10 px-2 py-1 text-[11px] font-medium text-success transition-colors hover:bg-success/20"
@@ -1354,12 +1354,12 @@ const VerificationGroupByView = () => {
                   </button>
                   <button
                     onClick={deselectAll}
-                    className="bg-gray-100 text-gray-500 hover:bg-gray-200 dark:text-gray-400 rounded px-2 py-1 text-[11px] font-medium transition-colors dark:bg-meta-4"
+                    className="rounded bg-gray-100 px-2 py-1 text-[11px] font-medium text-gray-500 transition-colors hover:bg-gray-200 dark:bg-meta-4 dark:text-gray-400"
                     title="N"
                   >
                     전체거절
                   </button>
-                  <div className="bg-gray-200 mx-0.5 h-4 w-px dark:bg-strokedark" />
+                  <div className="mx-0.5 h-4 w-px bg-gray-200 dark:bg-strokedark" />
                   <button
                     onClick={handleConfirmMatching}
                     className="flex items-center gap-1 rounded bg-primary px-2.5 py-1 text-[11px] font-bold text-white transition-colors hover:bg-opacity-90"
@@ -1413,12 +1413,12 @@ const VerificationGroupByView = () => {
                   >
                     유사 딜 찾기
                   </button>
-                  <label className="text-gray-500 dark:text-gray-400 flex cursor-pointer items-center gap-1.5 text-[11px]">
+                  <label className="flex cursor-pointer items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-400">
                     <input
                       type="checkbox"
                       checked={!includeVerified}
                       onChange={(e) => setIncludeVerified(!e.target.checked)}
-                      className="border-gray-300 h-3.5 w-3.5 rounded text-blue-500 focus:ring-blue-500"
+                      className="h-3.5 w-3.5 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
                     />
                     <span
                       className={
@@ -1449,7 +1449,7 @@ const VerificationGroupByView = () => {
                 {pendingLoading && verificationItems.length === 0 ? (
                   <div className="flex items-center justify-center py-20">
                     <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                    <span className="text-gray-500 ml-2">검증 대기 목록 불러오는 중...</span>
+                    <span className="ml-2 text-gray-500">검증 대기 목록 불러오는 중...</span>
                   </div>
                 ) : (
                   <div className="space-y-1">
@@ -1475,7 +1475,7 @@ const VerificationGroupByView = () => {
                         {isLoadingVerificationMore && (
                           <div className="flex items-center justify-center py-4">
                             <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                            <span className="text-gray-500 ml-2 text-xs">불러오는 중...</span>
+                            <span className="ml-2 text-xs text-gray-500">불러오는 중...</span>
                           </div>
                         )}
                       </>
@@ -1496,12 +1496,12 @@ const VerificationGroupByView = () => {
                             />
                           </svg>
                         </div>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-sm text-gray-500">
                           {verificationError
                             ? '목록을 불러오지 못했습니다'
                             : '매칭 항목이 없습니다'}
                         </p>
-                        <p className="text-gray-400 mt-1 text-xs">
+                        <p className="mt-1 text-xs text-gray-400">
                           {verificationError
                             ? verificationError
                             : !includeVerified
@@ -1515,7 +1515,7 @@ const VerificationGroupByView = () => {
               </div>
             </>
           ) : (
-            <div className="text-gray-500 flex flex-1 items-center justify-center">
+            <div className="flex flex-1 items-center justify-center text-gray-500">
               {filteredBrandItems.length > 0
                 ? '좌측에서 브랜드 아이템을 선택해주세요.'
                 : '브랜드 아이템이 없습니다.'}

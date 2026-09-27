@@ -55,10 +55,10 @@ const SnsPublishTable = ({ initialDrafts }: { initialDrafts: SnsDraft[] }) => {
               <div className="flex flex-1 flex-col gap-2">
                 <div className="flex flex-wrap items-center gap-2 text-xs text-bodydark2">
                   <span className="rounded bg-primary/10 px-2 py-0.5 text-primary">#{d.id}</span>
-                  <span className="bg-gray-100 rounded px-2 py-0.5 dark:bg-meta-4">
+                  <span className="rounded bg-gray-100 px-2 py-0.5 dark:bg-meta-4">
                     {d.channel}
                   </span>
-                  <span className="bg-gray-100 rounded px-2 py-0.5 dark:bg-meta-4">
+                  <span className="rounded bg-gray-100 px-2 py-0.5 dark:bg-meta-4">
                     {d.hookType} · {d.tone}
                   </span>
                   <span>productId {d.productId}</span>
@@ -88,7 +88,7 @@ const SnsPublishTable = ({ initialDrafts }: { initialDrafts: SnsDraft[] }) => {
               <button
                 onClick={() => handleReject(d.id)}
                 disabled={pendingId === d.id}
-                className="border-red-300 text-red-600 hover:bg-red-50 flex-shrink-0 rounded border px-4 py-2 text-sm disabled:opacity-50"
+                className="flex-shrink-0 rounded border border-red-300 px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
               >
                 {pendingId === d.id ? '반려 중…' : '반려'}
               </button>

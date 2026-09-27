@@ -50,7 +50,7 @@ const GroupUpdate = ({ groupId }: Props) => {
   if (fetching) {
     return (
       <div className="animate-pulse space-y-4">
-        <div className="bg-gray-200 h-40 rounded" />
+        <div className="h-40 rounded bg-gray-200" />
       </div>
     );
   }

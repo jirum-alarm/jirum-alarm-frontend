@@ -86,7 +86,7 @@ const ModelPagesTable = () => {
                           unoptimized
                         />
                       ) : (
-                        <div className="bg-gray-100 h-10 w-10 rounded" />
+                        <div className="h-10 w-10 rounded bg-gray-100" />
                       )}
                       <div className="min-w-0">
                         {/* 미리보기(초안도 열림) — 발행 전 실제 모양 검수 */}

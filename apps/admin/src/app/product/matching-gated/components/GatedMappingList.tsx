@@ -89,7 +89,7 @@ const GatedMappingList = () => {
               className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                 activeSources.includes(opt.value)
                   ? 'bg-primary text-white'
-                  : 'text-gray-500 dark:text-gray-400 border border-stroke dark:border-strokedark'
+                  : 'border border-stroke text-gray-500 dark:border-strokedark dark:text-gray-400'
               }`}
             >
               {opt.label}
@@ -122,21 +122,21 @@ const GatedMappingList = () => {
         >
           새로고침
         </button>
-        <span className="text-gray-400 text-xs">{items.length}건</span>
+        <span className="text-xs text-gray-400">{items.length}건</span>
       </div>
 
       {message && (
-        <div className="bg-gray-100 text-gray-700 dark:text-gray-200 mb-3 rounded-md px-3 py-2 text-xs dark:bg-meta-4">
+        <div className="mb-3 rounded-md bg-gray-100 px-3 py-2 text-xs text-gray-700 dark:bg-meta-4 dark:text-gray-200">
           {message}
         </div>
       )}
 
-      {loading && <div className="text-gray-400 py-10 text-center text-sm">불러오는 중…</div>}
+      {loading && <div className="py-10 text-center text-sm text-gray-400">불러오는 중…</div>}
       {error && (
         <div className="py-10 text-center text-sm text-meta-1">조회 실패: {error.message}</div>
       )}
       {!loading && !error && items.length === 0 && (
-        <div className="text-gray-400 py-10 text-center text-sm">차단된 매핑이 없습니다.</div>
+        <div className="py-10 text-center text-sm text-gray-400">차단된 매핑이 없습니다.</div>
       )}
 
       {/* 목록 — title ↔ 추출 대조가 핵심 */}
@@ -173,7 +173,7 @@ const GatedMappingList = () => {
                     {sourceLabel}
                   </span>
                   {item.product?.provider?.name && (
-                    <span className="text-gray-400 text-[11px]">{item.product.provider.name}</span>
+                    <span className="text-[11px] text-gray-400">{item.product.provider.name}</span>
                   )}
                   {item.product?.url && (
                     <a
@@ -193,13 +193,13 @@ const GatedMappingList = () => {
                 </div>
 
                 {/* 추출 결과 — 제목과 대조해 오염 판단 */}
-                <div className="text-gray-500 dark:text-gray-400 mt-1 text-xs">
+                <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                   추출 → brand: <b className="text-meta-1">{brand ?? '∅'}</b> / model:{' '}
                   <b className="text-meta-1">{modelName ?? '∅'}</b>
                 </div>
 
                 {reason && (
-                  <div className="text-gray-400 mt-0.5 truncate text-[11px]" title={reason}>
+                  <div className="mt-0.5 truncate text-[11px] text-gray-400" title={reason}>
                     {reason}
                   </div>
                 )}
@@ -208,7 +208,7 @@ const GatedMappingList = () => {
               {/* 액션 */}
               <div className="flex flex-shrink-0 flex-col justify-center gap-2">
                 {done ? (
-                  <span className="text-gray-400 text-xs">
+                  <span className="text-xs text-gray-400">
                     {done === 'verified' ? '승인됨' : '거절됨'}
                   </span>
                 ) : (

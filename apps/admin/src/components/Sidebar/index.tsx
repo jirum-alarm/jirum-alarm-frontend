@@ -15,6 +15,100 @@ interface SidebarProps {
   setSidebarExpanded: (arg: boolean) => void;
 }
 
+type MenuGroupConfig = {
+  name: string;
+  icon?: () => React.JSX.Element;
+  /** 그룹 강조 기준 — 목록에 없는 상세 페이지(/product/123 등)도 그룹은 켜지게 */
+  match: string[];
+  items: { name: string; href: string }[];
+};
+
+const MENU: { title: string; groups: MenuGroupConfig[] }[] = [
+  {
+    title: 'MENU',
+    groups: [
+      {
+        name: '대시보드',
+        icon: DashboardIcon,
+        match: ['/', '/stats', '/crawling', '/profit-link', '/sns-publish'],
+        items: [
+          { name: '홈', href: '/' },
+          { name: '통계', href: '/stats' },
+          { name: '크롤링', href: '/crawling' },
+          { name: '수익 링크', href: '/profit-link' },
+          { name: 'SNS 발행', href: '/sns-publish' },
+        ],
+      },
+      {
+        name: '핫딜',
+        icon: HotdealIcon,
+        match: ['/hotdeal', '/deals'],
+        items: [
+          { name: '키워드', href: '/hotdeal/keyword' },
+          { name: '딜 페이지', href: '/deals' },
+        ],
+      },
+      {
+        name: '상품',
+        icon: ProductIcon,
+        match: ['/product'],
+        items: [
+          { name: '목록', href: '/product/list' },
+          { name: '매칭', href: '/product/matching' },
+          { name: '게이트 차단', href: '/product/matching-gated' },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'SYSTEM',
+    groups: [
+      {
+        name: '키워드맵',
+        icon: KeywordMapIcon,
+        match: ['/keyword-map'],
+        items: [{ name: '그룹 목록', href: '/keyword-map' }],
+      },
+      {
+        name: '카테고리',
+        icon: CategoryIcon,
+        match: ['/category'],
+        items: [{ name: '목록', href: '/category' }],
+      },
+      {
+        name: '사용자',
+        icon: UserIcon,
+        match: ['/user'],
+        items: [{ name: '목록', href: '/user' }],
+      },
+      {
+        name: '알림',
+        icon: BellIcon,
+        match: ['/notification'],
+        items: [{ name: '발송 및 내역', href: '/notification' }],
+      },
+      {
+        name: '광고',
+        match: ['/advertisement'],
+        items: [
+          { name: '목록', href: '/advertisement' },
+          { name: '등록', href: '/advertisement/register' },
+        ],
+      },
+    ],
+  },
+];
+
+/** '/' 는 정확히 일치할 때만 — 예전엔 includes 라 홈이 모든 페이지에서 켜졌다 */
+const matchesPath = (pathname: string, href: string) =>
+  href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
+
+/** 가장 구체적인(긴) 메뉴 하나만 켠다 — /advertisement/register 에서 '목록'까지 켜지던 것 */
+const findActiveHref = (pathname: string) =>
+  MENU.flatMap((s) => s.groups.flatMap((g) => g.items.map((i) => i.href)))
+    .filter((href) => matchesPath(pathname, href))
+    .sort((a, b) => b.length - a.length)[0];
+
 const Sidebar = ({
   sidebarOpen,
   setSidebarOpen,
@@ -22,6 +116,7 @@ const Sidebar = ({
   setSidebarExpanded,
 }: SidebarProps) => {
   const pathname = usePathname();
+  const activeHref = findActiveHref(pathname);
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -123,271 +218,50 @@ const Sidebar = ({
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         {/* <!-- Sidebar Menu --> */}
         <nav className={`mt-5 px-4 py-4 lg:mt-9 lg:px-6 ${!sidebarExpanded && 'lg:px-2'}`}>
-          {/* <!-- Menu Group --> */}
-          <div>
-            <h3
-              className={`mb-4 ml-4 text-sm font-semibold text-bodydark2 ${
-                !sidebarExpanded && 'hidden'
-              }`}
-            >
-              MENU
-            </h3>
-
-            <ul className="mb-6 flex flex-col gap-1.5">
-              <SidebarLinkGroup
-                activeCondition={
-                  pathname === '/' ||
-                  pathname.startsWith('/stats') ||
-                  pathname.startsWith('/crawling') ||
-                  pathname.startsWith('/profit-link') ||
-                  pathname.startsWith('/sns-publish')
-                }
+          {MENU.map((section, si) => (
+            <div key={section.title} className={si > 0 ? 'mt-5 lg:mt-9' : undefined}>
+              <h3
+                className={`mb-4 ml-4 text-sm font-semibold text-bodydark2 ${
+                  !sidebarExpanded && 'hidden'
+                }`}
               >
-                {(handleClick, open) => {
+                {section.title}
+              </h3>
+              <ul className="mb-6 flex flex-col gap-1.5">
+                {section.groups.map((group) => {
+                  const Icon = group.icon;
+                  const groupActive = group.match.some((m) => matchesPath(pathname, m));
                   return (
-                    <React.Fragment>
-                      <MenuGroup
-                        name="대시보드"
-                        isSelectedPath={
-                          pathname === '/' ||
-                          pathname.startsWith('/stats') ||
-                          pathname.startsWith('/crawling') ||
-                          pathname.startsWith('/profit-link') ||
-                          pathname.startsWith('/sns-publish')
-                        }
-                        open={open}
-                        sidebarExpanded={sidebarExpanded}
-                        openSidebar={openSidebar}
-                        handleClick={handleClick}
-                        icon={<DashboardIcon />}
-                      />
-                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
-                        <SubMenuItem name="홈" linkTo="/" pathname={pathname} />
-                        <SubMenuItem name="통계" linkTo="/stats" pathname={pathname} />
-                        <SubMenuItem name="크롤링" linkTo="/crawling" pathname={pathname} />
-                        <SubMenuItem name="수익 링크" linkTo="/profit-link" pathname={pathname} />
-                        <SubMenuItem name="SNS 발행" linkTo="/sns-publish" pathname={pathname} />
-                      </SubMenu>
-                    </React.Fragment>
+                    <SidebarLinkGroup key={group.name} activeCondition={groupActive}>
+                      {(handleClick, open) => (
+                        <>
+                          <MenuGroup
+                            name={group.name}
+                            isSelectedPath={groupActive}
+                            open={open}
+                            sidebarExpanded={sidebarExpanded}
+                            openSidebar={openSidebar}
+                            handleClick={handleClick}
+                            icon={Icon ? <Icon /> : undefined}
+                          />
+                          <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
+                            {group.items.map((item) => (
+                              <SubMenuItem
+                                key={item.href}
+                                name={item.name}
+                                linkTo={item.href}
+                                active={item.href === activeHref}
+                              />
+                            ))}
+                          </SubMenu>
+                        </>
+                      )}
+                    </SidebarLinkGroup>
                   );
-                }}
-              </SidebarLinkGroup>
-
-              <SidebarLinkGroup
-                activeCondition={pathname.startsWith('/hotdeal') || pathname.startsWith('/deals')}
-              >
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <MenuGroup
-                        name="핫딜"
-                        isSelectedPath={
-                          pathname.startsWith('/hotdeal') || pathname.startsWith('/deals')
-                        }
-                        open={open}
-                        sidebarExpanded={sidebarExpanded}
-                        openSidebar={openSidebar}
-                        handleClick={handleClick}
-                        icon={<HotdealIcon />}
-                      />
-                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
-                        <SubMenuItem name="키워드" linkTo="/hotdeal/keyword" pathname={pathname} />
-                        <SubMenuItem name="딜 페이지" linkTo="/deals" pathname={pathname} />
-                      </SubMenu>
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-              <SidebarLinkGroup activeCondition={pathname.startsWith('/product')}>
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <MenuGroup
-                        name="상품"
-                        isSelectedPath={pathname.startsWith('/product')}
-                        open={open}
-                        sidebarExpanded={sidebarExpanded}
-                        openSidebar={openSidebar}
-                        handleClick={handleClick}
-                        icon={<ProductIcon />}
-                      />
-                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
-                        <SubMenuItem name="목록" linkTo="/product/list" pathname={pathname} />
-                        <SubMenuItem name="매칭" linkTo="/product/matching" pathname={pathname} />
-                        <SubMenuItem
-                          name="게이트 차단"
-                          linkTo="/product/matching-gated"
-                          pathname={pathname}
-                        />
-                      </SubMenu>
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-            </ul>
-          </div>
-
-          <div className="mt-5 lg:mt-9">
-            <h3
-              className={`mb-4 ml-4 text-sm font-semibold text-bodydark2 ${
-                !sidebarExpanded && 'hidden'
-              }`}
-            >
-              SYSTEM
-            </h3>
-
-            <ul className="mb-6 flex flex-col gap-1.5">
-              <SidebarLinkGroup activeCondition={pathname.startsWith('/keyword-map')}>
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <MenuGroup
-                        name="키워드맵"
-                        isSelectedPath={pathname.startsWith('/keyword-map')}
-                        open={open}
-                        sidebarExpanded={sidebarExpanded}
-                        openSidebar={openSidebar}
-                        handleClick={handleClick}
-                        icon={<KeywordMapIcon />}
-                      />
-                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
-                        <SubMenuItem name="그룹 목록" linkTo="/keyword-map" pathname={pathname} />
-                      </SubMenu>
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-
-              <SidebarLinkGroup activeCondition={pathname.startsWith('/category')}>
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <MenuGroup
-                        name="카테고리"
-                        isSelectedPath={pathname.startsWith('/category')}
-                        open={open}
-                        sidebarExpanded={sidebarExpanded}
-                        openSidebar={openSidebar}
-                        handleClick={handleClick}
-                        icon={<CategoryIcon />}
-                      />
-                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
-                        <SubMenuItem name="목록" linkTo="/category" pathname={pathname} />
-                      </SubMenu>
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-
-              <SidebarLinkGroup activeCondition={pathname.startsWith('/user')}>
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <MenuGroup
-                        name="사용자"
-                        isSelectedPath={pathname.startsWith('/user')}
-                        open={open}
-                        sidebarExpanded={sidebarExpanded}
-                        openSidebar={openSidebar}
-                        handleClick={handleClick}
-                        icon={<UserIcon />}
-                      />
-                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
-                        <SubMenuItem name="목록" linkTo="/user" pathname={pathname} />
-                      </SubMenu>
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-
-              <SidebarLinkGroup activeCondition={pathname.startsWith('/notification')}>
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <MenuGroup
-                        name="알림"
-                        isSelectedPath={pathname.startsWith('/notification')}
-                        open={open}
-                        sidebarExpanded={sidebarExpanded}
-                        openSidebar={openSidebar}
-                        handleClick={handleClick}
-                        icon={<BellIcon />}
-                      />
-                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
-                        <SubMenuItem
-                          name="발송 및 내역"
-                          linkTo="/notification"
-                          pathname={pathname}
-                        />
-                      </SubMenu>
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-
-              <SidebarLinkGroup activeCondition={pathname.startsWith('/advertisement')}>
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <MenuGroup
-                        name="광고"
-                        isSelectedPath={pathname.startsWith('/advertisement')}
-                        open={open}
-                        sidebarExpanded={sidebarExpanded}
-                        openSidebar={openSidebar}
-                        handleClick={handleClick}
-                      />
-                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
-                        <SubMenuItem name="목록" linkTo="/advertisement" pathname={pathname} />
-                        <SubMenuItem
-                          name="등록"
-                          linkTo="/advertisement/register"
-                          pathname={pathname}
-                        />
-                      </SubMenu>
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-            </ul>
-          </div>
-
-          <div className="mt-5 lg:mt-9">
-            <h3
-              className={`mb-4 ml-4 text-sm font-semibold text-bodydark2 ${
-                !sidebarExpanded && 'hidden'
-              }`}
-            >
-              ARCHIVE
-            </h3>
-
-            <ul className="mb-6 flex flex-col gap-1.5">
-              <SidebarLinkGroup activeCondition={pathname.startsWith('/post')}>
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <MenuGroup
-                        name="포스트"
-                        isSelectedPath={pathname.startsWith('/post')}
-                        open={open}
-                        sidebarExpanded={sidebarExpanded}
-                        openSidebar={openSidebar}
-                        handleClick={handleClick}
-                        icon={<PostIcon />}
-                      />
-                      <SubMenu open={open} sidebarExpanded={sidebarExpanded}>
-                        <SubMenuItem
-                          name="예약 목록"
-                          linkTo="/post/reservation"
-                          pathname={pathname}
-                        />
-                      </SubMenu>
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
-            </ul>
-          </div>
+                })}
+              </ul>
+            </div>
+          ))}
         </nav>
         {/* <!-- Sidebar Menu --> */}
       </div>
@@ -453,21 +327,13 @@ function SubMenu({
   );
 }
 
-function SubMenuItem({
-  name,
-  pathname,
-  linkTo,
-}: {
-  name: string;
-  pathname: string;
-  linkTo: string;
-}) {
+function SubMenuItem({ name, linkTo, active }: { name: string; linkTo: string; active: boolean }) {
   return (
     <li>
       <Link
         href={linkTo}
         className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-          pathname.includes(linkTo) && 'text-white'
+          active && 'text-white'
         }`}
       >
         {name}
@@ -509,28 +375,6 @@ function ProductIcon() {
         fill=""
       />
       <path d="M10.125 6.75H4.5V7.875H10.125V6.75ZM13.5 10.125H4.5V11.25H13.5V10.125Z" fill="" />
-    </svg>
-  );
-}
-
-function PostIcon() {
-  return (
-    <svg
-      className="fill-current"
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M15 1.5H3C2.17157 1.5 1.5 2.17157 1.5 3V15C1.5 15.8284 2.17157 16.5 3 16.5H15C15.8284 16.5 16.5 15.8284 16.5 15V3C16.5 2.17157 15.8284 1.5 15 1.5ZM15 3V15H3V3H15Z"
-        fill=""
-      />
-      <path
-        d="M5.25 5.25H12.75V6.75H5.25V5.25ZM5.25 8.25H12.75V9.75H5.25V8.25ZM5.25 11.25H9.75V12.75H5.25V11.25Z"
-        fill=""
-      />
     </svg>
   );
 }

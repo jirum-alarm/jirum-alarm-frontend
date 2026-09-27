@@ -319,7 +319,7 @@ const FunnelSection = () => {
           <tbody>
             {errors.map((row) => (
               <tr key={row.error} className="border-b border-stroke dark:border-strokedark">
-                <td className={`${tdClass} font-mono break-all text-xs`}>{row.error}</td>
+                <td className={`${tdClass} break-all font-mono text-xs`}>{row.error}</td>
                 <td className={`${tdClass} text-right`}>{row.count.toLocaleString()}</td>
               </tr>
             ))}

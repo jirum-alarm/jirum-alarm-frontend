@@ -87,7 +87,7 @@ const SimilarDealsPanel = ({
   const chips = [...new Set(seedTitles)].slice(0, 5);
 
   return (
-    <div className="bg-gray-50 border-b border-stroke px-3 py-2 dark:border-strokedark dark:bg-meta-4/30">
+    <div className="border-b border-stroke bg-gray-50 px-3 py-2 dark:border-strokedark dark:bg-meta-4/30">
       <div className="mb-1.5 flex items-center gap-2 text-[11px]">
         <span className="font-bold text-black dark:text-white">유사 딜로 매핑</span>
         <span className="rounded bg-warning/10 px-1.5 py-0.5 font-bold text-warning">
@@ -120,7 +120,7 @@ const SimilarDealsPanel = ({
             <button
               key={t}
               onClick={() => runSearch(t)}
-              className="text-gray-600 dark:text-gray-300 line-clamp-1 max-w-[240px] rounded-full border border-stroke bg-white px-2 py-0.5 text-left text-[10px] hover:border-primary dark:border-strokedark dark:bg-boxdark"
+              className="line-clamp-1 max-w-[240px] rounded-full border border-stroke bg-white px-2 py-0.5 text-left text-[10px] text-gray-600 hover:border-primary dark:border-strokedark dark:bg-boxdark dark:text-gray-300"
               title={t}
             >
               {t}
@@ -130,10 +130,10 @@ const SimilarDealsPanel = ({
       )}
 
       <div className="max-h-72 space-y-0.5 overflow-y-auto">
-        {loading && <p className="text-gray-500 py-2 text-xs">검색 중...</p>}
+        {loading && <p className="py-2 text-xs text-gray-500">검색 중...</p>}
         {error && <p className="py-2 text-xs text-danger">검색 실패: {error.message}</p>}
         {!loading && !error && data && results.length === 0 && (
-          <p className="text-gray-500 py-2 text-xs">
+          <p className="py-2 text-xs text-gray-500">
             새 후보가 없습니다 — 검색어를 짧게(브랜드 + 모델 + 수량) 바꿔보세요
           </p>
         )}
@@ -154,13 +154,13 @@ const SimilarDealsPanel = ({
                 onChange={() => toggle(id)}
                 className="h-3.5 w-3.5"
               />
-              <span className="text-gray-400 w-8 text-right text-[10px]">
+              <span className="w-8 text-right text-[10px] text-gray-400">
                 {p.similarity != null ? p.similarity.toFixed(2) : '-'}
               </span>
               <span className="line-clamp-1 flex-1 text-black dark:text-white">{p.title}</span>
               {p.price && <span className="text-[10px] font-bold text-primary">{p.price}</span>}
               {elsewhere ? (
-                <span className="text-gray-500 text-[10px]">
+                <span className="text-[10px] text-gray-500">
                   다른 상품 #{p.productMapping?.targetId}
                 </span>
               ) : (

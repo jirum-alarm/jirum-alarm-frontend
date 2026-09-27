@@ -1,7 +1,7 @@
 import { QueryHookOptions, useQuery } from '@apollo/client';
 
 import { PAGE_LIMIT } from '@/constants/limit';
-import { QueryUserByAdmin, QueryUsersByAdmin, QueryUsersTotalCountByAdmin } from '@/graphql/user';
+import { QueryUserByAdmin, QueryUsersByAdmin } from '@/graphql/user';
 
 export interface UserListItem {
   id: number;
@@ -51,18 +51,4 @@ export const useGetUserByAdmin = (
     fetchPolicy: 'network-only',
     ...options,
   });
-};
-
-export const useGetUsersTotalCountByAdmin = (
-  variables?: { keyword?: string },
-  options?: QueryHookOptions,
-) => {
-  return useQuery<{ usersTotalCountByAdmin: number }, { keyword?: string }>(
-    QueryUsersTotalCountByAdmin,
-    {
-      variables,
-      fetchPolicy: 'network-only',
-      ...options,
-    },
-  );
 };

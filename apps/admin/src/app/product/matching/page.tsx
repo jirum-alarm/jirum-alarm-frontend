@@ -58,28 +58,28 @@ const ProductMatchingPage = () => {
 
         {/* 브랜드별 뷰 단축키 힌트 */}
         {viewMode === 'brand' && (
-          <div className="text-gray-400 hidden items-center gap-2 text-[11px] sm:flex">
-            <kbd className="font-mono rounded bg-white px-1.5 py-0.5 shadow-sm dark:bg-boxdark">
+          <div className="hidden items-center gap-2 text-[11px] text-gray-400 sm:flex">
+            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
               ↑↓
             </kbd>
             <span>이동</span>
-            <kbd className="font-mono rounded bg-white px-1.5 py-0.5 shadow-sm dark:bg-boxdark">
+            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
               →←
             </kbd>
             <span>패널전환</span>
-            <kbd className="font-mono rounded bg-white px-1.5 py-0.5 shadow-sm dark:bg-boxdark">
+            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
               Space
             </kbd>
             <span>선택</span>
-            <kbd className="font-mono rounded bg-white px-1.5 py-0.5 shadow-sm dark:bg-boxdark">
+            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
               Enter
             </kbd>
             <span>확정</span>
-            <kbd className="font-mono rounded bg-white px-1.5 py-0.5 shadow-sm dark:bg-boxdark">
+            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
               ⌘/Ctrl+Z
             </kbd>
             <span>되돌리기</span>
-            <kbd className="font-mono rounded bg-white px-1.5 py-0.5 shadow-sm dark:bg-boxdark">
+            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
               ?
             </kbd>
             <span>도움말</span>

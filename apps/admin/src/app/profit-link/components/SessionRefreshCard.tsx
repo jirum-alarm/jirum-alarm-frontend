@@ -64,7 +64,7 @@ const SessionRefreshCard = ({
         onPaste={onPaste}
         placeholder={placeholder}
         rows={2}
-        className="font-mono mb-3 w-full rounded border border-stroke bg-transparent px-3 py-2 text-xs text-black outline-none focus:border-primary dark:border-strokedark dark:text-white"
+        className="mb-3 w-full rounded border border-stroke bg-transparent px-3 py-2 font-mono text-xs text-black outline-none focus:border-primary dark:border-strokedark dark:text-white"
       />
       <button
         onClick={onSave}

@@ -28,7 +28,7 @@ const SnsPublishPageRoute = async () => {
         </p>
       </div>
       {error ? (
-        <div className="border-red-300 bg-red-50 text-red-700 rounded border p-4 text-sm">
+        <div className="rounded border border-red-300 bg-red-50 p-4 text-sm text-red-700">
           publisher 서비스 조회 실패: {error}
         </div>
       ) : (
