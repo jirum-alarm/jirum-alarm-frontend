@@ -7,7 +7,7 @@ export const QueryProducts = gql`
     $startDate: DateTime
     $orderBy: ProductOrderType
     $orderOption: OrderOptionType
-    $categoryId: Int
+    $categoryIds: [Int!]
     $keyword: String
     $thumbnailType: ThumbnailType
     $isEnd: Boolean
@@ -19,7 +19,7 @@ export const QueryProducts = gql`
       startDate: $startDate
       orderBy: $orderBy
       orderOption: $orderOption
-      categoryId: $categoryId
+      categoryIds: $categoryIds
       keyword: $keyword
       thumbnailType: $thumbnailType
       isEnd: $isEnd

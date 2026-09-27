@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 
 import Header from '@/components/Header';
+import QueryErrorBanner from '@/components/QueryErrorBanner';
 import Sidebar from '@/components/Sidebar';
 
 interface Props {
@@ -63,7 +64,10 @@ export default function DefaultLayout({ isLoggedIn, children }: Props) {
 
           {/* <!-- ===== Main Content Start ===== --> */}
           <main>
-            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">{children}</div>
+            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+              <QueryErrorBanner />
+              {children}
+            </div>
           </main>
           {/* <!-- ===== Main Content End ===== --> */}
         </div>

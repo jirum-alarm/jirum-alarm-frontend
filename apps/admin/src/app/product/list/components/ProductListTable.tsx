@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useState, useTransition } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { QueryProducts } from '@/graphql/product';
 import {
   type GetProductsVariables,
   useGetProduct,
@@ -68,7 +67,8 @@ const ProductListTable = () => {
     : (listData?.products ?? []);
 
   const [hardDelete, { loading: deleting }] = useHardDeleteProductByAdmin({
-    refetchQueries: isSingleMode ? [] : [{ query: QueryProducts, variables: searchVariables }],
+    // 이름으로 지정해야 훅이 만든 변수(categoryIds 변환·기본값)로 다시 가져온다
+    refetchQueries: isSingleMode ? [] : ['QueryProducts'],
     awaitRefetchQueries: true,
   });
 
@@ -112,7 +112,7 @@ const ProductListTable = () => {
       if (!searchAfter) return;
       startTransition(() => {
         fetchMore({
-          variables: { ...searchVariables, searchAfter },
+          variables: { searchAfter }, // 나머지 변수는 원 쿼리 것이 병합된다
           updateQuery: (prev, { fetchMoreResult }) => {
             if (!fetchMoreResult) return prev;
             return {

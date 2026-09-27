@@ -12,8 +12,9 @@ const Signin = () => {
     password: '',
   });
   const [login, { loading }] = useMutationAdminLogin({
-    onCompleted: (data) => {
-      setAccessToken(data.adminLogin.accessToken);
+    onCompleted: async (data) => {
+      // 쿠키가 심기기 전에 이동하면 미들웨어가 다시 로그인으로 돌려보낸다
+      await setAccessToken(data.adminLogin.accessToken);
       router.push('/');
     },
     onError: (e) => {

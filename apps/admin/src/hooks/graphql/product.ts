@@ -35,13 +35,17 @@ export interface GetProductsVariables {
 }
 
 export const useGetProducts = (variables?: GetProductsVariables, options?: QueryHookOptions) => {
-  return useQuery<{ products: ProductListItem[] }, GetProductsVariables>(QueryProducts, {
+  // 스키마는 categoryIds(목록)만 받는다 — 화면은 단일 선택이라 여기서 감싼다
+  return useQuery<
+    { products: ProductListItem[] },
+    Omit<GetProductsVariables, 'categoryId'> & { categoryIds?: number[] }
+  >(QueryProducts, {
     variables: {
       limit: variables?.limit ?? PAGE_LIMIT,
       searchAfter: variables?.searchAfter,
       orderBy: variables?.orderBy ?? 'POSTED_AT',
       orderOption: variables?.orderOption ?? 'DESC',
-      categoryId: variables?.categoryId,
+      categoryIds: variables?.categoryId != null ? [variables.categoryId] : undefined,
       keyword: variables?.keyword,
       isEnd: variables?.isEnd,
       isHot: variables?.isHot,

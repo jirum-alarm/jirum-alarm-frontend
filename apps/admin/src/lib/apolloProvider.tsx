@@ -9,10 +9,11 @@ import {
   InMemoryCache,
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
 import { deleteAccessToken, getAccessToken } from '@/app/actions/token';
+import { reportQueryError } from '@/components/QueryErrorBanner';
 import { baseUrl } from '@/constants/endpoint';
 
 declare module '@apollo/client' {
@@ -36,7 +37,9 @@ const ApolloProvider = ({ children }: React.PropsWithChildren) => {
       };
     });
 
-    const linkOnError = onError(({ graphQLErrors, operation, forward }) => {
+    // 인증 에러는 로그인으로 보내고, 나머지는 상단 배너로 알린 뒤 컴포넌트에도 error 로 흘린다
+    // (예전엔 여기서 forward(operation) 을 반환해 실패한 요청을 한 번 더 보냈다 — onError 의 forward 는 재시도다).
+    const linkOnError = onError(({ graphQLErrors, networkError, operation }) => {
       if (graphQLErrors) {
         for (const err of graphQLErrors) {
           switch (err.extensions?.code) {
@@ -47,14 +50,15 @@ const ApolloProvider = ({ children }: React.PropsWithChildren) => {
               });
               return undefined;
           }
+          reportQueryError(operation.operationName, err.message);
         }
       }
-      return forward(operation);
+      if (networkError) reportQueryError(operation.operationName, networkError.message);
     });
 
     const httpLink = new HttpLink({
       uri: baseUrl,
-      fetchOptions: { cache: 'no-store', crendentials: 'include' },
+      fetchOptions: { cache: 'no-store' },
     });
 
     return new ApolloClient({

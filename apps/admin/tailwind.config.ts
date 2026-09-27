@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import tailwindColors from 'tailwindcss/colors';
 import defaultTheme from 'tailwindcss/defaultTheme';
 
 const config: Config = {
@@ -8,21 +9,10 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   darkMode: 'class',
-  // Tailwind가 사용자 정의 유틸리티 클래스를 인식하도록 설정
-  addUtilities: () => ({
-    '.no-scrollbar': {
-      /* Hide scrollbar for Chrome, Safari and Opera */
-      '&::-webkit-scrollbar': {
-        display: 'none',
-      },
-      /* Hide scrollbar for IE, Edge and Firefox */
-      '-ms-overflow-style': 'none' /* IE and Edge */,
-      'scrollbar-width': 'none' /* Firefox */,
-    },
-  }),
   theme: {
     fontFamily: {
       satoshi: ['Satoshi', 'sans-serif'],
+      mono: defaultTheme.fontFamily.mono,
     },
     screens: {
       '2xsm': '375px',
@@ -36,7 +26,8 @@ const config: Config = {
         transparent: 'transparent',
         white: '#FFFFFF',
         black: '#1C2434',
-        red: '#FB5454',
+        // 템플릿이 단일 색으로 덮어써 red-50·gray-500 같은 스케일 클래스가 CSS 없이 죽어 있었다 — DEFAULT 로 원래 색을 두고 스케일을 되살린다
+        red: { ...tailwindColors.red, DEFAULT: '#FB5454' },
         'black-2': '#010101',
         body: '#64748B',
         bodydark: '#AEB7C0',
@@ -45,7 +36,7 @@ const config: Config = {
         primary: '#3C50E0',
         secondary: '#80CAEE',
         stroke: '#E2E8F0',
-        gray: '#EFF4FB',
+        gray: { ...tailwindColors.gray, DEFAULT: '#EFF4FB' },
         graydark: '#333A48',
         'gray-2': '#F7F9FC',
         'gray-3': '#FAFAFA',
