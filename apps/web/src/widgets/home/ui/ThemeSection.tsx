@@ -23,12 +23,12 @@ const ThemeSection = ({ isMobile }: { isMobile: boolean }) => {
     <section className="pc:pt-7 pc:space-y-4 space-y-2">
       <div className="pc:px-0 px-5">
         <SectionHeader
-          title="관심 묶음 알림 받기"
+          title="관심사별 핫딜 알림"
           right={
             <InteractiveMoreLink
               href="/themes"
               className="text-sm text-gray-500 hover:text-gray-700"
-              aria-label="알림 묶음 더보기"
+              aria-label="관심사별 핫딜 알림 더보기"
             >
               더보기
             </InteractiveMoreLink>

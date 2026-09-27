@@ -47,12 +47,13 @@ const QueryNotificationThemes = new TypedDocumentString<
   }
 `);
 
-const QueryNotificationThemeLiveDeals = new TypedDocumentString<
-  { notificationThemeLiveDeals: ThemeLiveDeal[] },
-  { themeId: number }
+// 상세 무한 스크롤 — 최근 30일 "받았을 알림"을 offset 페이지로.
+const QueryNotificationThemeDeals = new TypedDocumentString<
+  { notificationThemeDeals: ThemeLiveDeal[] },
+  { themeId: number; offset: number; limit: number }
 >(`
-  query QueryNotificationThemeLiveDeals($themeId: Int!) {
-    notificationThemeLiveDeals(themeId: $themeId) {
+  query QueryNotificationThemeDeals($themeId: Int!, $offset: Int!, $limit: Int!) {
+    notificationThemeDeals(themeId: $themeId, offset: $offset, limit: $limit) {
       id
       title
       thumbnail
@@ -102,9 +103,9 @@ export class ThemeService {
     return execute(QueryNotificationThemes).then((res) => res.data.notificationThemes);
   }
 
-  static async getLiveDeals(themeId: number) {
-    return execute(QueryNotificationThemeLiveDeals, { themeId }).then(
-      (res) => res.data.notificationThemeLiveDeals,
+  static async getDeals(themeId: number, offset: number, limit: number) {
+    return execute(QueryNotificationThemeDeals, { themeId, offset, limit }).then(
+      (res) => res.data.notificationThemeDeals,
     );
   }
 

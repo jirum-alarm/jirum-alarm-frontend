@@ -15,7 +15,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
   // SSR에서는 인증 쿠키 없이 빈 배열로 dehydrate되어 클라이언트 re-fetch가 안 됨
   // → useQuery + initialData:[] 로 클라이언트에서만 fetch
   const { data: subscribedIds = [] } = useQuery(ThemeQueries.mySubscribedIds());
-  const { subscribe, unsubscribe, isPending } = useThemeSubscription();
+  const { subscribe, unsubscribe, isPendingFor } = useThemeSubscription();
   const { checkAndRedirect } = useRedirectIfNotLoggedIn();
 
   const subscribed = new Set(subscribedIds);
@@ -50,7 +50,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
               <Button
                 size="sm"
                 color={isSubscribed ? 'secondary' : 'primary'}
-                disabled={isPending}
+                disabled={isPendingFor(themeId)}
                 className="w-auto shrink-0 self-start px-3 py-1 text-sm disabled:opacity-50"
                 onClick={(e) => {
                   e.preventDefault(); // 카드 링크 이동 막고 구독만
@@ -59,7 +59,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
                   else subscribe(themeId);
                 }}
               >
-                {isSubscribed ? '구독중' : '구독'}
+                {isSubscribed ? '받는 중' : '알림 받기'}
               </Button>
             </Link>
           </li>

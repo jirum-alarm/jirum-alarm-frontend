@@ -9,8 +9,9 @@ import SectionHeader from '@/shared/ui/SectionHeader';
 import ThemeList from '@/features/mypage/ui/theme/ThemeList';
 
 export const metadata: Metadata = {
-  title: '알림 묶음 | 지름알림',
-  description: '관심 묶음을 구독하면 반응 좋은 딜만 골라 하루 최대 3건 알려드려요.',
+  title: '관심사별 핫딜 알림 | 지름알림',
+  description:
+    '관심사를 고르면 키워드를 하나하나 등록하지 않아도, 반응 좋은 핫딜만 하루 최대 3건 보내드려요.',
   alternates: { canonical: '/themes' },
 };
 
@@ -21,10 +22,11 @@ const ThemesPage = async () => {
   if (!isMobile) {
     return (
       <div className="mt-14 pt-8">
-        <h1 className="sr-only">알림 묶음</h1>
-        <SectionHeader title="알림 묶음" />
+        <h1 className="sr-only">관심사별 핫딜 알림</h1>
+        <SectionHeader title="관심사별 핫딜 알림" />
         <p className="mb-8 text-center text-sm text-gray-500">
-          관심 묶음을 구독하면 반응 좋은 딜만 골라 하루 최대 3건 알려드려요.
+          관심사를 고르면 키워드를 하나하나 등록하지 않아도, 반응 좋은 핫딜만 하루 최대 3건
+          보내드려요.
         </p>
         <div className="max-w-layout-max mx-auto px-5 pb-16">
           <Suspense>
@@ -36,11 +38,12 @@ const ThemesPage = async () => {
   }
 
   return (
-    <BasicLayout hasBackButton title="알림 묶음">
+    <BasicLayout hasBackButton title="관심사별 핫딜 알림">
       <div className="relative h-full px-5 py-6">
-        <h1 className="sr-only">알림 묶음</h1>
+        <h1 className="sr-only">관심사별 핫딜 알림</h1>
         <p className="mb-5 text-sm text-gray-500">
-          관심 묶음을 구독하면 반응 좋은 딜만 골라 하루 최대 3건 알려드려요.
+          관심사를 고르면 키워드를 하나하나 등록하지 않아도, 반응 좋은 핫딜만 하루 최대 3건
+          보내드려요.
         </p>
         <Suspense>
           <ThemeList isMobile />

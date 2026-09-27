@@ -24,22 +24,34 @@ export const useThemeSubscription = () => {
     });
   };
 
-  const { mutate: subscribe, isPending: isSubscribing } = useMutation({
+  const {
+    mutate: subscribe,
+    isPending: isSubscribing,
+    variables: subscribingId,
+  } = useMutation({
     mutationFn: (themeId: number) => ThemeService.subscribe(themeId),
     onMutate: (themeId) => {
       const prev = queryClient.getQueryData<number[]>(key);
       optimistic(themeId, true);
       return { prev };
     },
-    onSuccess: () => requestPermission(),
+    onSuccess: () => {
+      // 켠 직후 "그래서 뭐가 오는지"를 한 번 알려준다 — 키워드처럼 딜마다 오는 게 아니라서.
+      toast('알림을 켰어요. 반응 좋은 딜만 골라 하루 최대 3건 보내드릴게요.');
+      requestPermission();
+    },
     onError: (_e, _themeId, ctx) => {
       if (ctx?.prev) queryClient.setQueryData(key, ctx.prev);
-      toast('묶음 구독에 실패했습니다.');
+      toast('알림 켜기에 실패했어요.');
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   });
 
-  const { mutate: unsubscribe, isPending: isUnsubscribing } = useMutation({
+  const {
+    mutate: unsubscribe,
+    isPending: isUnsubscribing,
+    variables: unsubscribingId,
+  } = useMutation({
     mutationFn: (themeId: number) => ThemeService.unsubscribe(themeId),
     onMutate: (themeId) => {
       const prev = queryClient.getQueryData<number[]>(key);
@@ -48,10 +60,22 @@ export const useThemeSubscription = () => {
     },
     onError: (_e, _themeId, ctx) => {
       if (ctx?.prev) queryClient.setQueryData(key, ctx.prev);
-      toast('구독 해지에 실패했습니다.');
+      toast('알림 끄기에 실패했어요.');
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   });
 
-  return { subscribe, unsubscribe, isPending: isSubscribing || isUnsubscribing };
+  // 목록에서 버튼마다 isPending 을 공유하면 하나를 눌렀을 때 전부 disabled 로 깜빡인다 → 누른 것만.
+  const pendingThemeId = isSubscribing
+    ? subscribingId
+    : isUnsubscribing
+      ? unsubscribingId
+      : undefined;
+
+  return {
+    subscribe,
+    unsubscribe,
+    isPending: isSubscribing || isUnsubscribing,
+    isPendingFor: (themeId: number) => pendingThemeId === themeId,
+  };
 };

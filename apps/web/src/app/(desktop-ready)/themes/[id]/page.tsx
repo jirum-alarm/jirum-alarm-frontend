@@ -17,8 +17,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   return {
-    title: '알림 묶음 | 지름알림',
-    description: '관심 묶음을 구독하면 반응 좋은 딜만 골라 하루 최대 3건 알려드려요.',
+    title: '관심사별 핫딜 알림 | 지름알림',
+    description:
+      '관심사를 고르면 키워드를 하나하나 등록하지 않아도, 반응 좋은 핫딜만 하루 최대 3건 보내드려요.',
     alternates: { canonical: `/themes/${id}` },
   };
 }
@@ -47,8 +48,8 @@ const ThemeDetailPage = async ({ params }: { params: Promise<{ id: string }> }) 
       header={
         <PageHeader
           leading={<BackButton backTo="/themes" />}
-          title="알림 묶음"
-          actions={<ShareButton title="알림 묶음 | 지름알림" />}
+          title="관심사별 핫딜 알림"
+          actions={<ShareButton title="관심사별 핫딜 알림 | 지름알림" />}
         />
       }
     >

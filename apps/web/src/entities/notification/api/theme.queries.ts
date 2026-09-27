@@ -1,4 +1,4 @@
-import { queryOptions } from '@tanstack/react-query';
+import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 
 import { ThemeService } from '@/shared/api/notification/theme.service';
 
@@ -9,11 +9,14 @@ export const ThemeQueries = {
       queryKey: [...ThemeQueries.all(), 'list'],
       queryFn: () => ThemeService.getThemes(),
     }),
-  liveDeals: (themeId: number) =>
-    queryOptions({
-      queryKey: [...ThemeQueries.all(), 'live-deals', themeId],
-      queryFn: () => ThemeService.getLiveDeals(themeId),
-      staleTime: 0, // 라이브딜은 항상 최신(상세 진입 시 실시간)
+  // 상세 무한 스크롤. 페이지가 꽉 차면(limit 개) 다음 offset 이 있다고 본다.
+  deals: (themeId: number, limit = 20) =>
+    infiniteQueryOptions({
+      queryKey: [...ThemeQueries.all(), 'deals', themeId, limit],
+      queryFn: ({ pageParam }) => ThemeService.getDeals(themeId, pageParam, limit),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, pages) =>
+        lastPage.length === limit ? pages.length * limit : undefined,
     }),
   mySubscribedIds: () =>
     queryOptions({
