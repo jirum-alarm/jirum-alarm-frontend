@@ -1,6 +1,6 @@
 'use client';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import Card from '@/components/Card';
 import Chip from '@/components/Chip';
@@ -73,19 +73,25 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
     if (!synonymInputRef.current) return;
     const { value } = synonymInputRef.current;
     const keyword = value.trim();
-    onAddSynonym(keyword);
     synonymInputRef.current.value = '';
+    // 빈 칩이 저장되면 keywords:[""] 가 서버 @IsNotEmpty 에 걸려 저장 전체가 Bad Request 가 된다
+    if (!keyword) return;
+    onAddSynonym(keyword);
   };
 
   const addExcludeSynonym = () => {
     if (!excludeSynonymInputRef.current) return;
     const { value } = excludeSynonymInputRef.current;
     const keyword = value.trim();
-    onAddExcludeSynonym(keyword);
     excludeSynonymInputRef.current.value = '';
+    if (!keyword) return;
+    onAddExcludeSynonym(keyword);
   };
 
-  const handleSaveSynonym = () => {
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSaveSynonym = async () => {
+    if (isSaving) return;
     const toDeleteSynonym = synonymList.filter(
       (synonym) => !synonyms.map((synonym) => synonym.text).includes(synonym.keyword),
     );
@@ -93,22 +99,6 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
     const toAddSynonym = synonyms.filter(
       (synonym) => !synonymList.map((synonym) => synonym.keyword).includes(synonym.text),
     );
-
-    if (toDeleteSynonym.length) {
-      removeSynonym({
-        variables: {
-          ids: toDeleteSynonym.map((synonym) => Number(synonym.id)),
-        },
-      });
-    }
-    if (toAddSynonym.length) {
-      saveSynonym({
-        variables: {
-          hotDealKeywordId: hotDealKeywordId,
-          keywords: toAddSynonym.map((synonym) => synonym.text),
-        },
-      });
-    }
 
     const toDeleteExcludeSynonym = excludeKeywordList.filter(
       (synonym) => !excludeSynonyms.map((synonym) => synonym.text).includes(synonym.excludeKeyword),
@@ -119,23 +109,56 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
         !excludeKeywordList.map((synonym) => synonym.excludeKeyword).includes(synonym.text),
     );
 
+    const requests: Promise<unknown>[] = [];
+    if (toDeleteSynonym.length) {
+      requests.push(
+        removeSynonym({ variables: { ids: toDeleteSynonym.map((synonym) => Number(synonym.id)) } }),
+      );
+    }
+    if (toAddSynonym.length) {
+      requests.push(
+        saveSynonym({
+          variables: {
+            hotDealKeywordId: hotDealKeywordId,
+            keywords: toAddSynonym.map((synonym) => synonym.text),
+          },
+        }),
+      );
+    }
     if (toDeleteExcludeSynonym.length) {
-      removeExcludeSynonym({
-        variables: {
-          ids: toDeleteExcludeSynonym.map((synonym) => Number(synonym.id)),
-        },
-      });
+      requests.push(
+        removeExcludeSynonym({
+          variables: { ids: toDeleteExcludeSynonym.map((synonym) => Number(synonym.id)) },
+        }),
+      );
     }
     if (toAddExcludeSynonym.length) {
-      saveExcludeSynonym({
-        variables: {
-          hotDealKeywordId: hotDealKeywordId,
-          excludeKeywords: toAddExcludeSynonym.map((synonym) => synonym.text),
-        },
-      });
+      requests.push(
+        saveExcludeSynonym({
+          variables: {
+            hotDealKeywordId: hotDealKeywordId,
+            excludeKeywords: toAddExcludeSynonym.map((synonym) => synonym.text),
+          },
+        }),
+      );
     }
 
-    toast.success('저장이 완료되었습니다!');
+    if (requests.length === 0) {
+      toast.info('변경 사항이 없습니다.');
+      return;
+    }
+
+    // 예전엔 응답을 기다리지 않고 바로 "저장 완료" 를 띄워 서버가 거부해도 성공으로 보였다
+    setIsSaving(true);
+    try {
+      await Promise.all(requests);
+      toast.success('저장이 완료되었습니다!');
+    } catch (e) {
+      // 일부만 반영됐을 수 있다 — 성공한 요청의 refetch 가 칩을 서버 상태로 다시 맞춘다
+      toast.error(`저장 실패: ${(e as Error).message}`);
+    } finally {
+      setIsSaving(false);
+    }
 
     // onReset();
   };
@@ -143,8 +166,12 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
   return (
     <Card>
       <div className="flex w-full justify-end">
-        <button className="rounded-xl bg-lime-400 p-2 text-white" onClick={handleSaveSynonym}>
-          저장
+        <button
+          className="rounded-xl bg-lime-400 p-2 text-white disabled:opacity-50"
+          onClick={handleSaveSynonym}
+          disabled={isSaving}
+        >
+          {isSaving ? '저장 중…' : '저장'}
         </button>
       </div>
       <h2 className="mb-3 block text-xl font-medium text-black dark:text-white">유의어 검색</h2>
