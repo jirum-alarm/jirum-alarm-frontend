@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from 'react';
 
+import { useConfirm } from '@/components/Confirm';
 import Spinner from '@/components/Spinner';
 import { useToast } from '@/components/Toast';
 import { NotificationTarget, NotificationType } from '@/generated/gql/graphql';
@@ -30,6 +31,7 @@ interface SelectedUser {
 }
 
 const NotificationSender = () => {
+  const confirm = useConfirm();
   const toast = useToast();
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
@@ -89,7 +91,7 @@ const NotificationSender = () => {
     },
   });
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!title.trim() || !message.trim()) {
       toast.error('제목과 메시지를 입력해주세요.');
       return;
@@ -100,7 +102,7 @@ const NotificationSender = () => {
     }
 
     const userCount = recipientMode === 'specific' ? `${selectedUsers.length}명` : '전체 사용자';
-    if (!confirm(`${userCount}에게 알림을 발송하시겠습니까?`)) return;
+    if (!(await confirm({ message: `${userCount}에게 알림을 발송하시겠습니까?` }))) return;
 
     sendNotification({
       variables: {

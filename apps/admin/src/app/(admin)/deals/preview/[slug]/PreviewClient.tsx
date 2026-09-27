@@ -3,6 +3,7 @@
 import dayjs from 'dayjs';
 import Image from 'next/image';
 
+import { useConfirm } from '@/components/Confirm';
 import { QueryModelPagePreviewByAdmin } from '@/graphql/modelPage';
 import {
   useGetModelPagePreviewByAdmin,
@@ -53,6 +54,7 @@ interface Payload {
 const won = (n?: number | null) => (n == null ? '-' : `${Math.round(n).toLocaleString()}원`);
 
 const PreviewClient = ({ slug }: { slug: string }) => {
+  const confirm = useConfirm();
   const { data, loading } = useGetModelPagePreviewByAdmin({ slug });
   const [setPublished, { loading: mutating }] = useSetModelPagePublishedByAdmin({
     // 미리보기 쿼리를 다시 받아 상태 배지·버튼 갱신.
@@ -75,11 +77,11 @@ const PreviewClient = ({ slug }: { slug: string }) => {
   const histMax = histPrices.length ? Math.max(...histPrices) : 0;
 
   const isPublished = !!page.isPublished;
-  const handlePublish = () => {
+  const handlePublish = async () => {
     if (page.id == null) return;
     const next = !isPublished;
-    if (!confirm(`"${page.modelName}" 페이지를 ${next ? '발행' : '발행 취소'}하시겠습니까?`))
-      return;
+    const message = `"${page.modelName}" 페이지를 ${next ? '발행' : '발행 취소'}하시겠습니까?`;
+    if (!(await confirm({ message }))) return;
     setPublished({ variables: { id: page.id, isPublished: next } });
   };
 

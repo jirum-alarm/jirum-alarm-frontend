@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
+import { useConfirm } from '@/components/Confirm';
 import {
   useGetModelPagesByAdmin,
   useSetModelPagePublishedByAdmin,
@@ -15,15 +16,16 @@ import { dateFormatter } from '@/utils/date';
 const STALE_DAYS = 90;
 
 const ModelPagesTable = () => {
+  const confirm = useConfirm();
   const [onlyDrafts, setOnlyDrafts] = useState(false);
   const { data, loading } = useGetModelPagesByAdmin({ onlyDrafts });
   const [setPublished, { loading: mutating }] = useSetModelPagePublishedByAdmin();
 
   const pages = data?.modelPagesByAdmin ?? [];
 
-  const handleToggle = (id: number, slug: string, next: boolean) => () => {
+  const handleToggle = (id: number, slug: string, next: boolean) => async () => {
     const verb = next ? '발행' : '발행 취소';
-    if (!confirm(`"${slug}" 페이지를 ${verb}하시겠습니까?`)) return;
+    if (!(await confirm({ message: `"${slug}" 페이지를 ${verb}하시겠습니까?` }))) return;
     setPublished({ variables: { id, isPublished: next } });
   };
 

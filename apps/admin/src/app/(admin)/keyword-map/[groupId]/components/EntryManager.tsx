@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import Card from '@/components/Card';
+import { useConfirm } from '@/components/Confirm';
 import Spinner from '@/components/Spinner';
 import {
   useAddKeywordMapEntries,
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const EntryManager = ({ groupId, entries }: Props) => {
+  const confirm = useConfirm();
   const [keyword, setKeyword] = useState('');
   const [addEntry, { loading: addingOne }] = useAddKeywordMapEntry(groupId);
   const [addEntries, { loading: addingBulk }] = useAddKeywordMapEntries(groupId);
@@ -53,8 +55,8 @@ const EntryManager = ({ groupId, entries }: Props) => {
     }
   };
 
-  const handleRemove = (id: string, keyword: string) => {
-    if (confirm(`"${keyword}" 키워드를 삭제하시겠습니까?`)) {
+  const handleRemove = async (id: string, keyword: string) => {
+    if (await confirm({ message: `"${keyword}" 키워드를 삭제하시겠습니까?`, danger: true })) {
       removeEntry({ variables: { id: Number(id) } });
     }
   };

@@ -2,17 +2,19 @@
 
 import Link from 'next/link';
 
+import { useConfirm } from '@/components/Confirm';
 import { useGetKeywordMapGroups, useRemoveKeywordMapGroup } from '@/hooks/graphql/keywordMap';
 import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
 
 const KeywordMapGroupsTable = () => {
+  const confirm = useConfirm();
   const { data, loading, fetchMore } = useGetKeywordMapGroups();
   const [removeGroup] = useRemoveKeywordMapGroup();
 
   const handleRemoveGroup = (id: string, name: string) => {
-    return (e: React.MouseEvent<HTMLButtonElement>) => {
+    return async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
-      if (confirm(`정말 "${name}" 그룹을 삭제하시겠습니까?`)) {
+      if (await confirm({ message: `정말 "${name}" 그룹을 삭제하시겠습니까?`, danger: true })) {
         removeGroup({
           variables: { id: Number(id) },
         });

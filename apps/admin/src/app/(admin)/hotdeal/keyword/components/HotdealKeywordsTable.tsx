@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { useConfirm } from '@/components/Confirm';
 import Switcher from '@/components/Switchers/SwitcherOne';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
@@ -12,6 +13,7 @@ import { dateFormatter } from '@/utils/date';
 import { getParticle } from '@/utils/text';
 
 const HotdealKeywordsTable = () => {
+  const confirm = useConfirm();
   const router = useRouter();
   const searchParams = useSearchParams();
   const keywordType = (searchParams.get('keywordType') ??
@@ -25,9 +27,14 @@ const HotdealKeywordsTable = () => {
   const [removeHotdealKeyword] = useRemoveHotDealKeyword(keywordType);
 
   const handleRemoveHotdealKeyword = (id: string, keyword: string) => {
-    return (e: React.MouseEvent<HTMLButtonElement>) => {
+    return async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
-      if (confirm(`정말 "${keyword}"${getParticle(keyword)} 삭제하시겠습니까?`)) {
+      if (
+        await confirm({
+          message: `정말 "${keyword}"${getParticle(keyword)} 삭제하시겠습니까?`,
+          danger: true,
+        })
+      ) {
         removeHotdealKeyword({
           variables: {
             id: Number(id),

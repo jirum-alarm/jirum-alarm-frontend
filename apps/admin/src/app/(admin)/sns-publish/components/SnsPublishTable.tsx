@@ -2,18 +2,21 @@
 
 import { useState, useTransition } from 'react';
 
+import { useConfirm } from '@/components/Confirm';
 import { useToast } from '@/components/Toast';
 
 import { rejectDraft, type SnsDraft } from '../actions';
 
 const SnsPublishTable = ({ initialDrafts }: { initialDrafts: SnsDraft[] }) => {
+  const confirm = useConfirm();
   const [drafts, setDrafts] = useState(initialDrafts);
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [, startTransition] = useTransition();
   const toast = useToast();
 
-  const handleReject = (id: number) => {
-    if (!confirm('이 초안을 반려할까요? 발행되지 않습니다.')) return;
+  const handleReject = async (id: number) => {
+    if (!(await confirm({ message: '이 초안을 반려할까요? 발행되지 않습니다.', danger: true })))
+      return;
     setPendingId(id);
     startTransition(async () => {
       try {
