@@ -25,6 +25,26 @@ const NOTIFICATION_TARGETS = [
 
 type RecipientMode = 'all' | 'specific';
 
+const SERVICE_ORIGIN = 'https://jirum-alarm.com';
+
+// 서버 url 은 @IsUrl() — '/products/1' 같은 상대경로는 Bad Request 다.
+// 상대경로는 서비스 도메인을 붙여 절대 URL 로 보내고, 그 밖엔 http(s) 절대 URL 만 통과시킨다.
+const normalizeNotificationUrl = (raw: string): { url?: string; error?: string } => {
+  const value = raw.trim();
+  if (!value) return {};
+  const candidate = value.startsWith('/') ? `${SERVICE_ORIGIN}${value}` : value;
+  try {
+    const parsed = new URL(candidate);
+    // @IsUrl 은 TLD 를 요구한다(localhost 등 불가)
+    if (!['http:', 'https:'].includes(parsed.protocol) || !parsed.hostname.includes('.')) {
+      throw new Error();
+    }
+    return { url: candidate };
+  } catch {
+    return { error: 'https:// 로 시작하는 주소나 /products/123 같은 경로를 입력해주세요.' };
+  }
+};
+
 interface SelectedUser {
   id: string;
   email: string;
@@ -39,6 +59,7 @@ const NotificationSender = () => {
   const [type, setType] = useState('NOTIFICATION_CENTER_AND_PUSH');
   const [target, setTarget] = useState('');
   const [url, setUrl] = useState('');
+  const [targetId, setTargetId] = useState('');
   const [recipientMode, setRecipientMode] = useState<RecipientMode>('all');
   const [selectedUsers, setSelectedUsers] = useState<SelectedUser[]>([]);
   const [userSearchKeyword, setUserSearchKeyword] = useState('');
@@ -84,6 +105,7 @@ const NotificationSender = () => {
       setTitle('');
       setMessage('');
       setUrl('');
+      setTargetId('');
       setSelectedUsers([]);
       setRecipientMode('all');
     },
@@ -92,6 +114,17 @@ const NotificationSender = () => {
     },
   });
 
+  const normalizedUrl = normalizeNotificationUrl(url);
+  // 전체 발송은 NOTICE 토픽으로만 가서 서버가 target·targetId 를 버린다(admin.service).
+  const usesTarget = recipientMode === 'specific';
+  // 특정 사용자 + 상품이면 targetId 로 알림센터에 상품 카드·상세 링크가 붙는다(없으면 링크 없음).
+  const needsTargetId = usesTarget && target === 'PRODUCT';
+  const parsedTargetId = Number(targetId);
+  const targetIdError =
+    needsTargetId && !(Number.isInteger(parsedTargetId) && parsedTargetId > 0)
+      ? '상품 ID(숫자)를 입력해주세요.'
+      : undefined;
+
   const handleSend = async () => {
     if (!title.trim() || !message.trim()) {
       toast.error('제목과 메시지를 입력해주세요.');
@@ -99,6 +132,10 @@ const NotificationSender = () => {
     }
     if (recipientMode === 'specific' && selectedUsers.length === 0) {
       toast.error('수신 대상 사용자를 선택해주세요.');
+      return;
+    }
+    if (normalizedUrl.error || targetIdError) {
+      toast.error(normalizedUrl.error ?? targetIdError ?? '입력값을 확인해주세요.');
       return;
     }
 
@@ -110,8 +147,9 @@ const NotificationSender = () => {
         title: title.trim(),
         message: message.trim(),
         type: type as NotificationType,
-        target: (target || undefined) as NotificationTarget | undefined,
-        url: url.trim() || undefined,
+        target: usesTarget ? ((target || undefined) as NotificationTarget | undefined) : undefined,
+        targetId: needsTargetId ? parsedTargetId : undefined,
+        url: normalizedUrl.url,
         userIds: recipientMode === 'specific' ? selectedUsers.map((u) => Number(u.id)) : undefined,
       },
     });
@@ -172,7 +210,8 @@ const NotificationSender = () => {
             <select
               value={target}
               onChange={(e) => setTarget(e.target.value)}
-              className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+              disabled={!usesTarget}
+              className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
             >
               {NOTIFICATION_TARGETS.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -180,6 +219,11 @@ const NotificationSender = () => {
                 </option>
               ))}
             </select>
+            {!usesTarget && (
+              <p className="mt-1 text-xs text-bodydark2">
+                전체 발송은 공지 토픽으로 가서 카테고리가 적용되지 않습니다.
+              </p>
+            )}
           </div>
         </div>
 
@@ -298,17 +342,46 @@ const NotificationSender = () => {
           )}
         </div>
 
+        {needsTargetId && (
+          <div>
+            <label className="mb-1 block text-sm font-medium text-black dark:text-white">
+              상품 ID *
+            </label>
+            <input
+              type="number"
+              min={1}
+              placeholder="알림센터에 붙일 상품 ID"
+              value={targetId}
+              onChange={(e) => setTargetId(e.target.value)}
+              className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            />
+            {targetId && targetIdError && (
+              <p className="mt-1 text-xs text-danger">{targetIdError}</p>
+            )}
+          </div>
+        )}
+
         <div>
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
             링크 URL (선택)
           </label>
           <input
             type="text"
-            placeholder="https://..."
+            placeholder="https://jirum-alarm.com/... 또는 /products/123"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
+            maxLength={1024}
+            aria-invalid={!!normalizedUrl.error}
             className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           />
+          {normalizedUrl.error ? (
+            <p className="mt-1 text-xs text-danger">{normalizedUrl.error}</p>
+          ) : (
+            normalizedUrl.url &&
+            normalizedUrl.url !== url.trim() && (
+              <p className="mt-1 text-xs text-bodydark2">{normalizedUrl.url} 로 발송됩니다.</p>
+            )
+          )}
         </div>
 
         <div className="flex justify-end">
