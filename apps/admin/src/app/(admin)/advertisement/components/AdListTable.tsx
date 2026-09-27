@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import Spinner from '@/components/Spinner';
 import { useAdReport, useAdsByAdmin, useSetAdActive } from '@/hooks/graphql/advertisement';
 
 // 전체 누적 집계용 넉넉한 기간. ponytail: 광고 수가 적어 풀스캔 OK,
@@ -25,7 +26,7 @@ const AdListTable = () => {
   if (loading)
     return (
       <div className="flex h-60 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <Spinner size="lg" />
       </div>
     );
   if (error)

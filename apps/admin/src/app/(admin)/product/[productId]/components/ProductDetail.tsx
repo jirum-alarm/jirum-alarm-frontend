@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import Spinner from '@/components/Spinner';
 import { useGetProduct } from '@/hooks/graphql/product';
 import { dateFormatter } from '@/utils/date';
 
@@ -12,7 +13,7 @@ const ProductDetail = ({ productId }: { productId: string }) => {
   if (loading) {
     return (
       <div className="flex h-60 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <Spinner size="lg" />
       </div>
     );
   }

@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from 'react';
 
+import Spinner from '@/components/Spinner';
 import { NotificationTarget, NotificationType } from '@/generated/gql/graphql';
 import { useSendNotificationByAdmin } from '@/hooks/graphql/notification';
 import { useGetUsersByAdmin, UserListItem } from '@/hooks/graphql/user';
@@ -311,9 +312,7 @@ const NotificationSender = () => {
             disabled={loading}
             className="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:bg-opacity-60"
           >
-            {loading && (
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-            )}
+            {loading && <Spinner size="sm" color="white" />}
             발송
           </button>
         </div>

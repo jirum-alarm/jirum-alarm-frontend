@@ -1,5 +1,6 @@
 'use client';
 
+import Spinner from '@/components/Spinner';
 import { useAdsByAdmin } from '@/hooks/graphql/advertisement';
 
 import AdForm from '../../components/AdForm';
@@ -14,7 +15,7 @@ const AdEditLoader = ({ adId }: { adId: string }) => {
   if (loading)
     return (
       <div className="flex h-60 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <Spinner size="lg" />
       </div>
     );
   if (error) return <div className="text-danger">오류: {error.message}</div>;

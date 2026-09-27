@@ -2,6 +2,7 @@
 
 import dayjs from 'dayjs';
 
+import Spinner from '@/components/Spinner';
 import { useProviderHealthStatus } from '@/hooks/graphql/stats';
 import { ProviderHealthOutput, ProviderType } from '@/types/stats';
 
@@ -62,7 +63,7 @@ const ProviderHealthGrid = () => {
           Provider 상태 (커뮤니티)
         </h3>
         <div className="flex h-32 items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <Spinner size="lg" />
         </div>
       </div>
     );

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
+import Spinner from '@/components/Spinner';
 import {
   type GetProductsVariables,
   useGetProduct,
@@ -222,7 +223,7 @@ const ProductListTable = () => {
             {loading && (
               <tr>
                 <td colSpan={8} className="px-4 py-8 text-center">
-                  <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+                  <Spinner size="lg" />
                 </td>
               </tr>
             )}

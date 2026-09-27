@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
+import Spinner from '@/components/Spinner';
 import { useGetUsersByAdmin } from '@/hooks/graphql/user';
 import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
 import { dateFormatter } from '@/utils/date';
@@ -110,7 +111,7 @@ const UserListTable = () => {
             {loading && (
               <tr>
                 <td colSpan={6} className="px-4 py-8 text-center">
-                  <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+                  <Spinner size="lg" />
                 </td>
               </tr>
             )}

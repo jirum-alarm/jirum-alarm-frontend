@@ -1,3 +1,5 @@
+import Spinner from '@/components/Spinner';
+
 interface ChartCardProps {
   title: string;
   loading?: boolean;
@@ -10,7 +12,7 @@ const ChartCard = ({ title, loading, children }: ChartCardProps) => {
       <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">{title}</h3>
       {loading ? (
         <div className="flex h-64 items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <Spinner size="lg" />
         </div>
       ) : (
         children

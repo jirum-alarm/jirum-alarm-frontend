@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
+import Spinner from '@/components/Spinner';
 import {
   AdSlotLocation,
   AdSlotType,
@@ -526,9 +527,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
           disabled={loading}
           className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:bg-opacity-60"
         >
-          {loading && (
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-          )}
+          {loading && <Spinner size="sm" color="white" />}
           {mode === 'create' ? '등록' : '수정'}
         </button>
       </div>

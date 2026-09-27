@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useRef, useState } from 'react';
 
+import Spinner from '@/components/Spinner';
 import { OrderOptionType, ProductMappingVerificationStatus } from '@/generated/gql/graphql';
 import { useAdminMe } from '@/hooks/graphql/auth';
 import { useCancelVerification, useGetVerificationHistory } from '@/hooks/graphql/verification';
@@ -347,7 +348,7 @@ const VerificationHistory = () => {
                         >
                           {cancellingId === item.id ? (
                             <>
-                              <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                              <Spinner size="xs" color="current" />
                               취소 중
                             </>
                           ) : (
@@ -382,29 +383,12 @@ const VerificationHistory = () => {
           {hasNextPage && (
             <div ref={loadMoreRef} className="flex items-center justify-center py-6">
               {loading && (
-                <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                  <svg
-                    className="h-5 w-5 animate-spin"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  <span>불러오는 중...</span>
-                </div>
+                <Spinner
+                  size="md"
+                  color="current"
+                  label="불러오는 중..."
+                  className="text-sm text-slate-500 dark:text-slate-400"
+                />
               )}
             </div>
           )}

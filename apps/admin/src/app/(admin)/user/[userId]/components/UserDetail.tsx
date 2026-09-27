@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import Spinner from '@/components/Spinner';
 import { useGetUserByAdmin } from '@/hooks/graphql/user';
 import { dateFormatter } from '@/utils/date';
 
@@ -24,7 +25,7 @@ const UserDetail = ({ userId }: { userId: string }) => {
   if (loading) {
     return (
       <div className="flex h-60 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <Spinner size="lg" />
       </div>
     );
   }
