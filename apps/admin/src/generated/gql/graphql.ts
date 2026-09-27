@@ -3869,6 +3869,7 @@ export type QueryPendingVerificationsQuery = {
       thumbnail?: string | null;
       price?: string | null;
       url?: string | null;
+      isEnd?: boolean | null;
       provider: { __typename?: 'Provider'; name: string };
     } | null;
     verifiedBy?: { __typename?: 'AdminUser'; id: string; name: string; email: string } | null;
@@ -5028,6 +5029,7 @@ export const QueryPendingVerificationsDocument = new TypedDocumentString(`
       thumbnail
       price
       url
+      isEnd
       provider {
         name
       }

@@ -33,6 +33,7 @@ export const QueryPendingVerifications = gql`
         thumbnail
         price
         url
+        isEnd
         provider {
           name
         }

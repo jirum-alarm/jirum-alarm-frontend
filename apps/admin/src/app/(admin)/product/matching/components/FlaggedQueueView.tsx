@@ -1,24 +1,26 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
-  OrderOptionType,
   ProductMappingAiSuggestion,
   ProductMappingVerificationStatus,
   QueryPendingVerificationsQuery,
-  QueryPendingVerificationsQueryVariables,
   QueryPendingVerificationsTotalCountQuery,
   QueryPendingVerificationsTotalCountQueryVariables,
 } from '@/generated/gql/graphql';
+import { QueryPendingVerificationsTotalCount } from '@/graphql/verification';
 import {
-  QueryPendingVerifications,
-  QueryPendingVerificationsTotalCount,
-} from '@/graphql/verification';
-import { useVerifyProductMapping } from '@/hooks/graphql/verification';
+  useGetPendingVerificationsLazy,
+  useVerifyProductMapping,
+} from '@/hooks/graphql/verification';
 
 const PAGE_SIZE = 20;
+// 한 번 불러올 때 이어 받는 최대 페이지 — 종료 딜만 연달아 나와도 빈 화면에서 멈추지 않게, 하지만 무한히 돌지 않게
+const MAX_PAGES_PER_LOAD = 5;
+
+type Item = QueryPendingVerificationsQuery['pendingVerifications'][number];
 
 /** '[26b:REJECT] 근거문장' → 근거문장 */
 const stripMarker = (reason?: string | null) => (reason ?? '').replace(/^\[26b:[A-Z]+\]\s*/, '');
@@ -32,22 +34,68 @@ export default function FlaggedQueueView() {
   const [onlyActive, setOnlyActive] = useState(true);
   const [decided, setDecided] = useState<Record<string, 'approved' | 'rejected'>>({});
 
-  const variables: QueryPendingVerificationsQueryVariables = useMemo(
-    () => ({
-      limit: PAGE_SIZE,
-      orderBy: OrderOptionType.Desc,
-      aiSuggestion: ProductMappingAiSuggestion.Reject,
-      onlyActive,
-      // 의심스러운 것부터 — 매칭 confidence 낮은 순 (먼저 검증해야 할 것 위에)
-      suspiciousFirst: true,
-    }),
-    [onlyActive],
+  // 서버 onlyActive 는 limit 으로 자른 '뒤에' 종료 딜을 걸러서(matching-api filterByActiveProduct)
+  // 페이지가 짧거나 통째로 비고, 비면 다음 커서까지 사라져 목록이 멈췄다.
+  // → 목록은 전체를 받아 커서는 원본 마지막 행에서 잇고, 종료 딜은 여기서 거른다.
+  const [fetchPage] = useGetPendingVerificationsLazy();
+  const [items, setItems] = useState<Item[]>([]);
+  const [cursor, setCursor] = useState<string[] | null>(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const requestRef = useRef(0);
+
+  const load = useCallback(
+    async (from: string[] | null) => {
+      const request = ++requestRef.current;
+      setLoading(true);
+      setLoadError(null);
+      try {
+        let after = from;
+        let more = true;
+        const collected: Item[] = [];
+        for (
+          let page = 0;
+          page < MAX_PAGES_PER_LOAD && more && collected.length < PAGE_SIZE;
+          page++
+        ) {
+          const result = await fetchPage({
+            variables: {
+              limit: PAGE_SIZE,
+              searchAfter: after ?? undefined,
+              aiSuggestion: ProductMappingAiSuggestion.Reject,
+              // 의심스러운 것부터 — 매칭 confidence 낮은 순. 이때 서버는 orderBy 를 안 본다
+              suspiciousFirst: true,
+            },
+          });
+          if (request !== requestRef.current) return;
+          if (result.error) throw result.error;
+          const rows = result.data?.pendingVerifications ?? [];
+          // 서버 onlyActive 와 같은 기준: 상품이 있고 종료되지 않은 것
+          collected.push(
+            ...(onlyActive ? rows.filter((r) => r.product && !r.product.isEnd) : rows),
+          );
+          const last = rows.at(-1)?.searchAfter;
+          if (last) after = [...last];
+          more = rows.length >= PAGE_SIZE && !!last;
+        }
+        setItems((prev) => (from ? [...prev, ...collected] : collected));
+        setCursor(after);
+        setHasMore(more);
+      } catch (error) {
+        if (request !== requestRef.current) return;
+        setLoadError((error as Error).message);
+      } finally {
+        if (request === requestRef.current) setLoading(false);
+      }
+    },
+    [fetchPage, onlyActive],
   );
 
-  const { data, loading, fetchMore, refetch } = useQuery<
-    QueryPendingVerificationsQuery,
-    QueryPendingVerificationsQueryVariables
-  >(QueryPendingVerifications, { variables, fetchPolicy: 'network-only' });
+  useEffect(() => {
+    setItems([]);
+    load(null);
+  }, [load]);
 
   const { data: countData } = useQuery<
     QueryPendingVerificationsTotalCountQuery,
@@ -65,9 +113,6 @@ export default function FlaggedQueueView() {
 
   const [verifyMutation] = useVerifyProductMapping();
 
-  const items = data?.pendingVerifications ?? [];
-  const lastSearchAfter = items.length ? items[items.length - 1].searchAfter : null;
-
   const decide = useCallback(
     async (id: string, result: ProductMappingVerificationStatus) => {
       await verifyMutation({
@@ -82,17 +127,8 @@ export default function FlaggedQueueView() {
   );
 
   const loadMore = useCallback(() => {
-    if (!lastSearchAfter) return;
-    fetchMore({
-      variables: { ...variables, searchAfter: lastSearchAfter },
-      updateQuery: (prev, { fetchMoreResult }) => ({
-        pendingVerifications: [
-          ...(prev.pendingVerifications ?? []),
-          ...(fetchMoreResult.pendingVerifications ?? []),
-        ],
-      }),
-    });
-  }, [fetchMore, lastSearchAfter, variables]);
+    if (cursor) load(cursor);
+  }, [cursor, load]);
 
   return (
     <div className="space-y-3">
@@ -122,9 +158,14 @@ export default function FlaggedQueueView() {
       </div>
 
       {/* 리스트 */}
+      {loadError && (
+        <div className="rounded border border-danger/40 bg-danger/5 px-3 py-2 text-xs text-danger">
+          불러오기 실패: {loadError}
+        </div>
+      )}
       {loading && items.length === 0 ? (
         <div className="py-10 text-center text-sm text-gray-400">불러오는 중…</div>
-      ) : items.length === 0 ? (
+      ) : items.length === 0 && !hasMore ? (
         <div className="py-10 text-center text-sm text-gray-400">
           거절추천 매핑이 없습니다. (사전분류 배치가 매일 새벽 02:00 갱신)
         </div>
@@ -210,18 +251,19 @@ export default function FlaggedQueueView() {
           })}
 
           <div className="flex justify-center gap-2 py-2">
-            {lastSearchAfter && (
+            {hasMore && (
               <button
                 onClick={loadMore}
-                className="rounded border border-stroke px-4 py-1.5 text-xs dark:border-strokedark dark:text-white"
+                disabled={loading}
+                className="rounded border border-stroke px-4 py-1.5 text-xs disabled:opacity-50 dark:border-strokedark dark:text-white"
               >
-                더 불러오기
+                {loading ? '불러오는 중…' : '더 불러오기'}
               </button>
             )}
             <button
               onClick={() => {
                 setDecided({});
-                refetch();
+                load(null);
               }}
               className="rounded border border-stroke px-4 py-1.5 text-xs text-gray-500 dark:border-strokedark"
             >
