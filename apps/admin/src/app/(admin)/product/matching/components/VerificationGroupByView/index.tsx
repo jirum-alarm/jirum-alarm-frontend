@@ -13,6 +13,7 @@ import Toast from '../Toast';
 
 import BrandItemList from './BrandItemList';
 import BrandSearchHeader from './BrandSearchHeader';
+import { EXPANDED_MAX_PAGES, EXPANDED_PAGE_LIMIT } from './constants';
 import ExpandedProductList from './ExpandedProductList';
 import LeftPanelTabs from './LeftPanelTabs';
 import LoadingScreen from './LoadingScreen';
@@ -113,33 +114,56 @@ const VerificationGroupByView = () => {
     setSelectedBrandItem(item);
   }, []);
 
+  // 확장 중 다른 BrandItem 을 열면 이전 페이지 루프의 응답을 버리기 위한 토큰
+  const expandTokenRef = useRef(0);
+
   // BrandItem 확장: details 탭 전환 및 하위 BrandProduct 로드 (스페이스)
+  // 서버 limit 상한이 50(@Max) 이라 한 번만 받으면 51번째부터가 안 보였다 → searchAfter 로 끝까지 이어 받는다.
   const expandBrandItem = useCallback(
     (item: BrandItem) => {
+      const token = ++expandTokenRef.current;
       setSelectedBrandItem(item);
       setSelectedBrandProduct(null);
       setExpandedItems([]);
       setExpandedSelectedIndex(0);
       setActiveTab('details');
       setIsLoadingExpanded(true);
-      fetchMoreBrandProducts({
-        variables: { limit: 50, brandItemId: parseInt(item.id) },
-      })
-        .then((result) => {
-          if (result.data?.brandProductsOrderByMatchCount) {
-            const products = result.data.brandProductsOrderByMatchCount;
+
+      const loadAll = async () => {
+        let searchAfter: string[] | undefined;
+        for (let page = 0; page < EXPANDED_MAX_PAGES; page++) {
+          const result = await fetchMoreBrandProducts({
+            variables: {
+              limit: EXPANDED_PAGE_LIMIT,
+              brandItemId: parseInt(item.id),
+              searchAfter,
+            },
+          });
+          if (token !== expandTokenRef.current) return;
+          const products = result.data?.brandProductsOrderByMatchCount ?? [];
+          if (page === 0) {
+            // 첫 페이지는 바로 보여주고 나머지는 뒤에 붙인다
             setExpandedItems(products);
             if (products.length > 0) {
               setSelectedBrandProduct(products[0]);
               setExpandedSelectedIndex(0);
             }
+            setIsLoadingExpanded(false);
+          } else {
+            setExpandedItems((prev) => [...prev, ...products]);
           }
-        })
+          const last = products[products.length - 1];
+          if (products.length < EXPANDED_PAGE_LIMIT || !last?.searchAfter) return;
+          searchAfter = last.searchAfter;
+        }
+      };
+
+      loadAll()
         .catch((error) => {
           console.error('Failed to load expanded items:', error);
         })
         .finally(() => {
-          setIsLoadingExpanded(false);
+          if (token === expandTokenRef.current) setIsLoadingExpanded(false);
         });
     },
     [fetchMoreBrandProducts],
