@@ -1,8 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useTransition } from 'react';
-import { useInView } from 'react-intersection-observer';
+import { useState } from 'react';
 
 import {
   type GetProductsVariables,
@@ -10,6 +9,7 @@ import {
   useGetProducts,
   useHardDeleteProductByAdmin,
 } from '@/hooks/graphql/product';
+import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
 import { dateFormatter } from '@/utils/date';
 
 import ProductFilters from './ProductFilters';
@@ -24,7 +24,6 @@ const ProductListTable = () => {
   const [searchProductId, setSearchProductId] = useState<number | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
-  const [, startTransition] = useTransition();
 
   const {
     data: listData,
@@ -103,25 +102,12 @@ const ProductListTable = () => {
     }
   };
 
-  const { ref: viewRef } = useInView({
-    threshold: 0,
-    onChange: (inView) => {
-      if (isSingleMode) return;
-      if (!inView || loading || products.length === 0) return;
-      const searchAfter = products[products.length - 1]?.searchAfter;
-      if (!searchAfter) return;
-      startTransition(() => {
-        fetchMore({
-          variables: { searchAfter }, // 나머지 변수는 원 쿼리 것이 병합된다
-          updateQuery: (prev, { fetchMoreResult }) => {
-            if (!fetchMoreResult) return prev;
-            return {
-              products: [...prev.products, ...fetchMoreResult.products],
-            };
-          },
-        });
-      });
-    },
+  // 단일 조회 모드에선 listData 가 없어(skip) 아무것도 안 한다
+  const viewRef = useLoadMoreOnView({
+    field: 'products',
+    data: listData,
+    loading: listLoading,
+    fetchMore,
   });
 
   return (

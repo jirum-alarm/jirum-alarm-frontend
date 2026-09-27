@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useInView } from 'react-intersection-observer';
 
 import { useGetKeywordMapGroups, useRemoveKeywordMapGroup } from '@/hooks/graphql/keywordMap';
+import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
 
 const KeywordMapGroupsTable = () => {
   const { data, loading, fetchMore } = useGetKeywordMapGroups();
@@ -20,26 +20,7 @@ const KeywordMapGroupsTable = () => {
     };
   };
 
-  const { ref: viewRef } = useInView({
-    threshold: 0,
-    onChange: (inView) => {
-      if (!inView) return;
-      const groups = data?.keywordMapGroupsByAdmin;
-      const searchAfter = groups?.at(-1)?.searchAfter;
-      if (!searchAfter) return;
-      fetchMore({
-        variables: { searchAfter },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          return {
-            keywordMapGroupsByAdmin: [
-              ...prev.keywordMapGroupsByAdmin,
-              ...fetchMoreResult.keywordMapGroupsByAdmin,
-            ],
-          };
-        },
-      });
-    },
-  });
+  const viewRef = useLoadMoreOnView({ field: 'keywordMapGroupsByAdmin', data, loading, fetchMore });
 
   if (loading) {
     return (

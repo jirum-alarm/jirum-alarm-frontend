@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useTransition } from 'react';
-import { useInView } from 'react-intersection-observer';
+import { useState } from 'react';
 
 import { useGetUsersByAdmin } from '@/hooks/graphql/user';
+import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
 import { dateFormatter } from '@/utils/date';
 
 const GENDER_MAP: Record<string, string> = {
@@ -15,7 +15,6 @@ const GENDER_MAP: Record<string, string> = {
 const UserListTable = () => {
   const [keyword, setKeyword] = useState('');
   const [searchKeyword, setSearchKeyword] = useState<string | undefined>(undefined);
-  const [, startTransition] = useTransition();
 
   const { data, loading, fetchMore } = useGetUsersByAdmin({
     keyword: searchKeyword,
@@ -32,25 +31,7 @@ const UserListTable = () => {
     }
   };
 
-  const { ref: viewRef } = useInView({
-    threshold: 0,
-    onChange: (inView) => {
-      if (!inView || loading || users.length === 0) return;
-      const searchAfter = users[users.length - 1]?.searchAfter;
-      if (!searchAfter) return;
-      startTransition(() => {
-        fetchMore({
-          variables: { keyword: searchKeyword, searchAfter },
-          updateQuery: (prev, { fetchMoreResult }) => {
-            if (!fetchMoreResult) return prev;
-            return {
-              usersByAdmin: [...prev.usersByAdmin, ...fetchMoreResult.usersByAdmin],
-            };
-          },
-        });
-      });
-    },
-  });
+  const viewRef = useLoadMoreOnView({ field: 'usersByAdmin', data, loading, fetchMore });
 
   return (
     <>

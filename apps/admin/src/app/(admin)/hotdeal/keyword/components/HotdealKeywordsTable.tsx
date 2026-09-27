@@ -2,12 +2,11 @@
 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { startTransition } from 'react';
-import { useInView } from 'react-intersection-observer';
 
 import Switcher from '@/components/Switchers/SwitcherOne';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
+import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
 import { HotDealKeywordType } from '@/types/keyword';
 import { dateFormatter } from '@/utils/date';
 import { getParticle } from '@/utils/text';
@@ -44,32 +43,13 @@ const HotdealKeywordsTable = () => {
     router.replace(`/hotdeal/keyword?keywordType=${type}`);
   };
 
-  const { ref: viewRef } = useInView({
-    threshold: 0,
-    onChange: (inView) => {
-      if (!inView) return;
-      loadMore();
-    },
+  // useSuspenseQuery 라 로딩 상태가 없다
+  const viewRef = useLoadMoreOnView({
+    field: 'hotDealKeywordsByAdmin',
+    data,
+    loading: false,
+    fetchMore,
   });
-
-  const loadMore = () => {
-    startTransition(() => {
-      const searchAfter = data.hotDealKeywordsByAdmin.at(-1)?.searchAfter;
-      fetchMore({
-        variables: {
-          searchAfter,
-        },
-        updateQuery: ({ hotDealKeywordsByAdmin }, { fetchMoreResult }) => {
-          return {
-            hotDealKeywordsByAdmin: [
-              ...hotDealKeywordsByAdmin,
-              ...fetchMoreResult.hotDealKeywordsByAdmin,
-            ],
-          };
-        },
-      });
-    });
-  };
 
   return (
     <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">

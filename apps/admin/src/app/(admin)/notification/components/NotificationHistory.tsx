@@ -1,9 +1,7 @@
 'use client';
 
-import { useTransition } from 'react';
-import { useInView } from 'react-intersection-observer';
-
 import { useGetNotificationsByAdmin } from '@/hooks/graphql/notification';
+import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
 import { dateFormatter } from '@/utils/date';
 
 const NOTIFICATION_TARGET_MAP: Record<string, string> = {
@@ -13,32 +11,10 @@ const NOTIFICATION_TARGET_MAP: Record<string, string> = {
 };
 
 const NotificationHistory = () => {
-  const [, startTransition] = useTransition();
   const { data, loading, fetchMore } = useGetNotificationsByAdmin();
   const notifications = data?.notificationsByAdmin ?? [];
 
-  const { ref: viewRef } = useInView({
-    threshold: 0,
-    onChange: (inView) => {
-      if (!inView || loading || notifications.length === 0) return;
-      const searchAfter = notifications[notifications.length - 1]?.searchAfter;
-      if (!searchAfter) return;
-      startTransition(() => {
-        fetchMore({
-          variables: { searchAfter },
-          updateQuery: (prev, { fetchMoreResult }) => {
-            if (!fetchMoreResult) return prev;
-            return {
-              notificationsByAdmin: [
-                ...prev.notificationsByAdmin,
-                ...fetchMoreResult.notificationsByAdmin,
-              ],
-            };
-          },
-        });
-      });
-    },
-  });
+  const viewRef = useLoadMoreOnView({ field: 'notificationsByAdmin', data, loading, fetchMore });
 
   return (
     <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
