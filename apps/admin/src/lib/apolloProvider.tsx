@@ -23,19 +23,16 @@ declare module '@apollo/client' {
 
 const isServer = typeof window === 'undefined';
 
-type Props = React.PropsWithChildren<{
-  // 서버 렌더 전용. 서버에선 서버 액션을 부를 수 없어(클라 번들의 서버 액션은 fetch 프록시) 루트 레이아웃이 쿠키를 읽어 넘긴다
-  ssrAccessToken?: string;
-}>;
-
-const ApolloProvider = ({ children, ssrAccessToken }: Props) => {
+const ApolloProvider = ({ children }: React.PropsWithChildren) => {
   const router = useRouter();
 
   // ApolloNextAppProvider 가 서버에선 요청(렌더 트리)마다, 브라우저에선 한 번만 부른다 — 요청 간 클라이언트 공유 없음
   const makeClient = () => {
     const authLink = setContext(async (_, { headers }) => {
-      // 브라우저는 httpOnly 쿠키를 못 읽으니 기존대로 서버 액션으로 받는다(로그인 직후 새 토큰도 여기서 반영)
-      const token = isServer ? ssrAccessToken : await getAccessToken();
+      // 서버 렌더엔 토큰을 싣지 않는다 — 넘기려면 prop 으로 RSC payload(HTML)에 실려 httpOnly 가 무의미해진다.
+      // 서버에서 인증 쿼리를 도는 건 useSuspenseQuery 화면뿐이라, 그건 FORBIDDEN 뒤 브라우저가 다시 받는다.
+      // 브라우저는 httpOnly 쿠키를 못 읽으니 서버 액션으로 받는다(로그인 직후 새 토큰도 여기서 반영)
+      const token = isServer ? undefined : await getAccessToken();
       return {
         headers: {
           ...headers,
