@@ -116,7 +116,7 @@ src/components/         # 공통: Layouts·Sidebar(메뉴는 MENU 설정 배열)
   서버에서 인증 쿼리가 필요한 useSuspenseQuery 화면은 브라우저가 다시 받는다.
 - 큰 화면(매칭 검수 `VerificationGroupByView/`, 광고 `GraphicLayerEditor/`)은 폴더 안 훅·컴포넌트로 나뉘어 있다. `layout.ts` 같은
   Next 예약 파일명은 라우트 폴더 밑에 두지 말 것(빌드가 라우트 레이아웃으로 읽는다).
-- 미들웨어는 쿠키 "존재"만 본다 — 서버 액션처럼 백엔드를 안 거치는 쓰기는 직접 어드민 확인(`sns-publish/actions.ts` 의 `assertAdmin`).
+- 미들웨어는 쿠키 "존재"만 본다 — 서버 액션처럼 백엔드를 안 거치는 쓰기를 만들면 액션 안에서 `adminMe` 로 어드민인지 직접 확인할 것.
 - 사이드바 메뉴 추가 = `src/components/Sidebar/index.tsx` 의 `MENU` 배열에 한 줄.
 - `public/` 은 비어 있어도 지우지 말 것(`.gitkeep`) — Dockerfile 이 COPY 한다.
 

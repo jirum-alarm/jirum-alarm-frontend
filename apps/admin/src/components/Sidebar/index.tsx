@@ -30,13 +30,12 @@ const MENU: { title: string; groups: MenuGroupConfig[] }[] = [
       {
         name: '대시보드',
         icon: DashboardIcon,
-        match: ['/', '/stats', '/crawling', '/profit-link', '/sns-publish'],
+        match: ['/', '/stats', '/crawling', '/profit-link'],
         items: [
           { name: '홈', href: '/' },
           { name: '통계', href: '/stats' },
           { name: '크롤링', href: '/crawling' },
           { name: '수익 링크', href: '/profit-link' },
-          { name: 'SNS 발행', href: '/sns-publish' },
         ],
       },
       {
