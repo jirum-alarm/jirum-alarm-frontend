@@ -33,6 +33,10 @@ const ProductFilters = ({
   const { data: categoryData } = useGetCategories();
   const categories = categoryData?.categories ?? [];
 
+  // 검색어 경로(Meili)는 isHot 을 안 보고 isEnd:true 를 '종료 포함'으로 읽는다(product-read.service)
+  // → 검색어가 있으면 두 필터를 잠가 화면과 결과가 어긋나지 않게 한다.
+  const keywordMode = keyword.trim().length > 0;
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       onSearch();
@@ -68,6 +72,7 @@ const ProductFilters = ({
             onChange={(e) => onChangeKeyword(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={productId.length > 0}
+            maxLength={100}
             className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           />
         </div>
@@ -99,7 +104,8 @@ const ProductFilters = ({
             onChange={(e) =>
               onChangeIsHot(e.target.value === '' ? undefined : e.target.value === 'true')
             }
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            disabled={keywordMode}
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           >
             <option value="">전체</option>
             <option value="true">핫딜</option>
@@ -114,7 +120,8 @@ const ProductFilters = ({
             onChange={(e) =>
               onChangeIsEnd(e.target.value === '' ? undefined : e.target.value === 'true')
             }
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            disabled={keywordMode}
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           >
             <option value="">전체</option>
             <option value="false">판매중</option>
@@ -129,6 +136,11 @@ const ProductFilters = ({
           검색
         </button>
       </div>
+      {keywordMode && (
+        <p className="mt-2 text-xs text-bodydark2">
+          검색어 검색은 핫딜·상태 필터가 적용되지 않고 판매중 상품만 보여줍니다.
+        </p>
+      )}
     </Panel>
   );
 };

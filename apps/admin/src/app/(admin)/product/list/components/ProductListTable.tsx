@@ -81,11 +81,13 @@ const ProductListTable = () => {
       return;
     }
     setSearchProductId(null);
+    const trimmed = keyword.trim();
+    // 검색어 경로는 isHot 을 무시하고 isEnd:true 를 '종료 포함'으로 읽으므로 보내지 않는다
     setSearchVariables({
-      keyword: keyword || undefined,
+      keyword: trimmed || undefined,
       categoryId,
-      isEnd,
-      isHot,
+      isEnd: trimmed ? undefined : isEnd,
+      isHot: trimmed ? undefined : isHot,
     });
   };
 
