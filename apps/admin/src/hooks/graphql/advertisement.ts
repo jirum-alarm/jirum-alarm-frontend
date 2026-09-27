@@ -103,7 +103,8 @@ export interface CreateAdInput {
   slotPriority?: number;
   graphic: ResponsiveAdvertiseGraphic;
   displayPrice?: AdvertisePrice;
-  displayTitle?: string;
+  // null = 제목 비우기(스키마 InputMaybe). undefined 는 수정 시 "안 건드림" 이다
+  displayTitle?: string | null;
   targetUrl: string;
   isActive?: boolean;
 }

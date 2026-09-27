@@ -34,6 +34,7 @@ const GroupUpdate = ({ groupId }: Props) => {
       toast.success('그룹이 수정되었습니다.');
       router.push('/keyword-map');
     },
+    onError: (e) => toast.error(`수정 실패: ${e.message}`),
   });
 
   const handleSubmit = () => {
@@ -45,7 +46,8 @@ const GroupUpdate = ({ groupId }: Props) => {
       variables: {
         id: Number(groupId),
         name: name.trim(),
-        description: description.trim() || undefined,
+        // undefined 는 서버 update 가 건너뛰어 설명을 비울 수 없다 — null 이어야 NULL 로 쓴다
+        description: description.trim() || null,
       },
     });
   };

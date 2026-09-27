@@ -387,7 +387,8 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
       startAt: new Date(startAt).toISOString(),
       endAt: new Date(endAt).toISOString(),
       targetUrl: normalizedTargetUrl.targetUrl,
-      displayTitle: displayTitle || undefined,
+      // undefined 는 서버 부분수정이 건너뛰어 지운 제목이 안 지워진다 — null 이어야 NULL 로 쓴다
+      displayTitle: displayTitle || null,
       isActive,
       graphic: normalizedGraphic,
     };
