@@ -26,6 +26,8 @@ export interface ThemeLiveDeal {
   isEnd: boolean | null;
   isHot: boolean | null;
   hotDealType: string | null;
+  mallName: string | null;
+  provider: { nameKr: string | null } | null;
 }
 
 const QueryNotificationThemes = new TypedDocumentString<
@@ -60,6 +62,10 @@ const QueryNotificationThemeLiveDeals = new TypedDocumentString<
       isEnd
       isHot
       hotDealType
+      mallName
+      provider {
+        nameKr
+      }
     }
   }
 `);

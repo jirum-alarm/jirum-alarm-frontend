@@ -5,10 +5,14 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { HotDealType } from '@/shared/api/gql/graphql';
 import type { ThemeLiveDeal } from '@/shared/api/notification/theme.service';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
+import { cn } from '@/shared/lib/cn';
+import Button from '@/shared/ui/common/Button';
+import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
+import SectionHeader from '@/shared/ui/SectionHeader';
 
 import { ThemeQueries } from '@/entities/notification';
 import { type ProductCardType } from '@/entities/product-list/model/types';
-import ListProductCard from '@/entities/product-list/ui/list/ListProductCard';
+import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
 
 import { useThemeSubscription } from '../../model/useThemeSubscription';
 
@@ -26,8 +30,11 @@ const toCard = (d: ThemeLiveDeal): ProductCardType => ({
   isEnd: d.isEnd,
   isHot: d.isHot,
   hotDealType: (d.hotDealType as HotDealType) ?? null,
+  mallName: d.mallName,
+  provider: d.provider,
 });
 
+// 레이아웃은 큐레이션 상세(curation/[id])와 같은 틀: PC 는 SectionHeader 중앙 타이틀 + 5열 그리드.
 const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?: boolean }) => {
   const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
   const { data: subscribedIds = [] } = useQuery(ThemeQueries.mySubscribedIds());
@@ -39,82 +46,69 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
   if (!theme) return null;
 
   const isSubscribed = new Set(subscribedIds).has(themeId);
-
-  // 구독↔해제 한 버튼 토글
-  const SubscribeButton = ({ className = '' }: { className?: string }) => (
-    <button
-      type="button"
-      disabled={isPending}
-      onClick={() => {
-        // 비로그인은 구독 불가(서버 403) → 로그인으로 유도. 실패 토스트 대신 로그인 플로우.
-        if (checkAndRedirect()) return;
-        if (isSubscribed) unsubscribe(themeId);
-        else subscribe(themeId);
-      }}
-      className={`rounded-xl text-base font-semibold disabled:opacity-50 ${
-        isSubscribed ? 'bg-gray-100 text-gray-500' : 'bg-primary-500 text-white'
-      } ${className}`}
-    >
-      {isSubscribed ? '구독 중 (해제)' : '이 묶음 구독'}
-    </button>
-  );
+  const title = `${theme.emoji ?? ''} ${theme.name}`.trim();
 
   return (
-    <div className={isMobile ? 'pb-10' : 'mx-auto max-w-3xl'}>
-      {/* 헤더: 이모지 + 이름 + 설명 / 구독 버튼 상단 우측 */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-start gap-2">
-          {theme.emoji && <span className="text-2xl">{theme.emoji}</span>}
-          <div>
-            <h2 className="text-lg font-bold text-gray-900">{theme.name}</h2>
-            <p className="mt-1 text-sm text-gray-500">{theme.description}</p>
-            {theme.subscriberCount >= SUBSCRIBER_COUNT_MIN_VISIBLE && (
-              <p className="mt-1 text-xs text-gray-400">
-                {theme.subscriberCount.toLocaleString()}명이 구독 중
-              </p>
-            )}
-          </div>
-        </div>
-        {/* PC: 헤더 옆 인라인 / 모바일: 헤더 아래 전체폭은 키워드 아래로 */}
-        {!isMobile && <SubscribeButton className="shrink-0 px-8 py-3" />}
+    <div className={isMobile ? 'pb-10' : 'pb-16'}>
+      {isMobile ? (
+        <h2 className="text-lg font-bold text-gray-900">{title}</h2>
+      ) : (
+        <SectionHeader title={title} />
+      )}
+
+      <div className={cn('mt-1', !isMobile && 'mx-auto max-w-xl text-center')}>
+        <p className="text-sm text-gray-500">{theme.description}</p>
+        {theme.subscriberCount >= SUBSCRIBER_COUNT_MIN_VISIBLE && (
+          <p className="mt-1 text-xs text-gray-400">
+            {theme.subscriberCount.toLocaleString()}명이 구독 중
+          </p>
+        )}
+        <Button
+          color={isSubscribed ? 'secondary' : 'primary'}
+          disabled={isPending}
+          className={cn('mt-4', !isMobile && 'w-60')}
+          onClick={() => {
+            // 비로그인은 구독 불가(서버 403) → 로그인으로 유도. 실패 토스트 대신 로그인 플로우.
+            if (checkAndRedirect()) return;
+            if (isSubscribed) unsubscribe(themeId);
+            else subscribe(themeId);
+          }}
+        >
+          {isSubscribed ? '구독 중 · 해제하기' : '이 묶음 구독하기'}
+        </Button>
       </div>
 
-      {/* 모바일: 구독 버튼을 헤더 바로 아래 전체폭(상단) */}
-      {isMobile && <SubscribeButton className="mt-4 w-full py-3.5" />}
-
-      {/* 포함 키워드 */}
-      <div className="mt-6">
-        <h3 className="mb-2 text-sm font-medium text-gray-900">포함 키워드</h3>
-        <div className="flex flex-wrap gap-1.5">
+      <section className="mt-8">
+        <DetailSectionHeader as="h3" title="포함 키워드" />
+        <div className="mt-3 flex flex-wrap gap-2">
           {theme.representativeKeywords.map((keyword) => (
-            <span key={keyword} className="rounded-md bg-gray-50 px-2.5 py-1 text-xs text-gray-600">
+            <span
+              key={keyword}
+              className="rounded-full bg-gray-100 px-3 py-1.5 text-sm text-gray-700"
+            >
               {keyword}
             </span>
           ))}
         </div>
-      </div>
+      </section>
 
       {/* 미리보기 — 서버 발송 배치와 같은 기준으로 고른 "구독했다면 받았을" 딜 */}
-      <div className="mt-7">
-        <h3 className="text-sm font-medium text-gray-900">
-          📬 구독했다면 최근 7일 받았을 알림{' '}
-          <span className="text-primary-500">{deals.length}건</span>
-        </h3>
-        <p className="mt-1 mb-3 text-xs text-gray-400">
-          반응 좋은 딜만 골라 하루 최대 3건 보내드려요.
-        </p>
-        {deals.length === 0 ? (
-          <p className="py-8 text-center text-sm text-gray-400">
-            최근 7일엔 이 묶음에 맞는 딜이 없었어요.
-          </p>
-        ) : (
-          <div className={isMobile ? 'flex flex-col gap-4' : 'grid grid-cols-2 gap-x-8 gap-y-4'}>
-            {deals.map((deal) => (
-              <ListProductCard key={deal.id} product={toCard(deal)} source="notification_theme" />
-            ))}
-          </div>
-        )}
-      </div>
+      <section className="mt-10">
+        <DetailSectionHeader
+          as="h3"
+          title={`구독했다면 최근 7일 받았을 알림 ${deals.length}건`}
+          subtitle="반응 좋은 딜만 골라 하루 최대 3건 보내드려요."
+        />
+        <div className="mt-4">
+          {deals.length === 0 ? (
+            <p className="py-10 text-center text-sm text-gray-500">
+              최근 7일엔 이 묶음에 맞는 딜이 없었어요.
+            </p>
+          ) : (
+            <ProductGridList products={deals.map(toCard)} source="notification_theme" />
+          )}
+        </div>
+      </section>
     </div>
   );
 };

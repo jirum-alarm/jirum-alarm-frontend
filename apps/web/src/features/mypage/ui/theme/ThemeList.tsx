@@ -4,6 +4,7 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
+import Button from '@/shared/ui/common/Button';
 
 import { ThemeQueries } from '@/entities/notification';
 
@@ -26,53 +27,40 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
         const isSubscribed = subscribed.has(themeId);
         return (
           <li key={theme.id} className="h-full">
+            {/* 홈 캐러셀 카드(widgets/home/ui/ThemeSection)와 같은 회색 카드 */}
             <Link
               href={`/themes/${theme.id}`}
-              className="flex h-full flex-col rounded-2xl border border-gray-200 p-4"
+              className="flex h-full gap-3 rounded-xl bg-gray-50 p-4 transition-colors hover:bg-gray-100"
             >
-              <div className="flex items-start justify-between">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
-                    {theme.emoji && <span aria-hidden>{theme.emoji}</span>}
-                    <span className="text-base font-semibold text-gray-900">{theme.name}</span>
-                  </div>
-                  <p className="mt-1 text-sm text-gray-500">{theme.description}</p>
-                  <p className="text-primary-500 mt-1 text-xs">
-                    최근 7일 알림 {theme.weeklyAlertCount}건
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  disabled={isPending}
-                  onClick={(e) => {
-                    e.preventDefault(); // 카드 링크 이동 막고 구독만
-                    if (checkAndRedirect()) return; // 비로그인은 로그인으로 유도
-                    if (isSubscribed) unsubscribe(themeId);
-                    else subscribe(themeId);
-                  }}
-                  className={`ml-3 w-16 shrink-0 rounded-full py-1.5 text-center text-sm font-medium disabled:opacity-50 ${
-                    // primary-500 은 밝은 라임(#9DF02E 계열)이라 흰 글씨는 대비
-                    // 1.4:1 로 WCAG AA 를 크게 밑돈다. gray-900 은 12.6:1.
-                    // 앱(`ThemeCards`)이 이미 gray-900 을 쓰고 있어 표기도 갈렸다.
-                    isSubscribed ? 'bg-gray-100 text-gray-500' : 'bg-primary-500 text-gray-900'
-                  }`}
-                >
-                  {isSubscribed ? '구독중' : '구독'}
-                </button>
+              <span className="text-2xl" aria-hidden>
+                {theme.emoji || '🔔'}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-base font-semibold text-gray-900">{theme.name}</p>
+                <p className="mt-1 line-clamp-2 text-sm text-gray-500">{theme.description}</p>
+                {/* 깜깜이 구독 방지: 묶음에 어떤 키워드가 들었는지 미리보기 */}
+                <p className="mt-2 line-clamp-1 text-xs text-gray-500">
+                  {theme.representativeKeywords.join('·')}
+                </p>
+                <p className="mt-1 text-xs text-gray-500">
+                  최근 7일 알림{' '}
+                  <b className="font-semibold text-gray-900">{theme.weeklyAlertCount}건</b>
+                </p>
               </div>
-              {/* 깜깜이 구독 방지: 묶음에 어떤 키워드가 들었는지 미리보기 */}
-              {theme.representativeKeywords.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {theme.representativeKeywords.map((keyword) => (
-                    <span
-                      key={keyword}
-                      className="rounded-md bg-gray-50 px-2 py-0.5 text-xs text-gray-600"
-                    >
-                      {keyword}
-                    </span>
-                  ))}
-                </div>
-              )}
+              <Button
+                size="sm"
+                color={isSubscribed ? 'secondary' : 'primary'}
+                disabled={isPending}
+                className="w-auto shrink-0 self-start px-3 py-1 text-sm disabled:opacity-50"
+                onClick={(e) => {
+                  e.preventDefault(); // 카드 링크 이동 막고 구독만
+                  if (checkAndRedirect()) return; // 비로그인은 로그인으로 유도
+                  if (isSubscribed) unsubscribe(themeId);
+                  else subscribe(themeId);
+                }}
+              >
+                {isSubscribed ? '구독중' : '구독'}
+              </Button>
             </Link>
           </li>
         );

@@ -5,11 +5,10 @@ import { type TossDeal } from '@/app/(desktop-ready)/toss/mock';
 
 import { PromotionSection } from '@/entities/promotion/model/types';
 
-import DesktopThemeSection from './desktop/ThemeSection';
 import DynamicProductSection from './DynamicProductSection';
 import HomeEndCta from './HomeEndCta';
-import ThemeCarousel from './mobile/ThemeCarousel';
 import RecommendedKeywordSection from './RecommendedKeywordSection';
+import ThemeSection from './ThemeSection';
 import TossHomeSection from './TossHomeSection';
 
 interface PromotionSectionListProps {
@@ -44,7 +43,7 @@ const PromotionSectionList = ({
       // 선택형 섹션이라 쿼리가 실패하면(예: 스키마가 뒤처진 dev API) 섹션만 숨기고 홈은 살린다.
       <ErrorBoundary fallback={null}>
         <Suspense fallback={null}>
-          {isMobile ? <ThemeCarousel /> : <DesktopThemeSection />}
+          <ThemeSection isMobile={isMobile} />
         </Suspense>
       </ErrorBoundary>
     ) : null;
