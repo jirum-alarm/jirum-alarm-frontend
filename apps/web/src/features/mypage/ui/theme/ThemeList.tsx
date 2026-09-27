@@ -37,6 +37,9 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
                     <span className="text-base font-semibold text-gray-900">{theme.name}</span>
                   </div>
                   <p className="mt-1 text-sm text-gray-500">{theme.description}</p>
+                  <p className="text-primary-500 mt-1 text-xs">
+                    최근 7일 알림 {theme.weeklyAlertCount}건
+                  </p>
                 </div>
                 <button
                   type="button"

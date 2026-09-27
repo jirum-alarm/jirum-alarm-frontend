@@ -10,6 +10,9 @@ export interface ThemeWithKeywords {
   description: string;
   emoji: string | null;
   representativeKeywords: string[];
+  subscriberCount: number;
+  /** 지난 7일 이 묶음을 구독했다면 받았을 알림 수 (반응 좋은 딜만, 하루 최대 3건) */
+  weeklyAlertCount: number;
 }
 
 export interface ThemeLiveDeal {
@@ -36,6 +39,8 @@ const QueryNotificationThemes = new TypedDocumentString<
       description
       emoji
       representativeKeywords
+      subscriberCount
+      weeklyAlertCount
     }
   }
 `);

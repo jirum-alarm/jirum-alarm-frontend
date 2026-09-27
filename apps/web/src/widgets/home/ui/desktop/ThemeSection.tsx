@@ -11,7 +11,9 @@ import { ThemeQueries } from '@/entities/notification';
 // PC 홈: 알림 묶음 캐러셀. 랭킹/핫딜과 동일하게 Swiper 스와이프(slidesPerView auto).
 // 적당한 카드(이모지+이름+키워드 1줄) 1줄, 넘치면 스와이프.
 const ThemeSection = () => {
-  const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
+  const { data: allThemes } = useSuspenseQuery(ThemeQueries.themes());
+  // 최근 7일 알림 0건인 묶음은 구독해도 아무것도 안 온다 → 홈에서 숨김(상세·목록은 유지).
+  const themes = allThemes.filter((theme) => theme.weeklyAlertCount > 0);
 
   if (!themes.length) return null;
 
@@ -45,6 +47,9 @@ const ThemeSection = () => {
               </span>
               <span className="line-clamp-1 text-xs text-gray-400">
                 {theme.representativeKeywords.slice(0, 4).join('·')}
+              </span>
+              <span className="text-primary-500 text-xs">
+                최근 7일 알림 {theme.weeklyAlertCount}건
               </span>
             </Link>
           </SwiperSlide>

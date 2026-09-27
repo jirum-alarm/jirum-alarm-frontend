@@ -10,7 +10,9 @@ import { ThemeQueries } from '@/entities/notification';
 
 // 홈 모바일: 알림 묶음 캐러셀. 랭킹/핫딜과 동일 Swiper 스와이프. 신규 발견 → 활성화 레버.
 const ThemeCarousel = () => {
-  const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
+  const { data: allThemes } = useSuspenseQuery(ThemeQueries.themes());
+  // 최근 7일 알림 0건인 묶음은 구독해도 아무것도 안 온다 → 홈에서 숨김(상세·목록은 유지).
+  const themes = allThemes.filter((theme) => theme.weeklyAlertCount > 0);
 
   if (!themes.length) return null;
 
@@ -45,6 +47,9 @@ const ThemeCarousel = () => {
               </span>
               <span className="line-clamp-1 text-xs text-gray-400">
                 {theme.representativeKeywords.slice(0, 3).join('·')}
+              </span>
+              <span className="text-primary-500 text-xs">
+                최근 7일 알림 {theme.weeklyAlertCount}건
               </span>
             </Link>
           </SwiperSlide>

@@ -12,7 +12,10 @@ import ListProductCard from '@/entities/product-list/ui/list/ListProductCard';
 
 import { useThemeSubscription } from '../../model/useThemeSubscription';
 
-// 라이브딜(ThemeLiveDeal) → 기존 상품 카드 타입(ProductCardType) 매핑.
+// 구독자 수는 이 이상일 때만 보인다 — "0명 구독 중"은 구독을 말리는 신호라서.
+const SUBSCRIBER_COUNT_MIN_VISIBLE = 10;
+
+// 미리보기 딜(ThemeLiveDeal) → 기존 상품 카드 타입(ProductCardType) 매핑.
 const toCard = (d: ThemeLiveDeal): ProductCardType => ({
   id: d.id,
   title: d.title,
@@ -65,6 +68,11 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
           <div>
             <h2 className="text-lg font-bold text-gray-900">{theme.name}</h2>
             <p className="mt-1 text-sm text-gray-500">{theme.description}</p>
+            {theme.subscriberCount >= SUBSCRIBER_COUNT_MIN_VISIBLE && (
+              <p className="mt-1 text-xs text-gray-400">
+                {theme.subscriberCount.toLocaleString()}명이 구독 중
+              </p>
+            )}
           </div>
         </div>
         {/* PC: 헤더 옆 인라인 / 모바일: 헤더 아래 전체폭은 키워드 아래로 */}
@@ -86,13 +94,19 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
         </div>
       </div>
 
-      {/* 라이브 딜 — 지금 이 묶음에 뜬 딜 */}
+      {/* 미리보기 — 서버 발송 배치와 같은 기준으로 고른 "구독했다면 받았을" 딜 */}
       <div className="mt-7">
-        <h3 className="mb-3 text-sm font-medium text-gray-900">
-          🔥 지금 이 묶음에 뜬 딜 <span className="text-primary-500">{deals.length}</span>
+        <h3 className="text-sm font-medium text-gray-900">
+          📬 구독했다면 최근 7일 받았을 알림{' '}
+          <span className="text-primary-500">{deals.length}건</span>
         </h3>
+        <p className="mt-1 mb-3 text-xs text-gray-400">
+          반응 좋은 딜만 골라 하루 최대 3건 보내드려요.
+        </p>
         {deals.length === 0 ? (
-          <p className="py-8 text-center text-sm text-gray-400">지금은 뜬 딜이 없어요.</p>
+          <p className="py-8 text-center text-sm text-gray-400">
+            최근 7일엔 이 묶음에 맞는 딜이 없었어요.
+          </p>
         ) : (
           <div className={isMobile ? 'flex flex-col gap-4' : 'grid grid-cols-2 gap-x-8 gap-y-4'}>
             {deals.map((deal) => (

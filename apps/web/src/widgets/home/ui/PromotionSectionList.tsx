@@ -1,17 +1,15 @@
-import { Fragment } from 'react';
+import { Fragment, Suspense } from 'react';
 
 import { type TossDeal } from '@/app/(desktop-ready)/toss/mock';
 
 import { PromotionSection } from '@/entities/promotion/model/types';
 
+import DesktopThemeSection from './desktop/ThemeSection';
 import DynamicProductSection from './DynamicProductSection';
 import HomeEndCta from './HomeEndCta';
+import ThemeCarousel from './mobile/ThemeCarousel';
 import RecommendedKeywordSection from './RecommendedKeywordSection';
 import TossHomeSection from './TossHomeSection';
-// 홈 노출 보류: 테마 섹션 import 임시 제거 (renderThemeSlot 되살릴 때 함께 복구)
-// import { Suspense } from 'react';
-// import DesktopThemeSection from './desktop/ThemeSection';
-// import ThemeCarousel from './mobile/ThemeCarousel';
 
 interface PromotionSectionListProps {
   sections: PromotionSection[];
@@ -20,8 +18,9 @@ interface PromotionSectionListProps {
   tossInitialDeals?: TossDeal[];
 }
 
-// 알림 묶음 섹션을 이 프로모션 섹션 id 뒤에 끼운다. (홈 노출 보류로 현재 미사용)
-// const THEME_AFTER_SECTION_ID = 'under-10000';
+// 알림 묶음 섹션을 이 프로모션 섹션 id 뒤에 끼운다. 인기 키워드 칩 바로 아래 — "키워드 하나씩"
+// 대신 "묶음으로 한 번에" 를 이어서 제안한다.
+const THEME_AFTER_SECTION_ID = 'under-10000';
 
 // 인기 키워드 추천 칩을 이 섹션 뒤에 끼운다. 상위 세 섹션(핫딜·취향저격·만원이하)을
 // 지나 딜을 충분히 둘러본 뒤라 "이런 거 놓치기 싫으면 알림" 제안이 맥락에 맞는다.
@@ -37,13 +36,12 @@ const PromotionSectionList = ({
   const renderKeywordSlot = (sectionId: string) =>
     sectionId === KEYWORD_AFTER_SECTION_ID ? <RecommendedKeywordSection /> : null;
 
-  // 홈 노출 보류: 알림 묶음(테마) 섹션을 홈에서만 임시 제거. /themes 직접진입·mypage 구독관리는 유지.
-  // 되살리려면 아래 주석 본문 복구.
-  const renderThemeSlot = (_sectionId: string) => null;
-  // const renderThemeSlot = (sectionId: string) =>
-  //   sectionId === THEME_AFTER_SECTION_ID ? (
-  //     <Suspense fallback={null}>{isMobile ? <ThemeCarousel /> : <DesktopThemeSection />}</Suspense>
-  //   ) : null;
+  // 6/25~9/27 홈 노출 보류였다 — 테마 키워드를 즉시 매칭하면 구독 1건이 주당 100~1,800건이라.
+  // 서버가 반응 상위만 하루 3건 보내도록 바뀐 뒤(crawling-server sendThemeDigest) 다시 연다.
+  const renderThemeSlot = (sectionId: string) =>
+    sectionId === THEME_AFTER_SECTION_ID ? (
+      <Suspense fallback={null}>{isMobile ? <ThemeCarousel /> : <DesktopThemeSection />}</Suspense>
+    ) : null;
 
   return (
     <div className="flex flex-col gap-y-8">
