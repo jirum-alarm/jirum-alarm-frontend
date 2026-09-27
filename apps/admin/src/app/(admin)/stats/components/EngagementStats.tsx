@@ -5,22 +5,17 @@ import { useState } from 'react';
 
 import { useDailyServiceViewStats, useTopNotificationKeywords } from '@/hooks/graphql/stats';
 import { DateInterval } from '@/types/stats';
-import { formatStatsDate } from '@/utils/date';
+import { formatStatsDate, kstMonthsAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
 import ChartCard from './ChartCard';
 import DateRangeFilter from './DateRangeFilter';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const getDefaultDateRange = () => {
-  const end = new Date();
-  const start = new Date();
-  start.setMonth(start.getMonth() - 1);
-  return {
-    startDate: start.toISOString().split('T')[0],
-    endDate: end.toISOString().split('T')[0],
-  };
-};
+const getDefaultDateRange = () => ({
+  startDate: kstMonthsAgo(1),
+  endDate: toKstDateString(),
+});
 
 const EngagementStats = () => {
   const defaultRange = getDefaultDateRange();
@@ -33,7 +28,7 @@ const EngagementStats = () => {
 
   const handleSearch = () => {
     fetchViewStats({
-      variables: { startDate, endDate, interval },
+      variables: { ...toStatsDateRange(startDate, endDate), interval },
     });
   };
 

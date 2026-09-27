@@ -12,22 +12,15 @@ import {
   useProfitLinkProviderHealth,
   useProfitLinkQueueHealth,
 } from '@/hooks/graphql/profitLink';
+import { kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 // 수익 90%가 고가전자 (노트북/GPU/TV/가전) — 작업 큐 기본 필터
 const HIGH_VALUE_CATEGORY_IDS = [1, 6, 9];
 
-const dateRangeOf = (days: number) => {
-  const end = new Date();
-  end.setDate(end.getDate() + 1); // endDate exclusive → 오늘 포함
-  const start = new Date();
-  start.setDate(start.getDate() - days);
-  return {
-    startDate: start.toISOString().split('T')[0],
-    endDate: end.toISOString().split('T')[0],
-  };
-};
+// 오늘(KST) 포함 최근 days 일 — exclusive 종료일 처리는 공용 헬퍼가 한다
+const dateRangeOf = (days: number) => toStatsDateRange(kstDaysAgo(days), toKstDateString());
 
 const formatAgo = (iso?: string) => {
   if (!iso) return '-';

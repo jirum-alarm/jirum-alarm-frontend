@@ -15,21 +15,16 @@ import {
   useUserRegistrationStats,
 } from '@/hooks/graphql/stats';
 import { DateCountOutput, DateInterval } from '@/types/stats';
-import { formatStatsDate } from '@/utils/date';
+import { formatStatsDate, kstMonthsAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const formatDateCategories = (data: DateCountOutput[]) => data.map((d) => formatStatsDate(d.date));
 
-const getDefaultDateRange = () => {
-  const end = new Date();
-  const start = new Date();
-  start.setMonth(start.getMonth() - 1);
-  return {
-    startDate: start.toISOString().split('T')[0],
-    endDate: end.toISOString().split('T')[0],
-  };
-};
+const getDefaultDateRange = () => ({
+  startDate: kstMonthsAgo(1),
+  endDate: toKstDateString(),
+});
 
 const Dashboard = () => {
   const defaultRange = getDefaultDateRange();
@@ -49,7 +44,7 @@ const Dashboard = () => {
   const { data: keywordData, loading: keywordLoading } = useTopNotificationKeywords({ limit: 20 });
 
   const handleSearch = () => {
-    const variables = { startDate, endDate, interval };
+    const variables = { ...toStatsDateRange(startDate, endDate), interval };
     fetchUserStats({ variables });
     fetchProductStats({ variables });
     fetchViewStats({ variables });

@@ -7,19 +7,14 @@ import ChartCard from '@/app/(admin)/stats/components/ChartCard';
 import DateRangeFilter from '@/app/(admin)/stats/components/DateRangeFilter';
 import { useProductRegistrationStatsByProvider } from '@/hooks/graphql/stats';
 import { DateInterval, ProviderType } from '@/types/stats';
-import { formatStatsDate } from '@/utils/date';
+import { formatStatsDate, kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const getDefaultDateRange = () => {
-  const end = new Date();
-  const start = new Date();
-  start.setDate(start.getDate() - 7);
-  return {
-    startDate: start.toISOString().split('T')[0],
-    endDate: end.toISOString().split('T')[0],
-  };
-};
+const getDefaultDateRange = () => ({
+  startDate: kstDaysAgo(7),
+  endDate: toKstDateString(),
+});
 
 interface ProviderSeries {
   name: string;
@@ -37,8 +32,7 @@ const CommunityCrawlerStats = () => {
   const runQuery = () => {
     fetchStats({
       variables: {
-        startDate,
-        endDate,
+        ...toStatsDateRange(startDate, endDate),
         interval,
         providerType: ProviderType.COMMUNITY,
       },

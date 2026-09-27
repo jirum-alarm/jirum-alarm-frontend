@@ -12,22 +12,17 @@ import {
   useProductRegistrationStats,
 } from '@/hooks/graphql/stats';
 import { DateInterval } from '@/types/stats';
-import { formatStatsDate } from '@/utils/date';
+import { formatStatsDate, kstMonthsAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
 import ChartCard from './ChartCard';
 import DateRangeFilter from './DateRangeFilter';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const getDefaultDateRange = () => {
-  const end = new Date();
-  const start = new Date();
-  start.setMonth(start.getMonth() - 1);
-  return {
-    startDate: start.toISOString().split('T')[0],
-    endDate: end.toISOString().split('T')[0],
-  };
-};
+const getDefaultDateRange = () => ({
+  startDate: kstMonthsAgo(1),
+  endDate: toKstDateString(),
+});
 
 const ProductStats = () => {
   const defaultRange = getDefaultDateRange();
@@ -48,7 +43,7 @@ const ProductStats = () => {
   const { data: providerData, loading: providerLoading } = useProductCountByProvider();
 
   const handleSearch = () => {
-    const variables = { startDate, endDate, interval };
+    const variables = { ...toStatsDateRange(startDate, endDate), interval };
     fetchProductStats({ variables });
     fetchHotDealRatio({ variables });
     fetchHotDealType({ variables });
