@@ -6,6 +6,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { themePath } from '@/shared/api/notification/theme.service';
 import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
@@ -45,7 +46,7 @@ const ThemeSection = ({ isMobile }: { isMobile: boolean }) => {
         {themes.map((theme) => (
           <SwiperSlide key={theme.id} className={isMobile ? '!w-[180px]' : '!w-[220px]'}>
             <Link
-              href={`/themes/${theme.id}`}
+              href={themePath(theme)}
               className="flex h-full flex-col gap-1.5 rounded-xl bg-gray-50 p-4 transition-colors hover:bg-gray-100"
             >
               <span className="text-2xl" aria-hidden>

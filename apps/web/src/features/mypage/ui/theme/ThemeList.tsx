@@ -3,6 +3,7 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
+import { themePath } from '@/shared/api/notification/theme.service';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import Button from '@/shared/ui/common/Button';
 
@@ -29,7 +30,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
           <li key={theme.id} className="h-full">
             {/* 홈 캐러셀 카드(widgets/home/ui/ThemeSection)와 같은 회색 카드 */}
             <Link
-              href={`/themes/${theme.id}`}
+              href={themePath(theme)}
               className="flex h-full gap-3 rounded-xl bg-gray-50 p-4 transition-colors hover:bg-gray-100"
             >
               <span className="text-2xl" aria-hidden>

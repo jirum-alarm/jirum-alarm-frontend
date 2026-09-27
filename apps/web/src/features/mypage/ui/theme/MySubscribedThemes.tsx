@@ -3,6 +3,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 
+import { themePath } from '@/shared/api/notification/theme.service';
+
 import { ThemeQueries } from '@/entities/notification';
 
 import { useThemeSubscription } from '../../model/useThemeSubscription';
@@ -33,7 +35,7 @@ const MySubscribedThemes = () => {
             key={theme.id}
             className="flex items-center justify-between rounded-xl border border-gray-200 px-3 py-2.5"
           >
-            <Link href={`/themes/${theme.id}`} className="flex min-w-0 flex-col gap-1">
+            <Link href={themePath(theme)} className="flex min-w-0 flex-col gap-1">
               <span className="flex min-w-0 items-center gap-1.5">
                 {theme.emoji && <span aria-hidden>{theme.emoji}</span>}
                 <span className="truncate text-sm text-gray-900">{theme.name}</span>

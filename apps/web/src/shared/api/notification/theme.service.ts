@@ -8,6 +8,8 @@ export interface ThemeWithKeywords {
   id: number;
   name: string;
   description: string;
+  /** URL slug(/themes/{slug}). 없는 테마는 id 로 링크 — themePath() */
+  slug: string | null;
   emoji: string | null;
   representativeKeywords: string[];
   subscriberCount: number;
@@ -39,6 +41,7 @@ const QueryNotificationThemes = new TypedDocumentString<
       id
       name
       description
+      slug
       emoji
       representativeKeywords
       subscriberCount
@@ -98,9 +101,23 @@ const MutationUnsubscribeNotificationTheme = new TypedDocumentString<
   }
 `);
 
+/**
+ * 테마 상세 URL. slug 가 canonical 이고, slug 없는 테마만 id 로.
+ * 인코딩은 리다이렉트 Location 헤더(ASCII 만 허용) 때문 — 비ASCII slug 가 들어오면 500 이 난다.
+ */
+export const themePath = (theme: Pick<ThemeWithKeywords, 'id' | 'slug'>) =>
+  `/themes/${encodeURIComponent(theme.slug ?? theme.id)}`;
+
 export class ThemeService {
   static async getThemes() {
     return execute(QueryNotificationThemes).then((res) => res.data.notificationThemes);
+  }
+
+  /** 서버(상세 라우트·메타데이터)용 — 공개 쿼리라 cookies() 없이 5분 data cache. */
+  static async getThemesPublic() {
+    return execute(QueryNotificationThemes, undefined, { public: true, revalidate: 300 }).then(
+      (res) => res.data.notificationThemes,
+    );
   }
 
   static async getDeals(themeId: number, before: number | undefined, limit: number) {
