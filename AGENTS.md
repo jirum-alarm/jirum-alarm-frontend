@@ -22,7 +22,7 @@ This is a **Turborepo monorepo** that manages multiple applications and shared p
 jirum-alarm-frontend/
 ├── apps/                    # Next.js applications
 │   ├── web/                # Main web application (port 3000)
-│   ├── admin/              # Admin dashboard (port 3000)
+│   ├── admin/              # Admin dashboard (port 3000, 운영 도구)
 │   └── landing/            # Landing page (port 3100)
 ├── packages/               # Shared packages
 │   ├── eslint/            # ESLint configuration
@@ -83,30 +83,51 @@ pnpm code-gen        # GraphQL code generation
 ```
 
 ### 2. **Admin App** (`apps/admin/`)
-**Administrative Dashboard**
+**Administrative Dashboard** — 매칭 검수·핫딜 키워드·키워드맵·광고·알림·통계·수익링크 운영 도구
 
 **Technology Stack:**
-- **Framework**: Next.js 15.4.10
-- **UI**: React 19.1.2, Tailwind CSS 3.4.1
-- **Data Fetching**: Apollo Client (GraphQL)
-- **Charts**: ApexCharts, React ApexCharts
-- **Virtualization**: TanStack React Virtual
-- **Date Handling**: Day.js, Flatpickr
+- **Framework**: Next.js 15.5 (App Router), React 19.2
+- **UI**: Tailwind CSS 3.4 (TailAdmin 토큰: `primary`·`success`·`danger`·`stroke`·`boxdark`…). 라이트 전용 — `dark:` 클래스는 남아 있지만 토글이 없다
+- **Data Fetching**: Apollo Client 3 (GraphQL, 운영 API `jirum-api.kyojs.com/graphql`)
+- **Charts**: ApexCharts · **Virtualization**: TanStack React Virtual · **Date**: Day.js
 
-**Key Features:**
-- Analytics and monitoring dashboard
-- Deal management and curation
-- User management and statistics
-- Real-time data visualization
-- Docker support for development and production
+**Structure:**
+```
+src/app/
+├── (admin)/            # 로그인 뒤 화면 전부 — layout.tsx 가 DefaultLayout(사이드바·헤더·에러 배너)을 한 번 그린다
+│   └── <route>/        # page.tsx 는 얇게, 로직은 같은 폴더 components/ (필요시 hooks/ lib/)
+├── auth/signin/        # 레이아웃 밖
+├── actions/token.ts    # httpOnly accessToken 쿠키(서버 액션)
+└── error.tsx           # 렌더 중 에러 경계
+src/graphql/*.ts        # gql 문서(오퍼레이션) 전부 여기
+src/hooks/graphql/*.ts  # 오퍼레이션별 훅 — 타입은 src/generated/gql 생성 타입(손타입 금지)
+src/components/         # 공통: Layouts·Sidebar(메뉴는 MENU 설정 배열)·QueryErrorBanner·…
+```
+
+**Conventions / 함정:**
+- 새 오퍼레이션: `src/graphql/`에 문서 → `pnpm --filter admin code-gen`(운영 스키마 기준) → 훅에서 생성 타입 사용.
+  dev API 는 스키마가 뒤처져 codegen 소스로 쓰지 않는다.
+- GraphQL 실패는 Apollo 에러 링크가 상단 `QueryErrorBanner` 로 띄운다 — 화면이 `error` 를 안 읽어도 "결과 없음"으로 위장되지 않게.
+  인증 에러(FORBIDDEN/UNAUTHENTICATED)만 로그인으로 보낸다.
+- searchAfter 커서 무한 스크롤은 `useLoadMoreOnView`.
+- 공통 UI: 알림은 `useToast()`(alert 금지), 확인은 `await useConfirm()(...)`(confirm 금지), 로딩은 `<Spinner>`, 흰 카드 틀은 `<Panel>`.
+  토스트·확인 provider 는 DefaultLayout 에 한 번 달려 있다(로그인 화면은 레이아웃 밖이라 별도).
+- Apollo 클라이언트는 서버 렌더에도 만들어지지만 서버엔 토큰을 싣지 않는다(httpOnly 토큰이 HTML 에 실리지 않게) —
+  서버에서 인증 쿼리가 필요한 useSuspenseQuery 화면은 브라우저가 다시 받는다.
+- 큰 화면(매칭 검수 `VerificationGroupByView/`, 광고 `GraphicLayerEditor/`)은 폴더 안 훅·컴포넌트로 나뉘어 있다. `layout.ts` 같은
+  Next 예약 파일명은 라우트 폴더 밑에 두지 말 것(빌드가 라우트 레이아웃으로 읽는다).
+- 미들웨어는 쿠키 "존재"만 본다 — 서버 액션처럼 백엔드를 안 거치는 쓰기는 직접 어드민 확인(`sns-publish/actions.ts` 의 `assertAdmin`).
+- 사이드바 메뉴 추가 = `src/components/Sidebar/index.tsx` 의 `MENU` 배열에 한 줄.
+- `public/` 은 비어 있어도 지우지 말 것(`.gitkeep`) — Dockerfile 이 COPY 한다.
 
 **Development Scripts:**
 ```bash
-pnpm dev              # Development server
-pnpm build           # Production build
-make build-development && make start-development  # Docker dev
-make build-production && make start-production   # Docker prod
+pnpm --filter admin dev        # :3000 (운영 API 에 붙는다 — 쓰기 조작 주의)
+pnpm --filter admin build
+pnpm --filter admin code-gen   # 운영 스키마로 타입 생성
 ```
+
+**Deploy:** main push → 스테이징. 운영은 `v*.*.*` 태그(web·ai 도 함께 나감) 또는 admin 만: `gh workflow run deploy-admin-prod.yml --ref main`.
 
 ### 3. **Landing App** (`apps/landing/`)
 **Marketing Landing Page**
