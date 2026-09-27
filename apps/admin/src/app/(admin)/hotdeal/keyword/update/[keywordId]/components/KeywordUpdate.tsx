@@ -49,6 +49,7 @@ const KeywordUpdate = ({ keywordId }: Props) => {
       toast.success('키워드 수정 성공!');
       router.back();
     },
+    onError: (e) => toast.error(`수정 실패: ${e.message}`),
   });
   const handleChangeWeight = (value: number) => {
     setKeyword((keyword) => ({
@@ -64,10 +65,16 @@ const KeywordUpdate = ({ keywordId }: Props) => {
   };
 
   const handleKeywordUpdate = () => {
+    // 서버 @IsNotEmpty 는 공백만 있는 문자열을 통과시킨다 — 여기서 잘라서 막는다
+    const trimmed = keyword.keyword.trim();
+    if (!trimmed) {
+      toast.error('키워드를 입력해주세요.');
+      return;
+    }
     mutate({
       variables: {
         id: Number(keywordId),
-        keyword: keyword.keyword,
+        keyword: trimmed,
         weight: keyword.weight,
         isMajor: keyword.isMajor,
       },

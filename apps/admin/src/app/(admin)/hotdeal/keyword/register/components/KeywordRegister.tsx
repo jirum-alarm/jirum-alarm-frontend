@@ -34,6 +34,8 @@ const KeywordRegister = () => {
       toast.success('키워드 등록 성공!');
       router.push(`/hotdeal/keyword?keywordType=${keyword.type}`);
     },
+    // onError 가 없으면 실패해도 아무 반응이 없다(버튼만 다시 풀린다)
+    onError: (e) => toast.error(`등록 실패: ${e.message}`),
   });
   const handleChangeWeight = (value: number) => {
     setKeyword((keyword) => ({
@@ -54,8 +56,14 @@ const KeywordRegister = () => {
     }));
   };
   const handleKeywordRegister = () => {
+    // 서버 @IsNotEmpty 는 공백만 있는 문자열을 통과시킨다 — 앞뒤 공백 키워드가 저장되지 않게 여기서 자른다
+    const trimmed = keyword.keyword.trim();
+    if (!trimmed) {
+      toast.error('키워드를 입력해주세요.');
+      return;
+    }
     mutate({
-      variables: keyword,
+      variables: { ...keyword, keyword: trimmed },
     });
   };
   return (
