@@ -195,7 +195,7 @@ const VerificationGroupByView = () => {
       const items = brandItemData.brandItemsOrderByTotalMatchCount;
       setAllBrandItems(items);
       if (items.length > 0) {
-        setBrandItemSearchAfter(items[items.length - 1].searchAfter);
+        setBrandItemSearchAfter(items[items.length - 1].searchAfter ?? null);
         setHasBrandItemMore(items.length >= PAGE_LIMIT);
       } else {
         setHasBrandItemMore(false);
@@ -333,7 +333,7 @@ const VerificationGroupByView = () => {
         const newItems = result.data.brandItemsOrderByTotalMatchCount;
         if (newItems.length > 0) {
           setAllBrandItems((prev) => [...prev, ...newItems]);
-          setBrandItemSearchAfter(newItems[newItems.length - 1].searchAfter);
+          setBrandItemSearchAfter(newItems[newItems.length - 1].searchAfter ?? null);
           setHasBrandItemMore(newItems.length >= PAGE_LIMIT);
         } else {
           setHasBrandItemMore(false);
@@ -433,7 +433,7 @@ const VerificationGroupByView = () => {
           const items = result.data.brandItemsOrderByTotalMatchCount;
           setAllBrandItems(items);
           if (items.length > 0) {
-            setBrandItemSearchAfter(items[items.length - 1].searchAfter);
+            setBrandItemSearchAfter(items[items.length - 1].searchAfter ?? null);
             setHasBrandItemMore(items.length >= PAGE_LIMIT);
             highlightBrandItem(items[0]);
           } else {

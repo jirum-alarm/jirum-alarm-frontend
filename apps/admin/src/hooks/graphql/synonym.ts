@@ -1,5 +1,15 @@
 import { MutationHookOptions, useMutation } from '@apollo/client';
 
+import {
+  MutationAddHotDealExcludeKeywordByAdminMutation,
+  MutationAddHotDealExcludeKeywordByAdminMutationVariables,
+  MutationAddHotDealKeywordSynonymByAdminMutation,
+  MutationAddHotDealKeywordSynonymByAdminMutationVariables,
+  MutationRemoveHotDealExcludeKeywordByAdminMutation,
+  MutationRemoveHotDealExcludeKeywordByAdminMutationVariables,
+  MutationRemoveHotDealKeywordSynonymByAdminMutation,
+  MutationRemoveHotDealKeywordSynonymByAdminMutationVariables,
+} from '@/generated/gql/graphql';
 import { QueryHotDealKeywordByAdmin } from '@/graphql/keyword';
 import {
   MutationAddHotDealExcludeKeywordByAdmin,
@@ -8,18 +18,16 @@ import {
   MutationRemoveHotDealKeywordSynonymByAdmin,
 } from '@/graphql/synonym';
 
-interface AddHotDealKeywordSynonymByAdminVariable {
-  hotDealKeywordId: number;
-  keywords: string[];
-}
-
 export const useAddHotDealKeywordSynonymByAdmin = (
   keywordId: number,
-  options?: MutationHookOptions<any, AddHotDealKeywordSynonymByAdminVariable>,
+  options?: MutationHookOptions<
+    MutationAddHotDealKeywordSynonymByAdminMutation,
+    MutationAddHotDealKeywordSynonymByAdminMutationVariables
+  >,
 ) => {
   return useMutation<
-    { data: { addHotDealKeywordSynonymByAdmin: number } },
-    AddHotDealKeywordSynonymByAdminVariable
+    MutationAddHotDealKeywordSynonymByAdminMutation,
+    MutationAddHotDealKeywordSynonymByAdminMutationVariables
   >(MutationAddHotDealKeywordSynonymByAdmin, {
     refetchQueries: [
       {
@@ -33,18 +41,16 @@ export const useAddHotDealKeywordSynonymByAdmin = (
   });
 };
 
-interface AddHotDealExcludeKeywordByAdminVariable {
-  hotDealKeywordId: number;
-  excludeKeywords: string[];
-}
-
 export const useAddHotDealExcludeKeywordByAdmin = (
   keywordId: number,
-  options?: MutationHookOptions<any, AddHotDealExcludeKeywordByAdminVariable>,
+  options?: MutationHookOptions<
+    MutationAddHotDealExcludeKeywordByAdminMutation,
+    MutationAddHotDealExcludeKeywordByAdminMutationVariables
+  >,
 ) => {
   return useMutation<
-    { data: { addHotDealExcludeKeywordByAdmin: number } },
-    AddHotDealExcludeKeywordByAdminVariable
+    MutationAddHotDealExcludeKeywordByAdminMutation,
+    MutationAddHotDealExcludeKeywordByAdminMutationVariables
   >(MutationAddHotDealExcludeKeywordByAdmin, {
     refetchQueries: [
       {
@@ -58,17 +64,16 @@ export const useAddHotDealExcludeKeywordByAdmin = (
   });
 };
 
-interface RemoveHotDealKeywordSynonymVariable {
-  ids: number[];
-}
-
 export const useRemoveHotDealKeywordSynonym = (
   keywordId: number,
-  options?: MutationHookOptions<any, RemoveHotDealKeywordSynonymVariable>,
+  options?: MutationHookOptions<
+    MutationRemoveHotDealKeywordSynonymByAdminMutation,
+    MutationRemoveHotDealKeywordSynonymByAdminMutationVariables
+  >,
 ) => {
   return useMutation<
-    { data: { removeHotDealKeywordSynonymByAdmin: boolean } },
-    RemoveHotDealKeywordSynonymVariable
+    MutationRemoveHotDealKeywordSynonymByAdminMutation,
+    MutationRemoveHotDealKeywordSynonymByAdminMutationVariables
   >(MutationRemoveHotDealKeywordSynonymByAdmin, {
     refetchQueries: [
       {
@@ -82,17 +87,16 @@ export const useRemoveHotDealKeywordSynonym = (
   });
 };
 
-interface RemoveHotDealExcludeKeywordVariable {
-  ids: number[];
-}
-
 export const useRemoveHotDealExcludeKeyword = (
   keywordId: number,
-  options?: MutationHookOptions<any, RemoveHotDealExcludeKeywordVariable>,
+  options?: MutationHookOptions<
+    MutationRemoveHotDealExcludeKeywordByAdminMutation,
+    MutationRemoveHotDealExcludeKeywordByAdminMutationVariables
+  >,
 ) => {
   return useMutation<
-    { data: { removeHotDealExcludeKeywordByAdmin: boolean } },
-    RemoveHotDealExcludeKeywordVariable
+    MutationRemoveHotDealExcludeKeywordByAdminMutation,
+    MutationRemoveHotDealExcludeKeywordByAdminMutationVariables
   >(MutationRemoveHotDealExcludeKeywordByAdmin, {
     refetchQueries: [
       {

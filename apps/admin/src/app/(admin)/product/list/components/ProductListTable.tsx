@@ -22,7 +22,7 @@ const ProductListTable = () => {
   const [isHot, setIsHot] = useState<boolean | undefined>(undefined);
   const [searchVariables, setSearchVariables] = useState<GetProductsVariables>({});
   const [searchProductId, setSearchProductId] = useState<number | null>(null);
-  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
 

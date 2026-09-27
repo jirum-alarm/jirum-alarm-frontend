@@ -1,20 +1,13 @@
 import { QueryHookOptions, useQuery } from '@apollo/client';
 
+import { CommentsByAdminQuery, CommentsByAdminQueryVariables } from '@/generated/gql/graphql';
 import { QueryCommentsByAdmin } from '@/graphql/comments';
 
-interface GetCommentsData {
-  commentsByAdmin: string[];
-}
-
-interface GetCommentsVariables {
-  hotDealKeywordId: number;
-  synonyms?: string[];
-  excludes?: string[];
-}
-
-export const useGetComments = (queryOptions: QueryHookOptions<any, GetCommentsVariables>) => {
+export const useGetComments = (
+  queryOptions: QueryHookOptions<CommentsByAdminQuery, CommentsByAdminQueryVariables>,
+) => {
   const { variables, ...rest } = queryOptions;
-  return useQuery<GetCommentsData, GetCommentsVariables>(QueryCommentsByAdmin, {
+  return useQuery<CommentsByAdminQuery, CommentsByAdminQueryVariables>(QueryCommentsByAdmin, {
     ...rest,
     variables: {
       hotDealKeywordId: variables?.hotDealKeywordId ?? 1,

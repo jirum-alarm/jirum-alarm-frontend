@@ -11,7 +11,7 @@ import {
 
 interface Props {
   groupId: number;
-  entries: Array<{ id: number; keyword: string }>;
+  entries: Array<{ id: string; keyword: string }>;
 }
 
 const EntryManager = ({ groupId, entries }: Props) => {
@@ -52,7 +52,7 @@ const EntryManager = ({ groupId, entries }: Props) => {
     }
   };
 
-  const handleRemove = (id: number, keyword: string) => {
+  const handleRemove = (id: string, keyword: string) => {
     if (confirm(`"${keyword}" 키워드를 삭제하시겠습니까?`)) {
       removeEntry({ variables: { id: Number(id) } });
     }

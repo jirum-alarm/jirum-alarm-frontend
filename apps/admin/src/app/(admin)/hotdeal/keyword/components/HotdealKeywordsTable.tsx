@@ -25,7 +25,7 @@ const HotdealKeywordsTable = () => {
 
   const [removeHotdealKeyword] = useRemoveHotDealKeyword(keywordType);
 
-  const handleRemoveHotdealKeyword = (id: number, keyword: string) => {
+  const handleRemoveHotdealKeyword = (id: string, keyword: string) => {
     return (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       if (confirm(`정말 "${keyword}"${getParticle(keyword)} 삭제하시겠습니까?`)) {

@@ -9,6 +9,18 @@ import {
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
+  MutationAddHotDealKeywordByAdminMutation,
+  MutationRemoveHotDealKeywordByAdminMutation,
+  MutationRemoveHotDealKeywordByAdminMutationVariables,
+  MutationUpdateHotDealKeywordByAdminMutation,
+  MutationUpdateHotDealKeywordByAdminMutationVariables,
+  QueryHotDealKeywordByAdminQuery,
+  QueryHotDealKeywordByAdminQueryVariables,
+  QueryHotDealKeywordDetailByAdminQuery,
+  QueryHotDealKeywordDetailByAdminQueryVariables,
+  QueryHotDealKeywordsByAdminQuery,
+} from '@/generated/gql/graphql';
+import {
   MutationAddHotDealKeywordByAdmin,
   MutationRemoveHotDealKeywordByAdmin,
   MutationUpdateHotDealKeywordByAdmin,
@@ -17,6 +29,30 @@ import {
   QueryHotDealKeywordsByAdmin,
 } from '@/graphql/keyword';
 import { HotDealKeywordOrderType, HotDealKeywordType, OrderOptionType } from '@/types/keyword';
+
+// 화면은 로컬 enum(@/types/keyword)을 쓴다 — 생성 enum 과 멤버 이름이 달라(POSITIVE vs Positive)
+// 서로 대입되지 않으므로, enum 이 걸린 자리만 로컬 enum 으로 돌려 둔다
+type WithLocalKeywordType<T> = T extends object
+  ? Omit<T, 'type'> & { type: HotDealKeywordType }
+  : T;
+
+type HotDealKeywordsData = {
+  hotDealKeywordsByAdmin: WithLocalKeywordType<
+    QueryHotDealKeywordsByAdminQuery['hotDealKeywordsByAdmin'][number]
+  >[];
+};
+
+type HotDealKeywordData = {
+  hotDealKeywordByAdmin: WithLocalKeywordType<
+    QueryHotDealKeywordByAdminQuery['hotDealKeywordByAdmin']
+  >;
+};
+
+type HotDealKeywordDetailData = {
+  hotDealKeywordByAdmin: WithLocalKeywordType<
+    QueryHotDealKeywordDetailByAdminQuery['hotDealKeywordByAdmin']
+  >;
+};
 
 interface AddHotDealKeywordVariable {
   type: HotDealKeywordType;
@@ -27,9 +63,12 @@ interface AddHotDealKeywordVariable {
 
 export const useAddHotDealKeyword = (
   keywordType: HotDealKeywordType,
-  options?: MutationHookOptions<any, AddHotDealKeywordVariable>,
+  options?: MutationHookOptions<
+    MutationAddHotDealKeywordByAdminMutation,
+    AddHotDealKeywordVariable
+  >,
 ) => {
-  return useMutation<{ addHotDealKeywordByAdmin: boolean }, AddHotDealKeywordVariable>(
+  return useMutation<MutationAddHotDealKeywordByAdminMutation, AddHotDealKeywordVariable>(
     MutationAddHotDealKeywordByAdmin,
     {
       refetchQueries: [
@@ -48,20 +87,30 @@ export const useAddHotDealKeyword = (
   );
 };
 
-interface removeHotDealKeywordVariables {
-  id: number;
-}
-
 export const useRemoveHotDealKeyword = (
   keywordType: HotDealKeywordType,
-  options?: MutationHookOptions<any, removeHotDealKeywordVariables>,
+  options?: MutationHookOptions<
+    MutationRemoveHotDealKeywordByAdminMutation,
+    MutationRemoveHotDealKeywordByAdminMutationVariables
+  >,
 ) => {
-  return useMutation<{ removeHotDealKeywordByAdmin: boolean }, removeHotDealKeywordVariables>(
-    MutationRemoveHotDealKeywordByAdmin,
-    {
-      update(cache, { data }, option) {
-        const { variables } = option;
-        const existingKeywords = cache.readQuery({
+  return useMutation<
+    MutationRemoveHotDealKeywordByAdminMutation,
+    MutationRemoveHotDealKeywordByAdminMutationVariables
+  >(MutationRemoveHotDealKeywordByAdmin, {
+    update(cache, { data }, option) {
+      const { variables } = option;
+      const existingKeywords = cache.readQuery({
+        query: QueryHotDealKeywordsByAdmin,
+        variables: {
+          type: keywordType,
+          orderBy: HotDealKeywordOrderType.WEIGHT,
+          orderOption: OrderOptionType.DESC,
+          limit: PAGE_LIMIT,
+        },
+      }) as HotDealKeywordsData | null;
+      if (existingKeywords?.hotDealKeywordsByAdmin.length && data?.removeHotDealKeywordByAdmin) {
+        cache.writeQuery({
           query: QueryHotDealKeywordsByAdmin,
           variables: {
             type: keywordType,
@@ -69,46 +118,42 @@ export const useRemoveHotDealKeyword = (
             orderOption: OrderOptionType.DESC,
             limit: PAGE_LIMIT,
           },
-        }) as { hotDealKeywordsByAdmin: GetHotDealKeywordsData[] } | null;
-        if (existingKeywords?.hotDealKeywordsByAdmin.length && data?.removeHotDealKeywordByAdmin) {
-          cache.writeQuery({
-            query: QueryHotDealKeywordsByAdmin,
-            variables: {
-              type: keywordType,
-              orderBy: HotDealKeywordOrderType.WEIGHT,
-              orderOption: OrderOptionType.DESC,
-              limit: PAGE_LIMIT,
-            },
-            data: {
-              hotDealKeywordsByAdmin: existingKeywords.hotDealKeywordsByAdmin.filter(
-                (keyword) => Number(keyword.id) !== variables?.id,
-              ),
-            },
-          });
-        }
-      },
-      ...options,
+          data: {
+            hotDealKeywordsByAdmin: existingKeywords.hotDealKeywordsByAdmin.filter(
+              (keyword) => Number(keyword.id) !== variables?.id,
+            ),
+          },
+        });
+      }
     },
-  );
+    ...options,
+  });
 };
-
-interface updateHotDealKeywordVariables {
-  id: number;
-  keyword?: string;
-  weight?: number;
-  isMajor?: boolean;
-}
 
 export const useUpdateHotDealKeyword = (
   keywordType: HotDealKeywordType,
-  options?: MutationHookOptions<any, updateHotDealKeywordVariables>,
+  options?: MutationHookOptions<
+    MutationUpdateHotDealKeywordByAdminMutation,
+    MutationUpdateHotDealKeywordByAdminMutationVariables
+  >,
 ) => {
-  return useMutation<{ updateHotDealKeywordByAdmin: boolean }, updateHotDealKeywordVariables>(
-    MutationUpdateHotDealKeywordByAdmin,
-    {
-      update(cache, { data }, option) {
-        const { variables } = option;
-        const existingKeywords = cache.readQuery({
+  return useMutation<
+    MutationUpdateHotDealKeywordByAdminMutation,
+    MutationUpdateHotDealKeywordByAdminMutationVariables
+  >(MutationUpdateHotDealKeywordByAdmin, {
+    update(cache, { data }, option) {
+      const { variables } = option;
+      const existingKeywords = cache.readQuery({
+        query: QueryHotDealKeywordsByAdmin,
+        variables: {
+          type: keywordType,
+          orderBy: HotDealKeywordOrderType.WEIGHT,
+          orderOption: OrderOptionType.DESC,
+          limit: PAGE_LIMIT,
+        },
+      }) as HotDealKeywordsData | null;
+      if (existingKeywords?.hotDealKeywordsByAdmin.length && data?.updateHotDealKeywordByAdmin) {
+        cache.writeQuery({
           query: QueryHotDealKeywordsByAdmin,
           variables: {
             type: keywordType,
@@ -116,89 +161,52 @@ export const useUpdateHotDealKeyword = (
             orderOption: OrderOptionType.DESC,
             limit: PAGE_LIMIT,
           },
-        }) as { hotDealKeywordsByAdmin: GetHotDealKeywordsData[] } | null;
-        if (existingKeywords?.hotDealKeywordsByAdmin.length && data?.updateHotDealKeywordByAdmin) {
-          cache.writeQuery({
-            query: QueryHotDealKeywordsByAdmin,
-            variables: {
-              type: keywordType,
-              orderBy: HotDealKeywordOrderType.WEIGHT,
-              orderOption: OrderOptionType.DESC,
-              limit: PAGE_LIMIT,
-            },
-            data: {
-              hotDealKeywordsByAdmin: existingKeywords.hotDealKeywordsByAdmin.map((keyword) =>
-                Number(keyword.id) === variables?.id ? { ...keyword, ...variables } : keyword,
-              ),
-            },
-          });
-        }
-      },
-      ...options,
+          data: {
+            hotDealKeywordsByAdmin: existingKeywords.hotDealKeywordsByAdmin.map((keyword) =>
+              Number(keyword.id) === variables?.id ? { ...keyword, ...variables } : keyword,
+            ),
+          },
+        });
+      }
     },
-  );
+    ...options,
+  });
 };
-
-interface GetHotDealKeywordsData {
-  id: number;
-  type: HotDealKeywordType;
-  keyword: string;
-  weight: number;
-  isMajor: boolean;
-  lastUpdatedAt: number;
-  synonymCount: number;
-  excludeKeywordCount: number;
-  searchAfter?: string[];
-}
 
 interface GetHotDealKeywordsVariables {
   type?: HotDealKeywordType;
   orderBy?: HotDealKeywordOrderType;
   orderOption?: OrderOptionType;
   limit?: number;
-  searchAfter?: string[];
+  searchAfter?: string[] | null;
 }
 
 export const useGetHotDealKeywords = (
-  queryOptions?: SuspenseQueryHookOptions<any, GetHotDealKeywordsVariables>,
+  queryOptions?: SuspenseQueryHookOptions<HotDealKeywordsData, GetHotDealKeywordsVariables>,
 ) => {
   const { variables, ...rest } = queryOptions ?? {};
 
-  return useSuspenseQuery<
-    { hotDealKeywordsByAdmin: GetHotDealKeywordsData[] },
-    GetHotDealKeywordsVariables
-  >(QueryHotDealKeywordsByAdmin, {
-    ...rest,
-    variables: {
-      type: variables?.type,
-      orderBy: HotDealKeywordOrderType.WEIGHT,
-      orderOption: variables?.orderOption ?? OrderOptionType.DESC,
-      limit: variables?.limit ?? PAGE_LIMIT,
-      searchAfter: variables?.searchAfter,
+  return useSuspenseQuery<HotDealKeywordsData, GetHotDealKeywordsVariables>(
+    QueryHotDealKeywordsByAdmin,
+    {
+      ...rest,
+      variables: {
+        type: variables?.type,
+        orderBy: HotDealKeywordOrderType.WEIGHT,
+        orderOption: variables?.orderOption ?? OrderOptionType.DESC,
+        limit: variables?.limit ?? PAGE_LIMIT,
+        searchAfter: variables?.searchAfter,
+      },
     },
-  });
+  );
 };
 
-interface GetHotDealKeywordData {
-  id: number;
-  type: HotDealKeywordType;
-  keyword: string;
-  weight: number;
-  isMajor: boolean;
-  synonyms: Array<{ id: number; hotDealKeywordId: number; keyword: string }>;
-  excludeKeywords: Array<{ id: number; hotDealKeywordId: number; excludeKeyword: string }>;
-}
-
-interface GetHotDealKeywordVariables {
-  id: number;
-}
-
 export const useGetHotDealKeyword = (
-  queryOptions?: QueryHookOptions<any, GetHotDealKeywordVariables>,
+  queryOptions?: QueryHookOptions<HotDealKeywordData, QueryHotDealKeywordByAdminQueryVariables>,
 ) => {
   const { variables, ...rest } = queryOptions ?? {};
 
-  return useQuery<{ hotDealKeywordByAdmin: GetHotDealKeywordData }, GetHotDealKeywordVariables>(
+  return useQuery<HotDealKeywordData, QueryHotDealKeywordByAdminQueryVariables>(
     QueryHotDealKeywordByAdmin,
     {
       ...rest,
@@ -211,14 +219,14 @@ export const useGetHotDealKeyword = (
 
 export const useGetHotDealDetailKeyword = (
   queryOptions: QueryHookOptions<
-    { hotDealKeywordByAdmin: Omit<GetHotDealKeywordData, 'synonyms' | 'excludeKeywords'> },
-    GetHotDealKeywordVariables
+    HotDealKeywordDetailData,
+    QueryHotDealKeywordDetailByAdminQueryVariables
   >,
 ) => {
-  return useQuery<
-    { hotDealKeywordByAdmin: Omit<GetHotDealKeywordData, 'synonyms' | 'excludeKeywords'> },
-    GetHotDealKeywordVariables
-  >(QueryHotDealKeywordDetailByAdmin, {
-    ...queryOptions,
-  });
+  return useQuery<HotDealKeywordDetailData, QueryHotDealKeywordDetailByAdminQueryVariables>(
+    QueryHotDealKeywordDetailByAdmin,
+    {
+      ...queryOptions,
+    },
+  );
 };

@@ -20,14 +20,14 @@ const KeywordDetail = ({ keywordId }: Props) => {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-3">
         <KeywordDetailInfo
-          keyword={data?.hotDealKeywordByAdmin.keyword}
-          weight={data?.hotDealKeywordByAdmin.weight}
-          type={data?.hotDealKeywordByAdmin.type}
+          keyword={data?.hotDealKeywordByAdmin!.keyword}
+          weight={data?.hotDealKeywordByAdmin!.weight}
+          type={data?.hotDealKeywordByAdmin!.type}
         ></KeywordDetailInfo>
         <SynonymInputResult
           keywordId={keywordId}
-          synonymList={data?.hotDealKeywordByAdmin.synonyms ?? []}
-          excludeKeywordList={data?.hotDealKeywordByAdmin.excludeKeywords ?? []}
+          synonymList={data?.hotDealKeywordByAdmin!.synonyms ?? []}
+          excludeKeywordList={data?.hotDealKeywordByAdmin!.excludeKeywords ?? []}
         />
         <KeywordSearch keywordId={keywordId} />
       </div>

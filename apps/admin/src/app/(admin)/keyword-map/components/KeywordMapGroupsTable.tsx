@@ -9,7 +9,7 @@ const KeywordMapGroupsTable = () => {
   const { data, loading, fetchMore } = useGetKeywordMapGroups();
   const [removeGroup] = useRemoveKeywordMapGroup();
 
-  const handleRemoveGroup = (id: number, name: string) => {
+  const handleRemoveGroup = (id: string, name: string) => {
     return (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       if (confirm(`정말 "${name}" 그룹을 삭제하시겠습니까?`)) {

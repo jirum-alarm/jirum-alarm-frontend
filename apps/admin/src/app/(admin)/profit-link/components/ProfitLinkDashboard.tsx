@@ -39,7 +39,7 @@ const formatAgo = (iso?: string) => {
   return `${Math.floor(hours / 24)}일 전`;
 };
 
-const formatKrw = (value?: number) =>
+const formatKrw = (value?: number | null) =>
   value == null ? '-' : `${Math.round(value).toLocaleString()}원`;
 
 const StatusDot = ({ level }: { level: 'ok' | 'warn' | 'danger' | 'muted' }) => (
@@ -75,7 +75,7 @@ const ProviderHealthSection = () => {
 
   // 발급당 커미션 — 어디에 발급/노출을 더 쓸지의 지표. 판매 수신이 뭉텅이로 들어와서
   // 7d 는 출렁이므로 30d 로 본다.
-  const revenuePerIssue = (commission30d?: number, issued30d?: number) =>
+  const revenuePerIssue = (commission30d?: number | null, issued30d?: number) =>
     commission30d != null && issued30d ? commission30d / issued30d : null;
 
   return (
@@ -110,7 +110,9 @@ const ProviderHealthSection = () => {
                 <td className={tdClass}>{formatAgo(row.lastIssuedProductAt)}</td>
                 <td className={tdClass}>
                   <span className="flex items-center gap-2">
-                    <StatusDot level={saleDotLevel[row.salesHealth] ?? 'muted'} />
+                    <StatusDot
+                      level={saleDotLevel[row.salesHealth as keyof typeof saleDotLevel] ?? 'muted'}
+                    />
                     {row.sales24h.toLocaleString()}
                   </span>
                 </td>

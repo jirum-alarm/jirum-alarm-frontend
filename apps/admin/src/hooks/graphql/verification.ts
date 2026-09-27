@@ -17,11 +17,11 @@ import {
   MutationVerifyProductMappingMutation,
   MutationVerifyProductMappingMutationVariables,
   OrderOptionType,
-  ProductMappingMatchStatus,
-  ProductMappingTarget,
   ProductMappingVerificationStatus,
   QueryPendingVerificationsQuery,
   QueryPendingVerificationsQueryVariables,
+  QueryPendingVerificationsTotalCountQuery,
+  QueryPendingVerificationsTotalCountQueryVariables,
   QueryVerificationHistoryQuery,
   QueryVerificationHistoryQueryVariables,
 } from '@/generated/gql/graphql';
@@ -148,19 +148,6 @@ export const useCancelVerification = (
     ...options,
   });
 };
-
-// TotalCount 쿼리 타입 정의
-export interface QueryPendingVerificationsTotalCountQuery {
-  pendingVerificationsTotalCount: number;
-}
-
-export interface QueryPendingVerificationsTotalCountQueryVariables {
-  brandProductId?: number;
-  matchStatus?: ProductMappingMatchStatus[];
-  target?: ProductMappingTarget;
-  verificationStatus?: ProductMappingVerificationStatus[];
-  suspiciousFirst?: boolean;
-}
 
 export const useGetPendingVerificationsTotalCount = (
   variables?: QueryPendingVerificationsTotalCountQueryVariables,

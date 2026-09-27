@@ -2,7 +2,7 @@ import Card from '@/components/Card';
 
 interface Props {
   name: string;
-  description?: string;
+  description?: string | null;
 }
 
 const GroupDetailInfo = ({ name, description }: Props) => {

@@ -2,6 +2,18 @@ import { QueryHookOptions, useLazyQuery, useMutation, useQuery } from '@apollo/c
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
+  MutationAddProductMappingMutation,
+  MutationAddProductMappingMutationVariables,
+  QueryBrandItemsByMatchCountTotalCountQuery,
+  QueryBrandItemsByMatchCountTotalCountQueryVariables,
+  QueryBrandItemsOrderByTotalMatchCountQuery,
+  QueryBrandItemsOrderByTotalMatchCountQueryVariables,
+  QueryBrandProductsOrderByMatchCountQuery,
+  QueryBrandProductsOrderByMatchCountQueryVariables,
+  QuerySimilarProductsByTitleQuery,
+  QuerySimilarProductsByTitleQueryVariables,
+} from '@/generated/gql/graphql';
+import {
   MutationAddProductMapping,
   QueryBrandItemsByMatchCountTotalCount,
   QueryBrandItemsOrderByTotalMatchCount,
@@ -9,31 +21,8 @@ import {
   QuerySimilarProductsByTitle,
 } from '@/graphql/brandProduct';
 
-// 타입 정의 (codegen 전까지 임시 사용)
-export interface BrandProduct {
-  id: string;
-  danawaProductId: string;
-  brandItemId: number;
-  brandName: string;
-  productName: string;
-  volume: string | null;
-  amount: string | null;
-  matchCount: number;
-  pendingVerificationCount: number;
-  createdAt: string;
-  searchAfter: string[];
-}
-
-export interface QueryBrandProductsOrderByMatchCountQuery {
-  brandProductsOrderByMatchCount: BrandProduct[];
-}
-
-export interface QueryBrandProductsOrderByMatchCountQueryVariables {
-  limit: number;
-  searchAfter?: string[];
-  brandItemId?: number;
-  title?: string;
-}
+export type BrandProduct =
+  QueryBrandProductsOrderByMatchCountQuery['brandProductsOrderByMatchCount'][number];
 
 export const useGetBrandProductsOrderByMatchCountLazy = () => {
   return useLazyQuery<
@@ -44,25 +33,8 @@ export const useGetBrandProductsOrderByMatchCountLazy = () => {
   });
 };
 
-// BrandItem 타입 정의
-export interface BrandItem {
-  id: string;
-  brandName: string;
-  productName: string;
-  totalMatchCount: number;
-  pendingVerificationCount: number;
-  searchAfter: string[];
-}
-
-export interface QueryBrandItemsOrderByTotalMatchCountQuery {
-  brandItemsOrderByTotalMatchCount: BrandItem[];
-}
-
-export interface QueryBrandItemsOrderByTotalMatchCountQueryVariables {
-  limit: number;
-  searchAfter?: string[];
-  title?: string;
-}
+export type BrandItem =
+  QueryBrandItemsOrderByTotalMatchCountQuery['brandItemsOrderByTotalMatchCount'][number];
 
 export const useGetBrandItemsOrderByTotalMatchCount = (
   variables?: Partial<QueryBrandItemsOrderByTotalMatchCountQueryVariables>,
@@ -93,15 +65,6 @@ export const useGetBrandItemsOrderByTotalMatchCountLazy = () => {
   });
 };
 
-// BrandItem TotalCount
-export interface QueryBrandItemsByMatchCountTotalCountQuery {
-  brandItemsByMatchCountTotalCount: number;
-}
-
-export interface QueryBrandItemsByMatchCountTotalCountQueryVariables {
-  title?: string;
-}
-
 export const useGetBrandItemsByMatchCountTotalCount = (
   variables?: QueryBrandItemsByMatchCountTotalCountQueryVariables,
   options?: QueryHookOptions<
@@ -127,30 +90,9 @@ export const useGetBrandItemsByMatchCountTotalCountLazy = () => {
   });
 };
 
-export interface SimilarProductByTitle {
-  id: string;
-  title: string;
-  url: string;
-  thumbnail: string | null;
-  price: string | null;
-  similarity: number | null;
-  provider: { name: string } | null;
-  /** 서빙되는(verified) 매핑만 온다 — null 이면 미매핑이거나 pending 뿐인 딜 */
-  productMapping: {
-    target: string | null;
-    targetId: number | null;
-    verificationStatus: string | null;
-  } | null;
-}
-
-export interface QuerySimilarProductsByTitleQuery {
-  similarProductsByTitle: SimilarProductByTitle[];
-}
-
-export interface QuerySimilarProductsByTitleQueryVariables {
-  title: string;
-  limit: number;
-}
+/** productMapping 은 서빙되는(verified) 매핑만 온다 — null 이면 미매핑이거나 pending 뿐인 딜 */
+export type SimilarProductByTitle =
+  QuerySimilarProductsByTitleQuery['similarProductsByTitle'][number];
 
 export const useGetSimilarProductsByTitleLazy = () => {
   return useLazyQuery<QuerySimilarProductsByTitleQuery, QuerySimilarProductsByTitleQueryVariables>(
@@ -158,15 +100,6 @@ export const useGetSimilarProductsByTitleLazy = () => {
     { fetchPolicy: 'network-only' },
   );
 };
-
-export interface MutationAddProductMappingMutation {
-  addProductMapping: boolean;
-}
-
-export interface MutationAddProductMappingMutationVariables {
-  productId: number;
-  brandProductId: number;
-}
 
 /** 어드민 수동 매핑 — 서버가 matched+verified 로 넣는다 (matching-api adminAddMapping) */
 export const useAddProductMapping = () => {

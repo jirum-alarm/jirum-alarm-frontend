@@ -165,7 +165,7 @@ const SimilarDealsPanel = ({
                 </span>
               ) : (
                 <a
-                  href={p.url}
+                  href={p.url ?? undefined}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[10px] text-blue-500 hover:underline"

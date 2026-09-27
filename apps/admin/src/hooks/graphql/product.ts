@@ -1,50 +1,33 @@
 import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
 
 import { PAGE_LIMIT } from '@/constants/limit';
+import {
+  MutationHardDeleteProductByAdminMutation,
+  MutationHardDeleteProductByAdminMutationVariables,
+  OrderOptionType,
+  ProductOrderType,
+  QueryProductQuery,
+  QueryProductQueryVariables,
+  QueryProductsQuery,
+  QueryProductsQueryVariables,
+} from '@/generated/gql/graphql';
 import { MutationHardDeleteProductByAdmin, QueryProduct, QueryProducts } from '@/graphql/product';
 
-export interface ProductListItem {
-  id: number;
-  title: string;
-  mallId: string;
-  url: string;
-  isHot: boolean;
-  isEnd: boolean;
-  price: number;
-  providerId: number;
-  categoryId: number;
-  category: string;
-  thumbnail: string;
-  hotDealType: string;
-  provider: { nameKr: string } | null;
-  searchAfter: string[];
-  postedAt: string;
-}
-
-export interface GetProductsVariables {
-  limit?: number;
-  searchAfter?: string[];
-  startDate?: string;
-  orderBy?: string;
-  orderOption?: string;
+// 스키마는 categoryIds(목록)만 받는다 — 화면은 단일 선택이라 훅이 categoryId 를 받아 감싼다
+export type GetProductsVariables = Omit<Partial<QueryProductsQueryVariables>, 'categoryIds'> & {
   categoryId?: number;
-  keyword?: string;
-  thumbnailType?: string;
-  isEnd?: boolean;
-  isHot?: boolean;
-}
+};
 
-export const useGetProducts = (variables?: GetProductsVariables, options?: QueryHookOptions) => {
-  // 스키마는 categoryIds(목록)만 받는다 — 화면은 단일 선택이라 여기서 감싼다
-  return useQuery<
-    { products: ProductListItem[] },
-    Omit<GetProductsVariables, 'categoryId'> & { categoryIds?: number[] }
-  >(QueryProducts, {
+export const useGetProducts = (
+  variables?: GetProductsVariables,
+  options?: QueryHookOptions<QueryProductsQuery, QueryProductsQueryVariables>,
+) => {
+  return useQuery<QueryProductsQuery, QueryProductsQueryVariables>(QueryProducts, {
     variables: {
       limit: variables?.limit ?? PAGE_LIMIT,
       searchAfter: variables?.searchAfter,
-      orderBy: variables?.orderBy ?? 'POSTED_AT',
-      orderOption: variables?.orderOption ?? 'DESC',
+      orderBy: variables?.orderBy ?? ProductOrderType.PostedAt,
+      orderOption: variables?.orderOption ?? OrderOptionType.Desc,
       categoryIds: variables?.categoryId != null ? [variables.categoryId] : undefined,
       keyword: variables?.keyword,
       isEnd: variables?.isEnd,
@@ -55,46 +38,11 @@ export const useGetProducts = (variables?: GetProductsVariables, options?: Query
   });
 };
 
-export interface ProductDetailData {
-  id: number;
-  providerId: number;
-  category: string;
-  categoryId: number;
-  categoryName: string;
-  mallId: string;
-  title: string;
-  url: string;
-  detailUrl: string;
-  isHot: boolean;
-  isEnd: boolean;
-  price: number;
-  postedAt: string;
-  thumbnail: string;
-  wishlistCount: number;
-  positiveCommunityReactionCount: number;
-  negativeCommunityReactionCount: number;
-  author: { id: number; nickname: string } | null;
-  provider: { id: number; name: string; nameKr: string; host: string } | null;
-  viewCount: number;
-  mallName: string;
-  prices: Array<{ id: number; target: string; type: string; price: number; createdAt: string }>;
-  hotDealType: string;
-  hotDealIndex: {
-    id: number;
-    message: string;
-    highestPrice: number;
-    currentPrice: number;
-    lowestPrice: number;
-  } | null;
-  likeCount: number;
-  dislikeCount: number;
-}
-
 export const useGetProduct = (
-  variables: { id: number },
-  options?: Omit<QueryHookOptions<{ product: ProductDetailData }, { id: number }>, 'variables'>,
+  variables: QueryProductQueryVariables,
+  options?: Omit<QueryHookOptions<QueryProductQuery, QueryProductQueryVariables>, 'variables'>,
 ) => {
-  return useQuery<{ product: ProductDetailData }, { id: number }>(QueryProduct, {
+  return useQuery<QueryProductQuery, QueryProductQueryVariables>(QueryProduct, {
     variables,
     fetchPolicy: 'network-only',
     ...options,
@@ -102,10 +50,13 @@ export const useGetProduct = (
 };
 
 export const useHardDeleteProductByAdmin = (
-  options?: MutationHookOptions<{ hardDeleteProductByAdmin: boolean }, { id: number }>,
+  options?: MutationHookOptions<
+    MutationHardDeleteProductByAdminMutation,
+    MutationHardDeleteProductByAdminMutationVariables
+  >,
 ) => {
-  return useMutation<{ hardDeleteProductByAdmin: boolean }, { id: number }>(
-    MutationHardDeleteProductByAdmin,
-    options,
-  );
+  return useMutation<
+    MutationHardDeleteProductByAdminMutation,
+    MutationHardDeleteProductByAdminMutationVariables
+  >(MutationHardDeleteProductByAdmin, options);
 };

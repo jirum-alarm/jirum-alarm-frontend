@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from 'react';
 
+import { NotificationTarget, NotificationType } from '@/generated/gql/graphql';
 import { useSendNotificationByAdmin } from '@/hooks/graphql/notification';
 import { useGetUsersByAdmin, UserListItem } from '@/hooks/graphql/user';
 
@@ -21,9 +22,9 @@ const NOTIFICATION_TARGETS = [
 type RecipientMode = 'all' | 'specific';
 
 interface SelectedUser {
-  id: number;
+  id: string;
   email: string;
-  nickname: string;
+  nickname?: string | null;
 }
 
 const NotificationSender = () => {
@@ -67,7 +68,7 @@ const NotificationSender = () => {
     setShowUserDropdown(false);
   };
 
-  const removeUser = (userId: number) => {
+  const removeUser = (userId: string) => {
     setSelectedUsers((prev) => prev.filter((u) => u.id !== userId));
   };
 
@@ -102,8 +103,8 @@ const NotificationSender = () => {
       variables: {
         title: title.trim(),
         message: message.trim(),
-        type,
-        target: target || undefined,
+        type: type as NotificationType,
+        target: (target || undefined) as NotificationTarget | undefined,
         url: url.trim() || undefined,
         userIds: recipientMode === 'specific' ? selectedUsers.map((u) => Number(u.id)) : undefined,
       },

@@ -1,6 +1,27 @@
 import { QueryHookOptions, useLazyQuery, useQuery } from '@apollo/client';
 
 import {
+  QueryDailyServiceViewStatsQuery,
+  QueryHotDealRatioStatsQuery,
+  QueryHotDealTypeDistributionQuery,
+  QueryProductCountByCategoryQuery,
+  QueryProductCountByCategoryQueryVariables,
+  QueryProductCountByProviderQuery,
+  QueryProductCountByProviderQueryVariables,
+  QueryProductPriceDistributionQuery,
+  QueryProductRegistrationStatsByProviderQuery,
+  QueryProductRegistrationStatsQuery,
+  QueryProviderHealthStatusQuery,
+  QueryThumbnailStatsQuery,
+  QueryTopFavoriteCategoriesQuery,
+  QueryTopFavoriteCategoriesQueryVariables,
+  QueryTopNotificationKeywordsQuery,
+  QueryTopNotificationKeywordsQueryVariables,
+  QueryUserDemographicStatsQuery,
+  QueryUserDemographicStatsQueryVariables,
+  QueryUserRegistrationStatsQuery,
+} from '@/generated/gql/graphql';
+import {
   QueryDailyServiceViewStats,
   QueryHotDealRatioStats,
   QueryHotDealTypeDistribution,
@@ -16,23 +37,10 @@ import {
   QueryUserDemographicStats,
   QueryUserRegistrationStats,
 } from '@/graphql/stats';
-import {
-  CategoryCountOutput,
-  DateCountOutput,
-  DateInterval,
-  HotDealRatioOutput,
-  HotDealTypeCountOutput,
-  KeywordCountOutput,
-  PriceRangeCountOutput,
-  ProviderCountOutput,
-  ProviderDateCountOutput,
-  ProviderHealthOutput,
-  ProviderType,
-  ThumbnailStatsOutput,
-  UserDemographicStatsOutput,
-} from '@/types/stats';
+import { DateInterval, ProviderType } from '@/types/stats';
 
-// 날짜 범위 쿼리 공통 변수
+// 날짜 범위 쿼리 공통 변수 — interval/providerType 은 화면이 쓰는 로컬 enum(@/types/stats)이라
+// 생성된 *QueryVariables 대신 손으로 둔다 (생성 enum 과 멤버 이름이 달라 서로 대입되지 않는다)
 interface DateRangeVariables {
   startDate: string;
   endDate: string;
@@ -42,7 +50,7 @@ interface DateRangeVariables {
 // 1. 사용자 통계
 
 export const useUserRegistrationStats = () => {
-  return useLazyQuery<{ userRegistrationStats: DateCountOutput[] }, DateRangeVariables>(
+  return useLazyQuery<QueryUserRegistrationStatsQuery, DateRangeVariables>(
     QueryUserRegistrationStats,
     {
       fetchPolicy: 'network-only',
@@ -51,19 +59,28 @@ export const useUserRegistrationStats = () => {
 };
 
 export const useUserDemographicStats = (
-  options?: QueryHookOptions<{ userDemographicStats: UserDemographicStatsOutput }>,
+  options?: QueryHookOptions<
+    QueryUserDemographicStatsQuery,
+    QueryUserDemographicStatsQueryVariables
+  >,
 ) => {
-  return useQuery<{ userDemographicStats: UserDemographicStatsOutput }>(QueryUserDemographicStats, {
-    fetchPolicy: 'network-only',
-    ...options,
-  });
+  return useQuery<QueryUserDemographicStatsQuery, QueryUserDemographicStatsQueryVariables>(
+    QueryUserDemographicStats,
+    {
+      fetchPolicy: 'network-only',
+      ...options,
+    },
+  );
 };
 
 export const useTopFavoriteCategories = (
-  variables?: { limit?: number },
-  options?: QueryHookOptions<{ topFavoriteCategories: CategoryCountOutput[] }, { limit?: number }>,
+  variables?: QueryTopFavoriteCategoriesQueryVariables,
+  options?: QueryHookOptions<
+    QueryTopFavoriteCategoriesQuery,
+    QueryTopFavoriteCategoriesQueryVariables
+  >,
 ) => {
-  return useQuery<{ topFavoriteCategories: CategoryCountOutput[] }, { limit?: number }>(
+  return useQuery<QueryTopFavoriteCategoriesQuery, QueryTopFavoriteCategoriesQueryVariables>(
     QueryTopFavoriteCategories,
     {
       variables: { limit: variables?.limit ?? 10 },
@@ -76,7 +93,7 @@ export const useTopFavoriteCategories = (
 // 2. 상품/핫딜 통계
 
 export const useProductRegistrationStats = () => {
-  return useLazyQuery<{ productRegistrationStats: DateCountOutput[] }, DateRangeVariables>(
+  return useLazyQuery<QueryProductRegistrationStatsQuery, DateRangeVariables>(
     QueryProductRegistrationStats,
     {
       fetchPolicy: 'network-only',
@@ -85,16 +102,13 @@ export const useProductRegistrationStats = () => {
 };
 
 export const useHotDealRatioStats = () => {
-  return useLazyQuery<{ hotDealRatioStats: HotDealRatioOutput[] }, DateRangeVariables>(
-    QueryHotDealRatioStats,
-    {
-      fetchPolicy: 'network-only',
-    },
-  );
+  return useLazyQuery<QueryHotDealRatioStatsQuery, DateRangeVariables>(QueryHotDealRatioStats, {
+    fetchPolicy: 'network-only',
+  });
 };
 
 export const useHotDealTypeDistribution = () => {
-  return useLazyQuery<{ hotDealTypeDistribution: HotDealTypeCountOutput[] }, DateRangeVariables>(
+  return useLazyQuery<QueryHotDealTypeDistributionQuery, DateRangeVariables>(
     QueryHotDealTypeDistribution,
     {
       fetchPolicy: 'network-only',
@@ -103,25 +117,37 @@ export const useHotDealTypeDistribution = () => {
 };
 
 export const useProductCountByCategory = (
-  options?: QueryHookOptions<{ productCountByCategory: CategoryCountOutput[] }>,
+  options?: QueryHookOptions<
+    QueryProductCountByCategoryQuery,
+    QueryProductCountByCategoryQueryVariables
+  >,
 ) => {
-  return useQuery<{ productCountByCategory: CategoryCountOutput[] }>(QueryProductCountByCategory, {
-    fetchPolicy: 'network-only',
-    ...options,
-  });
+  return useQuery<QueryProductCountByCategoryQuery, QueryProductCountByCategoryQueryVariables>(
+    QueryProductCountByCategory,
+    {
+      fetchPolicy: 'network-only',
+      ...options,
+    },
+  );
 };
 
 export const useProductCountByProvider = (
-  options?: QueryHookOptions<{ productCountByProvider: ProviderCountOutput[] }>,
+  options?: QueryHookOptions<
+    QueryProductCountByProviderQuery,
+    QueryProductCountByProviderQueryVariables
+  >,
 ) => {
-  return useQuery<{ productCountByProvider: ProviderCountOutput[] }>(QueryProductCountByProvider, {
-    fetchPolicy: 'network-only',
-    ...options,
-  });
+  return useQuery<QueryProductCountByProviderQuery, QueryProductCountByProviderQueryVariables>(
+    QueryProductCountByProvider,
+    {
+      fetchPolicy: 'network-only',
+      ...options,
+    },
+  );
 };
 
 export const useProductPriceDistribution = () => {
-  return useLazyQuery<{ productPriceDistribution: PriceRangeCountOutput[] }, DateRangeVariables>(
+  return useLazyQuery<QueryProductPriceDistributionQuery, DateRangeVariables>(
     QueryProductPriceDistribution,
     {
       fetchPolicy: 'network-only',
@@ -132,7 +158,7 @@ export const useProductPriceDistribution = () => {
 // 3. 사용자 참여 통계
 
 export const useDailyServiceViewStats = () => {
-  return useLazyQuery<{ dailyServiceViewStats: DateCountOutput[] }, DateRangeVariables>(
+  return useLazyQuery<QueryDailyServiceViewStatsQuery, DateRangeVariables>(
     QueryDailyServiceViewStats,
     {
       fetchPolicy: 'network-only',
@@ -141,20 +167,20 @@ export const useDailyServiceViewStats = () => {
 };
 
 export const useTopNotificationKeywords = (
-  variables?: { limit?: number; since?: string },
+  variables?: QueryTopNotificationKeywordsQueryVariables,
   options?: QueryHookOptions<
-    { topNotificationKeywords: KeywordCountOutput[] },
-    { limit?: number; since?: string }
+    QueryTopNotificationKeywordsQuery,
+    QueryTopNotificationKeywordsQueryVariables
   >,
 ) => {
-  return useQuery<
-    { topNotificationKeywords: KeywordCountOutput[] },
-    { limit?: number; since?: string }
-  >(QueryTopNotificationKeywords, {
-    variables: { limit: variables?.limit ?? 30, since: variables?.since },
-    fetchPolicy: 'network-only',
-    ...options,
-  });
+  return useQuery<QueryTopNotificationKeywordsQuery, QueryTopNotificationKeywordsQueryVariables>(
+    QueryTopNotificationKeywords,
+    {
+      variables: { limit: variables?.limit ?? 30, since: variables?.since },
+      fetchPolicy: 'network-only',
+      ...options,
+    },
+  );
 };
 
 // 4. 크롤링 운영 통계
@@ -166,34 +192,28 @@ interface ProviderTypeFilter {
 type DateRangeWithProviderFilter = DateRangeVariables & ProviderTypeFilter;
 
 export const useProductRegistrationStatsByProvider = () => {
-  return useLazyQuery<
-    { productRegistrationStatsByProvider: ProviderDateCountOutput[] },
-    DateRangeWithProviderFilter
-  >(QueryProductRegistrationStatsByProvider, {
-    fetchPolicy: 'network-only',
-  });
+  return useLazyQuery<QueryProductRegistrationStatsByProviderQuery, DateRangeWithProviderFilter>(
+    QueryProductRegistrationStatsByProvider,
+    {
+      fetchPolicy: 'network-only',
+    },
+  );
 };
 
 export const useProviderHealthStatus = (
   variables?: ProviderTypeFilter,
-  options?: QueryHookOptions<{ providerHealthStatus: ProviderHealthOutput[] }, ProviderTypeFilter>,
+  options?: QueryHookOptions<QueryProviderHealthStatusQuery, ProviderTypeFilter>,
 ) => {
-  return useQuery<{ providerHealthStatus: ProviderHealthOutput[] }, ProviderTypeFilter>(
-    QueryProviderHealthStatus,
-    {
-      variables,
-      fetchPolicy: 'network-only',
-      pollInterval: 60_000,
-      ...options,
-    },
-  );
+  return useQuery<QueryProviderHealthStatusQuery, ProviderTypeFilter>(QueryProviderHealthStatus, {
+    variables,
+    fetchPolicy: 'network-only',
+    pollInterval: 60_000,
+    ...options,
+  });
 };
 
 export const useThumbnailStats = () => {
-  return useLazyQuery<{ thumbnailStats: ThumbnailStatsOutput }, DateRangeVariables>(
-    QueryThumbnailStats,
-    {
-      fetchPolicy: 'network-only',
-    },
-  );
+  return useLazyQuery<QueryThumbnailStatsQuery, DateRangeVariables>(QueryThumbnailStats, {
+    fetchPolicy: 'network-only',
+  });
 };

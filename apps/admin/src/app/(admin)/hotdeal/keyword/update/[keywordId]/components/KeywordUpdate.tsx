@@ -36,9 +36,7 @@ const KeywordUpdate = ({ keywordId }: Props) => {
       id: Number(keywordId),
     },
     onCompleted: (data) => {
-      const {
-        hotDealKeywordByAdmin: { type, keyword, weight, isMajor },
-      } = data;
+      const { type, keyword, weight, isMajor } = data.hotDealKeywordByAdmin!;
       setKeyword({ type, keyword, weight, isMajor });
     },
   });

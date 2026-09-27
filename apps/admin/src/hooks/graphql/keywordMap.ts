@@ -2,6 +2,23 @@ import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@a
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
+  MutationAddKeywordMapEntriesByAdminMutation,
+  MutationAddKeywordMapEntriesByAdminMutationVariables,
+  MutationAddKeywordMapEntryByAdminMutation,
+  MutationAddKeywordMapEntryByAdminMutationVariables,
+  MutationAddKeywordMapGroupByAdminMutation,
+  MutationAddKeywordMapGroupByAdminMutationVariables,
+  MutationRemoveKeywordMapEntryByAdminMutation,
+  MutationRemoveKeywordMapEntryByAdminMutationVariables,
+  MutationRemoveKeywordMapGroupByAdminMutation,
+  MutationRemoveKeywordMapGroupByAdminMutationVariables,
+  MutationUpdateKeywordMapGroupByAdminMutation,
+  MutationUpdateKeywordMapGroupByAdminMutationVariables,
+  QueryKeywordMapGroupByAdminQuery,
+  QueryKeywordMapGroupByAdminQueryVariables,
+  QueryKeywordMapGroupsByAdminQuery,
+} from '@/generated/gql/graphql';
+import {
   MutationAddKeywordMapEntriesByAdmin,
   MutationAddKeywordMapEntryByAdmin,
   MutationAddKeywordMapGroupByAdmin,
@@ -13,26 +30,9 @@ import {
 } from '@/graphql/keywordMap';
 import { KeywordMapGroupOrderType, OrderOptionType } from '@/types/keyword';
 
-// ── Types ──
-
-interface KeywordMapGroupListItem {
-  id: number;
-  name: string;
-  description?: string;
-  entryCount: number;
-  searchAfter?: string[];
-}
-
-interface KeywordMapGroupDetail {
-  id: number;
-  name: string;
-  description?: string;
-  entryCount: number;
-  entries: Array<{ id: number; keyword: string }>;
-}
-
 // ── Group List ──
 
+// orderBy/orderOption 은 화면이 쓰는 로컬 enum(@/types/keyword)이라 생성 변수 타입 대신 손으로 둔다
 interface GetKeywordMapGroupsVariables {
   orderBy?: KeywordMapGroupOrderType;
   orderOption?: OrderOptionType;
@@ -41,40 +41,33 @@ interface GetKeywordMapGroupsVariables {
 }
 
 export const useGetKeywordMapGroups = (
-  queryOptions?: QueryHookOptions<
-    { keywordMapGroupsByAdmin: KeywordMapGroupListItem[] },
-    GetKeywordMapGroupsVariables
-  >,
+  queryOptions?: QueryHookOptions<QueryKeywordMapGroupsByAdminQuery, GetKeywordMapGroupsVariables>,
 ) => {
   const { variables, ...rest } = queryOptions ?? {};
 
-  return useQuery<
-    { keywordMapGroupsByAdmin: KeywordMapGroupListItem[] },
-    GetKeywordMapGroupsVariables
-  >(QueryKeywordMapGroupsByAdmin, {
-    ...rest,
-    variables: {
-      orderBy: variables?.orderBy ?? KeywordMapGroupOrderType.ID,
-      orderOption: variables?.orderOption ?? OrderOptionType.DESC,
-      limit: variables?.limit ?? PAGE_LIMIT,
-      searchAfter: variables?.searchAfter,
+  return useQuery<QueryKeywordMapGroupsByAdminQuery, GetKeywordMapGroupsVariables>(
+    QueryKeywordMapGroupsByAdmin,
+    {
+      ...rest,
+      variables: {
+        orderBy: variables?.orderBy ?? KeywordMapGroupOrderType.ID,
+        orderOption: variables?.orderOption ?? OrderOptionType.DESC,
+        limit: variables?.limit ?? PAGE_LIMIT,
+        searchAfter: variables?.searchAfter,
+      },
     },
-  });
+  );
 };
 
 // ── Group Detail ──
 
-interface GetKeywordMapGroupVariables {
-  id: number;
-}
-
 export const useGetKeywordMapGroup = (
   queryOptions?: QueryHookOptions<
-    { keywordMapGroupByAdmin: KeywordMapGroupDetail },
-    GetKeywordMapGroupVariables
+    QueryKeywordMapGroupByAdminQuery,
+    QueryKeywordMapGroupByAdminQueryVariables
   >,
 ) => {
-  return useQuery<{ keywordMapGroupByAdmin: KeywordMapGroupDetail }, GetKeywordMapGroupVariables>(
+  return useQuery<QueryKeywordMapGroupByAdminQuery, QueryKeywordMapGroupByAdminQueryVariables>(
     QueryKeywordMapGroupByAdmin,
     {
       ...queryOptions,
@@ -84,204 +77,193 @@ export const useGetKeywordMapGroup = (
 
 // ── Add Group ──
 
-interface AddKeywordMapGroupVariables {
-  name: string;
-  description?: string;
-}
-
 export const useAddKeywordMapGroup = (
-  options?: MutationHookOptions<any, AddKeywordMapGroupVariables>,
+  options?: MutationHookOptions<
+    MutationAddKeywordMapGroupByAdminMutation,
+    MutationAddKeywordMapGroupByAdminMutationVariables
+  >,
 ) => {
-  return useMutation<{ addKeywordMapGroupByAdmin: number }, AddKeywordMapGroupVariables>(
-    MutationAddKeywordMapGroupByAdmin,
-    {
-      refetchQueries: [
-        {
-          query: QueryKeywordMapGroupsByAdmin,
-          variables: {
-            orderBy: KeywordMapGroupOrderType.ID,
-            orderOption: OrderOptionType.DESC,
-            limit: PAGE_LIMIT,
-          },
+  return useMutation<
+    MutationAddKeywordMapGroupByAdminMutation,
+    MutationAddKeywordMapGroupByAdminMutationVariables
+  >(MutationAddKeywordMapGroupByAdmin, {
+    refetchQueries: [
+      {
+        query: QueryKeywordMapGroupsByAdmin,
+        variables: {
+          orderBy: KeywordMapGroupOrderType.ID,
+          orderOption: OrderOptionType.DESC,
+          limit: PAGE_LIMIT,
         },
-      ],
-      ...options,
-    },
-  );
+      },
+    ],
+    ...options,
+  });
 };
 
 // ── Update Group ──
 
-interface UpdateKeywordMapGroupVariables {
-  id: number;
-  name?: string;
-  description?: string;
-}
-
 export const useUpdateKeywordMapGroup = (
-  options?: MutationHookOptions<any, UpdateKeywordMapGroupVariables>,
+  options?: MutationHookOptions<
+    MutationUpdateKeywordMapGroupByAdminMutation,
+    MutationUpdateKeywordMapGroupByAdminMutationVariables
+  >,
 ) => {
-  return useMutation<{ updateKeywordMapGroupByAdmin: boolean }, UpdateKeywordMapGroupVariables>(
-    MutationUpdateKeywordMapGroupByAdmin,
-    {
-      update(cache, { data }, option) {
-        const { variables } = option;
-        const existing = cache.readQuery({
+  return useMutation<
+    MutationUpdateKeywordMapGroupByAdminMutation,
+    MutationUpdateKeywordMapGroupByAdminMutationVariables
+  >(MutationUpdateKeywordMapGroupByAdmin, {
+    update(cache, { data }, option) {
+      const { variables } = option;
+      const existing = cache.readQuery({
+        query: QueryKeywordMapGroupsByAdmin,
+        variables: {
+          orderBy: KeywordMapGroupOrderType.ID,
+          orderOption: OrderOptionType.DESC,
+          limit: PAGE_LIMIT,
+        },
+      }) as QueryKeywordMapGroupsByAdminQuery | null;
+      if (existing?.keywordMapGroupsByAdmin.length && data?.updateKeywordMapGroupByAdmin) {
+        cache.writeQuery({
           query: QueryKeywordMapGroupsByAdmin,
           variables: {
-            orderBy: KeywordMapGroupOrderType.ID,
             orderOption: OrderOptionType.DESC,
             limit: PAGE_LIMIT,
           },
-        }) as { keywordMapGroupsByAdmin: KeywordMapGroupListItem[] } | null;
-        if (existing?.keywordMapGroupsByAdmin.length && data?.updateKeywordMapGroupByAdmin) {
-          cache.writeQuery({
-            query: QueryKeywordMapGroupsByAdmin,
-            variables: {
-              orderOption: OrderOptionType.DESC,
-              limit: PAGE_LIMIT,
-            },
-            data: {
-              keywordMapGroupsByAdmin: existing.keywordMapGroupsByAdmin.map((group) =>
-                Number(group.id) === variables?.id ? { ...group, ...variables } : group,
-              ),
-            },
-          });
-        }
-      },
-      ...options,
+          data: {
+            keywordMapGroupsByAdmin: existing.keywordMapGroupsByAdmin.map((group) =>
+              Number(group.id) === variables?.id ? { ...group, ...variables } : group,
+            ),
+          },
+        });
+      }
     },
-  );
+    ...options,
+  });
 };
 
 // ── Remove Group ──
 
-interface RemoveKeywordMapGroupVariables {
-  id: number;
-}
-
 export const useRemoveKeywordMapGroup = (
-  options?: MutationHookOptions<any, RemoveKeywordMapGroupVariables>,
+  options?: MutationHookOptions<
+    MutationRemoveKeywordMapGroupByAdminMutation,
+    MutationRemoveKeywordMapGroupByAdminMutationVariables
+  >,
 ) => {
-  return useMutation<{ removeKeywordMapGroupByAdmin: boolean }, RemoveKeywordMapGroupVariables>(
-    MutationRemoveKeywordMapGroupByAdmin,
-    {
-      update(cache, { data }, option) {
-        const { variables } = option;
-        const existing = cache.readQuery({
+  return useMutation<
+    MutationRemoveKeywordMapGroupByAdminMutation,
+    MutationRemoveKeywordMapGroupByAdminMutationVariables
+  >(MutationRemoveKeywordMapGroupByAdmin, {
+    update(cache, { data }, option) {
+      const { variables } = option;
+      const existing = cache.readQuery({
+        query: QueryKeywordMapGroupsByAdmin,
+        variables: {
+          orderBy: KeywordMapGroupOrderType.ID,
+          orderOption: OrderOptionType.DESC,
+          limit: PAGE_LIMIT,
+        },
+      }) as QueryKeywordMapGroupsByAdminQuery | null;
+      if (existing?.keywordMapGroupsByAdmin.length && data?.removeKeywordMapGroupByAdmin) {
+        cache.writeQuery({
           query: QueryKeywordMapGroupsByAdmin,
           variables: {
-            orderBy: KeywordMapGroupOrderType.ID,
             orderOption: OrderOptionType.DESC,
             limit: PAGE_LIMIT,
           },
-        }) as { keywordMapGroupsByAdmin: KeywordMapGroupListItem[] } | null;
-        if (existing?.keywordMapGroupsByAdmin.length && data?.removeKeywordMapGroupByAdmin) {
-          cache.writeQuery({
-            query: QueryKeywordMapGroupsByAdmin,
-            variables: {
-              orderOption: OrderOptionType.DESC,
-              limit: PAGE_LIMIT,
-            },
-            data: {
-              keywordMapGroupsByAdmin: existing.keywordMapGroupsByAdmin.filter(
-                (group) => Number(group.id) !== variables?.id,
-              ),
-            },
-          });
-        }
-      },
-      ...options,
+          data: {
+            keywordMapGroupsByAdmin: existing.keywordMapGroupsByAdmin.filter(
+              (group) => Number(group.id) !== variables?.id,
+            ),
+          },
+        });
+      }
     },
-  );
+    ...options,
+  });
 };
 
 // ── Add Entry ──
 
-interface AddKeywordMapEntryVariables {
-  groupId: number;
-  keyword: string;
-}
-
 export const useAddKeywordMapEntry = (
   groupId: number,
-  options?: MutationHookOptions<any, AddKeywordMapEntryVariables>,
+  options?: MutationHookOptions<
+    MutationAddKeywordMapEntryByAdminMutation,
+    MutationAddKeywordMapEntryByAdminMutationVariables
+  >,
 ) => {
-  return useMutation<{ addKeywordMapEntryByAdmin: number }, AddKeywordMapEntryVariables>(
-    MutationAddKeywordMapEntryByAdmin,
-    {
-      refetchQueries: [
-        {
-          query: QueryKeywordMapGroupByAdmin,
-          variables: { id: groupId },
-        },
-      ],
-      ...options,
-    },
-  );
+  return useMutation<
+    MutationAddKeywordMapEntryByAdminMutation,
+    MutationAddKeywordMapEntryByAdminMutationVariables
+  >(MutationAddKeywordMapEntryByAdmin, {
+    refetchQueries: [
+      {
+        query: QueryKeywordMapGroupByAdmin,
+        variables: { id: groupId },
+      },
+    ],
+    ...options,
+  });
 };
 
 // ── Add Entries (Bulk) ──
 
-interface AddKeywordMapEntriesVariables {
-  groupId: number;
-  keywords: string[];
-}
-
 export const useAddKeywordMapEntries = (
   groupId: number,
-  options?: MutationHookOptions<any, AddKeywordMapEntriesVariables>,
+  options?: MutationHookOptions<
+    MutationAddKeywordMapEntriesByAdminMutation,
+    MutationAddKeywordMapEntriesByAdminMutationVariables
+  >,
 ) => {
-  return useMutation<{ addKeywordMapEntriesByAdmin: boolean }, AddKeywordMapEntriesVariables>(
-    MutationAddKeywordMapEntriesByAdmin,
-    {
-      refetchQueries: [
-        {
-          query: QueryKeywordMapGroupByAdmin,
-          variables: { id: groupId },
-        },
-      ],
-      ...options,
-    },
-  );
+  return useMutation<
+    MutationAddKeywordMapEntriesByAdminMutation,
+    MutationAddKeywordMapEntriesByAdminMutationVariables
+  >(MutationAddKeywordMapEntriesByAdmin, {
+    refetchQueries: [
+      {
+        query: QueryKeywordMapGroupByAdmin,
+        variables: { id: groupId },
+      },
+    ],
+    ...options,
+  });
 };
 
 // ── Remove Entry ──
 
-interface RemoveKeywordMapEntryVariables {
-  id: number;
-}
-
 export const useRemoveKeywordMapEntry = (
   groupId: number,
-  options?: MutationHookOptions<any, RemoveKeywordMapEntryVariables>,
+  options?: MutationHookOptions<
+    MutationRemoveKeywordMapEntryByAdminMutation,
+    MutationRemoveKeywordMapEntryByAdminMutationVariables
+  >,
 ) => {
-  return useMutation<{ removeKeywordMapEntryByAdmin: boolean }, RemoveKeywordMapEntryVariables>(
-    MutationRemoveKeywordMapEntryByAdmin,
-    {
-      update(cache, { data }, option) {
-        const { variables } = option;
-        const existing = cache.readQuery({
+  return useMutation<
+    MutationRemoveKeywordMapEntryByAdminMutation,
+    MutationRemoveKeywordMapEntryByAdminMutationVariables
+  >(MutationRemoveKeywordMapEntryByAdmin, {
+    update(cache, { data }, option) {
+      const { variables } = option;
+      const existing = cache.readQuery({
+        query: QueryKeywordMapGroupByAdmin,
+        variables: { id: groupId },
+      }) as QueryKeywordMapGroupByAdminQuery | null;
+      if (existing?.keywordMapGroupByAdmin && data?.removeKeywordMapEntryByAdmin) {
+        cache.writeQuery({
           query: QueryKeywordMapGroupByAdmin,
           variables: { id: groupId },
-        }) as { keywordMapGroupByAdmin: KeywordMapGroupDetail } | null;
-        if (existing?.keywordMapGroupByAdmin && data?.removeKeywordMapEntryByAdmin) {
-          cache.writeQuery({
-            query: QueryKeywordMapGroupByAdmin,
-            variables: { id: groupId },
-            data: {
-              keywordMapGroupByAdmin: {
-                ...existing.keywordMapGroupByAdmin,
-                entryCount: existing.keywordMapGroupByAdmin.entryCount - 1,
-                entries: existing.keywordMapGroupByAdmin.entries.filter(
-                  (entry) => Number(entry.id) !== variables?.id,
-                ),
-              },
+          data: {
+            keywordMapGroupByAdmin: {
+              ...existing.keywordMapGroupByAdmin,
+              entryCount: existing.keywordMapGroupByAdmin.entryCount - 1,
+              entries: existing.keywordMapGroupByAdmin.entries.filter(
+                (entry) => Number(entry.id) !== variables?.id,
+              ),
             },
-          });
-        }
-      },
-      ...options,
+          },
+        });
+      }
     },
-  );
+    ...options,
+  });
 };

@@ -1,14 +1,12 @@
 import { QueryHookOptions, useQuery } from '@apollo/client';
 
+import { QueryCategoriesQuery, QueryCategoriesQueryVariables } from '@/generated/gql/graphql';
 import { QueryCategories } from '@/graphql/category';
 
-export interface CategoryData {
-  id: number;
-  name: string;
-}
-
-export const useGetCategories = (options?: QueryHookOptions) => {
-  return useQuery<{ categories: CategoryData[] }>(QueryCategories, {
+export const useGetCategories = (
+  options?: QueryHookOptions<QueryCategoriesQuery, QueryCategoriesQueryVariables>,
+) => {
+  return useQuery<QueryCategoriesQuery, QueryCategoriesQueryVariables>(QueryCategories, {
     ...options,
   });
 };

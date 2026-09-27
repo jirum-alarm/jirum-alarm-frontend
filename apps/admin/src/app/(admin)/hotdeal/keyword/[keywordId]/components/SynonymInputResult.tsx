@@ -19,8 +19,8 @@ import CommentsContainer from './CommentsContainer';
 
 interface Props {
   keywordId: string;
-  synonymList: Array<{ id: number; hotDealKeywordId: number; keyword: string }>;
-  excludeKeywordList: Array<{ id: number; hotDealKeywordId: number; excludeKeyword: string }>;
+  synonymList: Array<{ id: string; hotDealKeywordId: number; keyword: string }>;
+  excludeKeywordList: Array<{ id: string; hotDealKeywordId: number; excludeKeyword: string }>;
 }
 
 const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Props) => {

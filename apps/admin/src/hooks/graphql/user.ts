@@ -1,26 +1,21 @@
 import { QueryHookOptions, useQuery } from '@apollo/client';
 
 import { PAGE_LIMIT } from '@/constants/limit';
+import {
+  QueryUserByAdminQuery,
+  QueryUserByAdminQueryVariables,
+  QueryUsersByAdminQuery,
+  QueryUsersByAdminQueryVariables,
+} from '@/generated/gql/graphql';
 import { QueryUserByAdmin, QueryUsersByAdmin } from '@/graphql/user';
 
-export interface UserListItem {
-  id: number;
-  email: string;
-  nickname: string;
-  birthYear: number | null;
-  gender: string | null;
-  createdAt: string;
-  searchAfter: string[];
-}
+export type UserListItem = QueryUsersByAdminQuery['usersByAdmin'][number];
 
-export interface GetUsersVariables {
-  limit?: number;
-  searchAfter?: string[];
-  keyword?: string;
-}
-
-export const useGetUsersByAdmin = (variables?: GetUsersVariables, options?: QueryHookOptions) => {
-  return useQuery<{ usersByAdmin: UserListItem[] }, GetUsersVariables>(QueryUsersByAdmin, {
+export const useGetUsersByAdmin = (
+  variables?: Partial<QueryUsersByAdminQueryVariables>,
+  options?: QueryHookOptions<QueryUsersByAdminQuery, QueryUsersByAdminQueryVariables>,
+) => {
+  return useQuery<QueryUsersByAdminQuery, QueryUsersByAdminQueryVariables>(QueryUsersByAdmin, {
     variables: {
       limit: variables?.limit ?? PAGE_LIMIT,
       searchAfter: variables?.searchAfter,
@@ -31,22 +26,14 @@ export const useGetUsersByAdmin = (variables?: GetUsersVariables, options?: Quer
   });
 };
 
-export interface UserDetailData {
-  id: number;
-  email: string;
-  nickname: string;
-  birthYear: number | null;
-  gender: string | null;
-  favoriteCategories: number[];
-  linkedSocialProviders: string[];
-  createdAt: string;
-}
-
 export const useGetUserByAdmin = (
-  variables: { id: number },
-  options?: Omit<QueryHookOptions<{ userByAdmin: UserDetailData }, { id: number }>, 'variables'>,
+  variables: QueryUserByAdminQueryVariables,
+  options?: Omit<
+    QueryHookOptions<QueryUserByAdminQuery, QueryUserByAdminQueryVariables>,
+    'variables'
+  >,
 ) => {
-  return useQuery<{ userByAdmin: UserDetailData }, { id: number }>(QueryUserByAdmin, {
+  return useQuery<QueryUserByAdminQuery, QueryUserByAdminQueryVariables>(QueryUserByAdmin, {
     variables,
     fetchPolicy: 'network-only',
     ...options,

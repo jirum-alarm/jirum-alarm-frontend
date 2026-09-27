@@ -1,6 +1,16 @@
 import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
 
 import {
+  AdReportQuery,
+  AdReportQueryVariables,
+  CreateAdAssetUploadUrlMutation,
+  CreateAdAssetUploadUrlMutationVariables,
+  CreateAdMutation,
+  SetAdActiveMutation,
+  SetAdActiveMutationVariables,
+  UpdateAdMutation,
+} from '@/generated/gql/graphql';
+import {
   MutationCreateAd,
   MutationCreateAdAssetUploadUrl,
   MutationSetAdActive,
@@ -10,6 +20,8 @@ import {
 } from '@/graphql/advertisement';
 
 // ── graphic 타입 (백엔드 advertise-graphic.interface 와 1:1, JSON scalar) ──
+// graphic 은 스키마상 JSONObject(생성 타입 any)이고 slotType/slotLocation 은 문자열 유니온으로 쓰고 있어,
+// 광고 목록 응답(AdCreative)·생성/수정 입력(CreateAdInput)은 생성 타입 대신 손으로 둔다
 
 export interface GraphicSize {
   width: number;
@@ -82,15 +94,6 @@ export interface AdCreative {
   modifiedAt: string;
 }
 
-export interface AdReportRow {
-  creativeId: number;
-  internalId: string;
-  slotLocation: string;
-  impressions: number;
-  clicks: number;
-  ctr: number;
-}
-
 export interface CreateAdInput {
   internalId: string;
   startAt: string;
@@ -120,10 +123,10 @@ export const useAdsByAdmin = (
   });
 
 export const useAdReport = (
-  variables: { from: string; to: string; creativeId?: number },
-  options?: QueryHookOptions,
+  variables: AdReportQueryVariables,
+  options?: QueryHookOptions<AdReportQuery, AdReportQueryVariables>,
 ) =>
-  useQuery<{ adReport: AdReportRow[] }>(QueryAdReport, {
+  useQuery<AdReportQuery, AdReportQueryVariables>(QueryAdReport, {
     variables,
     fetchPolicy: 'network-only',
     ...options,
@@ -131,35 +134,35 @@ export const useAdReport = (
 
 export const useCreateAdAssetUploadUrl = (
   options?: MutationHookOptions<
-    { createAdAssetUploadUrl: { uploadUrl: string; assetUrl: string } },
-    { contentType: string }
+    CreateAdAssetUploadUrlMutation,
+    CreateAdAssetUploadUrlMutationVariables
   >,
 ) =>
-  useMutation<
-    { createAdAssetUploadUrl: { uploadUrl: string; assetUrl: string } },
-    { contentType: string }
-  >(MutationCreateAdAssetUploadUrl, options);
+  useMutation<CreateAdAssetUploadUrlMutation, CreateAdAssetUploadUrlMutationVariables>(
+    MutationCreateAdAssetUploadUrl,
+    options,
+  );
 
 export const useCreateAd = (
-  options?: MutationHookOptions<{ createAd: number }, { input: CreateAdInput }>,
+  options?: MutationHookOptions<CreateAdMutation, { input: CreateAdInput }>,
 ) =>
-  useMutation<{ createAd: number }, { input: CreateAdInput }>(MutationCreateAd, {
+  useMutation<CreateAdMutation, { input: CreateAdInput }>(MutationCreateAd, {
     refetchQueries: [{ query: QueryAdsByAdmin, variables: {} }],
     ...options,
   });
 
 export const useUpdateAd = (
-  options?: MutationHookOptions<{ updateAd: boolean }, { id: number; input: UpdateAdInput }>,
+  options?: MutationHookOptions<UpdateAdMutation, { id: number; input: UpdateAdInput }>,
 ) =>
-  useMutation<{ updateAd: boolean }, { id: number; input: UpdateAdInput }>(MutationUpdateAd, {
+  useMutation<UpdateAdMutation, { id: number; input: UpdateAdInput }>(MutationUpdateAd, {
     refetchQueries: [{ query: QueryAdsByAdmin, variables: {} }],
     ...options,
   });
 
 export const useSetAdActive = (
-  options?: MutationHookOptions<{ setAdActive: boolean }, { id: number; isActive: boolean }>,
+  options?: MutationHookOptions<SetAdActiveMutation, SetAdActiveMutationVariables>,
 ) =>
-  useMutation<{ setAdActive: boolean }, { id: number; isActive: boolean }>(MutationSetAdActive, {
+  useMutation<SetAdActiveMutation, SetAdActiveMutationVariables>(MutationSetAdActive, {
     refetchQueries: [{ query: QueryAdsByAdmin, variables: {} }],
     ...options,
   });
