@@ -1,4 +1,5 @@
 import { Fragment, Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { type TossDeal } from '@/app/(desktop-ready)/toss/mock';
 
@@ -40,7 +41,12 @@ const PromotionSectionList = ({
   // 서버가 반응 상위만 하루 3건 보내도록 바뀐 뒤(crawling-server sendThemeDigest) 다시 연다.
   const renderThemeSlot = (sectionId: string) =>
     sectionId === THEME_AFTER_SECTION_ID ? (
-      <Suspense fallback={null}>{isMobile ? <ThemeCarousel /> : <DesktopThemeSection />}</Suspense>
+      // 선택형 섹션이라 쿼리가 실패하면(예: 스키마가 뒤처진 dev API) 섹션만 숨기고 홈은 살린다.
+      <ErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
+          {isMobile ? <ThemeCarousel /> : <DesktopThemeSection />}
+        </Suspense>
+      </ErrorBoundary>
     ) : null;
 
   return (
