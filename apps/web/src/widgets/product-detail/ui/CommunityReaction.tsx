@@ -27,6 +27,11 @@ type ReactionItem = {
   role?: string | null;
 };
 
+// 토스(21)·네이버(101)·오늘의집(102)은 커뮤니티 글이 아니라 몰 상품이라 product.url 이 제휴 태그 없는
+// 원본 몰 링크다. "반응 보기"로 내보내면 구매 CTA(제휴 링크)를 우회해 커미션이 샌다
+// (GA4 30일: 토스 원본 115클릭 vs 제휴 2,328). 이 딜은 링크를 숨기고 CTA 로만 나가게 한다.
+const MALL_SOURCED_PROVIDER_IDS = new Set(['21', '101', '102']);
+
 function CommunityLink({ url, provider }: { url: string; provider: string }) {
   return (
     <m.a
@@ -183,7 +188,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
 
             <div className="flex items-center justify-between gap-2 border-t border-gray-100 pt-2.5">
               <span className="text-xs text-gray-400">{lastUpdatedAt ?? '\u00a0'}</span>
-              {product.url ? (
+              {product.url && !MALL_SOURCED_PROVIDER_IDS.has(product.provider.id) ? (
                 <CommunityLink url={product.url} provider={product.provider.nameKr} />
               ) : null}
             </div>
