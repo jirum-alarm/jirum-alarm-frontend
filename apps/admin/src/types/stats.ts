@@ -12,9 +12,9 @@ export enum DateInterval {
 export type DateCountOutput = QueryUserRegistrationStatsQuery['userRegistrationStats'][number];
 
 export enum ProviderType {
-  COMMUNITY = 'community',
-  MALL = 'mall',
-  DANAWA = 'danawa',
+  COMMUNITY = 'COMMUNITY',
+  MALL = 'MALL',
+  DANAWA = 'DANAWA',
 }
 
 export type ProviderHealthOutput = QueryProviderHealthStatusQuery['providerHealthStatus'][number];
