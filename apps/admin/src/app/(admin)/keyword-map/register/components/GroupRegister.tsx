@@ -5,23 +5,25 @@ import { useState } from 'react';
 
 import Card from '@/components/Card';
 import Spinner from '@/components/Spinner';
+import { useToast } from '@/components/Toast';
 import { useAddKeywordMapGroup } from '@/hooks/graphql/keywordMap';
 
 const GroupRegister = () => {
   const router = useRouter();
+  const toast = useToast();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
   const [mutate, { loading }] = useAddKeywordMapGroup({
     onCompleted: () => {
-      alert('그룹이 등록되었습니다.');
+      toast.success('그룹이 등록되었습니다.');
       router.push('/keyword-map');
     },
   });
 
   const handleSubmit = () => {
     if (!name.trim()) {
-      alert('그룹 이름을 입력해주세요.');
+      toast.error('그룹 이름을 입력해주세요.');
       return;
     }
     mutate({

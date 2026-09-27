@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 import Spinner from '@/components/Spinner';
+import { useToast } from '@/components/Toast';
 import { useAddHotDealKeyword } from '@/hooks/graphql/keyword';
 import { HotDealKeywordType } from '@/types/keyword';
 
@@ -21,6 +22,7 @@ interface KeywordFormType {
 
 const KeywordRegister = () => {
   const router = useRouter();
+  const toast = useToast();
   const [keyword, setKeyword] = useState<KeywordFormType>({
     type: HotDealKeywordType.POSITIVE,
     keyword: '',
@@ -29,7 +31,7 @@ const KeywordRegister = () => {
   });
   const [mutate, { loading }] = useAddHotDealKeyword(keyword.type, {
     onCompleted: () => {
-      alert('키워드 등록 성공!');
+      toast.success('키워드 등록 성공!');
       router.push(`/hotdeal/keyword?keywordType=${keyword.type}`);
     },
   });

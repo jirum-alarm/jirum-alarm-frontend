@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from 'react';
 
 import Spinner from '@/components/Spinner';
+import { useToast } from '@/components/Toast';
 import { NotificationTarget, NotificationType } from '@/generated/gql/graphql';
 import { useSendNotificationByAdmin } from '@/hooks/graphql/notification';
 import { useGetUsersByAdmin, UserListItem } from '@/hooks/graphql/user';
@@ -29,6 +30,7 @@ interface SelectedUser {
 }
 
 const NotificationSender = () => {
+  const toast = useToast();
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [type, setType] = useState('NOTIFICATION_CENTER_AND_PUSH');
@@ -75,7 +77,7 @@ const NotificationSender = () => {
 
   const [sendNotification, { loading }] = useSendNotificationByAdmin({
     onCompleted: () => {
-      alert('알림이 발송되었습니다.');
+      toast.success('알림이 발송되었습니다.');
       setTitle('');
       setMessage('');
       setUrl('');
@@ -83,17 +85,17 @@ const NotificationSender = () => {
       setRecipientMode('all');
     },
     onError: (error) => {
-      alert(`발송 실패: ${error.message}`);
+      toast.error(`발송 실패: ${error.message}`);
     },
   });
 
   const handleSend = () => {
     if (!title.trim() || !message.trim()) {
-      alert('제목과 메시지를 입력해주세요.');
+      toast.error('제목과 메시지를 입력해주세요.');
       return;
     }
     if (recipientMode === 'specific' && selectedUsers.length === 0) {
-      alert('수신 대상 사용자를 선택해주세요.');
+      toast.error('수신 대상 사용자를 선택해주세요.');
       return;
     }
 

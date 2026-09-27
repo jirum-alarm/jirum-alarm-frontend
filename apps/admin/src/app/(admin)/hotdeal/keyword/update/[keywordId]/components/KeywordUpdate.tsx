@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 
 import Card from '@/components/Card';
 import Spinner from '@/components/Spinner';
+import { useToast } from '@/components/Toast';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealDetailKeyword, useUpdateHotDealKeyword } from '@/hooks/graphql/keyword';
 import { HotDealKeywordType } from '@/types/keyword';
@@ -25,6 +26,7 @@ interface Props {
 
 const KeywordUpdate = ({ keywordId }: Props) => {
   const router = useRouter();
+  const toast = useToast();
   const [keyword, setKeyword] = useState<KeywordFormType>({
     type: HotDealKeywordType.POSITIVE,
     keyword: '',
@@ -44,7 +46,7 @@ const KeywordUpdate = ({ keywordId }: Props) => {
 
   const [mutate, { loading }] = useUpdateHotDealKeyword(keyword.type, {
     onCompleted: () => {
-      alert('키워드 수정 성공!');
+      toast.success('키워드 수정 성공!');
       router.back();
     },
   });

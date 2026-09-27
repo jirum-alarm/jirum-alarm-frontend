@@ -2,13 +2,15 @@
 
 import { useState, useTransition } from 'react';
 
+import { useToast } from '@/components/Toast';
+
 import { rejectDraft, type SnsDraft } from '../actions';
 
 const SnsPublishTable = ({ initialDrafts }: { initialDrafts: SnsDraft[] }) => {
   const [drafts, setDrafts] = useState(initialDrafts);
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [, startTransition] = useTransition();
-  const [message, setMessage] = useState<{ type: 'ok' | 'error'; text: string } | null>(null);
+  const toast = useToast();
 
   const handleReject = (id: number) => {
     if (!confirm('이 초안을 반려할까요? 발행되지 않습니다.')) return;
@@ -17,9 +19,9 @@ const SnsPublishTable = ({ initialDrafts }: { initialDrafts: SnsDraft[] }) => {
       try {
         await rejectDraft(id);
         setDrafts((prev) => prev.filter((d) => d.id !== id));
-        setMessage({ type: 'ok', text: `#${id} 반려됨 (발행 제외)` });
+        toast.success(`#${id} 반려됨 (발행 제외)`);
       } catch (e) {
-        setMessage({ type: 'error', text: e instanceof Error ? e.message : String(e) });
+        toast.error(e instanceof Error ? e.message : String(e));
       } finally {
         setPendingId(null);
       }
@@ -36,15 +38,6 @@ const SnsPublishTable = ({ initialDrafts }: { initialDrafts: SnsDraft[] }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      {message && (
-        <div
-          className={`rounded p-3 text-sm ${
-            message.type === 'ok' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
-          }`}
-        >
-          {message.text}
-        </div>
-      )}
       <div className="flex flex-col gap-4">
         {drafts.map((d) => (
           <div

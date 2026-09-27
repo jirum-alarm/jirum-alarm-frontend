@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import Card from '@/components/Card';
 import Spinner from '@/components/Spinner';
+import { useToast } from '@/components/Toast';
 import { useGetKeywordMapGroup, useUpdateKeywordMapGroup } from '@/hooks/graphql/keywordMap';
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 
 const GroupUpdate = ({ groupId }: Props) => {
   const router = useRouter();
+  const toast = useToast();
   const { data, loading: fetching } = useGetKeywordMapGroup({
     variables: { id: Number(groupId) },
   });
@@ -29,14 +31,14 @@ const GroupUpdate = ({ groupId }: Props) => {
 
   const [mutate, { loading }] = useUpdateKeywordMapGroup({
     onCompleted: () => {
-      alert('그룹이 수정되었습니다.');
+      toast.success('그룹이 수정되었습니다.');
       router.push('/keyword-map');
     },
   });
 
   const handleSubmit = () => {
     if (!name.trim()) {
-      alert('그룹 이름을 입력해주세요.');
+      toast.error('그룹 이름을 입력해주세요.');
       return;
     }
     mutate({

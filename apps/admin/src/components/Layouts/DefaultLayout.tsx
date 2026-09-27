@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import QueryErrorBanner from '@/components/QueryErrorBanner';
 import Sidebar from '@/components/Sidebar';
+import { ToastProvider } from '@/components/Toast';
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -31,7 +32,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
   }, [sidebarExpanded, mounted]);
 
   return (
-    <>
+    <ToastProvider>
       <div>
         {/* <!-- ===== Page Wrapper Start ===== --> */}
         {/* <!-- ===== Sidebar Start ===== --> */}
@@ -65,6 +66,6 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
         {/* <!-- ===== Content Area End ===== --> */}
         {/* <!-- ===== Page Wrapper End ===== --> */}
       </div>
-    </>
+    </ToastProvider>
   );
 }

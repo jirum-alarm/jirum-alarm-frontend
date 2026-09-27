@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
+import { useToast } from '@/components/Toast';
 import { ProductMappingVerificationStatus } from '@/generated/gql/graphql';
 import { useGetGatedMappings } from '@/hooks/graphql/gated-mappings';
 import { useVerifyProductMapping } from '@/hooks/graphql/verification';
@@ -38,7 +39,7 @@ const GatedMappingList = () => {
   const [activeSources, setActiveSources] = useState<string[]>(SOURCE_OPTIONS.map((o) => o.value));
   const [titleQuery, setTitleQuery] = useState('');
   const [appliedTitle, setAppliedTitle] = useState('');
-  const [message, setMessage] = useState<string | null>(null);
+  const toast = useToast();
   // 낙관적 처리 표시 (id → 처리 결과). GraphQL id 는 string(ID).
   const [handled, setHandled] = useState<Record<string, 'verified' | 'rejected'>>({});
 
@@ -67,13 +68,13 @@ const GatedMappingList = () => {
         ...prev,
         [id]: result === ProductMappingVerificationStatus.Verified ? 'verified' : 'rejected',
       }));
-      setMessage(
+      toast.success(
         result === ProductMappingVerificationStatus.Verified
           ? '승인 처리했습니다 (게이트 오판 → 재매칭 대상).'
           : '거절 유지했습니다 (추출 오염 확정).',
       );
     } catch (e) {
-      setMessage(`처리 실패: ${(e as Error).message}`);
+      toast.error(`처리 실패: ${(e as Error).message}`);
     }
   };
 
@@ -124,12 +125,6 @@ const GatedMappingList = () => {
         </button>
         <span className="text-xs text-gray-400">{items.length}건</span>
       </div>
-
-      {message && (
-        <div className="mb-3 rounded-md bg-gray-100 px-3 py-2 text-xs text-gray-700 dark:bg-meta-4 dark:text-gray-200">
-          {message}
-        </div>
-      )}
 
       {loading && <div className="py-10 text-center text-sm text-gray-400">불러오는 중…</div>}
       {error && (

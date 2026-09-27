@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef } from 'react';
 
 import Card from '@/components/Card';
 import Chip from '@/components/Chip';
+import { useToast } from '@/components/Toast';
 import { useGetComments } from '@/hooks/graphql/comments';
 import {
   useAddHotDealExcludeKeywordByAdmin,
@@ -25,6 +26,7 @@ interface Props {
 
 const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Props) => {
   const router = useRouter();
+  const toast = useToast();
   const pathname = usePathname();
   const hotDealKeywordId = Number(keywordId);
 
@@ -133,7 +135,7 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
       });
     }
 
-    alert('저장이 완료되었습니다!');
+    toast.success('저장이 완료되었습니다!');
 
     // onReset();
   };

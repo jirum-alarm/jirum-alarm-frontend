@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
 import Spinner from '@/components/Spinner';
+import { useToast } from '@/components/Toast';
 import {
   AdSlotLocation,
   AdSlotType,
@@ -188,6 +189,7 @@ function upsertUploadedForegroundElement(
 
 const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditInitial }) => {
   const router = useRouter();
+  const toast = useToast();
 
   const [internalId, setInternalId] = useState(initial?.internalId ?? '');
   const [slotType, setSlotType] = useState<AdSlotType>(initial?.slotType ?? 'banner');
@@ -211,6 +213,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
       const g = JSON.parse(graphicText);
       setGraphicText(JSON.stringify(patcher(g), null, 2));
     } catch {
+      // 손으로 옮겨 넣을 URL·JSON 이 담겨 있다 — 몇 초 뒤 사라지는 토스트로는 복사할 수 없어 alert 유지
       alert(fallbackMessage(assetUrl));
     }
   };
@@ -315,17 +318,17 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
 
   const [createAd, { loading: creating }] = useCreateAd({
     onCompleted: () => {
-      alert('광고가 등록되었습니다.');
+      toast.success('광고가 등록되었습니다.');
       router.push('/advertisement');
     },
-    onError: (e) => alert(`등록 실패: ${e.message}`),
+    onError: (e) => toast.error(`등록 실패: ${e.message}`),
   });
   const [updateAd, { loading: updating }] = useUpdateAd({
     onCompleted: () => {
-      alert('수정되었습니다.');
+      toast.success('수정되었습니다.');
       router.push('/advertisement');
     },
-    onError: (e) => alert(`수정 실패: ${e.message}`),
+    onError: (e) => toast.error(`수정 실패: ${e.message}`),
   });
 
   const toggleLocation = (loc: AdSlotLocation) =>
@@ -350,27 +353,28 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
   };
 
   const handleSubmit = () => {
-    if (!internalId.trim()) return alert('internalId 를 입력하세요.');
+    if (!internalId.trim()) return toast.error('internalId 를 입력하세요.');
     if (internalId.length > LIMIT.internalId)
-      return alert(`internalId는 ${LIMIT.internalId}자 이하여야 합니다.`);
-    if (slotLocation.length === 0) return alert('노출 위치를 1개 이상 선택하세요.');
-    if (!startAt || !endAt) return alert('시작/종료 시각을 입력하세요.');
+      return toast.error(`internalId는 ${LIMIT.internalId}자 이하여야 합니다.`);
+    if (slotLocation.length === 0) return toast.error('노출 위치를 1개 이상 선택하세요.');
+    if (!startAt || !endAt) return toast.error('시작/종료 시각을 입력하세요.');
     if (new Date(endAt) <= new Date(startAt))
-      return alert('종료 시각이 시작 시각보다 뒤여야 합니다.');
+      return toast.error('종료 시각이 시작 시각보다 뒤여야 합니다.');
     const normalizedTargetUrl = normalizeTargetUrl(targetUrl);
-    if (!normalizedTargetUrl.ok) return alert(normalizedTargetUrl.error);
+    if (!normalizedTargetUrl.ok) return toast.error(normalizedTargetUrl.error);
     if (displayTitle.length > LIMIT.displayTitle)
-      return alert(`displayTitle은 ${LIMIT.displayTitle}자 이하여야 합니다.`);
+      return toast.error(`displayTitle은 ${LIMIT.displayTitle}자 이하여야 합니다.`);
     if (parsedGraphic.error || !parsedGraphic.graphic)
-      return alert(`graphic JSON 오류: ${parsedGraphic.error}`);
+      return toast.error(`graphic JSON 오류: ${parsedGraphic.error}`);
     // 백엔드 validateAdGraphic와 동일: 필수 키 + assetUrl CDN origin
     const g = parsedGraphic.graphic;
-    if (!g.size?._default) return alert('graphic.size._default 가 필요합니다.');
+    if (!g.size?._default) return toast.error('graphic.size._default 가 필요합니다.');
     if (!g.background?.assetUrl)
-      return alert('배경 에셋을 업로드하거나 background.assetUrl 을 입력하세요.');
+      return toast.error('배경 에셋을 업로드하거나 background.assetUrl 을 입력하세요.');
     const urls = collectGraphicAssetUrls(g);
     const bad = urls.find((u) => !u || !u.startsWith(CDN_BASE));
-    if (bad !== undefined) return alert(`모든 assetUrl은 ${CDN_BASE} 도메인이어야 합니다: ${bad}`);
+    if (bad !== undefined)
+      return toast.error(`모든 assetUrl은 ${CDN_BASE} 도메인이어야 합니다: ${bad}`);
 
     const normalizedGraphic = normalizeGraphicAssetUrls(parsedGraphic.graphic);
 

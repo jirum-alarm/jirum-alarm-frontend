@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useRef, useState } from 'react';
 
 import Spinner from '@/components/Spinner';
+import { useToast } from '@/components/Toast';
 import { OrderOptionType, ProductMappingVerificationStatus } from '@/generated/gql/graphql';
 import { useAdminMe } from '@/hooks/graphql/auth';
 import { useCancelVerification, useGetVerificationHistory } from '@/hooks/graphql/verification';
@@ -22,6 +23,7 @@ const VerificationStatusColorMap: Record<ProductMappingVerificationStatus, strin
 };
 
 const VerificationHistory = () => {
+  const toast = useToast();
   const [verificationStatus, setVerificationStatus] = useState<ProductMappingVerificationStatus[]>(
     [],
   );
@@ -90,12 +92,12 @@ const VerificationHistory = () => {
         await refetch();
       } catch (error) {
         console.error('Cancel verification failed:', error);
-        alert('검증 취소에 실패했습니다.');
+        toast.error('검증 취소에 실패했습니다.');
       } finally {
         setCancellingId(null);
       }
     },
-    [cancellingId, cancelVerificationMutation, refetch],
+    [cancellingId, cancelVerificationMutation, refetch, toast],
   );
 
   const historyItems = data?.verificationHistory ?? [];

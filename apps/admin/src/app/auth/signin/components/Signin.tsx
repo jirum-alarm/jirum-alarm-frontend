@@ -4,10 +4,12 @@ import React, { useState } from 'react';
 
 import { setAccessToken } from '@/app/actions/token';
 import Spinner from '@/components/Spinner';
+import { useToast } from '@/components/Toast';
 import { useMutationAdminLogin } from '@/hooks/graphql/auth';
 
 const Signin = () => {
   const router = useRouter();
+  const toast = useToast();
   const [loginInputs, setLoginInputs] = useState({
     email: '',
     password: '',
@@ -20,9 +22,9 @@ const Signin = () => {
     },
     onError: (e) => {
       if (e.graphQLErrors[0]?.extensions?.code === '404') {
-        alert('존재하지 않는 아이디입니다.');
+        toast.error('존재하지 않는 아이디입니다.');
       } else {
-        alert('에러가 발생했습니다.');
+        toast.error('에러가 발생했습니다.');
       }
     },
   });
