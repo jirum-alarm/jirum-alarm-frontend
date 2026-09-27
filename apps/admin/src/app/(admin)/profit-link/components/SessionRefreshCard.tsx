@@ -2,6 +2,8 @@
 
 import { type ClipboardEvent, type ReactNode } from 'react';
 
+import Panel from '@/components/Panel';
+
 type SessionRefreshCardProps = {
   title: string;
   hasSession?: boolean;
@@ -34,7 +36,7 @@ const SessionRefreshCard = ({
   message,
 }: SessionRefreshCardProps) => {
   return (
-    <div className="rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <Panel rounded="sm" className="p-4">
       <div className="mb-3 flex items-start justify-between gap-3">
         <h3 className="text-base font-semibold text-black dark:text-white">{title}</h3>
         {statusLoading ? (
@@ -79,7 +81,7 @@ const SessionRefreshCard = ({
           {message.text}
         </p>
       )}
-    </div>
+    </Panel>
   );
 };
 

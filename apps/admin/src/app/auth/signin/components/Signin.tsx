@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 import { setAccessToken } from '@/app/actions/token';
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useToast } from '@/components/Toast';
 import { useMutationAdminLogin } from '@/hooks/graphql/auth';
@@ -47,7 +48,7 @@ const Signin = () => {
   };
   return (
     <>
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel rounded="sm">
         <div className="w-full border-stroke dark:border-strokedark">
           <div className="w-full p-4">
             <form onSubmit={handleSubmit}>
@@ -132,7 +133,7 @@ const Signin = () => {
             </form>
           </div>
         </div>
-      </div>
+      </Panel>
     </>
   );
 };

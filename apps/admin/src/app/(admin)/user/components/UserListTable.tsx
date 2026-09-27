@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useGetUsersByAdmin } from '@/hooks/graphql/user';
 import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
@@ -36,7 +37,7 @@ const UserListTable = () => {
 
   return (
     <>
-      <div className="mb-6 rounded-lg border border-stroke bg-white px-5 py-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5">
+      <Panel className="mb-6 px-5 py-4 sm:px-7.5">
         <div className="flex items-end gap-4">
           <div className="flex-1">
             <label className="mb-1 block text-sm font-medium text-black dark:text-white">
@@ -58,9 +59,9 @@ const UserListTable = () => {
             검색
           </button>
         </div>
-      </div>
+      </Panel>
 
-      <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel>
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
@@ -123,7 +124,7 @@ const UserListTable = () => {
         )}
 
         <div ref={viewRef} className="h-4" />
-      </div>
+      </Panel>
     </>
   );
 };

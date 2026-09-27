@@ -1,5 +1,6 @@
 'use client';
 
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useGetCategories } from '@/hooks/graphql/category';
 
@@ -16,7 +17,7 @@ const CategoryList = () => {
   }
 
   return (
-    <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+    <Panel>
       <table className="w-full table-auto">
         <thead>
           <tr className="bg-gray-2 text-left dark:bg-meta-4">
@@ -39,7 +40,7 @@ const CategoryList = () => {
       {categories.length === 0 && (
         <div className="px-4 py-12 text-center text-sm text-bodydark2">카테고리가 없습니다.</div>
       )}
-    </div>
+    </Panel>
   );
 };
 

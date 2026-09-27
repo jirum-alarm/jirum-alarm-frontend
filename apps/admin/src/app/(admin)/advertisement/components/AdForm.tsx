@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useToast } from '@/components/Toast';
 import {
@@ -401,7 +402,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       {/* 좌: 폼 */}
-      <div className="flex flex-col gap-4 rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel className="flex flex-col gap-4 p-6">
         <div>
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
             internalId * (예: 얼라이브-260625-배너)
@@ -534,10 +535,10 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
           {loading && <Spinner size="sm" color="white" />}
           {mode === 'create' ? '등록' : '수정'}
         </button>
-      </div>
+      </Panel>
 
       {/* 우: graphic 2Layer 편집 + 프리뷰 */}
-      <div className="flex flex-col gap-4 rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel className="flex flex-col gap-4 p-6">
         <GraphicLayerEditor
           graphic={graphic}
           onGraphicChange={(nextGraphic) => setGraphicText(JSON.stringify(nextGraphic, null, 2))}
@@ -563,7 +564,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
             <p className="mt-1 text-xs text-danger">JSON 오류: {parsedGraphic.error}</p>
           )}
         </div>
-      </div>
+      </Panel>
     </div>
   );
 };

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useAdReport, useAdsByAdmin, useSetAdActive } from '@/hooks/graphql/advertisement';
 
@@ -35,7 +36,7 @@ const AdListTable = () => {
     );
 
   return (
-    <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+    <Panel>
       <div className="flex justify-end p-4">
         <Link
           href="/advertisement/register"
@@ -119,7 +120,7 @@ const AdListTable = () => {
           })}
         </tbody>
       </table>
-    </div>
+    </Panel>
   );
 };
 

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 
 import { useConfirm } from '@/components/Confirm';
+import Panel from '@/components/Panel';
 import { useGetKeywordMapGroups, useRemoveKeywordMapGroup } from '@/hooks/graphql/keywordMap';
 import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
 
@@ -26,20 +27,20 @@ const KeywordMapGroupsTable = () => {
 
   if (loading) {
     return (
-      <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      <Panel rounded="sm" className="w-full px-5 pb-2.5 pt-6 sm:px-7.5 xl:pb-1">
         <div className="animate-pulse space-y-4 p-4">
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="h-10 rounded bg-gray-200" />
           ))}
         </div>
-      </div>
+      </Panel>
     );
   }
 
   const groups = data?.keywordMapGroupsByAdmin ?? [];
 
   return (
-    <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <Panel rounded="sm" className="w-full px-5 pb-2.5 pt-6 sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
           <thead>
@@ -96,7 +97,7 @@ const KeywordMapGroupsTable = () => {
         </table>
         <div ref={viewRef} />
       </div>
-    </div>
+    </Panel>
   );
 };
 

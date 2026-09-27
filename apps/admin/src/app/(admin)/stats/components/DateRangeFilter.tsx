@@ -1,3 +1,4 @@
+import Panel from '@/components/Panel';
 import { DateInterval } from '@/types/stats';
 
 interface DateRangeFilterProps {
@@ -20,7 +21,7 @@ const DateRangeFilter = ({
   onSearch,
 }: DateRangeFilterProps) => {
   return (
-    <div className="mb-6 rounded-lg border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <Panel className="mb-6 p-4">
       <div className="flex flex-wrap items-end gap-4">
         <div>
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
@@ -63,7 +64,7 @@ const DateRangeFilter = ({
           조회
         </button>
       </div>
-    </div>
+    </Panel>
   );
 };
 

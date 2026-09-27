@@ -1,5 +1,6 @@
 'use client';
 
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useGetNotificationsByAdmin } from '@/hooks/graphql/notification';
 import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
@@ -18,7 +19,7 @@ const NotificationHistory = () => {
   const viewRef = useLoadMoreOnView({ field: 'notificationsByAdmin', data, loading, fetchMore });
 
   return (
-    <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+    <Panel>
       <div className="px-5 py-4 sm:px-7.5">
         <h3 className="text-lg font-semibold text-black dark:text-white">발송 이력</h3>
       </div>
@@ -70,7 +71,7 @@ const NotificationHistory = () => {
       )}
 
       <div ref={viewRef} className="h-4" />
-    </div>
+    </Panel>
   );
 };
 

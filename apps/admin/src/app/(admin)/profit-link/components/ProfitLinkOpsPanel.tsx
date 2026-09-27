@@ -2,6 +2,7 @@
 
 import { type ClipboardEvent, useState } from 'react';
 
+import Panel from '@/components/Panel';
 import {
   useMutationIssueKakaoProfitLink,
   useMutationIssueOhouProfitLink,
@@ -100,7 +101,7 @@ const ProfitLinkOpsPanel = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="rounded-sm border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel rounded="sm" className="p-6">
         <h3 className="mb-1 text-lg font-semibold text-black dark:text-white">
           상품 URL → 수익링크
         </h3>
@@ -152,7 +153,7 @@ const ProfitLinkOpsPanel = () => {
           </div>
         )}
         {issueError && <p className="mt-3 text-sm text-danger">{issueError}</p>}
-      </div>
+      </Panel>
 
       <div>
         <h3 className="mb-3 text-lg font-semibold text-black dark:text-white">세션 갱신</h3>

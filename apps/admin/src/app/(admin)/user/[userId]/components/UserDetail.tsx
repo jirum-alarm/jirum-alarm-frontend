@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useGetUserByAdmin } from '@/hooks/graphql/user';
 import { dateFormatter } from '@/utils/date';
@@ -41,7 +42,7 @@ const UserDetail = ({ userId }: { userId: string }) => {
   return (
     <div className="flex flex-col gap-6">
       {/* 기본 정보 */}
-      <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel className="p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">기본 정보</h3>
         <div className="flex flex-col gap-3">
           <InfoRow label="ID" value={String(user.id)} />
@@ -54,10 +55,10 @@ const UserDetail = ({ userId }: { userId: string }) => {
           <InfoRow label="출생연도" value={user.birthYear ? String(user.birthYear) : '-'} />
           <InfoRow label="가입일" value={user.createdAt ? dateFormatter(user.createdAt) : '-'} />
         </div>
-      </div>
+      </Panel>
 
       {/* 소셜 로그인 */}
-      <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel className="p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">연동된 소셜 계정</h3>
         {user.linkedSocialProviders && user.linkedSocialProviders.length > 0 ? (
           <div className="flex flex-wrap gap-2">
@@ -73,10 +74,10 @@ const UserDetail = ({ userId }: { userId: string }) => {
         ) : (
           <p className="text-sm text-bodydark2">연동된 소셜 계정이 없습니다.</p>
         )}
-      </div>
+      </Panel>
 
       {/* 관심 카테고리 */}
-      <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel className="p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">관심 카테고리</h3>
         {user.favoriteCategories && user.favoriteCategories.length > 0 ? (
           <div className="flex flex-wrap gap-2">
@@ -92,7 +93,7 @@ const UserDetail = ({ userId }: { userId: string }) => {
         ) : (
           <p className="text-sm text-bodydark2">설정된 관심 카테고리가 없습니다.</p>
         )}
-      </div>
+      </Panel>
 
       <div>
         <Link

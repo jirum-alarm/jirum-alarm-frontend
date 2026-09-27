@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from 'react';
 
 import { useConfirm } from '@/components/Confirm';
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useToast } from '@/components/Toast';
 import { NotificationTarget, NotificationType } from '@/generated/gql/graphql';
@@ -117,7 +118,7 @@ const NotificationSender = () => {
   };
 
   return (
-    <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <Panel className="p-6">
       <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">알림 발송</h3>
       <div className="flex flex-col gap-4">
         <div>
@@ -321,7 +322,7 @@ const NotificationSender = () => {
           </button>
         </div>
       </div>
-    </div>
+    </Panel>
   );
 };
 

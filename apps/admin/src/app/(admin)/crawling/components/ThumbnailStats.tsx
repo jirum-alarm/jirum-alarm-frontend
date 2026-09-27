@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import ChartCard from '@/app/(admin)/stats/components/ChartCard';
 import DateRangeFilter from '@/app/(admin)/stats/components/DateRangeFilter';
+import Panel from '@/components/Panel';
 import { useThumbnailStats } from '@/hooks/graphql/stats';
 import { DateInterval } from '@/types/stats';
 
@@ -68,24 +69,24 @@ const ThumbnailStats = () => {
       />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-lg border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark">
+        <Panel className="p-5">
           <div className="text-sm text-bodydark2">기간 내 상품</div>
           <div className="mt-1 font-mono text-2xl font-semibold text-black dark:text-white">
             {total.toLocaleString()}
           </div>
-        </div>
-        <div className="rounded-lg border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark">
+        </Panel>
+        <Panel className="p-5">
           <div className="text-sm text-bodydark2">썸네일 수집률</div>
           <div className="mt-1 font-mono text-2xl font-semibold text-black dark:text-white">
             {collectionRate.toFixed(1)}%
           </div>
-        </div>
-        <div className="rounded-lg border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark">
+        </Panel>
+        <Panel className="p-5">
           <div className="text-sm text-bodydark2">미수집</div>
           <div className="mt-1 font-mono text-2xl font-semibold text-danger">
             {missing.toLocaleString()}
           </div>
-        </div>
+        </Panel>
       </div>
 
       <ChartCard title="썸네일 타입 분포" loading={loading}>

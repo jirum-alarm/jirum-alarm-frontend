@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useConfirm } from '@/components/Confirm';
+import Panel from '@/components/Panel';
 import Switcher from '@/components/Switchers/SwitcherOne';
 import { HotDealKeywordTypeMap } from '@/constants/hotdeal';
 import { useGetHotDealKeywords, useRemoveHotDealKeyword } from '@/hooks/graphql/keyword';
@@ -59,7 +60,7 @@ const HotdealKeywordsTable = () => {
   });
 
   return (
-    <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <Panel rounded="sm" className="w-full px-5 pb-2.5 pt-6 sm:px-7.5 xl:pb-1">
       <div className="flex w-full items-center justify-end gap-2 p-2">
         <span>긍정</span>
         <Switcher
@@ -161,7 +162,7 @@ const HotdealKeywordsTable = () => {
         </table>
         <div ref={viewRef} />
       </div>
-    </div>
+    </Panel>
   );
 };
 

@@ -1,3 +1,4 @@
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 
 interface ChartCardProps {
@@ -8,7 +9,7 @@ interface ChartCardProps {
 
 const ChartCard = ({ title, loading, children }: ChartCardProps) => {
   return (
-    <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <Panel className="p-6">
       <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">{title}</h3>
       {loading ? (
         <div className="flex h-64 items-center justify-center">
@@ -17,7 +18,7 @@ const ChartCard = ({ title, loading, children }: ChartCardProps) => {
       ) : (
         children
       )}
-    </div>
+    </Panel>
   );
 };
 

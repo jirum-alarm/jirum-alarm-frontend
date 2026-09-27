@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useRef, useState } from 'react';
 
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useToast } from '@/components/Toast';
 import { OrderOptionType, ProductMappingVerificationStatus } from '@/generated/gql/graphql';
@@ -126,7 +127,7 @@ const VerificationHistory = () => {
   };
 
   return (
-    <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <Panel rounded="sm" className="w-full px-5 pb-2.5 pt-6 sm:px-7.5 xl:pb-1">
       {/* 필터 섹션 */}
       <div className="mb-4 flex flex-wrap items-center gap-4">
         <div className="flex items-center gap-2">
@@ -404,7 +405,7 @@ const VerificationHistory = () => {
           )}
         </>
       )}
-    </div>
+    </Panel>
   );
 };
 

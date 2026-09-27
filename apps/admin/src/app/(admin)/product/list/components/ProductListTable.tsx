@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import {
   type GetProductsVariables,
@@ -127,7 +128,7 @@ const ProductListTable = () => {
         onSearch={handleSearch}
       />
 
-      <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel>
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
@@ -235,7 +236,7 @@ const ProductListTable = () => {
         )}
 
         {!isSingleMode && <div ref={viewRef} className="h-4" />}
-      </div>
+      </Panel>
 
       {pendingDeleteId !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

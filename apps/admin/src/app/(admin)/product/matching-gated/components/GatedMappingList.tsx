@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
+import Panel from '@/components/Panel';
 import { useToast } from '@/components/Toast';
 import { ProductMappingVerificationStatus } from '@/generated/gql/graphql';
 import { useGetGatedMappings } from '@/hooks/graphql/gated-mappings';
@@ -79,7 +80,7 @@ const GatedMappingList = () => {
   };
 
   return (
-    <div className="rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <Panel rounded="sm" className="p-4">
       {/* 필터 바 */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <div className="flex gap-1.5">
@@ -231,7 +232,7 @@ const GatedMappingList = () => {
           );
         })}
       </div>
-    </div>
+    </Panel>
   );
 };
 

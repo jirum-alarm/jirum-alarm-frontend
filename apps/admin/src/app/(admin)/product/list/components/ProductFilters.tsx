@@ -1,5 +1,6 @@
 'use client';
 
+import Panel from '@/components/Panel';
 import { useGetCategories } from '@/hooks/graphql/category';
 
 interface ProductFiltersProps {
@@ -39,7 +40,7 @@ const ProductFilters = ({
   };
 
   return (
-    <div className="mb-6 rounded-lg border border-stroke bg-white px-5 py-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5">
+    <Panel className="mb-6 px-5 py-4 sm:px-7.5">
       <div className="flex flex-wrap items-end gap-4">
         <div className="w-32">
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
@@ -128,7 +129,7 @@ const ProductFilters = ({
           검색
         </button>
       </div>
-    </div>
+    </Panel>
   );
 };
 

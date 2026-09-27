@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useGetProduct } from '@/hooks/graphql/product';
 import { dateFormatter } from '@/utils/date';
@@ -29,7 +30,7 @@ const ProductDetail = ({ productId }: { productId: string }) => {
   return (
     <div className="flex flex-col gap-6">
       {/* 기본 정보 */}
-      <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel className="p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">기본 정보</h3>
         <div className="flex gap-6">
           {product.thumbnail && (
@@ -56,10 +57,10 @@ const ProductDetail = ({ productId }: { productId: string }) => {
             <InfoRow label="작성자" value={product.author?.nickname ?? '-'} />
           </div>
         </div>
-      </div>
+      </Panel>
 
       {/* 상태 */}
-      <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel className="p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">상태 및 통계</h3>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <StatCard
@@ -87,11 +88,11 @@ const ProductDetail = ({ productId }: { productId: string }) => {
             color="text-danger"
           />
         </div>
-      </div>
+      </Panel>
 
       {/* 핫딜 지수 */}
       {product.hotDealIndex && (
-        <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+        <Panel className="p-6">
           <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">핫딜 지수</h3>
           <p className="mb-4 text-sm text-bodydark2">{product.hotDealIndex.message}</p>
           <div className="grid grid-cols-3 gap-4">
@@ -110,12 +111,12 @@ const ProductDetail = ({ productId }: { productId: string }) => {
               color="text-danger"
             />
           </div>
-        </div>
+        </Panel>
       )}
 
       {/* 가격 이력 */}
       {product.prices && product.prices.length > 0 && (
-        <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+        <Panel className="p-6">
           <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">가격 이력</h3>
           <table className="w-full table-auto">
             <thead>
@@ -141,11 +142,11 @@ const ProductDetail = ({ productId }: { productId: string }) => {
               ))}
             </tbody>
           </table>
-        </div>
+        </Panel>
       )}
 
       {/* 링크 */}
-      <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel className="p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">링크</h3>
         <div className="flex flex-col gap-2">
           {product.url && (
@@ -169,7 +170,7 @@ const ProductDetail = ({ productId }: { productId: string }) => {
             </a>
           )}
         </div>
-      </div>
+      </Panel>
 
       <div>
         <Link

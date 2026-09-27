@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { useConfirm } from '@/components/Confirm';
+import Panel from '@/components/Panel';
 import {
   useGetModelPagesByAdmin,
   useSetModelPagePublishedByAdmin,
@@ -30,7 +31,7 @@ const ModelPagesTable = () => {
   };
 
   return (
-    <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <Panel rounded="sm" className="w-full px-5 pb-2.5 pt-6 sm:px-7.5 xl:pb-1">
       <div className="flex w-full items-center justify-between gap-2 p-2">
         <span className="text-sm text-bodydark2">
           {loading ? '불러오는 중…' : `${pages.length}개`}
@@ -167,7 +168,7 @@ const ModelPagesTable = () => {
           </tbody>
         </table>
       </div>
-    </div>
+    </Panel>
   );
 };
 

@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import {
   useDailyServiceViewStats,
@@ -65,7 +66,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col gap-6">
       {/* 날짜 필터 */}
-      <div className="rounded-lg border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel className="p-4">
         <div className="flex flex-wrap items-end gap-4">
           <div>
             <label className="mb-1 block text-sm font-medium text-black dark:text-white">
@@ -110,7 +111,7 @@ const Dashboard = () => {
             조회
           </button>
         </div>
-      </div>
+      </Panel>
 
       {/* 1. 서비스 조회수 추이 */}
       <ChartCard title="서비스 조회수 추이" loading={viewLoading}>
@@ -312,7 +313,7 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <Panel className="p-6">
       <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">{title}</h3>
       {loading ? (
         <div className="flex h-48 items-center justify-center">
@@ -321,7 +322,7 @@ function ChartCard({
       ) : (
         children
       )}
-    </div>
+    </Panel>
   );
 }
 

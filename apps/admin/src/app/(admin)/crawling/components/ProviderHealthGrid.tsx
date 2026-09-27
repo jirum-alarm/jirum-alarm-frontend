@@ -2,6 +2,7 @@
 
 import dayjs from 'dayjs';
 
+import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useProviderHealthStatus } from '@/hooks/graphql/stats';
 import { ProviderHealthOutput, ProviderType } from '@/types/stats';
@@ -58,25 +59,25 @@ const ProviderHealthGrid = () => {
 
   if (loading && !data) {
     return (
-      <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel className="p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">
           Provider 상태 (커뮤니티)
         </h3>
         <div className="flex h-32 items-center justify-center">
           <Spinner size="lg" />
         </div>
-      </div>
+      </Panel>
     );
   }
 
   if (error) {
     return (
-      <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      <Panel className="p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">
           Provider 상태 (커뮤니티)
         </h3>
         <p className="text-sm text-danger">에러: {error.message}</p>
-      </div>
+      </Panel>
     );
   }
 
@@ -93,7 +94,7 @@ const ProviderHealthGrid = () => {
   });
 
   return (
-    <div className="rounded-lg border border-stroke bg-white p-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <Panel className="p-6">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-black dark:text-white">
           Provider 상태 (커뮤니티)
@@ -155,7 +156,7 @@ const ProviderHealthGrid = () => {
           })}
         </div>
       )}
-    </div>
+    </Panel>
   );
 };
 
