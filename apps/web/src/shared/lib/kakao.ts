@@ -45,7 +45,9 @@ export const loadKakaoSDK = (): Promise<void> => {
 export const initKakao = (): void => {
   if (!window.Kakao) throw new Error('Kakao SDK가 로드되지 않았습니다.');
   if (!window.Kakao.isInitialized()) {
-    window.Kakao.init(env('NEXT_PUBLIC_KAKAO_SECRET') ?? '');
+    // 카카오 **JavaScript 키** — 브라우저 공개가 설계(방어선 = 카카오 콘솔 도메인 제한). 비밀 아님.
+    // NEXT_PUBLIC_KAKAO_SECRET 은 옛 이름(비밀로 오해를 불렀다). 운영 배포 후 gitops ConfigMap 에서 옛 키를 지우면 fallback 도 지울 것.
+    window.Kakao.init(env('NEXT_PUBLIC_KAKAO_JS_KEY') ?? env('NEXT_PUBLIC_KAKAO_SECRET') ?? '');
   }
 };
 
