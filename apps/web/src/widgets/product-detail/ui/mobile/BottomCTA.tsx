@@ -3,6 +3,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import { ProductService } from '@/shared/api/product';
 import Button from '@/shared/ui/common/Button';
 import TopButton from '@/shared/ui/TopButton';
 
@@ -34,6 +35,10 @@ export default function BottomCTA({
   const handlePurchaseClick = () => {
     // 구매 링크는 target=_blank 라 유저는 이 페이지에 남는다. 그 순간에만 알림/오카방을 권한다.
     setPromptQueue(buildPostPurchasePromptQueue(isUserLogin));
+    // fire-and-forget — 새 탭으로 나가도 이 페이지에 남아 요청이 끝난다.
+    void ProductService.collectPurchaseClick({ productId, source: 'detail_mobile' }).catch(
+      () => {},
+    );
 
     if (typeof window === 'undefined') return;
     (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({

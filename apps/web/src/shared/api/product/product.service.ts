@@ -109,6 +109,10 @@ export class ProductService {
     return execute(MutationCollectProduct, variables).then((res) => res.data);
   }
 
+  static async collectPurchaseClick(variables: { productId: number; source?: string | null }) {
+    return execute(MutationCollectPurchaseClick, variables).then((res) => res.data);
+  }
+
   static async recordProductImpressions(variables: {
     source: string;
     impressions: { productId: number; position: number }[];
@@ -659,6 +663,16 @@ const MutationCollectProduct = new TypedDocumentString<
 >(`
   mutation MutationCollectProduct($productId: Int!, $source: String, $position: Int) {
     collectProduct(productId: $productId, source: $source, position: $position)
+  }
+`);
+
+// 구매(수익링크) 버튼 클릭 — GA4 purchase_link_click 과 같은 순간 서버에도 남긴다(상품·그룹별 수요 신호).
+const MutationCollectPurchaseClick = new TypedDocumentString<
+  { collectPurchaseClick: boolean },
+  { productId: number; source?: string | null }
+>(`
+  mutation MutationCollectPurchaseClick($productId: Int!, $source: String) {
+    collectPurchaseClick(productId: $productId, source: $source)
   }
 `);
 

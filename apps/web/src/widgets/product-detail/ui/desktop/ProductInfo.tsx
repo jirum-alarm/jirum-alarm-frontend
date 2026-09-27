@@ -4,6 +4,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense, useEffect, useState } from 'react';
 
 import { UploaderType } from '@/shared/api/gql/graphql';
+import { ProductService } from '@/shared/api/product';
 import { cn } from '@/shared/lib/cn';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
 import Button from '@/shared/ui/common/Button';
@@ -266,6 +267,10 @@ export default function ProductInfo({
             // 모바일 BottomCTA 와 동일 — GTM Click URL 빈값 문제로 dataLayer 명시 전송 (2026-07-20)
             onClick={() => {
               setPromptQueue(buildPostPurchasePromptQueue(isUserLogin));
+              void ProductService.collectPurchaseClick({
+                productId,
+                source: 'detail_desktop',
+              }).catch(() => {});
 
               if (typeof window === 'undefined') return;
               (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
