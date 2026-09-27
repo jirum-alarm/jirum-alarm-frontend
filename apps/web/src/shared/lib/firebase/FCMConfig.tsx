@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 
 import { setFcmToken as setFcmTokenAction } from '@/app/actions/token';
 
+import { TokenType } from '@/shared/api/gql/graphql';
+import { NotificationService } from '@/shared/api/notification/notification.service';
 import { firebaseConfig } from '@/shared/config/firebase';
 
 const FCMConfig = () => {
@@ -38,6 +40,12 @@ const FCMConfig = () => {
         const token = await getToken(messaging, { vapidKey });
         if (token) {
           await setFcmTokenAction(token);
+          // 권한을 이미 허용한 재방문자도 서버에 다시 등록한다. 쿠키에만 두면 서버 행이 사라졌을 때
+          // (2026-08-18 user_token 전체 삭제) 권한 프롬프트를 다시 거치기 전엔 영영 복구되지 않았다.
+          // 서버 add 는 같은 토큰이면 insert 없이 끝나 멱등하다.
+          NotificationService.addPushToken({ token, tokenType: TokenType.Fcm }).catch((e) =>
+            console.log('FCM token register error: ', e),
+          );
         }
 
         unsubscribe = onMessage(messaging, (payload) => {
