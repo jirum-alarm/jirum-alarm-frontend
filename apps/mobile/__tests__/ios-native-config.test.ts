@@ -171,3 +171,44 @@ describe('iOS pbxproj', () => {
     expect(releaseBlock).toContain('CODE_SIGN_IDENTITY = "Apple Distribution"');
   });
 });
+
+describe('iOS UIScene 생명주기 — iOS 27 SDK 필수', () => {
+  /**
+   * Xcode 27(iOS 27 SDK)로 빌드한 앱이 씬을 안 쓰면 "UIScene life cycle is required for
+   * apps built with this SDK" 로 **실행 즉시 종료**된다(iOS 27 시뮬레이터 실측 2026-09-27).
+   * EAS 가 Xcode 26 인 동안엔 안 드러나서, 누가 씬 설정을 지워도 초록불로 지나간다 —
+   * 그러다 이미지가 올라가는 날 모든 빌드가 죽는다. 그래서 여기서 묶는다.
+   */
+  const appDelegate = read('ios/jirumAlarmMobile/AppDelegate.swift');
+
+  it('Info.plist 가 SceneDelegate 를 씬 델리게이트로 선언한다', () => {
+    expect(infoPlist).toContain('<key>UIApplicationSceneManifest</key>');
+    expect(
+      hasStringValue(infoPlist, '$(PRODUCT_MODULE_NAME).SceneDelegate'),
+    ).toBe(true);
+  });
+
+  it('SceneDelegate 가 창을 만들고 RN 을 시작한다(AppDelegate 는 창을 만들지 않는다)', () => {
+    expect(appDelegate).toMatch(
+      /class SceneDelegate: UIResponder, UIWindowSceneDelegate/,
+    );
+    expect(appDelegate).toContain('UIWindow(windowScene: windowScene)');
+    expect(appDelegate).not.toContain('UIWindow(frame: UIScreen.main.bounds)');
+    // startReactNative 는 SceneDelegate 한 곳에서만.
+    expect(appDelegate.match(/startReactNative\(/g)).toHaveLength(1);
+  });
+
+  it('씬으로 오는 URL·유니버설 링크를 AppDelegate 의 기존 분기로 넘긴다', () => {
+    // 이게 빠지면 카카오·네이버 OAuth 콜백과 딥링크가 조용히 버려진다(씬 방식에선
+    // application(_:open:options:) 이 아니라 여기로 온다).
+    expect(appDelegate).toContain('openURLContexts');
+    expect(appDelegate).toMatch(
+      /appDelegate\?\.application\(UIApplication\.shared, open:/,
+    );
+    expect(appDelegate).toMatch(
+      /func scene\(_ scene: UIScene, continue userActivity: NSUserActivity\)/,
+    );
+    // 콜드 스타트 URL 은 connectionOptions 로 온다 — RN getInitialURL 용으로 launchOptions 에 옮긴다.
+    expect(appDelegate).toContain('launchOptions[.url] = url');
+  });
+});
