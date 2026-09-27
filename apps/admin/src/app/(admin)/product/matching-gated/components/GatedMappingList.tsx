@@ -7,6 +7,7 @@ import { useToast } from '@/components/Toast';
 import { ProductMappingVerificationStatus } from '@/generated/gql/graphql';
 import { useGetGatedMappings } from '@/hooks/graphql/gated-mappings';
 import { useVerifyProductMapping } from '@/hooks/graphql/verification';
+import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
 
 // 게이트 source 필터 옵션. 백엔드 matchingSource 값과 일치해야 한다.
 const SOURCE_OPTIONS = [
@@ -44,11 +45,12 @@ const GatedMappingList = () => {
   // 낙관적 처리 표시 (id → 처리 결과). GraphQL id 는 string(ID).
   const [handled, setHandled] = useState<Record<string, 'verified' | 'rejected'>>({});
 
-  const { data, loading, error, refetch } = useGetGatedMappings({
+  // limit 은 서버 상한 20(SearchAfterArgs) — 50 을 보내 Bad Request 로 목록이 통째로 안 떴다. 나머지는 스크롤로 이어 받는다
+  const { data, loading, error, refetch, fetchMore } = useGetGatedMappings({
     matchingSource: activeSources.length > 0 ? activeSources : undefined,
     productTitle: appliedTitle || undefined,
-    limit: 50,
   });
+  const viewRef = useLoadMoreOnView({ field: 'gatedMappings', data, loading, fetchMore });
 
   const [verifyMapping] = useVerifyProductMapping();
 
@@ -232,6 +234,7 @@ const GatedMappingList = () => {
           );
         })}
       </div>
+      <div ref={viewRef} className="h-4" />
     </Panel>
   );
 };
