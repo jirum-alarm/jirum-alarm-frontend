@@ -2953,6 +2953,7 @@ export type QueryGatedMappingsQuery = {
     id: string;
     productId: number;
     matchStatus?: ProductMappingMatchStatus | null;
+    verificationStatus?: ProductMappingVerificationStatus | null;
     matchingSource?: string | null;
     matchingReasoning?: string | null;
     extractedProductInfo?: string | null;
@@ -4200,6 +4201,7 @@ export const QueryGatedMappingsDocument = new TypedDocumentString(`
       }
     }
     matchStatus
+    verificationStatus
     matchingSource
     matchingReasoning
     extractedProductInfo

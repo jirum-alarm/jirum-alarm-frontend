@@ -54,7 +54,18 @@ const GatedMappingList = () => {
 
   const [verifyMapping] = useVerifyProductMapping();
 
-  const items = useMemo(() => data?.gatedMappings ?? [], [data]);
+  // 서버가 이미 판정된 행을 걸러주지 않아 새로고침하면 처리한 항목이 다시 떴다(서버 제외는 matching-api 에서 따로 진행).
+  // 그 전까지 안전망: 판정 끝난 행은 숨긴다. 방금 이 화면에서 처리한 행은 결과 표시를 위해 남긴다
+  const items = useMemo(
+    () =>
+      (data?.gatedMappings ?? []).filter(
+        (item) =>
+          handled[item.id] ||
+          (item.verificationStatus !== ProductMappingVerificationStatus.Verified &&
+            item.verificationStatus !== ProductMappingVerificationStatus.Rejected),
+      ),
+    [data, handled],
+  );
 
   const toggleSource = (value: string) => {
     setActiveSources((prev) =>
@@ -73,8 +84,9 @@ const GatedMappingList = () => {
       }));
       toast.success(
         result === ProductMappingVerificationStatus.Verified
-          ? '승인 처리했습니다 (게이트 오판 → 재매칭 대상).'
-          : '거절 유지했습니다 (추출 오염 확정).',
+          ? // 승인 뒤 재매칭이 실제로 도는지는 확인되지 않았다 — 한 일만 말한다
+            '승인 처리했습니다.'
+          : '거절 유지했습니다.',
       );
     } catch (e) {
       toast.error(`처리 실패: ${(e as Error).message}`);
@@ -111,6 +123,8 @@ const GatedMappingList = () => {
             value={titleQuery}
             onChange={(e) => setTitleQuery(e.target.value)}
             placeholder="제목 검색"
+            // 서버 GatedMappingsArgs.productTitle @MaxLength(100) — 넘기면 목록이 Bad Request 로 통째 실패한다
+            maxLength={100}
             className="rounded-md border border-stroke px-3 py-1.5 text-xs dark:border-strokedark dark:bg-boxdark"
           />
           <button
