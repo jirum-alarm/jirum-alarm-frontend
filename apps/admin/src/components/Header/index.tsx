@@ -9,7 +9,6 @@ import SvgLogo from '../icons/Logo';
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
-  isLoggedIn: boolean;
 }) => {
   const { logout } = useLogout();
 
@@ -65,15 +64,9 @@ const Header = (props: {
         </div>
 
         <div className="flex w-full items-center justify-end gap-3 2xsm:gap-7">
-          {!props.isLoggedIn ? (
-            <Link className="rounded-md p-2 hover:bg-slate-100" href={'/auth/signin'}>
-              로그인
-            </Link>
-          ) : (
-            <button className="rounded-md p-2 hover:bg-slate-100" onClick={logout}>
-              로그아웃
-            </button>
-          )}
+          <button className="rounded-md p-2 hover:bg-slate-100" onClick={logout}>
+            로그아웃
+          </button>
         </div>
       </div>
     </header>

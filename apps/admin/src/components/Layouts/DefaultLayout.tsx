@@ -6,12 +6,7 @@ import Header from '@/components/Header';
 import QueryErrorBanner from '@/components/QueryErrorBanner';
 import Sidebar from '@/components/Sidebar';
 
-interface Props {
-  isLoggedIn: boolean;
-  children: React.ReactNode;
-}
-
-export default function DefaultLayout({ isLoggedIn, children }: Props) {
+export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -55,11 +50,7 @@ export default function DefaultLayout({ isLoggedIn, children }: Props) {
           }`}
         >
           {/* <!-- ===== Header Start ===== --> */}
-          <Header
-            sidebarOpen={sidebarOpen}
-            setSidebarOpen={setSidebarOpen}
-            isLoggedIn={isLoggedIn}
-          />
+          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           {/* <!-- ===== Header End ===== --> */}
 
           {/* <!-- ===== Main Content Start ===== --> */}
