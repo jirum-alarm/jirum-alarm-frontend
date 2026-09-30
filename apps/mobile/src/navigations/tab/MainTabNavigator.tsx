@@ -254,7 +254,30 @@ function InstantTabButton({
   );
 }
 
+/**
+ * 앱이 한가해지면 자주 가는 탭을 백그라운드에 미리 그려 둔다 — 처음 누를 때도 이미 그려진
+ * 화면이 바로 뜬다(lazy 라 첫 방문마다 마운트·쿼리를 그때 시작했다).
+ * ★알림 탭은 뺀다: 마운트될 때 "마지막 읽은 시각" 을 지금으로 갱신해서, 미리 그리면 보지도
+ * 않은 알림의 "새 알림" 표시가 꺼진다.
+ * ponytail: 2초 고정 지연. 첫 화면(홈) 요청과 겹치지 않을 만큼이면 된다 — 더 정교하게는
+ * 홈 쿼리 완료 후로 걸 수 있다.
+ */
+const PRELOAD_TABS = [
+  tabNavigations.DISCOVER,
+  tabNavigations.COMMUNITY,
+  tabNavigations.MYPAGE,
+] as const;
+const PRELOAD_DELAY_MS = 2000;
+
 function AnimatedTabBar(props: BottomTabBarProps) {
+  const {navigation} = props;
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      for (const name of PRELOAD_TABS) navigation.preload(name);
+    }, PRELOAD_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [navigation]);
+
   const tabBarVisible = useTabBarVisibility();
   const insets = useSafeAreaInsets();
   const bottomGap = insets.bottom > 0 ? insets.bottom : GLASS_BOTTOM_GAP;

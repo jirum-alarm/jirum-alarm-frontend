@@ -6,6 +6,8 @@ import * as React from 'react';
 import * as ReactTestRenderer from 'react-test-renderer';
 
 jest.mock('../global.css', () => ({}));
+// 예열용 숨은 WebView — 네이티브 모듈이라 jest 에서 로드되지 않는다.
+jest.mock('../src/shared/components/WebViewPrewarm', () => () => null);
 // 네이티브 모듈이라 jest 에서 로드가 안 된다. 래퍼는 children 을 그대로 통과시키면 충분.
 jest.mock('react-native-gesture-handler', () => ({
   GestureHandlerRootView: ({children}: {children: React.ReactNode}) => children,

@@ -15,6 +15,7 @@ import {
 } from '@/provider/WebViewRefProvider.tsx';
 import FcmHandler from '@/components/FCMHandler.tsx';
 import OfflineBanner from '@/shared/components/OfflineBanner.tsx';
+import WebViewPrewarm from '@/shared/components/WebViewPrewarm';
 import AppErrorFallback from '@/shared/components/AppErrorFallback.tsx';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -43,6 +44,7 @@ function App(): React.JSX.Element {
                     <RootNavigator />
                   </FcmHandler>
                   <OfflineBanner />
+                  <WebViewPrewarm />
                 </WebviewRefContext.Provider>
                 <Toast config={toastConfig} />
               </ReactQueryProvider>

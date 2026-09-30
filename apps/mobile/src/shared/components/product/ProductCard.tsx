@@ -1,3 +1,4 @@
+import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import React from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -59,6 +60,9 @@ export default function ProductCard({
   return (
     <PressableScale
       style={isGrid ? {width: '100%'} : {width: CARD_WIDTH}}
+      onPressIn={() =>
+        prefetchProductDetail(Number(product.id), product.thumbnail)
+      }
       onPress={() => {
         trackProductCardClick(trackingSource, product.id);
         onPress(Number(product.id));

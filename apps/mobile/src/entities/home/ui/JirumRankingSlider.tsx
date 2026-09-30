@@ -1,3 +1,4 @@
+import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
@@ -253,6 +254,9 @@ function RankingCard({
       <PressableScale
         scaleTo={0.96}
         style={{width: CARD_WIDTH, height: CARD_HEIGHT}}
+        onPressIn={() =>
+          prefetchProductDetail(Number(product.id), product.thumbnail)
+        }
         onPress={() => {
           // web ProductRankingImageCard: source="home_ranking", rank 1-based.
           trackProductCardClick('home_ranking', product.id, rank);

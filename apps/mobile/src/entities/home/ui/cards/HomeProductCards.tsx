@@ -1,3 +1,4 @@
+import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import React from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -58,6 +59,9 @@ export function GridCard({
   return (
     <PressableScale
       style={{width: '100%'}}
+      onPressIn={() =>
+        prefetchProductDetail(Number(product.id), product.thumbnail)
+      }
       onPress={() => {
         // web ProductGridCard: 뱃지와 같은 rank 를 추적에도 싣는다.
         trackProductCardClick(trackingSource, product.id, rank);
@@ -105,6 +109,9 @@ export function CarouselCard({product, onPress, trackingSource}: CardProps) {
   return (
     <PressableScale
       style={{width: CAROUSEL_CARD_WIDTH}}
+      onPressIn={() =>
+        prefetchProductDetail(Number(product.id), product.thumbnail)
+      }
       onPress={() => {
         trackProductCardClick(trackingSource, product.id);
         onPress(Number(product.id));
@@ -138,6 +145,9 @@ export function CarouselCard({product, onPress, trackingSource}: CardProps) {
 export function ListCard({product, onPress, trackingSource}: CardProps) {
   return (
     <PressableScale
+      onPressIn={() =>
+        prefetchProductDetail(Number(product.id), product.thumbnail)
+      }
       onPress={() => {
         trackProductCardClick(trackingSource, product.id);
         onPress(Number(product.id));
@@ -191,6 +201,9 @@ export function ListCard({product, onPress, trackingSource}: CardProps) {
 export function DoubleRowCard({product, onPress, trackingSource}: CardProps) {
   return (
     <PressableScale
+      onPressIn={() =>
+        prefetchProductDetail(Number(product.id), product.thumbnail)
+      }
       onPress={() => {
         trackProductCardClick(trackingSource, product.id);
         onPress(Number(product.id));

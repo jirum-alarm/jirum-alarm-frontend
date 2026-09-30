@@ -26,6 +26,7 @@ export default function PressableScale({
   style,
   className,
   onPress,
+  onPressIn,
   ...rest
 }: PressableProps & {
   scaleTo?: number;
@@ -81,7 +82,11 @@ export default function PressableScale({
 
   return (
     <Pressable
-      onPressIn={() => animate(true)}
+      // 호출부 onPressIn(상세 미리 받기 등)도 같이 부른다 — rest 로 넘기면 애니메이션을 덮어쓴다.
+      onPressIn={e => {
+        animate(true);
+        onPressIn?.(e);
+      }}
       onPressOut={() => animate(false)}
       onPress={handlePress}
       style={style}
