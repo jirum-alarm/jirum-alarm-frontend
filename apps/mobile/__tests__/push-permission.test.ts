@@ -58,10 +58,17 @@ describe('requestPushPermissionIfNeeded', () => {
     expect(mockAddToken).not.toHaveBeenCalled();
   });
 
-  it('다시 물을 수 없으면(iOS 거부 확정·Android 영구 거부) 묻지 않는다', async () => {
+  it('다시 물을 수 없으면(iOS 거부 확정·Android 영구 거부) 묻지 않고, 설정 안내를 한 번만 띄운다', async () => {
+    const {Alert} = require('react-native');
+    const alert = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
     mockGetPermissions.mockResolvedValue({granted: false, canAskAgain: false});
     await requestPushPermissionIfNeeded();
+    await requestPushPermissionIfNeeded();
     expect(mockRequestPermissions).not.toHaveBeenCalled();
+    // 조용히 끝나면 등록해도 알림이 영영 안 오는 걸 사용자가 모른다.
+    expect(alert).toHaveBeenCalledTimes(1);
+    expect(alert.mock.calls[0][0]).toBe('알림이 꺼져 있어요');
+    alert.mockRestore();
   });
 
   it('물을 수 있으면 묻고, 허용되면 토큰을 등록한다', async () => {

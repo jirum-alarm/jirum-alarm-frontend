@@ -1,5 +1,6 @@
 import messaging from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
+import {Alert, Linking} from 'react-native';
 
 import {NotificationService} from '@/shared/api/notification';
 import {TokenType} from '@/shared/api/gql/graphql.ts';
@@ -95,10 +96,33 @@ export async function unbindFcmTokenFromUser(): Promise<void> {
 export async function requestPushPermissionIfNeeded(): Promise<void> {
   try {
     const current = await Notifications.getPermissionsAsync();
-    if (current.granted || !current.canAskAgain) return;
+    if (current.granted) return;
+    if (!current.canAskAgain) {
+      // 예전엔 여기서 조용히 끝났다 — 키워드·묶음을 등록해도 알림이 영영 안 오는데
+      // 사용자는 모른다. OS 가 더는 안 물어 주므로 설정으로 보내는 수밖에 없다.
+      promptOpenSettingsOnce();
+      return;
+    }
     const next = await Notifications.requestPermissionsAsync();
     if (next.granted) await registerFcmToken();
   } catch (error) {
     console.log('push permission error:', error);
   }
+}
+
+// ponytail: 앱 실행당 한 번. 키워드를 연달아 등록할 때마다 뜨면 잔소리가 된다.
+// 영구 저장(며칠에 한 번)은 "안내를 봤는데도 안 켠" 사람이 많다는 신호가 생기면.
+let settingsPrompted = false;
+
+function promptOpenSettingsOnce() {
+  if (settingsPrompted) return;
+  settingsPrompted = true;
+  Alert.alert(
+    '알림이 꺼져 있어요',
+    '설정에서 알림을 켜야 등록한 키워드의 새 핫딜을 알려드릴 수 있어요.',
+    [
+      {text: '나중에', style: 'cancel'},
+      {text: '설정 열기', onPress: () => Linking.openSettings()},
+    ],
+  );
 }
