@@ -42,7 +42,7 @@ export default function NoticePostCard({
           {displayTime(post.createdAt)}
         </Text>
         {isNew ? (
-          <View className="bg-secondary-500 rounded px-1.5 py-0.5">
+          <View className="bg-secondary-600 rounded px-1.5 py-0.5">
             <Text className="text-xs font-semibold text-white">NEW</Text>
           </View>
         ) : null}

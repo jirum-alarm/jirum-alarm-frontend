@@ -258,6 +258,6 @@ function RuleText({
     ? 'text-gray-500'
     : invalid
     ? 'text-error-500'
-    : 'text-primary-700';
+    : 'text-primary-800';
   return <Text className={`text-xs ${color}`}>{`• ${text}`}</Text>;
 }

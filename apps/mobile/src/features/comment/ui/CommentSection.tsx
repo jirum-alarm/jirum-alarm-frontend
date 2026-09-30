@@ -42,7 +42,7 @@ export default function CommentSection({
       <Text className="px-5 pb-3 text-lg font-semibold text-gray-900">
         지름알림 댓글
         {comments.length > 0 ? (
-          <Text className="text-secondary-500"> {comments.length}개</Text>
+          <Text className="text-secondary-600"> {comments.length}개</Text>
         ) : null}
       </Text>
 

@@ -135,7 +135,7 @@ export default function RecommendedKeywordSection() {
               <Text
                 className={cn(
                   'text-sm font-medium',
-                  added ? 'text-primary-700' : 'text-gray-900',
+                  added ? 'text-primary-800' : 'text-gray-900',
                 )}>
                 {keyword}
               </Text>

@@ -108,7 +108,7 @@ export default function KeywordScreen({navigation}: Props) {
                 나의 지름 키워드
               </Text>
               <Text className="text-sm text-gray-900">
-                <Text className="text-primary-700">{keywords.length}</Text>
+                <Text className="text-primary-800">{keywords.length}</Text>
                 {`/${MAX_KEYWORD_COUNT}`}
               </Text>
             </View>

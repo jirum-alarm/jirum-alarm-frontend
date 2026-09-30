@@ -42,7 +42,7 @@ export default function ViewerCount({
           transform: [{translateY: collapsed ? 8 : 0}],
         }}>
         <Text className="text-sm text-gray-700">
-          <Text className="font-semibold text-secondary-500">
+          <Text className="font-semibold text-secondary-600">
             {count.toLocaleString('ko-KR')}명
           </Text>
           이 살펴본 상품

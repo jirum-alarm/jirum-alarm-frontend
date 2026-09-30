@@ -74,7 +74,7 @@ const SearchHeader = forwardRef<
             // 결과·필터를 가리고 키보드가 올라온다(web 운영 실측 주석과 같은 이유).
             autoFocus={autoFocus}
             placeholder="핫딜 상품을 검색해주세요"
-            placeholderTextColor="#98A2B3"
+            placeholderTextColor="#667085"
             returnKeyType="search"
             // 검색어는 사람 이름이 아니다 — 자동 대문자·교정이 켜지면 영문
             // 모델명이 엉뚱하게 바뀐다(web 도 전부 off).

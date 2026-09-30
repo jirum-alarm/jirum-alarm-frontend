@@ -139,14 +139,14 @@ export default function Comment({
           <Text
             className={cn(
               'text-sm',
-              comment.isMyLike ? 'text-primary-700' : 'text-gray-500',
+              comment.isMyLike ? 'text-primary-800' : 'text-gray-500',
             )}>
             좋아요
           </Text>
           <Text
             className={cn(
               'text-sm',
-              comment.isMyLike ? 'text-primary-700' : 'text-gray-600',
+              comment.isMyLike ? 'text-primary-800' : 'text-gray-600',
             )}>
             {comment.likeCount}
           </Text>
@@ -166,7 +166,7 @@ export default function Comment({
             <Text
               className={cn(
                 'text-sm',
-                editStatus === 'reply' ? 'text-secondary-500' : 'text-gray-500',
+                editStatus === 'reply' ? 'text-secondary-600' : 'text-gray-500',
               )}>
               답글
             </Text>

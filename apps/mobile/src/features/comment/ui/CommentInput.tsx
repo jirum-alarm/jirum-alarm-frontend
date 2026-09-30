@@ -117,7 +117,7 @@ export default function CommentInput({
           placeholder={
             isUserLogin ? '댓글을 입력해주세요' : '로그인 후 이용해주세요'
           }
-          placeholderTextColor="#98A2B3"
+          placeholderTextColor="#667085"
           editable={isUserLogin}
         />
         <Pressable
@@ -130,7 +130,7 @@ export default function CommentInput({
           <Text
             className={
               canSubmit
-                ? 'text-base font-semibold text-primary-700'
+                ? 'text-base font-semibold text-primary-800'
                 : 'text-base font-semibold text-gray-400'
             }>
             등록

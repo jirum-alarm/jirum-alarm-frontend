@@ -85,7 +85,7 @@ export default function RecentKeywords({
               accessibilityRole="button"
               accessibilityLabel={`${keyword} 삭제`}
               style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-              <XSmall width={16} height={16} color="#98A2B3" />
+              <XSmall width={16} height={16} color="#667085" />
             </Pressable>
           </Pressable>
         ))}

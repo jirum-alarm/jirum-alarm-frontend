@@ -127,7 +127,7 @@ export default function CommunityCommentItem({
           <Text
             className={cn(
               'pl-1 text-xs',
-              comment.isMyLike ? 'text-primary-700' : 'text-gray-500',
+              comment.isMyLike ? 'text-primary-800' : 'text-gray-500',
             )}>
             좋아요 {comment.likeCount}
           </Text>

@@ -38,7 +38,7 @@ export default function SectionErrorRow({
         className="items-end justify-center"
         accessibilityRole="button"
         accessibilityLabel={`${label} 다시 시도`}>
-        <Text className="text-sm font-medium text-primary-700">다시 시도</Text>
+        <Text className="text-sm font-medium text-primary-800">다시 시도</Text>
       </Pressable>
     </View>
   );

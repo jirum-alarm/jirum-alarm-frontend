@@ -94,7 +94,7 @@ export default function ReportSheet({
             value={description}
             onChangeText={setDescription}
             placeholder="신고 내용을 입력해주세요"
-            placeholderTextColor="#98A2B3"
+            placeholderTextColor="#667085"
             multiline
             className="mt-3 rounded-lg border border-gray-200 p-3 text-sm text-gray-900"
             style={styles.descriptionInput}

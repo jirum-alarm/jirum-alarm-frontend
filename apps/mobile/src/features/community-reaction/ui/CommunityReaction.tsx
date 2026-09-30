@@ -90,7 +90,7 @@ function CommunityLink({url, provider}: {url: string; provider: string}) {
       className="flex-row items-center gap-x-1"
       accessibilityRole="button"
       accessibilityLabel={`${provider} 반응 보기`}>
-      <Text className="text-xs font-semibold text-secondary-500">
+      <Text className="text-xs font-semibold text-secondary-600">
         {provider} 반응 보기
       </Text>
       <View className="h-4 w-4 items-center justify-center rounded-full bg-secondary-500">

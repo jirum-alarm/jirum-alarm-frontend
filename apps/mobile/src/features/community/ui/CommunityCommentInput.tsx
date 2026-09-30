@@ -44,7 +44,7 @@ export default function CommunityCommentInput({
         multiline
         maxLength={MAX_COMMENT_LENGTH}
         placeholder="댓글을 입력해주세요."
-        placeholderTextColor="#98A2B3"
+        placeholderTextColor="#667085"
         className="flex-1 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-900"
         // web 은 textarea scrollHeight 로 늘린다. RN 대응이 이것.
         style={{height: Math.min(Math.max(40, height), MAX_INPUT_HEIGHT)}}

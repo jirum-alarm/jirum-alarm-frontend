@@ -116,7 +116,7 @@ export function SubscribedThemeRow({
             {theme.name}
           </Text>
         </View>
-        <Text className="bg-primary-50 text-primary-700 self-start rounded px-1.5 py-0.5 text-[11px] font-medium">
+        <Text className="bg-primary-50 text-primary-800 self-start rounded px-1.5 py-0.5 text-[11px] font-medium">
           묶음
         </Text>
       </Pressable>

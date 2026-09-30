@@ -89,7 +89,7 @@ export default function BirthYearSelect({
                       <Text
                         className={
                           isSelected
-                            ? 'text-primary-700 text-base font-semibold'
+                            ? 'text-primary-800 text-base font-semibold'
                             : 'text-base text-gray-700'
                         }>
                         {item.text}

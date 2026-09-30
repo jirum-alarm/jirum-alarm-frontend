@@ -152,7 +152,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
           <View className="mt-7">
             <Text className="mb-3 text-sm font-medium text-gray-900">
               {'🔥 지금 이 묶음에 뜬 딜 '}
-              <Text className="text-primary-700">{deals?.length ?? 0}</Text>
+              <Text className="text-primary-800">{deals?.length ?? 0}</Text>
             </Text>
             {isDealsError ? (
               <SectionErrorRow label="라이브 딜" onRetry={refetchDeals} />

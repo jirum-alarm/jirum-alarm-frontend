@@ -63,7 +63,7 @@ const TextField = forwardRef<TextInput, Props>(
             onFocus={composeEventHandlers(handleFocused, onFocus)}
             onBlur={composeEventHandlers(handleBlur, onBlur)}
             selectionColor={'#000000'}
-            placeholderTextColor={'#98A2B3'}
+            placeholderTextColor={'#667085'}
             className={cn(textfieldVariant({variant, size, color}), className)}
           />
           {suffixIcon && <View className="pr-[8px]">{suffixIcon}</View>}
