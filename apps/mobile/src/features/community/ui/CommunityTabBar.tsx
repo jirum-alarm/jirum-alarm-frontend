@@ -34,7 +34,7 @@ export default function CommunityTabBar({
             accessibilityRole="button"
             accessibilityState={{selected: isActive}}
             accessibilityLabel={tab.label}
-            style={({pressed}) => (pressed ? {opacity: 0.7} : null)}
+            style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
             className={cn(
               'h-8 justify-center rounded-full px-3',
               isActive ? 'bg-gray-900' : 'bg-gray-100',

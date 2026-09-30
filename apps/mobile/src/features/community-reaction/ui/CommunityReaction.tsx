@@ -30,7 +30,7 @@ function KeywordChip({item}: {item: ReactionKeywordItem}) {
   return (
     <View
       className={cn(
-        'flex-row gap-x-1 rounded-[40px] border bg-white px-3 py-1.5',
+        'flex-row gap-x-1 rounded-full border bg-white px-3 py-1.5',
         positive
           ? 'border-secondary-300'
           : negative
@@ -199,7 +199,7 @@ export default function CommunityReaction({
               <Text className="text-base font-semibold text-gray-800">
                 {isPositive ? '추천해요' : '아쉬워요'}
               </Text>
-              <Text className="text-sm text-gray-400">
+              <Text className="text-sm text-gray-500">
                 · {dominantPercent}%
               </Text>
             </View>
@@ -231,7 +231,7 @@ export default function CommunityReaction({
           ) : null}
 
           <View className="flex-row items-center justify-between gap-2 border-t border-gray-100 pt-2.5">
-            <Text className="text-xs text-gray-400">
+            <Text className="text-xs text-gray-500">
               {lastUpdatedAt ?? ' '}
             </Text>
             {additional?.url && additional.provider?.nameKr ? (

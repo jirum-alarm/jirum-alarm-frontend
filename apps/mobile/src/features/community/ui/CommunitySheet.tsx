@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 4,
     borderRadius: 999,
-    backgroundColor: '#EAECF0', // gray-200
+    backgroundColor: '#E4E7EC', // gray-200
     marginBottom: 12,
   },
 });

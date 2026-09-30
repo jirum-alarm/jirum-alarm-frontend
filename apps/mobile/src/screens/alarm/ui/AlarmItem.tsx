@@ -108,7 +108,7 @@ export default function AlarmItem({
                 <View className="h-2.5 border-l border-gray-400" />
               </>
             ) : null}
-            <Text className="text-xs text-gray-400">
+            <Text className="text-xs text-gray-500">
               {displayTime(createdAt)}
             </Text>
           </View>

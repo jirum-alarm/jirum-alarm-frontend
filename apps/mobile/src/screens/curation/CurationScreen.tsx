@@ -28,6 +28,7 @@ import {
   DetailHeaderBackButton,
 } from '@/screens/detail/ui/ProductDetailHeader';
 import {openSearch} from '@/shared/lib/navigation/search-flow';
+import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 
 /**
  * 더보기(큐레이션) 화면. web: app/(desktop-ready)/curation/[id]
@@ -188,6 +189,7 @@ function InfiniteList({section, onPressProduct, topSpacing}: ListProps) {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery(curationInfiniteQuery(section));
+  const bottomClip = useHiddenTabBarClipPadding();
 
   const products = useMemo(
     () => (data?.pages ?? []).flat() as ProductCardType[],
@@ -204,6 +206,7 @@ function InfiniteList({section, onPressProduct, topSpacing}: ListProps) {
       label={section.title}
       onRetry={refetch}
       topSpacing={topSpacing}
+      bottomInset={bottomClip}
       onEndReached={() => {
         if (hasNextPage && !isFetchingNextPage) fetchNextPage();
       }}
@@ -223,6 +226,7 @@ function SingleList({section, onPressProduct, topSpacing}: ListProps) {
   const {data, isPending, isError, refetch} = useQuery(
     curationSingleQuery(section),
   );
+  const bottomClip = useHiddenTabBarClipPadding();
 
   return (
     <CurationGrid
@@ -234,6 +238,7 @@ function SingleList({section, onPressProduct, topSpacing}: ListProps) {
       label={section.title}
       onRetry={refetch}
       topSpacing={topSpacing}
+      bottomInset={bottomClip}
     />
   );
 }

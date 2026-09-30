@@ -177,7 +177,7 @@ export function ChipRow({
             accessibilityState={{selected: isActive}}
             accessibilityLabel={item.label}
             className={cn(
-              'rounded-[40px] border',
+              'rounded-full border',
               variant === 'sub' ? 'px-3 py-1' : 'px-4 py-1.5',
               isActive
                 ? 'border-secondary-500 bg-secondary-50'

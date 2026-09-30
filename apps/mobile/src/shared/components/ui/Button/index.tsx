@@ -19,6 +19,13 @@ interface ButtonProps
   loading?: boolean;
 }
 
+// 라벨 색과 같게 — 흰 스피너는 lime·error-50 배경에서 안 보였다.
+const SPINNER_COLOR = {
+  primary: '#101828',
+  secondary: '#344054',
+  error: '#BC0017',
+} as const;
+
 const Button = ({
   children,
   size = 'lg',
@@ -31,12 +38,16 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <Pressable
-      disabled={disabled}
+      // 로딩 중 재탭 = 이중 제출(탈퇴·신고)이라 막는다.
+      disabled={disabled || loading}
       className={cn(buttonVaraint({size, variant, color}), className)}
       {...rest}>
       {({pressed}) => {
         return loading ? (
-          <ActivityIndicator size="small" color={'white'} />
+          <ActivityIndicator
+            size="small"
+            color={SPINNER_COLOR[color ?? 'primary']}
+          />
         ) : isValidElement(children) ? (
           children
         ) : (

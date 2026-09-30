@@ -358,7 +358,7 @@ function AppButton({
       onPress={onPress}
       disabled={disabled}
       className="flex-1 items-center"
-      style={({pressed}) => ({opacity: pressed ? 0.72 : 1})}
+      style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
       accessibilityRole="button"
       accessibilityLabel={`${label}(으)로 공유`}>
       <View

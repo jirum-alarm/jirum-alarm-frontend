@@ -57,12 +57,17 @@ function App(): React.JSX.Element {
 // init 없이 wrap 하면 앱 시작 계측이 받아줄 클라이언트를 못 찾아 릴리스에서 죽는다.
 export default wrapApp(App);
 
+// 토스트는 한 모양 — error·warning 이 빠져 있으면 라이브러리 기본 흰 카드로 떨어진다.
+const renderToast: ToastConfig[string] = ({text1}) => (
+  <View className="bg-gray-600 rounded-[8px]">
+    <Text className="text-[14px] font-pretendard py-[14px] px-[22.5px] text-white">
+      {text1}
+    </Text>
+  </View>
+);
+
 export const toastConfig: ToastConfig = {
-  info: ({text1}) => (
-    <View className="bg-gray-600 rounded-[8px]">
-      <Text className="text-[14px] font-pretendard py-[14px] px-[22.5px] text-white">
-        {text1}
-      </Text>
-    </View>
-  ),
+  info: renderToast,
+  warning: renderToast,
+  error: renderToast,
 };

@@ -122,7 +122,7 @@ export default function CommunityPostBody({
           accessibilityRole="button"
           accessibilityLabel="추천"
           accessibilityState={{selected: !!post.isMyLike}}
-          style={({pressed}) => (pressed ? {opacity: 0.7} : null)}
+          style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
           className={cn(
             'flex-row items-center rounded-full border px-4 py-1.5',
             post.isMyLike

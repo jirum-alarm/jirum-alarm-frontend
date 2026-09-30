@@ -225,7 +225,7 @@ function PromotionTabs({
             accessibilityState={{selected: isActive}}
             accessibilityLabel={tab.label}
             className={cn(
-              'rounded-[40px] border px-4 py-1.5',
+              'rounded-full border px-4 py-1.5',
               isActive
                 ? 'border-secondary-500 bg-secondary-50'
                 : 'border-gray-300 bg-white',

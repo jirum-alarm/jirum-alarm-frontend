@@ -58,7 +58,7 @@ export default function PriceVerdictHero({
         {verdict.subline ? (
           <Text className="mt-1 text-xs text-gray-500">{verdict.subline}</Text>
         ) : null}
-        <Text className="mt-2 text-xs font-medium text-gray-400">
+        <Text className="mt-2 text-xs font-medium text-gray-500">
           기준 보기 ↓
         </Text>
       </Pressable>

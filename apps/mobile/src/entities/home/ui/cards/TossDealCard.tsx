@@ -84,7 +84,7 @@ export default function TossDealCard({
             </Text>
           ) : null}
           {deal.delivery ? (
-            <Text className="text-xs text-gray-400" numberOfLines={1}>
+            <Text className="text-xs text-gray-500" numberOfLines={1}>
               · {deal.delivery}
             </Text>
           ) : null}

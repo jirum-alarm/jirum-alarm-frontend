@@ -1,12 +1,5 @@
 import React, {useCallback, useLayoutEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, FlatList, Text, View} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -21,7 +14,14 @@ import CommunityPostBody from '@/features/community/ui/CommunityPostBody';
 import PostMenu from '@/features/community/ui/PostMenu';
 import {useCommunityCommentsViewModel} from '@/features/community/model/useCommunityCommentsViewModel';
 import {useCommunityPostViewModel} from '@/features/community/model/useCommunityPostViewModel';
-import {baseHeaderOptions} from '@/navigations/tab/native-headers';
+import {
+  baseHeaderOptions,
+  HEADER_TINT_COLOR,
+} from '@/navigations/tab/native-headers';
+import {
+  DetailHeaderBackButton,
+  HeaderIconButton,
+} from '@/screens/detail/ui/ProductDetailHeader';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import Dots from '@/shared/components/icons/Dots';
 import ShareIcon from '@/shared/components/icons/share';
@@ -84,6 +84,12 @@ export default function CommunityPostScreen({route, navigation}: Props) {
     navigation.setOptions({
       ...baseHeaderOptions,
       title: '',
+      // 시스템 back 은 선이 굵어 옆 아이콘과 어긋난다 — 상세와 같은 규격.
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerLeft: ({canGoBack}) =>
+        canGoBack ? (
+          <DetailHeaderBackButton onPress={() => navigation.goBack()} />
+        ) : null,
       // 네이티브 스택의 headerRight 는 함수만 받는다. 실제 컴포넌트는 모듈
       // 스코프의 PostHeaderActions 이므로 렌더마다 타입이 새로 생기지 않는다.
       // eslint-disable-next-line react/no-unstable-nested-components
@@ -256,21 +262,13 @@ function PostHeaderActions({
   onPressMenu: () => void;
 }) {
   return (
-    <View className="flex-row items-center" style={styles.headerActions}>
-      <Pressable
-        onPress={onPressShare}
-        hitSlop={8}
-        accessibilityRole="button"
-        accessibilityLabel="공유하기">
-        <ShareIcon width={24} height={24} color="#101828" />
-      </Pressable>
-      <Pressable
-        onPress={onPressMenu}
-        hitSlop={8}
-        accessibilityRole="button"
-        accessibilityLabel="게시글 메뉴">
+    <View className="flex-row items-center">
+      <HeaderIconButton onPress={onPressShare} label="공유하기">
+        <ShareIcon width={22} height={22} color={HEADER_TINT_COLOR} />
+      </HeaderIconButton>
+      <HeaderIconButton onPress={onPressMenu} label="게시글 메뉴">
         <Dots width={24} height={24} />
-      </Pressable>
+      </HeaderIconButton>
     </View>
   );
 }
@@ -279,7 +277,3 @@ function PostHeaderActions({
 function CommentSeparator() {
   return <View className="mx-5 h-px bg-gray-100" />;
 }
-
-const styles = StyleSheet.create({
-  headerActions: {gap: 16},
-});

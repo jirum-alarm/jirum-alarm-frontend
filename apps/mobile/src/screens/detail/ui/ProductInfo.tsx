@@ -29,7 +29,7 @@ function MetaRow({
 }) {
   return (
     <View className="flex-row justify-between">
-      <Text className="text-sm font-medium text-gray-400">{label}</Text>
+      <Text className="text-sm font-medium text-gray-500">{label}</Text>
       <View className="flex-row items-center gap-x-1">{children}</View>
     </View>
   );
@@ -210,7 +210,7 @@ export default function ProductInfo({
 
       {product.uploaderType === UploaderType.User && product.content ? (
         <View className="mt-6">
-          <Text className="mb-2 text-sm font-medium text-gray-400">
+          <Text className="mb-2 text-sm font-medium text-gray-500">
             상품 설명
           </Text>
           <Text className="text-sm leading-relaxed text-gray-700">

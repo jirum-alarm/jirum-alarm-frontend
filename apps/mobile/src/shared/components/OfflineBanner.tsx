@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    backgroundColor: '#EF4444',
+    backgroundColor: '#EB001C', // error-500
     paddingVertical: 8,
     alignItems: 'center',
     pointerEvents: 'none',

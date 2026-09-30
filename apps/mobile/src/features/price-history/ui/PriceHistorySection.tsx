@@ -267,7 +267,7 @@ export default function PriceHistorySection({
         </View>
       ) : null}
 
-      <Text className="px-5 pt-2 text-xs text-gray-400">
+      <Text className="px-5 pt-2 text-xs text-gray-500">
         이 기간 핫딜 {points.length}건 · {rangeLabel}
       </Text>
 
@@ -359,10 +359,10 @@ function DealPreview({
         <View
           className={cn(
             'size-1.5 rounded-full',
-            isCurrent ? 'bg-[#467DFB]' : 'opacity-0',
+            isCurrent ? 'bg-secondary-500' : 'opacity-0',
           )}
         />
-        <Text className="text-[11px] text-gray-400" numberOfLines={1}>
+        <Text className="text-[11px] text-gray-500" numberOfLines={1}>
           {formatPreviewDate(date)}
           {isCurrent ? ' · 이 상품' : ''}
         </Text>
@@ -381,7 +381,7 @@ function DealPreview({
           </Text>
           {deal.providerName ? (
             <Text
-              className="mt-0.5 text-[11px] text-gray-400"
+              className="mt-0.5 text-[11px] text-gray-500"
               numberOfLines={1}>
               {deal.providerName}
             </Text>

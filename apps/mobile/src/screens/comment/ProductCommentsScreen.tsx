@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect} from 'react';
 import {ActivityIndicator, FlatList, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -13,6 +13,7 @@ import {clearEditingComment} from '@/entities/comment/editing-comment';
 import Comment from '@/features/comment/ui/Comment';
 import CommentEmpty from '@/features/comment/ui/CommentEmpty';
 import CommentInput from '@/features/comment/ui/CommentInput';
+import {DetailHeaderBackButton} from '@/screens/detail/ui/ProductDetailHeader';
 import type {ProductFlowParamList} from '@/navigations/tab/types';
 import type {TComment} from '@/shared/api/comment/comment.service';
 import {tabStackNavigations} from '@/shared/constant/navigations';
@@ -26,6 +27,17 @@ export default function ProductCommentsScreen({route, navigation}: Props) {
   const {productId} = route.params;
   const insets = useSafeAreaInsets();
   const bottomClip = useHiddenTabBarClipPadding();
+
+  // 시스템 back 은 선이 굵어 상세·커뮤니티 헤더와 어긋난다 — 같은 규격으로.
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerLeft: ({canGoBack}) =>
+        canGoBack ? (
+          <DetailHeaderBackButton onPress={() => navigation.goBack()} />
+        ) : null,
+    });
+  }, [navigation]);
 
   useEffect(() => {
     const unsub = navigation.addListener('beforeRemove', () => {

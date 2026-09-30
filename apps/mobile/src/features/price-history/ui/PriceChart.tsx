@@ -25,7 +25,7 @@ const HEIGHT = 260;
 const PAD = {top: 40, right: 20, bottom: 28, left: 44};
 
 const LINE = '#7FC125';
-const GRID = '#EAECF0';
+const GRID = '#E4E7EC'; // gray-200
 const AXIS_TEXT = '#667085';
 /** web PriceHistorySection CHART.current — 이 상품 마커. */
 const SEED = '#467DFB';

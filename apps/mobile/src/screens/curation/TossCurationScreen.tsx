@@ -16,6 +16,7 @@ import {
 } from '@/screens/detail/ui/ProductDetailHeader';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
+import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import type {TabStackParamList} from '@/navigations/tab/types';
 
 /**
@@ -38,6 +39,7 @@ export default function TossCurationScreen({
   route: {params: {sectionId?: string}};
 }) {
   const navigation = useNavigation<Nav>();
+  const bottomClip = useHiddenTabBarClipPadding();
   const [activeId, setActiveId] = useState<string>(
     route.params?.sectionId ?? TOSS_SECTIONS[0].id,
   );
@@ -126,6 +128,7 @@ export default function TossCurationScreen({
         )}
         columns={3}
         topSpacing="tight"
+        bottomInset={bottomClip}
         isPending={isPending}
         isError={isError}
         label={activeLabel}

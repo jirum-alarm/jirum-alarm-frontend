@@ -1,3 +1,4 @@
+import Button from '@/shared/components/ui/Button';
 import React, {useEffect, useRef, useState} from 'react';
 import {Animated, Modal, Pressable, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -89,14 +90,9 @@ export default function HotdealGuideModal({
               ))}
             </View>
 
-            <Pressable
-              onPress={onClose}
-              className="mt-7 rounded-lg bg-primary-500 py-3.5"
-              accessibilityRole="button">
-              <Text className="text-center text-base font-semibold text-gray-900">
-                확인
-              </Text>
-            </Pressable>
+            <Button onPress={onClose} className="mt-7">
+              확인
+            </Button>
           </Animated.View>
         </Pressable>
       </Pressable>

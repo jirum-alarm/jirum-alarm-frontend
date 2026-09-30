@@ -1,6 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
-import {Alert, Linking, Platform} from 'react-native';
+import {Linking, Platform} from 'react-native';
 import {SERVICE_URL} from '@/constants/env';
+import {showToast} from '@/shared/lib/feedback/toast';
 import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
 
 /**
@@ -159,7 +160,7 @@ export async function openInAppBrowser(url: string) {
     try {
       await Linking.openURL(url);
     } catch {
-      Alert.alert('알림', '링크를 열 수 없습니다.');
+      showToast.info('링크를 열 수 없어요.');
     }
   }
 }

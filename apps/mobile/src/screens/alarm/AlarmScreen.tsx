@@ -19,6 +19,7 @@ import {
   tabStackNavigations,
 } from '@/shared/constant/navigations';
 import {useRegisterScrollToTop} from '@/navigations/tab/scroll-to-top-store';
+import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import {
   getLastAlarmReadAt,
   setLastAlarmReadAt,
@@ -197,6 +198,10 @@ export default function AlarmScreen() {
           ref={listRef}
           data={notifications}
           keyExtractor={item => String(item.id)}
+          // 탭바가 화면 위에 떠 있어 마지막 행이 가려진다(다른 탭 목록과 같게).
+          contentContainerStyle={{
+            paddingBottom: getReservedBottomPx(insets.bottom),
+          }}
           refreshControl={
             <RefreshControl
               refreshing={false}

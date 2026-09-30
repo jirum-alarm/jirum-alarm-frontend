@@ -11,6 +11,13 @@ import {Pressable, Text, View} from 'react-native';
  * 빈 상태는 계속 숨긴다 — 가격이력 없는 상품이 다수라 그걸 다 에러처럼
  * 띄우면 오해를 산다. 이 컴포넌트는 isError 일 때만 쓴다.
  */
+/** 받침 있으면 '을', 없으면 '를' ("커뮤니티를"). 한글로 안 끝나면 '을(를)'. */
+export const objectParticle = (word: string): string => {
+  const code = word.trim().charCodeAt(word.trim().length - 1) - 0xac00;
+  if (!(code >= 0 && code <= 11171)) return '을(를)';
+  return code % 28 ? '을' : '를';
+};
+
 export default function SectionErrorRow({
   label,
   onRetry,
@@ -21,7 +28,8 @@ export default function SectionErrorRow({
   return (
     <View className="mx-5 mt-3 flex-row items-center justify-between rounded-lg bg-gray-50 px-4 py-3">
       <Text className="shrink text-sm text-gray-600" numberOfLines={1}>
-        {label}을 불러오지 못했어요
+        {label}
+        {objectParticle(label)} 불러오지 못했어요
       </Text>
       <Pressable
         onPress={onRetry}

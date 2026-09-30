@@ -5,6 +5,7 @@ import SearchIcon from '@/shared/components/icons/search';
 import ShareIcon from '@/shared/components/icons/share';
 import IconLogo from '@/shared/components/icons/IconLogo';
 import CaretLeftIcon from '@/shared/components/icons/caret_left';
+import {HEADER_TINT_COLOR} from '@/navigations/tab/native-headers';
 
 /** 로고 아래 붙는 서비스 한 줄 설명. web LOGO_SUBTITLE 과 같은 문구. */
 const LOGO_SUBTITLE = '커뮤니티 핫딜 모아보기';
@@ -24,7 +25,7 @@ export function DetailHeaderTitle({onPress}: {onPress: () => void}) {
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel="지름알림 홈으로"
-      style={styles.title}>
+      style={({pressed}) => [styles.title, pressed && styles.pressed]}>
       <IconLogo size={28} />
       <View style={styles.titleText}>
         <Text style={styles.brand} numberOfLines={1}>
@@ -46,13 +47,33 @@ export function DetailHeaderTitle({onPress}: {onPress: () => void}) {
  */
 export function DetailHeaderBackButton({onPress}: {onPress: () => void}) {
   return (
+    <HeaderIconButton onPress={onPress} label="뒤로">
+      <CaretLeftIcon width={22} height={22} color={HEADER_TINT_COLOR} />
+    </HeaderIconButton>
+  );
+}
+
+/**
+ * 헤더 아이콘 버튼 한 규격 — 36pt 탭 영역 + hitSlop, 누르면 0.6(StackHeader 와 같은 규칙).
+ * 아이콘은 22px · HEADER_TINT_COLOR 로 넣는다.
+ */
+export function HeaderIconButton({
+  onPress,
+  label,
+  children,
+}: {
+  onPress: () => void;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
     <Pressable
       onPress={onPress}
       hitSlop={8}
       accessibilityRole="button"
-      accessibilityLabel="뒤로"
-      style={styles.iconBtn}>
-      <CaretLeftIcon width={22} height={22} color="#101828" />
+      accessibilityLabel={label}
+      style={({pressed}) => [styles.iconBtn, pressed && styles.pressed]}>
+      {children}
     </Pressable>
   );
 }
@@ -68,23 +89,13 @@ export function DetailHeaderActions({
 }) {
   return (
     <View style={styles.actions}>
-      <Pressable
-        onPress={onPressSearch}
-        hitSlop={8}
-        accessibilityRole="button"
-        accessibilityLabel="검색"
-        style={styles.iconBtn}>
-        <SearchIcon width={22} height={22} />
-      </Pressable>
+      <HeaderIconButton onPress={onPressSearch} label="검색">
+        <SearchIcon width={22} height={22} color={HEADER_TINT_COLOR} />
+      </HeaderIconButton>
       {onPressShare ? (
-        <Pressable
-          onPress={onPressShare}
-          hitSlop={8}
-          accessibilityRole="button"
-          accessibilityLabel="공유하기"
-          style={styles.iconBtn}>
-          <ShareIcon width={22} height={22} />
-        </Pressable>
+        <HeaderIconButton onPress={onPressShare} label="공유하기">
+          <ShareIcon width={22} height={22} color={HEADER_TINT_COLOR} />
+        </HeaderIconButton>
       ) : null}
     </View>
   );
@@ -118,6 +129,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  pressed: {opacity: 0.6},
   iconBtn: {
     minWidth: MIN_TAP,
     minHeight: MIN_TAP,

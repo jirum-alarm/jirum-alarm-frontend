@@ -337,7 +337,7 @@ function BannerCard({
       </View>
 
       {isAd ? (
-        <View className="absolute right-2 bottom-2 rounded-lg border border-white bg-[#98A2B3] px-[7px] py-[3px]">
+        <View className="absolute right-2 bottom-2 rounded-lg border border-white bg-gray-400 px-[7px] py-[3px]">
           {/* web `leading-none` — 기본 line-height 면 뱃지가 4~6px 커진다. */}
           <Text
             className="text-xs font-medium text-white"

@@ -1,7 +1,6 @@
 import React, {useCallback} from 'react';
 import {
   ActivityIndicator,
-  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -19,6 +18,7 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import StackHeader from '@/features/mypage/ui/StackHeader';
+import Button from '@/shared/components/ui/Button';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
 
 type Props = NativeStackScreenProps<
@@ -120,29 +120,17 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
           </View>
 
           {/* 구독 토글 — 헤더 바로 아래 전체폭(web 모바일과 같은 위치) */}
-          <Pressable
+          <Button
             onPress={() => {
               if (isSubscribed) unsubscribe(themeId);
               else subscribe(themeId);
             }}
-            disabled={isMutating}
-            accessibilityRole="button"
-            accessibilityLabel={isSubscribed ? '구독 해제' : '이 묶음 구독'}
-            style={isMutating ? styles.dimmed : undefined}
-            className={
-              isSubscribed
-                ? 'mt-4 items-center rounded-xl bg-gray-100 py-3.5'
-                : 'bg-primary-500 mt-4 items-center rounded-xl py-3.5'
-            }>
-            <Text
-              className={
-                isSubscribed
-                  ? 'text-base font-semibold text-gray-500'
-                  : 'text-base font-semibold text-gray-900'
-              }>
-              {isSubscribed ? '구독 중 (해제)' : '이 묶음 구독'}
-            </Text>
-          </Pressable>
+            loading={isMutating}
+            color={isSubscribed ? 'secondary' : 'primary'}
+            className="mt-4"
+            accessibilityLabel={isSubscribed ? '구독 해제' : '이 묶음 구독'}>
+            {isSubscribed ? '구독 중 (해제)' : '이 묶음 구독'}
+          </Button>
 
           {/* 포함 키워드 */}
           <View className="mt-6">
@@ -198,5 +186,4 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
 const styles = StyleSheet.create({
   content: {paddingHorizontal: 20, paddingTop: 24},
   grow: {flex: 1},
-  dimmed: {opacity: 0.5},
 });

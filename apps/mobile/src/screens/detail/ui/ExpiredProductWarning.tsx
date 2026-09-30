@@ -87,7 +87,7 @@ export default function ExpiredProductWarning({
             hitSlop={12}
             accessibilityRole="link"
             accessibilityLabel="최신 핫딜 더보기">
-            <Text className="text-xs font-medium text-gray-400">더보기</Text>
+            <Text className="text-xs font-medium text-gray-500">더보기</Text>
           </Pressable>
         ) : null}
       </View>

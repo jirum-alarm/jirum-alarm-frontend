@@ -1,10 +1,13 @@
 import * as WebBrowser from 'expo-web-browser';
-import {Alert, Linking, Platform} from 'react-native';
+import {Linking, Platform} from 'react-native';
+import Toast from 'react-native-toast-message';
 import {
   openInAppBrowser,
   shouldOpenExternally,
 } from '../src/shared/lib/navigation/in-app-browser';
 import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
+
+jest.mock('react-native-toast-message', () => ({show: jest.fn()}));
 
 jest.mock('expo-web-browser', () => ({
   openBrowserAsync: jest.fn(),
@@ -20,7 +23,6 @@ describe('openInAppBrowser', () => {
     jest.clearAllMocks();
     jest.spyOn(Linking, 'canOpenURL').mockResolvedValue(true);
     jest.spyOn(Linking, 'openURL').mockResolvedValue(undefined);
-    jest.spyOn(Alert, 'alert').mockImplementation(jest.fn());
   });
 
   afterEach(() => {
@@ -192,7 +194,9 @@ describe('openInAppBrowser', () => {
 
     await openInAppBrowser('https://example.com');
 
-    expect(Alert.alert).toHaveBeenCalledWith('알림', '링크를 열 수 없습니다.');
+    expect(Toast.show).toHaveBeenCalledWith(
+      expect.objectContaining({text1: '링크를 열 수 없어요.'}),
+    );
   });
 });
 
