@@ -26,6 +26,7 @@ import {
 import {useRegisterScrollToTop} from '@/navigations/tab/scroll-to-top-store';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
+import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import {ListRowsSkeleton} from '@/shared/components/Skeletons';
 import type {CommunityPost} from '@/shared/api/community';
 import {
@@ -105,6 +106,8 @@ export default function CommunityScreen() {
     [tab, openPost],
   );
 
+  const {refreshing, onRefresh} = usePullRefresh(refetch);
+
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
       <SystemBars style="dark" hidden={false} />
@@ -118,7 +121,7 @@ export default function CommunityScreen() {
 
       <CommunityTabBar activeTab={tab} onChange={setTab} />
 
-      {isError ? (
+      {isError && !posts?.length ? (
         <View className="flex-1">
           <SectionErrorRow label="커뮤니티" onRetry={refetch} />
         </View>
@@ -134,8 +137,8 @@ export default function CommunityScreen() {
           renderItem={renderItem}
           refreshControl={
             <RefreshControl
-              refreshing={false}
-              onRefresh={refetch}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
               tintColor="#667085"
             />
           }

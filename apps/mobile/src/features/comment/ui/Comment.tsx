@@ -1,3 +1,4 @@
+import ConfirmSheet from '@/features/community/ui/ConfirmSheet';
 import React, {useState} from 'react';
 import {Pressable, Text, View} from 'react-native';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
@@ -38,6 +39,7 @@ export default function Comment({
 }) {
   const queryClient = useQueryClient();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const editStatus = useEditStatusOf(comment.id);
 
   const isMyComment =
@@ -53,6 +55,7 @@ export default function Comment({
   const {mutate: likeComment} = useMutation({
     mutationFn: ProductService.addUserLikeOrDislike,
     onSuccess: invalidate,
+    onError: () => showToast.info('좋아요에 실패했어요.'),
   });
 
   const {mutate: removeComment} = useMutation({
@@ -60,9 +63,10 @@ export default function Comment({
     onSuccess: () => {
       setMenuOpen(false);
       clearEditingComment();
-      showToast.info('댓글이 삭제되었습니다.');
+      showToast.info('댓글이 삭제되었어요.');
       invalidate();
     },
+    onError: () => showToast.info('댓글을 삭제하지 못했어요.'),
   });
 
   const handleLike = () => {
@@ -171,7 +175,22 @@ export default function Comment({
           setMenuOpen(false);
           setUpdateTarget(comment);
         }}
-        onRemove={() => removeComment({id: Number(comment.id)})}
+        // 커뮤니티 댓글과 같게 — 한 번 탭으로 지우지 않고 묻는다.
+        onRemove={() => {
+          setMenuOpen(false);
+          setConfirmOpen(true);
+        }}
+      />
+      <ConfirmSheet
+        visible={confirmOpen}
+        title="댓글을 삭제할까요?"
+        description="댓글을 삭제하면 다시 복구할 수 없어요."
+        confirmLabel="삭제"
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => {
+          setConfirmOpen(false);
+          removeComment({id: Number(comment.id)});
+        }}
       />
     </View>
   );

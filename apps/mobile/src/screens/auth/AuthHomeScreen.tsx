@@ -18,6 +18,7 @@ const AuthHomeScreen = () => {
     signInWithNaver,
     signInWithApple,
     isAppleLoginAvailable,
+    isSocialLoginPending,
   } = useSocialLogin();
 
   const navigation = useNavigation<NavigationProp<AuthParamList>>();
@@ -35,9 +36,16 @@ const AuthHomeScreen = () => {
             <Text style={styles.title}>지름알림</Text>
           </View>
         </View>
-        <View style={styles.buttonContainer}>
+        <View
+          style={[
+            styles.buttonContainer,
+            isSocialLoginPending && styles.pending,
+          ]}>
           <TouchableOpacity
             activeOpacity={0.8}
+            accessibilityRole="button"
+            // 서버 로그인 중 재탭 = 이중 로그인 요청.
+            disabled={isSocialLoginPending}
             style={[styles.button, styles.kakaoButton]}
             onPress={() => signInWithKakao()}>
             <KaKaoIcon />
@@ -45,6 +53,9 @@ const AuthHomeScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
+            accessibilityRole="button"
+            // 서버 로그인 중 재탭 = 이중 로그인 요청.
+            disabled={isSocialLoginPending}
             style={[styles.button, styles.naverButton]}
             onPress={() => signInWithNaver()}>
             <NaverIcon />
@@ -53,6 +64,8 @@ const AuthHomeScreen = () => {
           {isAppleLoginAvailable && (
             <TouchableOpacity
               activeOpacity={0.8}
+              accessibilityRole="button"
+              disabled={isSocialLoginPending}
               style={[styles.button, styles.appleButton]}
               onPress={() => signInWithApple()}>
               <AppleIcon />
@@ -61,6 +74,9 @@ const AuthHomeScreen = () => {
           )}
           <TouchableOpacity
             activeOpacity={0.8}
+            accessibilityRole="button"
+            // 서버 로그인 중 재탭 = 이중 로그인 요청.
+            disabled={isSocialLoginPending}
             style={[styles.button, styles.emailButton]}
             onPress={() =>
               navigation.navigate(authNavigations.AUTH_EMAIL_LOGIN)
@@ -77,6 +93,7 @@ const AuthHomeScreen = () => {
 export default AuthHomeScreen;
 
 const styles = StyleSheet.create({
+  pending: {opacity: 0.5},
   container: {
     flex: 1,
     justifyContent: 'center',

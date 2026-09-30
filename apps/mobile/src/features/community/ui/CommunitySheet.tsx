@@ -1,5 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Animated, Modal, Pressable, StyleSheet, View} from 'react-native';
+import {
+  Animated,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 /**
@@ -59,34 +67,44 @@ export default function CommunitySheet({
       animationType="none"
       statusBarTranslucent
       onRequestClose={onClose}>
-      <Pressable
+      {/*
+        ★백드롭은 시트의 **형제**다(ShareSheet 와 같은 구조). 예전엔 백드롭 Pressable 이
+        시트를 감쌌는데, iOS 는 누를 수 있는 부모를 요소 하나로 묶어 VoiceOver 가
+        "닫기" 만 읽고 안쪽 버튼에 닿지 못했다. 키보드가 뜨면 시트째 올린다('기타' 신고 사유).
+      */}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.backdrop}
-        onPress={onClose}
-        accessibilityRole="button"
-        accessibilityLabel="닫기">
-        {/* 시트 안쪽 탭이 백드롭으로 새어 닫히지 않도록 흡수한다. */}
-        <Pressable onPress={() => {}} accessibilityLabel={accessibilityLabel}>
-          <Animated.View
-            style={[
-              styles.sheet,
-              {
-                paddingBottom: Math.max(insets.bottom, 12),
-                opacity: slide,
-                transform: [
-                  {
-                    translateY: slide.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [40, 0],
-                    }),
-                  },
-                ],
-              },
-            ]}>
-            <View style={styles.handle} />
-            {children}
-          </Animated.View>
-        </Pressable>
-      </Pressable>
+        accessibilityViewIsModal>
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={onClose}
+          accessibilityRole="button"
+          accessibilityLabel="닫기"
+        />
+        <Animated.View
+          // 시트 안쪽 탭이 백드롭으로 새어 닫히지 않도록 흡수한다.
+          onStartShouldSetResponder={() => true}
+          aria-label={accessibilityLabel}
+          style={[
+            styles.sheet,
+            {
+              paddingBottom: Math.max(insets.bottom, 12),
+              opacity: slide,
+              transform: [
+                {
+                  translateY: slide.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [40, 0],
+                  }),
+                },
+              ],
+            },
+          ]}>
+          <View style={styles.handle} />
+          {children}
+        </Animated.View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

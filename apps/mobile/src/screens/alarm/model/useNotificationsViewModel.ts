@@ -12,6 +12,7 @@ import {NotificationQueries} from '@/entities/notification';
 import {NotificationService} from '@/shared/api/notification';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
 import {setAlarmUnreadSnapshot} from '@/shared/lib/alarm-unread-snapshot';
+import {showToast} from '@/shared/lib/feedback';
 
 type Page = Awaited<ReturnType<typeof NotificationService.getNotifications>>;
 type InfiniteData = {pages: Page[]; pageParams: unknown[]};
@@ -137,14 +138,20 @@ export function useNotificationsViewModel() {
     mutationFn: (id: number) => NotificationService.removeNotification(id),
     onMutate: (id: number) =>
       optimistic(page => page.filter(n => Number(n.id) !== id)),
-    onError: (_err, _id, context) => rollback(context),
+    onError: (_err, _id, context) => {
+      rollback(context);
+      showToast.info('알림을 삭제하지 못했어요.');
+    },
     onSettled: () => syncUnreadCount(true),
   });
 
   const {mutate: onRemoveAll} = useMutation({
     mutationFn: () => NotificationService.removeAllNotifications(),
     onMutate: () => optimistic(() => []),
-    onError: (_err, _vars, context) => rollback(context),
+    onError: (_err, _vars, context) => {
+      rollback(context);
+      showToast.info('알림을 삭제하지 못했어요.');
+    },
     onSettled: () => syncUnreadCount(true),
   });
 

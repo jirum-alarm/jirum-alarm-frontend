@@ -17,7 +17,8 @@ export default function CommunityCommentInput({
   onSubmit,
   isPending,
 }: {
-  onSubmit: (content: string) => void;
+  /** 성공했을 때만 `clear` 를 부른다 — 실패하면 쓴 글이 그대로 남아야 한다. */
+  onSubmit: (content: string, clear: () => void) => void;
   isPending: boolean;
 }) {
   const [value, setValue] = useState('');
@@ -28,9 +29,10 @@ export default function CommunityCommentInput({
   const submit = () => {
     const content = value.trim();
     if (!content || isPending) return;
-    onSubmit(content);
-    setValue('');
-    setHeight(0);
+    onSubmit(content, () => {
+      setValue('');
+      setHeight(0);
+    });
   };
 
   return (

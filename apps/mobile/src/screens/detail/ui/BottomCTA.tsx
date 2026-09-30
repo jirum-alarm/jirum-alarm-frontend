@@ -74,6 +74,7 @@ export default function BottomCTA({
       invalidate();
       if (next) showToast.info('찜 목록에 추가되었어요.');
     },
+    onError: () => showToast.info('찜하지 못했어요. 다시 시도해주세요.'),
   });
 
   const handlePurchase = useCallback(async () => {

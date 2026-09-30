@@ -222,7 +222,12 @@ export default function CommunityPostScreen({route, navigation}: Props) {
           이미 같은 훅으로 되돌리고 있다.
         */}
         <View style={{paddingBottom: Math.max(insets.bottom, 4) + bottomClip}}>
-          <CommunityCommentInput onSubmit={addComment} isPending={isAdding} />
+          <CommunityCommentInput
+            onSubmit={(content, clear) =>
+              addComment(content, {onSuccess: clear})
+            }
+            isPending={isAdding}
+          />
         </View>
       </KeyboardAvoidingView>
 

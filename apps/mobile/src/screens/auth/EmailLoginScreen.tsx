@@ -69,7 +69,8 @@ const EmailLoginScreen = () => {
           });
         },
         onError: async () => {
-          await handleLoginError();
+          // 아래 인라인 문구가 안내한다 — 토스트까지 띄우면 같은 말이 두 번 나온다.
+          await handleLoginError(null);
         },
       },
     );

@@ -40,10 +40,12 @@ export default function CommentInput({
   const {mutate: addComment, isPending: isAdding} = useMutation({
     mutationFn: CommentService.addComment,
     onSuccess,
+    onError: () => showToast.info('댓글을 등록하지 못했어요.'),
   });
   const {mutate: updateComment, isPending: isUpdating} = useMutation({
     mutationFn: CommentService.updateComment,
     onSuccess,
+    onError: () => showToast.info('댓글을 수정하지 못했어요.'),
   });
 
   // 수정이면 기존 내용을 채우고, 답글이면 빈 칸으로 시작한다.

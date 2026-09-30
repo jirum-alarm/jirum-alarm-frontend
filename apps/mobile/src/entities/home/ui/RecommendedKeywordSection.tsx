@@ -59,8 +59,8 @@ export default function RecommendedKeywordSection() {
       if (failed) setJustAdded(prev => prev.filter(k => k !== failed));
       // 서버가 '이미 등록된 키워드', '최대 20개 초과' 같은 구체적 이유를 준다.
       const message =
-        error instanceof Error ? error.message : '키워드 저장에 실패했습니다.';
-      showToast.info(message || '키워드 저장에 실패했습니다.');
+        error instanceof Error ? error.message : '키워드 저장에 실패했어요.';
+      showToast.info(message || '키워드 저장에 실패했어요.');
     },
   });
 

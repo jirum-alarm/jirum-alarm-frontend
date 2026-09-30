@@ -19,6 +19,7 @@ import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {useUpdatePassword} from '@/features/mypage/model/mutations';
 import {usePasswordCheck} from '@/features/mypage/model/usePasswordCheck';
 import {validatePassword} from '@/features/mypage/lib/validation';
+import {showToast} from '@/shared/lib/feedback';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -159,6 +160,12 @@ function ChangePasswordStep({
 
   const submit = () => {
     if (isPending) return;
+    // 버튼은 web 처럼 열어 두되, 규칙 위반을 서버에 보내 "에러가 발생했어요" 로
+    // 돌려받지 않는다 — 무엇이 틀렸는지 여기서 바로 말한다.
+    if (!password || validity.invalidLength || validity.invalidType) {
+      showToast.info('비밀번호 규칙을 확인해주세요.');
+      return;
+    }
     if (password !== confirm) {
       setMismatch(true);
       return;

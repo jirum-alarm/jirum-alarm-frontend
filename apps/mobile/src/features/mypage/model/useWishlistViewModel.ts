@@ -1,3 +1,4 @@
+import {showToast} from '@/shared/lib/feedback';
 import {useMemo} from 'react';
 import {useInfiniteQuery, useMutation, useQuery} from '@tanstack/react-query';
 
@@ -52,9 +53,11 @@ export function useWishlistViewModel() {
 
   const {mutate: addWishlist} = useMutation({
     mutationFn: MyWishlistService.addWishlist,
+    onError: () => showToast.info('찜하지 못했어요. 다시 시도해주세요.'),
   });
   const {mutate: removeWishlist} = useMutation({
     mutationFn: MyWishlistService.removeWishlist,
+    onError: () => showToast.info('찜을 해제하지 못했어요.'),
   });
 
   return {

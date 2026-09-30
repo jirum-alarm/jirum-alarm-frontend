@@ -36,6 +36,7 @@ export default function CurationGrid<T>({
   onRetry,
   onEndReached,
   footer,
+  emptyText = '상품이 없어요.',
   onViewableIndexes,
   bottomInset = 0,
   /**
@@ -57,6 +58,8 @@ export default function CurationGrid<T>({
   onRetry: () => void | Promise<unknown>;
   onEndReached?: () => void;
   footer?: React.ReactNode;
+  /** 빈 목록 문구(찜 목록처럼 맥락이 있으면 바꾼다). */
+  emptyText?: string;
   /**
    * 화면에 실제로 보인 카드의 index 를 알려준다(CTR 분모).
    * RN 엔 IntersectionObserver 가 없어 FlatList 만 이걸 알 수 있다.
@@ -101,7 +104,10 @@ export default function CurationGrid<T>({
     );
   }
 
-  if (isError) {
+  // ★데이터가 있으면 목록을 지키고 꼬리에서 다시 시도시킨다. v5 는 다음 페이지·
+  // 리페치가 한 번 실패해도 isError 가 되는데(데이터는 유지), 그때 전체를 에러로
+  // 바꾸면 스크롤해 온 목록이 통째로 사라졌다.
+  if (isError && items.length === 0) {
     return (
       <View className="flex-1 bg-white pt-4">
         <SectionErrorRow label={label} onRetry={onRetry} />
@@ -110,10 +116,9 @@ export default function CurationGrid<T>({
   }
 
   if (items.length === 0) {
-    // web EmptyState — "상품이 없습니다."
     return (
       <View className="flex-1 items-center bg-white py-10">
-        <Text className="text-sm text-gray-500">상품이 없습니다.</Text>
+        <Text className="text-sm text-gray-500">{emptyText}</Text>
       </View>
     );
   }
@@ -143,7 +148,13 @@ export default function CurationGrid<T>({
       onViewableItemsChanged={
         onViewableIndexes ? handleViewableItemsChanged : undefined
       }
-      ListFooterComponent={footer as React.ReactElement}
+      ListFooterComponent={
+        isError ? (
+          <SectionErrorRow label={label} onRetry={onRetry} />
+        ) : (
+          (footer as React.ReactElement)
+        )
+      }
       renderItem={({item, index}) => (
         <View style={{flex: 1 / columns}}>{renderCard(item, index)}</View>
       )}

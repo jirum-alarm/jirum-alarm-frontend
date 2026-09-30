@@ -1,8 +1,11 @@
 import React, {useCallback, useEffect, useLayoutEffect} from 'react';
-import {ActivityIndicator, FlatList, View} from 'react-native';
+import {ActivityIndicator, FlatList, RefreshControl, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
+import {useAuth} from '@/shared/hooks/useAuth';
+import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
+import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -48,8 +51,20 @@ export default function ProductCommentsScreen({route, navigation}: Props) {
 
   const {data: myUserId} = useQuery(UserQueries.me());
 
-  const {data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage} =
-    useInfiniteQuery(CommentQueries.infiniteComments(productId));
+  // 로그인 여부는 토큰으로 본다 — me() 로 보면 조회 중·실패 때 로그인 사용자에게도
+  // "로그인 후 이용해주세요" 가 떴다.
+  const {isLogin} = useAuth();
+
+  const {
+    data,
+    isPending,
+    isError,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(CommentQueries.infiniteComments(productId));
+  const {refreshing, onRefresh} = usePullRefresh(refetch);
 
   const comments = data?.pages.flat() ?? [];
 
@@ -79,9 +94,21 @@ export default function ProductCommentsScreen({route, navigation}: Props) {
           <View className="flex-1 items-center justify-center">
             <ActivityIndicator size="small" color="#667085" />
           </View>
+        ) : isError && comments.length === 0 ? (
+          // 실패를 "첫 댓글을 남겨주세요" 로 위장하지 않는다.
+          <View className="flex-1 pt-4">
+            <SectionErrorRow label="댓글" onRetry={refetch} />
+          </View>
         ) : (
           <FlatList
             data={comments}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor="#667085"
+              />
+            }
             keyExtractor={item => String(item.id)}
             renderItem={renderItem}
             onEndReached={handleEndReached}
@@ -105,7 +132,7 @@ export default function ProductCommentsScreen({route, navigation}: Props) {
           이미 같은 훅으로 되돌리고 있다.
         */}
         <View style={{paddingBottom: Math.max(insets.bottom, 4) + bottomClip}}>
-          <CommentInput productId={productId} isUserLogin={!!myUserId} />
+          <CommentInput productId={productId} isUserLogin={isLogin} />
         </View>
       </KeyboardAvoidingView>
     </View>

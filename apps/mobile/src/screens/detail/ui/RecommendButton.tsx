@@ -1,3 +1,4 @@
+import {showToast} from '@/shared/lib/feedback';
 import React from 'react';
 import {Text, View} from 'react-native';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
@@ -38,6 +39,7 @@ export default function RecommendButton({
       queryClient.invalidateQueries({
         queryKey: ProductQueries.keys.stats(productId),
       }),
+    onError: () => showToast.info('추천에 실패했어요.'),
   });
 
   const isRecommended = !!stats?.isMyLike;

@@ -12,7 +12,9 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {NotificationQueries} from '@/entities/notification';
 import PressableScale from '@/shared/components/PressableScale';
+import ConfirmSheet from '@/features/community/ui/ConfirmSheet';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
+import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import TrashBin from '@/shared/components/icons/TrashBin';
 import {
   tabNavigations,
@@ -66,6 +68,7 @@ export default function AlarmScreen() {
   } = useNotificationsViewModel();
 
   const [isEditMode, setEditMode] = useState(false);
+  const [confirmRemoveAll, setConfirmRemoveAll] = useState(false);
 
   /**
    * 알림 탭 재탭 → 목록 맨 위로. (웹뷰 시절 injectJavaScript 를 대체)
@@ -130,6 +133,8 @@ export default function AlarmScreen() {
 
   const showEditButton = !!existsAny && !isEditMode;
 
+  const {refreshing, onRefresh} = usePullRefresh(refetch);
+
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
       {/* 헤더 — web PageHeader(title="알림", actions=휴지통) */}
@@ -154,10 +159,8 @@ export default function AlarmScreen() {
           <View className="h-11 flex-row items-center justify-end gap-x-3 px-5">
             <PressableScale
               accessibilityRole="button"
-              onPress={() => {
-                onRemoveAll();
-                setEditMode(false);
-              }}>
+              hitSlop={8}
+              onPress={() => setConfirmRemoveAll(true)}>
               <Text className="px-1 text-sm font-medium text-gray-600">
                 전체 삭제
               </Text>
@@ -186,7 +189,7 @@ export default function AlarmScreen() {
         )}
       </View>
 
-      {isError ? (
+      {isError && !notifications?.length ? (
         <SectionErrorRow label="알림" onRetry={refetch} />
       ) : isPending ? (
         // 빈 화면 + 점 하나 대신 알림 행 골격을 그린다.
@@ -204,8 +207,8 @@ export default function AlarmScreen() {
           }}
           refreshControl={
             <RefreshControl
-              refreshing={false}
-              onRefresh={refetch}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
               tintColor="#667085"
             />
           }
@@ -233,6 +236,19 @@ export default function AlarmScreen() {
           )}
         />
       )}
+      {/* 한 번 탭으로 전부 지우지 않는다 — 되돌릴 수 없다. */}
+      <ConfirmSheet
+        visible={confirmRemoveAll}
+        title="알림을 모두 삭제할까요?"
+        description="삭제한 알림은 다시 볼 수 없어요."
+        confirmLabel="전체 삭제"
+        onCancel={() => setConfirmRemoveAll(false)}
+        onConfirm={() => {
+          setConfirmRemoveAll(false);
+          onRemoveAll();
+          setEditMode(false);
+        }}
+      />
     </View>
   );
 }

@@ -69,6 +69,7 @@ export default function LikeScreen({navigation}: Props) {
       ) : null}
       <CurationGrid
         items={products}
+        emptyText="아직 찜한 상품이 없어요."
         keyOf={item => String(item.id)}
         renderCard={item => (
           <View>

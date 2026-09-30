@@ -156,9 +156,16 @@ describe('댓글 삭제·수정·작성', () => {
     );
   });
 
-  it('작성 화면은 입력창을 비운다(중복 등록 방지)', () => {
+  // 중복 등록은 isPending 이 막는다. 비우는 건 **성공했을 때만** — 먼저 비우면
+  // 등록이 실패했을 때 쓴 글이 통째로 사라졌다.
+  it('작성 화면은 등록이 성공했을 때만 입력창을 비운다', () => {
     const input = read('src/features/community/ui/CommunityCommentInput.tsx');
-    expect(input).toMatch(/onSubmit\(content\);\s*\n\s*setValue\(''\)/);
+    expect(input).toMatch(
+      /onSubmit\(content, \(\) => \{\s*\n\s*setValue\(''\)/,
+    );
+    expect(input).toContain('if (!content || isPending) return;');
+    const screen = read('src/screens/community/CommunityPostScreen.tsx');
+    expect(screen).toContain('addComment(content, {onSuccess: clear})');
   });
 });
 

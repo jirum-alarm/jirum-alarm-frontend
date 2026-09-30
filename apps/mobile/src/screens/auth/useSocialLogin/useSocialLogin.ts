@@ -48,7 +48,7 @@ export const useSocialLogin = () => {
         });
       },
       onError: async () => {
-        await handleLoginError('로그인에 실패했습니다. 다시 시도해주세요.');
+        await handleLoginError('로그인에 실패했어요. 다시 시도해주세요.');
       },
     });
 
@@ -76,8 +76,11 @@ export const useSocialLogin = () => {
         socialAccessToken: token.accessToken,
       });
     } catch (err) {
+      // ponytail: 네이티브 모듈이 취소도 localizedDescription 문자열로만 넘긴다(코드 없음).
+      // 취소는 사용자가 한 일이라 실패 토스트를 띄우지 않는다.
+      if (/cancel/i.test(String((err as Error)?.message ?? err))) return;
       console.error('Kakao login error:', err);
-      showToast.info('카카오 로그인에 실패했습니다.');
+      showToast.info('카카오 로그인에 실패했어요.');
     }
   };
 
@@ -92,23 +95,21 @@ export const useSocialLogin = () => {
       } else {
         // 네이버 로그인 실패 또는 취소
         console.error('Naver login failure:', failureResponse);
-        if (failureResponse?.isCancel) {
-          // 사용자가 로그인을 취소한 경우
-          showToast.info('네이버 로그인이 취소되었습니다.');
-        } else {
-          showToast.info('네이버 로그인에 실패했습니다.');
+        // 취소는 사용자가 한 일이라 토스트를 띄우지 않는다.
+        if (!failureResponse?.isCancel) {
+          showToast.info('네이버 로그인에 실패했어요.');
         }
       }
     } catch (err) {
       console.error('Naver login error:', err);
-      showToast.info('네이버 로그인 중 오류가 발생했습니다.');
+      showToast.info('네이버 로그인 중 오류가 생겼어요.');
     }
   };
 
   const signInWithApple = async () => {
     try {
       if (!isAppleLoginAvailable) {
-        showToast.info('Apple 로그인은 iOS 13 이상 기기에서만 지원됩니다.');
+        showToast.info('Apple 로그인은 iOS 13 이상 기기에서만 지원돼요.');
         return;
       }
       const appleAuthRequestResponse = await AppleAuthentication.signInAsync({
@@ -121,7 +122,7 @@ export const useSocialLogin = () => {
       const {identityToken} = appleAuthRequestResponse;
 
       if (!identityToken) {
-        showToast.info('Apple 로그인 정보를 가져오는데 실패했습니다.');
+        showToast.info('Apple 로그인 정보를 가져오는 데 실패했어요.');
         return;
       }
 
@@ -135,12 +136,9 @@ export const useSocialLogin = () => {
           ? String(error.code)
           : null;
 
-      if (errorCode === 'ERR_REQUEST_CANCELED') {
-        showToast.info('Apple 로그인이 취소되었습니다.');
-        return;
-      }
+      if (errorCode === 'ERR_REQUEST_CANCELED') return;
       console.error('Apple login error:', error);
-      showToast.info('Apple 로그인 중 오류가 발생했습니다.');
+      showToast.info('Apple 로그인 중 오류가 생겼어요.');
     }
   };
 
