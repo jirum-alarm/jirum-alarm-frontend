@@ -67,6 +67,6 @@ export function validatePassword(value: string): PasswordValidity {
   };
 }
 
-export const NICKNAME_HELPER_TEXT = '공백없이 2~12자로 입력해주세요.';
+export const NICKNAME_HELPER_TEXT = '공백 없이 2~12자로 입력해주세요.';
 export const KEYWORD_HELPER_TEXT =
   '키워드는 2자 이상 20자까지 입력할 수 있어요.';

@@ -152,11 +152,11 @@ describe('관심 카테고리 — web shared/config/categories.ts 와 id·순서
   });
 });
 
-describe('출생년도 — web BIRTH_YEAR(100년) + 선택안함', () => {
+describe('출생 연도 — web BIRTH_YEAR(100년) + 선택 안 함', () => {
   const options = buildBirthYearOptions(new Date('2026-09-07T00:00:00Z'));
 
-  it('맨 앞이 선택안함(null)', () => {
-    expect(options[0]).toEqual({text: '선택안함', value: null});
+  it('맨 앞이 선택 안 함(null)', () => {
+    expect(options[0]).toEqual({text: '선택 안 함', value: null});
   });
 
   it('올해부터 100년', () => {

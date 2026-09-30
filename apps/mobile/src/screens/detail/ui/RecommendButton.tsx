@@ -61,7 +61,9 @@ export default function RecommendButton({
       disabled={isPending}
       accessibilityRole="button"
       accessibilityState={{selected: isRecommended}}
-      accessibilityLabel={isRecommended ? '추천 완료' : '상품 추천'}>
+      accessibilityLabel={isRecommended ? '추천 완료' : '상품 추천'}
+      // 36px 높이라 44pt 권장 터치 영역을 채운다.
+      hitSlop={4}>
       <View
         className={cn(
           'h-[36px] flex-row items-center justify-center gap-x-1 rounded-full border bg-white px-3.5',

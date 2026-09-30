@@ -115,9 +115,9 @@ export function useCommonWebViewLogic() {
   );
 
   const closeApp = useCallback(() => {
-    Alert.alert('종료 확인', '앱을 종료하시겠습니까?', [
+    Alert.alert('종료 확인', '앱을 종료할까요?', [
       {text: '취소', onPress: () => {}, style: 'cancel'},
-      {text: '확인', onPress: () => BackHandler.exitApp()},
+      {text: '종료', onPress: () => BackHandler.exitApp()},
     ]);
   }, []);
 

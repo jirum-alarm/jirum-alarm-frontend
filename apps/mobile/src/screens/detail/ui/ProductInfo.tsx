@@ -73,7 +73,9 @@ export default function ProductInfo({
           <PressableScale
             onPress={() => setGuideOpen(true)}
             accessibilityRole="button"
-            accessibilityLabel="핫딜 기준 안내">
+            accessibilityLabel="핫딜 기준 안내"
+            // 22px 뱃지라 위아래로 넓혀 44pt 에 맞춘다.
+            hitSlop={11}>
             <HotdealBadge
               hotdealType={product.hotDealType as HotDealType}
               badgeVariant="page"
@@ -100,7 +102,8 @@ export default function ProductInfo({
             ) : (
               <>
                 {display?.originalPrice ? (
-                  <Text className="text-sm text-gray-400 line-through">
+                  // gray-400 은 흰 배경 대비 AA 미달이라 gray-500.
+                  <Text className="text-sm text-gray-500 line-through">
                     {display.originalPrice.toLocaleString()}원
                   </Text>
                 ) : null}

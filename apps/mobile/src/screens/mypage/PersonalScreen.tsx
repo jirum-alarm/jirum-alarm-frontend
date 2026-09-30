@@ -61,7 +61,7 @@ export default function PersonalScreen({navigation}: Props) {
       <ScrollView contentContainerStyle={contentStyle}>
         <View className="px-5 pt-9" style={styles.grow}>
           <Text className="text-2xl font-semibold text-gray-900">
-            {'출생년도와 성별을\n수정해주세요.'}
+            {'출생 연도와 성별을\n수정해주세요.'}
           </Text>
           <View className="pt-[88px]">
             <BirthYearSelect

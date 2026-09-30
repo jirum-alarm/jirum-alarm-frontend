@@ -252,8 +252,8 @@ describe('web 과 같아야 하는 상수', () => {
   });
 
   it('입력창 placeholder 가 같다', () => {
-    expect(webInput).toContain('placeholder="핫딜 제품을 검색해 주세요"');
-    expect(header).toContain('placeholder="핫딜 제품을 검색해 주세요"');
+    expect(webInput).toContain('placeholder="핫딜 상품을 검색해주세요"');
+    expect(header).toContain('placeholder="핫딜 상품을 검색해주세요"');
   });
 });
 

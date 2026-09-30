@@ -151,9 +151,7 @@ export default function CustomerServiceSheet({
         */}
         {!isReady ? (
           <View className="h-14 flex-row items-center justify-between border-b border-gray-100 px-5">
-            <Text className="text-lg font-semibold text-gray-900">
-              고객센터
-            </Text>
+            <Text className="text-lg font-bold text-gray-900">고객센터</Text>
             <Pressable
               onPress={close}
               hitSlop={12}

@@ -111,7 +111,11 @@ const EmailLoginScreen = () => {
                 returnKeyType="next"
                 suffixIcon={
                   !!field.value && (
-                    <Pressable onPress={() => field.onChange('')}>
+                    <Pressable
+                      onPress={() => field.onChange('')}
+                      accessibilityRole="button"
+                      accessibilityLabel="입력 지우기"
+                      hitSlop={12}>
                       <CircleXIcon />
                     </Pressable>
                   )
@@ -134,16 +138,26 @@ const EmailLoginScreen = () => {
                 label="비밀번호"
                 error={!!fieldState.error}
                 helperText={fieldState.error?.message}
-                returnKeyType="join"
+                returnKeyType="go"
                 submitBehavior="submit"
                 onSubmitEditing={onSubmit}
                 suffixIcon={
                   <View className="flex-row">
-                    <Pressable onPress={() => setShowPassword(prev => !prev)}>
+                    <Pressable
+                      onPress={() => setShowPassword(prev => !prev)}
+                      accessibilityRole="button"
+                      accessibilityLabel={
+                        showPassword ? '비밀번호 가리기' : '비밀번호 보기'
+                      }
+                      hitSlop={12}>
                       {showPassword ? <EyeIcon /> : <EyeOffIcon />}
                     </Pressable>
                     {!!field.value && (
-                      <Pressable onPress={() => field.onChange('')}>
+                      <Pressable
+                        onPress={() => field.onChange('')}
+                        accessibilityRole="button"
+                        accessibilityLabel="입력 지우기"
+                        hitSlop={12}>
                         <CircleXIcon />
                       </Pressable>
                     )}

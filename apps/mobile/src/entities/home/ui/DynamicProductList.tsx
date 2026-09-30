@@ -198,6 +198,8 @@ function PaginatedProductGrid({
         <Pressable
           onPress={() => setCurrentPage(prev => (prev + 1) % totalPages)}
           className="h-9 flex-row items-center gap-2.5 rounded-lg bg-gray-100 px-5"
+          // h-9(36px) → 44pt 권장 터치 영역.
+          hitSlop={4}
           accessibilityRole="button"
           accessibilityLabel={`추천 상품 더보기, ${
             currentPage + 1

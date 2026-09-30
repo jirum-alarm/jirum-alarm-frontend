@@ -364,10 +364,10 @@ function HomeEndCta({onPress}: {onPress: () => void}) {
       <PressableScale
         onPress={onPress}
         accessibilityRole="button"
-        accessibilityLabel="실시간 특가 더 보기"
+        accessibilityLabel="실시간 특가 더보기"
         className="bg-secondary-600 flex-row items-center gap-x-1 rounded-full px-6 py-3">
         <Text className="text-sm font-semibold text-white">
-          실시간 특가 더 보기
+          실시간 특가 더보기
         </Text>
         <ArrowRightIcon color="#ffffff" width={16} height={16} />
       </PressableScale>

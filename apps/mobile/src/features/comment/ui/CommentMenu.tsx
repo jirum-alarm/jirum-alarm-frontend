@@ -51,12 +51,19 @@ export default function CommentMenu({
 
   return (
     <Modal transparent visible animationType="none" onRequestClose={onClose}>
+      {/*
+        백드롭이 시트를 감싸므로 iOS 가 전체를 요소 하나로 묶지 않게 접근성에서 뺀다
+        (VoiceOver 가 안쪽 버튼에 닿도록). 모달 밖 화면은 accessibilityViewIsModal 로 가린다.
+      */}
       <Pressable
         className="flex-1 justify-end bg-black/40"
         onPress={onClose}
-        accessibilityLabel="닫기">
+        accessible={false}
+        accessibilityViewIsModal
+        // VoiceOver 두 손가락 Z — 닫기 버튼이 없는 시트도 빠져나올 수 있게.
+        onAccessibilityEscape={onClose}>
         {/* 시트 안쪽 탭이 백드롭으로 새어 닫히지 않도록 흡수한다. */}
-        <Pressable onPress={() => {}}>
+        <Pressable onPress={() => {}} accessible={false}>
           <Animated.View
             className="rounded-t-2xl bg-white px-5 pt-2"
             style={{

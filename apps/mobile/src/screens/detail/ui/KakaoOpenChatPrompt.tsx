@@ -50,7 +50,7 @@ export default function KakaoOpenChatPrompt({href}: {href?: string}) {
       className="mx-5 mb-4 flex-row items-center gap-x-3 rounded-lg border border-secondary-200 bg-secondary-50 px-4 py-3"
       accessibilityRole="button"
       accessibilityLabel="핫딜 오픈 채팅방 입장">
-      <View className="h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FAE300]">
+      <View className="h-7 w-7 shrink-0 items-center justify-center rounded-full bg-kakao">
         <TalkLight width={18} height={18} style={{marginTop: 2}} />
       </View>
       <View className="min-w-0 flex-1">

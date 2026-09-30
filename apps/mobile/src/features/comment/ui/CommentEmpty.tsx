@@ -13,7 +13,7 @@ export default function CommentEmpty() {
         <BubbleChatEmpty />
         <View className="items-center gap-y-1">
           <Text className="font-semibold text-gray-700">
-            첫 후기를 남겨주세요!
+            첫 댓글을 남겨주세요!
           </Text>
           <Text className="text-sm font-medium text-gray-500">
             댓글로 함께 소통해요

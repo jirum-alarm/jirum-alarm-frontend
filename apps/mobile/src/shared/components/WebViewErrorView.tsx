@@ -9,11 +9,14 @@ const WebViewErrorView = ({onRetry}: WebViewErrorViewProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.emoji}>😵</Text>
-      <Text style={styles.title}>페이지를 불러올 수 없습니다</Text>
+      <Text style={styles.title}>페이지를 불러오지 못했어요</Text>
       <Text style={styles.description}>
         네트워크 연결을 확인하고 다시 시도해주세요
       </Text>
-      <Pressable style={styles.button} onPress={onRetry}>
+      <Pressable
+        style={styles.button}
+        onPress={onRetry}
+        accessibilityRole="button">
         <Text style={styles.buttonText}>다시 시도</Text>
       </Pressable>
     </View>

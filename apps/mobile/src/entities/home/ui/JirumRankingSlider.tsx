@@ -175,6 +175,7 @@ export default function JirumRankingSlider({
             product={item.product}
             rank={item.realIndex + 1}
             index={index}
+            isLoopCopy={index < count || index >= count * 2}
             scrollX={scrollX}
             onPress={onPressProduct}
           />
@@ -196,12 +197,14 @@ function RankingCard({
   product,
   rank,
   index,
+  isLoopCopy,
   scrollX,
   onPress,
 }: {
   product: ProductCardType;
   rank: number;
   index: number;
+  isLoopCopy: boolean;
   scrollX: SharedValue<number>;
   onPress: (id: number) => void;
 }) {
@@ -230,6 +233,9 @@ function RankingCard({
     // 같은 View 에 overflow-hidden 을 걸면 클리핑이 무력화된다
     // (썸네일이 카드 밖으로 삐져나온다). 바깥=그림자, 안쪽=클리핑.
     <Animated.View
+      // 앞뒤 복제 블록은 loop 용 허상이라 스크린리더가 같은 카드를 3번 읽지 않게 숨긴다.
+      accessibilityElementsHidden={isLoopCopy}
+      importantForAccessibility={isLoopCopy ? 'no-hide-descendants' : 'auto'}
       style={[
         {
           marginRight: GAP,

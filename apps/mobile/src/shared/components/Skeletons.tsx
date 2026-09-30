@@ -1,6 +1,8 @@
 import React, {useEffect, useRef} from 'react';
 import {Animated, View} from 'react-native';
 
+import {useReduceMotion} from '@/shared/hooks/useReduceMotion';
+
 /**
  * 화면 공용 스켈레톤.
  *
@@ -15,8 +17,14 @@ import {Animated, View} from 'react-native';
 /** 은은한 깜빡임. 정지된 회색 판은 "멈춘 화면"처럼 보인다. */
 export function useShimmer() {
   const opacity = useRef(new Animated.Value(0.5)).current;
+  const reduceMotion = useReduceMotion();
 
   useEffect(() => {
+    // "동작 줄이기" 사용자에겐 끝없는 깜빡임이 불편하다 — 판을 멈춘 채 둔다.
+    if (reduceMotion) {
+      opacity.setValue(1);
+      return;
+    }
     const loop = Animated.loop(
       Animated.sequence([
         Animated.timing(opacity, {
@@ -33,7 +41,7 @@ export function useShimmer() {
     );
     loop.start();
     return () => loop.stop();
-  }, [opacity]);
+  }, [opacity, reduceMotion]);
 
   return opacity;
 }

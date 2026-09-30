@@ -7,7 +7,8 @@ type Props = SvgProps & {
 };
 
 const defaultFill = '#F2F4F7';
-const defaultLine = '#98A2B3';
+// 누르는 아이콘이라 3:1 이상 필요(gray-400 은 2.6:1) → gray-500.
+const defaultLine = '#667085';
 
 /** web ThumbsupFill 과 같은 패스. */
 export default function ThumbsupFill({

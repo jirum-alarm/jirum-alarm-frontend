@@ -39,7 +39,7 @@ export async function onForegroundMessageHandler(
 ) {
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('alarm', {
-      name: '지름 알림',
+      name: '지름알림',
       importance: Notifications.AndroidImportance.HIGH,
     });
   }

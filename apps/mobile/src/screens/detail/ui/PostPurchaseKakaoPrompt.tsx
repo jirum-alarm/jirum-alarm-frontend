@@ -31,7 +31,7 @@ export default function PostPurchaseKakaoPrompt({
 
   return (
     <View className="flex-row items-center gap-x-3 border-b border-gray-100 bg-secondary-50 px-5 py-3">
-      <View className="h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FAE300]">
+      <View className="h-7 w-7 shrink-0 items-center justify-center rounded-full bg-kakao">
         <TalkLight width={18} height={18} style={{marginTop: 2}} />
       </View>
       <View className="min-w-0 flex-1">

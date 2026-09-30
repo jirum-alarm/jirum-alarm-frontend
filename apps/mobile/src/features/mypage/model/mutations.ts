@@ -49,7 +49,7 @@ function useProfileMutation({
 export function useUpdateNickname(onDone?: () => void) {
   return useProfileMutation({
     successMessage: '닉네임이 저장됐어요',
-    errorMessage: '닉네임 저장중 에러가 발생했어요',
+    errorMessage: '닉네임을 저장하지 못했어요.',
     onDone,
   });
 }
@@ -57,7 +57,7 @@ export function useUpdateNickname(onDone?: () => void) {
 export function useUpdatePersonal(onDone?: () => void) {
   return useProfileMutation({
     successMessage: '개인정보가 저장됐어요.',
-    errorMessage: '개인정보 저장중 에러가 발생했어요.',
+    errorMessage: '개인정보를 저장하지 못했어요.',
     onDone,
   });
 }
@@ -65,7 +65,7 @@ export function useUpdatePersonal(onDone?: () => void) {
 export function useUpdateCategories(onDone?: () => void) {
   return useProfileMutation({
     successMessage: '관심 카테고리가 저장됐어요.',
-    errorMessage: '관심 카테고리 저장중 에러가 발생했어요.',
+    errorMessage: '관심 카테고리를 저장하지 못했어요.',
     onDone,
     invalidateCategories: true,
   });

@@ -92,7 +92,8 @@ export default function CommentInput({
           </Text>
           <Pressable
             onPress={clearEditingComment}
-            hitSlop={8}
+            // 16px 아이콘이라 12씩 넓혀야 40pt 남짓이 된다.
+            hitSlop={12}
             accessibilityRole="button"
             accessibilityLabel="취소">
             <Close width={16} height={16} color="#667085" />
@@ -122,6 +123,8 @@ export default function CommentInput({
           onPress={handleSubmit}
           disabled={!canSubmit}
           accessibilityRole="button"
+          // h-10(40px) → 44pt 권장 터치 영역.
+          hitSlop={4}
           className="h-10 justify-center px-2">
           <Text
             className={

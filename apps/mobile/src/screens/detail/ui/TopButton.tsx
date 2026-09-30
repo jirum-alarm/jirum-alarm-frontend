@@ -32,7 +32,12 @@ export default function TopButton({
     <Animated.View
       pointerEvents={visible ? 'auto' : 'none'}
       style={{opacity, position: 'absolute', right: 16, top: -56, zIndex: 50}}>
-      <PressableScale onPress={onPress} accessibilityLabel="스크롤 최상단 이동">
+      <PressableScale
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel="맨 위로"
+        // 40px 원이라 44pt 권장 터치 영역에 조금 모자라다.
+        hitSlop={4}>
         <View
           className="h-[40px] w-[40px] items-center justify-center rounded-full border border-gray-300 bg-white"
           style={{

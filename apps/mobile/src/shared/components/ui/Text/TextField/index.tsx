@@ -1,11 +1,5 @@
 import React, {forwardRef, isValidElement, useState} from 'react';
-import {
-  Pressable,
-  TextInput,
-  Text,
-  type TextInputProps,
-  View,
-} from 'react-native';
+import {TextInput, Text, type TextInputProps, View} from 'react-native';
 import {
   containerVaraint,
   textfieldVariant,
@@ -45,8 +39,9 @@ const TextField = forwardRef<TextInput, Props>(
       setIsFocused(false);
     };
 
+    // onPress 없는 Pressable 로 감싸면 iOS 가 라벨·입력·버튼을 요소 하나로 묶었다 → View.
     return (
-      <Pressable>
+      <View>
         {label && (
           <View className="mb-[8px]">
             <Text className="text-gray-500 text-[14px] font-semibold">
@@ -57,6 +52,8 @@ const TextField = forwardRef<TextInput, Props>(
         <View className={cn(containerVaraint({variant, focused: isFocused}))}>
           <TextInput
             ref={ref}
+            // 화면 라벨이 입력칸 밖 Text 라 스크린리더가 연결하지 못한다. 호출부 값이 우선.
+            accessibilityLabel={label}
             {...rest}
             numberOfLines={1}
             autoCapitalize="none" // 자동 대문자 방지
@@ -85,7 +82,7 @@ const TextField = forwardRef<TextInput, Props>(
             )}
           </View>
         )}
-      </Pressable>
+      </View>
     );
   },
 );

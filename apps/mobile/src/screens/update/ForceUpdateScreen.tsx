@@ -35,7 +35,7 @@ export default function ForceUpdateScreen(): React.JSX.Element {
       <Text style={styles.emoji}>🚀</Text>
       <Text style={styles.title}>새 버전이 필요해요</Text>
       <Text style={styles.description}>
-        지금 버전은 더 이상 지원되지 않습니다.{'\n'}
+        지금 버전은 더 이상 지원하지 않아요.{'\n'}
         업데이트하고 계속 이용해주세요.
       </Text>
       <Pressable

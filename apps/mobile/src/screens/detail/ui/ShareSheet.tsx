@@ -222,7 +222,11 @@ export default function ShareSheet({
       presentationStyle="overFullScreen"
       statusBarTranslucent
       onRequestClose={onClose}>
-      <View className="flex-1 justify-end" accessibilityViewIsModal>
+      <View
+        className="flex-1 justify-end"
+        accessibilityViewIsModal
+        // VoiceOver 두 손가락 Z — 닫기 버튼이 없는 시트도 빠져나올 수 있게.
+        onAccessibilityEscape={onClose}>
         <Animated.View
           pointerEvents="none"
           style={[StyleSheet.absoluteFill, {opacity: overlay}]}>

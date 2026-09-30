@@ -159,7 +159,7 @@ export default function KeywordScreen({navigation}: Props) {
                     onPress={() => removeKeyword(keyword.id)}
                     hitSlop={8}
                     accessibilityRole="button"
-                    accessibilityLabel="키워드 삭제"
+                    accessibilityLabel={`${keyword.keyword} 삭제`}
                     className="shrink-0 p-2"
                     style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
                     {/* web 은 gray-400(AA 미달) — gray-500 을 쓴다. */}

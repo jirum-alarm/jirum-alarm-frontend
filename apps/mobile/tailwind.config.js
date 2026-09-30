@@ -16,6 +16,8 @@ module.exports = {
       colors: {
         white: '#FFFFFF',
         black: '#000000',
+        // 카카오 브랜드 노랑(공식). 로그인·공유·오픈채팅이 세 값으로 갈려 있었다.
+        kakao: '#FEE500',
         error: {
           50: '#FFE1E5',
           100: '#FBCCD2',

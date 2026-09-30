@@ -13,7 +13,7 @@ const _BIRTH_YEAR = BIRTH_YEAR.map((year) => ({
   text: String(year),
   value: String(year),
 }));
-const birthYearOptions = [{ text: '선택안함', value: null }, ..._BIRTH_YEAR];
+const birthYearOptions = [{ text: '선택 안 함', value: null }, ..._BIRTH_YEAR];
 
 const usePersonalInfoFormViewModel = () => {
   const [birthYear, setBirthYear] = useState<string | null>();

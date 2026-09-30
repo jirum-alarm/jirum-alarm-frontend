@@ -21,8 +21,8 @@ export const SORT_LABELS: Record<SearchSort, string> = {
 export const PERIOD_LABELS: Record<SearchPeriod, string> = {
   all: '전체 기간',
   '1d': '오늘',
-  '7d': '이번주',
-  '30d': '한달',
+  '7d': '이번 주',
+  '30d': '한 달',
 };
 
 /** web PERIOD_HOURS 와 같은 값. 'all' 은 기간 필터 없음. */

@@ -107,7 +107,7 @@ export default function Comment({
           </Text>
           <Text className="text-sm text-gray-500">
             {editStatus === 'update'
-              ? '수정중'
+              ? '수정 중'
               : displayTime(comment.createdAt)}
           </Text>
         </View>
@@ -129,6 +129,10 @@ export default function Comment({
           onPress={handleLike}
           disabled={!isLoggedIn}
           accessibilityRole="button"
+          accessibilityLabel={`좋아요 ${comment.likeCount ?? 0}`}
+          accessibilityState={{selected: !!comment.isMyLike}}
+          // 16px 아이콘 + 글자 한 줄이라 터치 영역이 좁다.
+          hitSlop={10}
           className="flex-row items-center gap-x-1">
           <ThumbsupFill width={16} height={16} active={!!comment.isMyLike} />
           <Text
@@ -151,6 +155,7 @@ export default function Comment({
             onPress={handleReply}
             disabled={!isLoggedIn}
             accessibilityRole="button"
+            hitSlop={10}
             className="flex-row items-center gap-x-1">
             {editStatus === 'reply' ? (
               <BubbleChatFill width={16} height={16} />
@@ -162,7 +167,7 @@ export default function Comment({
                 'text-sm',
                 editStatus === 'reply' ? 'text-secondary-500' : 'text-gray-500',
               )}>
-              대댓글
+              답글
             </Text>
           </Pressable>
         ) : null}

@@ -120,8 +120,9 @@ export default function CommunityPostBody({
         <Pressable
           onPress={onPressLike}
           accessibilityRole="button"
-          accessibilityLabel="추천"
+          accessibilityLabel={`추천 ${post.likeCount ?? 0}`}
           accessibilityState={{selected: !!post.isMyLike}}
+          hitSlop={8}
           style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
           className={cn(
             'flex-row items-center rounded-full border px-4 py-1.5',
@@ -133,7 +134,8 @@ export default function CommunityPostBody({
           <Text
             className={cn(
               'pl-2 text-sm font-medium',
-              post.isMyLike ? 'text-primary-500' : 'text-gray-500',
+              // primary-500 은 primary-50 배경 위에서 대비 1.3:1 이라 글자가 안 읽힌다.
+              post.isMyLike ? 'text-primary-800' : 'text-gray-500',
             )}>
             추천
           </Text>

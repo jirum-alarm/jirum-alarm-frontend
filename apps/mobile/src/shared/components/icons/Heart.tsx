@@ -4,7 +4,8 @@ import Svg, {Path, type SvgProps} from 'react-native-svg';
 /** web Heart 아이콘과 같은 패스. 찜 여부는 fill 로만 가른다. */
 export default function Heart({
   liked,
-  color = '#98A2B3',
+  // 누르는 아이콘이라 3:1 이상 필요(gray-400 은 2.6:1) → gray-500.
+  color = '#667085',
   width = 24,
   height = 24,
   ...props

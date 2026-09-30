@@ -20,7 +20,7 @@ export default function AppErrorFallback({
       <Text style={styles.emoji}>😵</Text>
       <Text style={styles.title}>앱에 문제가 생겼어요</Text>
       <Text style={styles.description}>
-        불편을 드려 죄송합니다.{'\n'}
+        불편을 드려 죄송해요.{'\n'}
         다시 시도해도 계속된다면 앱을 완전히 종료 후 실행해주세요.
       </Text>
       <Pressable

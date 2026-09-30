@@ -173,7 +173,7 @@ export default function ProductTagModal({
                       setInputValue('');
                     }
                   }}
-                  placeholder="핫딜 제품을 검색해 주세요"
+                  placeholder="핫딜 상품을 검색해주세요"
                   className="flex-1 bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none"
                 />
                 {inputValue && (

@@ -95,5 +95,5 @@ export function displayTime(createdAt: string | Date | null | undefined) {
     (new Date().getMonth() - created.getMonth());
   if (months < 12) return `${Math.max(1, months)}달 전`;
 
-  return '12달 전';
+  return `${Math.floor(months / 12)}년 전`;
 }

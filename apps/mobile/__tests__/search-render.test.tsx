@@ -262,7 +262,7 @@ describe('검색 입력 헤더', () => {
   it('입력창이 실제로 그려진다(placeholder 로 확인)', () => {
     const tree = render(<SearchHeader {...props} value="" />);
     const inputs = tree.root.findAll(
-      node => node.props?.placeholder === '핫딜 제품을 검색해 주세요',
+      node => node.props?.placeholder === '핫딜 상품을 검색해주세요',
     );
     expect(inputs.length).toBeGreaterThan(0);
   });

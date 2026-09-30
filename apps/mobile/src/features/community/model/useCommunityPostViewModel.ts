@@ -46,7 +46,7 @@ export function useCommunityPostViewModel(postId: number) {
       if (context?.previous !== undefined) {
         queryClient.setQueryData(queryKey, context.previous);
       }
-      showToast.info('좋아요 처리에 실패했어요.');
+      showToast.info('추천에 실패했어요.');
     },
     onSettled: () => {
       // 목록의 추천 수도 같이 맞춘다 — 상세에서 누르고 뒤로 나갔을 때

@@ -37,11 +37,11 @@ export default function ProductReport({
         queryKey: ProductQueries.keys.stats(productId),
       });
       setOpen(false);
-      showToast.info('제보해주셔서 감사해요 :)');
+      showToast.info('제보해주셔서 감사해요');
     },
     onError: () => {
       setOpen(false);
-      showToast.info('이미 종료 제보된 상품입니다 :(');
+      showToast.info('이미 종료 제보된 상품이에요.');
     },
   });
 
@@ -81,18 +81,23 @@ export default function ProductReport({
         visible={open}
         animationType="fade"
         onRequestClose={() => setOpen(false)}>
+        {/* 백드롭이 시트를 감싸 iOS 가 통째로 묶지 않도록 접근성에서 뺀다(안쪽 버튼에 닿게). */}
         <Pressable
           className="flex-1 justify-end bg-black/40"
-          onPress={() => setOpen(false)}>
-          <Pressable onPress={() => {}}>
+          onPress={() => setOpen(false)}
+          accessible={false}
+          accessibilityViewIsModal
+          // VoiceOver 두 손가락 Z — 닫기 버튼이 없는 시트도 빠져나올 수 있게.
+          onAccessibilityEscape={() => setOpen(false)}>
+          <Pressable onPress={() => {}} accessible={false}>
             <View
               className="rounded-t-[20px] bg-white px-5 pt-8"
               style={{paddingBottom: Math.max(insets.bottom, 20)}}>
-              <Text className="text-center text-xl font-bold text-gray-900">
+              <Text className="text-center text-lg font-bold text-gray-900">
                 판매가 종료된 상품인가요?
               </Text>
               <Text className="py-3 text-center text-gray-700">
-                더 빠른 핫딜 확인을 위해{'\n'}종료된 상품을 제보해 주세요!
+                더 빠른 핫딜 확인을 위해{'\n'}종료된 상품을 제보해주세요!
               </Text>
               <View className="flex-row gap-3 pt-2">
                 <Button

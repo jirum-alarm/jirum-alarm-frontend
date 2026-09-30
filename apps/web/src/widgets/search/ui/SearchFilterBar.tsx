@@ -18,8 +18,8 @@ const SORT_LABELS: Record<(typeof SEARCH_SORTS)[number], string> = {
 const PERIOD_LABELS: Record<(typeof SEARCH_PERIODS)[number], string> = {
   all: '전체 기간',
   '1d': '오늘',
-  '7d': '이번주',
-  '30d': '한달',
+  '7d': '이번 주',
+  '30d': '한 달',
 };
 
 /** 필터 행 그룹 라벨 — 어떤 칩 줄이 어떤 필터인지 구분(전부 '전체'로 시작해 라벨 없인 식별 불가). */

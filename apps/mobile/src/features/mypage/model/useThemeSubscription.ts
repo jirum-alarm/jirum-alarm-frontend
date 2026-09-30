@@ -42,7 +42,7 @@ export function useThemeSubscription() {
     },
     onError: (_err, _themeId, context) => {
       rollback(context);
-      showToast.info('묶음 구독에 실패했습니다.');
+      showToast.info('묶음 구독에 실패했어요.');
     },
     onSettled: () => queryClient.invalidateQueries({queryKey: key}),
   });
@@ -56,7 +56,7 @@ export function useThemeSubscription() {
     },
     onError: (_err, _themeId, context) => {
       rollback(context);
-      showToast.info('구독 해지에 실패했습니다.');
+      showToast.info('구독 해제에 실패했어요.');
     },
     onSettled: () => queryClient.invalidateQueries({queryKey: key}),
   });

@@ -11,7 +11,7 @@ export function buildBirthYearOptions(
 ): BirthYearOption[] {
   const currentYear = now.getFullYear();
   return [
-    {text: '선택안함', value: null},
+    {text: '선택 안 함', value: null},
     ...Array.from({length: YEAR_RANGE}, (_, i) => {
       const year = String(currentYear - i);
       return {text: year, value: year};

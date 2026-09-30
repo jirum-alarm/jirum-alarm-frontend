@@ -83,7 +83,7 @@ export default function SearchNotFound({
 
       {hotDeals && hotDeals.length > 0 ? (
         <View style={styles.section}>
-          {/* web: hr + '오늘 가장 인기있는 핫딜' + 더보기 */}
+          {/* web: hr + '오늘 가장 인기 있는 핫딜' + 더보기 */}
           <View className="mx-5 border-t border-gray-300" />
           {/*
             ★web 의 '더보기'(→ /trending)는 옮기지 않았다. 검색 스택에서
@@ -91,7 +91,7 @@ export default function SearchNotFound({
             사라진다(뒤로가기로 돌아올 수 없다). 캐러셀에서 상품을 바로
             누르는 길은 그대로 남는다.
           */}
-          <SectionTitle title="오늘 가장 인기있는 핫딜" />
+          <SectionTitle title="오늘 가장 인기 있는 핫딜" />
           <CarouselList products={hotDeals} onPressProduct={onPressProduct} />
         </View>
       ) : null}

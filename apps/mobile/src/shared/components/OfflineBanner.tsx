@@ -13,7 +13,7 @@ const OfflineBanner = () => {
 
   return (
     <View style={[styles.container, {top: insets.top}]}>
-      <Text style={styles.text}>인터넷 연결이 끊어졌습니다</Text>
+      <Text style={styles.text}>인터넷 연결이 끊어졌어요</Text>
     </View>
   );
 };

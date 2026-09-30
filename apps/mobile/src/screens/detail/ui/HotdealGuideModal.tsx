@@ -52,11 +52,18 @@ export default function HotdealGuideModal({
 
   return (
     <Modal transparent visible animationType="none" onRequestClose={onClose}>
+      {/*
+        백드롭이 시트를 감싸므로 iOS 가 전체를 요소 하나로 묶지 않게 접근성에서 뺀다
+        (VoiceOver 가 안쪽 버튼에 닿도록). 모달 밖 화면은 accessibilityViewIsModal 로 가린다.
+      */}
       <Pressable
         className="flex-1 justify-end bg-black/40"
         onPress={onClose}
-        accessibilityLabel="닫기">
-        <Pressable onPress={() => {}}>
+        accessible={false}
+        accessibilityViewIsModal
+        // VoiceOver 두 손가락 Z — 닫기 버튼이 없는 시트도 빠져나올 수 있게.
+        onAccessibilityEscape={onClose}>
+        <Pressable onPress={() => {}} accessible={false}>
           <Animated.View
             className="rounded-t-2xl bg-white px-5 pt-8"
             style={{
@@ -71,7 +78,7 @@ export default function HotdealGuideModal({
                 },
               ],
             }}>
-            <Text className="pb-3 text-center text-xl font-bold text-gray-900">
+            <Text className="pb-3 text-center text-lg font-bold text-gray-900">
               핫딜 기준 안내
             </Text>
             <Text className="pb-6 text-center text-gray-700">

@@ -19,6 +19,10 @@ import PressableScale from '@/shared/components/PressableScale';
 import {openInAppBrowser} from '@/shared/lib/navigation';
 import {AdvertiseSlotLocation} from '@/shared/api/gql/graphql';
 import {LANDING_URL} from '@/constants/env';
+import {
+  useReduceMotion,
+  useScreenReaderEnabled,
+} from '@/shared/hooks/useReduceMotion';
 
 import {HomeQueries} from '../api/home.queries';
 import {useAdTracking} from '../lib/useAdTracking';
@@ -117,6 +121,10 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
   const indexRef = useRef(count);
   const interactedRef = useRef(false);
   const progress = useSharedValue(0);
+  // 동작 줄이기·스크린리더 사용자에겐 저절로 넘어가는 배너가 방해다(읽는 도중 바뀐다).
+  const reduceMotion = useReduceMotion();
+  const screenReader = useScreenReaderEnabled();
+  const autoplay = count > 1 && !reduceMotion && !screenReader;
 
   const index = count > 0 ? scrollIndex % count : 0;
   const currentDelay =
@@ -145,7 +153,7 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
    * 사용자가 한 번 만지면 잠시 멈췄다가 다음 tick 부터 재개한다.
    */
   useEffect(() => {
-    if (count <= 1) return;
+    if (!autoplay) return;
     const timer = setInterval(() => {
       if (interactedRef.current) {
         interactedRef.current = false;
@@ -154,7 +162,7 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
       goTo(indexRef.current + 1);
     }, currentDelay);
     return () => clearInterval(timer);
-  }, [count, currentDelay, goTo]);
+  }, [autoplay, currentDelay, goTo]);
 
   // web 의 진행바(onAutoplayTimeLeft → --progress)
   useEffect(() => {
@@ -199,7 +207,14 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
         onMomentumScrollEnd={onMomentumEnd}
         contentContainerStyle={{paddingHorizontal: sidePadding, gap: GAP}}>
         {looped.map((item, i) => (
-          <View key={item.key} style={{width: slideWidth}}>
+          <View
+            key={item.key}
+            style={{width: slideWidth}}
+            // 앞뒤 복제 블록은 loop 용 허상이라 스크린리더가 같은 배너를 3번 읽지 않게 숨긴다.
+            accessibilityElementsHidden={i < count || i >= count * 2}
+            importantForAccessibility={
+              i < count || i >= count * 2 ? 'no-hide-descendants' : 'auto'
+            }>
             <BannerSlideView slide={item.slide} isVisible={i === scrollIndex} />
             {/*
               진행바는 슬라이드 안에 둔다 — 배너와 같이 움직여야 한다.
@@ -207,7 +222,8 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
               그러면 스크롤 중 배너만 지나가고 바는 제자리라 따로 논다.
               활성 슬라이드에만 그려서 "지금 이 배너의 남은 시간"으로 읽히게 한다.
             */}
-            {i === scrollIndex ? (
+            {/* 자동 넘김이 꺼지면 남은 시간도 없으니 진행바를 그리지 않는다. */}
+            {autoplay && i === scrollIndex ? (
               <View className="absolute top-2 right-3 h-1 w-8">
                 <View className="h-full w-full overflow-hidden rounded-full bg-white/20">
                   <Animated.View
@@ -283,7 +299,7 @@ function BannerSlideView({
     <BannerCard
       title="지름알림, "
       strongTitle="어떻게 쓰나요?"
-      description="소개 페이지에서 한 눈에 알아보세요!"
+      description="소개 페이지에서 한눈에 알아보세요!"
       image={LANDING_IMAGE}
       backgroundClassName="bg-[#193E21] border-[#34673C]"
       onPress={() => openInAppBrowser(LANDING_URL)}
@@ -337,7 +353,7 @@ function BannerCard({
       </View>
 
       {isAd ? (
-        <View className="absolute right-2 bottom-2 rounded-lg border border-white bg-gray-400 px-[7px] py-[3px]">
+        <View className="absolute right-2 bottom-2 rounded-lg border border-white bg-gray-500 px-[7px] py-[3px]">
           {/* web `leading-none` — 기본 line-height 면 뱃지가 4~6px 커진다. */}
           <Text
             className="text-xs font-medium text-white"

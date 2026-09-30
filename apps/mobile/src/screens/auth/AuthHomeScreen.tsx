@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   kakaoButton: {
-    backgroundColor: '#FBE84C',
+    backgroundColor: '#FEE500', // tailwind kakao
   },
   naverButton: {
     backgroundColor: '#02C75A',

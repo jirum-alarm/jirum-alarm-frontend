@@ -83,7 +83,7 @@ export default function PostPurchaseKeywordPrompt({
         setDone(true);
         return;
       }
-      showToast.info(message || '키워드 저장에 실패했습니다.');
+      showToast.info(message || '키워드 저장에 실패했어요.');
     },
   });
 
@@ -130,7 +130,10 @@ export default function PostPurchaseKeywordPrompt({
             ‘{keyword}’ 새 딜이 나오면 알려드려요
           </Text>
         </View>
-        <PressableScale onPress={onClose} accessibilityLabel="알림 안내 닫기">
+        <PressableScale
+          onPress={onClose}
+          accessibilityRole="button"
+          accessibilityLabel="알림 안내 닫기">
           <View className="h-11 justify-center px-2">
             <Text className="text-xs text-gray-500">닫기</Text>
           </View>
@@ -173,7 +176,10 @@ export default function PostPurchaseKeywordPrompt({
             </Text>
           </View>
         </PressableScale>
-        <PressableScale onPress={onClose} accessibilityLabel="알림 안내 닫기">
+        <PressableScale
+          onPress={onClose}
+          accessibilityRole="button"
+          accessibilityLabel="알림 안내 닫기">
           <View className="h-11 justify-center px-2">
             <Text className="text-xs text-gray-500">닫기</Text>
           </View>

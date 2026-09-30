@@ -200,8 +200,9 @@ export default function CommunityScreen() {
             pressed ? styles.fabPressed : null,
           ]}
           className="bg-primary-500 flex-row items-center rounded-full px-4 py-3">
-          <Text className="text-lg leading-5 text-white">+</Text>
-          <Text className="pl-1.5 text-sm font-semibold text-white">
+          {/* 라임 위 흰 글자는 1.4:1 — 주 버튼(Button primary)처럼 gray-900. */}
+          <Text className="text-lg leading-5 text-gray-900">+</Text>
+          <Text className="pl-1.5 text-sm font-semibold text-gray-900">
             글쓰기
           </Text>
         </Pressable>

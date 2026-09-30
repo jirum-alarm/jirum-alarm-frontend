@@ -80,7 +80,8 @@ export default function AlarmItem({
         onPress={() => {
           if (isEditMode) return;
           onPress(productId);
-        }}>
+        }}
+        accessibilityRole="button">
         <View className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">
           <Thumbnail uri={thumbnail} fallback={<AlarmItemNoImage />} />
         </View>
@@ -117,7 +118,8 @@ export default function AlarmItem({
       {isEditMode ? (
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="알림 삭제"
+          // 목록에 X 가 줄마다 있어 "알림 삭제" 만으론 어느 줄인지 구분이 안 된다.
+          accessibilityLabel={`${message} 알림 삭제`}
           hitSlop={12}
           // ★PressableScale 을 쓰면 안 된다 — className 을 **안쪽 View** 에
           // 넘기는 구조라 `absolute` 가 껍데기가 아니라 내부에 걸린다.

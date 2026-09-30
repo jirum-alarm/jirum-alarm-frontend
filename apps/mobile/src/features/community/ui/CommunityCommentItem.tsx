@@ -66,6 +66,8 @@ export default function CommunityCommentItem({
           <Pressable
             onPress={onCancelEdit}
             accessibilityRole="button"
+            // h-8(32px)이라 44pt 권장 터치 영역에 모자라 위아래로 넓힌다.
+            hitSlop={6}
             style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
             className="h-8 justify-center rounded-lg bg-gray-100 px-4">
             <Text className="text-sm font-medium text-gray-700">취소</Text>
@@ -74,6 +76,7 @@ export default function CommunityCommentItem({
             onPress={() => onSubmitEdit(draft.trim())}
             disabled={!draft.trim() || isUpdating}
             accessibilityRole="button"
+            hitSlop={6}
             style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
             className={cn(
               'h-8 justify-center rounded-lg px-4',
@@ -114,7 +117,8 @@ export default function CommunityCommentItem({
         <Pressable
           onPress={onLike}
           accessibilityRole="button"
-          accessibilityLabel="좋아요"
+          accessibilityLabel={`좋아요 ${comment.likeCount ?? 0}`}
+          accessibilityState={{selected: !!comment.isMyLike}}
           style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
           className="flex-row items-center"
           hitSlop={6}>

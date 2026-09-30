@@ -134,7 +134,7 @@ const SearchInput = () => {
             }
           }}
           spellCheck={false}
-          placeholder="핫딜 제품을 검색해 주세요"
+          placeholder="핫딜 상품을 검색해주세요"
           // 결과 페이지(키워드 존재)에선 autoFocus 금지 — 공유 URL/뒤로가기 진입 시
           // 포커스→제안어 드롭다운이 결과·필터를 가리고 모바일 키보드가 올라오는 결함(운영 실측).
           autoFocus={!keyword}

@@ -49,7 +49,8 @@ export function ThemeCard({
           disabled={isPending}
           accessibilityRole="button"
           accessibilityLabel={isSubscribed ? '구독 해제' : '구독'}
-          // web `w-16`(64px) 고정. 텍스트가 '구독중'/'구독' 으로 바뀌어도
+          accessibilityState={{selected: isSubscribed}}
+          // web `w-16`(64px) 고정. 텍스트가 '구독 중'/'구독' 으로 바뀌어도
           // 카드 폭이 흔들리지 않는다.
           style={
             isPending ? styles.subscribeButtonDimmed : styles.subscribeButton
@@ -65,7 +66,7 @@ export function ThemeCard({
                 ? 'text-sm font-medium text-gray-500'
                 : 'text-sm font-medium text-gray-900'
             }>
-            {isSubscribed ? '구독중' : '구독'}
+            {isSubscribed ? '구독 중' : '구독'}
           </Text>
         </Pressable>
       </View>

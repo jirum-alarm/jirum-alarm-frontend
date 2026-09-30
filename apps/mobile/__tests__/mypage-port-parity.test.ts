@@ -199,7 +199,7 @@ describe('묶음(테마) — 목록·상세의 조각이 다 있다', () => {
     expect(read('src/features/mypage/ui/ThemeCards.tsx')).toContain(
       'representativeKeywords',
     );
-    expect(read('src/features/mypage/ui/ThemeCards.tsx')).toContain('구독중');
+    expect(read('src/features/mypage/ui/ThemeCards.tsx')).toContain('구독 중');
   });
 
   it('상세: 포함 키워드 + 라이브 딜 + 구독 토글', () => {
