@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
+import {Text, TextInput} from '@/shared/components/ui/Text/AppText';
 
 import Dots from '@/shared/components/icons/Dots';
 import ThumbsupFill from '@/shared/components/icons/ThumbsupFill';

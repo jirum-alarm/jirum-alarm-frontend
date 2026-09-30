@@ -1,5 +1,6 @@
 import React, {useMemo, useState} from 'react';
-import {Dimensions, FlatList, Pressable, Text, View} from 'react-native';
+import {Dimensions, FlatList, Pressable, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import type {ProductCardSource} from '@/shared/lib/analytics/card-tracking';
 

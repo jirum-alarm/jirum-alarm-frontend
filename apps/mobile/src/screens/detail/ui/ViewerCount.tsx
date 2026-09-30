@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 /** web 과 같은 노출 하한 — 이보다 적으면 "N명이 살펴본"이 되레 빈약해 보인다. */
 export const MIN_VIEWER_COUNT = 10;

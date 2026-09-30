@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {parsePrice} from '@/shared/lib/format/price';
 import {cn} from '@/shared/lib/styling';

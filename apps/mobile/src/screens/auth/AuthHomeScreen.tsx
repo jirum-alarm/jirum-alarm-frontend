@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Image, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {COLORS} from '@/shared/constant/colors.ts';
 import {
   AppleIcon,

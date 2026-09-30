@@ -1,6 +1,7 @@
 import ConfirmSheet from '@/features/community/ui/ConfirmSheet';
 import React, {useState} from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Pressable, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 import {UserLikeTarget} from '@/shared/api/gql/graphql';

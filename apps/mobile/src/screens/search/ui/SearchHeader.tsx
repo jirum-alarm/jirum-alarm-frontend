@@ -1,5 +1,6 @@
 import React, {forwardRef} from 'react';
-import {Pressable, StyleSheet, TextInput, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
+import {TextInput} from '@/shared/components/ui/Text/AppText';
 
 import CaretLeft from '@/shared/components/icons/caret_left';
 import CircleX from '@/shared/components/icons/circle_x';

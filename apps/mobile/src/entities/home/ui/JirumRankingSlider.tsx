@@ -2,11 +2,11 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
-  Text,
   View,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import Animated, {
   type SharedValue,
   useAnimatedScrollHandler,

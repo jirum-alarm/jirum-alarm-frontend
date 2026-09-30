@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {HotDealType, UploaderType} from '@/shared/api/gql/graphql';
 import DisplayPrice from '@/shared/components/product/DisplayPrice';

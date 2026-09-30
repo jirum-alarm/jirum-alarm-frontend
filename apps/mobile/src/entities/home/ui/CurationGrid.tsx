@@ -1,11 +1,6 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, FlatList, RefreshControl, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 

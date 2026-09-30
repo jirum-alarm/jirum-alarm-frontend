@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
 import Thumbnail from '@/shared/components/product/Thumbnail';

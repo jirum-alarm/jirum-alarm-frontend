@@ -1,11 +1,7 @@
 import React, {isValidElement} from 'react';
 import {type VariantProps} from 'class-variance-authority';
-import {
-  ActivityIndicator,
-  Pressable,
-  type PressableProps,
-  Text,
-} from 'react-native';
+import {ActivityIndicator, Pressable, type PressableProps} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {cn} from '@/shared/lib/styling';
 import {
   buttonVaraint,

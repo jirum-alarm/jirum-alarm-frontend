@@ -1,11 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, FlatList, RefreshControl, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useNavigation} from '@react-navigation/native';
 import {useQuery} from '@tanstack/react-query';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';

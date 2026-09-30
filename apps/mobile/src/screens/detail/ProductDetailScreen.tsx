@@ -5,7 +5,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {ActivityIndicator, ScrollView, Text, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {SystemBars} from 'react-native-edge-to-edge';
 import {useNavigation} from '@react-navigation/native';
 import {useQuery} from '@tanstack/react-query';

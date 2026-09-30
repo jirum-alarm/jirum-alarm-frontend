@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, Pressable, StyleSheet} from 'react-native';
+import {View, Pressable, StyleSheet} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 /**
  * 앱 전체가 죽었을 때의 마지막 화면.

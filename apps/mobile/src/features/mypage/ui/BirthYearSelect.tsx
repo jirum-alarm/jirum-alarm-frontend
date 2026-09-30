@@ -1,5 +1,6 @@
 import React, {useMemo, useState} from 'react';
-import {FlatList, Modal, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Modal, Pressable, StyleSheet, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import ArrowRight from '@/shared/components/icons/ArrowRight';

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Modal, Pressable, Text, View} from 'react-native';
+import {Modal, Pressable, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Button from '@/shared/components/ui/Button';

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, Text} from 'react-native';
+import {Pressable} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 /**
  * 시트 안의 메뉴 한 줄(글 메뉴·댓글 메뉴 공용).

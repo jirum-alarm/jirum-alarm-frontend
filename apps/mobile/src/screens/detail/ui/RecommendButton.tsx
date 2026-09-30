@@ -1,6 +1,7 @@
 import {showToast} from '@/shared/lib/feedback';
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 import {UserLikeTarget} from '@/shared/api/gql/graphql';

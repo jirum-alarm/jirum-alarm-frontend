@@ -4,9 +4,9 @@ import {
   Modal,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import WebView, {type WebViewMessageEvent} from 'react-native-webview';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 

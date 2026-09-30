@@ -1,5 +1,6 @@
 import React from 'react';
-import {ActivityIndicator, Pressable, Text, View} from 'react-native';
+import {ActivityIndicator, Pressable, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
 
 import {OrderOptionType, ProductOrderType} from '@/shared/api/gql/graphql';

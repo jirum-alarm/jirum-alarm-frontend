@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
-import {Dimensions, Pressable, Text, View} from 'react-native';
+import {Dimensions, Pressable, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {Analytics} from '@/shared/lib/analytics/ga4';
 

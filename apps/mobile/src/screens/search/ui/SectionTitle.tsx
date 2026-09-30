@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 /**
  * 섹션 제목 줄. web `shared/ui/SectionHeader`(h-14, text-lg font-bold) 의

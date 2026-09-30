@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import IconLogo from '@/shared/components/icons/IconLogo';
 import {gaps} from './community-styles';

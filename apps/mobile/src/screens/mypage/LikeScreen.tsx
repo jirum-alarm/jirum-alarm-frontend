@@ -1,5 +1,6 @@
 import React, {useCallback, useState} from 'react';
-import {ActivityIndicator, Pressable, Text, View} from 'react-native';
+import {ActivityIndicator, Pressable, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useNavigation} from '@react-navigation/native';
 import type {
   NativeStackNavigationProp,

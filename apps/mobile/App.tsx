@@ -7,7 +7,8 @@ import RootNavigator from './src/navigations/root/RootNavigator.tsx';
 import './global.css';
 import {KeyboardProvider} from 'react-native-keyboard-controller';
 import Toast, {type ToastConfig} from 'react-native-toast-message';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {
   WebviewRefContext,
   useWebViewRefManager,

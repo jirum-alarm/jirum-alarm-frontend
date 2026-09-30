@@ -1,5 +1,6 @@
 import React, {useCallback, useState} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';

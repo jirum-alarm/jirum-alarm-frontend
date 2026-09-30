@@ -1,5 +1,6 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import Svg, {Defs, LinearGradient, Rect, Stop} from 'react-native-svg';
 
 import {HotDealType} from '@/shared/api/gql/graphql';

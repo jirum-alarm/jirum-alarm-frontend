@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Pressable, Text, TextInput, View} from 'react-native';
+import {Pressable, View} from 'react-native';
+import {Text, TextInput} from '@/shared/components/ui/Text/AppText';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 import {CommentService} from '@/shared/api/comment/comment.service';

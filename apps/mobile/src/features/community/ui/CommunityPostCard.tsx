@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import Thumbnail from '@/shared/components/product/Thumbnail';
 import {displayTime} from '@/shared/lib/format/price';

@@ -1,5 +1,6 @@
 import React, {useMemo, useState} from 'react';
-import {ActivityIndicator, Pressable, Text, View} from 'react-native';
+import {ActivityIndicator, Pressable, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import type {LayoutChangeEvent} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 

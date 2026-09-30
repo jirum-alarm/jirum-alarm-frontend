@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
+import {Text, TextInput} from '@/shared/components/ui/Text/AppText';
 import {useMutation} from '@tanstack/react-query';
 
 import {CommunityService} from '@/shared/api/community';

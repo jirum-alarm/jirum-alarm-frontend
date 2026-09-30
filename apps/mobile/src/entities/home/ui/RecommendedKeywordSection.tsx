@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useMutation, useQuery} from '@tanstack/react-query';
 
 import PressableScale from '@/shared/components/PressableScale';

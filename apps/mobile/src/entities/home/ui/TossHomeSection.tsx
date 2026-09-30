@@ -1,5 +1,6 @@
 import React, {useMemo, useState} from 'react';
-import {ActivityIndicator, ScrollView, Text, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
 
 import PressableScale from '@/shared/components/PressableScale';

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Modal, Pressable, Text, View} from 'react-native';
+import {Modal, Pressable, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 

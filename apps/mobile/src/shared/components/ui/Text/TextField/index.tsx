@@ -1,5 +1,6 @@
 import React, {forwardRef, isValidElement, useState} from 'react';
-import {TextInput, Text, type TextInputProps, View} from 'react-native';
+import {type TextInputProps, View} from 'react-native';
+import {Text, TextInput} from '@/shared/components/ui/Text/AppText';
 import {
   containerVaraint,
   textfieldVariant,

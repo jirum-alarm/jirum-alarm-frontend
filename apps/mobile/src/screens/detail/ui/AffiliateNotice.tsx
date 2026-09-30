@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 /** web lib/isCoupangPartner.ts 와 동일 규칙. */
 export function isCoupangPartner(mallName?: string | null): boolean {

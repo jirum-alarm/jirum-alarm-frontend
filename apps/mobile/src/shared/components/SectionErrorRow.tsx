@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Pressable, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 /**
  * 섹션 단위 실패 표시.

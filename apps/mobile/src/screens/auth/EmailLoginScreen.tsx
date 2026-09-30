@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
-import {Pressable, Text, type TextInput, View} from 'react-native';
+import {Pressable, type TextInput, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import BasicLayout from '@/components/layout/BasicLayout.tsx';
 import TextField from '@/shared/components/ui/Text/TextField';
 import {CircleXIcon, EyeIcon, EyeOffIcon} from '@/shared/components/icons';

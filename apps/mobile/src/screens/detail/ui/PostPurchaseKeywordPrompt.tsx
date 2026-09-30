@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import Svg, {Path} from 'react-native-svg';
 

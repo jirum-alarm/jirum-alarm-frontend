@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 /**
  * 키워드 한 줄의 "가격 하락 알림" 스위치. web `PriceDropOnlyToggle`.

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Pressable, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import {cn} from '@/shared/lib/styling';
 import type {CommunityTab} from '@/entities/community';

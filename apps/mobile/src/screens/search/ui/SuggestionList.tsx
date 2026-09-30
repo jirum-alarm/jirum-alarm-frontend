@@ -1,5 +1,6 @@
 import React from 'react';
-import {Pressable, ScrollView, StyleSheet, Text} from 'react-native';
+import {Pressable, ScrollView, StyleSheet} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import SearchIcon from '@/shared/components/icons/search';
 

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Pressable, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import TextField from '@/shared/components/ui/Text/TextField';
 import EyeIcon from '@/shared/components/icons/eye';

@@ -1,5 +1,6 @@
 import React, {useCallback} from 'react';
-import {ActivityIndicator, FlatList, Text, View} from 'react-native';
+import {ActivityIndicator, FlatList, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import ProductCard, {
   type ProductCardItem,

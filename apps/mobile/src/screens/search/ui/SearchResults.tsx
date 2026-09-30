@@ -1,11 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, Pressable, StyleSheet, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import {useInfiniteQuery} from '@tanstack/react-query';
 
 import CurationGrid from '@/entities/home/ui/CurationGrid';

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import type {ProductCommentSummary} from '@/shared/api/gql/graphql';
 import AIIcon from '@/shared/components/icons/AI';

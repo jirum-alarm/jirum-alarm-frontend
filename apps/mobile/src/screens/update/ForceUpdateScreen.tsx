@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  Linking,
-  Platform,
-} from 'react-native';
+import {View, Pressable, StyleSheet, Linking, Platform} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 // web 의 shared/config/appStore.ts 와 같은 앱을 가리킨다.
 // iOS 는 스토어프론트를 붙이지 않는다 — 붙이면 다른 국가 계정에서 열리지 않는다.

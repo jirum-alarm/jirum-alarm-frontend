@@ -2,12 +2,12 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Dimensions,
   Image,
-  Text,
   View,
   type ImageSourcePropType,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,

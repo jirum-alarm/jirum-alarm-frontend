@@ -1,5 +1,6 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 /**
  * 카드의 "판매처 · 제보 커뮤니티 · 시간" 메타 한 줄.

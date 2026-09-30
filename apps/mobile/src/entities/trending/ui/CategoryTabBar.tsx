@@ -1,5 +1,6 @@
 import React, {useEffect, useRef} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
+import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
 import {cn} from '@/shared/lib/styling';
