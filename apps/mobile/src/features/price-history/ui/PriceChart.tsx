@@ -22,7 +22,9 @@ import type {CurrentProductMarker} from '../model/seed-marker';
 
 const WIDTH = 640;
 const HEIGHT = 260;
-const PAD = {top: 40, right: 20, bottom: 28, left: 44};
+// left: Y축 라벨(textAnchor=end, x=left-8)이 들어갈 폭. 44 면 "2,260k"(12px ≈ 39)의
+// 첫 글자가 0 밖으로 나가 잘렸다 — "12,260k" 까지 들어가게 56.
+const PAD = {top: 40, right: 20, bottom: 28, left: 56};
 
 const LINE = '#7FC125';
 const GRID = '#E4E7EC'; // gray-200

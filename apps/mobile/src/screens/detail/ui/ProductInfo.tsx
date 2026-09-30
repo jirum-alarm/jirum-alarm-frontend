@@ -94,8 +94,8 @@ export default function ProductInfo({
           {displayTime(product.postedAt)}
         </Text>
 
-        <View className="flex-row items-center justify-between">
-          <View className="shrink">
+        <View className="flex-row items-center justify-between gap-x-3">
+          <View className="min-w-0 flex-1">
             {hidePrice ? (
               <Text className="text-lg font-semibold text-gray-900">
                 토스에서 가격 확인
@@ -108,7 +108,8 @@ export default function ProductInfo({
                     {display.originalPrice.toLocaleString()}원
                   </Text>
                 ) : null}
-                <View className="flex-row items-baseline gap-x-2">
+                {/* 좁으면 할인율·가격이 통째로 넘어간다(숫자 중간에서 쪼개지지 않게). */}
+                <View className="flex-row flex-wrap items-baseline gap-x-2">
                   {typeof display?.discountRate === 'number' ? (
                     <Text className="text-2xl font-bold text-error-500">
                       {display.discountRate}%
@@ -118,31 +119,33 @@ export default function ProductInfo({
                 </View>
               </>
             )}
-            {display &&
-            (typeof display.rating === 'number' ||
-              (!hidePrice && display.couponDiscount)) ? (
-              <View className="flex-row flex-wrap items-center gap-x-2 pt-1">
-                {typeof display.rating === 'number' ? (
-                  <Text className="text-sm text-gray-500">
-                    <Text className="text-[#ffb200]">★</Text> {display.rating}
-                    {display.reviewCount
-                      ? ` (${display.reviewCount.toLocaleString()})`
-                      : ''}
-                  </Text>
-                ) : null}
-                {!hidePrice && display.couponDiscount ? (
-                  <Text className="text-sm text-error-500">
-                    쿠폰{' '}
-                    {typeof display.couponDiscount === 'number'
-                      ? `${display.couponDiscount.toLocaleString()}원 추가할인`
-                      : display.couponDiscount}
-                  </Text>
-                ) : null}
-              </View>
-            ) : null}
           </View>
           <RecommendButton productId={productId} isUserLogin={isUserLogin} />
         </View>
+        {/* 평점·쿠폰은 추천 버튼 옆 좁은 칸이 아니라 한 줄 전체를 쓴다 — 거기선 쿠폰 문구가
+            셋째 줄로 꺾였다(1rem 16px 이후 추천 버튼이 넓어짐). */}
+        {display &&
+        (typeof display.rating === 'number' ||
+          (!hidePrice && display.couponDiscount)) ? (
+          <View className="flex-row flex-wrap items-center gap-x-2 pt-1">
+            {typeof display.rating === 'number' ? (
+              <Text className="text-sm text-gray-500">
+                <Text className="text-[#ffb200]">★</Text> {display.rating}
+                {display.reviewCount
+                  ? ` (${display.reviewCount.toLocaleString()})`
+                  : ''}
+              </Text>
+            ) : null}
+            {!hidePrice && display.couponDiscount ? (
+              <Text className="text-sm text-error-500">
+                쿠폰{' '}
+                {typeof display.couponDiscount === 'number'
+                  ? `${display.couponDiscount.toLocaleString()}원 추가할인`
+                  : display.couponDiscount}
+              </Text>
+            ) : null}
+          </View>
+        ) : null}
       </View>
 
       {/* web 순서: 추천 버튼 줄 → 가격 판정 → 토스 뱃지. */}

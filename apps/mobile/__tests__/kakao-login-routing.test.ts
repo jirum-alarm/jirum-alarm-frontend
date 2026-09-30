@@ -2,6 +2,8 @@ import {Platform} from 'react-native';
 import {shouldOpenExternally} from '../src/shared/lib/navigation/in-app-browser';
 import type {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
 
+jest.mock('react-native-toast-message', () => ({show: jest.fn()}));
+
 jest.mock('expo-web-browser', () => ({
   openBrowserAsync: jest.fn(),
   WebBrowserPresentationStyle: {PAGE_SHEET: 'pageSheet'},

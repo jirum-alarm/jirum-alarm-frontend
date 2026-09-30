@@ -75,37 +75,38 @@ export default function CommunityPostBody({
           onPress={() => onPressTaggedProduct(Number(post.taggedProduct!.id))}
           accessibilityRole="button"
           accessibilityLabel={`태그한 상품 ${post.taggedProduct.title}`}
-          style={({pressed}) => [
-            {backgroundColor: TAG_CARD_BG},
-            pressed ? {opacity: 0.8} : null,
-          ]}
-          className="mx-5 mb-4 rounded-2xl p-4">
+          // ★Pressable 엔 opacity 만(ThemeCards 주석 참조). 바탕·여백은 안쪽 View.
+          style={({pressed}) => ({opacity: pressed ? 0.8 : 1})}>
           <View
-            className="self-start rounded-full px-2.5 py-0.5"
-            style={{backgroundColor: TAG_BADGE_BG}}>
-            <Text
-              className="text-xs font-medium"
-              style={{color: TAG_BADGE_TEXT}}>
-              태그한 상품
-            </Text>
-          </View>
-          <View className="flex-row items-center pt-3">
-            {post.taggedProduct.thumbnail ? (
-              <View className="h-20 w-20 overflow-hidden rounded-xl bg-white">
-                <Thumbnail uri={post.taggedProduct.thumbnail} />
-              </View>
-            ) : null}
-            <View className="min-w-0 flex-1 pl-3">
+            className="mx-5 mb-4 rounded-2xl p-4"
+            style={{backgroundColor: TAG_CARD_BG}}>
+            <View
+              className="self-start rounded-full px-2.5 py-0.5"
+              style={{backgroundColor: TAG_BADGE_BG}}>
               <Text
-                className="text-sm font-medium text-gray-900"
-                numberOfLines={2}>
-                {post.taggedProduct.title}
+                className="text-xs font-medium"
+                style={{color: TAG_BADGE_TEXT}}>
+                태그한 상품
               </Text>
-              {post.taggedProduct.price ? (
-                <Text className="pt-1.5 text-base font-bold text-gray-900">
-                  {post.taggedProduct.price}
-                </Text>
+            </View>
+            <View className="flex-row items-center pt-3">
+              {post.taggedProduct.thumbnail ? (
+                <View className="h-20 w-20 overflow-hidden rounded-xl bg-white">
+                  <Thumbnail uri={post.taggedProduct.thumbnail} />
+                </View>
               ) : null}
+              <View className="min-w-0 flex-1 pl-3">
+                <Text
+                  className="text-sm font-medium text-gray-900"
+                  numberOfLines={2}>
+                  {post.taggedProduct.title}
+                </Text>
+                {post.taggedProduct.price ? (
+                  <Text className="pt-1.5 text-base font-bold text-gray-900">
+                    {post.taggedProduct.price}
+                  </Text>
+                ) : null}
+              </View>
             </View>
           </View>
         </Pressable>

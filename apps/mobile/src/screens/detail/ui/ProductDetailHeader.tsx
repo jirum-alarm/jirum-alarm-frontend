@@ -13,6 +13,10 @@ const LOGO_SUBTITLE = '커뮤니티 핫딜 모아보기';
 
 const MIN_TAP = 36;
 
+const pressedOpacity = ({pressed}: {pressed: boolean}) => ({
+  opacity: pressed ? 0.6 : 1,
+});
+
 /**
  * 시스템 헤더 왼쪽 — 뒤로가기 옆에 붙는다. 로고를 누르면 탭 홈으로.
  *
@@ -26,15 +30,19 @@ export function DetailHeaderTitle({onPress}: {onPress: () => void}) {
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel="지름알림 홈으로"
-      style={({pressed}) => [styles.title, pressed && styles.pressed]}>
-      <IconLogo size={28} />
-      <View style={styles.titleText}>
-        <Text style={styles.brand} numberOfLines={1}>
-          지름알림
-        </Text>
-        <Text style={styles.subtitle} numberOfLines={1}>
-          {LOGO_SUBTITLE}
-        </Text>
+      // ★함수형 style 은 opacity 객체만 돌려준다. 레이아웃까지 배열로 돌려줬더니
+      // (NativeWind 가 끼어드는 Pressable) row 가 사라져 로고 아래로 글자가 떨어졌다.
+      style={pressedOpacity}>
+      <View style={styles.title}>
+        <IconLogo size={28} />
+        <View style={styles.titleText}>
+          <Text style={styles.brand} numberOfLines={1}>
+            지름알림
+          </Text>
+          <Text style={styles.subtitle} numberOfLines={1}>
+            {LOGO_SUBTITLE}
+          </Text>
+        </View>
       </View>
     </Pressable>
   );
@@ -73,8 +81,8 @@ export function HeaderIconButton({
       hitSlop={8}
       accessibilityRole="button"
       accessibilityLabel={label}
-      style={({pressed}) => [styles.iconBtn, pressed && styles.pressed]}>
-      {children}
+      style={pressedOpacity}>
+      <View style={styles.iconBtn}>{children}</View>
     </Pressable>
   );
 }
@@ -130,7 +138,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  pressed: {opacity: 0.6},
   iconBtn: {
     minWidth: MIN_TAP,
     minHeight: MIN_TAP,

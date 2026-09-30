@@ -156,8 +156,9 @@ export function ListCard({product, onPress, trackingSource}: CardProps) {
           // 한 행에 같은 뱃지가 두 번(web ListProductCard 는 안 그린다).
           showHotdealBadge={false}
         />
-        {/* web `h-full justify-between` — 76px 안에서 제목/가격/출처를 벌린다. */}
-        <View className="h-[76px] flex-1 justify-between gap-1">
+        {/* web `h-full justify-between` — 썸네일(76px) 높이에 맞춰 벌리되, 제목이 두 줄이면
+            (40+4+28+4+16=92) 칸이 늘어나야 출처 줄이 다음 카드로 삐져나가지 않는다. */}
+        <View className="min-h-[76px] flex-1 justify-between gap-1">
           <Text className="text-sm text-gray-700" numberOfLines={2}>
             {product.title}
           </Text>

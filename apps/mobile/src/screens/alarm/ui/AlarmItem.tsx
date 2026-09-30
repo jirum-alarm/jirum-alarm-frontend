@@ -103,7 +103,7 @@ export default function AlarmItem({
             {price ? (
               <>
                 <Text
-                  className="max-w-56 font-semibold text-gray-900"
+                  className="shrink font-semibold text-gray-900"
                   numberOfLines={1}>
                   {price}
                 </Text>

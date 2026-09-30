@@ -26,7 +26,12 @@ const BasicLayout = ({children, hasBackButton, title}: Props) => {
         style={{paddingTop: 12 + insets.top}}>
         {hasBackButton && (
           <>
-            <Pressable onPress={router.goBack}>
+            <Pressable
+              onPress={router.goBack}
+              hitSlop={12}
+              accessibilityRole="button"
+              accessibilityLabel="뒤로"
+              style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
               <CaretLeft />
             </Pressable>
             {title && (

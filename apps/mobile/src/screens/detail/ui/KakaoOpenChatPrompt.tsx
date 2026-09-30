@@ -59,7 +59,8 @@ export default function KakaoOpenChatPrompt({href}: {href?: string}) {
         <Text className="text-sm font-semibold text-gray-800">
           핫딜 오픈 채팅방 입장하기
         </Text>
-        <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
+        {/* 좁은 폰(360dp)에선 한 줄에 안 들어가 말줄임됐다 — 두 줄까지 허용. */}
+        <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={2}>
           지름알림이 엄선한 핫딜만 골라 받아보세요!
         </Text>
       </View>

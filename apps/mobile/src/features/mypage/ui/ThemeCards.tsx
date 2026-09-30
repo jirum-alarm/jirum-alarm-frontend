@@ -108,17 +108,20 @@ export function SubscribedThemeRow({
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel={theme.name}
-        style={({pressed}) => [styles.grow, pressed && styles.pressed]}
-        className="min-w-0 gap-1">
-        <View className="min-w-0 flex-row items-center gap-1.5">
-          {theme.emoji ? <Text>{theme.emoji}</Text> : null}
-          <Text className="text-sm text-gray-900" numberOfLines={1}>
-            {theme.name}
+        // ★Pressable 엔 opacity 만 — className·배열 style 을 함수형 style 과 섞으면
+        // NativeWind 가 레이아웃을 떨군다(상세 헤더 로고가 세로로 쌓였던 원인).
+        style={({pressed}) => ({flex: 1, opacity: pressed ? 0.6 : 1})}>
+        <View className="min-w-0 gap-1">
+          <View className="min-w-0 flex-row items-center gap-1.5">
+            {theme.emoji ? <Text>{theme.emoji}</Text> : null}
+            <Text className="text-sm text-gray-900" numberOfLines={1}>
+              {theme.name}
+            </Text>
+          </View>
+          <Text className="bg-primary-50 text-primary-800 self-start rounded px-1.5 py-0.5 text-[11px] font-medium">
+            묶음
           </Text>
         </View>
-        <Text className="bg-primary-50 text-primary-800 self-start rounded px-1.5 py-0.5 text-[11px] font-medium">
-          묶음
-        </Text>
       </Pressable>
       <Pressable
         onPress={onUnsubscribe}
@@ -137,7 +140,6 @@ export function SubscribedThemeRow({
 
 const styles = StyleSheet.create({
   grow: {flex: 1},
-  pressed: {opacity: 0.6},
   dimmed: {opacity: 0.5},
   subscribeButton: {width: 64},
   subscribeButtonDimmed: {width: 64, opacity: 0.5},

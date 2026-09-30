@@ -195,16 +195,17 @@ export default function CommunityScreen() {
           onPress={openWrite}
           accessibilityRole="button"
           accessibilityLabel="글쓰기"
-          style={({pressed}) => [
-            styles.fabShadow,
-            pressed ? styles.fabPressed : null,
-          ]}
-          className="bg-primary-500 flex-row items-center rounded-full px-4 py-3">
-          {/* 라임 위 흰 글자는 1.4:1 — 주 버튼(Button primary)처럼 gray-900. */}
-          <Text className="text-lg leading-5 text-gray-900">+</Text>
-          <Text className="pl-1.5 text-sm font-semibold text-gray-900">
-            글쓰기
-          </Text>
+          // ★Pressable 엔 opacity 만 — 모양·그림자는 안쪽 View(ThemeCards 주석 참조).
+          style={({pressed}) => ({opacity: pressed ? 0.85 : 1})}>
+          <View
+            className="bg-primary-500 flex-row items-center rounded-full px-4 py-3"
+            style={styles.fabShadow}>
+            {/* 라임 위 흰 글자는 1.4:1 — 주 버튼(Button primary)처럼 gray-900. */}
+            <Text className="text-lg leading-5 text-gray-900">+</Text>
+            <Text className="pl-1.5 text-sm font-semibold text-gray-900">
+              글쓰기
+            </Text>
+          </View>
         </Pressable>
       </View>
     </View>
@@ -230,5 +231,4 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 6,
   },
-  fabPressed: {opacity: 0.85},
 });
