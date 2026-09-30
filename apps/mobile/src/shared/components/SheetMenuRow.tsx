@@ -3,7 +3,7 @@ import {Pressable} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 /**
- * 시트 안의 메뉴 한 줄(글 메뉴·댓글 메뉴 공용).
+ * 시트 안의 메뉴 한 줄(커뮤니티 글·댓글 메뉴, 상품 댓글 메뉴 공용).
  * web 의 vaul 시트 안 버튼과 같은 높이(h-14)·타이포.
  */
 export default function SheetMenuRow({

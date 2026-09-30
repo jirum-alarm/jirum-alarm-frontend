@@ -230,7 +230,8 @@ export default function ShareSheet({
         <Animated.View
           pointerEvents="none"
           style={[StyleSheet.absoluteFill, {opacity: overlay}]}>
-          <View className="flex-1 bg-black/50" />
+          {/* 백드롭 농도·라운드는 앱 공용 BottomSheet 와 맞춘다(스프링·레이아웃만 이 시트 고유). */}
+          <View className="flex-1 bg-black/40" />
         </Animated.View>
         <Pressable
           style={StyleSheet.absoluteFill}
@@ -396,8 +397,8 @@ function CheckIcon() {
 const styles = StyleSheet.create({
   sheet: {
     backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
     // overlay 위에 떠 있어야 백드롭 Pressable 이 시트를 먹지 않는다.
     zIndex: 1,
     shadowColor: '#101828',

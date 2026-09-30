@@ -7,7 +7,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {NotificationQueries} from '@/entities/notification';
 import PressableScale from '@/shared/components/PressableScale';
-import ConfirmSheet from '@/features/community/ui/ConfirmSheet';
+import ConfirmSheet from '@/shared/components/ConfirmSheet';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import TrashBin from '@/shared/components/icons/TrashBin';
@@ -237,6 +237,7 @@ export default function AlarmScreen() {
         title="알림을 모두 삭제할까요?"
         description="삭제한 알림은 다시 볼 수 없어요."
         confirmLabel="전체 삭제"
+        tone="danger"
         onCancel={() => setConfirmRemoveAll(false)}
         onConfirm={() => {
           setConfirmRemoveAll(false);

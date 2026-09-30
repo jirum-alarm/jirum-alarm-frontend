@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
-import {Modal, Pressable, View} from 'react-native';
+import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
-import Button from '@/shared/components/ui/Button';
+import ConfirmSheet from '@/shared/components/ConfirmSheet';
 import PressableScale from '@/shared/components/PressableScale';
 import {showToast} from '@/shared/lib/feedback';
 import {
@@ -17,7 +16,8 @@ import {PendingActionType} from '@/shared/lib/pending-action';
 
 /**
  * 판매 종료 제보. web ProductReport 와 같은 문구·위치(커뮤니티 반응 아래).
- * 확인 시트는 댓글 메뉴와 같이 Modal 자작 — 버튼 2개라 라이브러리가 필요 없다.
+ * 확인은 앱 공용 `ConfirmSheet` — 다른 확인 시트와 모양을 맞춘다. tone 을 danger 로
+ * 두지 않는 건 제보가 지우는 동작이 아니라서다.
  */
 export default function ProductReport({
   productId,
@@ -25,7 +25,6 @@ export default function ProductReport({
   productId: number;
   isUserLogin: boolean;
 }) {
-  const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
   const {requireLogin} = useRequireLogin(`/products/${productId}`);
   const {data: stats} = useQuery(ProductQueries.stats({id: productId}));
@@ -77,47 +76,15 @@ export default function ProductReport({
         </PressableScale>
       </View>
 
-      <Modal
-        transparent
+      <ConfirmSheet
         visible={open}
-        animationType="fade"
-        onRequestClose={() => setOpen(false)}>
-        {/* 백드롭이 시트를 감싸 iOS 가 통째로 묶지 않도록 접근성에서 뺀다(안쪽 버튼에 닿게). */}
-        <Pressable
-          className="flex-1 justify-end bg-black/40"
-          onPress={() => setOpen(false)}
-          accessible={false}
-          accessibilityViewIsModal
-          // VoiceOver 두 손가락 Z — 닫기 버튼이 없는 시트도 빠져나올 수 있게.
-          onAccessibilityEscape={() => setOpen(false)}>
-          <Pressable onPress={() => {}} accessible={false}>
-            <View
-              className="rounded-t-[20px] bg-white px-5 pt-8"
-              style={{paddingBottom: Math.max(insets.bottom, 20)}}>
-              <Text className="text-center text-lg font-bold text-gray-900">
-                판매가 종료된 상품인가요?
-              </Text>
-              <Text className="py-3 text-center text-gray-700">
-                더 빠른 핫딜 확인을 위해{'\n'}종료된 상품을 제보해주세요!
-              </Text>
-              <View className="flex-row gap-3 pt-2">
-                <Button
-                  color="secondary"
-                  className="flex-1"
-                  onPress={() => setOpen(false)}>
-                  취소
-                </Button>
-                <Button
-                  className="flex-1"
-                  loading={isPending}
-                  onPress={() => mutate()}>
-                  종료 제보하기
-                </Button>
-              </View>
-            </View>
-          </Pressable>
-        </Pressable>
-      </Modal>
+        title="판매가 종료된 상품인가요?"
+        description={'더 빠른 핫딜 확인을 위해\n종료된 상품을 제보해주세요!'}
+        confirmLabel="종료 제보하기"
+        loading={isPending}
+        onCancel={() => setOpen(false)}
+        onConfirm={() => mutate()}
+      />
     </>
   );
 }

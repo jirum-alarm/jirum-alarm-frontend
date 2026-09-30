@@ -12,12 +12,12 @@ import {useQuery} from '@tanstack/react-query';
 
 import {MyPageQueries} from '@/entities/mypage';
 import type {TabStackParamList} from '@/navigations/tab/types';
+import ConfirmSheet from '@/shared/components/ConfirmSheet';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
-import ConfirmModal from '@/features/mypage/ui/ConfirmModal';
 import {FORM_CTA_BOTTOM, MovePageRow} from '@/features/mypage/ui/Rows';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {useLogout} from '@/features/mypage/model/useLogout';
@@ -128,11 +128,11 @@ export default function AccountScreen({navigation}: Props) {
         )}
       </ScrollView>
 
-      <ConfirmModal
+      <ConfirmSheet
         visible={dialog === 'logout'}
         title="로그아웃"
         description={
-          <Text className="text-center text-gray-700">
+          <Text className="text-center text-sm text-gray-600">
             로그아웃 시 알림을 받을 수 없어요.{'\n'}
             지름알림에서 <Text className="font-semibold">로그아웃</Text>할까요?
           </Text>
@@ -146,16 +146,17 @@ export default function AccountScreen({navigation}: Props) {
           logout();
         }}
       />
-      <ConfirmModal
+      <ConfirmSheet
         visible={dialog === 'withdraw'}
         title="회원탈퇴"
         description={
-          <Text className="text-center text-gray-700">
+          <Text className="text-center text-sm text-gray-600">
             회원탈퇴 시 모든 계정 정보가 삭제돼요.{'\n'}
             지름알림에서 <Text className="font-semibold">회원탈퇴</Text>할까요?
           </Text>
         }
         confirmLabel="회원탈퇴"
+        tone="danger"
         loading={isWithdrawing}
         onCancel={() => setDialog(null)}
         onConfirm={() => withdraw()}

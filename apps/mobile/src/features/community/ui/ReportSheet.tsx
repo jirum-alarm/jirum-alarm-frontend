@@ -9,9 +9,10 @@ import Button from '@/shared/components/ui/Button';
 import {showToast} from '@/shared/lib/feedback';
 import {cn} from '@/shared/lib/styling';
 
+import BottomSheet from '@/shared/components/BottomSheet';
+
 import {buildReportVariables, REPORT_REASONS} from '../lib/report';
 
-import CommunitySheet from './CommunitySheet';
 import {gaps} from './community-styles';
 
 /** web `features/community/ui/ReportModal` 대응. 문구·사유 목록을 그대로 옮겼다. */
@@ -48,7 +49,7 @@ export default function ReportSheet({
   });
 
   return (
-    <CommunitySheet
+    <BottomSheet
       visible={visible}
       onClose={close}
       accessibilityLabel="글 신고하기">
@@ -114,7 +115,7 @@ export default function ReportSheet({
           </Button>
         </View>
       </View>
-    </CommunitySheet>
+    </BottomSheet>
   );
 }
 

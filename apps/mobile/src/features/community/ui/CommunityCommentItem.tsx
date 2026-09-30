@@ -7,10 +7,10 @@ import ThumbsupFill from '@/shared/components/icons/ThumbsupFill';
 import {displayTime} from '@/shared/lib/format/price';
 import {cn} from '@/shared/lib/styling';
 import type {CommunityComment} from '@/shared/api/community';
+import BottomSheet from '@/shared/components/BottomSheet';
+import ConfirmSheet from '@/shared/components/ConfirmSheet';
+import SheetMenuRow from '@/shared/components/SheetMenuRow';
 
-import CommunitySheet from './CommunitySheet';
-import ConfirmSheet from './ConfirmSheet';
-import SheetMenuRow from './SheetMenuRow';
 import {gaps} from './community-styles';
 
 const MAX_COMMENT_LENGTH = 300; // web textarea maxLength
@@ -134,7 +134,7 @@ export default function CommunityCommentItem({
         </Pressable>
       </View>
 
-      <CommunitySheet
+      <BottomSheet
         visible={menuOpen}
         onClose={() => setMenuOpen(false)}
         accessibilityLabel="댓글 메뉴">
@@ -157,13 +157,14 @@ export default function CommunityCommentItem({
             }}
           />
         </View>
-      </CommunitySheet>
+      </BottomSheet>
 
       <ConfirmSheet
         visible={confirmOpen}
         title="댓글을 삭제할까요?"
         description="댓글을 삭제하면 다시 복구할 수 없어요."
         confirmLabel="삭제"
+        tone="danger"
         onCancel={() => setConfirmOpen(false)}
         onConfirm={() => {
           setConfirmOpen(false);

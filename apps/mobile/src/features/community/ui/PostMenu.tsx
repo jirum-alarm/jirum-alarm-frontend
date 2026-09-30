@@ -6,10 +6,11 @@ import {CommunityQueries} from '@/entities/community';
 import {CommentService} from '@/shared/api/comment/comment.service';
 import {showToast} from '@/shared/lib/feedback';
 
-import CommunitySheet from './CommunitySheet';
-import ConfirmSheet from './ConfirmSheet';
+import BottomSheet from '@/shared/components/BottomSheet';
+import ConfirmSheet from '@/shared/components/ConfirmSheet';
+import SheetMenuRow from '@/shared/components/SheetMenuRow';
+
 import ReportSheet from './ReportSheet';
-import SheetMenuRow from './SheetMenuRow';
 
 /**
  * 글 더보기 메뉴. web `features/community/ui/PostMenu` 대응 —
@@ -59,7 +60,7 @@ export default function PostMenu({
 
   return (
     <>
-      <CommunitySheet
+      <BottomSheet
         visible={visible}
         onClose={onClose}
         accessibilityLabel="게시글 메뉴">
@@ -94,13 +95,14 @@ export default function PostMenu({
             />
           )}
         </View>
-      </CommunitySheet>
+      </BottomSheet>
 
       <ConfirmSheet
         visible={confirmOpen}
         title="글을 삭제할까요?"
         description="글을 삭제하면 다시 복구할 수 없어요."
         confirmLabel="삭제"
+        tone="danger"
         loading={isRemoving}
         onCancel={() => setConfirmOpen(false)}
         onConfirm={() => removePost()}

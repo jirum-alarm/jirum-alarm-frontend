@@ -1,4 +1,3 @@
-import ConfirmSheet from '@/features/community/ui/ConfirmSheet';
 import React, {useState} from 'react';
 import {Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -10,6 +9,7 @@ import {
   type TComment,
 } from '@/shared/api/comment/comment.service';
 import {ProductService} from '@/shared/api/product/product.service';
+import ConfirmSheet from '@/shared/components/ConfirmSheet';
 import {CommentQueries} from '@/entities/comment/comment.queries';
 import {
   clearEditingComment,
@@ -192,6 +192,7 @@ export default function Comment({
         title="댓글을 삭제할까요?"
         description="댓글을 삭제하면 다시 복구할 수 없어요."
         confirmLabel="삭제"
+        tone="danger"
         onCancel={() => setConfirmOpen(false)}
         onConfirm={() => {
           setConfirmOpen(false);

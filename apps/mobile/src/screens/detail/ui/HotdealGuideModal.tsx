@@ -1,8 +1,9 @@
-import Button from '@/shared/components/ui/Button';
-import React, {useEffect, useRef, useState} from 'react';
-import {Animated, Modal, Pressable, View} from 'react-native';
+import React from 'react';
+import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
+import BottomSheet from '@/shared/components/BottomSheet';
+import Button from '@/shared/components/ui/Button';
 
 import {HotDealType} from '@/shared/api/gql/graphql';
 import HotdealBadge from '@/shared/components/product/HotdealBadge';
@@ -28,82 +29,33 @@ export default function HotdealGuideModal({
   visible: boolean;
   onClose: () => void;
 }) {
-  const insets = useSafeAreaInsets();
-  const slide = useRef(new Animated.Value(0)).current;
-  const [mounted, setMounted] = useState(visible);
-
-  useEffect(() => {
-    if (visible) {
-      setMounted(true);
-      Animated.timing(slide, {
-        toValue: 1,
-        duration: 180,
-        useNativeDriver: true,
-      }).start();
-      return;
-    }
-    Animated.timing(slide, {
-      toValue: 0,
-      duration: 150,
-      useNativeDriver: true,
-    }).start(({finished}) => finished && setMounted(false));
-  }, [visible, slide]);
-
-  if (!mounted) return null;
-
   return (
-    <Modal transparent visible animationType="none" onRequestClose={onClose}>
-      {/*
-        백드롭이 시트를 감싸므로 iOS 가 전체를 요소 하나로 묶지 않게 접근성에서 뺀다
-        (VoiceOver 가 안쪽 버튼에 닿도록). 모달 밖 화면은 accessibilityViewIsModal 로 가린다.
-      */}
-      <Pressable
-        className="flex-1 justify-end bg-black/40"
-        onPress={onClose}
-        accessible={false}
-        accessibilityViewIsModal
-        // VoiceOver 두 손가락 Z — 닫기 버튼이 없는 시트도 빠져나올 수 있게.
-        onAccessibilityEscape={onClose}>
-        <Pressable onPress={() => {}} accessible={false}>
-          <Animated.View
-            className="rounded-t-2xl bg-white px-5 pt-8"
-            style={{
-              paddingBottom: Math.max(insets.bottom, 20),
-              opacity: slide,
-              transform: [
-                {
-                  translateY: slide.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [40, 0],
-                  }),
-                },
-              ],
-            }}>
-            <Text className="pb-3 text-center text-lg font-bold text-gray-900">
-              핫딜 기준 안내
-            </Text>
-            <Text className="pb-6 text-center text-gray-700">
-              AI를 활용해서 상품의 기존 가격과 할인된 가격을{'\n'}
-              비교해서 3단계로 구분해드려요!
-            </Text>
+    <BottomSheet
+      visible={visible}
+      onClose={onClose}
+      accessibilityLabel="핫딜 기준 안내">
+      <View className="px-5 pt-4">
+        <Text className="pb-3 text-center text-lg font-bold text-gray-900">
+          핫딜 기준 안내
+        </Text>
+        <Text className="pb-6 text-center text-gray-700">
+          AI를 활용해서 상품의 기존 가격과 할인된 가격을{'\n'}
+          비교해서 3단계로 구분해드려요!
+        </Text>
 
-            <View className="gap-y-3">
-              {STEPS.map(step => (
-                <View key={step.type} className="flex-row items-center gap-x-3">
-                  <HotdealBadge hotdealType={step.type} badgeVariant="page" />
-                  <Text className="shrink text-sm text-gray-700">
-                    {step.label}
-                  </Text>
-                </View>
-              ))}
+        <View className="gap-y-3">
+          {STEPS.map(step => (
+            <View key={step.type} className="flex-row items-center gap-x-3">
+              <HotdealBadge hotdealType={step.type} badgeVariant="page" />
+              <Text className="shrink text-sm text-gray-700">{step.label}</Text>
             </View>
+          ))}
+        </View>
 
-            <Button onPress={onClose} className="mt-7">
-              확인
-            </Button>
-          </Animated.View>
-        </Pressable>
-      </Pressable>
-    </Modal>
+        <Button onPress={onClose} className="mt-7">
+          확인
+        </Button>
+      </View>
+    </BottomSheet>
   );
 }

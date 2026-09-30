@@ -57,7 +57,7 @@ const stripComments = (source: string) =>
 const FEATURE_FILES = [
   'src/features/mypage/ui/StackHeader.tsx',
   'src/features/mypage/ui/Rows.tsx',
-  'src/features/mypage/ui/ConfirmModal.tsx',
+  'src/shared/components/ConfirmSheet.tsx',
   'src/features/mypage/ui/PasswordField.tsx',
   'src/features/mypage/ui/PriceDropSwitch.tsx',
   'src/features/mypage/ui/CategoryCheckboxGroup.tsx',
@@ -141,7 +141,9 @@ describe('가입 정보 — web AccountContainer 의 4줄 + 계정 관리 2개',
     const remove = readWeb('features/mypage/ui/account/DeleteAccount.tsx');
     expect(logout).toContain('AlertDialog');
     expect(remove).toContain('AlertDialog');
-    expect(SCREENS.account.match(/<ConfirmModal/g) ?? []).toHaveLength(2);
+    expect(SCREENS.account.match(/<ConfirmSheet/g) ?? []).toHaveLength(2);
+    // 되돌릴 수 없는 탈퇴만 빨간 확인 버튼(로그아웃은 다시 하면 된다).
+    expect(SCREENS.account.match(/tone="danger"/g) ?? []).toHaveLength(1);
   });
 
   it('web 문구를 그대로 쓴다', () => {

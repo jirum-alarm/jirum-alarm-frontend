@@ -11,18 +11,23 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 /**
- * 아래에서 올라오는 시트. 커뮤니티의 글 메뉴·댓글 메뉴·신고가 같이 쓴다.
+ * 아래에서 올라오는 시트 — 앱의 바텀시트는 전부 이것 하나를 쓴다
+ * (커뮤니티 글·댓글 메뉴, 신고, 확인, 상품 댓글 메뉴, 종료 제보, 출생 연도, 핫딜 기준).
+ * 예전엔 7곳이 제각각 라운드(16/20/24)·백드롭(40/50%)·애니메이션을 따로 들고 있어
+ * 화면마다 시트 모양이 달랐다. 공유 시트(ShareSheet)만 iOS 공유 시트 모양이라 따로 둔다.
  *
- * ponytail: web 은 `vaul` 을 쓰지만 여기 내용물은 버튼 몇 개와 라디오 목록뿐이다 —
- * 스냅 포인트도, 드래그도, 스크롤도 필요 없다. 이 레포 관행(`CommentMenu` ·
- * `ProductReport` 의 자작 `Modal`)을 그대로 따른다. 바텀시트 라이브러리를
- * 새로 넣으면 안 쓰는 기능 때문에 reanimated 버전 리스크만 진다.
+ * ponytail: web 은 `vaul` 을 쓰지만 여기 내용물은 버튼 몇 개와 목록뿐이다 —
+ * 스냅 포인트도, 드래그도 필요 없다. 바텀시트 라이브러리를 새로 넣으면
+ * 안 쓰는 기능 때문에 reanimated 버전 리스크만 진다.
  *
  * ★`Animated.View` 에는 **className 을 주지 않는다** — NativeWind 는 기본
  * 컴포넌트만 스타일을 처리해서 Animated 컴포넌트의 className 이 조용히
  * 사라진다(배경·라운드가 통째로 안 먹는다). 여기 스타일은 전부 StyleSheet.
+ *
+ * ★iOS 는 Modal 위에 Modal 을 띄우면 두 번째가 안 뜰 수 있다 — 메뉴 시트에서
+ * 확인 시트로 넘어갈 땐 메뉴를 먼저 닫고(visible=false) 확인을 연다.
  */
-export default function CommunitySheet({
+export default function BottomSheet({
   visible,
   onClose,
   accessibilityLabel,
@@ -35,8 +40,7 @@ export default function CommunitySheet({
 }) {
   const insets = useSafeAreaInsets();
   const slide = useRef(new Animated.Value(0)).current;
-  // Modal 은 언마운트 애니메이션을 못 하므로 닫히는 동안 잠깐 더 살려둔다
-  // (CommentMenu 와 같은 처방).
+  // Modal 은 언마운트 애니메이션을 못 하므로 닫히는 동안 잠깐 더 살려둔다.
   const [mounted, setMounted] = useState(visible);
 
   useEffect(() => {
