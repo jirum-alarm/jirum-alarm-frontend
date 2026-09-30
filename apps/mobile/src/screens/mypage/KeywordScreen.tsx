@@ -203,14 +203,16 @@ function SubscribedThemes({
   return (
     <View className="pb-6">
       <View className="mb-2 flex-row items-center justify-between">
-        <Text className="text-sm font-medium text-gray-900">구독한 묶음</Text>
+        <Text className="text-sm font-medium text-gray-900">
+          받고 있는 관심사 알림
+        </Text>
         <Pressable
           onPress={onOpenThemes}
           hitSlop={8}
           accessibilityRole="button"
-          accessibilityLabel="묶음 더보기"
+          accessibilityLabel="관심사 더 둘러보기"
           style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-          <Text className="text-xs text-gray-500">묶음 더보기</Text>
+          <Text className="text-xs text-gray-500">더 둘러보기</Text>
         </Pressable>
       </View>
       <View className="gap-2">

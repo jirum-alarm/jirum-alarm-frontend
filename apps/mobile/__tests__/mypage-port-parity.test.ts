@@ -163,7 +163,7 @@ describe('키워드 화면 — web 이 한 화면에서 관리하는 3덩어리'
 
   it('앱도 3개를 다 그린다', () => {
     expect(SCREENS.keyword).toContain('키워드를 입력해주세요.');
-    expect(SCREENS.keyword).toContain('구독한 묶음');
+    expect(SCREENS.keyword).toContain('받고 있는 관심사 알림');
     expect(SCREENS.keyword).toContain('나의 지름 키워드');
   });
 
@@ -182,12 +182,15 @@ describe('키워드 화면 — web 이 한 화면에서 관리하는 3덩어리'
     expect(SCREENS.keyword).toContain('PriceDropSwitch');
   });
 
-  it('묶음 더보기 링크가 있다(web MySubscribedThemes)', () => {
+  // web 9/27 개편에서 "묶음" → "관심사". 제목·링크 문구를 web 과 같이 둔다.
+  it('받고 있는 관심사 알림 + 더 둘러보기 링크(web MySubscribedThemes)', () => {
     const webThemes = readWeb(
       'features/mypage/ui/theme/MySubscribedThemes.tsx',
     );
-    expect(webThemes).toContain('묶음 더보기');
-    expect(SCREENS.keyword).toContain('묶음 더보기');
+    expect(webThemes).toContain('받고 있는 관심사 알림');
+    expect(webThemes).toContain('더 둘러보기');
+    expect(SCREENS.keyword).toContain('받고 있는 관심사 알림');
+    expect(SCREENS.keyword).toContain('더 둘러보기');
   });
 });
 
@@ -195,22 +198,35 @@ describe('묶음(테마) — 목록·상세의 조각이 다 있다', () => {
   it('목록: 설명문 + 구독 버튼 + 대표 키워드 미리보기', () => {
     const web = readWeb('features/mypage/ui/theme/ThemeList.tsx');
     expect(web).toContain('representativeKeywords');
+    // 설명문은 web /themes 의 소개 문장과 같다.
+    const webPage = readWeb('app/(desktop-ready)/themes/page.tsx');
+    expect(webPage).toContain(
+      '관심사를 고르면 키워드를 하나하나 등록하지 않아도',
+    );
     expect(SCREENS.themes).toContain(
-      '관심 묶음을 구독하면 그 안의 키워드 딜이 뜰 때 알림을 받아요.',
+      '관심사를 고르면 키워드를 하나하나 등록하지 않아도',
     );
     expect(read('src/features/mypage/ui/ThemeCards.tsx')).toContain(
       'representativeKeywords',
     );
-    expect(read('src/features/mypage/ui/ThemeCards.tsx')).toContain('구독 중');
+    expect(web).toContain("'받는 중'");
+    expect(read('src/features/mypage/ui/ThemeCards.tsx')).toContain(
+      "'받는 중'",
+    );
   });
 
-  it('상세: 포함 키워드 + 라이브 딜 + 구독 토글', () => {
+  /**
+   * ⚠️딜 목록은 아직 web 과 다르다 — web 은 "알림을 켰다면 받았을" 딜(발송 기준·무한 스크롤),
+   * 앱은 지금 뜬 라이브 딜이다. 데이터가 달라 web 제목을 그대로 쓰면 틀린 말이 되므로
+   * 딜 섹션 제목만 앱 고유 문구로 둔다(구성 이식은 별도).
+   */
+  it('상세: 키워드 섹션 + 딜 + 알림 토글 문구가 web 과 같다', () => {
     const web = readWeb('features/mypage/ui/theme/ThemeDetail.tsx');
-    expect(web).toContain('포함 키워드');
-    expect(web).toContain('지금 이 묶음에 뜬 딜');
-    expect(SCREENS.themeDetail).toContain('포함 키워드');
-    expect(SCREENS.themeDetail).toContain('지금 이 묶음에 뜬 딜');
-    expect(SCREENS.themeDetail).toContain('이 묶음 구독');
+    expect(web).toContain('이런 키워드가 들어간 딜을 골라요');
+    expect(web).toContain("'알림 받는 중 · 끄기'");
+    expect(SCREENS.themeDetail).toContain('이런 키워드가 들어간 딜을 골라요');
+    expect(SCREENS.themeDetail).toContain("'알림 받는 중 · 끄기'");
+    expect(SCREENS.themeDetail).toContain('지금 이 관심사에 뜬 딜');
     expect(SCREENS.themeDetail).toContain('지금은 뜬 딜이 없어요.');
   });
 
@@ -352,7 +368,7 @@ describe('★디자인 점검 2026-09-09 — 고친 것이 되돌아가지 않�
   it('묶음 상세 헤더는 묶음 이름이다 — 목록과 같은 제목이면 구분이 안 된다', () => {
     expect(
       stripComments(read('src/screens/mypage/ThemeDetailScreen.tsx')),
-    ).toContain("title={theme?.name ?? '알림 묶음'}");
+    ).toContain("title={theme?.name ?? '관심사별 핫딜 알림'}");
   });
 
   it('카테고리 저장은 0개 선택이면 비활성', () => {

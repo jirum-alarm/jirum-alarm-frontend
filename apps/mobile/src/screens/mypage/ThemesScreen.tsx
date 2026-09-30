@@ -53,10 +53,10 @@ export default function ThemesScreen({navigation}: Props) {
 
   return (
     <View className="flex-1 bg-white">
-      <StackHeader title="알림 묶음" onBack={navigation.goBack} />
+      <StackHeader title="관심사별 핫딜 알림" onBack={navigation.goBack} />
       {isError ? (
         <View className="pt-4">
-          <SectionErrorRow label="알림 묶음" onRetry={refetch} />
+          <SectionErrorRow label="관심사" onRetry={refetch} />
         </View>
       ) : isPending ? (
         <View className="flex-1 items-center justify-center">
@@ -104,7 +104,8 @@ export default function ThemesScreen({navigation}: Props) {
 function ThemesListHeader() {
   return (
     <Text className="mb-5 text-sm text-gray-500">
-      관심 묶음을 구독하면 그 안의 키워드 딜이 뜰 때 알림을 받아요.
+      관심사를 고르면 키워드를 하나하나 등록하지 않아도, 반응 좋은 핫딜만 하루
+      최대 3건 보내드려요.
     </Text>
   );
 }
@@ -116,7 +117,7 @@ function ThemeSeparator() {
 function ThemesEmpty() {
   return (
     <View className="items-center py-10">
-      <Text className="text-sm text-gray-500">아직 묶음이 없어요.</Text>
+      <Text className="text-sm text-gray-500">아직 관심사가 없어요.</Text>
     </View>
   );
 }

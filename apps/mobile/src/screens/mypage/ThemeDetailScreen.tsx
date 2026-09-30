@@ -79,12 +79,12 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
         묶음이 아직 안 왔을 때만 총칭으로 떨어진다.
       */}
       <StackHeader
-        title={theme?.name ?? '알림 묶음'}
+        title={theme?.name ?? '관심사별 핫딜 알림'}
         onBack={navigation.goBack}
       />
       {isThemesError ? (
         <View className="pt-4">
-          <SectionErrorRow label="알림 묶음" onRetry={refetchThemes} />
+          <SectionErrorRow label="관심사" onRetry={refetchThemes} />
         </View>
       ) : isThemesPending ? (
         <View className="flex-1 items-center justify-center">
@@ -95,7 +95,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
         // 알려준다 — 딥링크가 없어진 묶음 id 를 들고 올 수 있다.
         <View className="flex-1 items-center justify-center px-10">
           <Text className="text-center text-sm text-gray-500">
-            없는 묶음이거나 지금은 볼 수 없어요.
+            없는 관심사이거나 지금은 볼 수 없어요.
           </Text>
         </View>
       ) : (
@@ -128,14 +128,21 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
             loading={isMutating}
             color={isSubscribed ? 'secondary' : 'primary'}
             className="mt-4"
-            accessibilityLabel={isSubscribed ? '구독 해제' : '이 묶음 구독'}>
-            {isSubscribed ? '구독 중 (해제)' : '이 묶음 구독'}
+            accessibilityLabel={isSubscribed ? '알림 끄기' : '알림 받기'}>
+            {isSubscribed ? '알림 받는 중 · 끄기' : '알림 받기'}
           </Button>
+          <Text className="mt-2 text-xs text-gray-500">
+            키워드를 하나하나 등록하지 않아도, 반응 좋은 딜만 하루 최대 3건
+            보내드려요.
+          </Text>
 
           {/* 포함 키워드 */}
           <View className="mt-6">
-            <Text className="mb-2 text-sm font-medium text-gray-900">
-              포함 키워드
+            <Text className="mb-0.5 text-sm font-medium text-gray-900">
+              이런 키워드가 들어간 딜을 골라요
+            </Text>
+            <Text className="mb-2 text-xs text-gray-500">
+              딜이 뜰 때마다가 아니라, 그중 반응이 좋은 것만 보내드려요.
             </Text>
             <View className="flex-row flex-wrap gap-1.5">
               {theme.representativeKeywords.map(keyword => (
@@ -151,7 +158,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
           {/* 라이브 딜 */}
           <View className="mt-7">
             <Text className="mb-3 text-sm font-medium text-gray-900">
-              {'🔥 지금 이 묶음에 뜬 딜 '}
+              {'🔥 지금 이 관심사에 뜬 딜 '}
               <Text className="text-primary-800">{deals?.length ?? 0}</Text>
             </Text>
             {isDealsError ? (

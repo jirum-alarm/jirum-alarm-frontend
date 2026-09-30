@@ -49,9 +49,9 @@ export function ThemeCard({
           onPress={onToggleSubscribe}
           disabled={isPending}
           accessibilityRole="button"
-          accessibilityLabel={isSubscribed ? '구독 해제' : '구독'}
+          accessibilityLabel={isSubscribed ? '알림 끄기' : '알림 받기'}
           accessibilityState={{selected: isSubscribed}}
-          // web `w-16`(64px) 고정. 텍스트가 '구독 중'/'구독' 으로 바뀌어도
+          // web `w-16`(64px) 고정. 텍스트가 '받는 중'/'알림 받기' 로 바뀌어도
           // 카드 폭이 흔들리지 않는다.
           style={
             isPending ? styles.subscribeButtonDimmed : styles.subscribeButton
@@ -67,7 +67,7 @@ export function ThemeCard({
                 ? 'text-sm font-medium text-gray-500'
                 : 'text-sm font-medium text-gray-900'
             }>
-            {isSubscribed ? '구독 중' : '구독'}
+            {isSubscribed ? '받는 중' : '알림 받기'}
           </Text>
         </Pressable>
       </View>
@@ -119,7 +119,7 @@ export function SubscribedThemeRow({
             </Text>
           </View>
           <Text className="bg-primary-50 text-primary-800 self-start rounded px-1.5 py-0.5 text-[11px] font-medium">
-            묶음
+            관심사
           </Text>
         </View>
       </Pressable>
@@ -128,11 +128,11 @@ export function SubscribedThemeRow({
         disabled={isPending}
         hitSlop={8}
         accessibilityRole="button"
-        accessibilityLabel="묶음 구독 해제"
+        accessibilityLabel={`${theme.name} 알림 끄기`}
         style={isPending ? styles.dimmed : undefined}
         className="shrink-0 p-2">
         {/* web 은 gray-400 인데 명암비 2.58:1 로 AA 미달이라 gray-500 을 쓴다. */}
-        <Text className="text-xs text-gray-500">해제</Text>
+        <Text className="text-xs text-gray-500">끄기</Text>
       </Pressable>
     </View>
   );
