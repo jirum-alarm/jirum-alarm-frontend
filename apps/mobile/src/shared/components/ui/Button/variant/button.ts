@@ -45,12 +45,13 @@ export const buttonVaraint = cva('w-full items-center justify-center', {
     {
       variant: 'filled',
       color: 'secondary',
-      class: 'bg-gray-100',
+      // active: — primary 처럼 배경이 눌림을 보여준다(글자색만 바뀌면 잘 안 보인다).
+      class: 'bg-gray-100 active:bg-gray-200',
     },
     {
       variant: 'filled',
       color: 'error',
-      class: 'bg-error-50',
+      class: 'bg-error-50 active:bg-error-100',
     },
   ],
   defaultVariants: {

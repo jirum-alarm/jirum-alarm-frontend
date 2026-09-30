@@ -78,7 +78,8 @@ describe('상단바 전환 — web 과 같은 방식', () => {
 
   it('상태바는 전환 중간에 바꾼다', () => {
     // 즉시 바꾸면 다크 헤더에 검은 글씨, 끝나고 바꾸면 흰 헤더에 흰 글씨가 된다.
-    expect(screen).toContain('statusBarStyle');
+    // 상태바는 홈 전체가 아니라 HomeStatusBar 만 다시 그린다(스크롤 임계값 store 구독).
+    expect(screen).toContain('function HomeStatusBar');
     expect(screen).toMatch(/setTimeout\([\s\S]{0,120}150,/);
   });
 });

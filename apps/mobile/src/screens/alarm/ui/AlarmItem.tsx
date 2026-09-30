@@ -42,8 +42,10 @@ function HighlightedMessage({
  *
  * web 의 li + Link 구조를 Pressable 하나로 접었다 — 상품이 없으면
  * (서버가 product=null 을 주는 삭제/비공개 건) 상세로 보내지 않고 읽음만 찍는다.
+ *
+ * ★memo — 읽음·삭제 하나에 목록 전체가 다시 그려지지 않게 한다.
  */
-export default function AlarmItem({
+const AlarmItem = React.memo(function AlarmItem({
   notification,
   isNew,
   isEditMode,
@@ -132,7 +134,7 @@ export default function AlarmItem({
       ) : null}
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   /** 편집모드 삭제(X). 행 높이를 꽉 채우고 그 안에서 세로 가운데. */
@@ -144,3 +146,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default AlarmItem;

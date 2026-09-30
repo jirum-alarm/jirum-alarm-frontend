@@ -32,6 +32,10 @@ import {
  * | DoubleRowCard | entities/product-list/ui/card/DoubleRowProductCard.tsx |
  *
  * web 의 `whileTap={{scale:0.95}}` 는 PressableScale 이 대신한다.
+ *
+ * ★ 전부 React.memo — 홈은 섹션이 많아 부모가 다시 그릴 때마다 카드 수십 장이
+ * 같이 그려지면 JS 스레드가 막혀 탭 반응이 늦어진다. product 는 쿼리 캐시 객체라
+ * 무관한 리렌더에선 참조가 그대로다(onPress 는 호출부가 안정적으로 넘겨야 효과가 난다).
  */
 
 type CardProps = {
@@ -45,7 +49,7 @@ type CardProps = {
 };
 
 /** GRID · PAGINATED_GRID · GRID_TABBED. 정사각 썸네일, 가격만 text-base 로 작다. */
-export function GridCard({
+export const GridCard = React.memo(function GridCard({
   product,
   onPress,
   showTime = true,
@@ -100,12 +104,16 @@ export function GridCard({
       </View>
     </PressableScale>
   );
-}
+});
 
 /** HORIZONTAL_SCROLL. 120px 고정 폭. */
 export const CAROUSEL_CARD_WIDTH = 120;
 
-export function CarouselCard({product, onPress, trackingSource}: CardProps) {
+export const CarouselCard = React.memo(function CarouselCard({
+  product,
+  onPress,
+  trackingSource,
+}: CardProps) {
   return (
     <PressableScale
       style={{width: CAROUSEL_CARD_WIDTH}}
@@ -136,13 +144,17 @@ export function CarouselCard({product, onPress, trackingSource}: CardProps) {
       </View>
     </PressableScale>
   );
-}
+});
 
 /**
  * LIST(프리미엄 핫딜). 가로 배치 76px 썸네일.
  * ★ web 은 시간을 displayTime 이 아니라 **formatDateToMMD** 로 쓴다(카드마다 다름).
  */
-export function ListCard({product, onPress, trackingSource}: CardProps) {
+export const ListCard = React.memo(function ListCard({
+  product,
+  onPress,
+  trackingSource,
+}: CardProps) {
   return (
     <PressableScale
       onPressIn={() =>
@@ -192,13 +204,17 @@ export function ListCard({product, onPress, trackingSource}: CardProps) {
       </>
     </PressableScale>
   );
-}
+});
 
 /**
  * DOUBLE_ROW(유통기한 임박). 가로 배치 120px 썸네일, 시간 표기 없음.
  * web 은 이 카드에서 DisplayProductSource 에 time 을 안 넘긴다.
  */
-export function DoubleRowCard({product, onPress, trackingSource}: CardProps) {
+export const DoubleRowCard = React.memo(function DoubleRowCard({
+  product,
+  onPress,
+  trackingSource,
+}: CardProps) {
   return (
     <PressableScale
       onPressIn={() =>
@@ -244,4 +260,4 @@ export function DoubleRowCard({product, onPress, trackingSource}: CardProps) {
       </>
     </PressableScale>
   );
-}
+});

@@ -186,8 +186,10 @@ describe('표시 규칙이 web 과 같은가', () => {
 
 describe('접합부 — 상품 없는 알림·화면 이동', () => {
   it('상품이 없으면 상세로 보내지 않는다(web hasProduct 분기)', () => {
-    // productId == null 이면 early return
-    expect(screen).toMatch(/productId == null\) return/);
+    // productId == null 이면 읽음만 찍고 early return (push 전에 끝난다)
+    expect(screen).toMatch(
+      /if \(productId == null\) \{\s*markRead\(\);\s*return;/,
+    );
   });
 
   it('안 읽은 알림만 읽음 처리한다(web !readAt 분기)', () => {
@@ -209,8 +211,9 @@ describe('접합부 — 상품 없는 알림·화면 이동', () => {
 describe('탭 배선', () => {
   it('알림 탭 루트는 네이티브 화면이다', () => {
     // 플래그(constants/feature-flags.ts)는 2026-09-07 에 지웠다.
-    expect(navigator).toMatch(/case tabNavigations\.ALARM:/);
-    expect(navigator).toMatch(/<AlarmScreen \/>/);
+    // 루트는 탭별 컴포넌트 표(NATIVE_TAB_ROOTS)로 고른다 — 렌더 콜백은 매번 새 함수라
+    // 상세를 열고 닫을 때마다 탭 루트가 통째로 다시 그려졌다.
+    expect(navigator).toMatch(/\[tabNavigations\.ALARM\]: AlarmScreen/);
   });
 
   it('웹뷰 폴백은 남아 있다 — 커뮤니티·내정보가 아직 쓴다', () => {

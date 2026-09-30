@@ -87,7 +87,8 @@ export default function ExpiredProductWarning({
             onPress={onPressMore}
             hitSlop={12}
             accessibilityRole="link"
-            accessibilityLabel="최신 핫딜 더보기">
+            accessibilityLabel="최신 핫딜 더보기"
+            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
             <Text className="text-xs font-medium text-gray-500">더보기</Text>
           </Pressable>
         ) : null}

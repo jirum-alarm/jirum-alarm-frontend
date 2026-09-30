@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
 } from 'react';
 import {
   ActivityIndicator,
@@ -77,7 +78,6 @@ export default function HomeScreen() {
   // 탭바는 이 화면의 부모가 아니라 ref 를 내려줄 수 없어 store 로 등록한다.
   useRegisterScrollToTop(tabNavigations.HOME, scrollToTop);
 
-  const [isScrolled, setIsScrolled] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const {data: tabSources} = useQuery(HomeQueries.tabSources());
@@ -211,29 +211,6 @@ export default function HomeScreen() {
     setRefreshing(false);
   }, [queryClient]);
 
-  // web HomeHeader: 스크롤 90px 넘으면 흰 헤더가 내려온다.
-  const handleScroll = useCallback(
-    (y: number) => {
-      if (y > 90 && !isScrolled) setIsScrolled(true);
-      else if (y <= 90 && isScrolled) setIsScrolled(false);
-    },
-    [isScrolled],
-  );
-
-  // 헤더 크로스페이드(300ms)의 중간에 상태바를 바꾼다. SystemBars 는 애니메이션이
-  // 안 되므로, 즉시 바꾸면 아직 다크 헤더인데 글씨가 검어 안 보이고,
-  // 끝나고 바꾸면 흰 헤더에 흰 글씨가 된다.
-  const [statusBarStyle, setStatusBarStyle] = useState<'light' | 'dark'>(
-    isScrolled ? 'dark' : 'light',
-  );
-  useEffect(() => {
-    const timer = setTimeout(
-      () => setStatusBarStyle(isScrolled ? 'dark' : 'light'),
-      150,
-    );
-    return () => clearTimeout(timer);
-  }, [isScrolled]);
-
   const reservedBottom = getReservedBottomPx(insets.bottom);
 
   return (
@@ -243,18 +220,21 @@ export default function HomeScreen() {
         handleScrollForHomeStatusBar 가 하던 일이라 네이티브에서 직접 배선한다
         (안 하면 다크 헤더에서 상태바가 안 보인다).
       */}
-      <SystemBars style={statusBarStyle} hidden={false} />
+      <HomeStatusBar />
 
       <ScrollView
         ref={scrollRef}
         stickyHeaderIndices={[0]}
         scrollEventThrottle={16}
-        onScroll={e => handleScroll(e.nativeEvent.contentOffset.y)}
+        // web HomeHeader: 스크롤 90px 넘으면 흰 헤더가 내려온다.
+        onScroll={e =>
+          homeScrolledStore.set(e.nativeEvent.contentOffset.y > 90)
+        }
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         contentContainerStyle={{paddingBottom: reservedBottom}}>
-        <HomeHeader isScrolled={isScrolled} onPressLogo={scrollToTop} />
+        <HomeStickyHeader onPressLogo={scrollToTop} />
 
         {/*
           다크 배경 헤더 + 배너 캐러셀 (web BackgroundHeader).
@@ -373,4 +353,56 @@ function HomeEndCta({onPress}: {onPress: () => void}) {
       </PressableScale>
     </View>
   );
+}
+
+/**
+ * "90px 넘게 스크롤했나" — 헤더·상태바만 구독한다.
+ * ★예전엔 HomeScreen state 라 90px 을 넘나들 때마다(+150ms 뒤 상태바로 한 번 더) 홈 전체
+ * (모든 섹션·캐러셀)가 다시 그려져 JS 가 밀렸다 — 스크롤 직후 탭이 한 박자 늦던 원인 중 하나.
+ * ponytail: 홈은 한 화면뿐이라 모듈 단일 값으로 충분하다.
+ */
+let homeScrolled = false;
+const homeScrolledListeners = new Set<() => void>();
+const homeScrolledStore = {
+  get: () => homeScrolled,
+  set(next: boolean) {
+    if (next === homeScrolled) return;
+    homeScrolled = next;
+    homeScrolledListeners.forEach(listener => listener());
+  },
+  subscribe(listener: () => void) {
+    homeScrolledListeners.add(listener);
+    return () => {
+      homeScrolledListeners.delete(listener);
+    };
+  },
+};
+const useHomeScrolled = () =>
+  useSyncExternalStore(homeScrolledStore.subscribe, homeScrolledStore.get);
+
+function HomeStickyHeader({onPressLogo}: {onPressLogo: () => void}) {
+  return (
+    <HomeHeader isScrolled={useHomeScrolled()} onPressLogo={onPressLogo} />
+  );
+}
+
+/**
+ * 헤더 크로스페이드(300ms)의 중간에 상태바를 바꾼다. SystemBars 는 애니메이션이
+ * 안 되므로, 즉시 바꾸면 아직 다크 헤더인데 글씨가 검어 안 보이고,
+ * 끝나고 바꾸면 흰 헤더에 흰 글씨가 된다.
+ * 상단 다크 헤더 위에선 상태바를 밝게(웹뷰 시절 TabWebView 가 하던 일).
+ */
+function HomeStatusBar() {
+  const isScrolled = useHomeScrolled();
+  const [style, setStyle] = useState<'light' | 'dark'>(
+    isScrolled ? 'dark' : 'light',
+  );
+  useEffect(() => {
+    const timer = setTimeout(
+      () => setStyle(isScrolled ? 'dark' : 'light'),
+      150,
+    );
+    return () => clearTimeout(timer);
+  }, [isScrolled]);
+  return <SystemBars style={style} hidden={false} />;
 }

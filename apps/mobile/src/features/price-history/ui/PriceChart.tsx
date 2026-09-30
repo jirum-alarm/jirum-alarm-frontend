@@ -113,7 +113,11 @@ export default function PriceChart({
     () =>
       Gesture.Pan()
         .runOnJS(true)
-        .minDistance(0)
+        // 가로로 움직일 때만 차트가 잡는다 — 세로면 즉시 포기해 스크롤에 넘긴다.
+        // (minDistance(0) 이라 차트 위에서 시작한 세로 스크롤까지 가로챘다.)
+        // 탭 선택은 onBegin 이 손가락이 닿는 순간 처리하므로 그대로다.
+        .activeOffsetX([-6, 6])
+        .failOffsetY([-12, 12])
         .onBegin(e => onSelectIndex(nearestIndex(e.x)))
         .onUpdate(e => onSelectIndex(nearestIndex(e.x))),
     // eslint-disable-next-line react-hooks/exhaustive-deps

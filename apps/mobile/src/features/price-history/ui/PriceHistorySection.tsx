@@ -244,24 +244,29 @@ export default function PriceHistorySection({
                   setDays(period.days);
                   setSelectedIndex(null);
                 }}
-                // iOS HIG 최소 44px.
-                style={{minHeight: 44}}
-                className={cn(
-                  'justify-center rounded-lg border px-3',
-                  active
-                    ? 'border-gray-900 bg-gray-900'
-                    : 'border-gray-200 bg-white',
-                )}
                 accessibilityRole="button"
                 accessibilityState={{selected: active}}
-                accessibilityLabel={`${period.label} 기간`}>
-                <Text
+                accessibilityLabel={`${period.label} 기간`}
+                // ★함수형 style 엔 opacity 만 — 칩 모양 className 은 안쪽 View 가 받는다
+                // (섞으면 NativeWind 가 레이아웃을 떨군다).
+                style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+                <View
+                  // iOS HIG 최소 44px.
+                  style={{minHeight: 44}}
                   className={cn(
-                    'text-sm',
-                    active ? 'font-semibold text-white' : 'text-gray-600',
+                    'justify-center rounded-lg border px-3',
+                    active
+                      ? 'border-gray-900 bg-gray-900'
+                      : 'border-gray-200 bg-white',
                   )}>
-                  {period.label}
-                </Text>
+                  <Text
+                    className={cn(
+                      'text-sm',
+                      active ? 'font-semibold text-white' : 'text-gray-600',
+                    )}>
+                    {period.label}
+                  </Text>
+                </View>
               </Pressable>
             );
           })}
@@ -371,26 +376,30 @@ function DealPreview({
       <Pressable
         onPress={onPress}
         disabled={!onPress}
-        className="flex-row items-center gap-x-2.5"
-        accessibilityRole={onPress ? 'link' : undefined}>
-        <View className="size-11 overflow-hidden rounded-md bg-gray-50">
-          <Thumbnail uri={deal.thumbnail} resizeMode="contain" />
-        </View>
-        <View className="min-w-0 flex-1">
-          <Text className="text-xs text-gray-900" numberOfLines={1}>
-            {deal.title}
-          </Text>
-          {deal.providerName ? (
-            <Text
-              className="mt-0.5 text-[11px] text-gray-500"
-              numberOfLines={1}>
-              {deal.providerName}
+        accessibilityRole={onPress ? 'link' : undefined}
+        // ★함수형 style 엔 opacity 만 — 행 레이아웃은 안쪽 View 가 받는다.
+        // disabled 면 pressed 가 오지 않아 눌림 표시도 없다.
+        style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+        <View className="flex-row items-center gap-x-2.5">
+          <View className="size-11 overflow-hidden rounded-md bg-gray-50">
+            <Thumbnail uri={deal.thumbnail} resizeMode="contain" />
+          </View>
+          <View className="min-w-0 flex-1">
+            <Text className="text-xs text-gray-900" numberOfLines={1}>
+              {deal.title}
             </Text>
-          ) : null}
+            {deal.providerName ? (
+              <Text
+                className="mt-0.5 text-[11px] text-gray-500"
+                numberOfLines={1}>
+                {deal.providerName}
+              </Text>
+            ) : null}
+          </View>
+          <Text className="text-xs font-semibold text-error-500">
+            {won(deal.price, deal.currency)}
+          </Text>
         </View>
-        <Text className="text-xs font-semibold text-error-500">
-          {won(deal.price, deal.currency)}
-        </Text>
       </Pressable>
     </View>
   );

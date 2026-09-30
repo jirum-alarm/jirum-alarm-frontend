@@ -160,6 +160,35 @@ function TabWebViewPage({
   return <Screen route={{params: {uri: route.params.uri}}} />;
 }
 
+/**
+ * 탭 루트 화면. 홈·발견·알림·커뮤니티·내정보 다섯 탭 모두 네이티브가 정본이다
+ * (2026-09-07 feature-flags 삭제 — 되돌릴 땐 플래그가 아니라 해당 커밋을 eas update).
+ * ★2026-09-08 로 다섯 탭 전부 네이티브라 TabWebView 폴백은 도달하지 않는다. 그 웹뷰 ref·
+ * 주입 경로(WebViewRefProvider·getWebViewRef)는 별도 정리 대상이라 폴백으로 남긴다.
+ */
+const NATIVE_TAB_ROOTS: Partial<Record<TabName, React.ComponentType>> = {
+  [tabNavigations.HOME]: HomeScreen,
+  [tabNavigations.DISCOVER]: TrendingScreen,
+  [tabNavigations.ALARM]: AlarmScreen,
+  [tabNavigations.COMMUNITY]: CommunityScreen,
+  [tabNavigations.MYPAGE]: MyPageScreen,
+};
+const webViewTabRoots = new Map<TabName, React.ComponentType>();
+
+/** 탭마다 **같은 컴포넌트 참조**를 돌려준다 — 렌더마다 바뀌면 루트가 매번 다시 그려진다. */
+function getTabRootScreen(tabName: TabName): React.ComponentType {
+  const native = NATIVE_TAB_ROOTS[tabName];
+  if (native) return native;
+  let root = webViewTabRoots.get(tabName);
+  if (!root) {
+    root = function TabWebViewRoot() {
+      return <TabWebView tabName={tabName} baseUrl={getTabBaseUrl(tabName)} />;
+    };
+    webViewTabRoots.set(tabName, root);
+  }
+  return root;
+}
+
 export function createTabStack(tabName: TabName) {
   return function TabStack() {
     const onFocusedRoute = useSyncNativeTabBarHidden();
@@ -221,38 +250,13 @@ export function createTabStack(tabName: TabName) {
             }
           },
         }}>
-        <Stack.Screen name={tabStackNavigations.ROOT}>
-          {() => {
-            // ★홈·발견·알림은 네이티브 화면이 정본이다(플래그 없음).
-            // 2026-09-07 에 `constants/feature-flags.ts` 를 지웠다 — 세 탭 모두
-            // 릴리스 3회를 넘겼고, 되돌릴 일이 생기면 플래그를 켜는 게 아니라
-            // 해당 커밋을 `eas update` 로 내보내는 쪽이 맞다.
-            // 커뮤니티·내정보는 아직 루트가 웹뷰라 아래 TabWebView 가 받는다.
-            switch (tabName) {
-              case tabNavigations.HOME:
-                return <HomeScreen />;
-              case tabNavigations.DISCOVER:
-                return <TrendingScreen />;
-              case tabNavigations.ALARM:
-                return <AlarmScreen />;
-              case tabNavigations.COMMUNITY:
-                return <CommunityScreen />;
-              case tabNavigations.MYPAGE:
-                return <MyPageScreen />;
-              // ★2026-09-08 로 다섯 탭 전부 네이티브가 되어 이 아래는 더 이상
-              // 도달하지 않는다. TabWebView 와 그에 딸린 웹뷰 ref·주입 경로
-              // (WebViewRefProvider·getWebViewRef)는 **별도 정리 대상**이다 —
-              // 같은 변경에서 지우면 검증 범위가 두 배가 되므로 폴백으로 남긴다.
-              default:
-                return (
-                  <TabWebView
-                    tabName={tabName}
-                    baseUrl={getTabBaseUrl(tabName)}
-                  />
-                );
-            }
-          }}
-        </Stack.Screen>
+        {/* ★component 로 넘긴다 — 렌더 콜백({() => ...})은 렌더마다 새 함수라
+            react-navigation 이 루트를 건너뛰지 못해, 상세를 열고 닫을 때마다 탭 루트
+            전체(홈의 모든 섹션)가 다시 그려져 JS 가 밀렸다("터치가 한 박자 늦다"). */}
+        <Stack.Screen
+          name={tabStackNavigations.ROOT}
+          component={getTabRootScreen(tabName)}
+        />
         <Stack.Screen
           name={tabStackNavigations.DETAIL}
           component={ProductDetailScreen}

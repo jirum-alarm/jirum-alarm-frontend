@@ -107,14 +107,20 @@ export default function AlarmScreen() {
         target_id: notification.product?.id,
         platform: 'app',
       });
-      if (!notification.readAt) {
-        onReadNotification(Number(notification.id));
-      }
+      const markRead = () => {
+        if (!notification.readAt) onReadNotification(Number(notification.id));
+      };
       // 상품이 삭제/비공개면 읽음만 찍고 이동하지 않는다(web hasProduct 분기).
-      if (productId == null) return;
+      if (productId == null) {
+        markRead();
+        return;
+      }
+      // ★push 먼저 — 읽음 처리(낙관적 갱신)가 목록 전체를 다시 그리는 걸 전환과 같은
+      // 틱에 하면 상세가 한 박자 늦게 떴다. 전환이 시작된 뒤로 미룬다.
       navigation.push(tabStackNavigations.DETAIL, {
         path: `/products/${productId}`,
       });
+      setTimeout(markRead, 350);
     },
     [navigation, onReadNotification],
   );

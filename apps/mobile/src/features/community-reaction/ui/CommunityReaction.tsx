@@ -110,7 +110,9 @@ function InfoTooltip() {
         onPress={() => setOpen(v => !v)}
         hitSlop={8}
         accessibilityRole="button"
-        accessibilityLabel="커뮤니티 반응">
+        accessibilityLabel="커뮤니티 반응"
+        // 작은 아이콘이라 눌림이 안 보이면 탭이 먹었는지 모른다.
+        style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
         <Info />
       </Pressable>
       {open ? (

@@ -50,18 +50,24 @@ export default function PriceVerdictHero({
           });
           onPressHistory();
         }}
-        className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3"
         accessibilityRole="button"
-        accessibilityLabel="가격 추이 기준 보기">
-        <Text className="text-sm font-semibold text-gray-800">
-          {verdict.headline}
-        </Text>
-        {verdict.subline ? (
-          <Text className="mt-1 text-xs text-gray-500">{verdict.subline}</Text>
-        ) : null}
-        <Text className="mt-2 text-xs font-medium text-gray-500">
-          기준 보기 ↓
-        </Text>
+        accessibilityLabel="가격 추이 기준 보기"
+        // ★함수형 style 엔 opacity 만 — 카드 모양 className 은 안쪽 View 가 받는다
+        // (섞으면 NativeWind 가 레이아웃을 떨군다).
+        style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+        <View className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+          <Text className="text-sm font-semibold text-gray-800">
+            {verdict.headline}
+          </Text>
+          {verdict.subline ? (
+            <Text className="mt-1 text-xs text-gray-500">
+              {verdict.subline}
+            </Text>
+          ) : null}
+          <Text className="mt-2 text-xs font-medium text-gray-500">
+            기준 보기 ↓
+          </Text>
+        </View>
       </Pressable>
     </View>
   );

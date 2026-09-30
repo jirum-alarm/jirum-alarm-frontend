@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {Dimensions, FlatList, Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
@@ -38,6 +38,12 @@ const GRID_GAP_Y = 20; // web gap-y-5
 // GA4 product_card_click 진입 경로. web DynamicProductList 도 모든 레이아웃에
 // source="home_promotion" 을 박는다 — 이 디스패처는 홈 SDUI 전용이다.
 const SOURCE: ProductCardSource = 'home_promotion';
+
+// ★캐러셀 카드 사이 간격. 모듈 밖에 둔다 — 인라인 화살표면 렌더마다 새 컴포넌트
+// 타입이라 구분자가 전부 언마운트·재마운트된다.
+function CarouselGap() {
+  return <View style={{width: 12}} />;
+}
 
 type Props = {
   type: ContentPromotionSectionType;
@@ -198,20 +204,24 @@ function PaginatedProductGrid({
       <View className="items-center">
         <Pressable
           onPress={() => setCurrentPage(prev => (prev + 1) % totalPages)}
-          className="h-9 flex-row items-center gap-2.5 rounded-lg bg-gray-100 px-5"
           // h-9(36px) → 44pt 권장 터치 영역.
           hitSlop={4}
           accessibilityRole="button"
           accessibilityLabel={`추천 상품 더보기, ${
             currentPage + 1
-          }/${totalPages} 페이지`}>
-          <Text className="text-sm font-medium text-gray-900">
-            추천 상품 더보기
-          </Text>
-          <Text className="text-sm">
-            <Text className="text-gray-900">{currentPage + 1}</Text>
-            <Text className="text-gray-500">/{totalPages}</Text>
-          </Text>
+          }/${totalPages} 페이지`}
+          // ★함수형 style 엔 opacity 만 — 레이아웃 className 은 안쪽 View 가 받는다
+          // (섞으면 NativeWind 가 레이아웃을 떨군다).
+          style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+          <View className="h-9 flex-row items-center gap-2.5 rounded-lg bg-gray-100 px-5">
+            <Text className="text-sm font-medium text-gray-900">
+              추천 상품 더보기
+            </Text>
+            <Text className="text-sm">
+              <Text className="text-gray-900">{currentPage + 1}</Text>
+              <Text className="text-gray-500">/{totalPages}</Text>
+            </Text>
+          </View>
         </Pressable>
       </View>
     </View>
@@ -232,6 +242,18 @@ export function CarouselList({
   /** GA4 `product_card_click` 진입 경로. 재사용처마다 다르다(web 도 호출처가 준다). */
   trackingSource?: ProductCardSource;
 }) {
+  // ★renderItem 을 고정해야 memo 된 CarouselCard 가 부모 리렌더에 안 끌려간다.
+  const renderItem = useCallback(
+    ({item}: {item: ProductCardType}) => (
+      <CarouselCard
+        product={item}
+        onPress={onPressProduct}
+        trackingSource={trackingSource}
+      />
+    ),
+    [onPressProduct, trackingSource],
+  );
+
   return (
     <FlatList
       horizontal
@@ -239,14 +261,8 @@ export function CarouselList({
       keyExtractor={item => String(item.id)}
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{paddingHorizontal: HORIZONTAL_PADDING}}
-      ItemSeparatorComponent={() => <View style={{width: 12}} />}
-      renderItem={({item}) => (
-        <CarouselCard
-          product={item}
-          onPress={onPressProduct}
-          trackingSource={trackingSource}
-        />
-      )}
+      ItemSeparatorComponent={CarouselGap}
+      renderItem={renderItem}
       // 카드 폭이 고정이라 미리 알려주면 초기 렌더가 빨라진다.
       getItemLayout={(_, index) => ({
         length: CAROUSEL_CARD_WIDTH + 12,
@@ -287,6 +303,23 @@ function DoubleRowCarousel({
     return chunks;
   }, [products]);
 
+  // ★위 CarouselList 와 같은 이유로 고정한다.
+  const renderItem = useCallback(
+    ({item}: {item: ProductCardType[]}) => (
+      <View style={{width: slideWidth, gap: 16}}>
+        {item.map(product => (
+          <DoubleRowCard
+            key={product.id}
+            product={product}
+            onPress={onPressProduct}
+            trackingSource={SOURCE}
+          />
+        ))}
+      </View>
+    ),
+    [slideWidth, onPressProduct],
+  );
+
   return (
     <FlatList
       horizontal
@@ -294,19 +327,8 @@ function DoubleRowCarousel({
       keyExtractor={(_, index) => `double-row-${index}`}
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{paddingHorizontal: HORIZONTAL_PADDING}}
-      ItemSeparatorComponent={() => <View style={{width: 12}} />}
-      renderItem={({item}) => (
-        <View style={{width: slideWidth, gap: 16}}>
-          {item.map(product => (
-            <DoubleRowCard
-              key={product.id}
-              product={product}
-              onPress={onPressProduct}
-              trackingSource={SOURCE}
-            />
-          ))}
-        </View>
-      )}
+      ItemSeparatorComponent={CarouselGap}
+      renderItem={renderItem}
     />
   );
 }

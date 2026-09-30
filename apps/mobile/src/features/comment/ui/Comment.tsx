@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
 import {Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {
+  type InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import {UserLikeTarget} from '@/shared/api/gql/graphql';
 import {
@@ -53,10 +57,42 @@ export default function Comment({
       queryKey: CommentQueries.keys.list(productId),
     });
 
+  // 좋아요는 누르는 즉시 바뀐다(낙관적) — 무효화·재조회를 기다리면 한 박자 늦게 켜졌다.
   const {mutate: likeComment} = useMutation({
     mutationFn: ProductService.addUserLikeOrDislike,
+    onMutate: async ({isLike}) => {
+      const queryKey = CommentQueries.keys.list(productId);
+      await queryClient.cancelQueries({queryKey});
+      const previous = queryClient.getQueryData(queryKey);
+      queryClient.setQueryData<InfiniteData<TComment[]>>(queryKey, old =>
+        old
+          ? {
+              ...old,
+              pages: old.pages.map(page =>
+                page.map(c =>
+                  String(c.id) === String(comment.id)
+                    ? {
+                        ...c,
+                        isMyLike: !!isLike,
+                        likeCount: Math.max(
+                          0,
+                          (c.likeCount ?? 0) +
+                            (!!isLike === !!c.isMyLike ? 0 : isLike ? 1 : -1),
+                        ),
+                      }
+                    : c,
+                ),
+              ),
+            }
+          : old,
+      );
+      return () => queryClient.setQueryData(queryKey, previous);
+    },
     onSuccess: invalidate,
-    onError: () => showToast.info('좋아요에 실패했어요.'),
+    onError: (_err, _vars, rollback) => {
+      rollback?.();
+      showToast.info('좋아요에 실패했어요.');
+    },
   });
 
   const {mutate: removeComment} = useMutation({

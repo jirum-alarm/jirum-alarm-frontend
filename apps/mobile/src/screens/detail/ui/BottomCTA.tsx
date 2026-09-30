@@ -1,3 +1,4 @@
+import {patchProductStats} from '@/entities/product/optimistic-stats';
 import React, {useCallback, useState} from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -67,16 +68,25 @@ export default function BottomCTA({
       queryKey: ProductQueries.keys.stats(productId),
     });
 
-  const {mutate: toggleWishlist, isPending: isWishlistPending} = useMutation({
+  // 하트는 누르는 즉시 바뀐다(낙관적) — 서버 왕복을 기다리지 않고, 실패하면 되돌린다.
+  const {mutate: toggleWishlist} = useMutation({
     mutationFn: (next: boolean) =>
       next
         ? ProductService.addWishlist({productId})
         : ProductService.removeWishlist({productId}),
+    onMutate: (next: boolean) =>
+      patchProductStats(queryClient, productId, old => ({
+        ...old,
+        isMyWishlist: next,
+      })),
     onSuccess: (_data, next) => {
       invalidate();
       if (next) showToast.info('찜 목록에 추가되었어요.');
     },
-    onError: () => showToast.info('찜하지 못했어요. 다시 시도해주세요.'),
+    onError: (_err, _next, rollback) => {
+      rollback?.();
+      showToast.info('찜하지 못했어요. 다시 시도해주세요.');
+    },
   });
 
   const handlePurchase = useCallback(async () => {
@@ -91,9 +101,11 @@ export default function BottomCTA({
       profit_provider: product.profitLinkProvider ?? null,
     });
 
+    // 브라우저를 먼저 연다 — 저장소 읽기(await)를 앞에 두면 구매 탭이 한 박자 늦게 반응했다.
+    // 돌아왔을 때 띄울 안내 순서는 브라우저가 떠 있는 동안 계산해도 충분하다.
+    openInAppBrowser(product.detailUrl);
     const joined = await hasJoinedOkachat();
     setPromptQueue(buildPostPurchasePromptQueue(isUserLogin, joined));
-    openInAppBrowser(product.detailUrl);
   }, [
     product.detailUrl,
     product.id,
@@ -144,7 +156,6 @@ export default function BottomCTA({
             });
             toggleWishlist(!isWishlisted);
           }}
-          disabled={isWishlistPending}
           style={{minWidth: MIN_TAP, minHeight: MIN_TAP}}
           className="items-center justify-center"
           accessibilityRole="button"

@@ -34,11 +34,18 @@ export default function SectionErrorRow({
       </Text>
       <Pressable
         onPress={onRetry}
-        style={{minHeight: 44, minWidth: 64}}
-        className="items-end justify-center"
         accessibilityRole="button"
-        accessibilityLabel={`${label} 다시 시도`}>
-        <Text className="text-sm font-medium text-primary-800">다시 시도</Text>
+        accessibilityLabel={`${label} 다시 시도`}
+        // ★함수형 style 엔 opacity 만 — 터치 영역·정렬은 안쪽 View 가 받는다
+        // (섞으면 NativeWind 가 레이아웃을 떨군다).
+        style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+        <View
+          style={{minHeight: 44, minWidth: 64}}
+          className="items-end justify-center">
+          <Text className="text-sm font-medium text-primary-800">
+            다시 시도
+          </Text>
+        </View>
       </Pressable>
     </View>
   );

@@ -25,8 +25,8 @@ describe('탭 배선', () => {
   it('발견 탭 루트는 네이티브 화면이다', () => {
     // 플래그(constants/feature-flags.ts)는 2026-09-07 에 지웠다 — 탭 이름으로
     // 직접 고른다. 되돌릴 일이 생기면 해당 커밋을 eas update 로 내보낸다.
-    expect(stack).toContain('case tabNavigations.DISCOVER:');
-    expect(stack).toContain('<TrendingScreen />');
+    // 탭별 컴포넌트 표(NATIVE_TAB_ROOTS) — 렌더 콜백은 루트를 매번 다시 그리게 했다.
+    expect(stack).toContain('[tabNavigations.DISCOVER]: TrendingScreen');
   });
 
   it('★웹뷰 폴백이 남아 있다 — 커뮤니티·내정보는 아직 웹뷰다', () => {

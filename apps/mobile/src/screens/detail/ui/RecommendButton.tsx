@@ -1,4 +1,5 @@
 import {showToast} from '@/shared/lib/feedback';
+import {patchProductStats} from '@/entities/product/optimistic-stats';
 import React from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -29,18 +30,33 @@ export default function RecommendButton({
   const {requireLogin} = useRequireLogin(`/products/${productId}`);
   const {data: stats} = useQuery(ProductQueries.stats({id: productId}));
 
-  const {mutate: toggle, isPending} = useMutation({
+  // 추천도 누르는 즉시 바뀐다(낙관적) — 실패하면 되돌린다.
+  const {mutate: toggle} = useMutation({
     mutationFn: (isLike: boolean | null) =>
       ProductService.addUserLikeOrDislike({
         target: UserLikeTarget.Product,
         targetId: productId,
         isLike,
       }),
+    onMutate: (isLike: boolean | null) =>
+      patchProductStats(queryClient, productId, old => {
+        const was = !!old.isMyLike;
+        const now = isLike === true;
+        const delta = now === was ? 0 : now ? 1 : -1;
+        return {
+          ...old,
+          isMyLike: now,
+          likeCount: Math.max(0, (old.likeCount ?? 0) + delta),
+        };
+      }),
     onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: ProductQueries.keys.stats(productId),
       }),
-    onError: () => showToast.info('추천에 실패했어요.'),
+    onError: (_err, _isLike, rollback) => {
+      rollback?.();
+      showToast.info('추천에 실패했어요.');
+    },
   });
 
   const isRecommended = !!stats?.isMyLike;
@@ -59,7 +75,6 @@ export default function RecommendButton({
   return (
     <PressableScale
       onPress={handlePress}
-      disabled={isPending}
       accessibilityRole="button"
       accessibilityState={{selected: isRecommended}}
       accessibilityLabel={isRecommended ? '추천 완료' : '상품 추천'}

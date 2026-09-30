@@ -62,6 +62,8 @@ const SNAP = CARD_WIDTH + GAP;
 /** loop 용 복제 배수. 앞 1벌 + 실제 1벌 + 뒤 1벌. */
 const LOOP_MULTIPLIER = 3;
 
+type LoopedItem = {product: ProductCardType; realIndex: number; key: string};
+
 export default function JirumRankingSlider({
   onPressProduct,
 }: {
@@ -72,7 +74,7 @@ export default function JirumRankingSlider({
   const count = products.length;
 
   // 앞뒤로 한 벌씩 덧댄 목록. 실제 시작 위치는 가운데 블록의 0번.
-  const looped = useMemo(
+  const looped = useMemo<LoopedItem[]>(
     () =>
       count === 0
         ? []
@@ -84,7 +86,7 @@ export default function JirumRankingSlider({
     [products, count],
   );
 
-  const listRef = useRef<Animated.FlatList<(typeof looped)[number]>>(null);
+  const listRef = useRef<Animated.FlatList<LoopedItem>>(null);
   // 도트 표시용. 스크롤 중 매 프레임 갱신하면 리렌더가 터지므로
   // 스크롤이 멈출 때만 바꾼다(scale 은 아래 scrollX 가 따로 담당).
   const [activeIndex, setActiveIndex] = useState(0);
@@ -125,6 +127,22 @@ export default function JirumRankingSlider({
       }
     },
     [count, scrollX],
+  );
+
+  // ★renderItem 을 고정한다 — 인라인이면 도트 갱신(activeIndex)마다 새 함수라
+  // 3벌로 덧댄 카드가 memo 를 무시하고 전부 다시 그려진다.
+  const renderItem = useCallback(
+    ({item, index}: {item: LoopedItem; index: number}) => (
+      <RankingCard
+        product={item.product}
+        rank={item.realIndex + 1}
+        index={index}
+        isLoopCopy={index < count || index >= count * 2}
+        scrollX={scrollX}
+        onPress={onPressProduct}
+      />
+    ),
+    [count, scrollX, onPressProduct],
   );
 
   if (isPending) {
@@ -171,16 +189,7 @@ export default function JirumRankingSlider({
           offset: SNAP * index,
           index,
         })}
-        renderItem={({item, index}) => (
-          <RankingCard
-            product={item.product}
-            rank={item.realIndex + 1}
-            index={index}
-            isLoopCopy={index < count || index >= count * 2}
-            scrollX={scrollX}
-            onPress={onPressProduct}
-          />
-        )}
+        renderItem={renderItem}
       />
       <SliderDots total={count} activeIndex={activeIndex} />
     </View>
@@ -194,7 +203,8 @@ export default function JirumRankingSlider({
  * 한 칸 떨어지면 0.9(web scale-90). 임계값 토글이 아니라 보간이라
  * 손가락을 따라 부드럽게 커지고 작아진다.
  */
-function RankingCard({
+// ★memo — scale 은 UI 스레드(scrollX)가 맡아 카드가 JS 에서 다시 그려질 일이 없다.
+const RankingCard = React.memo(function RankingCard({
   product,
   rank,
   index,
@@ -299,7 +309,7 @@ function RankingCard({
       </PressableScale>
     </Animated.View>
   );
-}
+});
 
 /** web SliderDots — 3px 점, 활성만 gray-600. */
 function SliderDots({

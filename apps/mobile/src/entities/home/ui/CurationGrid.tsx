@@ -1,5 +1,11 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {ActivityIndicator, FlatList, RefreshControl, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  View,
+  type ListRenderItemInfo,
+} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
@@ -19,6 +25,12 @@ const HORIZONTAL_PADDING = 20; // web px-5
 
 /** web 은 카드가 50% 보이면 노출로 셌다(useInView threshold 0.5). */
 const VIEWABILITY_CONFIG = {itemVisiblePercentThreshold: 50};
+
+// ★모듈 밖에 둔다 — 인라인 화살표면 렌더마다 새 컴포넌트 타입이라 구분자가
+// 전부 언마운트·재마운트된다.
+function RowGap() {
+  return <View style={{height: GRID_GAP_Y}} />;
+}
 
 export default function CurationGrid<T>({
   items,
@@ -91,6 +103,17 @@ export default function CurationGrid<T>({
       setRefreshing(false);
     }
   }, [onRetry]);
+
+  // ★renderItem 을 고정한다 — 인라인이면 새로고침 스피너·페이지 추가처럼 이 그리드가
+  // 다시 그려질 때마다 FlatList 가 보이는 셀을 전부 다시 그린다.
+  // renderCard 가 호출부에서 인라인이면 효과는 줄지만 동작은 같다.
+  const renderItem = useCallback(
+    ({item, index}: ListRenderItemInfo<T>) => (
+      <View style={{flex: 1 / columns}}>{renderCard(item, index)}</View>
+    ),
+    [renderCard, columns],
+  );
+
   if (isPending) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
@@ -133,7 +156,7 @@ export default function CurationGrid<T>({
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }
-      ItemSeparatorComponent={() => <View style={{height: GRID_GAP_Y}} />}
+      ItemSeparatorComponent={RowGap}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
       // ★viewabilityConfig 는 ref 로 고정한다. 매 렌더 새 객체를 주면
@@ -150,9 +173,7 @@ export default function CurationGrid<T>({
           (footer as React.ReactElement)
         )
       }
-      renderItem={({item, index}) => (
-        <View style={{flex: 1 / columns}}>{renderCard(item, index)}</View>
-      )}
+      renderItem={renderItem}
     />
   );
 }

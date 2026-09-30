@@ -1,4 +1,12 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import {NavigationContext} from '@react-navigation/native';
 import {
   Dimensions,
   Image,
@@ -124,7 +132,10 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
   // 동작 줄이기·스크린리더 사용자에겐 저절로 넘어가는 배너가 방해다(읽는 도중 바뀐다).
   const reduceMotion = useReduceMotion();
   const screenReader = useScreenReaderEnabled();
-  const autoplay = count > 1 && !reduceMotion && !screenReader;
+  // 상세를 열었거나 다른 탭에 있을 때(홈이 안 보일 때)는 멈춘다 — 안 보이는 배너가
+  // 계속 넘어가며 setState·스크롤을 돌려 앞 화면의 JS 를 밀었다.
+  const focused = useScreenFocused();
+  const autoplay = count > 1 && !reduceMotion && !screenReader && focused;
 
   const index = count > 0 ? scrollIndex % count : 0;
   const currentDelay =
@@ -170,8 +181,10 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
     progress.value = withTiming(1, {duration: currentDelay});
   }, [index, currentDelay, progress]);
 
+  // ★width 가 아니라 scaleX — width 는 레이아웃 속성이라 자동 넘김 내내 매 프레임 레이아웃을
+  // 다시 계산했다. transform 은 레이아웃 없이 합성만 한다.
   const progressStyle = useAnimatedStyle(() => ({
-    width: `${progress.value * 100}%`,
+    transform: [{scaleX: progress.value}],
   }));
 
   const onMomentumEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -227,8 +240,8 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
               <View className="absolute top-2 right-3 h-1 w-8">
                 <View className="h-full w-full overflow-hidden rounded-full bg-white/20">
                   <Animated.View
-                    className="h-full bg-white"
-                    style={progressStyle}
+                    className="h-full w-full bg-white"
+                    style={[{transformOrigin: 'left'}, progressStyle]}
                   />
                 </View>
               </View>
@@ -404,4 +417,23 @@ function findFirstImageUrl(node: unknown): string | undefined {
     }
   }
   return undefined;
+}
+
+/**
+ * 이 화면이 보이는 중인가. 네비게이션 밖(단독 렌더·테스트)에선 항상 true.
+ * useIsFocused 는 네비게이션 컨텍스트가 없으면 던지므로 직접 구독한다.
+ */
+function useScreenFocused(): boolean {
+  const navigation = useContext(NavigationContext);
+  const [focused, setFocused] = useState(() => navigation?.isFocused() ?? true);
+  useEffect(() => {
+    if (!navigation) return;
+    const offFocus = navigation.addListener('focus', () => setFocused(true));
+    const offBlur = navigation.addListener('blur', () => setFocused(false));
+    return () => {
+      offFocus();
+      offBlur();
+    };
+  }, [navigation]);
+  return focused;
 }

@@ -40,7 +40,9 @@ function formatMMD(date: string): string {
 
 const CARD_WIDTH = 120;
 
-export default function ProductCard({
+// ★memo — 캐러셀·만료 추천 그리드에 여러 장이 깔려서, 부모가 다시 그릴 때
+// 카드가 같이 그려지지 않게 한다(product 는 쿼리 캐시 객체라 참조가 유지된다).
+const ProductCard = React.memo(function ProductCard({
   product,
   onPress,
   layout = 'fixed',
@@ -128,4 +130,6 @@ export default function ProductCard({
       </View>
     </PressableScale>
   );
-}
+});
+
+export default ProductCard;
