@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
+import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 import * as Haptics from 'expo-haptics';
@@ -50,6 +50,7 @@ export default function BottomCTA({
   showTopButton?: boolean;
 }) {
   const insets = useSafeAreaInsets();
+  const bottomClip = useHiddenTabBarClipPadding();
   const [promptQueue, setPromptQueue] = useState<PostPurchasePromptKind[]>([]);
   const queryClient = useQueryClient();
   const productId = Number(product.id);
@@ -102,10 +103,9 @@ export default function BottomCTA({
   ]);
 
   const isWishlisted = !!stats?.isMyWishlist;
-  // ★상세에서도 탭바가 보이므로(2026-08-17 지시) 그 높이만큼 더 띄운다.
-  // 안 그러면 구매 CTA 가 탭바에 가린다. 탭바가 없는 경우(안드로이드 등)는
-  // getReservedBottomPx 가 safe area 만 돌려주므로 그대로 안전하다.
-  const paddingBottom = getReservedBottomPx(insets.bottom);
+  // 상세는 탭바를 숨긴다(2026-10-01) — CTA 가 화면 바닥이라 safe area 만 비운다.
+  // (iOS 26 시스템 탭바를 다시 켜면 숨길 때 잘리는 높이만큼 clip 보정이 붙는다.)
+  const paddingBottom = Math.max(insets.bottom, 12) + bottomClip;
 
   usePendingAction(PendingActionType.WISHLIST_ADD, () => {
     if (!isWishlisted) toggleWishlist(true);

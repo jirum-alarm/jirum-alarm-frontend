@@ -45,6 +45,7 @@ import {
   commentsHeaderOptions,
   productDetailHeaderOptions,
 } from './native-headers';
+import AppStackHeader from './AppStackHeader';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
@@ -58,6 +59,12 @@ const Stack = createNativeStackNavigator<TabStackParamList>();
  * iOS 26 clip 은 네이티브로 push 한 화면만 켠다. 웹뷰 안 SPA 는
  * 자르면 댓글 입력창 아래가 빈다.
  */
+
+// 모듈 스코프 — 렌더마다 새 함수를 만들면 헤더가 매번 다시 마운트된다.
+const renderAppStackHeader = (
+  props: React.ComponentProps<typeof AppStackHeader>,
+) => <AppStackHeader {...props} />;
+
 function useSyncNativeTabBarHidden() {
   const visible = useTabBarVisibility();
   const navigation = useNavigation();
@@ -96,16 +103,16 @@ function useSyncNativeTabBarHidden() {
  */
 function hidesTabBar(routeName: string | undefined): boolean {
   return (
-    // ★상세는 숨기지 않는다(2026-08-17 사용자 지시). 찜/구매 CTA 가 탭바
-    // 위에 얹히므로 BottomCTA 가 탭바 높이만큼 더 띄운다.
-    // web 은 상세에서 BottomNav 를 아예 렌더하지 않지만 앱은 다르게 간다.
+    // ★상세도 숨긴다(2026-10-01 사용자 지시 — 8/17 의 "상세는 탭바 유지" 를 뒤집음).
+    // 하단엔 찜·구매 CTA 만 남는다. web 도 상세에서 BottomNav 를 그리지 않는다.
+    routeName === tabStackNavigations.DETAIL ||
     routeName === tabStackNavigations.COMMENTS ||
     routeName === tabStackNavigations.SEARCH ||
     routeName === tabStackNavigations.CURATION ||
     routeName === tabStackNavigations.TOSS_CURATION ||
     routeName === tabStackNavigations.WEBVIEW ||
     // 내정보·커뮤니티 하위 화면. web 도 탭 루트가 아니면 하단바를 안 그린다
-    // (isTabRootPath). 상세만 예외로 탭바를 남긴다(위 주석 참조).
+    // (isTabRootPath).
     MYPAGE_SUB_ROUTES.has(routeName ?? '') ||
     COMMUNITY_SUB_ROUTES.has(routeName ?? '')
   );
@@ -185,6 +192,8 @@ export function createTabStack(tabName: TabName) {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+          // 헤더를 켜는 화면은 전부 JS 헤더로 그린다(iOS 26 유리 헤더가 회색으로 비침).
+          header: renderAppStackHeader,
           // 지정 안 하면 전환 애니메이션 동안 시스템 기본 배경이 보인다.
           // 아직 아무것도 안 그린 WebView 가 올라올 때 특히 티가 난다.
           contentStyle: {backgroundColor: SCREEN_BACKGROUND_COLOR},

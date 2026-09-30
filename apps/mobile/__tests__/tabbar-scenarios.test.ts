@@ -29,8 +29,9 @@ const ROUTES = {
 };
 
 function hidesTabBar(routeName: string): boolean {
-  // ★상세는 숨기지 않는다(2026-08-17 지시). BottomCTA 가 탭바 위로 얹힌다.
+  // ★상세도 숨긴다(2026-10-01 지시). 하단엔 찜·구매 CTA 만.
   return [
+    ROUTES.DETAIL,
     ROUTES.COMMENTS,
     ROUTES.SEARCH,
     ROUTES.CURATION,
@@ -43,7 +44,7 @@ function hidesTabBar(routeName: string): boolean {
  *
  * web `isTabRootPath` 는 탭 루트 6개(`/`·`/trending/*`·`/community`·`/alarm`·
  * `/mypage`)에서만 하단바를 그린다. 하위 설정 화면·글 상세에서 하단바가 남으면
- * 같은 화면인데 web 과 앱이 달라진다. 상세(DETAIL)만 의도적 예외다.
+ * 같은 화면인데 web 과 앱이 달라진다.
  */
 describe('내정보·커뮤니티 하위 라우트는 탭바를 숨긴다', () => {
   const MYPAGE_SUBS = [
@@ -156,12 +157,12 @@ describe('소스의 규칙과 이 테스트가 일치하는가', () => {
     }
     // ROOT 는 숨기지 않는다 — 들어 있으면 탭 루트에서 탭바가 사라진다
     expect(fn).not.toContain('tabStackNavigations.ROOT');
-    // ★상세도 숨기지 않는다(주석엔 등장하므로 코드 줄만 본다)
+    // ★상세도 숨긴다(2026-10-01). 주석엔 등장하므로 코드 줄만 본다.
     const code = fn
       .split('\n')
       .filter((l: string) => !/^\s*(\/\/|\*)/.test(l))
       .join('\n');
-    expect(code).not.toContain('tabStackNavigations.DETAIL');
+    expect(code).toContain('tabStackNavigations.DETAIL');
   });
 
   it('라우트 이름 상수가 실제 값과 같다', () => {
@@ -201,7 +202,7 @@ describe('★★리스너는 포커스된 탭에서만 반영한다', () => {
 describe('케이스별 — 탭바가 보여야 하는가', () => {
   const cases: [string, string, boolean][] = [
     ['홈(탭 루트)', ROUTES.ROOT, true],
-    ['상품 상세', ROUTES.DETAIL, true], // ★숨기지 않는다(CTA 가 위로 얹힘)
+    ['상품 상세', ROUTES.DETAIL, false], // 찜·구매 CTA 만 남는다(2026-10-01)
     ['댓글', ROUTES.COMMENTS, false],
     ['검색', ROUTES.SEARCH, false],
     ['더보기 목록', ROUTES.CURATION, false],
@@ -217,10 +218,10 @@ describe('★왕복 시나리오 — 이전 상태가 남지 않는가', () => {
   /** 라우트 스택을 순서대로 밟으며 매 시점의 탭바 상태를 기록한다. */
   const walk = (routes: string[]) => routes.map(r => !hidesTabBar(r));
 
-  it('홈 → 상세 → 홈 (상세에서도 보인다)', () => {
+  it('홈 → 상세 → 홈 (상세에선 숨고 돌아오면 다시 보인다)', () => {
     expect(walk([ROUTES.ROOT, ROUTES.DETAIL, ROUTES.ROOT])).toEqual([
       true,
-      true,
+      false,
       true,
     ]);
   });
@@ -229,10 +230,10 @@ describe('★왕복 시나리오 — 이전 상태가 남지 않는가', () => {
    * 알림 탭(2026-08-20 네이티브 전환). 나가는 경로는 상세와 키워드 웹뷰 둘뿐.
    * 키워드는 web 페이지라 WEBVIEW 로 쌓이고 탭바를 숨긴다.
    */
-  it('알림 → 상세 → 알림 (상세에서도 보인다)', () => {
+  it('알림 → 상세 → 알림 (상세에선 숨는다)', () => {
     expect(walk([ROUTES.ROOT, ROUTES.DETAIL, ROUTES.ROOT])).toEqual([
       true,
-      true,
+      false,
       true,
     ]);
   });
@@ -254,7 +255,7 @@ describe('★왕복 시나리오 — 이전 상태가 남지 않는가', () => {
         ROUTES.DETAIL,
         ROUTES.ROOT,
       ]),
-    ).toEqual([true, true, false, true, true]);
+    ).toEqual([true, false, false, false, true]);
   });
 
   it('홈 → 더보기 → 상세 → 더보기 → 홈', () => {
@@ -266,7 +267,7 @@ describe('★왕복 시나리오 — 이전 상태가 남지 않는가', () => {
         ROUTES.CURATION,
         ROUTES.ROOT,
       ]),
-    ).toEqual([true, false, true, false, true]);
+    ).toEqual([true, false, false, false, true]);
   });
 
   it('★탭 왕복 — 홈 → 상세 → 홈 → 상세 → 홈 (10회)', () => {
@@ -275,16 +276,15 @@ describe('★왕복 시나리오 — 이전 상태가 남지 않는가', () => {
     for (let i = 0; i < 10; i++) seq.push(ROUTES.ROOT, ROUTES.DETAIL);
     seq.push(ROUTES.ROOT);
 
-    // 상세도 이제 보이므로 전 구간 true 여야 한다.
-    expect(walk(seq).every(Boolean)).toBe(true);
+    // 홈에선 매번 보이고 상세에선 매번 숨는다 — 왕복을 반복해도 어긋나지 않는다.
+    expect(walk(seq)).toEqual(seq.map(r => r === ROUTES.ROOT));
   });
 
-  it('상세 → 댓글 → 상세 (댓글만 숨긴다)', () => {
-    // 댓글은 하단 입력창이 탭바를 덮으므로 계속 숨긴다.
+  it('상세 → 댓글 → 상세 (둘 다 숨긴다)', () => {
     expect(walk([ROUTES.DETAIL, ROUTES.COMMENTS, ROUTES.DETAIL])).toEqual([
-      true,
       false,
-      true,
+      false,
+      false,
     ]);
   });
 

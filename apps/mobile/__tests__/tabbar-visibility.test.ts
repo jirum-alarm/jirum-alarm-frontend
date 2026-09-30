@@ -111,15 +111,13 @@ describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', (
     expect(code).not.toContain('useSyncExternalStore');
   });
 
-  it('★★탭바를 숨기지 않는 화면만 상쇄 패딩을 쓰지 않는다', () => {
-    // 상세는 탭바를 **숨기지 않으므로**(2026-08-17 사용자 지시) clip 이 0 이다
-    // → 상쇄할 것이 없다. BottomCTA 가 탭바 높이를 직접 비운다.
-    expect(read('src/screens/detail/ProductDetailScreen.tsx')).not.toContain(
-      'useHiddenTabBarClipPadding',
-    );
-    expect(read('src/screens/detail/ui/BottomCTA.tsx')).toContain(
-      'getReservedBottomPx(insets.bottom)',
-    );
+  it('★★상세는 탭바를 숨기므로 CTA 가 safe area + clip 상쇄만 비운다', () => {
+    // 2026-10-01 지시로 상세도 탭바를 숨긴다. 탭바 높이(getReservedBottomPx)를
+    // 계속 비우면 CTA 아래에 빈 띠가 남는다.
+    const cta = read('src/screens/detail/ui/BottomCTA.tsx');
+    expect(cta).toContain('useHiddenTabBarClipPadding');
+    expect(cta).toContain('Math.max(insets.bottom, 12) + bottomClip');
+    expect(cta).not.toContain('getReservedBottomPx');
   });
 
   it('★★탭바를 숨기는 화면의 하단 고정 UI 는 반드시 상쇄한다', () => {
@@ -147,7 +145,7 @@ describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', (
     // 한쪽만 탭바를 숨기면 같은 상세인데 진입 경로에 따라 하단이 달라진다
     // (사용자 지적: "웹뷰에서 갔을 때랑 홈에서 갔을 때가 다르다").
     const fallback = read('src/screens/detail/ProductDetailWebViewScreen.tsx');
-    expect(fallback).toContain('hideTabBar={false}');
+    expect(fallback).toMatch(/\bhideTabBar\s*\n/);
     // 웹 자체 하단바는 항상 숨긴다 — 네이티브 탭바와 두 겹이 된다
     expect(fallback).toMatch(/hideWebNav\s*\n/);
   });

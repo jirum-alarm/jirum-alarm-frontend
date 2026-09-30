@@ -185,13 +185,13 @@ describe('알림 탭이 여는 화면들 — 탭 구조를 벗어나지 않나',
     expect(alarm).not.toContain('mainNavigations');
   });
 
-  it('WEBVIEW 는 탭바를 숨기고 DETAIL 은 보인다(현행 정책)', () => {
+  it('WEBVIEW 도 DETAIL 도 탭바를 숨긴다(2026-10-01 정책)', () => {
     const rule = navigator.slice(
       navigator.indexOf('function hidesTabBar'),
       navigator.indexOf('function hidesTabBar') + 600,
     );
     expect(rule).toContain('tabStackNavigations.WEBVIEW');
-    expect(rule).not.toMatch(/routeName === tabStackNavigations\.DETAIL/);
+    expect(rule).toMatch(/routeName === tabStackNavigations\.DETAIL/);
   });
 });
 
