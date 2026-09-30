@@ -1,5 +1,3 @@
-import {Platform} from 'react-native';
-
 import {
   buildCaption,
   buildIntentUrl,
@@ -7,7 +5,9 @@ import {
   buildProductShareUrl,
   buildShareMessage,
   buildShareUrl,
+  fetchKakaoScrap,
   KAKAO_NATIVE_APP_KEY,
+  type KakaoScrap,
 } from '../src/shared/lib/share';
 
 declare const __dirname: string;
@@ -90,7 +90,7 @@ describe('buildIntentUrl', () => {
 });
 
 describe('kakao native schemes', () => {
-  it('★Android 도 kakaolink scrap 으로 보낸다 — intent: 문자열은 RN openURL 이 못 연다', () => {
+  it('★Android 도 kakaolink 로 보낸다 — intent: 문자열은 RN openURL 이 못 연다', () => {
     // RN Android Linking.openURL = Intent(ACTION_VIEW, Uri.parse(url)). `intent:#Intent;...`
     // 를 파싱하지 않아 받을 앱이 없다(예전 Android 경로가 토스트로만 떨어진 원인).
     const fs = require('fs');
@@ -99,35 +99,56 @@ describe('kakao native schemes', () => {
       path.join(__dirname, '../src/screens/detail/ui/ShareSheet.tsx'),
       'utf8',
     );
-    expect(sheet).toContain('await Linking.openURL(buildKakaoLinkUrl({url}))');
-    // 주석엔 이유 설명으로 남아 있으므로 빌더 이름으로 본다.
+    expect(sheet).toContain(
+      'await Linking.openURL(buildKakaoLinkUrl(await fetchKakaoScrap(url)))',
+    );
     expect(sheet).not.toContain('buildKakaoAndroidSendIntent');
     expect(sheet).not.toContain("Platform.OS === 'android'");
   });
 
-  it('kakaolink 는 앱키와 request_url 을 담는다 (scrap)', () => {
-    Object.defineProperty(Platform, 'OS', {value: 'ios'});
-    const out = buildKakaoLinkUrl({
-      url: 'https://jirum-alarm.com/products/1',
-    });
-    expect(out.startsWith('kakaolink://send?')).toBe(true);
-    expect(queryParam(out, 'appkey')).toBe(KAKAO_NATIVE_APP_KEY);
-    expect(queryParam(out, 'request_url')).toBe(
-      'https://jirum-alarm.com/products/1',
-    );
-  });
+  const scrap: KakaoScrap = {
+    template_id: 3138,
+    template_args: {'${SCRAP_TITLE}': '브리타 필터 | 지름알림'},
+    template_msg: {P: {TP: 'Feed'}, C: {BUL: []}},
+  };
 
   /**
-   * 🔴 회귀 가드: template_json 에 손으로 만든 카드를 실어 보내면 카톡이
-   * "core parameter(s) missing" 으로 거부한다(실제 사고). kakaolink 규격에
-   * template_json 이라는 파라미터는 없다.
+   * 🔴 회귀 가드 — 두 번 틀린 자리. kakaolink 는 scrap API 가 검증한 카드를
+   * template_json·template_args·template_id 로 받는다(카카오 JS SDK 2.7.7 KakaoLink).
+   * request_url 은 scrap API 의 파라미터라 kakaolink 에 실으면 카톡이 무시한다.
    */
-  it('template_json 을 쓰지 않는다 — 카톡이 거부하는 파라미터', () => {
-    const out = buildKakaoLinkUrl({
-      url: 'https://jirum-alarm.com/products/1',
+  it('scrap 응답을 template_json·template_args·template_id 로 싣는다', () => {
+    const out = buildKakaoLinkUrl(scrap);
+    expect(out.startsWith('kakaolink://send?')).toBe(true);
+    expect(queryParam(out, 'appkey')).toBe(KAKAO_NATIVE_APP_KEY);
+    expect(queryParam(out, 'linkver')).toBe('4.0');
+    expect(JSON.parse(queryParam(out, 'template_json')!)).toEqual(
+      scrap.template_msg,
+    );
+    expect(JSON.parse(queryParam(out, 'template_args')!)).toEqual(
+      scrap.template_args,
+    );
+    expect(queryParam(out, 'template_id')).toBe('3138');
+    expect(queryParam(out, 'request_url')).toBeNull();
+  });
+
+  it('scrap API 가 거부하면 던진다 — 빈 카드로 카톡을 열지 않는다', async () => {
+    const fetchMock = jest.fn().mockResolvedValue({
+      ok: false,
+      status: 401,
+      json: async () => ({msg: 'mismatched!', code: -401}),
     });
-    expect(out).not.toContain('template_json');
-    // 카드를 손조립하지 않으므로 템플릿 본문도 실리지 않는다.
-    expect(decodeURIComponent(out)).not.toContain('object_type');
+    (globalThis as {fetch: unknown}).fetch = fetchMock;
+    await expect(
+      fetchKakaoScrap('https://jirum-alarm.com/products/1'),
+    ).rejects.toThrow('mismatched!');
+    const [calledUrl, init] = fetchMock.mock.calls[0] as [
+      string,
+      {headers: Record<string, string>},
+    ];
+    expect(queryParam(calledUrl, 'request_url')).toBe(
+      'https://jirum-alarm.com/products/1',
+    );
+    expect(init.headers.Authorization).toBe(`KakaoAK ${KAKAO_NATIVE_APP_KEY}`);
   });
 });

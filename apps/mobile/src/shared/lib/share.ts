@@ -1,5 +1,3 @@
-import {Platform} from 'react-native';
-
 import {SERVICE_URL} from '@/constants/env';
 
 export type ShareChannel = 'kakao' | 'x' | 'threads' | 'copy' | 'native';
@@ -73,32 +71,67 @@ export const buildIntentUrl = (
 };
 
 /**
- * 카톡 공유(iOS·Android 공통). iOS 는 kakaolink:// 가 로그인 SDK 로 Info.plist 에
- * 이미 등록돼 있고, Android 는 카톡이 ACTION_VIEW 로 이 스킴을 받는다
- * (`<queries>` 에 com.kakao.talk 이 있어 패키지 가시성도 된다).
+ * 카톡 공유(iOS·Android 공통) — 카카오 JS SDK `Share.sendScrap` 과 같은 2단계.
  *
- * ★ scrap 방식 = 카톡이 requestUrl 의 OG 태그를 직접 긁어 카드를 만든다.
- * 상세 페이지엔 og:title/description/image 가 상품별로 완비돼 있으므로
- * (web 의 generateMetadata) 카드 규격을 앱에서 손으로 조립하지 않는다.
- * web ShareSheet 이 쓰는 `Kakao.Share.sendScrap({requestUrl})` 과 같은 방식.
+ * 1) scrap API 가 requestUrl 의 OG 를 긁어 **검증된 카드**(template_msg)를 돌려준다.
+ * 2) 그 응답을 `template_json`·`template_args`·`template_id` 로 `kakaolink://send` 에 싣는다.
  *
- * 🔴 이전 구현은 `template_json` 파라미터에 손으로 만든 카드를 실어 보냈고
- * 카톡이 "core parameter(s) missing" 으로 거부했다. kakaolink 규격의 파라미터는
- * `template_json` 이 아니라 아래 세 조합 중 하나다:
- *   - scrap:   template_id 없이 `request_url` (OG 스크랩)
- *   - custom:  `template_id` (+ `template_args`) — 카카오 콘솔에 등록한 템플릿
- *   - default: `template_object` — 카드를 직접 조립
- * 손조립(default)은 규격이 바뀌면 조용히 깨지고 OG 와 이중관리가 되므로 scrap 을 쓴다.
+ * 🔴 두 번 틀렸던 자리. ① 손으로 만든 카드를 template_json 에 실음 → 카톡이
+ * "core parameter(s) missing" (검증 안 된 카드라서지 이름이 틀려서가 아니다).
+ * ② 그래서 `request_url` 을 kakaolink 에 바로 실음 → 이건 1) API 의 파라미터라
+ * 카톡은 받지 않는다. 정본 = SDK 2.7.7 `KakaoLink` 클래스(appkey·appver·linkver·
+ * extras·template_json·template_args·template_id).
  */
-export const buildKakaoLinkUrl = ({url}: {url: string}): string => {
-  const extras = JSON.stringify({
-    ka: `sdk/2.7.0 os/${Platform.OS} lang/ko-KR device/phone`,
-  });
+const KAKAO_SCRAP_API =
+  'https://kapi.kakao.com/v2/api/kakaolink/talk/template/scrap';
 
-  return (
-    `kakaolink://send?appkey=${KAKAO_NATIVE_APP_KEY}` +
-    `&appver=1.0.0&apiver=10.0&linkver=4.0` +
-    `&request_url=${encodeURIComponent(url)}` +
-    `&extras=${encodeURIComponent(extras)}`
+// ponytail: 검증 호출은 두 플랫폼 모두 카카오 콘솔에 등록된 iOS 번들 ID 로 한다.
+// Android 는 origin 에 서명 키 해시가 필요한데 JS 에서 구할 수 없다. 카카오가 플랫폼
+// 일치를 강제하면 콘솔의 Android 키 해시를 받아 os/android origin/<해시> 로 나눌 것.
+const KAKAO_AGENT =
+  'sdk/2.20.0 os/ios lang/ko-KR origin/com.jirum-alarm.jirumalarm';
+
+export type KakaoScrap = {
+  template_id: number;
+  template_args?: Record<string, string>;
+  template_msg: unknown;
+};
+
+export const fetchKakaoScrap = async (url: string): Promise<KakaoScrap> => {
+  const res = await fetch(
+    `${KAKAO_SCRAP_API}?link_ver=4.0&request_url=${encodeURIComponent(url)}`,
+    {
+      headers: {
+        Authorization: `KakaoAK ${KAKAO_NATIVE_APP_KEY}`,
+        KA: KAKAO_AGENT,
+      },
+    },
   );
+  const body = await res.json();
+  if (!res.ok || !body?.template_msg) {
+    throw new Error(`kakao scrap ${res.status}: ${body?.msg ?? ''}`);
+  }
+  return body;
+};
+
+export const buildKakaoLinkUrl = (scrap: KakaoScrap): string => {
+  const params: Record<string, unknown> = {
+    appkey: KAKAO_NATIVE_APP_KEY,
+    appver: '1.0',
+    linkver: '4.0',
+    extras: {KA: KAKAO_AGENT},
+    template_json: scrap.template_msg,
+    template_args: scrap.template_args,
+    template_id: scrap.template_id,
+  };
+  const query = Object.entries(params)
+    .filter(([, v]) => v !== undefined)
+    .map(
+      ([k, v]) =>
+        `${k}=${encodeURIComponent(
+          typeof v === 'object' ? JSON.stringify(v) : String(v),
+        )}`,
+    )
+    .join('&');
+  return `kakaolink://send?${query}`;
 };

@@ -33,6 +33,7 @@ import {
   buildProductShareUrl,
   buildShareMessage,
   buildShareUrl,
+  fetchKakaoScrap,
   type ShareChannel,
 } from '@/shared/lib/share';
 
@@ -155,14 +156,10 @@ export default function ShareSheet({
 
     try {
       if (channel === 'kakao') {
-        // 카드는 카톡이 공유 URL 의 OG 를 긁어 만든다(scrap). **두 플랫폼 공통.**
-        // ★Android 도 같은 kakaolink:// 로 보낸다. 예전 Android 경로는
-        // `intent:#Intent;action=SEND;...` 문자열을 Linking.openURL 에 넘겼는데,
-        // RN Android 의 openURL 은 `Intent(ACTION_VIEW, Uri.parse(url))` 로만 열어
-        // `intent:` 를 **파싱하지 않는다** — 받을 앱이 없어 예외 → "카톡을 열지 못했어요"
-        // 토스트로 떨어졌다(카드는커녕 텍스트도 안 갔다). kakaolink://send 는 카톡이
-        // ACTION_VIEW 로 받는 스킴이다(카카오 JS SDK 도 Android 에서 이 스킴 intent 로 보낸다).
-        await Linking.openURL(buildKakaoLinkUrl({url}));
+        // 카드는 scrap API 가 공유 URL 의 OG 로 만든다(web sendScrap 과 같은 카드). **두 플랫폼 공통.**
+        // ★Android 도 kakaolink:// 로 보낸다 — `intent:#Intent;...` 는 RN Android openURL
+        // (ACTION_VIEW) 이 파싱하지 않아 받을 앱이 없다(예전 Android 경로가 토스트로만 떨어진 원인).
+        await Linking.openURL(buildKakaoLinkUrl(await fetchKakaoScrap(url)));
       } else if (channel === 'x' || channel === 'threads') {
         await openInAppBrowser(buildIntentUrl(channel, caption, url));
       } else if (channel === 'copy') {
