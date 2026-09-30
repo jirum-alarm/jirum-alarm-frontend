@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {Animated, Image, Platform, StyleSheet, View} from 'react-native';
+import {Animated, Image, StyleSheet, View} from 'react-native';
 import {
   createBottomTabNavigator,
   BottomTabBar,
@@ -38,6 +38,7 @@ import {
 import {
   GLASS_BOTTOM_GAP,
   TAB_BAR_HEIGHT,
+  isIos26SystemTabBar,
 } from '@/navigations/tab/tab-bar-metrics';
 import {useTabBarVisibility} from '@/shared/hooks/useTabBarVisibility';
 import {TAB_BAR_BACKGROUND_COLOR, TAB_BAR_BORDER_COLOR} from './native-headers';
@@ -56,13 +57,6 @@ export type MainTabParamList = {
   [tabNavigations.ALARM]: undefined;
   [tabNavigations.MYPAGE]: undefined;
 };
-
-/** iOS 26 시스템 UITabBar(리퀴드 글라스). 그 아래는 JS 탭바. */
-function isIos26SystemTabBar(): boolean {
-  return (
-    Platform.OS === 'ios' && Number.parseFloat(String(Platform.Version)) >= 26
-  );
-}
 
 const JsTab = createBottomTabNavigator<MainTabParamList>();
 const NativeTab = createNativeBottomTabNavigator<MainTabParamList>();

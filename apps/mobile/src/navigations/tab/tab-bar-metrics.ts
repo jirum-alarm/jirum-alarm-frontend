@@ -1,5 +1,4 @@
 import {Platform} from 'react-native';
-import {isLiquidGlassAvailable} from 'expo-glass-effect';
 
 /**
  * 탭바 치수. MainTabNavigator 에서 떼어낸 이유는 순환 참조 때문이다.
@@ -17,10 +16,22 @@ export const JS_TAB_BAR_FALLBACK_INSET = 8;
 /** iOS 시스템 UITabBar 콘텐츠 높이 (home indicator 제외). */
 export const SYSTEM_TAB_BAR_HEIGHT = 49;
 
-/** iOS 26 시스템 UITabBar (리퀴드 글라스 오버레이). */
+/**
+ * iOS 26 시스템 UITabBar(리퀴드 글라스)를 쓰나 — ★지금은 안 쓴다(2026-09-30).
+ *
+ * 떠 있는 유리 탭바는 appearance 의 배경색(TAB_BAR_BACKGROUND_COLOR)을 무시해 투명하게
+ * 떴고, 아이콘이 뒤로 비치는 콘텐츠와 겹쳐 안 읽혔다(사용자 지적). 그래서 모든 플랫폼이
+ * Android 와 같은 흰 JS 탭바를 쓴다. JS 라 OTA 로 나간다.
+ * ponytail: 네이티브 탭바 코드(createNativeBottomTabNavigator·clip)는 되돌릴 때를 위해
+ * 남긴다 — 이 값만 true 로 바꾸면 여백 계산까지 같이 돌아간다(분기가 전부 이 함수를 본다).
+ */
+const USE_IOS26_SYSTEM_TAB_BAR = false;
+
 export function isIos26SystemTabBar(): boolean {
   return (
-    Platform.OS === 'ios' && Number.parseFloat(String(Platform.Version)) >= 26
+    USE_IOS26_SYSTEM_TAB_BAR &&
+    Platform.OS === 'ios' &&
+    Number.parseFloat(String(Platform.Version)) >= 26
   );
 }
 
@@ -48,16 +59,12 @@ function jsTabBarOverlayPx(safeAreaBottom: number): number {
  *
  * JS 탭바(안드로이드·구 iOS)도 absolute 오버레이라 56 + inset 을 비운다.
  * 0 으로 두면 마지막 글·글쓰기 버튼이 탭바 밑으로 들어간다.
- *
- * 커스텀 리퀴드 글라스 캡슐만 높이+바닥 간격+여유를 쓴다.
+
  */
 export function getReservedBottomPx(safeAreaBottom: number): number {
   const bottomGap = safeAreaBottom > 0 ? safeAreaBottom : GLASS_BOTTOM_GAP;
   if (isIos26SystemTabBar()) {
     return SYSTEM_TAB_BAR_HEIGHT + bottomGap;
-  }
-  if (isLiquidGlassAvailable()) {
-    return TAB_BAR_HEIGHT + bottomGap + GLASS_BOTTOM_GAP;
   }
   return jsTabBarOverlayPx(safeAreaBottom);
 }
@@ -70,9 +77,6 @@ export function getReservedBottomPx(safeAreaBottom: number): number {
 export function getFabPaddingPx(safeAreaBottom: number): number {
   if (isIos26SystemTabBar()) {
     return SYSTEM_TAB_BAR_HEIGHT + GLASS_BOTTOM_GAP;
-  }
-  if (isLiquidGlassAvailable()) {
-    return TAB_BAR_HEIGHT + GLASS_BOTTOM_GAP;
   }
   return jsTabBarOverlayPx(safeAreaBottom);
 }

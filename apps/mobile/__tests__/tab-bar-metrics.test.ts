@@ -5,11 +5,8 @@ jest.mock('expo-glass-effect', () => ({
 import {Platform} from 'react-native';
 import {isLiquidGlassAvailable} from 'expo-glass-effect';
 import {
-  GLASS_BOTTOM_GAP,
   JS_TAB_BAR_FALLBACK_INSET,
   JS_TAB_BAR_HEIGHT,
-  SYSTEM_TAB_BAR_HEIGHT,
-  TAB_BAR_HEIGHT,
   buildNativeTabsInjectJs,
   getFabPaddingPx,
   getReservedBottomPx,
@@ -49,35 +46,27 @@ describe('getReservedBottomPx', () => {
     );
   });
 
-  it('iOS 26 시스템 탭바는 콘텐츠 높이 + safe-area 만 비운다 — 커스텀 캡슐 간격을 더하면 FAB 가 뜬다', () => {
-    mockLiquidGlass.mockReturnValue(false);
-    setIosVersion('26.5');
-    expect(getReservedBottomPx(34)).toBe(SYSTEM_TAB_BAR_HEIGHT + 34);
-  });
-
-  it('리퀴드 글라스면 탭바 + safe-area + 띄운 간격', () => {
+  // ★iOS 26 도 JS 탭바다 — 유리 탭바가 배경색을 무시해 투명하게 떠 아이콘이 안 읽혔다.
+  it('iOS 26 도 JS 탭바 여백(56 + safe-area)을 쓴다', () => {
     mockLiquidGlass.mockReturnValue(true);
-    setIosVersion('17.5');
-    expect(getReservedBottomPx(34)).toBe(
-      TAB_BAR_HEIGHT + 34 + GLASS_BOTTOM_GAP,
-    );
+    setIosVersion('26.5');
+    expect(getReservedBottomPx(34)).toBe(JS_TAB_BAR_HEIGHT + 34);
   });
 
-  it('오버레이인데 safe-area 가 0 이면 바닥 간격으로 대체한다', () => {
+  it('iOS 26 에서 safe-area 가 0 이면 JS 탭바처럼 바닥 8px', () => {
     mockLiquidGlass.mockReturnValue(true);
     setIosVersion('26.5');
     expect(getReservedBottomPx(0)).toBe(
-      SYSTEM_TAB_BAR_HEIGHT + GLASS_BOTTOM_GAP,
+      JS_TAB_BAR_HEIGHT + JS_TAB_BAR_FALLBACK_INSET,
     );
   });
 });
 
 describe('getFabPaddingPx', () => {
-  it('iOS 26 은 캡슐 높이만 — safe-area 를 더하면 글쓰기 버튼이 뜬다', () => {
-    mockLiquidGlass.mockReturnValue(false);
+  it('iOS 26 도 JS 탭바 높이만큼', () => {
+    mockLiquidGlass.mockReturnValue(true);
     setIosVersion('26.5');
-    expect(getFabPaddingPx(34)).toBe(SYSTEM_TAB_BAR_HEIGHT + GLASS_BOTTOM_GAP);
-    expect(getFabPaddingPx(34)).toBeLessThan(getReservedBottomPx(34));
+    expect(getFabPaddingPx(34)).toBe(JS_TAB_BAR_HEIGHT + 34);
   });
 
   it('JS 탭바 FAB 도 탭바 높이만큼 — 0 이면 글쓰기 버튼이 탭바와 겹친다', () => {
