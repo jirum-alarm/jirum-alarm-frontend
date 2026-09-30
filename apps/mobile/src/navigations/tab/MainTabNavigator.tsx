@@ -1,8 +1,9 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {Animated, Image, StyleSheet, View} from 'react-native';
+import {Animated, Image, Pressable, StyleSheet, View} from 'react-native';
 import {
   createBottomTabNavigator,
   BottomTabBar,
+  type BottomTabBarButtonProps,
   type BottomTabBarProps,
 } from '@react-navigation/bottom-tabs';
 import {
@@ -225,6 +226,34 @@ function useTabActions() {
   return {onTabPress};
 }
 
+/**
+ * 탭은 손가락이 닿는 순간 바꾼다 — 기본 버튼은 손을 뗄 때 바꿔서 한 박자 늦게 느껴졌다
+ * (사용자 지적 "탭 눌렀을 때 바로 전환"). 탭바는 스크롤 영역이 아니라 스크롤하다 잘못
+ * 눌릴 일이 없다. tabPress 이벤트·재탭 동작은 onPress 를 그대로 부르므로 같다.
+ */
+function InstantTabButton({
+  onPress,
+  onLongPress,
+  style,
+  children,
+  testID,
+  accessibilityLabel,
+  accessibilityState,
+}: BottomTabBarButtonProps) {
+  return (
+    <Pressable
+      onPressIn={onPress}
+      onLongPress={onLongPress}
+      style={style}
+      testID={testID}
+      accessibilityRole="tab"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityState={accessibilityState}>
+      {children}
+    </Pressable>
+  );
+}
+
 function AnimatedTabBar(props: BottomTabBarProps) {
   const tabBarVisible = useTabBarVisibility();
   const insets = useSafeAreaInsets();
@@ -309,6 +338,7 @@ function JsTabNavigator() {
         tabBarActiveTintColor: '#101828',
         tabBarInactiveTintColor: '#667085',
         tabBarLabelStyle: styles.tabBarLabel,
+        tabBarButton: InstantTabButton,
         tabBarStyle: {
           ...styles.tabBar,
           paddingBottom: insets.bottom > 0 ? insets.bottom : 8,

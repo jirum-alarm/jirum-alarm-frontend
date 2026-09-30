@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {SystemBars} from 'react-native-edge-to-edge';
 import {useNavigation} from '@react-navigation/native';
@@ -44,6 +44,7 @@ import ProductDetailWebViewScreen from './ProductDetailWebViewScreen';
 import {parseSourceData} from './model/types';
 import {formatDealAgeNotice} from './lib/price-signals';
 import BottomCTA from './ui/BottomCTA';
+import ProductDetailSkeleton from './ui/ProductDetailSkeleton';
 import ProductInfo from './ui/ProductInfo';
 import AffiliateNotice from './ui/AffiliateNotice';
 import ExpiredProductWarning from './ui/ExpiredProductWarning';
@@ -230,10 +231,10 @@ function NativeDetail({
 
   if (isPending || isGuidesPending || (!hidePrice && isVerdictPending)) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="small" color="#667085" />
+      <>
+        <ProductDetailSkeleton />
         {shareSheet}
-      </View>
+      </>
     );
   }
 
