@@ -105,7 +105,8 @@ export default function ProductCard({
         {/* 제목은 2줄 고정 — 높이를 안 잡으면 아래 가격 줄이 카드마다 어긋난다. */}
         <Text
           className="pt-2 text-sm text-gray-700"
-          style={{height: 40}}
+          // pt-2(8) + 2줄(20×2). HomeCardPrimitives CardTitle 과 같은 값.
+          style={{height: 48}}
           numberOfLines={2}>
           {product.title}
         </Text>
