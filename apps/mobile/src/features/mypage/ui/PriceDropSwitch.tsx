@@ -1,6 +1,7 @@
-import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {Animated, Pressable, StyleSheet} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {tick} from '@/shared/lib/feedback';
 
 /**
  * 키워드 한 줄의 "가격 하락 알림" 스위치. web `PriceDropOnlyToggle`.
@@ -28,9 +29,22 @@ export default function PriceDropSwitch({
    */
   showLabel?: boolean;
 }) {
+  // 노브는 미끄러지고 트랙 색은 번진다 — 예전엔 marginLeft 를 2 → 18 로 바꿔 순간이동했다.
+  const progress = useRef(new Animated.Value(value ? 1 : 0)).current;
+  useEffect(() => {
+    Animated.timing(progress, {
+      toValue: value ? 1 : 0,
+      duration: 160,
+      useNativeDriver: false, // 트랙 배경색 보간 — 색은 네이티브 드라이버가 못 한다(36px 한 칸이라 비용 없음).
+    }).start();
+  }, [value, progress]);
+
   return (
     <Pressable
-      onPress={() => onChange(!value)}
+      onPress={() => {
+        tick();
+        onChange(!value);
+      }}
       disabled={disabled}
       hitSlop={8}
       accessibilityRole="switch"
@@ -43,17 +57,34 @@ export default function PriceDropSwitch({
         <Text className="text-xs text-gray-500">가격 하락 알림</Text>
       ) : null}
       {/* 트랙 — web h-5 w-9 (20x36) */}
-      <View
-        className={
-          value ? 'bg-primary-500 rounded-full' : 'rounded-full bg-gray-300'
-        }
-        style={styles.track}>
+      {/* ★Animated.View 엔 className 을 주지 않는다(NativeWind 가 무시) — 색은 style 로. */}
+      <Animated.View
+        style={[
+          styles.track,
+          {
+            backgroundColor: progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: ['#D0D5DD', '#9EF22E'], // gray-300 → primary-500
+            }),
+          },
+        ]}>
         {/* 노브 — web h-4 w-4 (16px), 켜지면 오른쪽으로 16px */}
-        <View
-          className="rounded-full bg-white"
-          style={value ? styles.knobOn : styles.knobOff}
+        <Animated.View
+          style={[
+            styles.knob,
+            {
+              transform: [
+                {
+                  translateX: progress.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 16],
+                  }),
+                },
+              ],
+            },
+          ]}
         />
-      </View>
+      </Animated.View>
     </Pressable>
   );
 }
@@ -61,8 +92,13 @@ export default function PriceDropSwitch({
 const styles = StyleSheet.create({
   dimmed: {opacity: 0.5},
   /** web h-5 w-9 (20x36) */
-  track: {width: 36, height: 20, justifyContent: 'center'},
-  /** web h-4 w-4 (16px). 켜지면 오른쪽으로 밀린다(translate-x-4 대응). */
-  knobOff: {width: 16, height: 16, marginLeft: 2},
-  knobOn: {width: 16, height: 16, marginLeft: 18},
+  track: {width: 36, height: 20, borderRadius: 999, justifyContent: 'center'},
+  /** web h-4 w-4 (16px). 켜지면 오른쪽으로 16px(translate-x-4 대응). */
+  knob: {
+    width: 16,
+    height: 16,
+    marginLeft: 2,
+    borderRadius: 999,
+    backgroundColor: '#FFFFFF',
+  },
 });

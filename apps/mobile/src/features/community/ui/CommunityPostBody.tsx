@@ -13,6 +13,7 @@ import Thumbnail from '@/shared/components/product/Thumbnail';
 import PostImages from './PostImages';
 import PostStats from './PostStats';
 import {gaps} from './community-styles';
+import {tick} from '@/shared/lib/feedback';
 
 /** 태그 상품 카드 색 — web 이 하드코딩한 값 그대로(토큰이 아니다). */
 const TAG_CARD_BG = '#F3F7FF';
@@ -120,7 +121,10 @@ export default function CommunityPostBody({
           size="md"
         />
         <Pressable
-          onPress={onPressLike}
+          onPress={() => {
+            tick();
+            onPressLike();
+          }}
           accessibilityRole="button"
           accessibilityLabel={`추천 ${post.likeCount ?? 0}`}
           accessibilityState={{selected: !!post.isMyLike}}

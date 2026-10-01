@@ -9,6 +9,11 @@ const VISIBILITY_MS = 2500;
 const VISIBILITY_WITH_ACTION_MS = 4000;
 
 export type ToastAction = {label: string; onPress: () => void};
+type ToastOptions = {
+  action?: ToastAction;
+  /** 누르는 순간 이미 진동을 준 곳(찜)은 끈다 — 응답 뒤 한 번 더 울리면 두 번 떨린다. */
+  haptic?: boolean;
+};
 
 /**
  * 토스트 — 성공·실패를 **모양과 진동으로** 구분한다. 예전엔 전부 같은 회색 말풍선(info)이라
@@ -20,7 +25,7 @@ export type ToastAction = {label: string; onPress: () => void};
 function show(
   type: 'success' | 'error' | 'info' | 'warning',
   message: string,
-  action?: ToastAction,
+  {action, haptic = true}: ToastOptions = {},
 ) {
   Toast.show({
     type,
@@ -30,6 +35,7 @@ function show(
     bottomOffset: TOAST_BOTTOM_OFFSET,
     visibilityTime: action ? VISIBILITY_WITH_ACTION_MS : VISIBILITY_MS,
   });
+  if (!haptic) return;
   if (type === 'success') {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(
       () => {},
@@ -42,8 +48,8 @@ function show(
 }
 
 export const showToast = {
-  success: (message: string, action?: ToastAction) =>
-    show('success', message, action),
+  success: (message: string, options?: ToastOptions) =>
+    show('success', message, options),
   info: (message: string) => show('info', message),
   warning: (message: string) => show('warning', message),
   error: (message: string) => show('error', message),

@@ -1,6 +1,6 @@
 import {patchProductStats} from '@/entities/product/optimistic-stats';
-import React, {useCallback, useState} from 'react';
-import {View} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {Animated, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
@@ -18,6 +18,7 @@ import {openInAppBrowser} from '@/shared/lib/navigation';
 import {cn} from '@/shared/lib/styling';
 
 import PressableScale from '@/shared/components/PressableScale';
+import {useReduceMotion} from '@/shared/hooks/useReduceMotion';
 import {
   usePendingAction,
   useRequireLogin,
@@ -81,7 +82,7 @@ export default function BottomCTA({
       })),
     onSuccess: (_data, next) => {
       invalidate();
-      if (next) showToast.success('찜 목록에 추가되었어요.');
+      if (next) showToast.success('찜 목록에 추가되었어요.', {haptic: false});
     },
     onError: (_err, _next, rollback) => {
       rollback?.();
@@ -161,7 +162,7 @@ export default function BottomCTA({
           accessibilityRole="button"
           accessibilityState={{selected: isWishlisted}}
           accessibilityLabel={isWishlisted ? '찜 해제' : '찜하기'}>
-          <Heart liked={isWishlisted} width={24} height={24} />
+          <HeartPop liked={isWishlisted} />
           <Text
             className={cn(
               'text-[11px]',
@@ -183,5 +184,32 @@ export default function BottomCTA({
         </Button>
       </View>
     </View>
+  );
+}
+
+/**
+ * 찜하면 하트가 한 번 톡 튄다(1 → 1.25 → 1) — 색만 바뀌면 눌렸는지 손끝에 안 남는다.
+ * 해제는 조용히. "동작 줄이기" 사용자에겐 튀지 않는다.
+ */
+function HeartPop({liked}: {liked: boolean}) {
+  const scale = useRef(new Animated.Value(1)).current;
+  const reduceMotion = useReduceMotion();
+  const prev = useRef(liked);
+  useEffect(() => {
+    if (liked && !prev.current && !reduceMotion) {
+      scale.setValue(0.8);
+      Animated.spring(scale, {
+        toValue: 1,
+        friction: 3,
+        tension: 220,
+        useNativeDriver: true,
+      }).start();
+    }
+    prev.current = liked;
+  }, [liked, reduceMotion, scale]);
+  return (
+    <Animated.View style={{transform: [{scale}]}}>
+      <Heart liked={liked} width={24} height={24} />
+    </Animated.View>
   );
 }

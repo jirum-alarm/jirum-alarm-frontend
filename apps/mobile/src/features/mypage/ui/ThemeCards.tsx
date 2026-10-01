@@ -3,6 +3,7 @@ import {Pressable, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import type {ThemeWithKeywords} from '@/shared/api/theme';
+import {tick} from '@/shared/lib/feedback';
 
 /**
  * 알림 묶음 카드 2종. web `ThemeList`(목록) · `MySubscribedThemes`(키워드 화면).
@@ -46,7 +47,10 @@ export function ThemeCard({
           </Text>
         </View>
         <Pressable
-          onPress={onToggleSubscribe}
+          onPress={() => {
+            tick();
+            onToggleSubscribe();
+          }}
           disabled={isPending}
           accessibilityRole="button"
           accessibilityLabel={isSubscribed ? '알림 끄기' : '알림 받기'}

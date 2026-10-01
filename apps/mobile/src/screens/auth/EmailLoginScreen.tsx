@@ -44,7 +44,9 @@ const EmailLoginScreen = () => {
     formState: {isValid},
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
-    mode: 'onChange',
+    // 입력을 마치고(포커스를 떠난 뒤)부터 검사한다 — onChange 면 첫 글자부터 "이메일 형식" 빨간 글씨가
+    // 떴다. 떠난 뒤로는 고칠 때마다 바로 풀린다. 버튼 활성(isValid)은 모드와 무관하게 계속 계산된다.
+    mode: 'onTouched',
   });
 
   const onSubmit = handleSubmit(data => {

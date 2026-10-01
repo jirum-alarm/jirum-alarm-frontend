@@ -92,14 +92,16 @@ export function useKeywordViewModel() {
       const removed = context?.removed;
       if (!removed) return;
       showToast.success(`'${removed.keyword}' 키워드를 삭제했어요.`, {
-        label: '되돌리기',
-        onPress: () => {
-          MyPageService.addKeyword({
-            keyword: removed.keyword,
-            priceDropOnly: removed.priceDropOnly ?? false,
-          })
-            .catch(() => showToast.error('되돌리지 못했어요.'))
-            .finally(() => invalidate());
+        action: {
+          label: '되돌리기',
+          onPress: () => {
+            MyPageService.addKeyword({
+              keyword: removed.keyword,
+              priceDropOnly: removed.priceDropOnly ?? false,
+            })
+              .catch(() => showToast.error('되돌리지 못했어요.'))
+              .finally(() => invalidate());
+          },
         },
       });
     },

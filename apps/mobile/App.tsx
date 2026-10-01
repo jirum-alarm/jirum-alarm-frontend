@@ -1,4 +1,5 @@
 import React from 'react';
+import {Appearance} from 'react-native';
 
 import ReactQueryProvider from './src/provider/ReactQueryProvider.tsx';
 import {NavigationContainer} from '@react-navigation/native';
@@ -23,6 +24,11 @@ import useOtaUpdateOnResume from '@/shared/hooks/useOtaUpdateOnResume.ts';
 
 // init 은 컴포넌트 밖에서 — 렌더 시작 전에 나는 에러도 잡아야 한다.
 initSentry();
+
+// ★다크모드를 지원하기 전까지 라이트로 고정한다. 설정은 automatic 인데 화면은 전부 흰색이라,
+// 다크 기기에선 키보드·알럿·날짜 선택 같은 시스템 UI 만 검게 떠 앱 위에서 따로 놀았다.
+// 다크모드를 만들면 이 한 줄을 지운다(네이티브 설정 automatic 은 그대로라 빌드 없이 된다).
+Appearance.setColorScheme('light');
 
 function App(): React.JSX.Element {
   const webViewRefManager = useWebViewRefManager();

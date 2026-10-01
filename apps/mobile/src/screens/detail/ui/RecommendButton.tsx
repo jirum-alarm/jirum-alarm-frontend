@@ -1,4 +1,4 @@
-import {showToast} from '@/shared/lib/feedback';
+import {showToast, tick} from '@/shared/lib/feedback';
 import {patchProductStats} from '@/entities/product/optimistic-stats';
 import React from 'react';
 import {View} from 'react-native';
@@ -67,6 +67,7 @@ export default function RecommendButton({
 
   const handlePress = () => {
     if (requireLogin(PendingActionType.PRODUCT_LIKE)) return;
+    tick();
     // ★ 해제는 false 가 아니라 null 이다(web 과 동일). false 는 "비추천"이라
     // 별개 의미라, 해제 대신 비추천이 눌린 것으로 기록된다.
     toggle(isRecommended ? null : true);

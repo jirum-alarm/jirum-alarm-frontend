@@ -6,7 +6,10 @@ import {useQuery} from '@tanstack/react-query';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
-import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
+import {
+  KeyboardAvoidingView,
+  useKeyboardState,
+} from 'react-native-keyboard-controller';
 
 import {UserQueries} from '@/entities/user/user.queries';
 import CommunityCommentInput from '@/features/community/ui/CommunityCommentInput';
@@ -49,6 +52,7 @@ type Props = NativeStackScreenProps<
 export default function CommunityPostScreen({route, navigation}: Props) {
   const {postId} = route.params;
   const insets = useSafeAreaInsets();
+  const keyboardVisible = useKeyboardState(state => state.isVisible);
   const bottomClip = useHiddenTabBarClipPadding();
   const [menuOpen, setMenuOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -222,7 +226,14 @@ export default function CommunityPostScreen({route, navigation}: Props) {
           마지막 1px 만 보였다 — 사용자 지적 2회). 내정보 하위 화면 11개는
           이미 같은 훅으로 되돌리고 있다.
         */}
-        <View style={{paddingBottom: Math.max(insets.bottom, 4) + bottomClip}}>
+        {/* 키보드가 떠 있으면 홈 인디케이터·clip 여백은 키보드 아래로 들어간다 — 그대로 두면
+            입력창이 키보드 위에 그만큼(~34pt+) 떠 보였다. */}
+        <View
+          style={{
+            paddingBottom: keyboardVisible
+              ? 4
+              : Math.max(insets.bottom, 4) + bottomClip,
+          }}>
           <CommunityCommentInput
             onSubmit={(content, clear) =>
               addComment(content, {onSuccess: clear})

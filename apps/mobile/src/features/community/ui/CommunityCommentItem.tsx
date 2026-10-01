@@ -12,6 +12,7 @@ import ConfirmSheet from '@/shared/components/ConfirmSheet';
 import SheetMenuRow from '@/shared/components/SheetMenuRow';
 
 import {gaps} from './community-styles';
+import {tick} from '@/shared/lib/feedback';
 
 const MAX_COMMENT_LENGTH = 300; // web textarea maxLength
 
@@ -116,7 +117,10 @@ export default function CommunityCommentItem({
 
       <View className="flex-row items-center pt-2">
         <Pressable
-          onPress={onLike}
+          onPress={() => {
+            tick();
+            onLike();
+          }}
           accessibilityRole="button"
           accessibilityLabel={`좋아요 ${comment.likeCount ?? 0}`}
           accessibilityState={{selected: !!comment.isMyLike}}

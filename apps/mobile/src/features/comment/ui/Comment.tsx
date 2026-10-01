@@ -23,7 +23,7 @@ import {
 } from '@/entities/comment/editing-comment';
 import {displayTime} from '@/shared/lib/format/price';
 import {cn} from '@/shared/lib/styling';
-import {showToast} from '@/shared/lib/feedback';
+import {showToast, tick} from '@/shared/lib/feedback';
 import BubbleChat from '@/shared/components/icons/bubble_chat';
 import BubbleChatFill from '@/shared/components/icons/bubble_chat_fill';
 import Dots from '@/shared/components/icons/Dots';
@@ -111,6 +111,7 @@ export default function Comment({
       showToast.info('로그인 후 이용해주세요.');
       return;
     }
+    tick();
     likeComment({
       target: UserLikeTarget.Comment,
       targetId: Number(comment.id),
