@@ -153,9 +153,26 @@ pnpm build            # Production build
 ### 4. **Mobile App** (`apps/mobile/`) — 배포 규칙
 **Expo bare RN 앱.** 배포는 두 길이고, 어느 길인지는 사람이 아니라 **네이티브 지문**이 정한다.
 
-- **JS 변경 = 바로 배포.** main push → `mobile-validation`(테스트·타입·린트·지문) 성공 → `mobile-ota` 가
-  production 채널로 `eas update`. 저장소 변수 `MOBILE_AUTO_OTA=true` 일 때만 발행(사고 시 `false` 가 첫 조치).
-  수동: `apps/mobile` 에서 `pnpm ota:publish "메시지"` · 되돌리기 `pnpm ota:rollback`.
+- **JS 변경 = 기동 확인 뒤 OTA.** 테스트·타입·린트·지문이 초록이어도 **실제로 켜 보기 전엔 내지 않는다.**
+  2026-10-01 사고: `5cd32399` 로 낸 OTA 가 실행 즉시 종료 → 직전 그룹 재발행으로 롤백. CI 는 전부 초록이었고,
+  그 OTA 엔 그동안 안 나간 다른 작업 커밋 7개(시작 경로 변경 포함)가 함께 실려 있었다.
+  1. **발행 범위부터 본다.** `eas update:list --branch production --limit 1` 의 마지막 발행 이후
+     `git log <그 커밋>..HEAD -- apps/mobile`. 내 커밋이 아닌 미발행 커밋이 섞였으면 작성자(다른 세션)에게 알리고 같이 확인한다.
+  2. **발행할 커밋 그대로 iOS 시뮬레이터 Release 빌드 → 콜드 스타트 2회 + 홈·바뀐 화면 진입.**
+     `cd apps/mobile/ios && rm -f Pods/.last_build_configuration && pod install && rm -f Pods/.last_build_configuration &&
+     xcodebuild -workspace jirumAlarmMobile.xcworkspace -scheme jirumAlarmMobile -configuration Release -sdk iphonesimulator
+     -destination 'platform=iOS Simulator,name=iPhone 15' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build`
+     → `xcrun simctl install booted build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app` → `xcrun simctl launch`.
+     (Firebase plist 는 git 에 없다 — 로컬 사본을 `ios/GoogleService-Info.plist` 에. 안드로이드 전용 코드가 바뀌었으면 에뮬레이터 release 도.)
+     - 함정: `Pods/.last_build_configuration` 이 남아 있으면 Debug Hermes 가 링크돼 `initializeRuntime` SIGSEGV(debugJavaScript 스택)로
+       죽는다 — 가짜 재현이다. 크래시 리포트는 `/bin/ls -lt ~/Library/Logs/DiagnosticReports`(별칭 ls 는 정렬이 틀린다).
+  3. 통과한 커밋으로 `pnpm ota:publish "메시지"` → 매니페스트를 채널 헤더로 curl 해 새 update id 확인 → 내 기기에서 **두 번** 켜 본다
+     (OTA 는 두 번째 실행에 적용된다).
+  4. 이상하면 즉시 되돌린다. `pnpm ota:rollback` 은 대화형이라 에이전트가 못 쓴다 →
+     `eas update:list --branch production --json` 에서 직전 정상 group 을 찾아
+     `eas update:republish --group <id> --branch production --non-interactive --message "ROLLBACK: …"`.
+  - **자동 OTA(`mobile-ota`, `MOBILE_AUTO_OTA`)는 위 2번(기동 확인)이 CI 에 들어가기 전까지 켜지 않는다.** 켜면 main push 마다
+    1번·2번을 건너뛰고 나간다.
 - **네이티브 변경 = 버전 올림 + 스토어 빌드.** `ios/`·`android/`·네이티브 패키지(예: expo-image)·`app.json`
   플러그인이 바뀌면 **같은 커밋에서** 버전·runtimeVersion 을 올리고(app.json·Expo.plist·strings.xml 등 —
   `ota-updates-config` 테스트가 정렬을 본다) `pnpm --filter mobile native:write` 로 지문 기준을 새로 찍는다.
@@ -165,7 +182,7 @@ pnpm build            # Production build
 - **업데이트 안내 = `apps/web/public/app-release.json`**(웹 운영 배포로 발효, 플랫폼별 값).
   - `latestVersion`(권유): 새 스토어 버전이 **출시된 뒤** 그 플랫폼만 올린다 → 버전당 한 번 "새 버전이 나왔어요" 시트.
   - `minSupportedVersion`(강제): **옛 버전이 실제로 깨질 때만**(API 변경·보안). 평소엔 올리지 않는다 — 막는 화면은 나쁜 경험.
-- 완료 보고는 길을 나눠 적는다: JS 는 「OTA 발행됨/대기」, 네이티브는 「다음 스토어 빌드(1.x.y)에 포함」.
+- 완료 보고는 길을 나눠 적는다: JS 는 「OTA 발행됨(기동 확인: 시뮬레이터 Release 콜드 스타트 2회)/대기」, 네이티브는 「다음 스토어 빌드(1.x.y)에 포함」.
 - "배포됐나"는 스토어 실물 버전으로 판정한다(`app-store-lag` 워크플로) — EAS submit 성공 ≠ 출시.
 
 ## 📦 Shared Packages
