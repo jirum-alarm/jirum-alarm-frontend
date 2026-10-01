@@ -347,8 +347,9 @@ describe('레포 함정 — 같은 버그를 다시 만들지 않기', () => {
    */
   it('한 장짜리 첨부는 비율을 실측해서 그린다(잘림 방지)', () => {
     const postImages = read('src/features/community/ui/PostImages.tsx');
-    expect(postImages).toMatch(/Image\.getSize\(/);
-    expect(postImages).toMatch(/resizeMode="contain"/);
+    // 실측은 로드 결과(expo-image onLoad 의 원본 크기)로 한다 — getSize 는 같은 이미지를 두 번 받았다.
+    expect(postImages).toMatch(/onLoad=\{e => \{[\s\S]*?e\.source/);
+    expect(postImages).toMatch(/contentFit="contain"/);
   });
 
   /** 앱에서 도달 불가한 web 분기를 옮기면 영원히 안 뜨는 코드가 된다. */

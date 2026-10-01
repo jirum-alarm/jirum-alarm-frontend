@@ -43,6 +43,17 @@
         "credentialsSource": "remote"
       }
     },
+    "sim-check": {
+      "extends": "production",
+      "channel": "sim-check",
+      "environment": "production",
+      "autoIncrement": false,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true,
+        "scheme": "jirumAlarmMobile"
+      }
+    },
     "production": {
       "autoIncrement": true,
       "channel": "production",

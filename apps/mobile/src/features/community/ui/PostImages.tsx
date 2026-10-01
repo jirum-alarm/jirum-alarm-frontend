@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {Image} from 'expo-image';
 
 import {convertToWebp} from '@/shared/lib/format/image';
 
@@ -10,8 +11,8 @@ import {convertToWebp} from '@/shared/lib/format/image';
  * (`:::jirum-images` 블록) 서버 응답으로는 비율을 알 수 없다. 그래서 고정 비율
  * 박스에 `cover` 로 넣으면 세로 스크린샷이 반드시 잘린다.
  *
- * 처방: 한 장이면 `Image.getSize` 로 **실측**해서 그 비율로 그린다(RN 에는
- * CSS `height:auto` 가 없다 — 비율을 알아야 높이를 정할 수 있다).
+ * 처방: 한 장이면 **로드된 이미지에서** 원본 크기를 읽어(expo-image onLoad) 그 비율로 그린다
+ * (RN 에는 CSS `height:auto` 가 없다). 예전 `Image.getSize` 는 같은 이미지를 한 번 더 받았다.
  * 여러 장은 web 과 같이 정사각 그리드 + `contain` 이라 잘리지 않는다
  * (대신 위아래에 회색 여백이 남는다 — 잘리는 것보다 낫다는 web 의 판단을 따른다).
  *
@@ -26,32 +27,8 @@ const MAX_ASPECT_RATIO = 2.5;
 /** 실측이 오기 전 자리. */
 const PLACEHOLDER_ASPECT_RATIO = 4 / 3;
 
-function useMeasuredAspectRatio(uri?: string) {
-  const [ratio, setRatio] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (!uri) return;
-    let alive = true;
-    setRatio(null);
-    Image.getSize(
-      uri,
-      (width, height) => {
-        if (!alive || !width || !height) return;
-        setRatio(width / height);
-      },
-      // 실패하면 자리값 그대로 둔다 — 여기서 던지면 상세가 통째로 죽는다.
-      () => {},
-    );
-    return () => {
-      alive = false;
-    };
-  }, [uri]);
-
-  return ratio;
-}
-
 function SingleImage({uri}: {uri: string}) {
-  const measured = useMeasuredAspectRatio(uri);
+  const [measured, setMeasured] = useState<number | null>(null);
   const clamped =
     measured == null
       ? PLACEHOLDER_ASPECT_RATIO
@@ -63,10 +40,16 @@ function SingleImage({uri}: {uri: string}) {
       style={{aspectRatio: clamped}}>
       <Image
         source={{uri}}
-        className="h-full w-full"
+        style={styles.fill}
         // 실측 비율이면 contain 이 잘림 없이 꽉 찬다. 위 clamp 에 걸린
         // 극단적 비율에서만 회색 여백이 남는다.
-        resizeMode="contain"
+        contentFit="contain"
+        cachePolicy="memory-disk"
+        transition={120}
+        onLoad={e => {
+          const {width, height} = e.source;
+          if (width && height) setMeasured(width / height);
+        }}
         accessibilityIgnoresInvertColors
         accessibilityLabel="게시글 이미지"
       />
@@ -77,8 +60,8 @@ function SingleImage({uri}: {uri: string}) {
 export default function PostImages({images}: {images: string[]}) {
   // ★CDN 은 webp 만 갖고 있고 마커는 원본 확장자(.jpg/.png)를 준다 → 그대로
   // 쓰면 403 이 와서 첨부가 통째로 안 보인다(실측: 최근 글의 cdn URL 26/29 가
-  // 403, 같은 경로의 .webp 는 전부 200). `Image.getSize` 도 같은 URL 을 재야
-  // 비율이 나오므로 여기서 한 번에 바꾼다.
+  // 403, 같은 경로의 .webp 는 전부 200). 비율도 그 URL 의
+  // 로드 결과에서 나오므로 여기서 한 번에 바꾼다.
   const list = images
     .slice(0, MAX_IMAGES)
     .map(uri => convertToWebp(uri) ?? uri);
@@ -100,8 +83,10 @@ export default function PostImages({images}: {images: string[]}) {
           style={styles.gridCell}>
           <Image
             source={{uri}}
-            className="h-full w-full"
-            resizeMode="contain"
+            style={styles.fill}
+            contentFit="contain"
+            cachePolicy="memory-disk"
+            transition={120}
             accessibilityIgnoresInvertColors
             accessibilityLabel={`게시글 이미지 ${index + 1}`}
           />
@@ -112,6 +97,8 @@ export default function PostImages({images}: {images: string[]}) {
 }
 
 const styles = StyleSheet.create({
+  // ★expo-image 는 NativeWind className 을 받지 않는다 — 크기는 style 로.
+  fill: {width: '100%', height: '100%'},
   grid: {gap: 8},
   /** 2열. gap 8 을 빼고 나눈 값(50% 로 두면 한 줄에 하나만 들어간다). */
   gridCell: {width: '48%', aspectRatio: 1},

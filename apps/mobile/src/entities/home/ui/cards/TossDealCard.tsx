@@ -1,5 +1,6 @@
 import React from 'react';
-import {Image, View} from 'react-native';
+import {View} from 'react-native';
+import {Image} from 'expo-image';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
@@ -35,7 +36,10 @@ export default function TossDealCard({
           <Image
             source={{uri: deal.image}}
             style={{width: '100%', height: '100%'}}
-            resizeMode="cover"
+            contentFit="cover"
+            cachePolicy="memory-disk"
+            transition={120}
+            recyclingKey={deal.image}
           />
         ) : (
           <NoImage categoryId={null} type="product" />

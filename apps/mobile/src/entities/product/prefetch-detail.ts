@@ -1,4 +1,4 @@
-import {Image} from 'react-native';
+import {Image} from 'expo-image';
 
 import {convertToWebp} from '@/shared/lib/format/image';
 
@@ -28,5 +28,6 @@ export function prefetchProductDetail(
   void queryClient.prefetchQuery(ProductQueries.priceVerdict({id}));
   // 상세 첫 화면을 채우는 건 정사각 대표 이미지다. Thumbnail 과 같은 webp 주소를 데운다.
   const src = convertToWebp(thumbnail) ?? thumbnail;
-  if (src) Image.prefetch(src).catch(() => {});
+  // expo-image 캐시에 데운다 — 상세의 Thumbnail(expo-image)이 같은 캐시를 읽는다(RN Image.prefetch 는 다른 캐시라 헛일이었다).
+  if (src) Image.prefetch(src, 'memory-disk').catch(() => {});
 }

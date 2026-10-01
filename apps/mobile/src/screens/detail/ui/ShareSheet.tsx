@@ -3,7 +3,6 @@ import {
   Animated,
   Clipboard,
   Easing,
-  Image,
   Linking,
   Modal,
   Pressable,
@@ -13,6 +12,7 @@ import {
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import * as Haptics from 'expo-haptics';
+import {Image} from 'expo-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Svg, {Path} from 'react-native-svg';
 
@@ -268,8 +268,10 @@ export default function ShareSheet({
               {imageUrl && !thumbFailed ? (
                 <Image
                   source={{uri: imageUrl}}
-                  className="h-[72px] w-[72px] flex-none rounded-2xl bg-gray-100"
-                  resizeMode="cover"
+                  // ★expo-image 는 className 을 받지 않는다 — 72px 둥근 정사각은 style 로.
+                  style={[styles.thumb, {backgroundColor: c.gray[100]}]}
+                  contentFit="cover"
+                  cachePolicy="memory-disk"
                   accessibilityIgnoresInvertColors
                   onError={() => setThumbFailed(true)}
                 />
@@ -399,6 +401,8 @@ function CheckIcon() {
 }
 
 const styles = StyleSheet.create({
+  // 바탕색은 테마 토큰(c.gray[100])으로 — 다크에서 뒤집힌다.
+  thumb: {width: 72, height: 72, borderRadius: 16},
   sheet: {
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
