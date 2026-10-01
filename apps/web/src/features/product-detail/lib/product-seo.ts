@@ -25,6 +25,12 @@ export function parseNumericPrice(rawPrice?: string | null) {
     return null;
   }
 
+  // 외화 표기는 숫자만 남기면 원화로 둔갑한다 — "$41.00" → 4,100원(2026-10-01 실측, 알리 딜 6%가
+  // 제목 "4,100원 핫딜"·Offer price 4100 KRW 로 나갔다). 환산 근거가 없으니 가격 없음으로 다룬다.
+  if (/\$|\bUSD\b|달러|€|¥|￥/i.test(rawPrice)) {
+    return null;
+  }
+
   const normalized = rawPrice.replace(/[^0-9]/g, '');
 
   if (!normalized) {
@@ -58,6 +64,8 @@ export function summarizePriceHistoryForSeo(
 
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
+  // 같은 값만 반복되면 "최저가 13,800원 · 최고가 13,800원" 이 된다 — 범위가 아니라 정보가 없다.
+  if (minPrice === maxPrice) return null;
   // 이상치 가드: 이력이 현재가와 자릿수가 다르면 다른 상품(액세서리·직구 $)이 섞인 것이다.
   // 2026-09-23 실측: 699,000원 청소기에 "3개월 최저 107원". 모델 페이지의 "다나와가 40% 미만 = 오염"
   // 규칙과 같은 배율로 자른다. 틀린 숫자를 내느니 이력 문구를 생략한다.
@@ -199,6 +207,27 @@ function hasDealIntentWord(title: string): boolean {
   return /핫딜|최저가|특가|할인|쿠폰|무료|무배|파지|공구|이벤트/.test(title);
 }
 
+/** "핫딜" 을 따로 붙일 필요가 없는 제목. `무료`·`무배` 는 배송 표기라 여기선 의도어로 치지 않는다. */
+function hasHotDealWord(title: string): boolean {
+  return /핫딜|최저가|특가|할인|세일|쿠폰|파지|공구|이벤트/.test(title);
+}
+
+/**
+ * 네이버는 제목이 너무 길면 제목 대신 URL 을 찍는다(2026-10-01 실측: 92자·124자 상품 2건).
+ * 커뮤니티 원문은 뒤쪽이 옵션 나열이라 앞 60자 안에서 낱말 경계로 자른다.
+ */
+const TITLE_BASE_MAX = 60;
+
+function clipTitleBase(title: string): string {
+  if (title.length <= TITLE_BASE_MAX) return title;
+  const cut = title.slice(0, TITLE_BASE_MAX);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > TITLE_BASE_MAX * 0.6 ? cut.slice(0, lastSpace) : cut).replace(
+    /[\s,(/|-]+$/,
+    '',
+  );
+}
+
 /**
  * 상품 상세 <title>.
  *
@@ -221,6 +250,7 @@ export function buildProductSeoTitle(
     now?: number;
   } = {},
 ): string {
+  const base = clipTitleBase(displayTitle);
   const alreadyEnded = /판매종료/.test(displayTitle);
   const suffix = isEnd && !alreadyEnded ? ' (판매종료)' : '';
 
@@ -233,25 +263,31 @@ export function buildProductSeoTitle(
       ? ((opts.now ?? Date.now()) - posted.getTime()) / DAY_MS
       : 0;
 
+  const isFresh = !isEnd && !alreadyEnded && ageDays <= STALE_AFTER_DAYS;
   const canAnnotate =
-    !isEnd &&
-    !alreadyEnded &&
-    ageDays <= STALE_AFTER_DAYS &&
+    isFresh &&
     typeof price === 'number' &&
     Number.isFinite(price) &&
     price > 0 &&
-    !hasPriceInTitle(displayTitle) &&
-    !hasDealIntentWord(displayTitle);
+    // 잘린 뒤에 보이는 제목 기준으로 본다 — 잘려 나간 꼬리의 "이벤트"·가격은 검색결과에 안 보인다.
+    !hasPriceInTitle(base) &&
+    !hasDealIntentWord(base);
 
   // "최저가" 는 근거가 있을 때만: 이력이 있고 현재가가 그 최저가 이하일 때.
   // 현재가가 3개월 범위 맨 위인데 "최저가" 라고 붙던 걸 막는다(가젤 94,640원 / 범위 69,036~94,640).
   const isLowest =
     typeof opts.historyMinPrice === 'number' && price != null && price <= opts.historyMinPrice;
+  // 가격을 붙일 수 없어도(원문에 이미 가격이 있음·가격 파싱 실패) 신선한 딜이면 "핫딜" 은 붙인다.
+  // 경쟁 딜 사이트는 제목에 전부 "핫딜" 이 들어가는데(2026-10-01 실측) 우리는 27%가 빠져 있었다 —
+  // 네이버 질의가 "X 핫딜" 꼴이라 낱말 하나가 매칭을 가른다. 30일 넘은 딜은 건드리지 않는다
+  // (옛 딜이 노출당 클릭률이 가장 높다 — 잘 되는 걸 흔들지 않는다).
   const dealHint = canAnnotate
     ? ` ${isLowest ? '최저가 ' : ''}${price.toLocaleString('ko-KR')}원 핫딜`
-    : '';
+    : isFresh && !hasHotDealWord(base)
+      ? ' 핫딜'
+      : '';
 
-  return `${displayTitle}${suffix}${dealHint} | 지름알림`;
+  return `${base}${suffix}${dealHint} | 지름알림`;
 }
 
 const JIRUM_CDN_HOST = 'cdn.jirum-alarm.com';
@@ -279,6 +315,24 @@ type GuideInput =
   | null
   | undefined;
 
+/** KST 날짜 "2026년 9월 22일". 서버(UTC)에서 렌더해도 한국 날짜가 나오게 직접 9시간을 더한다. */
+function formatKstDate(date: Date): string {
+  const kst = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+  return `${kst.getUTCFullYear()}년 ${kst.getUTCMonth() + 1}월 ${kst.getUTCDate()}일`;
+}
+
+/** 다른 문장이 이미 말하는 가이드 항목(쇼핑몰·상품명)은 설명에서 뺀다. */
+const REDUNDANT_GUIDE_TITLES = /^(쇼핑몰|구매처|판매처|제품명|상품명)$/;
+
+/**
+ * 상품 상세 meta description(= JSON-LD description).
+ *
+ * 네이버는 이 값을 검색결과 스니펫으로 그대로 쓴다(2026-10-01 실측). 예전 형식
+ * "쇼핑몰: 지마켓, 가격: 21,190원, 배송: …" 은 쇼핑몰 상품 목록처럼 읽혀, 위쪽 가격비교·스토어 블록과
+ * 구별이 안 됐다. 그래서 "언제 어느 커뮤니티에 올라온 얼마짜리 핫딜인지"를 첫 문장으로 쓴다 —
+ * 날짜·출처는 우리만 줄 수 있는 정보다. 모든 페이지에 똑같이 붙던 꼬리 문구
+ * ("지름알림에서 제공하는 초특가 핫딜 상품!")는 고유성만 깎아서 뺐다.
+ */
 export function generateDescription(
   productGuides: GuideInput,
   product: {
@@ -286,53 +340,50 @@ export function generateDescription(
     categoryName?: string | null;
     price?: string | null;
     mallName?: string | null;
+    postedAt?: string | Date | null;
     provider?: { nameKr?: string | null } | null;
   },
   categoryName?: string,
   priceHistorySeo?: PriceHistorySeoSummary | null,
   commentSummary?: string | null,
 ): string {
-  const historyText = priceHistorySeo ? formatPriceHistorySeoText(priceHistorySeo) : '';
-  const mallName = product.mallName?.trim() || product.provider?.nameKr?.trim() || '';
+  const mallName = product.mallName?.trim() || '';
+  const providerName = product.provider?.nameKr?.trim() || '';
   const numericPrice = parseNumericPrice(product.price);
   const priceText = numericPrice ? `${numericPrice.toLocaleString('ko-KR')}원` : '';
-  const uniqueLead = commentSummary?.trim() || '';
+  const posted = product.postedAt ? new Date(product.postedAt) : null;
+  const dateText = posted && !Number.isNaN(posted.getTime()) ? formatKstDate(posted) : '';
 
-  const guideParts =
+  const where = [dateText, providerName ? `${providerName}에` : ''].filter(Boolean).join(' ');
+  const what = [mallName, priceText].filter(Boolean).join(' ');
+  const resolvedCategoryName = categoryName ?? product.categoryName ?? undefined;
+  const lead =
+    where || what
+      ? `${where ? `${where} 올라온 ` : ''}${what ? `${what} ` : ''}핫딜이에요.`
+      : `${resolvedCategoryName ? `[${resolvedCategoryName}] ` : ''}${product.title} 핫딜이에요.`;
+
+  const guideText =
     productGuides?.productGuides
       ?.filter((g) => g.title?.trim() && g.content?.trim())
-      .map((g) => `${g.title.trim()}: ${g.content.trim().replace(/\s+/g, ' ')}`) ?? [];
+      .filter((g) => !REDUNDANT_GUIDE_TITLES.test(g.title.trim()))
+      .filter((g) => !(priceText && g.title.trim() === '가격'))
+      .map(
+        (g) =>
+          `${g.title.trim()} ${g.content
+            .trim()
+            .replace(/\s+/g, ' ')
+            .replace(/[.\s]+$/, '')}`,
+      )
+      .join(' · ') ?? '';
 
-  let rest = '';
-
-  if (guideParts.length > 0) {
-    const head = [
-      mallName ? `쇼핑몰: ${mallName}` : '',
-      guideParts.some((p) => p.startsWith('가격:')) ? '' : priceText ? `가격: ${priceText}` : '',
-      ...guideParts,
-    ].filter(Boolean);
-
-    rest = historyText ? `${head.join(', ')} | ${historyText}` : head.join(', ');
-  } else {
-    const resolvedCategoryName = categoryName ?? product.categoryName ?? undefined;
-    const categoryText = resolvedCategoryName ? `[${resolvedCategoryName}]` : '';
-
-    const parts = [
-      categoryText,
-      product.title,
-      priceText ? `현재가 ${priceText}` : '',
-      historyText,
-      mallName ? `구매처: ${mallName}` : '',
-    ].filter(Boolean);
-
-    rest =
-      parts.length > 0
-        ? `${parts.join(' | ')} | 지름알림에서 제공하는 초특가 핫딜 상품!`
-        : `${product.title} | 지름알림에서 제공하는 초특가 핫딜 상품!`;
-  }
-
-  if (uniqueLead && rest) return `${uniqueLead} | ${rest}`;
-  return uniqueLead || rest;
+  return [
+    lead,
+    commentSummary?.trim() || '',
+    guideText ? `${guideText}.` : '',
+    priceHistorySeo ? `${formatPriceHistorySeoText(priceHistorySeo)}.` : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 }
 
 export function buildRssItemDescription(product: {

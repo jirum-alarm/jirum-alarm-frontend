@@ -23,6 +23,7 @@ const contactEmail = 'jirumalarm@gmail.com';
 const ogImageUrl = `${METADATA_SERVICE_URL}/opengraph-image.webp`;
 const iconUrl = `${METADATA_SERVICE_URL}/icon.png`;
 const appleTouchIconUrl = `${METADATA_SERVICE_URL}/apple-touch-icon.png`;
+const faviconUrl = `${METADATA_SERVICE_URL}/favicon.ico`;
 const defaultKeywords = [
   '실시간',
   '핫딜',
@@ -87,9 +88,11 @@ export const defaultMetadata: Metadata = {
     description,
     images: ogImageUrl,
   },
-  // icon/shortcut 은 두지 않는다 — 512px icon.png(121KB) 가 파비콘으로 매 페이지 내려갔다(홈은 2회).
-  // src/app/favicon.ico(15KB) 를 Next 가 자동 링크한다. icon.png 는 JSON-LD 로고로만 쓴다.
+  // 512px icon.png(121KB) 는 파비콘으로 쓰지 않는다(매 페이지 내려갔다). icon.png 는 JSON-LD 로고 전용.
+  // 파비콘은 절대경로로 — 네이버 가이드(markup-favicon)는 상대경로·같은 rel 중복을 반영 안 될 수 있다고
+  // 명시한다. 그래서 favicon.ico 를 app/ 자동 링크(상대경로 `/favicon.ico?해시`)에서 public/ 으로 옮겼다.
   icons: {
+    icon: [{ url: faviconUrl, sizes: '48x48', type: 'image/x-icon' }],
     apple: [{ url: appleTouchIconUrl }],
   },
   alternates: {

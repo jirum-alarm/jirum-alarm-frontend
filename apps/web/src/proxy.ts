@@ -38,7 +38,21 @@ const ensureDeviceId = (req: NextRequest, res: NextResponse): void => {
  */
 export const PATHNAME_HEADER = 'x-jirum-pathname';
 
+const WWW_HOST = 'www.jirum-alarm.com';
+const APEX_ORIGIN = 'https://jirum-alarm.com';
+
 export async function proxy(request: NextRequest): Promise<NextResponse> {
+  // www 는 apex 로 영구 이동. 지금은 www 가 200 으로 같은 페이지를 열어(canonical 만 apex) 네이버가
+  // 두 호스트를 중복으로 볼 수 있다. `/.well-known/*` 는 빼야 한다 — 앱 링크가 www 를 등록하고 있고
+  // (apps/mobile AndroidManifest·entitlements) Apple·Android 검증은 리다이렉트를 따라가지 않는다.
+  if (
+    request.headers.get('host') === WWW_HOST &&
+    !request.nextUrl.pathname.startsWith('/.well-known/')
+  ) {
+    const target = new URL(`${request.nextUrl.pathname}${request.nextUrl.search}`, APEX_ORIGIN);
+    return NextResponse.redirect(target, 301);
+  }
+
   // const response = await handlePostHog(request);
 
   // ⚠️ request.headers 자체에 심는다. applySetCookie 가 req.headers 를 원본으로

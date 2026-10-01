@@ -86,7 +86,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
         />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="application-name" content="지름알림" />
         <meta name="author" content="지름알림" />
       </head>

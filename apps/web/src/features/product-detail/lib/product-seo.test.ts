@@ -30,6 +30,12 @@ describe('parseNumericPrice', () => {
     assert.equal(parseNumericPrice(null), null);
     assert.equal(parseNumericPrice('무료'), null);
   });
+
+  it('외화는 원화로 둔갑시키지 않고 null', () => {
+    assert.equal(parseNumericPrice('$41.00'), null);
+    assert.equal(parseNumericPrice('USD 6.85'), null);
+    assert.equal(parseNumericPrice('15.31달러'), null);
+  });
 });
 
 describe('summarizePriceHistoryForSeo / formatPriceHistorySeoText', () => {
@@ -59,6 +65,17 @@ describe('summarizePriceHistoryForSeo / formatPriceHistorySeoText', () => {
     );
   });
 
+  it('같은 값만 반복되면 범위가 아니라서 요약을 안 만든다', () => {
+    assert.equal(
+      summarizePriceHistoryForSeo({
+        points: [{ price: 13800 }, { price: 13800 }, { price: 13800 }],
+        rangeDays: 90,
+        confidence: 'HIGH',
+      }),
+      null,
+    );
+  });
+
   it('LOW 신뢰도는 유사 핫딜가로 완곡 표기한다', () => {
     const summary = summarizePriceHistoryForSeo({
       points: [{ price: 10000 }, { price: 20000 }],
@@ -71,8 +88,8 @@ describe('summarizePriceHistoryForSeo / formatPriceHistorySeoText', () => {
 });
 
 describe('buildProductSeoTitle', () => {
-  it('기본은 상품명 | 지름알림', () => {
-    assert.equal(buildProductSeoTitle('에어팟 프로'), '에어팟 프로 | 지름알림');
+  it('가격을 모르는 신선한 딜엔 "핫딜" 만 붙인다', () => {
+    assert.equal(buildProductSeoTitle('에어팟 프로'), '에어팟 프로 핫딜 | 지름알림');
   });
 
   it('종료 상품은 판매종료를 붙인다', () => {
@@ -110,16 +127,21 @@ describe('buildProductSeoTitle', () => {
       buildProductSeoTitle('나이키 레볼루션8 블랙', false, 45012, { postedAt: '2025-09-30', now }),
       '나이키 레볼루션8 블랙 | 지름알림',
     );
+    // "핫딜" 도 붙이지 않는다 — 옛 딜 제목은 손대지 않는다.
+    assert.equal(
+      buildProductSeoTitle('나이키 레볼루션8 블랙', false, null, { postedAt: '2025-09-30', now }),
+      '나이키 레볼루션8 블랙 | 지름알림',
+    );
     assert.equal(
       buildProductSeoTitle('나이키 레볼루션8 블랙', false, 45012, { postedAt: '2026-09-20', now }),
       '나이키 레볼루션8 블랙 45,012원 핫딜 | 지름알림',
     );
   });
 
-  it('제목에 이미 가격이 있으면 붙이지 않는다', () => {
+  it('제목에 이미 가격이 있으면 가격은 중복하지 않고 "핫딜" 만 붙인다', () => {
     assert.equal(
       buildProductSeoTitle('메가커피 더블따아세트 (2,550원/무료)', false, 2550),
-      '메가커피 더블따아세트 (2,550원/무료) | 지름알림',
+      '메가커피 더블따아세트 (2,550원/무료) 핫딜 | 지름알림',
     );
   });
 
@@ -137,9 +159,26 @@ describe('buildProductSeoTitle', () => {
     );
   });
 
-  it('가격이 없으면(토스 유입 등) 기존과 동일하다', () => {
-    assert.equal(buildProductSeoTitle('에어팟 프로', false, null), '에어팟 프로 | 지름알림');
-    assert.equal(buildProductSeoTitle('에어팟 프로', false, 0), '에어팟 프로 | 지름알림');
+  it('가격이 없으면(토스 유입 등) 가격 없이 "핫딜" 만', () => {
+    assert.equal(buildProductSeoTitle('에어팟 프로', false, null), '에어팟 프로 핫딜 | 지름알림');
+    assert.equal(buildProductSeoTitle('에어팟 프로', false, 0), '에어팟 프로 핫딜 | 지름알림');
+  });
+
+  it('특가·할인 같은 의도어가 이미 있으면 "핫딜" 도 붙이지 않는다', () => {
+    assert.equal(
+      buildProductSeoTitle('[쿠팡] 신라면 특가 (21,190원/무료)', false, 21190),
+      '[쿠팡] 신라면 특가 (21,190원/무료) | 지름알림',
+    );
+  });
+
+  it('60자를 넘는 원문은 낱말 경계에서 잘라 URL 대신 제목이 보이게 한다', () => {
+    const long =
+      '삼성전자 갤럭시 버즈4 프로 SM-R640 노이즈캔슬링 무선 블루투스 이어폰 화이트 블랙 실버 정품 국내 AS 가능 사은품 증정 이벤트';
+    const title = buildProductSeoTitle(long, false, 189000);
+    const base = title.replace(/ 189,000원 핫딜 \| 지름알림$/, '').replace(/ \| 지름알림$/, '');
+    assert.ok(base.length <= 60, base);
+    assert.ok(long.startsWith(base));
+    assert.ok(!/\s$/.test(base));
   });
 });
 
@@ -151,14 +190,54 @@ describe('generateDescription', () => {
     categoryName: '디지털',
   };
 
-  it('댓글 요약을 맨 앞에 둔다', () => {
-    const desc = generateDescription(null, product, '디지털', null, '카드 할인이 핵심이다');
-    assert.match(desc, /^카드 할인이 핵심이다 \|/);
-    assert.match(desc, /현재가 89,000원/);
-    assert.match(desc, /구매처: 쿠팡/);
+  it('첫 문장은 언제·어디에 올라온 얼마짜리 핫딜인지(KST 날짜)', () => {
+    const desc = generateDescription(
+      null,
+      // 9/21 15:30 UTC = 9/22 00:30 KST — 서버가 UTC 여도 한국 날짜가 나와야 한다.
+      { ...product, postedAt: '2026-09-21T15:30:00Z', provider: { nameKr: '뽐뿌' } },
+      '디지털',
+      null,
+      null,
+    );
+    assert.equal(desc, '2026년 9월 22일 뽐뿌에 올라온 쿠팡 89,000원 핫딜이에요.');
   });
 
-  it('가이드가 있으면 키-값으로 붙이고 추이 문장을 뒤에 둔다', () => {
+  it('댓글 요약은 딜 문장 다음에, 템플릿 꼬리 문구는 없다', () => {
+    const desc = generateDescription(null, product, '디지털', null, '카드 할인이 핵심이다');
+    assert.equal(desc, '쿠팡 89,000원 핫딜이에요. 카드 할인이 핵심이다');
+    assert.doesNotMatch(desc, /초특가 핫딜 상품/);
+  });
+
+  it('외화 가격은 원화로 쓰지 않고 가이드의 원래 표기를 남긴다', () => {
+    const desc = generateDescription(
+      { productGuides: [{ title: '가격', content: '$41.00' }] },
+      { ...product, price: '$41.00', mallName: '알리익스프레스' },
+      '디지털',
+      null,
+      null,
+    );
+    assert.equal(desc, '알리익스프레스 핫딜이에요. 가격 $41.00.');
+  });
+
+  it('쇼핑몰·제품명 가이드는 첫 문장과 겹쳐서 뺀다', () => {
+    const desc = generateDescription(
+      {
+        productGuides: [
+          { title: '쇼핑몰', content: '쿠팡' },
+          { title: '제품명', content: '에어팟 프로 2' },
+          { title: '가격', content: '89,000원' },
+          { title: '구성', content: '1개.' },
+        ],
+      },
+      product,
+      '디지털',
+      null,
+      null,
+    );
+    assert.equal(desc, '쿠팡 89,000원 핫딜이에요. 구성 1개.');
+  });
+
+  it('가이드는 문장 뒤에, 가격 추이는 맨 뒤에 둔다', () => {
     const history = summarizePriceHistoryForSeo({
       points: [{ price: 80000 }, { price: 120000 }],
       rangeDays: 90,
@@ -171,9 +250,10 @@ describe('generateDescription', () => {
       history,
       null,
     );
-    assert.match(desc, /쇼핑몰: 쿠팡/);
-    assert.match(desc, /배송: 무료배송/);
-    assert.match(desc, /최근 3개월 핫딜 최저가/);
+    assert.equal(
+      desc,
+      '쿠팡 89,000원 핫딜이에요. 배송 무료배송. 최근 3개월 핫딜 최저가 80,000원 · 최고가 120,000원.',
+    );
   });
 });
 

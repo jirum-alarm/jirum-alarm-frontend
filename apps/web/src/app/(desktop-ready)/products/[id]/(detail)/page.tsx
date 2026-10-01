@@ -322,6 +322,12 @@ export async function generateMetadata({
 
   const other = Object.keys(otherMeta).length ? otherMeta : undefined;
 
+  // 게시일을 article 로 알린다. 네이버 검색결과에서 경쟁 딜 사이트는 72~95%에 날짜가 붙는데
+  // 우리는 0%였다(2026-10-01 실측) — og:type=website 에 게시일 메타가 없어서다.
+  const postedAt = product.postedAt ? new Date(product.postedAt) : null;
+  const publishedTime =
+    postedAt && !Number.isNaN(postedAt.getTime()) ? postedAt.toISOString() : undefined;
+
   return {
     title,
     description,
@@ -335,7 +341,9 @@ export async function generateMetadata({
       title,
       description,
       url,
-      type: 'website',
+      type: 'article',
+      ...(publishedTime ? { publishedTime } : {}),
+      ...(categoryName ? { section: categoryName } : {}),
       siteName: '지름알림',
       locale: 'ko_KR',
       images: [
