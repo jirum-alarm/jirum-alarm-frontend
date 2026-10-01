@@ -1,5 +1,7 @@
 module.exports = {
   preset: 'react-native',
+  // RNGH·Reanimated 공식 목(PressableScale 이 둘로 눌림 애니메이션을 돌린다).
+  setupFiles: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     '^react$': '<rootDir>/node_modules/react',
     '^react/jsx-runtime$': '<rootDir>/node_modules/react/jsx-runtime',
@@ -9,6 +11,6 @@ module.exports = {
   // ESM(예: expo/virtual/env.js의 `export const env`)을 끌어오는 패키지는
   // 변환 대상에 포함해야 한다. (App.test.tsx의 "Unexpected token 'export'" 원인)
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|@sentry/.*|native-base|react-native-svg|react-native-css-interop|nativewind|react-native-gesture-handler|mixpanel-react-native|react-native-get-random-values|uuid)/)',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|@sentry/.*|native-base|react-native-svg|react-native-css-interop|nativewind|react-native-gesture-handler|mixpanel-react-native|react-native-get-random-values|uuid|react-native-reanimated|react-native-worklets)/)',
   ],
 };
