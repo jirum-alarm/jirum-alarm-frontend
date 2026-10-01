@@ -1,11 +1,17 @@
 import {useQuery} from '@tanstack/react-query';
 import {useEffect, useSyncExternalStore} from 'react';
-import {removeAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
+import {
+  getAsyncStorage,
+  removeAsyncStorage,
+  setAsyncStorage,
+} from '@/shared/lib/persistence';
 import {StorageKey} from '@/shared/constant/storage-key.ts';
 import CookieManager from '@react-native-cookies/cookies';
 import {SERVICE_URL} from '@/constants/env.ts';
 import {AuthQueries} from '@/entities/auth';
 import {isAuthFailure} from '@/shared/lib/client';
+import {settleInitialAuth} from '@/shared/lib/client/initial-auth';
+import {clearQueryCache} from '@/shared/lib/persistence/query-cache';
 
 /**
  * 토큰·쿠키 동기화는 **앱 전체에서 토큰당 한 번**(모듈 단일 상태).
@@ -36,6 +42,38 @@ function subscribeReady(listener: () => void) {
 
 const getCookieReady = () => cookieReady;
 
+/**
+ * 기기에 refresh token 이 있나(null = 아직 읽는 중, 수 ms). 앱 전체에서 한 번 읽는다.
+ * ★있으면 갱신 응답을 기다리지 않고 **바로 메인을 그린다** — 예전엔 스플래시가 네트워크
+ * 왕복(+오프라인이면 재시도 3회, ~7초)을 다 기다린 뒤 로그인 화면이 한 번 비치고 홈이 떴다.
+ * 그 사이 access 요청은 waitForInitialAuth 가 새 토큰이 저장될 때까지 줄 세운다.
+ * 오프라인으로 켜도 토큰이 있으면 메인(캐시)에 머문다. 서버가 거절하면 그때 로그인으로.
+ */
+let storedRefresh: boolean | null = null;
+let storedRefreshRead = false;
+const getStoredRefresh = () => storedRefresh;
+
+function setStoredRefresh(next: boolean) {
+  if (storedRefresh === next) return;
+  storedRefresh = next;
+  emitReady();
+}
+
+function readStoredRefreshOnce() {
+  if (storedRefreshRead) return;
+  storedRefreshRead = true;
+  getAsyncStorage(StorageKey.REFRESH_TOKEN)
+    .then(token => {
+      setStoredRefresh(!!token);
+      // 기다릴 갱신이 없다(로그아웃 상태) — 줄 세운 요청을 바로 풀어준다.
+      if (!token) settleInitialAuth();
+    })
+    .catch(() => {
+      setStoredRefresh(false);
+      settleInitialAuth();
+    });
+}
+
 async function syncTokensOnce(
   accessToken: string,
   refreshToken?: string | null,
@@ -48,6 +86,8 @@ async function syncTokensOnce(
   try {
     await setAsyncStorage(StorageKey.ACCESS_TOKEN, accessToken);
     await setAsyncStorage(StorageKey.REFRESH_TOKEN, refreshToken);
+    // 새 access token 이 저장됐다 — 줄 선 요청을 쿠키 동기화까지 기다리게 하지 않는다.
+    settleInitialAuth();
     await CookieManager.set(SERVICE_URL, {
       name: 'ACCESS_TOKEN',
       value: accessToken,
@@ -61,6 +101,7 @@ async function syncTokensOnce(
   } catch (e) {
     console.warn('[useAuth] 토큰·쿠키 동기화 실패 — 로그인은 계속한다', e);
   } finally {
+    settleInitialAuth();
     syncingToken = null;
     syncedToken = accessToken;
     if (!cookieReady) {
@@ -77,9 +118,12 @@ async function clearTokensOnce() {
   try {
     await removeAsyncStorage(StorageKey.ACCESS_TOKEN);
     await removeAsyncStorage(StorageKey.REFRESH_TOKEN);
+    // 디스크 화면 캐시(알림·키워드)도 — 다음에 로그인하는 사람이 다를 수 있다.
+    await clearQueryCache();
   } finally {
     clearing = false;
     syncedToken = null;
+    setStoredRefresh(false);
     if (cookieReady) {
       cookieReady = false;
       emitReady();
@@ -93,6 +137,8 @@ export function __resetAuthSyncForTest() {
   syncedToken = null;
   syncingToken = null;
   clearing = false;
+  storedRefresh = null;
+  storedRefreshRead = false;
 }
 
 export const useAuth = () => {
@@ -109,6 +155,11 @@ export const useAuth = () => {
    */
   const isRejected = isError && isAuthFailure(error);
   const isCookieReady = useSyncExternalStore(subscribeReady, getCookieReady);
+  const hasStoredRefresh = useSyncExternalStore(
+    subscribeReady,
+    getStoredRefresh,
+  );
+  readStoredRefreshOnce();
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -118,8 +169,20 @@ export const useAuth = () => {
   }, [isSuccess, data]);
 
   useEffect(() => {
+    // 갱신이 끝내 실패(재시도 소진) — 오프라인이면 저장된 access token 으로라도 시도하게 푼다.
+    if (isError) settleInitialAuth();
+  }, [isError]);
+
+  useEffect(() => {
     if (isRejected) void clearTokensOnce();
   }, [isRejected]);
 
-  return {isLogin: !!data && isCookieReady && !isRejected, isLoading};
+  return {
+    isLogin:
+      !isRejected && ((!!data && isCookieReady) || hasStoredRefresh === true),
+    // 스플래시는 저장소를 읽는 수 ms 만 기다린다. 토큰이 없을 때만 갱신 결과를 기다린다
+    // (곧 거절돼 로그인 화면으로 간다 — 그 전에 메인이 비치지 않게).
+    isLoading:
+      hasStoredRefresh === null || (hasStoredRefresh === false && isLoading),
+  };
 };

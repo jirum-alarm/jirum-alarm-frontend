@@ -3,6 +3,7 @@ import {getAsyncStorage} from '@/shared/lib/persistence';
 import {getDeviceId} from '@/shared/lib/device/device-id';
 import {StorageKey} from '@/shared/constant/storage-key.ts';
 import {GRAPHQL_ENDPOINT} from '@/shared/constant/endpoint.ts';
+import {waitForInitialAuth} from './initial-auth';
 
 type TokenType = 'access' | 'refresh' | null;
 
@@ -50,6 +51,7 @@ export class HttpClient {
     let token: string | null = null;
 
     if (this.tokenType === 'access') {
+      await waitForInitialAuth();
       token = await getAsyncStorage(StorageKey.ACCESS_TOKEN);
     } else if (this.tokenType === 'refresh') {
       token = await getAsyncStorage(StorageKey.REFRESH_TOKEN);

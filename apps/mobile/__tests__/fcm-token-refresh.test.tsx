@@ -11,7 +11,7 @@ const mockUnsubscribe = jest.fn();
 
 jest.mock('@react-native-firebase/messaging', () => {
   const messaging = () => ({
-    requestPermission: () => Promise.resolve(0),
+    hasPermission: () => Promise.resolve(0),
     registerDeviceForRemoteMessages: () => Promise.resolve(),
     onTokenRefresh: (listener: RefreshListener) => {
       mockRefreshListener = listener;

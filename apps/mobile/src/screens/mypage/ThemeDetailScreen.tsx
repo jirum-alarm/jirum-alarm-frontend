@@ -17,6 +17,7 @@ import type {TabStackParamList} from '@/navigations/tab/types';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
+import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import Button from '@/shared/components/ui/Button';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
@@ -48,7 +49,6 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
     isPending: isDealsPending,
     isError: isDealsError,
     refetch: refetchDeals,
-    isRefetching,
   } = useQuery(ThemeQueries.liveDeals(themeId));
   const {
     subscribe,
@@ -71,6 +71,8 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
   const refetchAll = useCallback(async () => {
     await Promise.all([refetchThemes(), refetchDeals()]);
   }, [refetchDeals, refetchThemes]);
+  // isRefetching 에 묶으면 앱 복귀 때의 조용한 갱신에도 위에서 스피너가 돈다 — 당길 때만.
+  const {refreshing, onRefresh} = usePullRefresh(refetchAll);
 
   return (
     <View className="flex-1 bg-white">
@@ -102,7 +104,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
         <ScrollView
           contentContainerStyle={contentStyle}
           refreshControl={
-            <RefreshControl refreshing={isRefetching} onRefresh={refetchAll} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           {/* 헤더 — 이모지 + 이름 + 설명 */}
           <View className="flex-row items-start gap-2">

@@ -3,6 +3,7 @@ import MainTabNavigator from '@/navigations/tab/MainTabNavigator';
 import {PendingLoginRestore} from '@/shared/hooks/PendingLoginRestore';
 import useAlarmDotSync from '@/shared/hooks/useAlarmDotSync';
 import {mainNavigations} from '@/shared/constant/navigations';
+import PushPermissionPrePrompt from '@/shared/components/PushPermissionPrePrompt';
 
 /** @deprecated 기존 단일 WebView 화면에서 사용하던 타입. 호환성 유지용. */
 export type MainParamList = {
@@ -18,6 +19,7 @@ function MainStackNavigator() {
     <>
       <PendingLoginRestore />
       <MainTabNavigator />
+      <PushPermissionPrePrompt />
     </>
   );
 }

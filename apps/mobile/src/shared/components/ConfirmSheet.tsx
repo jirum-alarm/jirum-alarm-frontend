@@ -18,6 +18,7 @@ export default function ConfirmSheet({
   title,
   description,
   confirmLabel,
+  cancelLabel = '취소',
   tone = 'default',
   loading,
   onCancel,
@@ -28,6 +29,7 @@ export default function ConfirmSheet({
   /** 문자열이면 기본 설명 스타일로 감싼다. 강조가 섞이면 Text 노드를 직접 넘긴다. */
   description?: React.ReactNode;
   confirmLabel: string;
+  cancelLabel?: string;
   tone?: 'default' | 'danger';
   loading?: boolean;
   onCancel: () => void;
@@ -51,7 +53,7 @@ export default function ConfirmSheet({
         ) : null}
         <View className="flex-row pt-6" style={styles.buttons}>
           <Button color="secondary" className="flex-1" onPress={onCancel}>
-            취소
+            {cancelLabel}
           </Button>
           <Button
             color={tone === 'danger' ? 'error' : 'primary'}

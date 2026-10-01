@@ -15,4 +15,6 @@ export const StorageKey = {
    * 배경 강조를 준다 — web `gr-alarm-last-read-at` 과 같은 역할.
    */
   ALARM_LAST_READ_AT: 'alarmLastReadAt',
+  /** 로그인 뒤 알림 권한 안내 시트를 이미 보여줬는지. 한 번만 — 다음부터는 키워드 등록 때 묻는다. */
+  PUSH_PREPROMPT_SHOWN: 'pushPrePromptShown',
 } as const;

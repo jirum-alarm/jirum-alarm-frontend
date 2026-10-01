@@ -15,6 +15,7 @@ import type {TabStackParamList} from '@/navigations/tab/types';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
+import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {ThemeCard} from '@/features/mypage/ui/ThemeCards';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
@@ -39,8 +40,9 @@ export default function ThemesScreen({navigation}: Props) {
     isPending,
     isError,
     refetch,
-    isRefetching,
   } = useQuery(ThemeQueries.themes());
+  // isRefetching 에 묶으면 앱 복귀 때의 조용한 갱신에도 위에서 스피너가 돈다 — 당길 때만.
+  const {refreshing, onRefresh} = usePullRefresh(refetch);
   const {data: subscribedIds} = useQuery(ThemeQueries.mySubscribedIds());
   const {
     subscribe,
@@ -68,7 +70,7 @@ export default function ThemesScreen({navigation}: Props) {
           keyExtractor={theme => theme.id}
           contentContainerStyle={contentStyle}
           refreshControl={
-            <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           ListHeaderComponent={ThemesListHeader}
           // 화면 안에서 `() => <View/>` 로 만들면 렌더마다 새 컴포넌트 타입이

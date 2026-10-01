@@ -11,6 +11,7 @@ import {StorageKey} from '@/shared/constant/storage-key';
 import {removeAsyncStorage} from '@/shared/lib/persistence';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
 import {unbindFcmTokenFromUser} from '@/shared/lib/fcm/push-permission';
+import {clearQueryCache} from '@/shared/lib/persistence/query-cache';
 
 /**
  * 로그아웃. **웹뷰가 대신 해주던 일을 이 화면이 인수한 자리다.**
@@ -64,6 +65,7 @@ export function useLogout() {
     // 다음 유저에게 이전 유저 데이터가 한 프레임 보이지 않게 개인 캐시를 버린다.
     // ★`queryClient.clear()` 를 쓰지 않는다 — 아래 무효화 대상(auth)까지 지워
     // 재조회가 두 번 도는 데다, 어느 쪽이 먼저 끝나는지가 순서에 좌우된다.
+    clearQueryCache();
     queryClient.removeQueries({queryKey: MyPageQueries.keys.all});
     queryClient.removeQueries({queryKey: ThemeQueries.keys.all});
 

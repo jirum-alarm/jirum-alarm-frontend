@@ -6,6 +6,7 @@ import {StorageKey} from '../src/shared/constant/storage-key';
 import {__resetAuthSyncForTest, useAuth} from '../src/shared/hooks/useAuth';
 import {FetchError} from '../src/shared/lib/client/http-client';
 import {
+  getAsyncStorage,
   removeAsyncStorage,
   setAsyncStorage,
 } from '../src/shared/lib/persistence';
@@ -23,6 +24,7 @@ jest.mock('@react-native-cookies/cookies', () => ({
 }));
 
 jest.mock('../src/shared/lib/persistence', () => ({
+  getAsyncStorage: jest.fn(),
   setAsyncStorage: jest.fn(),
   removeAsyncStorage: jest.fn(),
 }));
@@ -31,6 +33,7 @@ const mockUseQuery = useQuery as jest.Mock;
 const mockCookieSet = CookieManager.set as jest.Mock;
 const mockSetAsyncStorage = setAsyncStorage as jest.Mock;
 const mockRemoveAsyncStorage = removeAsyncStorage as jest.Mock;
+const mockGetAsyncStorage = getAsyncStorage as jest.Mock;
 
 const flushMicrotasks = async (cycles = 5) => {
   for (let index = 0; index < cycles; index += 1) {
@@ -73,6 +76,7 @@ describe('useAuth', () => {
     mockSetAsyncStorage.mockResolvedValue(undefined);
     mockRemoveAsyncStorage.mockResolvedValue(undefined);
     mockCookieSet.mockResolvedValue(true);
+    mockGetAsyncStorage.mockResolvedValue(null);
   });
 
   it('stores both tokens and mirrors them into cookies after a successful refresh', async () => {
@@ -319,6 +323,64 @@ describe('useAuth', () => {
     await ReactTestRenderer.act(async () => {
       resolveCookie();
       await flushMicrotasks();
+    });
+  });
+
+  // 콜드 스타트: 저장된 refresh token 이 있으면 갱신 응답을 기다리지 않고 바로 메인을 그린다.
+  it('shows the main app right away when a refresh token is stored', async () => {
+    mockGetAsyncStorage.mockResolvedValue('stored-refresh');
+    mockUseQuery.mockReturnValue({
+      data: undefined,
+      isError: false,
+      isLoading: true,
+      isSuccess: false,
+    });
+
+    const renderer = await renderUseAuth();
+
+    expect(latestAuthState).toEqual({isLoading: false, isLogin: true});
+
+    await ReactTestRenderer.act(async () => {
+      renderer.unmount();
+    });
+  });
+
+  // 오프라인으로 켜도(네트워크 실패) 토큰이 있으면 로그인 화면에 가두지 않는다.
+  it('stays in the main app when the first refresh fails on the network', async () => {
+    mockGetAsyncStorage.mockResolvedValue('stored-refresh');
+    mockUseQuery.mockReturnValue({
+      data: undefined,
+      error: new TypeError('Network request failed'),
+      isError: true,
+      isLoading: false,
+      isSuccess: false,
+    });
+
+    const renderer = await renderUseAuth();
+
+    expect(latestAuthState).toEqual({isLoading: false, isLogin: true});
+    expect(mockRemoveAsyncStorage).not.toHaveBeenCalled();
+
+    await ReactTestRenderer.act(async () => {
+      renderer.unmount();
+    });
+  });
+
+  // 토큰이 없으면 갱신 결과(곧 거절)를 기다린다 — 메인이 한 번 비치지 않게.
+  it('keeps the splash while refreshing without a stored token', async () => {
+    mockUseQuery.mockReturnValue({
+      data: undefined,
+      isError: false,
+      isLoading: true,
+      isSuccess: false,
+    });
+
+    const renderer = await renderUseAuth();
+
+    expect(latestAuthState).toEqual({isLoading: true, isLogin: false});
+
+    await ReactTestRenderer.act(async () => {
+      renderer.unmount();
     });
   });
 });
