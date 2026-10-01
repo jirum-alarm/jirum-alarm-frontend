@@ -36,6 +36,7 @@ import {
 } from '@/shared/constant/navigations';
 import {getTabBaseUrl} from '@/shared/lib/navigation/tab-routing';
 import {
+  getVisible,
   setTabBarVisible,
   useTabBarVisibility,
 } from '@/shared/hooks/useTabBarVisibility';
@@ -72,11 +73,11 @@ function useSyncNativeTabBarHidden() {
   const clipWhenHiddenRef = useRef(false);
 
   const apply = useCallback(
-    (clipWhenHidden: boolean) => {
+    (clipWhenHidden: boolean, shown: boolean = visible) => {
       clipWhenHiddenRef.current = clipWhenHidden;
       navigation.setOptions({
-        tabBarStyle: {display: visible ? 'flex' : 'none'},
-        tabBarClipWhenHidden: !visible && clipWhenHidden,
+        tabBarStyle: {display: shown ? 'flex' : 'none'},
+        tabBarClipWhenHidden: !shown && clipWhenHidden,
       });
     },
     [visible, navigation],
@@ -86,9 +87,11 @@ function useSyncNativeTabBarHidden() {
     apply(clipWhenHiddenRef.current);
   }, [apply]);
 
+  // ★shown 을 받으면 렌더·effect 를 기다리지 않고 지금 네이티브 탭바에 반영한다 —
+  // effect 를 거치면 몇 프레임 늦어 "바로 뜨긴 하는데 시간차가 있다"(2026-10-01 사용자).
   return useCallback(
-    (routeName: string | undefined) => {
-      apply(routeName !== tabStackNavigations.ROOT);
+    (routeName: string | undefined, shown?: boolean) => {
+      apply(routeName !== tabStackNavigations.ROOT, shown);
     },
     [apply],
   );
@@ -219,6 +222,12 @@ export function createTabStack(tabName: TabName) {
       setTabBarVisible(!hidesTabBar(focusedRouteRef.current));
     }, [isTabFocused]);
 
+    /** 이 라우트 기준으로 탭바를 즉시 맞춘다(JS 탭바 = 스토어, iOS 26 네이티브 탭바 = 옵션 직접). */
+    const syncTabBarTo = (routeName: string | undefined) => {
+      setTabBarVisible(!hidesTabBar(routeName));
+      onFocusedRoute(routeName, getVisible());
+    };
+
     return (
       <Stack.Navigator
         screenOptions={{
@@ -229,7 +238,7 @@ export function createTabStack(tabName: TabName) {
           // 아직 아무것도 안 그린 WebView 가 올라올 때 특히 티가 난다.
           contentStyle: {backgroundColor: SCREEN_BACKGROUND_COLOR},
         }}
-        screenListeners={{
+        screenListeners={({navigation: screenNavigation, route}) => ({
           state: e => {
             const stack = e.data.state;
             const focused = stack.routes[stack.index]?.name;
@@ -249,10 +258,25 @@ export function createTabStack(tabName: TabName) {
             // 네비게이션 이벤트는 그 사이에 온다.
             if (navigation.isFocused()) {
               // 숨김·보이기 모두 즉시(setTabBarVisible 주석).
-              setTabBarVisible(!hidesTabBar(focused));
+              syncTabBarTo(focused);
             }
           },
-        }}>
+          // ★뒤로 가기가 **시작되는 순간** 드러날 화면 기준으로 맞춘다. 네이티브 스와이프·헤더 뒤로가기는
+          // state 이벤트가 애니메이션이 끝난 뒤에야 와서, 그걸 기다리면 탭바가 한 박자 늦게 생겼다.
+          transitionStart: e => {
+            if (!e.data.closing || !navigation.isFocused()) return;
+            const routes = screenNavigation.getState().routes;
+            const index = routes.findIndex(item => item.key === route.key);
+            // 맨 위가 닫히는 경우만(=뒤로 가기). push 로 아래에 깔리는 화면도 closing 이 오고,
+            // JS goBack 은 이미 state 에서 빠져 있어(-1) state 리스너가 처리했다.
+            if (index <= 0 || index !== routes.length - 1) return;
+            syncTabBarTo(routes[index - 1].name);
+          },
+          // 스와이프를 하다 놓으면 원래 화면에 머문다 — 미리 띄운 탭바를 되돌린다.
+          gestureCancel: () => {
+            if (navigation.isFocused()) syncTabBarTo(focusedRouteRef.current);
+          },
+        })}>
         {/* ★component 로 넘긴다 — 렌더 콜백({() => ...})은 렌더마다 새 함수라
             react-navigation 이 루트를 건너뛰지 못해, 상세를 열고 닫을 때마다 탭 루트
             전체(홈의 모든 섹션)가 다시 그려져 JS 가 밀렸다("터치가 한 박자 늦다"). */}

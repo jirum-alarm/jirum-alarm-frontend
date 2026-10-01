@@ -113,10 +113,10 @@ describe('iOS 26 탭바 clip', () => {
 
   it('웹뷰 루트는 clip 하지 않고, 네이티브 push 화면만 자른다', () => {
     expect(stackSrc).toMatch(
-      /tabBarClipWhenHidden:\s*!visible && clipWhenHidden/,
+      /tabBarClipWhenHidden:\s*!shown && clipWhenHidden/,
     );
     expect(stackSrc).toMatch(
-      /apply\(routeName !== tabStackNavigations\.ROOT\)/,
+      /apply\(routeName !== tabStackNavigations\.ROOT, shown\)/,
     );
   });
 

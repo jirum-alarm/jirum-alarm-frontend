@@ -39,7 +39,8 @@ describe('★★탭바 표시는 라우트 이름 하나로 정한다', () => {
     // 샌다 — 탭 5개가 같은 스택을 각자 갖고 있어 특히 그렇다.
     // 라우트는 언제나 정확히 하나라 어긋날 수 없다.
     expect(stack).toContain('hidesTabBar');
-    expect(stack).toContain('setTabBarVisible(!hidesTabBar(focused))');
+    expect(stack).toContain('syncTabBarTo(focused)');
+    expect(stack).toContain('setTabBarVisible(!hidesTabBar(routeName))');
   });
 
   it('★상세에서 나오면 탭바가 바로 보인다 — 전환 끝까지 미루지 않는다(2026-10-01 사용자)', () => {
@@ -50,6 +51,9 @@ describe('★★탭바 표시는 라우트 이름 하나로 정한다', () => {
       vis.setTabBarVisible(true);
       expect(vis.getVisible()).toBe(true);
     });
+    // 뒤로 가기 시작 순간에 맞춘다 — 네이티브 스와이프는 state 이벤트가 전환 끝에 온다.
+    expect(stack).toContain('transitionStart');
+    expect(stack).toContain('gestureCancel');
     // 미루기 장치가 되살아나면 "뒤늦게 생긴다"가 재발한다.
     const hook = read('src/shared/hooks/useTabBarVisibility.ts');
     expect(hook).not.toContain('setTimeout');
