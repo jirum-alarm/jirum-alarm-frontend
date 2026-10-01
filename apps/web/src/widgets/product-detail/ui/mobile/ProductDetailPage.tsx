@@ -82,6 +82,7 @@ function ProductDetailPage({
             <ProductPriceContext
               ageNotice={hidePrice ? null : ageNotice}
               modelPage={hidePrice ? null : modelPage}
+              productTitle={initialProduct?.title}
               className="mx-5 mb-6"
             />
             <AdvertiseSlotBanner

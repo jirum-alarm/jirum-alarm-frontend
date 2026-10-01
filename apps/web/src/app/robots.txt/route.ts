@@ -15,7 +15,8 @@ export function GET() {
   const sitemapLines = IS_INDEXABLE_DEPLOYMENT
     ? `
 Sitemap: ${METADATA_SERVICE_URL}/sitemap/sitemap-index.xml
-Sitemap: ${METADATA_SERVICE_URL}/sitemap/sitemap-recent-index.xml`
+Sitemap: ${METADATA_SERVICE_URL}/sitemap/sitemap-recent-index.xml
+Sitemap: ${METADATA_SERVICE_URL}/keywords/sitemap.xml`
     : '';
 
   const robotsTxt = `User-agent: *

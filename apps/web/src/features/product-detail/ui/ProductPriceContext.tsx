@@ -3,10 +3,14 @@ import Link from 'next/link';
 import type { ProductModelPageLink } from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
 
+import { findKeywordHubsForTitle, keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
+
 type Props = {
   /** `formatDealAgeNotice` 결과. JSON-LD 가 재고를 주장하지 않는 것과 짝이다. */
   ageNotice?: string | null;
   modelPage?: ProductModelPageLink | null;
+  /** 제목에 걸리는 키워드 허브(`/keywords/삼다수`)로 링크한다. */
+  productTitle?: string | null;
   className?: string;
 };
 
@@ -27,8 +31,16 @@ type Props = {
  *
  * 가격 추이 섹션에 있던 CTA 를 여기로 올렸다(링크 중복 방지 + 첫 화면 노출).
  */
-export default function ProductPriceContext({ ageNotice, modelPage, className }: Props) {
-  if (!ageNotice && !modelPage) return null;
+export default function ProductPriceContext({
+  ageNotice,
+  modelPage,
+  productTitle,
+  className,
+}: Props) {
+  // 키워드 허브 링크: 모델 페이지는 매핑된 상품에만 있어 무작위 상품 59개 중 0개였다(2026-10-01 실측).
+  // 허브는 제목만으로 걸리니 매핑이 안 된 딜도 허브로 가는 크롤 경로가 생긴다.
+  const keywordHubs = productTitle ? findKeywordHubsForTitle(productTitle) : [];
+  if (!ageNotice && !modelPage && keywordHubs.length === 0) return null;
 
   return (
     <section className={cn('flex flex-col gap-2', className)}>
@@ -60,6 +72,22 @@ export default function ProductPriceContext({ ageNotice, modelPage, className }:
             →
           </span>
         </Link>
+      ) : null}
+
+      {keywordHubs.length > 0 ? (
+        <p className="flex flex-wrap gap-x-3 gap-y-1 text-sm">
+          {keywordHubs.map((hub) => (
+            <Link
+              key={hub.slug}
+              href={keywordHubPath(hub)}
+              data-track="keyword-hub-link"
+              data-source="detail_price_context"
+              className="text-gray-600 underline-offset-2 hover:underline"
+            >
+              {hub.name} 핫딜 더보기 →
+            </Link>
+          ))}
+        </p>
       ) : null}
     </section>
   );

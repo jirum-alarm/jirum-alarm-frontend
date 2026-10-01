@@ -1,4 +1,4 @@
-import { execute, isNotFoundError } from '@/shared/lib/http-client';
+import { execute, type ExecuteOptions, isNotFoundError } from '@/shared/lib/http-client';
 
 import { graphql, useFragment } from '../gql';
 import {
@@ -79,8 +79,8 @@ export class ProductService {
     );
   }
 
-  static async getProducts(variables: ProductListQueryVariables) {
-    return execute(QueryProducts, variables).then((res) => res.data);
+  static async getProducts(variables: ProductListQueryVariables, opts?: ExecuteOptions) {
+    return execute(QueryProducts, variables, opts).then((res) => res.data);
   }
 
   static async getHotDealProductsRandom(

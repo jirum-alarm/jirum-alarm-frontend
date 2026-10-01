@@ -123,6 +123,7 @@ export default async function DesktopProductDetailPage({
               <ProductPriceContext
                 ageNotice={hidePrice ? null : ageNotice}
                 modelPage={hidePrice ? null : modelPage}
+                productTitle={initialProduct?.title}
               />
             </div>
           </div>

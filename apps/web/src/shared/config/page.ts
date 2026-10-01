@@ -17,6 +17,8 @@ export enum PAGE {
 
   DEALS = '/deals',
 
+  KEYWORDS = '/keywords',
+
   COMMUNITY = '/community',
   COMMUNITY_WRITE = '/community/write',
 
