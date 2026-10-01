@@ -69,6 +69,15 @@ jobs:
             --non-interactive --message "${SHA:0:8} ${subject}"
           echo "subject=$subject" >> "$GITHUB_OUTPUT"
 
+      # 크래시 스택을 파일·줄로 읽으려면 소스맵이 필요하다. 토큰은 EAS production env(sensitive).
+      # 실패해도 발행은 끝났으므로 잡을 빨갛게 만들지 않는다.
+      - name: Upload Sentry source maps
+        continue-on-error: true
+        working-directory: apps/mobile
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: npx eas env:exec production 'SENTRY_ORG=jirumalarm SENTRY_PROJECT=jirum-alarm-app npx sentry-expo-upload-sourcemaps dist'
+
       - name: Notify
         if: always()
         env:

@@ -174,7 +174,7 @@ pnpm build            # Production build
        uninstall → install → launch. 첫 실행은 내장 번들로 뜬다(그 사이 production OTA 를 받아 두 번째부터 덮으므로 판정은 매번 재설치 후 첫 실행).
        로그인 경로는 설치 직후 `<data>/Library/Application Support/com.jirum-alarm.jirumalarm/RCTAsyncLocalStorage_V1/manifest.json` 에
        `{"refreshToken":"\"x\""}` 를 넣으면 즉시 진입·메인 마운트까지 탄다(서버 거절 → 로그인). 다크모드는 `xcrun simctl ui <기기> appearance dark`.
-  3. 통과한 커밋으로 `pnpm ota:publish "메시지"` → 매니페스트를 채널 헤더로 curl 해 새 update id 확인 → 내 기기에서 **두 번** 켜 본다
+  3. 통과한 커밋으로 `pnpm ota:publish "메시지"`(지문 확인 → 발행 → Sentry 소스맵 업로드까지 한 번에; 토큰은 EAS production env `SENTRY_AUTH_TOKEN`, sensitive) → 매니페스트를 채널 헤더로 curl 해 새 update id 확인 → 내 기기에서 **두 번** 켜 본다
      (OTA 는 두 번째 실행에 적용된다).
   4. 이상하면 즉시 되돌린다. `pnpm ota:rollback` 은 대화형이라 에이전트가 못 쓴다 →
      `eas update:list --branch production --json` 에서 직전 정상 group 을 찾아

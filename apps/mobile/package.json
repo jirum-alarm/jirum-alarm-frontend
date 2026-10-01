@@ -21,7 +21,7 @@
     "verify:contracts": "node scripts/verify-public-contracts.mjs",
     "native:check": "node scripts/native-fingerprint.mjs --check",
     "native:write": "node scripts/native-fingerprint.mjs --write",
-    "ota:publish": "node scripts/native-fingerprint.mjs --check && eas update --channel production --environment production --non-interactive --message",
+    "ota:publish": "node scripts/ota-publish.mjs",
     "ota:rollback": "eas update:rollback",
     "verify:migration": "pnpm generate && pnpm ts:check && pnpm lint && pnpm exec jest --runInBand && npx expo-doctor",
     "start": "expo start",
