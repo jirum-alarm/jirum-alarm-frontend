@@ -399,6 +399,8 @@ export function buildRssItemDescription(product: {
   postedAt?: string | Date | null;
   provider?: { nameKr?: string | null } | null;
 }): string {
-  const lead = generateDescription(null, product, product.category ?? undefined);
+  // 원문 제목에 가격이 이미 있으면 문장에서 또 말하지 않는다("… 14,500원 — … 토스 14,500원 핫딜이에요").
+  const price = hasPriceInTitle(product.title) ? null : product.price;
+  const lead = generateDescription(null, { ...product, price }, product.category ?? undefined);
   return `${product.title} — ${lead}`;
 }

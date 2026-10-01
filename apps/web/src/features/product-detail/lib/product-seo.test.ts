@@ -288,6 +288,15 @@ describe('buildRssItemDescription', () => {
     assert.doesNotMatch(desc, /^핫딜\./);
     assert.doesNotMatch(desc, /모아 비교합니다/);
   });
+
+  it('제목에 가격이 있으면 문장에서 가격을 반복하지 않는다', () => {
+    const desc = buildRssItemDescription({
+      title: '프랑크 소시지 3개 14,500원',
+      price: '14,500원',
+      mallName: '토스',
+    });
+    assert.equal(desc, '프랑크 소시지 3개 14,500원 — 토스 핫딜이에요.');
+  });
 });
 
 describe('buildRssItemTitle', () => {
