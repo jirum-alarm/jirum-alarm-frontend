@@ -537,7 +537,12 @@ export type ModelPageAdminItemOutput = {
 
 export type ModelPageListItemOutput = {
   __typename?: 'ModelPageListItemOutput';
+  activeDealCount: Scalars['Int']['output'];
+  activePostedAt?: Maybe<Scalars['DateTime']['output']>;
+  activePrice?: Maybe<Scalars['Int']['output']>;
   brand?: Maybe<Scalars['String']['output']>;
+  buyLine?: Maybe<Scalars['Int']['output']>;
+  buyLineUnitLabel?: Maybe<Scalars['String']['output']>;
   categoryId?: Maybe<Scalars['Int']['output']>;
   categoryName?: Maybe<Scalars['String']['output']>;
   dealCount: Scalars['Int']['output'];
@@ -545,6 +550,8 @@ export type ModelPageListItemOutput = {
   heroMinPrice?: Maybe<Scalars['Int']['output']>;
   lastDealAt?: Maybe<Scalars['DateTime']['output']>;
   modelName: Scalars['String']['output'];
+  priceTone?: Maybe<Scalars['String']['output']>;
+  savePct?: Maybe<Scalars['Int']['output']>;
   slug: Scalars['String']['output'];
   unitLabel?: Maybe<Scalars['String']['output']>;
   unitPrice?: Maybe<Scalars['Int']['output']>;
@@ -3480,6 +3487,13 @@ export type PublishedModelPagesQuery = {
     categoryId?: number | null;
     categoryName?: string | null;
     lastDealAt?: any | null;
+    activeDealCount: number;
+    activePrice?: number | null;
+    activePostedAt?: any | null;
+    priceTone?: string | null;
+    savePct?: number | null;
+    buyLine?: number | null;
+    buyLineUnitLabel?: string | null;
   }>;
 };
 
@@ -4578,6 +4592,13 @@ export const PublishedModelPagesDocument = new TypedDocumentString(`
     categoryId
     categoryName
     lastDealAt
+    activeDealCount
+    activePrice
+    activePostedAt
+    priceTone
+    savePct
+    buyLine
+    buyLineUnitLabel
   }
 }
     `) as unknown as TypedDocumentString<

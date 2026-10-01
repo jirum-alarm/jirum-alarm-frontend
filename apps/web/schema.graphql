@@ -539,7 +539,12 @@ type ModelPageAdminItemOutput {
 }
 
 type ModelPageListItemOutput {
+  activeDealCount: Int!
+  activePostedAt: DateTime
+  activePrice: Int
   brand: String
+  buyLine: Int
+  buyLineUnitLabel: String
   categoryId: Int
   categoryName: String
   dealCount: Int!
@@ -547,6 +552,8 @@ type ModelPageListItemOutput {
   heroMinPrice: Int
   lastDealAt: DateTime
   modelName: String!
+  priceTone: String
+  savePct: Int
   slug: String!
   unitLabel: String
   unitPrice: Int

@@ -16,7 +16,7 @@ export class ModelPageService {
     return execute(ModelPageDocument, variables, PUBLIC_ISR).then((res) => res.data.modelPage);
   }
 
-  /** /deals 인덱스 — 퍼블리시된 모델 페이지 목록(딜 많은 순). 카드 필드만. */
+  /** /deals 인덱스 — 퍼블리시된 모델 페이지 목록(딜 많은 순). 카드 필드 + '지금 살까' 판정(active*·priceTone·buyLine). */
   static async getPublishedModelPages() {
     return execute(PublishedModelPagesDocument, undefined, PUBLIC_ISR).then(
       (res) => res.data.publishedModelPages,
@@ -38,6 +38,13 @@ const PublishedModelPagesDocument = graphql(`
       categoryId
       categoryName
       lastDealAt
+      activeDealCount
+      activePrice
+      activePostedAt
+      priceTone
+      savePct
+      buyLine
+      buyLineUnitLabel
     }
   }
 `);

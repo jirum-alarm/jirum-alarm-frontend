@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { ModelPageService } from '@/shared/api/model-page';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
+import { PAGE } from '@/shared/config/page';
 import { convertToWebp } from '@/shared/lib/utils/image';
 import ImageComponent from '@/shared/ui/ImageComponent';
 
@@ -328,7 +330,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                   <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
                     <div>
                       <p className="text-[11px] text-gray-400">
-                        지금 진행 최저
+                        {timing.isActivePrice ? '지금 진행 최저' : '지난 핫딜 최저'}
                         {timing.basis === 'unit' && timing.unitLabel
                           ? ` (${timing.unitLabel})`
                           : ''}
@@ -380,6 +382,16 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     >
                       지금 살 수 있는 딜 보기 →
                     </a>
+                  )}
+                  {!timing.isActivePrice && (
+                    // 지금 살 딜이 없으면 이 페이지의 다음 행동은 "기다리기" 뿐 — 키워드 허브와 같은 진입점.
+                    <Link
+                      href={PAGE.MYPAGE_KEYWORD}
+                      rel="nofollow"
+                      className="text-primary-600 mt-3 inline-flex text-sm font-semibold"
+                    >
+                      ‘{displayName}’ 핫딜 알림 받기 →
+                    </Link>
                   )}
                 </div>
               )}

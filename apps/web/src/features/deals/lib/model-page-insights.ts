@@ -70,6 +70,8 @@ export interface TimingInsight {
   packLabel?: string | null;
   totalPrice?: number | null;
   activeDealCount: number;
+  /** current 가 진행 중 딜 가격인가. false 면 히어로가(지난 핫딜) 폴백 — "지금" 이라고 부르면 안 된다. */
+  isActivePrice: boolean;
 }
 
 function mean(nums: number[]): number | null {
@@ -89,10 +91,15 @@ const ACTIVE_DEAL_MAX_DAYS = 30;
 /** 추이 중앙값의 이 배율 미만이면 가격 오독(단위가 계산 착오·묶음 일부 가격)으로 본다. 상세의 이력 가드와 같은 0.4. */
 const OUTLIER_MIN_RATIO = 0.4;
 const DAY_MS = 24 * 60 * 60 * 1000;
+/** 추이 점이 이보다 적으면 판정하지 않는다 — 점 2~3개면 지금 가격이 곧 "역대 최저"가 된다. */
+const MIN_HISTORY_POINTS = 5;
+/** 역대 최저라도 평균보다 이만큼(%) 싸야 그렇게 부른다 — 평평한 추이에서 "역대급(0% 저렴)"이 37건 나왔다(2026-10-01). */
+const LOWEST_MIN_SAVE_PCT = 5;
 
 /**
  * 진행 중(비종료) 딜 기준 현재가 + 추이 평균으로 타이밍 판정.
  * 백엔드 신규 필드 없이 payload만으로 동작.
+ * ★/deals 목록의 판정(crawling-server model-page-price-verdict.ts)과 규칙이 같아야 한다 — 바꾸면 둘 다.
  */
 export function buildTimingInsight(input: {
   deals: Deal[];
@@ -149,6 +156,7 @@ export function buildTimingInsight(input: {
       packLabel: heroPrice?.label ?? null,
       totalPrice: heroPrice?.minPrice ?? null,
       activeDealCount: pool.length,
+      isActivePrice: false,
     };
   }
 
@@ -157,7 +165,19 @@ export function buildTimingInsight(input: {
 
   let tone: TimingTone = 'fair';
   let label = '평소 수준';
-  if (histMin != null && current <= histMin * 1.02) {
+  if (!best) {
+    // 지난 가격으로 "사기 좋은 구간"이라 하면 /deals 목록("핫딜을 기다리는 상품")과 모순된다.
+    tone = 'unknown';
+    label = '진행 중인 핫딜 없음';
+  } else if (histPrices.length < MIN_HISTORY_POINTS) {
+    tone = 'unknown';
+    label = '추이 대비 판단 불가';
+  } else if (
+    histMin != null &&
+    current <= histMin * 1.02 &&
+    savePct != null &&
+    savePct >= LOWEST_MIN_SAVE_PCT
+  ) {
     tone = 'good';
     label = '역대급 · 사기 좋은 구간';
   } else if (avg != null && current <= avg * 0.9) {
@@ -187,6 +207,7 @@ export function buildTimingInsight(input: {
     packLabel: best?.deal ? undefined : (heroPrice?.label ?? null),
     totalPrice: best?.deal.price ?? heroPrice?.minPrice ?? null,
     activeDealCount: pool.length,
+    isActivePrice: best != null,
   };
 }
 
@@ -319,7 +340,7 @@ export function buildDealsLeadSentence(input: {
   if (timing.avg != null && timing.avg > 0) {
     evidence.push(`추이 평균 ${formatPrice(timing.avg)}`);
   }
-  if (timing.current > 0) {
+  if (timing.current > 0 && timing.isActivePrice) {
     const cheaper =
       timing.savePct != null && timing.savePct > 0 ? ` (평균보다 약 ${timing.savePct}% 저렴)` : '';
     evidence.push(`지금 진행 중 최저가 ${formatPrice(timing.current)}${cheaper}`);

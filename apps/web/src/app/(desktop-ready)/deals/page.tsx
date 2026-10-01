@@ -5,13 +5,20 @@ import Link from 'next/link';
 import { ModelPageService } from '@/shared/api/model-page';
 import { CATEGORIES } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
+import { PAGE } from '@/shared/config/page';
+
+import { buildModelDisplayName } from '@/features/deals/lib/model-page-insights';
 
 import DealsMobileHeader from './[slug]/DealsMobileHeader';
 import DealsCategoryTabs from './DealsCategoryTabs';
 
-// /deals 인덱스 — 퍼블리시된 모델 페이지(상품별 핫딜 최저가 모음)를 한눈에 모아보는 허브.
-// 각 카드 → /deals/{slug}. 모델 페이지들의 SEO 내부링크 허브이자 둘러보기 진입점.
-// ★현재 사이트 내부 메뉴엔 안 걸림(격리) — sitemap 등재 + URL 직접 접속.
+import type { ReactNode } from 'react';
+
+// /deals 인덱스 — "이 상품, 지금 사도 되나?"에 답하는 곳. 새 딜 피드(홈·랭킹)와 역할이 다르다.
+// 섹션: ① 지금 사기 좋아요(진행 딜이 추이보다 쌈) ② 최근 핫딜(진행 중, 평소·비쌈 그대로 표시)
+// ③ 기다리는 상품(30일 내 딜 없음 — 적정가 + 알림). 판정은 백엔드 publishedModelPages 가 상세와 같은 규칙으로 계산.
+// ③을 숨기지 않는 이유: 모델 페이지 751개의 내부링크 허브이고, 옛 딜 페이지가 검색 유입 원천이다.
+// 앱은 /deals 를 열지 않는다(apps/mobile tab-routing) — 웹 전용.
 
 export const metadata: Metadata = {
   title: '핫딜 최저가 모음 | 지름알림',
@@ -28,16 +35,16 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 600; // 10분 ISR — 목록은 자주 안 바뀜
+export const revalidate = 600; // 10분 ISR — 판정의 '30일 이내'도 이 주기로 갱신된다
 
 export default async function DealsIndexPage() {
   const pages = await ModelPageService.getPublishedModelPages();
+  const { buyNow, recent, waiting } = splitByVerdict(pages);
 
   // 구체 수치 = AI 답변 엔진이 인용할 수 있는 유일한 형태. "여러 상품"은 인용되지 않는다.
-  const totalDeals = pages.reduce((sum, p) => sum + (p.dealCount ?? 0), 0);
   const leadSentence =
     pages.length > 0
-      ? `상품 ${pages.length.toLocaleString('ko-KR')}개 · 커뮤니티 핫딜 ${totalDeals.toLocaleString('ko-KR')}건을 단위가로 비교해, 상품마다 사도 되는 가격을 알려드립니다.`
+      ? `상품 ${pages.length.toLocaleString('ko-KR')}개의 핫딜 가격을 추이와 비교해요. 지금 핫딜이 진행 중인 ${(buyNow.length + recent.length).toLocaleString('ko-KR')}개 중 ${buyNow.length.toLocaleString('ko-KR')}개가 평소보다 싸요.`
       : null;
 
   const itemListLd =
@@ -57,6 +64,21 @@ export default async function DealsIndexPage() {
         }
       : null;
 
+  const sections = groupByCategory(waiting);
+  // 활성 categoryId — 딜 총합순(섹션 순서 그대로). 탭 순서=섹션(스크롤) 순서 일치.
+  const activeIdOrder = sections
+    .map((s) => (s.anchor.startsWith('cat-') ? Number(s.anchor.slice(4)) : NaN))
+    .filter((id) => !Number.isNaN(id));
+  const activeIds = new Set(activeIdOrder);
+  // 라벨은 CATEGORIES.text 기준(섹션 label=DB categoryName과 표기 다름). id로 매핑.
+  const labelById = new Map<number, string>(CATEGORIES.map((c) => [c.value, c.text]));
+  // 탭 순서: 활성(딜순) 먼저 → 비활성(CATEGORIES 고정순) 뒤에. 비활성은 disabled.
+  const disabledIds = CATEGORIES.map((c) => c.value).filter((v) => !activeIds.has(v));
+  const tabCategories = [...activeIdOrder, ...disabledIds].map((id) => ({
+    id,
+    name: labelById.get(id) ?? '기타',
+  }));
+
   // 폭: 모바일 600px 중앙 → PC layout-max(1280) 확장 (홈/랭킹과 동일 패턴).
   return (
     <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
@@ -68,34 +90,62 @@ export default async function DealsIndexPage() {
       )}
       <DealsMobileHeader title="핫딜 최저가 모음" />
 
-      <header className="mb-5">
+      <header className="mb-8">
         <h1 className="text-2xl font-bold text-black">핫딜 최저가 모음</h1>
         <p className="mt-1 text-sm text-gray-600">
-          {leadSentence ?? '인기 상품별로 커뮤니티 핫딜과 다나와 최저가를 모았어요.'}
+          {leadSentence ?? '인기 상품별로 커뮤니티 핫딜 가격을 모았어요.'}
         </p>
       </header>
 
       {pages.length === 0 ? (
-        <p className="py-20 text-center text-gray-400">준비 중이에요.</p>
+        <p className="py-20 text-center text-gray-500">준비 중이에요.</p>
       ) : (
-        (() => {
-          const sections = groupByCategory(pages);
-          // 활성 categoryId — 딜 총합순(섹션 순서 그대로). 탭 순서=섹션(스크롤) 순서 일치.
-          const activeIdOrder = sections
-            .map((s) => (s.anchor.startsWith('cat-') ? Number(s.anchor.slice(4)) : NaN))
-            .filter((id) => !Number.isNaN(id));
-          const activeIds = new Set(activeIdOrder);
-          // 라벨은 CATEGORIES.text 기준(섹션 label=DB categoryName과 표기 다름). id로 매핑.
-          const labelById = new Map<number, string>(CATEGORIES.map((c) => [c.value, c.text]));
-          // 탭 순서: 활성(딜순) 먼저 → 비활성(CATEGORIES 고정순) 뒤에. 비활성은 disabled.
-          const disabledIds = CATEGORIES.map((c) => c.value).filter((v) => !activeIds.has(v));
-          const tabCategories = [...activeIdOrder, ...disabledIds].map((id) => ({
-            id,
-            name: labelById.get(id) ?? '기타',
-          }));
-          return (
+        <>
+          {buyNow.length > 0 && (
+            <section className="mb-12">
+              <SectionTitle
+                title="지금 사기 좋아요"
+                description="진행 중인 핫딜이 그동안의 가격보다 싼 상품이에요."
+              />
+              <DealGrid items={buyNow} />
+            </section>
+          )}
+
+          {recent.length > 0 && (
+            <section className="mb-12">
+              <SectionTitle
+                title="최근 핫딜이 떴어요"
+                description="한 달 안에 올라온 핫딜이에요. 평소 가격과 비교해 보세요."
+              />
+              <DealGrid items={recent.slice(0, RECENT_VISIBLE)} />
+              {recent.length > RECENT_VISIBLE && (
+                // 링크는 HTML 에 그대로 남아 크롤러가 따라간다(details 는 렌더 후 접기만).
+                <details className="group mt-4">
+                  <summary className="cursor-pointer list-none rounded-xl border border-gray-200 py-3 text-center text-sm font-medium text-gray-700 group-open:hidden">
+                    {recent.length - RECENT_VISIBLE}개 더 보기
+                  </summary>
+                  <DealGrid items={recent.slice(RECENT_VISIBLE)} className="mt-3" />
+                </details>
+              )}
+            </section>
+          )}
+
+          {waiting.length > 0 && (
             <>
-              {/* 카테고리 탭 — 랭킹 TabbarV2 재사용(sticky top-14). published 없는 건 disabled. 클릭=앵커 스크롤.
+              <SectionTitle
+                title="핫딜을 기다리는 상품"
+                description="한 달 넘게 핫딜이 없었어요. 적정가 아래로 내려오면 알림으로 알려드릴게요."
+                action={
+                  <Link
+                    href={PAGE.MYPAGE_KEYWORD}
+                    rel="nofollow"
+                    className="text-primary-600 shrink-0 text-sm font-semibold"
+                  >
+                    알림 설정
+                  </Link>
+                }
+              />
+              {/* 카테고리 탭 — 랭킹 TabbarV2 재사용(sticky top-14). 클릭=앵커 스크롤.
                   sticky는 감싸면 부모 영역 벗어날 때 풀리므로 main 직계로 두고 spacer 없이. */}
               <DealsCategoryTabs categories={tabCategories} disabledIds={disabledIds} />
               {sections.map((section) => (
@@ -106,75 +156,13 @@ export default async function DealsIndexPage() {
                   // ponytail: 헤더56+탭~56 기준값. 타이틀이 탭에 가리면 이 값만 키우면 됨.
                   className="pc:scroll-mt-28 mb-10 scroll-mt-32"
                 >
-                  <h2 className="mb-4 text-lg font-bold text-black">{section.label}</h2>
-                  {/* 열수: 모바일 2 → sm 3 → PC 5 (랭킹 TrackedProductGridList와 동일). */}
-                  <ul className="pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    {section.items.map((p) => (
-                      <li key={p.slug}>
-                        <Link
-                          href={`/deals/${p.slug}`}
-                          className="flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition-shadow hover:shadow-md"
-                        >
-                          <div className="relative aspect-square w-full bg-gray-50">
-                            {p.heroImage ? (
-                              <Image
-                                src={p.heroImage}
-                                alt={p.modelName}
-                                fill
-                                // 그리드 2열(모바일)/3열(sm)/5열(PC~1280) 실폭에 맞춤 — 과대 요청 방지.
-                                sizes="(max-width: 600px) 50vw, (max-width: 1024px) 33vw, 240px"
-                                className="object-cover"
-                              />
-                            ) : (
-                              <div className="flex h-full items-center justify-center text-gray-300">
-                                이미지 없음
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex grow flex-col gap-1 p-3">
-                            <h3 className="line-clamp-2 text-sm font-semibold text-black">
-                              {p.modelName}
-                            </h3>
-                            {(() => {
-                              const fresh = freshnessLabel(p.lastDealAt);
-                              return fresh ? (
-                                <span className="w-fit rounded-full bg-gray-100 px-1.5 py-0.5 text-[11px] font-medium text-gray-600">
-                                  {fresh}
-                                </span>
-                              ) : null;
-                            })()}
-                            {/* Step6·8: 단위 있으면 단위가 메인, 없으면 총액(또는 건수만).
-                                단위 줄을 억지로 만들지 않음. */}
-                            {p.unitLabel && p.unitPrice != null ? (
-                              <div className="mt-auto">
-                                <p className="text-lg font-semibold text-gray-900">
-                                  {p.unitLabel} {p.unitPrice.toLocaleString()}원
-                                </p>
-                                {p.heroMinPrice != null && (
-                                  <p className="text-xs text-gray-400">
-                                    총액 {p.heroMinPrice.toLocaleString()}원
-                                  </p>
-                                )}
-                              </div>
-                            ) : p.heroMinPrice != null ? (
-                              <div className="mt-auto">
-                                <p className="text-lg font-semibold text-gray-900">
-                                  {p.heroMinPrice.toLocaleString()}원
-                                </p>
-                              </div>
-                            ) : (
-                              <p className="mt-auto text-xs text-gray-400">핫딜 {p.dealCount}건</p>
-                            )}
-                          </div>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  <h3 className="mb-4 text-base font-bold text-black">{section.label}</h3>
+                  <DealGrid items={section.items} />
                 </section>
               ))}
             </>
-          );
-        })()
+          )}
+        </>
       )}
     </main>
   );
@@ -182,19 +170,176 @@ export default async function DealsIndexPage() {
 
 type DealItem = Awaited<ReturnType<typeof ModelPageService.getPublishedModelPages>>[number];
 
+/** ② 최근 핫딜에서 접지 않고 보여줄 개수. 모바일 2열 기준 6줄. */
+const RECENT_VISIBLE = 12;
+
+const GOOD_TONES = new Set(['lowest', 'cheap']);
+
 /**
- * 신선도 라벨 — 최근 딜만 배지로("오늘"/"어제"/"N일 전"). 7일 초과는 null(노이즈 방지, 배지 안 띄움).
- * lastDealAt 없으면 null. 서버 렌더라 KST 자정 경계는 근사(UTC 기준 일수차) — 배지 목적엔 충분.
+ * 판정으로 세 덩어리. ①② 는 최근 올라온 딜 순(새 딜이 위), ③ 은 카테고리 섹션이 정렬한다.
+ * ①② 를 할인율 순으로 두지 않는 이유: 추이 점이 5~9개인 상품이 대부분이라 % 의 정밀도가 낮다.
  */
-function freshnessLabel(lastDealAt?: string | null): string | null {
-  if (!lastDealAt) return null;
-  const then = new Date(lastDealAt).getTime();
+function splitByVerdict(pages: DealItem[]) {
+  const byRecent = (a: DealItem, b: DealItem) =>
+    Date.parse(b.activePostedAt ?? '') - Date.parse(a.activePostedAt ?? '');
+  const active = pages.filter((p) => p.activeDealCount > 0 && p.activePrice != null);
+  const activeSlugs = new Set(active.map((p) => p.slug));
+  return {
+    buyNow: active.filter((p) => GOOD_TONES.has(p.priceTone ?? '')).sort(byRecent),
+    recent: active.filter((p) => !GOOD_TONES.has(p.priceTone ?? '')).sort(byRecent),
+    waiting: pages.filter((p) => !activeSlugs.has(p.slug)),
+  };
+}
+
+function SectionTitle({
+  title,
+  description,
+  action,
+}: {
+  title: string;
+  description: string;
+  action?: ReactNode;
+}) {
+  return (
+    <div className="mb-4 flex items-end justify-between gap-3">
+      <div>
+        <h2 className="text-lg font-bold text-black">{title}</h2>
+        <p className="mt-0.5 text-sm text-gray-500">{description}</p>
+      </div>
+      {action}
+    </div>
+  );
+}
+
+function DealGrid({ items, className }: { items: DealItem[]; className?: string }) {
+  // 열수: 모바일 2 → sm 3 → PC 5 (랭킹 TrackedProductGridList와 동일).
+  return (
+    <ul
+      className={`pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 gap-3 sm:grid-cols-3 ${className ?? ''}`}
+    >
+      {items.map((p) => (
+        <li key={p.slug}>
+          <DealCard item={p} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function DealCard({ item: p }: { item: DealItem }) {
+  const isActive = p.activeDealCount > 0 && p.activePrice != null;
+  const verdict = verdictBadge(p);
+  return (
+    <Link
+      href={`/deals/${p.slug}`}
+      className="flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition-shadow hover:shadow-md"
+    >
+      <div className="relative aspect-square w-full bg-gray-50">
+        {p.heroImage ? (
+          <Image
+            src={p.heroImage}
+            alt={p.modelName}
+            fill
+            // 그리드 2열(모바일)/3열(sm)/5열(PC~1280) 실폭에 맞춤 — 과대 요청 방지.
+            sizes="(max-width: 600px) 50vw, (max-width: 1024px) 33vw, 240px"
+            className="object-cover"
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center text-gray-300">이미지 없음</div>
+        )}
+      </div>
+      <div className="flex grow flex-col gap-1 p-3">
+        <h3 className="line-clamp-2 text-sm font-semibold text-black">
+          {buildModelDisplayName(p.brand, p.modelName)}
+        </h3>
+        {isActive ? (
+          <div className="mt-auto">
+            {verdict && (
+              <span
+                className={`mb-1 inline-block rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${verdict.className}`}
+              >
+                {verdict.text}
+              </span>
+            )}
+            <p className="text-lg font-semibold text-gray-900">
+              {p.activePrice!.toLocaleString()}원
+            </p>
+            <p className="text-xs text-gray-500">
+              {[
+                relativeDayLabel(p.activePostedAt),
+                p.activeDealCount > 1 ? `진행 ${p.activeDealCount}건` : null,
+              ]
+                .filter(Boolean)
+                .join(' · ')}
+            </p>
+          </div>
+        ) : (
+          <div className="mt-auto">
+            {p.buyLine != null && p.buyLine > 0 ? (
+              <>
+                <p className="text-xs text-gray-500">적정가</p>
+                <p className="text-base font-semibold text-gray-900">
+                  {p.buyLineUnitLabel ? `${p.buyLineUnitLabel} ` : ''}
+                  {p.buyLine.toLocaleString()}원 이하
+                </p>
+              </>
+            ) : p.heroMinPrice != null ? (
+              <>
+                <p className="text-xs text-gray-500">지난 핫딜 최저</p>
+                <p className="text-base font-semibold text-gray-900">
+                  {p.heroMinPrice.toLocaleString()}원
+                </p>
+              </>
+            ) : null}
+            {p.lastDealAt && (
+              <p className="text-xs text-gray-500">마지막 핫딜 {relativeDayLabel(p.lastDealAt)}</p>
+            )}
+          </div>
+        )}
+      </div>
+    </Link>
+  );
+}
+
+/**
+ * 판정 배지. 색은 상세 페이지의 타이밍 배지와 같다(좋음=emerald·비쌈=amber·평소=gray).
+ * 단위 축이면 "%"가 용량당 비교라 단위를 붙인다 — 총액은 팩 크기가 달라 더 비싸 보일 수 있다.
+ */
+function verdictBadge(p: DealItem): { text: string; className: string } | null {
+  const unit = p.buyLineUnitLabel ? `${p.buyLineUnitLabel} ` : '';
+  switch (p.priceTone) {
+    case 'lowest':
+      return {
+        text: `역대 최저 · ${unit}${p.savePct}%↓`,
+        className: 'bg-emerald-50 text-emerald-700',
+      };
+    case 'cheap':
+      return {
+        text: `평소보다 ${unit}${p.savePct}%↓`,
+        className: 'bg-emerald-50 text-emerald-700',
+      };
+    case 'fair':
+      return { text: '평소 수준', className: 'bg-gray-100 text-gray-600' };
+    case 'high':
+      return { text: '평소보다 비싸요', className: 'bg-amber-50 text-amber-800' };
+    default:
+      return null;
+  }
+}
+
+/**
+ * "오늘"/"어제"/"N일 전"/"N달 전"/"N년 전". 서버 렌더라 KST 자정 경계는 근사(경과 시간 기준) — 목록 표기엔 충분.
+ */
+function relativeDayLabel(at?: string | null): string | null {
+  if (!at) return null;
+  const then = Date.parse(at);
   if (Number.isNaN(then)) return null;
   const days = Math.floor((Date.now() - then) / 86_400_000);
   if (days <= 0) return '오늘';
   if (days === 1) return '어제';
-  if (days <= 7) return `${days}일 전`;
-  return null;
+  if (days < 30) return `${days}일 전`;
+  if (days < 365) return `${Math.floor(days / 30)}달 전`;
+  return `${Math.floor(days / 365)}년 전`;
 }
 
 /**

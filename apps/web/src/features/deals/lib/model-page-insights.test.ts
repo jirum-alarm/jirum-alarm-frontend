@@ -21,6 +21,7 @@ const timing = (over: Partial<Timing> = {}): Timing => ({
   packLabel: null,
   totalPrice: 14830,
   activeDealCount: 16,
+  isActivePrice: true,
   ...over,
 });
 
@@ -197,5 +198,28 @@ describe('buildTimingInsight', () => {
     });
     assert.equal(t.current, 15900);
     assert.equal(t.activeDealCount, 0);
+    // 지난 가격으로 "사기 좋은 구간"이라 하지 않는다 — /deals 목록은 이 상품을 "기다리는 상품"에 둔다.
+    assert.equal(t.tone, 'unknown');
+    assert.equal(t.isActivePrice, false);
+  });
+
+  it('추이가 평평하면 역대 최저여도 "역대급"이라 하지 않는다', () => {
+    const t = buildTimingInsight({
+      deals: [deal(10000, '2026-09-20T00:00:00Z')],
+      histPrices: [10000, 10000, 10000, 10000, 10000],
+      histBasis: 'total',
+      now,
+    });
+    assert.equal(t.tone, 'fair');
+  });
+
+  it('추이 점이 5개 미만이면 판정하지 않는다', () => {
+    const t = buildTimingInsight({
+      deals: [deal(5000, '2026-09-20T00:00:00Z')],
+      histPrices: [9000, 10000],
+      histBasis: 'total',
+      now,
+    });
+    assert.equal(t.tone, 'unknown');
   });
 });
