@@ -155,6 +155,13 @@ const EXACT_ROUTES: ReadonlyMap<
     {tab: tabNavigations.MYPAGE, screen: tabStackNavigations.MYPAGE_KEYWORD},
   ],
   [
+    '/mypage/notification',
+    {
+      tab: tabNavigations.MYPAGE,
+      screen: tabStackNavigations.MYPAGE_NOTIFICATION,
+    },
+  ],
+  [
     '/mypage/terms-policies',
     {tab: tabNavigations.MYPAGE, screen: tabStackNavigations.MYPAGE_TERMS},
   ],

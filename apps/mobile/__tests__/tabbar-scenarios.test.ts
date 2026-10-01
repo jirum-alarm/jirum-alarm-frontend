@@ -54,6 +54,7 @@ describe('내정보·커뮤니티 하위 라우트는 탭바를 숨긴다', () =
     'MYPAGE_PERSONAL',
     'MYPAGE_CATEGORIES',
     'MYPAGE_KEYWORD',
+    'MYPAGE_NOTIFICATION',
     'MYPAGE_TERMS',
     'POLICY',
     'LIKE',
@@ -62,7 +63,7 @@ describe('내정보·커뮤니티 하위 라우트는 탭바를 숨긴다', () =
   ];
   const COMMUNITY_SUBS = ['COMMUNITY_POST', 'COMMUNITY_WRITE'];
 
-  it('11개 내정보 하위 라우트가 숨김 집합에 전부 있다', () => {
+  it('12개 내정보 하위 라우트가 숨김 집합에 전부 있다', () => {
     // ★하나라도 빠지면 그 화면에서만 탭바가 남는다 — "같은 정책을 한 곳에만
     // 적용"이 이 레포에서 4번 재발한 실패 모양이다.
     const set = stack.slice(

@@ -44,6 +44,7 @@ const tabStackNavigations = {
   MYPAGE_PERSONAL: 'MyPagePersonal',
   MYPAGE_CATEGORIES: 'MyPageCategories',
   MYPAGE_KEYWORD: 'MyPageKeyword',
+  MYPAGE_NOTIFICATION: 'MyPageNotification',
   MYPAGE_TERMS: 'MyPageTerms',
   /** 약관·개인정보 본문. web /policies/privacy · /policies/terms */
   POLICY: 'Policy',

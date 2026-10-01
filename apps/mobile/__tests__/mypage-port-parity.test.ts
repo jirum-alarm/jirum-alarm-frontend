@@ -84,7 +84,7 @@ describe('라우트 13개가 전부 있다 — 절반만 네이티브면 같은 
   });
 });
 
-describe('메뉴 — web MenuList 의 5줄이 전부 있다', () => {
+describe('메뉴 — web MenuList 의 6줄이 전부 있다', () => {
   const web = readWeb('features/mypage/ui/MenuList.tsx');
 
   /**
@@ -98,6 +98,7 @@ describe('메뉴 — web MenuList 의 5줄이 전부 있다', () => {
     ['찜 목록', 'LIKE'],
     ['관심 카테고리', 'MYPAGE_CATEGORIES'],
     ['키워드 알림', 'MYPAGE_KEYWORD'],
+    ['알림 설정', 'MYPAGE_NOTIFICATION'],
     ['약관 및 정책', 'MYPAGE_TERMS'],
   ])('"%s" 이 web 에 있고 앱에서 %s 로 간다', (title, route) => {
     expect(web).toContain(title);

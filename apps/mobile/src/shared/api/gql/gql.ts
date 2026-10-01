@@ -45,7 +45,7 @@ type Documents = {
   '\n  mutation MutationUpdateMyProfile(\n    $nickname: String\n    $birthYear: Float\n    $gender: Gender\n    $favoriteCategories: [Int!]\n  ) {\n    updateUserProfile(\n      nickname: $nickname\n      birthYear: $birthYear\n      gender: $gender\n      favoriteCategories: $favoriteCategories\n    )\n  }\n': typeof types.MutationUpdateMyProfileDocument;
   '\n  mutation MutationUpdateMyPassword($password: String!) {\n    updatePassword(password: $password)\n  }\n': typeof types.MutationUpdateMyPasswordDocument;
   '\n  mutation MutationWithdraw {\n    withdraw\n  }\n': typeof types.MutationWithdrawDocument;
-  '\n  query QueryMyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n      priceDropOnly\n    }\n  }\n': typeof types.QueryMyNotificationKeywordsDocument;
+  '\n  query QueryMyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n      priceDropOnly\n      minPrice\n      maxPrice\n      excludeKeywords\n    }\n  }\n': typeof types.QueryMyNotificationKeywordsDocument;
   '\n  mutation MutationAddMyNotificationKeyword(\n    $keyword: String!\n    $fromRecommendation: Boolean\n    $priceDropOnly: Boolean\n  ) {\n    addNotificationKeyword(\n      keyword: $keyword\n      fromRecommendation: $fromRecommendation\n      priceDropOnly: $priceDropOnly\n    )\n  }\n': typeof types.MutationAddMyNotificationKeywordDocument;
   '\n  mutation MutationRemoveMyNotificationKeyword($id: Float!) {\n    removeNotificationKeyword(id: $id)\n  }\n': typeof types.MutationRemoveMyNotificationKeywordDocument;
   '\n  mutation MutationUpdateKeywordPriceDropOnly(\n    $id: Int!\n    $priceDropOnly: Boolean!\n  ) {\n    updateNotificationKeywordPriceDropOnly(\n      id: $id\n      priceDropOnly: $priceDropOnly\n    )\n  }\n': typeof types.MutationUpdateKeywordPriceDropOnlyDocument;
@@ -58,6 +58,10 @@ type Documents = {
   '\n  query QueryNotificationThemeLiveDeals($themeId: Int!) {\n    notificationThemeLiveDeals(themeId: $themeId) {\n      id\n      title\n      thumbnail\n      price\n      postedAt\n      categoryId\n      isEnd\n      isHot\n      hotDealType\n      mallName\n      provider {\n        nameKr\n      }\n    }\n  }\n': typeof types.QueryNotificationThemeLiveDealsDocument;
   '\n  mutation MutationSubscribeNotificationTheme($themeId: Int!) {\n    subscribeNotificationTheme(themeId: $themeId)\n  }\n': typeof types.MutationSubscribeNotificationThemeDocument;
   '\n  mutation MutationUnsubscribeNotificationTheme($themeId: Int!) {\n    unsubscribeNotificationTheme(themeId: $themeId)\n  }\n': typeof types.MutationUnsubscribeNotificationThemeDocument;
+  '\n  mutation MutationUpdateKeywordPriceRange(\n    $id: Int!\n    $minPrice: Int\n    $maxPrice: Int\n  ) {\n    updateNotificationKeywordPriceRange(\n      id: $id\n      minPrice: $minPrice\n      maxPrice: $maxPrice\n    )\n  }\n': typeof types.MutationUpdateKeywordPriceRangeDocument;
+  '\n  mutation MutationUpdateKeywordExcludeKeywords(\n    $id: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    updateNotificationKeywordExcludeKeywords(\n      id: $id\n      excludeKeywords: $excludeKeywords\n    )\n  }\n': typeof types.MutationUpdateKeywordExcludeKeywordsDocument;
+  '\n  query QueryMyPushSetting {\n    pushSetting {\n      keywordAlert\n      hotDealAlert\n      nightAlerts\n      communityAlert\n    }\n  }\n': typeof types.QueryMyPushSettingDocument;
+  '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $hotDealAlert: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      hotDealAlert: $hotDealAlert\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n    )\n  }\n': typeof types.MutationUpdateMyPushSettingDocument;
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n': typeof types.MutationAddPushTokenDocument;
   '\n  mutation MutationRemoveTokenLinkage($token: String!) {\n    removeTokenLinkage(token: $token)\n  }\n': typeof types.MutationRemoveTokenLinkageDocument;
   '\n  query QueryNotifications($limit: Int!, $offset: Int!) {\n    notifications(limit: $limit, offset: $offset) {\n      id\n      message\n      createdAt\n      readAt\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n': typeof types.QueryNotificationsDocument;
@@ -153,7 +157,7 @@ const documents: Documents = {
     types.MutationUpdateMyPasswordDocument,
   '\n  mutation MutationWithdraw {\n    withdraw\n  }\n':
     types.MutationWithdrawDocument,
-  '\n  query QueryMyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n      priceDropOnly\n    }\n  }\n':
+  '\n  query QueryMyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n      priceDropOnly\n      minPrice\n      maxPrice\n      excludeKeywords\n    }\n  }\n':
     types.QueryMyNotificationKeywordsDocument,
   '\n  mutation MutationAddMyNotificationKeyword(\n    $keyword: String!\n    $fromRecommendation: Boolean\n    $priceDropOnly: Boolean\n  ) {\n    addNotificationKeyword(\n      keyword: $keyword\n      fromRecommendation: $fromRecommendation\n      priceDropOnly: $priceDropOnly\n    )\n  }\n':
     types.MutationAddMyNotificationKeywordDocument,
@@ -179,6 +183,14 @@ const documents: Documents = {
     types.MutationSubscribeNotificationThemeDocument,
   '\n  mutation MutationUnsubscribeNotificationTheme($themeId: Int!) {\n    unsubscribeNotificationTheme(themeId: $themeId)\n  }\n':
     types.MutationUnsubscribeNotificationThemeDocument,
+  '\n  mutation MutationUpdateKeywordPriceRange(\n    $id: Int!\n    $minPrice: Int\n    $maxPrice: Int\n  ) {\n    updateNotificationKeywordPriceRange(\n      id: $id\n      minPrice: $minPrice\n      maxPrice: $maxPrice\n    )\n  }\n':
+    types.MutationUpdateKeywordPriceRangeDocument,
+  '\n  mutation MutationUpdateKeywordExcludeKeywords(\n    $id: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    updateNotificationKeywordExcludeKeywords(\n      id: $id\n      excludeKeywords: $excludeKeywords\n    )\n  }\n':
+    types.MutationUpdateKeywordExcludeKeywordsDocument,
+  '\n  query QueryMyPushSetting {\n    pushSetting {\n      keywordAlert\n      hotDealAlert\n      nightAlerts\n      communityAlert\n    }\n  }\n':
+    types.QueryMyPushSettingDocument,
+  '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $hotDealAlert: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      hotDealAlert: $hotDealAlert\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n    )\n  }\n':
+    types.MutationUpdateMyPushSettingDocument,
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n':
     types.MutationAddPushTokenDocument,
   '\n  mutation MutationRemoveTokenLinkage($token: String!) {\n    removeTokenLinkage(token: $token)\n  }\n':
@@ -435,7 +447,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryMyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n      priceDropOnly\n    }\n  }\n',
+  source: '\n  query QueryMyNotificationKeywords($limit: Int!) {\n    notificationKeywordsByMe(limit: $limit) {\n      id\n      keyword\n      priceDropOnly\n      minPrice\n      maxPrice\n      excludeKeywords\n    }\n  }\n',
 ): typeof import('./graphql').QueryMyNotificationKeywordsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -509,6 +521,30 @@ export function graphql(
 export function graphql(
   source: '\n  mutation MutationUnsubscribeNotificationTheme($themeId: Int!) {\n    unsubscribeNotificationTheme(themeId: $themeId)\n  }\n',
 ): typeof import('./graphql').MutationUnsubscribeNotificationThemeDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationUpdateKeywordPriceRange(\n    $id: Int!\n    $minPrice: Int\n    $maxPrice: Int\n  ) {\n    updateNotificationKeywordPriceRange(\n      id: $id\n      minPrice: $minPrice\n      maxPrice: $maxPrice\n    )\n  }\n',
+): typeof import('./graphql').MutationUpdateKeywordPriceRangeDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationUpdateKeywordExcludeKeywords(\n    $id: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    updateNotificationKeywordExcludeKeywords(\n      id: $id\n      excludeKeywords: $excludeKeywords\n    )\n  }\n',
+): typeof import('./graphql').MutationUpdateKeywordExcludeKeywordsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QueryMyPushSetting {\n    pushSetting {\n      keywordAlert\n      hotDealAlert\n      nightAlerts\n      communityAlert\n    }\n  }\n',
+): typeof import('./graphql').QueryMyPushSettingDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $hotDealAlert: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      hotDealAlert: $hotDealAlert\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n    )\n  }\n',
+): typeof import('./graphql').MutationUpdateMyPushSettingDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

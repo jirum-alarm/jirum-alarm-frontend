@@ -65,6 +65,7 @@ export default function MyPageScreen() {
         | typeof tabStackNavigations.MYPAGE_ACCOUNT
         | typeof tabStackNavigations.MYPAGE_CATEGORIES
         | typeof tabStackNavigations.MYPAGE_KEYWORD
+        | typeof tabStackNavigations.MYPAGE_NOTIFICATION
         | typeof tabStackNavigations.MYPAGE_TERMS
         | typeof tabStackNavigations.LIKE,
     ) => {
@@ -130,7 +131,7 @@ export default function MyPageScreen() {
           </View>
         </View>
 
-        {/* 메뉴 — web MenuList(찜 목록 · 관심 카테고리 · 키워드 알림 · 약관 · 고객센터) */}
+        {/* 메뉴 — web MenuList(찜 목록 · 관심 카테고리 · 키워드 알림 · 알림 설정 · 약관 · 고객센터) */}
         <View className="px-5">
           {/* ★아래에 아무것도 없는 자리의 구분선은 뺀다 — 목록이 끊긴
               것처럼 보였다(마지막 행 밑에 회색 선 + 빈 화면). */}
@@ -149,6 +150,11 @@ export default function MyPageScreen() {
               icon={<AlertMenuIcon />}
               title="키워드 알림"
               onPress={() => push(tabStackNavigations.MYPAGE_KEYWORD)}
+            />
+            <MenuRow
+              icon={<FilterMenuIcon />}
+              title="알림 설정"
+              onPress={() => push(tabStackNavigations.MYPAGE_NOTIFICATION)}
             />
             <MenuRow
               icon={<DescriptionMenuIcon />}

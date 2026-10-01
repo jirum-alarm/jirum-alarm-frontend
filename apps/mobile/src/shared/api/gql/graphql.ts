@@ -297,6 +297,13 @@ export type ExistsUserOutput = {
   social: Scalars['Boolean']['output'];
 };
 
+export type GatedMappingRematchOutput = {
+  __typename?: 'GatedMappingRematchOutput';
+  productId?: Maybe<Scalars['Int']['output']>;
+  /** requeued = 게이트 행 삭제 후 게이트 없이 재매칭 시작(결과는 검수 대기로) / already_mapped = 다른 matched·verified 매핑이 있어 게이트 행만 삭제 / unavailable = matching-api 미설정 */
+  status: Scalars['String']['output'];
+};
+
 export enum Gender {
   Female = 'FEMALE',
   Male = 'MALE',
@@ -638,6 +645,8 @@ export type Mutation = {
   cancelVerification: Scalars['Boolean']['output'];
   /** 상품 단건 수집 */
   collectProduct: Scalars['Boolean']['output'];
+  /** 구매(수익링크) 버튼 클릭 기록 — source 에 화면(예: detail_mobile) */
+  collectPurchaseClick: Scalars['Boolean']['output'];
   /** 썸네일 단건 수집 */
   collectThumbnail: Scalars['Boolean']['output'];
   /** 어드민) 광고 생성 (생성된 id 반환) */
@@ -674,6 +683,8 @@ export type Mutation = {
   recordProductImpressions: Scalars['Boolean']['output'];
   /** 어드민) 리액션 키워드 후보 거절 */
   rejectHotDealKeywordCandidateByAdmin: Scalars['Boolean']['output'];
+  /** 게이트 차단 매핑 오판 → 게이트 행 삭제 후 재매칭 (결과는 검수 대기로) */
+  rematchGatedMapping: GatedMappingRematchOutput;
   /** 모든 알림 삭제 */
   removeAllNotifications: Scalars['Boolean']['output'];
   removeComment: Scalars['Boolean']['output'];
@@ -731,6 +742,8 @@ export type Mutation = {
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 키워드 맵 그룹 수정 */
   updateKeywordMapGroupByAdmin: Scalars['Boolean']['output'];
+  /** 이 키워드 알림에서 제외할 단어 설정 (전체 교체, 빈 배열 = 해제) */
+  updateNotificationKeywordExcludeKeywords: Scalars['Boolean']['output'];
   /** 이 키워드는 등록 시점보다 가격이 내려간 딜만 알림 받기 */
   updateNotificationKeywordPriceDropOnly: Scalars['Boolean']['output'];
   /** 이 키워드는 지정한 가격 범위 안의 딜만 알림 받기 (null = 그 방향 해제) */
@@ -878,6 +891,12 @@ export type MutationCollectProductArgs = {
   source?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type MutationCollectPurchaseClickArgs = {
+  position?: InputMaybe<Scalars['Int']['input']>;
+  productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type MutationCollectThumbnailArgs = {
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
@@ -946,6 +965,10 @@ export type MutationRecordProductImpressionsArgs = {
 
 export type MutationRejectHotDealKeywordCandidateByAdminArgs = {
   id: Scalars['Int']['input'];
+};
+
+export type MutationRematchGatedMappingArgs = {
+  productMappingId: Scalars['Int']['input'];
 };
 
 export type MutationRemoveCommentArgs = {
@@ -1095,6 +1118,11 @@ export type MutationUpdateKeywordMapGroupByAdminArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type MutationUpdateNotificationKeywordExcludeKeywordsArgs = {
+  excludeKeywords: Array<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
+};
+
 export type MutationUpdateNotificationKeywordPriceDropOnlyArgs = {
   id: Scalars['Int']['input'];
   priceDropOnly: Scalars['Boolean']['input'];
@@ -1170,6 +1198,7 @@ export type NotificationByAdminOutput = {
 export type NotificationKeyword = {
   __typename?: 'NotificationKeyword';
   createdAt: Scalars['DateTime']['output'];
+  excludeKeywords?: Maybe<Array<Scalars['String']['output']>>;
   id: Scalars['ID']['output'];
   isActive: Scalars['Boolean']['output'];
   keyword: Scalars['String']['output'];
@@ -1835,7 +1864,7 @@ export type Query = {
   communityProviders: Array<Provider>;
   /** 상품 랭킹 랜덤 조회 */
   communityRandomRankingProducts: Array<ProductOutput>;
-  /** 어드민) 일별 서비스 조회수 합계 */
+  /** 어드민) 일별/주별/월별 서비스 조회수 합계 */
   dailyServiceViewStats: Array<DateCountOutput>;
   /** 안읽은 알림 존재 여부 조회 */
   existUnreadNotification: Scalars['Boolean']['output'];
@@ -1880,7 +1909,7 @@ export type Query = {
   hotDealKeywordsByAdmin: Array<HotDealKeywordOutput>;
   /** 놓치면 아까운 핫딜 - 랭킹순 핫딜 상품 조회 */
   hotDealRankingProducts: Array<ProductOutput>;
-  /** 어드민) 일별 핫딜 비율 추이 */
+  /** 어드민) 일별/주별/월별 핫딜 비율 추이 */
   hotDealRatioStats: Array<HotDealRatioOutput>;
   /** 어드민) 핫딜 유형별 분포 */
   hotDealTypeDistribution: Array<HotDealTypeCountOutput>;
@@ -1906,7 +1935,9 @@ export type Query = {
   notificationKeywordsByMe: Array<NotificationKeyword>;
   /** 어드민) 개별 알림 목록 조회 */
   notificationListByAdmin: Array<Notification>;
-  /** 묶음 라이브 딜(상세 진입 시 실시간 조회) */
+  /** 묶음 상세 무한 스크롤 — 기간 제한 없이 이 묶음을 구독했다면 받았을 알림 딜(최근순, before 커서) */
+  notificationThemeDeals: Array<ProductOutput>;
+  /** 묶음 미리보기 — 지난 7일 이 묶음을 구독했다면 받았을 알림 딜(최근순) */
   notificationThemeLiveDeals: Array<ProductOutput>;
   /** 활성 알림 묶음(테마) 목록 + 대표 키워드 */
   notificationThemes: Array<ThemeWithKeywords>;
@@ -1930,7 +1961,7 @@ export type Query = {
   productKeywords: Array<Scalars['String']['output']>;
   /** 어드민) 가격대별 상품 분포 */
   productPriceDistribution: Array<PriceRangeCountOutput>;
-  /** 어드민) 일별 신규 상품 등록 수 */
+  /** 어드민) 일별/주별/월별 신규 상품 등록 수 */
   productRegistrationStats: Array<DateCountOutput>;
   /** 어드민) provider별 시계열 신규 상품 수 (커뮤니티 크롤러 health) */
   productRegistrationStatsByProvider: Array<ProviderDateCountOutput>;
@@ -1959,6 +1990,8 @@ export type Query = {
   recommendedNotificationKeywords: Array<Scalars['String']['output']>;
   /** 신고한 사용자 목록 조회 (마스킹) */
   reportUserNames: Array<Scalars['String']['output']>;
+  /** 같은 상품(동일상품 그룹)의 진행 중 딜 조회 (최신순, 최대 20) */
+  sameProductDeals: Array<ProductOutput>;
   /** 자동완성용 추천 검색어 목록. prefix로 시작하는 인기 검색어 + 상품 title prefix 매칭. */
   searchSuggestions: Array<Scalars['String']['output']>;
   /** 유사 상품 목록 조회 */
@@ -1969,9 +2002,6 @@ export type Query = {
   socialAccessToken: Scalars['String']['output'];
   /** 소셜 정보 조회 */
   socialInfo: SocialInfoOutput;
-  test6: Scalars['Int']['output'];
-  test7: Scalars['Boolean']['output'];
-  test8: Scalars['Boolean']['output'];
   /** 어드민) 썸네일 수집 통계 (타입 분포 + mall별 분포 + 미수집 카운트) */
   thumbnailStats: ThumbnailStatsOutput;
   /** 같이 본 상품 목록 조회 */
@@ -2252,6 +2282,12 @@ export type QueryNotificationListByAdminArgs = {
   userId?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type QueryNotificationThemeDealsArgs = {
+  before?: InputMaybe<Scalars['Float']['input']>;
+  limit?: Scalars['Int']['input'];
+  themeId: Scalars['Int']['input'];
+};
+
 export type QueryNotificationThemeLiveDealsArgs = {
   themeId: Scalars['Int']['input'];
 };
@@ -2387,6 +2423,10 @@ export type QueryRecentViewedProductsArgs = {
 
 export type QueryReportUserNamesArgs = {
   productId: Scalars['Int']['input'];
+};
+
+export type QuerySameProductDealsArgs = {
+  id: Scalars['Int']['input'];
 };
 
 export type QuerySearchSuggestionsArgs = {
@@ -2536,6 +2576,12 @@ export type ThemeWithKeywords = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   representativeKeywords: Array<Scalars['String']['output']>;
+  /** URL slug(/themes/{slug}). 없으면 id 로 링크 */
+  slug?: Maybe<Scalars['String']['output']>;
+  /** 구독자 수 */
+  subscriberCount: Scalars['Int']['output'];
+  /** 지난 7일 이 묶음을 구독했다면 받았을 알림 수 */
+  weeklyAlertCount: Scalars['Int']['output'];
 };
 
 export type ThumbnailMallCountOutput = {
@@ -3304,6 +3350,9 @@ export type QueryMyNotificationKeywordsQuery = {
     id: string;
     keyword: string;
     priceDropOnly: boolean;
+    minPrice?: number | null;
+    maxPrice?: number | null;
+    excludeKeywords?: Array<string> | null;
   }>;
 };
 
@@ -3460,6 +3509,54 @@ export type MutationUnsubscribeNotificationThemeMutationVariables = Exact<{
 export type MutationUnsubscribeNotificationThemeMutation = {
   __typename?: 'Mutation';
   unsubscribeNotificationTheme: boolean;
+};
+
+export type MutationUpdateKeywordPriceRangeMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  minPrice?: InputMaybe<Scalars['Int']['input']>;
+  maxPrice?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type MutationUpdateKeywordPriceRangeMutation = {
+  __typename?: 'Mutation';
+  updateNotificationKeywordPriceRange: boolean;
+};
+
+export type MutationUpdateKeywordExcludeKeywordsMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  excludeKeywords:
+    | Array<Scalars['String']['input']>
+    | Scalars['String']['input'];
+}>;
+
+export type MutationUpdateKeywordExcludeKeywordsMutation = {
+  __typename?: 'Mutation';
+  updateNotificationKeywordExcludeKeywords: boolean;
+};
+
+export type QueryMyPushSettingQueryVariables = Exact<{[key: string]: never}>;
+
+export type QueryMyPushSettingQuery = {
+  __typename?: 'Query';
+  pushSetting: {
+    __typename?: 'UserPushSetting';
+    keywordAlert: boolean;
+    hotDealAlert: boolean;
+    nightAlerts: boolean;
+    communityAlert: boolean;
+  };
+};
+
+export type MutationUpdateMyPushSettingMutationVariables = Exact<{
+  keywordAlert?: InputMaybe<Scalars['Boolean']['input']>;
+  hotDealAlert?: InputMaybe<Scalars['Boolean']['input']>;
+  nightAlerts?: InputMaybe<Scalars['Boolean']['input']>;
+  communityAlert?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type MutationUpdateMyPushSettingMutation = {
+  __typename?: 'Mutation';
+  updatePushSetting: boolean;
 };
 
 export type MutationAddPushTokenMutationVariables = Exact<{
@@ -4535,6 +4632,9 @@ export const QueryMyNotificationKeywordsDocument = new TypedDocumentString(`
     id
     keyword
     priceDropOnly
+    minPrice
+    maxPrice
+    excludeKeywords
   }
 }
     `) as unknown as TypedDocumentString<
@@ -4692,6 +4792,56 @@ export const MutationUnsubscribeNotificationThemeDocument =
     MutationUnsubscribeNotificationThemeMutation,
     MutationUnsubscribeNotificationThemeMutationVariables
   >;
+export const MutationUpdateKeywordPriceRangeDocument = new TypedDocumentString(`
+    mutation MutationUpdateKeywordPriceRange($id: Int!, $minPrice: Int, $maxPrice: Int) {
+  updateNotificationKeywordPriceRange(
+    id: $id
+    minPrice: $minPrice
+    maxPrice: $maxPrice
+  )
+}
+    `) as unknown as TypedDocumentString<
+  MutationUpdateKeywordPriceRangeMutation,
+  MutationUpdateKeywordPriceRangeMutationVariables
+>;
+export const MutationUpdateKeywordExcludeKeywordsDocument =
+  new TypedDocumentString(`
+    mutation MutationUpdateKeywordExcludeKeywords($id: Int!, $excludeKeywords: [String!]!) {
+  updateNotificationKeywordExcludeKeywords(
+    id: $id
+    excludeKeywords: $excludeKeywords
+  )
+}
+    `) as unknown as TypedDocumentString<
+    MutationUpdateKeywordExcludeKeywordsMutation,
+    MutationUpdateKeywordExcludeKeywordsMutationVariables
+  >;
+export const QueryMyPushSettingDocument = new TypedDocumentString(`
+    query QueryMyPushSetting {
+  pushSetting {
+    keywordAlert
+    hotDealAlert
+    nightAlerts
+    communityAlert
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryMyPushSettingQuery,
+  QueryMyPushSettingQueryVariables
+>;
+export const MutationUpdateMyPushSettingDocument = new TypedDocumentString(`
+    mutation MutationUpdateMyPushSetting($keywordAlert: Boolean, $hotDealAlert: Boolean, $nightAlerts: Boolean, $communityAlert: Boolean) {
+  updatePushSetting(
+    keywordAlert: $keywordAlert
+    hotDealAlert: $hotDealAlert
+    nightAlerts: $nightAlerts
+    communityAlert: $communityAlert
+  )
+}
+    `) as unknown as TypedDocumentString<
+  MutationUpdateMyPushSettingMutation,
+  MutationUpdateMyPushSettingMutationVariables
+>;
 export const MutationAddPushTokenDocument = new TypedDocumentString(`
     mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {
   addPushToken(token: $token, tokenType: $tokenType)

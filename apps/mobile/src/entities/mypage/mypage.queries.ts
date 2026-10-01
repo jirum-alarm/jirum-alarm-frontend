@@ -21,6 +21,7 @@ export class MyPageQueries {
     all: ['mypage'] as const,
     me: () => [...MyPageQueries.keys.all, 'me'] as const,
     keywords: () => [...MyPageQueries.keys.all, 'keywords'] as const,
+    pushSetting: () => [...MyPageQueries.keys.all, 'push-setting'] as const,
     wishlist: () => [...MyPageQueries.keys.all, 'wishlist'] as const,
     wishlistCount: () => [...MyPageQueries.keys.all, 'wishlist-count'] as const,
   };
@@ -29,6 +30,13 @@ export class MyPageQueries {
     return queryOptions({
       queryKey: MyPageQueries.keys.me(),
       queryFn: MyPageService.getMyProfile,
+    });
+  }
+
+  static pushSetting() {
+    return queryOptions({
+      queryKey: MyPageQueries.keys.pushSetting(),
+      queryFn: MyPageService.getMyPushSetting,
     });
   }
 

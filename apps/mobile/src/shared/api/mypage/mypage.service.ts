@@ -1,12 +1,16 @@
 import {
   MutationAddMyNotificationKeyword,
   MutationRemoveMyNotificationKeyword,
+  MutationUpdateKeywordExcludeKeywords,
   MutationUpdateKeywordPriceDropOnly,
+  MutationUpdateKeywordPriceRange,
+  MutationUpdateMyPushSetting,
   MutationUpdateMyPassword,
   MutationUpdateMyProfile,
   MutationWithdraw,
   QueryMyNotificationKeywords,
   QueryMyProfile,
+  QueryMyPushSetting,
 } from '@/graphql/mypage';
 import type {MutationUpdateMyProfileMutationVariables} from '@/shared/api/gql/graphql';
 import {HttpClient} from '@/shared/lib/client';
@@ -24,7 +28,17 @@ export type MyKeyword = {
   id: string;
   keyword: string;
   priceDropOnly: boolean;
+  minPrice?: number | null;
+  maxPrice?: number | null;
+  excludeKeywords?: string[] | null;
 };
+
+export type PushSettingKey =
+  | 'keywordAlert'
+  | 'hotDealAlert'
+  | 'nightAlerts'
+  | 'communityAlert';
+export type MyPushSetting = Record<PushSettingKey, boolean>;
 
 /**
  * 내정보 프로필·비밀번호·탈퇴·키워드. web `shared/api/auth` + `shared/api/keyword`.
@@ -97,6 +111,37 @@ export class MyPageService {
   }) {
     const res = await HttpClient.withAccessToken().execute(
       MutationUpdateKeywordPriceDropOnly,
+      variables,
+    );
+    return res.data;
+  }
+
+  /** 키워드별 제외 단어 + 가격 범위. 서버 뮤테이션이 둘이라 병렬로 부른다(web 과 같다). */
+  static async updateKeywordOptions(variables: {
+    id: number;
+    excludeKeywords: string[];
+    minPrice: number | null;
+    maxPrice: number | null;
+  }) {
+    const {id, excludeKeywords, minPrice, maxPrice} = variables;
+    const client = HttpClient.withAccessToken();
+    await Promise.all([
+      client.execute(MutationUpdateKeywordExcludeKeywords, {
+        id,
+        excludeKeywords,
+      }),
+      client.execute(MutationUpdateKeywordPriceRange, {id, minPrice, maxPrice}),
+    ]);
+  }
+
+  static async getMyPushSetting() {
+    const res = await HttpClient.withAccessToken().execute(QueryMyPushSetting);
+    return (res.data?.pushSetting ?? null) as MyPushSetting | null;
+  }
+
+  static async updateMyPushSetting(variables: Partial<MyPushSetting>) {
+    const res = await HttpClient.withAccessToken().execute(
+      MutationUpdateMyPushSetting,
       variables,
     );
     return res.data;

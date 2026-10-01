@@ -18,6 +18,7 @@ export default function PriceDropSwitch({
   disabled,
   onChange,
   showLabel = true,
+  accessibilityLabel = '가격 내려갔을 때만 알림 받기',
 }: {
   value: boolean;
   disabled?: boolean;
@@ -28,6 +29,8 @@ export default function PriceDropSwitch({
    * 두고, 스크린리더용 라벨은 `accessibilityLabel` 에 그대로 남는다.
    */
   showLabel?: boolean;
+  /** 다른 화면(알림 설정)에서 재사용할 때의 스크린리더 라벨 */
+  accessibilityLabel?: string;
 }) {
   // 노브는 미끄러지고 트랙 색은 번진다 — 예전엔 marginLeft 를 2 → 18 로 바꿔 순간이동했다.
   const progress = useRef(new Animated.Value(value ? 1 : 0)).current;
@@ -49,7 +52,7 @@ export default function PriceDropSwitch({
       hitSlop={8}
       accessibilityRole="switch"
       accessibilityState={{checked: value, disabled: !!disabled}}
-      accessibilityLabel="가격 내려갔을 때만 알림 받기"
+      accessibilityLabel={accessibilityLabel}
       // ★flex·크기는 style, 색·정렬은 className (NativeWind 규칙).
       style={disabled ? styles.dimmed : undefined}
       className="shrink-0 flex-row items-center gap-1.5">

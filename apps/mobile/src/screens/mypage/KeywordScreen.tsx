@@ -21,6 +21,7 @@ import Button from '@/shared/components/ui/Button';
 import TextField from '@/shared/components/ui/Text/TextField';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
+import KeywordOptions from '@/features/mypage/ui/KeywordOptions';
 import PriceDropSwitch from '@/features/mypage/ui/PriceDropSwitch';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
@@ -117,7 +118,9 @@ export default function KeywordScreen({navigation}: Props) {
               </Text>
             </View>
             <Text className="mt-1 text-xs text-gray-500">
-              {'‘가격 하락 알림’을 켜면 평소 시세보다 싸게 뜬 딜만 알려드려요'}
+              {
+                '‘가격 하락 알림’을 켜면 평소 시세보다 싸게 뜬 딜만, ‘알림 조건’에서 제외할 단어와 가격 범위를 정할 수 있어요'
+              }
             </Text>
           </View>
           <View className="h-4" />
@@ -167,6 +170,7 @@ export default function KeywordScreen({navigation}: Props) {
                     <Close width={20} height={20} color="#667085" />
                   </Pressable>
                 </View>
+                <KeywordOptions keyword={keyword} />
               </View>
             ))
           )}

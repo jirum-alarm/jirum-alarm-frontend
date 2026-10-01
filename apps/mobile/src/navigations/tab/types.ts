@@ -27,6 +27,7 @@ export type TabStackParamList = ProductFlowParamList & {
   [tabStackNavigations.MYPAGE_PERSONAL]: undefined;
   [tabStackNavigations.MYPAGE_CATEGORIES]: undefined;
   [tabStackNavigations.MYPAGE_KEYWORD]: undefined;
+  [tabStackNavigations.MYPAGE_NOTIFICATION]: undefined;
   [tabStackNavigations.MYPAGE_TERMS]: undefined;
   [tabStackNavigations.POLICY]: {kind: 'privacy' | 'terms'};
   [tabStackNavigations.LIKE]: undefined;

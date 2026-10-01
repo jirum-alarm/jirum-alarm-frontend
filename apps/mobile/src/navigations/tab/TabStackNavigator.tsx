@@ -20,6 +20,7 @@ import PasswordScreen from '@/screens/mypage/PasswordScreen';
 import PersonalScreen from '@/screens/mypage/PersonalScreen';
 import CategoriesScreen from '@/screens/mypage/CategoriesScreen';
 import KeywordScreen from '@/screens/mypage/KeywordScreen';
+import NotificationSettingScreen from '@/screens/mypage/NotificationSettingScreen';
 import TermsPoliciesScreen from '@/screens/mypage/TermsPoliciesScreen';
 import PolicyScreen from '@/screens/mypage/PolicyScreen';
 import LikeScreen from '@/screens/mypage/LikeScreen';
@@ -127,6 +128,7 @@ const MYPAGE_SUB_ROUTES: ReadonlySet<string> = new Set([
   tabStackNavigations.MYPAGE_PERSONAL,
   tabStackNavigations.MYPAGE_CATEGORIES,
   tabStackNavigations.MYPAGE_KEYWORD,
+  tabStackNavigations.MYPAGE_NOTIFICATION,
   tabStackNavigations.MYPAGE_TERMS,
   tabStackNavigations.POLICY,
   tabStackNavigations.LIKE,
@@ -329,6 +331,10 @@ export function createTabStack(tabName: TabName) {
         <Stack.Screen
           name={tabStackNavigations.MYPAGE_KEYWORD}
           component={KeywordScreen}
+        />
+        <Stack.Screen
+          name={tabStackNavigations.MYPAGE_NOTIFICATION}
+          component={NotificationSettingScreen}
         />
         <Stack.Screen
           name={tabStackNavigations.MYPAGE_TERMS}

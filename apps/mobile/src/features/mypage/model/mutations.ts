@@ -2,7 +2,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 import {MyPageQueries} from '@/entities/mypage';
 import {CategoryQueries} from '@/entities/category/category.queries';
-import {MyPageService} from '@/shared/api/mypage';
+import {MyPageService, type MyPushSetting} from '@/shared/api/mypage';
 import {showToast} from '@/shared/lib/feedback';
 
 import {useLogout} from './useLogout';
@@ -93,5 +93,47 @@ export function useWithdraw() {
     mutationFn: MyPageService.withdraw,
     onSuccess: () => logout(),
     onError: () => showToast.error('회원탈퇴에 실패했어요'),
+  });
+}
+
+/** 키워드별 제외 단어 + 가격 범위 저장. web `update-keyword-options`. */
+export function useUpdateKeywordOptions() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: MyPageService.updateKeywordOptions,
+    onSuccess: () => {
+      showToast.success('알림 조건을 저장했어요.');
+      return queryClient.invalidateQueries({
+        queryKey: MyPageQueries.keys.keywords(),
+      });
+    },
+    onError: () =>
+      showToast.error(
+        '알림 조건 저장에 실패했어요. 최소 가격이 최대 가격보다 크지 않은지 확인해 주세요.',
+      ),
+  });
+}
+
+/**
+ * 계정 단위 푸시 설정 토글. 누르는 즉시 바뀌고(낙관적), 실패하면 되돌린다.
+ * web `usePushSetting` 과 같다.
+ */
+export function useUpdatePushSetting() {
+  const queryClient = useQueryClient();
+  const key = MyPageQueries.keys.pushSetting();
+  return useMutation({
+    mutationFn: MyPageService.updateMyPushSetting,
+    onMutate: async (variables: Partial<MyPushSetting>) => {
+      await queryClient.cancelQueries({queryKey: key});
+      const previous = queryClient.getQueryData<MyPushSetting | null>(key);
+      queryClient.setQueryData<MyPushSetting | null>(key, old =>
+        old ? {...old, ...variables} : old,
+      );
+      return {previous};
+    },
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData(key, context?.previous);
+      showToast.error('알림 설정 변경에 실패했어요.');
+    },
   });
 }

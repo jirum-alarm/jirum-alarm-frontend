@@ -64,6 +64,9 @@ export const QueryMyNotificationKeywords = graphql(`
       id
       keyword
       priceDropOnly
+      minPrice
+      maxPrice
+      excludeKeywords
     }
   }
 `);
@@ -208,5 +211,61 @@ export const MutationSubscribeNotificationTheme = graphql(`
 export const MutationUnsubscribeNotificationTheme = graphql(`
   mutation MutationUnsubscribeNotificationTheme($themeId: Int!) {
     unsubscribeNotificationTheme(themeId: $themeId)
+  }
+`);
+
+/** 키워드별 가격 범위. null = 그 방향 해제. */
+export const MutationUpdateKeywordPriceRange = graphql(`
+  mutation MutationUpdateKeywordPriceRange(
+    $id: Int!
+    $minPrice: Int
+    $maxPrice: Int
+  ) {
+    updateNotificationKeywordPriceRange(
+      id: $id
+      minPrice: $minPrice
+      maxPrice: $maxPrice
+    )
+  }
+`);
+
+/** 키워드별 제외 단어(전체 교체, 빈 배열 = 해제). */
+export const MutationUpdateKeywordExcludeKeywords = graphql(`
+  mutation MutationUpdateKeywordExcludeKeywords(
+    $id: Int!
+    $excludeKeywords: [String!]!
+  ) {
+    updateNotificationKeywordExcludeKeywords(
+      id: $id
+      excludeKeywords: $excludeKeywords
+    )
+  }
+`);
+
+/** 계정 단위 푸시 설정. web `/mypage/notification`. */
+export const QueryMyPushSetting = graphql(`
+  query QueryMyPushSetting {
+    pushSetting {
+      keywordAlert
+      hotDealAlert
+      nightAlerts
+      communityAlert
+    }
+  }
+`);
+
+export const MutationUpdateMyPushSetting = graphql(`
+  mutation MutationUpdateMyPushSetting(
+    $keywordAlert: Boolean
+    $hotDealAlert: Boolean
+    $nightAlerts: Boolean
+    $communityAlert: Boolean
+  ) {
+    updatePushSetting(
+      keywordAlert: $keywordAlert
+      hotDealAlert: $hotDealAlert
+      nightAlerts: $nightAlerts
+      communityAlert: $communityAlert
+    )
   }
 `);
