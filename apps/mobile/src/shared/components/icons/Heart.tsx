@@ -1,15 +1,19 @@
 import React from 'react';
 import Svg, {Path, type SvgProps} from 'react-native-svg';
 
+import {useColors} from '@/shared/theme/useColors';
+
 /** web Heart 아이콘과 같은 패스. 찜 여부는 fill 로만 가른다. */
 export default function Heart({
   liked,
   // 누르는 아이콘이라 3:1 이상 필요(gray-400 은 2.6:1) → gray-500.
-  color = '#667085',
+  color: colorProp,
   width = 24,
   height = 24,
   ...props
 }: SvgProps & {liked?: boolean}) {
+  const c = useColors();
+  const color = colorProp ?? c.gray[500];
   const fill = liked ? '#EF334A' : 'none';
   const stroke = liked ? '#EF334A' : (color as string);
   return (

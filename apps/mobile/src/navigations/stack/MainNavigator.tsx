@@ -5,10 +5,10 @@ import MainTabNavigator from '@/navigations/tab/MainTabNavigator';
 import AppStackHeader from '@/navigations/tab/AppStackHeader';
 import SearchStackNavigator from '@/navigations/tab/SearchStackNavigator';
 import {
-  SCREEN_BACKGROUND_COLOR,
   baseHeaderOptions,
   commentsHeaderOptions,
   productDetailHeaderOptions,
+  useChromeColors,
 } from '@/navigations/tab/native-headers';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import JirumAlarmWebViewScreen from '@/screens/jirumalarmwebview/JirumAlarmWebViewScreen';
@@ -83,6 +83,7 @@ function MainStackNavigator() {
   // 탭바 알림 점의 원료(미읽음 수)를 앱 진입·포그라운드 복귀마다 받아온다.
   // 탭 화면 밖(여기)에 두는 이유: 알림 탭을 한 번도 안 열어도 점은 떠야 한다.
   useAlarmDotSync();
+  const chrome = useChromeColors();
 
   return (
     <>
@@ -94,7 +95,7 @@ function MainStackNavigator() {
           header: renderAppStackHeader,
           // 지정 안 하면 전환 애니메이션 동안 시스템 기본 배경이 보인다.
           // 아직 아무것도 안 그린 WebView 가 올라올 때 특히 티가 난다.
-          contentStyle: {backgroundColor: SCREEN_BACKGROUND_COLOR},
+          contentStyle: {backgroundColor: chrome.screenBackground},
         }}>
         <RootStack.Screen
           name={mainNavigations.TABS}

@@ -6,6 +6,7 @@ import BubbleChat from '@/shared/components/icons/bubble_chat';
 import Eye from '@/shared/components/icons/eye';
 import ThumbsupFill from '@/shared/components/icons/ThumbsupFill';
 import {gaps} from './community-styles';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 추천·조회·댓글 수 한 줄. 목록 카드 2종과 상세가 같이 쓴다
@@ -27,6 +28,7 @@ export default function PostStats({
   replyCount?: number;
   size?: 'sm' | 'md';
 }) {
+  const c = useColors();
   const icon = size === 'sm' ? 14 : 16;
   const textClass = size === 'sm' ? 'text-xs' : 'text-sm';
 
@@ -42,7 +44,7 @@ export default function PostStats({
       </View>
       {replyCount !== undefined ? (
         <View className="flex-row items-center" style={gaps.g4}>
-          <BubbleChat width={icon} height={icon} color="#667085" />
+          <BubbleChat width={icon} height={icon} color={c.gray[500]} />
           <Text className={`${textClass} text-gray-500`}>{replyCount}</Text>
         </View>
       ) : null}

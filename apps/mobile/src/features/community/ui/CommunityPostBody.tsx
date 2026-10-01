@@ -15,11 +15,6 @@ import PostStats from './PostStats';
 import {gaps} from './community-styles';
 import {tick} from '@/shared/lib/feedback';
 
-/** 태그 상품 카드 색 — web 이 하드코딩한 값 그대로(토큰이 아니다). */
-const TAG_CARD_BG = '#F3F7FF';
-const TAG_BADGE_BG = '#DCE8FF';
-const TAG_BADGE_TEXT = '#4378F5';
-
 /**
  * 글 본문. web `features/community/ui/CommunityPostDetail` 의 위쪽 절반
  * (헤더·제목·본문·이미지·태그상품·통계/추천)을 그대로 옮겼다.
@@ -78,15 +73,10 @@ export default function CommunityPostBody({
           accessibilityLabel={`태그한 상품 ${post.taggedProduct.title}`}
           // ★Pressable 엔 opacity 만(ThemeCards 주석 참조). 바탕·여백은 안쪽 View.
           style={({pressed}) => ({opacity: pressed ? 0.8 : 1})}>
-          <View
-            className="mx-5 mb-4 rounded-2xl p-4"
-            style={{backgroundColor: TAG_CARD_BG}}>
-            <View
-              className="self-start rounded-full px-2.5 py-0.5"
-              style={{backgroundColor: TAG_BADGE_BG}}>
-              <Text
-                className="text-xs font-medium"
-                style={{color: TAG_BADGE_TEXT}}>
+          {/* 태그 상품 카드 색 — 라이트는 web 이 하드코딩한 값 그대로(토큰이 아니다), 다크는 secondary 토큰. */}
+          <View className="mx-5 mb-4 rounded-2xl bg-[#F3F7FF] p-4 dark:bg-secondary-50">
+            <View className="self-start rounded-full bg-[#DCE8FF] px-2.5 py-0.5 dark:bg-secondary-100">
+              <Text className="text-xs font-medium text-[#4378F5] dark:text-secondary-400">
                 태그한 상품
               </Text>
             </View>

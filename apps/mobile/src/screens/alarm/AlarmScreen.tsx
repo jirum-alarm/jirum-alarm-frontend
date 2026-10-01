@@ -31,6 +31,7 @@ import {ListRowsSkeleton} from '@/shared/components/Skeletons';
 import {showToast} from '@/shared/lib/feedback';
 import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
 import {usePushPermissionStatus} from '@/shared/lib/fcm/usePushPermissionStatus';
+import {useColors} from '@/shared/theme/useColors';
 
 /** web PageHeader 와 같은 높이(h-14)·색·경계선. */
 const HEADER_HEIGHT = 56;
@@ -49,6 +50,7 @@ type Navigation = {
  * 둘을 옮기면 영원히 안 뜨는 코드가 된다.
  */
 export default function AlarmScreen() {
+  const c = useColors();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<Navigation>();
   const {
@@ -214,7 +216,7 @@ export default function AlarmScreen() {
                 <PressableScale
                   accessibilityRole="button"
                   accessibilityLabel="알림 켜기"
-                  className="h-8 justify-center rounded-md bg-gray-800 px-3"
+                  className="h-8 justify-center rounded-md bg-fixed-800 px-3"
                   onPress={push.enable}>
                   <Text className="text-sm font-semibold text-primary-500">
                     켜기
@@ -260,7 +262,7 @@ export default function AlarmScreen() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              tintColor="#667085"
+              tintColor={c.gray[500]}
             />
           }
           onEndReachedThreshold={0.5}
@@ -270,7 +272,7 @@ export default function AlarmScreen() {
           ListFooterComponent={
             isFetchingNextPage ? (
               <View className="h-12 items-center justify-center">
-                <ActivityIndicator size="small" color="#667085" />
+                <ActivityIndicator size="small" className="text-gray-500" />
               </View>
             ) : null
           }

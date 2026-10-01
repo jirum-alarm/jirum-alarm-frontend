@@ -1,8 +1,11 @@
 import React from 'react';
 import Svg, {Path, type SvgProps} from 'react-native-svg';
 
+import {useColors} from '@/shared/theme/useColors';
+
 /** web Info 와 같은 패스. */
 export default function Info({width = 20, height = 20, ...props}: SvgProps) {
+  const c = useColors();
   return (
     <Svg
       width={width}
@@ -12,7 +15,7 @@ export default function Info({width = 20, height = 20, ...props}: SvgProps) {
       {...props}>
       <Path
         d="M10 13.2V10M10 6.8H10.008M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10Z"
-        stroke="#98A2B3"
+        stroke={c.gray[400]}
         strokeWidth={1.5}
         strokeLinecap="square"
         strokeLinejoin="round"

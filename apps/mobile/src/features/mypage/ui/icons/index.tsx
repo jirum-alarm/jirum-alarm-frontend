@@ -1,6 +1,8 @@
 import React from 'react';
 import Svg, {Path, type SvgProps} from 'react-native-svg';
 
+import {useColors} from '@/shared/theme/useColors';
+
 /**
  * 내정보 메뉴 아이콘 4종. web `shared/ui/common/icons/{Alert,Filter,Description,Headset}`
  * 의 패스를 그대로 옮겼다.
@@ -10,7 +12,9 @@ import Svg, {Path, type SvgProps} from 'react-native-svg';
  */
 
 /** 키워드 알림(종). web 은 stroke 기반이라 currentColor 대신 색을 직접 받는다. */
-export function AlertMenuIcon({color = '#101828', ...props}: SvgProps) {
+export function AlertMenuIcon({color: colorProp, ...props}: SvgProps) {
+  const c = useColors();
+  const color = colorProp ?? c.gray[900];
   return (
     <Svg width={29} height={28} viewBox="0 0 29 28" fill="none" {...props}>
       <Path
@@ -25,7 +29,9 @@ export function AlertMenuIcon({color = '#101828', ...props}: SvgProps) {
 }
 
 /** 관심 카테고리(필터). */
-export function FilterMenuIcon({color = '#101828', ...props}: SvgProps) {
+export function FilterMenuIcon({color: colorProp, ...props}: SvgProps) {
+  const c = useColors();
+  const color = colorProp ?? c.gray[900];
   return (
     <Svg width={28} height={28} viewBox="0 0 28 28" fill="none" {...props}>
       <Path
@@ -39,7 +45,9 @@ export function FilterMenuIcon({color = '#101828', ...props}: SvgProps) {
 }
 
 /** 약관 및 정책(문서). */
-export function DescriptionMenuIcon({color = '#101828', ...props}: SvgProps) {
+export function DescriptionMenuIcon({color: colorProp, ...props}: SvgProps) {
+  const c = useColors();
+  const color = colorProp ?? c.gray[900];
   return (
     <Svg width={28} height={28} viewBox="0 0 28 28" fill="none" {...props}>
       <Path
@@ -51,7 +59,9 @@ export function DescriptionMenuIcon({color = '#101828', ...props}: SvgProps) {
 }
 
 /** 고객센터(헤드셋). */
-export function HeadsetMenuIcon({color = '#101828', ...props}: SvgProps) {
+export function HeadsetMenuIcon({color: colorProp, ...props}: SvgProps) {
+  const c = useColors();
+  const color = colorProp ?? c.gray[900];
   return (
     <Svg width={28} height={28} viewBox="0 0 28 28" fill="none" {...props}>
       <Path

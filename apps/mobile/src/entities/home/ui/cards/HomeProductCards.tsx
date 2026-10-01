@@ -81,7 +81,7 @@ export const GridCard = React.memo(function GridCard({
         />
         {typeof rank === 'number' && (
           // web ProductGridCard: 좌상단 h-6.5 w-6.5 (26px), 우하단만 둥글다.
-          <View className="absolute top-0 left-0 h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900">
+          <View className="absolute top-0 left-0 h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-fixed-900">
             <Text className="text-primary-500 text-sm">{rank}</Text>
           </View>
         )}

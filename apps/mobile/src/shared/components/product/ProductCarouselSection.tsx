@@ -68,7 +68,7 @@ export default function ProductCarouselSection({
       ) : null}
       {isPending ? (
         <View className="h-[200px] items-center justify-center">
-          <ActivityIndicator size="small" color="#667085" />
+          <ActivityIndicator size="small" className="text-gray-500" />
         </View>
       ) : (
         <FlatList

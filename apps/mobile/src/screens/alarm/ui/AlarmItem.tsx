@@ -12,6 +12,7 @@ import type {NotificationItem} from '@/shared/api/notification';
 import Thumbnail from '@/shared/components/product/Thumbnail';
 
 import AlarmItemNoImage from './AlarmItemNoImage';
+import {useColors} from '@/shared/theme/useColors';
 
 /** 키워드와 일치하는 부분만 굵게. 분할 규칙은 `lib/highlight` 가 정본이다. */
 function HighlightedMessage({
@@ -61,6 +62,7 @@ const AlarmItem = React.memo(function AlarmItem({
   onPress: (notification: NotificationItem, productId: number | null) => void;
   onDelete: (id: number) => void;
 }) {
+  const c = useColors();
   const {id, message, createdAt, product, keyword, readAt} = notification;
   const productId = product?.id != null ? Number(product.id) : null;
   const {thumbnail, price, isHot, isEnd} = product ?? {};
@@ -81,7 +83,7 @@ const AlarmItem = React.memo(function AlarmItem({
         // 목록 행의 관행이고, 배경 강조(bg-primary-50)와도 겹치지 않는다.
         style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
         className="w-full flex-row p-5 pr-14"
-        android_ripple={{color: '#F2F4F7'}}
+        android_ripple={{color: c.gray[100]}}
         // 편집모드에서는 상세로 가지 않는다(web 이 preventDefault 하는 자리).
         onPress={() => {
           if (isEditMode) return;
@@ -108,7 +110,9 @@ const AlarmItem = React.memo(function AlarmItem({
               </View>
             ) : isHot ? (
               <View className="bg-error-500 h-[22px] justify-center rounded-lg px-3">
-                <Text className="text-xs font-semibold text-white">핫딜</Text>
+                <Text className="text-xs font-semibold text-fixed-white">
+                  핫딜
+                </Text>
               </View>
             ) : null}
             {price ? (

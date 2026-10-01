@@ -1,13 +1,17 @@
 import React from 'react';
 import Svg, {Path, type SvgProps} from 'react-native-svg';
 
+import {useColors} from '@/shared/theme/useColors';
+
 /** web TrashBin 과 같은 패스. 알림 목록 헤더의 편집(삭제 모드) 진입 버튼. */
 export default function TrashBin({
   width = 28,
   height = 28,
-  color = '#101828',
+  color: colorProp,
   ...props
 }: SvgProps) {
+  const c = useColors();
+  const color = colorProp ?? c.gray[900];
   const stroke = color as string;
   return (
     <Svg

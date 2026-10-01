@@ -195,16 +195,15 @@ describe('상단 실시간/랭킹 탭 — web 대조', () => {
     // 애니메이션 때문에 Animated 컴포넌트를 쓰고, NativeWind 4 는 Animated 에
     // 준 className 을 **조용히 무시**하므로 style 로 쓴다. 그래서 대조 대상은
     // 클래스 문자열이 아니라 색상 값이다.
-    // web: text-gray-900 = #101828, text-gray-500 = #667085
+    // web: text-gray-900, text-gray-500 — 앱은 같은 토큰 값을 palette(useColors)에서 받는다(다크모드).
     expect(webTabs).toContain('text-gray-900');
     expect(webTabs).toContain('text-gray-500');
-    expect(tabs).toContain("COLOR_ACTIVE = '#101828'");
-    expect(tabs).toContain("COLOR_INACTIVE = '#667085'");
+    expect(tabs).toContain('[c.gray[900], c.gray[500]]');
 
     // 밑줄: web h-0.5(2px) + bg-gray-900
     expect(webTabs).toContain('h-0.5 bg-gray-900');
     expect(tabs).toContain('height: 2');
-    expect(tabs).toContain('backgroundColor: COLOR_ACTIVE');
+    expect(tabs).toContain('backgroundColor: c.gray[900]');
   });
 
   it('★밑줄은 하나를 움직인다 — 탭마다 그리면 순간이동이 된다', () => {

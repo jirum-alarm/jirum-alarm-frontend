@@ -70,7 +70,8 @@ export const textVariant = cva('text-[16px] font-pretendard', {
       filled: '',
     },
     color: {
-      primary: 'text-gray-900',
+      // 라임(bg-primary-500) 위라 테마와 무관하게 짙은 글자.
+      primary: 'text-fixed-900',
       secondary: 'text-gray-700',
       error: 'text-error-600',
     },
@@ -130,7 +131,7 @@ export const textVariant = cva('text-[16px] font-pretendard', {
       variant: 'filled',
       color: 'primary',
       disabled: true,
-      class: 'text-white',
+      class: 'text-fixed-white',
     },
     {
       variant: 'filled',
@@ -149,7 +150,7 @@ export const textVariant = cva('text-[16px] font-pretendard', {
       variant: 'filled',
       color: 'primary',
       disabled: true,
-      class: 'text-white',
+      class: 'text-fixed-white',
     },
     {
       variant: 'filled',

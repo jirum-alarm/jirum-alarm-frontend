@@ -1,3 +1,35 @@
+const {light, dark, fixed} = require('./src/shared/theme/palette');
+
+/** '#RRGGBB' → 'R G B' (rgb(var(--x) / <alpha-value>) 형태라 bg-white/20 같은 투명도가 계속 먹는다) */
+const rgb = hex =>
+  [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)).join(' ');
+
+/** {white, gray: {50: '#..'}} → {'--color-white': 'R G B', '--color-gray-50': ...} */
+const cssVars = theme =>
+  Object.fromEntries(
+    Object.entries(theme).flatMap(([name, value]) =>
+      typeof value === 'string'
+        ? [[`--color-${name}`, rgb(value)]]
+        : Object.entries(value).map(([step, hex]) => [
+            `--color-${name}-${step}`,
+            rgb(hex),
+          ]),
+    ),
+  );
+
+/** 테마 따라 바뀌는 색 = 변수 참조. 키 구조는 palette.light 와 같다. */
+const ref = name => `rgb(var(--color-${name}) / <alpha-value>)`;
+const themed = Object.fromEntries(
+  Object.entries(light).map(([name, value]) => [
+    name,
+    typeof value === 'string'
+      ? ref(name)
+      : Object.fromEntries(
+          Object.keys(value).map(step => [step, ref(`${name}-${step}`)]),
+        ),
+  ]),
+);
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   // NOTE: Update this to include the paths to all of your component files.
@@ -14,61 +46,21 @@ module.exports = {
         'pretendard-thin': ['Pretendard-Thin'],
       },
       colors: {
-        white: '#FFFFFF',
+        ...themed,
+        fixed,
         black: '#000000',
         // 카카오 브랜드 노랑(공식). 로그인·공유·오픈채팅이 세 값으로 갈려 있었다.
         kakao: '#FEE500',
-        error: {
-          50: '#FFE1E5',
-          100: '#FBCCD2',
-          200: '#F799A4',
-          300: '#F36677',
-          400: '#EF334A',
-          500: '#EB001C',
-          600: '#BC0017',
-          700: '#8D0011',
-          800: '#5E000B',
-          900: '#2F0006',
-        },
         link: '#587DFF',
-        primary: {
-          50: '#F5FDEA',
-          100: '#ECFCD5',
-          200: '#D8FAAB',
-          300: '#C5F782',
-          400: '#B2F458',
-          500: '#9EF22E',
-          600: '#4AD11B',
-          700: '#039100',
-          800: '#025900',
-          900: '#013200',
-        },
-        gray: {
-          50: '#F9FAFB',
-          100: '#F2F4F7',
-          200: '#E4E7EC',
-          300: '#D0D5DD',
-          400: '#98A2B3',
-          500: '#667085',
-          600: '#475467',
-          700: '#344054',
-          800: '#1D2939',
-          900: '#101828',
-        },
-        secondary: {
-          50: '#F3F7FF',
-          100: '#DAE5FE',
-          200: '#B5CBFD',
-          300: '#91B1FB',
-          400: '#6593FD',
-          500: '#467DFB',
-          600: '#3964C7',
-          700: '#2B4B95',
-          800: '#1C3264',
-          900: '#0E1932',
-        },
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // 라이트·다크 값을 :root 변수로 깐다. NativeWind 가 prefers-color-scheme 을 OS 다크모드에 묶는다.
+    ({addBase}) =>
+      addBase({
+        ':root': cssVars(light),
+        '@media (prefers-color-scheme: dark)': {':root': cssVars(dark)},
+      }),
+  ],
 };

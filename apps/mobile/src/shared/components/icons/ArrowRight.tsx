@@ -1,14 +1,18 @@
 import React from 'react';
 import Svg, {Path, type SvgProps} from 'react-native-svg';
 
+import {useColors} from '@/shared/theme/useColors';
+
 /** web ArrowRight 와 같은 패스. */
 export default function ArrowRight({
   width = 24,
   height = 25,
-  color = '#475467',
+  color: colorProp,
   strokeWidth = 1.5,
   ...props
 }: SvgProps) {
+  const c = useColors();
+  const color = colorProp ?? c.gray[600];
   return (
     <Svg
       width={width}

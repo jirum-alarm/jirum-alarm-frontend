@@ -1,24 +1,26 @@
 import React from 'react';
 import Svg, {Path, type SvgProps} from 'react-native-svg';
 
+import {useColors} from '@/shared/theme/useColors';
+
 type Props = SvgProps & {
   active?: boolean;
   line?: string;
 };
-
-const defaultFill = '#F2F4F7';
-// 누르는 아이콘이라 3:1 이상 필요(gray-400 은 2.6:1) → gray-500.
-const defaultLine = '#667085';
 
 /** web ThumbsupFill 과 같은 패스. */
 export default function ThumbsupFill({
   width = 16,
   height = 16,
   active = false,
-  fill = defaultFill,
-  line = defaultLine,
+  fill: fillProp,
+  line: lineProp,
   ...props
 }: Props) {
+  const c = useColors();
+  const fill = fillProp ?? c.gray[100];
+  // 누르는 아이콘이라 3:1 이상 필요(gray-400 은 2.6:1) → gray-500.
+  const line = lineProp ?? c.gray[500];
   const fillColor = active ? '#039100' : fill;
   const lineColor = active ? '#FFFFFF' : line;
 

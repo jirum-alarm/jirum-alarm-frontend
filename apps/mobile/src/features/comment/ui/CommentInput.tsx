@@ -11,6 +11,7 @@ import {
 } from '@/entities/comment/editing-comment';
 import {showToast} from '@/shared/lib/feedback';
 import Close from '@/shared/components/icons/Close';
+import {useColors} from '@/shared/theme/useColors';
 
 const MAX_INPUT_HEIGHT = 120;
 
@@ -21,6 +22,7 @@ export default function CommentInput({
   productId: number;
   isUserLogin: boolean;
 }) {
+  const c = useColors();
   const queryClient = useQueryClient();
   const editing = useEditingComment();
   const inputRef = useRef<TextInput>(null);
@@ -96,7 +98,7 @@ export default function CommentInput({
             hitSlop={12}
             accessibilityRole="button"
             accessibilityLabel="취소">
-            <Close width={16} height={16} color="#667085" />
+            <Close width={16} height={16} color={c.gray[500]} />
           </Pressable>
         </View>
       ) : null}
@@ -115,7 +117,7 @@ export default function CommentInput({
           placeholder={
             isUserLogin ? '댓글을 입력해주세요' : '로그인 후 이용해주세요'
           }
-          placeholderTextColor="#667085"
+          placeholderTextColor={c.gray[500]}
           editable={isUserLogin}
         />
         <Pressable

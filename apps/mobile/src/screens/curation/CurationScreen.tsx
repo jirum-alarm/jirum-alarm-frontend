@@ -122,7 +122,7 @@ export default function CurationScreen({
     if (isTabSourcesPending) {
       return (
         <View className="flex-1 items-center justify-center bg-white">
-          <ActivityIndicator size="small" color="#667085" />
+          <ActivityIndicator size="small" className="text-gray-500" />
         </View>
       );
     }
@@ -214,7 +214,7 @@ function InfiniteList({section, onPressProduct, topSpacing}: ListProps) {
       footer={
         isFetchingNextPage ? (
           <View className="items-center py-6">
-            <ActivityIndicator size="small" color="#667085" />
+            <ActivityIndicator size="small" className="text-gray-500" />
           </View>
         ) : null
       }

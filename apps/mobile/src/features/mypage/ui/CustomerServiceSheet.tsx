@@ -183,7 +183,7 @@ export default function CustomerServiceSheet({
             <View
               className="absolute inset-0 items-center justify-center bg-white"
               pointerEvents="none">
-              <ActivityIndicator size="small" color="#667085" />
+              <ActivityIndicator size="small" className="text-gray-500" />
             </View>
           ) : null}
         </View>

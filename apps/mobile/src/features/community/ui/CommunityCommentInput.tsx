@@ -3,6 +3,7 @@ import {Pressable, View} from 'react-native';
 import {Text, TextInput} from '@/shared/components/ui/Text/AppText';
 
 import {cn} from '@/shared/lib/styling';
+import {useColors} from '@/shared/theme/useColors';
 
 const MAX_COMMENT_LENGTH = 300; // web textarea maxLength
 const MAX_INPUT_HEIGHT = 100; // web max-h-[100px]
@@ -22,6 +23,7 @@ export default function CommunityCommentInput({
   onSubmit: (content: string, clear: () => void) => void;
   isPending: boolean;
 }) {
+  const c = useColors();
   const [value, setValue] = useState('');
 
   const canSubmit = value.trim().length > 0 && !isPending;
@@ -42,7 +44,7 @@ export default function CommunityCommentInput({
         multiline
         maxLength={MAX_COMMENT_LENGTH}
         placeholder="댓글을 입력해주세요."
-        placeholderTextColor="#667085"
+        placeholderTextColor={c.gray[500]}
         className="flex-1 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-900"
         // web 은 textarea scrollHeight 로 늘린다. RN 은 multiline 이 내용만큼 스스로 커지니 위아래만 막는다.
         // (onContentSizeChange 로 height 를 직접 계산하던 방식은 여러 줄을 쳐도 40pt 에

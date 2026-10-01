@@ -3,6 +3,7 @@ import {Pressable, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import ArrowRight from '@/shared/components/icons/ArrowRight';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 목록 행 공통 눌림 처리.
@@ -21,12 +22,13 @@ function Row({
   accessibilityLabel: string;
   className?: string;
 }) {
+  const c = useColors();
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      android_ripple={{color: '#F2F4F7'}}
+      android_ripple={{color: c.gray[100]}}
       style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
       className={className}>
       {children}

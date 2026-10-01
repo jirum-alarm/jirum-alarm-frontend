@@ -1,8 +1,13 @@
-import React from 'react';
-import {Appearance} from 'react-native';
+import React, {useMemo} from 'react';
+import {useColorScheme} from 'react-native';
 
 import ReactQueryProvider from './src/provider/ReactQueryProvider.tsx';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+  type Theme,
+} from '@react-navigation/native';
 import {navigationRef} from '@/navigations/navigation-ref.ts';
 import RootNavigator from './src/navigations/root/RootNavigator.tsx';
 import './global.css';
@@ -22,17 +27,37 @@ import WindowControlsSafeArea from '@/shared/components/WindowControlsSafeArea';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Sentry, initSentry, wrapApp} from '@/shared/lib/monitoring/sentry.ts';
 import useOtaUpdateOnResume from '@/shared/hooks/useOtaUpdateOnResume.ts';
+import {useColors} from '@/shared/theme/useColors';
 
 // init 은 컴포넌트 밖에서 — 렌더 시작 전에 나는 에러도 잡아야 한다.
 initSentry();
 
-// ★다크모드를 지원하기 전까지 라이트로 고정한다. 설정은 automatic 인데 화면은 전부 흰색이라,
-// 다크 기기에선 키보드·알럿·날짜 선택 같은 시스템 UI 만 검게 떠 앱 위에서 따로 놀았다.
-// 다크모드를 만들면 이 한 줄을 지운다(네이티브 설정 automatic 은 그대로라 빌드 없이 된다).
-Appearance.setColorScheme('light');
+// 다크모드는 OS 설정을 따른다(app.json·Info.plist userInterfaceStyle=automatic).
+// 색은 src/shared/theme/palette.js 한 곳 — className 토큰이 다크에서 값만 바뀐다.
+
+/** react-navigation 기본 바탕(전환 중 보이는 면·카드)도 같은 palette 로. */
+function useNavigationTheme(): Theme {
+  const isDark = useColorScheme() === 'dark';
+  const c = useColors();
+  return useMemo(() => {
+    const base = isDark ? DarkTheme : DefaultTheme;
+    return {
+      ...base,
+      colors: {
+        ...base.colors,
+        primary: c.gray[900],
+        background: c.white,
+        card: c.white,
+        text: c.gray[900],
+        border: c.gray[200],
+      },
+    };
+  }, [isDark, c]);
+}
 
 function App(): React.JSX.Element {
   const webViewRefManager = useWebViewRefManager();
+  const navigationTheme = useNavigationTheme();
   useOtaUpdateOnResume();
 
   return (
@@ -44,7 +69,7 @@ function App(): React.JSX.Element {
               <AppErrorFallback onRetry={resetError} />
             )}>
             <KeyboardProvider>
-              <NavigationContainer ref={navigationRef}>
+              <NavigationContainer ref={navigationRef} theme={navigationTheme}>
                 <ReactQueryProvider>
                   <WebviewRefContext.Provider value={webViewRefManager}>
                     <FcmHandler>

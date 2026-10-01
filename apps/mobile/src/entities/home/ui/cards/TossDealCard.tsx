@@ -42,12 +42,16 @@ export default function TossDealCard({
         )}
         {label ? (
           <View className="bg-error-500 absolute top-0 right-0 z-10 h-6 items-center justify-center rounded-tr-lg rounded-bl-lg px-2">
-            <Text className="text-xs font-semibold text-white">{label}</Text>
+            <Text className="text-xs font-semibold text-fixed-white">
+              {label}
+            </Text>
           </View>
         ) : null}
         {deal.bestSeller ? (
-          <View className="absolute bottom-0 left-0 z-10 h-[22px] justify-center rounded-tr-lg rounded-bl-lg bg-gray-900/80 px-2">
-            <Text className="text-xs font-medium text-white">베스트판매자</Text>
+          <View className="absolute bottom-0 left-0 z-10 h-[22px] justify-center rounded-tr-lg rounded-bl-lg bg-fixed-900/80 px-2">
+            <Text className="text-xs font-medium text-fixed-white">
+              베스트판매자
+            </Text>
           </View>
         ) : null}
       </View>
@@ -63,7 +67,9 @@ export default function TossDealCard({
         {deal.arrivalGuaranteed || deal.specialProduct ? (
           <View className="flex-row flex-wrap gap-1 pt-1">
             {deal.arrivalGuaranteed ? (
-              <Badge className="bg-green-50" textClassName="text-green-600">
+              <Badge
+                className="bg-green-50 dark:bg-green-950"
+                textClassName="text-green-600 dark:text-green-400">
                 도착보장
               </Badge>
             ) : null}

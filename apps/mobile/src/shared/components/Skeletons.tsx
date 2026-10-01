@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {Animated, View} from 'react-native';
 
 import {useReduceMotion} from '@/shared/hooks/useReduceMotion';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 화면 공용 스켈레톤.
@@ -55,12 +56,13 @@ export function SkeletonBox({
   style?: object;
 }) {
   const opacity = useShimmer();
+  const c = useColors();
   return (
     <Animated.View
       className={className}
       // gray-200 — gray-100 에 깜빡임(0.5)까지 겹치면 흰 바탕과 거의 구분이 안 됐다
       // (상세 첫 로딩에서 "스켈레톤이 잘 안 보인다" 사용자 지적).
-      style={[{backgroundColor: '#E4E7EC', opacity}, style]}
+      style={[{backgroundColor: c.gray[200], opacity}, style]}
     />
   );
 }
@@ -137,7 +139,8 @@ export function GridSkeleton({
   topSpacing?: number;
 }) {
   const opacity = useShimmer();
-  const bar = {backgroundColor: '#E4E7EC', borderRadius: 4};
+  const c = useColors();
+  const bar = {backgroundColor: c.gray[200], borderRadius: 4};
   return (
     <Animated.View
       style={{opacity, paddingHorizontal: 20, paddingTop: topSpacing, gap: 20}}

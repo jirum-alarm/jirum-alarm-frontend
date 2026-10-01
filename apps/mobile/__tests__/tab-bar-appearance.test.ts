@@ -43,12 +43,10 @@ describe('네이티브 탭바 appearance', () => {
     expect(new Set(fns).size).toBe(1);
   });
 
-  it('탭바 표면색은 native-headers 상수에서 온다 (하드코딩 금지)', () => {
+  it('탭바 표면색은 native-headers(useChromeColors)에서 온다 (하드코딩 금지)', () => {
     // 색을 여기 직접 적으면 JS 탭바와 갈린다.
-    expect(nav).toContain('TAB_BAR_BACKGROUND_COLOR');
-    expect(headers).toMatch(
-      /export const TAB_BAR_BACKGROUND_COLOR = '#[0-9a-fA-F]{6}'/,
-    );
+    expect(nav).toContain('chrome.tabBarBackground');
+    expect(headers).toMatch(/tabBarBackground: c\.white/);
   });
 
   it('appearance 를 만드는 함수가 배경색을 채운다', () => {
@@ -56,7 +54,7 @@ describe('네이티브 탭바 appearance', () => {
     const fn = nav.slice(nav.indexOf('function titleAppearance'));
     const body = fn.slice(0, fn.indexOf('\n}'));
     expect(body).toContain('tabBarBackgroundColor');
-    expect(body).toContain('TAB_BAR_BACKGROUND_COLOR');
+    expect(body).toContain('tabBarBackgroundColor: backgroundColor');
   });
 });
 

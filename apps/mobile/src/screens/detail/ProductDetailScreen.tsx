@@ -254,7 +254,7 @@ function NativeDetail({
 
   return (
     <View className="flex-1 bg-white">
-      <SystemBars style="dark" hidden={false} />
+      <SystemBars style="auto" hidden={false} />
       <ScrollView
         ref={scrollRef}
         className="flex-1"

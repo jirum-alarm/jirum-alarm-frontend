@@ -69,7 +69,7 @@ export default function CategoriesScreen({navigation}: Props) {
         <SectionErrorRow label="관심 카테고리" onRetry={refetch} />
       ) : isPending ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="small" color="#667085" />
+          <ActivityIndicator size="small" className="text-gray-500" />
         </View>
       ) : (
         <ScrollView contentContainerStyle={contentStyle}>

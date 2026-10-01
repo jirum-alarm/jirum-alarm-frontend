@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {Image, Pressable, StyleSheet, View} from 'react-native';
+import {Image, Pressable, StyleSheet, View, useColorScheme} from 'react-native';
 import {
   createBottomTabNavigator,
   BottomTabBar,
@@ -42,7 +42,7 @@ import {
   isIos26SystemTabBar,
 } from '@/navigations/tab/tab-bar-metrics';
 import {useTabBarVisibility} from '@/shared/hooks/useTabBarVisibility';
-import {TAB_BAR_BACKGROUND_COLOR, TAB_BAR_BORDER_COLOR} from './native-headers';
+import {useChromeColors} from './native-headers';
 import {
   requestTrendingView,
   toggleTrendingView,
@@ -70,6 +70,11 @@ const TAB_CONFIG = [
     activeIcon: HomeFillIcon,
     idlePng: require('../../shared/assets/tab-icons/home.png'),
     activePng: require('../../shared/assets/tab-icons/home-fill.png'),
+    // OS 다크모드용 — tinted:false 라 원본 색이 그대로 나가서 따로 둔다(assets/tab-icons/README.md).
+    dark: {
+      idlePng: require('../../shared/assets/tab-icons/home-dark.png'),
+      activePng: require('../../shared/assets/tab-icons/home-fill-dark.png'),
+    },
   },
   {
     name: tabNavigations.DISCOVER,
@@ -78,6 +83,11 @@ const TAB_CONFIG = [
     activeIcon: FindFillIcon,
     idlePng: require('../../shared/assets/tab-icons/find.png'),
     activePng: require('../../shared/assets/tab-icons/find-fill.png'),
+    // OS 다크모드용 — tinted:false 라 원본 색이 그대로 나가서 따로 둔다(assets/tab-icons/README.md).
+    dark: {
+      idlePng: require('../../shared/assets/tab-icons/find-dark.png'),
+      activePng: require('../../shared/assets/tab-icons/find-fill-dark.png'),
+    },
   },
   {
     name: tabNavigations.COMMUNITY,
@@ -86,6 +96,11 @@ const TAB_CONFIG = [
     activeIcon: BubbleChatFillIcon,
     idlePng: require('../../shared/assets/tab-icons/community.png'),
     activePng: require('../../shared/assets/tab-icons/community-fill.png'),
+    // OS 다크모드용 — tinted:false 라 원본 색이 그대로 나가서 따로 둔다(assets/tab-icons/README.md).
+    dark: {
+      idlePng: require('../../shared/assets/tab-icons/community-dark.png'),
+      activePng: require('../../shared/assets/tab-icons/community-fill-dark.png'),
+    },
   },
   {
     name: tabNavigations.ALARM,
@@ -101,6 +116,13 @@ const TAB_CONFIG = [
     // 재생성 방법은 assets/tab-icons/README.md.
     idleDotPng: require('../../shared/assets/tab-icons/alert-dot.png'),
     activeDotPng: require('../../shared/assets/tab-icons/alert-fill-dot.png'),
+    // OS 다크모드용 — tinted:false 라 원본 색이 그대로 나가서 따로 둔다(assets/tab-icons/README.md).
+    dark: {
+      idlePng: require('../../shared/assets/tab-icons/alert-dark.png'),
+      activePng: require('../../shared/assets/tab-icons/alert-fill-dark.png'),
+      idleDotPng: require('../../shared/assets/tab-icons/alert-dot-dark.png'),
+      activeDotPng: require('../../shared/assets/tab-icons/alert-fill-dot-dark.png'),
+    },
   },
   {
     name: tabNavigations.MYPAGE,
@@ -109,6 +131,11 @@ const TAB_CONFIG = [
     activeIcon: MyFillIcon,
     idlePng: require('../../shared/assets/tab-icons/my.png'),
     activePng: require('../../shared/assets/tab-icons/my-fill.png'),
+    // OS 다크모드용 — tinted:false 라 원본 색이 그대로 나가서 따로 둔다(assets/tab-icons/README.md).
+    dark: {
+      idlePng: require('../../shared/assets/tab-icons/my-dark.png'),
+      activePng: require('../../shared/assets/tab-icons/my-fill-dark.png'),
+    },
   },
 ] as const;
 
@@ -298,14 +325,16 @@ function AnimatedTabBar(props: BottomTabBarProps) {
 function NativeSystemTabNavigator() {
   const hasNewAlarm = useHasNewAlarm();
   const {onTabPress} = useTabActions();
+  const chrome = useChromeColors();
+  const isDark = useColorScheme() === 'dark';
 
   return (
     <NativeTab.Navigator
       id={MAIN_TABS_ID}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#101828',
-        tabBarInactiveTintColor: '#667085',
+        tabBarActiveTintColor: chrome.tabBarActiveTint,
+        tabBarInactiveTintColor: chrome.tabBarInactiveTint,
         tabBarLabelVisibilityMode: 'labeled',
         tabBarMinimizeBehavior: 'onScrollDown',
         overrideScrollViewContentInsetAdjustmentBehavior: false,
@@ -322,16 +351,18 @@ function NativeSystemTabNavigator() {
             // ★시스템 뱃지를 쓰지 않는다 — 크기를 못 줄여 web·JS 의 8pt 점보다
             // 훨씬 크게 뜬다(지적받음). 점은 아이콘에 그려 넣은 변형으로 낸다.
             tabBarIcon: ({focused}: {focused: boolean}) => {
-              const dot =
+              if (
                 tab.name === tabNavigations.ALARM &&
                 hasNewAlarm &&
-                'idleDotPng' in tab;
-              if (dot) {
+                'idleDotPng' in tab
+              ) {
+                const dot = isDark ? tab.dark : tab;
                 return nativeTabIcon(
-                  focused ? tab.activeDotPng : tab.idleDotPng,
+                  focused ? dot.activeDotPng : dot.idleDotPng,
                 );
               }
-              return nativeTabIcon(focused ? tab.activePng : tab.idlePng);
+              const png = isDark ? tab.dark : tab;
+              return nativeTabIcon(focused ? png.activePng : png.idlePng);
             },
           }}
           listeners={({navigation}: {navigation: TabPressNavigation}) => ({
@@ -347,6 +378,7 @@ function JsTabNavigator() {
   const hasNewAlarm = useHasNewAlarm();
   const insets = useSafeAreaInsets();
   const {onTabPress} = useTabActions();
+  const chrome = useChromeColors();
 
   return (
     <JsTab.Navigator
@@ -354,12 +386,14 @@ function JsTabNavigator() {
       tabBar={props => <AnimatedTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#101828',
-        tabBarInactiveTintColor: '#667085',
+        tabBarActiveTintColor: chrome.tabBarActiveTint,
+        tabBarInactiveTintColor: chrome.tabBarInactiveTint,
         tabBarLabelStyle: styles.tabBarLabel,
         tabBarButton: InstantTabButton,
         tabBarStyle: {
           ...styles.tabBar,
+          backgroundColor: chrome.tabBarBackground,
+          borderTopColor: chrome.tabBarBorder,
           paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
           height: 56 + (insets.bottom > 0 ? insets.bottom : 8),
         },
@@ -379,7 +413,11 @@ function JsTabNavigator() {
                   <IconComponent
                     width={24}
                     height={24}
-                    color={focused ? '#101828' : '#667085'}
+                    color={
+                      focused
+                        ? chrome.tabBarActiveTint
+                        : chrome.tabBarInactiveTint
+                    }
                   />
                   {tab.name === tabNavigations.ALARM && hasNewAlarm && (
                     <View style={styles.badgeDot} />
@@ -413,10 +451,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
   },
+  // 색(배경·선)은 테마를 따라 바뀌므로 tabBarStyle 에서 chrome 으로 준다.
   tabBar: {
-    backgroundColor: TAB_BAR_BACKGROUND_COLOR,
     borderTopWidth: 1,
-    borderTopColor: TAB_BAR_BORDER_COLOR,
     paddingTop: 8,
   },
   tabBarLabel: {

@@ -17,7 +17,7 @@ import {BottomTabs, BottomTabsScreen} from 'react-native-screens';
 import type {ColorValue, ImageSourcePropType} from 'react-native';
 
 import {getTabBarClipPx} from './tab-bar-metrics';
-import {TAB_BAR_BACKGROUND_COLOR} from './native-headers';
+import {useChromeColors} from './native-headers';
 
 export type NativeTabIcon =
   | {type: 'sfSymbol'; name: string}
@@ -117,13 +117,14 @@ function androidIconResource(
 }
 
 function titleAppearance(
+  backgroundColor: ColorValue,
   titleColor: ColorValue,
   titleColorActive: ColorValue,
 ): NonNullable<
   React.ComponentProps<typeof BottomTabsScreen>['standardAppearance']
 > {
   return {
-    tabBarBackgroundColor: TAB_BAR_BACKGROUND_COLOR,
+    tabBarBackgroundColor: backgroundColor,
     stacked: {
       normal: {tabBarItemTitleFontColor: titleColor},
       selected: {tabBarItemTitleFontColor: titleColorActive},
@@ -178,8 +179,14 @@ function NativeBottomTabNavigator({
       ? 'automatic'
       : options?.tabBarMinimizeBehavior;
 
-  const titleColor = options?.tabBarInactiveTintColor ?? '#667085';
-  const titleColorActive = options?.tabBarActiveTintColor ?? '#101828';
+  const chrome = useChromeColors();
+  const titleColor =
+    options?.tabBarInactiveTintColor ?? chrome.tabBarInactiveTint;
+  const titleColorActive =
+    options?.tabBarActiveTintColor ?? chrome.tabBarActiveTint;
+  // 화면이 tabBarStyle 을 통째로 바꾸면(숨김 등) backgroundColor 가 빠지므로 크롬 값으로 받친다.
+  const tabBarBackground =
+    options?.tabBarStyle?.backgroundColor ?? chrome.tabBarBackground;
 
   return (
     <NavigationContent>
@@ -191,10 +198,7 @@ function NativeBottomTabNavigator({
               tabBarItemTitleFontColorActive={titleColorActive}
               tabBarItemLabelVisibilityMode={options?.tabBarLabelVisibilityMode}
               tabBarMinimizeBehavior={minimize}
-              tabBarBackgroundColor={
-                options?.tabBarStyle?.backgroundColor ??
-                TAB_BAR_BACKGROUND_COLOR
-              }
+              tabBarBackgroundColor={tabBarBackground}
               experimentalControlNavigationStateInJS
               onNativeFocusChange={event => {
                 const route = state.routes.find(
@@ -241,6 +245,7 @@ function NativeBottomTabNavigator({
                       isFocused,
                     )}
                     standardAppearance={titleAppearance(
+                      tabBarBackground,
                       titleColor,
                       titleColorActive,
                     )}
@@ -248,6 +253,7 @@ function NativeBottomTabNavigator({
                     // 쓴다. 비워 두면 시스템 기본값이 적용돼 **다크모드에서 탭바만
                     // 검게** 뜬다(홈처럼 스크롤 화면에서 재현). 같은 값을 준다.
                     scrollEdgeAppearance={titleAppearance(
+                      tabBarBackground,
                       titleColor,
                       titleColorActive,
                     )}

@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {Animated, Pressable, StyleSheet} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {tick} from '@/shared/lib/feedback';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 키워드 한 줄의 "가격 하락 알림" 스위치. web `PriceDropOnlyToggle`.
@@ -32,6 +33,7 @@ export default function PriceDropSwitch({
   /** 다른 화면(알림 설정)에서 재사용할 때의 스크린리더 라벨 */
   accessibilityLabel?: string;
 }) {
+  const c = useColors();
   // 노브는 미끄러지고 트랙 색은 번진다 — 예전엔 marginLeft 를 2 → 18 로 바꿔 순간이동했다.
   const progress = useRef(new Animated.Value(value ? 1 : 0)).current;
   useEffect(() => {
@@ -67,7 +69,7 @@ export default function PriceDropSwitch({
           {
             backgroundColor: progress.interpolate({
               inputRange: [0, 1],
-              outputRange: ['#D0D5DD', '#9EF22E'], // gray-300 → primary-500
+              outputRange: [c.gray[300], '#9EF22E'], // gray-300 → primary-500
             }),
           },
         ]}>

@@ -6,10 +6,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {HEADER_HEIGHT} from '@/features/mypage/ui/StackHeader';
 import {DetailHeaderBackButton} from '@/screens/detail/ui/ProductDetailHeader';
-import {
-  HEADER_BACKGROUND_COLOR,
-  HEADER_TINT_COLOR,
-} from '@/navigations/tab/native-headers';
+import {useChromeColors} from '@/navigations/tab/native-headers';
 
 /**
  * 탭 스택의 헤더 — 시스템 헤더 대신 JS 로 그린다(2026-10-01).
@@ -28,15 +25,16 @@ export default function AppStackHeader({
   back,
 }: NativeStackHeaderProps) {
   const insets = useSafeAreaInsets();
+  const chrome = useChromeColors();
   const canGoBack = !!back;
   const left = options.headerLeft ? (
-    options.headerLeft({canGoBack, tintColor: HEADER_TINT_COLOR})
+    options.headerLeft({canGoBack, tintColor: chrome.headerTint})
   ) : canGoBack ? (
     <DetailHeaderBackButton onPress={() => navigation.goBack()} />
   ) : null;
   const right = options.headerRight?.({
     canGoBack,
-    tintColor: HEADER_TINT_COLOR,
+    tintColor: chrome.headerTint,
   });
   const title =
     typeof options.headerTitle === 'function'
@@ -44,12 +42,22 @@ export default function AppStackHeader({
       : options.headerTitle ?? options.title;
 
   return (
-    <View style={[styles.wrap, {paddingTop: insets.top}]}>
+    <View
+      style={[
+        styles.wrap,
+        {
+          paddingTop: insets.top,
+          backgroundColor: chrome.headerBackground,
+          borderBottomColor: chrome.headerBorder,
+        },
+      ]}>
       <View style={styles.bar}>
         <View style={styles.left}>
           {left}
           {title ? (
-            <Text style={styles.title} numberOfLines={1}>
+            <Text
+              style={[styles.title, {color: chrome.headerTint}]}
+              numberOfLines={1}>
               {title}
             </Text>
           ) : null}
@@ -61,11 +69,8 @@ export default function AppStackHeader({
 }
 
 const styles = StyleSheet.create({
-  wrap: {
-    backgroundColor: HEADER_BACKGROUND_COLOR,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F2F4F7', // gray-100 — StackHeader 와 같은 선
-  },
+  // 선은 gray-100 — StackHeader 와 같은 선
+  wrap: {borderBottomWidth: 1},
   bar: {
     height: HEADER_HEIGHT,
     flexDirection: 'row',
@@ -84,6 +89,5 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     fontSize: 18,
     fontWeight: '600',
-    color: HEADER_TINT_COLOR,
   },
 });

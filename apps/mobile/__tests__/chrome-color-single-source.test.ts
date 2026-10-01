@@ -30,15 +30,17 @@ const NAV_DIR = 'src/navigations/tab';
 const SOURCE = `${NAV_DIR}/native-headers.ts`;
 
 describe('크롬 색 단일 출처', () => {
-  it('native-headers 가 헤더·탭바 색 상수를 모두 내보낸다', () => {
+  it('native-headers 의 useChromeColors 가 헤더·탭바·바탕 색을 모두 내준다', () => {
     const src = read(SOURCE);
-    for (const name of [
-      'HEADER_TINT_COLOR',
-      'HEADER_BACKGROUND_COLOR',
-      'TAB_BAR_BACKGROUND_COLOR',
-      'TAB_BAR_BORDER_COLOR',
+    expect(src).toContain('export function useChromeColors()');
+    for (const key of [
+      'headerTint',
+      'headerBackground',
+      'tabBarBackground',
+      'tabBarBorder',
+      'screenBackground',
     ]) {
-      expect(src).toContain(`export const ${name} =`);
+      expect(src).toMatch(new RegExp(`${key}: c\\.`));
     }
   });
 
@@ -61,12 +63,12 @@ describe('크롬 색 단일 출처', () => {
     }
   });
 
-  it('JS 탭바와 네이티브 탭바가 같은 상수를 쓴다 — 두 벌이 갈리면 안 된다', () => {
+  it('JS 탭바와 네이티브 탭바가 같은 값을 쓴다 — 두 벌이 갈리면 안 된다', () => {
     for (const file of [
       'MainTabNavigator.tsx',
       'createNativeBottomTabNavigator.tsx',
     ]) {
-      expect(read(`${NAV_DIR}/${file}`)).toContain('TAB_BAR_BACKGROUND_COLOR');
+      expect(read(`${NAV_DIR}/${file}`)).toContain('chrome.tabBarBackground');
     }
   });
 });

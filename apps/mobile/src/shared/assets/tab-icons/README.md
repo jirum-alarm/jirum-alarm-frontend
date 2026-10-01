@@ -9,6 +9,7 @@ JS 탭바(iOS 26 미만·Android)는 `shared/components/icons` 의 SVG 를 쓴�
 미읽음 표시를 **아이콘에 그려 넣은** 변형이다. 손으로 그리지 말고 아래로 재생성한다.
 
 왜 뱃지가 아닌가:
+
 - iOS 26 시스템 뱃지(`badgeValue`)는 **크기를 줄일 수 없다**(지름 ~20pt). web·JS 탭바의
   8pt 점보다 훨씬 커서 "너무 크다"는 지적을 받았다.
 - 빈 문자열을 주면 iOS 에선 **뱃지가 아예 안 뜬다** — `react-native-screens` 문서의
@@ -35,3 +36,13 @@ PY
 ```
 
 원본(`alert@3x.png`·`alert-fill@3x.png`)이 바뀌면 **반드시 다시 돌린다.**
+
+## 다크 변형(`*-dark@3x.png`)도 생성물이다
+
+네이티브 탭바 아이콘은 `tinted: false`(원본 색 그대로)라 OS 다크모드에서 `#101828` 선이 어두운
+유리 위에서 사라진다. 그래서 다크 변형을 따로 두고 `MainTabNavigator` 가 `useColorScheme()` 으로 고른다.
+색은 `src/shared/theme/palette.js` 의 dark 값(gray-900→`#F9FAFB`, gray-500→`#98A2B3`, 흰 속채움→투명).
+
+```bash
+python3 apps/mobile/src/shared/assets/tab-icons/make-dark.py   # 알림 점을 다시 찍었으면 그 뒤에
+```

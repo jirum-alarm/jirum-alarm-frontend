@@ -14,6 +14,9 @@ jest.mock('react-native-gesture-handler', () => ({
 }));
 jest.mock('@react-navigation/native', () => ({
   NavigationContainer: ({children}: {children: React.ReactNode}) => children,
+  // App 이 OS 다크모드에 맞춰 내비게이션 테마를 고른다.
+  DefaultTheme: {dark: false, colors: {}, fonts: {}},
+  DarkTheme: {dark: true, colors: {}, fonts: {}},
   // App 이 navigationRef 를 NavigationContainer 에 넘긴다(푸시 → 네이티브 상세).
   createNavigationContainerRef: () => ({
     isReady: () => false,

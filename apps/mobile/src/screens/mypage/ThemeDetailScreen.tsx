@@ -90,7 +90,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
         </View>
       ) : isThemesPending ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="small" color="#667085" />
+          <ActivityIndicator size="small" className="text-gray-500" />
         </View>
       ) : !theme ? (
         // web 은 `if (!theme) return null` 로 빈 화면을 내보낸다. 앱은 왜 비었는지
@@ -167,7 +167,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
               <SectionErrorRow label="라이브 딜" onRetry={refetchDeals} />
             ) : isDealsPending ? (
               <View className="items-center py-8">
-                <ActivityIndicator size="small" color="#667085" />
+                <ActivityIndicator size="small" className="text-gray-500" />
               </View>
             ) : (deals ?? []).length === 0 ? (
               <Text className="py-8 text-center text-sm text-gray-500">

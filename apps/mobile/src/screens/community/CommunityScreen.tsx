@@ -34,6 +34,7 @@ import {
   tabNavigations,
   tabStackNavigations,
 } from '@/shared/constant/navigations';
+import {useColors} from '@/shared/theme/useColors';
 
 /** web PageHeader 와 같은 높이(h-14). */
 const HEADER_HEIGHT = 56;
@@ -56,6 +57,7 @@ type Nav = NativeStackNavigationProp<TabStackParamList>;
  * 있으면 어디쯤인지 알 수 없다).
  */
 export default function CommunityScreen() {
+  const c = useColors();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<Nav>();
   const [tab, setTab] = useState<CommunityTab>('all');
@@ -117,7 +119,7 @@ export default function CommunityScreen() {
 
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
-      <SystemBars style="dark" hidden={false} />
+      <SystemBars style="auto" hidden={false} />
 
       {/* 헤더 — web PageHeader(title="커뮤니티") */}
       <View
@@ -146,7 +148,7 @@ export default function CommunityScreen() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              tintColor="#667085"
+              tintColor={c.gray[500]}
             />
           }
           onEndReachedThreshold={0.5}
@@ -165,7 +167,7 @@ export default function CommunityScreen() {
             <>
               {isFetchingNextPage ? (
                 <View className="h-12 items-center justify-center">
-                  <ActivityIndicator size="small" color="#667085" />
+                  <ActivityIndicator size="small" className="text-gray-500" />
                 </View>
               ) : null}
               {/*
@@ -208,8 +210,8 @@ export default function CommunityScreen() {
             className="bg-primary-500 flex-row items-center rounded-full px-4 py-3"
             style={styles.fabShadow}>
             {/* 라임 위 흰 글자는 1.4:1 — 주 버튼(Button primary)처럼 gray-900. */}
-            <Text className="text-lg leading-5 text-gray-900">+</Text>
-            <Text className="pl-1.5 text-sm font-semibold text-gray-900">
+            <Text className="text-lg leading-5 text-fixed-900">+</Text>
+            <Text className="pl-1.5 text-sm font-semibold text-fixed-900">
               글쓰기
             </Text>
           </View>

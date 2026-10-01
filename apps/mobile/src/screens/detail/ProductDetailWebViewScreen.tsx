@@ -30,7 +30,8 @@ import {useTokenRemoveEffect} from '@/screens/jirumalarmwebview/hooks/useTokenRe
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import type {ProductFlowParamList} from '@/navigations/tab/types';
 import {tabStackNavigations} from '@/shared/constant/navigations';
-import {SCREEN_BACKGROUND_COLOR} from '@/navigations/tab/native-headers';
+import {useChromeColors} from '@/navigations/tab/native-headers';
+import {fixed} from '@/shared/theme/palette';
 
 type StackNav = Pick<
   NativeStackNavigationProp<ProductFlowParamList>,
@@ -67,6 +68,7 @@ export function StackWebView({
   header?: React.ReactNode;
 }) {
   const insets = useSafeAreaInsets();
+  const chrome = useChromeColors();
   const webviewRef = useRef<WebView>(null);
 
   useTokenRemoveEffect();
@@ -140,12 +142,16 @@ export function StackWebView({
     <View
       style={[
         styles.container,
+        {backgroundColor: chrome.screenBackground},
         // ★탭바를 숨길 땐 잘린 만큼 올리고, 보일 땐 탭바 높이만큼 비운다.
         // 후자를 빼먹어서 웹 콘텐츠가 홈 인디케이터에 붙었다(사용자 지적).
         {paddingBottom: tabBarClipPad},
       ]}>
-      <SystemBars style="dark" hidden={false} />
-      <View style={[styles.statusBarSpacer, {height: insets.top}]} />
+      {/* 상태바 칸은 헤더(테마를 따름)와 같은 바탕이라 글자색도 테마를 따른다. */}
+      <SystemBars style="auto" hidden={false} />
+      <View
+        style={{height: insets.top, backgroundColor: chrome.screenBackground}}
+      />
       {header}
       <View style={styles.webviewWrap}>
         <WebView
@@ -174,7 +180,7 @@ export function StackWebView({
         />
         {isLoading && (
           <View style={styles.loadingContainer} pointerEvents="none">
-            <ActivityIndicator size="small" color="#667085" />
+            <ActivityIndicator size="small" className="text-gray-500" />
           </View>
         )}
         {hasError && <WebViewErrorView onRetry={retry} />}
@@ -211,10 +217,6 @@ export default ProductDetailWebViewScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: SCREEN_BACKGROUND_COLOR,
-  },
-  statusBarSpacer: {
-    backgroundColor: SCREEN_BACKGROUND_COLOR,
   },
   webviewWrap: {
     flex: 1,
@@ -227,6 +229,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: SCREEN_BACKGROUND_COLOR,
+    // web 본문은 다크모드가 없어 늘 흰색이다 — 로딩 가림막도 그 색이어야 뜰 때 번쩍이지 않는다.
+    backgroundColor: fixed.white,
   },
 });

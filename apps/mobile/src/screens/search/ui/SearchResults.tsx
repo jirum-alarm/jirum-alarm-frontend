@@ -156,7 +156,7 @@ export default function SearchResults({
               footer={
                 isFetchingNextPage ? (
                   <View className="items-center py-6">
-                    <ActivityIndicator size="small" color="#667085" />
+                    <ActivityIndicator size="small" className="text-gray-500" />
                   </View>
                 ) : null
               }

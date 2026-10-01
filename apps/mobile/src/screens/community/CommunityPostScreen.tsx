@@ -21,7 +21,7 @@ import {useCommunityCommentsViewModel} from '@/features/community/model/useCommu
 import {useCommunityPostViewModel} from '@/features/community/model/useCommunityPostViewModel';
 import {
   baseHeaderOptions,
-  HEADER_TINT_COLOR,
+  useChromeColors,
 } from '@/navigations/tab/native-headers';
 import {
   DetailHeaderBackButton,
@@ -158,7 +158,7 @@ export default function CommunityPostScreen({route, navigation}: Props) {
   if (isPending || !post) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="small" color="#667085" />
+        <ActivityIndicator size="small" className="text-gray-500" />
       </View>
     );
   }
@@ -198,7 +198,7 @@ export default function CommunityPostScreen({route, navigation}: Props) {
           ListEmptyComponent={
             isCommentsPending ? (
               <View className="py-8 items-center">
-                <ActivityIndicator size="small" color="#667085" />
+                <ActivityIndicator size="small" className="text-gray-500" />
               </View>
             ) : (
               <View className="py-8">
@@ -211,7 +211,7 @@ export default function CommunityPostScreen({route, navigation}: Props) {
           ListFooterComponent={
             isFetchingNextPage ? (
               <View className="py-4">
-                <ActivityIndicator size="small" color="#667085" />
+                <ActivityIndicator size="small" className="text-gray-500" />
               </View>
             ) : null
           }
@@ -282,10 +282,11 @@ function PostHeaderActions({
   onPressShare: () => void;
   onPressMenu: () => void;
 }) {
+  const {headerTint} = useChromeColors();
   return (
     <View className="flex-row items-center">
       <HeaderIconButton onPress={onPressShare} label="공유하기">
-        <ShareIcon width={22} height={22} color={HEADER_TINT_COLOR} />
+        <ShareIcon width={22} height={22} color={headerTint} />
       </HeaderIconButton>
       <HeaderIconButton onPress={onPressMenu} label="게시글 메뉴">
         <Dots width={24} height={24} />

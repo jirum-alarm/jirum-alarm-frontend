@@ -146,7 +146,7 @@ export default function PriceHistorySection({
   if (isPending) {
     return (
       <View className="h-[220px] items-center justify-center">
-        <ActivityIndicator size="small" color="#667085" />
+        <ActivityIndicator size="small" className="text-gray-500" />
       </View>
     );
   }
@@ -304,7 +304,7 @@ export default function PriceHistorySection({
         {/* 가운데 칸(≈100px)엔 "최고 대비 N원 절약"(≈103px)이 안 들어가 두 줄로 꺾였다(web 은 v1.22.16 에서 수정).
             RN Text 는 칸 밖으로 넘칠 수 없어 카드 폭 전체에 가운데 정렬로 뺀다 — 가운데 칸도 가운데 정렬이라 위치는 같다. */}
         {currentBadge ? (
-          <Text className="mt-0.5 text-center text-[11px] font-medium text-emerald-600">
+          <Text className="mt-0.5 text-center text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
             {currentBadge}
           </Text>
         ) : null}

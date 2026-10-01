@@ -5,6 +5,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import SearchIcon from '@/shared/components/icons/search';
 
 import {splitByPrefix} from '../lib/highlight';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 자동완성 목록. web: widgets/search/ui/SearchAutocompleteDropdown.tsx
@@ -30,6 +31,7 @@ export default function SuggestionList({
   highlight: string;
   onSelect: (suggestion: string) => void;
 }) {
+  const c = useColors();
   return (
     <ScrollView
       className="border-b border-gray-200 bg-white"
@@ -43,9 +45,9 @@ export default function SuggestionList({
           accessibilityLabel={suggestion}
           className="flex-row items-center gap-2 px-5 py-3"
           style={({pressed}) => ({
-            backgroundColor: pressed ? '#F9FAFB' : '#FFFFFF',
+            backgroundColor: pressed ? c.gray[50] : c.white,
           })}>
-          <SearchIcon width={18} height={18} color="#98A2B3" />
+          <SearchIcon width={18} height={18} color={c.gray[400]} />
           <Text className="text-sm text-gray-700" numberOfLines={1}>
             {splitByPrefix(suggestion, highlight).map((part, i) => (
               <Text

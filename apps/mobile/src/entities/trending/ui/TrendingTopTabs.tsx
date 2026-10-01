@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import PressableScale from '@/shared/components/PressableScale';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 발견 탭 상단 2분할(실시간 · 랭킹).
@@ -32,9 +33,6 @@ const TABS: {id: TrendingView; label: string}[] = [
 /** web `transition-colors` 기본값(150ms)보다 살짝 길게 — 이동 거리가 있어서. */
 const DURATION_MS = 220;
 
-const COLOR_ACTIVE = '#101828'; // gray-900
-const COLOR_INACTIVE = '#667085'; // gray-500
-
 export default function TrendingTopTabs({
   active,
   onSelect,
@@ -42,6 +40,7 @@ export default function TrendingTopTabs({
   active: TrendingView;
   onSelect: (view: TrendingView) => void;
 }) {
+  const c = useColors();
   const activeIndex = TABS.findIndex(t => t.id === active);
   // 0 = 실시간, 1 = 랭킹. 밑줄 위치와 글자색을 같은 값으로 움직인다.
   const progress = useSharedValue(activeIndex);
@@ -92,7 +91,7 @@ export default function TrendingTopTabs({
             bottom: 0,
             height: 2, // h-0.5
             width: '50%',
-            backgroundColor: COLOR_ACTIVE, // bg-gray-900
+            backgroundColor: c.gray[900],
           },
           underlineStyle,
         ]}
@@ -118,6 +117,7 @@ function TabLabel({
   isActive: boolean;
   onPress: () => void;
 }) {
+  const c = useColors();
   const textStyle = useAnimatedStyle(() => {
     // 이 탭에 가까울수록(거리 0) 진해진다.
     const distance = Math.abs(progress.value - index);
@@ -125,7 +125,7 @@ function TabLabel({
       color: interpolateColor(
         Math.min(1, distance),
         [0, 1],
-        [COLOR_ACTIVE, COLOR_INACTIVE],
+        [c.gray[900], c.gray[500]],
       ),
     };
   });

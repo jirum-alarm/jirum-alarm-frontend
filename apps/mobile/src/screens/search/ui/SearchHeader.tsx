@@ -5,6 +5,7 @@ import {TextInput} from '@/shared/components/ui/Text/AppText';
 import CaretLeft from '@/shared/components/icons/caret_left';
 import CircleX from '@/shared/components/icons/circle_x';
 import SearchIcon from '@/shared/components/icons/search';
+import {useColors} from '@/shared/theme/useColors';
 
 /** web PageHeader 와 같은 높이(h-14). 내정보 StackHeader·알림 헤더와도 같은 값. */
 export const SEARCH_HEADER_HEIGHT = 56;
@@ -41,6 +42,7 @@ const SearchHeader = forwardRef<
   {value, onChangeText, onSubmit, onClear, onBack, onFocus, autoFocus},
   ref,
 ) {
+  const c = useColors();
   return (
     <View className="bg-white px-5">
       <View
@@ -63,7 +65,7 @@ const SearchHeader = forwardRef<
         <View
           className="flex-row items-center rounded-md bg-gray-50 pl-3"
           style={styles.box}>
-          <SearchIcon width={20} height={20} color="#98A2B3" />
+          <SearchIcon width={20} height={20} color={c.gray[400]} />
           <TextInput
             ref={ref}
             value={value}
@@ -74,14 +76,14 @@ const SearchHeader = forwardRef<
             // 결과·필터를 가리고 키보드가 올라온다(web 운영 실측 주석과 같은 이유).
             autoFocus={autoFocus}
             placeholder="핫딜 상품을 검색해주세요"
-            placeholderTextColor="#667085"
+            placeholderTextColor={c.gray[500]}
             returnKeyType="search"
             // 검색어는 사람 이름이 아니다 — 자동 대문자·교정이 켜지면 영문
             // 모델명이 엉뚱하게 바뀐다(web 도 전부 off).
             autoCapitalize="none"
             autoCorrect={false}
             spellCheck={false}
-            selectionColor="#000000"
+            selectionColor={c.gray[900]}
             className="flex-1 text-sm text-gray-900"
             style={styles.input}
             accessibilityLabel="검색어 입력"

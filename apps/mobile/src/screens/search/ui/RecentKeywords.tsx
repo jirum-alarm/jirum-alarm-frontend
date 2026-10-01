@@ -5,6 +5,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import XSmall from '@/shared/components/icons/XSmall';
 
 import SectionTitle from './SectionTitle';
+import {useColors} from '@/shared/theme/useColors';
 
 /** web Chip: 15자까지만 보여주고 넘치면 '...'. */
 const MAX_CHIP_CHARS = 15;
@@ -35,6 +36,7 @@ export default function RecentKeywords({
    */
   onClearAll: () => void;
 }) {
+  const c = useColors();
   if (keywords.length === 0) return null;
 
   return (
@@ -85,7 +87,7 @@ export default function RecentKeywords({
               accessibilityRole="button"
               accessibilityLabel={`${keyword} 삭제`}
               style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-              <XSmall width={16} height={16} color="#667085" />
+              <XSmall width={16} height={16} color={c.gray[500]} />
             </Pressable>
           </Pressable>
         ))}

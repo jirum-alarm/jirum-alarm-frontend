@@ -22,16 +22,16 @@ export default function TossBadges({
     badges.push({
       key: 'lpc',
       label: '최저가 보상',
-      bg: 'bg-blue-50',
-      fg: 'text-blue-600',
+      bg: 'bg-blue-50 dark:bg-blue-950',
+      fg: 'text-blue-600 dark:text-blue-400',
     });
   }
   if (toss.arrivalGuaranteed) {
     badges.push({
       key: 'ag',
       label: '도착보장',
-      bg: 'bg-green-50',
-      fg: 'text-green-600',
+      bg: 'bg-green-50 dark:bg-green-950',
+      fg: 'text-green-600 dark:text-green-400',
     });
   }
   if (toss.specialProduct) {

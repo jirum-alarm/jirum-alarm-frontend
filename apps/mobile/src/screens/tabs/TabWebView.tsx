@@ -47,7 +47,9 @@ import {
 import {DEVICE_ID_SYNC_SCRIPT} from '@/shared/lib/device/device-id';
 import {INTERCEPT_DETAIL_LINK_SCRIPT} from '@/shared/lib/webview/intercept-detail-link';
 import {subscribeOpenDetail} from '@/shared/lib/webview/event';
-import {SCREEN_BACKGROUND_COLOR} from '@/navigations/tab/native-headers';
+// ponytail: 죽은 코드(다섯 탭 전부 네이티브, TabStackNavigator 주석) — 다크 대응 안 함. 지울 때 같이 사라진다.
+import {fixed} from '@/shared/theme/palette';
+const SCREEN_BACKGROUND_COLOR = fixed.white;
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
@@ -384,7 +386,7 @@ const TabWebViewAndroid = ({tabName, baseUrl}: TabWebViewProps) => {
       </ScrollView>
       {isLoading && (
         <View style={styles.loadingContainer} pointerEvents="none">
-          <ActivityIndicator size="small" color="#667085" />
+          <ActivityIndicator size="small" className="text-gray-500" />
         </View>
       )}
       {hasError && <WebViewErrorView onRetry={retry} />}
@@ -464,7 +466,7 @@ const TabWebViewIOS = ({tabName, baseUrl}: TabWebViewProps) => {
       />
       {isLoading && (
         <View style={styles.loadingContainer} pointerEvents="none">
-          <ActivityIndicator size="small" color="#667085" />
+          <ActivityIndicator size="small" className="text-gray-500" />
         </View>
       )}
       {hasError && <WebViewErrorView onRetry={retry} />}

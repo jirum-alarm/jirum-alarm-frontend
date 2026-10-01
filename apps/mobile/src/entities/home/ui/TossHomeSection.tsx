@@ -116,7 +116,7 @@ export default function TossHomeSection({
 
       {!isFetched ? (
         <View className="h-40 items-center justify-center">
-          <ActivityIndicator size="small" color="#667085" />
+          <ActivityIndicator size="small" className="text-gray-500" />
         </View>
       ) : (
         <View

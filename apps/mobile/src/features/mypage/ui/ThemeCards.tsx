@@ -69,7 +69,7 @@ export function ThemeCard({
             className={
               isSubscribed
                 ? 'text-sm font-medium text-gray-500'
-                : 'text-sm font-medium text-gray-900'
+                : 'text-sm font-medium text-fixed-900'
             }>
             {isSubscribed ? '받는 중' : '알림 받기'}
           </Text>

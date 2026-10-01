@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Pressable, StyleSheet, Linking} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {storeUrl} from '@/shared/lib/update/release-policy';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 스토어 업데이트가 필요할 때 앱 전체를 덮는 화면.
@@ -11,6 +12,7 @@ import {storeUrl} from '@/shared/lib/update/release-policy';
  * 깨진 앱을 쓰게 된다.
  */
 export default function ForceUpdateScreen(): React.JSX.Element {
+  const c = useColors();
   const openStore = () => {
     Linking.openURL(storeUrl()).catch(() => {
       // 스토어 앱이 없는 기기(에뮬레이터 등)에서는 조용히 무시한다.
@@ -18,19 +20,21 @@ export default function ForceUpdateScreen(): React.JSX.Element {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: c.white}]}>
       <Text style={styles.emoji}>🚀</Text>
-      <Text style={styles.title}>새 버전이 필요해요</Text>
-      <Text style={styles.description}>
+      <Text style={[styles.title, {color: c.gray[900]}]}>
+        새 버전이 필요해요
+      </Text>
+      <Text style={[styles.description, {color: c.gray[500]}]}>
         지금 버전은 더 이상 지원하지 않아요.{'\n'}
         업데이트하고 계속 이용해주세요.
       </Text>
       <Pressable
-        style={styles.button}
+        style={[styles.button, {backgroundColor: c.gray[900]}]}
         onPress={openStore}
         accessibilityRole="button"
         accessibilityLabel="스토어에서 업데이트">
-        <Text style={styles.buttonText}>업데이트하기</Text>
+        <Text style={[styles.buttonText, {color: c.white}]}>업데이트하기</Text>
       </Pressable>
     </View>
   );
@@ -39,7 +43,6 @@ export default function ForceUpdateScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -48,23 +51,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#101828',
     marginBottom: 8,
   },
   description: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#667085',
     textAlign: 'center',
     marginBottom: 24,
   },
   button: {
-    backgroundColor: '#101828',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
     minHeight: 44,
     justifyContent: 'center',
   },
-  buttonText: {color: '#ffffff', fontSize: 14, fontWeight: '600'},
+  buttonText: {fontSize: 14, fontWeight: '600'},
 });

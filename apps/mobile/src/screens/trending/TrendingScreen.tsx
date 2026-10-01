@@ -96,7 +96,7 @@ export default function TrendingScreen() {
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
       {/* 흰 배경이라 상태바 글씨는 어둡게. 홈(다크 헤더)과 다르다. */}
-      <SystemBars style="dark" hidden={false} />
+      <SystemBars style="auto" hidden={false} />
 
       {/* web TrendingPageHeader — h1 은 sr-only 라 화면엔 탭만 보인다. */}
       <TrendingTopTabs active={view} onSelect={requestTrendingView} />

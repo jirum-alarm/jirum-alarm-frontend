@@ -238,9 +238,9 @@ function BannerPager({slides}: {slides: BannerSlide[]}) {
             {/* 자동 넘김이 꺼지면 남은 시간도 없으니 진행바를 그리지 않는다. */}
             {autoplay && i === scrollIndex ? (
               <View className="absolute top-2 right-3 h-1 w-8">
-                <View className="h-full w-full overflow-hidden rounded-full bg-white/20">
+                <View className="h-full w-full overflow-hidden rounded-full bg-fixed-white/20">
                   <Animated.View
-                    className="h-full w-full bg-white"
+                    className="h-full w-full bg-fixed-white"
                     style={[{transformOrigin: 'left'}, progressStyle]}
                   />
                 </View>
@@ -281,7 +281,7 @@ function BannerSlideView({
         title={slide.title}
         description="자세히 보기"
         image={slide.imageUrl ? {uri: slide.imageUrl} : LANDING_IMAGE}
-        backgroundClassName="bg-gray-800 border-gray-600"
+        backgroundClassName="bg-fixed-800 border-fixed-600"
         isAd
         onPress={() => {
           recordClick(slide.creativeId);
@@ -298,7 +298,7 @@ function BannerSlideView({
         strongTitle="OPEN"
         description="오픈 카톡방에서 소식을 확인해보세요!"
         image={KAKAO_IMAGE}
-        backgroundClassName="bg-gray-800 border-gray-600"
+        backgroundClassName="bg-fixed-800 border-fixed-600"
         onPress={() => {
           // 상세 오카방 카드와 같은 이벤트 — placement 로 위치를 가른다.
           Analytics.track('okachat_prompt_click', {placement: 'home_banner'});
@@ -346,13 +346,13 @@ function BannerCard({
       style={{height: BANNER_HEIGHT}}
       className={`h-full w-full flex-row items-center justify-between rounded-lg border py-3 pr-1.5 pl-4 ${backgroundClassName}`}>
       <View className="flex-1">
-        <Text className="mb-1 font-bold text-white" numberOfLines={1}>
+        <Text className="mb-1 font-bold text-fixed-white" numberOfLines={1}>
           {title}
           {strongTitle ? (
             <Text className="text-primary-300 font-bold">{strongTitle}</Text>
           ) : null}
         </Text>
-        <Text className="text-[13px] text-gray-200" numberOfLines={1}>
+        <Text className="text-[13px] text-fixed-200" numberOfLines={1}>
           {description}
         </Text>
       </View>
@@ -366,10 +366,10 @@ function BannerCard({
       </View>
 
       {isAd ? (
-        <View className="absolute right-2 bottom-2 rounded-lg border border-white bg-gray-500 px-[7px] py-[3px]">
+        <View className="absolute right-2 bottom-2 rounded-lg border border-fixed-white bg-fixed-500 px-[7px] py-[3px]">
           {/* web `leading-none` — 기본 line-height 면 뱃지가 4~6px 커진다. */}
           <Text
-            className="text-xs font-medium text-white"
+            className="text-xs font-medium text-fixed-white"
             style={{lineHeight: 12}}>
             AD
           </Text>

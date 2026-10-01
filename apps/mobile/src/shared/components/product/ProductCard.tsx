@@ -101,8 +101,8 @@ const ProductCard = React.memo(function ProductCard({
           ) : null}
 
           {product.earliestExpiryDate && !product.isEnd ? (
-            <View className="absolute inset-x-0 bottom-0 h-[22px] items-center justify-center bg-gray-700/80 px-2">
-              <Text className="text-xs font-semibold text-white">
+            <View className="absolute inset-x-0 bottom-0 h-[22px] items-center justify-center bg-fixed-700/80 px-2">
+              <Text className="text-xs font-semibold text-fixed-white">
                 유통기한 {formatMMD(product.earliestExpiryDate)}
               </Text>
             </View>

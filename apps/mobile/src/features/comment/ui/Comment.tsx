@@ -30,6 +30,7 @@ import Dots from '@/shared/components/icons/Dots';
 import ThumbsupFill from '@/shared/components/icons/ThumbsupFill';
 
 import CommentMenu from './CommentMenu';
+import {useColors} from '@/shared/theme/useColors';
 
 export default function Comment({
   comment,
@@ -42,6 +43,7 @@ export default function Comment({
   myUserId?: string | null;
   canReply: boolean;
 }) {
+  const c = useColors();
   const queryClient = useQueryClient();
   const [menuOpen, setMenuOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -198,7 +200,7 @@ export default function Comment({
             {editStatus === 'reply' ? (
               <BubbleChatFill width={16} height={16} />
             ) : (
-              <BubbleChat width={16} height={16} color="#667085" />
+              <BubbleChat width={16} height={16} color={c.gray[500]} />
             )}
             <Text
               className={cn(

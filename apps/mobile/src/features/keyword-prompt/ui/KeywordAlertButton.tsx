@@ -16,6 +16,7 @@ import {
   normalizeKeyword,
   useMyKeywordSet,
 } from '../model/myKeywords';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 검색한 바로 그 단어로 **한 번에** 알림을 건다. 예전엔 "키워드 등록" 이 빈 키워드 화면으로
@@ -31,6 +32,7 @@ export default function KeywordAlertButton({
   keyword: string;
   variant: 'bar' | 'cta';
 }) {
+  const c = useColors();
   const queryClient = useQueryClient();
   const registered = useMyKeywordSet();
   const [optimistic, setOptimistic] = useState<string | null>(null);
@@ -82,9 +84,9 @@ export default function KeywordAlertButton({
         className={
           isOn
             ? 'flex-row items-center gap-x-1.5 rounded-lg bg-gray-100 px-5 py-3'
-            : 'flex-row items-center gap-x-1.5 rounded-lg bg-gray-800 px-5 py-3'
+            : 'flex-row items-center gap-x-1.5 rounded-lg bg-fixed-800 px-5 py-3'
         }>
-        {isOn ? <Check color="#039100" /> : null}
+        {isOn ? <Check color={c.primary[700]} /> : null}
         <Text
           className={
             isOn
@@ -112,9 +114,9 @@ export default function KeywordAlertButton({
         className={
           isOn
             ? 'h-9 flex-row items-center gap-x-1 rounded-lg px-3'
-            : 'h-9 flex-row items-center rounded-lg bg-gray-800 px-3'
+            : 'h-9 flex-row items-center rounded-lg bg-fixed-800 px-3'
         }>
-        {isOn ? <Check color="#039100" /> : null}
+        {isOn ? <Check color={c.primary[700]} /> : null}
         <Text
           className={
             isOn

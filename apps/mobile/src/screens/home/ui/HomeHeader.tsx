@@ -9,6 +9,7 @@ import IconLogo from '@/shared/components/icons/IconLogo';
 import SearchIcon from '@/shared/components/icons/search';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {TabStackParamList} from '@/navigations/tab/types';
+import {useColors} from '@/shared/theme/useColors';
 
 /** 로고 아래 붙는 서비스 한 줄 설명. web LOGO_SUBTITLE 과 같은 문구. */
 const LOGO_SUBTITLE = '커뮤니티 핫딜 모아보기';
@@ -53,9 +54,9 @@ export default function HomeHeader({
 
   return (
     <View style={{height: insets.top + 56}}>
-      {/* 아래 겹: 다크. 배너와 같은 gray-900 이라 이어져 보인다. */}
+      {/* 아래 겹: 다크(테마 무관 fixed). 배너와 같은 gray-900 이라 이어져 보인다. */}
       <View
-        className="absolute inset-0 bg-gray-900"
+        className="absolute inset-0 bg-fixed-900"
         style={{paddingTop: insets.top}}>
         <HeaderRow inverted onPressLogo={onPressLogo} />
       </View>
@@ -78,6 +79,7 @@ function HeaderRow({
   inverted: boolean;
   onPressLogo?: () => void;
 }) {
+  const c = useColors();
   const navigation =
     useNavigation<NativeStackNavigationProp<TabStackParamList>>();
 
@@ -96,7 +98,7 @@ function HeaderRow({
           <Text
             className={
               inverted
-                ? 'text-base font-semibold text-white'
+                ? 'text-base font-semibold text-fixed-white'
                 : 'text-base font-semibold text-gray-800'
             }
             numberOfLines={1}>
@@ -105,7 +107,7 @@ function HeaderRow({
           <Text
             className={
               inverted
-                ? 'text-[11px] text-white/70'
+                ? 'text-[11px] text-fixed-white/70'
                 : 'text-[11px] text-gray-500'
             }
             numberOfLines={1}>
@@ -125,7 +127,7 @@ function HeaderRow({
         <SearchIcon
           width={24}
           height={24}
-          color={inverted ? '#FFFFFF' : '#101828'}
+          color={inverted ? '#FFFFFF' : c.gray[900]}
         />
       </Pressable>
     </View>

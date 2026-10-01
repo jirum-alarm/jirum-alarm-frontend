@@ -32,6 +32,7 @@ import {
   FilterMenuIcon,
   HeadsetMenuIcon,
 } from '@/features/mypage/ui/icons';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 내정보 탭 루트. web `/mypage`(BasicLayout + MyProfileSection + MenuList) 대응.
@@ -41,6 +42,7 @@ import {
  * 메뉴는 먼저 쓸 수 있어야 하므로 프로필 블록만 상태를 가른다.
  */
 export default function MyPageScreen() {
+  const c = useColors();
   const insets = useSafeAreaInsets();
   const navigation =
     useNavigation<NativeStackNavigationProp<TabStackParamList>>();
@@ -100,14 +102,14 @@ export default function MyPageScreen() {
               <SectionErrorRow label="내 정보" onRetry={refetch} />
             ) : isPending ? (
               <View className="h-14 justify-center">
-                <ActivityIndicator size="small" color="#667085" />
+                <ActivityIndicator size="small" className="text-gray-500" />
               </View>
             ) : (
               <Pressable
                 onPress={() => push(tabStackNavigations.MYPAGE_ACCOUNT)}
                 accessibilityRole="button"
                 accessibilityLabel="가입 정보"
-                android_ripple={{color: '#F2F4F7'}}
+                android_ripple={{color: c.gray[100]}}
                 style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
                 <View className="flex-row items-center justify-between">
                   <View className="min-w-0" style={styles.grow}>

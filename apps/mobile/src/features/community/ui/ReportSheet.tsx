@@ -14,6 +14,7 @@ import BottomSheet from '@/shared/components/BottomSheet';
 import {buildReportVariables, REPORT_REASONS} from '../lib/report';
 
 import {gaps} from './community-styles';
+import {useColors} from '@/shared/theme/useColors';
 
 /** web `features/community/ui/ReportModal` 대응. 문구·사유 목록을 그대로 옮겼다. */
 export default function ReportSheet({
@@ -25,6 +26,7 @@ export default function ReportSheet({
   postId: number;
   onClose: () => void;
 }) {
+  const c = useColors();
   const [reason, setReason] = useState<UserReportReason | null>(null);
   const [description, setDescription] = useState('');
 
@@ -81,7 +83,7 @@ export default function ReportSheet({
                       : 'border-gray-300',
                   )}>
                   {selected ? (
-                    <View className="h-2 w-2 rounded-full bg-white" />
+                    <View className="h-2 w-2 rounded-full bg-fixed-white" />
                   ) : null}
                 </View>
                 <Text className="pl-3 text-sm text-gray-800">{item.label}</Text>
@@ -95,7 +97,7 @@ export default function ReportSheet({
             value={description}
             onChangeText={setDescription}
             placeholder="신고 내용을 입력해주세요"
-            placeholderTextColor="#667085"
+            placeholderTextColor={c.gray[500]}
             multiline
             className="mt-3 rounded-lg border border-gray-200 p-3 text-sm text-gray-900"
             style={styles.descriptionInput}

@@ -100,7 +100,7 @@ export default function ExpiredProductWarning({
         <SectionErrorRow label="최신 핫딜" onRetry={refetch} />
       ) : isPending ? (
         <View className="h-[220px] items-center justify-center">
-          <ActivityIndicator size="small" color="#667085" />
+          <ActivityIndicator size="small" className="text-gray-500" />
         </View>
       ) : (
         <View className="flex-row flex-wrap px-[17px] pt-3">

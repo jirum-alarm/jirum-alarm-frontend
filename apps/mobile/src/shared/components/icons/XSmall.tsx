@@ -1,13 +1,17 @@
 import React from 'react';
 import Svg, {Path, type SvgProps} from 'react-native-svg';
 
+import {useColors} from '@/shared/theme/useColors';
+
 /** web XSmall 과 같은 패스. 알림 편집모드의 삭제(X) 버튼. */
 export default function XSmall({
   width = 20,
   height = 20,
-  color = '#667085',
+  color: colorProp,
   ...props
 }: SvgProps) {
+  const c = useColors();
+  const color = colorProp ?? c.gray[500];
   return (
     <Svg
       width={width}

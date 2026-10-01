@@ -8,6 +8,7 @@ import {
 import type {VariantProps} from 'class-variance-authority';
 import {cn} from '@/shared/lib/styling';
 import {composeEventHandlers} from '@/shared/lib/ui';
+import {useColors} from '@/shared/theme/useColors';
 
 interface Props extends TextInputProps, VariantProps<typeof textfieldVariant> {
   label?: string;
@@ -32,6 +33,7 @@ const TextField = forwardRef<TextInput, Props>(
     },
     ref,
   ) => {
+    const c = useColors();
     const [isFocused, setIsFocused] = useState(false);
     const handleFocused = () => {
       setIsFocused(true);
@@ -62,8 +64,8 @@ const TextField = forwardRef<TextInput, Props>(
             autoCorrect={false} //입력중 자동 수정 기능
             onFocus={composeEventHandlers(handleFocused, onFocus)}
             onBlur={composeEventHandlers(handleBlur, onBlur)}
-            selectionColor={'#000000'}
-            placeholderTextColor={'#667085'}
+            selectionColor={c.gray[900]}
+            placeholderTextColor={c.gray[500]}
             className={cn(textfieldVariant({variant, size, color}), className)}
           />
           {suffixIcon && <View className="pr-[8px]">{suffixIcon}</View>}

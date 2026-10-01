@@ -18,7 +18,7 @@ import {
   useTabBarVisibility,
 } from '@/shared/hooks/useTabBarVisibility';
 import type {TabStackParamList} from './types';
-import {SCREEN_BACKGROUND_COLOR} from './native-headers';
+import {useChromeColors} from './native-headers';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
@@ -82,6 +82,7 @@ function getTabRootScreen(tabName: TabName): React.ComponentType {
 export function createTabStack(tabName: TabName) {
   return function TabStack() {
     useSyncNativeTabBarHidden();
+    const chrome = useChromeColors();
 
     // 탭을 옮기면 탭바를 되살린다 — 웹뷰 탭이 하위 URL 에서 꺼둔 채 떠난 경우.
     const isTabFocused = useIsFocused();
@@ -93,7 +94,7 @@ export function createTabStack(tabName: TabName) {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-          contentStyle: {backgroundColor: SCREEN_BACKGROUND_COLOR},
+          contentStyle: {backgroundColor: chrome.screenBackground},
         }}>
         {/* ★component 로 넘긴다 — 렌더 콜백({() => ...})은 렌더마다 새 함수라
             react-navigation 이 루트를 건너뛰지 못해 탭 루트 전체가 다시 그려진다. */}

@@ -1,25 +1,27 @@
 import React from 'react';
 import Svg, {Path, type SvgProps} from 'react-native-svg';
 
+import {useColors} from '@/shared/theme/useColors';
+
 type Props = SvgProps & {
   active?: boolean;
   line?: string;
 };
-
-const defaultFill = '#D0D5DD';
-const defaultLine = '#667085';
 
 /** web Thumbsdown 과 같은 패스. */
 export default function Thumbsdown({
   active = false,
   width = 22,
   height = 22,
-  fill = defaultFill,
-  line = defaultLine,
+  fill: fillProp,
+  line: lineProp,
   ...props
 }: Props) {
-  const fillColor = active ? '#FFE1E5' : fill;
-  const lineColor = active ? '#F36677' : line;
+  const c = useColors();
+  const fill = fillProp ?? c.gray[300];
+  const line = lineProp ?? c.gray[500];
+  const fillColor = active ? c.error[50] : fill;
+  const lineColor = active ? c.error[300] : line;
 
   return (
     <Svg

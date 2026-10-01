@@ -194,6 +194,11 @@ pnpm build            # Production build
   - `minSupportedVersion`(강제): **옛 버전이 실제로 깨질 때만**(API 변경·보안). 평소엔 올리지 않는다 — 막는 화면은 나쁜 경험.
 - 완료 보고는 길을 나눠 적는다: JS 는 「OTA 발행됨(기동 확인: 시뮬레이터 Release 콜드 스타트 2회)/대기」, 네이티브는 「다음 스토어 빌드(1.x.y)에 포함」.
 - "배포됐나"는 스토어 실물 버전으로 판정한다(`app-store-lag` 워크플로) — EAS submit 성공 ≠ 출시.
+- **다크모드 = OS 설정을 따른다(2026-10-01).** 색 정본은 `src/shared/theme/palette.js` 한 곳 — tailwind 토큰이 `:root` 변수라
+  `bg-white`·`text-gray-900` 은 **다크에서 값만 뒤집힌다**(`dark:` 를 붙일 일이 거의 없다. `white`=바탕, gray 50↔900).
+  - 테마와 무관해야 하는 자리(홈 상단 어두운 띠·사진 위 배지·색 배지 위 흰 글자·라임 버튼 위 짙은 글자)는 `fixed-*`(`text-fixed-white`, `bg-fixed-900`).
+  - className 이 안 닿는 색(아이콘 color·placeholderTextColor·RefreshControl·StyleSheet)은 hex 대신 `useColors()`, 헤더·탭바는 `useChromeColors()`.
+  - 웹뷰 화면(글쓰기·약관·고객센터)은 web 이 다크가 없어 본문이 흰색이다(의도). 네이티브 탭바 PNG 는 `*-dark` 변형이 따로 있다(`assets/tab-icons/README.md`).
 
 ## 📦 Shared Packages
 

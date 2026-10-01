@@ -19,6 +19,7 @@ import {
   won,
 } from '../model/chart-geometry';
 import type {CurrentProductMarker} from '../model/seed-marker';
+import {useColors} from '@/shared/theme/useColors';
 
 const WIDTH = 640;
 const HEIGHT = 260;
@@ -27,8 +28,6 @@ const HEIGHT = 260;
 const PAD = {top: 40, right: 20, bottom: 28, left: 56};
 
 const LINE = '#7FC125';
-const GRID = '#E4E7EC'; // gray-200
-const AXIS_TEXT = '#667085';
 /** web PriceHistorySection CHART.current — 이 상품 마커. */
 const SEED = '#467DFB';
 
@@ -53,6 +52,7 @@ export default function PriceChart({
   onSelectIndex: (index: number) => void;
   currentMarker?: CurrentProductMarker | null;
 }) {
+  const colors = useColors();
   // viewBox 는 640 고정이고 실제 폭은 화면마다 다르다. 제스처 x 를 뷰박스
   // 좌표로 되돌리려면 실측 폭이 필요하다(web 의 getBoundingClientRect 대응).
   const [layoutWidth, setLayoutWidth] = useState(0);
@@ -158,14 +158,14 @@ export default function PriceChart({
                 y1={t.y}
                 x2={WIDTH - PAD.right}
                 y2={t.y}
-                stroke={GRID}
+                stroke={colors.gray[200]}
                 strokeWidth={1}
               />
               <SvgText
                 x={PAD.left - 8}
                 y={t.y + 4}
                 fontSize={12}
-                fill={AXIS_TEXT}
+                fill={colors.gray[500]}
                 textAnchor="end">
                 {shortWon(t.price, currency, geo.tickStep, geo.yMax)}
               </SvgText>
@@ -199,7 +199,7 @@ export default function PriceChart({
                 cx={c.x}
                 cy={c.y}
                 r={i === selectedIndex ? 5 : 3}
-                fill={i === selectedIndex ? LINE : '#ffffff'}
+                fill={i === selectedIndex ? LINE : colors.white}
                 stroke={LINE}
                 strokeWidth={2}
               />
@@ -246,7 +246,7 @@ export default function PriceChart({
                 y={PAD.top - 12}
                 fontSize={13}
                 fontWeight="600"
-                fill="#101828"
+                fill={colors.gray[900]}
                 textAnchor="middle">
                 {shortWon(selected.price, currency, undefined, geo.yMax)}
               </SvgText>
@@ -259,7 +259,7 @@ export default function PriceChart({
               x={l.x}
               y={HEIGHT - 8}
               fontSize={12}
-              fill={AXIS_TEXT}
+              fill={colors.gray[500]}
               textAnchor="middle">
               {l.label}
             </SvgText>

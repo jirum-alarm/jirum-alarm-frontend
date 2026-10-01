@@ -74,7 +74,7 @@ export default function CategoryTabBar({
               accessibilityLabel={category.name}
               className={cn(
                 'rounded-full px-3 py-2',
-                isActive ? 'bg-gray-800' : 'bg-gray-100',
+                isActive ? 'bg-fixed-800' : 'bg-gray-100',
               )}>
               <Text
                 className={cn(

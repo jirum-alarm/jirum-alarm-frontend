@@ -119,7 +119,7 @@ export default function RecommendedKeywordSection() {
   };
 
   return (
-    <View className="bg-[#eaf7d9] px-5 py-7">
+    <View className="bg-[#eaf7d9] px-5 py-7 dark:bg-primary-50">
       <Text className="text-center text-[15px] font-semibold text-gray-900">
         인기 키워드로 알림 받아보세요!
       </Text>

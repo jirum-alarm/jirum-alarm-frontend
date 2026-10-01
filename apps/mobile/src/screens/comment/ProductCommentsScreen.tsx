@@ -24,6 +24,7 @@ import {DetailHeaderBackButton} from '@/screens/detail/ui/ProductDetailHeader';
 import type {ProductFlowParamList} from '@/navigations/tab/types';
 import type {TComment} from '@/shared/api/comment/comment.service';
 import {tabStackNavigations} from '@/shared/constant/navigations';
+import {useColors} from '@/shared/theme/useColors';
 
 type Props = NativeStackScreenProps<
   ProductFlowParamList,
@@ -31,6 +32,7 @@ type Props = NativeStackScreenProps<
 >;
 
 export default function ProductCommentsScreen({route, navigation}: Props) {
+  const c = useColors();
   const {productId} = route.params;
   const insets = useSafeAreaInsets();
   const keyboardVisible = useKeyboardState(state => state.isVisible);
@@ -100,7 +102,7 @@ export default function ProductCommentsScreen({route, navigation}: Props) {
         keyboardVerticalOffset={headerHeight}>
         {isPending ? (
           <View className="flex-1 items-center justify-center">
-            <ActivityIndicator size="small" color="#667085" />
+            <ActivityIndicator size="small" className="text-gray-500" />
           </View>
         ) : isError && comments.length === 0 ? (
           // 실패를 "첫 댓글을 남겨주세요" 로 위장하지 않는다.
@@ -114,7 +116,7 @@ export default function ProductCommentsScreen({route, navigation}: Props) {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                tintColor="#667085"
+                tintColor={c.gray[500]}
               />
             }
             keyExtractor={item => String(item.id)}
@@ -126,7 +128,7 @@ export default function ProductCommentsScreen({route, navigation}: Props) {
             ListFooterComponent={
               isFetchingNextPage ? (
                 <View className="py-4">
-                  <ActivityIndicator size="small" color="#667085" />
+                  <ActivityIndicator size="small" className="text-gray-500" />
                 </View>
               ) : null
             }

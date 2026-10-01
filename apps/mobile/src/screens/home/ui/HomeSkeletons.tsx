@@ -27,7 +27,7 @@ export function BannerSkeleton() {
           height: 92,
           opacity,
         }}
-        className="rounded-lg bg-white/10"
+        className="rounded-lg bg-fixed-white/10"
       />
     </View>
   );

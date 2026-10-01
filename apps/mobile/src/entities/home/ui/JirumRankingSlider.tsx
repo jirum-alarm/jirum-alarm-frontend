@@ -29,6 +29,7 @@ import {cn} from '@/shared/lib/styling';
 import {HomeQueries} from '../api/home.queries';
 import type {ProductCardType} from '../model/types';
 import {DisplayListPrice} from './cards/HomeCardPrimitives';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 지름알림 랭킹 슬라이더. web: widgets/home/ui/JirumRankingSlider.tsx
@@ -150,7 +151,7 @@ export default function JirumRankingSlider({
       <View
         style={{height: CARD_HEIGHT}}
         className="items-center justify-center">
-        <ActivityIndicator size="small" color="#667085" />
+        <ActivityIndicator size="small" className="text-gray-500" />
       </View>
     );
   }
@@ -219,6 +220,7 @@ const RankingCard = React.memo(function RankingCard({
   scrollX: SharedValue<number>;
   onPress: (id: number) => void;
 }) {
+  const c = useColors();
   const animatedStyle = useAnimatedStyle(() => {
     const distance = Math.abs(scrollX.value - index * SNAP);
     const scale = interpolate(
@@ -251,7 +253,7 @@ const RankingCard = React.memo(function RankingCard({
         {
           marginRight: GAP,
           borderRadius: 8,
-          backgroundColor: '#fff',
+          backgroundColor: c.white,
           // web shadow-[0_2px_12px_rgba(0,0,0,0.08)].
           // 모바일 카드엔 border 가 없어 이 그림자가 유일한 경계다.
           shadowColor: '#000',
@@ -279,7 +281,7 @@ const RankingCard = React.memo(function RankingCard({
         <View
           style={{height: THUMB_HEIGHT}}
           className="w-full overflow-hidden bg-gray-50">
-          <View className="absolute top-0 left-0 z-10 h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-gray-900">
+          <View className="absolute top-0 left-0 z-10 h-[26px] w-[26px] items-center justify-center rounded-br-lg bg-fixed-900">
             <Text className="text-primary-500 text-sm font-medium">{rank}</Text>
           </View>
           <Thumbnail

@@ -29,6 +29,7 @@ import {SubscribedThemeRow} from '@/features/mypage/ui/ThemeCards';
 import {useKeywordViewModel} from '@/features/mypage/model/useKeywordViewModel';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
 import {KEYWORD_HELPER_TEXT} from '@/features/mypage/lib/validation';
+import {useColors} from '@/shared/theme/useColors';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -44,6 +45,7 @@ type Props = NativeStackScreenProps<
  * 걸려 있어 키보드가 늘 떠 있고, 고정 위치면 버튼이 키보드에 가려진다.
  */
 export default function KeywordScreen({navigation}: Props) {
+  const c = useColors();
   const insets = useSafeAreaInsets();
   const bottomClip = useHiddenTabBarClipPadding();
   const {
@@ -138,7 +140,7 @@ export default function KeywordScreen({navigation}: Props) {
             <SectionErrorRow label="키워드" onRetry={refetch} />
           ) : isPending ? (
             <View className="items-center py-8">
-              <ActivityIndicator size="small" color="#667085" />
+              <ActivityIndicator size="small" className="text-gray-500" />
             </View>
           ) : keywords.length === 0 ? (
             <EmptyKeywords onPick={addDirect} disabled={isAdding} />
@@ -168,7 +170,7 @@ export default function KeywordScreen({navigation}: Props) {
                     className="shrink-0 p-2"
                     style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
                     {/* web 은 gray-400(AA 미달) — gray-500 을 쓴다. */}
-                    <Close width={20} height={20} color="#667085" />
+                    <Close width={20} height={20} color={c.gray[500]} />
                   </Pressable>
                 </View>
                 <KeywordOptions keyword={keyword} />

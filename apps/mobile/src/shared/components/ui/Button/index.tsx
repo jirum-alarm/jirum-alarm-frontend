@@ -7,6 +7,8 @@ import {
   buttonVaraint,
   textVariant,
 } from '@/shared/components/ui/Button/variant/button.ts';
+import {useColors} from '@/shared/theme/useColors';
+import {fixed} from '@/shared/theme/palette';
 
 interface ButtonProps
   extends PressableProps,
@@ -16,11 +18,6 @@ interface ButtonProps
 }
 
 // 라벨 색과 같게 — 흰 스피너는 lime·error-50 배경에서 안 보였다.
-const SPINNER_COLOR = {
-  primary: '#101828',
-  secondary: '#344054',
-  error: '#BC0017',
-} as const;
 
 const Button = ({
   children,
@@ -32,6 +29,13 @@ const Button = ({
   className,
   ...rest
 }: ButtonProps) => {
+  const c = useColors();
+  // 글자색과 같은 색. primary 는 라임 위라 테마 무관 짙은 색(fixed).
+  const spinnerColor = {
+    primary: fixed[900],
+    secondary: c.gray[700],
+    error: c.error[600],
+  }[color ?? 'primary'];
   return (
     <Pressable
       // 로딩 중 재탭 = 이중 제출(탈퇴·신고)이라 막는다.
@@ -45,10 +49,7 @@ const Button = ({
       {...rest}>
       {({pressed}) => {
         return loading ? (
-          <ActivityIndicator
-            size="small"
-            color={SPINNER_COLOR[color ?? 'primary']}
-          />
+          <ActivityIndicator size="small" color={spinnerColor} />
         ) : isValidElement(children) ? (
           children
         ) : (

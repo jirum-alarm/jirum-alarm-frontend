@@ -64,7 +64,7 @@ export default function NotificationSettingScreen({navigation}: Props) {
             <SectionErrorRow label="알림 설정" onRetry={refetch} />
           ) : isPending || !data ? (
             <View className="items-center py-8">
-              <ActivityIndicator size="small" color="#667085" />
+              <ActivityIndicator size="small" className="text-gray-500" />
             </View>
           ) : (
             ROWS.map(({key, title, description}) => (

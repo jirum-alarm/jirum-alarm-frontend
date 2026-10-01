@@ -1,6 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {useColors} from '@/shared/theme/useColors';
 
 /** web 과 같은 노출 하한 — 이보다 적으면 "N명이 살펴본"이 되레 빈약해 보인다. */
 export const MIN_VIEWER_COUNT = 10;
@@ -28,6 +29,7 @@ export default function ViewerCount({
   count: number;
   collapsed: boolean;
 }) {
+  const c = useColors();
   return (
     <View
       className="w-full items-center justify-center"
@@ -38,7 +40,7 @@ export default function ViewerCount({
           height: VIEWER_COUNT_HEIGHT,
           width: collapsed ? undefined : '100%',
           borderRadius: collapsed ? VIEWER_COUNT_HEIGHT / 2 : 0,
-          borderColor: collapsed ? '#B5CBFD' : '#F3F7FF',
+          borderColor: collapsed ? c.secondary[200] : c.secondary[50],
           transform: [{translateY: collapsed ? 8 : 0}],
         }}>
         <Text className="text-sm text-gray-700">

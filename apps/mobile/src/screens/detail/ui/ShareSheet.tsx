@@ -36,6 +36,7 @@ import {
   fetchKakaoScrap,
   type ShareChannel,
 } from '@/shared/lib/share';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 무엇을 공유하나 — 상품(`productId`) 또는 임의 서비스 경로(`sharePath`, 예: `/community/12`).
@@ -75,6 +76,7 @@ export default function ShareSheet({
   description,
   imageUrl,
 }: Props) {
+  const c = useColors();
   const insets = useSafeAreaInsets();
   const overlay = useRef(new Animated.Value(0)).current;
   const sheet = useRef(new Animated.Value(0)).current;
@@ -209,8 +211,8 @@ export default function ShareSheet({
     {
       c: 'native',
       label: '더보기',
-      icon: <ShareIcon width={22} height={22} color="#344054" />,
-      bg: '#F2F4F7',
+      icon: <ShareIcon width={22} height={22} color={c.gray[700]} />,
+      bg: c.gray[100],
     },
   ];
 
@@ -244,6 +246,7 @@ export default function ShareSheet({
           onStartShouldSetResponder={() => true}
           style={[
             styles.sheet,
+            {backgroundColor: c.white},
             {
               paddingBottom: Math.max(insets.bottom, 16),
               transform: [
@@ -272,7 +275,7 @@ export default function ShareSheet({
                 />
               ) : (
                 <View className="h-[72px] w-[72px] flex-none items-center justify-center rounded-2xl bg-gray-100">
-                  <ShareIcon width={22} height={22} color="#98A2B3" />
+                  <ShareIcon width={22} height={22} color={c.gray[400]} />
                 </View>
               )}
               <View className="min-w-0 flex-1 pr-2">
@@ -318,7 +321,7 @@ export default function ShareSheet({
           <Pressable
             onPress={() => share('copy')}
             disabled={!!pending}
-            android_ripple={{color: '#E4E7EC'}}
+            android_ripple={{color: c.gray[200]}}
             className="mx-5 mt-5 flex-row items-center rounded-2xl bg-gray-50 px-3.5"
             style={{height: 56}}
             accessibilityRole="button"
@@ -327,7 +330,7 @@ export default function ShareSheet({
               {copied ? (
                 <CheckIcon />
               ) : (
-                <ShareLink width={18} height={18} color="#344054" />
+                <ShareLink width={18} height={18} color={c.gray[700]} />
               )}
             </View>
             <Text className="ml-3 flex-1 text-[16px] font-medium text-gray-900">
@@ -381,11 +384,12 @@ function AppButton({
 }
 
 function CheckIcon() {
+  const c = useColors();
   return (
     <Svg width={18} height={18} viewBox="0 0 24 24" fill="none">
       <Path
         d="M5 12.5l4.2 4.2L19 7.5"
-        stroke="#3964C7"
+        stroke={c.secondary[600]}
         strokeWidth={2.2}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -396,7 +400,6 @@ function CheckIcon() {
 
 const styles = StyleSheet.create({
   sheet: {
-    backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     // overlay 위에 떠 있어야 백드롭 Pressable 이 시트를 먹지 않는다.

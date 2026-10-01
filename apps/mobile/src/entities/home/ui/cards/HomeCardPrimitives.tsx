@@ -76,9 +76,9 @@ export function CardThumbnail({
       ) : null}
 
       {product.earliestExpiryDate && !product.isEnd ? (
-        <View className="absolute inset-x-0 bottom-0 h-[22px] items-center justify-center rounded-b-lg bg-gray-700/80 px-2">
+        <View className="absolute inset-x-0 bottom-0 h-[22px] items-center justify-center rounded-b-lg bg-fixed-700/80 px-2">
           {/* web 의 `text-semibold` 는 무효 클래스 → 실렌더 400. 위 주석 참조. */}
-          <Text className="text-xs text-white">
+          <Text className="text-xs text-fixed-white">
             유통기한 {formatMMD(product.earliestExpiryDate)}
           </Text>
         </View>

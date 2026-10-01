@@ -121,7 +121,7 @@ export default function SearchScreen({
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
       {/* 흰 배경이라 상태바 글씨는 어둡게(발견 탭과 같다). */}
-      <SystemBars style="dark" hidden={false} />
+      <SystemBars style="auto" hidden={false} />
 
       <SearchHeader
         ref={inputRef}

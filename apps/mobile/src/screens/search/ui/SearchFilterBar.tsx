@@ -230,7 +230,7 @@ function Checkbox({checked}: {checked: boolean}) {
       )}
       style={styles.checkbox}>
       {checked ? (
-        <Text className="text-white" style={styles.checkmark}>
+        <Text className="text-fixed-white" style={styles.checkmark}>
           ✓
         </Text>
       ) : null}

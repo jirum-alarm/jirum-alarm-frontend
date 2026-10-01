@@ -43,10 +43,10 @@ function ToastBody({
 }) {
   return (
     <View
-      className="mx-5 flex-row items-center gap-x-2 rounded-[12px] bg-gray-800 py-[13px] pl-4 pr-4"
+      className="mx-5 flex-row items-center gap-x-2 rounded-[12px] bg-fixed-800 py-[13px] pl-4 pr-4"
       accessibilityLiveRegion="polite">
       {icon}
-      <Text className="flex-1 text-[14px] font-pretendard text-white">
+      <Text className="flex-1 text-[14px] font-pretendard text-fixed-white">
         {text}
       </Text>
       {action && (

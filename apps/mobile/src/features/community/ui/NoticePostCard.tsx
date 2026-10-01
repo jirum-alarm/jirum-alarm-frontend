@@ -9,6 +9,7 @@ import type {CommunityPost} from '@/shared/api/community';
 import NoticeAuthor from './NoticeAuthor';
 import PostStats from './PostStats';
 import {gaps} from './community-styles';
+import {useColors} from '@/shared/theme/useColors';
 
 /**
  * 공지 탭 전용 한 줄. web `features/community/ui/NoticePostCard` 대응 —
@@ -26,6 +27,7 @@ export default function NoticePostCard({
   isNew?: boolean;
   onPress: (postId: number) => void;
 }) {
+  const c = useColors();
   const displayContent = getPostDisplayContent(post.content);
 
   return (
@@ -34,7 +36,7 @@ export default function NoticePostCard({
       accessibilityRole="button"
       accessibilityLabel={post.title ?? displayContent}
       style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
-      android_ripple={{color: '#F2F4F7'}}
+      android_ripple={{color: c.gray[100]}}
       className="w-full border-b border-gray-100 bg-white px-5 py-4">
       <View className="flex-row items-center" style={gaps.g8}>
         <NoticeAuthor />
@@ -43,7 +45,7 @@ export default function NoticePostCard({
         </Text>
         {isNew ? (
           <View className="bg-secondary-600 rounded px-1.5 py-0.5">
-            <Text className="text-xs font-semibold text-white">NEW</Text>
+            <Text className="text-xs font-semibold text-fixed-white">NEW</Text>
           </View>
         ) : null}
       </View>

@@ -11,6 +11,7 @@ import {getPostCardView} from '../lib/post-card';
 import NoticeAuthor from './NoticeAuthor';
 import PostStats from './PostStats';
 import {gaps} from './community-styles';
+import {useColors} from '@/shared/theme/useColors';
 
 const THUMBNAIL_SIZE = 80; // web h-20 w-20
 
@@ -28,6 +29,7 @@ export default function CommunityPostCard({
   post: CommunityPost;
   onPress: (postId: number) => void;
 }) {
+  const c = useColors();
   const view = getPostCardView(post);
 
   return (
@@ -36,7 +38,7 @@ export default function CommunityPostCard({
       accessibilityRole="button"
       accessibilityLabel={post.title ?? view.displayContent}
       style={({pressed}) => (pressed ? {opacity: 0.6} : null)}
-      android_ripple={{color: '#F2F4F7'}}
+      android_ripple={{color: c.gray[100]}}
       className="w-full flex-row border-b border-gray-100 bg-white px-5 py-4"
       // gap-x-3
     >
@@ -64,7 +66,9 @@ export default function CommunityPostCard({
           </Text>
           {post.isNotice ? (
             <View className="bg-secondary-600 rounded px-1.5 py-0.5">
-              <Text className="text-xs font-semibold text-white">NEW</Text>
+              <Text className="text-xs font-semibold text-fixed-white">
+                NEW
+              </Text>
             </View>
           ) : null}
         </View>
@@ -105,7 +109,7 @@ export default function CommunityPostCard({
             <Thumbnail uri={view.previewImage} />
             {view.extraImageCount > 0 ? (
               <View className="absolute bottom-1 right-1 rounded bg-black/60 px-1.5 py-0.5">
-                <Text className="text-[10px] font-medium text-white">
+                <Text className="text-[10px] font-medium text-fixed-white">
                   +{view.extraImageCount}
                 </Text>
               </View>

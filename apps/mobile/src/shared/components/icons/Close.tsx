@@ -1,13 +1,17 @@
 import React from 'react';
 import Svg, {Path, type SvgProps} from 'react-native-svg';
 
+import {useColors} from '@/shared/theme/useColors';
+
 /** web Close 와 같은 패스. */
 export default function Close({
   width = 24,
   height = 24,
-  color = '#101828',
+  color: colorProp,
   ...props
 }: SvgProps) {
+  const c = useColors();
+  const color = colorProp ?? c.gray[900];
   return (
     <Svg
       width={width}

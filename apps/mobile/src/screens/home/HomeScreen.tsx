@@ -243,7 +243,7 @@ export default function HomeScreen() {
           아래 여백: 본문이 -mt-5(20px)로 올라타므로 그만큼 더 준다.
           pb-6(24px)만 주면 실제로 4px 만 남아 배너가 흰 면에 닿는다.
         */}
-        <View className="bg-gray-900 pt-2 pb-11">
+        <View className="bg-fixed-900 pt-2 pb-11">
           {isAboveFoldPending ? <BannerSkeleton /> : <HomeBannerCarousel />}
         </View>
 
@@ -275,7 +275,7 @@ export default function HomeScreen() {
 
           {isHomePagePending ? (
             <View className="h-40 items-center justify-center">
-              <ActivityIndicator size="small" color="#667085" />
+              <ActivityIndicator size="small" className="text-gray-500" />
             </View>
           ) : (
             <View style={{gap: 32, paddingVertical: 24}}>
@@ -346,7 +346,7 @@ function HomeEndCta({onPress}: {onPress: () => void}) {
         accessibilityRole="button"
         accessibilityLabel="실시간 특가 더보기"
         className="bg-secondary-600 flex-row items-center gap-x-1 rounded-full px-6 py-3">
-        <Text className="text-sm font-semibold text-white">
+        <Text className="text-sm font-semibold text-fixed-white">
           실시간 특가 더보기
         </Text>
         <ArrowRightIcon color="#ffffff" width={16} height={16} />
@@ -394,12 +394,13 @@ function HomeStickyHeader({onPressLogo}: {onPressLogo: () => void}) {
  */
 function HomeStatusBar() {
   const isScrolled = useHomeScrolled();
-  const [style, setStyle] = useState<'light' | 'dark'>(
-    isScrolled ? 'dark' : 'light',
+  // 내려가면 테마 바탕 헤더라 'auto'(라이트=검은 글자, 다크=흰 글자). 맨 위는 늘 어두운 띠라 'light'.
+  const [style, setStyle] = useState<'light' | 'auto'>(
+    isScrolled ? 'auto' : 'light',
   );
   useEffect(() => {
     const timer = setTimeout(
-      () => setStyle(isScrolled ? 'dark' : 'light'),
+      () => setStyle(isScrolled ? 'auto' : 'light'),
       150,
     );
     return () => clearTimeout(timer);

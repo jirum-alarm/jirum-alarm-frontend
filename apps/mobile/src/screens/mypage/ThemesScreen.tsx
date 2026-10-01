@@ -62,7 +62,7 @@ export default function ThemesScreen({navigation}: Props) {
         </View>
       ) : isPending ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="small" color="#667085" />
+          <ActivityIndicator size="small" className="text-gray-500" />
         </View>
       ) : (
         <FlatList

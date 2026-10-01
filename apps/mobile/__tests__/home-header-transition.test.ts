@@ -61,7 +61,8 @@ describe('상단바 전환 — web 과 같은 방식', () => {
   });
 
   it('두 겹을 쌓는다 — 다크 위에 흰 헤더', () => {
-    expect(header).toContain('bg-gray-900');
+    // 아래 겹은 테마와 무관하게 늘 어둡다(fixed) — 배너 띠와 이어진다.
+    expect(header).toContain('bg-fixed-900');
     expect(header).toContain('bg-white');
   });
 

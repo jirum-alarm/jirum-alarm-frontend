@@ -62,7 +62,7 @@ export default function AccountScreen({navigation}: Props) {
           <SectionErrorRow label="내 정보" onRetry={refetch} />
         ) : isPending ? (
           <View className="flex-1 items-center justify-center py-16">
-            <ActivityIndicator size="small" color="#667085" />
+            <ActivityIndicator size="small" className="text-gray-500" />
           </View>
         ) : (
           <View className="px-5" style={styles.grow}>
