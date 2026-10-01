@@ -35,9 +35,11 @@ export interface HeroPrice {
 
 export type HistBasis = 'unit' | 'total';
 
-/** 증정·포인트·사은품 등으로 단위가가 왜곡될 수 있는 딜. */
-const BUNDLE_TITLE_RE =
-  /증정|포인트|원권|쿠폰|치킨|햄버거|버거|사은품|라이브|카드.?할|스마일페이|롯데카드/i;
+/**
+ * 증정·포인트·사은품 등으로 단위가가 왜곡될 수 있는 딜. crawling-server model-page-price-verdict.ts 와 같다.
+ * 치킨·버거는 뺐다 — 상품 자체가 치킨(용가리치킨·치킨텐더)이면 모든 딜이 묶음으로 걸러졌다(2026-10-01).
+ */
+const BUNDLE_TITLE_RE = /증정|포인트|원권|쿠폰|사은품|라이브|카드.?할|스마일페이|롯데카드/i;
 
 export function isLikelyBundleDeal(title: string): boolean {
   return BUNDLE_TITLE_RE.test(title);
