@@ -63,6 +63,11 @@ jobs:
       - name: Run mobile JS validation
         run: pnpm verify:mobile
 
+      # 네이티브가 바뀌었는데 runtimeVersion 을 안 올렸으면 여기서 막는다 — 그대로 OTA 가 나가면
+      # 옛 바이너리가 새 네이티브를 기대하는 JS 를 받아 실행 즉시 죽는다(mobile-ota 가 이 잡 뒤에 돈다).
+      - name: Native fingerprint (OTA safety)
+        run: pnpm --filter mobile native:check
+
   mobile-ios-smoke:
     name: Mobile iOS Smoke
     runs-on: macos-latest

@@ -1,0 +1,88 @@
+name: mobile-ota
+
+# main 에 푸시된 앱 JS 를 OTA(production 채널)로 바로 내보낸다.
+#
+# - mobile-validation(테스트·타입·린트·네이티브 지문)이 main push 로 **성공**했을 때만 돈다.
+#   지문이 기준과 다르면 validation 이 실패하므로, 여기까지 왔다 = 지금 스토어 바이너리에 보내도 안전.
+# - 켜고 끄기: 저장소 변수 MOBILE_AUTO_OTA=true 일 때만 발행한다(끄면 즉시 멈춤 — 사고 때 첫 조치).
+# - 되돌리기: apps/mobile 에서 `pnpm ota:rollback`(직전 업데이트를 다시 내보낸다).
+# - 필요: secrets.EXPO_TOKEN (expo.dev → Access tokens).
+
+on:
+  workflow_run:
+    workflows: [mobile-validation]
+    types: [completed]
+    branches: [main]
+
+concurrency:
+  group: mobile-ota
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 22.18.0
+  PNPM_VERSION: 10.30.3
+
+jobs:
+  publish:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      vars.MOBILE_AUTO_OTA == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      # validation 이 이미 봤지만 발행 직전에 한 번 더 — 발행 대상 커밋 그대로를 본다.
+      - name: Native fingerprint (OTA safety)
+        run: pnpm --filter mobile native:check
+
+      - name: Publish OTA (production)
+        id: publish
+        working-directory: apps/mobile
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          subject=$(git log -1 --format=%s "$SHA")
+          npx eas update --channel production --environment production \
+            --non-interactive --message "${SHA:0:8} ${subject}"
+          echo "subject=$subject" >> "$GITHUB_OUTPUT"
+
+      - name: Notify
+        if: always()
+        env:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+          OUTCOME: ${{ steps.publish.outcome }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          [ -n "${MATTERMOST_WEBHOOK_URL:-}" ] || exit 0
+          subject=$(git log -1 --format=%s "$SHA")
+          if [ "$OUTCOME" = "success" ]; then
+            msg="📲 앱 OTA 발행 — ${SHA:0:8} ${subject}. 사용자는 다음 실행(또는 포그라운드 복귀) 때 받는다. 되돌리기: apps/mobile 에서 pnpm ota:rollback"
+          else
+            msg="🔴 앱 OTA 발행 실패(${OUTCOME}) — ${SHA:0:8} ${subject}. ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          fi
+          jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
+            | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
