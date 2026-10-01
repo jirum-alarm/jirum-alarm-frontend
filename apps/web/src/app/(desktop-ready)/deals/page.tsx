@@ -16,7 +16,7 @@ import type { ReactNode } from 'react';
 
 // /deals 인덱스 — "이 상품, 지금 사도 되나?"에 답하는 곳. 새 딜 피드(홈·랭킹)와 역할이 다르다.
 // 섹션: ① 지금 사기 좋아요(진행 딜이 추이보다 쌈) ② 최근 핫딜(진행 중, 평소·비쌈 그대로 표시)
-// ③ 기다리는 상품(30일 내 딜 없음 — 적정가 + 알림). 판정은 백엔드 publishedModelPages 가 상세와 같은 규칙으로 계산.
+// ③ 기다리는 상품(30일 내 진행 딜 없음 — 종료된 최근 딜은 있을 수 있다. 적정가 + 알림). 판정은 백엔드 publishedModelPages 가 상세와 같은 규칙으로 계산.
 // ③을 숨기지 않는 이유: 모델 페이지 751개의 내부링크 허브이고, 옛 딜 페이지가 검색 유입 원천이다.
 // 앱은 /deals 를 열지 않는다(apps/mobile tab-routing) — 웹 전용.
 
@@ -134,7 +134,7 @@ export default async function DealsIndexPage() {
             <>
               <SectionTitle
                 title="핫딜을 기다리는 상품"
-                description="한 달 넘게 핫딜이 없었어요. 적정가 아래로 내려오면 알림으로 알려드릴게요."
+                description="지금 진행 중인 핫딜이 없어요. 적정가 아래로 내려오면 알림으로 알려드릴게요."
                 action={
                   <Link
                     href={PAGE.MYPAGE_KEYWORD}
