@@ -178,7 +178,7 @@ pnpm build            # Production build
      (OTA 는 두 번째 실행에 적용된다).
   4. 이상하면 즉시 되돌린다. `pnpm ota:rollback` 은 대화형이라 에이전트가 못 쓴다 →
      `eas update:list --branch production --json` 에서 직전 정상 group 을 찾아
-     `eas update:republish --group <id> --branch production --non-interactive --message "ROLLBACK: …"`.
+     `eas update:republish --group <id> --non-interactive --message "ROLLBACK: …"`(같은 브랜치로 재발행 — `--group` 과 `--branch` 는 함께 못 쓴다).
   - **자동 OTA(`mobile-ota`, `MOBILE_AUTO_OTA`)는 위 2번(기동 확인)이 CI 에 들어가기 전까지 켜지 않는다.** 켜면 main push 마다
     1번·2번을 건너뛰고 나간다.
 - **네이티브 변경 = 버전 올림 + 스토어 빌드.** `ios/`·`android/`·네이티브 패키지(예: expo-image)·`app.json`
