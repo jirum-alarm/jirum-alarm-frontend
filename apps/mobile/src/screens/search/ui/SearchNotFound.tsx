@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
 
@@ -7,6 +7,8 @@ import {CarouselList} from '@/entities/home/ui/DynamicProductList';
 import {TrendingQueries} from '@/entities/trending/api/trending.queries';
 import AlarmIllustError from '@/shared/components/icons/AlarmIllustError';
 import {Analytics} from '@/shared/lib/analytics/ga4';
+
+import KeywordAlertButton from '@/features/keyword-prompt/ui/KeywordAlertButton';
 
 import SectionTitle from './SectionTitle';
 
@@ -26,12 +28,10 @@ import SectionTitle from './SectionTitle';
  */
 export default function SearchNotFound({
   keyword,
-  onPressKeywordRegister,
   onPressProduct,
   bottomInset,
 }: {
   keyword: string;
-  onPressKeywordRegister: () => void;
   onPressProduct: (id: number) => void;
   bottomInset: number;
 }) {
@@ -60,26 +60,17 @@ export default function SearchNotFound({
         <Text className="pt-4 pb-2 text-2xl font-semibold text-gray-900">
           검색 결과가 없어요
         </Text>
-        <Text className="text-gray-500">
-          키워드를 등록하고 알림을 받아보세요
+        <Text className="text-center text-gray-500">
+          {'지금은 없지만, 올라오면 바로 알려드릴게요'}
         </Text>
       </View>
 
       <View className="items-center pb-16">
         {/*
-          ★web 은 raw button(bg-gray-800 + primary-500 글자)이다. 공용 Button 은
-          base `w-full` 이라 화면 폭을 가로지르는 띠가 되고 이 색 조합도 없다.
+          검색한 단어 그대로 바로 건다 — 예전엔 빈 키워드 화면으로 보내 다시 치게 했다.
+          (2~20자 밖이면 키워드로 못 걸어 버튼이 숨는다.)
         */}
-        <Pressable
-          onPress={onPressKeywordRegister}
-          accessibilityRole="button"
-          accessibilityLabel="키워드 등록"
-          className="rounded-lg bg-gray-800 px-5 py-1.5"
-          style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-          <Text className="text-primary-500 text-base font-semibold">
-            키워드 등록
-          </Text>
-        </Pressable>
+        <KeywordAlertButton keyword={keyword} variant="cta" />
       </View>
 
       {hotDeals && hotDeals.length > 0 ? (

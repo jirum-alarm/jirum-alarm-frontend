@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 import PressableScale from '@/shared/components/PressableScale';
 import {ProductService} from '@/shared/api/product/product.service';
@@ -13,6 +13,12 @@ import {
   useRequireLogin,
 } from '@/shared/hooks/useRequireLogin';
 import {cn} from '@/shared/lib/styling';
+
+import {
+  invalidateMyKeywords,
+  normalizeKeyword,
+  useMyKeywordSet,
+} from '@/features/keyword-prompt/model/myKeywords';
 
 import {HomeQueries} from '../api/home.queries';
 
@@ -34,6 +40,9 @@ const MAX_CHIPS = 5;
 export default function RecommendedKeywordSection() {
   const {data} = useQuery(HomeQueries.recommendedKeywords());
   const {requireLogin} = useRequireLogin();
+  const queryClient = useQueryClient();
+  // 이미 등록한 키워드는 처음부터 "등록됨" — 예전엔 눌러야 "이미 등록된…" 에러 토스트가 떴다.
+  const registered = useMyKeywordSet();
 
   const [justAdded, setJustAdded] = useState<string[]>([]);
   const inFlight = useRef<string | null>(null);
@@ -53,6 +62,8 @@ export default function RecommendedKeywordSection() {
       );
       // web 과 같은 자리 — 알림 권한이 아직 없고 물어볼 수 있을 때만 묻는다.
       requestPushPermissionIfNeeded();
+      // 키워드 화면·상세 권유가 방금 등록한 걸 알도록(예전엔 아무것도 무효화하지 않았다).
+      invalidateMyKeywords(queryClient);
     },
     onError: (error: unknown) => {
       // 낙관적으로 켜둔 체크를 되돌린다.
@@ -78,6 +89,9 @@ export default function RecommendedKeywordSection() {
   }
   const chips = pinned.current ?? [];
 
+  const isAdded = (keyword: string) =>
+    justAdded.includes(keyword) || registered.has(normalizeKeyword(keyword));
+
   const runAdd = (keyword: string) => {
     inFlight.current = keyword;
     setJustAdded(prev => (prev.includes(keyword) ? prev : [...prev, keyword]));
@@ -98,7 +112,7 @@ export default function RecommendedKeywordSection() {
   if (chips.length === 0) return null;
 
   const handleSelect = (keyword: string) => {
-    if (isPending || justAdded.includes(keyword)) return;
+    if (isPending || isAdded(keyword)) return;
     if (requireLogin(PendingActionType.NOTIFICATION_KEYWORD_ADD, keyword))
       return;
     runAdd(keyword);
@@ -111,7 +125,7 @@ export default function RecommendedKeywordSection() {
       </Text>
       <View className="mt-4 flex-row flex-wrap justify-center gap-2">
         {chips.map(keyword => {
-          const added = justAdded.includes(keyword);
+          const added = isAdded(keyword);
           return (
             <PressableScale
               key={keyword}
@@ -147,7 +161,7 @@ export default function RecommendedKeywordSection() {
                 style={{width: 12, lineHeight: 18, textAlign: 'center'}}
                 className={cn(
                   'text-sm',
-                  added ? 'text-primary-600' : 'text-gray-400',
+                  added ? 'text-primary-600' : 'text-gray-500',
                 )}>
                 {added ? '✓' : '+'}
               </Text>

@@ -28,6 +28,8 @@ import {useNotificationsViewModel} from './model/useNotificationsViewModel';
 import AlarmItem from './ui/AlarmItem';
 import NoAlerts from './ui/NoAlerts';
 import {ListRowsSkeleton} from '@/shared/components/Skeletons';
+import {showToast} from '@/shared/lib/feedback';
+import {usePushPermissionStatus} from '@/shared/lib/fcm/usePushPermissionStatus';
 
 /** web PageHeader 와 같은 높이(h-14)·색·경계선. */
 const HEADER_HEIGHT = 56;
@@ -111,8 +113,10 @@ export default function AlarmScreen() {
         if (!notification.readAt) onReadNotification(Number(notification.id));
       };
       // 상품이 삭제/비공개면 읽음만 찍고 이동하지 않는다(web hasProduct 분기).
+      // 예전엔 아무 반응이 없어 고장 난 것처럼 보였다 — 이유를 알려준다.
       if (productId == null) {
         markRead();
+        showToast.info('판매가 끝났거나 내려간 딜이에요.');
         return;
       }
       // ★push 먼저 — 읽음 처리(낙관적 갱신)가 목록 전체를 다시 그리는 걸 전환과 같은
@@ -133,6 +137,21 @@ export default function AlarmScreen() {
   }, [navigation]);
 
   const showEditButton = !!existsAny && !isEditMode;
+
+  const renderItem = useCallback(
+    ({item}: {item: NotificationItem}) => (
+      <AlarmItem
+        notification={item}
+        isNew={new Date(item.createdAt).getTime() > lastReadAt && !item.readAt}
+        isEditMode={isEditMode}
+        onPress={handlePressItem}
+        onDelete={onRemoveNotification}
+      />
+    ),
+    [lastReadAt, isEditMode, handlePressItem, onRemoveNotification],
+  );
+
+  const push = usePushPermissionStatus();
 
   const {refreshing, onRefresh} = usePullRefresh(refetch);
 
@@ -175,17 +194,37 @@ export default function AlarmScreen() {
           </View>
         ) : (
           <View className="h-11 flex-row items-center justify-between px-5">
-            <Text className="text-sm font-medium text-gray-600">
-              지금 다양한 핫딜 알림을 받아보세요!
-            </Text>
-            <PressableScale
-              accessibilityRole="button"
-              className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
-              onPress={goKeywordSettings}>
-              <Text className="text-sm font-medium text-gray-900">
-                키워드 알림
-              </Text>
-            </PressableScale>
+            {/* 권한이 꺼져 있으면 무엇보다 그게 먼저다 — 키워드를 등록해도 알림이 안 온다. */}
+            {push.granted === false ? (
+              <>
+                <Text className="text-sm font-medium text-gray-700">
+                  알림이 꺼져 있어 핫딜을 못 받고 있어요
+                </Text>
+                <PressableScale
+                  accessibilityRole="button"
+                  accessibilityLabel="알림 켜기"
+                  className="h-8 justify-center rounded-md bg-gray-800 px-3"
+                  onPress={push.enable}>
+                  <Text className="text-sm font-semibold text-primary-500">
+                    켜기
+                  </Text>
+                </PressableScale>
+              </>
+            ) : (
+              <>
+                <Text className="text-sm font-medium text-gray-600">
+                  지금 다양한 핫딜 알림을 받아보세요!
+                </Text>
+                <PressableScale
+                  accessibilityRole="button"
+                  className="h-8 justify-center rounded-md border border-gray-300 bg-white px-3"
+                  onPress={goKeywordSettings}>
+                  <Text className="text-sm font-medium text-gray-900">
+                    키워드 알림
+                  </Text>
+                </PressableScale>
+              </>
+            )}
           </View>
         )}
       </View>
@@ -224,17 +263,7 @@ export default function AlarmScreen() {
               </View>
             ) : null
           }
-          renderItem={({item}) => (
-            <AlarmItem
-              notification={item}
-              isNew={
-                new Date(item.createdAt).getTime() > lastReadAt && !item.readAt
-              }
-              isEditMode={isEditMode}
-              onPress={productId => handlePressItem(item, productId)}
-              onDelete={onRemoveNotification}
-            />
-          )}
+          renderItem={renderItem}
         />
       )}
       {/* 한 번 탭으로 전부 지우지 않는다 — 되돌릴 수 없다. */}

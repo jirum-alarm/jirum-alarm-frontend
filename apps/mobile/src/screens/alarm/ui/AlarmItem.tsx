@@ -1,3 +1,4 @@
+import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import React from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -55,7 +56,9 @@ const AlarmItem = React.memo(function AlarmItem({
   notification: NotificationItem;
   isNew: boolean;
   isEditMode: boolean;
-  onPress: (productId: number | null) => void;
+  // ★알림 자체를 함께 넘겨 부모가 콜백 하나(useCallback)를 그대로 줄 수 있게 —
+  // 행마다 화살표 함수를 만들면 memo 가 무력해진다.
+  onPress: (notification: NotificationItem, productId: number | null) => void;
   onDelete: (id: number) => void;
 }) {
   const {id, message, createdAt, product, keyword, readAt} = notification;
@@ -82,7 +85,13 @@ const AlarmItem = React.memo(function AlarmItem({
         // 편집모드에서는 상세로 가지 않는다(web 이 preventDefault 하는 자리).
         onPress={() => {
           if (isEditMode) return;
-          onPress(productId);
+          onPress(notification, productId);
+        }}
+        // 손가락이 닿는 순간 상세를 받기 시작한다(상품 카드와 같다).
+        onPressIn={() => {
+          if (!isEditMode && productId != null) {
+            prefetchProductDetail(productId, thumbnail);
+          }
         }}
         accessibilityRole="button">
         <View className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">

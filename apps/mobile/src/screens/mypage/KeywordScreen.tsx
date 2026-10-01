@@ -11,9 +11,11 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {MAX_KEYWORD_COUNT} from '@/entities/mypage';
 import {ThemeQueries} from '@/entities/theme';
+import {HomeQueries} from '@/entities/home/api/home.queries';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {CircleXIcon} from '@/shared/components/icons';
 import Close from '@/shared/components/icons/Close';
+import PressableScale from '@/shared/components/PressableScale';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import Button from '@/shared/components/ui/Button';
 import TextField from '@/shared/components/ui/Text/TextField';
@@ -54,6 +56,8 @@ export default function KeywordScreen({navigation}: Props) {
     handleChange,
     reset,
     submit,
+    addDirect,
+    isAdding,
     removeKeyword,
     updatePriceDropOnly,
     isTogglingPriceDrop,
@@ -132,6 +136,8 @@ export default function KeywordScreen({navigation}: Props) {
             <View className="items-center py-8">
               <ActivityIndicator size="small" color="#667085" />
             </View>
+          ) : keywords.length === 0 ? (
+            <EmptyKeywords onPick={addDirect} disabled={isAdding} />
           ) : (
             keywords.map(keyword => (
               <View
@@ -198,7 +204,30 @@ function SubscribedThemes({
   const subscribed = new Set(subscribedIds ?? []);
   const mine = (themes ?? []).filter(theme => subscribed.has(Number(theme.id)));
 
-  if (mine.length === 0) return null;
+  // ★구독이 0개여도 들어갈 길은 남긴다 — 예전엔 섹션째 사라져 신규 사용자는
+  // 원탭으로 묶음 알림을 받는 기능이 있는지조차 몰랐다.
+  if (mine.length === 0) {
+    return (
+      <View className="pb-6">
+        <PressableScale
+          onPress={onOpenThemes}
+          scaleTo={0.98}
+          accessibilityRole="button"
+          accessibilityLabel="관심사 알림 둘러보기"
+          className="flex-row items-center gap-x-3 rounded-xl bg-gray-50 px-4 py-3.5">
+          <View className="min-w-0 flex-1">
+            <Text className="text-sm font-semibold text-gray-900">
+              관심사 알림 둘러보기
+            </Text>
+            <Text className="mt-0.5 text-xs text-gray-500">
+              키워드를 몰라도, 관심사 하나로 관련 핫딜을 한 번에 받아요
+            </Text>
+          </View>
+          <Text className="text-lg text-gray-500">›</Text>
+        </PressableScale>
+      </View>
+    );
+  }
 
   return (
     <View className="pb-6">
@@ -226,6 +255,56 @@ function SubscribedThemes({
           />
         ))}
       </View>
+    </View>
+  );
+}
+
+/**
+ * 키워드 0개 — 빈 목록 대신 "무엇을 하면 되는지" 를 보여준다. 인기 키워드를 누르면 바로 등록된다
+ * (입력창을 거치지 않는다). 알림 탭·검색에서 넘어온 신규 사용자가 빈 화면에 서 있던 자리다.
+ */
+function EmptyKeywords({
+  onPick,
+  disabled,
+}: {
+  onPick: (keyword: string) => void;
+  disabled: boolean;
+}) {
+  const {data} = useQuery(HomeQueries.recommendedKeywords());
+  const chips = (data ?? []).slice(0, 8);
+
+  return (
+    <View className="items-center py-8">
+      <Text className="text-base font-semibold text-gray-900">
+        아직 등록한 키워드가 없어요
+      </Text>
+      <Text className="mt-1 text-center text-sm text-gray-500">
+        {'갖고 싶은 상품 이름을 등록하면\n새 핫딜이 올라올 때 바로 알려드려요'}
+      </Text>
+      {chips.length > 0 ? (
+        <>
+          <Text className="mt-6 text-xs text-gray-500">
+            요즘 많이 받는 키워드
+          </Text>
+          <View className="mt-2 flex-row flex-wrap justify-center gap-2">
+            {chips.map(keyword => (
+              <PressableScale
+                key={keyword}
+                disabled={disabled}
+                onPress={() => onPick(keyword)}
+                accessibilityRole="button"
+                accessibilityLabel={`${keyword} 키워드 알림 등록`}
+                hitSlop={{top: 4, bottom: 4}}
+                className="flex-row items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2">
+                <Text className="text-sm font-medium text-gray-900">
+                  {keyword}
+                </Text>
+                <Text className="text-sm text-gray-500">+</Text>
+              </PressableScale>
+            ))}
+          </View>
+        </>
+      ) : null}
     </View>
   );
 }

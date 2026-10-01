@@ -21,6 +21,14 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   }),
 }));
 jest.mock('react-native-edge-to-edge', () => ({SystemBars: () => null}));
+// 검색 알림 버튼이 권한 요청(firebase·expo-notifications)을 끌어온다 — 네이티브라 막는다.
+jest.mock('react-native-toast-message', () => ({
+  __esModule: true,
+  default: {show: jest.fn(), hide: jest.fn()},
+}));
+jest.mock('../src/shared/lib/fcm/push-permission', () => ({
+  requestPushPermissionIfNeeded: jest.fn(() => Promise.resolve()),
+}));
 jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaInsets: () => ({top: 44, bottom: 34, left: 0, right: 0}),
 }));

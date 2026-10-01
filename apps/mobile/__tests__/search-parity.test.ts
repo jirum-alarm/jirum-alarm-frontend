@@ -245,7 +245,10 @@ describe('web 과 같아야 하는 상수', () => {
     expect(webNotFound).toContain('검색 결과가 없어요');
     expect(webNotFound).toContain('키워드를 등록하고 알림을 받아보세요');
     expect(notFound).toContain('검색 결과가 없어요');
-    expect(notFound).toContain('키워드를 등록하고 알림을 받아보세요');
+    // ★앱은 일부러 다르다 — 빈 키워드 화면으로 보내는 대신 검색어로 바로 알림을 건다
+    // (KeywordAlertButton). 그래서 "등록하세요" 가 아니라 "알려드릴게요".
+    expect(notFound).toContain('올라오면 바로 알려드릴게요');
+    expect(notFound).toContain('<KeywordAlertButton');
     // 필터 때문에 0건인 경우는 문구가 다르다(풀 수 있는 필터가 있다).
     expect(webResult).toContain('선택한 필터에 맞는 결과가 없어요.');
     expect(results).toContain('선택한 필터에 맞는 결과가 없어요.');

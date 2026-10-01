@@ -188,7 +188,7 @@ describe('접합부 — 상품 없는 알림·화면 이동', () => {
   it('상품이 없으면 상세로 보내지 않는다(web hasProduct 분기)', () => {
     // productId == null 이면 읽음만 찍고 early return (push 전에 끝난다)
     expect(screen).toMatch(
-      /if \(productId == null\) \{\s*markRead\(\);\s*return;/,
+      /if \(productId == null\) \{\s*markRead\(\);\s*showToast\.info\([^)]*\);\s*return;/,
     );
   });
 
@@ -256,9 +256,9 @@ describe('터치 인터랙션 — web whileTap 대응', () => {
   const alarmItem = read('src/screens/alarm/ui/AlarmItem.tsx');
 
   it('버튼은 PressableScale(=web whileTap scale 0.95)', () => {
-    // 헤더 휴지통·전체삭제·완료·키워드알림 4개
+    // 헤더 휴지통·전체삭제·완료·키워드알림 + 알림 꺼짐일 때 켜기 = 5개
     const scaled = screen.match(/<PressableScale/g) ?? [];
-    expect(scaled.length).toBe(4);
+    expect(scaled.length).toBe(5);
     // 맨 Pressable 이 남아 있으면 피드백 없는 버튼이다
     expect(screen).not.toMatch(/<Pressable[\s\n]/);
   });

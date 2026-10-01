@@ -6,6 +6,8 @@ import {MyPageService, type MyKeyword} from '@/shared/api/mypage';
 import {showToast} from '@/shared/lib/feedback';
 import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
 
+import {invalidateMyKeywords} from '@/features/keyword-prompt/model/myKeywords';
+
 import {isValidKeyword} from '../lib/validation';
 
 /**
@@ -30,9 +32,9 @@ export function useKeywordViewModel() {
     refetch,
   } = useQuery(MyPageQueries.keywords());
 
+  // 상세 권유 캐시(user·notificationKeywords)도 같이 — 여기서 지운 키워드가 상세에 "등록됨" 으로 남지 않게.
   const invalidate = useCallback(
-    () =>
-      queryClient.invalidateQueries({queryKey: MyPageQueries.keys.keywords()}),
+    () => invalidateMyKeywords(queryClient),
     [queryClient],
   );
 
@@ -72,7 +74,8 @@ export function useKeywordViewModel() {
         MyPageQueries.keys.keywords(),
         old => (old ?? []).filter(k => Number(k.id) !== id),
       );
-      return {previous};
+      const removed = previous?.find(k => Number(k.id) === id);
+      return {previous, removed};
     },
     onError: (_err, _vars, context) => {
       if (context?.previous) {
@@ -82,6 +85,23 @@ export function useKeywordViewModel() {
         );
       }
       showToast.error('키워드 삭제에 실패했어요.');
+    },
+    // ★확인 시트 대신 되돌리기 — 원탭 삭제는 빠르지만 잘못 누르면 가격 하락 설정까지 날아갔다.
+    // 되살릴 땐 설정(priceDropOnly)도 그대로 다시 건다. 새 id 로 만들어지지만 사용자에겐 같은 키워드다.
+    onSuccess: (_data, _vars, context) => {
+      const removed = context?.removed;
+      if (!removed) return;
+      showToast.success(`'${removed.keyword}' 키워드를 삭제했어요.`, {
+        label: '되돌리기',
+        onPress: () => {
+          MyPageService.addKeyword({
+            keyword: removed.keyword,
+            priceDropOnly: removed.priceDropOnly ?? false,
+          })
+            .catch(() => showToast.error('되돌리지 못했어요.'))
+            .finally(() => invalidate());
+        },
+      });
     },
     onSettled: () => invalidate(),
   });
@@ -129,6 +149,15 @@ export function useKeywordViewModel() {
     addKeyword({keyword: value.trim()});
   }, [addKeyword, canSubmit, value]);
 
+  /** 추천 칩 — 입력 없이 바로 등록한다. */
+  const addDirect = useCallback(
+    (keyword: string) => {
+      if (isAdding) return;
+      addKeyword({keyword, fromRecommendation: true});
+    },
+    [addKeyword, isAdding],
+  );
+
   return {
     keywords: keywords ?? [],
     isPending,
@@ -140,6 +169,8 @@ export function useKeywordViewModel() {
     handleChange,
     reset,
     submit,
+    addDirect,
+    isAdding,
     removeKeyword: (id: string) => removeKeyword({id: Number(id)}),
     updatePriceDropOnly: (id: string, priceDropOnly: boolean) =>
       updatePriceDropOnly({id: Number(id), priceDropOnly}),

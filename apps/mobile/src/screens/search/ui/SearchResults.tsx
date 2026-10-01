@@ -14,6 +14,7 @@ import type {SearchFiltersController} from '@/features/search/model/useSearchFil
 
 import SearchFilterBar from './SearchFilterBar';
 import SearchNotFound from './SearchNotFound';
+import KeywordAlertButton from '@/features/keyword-prompt/ui/KeywordAlertButton';
 
 /**
  * 검색 결과. web: widgets/search/ui/SearchResult.tsx + useProductListViewModel
@@ -37,13 +38,11 @@ export default function SearchResults({
   keyword,
   controller,
   onPressProduct,
-  onPressKeywordRegister,
   bottomInset,
 }: {
   keyword: string;
   controller: SearchFiltersController;
   onPressProduct: (id: number) => void;
-  onPressKeywordRegister: () => void;
   bottomInset: number;
 }) {
   const {filters, hasActiveFilters, resetFilters} = controller;
@@ -100,6 +99,10 @@ export default function SearchResults({
                 {`건${estimatedTotal >= ESTIMATED_TOTAL_CAP ? '+' : ''}`}
               </Text>
             </View>
+          ) : null}
+          {/* 결과를 보는 그 자리에서 이 단어로 알림을 건다(결과 없음 화면엔 큰 버튼). */}
+          {!isPending && !isError && !isEmpty ? (
+            <KeywordAlertButton keyword={keyword} variant="bar" />
           ) : null}
           {/*
             필터를 바꾸는 동안 이전 결과를 흐리게 둔다(web transition 디밍과 같다).
@@ -168,7 +171,6 @@ export default function SearchResults({
       ) : (
         <SearchNotFound
           keyword={keyword}
-          onPressKeywordRegister={onPressKeywordRegister}
           onPressProduct={onPressProduct}
           bottomInset={bottomInset}
         />

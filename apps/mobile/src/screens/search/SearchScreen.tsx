@@ -8,10 +8,7 @@ import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useRecentKeywords} from '@/features/search/model/useRecentKeywords';
 import {useSearchFilters} from '@/features/search/model/useSearchFilters';
 import {useSearchSuggestions} from '@/features/search/model/useSearchSuggestions';
-import type {
-  SearchStackParamList,
-  TabStackParamList,
-} from '@/navigations/tab/types';
+import type {SearchStackParamList} from '@/navigations/tab/types';
 import {
   searchStackNavigations,
   tabStackNavigations,
@@ -121,19 +118,6 @@ export default function SearchScreen({
     [navigation],
   );
 
-  /**
-   * 키워드 알림 등록으로. 이 라우트는 **검색 스택엔 없고 탭 스택에 있다** —
-   * 부모로 올려 push 한다(그래야 뒤로가기로 검색 한 판이 그대로 남는다).
-   *
-   * ⚠️react-navigation 은 처리 못 하는 navigate 를 던지지 않는다(콘솔 에러만).
-   * 그래서 부모가 없을 때 조용히 무시되는 경로를 만들지 않도록 옵셔널로 받는다.
-   */
-  const handlePressKeywordRegister = useCallback(() => {
-    navigation
-      .getParent<NativeStackNavigationProp<TabStackParamList>>()
-      ?.push(tabStackNavigations.MYPAGE_KEYWORD);
-  }, [navigation]);
-
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>
       {/* 흰 배경이라 상태바 글씨는 어둡게(발견 탭과 같다). */}
@@ -156,7 +140,6 @@ export default function SearchScreen({
           keyword={submitted}
           controller={filterController}
           onPressProduct={handlePressProduct}
-          onPressKeywordRegister={handlePressKeywordRegister}
           bottomInset={bottomInset}
         />
       ) : (
