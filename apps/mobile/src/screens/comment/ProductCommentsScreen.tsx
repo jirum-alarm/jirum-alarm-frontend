@@ -12,6 +12,7 @@ import {
 } from 'react-native-keyboard-controller';
 import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useHeaderHeight} from '@react-navigation/elements';
 
 import {UserQueries} from '@/entities/user/user.queries';
 import {CommentQueries} from '@/entities/comment/comment.queries';
@@ -33,6 +34,9 @@ export default function ProductCommentsScreen({route, navigation}: Props) {
   const {productId} = route.params;
   const insets = useSafeAreaInsets();
   const keyboardVisible = useKeyboardState(state => state.isVisible);
+  // KeyboardAvoidingView 는 자기 위치를 부모 기준(onLayout)으로 잰다 — 위에 네이티브 헤더가 있으면
+  // 그 높이만큼 덜 밀어 입력창이 키보드 뒤에 묻혔다(키보드만 올라옴). 헤더 높이를 넘겨 보정한다.
+  const headerHeight = useHeaderHeight();
   const bottomClip = useHiddenTabBarClipPadding();
 
   // 시스템 back 은 선이 굵어 상세·커뮤니티 헤더와 어긋난다 — 같은 규격으로.
@@ -93,7 +97,7 @@ export default function ProductCommentsScreen({route, navigation}: Props) {
       <KeyboardAvoidingView
         behavior="padding"
         className="flex-1"
-        keyboardVerticalOffset={0}>
+        keyboardVerticalOffset={headerHeight}>
         {isPending ? (
           <View className="flex-1 items-center justify-center">
             <ActivityIndicator size="small" color="#667085" />

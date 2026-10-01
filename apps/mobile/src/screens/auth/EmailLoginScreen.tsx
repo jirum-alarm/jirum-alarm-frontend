@@ -83,7 +83,8 @@ const EmailLoginScreen = () => {
     <BasicLayout title="로그인" hasBackButton={true}>
       <KeyboardAwareScrollView
         className="flex-1 bg-white"
-        bottomOffset={88}
+        // 포커스 칸을 키보드 위 이만큼 띄운다 — 하단 로그인 바(버튼 48 + 20, 오류 문구가 뜨면 +36 = 104)보다 커야 칸이 바 뒤에 안 숨는다.
+        bottomOffset={120}
         extraKeyboardSpace={68}
         keyboardShouldPersistTaps="handled">
         <View className="pt-[20px] px-[20px] mb-[44px]">

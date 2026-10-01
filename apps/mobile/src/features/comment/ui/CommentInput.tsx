@@ -25,7 +25,6 @@ export default function CommentInput({
   const editing = useEditingComment();
   const inputRef = useRef<TextInput>(null);
   const [value, setValue] = useState('');
-  const [height, setHeight] = useState(0);
 
   const invalidate = () =>
     queryClient.invalidateQueries({
@@ -106,14 +105,13 @@ export default function CommentInput({
         <TextInput
           ref={inputRef}
           className="flex-1 rounded-lg bg-gray-100 px-3 py-2 text-base text-gray-900"
-          style={{height: Math.min(Math.max(40, height), MAX_INPUT_HEIGHT)}}
           multiline
           value={value}
           onChangeText={setValue}
-          // web 은 textarea scrollHeight 로 늘린다. RN 대응이 이것.
-          onContentSizeChange={e =>
-            setHeight(e.nativeEvent.contentSize.height + 16)
-          }
+          // web 은 textarea scrollHeight 로 늘린다. RN 은 multiline 이 내용만큼 스스로 커지니 위아래만 막는다.
+          // (onContentSizeChange 로 height 를 직접 계산하던 방식은 여러 줄을 쳐도 40pt 에
+          // 갇혀 윗줄이 잘렸다(iOS 26 시뮬 실측). 패딩도 두 번 더해 빈 칸이 52~56pt 로 떴다.)
+          style={{minHeight: 40, maxHeight: MAX_INPUT_HEIGHT}}
           placeholder={
             isUserLogin ? '댓글을 입력해주세요' : '로그인 후 이용해주세요'
           }

@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useKeyboardState} from 'react-native-keyboard-controller';
 
 /**
  * 아래에서 올라오는 시트 — 앱의 바텀시트는 전부 이것 하나를 쓴다
@@ -40,6 +41,7 @@ export default function BottomSheet({
   children: React.ReactNode;
 }) {
   const insets = useSafeAreaInsets();
+  const keyboardVisible = useKeyboardState(state => state.isVisible);
   // 0 = 닫힘, 1 = 열림. 백드롭 투명도와 시트 위치가 같은 값을 따라간다 —
   // 예전엔 백드롭이 고정색이라 열리는 순간 40% 로 툭 켜지고 닫힐 때 툭 꺼졌다.
   const progress = useRef(new Animated.Value(0)).current;
@@ -150,7 +152,9 @@ export default function BottomSheet({
           style={[
             styles.sheet,
             {
-              paddingBottom: Math.max(insets.bottom, 12),
+              // 키보드가 떠 있으면 홈 인디케이터 여백은 키보드 아래로 들어간다 — 그대로 두면
+              // 시트가 그만큼 더 올라가 '기타' 신고 시트 윗부분이 상태바와 겹쳤다.
+              paddingBottom: keyboardVisible ? 12 : Math.max(insets.bottom, 12),
               transform: [{translateY}],
             },
           ]}>

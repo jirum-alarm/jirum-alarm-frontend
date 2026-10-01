@@ -2,6 +2,7 @@ import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useHeaderHeight} from '@react-navigation/elements';
 import {useQuery} from '@tanstack/react-query';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -53,6 +54,9 @@ export default function CommunityPostScreen({route, navigation}: Props) {
   const {postId} = route.params;
   const insets = useSafeAreaInsets();
   const keyboardVisible = useKeyboardState(state => state.isVisible);
+  // KeyboardAvoidingView 는 자기 위치를 부모 기준(onLayout)으로 잰다 — 위에 네이티브 헤더가 있으면
+  // 그 높이만큼 덜 밀어 입력창이 키보드 뒤에 묻혔다(키보드만 올라옴). 헤더 높이를 넘겨 보정한다.
+  const headerHeight = useHeaderHeight();
   const bottomClip = useHiddenTabBarClipPadding();
   const [menuOpen, setMenuOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -164,7 +168,7 @@ export default function CommunityPostScreen({route, navigation}: Props) {
       <KeyboardAvoidingView
         behavior="padding"
         className="flex-1"
-        keyboardVerticalOffset={0}>
+        keyboardVerticalOffset={headerHeight}>
         <FlatList
           data={comments}
           keyExtractor={item => String(item.id)}

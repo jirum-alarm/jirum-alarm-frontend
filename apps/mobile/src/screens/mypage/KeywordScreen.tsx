@@ -69,7 +69,8 @@ export default function KeywordScreen({navigation}: Props) {
       <StackHeader title="키워드 알림" onBack={navigation.goBack} />
       <KeyboardAwareScrollView
         className="flex-1 bg-white"
-        bottomOffset={88}
+        // 포커스 칸을 키보드 위 이만큼 띄운다 — 하단 등록 바(pt-6 24 + 버튼 48 + 20 = 92)보다 커야 칸이 바 뒤에 안 숨는다.
+        bottomOffset={120}
         keyboardShouldPersistTaps="handled">
         <View className="px-5 py-6">
           <TextField
