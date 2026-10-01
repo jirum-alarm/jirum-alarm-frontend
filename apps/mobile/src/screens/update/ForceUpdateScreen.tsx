@@ -1,13 +1,7 @@
 import React from 'react';
-import {View, Pressable, StyleSheet, Linking, Platform} from 'react-native';
+import {View, Pressable, StyleSheet, Linking} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-
-// web 의 shared/config/appStore.ts 와 같은 앱을 가리킨다.
-// iOS 는 스토어프론트를 붙이지 않는다 — 붙이면 다른 국가 계정에서 열리지 않는다.
-const STORE_URL = {
-  ios: 'https://apps.apple.com/app/id6474611420',
-  android: 'https://play.google.com/store/apps/details?id=com.solcode.jirmalam',
-} as const;
+import {storeUrl} from '@/shared/lib/update/release-policy';
 
 /**
  * 스토어 업데이트가 필요할 때 앱 전체를 덮는 화면.
@@ -18,8 +12,7 @@ const STORE_URL = {
  */
 export default function ForceUpdateScreen(): React.JSX.Element {
   const openStore = () => {
-    const url = STORE_URL[Platform.OS === 'ios' ? 'ios' : 'android'];
-    Linking.openURL(url).catch(() => {
+    Linking.openURL(storeUrl()).catch(() => {
       // 스토어 앱이 없는 기기(에뮬레이터 등)에서는 조용히 무시한다.
     });
   };

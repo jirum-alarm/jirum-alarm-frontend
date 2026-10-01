@@ -16,20 +16,28 @@ const SHOW_DELAY_MS = 1500;
  * - 이미 허용·더는 물을 수 없음 → 아무것도 안 한다.
  * - "나중에" → 다시 안 띄운다. 키워드를 등록할 때 requestPushPermissionIfNeeded 가 묻는다.
  */
+/**
+ * 이번 실행에 사전 안내를 띄울 차례인가. 업데이트 권유 시트도 이걸 본다 — 시트(Modal)가 둘
+ * 겹치면 iOS 는 두 번째를 못 띄우므로, 이번 실행엔 이쪽이 먼저고 권유는 다음 실행으로 미룬다.
+ * 권한 조회 실패는 false(앱을 막지 않는다 — 키워드 등록 경로가 다시 묻는다).
+ */
+export async function shouldShowPushPrePrompt(): Promise<boolean> {
+  try {
+    if (await getAsyncStorage(StorageKey.PUSH_PREPROMPT_SHOWN)) return false;
+    const current = await Notifications.getPermissionsAsync();
+    return !current.granted && current.canAskAgain;
+  } catch {
+    return false;
+  }
+}
+
 export default function PushPermissionPrePrompt() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     const timer = setTimeout(async () => {
-      try {
-        if (await getAsyncStorage(StorageKey.PUSH_PREPROMPT_SHOWN)) return;
-        const current = await Notifications.getPermissionsAsync();
-        if (current.granted || !current.canAskAgain) return;
-        if (!cancelled) setVisible(true);
-      } catch {
-        // 권한 조회 실패로 앱을 막지 않는다 — 키워드 등록 경로가 다시 묻는다.
-      }
+      if ((await shouldShowPushPrePrompt()) && !cancelled) setVisible(true);
     }, SHOW_DELAY_MS);
     return () => {
       cancelled = true;
