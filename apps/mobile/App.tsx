@@ -18,6 +18,7 @@ import OfflineBanner from '@/shared/components/OfflineBanner.tsx';
 import WebViewPrewarm from '@/shared/components/WebViewPrewarm';
 import AppErrorFallback from '@/shared/components/AppErrorFallback.tsx';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import WindowControlsSafeArea from '@/shared/components/WindowControlsSafeArea';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Sentry, initSentry, wrapApp} from '@/shared/lib/monitoring/sentry.ts';
 import useOtaUpdateOnResume from '@/shared/hooks/useOtaUpdateOnResume.ts';
@@ -37,25 +38,27 @@ function App(): React.JSX.Element {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaProvider>
-        <Sentry.ErrorBoundary
-          fallback={({resetError}) => (
-            <AppErrorFallback onRetry={resetError} />
-          )}>
-          <KeyboardProvider>
-            <NavigationContainer ref={navigationRef}>
-              <ReactQueryProvider>
-                <WebviewRefContext.Provider value={webViewRefManager}>
-                  <FcmHandler>
-                    <RootNavigator />
-                  </FcmHandler>
-                  <OfflineBanner />
-                  <WebViewPrewarm />
-                </WebviewRefContext.Provider>
-                <Toast config={toastConfig} />
-              </ReactQueryProvider>
-            </NavigationContainer>
-          </KeyboardProvider>
-        </Sentry.ErrorBoundary>
+        <WindowControlsSafeArea>
+          <Sentry.ErrorBoundary
+            fallback={({resetError}) => (
+              <AppErrorFallback onRetry={resetError} />
+            )}>
+            <KeyboardProvider>
+              <NavigationContainer ref={navigationRef}>
+                <ReactQueryProvider>
+                  <WebviewRefContext.Provider value={webViewRefManager}>
+                    <FcmHandler>
+                      <RootNavigator />
+                    </FcmHandler>
+                    <OfflineBanner />
+                    <WebViewPrewarm />
+                  </WebviewRefContext.Provider>
+                  <Toast config={toastConfig} />
+                </ReactQueryProvider>
+              </NavigationContainer>
+            </KeyboardProvider>
+          </Sentry.ErrorBoundary>
+        </WindowControlsSafeArea>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
