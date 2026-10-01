@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { METADATA_SERVICE_URL } from '@/shared/config/env';
+
 const CDN_BASE_URL = 'https://cdn.jirum-alarm.com';
 
 export async function GET(
@@ -27,9 +29,13 @@ export async function GET(
     }
 
     const contentType = response.headers.get('content-type') || 'application/xml';
-    const content = await response.text();
+    // 인덱스의 <loc> 가 CDN 호스트를 가리키므로 이 프록시 경로로 바꿔 사이트맵 전체를 같은 호스트로
+    // 맞춘다(robots.txt 가 이 프록시를 광고). 상품 URL 은 원래 apex 라 영향 없음.
+    const content = (await response.text()).replaceAll(
+      `${CDN_BASE_URL}/sitemap/`,
+      `${METADATA_SERVICE_URL}/sitemap/`,
+    );
 
-    // CDN의 응답을 그대로 반환
     return new NextResponse(content, {
       status: 200,
       headers: {

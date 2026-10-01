@@ -10,10 +10,12 @@ export function GET() {
   // dev 배포는 색인 대상이 아니다. 그래도 **Disallow: / 는 쓰지 않는다** — 크롤을 막으면
   // middleware 가 붙이는 noindex 를 읽지 못해 이미 색인된 URL 이 영구히 남는다.
   // 대신 운영 사이트맵을 광고하지 않는다(dev 호스트에서 운영 URL 을 가리키는 건 잡음).
+  // 사이트맵은 CDN 이 아니라 같은 호스트 프록시(/sitemap/*)로 광고한다 — 네이버 서치어드바이저는
+  // 등록 도메인 아래 경로로만 사이트맵을 받는다. CDN 호스트는 교차 호스트라 네이버가 무시할 수 있다.
   const sitemapLines = IS_INDEXABLE_DEPLOYMENT
     ? `
-Sitemap: https://cdn.jirum-alarm.com/sitemap/sitemap-index.xml
-Sitemap: https://cdn.jirum-alarm.com/sitemap/sitemap-recent-index.xml`
+Sitemap: ${METADATA_SERVICE_URL}/sitemap/sitemap-index.xml
+Sitemap: ${METADATA_SERVICE_URL}/sitemap/sitemap-recent-index.xml`
     : '';
 
   const robotsTxt = `User-agent: *
