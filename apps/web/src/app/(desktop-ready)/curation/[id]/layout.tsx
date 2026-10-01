@@ -38,6 +38,8 @@ export default async function Layout({ children, params }: LayoutProps) {
   const renderDesktop = () => {
     return (
       <div className="mt-14 pt-8">
+        {/* 헤더(h1)는 모바일 분기에만 있다 — 크롤러는 데스크톱 UA 라 여기에도 둔다. */}
+        <h1 className="sr-only">{section.title} 핫딜 모음</h1>
         <SectionHeader title={section.title} />
         <div className="max-w-layout-max mx-auto">{children}</div>
       </div>

@@ -77,6 +77,19 @@ function mean(nums: number[]): number | null {
   return nums.reduce((a, b) => a + b, 0) / nums.length;
 }
 
+function median(nums: number[]): number | null {
+  if (!nums.length) return null;
+  const sorted = [...nums].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+/** "진행 중"이라고 부를 수 있는 게시 후 일수. 상품 상세의 신선도 임계(STALE_AFTER_DAYS)와 같다. */
+const ACTIVE_DEAL_MAX_DAYS = 30;
+/** 추이 중앙값의 이 배율 미만이면 가격 오독(단위가 계산 착오·묶음 일부 가격)으로 본다. 상세의 이력 가드와 같은 0.4. */
+const OUTLIER_MIN_RATIO = 0.4;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 /**
  * 진행 중(비종료) 딜 기준 현재가 + 추이 평균으로 타이밍 판정.
  * 백엔드 신규 필드 없이 payload만으로 동작.
@@ -87,15 +100,24 @@ export function buildTimingInsight(input: {
   histBasis: HistBasis;
   histUnitLabel?: string | null;
   heroPrice?: HeroPrice | null;
+  now?: number;
 }): TimingInsight {
-  const { deals, histPrices, histBasis, histUnitLabel, heroPrice } = input;
-  const active = deals.filter((d) => !d.isEnd && !isLikelyBundleDeal(d.title));
-  const pool = active.length ? active : deals.filter((d) => !d.isEnd);
+  const { deals, histPrices, histBasis, histUnitLabel, heroPrice, now = Date.now() } = input;
+  // "지금 진행 중 최저가" 는 검색결과 설명에 그대로 찍힌다 — 근거 없는 딜은 넣지 않는다.
+  // ① 게시 30일 이내만: 종료 자동 판정이 없어 2024년 딜도 isEnd=false 로 남는다(2026-10-01 실측: "진행 중 24건"에 2024년 딜).
+  // ② 추이 중앙값의 40% 미만은 오독: 신라면 14,454원을 4,454원으로 읽어 "100g당 186원·평균보다 64% 저렴" 이 나갔다.
+  const histMedian = median(histPrices);
+  const pool = deals.filter((d) => {
+    if (d.isEnd || isLikelyBundleDeal(d.title)) return false;
+    const posted = d.postedAt ? Date.parse(d.postedAt) : NaN;
+    return !Number.isNaN(posted) && now - posted <= ACTIVE_DEAL_MAX_DAYS * DAY_MS;
+  });
 
   let best: { price: number; deal: Deal } | null = null;
   for (const deal of pool) {
     const p = dealComparePrice(deal, histBasis, histUnitLabel);
     if (p == null) continue;
+    if (histMedian != null && p < histMedian * OUTLIER_MIN_RATIO) continue;
     if (!best || p < best.price) best = { price: p, deal };
   }
 

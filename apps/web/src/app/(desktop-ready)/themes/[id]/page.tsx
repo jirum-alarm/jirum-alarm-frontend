@@ -42,7 +42,14 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     title,
     description,
     alternates: { canonical: url },
-    openGraph: { title, description, url, type: 'website' },
+    // images 를 빼면 루트 og 이미지까지 사라진다(메타데이터 shallow merge) — 공유·검색 썸네일이 비었다.
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'website',
+      images: [{ url: `${METADATA_SERVICE_URL}/opengraph-image.webp`, width: 1200, height: 630 }],
+    },
   };
 }
 
@@ -76,12 +83,14 @@ const ThemeDetailPage = async ({ params }: { params: Params }) => {
       header={
         <PageHeader
           leading={<BackButton backTo="/themes" />}
-          title="관심사별 핫딜 알림"
+          title={<span>관심사별 핫딜 알림</span>}
           actions={<ShareButton title={`${theme.name} 핫딜 알림 | 지름알림`} />}
         />
       }
     >
       <div className="relative h-full px-5 py-6">
+        {/* 헤더 제목은 모든 테마가 같아서 h1 로 두지 않고, 테마 이름을 h1 로 한다(데스크톱 분기와 같은 문구). */}
+        <h1 className="sr-only">{theme.name} 핫딜 알림</h1>
         <Suspense>
           <ThemeDetail themeId={themeId} isMobile />
         </Suspense>

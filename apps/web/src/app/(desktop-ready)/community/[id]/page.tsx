@@ -12,6 +12,7 @@ import BasicLayout from '@/shared/ui/layout/BasicLayout';
 import { getPostDisplayContent, getPostImages } from '@/features/community/lib/postContent';
 import CommunityPostDetailClient from '@/features/community/ui/CommunityPostDetail';
 import CommunityPostPageHeader from '@/features/community/ui/CommunityPostPageHeader';
+import { toSeoImageUrl } from '@/features/product-detail/lib/product-seo';
 
 // generateMetadata에서 글 정보를 한 번만 조회하도록 캐싱
 const getCommunityPostCached = cache((id: number) => CommunityService.getCommunityPost(id));
@@ -38,9 +39,9 @@ export async function generateMetadata({
     displayContent.replace(/\s+/g, ' ').trim().slice(0, 100) ||
     '지름알림 커뮤니티에서 핫딜 정보를 나눠보세요.';
   const url = `${METADATA_SERVICE_URL}/community/${id}`;
+  // 우리 CDN 은 webp 만 있어 원본 확장자(.jpg)는 403 이다 — 상품 상세와 같은 변환을 건다.
   const ogImage =
-    post.taggedProduct?.thumbnail ||
-    postImages[0] ||
+    toSeoImageUrl(post.taggedProduct?.thumbnail || postImages[0]) ??
     `${METADATA_SERVICE_URL}/opengraph-image.webp`;
 
   return {

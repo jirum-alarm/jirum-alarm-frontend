@@ -144,3 +144,58 @@ describe('buildModelDisplayName', () => {
     assert.equal(buildModelDisplayName(null, 'L10s Ultra GEN2'), 'L10s Ultra GEN2');
   });
 });
+
+describe('buildTimingInsight', () => {
+  const { buildTimingInsight } =
+    require('./model-page-insights.ts') as typeof import('./model-page-insights');
+  const now = Date.parse('2026-10-01T00:00:00Z');
+  const deal = (price: number, postedAt: string | null, extra = {}) => ({
+    productId: price,
+    title: '농심 신라면 120g 40개',
+    price,
+    url: '',
+    providerId: 1,
+    mallName: null,
+    postedAt,
+    thumbnail: null,
+    ...extra,
+  });
+  const histPrices: number[] = [14000, 15000, 16000, 17000];
+
+  it('가격 오독(추이 중앙값의 40% 미만)은 현재가로 쓰지 않는다', () => {
+    const t = buildTimingInsight({
+      deals: [deal(4454, '2026-09-28T00:00:00Z'), deal(14454, '2026-09-27T00:00:00Z')],
+      histPrices,
+      histBasis: 'total',
+      now,
+    });
+    assert.equal(t.current, 14454);
+  });
+
+  it('30일 지난 딜·게시일 모르는 딜은 "진행 중"에서 뺀다', () => {
+    const t = buildTimingInsight({
+      deals: [
+        deal(13000, '2024-05-01T00:00:00Z'),
+        deal(13500, null),
+        deal(15500, '2026-09-20T00:00:00Z'),
+      ],
+      histPrices,
+      histBasis: 'total',
+      now,
+    });
+    assert.equal(t.current, 15500);
+    assert.equal(t.activeDealCount, 1);
+  });
+
+  it('진행 중 딜이 없으면 히어로가로 폴백한다', () => {
+    const t = buildTimingInsight({
+      deals: [deal(13000, '2024-05-01T00:00:00Z')],
+      histPrices,
+      histBasis: 'total',
+      heroPrice: { minPrice: 15900, label: '40개', unitPrice: null, unitLabel: null },
+      now,
+    });
+    assert.equal(t.current, 15900);
+    assert.equal(t.activeDealCount, 0);
+  });
+});
