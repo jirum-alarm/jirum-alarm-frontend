@@ -87,9 +87,9 @@ describe('폴백 웹뷰도 같은 가로채기를 쓴다', () => {
     expect(src).toContain('subscribeOpenDetail');
   });
 
-  it('검색은 탭 스택의 중첩 플로우로 등록돼 있다', () => {
+  it('검색은 루트 스택의 중첩 플로우로 등록돼 있다', () => {
     const nav: string = require('fs').readFileSync(
-      'src/navigations/tab/TabStackNavigator.tsx',
+      'src/navigations/stack/MainNavigator.tsx',
       'utf8',
     );
     const detail: string = require('fs').readFileSync(

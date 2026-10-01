@@ -19,31 +19,65 @@ const navigator = read(
 );
 const home = read('src/screens/home/HomeScreen.tsx');
 
-describe('hideCount 는 카운터다', () => {
-  it('boolean 이 아니라 숫자 — (다음 focus)→(이전 cleanup) 순서 때문', () => {
-    expect(hook).toContain('hideCount = {current: 0}');
-    expect(hook).toContain('setHideCount(hideCount.current + 1)');
-    expect(hook).toContain('setHideCount(hideCount.current - 1)');
-  });
-
-  it('음수로 내려가지 않는다', () => {
-    expect(hook).toContain('Math.max(0, next)');
+describe('탭바를 숨기는 카운터는 없다', () => {
+  it('useHideTabBar·hideCount 가 사라졌다 — 그런 화면은 루트 스택이 탭바째 덮는다', () => {
+    // 화면마다 숨김 카운터를 올리고 내리면 (다음 focus)→(이전 cleanup) 순서·한 틱 지연에
+    // 기대게 된다. 상세 등을 탭 바깥 루트 스택에 두면 숨길 일 자체가 없다(2026-10-01).
+    expect(hook).not.toContain('hideCount');
+    expect(hook).not.toContain('export function useHideTabBar');
   });
 });
 
-describe('★★탭바 표시는 라우트 이름 하나로 정한다', () => {
-  const stack = read('src/navigations/tab/TabStackNavigator.tsx');
+describe('★★탭 위에 쌓는 화면은 루트 스택이 탭바째 덮는다', () => {
+  const tabStack = read('src/navigations/tab/TabStackNavigator.tsx');
+  const rootStack = read('src/navigations/stack/MainNavigator.tsx');
 
-  it('스택 리스너가 포커스된 라우트로 결정한다', () => {
-    // 화면마다 useHideTabBar 를 걸면 focus/cleanup 순서에 의존해 카운터가
-    // 샌다 — 탭 5개가 같은 스택을 각자 갖고 있어 특히 그렇다.
-    // 라우트는 언제나 정확히 하나라 어긋날 수 없다.
-    expect(stack).toContain('hidesTabBar');
-    expect(stack).toContain('syncTabBarTo(focused)');
-    expect(stack).toContain('setTabBarVisible(!hidesTabBar(routeName))');
+  it('탭 스택엔 탭 루트 하나뿐이다', () => {
+    // 탭 안 스택에 상세를 쌓으면 탭바가 위에 남아 숨기고 되살려야 했고, 그 타이밍
+    // (전환 시작·끝·스와이프 취소)이 늘 어긋나 "뒤늦게 생긴다·깜빡인다"(2026-10-01 사용자).
+    const routes = [...tabStack.matchAll(/tabStackNavigations\.(\w+)/g)].map(
+      m => m[1],
+    );
+    expect(new Set(routes)).toEqual(new Set(['ROOT']));
   });
 
-  it('★상세에서 나오면 탭바가 바로 보인다 — 전환 끝까지 미루지 않는다(2026-10-01 사용자)', () => {
+  it('쌓는 화면은 전부 루트 스택에 있다', () => {
+    for (const name of [
+      'DETAIL',
+      'COMMENTS',
+      'SEARCH',
+      'CURATION',
+      'TOSS_CURATION',
+      'WEBVIEW',
+      'MYPAGE_ACCOUNT',
+      'MYPAGE_KEYWORD',
+      'MYPAGE_NOTIFICATION',
+      'LIKE',
+      'THEMES',
+      'THEME_DETAIL',
+      'POLICY',
+      'COMMUNITY_POST',
+      'COMMUNITY_WRITE',
+    ]) {
+      expect(rootStack).toContain(`name={tabStackNavigations.${name}}`);
+    }
+    // 첫 화면이 탭 전체다.
+    expect(rootStack).toMatch(
+      /name=\{mainNavigations\.TABS\}\s*component=\{MainTabNavigator\}/,
+    );
+  });
+
+  it('라우트로 탭바를 숨기고 되살리는 장치가 없다 — 되살아나면 시간차·깜빡임이 재발한다', () => {
+    for (const marker of [
+      'hidesTabBar',
+      'transitionStart',
+      'transitionEnd',
+      'gestureCancel',
+    ]) {
+      expect(tabStack).not.toContain(marker);
+    }
+    const visibility = read('src/shared/hooks/useTabBarVisibility.ts');
+    expect(visibility).not.toContain('setTimeout');
     jest.isolateModules(() => {
       const vis = require('../src/shared/hooks/useTabBarVisibility');
       vis.setTabBarVisible(false);
@@ -51,25 +85,6 @@ describe('★★탭바 표시는 라우트 이름 하나로 정한다', () => {
       vis.setTabBarVisible(true);
       expect(vis.getVisible()).toBe(true);
     });
-    // 뒤로 가기 시작 순간에 맞춘다 — 네이티브 스와이프는 state 이벤트가 전환 끝에 온다.
-    expect(stack).toContain('transitionStart');
-    expect(stack).toContain('gestureCancel');
-    // 미루기 장치가 되살아나면 "뒤늦게 생긴다"가 재발한다.
-    const hook = read('src/shared/hooks/useTabBarVisibility.ts');
-    expect(hook).not.toContain('setTimeout');
-    expect(stack).not.toContain('transitionEnd');
-  });
-
-  it('숨기는 라우트 5개가 빠짐없이 들어 있다', () => {
-    for (const name of [
-      'DETAIL',
-      'COMMENTS',
-      'SEARCH',
-      'CURATION',
-      'WEBVIEW',
-    ]) {
-      expect(stack).toContain(`tabStackNavigations.${name}`);
-    }
   });
 
   it('화면별 훅은 더 이상 쓰지 않는다', () => {
@@ -88,8 +103,7 @@ describe('★setTabBarVisible 직접 호출 금지', () => {
         "| grep -v 'useTabBarVisibility.ts' | grep -v '^\\s*\\*' || true",
       {cwd: path.join(__dirname, '..'), encoding: 'utf8'},
     );
-    // 라우트 기반으로 바꾼 뒤 정당한 호출처는 TabStackNavigator 한 곳뿐이다
-    // (거기가 포커스된 라우트로 판단하는 단일 지점). 나머지는 0.
+    // 정당한 호출처는 TabStackNavigator 한 곳뿐이다(탭을 옮기면 되살리는 지점). 나머지는 0.
     const calls = out
       .split('\n')
       .filter((l: string) => l.trim() && !/:\s*\*/.test(l))
@@ -97,7 +111,7 @@ describe('★setTabBarVisible 직접 호출 금지', () => {
     expect(calls).toEqual([]);
   });
 
-  it('탭 웹뷰는 hideCount 를 존중하는 setter 를 쓴다', () => {
+  it('탭 웹뷰는 전용 setter 를 쓴다(URL 판단 한 곳)', () => {
     const webview = read('src/screens/tabs/TabWebView.tsx');
     expect(webview).toContain('setTabBarVisibleFromUrl');
   });
@@ -109,28 +123,19 @@ describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', (
     expect(navigator).toContain('tabBarClipWhenHidden');
   });
 
-  it('★패딩은 tabBarVisible 하나만 본다 — 내비게이터와 같은 신호', () => {
-    // 내비게이터는 tabBarStyle.display 로 자르고, 그 값은 useTabBarVisibility
-    // 가 정한다. 패딩도 같은 신호를 봐야 같은 프레임에 맞는다.
-    //
-    // 예전엔 hideCount 도 함께 봤는데, 라우트 기반 전환 후 네이티브 상세가
-    // useHideTabBar 를 안 쓰게 되어 hideCount 가 늘 0 → 패딩이 영영 0 이었다.
+  it('★패딩은 내비게이터와 같은 조건 — clip 을 켜는 곳이 없으니 0', () => {
+    // 내비게이터는 display:none && tabBarClipWhenHidden 일 때만 자르는데, 탭 스택이 clip 을 끄고
+    // 쌓는 화면은 루트 스택이라 자르는 일이 없다. 패딩만 생기면 CTA 가 98px 아래로 밀린다(지적 이력).
+    const tabStack = read('src/navigations/tab/TabStackNavigator.tsx');
+    expect(tabStack).toMatch(/tabBarClipWhenHidden:\s*false/);
     const fn = hook.slice(
       hook.indexOf('export function useHiddenTabBarClipPadding'),
-      hook.indexOf('export function useHiddenTabBarClipPadding') + 700,
     );
-    expect(fn).toContain('useTabBarVisibility()');
-    // 주석엔 경위 설명으로 등장하므로 실제 코드 줄만 검사한다.
-    const code = fn
-      .split('\n')
-      .filter((l: string) => !/^\s*(\/\/|\*|\/\*)/.test(l))
-      .join('\n');
-    expect(code).not.toContain('hideCount');
-    expect(code).not.toContain('useSyncExternalStore');
+    expect(fn).toMatch(/\{\s*return 0;\s*\}/);
   });
 
-  it('★★상세는 탭바를 숨기므로 CTA 가 safe area + clip 상쇄만 비운다', () => {
-    // 2026-10-01 지시로 상세도 탭바를 숨긴다. 탭바 높이(getReservedBottomPx)를
+  it('★★상세는 탭바가 없으므로 CTA 가 safe area + clip 상쇄만 비운다', () => {
+    // 2026-10-01 지시로 상세엔 탭바가 없다(루트 스택이 덮는다). 탭바 높이(getReservedBottomPx)를
     // 계속 비우면 CTA 아래에 빈 띠가 남는다.
     const cta = read('src/screens/detail/ui/BottomCTA.tsx');
     expect(cta).toContain('useHiddenTabBarClipPadding');
@@ -158,26 +163,23 @@ describe('★clip 패딩은 내비게이터와 같은 조건이어야 한다', (
     }
   });
 
-  it('★★상세 두 갈래가 같은 탭바 정책을 쓴다', () => {
-    // /products/123 은 네이티브, 하위 경로는 웹뷰 폴백이 맡는다.
-    // 한쪽만 탭바를 숨기면 같은 상세인데 진입 경로에 따라 하단이 달라진다
-    // (사용자 지적: "웹뷰에서 갔을 때랑 홈에서 갔을 때가 다르다").
+  it('★★상세 두 갈래가 같은 하단 정책을 쓴다', () => {
+    // /products/123 은 네이티브, 하위 경로는 웹뷰 폴백이 맡는다 — 둘 다 루트 스택이라 탭바가 없다.
+    // 진입 경로에 따라 하단이 달라지면 안 된다(사용자 지적: "웹뷰에서 갔을 때랑 홈에서 갔을 때가 다르다").
     const fallback = read('src/screens/detail/ProductDetailWebViewScreen.tsx');
-    expect(fallback).toMatch(/\bhideTabBar\s*\n/);
-    // 웹 자체 하단바는 항상 숨긴다 — 네이티브 탭바와 두 겹이 된다
+    expect(fallback).not.toMatch(/\bhideTabBar\b/);
+    // 웹 자체 하단바는 항상 숨긴다 — 상세엔 찜·구매 CTA 만 남는다.
     expect(fallback).toMatch(/hideWebNav\s*\n/);
   });
 
-  it('★탭바가 보일 때도 하단 여백을 준다', () => {
-    // 숨길 때만 패딩을 주면, 탭바가 보이는 경우 웹 콘텐츠가 홈 인디케이터에
-    // 붙는다(폴백 상세 웹뷰에서 실제로 그랬다).
+  it('★상세 웹뷰는 탭바 높이를 비우지 않는다 — 탭바째 덮이므로', () => {
+    // 탭바 높이(getReservedBottomPx)를 비우면 콘텐츠 아래 빈 띠가 남는다. clip 상쇄(탭바가 보이는
+    // 루트 스택에선 0)만 둔다 — clip 시절과 같은 최종 배치(콘텐츠가 기기 바닥까지)다.
     const webviewDetail = read(
       'src/screens/detail/ProductDetailWebViewScreen.tsx',
     );
-    expect(webviewDetail).toContain('getReservedBottomPx');
-    expect(webviewDetail).toContain(
-      'hideTabBar ? tabBarClipPad : reservedBottom',
-    );
+    expect(webviewDetail).not.toContain('getReservedBottomPx');
+    expect(webviewDetail).toContain('{paddingBottom: tabBarClipPad}');
   });
 
   it('양쪽이 같은 getTabBarClipPx 를 쓴다', () => {

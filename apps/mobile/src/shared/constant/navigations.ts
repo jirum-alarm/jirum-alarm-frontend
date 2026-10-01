@@ -5,6 +5,8 @@ const authNavigations = {
 
 const mainNavigations = {
   JIRUM_ALARM_WEBVIEW: 'JirumAlarmWebView',
+  /** 루트 스택의 첫 화면 = 하단 탭 전체. 상세 등은 이 위에 push 되어 탭바째 덮는다. */
+  TABS: 'MainTabs',
 } as const;
 
 const tabNavigations = {
@@ -31,7 +33,7 @@ const tabStackNavigations = {
   CURATION: 'Curation',
   /** 토스 특가 더보기 — 네이티브 목록(카드가 달라 별 화면). */
   TOSS_CURATION: 'TossCuration',
-  /** 네이티브 화면이 아직 없는 web 페이지(토스 등)를 탭 스택에 쌓는다. */
+  /** 네이티브 화면이 아직 없는 web 페이지(토스 등)를 루트 스택에 쌓는다. */
   WEBVIEW: 'TabWebViewPage',
   COMMENTS: 'ProductComments',
 

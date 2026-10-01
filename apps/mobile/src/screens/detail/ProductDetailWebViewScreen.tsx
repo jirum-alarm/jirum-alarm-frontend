@@ -27,13 +27,9 @@ import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
 import {getPushablePath} from '@/shared/lib/navigation/tab-routing';
 import WebViewErrorView from '@/shared/components/WebViewErrorView';
 import {useTokenRemoveEffect} from '@/screens/jirumalarmwebview/hooks/useTokenRemoveEffect';
-import {
-  useHideTabBar,
-  useHiddenTabBarClipPadding,
-} from '@/shared/hooks/useHideTabBar';
+import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import type {ProductFlowParamList} from '@/navigations/tab/types';
 import {tabStackNavigations} from '@/shared/constant/navigations';
-import {getReservedBottomPx} from '@/navigations/tab/tab-bar-metrics';
 import {SCREEN_BACKGROUND_COLOR} from '@/navigations/tab/native-headers';
 
 type StackNav = Pick<
@@ -62,13 +58,11 @@ const HIDE_WEB_BOTTOM_NAV = `
 export function StackWebView({
   path,
   navigation,
-  hideTabBar,
   hideWebNav,
   header,
 }: {
   path: string;
   navigation: StackNav;
-  hideTabBar: boolean;
   hideWebNav: boolean;
   header?: React.ReactNode;
 }) {
@@ -76,10 +70,7 @@ export function StackWebView({
   const webviewRef = useRef<WebView>(null);
 
   useTokenRemoveEffect();
-  useHideTabBar(hideTabBar);
   const tabBarClipPad = useHiddenTabBarClipPadding();
-  // 탭바가 보일 때 확보해야 할 하단 여백(탭바 높이 + safe area).
-  const reservedBottom = getReservedBottomPx(insets.bottom);
 
   useFocusEffect(
     useCallback(() => {
@@ -151,7 +142,7 @@ export function StackWebView({
         styles.container,
         // ★탭바를 숨길 땐 잘린 만큼 올리고, 보일 땐 탭바 높이만큼 비운다.
         // 후자를 빼먹어서 웹 콘텐츠가 홈 인디케이터에 붙었다(사용자 지적).
-        {paddingBottom: hideTabBar ? tabBarClipPad : reservedBottom},
+        {paddingBottom: tabBarClipPad},
       ]}>
       <SystemBars style="dark" hidden={false} />
       <View style={[styles.statusBarSpacer, {height: insets.top}]} />
@@ -209,9 +200,6 @@ function ProductDetailWebViewScreen({route, navigation}: Props) {
     <StackWebView
       path={path}
       navigation={navigation}
-      // ★네이티브 상세와 같은 정책 — 상세는 탭바를 숨긴다(2026-10-01 지시).
-      // 같은 상세인데 진입 경로에 따라 하단이 달라 보이면 안 된다(사용자 지적 이력).
-      hideTabBar
       // 웹 자체 하단바(BottomNav)도 숨긴다 — 상세엔 찜·구매 CTA 만 남는다.
       hideWebNav
     />

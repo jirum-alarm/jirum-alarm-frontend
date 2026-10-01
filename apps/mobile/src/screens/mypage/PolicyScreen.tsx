@@ -35,7 +35,6 @@ export default function PolicyScreen({route, navigation}: Props) {
       navigation={navigation}
       // 이 라우트는 `hidesTabBar` 목록에 있다(내비게이터가 라우트로 판단).
       // 여기서도 켜 두면 iOS 26 clip 몫 패딩이 같이 걸린다.
-      hideTabBar
       // 웹 하단바는 항상 숨긴다 — 네이티브 탭바와 두 겹이 된다.
       hideWebNav
     />

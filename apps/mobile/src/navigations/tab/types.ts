@@ -1,4 +1,5 @@
 import type {
+  mainNavigations,
   searchStackNavigations,
   tabStackNavigations,
 } from '@/shared/constant/navigations';
@@ -10,10 +11,14 @@ export type ProductFlowParamList = {
 };
 
 /**
- * 각 탭 안쪽 스택. 탭 루트(웹뷰) 위에 상세를 push 한다.
+ * 앱 화면 목록. **탭 루트(ROOT)만 각 탭 스택**에 있고, 나머지는 전부 탭 **바깥** 루트 스택
+ * (MainNavigator)에 있다 — 상세 등이 탭바째 덮으므로 탭바를 숨기고 되살리는 코드가 없다.
+ * 화면은 탭 스택에서 push 해도 이름이 없으니 루트 스택으로 올라가 처리된다.
+ * 한 목록으로 두는 이유: 화면 props 타입이 어느 스택에 등록되든 같게.
  * 검색은 중첩 스택이라, 상세와 검색이 한 줄로 섞이지 않는다.
  */
 export type TabStackParamList = ProductFlowParamList & {
+  [mainNavigations.TABS]: undefined;
   [tabStackNavigations.ROOT]: undefined;
   [tabStackNavigations.SEARCH]: {keyword?: string} | undefined;
   [tabStackNavigations.CURATION]: {sectionId: string; title?: string};

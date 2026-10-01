@@ -172,26 +172,18 @@ describe('주입 스크립트 자체', () => {
 
 describe('알림 탭이 여는 화면들 — 탭 구조를 벗어나지 않나', () => {
   const alarm = read('src/screens/alarm/AlarmScreen.tsx');
-  const navigator = read('src/navigations/tab/TabStackNavigator.tsx');
+  const navigator = read('src/navigations/stack/MainNavigator.tsx');
 
-  it('push 대상이 모두 탭 스택 라우트다(MainStack 으로 나가면 탭바가 두 겹)', () => {
+  it('push 대상이 모두 루트 스택 화면이다 — 탭 위에 쌓여 탭바째 덮는다', () => {
     const pushed = [...alarm.matchAll(/tabStackNavigations\.(\w+)/g)].map(
       m => m[1],
     );
     expect(pushed.length).toBeGreaterThan(0);
     for (const route of pushed) {
-      expect(navigator).toContain(`tabStackNavigations.${route}`);
+      expect(navigator).toContain(`name={tabStackNavigations.${route}}`);
     }
+    // 옛 단일 웹뷰 스택(mainNavigations.JIRUM_ALARM_WEBVIEW)으로 나가면 웹 자체 하단바가 겹친다.
     expect(alarm).not.toContain('mainNavigations');
-  });
-
-  it('WEBVIEW 도 DETAIL 도 탭바를 숨긴다(2026-10-01 정책)', () => {
-    const rule = navigator.slice(
-      navigator.indexOf('function hidesTabBar'),
-      navigator.indexOf('function hidesTabBar') + 600,
-    );
-    expect(rule).toContain('tabStackNavigations.WEBVIEW');
-    expect(rule).toMatch(/routeName === tabStackNavigations\.DETAIL/);
   });
 });
 
@@ -228,11 +220,11 @@ describe('★탭 스택 웹뷰의 하단 safe area', () => {
     expect(calls).toHaveLength(2);
   });
 
-  it('선례(상세 폴백)도 여전히 하단 여백을 준다', () => {
-    expect(detailWebview).toContain('getReservedBottomPx');
-    expect(detailWebview).toContain(
-      'hideTabBar ? tabBarClipPad : reservedBottom',
-    );
+  it('상세 폴백은 clip 상쇄(지금 0)만 둔다 — 루트 스택이라 화면이 기기 바닥까지', () => {
+    // 탭바 높이(getReservedBottomPx)를 비우면 콘텐츠 아래 빈 띠가 남는다. clip 시절에도 최종 배치는
+    // "기기 바닥까지"였다(늘린 만큼 되밀었다) — 루트 스택은 처음부터 기기 크기라 같은 결과다.
+    expect(detailWebview).not.toContain('getReservedBottomPx');
+    expect(detailWebview).toContain('{paddingBottom: tabBarClipPad}');
   });
 });
 

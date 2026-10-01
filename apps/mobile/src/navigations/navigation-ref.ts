@@ -1,9 +1,10 @@
 import {
-  CommonActions,
+  StackActions,
   createNavigationContainerRef,
 } from '@react-navigation/native';
 
 import {
+  mainNavigations,
   tabNavigations,
   tabStackNavigations,
 } from '@/shared/constant/navigations';
@@ -116,54 +117,24 @@ function navigateToRoute(route: NativeRoute): boolean {
       requestTrendingCategory(route.trendingCategoryId);
     }
 
-    if (!route.screen) {
-      // 탭 루트로. 스택에 상세가 쌓여 있어도 ROOT 가 아래에 있으므로
-      // navigate 가 거기까지 되돌린다.
-      (navigationRef.navigate as (name: string, params?: object) => void)(
-        route.tab,
-        {screen: tabStackNavigations.ROOT},
-      );
-      return true;
-    }
+    // 아래에 깔 탭을 고른다. 루트 스택에 상세 등이 쌓여 있으면 navigate 가 탭까지 되돌린다.
+    (navigationRef.navigate as (name: string, params?: object) => void)(
+      mainNavigations.TABS,
+      {screen: route.tab, params: {screen: tabStackNavigations.ROOT}},
+    );
+    if (!route.screen) return true;
 
-    // 🔴하위 화면은 **중첩 스택 상태를 직접 지정**한다.
-    //
-    // `navigate(tab, {screen})` 만 쓰면 아직 마운트되지 않은 탭의 스택이 그 화면
-    // **하나로 초기화**되어 아래에 아무것도 없다 → **뒤로가기가 사라진다**
-    // (iOS 26 실측: 푸시로 커뮤니티 글을 열면 목록으로 돌아갈 길이 없었다).
-    // ROOT 를 먼저 navigate 하는 우회도 안 먹는다 — 마운트 전에는 두 번째
-    // navigate 가 첫 번째를 덮어써 결국 한 칸만 남는다(실측: 스택이
-    // ["CommunityPost"] 하나였다). 그래서 라우트 배열을 그대로 준다.
+    // 하위 화면은 탭 **바깥** 루트 스택에 올린다(MainNavigator 주석). 탭 위에 쌓이니 뒤로 가면
+    // 위에서 고른 탭이 드러난다 — 예전처럼 탭 안 스택 상태를 [ROOT, 화면] 으로 지정할 필요가 없다.
+    // 중첩 네비게이터(검색)면 {screen, params} 로 자식 화면까지 지정한다 — params 만 얹으면
+    // 부모가 들고만 있어 자식 화면엔 닿지 않는다.
     navigationRef.dispatch(
-      CommonActions.navigate({
-        name: route.tab,
-        params: {
-          state: {
-            index: 1,
-            routes: [
-              {name: tabStackNavigations.ROOT},
-              {
-                name: route.screen,
-                params: route.params,
-                // 중첩 네비게이터(검색)면 자식 라우트까지 지정한다 — params 만
-                // 얹으면 부모가 들고만 있어 자식 화면엔 닿지 않는다.
-                ...(route.nested
-                  ? {
-                      state: {
-                        routes: [
-                          {
-                            name: route.nested.screen,
-                            params: route.nested.params,
-                          },
-                        ],
-                      },
-                    }
-                  : {}),
-              },
-            ],
-          },
-        },
-      }),
+      StackActions.push(
+        route.screen,
+        route.nested
+          ? {screen: route.nested.screen, params: route.nested.params}
+          : route.params,
+      ),
     );
     return true;
   } catch {

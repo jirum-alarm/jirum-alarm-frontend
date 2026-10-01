@@ -19,7 +19,7 @@ const home = read('src/screens/home/HomeScreen.tsx');
 const tossScreen = read('src/screens/curation/TossCurationScreen.tsx');
 const curationScreen = read('src/screens/curation/CurationScreen.tsx');
 const grid = read('src/entities/home/ui/CurationGrid.tsx');
-const stack = read('src/navigations/tab/TabStackNavigator.tsx');
+const stack = read('src/navigations/stack/MainNavigator.tsx');
 
 describe('★홈에서 웹뷰가 사라졌다', () => {
   it('/toss 는 네이티브 화면으로', () => {
@@ -30,7 +30,7 @@ describe('★홈에서 웹뷰가 사라졌다', () => {
     expect(home).toContain('tabStackNavigations.CURATION');
   });
 
-  it('두 라우트가 탭 스택에 등록돼 있다', () => {
+  it('두 라우트가 루트 스택에 등록돼 있다(탭바째 덮는다)', () => {
     expect(stack).toContain('TossCurationScreen');
     expect(stack).toContain('CurationScreen');
   });

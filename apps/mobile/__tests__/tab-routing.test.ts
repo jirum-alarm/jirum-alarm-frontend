@@ -111,13 +111,10 @@ describe('iOS 26 탭바 clip', () => {
     'utf8',
   );
 
-  it('웹뷰 루트는 clip 하지 않고, 네이티브 push 화면만 자른다', () => {
-    expect(stackSrc).toMatch(
-      /tabBarClipWhenHidden:\s*!shown && clipWhenHidden/,
-    );
-    expect(stackSrc).toMatch(
-      /apply\(routeName !== tabStackNavigations\.ROOT, shown\)/,
-    );
+  it('탭 루트는 clip 하지 않는다 — 자를 화면(상세 등)이 이제 탭 안에 없다', () => {
+    // 상세·댓글 등은 탭 바깥 루트 스택이라 탭바째 덮는다(MainNavigator). 탭 스택엔 루트만 남고,
+    // 루트는 웹뷰일 수 있어 원래 자르지 않았다(자르면 웹 입력창 아래가 빈다).
+    expect(stackSrc).toMatch(/tabBarClipWhenHidden:\s*false/);
   });
 
   it('숨겼다고 무조건 자르지 않는다', () => {

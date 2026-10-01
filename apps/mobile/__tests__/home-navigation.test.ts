@@ -14,7 +14,9 @@ const read = (p: string) =>
 
 const screen = read('src/screens/home/HomeScreen.tsx');
 const routes = read('src/shared/constant/navigations.ts');
-const stack = read('src/navigations/tab/TabStackNavigator.tsx');
+// 탭 루트 위에 쌓는 화면은 전부 탭 **바깥** 루트 스택에 등록된다(탭바째 덮는다).
+const stack = read('src/navigations/stack/MainNavigator.tsx');
+const tabStack = read('src/navigations/tab/TabStackNavigator.tsx');
 
 describe('섹션 더보기 — 탭 스택에 쌓는다', () => {
   it('인앱 브라우저를 쓰지 않는다', () => {
@@ -37,7 +39,7 @@ describe('섹션 더보기 — 탭 스택에 쌓는다', () => {
     expect(screen).not.toContain('uri: `${SERVICE_URL}${link}`');
   });
 
-  it('WEBVIEW 라우트가 탭 스택에 등록돼 있다', () => {
+  it('WEBVIEW 라우트가 루트 스택에 등록돼 있다', () => {
     expect(routes).toContain('WEBVIEW:');
     expect(stack).toContain('tabStackNavigations.WEBVIEW');
   });
@@ -94,14 +96,10 @@ describe('더보기 웹뷰 안에서 상품을 눌렀을 때', () => {
     expect(logic).toContain('tabStackNavigations.WEBVIEW');
   });
 
-  it('WEBVIEW 라우트가 탭바 숨김 목록에 있다', () => {
-    // 화면별 훅이 아니라 라우트 이름으로 정한다(hidesTabBar).
-    expect(stack).toContain('hidesTabBar');
-    const fn = stack.slice(
-      stack.indexOf('function hidesTabBar'),
-      stack.indexOf('function hidesTabBar') + 700,
-    );
-    expect(fn).toContain('tabStackNavigations.WEBVIEW');
+  it('WEBVIEW 는 탭 바깥 루트 스택이라 탭바째 덮는다 — 탭 스택엔 없다', () => {
+    // 탭 안 스택에 두면 탭바를 숨겼다 되살려야 해 "뒤늦게 생긴다·깜빡인다"(2026-10-01)가 났다.
+    expect(stack).toContain('name={tabStackNavigations.WEBVIEW}');
+    expect(tabStack).not.toContain('tabStackNavigations.WEBVIEW');
   });
 });
 

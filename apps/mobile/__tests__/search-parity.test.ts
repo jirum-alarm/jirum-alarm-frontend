@@ -40,6 +40,7 @@ const suggestionsModel = read(
   'src/features/search/model/useSearchSuggestions.ts',
 );
 const navigator = read('src/navigations/tab/SearchStackNavigator.tsx');
+const rootStack = read('src/navigations/stack/MainNavigator.tsx');
 const tabStack = read('src/navigations/tab/TabStackNavigator.tsx');
 const navTypes = read('src/navigations/tab/types.ts');
 
@@ -131,9 +132,11 @@ describe('껍데기 교체 — 검색 본문이 더 이상 웹뷰가 아니다',
     expect(header).toContain('accessibilityLabel="뒤로"');
   });
 
-  it('탭바 숨김은 라우트가 이미 판정한다 — 화면이 useHideTabBar 를 또 걸지 않는다', () => {
-    // 화면별 훅은 focus/cleanup 순서로 카운터가 새서 탭바가 안 돌아오던 원인이다.
-    expect(tabStack).toContain('routeName === tabStackNavigations.SEARCH');
+  it('검색은 탭 바깥 루트 스택이라 탭바째 덮는다 — 화면이 탭바를 숨기지 않는다', () => {
+    // 화면별 훅은 focus/cleanup 순서로 카운터가 새서 탭바가 안 돌아오던 원인이고,
+    // 탭 안 스택의 라우트 판정은 되살리는 타이밍이 어긋났다(2026-10-01). 덮으면 둘 다 필요 없다.
+    expect(rootStack).toContain('name={tabStackNavigations.SEARCH}');
+    expect(tabStack).not.toContain('tabStackNavigations.SEARCH');
     expect(code(screen)).not.toContain('useHideTabBar(');
     // 대신 iOS26 clip 만큼 하단을 비운다(웹뷰 시절 잘림 버그와 같은 처방).
     expect(screen).toContain('useHiddenTabBarClipPadding()');

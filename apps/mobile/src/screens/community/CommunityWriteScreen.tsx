@@ -70,7 +70,6 @@ export default function CommunityWriteScreen({route, navigation}: Props) {
       // web 은 수정을 `?edit=<id>` 쿼리로 받는다(라우트가 아니다).
       path={postId ? `/community/write?edit=${postId}` : '/community/write'}
       navigation={navigation}
-      hideTabBar
       hideWebNav
     />
   );

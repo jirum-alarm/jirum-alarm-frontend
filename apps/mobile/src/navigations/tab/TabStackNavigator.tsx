@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 
@@ -6,163 +6,44 @@ import TabWebView from '@/screens/tabs/TabWebView';
 import HomeScreen from '@/screens/home/HomeScreen';
 import TrendingScreen from '@/screens/trending/TrendingScreen';
 import AlarmScreen from '@/screens/alarm/AlarmScreen';
-import JirumAlarmWebViewScreen from '@/screens/jirumalarmwebview/JirumAlarmWebViewScreen';
-import CurationScreen from '@/screens/curation/CurationScreen';
-import TossCurationScreen from '@/screens/curation/TossCurationScreen';
-import ProductDetailScreen from '@/screens/detail/ProductDetailScreen';
-import SearchStackNavigator from './SearchStackNavigator';
-import ProductCommentsScreen from '@/screens/comment/ProductCommentsScreen';
-// 내정보 — 하위 화면들은 자체 StackHeader 를 그린다(네비게이터 옵션 불필요).
 import MyPageScreen from '@/screens/mypage/MyPageScreen';
-import AccountScreen from '@/screens/mypage/AccountScreen';
-import NicknameScreen from '@/screens/mypage/NicknameScreen';
-import PasswordScreen from '@/screens/mypage/PasswordScreen';
-import PersonalScreen from '@/screens/mypage/PersonalScreen';
-import CategoriesScreen from '@/screens/mypage/CategoriesScreen';
-import KeywordScreen from '@/screens/mypage/KeywordScreen';
-import NotificationSettingScreen from '@/screens/mypage/NotificationSettingScreen';
-import TermsPoliciesScreen from '@/screens/mypage/TermsPoliciesScreen';
-import PolicyScreen from '@/screens/mypage/PolicyScreen';
-import LikeScreen from '@/screens/mypage/LikeScreen';
-import ThemesScreen from '@/screens/mypage/ThemesScreen';
-import ThemeDetailScreen from '@/screens/mypage/ThemeDetailScreen';
-// 커뮤니티 — 글 상세는 setOptions 로 시스템 헤더를 켜고, 글쓰기는 스스로 끈다.
 import CommunityScreen from '@/screens/community/CommunityScreen';
-import CommunityPostScreen from '@/screens/community/CommunityPostScreen';
-import CommunityWriteScreen from '@/screens/community/CommunityWriteScreen';
 import {
   tabStackNavigations,
   tabNavigations,
 } from '@/shared/constant/navigations';
 import {getTabBaseUrl} from '@/shared/lib/navigation/tab-routing';
 import {
-  getVisible,
   setTabBarVisible,
   useTabBarVisibility,
 } from '@/shared/hooks/useTabBarVisibility';
 import type {TabStackParamList} from './types';
-import {
-  SCREEN_BACKGROUND_COLOR,
-  baseHeaderOptions,
-  commentsHeaderOptions,
-  productDetailHeaderOptions,
-} from './native-headers';
-import AppStackHeader from './AppStackHeader';
+import {SCREEN_BACKGROUND_COLOR} from './native-headers';
 
 type TabName = (typeof tabNavigations)[keyof typeof tabNavigations];
 
 const Stack = createNativeStackNavigator<TabStackParamList>();
 
 /**
- * 이 탭의 탭바 표시를 숨김 카운터와 맞춘다.
- * JS 탭바는 AnimatedTabBar 가 translateY 로도 숨기지만,
- * tabBarStyle.display 를 같이 맞춰 두면 레이아웃 여백이 안 남는다.
+ * 탭바 표시(스토어)를 이 탭의 옵션에 맞춘다. JS 탭바는 스토어를 직접 구독하지만,
+ * iOS 26 네이티브 탭바는 `tabBarStyle.display` 로만 숨는다.
  *
- * iOS 26 clip 은 네이티브로 push 한 화면만 켠다. 웹뷰 안 SPA 는
- * 자르면 댓글 입력창 아래가 빈다.
+ * ★라우트 때문에 숨기는 일은 이제 없다 — 상세·검색·내정보 하위 등은 탭 **바깥** 루트 스택
+ * (MainNavigator)에 push 되어 탭바째 덮는다. 예전엔 탭 안 스택에 쌓고 탭바를 숨겼다가
+ * 되살려서, 뒤로 갈 때마다 "뒤늦게 생긴다·깜빡인다"(2026-10-01 사용자)가 났다.
+ * 남은 숨김은 탭 루트 위에서 탭바를 가리는 경우뿐이다(고객센터 상담창, 웹뷰 탭의 하위 URL).
  */
-
-// 모듈 스코프 — 렌더마다 새 함수를 만들면 헤더가 매번 다시 마운트된다.
-const renderAppStackHeader = (
-  props: React.ComponentProps<typeof AppStackHeader>,
-) => <AppStackHeader {...props} />;
-
 function useSyncNativeTabBarHidden() {
   const visible = useTabBarVisibility();
   const navigation = useNavigation();
-  const clipWhenHiddenRef = useRef(false);
-
-  const apply = useCallback(
-    (clipWhenHidden: boolean, shown: boolean = visible) => {
-      clipWhenHiddenRef.current = clipWhenHidden;
-      navigation.setOptions({
-        tabBarStyle: {display: shown ? 'flex' : 'none'},
-        tabBarClipWhenHidden: !shown && clipWhenHidden,
-      });
-    },
-    [visible, navigation],
-  );
 
   useEffect(() => {
-    apply(clipWhenHiddenRef.current);
-  }, [apply]);
-
-  // ★shown 을 받으면 렌더·effect 를 기다리지 않고 지금 네이티브 탭바에 반영한다 —
-  // effect 를 거치면 몇 프레임 늦어 "바로 뜨긴 하는데 시간차가 있다"(2026-10-01 사용자).
-  return useCallback(
-    (routeName: string | undefined, shown?: boolean) => {
-      apply(routeName !== tabStackNavigations.ROOT, shown);
-    },
-    [apply],
-  );
-}
-
-/**
- * 이 라우트에서 탭바를 숨기나.
- *
- * ★화면마다 useHideTabBar 를 거는 대신 **라우트 이름 하나로** 판단한다.
- * 화면별 훅은 focus/cleanup 순서에 의존해서 카운터가 새기 쉬웠다 —
- * 탭 5개가 각자 같은 스택을 갖고 있어 특히 그렇다(탭바가 사라져 안 돌아오던
- * 증상의 뿌리). 라우트는 언제나 정확히 하나이므로 어긋날 수가 없다.
- */
-function hidesTabBar(routeName: string | undefined): boolean {
-  return (
-    // ★상세도 숨긴다(2026-10-01 사용자 지시 — 8/17 의 "상세는 탭바 유지" 를 뒤집음).
-    // 하단엔 찜·구매 CTA 만 남는다. web 도 상세에서 BottomNav 를 그리지 않는다.
-    routeName === tabStackNavigations.DETAIL ||
-    routeName === tabStackNavigations.COMMENTS ||
-    routeName === tabStackNavigations.SEARCH ||
-    routeName === tabStackNavigations.CURATION ||
-    routeName === tabStackNavigations.TOSS_CURATION ||
-    routeName === tabStackNavigations.WEBVIEW ||
-    // 내정보·커뮤니티 하위 화면. web 도 탭 루트가 아니면 하단바를 안 그린다
-    // (isTabRootPath).
-    MYPAGE_SUB_ROUTES.has(routeName ?? '') ||
-    COMMUNITY_SUB_ROUTES.has(routeName ?? '')
-  );
-}
-
-const MYPAGE_SUB_ROUTES: ReadonlySet<string> = new Set([
-  tabStackNavigations.MYPAGE_ACCOUNT,
-  tabStackNavigations.MYPAGE_NICKNAME,
-  tabStackNavigations.MYPAGE_PASSWORD,
-  tabStackNavigations.MYPAGE_PERSONAL,
-  tabStackNavigations.MYPAGE_CATEGORIES,
-  tabStackNavigations.MYPAGE_KEYWORD,
-  tabStackNavigations.MYPAGE_NOTIFICATION,
-  tabStackNavigations.MYPAGE_TERMS,
-  tabStackNavigations.POLICY,
-  tabStackNavigations.LIKE,
-  tabStackNavigations.THEMES,
-  tabStackNavigations.THEME_DETAIL,
-]);
-
-const COMMUNITY_SUB_ROUTES: ReadonlySet<string> = new Set([
-  tabStackNavigations.COMMUNITY_POST,
-  tabStackNavigations.COMMUNITY_WRITE,
-]);
-
-/**
- * 탭 하나를 감싸는 네이티브 스택.
- *
- * 루트는 기존 탭 WebView 그대로. 상세는 그 위에 push 되어 네이티브 슬라이드
- * 전환을 탄다 — 전환 중 이전 화면이 뒤에 남으므로 흰 화면이 안 생긴다.
- * iOS 스와이프 뒤로가기도 스택이 알아서 붙여준다.
- */
-/**
- * 큐레이션 등 웹 페이지를 탭 스택에 쌓는 화면.
- * JirumAlarmWebViewScreen 은 MainParamList 로 타이핑돼 있어 그대로 못 넣는다 —
- * params 모양({uri})이 같으므로 얇게 감싼다.
- */
-function TabWebViewPage({
-  route,
-}: {
-  route: {params: {uri: string; title?: string}};
-}) {
-  const Screen = JirumAlarmWebViewScreen as unknown as React.ComponentType<{
-    route: {params: {uri: string}};
-  }>;
-  return <Screen route={{params: {uri: route.params.uri}}} />;
+    navigation.setOptions({
+      tabBarStyle: {display: visible ? 'flex' : 'none'},
+      // 탭 루트는 웹뷰일 수 있어 자르지 않는다(자르면 웹 입력창 아래가 빈다).
+      tabBarClipWhenHidden: false,
+    });
+  }, [visible, navigation]);
 }
 
 /**
@@ -194,193 +75,31 @@ function getTabRootScreen(tabName: TabName): React.ComponentType {
   return root;
 }
 
+/**
+ * 탭 하나 = 그 탭의 루트 화면 하나. 스택으로 감싸는 건 탭 루트가 헤더 옵션·
+ * `navigation.push` 를 그대로 쓰게 하려는 것뿐이다(push 는 루트 스택으로 올라간다).
+ */
 export function createTabStack(tabName: TabName) {
   return function TabStack() {
-    const onFocusedRoute = useSyncNativeTabBarHidden();
-    // 이 탭이 지금 화면에 보이는 탭인가. 포커스가 바뀔 때 자기 스택 기준으로
-    // 다시 맞추기 위한 것이고, 리스너 안에서는 ref 대신 navigation.isFocused()
-    // 를 직접 쓴다(위 리스너 주석 참조).
+    useSyncNativeTabBarHidden();
+
+    // 탭을 옮기면 탭바를 되살린다 — 웹뷰 탭이 하위 URL 에서 꺼둔 채 떠난 경우.
     const isTabFocused = useIsFocused();
-    // 이 탭 **스택**의 최상단 라우트. 아래 state 리스너가 유일한 갱신자다.
-    // 스택 밖(여기)에서는 스택 상태를 직접 읽을 수 없다 — `useNavigation()` 은
-    // 탭 네비게이터를 가리키므로 `getState()` 가 라우트가 아니라 **탭 이름**을 준다.
-    const focusedRouteRef = useRef<string | undefined>(
-      tabStackNavigations.ROOT,
-    );
-
-    // 이 탭으로 돌아왔을 때 자기 스택 최상단 기준으로 다시 맞춘다.
-    // (다른 탭에 있는 동안 이 탭의 리스너는 위 가드로 막혀 있었다)
-    const navigation = useNavigation();
     useEffect(() => {
-      if (!isTabFocused) return;
-      // 🔴예전엔 `navigation.getState()` 를 읽었는데 그건 **탭 네비게이터**의
-      // 상태라 focused 가 'CommunityTab' 같은 **탭 이름**이었다. hidesTabBar 는
-      // 라우트 이름을 기대하므로 언제나 false → **탭으로 돌아오면 상세·댓글
-      // 화면에서도 탭바를 다시 켰다**(리스너가 방금 숨긴 것을 덮어씀).
-      // iOS 26 실측: 딥링크로 탭 전환+push 하면 글 상세에 탭바가 남아 댓글
-      // 입력창을 덮었다. 스택의 라우트는 리스너가 ref 에 넣어 둔다.
-      setTabBarVisible(!hidesTabBar(focusedRouteRef.current));
+      if (isTabFocused) setTabBarVisible(true);
     }, [isTabFocused]);
-
-    /** 이 라우트 기준으로 탭바를 즉시 맞춘다(JS 탭바 = 스토어, iOS 26 네이티브 탭바 = 옵션 직접). */
-    const syncTabBarTo = (routeName: string | undefined) => {
-      setTabBarVisible(!hidesTabBar(routeName));
-      onFocusedRoute(routeName, getVisible());
-    };
 
     return (
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-          // 헤더를 켜는 화면은 전부 JS 헤더로 그린다(iOS 26 유리 헤더가 회색으로 비침).
-          header: renderAppStackHeader,
-          // 지정 안 하면 전환 애니메이션 동안 시스템 기본 배경이 보인다.
-          // 아직 아무것도 안 그린 WebView 가 올라올 때 특히 티가 난다.
           contentStyle: {backgroundColor: SCREEN_BACKGROUND_COLOR},
-        }}
-        screenListeners={({navigation: screenNavigation, route}) => ({
-          state: e => {
-            const stack = e.data.state;
-            const focused = stack.routes[stack.index]?.name;
-            focusedRouteRef.current = focused;
-            onFocusedRoute(focused);
-            // ★탭바 표시는 여기서 한 곳으로 정한다(화면별 훅 대신).
-            //
-            // ★★단 **이 탭이 지금 보고 있는 탭일 때만**. 이 리스너는 탭 5개의
-            // 스택에서 각각 돌기 때문에, 발견 탭에 상세를 열어둔 채 홈으로 오면
-            // 발견 탭 리스너가 false 로 덮어써 홈에서도 탭바가 사라진다.
-            //
-            // 🔴판정은 **호출 시점에 직접** 묻는다(`navigation.isFocused()`).
-            // 예전엔 ref 를 봤는데, 딥링크가 탭 전환과 push 를 한 번에 하면
-            // (`navigate(tab, {screen})`) 이 리스너가 **ref 가 갱신되기 전에**
-            // 돌아서 업데이트를 건너뛴다 → 글 상세인데 탭바가 남아 댓글
-            // 입력창을 덮는다(iOS 26 시뮬레이터 실측). ref 는 렌더 뒤에 갱신되고
-            // 네비게이션 이벤트는 그 사이에 온다.
-            if (navigation.isFocused()) {
-              // 숨김·보이기 모두 즉시(setTabBarVisible 주석).
-              syncTabBarTo(focused);
-            }
-          },
-          // ★뒤로 가기가 **시작되는 순간** 드러날 화면 기준으로 맞춘다. 네이티브 스와이프·헤더 뒤로가기는
-          // state 이벤트가 애니메이션이 끝난 뒤에야 와서, 그걸 기다리면 탭바가 한 박자 늦게 생겼다.
-          transitionStart: e => {
-            if (!e.data.closing || !navigation.isFocused()) return;
-            const routes = screenNavigation.getState().routes;
-            const index = routes.findIndex(item => item.key === route.key);
-            // 맨 위가 닫히는 경우만(=뒤로 가기). push 로 아래에 깔리는 화면도 closing 이 오고,
-            // JS goBack 은 이미 state 에서 빠져 있어(-1) state 리스너가 처리했다.
-            if (index <= 0 || index !== routes.length - 1) return;
-            syncTabBarTo(routes[index - 1].name);
-          },
-          // 스와이프를 하다 놓으면 원래 화면에 머문다 — 미리 띄운 탭바를 되돌린다.
-          gestureCancel: () => {
-            if (navigation.isFocused()) syncTabBarTo(focusedRouteRef.current);
-          },
-        })}>
+        }}>
         {/* ★component 로 넘긴다 — 렌더 콜백({() => ...})은 렌더마다 새 함수라
-            react-navigation 이 루트를 건너뛰지 못해, 상세를 열고 닫을 때마다 탭 루트
-            전체(홈의 모든 섹션)가 다시 그려져 JS 가 밀렸다("터치가 한 박자 늦다"). */}
+            react-navigation 이 루트를 건너뛰지 못해 탭 루트 전체가 다시 그려진다. */}
         <Stack.Screen
           name={tabStackNavigations.ROOT}
           component={getTabRootScreen(tabName)}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.DETAIL}
-          component={ProductDetailScreen}
-          options={productDetailHeaderOptions}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.SEARCH}
-          component={SearchStackNavigator}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.CURATION}
-          component={CurationScreen}
-          options={({route}) => ({
-            ...baseHeaderOptions,
-            title: route.params?.title ?? '',
-          })}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.TOSS_CURATION}
-          component={TossCurationScreen}
-          options={{
-            ...baseHeaderOptions,
-            title: '',
-          }}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.WEBVIEW}
-          component={TabWebViewPage}
-          // ★네이티브 헤더를 띄우지 않는다. 여기서 여는 web 페이지
-          // (/toss·/curation)는 **자체 헤더**(제목·뒤로가기·검색·공유)를
-          // 갖고 있어 헤더가 두 개로 겹친다. 뒤로가기는 웹 헤더와
-          // iOS 스와이프가 담당한다.
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.COMMENTS}
-          component={ProductCommentsScreen}
-          options={commentsHeaderOptions}
-        />
-
-        {/* ── 내정보 ──
-            옵션을 주지 않는다: 각 화면이 StackHeader 를 직접 그리고,
-            약관·정책은 web 페이지가 자체 헤더를 갖는다(두 겹 방지). */}
-        <Stack.Screen
-          name={tabStackNavigations.MYPAGE_ACCOUNT}
-          component={AccountScreen}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.MYPAGE_NICKNAME}
-          component={NicknameScreen}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.MYPAGE_PASSWORD}
-          component={PasswordScreen}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.MYPAGE_PERSONAL}
-          component={PersonalScreen}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.MYPAGE_CATEGORIES}
-          component={CategoriesScreen}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.MYPAGE_KEYWORD}
-          component={KeywordScreen}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.MYPAGE_NOTIFICATION}
-          component={NotificationSettingScreen}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.MYPAGE_TERMS}
-          component={TermsPoliciesScreen}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.POLICY}
-          component={PolicyScreen}
-        />
-        <Stack.Screen name={tabStackNavigations.LIKE} component={LikeScreen} />
-        <Stack.Screen
-          name={tabStackNavigations.THEMES}
-          component={ThemesScreen}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.THEME_DETAIL}
-          component={ThemeDetailScreen}
-        />
-
-        {/* ── 커뮤니티 ── 두 화면 모두 헤더를 스스로 결정한다(setOptions). */}
-        <Stack.Screen
-          name={tabStackNavigations.COMMUNITY_POST}
-          component={CommunityPostScreen}
-        />
-        <Stack.Screen
-          name={tabStackNavigations.COMMUNITY_WRITE}
-          component={CommunityWriteScreen}
         />
       </Stack.Navigator>
     );

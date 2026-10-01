@@ -26,9 +26,10 @@ jest.mock('@react-navigation/native', () => ({
     getRootState: () => mockRootState,
     dispatch: mockDispatch,
   }),
-  // 하위 화면은 중첩 스택 상태를 직접 지정한다(뒤로가기 보존).
-  // 액션을 그대로 들여다볼 수 있게 얇게 통과시킨다.
-  CommonActions: {navigate: (arg: unknown) => ({type: 'NAVIGATE', arg})},
+  // 하위 화면은 탭 바깥 루트 스택에 push 한다. 액션을 그대로 들여다볼 수 있게 얇게 통과시킨다.
+  StackActions: {
+    push: (name: string, params?: unknown) => ({type: 'PUSH', name, params}),
+  },
 }));
 
 jest.mock('../src/screens/trending/trending-view-store', () => ({
@@ -46,48 +47,48 @@ const {
 const url = (path: string) => `https://jirum-alarm.com${path}`;
 const webViewOn = {allowWebViewRoute: true};
 
-/** 탭 루트로 가는 이동. `navigate(tab, {screen: 'TabRoot'})` 한 번. */
+/**
+ * 아래에 깔 탭을 고르는 이동. 루트 스택의 탭 화면(`MainTabs`) 안 그 탭의 루트로 navigate 한 번 —
+ * 루트 스택에 상세 등이 쌓여 있으면 여기까지 걷힌다.
+ */
 const expectTabRoot = (tab: string) => {
-  expect(mockNavigate).toHaveBeenCalledWith(tab, {screen: 'TabRoot'});
+  expect(mockNavigate).toHaveBeenCalledWith('MainTabs', {
+    screen: tab,
+    params: {screen: 'TabRoot'},
+  });
 };
 
 /**
- * 하위 화면으로 가는 이동.
+ * 하위 화면으로 가는 이동 = 탭을 고른 뒤 **탭 바깥 루트 스택에 push**.
  *
- * 🔴라우트 배열에 **탭 루트가 먼저** 와야 한다. 없으면 그 화면이 스택의 유일한
- * 라우트가 되어 **뒤로가기가 사라진다**(iOS 26 실측: 푸시로 커뮤니티 글을 열면
- * 목록으로 돌아갈 길이 없었다).
+ * 🔴탭을 먼저 골라야 한다 — 뒤로 가면 그 탭이 드러난다. 예전엔 탭 안 스택을 [탭 루트, 화면] 으로
+ * 지정했는데(없으면 뒤로가기가 사라졌다, iOS 26 실측), 화면이 탭 위에 쌓이니 그 지정이 필요 없다.
  */
 const expectScreen = (tab: string, screen: string, params?: unknown) => {
-  const call = mockDispatch.mock.calls.at(-1)?.[0] as {
-    arg?: {name?: string; params?: {state?: {routes?: unknown[]}}};
-  };
-  expect(call?.arg?.name).toBe(tab);
-  expect(call?.arg?.params?.state?.routes).toEqual([
-    {name: 'TabRoot'},
-    {name: screen, params},
-  ]);
+  expectTabRoot(tab);
+  expect(mockDispatch.mock.calls.at(-1)?.[0]).toEqual({
+    type: 'PUSH',
+    name: screen,
+    params,
+  });
+  expect(mockNavigate.mock.invocationCallOrder.at(-1)).toBeLessThan(
+    mockDispatch.mock.invocationCallOrder.at(-1) ?? 0,
+  );
 };
 
-/** 중첩 네비게이터(검색) 목적지. 부모 라우트 안의 자식 state 를 본다. */
+/** 중첩 네비게이터(검색) 목적지. 부모 라우트 push 에 {screen, params} 로 자식까지 지정한다. */
 const expectNested = (
   tab: string,
   screen: string,
   child: string,
   childParams?: unknown,
 ) => {
-  const call = mockDispatch.mock.calls.at(-1)?.[0] as {
-    arg?: {name?: string; params?: {state?: {routes?: unknown[]}}};
-  };
-  expect(call?.arg?.name).toBe(tab);
-  expect(call?.arg?.params?.state?.routes).toEqual([
-    {name: 'TabRoot'},
-    {
-      name: screen,
-      params: undefined,
-      state: {routes: [{name: child, params: childParams}]},
-    },
-  ]);
+  expectTabRoot(tab);
+  expect(mockDispatch.mock.calls.at(-1)?.[0]).toEqual({
+    type: 'PUSH',
+    name: screen,
+    params: {screen: child, params: childParams},
+  });
 };
 
 const reset = () => {
@@ -310,9 +311,7 @@ describe('★핫딜 최저가(/deals)는 앱에서 열지 않는다', () => {
         reset();
         expect(navigateToNativeRoute(url(path), opts)).toBe(true);
         // 탭만 바꾸는 게 아니라 **루트로** 보낸다(하위 화면이 쌓여 있어도).
-        expect(mockNavigate).toHaveBeenCalledWith('HomeTab', {
-          screen: 'TabRoot',
-        });
+        expectTabRoot('HomeTab');
         expect(mockDispatch).not.toHaveBeenCalled();
       }
     });
