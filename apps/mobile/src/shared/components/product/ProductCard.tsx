@@ -91,7 +91,8 @@ const ProductCard = React.memo(function ProductCard({
                 판매종료
               </Text>
             </View>
-          ) : product.hotDealType ? (
+          ) : product.hotDealType && !product.earliestExpiryDate ? (
+            // 유통기한 띠가 같은 자리를 덮는다(HomeCardPrimitives CardThumbnail 과 같은 이유).
             <View className="absolute bottom-0 left-0">
               <HotdealBadge
                 hotdealType={product.hotDealType}

@@ -37,17 +37,18 @@ type Props = {
 };
 
 export default function HotdealBadge({hotdealType, badgeVariant}: Props) {
-  // 초대박딜만 글자가 4자라 web 도 폭을 넓힌다.
-  const width = hotdealType === HotDealType.UltraDeal ? 62 : 57;
-  const height = 24;
+  // 초대박딜만 글자가 4자라 web 도 폭을 넓힌다. 고정 폭이면 글자 확대(최대 1.3배)에서
+  // "초대박딜"이 잘려 minWidth 로 두고 그라디언트는 100% 로 따라 늘린다.
+  const minWidth = hotdealType === HotDealType.UltraDeal ? 62 : 57;
+  const minHeight = 24;
   const radius =
     badgeVariant === 'page'
       ? {borderRadius: 8}
       : {borderTopRightRadius: 8, borderBottomLeftRadius: 8};
 
   return (
-    <View style={[{width, height}, radius, styles.container]}>
-      <Svg width={width} height={height} style={StyleSheet.absoluteFill}>
+    <View style={[{minWidth, minHeight}, radius, styles.container]}>
+      <Svg width="100%" height="100%" style={StyleSheet.absoluteFill}>
         <Defs>
           <LinearGradient id="g" x1="0" y1="0" x2="1" y2="0">
             {GRADIENTS[hotdealType].map(([offset, color]) => (
@@ -55,7 +56,7 @@ export default function HotdealBadge({hotdealType, badgeVariant}: Props) {
             ))}
           </LinearGradient>
         </Defs>
-        <Rect width={width} height={height} fill="url(#g)" />
+        <Rect width="100%" height="100%" fill="url(#g)" />
       </Svg>
       <Text style={styles.label}>{hotdealTextMap[hotdealType]}</Text>
     </View>
@@ -67,6 +68,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    paddingHorizontal: 4,
   },
   label: {
     color: '#ffffff',

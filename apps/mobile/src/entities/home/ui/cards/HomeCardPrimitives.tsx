@@ -66,7 +66,10 @@ export function CardThumbnail({
               600 으로 "고쳐" 옮기면 네이티브 뱃지만 혼자 굵어 뭉개져 보인다. */}
           <Text className="text-xs text-gray-700">판매종료</Text>
         </View>
-      ) : product.hotDealType && showHotdealBadge ? (
+      ) : product.hotDealType &&
+        showHotdealBadge &&
+        // 유통기한 띠(22px)가 같은 자리에 깔려 뱃지(24px)를 덮고 윗변 2px 만 삐져나왔다.
+        !product.earliestExpiryDate ? (
         <View className="absolute bottom-0 left-0">
           <HotdealBadge
             hotdealType={product.hotDealType as HotDealType}

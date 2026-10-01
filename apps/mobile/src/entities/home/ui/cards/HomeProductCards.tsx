@@ -233,6 +233,8 @@ export const DoubleRowCard = React.memo(function DoubleRowCard({
           product={product}
           style={{width: 120, height: 120}}
           thumbnailType="product"
+          // web DoubleRowProductCard 도 썸네일엔 안 그린다 — 가격 옆 뱃지와 중복.
+          showHotdealBadge={false}
         />
         {/* h-[120px] = 썸네일 높이. mt-auto 는 부모에 높이가 있어야 먹는다. */}
         <View className="h-[120px] flex-1 gap-2">
