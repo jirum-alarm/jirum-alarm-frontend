@@ -42,12 +42,13 @@ try {
     'eas',
     'env:exec',
     'production',
-    // bare 라 업로드 스크립트가 app.json 플러그인 설정을 못 읽는다 — org·project 를 직접 준다.
-    'SENTRY_ORG=jirumalarm SENTRY_PROJECT=jirum-alarm-app npx sentry-expo-upload-sourcemaps dist',
+    // bare 라 업로드 스크립트가 app.json 플러그인 설정을 못 읽는다 — org·project·url **셋 다** 줘야 한다
+    // (하나라도 비면 플러그인 설정을 읽으러 갔다가 exit 1 — 10/1 0f059bf6 업로드가 이걸로 실패).
+    'SENTRY_ORG=jirumalarm SENTRY_PROJECT=jirum-alarm-app SENTRY_URL=https://sentry.io/ npx sentry-expo-upload-sourcemaps dist',
   ]);
 } catch {
   console.warn(
     '⚠️ Sentry 소스맵 업로드 실패 — 발행은 끝났다. SENTRY_AUTH_TOKEN(EAS production, sensitive)을 확인하고' +
-      ' `npx eas env:exec production "SENTRY_ORG=jirumalarm SENTRY_PROJECT=jirum-alarm-app npx sentry-expo-upload-sourcemaps dist"` 로 다시 올린다.',
+      ' `npx eas env:exec production "SENTRY_ORG=jirumalarm SENTRY_PROJECT=jirum-alarm-app SENTRY_URL=https://sentry.io/ npx sentry-expo-upload-sourcemaps dist"` 로 다시 올린다.',
   );
 }

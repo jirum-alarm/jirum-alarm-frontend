@@ -76,7 +76,7 @@ jobs:
         working-directory: apps/mobile
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: npx eas env:exec production 'SENTRY_ORG=jirumalarm SENTRY_PROJECT=jirum-alarm-app npx sentry-expo-upload-sourcemaps dist'
+        run: npx eas env:exec production 'SENTRY_ORG=jirumalarm SENTRY_PROJECT=jirum-alarm-app SENTRY_URL=https://sentry.io/ npx sentry-expo-upload-sourcemaps dist'
 
       - name: Notify
         if: always()
