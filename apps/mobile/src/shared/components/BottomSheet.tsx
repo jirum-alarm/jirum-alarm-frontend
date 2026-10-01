@@ -40,7 +40,9 @@ export default function BottomSheet({
 }) {
   const insets = useSafeAreaInsets();
   const slide = useRef(new Animated.Value(0)).current;
-  // Modal 은 언마운트 애니메이션을 못 하므로 닫히는 동안 잠깐 더 살려둔다.
+  // ★닫을 땐 바로 내린다. 예전엔 닫히는 150ms 동안 Modal(별도 네이티브 창)이 화면을 덮고
+  // 남아 있어, 시트에서 고른 직후의 다음 탭이 그 창에 먹혔다(사용자 지적 "터치가 한 박자 늦다").
+  // 닫힘 페이드는 포기한다 — 열릴 때 애니메이션은 그대로다.
   const [mounted, setMounted] = useState(visible);
 
   useEffect(() => {
@@ -53,13 +55,8 @@ export default function BottomSheet({
       }).start();
       return;
     }
-    Animated.timing(slide, {
-      toValue: 0,
-      duration: 150,
-      useNativeDriver: true,
-    }).start(({finished}) => {
-      if (finished) setMounted(false);
-    });
+    slide.setValue(0);
+    setMounted(false);
   }, [visible, slide]);
 
   if (!mounted) return null;

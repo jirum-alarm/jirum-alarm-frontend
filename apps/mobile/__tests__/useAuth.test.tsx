@@ -3,7 +3,7 @@ import {useQuery} from '@tanstack/react-query';
 import * as ReactTestRenderer from 'react-test-renderer';
 import {SERVICE_URL} from '../src/constants/env';
 import {StorageKey} from '../src/shared/constant/storage-key';
-import {useAuth} from '../src/shared/hooks/useAuth';
+import {__resetAuthSyncForTest, useAuth} from '../src/shared/hooks/useAuth';
 import {FetchError} from '../src/shared/lib/client/http-client';
 import {
   removeAsyncStorage,
@@ -66,6 +66,8 @@ const renderUseAuth = async () => {
 
 describe('useAuth', () => {
   beforeEach(() => {
+    // 동기화 상태는 앱 전체 단일값(모듈)이라 테스트마다 처음으로 되돌린다.
+    __resetAuthSyncForTest();
     jest.clearAllMocks();
     latestAuthState = undefined;
     mockSetAsyncStorage.mockResolvedValue(undefined);
@@ -256,6 +258,67 @@ describe('useAuth', () => {
 
     await ReactTestRenderer.act(async () => {
       renderer.unmount();
+    });
+  });
+
+  /**
+   * ★동기화는 앱 전체에서 토큰당 한 번. 나중에 마운트된 화면(상세의 찜·추천 등)은
+   * 첫 렌더부터 로그인 상태여야 한다 — 예전엔 인스턴스마다 false 로 시작해 그 사이 탭이
+   * "로그인 후 이용해주세요" 로 튕겼다.
+   */
+  it('a later-mounted consumer is logged in from its first render and does not re-sync', async () => {
+    mockUseQuery.mockReturnValue({
+      data: {loginByRefreshToken: {accessToken: 'a1', refreshToken: 'r1'}},
+      isError: false,
+      isLoading: false,
+      isSuccess: true,
+    });
+    await renderUseAuth();
+    expect(mockCookieSet).toHaveBeenCalledTimes(2);
+
+    const firstRender: boolean[] = [];
+    const Late = () => {
+      const {isLogin} = useAuth();
+      if (firstRender.length === 0) firstRender.push(isLogin);
+      return null;
+    };
+    await ReactTestRenderer.act(async () => {
+      ReactTestRenderer.create(<Late />);
+      await flushMicrotasks();
+    });
+    expect(firstRender[0]).toBe(true);
+    expect(mockCookieSet).toHaveBeenCalledTimes(2); // 같은 토큰은 다시 쓰지 않는다
+  });
+
+  it('a refreshed access token keeps isLogin true while it syncs', async () => {
+    mockUseQuery.mockReturnValue({
+      data: {loginByRefreshToken: {accessToken: 'a1', refreshToken: 'r1'}},
+      isError: false,
+      isLoading: false,
+      isSuccess: true,
+    });
+    const renderer = await renderUseAuth();
+    expect(latestAuthState?.isLogin).toBe(true);
+
+    let resolveCookie: () => void = () => {};
+    mockCookieSet.mockImplementation(
+      () => new Promise<boolean>(r => (resolveCookie = () => r(true))),
+    );
+    mockUseQuery.mockReturnValue({
+      data: {loginByRefreshToken: {accessToken: 'a2', refreshToken: 'r2'}},
+      isError: false,
+      isLoading: false,
+      isSuccess: true,
+    });
+    await ReactTestRenderer.act(async () => {
+      renderer.update(<AuthConsumer />);
+      await flushMicrotasks();
+    });
+    // 새 토큰 동기화가 아직 안 끝났어도 로그인 화면으로 튕기지 않는다.
+    expect(latestAuthState?.isLogin).toBe(true);
+    await ReactTestRenderer.act(async () => {
+      resolveCookie();
+      await flushMicrotasks();
     });
   });
 });

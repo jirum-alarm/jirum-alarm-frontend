@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useRef} from 'react';
-import {Animated, Image, Pressable, StyleSheet, View} from 'react-native';
+import React, {useCallback, useEffect} from 'react';
+import {Image, Pressable, StyleSheet, View} from 'react-native';
 import {
   createBottomTabNavigator,
   BottomTabBar,
@@ -282,20 +282,17 @@ function AnimatedTabBar(props: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
   const bottomGap = insets.bottom > 0 ? insets.bottom : GLASS_BOTTOM_GAP;
   const hiddenOffset = TAB_BAR_HEIGHT + bottomGap;
-  const translateY = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(translateY, {
-      toValue: tabBarVisible ? 0 : hiddenOffset,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
-  }, [tabBarVisible, hiddenOffset, translateY]);
-
+  // ★미끄러지는 애니메이션을 두지 않는다 — 상세로 들어갈 땐 즉시 사라지고, 나올 땐 상세가
+  // 다 빠진 뒤 제자리에 나타난다(시점은 requestTabBarVisible). 250ms 슬라이드가 전환과
+  // 겹쳐 "바텀바가 움직인다" 로 보였다.
   return (
-    <Animated.View style={[styles.barWrapper, {transform: [{translateY}]}]}>
+    <View
+      style={[
+        styles.barWrapper,
+        {transform: [{translateY: tabBarVisible ? 0 : hiddenOffset}]},
+      ]}>
       <BottomTabBar {...props} />
-    </Animated.View>
+    </View>
   );
 }
 

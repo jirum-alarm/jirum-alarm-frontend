@@ -4,6 +4,7 @@ import React, {
   useLayoutEffect,
   useRef,
   useState,
+  useSyncExternalStore,
 } from 'react';
 import {ScrollView, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -100,11 +101,9 @@ function NativeDetail({
 }) {
   const scrollRef = useRef<ScrollView>(null);
   const lastScrollY = useRef(0);
+  const [scrollFlags] = useState(createScrollFlags);
   // 가격 추이 섹션의 스크롤 위치 — 판정 카드 "기준 보기"가 여기로 간다.
   const priceHistoryY = useRef<number | null>(null);
-  const [showTopButton, setShowTopButton] = useState(false);
-  // 조회수 띠가 꽉 찬 띠 → 떠 있는 알약으로 바뀌는 기준(web 의 센티널 translate-y-7 = 28px).
-  const [viewerCollapsed, setViewerCollapsed] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const navigation = useNavigation<DetailNavigationProp>();
   const {getWebViewRef} = useWebviewContext();
@@ -266,14 +265,19 @@ function NativeDetail({
         stickyHeaderIndices={showViewerCount ? [0] : undefined}
         onScroll={e => {
           const y = e.nativeEvent.contentOffset.y;
-          setShowTopButton(y > 200 && y < lastScrollY.current);
-          setViewerCollapsed(y > 28);
+          // ★상세 state 가 아니라 작은 store 에 쓴다 — 방향이 바뀔 때마다 상세 전체
+          // (차트·댓글·캐러셀)가 다시 그려져 스크롤 직후 탭이 한 박자 늦었다.
+          scrollFlags.set({
+            showTopButton: y > 200 && y < lastScrollY.current,
+            // 조회수 띠가 꽉 찬 띠 → 떠 있는 알약으로(web 센티널 translate-y-7 = 28px).
+            viewerCollapsed: y > 28,
+          });
           lastScrollY.current = y;
         }}>
         {showViewerCount ? (
-          <ViewerCount
+          <ScrollAwareViewerCount
             count={product.viewCount ?? 0}
-            collapsed={viewerCollapsed}
+            flags={scrollFlags}
           />
         ) : null}
         {/* web ProductDetailImage 와 같이 webp → 원본 → 카테고리 대체 그림 순서.
@@ -379,10 +383,10 @@ function NativeDetail({
         <AffiliateNotice mallName={product.mallName} variant="general" />
         <View className="h-[24px] bg-gray-100" />
       </ScrollView>
-      <BottomCTA
+      <ScrollAwareBottomCTA
+        flags={scrollFlags}
         product={product}
         isUserLogin={isLogin}
-        showTopButton={showTopButton}
         onPressTop={() => scrollRef.current?.scrollTo({y: 0, animated: true})}
       />
       {shareSheet}
@@ -400,3 +404,57 @@ function Hr() {
 }
 
 export {parseProductId};
+
+type ScrollFlags = {showTopButton: boolean; viewerCollapsed: boolean};
+
+/** 상세 하나당 하나 — 스택에 상세가 여러 개 쌓여도 서로 섞이지 않게 인스턴스마다 만든다. */
+function createScrollFlags() {
+  let value: ScrollFlags = {showTopButton: false, viewerCollapsed: false};
+  const listeners = new Set<() => void>();
+  return {
+    get: () => value,
+    set(next: ScrollFlags) {
+      if (
+        next.showTopButton === value.showTopButton &&
+        next.viewerCollapsed === value.viewerCollapsed
+      ) {
+        return;
+      }
+      value = next;
+      listeners.forEach(listener => listener());
+    },
+    subscribe(listener: () => void) {
+      listeners.add(listener);
+      return () => {
+        listeners.delete(listener);
+      };
+    },
+  };
+}
+type ScrollFlagsStore = ReturnType<typeof createScrollFlags>;
+
+function useScrollFlags(flags: ScrollFlagsStore) {
+  return useSyncExternalStore(flags.subscribe, flags.get);
+}
+
+function ScrollAwareViewerCount({
+  flags,
+  ...props
+}: Omit<React.ComponentProps<typeof ViewerCount>, 'collapsed'> & {
+  flags: ScrollFlagsStore;
+}) {
+  return (
+    <ViewerCount {...props} collapsed={useScrollFlags(flags).viewerCollapsed} />
+  );
+}
+
+function ScrollAwareBottomCTA({
+  flags,
+  ...props
+}: Omit<React.ComponentProps<typeof BottomCTA>, 'showTopButton'> & {
+  flags: ScrollFlagsStore;
+}) {
+  return (
+    <BottomCTA {...props} showTopButton={useScrollFlags(flags).showTopButton} />
+  );
+}

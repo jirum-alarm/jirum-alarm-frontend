@@ -35,6 +35,8 @@ import {
 } from '@/shared/constant/navigations';
 import {getTabBaseUrl} from '@/shared/lib/navigation/tab-routing';
 import {
+  flushTabBarShow,
+  requestTabBarVisible,
   setTabBarVisible,
   useTabBarVisibility,
 } from '@/shared/hooks/useTabBarVisibility';
@@ -246,8 +248,12 @@ export function createTabStack(tabName: TabName) {
             // 입력창을 덮는다(iOS 26 시뮬레이터 실측). ref 는 렌더 뒤에 갱신되고
             // 네비게이션 이벤트는 그 사이에 온다.
             if (navigation.isFocused()) {
-              setTabBarVisible(!hidesTabBar(focused));
+              // 숨김은 즉시, 다시 보이기는 전환이 끝난 뒤(requestTabBarVisible 주석).
+              requestTabBarVisible(!hidesTabBar(focused));
             }
+          },
+          transitionEnd: () => {
+            if (navigation.isFocused()) flushTabBarShow();
           },
         }}>
         {/* ★component 로 넘긴다 — 렌더 콜백({() => ...})은 렌더마다 새 함수라

@@ -39,7 +39,29 @@ describe('★★탭바 표시는 라우트 이름 하나로 정한다', () => {
     // 샌다 — 탭 5개가 같은 스택을 각자 갖고 있어 특히 그렇다.
     // 라우트는 언제나 정확히 하나라 어긋날 수 없다.
     expect(stack).toContain('hidesTabBar');
-    expect(stack).toContain('setTabBarVisible(!hidesTabBar(focused))');
+    // 숨김은 즉시, 다시 보이기는 전환이 끝난 뒤 — 뒤로 가기 중 탭바가 미끄러져
+    // 올라오던 것(사용자 지적)을 막는다.
+    expect(stack).toContain('requestTabBarVisible(!hidesTabBar(focused))');
+    expect(stack).toContain('flushTabBarShow()');
+  });
+
+  it('★다시 보이기는 전환 끝까지 미룬다(숨김은 즉시)', () => {
+    jest.useFakeTimers();
+    jest.isolateModules(() => {
+      const vis = require('../src/shared/hooks/useTabBarVisibility');
+      const read = (): boolean => vis.getVisible();
+      vis.requestTabBarVisible(false);
+      expect(read()).toBe(false); // 숨김은 즉시
+      vis.requestTabBarVisible(true);
+      expect(read()).toBe(false); // 상세가 빠지는 동안은 아직 숨김
+      vis.flushTabBarShow();
+      expect(read()).toBe(true); // 전환 끝 → 제자리에 보임
+      vis.requestTabBarVisible(false);
+      vis.requestTabBarVisible(true);
+      jest.advanceTimersByTime(400);
+      expect(read()).toBe(true); // 전환 끝 신호가 없어도 안전 타이머로
+    });
+    jest.useRealTimers();
   });
 
   it('숨기는 라우트 5개가 빠짐없이 들어 있다', () => {
