@@ -3,7 +3,15 @@
 import { m } from 'motion/react';
 
 import customerService from '@/shared/lib/customerservice/customer-service';
-import { Alert, ArrowRight, Description, Filter, Headset, Heart } from '@/shared/ui/common/icons';
+import {
+  Alert,
+  ArrowRight,
+  Description,
+  Filter,
+  Headset,
+  Heart,
+  Setting,
+} from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 const MENU_LIST: Array<{
   icon: React.ReactNode;
@@ -28,6 +36,11 @@ const MENU_LIST: Array<{
     icon: <Alert />,
     title: '키워드 알림',
     url: '/mypage/keyword',
+  },
+  {
+    icon: <Setting />,
+    title: '알림 설정',
+    url: '/mypage/notification',
   },
   {
     icon: <Description />,

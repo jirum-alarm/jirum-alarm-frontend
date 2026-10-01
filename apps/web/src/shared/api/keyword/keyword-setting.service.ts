@@ -21,8 +21,38 @@ const MutationUpdateKeywordPriceDropOnlyDocument = new TypedDocumentString<
   }
 `);
 
+type UpdatePriceRangeVariables = { id: number; minPrice: number | null; maxPrice: number | null };
+
+const MutationUpdateKeywordPriceRangeDocument = new TypedDocumentString<
+  { updateNotificationKeywordPriceRange: boolean },
+  UpdatePriceRangeVariables
+>(`
+  mutation MutationUpdateNotificationKeywordPriceRange($id: Int!, $minPrice: Int, $maxPrice: Int) {
+    updateNotificationKeywordPriceRange(id: $id, minPrice: $minPrice, maxPrice: $maxPrice)
+  }
+`);
+
+type UpdateExcludeKeywordsVariables = { id: number; excludeKeywords: string[] };
+
+const MutationUpdateKeywordExcludeKeywordsDocument = new TypedDocumentString<
+  { updateNotificationKeywordExcludeKeywords: boolean },
+  UpdateExcludeKeywordsVariables
+>(`
+  mutation MutationUpdateNotificationKeywordExcludeKeywords($id: Int!, $excludeKeywords: [String!]!) {
+    updateNotificationKeywordExcludeKeywords(id: $id, excludeKeywords: $excludeKeywords)
+  }
+`);
+
 export class KeywordSettingService {
   static async updatePriceDropOnly(variables: UpdatePriceDropOnlyVariables) {
     return execute(MutationUpdateKeywordPriceDropOnlyDocument, variables).then((res) => res.data);
+  }
+
+  static async updatePriceRange(variables: UpdatePriceRangeVariables) {
+    return execute(MutationUpdateKeywordPriceRangeDocument, variables).then((res) => res.data);
+  }
+
+  static async updateExcludeKeywords(variables: UpdateExcludeKeywordsVariables) {
+    return execute(MutationUpdateKeywordExcludeKeywordsDocument, variables).then((res) => res.data);
   }
 }

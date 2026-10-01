@@ -4,6 +4,7 @@ import { Close } from '@/shared/ui/common/icons';
 
 import { useKeywordList } from '../../model/useKeywordList';
 
+import KeywordOptions from './KeywordOptions';
 import PriceDropOnlyToggle from './PriceDropOnlyToggle';
 
 const KeywordList = () => {
@@ -21,7 +22,8 @@ const KeywordList = () => {
           </p>
         </div>
         <p className="mt-1 text-xs text-gray-500">
-          &lsquo;가격 하락 알림&rsquo;을 켜면 평소 시세보다 싸게 뜬 딜만 알려드려요
+          &lsquo;가격 하락 알림&rsquo;을 켜면 평소 시세보다 싸게 뜬 딜만, &lsquo;알림
+          조건&rsquo;에서 제외할 단어와 가격 범위를 정할 수 있어요
         </p>
       </div>
       <div className="h-4" />
@@ -45,6 +47,12 @@ const KeywordList = () => {
                 <Close width={20} height={20} />
               </button>
             </div>
+            <KeywordOptions
+              keywordId={Number(keyword.id)}
+              excludeKeywords={keyword.excludeKeywords ?? []}
+              minPrice={keyword.minPrice ?? null}
+              maxPrice={keyword.maxPrice ?? null}
+            />
           </li>
         ))}
       </ul>

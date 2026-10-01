@@ -137,7 +137,14 @@ const MutationLoginByRefreshToken = graphql(`
  */
 const QueryMypageKeyword = new TypedDocumentString<
   {
-    notificationKeywordsByMe: { id: string; keyword: string; priceDropOnly: boolean }[];
+    notificationKeywordsByMe: {
+      id: string;
+      keyword: string;
+      priceDropOnly: boolean;
+      minPrice?: number | null;
+      maxPrice?: number | null;
+      excludeKeywords?: string[] | null;
+    }[];
   },
   QueryMypageKeywordQueryVariables
 >(`
@@ -146,6 +153,9 @@ const QueryMypageKeyword = new TypedDocumentString<
       id
       keyword
       priceDropOnly
+      minPrice
+      maxPrice
+      excludeKeywords
     }
   }
 `);

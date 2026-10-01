@@ -23,36 +23,37 @@ async function getMessagingLazy() {
 }
 
 export function useFcmPermission() {
-  const requestPermission = useCallback(async () => {
+  // force: 유저가 "알림 켜기"를 직접 누른 경우 — 자동 프롬프트용 3일 쿨다운을 무시한다.
+  const requestPermission = useCallback(async ({ force = false }: { force?: boolean } = {}) => {
     if (!('Notification' in window)) return { granted: false as const };
 
     // Cooldown for denied/ignored prompts
     const cooldown = localStorage.getItem(COOLDOWN_KEY);
-    if (cooldown && Date.now() - Number(cooldown) < COOLDOWN_MS) {
+    if (!force && cooldown && Date.now() - Number(cooldown) < COOLDOWN_MS) {
       return { granted: false as const };
     }
 
-    Notification.requestPermission().then(async (permission) => {
-      if (permission !== 'granted') {
-        localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
-        return { granted: false as const };
-      }
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') {
+      localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
+      return { granted: false as const };
+    }
 
-      const { messaging, getToken } = await getMessagingLazy();
-      const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
+    const { messaging, getToken } = await getMessagingLazy();
+    const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
 
-      getToken(messaging, { vapidKey }).then((token) => {
-        try {
-          if (token) {
-            // 쿠키 저장 및 서버 등록
-            setFcmTokenAction(token);
-            NotificationService.addPushToken({ token, tokenType: TokenType.Fcm });
-          }
-        } catch (e) {
-          console.error('FCM getToken error', e);
+    getToken(messaging, { vapidKey }).then((token) => {
+      try {
+        if (token) {
+          // 쿠키 저장 및 서버 등록
+          setFcmTokenAction(token);
+          NotificationService.addPushToken({ token, tokenType: TokenType.Fcm });
         }
-      });
+      } catch (e) {
+        console.error('FCM getToken error', e);
+      }
     });
+    return { granted: true as const };
   }, []);
 
   return { requestPermission };
