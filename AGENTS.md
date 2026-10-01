@@ -172,6 +172,8 @@ pnpm build            # Production build
        복사해 `main.jsbundle` 만 바꿔 끼운다 — `cd apps/mobile && npx expo export --platform ios --output-dir <out>`(OTA 와 같은 Hermes 바이트코드)의
        `_expo/static/js/ios/*.hbc` → `<app>/main.jsbundle`, `codesign --force --deep --sign - <app>`, **전용 시뮬레이터**(`xcrun simctl create`)에
        uninstall → install → launch. 첫 실행은 내장 번들로 뜬다(그 사이 production OTA 를 받아 두 번째부터 덮으므로 판정은 매번 재설치 후 첫 실행).
+       ⚠️ 판정용 시뮬레이터는 **새로 만든 깨끗한 기기**로. 옛 OTA(앱 시작 때 권한을 묻던 코드)를 한 번이라도 띄운 기기는
+       재설치해도 OS 알림 권한 팝업이 계속 떠서(JS 를 비운 번들로도 뜸) "권한을 앱 시작 때 묻는다" 로 오판한다(10/1 실측).
        로그인 경로는 설치 직후 `<data>/Library/Application Support/com.jirum-alarm.jirumalarm/RCTAsyncLocalStorage_V1/manifest.json` 에
        `{"refreshToken":"\"x\""}` 를 넣으면 즉시 진입·메인 마운트까지 탄다(서버 거절 → 로그인). 다크모드는 `xcrun simctl ui <기기> appearance dark`.
   3. 통과한 커밋으로 `pnpm ota:publish "메시지"`(지문 확인 → 발행 → Sentry 소스맵 업로드까지 한 번에; 토큰은 EAS production env `SENTRY_AUTH_TOKEN`, sensitive) → 매니페스트를 채널 헤더로 curl 해 새 update id 확인 → 내 기기에서 **두 번** 켜 본다
