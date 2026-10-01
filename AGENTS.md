@@ -20,7 +20,8 @@ This is a **Turborepo monorepo** that manages multiple applications and shared p
 
 ```
 jirum-alarm-frontend/
-├── apps/                    # Next.js applications
+├── apps/                    # Next.js applications + RN app
+│   ├── mobile/             # Expo bare React Native app (iOS·Android)
 │   ├── web/                # Main web application (port 3000)
 │   ├── admin/              # Admin dashboard (port 3000, 운영 도구)
 │   └── landing/            # Landing page (port 3100)
@@ -148,6 +149,24 @@ pnpm --filter admin code-gen   # 운영 스키마로 타입 생성
 pnpm dev --port 3100  # Development server on port 3100
 pnpm build            # Production build
 ```
+
+### 4. **Mobile App** (`apps/mobile/`) — 배포 규칙
+**Expo bare RN 앱.** 배포는 두 길이고, 어느 길인지는 사람이 아니라 **네이티브 지문**이 정한다.
+
+- **JS 변경 = 바로 배포.** main push → `mobile-validation`(테스트·타입·린트·지문) 성공 → `mobile-ota` 가
+  production 채널로 `eas update`. 저장소 변수 `MOBILE_AUTO_OTA=true` 일 때만 발행(사고 시 `false` 가 첫 조치).
+  수동: `apps/mobile` 에서 `pnpm ota:publish "메시지"` · 되돌리기 `pnpm ota:rollback`.
+- **네이티브 변경 = 버전 올림 + 스토어 빌드.** `ios/`·`android/`·네이티브 패키지(예: expo-image)·`app.json`
+  플러그인이 바뀌면 **같은 커밋에서** 버전·runtimeVersion 을 올리고(app.json·Expo.plist·strings.xml 등 —
+  `ota-updates-config` 테스트가 정렬을 본다) `pnpm --filter mobile native:write` 로 지문 기준을 새로 찍는다.
+  안 하면 CI `native:check` 가 막는다(그대로 OTA 가 나가면 옛 바이너리가 실행 즉시 죽는다). 그다음 스토어 빌드·제출.
+  - 버전을 올린 뒤 OTA 는 새 runtime 바이너리에만 간다 — 옛 버전용 OTA·hotfix 브랜치는 만들지 않는다(하위호환 안 챙김).
+  - 네이티브 변경은 몇 주에 한 번 묶어 낸다(스토어 업데이트를 사용자가 마주치는 횟수를 줄인다).
+- **업데이트 안내 = `apps/web/public/app-release.json`**(웹 운영 배포로 발효, 플랫폼별 값).
+  - `latestVersion`(권유): 새 스토어 버전이 **출시된 뒤** 그 플랫폼만 올린다 → 버전당 한 번 "새 버전이 나왔어요" 시트.
+  - `minSupportedVersion`(강제): **옛 버전이 실제로 깨질 때만**(API 변경·보안). 평소엔 올리지 않는다 — 막는 화면은 나쁜 경험.
+- 완료 보고는 길을 나눠 적는다: JS 는 「OTA 발행됨/대기」, 네이티브는 「다음 스토어 빌드(1.x.y)에 포함」.
+- "배포됐나"는 스토어 실물 버전으로 판정한다(`app-store-lag` 워크플로) — EAS submit 성공 ≠ 출시.
 
 ## 📦 Shared Packages
 
