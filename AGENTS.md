@@ -161,8 +161,8 @@ pnpm build            # Production build
   2. **발행할 커밋 그대로 iOS 시뮬레이터 Release 빌드 → 콜드 스타트 2회 + 홈·바뀐 화면 진입.**
      `cd apps/mobile/ios && rm -f Pods/.last_build_configuration && pod install && rm -f Pods/.last_build_configuration &&
      xcodebuild -workspace jirumAlarmMobile.xcworkspace -scheme jirumAlarmMobile -configuration Release -sdk iphonesimulator
-     -destination 'platform=iOS Simulator,name=iPhone 15' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build`
-     → `xcrun simctl install booted build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app` → `xcrun simctl launch`.
+     -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build`
+     → 시뮬레이터 부팅(`xcrun simctl list devices available` 에서 최신 OS 기기) → `xcrun simctl install booted build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app` → `xcrun simctl launch booted com.jirum-alarm.jirumalarm`.
      (Firebase plist 는 git 에 없다 — 로컬 사본을 `ios/GoogleService-Info.plist` 에. 안드로이드 전용 코드가 바뀌었으면 에뮬레이터 release 도.)
      - 함정: `Pods/.last_build_configuration` 이 남아 있으면 Debug Hermes 가 링크돼 `initializeRuntime` SIGSEGV(debugJavaScript 스택)로
        죽는다 — 가짜 재현이다. 크래시 리포트는 `/bin/ls -lt ~/Library/Logs/DiagnosticReports`(별칭 ls 는 정렬이 틀린다).
