@@ -356,7 +356,9 @@ export async function generateMetadata({
     },
     // dev 배포는 noindex 로 내려간다 — 여기 하드코딩된 `index: true` 때문에 dev 상품 페이지가
     // Bing 인덱스와 학습 코퍼스에 들어갔다.
-    robots: robotsDirective,
+    // 제목이 비면(7월 이전 수집분 ~1.9천 건) `<title> | 지름알림` 로 나가 네이버가 "동일 제목 다수"로
+    // 잡는다. 내세울 내용이 없는 페이지라 색인에서 뺀다(링크는 따라가게 follow 유지).
+    robots: displayTitle.trim() ? robotsDirective : { ...robotsDirective, index: false },
     other,
   };
 }
