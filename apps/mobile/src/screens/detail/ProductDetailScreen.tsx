@@ -56,7 +56,6 @@ import {
 } from './ui/ProductDetailHeader';
 import ShareSheet from './ui/ShareSheet';
 import KakaoOpenChatPrompt from './ui/KakaoOpenChatPrompt';
-import PostPurchaseKeywordPrompt from './ui/PostPurchaseKeywordPrompt';
 import TossDetailImages from './ui/TossDetailImages';
 import ViewerCount, {
   MIN_VIEWER_COUNT,
@@ -105,7 +104,6 @@ function NativeDetail({
   const [scrollFlags] = useState(createScrollFlags);
   // 가격 추이 섹션의 스크롤 위치 — 판정 카드 "기준 보기"가 여기로 간다.
   const priceHistoryY = useRef<number | null>(null);
-  const [keywordPromptDismissed, setKeywordPromptDismissed] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const navigation = useNavigation<DetailNavigationProp>();
   const {getWebViewRef} = useWebviewContext();
@@ -317,17 +315,6 @@ function NativeDetail({
             <Text className="mx-5 mb-6 text-sm text-gray-500">{ageNotice}</Text>
           ) : null}
         </View>
-        {/* 가격을 본 바로 그 자리 — 사지 않고 기다리려는 사람이 여기서 알림을 건다. */}
-        {!hidePrice && !product.isEnd ? (
-          <PostPurchaseKeywordPrompt
-            placement="detail"
-            show={!keywordPromptDismissed}
-            title={product.title}
-            productId={productId}
-            isUserLogin={isLogin}
-            onClose={() => setKeywordPromptDismissed(true)}
-          />
-        ) : null}
         {/* web 순서: 카톡방 → 쿠팡 고지 → 만료 경고 → 가격추이. 광고는 앱에서 제거. */}
         <KakaoOpenChatPrompt />
         <AffiliateNotice mallName={product.mallName} variant="coupang" />

@@ -23,10 +23,7 @@ import {invalidateMyKeywords} from '@/features/keyword-prompt/model/myKeywords';
 const MIN_KEYWORD_LENGTH = 2;
 
 /**
- * "더 싸지면 알려줘" 알림 등록 배너. 두 자리에 뜬다(`placement`):
- * - `post_purchase`: 구매 링크를 누르고 돌아온 직후(하단 CTA 위).
- * - `detail`: 상세 본문 가격 아래 — 예전엔 구매를 눌러야만 나와서, 비싸서 안 사는 사람
- *   (= 알림이 가장 필요한 사람)은 걸 기회가 없었다.
+ * 구매 링크를 누른 직후에만 뜨는 알림 등록 배너.
  *
  * ★ 글자 수는 Array.from 으로 센다.
  * web 은 Intl.Segmenter 를 쓰지만 Hermes 지원이 확실하지 않다. 한글·영문은
@@ -38,9 +35,7 @@ export default function PostPurchaseKeywordPrompt({
   productId,
   isUserLogin,
   onClose,
-  placement = 'post_purchase',
 }: {
-  placement?: 'post_purchase' | 'detail';
   show: boolean;
   title: string;
   productId: number;
@@ -105,8 +100,8 @@ export default function PostPurchaseKeywordPrompt({
 
   useEffect(() => {
     if (!visible || done) return;
-    Analytics.track('keyword_prompt_view', {keyword, placement});
-  }, [visible, done, keyword, placement]);
+    Analytics.track('keyword_prompt_view', {keyword});
+  }, [visible, done, keyword]);
 
   if (!visible) return null;
 
@@ -166,7 +161,6 @@ export default function PostPurchaseKeywordPrompt({
             Analytics.track('keyword_prompt_click', {
               keyword,
               logged_in: isUserLogin,
-              placement,
             });
             if (requireLogin(PendingActionType.NOTIFICATION_KEYWORD_ADD)) {
               return;
