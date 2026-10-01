@@ -6,9 +6,10 @@ import type { Metadata } from 'next';
 
 import '@/styles/globals.css';
 
-const title = '지름알림: 실시간 초특가 핫딜 정보 모아보기 | 지금 놓치면 끝!';
+// "지름 알림 앱" 검색에 이 페이지가 아니라 엉뚱한 딜 상세가 떴다(2026-10-01 네이버 실측) — 제목에 "앱"이 없었다.
+const title = '지름알림 앱 — 커뮤니티 핫딜 실시간 키워드 알림';
 const description =
-  '전자제품부터 패션까지 초특가 할인 정보를 실시간으로 만나보세요. 모두가 알뜰하게 쇼핑하는 그날까지🔥';
+  '지름알림은 뽐뿌·에펨코리아·루리웹·퀘이사존 등 커뮤니티 핫딜을 한곳에 모아, 등록한 키워드의 핫딜이 올라오면 바로 푸시로 알려주는 무료 앱이에요. iOS·Android 지원.';
 const URL_BASE = 'https://about-us.jirum-alarm.com';
 // web 과 같은 GA4 스트림(jirum-alarm-web). hostName=about-us 로 갈라 본다.
 // 스토어·카톡 링크 클릭은 향상된 측정의 outbound click 이 link_url 로 잡는다.

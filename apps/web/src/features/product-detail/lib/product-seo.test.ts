@@ -275,17 +275,18 @@ describe('MISSING_PRODUCT_METADATA', () => {
 });
 
 describe('buildRssItemDescription', () => {
-  it('RSS description 에 가격·구매처를 넣는다', () => {
+  it('상품명 + 상세와 같은 첫 문장, 공통 꼬리 문구 없음', () => {
     const desc = buildRssItemDescription({
       title: '에어팟 프로',
       price: '89,000원',
       category: '디지털',
       mallName: '쿠팡',
+      postedAt: '2026-09-30T16:00:00Z',
+      provider: { nameKr: '뽐뿌' },
     });
-    assert.match(desc, /디지털 핫딜/);
-    assert.match(desc, /현재가 89,000원/);
-    assert.match(desc, /구매처 쿠팡/);
-    assert.match(desc, /지름알림/);
+    assert.equal(desc, '에어팟 프로 — 2026년 10월 1일 뽐뿌에 올라온 쿠팡 89,000원 핫딜이에요.');
+    assert.doesNotMatch(desc, /^핫딜\./);
+    assert.doesNotMatch(desc, /모아 비교합니다/);
   });
 });
 

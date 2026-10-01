@@ -59,6 +59,9 @@ export async function generateMetadata({
     alternates: {
       canonical: url,
     },
+    // 색인하지 않는다(링크는 따라간다). 키워드 9개(뽐뿌·쿠팡·알리·만원이하…)가 전부 /curation/* 모음과
+    // 같은 내용이고, 본문 ~580자에 홈에서 오는 링크도 없었다(2026-10-01 실측) — 얇은 중복 페이지다.
+    robots: { index: false, follow: true },
   };
 }
 

@@ -386,19 +386,19 @@ export function generateDescription(
     .join(' ');
 }
 
+/**
+ * RSS item description. 상세 meta description 과 같은 첫 문장("언제·어디에 올라온 얼마짜리 핫딜")에
+ * 상품명을 앞에 붙인다. 예전엔 "핫딜. {제목}. … 지름알림에서 커뮤니티 핫딜을 모아 비교합니다." 로
+ * 모든 항목이 같은 앞뒤 문구였다 — 네이버 가이드는 키워드 반복·동일 문구를 불이익으로 본다.
+ */
 export function buildRssItemDescription(product: {
   title: string;
   price?: string | null;
   category?: string | null;
   mallName?: string | null;
+  postedAt?: string | Date | null;
   provider?: { nameKr?: string | null } | null;
 }): string {
-  const mall = product.mallName?.trim() || product.provider?.nameKr?.trim() || '';
-  const parts = [
-    product.category ? `${product.category} 핫딜` : '핫딜',
-    product.title,
-    product.price ? `현재가 ${product.price}` : '',
-    mall ? `구매처 ${mall}` : '',
-  ].filter(Boolean);
-  return `${parts.join('. ')}. 지름알림에서 커뮤니티 핫딜을 모아 비교합니다.`;
+  const lead = generateDescription(null, product, product.category ?? undefined);
+  return `${product.title} — ${lead}`;
 }

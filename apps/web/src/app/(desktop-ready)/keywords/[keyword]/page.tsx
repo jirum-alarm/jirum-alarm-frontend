@@ -130,6 +130,12 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
         >
           ‘{hub.name}’ 핫딜 알림 받기
         </Link>
+        <Link
+          href="/guide/hotdeal-alarm"
+          className="mt-3 ml-3 inline-block text-sm text-gray-500 underline underline-offset-2"
+        >
+          알림 받는 법
+        </Link>
       </header>
 
       {cards.length > 0 ? (
