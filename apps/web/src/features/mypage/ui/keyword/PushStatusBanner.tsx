@@ -44,7 +44,7 @@ const PushStatusBanner = () => {
           <button
             type="button"
             onClick={handleEnable}
-            className="bg-primary-500 mt-3 rounded-md px-4 py-2 text-sm font-medium text-white"
+            className="bg-primary-500 mt-3 rounded-md px-4 py-2 text-sm font-semibold text-gray-900"
           >
             알림 켜기
           </button>
@@ -66,7 +66,7 @@ const PushStatusBanner = () => {
         // 스토어 분기 리다이렉트(UA) 라우트라 클라이언트 라우팅(next/link) 말고 일반 이동.
         <a
           href={APP_QR_PATH}
-          className="bg-primary-500 mt-3 inline-block rounded-md px-4 py-2 text-sm font-medium text-white"
+          className="bg-primary-500 mt-3 inline-block rounded-md px-4 py-2 text-sm font-semibold text-gray-900"
         >
           앱 설치하기
         </a>
