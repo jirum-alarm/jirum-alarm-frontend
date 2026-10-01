@@ -1,6 +1,5 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   RefreshControl,
   View,
@@ -9,6 +8,7 @@ import {
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
+import {GridSkeleton} from '@/shared/components/Skeletons';
 
 /**
  * 더보기(목록) 화면들이 공유하는 그리드 껍데기.
@@ -114,10 +114,14 @@ export default function CurationGrid<T>({
     [renderCard, columns],
   );
 
+  // 화면 가운데 점 하나 대신 카드 골격 — 홈·상세처럼 "곧 이렇게 채워진다" 를 보여준다.
   if (isPending) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="small" color="#667085" />
+      <View className="flex-1 bg-white">
+        <GridSkeleton
+          columns={columns}
+          topSpacing={topSpacing === 'tight' ? 0 : 16}
+        />
       </View>
     );
   }

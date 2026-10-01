@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, FlatList, RefreshControl, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useNavigation} from '@react-navigation/native';
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {NotificationQueries} from '@/entities/notification';
@@ -29,6 +29,7 @@ import AlarmItem from './ui/AlarmItem';
 import NoAlerts from './ui/NoAlerts';
 import {ListRowsSkeleton} from '@/shared/components/Skeletons';
 import {showToast} from '@/shared/lib/feedback';
+import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
 import {usePushPermissionStatus} from '@/shared/lib/fcm/usePushPermissionStatus';
 
 /** web PageHeader 와 같은 높이(h-14)·색·경계선. */
@@ -153,7 +154,17 @@ export default function AlarmScreen() {
 
   const push = usePushPermissionStatus();
 
-  const {refreshing, onRefresh} = usePullRefresh(refetch);
+  // 당기면 첫 페이지부터 — 깊이 내린 뒤 당기면 페이지 수만큼 왕복을 차례로 기다렸다.
+  const queryClient = useQueryClient();
+  const pullRefresh = useCallback(
+    () =>
+      refetchFirstPage(
+        queryClient,
+        NotificationQueries.infiniteNotifications().queryKey,
+      ),
+    [queryClient],
+  );
+  const {refreshing, onRefresh} = usePullRefresh(pullRefresh);
 
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>

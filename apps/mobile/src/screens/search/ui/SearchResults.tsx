@@ -1,7 +1,7 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useRef} from 'react';
 import {ActivityIndicator, Pressable, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-import {useInfiniteQuery} from '@tanstack/react-query';
+import {useInfiniteQuery, useQueryClient} from '@tanstack/react-query';
 
 import CurationGrid from '@/entities/home/ui/CurationGrid';
 import {GridCard} from '@/entities/home/ui/cards/HomeProductCards';
@@ -15,6 +15,7 @@ import type {SearchFiltersController} from '@/features/search/model/useSearchFil
 import SearchFilterBar from './SearchFilterBar';
 import SearchNotFound from './SearchNotFound';
 import KeywordAlertButton from '@/features/keyword-prompt/ui/KeywordAlertButton';
+import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
 
 /**
  * 검색 결과. web: widgets/search/ui/SearchResult.tsx + useProductListViewModel
@@ -34,6 +35,8 @@ const SEARCH_SOURCE = 'search';
 /** web: estimatedTotal 은 Meili 5000 캡이라 그 이상은 '+' 를 붙인다. */
 const ESTIMATED_TOTAL_CAP = 5000;
 
+const keyOf = (item: SearchProductCard) => String(item.id);
+
 export default function SearchResults({
   keyword,
   controller,
@@ -47,16 +50,22 @@ export default function SearchResults({
 }) {
   const {filters, hasActiveFilters, resetFilters} = controller;
 
+  const queryClient = useQueryClient();
+  const searchQuery = SearchQueries.products(keyword, filters);
   const {
     data,
     isPending,
     isError,
     isPlaceholderData,
-    refetch,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery(SearchQueries.products(keyword, filters));
+  } = useInfiniteQuery(searchQuery);
+  const searchKey = searchQuery.queryKey;
+  const refresh = useCallback(
+    () => refetchFirstPage(queryClient, searchKey),
+    [queryClient, searchKey],
+  );
 
   // ★`?? []` 를 그대로 쓰면 매 렌더 새 배열이라 아래 노출 콜백이 계속 재생성된다.
   const products = useMemo(
@@ -81,6 +90,25 @@ export default function SearchResults({
   );
 
   const isEmpty = products.length === 0;
+
+  // ★카드 콜백을 고정한다 — 인라인이면 페이지가 붙을 때마다 보이는 카드가 전부 다시 그려졌다
+  // (GridCard memo 무력화). 순번은 클릭 순간 최신 목록에서 찾는다.
+  const productsRef = useRef(products);
+  productsRef.current = products;
+  const handlePress = useCallback(
+    (id: number) => {
+      const index = productsRef.current.findIndex(p => Number(p.id) === id);
+      recordClick(id, index);
+      onPressProduct(id);
+    },
+    [recordClick, onPressProduct],
+  );
+  const renderCard = useCallback(
+    (item: SearchProductCard) => (
+      <GridCard product={item} trackingSource="search" onPress={handlePress} />
+    ),
+    [handlePress],
+  );
 
   return (
     <View className="flex-1 bg-white">
@@ -113,21 +141,12 @@ export default function SearchResults({
             pointerEvents={isPlaceholderData ? 'none' : 'auto'}>
             <CurationGrid
               items={products}
-              keyOf={item => String(item.id)}
-              renderCard={(item, index) => (
-                <GridCard
-                  product={item}
-                  trackingSource="search"
-                  onPress={id => {
-                    recordClick(id, index);
-                    onPressProduct(id);
-                  }}
-                />
-              )}
+              keyOf={keyOf}
+              renderCard={renderCard}
               isPending={isPending}
               isError={isError}
               label="검색 결과"
-              onRetry={refetch}
+              onRetry={refresh}
               onViewableIndexes={handleViewableIndexes}
               bottomInset={bottomInset}
               topSpacing="tight"

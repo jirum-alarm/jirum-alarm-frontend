@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
-import {useInfiniteQuery} from '@tanstack/react-query';
+import {useInfiniteQuery, useQueryClient} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -27,6 +27,7 @@ import {useRegisterScrollToTop} from '@/navigations/tab/scroll-to-top-store';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
+import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
 import {ListRowsSkeleton} from '@/shared/components/Skeletons';
 import type {CommunityPost} from '@/shared/api/community';
 import {
@@ -106,7 +107,13 @@ export default function CommunityScreen() {
     [tab, openPost],
   );
 
-  const {refreshing, onRefresh} = usePullRefresh(refetch);
+  // 당기면 첫 페이지부터 — 깊이 내린 뒤 당기면 페이지 수만큼 왕복을 차례로 기다렸다.
+  const queryClient = useQueryClient();
+  const pullRefresh = useCallback(
+    () => refetchFirstPage(queryClient, CommunityQueries.posts(tab).queryKey),
+    [queryClient, tab],
+  );
+  const {refreshing, onRefresh} = usePullRefresh(pullRefresh);
 
   return (
     <View className="flex-1 bg-white" style={{paddingTop: insets.top}}>

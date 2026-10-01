@@ -121,3 +121,41 @@ export function ListRowsSkeleton({
     </View>
   );
 }
+
+/**
+ * 2·3열 상품 그리드(실시간·검색·큐레이션·찜). CurationGrid·GridCard 와 같은 치수 —
+ * 정사각 썸네일 + 제목 2줄 + 출처 + 가격, 좌우 20·열 간격 12·행 간격 20.
+ * ★깜빡임 하나를 통째로 공유한다 — 칸마다 SkeletonBox 를 쓰면 애니메이션이 수십 개 돈다.
+ */
+export function GridSkeleton({
+  columns = 2,
+  rows = 3,
+  topSpacing = 16,
+}: {
+  columns?: 2 | 3;
+  rows?: number;
+  topSpacing?: number;
+}) {
+  const opacity = useShimmer();
+  const bar = {backgroundColor: '#E4E7EC', borderRadius: 4};
+  return (
+    <Animated.View
+      style={{opacity, paddingHorizontal: 20, paddingTop: topSpacing, gap: 20}}
+      accessibilityLabel="불러오는 중"
+      accessibilityRole="progressbar">
+      {Array.from({length: rows}).map((_, r) => (
+        <View key={r} style={{flexDirection: 'row', gap: 12}}>
+          {Array.from({length: columns}).map((__, c) => (
+            <View key={c} style={{flex: 1, gap: 6}}>
+              <View style={[bar, {aspectRatio: 1, borderRadius: 8}]} />
+              <View style={[bar, {height: 14}]} />
+              <View style={[bar, {height: 14, width: '70%'}]} />
+              <View style={[bar, {height: 12, width: '45%'}]} />
+              <View style={[bar, {height: 18, width: '55%'}]} />
+            </View>
+          ))}
+        </View>
+      ))}
+    </Animated.View>
+  );
+}

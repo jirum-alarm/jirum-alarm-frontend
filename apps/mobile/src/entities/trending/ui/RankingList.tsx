@@ -1,10 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {
-  ActivityIndicator,
-  RefreshControl,
-  ScrollView,
-  View,
-} from 'react-native';
+import {RefreshControl, ScrollView, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
 
@@ -16,6 +11,7 @@ import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
 import {RANKING_SPLIT, TrendingQueries} from '../api/trending.queries';
 import {useRankingImpressionTracker} from '../model/useRankingImpressionTracker';
+import {GridSkeleton} from '@/shared/components/Skeletons';
 
 /**
  * 랭킹 목록. web: widgets/trending/ui/TrendingList.tsx + useTrendingViewModel
@@ -112,10 +108,11 @@ export default function RankingList({
   );
   const restProducts = useMemo(() => products.slice(RANKING_SPLIT), [products]);
 
+  // 랭킹은 2열 그리드(RankedGrid)로 시작한다 — 같은 골격을 먼저 그린다.
   if (ranking.isPending) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="small" color="#667085" />
+      <View className="flex-1 bg-white">
+        <GridSkeleton />
       </View>
     );
   }
