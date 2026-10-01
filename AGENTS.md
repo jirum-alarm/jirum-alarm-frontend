@@ -156,6 +156,8 @@ pnpm build            # Production build
 - **JS 변경 = 기동 확인 뒤 OTA.** 테스트·타입·린트·지문이 초록이어도 **실제로 켜 보기 전엔 내지 않는다.**
   2026-10-01 사고: `5cd32399` 로 낸 OTA 가 실행 즉시 종료 → 직전 그룹 재발행으로 롤백. CI 는 전부 초록이었고,
   그 OTA 엔 그동안 안 나간 다른 작업 커밋 7개(시작 경로 변경 포함)가 함께 실려 있었다.
+  원인은 미확정 — 같은 그룹을 다시 냈을 때 실기기(iPhone·로그인·다크모드) 콜드 스타트 정상, 크래시 로그(.ips)·JS 예외 없음,
+  시뮬레이터(Hermes 바이트코드·다크모드·토큰)도 정상. 연달아 낸 OTA 4개를 받고 적용하던 중의 1회성으로 본다. 앱 Sentry 가 꺼져 있어 확정 불가.
   1. **발행 범위부터 본다.** `eas update:list --branch production --limit 1` 의 마지막 발행 이후
      `git log <그 커밋>..HEAD -- apps/mobile`. 내 커밋이 아닌 미발행 커밋이 섞였으면 작성자(다른 세션)에게 알리고 같이 확인한다.
   2. **발행할 커밋 그대로 iOS 시뮬레이터 Release 빌드 → 콜드 스타트 2회 + 홈·바뀐 화면 진입.**
@@ -166,6 +168,12 @@ pnpm build            # Production build
      (Firebase plist 는 git 에 없다 — 로컬 사본을 `ios/GoogleService-Info.plist` 에. 안드로이드 전용 코드가 바뀌었으면 에뮬레이터 release 도.)
      - 함정: `Pods/.last_build_configuration` 이 남아 있으면 Debug Hermes 가 링크돼 `initializeRuntime` SIGSEGV(debugJavaScript 스택)로
        죽는다 — 가짜 재현이다. 크래시 리포트는 `/bin/ls -lt ~/Library/Logs/DiagnosticReports`(별칭 ls 는 정렬이 틀린다).
+     - **JS 만 바뀌었으면 빌드 없이 더 빠르게**(실측 2026-10-01): 아무 Release `.app`(예: `xcrun simctl get_app_container <기기> com.jirum-alarm.jirumalarm`)을
+       복사해 `main.jsbundle` 만 바꿔 끼운다 — `cd apps/mobile && npx expo export --platform ios --output-dir <out>`(OTA 와 같은 Hermes 바이트코드)의
+       `_expo/static/js/ios/*.hbc` → `<app>/main.jsbundle`, `codesign --force --deep --sign - <app>`, **전용 시뮬레이터**(`xcrun simctl create`)에
+       uninstall → install → launch. 첫 실행은 내장 번들로 뜬다(그 사이 production OTA 를 받아 두 번째부터 덮으므로 판정은 매번 재설치 후 첫 실행).
+       로그인 경로는 설치 직후 `<data>/Library/Application Support/com.jirum-alarm.jirumalarm/RCTAsyncLocalStorage_V1/manifest.json` 에
+       `{"refreshToken":"\"x\""}` 를 넣으면 즉시 진입·메인 마운트까지 탄다(서버 거절 → 로그인). 다크모드는 `xcrun simctl ui <기기> appearance dark`.
   3. 통과한 커밋으로 `pnpm ota:publish "메시지"` → 매니페스트를 채널 헤더로 curl 해 새 update id 확인 → 내 기기에서 **두 번** 켜 본다
      (OTA 는 두 번째 실행에 적용된다).
   4. 이상하면 즉시 되돌린다. `pnpm ota:rollback` 은 대화형이라 에이전트가 못 쓴다 →
