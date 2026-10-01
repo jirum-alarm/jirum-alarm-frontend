@@ -140,7 +140,7 @@ export function useNotificationsViewModel() {
       optimistic(page => page.filter(n => Number(n.id) !== id)),
     onError: (_err, _id, context) => {
       rollback(context);
-      showToast.info('알림을 삭제하지 못했어요.');
+      showToast.error('알림을 삭제하지 못했어요.');
     },
     onSettled: () => syncUnreadCount(true),
   });
@@ -150,7 +150,7 @@ export function useNotificationsViewModel() {
     onMutate: () => optimistic(() => []),
     onError: (_err, _vars, context) => {
       rollback(context);
-      showToast.info('알림을 삭제하지 못했어요.');
+      showToast.error('알림을 삭제하지 못했어요.');
     },
     onSettled: () => syncUnreadCount(true),
   });

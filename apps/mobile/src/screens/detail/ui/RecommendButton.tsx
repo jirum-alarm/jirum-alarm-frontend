@@ -55,7 +55,7 @@ export default function RecommendButton({
       }),
     onError: (_err, _isLike, rollback) => {
       rollback?.();
-      showToast.info('추천에 실패했어요.');
+      showToast.error('추천에 실패했어요.');
     },
   });
 

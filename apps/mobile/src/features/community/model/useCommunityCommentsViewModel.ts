@@ -69,26 +69,26 @@ export function useCommunityCommentsViewModel(postId: number) {
       // 안 하면 새 댓글을 달아도 카드의 댓글 수가 그대로다.
       queryClient.invalidateQueries({queryKey: CommunityQueries.keys.all});
     },
-    onError: () => showToast.info('댓글 등록에 실패했어요.'),
+    onError: () => showToast.error('댓글 등록에 실패했어요.'),
   });
 
   const {mutate: updateComment, isPending: isUpdating} = useMutation({
     mutationFn: ({id, content}: {id: number; content: string}) =>
       CommentService.updateComment({id, content}),
     onSuccess: invalidate,
-    onError: () => showToast.info('수정에 실패했어요.'),
+    onError: () => showToast.error('수정에 실패했어요.'),
   });
 
   const {mutate: removeComment} = useMutation({
     mutationFn: (id: number) => CommentService.removeComment({id}),
     onMutate: (id: number) => optimistic(page => removeCommentById(page, id)),
     onSuccess: () => {
-      showToast.info('댓글이 삭제되었어요.');
+      showToast.success('댓글이 삭제되었어요.');
       queryClient.invalidateQueries({queryKey: CommunityQueries.keys.all});
     },
     onError: (_err, _id, context) => {
       rollback(context);
-      showToast.info('삭제에 실패했어요.');
+      showToast.error('삭제에 실패했어요.');
     },
   });
 
@@ -104,7 +104,7 @@ export function useCommunityCommentsViewModel(postId: number) {
       optimistic(page => applyCommentLike(page, id, isMyLike)),
     onError: (_err, _vars, context) => {
       rollback(context);
-      showToast.info('좋아요 처리에 실패했어요.');
+      showToast.error('좋아요 처리에 실패했어요.');
     },
   });
 

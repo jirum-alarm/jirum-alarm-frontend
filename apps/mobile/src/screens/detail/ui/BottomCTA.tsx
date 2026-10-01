@@ -81,11 +81,11 @@ export default function BottomCTA({
       })),
     onSuccess: (_data, next) => {
       invalidate();
-      if (next) showToast.info('찜 목록에 추가되었어요.');
+      if (next) showToast.success('찜 목록에 추가되었어요.');
     },
     onError: (_err, _next, rollback) => {
       rollback?.();
-      showToast.info('찜하지 못했어요. 다시 시도해주세요.');
+      showToast.error('찜하지 못했어요. 다시 시도해주세요.');
     },
   });
 

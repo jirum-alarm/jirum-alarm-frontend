@@ -18,7 +18,7 @@ export const handleLoginSuccess = async (
     await setAsyncStorage(StorageKey.REFRESH_TOKEN, refreshToken);
     // 기다리지 않는다 — 네트워크 한 번 때문에 로그인 전환이 늦어질 이유가 없다.
     bindFcmTokenToUser();
-    showToast.info('로그인 성공! 알림 설정하고 핫딜을 받아보세요!');
+    showToast.success('로그인 성공! 알림 설정하고 핫딜을 받아보세요!');
   } catch (storageError) {
     console.error('Error saving tokens:', storageError);
     showToast.error('로그인 처리 중 오류가 생겼어요.');

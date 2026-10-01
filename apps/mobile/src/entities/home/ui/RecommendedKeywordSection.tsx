@@ -46,7 +46,7 @@ export default function RecommendedKeywordSection() {
       }),
     onSuccess: () => {
       const added = inFlight.current;
-      showToast.info(
+      showToast.success(
         added
           ? `'${added}' 키워드 알림을 등록했어요.`
           : '키워드 알림을 등록했어요.',
@@ -61,7 +61,7 @@ export default function RecommendedKeywordSection() {
       // 서버가 '이미 등록된 키워드', '최대 20개 초과' 같은 구체적 이유를 준다.
       const message =
         error instanceof Error ? error.message : '키워드 저장에 실패했어요.';
-      showToast.info(message || '키워드 저장에 실패했어요.');
+      showToast.error(message || '키워드 저장에 실패했어요.');
     },
   });
 

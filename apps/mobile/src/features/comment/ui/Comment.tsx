@@ -91,7 +91,7 @@ export default function Comment({
     onSuccess: invalidate,
     onError: (_err, _vars, rollback) => {
       rollback?.();
-      showToast.info('좋아요에 실패했어요.');
+      showToast.error('좋아요에 실패했어요.');
     },
   });
 
@@ -100,10 +100,10 @@ export default function Comment({
     onSuccess: () => {
       setMenuOpen(false);
       clearEditingComment();
-      showToast.info('댓글이 삭제되었어요.');
+      showToast.success('댓글이 삭제되었어요.');
       invalidate();
     },
-    onError: () => showToast.info('댓글을 삭제하지 못했어요.'),
+    onError: () => showToast.error('댓글을 삭제하지 못했어요.'),
   });
 
   const handleLike = () => {

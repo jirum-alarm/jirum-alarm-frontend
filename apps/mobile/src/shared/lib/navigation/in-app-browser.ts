@@ -160,7 +160,7 @@ export async function openInAppBrowser(url: string) {
     try {
       await Linking.openURL(url);
     } catch {
-      showToast.info('링크를 열 수 없어요.');
+      showToast.error('링크를 열 수 없어요.');
     }
   }
 }

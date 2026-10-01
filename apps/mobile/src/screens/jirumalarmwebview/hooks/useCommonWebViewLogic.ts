@@ -3,13 +3,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTokenRemoveEffect} from './useTokenRemoveEffect';
 import {SERVICE_URL} from '@/constants/env';
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  Alert,
-  Animated,
-  BackHandler,
-  Platform,
-  useAnimatedValue,
-} from 'react-native';
+import {Animated, BackHandler, Platform, useAnimatedValue} from 'react-native';
 import {openInAppBrowser, shouldOpenExternally} from '@/shared/lib/navigation';
 import type {WebViewMessageEvent} from 'react-native-webview';
 import {ShouldStartLoadRequest} from 'react-native-webview/lib/WebViewTypes';
@@ -22,6 +16,7 @@ import {
 import {
   CommonActions,
   StackActions,
+  useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -114,28 +109,24 @@ export function useCommonWebViewLogic() {
     [clearLoadingState, navigation],
   );
 
-  const closeApp = useCallback(() => {
-    Alert.alert('종료 확인', '앱을 종료할까요?', [
-      {text: '취소', onPress: () => {}, style: 'cancel'},
-      {text: '종료', onPress: () => BackHandler.exitApp()},
-    ]);
-  }, []);
-
-  useEffect(() => {
-    const handleBackPress = () => {
-      if (navState.canGoBack && webviewRef?.current) {
-        if (navState.url === `${SERVICE_URL}/`) {
-          closeApp();
-        } else {
+  /**
+   * 안드로이드 뒤로가기 — 웹 기록이 있으면 웹에서 한 칸, 없으면 **스택에 넘긴다**(false).
+   * 🔴예전엔 리스너를 해제하지 않았고 기록이 없으면 "앱을 종료할까요?" 를 띄웠다 —
+   * 웹뷰 화면을 한 번 지나가면 남은 리스너가 다른 화면의 뒤로가기까지 가로채
+   * 어디서 눌러도 종료 알럿이 떴다. 포커스된 동안만 듣는다.
+   */
+  useFocusEffect(
+    useCallback(() => {
+      const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+        if (navState.canGoBack && webviewRef?.current) {
           webviewRef.current.goBack();
+          return true;
         }
-      } else {
-        closeApp();
-      }
-      return true;
-    };
-    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-  }, [webviewRef, navState, closeApp]);
+        return false;
+      });
+      return () => sub.remove();
+    }, [webviewRef, navState.canGoBack]),
+  );
 
   const shouldDarkStatusBar = useMemo(
     () => navState.url === `${SERVICE_URL}/` && !isScroll,

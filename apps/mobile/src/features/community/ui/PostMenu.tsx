@@ -49,12 +49,12 @@ export default function PostMenu({
       // 남아 있어도 지워져야 한다.
       queryClient.invalidateQueries({queryKey: CommunityQueries.keys.all});
       setConfirmOpen(false);
-      showToast.info('게시글이 삭제되었어요.');
+      showToast.success('게시글이 삭제되었어요.');
       onDeleted();
     },
     onError: () => {
       setConfirmOpen(false);
-      showToast.info('삭제에 실패했어요.');
+      showToast.error('삭제에 실패했어요.');
     },
   });
 

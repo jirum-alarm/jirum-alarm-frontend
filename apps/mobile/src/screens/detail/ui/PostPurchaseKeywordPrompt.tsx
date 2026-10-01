@@ -84,7 +84,7 @@ export default function PostPurchaseKeywordPrompt({
         setDone(true);
         return;
       }
-      showToast.info(message || '키워드 저장에 실패했어요.');
+      showToast.error(message || '키워드 저장에 실패했어요.');
     },
   });
 

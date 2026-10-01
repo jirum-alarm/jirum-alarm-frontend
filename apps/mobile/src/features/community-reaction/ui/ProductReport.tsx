@@ -37,7 +37,7 @@ export default function ProductReport({
         queryKey: ProductQueries.keys.stats(productId),
       });
       setOpen(false);
-      showToast.info('제보해주셔서 감사해요');
+      showToast.success('제보해주셔서 감사해요');
     },
     onError: () => {
       setOpen(false);

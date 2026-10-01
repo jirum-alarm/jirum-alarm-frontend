@@ -171,7 +171,7 @@ export default function ShareSheet({
       onClose();
     } catch {
       if (channel === 'kakao') {
-        showToast.info('카카오톡을 열지 못했어요. 링크 복사를 이용해주세요.');
+        showToast.error('카카오톡을 열지 못했어요. 링크 복사를 이용해주세요.');
         return;
       }
       copyLink(url);

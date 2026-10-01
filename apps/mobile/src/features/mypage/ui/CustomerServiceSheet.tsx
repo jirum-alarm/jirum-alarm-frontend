@@ -112,7 +112,7 @@ export default function CustomerServiceSheet({
         // 갇힌다(실측) — 사실을 알리고 닫는다. 웹뷰 버전이 낡은 기기·느린 망에서
         // 실제로 20초를 넘긴다.
         if (failed) {
-          showToast.info('상담창을 열지 못했어요. 잠시 후 다시 시도해주세요.');
+          showToast.error('상담창을 열지 못했어요. 잠시 후 다시 시도해주세요.');
         }
         // 상담창을 닫으면 뒤에 web /mypage 가 남는다 → 시트를 같이 닫는다.
         setReady(false);

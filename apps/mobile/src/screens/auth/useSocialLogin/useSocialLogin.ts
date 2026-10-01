@@ -80,7 +80,7 @@ export const useSocialLogin = () => {
       // 취소는 사용자가 한 일이라 실패 토스트를 띄우지 않는다.
       if (/cancel/i.test(String((err as Error)?.message ?? err))) return;
       console.error('Kakao login error:', err);
-      showToast.info('카카오 로그인에 실패했어요.');
+      showToast.error('카카오 로그인에 실패했어요.');
     }
   };
 
@@ -97,12 +97,12 @@ export const useSocialLogin = () => {
         console.error('Naver login failure:', failureResponse);
         // 취소는 사용자가 한 일이라 토스트를 띄우지 않는다.
         if (!failureResponse?.isCancel) {
-          showToast.info('네이버 로그인에 실패했어요.');
+          showToast.error('네이버 로그인에 실패했어요.');
         }
       }
     } catch (err) {
       console.error('Naver login error:', err);
-      showToast.info('네이버 로그인 중 오류가 생겼어요.');
+      showToast.error('네이버 로그인 중 오류가 생겼어요.');
     }
   };
 
@@ -122,7 +122,7 @@ export const useSocialLogin = () => {
       const {identityToken} = appleAuthRequestResponse;
 
       if (!identityToken) {
-        showToast.info('Apple 로그인 정보를 가져오는 데 실패했어요.');
+        showToast.error('Apple 로그인 정보를 가져오는 데 실패했어요.');
         return;
       }
 
@@ -138,7 +138,7 @@ export const useSocialLogin = () => {
 
       if (errorCode === 'ERR_REQUEST_CANCELED') return;
       console.error('Apple login error:', error);
-      showToast.info('Apple 로그인 중 오류가 생겼어요.');
+      showToast.error('Apple 로그인 중 오류가 생겼어요.');
     }
   };
 

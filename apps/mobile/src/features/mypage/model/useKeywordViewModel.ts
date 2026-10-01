@@ -45,13 +45,13 @@ export function useKeywordViewModel() {
     mutationFn: MyPageService.addKeyword,
     onSuccess: () => {
       reset();
-      showToast.info('키워드 알림을 등록했어요.');
+      showToast.success('키워드 알림을 등록했어요.');
       requestPushPermissionIfNeeded();
       return invalidate();
     },
     // 서버가 '이미 등록된 키워드'·'최대 20개 초과' 같은 이유를 준다(추천 키워드와 같게).
     onError: (error: unknown) =>
-      showToast.info(
+      showToast.error(
         (error instanceof Error && error.message) ||
           '키워드 저장에 실패했어요.',
       ),
@@ -81,7 +81,7 @@ export function useKeywordViewModel() {
           context.previous,
         );
       }
-      showToast.info('키워드 삭제에 실패했어요.');
+      showToast.error('키워드 삭제에 실패했어요.');
     },
     onSettled: () => invalidate(),
   });
@@ -112,7 +112,7 @@ export function useKeywordViewModel() {
             context.previous,
           );
         }
-        showToast.info('알림 설정 변경에 실패했어요.');
+        showToast.error('알림 설정 변경에 실패했어요.');
       },
       onSettled: () => invalidate(),
     });

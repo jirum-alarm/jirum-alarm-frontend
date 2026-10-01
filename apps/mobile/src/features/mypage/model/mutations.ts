@@ -31,7 +31,7 @@ function useProfileMutation({
   return useMutation({
     mutationFn: MyPageService.updateMyProfile,
     onSuccess: () => {
-      showToast.info(successMessage);
+      showToast.success(successMessage);
       queryClient.invalidateQueries({queryKey: MyPageQueries.keys.me()});
       if (invalidateCategories) {
         // 관심 카테고리는 발견 탭의 카테고리 칩 줄에도 쓰인다(categoriesForUser).
@@ -42,7 +42,7 @@ function useProfileMutation({
       }
       onDone?.();
     },
-    onError: () => showToast.info(errorMessage),
+    onError: () => showToast.error(errorMessage),
   });
 }
 
@@ -75,10 +75,10 @@ export function useUpdatePassword(onDone?: () => void) {
   return useMutation({
     mutationFn: MyPageService.updateMyPassword,
     onSuccess: () => {
-      showToast.info('비밀번호 변경이 완료됐어요.');
+      showToast.success('비밀번호 변경이 완료됐어요.');
       onDone?.();
     },
-    onError: () => showToast.info('비밀번호 변경중 에러가 발생했어요.'),
+    onError: () => showToast.error('비밀번호를 바꾸지 못했어요.'),
   });
 }
 
@@ -92,6 +92,6 @@ export function useWithdraw() {
   return useMutation({
     mutationFn: MyPageService.withdraw,
     onSuccess: () => logout(),
-    onError: () => showToast.info('회원탈퇴에 실패했어요'),
+    onError: () => showToast.error('회원탈퇴에 실패했어요'),
   });
 }
