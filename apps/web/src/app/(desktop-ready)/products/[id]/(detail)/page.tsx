@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 
@@ -10,6 +11,7 @@ import type { ProductModelPageLink } from '@/shared/api/product/product.service'
 import { CATEGORY_MAP } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { robotsDirective } from '@/shared/config/metadata';
+import { isLightSsrCrawlerUA } from '@/shared/config/user-agent';
 
 import { isFromToss, stripPriceFromTitle } from '@/entities/product/lib/from-toss';
 import { parseProductId } from '@/entities/product/lib/product-id';
@@ -398,6 +400,7 @@ export default async function ProductDetail({
 
   const device = await checkDevice();
   const { isMobile } = device;
+  const lightSsr = isLightSsrCrawlerUA((await headers()).get('user-agent') ?? '');
 
   const renderMobile = (
     productData?: any,
@@ -452,7 +455,8 @@ export default async function ProductDetail({
   const [productGuides, priceHistoryData, priceVerdict, additionalInfo] = await Promise.all([
     getProductGuidesCached(+product.id),
     getPriceHistoryCached(+product.id),
-    getPriceVerdictCached(+product.id),
+    // AI 학습·SEO 도구 봇엔 히어로 배지(사람용)를 안 그린다 → 백엔드 최중량 호출 하나를 건너뛴다(user-agent.ts).
+    lightSsr ? null : getPriceVerdictCached(+product.id),
     getProductAdditionalInfoCached(+product.id),
   ]);
   const priceHistorySeo = priceHistoryFromProduct(
@@ -489,7 +493,11 @@ export default async function ProductDetail({
         />
       )}
       <CollectProductOnView productId={productId} />
-      <ProductPrefetch productId={productId} initial={{ product, productGuides, additionalInfo }}>
+      <ProductPrefetch
+        productId={productId}
+        initial={{ product, productGuides, additionalInfo }}
+        skipPriceChart={lightSsr}
+      >
         {!isMobile
           ? renderDesktop(
               product ?? undefined,

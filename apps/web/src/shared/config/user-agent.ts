@@ -12,3 +12,18 @@
 export const IN_APP_BROWSER_PATTERN = /KAKAOTALK|Instagram|Threads|FB[AS]V|Line\/|NAVER|DaumApps/i;
 
 export const isInAppBrowserUA = (ua: string) => IN_APP_BROWSER_PATTERN.test(ua);
+
+/**
+ * 상품 상세 SSR 을 가볍게 받을 크롤러 — AI 학습·수집 봇과 SEO 분석 도구(2026-10-02).
+ *
+ * ★왜: 상품 상세 요청의 ~75% 가 봇이고, crawling-server 처리 시간의 56% 가 가격 이력 730일(차트)·
+ * 가격 판정(히어로 배지) 두 개였다. 둘 다 사람용 화면 요소라 이 봇들에겐 SSR 에서 뺀다(차트는 원래
+ * 클라이언트 useQuery, 배지는 prop 이 없으면 안 그린다). SEO 메타·본문·90일 가격 요약·내부 링크는 그대로.
+ *
+ * ⚠️ 검색엔진(Googlebot·bingbot·Yeti·Applebot·OAI-SearchBot 등)과 사용자 요청 봇(ChatGPT-User·Claude-User·
+ * Perplexity-User)은 **넣지 않는다** — 사람과 같은 HTML(사용자 결정 2026-10-02). 봇 차단은 안 한다.
+ */
+export const LIGHT_SSR_CRAWLER_PATTERN =
+  /ClaudeBot|anthropic-ai|GPTBot|CCBot|Bytespider|meta-externalagent|ExaSearchBot|Amazonbot|AhrefsBot|SemrushBot|DataForSeoBot|MJ12bot|DotBot|BLEXBot/i;
+
+export const isLightSsrCrawlerUA = (ua: string) => LIGHT_SSR_CRAWLER_PATTERN.test(ua);

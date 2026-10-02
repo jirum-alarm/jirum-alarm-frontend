@@ -18,10 +18,13 @@ type InitialData = {
 export default async function ProductPrefetch({
   productId,
   initial,
+  skipPriceChart = false,
   children,
 }: {
   productId: number;
   initial?: InitialData;
+  /** AI 학습·SEO 도구 봇 — 차트(사람용)는 SSR 에 안 싣는다. 차트는 클라이언트 useQuery 라 JS 가 돌면 그때 받는다. */
+  skipPriceChart?: boolean;
   children: React.ReactNode;
 }) {
   const queryClient = getQueryClient();
@@ -46,7 +49,9 @@ export default async function ProductPrefetch({
     queryClient.prefetchQuery(ProductQueries.reactionKeywords({ id: productId })),
     // 가격 이력 차트(PriceHistorySection)가 쓰는 730일. 안 받아두면 하이드레이션 뒤에 클라이언트가
     // 다시 부른다(Slow 4G 실측 8.2s).
-    queryClient.prefetchQuery(ProductQueries.priceHistory({ id: productId, days: 730 })),
+    skipPriceChart
+      ? null
+      : queryClient.prefetchQuery(ProductQueries.priceHistory({ id: productId, days: 730 })),
     queryClient.fetchQuery(
       AdvertisementQueries.activeAds({
         slotLocation: AdvertiseSlotLocation.ProductMainBanner,
