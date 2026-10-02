@@ -69,7 +69,7 @@ export default function PriceDropSwitch({
           {
             backgroundColor: progress.interpolate({
               inputRange: [0, 1],
-              outputRange: [c.gray[300], '#9EF22E'], // gray-300 → primary-500
+              outputRange: [c.gray[300], c.primary[500]], // gray-300 → primary-500
             }),
           },
         ]}>

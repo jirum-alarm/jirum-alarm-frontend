@@ -28,11 +28,15 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Sentry, initSentry, wrapApp} from '@/shared/lib/monitoring/sentry.ts';
 import useOtaUpdateOnResume from '@/shared/hooks/useOtaUpdateOnResume.ts';
 import {useColors} from '@/shared/theme/useColors';
+import {restoreColorSchemePreference} from '@/shared/theme/color-scheme-preference';
 
 // init 은 컴포넌트 밖에서 — 렌더 시작 전에 나는 에러도 잡아야 한다.
 initSentry();
+// 내정보 > 화면 모드에서 라이트/다크를 골랐으면 첫 화면 전에 다시 건다.
+restoreColorSchemePreference();
 
-// 다크모드는 OS 설정을 따른다(app.json·Info.plist userInterfaceStyle=automatic).
+// 다크모드는 기본으로 OS 설정을 따르고(app.json·Info.plist userInterfaceStyle=automatic),
+// 내정보 > 화면 모드에서 라이트/다크로 고정할 수 있다(color-scheme-preference).
 // 색은 src/shared/theme/palette.js 한 곳 — className 토큰이 다크에서 값만 바뀐다.
 
 /** react-navigation 기본 바탕(전환 중 보이는 면·카드)도 같은 palette 로. */

@@ -243,7 +243,7 @@ export default function HomeScreen() {
           아래 여백: 본문이 -mt-5(20px)로 올라타므로 그만큼 더 준다.
           pb-6(24px)만 주면 실제로 4px 만 남아 배너가 흰 면에 닿는다.
         */}
-        <View className="bg-fixed-900 pt-2 pb-11">
+        <View className="bg-fixed-900 pt-2 pb-11 dark:bg-fixed-800">
           {isAboveFoldPending ? <BannerSkeleton /> : <HomeBannerCarousel />}
         </View>
 

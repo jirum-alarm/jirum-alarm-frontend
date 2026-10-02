@@ -26,13 +26,19 @@ import {
 import {HEADER_HEIGHT} from '@/features/mypage/ui/StackHeader';
 import {MenuRow} from '@/features/mypage/ui/Rows';
 import CustomerServiceSheet from '@/features/mypage/ui/CustomerServiceSheet';
+import ColorSchemeSheet from '@/features/mypage/ui/ColorSchemeSheet';
 import {
   AlertMenuIcon,
   DescriptionMenuIcon,
   FilterMenuIcon,
   HeadsetMenuIcon,
+  ThemeMenuIcon,
 } from '@/features/mypage/ui/icons';
 import {useColors} from '@/shared/theme/useColors';
+import {
+  COLOR_SCHEME_LABEL,
+  useColorSchemePreference,
+} from '@/shared/theme/color-scheme-preference';
 
 /**
  * 내정보 탭 루트. web `/mypage`(BasicLayout + MyProfileSection + MenuList) 대응.
@@ -47,6 +53,8 @@ export default function MyPageScreen() {
   const navigation =
     useNavigation<NativeStackNavigationProp<TabStackParamList>>();
   const [isCustomerServiceOpen, setCustomerServiceOpen] = useState(false);
+  const [isColorSchemeOpen, setColorSchemeOpen] = useState(false);
+  const [colorScheme, setColorScheme] = useColorSchemePreference();
 
   const {data: me, isPending, isError, refetch} = useQuery(MyPageQueries.me());
 
@@ -159,6 +167,12 @@ export default function MyPageScreen() {
               onPress={() => push(tabStackNavigations.MYPAGE_NOTIFICATION)}
             />
             <MenuRow
+              icon={<ThemeMenuIcon />}
+              title="화면 모드"
+              value={COLOR_SCHEME_LABEL[colorScheme]}
+              onPress={() => setColorSchemeOpen(true)}
+            />
+            <MenuRow
               icon={<DescriptionMenuIcon />}
               title="약관 및 정책"
               onPress={() => push(tabStackNavigations.MYPAGE_TERMS)}
@@ -172,6 +186,12 @@ export default function MyPageScreen() {
         </View>
       </ScrollView>
 
+      <ColorSchemeSheet
+        visible={isColorSchemeOpen}
+        value={colorScheme}
+        onChange={setColorScheme}
+        onClose={() => setColorSchemeOpen(false)}
+      />
       <CustomerServiceSheet
         visible={isCustomerServiceOpen}
         onClose={() => setCustomerServiceOpen(false)}

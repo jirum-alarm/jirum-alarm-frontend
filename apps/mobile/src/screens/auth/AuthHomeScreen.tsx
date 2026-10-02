@@ -1,5 +1,11 @@
 import React from 'react';
-import {Image, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Image,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  useColorScheme,
+} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {fixed} from '@/shared/theme/palette';
 import {useColors} from '@/shared/theme/useColors';
@@ -25,6 +31,7 @@ const AuthHomeScreen = () => {
 
   const navigation = useNavigation<NavigationProp<AuthParamList>>();
   const c = useColors();
+  const isDark = useColorScheme() === 'dark';
 
   return (
     <View style={[styles.container, {backgroundColor: c.white}]}>
@@ -71,7 +78,12 @@ const AuthHomeScreen = () => {
               activeOpacity={0.8}
               accessibilityRole="button"
               disabled={isSocialLoginPending}
-              style={[styles.button, styles.appleButton]}
+              style={[
+                styles.button,
+                styles.appleButton,
+                // 다크 바탕(#0C111D)과 붙어 버튼 윤곽이 흐리다 → 한 단 밝게.
+                isDark && {backgroundColor: fixed[700]},
+              ]}
               onPress={() => signInWithApple()}>
               <AppleIcon />
               <Text style={styles.appleButtonText}>Apple로 시작하기</Text>

@@ -19,4 +19,6 @@ export const StorageKey = {
   PUSH_PREPROMPT_SHOWN: 'pushPrePromptShown',
   /** 마지막으로 "새 버전이 나왔어요" 를 권한 latestVersion. 버전당 한 번만 권한다. */
   UPDATE_OFFERED_VERSION: 'updateOfferedVersion',
+  /** 내정보 > 화면 모드('system' | 'light' | 'dark'). 없으면 시스템 설정. */
+  COLOR_SCHEME: 'colorScheme',
 } as const;

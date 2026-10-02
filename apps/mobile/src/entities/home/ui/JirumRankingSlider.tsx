@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   Dimensions,
   View,
+  useColorScheme,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from 'react-native';
@@ -221,6 +222,7 @@ const RankingCard = React.memo(function RankingCard({
   onPress: (id: number) => void;
 }) {
   const c = useColors();
+  const isDark = useColorScheme() === 'dark';
   const animatedStyle = useAnimatedStyle(() => {
     const distance = Math.abs(scrollX.value - index * SNAP);
     const scale = interpolate(
@@ -253,9 +255,12 @@ const RankingCard = React.memo(function RankingCard({
         {
           marginRight: GAP,
           borderRadius: 8,
-          backgroundColor: c.white,
           // web shadow-[0_2px_12px_rgba(0,0,0,0.08)].
           // 모바일 카드엔 border 가 없어 이 그림자가 유일한 경계다.
+          // 다크에선 검은 그림자가 안 보이고 카드가 바탕과 같은 색이라 경계가 사라진다 →
+          // 한 단 밝은 면(gray-50) + 1px 선(gray-100)으로 경계를 대신한다.
+          backgroundColor: isDark ? c.gray[50] : c.white,
+          ...(isDark ? {borderWidth: 1, borderColor: c.gray[100]} : null),
           shadowColor: '#000',
           shadowOffset: {width: 0, height: 2},
           shadowRadius: 12,

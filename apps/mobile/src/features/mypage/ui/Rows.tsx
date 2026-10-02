@@ -40,14 +40,19 @@ function Row({
 export function MenuRow({
   icon,
   title,
+  value,
   onPress,
 }: {
   icon: React.ReactNode;
   title: string;
+  /** 오른쪽에 현재 값(예: 화면 모드 "시스템 설정"). */
+  value?: string;
   onPress: () => void;
 }) {
   return (
-    <Row onPress={onPress} accessibilityLabel={title}>
+    <Row
+      onPress={onPress}
+      accessibilityLabel={value ? `${title}, ${value}` : title}>
       <View className="flex-row items-center gap-3 py-3">
         <View className="h-7 w-7 items-center justify-center">{icon}</View>
         {/* ★이동하는 행은 chevron 을 준다 — 같은 화면에서 프로필 행만 있고
@@ -55,6 +60,7 @@ export function MenuRow({
         <Text className="text-gray-900" style={styles.grow}>
           {title}
         </Text>
+        {value ? <Text className="text-sm text-gray-500">{value}</Text> : null}
         <ArrowRight />
       </View>
     </Row>

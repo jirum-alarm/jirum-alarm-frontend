@@ -54,9 +54,9 @@ export default function HomeHeader({
 
   return (
     <View style={{height: insets.top + 56}}>
-      {/* 아래 겹: 다크(테마 무관 fixed). 배너와 같은 gray-900 이라 이어져 보인다. */}
+      {/* 아래 겹: 다크(테마 무관 fixed). 배너 띠와 같은 색이라 이어져 보인다 — 다크모드에선 바탕과 갈리게 한 단 밝다(HomeScreen 과 같이). */}
       <View
-        className="absolute inset-0 bg-fixed-900"
+        className="absolute inset-0 bg-fixed-900 dark:bg-fixed-800"
         style={{paddingTop: insets.top}}>
         <HeaderRow inverted onPressLogo={onPressLogo} />
       </View>

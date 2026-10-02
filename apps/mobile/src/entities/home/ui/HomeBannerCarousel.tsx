@@ -281,7 +281,7 @@ function BannerSlideView({
         title={slide.title}
         description="자세히 보기"
         image={slide.imageUrl ? {uri: slide.imageUrl} : LANDING_IMAGE}
-        backgroundClassName="bg-fixed-800 border-fixed-600"
+        backgroundClassName="bg-fixed-800 border-fixed-600 dark:bg-fixed-700"
         isAd
         onPress={() => {
           recordClick(slide.creativeId);
@@ -298,7 +298,7 @@ function BannerSlideView({
         strongTitle="OPEN"
         description="오픈 카톡방에서 소식을 확인해보세요!"
         image={KAKAO_IMAGE}
-        backgroundClassName="bg-fixed-800 border-fixed-600"
+        backgroundClassName="bg-fixed-800 border-fixed-600 dark:bg-fixed-700"
         onPress={() => {
           // 상세 오카방 카드와 같은 이벤트 — placement 로 위치를 가른다.
           Analytics.track('okachat_prompt_click', {placement: 'home_banner'});

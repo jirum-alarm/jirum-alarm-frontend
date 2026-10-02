@@ -3,7 +3,7 @@
 import glob, itertools
 from PIL import Image
 H = lambda h: tuple(int(h[i:i+2], 16) for i in (1, 3, 5))
-SRC = {'#101828': ('#F9FAFB', 255), '#667085': ('#98A2B3', 255), '#9EF22E': ('#9EF22E', 255),
+SRC = {'#101828': ('#F9FAFB', 255), '#667085': ('#98A2B3', 255), '#9EF22E': ('#84CC2A', 255),
        '#EB001C': ('#EB001C', 255), '#FFFFFF': ('#FFFFFF', 0)}
 src = [(H(k), H(v[0]), v[1]) for k, v in SRC.items()]
 def mapc(c):

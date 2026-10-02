@@ -9,6 +9,7 @@ import {
   Share,
   StyleSheet,
   View,
+  useColorScheme,
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import * as Haptics from 'expo-haptics';
@@ -77,6 +78,8 @@ export default function ShareSheet({
   imageUrl,
 }: Props) {
   const c = useColors();
+  // X·스레드의 검은 원이 다크 시트 바탕에 묻힌다 → 다크에선 '더보기' 와 같은 회색 원(로고는 흰색 그대로).
+  const brandDark = useColorScheme() === 'dark' ? c.gray[100] : '#000000';
   const insets = useSafeAreaInsets();
   const overlay = useRef(new Animated.Value(0)).current;
   const sheet = useRef(new Animated.Value(0)).current;
@@ -200,13 +203,13 @@ export default function ShareSheet({
       c: 'x',
       label: 'X',
       icon: <ShareX width={22} height={22} />,
-      bg: '#000000',
+      bg: brandDark,
     },
     {
       c: 'threads',
       label: '스레드',
       icon: <ShareThreads width={24} height={24} />,
-      bg: '#000000',
+      bg: brandDark,
     },
     {
       c: 'native',

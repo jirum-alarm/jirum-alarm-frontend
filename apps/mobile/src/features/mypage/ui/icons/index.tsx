@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, {Path, type SvgProps} from 'react-native-svg';
+import Svg, {Circle, Path, type SvgProps} from 'react-native-svg';
 
 import {useColors} from '@/shared/theme/useColors';
 
@@ -70,6 +70,24 @@ export function HeadsetMenuIcon({color: colorProp, ...props}: SvgProps) {
         clipRule="evenodd"
         d="M14 21.692v1.829h3.04v-.329h3.652c.505 0 .933-.175 1.283-.525.35-.35.525-.777.525-1.282V12c0-1.17-.223-2.27-.67-3.3a8.633 8.633 0 0 0-1.826-2.704A8.635 8.635 0 0 0 17.3 4.17 8.218 8.218 0 0 0 14 3.5c-1.17 0-2.27.223-3.3.67a8.634 8.634 0 0 0-2.704 1.826A8.634 8.634 0 0 0 6.17 8.7 8.217 8.217 0 0 0 5.5 12v6.692c0 .505.175.933.525 1.283.35.35.778.525 1.283.525h3.23v-7.077H7V12c0-1.933.683-3.583 2.05-4.95C10.417 5.683 12.067 5 14 5c1.933 0 3.583.683 4.95 2.05C20.317 8.417 21 10.067 21 12v1.423h-3.538V20.5H21v.885a.3.3 0 0 1-.087.22.3.3 0 0 1-.22.087H17.04v-.38H14zM9.038 19h-1.73a.3.3 0 0 1-.221-.087.3.3 0 0 1-.087-.22v-3.77h2.038zM21 19h-2.038v-4.077H21z"
       />
+    </Svg>
+  );
+}
+
+/** 화면 모드(반쯤 채운 원). 다른 메뉴 아이콘과 같은 28 박스·stroke 1.5. */
+export function ThemeMenuIcon({color: colorProp, ...props}: SvgProps) {
+  const c = useColors();
+  const color = colorProp ?? c.gray[900];
+  return (
+    <Svg width={28} height={28} viewBox="0 0 28 28" fill="none" {...props}>
+      <Circle
+        cx={14}
+        cy={14}
+        r={9}
+        stroke={color as string}
+        strokeWidth={1.5}
+      />
+      <Path d="M14 5a9 9 0 0 1 0 18z" fill={color as string} />
     </Svg>
   );
 }
