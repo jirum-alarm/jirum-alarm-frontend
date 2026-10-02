@@ -4,6 +4,8 @@
 
 import * as Sentry from '@sentry/nextjs';
 
+import { tempoSpanProcessors, enableW3CTracePropagation } from './otel-tempo';
+
 // development 환경(NODE_ENV=test)에서는 센트리 비활성화
 const isDevelopment = process.env.NODE_ENV === 'test';
 
@@ -22,4 +24,9 @@ Sentry.init({
   // Enable sending user PII (Personally Identifiable Information)
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/#sendDefaultPii
   sendDefaultPii: true,
+
+  // 같은 span 을 사내 Tempo 로도(OTEL_EXPORTER_OTLP_ENDPOINT 있을 때만). 자세한 건 otel-tempo.ts.
+  openTelemetrySpanProcessors: tempoSpanProcessors(),
 });
+
+enableW3CTracePropagation();
