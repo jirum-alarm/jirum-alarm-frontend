@@ -1,9 +1,4 @@
-jest.mock('expo-glass-effect', () => ({
-  isLiquidGlassAvailable: jest.fn(() => false),
-}));
-
 import {Platform} from 'react-native';
-import {isLiquidGlassAvailable} from 'expo-glass-effect';
 import {
   JS_TAB_BAR_FALLBACK_INSET,
   JS_TAB_BAR_HEIGHT,
@@ -12,10 +7,6 @@ import {
   getReservedBottomPx,
   getWebBottomNavVars,
 } from '../src/navigations/tab/tab-bar-metrics';
-
-const mockLiquidGlass = isLiquidGlassAvailable as jest.MockedFunction<
-  typeof isLiquidGlassAvailable
->;
 
 function setIosVersion(version: string) {
   Object.defineProperty(Platform, 'OS', {
@@ -30,13 +21,11 @@ function setIosVersion(version: string) {
 
 describe('getReservedBottomPx', () => {
   it('JS 탭바(안드로이드·구 iOS)는 56 + safe-area — 0 이면 콘텐츠가 탭바 밑으로 들어간다', () => {
-    mockLiquidGlass.mockReturnValue(false);
     setIosVersion('17.5');
     expect(getReservedBottomPx(34)).toBe(JS_TAB_BAR_HEIGHT + 34);
   });
 
   it('JS 탭바 inset 이 0 이면 바닥 8px', () => {
-    mockLiquidGlass.mockReturnValue(false);
     Object.defineProperty(Platform, 'OS', {
       configurable: true,
       get: () => 'android',
@@ -48,13 +37,11 @@ describe('getReservedBottomPx', () => {
 
   // ★iOS 26 도 JS 탭바다 — 유리 탭바가 배경색을 무시해 투명하게 떠 아이콘이 안 읽혔다.
   it('iOS 26 도 JS 탭바 여백(56 + safe-area)을 쓴다', () => {
-    mockLiquidGlass.mockReturnValue(true);
     setIosVersion('26.5');
     expect(getReservedBottomPx(34)).toBe(JS_TAB_BAR_HEIGHT + 34);
   });
 
   it('iOS 26 에서 safe-area 가 0 이면 JS 탭바처럼 바닥 8px', () => {
-    mockLiquidGlass.mockReturnValue(true);
     setIosVersion('26.5');
     expect(getReservedBottomPx(0)).toBe(
       JS_TAB_BAR_HEIGHT + JS_TAB_BAR_FALLBACK_INSET,
@@ -64,13 +51,11 @@ describe('getReservedBottomPx', () => {
 
 describe('getFabPaddingPx', () => {
   it('iOS 26 도 JS 탭바 높이만큼', () => {
-    mockLiquidGlass.mockReturnValue(true);
     setIosVersion('26.5');
     expect(getFabPaddingPx(34)).toBe(JS_TAB_BAR_HEIGHT + 34);
   });
 
   it('JS 탭바 FAB 도 탭바 높이만큼 — 0 이면 글쓰기 버튼이 탭바와 겹친다', () => {
-    mockLiquidGlass.mockReturnValue(false);
     setIosVersion('17.5');
     expect(getFabPaddingPx(34)).toBe(JS_TAB_BAR_HEIGHT + 34);
   });

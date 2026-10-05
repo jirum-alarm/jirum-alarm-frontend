@@ -11,19 +11,14 @@
 		15AC4C4A95A043BCA961F08C /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6277274F6544998805430CD /* Colors.xcassets */; };
 		1F9106CE0756482ABFA09CF5 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4FBDF121398543898F51DA29 /* Pretendard-Bold.otf */; };
 		22B23AB5F8E240BA85178B97 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3EABFD8CC0D747EB97F16CBC /* Pretendard-SemiBold.otf */; };
-		3F6278B599434F31B28F0BC0 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30DDAD5B18994F45A595C029 /* Pretendard-ExtraBold.otf */; };
-		548F0CF2E07D47D989C727CE /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = DC9FDE7B711E41008E76D69F /* Pretendard-Thin.otf */; };
 		5EFC819DF48C4C7BB2789C05 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7A8773A193EE423BBF2E4081 /* Pretendard-Medium.otf */; };
 		72642E4FF8BF2ED6C2600FB7 /* Pods_jirumAlarmMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9765307C2FC11DDDA0C530F9 /* Pods_jirumAlarmMobile.framework */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
-		7835F4FDA3EC4CA9B71F33A5 /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = C3F4F2B70D8F4D13B8A3C4A5 /* Pretendard-Black.otf */; };
-		78D3C8D4DEDB475D86BD1E2C /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4AE4F0CE1D46422985621C46 /* Pretendard-Light.otf */; };
 		7D3F7670F77E4168B8CF5298 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00818B1D71FA4F5D97326555 /* BootSplash.storyboard */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		86519CAB4CF59254EDB9F860 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		994F2B732DBE4EDF005B1327 /* SwiftBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994F2B722DBE4EDF005B1327 /* SwiftBridge.swift */; };
 		AB7E6451F40EB28ADD5F8459 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50FEB904ABFF219A16CBE2 /* ExpoModulesProvider.swift */; };
-		B5313F0BA7764272969844EE /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8632361B2254DE0A91D6ABD /* Pretendard-ExtraLight.otf */; };
 		D6333391A6714250AF71E797 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8E44C7F3ED0F44E68FF0573F /* Pretendard-Regular.otf */; };
 		FE3073402D490453001A29D5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE30733F2D490453001A29D5 /* GoogleService-Info.plist */; };
 		A1B2C3D40002EXPOPLIST000 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40001EXPOPLIST000 /* Expo.plist */; };
@@ -35,9 +30,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = jirumAlarmMobile/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = jirumAlarmMobile/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = jirumAlarmMobile/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		30DDAD5B18994F45A595C029 /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-ExtraBold.otf"; path = "../src/shared/assets/fonts/Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
 		3EABFD8CC0D747EB97F16CBC /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-SemiBold.otf"; path = "../src/shared/assets/fonts/Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
-		4AE4F0CE1D46422985621C46 /* Pretendard-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Light.otf"; path = "../src/shared/assets/fonts/Pretendard-Light.otf"; sourceTree = "<group>"; };
 		4FBDF121398543898F51DA29 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Bold.otf"; path = "../src/shared/assets/fonts/Pretendard-Bold.otf"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = jirumAlarmMobile/AppDelegate.swift; sourceTree = "<group>"; };
 		7A8773A193EE423BBF2E4081 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Medium.otf"; path = "../src/shared/assets/fonts/Pretendard-Medium.otf"; sourceTree = "<group>"; };
@@ -47,10 +40,7 @@
 		990B678E2DC613AE00BC5E0A /* jirumAlarmMobileDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = jirumAlarmMobileDebug.entitlements; path = jirumAlarmMobile/jirumAlarmMobileDebug.entitlements; sourceTree = "<group>"; };
 		994F2B722DBE4EDF005B1327 /* SwiftBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftBridge.swift; sourceTree = "<group>"; };
 		A85B92C02B58FE30759EE4F7 /* Pods-jirumAlarmMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jirumAlarmMobile.release.xcconfig"; path = "Target Support Files/Pods-jirumAlarmMobile/Pods-jirumAlarmMobile.release.xcconfig"; sourceTree = "<group>"; };
-		C3F4F2B70D8F4D13B8A3C4A5 /* Pretendard-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Black.otf"; path = "../src/shared/assets/fonts/Pretendard-Black.otf"; sourceTree = "<group>"; };
-		C8632361B2254DE0A91D6ABD /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-ExtraLight.otf"; path = "../src/shared/assets/fonts/Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		CE50FEB904ABFF219A16CBE2 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-jirumAlarmMobile/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		DC9FDE7B711E41008E76D69F /* Pretendard-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Thin.otf"; path = "../src/shared/assets/fonts/Pretendard-Thin.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F6277274F6544998805430CD /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = jirumAlarmMobile/Colors.xcassets; sourceTree = "<group>"; };
 		FDC8B67C4068A971431B7FC1 /* Pods-jirumAlarmMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jirumAlarmMobile.debug.xcconfig"; path = "Target Support Files/Pods-jirumAlarmMobile/Pods-jirumAlarmMobile.debug.xcconfig"; sourceTree = "<group>"; };
@@ -158,15 +148,10 @@
 		F20A9FCE3DD445AE81549272 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				C3F4F2B70D8F4D13B8A3C4A5 /* Pretendard-Black.otf */,
 				4FBDF121398543898F51DA29 /* Pretendard-Bold.otf */,
-				30DDAD5B18994F45A595C029 /* Pretendard-ExtraBold.otf */,
-				C8632361B2254DE0A91D6ABD /* Pretendard-ExtraLight.otf */,
-				4AE4F0CE1D46422985621C46 /* Pretendard-Light.otf */,
 				7A8773A193EE423BBF2E4081 /* Pretendard-Medium.otf */,
 				8E44C7F3ED0F44E68FF0573F /* Pretendard-Regular.otf */,
 				3EABFD8CC0D747EB97F16CBC /* Pretendard-SemiBold.otf */,
-				DC9FDE7B711E41008E76D69F /* Pretendard-Thin.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -238,15 +223,10 @@
 				A1B2C3D40002EXPOPLIST000 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				86519CAB4CF59254EDB9F860 /* PrivacyInfo.xcprivacy in Resources */,
-				7835F4FDA3EC4CA9B71F33A5 /* Pretendard-Black.otf in Resources */,
 				1F9106CE0756482ABFA09CF5 /* Pretendard-Bold.otf in Resources */,
-				3F6278B599434F31B28F0BC0 /* Pretendard-ExtraBold.otf in Resources */,
-				B5313F0BA7764272969844EE /* Pretendard-ExtraLight.otf in Resources */,
-				78D3C8D4DEDB475D86BD1E2C /* Pretendard-Light.otf in Resources */,
 				5EFC819DF48C4C7BB2789C05 /* Pretendard-Medium.otf in Resources */,
 				D6333391A6714250AF71E797 /* Pretendard-Regular.otf in Resources */,
 				22B23AB5F8E240BA85178B97 /* Pretendard-SemiBold.otf in Resources */,
-				548F0CF2E07D47D989C727CE /* Pretendard-Thin.otf in Resources */,
 				7D3F7670F77E4168B8CF5298 /* BootSplash.storyboard in Resources */,
 				15AC4C4A95A043BCA961F08C /* Colors.xcassets in Resources */,
 			);
@@ -400,7 +380,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.7;
+				MARKETING_VERSION = 1.4.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -436,7 +416,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.7;
+				MARKETING_VERSION = 1.4.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

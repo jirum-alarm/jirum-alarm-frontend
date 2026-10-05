@@ -27,18 +27,20 @@ import {dark} from '@/shared/theme/palette';
  */
 export const MAX_FONT_SIZE_MULTIPLIER = 1.3;
 
+// ★실제로 쓰는 굵기는 400·500·600·700 뿐이라 그 4개 파일만 싣는다(2026-10-05, 앱 -7.7MB).
+// 100~300 은 Regular, 800·900 은 Bold 로 내린다 — 쓰는 곳이 생기면 폰트 파일을 다시 넣을 것.
 const FAMILY_BY_WEIGHT: Record<string, string> = {
-  '100': 'Pretendard-Thin',
-  '200': 'Pretendard-ExtraLight',
-  '300': 'Pretendard-Light',
+  '100': 'Pretendard-Regular',
+  '200': 'Pretendard-Regular',
+  '300': 'Pretendard-Regular',
   '400': 'Pretendard-Regular',
   normal: 'Pretendard-Regular',
   '500': 'Pretendard-Medium',
   '600': 'Pretendard-SemiBold',
   '700': 'Pretendard-Bold',
   bold: 'Pretendard-Bold',
-  '800': 'Pretendard-ExtraBold',
-  '900': 'Pretendard-Black',
+  '800': 'Pretendard-Bold',
+  '900': 'Pretendard-Bold',
 };
 
 const WEIGHT_BY_CLASS: Record<string, string> = {

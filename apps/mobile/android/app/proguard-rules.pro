@@ -16,3 +16,10 @@
 -dontwarn org.bouncycastle.jsse.**
 -dontwarn org.conscrypt.*
 -dontwarn org.openjsse.**
+# --- R8 켜면서 추가(2026-10-05) ---
+# 리플렉션·JNI 로 이름을 찾는 것들. 대부분 라이브러리 consumer 규칙이 있지만 확인이 어려운 것만 명시한다.
+-keep class com.swmansion.reanimated.** { *; }
+-keep class com.facebook.react.turbomodule.** { *; }
+-keep class com.navercorp.nid.** { *; }
+-keep class com.kakao.sdk.** { *; }
+-dontwarn com.navercorp.nid.**

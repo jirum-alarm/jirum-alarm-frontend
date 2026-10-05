@@ -42,8 +42,6 @@ module.exports = {
         'pretendard-bold': ['Pretendard-Bold'],
         'pretendard-semibold': ['Pretendard-SemiBold'],
         'pretendard-medium': ['Pretendard-Medium'],
-        'pretendard-light': ['Pretendard-Light'],
-        'pretendard-thin': ['Pretendard-Thin'],
       },
       colors: {
         ...themed,
