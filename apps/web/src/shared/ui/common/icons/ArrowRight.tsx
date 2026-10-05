@@ -12,7 +12,7 @@ const SvgArrowRight = (props: SVGProps<SVGSVGElement>) => (
     <path
       d="M14.62 12.51 7.561 5.433l.91-.91 7.966 7.987-7.967 7.967-.91-.91z"
       strokeWidth={props.strokeWidth ?? 1.5}
-      stroke={props.color ?? '#475467'}
+      stroke={props.color ?? 'var(--color-gray-600)'}
     />
   </svg>
 );

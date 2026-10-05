@@ -49,12 +49,12 @@ export default function PriceContextBadge({ productId, source }: PriceContextBad
     normalPriceMax / normalPriceMin <= 3;
 
   return (
-    <div className="mt-3 rounded-[12px] border border-[#FFD6D0] bg-[#FFF1F0] px-5 py-4">
+    <div className="dark:border-error-100 dark:bg-error-50 mt-3 rounded-[12px] border border-[#FFD6D0] bg-[#FFF1F0] px-5 py-4">
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-gray-700">다나와 최저가 대비</span>
         <span className="text-[18px] font-bold text-[#EB001C]">{percent}% 저렴</span>
       </div>
-      <div className="mt-2.5 flex items-center justify-between border-t border-[#FFD6D0] pt-2.5">
+      <div className="dark:border-error-100 mt-2.5 flex items-center justify-between border-t border-[#FFD6D0] pt-2.5">
         <span className="text-sm text-gray-500">
           {/* 기준가가 배송비 포함 총액일 때만 — 딜 가격엔 배송비가 빠졌을 수 있다 */}
           다나와 최저가{shippingIncluded ? ' (배송비 포함)' : ''}

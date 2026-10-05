@@ -132,7 +132,7 @@ export default function RecommendedKeywordSection() {
       //
       // ★/srgb 를 붙여 보간 공간을 고정한다. Tailwind v4 는 그라데이션을 oklab 으로
       // 보간하는데, 흰색→연두 구간에서 중간톤이 탁한 회색빛으로 뜬다.
-      className="bg-linear-to-b/srgb from-white to-[#eaf7d9] px-5 py-7"
+      className="dark:to-primary-50 bg-linear-to-b/srgb from-white to-[#eaf7d9] px-5 py-7"
     >
       <h2
         id="home-recommended-keywords"

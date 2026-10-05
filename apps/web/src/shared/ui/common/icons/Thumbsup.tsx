@@ -5,8 +5,8 @@ interface SvgThumbsupProps extends SVGProps<SVGSVGElement> {
   line?: string;
 }
 
-const defaultFill = '#D0D5DD';
-const defaultLine = '#667085';
+const defaultFill = 'var(--color-gray-300)';
+const defaultLine = 'var(--color-gray-500)';
 const SvgThumbsup = ({
   active = false,
   width = 22,
@@ -15,7 +15,7 @@ const SvgThumbsup = ({
   line = defaultLine,
   ...props
 }: SvgThumbsupProps) => {
-  const fillColor = active ? '#F3F7FF' : fill;
+  const fillColor = active ? 'var(--color-secondary-50)' : fill;
   const lineColor = active ? '#467DFB' : line;
 
   return (

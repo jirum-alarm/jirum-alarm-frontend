@@ -184,7 +184,7 @@ export default function PostPurchaseKeywordPrompt({
             채워 대비를 지킨다. ✓ 글리프 대신 SVG — 글꼴에 U+2713 이 없으면 두부가 된다. */}
         <span
           aria-hidden
-          className="bg-secondary-500 flex size-7 shrink-0 items-center justify-center rounded-full text-white"
+          className="bg-secondary-500 text-fixed-white flex size-7 shrink-0 items-center justify-center rounded-full"
         >
           <svg width={15} height={15} viewBox="0 0 20 20" fill="none">
             <path

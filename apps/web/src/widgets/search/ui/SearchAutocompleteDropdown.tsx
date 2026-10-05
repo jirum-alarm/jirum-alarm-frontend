@@ -60,7 +60,7 @@ export default function SearchAutocompleteDropdown({
               isActive ? 'bg-gray-100' : 'hover:bg-gray-50',
             )}
           >
-            <Search color="#98A2B3" className="shrink-0" />
+            <Search color="var(--color-gray-400)" className="shrink-0" />
             <span className="truncate">{renderHighlighted(s, highlight)}</span>
           </li>
         );

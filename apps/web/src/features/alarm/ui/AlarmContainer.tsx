@@ -105,7 +105,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
               <br />
               누구보다 빠르게 받아보세요
             </p>
-            <ArrowDown color="#D0D5DD" />
+            <ArrowDown color="var(--color-gray-300)" />
           </div>
           <div className="flex gap-x-2">
             {platform === 'android' && <AndroidDownloadButton />}
@@ -130,7 +130,7 @@ function AndroidDownloadButton() {
   return (
     <a href={ANDROID_STORE_LINK} onClick={handleClick} className="w-full">
       <m.button
-        className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
+        className="bg-primary-500 text-fixed-900 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
@@ -153,7 +153,7 @@ function IosDownloadButton() {
   return (
     <a href={IOS_STORE_LINK} onClick={handleClick} className="w-full">
       <m.button
-        className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
+        className="bg-primary-500 text-fixed-900 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >

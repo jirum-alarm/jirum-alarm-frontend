@@ -120,7 +120,7 @@ function StoreButton({ kind }: { kind: 'android' | 'apple' }) {
     >
       <a href={link} className="w-full">
         <m.span
-          className="bg-primary-500 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold text-gray-900"
+          className="bg-primary-500 text-fixed-900 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}
         >

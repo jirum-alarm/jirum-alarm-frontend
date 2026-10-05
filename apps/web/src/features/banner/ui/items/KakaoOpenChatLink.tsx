@@ -14,7 +14,7 @@ const props = {
   description: '오픈 카톡방에서 소식을 확인해보세요!',
   image: kakao,
   // eventName: EVENT.OPEN_KAKAO_TALK.NAME,
-  className: 'bg-gray-800 border-gray-600',
+  className: 'bg-fixed-800 border-fixed-600',
 };
 
 // 상세 오카방 카드와 같은 이벤트·파라미터(features/product-detail/lib/okachat.ts) — placement 로 위치를 가른다.

@@ -62,7 +62,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
         'fixed top-0 z-50 w-full min-w-5xl border-b bg-white shadow-xs transition-all duration-300',
         {
           'border-b-gray-200 bg-white': !isInHomeHero,
-          'border-b-gray-700 bg-gray-900': isInHomeHero,
+          'border-b-fixed-700 bg-fixed-900': isInHomeHero,
         },
       )}
     >
@@ -95,7 +95,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             className={cn(
               'rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors duration-300',
               {
-                'border-white/40 text-white hover:bg-white/10': isInHomeHero,
+                'border-fixed-white/40 text-fixed-white hover:bg-fixed-white/10': isInHomeHero,
                 'border-gray-300 text-gray-700 hover:bg-gray-50': !isInHomeHero,
               },
             )}
@@ -104,7 +104,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               핫딜 등록
             </m.div>
           </Link>
-          <SearchLinkButton color={isInHomeHero ? '#FFFFFF' : '#101828'} />
+          <SearchLinkButton color={isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)'} />
           <Link
             href={talkroomLink}
             target="_blank"
@@ -150,7 +150,11 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 transition={{ duration: 0.1 }}
                 className="flex items-center justify-center"
               >
-                <My width={28} height={28} color={isInHomeHero ? '#FFFFFF' : '#101828'} />
+                <My
+                  width={28}
+                  height={28}
+                  color={isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)'}
+                />
               </m.div>
             </Link>
           ) : (

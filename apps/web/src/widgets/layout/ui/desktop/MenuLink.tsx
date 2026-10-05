@@ -23,8 +23,8 @@ export default function NavLink({
       prefetch={prefetch}
       href={href}
       className={cn('relative flex h-full items-center text-lg font-semibold', {
-        'text-white': isActive,
-        'text-gray-200': !isActive,
+        'text-fixed-white': isActive,
+        'text-fixed-200': !isActive,
         'text-gray-900': isActive && !isInverted,
         'text-gray-700': !isActive && !isInverted,
       })}

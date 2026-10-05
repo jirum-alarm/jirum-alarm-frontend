@@ -2,7 +2,7 @@ import type { SVGProps } from 'react';
 const SvgRanking = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={28} height={28} fill="none" {...props}>
     <path
-      stroke="#667085"
+      stroke="var(--color-gray-500)"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.757}

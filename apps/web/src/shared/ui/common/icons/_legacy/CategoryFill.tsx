@@ -8,7 +8,7 @@ const SvgCategoryFill = (props: SVGProps<SVGSVGElement>) => (
       x={5.75}
       y={5.75}
       fill="#9EF22E"
-      stroke="#101828"
+      stroke="var(--color-gray-900)"
       strokeWidth={1.5}
       rx={1.25}
     />
@@ -18,7 +18,7 @@ const SvgCategoryFill = (props: SVGProps<SVGSVGElement>) => (
       x={5.75}
       y={15.75}
       fill="#9EF22E"
-      stroke="#101828"
+      stroke="var(--color-gray-900)"
       strokeWidth={1.5}
       rx={1.25}
     />
@@ -28,7 +28,7 @@ const SvgCategoryFill = (props: SVGProps<SVGSVGElement>) => (
       x={15.75}
       y={5.75}
       fill="#9EF22E"
-      stroke="#101828"
+      stroke="var(--color-gray-900)"
       strokeWidth={1.5}
       rx={1.25}
     />
@@ -38,7 +38,7 @@ const SvgCategoryFill = (props: SVGProps<SVGSVGElement>) => (
       x={15.75}
       y={15.75}
       fill="#9EF22E"
-      stroke="#101828"
+      stroke="var(--color-gray-900)"
       strokeWidth={1.5}
       rx={1.25}
     />

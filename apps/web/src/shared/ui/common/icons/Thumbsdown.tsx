@@ -6,8 +6,8 @@ interface SvgThumbsdownProps extends SVGProps<SVGSVGElement> {
   line?: string;
 }
 
-const defaultFill = '#D0D5DD';
-const defaultLine = '#667085';
+const defaultFill = 'var(--color-gray-300)';
+const defaultLine = 'var(--color-gray-500)';
 const SvgThumbsdown = ({
   active = false,
   width = 22,

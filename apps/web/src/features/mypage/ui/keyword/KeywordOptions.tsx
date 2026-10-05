@@ -110,7 +110,7 @@ const KeywordOptions = ({
         <button
           type="submit"
           disabled={isPending}
-          className="bg-primary-500 self-end rounded-md px-4 py-2 text-sm font-semibold text-gray-900 disabled:opacity-50"
+          className="bg-primary-500 text-fixed-900 self-end rounded-md px-4 py-2 text-sm font-semibold disabled:opacity-50"
         >
           저장
         </button>

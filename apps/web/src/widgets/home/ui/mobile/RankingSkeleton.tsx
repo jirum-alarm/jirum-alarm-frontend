@@ -49,7 +49,7 @@ const PreviewCard = ({ product, rank, isActive, priority }: PreviewCardProps) =>
         }`}
       >
         <div className="relative h-[240px] w-full bg-gray-50">
-          <div className="text-primary-500 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900 text-sm font-medium">
+          <div className="text-primary-500 bg-fixed-900 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg text-sm font-medium">
             {rank}
           </div>
           <ProductThumbnail
@@ -95,7 +95,7 @@ const SkeletonCard = ({ isActive }: { isActive: boolean }) => (
       }`}
     >
       <div className="relative h-[240px] w-full bg-gray-50">
-        <div className="absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900">
+        <div className="bg-fixed-900 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg">
           <div className="h-3 w-2 animate-pulse rounded-sm bg-gray-600" />
         </div>
         <div className="h-full w-full animate-pulse bg-gray-100" />

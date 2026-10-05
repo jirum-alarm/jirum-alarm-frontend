@@ -33,7 +33,7 @@ export default function LogoLink({ inverted = false, subtitle = LOGO_SUBTITLE }:
         <span className="flex flex-col justify-center whitespace-nowrap">
           <h2
             className={cn('relative text-lg leading-tight font-bold', {
-              'text-white': inverted,
+              'text-fixed-white': inverted,
               'text-gray-800': !inverted,
             })}
           >
@@ -42,7 +42,7 @@ export default function LogoLink({ inverted = false, subtitle = LOGO_SUBTITLE }:
           {subtitle && (
             <span
               className={cn('text-[11px] leading-tight', {
-                'text-white/70': inverted,
+                'text-fixed-white/70': inverted,
                 'text-gray-500': !inverted,
               })}
             >

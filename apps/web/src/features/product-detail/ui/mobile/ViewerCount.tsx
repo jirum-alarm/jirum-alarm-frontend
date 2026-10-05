@@ -52,11 +52,11 @@ export default function ViewerCount({ productId }: ViewerCountProps) {
               )}
               initial={{
                 borderRadius: 0,
-                borderColor: '#F3F7FF',
+                borderColor: 'var(--color-secondary-50)',
               }}
               animate={{
                 borderRadius: isInView ? 0 : 48,
-                borderColor: isInView ? '#F3F7FF' : '#B5CBFD',
+                borderColor: isInView ? 'var(--color-secondary-50)' : 'var(--color-secondary-200)',
               }}
             >
               <span className="text-sm text-gray-700">

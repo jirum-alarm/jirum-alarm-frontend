@@ -917,7 +917,7 @@ function PriceLineChart({
                 cx={c.x}
                 cy={c.y}
                 r={isSelected || isHovered ? 5.5 : 4}
-                fill="#fff"
+                fill="var(--color-white)"
                 stroke={stroke}
                 strokeWidth={isSelected || isHovered ? 2.5 : 2}
               />
@@ -953,7 +953,7 @@ function PriceLineChart({
               cy={seedCoord.y}
               r={6.5}
               fill={CHART.current}
-              stroke="#fff"
+              stroke="var(--color-white)"
               strokeWidth={2}
             />
           </g>

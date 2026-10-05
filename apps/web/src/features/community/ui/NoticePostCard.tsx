@@ -35,7 +35,7 @@ export default function NoticePostCard({
         <NoticeAuthor />
         <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
         {isNew && (
-          <span className="bg-secondary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">
+          <span className="bg-secondary-500 text-fixed-white rounded px-1.5 py-0.5 text-xs font-semibold">
             NEW
           </span>
         )}

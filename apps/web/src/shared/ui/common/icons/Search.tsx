@@ -13,7 +13,7 @@ const SvgSearch = (props: SVGProps<SVGSVGElement>) => {
     >
       <path
         d="M23 23L17.0001 17M19 12C19 15.866 15.866 19 12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12Z"
-        stroke={color ?? '#1D2939'}
+        stroke={color ?? 'var(--color-gray-800)'}
         strokeWidth="1.5"
         strokeLinecap="square"
         strokeLinejoin="round"

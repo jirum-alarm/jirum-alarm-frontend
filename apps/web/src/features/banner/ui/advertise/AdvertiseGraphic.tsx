@@ -147,7 +147,7 @@ export default function AdvertiseGraphic({
         })}
       </div>
 
-      <div className="pointer-events-none absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs leading-none font-medium text-white">
+      <div className="border-fixed-white text-fixed-white pointer-events-none absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border bg-[#667085]/60 px-[7px] py-[3px] text-xs leading-none font-medium">
         AD
       </div>
     </div>

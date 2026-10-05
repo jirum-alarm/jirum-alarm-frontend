@@ -41,17 +41,17 @@ export default function TossDealCard({
           priority={priority}
         />
         {typeof rank === 'number' && (
-          <div className="text-primary-500 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-900 text-sm">
+          <div className="text-primary-500 bg-fixed-900 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg text-sm">
             {rank}
           </div>
         )}
         {label && (
-          <div className="bg-error-500 absolute top-0 right-0 z-10 flex h-6 items-center justify-center rounded-tr-[8px] rounded-bl-[8px] px-2 text-xs font-semibold text-white">
+          <div className="bg-error-500 text-fixed-white absolute top-0 right-0 z-10 flex h-6 items-center justify-center rounded-tr-[8px] rounded-bl-[8px] px-2 text-xs font-semibold">
             {label}
           </div>
         )}
         {deal.bestSeller && (
-          <div className="absolute bottom-0 left-0 z-10 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-gray-900/80 px-2 text-xs font-medium text-white">
+          <div className="bg-fixed-900/80 text-fixed-white absolute bottom-0 left-0 z-10 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg px-2 text-xs font-medium">
             베스트판매자
           </div>
         )}

@@ -49,7 +49,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
           )}
           <span className="text-xs text-gray-400">{displayTime(post.createdAt)}</span>
           {post.isNotice && (
-            <span className="bg-secondary-500 rounded px-1.5 py-0.5 text-xs font-semibold text-white">
+            <span className="bg-secondary-500 text-fixed-white rounded px-1.5 py-0.5 text-xs font-semibold">
               NEW
             </span>
           )}
@@ -98,7 +98,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
               <>
                 <Image src={previewImage} alt="" fill className="object-cover" sizes="80px" />
                 {images.length > 1 && (
-                  <span className="absolute right-1 bottom-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-medium text-white">
+                  <span className="text-fixed-white absolute right-1 bottom-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-medium">
                     +{images.length - 1}
                   </span>
                 )}

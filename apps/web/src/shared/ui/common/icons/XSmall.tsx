@@ -13,7 +13,7 @@ const XSmall = (props: SVGProps<SVGSVGElement>) => {
     >
       <path
         d="M15.7143 4.28577L4.28571 15.7143M4.28571 4.28577L15.7143 15.7143"
-        stroke="#667085"
+        stroke="var(--color-gray-500)"
         strokeWidth="1.5"
         strokeLinecap="square"
         strokeLinejoin="round"

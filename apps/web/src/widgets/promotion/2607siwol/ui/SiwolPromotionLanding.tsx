@@ -72,7 +72,7 @@ export function SiwolPromotionLanding() {
   };
 
   return (
-    <main className="min-h-dvh bg-[#0d1726] text-white">
+    <main className="text-fixed-white min-h-dvh bg-[#0d1726]">
       <PromotionHeader />
       <section className="mx-auto flex w-full max-w-[480px] flex-col px-5 pt-10 pb-10 sm:px-0">
         <div className="text-center">
@@ -80,7 +80,7 @@ export function SiwolPromotionLanding() {
           <CollaborationBadge />
           <h1 className="mt-5 text-[28px] leading-9 font-extrabold tracking-normal sm:text-[24px]">
             <span className="block text-[#fff200]">프로 절약러를 위한</span>
-            <span className="block text-white">0원 이벤트</span>
+            <span className="text-fixed-white block">0원 이벤트</span>
           </h1>
         </div>
 
@@ -200,9 +200,9 @@ function PromotionHeader() {
         <nav className="flex h-full items-center gap-11">
           <Link href={PAGE.HOME} className="flex items-center gap-2 rounded-lg py-1">
             <IconLogo width={30} height={30} />
-            <span className="text-lg font-bold text-white">지름알림</span>
+            <span className="text-fixed-white text-lg font-bold">지름알림</span>
           </Link>
-          <div className="hidden h-full items-center gap-10 text-sm font-semibold text-white md:flex">
+          <div className="text-fixed-white hidden h-full items-center gap-10 text-sm font-semibold md:flex">
             <Link href={PAGE.TRENDING_LIVE} className="hover:text-primary-400 transition-colors">
               실시간
             </Link>
@@ -236,7 +236,7 @@ function PromotionHeader() {
           </Link>
           <Link
             href={PAGE.LOGIN}
-            className="hidden rounded-full bg-[#27364e] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#33445f] md:block"
+            className="text-fixed-white hidden rounded-full bg-[#27364e] px-4 py-2 text-sm font-semibold transition-colors hover:bg-[#33445f] md:block"
           >
             로그인
           </Link>
@@ -249,7 +249,7 @@ function PromotionHeader() {
 function EventCard({ planRows }: { planRows: (typeof pricePlans)[] }) {
   return (
     <article className="overflow-hidden rounded-[18px] bg-[#9c88ff] shadow-[0_18px_60px_rgba(47,32,126,0.3)]">
-      <div className="flex h-12 items-center justify-center bg-[#9f8aff] text-sm font-bold text-white">
+      <div className="text-fixed-white flex h-12 items-center justify-center bg-[#9f8aff] text-sm font-bold">
         지름알림 단독 이벤트
       </div>
       <div className="relative overflow-hidden bg-linear-to-b from-[#785cf4] to-[#a490ff] py-7">
@@ -263,7 +263,7 @@ function EventCard({ planRows }: { planRows: (typeof pricePlans)[] }) {
           ))}
         </div>
         <div className="mt-6 flex justify-center">
-          <div className="relative rounded-md bg-[#5545b7] px-7 py-3 text-center text-sm leading-6 font-extrabold text-white shadow-sm before:absolute before:top-[-8px] before:left-1/2 before:size-0 before:-translate-x-1/2 before:border-x-[7px] before:border-b-[8px] before:border-x-transparent before:border-b-[#5545b7]">
+          <div className="text-fixed-white relative rounded-md bg-[#5545b7] px-7 py-3 text-center text-sm leading-6 font-extrabold shadow-sm before:absolute before:top-[-8px] before:left-1/2 before:size-0 before:-translate-x-1/2 before:border-x-[7px] before:border-b-[8px] before:border-x-transparent before:border-b-[#5545b7]">
             통신비 아끼는
             <br />
             알뜰폰 가격 궁금하다면?
@@ -298,7 +298,7 @@ function PriceCardRow({
 function PriceCard({ plan }: { plan: (typeof pricePlans)[number] }) {
   return (
     <div className="flex h-24 min-w-[174px] shrink-0 flex-col items-center justify-center rounded-lg bg-white px-3 text-[#17105f]">
-      <div className="rounded-md bg-[#4530b3] px-3 py-1 text-xs leading-5 font-bold text-white">
+      <div className="text-fixed-white rounded-md bg-[#4530b3] px-3 py-1 text-xs leading-5 font-bold">
         {plan.label}
       </div>
       <div className="mt-3 flex items-baseline gap-1 whitespace-nowrap">
@@ -336,11 +336,11 @@ function CodeCard({
       </div>
       <div className="flex h-12 items-center justify-center gap-3 rounded-b-lg bg-[#162034] px-4">
         <span className="text-sm font-extrabold text-[#92ff1f]">비밀번호</span>
-        <strong className="text-sm font-extrabold text-white">{SECRET_CODE}</strong>
+        <strong className="text-fixed-white text-sm font-extrabold">{SECRET_CODE}</strong>
         <button
           type="button"
           onClick={onCopy}
-          className="ml-1 flex h-8 items-center gap-1.5 rounded-full bg-[#344054] px-3 text-xs font-bold text-white transition-colors hover:bg-[#475467]"
+          className="text-fixed-white ml-1 flex h-8 items-center gap-1.5 rounded-full bg-[#344054] px-3 text-xs font-bold transition-colors hover:bg-[#475467]"
           aria-label="비밀번호 복사하기"
         >
           <span className="relative block size-4 before:absolute before:top-[2px] before:left-[2px] before:size-[10px] before:rounded-[2px] before:border before:border-white/80 after:absolute after:right-[1px] after:bottom-[1px] after:size-[10px] after:rounded-[2px] after:border after:border-white" />

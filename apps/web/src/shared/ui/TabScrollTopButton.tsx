@@ -66,7 +66,7 @@ export default function TabScrollTopButton() {
       whileTap={isVisible ? { scale: 0.95 } : undefined}
       transition={{ duration: 0.1 }}
     >
-      <ArrowRight color="#475467" className="-rotate-90" />
+      <ArrowRight color="var(--color-gray-600)" className="-rotate-90" />
     </m.button>
   );
 }

@@ -1,13 +1,15 @@
 import '@/shared/style/globals.css';
 
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { PublicEnvScript } from 'next-runtime-env';
 
 import { AppProvider } from '@/app/(app)/providers';
 
+import { COLOR_SCHEME_COOKIE, isDarkCookie, THEME_COLOR } from '@/shared/config/color-scheme';
 import { IS_PRD } from '@/shared/config/env';
 import { defaultMetadata, jsonLd, organizationLd } from '@/shared/config/metadata';
 import { isTabRootPath } from '@/shared/config/tab-root';
+import { cn } from '@/shared/lib/cn';
 import { pretendard } from '@/shared/lib/fonts';
 
 import { PATHNAME_HEADER } from '../proxy';
@@ -19,20 +21,25 @@ import type { Metadata, Viewport } from 'next';
 
 export const metadata: Metadata = defaultMetadata;
 
-export const viewport: Viewport = {
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  width: 'device-width',
-  themeColor: '#FFFFFF',
-  viewportFit: 'cover',
-};
+const isDarkScheme = async () => isDarkCookie((await cookies()).get(COLOR_SCHEME_COOKIE)?.value);
+
+export async function generateViewport(): Promise<Viewport> {
+  return {
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    width: 'device-width',
+    themeColor: (await isDarkScheme()) ? THEME_COLOR.dark : THEME_COLOR.light,
+    viewportFit: 'cover',
+  };
+}
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [device, accessToken, headersList] = await Promise.all([
+  const [device, accessToken, headersList, isDark] = await Promise.all([
     checkDevice(),
     getAccessToken(),
     headers(),
+    isDarkScheme(),
   ]);
 
   // 웹 바텀네비는 앱이 아니면서 탭 루트 경로일 때만 뜬다. 그 조건을 서버에서
@@ -44,7 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html
       lang="ko"
-      className={`${pretendard.className} antialiased`}
+      className={cn(pretendard.className, 'antialiased', isDark && 'dark')}
       data-bottom-nav={hasWebBottomNav ? 'true' : undefined}
     >
       <head>

@@ -111,7 +111,7 @@ export default function ReportModal({
               <button
                 onClick={() => report()}
                 disabled={!selectedReason || isPending}
-                className="bg-primary-500 flex h-12 flex-1 items-center justify-center rounded-lg text-sm font-medium text-white transition-transform active:scale-95 disabled:opacity-40"
+                className="bg-primary-500 text-fixed-white flex h-12 flex-1 items-center justify-center rounded-lg text-sm font-medium transition-transform active:scale-95 disabled:opacity-40"
               >
                 신고
               </button>

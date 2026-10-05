@@ -84,7 +84,7 @@ export default function PushChannelSheet() {
             <AlertDialog.Action asChild onClick={() => track('app')}>
               <a
                 href={storeLink}
-                className="bg-primary-500 flex h-12 w-full items-center justify-center rounded-lg font-semibold text-gray-900"
+                className="bg-primary-500 text-fixed-900 flex h-12 w-full items-center justify-center rounded-lg font-semibold"
               >
                 앱으로 받기
               </a>

@@ -6,7 +6,7 @@ import { useRef } from 'react';
 import { cn } from '@/shared/lib/cn';
 import { Thumbsdown, Thumbsup } from '@/shared/ui/common/icons';
 
-const DISABLED_COLOR = '#D0D5DD';
+const DISABLED_COLOR = 'var(--color-gray-300)';
 
 export type ReactionChartProps = {
   positiveCount: number;
@@ -51,7 +51,7 @@ export function ReactionChart({
             {/* 배경 반원 */}
             <path
               d="M7.20996 95.9719C10.9267 46.2193 52.7747 7 103.852 7C154.929 7 196.777 46.2193 200.494 95.9719"
-              stroke="#E4E7EC"
+              stroke="var(--color-gray-200)"
               strokeWidth={stroke}
               strokeDasharray={circumference}
               strokeDashoffset={0}

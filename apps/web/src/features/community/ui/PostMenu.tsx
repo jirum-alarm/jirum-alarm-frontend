@@ -117,7 +117,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
                 취소
               </Cancel>
               <Action
-                className="bg-error-500 flex h-11 flex-1 items-center justify-center rounded-lg text-sm font-medium text-white"
+                className="bg-error-500 text-fixed-white flex h-11 flex-1 items-center justify-center rounded-lg text-sm font-medium"
                 onClick={() => removePost()}
               >
                 삭제

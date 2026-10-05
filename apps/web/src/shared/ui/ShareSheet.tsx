@@ -103,13 +103,13 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
     {
       c: 'x',
       label: 'X',
-      icon: <ShareX width={20} height={20} className="text-white" />,
+      icon: <ShareX width={20} height={20} className="text-fixed-white" />,
       badge: 'bg-black',
     },
     {
       c: 'threads',
       label: '스레드',
-      icon: <ShareThreads width={22} height={22} className="text-white" />,
+      icon: <ShareThreads width={22} height={22} className="text-fixed-white" />,
       badge: 'bg-black',
     },
     {
@@ -163,7 +163,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
         type="button"
         onClick={() => share('kakao')}
         disabled={!!pending}
-        className="flex h-[46px] w-full items-center justify-center gap-1.5 rounded-[10px] bg-[#FBE84C] text-sm font-bold text-gray-900 hover:bg-[#F5DC3D] disabled:opacity-60"
+        className="text-fixed-900 flex h-[46px] w-full items-center justify-center gap-1.5 rounded-[10px] bg-[#FBE84C] text-sm font-bold hover:bg-[#F5DC3D] disabled:opacity-60"
       >
         <SvgKakao width={20} height={20} />
         {pending === 'kakao' ? '카카오톡 여는 중…' : '카카오톡으로 공유'}

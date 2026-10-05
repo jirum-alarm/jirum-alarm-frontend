@@ -6,8 +6,8 @@ interface ThumbsupFillProps extends SVGProps<SVGSVGElement> {
   line?: string;
 }
 
-const thumbsupFillDefaultFill = '#F2F4F7';
-const thumbsupFillDefaultLine = '#98A2B3';
+const thumbsupFillDefaultFill = 'var(--color-gray-100)';
+const thumbsupFillDefaultLine = 'var(--color-gray-400)';
 
 const ThumbsupFill = ({
   width = 16,

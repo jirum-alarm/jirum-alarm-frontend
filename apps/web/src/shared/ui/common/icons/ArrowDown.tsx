@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 
-const SvgArrowDown = ({ color = '#101828', ...props }: SVGProps<SVGSVGElement>) => (
+const SvgArrowDown = ({ color = 'var(--color-gray-900)', ...props }: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" {...props}>
     <path
       fill={color}

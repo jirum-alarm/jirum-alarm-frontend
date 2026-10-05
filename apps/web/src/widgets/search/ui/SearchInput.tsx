@@ -106,7 +106,7 @@ const SearchInput = () => {
   return (
     <div ref={containerRef} className="relative w-full">
       <div className="flex w-full items-center overflow-hidden rounded-sm bg-gray-50 pl-3 focus-within:outline-1 focus-within:outline-gray-900 focus-within:outline-solid">
-        <Search color="#98A2B3" className="shrink-0" />
+        <Search color="var(--color-gray-400)" className="shrink-0" />
         <input
           ref={inputRef}
           value={displayValue}

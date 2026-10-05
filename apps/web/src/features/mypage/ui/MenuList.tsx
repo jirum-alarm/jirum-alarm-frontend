@@ -1,7 +1,9 @@
 'use client';
 
 import { m } from 'motion/react';
+import { useState } from 'react';
 
+import { setColorScheme } from '@/shared/config/color-scheme';
 import customerService from '@/shared/lib/customerservice/customer-service';
 import {
   Alert,
@@ -49,7 +51,8 @@ const MENU_LIST: Array<{
   },
 ];
 
-const MenuList = () => {
+const MenuList = ({ isDark }: { isDark: boolean }) => {
+  const [dark, setDark] = useState(isDark);
   const handleShowChannelTalkClick = () => {
     customerService.onShowMessenger();
   };
@@ -74,6 +77,34 @@ const MenuList = () => {
               </li>
             );
           })}
+          <li>
+            {/* ponytail: Switch primitive 가 없어 PriceDropOnlyToggle 과 같은 checkbox+peer 모양. */}
+            <label className="flex cursor-pointer items-center gap-3 py-3">
+              <div className="flex h-7 w-7 items-center justify-center">
+                <svg width={22} height={22} viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1Z"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <span className="flex-1 text-left text-gray-900">다크 모드</span>
+              <input
+                type="checkbox"
+                className="peer hidden"
+                checked={dark}
+                onChange={(e) => {
+                  setDark(e.target.checked);
+                  setColorScheme(e.target.checked);
+                }}
+              />
+              <span className="peer-checked:bg-primary-500 relative h-6 w-11 shrink-0 rounded-full bg-gray-300 transition-colors peer-checked:[&>span]:translate-x-5">
+                <span className="bg-fixed-white absolute top-0.5 left-0.5 h-5 w-5 rounded-full shadow transition-transform" />
+              </span>
+            </label>
+          </li>
           <li>
             <m.button
               className="w-full rounded-lg"

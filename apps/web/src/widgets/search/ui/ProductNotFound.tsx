@@ -99,7 +99,7 @@ const ProductNotFound = () => {
       <div className="w-full pb-16 text-center">
         <button
           onClick={handleAddKeywordClick}
-          className="text-primary-500 rounded-lg bg-gray-800 px-5 py-1.5 font-semibold"
+          className="text-primary-500 bg-fixed-800 rounded-lg px-5 py-1.5 font-semibold"
         >
           {canRegister ? `'${keyword.trim()}' 알림 받기` : '키워드 등록'}
         </button>

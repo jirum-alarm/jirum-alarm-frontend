@@ -59,7 +59,7 @@ export default async function CommunityDesktopSidebar() {
                       ? 'text-orange-400'
                       : i === 2
                         ? 'text-yellow-500'
-                        : 'text-white',
+                        : 'text-fixed-white',
                 ].join(' ')}
               >
                 {i + 1}

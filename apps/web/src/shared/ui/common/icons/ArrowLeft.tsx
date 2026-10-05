@@ -13,7 +13,7 @@ const SvgArrowLeft = (props: SVGProps<SVGSVGElement>) => {
     >
       <path
         d="M18 22L10 14L18 6"
-        stroke={color ?? '#101828'}
+        stroke={color ?? 'var(--color-gray-900)'}
         strokeWidth="1.5"
         strokeLinecap="square"
         strokeLinejoin="round"

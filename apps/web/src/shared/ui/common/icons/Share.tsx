@@ -9,7 +9,7 @@ const SvgShare = (props: SVGProps<SVGSVGElement>) => {
       viewBox="0 0 28 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      stroke={color ?? '#1D2939'}
+      stroke={color ?? 'var(--color-gray-800)'}
       strokeWidth="1.5"
       {...others}
     >

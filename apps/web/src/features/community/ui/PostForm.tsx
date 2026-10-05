@@ -153,7 +153,7 @@ export default function PostForm({
         <button
           type="submit"
           disabled={!canSubmit}
-          className="bg-primary-500 w-full rounded-xl py-3.5 text-sm font-semibold text-white transition-opacity disabled:opacity-40"
+          className="bg-primary-500 text-fixed-white w-full rounded-xl py-3.5 text-sm font-semibold transition-opacity disabled:opacity-40"
         >
           {isSubmitting ? '처리 중...' : isEdit ? '수정 완료' : '글 등록하기'}
         </button>

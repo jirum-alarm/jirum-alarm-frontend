@@ -17,9 +17,9 @@ import { loginModalMessageAtom } from '../../model/login/loginModal';
 import { getRecentLoginMethod, LoginMethod } from '../../model/login/recentLoginMethod';
 
 const LOGIN_BUTTON_STYLE: Record<LoginMethod, string> = {
-  kakao: 'bg-[#FBE84C] hover:bg-[#F5DC3D] text-gray-900',
-  naver: 'bg-[#02C75A] hover:bg-[#00B04F] text-white',
-  email: 'hover:bg-[#E4E7EC] border-[1px] border-[#E4E7EC] text-gray-900',
+  kakao: 'bg-[#FBE84C] hover:bg-[#F5DC3D] text-fixed-900',
+  naver: 'bg-[#02C75A] hover:bg-[#00B04F] text-fixed-white',
+  email: 'hover:bg-gray-200 border-[1px] border-gray-200 text-gray-900',
 };
 
 const RECENT_METHOD_LABEL: Record<LoginMethod, string> = {

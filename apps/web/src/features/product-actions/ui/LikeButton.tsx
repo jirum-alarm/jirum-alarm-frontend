@@ -117,7 +117,7 @@ export default function LikeButton({
       onClick={handleClickWishlist}
       className="pc:w-15 flex size-12 flex-col items-center justify-center border-gray-300 px-0"
     >
-      <Heart className="shrink-0" color="#98A2B3" isLiked={!!isLiked} />
+      <Heart className="shrink-0" color="var(--color-gray-400)" isLiked={!!isLiked} />
       <span className="shrink-0 text-[11px] leading-4 text-gray-800">찜하기</span>
     </Button>
   );

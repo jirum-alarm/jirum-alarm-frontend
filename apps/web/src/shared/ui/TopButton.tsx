@@ -66,7 +66,7 @@ const TopButton = ({
       whileTap={{ scale: 0.95 }}
       transition={{ duration: 0.1 }}
     >
-      <ArrowRight color="#475467" className="-rotate-90" />
+      <ArrowRight color="var(--color-gray-600)" className="-rotate-90" />
     </m.button>
   );
 };

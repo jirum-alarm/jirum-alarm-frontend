@@ -27,19 +27,19 @@ export const buttonVaraint = cva('w-full', {
     {
       variant: 'filled',
       color: 'primary',
-      class: 'font-semibold bg-primary-500 text-gray-900 disabled:bg-gray-300 disabled:text-white',
+      class: 'font-semibold bg-primary-500 text-fixed-900 disabled:bg-gray-300 disabled:text-white',
     },
     {
       variant: 'filled',
       color: 'primary',
       size: 'md',
-      class: 'font-semibold bg-gray-800 text-primary-500 w-auto px-5 py-1.5 h-auto',
+      class: 'font-semibold bg-fixed-800 text-primary-500 w-auto px-5 py-1.5 h-auto',
     },
     {
       variant: 'filled',
       color: 'primary',
       size: 'sm',
-      class: 'font-semibold bg-gray-800 text-primary-500 w-auto px-3 py-1 h-auto',
+      class: 'font-semibold bg-fixed-800 text-primary-500 w-auto px-3 py-1 h-auto',
     },
     {
       variant: 'filled',

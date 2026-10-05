@@ -51,7 +51,7 @@ export default function BottomCTA({
   };
 
   return (
-    <div className="max-w-mobile-max pb-safe-bottom fixed bottom-0 left-1/2 z-50 mx-auto w-full -translate-x-1/2 border-t border-t-[#D0D5DD] bg-white">
+    <div className="max-w-mobile-max pb-safe-bottom fixed bottom-0 left-1/2 z-50 mx-auto w-full -translate-x-1/2 border-t border-t-gray-300 bg-white">
       <PostPurchaseKakaoPrompt
         show={phase === 'kakao'}
         onClose={advancePrompt}

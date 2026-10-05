@@ -56,7 +56,7 @@ export default async function AppInstallPage() {
 
       <a
         href={store.href}
-        className="bg-primary-500 mt-10 flex h-14 w-full items-center justify-center rounded-xl font-semibold text-gray-900"
+        className="bg-primary-500 text-fixed-900 mt-10 flex h-14 w-full items-center justify-center rounded-xl font-semibold"
       >
         {store.label}
       </a>

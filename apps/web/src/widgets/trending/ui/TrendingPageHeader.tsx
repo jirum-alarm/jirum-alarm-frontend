@@ -17,7 +17,7 @@ const TrendingPageHeader = () => {
     >
       <h1 className="sr-only">지금 뜨는 핫딜 · 실시간 인기 상품</h1>
       <PageTabNavigation />
-      {/* <SearchLinkButton color="#1d2939" /> */}
+      {/* <SearchLinkButton color="var(--color-gray-800)" /> */}
     </PageHeader>
   );
 };

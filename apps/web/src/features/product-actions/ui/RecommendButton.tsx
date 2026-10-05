@@ -72,7 +72,7 @@ export default function RecommendButton({ productId }: { productId: number }) {
       {typeof productStats?.likeCount === 'number' && productStats.likeCount > 0 && (
         <span className="tabular-nums">{productStats.likeCount}</span>
       )}
-      <Thumbsup width={18} height={18} fill="#F2F4F7" />
+      <Thumbsup width={18} height={18} fill="var(--color-gray-100)" />
     </Button>
   );
 }
