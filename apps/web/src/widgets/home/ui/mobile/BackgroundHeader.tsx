@@ -1,4 +1,5 @@
 import { cn } from '@/shared/lib/cn';
+import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
 import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 
 import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
@@ -24,7 +25,10 @@ const BackgroundHeader = async () => {
       <div className="max-w-mobile-max mx-auto w-full">
         <header className="flex h-14 w-full items-center justify-between px-5 py-3">
           <LogoLink inverted />
-          <SearchLinkButton color="#FFF" />
+          <div className="flex items-center gap-x-5">
+            <ColorSchemeButton color="#FFF" />
+            <SearchLinkButton color="#FFF" />
+          </div>
         </header>
         <BannerSwiper />
       </div>

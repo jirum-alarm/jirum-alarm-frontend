@@ -120,7 +120,7 @@ function HeaderRow({
       </Pressable>
 
       <View className="flex-row items-center gap-3">
-        <ThemeSwitch inverted={inverted} />
+        <ThemeButton inverted={inverted} />
 
         <Pressable
           onPress={() => navigation.push(tabStackNavigations.SEARCH)}
@@ -141,62 +141,29 @@ function HeaderRow({
   );
 }
 
-/** 스위치 치수 — 손잡이가 TRACK_W - KNOB - PAD*2 만큼 움직인다. */
-const TRACK_W = 48;
-const KNOB = 22;
-const PAD = 3;
-
 /**
- * 화면 모드 스위치. 손잡이가 왼쪽(해)=라이트, 오른쪽(달)=다크 — 지금 상태와 "누르면 바뀐다"가 같이 보인다.
- * ★아이콘 버튼(라이트일 때 달)은 홈 상단 띠가 라이트에서도 어두워 "이미 다크인가?"로 읽혔다(사용자 지적).
- * 누르면 지금 보이는 모드의 반대로 고정한다. '시스템 설정'으로 되돌리는 건 내정보 > 화면 모드.
+ * 화면 모드 버튼. 지금 모드를 보여 준다(라이트=해, 다크=달) — 누르면 반대로 고정한다.
+ * ★처음엔 다음 모드 아이콘(라이트일 때 달)이었는데, 홈 상단 띠가 라이트에서도 어두워 "이미 다크인가?"로
+ * 읽혔다(사용자 지적). 그 뒤 스위치로 바꿨다가 "그냥 버튼으로"(10/5) — 현재 모드 아이콘으로 둘 다 피한다.
+ * '시스템 설정'으로 되돌리는 건 내정보 > 화면 모드. web ColorSchemeButton 과 같은 아이콘·동작.
  */
-function ThemeSwitch({inverted}: {inverted: boolean}) {
+function ThemeButton({inverted}: {inverted: boolean}) {
+  const c = useColors();
   const isDark = useColorScheme() === 'dark';
   const [, setColorScheme] = useColorSchemePreference();
-  const x = useRef(new Animated.Value(isDark ? 1 : 0)).current;
-
-  useEffect(() => {
-    Animated.timing(x, {
-      toValue: isDark ? 1 : 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }, [isDark, x]);
+  const color = inverted ? fixed.white : c.gray[900];
+  const Icon = isDark ? MoonIcon : SunIcon;
 
   return (
     <Pressable
       onPress={() => setColorScheme(isDark ? 'light' : 'dark')}
       hitSlop={8}
-      accessibilityRole="switch"
-      accessibilityLabel="다크 모드"
-      accessibilityState={{checked: isDark}}
-      className={
-        inverted
-          ? 'h-7 justify-center rounded-full bg-fixed-white/20'
-          : 'h-7 justify-center rounded-full bg-gray-200'
+      accessibilityRole="button"
+      accessibilityLabel={
+        isDark ? '라이트 모드로 바꾸기' : '다크 모드로 바꾸기'
       }
-      style={{width: TRACK_W, paddingHorizontal: PAD}}>
-      <Animated.View
-        className="items-center justify-center rounded-full bg-fixed-white"
-        style={{
-          width: KNOB,
-          height: KNOB,
-          transform: [
-            {
-              translateX: x.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, TRACK_W - KNOB - PAD * 2],
-              }),
-            },
-          ],
-        }}>
-        {isDark ? (
-          <MoonIcon color={fixed[900]} />
-        ) : (
-          <SunIcon color={fixed[900]} />
-        )}
-      </Animated.View>
+      className="h-9 w-9 items-center justify-center">
+      <Icon width={24} height={24} color={color} />
     </Pressable>
   );
 }

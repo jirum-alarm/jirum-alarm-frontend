@@ -2,6 +2,7 @@
 
 import useScrollPosition from '@/shared/hooks/useScrollPosition';
 import { cn } from '@/shared/lib/cn';
+import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
 import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 
 import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
@@ -32,6 +33,7 @@ const HomeHeader = () => {
       <header className="max-w-mobile-max mx-auto flex h-14 w-full items-center justify-between px-5 py-2">
         <LogoLink />
         <div className="flex items-center gap-x-5">
+          <ColorSchemeButton color="var(--color-gray-900)" />
           <SearchLinkButton color="var(--color-gray-900)" onClick={handleSearchClick} />
         </div>
       </header>

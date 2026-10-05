@@ -8,6 +8,7 @@ import { LANDING_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import useScrollPosition from '@/shared/hooks/useScrollPosition';
 import { cn } from '@/shared/lib/cn';
+import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
 import { My } from '@/shared/ui/common/icons';
 import TalkDark from '@/shared/ui/common/icons/TalkDark';
 import TalkLight from '@/shared/ui/common/icons/TalkLight';
@@ -104,6 +105,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               핫딜 등록
             </m.div>
           </Link>
+          <ColorSchemeButton color={isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)'} />
           <SearchLinkButton color={isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)'} />
           <Link
             href={talkroomLink}
