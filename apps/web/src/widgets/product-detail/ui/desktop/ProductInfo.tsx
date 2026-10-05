@@ -6,6 +6,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { UploaderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product';
 import { cn } from '@/shared/lib/cn';
+import { getEntry } from '@/shared/lib/entry';
 import { pushRecentViewedProduct } from '@/shared/lib/recentViewedProducts';
 import Button from '@/shared/ui/common/Button';
 import Jirume from '@/shared/ui/common/icons/Jirume';
@@ -282,6 +283,7 @@ export default function ProductInfo({
               void ProductService.collectPurchaseClick({
                 productId,
                 source: 'detail_desktop',
+                entry: getEntry(),
               }).catch(() => {});
 
               if (typeof window === 'undefined') return;
