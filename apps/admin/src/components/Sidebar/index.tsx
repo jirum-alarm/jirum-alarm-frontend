@@ -2,7 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
+
+import { useMyAdminAccess } from '@/hooks/graphql/permission';
+import { AdminAccess, canAccessPath, PERMISSION_PATH } from '@/lib/adminSection';
 
 import SvgLogo from '../icons/Logo';
 
@@ -94,9 +97,26 @@ const MENU: { title: string; groups: MenuGroupConfig[] }[] = [
           { name: '등록', href: '/advertisement/register' },
         ],
       },
+      {
+        name: '권한 관리',
+        match: [PERMISSION_PATH],
+        items: [{ name: '역할·계정', href: PERMISSION_PATH }],
+      },
     ],
   },
 ];
+
+/** 권한 없는 메뉴는 아예 안 그린다 — 항목이 다 빠진 그룹·구역도 같이 숨긴다. */
+const filterMenu = (access: AdminAccess | undefined) =>
+  MENU.map((section) => ({
+    ...section,
+    groups: section.groups
+      .map((group) => ({
+        ...group,
+        items: group.items.filter((item) => canAccessPath(access, item.href)),
+      }))
+      .filter((group) => group.items.length > 0),
+  })).filter((section) => section.groups.length > 0);
 
 /** '/' 는 정확히 일치할 때만 — 예전엔 includes 라 홈이 모든 페이지에서 켜졌다 */
 const matchesPath = (pathname: string, href: string) =>
@@ -116,6 +136,8 @@ const Sidebar = ({
 }: SidebarProps) => {
   const pathname = usePathname();
   const activeHref = findActiveHref(pathname);
+  const { data: accessData } = useMyAdminAccess();
+  const menu = useMemo(() => filterMenu(accessData?.myAdminAccess), [accessData]);
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -217,7 +239,7 @@ const Sidebar = ({
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         {/* <!-- Sidebar Menu --> */}
         <nav className={`mt-5 px-4 py-4 lg:mt-9 lg:px-6 ${!sidebarExpanded && 'lg:px-2'}`}>
-          {MENU.map((section, si) => (
+          {menu.map((section, si) => (
             <div key={section.title} className={si > 0 ? 'mt-5 lg:mt-9' : undefined}>
               <h3
                 className={`mb-4 ml-4 text-sm font-semibold text-bodydark2 ${

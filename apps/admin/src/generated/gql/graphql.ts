@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -43,12 +42,35 @@ export type AdReportRow = {
   slotLocation: Scalars['String']['output'];
 };
 
+export type AdminAccessOutput = {
+  __typename?: 'AdminAccessOutput';
+  isAdmin: Scalars['Boolean']['output'];
+  roleName?: Maybe<Scalars['String']['output']>;
+  sections: Array<Scalars['String']['output']>;
+};
+
+export type AdminRoleOutput = {
+  __typename?: 'AdminRoleOutput';
+  id: Scalars['Int']['output'];
+  isSystem: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  sections: Array<Scalars['String']['output']>;
+};
+
 export type AdminUser = {
   __typename?: 'AdminUser';
   createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+};
+
+export type AdminUserRoleOutput = {
+  __typename?: 'AdminUserRoleOutput';
+  email: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  roleId?: Maybe<Scalars['Int']['output']>;
 };
 
 export type AdvertiseCreative = {
@@ -573,7 +595,12 @@ export type ModelPageAdminItemOutput = {
 
 export type ModelPageListItemOutput = {
   __typename?: 'ModelPageListItemOutput';
+  activeDealCount: Scalars['Int']['output'];
+  activePostedAt?: Maybe<Scalars['DateTime']['output']>;
+  activePrice?: Maybe<Scalars['Int']['output']>;
   brand?: Maybe<Scalars['String']['output']>;
+  buyLine?: Maybe<Scalars['Int']['output']>;
+  buyLineUnitLabel?: Maybe<Scalars['String']['output']>;
   categoryId?: Maybe<Scalars['Int']['output']>;
   categoryName?: Maybe<Scalars['String']['output']>;
   dealCount: Scalars['Int']['output'];
@@ -581,6 +608,8 @@ export type ModelPageListItemOutput = {
   heroMinPrice?: Maybe<Scalars['Int']['output']>;
   lastDealAt?: Maybe<Scalars['DateTime']['output']>;
   modelName: Scalars['String']['output'];
+  priceTone?: Maybe<Scalars['String']['output']>;
+  savePct?: Maybe<Scalars['Int']['output']>;
   slug: Scalars['String']['output'];
   unitLabel?: Maybe<Scalars['String']['output']>;
   unitPrice?: Maybe<Scalars['Int']['output']>;
@@ -635,6 +664,7 @@ export type Mutation = {
   adminLogin: TokenOutput;
   /** 어드민) 리액션 키워드 후보 승인 (synonym 으로 등록) */
   approveHotDealKeywordCandidateByAdmin: Scalars['Boolean']['output'];
+  assignAdminRole: Scalars['Boolean']['output'];
   /** 여러 매핑을 한 번에 검증 수행 */
   batchVerifyProductMapping: Scalars['Int']['output'];
   /** 검증 취소 (검증 완료/거부된 항목을 다시 대기 상태로 되돌림) */
@@ -649,10 +679,12 @@ export type Mutation = {
   createAd: Scalars['Int']['output'];
   /** 어드민) 광고 에셋 업로드 presigned URL */
   createAdAssetUploadUrl: AdAssetUploadUrlOutput;
+  createAdminRole: AdminRoleOutput;
   /** 유저 등록 상품 썸네일 업로드용 presigned URL 발급 */
   createProductImageUploadUrl: ProductImageUploadUrlOutput;
   /** 유저가 직접 핫딜 상품 등록 (등록된 productId 반환) */
   createUserProduct: Scalars['Int']['output'];
+  deleteAdminRole: Scalars['Boolean']['output'];
   /** 어드민) 상품 hard delete */
   hardDeleteProductByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 카카오쇼핑 상품 URL을 추천리워드 링크(clink.kakao.com/sp/…)로 발급. product 에는 쓰지 않고 링크만 반환. */
@@ -733,11 +765,14 @@ export type Mutation = {
   unsubscribeNotificationTheme: Scalars['Boolean']['output'];
   /** 어드민) 광고 수정 */
   updateAd: Scalars['Boolean']['output'];
+  updateAdminRole: AdminRoleOutput;
   updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
   updateHotDealKeywordByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 키워드 맵 그룹 수정 */
   updateKeywordMapGroupByAdmin: Scalars['Boolean']['output'];
+  /** 이 키워드 알림에서 제외할 단어 설정 (전체 교체, 빈 배열 = 해제) */
+  updateNotificationKeywordExcludeKeywords: Scalars['Boolean']['output'];
   /** 이 키워드는 등록 시점보다 가격이 내려간 딜만 알림 받기 */
   updateNotificationKeywordPriceDropOnly: Scalars['Boolean']['output'];
   /** 이 키워드는 지정한 가격 범위 안의 딜만 알림 받기 (null = 그 방향 해제) */
@@ -868,6 +903,11 @@ export type MutationApproveHotDealKeywordCandidateByAdminArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type MutationAssignAdminRoleArgs = {
+  adminUserId: Scalars['Int']['input'];
+  roleId?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type MutationBatchVerifyProductMappingArgs = {
   feedback?: InputMaybe<Scalars['String']['input']>;
   productMappingIds: Array<Scalars['Int']['input']>;
@@ -905,6 +945,11 @@ export type MutationCreateAdAssetUploadUrlArgs = {
   contentType: Scalars['String']['input'];
 };
 
+export type MutationCreateAdminRoleArgs = {
+  name: Scalars['String']['input'];
+  sections: Array<Scalars['String']['input']>;
+};
+
 export type MutationCreateProductImageUploadUrlArgs = {
   contentType: Scalars['String']['input'];
 };
@@ -916,6 +961,10 @@ export type MutationCreateUserProductArgs = {
   thumbnail?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
   url: Scalars['String']['input'];
+};
+
+export type MutationDeleteAdminRoleArgs = {
+  id: Scalars['Int']['input'];
 };
 
 export type MutationHardDeleteProductByAdminArgs = {
@@ -1093,6 +1142,12 @@ export type MutationUpdateAdArgs = {
   input: UpdateAdvertiseInput;
 };
 
+export type MutationUpdateAdminRoleArgs = {
+  id: Scalars['Int']['input'];
+  name: Scalars['String']['input'];
+  sections: Array<Scalars['String']['input']>;
+};
+
 export type MutationUpdateCommentArgs = {
   content?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['Int']['input'];
@@ -1110,6 +1165,11 @@ export type MutationUpdateKeywordMapGroupByAdminArgs = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['Int']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationUpdateNotificationKeywordExcludeKeywordsArgs = {
+  excludeKeywords: Array<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
 };
 
 export type MutationUpdateNotificationKeywordPriceDropOnlyArgs = {
@@ -1187,6 +1247,7 @@ export type NotificationByAdminOutput = {
 export type NotificationKeyword = {
   __typename?: 'NotificationKeyword';
   createdAt: Scalars['DateTime']['output'];
+  excludeKeywords?: Maybe<Array<Scalars['String']['output']>>;
   id: Scalars['ID']['output'];
   isActive: Scalars['Boolean']['output'];
   keyword: Scalars['String']['output'];
@@ -1674,24 +1735,35 @@ export type ProductPriceVerdict = {
   __typename?: 'ProductPriceVerdict';
   /** MAPPING | CLUSTER */
   basis?: Maybe<Scalars['String']['output']>;
+  /** 비교 딜 가격(오름차순) — 분포 막대용 */
+  comparePrices?: Maybe<Array<Scalars['Float']['output']>>;
   /** HIGH only in v1 READY */
   confidence?: Maybe<Scalars['String']['output']>;
   /** KRW | USD */
   currency?: Maybe<Scalars['String']['output']>;
+  /** 비교한 지난 핫딜 수(딜 단위, 이상치 제외) */
+  dealCount?: Maybe<Scalars['Int']['output']>;
   /** seedPrice - windowMinPrice. 음수 = 지금이 더 쌈 */
   deltaWon?: Maybe<Scalars['Float']['output']>;
+  /** 보통가 대비 할인율(%). 음수 = 더 비쌈 */
+  discountPercent?: Maybe<Scalars['Float']['output']>;
   displayTier: PriceVerdictDisplayTier;
   headline?: Maybe<Scalars['String']['output']>;
+  /** v2: dealCount 와 같음(호환용) */
   historyPointCount?: Maybe<Scalars['Int']['output']>;
   labelKey?: Maybe<PriceVerdictLabelKey>;
   nullReason?: Maybe<PriceVerdictNullReason>;
   percentile?: Maybe<Scalars['Float']['output']>;
   rangeDays?: Maybe<Scalars['Int']['output']>;
+  /** 좋은 딜에 필요한 할인율(%) — 비교 딜이 적을수록 커진다 */
+  requiredDiscountPercent?: Maybe<Scalars['Float']['output']>;
   /** max(0, -deltaWon) */
   savingsWon?: Maybe<Scalars['Float']['output']>;
   seedPrice?: Maybe<Scalars['Float']['output']>;
   status: PriceVerdictStatus;
   subline?: Maybe<Scalars['String']['output']>;
+  /** 보통가 = 비교 딜 중앙값 */
+  typicalPrice?: Maybe<Scalars['Float']['output']>;
   /** KST YYYY-MM-DD */
   windowMinDate?: Maybe<Scalars['String']['output']>;
   windowMinPrice?: Maybe<Scalars['Float']['output']>;
@@ -1824,6 +1896,9 @@ export type Query = {
   /** 어드민) 광고 노출/클릭 정산 리포트 */
   adReport: Array<AdReportRow>;
   adminMe: AdminUser;
+  adminRoles: Array<AdminRoleOutput>;
+  adminSections: Array<Scalars['String']['output']>;
+  adminUsersWithRole: Array<AdminUserRoleOutput>;
   /** 어드민) 광고 목록 */
   adsByAdmin: Array<AdvertiseCreative>;
   /** 어드민) provider별 일간 판매 추이 (건수 + localCommission 합, 추세 감시용) */
@@ -1917,6 +1992,7 @@ export type Query = {
   modelPagePreviewByAdmin?: Maybe<ModelPageOutput>;
   /** 어드민) 모델 페이지 검수 목록 */
   modelPagesByAdmin: Array<ModelPageAdminItemOutput>;
+  myAdminAccess: AdminAccessOutput;
   /** 내가 구독한 묶음(테마) id 목록 */
   mySubscribedThemeIds: Array<Scalars['Int']['output']>;
   /** 유저 알림 키워드 목록 조회 */
@@ -1978,6 +2054,7 @@ export type Query = {
   recommendedNotificationKeywords: Array<Scalars['String']['output']>;
   /** 신고한 사용자 목록 조회 (마스킹) */
   reportUserNames: Array<Scalars['String']['output']>;
+  revenueTrend: Array<RevenueDailyOutput>;
   /** 같은 상품(동일상품 그룹)의 진행 중 딜 조회 (최신순, 최대 20) */
   sameProductDeals: Array<ProductOutput>;
   /** 자동완성용 추천 검색어 목록. prefix로 시작하는 인기 검색어 + 상품 title prefix 매칭. */
@@ -2413,6 +2490,11 @@ export type QueryReportUserNamesArgs = {
   productId: Scalars['Int']['input'];
 };
 
+export type QueryRevenueTrendArgs = {
+  endDate: Scalars['DateTime']['input'];
+  startDate: Scalars['DateTime']['input'];
+};
+
 export type QuerySameProductDealsArgs = {
   id: Scalars['Int']['input'];
 };
@@ -2515,6 +2597,13 @@ export type RecommendedProductOutput = {
   product: ProductOutput;
   recommendationReason?: Maybe<Scalars['String']['output']>;
   recommendationScore?: Maybe<Scalars['Float']['output']>;
+};
+
+export type RevenueDailyOutput = {
+  __typename?: 'RevenueDailyOutput';
+  date: Scalars['String']['output'];
+  revenue: Scalars['Float']['output'];
+  source: Scalars['String']['output'];
 };
 
 export enum Role {
@@ -3276,6 +3365,73 @@ export type MutationSendNotificationByAdminMutation = {
   sendNotificationByAdmin: boolean;
 };
 
+export type MyAdminAccessQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MyAdminAccessQuery = {
+  __typename?: 'Query';
+  myAdminAccess: {
+    __typename?: 'AdminAccessOutput';
+    isAdmin: boolean;
+    roleName?: string | null;
+    sections: Array<string>;
+  };
+};
+
+export type AdminPermissionsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AdminPermissionsQuery = {
+  __typename?: 'Query';
+  adminSections: Array<string>;
+  adminRoles: Array<{
+    __typename?: 'AdminRoleOutput';
+    id: number;
+    name: string;
+    sections: Array<string>;
+    isSystem: boolean;
+  }>;
+  adminUsersWithRole: Array<{
+    __typename?: 'AdminUserRoleOutput';
+    id: number;
+    email: string;
+    name: string;
+    roleId?: number | null;
+  }>;
+};
+
+export type CreateAdminRoleMutationVariables = Exact<{
+  name: Scalars['String']['input'];
+  sections: Array<Scalars['String']['input']> | Scalars['String']['input'];
+}>;
+
+export type CreateAdminRoleMutation = {
+  __typename?: 'Mutation';
+  createAdminRole: { __typename?: 'AdminRoleOutput'; id: number };
+};
+
+export type UpdateAdminRoleMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  name: Scalars['String']['input'];
+  sections: Array<Scalars['String']['input']> | Scalars['String']['input'];
+}>;
+
+export type UpdateAdminRoleMutation = {
+  __typename?: 'Mutation';
+  updateAdminRole: { __typename?: 'AdminRoleOutput'; id: number };
+};
+
+export type DeleteAdminRoleMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type DeleteAdminRoleMutation = { __typename?: 'Mutation'; deleteAdminRole: boolean };
+
+export type AssignAdminRoleMutationVariables = Exact<{
+  adminUserId: Scalars['Int']['input'];
+  roleId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type AssignAdminRoleMutation = { __typename?: 'Mutation'; assignAdminRole: boolean };
+
 export type QueryProductsQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
@@ -3567,6 +3723,21 @@ export type AffiliateSalesTrendQuery = {
     provider: string;
     count: number;
     commissionSum: number;
+  }>;
+};
+
+export type RevenueTrendQueryVariables = Exact<{
+  startDate: Scalars['DateTime']['input'];
+  endDate: Scalars['DateTime']['input'];
+}>;
+
+export type RevenueTrendQuery = {
+  __typename?: 'Query';
+  revenueTrend: Array<{
+    __typename?: 'RevenueDailyOutput';
+    date: string;
+    source: string;
+    revenue: number;
   }>;
 };
 
@@ -4504,6 +4675,56 @@ export const MutationSendNotificationByAdminDocument = new TypedDocumentString(`
   MutationSendNotificationByAdminMutation,
   MutationSendNotificationByAdminMutationVariables
 >;
+export const MyAdminAccessDocument = new TypedDocumentString(`
+    query MyAdminAccess {
+  myAdminAccess {
+    isAdmin
+    roleName
+    sections
+  }
+}
+    `) as unknown as TypedDocumentString<MyAdminAccessQuery, MyAdminAccessQueryVariables>;
+export const AdminPermissionsDocument = new TypedDocumentString(`
+    query AdminPermissions {
+  adminSections
+  adminRoles {
+    id
+    name
+    sections
+    isSystem
+  }
+  adminUsersWithRole {
+    id
+    email
+    name
+    roleId
+  }
+}
+    `) as unknown as TypedDocumentString<AdminPermissionsQuery, AdminPermissionsQueryVariables>;
+export const CreateAdminRoleDocument = new TypedDocumentString(`
+    mutation CreateAdminRole($name: String!, $sections: [String!]!) {
+  createAdminRole(name: $name, sections: $sections) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<CreateAdminRoleMutation, CreateAdminRoleMutationVariables>;
+export const UpdateAdminRoleDocument = new TypedDocumentString(`
+    mutation UpdateAdminRole($id: Int!, $name: String!, $sections: [String!]!) {
+  updateAdminRole(id: $id, name: $name, sections: $sections) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<UpdateAdminRoleMutation, UpdateAdminRoleMutationVariables>;
+export const DeleteAdminRoleDocument = new TypedDocumentString(`
+    mutation DeleteAdminRole($id: Int!) {
+  deleteAdminRole(id: $id)
+}
+    `) as unknown as TypedDocumentString<DeleteAdminRoleMutation, DeleteAdminRoleMutationVariables>;
+export const AssignAdminRoleDocument = new TypedDocumentString(`
+    mutation AssignAdminRole($adminUserId: Int!, $roleId: Int) {
+  assignAdminRole(adminUserId: $adminUserId, roleId: $roleId)
+}
+    `) as unknown as TypedDocumentString<AssignAdminRoleMutation, AssignAdminRoleMutationVariables>;
 export const QueryProductsDocument = new TypedDocumentString(`
     query QueryProducts($limit: Int!, $searchAfter: [String!], $startDate: DateTime, $orderBy: ProductOrderType, $orderOption: OrderOptionType, $categoryIds: [Int!], $keyword: String, $thumbnailType: ThumbnailType, $isEnd: Boolean, $isHot: Boolean) {
   products(
@@ -4774,6 +4995,15 @@ export const AffiliateSalesTrendDocument = new TypedDocumentString(`
   AffiliateSalesTrendQuery,
   AffiliateSalesTrendQueryVariables
 >;
+export const RevenueTrendDocument = new TypedDocumentString(`
+    query RevenueTrend($startDate: DateTime!, $endDate: DateTime!) {
+  revenueTrend(startDate: $startDate, endDate: $endDate) {
+    date
+    source
+    revenue
+  }
+}
+    `) as unknown as TypedDocumentString<RevenueTrendQuery, RevenueTrendQueryVariables>;
 export const QueryUserRegistrationStatsDocument = new TypedDocumentString(`
     query QueryUserRegistrationStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {
   userRegistrationStats(

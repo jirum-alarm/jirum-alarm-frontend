@@ -1,4 +1,3 @@
-/* eslint-disable */
 import * as types from './graphql';
 
 /**
@@ -49,6 +48,12 @@ type Documents = {
   '\n  mutation MutationSetModelPagePublishedByAdmin($id: Int!, $isPublished: Boolean!) {\n    setModelPagePublishedByAdmin(id: $id, isPublished: $isPublished)\n  }\n': typeof types.MutationSetModelPagePublishedByAdminDocument;
   '\n  query QueryNotificationsByAdmin($limit: Int!, $searchAfter: [String!]) {\n    notificationsByAdmin(limit: $limit, searchAfter: $searchAfter) {\n      id\n      title\n      message\n      target\n      targetId\n      createdAt\n      searchAfter\n    }\n  }\n': typeof types.QueryNotificationsByAdminDocument;
   '\n  mutation MutationSendNotificationByAdmin(\n    $title: String!\n    $message: String!\n    $type: NotificationType!\n    $target: NotificationTarget\n    $targetId: Int\n    $url: String\n    $userIds: [Int!]\n  ) {\n    sendNotificationByAdmin(\n      title: $title\n      message: $message\n      type: $type\n      target: $target\n      targetId: $targetId\n      url: $url\n      userIds: $userIds\n    )\n  }\n': typeof types.MutationSendNotificationByAdminDocument;
+  '\n  query MyAdminAccess {\n    myAdminAccess {\n      isAdmin\n      roleName\n      sections\n    }\n  }\n': typeof types.MyAdminAccessDocument;
+  '\n  query AdminPermissions {\n    adminSections\n    adminRoles {\n      id\n      name\n      sections\n      isSystem\n    }\n    adminUsersWithRole {\n      id\n      email\n      name\n      roleId\n    }\n  }\n': typeof types.AdminPermissionsDocument;
+  '\n  mutation CreateAdminRole($name: String!, $sections: [String!]!) {\n    createAdminRole(name: $name, sections: $sections) {\n      id\n    }\n  }\n': typeof types.CreateAdminRoleDocument;
+  '\n  mutation UpdateAdminRole($id: Int!, $name: String!, $sections: [String!]!) {\n    updateAdminRole(id: $id, name: $name, sections: $sections) {\n      id\n    }\n  }\n': typeof types.UpdateAdminRoleDocument;
+  '\n  mutation DeleteAdminRole($id: Int!) {\n    deleteAdminRole(id: $id)\n  }\n': typeof types.DeleteAdminRoleDocument;
+  '\n  mutation AssignAdminRole($adminUserId: Int!, $roleId: Int) {\n    assignAdminRole(adminUserId: $adminUserId, roleId: $roleId)\n  }\n': typeof types.AssignAdminRoleDocument;
   '\n  query QueryProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n    $categoryIds: [Int!]\n    $keyword: String\n    $thumbnailType: ThumbnailType\n    $isEnd: Boolean\n    $isHot: Boolean\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      orderOption: $orderOption\n      categoryIds: $categoryIds\n      keyword: $keyword\n      thumbnailType: $thumbnailType\n      isEnd: $isEnd\n      isHot: $isHot\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n': typeof types.QueryProductsDocument;
   '\n  mutation MutationHardDeleteProductByAdmin($id: Int!) {\n    hardDeleteProductByAdmin(id: $id)\n  }\n': typeof types.MutationHardDeleteProductByAdminDocument;
   '\n  query QueryProduct($id: Int!) {\n    product(id: $id) {\n      id\n      providerId\n      category\n      categoryId\n      categoryName\n      mallId\n      title\n      url\n      detailUrl\n      isHot\n      isEnd\n      price\n      postedAt\n      thumbnail\n      wishlistCount\n      positiveCommunityReactionCount\n      negativeCommunityReactionCount\n      author {\n        id\n        nickname\n      }\n      provider {\n        id\n        name\n        nameKr\n        host\n      }\n      viewCount\n      mallName\n      prices {\n        id\n        target\n        type\n        price\n        createdAt\n      }\n      hotDealType\n      hotDealIndex {\n        id\n        message\n        highestPrice\n        currentPrice\n        lowestPrice\n      }\n      likeCount\n      dislikeCount\n    }\n  }\n': typeof types.QueryProductDocument;
@@ -69,6 +74,7 @@ type Documents = {
   '\n  query ProfitLinkMissedProducts($limit: Int, $categoryIds: [Int!]) {\n    profitLinkMissedProducts(limit: $limit, categoryIds: $categoryIds) {\n      id\n      title\n      mallName\n      parsedPrice\n      categoryId\n      createdAt\n      attempts\n      lastError\n      nextRetryAt\n      rankingScore\n      detailUrl\n    }\n  }\n': typeof types.ProfitLinkMissedProductsDocument;
   '\n  query ProfitLinkQueueHealth {\n    profitLinkQueueHealth {\n      eligibleNow\n      waitingBackoff\n      parked\n      terminalDisabled\n      oldestEligibleCreatedAt\n      attemptsDistribution {\n        attempts\n        count\n      }\n    }\n  }\n': typeof types.ProfitLinkQueueHealthDocument;
   '\n  query AffiliateSalesTrend($startDate: DateTime!, $endDate: DateTime!) {\n    affiliateSalesTrend(startDate: $startDate, endDate: $endDate) {\n      date\n      provider\n      count\n      commissionSum\n    }\n  }\n': typeof types.AffiliateSalesTrendDocument;
+  '\n  query RevenueTrend($startDate: DateTime!, $endDate: DateTime!) {\n    revenueTrend(startDate: $startDate, endDate: $endDate) {\n      date\n      source\n      revenue\n    }\n  }\n': typeof types.RevenueTrendDocument;
   '\n  query QueryUserRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    userRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n': typeof types.QueryUserRegistrationStatsDocument;
   '\n  query QueryUserDemographicStats {\n    userDemographicStats {\n      genderDistribution {\n        gender\n        count\n      }\n      ageDistribution {\n        ageGroup\n        count\n      }\n    }\n  }\n': typeof types.QueryUserDemographicStatsDocument;
   '\n  query QueryTopFavoriteCategories($limit: Int) {\n    topFavoriteCategories(limit: $limit) {\n      categoryId\n      categoryName\n      count\n    }\n  }\n': typeof types.QueryTopFavoriteCategoriesDocument;
@@ -171,6 +177,18 @@ const documents: Documents = {
     types.QueryNotificationsByAdminDocument,
   '\n  mutation MutationSendNotificationByAdmin(\n    $title: String!\n    $message: String!\n    $type: NotificationType!\n    $target: NotificationTarget\n    $targetId: Int\n    $url: String\n    $userIds: [Int!]\n  ) {\n    sendNotificationByAdmin(\n      title: $title\n      message: $message\n      type: $type\n      target: $target\n      targetId: $targetId\n      url: $url\n      userIds: $userIds\n    )\n  }\n':
     types.MutationSendNotificationByAdminDocument,
+  '\n  query MyAdminAccess {\n    myAdminAccess {\n      isAdmin\n      roleName\n      sections\n    }\n  }\n':
+    types.MyAdminAccessDocument,
+  '\n  query AdminPermissions {\n    adminSections\n    adminRoles {\n      id\n      name\n      sections\n      isSystem\n    }\n    adminUsersWithRole {\n      id\n      email\n      name\n      roleId\n    }\n  }\n':
+    types.AdminPermissionsDocument,
+  '\n  mutation CreateAdminRole($name: String!, $sections: [String!]!) {\n    createAdminRole(name: $name, sections: $sections) {\n      id\n    }\n  }\n':
+    types.CreateAdminRoleDocument,
+  '\n  mutation UpdateAdminRole($id: Int!, $name: String!, $sections: [String!]!) {\n    updateAdminRole(id: $id, name: $name, sections: $sections) {\n      id\n    }\n  }\n':
+    types.UpdateAdminRoleDocument,
+  '\n  mutation DeleteAdminRole($id: Int!) {\n    deleteAdminRole(id: $id)\n  }\n':
+    types.DeleteAdminRoleDocument,
+  '\n  mutation AssignAdminRole($adminUserId: Int!, $roleId: Int) {\n    assignAdminRole(adminUserId: $adminUserId, roleId: $roleId)\n  }\n':
+    types.AssignAdminRoleDocument,
   '\n  query QueryProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n    $categoryIds: [Int!]\n    $keyword: String\n    $thumbnailType: ThumbnailType\n    $isEnd: Boolean\n    $isHot: Boolean\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      orderOption: $orderOption\n      categoryIds: $categoryIds\n      keyword: $keyword\n      thumbnailType: $thumbnailType\n      isEnd: $isEnd\n      isHot: $isHot\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n':
     types.QueryProductsDocument,
   '\n  mutation MutationHardDeleteProductByAdmin($id: Int!) {\n    hardDeleteProductByAdmin(id: $id)\n  }\n':
@@ -207,6 +225,8 @@ const documents: Documents = {
     types.ProfitLinkQueueHealthDocument,
   '\n  query AffiliateSalesTrend($startDate: DateTime!, $endDate: DateTime!) {\n    affiliateSalesTrend(startDate: $startDate, endDate: $endDate) {\n      date\n      provider\n      count\n      commissionSum\n    }\n  }\n':
     types.AffiliateSalesTrendDocument,
+  '\n  query RevenueTrend($startDate: DateTime!, $endDate: DateTime!) {\n    revenueTrend(startDate: $startDate, endDate: $endDate) {\n      date\n      source\n      revenue\n    }\n  }\n':
+    types.RevenueTrendDocument,
   '\n  query QueryUserRegistrationStats(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n  ) {\n    userRegistrationStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      date\n      count\n    }\n  }\n':
     types.QueryUserRegistrationStatsDocument,
   '\n  query QueryUserDemographicStats {\n    userDemographicStats {\n      genderDistribution {\n        gender\n        count\n      }\n      ageDistribution {\n        ageGroup\n        count\n      }\n    }\n  }\n':
@@ -485,6 +505,42 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: '\n  query MyAdminAccess {\n    myAdminAccess {\n      isAdmin\n      roleName\n      sections\n    }\n  }\n',
+): typeof import('./graphql').MyAdminAccessDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query AdminPermissions {\n    adminSections\n    adminRoles {\n      id\n      name\n      sections\n      isSystem\n    }\n    adminUsersWithRole {\n      id\n      email\n      name\n      roleId\n    }\n  }\n',
+): typeof import('./graphql').AdminPermissionsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation CreateAdminRole($name: String!, $sections: [String!]!) {\n    createAdminRole(name: $name, sections: $sections) {\n      id\n    }\n  }\n',
+): typeof import('./graphql').CreateAdminRoleDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation UpdateAdminRole($id: Int!, $name: String!, $sections: [String!]!) {\n    updateAdminRole(id: $id, name: $name, sections: $sections) {\n      id\n    }\n  }\n',
+): typeof import('./graphql').UpdateAdminRoleDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation DeleteAdminRole($id: Int!) {\n    deleteAdminRole(id: $id)\n  }\n',
+): typeof import('./graphql').DeleteAdminRoleDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation AssignAdminRole($adminUserId: Int!, $roleId: Int) {\n    assignAdminRole(adminUserId: $adminUserId, roleId: $roleId)\n  }\n',
+): typeof import('./graphql').AssignAdminRoleDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: '\n  query QueryProducts(\n    $limit: Int!\n    $searchAfter: [String!]\n    $startDate: DateTime\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n    $categoryIds: [Int!]\n    $keyword: String\n    $thumbnailType: ThumbnailType\n    $isEnd: Boolean\n    $isHot: Boolean\n  ) {\n    products(\n      limit: $limit\n      searchAfter: $searchAfter\n      startDate: $startDate\n      orderBy: $orderBy\n      orderOption: $orderOption\n      categoryIds: $categoryIds\n      keyword: $keyword\n      thumbnailType: $thumbnailType\n      isEnd: $isEnd\n      isHot: $isHot\n    ) {\n      id\n      title\n      mallId\n      url\n      isHot\n      isEnd\n      price\n      providerId\n      categoryId\n      category\n      thumbnail\n      hotDealType\n      provider {\n        nameKr\n      }\n      searchAfter\n      postedAt\n    }\n  }\n',
 ): typeof import('./graphql').QueryProductsDocument;
 /**
@@ -601,6 +657,12 @@ export function graphql(
 export function graphql(
   source: '\n  query AffiliateSalesTrend($startDate: DateTime!, $endDate: DateTime!) {\n    affiliateSalesTrend(startDate: $startDate, endDate: $endDate) {\n      date\n      provider\n      count\n      commissionSum\n    }\n  }\n',
 ): typeof import('./graphql').AffiliateSalesTrendDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query RevenueTrend($startDate: DateTime!, $endDate: DateTime!) {\n    revenueTrend(startDate: $startDate, endDate: $endDate) {\n      date\n      source\n      revenue\n    }\n  }\n',
+): typeof import('./graphql').RevenueTrendDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -27,6 +27,8 @@ import {
   ProfitLinkProviderHealthQueryVariables,
   ProfitLinkQueueHealthQuery,
   ProfitLinkQueueHealthQueryVariables,
+  RevenueTrendQuery,
+  RevenueTrendQueryVariables,
   SetKakaoSessionMutation,
   SetKakaoSessionMutationVariables,
   SetOhouSessionMutation,
@@ -54,6 +56,7 @@ import {
   QueryProfitLinkMissedProducts,
   QueryProfitLinkProviderHealth,
   QueryProfitLinkQueueHealth,
+  QueryRevenueTrend,
 } from '@/graphql/profitLink';
 
 export const useQueryHasTossSession = (
@@ -200,6 +203,12 @@ export const useProfitLinkQueueHealth = () =>
 
 export const useAffiliateSalesTrend = (variables: AffiliateSalesTrendQueryVariables) =>
   useQuery<AffiliateSalesTrendQuery, AffiliateSalesTrendQueryVariables>(QueryAffiliateSalesTrend, {
+    variables,
+    fetchPolicy: 'network-only',
+  });
+
+export const useRevenueTrend = (variables: RevenueTrendQueryVariables) =>
+  useQuery<RevenueTrendQuery, RevenueTrendQueryVariables>(QueryRevenueTrend, {
     variables,
     fetchPolicy: 'network-only',
   });

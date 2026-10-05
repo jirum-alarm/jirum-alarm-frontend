@@ -164,3 +164,13 @@ export const QueryAffiliateSalesTrend = gql`
     }
   }
 `;
+
+export const QueryRevenueTrend = gql`
+  query RevenueTrend($startDate: DateTime!, $endDate: DateTime!) {
+    revenueTrend(startDate: $startDate, endDate: $endDate) {
+      date
+      source
+      revenue
+    }
+  }
+`;

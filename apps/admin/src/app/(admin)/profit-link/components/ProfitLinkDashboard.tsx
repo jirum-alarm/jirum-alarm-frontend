@@ -11,6 +11,7 @@ import {
   useProfitLinkMissedProducts,
   useProfitLinkProviderHealth,
   useProfitLinkQueueHealth,
+  useRevenueTrend,
 } from '@/hooks/graphql/profitLink';
 import { kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
@@ -398,7 +399,70 @@ const MissedProductsSection = () => {
   );
 };
 
-// ─── 5. 판매 추이 (참고용) ───
+// ─── 5. 수익 추이 (세후) — 제휴 + 애드센스 ───
+
+const RevenueTrendSection = () => {
+  const range = useMemo(() => dateRangeOf(30), []);
+  const { data, loading } = useRevenueTrend(range);
+  const { dates, series, totals } = useMemo(() => {
+    const rows = data?.revenueTrend ?? [];
+    const dateSet = [...new Set(rows.map((row) => row.date))].sort();
+    const totalBySource = new Map<string, number>();
+    rows.forEach((row) =>
+      totalBySource.set(row.source, (totalBySource.get(row.source) ?? 0) + row.revenue),
+    );
+    const sources = [...totalBySource.keys()].sort(
+      (a, b) => (totalBySource.get(b) ?? 0) - (totalBySource.get(a) ?? 0),
+    );
+    const revenueByKey = new Map(rows.map((row) => [`${row.source}|${row.date}`, row.revenue]));
+    return {
+      dates: dateSet,
+      series: sources.map((source) => ({
+        name: source,
+        data: dateSet.map((date) => revenueByKey.get(`${source}|${date}`) ?? 0),
+      })),
+      totals: sources.map((source) => ({ source, revenue: totalBySource.get(source) ?? 0 })),
+    };
+  }, [data]);
+  const grandTotal = totals.reduce((sum, t) => sum + t.revenue, 0);
+
+  return (
+    <ChartCard title="수익 추이 30일 — 세후, 제휴 + 애드센스" loading={loading}>
+      <div className="mb-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+        <span className="font-semibold text-black dark:text-white">
+          합계 {formatKrw(grandTotal)}
+        </span>
+        {totals.map((t) => (
+          <span key={t.source} className="text-bodydark2">
+            {t.source} {formatKrw(t.revenue)}
+          </span>
+        ))}
+      </div>
+      {dates.length > 0 && (
+        <Chart
+          type="bar"
+          height={300}
+          options={{
+            chart: { stacked: true, toolbar: { show: false } },
+            xaxis: { categories: dates.map((d) => d.slice(5)) },
+            yaxis: { labels: { formatter: (v: number) => `${Math.round(v / 1000)}k` } },
+            tooltip: { y: { formatter: (v: number) => formatKrw(v) } },
+            legend: { position: 'top' },
+            dataLabels: { enabled: false },
+          }}
+          series={series}
+        />
+      )}
+      <p className="mt-2 text-xs text-bodydark2">
+        결제일 기준·취소 제외. 토스는 원천징수 3.3% 뺀 금액이고 실제 지급은 구매확정월 회차라 날짜가
+        밀린다. 애드센스는 GA4 추정치(최근 1~2일은 덜 찬 값, 매일 다시 받음). 쿠팡·네이버는 하루
+        늦게 들어온다.
+      </p>
+    </ChartCard>
+  );
+};
+
+// ─── 6. 판매 추이 (참고용) ───
 
 const SalesTrendSection = () => {
   const range = useMemo(() => dateRangeOf(30), []);
@@ -447,6 +511,7 @@ const ProfitLinkDashboard = () => (
     <QueueHealthSection />
     <FunnelSection />
     <MissedProductsSection />
+    <RevenueTrendSection />
     <SalesTrendSection />
   </div>
 );
