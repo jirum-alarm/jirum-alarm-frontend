@@ -107,9 +107,10 @@ export default function DealsListSection({
                       src={convertToWebp(deal.thumbnail) ?? deal.thumbnail}
                       fallbackSrc={deal.thumbnail}
                       alt={title}
-                      fill
-                      sizes="56px"
-                      className="object-contain"
+                      // fill+sizes="56px" 는 px 만 있어 srcset 에 너비 14개가 다 붙는다 — 고정 크기로 1x·2x 만.
+                      width={56}
+                      height={56}
+                      className="h-full w-full object-contain"
                     />
                   )}
                 </div>

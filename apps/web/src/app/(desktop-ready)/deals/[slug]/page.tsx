@@ -305,10 +305,10 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                   src={convertToWebp(heroImage) ?? heroImage}
                   fallbackSrc={heroImage}
                   alt={displayName}
-                  fill
-                  sizes="160px"
+                  width={160}
+                  height={160}
                   priority
-                  className="object-contain"
+                  className="h-full w-full object-contain"
                 />
               </div>
             )}

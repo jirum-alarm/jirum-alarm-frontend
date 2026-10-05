@@ -258,10 +258,11 @@ function DealCard({ item: p }: { item: DealItem }) {
           fallbackSrc={p.heroImage ?? undefined}
           fallback={<NoImage />}
           alt={p.modelName}
-          fill
-          // 그리드 2열(모바일)/3열(sm)/5열(PC~1280) 실폭에 맞춤 — 과대 요청 방지.
-          sizes="(max-width: 600px) 50vw, (max-width: 1024px) 33vw, 240px"
-          className="object-cover"
+          // 고정 크기 = srcset 1x·2x 두 개뿐. fill+sizes 는 너비 14개를 카드마다 찍어
+          // 757장에 img 태그만 1.2MB(HTML 3MB)였다(2026-10-05). 카드 실폭은 최대 ~240px.
+          width={256}
+          height={256}
+          className="absolute inset-0 h-full w-full object-cover"
         />
       </div>
       <div className="flex grow flex-col gap-1 p-3">
