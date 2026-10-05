@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import { WindowLocation } from '@/shared/lib/window-location';
@@ -22,6 +22,18 @@ const Completed = () => {
   // 상품 상세에서 가입했으면(가입의 81%) 그 상품으로 키워드를 추천한다.
   const productMatch = target.kind === 'internal' ? target.path.match(/^\/products\/(\d+)/) : null;
   const productId = productMatch ? Number(productMatch[1]) : null;
+
+  // 가입 계측은 여기서 코드로 쏜다. 예전엔 GTM 이 "/signup/complete 로 URL 이 바뀌는 순간"
+  // (historyChange)을 잡았는데, GTM 은 성능 때문에 load 뒤(lazyOnload)에 붙어서 OAuth 콜백이
+  // 곧장 넘어오면 그 순간을 놓쳤다 — GA4 웹 가입 98건 vs DB ~360(2026-10-05).
+  // dataLayer push 는 GTM 이 늦게 붙어도 큐에 남는다.
+  const method = searchParams.get('method');
+  useEffect(() => {
+    (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
+      event: 'sign_up',
+      method: method ?? 'unknown',
+    });
+  }, [method]);
 
   const handleCTAButton = () => {
     if (target.kind === 'external') {

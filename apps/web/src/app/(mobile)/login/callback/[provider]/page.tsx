@@ -79,12 +79,13 @@ const SocialLoginCallbackPage = () => {
       );
       const landing = target.kind === 'external' ? target.url : target.path;
 
-      // 신규 OAuth 가입은 /signup/complete 를 거쳐 보낸다. 이메일 가입과 동일한 GTM URL 트리거가
-      // 발화돼야 signup_complete 가 잡힌다(계측은 코드가 아닌 GTM DOM 트리거가 함). type 은
-      // 서버 social.service 가 신규=SIGNUP / 기존=LOGIN 으로 내려준다.
+      // 신규 OAuth 가입은 /signup/complete 를 거쳐 보낸다. sign_up 은 그 화면이 dataLayer 로 쏜다.
+      // type 은 서버 social.service 가 신규=SIGNUP / 기존=LOGIN 으로 내려준다.
       if (data.socialLogin.type === 'SIGNUP') {
         toast('회원가입에 성공했어요.');
-        router.replace(`${PAGE.SIGNUP_COMPLETE}?rtnUrl=${encodeURIComponent(landing)}`);
+        router.replace(
+          `${PAGE.SIGNUP_COMPLETE}?method=${provider}&rtnUrl=${encodeURIComponent(landing)}`,
+        );
         return;
       }
 

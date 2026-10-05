@@ -20,7 +20,7 @@ import TermsOfService from '@/features/auth/ui/signup/TermsOfService';
 
 import { setAccessToken, setRefreshToken } from '../../actions/token';
 
-const COMPLETE_ROUTE = 'signup/complete';
+const COMPLETE_ROUTE = 'signup/complete?method=email';
 
 const STEPS = [
   'termsOfService',
