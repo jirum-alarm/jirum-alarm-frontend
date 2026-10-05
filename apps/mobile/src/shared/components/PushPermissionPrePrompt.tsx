@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import * as Notifications from 'expo-notifications';
 
+import {MyPageService} from '@/shared/api/mypage';
 import ConfirmSheet from '@/shared/components/ConfirmSheet';
 import {StorageKey} from '@/shared/constant/storage-key';
 import {registerFcmToken} from '@/shared/lib/fcm/push-permission';
@@ -31,13 +32,40 @@ export async function shouldShowPushPrePrompt(): Promise<boolean> {
   }
 }
 
+/**
+ * 이미 걸어 둔 키워드가 있으면(대개 웹에서 등록) 그 키워드로 말한다. 웹에서 가입해 키워드를
+ * 등록한 56명 중 42명은 받을 통로가 없었다(2026-10-05) — 앱을 깐 이 순간이 그 알림이 처음
+ * 도착할 수 있게 되는 순간이라, 일반 문구보다 "그 알림이 이제 여기로 온다"가 이유가 된다.
+ */
+const copyFor = (keywords: string[]) => {
+  if (keywords.length === 0) {
+    return {
+      title: '새 핫딜, 놓치지 않게 알려드릴게요',
+      description:
+        '관심 키워드의 핫딜이 올라오면 바로 알림을 보내드려요. 알림은 설정에서 언제든 끌 수 있어요.',
+    };
+  }
+  const rest = keywords.length > 1 ? ` 외 ${keywords.length - 1}개` : '';
+  return {
+    title: `등록해 둔 ‘${keywords[0]}’${rest} 알림,\n이제 이 폰으로 받아보세요`,
+    description:
+      '알림만 켜면 핫딜이 올라올 때 바로 알려드려요. 알림은 설정에서 언제든 끌 수 있어요.',
+  };
+};
+
 export default function PushPermissionPrePrompt() {
   const [visible, setVisible] = useState(false);
+  const [keywords, setKeywords] = useState<string[]>([]);
 
   useEffect(() => {
     let cancelled = false;
     const timer = setTimeout(async () => {
-      if ((await shouldShowPushPrePrompt()) && !cancelled) setVisible(true);
+      if (!(await shouldShowPushPrePrompt()) || cancelled) return;
+      // 키워드 조회가 실패해도 일반 문구로 띄운다 — 안내 자체를 막지 않는다.
+      const mine = await MyPageService.getMyKeywords().catch(() => []);
+      if (cancelled) return;
+      setKeywords(mine.map(k => k.keyword).filter(Boolean));
+      setVisible(true);
     }, SHOW_DELAY_MS);
     return () => {
       cancelled = true;
@@ -60,11 +88,13 @@ export default function PushPermissionPrePrompt() {
     }
   };
 
+  const {title, description} = copyFor(keywords);
+
   return (
     <ConfirmSheet
       visible={visible}
-      title="새 핫딜, 놓치지 않게 알려드릴게요"
-      description="관심 키워드의 핫딜이 올라오면 바로 알림을 보내드려요. 알림은 설정에서 언제든 끌 수 있어요."
+      title={title}
+      description={description}
       cancelLabel="나중에"
       confirmLabel="알림 받기"
       onCancel={close}
