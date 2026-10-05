@@ -3820,6 +3820,7 @@ export type ProductPriceVerdictQuery = {
       delta: number;
       normalPriceMin?: number | null;
       normalPriceMax?: number | null;
+      shippingIncluded?: boolean | null;
     } | null;
   } | null;
 };
@@ -5101,6 +5102,7 @@ export const ProductPriceVerdictDocument = new TypedDocumentString(`
       delta
       normalPriceMin
       normalPriceMax
+      shippingIncluded
     }
   }
 }

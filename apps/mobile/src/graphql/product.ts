@@ -160,6 +160,7 @@ export const QueryProductPriceVerdict = graphql(`
         delta
         normalPriceMin
         normalPriceMax
+        shippingIncluded
       }
     }
   }

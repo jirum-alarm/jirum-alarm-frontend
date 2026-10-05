@@ -31,7 +31,8 @@ export default function PriceContextBadge({
 
   if (!priceContext) return null;
 
-  const {danawaPrice, delta, normalPriceMin, normalPriceMax} = priceContext;
+  const {danawaPrice, delta, normalPriceMin, normalPriceMax, shippingIncluded} =
+    priceContext;
   // 정상가 범위는 max/min > 3배면(액세서리·변형 섞임) 신뢰를 깎으므로 숨김 — web 과 같다.
   const hasRange =
     typeof normalPriceMin === 'number' &&
@@ -51,7 +52,10 @@ export default function PriceContextBadge({
         </Text>
       </View>
       <View className="mt-2.5 flex-row items-center justify-between border-t border-error-100 pt-2.5">
-        <Text className="text-sm text-gray-500">다나와 최저가</Text>
+        {/* 기준가가 배송비 포함 총액일 때만 — 딜 가격엔 배송비가 빠졌을 수 있다 */}
+        <Text className="text-sm text-gray-500">
+          다나와 최저가{shippingIncluded ? ' (배송비 포함)' : ''}
+        </Text>
         <Text className="text-sm font-medium text-gray-700">
           {danawaPrice.toLocaleString()}원
         </Text>
