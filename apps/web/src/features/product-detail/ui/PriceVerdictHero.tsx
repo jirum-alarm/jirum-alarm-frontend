@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 
+import { ProductService } from '@/shared/api/product';
+
 import {
   isStrongPriceVerdict,
   type ProductPriceVerdict,
@@ -17,6 +19,8 @@ function pushEvent(event: string, props: Record<string, unknown>) {
 
 type Props = {
   productId: number;
+  /** user_history source — detail_mobile | detail_desktop */
+  source: string;
   /**
    * 서버(page.tsx)가 이미 받아둔 판정. 쿼리를 타지 않아 첫 HTML 에 박힌다
    * ("없다가 생기는" 깜빡임 제거). null 이면 미노출.
@@ -28,7 +32,7 @@ type Props = {
  * 상세 가격 아래 히어로. READY+STRONG 만 노출.
  * "기준 보기" → #price-history 로 스크롤.
  */
-export default function PriceVerdictHero({ productId, verdict }: Props) {
+export default function PriceVerdictHero({ productId, source, verdict }: Props) {
   const visible = isStrongPriceVerdict(verdict);
 
   useEffect(() => {
@@ -44,7 +48,12 @@ export default function PriceVerdictHero({ productId, verdict }: Props) {
       rangeDays: verdict.rangeDays,
       screen_width: window.innerWidth,
     });
-  }, [visible, productId, verdict]);
+    void ProductService.collectPriceContextImpression({
+      productId,
+      source,
+      detail: `verdict:${verdict.basis ?? 'NONE'}`,
+    }).catch(() => {});
+  }, [visible, productId, source, verdict]);
 
   if (!visible || !verdict) return null;
 
@@ -54,6 +63,11 @@ export default function PriceVerdictHero({ productId, verdict }: Props) {
       labelKey: verdict.labelKey,
       screen_width: window.innerWidth,
     });
+    void ProductService.collectPriceContextClick({
+      productId,
+      source,
+      detail: 'verdict:history',
+    }).catch(() => {});
     document
       .getElementById('price-history')
       ?.scrollIntoView({ behavior: 'smooth', block: 'start' });

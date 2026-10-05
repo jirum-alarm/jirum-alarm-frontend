@@ -103,6 +103,7 @@ function ProductDetailPage({
                 {!hidePrice && (
                   <PriceHistorySection
                     productId={productId}
+                    source="detail_mobile"
                     currentPrice={
                       initialProduct?.price
                         ? Number(String(initialProduct.price).replace(/[^0-9.]/g, ''))

@@ -113,6 +113,14 @@ export class ProductService {
     return execute(MutationCollectPurchaseClick, variables).then((res) => res.data);
   }
 
+  static async collectPriceContextImpression(variables: PriceContextEventVariables) {
+    return execute(MutationCollectPriceContextImpression, variables).then((res) => res.data);
+  }
+
+  static async collectPriceContextClick(variables: PriceContextEventVariables) {
+    return execute(MutationCollectPriceContextClick, variables).then((res) => res.data);
+  }
+
   static async recordProductImpressions(variables: {
     source: string;
     impressions: { productId: number; position: number }[];
@@ -673,6 +681,27 @@ const MutationCollectPurchaseClick = new TypedDocumentString<
 >(`
   mutation MutationCollectPurchaseClick($productId: Int!, $source: String) {
     collectPurchaseClick(productId: $productId, source: $source)
+  }
+`);
+
+// 상세 가격 맥락(판정 카드·가격 추이) 노출/클릭. detail = '종류:근거'(노출) | '종류:요소'(클릭).
+type PriceContextEventVariables = { productId: number; source: string; detail: string };
+
+const MutationCollectPriceContextImpression = new TypedDocumentString<
+  { collectPriceContextImpression: boolean },
+  PriceContextEventVariables
+>(`
+  mutation MutationCollectPriceContextImpression($productId: Int!, $source: String, $detail: String!) {
+    collectPriceContextImpression(productId: $productId, source: $source, detail: $detail)
+  }
+`);
+
+const MutationCollectPriceContextClick = new TypedDocumentString<
+  { collectPriceContextClick: boolean },
+  PriceContextEventVariables
+>(`
+  mutation MutationCollectPriceContextClick($productId: Int!, $source: String, $detail: String!) {
+    collectPriceContextClick(productId: $productId, source: $source, detail: $detail)
   }
 `);
 

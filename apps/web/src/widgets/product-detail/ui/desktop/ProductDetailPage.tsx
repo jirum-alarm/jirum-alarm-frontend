@@ -87,6 +87,7 @@ export default async function DesktopProductDetailPage({
                 {!hidePrice && (
                   <PriceHistorySection
                     productId={productId}
+                    source="detail_desktop"
                     currentPrice={
                       initialProduct?.price
                         ? Number(String(initialProduct.price).replace(/[^0-9.]/g, ''))

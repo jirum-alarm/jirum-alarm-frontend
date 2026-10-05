@@ -174,7 +174,13 @@ export default function ProductInfo({
               <RecommendButton productId={productId} />
             </div>
           </div>
-          {!hidePrice && <PriceVerdictHero productId={productId} verdict={initialVerdict} />}
+          {!hidePrice && (
+            <PriceVerdictHero
+              productId={productId}
+              source="detail_desktop"
+              verdict={initialVerdict}
+            />
+          )}
           {tossData && <TossBadges toss={tossData} hidePriceSignals={hidePrice} />}
         </div>
         {product.viewCount >= 10 && <ViewerCount count={product.viewCount} />}

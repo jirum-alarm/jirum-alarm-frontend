@@ -141,7 +141,13 @@ export default function ProductInfo({
               <RecommendButton productId={productId} />
             </div>
           </div>
-          {!hidePrice && <PriceVerdictHero productId={productId} verdict={initialVerdict} />}
+          {!hidePrice && (
+            <PriceVerdictHero
+              productId={productId}
+              source="detail_mobile"
+              verdict={initialVerdict}
+            />
+          )}
           {tossData && <TossBadges toss={tossData} hidePriceSignals={hidePrice} />}
         </div>
       </div>

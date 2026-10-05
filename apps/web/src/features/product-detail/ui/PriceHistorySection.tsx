@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
+import { ProductService } from '@/shared/api/product';
 import type {
   PriceHistoryDeal,
   PriceHistoryPoint,
@@ -18,6 +19,8 @@ import { ProductQueries } from '@/entities/product';
 
 type Props = {
   productId: number;
+  /** user_history source — detail_mobile | detail_desktop */
+  source: string;
   /** 상세 현재가 — seed 점이 빠졌을 때 폴백 */
   currentPrice?: number | null;
   /** 이 상품 게시일 — 기간 필터로 seed가 잘려도 오늘로 찍지 않기 위함 */
@@ -461,6 +464,7 @@ function buildChartGeometry(
  */
 export default function PriceHistorySection({
   productId,
+  source,
   currentPrice: currentPriceProp,
   postedAt,
 }: Props) {
@@ -526,6 +530,33 @@ export default function PriceHistorySection({
     return marker;
   }, [allPoints, productId, currentPriceProp, postedAt, periodStartMs, contentEndMs]);
 
+  // 노출은 섹션이 실제로 그려질 때(아래 early return 을 통과할 때) 상세 진입당 1회, 점 선택도 첫 1회만.
+  const shown = !isError && !!history && allPoints.length >= 2 && points.length >= 2;
+  const basis = history?.basis;
+  const impressedRef = useRef<number | null>(null);
+  const pointClickedRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (!shown || impressedRef.current === productId) return;
+    impressedRef.current = productId;
+    void ProductService.collectPriceContextImpression({
+      productId,
+      source,
+      detail: `price_history:${basis}`,
+    }).catch(() => {});
+  }, [shown, basis, productId, source]);
+
+  const trackClick = (element: 'period' | 'point' | 'deal') => {
+    if (element === 'point') {
+      if (pointClickedRef.current === productId) return;
+      pointClickedRef.current = productId;
+    }
+    void ProductService.collectPriceContextClick({
+      productId,
+      source,
+      detail: `price_history:${element}`,
+    }).catch(() => {});
+  };
+
   if (mounted && isError && process.env.NODE_ENV === 'development') {
     return (
       <section className="py-0">
@@ -590,7 +621,10 @@ export default function PriceHistorySection({
               <button
                 key={p.days}
                 type="button"
-                onClick={() => setDaysOverride(p.days)}
+                onClick={() => {
+                  setDaysOverride(p.days);
+                  trackClick('period');
+                }}
                 className={cn(
                   'rounded-lg border px-3 py-1.5 text-sm transition-colors',
                   active
@@ -649,6 +683,7 @@ export default function PriceHistorySection({
         axisEndMs={axisEndMs}
         contentStartMs={contentStartMs}
         contentEndMs={contentEndMs}
+        onTrackClick={trackClick}
       />
     </section>
   );
@@ -675,6 +710,7 @@ function PriceLineChart({
   axisEndMs,
   contentStartMs,
   contentEndMs,
+  onTrackClick,
 }: {
   points: PriceHistoryPoint[];
   currentMarker: CurrentProductMarker | null;
@@ -686,6 +722,7 @@ function PriceLineChart({
   axisEndMs: number;
   contentStartMs: number;
   contentEndMs: number;
+  onTrackClick: (element: 'point' | 'deal') => void;
 }) {
   const width = 640;
   const height = 260;
@@ -757,6 +794,7 @@ function PriceLineChart({
   };
 
   const selectAtClientX = (clientX: number) => {
+    onTrackClick('point');
     const x = clientXToPlotX(clientX);
     const idx = nearestIdxFromClientX(clientX);
     const pointDist = orderedPoints[idx] != null ? Math.abs(orderedPoints[idx].x - x) : Infinity;
@@ -940,7 +978,12 @@ function PriceLineChart({
       </svg>
 
       {selectedPoint && (
-        <DealPreview point={selectedPoint} currency={currency} isCurrent={viewingCurrent} />
+        <DealPreview
+          point={selectedPoint}
+          currency={currency}
+          isCurrent={viewingCurrent}
+          onClick={() => onTrackClick('deal')}
+        />
       )}
     </div>
   );
@@ -950,10 +993,12 @@ function DealPreview({
   point,
   currency,
   isCurrent,
+  onClick,
 }: {
   point: PriceHistoryPoint;
   currency: string;
   isCurrent: boolean;
+  onClick: () => void;
 }) {
   const deal = point.deal;
 
@@ -978,6 +1023,7 @@ function DealPreview({
         data-track="product-card"
         data-source="price_history"
         data-product-id={deal.id}
+        onClick={onClick}
         className="flex items-center gap-2.5 hover:opacity-90"
       >
         <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-md bg-gray-50">
