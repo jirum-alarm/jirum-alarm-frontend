@@ -53,8 +53,6 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     return NextResponse.redirect(target, 301);
   }
 
-  // const response = await handlePostHog(request);
-
   // ⚠️ request.headers 자체에 심는다. applySetCookie 가 req.headers 를 원본으로
   // 새 override 를 만들어 통째로 덮어쓰기 때문에, NextResponse.next({request:{headers}})
   // 로만 넘기면 토큰 리프레시 경로에서 이 헤더가 조용히 사라진다.
@@ -94,58 +92,6 @@ const routeGuard = async (req: NextRequest, res: NextResponse) => {
 
   return res;
 };
-
-// const handlePostHog = async (request: NextRequest) => {
-//   const ph_project_api_key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-//   const ph_cookie_key = `ph_${ph_project_api_key}_posthog`;
-//   const cookie = request.cookies.get(ph_cookie_key);
-
-//   let distinct_id;
-//   if (cookie) {
-//     distinct_id = JSON.parse(cookie.value).distinct_id;
-//   } else {
-//     distinct_id = crypto.randomUUID();
-//   }
-
-//   const requestOptions = {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({
-//       api_key: ph_project_api_key,
-//       distinct_id: distinct_id,
-//     }),
-//   };
-
-//   const ph_request = await fetch(
-//     `${process.env.NEXT_PUBLIC_POSTHOG_HOST}/decide?v=3`,
-//     requestOptions,
-//   );
-
-//   const data = await ph_request.json();
-
-//   const response = NextResponse.next({
-//     request: {
-//       headers: new Headers(request.headers),
-//     },
-//   });
-
-//   const bootstrapData = {
-//     distinctID: distinct_id,
-//     featureFlags: data.featureFlags,
-//   };
-
-//   const cookieInfo = {
-//     name: 'bootstrapData',
-//     value: JSON.stringify(bootstrapData),
-//   };
-
-//   response.cookies.set(cookieInfo);
-//   applySetCookie(request, response);
-
-//   return response;
-// };
 
 const getNewToken = async (refreshToken?: string) => {
   const response = await fetch(GRAPHQL_ENDPOINT, {

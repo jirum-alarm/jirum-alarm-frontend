@@ -17,10 +17,6 @@ import { getAccessToken } from './actions/token';
 
 import type { Metadata, Viewport } from 'next';
 
-// const PostHogPageView = dynamic(() => import('@/shared/ui/PostHogPageView'), {
-//   ssr: false,
-// });
-
 export const metadata: Metadata = defaultMetadata;
 
 export const viewport: Viewport = {

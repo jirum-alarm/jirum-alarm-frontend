@@ -62,7 +62,7 @@ jirum-alarm-frontend/
 - **Data Fetching**: Apollo Client (GraphQL)
 - **Styling**: Tailwind CSS, Tailwind Merge, Class Variance Authority
 - **Animation**: Motion, Swiper, Tailwind CSS Animate
-- **Analytics**: Sentry, Mixpanel, PostHog
+- **Analytics**: GA4(웹=GTM dataLayer, 앱=Firebase), Clarity(웹), Sentry. Mixpanel 은 코드가 아니라 GTM 태그
 - **Real-time**: GraphQL WS, Firebase
 - **Development**: Storybook, MSW for mocking
 
@@ -307,7 +307,7 @@ Reusable UI components accessed via workspace links:
 
 ### Analytics & Monitoring
 - **Error Tracking**: Sentry 10.x
-- **Analytics**: Mixpanel, PostHog
+- **Analytics**: GA4 (GTM), Clarity — 웹 이벤트는 GTM 에 태그·트리거가 있어야 GA4 에 들어간다
 - **Performance**: Web performance monitoring
 - **Deployment**: Platform-agnostic deployment configuration
 

@@ -50,7 +50,6 @@ src/
 │   ├── (app)/                    # App-specific layout group
 │   │   ├── providers/            # Context and state providers
 │   │   │   ├── ReactQueryProviders.tsx # React Query setup
-│   │   │   ├── posthogProvider.tsx # Analytics provider
 │   │   │   ├── appProvier.tsx    # App-specific providers
 │   │   │   └── index.ts         # Provider exports
 │   │   ├── deviceId.tsx         # Device identification
@@ -141,7 +140,6 @@ src/
 ### Analytics and Monitoring
 - **Sentry 10.21.0**: Error tracking and performance monitoring
 - **Mixpanel 2.63.0**: User behavior analytics
-- **PostHog 1.234.9**: Product analytics and feature flags
 
 ### Development Tools
 - **Storybook 8.6.12**: Component development and documentation
@@ -205,7 +203,7 @@ src/
 - **GraphQL API**: Connection to backend GraphQL services
 - **Firebase**: Push notifications and real-time features
 - **Sentry**: Error tracking and performance monitoring
-- **Mixpanel/PostHog**: User analytics and behavior tracking
+- **GA4 (GTM)·Clarity**: User analytics and behavior tracking
 
 ### PWA Features
 - **Service Worker**: Offline functionality and background sync
