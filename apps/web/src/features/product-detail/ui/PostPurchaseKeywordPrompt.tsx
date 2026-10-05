@@ -113,7 +113,7 @@ export default function PostPurchaseKeywordPrompt({
   usePendingAction<string>(PendingActionType.NOTIFICATION_KEYWORD_ADD, (pending) => {
     if (!pending) return;
     addNotificationKeyword(
-      { keyword: pending, priceDropOnly: true },
+      { keyword: pending },
       { onSuccess: () => toast(`'${pending}' 알림을 등록했어요.`) },
     );
   });
@@ -160,9 +160,10 @@ export default function PostPurchaseKeywordPrompt({
     )
       return;
 
-    // 이 배너의 문구가 "더 싸지면" 이므로 하락 전용으로 등록한다.
-    // 마이페이지에서 직접 입력하는 경로는 기본값(전부 받기)을 그대로 쓴다.
-    addNotificationKeyword({ keyword, priceDropOnly: true });
+    // 전부 받기로 등록한다. 예전엔 "더 싸지면"이라 하락 전용이었는데, 기준가가 방금 누른
+    // 핫딜 가격으로 박제돼 그보다 싼 딜이 거의 안 나왔다 — 토큰이 있는데도 하락 전용만 가진
+    // 유저는 35%만 첫 알림을 받았고 전부 받기 유저는 100%였다(2026-10-05).
+    addNotificationKeyword({ keyword });
   };
 
   // 등록 완료 상태. 아이콘 자리(28px 원)·텍스트 2줄 구조·닫기 위치를 권유 상태와
@@ -229,12 +230,12 @@ export default function PostPurchaseKeywordPrompt({
         <Alert width={17} height={17} />
       </span>
       <div className="min-w-0 flex-1">
-        {/* 375px 에서 텍스트 가용폭은 ~215px 인데 "더 싸지면 알려드릴까요?" 만 ~182px 라
+        {/* 375px 에서 텍스트 가용폭은 ~215px 인데 제목 문장만 ~170px 라
             키워드와 한 줄에 넣으면 키워드가 2자로 잘린다. 줄을 나눠 각자 온전히 보여준다.
             아이콘(28px+gap 12px)이 생겨 가용폭이 그만큼 더 줄었으므로 truncate 는 유지한다. */}
-        <p className="text-sm font-semibold text-gray-800">더 싸지면 알려드릴까요?</p>
+        <p className="text-sm font-semibold text-gray-800">또 뜨면 알려드릴까요?</p>
         <p className="mt-0.5 truncate text-xs text-gray-500">
-          &lsquo;{keyword}&rsquo; 가격을 지켜볼게요
+          &lsquo;{keyword}&rsquo; 핫딜이 올라오면 알려드려요
         </p>
       </div>
       {/* 채운 pill 을 쓰지 않는다 — 바로 아래 구매 버튼(primary-500)과 같은 화면에서

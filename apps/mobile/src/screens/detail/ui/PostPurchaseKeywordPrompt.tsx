@@ -67,7 +67,7 @@ export default function PostPurchaseKeywordPrompt({
       ProductService.addNotificationKeyword({
         keyword,
         fromRecommendation: true,
-        priceDropOnly: true,
+        // 전부 받기 — 하락 전용은 기준가가 방금 본 핫딜 가격이라 첫 알림이 거의 안 왔다(web 과 같음).
       }),
     onSuccess: () => {
       trackKeywordRegister('post_purchase', keyword);
@@ -151,10 +151,10 @@ export default function PostPurchaseKeywordPrompt({
       </View>
       <View className="min-w-0 flex-1">
         <Text className="text-sm font-semibold text-gray-800">
-          더 싸지면 알려드릴까요?
+          또 뜨면 알려드릴까요?
         </Text>
         <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
-          ‘{keyword}’ 가격을 지켜볼게요
+          ‘{keyword}’ 핫딜이 올라오면 알려드려요
         </Text>
       </View>
       <View className="flex-row items-center">
