@@ -37,7 +37,7 @@ export default function PriceContextBadge({ productId, source }: PriceContextBad
 
   if (!priceContext) return null;
 
-  const { danawaPrice, delta, normalPriceMin, normalPriceMax } = priceContext;
+  const { danawaPrice, delta, normalPriceMin, normalPriceMax, shippingIncluded } = priceContext;
   const percent = Math.round(delta * 100);
 
   // 정상가 범위는 너무 넓으면(액세서리·변형 섞임) 신뢰를 깎으므로 숨김. max/min > 3배면 미표시.
@@ -55,7 +55,10 @@ export default function PriceContextBadge({ productId, source }: PriceContextBad
         <span className="text-[18px] font-bold text-[#EB001C]">{percent}% 저렴</span>
       </div>
       <div className="mt-2.5 flex items-center justify-between border-t border-[#FFD6D0] pt-2.5">
-        <span className="text-sm text-gray-500">다나와 최저가</span>
+        <span className="text-sm text-gray-500">
+          {/* 기준가가 배송비 포함 총액일 때만 — 딜 가격엔 배송비가 빠졌을 수 있다 */}
+          다나와 최저가{shippingIncluded ? ' (배송비 포함)' : ''}
+        </span>
         <span className="text-sm font-medium text-gray-700">{danawaPrice.toLocaleString()}원</span>
       </div>
       {hasRange && (

@@ -91,6 +91,7 @@ export const QueryProductAdditionalInfo = gql`
       normalPriceMedian
       danawaProductName
       verificationStatus
+      shippingIncluded
     }
     hotDealType
     hotDealIndex {

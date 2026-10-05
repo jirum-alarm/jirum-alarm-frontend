@@ -1176,6 +1176,7 @@ export type PriceContext = {
   normalPriceMax?: Maybe<Scalars['Float']['output']>;
   normalPriceMedian?: Maybe<Scalars['Float']['output']>;
   normalPriceMin?: Maybe<Scalars['Float']['output']>;
+  shippingIncluded?: Maybe<Scalars['Boolean']['output']>;
   verificationStatus?: Maybe<Scalars['String']['output']>;
 };
 
@@ -2995,6 +2996,7 @@ export type ProductAdditionalInfoFragment = {
     normalPriceMedian?: number | null;
     danawaProductName?: string | null;
     verificationStatus?: string | null;
+    shippingIncluded?: boolean | null;
   } | null;
   hotDealIndex?: {
     __typename?: 'ProductHotDealIndex';
@@ -3562,6 +3564,7 @@ export const ProductAdditionalInfoFragmentDoc = new TypedDocumentString(
     normalPriceMedian
     danawaProductName
     verificationStatus
+    shippingIncluded
   }
   hotDealType
   hotDealIndex {
@@ -4143,6 +4146,7 @@ export const ProductAdditionalInfoDocument = new TypedDocumentString(`
     normalPriceMedian
     danawaProductName
     verificationStatus
+    shippingIncluded
   }
   hotDealType
   hotDealIndex {

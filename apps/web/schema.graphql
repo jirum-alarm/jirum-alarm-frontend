@@ -1132,6 +1132,7 @@ type PriceContext {
   normalPriceMax: Float
   normalPriceMedian: Float
   normalPriceMin: Float
+  shippingIncluded: Boolean
   verificationStatus: String
 }
 
