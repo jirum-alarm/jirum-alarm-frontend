@@ -237,6 +237,20 @@ export const MutationCollectProduct = graphql(`
   }
 `);
 
+/**
+ * 구매(수익링크) 버튼 클릭. 웹은 전부터 쏘고 있었고 앱은 GA4 에만 보내 user_history 에 앱 클릭이 없었다.
+ * entry = 상세 진입 직전 화면(entry-screen.ts).
+ */
+export const MutationCollectPurchaseClick = graphql(`
+  mutation CollectPurchaseClick(
+    $productId: Int!
+    $source: String
+    $entry: String
+  ) {
+    collectPurchaseClick(productId: $productId, source: $source, entry: $entry)
+  }
+`);
+
 /** 상세 가격 맥락(판정 카드·가격 추이) 노출/클릭 — detail = '종류:근거' | '종류:요소'. */
 export const MutationCollectPriceContextImpression = graphql(`
   mutation CollectPriceContextImpression(

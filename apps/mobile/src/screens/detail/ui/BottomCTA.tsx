@@ -7,6 +7,7 @@ import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 
 import * as Haptics from 'expo-haptics';
+import {useNavigation} from '@react-navigation/native';
 
 import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
@@ -15,6 +16,7 @@ import Heart from '@/shared/components/icons/Heart';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {showToast} from '@/shared/lib/feedback';
 import {openInAppBrowser} from '@/shared/lib/navigation';
+import {resolveEntryScreen} from '@/shared/lib/navigation/entry-screen';
 import {cn} from '@/shared/lib/styling';
 
 import PressableScale from '@/shared/components/PressableScale';
@@ -56,6 +58,7 @@ export default function BottomCTA({
   const [promptQueue, setPromptQueue] = useState<PostPurchasePromptKind[]>([]);
   const queryClient = useQueryClient();
   const productId = Number(product.id);
+  const navigation = useNavigation();
   const {requireLogin} = useRequireLogin(`/products/${productId}`);
 
   const phase = promptQueue[0] ?? null;
@@ -102,6 +105,16 @@ export default function BottomCTA({
       profit_provider: product.profitLinkProvider ?? null,
     });
 
+    // 서버 user_history 에도 남긴다(상품별 수요·쿠팡 클릭 집계율 분모). 진입 직전 화면을 entry 로.
+    void ProductService.collectPurchaseClick({
+      productId: Number(product.id),
+      source: 'app_detail',
+      entry: resolveEntryScreen(
+        navigation.getState(),
+        navigation.getParent()?.getState(),
+      ),
+    }).catch(() => {});
+
     // 브라우저를 먼저 연다 — 저장소 읽기(await)를 앞에 두면 구매 탭이 한 박자 늦게 반응했다.
     // 돌아왔을 때 띄울 안내 순서는 브라우저가 떠 있는 동안 계산해도 충분하다.
     openInAppBrowser(product.detailUrl);
@@ -113,6 +126,7 @@ export default function BottomCTA({
     product.isProfitUrl,
     product.profitLinkProvider,
     isUserLogin,
+    navigation,
   ]);
 
   const isWishlisted = !!stats?.isMyWishlist;

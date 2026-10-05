@@ -5,6 +5,7 @@ import {
   MutationCollectPriceContextClick,
   MutationCollectPriceContextImpression,
   MutationCollectProduct,
+  MutationCollectPurchaseClick,
   MutationRecordProductImpressions,
   MutationRemoveWishlist,
   MutationReportExpiredProduct,
@@ -29,6 +30,7 @@ import type {
   CollectPriceContextClickMutationVariables,
   CollectPriceContextImpressionMutationVariables,
   CollectProductMutationVariables,
+  CollectPurchaseClickMutationVariables,
   RecordProductImpressionsMutationVariables,
   RemoveWishlistMutationVariables,
   ReportExpiredProductMutationVariables,
@@ -88,6 +90,17 @@ export class ProductService {
       variables,
     );
     return res.data?.collectProduct ?? null;
+  }
+
+  /** 구매(수익링크) 버튼 클릭. fire-and-forget. */
+  static async collectPurchaseClick(
+    variables: CollectPurchaseClickMutationVariables,
+  ) {
+    const res = await HttpClient.withAccessToken().execute(
+      MutationCollectPurchaseClick,
+      variables,
+    );
+    return res.data?.collectPurchaseClick ?? null;
   }
 
   /** 상세 가격 맥락(판정 카드·가격 추이) 노출. fire-and-forget. */

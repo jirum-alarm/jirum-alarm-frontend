@@ -638,6 +638,8 @@ type Mutation {
   ): Boolean!
   """구매(수익링크) 버튼 클릭 기록 — source 에 화면(예: detail_mobile)"""
   collectPurchaseClick(
+    """상세 진입 직전 화면 (예: path:/search)"""
+    entry: String
     """클릭 위치(랭크, 0-based)"""
     position: Int
     productId: Int!
