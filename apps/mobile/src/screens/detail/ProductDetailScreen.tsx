@@ -122,7 +122,7 @@ function NativeDetail({
   );
   // 가격 판정도 같은 이유로 먼저 건다. web 은 서버(page.tsx)가 받아 첫 HTML 에 박는다 —
   // 늦게 오면 가격 바로 아래 카드가 "없다가 생기며" 화면을 민다. 실패는 null(서비스가 삼킴).
-  const {data: verdict, isPending: isVerdictPending} = useQuery({
+  const {data: priceSignals, isPending: isVerdictPending} = useQuery({
     ...ProductQueries.priceVerdict({id: productId}),
     enabled: !hidePrice,
   });
@@ -297,7 +297,8 @@ function NativeDetail({
             productId={productId}
             isUserLogin={isLogin}
             hidePrice={hidePrice}
-            verdict={verdict}
+            verdict={priceSignals?.priceVerdict}
+            priceContext={priceSignals?.priceContext}
             onPressVerdictHistory={() => {
               if (priceHistoryY.current == null) return;
               // sticky 조회수 띠가 섹션 제목을 덮지 않게 그 높이만큼 덜 내린다.

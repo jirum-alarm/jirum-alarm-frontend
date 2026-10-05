@@ -15,6 +15,7 @@ import TossBadges from './TossBadges';
 import TossIcon from './TossIcon';
 import NaverIcon from './NaverIcon';
 import PriceVerdictHero from './PriceVerdictHero';
+import PriceContextBadge, {type PriceContext} from './PriceContextBadge';
 
 import type {ProductDetail, SourceData} from '../model/types';
 import type {PriceVerdict} from '../lib/price-signals';
@@ -43,6 +44,7 @@ export default function ProductInfo({
   isUserLogin,
   hidePrice,
   verdict,
+  priceContext,
   onPressVerdictHistory,
 }: {
   product: ProductDetail;
@@ -52,6 +54,7 @@ export default function ProductInfo({
   hidePrice?: boolean;
   /** 가격 판정(web PriceVerdictHero). READY+STRONG 일 때만 그려진다. */
   verdict?: PriceVerdict | null;
+  priceContext?: PriceContext | null;
   onPressVerdictHistory?: () => void;
 }) {
   // 가격/할인율/평점/쿠폰은 소스 무관 공통 필드라 토스·오늘의집이 같은 블록을 쓴다.
@@ -148,13 +151,19 @@ export default function ProductInfo({
         ) : null}
       </View>
 
-      {/* web 순서: 추천 버튼 줄 → 가격 판정 → 토스 뱃지. */}
+      {/* web 순서: 추천 버튼 줄 → 가격 판정 → 다나와 배지 → 토스 뱃지. */}
       {!hidePrice ? (
-        <PriceVerdictHero
-          productId={productId}
-          verdict={verdict}
-          onPressHistory={() => onPressVerdictHistory?.()}
-        />
+        <>
+          <PriceVerdictHero
+            productId={productId}
+            verdict={verdict}
+            onPressHistory={() => onPressVerdictHistory?.()}
+          />
+          <PriceContextBadge
+            productId={productId}
+            priceContext={priceContext}
+          />
+        </>
       ) : null}
 
       {source.toss ? (

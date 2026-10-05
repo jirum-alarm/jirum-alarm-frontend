@@ -3813,6 +3813,14 @@ export type ProductPriceVerdictQuery = {
       subline?: string | null;
       historyPointCount?: number | null;
     } | null;
+    priceContext?: {
+      __typename?: 'PriceContext';
+      dealPrice: number;
+      danawaPrice: number;
+      delta: number;
+      normalPriceMin?: number | null;
+      normalPriceMax?: number | null;
+    } | null;
   } | null;
 };
 
@@ -5086,6 +5094,13 @@ export const ProductPriceVerdictDocument = new TypedDocumentString(`
       headline
       subline
       historyPointCount
+    }
+    priceContext {
+      dealPrice
+      danawaPrice
+      delta
+      normalPriceMin
+      normalPriceMax
     }
   }
 }

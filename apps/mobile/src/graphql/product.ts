@@ -135,8 +135,9 @@ export const QueryProductPriceHistory = graphql(`
 `);
 
 /**
- * 상세 가격 아래 판정 카드(PriceVerdictHero). web `QueryProductPriceVerdict` 와 같은 필드.
- * 가격 추이와 쿼리를 나눈 이유도 web 과 같다 — 판정은 서버가 따로 계산한다.
+ * 상세 가격 아래 판정 카드(PriceVerdictHero) + 다나와 최저가 배지(PriceContextBadge).
+ * 판정은 web `QueryProductPriceVerdict` 와 같은 필드. 가격 추이와 쿼리를 나눈 이유도 web 과 같다 — 판정은 서버가 따로 계산한다.
+ * 배지도 가격 바로 아래라 첫 화면이 같이 기다린다(늦게 끼어들어 화면을 밀지 않게).
  */
 export const QueryProductPriceVerdict = graphql(`
   query ProductPriceVerdict($id: Int!) {
@@ -152,6 +153,13 @@ export const QueryProductPriceVerdict = graphql(`
         headline
         subline
         historyPointCount
+      }
+      priceContext {
+        dealPrice
+        danawaPrice
+        delta
+        normalPriceMin
+        normalPriceMax
       }
     }
   }

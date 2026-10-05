@@ -144,14 +144,14 @@ export class ProductService {
   }
 
   /**
-   * 가격 판정 카드용. 실패는 null 로 삼킨다 — web page.tsx(getPriceVerdictCached)처럼
+   * 가격 판정 카드·다나와 배지용. 실패는 null 로 삼킨다 — web page.tsx(getPriceVerdictCached)처럼
    * 판정이 없다고 상세가 에러 화면이 되면 안 된다.
    */
   static async getPriceVerdict(variables: ProductPriceVerdictQueryVariables) {
     try {
       const request = HttpClient.withAccessToken()
         .execute(QueryProductPriceVerdict, variables)
-        .then(res => res.data?.product?.priceVerdict ?? null);
+        .then(res => res.data?.product ?? null);
       // 상세 첫 화면이 이 응답을 기다린다(카드가 늦게 끼어들어 화면을 미는 것 방지).
       // HttpClient 엔 타임아웃이 없어, 응답이 안 오면 상세 전체가 스피너에 묶인다 —
       // 판정은 없어도 되는 정보라 기다림에 상한을 둔다.
