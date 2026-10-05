@@ -2,6 +2,8 @@ import {
   MutationAddUserLikeOrDislike,
   MutationAddNotificationKeyword,
   MutationAddWishlist,
+  MutationCollectPriceContextClick,
+  MutationCollectPriceContextImpression,
   MutationCollectProduct,
   MutationRecordProductImpressions,
   MutationRemoveWishlist,
@@ -24,6 +26,8 @@ import type {
   AddNotificationKeywordMutationVariables,
   AddWishlistMutationVariables,
   MyNotificationKeywordsQueryVariables,
+  CollectPriceContextClickMutationVariables,
+  CollectPriceContextImpressionMutationVariables,
   CollectProductMutationVariables,
   RecordProductImpressionsMutationVariables,
   RemoveWishlistMutationVariables,
@@ -84,6 +88,28 @@ export class ProductService {
       variables,
     );
     return res.data?.collectProduct ?? null;
+  }
+
+  /** 상세 가격 맥락(판정 카드·가격 추이) 노출. fire-and-forget. */
+  static async collectPriceContextImpression(
+    variables: CollectPriceContextImpressionMutationVariables,
+  ) {
+    const res = await HttpClient.withAccessToken().execute(
+      MutationCollectPriceContextImpression,
+      variables,
+    );
+    return res.data?.collectPriceContextImpression ?? null;
+  }
+
+  /** 상세 가격 맥락 클릭. fire-and-forget. */
+  static async collectPriceContextClick(
+    variables: CollectPriceContextClickMutationVariables,
+  ) {
+    const res = await HttpClient.withAccessToken().execute(
+      MutationCollectPriceContextClick,
+      variables,
+    );
+    return res.data?.collectPriceContextClick ?? null;
   }
 
   /**

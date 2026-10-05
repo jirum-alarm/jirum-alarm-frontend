@@ -228,6 +228,35 @@ export const MutationCollectProduct = graphql(`
   }
 `);
 
+/** 상세 가격 맥락(판정 카드·가격 추이) 노출/클릭 — detail = '종류:근거' | '종류:요소'. */
+export const MutationCollectPriceContextImpression = graphql(`
+  mutation CollectPriceContextImpression(
+    $productId: Int!
+    $source: String
+    $detail: String!
+  ) {
+    collectPriceContextImpression(
+      productId: $productId
+      source: $source
+      detail: $detail
+    )
+  }
+`);
+
+export const MutationCollectPriceContextClick = graphql(`
+  mutation CollectPriceContextClick(
+    $productId: Int!
+    $source: String
+    $detail: String!
+  ) {
+    collectPriceContextClick(
+      productId: $productId
+      source: $source
+      detail: $detail
+    )
+  }
+`);
+
 /** 만료 경고용 유사 상품(제목 키워드 검색). */
 export const QueryKeywordProducts = graphql(`
   query KeywordProducts(

@@ -40,6 +40,7 @@ export default function PriceChart({
   contentEndMs,
   selectedIndex,
   onSelectIndex,
+  onInteract,
   currentMarker,
 }: {
   points: ChartPoint[];
@@ -50,6 +51,8 @@ export default function PriceChart({
   contentEndMs: number;
   selectedIndex: number | null;
   onSelectIndex: (index: number) => void;
+  /** 탭·가로 스크럽이 끝났을 때(세로 스크롤로 빠진 터치는 제외). */
+  onInteract?: () => void;
   currentMarker?: CurrentProductMarker | null;
 }) {
   const colors = useColors();
@@ -119,7 +122,11 @@ export default function PriceChart({
         .activeOffsetX([-6, 6])
         .failOffsetY([-12, 12])
         .onBegin(e => onSelectIndex(nearestIndex(e.x)))
-        .onUpdate(e => onSelectIndex(nearestIndex(e.x))),
+        .onUpdate(e => onSelectIndex(nearestIndex(e.x)))
+        // onBegin 은 세로 스크롤을 시작한 터치에도 불린다. failOffsetY(12) 를 넘긴 터치만 빼면 탭·스크럽이 남는다.
+        .onFinalize(e => {
+          if (Math.abs(e.translationY) < 12) onInteract?.();
+        }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [layoutWidth, geo.coords],
   );

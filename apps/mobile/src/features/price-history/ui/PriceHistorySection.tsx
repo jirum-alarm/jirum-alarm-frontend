@@ -1,10 +1,11 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import type {LayoutChangeEvent} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 
 import {ProductQueries} from '@/entities/product/product.queries';
+import {ProductService} from '@/shared/api/product/product.service';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {cn} from '@/shared/lib/styling';
 import Thumbnail from '@/shared/components/product/Thumbnail';
@@ -143,6 +144,33 @@ export default function PriceHistorySection({
     };
   }, [allPoints, resolvedDays]);
 
+  // 노출은 섹션이 실제로 그려질 때(아래 early return 을 통과할 때) 상세 진입당 1회, 점 선택도 첫 1회만.
+  const shown = !isError && !!data && points.length >= 2;
+  const basis = data?.basis;
+  const impressedRef = useRef<number | null>(null);
+  const pointTouchedRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (!shown || impressedRef.current === productId) return;
+    impressedRef.current = productId;
+    void ProductService.collectPriceContextImpression({
+      productId,
+      source: 'app_detail',
+      detail: `price_history:${basis}`,
+    }).catch(() => {});
+  }, [shown, basis, productId]);
+
+  const trackClick = (element: 'period' | 'point' | 'deal') => {
+    if (element === 'point') {
+      if (pointTouchedRef.current === productId) return;
+      pointTouchedRef.current = productId;
+    }
+    void ProductService.collectPriceContextClick({
+      productId,
+      source: 'app_detail',
+      detail: `price_history:${element}`,
+    }).catch(() => {});
+  };
+
   if (isPending) {
     return (
       <View className="h-[220px] items-center justify-center">
@@ -243,6 +271,7 @@ export default function PriceHistorySection({
                 onPress={() => {
                   setDays(period.days);
                   setSelectedIndex(null);
+                  trackClick('period');
                 }}
                 accessibilityRole="button"
                 accessibilityState={{selected: active}}
@@ -320,6 +349,7 @@ export default function PriceHistorySection({
           contentEndMs={content.contentEndMs}
           selectedIndex={selectedIndex}
           onSelectIndex={setSelectedIndex}
+          onInteract={() => trackClick('point')}
           currentMarker={currentMarker}
         />
       </View>
@@ -337,6 +367,7 @@ export default function PriceHistorySection({
                     source: 'price_history',
                     product_id: String(preview.deal.id),
                   });
+                  trackClick('deal');
                   onPressProduct(preview.deal.id);
                 }
               : undefined

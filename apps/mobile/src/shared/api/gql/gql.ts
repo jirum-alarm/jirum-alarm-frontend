@@ -80,6 +80,8 @@ type Documents = {
   '\n  query CategorizedReactionKeywords($id: Int!) {\n    categorizedReactionKeywords(id: $id) {\n      items {\n        name\n        count\n        type\n        role\n        tag\n      }\n      lastUpdatedAt\n    }\n  }\n': typeof types.CategorizedReactionKeywordsDocument;
   '\n  query TogetherViewedProducts($productId: Int!, $limit: Int!) {\n    togetherViewedProducts(productId: $productId, limit: $limit) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n': typeof types.TogetherViewedProductsDocument;
   '\n  mutation CollectProduct($productId: Int!, $source: String, $position: Int) {\n    collectProduct(productId: $productId, source: $source, position: $position)\n  }\n': typeof types.CollectProductDocument;
+  '\n  mutation CollectPriceContextImpression(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextImpression(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n': typeof types.CollectPriceContextImpressionDocument;
+  '\n  mutation CollectPriceContextClick(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextClick(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n': typeof types.CollectPriceContextClickDocument;
   '\n  query KeywordProducts(\n    $keyword: String\n    $limit: Int!\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n  ) {\n    products(\n      keyword: $keyword\n      limit: $limit\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n': typeof types.KeywordProductsDocument;
   '\n  query CategoryProducts(\n    $categoryIds: [Int!]\n    $limit: Int!\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n  ) {\n    products(\n      categoryIds: $categoryIds\n      limit: $limit\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n': typeof types.CategoryProductsDocument;
   '\n  mutation AddWishlist($productId: Int!) {\n    addWishlist(productId: $productId)\n  }\n': typeof types.AddWishlistDocument;
@@ -227,6 +229,10 @@ const documents: Documents = {
     types.TogetherViewedProductsDocument,
   '\n  mutation CollectProduct($productId: Int!, $source: String, $position: Int) {\n    collectProduct(productId: $productId, source: $source, position: $position)\n  }\n':
     types.CollectProductDocument,
+  '\n  mutation CollectPriceContextImpression(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextImpression(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n':
+    types.CollectPriceContextImpressionDocument,
+  '\n  mutation CollectPriceContextClick(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextClick(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n':
+    types.CollectPriceContextClickDocument,
   '\n  query KeywordProducts(\n    $keyword: String\n    $limit: Int!\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n  ) {\n    products(\n      keyword: $keyword\n      limit: $limit\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n':
     types.KeywordProductsDocument,
   '\n  query CategoryProducts(\n    $categoryIds: [Int!]\n    $limit: Int!\n    $orderBy: ProductOrderType\n    $orderOption: OrderOptionType\n  ) {\n    products(\n      categoryIds: $categoryIds\n      limit: $limit\n      orderBy: $orderBy\n      orderOption: $orderOption\n    ) {\n      id\n      title\n      price\n      thumbnail\n      isEnd\n      hotDealType\n      categoryId\n      mallName\n      postedAt\n      earliestExpiryDate\n      provider {\n        id\n        nameKr\n      }\n    }\n  }\n':
@@ -653,6 +659,18 @@ export function graphql(
 export function graphql(
   source: '\n  mutation CollectProduct($productId: Int!, $source: String, $position: Int) {\n    collectProduct(productId: $productId, source: $source, position: $position)\n  }\n',
 ): typeof import('./graphql').CollectProductDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation CollectPriceContextImpression(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextImpression(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n',
+): typeof import('./graphql').CollectPriceContextImpressionDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation CollectPriceContextClick(\n    $productId: Int!\n    $source: String\n    $detail: String!\n  ) {\n    collectPriceContextClick(\n      productId: $productId\n      source: $source\n      detail: $detail\n    )\n  }\n',
+): typeof import('./graphql').CollectPriceContextClickDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

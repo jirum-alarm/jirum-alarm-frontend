@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {Dimensions, Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
+import {ProductService} from '@/shared/api/product/product.service';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 
 import {isStrongPriceVerdict, type PriceVerdict} from '../lib/price-signals';
@@ -35,6 +36,11 @@ export default function PriceVerdictHero({
       rangeDays: verdict.rangeDays,
       screen_width: Dimensions.get('window').width,
     });
+    void ProductService.collectPriceContextImpression({
+      productId,
+      source: 'app_detail',
+      detail: `verdict:${verdict.basis ?? 'NONE'}`,
+    }).catch(() => {});
   }, [visible, productId, verdict]);
 
   if (!isStrongPriceVerdict(verdict)) return null;
@@ -48,6 +54,11 @@ export default function PriceVerdictHero({
             labelKey: verdict.labelKey,
             screen_width: Dimensions.get('window').width,
           });
+          void ProductService.collectPriceContextClick({
+            productId,
+            source: 'app_detail',
+            detail: 'verdict:history',
+          }).catch(() => {});
           onPressHistory();
         }}
         accessibilityRole="button"

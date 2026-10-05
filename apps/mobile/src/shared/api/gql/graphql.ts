@@ -643,6 +643,10 @@ export type Mutation = {
   batchVerifyProductMapping: Scalars['Int']['output'];
   /** 검증 취소 (검증 완료/거부된 항목을 다시 대기 상태로 되돌림) */
   cancelVerification: Scalars['Boolean']['output'];
+  /** 상세 가격 맥락(판정 카드·가격 추이) 클릭 기록 */
+  collectPriceContextClick: Scalars['Boolean']['output'];
+  /** 상세 가격 맥락(판정 카드·가격 추이) 노출 기록 — 상세 진입당 종류별 1회 */
+  collectPriceContextImpression: Scalars['Boolean']['output'];
   /** 상품 단건 수집 */
   collectProduct: Scalars['Boolean']['output'];
   /** 구매(수익링크) 버튼 클릭 기록 — source 에 화면(예: detail_mobile) */
@@ -883,6 +887,18 @@ export type MutationBatchVerifyProductMappingArgs = {
 export type MutationCancelVerificationArgs = {
   productMappingId: Scalars['Int']['input'];
   reason?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationCollectPriceContextClickArgs = {
+  detail: Scalars['String']['input'];
+  productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationCollectPriceContextImpressionArgs = {
+  detail: Scalars['String']['input'];
+  productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationCollectProductArgs = {
@@ -3878,6 +3894,28 @@ export type CollectProductMutation = {
   collectProduct: boolean;
 };
 
+export type CollectPriceContextImpressionMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
+  detail: Scalars['String']['input'];
+}>;
+
+export type CollectPriceContextImpressionMutation = {
+  __typename?: 'Mutation';
+  collectPriceContextImpression: boolean;
+};
+
+export type CollectPriceContextClickMutationVariables = Exact<{
+  productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
+  detail: Scalars['String']['input'];
+}>;
+
+export type CollectPriceContextClickMutation = {
+  __typename?: 'Mutation';
+  collectPriceContextClick: boolean;
+};
+
 export type KeywordProductsQueryVariables = Exact<{
   keyword?: InputMaybe<Scalars['String']['input']>;
   limit: Scalars['Int']['input'];
@@ -5126,6 +5164,30 @@ export const CollectProductDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   CollectProductMutation,
   CollectProductMutationVariables
+>;
+export const CollectPriceContextImpressionDocument = new TypedDocumentString(`
+    mutation CollectPriceContextImpression($productId: Int!, $source: String, $detail: String!) {
+  collectPriceContextImpression(
+    productId: $productId
+    source: $source
+    detail: $detail
+  )
+}
+    `) as unknown as TypedDocumentString<
+  CollectPriceContextImpressionMutation,
+  CollectPriceContextImpressionMutationVariables
+>;
+export const CollectPriceContextClickDocument = new TypedDocumentString(`
+    mutation CollectPriceContextClick($productId: Int!, $source: String, $detail: String!) {
+  collectPriceContextClick(
+    productId: $productId
+    source: $source
+    detail: $detail
+  )
+}
+    `) as unknown as TypedDocumentString<
+  CollectPriceContextClickMutation,
+  CollectPriceContextClickMutationVariables
 >;
 export const KeywordProductsDocument = new TypedDocumentString(`
     query KeywordProducts($keyword: String, $limit: Int!, $orderBy: ProductOrderType, $orderOption: OrderOptionType) {

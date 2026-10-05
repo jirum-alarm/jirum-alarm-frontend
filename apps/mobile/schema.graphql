@@ -612,6 +612,22 @@ type Mutation {
   batchVerifyProductMapping(feedback: String, productMappingIds: [Int!]!, result: ProductMappingVerificationStatus!): Int!
   """검증 취소 (검증 완료/거부된 항목을 다시 대기 상태로 되돌림)"""
   cancelVerification(productMappingId: Int!, reason: String): Boolean!
+  """상세 가격 맥락(판정 카드·가격 추이) 클릭 기록"""
+  collectPriceContextClick(
+    """종류:근거(노출, 예: price_history:MAPPING · verdict:CLUSTER) 또는 종류:요소(클릭, 예: verdict:history · price_history:period)"""
+    detail: String!
+    productId: Int!
+    """화면 (예: detail_mobile, app_detail)"""
+    source: String
+  ): Boolean!
+  """상세 가격 맥락(판정 카드·가격 추이) 노출 기록 — 상세 진입당 종류별 1회"""
+  collectPriceContextImpression(
+    """종류:근거(노출, 예: price_history:MAPPING · verdict:CLUSTER) 또는 종류:요소(클릭, 예: verdict:history · price_history:period)"""
+    detail: String!
+    productId: Int!
+    """화면 (예: detail_mobile, app_detail)"""
+    source: String
+  ): Boolean!
   """상품 단건 수집"""
   collectProduct(
     """클릭 위치(랭크, 0-based)"""
