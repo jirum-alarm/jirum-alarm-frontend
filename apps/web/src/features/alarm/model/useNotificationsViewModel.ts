@@ -1,7 +1,7 @@
 'use client';
 
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { NotificationService } from '@/shared/api/notification/notification.service';
@@ -31,6 +31,23 @@ export const useNotificationsViewModel = () => {
       }
     },
   });
+
+  /**
+   * 알림함에 들어오면 서버에서 모두 읽음 처리한다(앱 useNotificationsViewModel 과 같은 규칙).
+   * 앱 아이콘 배지 = 서버 미읽음 수라, 들어올 때 안 읽으면 배지가 영구히 쌓였다(2026-10-05 운영: 중앙값 310).
+   * 목록 캐시는 건드리지 않아 이번 방문 동안은 새 알림의 안 읽음 표시가 그대로 보인다.
+   */
+  useEffect(() => {
+    NotificationService.readAllNotifications()
+      .then(async () => {
+        await queryClient.invalidateQueries({
+          queryKey: NotificationQueries.unreadCount().queryKey,
+        });
+        setAlarmReadState(0);
+        WebViewBridge.sendMessage(WebViewEventType.NOTIFICATION_READ, { data: { unreadCount: 0 } });
+      })
+      .catch(() => {});
+  }, [queryClient]);
 
   const { mutate: readNotification } = useMutation({
     mutationFn: (id: number) => NotificationService.readNotification({ id }),

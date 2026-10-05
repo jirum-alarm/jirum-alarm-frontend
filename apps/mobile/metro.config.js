@@ -18,6 +18,26 @@ config.transformer.getTransformOptions = async (...args) => {
   };
 };
 
+// ★@sentry/core 를 한 벌로 묶는다. node_modules 가 펼쳐진(hoisted) 구조라 Sentry 하위 패키지 6개
+// (react-native·react·browser·feedback·replay·replay-canvas)가 각자 같은 10.12.0 사본을 품고, 일부는
+// esm·cjs 가 둘 다 실려 번들의 ~35%(2.5MB)가 같은 코드였다(2026-10-05 소스맵 실측). 하위 경로 import 는 없고
+// 전부 '@sentry/core' 한 이름이라 그 이름만 @sentry/react-native 가 쓰는 사본의 cjs 진입 파일로 고정한다.
+// ⚠️ @sentry/react-native 를 올리면 하위 패키지들의 core 버전이 다시 같은지 확인할 것(다르면 이 고정이 깨뜨린다).
+const SENTRY_CORE = require.resolve('@sentry/core', {
+  paths: [path.dirname(require.resolve('@sentry/react-native/package.json'))],
+});
+const baseResolveRequest = config.resolver.resolveRequest;
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (moduleName === '@sentry/core') {
+    return {type: 'sourceFile', filePath: SENTRY_CORE};
+  }
+  return (baseResolveRequest ?? context.resolveRequest)(
+    context,
+    moduleName,
+    platform,
+  );
+};
+
 module.exports = withNativeWind(config, {
   input: './global.css',
   configPath: path.join(__dirname, 'tailwind.config.js'),

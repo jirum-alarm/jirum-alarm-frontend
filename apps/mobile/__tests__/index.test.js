@@ -32,6 +32,7 @@ jest.mock('../App', () => ({
 jest.mock('../src/shared/lib/fcm/fcm-handler', () => ({
   onBackgroundMessageHandler: mockOnBackgroundMessageHandler,
   foregroundNotificationBehavior: mockForegroundNotificationBehavior,
+  ensureAlarmChannel: () => Promise.resolve(),
 }));
 
 describe('index.js', () => {

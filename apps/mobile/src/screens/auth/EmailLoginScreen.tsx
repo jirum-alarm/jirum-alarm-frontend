@@ -10,8 +10,6 @@ import {
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
 import {Controller, useForm} from 'react-hook-form';
-import {z} from 'zod';
-import {zodResolver} from '@hookform/resolvers/zod';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {AuthService} from '@/shared/api/auth/auth.service.ts';
 import {AuthQueries} from '@/entities/auth';
@@ -20,14 +18,14 @@ import {UserService} from '@/shared/api/user/user.service';
 import {handleLoginError, handleLoginSuccess} from './useSocialLogin/lib';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-const loginSchema = z.object({
-  email: z
-    .string({required_error: '이메일을 입력해주세요.'})
-    .email('올바른 이메일 형식으로 입력해주세요.'),
-  password: z.string({required_error: '비밀번호를 입력해주세요.'}),
-});
+/**
+ * zod 의 email() 과 같은 정규식. ★zod 를 이 검사 하나 때문에 번들에 두 벌(v3·v4, 430KB) 싣고 있어
+ * react-hook-form 내장 rules 로 옮겼다(2026-10-05).
+ */
+const EMAIL_PATTERN =
+  /^(?!\.)(?!.*\.\.)([A-Z0-9_'+\-\.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9\-]*\.)+[A-Z]{2,}$/i;
 
-type LoginForm = z.infer<typeof loginSchema>;
+type LoginForm = {email: string; password: string};
 
 const EmailLoginScreen = () => {
   const insets = useSafeAreaInsets();
@@ -43,7 +41,6 @@ const EmailLoginScreen = () => {
     handleSubmit,
     formState: {isValid},
   } = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
     // 입력을 마치고(포커스를 떠난 뒤)부터 검사한다 — onChange 면 첫 글자부터 "이메일 형식" 빨간 글씨가
     // 떴다. 떠난 뒤로는 고칠 때마다 바로 풀린다. 버튼 활성(isValid)은 모드와 무관하게 계속 계산된다.
     mode: 'onTouched',
@@ -96,6 +93,13 @@ const EmailLoginScreen = () => {
           <Controller
             control={control}
             name="email"
+            rules={{
+              required: '이메일을 입력해주세요.',
+              pattern: {
+                value: EMAIL_PATTERN,
+                message: '올바른 이메일 형식으로 입력해주세요.',
+              },
+            }}
             render={({field, fieldState}) => (
               <TextField
                 onChangeText={text => {
@@ -130,6 +134,7 @@ const EmailLoginScreen = () => {
           <Controller
             control={control}
             name="password"
+            rules={{required: '비밀번호를 입력해주세요.'}}
             render={({field, fieldState}) => (
               <TextField
                 ref={passwordRef}

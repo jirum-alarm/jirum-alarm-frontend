@@ -167,6 +167,17 @@ describe('★배선 — 판정이 네이티브 소유인가(브릿지 회귀 방
     expect(viewModel).toMatch(/setAlarmUnreadSnapshot\(/);
   });
 
+  /**
+   * 서버 배지 = 미읽음 수. 들어올 때 모두 읽지 않으면 배지가 영구히 쌓인다
+   * (2026-10-05 운영: 중앙값 310·최대 2.5만).
+   */
+  it('알림함에 들어오면(focus) 서버에서 모두 읽음 처리한 뒤 기준선을 맞춘다', () => {
+    const focus = viewModel.slice(viewModel.indexOf('useFocusEffect('));
+    expect(focus).toMatch(
+      /^useFocusEffect\([\s\S]{0,400}readAllNotifications\(\)[\s\S]{0,120}syncUnreadCount\(false\)/,
+    );
+  });
+
   /** 기존 iOS 배지 처리는 건드리지 않았다(없으면 unhandled rejection). */
   it('iOS 배지 가드는 그대로다', () => {
     expect(viewModel).toMatch(/Platform\.OS === 'ios'/);

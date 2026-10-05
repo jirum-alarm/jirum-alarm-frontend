@@ -28,6 +28,19 @@ export function foregroundNotificationBehavior(
 }
 
 /**
+ * Android 알림 채널 'alarm'(중요도 HIGH=화면 위 배너). 서버 푸시가 android.notification.channel_id='alarm' 을 지정하므로
+ * **앱 시작 때** 만들어 둔다 — 예전엔 포그라운드 수신 때만 만들어, 앱이 떠 있을 때 푸시를 한 번도 안 받은 기기는
+ * 백그라운드 푸시가 FCM 기본 채널(「기타」, 중요도 보통 → 배너 없음)로 떨어졌다. 같은 값으로 다시 불러도 무해하다.
+ */
+export async function ensureAlarmChannel() {
+  if (Platform.OS !== 'android') return;
+  await Notifications.setNotificationChannelAsync('alarm', {
+    name: '지름알림',
+    importance: Notifications.AndroidImportance.HIGH,
+  });
+}
+
+/**
  * Handle FCM messages when app is in foreground
  *
  * Displays a local notification using expo-notifications
@@ -37,12 +50,7 @@ export function foregroundNotificationBehavior(
 export async function onForegroundMessageHandler(
   message: FirebaseMessagingTypes.RemoteMessage,
 ) {
-  if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('alarm', {
-      name: '지름알림',
-      importance: Notifications.AndroidImportance.HIGH,
-    });
-  }
+  await ensureAlarmChannel();
 
   const badgeCount = Number(message.data?.badge ?? 0);
 
