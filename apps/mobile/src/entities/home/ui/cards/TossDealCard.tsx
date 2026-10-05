@@ -1,10 +1,11 @@
 import React from 'react';
-import {View} from 'react-native';
+import {useColorScheme, View} from 'react-native';
 import {Image} from 'expo-image';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
 import NoImage from '@/shared/components/product/NoImage';
+import {DARK_IMAGE_STYLE} from '@/shared/components/product/Thumbnail';
 import {cn} from '@/shared/lib/styling';
 
 import type {TossDeal} from '../../lib/toss';
@@ -21,6 +22,7 @@ export default function TossDealCard({
   onPress: (id: number) => void;
 }) {
   const label = deal.badge;
+  const isDark = useColorScheme() === 'dark';
 
   return (
     <PressableScale
@@ -35,7 +37,10 @@ export default function TossDealCard({
         {deal.image ? (
           <Image
             source={{uri: deal.image}}
-            style={{width: '100%', height: '100%'}}
+            style={[
+              {width: '100%', height: '100%'},
+              isDark && DARK_IMAGE_STYLE,
+            ]}
             contentFit="cover"
             cachePolicy="memory-disk"
             transition={120}

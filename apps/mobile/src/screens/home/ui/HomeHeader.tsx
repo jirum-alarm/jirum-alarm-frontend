@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {Animated, Pressable, View} from 'react-native';
+import {Animated, Pressable, useColorScheme, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -7,9 +7,12 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import IconLogo from '@/shared/components/icons/IconLogo';
 import SearchIcon from '@/shared/components/icons/search';
+import {MoonIcon, SunIcon} from '@/shared/components/icons/theme-mode';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {useColors} from '@/shared/theme/useColors';
+import {fixed} from '@/shared/theme/palette';
+import {useColorSchemePreference} from '@/shared/theme/color-scheme-preference';
 
 /** 로고 아래 붙는 서비스 한 줄 설명. web LOGO_SUBTITLE 과 같은 문구. */
 const LOGO_SUBTITLE = '커뮤니티 핫딜 모아보기';
@@ -71,7 +74,7 @@ export default function HomeHeader({
   );
 }
 
-/** 로고·부제·검색 한 줄. 두 겹이 같은 내용을 각자의 색으로 그린다. */
+/** 로고·부제·화면 모드·검색 한 줄. 두 겹이 같은 내용을 각자의 색으로 그린다. */
 function HeaderRow({
   inverted,
   onPressLogo,
@@ -116,20 +119,84 @@ function HeaderRow({
         </View>
       </Pressable>
 
-      <Pressable
-        onPress={() => navigation.push(tabStackNavigations.SEARCH)}
-        hitSlop={8}
-        accessibilityRole="button"
-        accessibilityLabel="검색"
-        // 흰 겹이 위에 깔려 있어도 투명할 때는 아래 겹이 눌려야 한다.
-        // 두 겹의 버튼이 같은 자리라 어느 쪽이 눌려도 동작은 같다.
-        className="h-9 w-9 items-center justify-center">
-        <SearchIcon
-          width={24}
-          height={24}
-          color={inverted ? '#FFFFFF' : c.gray[900]}
-        />
-      </Pressable>
+      <View className="flex-row items-center gap-3">
+        <ThemeSwitch inverted={inverted} />
+
+        <Pressable
+          onPress={() => navigation.push(tabStackNavigations.SEARCH)}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="검색"
+          // 흰 겹이 위에 깔려 있어도 투명할 때는 아래 겹이 눌려야 한다.
+          // 두 겹의 버튼이 같은 자리라 어느 쪽이 눌려도 동작은 같다.
+          className="h-9 w-9 items-center justify-center">
+          <SearchIcon
+            width={24}
+            height={24}
+            color={inverted ? '#FFFFFF' : c.gray[900]}
+          />
+        </Pressable>
+      </View>
     </View>
+  );
+}
+
+/** 스위치 치수 — 손잡이가 TRACK_W - KNOB - PAD*2 만큼 움직인다. */
+const TRACK_W = 48;
+const KNOB = 22;
+const PAD = 3;
+
+/**
+ * 화면 모드 스위치. 손잡이가 왼쪽(해)=라이트, 오른쪽(달)=다크 — 지금 상태와 "누르면 바뀐다"가 같이 보인다.
+ * ★아이콘 버튼(라이트일 때 달)은 홈 상단 띠가 라이트에서도 어두워 "이미 다크인가?"로 읽혔다(사용자 지적).
+ * 누르면 지금 보이는 모드의 반대로 고정한다. '시스템 설정'으로 되돌리는 건 내정보 > 화면 모드.
+ */
+function ThemeSwitch({inverted}: {inverted: boolean}) {
+  const isDark = useColorScheme() === 'dark';
+  const [, setColorScheme] = useColorSchemePreference();
+  const x = useRef(new Animated.Value(isDark ? 1 : 0)).current;
+
+  useEffect(() => {
+    Animated.timing(x, {
+      toValue: isDark ? 1 : 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }, [isDark, x]);
+
+  return (
+    <Pressable
+      onPress={() => setColorScheme(isDark ? 'light' : 'dark')}
+      hitSlop={8}
+      accessibilityRole="switch"
+      accessibilityLabel="다크 모드"
+      accessibilityState={{checked: isDark}}
+      className={
+        inverted
+          ? 'h-7 justify-center rounded-full bg-fixed-white/20'
+          : 'h-7 justify-center rounded-full bg-gray-200'
+      }
+      style={{width: TRACK_W, paddingHorizontal: PAD}}>
+      <Animated.View
+        className="items-center justify-center rounded-full bg-fixed-white"
+        style={{
+          width: KNOB,
+          height: KNOB,
+          transform: [
+            {
+              translateX: x.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, TRACK_W - KNOB - PAD * 2],
+              }),
+            },
+          ],
+        }}>
+        {isDark ? (
+          <MoonIcon color={fixed[900]} />
+        ) : (
+          <SunIcon color={fixed[900]} />
+        )}
+      </Animated.View>
+    </Pressable>
   );
 }

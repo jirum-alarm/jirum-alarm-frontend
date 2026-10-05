@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
 import {Image, type ImageContentFit} from 'expo-image';
-import type {ImageResizeMode, ImageStyle, StyleProp} from 'react-native';
+import {
+  useColorScheme,
+  type ImageResizeMode,
+  type ImageStyle,
+  type StyleProp,
+} from 'react-native';
 
 import {convertToWebp} from '@/shared/lib/format/image';
 
@@ -23,6 +28,12 @@ import NoImage from './NoImage';
  * ⚠️`uri` 가 바뀌면 실패 기록을 지운다. 안 지우면 목록 재사용(FlatList) 에서
  * 한 번 실패한 자리가 다음 상품에도 폴백을 그린다.
  */
+/**
+ * 다크에서 사진 밝기를 낮춘다. 상품 사진은 대부분 흰 배경이라 어두운 화면에서 밝은 네모가 줄줄이 빛나
+ * 눈이 부셨다(사용자 지적). opacity 라 뒤의 어두운 카드 면이 비쳐 어두워진다.
+ */
+export const DARK_IMAGE_STYLE = {opacity: 0.85} as const;
+
 export default function Thumbnail({
   uri,
   categoryId,
@@ -46,6 +57,7 @@ export default function Thumbnail({
     step: 0,
   });
   const step = failed.uri === uri ? failed.step : 0;
+  const isDark = useColorScheme() === 'dark';
 
   // ★webp 를 먼저, 실패하면 원본. web `ImageComponent`(fallbackSrc)와 같은
   // 순서다. CDN 이 webp 만 갖고 있어 원본 확장자는 403 이 온다(convertToWebp
@@ -62,7 +74,10 @@ export default function Thumbnail({
   return (
     <Image
       source={{uri: current}}
-      style={style ?? {width: '100%', height: '100%'}}
+      style={[
+        style ?? {width: '100%', height: '100%'},
+        isDark && DARK_IMAGE_STYLE,
+      ]}
       contentFit={CONTENT_FIT[resizeMode] ?? 'cover'}
       cachePolicy="memory-disk"
       transition={120}

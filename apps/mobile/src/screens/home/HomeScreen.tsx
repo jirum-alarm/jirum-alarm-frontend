@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import {
   ActivityIndicator,
+  Animated,
   RefreshControl,
   ScrollView,
   View,
@@ -79,6 +80,32 @@ export default function HomeScreen() {
   useRegisterScrollToTop(tabNavigations.HOME, scrollToTop);
 
   const [refreshing, setRefreshing] = useState(false);
+
+  /**
+   * ★당겨서 새로고침은 흰 본문 시트만 내려온다(사용자 요청) — 헤더·어두운 배너 띠는 제자리.
+   * iOS 는 당기면 스크롤 위치가 음수가 되며 내용 전체가 내려오므로, 그 거리만큼 헤더·띠를
+   * 거꾸로 올려 붙잡는다(UI 스레드에서). 안드로이드는 내용이 안 당겨져 늘 0 이다.
+   */
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const pullUp = useMemo(
+    () =>
+      scrollY.interpolate({
+        inputRange: [-1000, 0],
+        outputRange: [-1000, 0],
+        extrapolate: 'clamp',
+      }),
+    [scrollY],
+  );
+  const onScroll = useMemo(
+    () =>
+      Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {
+        useNativeDriver: true,
+        // web HomeHeader: 스크롤 90px 넘으면 흰 헤더가 내려온다.
+        listener: (e: {nativeEvent: {contentOffset: {y: number}}}) =>
+          homeScrolledStore.set(e.nativeEvent.contentOffset.y > 90),
+      }),
+    [scrollY],
+  );
 
   const {data: tabSources} = useQuery(HomeQueries.tabSources());
   const {data: homePage, isPending: isHomePagePending} = useQuery(
@@ -222,19 +249,26 @@ export default function HomeScreen() {
       */}
       <HomeStatusBar />
 
-      <ScrollView
+      <Animated.ScrollView
         ref={scrollRef}
         stickyHeaderIndices={[0]}
         scrollEventThrottle={16}
-        // web HomeHeader: 스크롤 90px 넘으면 흰 헤더가 내려온다.
-        onScroll={e =>
-          homeScrolledStore.set(e.nativeEvent.contentOffset.y > 90)
-        }
+        onScroll={onScroll}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            // iOS 기본 스피너는 맨 위(붙잡아 둔 헤더 밑)에 가려진다 → 숨기고 시트 위 틈에 따로 띄운다.
+            tintColor="transparent"
+          />
         }
         contentContainerStyle={{paddingBottom: reservedBottom}}>
-        <HomeStickyHeader onPressLogo={scrollToTop} />
+        {/* ★sticky 는 첫 자식의 style 을 자기 것으로 덮어쓴다(transform 이 사라짐) → 한 겹 더 감싼다. */}
+        <View>
+          <Animated.View style={{transform: [{translateY: pullUp}]}}>
+            <HomeStickyHeader onPressLogo={scrollToTop} />
+          </Animated.View>
+        </View>
 
         {/*
           다크 배경 헤더 + 배너 캐러셀 (web BackgroundHeader).
@@ -243,9 +277,24 @@ export default function HomeScreen() {
           아래 여백: 본문이 -mt-5(20px)로 올라타므로 그만큼 더 준다.
           pb-6(24px)만 주면 실제로 4px 만 남아 배너가 흰 면에 닿는다.
         */}
-        <View className="bg-fixed-900 pt-2 pb-11 dark:bg-fixed-800">
-          {isAboveFoldPending ? <BannerSkeleton /> : <HomeBannerCarousel />}
-        </View>
+        <Animated.View style={{transform: [{translateY: pullUp}]}}>
+          <View className="bg-fixed-900 pt-2 pb-11 dark:bg-fixed-800">
+            {isAboveFoldPending ? <BannerSkeleton /> : <HomeBannerCarousel />}
+          </View>
+          {/* 띠 아래로 이어지는 같은 색 면 — 시트가 내려오며 벌어지는 틈을 채운다(평소엔 시트가 덮는다).
+              스피너도 여기 둔다: 틈이 벌어질 때만 보인다. */}
+          <View
+            className="absolute inset-x-0 top-full h-[400px] items-center bg-fixed-900 dark:bg-fixed-800"
+            pointerEvents="none">
+            <ActivityIndicator
+              size="small"
+              color="#FFFFFF"
+              animating={refreshing}
+              hidesWhenStopped={false}
+              style={{marginTop: 4}}
+            />
+          </View>
+        </Animated.View>
 
         {/* 본문 — web 은 rounded-t-[1.25rem] 로 다크 헤더 위에 올라탄다 */}
         <View className="-mt-5 rounded-t-[20px] bg-white pt-3">
@@ -325,7 +374,7 @@ export default function HomeScreen() {
             </View>
           )}
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </View>
   );
 }

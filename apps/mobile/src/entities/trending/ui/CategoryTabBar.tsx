@@ -74,13 +74,14 @@ export default function CategoryTabBar({
               accessibilityLabel={category.name}
               className={cn(
                 'rounded-full px-3 py-2',
-                isActive ? 'bg-fixed-800' : 'bg-gray-100',
+                // 다크에선 fixed-800 이 비활성 gray-100 과 같은 색이라 커뮤니티 칩처럼 밝은 칩으로 뒤집는다.
+                isActive ? 'bg-fixed-800 dark:bg-gray-900' : 'bg-gray-100',
               )}>
               <Text
                 className={cn(
                   'text-sm leading-none',
                   isActive
-                    ? 'text-primary-500 font-bold'
+                    ? 'text-primary-500 font-bold dark:text-white'
                     : 'font-medium text-gray-500',
                 )}>
                 {category.name}

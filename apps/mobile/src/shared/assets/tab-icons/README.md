@@ -41,7 +41,7 @@ PY
 
 네이티브 탭바 아이콘은 `tinted: false`(원본 색 그대로)라 OS 다크모드에서 `#101828` 선이 어두운
 유리 위에서 사라진다. 그래서 다크 변형을 따로 두고 `MainTabNavigator` 가 `useColorScheme()` 으로 고른다.
-색은 `src/shared/theme/palette.js` 의 dark 값(gray-900→`#F9FAFB`, gray-500→`#98A2B3`, 라임→`#84CC2A`, 흰 속채움→투명).
+색은 `src/shared/theme/palette.js` 의 dark 값(gray-900→`#E4E7EC`, gray-500→`#A2ABBA`, 라임→`#84CC2A`, 흰 속채움→투명).
 
 ```bash
 python3 apps/mobile/src/shared/assets/tab-icons/make-dark.py   # 알림 점을 다시 찍었으면 그 뒤에

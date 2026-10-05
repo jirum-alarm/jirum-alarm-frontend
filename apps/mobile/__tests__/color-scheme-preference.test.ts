@@ -12,7 +12,7 @@ jest.mock('../src/shared/lib/persistence/async-storage', () => ({
 
 import {restoreColorSchemePreference} from '../src/shared/theme/color-scheme-preference';
 
-const flush = () => new Promise(resolve => setTimeout(resolve, 0));
+const flush = () => new Promise<void>(resolve => setTimeout(resolve, 0));
 
 describe('restoreColorSchemePreference', () => {
   let spy: jest.SpyInstance;

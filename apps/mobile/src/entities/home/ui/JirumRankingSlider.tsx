@@ -223,6 +223,9 @@ const RankingCard = React.memo(function RankingCard({
 }) {
   const c = useColors();
   const isDark = useColorScheme() === 'dark';
+  // ★테두리는 카드 칸(CARD_WIDTH) 안에서 먹는다. 바깥에 더하면 다크에서만 칸이 2px 넓어져
+  // SNAP 과 어긋나고, 그 오차가 카드 수만큼 쌓여 모드를 바꿀 때 슬라이더가 옆으로 밀렸다(사용자 지적).
+  const border = isDark ? 1 : 0;
   const animatedStyle = useAnimatedStyle(() => {
     const distance = Math.abs(scrollX.value - index * SNAP);
     const scale = interpolate(
@@ -260,7 +263,8 @@ const RankingCard = React.memo(function RankingCard({
           // 다크에선 검은 그림자가 안 보이고 카드가 바탕과 같은 색이라 경계가 사라진다 →
           // 한 단 밝은 면(gray-50) + 1px 선(gray-100)으로 경계를 대신한다.
           backgroundColor: isDark ? c.gray[50] : c.white,
-          ...(isDark ? {borderWidth: 1, borderColor: c.gray[100]} : null),
+          borderWidth: border,
+          borderColor: c.gray[100],
           shadowColor: '#000',
           shadowOffset: {width: 0, height: 2},
           shadowRadius: 12,
@@ -270,7 +274,10 @@ const RankingCard = React.memo(function RankingCard({
       ]}>
       <PressableScale
         scaleTo={0.96}
-        style={{width: CARD_WIDTH, height: CARD_HEIGHT}}
+        style={{
+          width: CARD_WIDTH - border * 2,
+          height: CARD_HEIGHT - border * 2,
+        }}
         onPressIn={() =>
           prefetchProductDetail(Number(product.id), product.thumbnail)
         }
