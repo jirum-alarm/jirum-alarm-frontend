@@ -8,6 +8,7 @@ import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useRecentKeywords} from '@/features/search/model/useRecentKeywords';
 import {useSearchFilters} from '@/features/search/model/useSearchFilters';
 import {useSearchSuggestions} from '@/features/search/model/useSearchSuggestions';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import type {SearchStackParamList} from '@/navigations/tab/types';
 import {
   searchStackNavigations,
@@ -84,6 +85,8 @@ export default function SearchScreen({
     (keyword: string) => {
       const trimmed = keyword.trim();
       if (!trimmed) return;
+      // GA4 권장 이벤트 search(search_term) — 웹 GTM '검색 이벤트' 와 같은 이름. 입력·최근·추천 검색어가 전부 여기로 온다.
+      Analytics.track('search', {search_term: trimmed});
       setInput(trimmed);
       setSubmitted(trimmed);
       recent.push(trimmed);
