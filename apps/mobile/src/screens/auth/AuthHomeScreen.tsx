@@ -108,6 +108,12 @@ const AuthHomeScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
+        {/* 웹에서 가입한 사람이 앱에서 Apple 로 들어가면 다른 계정이 된다(웹엔 Apple 로그인이
+            없다) — 웹에서 걸어 둔 키워드 알림이 안 보여 "알림이 안 온다"가 된다. */}
+        <Text style={[styles.hint, {color: c.gray[500]}]}>
+          웹에서 쓰던 카카오·네이버 계정으로 로그인하면{'\n'}등록한 키워드
+          알림이 그대로 이어져요
+        </Text>
       </View>
     </View>
   );
@@ -117,6 +123,7 @@ export default AuthHomeScreen;
 
 const styles = StyleSheet.create({
   pending: {opacity: 0.5},
+  hint: {marginTop: 20, fontSize: 13, lineHeight: 19, textAlign: 'center'},
   container: {
     flex: 1,
     justifyContent: 'center',
