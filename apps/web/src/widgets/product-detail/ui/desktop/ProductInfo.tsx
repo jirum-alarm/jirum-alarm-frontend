@@ -30,6 +30,7 @@ import type { ProductPriceVerdict } from '@/features/product-detail/lib/price-ve
 import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
 import PostPurchaseKakaoPrompt from '@/features/product-detail/ui/PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from '@/features/product-detail/ui/PostPurchaseKeywordPrompt';
+import PriceContextBadge from '@/features/product-detail/ui/PriceContextBadge';
 import PriceVerdictHero from '@/features/product-detail/ui/PriceVerdictHero';
 import ProductGuideMetaRows, {
   type GuideRow as ProductGuideRow,
@@ -175,11 +176,16 @@ export default function ProductInfo({
             </div>
           </div>
           {!hidePrice && (
-            <PriceVerdictHero
-              productId={productId}
-              source="detail_desktop"
-              verdict={initialVerdict}
-            />
+            <>
+              <PriceVerdictHero
+                productId={productId}
+                source="detail_desktop"
+                verdict={initialVerdict}
+              />
+              <Suspense fallback={null}>
+                <PriceContextBadge productId={productId} source="detail_desktop" />
+              </Suspense>
+            </>
           )}
           {tossData && <TossBadges toss={tossData} hidePriceSignals={hidePrice} />}
         </div>

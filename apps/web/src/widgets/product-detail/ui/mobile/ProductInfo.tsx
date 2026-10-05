@@ -21,6 +21,7 @@ import { RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
 import type { ProductPriceVerdict } from '@/features/product-detail/lib/price-verdict';
 import HotdealGuideModal from '@/features/product-detail/ui/mobile/HotDealGuideModal';
+import PriceContextBadge from '@/features/product-detail/ui/PriceContextBadge';
 import PriceVerdictHero from '@/features/product-detail/ui/PriceVerdictHero';
 import ProductGuideMetaRows, {
   type GuideRow as ProductGuideRow,
@@ -142,11 +143,16 @@ export default function ProductInfo({
             </div>
           </div>
           {!hidePrice && (
-            <PriceVerdictHero
-              productId={productId}
-              source="detail_mobile"
-              verdict={initialVerdict}
-            />
+            <>
+              <PriceVerdictHero
+                productId={productId}
+                source="detail_mobile"
+                verdict={initialVerdict}
+              />
+              <Suspense fallback={null}>
+                <PriceContextBadge productId={productId} source="detail_mobile" />
+              </Suspense>
+            </>
           )}
           {tossData && <TossBadges toss={tossData} hidePriceSignals={hidePrice} />}
         </div>
