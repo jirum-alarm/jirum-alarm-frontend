@@ -1,11 +1,12 @@
 import { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { ModelPageService } from '@/shared/api/model-page';
 import { CATEGORIES } from '@/shared/config/categories';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
+import { convertToWebp } from '@/shared/lib/utils/image';
+import ImageComponent from '@/shared/ui/ImageComponent';
 
 import { buildModelDisplayName } from '@/features/deals/lib/model-page-insights';
 
@@ -117,16 +118,7 @@ export default async function DealsIndexPage() {
                 title="최근 핫딜이 떴어요"
                 description="한 달 안에 올라온 핫딜이에요. 평소 가격과 비교해 보세요."
               />
-              <DealGrid items={recent.slice(0, RECENT_VISIBLE)} />
-              {recent.length > RECENT_VISIBLE && (
-                // 링크는 HTML 에 그대로 남아 크롤러가 따라간다(details 는 렌더 후 접기만).
-                <details className="group mt-4">
-                  <summary className="cursor-pointer list-none rounded-xl border border-gray-200 py-3 text-center text-sm font-medium text-gray-700 group-open:hidden">
-                    {recent.length - RECENT_VISIBLE}개 더 보기
-                  </summary>
-                  <DealGrid items={recent.slice(RECENT_VISIBLE)} className="mt-3" />
-                </details>
-              )}
+              <FoldedGrid items={recent} visible={RECENT_VISIBLE} />
             </section>
           )}
 
@@ -156,8 +148,13 @@ export default async function DealsIndexPage() {
                   // ponytail: 헤더56+탭~56 기준값. 타이틀이 탭에 가리면 이 값만 키우면 됨.
                   className="pc:scroll-mt-28 mb-10 scroll-mt-32"
                 >
-                  <h3 className="mb-4 text-base font-bold text-black">{section.label}</h3>
-                  <DealGrid items={section.items} />
+                  <h3 className="mb-4 text-base font-bold text-black">
+                    {section.label}
+                    <span className="ml-1 text-sm font-medium text-gray-400">
+                      {section.items.length}
+                    </span>
+                  </h3>
+                  <FoldedGrid items={section.items} visible={CATEGORY_VISIBLE} />
                 </section>
               ))}
             </>
@@ -172,6 +169,8 @@ type DealItem = Awaited<ReturnType<typeof ModelPageService.getPublishedModelPage
 
 /** ② 최근 핫딜에서 접지 않고 보여줄 개수. 모바일 2열 기준 6줄. */
 const RECENT_VISIBLE = 12;
+/** ③ 카테고리 섹션마다 접지 않고 보여줄 개수. 안 접으면 식품 한 섹션만 수백 장이라 아래 카테고리에 닿지 못했다. */
+const CATEGORY_VISIBLE = 10;
 
 const GOOD_TONES = new Set(['lowest', 'cheap']);
 
@@ -226,6 +225,23 @@ function DealGrid({ items, className }: { items: DealItem[]; className?: string 
   );
 }
 
+/** 앞 `visible` 개만 펼치고 나머지는 "더 보기"로 접는다. 링크는 HTML 에 그대로 남아 크롤러가 따라간다(details 는 렌더 후 접기만). */
+function FoldedGrid({ items, visible }: { items: DealItem[]; visible: number }) {
+  return (
+    <>
+      <DealGrid items={items.slice(0, visible)} />
+      {items.length > visible && (
+        <details className="group mt-4">
+          <summary className="cursor-pointer list-none rounded-xl border border-gray-200 py-3 text-center text-sm font-medium text-gray-700 group-open:hidden">
+            {items.length - visible}개 더 보기
+          </summary>
+          <DealGrid items={items.slice(visible)} className="mt-3" />
+        </details>
+      )}
+    </>
+  );
+}
+
 function DealCard({ item: p }: { item: DealItem }) {
   const isActive = p.activeDealCount > 0 && p.activePrice != null;
   const verdict = verdictBadge(p);
@@ -235,18 +251,18 @@ function DealCard({ item: p }: { item: DealItem }) {
       className="flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition-shadow hover:shadow-md"
     >
       <div className="relative aspect-square w-full bg-gray-50">
-        {p.heroImage ? (
-          <Image
-            src={p.heroImage}
-            alt={p.modelName}
-            fill
-            // 그리드 2열(모바일)/3열(sm)/5열(PC~1280) 실폭에 맞춤 — 과대 요청 방지.
-            sizes="(max-width: 600px) 50vw, (max-width: 1024px) 33vw, 240px"
-            className="object-cover"
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center text-gray-300">이미지 없음</div>
-        )}
+        {/* CDN 은 webp 만 있고 원본 확장자(.jpg 등)는 403 — 원본을 그대로 쓰면 카드 90% 가 깨졌다
+            (2026-10-05 운영 실측 60장 중 53장). 상세 히어로와 같이 webp 우선 + 원본 폴백. */}
+        <ImageComponent
+          src={convertToWebp(p.heroImage) ?? p.heroImage ?? ''}
+          fallbackSrc={p.heroImage ?? undefined}
+          fallback={<NoImage />}
+          alt={p.modelName}
+          fill
+          // 그리드 2열(모바일)/3열(sm)/5열(PC~1280) 실폭에 맞춤 — 과대 요청 방지.
+          sizes="(max-width: 600px) 50vw, (max-width: 1024px) 33vw, 240px"
+          className="object-cover"
+        />
       </div>
       <div className="flex grow flex-col gap-1 p-3">
         <h3 className="line-clamp-2 text-sm font-semibold text-black">
@@ -299,6 +315,10 @@ function DealCard({ item: p }: { item: DealItem }) {
       </div>
     </Link>
   );
+}
+
+function NoImage() {
+  return <div className="flex h-full items-center justify-center text-gray-300">이미지 없음</div>;
 }
 
 /**

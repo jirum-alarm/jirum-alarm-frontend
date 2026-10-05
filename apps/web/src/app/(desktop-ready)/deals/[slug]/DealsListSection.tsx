@@ -7,6 +7,7 @@ import { convertToWebp } from '@/shared/lib/utils/image';
 import ImageComponent from '@/shared/ui/ImageComponent';
 
 import {
+  cleanDealTitle,
   Deal,
   dealComparePrice,
   HistBasis,
@@ -88,6 +89,7 @@ export default function DealsListSection({
             comparePrice != null &&
             comparePrice <= histMin;
           const isActivePick = tab === 'active' && !deal.isEnd && !isBundle && deals[0] === deal;
+          const title = cleanDealTitle(deal.title);
 
           return (
             <li key={deal.productId}>
@@ -95,23 +97,24 @@ export default function DealsListSection({
                 href={`/products/${deal.productId}`}
                 className="flex items-center gap-3 rounded-lg border border-gray-100 p-3 hover:bg-gray-50"
               >
-                {deal.thumbnail && (
-                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded bg-gray-50">
-                    {/* webp 를 먼저 요청하고, 없으면(S3 변환 누락 8%) 원본으로 폴백한다.
-                        같은 이미지가 원본 169KB vs webp 15KB — 11배 차이(2026-09-02 실측).
-                        이 목록은 한 페이지에 딜이 수백 개라 여기가 모델페이지 전송량의 대부분. */}
+                {/* 썸네일 없는 딜(약 40%)도 자리를 비워 두지 않는다 — 없으면 제목 시작선이 줄마다 들쭉날쭉했다. */}
+                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded bg-gray-50">
+                  {/* webp 를 먼저 요청하고, 없으면(S3 변환 누락 8%) 원본으로 폴백한다.
+                      같은 이미지가 원본 169KB vs webp 15KB — 11배 차이(2026-09-02 실측).
+                      이 목록은 한 페이지에 딜이 수백 개라 여기가 모델페이지 전송량의 대부분. */}
+                  {deal.thumbnail && (
                     <ImageComponent
                       src={convertToWebp(deal.thumbnail) ?? deal.thumbnail}
                       fallbackSrc={deal.thumbnail}
-                      alt={deal.title}
+                      alt={title}
                       fill
                       sizes="56px"
                       className="object-contain"
                     />
-                  </div>
-                )}
+                  )}
+                </div>
                 <div className="min-w-0 flex-1">
-                  <div className="line-clamp-2 text-sm">{deal.title}</div>
+                  <div className="line-clamp-2 text-sm">{title}</div>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-400">
                     {deal.mallName && <span className="text-gray-500">{deal.mallName}</span>}
                     {deal.postedAt && (

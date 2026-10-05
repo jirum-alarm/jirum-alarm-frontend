@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { withTopicParticle, buildDealsLeadSentence } =
+const { withTopicParticle, buildDealsLeadSentence, splitDealsForList, cleanDealTitle } =
   require('./model-page-insights.ts') as typeof import('./model-page-insights');
 
 type Timing = Parameters<typeof buildDealsLeadSentence>[0]['timing'];
@@ -221,5 +221,48 @@ describe('buildTimingInsight', () => {
       now,
     });
     assert.equal(t.tone, 'unknown');
+  });
+});
+
+describe('splitDealsForList', () => {
+  const now = Date.parse('2026-10-05T00:00:00Z');
+  const deal = (productId: number, postedAt: string, isEnd = false) => ({
+    productId,
+    title: `딜 ${productId}`,
+    price: 1000 + productId,
+    isEnd,
+    url: '',
+    providerId: 1,
+    mallName: null,
+    postedAt,
+    thumbnail: null,
+  });
+
+  it('진행 중 = 비종료 + 30일 이내 (isEnd 가 안 꺼진 옛 딜은 이력에만)', () => {
+    const { active, history } = splitDealsForList(
+      [
+        deal(1, '2026-10-01T00:00:00Z'),
+        deal(2, '2023-08-22T00:00:00Z'),
+        deal(3, '2026-10-02T00:00:00Z', true),
+      ],
+      'total',
+      null,
+      now,
+    );
+    assert.deepEqual(
+      active.map((d) => d.productId),
+      [1],
+    );
+    assert.equal(history.length, 3);
+  });
+});
+
+describe('cleanDealTitle', () => {
+  it('크롤링 제목의 HTML 태그·엔티티를 걷어낸다', () => {
+    assert.equal(
+      cleanDealTitle('<img src="/images/menu/hot_icon2.jpg"> [네이버] 스팸 &amp; 햄'),
+      '[네이버] 스팸 & 햄',
+    );
+    assert.equal(cleanDealTitle('사랑해요 <3 스팸'), '사랑해요 <3 스팸');
   });
 });

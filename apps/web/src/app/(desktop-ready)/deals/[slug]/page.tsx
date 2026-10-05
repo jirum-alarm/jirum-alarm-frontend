@@ -258,8 +258,24 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
   const listTitleSuffix =
     histBasis === 'unit' && histUnitLabel ? `${histUnitLabel} 싼 순` : '싼 순';
 
-  // 추이 막대에 "지금" 표시 — 현재가가 어느 막대에 가장 가까운지(없으면 라인만 설명).
+  // 추이 막대에 "지금" 표시 — 현재가에 가장 가까운 막대 하나만(2% 안일 때, 동률이면 최근).
+  // 예전엔 2% 안의 막대마다 "지금 N원" 을 찍어 평평한 추이에서 라벨 10개가 겹쳤다(2026-10-05 스팸).
+  // 최저·최고 라벨도 같은 값이 여러 막대면 하나씩만(최저=최근, 최고=처음).
   const nowPrice = timing.current > 0 ? timing.current : null;
+  let nowIdx = -1;
+  if (nowPrice != null) {
+    let bestDiff = Infinity;
+    histPoints.forEach((p, i) => {
+      const diff = Math.abs(p.price - nowPrice);
+      if (diff <= bestDiff) {
+        bestDiff = diff;
+        nowIdx = i;
+      }
+    });
+    if (bestDiff / (histMax || 1) >= 0.02) nowIdx = -1;
+  }
+  const lowIdx = histPrices.lastIndexOf(histMin);
+  const highIdx = histPrices.indexOf(histMax);
 
   return (
     <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
@@ -514,16 +530,17 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                 <div className="flex items-end gap-1" style={{ height: 96 }}>
                   {histPoints.map((p, i) => {
                     const isLow = p.price === histMin;
-                    const isHigh = p.price === histMax;
-                    const isNearNow =
-                      nowPrice != null && Math.abs(p.price - nowPrice) / (histMax || 1) < 0.02;
-                    const showLabel = i % 2 === 0 || i === histPoints.length - 1;
+                    const isNearNow = i === nowIdx;
+                    const showPriceLabel = isNearNow || i === lowIdx || i === highIdx;
+                    // 막대가 많으면 x라벨이 겹친다 — 최근 막대부터 거꾸로 세어 ~8개만.
+                    const labelStep = Math.max(2, Math.ceil(histPoints.length / 8));
+                    const showLabel = (histPoints.length - 1 - i) % labelStep === 0;
                     return (
                       <div
                         key={p.month}
                         className="flex flex-1 flex-col items-center justify-end gap-1"
                       >
-                        {(isLow || isHigh || isNearNow) && (
+                        {showPriceLabel && (
                           <span
                             className={`text-[9px] whitespace-nowrap ${
                               isNearNow

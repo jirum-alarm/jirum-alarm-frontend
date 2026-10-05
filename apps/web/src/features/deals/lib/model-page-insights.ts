@@ -57,6 +57,27 @@ export function dealComparePrice(
   return deal.price;
 }
 
+const ACTIVE_DEAL_MAX_DAYS = 30;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** 진행 중 = 비종료 + 게시 30일 이내. 판정과 목록 "진행 중" 탭이 같은 기준을 써야 숫자가 맞는다. */
+export function isActiveDeal(d: Deal, now = Date.now()): boolean {
+  if (d.isEnd) return false;
+  const posted = d.postedAt ? Date.parse(d.postedAt) : NaN;
+  return !Number.isNaN(posted) && now - posted <= ACTIVE_DEAL_MAX_DAYS * DAY_MS;
+}
+
+/** 크롤링 제목에 섞여 온 HTML 태그(`<img src=...>`)·엔티티 제거. */
+export function cleanDealTitle(title: string): string {
+  return title
+    .replace(/<\/?[a-z][^>]*>/gi, ' ')
+    .replace(/&(amp|lt|gt|quot|#39);/g, (_, e: string) =>
+      e === 'amp' ? '&' : e === 'lt' ? '<' : e === 'gt' ? '>' : e === 'quot' ? '"' : "'",
+    )
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export type TimingTone = 'good' | 'fair' | 'high' | 'unknown';
 
 export interface TimingInsight {
@@ -89,10 +110,8 @@ function median(nums: number[]): number | null {
 }
 
 /** "진행 중"이라고 부를 수 있는 게시 후 일수. 상품 상세의 신선도 임계(STALE_AFTER_DAYS)와 같다. */
-const ACTIVE_DEAL_MAX_DAYS = 30;
 /** 추이 중앙값의 이 배율 미만이면 가격 오독(단위가 계산 착오·묶음 일부 가격)으로 본다. 상세의 이력 가드와 같은 0.4. */
 const OUTLIER_MIN_RATIO = 0.4;
-const DAY_MS = 24 * 60 * 60 * 1000;
 /** 추이 점이 이보다 적으면 판정하지 않는다 — 점 2~3개면 지금 가격이 곧 "역대 최저"가 된다. */
 const MIN_HISTORY_POINTS = 5;
 /** 역대 최저라도 평균보다 이만큼(%) 싸야 그렇게 부른다 — 평평한 추이에서 "역대급(0% 저렴)"이 37건 나왔다(2026-10-01). */
@@ -116,11 +135,7 @@ export function buildTimingInsight(input: {
   // ① 게시 30일 이내만: 종료 자동 판정이 없어 2024년 딜도 isEnd=false 로 남는다(2026-10-01 실측: "진행 중 24건"에 2024년 딜).
   // ② 추이 중앙값의 40% 미만은 오독: 신라면 14,454원을 4,454원으로 읽어 "100g당 186원·평균보다 64% 저렴" 이 나갔다.
   const histMedian = median(histPrices);
-  const pool = deals.filter((d) => {
-    if (d.isEnd || isLikelyBundleDeal(d.title)) return false;
-    const posted = d.postedAt ? Date.parse(d.postedAt) : NaN;
-    return !Number.isNaN(posted) && now - posted <= ACTIVE_DEAL_MAX_DAYS * DAY_MS;
-  });
+  const pool = deals.filter((d) => isActiveDeal(d, now) && !isLikelyBundleDeal(d.title));
 
   let best: { price: number; deal: Deal } | null = null;
   for (const deal of pool) {
@@ -252,8 +267,10 @@ export function splitDealsForList(
   deals: Deal[],
   basis: HistBasis,
   unitLabel?: string | null,
+  now = Date.now(),
 ): { active: Deal[]; history: Deal[] } {
-  const active = deals.filter((d) => !d.isEnd);
+  // !isEnd 만 보면 2023년 딜이 "진행 중"에 섞였다 — 종료 자동 판정이 없다(2026-10-05 스팸 진행 중 29건 중 21건이 30일 밖).
+  const active = deals.filter((d) => isActiveDeal(d, now));
   const history = deals;
 
   const byPrice = (a: Deal, b: Deal) => {
