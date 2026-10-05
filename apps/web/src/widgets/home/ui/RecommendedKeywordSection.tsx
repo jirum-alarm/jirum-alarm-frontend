@@ -59,6 +59,7 @@ export default function RecommendedKeywordSection() {
   const inFlight = useRef<string | null>(null);
 
   const { mutate: addNotificationKeyword, isPending } = useUpdateKeyword({
+    source: 'home_recommend',
     onSuccess: () => {
       // 칩이 체크로 바뀌는 것과 별개로 토스트도 띄운다. 칩은 스크롤 밖으로 나갈 수 있고,
       // "등록됐다"는 사실은 화면 어디를 보고 있든 전달돼야 한다.

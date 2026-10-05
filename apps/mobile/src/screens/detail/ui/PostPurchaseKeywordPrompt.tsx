@@ -9,6 +9,7 @@ import {ProductService} from '@/shared/api/product/product.service';
 import PressableScale from '@/shared/components/PressableScale';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {showToast} from '@/shared/lib/feedback';
+import {trackKeywordRegister} from '@/shared/lib/analytics/keyword-tracking';
 import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
 import {
   usePendingAction,
@@ -69,6 +70,7 @@ export default function PostPurchaseKeywordPrompt({
         priceDropOnly: true,
       }),
     onSuccess: () => {
+      trackKeywordRegister('post_purchase', keyword);
       // 배너를 없애지 않고 안내 문구로 바꾼다. 사라지면 등록된 건지 눌림이
       // 씹힌 건지 알 수 없다 — 결과를 남겨두는 쪽이 신뢰를 만든다.
       setDone(true);

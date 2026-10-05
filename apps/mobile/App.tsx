@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo, useRef} from 'react';
 import {useColorScheme} from 'react-native';
 
 import ReactQueryProvider from './src/provider/ReactQueryProvider.tsx';
@@ -29,6 +29,8 @@ import {Sentry, initSentry, wrapApp} from '@/shared/lib/monitoring/sentry.ts';
 import useOtaUpdateOnResume from '@/shared/hooks/useOtaUpdateOnResume.ts';
 import {useColors} from '@/shared/theme/useColors';
 import {restoreColorSchemePreference} from '@/shared/theme/color-scheme-preference';
+import {Analytics} from '@/shared/lib/analytics/ga4';
+import {focusedScreenName} from '@/shared/lib/analytics/screen-tracking';
 
 // init 은 컴포넌트 밖에서 — 렌더 시작 전에 나는 에러도 잡아야 한다.
 initSentry();
@@ -64,6 +66,15 @@ function App(): React.JSX.Element {
   const navigationTheme = useNavigationTheme();
   useOtaUpdateOnResume();
 
+  // 화면 전환마다 GA4 screen_view. 같은 화면 안 params 변화(탭 재선택 등)는 한 번만.
+  const lastScreen = useRef<string | undefined>(undefined);
+  const trackScreen = useCallback(() => {
+    const name = focusedScreenName(navigationRef.getRootState());
+    if (!name || name === lastScreen.current) return;
+    lastScreen.current = name;
+    Analytics.screen(name);
+  }, []);
+
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaProvider>
@@ -73,7 +84,11 @@ function App(): React.JSX.Element {
               <AppErrorFallback onRetry={resetError} />
             )}>
             <KeyboardProvider>
-              <NavigationContainer ref={navigationRef} theme={navigationTheme}>
+              <NavigationContainer
+                ref={navigationRef}
+                theme={navigationTheme}
+                onReady={trackScreen}
+                onStateChange={trackScreen}>
                 <ReactQueryProvider>
                   <WebviewRefContext.Provider value={webViewRefManager}>
                     <FcmHandler>

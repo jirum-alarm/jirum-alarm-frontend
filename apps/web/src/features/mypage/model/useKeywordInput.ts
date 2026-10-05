@@ -14,6 +14,7 @@ export const useKeywordInput = () => {
     value: '',
   });
   const { mutate: addNotificationKeyword, isPending } = useUpdateKeyword({
+    source: 'mypage',
     onSuccess: ({ keyword }) => {
       reset();
       promptPushChannel(keyword);

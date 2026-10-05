@@ -6,11 +6,21 @@ import RNBootSplash from 'react-native-bootsplash';
 import useAppStateTokenRefresh from '@/shared/hooks/useAppStateTokenRefresh';
 import useForceUpdate from '@/shared/hooks/useForceUpdate';
 import ForceUpdateScreen from '@/screens/update/ForceUpdateScreen';
+import {useQuery} from '@tanstack/react-query';
+import {UserQueries} from '@/entities/user/user.queries';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 
 const RootNavigator = () => {
   const {isLogin, isLoading} = useAuth();
   const {needsUpdate} = useForceUpdate();
   useAppStateTokenRefresh();
+
+  // 자동 로그인으로 들어온 사람도 GA4 user_id 를 단다 — 예전엔 로그인 화면을 지날 때만 달아서
+  // 이미 로그인돼 있던 대부분의 앱 사용자가 익명으로 남았다. (access 요청은 첫 토큰 갱신까지 줄 선다)
+  const {data: myUserId} = useQuery({...UserQueries.me(), enabled: isLogin});
+  useEffect(() => {
+    if (myUserId) Analytics.identify(myUserId);
+  }, [myUserId]);
   const splashHidden = useRef(false);
 
   const hideSplash = useCallback(() => {

@@ -6,6 +6,7 @@ import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import PressableScale from '@/shared/components/PressableScale';
 import {ProductService} from '@/shared/api/product/product.service';
 import {showToast} from '@/shared/lib/feedback';
+import {trackKeywordRegister} from '@/shared/lib/analytics/keyword-tracking';
 import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
 import {PendingActionType} from '@/shared/lib/pending-action';
 import {
@@ -53,7 +54,8 @@ export default function RecommendedKeywordSection() {
         keyword,
         fromRecommendation: true,
       }),
-    onSuccess: () => {
+    onSuccess: (_data, keyword) => {
+      trackKeywordRegister('home_recommend', keyword);
       const added = inFlight.current;
       showToast.success(
         added

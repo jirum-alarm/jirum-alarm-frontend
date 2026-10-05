@@ -68,6 +68,13 @@ export const Analytics = {
     );
   },
 
+  // RN 은 네이티브 화면이 하나라 자동 screen_view 로는 화면이 안 갈린다 — 라우트 이름으로 직접 보낸다.
+  screen(name: string) {
+    safely(`screen(${name})`, () =>
+      analytics().logScreenView({screen_name: name, screen_class: name}),
+    );
+  },
+
   // 로그아웃 시 user_id 해제(다음 유저와 섞이지 않도록).
   reset() {
     safely('reset', () => analytics().setUserId(null));

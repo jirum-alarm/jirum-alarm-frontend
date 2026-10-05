@@ -7,6 +7,8 @@ import {useQueryClient} from '@tanstack/react-query';
 import {AuthQueries} from '@/entities/auth';
 import {MyPageQueries} from '@/entities/mypage';
 import {ThemeQueries} from '@/entities/theme';
+import {UserQueries} from '@/entities/user/user.queries';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {StorageKey} from '@/shared/constant/storage-key';
 import {removeAsyncStorage} from '@/shared/lib/persistence';
 import {setUnreadCount} from '@/shared/hooks/useUnreadNotifications';
@@ -68,6 +70,9 @@ export function useLogout() {
     clearQueryCache();
     queryClient.removeQueries({queryKey: MyPageQueries.keys.all});
     queryClient.removeQueries({queryKey: ThemeQueries.keys.all});
+    // 내 id 도 — 남으면 다음 로그인 유저에게 이전 user_id 를 다시 단다(댓글 소유 판정도 이걸 본다).
+    queryClient.removeQueries({queryKey: UserQueries.keys.all});
+    Analytics.reset();
 
     await queryClient
       .invalidateQueries({queryKey: AuthQueries.keys.loginByRefreshToken()})

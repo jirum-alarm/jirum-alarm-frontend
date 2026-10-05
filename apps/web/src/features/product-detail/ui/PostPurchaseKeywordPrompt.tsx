@@ -62,6 +62,7 @@ export default function PostPurchaseKeywordPrompt({
   const [done, setDone] = useState(false);
 
   const { mutate: addNotificationKeyword, isPending } = useUpdateKeyword({
+    source: 'post_purchase',
     onSuccess: () => {
       // 등록되면 배너가 사라지는 게 아니라 안내 문구로 바뀐다. 사라지면 등록이 된 건지
       // 눌림이 씹힌 건지 알 수 없다 — 결과를 남겨두는 쪽이 신뢰를 만든다.

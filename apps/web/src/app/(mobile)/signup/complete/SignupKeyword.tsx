@@ -55,6 +55,7 @@ export default function SignupKeyword({ productId }: { productId: number | null 
   }, [productId]);
 
   const { mutate, isPending } = useUpdateKeyword({
+    source: 'signup_complete',
     onSuccess: ({ keyword }) => {
       setDone(keyword);
       promptPushChannel(keyword);

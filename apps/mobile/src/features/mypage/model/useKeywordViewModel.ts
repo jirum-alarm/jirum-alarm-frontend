@@ -5,6 +5,7 @@ import {MyPageQueries} from '@/entities/mypage';
 import {MyPageService, type MyKeyword} from '@/shared/api/mypage';
 import {showToast} from '@/shared/lib/feedback';
 import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
+import {trackKeywordRegister} from '@/shared/lib/analytics/keyword-tracking';
 
 import {invalidateMyKeywords} from '@/features/keyword-prompt/model/myKeywords';
 
@@ -45,7 +46,11 @@ export function useKeywordViewModel() {
 
   const {mutate: addKeyword, isPending: isAdding} = useMutation({
     mutationFn: MyPageService.addKeyword,
-    onSuccess: () => {
+    onSuccess: (_data, {keyword, fromRecommendation}) => {
+      trackKeywordRegister(
+        fromRecommendation ? 'mypage_recommend' : 'mypage',
+        keyword,
+      );
       reset();
       showToast.success('키워드 알림을 등록했어요.');
       requestPushPermissionIfNeeded();

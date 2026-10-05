@@ -7,6 +7,7 @@ import {MyPageService} from '@/shared/api/mypage';
 import PressableScale from '@/shared/components/PressableScale';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {Analytics} from '@/shared/lib/analytics/ga4';
+import {trackKeywordRegister} from '@/shared/lib/analytics/keyword-tracking';
 import {requestPushPermissionIfNeeded} from '@/shared/lib/fcm/push-permission';
 import {showToast} from '@/shared/lib/feedback';
 import {isValidKeyword} from '@/features/mypage/lib/validation';
@@ -43,6 +44,10 @@ export default function KeywordAlertButton({
   const {mutate} = useMutation({
     mutationFn: () => MyPageService.addKeyword({keyword: trimmed}),
     onSuccess: () => {
+      trackKeywordRegister(
+        variant === 'bar' ? 'search_bar' : 'search_no_result',
+        trimmed,
+      );
       showToast.success(`'${trimmed}' 새 핫딜이 올라오면 알려드릴게요.`);
       requestPushPermissionIfNeeded();
       return invalidateMyKeywords(queryClient);
