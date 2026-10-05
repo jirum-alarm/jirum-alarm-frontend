@@ -6,8 +6,8 @@ import { useRef, useState } from 'react';
 
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
-import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
+import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { AuthQueries } from '@/entities/auth';
@@ -44,7 +44,7 @@ function getErrorMessage(error: unknown): string {
 export default function RecommendedKeywordSection() {
   const { toast } = useToast();
   const { checkAndRedirect } = useRedirectIfNotLoggedIn();
-  const { requestPermission } = useFcmPermission();
+  const promptPushChannel = usePushChannelPrompt();
 
   // 이미 등록한 키워드 제외는 서버가 한다(recommendedNotificationKeywords 가 로그인
   // 사용자면 걸러서 준다). 클라이언트에서 거르려면 notificationKeywordsByMe 를 따로
@@ -64,7 +64,7 @@ export default function RecommendedKeywordSection() {
       // "등록됐다"는 사실은 화면 어디를 보고 있든 전달돼야 한다.
       const added = inFlight.current;
       toast(added ? `'${added}' 키워드 알림을 등록했어요.` : '키워드 알림을 등록했어요.');
-      requestPermission();
+      promptPushChannel(added ?? undefined);
     },
     onError: (error) => {
       // 낙관적으로 켜둔 체크를 되돌린다.

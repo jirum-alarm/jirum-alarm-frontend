@@ -11,13 +11,19 @@ import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 import { resolveReturnUrl } from '@/features/auth/lib/return-url';
 
+import SignupKeyword from './SignupKeyword';
+
 const Completed = () => {
   const router = useMyRouter();
   const searchParams = useSearchParams();
+  // 소셜 가입은 가입 전 의도한 곳(rtnUrl)으로, 그 외엔 홈으로.
+  // rtnUrl 이 다른 오리진(ai.jirum-alarm.com 등)이면 라우터가 못 가므로 브라우저 이동을 쓴다.
+  const target = resolveReturnUrl(searchParams.get('rtnUrl'), WindowLocation.getCurrentOrigin());
+  // 상품 상세에서 가입했으면(가입의 81%) 그 상품으로 키워드를 추천한다.
+  const productMatch = target.kind === 'internal' ? target.path.match(/^\/products\/(\d+)/) : null;
+  const productId = productMatch ? Number(productMatch[1]) : null;
+
   const handleCTAButton = () => {
-    // 소셜 가입은 가입 전 의도한 곳(rtnUrl)으로, 그 외엔 홈으로.
-    // rtnUrl 이 다른 오리진(ai.jirum-alarm.com 등)이면 라우터가 못 가므로 브라우저 이동을 쓴다.
-    const target = resolveReturnUrl(searchParams.get('rtnUrl'), WindowLocation.getCurrentOrigin());
     if (target.kind === 'external') {
       window.location.replace(target.url);
       return;
@@ -30,20 +36,19 @@ const Completed = () => {
       <div className="h-full px-5 py-9">
         <div className="grid h-full text-center">
           <div>
-            <div className="grid justify-center pb-10">
+            <div className="grid justify-center pb-6">
               <Illust />
             </div>
             <div>
               <p className="pb-3 text-2xl font-semibold">가입을 축하합니다!</p>
-              <p>
-                실시간으로 올라오는 핫딜 정보를 확인하고
-                <br />
-                키워드를 등록해 관심있는 정보를 얻어보세요
-              </p>
+            </div>
+            <div className="pt-8 pb-28">
+              <SignupKeyword productId={productId} />
             </div>
           </div>
           <div className="fixed right-0 bottom-0 left-0 m-auto w-full max-w-[600px] px-5 pb-9">
-            <Button onClick={handleCTAButton} className="self-end">
+            {/* 위 "알림 받기"가 이 화면의 제1 CTA 라 여긴 회색으로 물러선다. */}
+            <Button onClick={handleCTAButton} color="secondary" className="self-end">
               핫딜 보러가기
             </Button>
           </div>

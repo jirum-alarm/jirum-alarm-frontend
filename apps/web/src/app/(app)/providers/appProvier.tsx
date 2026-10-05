@@ -10,6 +10,7 @@ import { IS_PRD } from '@/shared/config/env';
 import { GTM_ID } from '@/shared/config/gtm';
 import FCMConfig from '@/shared/lib/firebase/FCMConfig';
 
+import PushChannelSheet from '@/features/app-download/ui/PushChannelSheet';
 import LoginModal from '@/features/auth/ui/login/LoginModal';
 
 import { ClarityProvider } from './clarityProvider';
@@ -63,6 +64,7 @@ export const AppProvider = ({ children, device, isLoggedIn }: Props) => {
               <ClarityProvider />
               <NuqsAdapter>{children}</NuqsAdapter>
               <LoginModal />
+              <PushChannelSheet />
             </ReactQueryProviders>
           </ServerStateProvider>
         </JotaiProvider>

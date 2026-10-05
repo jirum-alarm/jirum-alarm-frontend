@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
-import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
+import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { Alert } from '@/shared/ui/common/icons';
 import { useToast } from '@/shared/ui/common/Toast';
 
@@ -58,7 +58,7 @@ export default function PostPurchaseKeywordPrompt({
   const { toast } = useToast();
   const { isLoggedIn } = useIsLoggedIn();
   const { checkAndRedirect } = useRedirectIfNotLoggedIn();
-  const { requestPermission } = useFcmPermission();
+  const promptPushChannel = usePushChannelPrompt();
   const [done, setDone] = useState(false);
 
   const { mutate: addNotificationKeyword, isPending } = useUpdateKeyword({
@@ -66,7 +66,7 @@ export default function PostPurchaseKeywordPrompt({
       // 등록되면 배너가 사라지는 게 아니라 안내 문구로 바뀐다. 사라지면 등록이 된 건지
       // 눌림이 씹힌 건지 알 수 없다 — 결과를 남겨두는 쪽이 신뢰를 만든다.
       setDone(true);
-      requestPermission();
+      promptPushChannel(keyword);
     },
     onError: (error) => {
       // '이미 등록된 키워드'는 사용자 입장에선 실패가 아니라 이미 목적이 달성된 상태다.

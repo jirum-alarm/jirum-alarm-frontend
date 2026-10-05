@@ -4,16 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { APP_QR_PATH } from '@/shared/config/appStore';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
-import { isInApp } from '@/shared/lib/webview';
-
-type PushStatus = 'unknown' | 'ok' | 'unsupported' | 'denied' | 'default';
-
-const readStatus = (): PushStatus => {
-  if (isInApp()) return 'ok'; // 앱은 네이티브 토큰으로 받는다
-  if (!('Notification' in window)) return 'unsupported';
-  if (Notification.permission === 'granted') return 'ok';
-  return Notification.permission;
-};
+import { PushStatus, readPushStatus as readStatus } from '@/shared/lib/push-channel/pushChannel';
 
 /**
  * 키워드를 걸어도 이 브라우저로는 푸시가 안 오는 상태면 알려준다.
@@ -23,7 +14,7 @@ const readStatus = (): PushStatus => {
  * 추가하지 않으면 웹 푸시 API 자체가 없고, 거부한 브라우저는 다시 묻지 않는다.
  */
 const PushStatusBanner = () => {
-  const [status, setStatus] = useState<PushStatus>('unknown');
+  const [status, setStatus] = useState<PushStatus | 'unknown'>('unknown');
   const { requestPermission } = useFcmPermission();
 
   useEffect(() => setStatus(readStatus()), []);

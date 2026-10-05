@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { ThemeService } from '@/shared/api/notification/theme.service';
-import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
+import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { ThemeQueries } from '@/entities/notification';
@@ -11,7 +11,7 @@ import { ThemeQueries } from '@/entities/notification';
 export const useThemeSubscription = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { requestPermission } = useFcmPermission();
+  const promptPushChannel = usePushChannelPrompt();
 
   const key = ThemeQueries.mySubscribedIds().queryKey;
 
@@ -38,7 +38,7 @@ export const useThemeSubscription = () => {
     onSuccess: () => {
       // 켠 직후 "그래서 뭐가 오는지"를 한 번 알려준다 — 키워드처럼 딜마다 오는 게 아니라서.
       toast('알림을 켰어요. 반응 좋은 딜만 골라 하루 최대 3건 보내드릴게요.');
-      requestPermission();
+      promptPushChannel();
     },
     onError: (_e, _themeId, ctx) => {
       if (ctx?.prev) queryClient.setQueryData(key, ctx.prev);
