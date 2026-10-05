@@ -2,7 +2,7 @@
 
 import 'swiper/css';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -14,7 +14,9 @@ import { ThemeQueries } from '@/entities/notification';
 
 // 홈 알림 묶음 캐러셀. 헤더·여백은 DynamicProductSection 과 같은 틀(SectionHeader + 더보기)을 쓴다.
 const ThemeSection = ({ isMobile }: { isMobile: boolean }) => {
-  const { data: allThemes } = useSuspenseQuery(ThemeQueries.themes());
+  // 서버(HomeContainerV2)가 프리페치한다. Suspense 를 쓰면 React 19 가 경계를 떼어 늦게 공개해
+  // 섹션이 중간에 끼어들며 아래를 밀었다. 실패하면 data 가 없어 섹션만 숨는다.
+  const { data: allThemes = [] } = useQuery(ThemeQueries.themes());
   // 최근 7일 알림 0건인 묶음은 구독해도 아무것도 안 온다 → 홈에서 숨김(목록·상세는 유지).
   const themes = allThemes.filter((theme) => theme.weeklyAlertCount > 0);
 

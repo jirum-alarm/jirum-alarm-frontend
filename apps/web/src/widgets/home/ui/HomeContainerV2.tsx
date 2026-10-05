@@ -4,13 +4,15 @@ import Link from 'next/link';
 
 import { getQueryClient } from '@/app/(app)/react-query/query-client';
 import { TOSS_SECTIONS } from '@/app/(desktop-ready)/toss/mock';
-import { fetchTossDeals } from '@/app/(desktop-ready)/toss/toss.api';
+import { fetchTossCategoryLabels, fetchTossDeals } from '@/app/(desktop-ready)/toss/toss.api';
 import { checkDevice } from '@/app/actions/agent';
 
 import { AdvertiseSlotLocation } from '@/shared/api/gql/graphql';
 import { Advertisement } from '@/shared/config/advertisement';
 
 import { AdvertisementQueries } from '@/entities/advertisement/api';
+import { AuthQueries } from '@/entities/auth';
+import { ThemeQueries } from '@/entities/notification';
 import { getPromotionSections } from '@/entities/promotion/api/getPromotionSections';
 
 import PromotionSectionList from '@/widgets/home/ui/PromotionSectionList';
@@ -31,11 +33,22 @@ async function HomeContainerV2() {
   ]);
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery(
-    AdvertisementQueries.activeAds({
-      slotLocation: AdvertiseSlotLocation.HomeCarouselBanner,
+  // 섹션 안에서 클라이언트가 받던 쿼리(인기 키워드 칩·관심사 묶음·토스 카테고리 탭)도 서버에서 채운다.
+  // 안 채우면 칩은 하이드레이션 뒤에 끼어들어 아래 섹션을 밀고, 묶음은 스트리밍으로 늦게 붙는다.
+  // prefetchQuery 는 실패를 삼킨다 → 실패한 섹션만 예전처럼 클라이언트가 다시 받는다.
+  await Promise.all([
+    queryClient.prefetchQuery(
+      AdvertisementQueries.activeAds({
+        slotLocation: AdvertiseSlotLocation.HomeCarouselBanner,
+      }),
+    ),
+    queryClient.prefetchQuery(AuthQueries.recommendedKeywords()),
+    queryClient.prefetchQuery(ThemeQueries.themes()),
+    queryClient.prefetchQuery({
+      queryKey: ['toss-category-labels'],
+      queryFn: fetchTossCategoryLabels,
     }),
-  );
+  ]);
 
   const renderDesktop = () => {
     return (
@@ -72,22 +85,24 @@ async function HomeContainerV2() {
   return (
     <div className="pc:max-w-none pc:pb-0 max-w-mobile-max mx-auto h-full w-full overflow-x-hidden bg-white pb-[var(--bottom-nav-padding)]">
       {!isMobile ? renderDesktop() : renderMobile()}
-      <main className="pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-[1.75rem] pc:pt-[72px] max-w-mobile-max relative z-10 mt-[160px] rounded-t-[1.25rem] bg-white pt-3">
-        <h1 className="sr-only">지름알림 · 실시간 초특가 핫딜 정보 모아보기</h1>
-        <div className="pc:mx-auto pc:max-w-layout-max">
-          {!isMobile ? null : renderMobileRanking()}
-          <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-14">
-            <div>
-              {/* 묶음 섹션은 PromotionSectionList 내부에서 'under-10000'(만원이하템) 뒤에 렌더 */}
-              <PromotionSectionList
-                sections={sections}
-                isMobile={isMobile}
-                tossInitialDeals={tossInitialDeals}
-              />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <main className="pc:mt-[770px] pc:w-full pc:max-w-none pc:rounded-t-[1.75rem] pc:pt-[72px] max-w-mobile-max relative z-10 mt-[160px] rounded-t-[1.25rem] bg-white pt-3">
+          <h1 className="sr-only">지름알림 · 실시간 초특가 핫딜 정보 모아보기</h1>
+          <div className="pc:mx-auto pc:max-w-layout-max">
+            {!isMobile ? null : renderMobileRanking()}
+            <div className="pc:gap-y-15 pc:pt-0 pc:px-5 flex flex-col gap-y-8 py-14">
+              <div>
+                {/* 묶음 섹션은 PromotionSectionList 내부에서 'under-10000'(만원이하템) 뒤에 렌더 */}
+                <PromotionSectionList
+                  sections={sections}
+                  isMobile={isMobile}
+                  tossInitialDeals={tossInitialDeals}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </HydrationBoundary>
       <Footer />
     </div>
   );

@@ -1,14 +1,8 @@
-import { PAGE } from '@/shared/config/page';
-import Link from '@/shared/ui/Link';
-
 import { type ProductCardType } from '@/entities/product-list/model/types';
-import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
-import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
-
-type RankingProduct = Omit<ProductCardType, 'postedAt'>;
+import ProductRankingImageCard from '@/entities/product-list/ui/ranking/ProductRankingImageCard';
 
 interface RankingPreviewProps {
-  products: RankingProduct[];
+  products: ProductCardType[];
 }
 
 /**
@@ -34,43 +28,24 @@ export const RankingPreview = ({ products }: RankingPreviewProps) => {
 };
 
 interface PreviewCardProps {
-  product: RankingProduct;
+  product: ProductCardType;
   rank: number;
   isActive: boolean;
   priority?: boolean;
 }
 
+// 실제 슬라이드와 같은 카드를 그린다. 따로 그리면 스와이퍼가 뜨며 갈아끼울 때
+// 빠진 줄(판매처·커뮤니티·시간)이 생기며 내용이 바뀌는 게 보인다.
 const PreviewCard = ({ product, rank, isActive, priority }: PreviewCardProps) => (
   <div className="w-[240px] shrink-0 pb-5">
-    <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
-      <div
-        className={`h-[352px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300 ${
-          isActive ? 'scale-100' : 'scale-90'
-        }`}
-      >
-        <div className="relative h-[240px] w-full bg-gray-50">
-          <div className="text-primary-500 bg-fixed-900 absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg text-sm font-medium">
-            {rank}
-          </div>
-          <ProductThumbnail
-            src={product.thumbnail ?? ''}
-            title={product.title}
-            type="product"
-            categoryId={product.categoryId}
-            alt={product.title}
-            sizes="252px"
-            priority={priority}
-            quality={priority ? 85 : 75}
-          />
-        </div>
-        <div className="p-3 pb-0">
-          <div className="line-clamp-2 text-sm text-gray-700">{product.title}</div>
-          <div className="pt-2 text-lg font-bold text-gray-900">
-            <DisplayListPrice price={product.price} />
-          </div>
-        </div>
-      </div>
-    </Link>
+    <ProductRankingImageCard
+      product={product}
+      rank={rank}
+      activeIndex={0}
+      index={isActive ? 0 : 1}
+      priority={priority}
+      source="home_ranking"
+    />
   </div>
 );
 

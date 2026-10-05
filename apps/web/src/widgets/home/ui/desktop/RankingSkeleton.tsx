@@ -1,14 +1,8 @@
-import { PAGE } from '@/shared/config/page';
-import Link from '@/shared/ui/Link';
-
 import { type ProductCardType } from '@/entities/product-list/model/types';
-import DisplayListPrice from '@/entities/product-list/ui/card/DisplayListPrice';
-import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
-
-type RankingProduct = Omit<ProductCardType, 'postedAt'>;
+import ProductRankingImageCard from '@/entities/product-list/ui/ranking/ProductRankingImageCard';
 
 interface RankingPreviewProps {
-  products: RankingProduct[];
+  products: ProductCardType[];
 }
 
 /**
@@ -20,45 +14,20 @@ export const RankingPreview = ({ products }: RankingPreviewProps) => {
   return (
     <div className="relative grid w-full grid-cols-4 justify-center gap-x-6 overflow-x-hidden pb-5">
       {products.slice(0, 4).map((product, i) => (
-        <PreviewCard key={product.id} product={product} rank={i + 1} priority={i === 0} />
+        // 실제 슬라이드와 같은 카드 — 따로 그리면 갈아끼울 때 판매처·커뮤니티 줄이 생기는 게 보인다.
+        <ProductRankingImageCard
+          key={product.id}
+          product={product}
+          rank={i + 1}
+          activeIndex={0}
+          index={i}
+          priority={i === 0}
+          source="home_ranking"
+        />
       ))}
     </div>
   );
 };
-
-interface PreviewCardProps {
-  product: RankingProduct;
-  rank: number;
-  priority?: boolean;
-}
-
-const PreviewCard = ({ product, rank, priority }: PreviewCardProps) => (
-  <Link href={PAGE.DETAIL + '/' + product.id} rel="preload">
-    <div className="col-span-1 overflow-hidden rounded-lg border bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)]">
-      <div className="relative aspect-square w-full bg-gray-50">
-        <div className="bg-fixed-600/80 text-fixed-white absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg text-sm font-medium">
-          {rank}
-        </div>
-        <ProductThumbnail
-          src={product.thumbnail ?? ''}
-          title={product.title}
-          type="product"
-          categoryId={product.categoryId}
-          alt={product.title}
-          sizes="252px"
-          priority={priority}
-          quality={priority ? 85 : 75}
-        />
-      </div>
-      <div className="h-[132px] p-3 pb-0">
-        <div className="line-clamp-2 text-sm text-gray-700 xl:text-base">{product.title}</div>
-        <div className="h-[36px] pt-0.5 text-lg font-bold text-gray-900 xl:text-[22px]">
-          <DisplayListPrice price={product.price} />
-        </div>
-      </div>
-    </div>
-  </Link>
-);
 
 /** 로딩 스켈레톤 (fallback용) */
 export const RankingSkeleton = () => {

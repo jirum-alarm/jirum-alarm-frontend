@@ -1,5 +1,4 @@
-import { Fragment, Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { Fragment } from 'react';
 
 import { type TossDeal } from '@/app/(desktop-ready)/toss/mock';
 
@@ -39,14 +38,7 @@ const PromotionSectionList = ({
   // 6/25~9/27 홈 노출 보류였다 — 테마 키워드를 즉시 매칭하면 구독 1건이 주당 100~1,800건이라.
   // 서버가 반응 상위만 하루 3건 보내도록 바뀐 뒤(crawling-server sendThemeDigest) 다시 연다.
   const renderThemeSlot = (sectionId: string) =>
-    sectionId === THEME_AFTER_SECTION_ID ? (
-      // 선택형 섹션이라 쿼리가 실패하면(예: 스키마가 뒤처진 dev API) 섹션만 숨기고 홈은 살린다.
-      <ErrorBoundary fallback={null}>
-        <Suspense fallback={null}>
-          <ThemeSection isMobile={isMobile} />
-        </Suspense>
-      </ErrorBoundary>
-    ) : null;
+    sectionId === THEME_AFTER_SECTION_ID ? <ThemeSection isMobile={isMobile} /> : null;
 
   return (
     <div className="flex flex-col gap-y-8">

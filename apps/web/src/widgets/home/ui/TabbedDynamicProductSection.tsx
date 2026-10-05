@@ -1,8 +1,8 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { m } from 'motion/react';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 
 import Link from '@/shared/ui/Link';
 import SectionHeader from '@/shared/ui/SectionHeader';
@@ -22,7 +22,9 @@ interface TabbedDynamicProductSectionProps {
   isMobile: boolean;
 }
 
-// Suspense 경계 안쪽에서만 쿼리를 걸어야 탭 전환 시 탭바까지 스켈레톤으로 대체되지 않는다.
+// Suspense 대신 isPending 으로 스켈레톤을 그린다. 첫 탭은 서버가 프리페치해 둬서 SSR HTML 에
+// 상품이 바로 박히는데, Suspense 경계로 감싸면 React 19 가 큰 경계를 따로 떼어 스트리밍하고
+// 공개를 잠깐 미뤄 스켈레톤 → 상품으로 바뀌는 게 보였다. 탭 전환 때만 스켈레톤이 뜬다.
 const TabProductList = ({
   section,
   isMobile,
@@ -30,7 +32,19 @@ const TabProductList = ({
   section: ContentPromotionSection;
   isMobile: boolean;
 }) => {
-  const { data } = useSuspenseQuery(getPromotionQueryOptions(section) as any);
+  const { data, isPending } = useQuery(getPromotionQueryOptions(section) as any);
+
+  if (isPending) {
+    return (
+      <div className="pc:py-4 pc:px-0 px-5">
+        <div className="pc:grid-cols-6 grid animate-pulse grid-cols-3 gap-x-3 gap-y-5">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <ProductImageCardSkeleton key={index} />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <DynamicProductList
@@ -93,19 +107,7 @@ const TabbedDynamicProductSection = ({ section, isMobile }: TabbedDynamicProduct
         <PromotionTabs tabs={tabs} activeTabId={activeTab.id} onTabClick={handleTabClick} />
       </div>
 
-      <Suspense
-        fallback={
-          <div className="pc:py-4 pc:px-0 px-5">
-            <div className="pc:grid-cols-6 grid animate-pulse grid-cols-3 gap-x-3 gap-y-5">
-              {Array.from({ length: 6 }).map((_, index) => (
-                <ProductImageCardSkeleton key={index} />
-              ))}
-            </div>
-          </div>
-        }
-      >
-        <TabProductList section={activeSection} isMobile={isMobile} />
-      </Suspense>
+      <TabProductList section={activeSection} isMobile={isMobile} />
     </div>
   );
 };
