@@ -302,6 +302,9 @@ export async function generateMetadata({
   const retailerName = product.mallName?.trim();
   const otherMeta: Record<string, string | number> = {
     'product:id': product.id,
+    // 루트의 Smart App Banner 를 이 상품으로 덮는다. 앱이 깔린 사람이 "열기"를 누르면
+    // 앱 첫 화면이 아니라 이 상품이 열린다(앱 딥링크가 /products 를 받는다).
+    'apple-itunes-app': `app-id=6474611420, app-argument=${url}`,
   };
 
   if (categoryName) {

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
+import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { Alert } from '@/shared/ui/common/icons';
 import { useToast } from '@/shared/ui/common/Toast';
@@ -107,6 +108,16 @@ export default function PostPurchaseKeywordPrompt({
   // 여기서 숨기면 사용자가 누른 직후 배너가 사라져 등록됐는지 알 수 없다.
   const visible = show && hasKeyword && (done || !alreadyRegistered);
 
+  // 게스트가 "알림 받기"를 눌러 로그인하고 이 상품으로 돌아왔으면 이어서 등록한다.
+  // 배너는 구매 클릭 뒤에만 보이므로(show) 결과는 토스트로 알린다.
+  usePendingAction<string>(PendingActionType.NOTIFICATION_KEYWORD_ADD, (pending) => {
+    if (!pending) return;
+    addNotificationKeyword(
+      { keyword: pending, priceDropOnly: true },
+      { onSuccess: () => toast(`'${pending}' 알림을 등록했어요.`) },
+    );
+  });
+
   // 상품이 바뀌면 이전 상품의 완료 상태가 남지 않도록 초기화.
   useEffect(() => {
     setDone(false);
@@ -138,10 +149,14 @@ export default function PostPurchaseKeywordPrompt({
     // 게스트가 트래픽의 97%다. 웹은 로그인 모달, 앱(WebView)은 네이티브 라우팅 —
     // 둘 다 checkAndRedirect 가 처리한다.
     if (
-      checkAndRedirect({
-        title: '키워드 알림은 로그인이 필요해요',
-        description: `로그인하고 '${keyword}' 알림을 받아보세요`,
-      })
+      checkAndRedirect(
+        {
+          title: '키워드 알림은 로그인이 필요해요',
+          description: `로그인하고 '${keyword}' 알림을 받아보세요`,
+        },
+        // 로그인 왕복에 의도가 사라지지 않게 — 돌아오면 위 usePendingAction 이 등록한다.
+        { type: PendingActionType.NOTIFICATION_KEYWORD_ADD, payload: keyword },
+      )
     )
       return;
 

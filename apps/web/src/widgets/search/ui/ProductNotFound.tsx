@@ -5,11 +5,15 @@ import { PAGE } from '@/shared/config/page';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import useMyRouter from '@/shared/hooks/useMyRouter';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
+import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
+import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { ErrorIllust } from '@/shared/ui/common/icons/Illust';
+import { useToast } from '@/shared/ui/common/Toast';
 import SectionHeader from '@/shared/ui/SectionHeader';
 
 import { CarouselProductList } from '@/entities/product-list/ui/carousel';
 
+import { useUpdateKeyword } from '@/features/mypage/model';
 import { useHotDealsRandom } from '@/features/product-list/hooks';
 
 const ProductNotFound = () => {
@@ -29,6 +33,28 @@ const ProductNotFound = () => {
 
   const { data: { communityRandomRankingProducts: hotDeals } = {} } = useHotDealsRandom();
 
+  const { toast } = useToast();
+  const promptPushChannel = usePushChannelPrompt();
+  // 검색어를 그대로 등록한다. 예전엔 빈 키워드 화면으로 보내 검색어를 다시 치게 했다.
+  const { mutate: addKeyword, isPending } = useUpdateKeyword({
+    source: 'search_no_result',
+    onSuccess: ({ keyword: added }) => {
+      toast(`'${added}' 알림을 등록했어요.`);
+      promptPushChannel(added);
+    },
+    onError: (error) => {
+      const gql = error as { response?: { errors?: { message?: string }[] } };
+      toast(gql?.response?.errors?.[0]?.message || '키워드 저장에 실패했습니다.');
+    },
+  });
+  const segments = [...new Intl.Segmenter().segment(keyword.trim())].length;
+  const canRegister = segments >= 2 && segments <= 20;
+
+  // 게스트가 눌러 로그인하고 돌아왔으면 그 검색어를 이어서 등록한다.
+  usePendingAction<string>(PendingActionType.NOTIFICATION_KEYWORD_ADD, (pending) => {
+    if (pending) addKeyword({ keyword: pending });
+  });
+
   const handleAddKeywordClick = () => {
     // 비로그인 유저는 검색 결과가 없을 때 가장 강한 "알림받고 싶은" 의도를 보인다.
     // 게이트 직전에 keyword_intent를 쏴서 "막힌 알림 수요"를 측정한다. (Phase 1 익명→회원 전환)
@@ -39,9 +65,22 @@ const ProductNotFound = () => {
       });
     }
 
-    if (checkAndRedirect()) return;
-
-    router.push(PAGE.MYPAGE_KEYWORD);
+    if (!canRegister) {
+      if (checkAndRedirect()) return;
+      router.push(PAGE.MYPAGE_KEYWORD);
+      return;
+    }
+    if (
+      checkAndRedirect(
+        {
+          title: '키워드 알림은 로그인이 필요해요',
+          description: `로그인하고 '${keyword.trim()}' 알림을 받아보세요`,
+        },
+        { type: PendingActionType.NOTIFICATION_KEYWORD_ADD, payload: keyword.trim() },
+      )
+    )
+      return;
+    if (!isPending) addKeyword({ keyword: keyword.trim() });
   };
 
   const handleShowMoreClick = () => {
@@ -62,7 +101,7 @@ const ProductNotFound = () => {
           onClick={handleAddKeywordClick}
           className="text-primary-500 rounded-lg bg-gray-800 px-5 py-1.5 font-semibold"
         >
-          키워드 등록
+          {canRegister ? `'${keyword.trim()}' 알림 받기` : '키워드 등록'}
         </button>
       </div>
       {hotDeals?.length ? (

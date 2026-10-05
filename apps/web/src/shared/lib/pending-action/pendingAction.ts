@@ -47,18 +47,23 @@ export function savePendingAction(type: string, payload?: unknown) {
   }
 }
 
-/** 저장된 의도를 꺼내면서 지운다(한 번만 실행되도록). 만료됐으면 null. */
-export function takePendingAction(): PendingAction | null {
+/**
+ * 저장된 의도를 꺼내면서 지운다(한 번만 실행되도록). 만료됐으면 null.
+ *
+ * type 을 주면 그 type 일 때만 꺼낸다. 한 화면에 소비자가 여럿이면(상세 = 찜 + 키워드)
+ * 먼저 돈 effect 가 남의 의도를 꺼내 버리던 걸 막는다.
+ */
+export function takePendingAction(type?: string): PendingAction | null {
   if (typeof window === 'undefined') return null;
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    sessionStorage.removeItem(STORAGE_KEY);
 
     const action = JSON.parse(raw) as PendingAction;
-    if (!action?.type) return null;
-    if (Date.now() - action.savedAt > MAX_AGE_MS) return null;
-    return action;
+    const expired = !action?.type || Date.now() - action.savedAt > MAX_AGE_MS;
+    if (!expired && type && action.type !== type) return null;
+    sessionStorage.removeItem(STORAGE_KEY);
+    return expired ? null : action;
   } catch {
     return null;
   }

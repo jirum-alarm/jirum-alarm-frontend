@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import Button from '@/shared/ui/common/Button';
 import Input from '@/shared/ui/common/Input';
@@ -69,6 +70,15 @@ export default function SignupKeyword({ productId }: { productId: number | null 
       }
       toast(message || '키워드 저장에 실패했습니다.');
     },
+  });
+
+  // 가입 전에 "알림 받기"를 누르고 로그인 벽을 만났다면(추천 칩·구매 후·검색 결과 없음),
+  // 신규 가입자는 원래 화면이 아니라 여기로 온다 — 그 의도를 여기서 이어서 등록한다.
+  usePendingAction<string>(PendingActionType.NOTIFICATION_KEYWORD_ADD, (pending) => {
+    if (!pending) return;
+    setTouched(true);
+    setValue(pending);
+    mutate({ keyword: pending });
   });
 
   const length = segmentCount(value);
