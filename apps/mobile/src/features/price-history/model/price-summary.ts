@@ -45,6 +45,9 @@ export function resolveSubtitle(history: {
   if (history.basis === 'SIMILAR') {
     return '비슷한 상품 핫딜을 모아 참고용으로 보여드려요';
   }
+  if (history.basis === 'SELF') {
+    return '이 상품의 날짜별 가격을 보여드려요';
+  }
   if (history.confidence === 'HIGH' && history.basis === 'MAPPING') {
     return '같은 모델의 커뮤니티 핫딜가를 모아 보여드려요';
   }

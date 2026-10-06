@@ -145,8 +145,10 @@ export default function PriceHistorySection({
   }, [allPoints, resolvedDays]);
 
   // 노출은 섹션이 실제로 그려질 때(아래 early return 을 통과할 때) 상세 진입당 1회, 점 선택도 첫 1회만.
+  // holdout(가치 실험) 기기는 차트 대신 "그려졌을 노출"만 price_history_holdout 으로 남긴다.
   const shown = !isError && !!data && points.length >= 2;
   const basis = data?.basis;
+  const holdout = !!data?.holdout;
   const impressedRef = useRef<number | null>(null);
   const pointTouchedRef = useRef<number | null>(null);
   useEffect(() => {
@@ -155,9 +157,9 @@ export default function PriceHistorySection({
     void ProductService.collectPriceContextImpression({
       productId,
       source: 'app_detail',
-      detail: `price_history:${basis}`,
+      detail: `${holdout ? 'price_history_holdout' : 'price_history'}:${basis}`,
     }).catch(() => {});
-  }, [shown, basis, productId]);
+  }, [shown, basis, holdout, productId]);
 
   const trackClick = (element: 'period' | 'point' | 'deal') => {
     if (element === 'point') {
@@ -185,6 +187,7 @@ export default function PriceHistorySection({
 
   // 가격 이력은 매핑된 상품에만 있다. 대부분은 null 이므로 조용히 숨긴다.
   if (!data || points.length < 2) return null;
+  if (holdout) return null;
 
   const currency = data.currency;
   const prices = points.map(p => p.price);

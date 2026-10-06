@@ -1315,6 +1315,7 @@ export type PriceContext = {
 export enum PriceHistoryBasis {
   Cluster = 'CLUSTER',
   Mapping = 'MAPPING',
+  Self = 'SELF',
   Similar = 'SIMILAR',
 }
 
@@ -1681,6 +1682,8 @@ export type ProductPriceHistory = {
   currency: Scalars['String']['output'];
   /** LOW confidence 안내 문구 */
   disclaimer?: Maybe<Scalars['String']['output']>;
+  /** 가격추이 가치 실험(price_history_holdout_v1) holdout 기기 — 프론트는 차트를 그리지 않고 price_history_holdout 노출만 남긴다 */
+  holdout?: Maybe<Scalars['Boolean']['output']>;
   pointCount: Scalars['Int']['output'];
   points: Array<PriceHistoryPoint>;
   /** TOTAL | UNIT — brand_item 추이 축 */
@@ -3763,6 +3766,7 @@ export type ProductPriceHistoryQuery = {
       confidence: PriceHistoryConfidence;
       currency: string;
       disclaimer?: string | null;
+      holdout?: boolean | null;
       pointCount: number;
       rangeDays: number;
       sampleCount: number;
@@ -5062,6 +5066,7 @@ export const ProductPriceHistoryDocument = new TypedDocumentString(`
       confidence
       currency
       disclaimer
+      holdout
       pointCount
       rangeDays
       sampleCount

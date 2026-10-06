@@ -2,7 +2,7 @@ import type { Deal, PriceConfidence, PricePoint } from './types';
 
 /** 백엔드 `ProductPriceHistory` 중 우리가 쓰는 부분만. */
 export type PriceHistory = {
-  basis: 'MAPPING' | 'CLUSTER' | 'SIMILAR';
+  basis: 'MAPPING' | 'CLUSTER' | 'SIMILAR' | 'SELF';
   confidence: PriceConfidence;
   currency: string;
   pointCount: number;

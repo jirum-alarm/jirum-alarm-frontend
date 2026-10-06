@@ -277,7 +277,8 @@ const QuerySimilarProducts = new TypedDocumentString<QuerySimilarProductsResult,
   }
 `);
 
-export type PriceHistoryBasis = 'MAPPING' | 'CLUSTER' | 'SIMILAR';
+/** SELF = 이 상품 자신의 날짜별 관측가만(다른 딜 없음). */
+export type PriceHistoryBasis = 'MAPPING' | 'CLUSTER' | 'SIMILAR' | 'SELF';
 export type PriceHistoryConfidence = 'HIGH' | 'LOW';
 
 export interface PriceHistoryDeal {
@@ -313,6 +314,8 @@ export interface ProductPriceHistory {
   disclaimer: string | null;
   priceAxis?: string | null;
   unitLabel?: string | null;
+  /** 가격추이 가치 실험(price_history_holdout_v1) holdout 기기 — 차트를 그리지 않는다. */
+  holdout?: boolean | null;
   points: PriceHistoryPoint[];
 }
 
@@ -347,6 +350,7 @@ const QueryProductPriceHistory = new TypedDocumentString<
         pointCount
         sampleCount
         disclaimer
+        holdout
         priceAxis
         unitLabel
         points {

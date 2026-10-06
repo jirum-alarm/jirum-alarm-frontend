@@ -146,6 +146,9 @@ function resolveSubtitle(history: ProductPriceHistory): string {
   if (history.basis === 'SIMILAR') {
     return '비슷한 상품 핫딜을 모아 참고용으로 보여드려요';
   }
+  if (history.basis === 'SELF') {
+    return '이 상품의 날짜별 가격을 보여드려요';
+  }
   // brand_item SSOT(MAPPING HIGH)는 모델 라인 모음. 단위가 축은 /deals 전용이라 상세에선 안 씀.
   if (history.confidence === 'HIGH' && history.basis === 'MAPPING') {
     return '같은 모델의 커뮤니티 핫딜가를 모아 보여드려요';
@@ -531,8 +534,10 @@ export default function PriceHistorySection({
   }, [allPoints, productId, currentPriceProp, postedAt, periodStartMs, contentEndMs]);
 
   // 노출은 섹션이 실제로 그려질 때(아래 early return 을 통과할 때) 상세 진입당 1회, 점 선택도 첫 1회만.
+  // holdout(가치 실험) 기기는 차트 대신 "그려졌을 노출"만 price_history_holdout 으로 남긴다.
   const shown = !isError && !!history && allPoints.length >= 2 && points.length >= 2;
   const basis = history?.basis;
+  const holdout = !!history?.holdout;
   const impressedRef = useRef<number | null>(null);
   const pointClickedRef = useRef<number | null>(null);
   useEffect(() => {
@@ -541,9 +546,9 @@ export default function PriceHistorySection({
     void ProductService.collectPriceContextImpression({
       productId,
       source,
-      detail: `price_history:${basis}`,
+      detail: `${holdout ? 'price_history_holdout' : 'price_history'}:${basis}`,
     }).catch(() => {});
-  }, [shown, basis, productId, source]);
+  }, [shown, basis, holdout, productId, source]);
 
   const trackClick = (element: 'period' | 'point' | 'deal') => {
     if (element === 'point') {
@@ -584,6 +589,7 @@ export default function PriceHistorySection({
   // 이 상품은 추이 데이터 없음 → 섹션 자체 숨김
   if (isError || !history || allPoints.length < 2) return null;
   if (points.length < 2) return null;
+  if (holdout) return null;
 
   const currency = history.currency;
   const orderedForMeta = [...points].sort(

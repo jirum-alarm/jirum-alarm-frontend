@@ -105,6 +105,7 @@ export const QueryProductPriceHistory = graphql(`
         confidence
         currency
         disclaimer
+        holdout
         pointCount
         rangeDays
         sampleCount

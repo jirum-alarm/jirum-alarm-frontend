@@ -976,6 +976,7 @@ type PriceContext {
 enum PriceHistoryBasis {
   CLUSTER
   MAPPING
+  SELF
   SIMILAR
 }
 
@@ -1329,6 +1330,10 @@ type ProductPriceHistory {
   currency: String!
   """LOW confidence 안내 문구"""
   disclaimer: String
+  """
+  가격추이 가치 실험(price_history_holdout_v1) holdout 기기 — 프론트는 차트를 그리지 않고 price_history_holdout 노출만 남긴다
+  """
+  holdout: Boolean
   pointCount: Int!
   points: [PriceHistoryPoint!]!
   """TOTAL | UNIT — brand_item 추이 축"""

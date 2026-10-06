@@ -72,6 +72,9 @@ describe('resolveSubtitle · formatRangeLabel', () => {
     expect(resolveSubtitle({basis: 'SIMILAR'})).toBe(
       '비슷한 상품 핫딜을 모아 참고용으로 보여드려요',
     );
+    expect(resolveSubtitle({basis: 'SELF', confidence: 'HIGH'})).toBe(
+      '이 상품의 날짜별 가격을 보여드려요',
+    );
     expect(resolveSubtitle({basis: 'MAPPING', confidence: 'HIGH'})).toBe(
       '같은 모델의 커뮤니티 핫딜가를 모아 보여드려요',
     );
