@@ -9,6 +9,7 @@ import ProductCard from '@/shared/components/product/ProductCard';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
 import type {ProductDetail} from '../model/types';
+import {dealFreshnessAt} from '../lib/price-signals';
 
 /** 7일 지나면 품절·종료됐을 수 있다고 본다(web 과 같은 기준). */
 const EXPIRE_DAYS = 7;
@@ -39,7 +40,9 @@ export default function ExpiredProductWarning({
   /** 더보기 → 관련 상품 전체(web `/products/{id}/related`). */
   onPressMore?: () => void;
 }) {
-  const postedAt = product.postedAt ? new Date(product.postedAt) : null;
+  // 토스처럼 매일 재확인되는 딜은 마지막 확인 시각 기준 — 판매 중인데 "품절됐을 수 있어요"가 붙지 않게.
+  const freshAt = dealFreshnessAt(product);
+  const postedAt = freshAt ? new Date(freshAt) : null;
   const days = postedAt
     ? Math.floor((Date.now() - postedAt.getTime()) / 86_400_000)
     : 0;

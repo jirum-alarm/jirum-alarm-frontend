@@ -43,7 +43,7 @@ import {useWebviewContext} from '@/provider/WebViewRefProvider';
 
 import ProductDetailWebViewScreen from './ProductDetailWebViewScreen';
 import {parseSourceData} from './model/types';
-import {formatDealAgeNotice} from './lib/price-signals';
+import {dealFreshnessAt, formatDealAgeNotice} from './lib/price-signals';
 import BottomCTA from './ui/BottomCTA';
 import ProductDetailSkeleton from './ui/ProductDetailSkeleton';
 import ProductInfo from './ui/ProductInfo';
@@ -249,7 +249,7 @@ function NativeDetail({
   const source = parseSourceData(product.data);
   const ageNotice = hidePrice
     ? null
-    : formatDealAgeNotice(product.postedAt, product.isEnd);
+    : formatDealAgeNotice(dealFreshnessAt(product), product.isEnd);
   const showViewerCount = (product.viewCount ?? 0) >= MIN_VIEWER_COUNT;
 
   return (

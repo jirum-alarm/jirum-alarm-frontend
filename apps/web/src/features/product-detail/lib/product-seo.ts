@@ -107,6 +107,29 @@ export const STALE_AFTER_DAYS = 30;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+/**
+ * 신선도(오래됨 안내·JSON-LD 재고·제목 가격 주석)를 잴 기준 시각.
+ *
+ * 크롤러가 매일 다시 확인하는 스토어 딜(토스)은 `data.toss.lastSeenAt`(마지막 확인 시각)을 쓴다.
+ * 게시일(=최초 수집일)로 재면 오늘도 판매 중인 딜에 "N개월 전·품절됐을 수 있어요"가 붙는다 —
+ * 2026-10-06 실측: 토스 딜 조회의 85%가 7일+ 페이지였고 클릭률이 1.22% → 0.7%로 떨어졌다.
+ * 커뮤니티 딜은 값이 없으니 게시일 그대로.
+ */
+export function dealFreshnessAt<T extends string | Date | null | undefined>(product: {
+  postedAt?: T;
+  data?: unknown;
+}): T | string | undefined {
+  const seen = (product.data as { toss?: { lastSeenAt?: unknown } } | null | undefined)?.toss
+    ?.lastSeenAt;
+  if (typeof seen === 'string' && !Number.isNaN(Date.parse(seen))) return seen;
+  return product.postedAt;
+}
+
+/** 표시 시각이 확인 시각이면 true — 화면에서 "3시간 전 확인"처럼 게시가 아님을 밝힌다. */
+export function isSeenBasedFreshness(product: { postedAt?: unknown; data?: unknown }): boolean {
+  return dealFreshnessAt(product as { postedAt?: string; data?: unknown }) !== product.postedAt;
+}
+
 export type OfferFreshness = {
   /** schema.org Offer.availability. undefined = 주장하지 않음(필드 생략). */
   availability?: string;

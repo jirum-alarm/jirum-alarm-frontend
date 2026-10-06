@@ -28,6 +28,7 @@ import {
   type PostPurchasePromptKind,
 } from '@/features/product-detail/lib/okachat';
 import type { ProductPriceVerdict } from '@/features/product-detail/lib/price-verdict';
+import { dealFreshnessAt, isSeenBasedFreshness } from '@/features/product-detail/lib/product-seo';
 import ViewerCount from '@/features/product-detail/ui/desktop/ViewerCount';
 import PostPurchaseKakaoPrompt from '@/features/product-detail/ui/PostPurchaseKakaoPrompt';
 import PostPurchaseKeywordPrompt from '@/features/product-detail/ui/PostPurchaseKeywordPrompt';
@@ -125,7 +126,8 @@ export default function ProductInfo({
         </div>
         <div className="space-y-1 pt-3 pb-8">
           <div className="h-5 text-sm text-gray-500">
-            <DisplayTime time={product.postedAt} />
+            <DisplayTime time={dealFreshnessAt(product) ?? product.postedAt} />
+            {isSeenBasedFreshness(product) && ' 확인'}
           </div>
           <div className="flex justify-between">
             <div>

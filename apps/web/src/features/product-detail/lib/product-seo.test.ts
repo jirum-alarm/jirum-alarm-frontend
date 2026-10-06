@@ -16,6 +16,8 @@ const {
   buildRssItemTitle,
   buildOfferFreshness,
   formatDealAgeNotice,
+  dealFreshnessAt,
+  isSeenBasedFreshness,
   OFFER_VALID_DAYS,
   STALE_AFTER_DAYS,
   toSeoImageUrl,
@@ -457,5 +459,27 @@ describe('toSeoImageUrl', () => {
     const webp = 'https://cdn.jirum-alarm.com/community/toss/1.webp';
     assert.equal(toSeoImageUrl(webp), webp);
     assert.equal(toSeoImageUrl(null), null);
+  });
+});
+
+describe('dealFreshnessAt', () => {
+  it('토스 딜은 마지막 확인 시각 — 매일 재확인되는 딜에 오래됨 안내가 붙지 않게', () => {
+    const product = {
+      postedAt: '2026-08-10T13:49:03.000Z',
+      data: { toss: { lastSeenAt: '2026-10-06T14:00:00.000Z' } },
+    };
+    assert.equal(dealFreshnessAt(product), '2026-10-06T14:00:00.000Z');
+    assert.equal(isSeenBasedFreshness(product), true);
+    const now = Date.parse('2026-10-07T00:00:00.000Z');
+    assert.equal(formatDealAgeNotice(dealFreshnessAt(product), false, now), null);
+  });
+
+  it('값이 없거나 깨졌으면 게시일 그대로(커뮤니티 딜)', () => {
+    assert.equal(dealFreshnessAt({ postedAt: '2026-08-10', data: null }), '2026-08-10');
+    assert.equal(
+      dealFreshnessAt({ postedAt: '2026-08-10', data: { toss: { lastSeenAt: 'x' } } }),
+      '2026-08-10',
+    );
+    assert.equal(isSeenBasedFreshness({ postedAt: '2026-08-10', data: {} }), false);
   });
 });

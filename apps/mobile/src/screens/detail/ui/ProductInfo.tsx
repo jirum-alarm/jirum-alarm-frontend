@@ -19,6 +19,7 @@ import PriceContextBadge, {type PriceContext} from './PriceContextBadge';
 
 import type {ProductDetail, SourceData} from '../model/types';
 import type {PriceVerdict} from '../lib/price-signals';
+import {dealFreshnessAt, isSeenBasedFreshness} from '../lib/price-signals';
 import {stripPriceFromTitle} from '@/entities/home/lib/toss';
 
 /** 라벨/값 한 줄. 색은 web ProductInfo 와 동일하게 맞춘다(사용자 결정 2026-08-12). */
@@ -94,7 +95,8 @@ export default function ProductInfo({
 
       <View className="gap-y-1 pt-3">
         <Text className="h-5 text-sm text-gray-600">
-          {displayTime(product.postedAt)}
+          {displayTime(dealFreshnessAt(product) ?? product.postedAt)}
+          {isSeenBasedFreshness(product) ? ' 확인' : ''}
         </Text>
 
         <View className="flex-row items-center justify-between gap-x-3">

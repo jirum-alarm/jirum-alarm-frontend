@@ -8,6 +8,8 @@ export {};
 const {
   isStrongPriceVerdict,
   formatDealAgeNotice,
+  dealFreshnessAt,
+  isSeenBasedFreshness,
 } = require('../src/screens/detail/lib/price-signals');
 const {
   resolveCurrentPriceBadge,
@@ -111,5 +113,35 @@ describe('pickDefaultDays', () => {
 
   it('활성 탭이 없으면 3개월', () => {
     expect(pickDefaultDays(states({}), null, NOW)).toBe(90);
+  });
+});
+
+describe('dealFreshnessAt (web 과 같은 규칙)', () => {
+  it('토스 딜은 마지막 확인 시각 — 매일 재확인되는 딜에 오래됨 안내가 붙지 않게', () => {
+    const product = {
+      postedAt: '2026-08-10T13:49:03.000Z',
+      data: {toss: {lastSeenAt: '2026-10-06T14:00:00.000Z'}},
+    };
+    expect(dealFreshnessAt(product)).toBe('2026-10-06T14:00:00.000Z');
+    expect(isSeenBasedFreshness(product)).toBe(true);
+    const now = Date.parse('2026-10-07T00:00:00.000Z');
+    expect(
+      formatDealAgeNotice(dealFreshnessAt(product), false, now),
+    ).toBeNull();
+  });
+
+  it('값이 없거나 깨졌으면 게시일 그대로(커뮤니티 딜)', () => {
+    expect(dealFreshnessAt({postedAt: '2026-08-10', data: null})).toBe(
+      '2026-08-10',
+    );
+    expect(
+      dealFreshnessAt({
+        postedAt: '2026-08-10',
+        data: {toss: {lastSeenAt: 'x'}},
+      }),
+    ).toBe('2026-08-10');
+    expect(isSeenBasedFreshness({postedAt: '2026-08-10', data: {}})).toBe(
+      false,
+    );
   });
 });

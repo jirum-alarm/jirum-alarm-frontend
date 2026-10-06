@@ -11,13 +11,16 @@ import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 import { ProductQueries } from '@/entities/product';
 import { ProductGridList } from '@/entities/product-list/ui/grid';
 
+import { dealFreshnessAt } from '@/features/product-detail/lib/product-seo';
+
 interface Props {
   product: ProductInfoFragment;
   isMobile: boolean;
 }
 
 export default function ExpiredProductWarning({ product, isMobile }: Props) {
-  const isExpired = dayjs().diff(dayjs(product.postedAt), 'day') >= 7;
+  // 토스처럼 매일 재확인되는 딜은 마지막 확인 시각 기준 — 판매 중인데 "품절됐을 수 있어요"가 붙지 않게.
+  const isExpired = dayjs().diff(dayjs(dealFreshnessAt(product)), 'day') >= 7;
 
   if (!isExpired) return null;
 

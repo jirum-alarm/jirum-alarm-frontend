@@ -20,6 +20,7 @@ import TossIcon from '@/entities/product/ui/TossIcon';
 import { RecommendButton } from '@/features/product-actions/ui';
 import { useProductPurchaseStatusClarity } from '@/features/product-detail/hooks/useProductPurchaseStatusClarity';
 import type { ProductPriceVerdict } from '@/features/product-detail/lib/price-verdict';
+import { dealFreshnessAt, isSeenBasedFreshness } from '@/features/product-detail/lib/product-seo';
 import HotdealGuideModal from '@/features/product-detail/ui/mobile/HotDealGuideModal';
 import PriceContextBadge from '@/features/product-detail/ui/PriceContextBadge';
 import PriceVerdictHero from '@/features/product-detail/ui/PriceVerdictHero';
@@ -92,7 +93,8 @@ export default function ProductInfo({
         <h1 className="font-medium text-gray-800">{displayTitle}</h1>
         <div className="flex flex-col gap-y-1 pt-3">
           <div className="h-5 text-sm text-gray-600">
-            <DisplayTime time={product.postedAt} />
+            <DisplayTime time={dealFreshnessAt(product) ?? product.postedAt} />
+            {isSeenBasedFreshness(product) && ' 확인'}
           </div>
           <div className="flex items-center justify-between">
             <div>

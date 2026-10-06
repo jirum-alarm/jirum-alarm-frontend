@@ -22,6 +22,7 @@ import {
   buildOfferFreshness,
   buildProductSeoTitle,
   clipMetaDescription,
+  dealFreshnessAt,
   formatDealAgeNotice,
   generateDescription,
   MISSING_PRODUCT_METADATA,
@@ -141,7 +142,7 @@ function generateProductJsonLd(
   const productUrl = `${METADATA_SERVICE_URL}/products/${product.id}`;
   const mallName = product.mallName?.trim() || null;
   // 게시일 기준 재고·가격 유효기간. 오래된 딜을 InStock 으로 단정하지 않는다.
-  const freshness = buildOfferFreshness(product.postedAt, product.isEnd);
+  const freshness = buildOfferFreshness(dealFreshnessAt(product), product.isEnd);
 
   const additionalProperty: Array<Record<string, unknown>> = hidePrice
     ? []
@@ -283,7 +284,7 @@ export async function generateMetadata({
   const categoryName = resolveCategoryName(product);
   // 토스 유입(hidePrice)은 가격 노출 금지라 priceValue 가 null → 제목에도 안 붙는다.
   const title = buildProductSeoTitle(displayTitle, product.isEnd, priceValue, {
-    postedAt: product.postedAt,
+    postedAt: dealFreshnessAt(product),
     historyMinPrice: priceHistorySeo?.minPrice ?? null,
   });
   const description = hidePrice
@@ -469,7 +470,7 @@ export default async function ProductDetail({
   const commentSummary = additionalInfo?.commentSummary?.summary ?? null;
   const modelPageLink = modelPageLinkFromProduct(priceHistoryData);
   // JSON-LD 가 availability 를 생략하는 것과 같은 임계(30일)로 화면에도 안내를 낸다.
-  const ageNotice = hidePrice ? null : formatDealAgeNotice(product.postedAt, product.isEnd);
+  const ageNotice = hidePrice ? null : formatDealAgeNotice(dealFreshnessAt(product), product.isEnd);
   const jsonLd = generateProductJsonLd(
     product,
     productGuides ?? undefined,
