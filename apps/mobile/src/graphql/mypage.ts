@@ -172,6 +172,8 @@ export const QueryNotificationThemes = graphql(`
       description
       emoji
       representativeKeywords
+      keywords
+      weeklyAlertCount
     }
   }
 `);

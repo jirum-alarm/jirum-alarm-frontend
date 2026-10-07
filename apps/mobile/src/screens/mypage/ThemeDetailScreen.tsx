@@ -1,6 +1,7 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   ActivityIndicator,
+  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -21,6 +22,7 @@ import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import Button from '@/shared/components/ui/Button';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
+import type {ThemeWithKeywords} from '@/shared/api/theme';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -138,23 +140,15 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
             보내드려요.
           </Text>
 
-          {/* 포함 키워드 */}
+          {/* 고르는 조건 — web ThemeDetail 의 ThemeConditions */}
           <View className="mt-6">
             <Text className="mb-0.5 text-sm font-medium text-gray-900">
-              이런 키워드가 들어간 딜을 골라요
+              이렇게 골라서 보내드려요
             </Text>
             <Text className="mb-2 text-xs text-gray-500">
-              딜이 뜰 때마다가 아니라, 그중 반응이 좋은 것만 보내드려요.
+              딜이 뜰 때마다 울리는 게 아니라, 아래 조건을 다 통과한 딜만 와요.
             </Text>
-            <View className="flex-row flex-wrap gap-1.5">
-              {theme.representativeKeywords.map(keyword => (
-                <Text
-                  key={keyword}
-                  className="rounded-md bg-gray-50 px-2.5 py-1 text-xs text-gray-600">
-                  {keyword}
-                </Text>
-              ))}
-            </View>
+            <ThemeConditions theme={theme} />
           </View>
 
           {/* 라이브 딜 */}
@@ -190,6 +184,113 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
       )}
     </View>
   );
+}
+
+// 처음엔 이만큼만 칩으로 보여주고 나머지는 "더 보기".
+const KEYWORD_PREVIEW_COUNT = 12;
+
+/**
+ * 관심사 알림이 딜을 고르는 조건. web `ThemeDetail` 의 ThemeConditions 와 같은 문구다.
+ * 숫자는 crawling-server 발송 배치와 같아야 한다 — THEME_MIN_SCORE(상위 ~7%)·
+ * THEME_SLOTS_PER_DAY(3)·크론 KST 10·14·20시(util/pick-theme-deals.ts).
+ */
+function ThemeConditions({theme}: {theme: ThemeWithKeywords}) {
+  const [showAll, setShowAll] = useState(false);
+  const keywords = theme.keywords.length
+    ? theme.keywords
+    : theme.representativeKeywords;
+  const visible = showAll ? keywords : keywords.slice(0, KEYWORD_PREVIEW_COUNT);
+  const hidden = keywords.length - visible.length;
+
+  return (
+    <View className="rounded-xl border border-gray-100">
+      <ConditionRow
+        first
+        icon="🔎"
+        title={`키워드 ${keywords.length}개 중 하나라도 제목에 있으면`}>
+        <View className="mt-2 flex-row flex-wrap gap-1.5">
+          {visible.map(keyword => (
+            <Text
+              key={keyword}
+              className="rounded-md bg-gray-50 px-2.5 py-1 text-xs text-gray-600">
+              {keyword}
+            </Text>
+          ))}
+          {hidden > 0 ? (
+            <Pressable
+              onPress={() => setShowAll(true)}
+              accessibilityRole="button"
+              hitSlop={6}
+              className="rounded-md border border-gray-200 px-2.5 py-1">
+              <Text className="text-xs font-medium text-gray-700">
+                +{hidden}개 더 보기
+              </Text>
+            </Pressable>
+          ) : null}
+        </View>
+      </ConditionRow>
+      <ConditionRow icon="🔥" title="반응 좋은 딜만">
+        <ConditionText>
+          조회·추천·댓글이 몰린 커뮤니티 상위 약 7% 딜만 골라요.
+        </ConditionText>
+      </ConditionRow>
+      <ConditionRow icon="⏰" title="하루 최대 3건">
+        <ConditionText>
+          오전 10시 · 오후 2시 · 오후 8시에 그때 가장 좋은 딜 1건씩.
+        </ConditionText>
+      </ConditionRow>
+      <ConditionRow icon="🔁" title="받은 딜은 다시 안 보내요">
+        <ConditionText>
+          키워드 알림이나 앞선 시간에 이미 받은 딜은 건너뛰고 다음 딜로.
+        </ConditionText>
+      </ConditionRow>
+      <ConditionRow icon="🧹" title="엉뚱한 딜은 걸러요">
+        <ConditionText>
+          여러 상품을 늘어놓은 모음 글, 사은품 문구에만 키워드가 걸린 딜은 빼요.
+        </ConditionText>
+      </ConditionRow>
+      {theme.weeklyAlertCount > 0 ? (
+        <ConditionRow
+          icon="📬"
+          title={`지난 7일이었다면 ${theme.weeklyAlertCount}건`}>
+          <ConditionText>
+            이 조건으로 지난 일주일 동안 받았을 알림 수예요.
+          </ConditionText>
+        </ConditionRow>
+      ) : null}
+    </View>
+  );
+}
+
+function ConditionRow({
+  first = false,
+  icon,
+  title,
+  children,
+}: {
+  first?: boolean;
+  icon: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <View
+      className={
+        first
+          ? 'flex-row gap-3 px-4 py-3.5'
+          : 'flex-row gap-3 border-t border-gray-100 px-4 py-3.5'
+      }>
+      <Text className="text-lg">{icon}</Text>
+      <View style={styles.grow}>
+        <Text className="text-sm font-semibold text-gray-900">{title}</Text>
+        {children}
+      </View>
+    </View>
+  );
+}
+
+function ConditionText({children}: {children: React.ReactNode}) {
+  return <Text className="mt-0.5 text-sm text-gray-500">{children}</Text>;
 }
 
 const styles = StyleSheet.create({

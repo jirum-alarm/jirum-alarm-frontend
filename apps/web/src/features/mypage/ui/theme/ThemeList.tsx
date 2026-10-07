@@ -44,6 +44,7 @@ const ThemeList = ({ isMobile = true }: { isMobile?: boolean }) => {
                   {theme.representativeKeywords.join('·')}
                 </p>
                 <p className="mt-1 text-xs text-gray-500">
+                  {theme.keywords.length > 0 && <>키워드 {theme.keywords.length}개 · </>}
                   최근 7일 알림{' '}
                   <b className="font-semibold text-gray-900">{theme.weeklyAlertCount}건</b>
                 </p>

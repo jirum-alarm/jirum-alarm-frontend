@@ -243,11 +243,22 @@ describe('묶음(테마) — 목록·상세의 조각이 다 있다', () => {
    * 앱은 지금 뜬 라이브 딜이다. 데이터가 달라 web 제목을 그대로 쓰면 틀린 말이 되므로
    * 딜 섹션 제목만 앱 고유 문구로 둔다(구성 이식은 별도).
    */
-  it('상세: 키워드 섹션 + 딜 + 알림 토글 문구가 web 과 같다', () => {
+  it('상세: 고르는 조건 + 딜 + 알림 토글 문구가 web 과 같다', () => {
     const web = readWeb('features/mypage/ui/theme/ThemeDetail.tsx');
-    expect(web).toContain('이런 키워드가 들어간 딜을 골라요');
+    // 조건 카드 — 숫자(상위 7%·하루 3건·발송 시각)가 한쪽만 바뀌면 둘이 다른 말을 한다.
+    for (const copy of [
+      '이렇게 골라서 보내드려요',
+      '중 하나라도 제목에 있으면',
+      '조회·추천·댓글이 몰린 커뮤니티 상위 약 7% 딜만 골라요.',
+      '오전 10시 · 오후 2시 · 오후 8시에 그때 가장 좋은 딜 1건씩.',
+      '키워드 알림이나 앞선 시간에 이미 받은 딜은 건너뛰고 다음 딜로.',
+      '여러 상품을 늘어놓은 모음 글, 사은품 문구에만 키워드가 걸린 딜은 빼요.',
+      '개 더 보기',
+    ]) {
+      expect(web).toContain(copy);
+      expect(SCREENS.themeDetail).toContain(copy);
+    }
     expect(web).toContain("'알림 받는 중 · 끄기'");
-    expect(SCREENS.themeDetail).toContain('이런 키워드가 들어간 딜을 골라요');
     expect(SCREENS.themeDetail).toContain("'알림 받는 중 · 끄기'");
     expect(SCREENS.themeDetail).toContain('지금 이 관심사에 뜬 딜');
     expect(SCREENS.themeDetail).toContain('지금은 뜬 딜이 없어요.');

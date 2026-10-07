@@ -2594,6 +2594,8 @@ export type ThemeWithKeywords = {
   description: Scalars['String']['output'];
   emoji?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  /** 이 묶음이 딜 제목에서 찾는 키워드 전부(등록 순) */
+  keywords: Array<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   representativeKeywords: Array<Scalars['String']['output']>;
   /** URL slug(/themes/{slug}). 없으면 id 로 링크 */
@@ -3479,6 +3481,8 @@ export type QueryNotificationThemesQuery = {
     description: string;
     emoji?: string | null;
     representativeKeywords: Array<string>;
+    keywords: Array<string>;
+    weeklyAlertCount: number;
   }>;
 };
 
@@ -4801,6 +4805,8 @@ export const QueryNotificationThemesDocument = new TypedDocumentString(`
     description
     emoji
     representativeKeywords
+    keywords
+    weeklyAlertCount
   }
 }
     `) as unknown as TypedDocumentString<

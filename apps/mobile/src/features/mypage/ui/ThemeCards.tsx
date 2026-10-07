@@ -45,6 +45,16 @@ export function ThemeCard({
           <Text className="mt-1 text-sm text-gray-500">
             {theme.description}
           </Text>
+          {/* web ThemeList 와 같은 줄 — 몇 개 단어로 찾고 얼마나 오는지. */}
+          <Text className="mt-1 text-xs text-gray-500">
+            {theme.keywords.length > 0
+              ? `키워드 ${theme.keywords.length}개 · `
+              : ''}
+            최근 7일 알림{' '}
+            <Text className="font-semibold text-gray-900">
+              {theme.weeklyAlertCount}건
+            </Text>
+          </Text>
         </View>
         <Pressable
           onPress={() => {

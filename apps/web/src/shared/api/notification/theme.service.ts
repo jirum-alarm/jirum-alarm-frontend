@@ -12,6 +12,8 @@ export interface ThemeWithKeywords {
   slug: string | null;
   emoji: string | null;
   representativeKeywords: string[];
+  /** 딜 제목에서 찾는 키워드 전부(등록 순 — 대표 키워드가 앞) */
+  keywords: string[];
   subscriberCount: number;
   /** 지난 7일 이 묶음을 구독했다면 받았을 알림 수 (반응 좋은 딜만, 하루 최대 3건) */
   weeklyAlertCount: number;
@@ -44,6 +46,7 @@ const QueryNotificationThemes = new TypedDocumentString<
       slug
       emoji
       representativeKeywords
+      keywords
       subscriberCount
       weeklyAlertCount
     }

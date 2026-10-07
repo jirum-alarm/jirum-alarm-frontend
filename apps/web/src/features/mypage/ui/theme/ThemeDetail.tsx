@@ -1,11 +1,11 @@
 'use client';
 
 import { useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { HotDealType } from '@/shared/api/gql/graphql';
-import type { ThemeLiveDeal } from '@/shared/api/notification/theme.service';
+import type { ThemeLiveDeal, ThemeWithKeywords } from '@/shared/api/notification/theme.service';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
 import Button from '@/shared/ui/common/Button';
@@ -67,6 +67,84 @@ const ThemeDealList = ({ themeId }: { themeId: number }) => {
   );
 };
 
+// 처음엔 이만큼만 칩으로 보여주고 나머지는 "더 보기".
+const KEYWORD_PREVIEW_COUNT = 12;
+
+/**
+ * 관심사 알림이 딜을 고르는 조건. 숫자는 crawling-server 발송 배치와 같아야 한다 —
+ * THEME_MIN_SCORE(상위 ~7%)·THEME_SLOTS_PER_DAY(3)·크론 KST 10·14·20시(util/pick-theme-deals.ts).
+ * 앱 ThemeDetailScreen 에 같은 문구가 있다.
+ */
+const ThemeConditions = ({ theme }: { theme: ThemeWithKeywords }) => {
+  const [showAll, setShowAll] = useState(false);
+  const keywords = theme.keywords.length ? theme.keywords : theme.representativeKeywords;
+  const visible = showAll ? keywords : keywords.slice(0, KEYWORD_PREVIEW_COUNT);
+  const hidden = keywords.length - visible.length;
+
+  return (
+    <ul className="mt-3 divide-y divide-gray-100 rounded-xl border border-gray-100">
+      <ConditionRow icon="🔎" title={`키워드 ${keywords.length}개 중 하나라도 제목에 있으면`}>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {visible.map((keyword) => (
+            <span
+              key={keyword}
+              className="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-700"
+            >
+              {keyword}
+            </span>
+          ))}
+          {hidden > 0 && (
+            <button
+              type="button"
+              onClick={() => setShowAll(true)}
+              className="rounded-full border border-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50"
+            >
+              +{hidden}개 더 보기
+            </button>
+          )}
+        </div>
+      </ConditionRow>
+      <ConditionRow icon="🔥" title="반응 좋은 딜만">
+        조회·추천·댓글이 몰린 커뮤니티 상위 약 7% 딜만 골라요.
+      </ConditionRow>
+      <ConditionRow icon="⏰" title="하루 최대 3건">
+        오전 10시 · 오후 2시 · 오후 8시에 그때 가장 좋은 딜 1건씩.
+      </ConditionRow>
+      <ConditionRow icon="🔁" title="받은 딜은 다시 안 보내요">
+        키워드 알림이나 앞선 시간에 이미 받은 딜은 건너뛰고 다음 딜로.
+      </ConditionRow>
+      <ConditionRow icon="🧹" title="엉뚱한 딜은 걸러요">
+        여러 상품을 늘어놓은 모음 글, 사은품 문구에만 키워드가 걸린 딜은 빼요.
+      </ConditionRow>
+      {theme.weeklyAlertCount > 0 && (
+        <ConditionRow icon="📬" title={`지난 7일이었다면 ${theme.weeklyAlertCount}건`}>
+          이 조건으로 지난 일주일 동안 받았을 알림 수예요.
+        </ConditionRow>
+      )}
+    </ul>
+  );
+};
+
+const ConditionRow = ({
+  icon,
+  title,
+  children,
+}: {
+  icon: string;
+  title: string;
+  children: ReactNode;
+}) => (
+  <li className="flex gap-3 px-4 py-3.5">
+    <span className="text-lg leading-6" aria-hidden>
+      {icon}
+    </span>
+    <div className="min-w-0 flex-1">
+      <p className="text-sm font-semibold text-gray-900">{title}</p>
+      <div className="mt-0.5 text-sm text-gray-500">{children}</div>
+    </div>
+  </li>
+);
+
 // 레이아웃은 큐레이션 상세(curation/[id])와 같은 틀: PC 는 SectionHeader 중앙 타이틀 + 5열 그리드.
 const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?: boolean }) => {
   const { data: themes } = useSuspenseQuery(ThemeQueries.themes());
@@ -116,19 +194,10 @@ const ThemeDetail = ({ themeId, isMobile = true }: { themeId: number; isMobile?:
       <section className="mt-8">
         <DetailSectionHeader
           as="h3"
-          title="이런 키워드가 들어간 딜을 골라요"
-          subtitle="딜이 뜰 때마다가 아니라, 그중 반응이 좋은 것만 보내드려요."
+          title="이렇게 골라서 보내드려요"
+          subtitle="딜이 뜰 때마다 울리는 게 아니라, 아래 조건을 다 통과한 딜만 와요."
         />
-        <div className="mt-3 flex flex-wrap gap-2">
-          {theme.representativeKeywords.map((keyword) => (
-            <span
-              key={keyword}
-              className="rounded-full bg-gray-100 px-3 py-1.5 text-sm text-gray-700"
-            >
-              {keyword}
-            </span>
-          ))}
-        </div>
+        <ThemeConditions theme={theme} />
       </section>
 
       <section className="mt-10">
