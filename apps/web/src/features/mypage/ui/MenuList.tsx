@@ -18,7 +18,7 @@ const MenuList = () => {
           회색 선 + 빈 화면이라 목록이 끊긴 것처럼 보였다. */}
       <div className="py-4">
         <ul>
-          {MYPAGE_MENU.map((menu, i) => {
+          {MYPAGE_MENU.filter((menu) => !menu.pcOnly).map((menu, i) => {
             return (
               <li key={i}>
                 <Link href={menu.url}>

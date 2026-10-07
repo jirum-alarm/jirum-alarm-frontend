@@ -1,14 +1,23 @@
 import { PAGE } from '@/shared/config/page';
 import { Alert, Description, Filter, Heart, Setting } from '@/shared/ui/common/icons';
 
-/** 마이페이지 메뉴. 모바일 목록(MenuList)·PC 사이드바·PC 첫 화면 카드가 같은 목록을 쓴다. */
+/** 마이페이지 메뉴. 모바일 목록(MenuList)·PC 사이드바·PC 첫 화면 카드가 같은 목록을 쓴다.
+ *  pcOnly: 모바일엔 따로 길이 있는 것(알림 = 바텀 탭). PC 는 GNB 아이콘뿐이라 마이페이지 메뉴로 묶는다. */
 export const MYPAGE_MENU: Array<{
   icon: React.ReactNode;
   title: string;
   url: string;
   /** PC 첫 화면 카드에만 보인다. */
   description: string;
+  pcOnly?: boolean;
 }> = [
+  {
+    icon: <Alert />,
+    title: '알림',
+    url: PAGE.ALARM,
+    description: '받은 핫딜 알림을 모아봐요',
+    pcOnly: true,
+  },
   {
     icon: (
       <div className="flex h-7 w-7 items-center justify-center">
