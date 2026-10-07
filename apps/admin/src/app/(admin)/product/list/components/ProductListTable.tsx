@@ -132,7 +132,7 @@ const ProductListTable = () => {
 
       <Panel>
         <div className="overflow-x-auto">
-          <table className="w-full table-auto whitespace-nowrap md:whitespace-normal">
+          <table className="table-cards w-full table-auto">
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
                 <th className="w-16 px-4 py-4 text-center text-sm font-medium text-bodydark2">
@@ -165,35 +165,41 @@ const ProductListTable = () => {
                   key={product.id}
                   className="hover:bg-gray-1 border-b border-stroke dark:border-strokedark dark:hover:bg-meta-4"
                 >
-                  <td className="px-4 py-3 text-center text-sm text-black dark:text-white">
+                  <td
+                    data-label="ID"
+                    className="px-4 py-3 text-center text-sm text-black dark:text-white"
+                  >
                     {product.id}
                   </td>
-                  <td className="px-4 py-3 text-center">
+                  <td data-label="이미지" className="px-4 py-3 text-center">
                     {product.thumbnail ? (
                       <img
                         src={product.thumbnail}
                         alt=""
-                        className="mx-auto h-10 w-10 rounded object-cover"
+                        className="h-10 w-10 shrink-0 rounded object-cover md:mx-auto"
                       />
                     ) : (
-                      <div className="mx-auto h-10 w-10 rounded bg-gray-2 dark:bg-meta-4" />
+                      <div className="h-10 w-10 shrink-0 rounded bg-gray-2 dark:bg-meta-4 md:mx-auto" />
                     )}
                   </td>
                   <td className="px-4 py-3">
                     <Link
                       href={`/product/${product.id}`}
-                      className="line-clamp-1 max-w-[240px] whitespace-normal text-sm text-black hover:text-primary dark:text-white md:max-w-none"
+                      className="line-clamp-2 text-sm font-medium text-black hover:text-primary dark:text-white md:line-clamp-1 md:font-normal"
                     >
                       {product.title}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-center text-sm text-black dark:text-white">
+                  <td
+                    data-label="가격"
+                    className="px-4 py-3 text-center text-sm text-black dark:text-white"
+                  >
                     {product.price ? `${product.price.toLocaleString()}원` : '-'}
                   </td>
-                  <td className="px-4 py-3 text-center text-sm text-bodydark2">
+                  <td data-label="출처" className="px-4 py-3 text-center text-sm text-bodydark2">
                     {product.provider?.nameKr ?? '-'}
                   </td>
-                  <td className="px-4 py-3 text-center">
+                  <td data-label="상태" className="px-4 py-3 text-center">
                     {product.isEnd ? (
                       <span className="inline-block rounded bg-danger bg-opacity-10 px-2 py-1 text-xs font-medium text-danger">
                         종료
@@ -208,10 +214,10 @@ const ProductListTable = () => {
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-center text-xs text-bodydark2">
+                  <td data-label="등록일" className="px-4 py-3 text-center text-xs text-bodydark2">
                     {product.postedAt ? dateFormatter(product.postedAt) : '-'}
                   </td>
-                  <td className="px-4 py-3 text-center">
+                  <td data-label="actions" className="px-4 py-3 text-center">
                     <button
                       type="button"
                       onClick={() => {

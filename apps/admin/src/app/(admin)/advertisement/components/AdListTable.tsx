@@ -46,7 +46,7 @@ const AdListTable = () => {
         </Link>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full table-auto whitespace-nowrap lg:whitespace-normal">
+        <table className="table-cards w-full table-auto md:whitespace-nowrap lg:whitespace-normal">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="px-4 py-3 text-sm font-medium text-bodydark2">ID</th>
@@ -74,22 +74,32 @@ const AdListTable = () => {
               const report = reportByCreative.get(ad.id);
               return (
                 <tr key={ad.id} className="border-b border-stroke dark:border-strokedark">
-                  <td className="px-4 py-3 text-sm">{ad.id}</td>
+                  <td data-label="ID" className="px-4 py-3 text-sm">
+                    {ad.id}
+                  </td>
                   <td className="px-4 py-3 text-sm">{ad.internalId}</td>
-                  <td className="px-4 py-3 text-sm">{ad.slotType}</td>
-                  <td className="px-4 py-3 text-xs">{ad.slotLocation.join(', ')}</td>
-                  <td className="px-4 py-3 text-xs">
+                  <td data-label="타입" className="px-4 py-3 text-sm">
+                    {ad.slotType}
+                  </td>
+                  <td data-label="위치" className="px-4 py-3 text-xs">
+                    {ad.slotLocation.join(', ')}
+                  </td>
+                  <td data-label="기간" className="px-4 py-3 text-xs">
                     {ad.startAt.slice(0, 10)} ~ {ad.endAt.slice(0, 10)}
                   </td>
-                  <td className="px-4 py-3 text-sm">{ad.slotPriority}</td>
-                  <td className="px-4 py-3 text-sm">
+                  <td data-label="우선순위" className="px-4 py-3 text-sm">
+                    {ad.slotPriority}
+                  </td>
+                  <td data-label="노출" className="px-4 py-3 text-sm">
                     {(report?.impressions ?? 0).toLocaleString()}
                   </td>
-                  <td className="px-4 py-3 text-sm">{(report?.clicks ?? 0).toLocaleString()}</td>
-                  <td className="px-4 py-3 text-sm">
+                  <td data-label="클릭" className="px-4 py-3 text-sm">
+                    {(report?.clicks ?? 0).toLocaleString()}
+                  </td>
+                  <td data-label="CTR" className="px-4 py-3 text-sm">
                     {report && report.impressions > 0 ? `${(report.ctr * 100).toFixed(2)}%` : '-'}
                   </td>
-                  <td className="px-4 py-3 text-sm">
+                  <td data-label="상태" className="px-4 py-3 text-sm">
                     <button
                       type="button"
                       onClick={() =>
@@ -102,7 +112,7 @@ const AdListTable = () => {
                       {ad.isActive ? '활성' : '비활성'}
                     </button>
                   </td>
-                  <td className="px-4 py-3 text-sm">
+                  <td data-label="actions" className="px-4 py-3 text-sm">
                     <div className="flex items-center gap-1.5">
                       <Link
                         href={`/advertisement/${ad.id}`}

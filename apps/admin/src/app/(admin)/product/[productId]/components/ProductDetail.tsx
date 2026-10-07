@@ -119,7 +119,7 @@ const ProductDetail = ({ productId }: { productId: string }) => {
         <Panel className="p-4 sm:p-6">
           <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">가격 이력</h3>
           <div className="overflow-x-auto">
-            <table className="w-full table-auto whitespace-nowrap">
+            <table className="table-cards w-full table-auto md:whitespace-nowrap">
               <thead>
                 <tr className="bg-gray-2 dark:bg-meta-4">
                   <th className="px-4 py-3 text-left text-sm font-medium text-bodydark2">출처</th>
@@ -131,12 +131,19 @@ const ProductDetail = ({ productId }: { productId: string }) => {
               <tbody>
                 {product.prices.map((price) => (
                   <tr key={price.id} className="border-b border-stroke dark:border-strokedark">
-                    <td className="px-4 py-3 text-sm text-black dark:text-white">{price.target}</td>
-                    <td className="px-4 py-3 text-sm text-bodydark2">{price.type}</td>
-                    <td className="px-4 py-3 text-right text-sm text-black dark:text-white">
+                    <td className="px-4 py-3 text-sm font-medium text-black dark:text-white md:font-normal">
+                      {price.target}
+                    </td>
+                    <td data-label="타입" className="px-4 py-3 text-sm text-bodydark2">
+                      {price.type}
+                    </td>
+                    <td
+                      data-label="가격"
+                      className="px-4 py-3 text-right text-sm text-black dark:text-white"
+                    >
                       {price.price.toLocaleString()}원
                     </td>
-                    <td className="px-4 py-3 text-right text-xs text-bodydark2">
+                    <td data-label="날짜" className="px-4 py-3 text-right text-xs text-bodydark2">
                       {dateFormatter(price.createdAt)}
                     </td>
                   </tr>

@@ -22,6 +22,72 @@
 }
 
 @layer components {
+    /*
+     * 폰에서 표 → 카드. <table className="table-cards"> 에 각 <td data-label="열 이름"> 만 달면 된다.
+     * - 줄(tr) 하나가 카드 하나, 칸(td)은 "열 이름 ……… 값" 한 줄
+     * - data-label 이 없는 칸은 이름 없이 전체 폭(제목·사진처럼 카드의 머리가 되는 칸)
+     * - data-label="actions" 칸은 버튼 줄(오른쪽 정렬, 이름 없음)
+     * - hidden md:table-cell 로 숨긴 칸은 그대로 숨는다
+     * md 이상은 원래 표 그대로.
+     */
+    @media (max-width: 767px) {
+        .table-cards {
+            min-width: 0 !important;
+        }
+        .table-cards thead {
+            display: none;
+        }
+        .table-cards,
+        .table-cards tbody {
+            display: block;
+            width: 100%;
+        }
+        /* 칸 순서는 표와 달라도 카드에선 머리(이름 없는 칸)가 맨 위, 버튼 줄이 맨 아래 */
+        .table-cards tbody > tr {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0.75rem;
+            border: 1px solid theme('colors.stroke');
+            border-radius: 0.5rem;
+            background: theme('colors.white');
+            padding: 0.625rem 0.875rem;
+        }
+        .table-cards tbody > tr > td:not(.hidden) {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            width: 100%;
+            min-width: 0 !important;
+            max-width: none !important;
+            border: 0 !important;
+            padding: 0.3rem 0 !important;
+            text-align: right;
+            white-space: normal !important;
+            word-break: break-word;
+        }
+        .table-cards tbody > tr > td[data-label]::before {
+            content: attr(data-label);
+            flex-shrink: 0;
+            text-align: left;
+            font-size: 0.75rem;
+            color: theme('colors.body');
+        }
+        .table-cards tbody > tr > td:not([data-label]):not(.hidden) {
+            display: block;
+            order: -1;
+            text-align: left;
+        }
+        .table-cards tbody > tr > td[data-label='actions'] {
+            order: 1;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            padding-top: 0.5rem !important;
+        }
+        .table-cards tbody > tr > td[data-label='actions']::before {
+            content: none;
+        }
+    }
 }
 
 @layer utilities {

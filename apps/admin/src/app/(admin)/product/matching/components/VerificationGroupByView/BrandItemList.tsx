@@ -42,7 +42,9 @@ const BrandItemList = ({
               data-product-index={index}
               onClick={() => {
                 setSelectedBrandItemIndex(index);
-                highlightBrandItem(item);
+                // 데스크톱은 클릭=하이라이트(펼침은 스페이스), 폰은 키보드가 없으니 탭 한 번에 펼친다
+                if (window.innerWidth < 1024) expandBrandItem(item);
+                else highlightBrandItem(item);
                 setIsLeftPanelFocused(true);
                 if (
                   index >= filteredBrandItems.length - 3 &&
@@ -90,16 +92,6 @@ const BrandItemList = ({
                 </p>
                 <p className="mt-0.5 text-[9px] text-gray-400">매칭 {item.totalMatchCount}건</p>
               </div>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedBrandItemIndex(index);
-                expandBrandItem(item);
-              }}
-              className="flex flex-shrink-0 items-center border-l border-stroke px-3 text-xs font-medium text-primary dark:border-strokedark lg:hidden"
-            >
-              열기 ›
             </button>
           </div>
         ))}

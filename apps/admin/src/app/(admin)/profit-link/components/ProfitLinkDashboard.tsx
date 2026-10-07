@@ -75,7 +75,7 @@ const ProviderHealthSection = () => {
   return (
     <ChartCard title="Provider 생존 신호 — 발급·판매 비대칭이 사고 신호" loading={loading}>
       <div className="overflow-x-auto">
-        <table className="w-full whitespace-nowrap">
+        <table className="table-cards w-full md:whitespace-nowrap">
           <thead>
             <tr className="border-b border-stroke dark:border-strokedark">
               <th className={thClass}>Provider</th>
@@ -94,15 +94,19 @@ const ProviderHealthSection = () => {
             {rows.map((row) => (
               <tr key={row.provider} className="border-b border-stroke dark:border-strokedark">
                 <td className={`${tdClass} font-medium`}>{row.provider}</td>
-                <td className={tdClass}>
+                <td data-label="발급 24h" className={tdClass}>
                   <span className="flex items-center gap-2">
                     <StatusDot level={issueLevel(row.issued24h, row.issued7d)} />
                     {row.issued24h.toLocaleString()}
                   </span>
                 </td>
-                <td className={tdClass}>{row.issued7d.toLocaleString()}</td>
-                <td className={tdClass}>{formatAgo(row.lastIssuedProductAt)}</td>
-                <td className={tdClass}>
+                <td data-label="발급 7d" className={tdClass}>
+                  {row.issued7d.toLocaleString()}
+                </td>
+                <td data-label="마지막 발급딜" className={tdClass}>
+                  {formatAgo(row.lastIssuedProductAt)}
+                </td>
+                <td data-label="판매 24h" className={tdClass}>
                   <span className="flex items-center gap-2">
                     <StatusDot
                       level={saleDotLevel[row.salesHealth as keyof typeof saleDotLevel] ?? 'muted'}
@@ -110,9 +114,13 @@ const ProviderHealthSection = () => {
                     {row.sales24h.toLocaleString()}
                   </span>
                 </td>
-                <td className={tdClass}>{row.sales7d.toLocaleString()}</td>
-                <td className={tdClass}>{row.sales30d.toLocaleString()}</td>
-                <td className={tdClass}>
+                <td data-label="판매 7d" className={tdClass}>
+                  {row.sales7d.toLocaleString()}
+                </td>
+                <td data-label="판매 30d" className={tdClass}>
+                  {row.sales30d.toLocaleString()}
+                </td>
+                <td data-label="마지막 판매 수신" className={tdClass}>
                   {formatAgo(row.lastSaleAt)}
                   {row.salesHealth === 'sparse' && (
                     <span className="ml-1 text-xs text-bodydark2">
@@ -120,8 +128,10 @@ const ProviderHealthSection = () => {
                     </span>
                   )}
                 </td>
-                <td className={tdClass}>{formatKrw(row.commission30d)}</td>
-                <td className={tdClass}>
+                <td data-label="30d 커미션(GROSS)" className={tdClass}>
+                  {formatKrw(row.commission30d)}
+                </td>
+                <td data-label="원/발급 (30d)" className={tdClass}>
                   {(() => {
                     const v = revenuePerIssue(row.commission30d, row.issued30d);
                     return v == null ? '-' : `${v.toFixed(1)}원`;
@@ -305,7 +315,7 @@ const FunnelSection = () => {
         </ChartCard>
       </div>
       <ChartCard title="미발급 lastError 사유" loading={errorLoading}>
-        <table className="w-full">
+        <table className="table-cards w-full">
           <thead>
             <tr className="border-b border-stroke dark:border-strokedark">
               <th className={thClass}>사유</th>
@@ -316,7 +326,9 @@ const FunnelSection = () => {
             {errors.map((row) => (
               <tr key={row.error} className="border-b border-stroke dark:border-strokedark">
                 <td className={`${tdClass} break-all font-mono text-xs`}>{row.error}</td>
-                <td className={`${tdClass} text-right`}>{row.count.toLocaleString()}</td>
+                <td data-label="건수" className={`${tdClass} text-right`}>
+                  {row.count.toLocaleString()}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -357,7 +369,7 @@ const MissedProductsSection = () => {
         </button>
       </div>
       <div className="max-h-[500px] overflow-auto">
-        <table className="w-full min-w-[720px] md:min-w-0">
+        <table className="table-cards w-full">
           <thead>
             <tr className="border-b border-stroke dark:border-strokedark">
               <th className={thClass}>딜</th>
@@ -377,19 +389,29 @@ const MissedProductsSection = () => {
                     href={row.detailUrl ?? `https://jirum-alarm.com/products/${row.id}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="line-clamp-1 text-primary hover:underline"
+                    className="line-clamp-2 text-primary hover:underline md:line-clamp-1"
                   >
                     {row.title}
                   </a>
                 </td>
-                <td className={tdClass}>{row.mallName ?? '-'}</td>
-                <td className={`${tdClass} text-right`}>
+                <td data-label="몰" className={tdClass}>
+                  {row.mallName ?? '-'}
+                </td>
+                <td data-label="가격" className={`${tdClass} text-right`}>
                   {row.parsedPrice != null ? `${row.parsedPrice.toLocaleString()}원` : '-'}
                 </td>
-                <td className={`${tdClass} text-right`}>{row.rankingScore?.toFixed(1) ?? '-'}</td>
-                <td className={tdClass}>{formatAgo(row.createdAt)}</td>
-                <td className={`${tdClass} text-right`}>{row.attempts}</td>
-                <td className={`${tdClass} font-mono text-xs`}>{row.lastError ?? '-'}</td>
+                <td data-label="랭킹점수" className={`${tdClass} text-right`}>
+                  {row.rankingScore?.toFixed(1) ?? '-'}
+                </td>
+                <td data-label="생성" className={tdClass}>
+                  {formatAgo(row.createdAt)}
+                </td>
+                <td data-label="attempts" className={`${tdClass} text-right`}>
+                  {row.attempts}
+                </td>
+                <td data-label="lastError" className={`${tdClass} font-mono text-xs`}>
+                  {row.lastError ?? '-'}
+                </td>
               </tr>
             ))}
           </tbody>

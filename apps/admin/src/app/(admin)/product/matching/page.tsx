@@ -30,7 +30,10 @@ const ProductMatching = () => {
     <>
       <div className="mb-4 flex items-center justify-between">
         <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-          <h2 className="text-xl font-bold text-black dark:text-white">상품 매칭</h2>
+          {/* 폰은 상단 헤더에 화면 이름이 이미 있다 */}
+          <h2 className="hidden text-xl font-bold text-black dark:text-white lg:block">
+            상품 매칭
+          </h2>
 
           {/* 뷰 전환 탭 */}
           <div className="flex overflow-x-auto rounded-lg border border-stroke bg-white p-0.5 dark:border-strokedark dark:bg-boxdark">

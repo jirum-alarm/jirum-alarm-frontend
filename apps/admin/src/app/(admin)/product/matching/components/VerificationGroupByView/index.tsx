@@ -26,7 +26,7 @@ import { useVerificationActions } from './useVerificationActions';
 import { useVerificationList } from './useVerificationList';
 import { useVerificationQueries } from './useVerificationQueries';
 import VerificationList from './VerificationList';
-import VerificationPanelHeader from './VerificationPanelHeader';
+import VerificationPanelHeader, { MobileActionBar } from './VerificationPanelHeader';
 import VerificationStatsBar from './VerificationStatsBar';
 
 // ─────────────────────────────────────────────
@@ -43,6 +43,8 @@ const VerificationGroupByView = () => {
   const [selectedBrandItem, setSelectedBrandItem] = useState<BrandItem | null>(null);
   const [selectedBrandItemIndex, setSelectedBrandItemIndex] = useState(0);
   const [selectedBrandProduct, setSelectedBrandProduct] = useState<BrandProduct | null>(null);
+  // 폰에서 검수 화면(우측 칸)을 보고 있는지 — 데스크톱은 두 칸이 늘 같이 보여 쓰지 않는다
+  const [mobileDetail, setMobileDetail] = useState(false);
   const [focusedPostIndex, setFocusedPostIndex] = useState<number>(-1);
   const [isLeftPanelFocused, setIsLeftPanelFocused] = useState(true);
 
@@ -345,12 +347,13 @@ const VerificationGroupByView = () => {
 
   return (
     <>
-      {/* 모바일: 좌(목록)·우(검증)를 세로로 쌓고 각 패널에 높이를 줘 안쪽 스크롤·자동 페이징이 그대로 돈다 */}
-      <div className="flex flex-col overflow-hidden rounded-xl border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark lg:h-[calc(100vh-200px)] lg:flex-row">
+      {/* 폰: 한 번에 한 칸만(목록 → 상품 탭 → 검수 → ‹ 목록). 높이는 화면에서 헤더·제목·하단 탭바를 뺀 만큼이라
+          안쪽 스크롤·자동 페이징이 데스크톱과 같이 돈다 */}
+      <div className="flex h-[calc(100dvh-12.5rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] min-h-[420px] overflow-hidden rounded-xl border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark lg:h-[calc(100vh-200px)]">
         {/* ───── 좌측 패널: 브랜드 상품 목록 ───── */}
         <div
           ref={leftPanelRef}
-          className={`flex h-[45dvh] w-full flex-shrink-0 flex-col border-b transition-all lg:h-auto lg:w-80 lg:border-b-0 lg:border-r ${
+          className={`${mobileDetail ? 'hidden lg:flex' : 'flex'} w-full flex-shrink-0 flex-col transition-all lg:w-80 lg:border-r ${
             isLeftPanelFocused
               ? 'border-primary/50 dark:border-primary/50'
               : 'border-stroke dark:border-strokedark'
@@ -403,14 +406,14 @@ const VerificationGroupByView = () => {
               setIsLeftPanelFocused={setIsLeftPanelFocused}
               setExpandedSelectedIndex={setExpandedSelectedIndex}
               setSelectedBrandProduct={setSelectedBrandProduct}
+              onOpenDetail={() => setMobileDetail(true)}
             />
           )}
         </div>
 
         {/* ───── 우측 패널: 검증 항목 ───── */}
         <div
-          id="verification-detail"
-          className="flex h-[85dvh] scroll-mt-16 flex-col overflow-hidden bg-gray-50 dark:bg-black lg:h-auto lg:flex-1"
+          className={`${mobileDetail ? 'flex' : 'hidden lg:flex'} min-w-0 flex-1 flex-col overflow-hidden bg-gray-50 dark:bg-black`}
         >
           {selectedBrandProduct ? (
             <>
@@ -424,6 +427,7 @@ const VerificationGroupByView = () => {
                 deselectAll={deselectAll}
                 handleConfirmMatching={handleConfirmMatching}
                 handleConfirmAndNext={handleConfirmAndNext}
+                onBack={() => setMobileDetail(false)}
               />
 
               {/* 통계 + 필터 */}
@@ -467,6 +471,14 @@ const VerificationGroupByView = () => {
                 toggleItemSelection={toggleItemSelection}
                 handleImageClick={handleImageClick}
                 handleRemoveMapping={handleRemoveMapping}
+              />
+              <MobileActionBar
+                canUndo={canUndo}
+                handleUndo={handleUndo}
+                selectAll={selectAll}
+                deselectAll={deselectAll}
+                handleConfirmMatching={handleConfirmMatching}
+                handleConfirmAndNext={handleConfirmAndNext}
               />
             </>
           ) : (

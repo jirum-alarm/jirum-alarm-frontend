@@ -10,6 +10,7 @@ type Props = {
   setIsLeftPanelFocused: (focused: boolean) => void;
   setExpandedSelectedIndex: (index: number) => void;
   setSelectedBrandProduct: (bp: BrandProduct) => void;
+  onOpenDetail: () => void;
 };
 
 // details 탭: 펼친 BrandItem 헤더(← 돌아가기) + 하위 BrandProduct 목록.
@@ -23,6 +24,7 @@ const ExpandedProductList = ({
   setIsLeftPanelFocused,
   setExpandedSelectedIndex,
   setSelectedBrandProduct,
+  onOpenDetail,
 }: Props) => (
   <div className="flex-1 overflow-y-auto p-3">
     {selectedBrandItem && (
@@ -57,12 +59,7 @@ const ExpandedProductList = ({
             setExpandedSelectedIndex(expandedIndex);
             setSelectedBrandProduct(expandedBp);
             setIsLeftPanelFocused(true);
-            // 모바일은 두 칸이 위아래로 쌓여 있다 — 고른 상품의 검수 목록으로 내려 준다
-            if (window.innerWidth < 1024) {
-              document
-                .getElementById('verification-detail')
-                ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            onOpenDetail();
           }}
           className={`mb-1 flex w-full items-center gap-1.5 px-2 py-2.5 text-left transition-all hover:bg-gray-100 dark:hover:bg-meta-4 lg:py-1.5 ${
             selectedBrandProduct?.id === expandedBp.id
@@ -94,7 +91,7 @@ const ExpandedProductList = ({
           </div>
           <div className="min-w-0 flex-1">
             <p
-              className={`line-clamp-1 text-[10px] font-medium ${
+              className={`line-clamp-1 text-sm font-medium lg:text-[10px] ${
                 selectedBrandProduct?.id === expandedBp.id
                   ? 'text-primary'
                   : 'text-black dark:text-white'
@@ -107,7 +104,10 @@ const ExpandedProductList = ({
       ))
     ) : (
       <div className="flex flex-col items-center justify-center py-10 text-gray-500">
-        <p className="text-xs">스페이스바로 브랜드 상품을 선택하여</p>
+        <p className="text-xs">
+          <span className="lg:hidden">브랜드 아이템을 탭해</span>
+          <span className="hidden lg:inline">스페이스바로 브랜드 상품을 선택하여</span>
+        </p>
         <p className="text-xs">상세 상품 목록을 확인하세요.</p>
       </div>
     )}

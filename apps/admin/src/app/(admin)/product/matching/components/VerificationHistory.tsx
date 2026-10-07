@@ -235,7 +235,7 @@ const VerificationHistory = () => {
       ) : (
         <>
           <div className="max-w-full overflow-x-auto">
-            <table className="w-full table-auto">
+            <table className="table-cards w-full table-auto">
               <thead>
                 <tr className="bg-gray-2 text-left dark:bg-meta-4">
                   <th className="hidden min-w-[80px] px-4 py-4 text-center font-medium text-black dark:text-white md:table-cell">
@@ -272,10 +272,16 @@ const VerificationHistory = () => {
                       isMyVerification(item) ? 'bg-primary/[0.02]' : ''
                     }`}
                   >
-                    <td className="hidden border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark md:table-cell">
+                    <td
+                      data-label="ID"
+                      className="hidden border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark md:table-cell"
+                    >
                       <p className="text-black dark:text-white">{item.id}</p>
                     </td>
-                    <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
+                    <td
+                      data-label="Product ID"
+                      className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
+                    >
                       <Link
                         href={`https://jirum-alarm.com/products/${item.productId}`}
                         target="_blank"
@@ -289,12 +295,18 @@ const VerificationHistory = () => {
                         {item.product?.title ?? '-'}
                       </p>
                     </td>
-                    <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
+                    <td
+                      data-label="다나와 상품명"
+                      className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
+                    >
                       <p className="whitespace-normal text-sm text-black dark:text-white">
                         {item.brandProduct ?? '-'}
                       </p>
                     </td>
-                    <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
+                    <td
+                      data-label="검증 상태"
+                      className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
+                    >
                       <span
                         className={`inline-flex rounded-full px-3 py-1 text-sm font-medium ${
                           item.verificationStatus
@@ -307,7 +319,10 @@ const VerificationHistory = () => {
                           : '-'}
                       </span>
                     </td>
-                    <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
+                    <td
+                      data-label="검증 정보"
+                      className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
+                    >
                       <div className="flex flex-col items-start gap-1 text-left text-xs text-slate-600 dark:text-slate-300">
                         <span className="flex items-center gap-1">
                           검증자:{' '}
@@ -330,12 +345,18 @@ const VerificationHistory = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="hidden border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark md:table-cell">
+                    <td
+                      data-label="생성일"
+                      className="hidden border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark md:table-cell"
+                    >
                       <p className="text-sm text-black dark:text-white">
                         {item.createdAt ? dateFormatter(item.createdAt) : '-'}
                       </p>
                     </td>
-                    <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
+                    <td
+                      data-label="actions"
+                      className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
+                    >
                       {item.verificationStatus &&
                       item.verificationStatus !==
                         ProductMappingVerificationStatus.PendingVerification ? (

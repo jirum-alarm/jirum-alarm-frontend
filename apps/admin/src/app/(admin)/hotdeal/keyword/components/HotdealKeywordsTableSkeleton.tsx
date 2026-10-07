@@ -4,7 +4,7 @@ const HotdealKeywordsTableSkeleton = () => {
   return (
     <Panel rounded="sm" className="w-full min-w-0 px-3 pb-2.5 pt-4 sm:px-7.5 sm:pt-6 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
-        <table className="w-full table-auto">
+        <table className="table-cards w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[110px] px-4 py-4 font-medium text-black dark:text-white sm:min-w-[220px] xl:pl-11">
@@ -28,16 +28,28 @@ const HotdealKeywordsTableSkeleton = () => {
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark sm:pl-9 xl:pl-11">
                   <div className="mb-4 h-2.5 w-12 rounded-full bg-slate-200 dark:bg-gray-700"></div>
                 </td>
-                <td className="hidden border-b border-[#eee] px-4 py-5 dark:border-strokedark md:table-cell">
+                <td
+                  data-label="업데이트"
+                  className="hidden border-b border-[#eee] px-4 py-5 dark:border-strokedark md:table-cell"
+                >
                   <div className="mb-4 h-2.5 w-12 rounded-full bg-slate-200 dark:bg-gray-700"></div>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td
+                  data-label="가중치"
+                  className="border-b border-[#eee] px-4 py-5 dark:border-strokedark"
+                >
                   <div className="mb-4 h-2.5 w-12 rounded-full bg-slate-200 dark:bg-gray-700"></div>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td
+                  data-label="유형"
+                  className="border-b border-[#eee] px-4 py-5 dark:border-strokedark"
+                >
                   <div className="mb-4 h-2.5 w-12 rounded-full bg-slate-200 dark:bg-gray-700"></div>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td
+                  data-label="actions"
+                  className="border-b border-[#eee] px-4 py-5 dark:border-strokedark"
+                >
                   <div className="mb-4 h-2.5 w-12 rounded-full bg-slate-200 dark:bg-gray-700"></div>
                 </td>
               </tr>

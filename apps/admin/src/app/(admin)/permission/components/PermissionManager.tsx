@@ -20,9 +20,13 @@ const cardClass =
 const thClass = 'px-3 py-2 text-left text-xs font-semibold text-bodydark2 whitespace-nowrap';
 const tdClass = 'px-3 py-2 text-sm text-black dark:text-white';
 const inputClass =
-  'w-36 rounded border border-stroke bg-transparent px-2 py-1 text-sm outline-none focus:border-primary dark:border-strokedark';
+  'w-full md:w-36 rounded border border-stroke bg-transparent px-2 py-1 text-sm outline-none focus:border-primary dark:border-strokedark';
 const buttonClass =
   'rounded px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40 md:py-1';
+
+// 체크박스는 작아서 폰에서 누르기 어렵다 — label 로 감싸 32px 누름 영역을 준다(md 이상은 원래 크기).
+const checkboxLabelClass =
+  'inline-flex h-8 w-8 cursor-pointer items-center justify-center md:h-auto md:w-auto';
 
 const toggle = (list: string[], key: string) =>
   list.includes(key) ? list.filter((k) => k !== key) : [...list, key];
@@ -90,7 +94,7 @@ const PermissionManager = () => {
       <div className={cardClass}>
         <h3 className="mb-3 font-semibold text-black dark:text-white">역할별 접근 섹션</h3>
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="table-cards w-full">
             <thead>
               <tr className="border-b border-stroke dark:border-strokedark">
                 <th className={thClass}>역할</th>
@@ -125,22 +129,31 @@ const PermissionManager = () => {
                       )}
                     </td>
                     {sections.map((key) => (
-                      <td key={key} className={`${tdClass} text-center`}>
-                        <input
-                          type="checkbox"
-                          aria-label={`${role.name} ${SECTION_LABELS[key] ?? key}`}
-                          checked={role.isSystem || draft.sections.includes(key)}
-                          disabled={role.isSystem}
-                          onChange={() =>
-                            setDrafts({
-                              ...drafts,
-                              [role.id]: { ...draft, sections: toggle(draft.sections, key) },
-                            })
-                          }
-                        />
+                      <td
+                        key={key}
+                        data-label={SECTION_LABELS[key] ?? key}
+                        className={`${tdClass} text-center`}
+                      >
+                        <label className={checkboxLabelClass}>
+                          <input
+                            type="checkbox"
+                            aria-label={`${role.name} ${SECTION_LABELS[key] ?? key}`}
+                            checked={role.isSystem || draft.sections.includes(key)}
+                            disabled={role.isSystem}
+                            onChange={() =>
+                              setDrafts({
+                                ...drafts,
+                                [role.id]: { ...draft, sections: toggle(draft.sections, key) },
+                              })
+                            }
+                          />
+                        </label>
                       </td>
                     ))}
-                    <td className={`${tdClass} whitespace-nowrap`}>
+                    <td
+                      data-label="actions"
+                      className={`${tdClass} md:whitespace-nowrap ${role.isSystem ? 'hidden md:table-cell' : ''}`}
+                    >
                       {!role.isSystem && (
                         <div className="flex gap-2">
                           <button
@@ -177,18 +190,24 @@ const PermissionManager = () => {
                   />
                 </td>
                 {sections.map((key) => (
-                  <td key={key} className={`${tdClass} text-center`}>
-                    <input
-                      type="checkbox"
-                      aria-label={`새 역할 ${SECTION_LABELS[key] ?? key}`}
-                      checked={newRole.sections.includes(key)}
-                      onChange={() =>
-                        setNewRole({ ...newRole, sections: toggle(newRole.sections, key) })
-                      }
-                    />
+                  <td
+                    key={key}
+                    data-label={SECTION_LABELS[key] ?? key}
+                    className={`${tdClass} text-center`}
+                  >
+                    <label className={checkboxLabelClass}>
+                      <input
+                        type="checkbox"
+                        aria-label={`새 역할 ${SECTION_LABELS[key] ?? key}`}
+                        checked={newRole.sections.includes(key)}
+                        onChange={() =>
+                          setNewRole({ ...newRole, sections: toggle(newRole.sections, key) })
+                        }
+                      />
+                    </label>
                   </td>
                 ))}
-                <td className={tdClass}>
+                <td data-label="actions" className={tdClass}>
                   <button
                     className={`${buttonClass} bg-primary`}
                     disabled={!newRole.name.trim()}
@@ -206,7 +225,7 @@ const PermissionManager = () => {
       <div className={cardClass}>
         <h3 className="mb-3 font-semibold text-black dark:text-white">계정별 역할</h3>
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="table-cards w-full">
             <thead>
               <tr className="border-b border-stroke dark:border-strokedark">
                 <th className={thClass}>ID</th>
@@ -218,10 +237,14 @@ const PermissionManager = () => {
             <tbody>
               {users.map((user) => (
                 <tr key={user.id} className="border-b border-stroke dark:border-strokedark">
-                  <td className={tdClass}>{user.id}</td>
-                  <td className={tdClass}>{user.name}</td>
-                  <td className={`${tdClass} whitespace-nowrap`}>{user.email}</td>
-                  <td className={tdClass}>
+                  <td data-label="ID" className={tdClass}>
+                    {user.id}
+                  </td>
+                  <td className={`${tdClass} font-medium md:font-normal`}>{user.name}</td>
+                  <td data-label="이메일" className={`${tdClass} md:whitespace-nowrap`}>
+                    {user.email}
+                  </td>
+                  <td data-label="역할" className={tdClass}>
                     <select
                       className="rounded border border-stroke bg-transparent px-2 py-2 text-sm dark:border-strokedark dark:bg-boxdark md:py-1"
                       value={user.roleId ?? ''}

@@ -64,7 +64,7 @@ const UserListTable = () => {
 
       <Panel>
         <div className="max-w-full overflow-x-auto">
-          <table className="w-full table-auto whitespace-nowrap">
+          <table className="table-cards w-full table-auto md:whitespace-nowrap">
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
                 <th className="w-16 px-4 py-4 text-center text-sm font-medium text-bodydark2">
@@ -91,25 +91,36 @@ const UserListTable = () => {
                   key={user.id}
                   className="hover:bg-gray-1 border-b border-stroke dark:border-strokedark dark:hover:bg-meta-4"
                 >
-                  <td className="px-4 py-3 text-center text-sm text-black dark:text-white">
+                  <td
+                    data-label="ID"
+                    className="px-4 py-3 text-center text-sm text-black dark:text-white"
+                  >
                     {user.id}
                   </td>
                   <td className="px-4 py-3">
                     <Link
                       href={`/user/${user.id}`}
-                      className="-my-3 block py-3 text-sm text-black hover:text-primary dark:text-white"
+                      className="block py-1 text-sm font-medium text-black hover:text-primary dark:text-white md:-my-3 md:py-3 md:font-normal"
                     >
                       {user.email}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-sm text-black dark:text-white">{user.nickname}</td>
-                  <td className="hidden px-4 py-3 text-center text-sm text-bodydark2 md:table-cell">
+                  <td data-label="닉네임" className="px-4 py-3 text-sm text-black dark:text-white">
+                    {user.nickname}
+                  </td>
+                  <td
+                    data-label="성별"
+                    className="hidden px-4 py-3 text-center text-sm text-bodydark2 md:table-cell"
+                  >
                     {user.gender ? (GENDER_MAP[user.gender] ?? user.gender) : '-'}
                   </td>
-                  <td className="hidden px-4 py-3 text-center text-sm text-bodydark2 md:table-cell">
+                  <td
+                    data-label="출생연도"
+                    className="hidden px-4 py-3 text-center text-sm text-bodydark2 md:table-cell"
+                  >
                     {user.birthYear ?? '-'}
                   </td>
-                  <td className="px-4 py-3 text-center text-xs text-bodydark2">
+                  <td data-label="가입일" className="px-4 py-3 text-center text-xs text-bodydark2">
                     {user.createdAt ? dateFormatter(user.createdAt) : '-'}
                   </td>
                 </tr>

@@ -48,7 +48,7 @@ const ModelPagesTable = () => {
       </div>
 
       <div className="max-w-full overflow-x-auto">
-        <table className="w-full table-auto">
+        <table className="table-cards w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
@@ -95,7 +95,7 @@ const ModelPagesTable = () => {
                         {/* 미리보기(초안도 열림) — 발행 전 실제 모양 검수 */}
                         <Link
                           href={`/deals/preview/${encodeURIComponent(p.slug)}`}
-                          className="block truncate text-black hover:underline dark:text-white"
+                          className="block break-words text-black hover:underline dark:text-white md:truncate"
                         >
                           {p.modelName}
                         </Link>
@@ -117,13 +117,22 @@ const ModelPagesTable = () => {
                       </div>
                     </div>
                   </td>
-                  <td className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark">
+                  <td
+                    data-label="딜수"
+                    className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark"
+                  >
                     {p.dealCount}
                   </td>
-                  <td className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark">
+                  <td
+                    data-label="최저가"
+                    className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark"
+                  >
                     {p.heroMinPrice != null ? `${p.heroMinPrice.toLocaleString()}원` : '-'}
                   </td>
-                  <td className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark">
+                  <td
+                    data-label="마지막 딜"
+                    className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark"
+                  >
                     {p.lastDealAt ? (
                       <span className={isStale ? 'font-medium text-meta-1' : ''}>
                         {dateFormatter(p.lastDealAt)}
@@ -133,7 +142,10 @@ const ModelPagesTable = () => {
                       '-'
                     )}
                   </td>
-                  <td className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark">
+                  <td
+                    data-label="상태"
+                    className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark"
+                  >
                     {p.isPublished ? (
                       <span className="inline-flex rounded-full bg-success/10 px-2.5 py-0.5 text-sm font-medium text-success">
                         발행됨
@@ -144,7 +156,10 @@ const ModelPagesTable = () => {
                       </span>
                     )}
                   </td>
-                  <td className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark">
+                  <td
+                    data-label="actions"
+                    className="border-b border-[#eee] px-4 py-4 text-center dark:border-strokedark"
+                  >
                     <button
                       disabled={mutating}
                       onClick={handleToggle(p.id, p.slug, !p.isPublished)}

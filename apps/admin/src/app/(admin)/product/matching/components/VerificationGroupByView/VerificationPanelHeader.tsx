@@ -9,6 +9,7 @@ type Props = {
   deselectAll: () => void;
   handleConfirmMatching: () => Promise<void>;
   handleConfirmAndNext: () => Promise<void>;
+  onBack: () => void;
 };
 
 // 우측 헤더: 선택된 BrandProduct 이름 + 되돌리기/전체승인/전체거절/확정 버튼.
@@ -21,8 +22,16 @@ const VerificationPanelHeader = ({
   deselectAll,
   handleConfirmMatching,
   handleConfirmAndNext,
+  onBack,
 }: Props) => (
-  <div className="flex flex-col gap-2 border-b border-stroke bg-white px-3 py-2 dark:border-strokedark dark:bg-boxdark sm:flex-row sm:items-center sm:justify-between">
+  <div className="flex items-center justify-between gap-2 border-b border-stroke bg-white px-3 py-2 dark:border-strokedark dark:bg-boxdark">
+    <button
+      type="button"
+      onClick={onBack}
+      className="-ml-1 flex h-9 flex-shrink-0 items-center px-1 text-sm font-medium text-primary lg:hidden"
+    >
+      ‹ 목록
+    </button>
     <div className="min-w-0 flex-1">
       <h3 className="break-words text-sm font-bold text-black dark:text-white">
         {selectedBrandProduct.brandName} {selectedBrandProduct.productName}
@@ -35,7 +44,8 @@ const VerificationPanelHeader = ({
         )}
       </h3>
     </div>
-    <div className="flex flex-wrap items-center gap-1.5">
+    {/* 폰에선 엄지가 닿는 하단 바(MobileActionBar)로 옮긴다 */}
+    <div className="hidden flex-wrap items-center gap-1.5 lg:flex">
       {/* #7: Undo 버튼 */}
       <button
         onClick={handleUndo}
@@ -98,6 +108,62 @@ const VerificationPanelHeader = ({
         <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
         </svg>
+      </button>
+    </div>
+  </div>
+);
+
+/** 폰 전용 하단 고정 바 — 확정은 크게, 나머지는 작게 */
+export const MobileActionBar = ({
+  canUndo,
+  handleUndo,
+  selectAll,
+  deselectAll,
+  handleConfirmMatching,
+  handleConfirmAndNext,
+}: Pick<
+  Props,
+  | 'canUndo'
+  | 'handleUndo'
+  | 'selectAll'
+  | 'deselectAll'
+  | 'handleConfirmMatching'
+  | 'handleConfirmAndNext'
+>) => (
+  <div className="flex flex-col gap-2 border-t border-stroke bg-white p-2 dark:border-strokedark dark:bg-boxdark lg:hidden">
+    <div className="flex gap-2">
+      <button
+        onClick={handleUndo}
+        disabled={!canUndo}
+        className="h-9 flex-1 rounded bg-gray-100 text-xs font-medium text-gray-600 disabled:opacity-40"
+      >
+        되돌리기
+      </button>
+      <button
+        onClick={selectAll}
+        className="h-9 flex-1 rounded bg-success/10 text-xs font-medium text-success"
+      >
+        전체승인
+      </button>
+      <button
+        onClick={deselectAll}
+        className="h-9 flex-1 rounded bg-gray-100 text-xs font-medium text-gray-500"
+      >
+        전체거절
+      </button>
+    </div>
+    <div className="flex gap-2">
+      <button
+        onClick={handleConfirmMatching}
+        className="h-11 flex-1 rounded-lg border border-primary text-sm font-bold text-primary"
+      >
+        확정
+      </button>
+      <button
+        onClick={handleConfirmAndNext}
+        className="h-11 flex-[2] rounded-lg bg-primary text-sm font-bold text-white"
+      >
+        확정 + 다음 상품 ›
       </button>
     </div>
   </div>

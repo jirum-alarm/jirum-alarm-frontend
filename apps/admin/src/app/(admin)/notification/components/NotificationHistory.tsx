@@ -24,7 +24,7 @@ const NotificationHistory = () => {
         <h3 className="text-lg font-semibold text-black dark:text-white">발송 이력</h3>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full table-auto">
+        <table className="table-cards w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="w-16 px-4 py-4 text-center text-sm font-medium text-bodydark2">ID</th>
@@ -43,21 +43,30 @@ const NotificationHistory = () => {
           <tbody>
             {notifications.map((notification) => (
               <tr key={notification.id} className="border-b border-stroke dark:border-strokedark">
-                <td className="px-4 py-3 text-center text-sm text-black dark:text-white">
+                <td
+                  data-label="ID"
+                  className="px-4 py-3 text-center text-sm text-black dark:text-white"
+                >
                   {notification.id}
                 </td>
                 <td className="px-4 py-3 text-sm text-black dark:text-white">
                   {notification.title}
                 </td>
-                <td className="px-4 py-3">
+                <td data-label="메시지" className="px-4 py-3">
                   <p className="line-clamp-2 text-sm text-bodydark2">{notification.message}</p>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-bodydark2">
+                <td
+                  data-label="타겟"
+                  className="px-4 py-3 text-center text-sm text-bodydark2 md:whitespace-nowrap"
+                >
                   {notification.target
                     ? (NOTIFICATION_TARGET_MAP[notification.target] ?? notification.target)
                     : '전체'}
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-center text-xs text-bodydark2">
+                <td
+                  data-label="발송일"
+                  className="px-4 py-3 text-center text-xs text-bodydark2 md:whitespace-nowrap"
+                >
                   {notification.createdAt ? dateFormatter(notification.createdAt) : '-'}
                 </td>
               </tr>
