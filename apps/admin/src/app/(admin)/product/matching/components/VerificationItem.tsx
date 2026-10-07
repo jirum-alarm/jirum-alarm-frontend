@@ -20,7 +20,7 @@ interface VerificationItemProps {
   amount?: string | null;
   onItemClick: (index: number) => void;
   onToggleSelection: (id: string) => void;
-  onImageClick: (thumbnail: string, title: string) => void;
+  onImageClick: (thumbnail: string, title: string, danawaUrl?: string | null) => void;
   /** 승인완료 매핑 해제 */
   onRemove?: (item: PendingVerificationItem) => void;
 }
@@ -144,14 +144,14 @@ const VerificationItem = memo(function VerificationItem({
       onClick={() => onItemClick(index)}
       className={`group relative cursor-pointer rounded-xl border-2 bg-white p-1.5 shadow-sm transition-all dark:bg-boxdark ${getBorderClass()}`}
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-2 sm:gap-4">
         {/* 승인/거절 체크박스 */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             onToggleSelection(item.id);
           }}
-          className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border-2 transition-all ${
+          className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md border-2 transition-all sm:h-6 sm:w-6 ${
             isSelected
               ? 'border-success bg-success text-white'
               : 'border-danger bg-danger/10 text-danger'
@@ -183,7 +183,11 @@ const VerificationItem = memo(function VerificationItem({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onImageClick(item.product?.thumbnail || '', item.product?.title || '');
+              onImageClick(
+                item.product?.thumbnail || '',
+                item.product?.title || '',
+                item.danawaUrl,
+              );
             }}
             className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg border border-stroke bg-white hover:scale-105 dark:border-strokedark"
           >
@@ -221,7 +225,7 @@ const VerificationItem = memo(function VerificationItem({
                   e.stopPropagation();
                   onRemove(item);
                 }}
-                className="ml-auto rounded border border-danger/40 px-1.5 py-0.5 text-[10px] text-danger hover:bg-danger/10"
+                className="ml-auto rounded border border-danger/40 px-2 py-1.5 text-[10px] text-danger hover:bg-danger/10 sm:px-1.5 sm:py-0.5"
               >
                 매핑 해제
               </button>
@@ -230,7 +234,7 @@ const VerificationItem = memo(function VerificationItem({
 
           {/* #3: 하이라이팅 된 제목 + 다나와 링크 */}
           <div className="flex items-center gap-1">
-            <p className="line-clamp-1 flex-1 text-xs font-semibold text-black dark:text-white">
+            <p className="line-clamp-2 min-w-0 flex-1 text-xs font-semibold text-black dark:text-white sm:line-clamp-1">
               {renderTitle()}
             </p>
             {item.danawaUrl && (
@@ -245,6 +249,13 @@ const VerificationItem = memo(function VerificationItem({
               </a>
             )}
           </div>
+
+          {/* 뱃지 근거는 title 툴팁(hover)으로만 보여 터치에선 안 보인다 → 좁은 화면에선 한 줄로 노출 */}
+          {item.aiSuggestionReason && (
+            <p className="mt-0.5 line-clamp-2 text-[10px] text-gray-500 lg:hidden">
+              🤖 {item.aiSuggestionReason}
+            </p>
+          )}
 
           {/* #8: 원본 게시물 미리보기 - 가격, 출처, 원문 링크 */}
           {(item.product?.price || item.product?.provider?.name || item.product?.url) && (

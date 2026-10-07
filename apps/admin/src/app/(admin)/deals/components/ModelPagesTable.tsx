@@ -31,8 +31,8 @@ const ModelPagesTable = () => {
   };
 
   return (
-    <Panel rounded="sm" className="w-full px-5 pb-2.5 pt-6 sm:px-7.5 xl:pb-1">
-      <div className="flex w-full items-center justify-between gap-2 p-2">
+    <Panel rounded="sm" className="w-full px-3 pb-2.5 pt-4 sm:px-7.5 sm:pt-6 xl:pb-1">
+      <div className="flex w-full flex-wrap items-center justify-between gap-2 p-2">
         <span className="text-sm text-bodydark2">
           {loading ? '불러오는 중…' : `${pages.length}개`}
           {onlyDrafts ? ' (초안만)' : ' (전체)'}
@@ -148,7 +148,7 @@ const ModelPagesTable = () => {
                     <button
                       disabled={mutating}
                       onClick={handleToggle(p.id, p.slug, !p.isPublished)}
-                      className={`rounded-md px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50 ${
+                      className={`whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium text-white disabled:opacity-50 md:py-1.5 ${
                         p.isPublished ? 'bg-meta-1' : 'bg-primary'
                       }`}
                     >

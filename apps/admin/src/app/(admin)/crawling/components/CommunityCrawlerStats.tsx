@@ -111,6 +111,8 @@ const CommunityCrawlerStats = () => {
               stroke: { curve: 'smooth', width: 2 },
               legend: { position: 'right' },
               tooltip: { shared: true },
+              // 폰 폭에선 오른쪽 범례가 그래프 폭을 다 먹는다 — 아래로 내린다
+              responsive: [{ breakpoint: 768, options: { legend: { position: 'bottom' } } }],
             }}
             series={series.map((s) => ({ name: s.name, data: s.data.map((d) => d.y) }))}
           />

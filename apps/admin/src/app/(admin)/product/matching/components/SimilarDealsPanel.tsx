@@ -88,7 +88,7 @@ const SimilarDealsPanel = ({
 
   return (
     <div className="border-b border-stroke bg-gray-50 px-3 py-2 dark:border-strokedark dark:bg-meta-4/30">
-      <div className="mb-1.5 flex items-center gap-2 text-[11px]">
+      <div className="mb-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px]">
         <span className="font-bold text-black dark:text-white">유사 딜로 매핑</span>
         <span className="rounded bg-warning/10 px-1.5 py-0.5 font-bold text-warning">
           용량 {brandProduct.volume || '-'} · 수량 {brandProduct.amount || '-'}
@@ -106,10 +106,13 @@ const SimilarDealsPanel = ({
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="flex-1 rounded border border-stroke bg-white px-2 py-1 text-xs dark:border-strokedark dark:bg-boxdark"
+          className="min-w-0 flex-1 rounded border border-stroke bg-white px-2 py-1 text-xs dark:border-strokedark dark:bg-boxdark"
           placeholder="검색어 (브랜드 + 모델 + 수량이 잘 걸립니다)"
         />
-        <button type="submit" className="rounded bg-primary px-2 py-1 text-xs text-white">
+        <button
+          type="submit"
+          className="shrink-0 rounded bg-primary px-3 py-1.5 text-xs text-white sm:px-2 sm:py-1"
+        >
           검색
         </button>
       </form>
@@ -120,7 +123,7 @@ const SimilarDealsPanel = ({
             <button
               key={t}
               onClick={() => runSearch(t)}
-              className="line-clamp-1 max-w-[240px] rounded-full border border-stroke bg-white px-2 py-0.5 text-left text-[10px] text-gray-600 hover:border-primary dark:border-strokedark dark:bg-boxdark dark:text-gray-300"
+              className="line-clamp-1 max-w-[240px] rounded-full border border-stroke bg-white px-2 py-1 text-left text-[10px] text-gray-600 hover:border-primary dark:border-strokedark dark:bg-boxdark dark:text-gray-300 sm:py-0.5"
               title={t}
             >
               {t}
@@ -143,7 +146,7 @@ const SimilarDealsPanel = ({
           return (
             <label
               key={p.id}
-              className={`flex items-center gap-2 rounded px-1 py-0.5 text-xs ${
+              className={`flex items-center gap-2 rounded px-1 py-1.5 text-xs sm:py-0.5 ${
                 elsewhere ? 'opacity-50' : 'cursor-pointer hover:bg-white dark:hover:bg-boxdark'
               }`}
             >
@@ -154,10 +157,12 @@ const SimilarDealsPanel = ({
                 onChange={() => toggle(id)}
                 className="h-3.5 w-3.5"
               />
-              <span className="w-8 text-right text-[10px] text-gray-400">
+              <span className="w-8 shrink-0 text-right text-[10px] text-gray-400">
                 {p.similarity != null ? p.similarity.toFixed(2) : '-'}
               </span>
-              <span className="line-clamp-1 flex-1 text-black dark:text-white">{p.title}</span>
+              <span className="line-clamp-1 min-w-0 flex-1 text-black dark:text-white">
+                {p.title}
+              </span>
               {p.price && <span className="text-[10px] font-bold text-primary">{p.price}</span>}
               {elsewhere ? (
                 <span className="text-[10px] text-gray-500">
@@ -179,12 +184,12 @@ const SimilarDealsPanel = ({
         })}
       </div>
 
-      <div className="mt-1.5 flex items-center justify-end gap-2">
+      <div className="mt-1.5 flex flex-wrap items-center justify-end gap-2">
         {mapError && <span className="text-[11px] text-danger">{mapError}</span>}
         <button
           onClick={handleMap}
           disabled={checked.size === 0 || isMapping}
-          className="rounded bg-success px-2.5 py-1 text-xs font-bold text-white disabled:opacity-40"
+          className="rounded bg-success px-2.5 py-2 text-xs font-bold text-white disabled:opacity-40 sm:py-1"
         >
           {isMapping ? '매핑 중...' : `선택 ${checked.size}건 매핑 (승인완료로)`}
         </button>

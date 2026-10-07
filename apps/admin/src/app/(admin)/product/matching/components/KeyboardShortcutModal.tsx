@@ -71,7 +71,7 @@ const KeyboardShortcutModal = ({ isOpen, onClose }: KeyboardShortcutModalProps) 
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="relative mx-4 w-full max-w-lg animate-[fadeIn_0.15s_ease-out] rounded-2xl bg-white shadow-2xl dark:bg-boxdark">
+      <div className="relative mx-3 max-h-[90dvh] w-full max-w-lg animate-[fadeIn_0.15s_ease-out] overflow-y-auto rounded-2xl bg-white shadow-2xl dark:bg-boxdark sm:mx-4">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-stroke px-6 py-4 dark:border-strokedark">
           <div className="flex items-center gap-3">

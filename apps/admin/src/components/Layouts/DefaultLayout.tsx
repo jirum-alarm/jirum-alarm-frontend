@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
+import BottomNav from '@/components/BottomNav';
 import { ConfirmProvider } from '@/components/Confirm';
 import Header from '@/components/Header';
 import QueryErrorBanner from '@/components/QueryErrorBanner';
@@ -27,6 +28,11 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
     setMounted(true);
   }, []);
 
+  // 모바일 서랍은 메뉴를 고르면 닫는다
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
+
   useEffect(() => {
     if (!mounted) return;
 
@@ -47,9 +53,17 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
           <Sidebar
             sidebarOpen={sidebarOpen}
             setSidebarOpen={setSidebarOpen}
-            sidebarExpanded={sidebarExpanded}
+            // 접힘은 데스크톱 설정 — 모바일 서랍은 늘 펼친 채로 연다
+            sidebarExpanded={sidebarExpanded || sidebarOpen}
             setSidebarExpanded={setSidebarExpanded}
           />
+          {sidebarOpen && (
+            <div
+              aria-hidden
+              className="fixed inset-0 z-[9998] bg-black/50 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
           {/* <!-- ===== Sidebar End ===== --> */}
 
           {/* <!-- ===== Content Area Start ===== --> */}
@@ -59,12 +73,13 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
             }`}
           >
             {/* <!-- ===== Header Start ===== --> */}
-            <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+            <Header />
             {/* <!-- ===== Header End ===== --> */}
 
             {/* <!-- ===== Main Content Start ===== --> */}
-            <main>
-              <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+            {/* 모바일은 하단 탭바 높이만큼 비운다 */}
+            <main className="pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
+              <div className="mx-auto max-w-screen-2xl p-3 md:p-6 2xl:p-10">
                 <QueryErrorBanner />
                 {/* 권한 없는 섹션은 URL 로 직접 들어와도 본문을 그리지 않는다(API 도 서버에서 막힘). */}
                 {canAccessPath(access, pathname) ? (
@@ -76,6 +91,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
             </main>
             {/* <!-- ===== Main Content End ===== --> */}
           </div>
+          <BottomNav onMenu={() => setSidebarOpen(true)} />
           {/* <!-- ===== Content Area End ===== --> */}
           {/* <!-- ===== Page Wrapper End ===== --> */}
         </div>

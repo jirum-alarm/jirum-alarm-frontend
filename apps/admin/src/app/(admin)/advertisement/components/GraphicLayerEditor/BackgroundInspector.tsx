@@ -54,7 +54,7 @@ export default function BackgroundInspector({
         {activeBreakpoint !== '_default' && graphic.background.assetByWidth?.[activeBreakpoint] && (
           <button
             type="button"
-            className="mt-2 rounded border border-stroke px-2 py-1 text-[11px] text-black hover:border-danger hover:text-danger dark:border-strokedark dark:text-white"
+            className="mt-2 rounded border border-stroke px-2 py-2 text-[11px] text-black hover:border-danger hover:text-danger dark:border-strokedark dark:text-white md:py-1"
             onClick={() => onClearBackgroundAssetOverride(activeBreakpoint)}
           >
             이 variant BG override 제거

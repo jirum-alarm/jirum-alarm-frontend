@@ -12,7 +12,7 @@ const LeftPanelTabs = ({ activeTab, setActiveTab, expandedItems }: Props) => (
     <div className="flex space-x-1">
       <button
         onClick={() => setActiveTab('brands')}
-        className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+        className={`rounded px-3 py-2 text-xs font-medium transition-colors lg:py-1.5 ${
           activeTab === 'brands'
             ? 'bg-primary text-white'
             : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-meta-4 dark:text-gray-300 dark:hover:bg-meta-3'
@@ -22,7 +22,7 @@ const LeftPanelTabs = ({ activeTab, setActiveTab, expandedItems }: Props) => (
       </button>
       <button
         onClick={() => setActiveTab('details')}
-        className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+        className={`rounded px-3 py-2 text-xs font-medium transition-colors lg:py-1.5 ${
           activeTab === 'details'
             ? 'bg-primary text-white'
             : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-meta-4 dark:text-gray-300 dark:hover:bg-meta-3'

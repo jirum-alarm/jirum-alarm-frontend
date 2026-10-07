@@ -66,7 +66,7 @@ const Toast = ({ message, type = 'success', isVisible, onClose, duration = 2000 
   const style = typeStyles[type];
 
   return (
-    <div className="fixed bottom-6 left-1/2 z-99999 -translate-x-1/2">
+    <div className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-1/2 z-99999 flex w-[calc(100%-2rem)] -translate-x-1/2 justify-center lg:bottom-6 lg:w-auto">
       <div
         className={`flex items-center gap-3 rounded-xl px-5 py-3.5 text-white shadow-lg transition-all duration-200 ${
           style.bg

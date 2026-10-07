@@ -345,11 +345,12 @@ const VerificationGroupByView = () => {
 
   return (
     <>
-      <div className="flex h-[calc(100vh-200px)] overflow-hidden rounded-xl border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      {/* 모바일: 좌(목록)·우(검증)를 세로로 쌓고 각 패널에 높이를 줘 안쪽 스크롤·자동 페이징이 그대로 돈다 */}
+      <div className="flex flex-col overflow-hidden rounded-xl border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark lg:h-[calc(100vh-200px)] lg:flex-row">
         {/* ───── 좌측 패널: 브랜드 상품 목록 ───── */}
         <div
           ref={leftPanelRef}
-          className={`flex w-80 flex-shrink-0 flex-col border-r transition-all ${
+          className={`flex h-[45dvh] w-full flex-shrink-0 flex-col border-b transition-all lg:h-auto lg:w-80 lg:border-b-0 lg:border-r ${
             isLeftPanelFocused
               ? 'border-primary/50 dark:border-primary/50'
               : 'border-stroke dark:border-strokedark'
@@ -389,6 +390,7 @@ const VerificationGroupByView = () => {
               highlightBrandItem={highlightBrandItem}
               setIsLeftPanelFocused={setIsLeftPanelFocused}
               loadMoreBrandItems={loadMoreBrandItems}
+              expandBrandItem={expandBrandItem}
             />
           ) : (
             <ExpandedProductList
@@ -406,7 +408,10 @@ const VerificationGroupByView = () => {
         </div>
 
         {/* ───── 우측 패널: 검증 항목 ───── */}
-        <div className="flex flex-1 flex-col overflow-hidden bg-gray-50 dark:bg-black">
+        <div
+          id="verification-detail"
+          className="flex h-[85dvh] scroll-mt-16 flex-col overflow-hidden bg-gray-50 dark:bg-black lg:h-auto lg:flex-1"
+        >
           {selectedBrandProduct ? (
             <>
               {/* 헤더 */}

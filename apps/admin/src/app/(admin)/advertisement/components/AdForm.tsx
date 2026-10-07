@@ -401,9 +401,9 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
   const graphic = parsedGraphic.graphic;
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
       {/* 좌: 폼 */}
-      <Panel className="flex flex-col gap-4 p-6">
+      <Panel className="flex min-w-0 flex-col gap-4 p-4 sm:p-6">
         <div>
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
             internalId * (예: 얼라이브-260625-배너)
@@ -453,7 +453,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
             {SLOT_LOCATIONS.map((loc) => (
               <label
                 key={loc.value}
-                className="flex cursor-pointer items-center gap-2 text-sm text-black dark:text-white"
+                className="flex cursor-pointer flex-wrap items-center gap-x-2 py-1 text-sm text-black dark:text-white md:py-0"
               >
                 <input
                   type="checkbox"
@@ -467,7 +467,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label className="mb-1 block text-sm font-medium text-black dark:text-white">
               시작 *
@@ -539,7 +539,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
       </Panel>
 
       {/* 우: graphic 2Layer 편집 + 프리뷰 */}
-      <Panel className="flex flex-col gap-4 p-6">
+      <Panel className="flex min-w-0 flex-col gap-4 p-4 sm:p-6">
         <GraphicLayerEditor
           graphic={graphic}
           onGraphicChange={(nextGraphic) => setGraphicText(JSON.stringify(nextGraphic, null, 2))}

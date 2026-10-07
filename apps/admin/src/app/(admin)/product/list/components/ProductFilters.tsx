@@ -38,15 +38,16 @@ const ProductFilters = ({
   const keywordMode = keyword.trim().length > 0;
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    // 한글 조합 중 Enter 는 글자 확정용 — 반쯤 조합된 글자로 실행하지 않는다
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       onSearch();
     }
   };
 
   return (
-    <Panel className="mb-6 px-5 py-4 sm:px-7.5">
-      <div className="flex flex-wrap items-end gap-4">
-        <div className="w-32">
+    <Panel className="mb-6 px-4 py-4 sm:px-7.5">
+      <div className="flex flex-wrap items-end gap-3 sm:gap-4">
+        <div className="w-full sm:w-32">
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
             상품 ID
           </label>
@@ -61,7 +62,7 @@ const ProductFilters = ({
           />
         </div>
 
-        <div className="flex-1">
+        <div className="w-full sm:w-auto sm:flex-1">
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
             검색어
           </label>
@@ -77,7 +78,7 @@ const ProductFilters = ({
           />
         </div>
 
-        <div className="w-40">
+        <div className="w-full sm:w-40">
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
             카테고리
           </label>
@@ -97,7 +98,7 @@ const ProductFilters = ({
           </select>
         </div>
 
-        <div className="w-32">
+        <div className="min-w-0 flex-1 sm:w-32 sm:flex-none">
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">핫딜</label>
           <select
             value={isHot === undefined ? '' : isHot ? 'true' : 'false'}
@@ -113,7 +114,7 @@ const ProductFilters = ({
           </select>
         </div>
 
-        <div className="w-32">
+        <div className="min-w-0 flex-1 sm:w-32 sm:flex-none">
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">상태</label>
           <select
             value={isEnd === undefined ? '' : isEnd ? 'true' : 'false'}
@@ -131,7 +132,7 @@ const ProductFilters = ({
 
         <button
           onClick={onSearch}
-          className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-white transition hover:bg-opacity-90"
+          className="w-full rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-opacity-90 sm:w-auto sm:py-2"
         >
           검색
         </button>

@@ -417,7 +417,7 @@ function WidthSimulator({
               aria-valuemax={maxWidth}
               aria-valuenow={width}
               tabIndex={0}
-              className="absolute left-full top-0 z-40 h-full w-4 cursor-ew-resize touch-none rounded-r border border-primary bg-primary/15 outline-none ring-primary focus:ring-2"
+              className="absolute left-full top-0 z-40 h-full w-6 cursor-ew-resize touch-none rounded-r border border-primary bg-primary/15 outline-none ring-primary focus:ring-2 sm:w-4"
               onPointerDown={handlePointerDown}
               onPointerMove={(event) => {
                 if (event.currentTarget.hasPointerCapture(event.pointerId)) {

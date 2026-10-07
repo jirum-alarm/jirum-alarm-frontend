@@ -50,7 +50,8 @@ const EntryManager = ({ groupId, entries }: Props) => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    // 한글 조합 중 Enter 는 글자 확정용 — 반쯤 조합된 글자로 실행하지 않는다
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       handleAdd();
     }
   };
@@ -75,10 +76,10 @@ const EntryManager = ({ groupId, entries }: Props) => {
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="키워드 입력 (쉼표로 구분하여 여러 개 추가 가능)"
-            className="flex-1 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            className="min-w-0 flex-1 rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary sm:px-5"
           />
           <button
-            className="flex items-center rounded bg-slate-600 px-4 py-2 text-white disabled:opacity-50"
+            className="flex shrink-0 items-center rounded bg-slate-600 px-4 py-2 text-white disabled:opacity-50"
             disabled={isAdding || !keyword.trim()}
             onClick={handleAdd}
           >
@@ -97,7 +98,7 @@ const EntryManager = ({ groupId, entries }: Props) => {
                 <span className="text-black dark:text-white">{entry.keyword}</span>
                 <button
                   onClick={() => handleRemove(entry.id, entry.keyword)}
-                  className="ml-1 text-slate-400 hover:text-danger"
+                  className="-my-1 ml-0.5 p-1 text-slate-400 hover:text-danger sm:my-0 sm:ml-1 sm:p-0"
                 >
                   <svg
                     width="14"

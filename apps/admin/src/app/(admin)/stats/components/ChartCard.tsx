@@ -9,7 +9,7 @@ interface ChartCardProps {
 
 const ChartCard = ({ title, loading, children }: ChartCardProps) => {
   return (
-    <Panel className="p-6">
+    <Panel className="min-w-0 p-4 sm:p-6">
       <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">{title}</h3>
       {loading ? (
         <div className="flex h-64 items-center justify-center">

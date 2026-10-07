@@ -4,8 +4,20 @@
 @tailwind utilities;
 
 @layer base {
+    html {
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+    }
+
     body {
         @apply relative z-1 bg-whiten font-satoshi text-base font-normal text-body;
+    }
+
+    /* iOS 는 16px 미만 입력칸에 포커스하면 화면을 확대해 버린다 */
+    @media (max-width: 767px) {
+        input, select, textarea {
+            font-size: 16px !important;
+        }
     }
 }
 

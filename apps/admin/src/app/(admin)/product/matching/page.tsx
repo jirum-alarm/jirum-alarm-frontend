@@ -14,14 +14,14 @@ const ProductMatchingPage = () => {
   return (
     <>
       <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           <h2 className="text-xl font-bold text-black dark:text-white">상품 매칭</h2>
 
           {/* 뷰 전환 탭 */}
           <div className="flex rounded-lg border border-stroke bg-white p-0.5 dark:border-strokedark dark:bg-boxdark">
             <button
               onClick={() => setViewMode('brand')}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`rounded-md px-3 py-2 text-xs font-medium transition-colors sm:py-1.5 ${
                 viewMode === 'brand'
                   ? 'bg-primary text-white shadow-sm'
                   : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
@@ -31,7 +31,7 @@ const ProductMatchingPage = () => {
             </button>
             <button
               onClick={() => setViewMode('flagged')}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`rounded-md px-3 py-2 text-xs font-medium transition-colors sm:py-1.5 ${
                 viewMode === 'flagged'
                   ? 'bg-primary text-white shadow-sm'
                   : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
@@ -41,7 +41,7 @@ const ProductMatchingPage = () => {
             </button>
             <button
               onClick={() => setViewMode('history')}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`rounded-md px-3 py-2 text-xs font-medium transition-colors sm:py-1.5 ${
                 viewMode === 'history'
                   ? 'bg-primary text-white shadow-sm'
                   : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
@@ -54,7 +54,7 @@ const ProductMatchingPage = () => {
 
         {/* 브랜드별 뷰 단축키 힌트 */}
         {viewMode === 'brand' && (
-          <div className="hidden items-center gap-2 text-[11px] text-gray-400 sm:flex">
+          <div className="hidden items-center gap-2 text-[11px] text-gray-400 lg:flex">
             <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
               ↑↓
             </kbd>

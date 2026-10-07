@@ -13,7 +13,7 @@ interface Props {
 const RadioButton = ({ text, value, name, checked, onChange, id }: Props) => {
   return (
     <div>
-      <label htmlFor={id} className="flex cursor-pointer select-none items-center">
+      <label htmlFor={id} className="flex cursor-pointer select-none items-center py-2 sm:py-0">
         <div className="relative">
           <input
             type="radio"

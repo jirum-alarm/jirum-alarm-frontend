@@ -71,7 +71,7 @@ const SessionRefreshCard = ({
       <button
         onClick={onSave}
         disabled={saving}
-        className="rounded bg-primary px-4 py-1.5 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:opacity-50"
+        className="rounded bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:opacity-50 md:py-1.5"
       >
         {saving ? '저장 중...' : '저장'}
       </button>

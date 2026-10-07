@@ -57,8 +57,14 @@ const ExpandedProductList = ({
             setExpandedSelectedIndex(expandedIndex);
             setSelectedBrandProduct(expandedBp);
             setIsLeftPanelFocused(true);
+            // 모바일은 두 칸이 위아래로 쌓여 있다 — 고른 상품의 검수 목록으로 내려 준다
+            if (window.innerWidth < 1024) {
+              document
+                .getElementById('verification-detail')
+                ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
           }}
-          className={`mb-1 flex w-full items-center gap-1.5 px-2 py-1.5 text-left transition-all hover:bg-gray-100 dark:hover:bg-meta-4 ${
+          className={`mb-1 flex w-full items-center gap-1.5 px-2 py-2.5 text-left transition-all hover:bg-gray-100 dark:hover:bg-meta-4 lg:py-1.5 ${
             selectedBrandProduct?.id === expandedBp.id
               ? 'border-r-3 border-primary bg-primary/10'
               : ''

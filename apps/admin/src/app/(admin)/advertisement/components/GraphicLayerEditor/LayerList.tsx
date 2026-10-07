@@ -35,7 +35,7 @@ export default function LayerList({
       <div className="overflow-hidden rounded border border-stroke dark:border-strokedark">
         <button
           type="button"
-          className={`flex h-8 w-full items-center justify-between gap-2 border-b border-stroke px-3 text-left text-xs transition last:border-b-0 dark:border-strokedark ${
+          className={`flex h-10 w-full items-center justify-between gap-2 border-b border-stroke px-3 text-left text-xs transition last:border-b-0 dark:border-strokedark md:h-8 ${
             selectedBackground
               ? 'bg-primary/10 text-primary'
               : 'bg-white text-black hover:bg-gray-2 dark:bg-boxdark dark:text-white dark:hover:bg-form-input'
@@ -55,7 +55,7 @@ export default function LayerList({
             <button
               key={`${activeBreakpoint}-${index}-${elementAssetUrl}`}
               type="button"
-              className={`flex h-8 w-full items-center justify-between gap-2 border-b border-stroke px-3 text-left text-xs transition last:border-b-0 dark:border-strokedark ${
+              className={`flex h-10 w-full items-center justify-between gap-2 border-b border-stroke px-3 text-left text-xs transition last:border-b-0 dark:border-strokedark md:h-8 ${
                 selected
                   ? 'bg-primary/10 text-primary'
                   : 'bg-white text-black hover:bg-gray-2 dark:bg-boxdark dark:text-white dark:hover:bg-form-input'

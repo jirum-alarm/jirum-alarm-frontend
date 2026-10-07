@@ -127,13 +127,13 @@ const VerificationHistory = () => {
   };
 
   return (
-    <Panel rounded="sm" className="w-full px-5 pb-2.5 pt-6 sm:px-7.5 xl:pb-1">
+    <Panel rounded="sm" className="w-full px-4 pb-2.5 pt-4 sm:px-7.5 sm:pt-6 xl:pb-1">
       {/* 필터 섹션 */}
-      <div className="mb-4 flex flex-wrap items-center gap-4">
+      <div className="mb-4 flex flex-wrap items-center gap-3 sm:gap-4">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-black dark:text-white">상태 필터:</span>
           <button
-            className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+            className={`rounded-md px-3 py-2 text-sm font-medium sm:py-1.5 ${
               verificationStatus.includes(ProductMappingVerificationStatus.Verified)
                 ? 'bg-success text-white'
                 : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
@@ -143,7 +143,7 @@ const VerificationHistory = () => {
             승인됨
           </button>
           <button
-            className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+            className={`rounded-md px-3 py-2 text-sm font-medium sm:py-1.5 ${
               verificationStatus.includes(ProductMappingVerificationStatus.Rejected)
                 ? 'bg-danger text-white'
                 : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
@@ -156,7 +156,7 @@ const VerificationHistory = () => {
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-black dark:text-white">정렬:</span>
           <button
-            className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+            className={`rounded-md px-3 py-2 text-sm font-medium sm:py-1.5 ${
               orderBy === OrderOptionType.Desc
                 ? 'bg-primary text-white'
                 : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
@@ -169,7 +169,7 @@ const VerificationHistory = () => {
             최신순
           </button>
           <button
-            className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+            className={`rounded-md px-3 py-2 text-sm font-medium sm:py-1.5 ${
               orderBy === OrderOptionType.Asc
                 ? 'bg-primary text-white'
                 : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
@@ -182,9 +182,9 @@ const VerificationHistory = () => {
             오래된순
           </button>
         </div>
-        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <div className="hidden h-6 w-px bg-gray-300 dark:bg-gray-600 sm:block" />
         <button
-          className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+          className={`rounded-md px-3 py-2 text-sm font-medium transition-colors sm:py-1.5 ${
             onlyMine
               ? 'bg-primary text-white'
               : 'bg-gray-200 text-gray-700 dark:bg-meta-4 dark:text-white'
@@ -238,16 +238,16 @@ const VerificationHistory = () => {
             <table className="w-full table-auto">
               <thead>
                 <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                  <th className="min-w-[80px] px-4 py-4 text-center font-medium text-black dark:text-white">
+                  <th className="hidden min-w-[80px] px-4 py-4 text-center font-medium text-black dark:text-white md:table-cell">
                     ID
                   </th>
                   <th className="min-w-[140px] px-4 py-4 text-center font-medium text-black dark:text-white">
                     Product ID
                   </th>
-                  <th className="px-4 py-4 text-center font-medium text-black dark:text-white">
+                  <th className="min-w-[180px] px-4 py-4 text-center font-medium text-black dark:text-white lg:min-w-0">
                     상품명
                   </th>
-                  <th className="px-4 py-4 text-center font-medium text-black dark:text-white">
+                  <th className="min-w-[160px] px-4 py-4 text-center font-medium text-black dark:text-white lg:min-w-0">
                     다나와 상품명
                   </th>
                   <th className="min-w-[120px] px-4 py-4 text-center font-medium text-black dark:text-white">
@@ -256,7 +256,7 @@ const VerificationHistory = () => {
                   <th className="min-w-[220px] px-4 py-4 text-center font-medium text-black dark:text-white">
                     검증 정보
                   </th>
-                  <th className="min-w-[160px] px-4 py-4 text-center font-medium text-black dark:text-white">
+                  <th className="hidden min-w-[160px] px-4 py-4 text-center font-medium text-black dark:text-white md:table-cell">
                     생성일
                   </th>
                   <th className="min-w-[100px] px-4 py-4 text-center font-medium text-black dark:text-white">
@@ -272,7 +272,7 @@ const VerificationHistory = () => {
                       isMyVerification(item) ? 'bg-primary/[0.02]' : ''
                     }`}
                   >
-                    <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
+                    <td className="hidden border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark md:table-cell">
                       <p className="text-black dark:text-white">{item.id}</p>
                     </td>
                     <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
@@ -330,7 +330,7 @@ const VerificationHistory = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
+                    <td className="hidden border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark md:table-cell">
                       <p className="text-sm text-black dark:text-white">
                         {item.createdAt ? dateFormatter(item.createdAt) : '-'}
                       </p>
@@ -342,7 +342,7 @@ const VerificationHistory = () => {
                         <button
                           onClick={() => handleCancelVerification(item.id)}
                           disabled={cancellingId === item.id}
-                          className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors ${
+                          className={`inline-flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-2 text-xs font-medium transition-colors sm:py-1.5 ${
                             cancellingId === item.id
                               ? 'cursor-not-allowed bg-gray-100 text-gray-400 dark:bg-meta-4 dark:text-gray-600'
                               : 'bg-warning/10 text-warning hover:bg-warning/20'

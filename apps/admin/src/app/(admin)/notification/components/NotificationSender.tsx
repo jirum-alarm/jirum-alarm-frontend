@@ -156,7 +156,7 @@ const NotificationSender = () => {
   };
 
   return (
-    <Panel className="p-6">
+    <Panel className="p-4 sm:p-6">
       <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">알림 발송</h3>
       <div className="flex flex-col gap-4">
         <div>
@@ -185,7 +185,7 @@ const NotificationSender = () => {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label className="mb-1 block text-sm font-medium text-black dark:text-white">
               발송 방식
@@ -232,7 +232,7 @@ const NotificationSender = () => {
           <label className="mb-2 block text-sm font-medium text-black dark:text-white">
             수신 대상 *
           </label>
-          <div className="mb-3 flex gap-4">
+          <div className="mb-3 flex flex-wrap gap-x-4 gap-y-2">
             <label className="flex cursor-pointer items-center gap-2 text-sm text-black dark:text-white">
               <input
                 type="radio"
@@ -268,13 +268,14 @@ const NotificationSender = () => {
                   {selectedUsers.map((user) => (
                     <span
                       key={user.id}
-                      className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+                      className="inline-flex max-w-full items-center gap-1 rounded-full bg-primary/10 py-1 pl-3 pr-1 text-xs font-medium text-primary"
                     >
-                      {user.nickname || user.email}
+                      <span className="truncate">{user.nickname || user.email}</span>
                       <button
                         type="button"
+                        aria-label="선택 해제"
                         onClick={() => removeUser(user.id)}
-                        className="ml-0.5 text-primary hover:text-primary/70"
+                        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-sm text-primary hover:text-primary/70"
                       >
                         &times;
                       </button>
@@ -320,13 +321,15 @@ const NotificationSender = () => {
                               isSelected ? 'opacity-50' : ''
                             }`}
                           >
-                            <div>
+                            <div className="min-w-0 truncate">
                               <span className="font-medium text-black dark:text-white">
                                 {user.nickname || '-'}
                               </span>
                               <span className="ml-2 text-bodydark2">{user.email}</span>
                             </div>
-                            {isSelected && <span className="text-xs text-primary">선택됨</span>}
+                            {isSelected && (
+                              <span className="ml-2 shrink-0 text-xs text-primary">선택됨</span>
+                            )}
                           </button>
                         );
                       })
@@ -388,7 +391,7 @@ const NotificationSender = () => {
           <button
             onClick={handleSend}
             disabled={loading}
-            className="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:bg-opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:bg-opacity-60 sm:w-auto"
           >
             {loading && <Spinner size="sm" color="white" />}
             발송

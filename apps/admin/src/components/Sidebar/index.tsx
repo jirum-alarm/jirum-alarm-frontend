@@ -128,6 +128,19 @@ const findActiveHref = (pathname: string) =>
     .filter((href) => matchesPath(pathname, href))
     .sort((a, b) => b.length - a.length)[0];
 
+/** 모바일 헤더 제목 — 메뉴에 없는 상세 페이지는 그룹 이름으로 */
+export const pageTitleOf = (pathname: string) => {
+  const activeHref = findActiveHref(pathname);
+  for (const group of MENU.flatMap((s) => s.groups)) {
+    const item = group.items.find((i) => i.href === activeHref);
+    if (item && item.href === pathname) {
+      return group.items.length > 1 ? `${group.name} · ${item.name}` : group.name;
+    }
+    if (group.match.some((m) => matchesPath(pathname, m))) return group.name;
+  }
+  return '지름알림';
+};
+
 const Sidebar = ({
   sidebarOpen,
   setSidebarOpen,
@@ -171,7 +184,7 @@ const Sidebar = ({
   return (
     <aside
       ref={sidebar}
-      className={`fixed left-0 top-0 z-9999 flex h-screen flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:translate-x-0 ${
+      className={`fixed left-0 top-0 z-9999 flex h-dvh flex-col overflow-y-hidden bg-black pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] duration-300 ease-linear dark:bg-boxdark lg:translate-x-0 ${
         sidebarExpanded ? 'w-72.5' : 'w-20'
       } ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
     >
@@ -353,7 +366,7 @@ function SubMenuItem({ name, linkTo, active }: { name: string; linkTo: string; a
     <li>
       <Link
         href={linkTo}
-        className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+        className={`group relative flex items-center gap-2.5 rounded-md px-4 py-1.5 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white lg:py-0 ${
           active && 'text-white'
         }`}
       >

@@ -40,14 +40,14 @@ const QueryErrorBanner = () => {
       {errors.map((err) => (
         <div
           key={err.id}
-          className="flex items-start gap-2 rounded border border-danger/40 bg-danger/5 px-3 py-2 text-sm text-danger"
+          className="flex flex-wrap items-start gap-x-2 rounded border border-danger/40 bg-danger/5 px-3 py-2 text-sm text-danger"
         >
-          <span className="font-bold">요청 실패</span>
-          <span className="font-medium">{err.operation}</span>
-          <span className="min-w-0 flex-1 break-all">{err.message}</span>
+          <span className="shrink-0 font-bold">요청 실패</span>
+          <span className="min-w-0 break-all font-medium">{err.operation}</span>
+          <span className="min-w-0 flex-1 basis-40 break-all">{err.message}</span>
           <button
             onClick={() => setErrors((prev) => prev.filter((x) => x.id !== err.id))}
-            className="shrink-0 px-1 font-bold"
+            className="ml-auto shrink-0 px-1 font-bold"
             aria-label="닫기"
           >
             ×

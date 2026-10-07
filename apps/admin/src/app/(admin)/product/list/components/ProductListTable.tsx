@@ -131,107 +131,111 @@ const ProductListTable = () => {
       />
 
       <Panel>
-        <table className="w-full table-auto">
-          <thead>
-            <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="w-16 px-4 py-4 text-center text-sm font-medium text-bodydark2">ID</th>
-              <th className="min-w-[60px] px-4 py-4 text-center text-sm font-medium text-bodydark2">
-                이미지
-              </th>
-              <th className="min-w-[200px] px-4 py-4 text-sm font-medium text-bodydark2">제목</th>
-              <th className="w-24 px-4 py-4 text-center text-sm font-medium text-bodydark2">
-                가격
-              </th>
-              <th className="w-24 px-4 py-4 text-center text-sm font-medium text-bodydark2">
-                출처
-              </th>
-              <th className="w-20 px-4 py-4 text-center text-sm font-medium text-bodydark2">
-                상태
-              </th>
-              <th className="w-24 px-4 py-4 text-center text-sm font-medium text-bodydark2">
-                등록일
-              </th>
-              <th className="w-20 px-4 py-4 text-center text-sm font-medium text-bodydark2">
-                관리
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr
-                key={product.id}
-                className="hover:bg-gray-1 border-b border-stroke dark:border-strokedark dark:hover:bg-meta-4"
-              >
-                <td className="px-4 py-3 text-center text-sm text-black dark:text-white">
-                  {product.id}
-                </td>
-                <td className="px-4 py-3 text-center">
-                  {product.thumbnail ? (
-                    <img
-                      src={product.thumbnail}
-                      alt=""
-                      className="mx-auto h-10 w-10 rounded object-cover"
-                    />
-                  ) : (
-                    <div className="mx-auto h-10 w-10 rounded bg-gray-2 dark:bg-meta-4" />
-                  )}
-                </td>
-                <td className="px-4 py-3">
-                  <Link
-                    href={`/product/${product.id}`}
-                    className="line-clamp-1 text-sm text-black hover:text-primary dark:text-white"
-                  >
-                    {product.title}
-                  </Link>
-                </td>
-                <td className="px-4 py-3 text-center text-sm text-black dark:text-white">
-                  {product.price ? `${product.price.toLocaleString()}원` : '-'}
-                </td>
-                <td className="px-4 py-3 text-center text-sm text-bodydark2">
-                  {product.provider?.nameKr ?? '-'}
-                </td>
-                <td className="px-4 py-3 text-center">
-                  {product.isEnd ? (
-                    <span className="inline-block rounded bg-danger bg-opacity-10 px-2 py-1 text-xs font-medium text-danger">
-                      종료
-                    </span>
-                  ) : product.isHot ? (
-                    <span className="inline-block rounded bg-success bg-opacity-10 px-2 py-1 text-xs font-medium text-success">
-                      핫딜
-                    </span>
-                  ) : (
-                    <span className="inline-block rounded bg-bodydark2 bg-opacity-10 px-2 py-1 text-xs font-medium text-bodydark2">
-                      일반
-                    </span>
-                  )}
-                </td>
-                <td className="px-4 py-3 text-center text-xs text-bodydark2">
-                  {product.postedAt ? dateFormatter(product.postedAt) : '-'}
-                </td>
-                <td className="px-4 py-3 text-center">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDeleteError(null);
-                      setPendingDeleteId(product.id);
-                    }}
-                    className="rounded-md border border-danger bg-transparent px-3 py-1 text-xs font-medium text-danger transition hover:bg-danger hover:text-white"
-                  >
-                    삭제
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto whitespace-nowrap md:whitespace-normal">
+            <thead>
+              <tr className="bg-gray-2 text-left dark:bg-meta-4">
+                <th className="w-16 px-4 py-4 text-center text-sm font-medium text-bodydark2">
+                  ID
+                </th>
+                <th className="min-w-[60px] px-4 py-4 text-center text-sm font-medium text-bodydark2">
+                  이미지
+                </th>
+                <th className="min-w-[200px] px-4 py-4 text-sm font-medium text-bodydark2">제목</th>
+                <th className="w-24 px-4 py-4 text-center text-sm font-medium text-bodydark2">
+                  가격
+                </th>
+                <th className="w-24 px-4 py-4 text-center text-sm font-medium text-bodydark2">
+                  출처
+                </th>
+                <th className="w-20 px-4 py-4 text-center text-sm font-medium text-bodydark2">
+                  상태
+                </th>
+                <th className="w-24 px-4 py-4 text-center text-sm font-medium text-bodydark2">
+                  등록일
+                </th>
+                <th className="w-20 px-4 py-4 text-center text-sm font-medium text-bodydark2">
+                  관리
+                </th>
               </tr>
-            ))}
+            </thead>
+            <tbody>
+              {products.map((product) => (
+                <tr
+                  key={product.id}
+                  className="hover:bg-gray-1 border-b border-stroke dark:border-strokedark dark:hover:bg-meta-4"
+                >
+                  <td className="px-4 py-3 text-center text-sm text-black dark:text-white">
+                    {product.id}
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    {product.thumbnail ? (
+                      <img
+                        src={product.thumbnail}
+                        alt=""
+                        className="mx-auto h-10 w-10 rounded object-cover"
+                      />
+                    ) : (
+                      <div className="mx-auto h-10 w-10 rounded bg-gray-2 dark:bg-meta-4" />
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    <Link
+                      href={`/product/${product.id}`}
+                      className="line-clamp-1 max-w-[240px] whitespace-normal text-sm text-black hover:text-primary dark:text-white md:max-w-none"
+                    >
+                      {product.title}
+                    </Link>
+                  </td>
+                  <td className="px-4 py-3 text-center text-sm text-black dark:text-white">
+                    {product.price ? `${product.price.toLocaleString()}원` : '-'}
+                  </td>
+                  <td className="px-4 py-3 text-center text-sm text-bodydark2">
+                    {product.provider?.nameKr ?? '-'}
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    {product.isEnd ? (
+                      <span className="inline-block rounded bg-danger bg-opacity-10 px-2 py-1 text-xs font-medium text-danger">
+                        종료
+                      </span>
+                    ) : product.isHot ? (
+                      <span className="inline-block rounded bg-success bg-opacity-10 px-2 py-1 text-xs font-medium text-success">
+                        핫딜
+                      </span>
+                    ) : (
+                      <span className="inline-block rounded bg-bodydark2 bg-opacity-10 px-2 py-1 text-xs font-medium text-bodydark2">
+                        일반
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-center text-xs text-bodydark2">
+                    {product.postedAt ? dateFormatter(product.postedAt) : '-'}
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDeleteError(null);
+                        setPendingDeleteId(product.id);
+                      }}
+                      className="rounded-md border border-danger bg-transparent px-3 py-2 text-xs font-medium text-danger transition hover:bg-danger hover:text-white md:py-1"
+                    >
+                      삭제
+                    </button>
+                  </td>
+                </tr>
+              ))}
 
-            {loading && (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center">
-                  <Spinner size="lg" />
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              {loading && (
+                <tr>
+                  <td colSpan={8} className="px-4 py-8 text-center">
+                    <Spinner size="lg" />
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
         {!loading && products.length === 0 && (
           <div className="px-4 py-12 text-center text-sm text-bodydark2">검색 결과가 없습니다.</div>
@@ -242,7 +246,7 @@ const ProductListTable = () => {
 
       {pendingDeleteId !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-default dark:bg-boxdark">
+          <div className="mx-3 max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-lg bg-white p-5 shadow-default dark:bg-boxdark sm:p-6">
             <h3 className="mb-3 text-lg font-semibold text-black dark:text-white">상품 삭제</h3>
             <p className="mb-2 text-sm text-bodydark2">
               상품 ID{' '}

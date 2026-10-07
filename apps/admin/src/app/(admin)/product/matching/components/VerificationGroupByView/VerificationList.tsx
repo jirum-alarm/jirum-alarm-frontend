@@ -19,7 +19,7 @@ type Props = {
   selectedBrandProduct: BrandProduct;
   handleItemClick: (idx: number) => void;
   toggleItemSelection: (itemId: string) => void;
-  handleImageClick: (thumbnail: string, title: string) => void;
+  handleImageClick: (thumbnail: string, title: string, danawaUrl?: string | null) => void;
   handleRemoveMapping: (item: PendingVerificationItem) => Promise<void>;
 };
 

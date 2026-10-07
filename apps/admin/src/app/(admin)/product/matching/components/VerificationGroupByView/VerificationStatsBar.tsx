@@ -20,7 +20,7 @@ const VerificationStatsBar = ({
   includeVerified,
   setIncludeVerified,
 }: Props) => (
-  <div className="flex items-center justify-between border-b border-stroke bg-white px-3 py-1 dark:border-strokedark dark:bg-boxdark">
+  <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-stroke bg-white px-3 py-1 dark:border-strokedark dark:bg-boxdark">
     <div className="flex items-center gap-3 text-[11px]">
       <span className="text-gray-500 dark:text-gray-400">
         전체{' '}
@@ -39,13 +39,13 @@ const VerificationStatsBar = ({
     <div className="flex items-center gap-3">
       <button
         onClick={() => setIsSimilarOpen((v) => !v)}
-        className={`rounded px-2 py-0.5 text-[11px] font-medium ${
+        className={`rounded px-2 py-1.5 text-[11px] font-medium sm:py-0.5 ${
           isSimilarOpen ? 'bg-primary text-white' : 'bg-primary/10 text-primary hover:bg-primary/20'
         }`}
       >
         유사 딜 찾기
       </button>
-      <label className="flex cursor-pointer items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-400">
+      <label className="flex cursor-pointer items-center gap-1.5 py-1 text-[11px] text-gray-500 dark:text-gray-400">
         <input
           type="checkbox"
           checked={!includeVerified}

@@ -59,7 +59,7 @@ const ProviderHealthGrid = () => {
 
   if (loading && !data) {
     return (
-      <Panel className="p-6">
+      <Panel className="p-4 sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">
           Provider 상태 (커뮤니티)
         </h3>
@@ -72,7 +72,7 @@ const ProviderHealthGrid = () => {
 
   if (error) {
     return (
-      <Panel className="p-6">
+      <Panel className="p-4 sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">
           Provider 상태 (커뮤니티)
         </h3>
@@ -94,8 +94,8 @@ const ProviderHealthGrid = () => {
   });
 
   return (
-    <Panel className="p-6">
-      <div className="mb-4 flex items-center justify-between">
+    <Panel className="p-4 sm:p-6">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
         <h3 className="text-lg font-semibold text-black dark:text-white">
           Provider 상태 (커뮤니티)
         </h3>

@@ -269,24 +269,22 @@ export function useVerificationActions({
 
   // #1: danawaUrl도 같이 전달
   const handleImageClick = useCallback(
-    (thumbnail: string, title: string) => {
+    (thumbnail: string, title: string, danawaUrl?: string | null) => {
       if (!selectedBrandProduct) return;
-
-      // 현재 포커스된 아이템의 danawaUrl 가져오기
-      const focusedItem = verificationItems[focusedPostIndex];
 
       setImageModalData({
         isOpen: true,
         danawaImage: '',
         danawaTitle: `${selectedBrandProduct.brandName} ${selectedBrandProduct.productName}`,
-        danawaUrl: focusedItem?.danawaUrl ?? undefined,
+        // 누른 항목의 링크 — 예전엔 포커스된 항목 것이라 탭(포커스 이동 없음)하면 엉뚱한 상품이 열렸다
+        danawaUrl: danawaUrl ?? undefined,
         communityImage: thumbnail || undefined,
         communityTitle: title,
       });
     },
     // setter 들은 useState 원본이라 안정 — 원본 의존성 배열을 그대로 유지한다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedBrandProduct, verificationItems, focusedPostIndex],
+    [selectedBrandProduct],
   );
 
   const handleConfirmAndNext = useCallback(async () => {

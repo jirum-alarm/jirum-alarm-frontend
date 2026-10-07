@@ -115,7 +115,7 @@ const GatedMappingList = () => {
             <button
               key={opt.value}
               onClick={() => toggleSource(opt.value)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`rounded-md px-3 py-2 text-xs font-medium transition-colors sm:py-1.5 ${
                 activeSources.includes(opt.value)
                   ? 'bg-primary text-white'
                   : 'border border-stroke text-gray-500 dark:border-strokedark dark:text-gray-400'
@@ -126,7 +126,7 @@ const GatedMappingList = () => {
           ))}
         </div>
         <form
-          className="flex items-center gap-2"
+          className="flex w-full items-center gap-2 sm:w-auto"
           onSubmit={(e) => {
             e.preventDefault();
             setAppliedTitle(titleQuery.trim());
@@ -138,18 +138,18 @@ const GatedMappingList = () => {
             placeholder="제목 검색"
             // 서버 GatedMappingsArgs.productTitle @MaxLength(100) — 넘기면 목록이 Bad Request 로 통째 실패한다
             maxLength={100}
-            className="rounded-md border border-stroke px-3 py-1.5 text-xs dark:border-strokedark dark:bg-boxdark"
+            className="min-w-0 flex-1 rounded-md border border-stroke px-3 py-1.5 text-xs dark:border-strokedark dark:bg-boxdark sm:flex-none"
           />
           <button
             type="submit"
-            className="rounded-md border border-stroke px-3 py-1.5 text-xs dark:border-strokedark"
+            className="shrink-0 rounded-md border border-stroke px-3 py-2 text-xs dark:border-strokedark sm:py-1.5"
           >
             검색
           </button>
         </form>
         <button
           onClick={() => refetch()}
-          className="rounded-md border border-stroke px-3 py-1.5 text-xs dark:border-strokedark"
+          className="rounded-md border border-stroke px-3 py-2 text-xs dark:border-strokedark sm:py-1.5"
         >
           새로고침
         </button>
@@ -177,7 +177,7 @@ const GatedMappingList = () => {
           return (
             <div
               key={item.id}
-              className={`flex gap-4 rounded-md border p-3 ${
+              className={`flex flex-wrap gap-3 rounded-md border p-3 sm:flex-nowrap sm:gap-4 ${
                 done
                   ? 'border-stroke opacity-50 dark:border-strokedark'
                   : 'border-stroke dark:border-strokedark'
@@ -193,7 +193,7 @@ const GatedMappingList = () => {
               )}
 
               <div className="min-w-0 flex-1">
-                <div className="mb-1 flex items-center gap-2">
+                <div className="mb-1 flex flex-wrap items-center gap-2">
                   <span className="rounded bg-meta-4 px-1.5 py-0.5 text-[10px] text-white">
                     {sourceLabel}
                   </span>
@@ -213,7 +213,7 @@ const GatedMappingList = () => {
                 </div>
 
                 {/* 원본 제목 */}
-                <div className="text-sm font-medium text-black dark:text-white">
+                <div className="break-words text-sm font-medium text-black dark:text-white">
                   {item.product?.title ?? '(제목 없음)'}
                 </div>
 
@@ -231,7 +231,7 @@ const GatedMappingList = () => {
               </div>
 
               {/* 액션 */}
-              <div className="flex flex-shrink-0 flex-col justify-center gap-2">
+              <div className="flex w-full flex-shrink-0 flex-row gap-2 sm:w-auto sm:flex-col sm:justify-center">
                 {done ? (
                   <span className="text-xs text-gray-400">
                     {done === 'rematch' ? '재매칭 요청됨' : '게이트 확정'}
@@ -240,13 +240,13 @@ const GatedMappingList = () => {
                   <>
                     <button
                       onClick={() => handleConfirmGate(item.id)}
-                      className="rounded-md bg-meta-1 px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+                      className="flex-1 rounded-md bg-meta-1 px-3 py-2.5 text-xs font-medium text-white hover:opacity-90 sm:flex-none sm:py-1.5"
                     >
                       게이트 맞음
                     </button>
                     <button
                       onClick={() => handleRematch(item.id)}
-                      className="rounded-md border border-stroke px-3 py-1.5 text-xs font-medium dark:border-strokedark"
+                      className="flex-1 rounded-md border border-stroke px-3 py-2.5 text-xs font-medium dark:border-strokedark sm:flex-none sm:py-1.5"
                     >
                       오판 → 재매칭
                     </button>

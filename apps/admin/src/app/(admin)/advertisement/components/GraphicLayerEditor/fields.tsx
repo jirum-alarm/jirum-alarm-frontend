@@ -143,7 +143,7 @@ export function AddBreakpointControl({ onAdd }: { onAdd: (width: number) => void
   const [value, setValue] = useState(String(DEFAULT_RENDER_WIDTH_BREAKPOINT));
 
   return (
-    <div className="flex items-end gap-2">
+    <div className="flex flex-wrap items-end gap-2">
       <label className="block">
         <span className="mb-1 block text-[11px] text-bodydark2">≥ width</span>
         <input
@@ -156,7 +156,7 @@ export function AddBreakpointControl({ onAdd }: { onAdd: (width: number) => void
       </label>
       <button
         type="button"
-        className="mb-0.5 rounded bg-primary px-3 py-1.5 text-xs text-white"
+        className="mb-0.5 rounded bg-primary px-3 py-2 text-xs text-white md:py-1.5"
         onClick={() => onAdd(toPositiveNumber(value, DEFAULT_RENDER_WIDTH_BREAKPOINT))}
       >
         variant 추가

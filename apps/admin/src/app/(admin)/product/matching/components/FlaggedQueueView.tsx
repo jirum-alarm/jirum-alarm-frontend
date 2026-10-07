@@ -133,8 +133,8 @@ export default function FlaggedQueueView() {
   return (
     <div className="space-y-3">
       {/* 툴바 */}
-      <div className="flex items-center justify-between rounded-lg border border-stroke bg-white px-4 py-2.5 dark:border-strokedark dark:bg-boxdark">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-stroke bg-white px-4 py-2.5 dark:border-strokedark dark:bg-boxdark">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <span className="text-sm font-semibold text-black dark:text-white">
             🤖 거절추천 큐
             {countData?.pendingVerificationsTotalCount != null && (
@@ -147,7 +147,7 @@ export default function FlaggedQueueView() {
             사전분류(26b)가 오매칭으로 의심한 것만 — 근거 확인 후 확정
           </span>
         </div>
-        <label className="flex cursor-pointer items-center gap-1.5 text-xs text-black dark:text-white">
+        <label className="flex cursor-pointer items-center gap-1.5 py-1 text-xs text-black dark:text-white">
           <input
             type="checkbox"
             checked={onlyActive}
@@ -182,10 +182,10 @@ export default function FlaggedQueueView() {
                     : 'border-danger/30 bg-white dark:bg-boxdark'
                 }`}
               >
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <div className="min-w-0 flex-1 space-y-1">
                     {/* 핫딜 제목 ↔ 카탈로그 나란히 */}
-                    <div className="truncate text-sm font-medium text-black dark:text-white">
+                    <div className="break-words text-sm font-medium text-black dark:text-white sm:truncate">
                       {item.product?.url ? (
                         <a
                           href={item.product.url}
@@ -199,7 +199,7 @@ export default function FlaggedQueueView() {
                         (item.product?.title ?? '(제목 없음)')
                       )}
                     </div>
-                    <div className="truncate text-xs text-gray-500 dark:text-gray-400">
+                    <div className="break-words text-xs text-gray-500 dark:text-gray-400 sm:truncate">
                       ↔{' '}
                       {item.danawaUrl ? (
                         <a
@@ -219,7 +219,7 @@ export default function FlaggedQueueView() {
                       {stripMarker(item.aiSuggestionReason) || 'AI 거절 추천'}
                     </div>
                   </div>
-                  <div className="flex shrink-0 flex-col gap-1.5">
+                  <div className="flex shrink-0 flex-row gap-1.5 sm:flex-col">
                     {state ? (
                       <span
                         className={`rounded px-2 py-1 text-xs font-bold ${
@@ -232,13 +232,13 @@ export default function FlaggedQueueView() {
                       <>
                         <button
                           onClick={() => decide(item.id, ProductMappingVerificationStatus.Rejected)}
-                          className="rounded bg-danger px-3 py-1.5 text-xs font-bold text-white hover:opacity-90"
+                          className="flex-1 rounded bg-danger px-3 py-2.5 text-xs font-bold text-white hover:opacity-90 sm:flex-none sm:py-1.5"
                         >
                           오매칭 확정
                         </button>
                         <button
                           onClick={() => decide(item.id, ProductMappingVerificationStatus.Verified)}
-                          className="rounded border border-success px-3 py-1.5 text-xs font-bold text-success hover:bg-success/10"
+                          className="flex-1 rounded border border-success px-3 py-2.5 text-xs font-bold text-success hover:bg-success/10 sm:flex-none sm:py-1.5"
                         >
                           정상 매칭
                         </button>
@@ -255,7 +255,7 @@ export default function FlaggedQueueView() {
               <button
                 onClick={loadMore}
                 disabled={loading}
-                className="rounded border border-stroke px-4 py-1.5 text-xs disabled:opacity-50 dark:border-strokedark dark:text-white"
+                className="rounded border border-stroke px-4 py-2 text-xs disabled:opacity-50 dark:border-strokedark dark:text-white sm:py-1.5"
               >
                 {loading ? '불러오는 중…' : '더 불러오기'}
               </button>
@@ -265,7 +265,7 @@ export default function FlaggedQueueView() {
                 setDecided({});
                 load(null);
               }}
-              className="rounded border border-stroke px-4 py-1.5 text-xs text-gray-500 dark:border-strokedark"
+              className="rounded border border-stroke px-4 py-2 text-xs text-gray-500 dark:border-strokedark sm:py-1.5"
             >
               새로고침
             </button>

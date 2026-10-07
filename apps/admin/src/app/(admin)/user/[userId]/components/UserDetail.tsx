@@ -40,9 +40,9 @@ const UserDetail = ({ userId }: { userId: string }) => {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 sm:gap-6">
       {/* 기본 정보 */}
-      <Panel className="p-6">
+      <Panel className="p-4 sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">기본 정보</h3>
         <div className="flex flex-col gap-3">
           <InfoRow label="ID" value={String(user.id)} />
@@ -58,7 +58,7 @@ const UserDetail = ({ userId }: { userId: string }) => {
       </Panel>
 
       {/* 소셜 로그인 */}
-      <Panel className="p-6">
+      <Panel className="p-4 sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">연동된 소셜 계정</h3>
         {user.linkedSocialProviders && user.linkedSocialProviders.length > 0 ? (
           <div className="flex flex-wrap gap-2">
@@ -77,7 +77,7 @@ const UserDetail = ({ userId }: { userId: string }) => {
       </Panel>
 
       {/* 관심 카테고리 */}
-      <Panel className="p-6">
+      <Panel className="p-4 sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">관심 카테고리</h3>
         {user.favoriteCategories && user.favoriteCategories.length > 0 ? (
           <div className="flex flex-wrap gap-2">
@@ -98,7 +98,7 @@ const UserDetail = ({ userId }: { userId: string }) => {
       <div>
         <Link
           href="/user"
-          className="hover:bg-gray-1 rounded-lg border border-stroke px-6 py-2 text-sm font-medium text-bodydark2 transition dark:border-strokedark dark:hover:bg-meta-4"
+          className="hover:bg-gray-1 inline-block rounded-lg border border-stroke px-6 py-2 text-sm font-medium text-bodydark2 transition dark:border-strokedark dark:hover:bg-meta-4"
         >
           목록으로
         </Link>
@@ -111,7 +111,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-4">
       <span className="w-20 shrink-0 text-sm font-medium text-bodydark2">{label}</span>
-      <span className="text-sm text-black dark:text-white">{value}</span>
+      <span className="min-w-0 break-all text-sm text-black dark:text-white">{value}</span>
     </div>
   );
 }

@@ -75,7 +75,7 @@ const ProviderHealthSection = () => {
   return (
     <ChartCard title="Provider 생존 신호 — 발급·판매 비대칭이 사고 신호" loading={loading}>
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full whitespace-nowrap">
           <thead>
             <tr className="border-b border-stroke dark:border-strokedark">
               <th className={thClass}>Provider</th>
@@ -158,11 +158,11 @@ const QueueHealthSection = () => {
 
   return (
     <ChartCard title="Retry 큐 건강도 (최근 90일 미발급)" loading={loading}>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
         {cards.map((card) => (
           <div
             key={card.label}
-            className="rounded-lg border border-stroke p-4 dark:border-strokedark"
+            className="rounded-lg border border-stroke p-3 dark:border-strokedark sm:p-4"
           >
             <p className="text-xs text-bodydark2">{card.label}</p>
             <p className="mt-1 text-2xl font-bold text-black dark:text-white">
@@ -249,14 +249,14 @@ const FunnelSection = () => {
 
   return (
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-      <div className="xl:col-span-2">
+      <div className="min-w-0 xl:col-span-2">
         <ChartCard title="일별 발급 퍼널" loading={funnelLoading}>
-          <div className="mb-3 flex gap-2">
+          <div className="mb-3 flex flex-wrap gap-2">
             {[7, 14, 30].map((option) => (
               <button
                 key={option}
                 onClick={() => setDays(option)}
-                className={`rounded px-3 py-1 text-xs ${
+                className={`rounded px-3 py-2 text-xs md:py-1 ${
                   days === option
                     ? 'bg-primary text-white'
                     : 'bg-gray-2 text-bodydark2 dark:bg-meta-4'
@@ -266,7 +266,7 @@ const FunnelSection = () => {
               </button>
             ))}
           </div>
-          <div className="mb-4 grid grid-cols-3 gap-3 md:grid-cols-6">
+          <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
             {summaryCards.map((card) => (
               <div
                 key={card.label}
@@ -338,10 +338,10 @@ const MissedProductsSection = () => {
 
   return (
     <ChartCard title="노출 가능한데 수익링크 없는 딜 (최근 30일·미종료)" loading={loading}>
-      <div className="mb-3 flex gap-2">
+      <div className="mb-3 flex flex-wrap gap-2">
         <button
           onClick={() => setHighValueOnly(true)}
-          className={`rounded px-3 py-1 text-xs ${
+          className={`rounded px-3 py-2 text-xs md:py-1 ${
             highValueOnly ? 'bg-primary text-white' : 'bg-gray-2 text-bodydark2 dark:bg-meta-4'
           }`}
         >
@@ -349,7 +349,7 @@ const MissedProductsSection = () => {
         </button>
         <button
           onClick={() => setHighValueOnly(false)}
-          className={`rounded px-3 py-1 text-xs ${
+          className={`rounded px-3 py-2 text-xs md:py-1 ${
             !highValueOnly ? 'bg-primary text-white' : 'bg-gray-2 text-bodydark2 dark:bg-meta-4'
           }`}
         >
@@ -357,7 +357,7 @@ const MissedProductsSection = () => {
         </button>
       </div>
       <div className="max-h-[500px] overflow-auto">
-        <table className="w-full">
+        <table className="w-full min-w-[720px] md:min-w-0">
           <thead>
             <tr className="border-b border-stroke dark:border-strokedark">
               <th className={thClass}>딜</th>

@@ -14,6 +14,8 @@ type Props = {
   highlightBrandItem: (item: BrandItem) => void;
   setIsLeftPanelFocused: (focused: boolean) => void;
   loadMoreBrandItems: () => Promise<void>;
+  /** 스페이스바와 같은 동작 — 키보드가 없는 모바일에서 상세 상품으로 들어가는 길 */
+  expandBrandItem: (item: BrandItem) => void;
 };
 
 // brands 탭: 브랜드 아이템 목록 (대기 건수 뱃지 + 클릭 시 하이라이트, 끝 3개면 다음 페이지).
@@ -29,12 +31,13 @@ const BrandItemList = ({
   highlightBrandItem,
   setIsLeftPanelFocused,
   loadMoreBrandItems,
+  expandBrandItem,
 }: Props) => (
   <div ref={leftScrollRef} className="flex-1 overflow-y-auto">
     {filteredBrandItems.length > 0 ? (
       <>
         {filteredBrandItems.map((item, index) => (
-          <div key={item.id} className="mb-0.5">
+          <div key={item.id} className="mb-0.5 flex items-stretch">
             <button
               data-product-index={index}
               onClick={() => {
@@ -49,7 +52,7 @@ const BrandItemList = ({
                   loadMoreBrandItems();
                 }
               }}
-              className={`flex w-full items-center gap-2 p-2 text-left transition-all hover:bg-gray-50 dark:hover:bg-meta-4 ${
+              className={`flex w-full min-w-0 flex-1 items-center gap-2 p-2 text-left transition-all hover:bg-gray-50 dark:hover:bg-meta-4 ${
                 selectedBrandItem?.id === item.id ? 'border-r-4 border-primary bg-primary/5' : ''
               } ${
                 isLeftPanelFocused && selectedBrandItemIndex === index
@@ -87,6 +90,16 @@ const BrandItemList = ({
                 </p>
                 <p className="mt-0.5 text-[9px] text-gray-400">매칭 {item.totalMatchCount}건</p>
               </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedBrandItemIndex(index);
+                expandBrandItem(item);
+              }}
+              className="flex flex-shrink-0 items-center border-l border-stroke px-3 text-xs font-medium text-primary dark:border-strokedark lg:hidden"
+            >
+              열기 ›
             </button>
           </div>
         ))}

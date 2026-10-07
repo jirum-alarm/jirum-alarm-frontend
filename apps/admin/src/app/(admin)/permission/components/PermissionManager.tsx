@@ -16,13 +16,13 @@ import { SECTION_LABELS } from '@/lib/adminSection';
 type Draft = { name: string; sections: string[] };
 
 const cardClass =
-  'rounded-sm border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark';
+  'rounded-sm border border-stroke bg-white p-3 sm:p-5 shadow-default dark:border-strokedark dark:bg-boxdark';
 const thClass = 'px-3 py-2 text-left text-xs font-semibold text-bodydark2 whitespace-nowrap';
 const tdClass = 'px-3 py-2 text-sm text-black dark:text-white';
 const inputClass =
   'w-36 rounded border border-stroke bg-transparent px-2 py-1 text-sm outline-none focus:border-primary dark:border-strokedark';
 const buttonClass =
-  'rounded px-3 py-1 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40';
+  'rounded px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40 md:py-1';
 
 const toggle = (list: string[], key: string) =>
   list.includes(key) ? list.filter((k) => k !== key) : [...list, key];
@@ -205,50 +205,52 @@ const PermissionManager = () => {
 
       <div className={cardClass}>
         <h3 className="mb-3 font-semibold text-black dark:text-white">계정별 역할</h3>
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-stroke dark:border-strokedark">
-              <th className={thClass}>ID</th>
-              <th className={thClass}>이름</th>
-              <th className={thClass}>이메일</th>
-              <th className={thClass}>역할</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id} className="border-b border-stroke dark:border-strokedark">
-                <td className={tdClass}>{user.id}</td>
-                <td className={tdClass}>{user.name}</td>
-                <td className={tdClass}>{user.email}</td>
-                <td className={tdClass}>
-                  <select
-                    className="rounded border border-stroke bg-transparent px-2 py-1 text-sm dark:border-strokedark dark:bg-boxdark"
-                    value={user.roleId ?? ''}
-                    onChange={(e) =>
-                      run(
-                        () =>
-                          assignRole({
-                            variables: {
-                              adminUserId: user.id,
-                              roleId: e.target.value ? Number(e.target.value) : null,
-                            },
-                          }),
-                        '역할을 바꿨습니다',
-                      )
-                    }
-                  >
-                    <option value="">역할 없음</option>
-                    {roles.map((role) => (
-                      <option key={role.id} value={role.id}>
-                        {role.name}
-                      </option>
-                    ))}
-                  </select>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-stroke dark:border-strokedark">
+                <th className={thClass}>ID</th>
+                <th className={thClass}>이름</th>
+                <th className={thClass}>이메일</th>
+                <th className={thClass}>역할</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id} className="border-b border-stroke dark:border-strokedark">
+                  <td className={tdClass}>{user.id}</td>
+                  <td className={tdClass}>{user.name}</td>
+                  <td className={`${tdClass} whitespace-nowrap`}>{user.email}</td>
+                  <td className={tdClass}>
+                    <select
+                      className="rounded border border-stroke bg-transparent px-2 py-2 text-sm dark:border-strokedark dark:bg-boxdark md:py-1"
+                      value={user.roleId ?? ''}
+                      onChange={(e) =>
+                        run(
+                          () =>
+                            assignRole({
+                              variables: {
+                                adminUserId: user.id,
+                                roleId: e.target.value ? Number(e.target.value) : null,
+                              },
+                            }),
+                          '역할을 바꿨습니다',
+                        )
+                      }
+                    >
+                      <option value="">역할 없음</option>
+                      {roles.map((role) => (
+                        <option key={role.id} value={role.id}>
+                          {role.name}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

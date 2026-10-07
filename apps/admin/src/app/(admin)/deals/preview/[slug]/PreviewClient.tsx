@@ -88,8 +88,8 @@ const PreviewClient = ({ slug }: { slug: string }) => {
   return (
     <div className="flex flex-col gap-6">
       {/* 발행 액션 바 */}
-      <div className="flex items-center justify-between rounded-md border border-stroke bg-white p-4 dark:border-strokedark dark:bg-boxdark">
-        <div className="flex items-center gap-2 text-sm">
+      <div className="flex flex-col gap-3 rounded-md border border-stroke bg-white p-4 dark:border-strokedark dark:bg-boxdark sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap items-center gap-2 text-sm">
           {isPublished ? (
             <span className="inline-flex rounded-full bg-success/10 px-2.5 py-0.5 font-medium text-success">
               발행됨
@@ -104,7 +104,7 @@ const PreviewClient = ({ slug }: { slug: string }) => {
         <button
           disabled={mutating}
           onClick={handlePublish}
-          className={`rounded-md px-4 py-2 text-sm font-medium text-white disabled:opacity-50 ${
+          className={`w-full shrink-0 rounded-md px-4 py-2 text-sm font-medium text-white disabled:opacity-50 sm:w-auto ${
             isPublished ? 'bg-meta-1' : 'bg-primary'
           }`}
         >
@@ -231,13 +231,13 @@ const PreviewClient = ({ slug }: { slug: string }) => {
           href={danawa.danawaUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-between rounded-lg border border-stroke p-4 dark:border-strokedark"
+          className="flex items-center justify-between gap-3 rounded-lg border border-stroke p-4 dark:border-strokedark"
         >
           <span className="text-sm font-medium text-black dark:text-white">
             다나와 최저가 비교 {danawa.mallCount ? `· ${danawa.mallCount}곳` : ''}{' '}
             {danawa.danawaPrice ? `· ${won(danawa.danawaPrice)}` : ''}
           </span>
-          <span className="text-sm text-bodydark2">바로가기 →</span>
+          <span className="shrink-0 text-sm text-bodydark2">바로가기 →</span>
         </a>
       )}
 

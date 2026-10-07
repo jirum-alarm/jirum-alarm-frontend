@@ -175,7 +175,7 @@ export default function VisualConstraintEditor({
   };
 
   return (
-    <section className="rounded-lg border border-stroke p-4 dark:border-strokedark">
+    <section className="rounded-lg border border-stroke p-3 dark:border-strokedark sm:p-4">
       <div className="mb-3">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
@@ -200,7 +200,7 @@ export default function VisualConstraintEditor({
               <AddBreakpointControl onAdd={onAddBreakpoint} />
             </div>
           </div>
-          <div className="min-w-64">
+          <div className="w-full sm:w-auto sm:min-w-64">
             <AssetUploader label="Foreground Element 추가" onUploaded={onForegroundUploaded} />
           </div>
         </div>

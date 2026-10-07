@@ -53,13 +53,18 @@ const ImageCompareModal = ({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div ref={modalRef} className="relative mx-4 w-full max-w-5xl animate-[fadeIn_0.2s_ease-out]">
+      <div
+        ref={modalRef}
+        className="relative mx-3 max-h-[90dvh] w-full max-w-5xl animate-[fadeIn_0.2s_ease-out] overflow-y-auto pt-10 sm:mx-4 sm:max-h-none sm:overflow-visible sm:pt-0"
+      >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute -top-12 right-0 flex items-center gap-2 text-white/70 transition-colors hover:text-white"
+          className="absolute right-0 top-0 flex items-center gap-2 py-1 text-white/70 transition-colors hover:text-white sm:-top-12 sm:py-0"
         >
-          <span className="text-sm">ESC로 닫기</span>
+          <span className="text-sm">
+            <span className="hidden sm:inline">ESC로 </span>닫기
+          </span>
           <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
@@ -71,7 +76,7 @@ const ImageCompareModal = ({
         </button>
 
         {/* Image Comparison */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6">
           {/* Danawa Product */}
           <div className="overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-boxdark">
             <div className="bg-gradient-to-r from-primary to-primary/80 px-4 py-3">
@@ -82,7 +87,7 @@ const ImageCompareModal = ({
                 </span>
               </div>
             </div>
-            <div className="flex aspect-square items-center justify-center bg-white p-4">
+            <div className="flex aspect-[4/3] items-center justify-center bg-white p-4 sm:aspect-square">
               {hasDanawaImage ? (
                 <img
                   src={danawaImage}
@@ -169,7 +174,7 @@ const ImageCompareModal = ({
                 </span>
               </div>
             </div>
-            <div className="flex aspect-square items-center justify-center bg-white p-4">
+            <div className="flex aspect-[4/3] items-center justify-center bg-white p-4 sm:aspect-square">
               {communityImage ? (
                 <img
                   src={communityImage}
@@ -207,7 +212,7 @@ const ImageCompareModal = ({
         </div>
 
         {/* Hint */}
-        <div className="mt-4 text-center">
+        <div className="mt-4 hidden text-center sm:block">
           <span className="inline-flex items-center gap-2 text-xs text-white/50">
             <span className="rounded bg-white/10 px-2 py-1">Space</span>
             선택/해제

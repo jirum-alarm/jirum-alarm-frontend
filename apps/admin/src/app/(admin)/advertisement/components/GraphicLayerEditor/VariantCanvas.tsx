@@ -57,11 +57,11 @@ export default function VariantCanvas({
 
   return (
     <div
-      className={`rounded border bg-gray-2 p-4 dark:bg-form-input ${
+      className={`rounded border bg-gray-2 p-3 dark:bg-form-input sm:p-4 ${
         selectedCanvas ? 'border-primary' : 'border-stroke dark:border-strokedark'
       }`}
     >
-      <div className="mb-2 flex items-center justify-between gap-2">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         {breakpoint === '_default' ? (
           <span className="text-xs font-semibold text-black dark:text-white">
             {labelBreakpoint(breakpoint)}
@@ -79,7 +79,7 @@ export default function VariantCanvas({
           <button
             type="button"
             disabled={breakpoint === '_default'}
-            className="rounded bg-danger px-2 py-1 text-[11px] text-white disabled:bg-bodydark2"
+            className="rounded bg-danger px-3 py-2 text-[11px] text-white disabled:bg-bodydark2 md:px-2 md:py-1"
             onClick={() => onRemoveBreakpoint(breakpoint)}
           >
             삭제
@@ -87,7 +87,7 @@ export default function VariantCanvas({
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto pb-3 md:pb-0">
         <div
           className="relative touch-none overflow-hidden rounded border border-stroke bg-white dark:border-strokedark"
           style={{ width: canvasSize.width, height: canvasSize.height }}

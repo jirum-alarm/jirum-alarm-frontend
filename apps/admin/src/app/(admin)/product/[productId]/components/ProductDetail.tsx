@@ -30,17 +30,17 @@ const ProductDetail = ({ productId }: { productId: string }) => {
   return (
     <div className="flex flex-col gap-6">
       {/* 기본 정보 */}
-      <Panel className="p-6">
+      <Panel className="p-4 sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">기본 정보</h3>
-        <div className="flex gap-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
           {product.thumbnail && (
             <img
               src={product.thumbnail}
               alt={product.title}
-              className="h-48 w-48 rounded-lg object-cover"
+              className="h-48 w-48 shrink-0 rounded-lg object-cover"
             />
           )}
-          <div className="flex flex-1 flex-col gap-3">
+          <div className="flex min-w-0 flex-1 flex-col gap-3">
             <InfoRow label="ID" value={String(product.id)} />
             <InfoRow label="제목" value={product.title} />
             <InfoRow
@@ -60,9 +60,9 @@ const ProductDetail = ({ productId }: { productId: string }) => {
       </Panel>
 
       {/* 상태 */}
-      <Panel className="p-6">
+      <Panel className="p-4 sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">상태 및 통계</h3>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
           <StatCard
             label="핫딜"
             value={product.isHot ? '핫딜' : '일반'}
@@ -92,10 +92,10 @@ const ProductDetail = ({ productId }: { productId: string }) => {
 
       {/* 핫딜 지수 */}
       {product.hotDealIndex && (
-        <Panel className="p-6">
+        <Panel className="p-4 sm:p-6">
           <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">핫딜 지수</h3>
           <p className="mb-4 text-sm text-bodydark2">{product.hotDealIndex.message}</p>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <StatCard
               label="현재가"
               value={`${product.hotDealIndex.currentPrice.toLocaleString()}원`}
@@ -116,37 +116,39 @@ const ProductDetail = ({ productId }: { productId: string }) => {
 
       {/* 가격 이력 */}
       {product.prices && product.prices.length > 0 && (
-        <Panel className="p-6">
+        <Panel className="p-4 sm:p-6">
           <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">가격 이력</h3>
-          <table className="w-full table-auto">
-            <thead>
-              <tr className="bg-gray-2 dark:bg-meta-4">
-                <th className="px-4 py-3 text-left text-sm font-medium text-bodydark2">출처</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-bodydark2">타입</th>
-                <th className="px-4 py-3 text-right text-sm font-medium text-bodydark2">가격</th>
-                <th className="px-4 py-3 text-right text-sm font-medium text-bodydark2">날짜</th>
-              </tr>
-            </thead>
-            <tbody>
-              {product.prices.map((price) => (
-                <tr key={price.id} className="border-b border-stroke dark:border-strokedark">
-                  <td className="px-4 py-3 text-sm text-black dark:text-white">{price.target}</td>
-                  <td className="px-4 py-3 text-sm text-bodydark2">{price.type}</td>
-                  <td className="px-4 py-3 text-right text-sm text-black dark:text-white">
-                    {price.price.toLocaleString()}원
-                  </td>
-                  <td className="px-4 py-3 text-right text-xs text-bodydark2">
-                    {dateFormatter(price.createdAt)}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto whitespace-nowrap">
+              <thead>
+                <tr className="bg-gray-2 dark:bg-meta-4">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-bodydark2">출처</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-bodydark2">타입</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-bodydark2">가격</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-bodydark2">날짜</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {product.prices.map((price) => (
+                  <tr key={price.id} className="border-b border-stroke dark:border-strokedark">
+                    <td className="px-4 py-3 text-sm text-black dark:text-white">{price.target}</td>
+                    <td className="px-4 py-3 text-sm text-bodydark2">{price.type}</td>
+                    <td className="px-4 py-3 text-right text-sm text-black dark:text-white">
+                      {price.price.toLocaleString()}원
+                    </td>
+                    <td className="px-4 py-3 text-right text-xs text-bodydark2">
+                      {dateFormatter(price.createdAt)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </Panel>
       )}
 
       {/* 링크 */}
-      <Panel className="p-6">
+      <Panel className="p-4 sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">링크</h3>
         <div className="flex flex-col gap-2">
           {product.url && (
@@ -175,7 +177,7 @@ const ProductDetail = ({ productId }: { productId: string }) => {
       <div>
         <Link
           href="/product/list"
-          className="hover:bg-gray-1 rounded-lg border border-stroke px-6 py-2 text-sm font-medium text-bodydark2 transition dark:border-strokedark dark:hover:bg-meta-4"
+          className="hover:bg-gray-1 inline-block rounded-lg border border-stroke px-6 py-2 text-sm font-medium text-bodydark2 transition dark:border-strokedark dark:hover:bg-meta-4"
         >
           목록으로
         </Link>
@@ -188,7 +190,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-4">
       <span className="w-20 shrink-0 text-sm font-medium text-bodydark2">{label}</span>
-      <span className="text-sm text-black dark:text-white">{value}</span>
+      <span className="min-w-0 break-words text-sm text-black dark:text-white">{value}</span>
     </div>
   );
 }

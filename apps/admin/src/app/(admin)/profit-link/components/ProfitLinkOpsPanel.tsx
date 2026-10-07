@@ -101,7 +101,7 @@ const ProfitLinkOpsPanel = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <Panel rounded="sm" className="p-6">
+      <Panel rounded="sm" className="p-4 sm:p-6">
         <h3 className="mb-1 text-lg font-semibold text-black dark:text-white">
           상품 URL → 수익링크
         </h3>
@@ -126,7 +126,7 @@ const ProfitLinkOpsPanel = () => {
         <button
           onClick={handleIssue}
           disabled={issuing}
-          className="rounded bg-primary px-6 py-2 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:opacity-50"
+          className="w-full rounded bg-primary px-6 py-2 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:opacity-50 sm:w-auto"
         >
           {issuing ? '발급 중...' : '수익링크 발급'}
         </button>
@@ -145,7 +145,7 @@ const ProfitLinkOpsPanel = () => {
               </a>
               <button
                 onClick={handleCopy}
-                className="shrink-0 rounded border border-stroke px-3 py-1 text-xs text-black hover:bg-white dark:border-strokedark dark:text-white dark:hover:bg-boxdark"
+                className="shrink-0 rounded border border-stroke px-3 py-2 text-xs text-black hover:bg-white dark:border-strokedark dark:text-white dark:hover:bg-boxdark md:py-1"
               >
                 {copied ? '복사됨' : '복사'}
               </button>

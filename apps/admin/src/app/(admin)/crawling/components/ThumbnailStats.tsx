@@ -64,20 +64,20 @@ const ThumbnailStats = () => {
         onSearch={runQuery}
       />
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <Panel className="p-5">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+        <Panel className="col-span-2 p-4 sm:col-span-1 sm:p-5">
           <div className="text-sm text-bodydark2">기간 내 상품</div>
           <div className="mt-1 font-mono text-2xl font-semibold text-black dark:text-white">
             {total.toLocaleString()}
           </div>
         </Panel>
-        <Panel className="p-5">
+        <Panel className="p-4 sm:p-5">
           <div className="text-sm text-bodydark2">썸네일 수집률</div>
           <div className="mt-1 font-mono text-2xl font-semibold text-black dark:text-white">
             {collectionRate.toFixed(1)}%
           </div>
         </Panel>
-        <Panel className="p-5">
+        <Panel className="p-4 sm:p-5">
           <div className="text-sm text-bodydark2">미수집</div>
           <div className="mt-1 font-mono text-2xl font-semibold text-danger">
             {missing.toLocaleString()}
@@ -93,6 +93,7 @@ const ThumbnailStats = () => {
             options={{
               labels: typeLabels,
               legend: { position: 'right' },
+              responsive: [{ breakpoint: 768, options: { legend: { position: 'bottom' } } }],
               dataLabels: {
                 formatter: (val: number) => `${val.toFixed(1)}%`,
               },

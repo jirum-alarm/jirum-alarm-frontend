@@ -11,7 +11,7 @@ import { useAdReport, useAdsByAdmin, useSetAdActive } from '@/hooks/graphql/adve
 const REPORT_FROM = '2020-01-01T00:00:00.000Z';
 const REPORT_TO = '2099-12-31T23:59:59.000Z';
 const actionButtonClass =
-  'inline-flex h-8 items-center justify-center whitespace-nowrap rounded-md px-2.5 text-xs font-semibold transition hover:bg-opacity-90';
+  'inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md px-2.5 text-xs font-semibold transition hover:bg-opacity-90 md:h-8';
 
 const AdListTable = () => {
   const { data, loading, error } = useAdsByAdmin();
@@ -37,89 +37,93 @@ const AdListTable = () => {
 
   return (
     <Panel>
-      <div className="flex justify-end p-4">
+      <div className="flex justify-end p-3 sm:p-4">
         <Link
           href="/advertisement/register"
-          className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90"
+          className="inline-flex h-10 items-center rounded-lg bg-primary px-4 text-sm font-medium text-white hover:bg-opacity-90"
         >
           광고 등록
         </Link>
       </div>
-      <table className="w-full table-auto">
-        <thead>
-          <tr className="bg-gray-2 text-left dark:bg-meta-4">
-            <th className="px-4 py-3 text-sm font-medium text-bodydark2">ID</th>
-            <th className="px-4 py-3 text-sm font-medium text-bodydark2">internalId</th>
-            <th className="px-4 py-3 text-sm font-medium text-bodydark2">타입</th>
-            <th className="px-4 py-3 text-sm font-medium text-bodydark2">위치</th>
-            <th className="px-4 py-3 text-sm font-medium text-bodydark2">기간</th>
-            <th className="px-4 py-3 text-sm font-medium text-bodydark2">우선순위</th>
-            <th className="px-4 py-3 text-sm font-medium text-bodydark2">노출</th>
-            <th className="px-4 py-3 text-sm font-medium text-bodydark2">클릭</th>
-            <th className="px-4 py-3 text-sm font-medium text-bodydark2">CTR</th>
-            <th className="px-4 py-3 text-sm font-medium text-bodydark2">상태</th>
-            <th className="px-4 py-3 text-sm font-medium text-bodydark2"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {ads.length === 0 && (
-            <tr>
-              <td colSpan={11} className="px-4 py-8 text-center text-sm text-bodydark2">
-                등록된 광고가 없습니다
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full table-auto whitespace-nowrap lg:whitespace-normal">
+          <thead>
+            <tr className="bg-gray-2 text-left dark:bg-meta-4">
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2">ID</th>
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2">internalId</th>
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2">타입</th>
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2">위치</th>
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2">기간</th>
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2">우선순위</th>
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2">노출</th>
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2">클릭</th>
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2">CTR</th>
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2">상태</th>
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2"></th>
             </tr>
-          )}
-          {ads.map((ad) => {
-            const report = reportByCreative.get(ad.id);
-            return (
-              <tr key={ad.id} className="border-b border-stroke dark:border-strokedark">
-                <td className="px-4 py-3 text-sm">{ad.id}</td>
-                <td className="px-4 py-3 text-sm">{ad.internalId}</td>
-                <td className="px-4 py-3 text-sm">{ad.slotType}</td>
-                <td className="px-4 py-3 text-xs">{ad.slotLocation.join(', ')}</td>
-                <td className="px-4 py-3 text-xs">
-                  {ad.startAt.slice(0, 10)} ~ {ad.endAt.slice(0, 10)}
-                </td>
-                <td className="px-4 py-3 text-sm">{ad.slotPriority}</td>
-                <td className="px-4 py-3 text-sm">{(report?.impressions ?? 0).toLocaleString()}</td>
-                <td className="px-4 py-3 text-sm">{(report?.clicks ?? 0).toLocaleString()}</td>
-                <td className="px-4 py-3 text-sm">
-                  {report && report.impressions > 0 ? `${(report.ctr * 100).toFixed(2)}%` : '-'}
-                </td>
-                <td className="px-4 py-3 text-sm">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setActive({ variables: { id: Number(ad.id), isActive: !ad.isActive } })
-                    }
-                    className={`${actionButtonClass} ${
-                      ad.isActive ? 'bg-success text-white' : 'bg-danger text-white'
-                    }`}
-                  >
-                    {ad.isActive ? '활성' : '비활성'}
-                  </button>
-                </td>
-                <td className="px-4 py-3 text-sm">
-                  <div className="flex items-center gap-1.5">
-                    <Link
-                      href={`/advertisement/${ad.id}`}
-                      className={`${actionButtonClass} bg-primary text-white`}
-                    >
-                      수정
-                    </Link>
-                    <Link
-                      href={`/advertisement/clone/${ad.id}`}
-                      className={`${actionButtonClass} bg-gray-2 text-black hover:bg-stroke dark:bg-meta-4 dark:text-white`}
-                    >
-                      복제
-                    </Link>
-                  </div>
+          </thead>
+          <tbody>
+            {ads.length === 0 && (
+              <tr>
+                <td colSpan={11} className="px-4 py-8 text-center text-sm text-bodydark2">
+                  등록된 광고가 없습니다
                 </td>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            )}
+            {ads.map((ad) => {
+              const report = reportByCreative.get(ad.id);
+              return (
+                <tr key={ad.id} className="border-b border-stroke dark:border-strokedark">
+                  <td className="px-4 py-3 text-sm">{ad.id}</td>
+                  <td className="px-4 py-3 text-sm">{ad.internalId}</td>
+                  <td className="px-4 py-3 text-sm">{ad.slotType}</td>
+                  <td className="px-4 py-3 text-xs">{ad.slotLocation.join(', ')}</td>
+                  <td className="px-4 py-3 text-xs">
+                    {ad.startAt.slice(0, 10)} ~ {ad.endAt.slice(0, 10)}
+                  </td>
+                  <td className="px-4 py-3 text-sm">{ad.slotPriority}</td>
+                  <td className="px-4 py-3 text-sm">
+                    {(report?.impressions ?? 0).toLocaleString()}
+                  </td>
+                  <td className="px-4 py-3 text-sm">{(report?.clicks ?? 0).toLocaleString()}</td>
+                  <td className="px-4 py-3 text-sm">
+                    {report && report.impressions > 0 ? `${(report.ctr * 100).toFixed(2)}%` : '-'}
+                  </td>
+                  <td className="px-4 py-3 text-sm">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setActive({ variables: { id: Number(ad.id), isActive: !ad.isActive } })
+                      }
+                      className={`${actionButtonClass} ${
+                        ad.isActive ? 'bg-success text-white' : 'bg-danger text-white'
+                      }`}
+                    >
+                      {ad.isActive ? '활성' : '비활성'}
+                    </button>
+                  </td>
+                  <td className="px-4 py-3 text-sm">
+                    <div className="flex items-center gap-1.5">
+                      <Link
+                        href={`/advertisement/${ad.id}`}
+                        className={`${actionButtonClass} bg-primary text-white`}
+                      >
+                        수정
+                      </Link>
+                      <Link
+                        href={`/advertisement/clone/${ad.id}`}
+                        className={`${actionButtonClass} bg-gray-2 text-black hover:bg-stroke dark:bg-meta-4 dark:text-white`}
+                      >
+                        복제
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </Panel>
   );
 };
