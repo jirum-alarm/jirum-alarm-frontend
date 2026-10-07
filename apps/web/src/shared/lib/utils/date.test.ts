@@ -44,3 +44,10 @@ test("startOf('day')는 같은 날 안에서 하루 종일 동일한 키를 유�
 
   assert.equal(new Set(keys).size, 1);
 });
+
+test('getDayBefore는 자정을 Asia/Seoul로 고정한다 — 런타임 TZ를 따르면 서버(UTC)와 브라우저(KST) 키가 갈린다', () => {
+  const body = source.slice(source.indexOf('export const getDayBefore'));
+  const impl = body.slice(0, body.indexOf('};'));
+
+  assert.match(impl, /\.tz\('Asia\/Seoul'\)/);
+});

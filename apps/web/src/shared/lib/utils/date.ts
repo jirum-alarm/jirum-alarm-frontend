@@ -15,8 +15,10 @@ extend(utc);
 // startOf('minute')이면 분이 넘어갈 때마다 새 키가 되어, 오래 열어둔 탭에서
 // useSuspenseQuery가 캐시 미스로 재suspend → 랭킹 영역이 사라진다.
 // 일 단위면 하루 동안 키가 고정되고, "최근 N일" 필터에 분 정밀도는 무의미하다.
+// 자정은 한국 시간으로 고정한다. 런타임 타임존을 따르면 서버(UTC)와 브라우저(KST)의 키가 달라져
+// 서버가 채운 랭킹을 클라가 버리고 다시 suspend → 스켈레톤·빈 화면이 번갈아 보인다.
 export const getDayBefore = (type: number) => {
-  return dayjs().add(-type, 'day').startOf('day').toDate();
+  return dayjs().tz('Asia/Seoul').add(-type, 'day').startOf('day').toDate();
 };
 
 export const getFromNow = (date: string) => {
