@@ -5,7 +5,7 @@ import { useRef, useState } from 'react';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
-import { Close } from '@/shared/ui/common/icons';
+import { ArrowDown } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
 import {
@@ -29,9 +29,19 @@ const inputClass =
   'focus:border-primary-500 w-full min-w-0 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 outline-none';
 
 const DEAL_CHOICES = [
-  { value: false, label: '새 핫딜 모두' },
-  { value: true, label: '평소보다 쌀 때만' },
+  {
+    value: false,
+    label: '새 핫딜 모두',
+    hint: (k: string) => `‘${k}’ 핫딜이 올라올 때마다 알려드려요`,
+  },
+  {
+    value: true,
+    label: '평소보다 쌀 때만',
+    hint: () => '평소 가격보다 싸게 올라온 딜만 알려드려요',
+  },
 ] as const;
+
+const sectionTitle = 'text-sm font-semibold text-gray-900';
 
 /**
  * 키워드 카드 한 장. 접힌 상태엔 "어떤 알림이 오는지" 한 줄 요약만, 누르면 설정이 펼쳐진다.
@@ -40,6 +50,9 @@ const DEAL_CHOICES = [
  * 알림" 스위치는 즉시 저장, "알림 조건"은 버튼 저장이라 같은 줄에서 저장 방식이 갈렸다.
  * 제외 단어는 키워드가 제목 부분일치라 생기는 오탐("콜라" → "콜라겐 마스크팩", 2026-10-01 실측
  * 커뮤니티 딜의 ~15%)을 유저가 끄는 용도.
+ *
+ * 2026-10-08 개편: 선택 표시가 라임 테두리(흰 바탕 대비 1.3:1)라 뭐가 골라졌는지 안 보였다 →
+ * 라디오 점 + 짙은 테두리. 헤더의 X 가 "닫기"로 읽혀 펼침과 헷갈렸다 → 삭제는 펼친 안쪽으로.
  * ponytail: 펼침은 네이티브 <details> — 상태·애니메이션 라이브러리 없이 접근성까지 공짜.
  */
 const KeywordItem = ({
@@ -75,27 +88,20 @@ const KeywordItem = ({
   return (
     <li className="rounded-xl border border-gray-200">
       <details ref={detailsRef} open={defaultOpen} className="group">
-        <summary className="flex cursor-pointer list-none items-center gap-2 py-3 pr-2 pl-4 [&::-webkit-details-marker]:hidden">
+        <summary className="flex cursor-pointer list-none items-center gap-2 py-3.5 pr-2 pl-4 [&::-webkit-details-marker]:hidden">
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-gray-900">{keyword.keyword}</p>
             <p className="mt-0.5 truncate text-xs text-gray-500">
               {summarizeKeywordAlert(keyword)}
             </p>
           </div>
-          <span className="shrink-0 text-xs text-gray-500 group-open:hidden">설정</span>
-          <span className="hidden shrink-0 text-xs text-gray-500 group-open:inline">접기</span>
-          {/* preventDefault — summary 안 클릭은 기본 동작이 펼침/접힘이라 삭제를 눌러도 카드가 같이 열린다. */}
-          <button
-            type="button"
-            className="shrink-0 p-2 text-gray-500"
-            aria-label={`${keyword.keyword} 키워드 삭제`}
-            onClick={(e) => {
-              e.preventDefault();
-              onDelete();
-            }}
-          >
-            <Close width={20} height={20} />
-          </button>
+          <ArrowDown
+            width={20}
+            height={20}
+            color="var(--color-gray-500)"
+            aria-hidden
+            className="mr-2 shrink-0 transition-transform group-open:rotate-180"
+          />
         </summary>
         <form
           onSubmit={handleSubmit}
@@ -110,48 +116,56 @@ const KeywordItem = ({
             <span className="text-gray-500">›</span>
           </Link>
           <fieldset className="flex flex-col gap-2">
-            <legend className="mb-2 text-xs font-medium text-gray-900">
-              어떤 딜을 알려드릴까요?
-            </legend>
-            <div className="grid grid-cols-2 gap-2">
-              {DEAL_CHOICES.map((choice) => (
+            <legend className={cn(sectionTitle, 'mb-2')}>어떤 딜을 알려드릴까요?</legend>
+            {DEAL_CHOICES.map((choice) => {
+              const selected = priceDropOnly === choice.value;
+              return (
                 <label
                   key={choice.label}
                   className={cn(
-                    'cursor-pointer rounded-lg border px-3 py-2.5 text-center text-sm',
-                    priceDropOnly === choice.value
-                      ? 'border-primary-500 bg-primary-50 font-semibold text-gray-900'
-                      : 'border-gray-200 text-gray-500',
+                    'flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-3 has-focus-visible:ring-2 has-focus-visible:ring-gray-400',
+                    selected ? 'border-gray-900' : 'border-gray-200',
                   )}
                 >
                   <input
                     type="radio"
                     name={`deal-${keyword.id}`}
                     className="sr-only"
-                    checked={priceDropOnly === choice.value}
+                    checked={selected}
                     onChange={() => setPriceDropOnly(choice.value)}
                   />
-                  {choice.label}
+                  <span
+                    aria-hidden
+                    className={cn(
+                      'mt-0.5 flex size-[18px] shrink-0 items-center justify-center rounded-full border-2',
+                      selected ? 'border-gray-900' : 'border-gray-300',
+                    )}
+                  >
+                    {selected && <span className="size-2 rounded-full bg-gray-900" />}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-sm font-semibold text-gray-900">
+                      {choice.label}
+                    </span>
+                    <span className="mt-0.5 block text-xs text-gray-500">
+                      {choice.hint(keyword.keyword)}
+                    </span>
+                  </span>
                 </label>
-              ))}
-            </div>
-            <p className="text-xs text-gray-500">
-              {priceDropOnly
-                ? '이 상품이 평소 가격보다 싸게 올라왔을 때만 알려드려요.'
-                : `제목에 ‘${keyword.keyword}’가 들어간 새 핫딜을 모두 알려드려요.`}
-            </p>
+              );
+            })}
           </fieldset>
 
           <div className="flex flex-col gap-2">
-            <span className="text-xs font-medium text-gray-900">
-              가격 범위 <span className="font-normal text-gray-500">(선택)</span>
+            <span className={sectionTitle}>
+              가격 범위 <span className="text-xs font-normal text-gray-500">(선택)</span>
             </span>
             <div className="flex items-center gap-2">
               <input
                 value={minInput}
                 onChange={(e) => setMinInput(formatPriceInput(e.target.value))}
                 inputMode="numeric"
-                placeholder="최소 (원)"
+                placeholder="최소 금액"
                 aria-label="최소 가격"
                 className={inputClass}
               />
@@ -160,19 +174,19 @@ const KeywordItem = ({
                 value={maxInput}
                 onChange={(e) => setMaxInput(formatPriceInput(e.target.value))}
                 inputMode="numeric"
-                placeholder="최대 (원)"
+                placeholder="최대 금액"
                 aria-label="최대 가격"
                 className={inputClass}
               />
             </div>
             <p className="text-xs text-gray-500">
-              비워두면 가격 상관없이 알려드려요. 가격을 못 읽은 글도 알려드려요.
+              비워 두면 가격과 상관없이 알려드려요. 가격이 안 적힌 글도 알려드려요.
             </p>
           </div>
 
           <label className="flex flex-col gap-2">
-            <span className="text-xs font-medium text-gray-900">
-              빼고 싶은 단어 <span className="font-normal text-gray-500">(선택)</span>
+            <span className={sectionTitle}>
+              빼고 싶은 단어 <span className="text-xs font-normal text-gray-500">(선택)</span>
             </span>
             <input
               value={excludeInput}
@@ -186,13 +200,23 @@ const KeywordItem = ({
             </span>
           </label>
 
-          <button
-            type="submit"
-            disabled={isPending}
-            className="bg-primary-500 text-fixed-900 rounded-lg py-2.5 text-sm font-semibold disabled:opacity-50"
-          >
-            저장
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onDelete}
+              className="rounded-lg px-3 py-2.5 text-sm text-gray-500 hover:text-gray-700"
+              aria-label={`${keyword.keyword} 키워드 삭제`}
+            >
+              키워드 삭제
+            </button>
+            <button
+              type="submit"
+              disabled={isPending}
+              className="bg-primary-500 text-fixed-900 flex-1 rounded-lg py-2.5 text-sm font-semibold disabled:opacity-50"
+            >
+              저장
+            </button>
+          </div>
         </form>
       </details>
     </li>
