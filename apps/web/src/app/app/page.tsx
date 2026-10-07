@@ -4,6 +4,8 @@ import Image from 'next/image';
 
 import { ANDROID_STORE_LINK, IOS_STORE_LINK } from '@/shared/config/appStore';
 
+import AppDownloadQr from '@/features/app-download/ui/AppDownloadQr';
+
 export const metadata: Metadata = {
   title: '지름알림 앱 설치',
   description: '키워드 알림으로 놓치기 쉬운 핫딜을 가장 먼저 받아보세요.',
@@ -24,6 +26,9 @@ export const metadata: Metadata = {
 export default async function AppInstallPage() {
   const ua = (await headers()).get('user-agent') ?? '';
   const isIOS = /iPhone|iPad|iPod/i.test(ua);
+  // PC 도 여기로 온다(키워드 화면 PushStatusBanner 「앱 설치하기」). 스토어 버튼은 데스크톱 웹 스토어를
+  // 열 뿐 설치로 안 이어지니 QR 을 보여준다. 판정은 agent.ts checkDevice 의 isMobile 과 같은 정규식.
+  const isDesktop = !/iPhone|iPad|iPod|Android|Mobi/i.test(ua);
 
   const store = isIOS
     ? { href: IOS_STORE_LINK, label: 'App Store에서 받기' }
@@ -54,20 +59,28 @@ export default async function AppInstallPage() {
         </p>
       </div>
 
-      <a
-        href={store.href}
-        className="bg-primary-500 text-fixed-900 mt-10 flex h-14 w-full items-center justify-center rounded-xl font-semibold"
-      >
-        {store.label}
-      </a>
+      {isDesktop ? (
+        <div className="mt-10">
+          <AppDownloadQr />
+        </div>
+      ) : (
+        <>
+          <a
+            href={store.href}
+            className="bg-primary-500 text-fixed-900 mt-10 flex h-14 w-full items-center justify-center rounded-xl font-semibold"
+          >
+            {store.label}
+          </a>
 
-      {/* UA 판정이 틀렸거나 다른 기기로 옮겨 설치하는 경우를 위한 탈출구. */}
-      <a
-        href={isIOS ? ANDROID_STORE_LINK : IOS_STORE_LINK}
-        className="mt-3 flex h-11 w-full items-center justify-center text-sm text-gray-500"
-      >
-        {isIOS ? 'Android 기기인가요?' : 'iPhone인가요?'}
-      </a>
+          {/* UA 판정이 틀렸거나 다른 기기로 옮겨 설치하는 경우를 위한 탈출구. */}
+          <a
+            href={isIOS ? ANDROID_STORE_LINK : IOS_STORE_LINK}
+            className="mt-3 flex h-11 w-full items-center justify-center text-sm text-gray-500"
+          >
+            {isIOS ? 'Android 기기인가요?' : 'iPhone인가요?'}
+          </a>
+        </>
+      )}
     </main>
   );
 }

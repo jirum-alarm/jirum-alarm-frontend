@@ -49,12 +49,14 @@ const BasicLayout = ({
           fullScreen && 'min-h-screen',
         )}
       >
-        {header ?? (
-          <PageHeader
-            leading={hasBackButton ? <BackButton backTo={backTo} /> : undefined}
-            title={title}
-          />
-        )}
+        {/* 제목도 뒤로가기도 없으면 헤더를 안 그린다 — 빈 흰 바가 fixed 라 내용 위 56px 을 덮었다(가입 완료·로그인 콜백). */}
+        {header ??
+          ((title || hasBackButton) && (
+            <PageHeader
+              leading={hasBackButton ? <BackButton backTo={backTo} /> : undefined}
+              title={title}
+            />
+          ))}
         <div
           className={cn('h-full grow', { 'pt-14': header !== undefined || title || hasBackButton })}
         >
