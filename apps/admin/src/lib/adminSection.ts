@@ -13,7 +13,6 @@ export const SECTION_LABELS: Record<string, string> = {
   deals: '딜 페이지',
   product: '상품',
   'keyword-map': '키워드맵',
-  category: '카테고리',
   user: '사용자',
   notification: '알림',
   advertisement: '광고',

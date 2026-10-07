@@ -44,7 +44,9 @@ export type AdReportRow = {
 
 export type AdminAccessOutput = {
   __typename?: 'AdminAccessOutput';
+  /** admin(시스템) 역할 — 모든 섹션 + 권한 관리 */
   isAdmin: Scalars['Boolean']['output'];
+  /** 역할 없으면 null = 아무 섹션도 못 봄 */
   roleName?: Maybe<Scalars['String']['output']>;
   sections: Array<Scalars['String']['output']>;
 };
@@ -664,11 +666,16 @@ export type Mutation = {
   adminLogin: TokenOutput;
   /** 어드민) 리액션 키워드 후보 승인 (synonym 으로 등록) */
   approveHotDealKeywordCandidateByAdmin: Scalars['Boolean']['output'];
+  /** 어드민) 계정에 역할 지정(null = 해제) */
   assignAdminRole: Scalars['Boolean']['output'];
   /** 여러 매핑을 한 번에 검증 수행 */
   batchVerifyProductMapping: Scalars['Int']['output'];
   /** 검증 취소 (검증 완료/거부된 항목을 다시 대기 상태로 되돌림) */
   cancelVerification: Scalars['Boolean']['output'];
+  /** 상세 가격 맥락(판정 카드·가격 추이) 클릭 기록 */
+  collectPriceContextClick: Scalars['Boolean']['output'];
+  /** 상세 가격 맥락(판정 카드·가격 추이) 노출 기록 — 상세 진입당 종류별 1회 */
+  collectPriceContextImpression: Scalars['Boolean']['output'];
   /** 상품 단건 수집 */
   collectProduct: Scalars['Boolean']['output'];
   /** 구매(수익링크) 버튼 클릭 기록 — source 에 화면(예: detail_mobile) */
@@ -679,11 +686,13 @@ export type Mutation = {
   createAd: Scalars['Int']['output'];
   /** 어드민) 광고 에셋 업로드 presigned URL */
   createAdAssetUploadUrl: AdAssetUploadUrlOutput;
+  /** 어드민) 역할 생성 */
   createAdminRole: AdminRoleOutput;
   /** 유저 등록 상품 썸네일 업로드용 presigned URL 발급 */
   createProductImageUploadUrl: ProductImageUploadUrlOutput;
   /** 유저가 직접 핫딜 상품 등록 (등록된 productId 반환) */
   createUserProduct: Scalars['Int']['output'];
+  /** 어드민) 역할 삭제 — 소속 계정은 역할 없음이 된다 */
   deleteAdminRole: Scalars['Boolean']['output'];
   /** 어드민) 상품 hard delete */
   hardDeleteProductByAdmin: Scalars['Boolean']['output'];
@@ -765,6 +774,7 @@ export type Mutation = {
   unsubscribeNotificationTheme: Scalars['Boolean']['output'];
   /** 어드민) 광고 수정 */
   updateAd: Scalars['Boolean']['output'];
+  /** 어드민) 역할 이름·섹션 수정 */
   updateAdminRole: AdminRoleOutput;
   updateComment: Scalars['Boolean']['output'];
   /** 어드민) 핫딜 키워드 수정 */
@@ -919,19 +929,34 @@ export type MutationCancelVerificationArgs = {
   reason?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type MutationCollectPriceContextClickArgs = {
+  detail: Scalars['String']['input'];
+  productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationCollectPriceContextImpressionArgs = {
+  detail: Scalars['String']['input'];
+  productId: Scalars['Int']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type MutationCollectProductArgs = {
+  entry?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationCollectPurchaseClickArgs = {
+  entry?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationCollectThumbnailArgs = {
+  entry?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['Int']['input']>;
   productId: Scalars['Int']['input'];
   source?: InputMaybe<Scalars['String']['input']>;
@@ -1347,6 +1372,7 @@ export type PriceContext = {
 export enum PriceHistoryBasis {
   Cluster = 'CLUSTER',
   Mapping = 'MAPPING',
+  Self = 'SELF',
   Similar = 'SIMILAR',
 }
 
@@ -1667,7 +1693,7 @@ export type ProductOutput = {
   /** 왜 핫딜인지 가격 컨텍스트 (게이트 통과 시에만, 상세 전용) */
   priceContext?: Maybe<PriceContext>;
   priceCurrency?: Maybe<Scalars['String']['output']>;
-  /** 일별 핫딜가 추이. brand_item/매핑∪클러스터(HIGH) 우선, 점 부족 시 유사 폴백(LOW). 2점 미만이면 null */
+  /** 일별 핫딜가 추이 — 같은 상품 근거가 있는 딜만(brand_item 같은 변형·verified 매핑·동일상품 그룹·같은 글). 2점 미만이면 null */
   priceHistory?: Maybe<ProductPriceHistory>;
   /** 상세 히어로 가격 판정(지금 사도 되나). 30일 MAPPING HIGH만 READY. 프론트는 READY+STRONG만 렌더. 실패해도 객체를 내려 nullReason 계측. */
   priceVerdict?: Maybe<ProductPriceVerdict>;
@@ -1713,6 +1739,8 @@ export type ProductPriceHistory = {
   currency: Scalars['String']['output'];
   /** LOW confidence 안내 문구 */
   disclaimer?: Maybe<Scalars['String']['output']>;
+  /** 가격추이 가치 실험(price_history_holdout_v1) holdout 기기 — 프론트는 차트를 그리지 않고 price_history_holdout 노출만 남긴다 */
+  holdout?: Maybe<Scalars['Boolean']['output']>;
   pointCount: Scalars['Int']['output'];
   points: Array<PriceHistoryPoint>;
   /** TOTAL | UNIT — brand_item 추이 축 */
@@ -1896,8 +1924,11 @@ export type Query = {
   /** 어드민) 광고 노출/클릭 정산 리포트 */
   adReport: Array<AdReportRow>;
   adminMe: AdminUser;
+  /** 어드민) 역할 목록 */
   adminRoles: Array<AdminRoleOutput>;
+  /** 어드민) 역할에 넣을 수 있는 섹션 키 전체 */
   adminSections: Array<Scalars['String']['output']>;
+  /** 어드민) 어드민 계정별 역할 */
   adminUsersWithRole: Array<AdminUserRoleOutput>;
   /** 어드민) 광고 목록 */
   adsByAdmin: Array<AdvertiseCreative>;
@@ -1992,6 +2023,7 @@ export type Query = {
   modelPagePreviewByAdmin?: Maybe<ModelPageOutput>;
   /** 어드민) 모델 페이지 검수 목록 */
   modelPagesByAdmin: Array<ModelPageAdminItemOutput>;
+  /** 어드민) 내 역할·접근 가능 섹션 */
   myAdminAccess: AdminAccessOutput;
   /** 내가 구독한 묶음(테마) id 목록 */
   mySubscribedThemeIds: Array<Scalars['Int']['output']>;
@@ -2054,6 +2086,7 @@ export type Query = {
   recommendedNotificationKeywords: Array<Scalars['String']['output']>;
   /** 신고한 사용자 목록 조회 (마스킹) */
   reportUserNames: Array<Scalars['String']['output']>;
+  /** 어드민) 일별 세후 수익 — 제휴(netCommission, 취소 제외) + 애드센스(GA4 추정치) */
   revenueTrend: Array<RevenueDailyOutput>;
   /** 같은 상품(동일상품 그룹)의 진행 중 딜 조회 (최신순, 최대 20) */
   sameProductDeals: Array<ProductOutput>;
@@ -2602,7 +2635,9 @@ export type RecommendedProductOutput = {
 export type RevenueDailyOutput = {
   __typename?: 'RevenueDailyOutput';
   date: Scalars['String']['output'];
+  /** 세후 KRW. 제휴=netCommission(취소 제외·결제일 기준), adsense=GA4 추정치 */
   revenue: Scalars['Float']['output'];
+  /** affiliate_sales.provider 또는 'adsense' */
   source: Scalars['String']['output'];
 };
 
@@ -4075,19 +4110,6 @@ export type QueryPendingVerificationsQuery = {
   }>;
 };
 
-export type QueryVerificationStatisticsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type QueryVerificationStatisticsQuery = {
-  __typename?: 'Query';
-  verificationStatistics: {
-    __typename?: 'VerificationStatistics';
-    pending: number;
-    verified: number;
-    rejected: number;
-    total: number;
-  };
-};
-
 export type QueryVerificationHistoryQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   searchAfter?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
@@ -5325,19 +5347,6 @@ export const QueryPendingVerificationsDocument = new TypedDocumentString(`
     `) as unknown as TypedDocumentString<
   QueryPendingVerificationsQuery,
   QueryPendingVerificationsQueryVariables
->;
-export const QueryVerificationStatisticsDocument = new TypedDocumentString(`
-    query QueryVerificationStatistics {
-  verificationStatistics {
-    pending
-    verified
-    rejected
-    total
-  }
-}
-    `) as unknown as TypedDocumentString<
-  QueryVerificationStatisticsQuery,
-  QueryVerificationStatisticsQueryVariables
 >;
 export const QueryVerificationHistoryDocument = new TypedDocumentString(`
     query QueryVerificationHistory($limit: Int!, $searchAfter: [String!], $verificationStatus: [ProductMappingVerificationStatus!], $matchStatus: [ProductMappingMatchStatus!], $target: ProductMappingTarget, $productId: Int, $verifiedBy: Int, $orderBy: OrderOptionType) {

@@ -15,6 +15,7 @@ import {
 import { useProviderHealthStatus } from '@/hooks/graphql/stats';
 import { useGetPendingVerificationsTotalCount } from '@/hooks/graphql/verification';
 import { canAccessPath } from '@/lib/adminSection';
+import { ProviderType } from '@/types/stats';
 
 /**
  * 홈 맨 위 '지금 확인할 것' — 손이 가야 하는 일만 숫자로 보여주고 해결 화면으로 보낸다.
@@ -32,7 +33,11 @@ const AttentionStrip = () => {
     { matchStatus: [ProductMappingMatchStatus.Matched], target: ProductMappingTarget.BrandProduct },
     { skip: !canProduct },
   );
-  const crawl = useProviderHealthStatus(undefined, { skip: !canCrawling });
+  // 크롤링 화면 그리드와 같은 범위(커뮤니티만) — 다르면 홈과 크롤링 화면의 숫자가 어긋난다
+  const crawl = useProviderHealthStatus(
+    { providerType: ProviderType.COMMUNITY },
+    { skip: !canCrawling },
+  );
   const sales = useProfitLinkProviderHealth({ skip: !canProfit });
   const toss = useQueryHasTossSession({ skip: !canProfit });
   const ohou = useQueryHasOhouSession({ skip: !canProfit });

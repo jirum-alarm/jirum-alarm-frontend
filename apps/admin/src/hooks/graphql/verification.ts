@@ -33,7 +33,6 @@ import {
   QueryPendingVerifications,
   QueryPendingVerificationsTotalCount,
   QueryVerificationHistory,
-  QueryVerificationStatistics,
 } from '@/graphql/verification';
 
 export const useGetPendingVerificationsLazy = (
@@ -79,11 +78,6 @@ export const useVerifyProductMapping = (
     MutationVerifyProductMappingMutation,
     MutationVerifyProductMappingMutationVariables
   >(MutationVerifyProductMapping, {
-    refetchQueries: [
-      {
-        query: QueryVerificationStatistics,
-      },
-    ],
     // pendingVerifications는 optimistic update로 처리하므로 refetch 제거
     ...options,
   });
@@ -99,11 +93,6 @@ export const useBatchVerifyProductMapping = (
     MutationBatchVerifyProductMappingMutation,
     MutationBatchVerifyProductMappingMutationVariables
   >(MutationBatchVerifyProductMapping, {
-    refetchQueries: [
-      {
-        query: QueryVerificationStatistics,
-      },
-    ],
     // pendingVerifications는 optimistic update로 처리하므로 refetch 제거
     ...options,
   });
@@ -119,11 +108,6 @@ export const useRemoveProductMapping = (
     MutationRemoveProductMappingMutation,
     MutationRemoveProductMappingMutationVariables
   >(MutationRemoveProductMapping, {
-    refetchQueries: [
-      {
-        query: QueryVerificationStatistics,
-      },
-    ],
     // pendingVerifications는 optimistic update로 처리하므로 refetch 제거
     ...options,
   });
@@ -139,11 +123,6 @@ export const useCancelVerification = (
     MutationCancelVerificationMutation,
     MutationCancelVerificationMutationVariables
   >(MutationCancelVerification, {
-    refetchQueries: [
-      {
-        query: QueryVerificationStatistics,
-      },
-    ],
     // pendingVerifications는 optimistic update로 처리하므로 refetch 제거
     ...options,
   });

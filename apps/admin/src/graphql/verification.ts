@@ -59,17 +59,6 @@ export const QueryPendingVerifications = gql`
   }
 `;
 
-export const QueryVerificationStatistics = gql`
-  query QueryVerificationStatistics {
-    verificationStatistics {
-      pending
-      verified
-      rejected
-      total
-    }
-  }
-`;
-
 export const QueryVerificationHistory = gql`
   query QueryVerificationHistory(
     $limit: Int!

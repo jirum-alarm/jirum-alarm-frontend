@@ -57,7 +57,6 @@ const MENU: { title: string; groups: MenuGroupConfig[] }[] = [
         items: [
           { name: '목록', href: '/product/list' },
           { name: '매칭', href: '/product/matching' },
-          { name: '게이트 차단', href: '/product/matching-gated' },
         ],
       },
     ],
@@ -70,12 +69,6 @@ const MENU: { title: string; groups: MenuGroupConfig[] }[] = [
         icon: KeywordMapIcon,
         match: ['/keyword-map'],
         items: [{ name: '그룹 목록', href: '/keyword-map' }],
-      },
-      {
-        name: '카테고리',
-        icon: CategoryIcon,
-        match: ['/category'],
-        items: [{ name: '목록', href: '/category' }],
       },
       {
         name: '사용자',
@@ -537,24 +530,6 @@ function KeywordMapIcon() {
       />
       <path
         d="M14.25 9.75H3.75C2.92157 9.75 2.25 10.4216 2.25 11.25V14.25C2.25 15.0784 2.92157 15.75 3.75 15.75H14.25C15.0784 15.75 15.75 15.0784 15.75 14.25V11.25C15.75 10.4216 15.0784 9.75 14.25 9.75ZM14.25 14.25H3.75V11.25H14.25V14.25ZM5.25 12.375H6.75V13.125H5.25V12.375Z"
-        fill=""
-      />
-    </svg>
-  );
-}
-
-function CategoryIcon() {
-  return (
-    <svg
-      className="fill-current"
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M2.25 2.25H7.5V7.5H2.25V2.25ZM3.75 3.75V6H6V3.75H3.75ZM10.5 2.25H15.75V7.5H10.5V2.25ZM12 3.75V6H14.25V3.75H12ZM2.25 10.5H7.5V15.75H2.25V10.5ZM3.75 12V14.25H6V12H3.75ZM10.5 10.5H15.75V15.75H10.5V10.5ZM12 12V14.25H14.25V12H12Z"
         fill=""
       />
     </svg>
