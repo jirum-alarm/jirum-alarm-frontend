@@ -18,14 +18,14 @@ const AlarmItem = ({
   onRead,
   onDelete,
   isNew,
-  watchedKeyword,
+  source,
 }: {
   notification: QueryNotificationsQuery['notifications'][number];
   onRead: (id: number) => void;
   onDelete: (id: number) => void;
   isNew: boolean;
-  /** 이 알림을 보낸 **내 키워드**(지금도 등록돼 있을 때만). 있으면 줄 위에 설정 링크로 보여준다. */
-  watchedKeyword?: string;
+  /** 어디서 온 알림인가(`notificationSource`). 있으면 줄 위에 그 알림의 설정 링크로 보여준다. */
+  source?: { label: string; href: string };
 }) => {
   const { id, message, createdAt, product, keyword, readAt } = notification;
   const { thumbnail, price, isHot, isEnd, id: productId } = product ?? {};
@@ -72,24 +72,25 @@ const AlarmItem = ({
           <XSmall />
         </button>
       )}
-      {/* 어느 키워드가 보낸 알림인지 — 누르면 그 키워드 설정으로 간다(엉뚱한 알림 → 제외 단어).
+      {/* 어디서 온 알림인지 — 누르면 그 알림의 설정으로 간다(엉뚱한 키워드 알림 → 제외 단어,
+          관심사 → 구독 해제, 좋은 딜 → 알림 설정).
           상세 링크(ItemBody) 안에 a 를 겹칠 수 없어 그 위 줄로 뺀다. 왼쪽은 본문 글자 칸(썸네일 56 + 12 + 20)에 맞춘다. */}
-      {watchedKeyword &&
+      {source &&
         (isEditMode ? (
           <span className="block truncate pt-4 pr-14 pl-[88px] text-xs text-gray-500">
-            {watchedKeyword} 키워드 알림
+            {source.label}
           </span>
         ) : (
           <Link
-            href={`${PAGE.MYPAGE_KEYWORD}?focus=${encodeURIComponent(watchedKeyword)}`}
-            aria-label={`${watchedKeyword} 키워드 알림 설정`}
+            href={source.href}
+            aria-label={`${source.label} 설정`}
             className="block truncate pt-4 pr-14 pl-[88px] text-xs text-gray-500 hover:text-gray-700"
           >
-            {watchedKeyword} 키워드 알림 ›
+            {source.label} ›
           </Link>
         ))}
       <ItemBody
-        compactTop={!!watchedKeyword}
+        compactTop={!!source}
         hasProduct={hasProduct}
         productId={productId}
         isEditMode={isEditMode}

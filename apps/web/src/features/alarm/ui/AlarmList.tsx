@@ -9,8 +9,9 @@ import { getLastAlarmReadAt, setLastAlarmReadAt } from '@/shared/lib/alarmReadSt
 import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
+import { ThemeQueries } from '@/entities/notification';
 
-import { matchMyKeyword, normalizeKeyword } from '../lib/matchMyKeyword';
+import { normalizeKeyword, notificationSource } from '../lib/notificationSource';
 import { alarmEditModeAtom } from '../model/alarmEditModeAtom';
 import { useNotificationsViewModel } from '../model/useNotificationsViewModel';
 
@@ -34,8 +35,10 @@ export default function AlarmList() {
 
   const lastReadAt = useMemo(() => getLastAlarmReadAt(), []);
 
-  // 알림 → 그 키워드 설정. 지운 키워드가 보낸 옛 알림·관심사 알림엔 링크를 안 단다 — 눌러도 갈 데가 없다.
+  // 알림 → 그 알림의 설정(키워드는 펼친 채로·관심사 화면·알림 설정). 지운 키워드·없어진 관심사엔
+  // 링크를 안 단다 — 눌러도 갈 데가 없다.
   const { data: myKeywords } = useQuery(AuthQueries.myKeywords({ limit: 20 }));
+  const { data: themes } = useQuery(ThemeQueries.themes());
   const watching = useMemo(
     () =>
       new Set((myKeywords?.notificationKeywordsByMe ?? []).map((k) => normalizeKeyword(k.keyword))),
@@ -100,7 +103,7 @@ export default function AlarmList() {
                 onRead={onReadNotification}
                 onDelete={onRemoveNotification}
                 isNew={isNew}
-                watchedKeyword={matchMyKeyword(notification.keyword, watching)}
+                source={notificationSource(notification.keyword, watching, themes ?? [])}
               />
             );
           })}

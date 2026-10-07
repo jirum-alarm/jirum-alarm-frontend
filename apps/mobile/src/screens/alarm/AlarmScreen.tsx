@@ -32,10 +32,9 @@ import {showToast} from '@/shared/lib/feedback';
 import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
 import {usePushPermissionStatus} from '@/shared/lib/fcm/usePushPermissionStatus';
 import {useColors} from '@/shared/theme/useColors';
-import {
-  matchMyKeyword,
-  useMyKeywordSet,
-} from '@/features/keyword-prompt/model/myKeywords';
+import {useMyKeywordSet} from '@/features/keyword-prompt/model/myKeywords';
+import {ThemeQueries} from '@/entities/theme';
+import {notificationSourceKey, parseSourceKey} from './lib/notification-source';
 
 /** web PageHeader 와 같은 높이(h-14)·색·경계선. */
 const HEADER_HEIGHT = 56;
@@ -143,11 +142,25 @@ export default function AlarmScreen() {
     navigation.push(tabStackNavigations.MYPAGE_KEYWORD);
   }, [navigation]);
 
-  // 알림 → 그 키워드 설정(펼친 채로). 지운 키워드가 보낸 옛 알림엔 라벨을 안 단다 — 눌러도 갈 데가 없다.
+  // 알림 → 그 알림의 설정(키워드는 펼친 채로·관심사 화면·알림 설정). 지운 키워드·없어진 관심사엔
+  // 라벨을 안 단다 — 눌러도 갈 데가 없다.
   const myKeywords = useMyKeywordSet();
-  const goKeyword = useCallback(
-    (keyword: string) =>
-      navigation.push(tabStackNavigations.MYPAGE_KEYWORD, {focus: keyword}),
+  const {data: themes} = useQuery(ThemeQueries.themes());
+  const goSource = useCallback(
+    (key: string) => {
+      const source = parseSourceKey(key);
+      if (source.kind === 'keyword') {
+        navigation.push(tabStackNavigations.MYPAGE_KEYWORD, {
+          focus: source.keyword,
+        });
+      } else if (source.kind === 'theme') {
+        navigation.push(tabStackNavigations.THEME_DETAIL, {
+          themeId: source.themeId,
+        });
+      } else {
+        navigation.push(tabStackNavigations.MYPAGE_NOTIFICATION);
+      }
+    },
     [navigation],
   );
 
@@ -161,8 +174,12 @@ export default function AlarmScreen() {
         isEditMode={isEditMode}
         onPress={handlePressItem}
         onDelete={onRemoveNotification}
-        watchedKeyword={matchMyKeyword(item.keyword, myKeywords)}
-        onPressKeyword={goKeyword}
+        sourceKey={notificationSourceKey(
+          item.keyword,
+          myKeywords,
+          themes ?? [],
+        )}
+        onPressSource={goSource}
       />
     ),
     [
@@ -171,7 +188,8 @@ export default function AlarmScreen() {
       handlePressItem,
       onRemoveNotification,
       myKeywords,
-      goKeyword,
+      themes,
+      goSource,
     ],
   );
 

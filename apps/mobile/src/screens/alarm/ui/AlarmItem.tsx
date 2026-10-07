@@ -6,6 +6,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 import XSmall from '@/shared/components/icons/XSmall';
 import {cn} from '@/shared/lib/styling';
 import {firstKeyword, splitByKeyword} from '../lib/highlight';
+import {parseSourceKey, sourceLabel} from '../lib/notification-source';
 import {displayTime} from '@/shared/lib/format/price';
 import type {NotificationItem} from '@/shared/api/notification';
 
@@ -53,15 +54,15 @@ const AlarmItem = React.memo(function AlarmItem({
   isEditMode,
   onPress,
   onDelete,
-  watchedKeyword,
-  onPressKeyword,
+  sourceKey,
+  onPressSource,
 }: {
   notification: NotificationItem;
   isNew: boolean;
   isEditMode: boolean;
-  /** 이 알림을 보낸 **내 키워드**(지금도 등록돼 있을 때만). 있으면 줄 위에 라벨로 보여준다. */
-  watchedKeyword?: string;
-  onPressKeyword?: (keyword: string) => void;
+  /** 어디서 온 알림인가(`notificationSourceKey`). 있으면 줄 위에 라벨로 — 누르면 그 알림의 설정으로. */
+  sourceKey?: string;
+  onPressSource?: (sourceKey: string) => void;
   // ★알림 자체를 함께 넘겨 부모가 콜백 하나(useCallback)를 그대로 줄 수 있게 —
   // 행마다 화살표 함수를 만들면 memo 가 무력해진다.
   onPress: (notification: NotificationItem, productId: number | null) => void;
@@ -73,9 +74,8 @@ const AlarmItem = React.memo(function AlarmItem({
   const {thumbnail, price, isHot, isEnd} = product ?? {};
 
   const highlightKeyword = firstKeyword(keyword);
-  const keywordAction = watchedKeyword
-    ? `${watchedKeyword} 키워드 알림 설정`
-    : undefined;
+  const label = sourceKey ? sourceLabel(parseSourceKey(sourceKey)) : undefined;
+  const sourceAction = label ? `${label} 설정` : undefined;
 
   return (
     <View
@@ -108,40 +108,38 @@ const AlarmItem = React.memo(function AlarmItem({
         // 같은 이동을 행의 사용자 지정 동작으로 연다(로터·위아래 쓸기 → "OO 키워드 알림 설정").
         // ★name 이 곧 읽히는 말이다 — iOS(Fabric)는 label 이 아니라 name 으로 UIAccessibilityCustomAction 을 만든다.
         accessibilityActions={
-          keywordAction
-            ? [{name: keywordAction, label: keywordAction}]
-            : undefined
+          sourceAction ? [{name: sourceAction, label: sourceAction}] : undefined
         }
         onAccessibilityAction={e => {
           if (
-            keywordAction &&
-            e.nativeEvent.actionName === keywordAction &&
-            watchedKeyword &&
+            sourceKey &&
+            e.nativeEvent.actionName === sourceAction &&
             !isEditMode
           ) {
-            onPressKeyword?.(watchedKeyword);
+            onPressSource?.(sourceKey);
           }
         }}>
         <View className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">
           <Thumbnail uri={thumbnail} fallback={<AlarmItemNoImage />} />
         </View>
         <View className="flex-1 pl-3">
-          {/* 어느 키워드가 보낸 알림인지 — 누르면 그 키워드 설정으로 간다(엉뚱한 알림 → 제외 단어).
+          {/* 어디서 온 알림인지 — 누르면 그 알림의 설정으로 간다(엉뚱한 키워드 알림 → 제외 단어,
+              관심사 → 구독 해제, 좋은 딜 → 알림 설정).
               행 전체(상세 이동) 안에 둔 Pressable 이라 여기를 누르면 이쪽만 반응한다. */}
-          {watchedKeyword ? (
+          {sourceKey && label ? (
             <Pressable
               onPress={() => {
-                if (!isEditMode) onPressKeyword?.(watchedKeyword);
+                if (!isEditMode) onPressSource?.(sourceKey);
               }}
               // 글자(12pt)만큼이라 첫 탭이 빗나가 상세로 갔다(10/7 시뮬레이터). 위·오른쪽은 행 여백이라
               // 넉넉히 넓히고, 아래는 본문(상세 이동)과 겹치지 않게 0. py-1 + -mt-1 로 줄 간격은 그대로.
               hitSlop={{top: 12, bottom: 0, left: 8, right: 24}}
               accessibilityRole="button"
-              accessibilityLabel={`${watchedKeyword} 키워드 알림`}
+              accessibilityLabel={label}
               className="-mt-1 self-start py-1"
               style={({pressed}) => (pressed ? {opacity: 0.6} : null)}>
               <Text className="text-xs text-gray-500" numberOfLines={1}>
-                {`${watchedKeyword} 키워드 알림 ›`}
+                {`${label} ›`}
               </Text>
             </Pressable>
           ) : null}
