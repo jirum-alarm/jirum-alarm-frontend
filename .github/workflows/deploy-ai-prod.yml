@@ -125,4 +125,11 @@ jobs:
           git config --global user.name "github-actions"
           git add .
           git diff --staged --quiet || git commit -m "chore(ai-prod): image tag ${{ needs.build-and-push.outputs.image-tag }}"
-          git push -u origin main
+          # 여러 앱 배포가 같은 gitops main 에 동시에 민다 — 뒤처지면 거절된다(2026-10-07 v1.47.0 web 이 admin 과 겹쳐 실패).
+          # 따라잡고 다시 민다. 같은 파일을 동시에 고쳐 충돌이면 그때만 실패.
+          for i in 1 2 3 4 5; do
+            if git push origin main; then exit 0; fi
+            git pull --rebase origin main || { git rebase --abort; exit 1; }
+            sleep $((i * 2))
+          done
+          exit 1
