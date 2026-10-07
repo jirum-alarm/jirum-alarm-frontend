@@ -33,7 +33,7 @@ const AccountContainer = () => {
   // PC 는 바텀네비가 없고 화면이 길어 바닥에 붙이면 내용과 멀리 떨어진다 → 이메일 바로 아래(왼쪽).
   return (
     <div className="pc:min-h-0 flex min-h-[calc(100vh-56px-max(56px,var(--bottom-nav-padding,0px)))] flex-col px-5 pb-4">
-      <div className="border-b border-b-gray-300 pt-6 pb-8">
+      <div className="pc:pt-0 border-b border-b-gray-300 pt-6 pb-8">
         <MovePage to="/mypage/account/nickname" title="닉네임" subtitle={me?.nickname} />
         <MovePage to="/mypage/account/personal" title="개인정보" />
         <MovePage to="/mypage/account/password" title="비밀번호" />

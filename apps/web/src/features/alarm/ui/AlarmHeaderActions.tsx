@@ -18,7 +18,7 @@ export default function AlarmHeaderActions() {
   if (!existsAny) return null;
 
   return (
-    <div className="ml-auto flex items-center">
+    <div className="-my-1.5 ml-auto flex items-center">
       {isEditMode ? (
         <div className="h-10 w-10" />
       ) : (

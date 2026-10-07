@@ -12,7 +12,7 @@ const KeywordPage = async ({ searchParams }: { searchParams: Promise<{ focus?: s
   const { focus } = await searchParams;
   return (
     <BasicLayout hasBackButton title="키워드 알림">
-      <div className="relative h-full px-5 py-6">
+      <div className="pc:pt-0 relative h-full px-5 py-6">
         <PushStatusBanner />
         {/* 특정 키워드를 고치러 왔으면 (모바일) 키보드가 그 카드를 가리지 않게 한다. */}
         <KeywordInput autoFocus={!focus} />

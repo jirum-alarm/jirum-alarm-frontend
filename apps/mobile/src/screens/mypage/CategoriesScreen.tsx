@@ -64,7 +64,7 @@ export default function CategoriesScreen({navigation}: Props) {
 
   return (
     <View className="flex-1 bg-white">
-      <StackHeader title="관심 카테고리 수정" onBack={navigation.goBack} />
+      <StackHeader title="관심 카테고리" onBack={navigation.goBack} />
       {isError ? (
         <SectionErrorRow label="관심 카테고리" onRetry={refetch} />
       ) : isPending ? (

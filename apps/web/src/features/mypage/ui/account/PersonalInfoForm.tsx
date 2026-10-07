@@ -17,7 +17,10 @@ const PersonalInfoForm = () => {
     birthYearOptions,
   } = usePersonalInfoFormViewModel();
   return (
-    <form className="flex flex-1 flex-col justify-between gap-10 pt-22" onSubmit={handleSubmit}>
+    <form
+      className="pc:pt-7 flex flex-1 flex-col justify-between gap-10 pt-22"
+      onSubmit={handleSubmit}
+    >
       <div>
         <BirthYearSelect
           handleSelectChange={handleSelectChange}

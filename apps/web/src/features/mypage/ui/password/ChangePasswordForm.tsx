@@ -10,7 +10,10 @@ import PasswordInput from './PasswordInput';
 const ChangePasswordForm = () => {
   const { handleInputChange, handleSubmit, input } = useChangePasswordFormViewModel();
   return (
-    <form className="flex h-full flex-col justify-between gap-10 px-5 py-6" onSubmit={handleSubmit}>
+    <form
+      className="pc:pt-0 flex h-full flex-col justify-between gap-10 px-5 py-6"
+      onSubmit={handleSubmit}
+    >
       <div>
         <PasswordInput
           autoFocus

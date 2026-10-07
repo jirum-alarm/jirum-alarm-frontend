@@ -13,7 +13,10 @@ const CurrentPasswordForm = ({ nextStep }: CurrentPasswordFormProps) => {
     useCurrentPasswordFormViewModel({ nextStep });
 
   return (
-    <form className="flex flex-1 flex-col justify-between gap-10 pt-22" onSubmit={handleSubmit}>
+    <form
+      className="pc:pt-7 flex flex-1 flex-col justify-between gap-10 pt-22"
+      onSubmit={handleSubmit}
+    >
       <PasswordInput
         autoFocus
         labelText="현재 비밀번호"
