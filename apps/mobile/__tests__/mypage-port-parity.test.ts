@@ -86,7 +86,10 @@ describe('라우트 13개가 전부 있다 — 절반만 네이티브면 같은 
 });
 
 describe('메뉴 — web MenuList 의 6줄이 전부 있다', () => {
-  const web = readWeb('features/mypage/ui/MenuList.tsx');
+  // 메뉴 항목은 web 이 model/menu.tsx(사이드바·목록 공용)로 옮겼다(d81f0ade) — 둘 다 읽는다.
+  const web =
+    readWeb('features/mypage/ui/MenuList.tsx') +
+    readWeb('features/mypage/model/menu.tsx');
 
   /**
    * ⚠️`toContain('찜 목록')` 처럼 **낱말만** 보면 안 된다 — 이 파일 주석에
