@@ -42,6 +42,7 @@ export default function CurationGrid<T>({
   label,
   onRetry,
   onEndReached,
+  header,
   footer,
   emptyText = '상품이 없어요.',
   onViewableIndexes,
@@ -64,6 +65,11 @@ export default function CurationGrid<T>({
   /** 에러 재시도 + pull-to-refresh 공용. react-query refetch 를 그대로 받는다. */
   onRetry: () => void | Promise<unknown>;
   onEndReached?: () => void;
+  /**
+   * 목록과 **같이 스크롤되는** 머리(검색 필터 바처럼 길어서 고정하면 결과를 가리는 것).
+   * 화면 폭 전체를 쓴다 — 그리드 좌우 여백은 받지 않는다. 로딩·에러·빈 상태에서도 보인다.
+   */
+  header?: React.ReactNode;
   footer?: React.ReactNode;
   /** 빈 목록 문구(찜 목록처럼 맥락이 있으면 바꾼다). */
   emptyText?: string;
@@ -118,6 +124,7 @@ export default function CurationGrid<T>({
   if (isPending) {
     return (
       <View className="flex-1 bg-white">
+        {header}
         <GridSkeleton
           columns={columns}
           topSpacing={topSpacing === 'tight' ? 0 : 16}
@@ -131,16 +138,22 @@ export default function CurationGrid<T>({
   // 바꾸면 스크롤해 온 목록이 통째로 사라졌다.
   if (isError && items.length === 0) {
     return (
-      <View className="flex-1 bg-white pt-4">
-        <SectionErrorRow label={label} onRetry={onRetry} />
+      <View className="flex-1 bg-white">
+        {header}
+        <View className="pt-4">
+          <SectionErrorRow label={label} onRetry={onRetry} />
+        </View>
       </View>
     );
   }
 
   if (items.length === 0) {
     return (
-      <View className="flex-1 items-center bg-white py-10">
-        <Text className="text-sm text-gray-500">{emptyText}</Text>
+      <View className="flex-1 bg-white">
+        {header}
+        <View className="items-center py-10">
+          <Text className="text-sm text-gray-500">{emptyText}</Text>
+        </View>
       </View>
     );
   }
@@ -169,6 +182,15 @@ export default function CurationGrid<T>({
       viewabilityConfig={VIEWABILITY_CONFIG}
       onViewableItemsChanged={
         onViewableIndexes ? handleViewableItemsChanged : undefined
+      }
+      ListHeaderComponent={
+        header ? (
+          // 콘텐츠 좌우 여백을 상쇄해 머리만 화면 폭을 쓴다.
+          <View
+            style={{marginHorizontal: -(HORIZONTAL_PADDING - GRID_GAP_X / 2)}}>
+            {header}
+          </View>
+        ) : null
       }
       ListFooterComponent={
         isError ? (
