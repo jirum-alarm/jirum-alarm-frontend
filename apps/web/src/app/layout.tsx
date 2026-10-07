@@ -9,6 +9,7 @@ import { COLOR_SCHEME_COOKIE, isDarkCookie, THEME_COLOR } from '@/shared/config/
 import { IS_PRD } from '@/shared/config/env';
 import { defaultMetadata, jsonLd, organizationLd } from '@/shared/config/metadata';
 import { isTabRootPath } from '@/shared/config/tab-root';
+import { CHUNK_RELOAD_SCRIPT } from '@/shared/lib/chunk-reload';
 import { cn } from '@/shared/lib/cn';
 import { pretendard } from '@/shared/lib/fonts';
 
@@ -57,6 +58,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     >
       <head>
         <PublicEnvScript />
+        {/* 다른 스크립트보다 먼저 — 배포 중 조각 404 를 새로고침으로 복구(chunk-reload.ts). */}
+        <script dangerouslySetInnerHTML={{ __html: CHUNK_RELOAD_SCRIPT }} />
         <link rel="preconnect" href="https://cdn.jirum-alarm.com" crossOrigin="" />
         {/* GTM 컨테이너(GTM_ID)는 load 이후 lazyOnload 로 붙는다(AppProvider). dataLayer 는 그보다 먼저
             있어야 그 사이의 push(identify·view_item…)가 큐에 남는다. 표준 스니펫의 gtm.start 도 여기서. */}
