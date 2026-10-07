@@ -4,7 +4,7 @@ import 'swiper/css';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { atom, useAtom } from 'jotai';
-import { AnimatePresence, m } from 'motion/react';
+import { m } from 'motion/react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
@@ -86,7 +86,9 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             index={slideIndex}
             rank={i + 1}
             product={product}
-            priority={slideIndex < 4}
+            // 모바일 loop 는 마지막 상품이 첫 화면 왼쪽에 걸린다 — lazy 면 스와이퍼가 뜬 뒤에야 받아서
+            // 미리보기에 있던 사진이 빈칸으로 돌아갔다 다시 뜬다.
+            priority={slideIndex < 4 || (isMobile && i === products.length - 1)}
             source="home_ranking"
           />
         </SwiperSlide>
@@ -150,14 +152,13 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
             )}
           </div>
         )}
-        <m.div
+        {/* 미리보기 → 스와이퍼는 페이드 없이 한 프레임에 바꾼다. 같은 카드·같은 사진이라 즉시 바꿔도 티가 안 나고,
+            페이드를 걸면 미리보기가 먼저 빠진 사이 랭킹 영역이 통째로 하얗게 비었다가 차오르는 게 보였다. */}
+        <div
           className={cn(
             'pc:max-w-slider-max max-w-mobile-max w-full overflow-visible',
-            !canRender && 'pc:hidden',
+            !canRender && 'pc:hidden opacity-0',
           )}
-          initial={{ opacity: canRender ? 1 : 0 }}
-          animate={{ opacity: canRender ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
         >
           <Swiper
             {...config}
@@ -167,7 +168,7 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           >
             {renderProducts()}
           </Swiper>
-        </m.div>
+        </div>
         <m.button
           className="pc:flex bg-fixed-800 mb-5 hidden size-11 shrink-0 items-center justify-center rounded-full disabled:opacity-0"
           onClick={handleSlideNext}
@@ -178,22 +179,15 @@ const JirumRankingSlider = ({ config, isMobile }: { config: SwiperOptions; isMob
           <ArrowLeft className="text-fixed-white ml-1 size-8 -scale-x-100" color="white" />
         </m.button>
 
-        <AnimatePresence>
-          {!canRender && (
-            <m.div
-              className="pc:px-16 absolute inset-0 bottom-auto z-10"
-              initial={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {isMobile ? (
-                <MobileRankingPreview products={products} />
-              ) : (
-                <DesktopRankingPreview products={products} />
-              )}
-            </m.div>
-          )}
-        </AnimatePresence>
+        {!canRender && (
+          <div className="pc:px-16 absolute inset-0 bottom-auto z-10">
+            {isMobile ? (
+              <MobileRankingPreview products={products} />
+            ) : (
+              <DesktopRankingPreview products={products} />
+            )}
+          </div>
+        )}
       </div>
       <SliderDots
         total={products.length + (Advertisement.Persil_20251124.isInPeriod() ? 1 : 0)}

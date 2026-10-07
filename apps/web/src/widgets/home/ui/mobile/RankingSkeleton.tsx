@@ -20,7 +20,7 @@ export const RankingPreview = ({ products }: RankingPreviewProps) => {
     <div className="relative flex justify-center overflow-x-hidden">
       <div className="flex w-auto justify-center gap-x-1">
         <PreviewCard product={lastProduct} rank={products.length} isActive={false} />
-        <PreviewCard product={firstProduct} rank={1} isActive={true} priority />
+        <PreviewCard product={firstProduct} rank={1} isActive={true} />
         <PreviewCard product={secondProduct} rank={2} isActive={false} />
       </div>
     </div>
@@ -31,19 +31,20 @@ interface PreviewCardProps {
   product: ProductCardType;
   rank: number;
   isActive: boolean;
-  priority?: boolean;
 }
 
 // 실제 슬라이드와 같은 카드를 그린다. 따로 그리면 스와이퍼가 뜨며 갈아끼울 때
 // 빠진 줄(판매처·커뮤니티·시간)이 생기며 내용이 바뀌는 게 보인다.
-const PreviewCard = ({ product, rank, isActive, priority }: PreviewCardProps) => (
+// 이미지도 같아야 한다 — 보이는 세 장 모두 priority(=스와이퍼 쪽과 같은 quality·eager)라
+// 같은 URL 을 한 번 받아 둘이 나눠 쓴다. 다르면 갈아끼울 때 사진이 빈칸으로 돌아갔다 다시 뜬다.
+const PreviewCard = ({ product, rank, isActive }: PreviewCardProps) => (
   <div className="w-[240px] shrink-0 pb-5">
     <ProductRankingImageCard
       product={product}
       rank={rank}
       activeIndex={0}
       index={isActive ? 0 : 1}
-      priority={priority}
+      priority
       source="home_ranking"
     />
   </div>
