@@ -248,6 +248,20 @@ function ThemeConditions({theme}: {theme: ThemeWithKeywords}) {
         <ConditionText>
           여러 상품을 늘어놓은 모음 글, 사은품 문구에만 키워드가 걸린 딜은 빼요.
         </ConditionText>
+        {theme.excludeKeywords.length > 0 ? (
+          <>
+            <ConditionText>이런 단어가 들어간 딜도 빼요</ConditionText>
+            <View className="mt-1.5 flex-row flex-wrap gap-1.5">
+              {theme.excludeKeywords.map(word => (
+                <Text
+                  key={word}
+                  className="rounded-md border border-gray-200 px-2.5 py-1 text-xs text-gray-500 line-through">
+                  {word}
+                </Text>
+              ))}
+            </View>
+          </>
+        ) : null}
       </ConditionRow>
       {theme.weeklyAlertCount > 0 ? (
         <ConditionRow

@@ -53,7 +53,7 @@ type Documents = {
   '\n  query QueryMyWishlistCount {\n    wishlistCount\n  }\n': typeof types.QueryMyWishlistCountDocument;
   '\n  mutation MutationAddMyWishlist($productId: Int!) {\n    addWishlist(productId: $productId)\n  }\n': typeof types.MutationAddMyWishlistDocument;
   '\n  mutation MutationRemoveMyWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n': typeof types.MutationRemoveMyWishlistDocument;
-  '\n  query QueryNotificationThemes {\n    notificationThemes {\n      id\n      name\n      description\n      emoji\n      representativeKeywords\n      keywords\n      weeklyAlertCount\n    }\n  }\n': typeof types.QueryNotificationThemesDocument;
+  '\n  query QueryNotificationThemes {\n    notificationThemes {\n      id\n      name\n      description\n      emoji\n      representativeKeywords\n      keywords\n      excludeKeywords\n      weeklyAlertCount\n    }\n  }\n': typeof types.QueryNotificationThemesDocument;
   '\n  query QueryMySubscribedThemeIds {\n    mySubscribedThemeIds\n  }\n': typeof types.QueryMySubscribedThemeIdsDocument;
   '\n  query QueryNotificationThemeLiveDeals($themeId: Int!) {\n    notificationThemeLiveDeals(themeId: $themeId) {\n      id\n      title\n      thumbnail\n      price\n      postedAt\n      categoryId\n      isEnd\n      isHot\n      hotDealType\n      mallName\n      provider {\n        nameKr\n      }\n    }\n  }\n': typeof types.QueryNotificationThemeLiveDealsDocument;
   '\n  mutation MutationSubscribeNotificationTheme($themeId: Int!) {\n    subscribeNotificationTheme(themeId: $themeId)\n  }\n': typeof types.MutationSubscribeNotificationThemeDocument;
@@ -176,7 +176,7 @@ const documents: Documents = {
     types.MutationAddMyWishlistDocument,
   '\n  mutation MutationRemoveMyWishlist($productId: Int!) {\n    removeWishlist(productId: $productId)\n  }\n':
     types.MutationRemoveMyWishlistDocument,
-  '\n  query QueryNotificationThemes {\n    notificationThemes {\n      id\n      name\n      description\n      emoji\n      representativeKeywords\n      keywords\n      weeklyAlertCount\n    }\n  }\n':
+  '\n  query QueryNotificationThemes {\n    notificationThemes {\n      id\n      name\n      description\n      emoji\n      representativeKeywords\n      keywords\n      excludeKeywords\n      weeklyAlertCount\n    }\n  }\n':
     types.QueryNotificationThemesDocument,
   '\n  query QueryMySubscribedThemeIds {\n    mySubscribedThemeIds\n  }\n':
     types.QueryMySubscribedThemeIdsDocument,
@@ -504,7 +504,7 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryNotificationThemes {\n    notificationThemes {\n      id\n      name\n      description\n      emoji\n      representativeKeywords\n      keywords\n      weeklyAlertCount\n    }\n  }\n',
+  source: '\n  query QueryNotificationThemes {\n    notificationThemes {\n      id\n      name\n      description\n      emoji\n      representativeKeywords\n      keywords\n      excludeKeywords\n      weeklyAlertCount\n    }\n  }\n',
 ): typeof import('./graphql').QueryNotificationThemesDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

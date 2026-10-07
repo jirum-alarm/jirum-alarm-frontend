@@ -2593,6 +2593,8 @@ export type ThemeWithKeywords = {
   __typename?: 'ThemeWithKeywords';
   description: Scalars['String']['output'];
   emoji?: Maybe<Scalars['String']['output']>;
+  /** 제목에 하나라도 있으면 이 묶음 알림에서 빼는 단어 */
+  excludeKeywords: Array<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   /** 이 묶음이 딜 제목에서 찾는 키워드 전부(등록 순) */
   keywords: Array<Scalars['String']['output']>;
@@ -3482,6 +3484,7 @@ export type QueryNotificationThemesQuery = {
     emoji?: string | null;
     representativeKeywords: Array<string>;
     keywords: Array<string>;
+    excludeKeywords: Array<string>;
     weeklyAlertCount: number;
   }>;
 };
@@ -4806,6 +4809,7 @@ export const QueryNotificationThemesDocument = new TypedDocumentString(`
     emoji
     representativeKeywords
     keywords
+    excludeKeywords
     weeklyAlertCount
   }
 }

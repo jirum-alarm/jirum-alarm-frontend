@@ -115,6 +115,21 @@ const ThemeConditions = ({ theme }: { theme: ThemeWithKeywords }) => {
       </ConditionRow>
       <ConditionRow icon="🧹" title="엉뚱한 딜은 걸러요">
         여러 상품을 늘어놓은 모음 글, 사은품 문구에만 키워드가 걸린 딜은 빼요.
+        {theme.excludeKeywords.length > 0 && (
+          <>
+            <p className="mt-2">이런 단어가 들어간 딜도 빼요</p>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {theme.excludeKeywords.map((word) => (
+                <span
+                  key={word}
+                  className="rounded-full border border-gray-200 px-2.5 py-1 text-xs text-gray-500 line-through"
+                >
+                  {word}
+                </span>
+              ))}
+            </div>
+          </>
+        )}
       </ConditionRow>
       {theme.weeklyAlertCount > 0 && (
         <ConditionRow icon="📬" title={`지난 7일이었다면 ${theme.weeklyAlertCount}건`}>

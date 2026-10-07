@@ -254,6 +254,7 @@ describe('묶음(테마) — 목록·상세의 조각이 다 있다', () => {
       '키워드 알림이나 앞선 시간에 이미 받은 딜은 건너뛰고 다음 딜로.',
       '여러 상품을 늘어놓은 모음 글, 사은품 문구에만 키워드가 걸린 딜은 빼요.',
       '개 더 보기',
+      '이런 단어가 들어간 딜도 빼요',
     ]) {
       expect(web).toContain(copy);
       expect(SCREENS.themeDetail).toContain(copy);

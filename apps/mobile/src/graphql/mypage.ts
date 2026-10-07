@@ -173,6 +173,7 @@ export const QueryNotificationThemes = graphql(`
       emoji
       representativeKeywords
       keywords
+      excludeKeywords
       weeklyAlertCount
     }
   }
