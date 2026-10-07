@@ -3,7 +3,7 @@
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { useEffect } from 'react';
 
-import { isInAppBrowserUA } from '@/shared/config/user-agent';
+import { isAndroidUA, isInAppBrowserUA } from '@/shared/config/user-agent';
 
 type DeviceInfo = {
   isMobile: boolean;
@@ -57,7 +57,7 @@ const getDeviceInfo = (): DeviceInfo => {
     !/OPiOS/i.test(ua);
 
   const isApple = /iPhone|iPad|iPod|Macintosh/i.test(ua);
-  const isAndroid = /Android/i.test(ua);
+  const isAndroid = isAndroidUA(ua);
 
   const isMobileBrowser = isMobile && !isJirumAlarmApp;
   const isInAppBrowser = isInAppBrowserUA(ua);

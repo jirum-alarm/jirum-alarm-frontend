@@ -14,6 +14,13 @@ export const IN_APP_BROWSER_PATTERN = /KAKAOTALK|Instagram|Threads|FB[AS]V|Line\
 export const isInAppBrowserUA = (ua: string) => IN_APP_BROWSER_PATTERN.test(ua);
 
 /**
+ * 안드로이드 기기. ua-parser 의 device.vendor 로 보면 안 된다 — 삼성 폰은 'Samsung' 이라
+ * 네이버 앱(GA4 "Whale Browser", 안드로이드 최대 유입)이 안드로이드가 아닌 것으로 판정돼
+ * 휴대폰에 PC용 QR 모달이 떴다(2026-10 실측: 3일 1,035회).
+ */
+export const isAndroidUA = (ua: string) => /Android/i.test(ua);
+
+/**
  * 상품 상세 SSR 을 가볍게 받을 크롤러 — AI 학습·수집 봇과 SEO 분석 도구(2026-10-02).
  *
  * ★왜: 상품 상세 요청의 ~75% 가 봇이고, crawling-server 처리 시간의 56% 가 가격 이력 730일(차트)·

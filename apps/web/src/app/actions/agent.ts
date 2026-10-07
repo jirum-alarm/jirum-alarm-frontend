@@ -3,7 +3,7 @@
 import { headers } from 'next/headers';
 import { userAgent } from 'next/server';
 
-import { isInAppBrowserUA } from '@/shared/config/user-agent';
+import { isAndroidUA, isInAppBrowserUA } from '@/shared/config/user-agent';
 
 import { CheckDeviceResult } from './agent.types';
 
@@ -44,8 +44,7 @@ async function checkDevice(): Promise<CheckDeviceResult> {
 
   const isApple =
     Boolean(device.vendor === 'Apple') || /iPhone|iPad|iPod|Macintosh/i.test(userAgentString);
-  const isAndroid =
-    Boolean(device.vendor === 'Google') || userAgentString.includes('(Linux; Android 10; K)');
+  const isAndroid = isAndroidUA(userAgentString);
 
   const isInAppBrowser = isInAppBrowserUA(userAgentString);
 
