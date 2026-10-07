@@ -73,6 +73,9 @@ const AlarmItem = React.memo(function AlarmItem({
   const {thumbnail, price, isHot, isEnd} = product ?? {};
 
   const highlightKeyword = firstKeyword(keyword);
+  const keywordAction = watchedKeyword
+    ? `${watchedKeyword} 키워드 알림 설정`
+    : undefined;
 
   return (
     <View
@@ -100,7 +103,25 @@ const AlarmItem = React.memo(function AlarmItem({
             prefetchProductDetail(productId, thumbnail);
           }
         }}
-        accessibilityRole="button">
+        accessibilityRole="button"
+        // 행이 자식을 한 덩어리로 읽어서 VoiceOver·TalkBack 은 안쪽 키워드 라벨을 따로 못 고른다 —
+        // 같은 이동을 행의 사용자 지정 동작으로 연다(로터·위아래 쓸기 → "OO 키워드 알림 설정").
+        // ★name 이 곧 읽히는 말이다 — iOS(Fabric)는 label 이 아니라 name 으로 UIAccessibilityCustomAction 을 만든다.
+        accessibilityActions={
+          keywordAction
+            ? [{name: keywordAction, label: keywordAction}]
+            : undefined
+        }
+        onAccessibilityAction={e => {
+          if (
+            keywordAction &&
+            e.nativeEvent.actionName === keywordAction &&
+            watchedKeyword &&
+            !isEditMode
+          ) {
+            onPressKeyword?.(watchedKeyword);
+          }
+        }}>
         <View className="h-14 w-14 overflow-hidden rounded-sm border border-gray-200">
           <Thumbnail uri={thumbnail} fallback={<AlarmItemNoImage />} />
         </View>
@@ -112,10 +133,12 @@ const AlarmItem = React.memo(function AlarmItem({
               onPress={() => {
                 if (!isEditMode) onPressKeyword?.(watchedKeyword);
               }}
-              hitSlop={{top: 8, bottom: 4, right: 8}}
+              // 글자(12pt)만큼이라 첫 탭이 빗나가 상세로 갔다(10/7 시뮬레이터). 위·오른쪽은 행 여백이라
+              // 넉넉히 넓히고, 아래는 본문(상세 이동)과 겹치지 않게 0. py-1 + -mt-1 로 줄 간격은 그대로.
+              hitSlop={{top: 12, bottom: 0, left: 8, right: 24}}
               accessibilityRole="button"
-              accessibilityLabel={`${watchedKeyword} 키워드 알림 설정`}
-              className="mb-1 self-start"
+              accessibilityLabel={`${watchedKeyword} 키워드 알림`}
+              className="-mt-1 self-start py-1"
               style={({pressed}) => (pressed ? {opacity: 0.6} : null)}>
               <Text className="text-xs text-gray-500" numberOfLines={1}>
                 {`${watchedKeyword} 키워드 알림 ›`}
