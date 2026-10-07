@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { isAndroidUA, isLightSsrCrawlerUA } =
+const { isAndroidUA, isLightSsrCrawlerUA, isSafariUA } =
   require('./user-agent.ts') as typeof import('./user-agent');
 
 // 2026-10-02 운영 액세스 로그에서 뽑은 실제 UA.
@@ -48,6 +48,22 @@ describe('isAndroidUA', () => {
       'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36',
     ]) {
       assert.equal(isAndroidUA(ua), true, ua);
+    }
+  });
+});
+
+describe('isSafariUA', () => {
+  it('iOS 사파리만 사파리 — iOS 크롬·파이어폭스·엣지·웨일과 안드로이드는 아니다', () => {
+    const safari =
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1';
+    assert.equal(isSafariUA(safari), true);
+    for (const ua of [
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/140.0.0.0 Mobile/15E148 Safari/604.1',
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/140.0 Mobile/15E148 Safari/605.1.15',
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) EdgiOS/140.0 Mobile/15E148 Safari/605.1.15',
+      'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/28.0 Chrome/130.0.0.0 Mobile Safari/537.36',
+    ]) {
+      assert.equal(isSafariUA(ua), false, ua);
     }
   });
 });

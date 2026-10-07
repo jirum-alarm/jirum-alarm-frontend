@@ -77,9 +77,11 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
         // 앱은 RN 브릿지, 웹은 Web Share API — shareNative 가 알아서 갈린다.
         await shareNative({ title, url, message: buildShareMessage(title, url, description) });
       } else if (channel === 'x' || channel === 'threads') {
-        const opened = window.open(buildIntentUrl(channel, caption, url), '_blank', 'noopener');
-        // 팝업 차단 시 공유가 조용히 죽지 않게 복사로 폴백.
-        if (!opened) await copyLink(url);
+        // 'noopener' 를 features 로 주면 열려도 항상 null 이 돌아와 매번 복사까지 했다.
+        // 열린 창의 opener 를 직접 끊고, null(팝업 차단)일 때만 복사로 폴백한다.
+        const opened = window.open(buildIntentUrl(channel, caption, url), '_blank');
+        if (opened) opened.opener = null;
+        else await copyLink(url);
       } else {
         await copyLink(url);
       }

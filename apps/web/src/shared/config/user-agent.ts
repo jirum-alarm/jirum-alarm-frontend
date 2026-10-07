@@ -21,6 +21,13 @@ export const isInAppBrowserUA = (ua: string) => IN_APP_BROWSER_PATTERN.test(ua);
 export const isAndroidUA = (ua: string) => /Android/i.test(ua);
 
 /**
+ * 진짜 사파리. iOS 의 크롬·파이어폭스·엣지·웨일도 UA 에 Safari 가 붙지만 Chrome 은 없다(CriOS 등)
+ * — 서버가 `/Safari/ && !/Chrome/` 만 봐서 이들을 사파리로 판정해 홈 앱 설치 슬라이드를 숨겼다.
+ */
+export const isSafariUA = (ua: string) =>
+  /Safari/i.test(ua) && !/Chrome|CriOS|FxiOS|OPiOS|EdgiOS|Whale/i.test(ua);
+
+/**
  * 상품 상세 SSR 을 가볍게 받을 크롤러 — AI 학습·수집 봇과 SEO 분석 도구(2026-10-02).
  *
  * ★왜: 상품 상세 요청의 ~75% 가 봇이고, crawling-server 처리 시간의 56% 가 가격 이력 730일(차트)·

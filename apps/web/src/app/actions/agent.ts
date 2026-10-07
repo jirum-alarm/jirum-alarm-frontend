@@ -3,13 +3,13 @@
 import { headers } from 'next/headers';
 import { userAgent } from 'next/server';
 
-import { isAndroidUA, isInAppBrowserUA } from '@/shared/config/user-agent';
+import { isAndroidUA, isInAppBrowserUA, isSafariUA } from '@/shared/config/user-agent';
 
 import { CheckDeviceResult } from './agent.types';
 
 async function checkDevice(): Promise<CheckDeviceResult> {
   const headersList = await headers();
-  const { device, browser, ua } = userAgent({ headers: headersList });
+  const { device, ua } = userAgent({ headers: headersList });
   const userAgentString = ua || headersList.get('user-agent') || '';
 
   const isJirumAlarmIOSApp = Boolean(userAgentString.match(/IOS ReactNative Webview Jirum Alarm/i));
@@ -32,11 +32,7 @@ async function checkDevice(): Promise<CheckDeviceResult> {
     Boolean(device.type === 'mobile' || device.type === 'tablet') ||
     isJirumAlarmApp ||
     /iPhone|iPad|iPod|Android|Mobi/i.test(userAgentString);
-  const isSafari = Boolean(
-    browser.name === 'Mobile Safari' ||
-      browser.name === 'Safari' ||
-      (/Safari/i.test(userAgentString) && !/Chrome/i.test(userAgentString)),
-  );
+  const isSafari = isSafariUA(userAgentString);
 
   const isMobileBrowser =
     Boolean((device.type === 'mobile' || device.type === 'tablet') && !isJirumAlarmApp) ||
