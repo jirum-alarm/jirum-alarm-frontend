@@ -12,7 +12,7 @@ import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
 
-import { MYPAGE_MENU } from '../model/menu';
+import { MYPAGE_GROUPS, MYPAGE_MENU } from '../model/menu';
 
 const rowClass = 'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-gray-900';
 
@@ -39,31 +39,38 @@ export default function MyPageSidebar() {
         <p className="truncate text-xs text-gray-500">{me?.email ?? '\u00a0'}</p>
         <p className="pt-2 text-xs font-medium text-gray-700">가입 정보 ›</p>
       </Link>
-      <nav className="pt-4">
-        <ul className="flex flex-col gap-0.5">
-          {MYPAGE_MENU.map((menu) => (
-            <li key={menu.url}>
-              <Link
-                href={menu.url}
-                className={cn(rowClass, 'hover:bg-gray-50', {
-                  'bg-gray-100 font-semibold': isActive(menu.url),
-                })}
-              >
-                {menu.icon}
-                {menu.title}
-              </Link>
-            </li>
-          ))}
-          <li>
-            <button
-              className={cn(rowClass, 'hover:bg-gray-50')}
-              onClick={() => customerService.onShowMessenger()}
-            >
-              <Headset />
-              고객센터
-            </button>
-          </li>
-        </ul>
+      <nav className="flex flex-col gap-5 pt-6">
+        {MYPAGE_GROUPS.map((group) => (
+          <section key={group.key}>
+            <h2 className="px-3 pb-1 text-xs font-medium text-gray-500">{group.label}</h2>
+            <ul className="flex flex-col gap-0.5">
+              {MYPAGE_MENU.filter((menu) => menu.group === group.key).map((menu) => (
+                <li key={menu.url}>
+                  <Link
+                    href={menu.url}
+                    className={cn(rowClass, 'hover:bg-gray-50', {
+                      'bg-gray-100 font-semibold': isActive(menu.url),
+                    })}
+                  >
+                    {menu.icon}
+                    {menu.title}
+                  </Link>
+                </li>
+              ))}
+              {group.key === 'support' && (
+                <li>
+                  <button
+                    className={cn(rowClass, 'hover:bg-gray-50')}
+                    onClick={() => customerService.onShowMessenger()}
+                  >
+                    <Headset />
+                    고객센터
+                  </button>
+                </li>
+              )}
+            </ul>
+          </section>
+        ))}
       </nav>
     </aside>
   );

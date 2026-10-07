@@ -6,6 +6,7 @@
 export type AlarmLink =
   | 'home_bell'
   | 'gnb_bell'
+  | 'gnb_menu'
   | 'source_keyword'
   | 'source_theme'
   | 'source_good_deal'

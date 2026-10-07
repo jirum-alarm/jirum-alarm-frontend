@@ -4,25 +4,19 @@ import { m } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 
-import { LANDING_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
 import { useHasNewAlarm } from '@/shared/hooks/useHasNewAlarm';
 import useScrollPosition from '@/shared/hooks/useScrollPosition';
 import { cn } from '@/shared/lib/cn';
 import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
-import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
-import { Alert, My } from '@/shared/ui/common/icons';
-import TalkDark from '@/shared/ui/common/icons/TalkDark';
-import TalkLight from '@/shared/ui/common/icons/TalkLight';
+import { Alert, Search } from '@/shared/ui/common/icons';
 import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 import Link from '@/shared/ui/Link';
 
-import SearchLinkButton from '@/features/search/ui/SearchLinkButton';
-
 import NavLink from './MenuLink';
+import UserMenu from './UserMenu';
 
 const HOME_SCROLLTHRESHOLD = 720;
-const talkroomLink = 'https://open.kakao.com/o/gJZTWAAg';
 
 const NAV_LINKS = [
   {
@@ -85,16 +79,29 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 isInverted={isInHomeHero}
               />
             ))}
-            <NavLink
-              href={LANDING_URL}
-              label="소개"
-              prefetch={false}
-              isActive={pathname === LANDING_URL}
-              isInverted={isInHomeHero}
-            />
           </div>
         </nav>
+        {/* 이동(왼쪽) · 행동(검색·등록) · 개인(알림·내 메뉴)만 둔다. 소개·카톡방은 홈 배너·푸터에, 화면 모드는 내 메뉴·푸터에 있다. */}
         <div className="flex items-center gap-x-5">
+          <Link
+            href={PAGE.SEARCH}
+            aria-label="검색"
+            className={cn(
+              'flex h-9 w-48 items-center gap-2 rounded-full px-3.5 text-sm transition-colors duration-300',
+              {
+                'bg-fixed-white/10 text-fixed-white/60 hover:bg-fixed-white/15': isInHomeHero,
+                'bg-gray-100 text-gray-400 hover:bg-gray-200': !isInHomeHero,
+              },
+            )}
+          >
+            <Search
+              width={18}
+              height={18}
+              color={isInHomeHero ? '#FFFFFF' : 'var(--color-gray-500)'}
+            />
+            {/* GNB 최소폭(min-w-5xl)에서 한 줄에 들어가게 w-48 — 더 넓히면 1024px 에서 넘친다. */}
+            핫딜 검색
+          </Link>
           <Link
             href={PAGE.PRODUCT_NEW}
             className={cn(
@@ -107,43 +114,6 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           >
             <m.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
               핫딜 등록
-            </m.div>
-          </Link>
-          <ColorSchemeButton color={isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)'} />
-          <SearchLinkButton color={isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)'} />
-          <Link
-            href={talkroomLink}
-            target="_blank"
-            className="group relative size-9 rounded-full duration-300 hover:bg-gray-400/20"
-            aria-label="핫딜 카톡방 입장"
-          >
-            <m.div
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.1 }}
-              className="flex h-full w-full items-center justify-center"
-            >
-              <div
-                className={cn(
-                  'absolute inset-0 flex items-center justify-center transition-opacity',
-                  {
-                    'opacity-100': isInHomeHero,
-                    'opacity-0': !isInHomeHero,
-                  },
-                )}
-              >
-                <TalkDark className="mt-0.25 size-full p-0.5" />
-              </div>
-              <div
-                className={cn(
-                  'absolute inset-0 flex items-center justify-center transition-opacity',
-                  {
-                    'opacity-100': !isInHomeHero,
-                    'opacity-0': isInHomeHero,
-                  },
-                )}
-              >
-                <TalkLight className="mt-0.25 size-full p-0.5" />
-              </div>
             </m.div>
           </Link>
           {/* 데스크톱엔 하단 탭이 없어 알림함(→ 키워드 알림)으로 갈 길이 아예 없었다. */}
@@ -171,22 +141,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             </Link>
           )}
           {isLoggedIn ? (
-            <Link
-              href={PAGE.MYPAGE}
-              className="flex size-8 items-center justify-center rounded-full duration-300 hover:bg-gray-400/20"
-            >
-              <m.div
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.1 }}
-                className="flex items-center justify-center"
-              >
-                <My
-                  width={28}
-                  height={28}
-                  color={isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)'}
-                />
-              </m.div>
-            </Link>
+            <UserMenu color={isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)'} />
           ) : (
             <Link
               href={PAGE.LOGIN}

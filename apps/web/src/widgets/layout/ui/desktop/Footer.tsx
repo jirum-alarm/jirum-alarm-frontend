@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
 import { IllustIcons } from '@/shared/ui/common/icons';
 import TalkLight from '@/shared/ui/common/icons/TalkLight';
 
@@ -13,14 +14,18 @@ const Footer = () => {
               <IllustIcons.IconLogo />
               <p className="text-2xl font-bold text-gray-900">지름알림</p>
             </div>
-            <Link
-              href="https://open.kakao.com/o/gJZTWAAg"
-              target="_blank"
-              aria-label="카카오톡 오픈채팅 바로가기"
-              className="flex size-9 items-center justify-center rounded-full bg-[#FAE300]"
-            >
-              <TalkLight className="mt-0.5 mr-0.25" />
-            </Link>
+            {/* 비로그인은 GNB 내 메뉴가 없어 화면 모드를 여기서 바꾼다. */}
+            <div className="flex items-center gap-x-3">
+              <ColorSchemeButton color="var(--color-gray-900)" />
+              <Link
+                href="https://open.kakao.com/o/gJZTWAAg"
+                target="_blank"
+                aria-label="카카오톡 오픈채팅 바로가기"
+                className="flex size-9 items-center justify-center rounded-full bg-[#FAE300]"
+              >
+                <TalkLight className="mt-0.5 mr-0.25" />
+              </Link>
+            </div>
           </div>
           <p className="mb-4 text-sm font-medium whitespace-pre-line text-gray-700">
             지름알림{'\n'}
