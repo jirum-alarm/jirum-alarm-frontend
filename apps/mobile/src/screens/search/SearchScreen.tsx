@@ -46,7 +46,7 @@ export default function SearchScreen({
   route,
 }: {
   navigation: Nav;
-  route: {params?: {keyword?: string}};
+  route: {params?: {keyword?: string; focusAt?: number}};
 }) {
   const insets = useSafeAreaInsets();
   const bottomInset = useHiddenTabBarClipPadding();
@@ -80,6 +80,21 @@ export default function SearchScreen({
     // 의존성에 넣으면 hydrate 후 재실행돼 순서가 흔들린다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialKeyword]);
+
+  /**
+   * 상세 → 검색 버튼으로 이미 열린 검색 화면에 돌아오면(openSearch) 입력창을 포커스한다.
+   * 돌아오는 전환 중엔 입력창이 아직 창에 붙지 않아 focus 가 먹지 않으므로 전환이 끝난 뒤 한 번만.
+   */
+  const focusAt = route.params?.focusAt;
+  useEffect(() => {
+    if (!focusAt) return;
+    const unsubscribe = navigation.addListener('transitionEnd', e => {
+      if (e.data.closing) return;
+      unsubscribe();
+      inputRef.current?.focus();
+    });
+    return unsubscribe;
+  }, [focusAt, navigation]);
 
   const submit = useCallback(
     (keyword: string) => {

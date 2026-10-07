@@ -34,6 +34,15 @@ const SearchInput = () => {
     !isComposing && dropdownOpen && activeIndex >= 0 && activeIndex < suggestions.length;
   const displayValue = showActiveOverride ? suggestions[activeIndex] : (keyword ?? '');
 
+  // 빈 검색창이 되면(진입·결과에서 검색 버튼·지우기) 포커스. autoFocus 는 마운트 때 한 번뿐이라
+  // 이미 /search 에 있을 때 누른 검색 버튼(?keyword 가 빠지는 이동)에는 반응하지 않는다.
+  // 결과 페이지(키워드 존재)에선 포커스 금지 — 공유 URL/뒤로가기 진입 시 제안어 드롭다운이
+  // 결과·필터를 가리고 모바일 키보드가 올라오는 결함(운영 실측).
+  const isEmpty = !keyword;
+  useEffect(() => {
+    if (isEmpty) inputRef.current?.focus();
+  }, [isEmpty]);
+
   // 키워드가 사용자 입력으로 바뀌면 활성 인덱스 초기화
   useEffect(() => {
     setActiveIndex(-1);
@@ -135,9 +144,6 @@ const SearchInput = () => {
           }}
           spellCheck={false}
           placeholder="핫딜 상품을 검색해주세요"
-          // 결과 페이지(키워드 존재)에선 autoFocus 금지 — 공유 URL/뒤로가기 진입 시
-          // 포커스→제안어 드롭다운이 결과·필터를 가리고 모바일 키보드가 올라오는 결함(운영 실측).
-          autoFocus={!keyword}
           inputMode="search"
           autoComplete="off"
           autoCorrect="off"

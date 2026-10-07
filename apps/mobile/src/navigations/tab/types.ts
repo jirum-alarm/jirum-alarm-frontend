@@ -48,6 +48,11 @@ export type TabStackParamList = ProductFlowParamList & {
 
 /** 검색 한 판 + 그 검색에서 연 상세. */
 export type SearchStackParamList = ProductFlowParamList & {
-  /** 딥링크(`/search?keyword=…`)로 들어오면 검색어를 들고 시작한다. */
-  [searchStackNavigations.HOME]: {keyword?: string} | undefined;
+  /**
+   * keyword: 딥링크(`/search?keyword=…`)로 들어오면 검색어를 들고 시작한다.
+   * focusAt: 이미 열린 검색 화면으로 돌아올 때 입력창을 포커스하라는 신호(값이 바뀔 때마다).
+   */
+  [searchStackNavigations.HOME]:
+    | {keyword?: string; focusAt?: number}
+    | undefined;
 };

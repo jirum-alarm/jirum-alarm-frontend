@@ -30,7 +30,8 @@ export function isInTabStack(navigation: Pick<StackNav, 'getState'>) {
  */
 export function openSearch(navigation: StackNav) {
   if (isInSearchStack(navigation)) {
-    navigation.navigate(searchStackNavigations.HOME);
+    // 이미 마운트된 화면이라 autoFocus 가 다시 안 걸린다 — 포커스 신호를 실어 보낸다.
+    navigation.navigate(searchStackNavigations.HOME, {focusAt: Date.now()});
     return;
   }
   navigation.push(tabStackNavigations.SEARCH);
