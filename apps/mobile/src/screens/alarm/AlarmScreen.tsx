@@ -33,7 +33,7 @@ import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
 import {usePushPermissionStatus} from '@/shared/lib/fcm/usePushPermissionStatus';
 import {useColors} from '@/shared/theme/useColors';
 import {
-  normalizeKeyword,
+  matchMyKeyword,
   useMyKeywordSet,
 } from '@/features/keyword-prompt/model/myKeywords';
 
@@ -161,11 +161,7 @@ export default function AlarmScreen() {
         isEditMode={isEditMode}
         onPress={handlePressItem}
         onDelete={onRemoveNotification}
-        watchedKeyword={
-          item.keyword && myKeywords.has(normalizeKeyword(item.keyword))
-            ? item.keyword
-            : undefined
-        }
+        watchedKeyword={matchMyKeyword(item.keyword, myKeywords)}
         onPressKeyword={goKeyword}
       />
     ),

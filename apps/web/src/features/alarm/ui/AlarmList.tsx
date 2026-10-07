@@ -10,6 +10,7 @@ import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
 
+import { matchMyKeyword, normalizeKeyword } from '../lib/matchMyKeyword';
 import { alarmEditModeAtom } from '../model/alarmEditModeAtom';
 import { useNotificationsViewModel } from '../model/useNotificationsViewModel';
 
@@ -33,14 +34,11 @@ export default function AlarmList() {
 
   const lastReadAt = useMemo(() => getLastAlarmReadAt(), []);
 
-  // 알림 → 그 키워드 설정. 지운 키워드가 보낸 옛 알림엔 링크를 안 단다 — 눌러도 갈 데가 없다.
-  // 서버는 키워드를 소문자로 저장한다 — 비교도 소문자·앞뒤 공백 없이.
+  // 알림 → 그 키워드 설정. 지운 키워드가 보낸 옛 알림·관심사 알림엔 링크를 안 단다 — 눌러도 갈 데가 없다.
   const { data: myKeywords } = useQuery(AuthQueries.myKeywords({ limit: 20 }));
   const watching = useMemo(
     () =>
-      new Set(
-        (myKeywords?.notificationKeywordsByMe ?? []).map((k) => k.keyword.trim().toLowerCase()),
-      ),
+      new Set((myKeywords?.notificationKeywordsByMe ?? []).map((k) => normalizeKeyword(k.keyword))),
     [myKeywords],
   );
 
@@ -102,11 +100,7 @@ export default function AlarmList() {
                 onRead={onReadNotification}
                 onDelete={onRemoveNotification}
                 isNew={isNew}
-                watchedKeyword={
-                  notification.keyword && watching.has(notification.keyword.trim().toLowerCase())
-                    ? notification.keyword
-                    : undefined
-                }
+                watchedKeyword={matchMyKeyword(notification.keyword, watching)}
               />
             );
           })}
