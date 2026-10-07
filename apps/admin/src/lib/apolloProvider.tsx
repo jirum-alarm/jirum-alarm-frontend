@@ -1,6 +1,6 @@
 'use client';
 
-import { ApolloLink, HttpLink } from '@apollo/client';
+import { ApolloLink, HttpLink, Observable } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import {
@@ -11,17 +11,27 @@ import {
 } from '@apollo/experimental-nextjs-app-support';
 import { useRouter } from 'next/navigation';
 
-import { deleteAccessToken, getAccessToken } from '@/app/actions/token';
+import { deleteAccessToken, getAccessToken, renewAccessToken } from '@/app/actions/token';
 import { reportQueryError } from '@/components/QueryErrorBanner';
 import { baseUrl } from '@/constants/endpoint';
 
 declare module '@apollo/client' {
   export interface DefaultContext {
     token?: string;
+    authRetried?: boolean;
   }
 }
 
 const isServer = typeof window === 'undefined';
+
+// 쿼리 여러 개가 한꺼번에 FORBIDDEN 을 받아도 refresh 는 한 번만
+let renewing: Promise<string | undefined> | null = null;
+const renewOnce = () => {
+  renewing ??= renewAccessToken().finally(() => {
+    renewing = null;
+  });
+  return renewing;
+};
 
 const ApolloProvider = ({ children }: React.PropsWithChildren) => {
   const router = useRouter();
@@ -41,24 +51,38 @@ const ApolloProvider = ({ children }: React.PropsWithChildren) => {
       };
     });
 
-    // 인증 에러는 로그인으로 보내고, 나머지는 상단 배너로 알린 뒤 컴포넌트에도 error 로 흘린다
-    // (예전엔 여기서 forward(operation) 을 반환해 실패한 요청을 한 번 더 보냈다 — onError 의 forward 는 재시도다).
-    const linkOnError = onError(({ graphQLErrors, networkError, operation }) => {
+    // 인증 에러(만료 토큰도 서버는 FORBIDDEN 으로 준다)는 refresh 로 새 토큰을 받아 한 번만 다시 보낸다.
+    // 새 토큰으로도 FORBIDDEN 이면 만료가 아니라 권한(섹션) 문제 — 로그아웃시키지 않고 배너로 알린다.
+    // refresh 자체가 거절될 때만 로그인으로 보낸다. 나머지 에러는 상단 배너 + 컴포넌트 error.
+    const linkOnError = onError(({ graphQLErrors, networkError, operation, forward }) => {
       // 서버 렌더 중엔 쿠키 삭제·라우팅을 못 한다 — 같은 쿼리를 브라우저가 다시 받아 거기서 처리된다
       if (isServer) return;
-      if (graphQLErrors) {
-        for (const err of graphQLErrors) {
-          switch (err.extensions?.code) {
-            case 'FORBIDDEN':
-            case 'UNAUTHENTICATED':
-              deleteAccessToken().then(() => {
-                router.replace('/auth/signin');
-              });
-              return undefined;
-          }
-          reportQueryError(operation.operationName, err.message);
-        }
+      const authError = graphQLErrors?.some((err) =>
+        ['FORBIDDEN', 'UNAUTHENTICATED'].includes(err.extensions?.code as string),
+      );
+      if (authError && !operation.getContext().authRetried) {
+        return new Observable((observer) => {
+          renewOnce()
+            .then((token) => {
+              if (!token) {
+                deleteAccessToken().then(() => router.replace('/auth/signin'));
+                observer.error(new Error('로그인이 만료되었습니다'));
+                return;
+              }
+              operation.setContext(({ headers }: { headers?: Record<string, string> }) => ({
+                authRetried: true,
+                headers: { ...headers, authorization: `Bearer ${token}` },
+              }));
+              forward(operation).subscribe(observer);
+            })
+            .catch((err: Error) => {
+              // refresh 서버 장애 — 로그아웃시키지 않는다
+              reportQueryError(operation.operationName, err.message);
+              observer.error(err);
+            });
+        });
       }
+      graphQLErrors?.forEach((err) => reportQueryError(operation.operationName, err.message));
       if (networkError) reportQueryError(operation.operationName, networkError.message);
     });
 
