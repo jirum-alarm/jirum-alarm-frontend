@@ -104,7 +104,11 @@ export function useNotificationsViewModel() {
    * ★배지는 서버가 푸시마다 "미읽음 수"를 싣는데, 미읽음을 줄이는 길이 항목을 하나씩 누르는 것뿐이라
    * 사용자 배지가 중앙값 310·최대 2.5만으로 쌓여 있었다(2026-10-05 운영 실측). 들어올 때 모두 읽으면
    * 배지 = "알림함을 마지막으로 본 뒤 새로 온 수"가 된다.
-   * 목록 캐시는 건드리지 않는다 — 이번 방문 동안은 새 알림의 안 읽음 표시가 그대로 보인다.
+   *
+   * ★목록을 **먼저** 다시 받고 그다음 읽음 처리한다. 탭 화면은 살아 있어 목록이 옛 캐시 그대로라,
+   * 탭바 점을 보고 들어와도 방금 온 알림이 목록에 없었다. 읽음 처리를 먼저 하면 새 알림이
+   * 읽은 채로(흐리게) 내려와 "새 알림" 강조가 사라진다. 읽음 처리 뒤엔 목록 캐시를 건드리지 않는다 —
+   * 이번 방문 동안은 새 알림의 안 읽음 표시가 그대로 보인다.
    *
    * 마운트 effect 로는 부족하다: 탭 화면은 한 번 마운트되면 계속 살아 있어 두 번째 방문부터 안 돈다.
    */
@@ -112,11 +116,18 @@ export function useNotificationsViewModel() {
     useCallback(() => {
       // 실패는 삼킨다 — 읽음 처리·기준선 갱신이 안 돼도 화면은 그대로 쓸 수 있고,
       // 다음 포커스에 다시 시도한다(여기서 던지면 unhandled rejection).
-      NotificationService.readAllNotifications()
+      // cancelRefetch:false — 첫 방문엔 첫 조회가 이미 날아가는 중이라 그걸 기다린다.
+      queryClient
+        .refetchQueries(
+          {queryKey: NotificationQueries.lists(), type: 'active'},
+          {cancelRefetch: false},
+        )
+        .catch(() => {})
+        .then(() => NotificationService.readAllNotifications())
         .catch(() => {})
         .then(() => syncUnreadCount(false))
         .catch(() => {});
-    }, [syncUnreadCount]),
+    }, [queryClient, syncUnreadCount]),
   );
 
   const {mutate: onReadNotification} = useMutation({

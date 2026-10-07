@@ -72,6 +72,16 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   return await routeGuard(request, response);
 }
 
+/**
+ * 로그인으로 보내되 원래 가려던 곳(rtnUrl)을 싣는다 — 예전엔 빈 손으로 보내서 알림함의 "키워드 알림"
+ * 같은 링크를 누른 비로그인 사용자가 로그인 뒤 홈에 떨어졌다. 같은 오리진 경로라 로그인 쪽이 라우터로 복귀한다.
+ */
+const redirectToLogin = (req: NextRequest) => {
+  const url = new URL(PAGE.LOGIN, req.url);
+  url.searchParams.set('rtnUrl', req.nextUrl.pathname + req.nextUrl.search);
+  return NextResponse.redirect(url);
+};
+
 const routeGuard = async (req: NextRequest, res: NextResponse) => {
   const action = decideAuthAction({
     pathname: req.nextUrl.pathname,
@@ -80,13 +90,13 @@ const routeGuard = async (req: NextRequest, res: NextResponse) => {
   });
 
   if (action === 'redirect') {
-    return NextResponse.redirect(new URL(PAGE.LOGIN, req.url));
+    return redirectToLogin(req);
   }
 
   if (action === 'refresh') {
     const { status } = await refreshToken(req, res);
     if (status === 'invalid' && isProtectedPath(req.nextUrl.pathname)) {
-      return NextResponse.redirect(new URL(PAGE.LOGIN, req.url));
+      return redirectToLogin(req);
     }
   }
 

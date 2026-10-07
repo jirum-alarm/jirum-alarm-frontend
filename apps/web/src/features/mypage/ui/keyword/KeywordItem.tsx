@@ -2,8 +2,10 @@
 
 import { useRef, useState } from 'react';
 
+import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 import { Close } from '@/shared/ui/common/icons';
+import Link from '@/shared/ui/Link';
 
 import {
   parseExcludeKeywords,
@@ -38,7 +40,16 @@ const DEAL_CHOICES = [
  * 커뮤니티 딜의 ~15%)을 유저가 끄는 용도.
  * ponytail: 펼침은 네이티브 <details> — 상태·애니메이션 라이브러리 없이 접근성까지 공짜.
  */
-const KeywordItem = ({ keyword, onDelete }: { keyword: Keyword; onDelete: () => void }) => {
+const KeywordItem = ({
+  keyword,
+  onDelete,
+  defaultOpen = false,
+}: {
+  keyword: Keyword;
+  onDelete: () => void;
+  /** 알림 한 줄의 키워드 링크에서 들어오면 펼친 채로 시작한다. */
+  defaultOpen?: boolean;
+}) => {
   const detailsRef = useRef<HTMLDetailsElement>(null);
   const [priceDropOnly, setPriceDropOnly] = useState(keyword.priceDropOnly);
   const [excludeInput, setExcludeInput] = useState(keyword.excludeKeywords.join(', '));
@@ -65,7 +76,7 @@ const KeywordItem = ({ keyword, onDelete }: { keyword: Keyword; onDelete: () => 
 
   return (
     <li className="rounded-xl border border-gray-200">
-      <details ref={detailsRef} className="group">
+      <details ref={detailsRef} open={defaultOpen} className="group">
         <summary className="flex cursor-pointer list-none items-center gap-2 py-3 pr-2 pl-4 [&::-webkit-details-marker]:hidden">
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-gray-900">{keyword.keyword}</p>
@@ -92,6 +103,13 @@ const KeywordItem = ({ keyword, onDelete }: { keyword: Keyword; onDelete: () => 
           onSubmit={handleSubmit}
           className="flex flex-col gap-5 border-t border-gray-100 px-4 pt-4 pb-4"
         >
+          <Link
+            href={`${PAGE.SEARCH}?keyword=${encodeURIComponent(keyword.keyword)}`}
+            className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2.5 text-sm text-gray-900 hover:bg-gray-100"
+          >
+            <span className="truncate">‘{keyword.keyword}’ 지금 올라온 딜 보기</span>
+            <span className="text-gray-500">›</span>
+          </Link>
           <fieldset className="flex flex-col gap-2">
             <legend className="mb-2 text-xs font-medium text-gray-900">
               어떤 딜을 알려드릴까요?

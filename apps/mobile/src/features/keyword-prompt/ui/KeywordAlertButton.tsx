@@ -15,6 +15,7 @@ import {isValidKeyword} from '@/features/mypage/lib/validation';
 import {
   invalidateMyKeywords,
   normalizeKeyword,
+  openKeywordSettings,
   useMyKeywordSet,
 } from '../model/myKeywords';
 import {useColors} from '@/shared/theme/useColors';
@@ -48,7 +49,10 @@ export default function KeywordAlertButton({
         variant === 'bar' ? 'search_bar' : 'search_no_result',
         trimmed,
       );
-      showToast.success(`'${trimmed}' 새 핫딜이 올라오면 알려드릴게요.`);
+      // 등록한 뒤 갈 곳이 없던 자리 — 조건(제외 단어·가격)을 바로 손볼 수 있게 키워드 화면으로 잇는다.
+      showToast.success(`'${trimmed}' 새 핫딜이 올라오면 알려드릴게요.`, {
+        action: {label: '보기', onPress: openKeywordSettings},
+      });
       requestPushPermissionIfNeeded();
       return invalidateMyKeywords(queryClient);
     },

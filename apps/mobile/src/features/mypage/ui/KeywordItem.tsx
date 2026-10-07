@@ -31,9 +31,15 @@ const DEAL_CHOICES = [
 export default function KeywordItem({
   keyword,
   onDelete,
+  onOpenDeals,
+  defaultOpen = false,
 }: {
   keyword: MyKeyword;
   onDelete: () => void;
+  /** 이 키워드로 지금 올라온 딜(검색 결과). */
+  onOpenDeals: () => void;
+  /** 알림 한 줄의 키워드 라벨에서 들어오면 펼친 채로 시작한다. */
+  defaultOpen?: boolean;
 }) {
   const c = useColors();
   const saved = {
@@ -43,7 +49,7 @@ export default function KeywordItem({
     maxPrice: keyword.maxPrice ?? null,
   };
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const [priceDropOnly, setPriceDropOnly] = useState(saved.priceDropOnly);
   const [excludeInput, setExcludeInput] = useState(
     saved.excludeKeywords.join(', '),
@@ -107,6 +113,17 @@ export default function KeywordItem({
 
       {open ? (
         <View className="gap-5 border-t border-gray-100 p-4">
+          <Pressable
+            onPress={onOpenDeals}
+            accessibilityRole="link"
+            accessibilityLabel={`${keyword.keyword} 지금 올라온 딜 보기`}
+            className="flex-row items-center justify-between rounded-lg bg-gray-50 px-3 py-2.5"
+            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+            <Text className="text-sm text-gray-900" numberOfLines={1}>
+              {`‘${keyword.keyword}’ 지금 올라온 딜 보기`}
+            </Text>
+            <Text className="text-sm text-gray-500">›</Text>
+          </Pressable>
           <View className="gap-2">
             <Text className="text-xs font-medium text-gray-900">
               어떤 딜을 알려드릴까요?

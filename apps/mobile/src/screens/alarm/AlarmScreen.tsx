@@ -32,6 +32,10 @@ import {showToast} from '@/shared/lib/feedback';
 import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
 import {usePushPermissionStatus} from '@/shared/lib/fcm/usePushPermissionStatus';
 import {useColors} from '@/shared/theme/useColors';
+import {
+  normalizeKeyword,
+  useMyKeywordSet,
+} from '@/features/keyword-prompt/model/myKeywords';
 
 /** web PageHeader 와 같은 높이(h-14)·색·경계선. */
 const HEADER_HEIGHT = 56;
@@ -133,11 +137,19 @@ export default function AlarmScreen() {
   );
 
   const goKeywordSettings = useCallback(() => {
-    // ★2026-09-08 로 키워드 관리가 네이티브 화면이 됐다(내정보 탭 소속).
-    // 예전처럼 web 을 웹뷰로 띄우면 **같은 화면이 두 벌**이 되고, 그 web 버전은
-    // 이제부터 낡는다. 라우트는 모든 탭 스택에 등록돼 있어 알림 탭 안에 쌓인다.
+    // ★2026-09-08 로 키워드 관리가 네이티브 화면이 됐다. 예전처럼 web 을 웹뷰로 띄우면
+    // **같은 화면이 두 벌**이 되고, 그 web 버전은 이제부터 낡는다.
+    // 라우트는 루트 스택에 있어 탭바를 덮고 쌓이며, 뒤로가면 알림 탭으로 돌아온다.
     navigation.push(tabStackNavigations.MYPAGE_KEYWORD);
   }, [navigation]);
+
+  // 알림 → 그 키워드 설정(펼친 채로). 지운 키워드가 보낸 옛 알림엔 라벨을 안 단다 — 눌러도 갈 데가 없다.
+  const myKeywords = useMyKeywordSet();
+  const goKeyword = useCallback(
+    (keyword: string) =>
+      navigation.push(tabStackNavigations.MYPAGE_KEYWORD, {focus: keyword}),
+    [navigation],
+  );
 
   const showEditButton = !!existsAny && !isEditMode;
 
@@ -149,9 +161,22 @@ export default function AlarmScreen() {
         isEditMode={isEditMode}
         onPress={handlePressItem}
         onDelete={onRemoveNotification}
+        watchedKeyword={
+          item.keyword && myKeywords.has(normalizeKeyword(item.keyword))
+            ? item.keyword
+            : undefined
+        }
+        onPressKeyword={goKeyword}
       />
     ),
-    [lastReadAt, isEditMode, handlePressItem, onRemoveNotification],
+    [
+      lastReadAt,
+      isEditMode,
+      handlePressItem,
+      onRemoveNotification,
+      myKeywords,
+      goKeyword,
+    ],
   );
 
   const push = usePushPermissionStatus();

@@ -18,11 +18,14 @@ const AlarmItem = ({
   onRead,
   onDelete,
   isNew,
+  watchedKeyword,
 }: {
   notification: QueryNotificationsQuery['notifications'][number];
   onRead: (id: number) => void;
   onDelete: (id: number) => void;
   isNew: boolean;
+  /** 이 알림을 보낸 **내 키워드**(지금도 등록돼 있을 때만). 있으면 줄 위에 설정 링크로 보여준다. */
+  watchedKeyword?: string;
 }) => {
   const { id, message, createdAt, product, keyword, readAt } = notification;
   const { thumbnail, price, isHot, isEnd, id: productId } = product ?? {};
@@ -50,7 +53,7 @@ const AlarmItem = ({
 
   return (
     <li
-      className={cn('relative flex gap-x-3', {
+      className={cn('relative', {
         'bg-primary-50': isNew && !readAt,
         'opacity-60': !!readAt,
       })}
@@ -69,7 +72,24 @@ const AlarmItem = ({
           <XSmall />
         </button>
       )}
+      {/* 어느 키워드가 보낸 알림인지 — 누르면 그 키워드 설정으로 간다(엉뚱한 알림 → 제외 단어).
+          상세 링크(ItemBody) 안에 a 를 겹칠 수 없어 그 위 줄로 뺀다. 왼쪽은 본문 글자 칸(썸네일 56 + 12 + 20)에 맞춘다. */}
+      {watchedKeyword &&
+        (isEditMode ? (
+          <span className="block truncate pt-4 pr-14 pl-[88px] text-xs text-gray-500">
+            {watchedKeyword} 키워드 알림
+          </span>
+        ) : (
+          <Link
+            href={`${PAGE.MYPAGE_KEYWORD}?focus=${encodeURIComponent(watchedKeyword)}`}
+            aria-label={`${watchedKeyword} 키워드 알림 설정`}
+            className="block truncate pt-4 pr-14 pl-[88px] text-xs text-gray-500 hover:text-gray-700"
+          >
+            {watchedKeyword} 키워드 알림 ›
+          </Link>
+        ))}
       <ItemBody
+        compactTop={!!watchedKeyword}
         hasProduct={hasProduct}
         productId={productId}
         isEditMode={isEditMode}
@@ -120,19 +140,22 @@ export default AlarmItem;
 
 // 상품이 살아있으면 상세로 가는 Link, 삭제됐으면 클릭만 받는 div.
 function ItemBody({
+  compactTop,
   hasProduct,
   productId,
   isEditMode,
   onActivate,
   children,
 }: {
+  /** 위에 키워드 줄이 있으면 윗 여백을 줄여 한 덩어리로 보이게 한다. */
+  compactTop: boolean;
   hasProduct: boolean;
   productId?: string | null;
   isEditMode: boolean;
   onActivate: () => void;
   children: ReactNode;
 }) {
-  const className = 'flex w-full p-5 pr-14';
+  const className = cn('flex w-full p-5 pr-14', compactTop && 'pt-1');
 
   if (!hasProduct) {
     // 상세 링크 없음: 읽음 처리만 (편집모드면 그것도 막음)

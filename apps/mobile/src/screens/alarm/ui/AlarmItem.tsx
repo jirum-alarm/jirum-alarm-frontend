@@ -53,10 +53,15 @@ const AlarmItem = React.memo(function AlarmItem({
   isEditMode,
   onPress,
   onDelete,
+  watchedKeyword,
+  onPressKeyword,
 }: {
   notification: NotificationItem;
   isNew: boolean;
   isEditMode: boolean;
+  /** 이 알림을 보낸 **내 키워드**(지금도 등록돼 있을 때만). 있으면 줄 위에 라벨로 보여준다. */
+  watchedKeyword?: string;
+  onPressKeyword?: (keyword: string) => void;
   // ★알림 자체를 함께 넘겨 부모가 콜백 하나(useCallback)를 그대로 줄 수 있게 —
   // 행마다 화살표 함수를 만들면 memo 가 무력해진다.
   onPress: (notification: NotificationItem, productId: number | null) => void;
@@ -100,6 +105,23 @@ const AlarmItem = React.memo(function AlarmItem({
           <Thumbnail uri={thumbnail} fallback={<AlarmItemNoImage />} />
         </View>
         <View className="flex-1 pl-3">
+          {/* 어느 키워드가 보낸 알림인지 — 누르면 그 키워드 설정으로 간다(엉뚱한 알림 → 제외 단어).
+              행 전체(상세 이동) 안에 둔 Pressable 이라 여기를 누르면 이쪽만 반응한다. */}
+          {watchedKeyword ? (
+            <Pressable
+              onPress={() => {
+                if (!isEditMode) onPressKeyword?.(watchedKeyword);
+              }}
+              hitSlop={{top: 8, bottom: 4, right: 8}}
+              accessibilityRole="button"
+              accessibilityLabel={`${watchedKeyword} 키워드 알림 설정`}
+              className="mb-1 self-start"
+              style={({pressed}) => (pressed ? {opacity: 0.6} : null)}>
+              <Text className="text-xs text-gray-500" numberOfLines={1}>
+                {`${watchedKeyword} 키워드 알림 ›`}
+              </Text>
+            </Pressable>
+          ) : null}
           <HighlightedMessage message={message} keyword={highlightKeyword} />
           <View className="flex-row items-center gap-x-3 pt-2">
             {isEnd ? (

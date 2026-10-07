@@ -18,7 +18,12 @@ import PressableScale from '@/shared/components/PressableScale';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import Button from '@/shared/components/ui/Button';
 import TextField from '@/shared/components/ui/Text/TextField';
-import {tabStackNavigations} from '@/shared/constant/navigations';
+import {
+  searchStackNavigations,
+  tabStackNavigations,
+} from '@/shared/constant/navigations';
+import {navigateToNativeRoute} from '@/navigations/navigation-ref';
+import {normalizeKeyword} from '@/features/keyword-prompt/model/myKeywords';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import KeywordItem from '@/features/mypage/ui/KeywordItem';
 import StackHeader from '@/features/mypage/ui/StackHeader';
@@ -41,7 +46,18 @@ type Props = NativeStackScreenProps<
  * 붙인다. 앱은 `KeyboardStickyView` 로 키보드 위에 붙인다 — 입력창에 오토포커스가
  * 걸려 있어 키보드가 늘 떠 있고, 고정 위치면 버튼이 키보드에 가려진다.
  */
-export default function KeywordScreen({navigation}: Props) {
+export default function KeywordScreen({navigation, route}: Props) {
+  // 알림의 키워드 라벨에서 왔으면 그 키워드를 맨 위에 펼쳐 둔다(스크롤 없이 바로 보이게).
+  const focus = route.params?.focus
+    ? normalizeKeyword(route.params.focus)
+    : undefined;
+  // 루트 스택의 Search 는 검색 스택(중첩)이라 검색어는 자식 화면 params 로 넣어야 닿는다
+  // (tab-routing 의 /search 와 같은 모양). 타입은 탭 스택 기준이라 단언한다.
+  const openSearch = (keyword: string) =>
+    (navigation.push as (name: string, params?: object) => void)(
+      tabStackNavigations.SEARCH,
+      {screen: searchStackNavigations.HOME, params: {keyword}},
+    );
   const insets = useSafeAreaInsets();
   const bottomClip = useHiddenTabBarClipPadding();
   const {
@@ -73,7 +89,8 @@ export default function KeywordScreen({navigation}: Props) {
             value={value}
             onChangeText={handleChange}
             placeholder="알림 받을 상품 이름 (예: 에어팟, 삼다수)"
-            autoFocus
+            // 특정 키워드를 고치러 왔으면 키보드가 그 카드를 가리지 않게 한다.
+            autoFocus={!focus}
             returnKeyType="done"
             onSubmitEditing={submit}
             error={error}
@@ -97,9 +114,19 @@ export default function KeywordScreen({navigation}: Props) {
             <Text className="text-sm font-semibold text-gray-900">
               내 키워드
             </Text>
-            <Text className="text-xs text-gray-500">
-              {`${keywords.length}/${MAX_KEYWORD_COUNT}`}
-            </Text>
+            <View className="flex-row items-baseline gap-x-3">
+              <Text className="text-xs text-gray-500">
+                {`${keywords.length}/${MAX_KEYWORD_COUNT}`}
+              </Text>
+              {/* 키워드 화면이 막다른 길이던 자리 — 등록한 키워드로 받은 알림을 바로 본다. */}
+              <Pressable
+                onPress={() => navigateToNativeRoute('/alarm')}
+                hitSlop={8}
+                accessibilityRole="link"
+                style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+                <Text className="text-xs text-gray-500">받은 알림 보기 ›</Text>
+              </Pressable>
+            </View>
           </View>
 
           {isError ? (
@@ -116,11 +143,13 @@ export default function KeywordScreen({navigation}: Props) {
                 키워드를 누르면 알림 받을 조건을 바꿀 수 있어요.
               </Text>
               <View className="mt-3 gap-2">
-                {keywords.map(keyword => (
+                {sortFocusFirst(keywords, focus).map(keyword => (
                   <KeywordItem
                     key={keyword.id}
                     keyword={keyword}
+                    defaultOpen={normalizeKeyword(keyword.keyword) === focus}
                     onDelete={() => removeKeyword(keyword.id)}
+                    onOpenDeals={() => openSearch(keyword.keyword)}
                   />
                 ))}
               </View>
@@ -152,6 +181,16 @@ export default function KeywordScreen({navigation}: Props) {
       </KeyboardStickyView>
     </View>
   );
+}
+
+/** focus 키워드를 맨 앞으로(나머지 순서는 그대로). */
+function sortFocusFirst<T extends {keyword: string}>(
+  list: T[],
+  focus?: string,
+) {
+  if (!focus) return list;
+  const hit = list.filter(k => normalizeKeyword(k.keyword) === focus);
+  return [...hit, ...list.filter(k => !hit.includes(k))];
 }
 
 /**

@@ -1,11 +1,14 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
 
 import { PAGE } from '@/shared/config/page';
 import { getLastAlarmReadAt, setLastAlarmReadAt } from '@/shared/lib/alarmReadState';
 import Link from '@/shared/ui/Link';
+
+import { AuthQueries } from '@/entities/auth';
 
 import { alarmEditModeAtom } from '../model/alarmEditModeAtom';
 import { useNotificationsViewModel } from '../model/useNotificationsViewModel';
@@ -29,6 +32,17 @@ export default function AlarmList() {
   const setEditMode = useSetAtom(alarmEditModeAtom);
 
   const lastReadAt = useMemo(() => getLastAlarmReadAt(), []);
+
+  // 알림 → 그 키워드 설정. 지운 키워드가 보낸 옛 알림엔 링크를 안 단다 — 눌러도 갈 데가 없다.
+  // 서버는 키워드를 소문자로 저장한다 — 비교도 소문자·앞뒤 공백 없이.
+  const { data: myKeywords } = useQuery(AuthQueries.myKeywords({ limit: 20 }));
+  const watching = useMemo(
+    () =>
+      new Set(
+        (myKeywords?.notificationKeywordsByMe ?? []).map((k) => k.keyword.trim().toLowerCase()),
+      ),
+    [myKeywords],
+  );
 
   useEffect(() => {
     setLastAlarmReadAt();
@@ -88,6 +102,11 @@ export default function AlarmList() {
                 onRead={onReadNotification}
                 onDelete={onRemoveNotification}
                 isNew={isNew}
+                watchedKeyword={
+                  notification.keyword && watching.has(notification.keyword.trim().toLowerCase())
+                    ? notification.keyword
+                    : undefined
+                }
               />
             );
           })}

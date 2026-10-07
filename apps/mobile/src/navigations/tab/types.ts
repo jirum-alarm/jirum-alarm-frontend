@@ -31,7 +31,8 @@ export type TabStackParamList = ProductFlowParamList & {
   [tabStackNavigations.MYPAGE_PASSWORD]: undefined;
   [tabStackNavigations.MYPAGE_PERSONAL]: undefined;
   [tabStackNavigations.MYPAGE_CATEGORIES]: undefined;
-  [tabStackNavigations.MYPAGE_KEYWORD]: undefined;
+  /** focus: 펼쳐서 맨 위에 둘 키워드(알림 한 줄의 키워드 라벨에서 들어올 때). */
+  [tabStackNavigations.MYPAGE_KEYWORD]: {focus?: string} | undefined;
   [tabStackNavigations.MYPAGE_NOTIFICATION]: undefined;
   [tabStackNavigations.MYPAGE_TERMS]: undefined;
   [tabStackNavigations.POLICY]: {kind: 'privacy' | 'terms'};

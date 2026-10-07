@@ -9,7 +9,7 @@ import { PAGE } from '@/shared/config/page';
 import useScrollPosition from '@/shared/hooks/useScrollPosition';
 import { cn } from '@/shared/lib/cn';
 import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
-import { My } from '@/shared/ui/common/icons';
+import { Alert, My } from '@/shared/ui/common/icons';
 import TalkDark from '@/shared/ui/common/icons/TalkDark';
 import TalkLight from '@/shared/ui/common/icons/TalkLight';
 import LogoLink from '@/shared/ui/common/Logo/LogoLink';
@@ -142,6 +142,26 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               </div>
             </m.div>
           </Link>
+          {/* 데스크톱엔 하단 탭이 없어 알림함(→ 키워드 알림)으로 갈 길이 아예 없었다. */}
+          {isLoggedIn && (
+            <Link
+              href={PAGE.ALARM}
+              aria-label="알림"
+              className="flex size-8 items-center justify-center rounded-full duration-300 hover:bg-gray-400/20"
+            >
+              <m.div
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.1 }}
+                className="flex items-center justify-center"
+              >
+                <Alert
+                  width={28}
+                  height={28}
+                  style={{ color: isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)' }}
+                />
+              </m.div>
+            </Link>
+          )}
           {isLoggedIn ? (
             <Link
               href={PAGE.MYPAGE}

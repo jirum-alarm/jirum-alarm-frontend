@@ -6,7 +6,7 @@ import Input from '@/shared/ui/common/Input';
 
 import { useKeywordInput } from '../../model/useKeywordInput';
 
-const KeywordInput = () => {
+const KeywordInput = ({ autoFocus = true }: { autoFocus?: boolean }) => {
   const { keyword, handleInputChange, reset, handleSubmit, canSubmit } = useKeywordInput();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -18,7 +18,7 @@ const KeywordInput = () => {
   return (
     <form onSubmit={handleSubmit}>
       <Input
-        autoFocus
+        autoFocus={autoFocus}
         type="text"
         placeholder="알림 받을 상품 이름 (예: 에어팟, 삼다수)"
         error={keyword.error}

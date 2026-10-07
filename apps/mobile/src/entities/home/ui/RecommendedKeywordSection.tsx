@@ -18,6 +18,7 @@ import {cn} from '@/shared/lib/styling';
 import {
   invalidateMyKeywords,
   normalizeKeyword,
+  openKeywordSettings,
   useMyKeywordSet,
 } from '@/features/keyword-prompt/model/myKeywords';
 
@@ -57,10 +58,12 @@ export default function RecommendedKeywordSection() {
     onSuccess: (_data, keyword) => {
       trackKeywordRegister('home_recommend', keyword);
       const added = inFlight.current;
+      // 등록한 뒤 갈 곳이 없던 자리 — 조건(제외 단어·가격)을 바로 손볼 수 있게 키워드 화면으로 잇는다.
       showToast.success(
         added
           ? `'${added}' 키워드 알림을 등록했어요.`
           : '키워드 알림을 등록했어요.',
+        {action: {label: '보기', onPress: openKeywordSettings}},
       );
       // web 과 같은 자리 — 알림 권한이 아직 없고 물어볼 수 있을 때만 묻는다.
       requestPushPermissionIfNeeded();

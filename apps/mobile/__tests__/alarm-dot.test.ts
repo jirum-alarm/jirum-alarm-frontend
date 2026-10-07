@@ -174,7 +174,15 @@ describe('★배선 — 판정이 네이티브 소유인가(브릿지 회귀 방
   it('알림함에 들어오면(focus) 서버에서 모두 읽음 처리한 뒤 기준선을 맞춘다', () => {
     const focus = viewModel.slice(viewModel.indexOf('useFocusEffect('));
     expect(focus).toMatch(
-      /^useFocusEffect\([\s\S]{0,400}readAllNotifications\(\)[\s\S]{0,120}syncUnreadCount\(false\)/,
+      /^useFocusEffect\([\s\S]{0,800}readAllNotifications\(\)[\s\S]{0,120}syncUnreadCount\(false\)/,
+    );
+  });
+
+  /** 탭 화면은 살아 있어 목록이 옛 캐시다 — 점을 보고 들어와도 새 알림이 없던 버그(2026-10-07). */
+  it('읽음 처리 **전에** 목록을 다시 받는다(새 알림이 안 읽음으로 보이게)', () => {
+    const focus = viewModel.slice(viewModel.indexOf('useFocusEffect('));
+    expect(focus).toMatch(
+      /^useFocusEffect\([\s\S]{0,800}refetchQueries\([\s\S]{0,200}NotificationQueries\.lists\(\)[\s\S]{0,200}readAllNotifications\(\)/,
     );
   });
 

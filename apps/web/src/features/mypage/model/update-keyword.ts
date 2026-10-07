@@ -11,6 +11,7 @@ import { AuthQueries } from '@/entities/auth';
  */
 export type KeywordRegisterSource =
   | 'mypage'
+  | 'mypage_recommend' // 키워드 0개 화면의 인기 키워드 칩
   | 'home_recommend'
   | 'post_purchase'
   | 'signup_complete' // 가입 완료 화면(웹만)
