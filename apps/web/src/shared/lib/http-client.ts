@@ -66,6 +66,8 @@ export interface ExecuteOptions {
   public?: boolean;
   /** public 일 때 data cache TTL(초). 미지정이면 no-store 유지. */
   revalidate?: number;
+  /** 페이지를 떠나는 순간의 요청(구매 클릭 등). 웹뷰가 링크를 같은 화면에서 열어도 끝까지 보낸다. */
+  keepalive?: boolean;
 }
 
 export async function execute<TResult, TVariables>(
@@ -97,10 +99,16 @@ export async function execute<TResult, TVariables>(
       headers.set('X-Device-Id', deviceId);
     }
   } else if (!isServer) {
-    let deviceId = localStorage.getItem('jirum-alarm-device-id');
-    if (!deviceId) {
-      deviceId = generateDeviceId();
-      localStorage.setItem('jirum-alarm-device-id', deviceId);
+    // 저장소가 막힌 웹뷰·시크릿 창에서 localStorage 가 throw 하면 모든 클라이언트 요청이 죽는다.
+    let deviceId: string | null = null;
+    try {
+      deviceId = localStorage.getItem('jirum-alarm-device-id');
+      if (!deviceId) {
+        deviceId = generateDeviceId();
+        localStorage.setItem('jirum-alarm-device-id', deviceId);
+      }
+    } catch {
+      deviceId ??= generateDeviceId();
     }
     headers.set('X-Device-Id', deviceId);
   }
@@ -120,6 +128,7 @@ export async function execute<TResult, TVariables>(
     }),
     ...cacheOption,
     credentials: 'include',
+    keepalive: opts?.keepalive,
   });
 
   await rejectIfNeeded(response);

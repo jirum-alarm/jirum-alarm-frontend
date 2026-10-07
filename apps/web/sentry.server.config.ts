@@ -16,7 +16,9 @@ Sentry.init({
   enabled: !isDevelopment,
 
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  tracesSampleRate: 1,
+  // 1 이면 봇 포함 모든 요청을 트레이싱해 조직 span 할당량이 바닥났고(2026-10-08 /monitoring 429
+  // span_usage_exceeded), 클라이언트 트랜잭션까지 버려졌다. 에러 수집과는 무관. 클라이언트(0.1)와 맞춘다.
+  tracesSampleRate: 0.1,
 
   // Enable logs to be sent to Sentry
   enableLogs: true,

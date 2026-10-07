@@ -114,7 +114,9 @@ export class ProductService {
     source?: string | null;
     entry?: string | null;
   }) {
-    return execute(MutationCollectPurchaseClick, variables).then((res) => res.data);
+    return execute(MutationCollectPurchaseClick, variables, { keepalive: true }).then(
+      (res) => res.data,
+    );
   }
 
   static async collectPriceContextImpression(variables: PriceContextEventVariables) {
