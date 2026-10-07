@@ -67,11 +67,10 @@ export default function RecentKeywords({
             onPress={() => onSelect(keyword)}
             accessibilityRole="button"
             accessibilityLabel={keyword}
-            className="flex-row items-center gap-x-1 rounded-full border border-gray-200 px-3"
-            style={({pressed}) => ({
-              height: 40,
-              opacity: pressed ? 0.6 : 1,
-            })}>
+            // ★높이는 className 으로 — 함수형 style 의 height 는 NativeWind 가 떨궈
+            // 칩이 글자 높이(≈21pt)로 납작해졌다. h-9 = 바로 아래 추천 검색어 칩(py-2 + text-sm)과 같은 36pt.
+            className="h-9 flex-row items-center gap-x-1 rounded-full border border-gray-200 px-3"
+            style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
             <Text className="text-sm text-gray-900" numberOfLines={1}>
               {keyword.slice(0, MAX_CHIP_CHARS)}
               {keyword.length > MAX_CHIP_CHARS ? '...' : ''}
