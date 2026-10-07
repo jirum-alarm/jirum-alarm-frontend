@@ -14,7 +14,8 @@ const CRITICAL_THRESHOLD_MIN = 60 * 6;
 
 type HealthLevel = 'healthy' | 'stale' | 'critical' | 'dead';
 
-const getHealthLevel = (provider: ProviderHealthOutput): HealthLevel => {
+/** 홈 '지금 확인할 것'도 같은 기준으로 센다 */
+export const getHealthLevel = (provider: ProviderHealthOutput): HealthLevel => {
   if (provider.minutesSinceLatest == null) return 'dead';
   if (provider.minutesSinceLatest >= CRITICAL_THRESHOLD_MIN) return 'critical';
   if (provider.minutesSinceLatest >= STALE_THRESHOLD_MIN) return 'stale';

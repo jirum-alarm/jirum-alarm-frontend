@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   useHotDealRatioStats,
@@ -50,6 +50,12 @@ const ProductStats = () => {
     fetchPriceDistribution({ variables });
   };
 
+  // 들어오자마자 기본 기간(최근 1개월)으로 불러온다 — 예전엔 '조회'를 눌러야 차트가 떴다
+  useEffect(() => {
+    handleSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const productStats = productData?.productRegistrationStats ?? [];
   const hotDealRatio = hotDealRatioData?.hotDealRatioStats ?? [];
   const hotDealTypes = hotDealTypeData?.hotDealTypeDistribution ?? [];
@@ -92,7 +98,7 @@ const ProductStats = () => {
             ]}
           />
         ) : (
-          <p className="py-8 text-center text-bodydark2">조회 버튼을 눌러 데이터를 불러오세요.</p>
+          <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
         )}
       </ChartCard>
 
@@ -134,7 +140,7 @@ const ProductStats = () => {
             ]}
           />
         ) : (
-          <p className="py-8 text-center text-bodydark2">조회 버튼을 눌러 데이터를 불러오세요.</p>
+          <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
         )}
       </ChartCard>
 
@@ -152,7 +158,7 @@ const ProductStats = () => {
               series={hotDealTypes.map((d) => d.count)}
             />
           ) : (
-            <p className="py-8 text-center text-bodydark2">조회 버튼을 눌러 데이터를 불러오세요.</p>
+            <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
           )}
         </ChartCard>
 
@@ -180,7 +186,7 @@ const ProductStats = () => {
               ]}
             />
           ) : (
-            <p className="py-8 text-center text-bodydark2">조회 버튼을 눌러 데이터를 불러오세요.</p>
+            <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
           )}
         </ChartCard>
       </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useDailyServiceViewStats, useTopNotificationKeywords } from '@/hooks/graphql/stats';
 import { DateInterval } from '@/types/stats';
@@ -31,6 +31,12 @@ const EngagementStats = () => {
       variables: { ...toStatsDateRange(startDate, endDate), interval },
     });
   };
+
+  // 들어오자마자 기본 기간(최근 1개월)으로 불러온다 — 예전엔 '조회'를 눌러야 차트가 떴다
+  useEffect(() => {
+    handleSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const viewStats = viewData?.dailyServiceViewStats ?? [];
   const keywords = keywordData?.topNotificationKeywords ?? [];
@@ -74,7 +80,7 @@ const EngagementStats = () => {
             ]}
           />
         ) : (
-          <p className="py-8 text-center text-bodydark2">조회 버튼을 눌러 데이터를 불러오세요.</p>
+          <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
         )}
       </ChartCard>
 

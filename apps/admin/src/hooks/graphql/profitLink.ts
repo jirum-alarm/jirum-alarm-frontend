@@ -169,10 +169,12 @@ export const useMutationIssueKakaoProfitLink = (
 
 // ─── 수익링크 대시보드 ───
 
-export const useProfitLinkProviderHealth = () =>
+export const useProfitLinkProviderHealth = (
+  options?: QueryHookOptions<ProfitLinkProviderHealthQuery, ProfitLinkProviderHealthQueryVariables>,
+) =>
   useQuery<ProfitLinkProviderHealthQuery, ProfitLinkProviderHealthQueryVariables>(
     QueryProfitLinkProviderHealth,
-    { fetchPolicy: 'network-only' },
+    { fetchPolicy: 'network-only', ...options },
   );
 
 export const useProfitLinkFunnelDaily = (variables: ProfitLinkFunnelDailyQueryVariables) =>
