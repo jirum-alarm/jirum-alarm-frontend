@@ -60,6 +60,7 @@ const FEATURE_FILES = [
   'src/shared/components/ConfirmSheet.tsx',
   'src/features/mypage/ui/PasswordField.tsx',
   'src/features/mypage/ui/PriceDropSwitch.tsx',
+  'src/features/mypage/ui/KeywordItem.tsx',
   'src/features/mypage/ui/CategoryCheckboxGroup.tsx',
   'src/features/mypage/ui/GenderRadioGroup.tsx',
   'src/features/mypage/ui/BirthYearSelect.tsx',
@@ -156,31 +157,39 @@ describe('가입 정보 — web AccountContainer 의 4줄 + 계정 관리 2개',
 describe('키워드 화면 — web 이 한 화면에서 관리하는 3덩어리', () => {
   const webPage = readWeb('app/(mobile)/mypage/keyword/page.tsx');
 
-  it('web 페이지가 입력·구독묶음·목록 3개를 렌더한다(전제 확인)', () => {
+  it('web 페이지가 입력·목록·구독묶음 3개를 렌더한다(전제 확인)', () => {
     expect(webPage).toContain('KeywordInput');
     expect(webPage).toContain('MySubscribedThemes');
     expect(webPage).toContain('KeywordList');
   });
 
   it('앱도 3개를 다 그린다', () => {
-    expect(SCREENS.keyword).toContain('키워드를 입력해주세요.');
+    expect(SCREENS.keyword).toContain('알림 받을 상품 이름');
     expect(SCREENS.keyword).toContain('받고 있는 관심사 알림');
-    expect(SCREENS.keyword).toContain('나의 지름 키워드');
+    expect(SCREENS.keyword).toContain('내 키워드');
   });
 
   /**
-   * ★키워드별 토글이다(유저 전역이 아니다). 이걸 빠뜨리면 web 에서 켠 설정을
+   * ★키워드 카드의 설정 3개(받을 딜·가격 범위·빼고 싶은 단어)가 web 과 같다.
+   * 받을 딜은 키워드별 설정이다(유저 전역이 아니다) — 빠뜨리면 web 에서 켠 설정을
    * 앱에서 볼 수도 끌 수도 없다.
    */
-  it('가격 하락 알림 토글이 있다', () => {
-    const webToggle = readWeb(
-      'features/mypage/ui/keyword/PriceDropOnlyToggle.tsx',
-    );
-    expect(webToggle).toContain('가격 하락 알림');
-    expect(read('src/features/mypage/ui/PriceDropSwitch.tsx')).toContain(
-      '가격 하락 알림',
-    );
-    expect(SCREENS.keyword).toContain('PriceDropSwitch');
+  it('키워드 카드의 설정 3개가 web 과 같다', () => {
+    const webItem = readWeb('features/mypage/ui/keyword/KeywordItem.tsx');
+    const appItem = read('src/features/mypage/ui/KeywordItem.tsx');
+    for (const label of [
+      '어떤 딜을 알려드릴까요?',
+      '새 핫딜 모두',
+      '평소보다 쌀 때만',
+      '가격 범위',
+      '빼고 싶은 단어',
+      'summarizeKeywordAlert',
+      'priceDropOnly',
+    ]) {
+      expect(webItem).toContain(label);
+      expect(appItem).toContain(label);
+    }
+    expect(SCREENS.keyword).toContain('KeywordItem');
   });
 
   // web 9/27 개편에서 "묶음" → "관심사". 제목·링크 문구를 web 과 같이 둔다.
@@ -378,9 +387,9 @@ describe('★디자인 점검 2026-09-09 — 고친 것이 되돌아가지 않�
     ).toContain('selected.size === 0');
   });
 
-  it('"가격 하락 알림" 은 행마다 반복하지 않는다', () => {
-    // 키워드가 20개면 같은 문구가 20번 반복돼 정작 키워드가 안 읽힌다.
-    expect(stripComments(SCREENS.keyword)).toContain('showLabel={false}');
+  it('키워드 행엔 설정 컨트롤을 늘어놓지 않는다 — 펼친 카드 안에만', () => {
+    // 행마다 스위치·라벨·링크가 붙어 키워드가 안 읽혔다(2026-10-07 개편).
+    expect(stripComments(SCREENS.keyword)).not.toContain('PriceDropSwitch');
   });
 
   it('고객센터는 상담창이 뜨면 네이티브 헤더를 접는다 — 닫기 2개 방지', () => {
@@ -449,7 +458,7 @@ describe('레포 함정 가드', () => {
 describe('데이터 계층', () => {
   it('키워드 상한이 web(20)과 같다', () => {
     const web = readWeb('features/mypage/ui/keyword/KeywordList.tsx');
-    expect(web).toContain('<span>20</span>');
+    expect(web).toContain('/20</span>');
     expect(read('src/entities/mypage/mypage.queries.ts')).toContain(
       'MAX_KEYWORD_COUNT = 20',
     );

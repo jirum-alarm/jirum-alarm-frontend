@@ -14,13 +14,15 @@ const KeywordPage = () => {
         <PushStatusBanner />
         <KeywordInput />
         <div className="h-8" />
-        {/* 구독한 묶음 — 키워드와 한 화면에서 통합 관리 (묶음 배지) */}
-        <Suspense>
-          <MySubscribedThemes />
-        </Suspense>
         <Suspense>
           <KeywordList />
         </Suspense>
+        {/* 구독한 관심사 — 입력창 바로 아래는 "방금 넣은 키워드가 어디 갔나"가 보여야 해서 목록 다음에 둔다. */}
+        <div className="h-8" />
+        <Suspense>
+          <MySubscribedThemes />
+        </Suspense>
+        <div className="h-32" />
       </div>
     </BasicLayout>
   );

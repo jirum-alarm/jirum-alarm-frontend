@@ -1,13 +1,11 @@
 import React, {useEffect, useRef} from 'react';
 import {Animated, Pressable, StyleSheet} from 'react-native';
-import {Text} from '@/shared/components/ui/Text/AppText';
 import {tick} from '@/shared/lib/feedback';
 import {useColors} from '@/shared/theme/useColors';
 
 /**
- * 키워드 한 줄의 "가격 하락 알림" 스위치. web `PriceDropOnlyToggle`.
- *
- * ★유저 전역이 아니라 **키워드별** 설정이다("삼다수는 싸질 때만, 노트북은 전부").
+ * 켜고 끄는 스위치(알림 설정 화면). 이름은 키워드 화면의 "가격 하락 알림" 스위치로
+ * 처음 만들어서 남은 것 — 그 스위치는 2026-10-07 키워드 카드의 2지선다로 바뀌었다.
  *
  * ponytail: 레포에 Switch primitive 가 없다(web 도 hidden checkbox +
  * peer-checked 로 모양만 냈다). RN 엔 peer 가 없으니 `Pressable` 두 겹으로
@@ -18,20 +16,12 @@ export default function PriceDropSwitch({
   value,
   disabled,
   onChange,
-  showLabel = true,
-  accessibilityLabel = '가격 내려갔을 때만 알림 받기',
+  accessibilityLabel,
 }: {
   value: boolean;
   disabled?: boolean;
   onChange: (next: boolean) => void;
-  /**
-   * 행마다 "가격 하락 알림" 을 붙일지. **목록에서는 끈다** — 키워드가 20개면
-   * 같은 문구가 20번 반복돼 정작 키워드가 안 읽힌다. 목록은 열 제목을 한 번만
-   * 두고, 스크린리더용 라벨은 `accessibilityLabel` 에 그대로 남는다.
-   */
-  showLabel?: boolean;
-  /** 다른 화면(알림 설정)에서 재사용할 때의 스크린리더 라벨 */
-  accessibilityLabel?: string;
+  accessibilityLabel: string;
 }) {
   const c = useColors();
   // 노브는 미끄러지고 트랙 색은 번진다 — 예전엔 marginLeft 를 2 → 18 로 바꿔 순간이동했다.
@@ -57,10 +47,7 @@ export default function PriceDropSwitch({
       accessibilityLabel={accessibilityLabel}
       // ★flex·크기는 style, 색·정렬은 className (NativeWind 규칙).
       style={disabled ? styles.dimmed : undefined}
-      className="shrink-0 flex-row items-center gap-1.5">
-      {showLabel ? (
-        <Text className="text-xs text-gray-500">가격 하락 알림</Text>
-      ) : null}
+      className="shrink-0 flex-row items-center">
       {/* 트랙 — web h-5 w-9 (20x36) */}
       {/* ★Animated.View 엔 className 을 주지 않는다(NativeWind 가 무시) — 색은 style 로. */}
       <Animated.View

@@ -96,21 +96,25 @@ export function useWithdraw() {
   });
 }
 
-/** 키워드별 제외 단어 + 가격 범위 저장. web `update-keyword-options`. */
+/** 키워드 알림 설정 저장(받을 딜·가격 범위·제외 단어). web `update-keyword-options`. */
 export function useUpdateKeywordOptions() {
   const queryClient = useQueryClient();
+  const invalidate = () =>
+    queryClient.invalidateQueries({
+      queryKey: MyPageQueries.keys.keywords(),
+    });
   return useMutation({
     mutationFn: MyPageService.updateKeywordOptions,
     onSuccess: () => {
-      showToast.success('알림 조건을 저장했어요.');
-      return queryClient.invalidateQueries({
-        queryKey: MyPageQueries.keys.keywords(),
-      });
+      showToast.success('알림 설정을 저장했어요.');
+      return invalidate();
     },
-    onError: () =>
+    onError: () => {
       showToast.error(
-        '알림 조건 저장에 실패했어요. 최소 가격이 최대 가격보다 크지 않은지 확인해 주세요.',
-      ),
+        '알림 설정 저장에 실패했어요. 최소 가격이 최대 가격보다 크지 않은지 확인해 주세요.',
+      );
+      return invalidate();
+    },
   });
 }
 

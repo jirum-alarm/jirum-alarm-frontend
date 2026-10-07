@@ -28,24 +28,35 @@ const formatWon = (price: number) =>
     ? `${(price / 10000).toLocaleString('ko-KR')}만원`
     : `${price.toLocaleString('ko-KR')}원`;
 
-/** 접힌 줄에 보일 요약. "~150만원 · 제외 2" */
-export const summarizeKeywordOptions = ({
+/**
+ * 키워드 카드에 늘 보이는 한 줄 — "지금 이 키워드로 어떤 알림이 오는지"를 말로 적는다.
+ * web `summarizeKeywordAlert` 와 같은 문구.
+ * 예: "평소보다 쌀 때만 · 100만원 이하 · ‘케이스’ 외 1개 제외"
+ */
+export const summarizeKeywordAlert = ({
+  priceDropOnly,
   excludeKeywords,
   minPrice,
   maxPrice,
 }: {
+  priceDropOnly: boolean;
   excludeKeywords: string[];
   minPrice: number | null;
   maxPrice: number | null;
 }) => {
-  const parts: string[] = [];
-  if (minPrice != null || maxPrice != null) {
+  const parts = [priceDropOnly ? '평소보다 쌀 때만' : '새 핫딜 모두'];
+  if (minPrice != null && maxPrice != null) {
+    parts.push(`${formatWon(minPrice)}~${formatWon(maxPrice)}`);
+  } else if (maxPrice != null) {
+    parts.push(`${formatWon(maxPrice)} 이하`);
+  } else if (minPrice != null) {
+    parts.push(`${formatWon(minPrice)} 이상`);
+  }
+  const [first, ...rest] = excludeKeywords;
+  if (first) {
     parts.push(
-      `${minPrice != null ? formatWon(minPrice) : ''}~${
-        maxPrice != null ? formatWon(maxPrice) : ''
-      }`,
+      rest.length ? `‘${first}’ 외 ${rest.length}개 제외` : `‘${first}’ 제외`,
     );
   }
-  if (excludeKeywords.length) parts.push(`제외 ${excludeKeywords.length}`);
   return parts.join(' · ');
 };

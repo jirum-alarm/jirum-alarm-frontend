@@ -1,7 +1,7 @@
 import {
   parseExcludeKeywords,
   parsePrice,
-  summarizeKeywordOptions,
+  summarizeKeywordAlert,
 } from '@/features/mypage/lib/keyword-options';
 
 describe('키워드 알림 조건 파싱 — web keyword-options 와 같은 규칙', () => {
@@ -23,20 +23,30 @@ describe('키워드 알림 조건 파싱 — web keyword-options 와 같은 규�
     expect(parsePrice('  ')).toBeNull();
   });
 
-  it('요약은 가격 범위와 제외 개수를 보여준다', () => {
+  it('요약은 받을 딜·가격 범위·제외 단어를 말로 적는다(web 과 같은 문구)', () => {
     expect(
-      summarizeKeywordOptions({
-        excludeKeywords: ['a', 'b'],
-        minPrice: null,
-        maxPrice: 1500000,
-      }),
-    ).toBe('~150만원 · 제외 2');
-    expect(
-      summarizeKeywordOptions({
+      summarizeKeywordAlert({
+        priceDropOnly: false,
         excludeKeywords: [],
         minPrice: null,
         maxPrice: null,
       }),
-    ).toBe('');
+    ).toBe('새 핫딜 모두');
+    expect(
+      summarizeKeywordAlert({
+        priceDropOnly: true,
+        excludeKeywords: ['케이스', '필름'],
+        minPrice: null,
+        maxPrice: 1000000,
+      }),
+    ).toBe('평소보다 쌀 때만 · 100만원 이하 · ‘케이스’ 외 1개 제외');
+    expect(
+      summarizeKeywordAlert({
+        priceDropOnly: false,
+        excludeKeywords: ['케이스'],
+        minPrice: 100000,
+        maxPrice: 200000,
+      }),
+    ).toBe('새 핫딜 모두 · 10만원~20만원 · ‘케이스’ 제외');
   });
 });

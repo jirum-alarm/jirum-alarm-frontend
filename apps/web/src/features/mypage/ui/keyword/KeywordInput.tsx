@@ -20,7 +20,7 @@ const KeywordInput = () => {
       <Input
         autoFocus
         type="text"
-        placeholder="키워드를 입력해주세요."
+        placeholder="알림 받을 상품 이름 (예: 에어팟, 삼다수)"
         error={keyword.error}
         helperText={'키워드는 2자 이상 20자까지 입력할 수 있어요.'}
         value={keyword.value}

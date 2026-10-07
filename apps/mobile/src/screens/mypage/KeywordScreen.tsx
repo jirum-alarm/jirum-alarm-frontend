@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, Pressable, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
@@ -14,22 +14,19 @@ import {ThemeQueries} from '@/entities/theme';
 import {HomeQueries} from '@/entities/home/api/home.queries';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {CircleXIcon} from '@/shared/components/icons';
-import Close from '@/shared/components/icons/Close';
 import PressableScale from '@/shared/components/PressableScale';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import Button from '@/shared/components/ui/Button';
 import TextField from '@/shared/components/ui/Text/TextField';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
-import KeywordOptions from '@/features/mypage/ui/KeywordOptions';
-import PriceDropSwitch from '@/features/mypage/ui/PriceDropSwitch';
+import KeywordItem from '@/features/mypage/ui/KeywordItem';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {SubscribedThemeRow} from '@/features/mypage/ui/ThemeCards';
 import {useKeywordViewModel} from '@/features/mypage/model/useKeywordViewModel';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
 import {KEYWORD_HELPER_TEXT} from '@/features/mypage/lib/validation';
-import {useColors} from '@/shared/theme/useColors';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -38,14 +35,13 @@ type Props = NativeStackScreenProps<
 
 /**
  * 키워드 알림. web `/mypage/keyword`
- * (KeywordInput + MySubscribedThemes + KeywordList).
+ * (KeywordInput + KeywordList + MySubscribedThemes).
  *
  * ★web 은 등록 버튼을 `fixed bottom-[var(--bottom-nav-padding)]` 로 화면 하단에
  * 붙인다. 앱은 `KeyboardStickyView` 로 키보드 위에 붙인다 — 입력창에 오토포커스가
  * 걸려 있어 키보드가 늘 떠 있고, 고정 위치면 버튼이 키보드에 가려진다.
  */
 export default function KeywordScreen({navigation}: Props) {
-  const c = useColors();
   const insets = useSafeAreaInsets();
   const bottomClip = useHiddenTabBarClipPadding();
   const {
@@ -62,8 +58,6 @@ export default function KeywordScreen({navigation}: Props) {
     addDirect,
     isAdding,
     removeKeyword,
-    updatePriceDropOnly,
-    isTogglingPriceDrop,
   } = useKeywordViewModel();
 
   return (
@@ -78,7 +72,7 @@ export default function KeywordScreen({navigation}: Props) {
           <TextField
             value={value}
             onChangeText={handleChange}
-            placeholder="키워드를 입력해주세요."
+            placeholder="알림 받을 상품 이름 (예: 에어팟, 삼다수)"
             autoFocus
             returnKeyType="done"
             onSubmitEditing={submit}
@@ -98,43 +92,15 @@ export default function KeywordScreen({navigation}: Props) {
           />
           <View className="h-8" />
 
-          {/* 구독한 묶음 — web MySubscribedThemes(키워드와 한 화면에서 관리) */}
-          <SubscribedThemes
-            onOpenThemes={() => navigation.push(tabStackNavigations.THEMES)}
-            // ★`title` 파라미터는 넘기지 않는다 — 상세 헤더는 web 과 같이
-            // 항상 '알림 묶음' 이다. 진입 경로마다 헤더가 달라지면 같은 화면이
-            // 두 개처럼 보인다(묶음 이름은 본문 맨 위에 이미 있다).
-            onOpenTheme={themeId =>
-              navigation.push(tabStackNavigations.THEME_DETAIL, {themeId})
-            }
-          />
-
           {/* 내 키워드 — web KeywordList */}
-          <View>
-            <View className="flex-row justify-between">
-              <Text className="text-sm font-medium text-gray-900">
-                나의 지름 키워드
-              </Text>
-              <Text className="text-sm text-gray-900">
-                <Text className="text-primary-800">{keywords.length}</Text>
-                {`/${MAX_KEYWORD_COUNT}`}
-              </Text>
-            </View>
-            <Text className="mt-1 text-xs text-gray-500">
-              {
-                '‘가격 하락 알림’을 켜면 평소 시세보다 싸게 뜬 딜만, ‘알림 조건’에서 제외할 단어와 가격 범위를 정할 수 있어요'
-              }
+          <View className="flex-row items-baseline justify-between">
+            <Text className="text-sm font-semibold text-gray-900">
+              내 키워드
+            </Text>
+            <Text className="text-xs text-gray-500">
+              {`${keywords.length}/${MAX_KEYWORD_COUNT}`}
             </Text>
           </View>
-          <View className="h-4" />
-
-          {/* ★스위치 열 제목을 한 번만 둔다 — 행마다 붙이면 문구가 반복돼
-              키워드가 묻힌다. 위 안내문이 이미 뜻을 설명한다. */}
-          {!isError && !isPending && keywords.length > 0 ? (
-            <View className="flex-row justify-end px-2 pb-1">
-              <Text className="text-xs text-gray-500">가격 하락 알림</Text>
-            </View>
-          ) : null}
 
           {isError ? (
             <SectionErrorRow label="키워드" onRetry={refetch} />
@@ -145,38 +111,34 @@ export default function KeywordScreen({navigation}: Props) {
           ) : keywords.length === 0 ? (
             <EmptyKeywords onPick={addDirect} disabled={isAdding} />
           ) : (
-            keywords.map(keyword => (
-              <View
-                key={keyword.id}
-                className="border-b border-gray-200 px-2 py-3">
-                <View className="w-full flex-row items-center justify-between gap-3">
-                  <Text
-                    className="min-w-0 text-sm text-gray-900"
-                    numberOfLines={1}
-                    style={styles.grow}>
-                    {keyword.keyword}
-                  </Text>
-                  <PriceDropSwitch
-                    value={keyword.priceDropOnly ?? false}
-                    disabled={isTogglingPriceDrop}
-                    onChange={next => updatePriceDropOnly(keyword.id, next)}
-                    showLabel={false}
+            <>
+              <Text className="mt-1 text-xs text-gray-500">
+                키워드를 누르면 알림 받을 조건을 바꿀 수 있어요.
+              </Text>
+              <View className="mt-3 gap-2">
+                {keywords.map(keyword => (
+                  <KeywordItem
+                    key={keyword.id}
+                    keyword={keyword}
+                    onDelete={() => removeKeyword(keyword.id)}
                   />
-                  <Pressable
-                    onPress={() => removeKeyword(keyword.id)}
-                    hitSlop={8}
-                    accessibilityRole="button"
-                    accessibilityLabel={`${keyword.keyword} 삭제`}
-                    className="shrink-0 p-2"
-                    style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-                    {/* web 은 gray-400(AA 미달) — gray-500 을 쓴다. */}
-                    <Close width={20} height={20} color={c.gray[500]} />
-                  </Pressable>
-                </View>
-                <KeywordOptions keyword={keyword} />
+                ))}
               </View>
-            ))
+            </>
           )}
+
+          {/* 구독한 관심사 — web MySubscribedThemes. 입력창 바로 아래는 "방금 넣은
+              키워드가 어디 갔나"가 보여야 해서 목록 다음에 둔다. */}
+          <View className="h-8" />
+          <SubscribedThemes
+            onOpenThemes={() => navigation.push(tabStackNavigations.THEMES)}
+            // ★`title` 파라미터는 넘기지 않는다 — 상세 헤더는 web 과 같이
+            // 항상 '알림 묶음' 이다. 진입 경로마다 헤더가 달라지면 같은 화면이
+            // 두 개처럼 보인다(묶음 이름은 본문 맨 위에 이미 있다).
+            onOpenTheme={themeId =>
+              navigation.push(tabStackNavigations.THEME_DETAIL, {themeId})
+            }
+          />
         </View>
       </KeyboardAwareScrollView>
       <KeyboardStickyView offset={{closed: -insets.bottom, opened: 0}}>
@@ -315,7 +277,3 @@ function EmptyKeywords({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  grow: {flex: 1},
-});

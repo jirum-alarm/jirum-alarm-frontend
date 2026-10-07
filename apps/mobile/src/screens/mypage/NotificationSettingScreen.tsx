@@ -47,7 +47,7 @@ const ROWS: {key: PushSettingKey; title: string; description: string}[] = [
  *
  * 백엔드(pushSetting / updatePushSetting)는 있었는데 화면이 없어서 2026-10-01 기준 1,204명
  * 전원이 기본값이었다(야간 동의 0명 → 밤 알림이 전부 아침으로 밀림).
- * ponytail: 스위치는 키워드 화면의 PriceDropSwitch 를 라벨 없이 쓴다(같은 모양·햅틱).
+ * ponytail: 스위치는 PriceDropSwitch(모양·햅틱을 직접 그린 것)를 쓴다.
  */
 export default function NotificationSettingScreen({navigation}: Props) {
   const {data, isPending, isError, refetch} = useQuery(
@@ -83,7 +83,6 @@ export default function NotificationSettingScreen({navigation}: Props) {
                 <PriceDropSwitch
                   value={data[key]}
                   onChange={next => mutate({[key]: next})}
-                  showLabel={false}
                   accessibilityLabel={title}
                 />
               </View>

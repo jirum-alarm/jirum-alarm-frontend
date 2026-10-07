@@ -105,25 +105,18 @@ export class MyPageService {
     return res.data;
   }
 
-  static async updateKeywordPriceDropOnly(variables: {
-    id: number;
-    priceDropOnly: boolean;
-  }) {
-    const res = await HttpClient.withAccessToken().execute(
-      MutationUpdateKeywordPriceDropOnly,
-      variables,
-    );
-    return res.data;
-  }
-
-  /** 키워드별 제외 단어 + 가격 범위. 서버 뮤테이션이 둘이라 병렬로 부른다(web 과 같다). */
+  /**
+   * 키워드 알림 설정(받을 딜·가격 범위·제외 단어)을 저장 한 번으로. 서버 뮤테이션이 따로라
+   * 병렬로 부른다(web 과 같다). `priceDropOnly` 는 바뀌었을 때만 넘긴다.
+   */
   static async updateKeywordOptions(variables: {
     id: number;
     excludeKeywords: string[];
     minPrice: number | null;
     maxPrice: number | null;
+    priceDropOnly?: boolean;
   }) {
-    const {id, excludeKeywords, minPrice, maxPrice} = variables;
+    const {id, excludeKeywords, minPrice, maxPrice, priceDropOnly} = variables;
     const client = HttpClient.withAccessToken();
     await Promise.all([
       client.execute(MutationUpdateKeywordExcludeKeywords, {
@@ -131,6 +124,8 @@ export class MyPageService {
         excludeKeywords,
       }),
       client.execute(MutationUpdateKeywordPriceRange, {id, minPrice, maxPrice}),
+      priceDropOnly !== undefined &&
+        client.execute(MutationUpdateKeywordPriceDropOnly, {id, priceDropOnly}),
     ]);
   }
 

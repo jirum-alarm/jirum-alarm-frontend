@@ -13,3 +13,33 @@ export const parsePrice = (value: string) => {
   const digits = value.replace(/[^0-9]/g, '');
   return digits ? Number(digits) : null;
 };
+
+const formatWon = (price: number) =>
+  price >= 10000 && price % 10000 === 0
+    ? `${(price / 10000).toLocaleString('ko-KR')}만원`
+    : `${price.toLocaleString('ko-KR')}원`;
+
+/**
+ * 키워드 카드에 늘 보이는 한 줄 — "지금 이 키워드로 어떤 알림이 오는지"를 말로 적는다.
+ * 예: "평소보다 쌀 때만 · 100만원 이하 · ‘케이스’ 외 1개 제외"
+ */
+export const summarizeKeywordAlert = ({
+  priceDropOnly,
+  excludeKeywords,
+  minPrice,
+  maxPrice,
+}: {
+  priceDropOnly: boolean;
+  excludeKeywords: string[];
+  minPrice: number | null;
+  maxPrice: number | null;
+}) => {
+  const parts = [priceDropOnly ? '평소보다 쌀 때만' : '새 핫딜 모두'];
+  if (minPrice != null && maxPrice != null)
+    parts.push(`${formatWon(minPrice)}~${formatWon(maxPrice)}`);
+  else if (maxPrice != null) parts.push(`${formatWon(maxPrice)} 이하`);
+  else if (minPrice != null) parts.push(`${formatWon(minPrice)} 이상`);
+  const [first, ...rest] = excludeKeywords;
+  if (first) parts.push(rest.length ? `‘${first}’ 외 ${rest.length}개 제외` : `‘${first}’ 제외`);
+  return parts.join(' · ');
+};
