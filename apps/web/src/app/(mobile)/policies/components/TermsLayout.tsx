@@ -5,6 +5,7 @@ import { Link } from 'react-scroll';
 import useGoBack from '@/shared/hooks/useGoBack';
 import { cn } from '@/shared/lib/cn';
 import { Close } from '@/shared/ui/common/icons';
+import { PC_PAGE_HEADER } from '@/shared/ui/layout/BasicLayout';
 import PageHeader from '@/shared/ui/layout/PageHeader';
 
 type TermsIndexData = {
@@ -36,8 +37,10 @@ const TermsLayout = ({
     <div
       className={cn(
         'flex w-full flex-col items-center pt-14',
-        // PC: BasicLayout 과 같은 규칙 — GNB(h-14) 아래로.
-        'pc:pt-28 pc:before:hidden pc:after:hidden pc:[&>header]:top-14',
+        // PC: BasicLayout 과 같은 틀 — GNB 아래 672px 칸 + 제목. 닫기(X)는 모달 흉내라 PC 에선 뺀다.
+        'pc:mx-auto pc:max-w-2xl pc:pt-14 pc:before:hidden pc:after:hidden',
+        PC_PAGE_HEADER,
+        "pc:[&>header_button[aria-label='닫기']]:hidden",
         'mobile-max:before:fixed mobile-max:before:left-1/2 mobile-max:before:top-0 mobile-max:before:-ml-[300px] mobile-max:before:h-full mobile-max:before:w-px mobile-max:before:-translate-x-1/2 mobile-max:before:bg-gray-200',
         'mobile-max:after:fixed mobile-max:after:left-1/2 mobile-max:after:top-0 mobile-max:after:ml-[300px] mobile-max:after:h-full mobile-max:after:w-px mobile-max:after:-translate-x-1/2 mobile-max:after:bg-gray-200',
       )}
@@ -55,7 +58,7 @@ const TermsLayout = ({
           </button>
         }
       />
-      <article className="max-w-mobile-max flex w-full flex-col gap-6 p-5">
+      <article className="max-w-mobile-max pc:max-w-none flex w-full flex-col gap-6 p-5">
         <div className="flex w-full flex-col gap-[8px] text-[13px] text-gray-500">
           <p>공고일자 : 2023년 12월 01일</p>
           <p>시행일자 : 2023년 12월 01일</p>
