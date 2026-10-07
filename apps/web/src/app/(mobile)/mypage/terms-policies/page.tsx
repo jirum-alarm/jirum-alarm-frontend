@@ -8,14 +8,14 @@ const TermsPoliciesPage = () => {
       {/* 이동하는 행은 chevron 을 준다 — 마이페이지의 다른 행들과 같은 규칙. */}
       <div className="pc:pt-0 h-full py-6">
         <Link className="w-full" href={'/policies/terms'}>
-          <div className="flex items-center px-5 py-4">
-            <span className="flex-1 text-left">서비스 이용약관</span>
+          <div className="flex items-center px-5 py-3">
+            <span className="flex-1 text-left text-gray-900">서비스 이용약관</span>
             <ArrowRight />
           </div>
         </Link>
         <Link className="w-full" href={'/policies/privacy'}>
-          <div className="flex items-center px-5 py-4">
-            <span className="flex-1 text-left">개인정보 처리방침</span>
+          <div className="flex items-center px-5 py-3">
+            <span className="flex-1 text-left text-gray-900">개인정보 처리방침</span>
             <ArrowRight />
           </div>
         </Link>

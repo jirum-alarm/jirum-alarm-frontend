@@ -73,10 +73,8 @@ export default function NotificationSettingScreen({navigation}: Props) {
                 accessible={false}
                 className="flex-row items-center gap-4 border-b border-gray-200 py-4">
                 <View className="min-w-0 flex-1">
-                  <Text className="text-sm font-medium text-gray-900">
-                    {title}
-                  </Text>
-                  <Text className="mt-0.5 text-xs text-gray-500">
+                  <Text className="font-medium text-gray-900">{title}</Text>
+                  <Text className="mt-0.5 text-sm text-gray-500">
                     {description}
                   </Text>
                 </View>

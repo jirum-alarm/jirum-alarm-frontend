@@ -44,8 +44,8 @@ const PushSettingForm = () => {
             htmlFor={`${id}-${key}`}
             className="flex min-w-0 flex-1 cursor-pointer flex-col gap-0.5"
           >
-            <span className="text-sm font-medium text-gray-900">{title}</span>
-            <span className="text-xs text-gray-500">{description}</span>
+            <span className="font-medium text-gray-900">{title}</span>
+            <span className="text-sm text-gray-500">{description}</span>
           </label>
           <input
             id={`${id}-${key}`}

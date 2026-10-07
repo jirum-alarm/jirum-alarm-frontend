@@ -66,7 +66,7 @@ export default function AccountScreen({navigation}: Props) {
           </View>
         ) : (
           <View className="px-5" style={styles.grow}>
-            <View className="border-b border-b-gray-300 pt-6 pb-8">
+            <View className="border-b border-b-gray-200 pt-6 pb-8">
               <MovePageRow
                 title="닉네임"
                 subtitle={me?.nickname}
@@ -90,7 +90,7 @@ export default function AccountScreen({navigation}: Props) {
 
             <View className="pt-8" style={styles.grow}>
               <View className="pb-[22px]">
-                <Text className="text-sm text-gray-600">이메일 주소</Text>
+                <Text className="text-sm text-gray-500">이메일 주소</Text>
               </View>
               <Text className="text-gray-900">{me?.email}</Text>
 

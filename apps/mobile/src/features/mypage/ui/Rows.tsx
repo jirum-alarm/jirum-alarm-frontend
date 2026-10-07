@@ -80,10 +80,10 @@ export function MovePageRow({
   return (
     <Row onPress={onPress} accessibilityLabel={title}>
       <View className="flex-row items-center justify-between py-3">
-        <Text className="text-sm text-gray-600">{title}</Text>
+        <Text className="text-gray-900">{title}</Text>
         <View className="flex-row items-center gap-2">
           {subtitle ? (
-            <Text className="text-sm text-gray-900" numberOfLines={1}>
+            <Text className="text-sm text-gray-500" numberOfLines={1}>
               {subtitle}
             </Text>
           ) : null}
@@ -105,7 +105,7 @@ export function TextRow({
   return (
     <Row onPress={onPress} accessibilityLabel={title}>
       {/* MenuRow 와 같은 이유로 chevron. 아이콘이 없어 제목이 왼쪽 끝이다. */}
-      <View className="flex-row items-center px-5 py-4">
+      <View className="flex-row items-center px-5 py-3">
         <Text className="text-gray-900" style={styles.grow}>
           {title}
         </Text>
