@@ -34,11 +34,12 @@ export function notificationSource(
   field: string | null | undefined,
   mine: Set<string>,
   themes: { id: string | number; name: string }[],
-): { label: string; href: string } | undefined {
+): { label: string; href: string; kind: 'keyword' | 'theme' | 'good_deal' } | undefined {
   if (!field) return undefined;
   const keyword = matchMyKeyword(field, mine);
   if (keyword) {
     return {
+      kind: 'keyword',
       label: `${keyword} 키워드 알림`,
       href: `/mypage/keyword?focus=${encodeURIComponent(keyword)}`,
     };
@@ -46,10 +47,12 @@ export function notificationSource(
   const themeName = field.match(/\[(.+?)\]/)?.[1];
   if (themeName) {
     const theme = themes.find((t) => t.name === themeName);
-    return theme ? { label: `${themeName} 관심사 알림`, href: `/themes/${theme.id}` } : undefined;
+    return theme
+      ? { kind: 'theme', label: `${themeName} 관심사 알림`, href: `/themes/${theme.id}` }
+      : undefined;
   }
   if (field.includes('지금 뜨는 좋은 딜')) {
-    return { label: '지금 뜨는 좋은 딜 알림', href: '/mypage/notification' };
+    return { kind: 'good_deal', label: '지금 뜨는 좋은 딜 알림', href: '/mypage/notification' };
   }
   return undefined;
 }

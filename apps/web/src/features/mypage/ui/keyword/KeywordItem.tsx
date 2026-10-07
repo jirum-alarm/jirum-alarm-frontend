@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
+import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
 import { Close } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
@@ -102,6 +103,7 @@ const KeywordItem = ({
         >
           <Link
             href={`${PAGE.SEARCH}?keyword=${encodeURIComponent(keyword.keyword)}`}
+            onClick={() => trackAlarmLink('keyword_deals')}
             className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2.5 text-sm text-gray-900 hover:bg-gray-100"
           >
             <span className="truncate">‘{keyword.keyword}’ 지금 올라온 딜 보기</span>

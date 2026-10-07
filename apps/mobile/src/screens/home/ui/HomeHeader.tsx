@@ -13,6 +13,7 @@ import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import {navigateToNativeRoute} from '@/navigations/navigation-ref';
 import {useHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {useColors} from '@/shared/theme/useColors';
 import {fixed} from '@/shared/theme/palette';
 import {useColorSchemePreference} from '@/shared/theme/color-scheme-preference';
@@ -147,7 +148,13 @@ function HeaderRow({
         {/* 알림함 — 하단 탭에도 있지만 "새 알림 왔나" 를 보는 익숙한 자리(사용자 요청 2026-10-07).
             점은 탭바와 같은 판정(useHasNewAlarm)이라 둘이 어긋나지 않는다. */}
         <Pressable
-          onPress={() => navigateToNativeRoute('/alarm')}
+          onPress={() => {
+            Analytics.track('alarm_link_click', {
+              link: 'home_bell',
+              platform: 'app',
+            });
+            navigateToNativeRoute('/alarm');
+          }}
           hitSlop={8}
           accessibilityRole="button"
           accessibilityLabel={hasNewAlarm ? '알림, 새 알림 있음' : '알림'}

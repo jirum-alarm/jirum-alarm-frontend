@@ -23,6 +23,7 @@ import {
   tabStackNavigations,
 } from '@/shared/constant/navigations';
 import {navigateToNativeRoute} from '@/navigations/navigation-ref';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {normalizeKeyword} from '@/features/keyword-prompt/model/myKeywords';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
 import KeywordItem from '@/features/mypage/ui/KeywordItem';
@@ -53,11 +54,16 @@ export default function KeywordScreen({navigation, route}: Props) {
     : undefined;
   // 루트 스택의 Search 는 검색 스택(중첩)이라 검색어는 자식 화면 params 로 넣어야 닿는다
   // (tab-routing 의 /search 와 같은 모양). 타입은 탭 스택 기준이라 단언한다.
-  const openSearch = (keyword: string) =>
+  const openSearch = (keyword: string) => {
+    Analytics.track('alarm_link_click', {
+      link: 'keyword_deals',
+      platform: 'app',
+    });
     (navigation.push as (name: string, params?: object) => void)(
       tabStackNavigations.SEARCH,
       {screen: searchStackNavigations.HOME, params: {keyword}},
     );
+  };
   const insets = useSafeAreaInsets();
   const bottomClip = useHiddenTabBarClipPadding();
   const {
@@ -120,7 +126,13 @@ export default function KeywordScreen({navigation, route}: Props) {
               </Text>
               {/* 키워드 화면이 막다른 길이던 자리 — 등록한 키워드로 받은 알림을 바로 본다. */}
               <Pressable
-                onPress={() => navigateToNativeRoute('/alarm')}
+                onPress={() => {
+                  Analytics.track('alarm_link_click', {
+                    link: 'keyword_inbox',
+                    platform: 'app',
+                  });
+                  navigateToNativeRoute('/alarm');
+                }}
                 hitSlop={8}
                 accessibilityRole="link"
                 style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>

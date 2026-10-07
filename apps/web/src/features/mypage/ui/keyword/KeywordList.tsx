@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { PAGE } from '@/shared/config/page';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
+import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
 import { useToast } from '@/shared/ui/common/Toast';
 import Link from '@/shared/ui/Link';
 
@@ -36,7 +37,11 @@ const KeywordList = ({ focus }: { focus?: string }) => {
         <div className="flex items-baseline gap-x-3">
           <span className="text-xs text-gray-500">{keywords.length}/20</span>
           {/* 키워드 화면이 막다른 길이던 자리 — 등록한 키워드로 받은 알림을 바로 본다. */}
-          <Link href={PAGE.ALARM} className="text-xs text-gray-500 hover:text-gray-700">
+          <Link
+            href={PAGE.ALARM}
+            onClick={() => trackAlarmLink('keyword_inbox')}
+            className="text-xs text-gray-500 hover:text-gray-700"
+          >
             받은 알림 보기 ›
           </Link>
         </div>

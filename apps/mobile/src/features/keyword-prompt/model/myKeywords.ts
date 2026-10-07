@@ -5,6 +5,7 @@ import {useQuery, type QueryClient} from '@tanstack/react-query';
 import {MyPageQueries} from '@/entities/mypage';
 import {ProductQueries} from '@/entities/product/product.queries';
 import {navigationRef} from '@/navigations/navigation-ref';
+import {Analytics} from '@/shared/lib/analytics/ga4';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 
 /**
@@ -62,5 +63,6 @@ export function useMyKeywordSet(): Set<string> {
  */
 export function openKeywordSettings() {
   if (!navigationRef.isReady()) return;
+  Analytics.track('alarm_link_click', {link: 'toast_keyword', platform: 'app'});
   navigationRef.dispatch(StackActions.push(tabStackNavigations.MYPAGE_KEYWORD));
 }

@@ -4,6 +4,7 @@ import { m } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
 import { useHasNewAlarm } from '@/shared/hooks/useHasNewAlarm';
+import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
 import { Alert } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
@@ -19,6 +20,7 @@ const AlarmLinkButton = ({ color }: { color?: string }) => {
     <Link
       className="pc:m-0 pc:size-9 pc:p-0 pc:rounded-full pc:hover:bg-gray-400/20 -m-2 flex items-center justify-center p-2 duration-300"
       href={PAGE.ALARM}
+      onClick={() => trackAlarmLink('home_bell')}
       aria-label={hasNewAlarm ? '알림, 새 알림 있음' : '알림'}
     >
       <m.div

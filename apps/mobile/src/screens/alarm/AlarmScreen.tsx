@@ -149,6 +149,13 @@ export default function AlarmScreen() {
   const goSource = useCallback(
     (key: string) => {
       const source = parseSourceKey(key);
+      // 웹 trackAlarmLink 와 같은 이벤트·값 — 알림 출처 라벨이 실제로 눌리는지 본다.
+      Analytics.track('alarm_link_click', {
+        link: `source_${
+          source.kind === 'goodDeal' ? 'good_deal' : source.kind
+        }`,
+        platform: 'app',
+      });
       if (source.kind === 'keyword') {
         navigation.push(tabStackNavigations.MYPAGE_KEYWORD, {
           focus: source.keyword,

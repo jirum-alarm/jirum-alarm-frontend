@@ -4,6 +4,7 @@ import { memo, type ReactNode } from 'react';
 import { QueryNotificationsQuery } from '@/shared/api/gql/graphql';
 import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
+import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
 import { convertToWebp } from '@/shared/lib/utils/image';
 import { XSmall } from '@/shared/ui/common/icons';
 import DisplayTime from '@/shared/ui/DisplayTime';
@@ -25,7 +26,7 @@ const AlarmItem = ({
   onDelete: (id: number) => void;
   isNew: boolean;
   /** 어디서 온 알림인가(`notificationSource`). 있으면 줄 위에 그 알림의 설정 링크로 보여준다. */
-  source?: { label: string; href: string };
+  source?: { label: string; href: string; kind: 'keyword' | 'theme' | 'good_deal' };
 }) => {
   const { id, message, createdAt, product, keyword, readAt } = notification;
   const { thumbnail, price, isHot, isEnd, id: productId } = product ?? {};
@@ -83,6 +84,7 @@ const AlarmItem = ({
         ) : (
           <Link
             href={source.href}
+            onClick={() => trackAlarmLink(`source_${source.kind}`)}
             aria-label={`${source.label} 설정`}
             className="block truncate pt-4 pr-14 pl-[88px] text-xs text-gray-500 hover:text-gray-700"
           >

@@ -9,6 +9,7 @@ import { PAGE } from '@/shared/config/page';
 import { useHasNewAlarm } from '@/shared/hooks/useHasNewAlarm';
 import useScrollPosition from '@/shared/hooks/useScrollPosition';
 import { cn } from '@/shared/lib/cn';
+import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
 import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
 import { Alert, My } from '@/shared/ui/common/icons';
 import TalkDark from '@/shared/ui/common/icons/TalkDark';
@@ -149,6 +150,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           {isLoggedIn && (
             <Link
               href={PAGE.ALARM}
+              onClick={() => trackAlarmLink('gnb_bell')}
               aria-label={hasNewAlarm ? '알림, 새 알림 있음' : '알림'}
               className="flex size-8 items-center justify-center rounded-full duration-300 hover:bg-gray-400/20"
             >

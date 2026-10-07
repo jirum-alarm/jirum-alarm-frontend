@@ -11,10 +11,12 @@ const themes = [{ id: '3', name: '생수·음료 쟁이기' }];
 
 test('키워드·가격 하락 → 키워드 설정, 관심사 제목 → 관심사 화면, 좋은 딜 → 알림 설정', () => {
   assert.deepEqual(notificationSource('햇반 평소보다 54% 싸게 떴어요 📉', mine, themes), {
+    kind: 'keyword',
     label: '햇반 키워드 알림',
     href: '/mypage/keyword?focus=%ED%96%87%EB%B0%98',
   });
   assert.deepEqual(notificationSource('🥤 [생수·음료 쟁이기] 펩시 핫딜', mine, themes), {
+    kind: 'theme',
     label: '생수·음료 쟁이기 관심사 알림',
     href: '/themes/3',
   });
