@@ -4,31 +4,46 @@ import Svg, {Circle, Path, type SvgProps} from 'react-native-svg';
 import {useColors} from '@/shared/theme/useColors';
 
 /**
- * 내정보 메뉴 아이콘 4종. web `shared/ui/common/icons/{Alert,Filter,Description,Headset}`
+ * 내정보 메뉴 아이콘. web `shared/ui/common/icons/{Grid,Hashtag,Filter,Description,Headset}`
  * 의 패스를 그대로 옮겼다.
  *
  * ★`src/shared/components/icons/` 에 넣지 않는다 — 이번 작업 동안 다른 화면과
  * 같은 파일을 건드리지 않기로 했다. 다른 화면에서도 쓰게 되면 그때 올린다.
  */
 
-/** 키워드 알림(종). web 은 stroke 기반이라 currentColor 대신 색을 직접 받는다. */
-export function AlertMenuIcon({color: colorProp, ...props}: SvgProps) {
+/** 키워드 알림(#) — 알림(종)과 구분. stroke 라 색을 직접 받는다. */
+export function HashtagMenuIcon({color: colorProp, ...props}: SvgProps) {
   const c = useColors();
   const color = colorProp ?? c.gray[900];
   return (
-    <Svg width={29} height={28} viewBox="0 0 29 28" fill="none" {...props}>
+    <Svg width={28} height={28} viewBox="0 0 28 28" fill="none" {...props}>
       <Path
         stroke={color as string}
-        strokeLinecap="square"
-        strokeLinejoin="round"
+        strokeLinecap="round"
         strokeWidth={1.5}
-        d="M11.853 23c.705.622 1.632 1 2.646 1s1.94-.378 2.646-1m3.354-13a6 6 0 1 0-12 0c0 3.09-.78 5.206-1.65 6.605-.735 1.18-1.102 1.771-1.089 1.936.015.182.054.252.2.36.133.099.732.099 1.928.099H21.11c1.197 0 1.795 0 1.927-.098.147-.11.186-.179.2-.361.014-.165-.353-.755-1.088-1.936-.87-1.399-1.65-3.515-1.65-6.605Z"
+        d="M11.5 5.5 9.5 22.5M18.5 5.5l-2 17M6.5 10.5h16M5.5 17.5h16"
       />
     </Svg>
   );
 }
 
-/** 관심 카테고리(필터). */
+/** 관심 카테고리(네 칸) — 알림 설정(슬라이더)과 구분. */
+export function GridMenuIcon({color: colorProp, ...props}: SvgProps) {
+  const c = useColors();
+  const color = colorProp ?? c.gray[900];
+  return (
+    <Svg width={28} height={28} viewBox="0 0 28 28" fill="none" {...props}>
+      <Path
+        stroke={color as string}
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M5.75 6.75a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zM15.25 6.75a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zM5.75 16.25a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zM15.25 16.25a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1z"
+      />
+    </Svg>
+  );
+}
+
+/** 알림 설정(슬라이더). */
 export function FilterMenuIcon({color: colorProp, ...props}: SvgProps) {
   const c = useColors();
   const color = colorProp ?? c.gray[900];

@@ -110,6 +110,16 @@ describe('메뉴 — web MenuList 의 6줄이 전부 있다', () => {
     expect(rootCode).toContain(route);
   });
 
+  /** 순서도 web 과 같다 — 키워드 알림이 가장 자주 여는 설정이라 맞춤 설정 맨 위. */
+  it('키워드 알림이 관심 카테고리보다 위다(web·앱)', () => {
+    expect(web.indexOf("title: '키워드 알림'")).toBeLessThan(
+      web.indexOf("title: '관심 카테고리'"),
+    );
+    expect(rootCode.indexOf('title="키워드 알림"')).toBeLessThan(
+      rootCode.indexOf('title="관심 카테고리"'),
+    );
+  });
+
   /**
    * ★고객센터(채널톡)는 web SDK 라 네이티브에 얹을 데가 없다 →
    * 네이티브 껍데기 안에 web 페이지를 띄운다. **행 자체가 사라지면**

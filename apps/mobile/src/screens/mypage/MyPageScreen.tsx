@@ -28,9 +28,10 @@ import {MenuRow} from '@/features/mypage/ui/Rows';
 import CustomerServiceSheet from '@/features/mypage/ui/CustomerServiceSheet';
 import ColorSchemeSheet from '@/features/mypage/ui/ColorSchemeSheet';
 import {
-  AlertMenuIcon,
   DescriptionMenuIcon,
   FilterMenuIcon,
+  GridMenuIcon,
+  HashtagMenuIcon,
   HeadsetMenuIcon,
   ThemeMenuIcon,
 } from '@/features/mypage/ui/icons';
@@ -141,7 +142,7 @@ export default function MyPageScreen() {
           </View>
         </View>
 
-        {/* 메뉴 — web MenuList(찜 목록 · 관심 카테고리 · 키워드 알림 · 알림 설정 · 약관 · 고객센터) */}
+        {/* 메뉴 — web MenuList(찜 목록 · 키워드 알림 · 관심 카테고리 · 알림 설정 · 약관 · 고객센터) */}
         <View className="px-5">
           {/* ★아래에 아무것도 없는 자리의 구분선은 뺀다 — 목록이 끊긴
               것처럼 보였다(마지막 행 밑에 회색 선 + 빈 화면). */}
@@ -152,14 +153,14 @@ export default function MyPageScreen() {
               onPress={() => push(tabStackNavigations.LIKE)}
             />
             <MenuRow
-              icon={<FilterMenuIcon />}
-              title="관심 카테고리"
-              onPress={() => push(tabStackNavigations.MYPAGE_CATEGORIES)}
-            />
-            <MenuRow
-              icon={<AlertMenuIcon />}
+              icon={<HashtagMenuIcon />}
               title="키워드 알림"
               onPress={() => push(tabStackNavigations.MYPAGE_KEYWORD)}
+            />
+            <MenuRow
+              icon={<GridMenuIcon />}
+              title="관심 카테고리"
+              onPress={() => push(tabStackNavigations.MYPAGE_CATEGORIES)}
             />
             <MenuRow
               icon={<FilterMenuIcon />}

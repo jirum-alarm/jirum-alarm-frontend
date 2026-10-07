@@ -26,9 +26,10 @@ interface WithoutBottomNav extends BaseProps {
 
 type Props = WithBottomNav | WithoutBottomNav;
 
-/** PC 에선 고정 앱바(PageHeader)를 내용 위 제목으로 바꾼다. TermsLayout 도 같이 쓴다. */
+/** PC 에선 고정 앱바(PageHeader)를 내용 위 제목으로 바꾼다. TermsLayout 도 같이 쓴다.
+ *  z-auto: 앱바의 z-50 은 static 이어도 grid 자식이라 살아 있어, GNB 아래 테두리를 제목 폭만큼 덮었다. */
 export const PC_PAGE_HEADER = cn(
-  'pc:[&>header]:static pc:[&>header]:h-auto pc:[&>header]:max-w-none pc:[&>header]:border-0 pc:[&>header]:pt-8 pc:[&>header]:pb-6',
+  'pc:[&>header]:static pc:[&>header]:z-auto pc:[&>header]:h-auto pc:[&>header]:max-w-none pc:[&>header]:border-0 pc:[&>header]:pt-8 pc:[&>header]:pb-6',
   'pc:[&>header_h1]:text-xl pc:[&>header_h1]:font-bold',
   "pc:[&>header_button[aria-label='뒤로_가기']]:hidden",
 );

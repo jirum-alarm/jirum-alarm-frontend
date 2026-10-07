@@ -1,5 +1,5 @@
 import { PAGE } from '@/shared/config/page';
-import { Alert, Description, Filter, Heart, Setting } from '@/shared/ui/common/icons';
+import { Alert, Description, Grid, Hashtag, Heart, Setting } from '@/shared/ui/common/icons';
 
 /** PC 사이드바·첫 화면의 묶음. 자주 여는 것(내 핫딜) → 가끔 바꾸는 것(맞춤 설정) → 거의 안 여는 것(지원) 순. */
 export const MYPAGE_GROUPS = [
@@ -40,18 +40,18 @@ export const MYPAGE_MENU: Array<{
     description: '찜한 핫딜을 모아봐요',
   },
   {
-    icon: <Filter />,
-    title: '관심 카테고리',
-    group: 'custom',
-    url: PAGE.MYPAGE_CATEGORIES,
-    description: '관심사를 최대 5개까지 골라요',
-  },
-  {
-    icon: <Alert />,
+    icon: <Hashtag />,
     title: '키워드 알림',
     group: 'custom',
     url: PAGE.MYPAGE_KEYWORD,
     description: '원하는 상품이 올라오면 알려드려요',
+  },
+  {
+    icon: <Grid />,
+    title: '관심 카테고리',
+    group: 'custom',
+    url: PAGE.MYPAGE_CATEGORIES,
+    description: '관심사를 최대 5개까지 골라요',
   },
   {
     icon: <Setting />,
