@@ -46,6 +46,7 @@ const BasicLayout = ({
   return (
     <>
       <div
+        data-basic-layout
         className={cn(
           'max-w-mobile-max relative mx-auto box-border grid grid-cols-1 bg-white pb-[var(--bottom-nav-padding)]',
           'mobile-max:before:fixed mobile-max:before:left-1/2 mobile-max:before:top-0 mobile-max:before:-ml-[300px] mobile-max:before:h-full mobile-max:before:w-px mobile-max:before:-translate-x-1/2 mobile-max:before:bg-gray-200',
@@ -53,7 +54,7 @@ const BasicLayout = ({
           // PC(.pc = DesktopReadyLayout)는 PC 폼 화면(products/new)과 같은 틀: GNB 아래 가운데 672px 칸 + 큰 제목.
           // 모바일 티(폰 테두리·고정 앱바·뒤로가기)는 뺀다 — 이동은 GNB·브라우저 뒤로가기가 맡는다.
           // PC 분기에서 BasicLayout 을 쓰는 곳은 (mobile) 그룹뿐이다.
-          'pc:max-w-2xl pc:pt-14 pc:before:hidden pc:after:hidden',
+          'pc:max-w-2xl pc:content-start pc:pt-14 pc:before:hidden pc:after:hidden',
           PC_PAGE_HEADER,
           fullScreen && 'min-h-screen',
         )}

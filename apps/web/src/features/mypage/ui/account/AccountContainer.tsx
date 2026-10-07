@@ -29,8 +29,10 @@ const AccountContainer = () => {
   //
   // pb 는 pb-4. 네비 클리어런스는 BasicLayout:42 가 이미 대주므로, 여기서 var 를
   // 또 더하면 56px 이 두 번 들어가 하단에 빈 여백이 생긴다(리포트 2026-07-31).
+  //
+  // PC 는 바텀네비가 없고 화면이 길어 바닥에 붙이면 내용과 멀리 떨어진다 → 이메일 바로 아래(왼쪽).
   return (
-    <div className="flex min-h-[calc(100vh-56px-max(56px,var(--bottom-nav-padding,0px)))] flex-col px-5 pb-4">
+    <div className="pc:min-h-0 flex min-h-[calc(100vh-56px-max(56px,var(--bottom-nav-padding,0px)))] flex-col px-5 pb-4">
       <div className="border-b border-b-gray-300 pt-6 pb-8">
         <MovePage to="/mypage/account/nickname" title="닉네임" subtitle={me?.nickname} />
         <MovePage to="/mypage/account/personal" title="개인정보" />
@@ -43,7 +45,7 @@ const AccountContainer = () => {
         <div>
           <span className="text-gray-900">{me?.email}</span>
         </div>
-        <div className="flex flex-1 items-end justify-center pt-10">
+        <div className="pc:justify-start flex flex-1 items-end justify-center pt-10">
           <AccountManagement />
         </div>
       </div>

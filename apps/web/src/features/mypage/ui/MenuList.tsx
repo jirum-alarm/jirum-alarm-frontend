@@ -3,51 +3,10 @@
 import { m } from 'motion/react';
 
 import customerService from '@/shared/lib/customerservice/customer-service';
-import {
-  Alert,
-  ArrowRight,
-  Description,
-  Filter,
-  Headset,
-  Heart,
-  Setting,
-} from '@/shared/ui/common/icons';
+import { ArrowRight, Headset } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
-const MENU_LIST: Array<{
-  icon: React.ReactNode;
-  title: string;
-  url: string;
-}> = [
-  {
-    icon: (
-      <div className="flex h-7 w-7 items-center justify-center">
-        <Heart width={24} height={24} />
-      </div>
-    ),
-    title: '찜 목록',
-    url: '/like',
-  },
-  {
-    icon: <Filter />,
-    title: '관심 카테고리',
-    url: '/mypage/categories',
-  },
-  {
-    icon: <Alert />,
-    title: '키워드 알림',
-    url: '/mypage/keyword',
-  },
-  {
-    icon: <Setting />,
-    title: '알림 설정',
-    url: '/mypage/notification',
-  },
-  {
-    icon: <Description />,
-    title: '약관 및 정책',
-    url: '/mypage/terms-policies',
-  },
-];
+
+import { MYPAGE_MENU } from '../model/menu';
 
 const MenuList = () => {
   const handleShowChannelTalkClick = () => {
@@ -59,7 +18,7 @@ const MenuList = () => {
           회색 선 + 빈 화면이라 목록이 끊긴 것처럼 보였다. */}
       <div className="py-4">
         <ul>
-          {MENU_LIST.map((menu, i) => {
+          {MYPAGE_MENU.map((menu, i) => {
             return (
               <li key={i}>
                 <Link href={menu.url}>

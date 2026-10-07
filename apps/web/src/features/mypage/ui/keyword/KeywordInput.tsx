@@ -34,7 +34,7 @@ const KeywordInput = ({ autoFocus = true }: { autoFocus?: boolean }) => {
           )
         }
       />
-      <div className="fixed right-0 bottom-[var(--bottom-nav-padding)] left-0 m-auto max-w-[600px] bg-white px-5 py-6">
+      <div className="pc:static pc:max-w-none pc:px-0 pc:pt-3 pc:pb-0 fixed right-0 bottom-[var(--bottom-nav-padding)] left-0 m-auto max-w-[600px] bg-white px-5 py-6">
         <Button type="submit" className="w-full" disabled={!canSubmit}>
           등록
         </Button>
