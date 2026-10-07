@@ -7,7 +7,7 @@ import { PAGE } from '@/shared/config/page';
 import { cn } from '@/shared/lib/cn';
 import customerService from '@/shared/lib/customerservice/customer-service';
 import CustomerServiceBoot from '@/shared/lib/customerservice/CustomerServiceBoot';
-import { Headset } from '@/shared/ui/common/icons';
+import { Alert, Headset } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
 import { AuthQueries } from '@/entities/auth';
@@ -41,6 +41,18 @@ export default function MyPageSidebar() {
       </Link>
       <nav className="pt-4">
         <ul className="flex flex-col gap-0.5">
+          {/* 알림함은 마이페이지 메뉴가 아니라 별도 탭(모바일)·GNB 아이콘이지만, PC 에선 같은 틀에 둔다. */}
+          <li className="mb-2 border-b border-gray-200 pb-2">
+            <Link
+              href={PAGE.ALARM}
+              className={cn(rowClass, 'hover:bg-gray-50', {
+                'bg-gray-100 font-semibold': isActive(PAGE.ALARM),
+              })}
+            >
+              <Alert />
+              알림
+            </Link>
+          </li>
           {MYPAGE_MENU.map((menu) => (
             <li key={menu.url}>
               <Link
