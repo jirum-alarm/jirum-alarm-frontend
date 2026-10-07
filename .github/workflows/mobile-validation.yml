@@ -7,6 +7,8 @@ on:
       - .npmrc
       - .nvmrc
       - apps/mobile/**
+      # 앱 테스트 다수가 web 소스를 읽어 대조한다(mypage-port-parity 등) — web 만 바뀐 커밋도 여기서 잡는다.
+      - apps/web/src/**
       - apps/web/src/app/actions/agent.ts
       - apps/web/src/shared/model/device.ts
       - apps/web/src/shared/hooks/useAppDownloadLink.tsx
@@ -21,6 +23,8 @@ on:
       - .npmrc
       - .nvmrc
       - apps/mobile/**
+      # 앱 테스트 다수가 web 소스를 읽어 대조한다(mypage-port-parity 등) — web 만 바뀐 커밋도 여기서 잡는다.
+      - apps/web/src/**
       - apps/web/src/app/actions/agent.ts
       - apps/web/src/shared/model/device.ts
       - apps/web/src/shared/hooks/useAppDownloadLink.tsx
