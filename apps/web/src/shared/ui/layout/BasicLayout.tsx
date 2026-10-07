@@ -43,6 +43,9 @@ const BasicLayout = ({
           'max-w-mobile-max relative mx-auto box-border grid grid-cols-1 bg-white pb-[var(--bottom-nav-padding)]',
           'mobile-max:before:fixed mobile-max:before:left-1/2 mobile-max:before:top-0 mobile-max:before:-ml-[300px] mobile-max:before:h-full mobile-max:before:w-px mobile-max:before:-translate-x-1/2 mobile-max:before:bg-gray-200',
           'mobile-max:after:fixed mobile-max:after:left-1/2 mobile-max:after:top-0 mobile-max:after:ml-[300px] mobile-max:after:h-full mobile-max:after:w-px mobile-max:after:-translate-x-1/2 mobile-max:after:bg-gray-200',
+          // PC(.pc = DesktopReadyLayout)는 고정 GNB(h-14)가 위에 있다 — 칸을 그만큼 내리고 헤더를 그 아래에 붙인다.
+          // 폰 테두리는 GNB 와 안 어울려 뺀다. PC 분기에서 BasicLayout 을 쓰는 곳은 (mobile) 그룹뿐이다.
+          'pc:pt-14 pc:before:hidden pc:after:hidden pc:[&>header]:top-14',
           fullScreen && 'min-h-screen',
         )}
       >

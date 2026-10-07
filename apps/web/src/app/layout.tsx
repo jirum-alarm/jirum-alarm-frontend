@@ -46,7 +46,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // 확정해 <html> 에 심어야 첫 페인트부터 하단 여백이 잡힌다 — 예전엔
   // BottomNav 의 useLayoutEffect 가 하이드레이션 후에 붙여 56px 이 밀렸다.
   const pathname = headersList.get(PATHNAME_HEADER) ?? '';
-  const hasWebBottomNav = !device.isJirumAlarmApp && isTabRootPath(pathname);
+  // PC 는 바텀네비 대신 GNB 라 여백도 없다(DesktopReadyLayout 이 isMobile 일 때만 BottomNav 를 그린다).
+  const hasWebBottomNav = device.isMobile && !device.isJirumAlarmApp && isTabRootPath(pathname);
 
   return (
     <html

@@ -37,7 +37,7 @@ export default function AlarmList() {
   return (
     <>
       {isEditMode && (
-        <div className="sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
+        <div className="pc:top-28 sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
           <div className="flex h-11 items-center justify-end gap-x-3 px-5">
             <button
               type="button"
@@ -60,7 +60,7 @@ export default function AlarmList() {
         </div>
       )}
       {!isEditMode && (
-        <div className="sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
+        <div className="pc:top-28 sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
           <div className="flex h-11 items-center justify-between px-5">
             <span className="text-sm font-medium text-gray-600">
               지금 다양한 핫딜 알림을 받아보세요!

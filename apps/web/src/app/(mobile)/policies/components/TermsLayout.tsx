@@ -36,6 +36,8 @@ const TermsLayout = ({
     <div
       className={cn(
         'flex w-full flex-col items-center pt-14',
+        // PC: BasicLayout 과 같은 규칙 — GNB(h-14) 아래로.
+        'pc:pt-28 pc:before:hidden pc:after:hidden pc:[&>header]:top-14',
         'mobile-max:before:fixed mobile-max:before:left-1/2 mobile-max:before:top-0 mobile-max:before:-ml-[300px] mobile-max:before:h-full mobile-max:before:w-px mobile-max:before:-translate-x-1/2 mobile-max:before:bg-gray-200',
         'mobile-max:after:fixed mobile-max:after:left-1/2 mobile-max:after:top-0 mobile-max:after:ml-[300px] mobile-max:after:h-full mobile-max:after:w-px mobile-max:after:-translate-x-1/2 mobile-max:after:bg-gray-200',
       )}
