@@ -1,4 +1,5 @@
 import { cn } from '@/shared/lib/cn';
+import AlarmLinkButton from '@/shared/ui/AlarmLinkButton';
 import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
 import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 
@@ -28,6 +29,7 @@ const BackgroundHeader = async () => {
           <div className="flex items-center gap-x-5">
             <ColorSchemeButton color="#FFF" />
             <SearchLinkButton color="#FFF" />
+            <AlarmLinkButton color="#FFF" />
           </div>
         </header>
         <BannerSwiper />

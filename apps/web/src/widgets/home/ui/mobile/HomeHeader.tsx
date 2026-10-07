@@ -2,6 +2,7 @@
 
 import useScrollPosition from '@/shared/hooks/useScrollPosition';
 import { cn } from '@/shared/lib/cn';
+import AlarmLinkButton from '@/shared/ui/AlarmLinkButton';
 import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
 import LogoLink from '@/shared/ui/common/Logo/LogoLink';
 
@@ -35,6 +36,7 @@ const HomeHeader = () => {
         <div className="flex items-center gap-x-5">
           <ColorSchemeButton color="var(--color-gray-900)" />
           <SearchLinkButton color="var(--color-gray-900)" onClick={handleSearchClick} />
+          <AlarmLinkButton color="var(--color-gray-900)" />
         </div>
       </header>
     </div>

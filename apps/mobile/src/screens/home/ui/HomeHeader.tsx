@@ -6,16 +6,22 @@ import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import IconLogo from '@/shared/components/icons/IconLogo';
+import AlertIcon from '@/shared/components/icons/alert';
 import SearchIcon from '@/shared/components/icons/search';
 import {MoonIcon, SunIcon} from '@/shared/components/icons/theme-mode';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import type {TabStackParamList} from '@/navigations/tab/types';
+import {navigateToNativeRoute} from '@/navigations/navigation-ref';
+import {useHasNewAlarm} from '@/shared/hooks/useHasNewAlarm';
 import {useColors} from '@/shared/theme/useColors';
 import {fixed} from '@/shared/theme/palette';
 import {useColorSchemePreference} from '@/shared/theme/color-scheme-preference';
 
 /** 로고 아래 붙는 서비스 한 줄 설명. web LOGO_SUBTITLE 과 같은 문구. */
 const LOGO_SUBTITLE = '커뮤니티 핫딜 모아보기';
+
+/** 새 알림 점 — 탭바·web BottomNav 와 같은 빨강. 테마와 무관하게 같은 색. */
+const ALARM_DOT = '#EB001C';
 
 /** web `transition-all duration-300` 과 같은 전환 시간. */
 const TRANSITION_MS = 300;
@@ -74,7 +80,7 @@ export default function HomeHeader({
   );
 }
 
-/** 로고·부제·화면 모드·검색 한 줄. 두 겹이 같은 내용을 각자의 색으로 그린다. */
+/** 로고·부제·화면 모드·검색·알림 한 줄. 두 겹이 같은 내용을 각자의 색으로 그린다. */
 function HeaderRow({
   inverted,
   onPressLogo,
@@ -85,6 +91,7 @@ function HeaderRow({
   const c = useColors();
   const navigation =
     useNavigation<NativeStackNavigationProp<TabStackParamList>>();
+  const hasNewAlarm = useHasNewAlarm();
 
   return (
     <View className="h-14 w-full flex-row items-center justify-between px-5">
@@ -135,6 +142,27 @@ function HeaderRow({
             height={24}
             color={inverted ? '#FFFFFF' : c.gray[900]}
           />
+        </Pressable>
+
+        {/* 알림함 — 하단 탭에도 있지만 "새 알림 왔나" 를 보는 익숙한 자리(사용자 요청 2026-10-07).
+            점은 탭바와 같은 판정(useHasNewAlarm)이라 둘이 어긋나지 않는다. */}
+        <Pressable
+          onPress={() => navigateToNativeRoute('/alarm')}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel={hasNewAlarm ? '알림, 새 알림 있음' : '알림'}
+          className="h-9 w-9 items-center justify-center">
+          <AlertIcon
+            width={26}
+            height={26}
+            color={inverted ? '#FFFFFF' : c.gray[900]}
+          />
+          {hasNewAlarm ? (
+            <View
+              className="absolute right-1 top-1 h-2 w-2 rounded-full"
+              style={{backgroundColor: ALARM_DOT}}
+            />
+          ) : null}
         </Pressable>
       </View>
     </View>

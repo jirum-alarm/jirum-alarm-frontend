@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 
 import { LANDING_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
+import { useHasNewAlarm } from '@/shared/hooks/useHasNewAlarm';
 import useScrollPosition from '@/shared/hooks/useScrollPosition';
 import { cn } from '@/shared/lib/cn';
 import ColorSchemeButton from '@/shared/ui/ColorSchemeButton';
@@ -54,6 +55,8 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const isScrolled = useScrollPosition(HOME_SCROLLTHRESHOLD);
 
   const pathname = usePathname();
+
+  const hasNewAlarm = useHasNewAlarm();
 
   const isInHomeHero = useMemo(() => pathname === PAGE.HOME && !isScrolled, [pathname, isScrolled]);
 
@@ -146,19 +149,22 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           {isLoggedIn && (
             <Link
               href={PAGE.ALARM}
-              aria-label="알림"
+              aria-label={hasNewAlarm ? '알림, 새 알림 있음' : '알림'}
               className="flex size-8 items-center justify-center rounded-full duration-300 hover:bg-gray-400/20"
             >
               <m.div
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.1 }}
-                className="flex items-center justify-center"
+                className="relative flex items-center justify-center"
               >
                 <Alert
                   width={28}
                   height={28}
                   style={{ color: isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)' }}
                 />
+                {hasNewAlarm && (
+                  <span className="absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-[#EB001C]" />
+                )}
               </m.div>
             </Link>
           )}

@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { m } from 'motion/react';
 import { usePathname } from 'next/navigation';
 import { createElement, useEffect, useRef } from 'react';
@@ -8,9 +7,8 @@ import { createElement, useEffect, useRef } from 'react';
 import { PAGE } from '@/shared/config/page';
 import { isTabRootPath } from '@/shared/config/tab-root';
 import { useDevice } from '@/shared/hooks/useDevice';
-import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
+import { useHasNewAlarm } from '@/shared/hooks/useHasNewAlarm';
 import { useHeaderVisibility } from '@/shared/hooks/useScrollDirection';
-import { getUnreadCountAfterLastRead, setUnreadCountSnapshot } from '@/shared/lib/alarmReadState';
 import { cn } from '@/shared/lib/cn';
 import {
   Alert,
@@ -25,8 +23,6 @@ import {
   MyFill,
 } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
-
-import { NotificationQueries } from '@/entities/notification';
 
 import TabScrollTopButton from '../TabScrollTopButton';
 import TopButton from '../TopButton';
@@ -82,36 +78,6 @@ const BottomNavList = [
     isActive: (pathName: string) => pathName.startsWith(PAGE.MYPAGE),
   },
 ];
-
-function useHasNewAlarm() {
-  const pathName = usePathname();
-  const { isLoggedIn } = useIsLoggedIn();
-  const { data: unreadCount } = useQuery({
-    ...NotificationQueries.unreadCount(),
-    enabled: isLoggedIn,
-  });
-
-  const isOnAlarmPage = pathName.startsWith(PAGE.ALARM);
-
-  useEffect(() => {
-    if (isOnAlarmPage && unreadCount !== undefined) {
-      setUnreadCountSnapshot(unreadCount);
-    }
-  }, [isOnAlarmPage, unreadCount]);
-
-  let hasNewAlarm = false;
-  if (!isOnAlarmPage) {
-    const storedCount = getUnreadCountAfterLastRead();
-    hasNewAlarm = storedCount === -1 ? (unreadCount ?? 0) > 0 : (unreadCount ?? 0) > storedCount;
-  }
-
-  // ★ALARM_DOT_CHANGED 송신을 제거했다. 이 훅은 BottomNavComponent 안에서만
-  // 돌고, 그 컴포넌트는 앱에서 아래 `isJirumAlarmApp` 조기 반환에 걸려 렌더되지
-  // 않는다 → 앱에 이 메시지가 온 적이 없어 네이티브 탭바 점이 영구히 꺼져 있었다.
-  // 이제 점 판정은 네이티브가 직접 한다(mobile useHasNewAlarm).
-
-  return hasNewAlarm;
-}
 
 const BottomNavComponent = () => {
   const pathName = usePathname();
