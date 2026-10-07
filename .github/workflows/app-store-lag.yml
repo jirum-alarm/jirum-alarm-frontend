@@ -6,7 +6,9 @@ name: app-store-lag
 #   - 2026-09-26 확인 시 App Store 는 1.4.1(8/8 출시)인데 레포는 9/9 부터 1.4.6 — iOS 사용자가 7주째 옛 버전
 # 버전은 빌드 직전에 올리므로, 올린 지 LAG_DAYS 가 지나도 스토어가 그 버전이 아니면
 # 심사 거절·대기 장기화·제출 누락 중 하나다.
-# ponytail: iOS 만 본다 — 공개 lookup API 라 자격증명이 필요 없다. Android 는 Play Developer API(서비스 계정)가 있어야 한다.
+# iOS 는 공개 lookup API, Android 는 Play 공개 상세 페이지의 버전 문자열을 본다(자격증명 불필요).
+# ponytail: Play 는 공식 API 가 아니라 페이지 긁기 — 모양이 바뀌면 경고만 내고 통과한다. 정확히 보려면 Play Developer API(서비스 계정).
+# 2026-10-07: Android 1.4.8 이 10% 단계 출시에 이틀 멈췄는데 아무도 몰랐다(iOS 만 보고 있었다).
 
 on:
   schedule:
@@ -49,6 +51,44 @@ jobs:
           fi
 
           msg="📱 App Store 에 ${version} 이 아직 없습니다 — 레포에서 올린 지 ${days}일, 스토어는 ${live}(출시 ${released}). 심사 거절·대기·미제출을 App Store Connect 에서 확인하세요. ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
+            | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
+          echo "::error::$msg"
+          exit 1
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+
+      - name: Compare repo version with Google Play
+        env:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+          app=apps/mobile/app.json
+          version=$(jq -r .expo.version "$app")
+          pkg=$(jq -r .expo.android.package "$app")
+          since=$(git log -S"\"version\": \"$version\"" --format=%ct --reverse -- "$app" | head -1)
+          days=$(( ($(date +%s) - since) / 86400 ))
+
+          # 공개 페이지는 100% 출시된 버전만 보인다 — 단계 출시(10%)에 멈춰 있어도 옛 버전으로 나온다.
+          live=$(curl -fsS -A "Mozilla/5.0" "https://play.google.com/store/apps/details?id=$pkg&hl=ko&gl=KR" \
+            | grep -oE '\[\[\["[0-9]+\.[0-9]+\.[0-9]+"\]\]' | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || true)
+          echo "repo=$version (set ${days}d ago) live=${live:-(조회 안 됨)}"
+
+          if [ -z "$live" ]; then
+            echo "::warning::Play 페이지에서 버전을 못 읽었다 — 페이지 모양이 바뀌었을 수 있다"
+            exit 0
+          fi
+          if [ "$live" = "$version" ] || [ "$days" -le "$LAG_DAYS" ]; then
+            exit 0
+          fi
+
+          msg="🤖 Google Play 에 ${version} 이 아직 전체 공개되지 않았습니다 — 레포에서 올린 지 ${days}일, 스토어는 ${live}. Play Console 프로덕션에서 심사·단계 출시 비율·미제출을 확인하세요. ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
           jq -n --arg text "$msg" '{channel: "alert-deploy", text: $text}' \
             | curl -fsS -X POST -H 'Content-Type: application/json' -d @- "$MATTERMOST_WEBHOOK_URL" >/dev/null
           echo "::error::$msg"

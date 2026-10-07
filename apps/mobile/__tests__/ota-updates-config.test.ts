@@ -74,25 +74,20 @@ describe('OTA 설정 — eas.json 채널', () => {
   });
 });
 
-describe('★Play production 트랙은 단계적 롤아웃을 명시한다', () => {
+describe('★Play production 트랙은 100% 로 낸다', () => {
   /**
-   * 🔴`track: "production"` 만 두면 EAS 기본값이 `completed` — Play 검토 통과 후
-   * **전체 유저에게 즉시 100% 롤아웃**된다. Play 는 이전 버전으로 되돌리기가
-   * 없어서(새 versionCode 를 다시 올려야 한다) 사고가 나면 회수가 불가능하다.
-   *
-   * 그래서 production 트랙에는 `releaseStatus: inProgress` + `rollout` 을
-   * 반드시 함께 둔다. 확대는 Play Console 에서 퍼센트만 올리면 된다.
-   * 의도적으로 전체 공개하려면 이 테스트를 같이 고쳐라 — 조용히 100% 가
-   * 나가는 것만 막는다.
+   * 예전엔 `releaseStatus: inProgress` + `rollout: 0.1`(10% 단계 출시)을 강제했다 — Play 는
+   * 되돌리기가 없어서. 그런데 10% 에서 올리는 사람이 없어 1.4.8 이 이틀 멈췄고(2026-10-05~07),
+   * Android 90% 가 runtime 1.4.8 OTA 를 하나도 못 받았다. Android 사용자가 적어(설치 ~560)
+   * 10% 는 표본도 안 된다. 그래서 100% 로 내고, 사고는 출시 전 Release 에뮬레이터 확인으로 막는다.
+   * 다시 단계 출시로 바꾸려면 확대 담당(누가·언제 100% 로 올리나)부터 정하고 이 테스트를 고쳐라.
    */
   const android = easJson.submit?.production?.android ?? {};
 
-  it('track 이 production 이면 rollout 을 명시한다', () => {
+  it('track 이 production 이면 completed 이고 rollout 이 없다', () => {
     if (android.track !== 'production') return;
-    expect(android.releaseStatus).toBe('inProgress');
-    expect(typeof android.rollout).toBe('number');
-    expect(android.rollout).toBeGreaterThan(0);
-    expect(android.rollout).toBeLessThanOrEqual(1);
+    expect(android.releaseStatus).toBe('completed');
+    expect(android.rollout).toBeUndefined();
   });
 });
 
