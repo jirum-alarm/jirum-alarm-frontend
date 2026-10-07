@@ -17,7 +17,11 @@ import NaverIcon from './NaverIcon';
 import PriceVerdictHero from './PriceVerdictHero';
 import PriceContextBadge, {type PriceContext} from './PriceContextBadge';
 
-import type {ProductDetail, SourceData} from '../model/types';
+import {
+  formatFreeShipping,
+  type ProductDetail,
+  type SourceData,
+} from '../model/types';
 import type {PriceVerdict} from '../lib/price-signals';
 import {dealFreshnessAt, isSeenBasedFreshness} from '../lib/price-signals';
 import {stripPriceFromTitle} from '@/entities/home/lib/toss';
@@ -212,7 +216,9 @@ export default function ProductInfo({
               {source.toss.deliveryFee
                 ? `${source.toss.deliveryFee.toLocaleString()}원` +
                   (source.toss.freeShippingThreshold
-                    ? ` (${source.toss.freeShippingThreshold.toLocaleString()}원 이상 무료배송)`
+                    ? ` (${formatFreeShipping(
+                        source.toss.freeShippingThreshold,
+                      )})`
                     : '')
                 : '무료배송'}
             </Text>

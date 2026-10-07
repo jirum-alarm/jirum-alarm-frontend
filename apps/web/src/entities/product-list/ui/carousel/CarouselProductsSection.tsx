@@ -31,7 +31,9 @@ export default function CarouselProductsSection({
       <div className="pc:px-0 px-5">
         <SectionHeader shouldShowMobileUI={shouldShowMobileHeader} title={title} />
       </div>
-      <div className={cn({ 'pc:px-5': nested, 'pc:-px-5': isFullWidth })}>
+      {/* 리스트가 -mx-5 로 양옆 20px 를 빼 쓰므로 모바일은 여기서 px-5 로 받아준다. 없으면 페이지가
+          20px 가로로 밀린다(상세·검색, 2026-10-08 실측 scrollWidth 380/360). */}
+      <div className={cn('pc:px-0 px-5', { 'pc:px-5': nested, 'pc:-px-5': isFullWidth })}>
         <Suspense fallback={<CarouselProductListSkeleton />}>
           <CarouselProductList
             products={products}

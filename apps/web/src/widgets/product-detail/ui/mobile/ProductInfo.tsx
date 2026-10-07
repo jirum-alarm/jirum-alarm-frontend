@@ -13,6 +13,7 @@ import HotdealBadge from '@/shared/ui/HotdealBadge';
 
 import { ProductQueries } from '@/entities/product';
 import { stripPriceFromTitle } from '@/entities/product/lib/from-toss';
+import { formatFreeShipping } from '@/entities/product/model/toss-data';
 import NaverIcon from '@/entities/product/ui/NaverIcon';
 import TossBadges from '@/entities/product/ui/TossBadges';
 import TossIcon from '@/entities/product/ui/TossIcon';
@@ -216,7 +217,7 @@ export default function ProductInfo({
                 {tossData.deliveryFee
                   ? `${tossData.deliveryFee.toLocaleString()}원` +
                     (tossData.freeShippingThreshold
-                      ? ` (${tossData.freeShippingThreshold.toLocaleString()}원 이상 무료배송)`
+                      ? ` (${formatFreeShipping(tossData.freeShippingThreshold)})`
                       : '')
                   : '무료배송'}
               </span>

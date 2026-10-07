@@ -27,7 +27,8 @@ export interface TossProductData {
   originalPrice?: number; // 40000 (할인 전)
   discountRate?: number; // 62
   deliveryFee?: number; // 3000 (0 이면 무료)
-  freeShippingThreshold?: number; // 20000 (이상 무료배송)
+  /** 숫자(20000) 또는 크롤러 원문('50,000원 이상 무료배송') — 표시는 formatFreeShipping */
+  freeShippingThreshold?: number | string;
   images?: string[]; // 상세 상품 이미지 URL (썸네일과 별개, 원본 URL 참조)
   rating?: number; // 4.8 (별점)
   reviewCount?: number; // 3185
@@ -55,3 +56,7 @@ export interface OhouProductData {
   couponDiscount?: string; // "최대 10% 쿠폰" (쿠폰 배지 문구)
   benefitBadges?: string[]; // ["최대 10% 결제할인"] 등 혜택 배지 문구
 }
+
+/** 무료배송 조건 문구. 크롤러가 원문 문자열을 넣기도 해서 숫자일 때만 문장을 만든다. */
+export const formatFreeShipping = (threshold: number | string) =>
+  typeof threshold === 'number' ? `${threshold.toLocaleString()}원 이상 무료배송` : threshold;

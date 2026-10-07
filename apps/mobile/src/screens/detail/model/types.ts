@@ -14,7 +14,8 @@ export type TossData = {
   couponDiscount?: number | string | null;
   sellerName?: string | null;
   deliveryFee?: number | null;
-  freeShippingThreshold?: number | null;
+  /** 숫자(20000) 또는 크롤러 원문('50,000원 이상 무료배송') — 표시는 formatFreeShipping */
+  freeShippingThreshold?: number | string | null;
   images?: string[] | null;
   /** 신뢰 배지 — web toss-data.ts 와 같은 필드명. */
   lowestIn30Days?: boolean | null;
@@ -48,3 +49,9 @@ export function parseSourceData(data: unknown): SourceData {
     d[k] && typeof d[k] === 'object' ? (d[k] as never) : undefined;
   return {toss: pick('toss'), ohou: pick('ohou'), naverbc: pick('naverbc')};
 }
+
+/** 무료배송 조건 문구. 크롤러가 원문 문자열을 넣기도 해서 숫자일 때만 문장을 만든다. */
+export const formatFreeShipping = (threshold: number | string) =>
+  typeof threshold === 'number'
+    ? `${threshold.toLocaleString()}원 이상 무료배송`
+    : threshold;
