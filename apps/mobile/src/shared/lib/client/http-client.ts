@@ -1,3 +1,4 @@
+import {AppState} from 'react-native';
 import type {TypedDocumentString} from '@/shared/api/gql/graphql.ts';
 import {getAsyncStorage} from '@/shared/lib/persistence';
 import {getDeviceId} from '@/shared/lib/device/device-id';
@@ -67,6 +68,10 @@ export class HttpClient {
         // 조회 수집(collectProduct)의 사용자 식별. web 도 같은 헤더를 쓴다.
         // 없으면 안 보낸다 — 틀린 id 를 만들어 보내면 집계가 쪼개진다.
         ...(deviceId ? {'X-Device-Id': deviceId} : {}),
+        // 토큰 갱신은 백그라운드에서도 돈다 — 서버가 그건 방문(lastLoggedInAt)으로 안 센다.
+        ...(this.tokenType === 'refresh'
+          ? {'X-App-State': AppState.currentState}
+          : {}),
       },
     });
     const res = await response.json();
