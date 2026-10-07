@@ -14,6 +14,9 @@ export const parsePrice = (value: string) => {
   return digits ? Number(digits) : null;
 };
 
+/** 입력칸 표시용: "1000000" → "1,000,000", 숫자 없으면 빈칸 */
+export const formatPriceInput = (value: string) => parsePrice(value)?.toLocaleString('ko-KR') ?? '';
+
 const formatWon = (price: number) =>
   price >= 10000 && price % 10000 === 0
     ? `${(price / 10000).toLocaleString('ko-KR')}만원`

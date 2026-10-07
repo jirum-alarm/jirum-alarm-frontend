@@ -1,4 +1,5 @@
 import {
+  formatPriceInput,
   parseExcludeKeywords,
   parsePrice,
   summarizeKeywordAlert,
@@ -21,6 +22,12 @@ describe('키워드 알림 조건 파싱 — web keyword-options 와 같은 규�
   it('가격은 숫자만 남겨 원 단위로, 비면 null', () => {
     expect(parsePrice('1,000,000원')).toBe(1000000);
     expect(parsePrice('  ')).toBeNull();
+  });
+
+  it('가격 입력칸은 쉼표를 찍어 보여준다', () => {
+    expect(formatPriceInput('1000000')).toBe('1,000,000');
+    expect(formatPriceInput('15,0000원')).toBe('150,000');
+    expect(formatPriceInput('abc')).toBe('');
   });
 
   it('요약은 받을 딜·가격 범위·제외 단어를 말로 적는다(web 과 같은 문구)', () => {

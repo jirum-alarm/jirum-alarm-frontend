@@ -8,6 +8,7 @@ import { Close } from '@/shared/ui/common/icons';
 import Link from '@/shared/ui/Link';
 
 import {
+  formatPriceInput,
   parseExcludeKeywords,
   parsePrice,
   summarizeKeywordAlert,
@@ -53,12 +54,8 @@ const KeywordItem = ({
   const detailsRef = useRef<HTMLDetailsElement>(null);
   const [priceDropOnly, setPriceDropOnly] = useState(keyword.priceDropOnly);
   const [excludeInput, setExcludeInput] = useState(keyword.excludeKeywords.join(', '));
-  const [minInput, setMinInput] = useState(
-    keyword.minPrice != null ? String(keyword.minPrice) : '',
-  );
-  const [maxInput, setMaxInput] = useState(
-    keyword.maxPrice != null ? String(keyword.maxPrice) : '',
-  );
+  const [minInput, setMinInput] = useState(formatPriceInput(String(keyword.minPrice ?? '')));
+  const [maxInput, setMaxInput] = useState(formatPriceInput(String(keyword.maxPrice ?? '')));
   const { mutate, isPending } = useUpdateKeywordOptions({
     onSuccess: () => detailsRef.current?.removeAttribute('open'),
   });
@@ -150,7 +147,7 @@ const KeywordItem = ({
             <div className="flex items-center gap-2">
               <input
                 value={minInput}
-                onChange={(e) => setMinInput(e.target.value)}
+                onChange={(e) => setMinInput(formatPriceInput(e.target.value))}
                 inputMode="numeric"
                 placeholder="최소 (원)"
                 aria-label="최소 가격"
@@ -159,7 +156,7 @@ const KeywordItem = ({
               <span className="text-gray-500">~</span>
               <input
                 value={maxInput}
-                onChange={(e) => setMaxInput(e.target.value)}
+                onChange={(e) => setMaxInput(formatPriceInput(e.target.value))}
                 inputMode="numeric"
                 placeholder="최대 (원)"
                 aria-label="최대 가격"

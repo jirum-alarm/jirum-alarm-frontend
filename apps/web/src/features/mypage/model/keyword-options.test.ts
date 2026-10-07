@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 
 const require = createRequire(import.meta.url);
-const { parseExcludeKeywords, parsePrice, summarizeKeywordAlert } =
+const { formatPriceInput, parseExcludeKeywords, parsePrice, summarizeKeywordAlert } =
   require('./keyword-options.ts') as typeof import('./keyword-options');
 
 describe('parseExcludeKeywords', () => {
@@ -21,6 +21,12 @@ describe('parsePrice', () => {
   it('숫자만 남겨 원 단위로, 비면 null', () => {
     assert.equal(parsePrice('1,000,000원'), 1000000);
     assert.equal(parsePrice('  '), null);
+  });
+
+  it('입력칸은 쉼표를 찍어 보여준다', () => {
+    assert.equal(formatPriceInput('1000000'), '1,000,000');
+    assert.equal(formatPriceInput('15,0000원'), '150,000');
+    assert.equal(formatPriceInput('abc'), '');
   });
 });
 

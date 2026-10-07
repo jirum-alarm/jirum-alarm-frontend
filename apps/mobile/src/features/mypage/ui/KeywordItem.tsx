@@ -9,6 +9,7 @@ import {useColors} from '@/shared/theme/useColors';
 
 import {
   parseExcludeKeywords,
+  formatPriceInput,
   parsePrice,
   summarizeKeywordAlert,
 } from '../lib/keyword-options';
@@ -55,10 +56,10 @@ export default function KeywordItem({
     saved.excludeKeywords.join(', '),
   );
   const [minInput, setMinInput] = useState(
-    saved.minPrice != null ? String(saved.minPrice) : '',
+    formatPriceInput(String(saved.minPrice ?? '')),
   );
   const [maxInput, setMaxInput] = useState(
-    saved.maxPrice != null ? String(saved.maxPrice) : '',
+    formatPriceInput(String(saved.maxPrice ?? '')),
   );
   const {mutate, isPending} = useUpdateKeywordOptions();
 
@@ -169,7 +170,7 @@ export default function KeywordItem({
               <View className="min-w-0 flex-1">
                 <TextField
                   value={minInput}
-                  onChangeText={setMinInput}
+                  onChangeText={text => setMinInput(formatPriceInput(text))}
                   placeholder="최소 (원)"
                   keyboardType="number-pad"
                   accessibilityLabel="최소 가격"
@@ -179,7 +180,7 @@ export default function KeywordItem({
               <View className="min-w-0 flex-1">
                 <TextField
                   value={maxInput}
-                  onChangeText={setMaxInput}
+                  onChangeText={text => setMaxInput(formatPriceInput(text))}
                   placeholder="최대 (원)"
                   keyboardType="number-pad"
                   accessibilityLabel="최대 가격"
