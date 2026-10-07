@@ -13,7 +13,7 @@ const EmailLoginForm = () => {
   const { email, password, error, handleSubmit } = useEmailLoginFormViewModel();
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-1 flex-col justify-between pt-11">
+    <form onSubmit={handleSubmit} className="flex flex-1 flex-col justify-between gap-10 pt-11">
       <EmailInput email={email} />
       <PasswordInput password={password} hideHelperText={true} />
       <div className="bg-white py-9">

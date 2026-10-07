@@ -29,7 +29,7 @@ const PersonalForm = ({
   });
 
   return (
-    <form className="flex flex-1 flex-col justify-between pt-22" onSubmit={handleSubmit}>
+    <form className="flex flex-1 flex-col justify-between gap-10 pt-22" onSubmit={handleSubmit}>
       <div>
         <BirthYearSelect
           handleSelectChange={handleSelectChange}

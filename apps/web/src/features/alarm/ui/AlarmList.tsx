@@ -51,8 +51,9 @@ export default function AlarmList() {
 
   return (
     <>
+      {/* PC 는 다른 내 메뉴 화면처럼 회색 띠 없이 흰 바탕 — 키워드 알림은 사이드바에 있어 안내 띠는 뺀다. */}
       {isEditMode && (
-        <div className="pc:top-14 sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
+        <div className="pc:top-14 pc:border-gray-100 pc:bg-white sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
           <div className="flex h-11 items-center justify-end gap-x-3 px-5">
             <button
               type="button"
@@ -75,7 +76,7 @@ export default function AlarmList() {
         </div>
       )}
       {!isEditMode && (
-        <div className="pc:top-14 sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
+        <div className="pc:hidden sticky top-14 z-40 border-b border-gray-200 bg-gray-50">
           <div className="flex h-11 items-center justify-between px-5">
             <span className="text-sm font-medium text-gray-600">
               지금 다양한 핫딜 알림을 받아보세요!
@@ -92,7 +93,7 @@ export default function AlarmList() {
       {!loading && noData ? (
         <NoAlerts />
       ) : (
-        <ul>
+        <ul className="pc:divide-y pc:divide-gray-100">
           {notifications.map((notification) => {
             const isNew =
               new Date(notification.createdAt).getTime() > lastReadAt && !notification.readAt;

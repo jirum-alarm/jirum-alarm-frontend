@@ -32,7 +32,7 @@ export default function MyPageSidebar() {
         href={PAGE.MYPAGE_ACCOUNT}
         className={cn(
           'block rounded-xl border border-gray-200 px-4 py-4 hover:bg-gray-50',
-          isActive(PAGE.MYPAGE_ACCOUNT) && 'border-gray-900',
+          isActive(PAGE.MYPAGE_ACCOUNT) && 'border-gray-100 bg-gray-100', // 메뉴 줄과 같은 선택 표시(검은 테두리는 입력창 포커스처럼 보였다)
         )}
       >
         <p className="truncate font-bold text-gray-900">{me?.nickname ?? '\u00a0'}</p>

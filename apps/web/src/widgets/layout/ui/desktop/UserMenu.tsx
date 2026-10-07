@@ -18,7 +18,7 @@ import { MYPAGE_GROUPS, MYPAGE_MENU } from '@/features/mypage/model/menu';
 const itemClass =
   'flex w-full cursor-pointer items-center rounded-lg px-2.5 py-1.5 text-sm text-gray-900 outline-none data-[highlighted]:bg-gray-50';
 const segClass =
-  'rounded-md px-2 py-0.5 text-xs text-gray-500 outline-none data-[highlighted]:ring-1 data-[highlighted]:ring-gray-300';
+  'cursor-pointer rounded-md px-2 py-0.5 text-xs text-gray-500 outline-none transition-colors data-[highlighted]:text-gray-900';
 
 /**
  * GNB 👤 메뉴 — 마이페이지 사이드바와 같은 묶음(지원 묶음은 사이드바에만) + 화면 모드 + 로그아웃.
