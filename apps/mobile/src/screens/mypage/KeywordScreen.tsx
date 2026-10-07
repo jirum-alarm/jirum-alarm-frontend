@@ -117,7 +117,7 @@ export default function KeywordScreen({navigation, route}: Props) {
 
           {/* 내 키워드 — web KeywordList */}
           <View className="flex-row items-baseline justify-between">
-            <Text className="text-sm font-semibold text-gray-900">
+            <Text className="text-base font-semibold text-gray-900">
               내 키워드
             </Text>
             <View className="flex-row items-baseline gap-x-3">
@@ -154,7 +154,7 @@ export default function KeywordScreen({navigation, route}: Props) {
               <Text className="mt-1 text-xs text-gray-500">
                 키워드를 누르면 알림 받을 조건을 바꿀 수 있어요.
               </Text>
-              <View className="mt-3 gap-2">
+              <View className="mt-4 gap-2">
                 {sortFocusFirst(keywords, focus).map(keyword => (
                   <KeywordItem
                     key={keyword.id}
@@ -251,8 +251,8 @@ function SubscribedThemes({
 
   return (
     <View className="pb-6">
-      <View className="mb-2 flex-row items-center justify-between">
-        <Text className="text-sm font-medium text-gray-900">
+      <View className="mb-4 flex-row items-center justify-between">
+        <Text className="text-base font-semibold text-gray-900">
           받고 있는 관심사 알림
         </Text>
         <Pressable
@@ -261,7 +261,7 @@ function SubscribedThemes({
           accessibilityRole="button"
           accessibilityLabel="관심사 더 둘러보기"
           style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-          <Text className="text-xs text-gray-500">더 둘러보기</Text>
+          <Text className="text-xs text-gray-500">더 둘러보기 ›</Text>
         </Pressable>
       </View>
       <View className="gap-2">

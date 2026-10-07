@@ -117,43 +117,45 @@ const KeywordItem = ({
           </Link>
           <fieldset className="flex flex-col gap-2">
             <legend className={cn(sectionTitle, 'mb-2')}>어떤 딜을 알려드릴까요?</legend>
-            {DEAL_CHOICES.map((choice) => {
-              const selected = priceDropOnly === choice.value;
-              return (
-                <label
-                  key={choice.label}
-                  className={cn(
-                    'flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-3 has-focus-visible:ring-2 has-focus-visible:ring-gray-400',
-                    selected ? 'border-gray-900' : 'border-gray-200',
-                  )}
-                >
-                  <input
-                    type="radio"
-                    name={`deal-${keyword.id}`}
-                    className="sr-only"
-                    checked={selected}
-                    onChange={() => setPriceDropOnly(choice.value)}
-                  />
-                  <span
-                    aria-hidden
+            <div className="pc:grid-cols-2 grid gap-2">
+              {DEAL_CHOICES.map((choice) => {
+                const selected = priceDropOnly === choice.value;
+                return (
+                  <label
+                    key={choice.label}
                     className={cn(
-                      'mt-0.5 flex size-[18px] shrink-0 items-center justify-center rounded-full border-2',
-                      selected ? 'border-gray-900' : 'border-gray-300',
+                      'flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-3 has-focus-visible:ring-2 has-focus-visible:ring-gray-400',
+                      selected ? 'border-gray-900' : 'border-gray-200',
                     )}
                   >
-                    {selected && <span className="size-2 rounded-full bg-gray-900" />}
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-semibold text-gray-900">
-                      {choice.label}
+                    <input
+                      type="radio"
+                      name={`deal-${keyword.id}`}
+                      className="sr-only"
+                      checked={selected}
+                      onChange={() => setPriceDropOnly(choice.value)}
+                    />
+                    <span
+                      aria-hidden
+                      className={cn(
+                        'mt-0.5 flex size-[18px] shrink-0 items-center justify-center rounded-full border-2',
+                        selected ? 'border-gray-900' : 'border-gray-300',
+                      )}
+                    >
+                      {selected && <span className="size-2 rounded-full bg-gray-900" />}
                     </span>
-                    <span className="mt-0.5 block text-xs text-gray-500">
-                      {choice.hint(keyword.keyword)}
+                    <span className="min-w-0">
+                      <span className="block text-sm font-semibold text-gray-900">
+                        {choice.label}
+                      </span>
+                      <span className="mt-0.5 block text-xs text-gray-500">
+                        {choice.hint(keyword.keyword)}
+                      </span>
                     </span>
-                  </span>
-                </label>
-              );
-            })}
+                  </label>
+                );
+              })}
+            </div>
           </fieldset>
 
           <div className="flex flex-col gap-2">
@@ -200,7 +202,7 @@ const KeywordItem = ({
             </span>
           </label>
 
-          <div className="flex items-center gap-2">
+          <div className="pc:justify-end flex items-center gap-2">
             <button
               type="button"
               onClick={onDelete}
@@ -212,7 +214,7 @@ const KeywordItem = ({
             <button
               type="submit"
               disabled={isPending}
-              className="bg-primary-500 text-fixed-900 flex-1 rounded-lg py-2.5 text-sm font-semibold disabled:opacity-50"
+              className="bg-primary-500 text-fixed-900 pc:flex-none pc:w-32 flex-1 rounded-lg py-2.5 text-sm font-semibold disabled:opacity-50"
             >
               저장
             </button>

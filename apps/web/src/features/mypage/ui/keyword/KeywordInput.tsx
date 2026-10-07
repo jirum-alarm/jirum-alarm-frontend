@@ -16,26 +16,29 @@ const KeywordInput = ({ autoFocus = true }: { autoFocus?: boolean }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Input
-        autoFocus={autoFocus}
-        type="text"
-        placeholder="알림 받을 상품 이름 (예: 에어팟, 삼다수)"
-        error={keyword.error}
-        helperText={'키워드는 2자 이상 20자까지 입력할 수 있어요.'}
-        value={keyword.value}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-        icon={
-          !!keyword.value && (
-            <button type="reset" onClick={reset}>
-              <Cancel />
-            </button>
-          )
-        }
-      />
-      <div className="pc:static pc:max-w-none pc:px-0 pc:pt-3 pc:pb-0 fixed right-0 bottom-[var(--bottom-nav-padding)] left-0 m-auto max-w-[600px] bg-white px-5 py-6">
-        <Button type="submit" className="w-full" disabled={!canSubmit}>
+    // PC: 입력칸 옆에 버튼 — 예전엔 폭 700px 짜리 회색 비활성 막대가 입력칸 밑에 깔려 있었다.
+    <form onSubmit={handleSubmit} className="pc:flex pc:items-start pc:gap-2">
+      <div className="pc:flex-1">
+        <Input
+          autoFocus={autoFocus}
+          type="text"
+          placeholder="알림 받을 상품 이름 (예: 에어팟, 삼다수)"
+          error={keyword.error}
+          helperText={'키워드는 2자 이상 20자까지 입력할 수 있어요.'}
+          value={keyword.value}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          icon={
+            !!keyword.value && (
+              <button type="reset" onClick={reset}>
+                <Cancel />
+              </button>
+            )
+          }
+        />
+      </div>
+      <div className="pc:static pc:m-0 pc:max-w-none pc:w-28 pc:shrink-0 pc:p-0 fixed right-0 bottom-[var(--bottom-nav-padding)] left-0 m-auto max-w-[600px] bg-white px-5 py-6">
+        <Button type="submit" className="pc:h-11 w-full" disabled={!canSubmit}>
           등록
         </Button>
       </div>

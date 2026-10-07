@@ -23,33 +23,29 @@ const MySubscribedThemes = () => {
 
   return (
     <div className="pb-6">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="text-sm font-medium text-gray-900">받고 있는 관심사 알림</span>
-        <Link href="/themes" className="text-xs text-gray-400">
-          더 둘러보기
+      <div className="mb-4 flex items-baseline justify-between">
+        <h2 className="text-base font-semibold text-gray-900">받고 있는 관심사 알림</h2>
+        <Link href="/themes" className="text-xs text-gray-500 hover:text-gray-700">
+          더 둘러보기 ›
         </Link>
       </div>
       <ul className="flex flex-col gap-2">
         {mine.map((theme) => (
           <li
             key={theme.id}
-            className="flex items-center justify-between rounded-xl border border-gray-200 px-3 py-2.5"
+            className="flex items-center justify-between gap-3 rounded-xl border border-gray-200 py-3 pr-3 pl-4"
           >
-            <Link href={themePath(theme)} className="flex min-w-0 flex-col gap-1">
-              <span className="flex min-w-0 items-center gap-1.5">
-                {theme.emoji && <span aria-hidden>{theme.emoji}</span>}
-                <span className="truncate text-sm text-gray-900">{theme.name}</span>
-              </span>
-              <span className="bg-primary-50 text-primary-500 w-fit rounded px-1.5 py-0.5 text-[11px] font-medium">
-                관심사
-              </span>
+            {/* 섹션 제목이 이미 "관심사" — 줄마다 붙던 라임 배지는 흰 바탕 대비 1.2:1 이라 뺐다. */}
+            <Link href={themePath(theme)} className="flex min-w-0 items-center gap-2">
+              {theme.emoji && <span aria-hidden>{theme.emoji}</span>}
+              <span className="truncate text-sm font-semibold text-gray-900">{theme.name}</span>
             </Link>
             <button
               type="button"
               disabled={isPendingFor(Number(theme.id))}
               onClick={() => unsubscribe(Number(theme.id))}
               aria-label={`${theme.name} 알림 끄기`}
-              className="-m-2 shrink-0 p-2 text-xs text-gray-400 disabled:opacity-50"
+              className="shrink-0 rounded-md border border-gray-200 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 disabled:opacity-50"
             >
               끄기
             </button>

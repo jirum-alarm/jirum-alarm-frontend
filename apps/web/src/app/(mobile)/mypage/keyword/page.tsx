@@ -16,12 +16,12 @@ const KeywordPage = async ({ searchParams }: { searchParams: Promise<{ focus?: s
         <PushStatusBanner />
         {/* 특정 키워드를 고치러 왔으면 (모바일) 키보드가 그 카드를 가리지 않게 한다. */}
         <KeywordInput autoFocus={!focus} />
-        <div className="h-8" />
+        <div className="pc:h-10 h-8" />
         <Suspense>
           <KeywordList focus={focus} />
         </Suspense>
         {/* 구독한 관심사 — 입력창 바로 아래는 "방금 넣은 키워드가 어디 갔나"가 보여야 해서 목록 다음에 둔다. */}
-        <div className="h-8" />
+        <div className="pc:h-10 h-8" />
         <Suspense>
           <MySubscribedThemes />
         </Suspense>

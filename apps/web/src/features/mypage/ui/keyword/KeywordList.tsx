@@ -33,7 +33,7 @@ const KeywordList = ({ focus }: { focus?: string }) => {
   return (
     <section>
       <div className="flex items-baseline justify-between">
-        <h2 className="text-sm font-semibold text-gray-900">내 키워드</h2>
+        <h2 className="text-base font-semibold text-gray-900">내 키워드</h2>
         <div className="flex items-baseline gap-x-3">
           <span className="text-xs text-gray-500">{keywords.length}/20</span>
           {/* 키워드 화면이 막다른 길이던 자리 — 등록한 키워드로 받은 알림을 바로 본다. */}
@@ -53,7 +53,7 @@ const KeywordList = ({ focus }: { focus?: string }) => {
           <p className="mt-1 text-xs text-gray-500">
             키워드를 누르면 알림 받을 조건을 바꿀 수 있어요.
           </p>
-          <ul className="mt-3 flex flex-col gap-2">
+          <ul className="mt-4 flex flex-col gap-2">
             {ordered.map((keyword) => (
               <KeywordItem
                 key={keyword.id}

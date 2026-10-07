@@ -117,7 +117,7 @@ export function SubscribedThemeRow({
   onUnsubscribe: () => void;
 }) {
   return (
-    <View className="flex-row items-center justify-between rounded-xl border border-gray-200 px-3 py-2.5">
+    <View className="flex-row items-center justify-between gap-3 rounded-xl border border-gray-200 py-3 pl-4 pr-3">
       <Pressable
         onPress={onPress}
         accessibilityRole="button"
@@ -125,15 +125,13 @@ export function SubscribedThemeRow({
         // ★Pressable 엔 opacity 만 — className·배열 style 을 함수형 style 과 섞으면
         // NativeWind 가 레이아웃을 떨군다(상세 헤더 로고가 세로로 쌓였던 원인).
         style={({pressed}) => ({flex: 1, opacity: pressed ? 0.6 : 1})}>
-        <View className="min-w-0 gap-1">
-          <View className="min-w-0 flex-row items-center gap-1.5">
-            {theme.emoji ? <Text>{theme.emoji}</Text> : null}
-            <Text className="text-sm text-gray-900" numberOfLines={1}>
-              {theme.name}
-            </Text>
-          </View>
-          <Text className="bg-primary-50 text-primary-800 self-start rounded px-1.5 py-0.5 text-[11px] font-medium">
-            관심사
+        {/* 섹션 제목이 이미 "관심사" — 줄마다 붙던 라임 배지는 뺐다(web 과 같이). */}
+        <View className="min-w-0 flex-row items-center gap-2">
+          {theme.emoji ? <Text>{theme.emoji}</Text> : null}
+          <Text
+            className="text-sm font-semibold text-gray-900"
+            numberOfLines={1}>
+            {theme.name}
           </Text>
         </View>
       </Pressable>
@@ -144,9 +142,8 @@ export function SubscribedThemeRow({
         accessibilityRole="button"
         accessibilityLabel={`${theme.name} 알림 끄기`}
         style={isPending ? styles.dimmed : undefined}
-        className="shrink-0 p-2">
-        {/* web 은 gray-400 인데 명암비 2.58:1 로 AA 미달이라 gray-500 을 쓴다. */}
-        <Text className="text-xs text-gray-500">끄기</Text>
+        className="shrink-0 rounded-md border border-gray-200 px-3 py-1.5">
+        <Text className="text-xs text-gray-700">끄기</Text>
       </Pressable>
     </View>
   );
