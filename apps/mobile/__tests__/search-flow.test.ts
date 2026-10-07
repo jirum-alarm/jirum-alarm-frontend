@@ -33,7 +33,10 @@ describe('검색 플로우', () => {
     const n = nav(['SearchHome', 'ProductDetail']);
     expect(isInSearchStack(n)).toBe(true);
     openSearch(n);
-    expect(n.navigate).toHaveBeenCalledWith(searchStackNavigations.HOME);
+    // 이미 마운트된 검색 화면이라 autoFocus 대신 포커스 신호(focusAt)를 싣는다.
+    expect(n.navigate).toHaveBeenCalledWith(searchStackNavigations.HOME, {
+      focusAt: expect.any(Number),
+    });
     expect(n.push).not.toHaveBeenCalled();
   });
 

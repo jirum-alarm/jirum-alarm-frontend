@@ -159,7 +159,8 @@ describe('딥링크 keyword 인수', () => {
 
   it('결과를 들고 진입하면 자동 포커스를 주지 않는다', () => {
     // web 운영 실측: 포커스 → 제안어가 결과·필터를 가리고 키보드가 올라온다.
-    expect(webInput).toContain('autoFocus={!keyword}');
+    // web 은 autoFocus 대신 "빈 검색창이면 포커스" effect 로 같은 규칙을 지킨다.
+    expect(webInput).toContain('if (isEmpty) inputRef.current?.focus()');
     expect(screen).toContain('autoFocus={!initialKeyword}');
   });
 });
