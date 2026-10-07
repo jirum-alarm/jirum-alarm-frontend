@@ -121,13 +121,9 @@ function ProductDetailPage({
               )}
             </div>
 
-            <ProductDetailAd productId={productId} isMobile />
-            <Hr />
-            {tossData?.images && <TossDetailImages images={tossData.images} />}
-            <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={true} />
-            <Hr />
-
-            <div className="mt-7 mb-8 space-y-8">
+            {/* 관련 딜은 광고·댓글·토스 이미지보다 위. 맨 아래에 두었을 땐 네이버 검색 유입(모바일 최대)의
+                74% 가 거기까지 내려가지 않아 클릭이 사실상 0이었다(2026-10-08 GA4). */}
+            <div className="mb-8 space-y-8">
               <Suspense>
                 <TogetherViewedSection productId={productId} />
               </Suspense>
@@ -135,6 +131,12 @@ function ProductDetailPage({
                 <CategoryPopularByProductSection productId={productId} />
               </Suspense>
             </div>
+
+            <ProductDetailAd productId={productId} isMobile />
+            <Hr />
+            {tossData?.images && <TossDetailImages images={tossData.images} />}
+            <CommentSection productId={productId} isUserLogin={isUserLogin} isMobile={true} />
+            <Hr />
 
             <NoticeProfitLink productId={productId} />
           </div>
