@@ -209,8 +209,12 @@ export const useAffiliateSalesTrend = (variables: AffiliateSalesTrendQueryVariab
     fetchPolicy: 'network-only',
   });
 
-export const useRevenueTrend = (variables: RevenueTrendQueryVariables) =>
+export const useRevenueTrend = (
+  variables: RevenueTrendQueryVariables,
+  options?: { skip?: boolean },
+) =>
   useQuery<RevenueTrendQuery, RevenueTrendQueryVariables>(QueryRevenueTrend, {
     variables,
     fetchPolicy: 'network-only',
+    ...options,
   });
