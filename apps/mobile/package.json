@@ -23,7 +23,7 @@
     "native:write": "node scripts/native-fingerprint.mjs --write",
     "ota:publish": "node scripts/ota-publish.mjs",
     "ota:rollback": "eas update:rollback",
-    "verify:migration": "pnpm generate && pnpm ts:check && pnpm lint && pnpm exec jest --runInBand && npx expo-doctor",
+    "verify:migration": "pnpm generate && pnpm ts:check && pnpm lint && pnpm exec jest --runInBand && node scripts/expo-doctor.mjs",
     "start": "expo start",
     "test": "jest",
     "eas-build-pre-install": "node scripts/eas-restore-build-files.mjs",
@@ -43,7 +43,7 @@
     "@react-navigation/bottom-tabs": "7.20.0",
     "@react-navigation/native": "7.5.0",
     "@react-navigation/native-stack": "7.20.0",
-    "@sentry/react-native": "^7.11.0",
+    "@sentry/react-native": "~7.11.0",
     "@tanstack/react-query": "^5.104.1",
     "class-variance-authority": "^0.7.1",
     "expo": "~57.0.27",
@@ -63,7 +63,7 @@
     "react-native-edge-to-edge": "1.6.0",
     "react-native-gesture-handler": "~2.32.0",
     "react-native-keyboard-controller": "1.21.9",
-    "react-native-reanimated": "~4.5.1",
+    "react-native-reanimated": "4.5.1",
     "react-native-safe-area-context": "5.7.0",
     "react-native-screens": "~4.26.2",
     "react-native-svg": "15.15.4",
@@ -71,8 +71,7 @@
     "react-native-webview": "13.16.1",
     "react-native-worklets": "0.10.1",
     "tailwind-merge": "^3.7.0",
-    "tailwindcss": "^3.4.17",
-    "zod": "^3.24.2"
+    "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.17.5",
@@ -116,6 +115,11 @@
         ],
         "listUnknownPackages": false
       }
+    },
+    "install": {
+      "exclude": [
+        "react-native-bootsplash"
+      ]
     }
   }
 }
