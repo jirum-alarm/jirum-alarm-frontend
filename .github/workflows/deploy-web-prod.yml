@@ -31,11 +31,48 @@ jobs:
     env:
       DOCKER_BUILDKIT: 1
       COMPOSE_DOCKER_CLI_BUILD: 1
+      # Next 빌드(러너)와 실행 이미지(build-args)가 같은 값을 쓴다. NODE_ENV 는 빌드 스텝에만 —
+      # 잡 전체에 두면 production 일 때 pnpm install 이 devDependencies 를 건너뛴다.
+      NEXT_PUBLIC_SERVICE_URL: ${{ vars.NEXT_PUBLIC_SERVICE_URL }}
+      API_URL: ${{ vars.API_URL }}
+      NEXT_PUBLIC_FIREBASE_VAPID_KEY: AIzaSyCpfnPqj8e_uVFTASlpumCYJ9w7R3d-8wQ
+      NEXT_PUBLIC_ADSENSE_CLIENT_ID: ca-pub-3855723530036909
+      NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL: "9763036455"
+      NEXT_PUBLIC_ADSENSE_SLOT_SEARCH_INFEED: "1939286674"
+      NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL_SIDE: "2933904228"
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      # Next 빌드를 이미지 밖(러너)에서 — 호스티드는 매 런 새 VM 이라 이미지 안 빌드는 컴파일 캐시가 늘 비었다.
+      # pnpm store·.next/cache 를 actions 캐시로 런 사이에 보존한다. 실행 이미지는 runtime.Dockerfile(standalone 만).
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.18
+          cache: pnpm
+
+      - name: Next build cache
+        uses: actions/cache@v4
+        with:
+          path: apps/web/.next/cache
+          key: next-web-prod-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            next-web-prod-${{ hashFiles('pnpm-lock.yaml') }}-
+            next-web-prod-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --filter=web...
+
+      - name: Build web
+        env:
+          NODE_ENV: ${{ vars.NODE_ENV }}
+        run: pnpm turbo run build --filter=web...
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -71,19 +108,20 @@ jobs:
         id: build
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: apps/web/deploy/production/Dockerfile
+          context: apps/web
+          file: apps/web/deploy/runtime.Dockerfile
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            NEXT_PUBLIC_SERVICE_URL=${{ vars.NEXT_PUBLIC_SERVICE_URL }}
-            NEXT_PUBLIC_ADSENSE_CLIENT_ID=ca-pub-3855723530036909
-            NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL=9763036455
-            NEXT_PUBLIC_ADSENSE_SLOT_SEARCH_INFEED=1939286674
-            NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL_SIDE=2933904228
-            API_URL=${{ vars.API_URL }}
+            NEXT_PUBLIC_SERVICE_URL=${{ env.NEXT_PUBLIC_SERVICE_URL }}
+            API_URL=${{ env.API_URL }}
+            NEXT_PUBLIC_FIREBASE_VAPID_KEY=${{ env.NEXT_PUBLIC_FIREBASE_VAPID_KEY }}
+            NEXT_PUBLIC_ADSENSE_CLIENT_ID=${{ env.NEXT_PUBLIC_ADSENSE_CLIENT_ID }}
+            NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL=${{ env.NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL }}
+            NEXT_PUBLIC_ADSENSE_SLOT_SEARCH_INFEED=${{ env.NEXT_PUBLIC_ADSENSE_SLOT_SEARCH_INFEED }}
+            NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL_SIDE=${{ env.NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL_SIDE }}
             NODE_ENV=${{ vars.NODE_ENV }}
           provenance: true
           sbom: true
