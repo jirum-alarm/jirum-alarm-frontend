@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import Panel from '@/components/Panel';
 import { useGetCategories } from '@/hooks/graphql/category';
 
@@ -37,6 +39,10 @@ const ProductFilters = ({
   // → 검색어가 있으면 두 필터를 잠가 화면과 결과가 어긋나지 않게 한다.
   const keywordMode = keyword.trim().length > 0;
 
+  // 폰에선 검색어만 보이고 나머지 조건은 접어 둔다(펼치면 화면 절반을 덮었다)
+  const [open, setOpen] = useState(false);
+  const more = open ? '' : 'hidden';
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // 한글 조합 중 Enter 는 글자 확정용 — 반쯤 조합된 글자로 실행하지 않는다
     if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
@@ -47,7 +53,7 @@ const ProductFilters = ({
   return (
     <Panel className="mb-6 px-4 py-4 sm:px-7.5">
       <div className="flex flex-wrap items-end gap-3 sm:gap-4">
-        <div className="w-full sm:w-32">
+        <div className={`${more} w-full sm:block sm:w-32`}>
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
             상품 ID
           </label>
@@ -78,7 +84,7 @@ const ProductFilters = ({
           />
         </div>
 
-        <div className="w-full sm:w-40">
+        <div className={`${more} w-full sm:block sm:w-40`}>
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">
             카테고리
           </label>
@@ -98,7 +104,7 @@ const ProductFilters = ({
           </select>
         </div>
 
-        <div className="min-w-0 flex-1 sm:w-32 sm:flex-none">
+        <div className={`${more} min-w-0 flex-1 sm:block sm:w-32 sm:flex-none`}>
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">핫딜</label>
           <select
             value={isHot === undefined ? '' : isHot ? 'true' : 'false'}
@@ -114,7 +120,7 @@ const ProductFilters = ({
           </select>
         </div>
 
-        <div className="min-w-0 flex-1 sm:w-32 sm:flex-none">
+        <div className={`${more} min-w-0 flex-1 sm:block sm:w-32 sm:flex-none`}>
           <label className="mb-1 block text-sm font-medium text-black dark:text-white">상태</label>
           <select
             value={isEnd === undefined ? '' : isEnd ? 'true' : 'false'}
@@ -130,12 +136,21 @@ const ProductFilters = ({
           </select>
         </div>
 
-        <button
-          onClick={onSearch}
-          className="w-full rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-opacity-90 sm:w-auto sm:py-2"
-        >
-          검색
-        </button>
+        <div className="flex w-full gap-2 sm:w-auto">
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="flex-1 rounded-lg border border-stroke px-4 py-2.5 text-sm font-medium text-body dark:border-strokedark sm:hidden"
+          >
+            {open ? '필터 접기' : '상세 필터'}
+          </button>
+          <button
+            onClick={onSearch}
+            className="flex-1 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-opacity-90 sm:w-auto sm:flex-none sm:py-2"
+          >
+            검색
+          </button>
+        </div>
       </div>
       {keywordMode && (
         <p className="mt-2 text-xs text-bodydark2">

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useGetProduct } from '@/hooks/graphql/product';
+import { CURRENCY_LABEL, labelOf, PRICE_TARGET_LABEL } from '@/lib/labels';
 import { dateFormatter } from '@/utils/date';
 
 const ProductDetail = ({ productId }: { productId: string }) => {
@@ -123,7 +124,7 @@ const ProductDetail = ({ productId }: { productId: string }) => {
               <thead>
                 <tr className="bg-gray-2 dark:bg-meta-4">
                   <th className="px-4 py-3 text-left text-sm font-medium text-bodydark2">출처</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-bodydark2">타입</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-bodydark2">통화</th>
                   <th className="px-4 py-3 text-right text-sm font-medium text-bodydark2">가격</th>
                   <th className="px-4 py-3 text-right text-sm font-medium text-bodydark2">날짜</th>
                 </tr>
@@ -132,10 +133,10 @@ const ProductDetail = ({ productId }: { productId: string }) => {
                 {product.prices.map((price) => (
                   <tr key={price.id} className="border-b border-stroke dark:border-strokedark">
                     <td className="px-4 py-3 text-sm font-medium text-black dark:text-white md:font-normal">
-                      {price.target}
+                      {labelOf(PRICE_TARGET_LABEL, price.target)}
                     </td>
-                    <td data-label="타입" className="px-4 py-3 text-sm text-bodydark2">
-                      {price.type}
+                    <td data-label="통화" className="px-4 py-3 text-sm text-bodydark2">
+                      {labelOf(CURRENCY_LABEL, price.type)}
                     </td>
                     <td
                       data-label="가격"

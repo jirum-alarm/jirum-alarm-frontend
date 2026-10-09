@@ -10,6 +10,7 @@ const NOTIFICATION_TARGET_MAP: Record<string, string> = {
   PRODUCT: '상품',
   NOTICE: '공지',
   INFO: '정보',
+  COMMENT: '댓글',
 };
 
 const NotificationHistory = () => {

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useAdReport, useAdsByAdmin, useSetAdActive } from '@/hooks/graphql/advertisement';
+import { AD_SLOT_LOCATION_LABEL, AD_SLOT_TYPE_LABEL, labelOf } from '@/lib/labels';
 
 // 전체 누적 집계용 넉넉한 기간. ponytail: 광고 수가 적어 풀스캔 OK,
 // 느려지면 광고 startAt 기준으로 좁히는 게 업그레이드 경로.
@@ -50,7 +51,7 @@ const AdListTable = () => {
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="px-4 py-3 text-sm font-medium text-bodydark2">ID</th>
-              <th className="px-4 py-3 text-sm font-medium text-bodydark2">internalId</th>
+              <th className="px-4 py-3 text-sm font-medium text-bodydark2">이름</th>
               <th className="px-4 py-3 text-sm font-medium text-bodydark2">타입</th>
               <th className="px-4 py-3 text-sm font-medium text-bodydark2">위치</th>
               <th className="px-4 py-3 text-sm font-medium text-bodydark2">기간</th>
@@ -74,15 +75,20 @@ const AdListTable = () => {
               const report = reportByCreative.get(ad.id);
               return (
                 <tr key={ad.id} className="border-b border-stroke dark:border-strokedark">
-                  <td data-label="ID" className="px-4 py-3 text-sm">
+                  <td data-label="ID" className="hidden px-4 py-3 text-sm md:table-cell">
                     {ad.id}
                   </td>
-                  <td className="px-4 py-3 text-sm">{ad.internalId}</td>
+                  <td className="px-4 py-3 text-sm">
+                    <span className="font-semibold text-black dark:text-white">
+                      {ad.internalId}
+                    </span>
+                    <span className="ml-2 text-xs text-bodydark2 md:hidden">#{ad.id}</span>
+                  </td>
                   <td data-label="타입" className="px-4 py-3 text-sm">
-                    {ad.slotType}
+                    {labelOf(AD_SLOT_TYPE_LABEL, ad.slotType)}
                   </td>
                   <td data-label="위치" className="px-4 py-3 text-xs">
-                    {ad.slotLocation.join(', ')}
+                    {ad.slotLocation.map((l) => labelOf(AD_SLOT_LOCATION_LABEL, l)).join(', ')}
                   </td>
                   <td data-label="기간" className="px-4 py-3 text-xs">
                     {ad.startAt.slice(0, 10)} ~ {ad.endAt.slice(0, 10)}
@@ -90,14 +96,19 @@ const AdListTable = () => {
                   <td data-label="우선순위" className="px-4 py-3 text-sm">
                     {ad.slotPriority}
                   </td>
-                  <td data-label="노출" className="px-4 py-3 text-sm">
+                  <td data-label="노출" className="hidden px-4 py-3 text-sm md:table-cell">
                     {(report?.impressions ?? 0).toLocaleString()}
                   </td>
-                  <td data-label="클릭" className="px-4 py-3 text-sm">
+                  <td data-label="클릭" className="hidden px-4 py-3 text-sm md:table-cell">
                     {(report?.clicks ?? 0).toLocaleString()}
                   </td>
-                  <td data-label="CTR" className="px-4 py-3 text-sm">
+                  <td data-label="CTR" className="hidden px-4 py-3 text-sm md:table-cell">
                     {report && report.impressions > 0 ? `${(report.ctr * 100).toFixed(2)}%` : '-'}
+                  </td>
+                  <td data-label="성과" className="px-4 py-3 text-sm md:hidden">
+                    노출 {(report?.impressions ?? 0).toLocaleString()} · 클릭{' '}
+                    {(report?.clicks ?? 0).toLocaleString()}
+                    {report && report.impressions > 0 && ` · ${(report.ctr * 100).toFixed(2)}%`}
                   </td>
                   <td data-label="상태" className="px-4 py-3 text-sm">
                     <button

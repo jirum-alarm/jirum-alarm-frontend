@@ -44,10 +44,10 @@ const CommentsContainer = forwardRef<HTMLDivElement, Props>(
     return (
       <div
         ref={commentsContainerRef}
-        className="h-96 w-full overflow-scroll rounded border-[1.5px] border-stroke bg-transparent px-3 py-3 text-black outline-none transition disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input sm:px-5"
+        className="h-96 w-full overflow-auto rounded border-[1.5px] border-stroke bg-transparent px-3 py-3 text-black outline-none transition disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input sm:px-5"
       >
         <div
-          className="whitespace-pre leading-7"
+          className="whitespace-pre-wrap break-words leading-7"
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,
             width: '100%',

@@ -426,8 +426,8 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
               value={slotType}
               onChange={(e) => setSlotType(e.target.value as AdSlotType)}
             >
-              <option value="banner">banner</option>
-              <option value="pinnedProduct">pinnedProduct</option>
+              <option value="banner">배너</option>
+              <option value="pinnedProduct">상품 고정</option>
             </select>
           </div>
           <div>

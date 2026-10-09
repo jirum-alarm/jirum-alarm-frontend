@@ -49,7 +49,7 @@ const BrandSearchHeader = ({
         />
       </svg>
     </div>
-    <div className="mt-1.5 flex items-center justify-between text-[10px] text-gray-500">
+    <div className="mt-1.5 flex items-center justify-between text-[11px] text-gray-500">
       <span>
         {isSearching ? (
           <span className="flex items-center gap-1">
@@ -76,7 +76,7 @@ const BrandSearchHeader = ({
           </>
         )}
       </span>
-      <span className="rounded bg-warning/10 px-1.5 py-0.5 text-[9px] font-semibold text-warning">
+      <span className="rounded bg-warning/10 px-1.5 py-0.5 text-[11px] font-semibold text-warning">
         전체 대기{' '}
         {pendingVerificationsTotalCountData?.pendingVerificationsTotalCount?.toLocaleString() ??
           '-'}

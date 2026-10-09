@@ -7,12 +7,8 @@ import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
 import { useGetUsersByAdmin } from '@/hooks/graphql/user';
 import { useLoadMoreOnView } from '@/hooks/useLoadMoreOnView';
+import { GENDER_LABEL, labelOf } from '@/lib/labels';
 import { dateFormatter } from '@/utils/date';
-
-const GENDER_MAP: Record<string, string> = {
-  MALE: '남',
-  FEMALE: '여',
-};
 
 const UserListTable = () => {
   const [keyword, setKeyword] = useState('');
@@ -112,7 +108,7 @@ const UserListTable = () => {
                     data-label="성별"
                     className="hidden px-4 py-3 text-center text-sm text-bodydark2 md:table-cell"
                   >
-                    {user.gender ? (GENDER_MAP[user.gender] ?? user.gender) : '-'}
+                    {user.gender ? labelOf(GENDER_LABEL, user.gender) : '-'}
                   </td>
                   <td
                     data-label="출생연도"

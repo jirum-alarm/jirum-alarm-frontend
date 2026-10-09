@@ -31,7 +31,7 @@ const Chip = ({ children, onClick, onDelete, isChecked, isActive }: Props) => {
             e.stopPropagation();
             onDelete?.();
           }}
-          className="mr-2 h-5 w-5 fill-current text-lg text-[#00000042] hover:text-[#00000066]"
+          className="mr-1 box-content h-5 w-5 fill-current p-1 text-lg text-[#00000042] hover:text-[#00000066]"
           focusable="false"
           aria-hidden="true"
           viewBox="0 0 24 24"

@@ -16,6 +16,21 @@ import { dateFormatter } from '@/utils/date';
 
 import ProductFilters from './ProductFilters';
 
+const StatusBadge = ({ isEnd, isHot }: { isEnd?: boolean | null; isHot?: boolean | null }) =>
+  isEnd ? (
+    <span className="inline-block rounded bg-danger bg-opacity-10 px-2 py-0.5 text-xs font-medium text-danger">
+      종료
+    </span>
+  ) : isHot ? (
+    <span className="inline-block rounded bg-success bg-opacity-10 px-2 py-0.5 text-xs font-medium text-success">
+      핫딜
+    </span>
+  ) : (
+    <span className="inline-block rounded bg-bodydark2 bg-opacity-10 px-2 py-0.5 text-xs font-medium text-bodydark2">
+      일반
+    </span>
+  );
+
 const ProductListTable = () => {
   const [productId, setProductId] = useState('');
   const [keyword, setKeyword] = useState('');
@@ -167,11 +182,11 @@ const ProductListTable = () => {
                 >
                   <td
                     data-label="ID"
-                    className="px-4 py-3 text-center text-sm text-black dark:text-white"
+                    className="hidden px-4 py-3 text-center text-sm text-black dark:text-white md:table-cell"
                   >
                     {product.id}
                   </td>
-                  <td data-label="이미지" className="px-4 py-3 text-center">
+                  <td data-label="이미지" className="hidden px-4 py-3 text-center md:table-cell">
                     {product.thumbnail ? (
                       <img
                         src={product.thumbnail}
@@ -183,38 +198,55 @@ const ProductListTable = () => {
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    <Link
-                      href={`/product/${product.id}`}
-                      className="line-clamp-2 text-sm font-medium text-black hover:text-primary dark:text-white md:line-clamp-1 md:font-normal"
-                    >
-                      {product.title}
-                    </Link>
+                    {/* 폰: 사진 + 제목 + 한 줄 요약 (넓은 화면은 칸마다 따로) */}
+                    <div className="flex gap-3 md:block">
+                      {product.thumbnail ? (
+                        <img
+                          src={product.thumbnail}
+                          alt=""
+                          className="h-14 w-14 shrink-0 rounded object-cover md:hidden"
+                        />
+                      ) : (
+                        <div className="h-14 w-14 shrink-0 rounded bg-gray-2 dark:bg-meta-4 md:hidden" />
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <Link
+                          href={`/product/${product.id}`}
+                          className="line-clamp-2 text-sm font-medium text-black hover:text-primary dark:text-white md:line-clamp-1 md:font-normal"
+                        >
+                          {product.title}
+                        </Link>
+                        <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-bodydark2 md:hidden">
+                          <StatusBadge isEnd={product.isEnd} isHot={product.isHot} />
+                          <span className="font-semibold text-black dark:text-white">
+                            {product.price ? `${product.price.toLocaleString()}원` : '가격 없음'}
+                          </span>
+                          <span>{product.provider?.nameKr ?? '-'}</span>
+                          <span>{product.postedAt ? dateFormatter(product.postedAt) : '-'}</span>
+                          <span>#{product.id}</span>
+                        </p>
+                      </div>
+                    </div>
                   </td>
                   <td
                     data-label="가격"
-                    className="px-4 py-3 text-center text-sm text-black dark:text-white"
+                    className="hidden px-4 py-3 text-center text-sm text-black dark:text-white md:table-cell"
                   >
                     {product.price ? `${product.price.toLocaleString()}원` : '-'}
                   </td>
-                  <td data-label="출처" className="px-4 py-3 text-center text-sm text-bodydark2">
+                  <td
+                    data-label="출처"
+                    className="hidden px-4 py-3 text-center text-sm text-bodydark2 md:table-cell"
+                  >
                     {product.provider?.nameKr ?? '-'}
                   </td>
-                  <td data-label="상태" className="px-4 py-3 text-center">
-                    {product.isEnd ? (
-                      <span className="inline-block rounded bg-danger bg-opacity-10 px-2 py-1 text-xs font-medium text-danger">
-                        종료
-                      </span>
-                    ) : product.isHot ? (
-                      <span className="inline-block rounded bg-success bg-opacity-10 px-2 py-1 text-xs font-medium text-success">
-                        핫딜
-                      </span>
-                    ) : (
-                      <span className="inline-block rounded bg-bodydark2 bg-opacity-10 px-2 py-1 text-xs font-medium text-bodydark2">
-                        일반
-                      </span>
-                    )}
+                  <td data-label="상태" className="hidden px-4 py-3 text-center md:table-cell">
+                    <StatusBadge isEnd={product.isEnd} isHot={product.isHot} />
                   </td>
-                  <td data-label="등록일" className="px-4 py-3 text-center text-xs text-bodydark2">
+                  <td
+                    data-label="등록일"
+                    className="hidden px-4 py-3 text-center text-xs text-bodydark2 md:table-cell"
+                  >
                     {product.postedAt ? dateFormatter(product.postedAt) : '-'}
                   </td>
                   <td data-label="actions" className="px-4 py-3 text-center">

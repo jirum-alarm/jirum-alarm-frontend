@@ -6,7 +6,10 @@ const KeywordMapPage = async () => {
   return (
     <>
       <div className="flex w-full justify-end">
-        <Link className="mb-2 rounded-xl bg-lime-400 p-2 text-white" href={'/keyword-map/register'}>
+        <Link
+          className="mb-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white"
+          href={'/keyword-map/register'}
+        >
           그룹 추가
         </Link>
       </div>

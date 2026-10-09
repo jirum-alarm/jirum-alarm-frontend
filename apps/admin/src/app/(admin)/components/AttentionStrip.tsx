@@ -15,6 +15,7 @@ import {
 import { useProviderHealthStatus } from '@/hooks/graphql/stats';
 import { useGetPendingVerificationsTotalCount } from '@/hooks/graphql/verification';
 import { canAccessPath } from '@/lib/adminSection';
+import { sourceName } from '@/lib/labels';
 import { ProviderType } from '@/types/stats';
 
 /**
@@ -49,7 +50,7 @@ const AttentionStrip = () => {
     .map((p) => p.providerName);
   const salesSilent = (sales.data?.profitLinkProviderHealth ?? [])
     .filter((r) => r.salesHealth === 'silent')
-    .map((r) => r.provider);
+    .map((r) => sourceName(r.provider));
   // 응답이 false 일 때만 만료로 센다(로딩·에러로 undefined 인 걸 만료로 오인하지 않게)
   const sessionsExpired = [
     ['토스', toss.data?.hasTossSession],

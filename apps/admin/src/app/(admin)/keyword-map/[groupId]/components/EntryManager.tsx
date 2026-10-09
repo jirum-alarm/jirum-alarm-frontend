@@ -79,7 +79,7 @@ const EntryManager = ({ groupId, entries }: Props) => {
             className="min-w-0 flex-1 rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary sm:px-5"
           />
           <button
-            className="flex shrink-0 items-center rounded bg-slate-600 px-4 py-2 text-white disabled:opacity-50"
+            className="flex shrink-0 items-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
             disabled={isAdding || !keyword.trim()}
             onClick={handleAdd}
           >

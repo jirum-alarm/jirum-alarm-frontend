@@ -9,7 +9,7 @@ const HotDealKeywordPage = async () => {
     <>
       <div className="flex w-full justify-end">
         <Link
-          className="mb-2 rounded-xl bg-lime-400 p-2 text-white"
+          className="mb-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white"
           href={'/hotdeal/keyword/register'}
         >
           추가

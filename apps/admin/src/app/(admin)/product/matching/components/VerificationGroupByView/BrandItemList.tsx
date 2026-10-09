@@ -63,7 +63,7 @@ const BrandItemList = ({
               }`}
             >
               <div
-                className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white ${
+                className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white ${
                   item.pendingVerificationCount === 0 ? 'bg-success' : 'bg-warning'
                 }`}
               >
@@ -90,7 +90,7 @@ const BrandItemList = ({
                 >
                   {item.brandName} {item.productName}
                 </p>
-                <p className="mt-0.5 text-[9px] text-gray-400">매칭 {item.totalMatchCount}건</p>
+                <p className="mt-0.5 text-[11px] text-gray-400">매칭 {item.totalMatchCount}건</p>
               </div>
             </button>
           </div>

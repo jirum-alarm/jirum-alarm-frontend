@@ -35,7 +35,7 @@ const GroupDetail = ({ groupId }: Props) => {
     <div className="flex flex-col gap-4">
       <div className="flex justify-end">
         <Link
-          className="rounded-xl bg-slate-600 p-2 text-white"
+          className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white"
           href={`/keyword-map/update/${groupId}`}
         >
           그룹 수정

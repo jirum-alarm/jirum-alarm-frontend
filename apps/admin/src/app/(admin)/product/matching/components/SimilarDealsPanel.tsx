@@ -123,7 +123,7 @@ const SimilarDealsPanel = ({
             <button
               key={t}
               onClick={() => runSearch(t)}
-              className="line-clamp-1 max-w-[240px] rounded-full border border-stroke bg-white px-2 py-1 text-left text-[10px] text-gray-600 hover:border-primary dark:border-strokedark dark:bg-boxdark dark:text-gray-300 sm:py-0.5"
+              className="line-clamp-1 max-w-[240px] rounded-full border border-stroke bg-white px-2 py-1 text-left text-[11px] text-gray-600 hover:border-primary dark:border-strokedark dark:bg-boxdark dark:text-gray-300 sm:py-0.5"
               title={t}
             >
               {t}
@@ -155,17 +155,17 @@ const SimilarDealsPanel = ({
                 disabled={elsewhere}
                 checked={checked.has(id)}
                 onChange={() => toggle(id)}
-                className="h-3.5 w-3.5"
+                className="h-5 w-5 shrink-0"
               />
-              <span className="w-8 shrink-0 text-right text-[10px] text-gray-400">
+              <span className="w-8 shrink-0 text-right text-[11px] text-gray-400">
                 {p.similarity != null ? p.similarity.toFixed(2) : '-'}
               </span>
               <span className="line-clamp-1 min-w-0 flex-1 text-black dark:text-white">
                 {p.title}
               </span>
-              {p.price && <span className="text-[10px] font-bold text-primary">{p.price}</span>}
+              {p.price && <span className="text-[11px] font-bold text-primary">{p.price}</span>}
               {elsewhere ? (
-                <span className="text-[10px] text-gray-500">
+                <span className="text-[11px] text-gray-500">
                   다른 상품 #{p.productMapping?.targetId}
                 </span>
               ) : (
@@ -173,7 +173,7 @@ const SimilarDealsPanel = ({
                   href={p.url ?? undefined}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[10px] text-blue-500 hover:underline"
+                  className="text-[11px] text-blue-500 hover:underline"
                   onClick={(e) => e.stopPropagation()}
                 >
                   원문

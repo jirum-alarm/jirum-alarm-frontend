@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useCallback } from 'react';
 
+import { useConfirm } from '@/components/Confirm';
 import { ProductMappingVerificationStatus } from '@/generated/gql/graphql';
 import { BrandItem, BrandProduct } from '@/hooks/graphql/brandProduct';
 
@@ -85,6 +86,7 @@ export function useVerificationActions({
   undo,
   isUndoing,
 }: Params) {
+  const confirm = useConfirm();
   const handleConfirmMatching = useCallback(async () => {
     const itemsToApprove = selectedItems.filter((item) => item.verificationStatus !== 'VERIFIED');
     const itemsToReject = deselectedItems.filter((item) => item.verificationStatus !== 'REJECTED');
@@ -244,8 +246,13 @@ export function useVerificationActions({
   // 매핑 해제 — 서버는 product 단위로 매핑 행을 전부 지운다(matching-api adminRemoveMapping)
   const handleRemoveMapping = useCallback(
     async (item: PendingVerificationItem) => {
-      if (!window.confirm(`이 딜의 매핑을 해제할까요?\n${item.product?.title ?? item.productId}`))
-        return;
+      const ok = await confirm({
+        title: '매핑 해제',
+        message: `이 딜의 매핑을 해제할까요?\n${item.product?.title ?? item.productId}`,
+        confirmText: '해제',
+        danger: true,
+      });
+      if (!ok) return;
       try {
         await removeMappingMutation({ variables: { productId: item.productId } });
         setVerificationItems((prev) => prev.filter((v) => v.id !== item.id));
@@ -256,7 +263,7 @@ export function useVerificationActions({
     },
     // setter 들은 useState 원본이라 안정 — 원본 의존성 배열을 그대로 유지한다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [removeMappingMutation, showToast],
+    [removeMappingMutation, showToast, confirm],
   );
 
   const handleSimilarMapped = useCallback(

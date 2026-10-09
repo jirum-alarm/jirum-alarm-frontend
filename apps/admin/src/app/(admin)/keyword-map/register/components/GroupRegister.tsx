@@ -64,7 +64,7 @@ const GroupRegister = () => {
           </div>
           <div>
             <button
-              className="flex items-center rounded bg-slate-600 p-2 text-white"
+              className="flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white"
               disabled={loading}
               onClick={handleSubmit}
             >

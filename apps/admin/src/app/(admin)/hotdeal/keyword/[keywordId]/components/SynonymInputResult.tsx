@@ -167,7 +167,7 @@ const SynonymInputResult = ({ keywordId, synonymList, excludeKeywordList }: Prop
     <Card>
       <div className="flex w-full justify-end">
         <button
-          className="rounded-xl bg-lime-400 px-4 py-2 text-white disabled:opacity-50 sm:p-2"
+          className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
           onClick={handleSaveSynonym}
           disabled={isSaving}
         >

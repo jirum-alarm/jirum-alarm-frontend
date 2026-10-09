@@ -36,14 +36,14 @@ const ExpandedProductList = ({
           }}
           className="flex w-full items-center gap-2 rounded border border-stroke p-2 text-left transition-all hover:bg-gray-50 dark:border-strokedark dark:hover:bg-meta-4"
         >
-          <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+          <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-white">
             ←
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xs font-semibold text-primary">
               {selectedBrandItem.brandName} {selectedBrandItem.productName}
             </p>
-            <p className="mt-0.5 text-[9px] text-gray-400">
+            <p className="mt-0.5 text-[11px] text-gray-400">
               매칭 {selectedBrandItem.totalMatchCount}건
             </p>
           </div>
@@ -72,7 +72,7 @@ const ExpandedProductList = ({
           }`}
         >
           <div
-            className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white ${
+            className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white ${
               expandedBp.pendingVerificationCount === 0 ? 'bg-success/80' : 'bg-warning/80'
             }`}
           >
@@ -91,7 +91,7 @@ const ExpandedProductList = ({
           </div>
           <div className="min-w-0 flex-1">
             <p
-              className={`line-clamp-1 text-sm font-medium lg:text-[10px] ${
+              className={`line-clamp-1 text-sm font-medium lg:text-[11px] ${
                 selectedBrandProduct?.id === expandedBp.id
                   ? 'text-primary'
                   : 'text-black dark:text-white'

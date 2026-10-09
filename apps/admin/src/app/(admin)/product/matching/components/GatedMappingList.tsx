@@ -194,7 +194,7 @@ const GatedMappingList = () => {
 
               <div className="min-w-0 flex-1">
                 <div className="mb-1 flex flex-wrap items-center gap-2">
-                  <span className="rounded bg-meta-4 px-1.5 py-0.5 text-[10px] text-white">
+                  <span className="rounded bg-meta-4 px-1.5 py-0.5 text-[11px] text-white">
                     {sourceLabel}
                   </span>
                   {item.product?.provider?.name && (

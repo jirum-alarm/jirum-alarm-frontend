@@ -66,21 +66,21 @@ const VerificationItem = memo(function VerificationItem({
   const getStatusBadge = () => {
     if (item.verificationStatus === 'VERIFIED') {
       return (
-        <span className="rounded bg-success/10 px-1 py-0.5 text-[10px] font-bold text-success">
+        <span className="rounded bg-success/10 px-1 py-0.5 text-[11px] font-bold text-success">
           승인완료
         </span>
       );
     }
     if (item.verificationStatus === 'REJECTED') {
       return (
-        <span className="rounded bg-danger/10 px-1 py-0.5 text-[10px] font-bold text-danger">
+        <span className="rounded bg-danger/10 px-1 py-0.5 text-[11px] font-bold text-danger">
           거절완료
         </span>
       );
     }
     return (
       <span
-        className={`rounded px-1 py-0.5 text-[10px] font-bold ${
+        className={`rounded px-1 py-0.5 text-[11px] font-bold ${
           isSelected ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'
         }`}
       >
@@ -101,7 +101,7 @@ const VerificationItem = memo(function VerificationItem({
           : 'bg-danger/10 text-danger';
     return (
       <span
-        className={`cursor-help rounded px-1 py-0.5 text-[10px] font-bold ${colorClass}`}
+        className={`cursor-help rounded px-1 py-0.5 text-[11px] font-bold ${colorClass}`}
         title={item.matchingReasoning || `AI 매칭 신뢰도: ${confidence}%`}
       >
         {confidence}%
@@ -119,7 +119,7 @@ const VerificationItem = memo(function VerificationItem({
         (item.aiSuggestionConfidence != null ? ` (${item.aiSuggestionConfidence}%)` : '');
     return (
       <span
-        className={`cursor-help rounded px-1 py-0.5 text-[10px] font-bold ${
+        className={`cursor-help rounded px-1 py-0.5 text-[11px] font-bold ${
           isApprove ? 'bg-success/15 text-success' : 'bg-danger/15 text-danger'
         }`}
         title={reason}
@@ -210,12 +210,12 @@ const VerificationItem = memo(function VerificationItem({
             {getStatusBadge()}
             {getAiSuggestionBadge()}
             {getConfidenceBadge()}
-            <span className="text-[10px] text-gray-400">ID: {item.productId}</span>
-            <span className="text-[10px] text-gray-400">
+            <span className="text-[11px] text-gray-400">ID: {item.productId}</span>
+            <span className="text-[11px] text-gray-400">
               {new Date(item.createdAt).toLocaleDateString()}
             </span>
             {item.verificationStatus === 'VERIFIED' && verifierName && (
-              <span className="rounded bg-blue-50 px-1 py-0.5 text-[10px] text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+              <span className="rounded bg-blue-50 px-1 py-0.5 text-[11px] text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                 검증: {verifierName}
               </span>
             )}
@@ -225,7 +225,7 @@ const VerificationItem = memo(function VerificationItem({
                   e.stopPropagation();
                   onRemove(item);
                 }}
-                className="ml-auto rounded border border-danger/40 px-2 py-1.5 text-[10px] text-danger hover:bg-danger/10 sm:px-1.5 sm:py-0.5"
+                className="ml-auto rounded border border-danger/40 px-2 py-1.5 text-[11px] text-danger hover:bg-danger/10 sm:px-1.5 sm:py-0.5"
               >
                 매핑 해제
               </button>
@@ -242,7 +242,7 @@ const VerificationItem = memo(function VerificationItem({
                 href={item.danawaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="whitespace-nowrap text-[10px] text-primary hover:underline"
+                className="whitespace-nowrap text-[11px] text-primary hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
                 다나와
@@ -252,7 +252,7 @@ const VerificationItem = memo(function VerificationItem({
 
           {/* 뱃지 근거는 title 툴팁(hover)으로만 보여 터치에선 안 보인다 → 좁은 화면에선 한 줄로 노출 */}
           {item.aiSuggestionReason && (
-            <p className="mt-0.5 line-clamp-2 text-[10px] text-gray-500 lg:hidden">
+            <p className="mt-0.5 line-clamp-2 text-[11px] text-gray-500 lg:hidden">
               🤖 {item.aiSuggestionReason}
             </p>
           )}
@@ -261,17 +261,17 @@ const VerificationItem = memo(function VerificationItem({
           {(item.product?.price || item.product?.provider?.name || item.product?.url) && (
             <div className="mt-0.5 flex flex-wrap items-center gap-1.5">
               {item.product?.price && (
-                <span className="text-[10px] font-bold text-primary">{item.product.price}</span>
+                <span className="text-[11px] font-bold text-primary">{item.product.price}</span>
               )}
               {item.product?.provider?.name && (
-                <span className="text-[10px] text-gray-400">{item.product.provider.name}</span>
+                <span className="text-[11px] text-gray-400">{item.product.provider.name}</span>
               )}
               {item.product?.url && (
                 <a
                   href={item.product.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[10px] text-blue-500 hover:underline"
+                  className="text-[11px] text-blue-500 hover:underline"
                   onClick={(e) => e.stopPropagation()}
                 >
                   원문 보기

@@ -22,3 +22,23 @@ export const GENDER_LABEL: Record<string, string> = { MALE: '남성', FEMALE: '�
 
 export const labelOf = (map: Record<string, string>, code?: string | null) =>
   code == null ? '-' : (map[code] ?? code);
+
+export const AD_SLOT_TYPE_LABEL: Record<string, string> = {
+  banner: '배너',
+  pinnedProduct: '상품 고정',
+};
+
+export const AD_SLOT_LOCATION_LABEL: Record<string, string> = {
+  home_carousel_banner: '홈 캐러셀 배너',
+  home_main_banner: '홈 메인 배너',
+  home_ranking_product: '홈 상품형 배너',
+  product_main_banner: '프로덕트 메인 배너',
+};
+
+export const PRICE_TARGET_LABEL: Record<string, string> = {
+  DANAWA: '다나와',
+  MALL: '쇼핑몰',
+  JIRUM_ALARM: '지름알림',
+};
+
+export const CURRENCY_LABEL: Record<string, string> = { WON: '원', DOLLOR: '달러' };

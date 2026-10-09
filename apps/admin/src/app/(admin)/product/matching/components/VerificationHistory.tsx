@@ -332,7 +332,7 @@ const VerificationHistory = () => {
                             {item.verifiedBy?.name ?? '-'}
                           </span>
                           {isMyVerification(item) && (
-                            <span className="rounded bg-primary/10 px-1 py-0.5 text-[10px] font-semibold text-primary">
+                            <span className="rounded bg-primary/10 px-1 py-0.5 text-[11px] font-semibold text-primary">
                               나
                             </span>
                           )}

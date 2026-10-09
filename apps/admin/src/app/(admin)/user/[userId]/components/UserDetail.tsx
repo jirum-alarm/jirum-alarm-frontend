@@ -4,13 +4,10 @@ import Link from 'next/link';
 
 import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
+import { useGetCategories } from '@/hooks/graphql/category';
 import { useGetUserByAdmin } from '@/hooks/graphql/user';
+import { GENDER_LABEL, labelOf } from '@/lib/labels';
 import { dateFormatter } from '@/utils/date';
-
-const GENDER_MAP: Record<string, string> = {
-  MALE: '남성',
-  FEMALE: '여성',
-};
 
 const PROVIDER_MAP: Record<string, string> = {
   GOOGLE: 'Google',
@@ -21,6 +18,8 @@ const PROVIDER_MAP: Record<string, string> = {
 
 const UserDetail = ({ userId }: { userId: string }) => {
   const { data, loading } = useGetUserByAdmin({ id: Number(userId) });
+  const { data: categoryData } = useGetCategories();
+  const categoryName = new Map((categoryData?.categories ?? []).map((c) => [Number(c.id), c.name]));
   const user = data?.userByAdmin;
 
   if (loading) {
@@ -48,10 +47,7 @@ const UserDetail = ({ userId }: { userId: string }) => {
           <InfoRow label="ID" value={String(user.id)} />
           <InfoRow label="이메일" value={user.email} />
           <InfoRow label="닉네임" value={user.nickname} />
-          <InfoRow
-            label="성별"
-            value={user.gender ? (GENDER_MAP[user.gender] ?? user.gender) : '-'}
-          />
+          <InfoRow label="성별" value={user.gender ? labelOf(GENDER_LABEL, user.gender) : '-'} />
           <InfoRow label="출생연도" value={user.birthYear ? String(user.birthYear) : '-'} />
           <InfoRow label="가입일" value={user.createdAt ? dateFormatter(user.createdAt) : '-'} />
         </div>
@@ -86,7 +82,7 @@ const UserDetail = ({ userId }: { userId: string }) => {
                 key={catId}
                 className="rounded-full bg-bodydark2 bg-opacity-10 px-4 py-1.5 text-sm font-medium text-bodydark2"
               >
-                카테고리 {catId}
+                {categoryName.get(Number(catId)) ?? `카테고리 ${catId}`}
               </span>
             ))}
           </div>
