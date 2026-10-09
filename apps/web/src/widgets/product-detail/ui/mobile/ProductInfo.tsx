@@ -69,6 +69,7 @@ export default function ProductInfo({
   return (
     <section className="px-5 pb-9">
       <div>
+        {/* 게시 시각은 배지 줄 오른쪽에 — 가격 위에 줄을 하나 더 두면 375×667 첫 화면에서 가격이 밀려난다. */}
         <div className="flex items-center gap-3 pb-2">
           {product.isEnd && (
             <div
@@ -90,13 +91,13 @@ export default function ProductInfo({
               />
             </div>
           )}
-        </div>
-        <h1 className="font-medium text-gray-800">{displayTitle}</h1>
-        <div className="flex flex-col gap-y-1 pt-3">
-          <div className="h-5 text-sm text-gray-600">
+          <div className="ml-auto shrink-0 text-sm text-gray-600">
             <DisplayTime time={dealFreshnessAt(product) ?? product.postedAt} />
             {isSeenBasedFreshness(product) && ' 확인'}
           </div>
+        </div>
+        <h1 className="font-medium text-gray-800">{displayTitle}</h1>
+        <div className="flex flex-col gap-y-1 pt-3">
           <div className="flex items-center justify-between">
             <div>
               {hidePrice ? (

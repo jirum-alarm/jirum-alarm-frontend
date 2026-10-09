@@ -3,6 +3,7 @@
 import { m } from 'motion/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { Drawer } from 'vaul';
 
 import { CheckDeviceResult } from '@/app/actions/agent.types';
 
@@ -30,7 +31,7 @@ function pushEvent(event: string, props: Record<string, unknown>) {
 }
 
 /**
- * 상품 상세에 "처음" 진입한 유저를 앱 설치로 유도하는 가운데 모달.
+ * 상품 상세에 "처음" 진입한 유저를 앱 설치로 유도한다 — 폰은 바텀시트, PC 는 가운데 모달(QR).
  * - 데이터 근거: 상세 본 유저 재방문율 모바일 7% / PC 4.8%, 재방문 훅(앱DL·키워드) 사망 수준.
  * - 카피/이미지/스토어버튼은 알림탭 AppDownloadGuide 와 동일.
  * - 애플 → App Store, 안드 → Google Play, PC(비모바일) → 둘 다 노출.
@@ -51,74 +52,99 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
     pushEvent('app_alert_hook_view', { platform });
   }, [platform]);
 
-  if (!show || !platform) return null;
+  if (!platform) return null;
 
-  return (
-    <AlertDialog defaultOpen>
-      <AlertDialog.Content className="max-w-[320px] gap-0">
-        <AlertDialog.Header>
-          <AlertDialog.Title className="text-2xl font-semibold text-gray-900">
-            <span className="shadow-primary-500 inline-block font-extrabold shadow-[inset_0-12px_0]">
-              지름알림
-            </span>{' '}
-            앱 다운받고
-            <br /> 핫딜을 알림
-            <span className="bg-primary-500 inline-flex h-2 w-2 rounded-full align-text-top"></span>{' '}
-            으로 받아보세요!
-          </AlertDialog.Title>
-          <AlertDialog.Description>
-            {/* 원본 에셋은 600x301(2:1). 280x334로 선언하면 확대·잘려서 폰 목업을 알아볼 수 없다. */}
-            <div className="animate-fade-in mt-4 overflow-hidden rounded-md bg-gray-100">
-              <Image
-                src={APP_GUIDE_IMAGE}
-                alt="지름알림 앱 다운로드 안내"
-                width={600}
-                height={301}
-                sizes="280px"
-                className="h-auto w-full"
-                quality={85}
-              />
+  const title = (
+    <>
+      <span className="shadow-primary-500 inline-block font-extrabold shadow-[inset_0-12px_0]">
+        지름알림
+      </span>{' '}
+      앱 다운받고
+      <br /> 핫딜을 알림
+      <span className="bg-primary-500 inline-flex h-2 w-2 rounded-full align-text-top"></span> 으로
+      받아보세요!
+    </>
+  );
+  const image = (
+    // 원본 에셋은 600x301(2:1). 280x334로 선언하면 확대·잘려서 폰 목업을 알아볼 수 없다.
+    <div className="animate-fade-in mt-4 overflow-hidden rounded-md bg-gray-100">
+      <Image
+        src={APP_GUIDE_IMAGE}
+        alt="지름알림 앱 다운로드 안내"
+        width={600}
+        height={301}
+        sizes={platform === 'non-mobile' ? '280px' : '(max-width: 600px) 100vw, 560px'}
+        className="h-auto w-full"
+        quality={85}
+      />
+    </div>
+  );
+
+  // PC 는 QR 을 보여주는 가운데 모달 그대로.
+  if (platform === 'non-mobile') {
+    if (!show) return null;
+    return (
+      <AlertDialog defaultOpen>
+        <AlertDialog.Content className="max-w-[320px] gap-0">
+          <AlertDialog.Header>
+            <AlertDialog.Title className="text-2xl font-semibold text-gray-900">
+              {title}
+            </AlertDialog.Title>
+            <AlertDialog.Description>{image}</AlertDialog.Description>
+          </AlertDialog.Header>
+          <div className="mt-4 flex flex-col items-center">
+            {/* PC는 QR 카드가 "스캔 → 알림"을 다 말하므로 리드문을 두지 않는다. */}
+            <div className="flex w-full gap-x-2">
+              <AppDownloadQr compact />
             </div>
-          </AlertDialog.Description>
-        </AlertDialog.Header>
-        <div className="mt-4 flex flex-col items-center">
-          {/* PC는 QR 카드가 "스캔 → 알림"을 다 말하므로 리드문을 두면 같은 말이 두 번 나온다. */}
-          {platform !== 'non-mobile' && (
+            <AlertDialog.Cancel asChild>
+              <button type="button" className="mt-3 h-10 text-sm text-gray-500">
+                다음에 할게요
+              </button>
+            </AlertDialog.Cancel>
+          </div>
+        </AlertDialog.Content>
+      </AlertDialog>
+    );
+  }
+
+  // 폰에선 가운데 모달이 방금 들어온 페이지를 통째로 가린다 — 아래에서 올라오는 시트로, 끌어내리거나 바깥을 누르면 닫힌다.
+  return (
+    <Drawer.Root open={show} onOpenChange={setShow}>
+      <Drawer.Portal>
+        <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
+        <Drawer.Content className="max-w-mobile-max rounded-t-5 pb-safe-bottom-16 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white px-5 pt-3 outline-hidden">
+          <div className="mx-auto mb-5 h-1 w-10 rounded-full bg-gray-300" aria-hidden />
+          <Drawer.Title className="text-2xl font-semibold text-gray-900">{title}</Drawer.Title>
+          <Drawer.Description asChild>{image}</Drawer.Description>
+          <div className="mt-4 flex flex-col items-center">
             <p className="pb-3 text-center text-sm text-gray-400">
               키워드를 등록하고
               <br />
               누구보다 빠르게 받아보세요
             </p>
-          )}
-          <div className="flex w-full gap-x-2">
-            {platform === 'non-mobile' ? (
-              <AppDownloadQr compact />
-            ) : (
-              <>
-                {platform === 'android' && <StoreButton kind="android" />}
-                {platform === 'apple' && <StoreButton kind="apple" />}
-              </>
-            )}
+            <StoreButton kind={platform} />
+            <Drawer.Close asChild>
+              <button type="button" className="mt-3 h-10 text-sm text-gray-500">
+                다음에 할게요
+              </button>
+            </Drawer.Close>
           </div>
-          <AlertDialog.Cancel asChild>
-            <button type="button" className="mt-3 h-10 text-sm text-gray-500">
-              다음에 할게요
-            </button>
-          </AlertDialog.Cancel>
-        </div>
-      </AlertDialog.Content>
-    </AlertDialog>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
   );
 }
 
 function StoreButton({ kind }: { kind: 'android' | 'apple' }) {
   const link = kind === 'android' ? ANDROID_STORE_LINK : IOS_STORE_LINK;
   return (
-    <AlertDialog.Action
-      asChild
-      onClick={() => pushEvent('app_download_click', { platform: kind, link })}
-    >
-      <a href={link} className="w-full">
+    <Drawer.Close asChild>
+      <a
+        href={link}
+        className="w-full"
+        onClick={() => pushEvent('app_download_click', { platform: kind, link })}
+      >
         <m.span
           className="bg-primary-500 text-fixed-900 flex w-full items-center justify-center gap-x-2 rounded-lg py-3 font-semibold"
           whileTap={{ scale: 0.95 }}
@@ -128,6 +154,6 @@ function StoreButton({ kind }: { kind: 'android' | 'apple' }) {
           {kind === 'android' ? 'Google Play' : 'App Store'}
         </m.span>
       </a>
-    </AlertDialog.Action>
+    </Drawer.Close>
   );
 }
