@@ -55,7 +55,7 @@
     "sharp": "^0.34.5",
     "swiper": "^14.3.0",
     "tailwind-merge": "^3.7.0",
-    "uuid": "^13.0.2",
+    "uuid": "^14.0.2",
     "vaul": "^1.1.2"
   },
   "devDependencies": {
