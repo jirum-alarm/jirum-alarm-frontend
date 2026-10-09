@@ -40,7 +40,7 @@
     "firebase": "^13.0.0",
     "graphql": "^16.14.2",
     "graphql-ws": "^6.3.0",
-    "jotai": "^2.20.3",
+    "jotai": "^3.0.1",
     "motion": "^12.43.0",
     "next": "16.4.0",
     "next-runtime-env": "^3.3.0",
