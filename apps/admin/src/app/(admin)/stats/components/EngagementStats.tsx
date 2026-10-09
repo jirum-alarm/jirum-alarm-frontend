@@ -1,119 +1,47 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
+import RankList from '@/components/RankList';
 import { useDailyServiceViewStats, useTopNotificationKeywords } from '@/hooks/graphql/stats';
-import { DateInterval } from '@/types/stats';
-import { formatStatsDate, kstMonthsAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
+import { toStatsDateRange } from '@/utils/date';
 
 import ChartCard from './ChartCard';
-import DateRangeFilter from './DateRangeFilter';
-
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
-const getDefaultDateRange = () => ({
-  startDate: kstMonthsAgo(1),
-  endDate: toKstDateString(),
-});
+import DateRangeFilter, { useStatsRange } from './DateRangeFilter';
+import TrendCard from './TrendCard';
 
 const EngagementStats = () => {
-  const defaultRange = getDefaultDateRange();
-  const [startDate, setStartDate] = useState(defaultRange.startDate);
-  const [endDate, setEndDate] = useState(defaultRange.endDate);
-  const [interval, setInterval] = useState<DateInterval>(DateInterval.DAILY);
-
+  const [range, setRange] = useStatsRange();
   const [fetchViewStats, { data: viewData, loading: viewLoading }] = useDailyServiceViewStats();
   const { data: keywordData, loading: keywordLoading } = useTopNotificationKeywords({ limit: 30 });
 
-  const handleSearch = () => {
-    fetchViewStats({
-      variables: { ...toStatsDateRange(startDate, endDate), interval },
-    });
-  };
-
-  // 들어오자마자 기본 기간(최근 1개월)으로 불러온다 — 예전엔 '조회'를 눌러야 차트가 떴다
   useEffect(() => {
-    handleSearch();
+    fetchViewStats({
+      variables: { ...toStatsDateRange(range.startDate, range.endDate), interval: range.interval },
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const viewStats = viewData?.dailyServiceViewStats ?? [];
-  const keywords = keywordData?.topNotificationKeywords ?? [];
+  }, [range.startDate, range.endDate, range.interval]);
 
   return (
     <div className="flex flex-col gap-6">
-      <DateRangeFilter
-        startDate={startDate}
-        endDate={endDate}
-        interval={interval}
-        onChangeStartDate={setStartDate}
-        onChangeEndDate={setEndDate}
-        onChangeInterval={setInterval}
-        onSearch={handleSearch}
+      <DateRangeFilter value={range} onChange={setRange} />
+
+      <TrendCard
+        title="서비스 조회수"
+        name="조회수"
+        loading={viewLoading}
+        rows={viewData?.dailyServiceViewStats ?? []}
       />
 
-      <ChartCard title="서비스 조회수 추이" loading={viewLoading}>
-        {viewStats.length > 0 ? (
-          <Chart
-            type="area"
-            height={350}
-            options={{
-              chart: { toolbar: { show: true } },
-              xaxis: {
-                categories: viewStats.map((d) => formatStatsDate(d.date)),
-                labels: { rotate: -45 },
-              },
-              yaxis: { title: { text: '조회수' } },
-              stroke: { curve: 'smooth', width: 2 },
-              fill: {
-                type: 'gradient',
-                gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.1 },
-              },
-              colors: ['#3C50E0'],
-            }}
-            series={[
-              {
-                name: '조회수',
-                data: viewStats.map((d) => d.count),
-              },
-            ]}
-          />
-        ) : (
-          <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-        )}
-      </ChartCard>
-
       <ChartCard title="알림 키워드 TOP 30" loading={keywordLoading}>
-        {keywords.length > 0 ? (
-          <Chart
-            type="bar"
-            height={500}
-            options={{
-              chart: { toolbar: { show: false } },
-              plotOptions: {
-                bar: { horizontal: true, borderRadius: 4, barHeight: '70%' },
-              },
-              xaxis: { title: { text: '등록 수' } },
-              yaxis: {
-                labels: { maxWidth: 150 },
-              },
-              colors: ['#80CAEE'],
-              dataLabels: { enabled: true },
-            }}
-            series={[
-              {
-                name: '등록 수',
-                data: keywords.map((k) => ({
-                  x: k.keyword,
-                  y: k.count,
-                })),
-              },
-            ]}
-          />
-        ) : (
-          <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-        )}
+        <RankList
+          color="#80CAEE"
+          items={(keywordData?.topNotificationKeywords ?? []).map((k) => ({
+            label: k.keyword,
+            value: k.count,
+          }))}
+          format={(v) => `${v.toLocaleString()}명`}
+        />
       </ChartCard>
     </div>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import dayjs from 'dayjs';
+import { useState } from 'react';
 
 import Panel from '@/components/Panel';
 import Spinner from '@/components/Spinner';
@@ -22,28 +22,13 @@ export const getHealthLevel = (provider: ProviderHealthOutput): HealthLevel => {
   return 'healthy';
 };
 
-const levelStyles: Record<HealthLevel, { card: string; dot: string; label: string }> = {
-  healthy: {
-    card: 'border-l-4 border-l-meta-3',
-    dot: 'bg-meta-3',
-    label: '정상',
-  },
-  stale: {
-    card: 'border-l-4 border-l-warning',
-    dot: 'bg-warning',
-    label: '지연',
-  },
-  critical: {
-    card: 'border-l-4 border-l-danger',
-    dot: 'bg-danger',
-    label: '심각',
-  },
-  dead: {
-    card: 'border-l-4 border-l-bodydark2',
-    dot: 'bg-bodydark2',
-    label: '7일 무수집',
-  },
+const LEVEL: Record<HealthLevel, { dot: string; label: string; text: string }> = {
+  healthy: { dot: 'bg-meta-3', label: '정상', text: 'text-body' },
+  stale: { dot: 'bg-warning', label: '지연', text: 'text-warning' },
+  critical: { dot: 'bg-danger', label: '심각', text: 'text-danger' },
+  dead: { dot: 'bg-bodydark2', label: '7일 무수집', text: 'text-bodydark2' },
 };
+const LEVEL_ORDER: HealthLevel[] = ['dead', 'critical', 'stale', 'healthy'];
 
 const formatMinutes = (minutes?: number | null) => {
   if (minutes == null) return '7일 이상';
@@ -54,6 +39,8 @@ const formatMinutes = (minutes?: number | null) => {
 };
 
 const ProviderHealthGrid = () => {
+  // 정상인 곳까지 다 펼치면 폰에서 한참 내려야 한다 — 문제 있는 곳만 먼저
+  const [showHealthy, setShowHealthy] = useState(false);
   const { data, loading, error } = useProviderHealthStatus({
     providerType: ProviderType.COMMUNITY,
   });
@@ -62,7 +49,7 @@ const ProviderHealthGrid = () => {
     return (
       <Panel className="p-4 sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">
-          Provider 상태 (커뮤니티)
+          커뮤니티 수집 상태
         </h3>
         <div className="flex h-32 items-center justify-center">
           <Spinner size="lg" />
@@ -75,7 +62,7 @@ const ProviderHealthGrid = () => {
     return (
       <Panel className="p-4 sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">
-          Provider 상태 (커뮤니티)
+          커뮤니티 수집 상태
         </h3>
         <p className="text-sm text-danger">에러: {error.message}</p>
       </Panel>
@@ -83,79 +70,71 @@ const ProviderHealthGrid = () => {
   }
 
   const providers = [...(data?.providerHealthStatus ?? [])].sort((a, b) => {
-    const levelOrder: Record<HealthLevel, number> = {
-      dead: 0,
-      critical: 1,
-      stale: 2,
-      healthy: 3,
-    };
-    const diff = levelOrder[getHealthLevel(a)] - levelOrder[getHealthLevel(b)];
-    if (diff !== 0) return diff;
-    return b.last24hCount - a.last24hCount;
+    const diff = LEVEL_ORDER.indexOf(getHealthLevel(a)) - LEVEL_ORDER.indexOf(getHealthLevel(b));
+    return diff !== 0 ? diff : b.last24hCount - a.last24hCount;
   });
+  const healthyCount = providers.filter((p) => getHealthLevel(p) === 'healthy').length;
+  const counts = LEVEL_ORDER.map((level) => ({
+    level,
+    n: providers.filter((p) => getHealthLevel(p) === level).length,
+  })).filter((c) => c.n > 0);
 
   return (
     <Panel className="p-4 sm:p-6">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-        <h3 className="text-lg font-semibold text-black dark:text-white">
-          Provider 상태 (커뮤니티)
-        </h3>
-        <span className="text-xs text-bodydark2">60초마다 자동 갱신</span>
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+        <h3 className="text-lg font-semibold text-black dark:text-white">커뮤니티 수집 상태</h3>
+        <span className="text-xs text-bodydark2">1분마다 갱신</span>
       </div>
+      {counts.length > 0 && (
+        <p className="mb-3 flex flex-wrap gap-x-3 text-sm">
+          {counts.map((c) => (
+            <span key={c.level} className="flex items-center gap-1.5 text-black dark:text-white">
+              <span className={`h-2 w-2 rounded-full ${LEVEL[c.level].dot}`} />
+              {LEVEL[c.level].label} <b>{c.n}</b>
+            </span>
+          ))}
+        </p>
+      )}
 
       {providers.length === 0 ? (
-        <p className="py-8 text-center text-bodydark2">provider 정보가 없습니다.</p>
+        <p className="py-8 text-center text-bodydark2">커뮤니티 정보가 없습니다.</p>
       ) : (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {providers.map((provider) => {
-            const level = getHealthLevel(provider);
-            const styles = levelStyles[level];
-            return (
-              <div
-                key={provider.providerId}
-                className={`rounded border border-stroke bg-white p-4 dark:border-strokedark dark:bg-boxdark ${styles.card}`}
-              >
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-base font-semibold text-black dark:text-white">
-                    {provider.providerName}
-                  </span>
-                  <span className="flex items-center gap-1.5 text-xs text-bodydark2">
-                    <span className={`h-2 w-2 rounded-full ${styles.dot}`} />
-                    {styles.label}
-                  </span>
-                </div>
-                <dl className="grid grid-cols-3 gap-2 text-xs">
-                  <div>
-                    <dt className="text-bodydark2">1h</dt>
-                    <dd className="font-mono text-base text-black dark:text-white">
-                      {provider.last1hCount}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-bodydark2">24h</dt>
-                    <dd className="font-mono text-base text-black dark:text-white">
-                      {provider.last24hCount}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-bodydark2">7d</dt>
-                    <dd className="font-mono text-base text-black dark:text-white">
-                      {provider.last7dCount}
-                    </dd>
-                  </div>
-                </dl>
-                <div className="mt-3 text-xs text-bodydark2">
-                  마지막 수집: {formatMinutes(provider.minutesSinceLatest)}
-                  {provider.latestCollectedAt && (
-                    <span className="ml-1 text-bodydark2/70">
-                      ({dayjs(provider.latestCollectedAt).format('MM/DD HH:mm')})
+        <ul className="grid divide-y divide-stroke dark:divide-strokedark md:grid-cols-2 md:gap-x-6 md:divide-y-0 xl:grid-cols-3">
+          {providers
+            .filter((p) => showHealthy || getHealthLevel(p) !== 'healthy')
+            .map((provider) => {
+              const level = LEVEL[getHealthLevel(provider)];
+              return (
+                <li
+                  key={provider.providerId}
+                  className="py-2 md:border-b md:border-stroke md:dark:border-strokedark"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex items-center gap-2 font-medium text-black dark:text-white">
+                      <span className={`h-2 w-2 rounded-full ${level.dot}`} />
+                      {provider.providerName}
                     </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                    <span className={`text-xs ${level.text}`}>
+                      {formatMinutes(provider.minutesSinceLatest)}
+                    </span>
+                  </div>
+                  <p className="ml-4 mt-0.5 text-xs text-bodydark2">
+                    1시간 {provider.last1hCount} · 24시간 {provider.last24hCount.toLocaleString()} ·
+                    7일 {provider.last7dCount.toLocaleString()}
+                  </p>
+                </li>
+              );
+            })}
+        </ul>
+      )}
+      {healthyCount > 0 && (
+        <button
+          type="button"
+          onClick={() => setShowHealthy((v) => !v)}
+          className="mt-2 w-full rounded-lg border border-stroke py-2 text-sm font-medium text-body dark:border-strokedark"
+        >
+          {showHealthy ? '정상 접기' : `정상 ${healthyCount}개 보기`}
+        </button>
       )}
     </Panel>
   );

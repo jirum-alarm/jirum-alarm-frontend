@@ -2,40 +2,24 @@
 
 import { useState } from 'react';
 
+import Tabs from '@/components/Tabs';
+
 import CommunityCrawlerStats from './CommunityCrawlerStats';
 import ProviderHealthGrid from './ProviderHealthGrid';
 import ThumbnailStats from './ThumbnailStats';
 
-type CrawlingTab = 'community' | 'thumbnail';
-
-const tabs: { key: CrawlingTab; label: string }[] = [
-  { key: 'community', label: '커뮤니티 크롤러' },
-  { key: 'thumbnail', label: '썸네일 워커' },
-];
+const TABS = [
+  { value: 'community', label: '커뮤니티 수집' },
+  { value: 'thumbnail', label: '썸네일' },
+] as const;
 
 const CrawlingPage = () => {
-  const [activeTab, setActiveTab] = useState<CrawlingTab>('community');
+  const [activeTab, setActiveTab] = useState<(typeof TABS)[number]['value']>('community');
 
   return (
     <div className="flex flex-col gap-6">
       <ProviderHealthGrid />
-
-      <div className="flex gap-2 overflow-x-auto whitespace-nowrap border-b border-stroke dark:border-strokedark">
-        {tabs.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`shrink-0 px-4 py-3 text-sm font-medium transition-colors ${
-              activeTab === tab.key
-                ? 'border-b-2 border-primary text-primary'
-                : 'text-bodydark2 hover:text-black dark:hover:text-white'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
+      <Tabs tabs={TABS} value={activeTab} onChange={setActiveTab} />
       {activeTab === 'community' && <CommunityCrawlerStats />}
       {activeTab === 'thumbnail' && <ThumbnailStats />}
     </div>

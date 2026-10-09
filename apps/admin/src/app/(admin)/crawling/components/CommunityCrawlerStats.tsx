@@ -1,153 +1,94 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import ChartCard from '@/app/(admin)/stats/components/ChartCard';
-import DateRangeFilter from '@/app/(admin)/stats/components/DateRangeFilter';
+import DateRangeFilter, { useStatsRange } from '@/app/(admin)/stats/components/DateRangeFilter';
+import { axisDate } from '@/app/(admin)/stats/components/TrendCard';
+import Chart from '@/components/Chart';
+import RankList from '@/components/RankList';
 import { useProductRegistrationStatsByProvider } from '@/hooks/graphql/stats';
-import { DateInterval, ProviderType } from '@/types/stats';
-import { formatStatsDate, kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
+import { ProviderType } from '@/types/stats';
+import { toStatsDateRange } from '@/utils/date';
 
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
-const getDefaultDateRange = () => ({
-  startDate: kstDaysAgo(7),
-  endDate: toKstDateString(),
-});
-
-interface ProviderSeries {
-  name: string;
-  data: { x: string; y: number }[];
-}
+const ALL = 'all';
 
 const CommunityCrawlerStats = () => {
-  const defaultRange = getDefaultDateRange();
-  const [startDate, setStartDate] = useState(defaultRange.startDate);
-  const [endDate, setEndDate] = useState(defaultRange.endDate);
-  const [interval, setInterval] = useState<DateInterval>(DateInterval.DAILY);
-
+  const [range, setRange] = useStatsRange(7);
+  const [picked, setPicked] = useState(ALL);
   const [fetchStats, { data, loading }] = useProductRegistrationStatsByProvider();
 
-  const runQuery = () => {
+  useEffect(() => {
     fetchStats({
       variables: {
-        ...toStatsDateRange(startDate, endDate),
-        interval,
+        ...toStatsDateRange(range.startDate, range.endDate),
+        interval: range.interval,
         providerType: ProviderType.COMMUNITY,
       },
     });
-  };
-
-  // 페이지 진입 시 자동 조회
-  useEffect(() => {
-    runQuery();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [range.startDate, range.endDate, range.interval]);
 
-  const rows = data?.productRegistrationStatsByProvider ?? [];
-
-  // provider별로 시계열을 묶음
-  const byProvider = new Map<number, ProviderSeries>();
-  const allDates = new Set<string>();
-  for (const row of rows) {
-    allDates.add(row.date);
-    const existing = byProvider.get(row.providerId);
-    if (existing) {
-      existing.data.push({ x: row.date, y: row.count });
-    } else {
-      byProvider.set(row.providerId, {
-        name: row.providerName,
-        data: [{ x: row.date, y: row.count }],
-      });
-    }
-  }
-
-  // 모든 시리즈에 동일한 x축을 채워서(없는 날짜는 0) 비교 가능하게
-  const sortedDates = Array.from(allDates).sort();
-  const series = Array.from(byProvider.values())
-    .map((s) => {
-      const dataByX = new Map(s.data.map((d) => [d.x, d.y]));
-      return {
-        name: s.name,
-        data: sortedDates.map((date) => ({
-          x: date,
-          y: dataByX.get(date) ?? 0,
-        })),
-      };
-    })
-    // 누적 수 많은 순으로 정렬해서 legend 가독성 ↑
-    .sort((a, b) => {
-      const aSum = a.data.reduce((acc, d) => acc + d.y, 0);
-      const bSum = b.data.reduce((acc, d) => acc + d.y, 0);
-      return bSum - aSum;
+  const { dates, providers, totals } = useMemo(() => {
+    const rows = data?.productRegistrationStatsByProvider ?? [];
+    const dateList = [...new Set(rows.map((r) => r.date))].sort();
+    const byProvider = new Map<string, Map<string, number>>();
+    rows.forEach((r) => {
+      const m = byProvider.get(r.providerName) ?? new Map<string, number>();
+      m.set(r.date, (m.get(r.date) ?? 0) + r.count);
+      byProvider.set(r.providerName, m);
     });
+    const sum = (m: Map<string, number>) => [...m.values()].reduce((a, b) => a + b, 0);
+    return {
+      dates: dateList,
+      providers: byProvider,
+      totals: [...byProvider.entries()]
+        .map(([label, m]) => ({ label, value: sum(m) }))
+        .sort((a, b) => b.value - a.value),
+    };
+  }, [data]);
+
+  // 커뮤니티 15개를 선 15개로 그리면 폰에선 못 읽는다 — 합계 하나, 또는 고른 커뮤니티 하나만
+  const line = dates.map((d) =>
+    picked === ALL
+      ? [...providers.values()].reduce((acc, m) => acc + (m.get(d) ?? 0), 0)
+      : (providers.get(picked)?.get(d) ?? 0),
+  );
 
   return (
     <div className="flex flex-col gap-6">
-      <DateRangeFilter
-        startDate={startDate}
-        endDate={endDate}
-        interval={interval}
-        onChangeStartDate={setStartDate}
-        onChangeEndDate={setEndDate}
-        onChangeInterval={setInterval}
-        onSearch={runQuery}
-      />
+      <DateRangeFilter value={range} onChange={setRange} />
 
-      <ChartCard title="Provider별 신규 상품 수집 시계열" loading={loading}>
-        {series.length > 0 ? (
-          <Chart
-            type="line"
-            height={420}
-            options={{
-              chart: { toolbar: { show: true } },
-              xaxis: {
-                type: 'category',
-                categories: sortedDates.map((d) => formatStatsDate(d)),
-                labels: { rotate: -45 },
-              },
-              yaxis: { title: { text: '수집 수' } },
-              stroke: { curve: 'smooth', width: 2 },
-              legend: { position: 'right' },
-              tooltip: { shared: true },
-              // 폰 폭에선 오른쪽 범례가 그래프 폭을 다 먹는다 — 아래로 내린다
-              responsive: [{ breakpoint: 768, options: { legend: { position: 'bottom' } } }],
-            }}
-            series={series.map((s) => ({ name: s.name, data: s.data.map((d) => d.y) }))}
-          />
-        ) : (
-          <p className="py-8 text-center text-bodydark2">조회 결과가 없습니다.</p>
-        )}
+      <ChartCard title="신규 상품 수집" loading={loading}>
+        <div className="flex flex-wrap items-end justify-between gap-2">
+          <p className="text-2xl font-bold text-black dark:text-white">
+            {line.reduce((a, b) => a + b, 0).toLocaleString()}
+            <span className="ml-1 text-sm font-normal text-body">합계</span>
+          </p>
+          <select
+            value={picked}
+            onChange={(e) => setPicked(e.target.value)}
+            className="rounded border border-stroke px-2 py-1.5 text-sm dark:border-strokedark dark:bg-boxdark dark:text-white"
+          >
+            <option value={ALL}>전체 커뮤니티</option>
+            {totals.map((t) => (
+              <option key={t.label} value={t.label}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <Chart
+          type="area"
+          categories={dates.map(axisDate)}
+          colors={['#3C50E0']}
+          series={[{ name: picked === ALL ? '전체' : picked, data: line }]}
+          options={{ fill: { type: 'gradient', gradient: { opacityFrom: 0.35, opacityTo: 0.05 } } }}
+        />
       </ChartCard>
 
-      <ChartCard title="기간 내 Provider별 누적 수집량" loading={loading}>
-        {series.length > 0 ? (
-          <Chart
-            type="bar"
-            height={400}
-            options={{
-              chart: { toolbar: { show: true } },
-              plotOptions: {
-                bar: { horizontal: true, borderRadius: 4, distributed: true },
-              },
-              dataLabels: { enabled: true },
-              xaxis: {
-                categories: series.map((s) => s.name),
-                title: { text: '수집 수' },
-              },
-              legend: { show: false },
-            }}
-            series={[
-              {
-                name: '수집 수',
-                data: series.map((s) => s.data.reduce((acc, d) => acc + d.y, 0)),
-              },
-            ]}
-          />
-        ) : (
-          <p className="py-8 text-center text-bodydark2">조회 결과가 없습니다.</p>
-        )}
+      <ChartCard title="커뮤니티별 수집량" loading={loading}>
+        <RankList items={totals} initial={20} />
       </ChartCard>
     </div>
   );

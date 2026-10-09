@@ -1,8 +1,9 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
+import Chart from '@/components/Chart';
+import RankList from '@/components/RankList';
 import {
   useHotDealRatioStats,
   useHotDealTypeDistribution,
@@ -11,25 +12,21 @@ import {
   useProductPriceDistribution,
   useProductRegistrationStats,
 } from '@/hooks/graphql/stats';
-import { DateInterval } from '@/types/stats';
-import { formatStatsDate, kstMonthsAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
+import { labelOf } from '@/lib/labels';
+import { toStatsDateRange } from '@/utils/date';
 
 import ChartCard from './ChartCard';
-import DateRangeFilter from './DateRangeFilter';
+import DateRangeFilter, { useStatsRange } from './DateRangeFilter';
+import TrendCard, { axisDate } from './TrendCard';
 
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
-const getDefaultDateRange = () => ({
-  startDate: kstMonthsAgo(1),
-  endDate: toKstDateString(),
-});
+const HOT_DEAL_TYPE_LABEL: Record<string, string> = {
+  HOT_DEAL: '핫딜',
+  SUPER_DEAL: '슈퍼딜',
+  ULTRA_DEAL: '울트라딜',
+};
 
 const ProductStats = () => {
-  const defaultRange = getDefaultDateRange();
-  const [startDate, setStartDate] = useState(defaultRange.startDate);
-  const [endDate, setEndDate] = useState(defaultRange.endDate);
-  const [interval, setInterval] = useState<DateInterval>(DateInterval.DAILY);
-
+  const [range, setRange] = useStatsRange();
   const [fetchProductStats, { data: productData, loading: productLoading }] =
     useProductRegistrationStats();
   const [fetchHotDealRatio, { data: hotDealRatioData, loading: hotDealRatioLoading }] =
@@ -38,216 +35,97 @@ const ProductStats = () => {
     useHotDealTypeDistribution();
   const [fetchPriceDistribution, { data: priceData, loading: priceLoading }] =
     useProductPriceDistribution();
-
   const { data: categoryData, loading: categoryLoading } = useProductCountByCategory();
   const { data: providerData, loading: providerLoading } = useProductCountByProvider();
 
-  const handleSearch = () => {
-    const variables = { ...toStatsDateRange(startDate, endDate), interval };
+  useEffect(() => {
+    const variables = {
+      ...toStatsDateRange(range.startDate, range.endDate),
+      interval: range.interval,
+    };
     fetchProductStats({ variables });
     fetchHotDealRatio({ variables });
     fetchHotDealType({ variables });
     fetchPriceDistribution({ variables });
-  };
-
-  // 들어오자마자 기본 기간(최근 1개월)으로 불러온다 — 예전엔 '조회'를 눌러야 차트가 떴다
-  useEffect(() => {
-    handleSearch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [range.startDate, range.endDate, range.interval]);
 
-  const productStats = productData?.productRegistrationStats ?? [];
   const hotDealRatio = hotDealRatioData?.hotDealRatioStats ?? [];
   const hotDealTypes = hotDealTypeData?.hotDealTypeDistribution ?? [];
-  const categories = categoryData?.productCountByCategory ?? [];
-  const providers = providerData?.productCountByProvider ?? [];
   const priceDistribution = priceData?.productPriceDistribution ?? [];
+  const totalCount = hotDealRatio.reduce((acc, d) => acc + d.totalCount, 0);
+  const hotCount = hotDealRatio.reduce((acc, d) => acc + d.hotDealCount, 0);
 
   return (
     <div className="flex flex-col gap-6">
-      <DateRangeFilter
-        startDate={startDate}
-        endDate={endDate}
-        interval={interval}
-        onChangeStartDate={setStartDate}
-        onChangeEndDate={setEndDate}
-        onChangeInterval={setInterval}
-        onSearch={handleSearch}
+      <DateRangeFilter value={range} onChange={setRange} />
+
+      <TrendCard
+        title="신규 상품 등록"
+        name="등록"
+        loading={productLoading}
+        rows={productData?.productRegistrationStats ?? []}
       />
 
-      <ChartCard title="신규 상품 등록 수" loading={productLoading}>
-        {productStats.length > 0 ? (
-          <Chart
-            type="line"
-            height={350}
-            options={{
-              chart: { toolbar: { show: true } },
-              xaxis: {
-                categories: productStats.map((d) => formatStatsDate(d.date)),
-                labels: { rotate: -45 },
-              },
-              yaxis: { title: { text: '등록 수' } },
-              stroke: { curve: 'smooth', width: 2 },
-              colors: ['#3C50E0'],
-            }}
-            series={[
-              {
-                name: '등록 수',
-                data: productStats.map((d) => d.count),
-              },
-            ]}
-          />
-        ) : (
-          <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-        )}
-      </ChartCard>
-
-      <ChartCard title="핫딜 비율 추이" loading={hotDealRatioLoading}>
-        {hotDealRatio.length > 0 ? (
-          <Chart
-            type="line"
-            height={350}
-            options={{
-              chart: { toolbar: { show: true } },
-              xaxis: {
-                categories: hotDealRatio.map((d) => formatStatsDate(d.date)),
-                labels: { rotate: -45 },
-              },
-              yaxis: [
-                { title: { text: '상품 수' } },
-                {
-                  opposite: true,
-                  title: { text: '비율 (%)' },
-                  max: 100,
-                },
-              ],
-              stroke: { curve: 'smooth', width: 2 },
-              colors: ['#3C50E0', '#FB5454', '#10B981'],
-            }}
-            series={[
-              {
-                name: '전체 상품',
-                data: hotDealRatio.map((d) => d.totalCount),
-              },
-              {
-                name: '핫딜 상품',
-                data: hotDealRatio.map((d) => d.hotDealCount),
-              },
-              {
-                name: '핫딜 비율 (%)',
-                data: hotDealRatio.map((d) => Math.round(d.ratio * 100) / 100),
-              },
-            ]}
-          />
-        ) : (
-          <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-        )}
+      <ChartCard title="핫딜 비율" loading={hotDealRatioLoading}>
+        <p className="text-2xl font-bold text-black dark:text-white">
+          {totalCount > 0 ? `${((hotCount / totalCount) * 100).toFixed(1)}%` : '-'}
+          <span className="ml-1 text-sm font-normal text-body">
+            기간 전체 · {hotCount.toLocaleString()} / {totalCount.toLocaleString()}개
+          </span>
+        </p>
+        <Chart
+          type="line"
+          categories={hotDealRatio.map((d) => axisDate(d.date))}
+          colors={['#FB5454']}
+          series={[
+            { name: '핫딜 비율', data: hotDealRatio.map((d) => Math.round(d.ratio * 10) / 10) },
+          ]}
+          format={(v) => `${v}%`}
+          options={{ yaxis: { min: 0, labels: { formatter: (v: number) => `${Math.round(v)}%` } } }}
+        />
       </ChartCard>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <ChartCard title="핫딜 유형별 분포" loading={hotDealTypeLoading}>
-          {hotDealTypes.length > 0 ? (
-            <Chart
-              type="donut"
-              height={300}
-              options={{
-                labels: hotDealTypes.map((d) => d.hotDealType),
-                colors: ['#3C50E0', '#80CAEE', '#10B981', '#FB5454'],
-                legend: { position: 'bottom' },
-              }}
-              series={hotDealTypes.map((d) => d.count)}
-            />
-          ) : (
-            <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-          )}
+        <ChartCard title="핫딜 유형" loading={hotDealTypeLoading}>
+          <Chart
+            type="donut"
+            height={240}
+            categories={hotDealTypes.map((d) => labelOf(HOT_DEAL_TYPE_LABEL, d.hotDealType))}
+            colors={['#3C50E0', '#80CAEE', '#10B981', '#FB5454']}
+            series={hotDealTypes.map((d) => d.count)}
+          />
         </ChartCard>
 
-        <ChartCard title="가격대별 분포" loading={priceLoading}>
-          {priceDistribution.length > 0 ? (
-            <Chart
-              type="bar"
-              height={300}
-              options={{
-                chart: { toolbar: { show: false } },
-                xaxis: {
-                  categories: priceDistribution.map((d) => d.priceRange),
-                },
-                yaxis: { title: { text: '상품 수' } },
-                colors: ['#80CAEE'],
-                plotOptions: {
-                  bar: { borderRadius: 4, columnWidth: '60%' },
-                },
-              }}
-              series={[
-                {
-                  name: '상품 수',
-                  data: priceDistribution.map((d) => d.count),
-                },
-              ]}
-            />
-          ) : (
-            <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-          )}
+        <ChartCard title="가격대" loading={priceLoading}>
+          <Chart
+            type="bar"
+            categories={priceDistribution.map((d) => d.priceRange)}
+            colors={['#80CAEE']}
+            series={[{ name: '상품', data: priceDistribution.map((d) => d.count) }]}
+            options={{ xaxis: { tickAmount: undefined } }}
+          />
         </ChartCard>
       </div>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <ChartCard title="카테고리별 상품 수" loading={categoryLoading}>
-          {categories.length > 0 ? (
-            <Chart
-              type="bar"
-              height={350}
-              options={{
-                chart: { toolbar: { show: false } },
-                xaxis: {
-                  categories: categories.map((c) => c.categoryName),
-                  labels: { rotate: -45 },
-                },
-                yaxis: { title: { text: '상품 수' } },
-                colors: ['#3C50E0'],
-                plotOptions: {
-                  bar: { borderRadius: 4, columnWidth: '60%' },
-                },
-              }}
-              series={[
-                {
-                  name: '상품 수',
-                  data: categories.map((c) => c.count),
-                },
-              ]}
-            />
-          ) : (
-            <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-          )}
+          <RankList
+            items={(categoryData?.productCountByCategory ?? []).map((c) => ({
+              label: c.categoryName,
+              value: c.count,
+            }))}
+          />
         </ChartCard>
 
-        <ChartCard title="제공자별 상품 수" loading={providerLoading}>
-          {providers.length > 0 ? (
-            <Chart
-              type="bar"
-              height={350}
-              options={{
-                chart: { toolbar: { show: false } },
-                xaxis: {
-                  categories: providers.map((p) => p.providerName),
-                  labels: { rotate: -45 },
-                },
-                yaxis: { title: { text: '상품 수' } },
-                colors: ['#10B981'],
-                plotOptions: {
-                  bar: { borderRadius: 4, columnWidth: '60%' },
-                },
-              }}
-              series={[
-                {
-                  name: '상품 수',
-                  data: providers.map((p) => p.count),
-                },
-              ]}
-            />
-          ) : (
-            <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-          )}
+        <ChartCard title="커뮤니티별 상품 수" loading={providerLoading}>
+          <RankList
+            color="#10B981"
+            items={(providerData?.productCountByProvider ?? []).map((p) => ({
+              label: p.providerName,
+              value: p.count,
+            }))}
+          />
         </ChartCard>
       </div>
     </div>

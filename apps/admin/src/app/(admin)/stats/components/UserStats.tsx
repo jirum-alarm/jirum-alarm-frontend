@@ -1,167 +1,79 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
+import Chart from '@/components/Chart';
+import RankList from '@/components/RankList';
 import {
   useTopFavoriteCategories,
   useUserDemographicStats,
   useUserRegistrationStats,
 } from '@/hooks/graphql/stats';
-import { DateInterval } from '@/types/stats';
-import { formatStatsDate, kstMonthsAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
+import { GENDER_LABEL, labelOf } from '@/lib/labels';
+import { toStatsDateRange } from '@/utils/date';
 
 import ChartCard from './ChartCard';
-import DateRangeFilter from './DateRangeFilter';
-
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
-const getDefaultDateRange = () => ({
-  startDate: kstMonthsAgo(1),
-  endDate: toKstDateString(),
-});
+import DateRangeFilter, { useStatsRange } from './DateRangeFilter';
+import TrendCard from './TrendCard';
 
 const UserStats = () => {
-  const defaultRange = getDefaultDateRange();
-  const [startDate, setStartDate] = useState(defaultRange.startDate);
-  const [endDate, setEndDate] = useState(defaultRange.endDate);
-  const [interval, setInterval] = useState<DateInterval>(DateInterval.DAILY);
-
+  const [range, setRange] = useStatsRange();
   const [fetchRegistrationStats, { data: registrationData, loading: registrationLoading }] =
     useUserRegistrationStats();
-
   const { data: demographicData, loading: demographicLoading } = useUserDemographicStats();
   const { data: categoryData, loading: categoryLoading } = useTopFavoriteCategories({ limit: 10 });
 
-  const handleSearch = () => {
-    fetchRegistrationStats({
-      variables: { ...toStatsDateRange(startDate, endDate), interval },
-    });
-  };
-
-  // 들어오자마자 기본 기간(최근 1개월)으로 불러온다 — 예전엔 '조회'를 눌러야 차트가 떴다
   useEffect(() => {
-    handleSearch();
+    fetchRegistrationStats({
+      variables: { ...toStatsDateRange(range.startDate, range.endDate), interval: range.interval },
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [range.startDate, range.endDate, range.interval]);
 
-  const registrationStats = registrationData?.userRegistrationStats ?? [];
   const demographics = demographicData?.userDemographicStats;
-  const favoriteCategories = categoryData?.topFavoriteCategories ?? [];
+  const genders = demographics?.genderDistribution ?? [];
+  const ages = demographics?.ageDistribution ?? [];
 
   return (
     <div className="flex flex-col gap-6">
-      <DateRangeFilter
-        startDate={startDate}
-        endDate={endDate}
-        interval={interval}
-        onChangeStartDate={setStartDate}
-        onChangeEndDate={setEndDate}
-        onChangeInterval={setInterval}
-        onSearch={handleSearch}
+      <DateRangeFilter value={range} onChange={setRange} />
+
+      <TrendCard
+        title="가입자 수"
+        name="가입자"
+        loading={registrationLoading}
+        rows={registrationData?.userRegistrationStats ?? []}
       />
 
-      <ChartCard title="가입자 수 추이" loading={registrationLoading}>
-        {registrationStats.length > 0 ? (
-          <Chart
-            type="line"
-            height={350}
-            options={{
-              chart: { toolbar: { show: true } },
-              xaxis: {
-                categories: registrationStats.map((d) => formatStatsDate(d.date)),
-                labels: { rotate: -45 },
-              },
-              yaxis: { title: { text: '가입자 수' } },
-              stroke: { curve: 'smooth', width: 2 },
-              colors: ['#3C50E0'],
-            }}
-            series={[
-              {
-                name: '가입자 수',
-                data: registrationStats.map((d) => d.count),
-              },
-            ]}
-          />
-        ) : (
-          <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-        )}
-      </ChartCard>
-
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <ChartCard title="성별 분포" loading={demographicLoading}>
-          {demographics?.genderDistribution && demographics.genderDistribution.length > 0 ? (
-            <Chart
-              type="pie"
-              height={300}
-              options={{
-                labels: demographics.genderDistribution.map((d) => d.gender || '미설정'),
-                colors: ['#3C50E0', '#80CAEE', '#10B981', '#FB5454'],
-                legend: { position: 'bottom' },
-              }}
-              series={demographics.genderDistribution.map((d) => d.count)}
-            />
-          ) : (
-            <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-          )}
+        <ChartCard title="성별" loading={demographicLoading}>
+          <Chart
+            type="donut"
+            height={240}
+            categories={genders.map((d) => (d.gender ? labelOf(GENDER_LABEL, d.gender) : '미설정'))}
+            colors={['#3C50E0', '#FB5454', '#94A3B8', '#10B981']}
+            series={genders.map((d) => d.count)}
+          />
         </ChartCard>
 
-        <ChartCard title="연령대 분포" loading={demographicLoading}>
-          {demographics?.ageDistribution && demographics.ageDistribution.length > 0 ? (
-            <Chart
-              type="bar"
-              height={300}
-              options={{
-                chart: { toolbar: { show: false } },
-                xaxis: {
-                  categories: demographics.ageDistribution.map((d) => d.ageGroup),
-                },
-                yaxis: { title: { text: '사용자 수' } },
-                colors: ['#3C50E0'],
-                plotOptions: {
-                  bar: { borderRadius: 4, columnWidth: '50%' },
-                },
-              }}
-              series={[
-                {
-                  name: '사용자 수',
-                  data: demographics.ageDistribution.map((d) => d.count),
-                },
-              ]}
-            />
-          ) : (
-            <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-          )}
+        <ChartCard title="연령대" loading={demographicLoading}>
+          <Chart
+            type="bar"
+            categories={ages.map((d) => d.ageGroup)}
+            colors={['#3C50E0']}
+            series={[{ name: '사용자', data: ages.map((d) => d.count) }]}
+          />
         </ChartCard>
       </div>
 
       <ChartCard title="인기 관심 카테고리 TOP 10" loading={categoryLoading}>
-        {favoriteCategories.length > 0 ? (
-          <Chart
-            type="bar"
-            height={350}
-            options={{
-              chart: { toolbar: { show: false } },
-              xaxis: {
-                categories: favoriteCategories.map((c) => c.categoryName),
-                labels: { rotate: -45 },
-              },
-              yaxis: { title: { text: '사용자 수' } },
-              colors: ['#80CAEE'],
-              plotOptions: {
-                bar: { borderRadius: 4, columnWidth: '60%' },
-              },
-            }}
-            series={[
-              {
-                name: '사용자 수',
-                data: favoriteCategories.map((c) => c.count),
-              },
-            ]}
-          />
-        ) : (
-          <p className="py-8 text-center text-bodydark2">데이터가 없습니다.</p>
-        )}
+        <RankList
+          items={(categoryData?.topFavoriteCategories ?? []).map((c) => ({
+            label: c.categoryName,
+            value: c.count,
+          }))}
+          format={(v) => `${v.toLocaleString()}명`}
+        />
       </ChartCard>
     </div>
   );
