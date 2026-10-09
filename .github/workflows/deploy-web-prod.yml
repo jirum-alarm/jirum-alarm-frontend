@@ -90,10 +90,28 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  # 스캔은 결과를 Security 탭에 올리기만 하고 배포를 막지 않는다(exit-code 0) — 그래서 배포와 병렬로 돈다.
+  # (빌드 잡 안에 있을 땐 배포가 스캔 ~50초를 기다렸다)
+  scan:
+    name: Trivy scan
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Log in to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web:${{ steps.meta.outputs.version }}
+          image-ref: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USER }}/jirum-alarm-frontend-web:${{ needs.build-and-push.outputs.image-tag }}
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
