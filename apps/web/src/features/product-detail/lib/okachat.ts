@@ -4,7 +4,7 @@ export const OKACHAT_LINK = 'https://open.kakao.com/o/gJZTWAAg';
 /** 입장 클릭 후 soft/구매후 권유를 다시 안 띄우기 위한 플래그. */
 export const OKACHAT_JOINED_KEY = 'jirum:okachat-joined';
 
-export type OkachatPlacement = 'soft' | 'after_purchase';
+export type OkachatPlacement = 'soft' | 'after_purchase' | 'first_visit';
 
 export type PostPurchasePromptKind = 'kakao' | 'keyword';
 

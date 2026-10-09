@@ -19,6 +19,32 @@ import FirstVisitAppAlertModal, {
 } from '@/features/app-download/ui/FirstVisitAppAlertModal';
 import { useUpdateKeyword } from '@/features/mypage/model/update-keyword';
 import { deriveKeyword } from '@/features/product-detail/lib/deriveKeyword';
+import {
+  markOkachatJoined,
+  OKACHAT_LINK,
+  pushOkachatEvent,
+  shouldShowOkachatSoftPrompt,
+} from '@/features/product-detail/lib/okachat';
+
+/**
+ * 웹 푸시를 못 받는 첫 방문자 A/B(2026-10-09~): control = 앱 설치 시트(안드로이드 인앱 비회원은 브라우저 넘기기),
+ * okachat = 카톡방 시트. 근거: 웹 푸시는 발송당 클릭 ~1.5%로 앱(~14%)의 1/10, 앱 설치 시트 클릭 0.4% vs
+ * 상단 카톡방 배너 ~1%, 카톡방 유입 D14 14%(채널 중 최고). 기기마다 한 번 정해 고정한다.
+ * 판정: okachat_prompt_click(placement=first_visit)/view vs app_download_click·handoff 클릭/노출.
+ */
+const FIRST_VISIT_AB_KEY = 'jirum:fv-ab-okachat';
+
+function pickFirstVisitVariant(): 'okachat' | 'control' {
+  try {
+    const saved = localStorage.getItem(FIRST_VISIT_AB_KEY);
+    if (saved === 'okachat' || saved === 'control') return saved;
+    const picked = Math.random() < 0.5 ? 'okachat' : 'control';
+    localStorage.setItem(FIRST_VISIT_AB_KEY, picked);
+    return picked;
+  } catch {
+    return 'control';
+  }
+}
 
 function pushEvent(event: string, props: Record<string, unknown>) {
   (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer?.push({
@@ -49,7 +75,7 @@ export default function FirstVisitAlertSheet({
   device: CheckDeviceResult;
   title?: string;
 }) {
-  const [mode, setMode] = useState<'none' | 'keyword' | 'handoff' | 'app'>('none');
+  const [mode, setMode] = useState<'none' | 'keyword' | 'handoff' | 'okachat' | 'app'>('none');
   const keyword = deriveKeyword(title ?? '');
   const { isLoggedIn } = useIsLoggedIn();
 
@@ -65,6 +91,15 @@ export default function FirstVisitAlertSheet({
     const status = readPushStatus();
     const canPush = status === 'default' || status === 'ok';
     const hasKeyword = [...new Intl.Segmenter().segment(keyword)].length >= 2;
+    // 웹 푸시를 못 받는 사람(이미 카톡방에 있는 사람 제외)은 절반에게 카톡방 시트.
+    if (!(canPush && hasKeyword) && shouldShowOkachatSoftPrompt()) {
+      if (pickFirstVisitVariant() === 'okachat') {
+        localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
+        setMode('okachat');
+        pushOkachatEvent('okachat_prompt_view', 'first_visit');
+        return;
+      }
+    }
     const ua = navigator.userAgent;
     const handoff =
       !isLoggedIn &&
@@ -89,6 +124,9 @@ export default function FirstVisitAlertSheet({
   }, [device.isJirumAlarmApp, keyword, isLoggedIn]);
 
   if (mode === 'app') return <FirstVisitAppAlertModal device={device} />;
+  if (mode === 'okachat') {
+    return <OkachatSheet isMobile={device.isMobile} onClose={() => setMode('none')} />;
+  }
   if (mode === 'none') return null;
 
   return (
@@ -191,6 +229,75 @@ function KeywordAlertSheet({
       >
         {handoff ? '브라우저에서 알림 받기' : '알림 받기'}
       </button>
+      <button type="button" onClick={onClose} className="h-10 text-sm text-gray-500">
+        다음에 할게요
+      </button>
+    </div>
+  );
+
+  if (!isMobile) {
+    return (
+      <AlertDialog defaultOpen onOpenChange={(open) => !open && onClose()}>
+        <AlertDialog.Content className="max-w-[320px] gap-0">
+          <AlertDialog.Header>
+            <AlertDialog.Title className="text-xl font-semibold text-gray-900">
+              {heading}
+            </AlertDialog.Title>
+            <AlertDialog.Description className="pt-2 text-sm text-gray-500">
+              {bodyText}
+            </AlertDialog.Description>
+          </AlertDialog.Header>
+          {actions}
+        </AlertDialog.Content>
+      </AlertDialog>
+    );
+  }
+
+  return (
+    <Drawer.Root open onOpenChange={(open) => !open && onClose()}>
+      <Drawer.Portal>
+        <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
+        <Drawer.Content className="max-w-mobile-max rounded-t-sheet pb-safe-bottom-16 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white px-5 pt-3 outline-hidden">
+          <div className="mx-auto mb-5 h-1 w-10 rounded-full bg-gray-300" aria-hidden />
+          <Drawer.Title className="text-2xl font-semibold text-gray-900">{heading}</Drawer.Title>
+          <Drawer.Description className="pt-2 text-sm text-gray-500">{bodyText}</Drawer.Description>
+          {actions}
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
+  );
+}
+
+function OkachatSheet({ isMobile, onClose }: { isMobile: boolean; onClose: () => void }) {
+  const heading = (
+    <>
+      핫딜, 카톡방에서
+      <br />
+      바로 받아보세요
+    </>
+  );
+  const bodyText = (
+    <>
+      앱 설치 없이 카카오톡 오픈채팅방으로
+      <br />
+      지금 뜨는 핫딜을 실시간으로 보내드려요.
+    </>
+  );
+  const actions = (
+    <div className="mt-5 flex flex-col gap-y-2">
+      <a
+        href={OKACHAT_LINK}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => {
+          markOkachatJoined();
+          pushOkachatEvent('okachat_prompt_click', 'first_visit');
+          onClose();
+        }}
+        className="bg-primary-500 text-fixed-900 flex h-12 w-full items-center justify-center rounded-lg font-semibold"
+      >
+        카톡방 입장하기
+      </a>
       <button type="button" onClick={onClose} className="h-10 text-sm text-gray-500">
         다음에 할게요
       </button>
