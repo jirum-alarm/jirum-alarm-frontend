@@ -66,10 +66,11 @@ ARG NEXT_PUBLIC_ADSENSE_SLOT_PRODUCT_DETAIL_SIDE=2933904228
 ARG NODE_ENV=test
 
 # Build the application with cache mount
+# .next/cache(Next 컴파일 캐시)는 캐시 마운트로 빌드 간 보존 — 마운트라 이미지 레이어엔 안 들어간다.
+# (이전엔 rm -rf 로 매번 지워 컴파일 54초를 매 빌드 처음부터 했다. 셀프호스티드 러너에서만 실제로 유지됨)
 RUN --mount=type=cache,id=turbo,target=/app/.turbo \
-    pnpm turbo run build --filter=web... && \
-    # Clean up unnecessary files
-    rm -rf apps/web/.next/cache
+    --mount=type=cache,id=next-web-development,target=/app/apps/web/.next/cache \
+    pnpm turbo run build --filter=web...
 
 # ========================================
 # Pruner stage - Prepare production files
