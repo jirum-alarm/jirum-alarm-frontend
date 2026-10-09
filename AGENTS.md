@@ -224,7 +224,7 @@ pnpm build            # Production build
   `bg-white`·`text-gray-900` 은 **다크에서 값만 뒤집힌다**(`dark:` 를 붙일 일이 거의 없다. `white`=바탕, gray 50↔900).
   - 테마와 무관해야 하는 자리(홈 상단 어두운 띠·사진 위 배지·색 배지 위 흰 글자·라임 버튼 위 짙은 글자)는 `fixed-*`(`text-fixed-white`, `bg-fixed-900`).
   - className 이 안 닿는 색(아이콘 color·placeholderTextColor·RefreshControl·StyleSheet)은 hex 대신 `useColors()`, 헤더·탭바는 `useChromeColors()`.
-  - 웹뷰 화면(글쓰기·약관·고객센터)은 web 이 다크가 없어 본문이 흰색이다(의도). 네이티브 탭바 PNG 는 `*-dark` 변형이 따로 있다(`assets/tab-icons/README.md`).
+  - 웹뷰 화면(글쓰기·약관·고객센터·공용 웹뷰)도 같은 모드다 — 앱이 지금 모드를 웹뷰 쿠키 `COLOR_SCHEME` 에 적고(`shared/theme/webview-color-scheme-cookie.ts`) web 서버가 그 값으로 `<html class="dark">` 를 그린다(2026-10-10). 이미 열린 웹뷰는 다시 열어야 바뀐다. 웹뷰 틀(상태바 영역·안전 영역)에 흰색을 박지 말 것. 네이티브 탭바 PNG 는 `*-dark` 변형이 따로 있다(`assets/tab-icons/README.md`).
 
 ## 📦 Shared Packages
 
