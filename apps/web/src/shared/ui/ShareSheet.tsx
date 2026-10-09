@@ -1,10 +1,12 @@
 'use client';
 
+import { infoBox } from '@jirum/design-system/recipes';
 import { Dialog } from 'radix-ui';
 import { useEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 
 import useScreen from '@/shared/hooks/useScreenSize';
+import { cn } from '@/shared/lib/cn';
 import { ensureKakao } from '@/shared/lib/kakao';
 import {
   buildCaption,
@@ -14,6 +16,7 @@ import {
   type ShareChannel,
 } from '@/shared/lib/share';
 import { isInApp, shareNative, triggerHaptic } from '@/shared/lib/webview';
+import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import { Share, ShareLink, ShareThreads, ShareX } from '@/shared/ui/common/icons';
 import SvgKakao from '@/shared/ui/common/icons/login/Kakao';
 import { useToast } from '@/shared/ui/common/Toast';
@@ -136,7 +139,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
 
   // 무엇을 공유하는지 보여주는 프리뷰. 링크만 있으면 뭘 보내는지 알 수 없다.
   const preview = (
-    <div className="mb-3 flex items-center gap-2.5 rounded-xl border border-gray-200 bg-gray-50 p-2.5">
+    <div className={cn('mb-3 flex items-center gap-2.5 p-2.5', infoBox)}>
       {imageUrl ? (
         // 외부 CDN 썸네일이라 next/image 대신 img — 도메인 화이트리스트 없이 뜨게.
         // eslint-disable-next-line @next/next/no-img-element
@@ -221,18 +224,14 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
   return (
     <Drawer.Root open={open} onOpenChange={setOpen}>
       <Drawer.Trigger asChild>{children}</Drawer.Trigger>
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        {/* pb 에 safe-area 를 더해야 홈 인디케이터가 있는 기기에서 마지막 행이 안 잘린다. */}
-        <Drawer.Content className="max-w-mobile-max rounded-t-sheet fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white pb-[calc(env(safe-area-inset-bottom)+20px)] outline-hidden">
-          <div className="mx-auto mt-2 h-1 w-9 rounded-full bg-gray-200" />
-          <Drawer.Title asChild>
-            <h3 className="px-5 pt-4 pb-3 text-base font-bold">공유하기</h3>
-          </Drawer.Title>
+      {/* pb 에 safe-area 를 더해야 홈 인디케이터가 있는 기기에서 마지막 행이 안 잘린다. */}
+      <BottomSheetContent handle className="pb-[calc(env(safe-area-inset-bottom)+20px)]">
+        <Drawer.Title asChild>
+          <h3 className="px-5 pb-3 text-base font-bold">공유하기</h3>
+        </Drawer.Title>
 
-          <div className="px-5">{body}</div>
-        </Drawer.Content>
-      </Drawer.Portal>
+        <div className="px-5">{body}</div>
+      </BottomSheetContent>
     </Drawer.Root>
   );
 }

@@ -7,6 +7,7 @@ import { getAccessToken } from '@/app/actions/token';
 
 import { CommunityService } from '@/shared/api/community/community.service';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
+import { Skeleton } from '@/shared/ui/common/Skeleton';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 import { getPostDisplayContent, getPostImages } from '@/features/community/lib/postContent';
@@ -73,48 +74,48 @@ function PostDetailSkeleton() {
     <div className="flex flex-col">
       {/* 헤더 */}
       <div className="flex items-center gap-x-2 px-5 py-4">
-        <div className="h-3.5 w-16 animate-pulse rounded bg-gray-100" />
-        <div className="h-3 w-10 animate-pulse rounded bg-gray-100" />
+        <Skeleton className="h-3.5 w-16 rounded" />
+        <Skeleton className="h-3 w-10 rounded" />
       </div>
       {/* 제목 */}
-      <div className="mx-5 mb-2 h-5 w-3/4 animate-pulse rounded bg-gray-100" />
+      <Skeleton className="mx-5 mb-2 h-5 w-3/4 rounded" />
       {/* 본문 */}
       <div className="mx-5 mb-1 flex flex-col gap-y-2">
-        <div className="h-4 w-full animate-pulse rounded bg-gray-100" />
-        <div className="h-4 w-full animate-pulse rounded bg-gray-100" />
-        <div className="h-4 w-2/3 animate-pulse rounded bg-gray-100" />
+        <Skeleton className="h-4 w-full rounded" />
+        <Skeleton className="h-4 w-full rounded" />
+        <Skeleton className="h-4 w-2/3 rounded" />
       </div>
       {/* 태그 상품 */}
       <div className="bg-secondary-50 mx-5 mt-2 mb-4 rounded-2xl p-4">
-        <div className="bg-secondary-100 mb-3 h-5 w-16 animate-pulse rounded-full" />
+        <Skeleton className="bg-secondary-100 mb-3 h-5 w-16 rounded-full" />
         <div className="flex items-center gap-x-3">
-          <div className="bg-secondary-100 h-20 w-20 flex-shrink-0 animate-pulse rounded-xl" />
+          <Skeleton className="bg-secondary-100 h-20 w-20 flex-shrink-0 rounded-xl" />
           <div className="flex flex-1 flex-col gap-y-2">
-            <div className="bg-secondary-100 h-3.5 w-full animate-pulse rounded" />
-            <div className="bg-secondary-100 h-3.5 w-2/3 animate-pulse rounded" />
-            <div className="bg-secondary-100 h-4 w-1/3 animate-pulse rounded" />
+            <Skeleton className="bg-secondary-100 h-3.5 w-full rounded" />
+            <Skeleton className="bg-secondary-100 h-3.5 w-2/3 rounded" />
+            <Skeleton className="bg-secondary-100 h-4 w-1/3 rounded" />
           </div>
         </div>
       </div>
       {/* 통계 바 */}
       <div className="flex items-center justify-between border-y border-gray-100 px-5 py-3">
         <div className="flex gap-x-3">
-          <div className="h-3.5 w-8 animate-pulse rounded bg-gray-100" />
-          <div className="h-3.5 w-8 animate-pulse rounded bg-gray-100" />
+          <Skeleton className="h-3.5 w-8 rounded" />
+          <Skeleton className="h-3.5 w-8 rounded" />
         </div>
-        <div className="h-8 w-16 animate-pulse rounded-full bg-gray-100" />
+        <Skeleton className="h-8 w-16 rounded-full" />
       </div>
       {/* 댓글 */}
       <div className="mt-4 px-5">
-        <div className="mb-3 h-4 w-10 animate-pulse rounded bg-gray-100" />
+        <Skeleton className="mb-3 h-4 w-10 rounded" />
         {Array.from({ length: 3 }).map((_, i) => (
           <div key={i} className="flex flex-col gap-y-1.5 border-b border-gray-100 py-3">
             <div className="flex items-center gap-x-2">
-              <div className="h-3.5 w-14 animate-pulse rounded bg-gray-100" />
-              <div className="h-3 w-8 animate-pulse rounded bg-gray-100" />
+              <Skeleton className="h-3.5 w-14 rounded" />
+              <Skeleton className="h-3 w-8 rounded" />
             </div>
-            <div className="h-3.5 w-full animate-pulse rounded bg-gray-100" />
-            <div className="h-3 w-1/2 animate-pulse rounded bg-gray-100" />
+            <Skeleton className="h-3.5 w-full rounded" />
+            <Skeleton className="h-3 w-1/2 rounded" />
           </div>
         ))}
       </div>

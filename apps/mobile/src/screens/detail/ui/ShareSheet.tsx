@@ -12,6 +12,9 @@ import {
   useColorScheme,
 } from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
+import {sheet as sheetRecipe} from '@jirum/design-system/recipes';
+import {SHEET_RADIUS} from '@/shared/components/BottomSheet';
+import {cn} from '@/shared/lib/styling';
 import * as Haptics from 'expo-haptics';
 import {Image} from 'expo-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -235,8 +238,8 @@ export default function ShareSheet({
         <Animated.View
           pointerEvents="none"
           style={[StyleSheet.absoluteFill, {opacity: overlay}]}>
-          {/* 백드롭 농도·라운드는 앱 공용 BottomSheet 와 맞춘다(스프링·레이아웃만 이 시트 고유). */}
-          <View className="flex-1 bg-black/40" />
+          {/* 가림막·모서리·손잡이는 공용 레시피(sheet) — 스프링·레이아웃만 이 시트 고유. */}
+          <View className={cn('flex-1', sheetRecipe.overlay)} />
         </Animated.View>
         <Pressable
           style={StyleSheet.absoluteFill}
@@ -263,7 +266,7 @@ export default function ShareSheet({
             },
           ]}>
           <View className="items-center pt-2.5">
-            <View className="h-1 w-9 rounded-full bg-gray-200" />
+            <View className={sheetRecipe.handle} />
           </View>
 
           <View className="flex-row items-start px-5 pt-4">
@@ -407,8 +410,8 @@ const styles = StyleSheet.create({
   // 바탕색은 테마 토큰(c.gray[100])으로 — 다크에서 뒤집힌다.
   thumb: {width: 72, height: 72, borderRadius: 16},
   sheet: {
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderTopLeftRadius: SHEET_RADIUS,
+    borderTopRightRadius: SHEET_RADIUS,
     // overlay 위에 떠 있어야 백드롭 Pressable 이 시트를 먹지 않는다.
     zIndex: 1,
     shadowColor: '#101828',

@@ -9,6 +9,7 @@ import { CheckDeviceResult } from '@/app/actions/agent.types';
 
 import { ANDROID_STORE_LINK, IOS_STORE_LINK } from '@/shared/config/appStore';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
+import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import { Apple, Google } from '@/shared/ui/common/icons';
 
 import { resolveAppDownloadPlatform } from '../model/resolvePlatform';
@@ -112,27 +113,23 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
   // 폰에선 가운데 모달이 방금 들어온 페이지를 통째로 가린다 — 아래에서 올라오는 시트로, 끌어내리거나 바깥을 누르면 닫힌다.
   return (
     <Drawer.Root open={show} onOpenChange={setShow}>
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max rounded-t-sheet pb-safe-bottom-16 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white px-5 pt-3 outline-hidden">
-          <div className="mx-auto mb-5 h-1 w-10 rounded-full bg-gray-300" aria-hidden />
-          <Drawer.Title className="text-2xl font-semibold text-gray-900">{title}</Drawer.Title>
-          <Drawer.Description asChild>{image}</Drawer.Description>
-          <div className="mt-4 flex flex-col items-center">
-            <p className="pb-3 text-center text-sm text-gray-400">
-              키워드를 등록하고
-              <br />
-              누구보다 빠르게 받아보세요
-            </p>
-            <StoreButton kind={platform} />
-            <Drawer.Close asChild>
-              <button type="button" className="mt-3 h-10 text-sm text-gray-500">
-                다음에 할게요
-              </button>
-            </Drawer.Close>
-          </div>
-        </Drawer.Content>
-      </Drawer.Portal>
+      <BottomSheetContent handle className="pb-safe-bottom-16 px-5">
+        <Drawer.Title className="text-2xl font-semibold text-gray-900">{title}</Drawer.Title>
+        <Drawer.Description asChild>{image}</Drawer.Description>
+        <div className="mt-4 flex flex-col items-center">
+          <p className="pb-3 text-center text-sm text-gray-400">
+            키워드를 등록하고
+            <br />
+            누구보다 빠르게 받아보세요
+          </p>
+          <StoreButton kind={platform} />
+          <Drawer.Close asChild>
+            <button type="button" className="mt-3 h-10 text-sm text-gray-500">
+              다음에 할게요
+            </button>
+          </Drawer.Close>
+        </div>
+      </BottomSheetContent>
     </Drawer.Root>
   );
 }

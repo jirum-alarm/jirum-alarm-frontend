@@ -2,7 +2,6 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { VisuallyHidden } from 'radix-ui';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
 
@@ -18,6 +17,7 @@ import {
   Header,
   Title,
 } from '@/shared/ui/common/AlertDialog/AlertDialog';
+import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import Dots from '@/shared/ui/common/icons/Dots';
 import { useToast } from '@/shared/ui/common/Toast';
 
@@ -56,49 +56,43 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
             <Dots width={24} height={24} />
           </button>
         </Drawer.Trigger>
-        <Drawer.Portal>
-          <VisuallyHidden.Root>
-            <Drawer.Title>게시글 메뉴</Drawer.Title>
-          </VisuallyHidden.Root>
-          <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-          <Drawer.Content className="max-w-mobile-max rounded-t-sheet fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
-            <div className="flex flex-col items-center pt-4 pb-8">
-              {isMyPost ? (
-                <>
-                  <button
-                    className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
-                    onClick={() => {
-                      setIsOpen(false);
-                      setIsDeleteConfirmOpen(true);
-                    }}
-                  >
-                    글 삭제하기
-                  </button>
-                  <div className="mx-5 h-px w-full bg-gray-200" />
-                  <button
-                    className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800 transition-transform active:scale-[0.98]"
-                    onClick={() => {
-                      setIsOpen(false);
-                      router.push(`${PAGE.COMMUNITY_WRITE}?edit=${postId}`);
-                    }}
-                  >
-                    글 수정하기
-                  </button>
-                </>
-              ) : (
+        <BottomSheetContent srTitle="게시글 메뉴">
+          <div className="flex flex-col items-center pt-4 pb-8">
+            {isMyPost ? (
+              <>
                 <button
                   className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
                   onClick={() => {
                     setIsOpen(false);
-                    setIsReportOpen(true);
+                    setIsDeleteConfirmOpen(true);
                   }}
                 >
-                  글 신고하기
+                  글 삭제하기
                 </button>
-              )}
-            </div>
-          </Drawer.Content>
-        </Drawer.Portal>
+                <div className="mx-5 h-px w-full bg-gray-200" />
+                <button
+                  className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800 transition-transform active:scale-[0.98]"
+                  onClick={() => {
+                    setIsOpen(false);
+                    router.push(`${PAGE.COMMUNITY_WRITE}?edit=${postId}`);
+                  }}
+                >
+                  글 수정하기
+                </button>
+              </>
+            ) : (
+              <button
+                className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsReportOpen(true);
+                }}
+              >
+                글 신고하기
+              </button>
+            )}
+          </div>
+        </BottomSheetContent>
       </Drawer.Root>
 
       {isDeleteConfirmOpen && (

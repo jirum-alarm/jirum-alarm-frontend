@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useKeyboardState} from 'react-native-keyboard-controller';
+import {radius} from '@jirum/design-system';
+import {sheet} from '@jirum/design-system/recipes';
 import {useColors} from '@/shared/theme/useColors';
 
 /**
@@ -161,7 +163,7 @@ export default function BottomSheet({
               transform: [{translateY}],
             },
           ]}>
-          <View style={[styles.handle, {backgroundColor: c.gray[200]}]} />
+          <View className={sheet.handle} style={styles.handle} />
           {children}
         </Animated.View>
       </KeyboardAvoidingView>
@@ -169,24 +171,26 @@ export default function BottomSheet({
   );
 }
 
+/** 시트 위 모서리 — rounded-t-sheet 토큰(1.25rem). 판이 Animated.View 라 className 대신 숫자로 쓴다. */
+export const SHEET_RADIUS = parseFloat(radius.sheet) * 16;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-end',
   },
+  // 가림막·판·손잡이 모양은 recipes 의 sheet(web BottomSheetContent 와 같은 값).
+  // 판·가림막은 Animated.View 라 className 대신 같은 값을 style 로 둔다.
   backdrop: {
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: 'rgba(0,0,0,0.4)', // = sheet.overlay(bg-black/40)
   },
   sheet: {
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    // rounded-t-sheet 토큰(1.25rem) — 예전엔 16 이라 web 시트(20)보다 각졌다.
+    borderTopLeftRadius: SHEET_RADIUS,
+    borderTopRightRadius: SHEET_RADIUS,
     paddingTop: 8,
   },
   handle: {
-    alignSelf: 'center',
-    width: 40,
-    height: 4,
-    borderRadius: 999,
     marginBottom: 12,
   },
 });

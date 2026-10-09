@@ -11,23 +11,21 @@ function CommunityListSkeleton() {
         <div key={i} className="flex flex-col gap-y-2 border-b border-gray-100 px-5 py-4">
           {/* 유저 정보 */}
           <div className="flex items-center gap-x-2">
-            <div className="h-3.5 w-16 animate-pulse rounded bg-gray-100" />
-            <div className="h-3 w-10 animate-pulse rounded bg-gray-100" />
+            <Skeleton className="h-3.5 w-16 rounded" />
+            <Skeleton className="h-3 w-10 rounded" />
           </div>
           {/* 본문 + 썸네일 */}
           <div className="flex items-start justify-between gap-x-3">
             <div className="flex flex-1 flex-col gap-y-1.5">
-              <div className="h-3.5 w-3/4 animate-pulse rounded bg-gray-100" />
-              <div className="h-3 w-full animate-pulse rounded bg-gray-100" />
+              <Skeleton className="h-3.5 w-3/4 rounded" />
+              <Skeleton className="h-3 w-full rounded" />
             </div>
-            {i % 3 === 0 && (
-              <div className="h-20 w-20 flex-shrink-0 animate-pulse rounded-lg bg-gray-100" />
-            )}
+            {i % 3 === 0 && <Skeleton className="h-20 w-20 flex-shrink-0 rounded-lg" />}
           </div>
           {/* 통계 */}
           <div className="flex gap-x-3">
-            <div className="h-3 w-8 animate-pulse rounded bg-gray-100" />
-            <div className="h-3 w-8 animate-pulse rounded bg-gray-100" />
+            <Skeleton className="h-3 w-8 rounded" />
+            <Skeleton className="h-3 w-8 rounded" />
           </div>
         </div>
       ))}
@@ -36,6 +34,7 @@ function CommunityListSkeleton() {
 }
 
 import { PAGE } from '@/shared/config/page';
+import { Skeleton } from '@/shared/ui/common/Skeleton';
 
 import { CommunityTab } from '@/entities/community';
 

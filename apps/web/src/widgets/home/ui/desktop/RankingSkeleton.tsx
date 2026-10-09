@@ -1,3 +1,5 @@
+import { Skeleton } from '@/shared/ui/common/Skeleton';
+
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import ProductRankingImageCard from '@/entities/product-list/ui/ranking/ProductRankingImageCard';
 
@@ -45,14 +47,14 @@ const SkeletonCard = () => {
     <div className="shadow-card col-span-1 overflow-hidden rounded-lg border bg-white">
       <div className="relative aspect-square w-full bg-gray-50">
         <div className="absolute top-0 left-0 z-10 flex h-6.5 w-6.5 items-center justify-center rounded-br-lg bg-gray-600/80">
-          <div className="h-3 w-2 animate-pulse rounded-sm bg-gray-400" />
+          <Skeleton className="h-3 w-2 rounded-sm bg-gray-400" />
         </div>
-        <div className="h-full w-full animate-pulse bg-gray-100" />
+        <Skeleton className="h-full w-full" />
       </div>
       <div className="h-[132px] p-3 pb-0">
-        <div className="mb-2 h-10 w-full animate-pulse rounded-sm bg-gray-100" />
+        <Skeleton className="mb-2 h-10 w-full rounded-sm" />
         <div className="pt-0.5">
-          <div className="h-6 w-1/2 animate-pulse rounded-sm bg-gray-100" />
+          <Skeleton className="h-6 w-1/2 rounded-sm" />
         </div>
       </div>
     </div>

@@ -252,7 +252,7 @@ Code formatting standards:
 - `tokens.js` 가 색(라이트·다크·fixed·브랜드)·사이 글자 크기·모서리·그림자의 **유일한 원본**. web·landing·ai 는 생성된 `theme.css` 를 `@import`, 앱은 `tailwind.config.js` 가 require.
 - 토큰을 고치면 `pnpm --filter @jirum/design-system build` 로 theme.css 를 다시 만들어 같이 커밋(커밋 훅이 확인).
 - `eslint.js` 가 네 앱에서 hex·Tailwind 기본 팔레트·임의 글자 크기·모서리·그림자·효과 없는 클래스(`text-semibold`)를 막는다.
-- 컴포넌트 코드는 플랫폼별(web DOM / 앱 RN)이지만 **모양은 `recipes.js` 한 곳** — Badge·Chip·ProductCardStatus·Switch·탭(앱 TabPill)·섹션 제목(SectionHeader)·카드 사진 틀(`cardThumb`)을 두 플랫폼이 같은 클래스 문자열로 읽는다. 배지·칩·탭·스위치·섹션 제목을 손으로 다시 만들지 말 것(목록은 패키지 README 「컴포넌트」). 어드민은 범위 밖(TailAdmin).
+- 컴포넌트 코드는 플랫폼별(web DOM / 앱 RN)이지만 **모양은 `recipes.js` 한 곳** — Badge·Chip·ProductCardStatus·Switch·탭(앱 TabPill)·섹션 제목(SectionHeader)·바텀시트 겉(web BottomSheetContent)·스켈레톤(Skeleton)·카드 사진 틀(`cardThumb`)·정보 상자(`infoBox`)를 두 플랫폼이 같은 클래스 문자열로 읽는다. 배지·칩·탭·스위치·섹션 제목·시트 가림막·`animate-pulse` 판을 손으로 다시 만들지 말 것(테스트가 막는다)(목록은 패키지 README 「컴포넌트」). 어드민은 범위 밖(TailAdmin).
 
 ## 🛠️ Development Guidelines for AI Agents
 

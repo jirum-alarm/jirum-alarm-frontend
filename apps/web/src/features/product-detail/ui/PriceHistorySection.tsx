@@ -13,6 +13,7 @@ import type {
 } from '@/shared/api/product/product.service';
 import { cn } from '@/shared/lib/cn';
 import { convertToWebp } from '@/shared/lib/utils/image';
+import { Skeleton } from '@/shared/ui/common/Skeleton';
 import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 import ImageComponent from '@/shared/ui/ImageComponent';
 
@@ -579,10 +580,10 @@ export default function PriceHistorySection({
   if (isLoading) {
     return (
       <section className="py-0">
-        <div className="h-7 w-28 animate-pulse rounded bg-gray-100" />
-        <div className="mt-3 h-9 animate-pulse rounded-lg bg-gray-50" />
-        <div className="mt-3 h-16 animate-pulse rounded-xl bg-gray-50" />
-        <div className="mt-3 h-52 animate-pulse rounded-xl bg-gray-50" />
+        <Skeleton className="h-7 w-28 rounded" />
+        <Skeleton className="mt-3 h-9 rounded-lg" />
+        <Skeleton className="mt-3 h-16 rounded-xl" />
+        <Skeleton className="mt-3 h-52 rounded-xl" />
       </section>
     );
   }

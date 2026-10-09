@@ -1,8 +1,10 @@
 'use client';
 
+import { infoBox } from '@jirum/design-system/recipes';
 import { useEffect } from 'react';
 
 import { ProductService } from '@/shared/api/product';
+import { cn } from '@/shared/lib/cn';
 
 import {
   isStrongPriceVerdict,
@@ -78,7 +80,7 @@ export default function PriceVerdictHero({ productId, source, verdict }: Props) 
       <button
         type="button"
         onClick={onHistoryClick}
-        className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-left"
+        className={cn('w-full px-4 py-3 text-left', infoBox)}
         aria-label="가격 추이 기준 보기"
       >
         <p className="text-sm font-semibold text-gray-800">{verdict.headline}</p>

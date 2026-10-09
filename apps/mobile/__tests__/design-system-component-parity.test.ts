@@ -134,4 +134,87 @@ describe('상품 카드 사진 틀 — web 5종·앱 3종이 같은 cardThumb', 
   });
 });
 
+/** web src 아래 .tsx 전부(공용 부품 파일은 뺀다). */
+const webTsxFiles = (exclude: string[]): string[] =>
+  (
+    fs.readdirSync(path.join(__dirname, '../../web/src'), {
+      recursive: true,
+    }) as string[]
+  ).filter(f => f.endsWith('.tsx') && !exclude.some(e => f.endsWith(e)));
+
+describe('시트 겉 — web 은 공용 BottomSheetContent 하나, 앱 시트 둘도 같은 레시피(sheet)', () => {
+  it('web BottomSheetContent·앱 BottomSheet·앱 공유 시트가 sheet 레시피를 읽는다', () => {
+    expect(
+      importsRecipe(
+        web('shared/ui/common/BottomSheet/BottomSheet.tsx'),
+        'sheet',
+      ),
+    ).toBe(true);
+    expect(
+      importsRecipe(native('shared/components/BottomSheet.tsx'), 'sheet'),
+    ).toBe(true);
+    expect(
+      importsRecipe(native('screens/detail/ui/ShareSheet.tsx'), 'sheet'),
+    ).toBe(true);
+  });
+
+  it('스캔이 실제로 web 파일을 읽는다(빈 목록으로 통과하지 않게)', () => {
+    expect(webTsxFiles([]).length).toBeGreaterThan(300);
+    expect(
+      webTsxFiles([]).some(f => web(f).includes('<BottomSheetContent')),
+    ).toBe(true);
+  });
+
+  it('web 에서 가림막·판을 손으로 다시 그리지 않는다(예전엔 11벌 복사)', () => {
+    const offenders = webTsxFiles(['BottomSheet/BottomSheet.tsx']).filter(f =>
+      web(f).includes('Drawer.Overlay'),
+    );
+    expect(offenders).toEqual([]);
+  });
+
+  it('앱 시트 위 모서리는 rounded-t-sheet 토큰(예전 16 은 web 20 보다 각졌다)', () => {
+    expect(native('shared/components/BottomSheet.tsx')).toMatch(
+      /radius\.sheet/,
+    );
+    expect(native('screens/detail/ui/ShareSheet.tsx')).toContain(
+      'SHEET_RADIUS',
+    );
+    expect(native('screens/detail/ui/ShareSheet.tsx')).not.toMatch(
+      /borderTopLeftRadius: 16/,
+    );
+  });
+});
+
+describe('스켈레톤 — web Skeleton·앱 SkeletonBox 가 같은 gray-200', () => {
+  const {skeleton} = require('@jirum/design-system/recipes');
+
+  it('레시피 색은 gray-200 이고 앱 SkeletonBox 도 같은 색', () => {
+    expect(skeleton).toBe('bg-gray-200');
+    expect(native('shared/components/Skeletons.tsx')).toContain('c.gray[200]');
+    expect(
+      importsRecipe(web('shared/ui/common/Skeleton/Skeleton.tsx'), 'skeleton'),
+    ).toBe(true);
+  });
+
+  it('web 에서 animate-pulse 판을 손으로 다시 만들지 않는다(예전엔 12개 파일 54곳, 색이 gray-100·50 으로 갈렸다)', () => {
+    const offenders = webTsxFiles(['Skeleton/Skeleton.tsx']).filter(f =>
+      /\banimate-pulse\b/.test(web(f)),
+    );
+    expect(offenders).toEqual([]);
+  });
+});
+
+describe('정보 상자 — web 3곳·앱 1곳이 같은 infoBox', () => {
+  it.each([
+    ['web', 'features/product-detail/ui/PriceVerdictHero.tsx'],
+    ['web', 'app/(desktop-ready)/deals/[slug]/page.tsx'],
+    ['web', 'shared/ui/ShareSheet.tsx'],
+    ['앱', 'screens/detail/ui/PriceVerdictHero.tsx'],
+  ])('%s %s', (side, file) => {
+    const src = side === 'web' ? web(file) : native(file);
+    expect(importsRecipe(src, 'infoBox')).toBe(true);
+    expect(src).not.toContain('rounded-xl border border-gray-200 bg-gray-50');
+  });
+});
+
 export {};

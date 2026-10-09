@@ -6,6 +6,7 @@ import { Suspense, useMemo } from 'react';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { getDayBefore } from '@/shared/lib/utils/date';
+import { Skeleton } from '@/shared/ui/common/Skeleton';
 
 import { ProductQueries } from '@/entities/product';
 import ProductThumbnail from '@/entities/product-list/ui/card/ProductThumbnail';
@@ -103,12 +104,12 @@ function RankingList({ categoryId }: { categoryId: number | null }) {
   return <ProductList products={products} />;
 }
 
-const Skeleton = () => (
+const HotDealsSkeleton = () => (
   <div className="smd:grid-cols-6 grid grid-cols-3 gap-x-2 gap-y-3 px-5 pb-4">
     {Array.from({ length: 6 }).map((_, i) => (
       <div key={i}>
-        <div className="aspect-square animate-pulse rounded-xl bg-gray-100" />
-        <div className="mt-1.5 h-3 w-full animate-pulse rounded bg-gray-100" />
+        <Skeleton className="aspect-square rounded-xl" />
+        <Skeleton className="mt-1.5 h-3 w-full rounded" />
       </div>
     ))}
   </div>
@@ -128,7 +129,7 @@ export default function CommunityHotDeals() {
           더보기
         </Link>
       </div>
-      <Suspense fallback={<Skeleton />}>
+      <Suspense fallback={<HotDealsSkeleton />}>
         {option.type === 'hotdeal' ? (
           <HotDealRankingList />
         ) : (

@@ -60,7 +60,7 @@ export function SkeletonBox({
   return (
     <Animated.View
       className={className}
-      // gray-200 — gray-100 에 깜빡임(0.5)까지 겹치면 흰 바탕과 거의 구분이 안 됐다
+      // gray-200(= recipes 의 skeleton, web Skeleton 과 같은 색) — gray-100 에 깜빡임(0.5)까지 겹치면 흰 바탕과 거의 구분이 안 됐다
       // (상세 첫 로딩에서 "스켈레톤이 잘 안 보인다" 사용자 지적).
       style={[{backgroundColor: c.gray[200], opacity}, style]}
     />

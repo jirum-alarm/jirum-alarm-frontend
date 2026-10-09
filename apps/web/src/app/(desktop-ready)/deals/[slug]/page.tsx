@@ -1,3 +1,4 @@
+import { infoBox } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -5,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { ModelPageService } from '@/shared/api/model-page';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 import { convertToWebp } from '@/shared/lib/utils/image';
 import Badge from '@/shared/ui/common/Badge';
 import ImageComponent from '@/shared/ui/ImageComponent';
@@ -334,7 +336,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               </p>
 
               {(timing.current > 0 || heroPrice?.minPrice != null) && (
-                <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50 p-3">
+                <div className={cn('mt-3 p-3', infoBox)}>
                   <div className="flex flex-wrap items-center gap-2">
                     {timing.tone !== 'unknown' && (
                       <Badge pill tone={timingTone}>

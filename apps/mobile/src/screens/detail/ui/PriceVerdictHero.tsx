@@ -1,3 +1,4 @@
+import {infoBox} from '@jirum/design-system/recipes';
 import React, {useEffect} from 'react';
 import {Dimensions, Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -6,6 +7,7 @@ import {ProductService} from '@/shared/api/product/product.service';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 
 import {isStrongPriceVerdict, type PriceVerdict} from '../lib/price-signals';
+import {cn} from '@/shared/lib/styling';
 
 /**
  * 상세 가격 아래 판정 카드. web `features/product-detail/ui/PriceVerdictHero.tsx` 이식.
@@ -66,7 +68,7 @@ export default function PriceVerdictHero({
         // ★함수형 style 엔 opacity 만 — 카드 모양 className 은 안쪽 View 가 받는다
         // (섞으면 NativeWind 가 레이아웃을 떨군다).
         style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-        <View className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+        <View className={cn('px-4 py-3', infoBox)}>
           <Text className="text-sm font-semibold text-gray-800">
             {verdict.headline}
           </Text>

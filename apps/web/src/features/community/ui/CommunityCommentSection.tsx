@@ -6,7 +6,6 @@ import {
   useQueryClient,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
-import { VisuallyHidden } from 'radix-ui';
 import { Suspense, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Drawer } from 'vaul';
@@ -23,6 +22,8 @@ import {
   Header,
   Title,
 } from '@/shared/ui/common/AlertDialog/AlertDialog';
+import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
+import { Skeleton } from '@/shared/ui/common/Skeleton';
 import { useToast } from '@/shared/ui/common/Toast';
 
 import { AuthQueries } from '@/entities/auth';
@@ -99,35 +100,29 @@ function CommentItem({
       </div>
 
       <Drawer.Root open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-        <Drawer.Portal>
-          <VisuallyHidden.Root>
-            <Drawer.Title>댓글 메뉴</Drawer.Title>
-          </VisuallyHidden.Root>
-          <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-          <Drawer.Content className="max-w-mobile-max rounded-t-sheet fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
-            <div className="flex flex-col items-center pt-4 pb-8">
-              <button
-                className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800 transition-transform active:scale-[0.98]"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  onEdit(comment.id, comment.content);
-                }}
-              >
-                댓글 수정하기
-              </button>
-              <div className="mx-5 h-px w-full bg-gray-200" />
-              <button
-                className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setIsDeleteConfirmOpen(true);
-                }}
-              >
-                댓글 삭제하기
-              </button>
-            </div>
-          </Drawer.Content>
-        </Drawer.Portal>
+        <BottomSheetContent srTitle="댓글 메뉴">
+          <div className="flex flex-col items-center pt-4 pb-8">
+            <button
+              className="flex h-14 w-full items-center justify-center text-lg font-medium text-gray-800 transition-transform active:scale-[0.98]"
+              onClick={() => {
+                setIsMenuOpen(false);
+                onEdit(comment.id, comment.content);
+              }}
+            >
+              댓글 수정하기
+            </button>
+            <div className="mx-5 h-px w-full bg-gray-200" />
+            <button
+              className="text-error-500 flex h-14 w-full items-center justify-center text-lg font-medium transition-transform active:scale-[0.98]"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsDeleteConfirmOpen(true);
+              }}
+            >
+              댓글 삭제하기
+            </button>
+          </div>
+        </BottomSheetContent>
       </Drawer.Root>
 
       {isDeleteConfirmOpen && (
@@ -389,12 +384,12 @@ export default function CommunityCommentSection({
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="flex flex-col gap-y-1.5 px-5 py-3">
                 <div className="flex items-center gap-x-2">
-                  <div className="h-3.5 w-14 animate-pulse rounded bg-gray-100" />
-                  <div className="h-3 w-8 animate-pulse rounded bg-gray-100" />
+                  <Skeleton className="h-3.5 w-14 rounded" />
+                  <Skeleton className="h-3 w-8 rounded" />
                 </div>
-                <div className="h-3.5 w-full animate-pulse rounded bg-gray-100" />
-                <div className="h-3.5 w-2/3 animate-pulse rounded bg-gray-100" />
-                <div className="h-3 w-12 animate-pulse rounded bg-gray-100" />
+                <Skeleton className="h-3.5 w-full rounded" />
+                <Skeleton className="h-3.5 w-2/3 rounded" />
+                <Skeleton className="h-3 w-12 rounded" />
               </div>
             ))}
           </div>

@@ -37,7 +37,7 @@ const TabProductList = ({
   if (isPending) {
     return (
       <div className="pc:py-4 pc:px-0 px-5">
-        <div className="pc:grid-cols-6 grid animate-pulse grid-cols-3 gap-x-3 gap-y-5">
+        <div className="pc:grid-cols-6 grid grid-cols-3 gap-x-3 gap-y-5">
           {Array.from({ length: 6 }).map((_, index) => (
             <ProductImageCardSkeleton key={index} />
           ))}

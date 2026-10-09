@@ -9,6 +9,7 @@ import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { readHandoff } from '@/shared/lib/push-channel/browserHandoff';
 import { readPushStatus } from '@/shared/lib/push-channel/pushChannel';
+import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import { useToast } from '@/shared/ui/common/Toast';
 
 const DEVICE_ID_KEY = 'jirum-alarm-device-id';
@@ -74,36 +75,32 @@ export default function BrowserHandoffArrival() {
 
   return (
     <Drawer.Root open onOpenChange={(open) => !open && setAskPush(false)}>
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max rounded-t-sheet pb-safe-bottom-16 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white px-5 pt-3 outline-hidden">
-          <div className="mx-auto mb-5 h-1 w-10 rounded-full bg-gray-300" aria-hidden />
-          <Drawer.Title className="text-2xl font-semibold text-gray-900">
-            마지막 단계예요
-            <br />
-            알림을 켜 주세요
-          </Drawer.Title>
-          <Drawer.Description className="pt-2 text-sm text-gray-500">
-            이 브라우저로 핫딜 알림을 보내드려요.
-          </Drawer.Description>
-          <div className="mt-5 flex flex-col gap-y-2">
-            <button
-              type="button"
-              onClick={handleEnable}
-              className="bg-primary-500 text-fixed-900 h-12 w-full rounded-lg font-semibold"
-            >
-              알림 켜기
-            </button>
-            <button
-              type="button"
-              onClick={() => setAskPush(false)}
-              className="h-10 text-sm text-gray-500"
-            >
-              다음에 할게요
-            </button>
-          </div>
-        </Drawer.Content>
-      </Drawer.Portal>
+      <BottomSheetContent handle className="pb-safe-bottom-16 px-5">
+        <Drawer.Title className="text-2xl font-semibold text-gray-900">
+          마지막 단계예요
+          <br />
+          알림을 켜 주세요
+        </Drawer.Title>
+        <Drawer.Description className="pt-2 text-sm text-gray-500">
+          이 브라우저로 핫딜 알림을 보내드려요.
+        </Drawer.Description>
+        <div className="mt-5 flex flex-col gap-y-2">
+          <button
+            type="button"
+            onClick={handleEnable}
+            className="bg-primary-500 text-fixed-900 h-12 w-full rounded-lg font-semibold"
+          >
+            알림 켜기
+          </button>
+          <button
+            type="button"
+            onClick={() => setAskPush(false)}
+            className="h-10 text-sm text-gray-500"
+          >
+            다음에 할게요
+          </button>
+        </div>
+      </BottomSheetContent>
     </Drawer.Root>
   );
 }

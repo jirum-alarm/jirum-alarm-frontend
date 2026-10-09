@@ -7,6 +7,7 @@ import { Drawer } from 'vaul';
 import { ProductService } from '@/shared/api/product';
 import useRedirectIfNotLoggedIn from '@/shared/hooks/useRedirectIfNotLoggedIn';
 import { cn } from '@/shared/lib/cn';
+import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import Button from '@/shared/ui/common/Button';
 import { useToast } from '@/shared/ui/common/Toast';
 
@@ -69,28 +70,25 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
       <Drawer.Trigger asChild>
         <button className="-m-2 p-2 text-gray-900">제보하기</button>
       </Drawer.Trigger>
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max rounded-t-sheet fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
-          <div className="flex flex-col items-center">
-            <Drawer.Title asChild>
-              <h2 className="pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>
-            </Drawer.Title>
-            <SoldOutIcon />
-            <p className="py-3 text-center text-gray-700">
-              더 빠른 핫딜 확인을 위해
-              <br />
-              종료된 상품을 제보해 주세요!
-            </p>
-            <div className="flex w-full gap-[12px] p-5">
-              <Drawer.Close asChild>
-                <Button color={'secondary'}>취소</Button>
-              </Drawer.Close>
-              <Button onClick={handleReportExpiredProductClick}>종료 제보하기</Button>
-            </div>
+      <BottomSheetContent>
+        <div className="flex flex-col items-center">
+          <Drawer.Title asChild>
+            <h2 className="pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>
+          </Drawer.Title>
+          <SoldOutIcon />
+          <p className="py-3 text-center text-gray-700">
+            더 빠른 핫딜 확인을 위해
+            <br />
+            종료된 상품을 제보해 주세요!
+          </p>
+          <div className="flex w-full gap-[12px] p-5">
+            <Drawer.Close asChild>
+              <Button color={'secondary'}>취소</Button>
+            </Drawer.Close>
+            <Button onClick={handleReportExpiredProductClick}>종료 제보하기</Button>
           </div>
-        </Drawer.Content>
-      </Drawer.Portal>
+        </div>
+      </BottomSheetContent>
     </Drawer.Root>
   );
 };

@@ -151,6 +151,12 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 - **섹션 제목**(`sectionTitle`) — page = 홈·목록 섹션(bold, web `SectionHeader`·앱 `SectionHeader` h-14 + 더보기),
   detail = 상세 안 섹션(semibold, web `DetailSectionHeader`, 앱은 자리마다 여백이 달라 Text 에 레시피를 바로 쓴다), subtitle.
 - **카드 사진 틀**(`cardThumb`) — 상품 카드 사진 자리의 옅은 면 + 테두리. web 5종·앱 3종 카드가 같은 문자열을 읽는다.
+- **정보 상자**(`infoBox`) — 본문 안 옅은 면 + 테두리 상자(가격 판정 요약·공유 미리보기). 여백은 자리마다.
+- **바텀시트 겉**(`sheet`) — 가림막 40% 검정·판 위 모서리 `rounded-t-sheet`(20px)·손잡이 40x4 gray-300.
+  web 은 `shared/ui/common/BottomSheet` 의 `BottomSheetContent`(vaul `Drawer.Root` 안에, `handle`·`srTitle`), 앱은 `shared/components/BottomSheet`
+  (공유 시트도 같은 값). 예전엔 web 에 가림막·판 클래스가 11벌 복사돼 있었고 앱은 모서리가 16px 로 달랐다.
+- **스켈레톤**(`skeleton`, gray-200) — web `shared/ui/common/Skeleton`, 앱 `shared/components/Skeletons`(`SkeletonBox`). 크기·모서리는 실제 요소와 맞춘다.
+  gray-100 은 깜빡임과 겹치면 흰 바탕에서 안 보였다(앱 사용자 지적). web 은 「동작 줄이기」면 깜빡임을 멈춘다(`motion-safe`).
 
 | 개념 | web | 앱 |
 | --- | --- | --- |
@@ -159,7 +165,6 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 | 글자 | (DOM) | `shared/components/ui/Text/AppText` — 모든 Text 는 이걸로 |
 | 토스트 | `shared/ui/common/Toast` (`useToast`) | `shared/components/AppToast` (`showToast.*`) |
 | 확인 | `shared/ui/common/AlertDialog` | `shared/components/ConfirmSheet` |
-| 바텀시트 | vaul `Drawer` + `rounded-t-sheet` | `shared/components/BottomSheet` |
 | 핫딜 배지 | `shared/ui/HotdealBadge` | `shared/components/product/HotdealBadge` |
 | 배지·태그 | `shared/ui/common/Badge` | `shared/components/ui/Badge` |
 | 고르는 칩 | `shared/ui/common/Chip` | `shared/components/ui/Chip` |
@@ -168,12 +173,12 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 | 채운 탭 | 각 자리 `<button>` + `tab` 레시피 | `shared/components/ui/TabPill` (토스·큐레이션 줄은 `ChipRow variant`) |
 | 섹션 제목 | `shared/ui/SectionHeader`·`DetailSectionHeader` | `shared/components/ui/SectionHeader` |
 | 체크 표시 | (DOM 체크박스) | `shared/components/icons` `CheckIcon` — ✓ 글리프는 글꼴에 없으면 두부 |
-| 스켈레톤 | 화면별 `animate-pulse` | `shared/components/Skeletons` |
+| 바텀시트 겉 | `shared/ui/common/BottomSheet` (`BottomSheetContent`) | `shared/components/BottomSheet` |
+| 스켈레톤 판 | `shared/ui/common/Skeleton` | `shared/components/Skeletons` (`SkeletonBox`) |
 | 섹션 오류 | `ApiErrorBoundary` | `shared/components/SectionErrorRow` |
 
 아직 공용 부품이 없어 화면마다 손으로 만든 것(2026-10 조사, 다음에 묶을 후보):
-카드 겉틀(정보 상자 `rounded-xl border bg-gray-50` web 4·앱 1, 딜 줄 `rounded-lg border-gray-100 p-3` web 2 — 여백이 자리마다 달라 아직 안 묶음),
-링크 칩(web 3), web 스켈레톤·빈 화면, 바텀시트 겉껍데기(web 에 같은 오버레이 8벌), 토스트 API(web·앱이 다름).
+딜 줄 `rounded-lg border-gray-100 p-3`(web 2), 빈 화면(문구·그림이 화면마다 달라 아직 안 묶음), 토스트 API(web·앱이 다름).
 체크박스는 web 1곳(네이티브 input, `accent-secondary-500`)·앱 1곳이라 부품 없이 앱 체크 표시만 `CheckIcon` 으로 바꿨다.
 묶을 때도 값은 이 토큰만 쓰고, 모양은 recipes 에 둔다.
 

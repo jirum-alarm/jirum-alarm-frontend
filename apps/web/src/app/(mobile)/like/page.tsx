@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { checkDevice } from '@/app/actions/agent';
 
 import SmallIllust from '@/shared/ui/common/icons/Illust/SmallIllust';
+import { Skeleton } from '@/shared/ui/common/Skeleton';
 import BasicLayout from '@/shared/ui/layout/BasicLayout';
 
 import MyPageShell from '@/features/mypage/ui/MyPageShell';
@@ -42,16 +43,16 @@ export default LikePage;
 const ProductLikeSkeleton = () => {
   return (
     <div>
-      <div className="mb-3 h-[17px] w-1/3 animate-pulse bg-gray-100" />
-      <div className="pc:grid-cols-4 pc:gap-x-[25px] pc:gap-y-10 grid animate-pulse grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
+      <Skeleton className="mb-3 h-[17px] w-1/3" />
+      <div className="pc:grid-cols-4 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-3">
         {Array.from({ length: 12 }).map((item, i) => (
           <div key={i} className="w-full">
-            <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
+            <Skeleton className="flex aspect-square items-center justify-center rounded-lg">
               <SmallIllust />
-            </div>
+            </Skeleton>
             <div className="flex flex-col gap-1 pt-2">
-              <div className="h-3 bg-gray-100"></div>
-              <div className="h-3 w-1/2 bg-gray-100"></div>
+              <Skeleton className="h-3" />
+              <Skeleton className="h-3 w-1/2" />
             </div>
           </div>
         ))}

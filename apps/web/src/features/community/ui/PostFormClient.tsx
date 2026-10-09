@@ -3,6 +3,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
+import { Skeleton } from '@/shared/ui/common/Skeleton';
+
 import { CommunityQueries } from '@/entities/community';
 
 import PostForm from './PostForm';
@@ -37,11 +39,11 @@ export default function PostFormClient({ editPostId }: { editPostId?: number }) 
       <Suspense
         fallback={
           <div className="flex flex-1 flex-col px-5 pt-4">
-            <div className="mb-3 h-5 w-1/2 animate-pulse rounded bg-gray-100 pb-3" />
+            <Skeleton className="mb-3 h-5 w-1/2 rounded pb-3" />
             <div className="flex flex-col gap-y-2">
-              <div className="h-4 w-full animate-pulse rounded bg-gray-100" />
-              <div className="h-4 w-full animate-pulse rounded bg-gray-100" />
-              <div className="h-4 w-3/4 animate-pulse rounded bg-gray-100" />
+              <Skeleton className="h-4 w-full rounded" />
+              <Skeleton className="h-4 w-full rounded" />
+              <Skeleton className="h-4 w-3/4 rounded" />
             </div>
           </div>
         }
