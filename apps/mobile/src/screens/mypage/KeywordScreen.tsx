@@ -1,3 +1,4 @@
+import {addChip} from '@jirum/design-system/recipes';
 import React from 'react';
 import {ActivityIndicator, Pressable, RefreshControl, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -36,6 +37,7 @@ import {SubscribedThemeRow} from '@/features/mypage/ui/ThemeCards';
 import {useKeywordViewModel} from '@/features/mypage/model/useKeywordViewModel';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
 import {KEYWORD_HELPER_TEXT} from '@/features/mypage/lib/validation';
+import {cn} from '@/shared/lib/styling';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -324,11 +326,9 @@ function EmptyKeywords({
                 accessibilityRole="button"
                 accessibilityLabel={`${keyword} 키워드 알림 등록`}
                 hitSlop={{top: 4, bottom: 4}}
-                className="flex-row items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2">
-                <Text className="text-sm font-medium text-gray-900">
-                  {keyword}
-                </Text>
-                <Text className="text-sm text-gray-500">+</Text>
+                className={cn('flex-row items-center gap-1.5', addChip.box)}>
+                <Text className={addChip.text}>{keyword}</Text>
+                <Text className={addChip.plus}>+</Text>
               </PressableScale>
             ))}
           </View>

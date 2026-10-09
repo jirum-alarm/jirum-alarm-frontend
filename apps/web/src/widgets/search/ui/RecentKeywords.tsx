@@ -1,6 +1,6 @@
 'use client';
 
-import { emptyText } from '@jirum/design-system/recipes';
+import { emptyText, keywordChip } from '@jirum/design-system/recipes';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -93,7 +93,11 @@ function Chip({
   return (
     <div
       onClick={handleClick}
-      className="flex h-[40px] shrink-0 items-center gap-x-1 truncate rounded-full border border-gray-200 px-3 text-gray-900 hover:cursor-pointer hover:bg-gray-200"
+      className={cn(
+        'flex shrink-0 items-center gap-x-1 truncate hover:cursor-pointer hover:bg-gray-50',
+        keywordChip.box,
+        keywordChip.text,
+      )}
     >
       {keyword.slice(0, 15)}
       {keyword.length > 15 ? '...' : ''}

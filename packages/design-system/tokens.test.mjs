@@ -172,6 +172,11 @@ const recipePairs = () => [
   ['toast text', {box: recipes.toast.box, text: recipes.toast.text}],
   ['toast action', {box: recipes.toast.box, text: recipes.toast.action}],
   ['emptyText', {box: '', text: recipes.emptyText}],
+  ['linkChip', {box: recipes.linkChip, text: recipes.linkChip}],
+  ['keywordChip', recipes.keywordChip],
+  ['addChip', recipes.addChip],
+  ['addChip plus', {box: recipes.addChip.box, text: recipes.addChip.plus}],
+  ...Object.entries(recipes.wordTag.tone).map(([k, r]) => [`wordTag ${k}`, r]),
   ...Object.entries(recipes.cardLabel.tone).map(([tone, r]) => [`cardLabel ${tone}`, r]),
   ['cardLabel strip', recipes.cardLabel.strip],
 ];

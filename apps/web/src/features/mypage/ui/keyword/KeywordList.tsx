@@ -1,8 +1,10 @@
 'use client';
 
+import { addChip } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { trackAlarmLink } from '@/shared/lib/trackAlarmLink';
 import { useToast } from '@/shared/ui/common/Toast';
@@ -114,10 +116,14 @@ function EmptyKeywords() {
                   disabled={isPending}
                   onClick={() => mutate({ keyword, fromRecommendation: true })}
                   aria-label={`${keyword} 키워드 알림 등록`}
-                  className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 disabled:opacity-50"
+                  className={cn(
+                    'flex items-center gap-1.5 disabled:opacity-50',
+                    addChip.box,
+                    addChip.text,
+                  )}
                 >
                   {keyword}
-                  <span className="text-gray-500">+</span>
+                  <span className={addChip.plus}>+</span>
                 </button>
               </li>
             ))}

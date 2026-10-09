@@ -1,7 +1,9 @@
+import { linkChip } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
+import { cn } from '@/shared/lib/cn';
 
 import { KEYWORD_HUBS, keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
 
@@ -31,10 +33,7 @@ export default function KeywordHubIndexPage() {
       <ul className="flex flex-wrap gap-2">
         {KEYWORD_HUBS.map((h) => (
           <li key={h.slug}>
-            <Link
-              href={keywordHubPath(h)}
-              className="inline-block rounded-full border border-gray-200 px-4 py-2 text-sm text-gray-800 hover:bg-gray-50"
-            >
+            <Link href={keywordHubPath(h)} className={cn('inline-block', linkChip)}>
               {h.name} 핫딜
             </Link>
           </li>

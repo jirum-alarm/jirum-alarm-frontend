@@ -164,6 +164,11 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
   누르면 면이 한 단계 진해진다(web 은 살짝 줄어드는 움직임도). 비활성은 disabled 일 때 disabledBox·disabledText 를 컴포넌트가 붙인다.
   (variant, color, size) → 모양 고르기는 `buttonTone` 하나 — 예전엔 web·앱 cva 가 따로라 눌림 피드백이 달랐다(web 글자색, 앱 면).
 - **딜 줄**(`dealRow`) — web /deals 상세·같은 상품 다른 가격 목록의 한 줄(앱엔 이 화면이 없다).
+- **링크 칩**(`linkChip`) — 다른 페이지로 가는 칩 모양 링크(키워드 허브 목록·가이드 인기 키워드·관련 모델). 고르는 칩보다 옅은 테두리. web 만.
+- **최근 검색어 칩**(`keywordChip`) — 36px·text-sm(앱 값). web 은 40px·text-base 였다. ✕ 아이콘·배치는 자리마다.
+- **추천 키워드 칩**(`addChip`) — 눌러서 키워드 알림을 바로 등록(내 키워드 「요즘 많이 받는 키워드」). web·앱 값은 같았고 손으로 두 번 적혀 있었다.
+- **단어 태그**(`wordTag`) — 누를 수 없는 단어 나열(관심사 키워드 fill·제외어 struck)과 끝의 「+N개 더 보기」(more). 알약 모양 —
+  앱은 6px 사각·gray-50 이라 web 과 달랐다. 앱은 Text 하나에 면을 주면 iOS 가 둥근 면을 안 잘라서 View(겉)·Text(글자)로 나눈다.
 - **빈 목록 한 줄 안내**(`emptyText`, text-sm gray-500) — 정렬·여백은 자리마다. gray-400 은 AA 미달이라 쓰지 않는다.
   그림·큰 제목이 있는 빈 화면(검색 결과 없음·알림 없음)은 이미 web·앱이 같은 text-2xl semibold 라 화면별로 둔다.
   gray-100 은 깜빡임과 겹치면 흰 바탕에서 안 보였다(앱 사용자 지적). web 은 「동작 줄이기」면 깜빡임을 멈춘다(`motion-safe`).

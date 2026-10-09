@@ -1,4 +1,4 @@
-import {emptyText} from '@jirum/design-system/recipes';
+import {emptyText, wordTag} from '@jirum/design-system/recipes';
 import React, {useCallback, useState} from 'react';
 import {
   ActivityIndicator,
@@ -214,19 +214,21 @@ function ThemeConditions({theme}: {theme: ThemeWithKeywords}) {
         title={`키워드 ${keywords.length}개 중 하나라도 제목에 있으면`}>
         <View className="mt-2 flex-row flex-wrap gap-1.5">
           {visible.map(keyword => (
-            <Text
+            <View
               key={keyword}
-              className="rounded-md bg-gray-50 px-2.5 py-1 text-xs text-gray-600">
-              {keyword}
-            </Text>
+              className={cn(wordTag.box, wordTag.tone.fill.box)}>
+              <Text className={cn(wordTag.text, wordTag.tone.fill.text)}>
+                {keyword}
+              </Text>
+            </View>
           ))}
           {hidden > 0 ? (
             <Pressable
               onPress={() => setShowAll(true)}
               accessibilityRole="button"
               hitSlop={6}
-              className="rounded-md border border-gray-200 px-2.5 py-1">
-              <Text className="text-xs font-medium text-gray-700">
+              className={cn(wordTag.box, wordTag.tone.more.box)}>
+              <Text className={cn(wordTag.text, wordTag.tone.more.text)}>
                 +{hidden}개 더 보기
               </Text>
             </Pressable>
@@ -257,11 +259,13 @@ function ThemeConditions({theme}: {theme: ThemeWithKeywords}) {
             <ConditionText>이런 단어가 들어간 딜도 빼요</ConditionText>
             <View className="mt-1.5 flex-row flex-wrap gap-1.5">
               {theme.excludeKeywords.map(word => (
-                <Text
+                <View
                   key={word}
-                  className="rounded-md border border-gray-200 px-2.5 py-1 text-xs text-gray-500 line-through">
-                  {word}
-                </Text>
+                  className={cn(wordTag.box, wordTag.tone.struck.box)}>
+                  <Text className={cn(wordTag.text, wordTag.tone.struck.text)}>
+                    {word}
+                  </Text>
+                </View>
               ))}
             </View>
           </>

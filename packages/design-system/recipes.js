@@ -157,6 +157,39 @@ const sectionTitle = {
 /** 상품 카드 사진 틀 — 사진이 늦거나 투명 PNG 여도 카드 자리가 보이게 옅은 면 + 테두리. */
 const cardThumb = 'overflow-hidden rounded-lg border border-gray-200 bg-gray-50';
 
+/**
+ * 다른 페이지로 가는 칩 모양 링크(키워드 허브·관련 모델). 고르는 칩(chip)보다 옅은 테두리, hover 에 옅은 면.
+ * 배치(inline-block 등)는 자리마다. web 만(앱엔 이 화면들이 없다).
+ */
+const linkChip = 'rounded-full border border-gray-200 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50';
+
+/**
+ * 최근 검색어 칩 — 눌러서 다시 검색, 옆 ✕ 로 지운다. web 40px·text-base 와 앱 36px·text-sm 이 갈려 있었다 → 앱 값.
+ * 배치(가로 정렬·간격)와 ✕ 아이콘은 자리마다.
+ */
+const keywordChip = {box: 'h-9 rounded-full border border-gray-200 px-3', text: 'text-sm text-gray-900'};
+
+/** 눌러서 키워드 알림을 바로 등록하는 칩(내 키워드의 「요즘 많이 받는 키워드」) — 글자 뒤에 옅은 +. */
+const addChip = {
+  box: 'rounded-full border border-gray-200 bg-white px-4 py-2',
+  text: 'text-sm font-medium text-gray-900',
+  plus: 'text-sm text-gray-500',
+};
+
+/**
+ * 누를 수 없는 단어 나열(관심사의 키워드·제외어)과 그 끝의 「+N개 더 보기」. 고르는 칩·배지와 다른 물건.
+ * web 은 알약(rounded-full)·키워드 gray-100, 앱은 6px 사각(rounded-md)·gray-50 으로 갈려 있었다 → 알약·gray-100.
+ */
+const wordTag = {
+  box: 'rounded-full px-2.5 py-1',
+  text: 'text-xs',
+  tone: {
+    fill: {box: 'bg-gray-100', text: 'text-gray-700'},
+    more: {box: 'border border-gray-200', text: 'font-medium text-gray-700'},
+    struck: {box: 'border border-gray-200', text: 'text-gray-500 line-through'},
+  },
+};
+
 /** 딜 목록 한 줄(사진·제목·가격) — 옅은 테두리, 누르는 줄이라 hover 에 옅은 면. web /deals 상세·같은 상품 다른 가격. */
 const dealRow = 'rounded-lg border border-gray-100 p-3 hover:bg-gray-50';
 
@@ -206,4 +239,4 @@ const cardLabel = {
   strip: {box: 'h-[22px] rounded-b-lg bg-fixed-700/80 px-2', text: 'text-xs text-fixed-white'},
 };
 
-module.exports = {badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, infoBox, sheet, skeleton, toast, emptyText, cardLabel};
+module.exports = {addChip, badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, infoBox, keywordChip, linkChip, wordTag, sheet, skeleton, toast, emptyText, cardLabel};

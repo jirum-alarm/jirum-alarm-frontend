@@ -1,8 +1,10 @@
+import { linkChip } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
 import { LANDING_URL, METADATA_SERVICE_URL } from '@/shared/config/env';
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 
 import { KEYWORD_HUBS, keywordHubPath } from '@/entities/keyword-hub/lib/keyword-hub';
 
@@ -153,10 +155,7 @@ export default function HotdealAlarmGuidePage() {
           <ul className="flex flex-wrap gap-2">
             {POPULAR.map((h) => (
               <li key={h.slug}>
-                <Link
-                  href={keywordHubPath(h)}
-                  className="inline-block rounded-full border border-gray-200 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
-                >
+                <Link href={keywordHubPath(h)} className={cn('inline-block', linkChip)}>
                   {h.name} 핫딜
                 </Link>
               </li>

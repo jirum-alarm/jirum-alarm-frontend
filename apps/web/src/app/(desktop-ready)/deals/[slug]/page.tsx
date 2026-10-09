@@ -1,4 +1,4 @@
-import { infoBox } from '@jirum/design-system/recipes';
+import { infoBox, linkChip } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -618,12 +618,8 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
               <h2 className="mb-3 text-base font-semibold">{page.brand} 다른 모델</h2>
               <div className="flex flex-wrap gap-2">
                 {relatedModels.map((m) => (
-                  <a
-                    key={m.slug}
-                    href={`/deals/${m.slug}`}
-                    className="rounded-full border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-50"
-                  >
-                    {m.modelName} <span className="text-gray-400">({m.dealCount})</span>
+                  <a key={m.slug} href={`/deals/${m.slug}`} className={linkChip}>
+                    {m.modelName} <span className="text-gray-500">({m.dealCount})</span>
                   </a>
                 ))}
               </div>

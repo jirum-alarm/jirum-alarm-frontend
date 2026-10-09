@@ -1,5 +1,6 @@
 'use client';
 
+import { wordTag } from '@jirum/design-system/recipes';
 import { useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { type ReactNode, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -88,7 +89,12 @@ const ThemeConditions = ({ theme }: { theme: ThemeWithKeywords }) => {
           {visible.map((keyword) => (
             <span
               key={keyword}
-              className="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-700"
+              className={cn(
+                wordTag.box,
+                wordTag.text,
+                wordTag.tone.fill.box,
+                wordTag.tone.fill.text,
+              )}
             >
               {keyword}
             </span>
@@ -97,7 +103,13 @@ const ThemeConditions = ({ theme }: { theme: ThemeWithKeywords }) => {
             <button
               type="button"
               onClick={() => setShowAll(true)}
-              className="rounded-full border border-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50"
+              className={cn(
+                'hover:bg-gray-50',
+                wordTag.box,
+                wordTag.text,
+                wordTag.tone.more.box,
+                wordTag.tone.more.text,
+              )}
             >
               +{hidden}개 더 보기
             </button>
@@ -122,7 +134,12 @@ const ThemeConditions = ({ theme }: { theme: ThemeWithKeywords }) => {
               {theme.excludeKeywords.map((word) => (
                 <span
                   key={word}
-                  className="rounded-full border border-gray-200 px-2.5 py-1 text-xs text-gray-500 line-through"
+                  className={cn(
+                    wordTag.box,
+                    wordTag.text,
+                    wordTag.tone.struck.box,
+                    wordTag.tone.struck.text,
+                  )}
                 >
                   {word}
                 </span>

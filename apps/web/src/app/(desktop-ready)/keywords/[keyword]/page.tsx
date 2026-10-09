@@ -1,4 +1,4 @@
-import { emptyText } from '@jirum/design-system/recipes';
+import { emptyText, linkChip } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -151,10 +151,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
         <ul className="flex flex-wrap gap-2">
           {otherHubs.map((h) => (
             <li key={h.slug}>
-              <Link
-                href={keywordHubPath(h)}
-                className="inline-block rounded-full border border-gray-200 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
-              >
+              <Link href={keywordHubPath(h)} className={cn('inline-block', linkChip)}>
                 {h.name} 핫딜
               </Link>
             </li>
