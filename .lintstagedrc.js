@@ -36,8 +36,16 @@ const buildWebCoupledMobileTests = () => {
   return tests.length ? [`pnpm --filter=mobile exec jest ${tests.join(" ")}`] : [];
 };
 
+// 디자인 시스템(packages/design-system): theme.css 가 tokens.js 와 맞는지·대비·린트 정규식을 테스트로 본다.
+// 린트 규칙(eslint.js)을 바꿨으면 그 규칙을 쓰는 앱을 전부 다시 린트한다 — 안 그러면 다음에 앱을 고친 사람의 커밋이 막힌다.
+const DESIGN_SYSTEM_APPS = ["web", "mobile", "ai", "landing"];
+const buildDesignSystemCommands = () => ["pnpm --filter @jirum/design-system test"];
+const buildDesignSystemLintCommands = () => DESIGN_SYSTEM_APPS.map((app) => `pnpm lint --filter=${app} -- --fix`);
+
 module.exports = {
   "*.{js,ts,tsx}": [buildEslintCommands, buildPrettierCommands],
+  "packages/design-system/**": [buildDesignSystemCommands],
+  "packages/design-system/eslint.js": [buildDesignSystemLintCommands],
   "*.{ts,tsx}": [buildCheckTypesCommands],
   "apps/web/src/**": [buildWebCoupledMobileTests],
 };
