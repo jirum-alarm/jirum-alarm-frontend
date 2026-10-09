@@ -1,3 +1,4 @@
+import {emptyText as emptyTextClass} from '@jirum/design-system/recipes';
 import React, {useCallback, useRef, useState} from 'react';
 import {
   FlatList,
@@ -161,7 +162,7 @@ export default function CurationGrid<T>({
         }>
         {header}
         <View className="items-center py-10">
-          <Text className="text-sm text-gray-500">{emptyText}</Text>
+          <Text className={emptyTextClass}>{emptyText}</Text>
         </View>
       </ScrollView>
     );

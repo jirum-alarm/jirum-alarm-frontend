@@ -1,3 +1,4 @@
+import {emptyText} from '@jirum/design-system/recipes';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -119,7 +120,7 @@ function ThemeSeparator() {
 function ThemesEmpty() {
   return (
     <View className="items-center py-10">
-      <Text className="text-sm text-gray-500">아직 관심사가 없어요.</Text>
+      <Text className={emptyText}>아직 관심사가 없어요.</Text>
     </View>
   );
 }

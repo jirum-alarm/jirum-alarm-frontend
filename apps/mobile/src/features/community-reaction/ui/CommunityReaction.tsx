@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ActivityIndicator, Pressable, View} from 'react-native';
-import {sectionTitle} from '@jirum/design-system/recipes';
+import {emptyText, sectionTitle} from '@jirum/design-system/recipes';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
@@ -208,9 +208,7 @@ export default function CommunityReaction({
               </Text>
             </View>
           ) : (
-            <Text className="text-sm text-gray-500">
-              아직 모은 반응이 없어요
-            </Text>
+            <Text className={emptyText}>아직 모은 반응이 없어요</Text>
           )}
 
           {positiveItems.length > 0 || negativeItems.length > 0 ? (

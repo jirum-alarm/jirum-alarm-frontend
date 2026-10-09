@@ -217,4 +217,49 @@ describe('정보 상자 — web 3곳·앱 1곳이 같은 infoBox', () => {
   });
 });
 
+describe('토스트 — web·앱이 같은 짙은 판(toast 레시피)', () => {
+  it('web toastVariant·앱 AppToast 가 toast 레시피를 읽고 색을 직접 적지 않는다', () => {
+    const webToast = web('shared/ui/common/Toast/variant/toast.ts');
+    const appToast = native('shared/components/AppToast.tsx');
+    expect(importsRecipe(webToast, 'toast')).toBe(true);
+    expect(importsRecipe(appToast, 'toast')).toBe(true);
+    // 예전 web 은 bg-fixed-600 가운데 정렬, 앱은 bg-fixed-800 — 한쪽이 다시 손으로 적으면 갈린다.
+    expect(webToast).not.toMatch(/bg-fixed-\d00/);
+    expect(appToast).not.toMatch(/bg-fixed-\d00/);
+  });
+
+  it('web 토스트는 스크린리더가 읽는다(앱 accessibilityLiveRegion 과 같게)', () => {
+    expect(web('shared/ui/common/Toast/Toast.tsx')).toMatch(
+      /aria-live="polite"/,
+    );
+  });
+});
+
+describe('빈 목록 한 줄 안내 — web·앱이 같은 emptyText(gray-400 은 AA 미달)', () => {
+  it.each([
+    ['web', 'widgets/product-detail/ui/CommunityReaction.tsx'],
+    ['web', 'widgets/search/ui/RecentKeywords.tsx'],
+    ['web', 'app/(desktop-ready)/keywords/[keyword]/page.tsx'],
+    ['web', 'features/community/ui/CommunityList.tsx'],
+    ['web', 'app/(desktop-ready)/deals/[slug]/DealsListSection.tsx'],
+    ['web', 'app/(desktop-ready)/toss/TossDailyContainer.tsx'],
+    [
+      'web',
+      'app/(desktop-ready)/products/[id]/related/RelatedProductsView.tsx',
+    ],
+    ['web', 'app/(desktop-ready)/curation/components/CurationProductList.tsx'],
+    ['web', 'widgets/search/ui/SearchResult.tsx'],
+    ['web', 'features/community/ui/ProductTagModal.tsx'],
+    ['앱', 'screens/community/CommunityScreen.tsx'],
+    ['앱', 'features/community-reaction/ui/CommunityReaction.tsx'],
+    ['앱', 'screens/mypage/ThemesScreen.tsx'],
+    ['앱', 'screens/mypage/ThemeDetailScreen.tsx'],
+    ['앱', 'entities/home/ui/CurationGrid.tsx'],
+    ['앱', 'screens/search/ui/SearchResults.tsx'],
+  ])('%s %s', (side, file) => {
+    const src = side === 'web' ? web(file) : native(file);
+    expect(importsRecipe(src, 'emptyText')).toBe(true);
+  });
+});
+
 export {};

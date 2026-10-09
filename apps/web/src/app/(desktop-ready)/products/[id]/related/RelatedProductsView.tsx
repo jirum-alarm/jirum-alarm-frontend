@@ -1,8 +1,11 @@
 'use client';
 
+import { emptyText } from '@jirum/design-system/recipes';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+
+import { cn } from '@/shared/lib/cn';
 
 import { ProductQueries } from '@/entities/product';
 import ProductGridList from '@/entities/product-list/ui/grid/ProductGridList';
@@ -49,7 +52,7 @@ export default function RelatedProductsView({
 
   if (allProducts.length === 0) {
     return (
-      <div className="flex h-40 items-center justify-center text-gray-500">
+      <div className={cn('flex h-40 items-center justify-center', emptyText)}>
         유사한 상품이 없습니다.
       </div>
     );

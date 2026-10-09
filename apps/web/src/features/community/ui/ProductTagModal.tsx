@@ -1,11 +1,13 @@
 'use client';
 
+import { emptyText } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
 
 import { OrderOptionType, ProductOrderType } from '@/shared/api/gql/graphql';
 import { ProductService } from '@/shared/api/product/product.service';
+import { cn } from '@/shared/lib/cn';
 import { getRecentViewedProducts } from '@/shared/lib/recentViewedProducts';
 import { BottomSheetContent } from '@/shared/ui/common/BottomSheet';
 import Close from '@/shared/ui/common/icons/Close';
@@ -194,10 +196,10 @@ export default function ProductTagModal({
             {keyword && (
               <>
                 {isFetching && (
-                  <div className="flex justify-center py-10 text-sm text-gray-400">검색 중...</div>
+                  <div className={cn('flex justify-center py-10', emptyText)}>검색 중...</div>
                 )}
                 {!isFetching && searchResults.length === 0 && (
-                  <div className="flex justify-center py-10 text-sm text-gray-400">
+                  <div className={cn('flex justify-center py-10', emptyText)}>
                     검색 결과가 없어요.
                   </div>
                 )}

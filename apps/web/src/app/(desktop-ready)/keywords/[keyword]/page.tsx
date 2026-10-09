@@ -1,3 +1,4 @@
+import { emptyText } from '@jirum/design-system/recipes';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -5,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { METADATA_SERVICE_URL } from '@/shared/config/env';
 import { robotsDirective } from '@/shared/config/metadata';
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 
 import {
   buildKeywordHubSeo,
@@ -141,7 +143,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
       {cards.length > 0 ? (
         <ProductGridList products={cards} priorityCount={4} />
       ) : (
-        <p className="py-20 text-center text-gray-500">최근 올라온 {hub.name} 핫딜이 없어요.</p>
+        <p className={cn('py-20 text-center', emptyText)}>최근 올라온 {hub.name} 핫딜이 없어요.</p>
       )}
 
       <nav aria-label="다른 키워드 핫딜" className="mt-14">

@@ -156,6 +156,10 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
   web 은 `shared/ui/common/BottomSheet` 의 `BottomSheetContent`(vaul `Drawer.Root` 안에, `handle`·`srTitle`), 앱은 `shared/components/BottomSheet`
   (공유 시트도 같은 값). 예전엔 web 에 가림막·판 클래스가 11벌 복사돼 있었고 앱은 모서리가 16px 로 달랐다.
 - **스켈레톤**(`skeleton`, gray-200) — web `shared/ui/common/Skeleton`, 앱 `shared/components/Skeletons`(`SkeletonBox`). 크기·모서리는 실제 요소와 맞춘다.
+- **토스트**(`toast`) — 짙은 판(fixed-800, 테마 무관)·왼쪽 정렬 흰 글자·오른쪽 라임 동작. 앱 AppToast 모양이 기준이고 web 도 같다
+  (예전 web 은 가운데 정렬 gray-600 280px 상자). web 은 `role="status"` 라 스크린리더가 읽는다. API 는 아직 다르다(web `useToast()`, 앱 `showToast.*`).
+- **빈 목록 한 줄 안내**(`emptyText`, text-sm gray-500) — 정렬·여백은 자리마다. gray-400 은 AA 미달이라 쓰지 않는다.
+  그림·큰 제목이 있는 빈 화면(검색 결과 없음·알림 없음)은 이미 web·앱이 같은 text-2xl semibold 라 화면별로 둔다.
   gray-100 은 깜빡임과 겹치면 흰 바탕에서 안 보였다(앱 사용자 지적). web 은 「동작 줄이기」면 깜빡임을 멈춘다(`motion-safe`).
 
 | 개념 | web | 앱 |
@@ -178,7 +182,8 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 | 섹션 오류 | `ApiErrorBoundary` | `shared/components/SectionErrorRow` |
 
 아직 공용 부품이 없어 화면마다 손으로 만든 것(2026-10 조사, 다음에 묶을 후보):
-딜 줄 `rounded-lg border-gray-100 p-3`(web 2), 빈 화면(문구·그림이 화면마다 달라 아직 안 묶음), 토스트 API(web·앱이 다름).
+딜 줄 `rounded-lg border-gray-100 p-3`(web 2), 토스트 API(web `useToast()` 는 아이콘·동작 버튼이 없다), 버튼 변형(web·앱 cva 가 따로 —
+값은 같고 눌림 피드백만 다르다: web 은 글자색, 앱은 면이 진해짐).
 체크박스는 web 1곳(네이티브 input, `accent-secondary-500`)·앱 1곳이라 부품 없이 앱 체크 표시만 `CheckIcon` 으로 바꿨다.
 묶을 때도 값은 이 토큰만 쓰고, 모양은 recipes 에 둔다.
 

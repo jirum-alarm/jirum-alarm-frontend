@@ -1,7 +1,10 @@
 'use client';
 
+import { emptyText } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
+
+import { cn } from '@/shared/lib/cn';
 
 import PromotionTabs from '@/widgets/home/ui/PromotionTabs';
 
@@ -72,7 +75,7 @@ export default function TossDailyContainer({
       {/* sticky 탭 바로 아래 그리드. 모바일은 탭이 붙어있어 상단 여백 최소(pt-6), 하단은 네비/푸터 클리어런스로 pb-14. PC는 pt-7 유지. */}
       <div className="pc:pt-7 px-5 pt-6 pb-14">
         {!isLoading && deals.length === 0 ? (
-          <p className="py-20 text-center text-sm text-gray-400">아직 준비된 특가가 없어요.</p>
+          <p className={cn('py-20 text-center', emptyText)}>아직 준비된 특가가 없어요.</p>
         ) : (
           <div className="pc:grid-cols-5 pc:gap-x-[25px] pc:gap-y-10 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3">
             {deals.map((deal, i) => (

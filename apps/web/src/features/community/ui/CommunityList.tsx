@@ -1,5 +1,6 @@
 'use client';
 
+import { emptyText } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Fragment, useEffect } from 'react';
@@ -64,8 +65,8 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
 
   if (posts.length === 0) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center py-20 text-gray-400">
-        <p className="text-sm">아직 게시글이 없어요.</p>
+      <div className="flex flex-1 flex-col items-center justify-center py-20">
+        <p className={emptyText}>아직 게시글이 없어요.</p>
       </div>
     );
   }

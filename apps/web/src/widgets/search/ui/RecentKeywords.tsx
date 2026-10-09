@@ -1,5 +1,6 @@
 'use client';
 
+import { emptyText } from '@jirum/design-system/recipes';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -52,7 +53,7 @@ export default function RecentKeywords() {
                     />
                   ))
                 ) : (
-                  <span className="text-gray-400">검색 내역이 없어요.</span>
+                  <span className={emptyText}>검색 내역이 없어요.</span>
                 )}
               </div>
             )}

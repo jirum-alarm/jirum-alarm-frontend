@@ -1,3 +1,4 @@
+import {emptyText} from '@jirum/design-system/recipes';
 import React, {useCallback, useState} from 'react';
 import {
   ActivityIndicator,
@@ -24,6 +25,7 @@ import StackHeader from '@/features/mypage/ui/StackHeader';
 import Button from '@/shared/components/ui/Button';
 import {useThemeSubscription} from '@/features/mypage/model/useThemeSubscription';
 import type {ThemeWithKeywords} from '@/shared/api/theme';
+import {cn} from '@/shared/lib/styling';
 
 type Props = NativeStackScreenProps<
   TabStackParamList,
@@ -99,7 +101,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
         // web 은 `if (!theme) return null` 로 빈 화면을 내보낸다. 앱은 왜 비었는지
         // 알려준다 — 딥링크가 없어진 묶음 id 를 들고 올 수 있다.
         <View className="flex-1 items-center justify-center px-10">
-          <Text className="text-center text-sm text-gray-500">
+          <Text className={cn('text-center', emptyText)}>
             없는 관심사이거나 지금은 볼 수 없어요.
           </Text>
         </View>
@@ -166,7 +168,7 @@ export default function ThemeDetailScreen({route, navigation}: Props) {
                 <ActivityIndicator size="small" className="text-gray-500" />
               </View>
             ) : (deals ?? []).length === 0 ? (
-              <Text className="py-8 text-center text-sm text-gray-500">
+              <Text className={cn('py-8 text-center', emptyText)}>
                 지금은 뜬 딜이 없어요.
               </Text>
             ) : (

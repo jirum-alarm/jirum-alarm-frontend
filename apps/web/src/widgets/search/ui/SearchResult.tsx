@@ -1,3 +1,4 @@
+import { emptyText } from '@jirum/design-system/recipes';
 import { Suspense, useEffect, useRef } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -67,7 +68,7 @@ export default function SearchResult({ show }: { show: boolean }) {
         <div className="flex justify-center pt-5 pb-10">
           {hasActiveFilters ? (
             <div className="flex flex-col items-center gap-4 pt-5 text-center">
-              <p className="text-sm text-gray-500">
+              <p className={emptyText}>
                 선택한 필터에 맞는 결과가 없어요.
                 <br />
                 필터를 조정하면 더 많은 딜을 볼 수 있어요.

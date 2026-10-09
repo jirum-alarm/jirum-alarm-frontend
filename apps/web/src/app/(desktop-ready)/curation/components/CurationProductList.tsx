@@ -1,5 +1,6 @@
 'use client';
 
+import { emptyText } from '@jirum/design-system/recipes';
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -9,6 +10,7 @@ import {
   QueryProductsByKeywordQueryVariables,
 } from '@/shared/api/gql/graphql';
 import { ProductListQueryVariables } from '@/shared/api/product';
+import { cn } from '@/shared/lib/cn';
 import { LoadingSpinner } from '@/shared/ui/common/icons';
 
 import { ProductQueries } from '@/entities/product';
@@ -22,7 +24,7 @@ interface CurationProductListProps {
 
 const LIMIT = 20;
 
-const EmptyState = () => <div className="py-10 text-center text-gray-500">상품이 없습니다.</div>;
+const EmptyState = () => <div className={cn('py-10 text-center', emptyText)}>상품이 없습니다.</div>;
 
 const ByKeyword = ({ section }: CurationProductListProps) => {
   const queryVariables: QueryProductsByKeywordQueryVariables = {

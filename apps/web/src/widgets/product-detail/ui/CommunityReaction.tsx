@@ -1,5 +1,6 @@
 'use client';
 
+import { emptyText } from '@jirum/design-system/recipes';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { m } from 'motion/react';
 import { Suspense } from 'react';
@@ -170,7 +171,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
                 <span className="text-sm text-gray-400 tabular-nums">· {dominantPercent}%</span>
               </div>
             ) : (
-              <p className="text-sm text-gray-500">아직 모은 반응이 없어요</p>
+              <p className={emptyText}>아직 모은 반응이 없어요</p>
             )}
 
             {(positiveItems.length > 0 || negativeItems.length > 0) && (

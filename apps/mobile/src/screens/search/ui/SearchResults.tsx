@@ -1,3 +1,4 @@
+import {emptyText} from '@jirum/design-system/recipes';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {ActivityIndicator, Pressable, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
@@ -16,6 +17,7 @@ import SearchFilterBar from './SearchFilterBar';
 import SearchNotFound from './SearchNotFound';
 import KeywordAlertButton from '@/features/keyword-prompt/ui/KeywordAlertButton';
 import {refetchFirstPage} from '@/shared/lib/client/refetch-first-page';
+import {cn} from '@/shared/lib/styling';
 
 /**
  * 검색 결과. web: widgets/search/ui/SearchResult.tsx + useProductListViewModel
@@ -173,7 +175,7 @@ export default function SearchResults({
           {hasActiveFilters ? (
             // 필터 때문에 0건인 경우. 상품이 없다고 말하면 안 된다 — 풀 수 있는 필터가 있다.
             <View className="items-center px-5 pt-10" style={styles.emptyBox}>
-              <Text className="text-center text-sm text-gray-500">
+              <Text className={cn('text-center', emptyText)}>
                 {
                   '선택한 필터에 맞는 결과가 없어요.\n필터를 조정하면 더 많은 딜을 볼 수 있어요.'
                 }

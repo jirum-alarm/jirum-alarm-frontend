@@ -1,3 +1,4 @@
+import {emptyText} from '@jirum/design-system/recipes';
 import React, {useCallback, useRef, useState} from 'react';
 import {
   ActivityIndicator,
@@ -158,9 +159,7 @@ export default function CommunityScreen() {
           contentContainerStyle={{paddingBottom: reservedBottom}}
           ListEmptyComponent={
             <View className="items-center py-20">
-              <Text className="text-sm text-gray-500">
-                아직 게시글이 없어요.
-              </Text>
+              <Text className={emptyText}>아직 게시글이 없어요.</Text>
             </View>
           }
           ListFooterComponent={

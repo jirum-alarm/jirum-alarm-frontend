@@ -1,5 +1,6 @@
 'use client';
 
+import { emptyText } from '@jirum/design-system/recipes';
 import { useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -84,7 +85,7 @@ export default function DealsListSection({
       </div>
 
       {tab === 'active' && !hasActive && (
-        <p className="mb-3 text-sm text-gray-400">
+        <p className={cn('mb-3', emptyText)}>
           지금 진행 중인 핫딜이 없습니다. 전체 이력에서 과거 최저가를 확인해 보세요.
         </p>
       )}
@@ -174,7 +175,7 @@ export default function DealsListSection({
         })}
       </ul>
       {deals.length === 0 && tab === 'history' && (
-        <p className="text-sm text-gray-400">표시할 핫딜이 없습니다.</p>
+        <p className={emptyText}>표시할 핫딜이 없습니다.</p>
       )}
     </section>
   );
