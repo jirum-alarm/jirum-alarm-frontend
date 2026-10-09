@@ -1,8 +1,10 @@
 'use client';
 
+import { dealRow } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+import { cn } from '@/shared/lib/cn';
 import Badge from '@/shared/ui/common/Badge';
 import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 
@@ -98,7 +100,7 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
                 data-track="product-card"
                 data-source={isFallback ? 'similar_fallback' : 'clustered_price'}
                 data-product-id={p.id}
-                className="flex items-center gap-3 rounded-lg border border-gray-100 p-3 hover:bg-gray-50"
+                className={cn('flex items-center gap-3', dealRow)}
               >
                 <div className="min-w-0 flex-1">
                   <div className="line-clamp-1 text-sm">{p.title}</div>

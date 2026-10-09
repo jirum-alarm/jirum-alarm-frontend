@@ -262,4 +262,71 @@ describe('빈 목록 한 줄 안내 — web·앱이 같은 emptyText(gray-400 �
   });
 });
 
+describe('버튼 — web·앱이 같은 레시피(button)와 같은 모양 고르기(buttonTone)', () => {
+  it('두 Button 이 button·buttonTone 을 읽고 색을 직접 적지 않는다(예전엔 cva 두 벌)', () => {
+    const webButton = web('shared/ui/common/Button/Button.tsx');
+    const appButton = native('shared/components/ui/Button/index.tsx');
+    for (const src of [webButton, appButton]) {
+      expect(importsRecipe(src, 'button')).toBe(true);
+      expect(importsRecipe(src, 'buttonTone')).toBe(true);
+      expect(src).not.toMatch(
+        /\b(?:bg|text|border)-(?:gray|primary|secondary|error|fixed)-\d{2,3}\b/,
+      );
+    }
+  });
+});
+
+describe('토스트 종류·표시 시간 — web 도 앱처럼 성공·실패를 아이콘으로 가른다', () => {
+  it('web 에 success·error·info 와 동작 버튼이 있다', () => {
+    const store = web('shared/ui/common/Toast/useToast.tsx');
+    expect(store).toMatch(/success:/);
+    expect(store).toMatch(/error:/);
+    expect(store).toMatch(/action\?: ToastAction/);
+    const toaster = web('shared/ui/common/Toast/Toaster.tsx');
+    expect(toaster).toContain('SuccessIcon');
+    expect(toaster).toContain('ErrorIcon');
+  });
+
+  it('표시 시간이 같다(앱 2.5초·동작 버튼 있으면 4초)', () => {
+    const webMs = web('shared/ui/common/Toast/useToast.tsx');
+    const appMs = native('shared/lib/feedback/toast.ts');
+    expect(webMs).toMatch(/VISIBLE_MS = 2500/);
+    expect(webMs).toMatch(/VISIBLE_WITH_ACTION_MS = 4000/);
+    expect(appMs).toMatch(/VISIBILITY_MS = 2500/);
+    expect(appMs).toMatch(/VISIBILITY_WITH_ACTION_MS = 4000/);
+  });
+
+  it('실패 문구에 성공 아이콘이 붙지 않는다(web 호출부)', () => {
+    const offenders = webTsxFiles([])
+      .concat(
+        (
+          fs.readdirSync(path.join(__dirname, '../../web/src'), {
+            recursive: true,
+          }) as string[]
+        ).filter(f => f.endsWith('.ts')),
+      )
+      .flatMap(f =>
+        web(f)
+          .split('\n')
+          .filter(
+            (l: string) =>
+              /toast\.success\(/.test(l) && /실패|에러|오류/.test(l),
+          )
+          .map((l: string) => `${f}: ${l.trim()}`),
+      );
+    expect(offenders).toEqual([]);
+  });
+});
+
+describe('딜 줄 — web 두 목록이 같은 dealRow', () => {
+  it.each([
+    'features/product-list/ui/ClusteredPriceSection.tsx',
+    'app/(desktop-ready)/deals/[slug]/DealsListSection.tsx',
+  ])('%s', file => {
+    const src = web(file);
+    expect(importsRecipe(src, 'dealRow')).toBe(true);
+    expect(src).not.toContain('rounded-lg border border-gray-100 p-3');
+  });
+});
+
 export {};

@@ -1,6 +1,6 @@
 'use client';
 
-import { emptyText } from '@jirum/design-system/recipes';
+import { dealRow, emptyText } from '@jirum/design-system/recipes';
 import { useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -113,7 +113,7 @@ export default function DealsListSection({
             <li key={deal.productId}>
               <a
                 href={`/products/${deal.productId}`}
-                className="flex items-center gap-3 rounded-lg border border-gray-100 p-3 hover:bg-gray-50"
+                className={cn('flex items-center gap-3', dealRow)}
               >
                 {/* 썸네일 없는 딜(약 40%)도 자리를 비워 두지 않는다 — 없으면 제목 시작선이 줄마다 들쭉날쭉했다. */}
                 <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded bg-gray-50">
