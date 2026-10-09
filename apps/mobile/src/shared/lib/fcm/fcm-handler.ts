@@ -1,4 +1,4 @@
-import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
+import type {RemoteMessage} from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
 import {Platform} from 'react-native';
 
@@ -47,9 +47,7 @@ export async function ensureAlarmChannel() {
  *
  * @param message - FCM remote message
  */
-export async function onForegroundMessageHandler(
-  message: FirebaseMessagingTypes.RemoteMessage,
-) {
+export async function onForegroundMessageHandler(message: RemoteMessage) {
   await ensureAlarmChannel();
 
   const badgeCount = Number(message.data?.badge ?? 0);
@@ -87,6 +85,4 @@ export async function onForegroundMessageHandler(
  *
  * 핸들러 자체는 남겨야 한다 — 없으면 RNFB 가 경고를 내고 headless task 가 실패한다.
  */
-export async function onBackgroundMessageHandler(
-  _message: FirebaseMessagingTypes.RemoteMessage,
-) {}
+export async function onBackgroundMessageHandler(_message: RemoteMessage) {}

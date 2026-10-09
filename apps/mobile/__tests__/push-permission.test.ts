@@ -18,10 +18,9 @@ jest.mock('expo-notifications', () => ({
 const mockGetToken = jest.fn(() => Promise.resolve('fcm-token'));
 jest.mock('@react-native-firebase/messaging', () => ({
   __esModule: true,
-  default: () => ({
-    getToken: mockGetToken,
-    registerDeviceForRemoteMessages: jest.fn(() => Promise.resolve()),
-  }),
+  getMessaging: () => ({}),
+  getToken: () => mockGetToken(),
+  registerDeviceForRemoteMessages: jest.fn(() => Promise.resolve()),
 }));
 
 const mockAddToken = jest.fn((_: {token: string; tokenType: string}) =>

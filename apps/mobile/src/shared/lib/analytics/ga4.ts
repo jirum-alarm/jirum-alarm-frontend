@@ -1,4 +1,9 @@
-import analytics from '@react-native-firebase/analytics';
+import {
+  getAnalytics,
+  logEvent,
+  logScreenView,
+  setUserId,
+} from '@react-native-firebase/analytics';
 
 // 앱(RN) 사용자 행동 분석 — GA4 앱 스트림(Firebase Analytics).
 // 웹은 GTM → GA4 웹 스트림으로 보내고, 앱은 여기서 같은 GA4 속성(394356262)의
@@ -23,7 +28,7 @@ const toParams = (
 /**
  * 분석 실패가 앱 흐름을 막지 않는다 — 전부 fire-and-forget + 로그.
  *
- * 🔴`.catch()` 만으로는 그 약속이 지켜지지 않는다. `analytics()` 자체가 **동기로
+ * 🔴`.catch()` 만으로는 그 약속이 지켜지지 않는다. `getAnalytics()` 자체가 **동기로
  * 던진다** — 네이티브 모듈이 없는 앱에서는 프라미스가 만들어지기도 전에 예외가
  * 나서 호출부까지 올라간다:
  *
@@ -46,9 +51,11 @@ const logOnce = (key: string, message: string, error: unknown) => {
   console.error(message, error);
 };
 
-const safely = (label: string, run: () => Promise<unknown>) => {
+// modular `logEvent` 는 프라미스를 돌려주지 않는다(void — 이름 검증 실패만 동기로 던진다).
+// setUserId·logScreenView 는 프라미스라 거절을 여기서 잡는다.
+const safely = (label: string, run: () => Promise<unknown> | void) => {
   try {
-    run().catch(e => logOnce(`fail:${label}`, `[GA4] ${label} 실패:`, e));
+    run()?.catch(e => logOnce(`fail:${label}`, `[GA4] ${label} 실패:`, e));
   } catch (e) {
     // 네이티브 모듈 부재 등 동기 예외. 로그만 남기고 흐름은 그대로 진행한다.
     logOnce(`sync:${label}`, `[GA4] ${label} 불가:`, e);
@@ -59,24 +66,24 @@ export const Analytics = {
   // 로그인 유저 식별 — 웹의 user_id 와 같은 키로 크로스 플랫폼 유저 병합.
   identify(userId: string) {
     if (!userId) return;
-    safely('identify', () => analytics().setUserId(userId));
+    safely('identify', () => setUserId(getAnalytics(), userId));
   },
 
   track(event: string, props?: Record<string, unknown>) {
     safely(`track(${event})`, () =>
-      analytics().logEvent(event, toParams(props)),
+      logEvent(getAnalytics(), event, toParams(props)),
     );
   },
 
   // RN 은 네이티브 화면이 하나라 자동 screen_view 로는 화면이 안 갈린다 — 라우트 이름으로 직접 보낸다.
   screen(name: string) {
     safely(`screen(${name})`, () =>
-      analytics().logScreenView({screen_name: name, screen_class: name}),
+      logScreenView(getAnalytics(), {screen_name: name, screen_class: name}),
     );
   },
 
   // 로그아웃 시 user_id 해제(다음 유저와 섞이지 않도록).
   reset() {
-    safely('reset', () => analytics().setUserId(null));
+    safely('reset', () => setUserId(getAnalytics(), null));
   },
 };

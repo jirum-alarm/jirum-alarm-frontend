@@ -3,7 +3,7 @@ export {};
 /**
  * 분석 호출이 앱 흐름을 막지 않는다.
  *
- * 🔴`analytics()` 는 네이티브 모듈이 없으면 **동기로 던진다**. `.catch()` 만
+ * 🔴`getAnalytics()` 는 네이티브 모듈이 없으면 **동기로 던진다**. `.catch()` 만
  * 걸어두면 프라미스가 만들어지기도 전에 예외가 호출부까지 올라간다 —
  * iOS 26 시뮬레이터에서 딥링크를 열자 앱이 레드스크린으로 죽었다
  * (`Analytics.track` → `useDeepLink.open` → `Linking.addEventListener`).
@@ -21,9 +21,19 @@ const rejecting = jest.fn(() => ({
 // ⚠️jest.mock 팩토리는 `mock` 접두어 변수만 참조할 수 있다.
 let mockImpl: () => unknown = rejecting;
 
+type MockAnalytics = {
+  logEvent: (...args: unknown[]) => Promise<void>;
+  setUserId: (...args: unknown[]) => Promise<void>;
+};
+// modular API(실물과 같은 모양): getAnalytics() 가 인스턴스를 주고, 함수는 그 인스턴스를
+// 첫 인자로 받는다. logEvent 는 void(RNFB 가 안에서 프라미스를 버린다), setUserId 는 프라미스.
 jest.mock('@react-native-firebase/analytics', () => ({
   __esModule: true,
-  default: () => mockImpl(),
+  getAnalytics: () => mockImpl(),
+  logEvent: (a: MockAnalytics, ...rest: unknown[]) => {
+    a.logEvent(...rest).catch(() => {});
+  },
+  setUserId: (a: MockAnalytics, ...rest: unknown[]) => a.setUserId(...rest),
 }));
 
 const {Analytics} = require('../src/shared/lib/analytics/ga4');
@@ -51,6 +61,7 @@ describe('Analytics — 실패가 흐름을 막지 않는다', () => {
   it('프라미스 거절도 삼킨다', async () => {
     mockImpl = rejecting;
     expect(() => Analytics.track('x')).not.toThrow();
+    expect(() => Analytics.identify('u1')).not.toThrow();
     await Promise.resolve();
     await Promise.resolve();
     expect(errorSpy).toHaveBeenCalled();

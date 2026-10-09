@@ -26,7 +26,7 @@ jest.mock('@react-native-cookies/cookies', () => ({
 // useLogout → push-permission 이 끌고 오는 네이티브 모듈(여기선 안 쓴다).
 jest.mock('@react-native-firebase/messaging', () => ({
   __esModule: true,
-  default: () => ({}),
+  getMessaging: () => ({}),
 }));
 
 jest.mock('expo-notifications', () => ({

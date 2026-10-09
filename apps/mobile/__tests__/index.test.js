@@ -1,8 +1,6 @@
 const mockRegisterComponent = jest.fn();
 const mockSetBackgroundMessageHandler = jest.fn();
-const mockMessaging = jest.fn(() => ({
-  setBackgroundMessageHandler: mockSetBackgroundMessageHandler,
-}));
+const mockMessagingInstance = {};
 const mockOnBackgroundMessageHandler = jest.fn();
 const mockSetNotificationHandler = jest.fn();
 const mockForegroundNotificationBehavior = jest.fn(() => 'behavior');
@@ -15,7 +13,8 @@ jest.mock('react-native', () => ({
 
 jest.mock('@react-native-firebase/messaging', () => ({
   __esModule: true,
-  default: mockMessaging,
+  getMessaging: () => mockMessagingInstance,
+  setBackgroundMessageHandler: mockSetBackgroundMessageHandler,
 }));
 
 jest.mock('expo-notifications', () => ({
@@ -47,6 +46,7 @@ describe('index.js', () => {
     });
 
     expect(mockSetBackgroundMessageHandler).toHaveBeenCalledWith(
+      mockMessagingInstance,
       mockOnBackgroundMessageHandler,
     );
     expect(mockRegisterComponent).toHaveBeenCalledWith(

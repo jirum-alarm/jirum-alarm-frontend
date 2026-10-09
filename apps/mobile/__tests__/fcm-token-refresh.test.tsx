@@ -9,18 +9,17 @@ type RefreshListener = (token: string) => void;
 let mockRefreshListener: RefreshListener | undefined;
 const mockUnsubscribe = jest.fn();
 
-jest.mock('@react-native-firebase/messaging', () => {
-  const messaging = () => ({
-    hasPermission: () => Promise.resolve(0),
-    registerDeviceForRemoteMessages: () => Promise.resolve(),
-    onTokenRefresh: (listener: RefreshListener) => {
-      mockRefreshListener = listener;
-      return mockUnsubscribe;
-    },
-  });
-  messaging.AuthorizationStatus = {AUTHORIZED: 1, PROVISIONAL: 2};
-  return {__esModule: true, default: messaging};
-});
+jest.mock('@react-native-firebase/messaging', () => ({
+  __esModule: true,
+  AuthorizationStatus: {AUTHORIZED: 1, PROVISIONAL: 2},
+  getMessaging: () => ({}),
+  hasPermission: () => Promise.resolve(0),
+  registerDeviceForRemoteMessages: () => Promise.resolve(),
+  onTokenRefresh: (_messaging: unknown, listener: RefreshListener) => {
+    mockRefreshListener = listener;
+    return mockUnsubscribe;
+  },
+}));
 
 const mockSaveAndRegister = jest.fn((_: string) => Promise.resolve());
 jest.mock('../src/shared/lib/fcm/push-permission', () => ({

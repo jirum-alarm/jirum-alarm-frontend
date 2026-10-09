@@ -1,4 +1,4 @@
-import type {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
+import type {RemoteMessage} from '@react-native-firebase/messaging';
 
 /**
  * 백그라운드 푸시는 한 번만 떠야 한다. notification 이 실린 메시지는 OS 가 이미
@@ -19,7 +19,7 @@ const {
 beforeEach(() => jest.clearAllMocks());
 
 it('notification 이 있으면 띄우지 않는다(OS 가 이미 띄웠다)', async () => {
-  const message: FirebaseMessagingTypes.RemoteMessage = {
+  const message: RemoteMessage = {
     notification: {title: '키워드 알림', body: '핫딜'},
     data: {link: 'https://jirum-alarm.com/products/1'},
     fcmOptions: {},

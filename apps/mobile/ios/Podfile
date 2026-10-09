@@ -16,6 +16,11 @@ ENV['RCT_USE_RN_DEP'] ||= '0'
 ENV['RCT_USE_PREBUILT_RNCORE'] ||= '0'
 prepare_react_native_project!
 
+# RNFirebase 26 은 기본으로 Firebase iOS SDK 를 SPM 으로 받는데, SPM 산출물은 자동 라이브러리라
+# use_frameworks!(static) 에선 RNFB pod 마다 사본이 들어가 링크 때 심볼이 겹친다(pod install 이 거부).
+# 21 때처럼 CocoaPods 로 받는다 — 타깃 블록보다 먼저 정해야 한다.
+$RNFirebaseDisableSPM = true
+
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green

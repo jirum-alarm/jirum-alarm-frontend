@@ -1,4 +1,8 @@
-import messaging from '@react-native-firebase/messaging';
+import {
+  getMessaging,
+  getToken,
+  registerDeviceForRemoteMessages,
+} from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
 import {Alert, Linking} from 'react-native';
 
@@ -13,8 +17,9 @@ import {getAsyncStorage, setAsyncStorage} from '@/shared/lib/persistence';
  * 키워드 등록 직후 권한을 새로 받았을 때 공용.
  */
 export async function registerFcmToken(): Promise<void> {
-  await messaging().registerDeviceForRemoteMessages();
-  await saveAndRegisterFcmToken(await messaging().getToken());
+  const messaging = getMessaging();
+  await registerDeviceForRemoteMessages(messaging);
+  await saveAndRegisterFcmToken(await getToken(messaging));
 }
 
 /**

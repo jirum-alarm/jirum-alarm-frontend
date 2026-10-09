@@ -71,11 +71,15 @@ describe('product_card_click', () => {
     );
     pressCard(tree, product.title);
 
-    expect(__mockFns.logEvent).toHaveBeenCalledWith('product_card_click', {
-      source: 'ranking_tab',
-      product_id: '28351243',
-      rank: 3,
-    });
+    expect(__mockFns.logEvent).toHaveBeenCalledWith(
+      expect.anything(),
+      'product_card_click',
+      {
+        source: 'ranking_tab',
+        product_id: '28351243',
+        rank: 3,
+      },
+    );
     // 추적이 원래 동작(상세 이동)을 대신하지 않는다.
     expect(onPress).toHaveBeenCalledWith(28351243);
   });
@@ -97,10 +101,11 @@ describe('product_card_click', () => {
         />,
       );
       pressCard(tree, product.title);
-      expect(__mockFns.logEvent).toHaveBeenCalledWith('product_card_click', {
-        source: 'home_promotion',
-        product_id: '28351243',
-      });
+      expect(__mockFns.logEvent).toHaveBeenCalledWith(
+        expect.anything(),
+        'product_card_click',
+        {source: 'home_promotion', product_id: '28351243'},
+      );
     },
   );
 });

@@ -12,16 +12,20 @@
  * 자동으로** 이걸 쓴다 — 파일마다 jest.mock 을 붙이지 않아도 된다.
  *
  * 분석 호출은 전부 fire-and-forget 이라 resolve 만 해 주면 충분하다.
+ * v22+ modular API(`logEvent(getAnalytics(), name, params)`) 모양 — 첫 인자는 인스턴스.
  */
+const analyticsInstance = {};
+const getAnalytics = jest.fn(() => analyticsInstance);
 const logEvent = jest.fn(() => Promise.resolve());
 const setUserId = jest.fn(() => Promise.resolve());
 const logScreenView = jest.fn(() => Promise.resolve());
 
-const analytics = jest.fn(() => ({logEvent, setUserId, logScreenView}));
-
 module.exports = {
   __esModule: true,
-  default: analytics,
+  getAnalytics,
+  logEvent,
+  setUserId,
+  logScreenView,
   // 테스트에서 호출 여부를 보고 싶을 때 쓸 수 있게 노출한다.
   __mockFns: {logEvent, setUserId, logScreenView},
 };

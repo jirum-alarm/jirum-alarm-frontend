@@ -1,5 +1,11 @@
 import React, {useEffect, useRef} from 'react';
-import messaging from '@react-native-firebase/messaging';
+import {
+  getInitialNotification,
+  getMessaging,
+  onMessage,
+  onNotificationOpenedApp,
+  type RemoteMessage,
+} from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
 import useFCMTokenManager from '@/shared/hooks/useFCMTokenManager.ts';
 import {onForegroundMessageHandler} from '../shared/lib/fcm/index.ts';
@@ -94,7 +100,7 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
   };
 
   const handleInitialNotification = async () => {
-    const initialNotification = await messaging().getInitialNotification();
+    const initialNotification = await getInitialNotification(getMessaging());
     if (initialNotification) {
       const url = initialNotification.data?.link;
       if (!!url && typeof url === 'string') {
@@ -133,9 +139,9 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
   };
 
   // ✅ 백그라운드에서 푸시 알람을 클릭했을 때 처리
-  const handleNotificationOpenedApp = (remoteMessage: any) => {
+  const handleNotificationOpenedApp = (remoteMessage: RemoteMessage) => {
     const url = remoteMessage.data?.link;
-    if (url) {
+    if (url && typeof url === 'string') {
       trackNotificationClick(remoteMessage.data, 'background');
       openNotificationUrl(url);
     }
@@ -154,9 +160,8 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
   }, [webviewRef]);
 
   useEffect(() => {
-    const unsubscribeMessage = messaging().onMessage(
-      onForegroundMessageHandler,
-    );
+    const messaging = getMessaging();
+    const unsubscribeMessage = onMessage(messaging, onForegroundMessageHandler);
 
     // ★앱을 켜둔 채 받은 푸시도 탭바 알림 점에 반영한다.
     // onForegroundMessageHandler 는 **앱 아이콘 배지만** 갱신하므로, 그대로 두면
@@ -165,7 +170,7 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
     //
     // 훅(useQueryClient) 대신 모듈 싱글턴을 쓴다 — Provider 가 쓰는 것과 같은
     // 인스턴스이고, 여기서는 렌더 밖 리스너에서 캐시만 한 번 만진다.
-    const unsubscribeUnreadSync = messaging().onMessage(() => {
+    const unsubscribeUnreadSync = onMessage(messaging, () => {
       queryClient
         .invalidateQueries({
           queryKey: NotificationQueries.unreadCount().queryKey,
@@ -174,7 +179,8 @@ const FcmHandler = ({children}: FcmHandlerProps) => {
         .catch(() => {});
     });
 
-    const unsubscribeOpenedApp = messaging().onNotificationOpenedApp(
+    const unsubscribeOpenedApp = onNotificationOpenedApp(
+      messaging,
       handleNotificationOpenedApp,
     );
 
