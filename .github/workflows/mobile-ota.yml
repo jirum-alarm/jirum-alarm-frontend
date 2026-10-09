@@ -20,8 +20,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# 수동 실행은 발행하지 않으니 발행 줄과 따로 — 같은 그룹이면 대기 중에 다음 푸시 실행에 밀려 취소된다.
 concurrency:
-  group: mobile-ota
+  group: mobile-ota-${{ github.event_name }}
   cancel-in-progress: false
 
 permissions:
@@ -116,9 +117,9 @@ jobs:
         id: xcode
         run: echo "version=$(xcodebuild -version | head -1 | tr ' ' '-')" >> "$GITHUB_OUTPUT"
 
-      - name: Cache Release simulator app
+      - name: Restore Release simulator app
         id: app-cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
           key: ios-release-sim-${{ steps.xcode.outputs.version }}-${{ hashFiles('apps/mobile/native-fingerprint.json') }}
@@ -147,6 +148,14 @@ jobs:
             -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath ios/build \
             CODE_SIGNING_ALLOWED=NO SKIP_BUNDLING=1 build -quiet
           rm -f ios/GoogleService-Info.plist
+
+      # 기동 확인이 실패해도 빌드(~45분)는 남긴다 — actions/cache 는 잡이 성공해야만 저장한다.
+      - name: Save Release simulator app
+        if: steps.app-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
+          key: ${{ steps.app-cache.outputs.cache-primary-key }}
 
       - name: Boot check (cold start ×3)
         run: bash apps/mobile/scripts/boot-check.sh apps/mobile/ios/build/Build/Products/Release-iphonesimulator/jirumAlarmMobile.app
@@ -177,9 +186,9 @@ jobs:
       - name: Install packages
         run: pnpm install --frozen-lockfile
 
-      - name: Cache Release APK
+      - name: Restore Release APK
         id: apk-cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: apps/mobile/android/boot-check.apk
           key: android-release-x86_64-${{ hashFiles('apps/mobile/native-fingerprint.json') }}
@@ -208,6 +217,13 @@ jobs:
             -Pandroid.injected.signing.key.alias=k -Pandroid.injected.signing.key.password=android
           cp app/build/outputs/apk/release/app-release.apk boot-check.apk
           rm -f app/google-services.json
+
+      - name: Save Release APK
+        if: steps.apk-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: apps/mobile/android/boot-check.apk
+          key: ${{ steps.apk-cache.outputs.cache-primary-key }}
 
       - name: Enable KVM
         run: |
