@@ -1,4 +1,4 @@
-import { QueryHookOptions, useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client/react';
 
 import {
   QueryDailyServiceViewStatsQuery,
@@ -39,6 +39,8 @@ import {
 } from '@/graphql/stats';
 import { DateInterval, ProviderType } from '@/types/stats';
 
+import { QueryOptions } from './options';
+
 // 날짜 범위 쿼리 공통 변수 — interval/providerType 은 화면이 쓰는 로컬 enum(@/types/stats)이라
 // 생성된 *QueryVariables 대신 손으로 둔다 (생성 enum 과 멤버 이름이 달라 서로 대입되지 않는다)
 interface DateRangeVariables {
@@ -54,15 +56,13 @@ export const useUserRegistrationStats = () => {
     QueryUserRegistrationStats,
     {
       fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
     },
   );
 };
 
 export const useUserDemographicStats = (
-  options?: QueryHookOptions<
-    QueryUserDemographicStatsQuery,
-    QueryUserDemographicStatsQueryVariables
-  >,
+  options?: QueryOptions<QueryUserDemographicStatsQuery, QueryUserDemographicStatsQueryVariables>,
 ) => {
   return useQuery<QueryUserDemographicStatsQuery, QueryUserDemographicStatsQueryVariables>(
     QueryUserDemographicStats,
@@ -75,10 +75,7 @@ export const useUserDemographicStats = (
 
 export const useTopFavoriteCategories = (
   variables?: QueryTopFavoriteCategoriesQueryVariables,
-  options?: QueryHookOptions<
-    QueryTopFavoriteCategoriesQuery,
-    QueryTopFavoriteCategoriesQueryVariables
-  >,
+  options?: QueryOptions<QueryTopFavoriteCategoriesQuery, QueryTopFavoriteCategoriesQueryVariables>,
 ) => {
   return useQuery<QueryTopFavoriteCategoriesQuery, QueryTopFavoriteCategoriesQueryVariables>(
     QueryTopFavoriteCategories,
@@ -97,6 +94,7 @@ export const useProductRegistrationStats = () => {
     QueryProductRegistrationStats,
     {
       fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
     },
   );
 };
@@ -104,6 +102,7 @@ export const useProductRegistrationStats = () => {
 export const useHotDealRatioStats = () => {
   return useLazyQuery<QueryHotDealRatioStatsQuery, DateRangeVariables>(QueryHotDealRatioStats, {
     fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
   });
 };
 
@@ -112,12 +111,13 @@ export const useHotDealTypeDistribution = () => {
     QueryHotDealTypeDistribution,
     {
       fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
     },
   );
 };
 
 export const useProductCountByCategory = (
-  options?: QueryHookOptions<
+  options?: QueryOptions<
     QueryProductCountByCategoryQuery,
     QueryProductCountByCategoryQueryVariables
   >,
@@ -132,7 +132,7 @@ export const useProductCountByCategory = (
 };
 
 export const useProductCountByProvider = (
-  options?: QueryHookOptions<
+  options?: QueryOptions<
     QueryProductCountByProviderQuery,
     QueryProductCountByProviderQueryVariables
   >,
@@ -151,6 +151,7 @@ export const useProductPriceDistribution = () => {
     QueryProductPriceDistribution,
     {
       fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
     },
   );
 };
@@ -162,13 +163,14 @@ export const useDailyServiceViewStats = () => {
     QueryDailyServiceViewStats,
     {
       fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
     },
   );
 };
 
 export const useTopNotificationKeywords = (
   variables?: QueryTopNotificationKeywordsQueryVariables,
-  options?: QueryHookOptions<
+  options?: QueryOptions<
     QueryTopNotificationKeywordsQuery,
     QueryTopNotificationKeywordsQueryVariables
   >,
@@ -196,13 +198,14 @@ export const useProductRegistrationStatsByProvider = () => {
     QueryProductRegistrationStatsByProvider,
     {
       fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
     },
   );
 };
 
 export const useProviderHealthStatus = (
   variables?: ProviderTypeFilter,
-  options?: QueryHookOptions<QueryProviderHealthStatusQuery, ProviderTypeFilter>,
+  options?: QueryOptions<QueryProviderHealthStatusQuery, ProviderTypeFilter>,
 ) => {
   return useQuery<QueryProviderHealthStatusQuery, ProviderTypeFilter>(QueryProviderHealthStatus, {
     variables,
@@ -215,5 +218,6 @@ export const useProviderHealthStatus = (
 export const useThumbnailStats = () => {
   return useLazyQuery<QueryThumbnailStatsQuery, DateRangeVariables>(QueryThumbnailStats, {
     fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
   });
 };

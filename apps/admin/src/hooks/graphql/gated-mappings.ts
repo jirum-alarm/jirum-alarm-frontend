@@ -1,4 +1,4 @@
-import { QueryHookOptions, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
@@ -9,6 +9,8 @@ import {
 } from '@/generated/gql/graphql';
 import { MutationRematchGatedMapping, QueryGatedMappings } from '@/graphql/gated-mappings';
 
+import { QueryOptions } from './options';
+
 /**
  * 게이트 차단 매핑(추출 오염 / 묶음글 등) 목록 조회.
  * matchingSource 를 명시하지 않으면 모든 not_matchable(target NULL)이 나오므로,
@@ -16,7 +18,7 @@ import { MutationRematchGatedMapping, QueryGatedMappings } from '@/graphql/gated
  */
 export const useGetGatedMappings = (
   variables?: Partial<QueryGatedMappingsQueryVariables>,
-  options?: QueryHookOptions<QueryGatedMappingsQuery, QueryGatedMappingsQueryVariables>,
+  options?: QueryOptions<QueryGatedMappingsQuery, QueryGatedMappingsQueryVariables>,
 ) => {
   return useQuery<QueryGatedMappingsQuery, QueryGatedMappingsQueryVariables>(QueryGatedMappings, {
     variables: {

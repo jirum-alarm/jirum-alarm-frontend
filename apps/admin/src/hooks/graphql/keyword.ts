@@ -1,11 +1,4 @@
-import {
-  MutationHookOptions,
-  QueryHookOptions,
-  SuspenseQueryHookOptions,
-  useMutation,
-  useQuery,
-  useSuspenseQuery,
-} from '@apollo/client';
+import { useMutation, useQuery, useSuspenseQuery } from '@apollo/client/react';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
@@ -29,6 +22,8 @@ import {
   QueryHotDealKeywordsByAdmin,
 } from '@/graphql/keyword';
 import { HotDealKeywordOrderType, HotDealKeywordType, OrderOptionType } from '@/types/keyword';
+
+import { QueryOptions } from './options';
 
 // 화면은 로컬 enum(@/types/keyword)을 쓴다 — 생성 enum 과 멤버 이름이 달라(POSITIVE vs Positive)
 // 서로 대입되지 않으므로, enum 이 걸린 자리만 로컬 enum 으로 돌려 둔다
@@ -63,7 +58,7 @@ interface AddHotDealKeywordVariable {
 
 export const useAddHotDealKeyword = (
   keywordType: HotDealKeywordType,
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationAddHotDealKeywordByAdminMutation,
     AddHotDealKeywordVariable
   >,
@@ -89,7 +84,7 @@ export const useAddHotDealKeyword = (
 
 export const useRemoveHotDealKeyword = (
   keywordType: HotDealKeywordType,
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationRemoveHotDealKeywordByAdminMutation,
     MutationRemoveHotDealKeywordByAdminMutationVariables
   >,
@@ -132,7 +127,7 @@ export const useRemoveHotDealKeyword = (
 
 export const useUpdateHotDealKeyword = (
   keywordType: HotDealKeywordType,
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationUpdateHotDealKeywordByAdminMutation,
     MutationUpdateHotDealKeywordByAdminMutationVariables
   >,
@@ -182,7 +177,7 @@ interface GetHotDealKeywordsVariables {
 }
 
 export const useGetHotDealKeywords = (
-  queryOptions?: SuspenseQueryHookOptions<HotDealKeywordsData, GetHotDealKeywordsVariables>,
+  queryOptions?: useSuspenseQuery.Options<GetHotDealKeywordsVariables>,
 ) => {
   const { variables, ...rest } = queryOptions ?? {};
 
@@ -202,7 +197,7 @@ export const useGetHotDealKeywords = (
 };
 
 export const useGetHotDealKeyword = (
-  queryOptions?: QueryHookOptions<HotDealKeywordData, QueryHotDealKeywordByAdminQueryVariables>,
+  queryOptions?: QueryOptions<HotDealKeywordData, QueryHotDealKeywordByAdminQueryVariables>,
 ) => {
   const { variables, ...rest } = queryOptions ?? {};
 
@@ -218,9 +213,10 @@ export const useGetHotDealKeyword = (
 };
 
 export const useGetHotDealDetailKeyword = (
-  queryOptions: QueryHookOptions<
-    HotDealKeywordDetailData,
-    QueryHotDealKeywordDetailByAdminQueryVariables
+  // id 가 필수라 variables 도 필수인 원래 옵션 타입(부분 데이터만 뺀다)
+  queryOptions: Omit<
+    useQuery.Options<HotDealKeywordDetailData, QueryHotDealKeywordDetailByAdminQueryVariables>,
+    'returnPartialData'
   >,
 ) => {
   return useQuery<HotDealKeywordDetailData, QueryHotDealKeywordDetailByAdminQueryVariables>(

@@ -1,10 +1,12 @@
-import { QueryHookOptions, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 
 import { CommentsByAdminQuery, CommentsByAdminQueryVariables } from '@/generated/gql/graphql';
 import { QueryCommentsByAdmin } from '@/graphql/comments';
 
+import { QueryOptions } from './options';
+
 export const useGetComments = (
-  queryOptions: QueryHookOptions<CommentsByAdminQuery, CommentsByAdminQueryVariables>,
+  queryOptions: QueryOptions<CommentsByAdminQuery, CommentsByAdminQueryVariables>,
 ) => {
   const { variables, ...rest } = queryOptions;
   return useQuery<CommentsByAdminQuery, CommentsByAdminQueryVariables>(QueryCommentsByAdmin, {

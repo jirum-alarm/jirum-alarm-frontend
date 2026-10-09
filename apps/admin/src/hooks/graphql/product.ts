@@ -1,4 +1,4 @@
-import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
@@ -13,6 +13,8 @@ import {
 } from '@/generated/gql/graphql';
 import { MutationHardDeleteProductByAdmin, QueryProduct, QueryProducts } from '@/graphql/product';
 
+import { QueryOptions } from './options';
+
 // 스키마는 categoryIds(목록)만 받는다 — 화면은 단일 선택이라 훅이 categoryId 를 받아 감싼다
 export type GetProductsVariables = Omit<Partial<QueryProductsQueryVariables>, 'categoryIds'> & {
   categoryId?: number;
@@ -20,7 +22,7 @@ export type GetProductsVariables = Omit<Partial<QueryProductsQueryVariables>, 'c
 
 export const useGetProducts = (
   variables?: GetProductsVariables,
-  options?: QueryHookOptions<QueryProductsQuery, QueryProductsQueryVariables>,
+  options?: QueryOptions<QueryProductsQuery, QueryProductsQueryVariables>,
 ) => {
   return useQuery<QueryProductsQuery, QueryProductsQueryVariables>(QueryProducts, {
     variables: {
@@ -40,7 +42,7 @@ export const useGetProducts = (
 
 export const useGetProduct = (
   variables: QueryProductQueryVariables,
-  options?: Omit<QueryHookOptions<QueryProductQuery, QueryProductQueryVariables>, 'variables'>,
+  options?: Omit<QueryOptions<QueryProductQuery, QueryProductQueryVariables>, 'variables'>,
 ) => {
   return useQuery<QueryProductQuery, QueryProductQueryVariables>(QueryProduct, {
     variables,
@@ -50,7 +52,7 @@ export const useGetProduct = (
 };
 
 export const useHardDeleteProductByAdmin = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationHardDeleteProductByAdminMutation,
     MutationHardDeleteProductByAdminMutationVariables
   >,

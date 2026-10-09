@@ -1,4 +1,4 @@
-import { QueryHookOptions, useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client/react';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
@@ -21,6 +21,8 @@ import {
   QuerySimilarProductsByTitle,
 } from '@/graphql/brandProduct';
 
+import { QueryOptions } from './options';
+
 export type BrandProduct =
   QueryBrandProductsOrderByMatchCountQuery['brandProductsOrderByMatchCount'][number];
 
@@ -30,6 +32,7 @@ export const useGetBrandProductsOrderByMatchCountLazy = () => {
     QueryBrandProductsOrderByMatchCountQueryVariables
   >(QueryBrandProductsOrderByMatchCount, {
     fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
   });
 };
 
@@ -38,7 +41,7 @@ export type BrandItem =
 
 export const useGetBrandItemsOrderByTotalMatchCount = (
   variables?: Partial<QueryBrandItemsOrderByTotalMatchCountQueryVariables>,
-  options?: QueryHookOptions<
+  options?: QueryOptions<
     QueryBrandItemsOrderByTotalMatchCountQuery,
     QueryBrandItemsOrderByTotalMatchCountQueryVariables
   >,
@@ -62,12 +65,13 @@ export const useGetBrandItemsOrderByTotalMatchCountLazy = () => {
     QueryBrandItemsOrderByTotalMatchCountQueryVariables
   >(QueryBrandItemsOrderByTotalMatchCount, {
     fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
   });
 };
 
 export const useGetBrandItemsByMatchCountTotalCount = (
   variables?: QueryBrandItemsByMatchCountTotalCountQueryVariables,
-  options?: QueryHookOptions<
+  options?: QueryOptions<
     QueryBrandItemsByMatchCountTotalCountQuery,
     QueryBrandItemsByMatchCountTotalCountQueryVariables
   >,
@@ -87,6 +91,7 @@ export const useGetBrandItemsByMatchCountTotalCountLazy = () => {
     QueryBrandItemsByMatchCountTotalCountQueryVariables
   >(QueryBrandItemsByMatchCountTotalCount, {
     fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
   });
 };
 
@@ -97,7 +102,7 @@ export type SimilarProductByTitle =
 export const useGetSimilarProductsByTitleLazy = () => {
   return useLazyQuery<QuerySimilarProductsByTitleQuery, QuerySimilarProductsByTitleQueryVariables>(
     QuerySimilarProductsByTitle,
-    { fetchPolicy: 'network-only' },
+    { fetchPolicy: 'network-only', notifyOnNetworkStatusChange: true },
   );
 };
 

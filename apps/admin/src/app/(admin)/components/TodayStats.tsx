@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 
+import { ignoreLazyRejection } from '@/hooks/graphql/options';
 import { useMyAdminAccess } from '@/hooks/graphql/permission';
 import {
   useDailyServiceViewStats,
@@ -34,9 +35,9 @@ const TodayStats = () => {
   useEffect(() => {
     if (!canStats) return;
     const variables = { ...toStatsDateRange(yesterday, today), interval: DateInterval.DAILY };
-    fetchUsers({ variables });
-    fetchProducts({ variables });
-    fetchViews({ variables });
+    fetchUsers({ variables }).catch(ignoreLazyRejection);
+    fetchProducts({ variables }).catch(ignoreLazyRejection);
+    fetchViews({ variables }).catch(ignoreLazyRejection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canStats]);
 

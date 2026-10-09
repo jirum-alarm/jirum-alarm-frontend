@@ -13,8 +13,8 @@
     "lint:check": "next lint"
   },
   "dependencies": {
-    "@apollo/client": "^3.14.1",
-    "@apollo/experimental-nextjs-app-support": "^0.11.11",
+    "@apollo/client": "^4.3.3",
+    "@apollo/client-integration-nextjs": "^0.14.5",
     "@tanstack/react-virtual": "^3.14.13",
     "apexcharts": "^3.54.1",
     "dayjs": "^1.11.23",
@@ -23,7 +23,8 @@
     "react": "19.3.0",
     "react-apexcharts": "^1.9.0",
     "react-dom": "19.3.0",
-    "react-intersection-observer": "^9.16.0"
+    "react-intersection-observer": "^9.16.0",
+    "rxjs": "^7.8.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^6.3.1",

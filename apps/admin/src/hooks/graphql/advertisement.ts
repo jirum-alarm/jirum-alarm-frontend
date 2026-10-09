@@ -1,4 +1,4 @@
-import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 
 import {
   AdReportQuery,
@@ -18,6 +18,8 @@ import {
   QueryAdReport,
   QueryAdsByAdmin,
 } from '@/graphql/advertisement';
+
+import { QueryOptions } from './options';
 
 // ── graphic 타입 (백엔드 advertise-graphic.interface 와 1:1, JSON scalar) ──
 // graphic 은 스키마상 JSONObject(생성 타입 any)이고 slotType/slotLocation 은 문자열 유니온으로 쓰고 있어,
@@ -115,7 +117,7 @@ export type UpdateAdInput = Partial<CreateAdInput>;
 
 export const useAdsByAdmin = (
   variables?: { slotLocation?: AdSlotLocation; isActive?: boolean },
-  options?: QueryHookOptions,
+  options?: QueryOptions<{ adsByAdmin: AdCreative[] }>,
 ) =>
   useQuery<{ adsByAdmin: AdCreative[] }>(QueryAdsByAdmin, {
     variables,
@@ -125,7 +127,7 @@ export const useAdsByAdmin = (
 
 export const useAdReport = (
   variables: AdReportQueryVariables,
-  options?: QueryHookOptions<AdReportQuery, AdReportQueryVariables>,
+  options?: QueryOptions<AdReportQuery, AdReportQueryVariables>,
 ) =>
   useQuery<AdReportQuery, AdReportQueryVariables>(QueryAdReport, {
     variables,
@@ -134,7 +136,7 @@ export const useAdReport = (
   });
 
 export const useCreateAdAssetUploadUrl = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     CreateAdAssetUploadUrlMutation,
     CreateAdAssetUploadUrlMutationVariables
   >,
@@ -145,7 +147,7 @@ export const useCreateAdAssetUploadUrl = (
   );
 
 export const useCreateAd = (
-  options?: MutationHookOptions<CreateAdMutation, { input: CreateAdInput }>,
+  options?: useMutation.Options<CreateAdMutation, { input: CreateAdInput }>,
 ) =>
   useMutation<CreateAdMutation, { input: CreateAdInput }>(MutationCreateAd, {
     refetchQueries: [{ query: QueryAdsByAdmin, variables: {} }],
@@ -153,7 +155,7 @@ export const useCreateAd = (
   });
 
 export const useUpdateAd = (
-  options?: MutationHookOptions<UpdateAdMutation, { id: number; input: UpdateAdInput }>,
+  options?: useMutation.Options<UpdateAdMutation, { id: number; input: UpdateAdInput }>,
 ) =>
   useMutation<UpdateAdMutation, { id: number; input: UpdateAdInput }>(MutationUpdateAd, {
     refetchQueries: [{ query: QueryAdsByAdmin, variables: {} }],
@@ -161,7 +163,7 @@ export const useUpdateAd = (
   });
 
 export const useSetAdActive = (
-  options?: MutationHookOptions<SetAdActiveMutation, SetAdActiveMutationVariables>,
+  options?: useMutation.Options<SetAdActiveMutation, SetAdActiveMutationVariables>,
 ) =>
   useMutation<SetAdActiveMutation, SetAdActiveMutationVariables>(MutationSetAdActive, {
     refetchQueries: [{ query: QueryAdsByAdmin, variables: {} }],

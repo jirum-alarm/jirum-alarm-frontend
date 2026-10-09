@@ -1,4 +1,4 @@
-import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 
 import {
   AffiliateSalesTrendQuery,
@@ -59,8 +59,10 @@ import {
   QueryRevenueTrend,
 } from '@/graphql/profitLink';
 
+import { QueryOptions } from './options';
+
 export const useQueryHasTossSession = (
-  options?: QueryHookOptions<HasTossSessionQuery, HasTossSessionQueryVariables>,
+  options?: QueryOptions<HasTossSessionQuery, HasTossSessionQueryVariables>,
 ) => {
   return useQuery<HasTossSessionQuery, HasTossSessionQueryVariables>(QueryHasTossSession, {
     fetchPolicy: 'network-only',
@@ -69,7 +71,7 @@ export const useQueryHasTossSession = (
 };
 
 export const useMutationSetTossSession = (
-  options?: MutationHookOptions<SetTossSessionMutation, SetTossSessionMutationVariables>,
+  options?: useMutation.Options<SetTossSessionMutation, SetTossSessionMutationVariables>,
 ) => {
   return useMutation<SetTossSessionMutation, SetTossSessionMutationVariables>(
     MutationSetTossSession,
@@ -80,7 +82,7 @@ export const useMutationSetTossSession = (
 };
 
 export const useQueryHasThreeHaSession = (
-  options?: QueryHookOptions<HasThreeHaSessionQuery, HasThreeHaSessionQueryVariables>,
+  options?: QueryOptions<HasThreeHaSessionQuery, HasThreeHaSessionQueryVariables>,
 ) => {
   return useQuery<HasThreeHaSessionQuery, HasThreeHaSessionQueryVariables>(QueryHasThreeHaSession, {
     fetchPolicy: 'network-only',
@@ -89,7 +91,7 @@ export const useQueryHasThreeHaSession = (
 };
 
 export const useMutationSetThreeHaSession = (
-  options?: MutationHookOptions<SetThreeHaSessionMutation, SetThreeHaSessionMutationVariables>,
+  options?: useMutation.Options<SetThreeHaSessionMutation, SetThreeHaSessionMutationVariables>,
 ) => {
   return useMutation<SetThreeHaSessionMutation, SetThreeHaSessionMutationVariables>(
     MutationSetThreeHaSession,
@@ -98,7 +100,7 @@ export const useMutationSetThreeHaSession = (
 };
 
 export const useMutationIssueTossProfitLink = (
-  options?: MutationHookOptions<IssueTossProfitLinkMutation, IssueTossProfitLinkMutationVariables>,
+  options?: useMutation.Options<IssueTossProfitLinkMutation, IssueTossProfitLinkMutationVariables>,
 ) => {
   return useMutation<IssueTossProfitLinkMutation, IssueTossProfitLinkMutationVariables>(
     MutationIssueTossProfitLink,
@@ -107,7 +109,7 @@ export const useMutationIssueTossProfitLink = (
 };
 
 export const useQueryHasOhouSession = (
-  options?: QueryHookOptions<HasOhouSessionQuery, HasOhouSessionQueryVariables>,
+  options?: QueryOptions<HasOhouSessionQuery, HasOhouSessionQueryVariables>,
 ) => {
   return useQuery<HasOhouSessionQuery, HasOhouSessionQueryVariables>(QueryHasOhouSession, {
     fetchPolicy: 'network-only',
@@ -116,7 +118,7 @@ export const useQueryHasOhouSession = (
 };
 
 export const useMutationSetOhouSession = (
-  options?: MutationHookOptions<SetOhouSessionMutation, SetOhouSessionMutationVariables>,
+  options?: useMutation.Options<SetOhouSessionMutation, SetOhouSessionMutationVariables>,
 ) => {
   return useMutation<SetOhouSessionMutation, SetOhouSessionMutationVariables>(
     MutationSetOhouSession,
@@ -127,7 +129,7 @@ export const useMutationSetOhouSession = (
 };
 
 export const useMutationIssueOhouProfitLink = (
-  options?: MutationHookOptions<IssueOhouProfitLinkMutation, IssueOhouProfitLinkMutationVariables>,
+  options?: useMutation.Options<IssueOhouProfitLinkMutation, IssueOhouProfitLinkMutationVariables>,
 ) => {
   return useMutation<IssueOhouProfitLinkMutation, IssueOhouProfitLinkMutationVariables>(
     MutationIssueOhouProfitLink,
@@ -136,7 +138,7 @@ export const useMutationIssueOhouProfitLink = (
 };
 
 export const useQueryHasKakaoSession = (
-  options?: QueryHookOptions<HasKakaoSessionQuery, HasKakaoSessionQueryVariables>,
+  options?: QueryOptions<HasKakaoSessionQuery, HasKakaoSessionQueryVariables>,
 ) => {
   return useQuery<HasKakaoSessionQuery, HasKakaoSessionQueryVariables>(QueryHasKakaoSession, {
     fetchPolicy: 'network-only',
@@ -145,7 +147,7 @@ export const useQueryHasKakaoSession = (
 };
 
 export const useMutationSetKakaoSession = (
-  options?: MutationHookOptions<SetKakaoSessionMutation, SetKakaoSessionMutationVariables>,
+  options?: useMutation.Options<SetKakaoSessionMutation, SetKakaoSessionMutationVariables>,
 ) => {
   return useMutation<SetKakaoSessionMutation, SetKakaoSessionMutationVariables>(
     MutationSetKakaoSession,
@@ -156,7 +158,7 @@ export const useMutationSetKakaoSession = (
 };
 
 export const useMutationIssueKakaoProfitLink = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     IssueKakaoProfitLinkMutation,
     IssueKakaoProfitLinkMutationVariables
   >,
@@ -170,7 +172,7 @@ export const useMutationIssueKakaoProfitLink = (
 // ─── 수익링크 대시보드 ───
 
 export const useProfitLinkProviderHealth = (
-  options?: QueryHookOptions<ProfitLinkProviderHealthQuery, ProfitLinkProviderHealthQueryVariables>,
+  options?: QueryOptions<ProfitLinkProviderHealthQuery, ProfitLinkProviderHealthQueryVariables>,
 ) =>
   useQuery<ProfitLinkProviderHealthQuery, ProfitLinkProviderHealthQueryVariables>(
     QueryProfitLinkProviderHealth,

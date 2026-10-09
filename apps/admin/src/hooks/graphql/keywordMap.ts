@@ -1,4 +1,4 @@
-import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
@@ -30,6 +30,8 @@ import {
 } from '@/graphql/keywordMap';
 import { KeywordMapGroupOrderType, OrderOptionType } from '@/types/keyword';
 
+import { QueryOptions } from './options';
+
 // ── Group List ──
 
 // orderBy/orderOption 은 화면이 쓰는 로컬 enum(@/types/keyword)이라 생성 변수 타입 대신 손으로 둔다
@@ -41,7 +43,7 @@ interface GetKeywordMapGroupsVariables {
 }
 
 export const useGetKeywordMapGroups = (
-  queryOptions?: QueryHookOptions<QueryKeywordMapGroupsByAdminQuery, GetKeywordMapGroupsVariables>,
+  queryOptions?: QueryOptions<QueryKeywordMapGroupsByAdminQuery, GetKeywordMapGroupsVariables>,
 ) => {
   const { variables, ...rest } = queryOptions ?? {};
 
@@ -62,9 +64,10 @@ export const useGetKeywordMapGroups = (
 // ── Group Detail ──
 
 export const useGetKeywordMapGroup = (
-  queryOptions?: QueryHookOptions<
-    QueryKeywordMapGroupByAdminQuery,
-    QueryKeywordMapGroupByAdminQueryVariables
+  // id 가 필수라 variables 도 필수인 원래 옵션 타입(부분 데이터만 뺀다)
+  queryOptions: Omit<
+    useQuery.Options<QueryKeywordMapGroupByAdminQuery, QueryKeywordMapGroupByAdminQueryVariables>,
+    'returnPartialData'
   >,
 ) => {
   return useQuery<QueryKeywordMapGroupByAdminQuery, QueryKeywordMapGroupByAdminQueryVariables>(
@@ -78,7 +81,7 @@ export const useGetKeywordMapGroup = (
 // ── Add Group ──
 
 export const useAddKeywordMapGroup = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationAddKeywordMapGroupByAdminMutation,
     MutationAddKeywordMapGroupByAdminMutationVariables
   >,
@@ -104,7 +107,7 @@ export const useAddKeywordMapGroup = (
 // ── Update Group ──
 
 export const useUpdateKeywordMapGroup = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationUpdateKeywordMapGroupByAdminMutation,
     MutationUpdateKeywordMapGroupByAdminMutationVariables
   >,
@@ -145,7 +148,7 @@ export const useUpdateKeywordMapGroup = (
 // ── Remove Group ──
 
 export const useRemoveKeywordMapGroup = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationRemoveKeywordMapGroupByAdminMutation,
     MutationRemoveKeywordMapGroupByAdminMutationVariables
   >,
@@ -187,7 +190,7 @@ export const useRemoveKeywordMapGroup = (
 
 export const useAddKeywordMapEntry = (
   groupId: number,
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationAddKeywordMapEntryByAdminMutation,
     MutationAddKeywordMapEntryByAdminMutationVariables
   >,
@@ -210,7 +213,7 @@ export const useAddKeywordMapEntry = (
 
 export const useAddKeywordMapEntries = (
   groupId: number,
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationAddKeywordMapEntriesByAdminMutation,
     MutationAddKeywordMapEntriesByAdminMutationVariables
   >,
@@ -233,7 +236,7 @@ export const useAddKeywordMapEntries = (
 
 export const useRemoveKeywordMapEntry = (
   groupId: number,
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationRemoveKeywordMapEntryByAdminMutation,
     MutationRemoveKeywordMapEntryByAdminMutationVariables
   >,

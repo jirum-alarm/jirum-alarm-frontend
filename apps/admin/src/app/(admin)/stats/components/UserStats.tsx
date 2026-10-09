@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 import Chart from '@/components/Chart';
 import RankList from '@/components/RankList';
+import { ignoreLazyRejection } from '@/hooks/graphql/options';
 import {
   useTopFavoriteCategories,
   useUserDemographicStats,
@@ -26,7 +27,7 @@ const UserStats = () => {
   useEffect(() => {
     fetchRegistrationStats({
       variables: { ...toStatsDateRange(range.startDate, range.endDate), interval: range.interval },
-    });
+    }).catch(ignoreLazyRejection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [range.startDate, range.endDate, range.interval]);
 

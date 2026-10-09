@@ -8,6 +8,7 @@ import {
   useAddProductMapping,
   useGetSimilarProductsByTitleLazy,
 } from '@/hooks/graphql/brandProduct';
+import { ignoreLazyRejection } from '@/hooks/graphql/options';
 
 interface SimilarDealsPanelProps {
   brandProduct: BrandProduct;
@@ -45,7 +46,7 @@ const SimilarDealsPanel = ({
     if (!t) return;
     setQuery(t);
     setChecked(new Set());
-    search({ variables: { title: t, limit: SIMILAR_LIMIT } });
+    search({ variables: { title: t, limit: SIMILAR_LIMIT } }).catch(ignoreLazyRejection);
   };
 
   useEffect(() => {

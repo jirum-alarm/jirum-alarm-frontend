@@ -1,4 +1,4 @@
-import { QueryHookOptions, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
@@ -9,11 +9,13 @@ import {
 } from '@/generated/gql/graphql';
 import { QueryUserByAdmin, QueryUsersByAdmin } from '@/graphql/user';
 
+import { QueryOptions } from './options';
+
 export type UserListItem = QueryUsersByAdminQuery['usersByAdmin'][number];
 
 export const useGetUsersByAdmin = (
   variables?: Partial<QueryUsersByAdminQueryVariables>,
-  options?: QueryHookOptions<QueryUsersByAdminQuery, QueryUsersByAdminQueryVariables>,
+  options?: QueryOptions<QueryUsersByAdminQuery, QueryUsersByAdminQueryVariables>,
 ) => {
   return useQuery<QueryUsersByAdminQuery, QueryUsersByAdminQueryVariables>(QueryUsersByAdmin, {
     variables: {
@@ -28,10 +30,7 @@ export const useGetUsersByAdmin = (
 
 export const useGetUserByAdmin = (
   variables: QueryUserByAdminQueryVariables,
-  options?: Omit<
-    QueryHookOptions<QueryUserByAdminQuery, QueryUserByAdminQueryVariables>,
-    'variables'
-  >,
+  options?: Omit<QueryOptions<QueryUserByAdminQuery, QueryUserByAdminQueryVariables>, 'variables'>,
 ) => {
   return useQuery<QueryUserByAdminQuery, QueryUserByAdminQueryVariables>(QueryUserByAdmin, {
     variables,

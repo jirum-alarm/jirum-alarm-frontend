@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ProductMappingTarget, ProductMappingVerificationStatus } from '@/generated/gql/graphql';
 import { BrandProduct } from '@/hooks/graphql/brandProduct';
+import { ignoreLazyRejection } from '@/hooks/graphql/options';
 
 import { PendingVerificationItem } from '../../types';
 
@@ -146,7 +147,7 @@ export function useVerificationList({
             ? ALL_VERIFICATION_STATUSES
             : [ProductMappingVerificationStatus.PendingVerification],
         },
-      });
+      }).catch(ignoreLazyRejection);
     }
   }, [
     selectedBrandProduct,

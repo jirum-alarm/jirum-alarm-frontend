@@ -1,10 +1,4 @@
-import {
-  MutationHookOptions,
-  QueryHookOptions,
-  useLazyQuery,
-  useMutation,
-  useQuery,
-} from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client/react';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
@@ -35,16 +29,16 @@ import {
   QueryVerificationHistory,
 } from '@/graphql/verification';
 
+import { QueryOptions } from './options';
+
 export const useGetPendingVerificationsLazy = (
-  options?: QueryHookOptions<
-    QueryPendingVerificationsQuery,
-    QueryPendingVerificationsQueryVariables
-  >,
+  options?: QueryOptions<QueryPendingVerificationsQuery, QueryPendingVerificationsQueryVariables>,
 ) => {
   return useLazyQuery<QueryPendingVerificationsQuery, QueryPendingVerificationsQueryVariables>(
     QueryPendingVerifications,
     {
       fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
       ...options,
     },
   );
@@ -52,7 +46,7 @@ export const useGetPendingVerificationsLazy = (
 
 export const useGetVerificationHistory = (
   variables?: Partial<QueryVerificationHistoryQueryVariables>,
-  options?: QueryHookOptions<QueryVerificationHistoryQuery, QueryVerificationHistoryQueryVariables>,
+  options?: QueryOptions<QueryVerificationHistoryQuery, QueryVerificationHistoryQueryVariables>,
 ) => {
   return useQuery<QueryVerificationHistoryQuery, QueryVerificationHistoryQueryVariables>(
     QueryVerificationHistory,
@@ -69,7 +63,7 @@ export const useGetVerificationHistory = (
 };
 
 export const useVerifyProductMapping = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationVerifyProductMappingMutation,
     MutationVerifyProductMappingMutationVariables
   >,
@@ -84,7 +78,7 @@ export const useVerifyProductMapping = (
 };
 
 export const useBatchVerifyProductMapping = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationBatchVerifyProductMappingMutation,
     MutationBatchVerifyProductMappingMutationVariables
   >,
@@ -99,7 +93,7 @@ export const useBatchVerifyProductMapping = (
 };
 
 export const useRemoveProductMapping = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationRemoveProductMappingMutation,
     MutationRemoveProductMappingMutationVariables
   >,
@@ -114,7 +108,7 @@ export const useRemoveProductMapping = (
 };
 
 export const useCancelVerification = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationCancelVerificationMutation,
     MutationCancelVerificationMutationVariables
   >,
@@ -130,7 +124,7 @@ export const useCancelVerification = (
 
 export const useGetPendingVerificationsTotalCount = (
   variables?: QueryPendingVerificationsTotalCountQueryVariables,
-  options?: QueryHookOptions<
+  options?: QueryOptions<
     QueryPendingVerificationsTotalCountQuery,
     QueryPendingVerificationsTotalCountQueryVariables
   >,
@@ -157,5 +151,6 @@ export const useGetPendingVerificationsTotalCountLazy = () => {
     QueryPendingVerificationsTotalCountQueryVariables
   >(QueryPendingVerificationsTotalCount, {
     fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
   });
 };

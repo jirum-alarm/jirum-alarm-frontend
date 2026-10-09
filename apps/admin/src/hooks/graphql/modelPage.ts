@@ -1,4 +1,4 @@
-import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 
 import {
   MutationSetModelPagePublishedByAdminMutation,
@@ -14,9 +14,11 @@ import {
   QueryModelPagesByAdmin,
 } from '@/graphql/modelPage';
 
+import { QueryOptions } from './options';
+
 export const useGetModelPagesByAdmin = (
   variables?: QueryModelPagesByAdminQueryVariables,
-  options?: QueryHookOptions<QueryModelPagesByAdminQuery, QueryModelPagesByAdminQueryVariables>,
+  options?: QueryOptions<QueryModelPagesByAdminQuery, QueryModelPagesByAdminQueryVariables>,
 ) => {
   return useQuery<QueryModelPagesByAdminQuery, QueryModelPagesByAdminQueryVariables>(
     QueryModelPagesByAdmin,
@@ -32,7 +34,7 @@ export const useGetModelPagesByAdmin = (
 
 export const useGetModelPagePreviewByAdmin = (
   variables: QueryModelPagePreviewByAdminQueryVariables,
-  options?: QueryHookOptions<
+  options?: QueryOptions<
     QueryModelPagePreviewByAdminQuery,
     QueryModelPagePreviewByAdminQueryVariables
   >,
@@ -48,7 +50,7 @@ export const useGetModelPagePreviewByAdmin = (
 };
 
 export const useSetModelPagePublishedByAdmin = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationSetModelPagePublishedByAdminMutation,
     MutationSetModelPagePublishedByAdminMutationVariables
   >,

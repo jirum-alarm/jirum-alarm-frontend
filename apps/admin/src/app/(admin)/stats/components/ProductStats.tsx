@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 import Chart from '@/components/Chart';
 import RankList from '@/components/RankList';
+import { ignoreLazyRejection } from '@/hooks/graphql/options';
 import {
   useHotDealRatioStats,
   useHotDealTypeDistribution,
@@ -43,10 +44,10 @@ const ProductStats = () => {
       ...toStatsDateRange(range.startDate, range.endDate),
       interval: range.interval,
     };
-    fetchProductStats({ variables });
-    fetchHotDealRatio({ variables });
-    fetchHotDealType({ variables });
-    fetchPriceDistribution({ variables });
+    fetchProductStats({ variables }).catch(ignoreLazyRejection);
+    fetchHotDealRatio({ variables }).catch(ignoreLazyRejection);
+    fetchHotDealType({ variables }).catch(ignoreLazyRejection);
+    fetchPriceDistribution({ variables }).catch(ignoreLazyRejection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [range.startDate, range.endDate, range.interval]);
 

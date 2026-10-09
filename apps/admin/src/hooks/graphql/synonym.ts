@@ -1,4 +1,4 @@
-import { MutationHookOptions, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 import {
   MutationAddHotDealExcludeKeywordByAdminMutation,
@@ -20,7 +20,7 @@ import {
 
 export const useAddHotDealKeywordSynonymByAdmin = (
   keywordId: number,
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationAddHotDealKeywordSynonymByAdminMutation,
     MutationAddHotDealKeywordSynonymByAdminMutationVariables
   >,
@@ -43,7 +43,7 @@ export const useAddHotDealKeywordSynonymByAdmin = (
 
 export const useAddHotDealExcludeKeywordByAdmin = (
   keywordId: number,
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationAddHotDealExcludeKeywordByAdminMutation,
     MutationAddHotDealExcludeKeywordByAdminMutationVariables
   >,
@@ -66,7 +66,7 @@ export const useAddHotDealExcludeKeywordByAdmin = (
 
 export const useRemoveHotDealKeywordSynonym = (
   keywordId: number,
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationRemoveHotDealKeywordSynonymByAdminMutation,
     MutationRemoveHotDealKeywordSynonymByAdminMutationVariables
   >,
@@ -89,7 +89,7 @@ export const useRemoveHotDealKeywordSynonym = (
 
 export const useRemoveHotDealExcludeKeyword = (
   keywordId: number,
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationRemoveHotDealExcludeKeywordByAdminMutation,
     MutationRemoveHotDealExcludeKeywordByAdminMutationVariables
   >,

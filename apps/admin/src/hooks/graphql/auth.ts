@@ -1,4 +1,4 @@
-import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 
 import {
   MutationAdminLoginMutation,
@@ -8,8 +8,10 @@ import {
 } from '@/generated/gql/graphql';
 import { MutationAdminLogin, QueryAdminMe } from '@/graphql/auth';
 
+import { QueryOptions } from './options';
+
 export const useMutationAdminLogin = (
-  options?: MutationHookOptions<MutationAdminLoginMutation, MutationAdminLoginMutationVariables>,
+  options?: useMutation.Options<MutationAdminLoginMutation, MutationAdminLoginMutationVariables>,
 ) => {
   return useMutation<MutationAdminLoginMutation, MutationAdminLoginMutationVariables>(
     MutationAdminLogin,
@@ -20,7 +22,7 @@ export const useMutationAdminLogin = (
 };
 
 export const useAdminMe = (
-  options?: QueryHookOptions<QueryAdminMeQuery, QueryAdminMeQueryVariables>,
+  options?: QueryOptions<QueryAdminMeQuery, QueryAdminMeQueryVariables>,
 ) => {
   return useQuery<QueryAdminMeQuery, QueryAdminMeQueryVariables>(QueryAdminMe, {
     fetchPolicy: 'cache-first',

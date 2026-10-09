@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 
 import RankList from '@/components/RankList';
+import { ignoreLazyRejection } from '@/hooks/graphql/options';
 import { useDailyServiceViewStats, useTopNotificationKeywords } from '@/hooks/graphql/stats';
 import { toStatsDateRange } from '@/utils/date';
 
@@ -18,7 +19,7 @@ const EngagementStats = () => {
   useEffect(() => {
     fetchViewStats({
       variables: { ...toStatsDateRange(range.startDate, range.endDate), interval: range.interval },
-    });
+    }).catch(ignoreLazyRejection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [range.startDate, range.endDate, range.interval]);
 

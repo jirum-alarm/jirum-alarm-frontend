@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import { BrandItem, BrandProduct } from '@/hooks/graphql/brandProduct';
+import { ignoreLazyRejection } from '@/hooks/graphql/options';
 
 import { PAGE_LIMIT } from './constants';
 import { VerificationQueries } from './useVerificationQueries';
@@ -63,7 +64,7 @@ export function useBrandItemSearchSync({
         }
         fetchBrandItemSearchTotalCount({
           variables: { title: debouncedSearchQuery || undefined },
-        });
+        }).catch(ignoreLazyRejection);
       } catch (error) {
         console.error('Failed to search brand items:', error);
       } finally {

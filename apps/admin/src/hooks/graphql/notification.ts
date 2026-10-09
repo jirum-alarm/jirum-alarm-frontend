@@ -1,4 +1,4 @@
-import { MutationHookOptions, QueryHookOptions, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 
 import { PAGE_LIMIT } from '@/constants/limit';
 import {
@@ -9,12 +9,11 @@ import {
 } from '@/generated/gql/graphql';
 import { MutationSendNotificationByAdmin, QueryNotificationsByAdmin } from '@/graphql/notification';
 
+import { QueryOptions } from './options';
+
 export const useGetNotificationsByAdmin = (
   variables?: Partial<QueryNotificationsByAdminQueryVariables>,
-  options?: QueryHookOptions<
-    QueryNotificationsByAdminQuery,
-    QueryNotificationsByAdminQueryVariables
-  >,
+  options?: QueryOptions<QueryNotificationsByAdminQuery, QueryNotificationsByAdminQueryVariables>,
 ) => {
   return useQuery<QueryNotificationsByAdminQuery, QueryNotificationsByAdminQueryVariables>(
     QueryNotificationsByAdmin,
@@ -30,7 +29,7 @@ export const useGetNotificationsByAdmin = (
 };
 
 export const useSendNotificationByAdmin = (
-  options?: MutationHookOptions<
+  options?: useMutation.Options<
     MutationSendNotificationByAdminMutation,
     MutationSendNotificationByAdminMutationVariables
   >,

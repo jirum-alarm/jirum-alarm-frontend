@@ -89,7 +89,7 @@ pnpm code-gen        # GraphQL code generation
 **Technology Stack:**
 - **Framework**: Next.js 15.5 (App Router), React 19.2
 - **UI**: Tailwind CSS 3.4 (TailAdmin 토큰: `primary`·`success`·`danger`·`stroke`·`boxdark`…). 라이트 전용 — `dark:` 클래스는 남아 있지만 토글이 없다
-- **Data Fetching**: Apollo Client 3 (GraphQL, 운영 API `jirum-api.kyojs.com/graphql`)
+- **Data Fetching**: Apollo Client 4 + @apollo/client-integration-nextjs (GraphQL, 운영 API `jirum-api.kyojs.com/graphql`)
 - **Charts**: ApexCharts · **Virtualization**: TanStack React Virtual · **Date**: Day.js
 
 **Structure:**

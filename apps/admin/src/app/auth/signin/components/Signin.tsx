@@ -1,4 +1,5 @@
 'use client';
+import { CombinedGraphQLErrors } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
@@ -22,7 +23,8 @@ const Signin = () => {
       router.push('/');
     },
     onError: (e) => {
-      const ext = e.graphQLErrors[0]?.extensions;
+      const firstError = CombinedGraphQLErrors.is(e) ? e.errors[0] : undefined;
+      const ext = firstError?.extensions;
       // @nestjs/apollo 는 404 를 code 가 아니라 status 로 싣는다(code 는 INTERNAL_SERVER_ERROR)
       if (ext?.status === 404) {
         toast.error('존재하지 않는 아이디입니다.');
@@ -35,7 +37,7 @@ const Signin = () => {
         toast.error(Array.isArray(detail) ? detail.join('\n') : '비밀번호가 올바르지 않습니다.');
         return;
       }
-      toast.error(e.graphQLErrors[0]?.message ?? '에러가 발생했습니다.');
+      toast.error(firstError?.message ?? '에러가 발생했습니다.');
     },
   });
 
