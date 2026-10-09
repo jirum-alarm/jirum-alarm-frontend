@@ -76,10 +76,16 @@ const [cohort]=await cn.query(`SELECT CAST(YEARWEEK(u.createdAt,3) AS CHAR) wk, 
   SUM(EXISTS(SELECT 1 FROM user_token t WHERE t.userId=u.id AND t.deletedAt IS NULL)) tok,
   SUM(EXISTS(SELECT 1 FROM push_history p WHERE p.userId=u.id AND p.errorCode IS NULL
       AND p.createdAt < u.createdAt + INTERVAL 7 DAY)) push7
-  FROM user u WHERE u.id>1682 AND u.createdAt>=? AND u.createdAt<? GROUP BY wk`,[s,e]);
+  FROM user u WHERE u.id>1682 AND u.isGuest=0 AND u.createdAt>=? AND u.createdAt<? GROUP BY wk`,[s,e]);
+// 게스트(로그인 없이 알림만 받는 기기 계정, 2026-10-09~) — 가입자가 아니라 따로 센다. 알림 키워드·관심사가 있는 게스트만.
+const [guest]=await cn.query(`SELECT CAST(YEARWEEK(u.createdAt,3) AS CHAR) wk, COUNT(*) guest,
+  SUM(EXISTS(SELECT 1 FROM user_token t WHERE t.userId=u.id AND t.deletedAt IS NULL)) gtok
+  FROM user u WHERE u.isGuest=1 AND u.createdAt>=? AND u.createdAt<?
+   AND (EXISTS(SELECT 1 FROM notification_keyword k WHERE k.userId=u.id) OR EXISTS(SELECT 1 FROM user_notification_theme n WHERE n.userId=u.id))
+  GROUP BY wk`,[s,e]);
 const [recv]=await cn.query(`SELECT CAST(YEARWEEK(createdAt,3) AS CHAR) wk, COUNT(DISTINCT userId) recv
   FROM push_history WHERE userId IS NOT NULL AND errorCode IS NULL AND createdAt>=? AND createdAt<? GROUP BY wk`,[s,e]);
-console.log(JSON.stringify({cohort,recv}));await cn.end();})().catch(x=>{console.error("ERR",x.message);process.exit(1)});
+console.log(JSON.stringify({cohort,recv,guest}));await cn.end();})().catch(x=>{console.error("ERR",x.message);process.exit(1)});
 """
 
 
@@ -87,7 +93,8 @@ def db():
     pod = subprocess.check_output(KUBE + ["get", "pods", "-l", "app=crawling-server", "-o", "name"], text=True).split()[0]
     end = last_sun + dt.timedelta(days=1)
     out = json.loads(subprocess.check_output(KUBE + ["exec", pod, "--", "node", "-e", DB_JS, str(start), str(end)], text=True))
-    return {r["wk"]: r for r in out["cohort"]}, {r["wk"]: int(r["recv"]) for r in out["recv"]}
+    return ({r["wk"]: r for r in out["cohort"]}, {r["wk"]: int(r["recv"]) for r in out["recv"]},
+            {r["wk"]: r for r in out["guest"]})
 
 
 def pct(n, d):
@@ -95,19 +102,21 @@ def pct(n, d):
 
 
 g = ga4()
-cohort, recv = db()
+cohort, recv, guests = db()
 lines = [f"# 지름알림 주간 깔때기 ({start} ~ {last_sun}, 생성 {today})", "",
          "★ = 알림 경유 재방문(오카방 유입 + 푸시 열기, 중복 가능). 가입 코호트는 그 주 가입자 기준, "
          "첫알림7일은 마지막 주가 아직 덜 찼다.", "",
-         "| 주 | 상세 조회 | 알림 권유 클릭 | 가입 | 키워드 등록 | 토큰 있음 | 첫 알림(7일) | 푸시 수신 | 오카방 유입 | 푸시 열기 | ★ |",
-         "|---|---|---|---|---|---|---|---|---|---|---|"]
+         "| 주 | 상세 조회 | 알림 권유 클릭 | 게스트 등록(토큰) | 가입 | 키워드 등록 | 토큰 있음 | 첫 알림(7일) | 푸시 수신 | 오카방 유입 | 푸시 열기 | ★ |",
+         "|---|---|---|---|---|---|---|---|---|---|---|---|"]
 star = {}
 for w in weeks:
     c = cohort.get(w, {})
     su, kw, tok, p7 = (int(c.get(k) or 0) for k in ("signup", "kw", "tok", "push7"))
     star[w] = g["kakao"].get(w, 0) + g["pushopen"].get(w, 0)
     det = g["detail"].get(w, 0)
-    lines.append(f"| {w[:4]}-W{w[4:]} | {det:,} | {pct(g['prompt'].get(w, 0), det)} | {su} | {pct(kw, su)} | "
+    gu = guests.get(w, {})
+    gcell = f"{int(gu.get('guest') or 0)} ({int(gu.get('gtok') or 0)})"
+    lines.append(f"| {w[:4]}-W{w[4:]} | {det:,} | {pct(g['prompt'].get(w, 0), det)} | {gcell} | {su} | {pct(kw, su)} | "
                  f"{pct(tok, su)} | {pct(p7, su)} | {recv.get(w, 0):,} | {g['kakao'].get(w, 0):,} | "
                  f"{g['pushopen'].get(w, 0):,} | **{star[w]:,}** |")
 report = "\n".join(lines) + "\n"
