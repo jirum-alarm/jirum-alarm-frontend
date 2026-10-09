@@ -110,7 +110,7 @@ export default function AccountScreen({navigation}: Props) {
                     accessibilityLabel="로그아웃"
                     style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
                     className="rounded-lg px-6 py-3">
-                    <Text className="text-[13px] text-gray-500">로그아웃</Text>
+                    <Text className="text-13 text-gray-500">로그아웃</Text>
                   </Pressable>
                   <View className="bg-gray-200" style={styles.divider} />
                   <Pressable
@@ -119,7 +119,7 @@ export default function AccountScreen({navigation}: Props) {
                     accessibilityLabel="회원탈퇴"
                     style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}
                     className="rounded-lg px-6 py-3">
-                    <Text className="text-[13px] text-gray-500">회원탈퇴</Text>
+                    <Text className="text-13 text-gray-500">회원탈퇴</Text>
                   </Pressable>
                 </View>
               </View>

@@ -74,7 +74,8 @@ describe('랭킹 카드 — web 대조', () => {
   });
 
   it('그림자 — 모바일 카드엔 border 가 없다', () => {
-    expect(w).toContain('shadow-[0_2px_12px_rgba(0,0,0,0.08)]');
+    // web 은 디자인 토큰 shadow-card(0 2px 12px rgb(0 0 0 / 0.08)) — 앱은 같은 값을 iOS 그림자 속성으로 옮긴다.
+    expect(w).toContain('shadow-card');
     expect(w).toContain('pc:border'); // border 는 데스크톱 전용
     expect(n).toContain('shadowRadius: 12');
   });

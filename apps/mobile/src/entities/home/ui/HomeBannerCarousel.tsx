@@ -314,6 +314,7 @@ function BannerSlideView({
       strongTitle="어떻게 쓰나요?"
       description="소개 페이지에서 한눈에 알아보세요!"
       image={LANDING_IMAGE}
+      // eslint-disable-next-line no-restricted-syntax -- 소개 페이지 배너 고유색(짙은 초록, web AboutLink 와 같은 값)
       backgroundClassName="bg-[#193E21] border-[#34673C]"
       onPress={() => openInAppBrowser(LANDING_URL)}
     />
@@ -352,7 +353,7 @@ function BannerCard({
             <Text className="text-primary-300 font-bold">{strongTitle}</Text>
           ) : null}
         </Text>
-        <Text className="text-[13px] text-fixed-200" numberOfLines={1}>
+        <Text className="text-13 text-fixed-200" numberOfLines={1}>
           {description}
         </Text>
       </View>

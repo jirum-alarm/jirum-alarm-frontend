@@ -20,6 +20,7 @@ const Category = ({ src, className }: { src: string; className?: string }) => (
 
 const KeyVisual = () => (
   <section className="mx-auto flex min-h-svh w-full flex-col bg-white px-5 pt-14 pb-5 lg:px-8 lg:pb-9">
+    {/* eslint-disable-next-line no-restricted-syntax -- 히어로 전용 모서리(28px) */}
     <div className="relative flex w-full grow items-center justify-center overflow-hidden rounded-[28px] rounded-bl-none py-5">
       <div className="to-landing-background absolute inset-0 -z-0 bg-linear-to-b from-gray-900 via-37% lg:via-0%" />
       <div className="relative">
@@ -76,6 +77,7 @@ const KeyVisual = () => (
         </div>
       </div>
       <div className="absolute bottom-0 left-0">
+        {/* eslint-disable-next-line no-restricted-syntax -- 오목한 모서리 트릭(흰 그림자로 바깥을 칠한다) */}
         <div className="h-16 w-16 rounded-bl-3xl shadow-[0_36px_0_rgb(255,255,255)]" />
         <div className="flex items-end">
           <Link
@@ -88,6 +90,7 @@ const KeyVisual = () => (
               <Image src="/assets/icons/arrow-right.svg" alt="" width={24} height={24} />
             </div>
           </Link>
+          {/* eslint-disable-next-line no-restricted-syntax -- 오목한 모서리 트릭(흰 그림자로 바깥을 칠한다) */}
           <div className="h-16 w-16 rounded-bl-3xl shadow-[0_36px_0_rgb(255,255,255)]" />
         </div>
       </div>

@@ -4,11 +4,11 @@ import { type HTMLMotionProps, m } from 'motion/react';
 
 import { cn } from '@/shared/lib/cn';
 
-import { buttonVaraint } from './variant/button';
+import { buttonVariant } from './variant/button';
 
 interface ButtonProps
   extends Omit<HTMLMotionProps<'button'>, 'color'>,
-    VariantProps<typeof buttonVaraint> {
+    VariantProps<typeof buttonVariant> {
   children?: React.ReactNode;
 }
 
@@ -17,7 +17,7 @@ export const Button = ({ size, variant, color, className, children, ...rest }: B
     <m.button
       {...rest}
       type={rest.type ?? 'button'}
-      className={cn(buttonVaraint({ size, variant, color }), className)}
+      className={cn(buttonVariant({ size, variant, color }), className)}
       whileTap={{ scale: 0.95 }}
       transition={{ duration: 0.1 }}
     >

@@ -47,7 +47,7 @@ export default async function AppInstallPage() {
           priority
         />
         <h1 className="pt-6 text-2xl font-semibold text-gray-900">
-          <span className="shadow-primary-500 inline-block font-extrabold shadow-[inset_0-12px_0]">
+          <span className="shadow-primary-500 shadow-highlight inline-block font-extrabold">
             지름알림
           </span>{' '}
           앱 설치

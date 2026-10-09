@@ -56,10 +56,10 @@ const BannerItem = ({
         transition={{ duration: 0.1 }}
       >
         <div>
-          <p className="pc:text-[22px] [&>strong]:text-primary-300 text-fixed-white mb-[4px] font-bold">
+          <p className="pc:text-22 [&>strong]:text-primary-300 text-fixed-white mb-[4px] font-bold">
             {title}
           </p>
-          <p className="pc:text-base text-fixed-200 text-[13px]">{description}</p>
+          <p className="pc:text-base text-fixed-200 text-13">{description}</p>
         </div>
 
         <div className="pc:h-[84px] pc:w-[120px] relative flex h-14 w-[80px] items-center justify-center">
@@ -75,7 +75,7 @@ const BannerItem = ({
       </m.div>
 
       {isAd && (
-        <div className="bg-opacity-90 border-fixed-white text-fixed-white absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border bg-[#98A2B3] px-[7px] py-[3px] text-xs leading-none font-medium">
+        <div className="border-fixed-white text-fixed-white bg-fixed-400 absolute right-[8px] bottom-[8px] z-30 w-fit rounded-lg border px-[7px] py-[3px] text-xs leading-none font-medium">
           AD
         </div>
       )}

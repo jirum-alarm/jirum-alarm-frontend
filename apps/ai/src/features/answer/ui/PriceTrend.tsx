@@ -75,17 +75,17 @@ export default function PriceTrend({
   return (
     <div className="mt-1 mb-2 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-baseline justify-between gap-2">
-        <span className="flex items-center gap-1.5 text-[15px] font-bold text-gray-900">
-          <span className="text-[16px] text-blue-500">📈</span> {spanLabel} 가격 흐름
+        <span className="text-15 flex items-center gap-1.5 font-bold text-gray-900">
+          <span className="text-secondary-500 text-base">📈</span> {spanLabel} 가격 흐름
         </span>
-        <span className="shrink-0 rounded-full border border-blue-100 bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-600 tabular-nums">
+        <span className="border-secondary-100 bg-secondary-50 text-11 text-secondary-600 shrink-0 rounded-full border px-2 py-0.5 font-semibold tabular-nums">
           {series.length}개 시점
         </span>
       </div>
 
       <div className="flex gap-2">
         {/* Y-axis */}
-        <div className="flex w-12 shrink-0 flex-col justify-between py-0.5 text-right text-[10px] font-medium text-gray-400 tabular-nums">
+        <div className="text-10 flex w-12 shrink-0 flex-col justify-between py-0.5 text-right font-medium text-gray-400 tabular-nums">
           {tickValues.map((v) => (
             <span key={v}>{won(Math.round(v))}</span>
           ))}
@@ -165,7 +165,7 @@ export default function PriceTrend({
           <div className="pointer-events-none absolute inset-0">
             {/* Lowest point indicator */}
             <div
-              className="animate-fade-in absolute size-[7px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500 shadow-sm"
+              className="animate-fade-in bg-secondary-500 absolute size-[7px] -translate-x-1/2 -translate-y-1/2 rounded-full shadow-sm"
               style={{
                 left: `${series.length === 1 ? 50 : (lowIdx / (series.length - 1)) * 100}%`,
                 top: `${(y(lowest) / H) * 100}%`,
@@ -174,7 +174,7 @@ export default function PriceTrend({
 
             {/* Current point indicator */}
             <div
-              className="animate-fade-in absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-red-500 shadow-sm"
+              className="animate-fade-in bg-error-500 absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-sm"
               style={{ left: `100%`, top: `${(y(last) / H) * 100}%` }}
             />
 
@@ -183,7 +183,7 @@ export default function PriceTrend({
               <>
                 {/* Visible vertical guideline */}
                 <div
-                  className="absolute top-0 bottom-0 -translate-x-px border-l border-dashed border-blue-300"
+                  className="border-secondary-300 absolute top-0 bottom-0 -translate-x-px border-l border-dashed"
                   style={{
                     left: `${series.length === 1 ? 50 : (hoveredIdx / (series.length - 1)) * 100}%`,
                   }}
@@ -191,7 +191,7 @@ export default function PriceTrend({
 
                 {/* Visible dot on hover */}
                 <div
-                  className="absolute size-[10px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[2.5px] border-blue-600 bg-white shadow-sm transition-all duration-75"
+                  className="border-secondary-600 absolute size-[10px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[2.5px] bg-white shadow-sm transition-all duration-75"
                   style={{
                     left: `${series.length === 1 ? 50 : (hoveredIdx / (series.length - 1)) * 100}%`,
                     top: `${(y(prices[hoveredIdx]) / H) * 100}%`,
@@ -206,8 +206,8 @@ export default function PriceTrend({
                     top: `${(y(prices[hoveredIdx]) / H) * 100}%`,
                   }}
                 >
-                  <div className="animate-in fade-in zoom-in relative rounded-lg bg-gray-900 px-2.5 py-1 text-[11px] font-medium whitespace-nowrap text-white shadow-xl duration-100">
-                    <div className="mb-0.5 text-[9px] opacity-80">
+                  <div className="animate-in fade-in zoom-in text-11 relative rounded-lg bg-gray-900 px-2.5 py-1 font-medium whitespace-nowrap text-white shadow-xl duration-100">
+                    <div className="text-10 mb-0.5 opacity-80">
                       {series[hoveredIdx][0].slice(5).replace('-', '/')}
                     </div>
                     <div>{won(prices[hoveredIdx])}원</div>
@@ -220,27 +220,27 @@ export default function PriceTrend({
         </div>
       </div>
 
-      <div className="mt-2 flex justify-between pl-[56px] text-[10px] font-medium text-gray-400">
+      <div className="text-10 mt-2 flex justify-between pl-[56px] font-medium text-gray-400">
         <span>{series[0][0].slice(5).replace('-', '/')}</span>
         <span>{series[series.length - 1][0].slice(5).replace('-', '/')}</span>
       </div>
 
-      <div className="mt-4 rounded-xl border border-blue-100/50 bg-blue-50/50 px-4 py-3 text-[13px] leading-relaxed text-gray-700">
+      <div className="border-secondary-100/50 bg-secondary-50/50 text-13 mt-4 rounded-xl border px-4 py-3 leading-relaxed text-gray-700">
         <span className="mr-1 font-semibold text-gray-900">{direction}</span>
         {gapFromLow > 0 ? (
           <>
             그동안 가장 싸던 때({won(lowest)}원)보다{' '}
-            <b className="text-rose-600 tabular-nums">{won(gapFromLow)}원</b> 높아요.
+            <b className="text-error-600 tabular-nums">{won(gapFromLow)}원</b> 높아요.
           </>
         ) : (
-          <b className="text-blue-600">
+          <b className="text-secondary-600">
             지금이 {spanLabel.replace('최근 ', '')} 중 가장 싼 가격이에요!
           </b>
         )}
       </div>
 
       {confidence !== 'HIGH' && (
-        <p className="mt-3 text-center text-[11px] leading-snug text-gray-400">
+        <p className="text-11 mt-3 text-center leading-snug text-gray-400">
           비슷한 상품 딜로 그린 추이예요. 규격이 다를 수 있어요.
         </p>
       )}

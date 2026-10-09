@@ -43,13 +43,11 @@ export default function PricePosition({ position, title }: { position: Position;
     <div className="rounded-2xl border border-gray-200 bg-white p-4">
       <div className="mb-3 flex items-baseline justify-between gap-2">
         <span className="text-sm font-bold text-gray-900">지금 사도 되나</span>
-        <span className="shrink-0 text-[11px] text-gray-500 tabular-nums">
-          과거 딜 {sampleSize}개
-        </span>
+        <span className="text-11 shrink-0 text-gray-500 tabular-nums">과거 딜 {sampleSize}개</span>
       </div>
 
-      <p className={`text-[15px] font-bold ${copy.tone}`}>{high ? copy.high : copy.low}</p>
-      <p className="mt-1 text-[13px] text-gray-600">
+      <p className={`text-15 font-bold ${copy.tone}`}>{high ? copy.high : copy.low}</p>
+      <p className="text-13 mt-1 text-gray-600">
         지금 <b className="tabular-nums">{won(price)}</b> · 과거는{' '}
         <span className="tabular-nums">
           {won(min)}~{won(max)}
@@ -66,7 +64,7 @@ export default function PricePosition({ position, title }: { position: Position;
           aria-hidden
         />
       </div>
-      <div className="mt-1.5 flex justify-between text-[11px] text-gray-500">
+      <div className="text-11 mt-1.5 flex justify-between text-gray-500">
         <span>최저</span>
         <span>최고</span>
       </div>
@@ -79,12 +77,12 @@ export default function PricePosition({ position, title }: { position: Position;
        * 판정만 읽고 넘어간다 — 백엔드 disclaimer 와 같은 취지.
        */}
       {!high && (
-        <p className="mt-2.5 text-[11px] leading-snug text-gray-500">
+        <p className="text-11 mt-2.5 leading-snug text-gray-500">
           같은 상품 이력이 없어서 이름·가격대가 비슷한 딜로 비교했어요. 규격이 다를 수 있어요.
         </p>
       )}
       {high && (
-        <p className="mt-2.5 truncate text-[11px] leading-snug text-gray-500" title={title}>
+        <p className="text-11 mt-2.5 truncate leading-snug text-gray-500" title={title}>
           기준: {title}
         </p>
       )}

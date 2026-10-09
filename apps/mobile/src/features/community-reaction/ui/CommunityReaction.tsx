@@ -121,7 +121,7 @@ function InfoTooltip() {
           className="absolute right-0 top-7 z-50"
           accessibilityRole="button">
           <View className="rounded-lg bg-gray-600 px-4 py-2.5">
-            <Text className="text-[13px] text-white">
+            <Text className="text-13 text-white">
               <Text className="font-semibold text-white">실제 커뮤니티</Text>
               {' 사용자들의\n핫딜 반응을 요약해 확인해요'}
             </Text>

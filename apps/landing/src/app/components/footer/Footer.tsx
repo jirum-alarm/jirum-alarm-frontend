@@ -25,7 +25,7 @@ const Footer = () => {
               href="https://open.kakao.com/o/gJZTWAAg"
               target="_blank"
               aria-label="핫딜 카톡방 입장"
-              className="flex size-9 items-center justify-center rounded-full bg-[#FAE300]"
+              className="bg-kakao flex size-9 items-center justify-center rounded-full"
             >
               <Image src="/assets/icons/katalk2.svg" alt="" width={30} height={31} />
             </Link>

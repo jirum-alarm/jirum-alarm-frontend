@@ -125,22 +125,22 @@ export default function DealsListSection({
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-0.5">
                   {deal.isEnd && (
-                    <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold text-gray-500">
+                    <span className="text-10 rounded bg-gray-100 px-1.5 py-0.5 font-semibold text-gray-500">
                       종료
                     </span>
                   )}
                   {isBundle && (
-                    <span className="rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">
+                    <span className="bg-warning-50 text-10 text-warning-700 rounded px-1.5 py-0.5 font-semibold">
                       증정·번들
                     </span>
                   )}
                   {isActivePick && (
-                    <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">
+                    <span className="bg-success-50 text-10 text-success-700 rounded px-1.5 py-0.5 font-semibold">
                       지금 추천
                     </span>
                   )}
                   {isAllTimeLow && (
-                    <span className="bg-error-50 text-error-600 rounded px-1.5 py-0.5 text-[10px] font-semibold">
+                    <span className="bg-error-50 text-error-600 text-10 rounded px-1.5 py-0.5 font-semibold">
                       역대 최저
                     </span>
                   )}
@@ -150,7 +150,7 @@ export default function DealsListSection({
                     {won(deal.price)}
                   </span>
                   {deal.unitPrice != null && deal.unitLabel && (
-                    <span className="text-[11px] text-gray-400">
+                    <span className="text-11 text-gray-400">
                       {deal.unitLabel} {won(deal.unitPrice)}
                     </span>
                   )}

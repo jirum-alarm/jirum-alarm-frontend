@@ -55,7 +55,7 @@ export default function UserMenu({ color }: { color: string }) {
           </DropdownMenu.Item>
           {MYPAGE_GROUPS.filter((group) => group.key !== 'support').map((group) => (
             <DropdownMenu.Group key={group.key} className="mt-1 border-t border-gray-100 pt-1">
-              <DropdownMenu.Label className="px-2.5 pt-1.5 pb-0.5 text-[11px] font-semibold text-gray-500">
+              <DropdownMenu.Label className="text-11 px-2.5 pt-1.5 pb-0.5 font-semibold text-gray-500">
                 {group.label}
               </DropdownMenu.Label>
               {MYPAGE_MENU.filter((menu) => menu.group === group.key).map((menu) => (

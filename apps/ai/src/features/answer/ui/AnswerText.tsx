@@ -12,7 +12,7 @@ export default function AnswerText({ markdown }: { markdown: string }) {
   if (markdown.length === 0) return null;
 
   return (
-    <p className="rounded-2xl rounded-tl-sm border border-gray-200 bg-white px-4 py-3 text-[15px] leading-relaxed whitespace-pre-wrap text-gray-800">
+    <p className="text-15 rounded-2xl rounded-tl-sm border border-gray-200 bg-white px-4 py-3 leading-relaxed whitespace-pre-wrap text-gray-800">
       {markdown}
     </p>
   );

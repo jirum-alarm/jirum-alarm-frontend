@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-export const containerVaraint = cva(['relative', 'w-full', 'min-w-[200px]'], {
+export const containerVariant = cva(['relative', 'w-full', 'min-w-[200px]'], {
   variants: {
     size: {
       md: ['h-11'],
@@ -11,7 +11,7 @@ export const containerVaraint = cva(['relative', 'w-full', 'min-w-[200px]'], {
   },
 });
 
-export const iconVaraint = cva(['absolute'], {
+export const iconVariant = cva(['absolute'], {
   variants: {
     variant: {
       standard: ['top-2/4', 'right-2', '-translate-y-1/2'],
@@ -40,7 +40,7 @@ export const inputVariant = cva(
   {
     variants: {
       variant: {
-        standard: ['border-b', 'placeholder:text-gray-400', 'rounded-none'],
+        standard: ['border-b', 'placeholder:text-gray-500', 'rounded-none'],
       },
       size: {
         md: ['text-base', 'px-1', 'py-3'],

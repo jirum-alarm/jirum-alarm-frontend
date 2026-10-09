@@ -46,7 +46,7 @@ export default function PostImageUploader({
             <button
               type="button"
               onClick={() => onRemove(index)}
-              className="text-fixed-white absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-[10px]"
+              className="text-fixed-white text-10 absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60"
               aria-label={`이미지 ${index + 1} 삭제`}
             >
               ✕
@@ -72,7 +72,7 @@ export default function PostImageUploader({
                 strokeLinecap="round"
               />
             </svg>
-            <span className="text-[10px]">추가</span>
+            <span className="text-10">추가</span>
           </button>
         )}
 

@@ -31,7 +31,7 @@ export default function HeaderActions({
       <nav className={`flex items-center gap-0.5 ${className}`}>
         <a
           href={WEB_ORIGIN}
-          className="tappable flex h-9 items-center rounded-full px-2 text-[13px] font-medium text-gray-500 active:bg-gray-100"
+          className="tappable text-13 flex h-9 items-center rounded-full px-2 font-medium text-gray-500 active:bg-gray-100"
         >
           핫딜
         </a>
@@ -43,7 +43,7 @@ export default function HeaderActions({
         {isAnon ? (
           <a
             href={accountHref}
-            className="tappable flex h-9 items-center rounded-full bg-gray-900 px-2.5 text-[13px] font-semibold text-white active:bg-gray-700"
+            className="tappable text-13 flex h-9 items-center rounded-full bg-gray-900 px-2.5 font-semibold text-white active:bg-gray-700"
           >
             로그인
           </a>
@@ -65,7 +65,7 @@ export default function HeaderActions({
     <nav className={`flex items-center gap-0.5 ${className}`}>
       <a
         href={WEB_ORIGIN}
-        className="tappable flex h-9 items-center rounded-full px-2.5 text-[13px] font-medium text-gray-500 active:bg-gray-100"
+        className="tappable text-13 flex h-9 items-center rounded-full px-2.5 font-medium text-gray-500 active:bg-gray-100"
       >
         핫딜 보러가기
       </a>
@@ -73,8 +73,8 @@ export default function HeaderActions({
         href={accountHref}
         className={
           isAnon
-            ? 'tappable flex h-9 items-center rounded-full bg-gray-900 px-3 text-[13px] font-semibold text-white active:bg-gray-700'
-            : 'tappable flex h-9 items-center rounded-full px-2.5 text-[13px] font-medium text-gray-500 active:bg-gray-100'
+            ? 'tappable text-13 flex h-9 items-center rounded-full bg-gray-900 px-3 font-semibold text-white active:bg-gray-700'
+            : 'tappable text-13 flex h-9 items-center rounded-full px-2.5 font-medium text-gray-500 active:bg-gray-100'
         }
       >
         {accountLabel}

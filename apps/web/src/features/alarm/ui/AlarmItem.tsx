@@ -117,13 +117,10 @@ const AlarmItem = ({
           <div className="flex items-center gap-x-3 pt-2">
             {(isHot || isEnd) && (
               <div
-                className={cn(
-                  'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-normal',
-                  {
-                    'border border-gray-400 bg-white px-2 text-gray-500': isEnd,
-                    'bg-error-500 text-fixed-white px-3': !isEnd && isHot,
-                  },
-                )}
+                className={cn('flex h-[22px] items-center rounded-lg text-xs leading-normal', {
+                  'border border-gray-400 bg-white px-2 text-gray-500': isEnd,
+                  'bg-error-500 text-fixed-white px-3': !isEnd && isHot,
+                })}
               >
                 {isEnd ? '판매종료' : isHot ? '핫딜' : ''}
               </div>

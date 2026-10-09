@@ -34,7 +34,7 @@ function Avatar() {
 }
 
 const Card = ({ children }: { children: React.ReactNode }) => (
-  <p className="rounded-2xl rounded-tl-sm border border-gray-200 bg-white px-4 py-3 text-[15px] leading-relaxed text-gray-800">
+  <p className="text-15 rounded-2xl rounded-tl-sm border border-gray-200 bg-white px-4 py-3 leading-relaxed text-gray-800">
     {children}
   </p>
 );
@@ -47,9 +47,7 @@ const Card = ({ children }: { children: React.ReactNode }) => (
 const SectionLabel = ({ title, aside }: { title: string; aside?: React.ReactNode }) => (
   <div className="mb-2 flex items-baseline justify-between gap-2">
     <span className="text-sm font-bold text-gray-900">{title}</span>
-    {aside != null && (
-      <span className="shrink-0 text-[11px] text-gray-500 tabular-nums">{aside}</span>
-    )}
+    {aside != null && <span className="text-11 shrink-0 text-gray-500 tabular-nums">{aside}</span>}
   </div>
 );
 
@@ -82,7 +80,7 @@ function Block({ block }: { block: AnswerBlock }) {
           {block.reason.code === 'NO_RESULTS' ? (
             <ExampleChips />
           ) : block.filteredCount > 0 ? (
-            <p className="text-[12px] text-gray-600">
+            <p className="text-xs text-gray-600">
               걸러낸 딜 {block.filteredCount}개는 아래에 있어요.
             </p>
           ) : null}
@@ -116,10 +114,10 @@ function Block({ block }: { block: AnswerBlock }) {
 
     case 'danawaFloor':
       return (
-        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5">
+        <div className="rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3.5">
           <SectionLabel title="다나와 공식 최저가" />
-          <p className="line-clamp-2 text-[13px] leading-snug text-slate-800">{block.title}</p>
-          <p className="mt-1.5 text-[22px] font-extrabold tracking-tight text-slate-900 tabular-nums">
+          <p className="text-13 line-clamp-2 leading-snug text-gray-800">{block.title}</p>
+          <p className="text-22 mt-1.5 font-extrabold tracking-tight text-gray-900 tabular-nums">
             {won(block.price)}
           </p>
         </div>
@@ -132,7 +130,7 @@ function Block({ block }: { block: AnswerBlock }) {
 
     case 'failure':
       return (
-        <p className="rounded-2xl rounded-tl-sm border border-gray-200 bg-white px-4 py-3 text-[13.5px] text-gray-600">
+        <p className="rounded-2xl rounded-tl-sm border border-gray-200 bg-white px-4 py-3 text-sm text-gray-600">
           {block.message}
         </p>
       );

@@ -10,6 +10,7 @@ const props = {
       {/* <span>{Advertisement.Beproc.description}</span> */}
     </>
   ),
+  // eslint-disable-next-line no-restricted-syntax -- 광고 소재 색(퍼실 배너 배경에 맞춤)
   description: <span className="text-[#DEEBFF]">{Advertisement.Persil_20251124.description}</span>,
   image: '/persil_2511_banner.png',
   // eventName: EVENT.OPEN_KAKAO_TALK.NAME,

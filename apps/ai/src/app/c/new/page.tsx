@@ -54,7 +54,7 @@ export default async function NewConversationPage({ searchParams }: Search) {
               <path d="m15 18-6-6 6-6" />
             </svg>
           </Link>
-          <p className="truncate text-[13px] font-medium text-gray-500">{question}</p>
+          <p className="text-13 truncate font-medium text-gray-500">{question}</p>
           <HeaderActions compact className="ml-auto shrink-0" tier={session.tier} />
         </header>
 

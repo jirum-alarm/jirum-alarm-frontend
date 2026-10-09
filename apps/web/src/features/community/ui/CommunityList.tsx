@@ -105,7 +105,7 @@ export default function CommunityList({ tab, insertAfterIndex, insertContent }: 
       {isUserLogin && (
         <Link
           href={PAGE.COMMUNITY_WRITE}
-          className="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-fixed-white fixed right-5 z-50 flex items-center gap-x-1.5 rounded-full px-4 py-3 text-sm font-semibold shadow-lg transition-transform active:scale-95 md:hidden"
+          className="bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-fixed-900 fixed right-5 z-50 flex items-center gap-x-1.5 rounded-full px-4 py-3 text-sm font-semibold shadow-lg transition-transform active:scale-95 md:hidden"
           style={{
             bottom:
               'calc(var(--bottom-fab-gap, 1rem) + var(--bottom-fab-padding, var(--bottom-nav-padding, 0px)))',

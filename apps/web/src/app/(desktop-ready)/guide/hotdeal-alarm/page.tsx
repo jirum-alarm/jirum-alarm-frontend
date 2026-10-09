@@ -71,7 +71,7 @@ export default function HotdealAlarmGuidePage() {
       />
       <DealsMobileHeader title="핫딜 알림 받는 법" />
 
-      <article className="space-y-10 text-[15px] leading-relaxed text-gray-800">
+      <article className="text-15 space-y-10 leading-relaxed text-gray-800">
         <header>
           <h1 className="text-2xl font-bold text-black">핫딜 알림 받는 법</h1>
           <p className="mt-3">

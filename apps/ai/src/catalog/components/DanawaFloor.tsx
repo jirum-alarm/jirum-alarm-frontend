@@ -8,15 +8,15 @@ const won = (n: number) => `${n.toLocaleString('ko-KR')}원`;
  */
 export function DanawaFloor({ props }: { props: { title: string; price: number } }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5">
+    <div className="rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3.5">
       <div className="mb-1 flex items-center gap-1.5">
-        <span className="inline-flex items-center rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-bold tracking-tight text-white">
+        <span className="text-10 inline-flex items-center rounded bg-gray-800 px-1.5 py-0.5 font-bold tracking-tight text-white">
           다나와
         </span>
-        <span className="text-[12px] font-semibold text-slate-600">공식 최저가</span>
+        <span className="text-xs font-semibold text-gray-600">공식 최저가</span>
       </div>
-      <p className="line-clamp-2 text-[13px] leading-snug text-slate-800">{props.title}</p>
-      <p className="mt-1.5 text-[22px] font-extrabold tracking-tight text-slate-900 tabular-nums">
+      <p className="text-13 line-clamp-2 leading-snug text-gray-800">{props.title}</p>
+      <p className="text-22 mt-1.5 font-extrabold tracking-tight text-gray-900 tabular-nums">
         {won(props.price)}
       </p>
     </div>

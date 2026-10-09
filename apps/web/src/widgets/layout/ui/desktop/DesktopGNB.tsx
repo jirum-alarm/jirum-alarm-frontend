@@ -135,7 +135,7 @@ const DesktopGNB = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                   style={{ color: isInHomeHero ? '#FFFFFF' : 'var(--color-gray-900)' }}
                 />
                 {hasNewAlarm && (
-                  <span className="absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-[#EB001C]" />
+                  <span className="bg-error-500 absolute top-0.5 right-0.5 h-2 w-2 rounded-full" />
                 )}
               </m.div>
             </Link>

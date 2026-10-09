@@ -132,11 +132,11 @@ export default function RecommendedKeywordSection() {
       //
       // ★/srgb 를 붙여 보간 공간을 고정한다. Tailwind v4 는 그라데이션을 oklab 으로
       // 보간하는데, 흰색→연두 구간에서 중간톤이 탁한 회색빛으로 뜬다.
-      className="dark:to-primary-50 bg-linear-to-b/srgb from-white to-[#eaf7d9] px-5 py-7"
+      className="dark:to-primary-50 to-primary-100 bg-linear-to-b/srgb from-white px-5 py-7"
     >
       <h2
         id="home-recommended-keywords"
-        className="text-center text-[15px] font-semibold text-gray-900"
+        className="text-15 text-center font-semibold text-gray-900"
       >
         인기 키워드로 알림 받아보세요!
       </h2>
@@ -160,7 +160,7 @@ export default function RecommendedKeywordSection() {
                 //
                 // 등록됨 상태는 disabled 지만 흐리게 하지 않는다 — 방금 성공한 결과라
                 // 또렷하게 보여야 한다(그래서 disabled:opacity-50 대신 분기).
-                className={`relative flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium shadow-[0_1px_2px_rgba(0,0,0,0.04)] before:absolute before:inset-x-0 before:top-1/2 before:h-11 before:-translate-y-1/2 before:content-[''] ${
+                className={`relative flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium shadow-xs before:absolute before:inset-x-0 before:top-1/2 before:h-11 before:-translate-y-1/2 before:content-[''] ${
                   added
                     ? 'border-primary-200 bg-primary-50 text-primary-700'
                     : 'border-gray-100 bg-white text-gray-900 disabled:opacity-50'

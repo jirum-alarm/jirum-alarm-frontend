@@ -85,7 +85,7 @@ const EmailLoginScreen = () => {
         extraKeyboardSpace={68}
         keyboardShouldPersistTaps="handled">
         <View className="pt-[20px] px-[20px] mb-[44px]">
-          <Text className="text-[24px] text-gray-900 font-pretendard-bold">
+          <Text className="text-2xl text-gray-900 font-pretendard-bold">
             {'이메일과 비밀번호를\n입력해주세요.'}
           </Text>
         </View>
@@ -182,7 +182,7 @@ const EmailLoginScreen = () => {
       <KeyboardStickyView offset={{closed: -insets.bottom, opened: 0}}>
         <View className="px-[20px] pb-[20px] items-center bg-white">
           {isError && (
-            <Text className="text-error-500 text-[14px] font-pretendard pb-[16px]">
+            <Text className="text-error-500 text-sm font-pretendard pb-[16px]">
               이메일 혹은 비밀번호가 올바르지 않아요.
             </Text>
           )}

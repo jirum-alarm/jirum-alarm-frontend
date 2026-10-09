@@ -97,7 +97,7 @@ export function ReactionChart({
             ])}
           >
             {disabled ? '00' : positivePercent.toFixed(0)}
-            <span className="text-semibold ml-[1px] text-2xl text-gray-400">%</span>
+            <span className="ml-[1px] text-2xl text-gray-400">%</span>
           </div>
           <div className="flex items-center justify-center gap-x-0.5">
             {!disabled &&

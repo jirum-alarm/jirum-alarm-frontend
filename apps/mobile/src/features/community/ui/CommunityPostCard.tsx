@@ -109,7 +109,7 @@ export default function CommunityPostCard({
             <Thumbnail uri={view.previewImage} />
             {view.extraImageCount > 0 ? (
               <View className="absolute bottom-1 right-1 rounded bg-black/60 px-1.5 py-0.5">
-                <Text className="text-[10px] font-medium text-fixed-white">
+                <Text className="text-10 font-medium text-fixed-white">
                   +{view.extraImageCount}
                 </Text>
               </View>

@@ -93,7 +93,7 @@ export default function ProductInfo({
               {product.isEnd && (
                 <div
                   className={cn('border border-gray-400 bg-white px-2 text-gray-700', {
-                    'text-semibold flex h-[22px] items-center rounded-lg text-xs leading-5': true,
+                    'flex h-[22px] items-center rounded-lg text-xs leading-5': true,
                   })}
                 >
                   판매종료
@@ -157,7 +157,7 @@ export default function ProductInfo({
                   <div className="flex flex-wrap items-center gap-x-2 pt-1 text-sm text-gray-500">
                     {typeof displayData.rating === 'number' && (
                       <span>
-                        <span className="text-[#ffb200]">★</span> {displayData.rating}
+                        <span className="text-warning-400">★</span> {displayData.rating}
                         {displayData.reviewCount
                           ? ` (${displayData.reviewCount.toLocaleString()})`
                           : ''}

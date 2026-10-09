@@ -285,13 +285,13 @@ export default function ShareSheet({
               )}
               <View className="min-w-0 flex-1 pr-2">
                 <Text
-                  className="text-[16px] font-semibold leading-[22px] text-gray-900"
+                  className="text-base font-semibold leading-[22px] text-gray-900"
                   numberOfLines={2}>
                   {title.trim() || '지름알림'}
                 </Text>
                 {description ? (
                   <Text
-                    className="mt-1 text-[13px] leading-[18px] text-gray-500"
+                    className="mt-1 text-13 leading-[18px] text-gray-500"
                     numberOfLines={1}>
                     {description}
                   </Text>
@@ -338,11 +338,11 @@ export default function ShareSheet({
                 <ShareLink width={18} height={18} color={c.gray[700]} />
               )}
             </View>
-            <Text className="ml-3 flex-1 text-[16px] font-medium text-gray-900">
+            <Text className="ml-3 flex-1 text-base font-medium text-gray-900">
               링크 복사
             </Text>
             {copied ? (
-              <Text className="text-[13px] font-medium text-secondary-600">
+              <Text className="text-13 font-medium text-secondary-600">
                 복사됨
               </Text>
             ) : null}
@@ -380,7 +380,7 @@ function AppButton({
         {children}
       </View>
       <Text
-        className="mt-2 text-center text-[12px] font-medium text-gray-600"
+        className="mt-2 text-center text-xs font-medium text-gray-600"
         numberOfLines={1}>
         {label}
       </Text>

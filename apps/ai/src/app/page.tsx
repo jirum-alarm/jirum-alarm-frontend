@@ -14,10 +14,10 @@ export default async function Page() {
         {/* 시작 화면은 세로 가운데. pt 로 위에 붙이면 아래 2/3 가 빈 화면으로 남는다. */}
         <main className="my-auto py-10">
           <header className="pb-7 text-center">
-            <h1 className="text-[28px] leading-tight font-bold tracking-tight text-gray-900 md:text-[36px]">
+            <h1 className="text-28 leading-tight font-bold tracking-tight text-gray-900 md:text-[36px]">
               사고 싶은 상품을 <span className="text-error-500">물어보세요</span>
             </h1>
-            <p className="mt-3 text-[14px] text-gray-500">
+            <p className="mt-3 text-sm text-gray-500">
               딱 맞는 핫딜을 찾아서, 지금이 살 때인지 알려드려요
             </p>
           </header>

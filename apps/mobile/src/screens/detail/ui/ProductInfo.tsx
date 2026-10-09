@@ -139,7 +139,7 @@ export default function ProductInfo({
           <View className="flex-row flex-wrap items-center gap-x-2 pt-1">
             {typeof display.rating === 'number' ? (
               <Text className="text-sm text-gray-500">
-                <Text className="text-[#ffb200]">★</Text> {display.rating}
+                <Text className="text-warning-400">★</Text> {display.rating}
                 {display.reviewCount
                   ? ` (${display.reviewCount.toLocaleString()})`
                   : ''}

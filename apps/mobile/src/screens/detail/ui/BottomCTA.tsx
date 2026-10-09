@@ -179,7 +179,7 @@ export default function BottomCTA({
           <HeartPop liked={isWishlisted} />
           <Text
             className={cn(
-              'text-[11px]',
+              'text-11',
               isWishlisted ? 'text-error-500' : 'text-gray-800',
             )}>
             찜하기

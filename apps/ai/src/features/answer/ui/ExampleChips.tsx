@@ -42,7 +42,7 @@ export default function ExampleChips({ exclude }: { exclude?: string }) {
                 },
               );
             }}
-            className="tappable block rounded-full border border-gray-200 bg-white/70 px-3.5 py-2 text-[13px] text-gray-700 active:border-gray-400 active:bg-gray-50"
+            className="tappable text-13 block rounded-full border border-gray-200 bg-white/70 px-3.5 py-2 text-gray-700 active:border-gray-400 active:bg-gray-50"
           >
             {e}
           </Link>

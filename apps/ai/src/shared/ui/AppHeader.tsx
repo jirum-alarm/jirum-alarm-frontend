@@ -24,7 +24,7 @@ export default async function AppHeader() {
         <LogoIcon size={32} />
         <span className="text-lg leading-tight font-bold text-gray-900">지름알림</span>
         {/* AI 표식. 로고 옆 배지라 "지름알림의 AI" 로 읽힌다 — 별도 서비스로 안 보이게. */}
-        <span className="rounded bg-gray-900 px-1.5 py-0.5 text-[10px] leading-none font-bold tracking-wide text-white">
+        <span className="text-10 rounded bg-gray-900 px-1.5 py-0.5 leading-none font-bold tracking-wide text-white">
           AI
         </span>
       </Link>

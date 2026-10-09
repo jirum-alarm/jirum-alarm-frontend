@@ -54,11 +54,11 @@ export default async function CommunityDesktopSidebar() {
                 className={[
                   'absolute top-1.5 left-1.5 text-sm font-bold drop-shadow',
                   i === 0
-                    ? 'text-red-500'
+                    ? 'text-error-500'
                     : i === 1
-                      ? 'text-orange-400'
+                      ? 'text-warning-500'
                       : i === 2
-                        ? 'text-yellow-500'
+                        ? 'text-warning-400'
                         : 'text-fixed-white',
                 ].join(' ')}
               >

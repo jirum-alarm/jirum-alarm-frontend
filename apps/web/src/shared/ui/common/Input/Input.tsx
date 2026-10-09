@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 
-import { containerVaraint, helperVariant, iconVaraint, inputVariant } from './variant/input';
+import { containerVariant, helperVariant, iconVariant, inputVariant } from './variant/input';
 
 interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
@@ -31,8 +31,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     return (
       <div>
-        <div className={containerVaraint({ size })}>
-          {icon && <div className={iconVaraint({ variant, size })}>{icon}</div>}
+        <div className={containerVariant({ size })}>
+          {icon && <div className={iconVariant({ variant, size })}>{icon}</div>}
           <input
             {...rest}
             ref={ref}

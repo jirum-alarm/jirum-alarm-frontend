@@ -109,7 +109,7 @@ export default function ClusteredPriceSection({ productId, title = '판매처별
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-0.5">
                   {isLowest && (
-                    <span className="bg-error-50 text-error-600 rounded px-1.5 py-0.5 text-[10px] font-semibold">
+                    <span className="bg-error-50 text-error-600 text-10 rounded px-1.5 py-0.5 font-semibold">
                       최저가
                     </span>
                   )}

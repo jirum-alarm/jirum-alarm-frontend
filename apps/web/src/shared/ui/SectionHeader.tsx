@@ -19,7 +19,7 @@ const SectionHeader = ({
       <h2
         className={cn(
           'text-lg font-bold text-gray-900',
-          !shouldShowMobileUI && 'pc:absolute pc:left-1/2 pc:-translate-x-1/2 pc:text-[28px]',
+          !shouldShowMobileUI && 'pc:absolute pc:left-1/2 pc:-translate-x-1/2 pc:text-28',
           titleClassName,
         )}
       >

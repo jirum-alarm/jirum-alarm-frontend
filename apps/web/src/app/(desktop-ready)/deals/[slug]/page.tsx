@@ -250,9 +250,9 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
 
   const timingToneClass =
     timing.tone === 'good'
-      ? 'bg-emerald-50 text-emerald-700'
+      ? 'bg-success-50 text-success-700'
       : timing.tone === 'high'
-        ? 'bg-amber-50 text-amber-800'
+        ? 'bg-warning-50 text-warning-800'
         : 'bg-gray-100 text-gray-600';
 
   const listTitleSuffix =
@@ -331,13 +331,13 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                   <div className="flex flex-wrap items-center gap-2">
                     {timing.tone !== 'unknown' && (
                       <span
-                        className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${timingToneClass}`}
+                        className={`text-11 rounded-full px-2 py-0.5 font-semibold ${timingToneClass}`}
                       >
                         {timing.label}
                       </span>
                     )}
                     {timing.activeDealCount > 0 && (
-                      <span className="text-[11px] text-gray-400">
+                      <span className="text-11 text-gray-400">
                         진행 중 {timing.activeDealCount}건 기준
                       </span>
                     )}
@@ -345,7 +345,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
 
                   <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
                     <div>
-                      <p className="text-[11px] text-gray-400">
+                      <p className="text-11 text-gray-400">
                         {timing.isActivePrice ? '지금 진행 최저' : '지난 핫딜 최저'}
                         {timing.basis === 'unit' && timing.unitLabel
                           ? ` (${timing.unitLabel})`
@@ -367,7 +367,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     </div>
                     {timing.avg != null && (
                       <div>
-                        <p className="text-[11px] text-gray-400">추이 평균 대비</p>
+                        <p className="text-11 text-gray-400">추이 평균 대비</p>
                         <p className="text-lg font-semibold text-gray-900">
                           {timing.savePct != null
                             ? timing.savePct > 0
@@ -382,7 +382,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                     )}
                     {timing.buyLine != null && (
                       <div>
-                        <p className="text-[11px] text-gray-400">이하면 사도 됨</p>
+                        <p className="text-11 text-gray-400">이하면 사도 됨</p>
                         <p className="text-lg font-semibold text-gray-900">
                           {fmtHist(timing.buyLine)}
                         </p>
@@ -440,24 +440,24 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                         ? { href: rep.danawaUrl, target: '_blank', rel: 'noopener noreferrer' }
                         : {})}
                       className={`flex flex-col gap-1 rounded-lg border p-3 hover:bg-gray-50 ${
-                        rep.isBestUnit ? 'border-emerald-300 bg-emerald-50/40' : 'border-gray-200'
+                        rep.isBestUnit ? 'border-success-300 bg-success-50/40' : 'border-gray-200'
                       }`}
                     >
                       <div className="flex items-center justify-between gap-1">
                         <span className="text-sm font-medium">{rep.label}</span>
                         <div className="flex shrink-0 flex-wrap justify-end gap-1">
                           {rep.isBestUnit && (
-                            <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">
+                            <span className="bg-success-100 text-10 text-success-700 rounded px-1.5 py-0.5 font-semibold">
                               단위가 최저
                             </span>
                           )}
                           {(rep.activeDeals > 0 || rep.dealMinPrice != null) && (
-                            <span className="rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-semibold text-sky-700">
+                            <span className="bg-secondary-50 text-10 text-secondary-700 rounded px-1.5 py-0.5 font-semibold">
                               핫딜
                             </span>
                           )}
                           {rep.priceRank && (
-                            <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">
+                            <span className="bg-warning-100 text-10 text-warning-700 rounded px-1.5 py-0.5 font-semibold">
                               다나와 {rep.priceRank}
                             </span>
                           )}
@@ -542,9 +542,9 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                       >
                         {showPriceLabel && (
                           <span
-                            className={`text-[9px] whitespace-nowrap ${
+                            className={`text-10 whitespace-nowrap ${
                               isNearNow
-                                ? 'font-semibold text-emerald-600'
+                                ? 'text-success-600 font-semibold'
                                 : isLow
                                   ? 'text-error-500 font-semibold'
                                   : 'text-gray-400'
@@ -556,7 +556,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                         <div
                           className={`w-full rounded-t ${
                             isNearNow
-                              ? 'bg-emerald-500'
+                              ? 'bg-success-500'
                               : isLow
                                 ? 'bg-error-400'
                                 : 'bg-secondary-300'
@@ -564,7 +564,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
                           style={{ height: `${histBarH(p.price)}px` }}
                           title={`${p.month}: ${fmtHist(p.price)}`}
                         />
-                        <span className="h-3 text-[9px] text-gray-400">
+                        <span className="text-10 h-3 text-gray-400">
                           {showLabel ? histPeriodLabel(p.month, histGranularity) : ''}
                         </span>
                       </div>

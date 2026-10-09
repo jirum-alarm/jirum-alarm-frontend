@@ -273,7 +273,7 @@ function DealCard({ item: p }: { item: DealItem }) {
           <div className="mt-auto">
             {verdict && (
               <span
-                className={`mb-1 inline-block rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${verdict.className}`}
+                className={`text-11 mb-1 inline-block rounded-full px-1.5 py-0.5 font-semibold ${verdict.className}`}
               >
                 {verdict.text}
               </span>
@@ -332,17 +332,17 @@ function verdictBadge(p: DealItem): { text: string; className: string } | null {
     case 'lowest':
       return {
         text: `역대 최저 · ${unit}${p.savePct}%↓`,
-        className: 'bg-emerald-50 text-emerald-700',
+        className: 'bg-success-50 text-success-700',
       };
     case 'cheap':
       return {
         text: `평소보다 ${unit}${p.savePct}%↓`,
-        className: 'bg-emerald-50 text-emerald-700',
+        className: 'bg-success-50 text-success-700',
       };
     case 'fair':
       return { text: '평소 수준', className: 'bg-gray-100 text-gray-600' };
     case 'high':
-      return { text: '평소보다 비싸요', className: 'bg-amber-50 text-amber-800' };
+      return { text: '평소보다 비싸요', className: 'bg-warning-50 text-warning-800' };
     default:
       return null;
   }

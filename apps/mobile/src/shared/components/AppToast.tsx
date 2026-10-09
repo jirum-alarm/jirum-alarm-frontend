@@ -43,10 +43,10 @@ function ToastBody({
 }) {
   return (
     <View
-      className="mx-5 flex-row items-center gap-x-2 rounded-[12px] bg-fixed-800 py-[13px] pl-4 pr-4"
+      className="mx-5 flex-row items-center gap-x-2 rounded-xl bg-fixed-800 py-[13px] pl-4 pr-4"
       accessibilityLiveRegion="polite">
       {icon}
-      <Text className="flex-1 text-[14px] font-pretendard text-fixed-white">
+      <Text className="flex-1 text-sm font-pretendard text-fixed-white">
         {text}
       </Text>
       {action && (
@@ -58,7 +58,7 @@ function ToastBody({
           hitSlop={8}
           accessibilityRole="button"
           className="active:opacity-60">
-          <Text className="text-[14px] font-semibold text-primary-500">
+          <Text className="text-sm font-semibold text-primary-500">
             {action.label}
           </Text>
         </Pressable>

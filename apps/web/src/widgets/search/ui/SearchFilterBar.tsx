@@ -50,7 +50,7 @@ function Chip({
       onClick={onClick}
       // ponytail: after 유사요소로 세로 히트영역만 확장(~42px) — 가로 확장은 이웃 칩과 겹쳐 오터치 유발
       className={cn(
-        'relative shrink-0 cursor-pointer rounded-[40px] border px-3 py-1.5 text-sm transition-all after:absolute after:-inset-y-1 after:right-0 after:left-0 after:content-[""]',
+        'relative shrink-0 cursor-pointer rounded-full border px-3 py-1.5 text-sm transition-all after:absolute after:-inset-y-1 after:right-0 after:left-0 after:content-[""]',
         active
           ? 'border-secondary-500 bg-secondary-50 text-secondary-800 font-semibold'
           : 'border-gray-300 bg-white text-gray-700',

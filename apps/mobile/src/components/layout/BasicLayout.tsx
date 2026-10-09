@@ -35,14 +35,14 @@ const BasicLayout = ({children, hasBackButton, title}: Props) => {
               <CaretLeft />
             </Pressable>
             {title && (
-              <Text className="pl-[20px] text-[18px] font-pretendard-bold">
+              <Text className="pl-[20px] text-lg font-pretendard-bold">
                 {title}
               </Text>
             )}
           </>
         )}
         {!hasBackButton && title && (
-          <Text className="text-[18px] font-pretendard-bold">{title}</Text>
+          <Text className="text-lg font-pretendard-bold">{title}</Text>
         )}
       </View>
       {children}

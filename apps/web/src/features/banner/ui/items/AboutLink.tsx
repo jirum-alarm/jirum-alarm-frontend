@@ -15,6 +15,7 @@ const props = {
   description: '소개 페이지에서 한 눈에 알아보세요!',
   image: landing,
   // eventName: EVENT.OPEN_KAKAO_TALK.NAME,
+  // eslint-disable-next-line no-restricted-syntax -- 소개 페이지 배너 고유색(짙은 초록, 앱 HomeBannerCarousel 과 같은 값)
   className: 'bg-[#193E21] border-[#34673C]',
 };
 

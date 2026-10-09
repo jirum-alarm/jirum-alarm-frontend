@@ -2,7 +2,7 @@ import React, {forwardRef, isValidElement, useState} from 'react';
 import {type TextInputProps, View} from 'react-native';
 import {Text, TextInput} from '@/shared/components/ui/Text/AppText';
 import {
-  containerVaraint,
+  containerVariant,
   textfieldVariant,
 } from '@/shared/components/ui/Text/TextField/variant/textfield.ts';
 import type {VariantProps} from 'class-variance-authority';
@@ -47,12 +47,10 @@ const TextField = forwardRef<TextInput, Props>(
       <View>
         {label && (
           <View className="mb-[8px]">
-            <Text className="text-gray-500 text-[14px] font-semibold">
-              {label}
-            </Text>
+            <Text className="text-gray-500 text-sm font-semibold">{label}</Text>
           </View>
         )}
-        <View className={cn(containerVaraint({variant, focused: isFocused}))}>
+        <View className={cn(containerVariant({variant, focused: isFocused}))}>
           <TextInput
             ref={ref}
             // 화면 라벨이 입력칸 밖 Text 라 스크린리더가 연결하지 못한다. 호출부 값이 우선.
@@ -76,7 +74,7 @@ const TextField = forwardRef<TextInput, Props>(
               helperText
             ) : (
               <Text
-                className={cn('text-[12px] font-pretendard', {
+                className={cn('text-xs font-pretendard', {
                   'text-error-500': error,
                   'text-gray-500': !error,
                 })}>

@@ -58,7 +58,7 @@ export default function Composer({
        * 같은 말을 더 크게 하므로 둘이 겹치면 잔소리가 된다.
        */}
       {quota && shouldWarn(quota) && (
-        <p className="mb-2 text-center text-[12px] text-gray-500">
+        <p className="mb-2 text-center text-xs text-gray-500">
           {QUOTA[quota.tier].period === '월' ? '이번 달' : '오늘'} 남은 질문{' '}
           <b className="text-gray-700 tabular-nums">{remaining(quota)}회</b>
           {quota.tier === 'anon' && ' · 로그인하면 더 물어볼 수 있어요'}
@@ -80,7 +80,7 @@ export default function Composer({
           disabled={walled}
           maxLength={40}
           enterKeyHint="send"
-          className="focus-visible:outline-secondary-400 h-[52px] w-full rounded-full border border-gray-300 bg-white pr-[52px] pl-[46px] text-[15px] shadow-sm placeholder:text-gray-400 focus-visible:border-gray-400 focus-visible:outline-2 focus-visible:outline-offset-1 disabled:bg-gray-50 disabled:text-gray-400"
+          className="focus-visible:outline-secondary-400 text-15 h-[52px] w-full rounded-full border border-gray-300 bg-white pr-[52px] pl-[46px] shadow-sm placeholder:text-gray-400 focus-visible:border-gray-400 focus-visible:outline-2 focus-visible:outline-offset-1 disabled:bg-gray-50 disabled:text-gray-400"
         />
         <svg
           className="pointer-events-none absolute top-[17px] left-4 size-[18px] text-gray-400"

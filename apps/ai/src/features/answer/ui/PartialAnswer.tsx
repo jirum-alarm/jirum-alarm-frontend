@@ -74,7 +74,7 @@ export default function PartialAnswer({
         </span>
         <div>
           <p className="mb-0.5 text-sm font-bold text-gray-900">{title}</p>
-          <p className="text-[12.5px] leading-relaxed text-gray-500">{detail}</p>
+          <p className="text-13 leading-relaxed text-gray-500">{detail}</p>
         </div>
       </div>
       {children ? <div className="p-4">{children}</div> : null}

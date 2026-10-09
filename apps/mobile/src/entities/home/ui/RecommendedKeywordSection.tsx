@@ -124,8 +124,8 @@ export default function RecommendedKeywordSection() {
   };
 
   return (
-    <View className="bg-[#eaf7d9] px-5 py-7 dark:bg-primary-50">
-      <Text className="text-center text-[15px] font-semibold text-gray-900">
+    <View className="bg-primary-100 px-5 py-7 dark:bg-primary-50">
+      <Text className="text-center text-15 font-semibold text-gray-900">
         인기 키워드로 알림 받아보세요!
       </Text>
       <View className="mt-4 flex-row flex-wrap justify-center gap-2">

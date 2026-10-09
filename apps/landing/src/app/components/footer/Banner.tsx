@@ -21,7 +21,7 @@ const Banner = () => {
     >
       <div className="flex shrink-0 flex-col items-center justify-center gap-y-2 pb-18 lg:items-start lg:pb-0">
         <p className="font-semibold text-white lg:text-2xl">핫딜을 누구보다 빠르게 구매해보세요!</p>
-        <h3 className="text-[22px] font-bold text-white lg:text-[28px]">바로 다운로드하기</h3>
+        <h3 className="text-22 lg:text-28 font-bold text-white">바로 다운로드하기</h3>
         <AppDownload type="footer" />
       </div>
       <div className="flex h-full max-h-[50vh] w-full max-w-[50vh] justify-end lg:max-h-[75vh] lg:max-w-160">

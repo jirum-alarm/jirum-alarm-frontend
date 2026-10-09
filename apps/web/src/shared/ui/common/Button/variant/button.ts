@@ -1,11 +1,11 @@
 import { cva } from 'class-variance-authority';
 
-export const buttonVaraint = cva('w-full', {
+export const buttonVariant = cva('w-full', {
   variants: {
     size: {
-      lg: ['h-12 px-3 rounded-[8px] text-base'],
-      md: ['rounded-[8px]'],
-      sm: ['rounded-[8px]'],
+      lg: ['h-12 px-3 rounded-lg text-base'],
+      md: ['rounded-lg'],
+      sm: ['rounded-lg'],
     },
     variant: {
       outlined: ['border'],

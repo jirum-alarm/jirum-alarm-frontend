@@ -21,9 +21,7 @@ export function PartialAnswer({ props }: { props: { reason?: any; filteredCount:
       {props.reason?.code === 'NO_RESULTS' ? (
         <ExampleChips />
       ) : props.filteredCount > 0 ? (
-        <p className="text-[12px] text-gray-600">
-          걸러낸 딜 {props.filteredCount}개는 아래에 있어요.
-        </p>
+        <p className="text-xs text-gray-600">걸러낸 딜 {props.filteredCount}개는 아래에 있어요.</p>
       ) : null}
     </NativePartialAnswer>
   );

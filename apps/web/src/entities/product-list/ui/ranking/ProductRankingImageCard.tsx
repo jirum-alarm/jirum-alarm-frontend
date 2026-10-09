@@ -42,7 +42,7 @@ export default function ProductRankingImageCard({
     >
       <m.div
         className={cn(
-          'pc:h-auto pc:scale-100 pc:border h-[352px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300',
+          'pc:h-auto pc:scale-100 pc:border shadow-card h-[352px] w-full origin-center scale-90 overflow-hidden rounded-lg bg-white transition-all duration-300',
           activeIndex === index && 'scale-100',
         )}
       >
@@ -72,7 +72,7 @@ export default function ProductRankingImageCard({
               time={product.postedAt ? <DisplayTime time={product.postedAt} /> : undefined}
               className="pt-1"
             />
-            <div className="pc:h-[36px] pc:pt-0.5 xl:pc:text-[22px] pt-2 text-lg font-bold text-gray-900">
+            <div className="pc:h-[36px] pc:pt-0.5 xl:pc:text-22 pt-2 text-lg font-bold text-gray-900">
               <DisplayListPrice price={product.price} />
             </div>
           </div>

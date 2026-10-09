@@ -56,7 +56,7 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
 
   const title = (
     <>
-      <span className="shadow-primary-500 inline-block font-extrabold shadow-[inset_0-12px_0]">
+      <span className="shadow-primary-500 inline-block font-extrabold shadow-highlight">
         지름알림
       </span>{' '}
       앱 다운받고
@@ -113,7 +113,7 @@ export default function FirstVisitAppAlertModal({ device }: { device: CheckDevic
     <Drawer.Root open={show} onOpenChange={setShow}>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max rounded-t-5 pb-safe-bottom-16 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white px-5 pt-3 outline-hidden">
+        <Drawer.Content className="max-w-mobile-max rounded-t-sheet pb-safe-bottom-16 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white px-5 pt-3 outline-hidden">
           <div className="mx-auto mb-5 h-1 w-10 rounded-full bg-gray-300" aria-hidden />
           <Drawer.Title className="text-2xl font-semibold text-gray-900">{title}</Drawer.Title>
           <Drawer.Description asChild>{image}</Drawer.Description>

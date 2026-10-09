@@ -46,7 +46,7 @@ export default function TossDealCard({
           </div>
         )}
         {label && (
-          <div className="bg-error-500 text-fixed-white absolute top-0 right-0 z-10 flex h-6 items-center justify-center rounded-tr-[8px] rounded-bl-[8px] px-2 text-xs font-semibold">
+          <div className="bg-error-500 text-fixed-white absolute top-0 right-0 z-10 flex h-6 items-center justify-center rounded-tr-lg rounded-bl-lg px-2 text-xs font-semibold">
             {label}
           </div>
         )}
@@ -66,12 +66,12 @@ export default function TossDealCard({
         {(deal.arrivalGuaranteed || deal.specialProduct) && (
           <div className="flex flex-wrap gap-1 pt-1">
             {deal.arrivalGuaranteed && (
-              <span className="rounded bg-green-50 px-1.5 py-0.5 text-[11px] font-medium whitespace-nowrap text-green-600">
+              <span className="bg-success-50 text-11 text-success-700 rounded px-1.5 py-0.5 font-medium whitespace-nowrap">
                 도착보장
               </span>
             )}
             {deal.specialProduct && (
-              <span className="bg-error-50 text-error-600 rounded px-1.5 py-0.5 text-[11px] font-medium whitespace-nowrap">
+              <span className="bg-error-50 text-error-600 text-11 rounded px-1.5 py-0.5 font-medium whitespace-nowrap">
                 토스특가
               </span>
             )}
@@ -82,7 +82,7 @@ export default function TossDealCard({
         <div className="flex flex-wrap items-center gap-x-1.5 pt-1 text-xs text-gray-500">
           {typeof deal.rating === 'number' && (
             <span className="whitespace-nowrap">
-              <span className="text-[#ffb200]">★</span> {deal.rating}
+              <span className="text-warning-400">★</span> {deal.rating}
               {deal.reviewCount ? ` (${deal.reviewCount.toLocaleString()})` : ''}
             </span>
           )}

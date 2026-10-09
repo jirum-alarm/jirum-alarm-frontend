@@ -12,7 +12,7 @@ const Logout = () => {
     <AlertDialog>
       <AlertDialog.Trigger asChild>
         <m.button
-          className="rounded-lg px-6 py-3 text-[13px] text-gray-500"
+          className="text-13 rounded-lg px-6 py-3 text-gray-500"
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.1 }}
         >

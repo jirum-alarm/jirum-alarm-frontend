@@ -50,8 +50,8 @@ export default function QuotaWall({ tier }: { tier: Tier }) {
 
   return (
     <div className="rounded-2xl rounded-tl-sm border border-gray-200 bg-white px-4 py-3.5">
-      <p className="text-[15px] font-bold text-gray-900">{title}</p>
-      <p className="mt-1 text-[13.5px] leading-relaxed text-gray-600">{body}</p>
+      <p className="text-15 font-bold text-gray-900">{title}</p>
+      <p className="mt-1 text-sm leading-relaxed text-gray-600">{body}</p>
       {tier === 'anon' ? (
         /*
          * 로그인은 web(jirum-alarm.com)이 갖고 있다. 돌아올 곳을 redirect 로 넘겨
@@ -59,7 +59,7 @@ export default function QuotaWall({ tier }: { tier: Tier }) {
          */
         <a
           href={loginHref()}
-          className="tappable mt-3 flex h-10 w-full items-center justify-center rounded-full bg-gray-900 text-[14px] font-medium text-white"
+          className="tappable mt-3 flex h-10 w-full items-center justify-center rounded-full bg-gray-900 text-sm font-medium text-white"
         >
           {cta}
         </a>
@@ -68,7 +68,7 @@ export default function QuotaWall({ tier }: { tier: Tier }) {
           <button
             type="button"
             onClick={() => setPlanOpen(true)}
-            className="tappable mt-3 h-10 w-full rounded-full bg-gray-900 text-[14px] font-medium text-white"
+            className="tappable mt-3 h-10 w-full rounded-full bg-gray-900 text-sm font-medium text-white"
           >
             {cta}
           </button>

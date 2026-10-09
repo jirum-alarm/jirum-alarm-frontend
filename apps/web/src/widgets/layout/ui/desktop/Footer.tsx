@@ -21,7 +21,7 @@ const Footer = () => {
                 href="https://open.kakao.com/o/gJZTWAAg"
                 target="_blank"
                 aria-label="카카오톡 오픈채팅 바로가기"
-                className="flex size-9 items-center justify-center rounded-full bg-[#FAE300]"
+                className="bg-kakao flex size-9 items-center justify-center rounded-full"
               >
                 <TalkLight className="mt-0.5 mr-0.25" />
               </Link>

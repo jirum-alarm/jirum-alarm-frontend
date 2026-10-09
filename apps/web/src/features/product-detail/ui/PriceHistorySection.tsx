@@ -566,7 +566,7 @@ export default function PriceHistorySection({
     return (
       <section className="py-0">
         <DetailSectionHeader title="가격 추이" />
-        <p className="mt-2 text-xs text-red-500">
+        <p className="text-error-500 mt-2 text-xs">
           priceHistory 조회 실패: {error instanceof Error ? error.message : 'unknown'}
         </p>
       </section>
@@ -664,7 +664,7 @@ export default function PriceHistorySection({
           {/* 3칸 그리드의 가운데 칸(≈100px)엔 안 들어가 390px 이하에서 "절/약" 으로 깨졌다.
               양옆 칸은 두 줄이라 이 세 번째 줄은 칸 밖으로 넘쳐도 겹칠 게 없다. */}
           {currentPriceBadge ? (
-            <span className="text-[11px] font-medium whitespace-nowrap text-emerald-600">
+            <span className="text-11 text-success-600 font-medium whitespace-nowrap">
               {currentPriceBadge.text}
             </span>
           ) : null}
@@ -1010,7 +1010,7 @@ function DealPreview({
 
   return (
     <div className="mt-3 rounded-xl border border-gray-200 bg-white p-2.5">
-      <div className="mb-1.5 flex h-4 items-center gap-2 text-[11px] text-gray-400">
+      <div className="text-11 mb-1.5 flex h-4 items-center gap-2 text-gray-400">
         {isCurrent ? (
           <span
             className="inline-block size-1.5 shrink-0 rounded-full"
@@ -1050,7 +1050,7 @@ function DealPreview({
         <div className="min-w-0 flex-1">
           <div className="truncate text-xs text-gray-900">{dealTitle(deal)}</div>
           {deal.providerName && (
-            <div className="mt-0.5 truncate text-[11px] text-gray-400">{deal.providerName}</div>
+            <div className="text-11 mt-0.5 truncate text-gray-400">{deal.providerName}</div>
           )}
         </div>
         <span className="text-error-500 shrink-0 text-xs font-semibold tabular-nums">

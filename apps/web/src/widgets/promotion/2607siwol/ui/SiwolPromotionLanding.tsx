@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable no-restricted-syntax -- 2026-07 시월 캠페인 페이지: 캠페인 고유 색·크기(토큰 밖이 의도) */
 
 import { m } from 'motion/react';
 import { useSearchParams } from 'next/navigation';
@@ -78,7 +79,7 @@ export function SiwolPromotionLanding() {
         <div className="text-center">
           <p className="text-xs leading-[18px] font-medium text-[#8b96a9]">26.07.01 - 26.08.01</p>
           <CollaborationBadge />
-          <h1 className="mt-5 text-[28px] leading-9 font-extrabold tracking-normal sm:text-[24px]">
+          <h1 className="text-28 mt-5 leading-9 font-extrabold tracking-normal sm:text-[24px]">
             <span className="block text-[#fff200]">프로 절약러를 위한</span>
             <span className="text-fixed-white block">0원 이벤트</span>
           </h1>
@@ -343,7 +344,7 @@ function CodeCard({
           className="text-fixed-white ml-1 flex h-8 items-center gap-1.5 rounded-full bg-[#344054] px-3 text-xs font-bold transition-colors hover:bg-[#475467]"
           aria-label="비밀번호 복사하기"
         >
-          <span className="relative block size-4 before:absolute before:top-[2px] before:left-[2px] before:size-[10px] before:rounded-[2px] before:border before:border-white/80 after:absolute after:right-[1px] after:bottom-[1px] after:size-[10px] after:rounded-[2px] after:border after:border-white" />
+          <span className="relative block size-4 before:absolute before:top-[2px] before:left-[2px] before:size-[10px] before:rounded-xs before:border before:border-white/80 after:absolute after:right-[1px] after:bottom-[1px] after:size-[10px] after:rounded-xs after:border after:border-white" />
           {copyState === 'copied' ? '복사됨' : copyState === 'failed' ? '실패' : '복사하기'}
         </button>
       </div>

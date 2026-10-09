@@ -32,7 +32,7 @@ const RecommendedProductTabs = ({
         <li
           key={keyword}
           onClick={handleKeywordClick(keyword)}
-          className={cn(`shrink-0 rounded-[40px] border transition-all`, {
+          className={cn(`shrink-0 rounded-full border transition-all`, {
             'border-secondary-500 bg-secondary-50 text-secondary-800 font-semibold':
               selectedKeyword === keyword,
             'border-gray-300 bg-white text-gray-700': selectedKeyword !== keyword,

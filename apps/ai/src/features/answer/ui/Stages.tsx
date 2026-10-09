@@ -7,7 +7,7 @@
 export default function Stages({ stages, done }: { stages: string[]; done: boolean }) {
   if (stages.length === 0 && !done) {
     return (
-      <p className="flex items-center gap-1.5 pl-1 text-[13px] text-gray-500">
+      <p className="text-13 flex items-center gap-1.5 pl-1 text-gray-500">
         <span className="dot size-1.5 rounded-full bg-gray-400" />
         <span
           className="dot size-1.5 rounded-full bg-gray-400"
@@ -33,7 +33,7 @@ export default function Stages({ stages, done }: { stages: string[]; done: boole
     return (
       <ol className="flex flex-col gap-1 pl-1">
         {stages.map((s, i) => (
-          <li key={`${s}-${i}`} className="flex items-center gap-2 text-[12px] text-gray-500">
+          <li key={`${s}-${i}`} className="flex items-center gap-2 text-xs text-gray-500">
             <Check />
             {s}
           </li>
@@ -56,8 +56,8 @@ export default function Stages({ stages, done }: { stages: string[]; done: boole
             key={`${s}-${i}`}
             className={
               active
-                ? 'rise flex items-center gap-2 text-[13px] font-medium text-gray-700'
-                : 'flex items-center gap-2 text-[13px] text-gray-500'
+                ? 'rise text-13 flex items-center gap-2 font-medium text-gray-700'
+                : 'text-13 flex items-center gap-2 text-gray-500'
             }
           >
             {active ? <Spinner /> : <Check />}

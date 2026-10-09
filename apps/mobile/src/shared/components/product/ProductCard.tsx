@@ -87,9 +87,7 @@ const ProductCard = React.memo(function ProductCard({
 
           {product.isEnd ? (
             <View className="absolute bottom-0 left-0 h-[22px] items-center justify-center rounded-tr-lg rounded-bl-lg bg-white px-2">
-              <Text className="text-xs font-semibold text-gray-700">
-                판매종료
-              </Text>
+              <Text className="text-xs text-gray-700">판매종료</Text>
             </View>
           ) : product.hotDealType && !product.earliestExpiryDate ? (
             // 유통기한 띠가 같은 자리를 덮는다(HomeCardPrimitives CardThumbnail 과 같은 이유).

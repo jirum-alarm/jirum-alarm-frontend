@@ -120,17 +120,17 @@ export default function DealList({ deals, lowest }: { deals: Deal[]; lowest: num
                   <div className="min-w-0 flex-1">
                     <div className="mb-1 flex flex-wrap items-center gap-1.5">
                       {isLowest && (
-                        <span className="bg-error-500 rounded px-1.5 py-0.5 text-[10px] font-bold text-white">
+                        <span className="bg-error-500 text-10 rounded px-1.5 py-0.5 font-bold text-white">
                           최저가
                         </span>
                       )}
-                      <span className="text-[11px] text-gray-500">
+                      <span className="text-11 text-gray-500">
                         {[d.mallName, daysAgo(d.postedAt)].filter(Boolean).join(' · ')}
                       </span>
                     </div>
-                    <p className="line-clamp-2 text-[13px] leading-snug text-gray-700">{d.title}</p>
+                    <p className="text-13 line-clamp-2 leading-snug text-gray-700">{d.title}</p>
                     <div className="mt-0.5 flex items-baseline justify-between gap-2">
-                      <span className="text-[15px] font-bold text-gray-900 tabular-nums">
+                      <span className="text-15 font-bold text-gray-900 tabular-nums">
                         {priceOf(d)}
                       </span>
                       <svg
@@ -156,7 +156,7 @@ export default function DealList({ deals, lowest }: { deals: Deal[]; lowest: num
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="tappable min-h-11 rounded-xl border border-gray-200 bg-white py-2.5 text-[13px] font-medium text-gray-600 active:bg-gray-50"
+          className="tappable text-13 min-h-11 rounded-xl border border-gray-200 bg-white py-2.5 font-medium text-gray-600 active:bg-gray-50"
         >
           {hidden}개 더 보기
         </button>
@@ -165,7 +165,7 @@ export default function DealList({ deals, lowest }: { deals: Deal[]; lowest: num
         <button
           type="button"
           onClick={() => setExpanded(false)}
-          className="tappable min-h-11 rounded-xl border border-gray-200 bg-white py-2.5 text-[13px] font-medium text-gray-500 active:bg-gray-50"
+          className="tappable text-13 min-h-11 rounded-xl border border-gray-200 bg-white py-2.5 font-medium text-gray-500 active:bg-gray-50"
         >
           접기
         </button>

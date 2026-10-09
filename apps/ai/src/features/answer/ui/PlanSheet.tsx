@@ -142,8 +142,8 @@ export default function PlanSheet({
       <div className="px-5 pt-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-[17px] font-bold text-gray-900">질문 횟수 플랜</h2>
-            <p className="mt-1 text-[13px] leading-relaxed text-gray-500">
+            <h2 className="text-lg font-bold text-gray-900">질문 횟수 플랜</h2>
+            <p className="text-13 mt-1 leading-relaxed text-gray-500">
               질문 한 번마다 실시간으로 가격·커뮤니티 반응을 훑어요. 그래서 횟수가 있어요.
             </p>
           </div>
@@ -176,19 +176,19 @@ export default function PlanSheet({
                 }`}
               >
                 <div className="flex items-baseline justify-between gap-3">
-                  <p className="flex items-center gap-1.5 text-[14.5px] font-bold text-gray-900">
+                  <p className="text-15 flex items-center gap-1.5 font-bold text-gray-900">
                     {row.name}
                     {current && (
-                      <span className="rounded-full bg-gray-900 px-1.5 py-0.5 text-[10.5px] font-medium text-white">
+                      <span className="text-11 rounded-full bg-gray-900 px-1.5 py-0.5 font-medium text-white">
                         현재
                       </span>
                     )}
                   </p>
-                  <p className="text-[13.5px] font-semibold text-gray-900">{row.price}</p>
+                  <p className="text-sm font-semibold text-gray-900">{row.price}</p>
                 </div>
-                <p className="mt-1 text-[13px] text-gray-700">{row.quota}</p>
+                <p className="text-13 mt-1 text-gray-700">{row.quota}</p>
                 {/* gray-500: 보조 라벨 하한. gray-400 은 흰 배경에서도 AA 미달 */}
-                <p className="mt-0.5 text-[12px] text-gray-500">{row.note}</p>
+                <p className="mt-0.5 text-xs text-gray-500">{row.note}</p>
               </li>
             );
           })}
@@ -202,7 +202,7 @@ export default function PlanSheet({
          * 대부분은 가격만 보고 닫기 때문이다 — 안 쓸 폼이 시트의 절반을 차지한다.
          */}
         {done ? (
-          <p className="mt-4 rounded-full bg-gray-100 py-3 text-center text-[13.5px] font-medium text-gray-700">
+          <p className="mt-4 rounded-full bg-gray-100 py-3 text-center text-sm font-medium text-gray-700">
             신청됐어요. 열리면 메일 드릴게요.
           </p>
         ) : open2 ? (
@@ -216,29 +216,29 @@ export default function PlanSheet({
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="이메일 주소"
                 aria-label="이메일 주소"
-                className="h-11 min-w-0 flex-1 rounded-full border border-gray-300 px-4 text-[14.5px] outline-none focus:border-gray-900"
+                className="text-15 h-11 min-w-0 flex-1 rounded-full border border-gray-300 px-4 outline-none focus:border-gray-900"
               />
               <button
                 type="submit"
                 disabled={busy}
-                className="tappable h-11 shrink-0 rounded-full bg-gray-900 px-5 text-[14.5px] font-medium text-white disabled:opacity-50"
+                className="tappable text-15 h-11 shrink-0 rounded-full bg-gray-900 px-5 font-medium text-white disabled:opacity-50"
               >
                 {busy ? '...' : '신청'}
               </button>
             </div>
             {/* 실패를 조용히 삼키지 않는다 — 안 눌린 건지 실패한 건지 알 수 없으면 다시 누른다 */}
-            {error && <p className="text-error-500 mt-2 text-[12px]">{error}</p>}
+            {error && <p className="text-error-500 mt-2 text-xs">{error}</p>}
           </form>
         ) : (
           <button
             type="button"
             onClick={() => setOpen2(true)}
-            className="tappable mt-4 h-11 w-full rounded-full bg-gray-900 text-[14.5px] font-medium text-white"
+            className="tappable text-15 mt-4 h-11 w-full rounded-full bg-gray-900 font-medium text-white"
           >
             프로 열리면 알려주세요
           </button>
         )}
-        <p className="mt-2 text-center text-[11.5px] text-gray-500">
+        <p className="mt-2 text-center text-xs text-gray-500">
           아직 준비 중이에요. 결제는 열리지 않았어요.
         </p>
       </div>

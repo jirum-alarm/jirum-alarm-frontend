@@ -37,10 +37,10 @@ const AppDownloadBanner = (props: AppDownloadBannerProps) => {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-left leading-none">
-              <span className="text-secondary-800 block text-[14px] leading-[18px] font-semibold">
+              <span className="text-secondary-800 block text-sm leading-4.5 font-semibold">
                 지름알림 앱 다운받고
               </span>
-              <span className="text-secondary-700 block text-[13px] leading-[17px]">
+              <span className="text-secondary-700 text-13 block leading-[17px]">
                 핫딜을 실시간으로 확인하세요!
               </span>
             </p>

@@ -27,7 +27,7 @@ export default function FollowUp({ suggestions }: { suggestions: string[] }) {
 
   return (
     <div>
-      <p className="mb-2 text-[12px] font-medium text-gray-500">이어서 물어보기</p>
+      <p className="mb-2 text-xs font-medium text-gray-500">이어서 물어보기</p>
       <ul className="flex flex-wrap gap-2">
         {suggestions.map((s) => (
           <li key={s}>
@@ -35,14 +35,14 @@ export default function FollowUp({ suggestions }: { suggestions: string[] }) {
               <button
                 type="button"
                 onClick={() => ask(s)}
-                className="tappable block rounded-full border border-gray-300 bg-white px-3.5 py-2 text-[13px] text-gray-700 active:border-gray-400 active:bg-gray-50"
+                className="tappable text-13 block rounded-full border border-gray-300 bg-white px-3.5 py-2 text-gray-700 active:border-gray-400 active:bg-gray-50"
               >
                 {s}
               </button>
             ) : (
               <Link
                 href={roomHref(s)}
-                className="tappable block rounded-full border border-gray-300 bg-white px-3.5 py-2 text-[13px] text-gray-700 active:border-gray-400 active:bg-gray-50"
+                className="tappable text-13 block rounded-full border border-gray-300 bg-white px-3.5 py-2 text-gray-700 active:border-gray-400 active:bg-gray-50"
               >
                 {s}
               </Link>

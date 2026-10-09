@@ -7,9 +7,7 @@ const Title = () => (
     <Image src="/assets/icons/logo.svg" alt="" width={32} height={32} unoptimized />
     <span className="flex flex-col justify-center whitespace-nowrap">
       <h2 className="relative text-lg leading-tight font-bold text-gray-800">지름알림</h2>
-      <span className="text-[11px] leading-tight text-gray-500 lg:hidden">
-        커뮤니티 핫딜 모아보기
-      </span>
+      <span className="text-11 leading-tight text-gray-500 lg:hidden">커뮤니티 핫딜 모아보기</span>
     </span>
   </Link>
 );

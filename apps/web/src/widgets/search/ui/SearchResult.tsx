@@ -75,7 +75,7 @@ export default function SearchResult({ show }: { show: boolean }) {
               <button
                 type="button"
                 onClick={resetFilters}
-                className="rounded-[40px] border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700"
+                className="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700"
               >
                 필터 초기화
               </button>

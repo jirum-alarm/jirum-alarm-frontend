@@ -38,7 +38,7 @@ export default function PostPurchaseKakaoPrompt({
     <div className={cn('bg-secondary-50 flex items-center gap-x-3 py-3', className)}>
       <span
         aria-hidden
-        className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#FAE300]"
+        className="bg-kakao flex size-7 shrink-0 items-center justify-center rounded-full"
       >
         <TalkLight width={18} height={18} className="mt-0.5" />
       </span>

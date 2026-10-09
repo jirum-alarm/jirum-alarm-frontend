@@ -53,7 +53,7 @@ function CommunityLink({ url, provider }: { url: string; provider: string }) {
 function KeywordChip({ item }: { item: ReactionItem }) {
   return (
     <li
-      className={cn('flex gap-x-1 rounded-[40px] border bg-white px-3 py-1.5', {
+      className={cn('flex gap-x-1 rounded-full border bg-white px-3 py-1.5', {
         'border-secondary-300': item.type === 'POSITIVE',
         'border-error-200': item.type === 'NEGATIVE',
         'border-gray-300': item.type !== 'POSITIVE' && item.type !== 'NEGATIVE',
@@ -140,7 +140,7 @@ export default function CommunityReaction({ productId }: { productId: number }) 
             align="right"
             polygonOffset={8}
             content={
-              <p className="text-fixed-white text-[13px]">
+              <p className="text-fixed-white text-13">
                 <strong className="font-semibold">실제 커뮤니티</strong> 사용자들의
                 <br />
                 핫딜 반응을 요약해 확인해요

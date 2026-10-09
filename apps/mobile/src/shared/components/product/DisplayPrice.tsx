@@ -19,7 +19,7 @@ export default function DisplayPrice({
 
   return (
     <Text className={cn('text-lg font-bold text-gray-500', className)}>
-      <Text className="text-[24px] font-semibold text-gray-900">
+      <Text className="text-2xl font-semibold text-gray-900">
         {priceWithoutWon}
       </Text>
       {hasWon ? '원' : ''}

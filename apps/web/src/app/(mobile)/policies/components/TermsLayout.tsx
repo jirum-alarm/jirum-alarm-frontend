@@ -59,7 +59,7 @@ const TermsLayout = ({
         }
       />
       <article className="max-w-mobile-max pc:max-w-none flex w-full flex-col gap-6 p-5">
-        <div className="flex w-full flex-col gap-[8px] text-[13px] text-gray-500">
+        <div className="text-13 flex w-full flex-col gap-[8px] text-gray-500">
           <p>공고일자 : 2023년 12월 01일</p>
           <p>시행일자 : 2023년 12월 01일</p>
         </div>

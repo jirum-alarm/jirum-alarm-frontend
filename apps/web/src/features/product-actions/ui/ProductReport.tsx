@@ -71,7 +71,7 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit rounded-t-[20px] bg-white outline-hidden">
+        <Drawer.Content className="max-w-mobile-max rounded-t-sheet fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
           <div className="flex flex-col items-center">
             <Drawer.Title asChild>
               <h2 className="pt-[32px] text-xl font-bold">판매가 종료된 상품인가요?</h2>

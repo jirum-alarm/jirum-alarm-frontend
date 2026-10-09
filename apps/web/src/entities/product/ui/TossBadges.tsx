@@ -12,9 +12,13 @@ export default function TossBadges({
 }) {
   const badges: { key: string; label: string; className: string }[] = [];
   if (!hidePriceSignals && toss.lowestPriceCompensation)
-    badges.push({ key: 'lpc', label: '최저가 보상', className: 'bg-blue-50 text-blue-600' });
+    badges.push({
+      key: 'lpc',
+      label: '최저가 보상',
+      className: 'bg-secondary-50 text-secondary-600',
+    });
   if (toss.arrivalGuaranteed)
-    badges.push({ key: 'ag', label: '도착보장', className: 'bg-green-50 text-green-600' });
+    badges.push({ key: 'ag', label: '도착보장', className: 'bg-success-50 text-success-700' });
   if (toss.specialProduct)
     badges.push({ key: 'sp', label: '토스특가', className: 'bg-error-50 text-error-600' });
   if (!hidePriceSignals && toss.lowestIn30Days)

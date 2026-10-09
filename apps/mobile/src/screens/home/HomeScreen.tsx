@@ -296,8 +296,8 @@ export default function HomeScreen() {
           </View>
         </Animated.View>
 
-        {/* 본문 — web 은 rounded-t-[1.25rem] 로 다크 헤더 위에 올라탄다 */}
-        <View className="-mt-5 rounded-t-[20px] bg-white pt-3">
+        {/* 본문 — web 은 rounded-t-sheet 로 다크 헤더 위에 올라탄다 */}
+        <View className="-mt-5 rounded-t-sheet bg-white pt-3">
           {/* web mobile/JirumRankingContainer — 제목 + 더보기(/trending/ranking).
               슬라이더만 옮기고 이 헤더를 빠뜨렸었다. */}
           <View

@@ -63,7 +63,7 @@ function AppDownloadGuide({ platform }: { platform: 'apple' | 'android' | 'non-m
           platform === 'non-mobile' ? 'text-2xl font-semibold' : 'pb-7 text-2xl font-semibold'
         }
       >
-        <span className="shadow-primary-500 inline-block font-extrabold shadow-[inset_0-12px_0]">
+        <span className="shadow-primary-500 shadow-highlight inline-block font-extrabold">
           지름알림
         </span>{' '}
         앱 다운받고

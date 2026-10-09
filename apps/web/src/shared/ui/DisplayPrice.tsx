@@ -11,9 +11,7 @@ export default function DisplayPrice({ price, className }: DisplayPriceProps) {
 
   return (
     <p className={cn('pc:text-2xl text-lg font-bold text-gray-500', className)}>
-      <strong className="pc:text-[28px] text-[24px] font-semibold text-gray-900">
-        {priceWithoutWon}
-      </strong>
+      <strong className="pc:text-28 text-2xl font-semibold text-gray-900">{priceWithoutWon}</strong>
       {hasWon && '원'}
     </p>
   );

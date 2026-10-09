@@ -421,7 +421,7 @@ export default function Chat({
           turn.role === 'user' ? (
             <p
               key={`u${i}`}
-              className="ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-gray-900 px-4 py-2.5 text-[14.5px] font-medium text-white md:max-w-[70%]"
+              className="text-15 ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-gray-900 px-4 py-2.5 font-medium text-white md:max-w-[70%]"
             >
               {turn.text}
             </p>

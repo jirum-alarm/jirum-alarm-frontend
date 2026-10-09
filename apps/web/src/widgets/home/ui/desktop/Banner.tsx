@@ -123,8 +123,8 @@ const Banner = () => {
         className="relative mx-auto mt-8 mb-10 h-[120px] w-full max-w-[1208px] overflow-hidden"
         data-home-desktop-banner-carousel
       >
-        <div className="pointer-events-none absolute top-[-40px] left-0 z-10 h-[200px] w-[60px] bg-linear-to-r from-[#101828] to-transparent" />
-        <div className="pointer-events-none absolute top-[-40px] right-0 z-10 h-[200px] w-[60px] bg-linear-to-l from-[#101828] to-transparent" />
+        <div className="from-fixed-900 pointer-events-none absolute top-[-40px] left-0 z-10 h-[200px] w-[60px] bg-linear-to-r to-transparent" />
+        <div className="from-fixed-900 pointer-events-none absolute top-[-40px] right-0 z-10 h-[200px] w-[60px] bg-linear-to-l to-transparent" />
         <Swiper
           className="h-full w-full overflow-visible"
           modules={[Autoplay]}

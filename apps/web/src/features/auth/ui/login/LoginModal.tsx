@@ -17,8 +17,8 @@ import { loginModalMessageAtom } from '../../model/login/loginModal';
 import { getRecentLoginMethod, LoginMethod } from '../../model/login/recentLoginMethod';
 
 const LOGIN_BUTTON_STYLE: Record<LoginMethod, string> = {
-  kakao: 'bg-[#FBE84C] hover:bg-[#F5DC3D] text-fixed-900',
-  naver: 'bg-[#02C75A] hover:bg-[#00B04F] text-fixed-white',
+  kakao: 'bg-kakao hover:brightness-95 text-fixed-900',
+  naver: 'bg-naver hover:brightness-95 text-fixed-white',
   email: 'hover:bg-gray-200 border-[1px] border-gray-200 text-gray-900',
 };
 
@@ -151,7 +151,7 @@ function LoginOptionButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`flex h-12 w-full items-center justify-center gap-2 rounded-[230px] font-semibold whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-50 ${LOGIN_BUTTON_STYLE[method]}`}
+      className={`flex h-12 w-full items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-50 ${LOGIN_BUTTON_STYLE[method]}`}
     >
       {isLoading ? (
         <LoadingSpinner className="size-5 shrink-0" />

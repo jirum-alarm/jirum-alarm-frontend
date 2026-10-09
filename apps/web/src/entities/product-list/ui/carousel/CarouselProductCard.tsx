@@ -47,7 +47,7 @@ export default function CarouselProductCard({
             priority={priority}
           />
           {product.isEnd ? (
-            <div className="text-semibold absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">
+            <div className="absolute bottom-0 left-0 flex h-[22px] items-center rounded-tr-lg rounded-bl-lg bg-white px-2 text-xs text-gray-700">
               판매종료
             </div>
           ) : (
@@ -58,7 +58,7 @@ export default function CarouselProductCard({
             )
           )}
           {product.earliestExpiryDate && !product.isEnd && (
-            <div className="text-semibold bg-fixed-700/80 text-fixed-white absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg px-2 text-xs">
+            <div className="bg-fixed-700/80 text-fixed-white absolute inset-x-0 bottom-0 flex h-[22px] items-center justify-center rounded-b-lg px-2 text-xs">
               유통기한 {formatDateToMMD(product.earliestExpiryDate)}
             </div>
           )}

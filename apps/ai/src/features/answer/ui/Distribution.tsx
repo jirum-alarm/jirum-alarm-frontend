@@ -49,9 +49,7 @@ export default function Distribution({ prices }: { prices: number[] }) {
     <div className="rounded-2xl border border-gray-200 bg-white p-4">
       <div className="mb-3 flex items-baseline justify-between gap-2">
         <span className="text-sm font-bold text-gray-900">가격대</span>
-        <span className="shrink-0 text-[11px] text-gray-500 tabular-nums">
-          최근 {sorted.length}개
-        </span>
+        <span className="text-11 shrink-0 text-gray-500 tabular-nums">최근 {sorted.length}개</span>
       </div>
 
       <dl className="grid gap-px overflow-hidden rounded-xl bg-gray-100 md:grid-cols-3">
@@ -60,12 +58,12 @@ export default function Distribution({ prices }: { prices: number[] }) {
             key={c.k}
             className="flex items-baseline justify-between gap-3 bg-white px-3 py-2.5 md:flex-col md:items-start md:gap-1 md:py-3"
           >
-            <dt className="shrink-0 text-[12px] text-gray-500">{c.k}</dt>
+            <dt className="shrink-0 text-xs text-gray-500">{c.k}</dt>
             <dd
               className={
                 c.accent
-                  ? 'text-error-600 text-[15px] font-bold tabular-nums'
-                  : 'text-[14px] font-semibold text-gray-800 tabular-nums'
+                  ? 'text-error-600 text-15 font-bold tabular-nums'
+                  : 'text-sm font-semibold text-gray-800 tabular-nums'
               }
             >
               {c.v}
@@ -75,13 +73,13 @@ export default function Distribution({ prices }: { prices: number[] }) {
       </dl>
 
       {!enough && (
-        <p className="mt-2.5 text-[11px] leading-snug text-gray-500">
+        <p className="text-11 mt-2.5 leading-snug text-gray-500">
           {/* "표본"은 통계 용어라 일상어로. 뜻은 그대로 전달된다 */}
           {sorted.length}개는 너무 적어서 평균이나 구간을 말하지 않았어요.
         </p>
       )}
       {enough && tooWide && (
-        <p className="mt-2.5 text-[11px] leading-snug text-gray-500">
+        <p className="text-11 mt-2.5 leading-snug text-gray-500">
           용량·수량이 섞여 있어 가격대가 넓어요. 같은 규격끼리 비교하세요.
         </p>
       )}

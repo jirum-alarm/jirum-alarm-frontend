@@ -98,7 +98,7 @@ export default function CommunityPostCard({ post, tab }: { post: Post; tab: Comm
               <>
                 <Image src={previewImage} alt="" fill className="object-cover" sizes="80px" />
                 {images.length > 1 && (
-                  <span className="text-fixed-white absolute right-1 bottom-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] font-medium">
+                  <span className="text-fixed-white text-10 absolute right-1 bottom-1 rounded bg-black/60 px-1.5 py-0.5 font-medium">
                     +{images.length - 1}
                   </span>
                 )}

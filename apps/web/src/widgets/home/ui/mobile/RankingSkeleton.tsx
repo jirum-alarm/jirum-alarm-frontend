@@ -66,7 +66,7 @@ export const RankingSkeleton = () => {
 const SkeletonCard = ({ isActive }: { isActive: boolean }) => (
   <div className="w-[240px] shrink-0 pb-5">
     <div
-      className={`h-[352px] w-full origin-center overflow-hidden rounded-lg bg-white shadow-[0_2px_12px_rgba(0,0,0,0.08)] transition-all duration-300 ${
+      className={`shadow-card h-[352px] w-full origin-center overflow-hidden rounded-lg bg-white transition-all duration-300 ${
         isActive ? 'scale-100' : 'scale-90'
       }`}
     >

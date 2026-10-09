@@ -50,7 +50,7 @@ export default function QuotaDevBar() {
   if (!quota) return null;
 
   return (
-    <div className="mt-6 rounded-xl border border-dashed border-gray-300 px-3 py-2.5 text-[12px] text-gray-500">
+    <div className="mt-6 rounded-xl border border-dashed border-gray-300 px-3 py-2.5 text-xs text-gray-500">
       <div className="flex items-center justify-between gap-2">
         <span>
           서버 쿼터 · <b className="text-gray-700">{quota.tier}</b>{' '}
@@ -67,7 +67,7 @@ export default function QuotaDevBar() {
           {busy ? '초기화 중…' : '초기화'}
         </button>
       </div>
-      <p className="mt-2 text-[11px] leading-snug">
+      <p className="text-11 mt-2 leading-snug">
         티어는 로그인 여부로 <b>서버가</b> 정해요 (익명 3 / 로그인 10).
         {quota.tier === 'anon' && ' 회원 한도를 보려면 web 에서 로그인하세요.'}
       </p>

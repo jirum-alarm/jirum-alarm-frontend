@@ -41,7 +41,7 @@ export default function LogoLink({ inverted = false, subtitle = LOGO_SUBTITLE }:
           </h2>
           {subtitle && (
             <span
-              className={cn('text-[11px] leading-tight', {
+              className={cn('text-11 leading-tight', {
                 'text-fixed-white/70': inverted,
                 'text-gray-500': !inverted,
               })}

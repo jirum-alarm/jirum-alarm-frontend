@@ -61,7 +61,7 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
             <Drawer.Title>게시글 메뉴</Drawer.Title>
           </VisuallyHidden.Root>
           <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-          <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
+          <Drawer.Content className="max-w-mobile-max rounded-t-sheet fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
             <div className="flex flex-col items-center pt-4 pb-8">
               {isMyPost ? (
                 <>

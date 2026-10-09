@@ -30,7 +30,7 @@ const AlarmLinkButton = ({ color }: { color?: string }) => {
       >
         <Alert style={{ color }} className="pc:size-7 size-6" />
         {hasNewAlarm && (
-          <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-[#EB001C]" />
+          <span className="bg-error-500 absolute top-0 right-0 h-2 w-2 rounded-full" />
         )}
       </m.div>
     </Link>

@@ -41,7 +41,7 @@ export default function KakaoOpenChatPrompt({
           20px 에서는 안에 든 'TALK' 글자가 뭉개져 노이즈가 된다. */}
       <span
         aria-hidden
-        className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#FAE300]"
+        className="bg-kakao flex size-7 shrink-0 items-center justify-center rounded-full"
       >
         <TalkLight width={18} height={18} className="mt-0.5" />
       </span>

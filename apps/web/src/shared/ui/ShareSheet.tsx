@@ -136,14 +136,14 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
 
   // 무엇을 공유하는지 보여주는 프리뷰. 링크만 있으면 뭘 보내는지 알 수 없다.
   const preview = (
-    <div className="mb-3 flex items-center gap-2.5 rounded-[11px] border border-gray-200 bg-gray-50 p-2.5">
+    <div className="mb-3 flex items-center gap-2.5 rounded-xl border border-gray-200 bg-gray-50 p-2.5">
       {imageUrl ? (
         // 외부 CDN 썸네일이라 next/image 대신 img — 도메인 화이트리스트 없이 뜨게.
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={imageUrl}
           alt=""
-          className="size-11 flex-none rounded-[7px] object-cover"
+          className="size-11 flex-none rounded-lg object-cover"
           onError={(e) => {
             e.currentTarget.style.display = 'none';
           }}
@@ -160,12 +160,12 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
   const body = (
     <>
       {preview}
-      {/* 카카오 브랜드 색은 로그인 버튼과 동일 값 사용(앱 내 일관성) — login/page.tsx 관용구 */}
+      {/* 카카오 브랜드 색 = 토큰 kakao(로그인 버튼·앱과 같은 값) */}
       <button
         type="button"
         onClick={() => share('kakao')}
         disabled={!!pending}
-        className="text-fixed-900 flex h-[46px] w-full items-center justify-center gap-1.5 rounded-[10px] bg-[#FBE84C] text-sm font-bold hover:bg-[#F5DC3D] disabled:opacity-60"
+        className="text-fixed-900 bg-kakao flex h-[46px] w-full items-center justify-center gap-1.5 rounded-xl text-sm font-bold hover:brightness-95 disabled:opacity-60"
       >
         <SvgKakao width={20} height={20} />
         {pending === 'kakao' ? '카카오톡 여는 중…' : '카카오톡으로 공유'}
@@ -178,14 +178,14 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
             onClick={() => share(c)}
             disabled={!!pending}
             aria-label={`${label}(으)로 공유`}
-            className="group flex flex-1 flex-col items-center gap-1.5 rounded-[10px] py-1 disabled:opacity-60"
+            className="group flex flex-1 flex-col items-center gap-1.5 rounded-xl py-1 disabled:opacity-60"
           >
             <span
               className={`flex size-11 items-center justify-center rounded-full transition-transform group-active:scale-95 ${badge}`}
             >
               {icon}
             </span>
-            <span className="text-[11px] font-medium text-gray-700">{label}</span>
+            <span className="text-11 font-medium text-gray-700">{label}</span>
           </button>
         ))}
       </div>
@@ -224,7 +224,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
         {/* pb 에 safe-area 를 더해야 홈 인디케이터가 있는 기기에서 마지막 행이 안 잘린다. */}
-        <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white pb-[calc(env(safe-area-inset-bottom)+20px)] outline-hidden">
+        <Drawer.Content className="max-w-mobile-max rounded-t-sheet fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white pb-[calc(env(safe-area-inset-bottom)+20px)] outline-hidden">
           <div className="mx-auto mt-2 h-1 w-9 rounded-full bg-gray-200" />
           <Drawer.Title asChild>
             <h3 className="px-5 pt-4 pb-3 text-base font-bold">공유하기</h3>

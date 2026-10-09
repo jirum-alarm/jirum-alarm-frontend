@@ -77,7 +77,7 @@ const Login = () => {
       name: '카카오로 시작하기',
       id: 'kakao-login-button',
       icon: <SvgKakao />,
-      style: 'bg-[#FBE84C] hover:bg-[#F5DC3D] text-fixed-900',
+      style: 'bg-kakao hover:brightness-95 text-fixed-900',
       action: handleKakaoLogin,
       type: LoginType.KAKAO,
     },
@@ -85,7 +85,7 @@ const Login = () => {
       name: '네이버로 시작하기',
       id: 'naver_id_login',
       icon: <SvgNaver />,
-      style: 'bg-[#02C75A] hover:bg-[#00B04F] text-fixed-white',
+      style: 'bg-naver hover:brightness-95 text-fixed-white',
       action: handleNaverLogin,
       type: LoginType.NAVER,
     },
@@ -110,7 +110,7 @@ const Login = () => {
 
           {/* Title */}
           <div className="mb-12">
-            <p className="text-[28px] leading-[130%] font-bold tracking-[-1%]">핫딜의 시작</p>
+            <p className="text-28 leading-[130%] font-bold tracking-[-1%]">핫딜의 시작</p>
             <p className="text-[38px] leading-[130%] font-bold tracking-[-1%] text-gray-900">
               지름알림
             </p>
@@ -128,7 +128,7 @@ const Login = () => {
                   onClick={button.action}
                   disabled={isLoading}
                   className={cn(
-                    'flex h-[48px] w-[280px] items-center justify-center gap-2 rounded-[230px] font-semibold transition-colors',
+                    'flex h-[48px] w-[280px] items-center justify-center gap-2 rounded-full font-semibold transition-colors',
                     button.style,
                     isLoading && 'cursor-not-allowed opacity-70',
                   )}

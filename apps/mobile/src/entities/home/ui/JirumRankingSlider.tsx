@@ -258,7 +258,7 @@ const RankingCard = React.memo(function RankingCard({
         {
           marginRight: GAP,
           borderRadius: 8,
-          // web shadow-[0_2px_12px_rgba(0,0,0,0.08)].
+          // web shadow-card.
           // 모바일 카드엔 border 가 없어 이 그림자가 유일한 경계다.
           // 다크에선 검은 그림자가 안 보이고 카드가 바탕과 같은 색이라 경계가 사라진다 →
           // 한 단 밝은 면(gray-50) + 1px 선(gray-100)으로 경계를 대신한다.

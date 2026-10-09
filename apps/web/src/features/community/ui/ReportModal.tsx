@@ -61,7 +61,7 @@ export default function ReportModal({
           <Drawer.Title>글 신고하기</Drawer.Title>
         </VisuallyHidden.Root>
         <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
+        <Drawer.Content className="max-w-mobile-max rounded-t-sheet fixed inset-x-0 right-0 bottom-0 left-0 z-[9999] mx-auto h-fit bg-white outline-hidden">
           <div className="flex flex-col px-5 pt-6 pb-8">
             <h2 className="mb-4 text-base font-semibold text-gray-900">글 신고하기</h2>
             <p className="mb-4 text-sm text-gray-500">
@@ -111,7 +111,7 @@ export default function ReportModal({
               <button
                 onClick={() => report()}
                 disabled={!selectedReason || isPending}
-                className="bg-primary-500 text-fixed-white flex h-12 flex-1 items-center justify-center rounded-lg text-sm font-medium transition-transform active:scale-95 disabled:opacity-40"
+                className="bg-primary-500 text-fixed-900 flex h-12 flex-1 items-center justify-center rounded-lg text-sm font-medium transition-transform active:scale-95 disabled:opacity-40"
               >
                 신고
               </button>

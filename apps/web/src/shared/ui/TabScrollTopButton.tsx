@@ -55,7 +55,7 @@ export default function TabScrollTopButton() {
       aria-hidden={!isVisible}
       tabIndex={isVisible ? 0 : -1}
       className={cn(
-        'fixed right-5 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-white shadow-[0_2px_12px_0_rgba(0,0,0,0.08)] transition-[opacity,transform] duration-200',
+        'shadow-card fixed right-5 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-white transition-[opacity,transform] duration-200',
         isVisible ? 'opacity-100' : 'pointer-events-none translate-y-1 opacity-0',
       )}
       style={{

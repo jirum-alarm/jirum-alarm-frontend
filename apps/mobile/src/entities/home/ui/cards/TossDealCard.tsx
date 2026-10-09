@@ -76,9 +76,7 @@ export default function TossDealCard({
         {deal.arrivalGuaranteed || deal.specialProduct ? (
           <View className="flex-row flex-wrap gap-1 pt-1">
             {deal.arrivalGuaranteed ? (
-              <Badge
-                className="bg-green-50 dark:bg-green-950"
-                textClassName="text-green-600 dark:text-green-400">
+              <Badge className="bg-success-50" textClassName="text-success-700">
                 도착보장
               </Badge>
             ) : null}
@@ -93,7 +91,7 @@ export default function TossDealCard({
         <View className="flex-row flex-wrap items-center gap-x-1.5 pt-1">
           {typeof deal.rating === 'number' ? (
             <Text className="text-xs text-gray-500" numberOfLines={1}>
-              <Text className="text-[#ffb200]">★</Text> {deal.rating}
+              <Text className="text-warning-400">★</Text> {deal.rating}
               {deal.reviewCount
                 ? ` (${deal.reviewCount.toLocaleString()})`
                 : ''}
@@ -123,7 +121,7 @@ function Badge({
     <View className={cn('rounded px-1.5 py-0.5', className)}>
       {/* web `whitespace-nowrap` — 3열 좁은 카드에서 "최저가 보상"이 쪼개지지 않게. */}
       <Text
-        className={cn('text-[11px] font-medium', textClassName)}
+        className={cn('text-11 font-medium', textClassName)}
         numberOfLines={1}>
         {children}
       </Text>

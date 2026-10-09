@@ -11,7 +11,7 @@ const PainPoint = () => {
   const isInView = useInView(ref, { once: true, amount: 0.5 });
   return (
     <section className="flex w-full flex-col items-center bg-white py-20 lg:py-40">
-      <h2 className="mb-10 text-center text-[22px] font-bold lg:mb-20 lg:text-[40px]">
+      <h2 className="text-22 mb-10 text-center font-bold lg:mb-20 lg:text-[40px]">
         쇼핑, 더 편하게 할 방법 없을까?
       </h2>
       <div ref={ref} className="flex w-full max-w-180 flex-col gap-y-5 px-7 lg:gap-y-8">
