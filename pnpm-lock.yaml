@@ -568,8 +568,8 @@ importers:
         specifier: ^0.34.5
         version: 0.34.5
       swiper:
-        specifier: ^11.2.10
-        version: 11.2.10
+        specifier: ^14.3.0
+        version: 14.3.0
       tailwind-merge:
         specifier: ^3.7.0
         version: 3.7.0
@@ -13252,8 +13252,8 @@ packages:
   swap-case@3.0.3:
     resolution: {integrity: sha512-6p4op8wE9CQv7uDFzulI6YXUw4lD9n4oQierdbFThEKVWVQcbQcUjdP27W8XE7V4QnWmnq9jueSHceyyQnqQVA==}
 
-  swiper@11.2.10:
-    resolution: {integrity: sha512-RMeVUUjTQH+6N3ckimK93oxz6Sn5la4aDlgPzB+rBrG/smPdCTicXyhxa+woIpopz+jewEloiEE3lKo1h9w2YQ==}
+  swiper@14.3.0:
+    resolution: {integrity: sha512-qw0Xv1+sylM8KCQxWxV2iYAK2G6XjFGPZ/8F1baEsY8DK4A3sTnLx6jUJ0G71rDbVQ05JHMWkcWmJ5NvlxZO0w==}
     engines: {node: '>= 4.7.0'}
 
   sync-fetch@0.7.1:
@@ -30411,7 +30411,7 @@ snapshots:
 
   swap-case@3.0.3: {}
 
-  swiper@11.2.10: {}
+  swiper@14.3.0: {}
 
   sync-fetch@0.7.1:
     dependencies:

@@ -53,7 +53,7 @@
     "react-scroll": "^1.9.3",
     "rxjs": "^7.8.2",
     "sharp": "^0.34.5",
-    "swiper": "^11.2.10",
+    "swiper": "^14.3.0",
     "tailwind-merge": "^3.7.0",
     "uuid": "^13.0.2",
     "vaul": "^1.1.2"
