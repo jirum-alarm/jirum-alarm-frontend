@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useConfirm } from '@/components/Confirm';
 import { useToast } from '@/components/Toast';
+import { AdminPermissionsQuery } from '@/generated/gql/graphql';
 import {
   useAdminPermissions,
   useAssignAdminRole,
@@ -14,6 +15,9 @@ import {
 import { SECTION_LABELS } from '@/lib/adminSection';
 
 type Draft = { name: string; sections: string[] };
+
+const toDrafts = (adminRoles?: AdminPermissionsQuery['adminRoles']): Record<number, Draft> =>
+  Object.fromEntries((adminRoles ?? []).map((r) => [r.id, { name: r.name, sections: r.sections }]));
 
 const cardClass =
   'rounded-xs border border-stroke bg-white p-3 sm:p-5 shadow-default dark:border-strokedark dark:bg-boxdark';
@@ -49,17 +53,15 @@ const PermissionManager = () => {
   const roles = data?.adminRoles ?? [];
   const users = data?.adminUsersWithRole ?? [];
 
-  const [drafts, setDrafts] = useState<Record<number, Draft>>({});
+  const [drafts, setDrafts] = useState<Record<number, Draft>>(() => toDrafts(data?.adminRoles));
   const [newRole, setNewRole] = useState<Draft>({ name: '', sections: [] });
 
-  // 서버 값이 새로 오면(저장·삭제 후 refetch) 편집 초안을 서버 값으로 맞춘다.
-  useEffect(() => {
-    setDrafts(
-      Object.fromEntries(
-        (data?.adminRoles ?? []).map((r) => [r.id, { name: r.name, sections: r.sections }]),
-      ),
-    );
-  }, [data?.adminRoles]);
+  // 서버 값이 새로 오면(저장·삭제 후 refetch) 편집 초안을 서버 값으로 맞춘다 — effect 대신 렌더 중 비교로.
+  const [syncedRoles, setSyncedRoles] = useState(data?.adminRoles);
+  if (data?.adminRoles !== syncedRoles) {
+    setSyncedRoles(data?.adminRoles);
+    setDrafts(toDrafts(data?.adminRoles));
+  }
 
   const run = async (action: () => Promise<unknown>, done: string) => {
     try {

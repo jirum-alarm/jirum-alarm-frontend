@@ -15,6 +15,7 @@ const Toast = ({ message, type = 'success', isVisible, onClose, duration = 2000 
 
   useEffect(() => {
     if (isVisible) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- 보이기 시작하면 타이머(외부)로 사라짐 애니메이션을 돌린다 — 타이머와 짝인 상태다.
       setIsAnimating(true);
       const timer = setTimeout(() => {
         setIsAnimating(false);

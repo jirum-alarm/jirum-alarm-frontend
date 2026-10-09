@@ -188,6 +188,16 @@ function upsertUploadedForegroundElement(
   ];
 }
 
+// graphic JSON 파싱 — try/catch 를 컴포넌트 밖으로 빼 useMemo 가 그대로 유지되게 한다.
+const parseGraphicText = (
+  graphicText: string,
+): { graphic: ResponsiveAdvertiseGraphic | null; error: string | null } => {
+  try {
+    return { graphic: JSON.parse(graphicText) as ResponsiveAdvertiseGraphic, error: null };
+  } catch (e) {
+    return { graphic: null, error: e instanceof Error ? e.message : 'JSON 파싱 실패' };
+  }
+};
 const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditInitial }) => {
   const router = useRouter();
   const toast = useToast();
@@ -204,6 +214,8 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
   const [graphicText, setGraphicText] = useState(
     initial ? JSON.stringify(initial.graphic, null, 2) : SAMPLE_GRAPHIC,
   );
+  // graphic JSON 파싱 (프리뷰 + 제출 공용). 아래 핸들러들이 쓰므로 그보다 먼저 선언한다.
+  const parsedGraphic = useMemo(() => parseGraphicText(graphicText), [graphicText]);
 
   const patchGraphicText = (
     assetUrl: string,
@@ -304,18 +316,6 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
       ),
     );
   };
-
-  // graphic JSON 파싱 (프리뷰 + 제출 공용)
-  const parsedGraphic = useMemo<{
-    graphic: ResponsiveAdvertiseGraphic | null;
-    error: string | null;
-  }>(() => {
-    try {
-      return { graphic: JSON.parse(graphicText) as ResponsiveAdvertiseGraphic, error: null };
-    } catch (e) {
-      return { graphic: null, error: e instanceof Error ? e.message : 'JSON 파싱 실패' };
-    }
-  }, [graphicText]);
 
   const [createAd, { loading: creating }] = useCreateAd({
     onCompleted: () => {

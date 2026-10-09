@@ -49,6 +49,7 @@ const RevenueSummary = () => {
   const monthStart = `${today.slice(0, 8)}01`;
   const range = useMemo(
     () => toStatsDateRange(last30Start < monthStart ? last30Start : monthStart, today),
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization -- today 등은 문자열(원시값)이라 나중에 바뀔 수 없다 — 컴파일러가 타입을 몰라 보수적으로 판단한 것.
     [last30Start, monthStart, today],
   );
   const { data } = useRevenueTrend(range, { skip: !canProfit });
@@ -87,6 +88,7 @@ const RevenueSummary = () => {
       })),
       partialFrom: days.findIndex((d) => d >= yesterday),
     };
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization -- today 등은 문자열(원시값)이라 나중에 바뀔 수 없다 — 컴파일러가 타입을 몰라 보수적으로 판단한 것.
   }, [rows, periodStart, today, yesterday]);
 
   if (!canProfit) return null;

@@ -1,6 +1,14 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 type ToastType = 'success' | 'error' | 'info';
 
@@ -68,11 +76,12 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     setItems((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
+  // 같은 밀리초에 두 번 띄워도 id 가 겹치지 않게 하는 순번 — 렌더가 아니라 push 때만 바뀐다.
+  const seqRef = useRef(0);
   const api = useMemo<ToastApi>(() => {
-    let seq = 0;
     const push = (type: ToastType) => (message: string) => {
-      seq += 1;
-      const id = Date.now() + seq;
+      seqRef.current += 1;
+      const id = Date.now() + seqRef.current;
       setItems((prev) => [...prev, { id, message, type }]);
     };
     return { success: push('success'), error: push('error'), info: push('info') };

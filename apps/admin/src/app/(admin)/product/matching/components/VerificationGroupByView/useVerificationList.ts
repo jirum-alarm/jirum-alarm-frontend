@@ -138,6 +138,7 @@ export function useVerificationList({
 
   useEffect(() => {
     if (selectedBrandProduct) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- 선택한 카탈로그가 바뀌면 검증 목록·개수를 서버에서 다시 받는 데이터 조회 effect 다.
       loadVerificationsForBrandProduct(parseInt(selectedBrandProduct.id));
       fetchPendingVerificationsTotalCountByBrandProduct({
         variables: {

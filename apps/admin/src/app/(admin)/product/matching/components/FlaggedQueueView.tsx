@@ -93,6 +93,7 @@ export default function FlaggedQueueView() {
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 필터(load)가 바뀌면 목록을 비우고 서버에서 다시 받는 데이터 조회 effect 다.
     setItems([]);
     load(null);
   }, [load]);

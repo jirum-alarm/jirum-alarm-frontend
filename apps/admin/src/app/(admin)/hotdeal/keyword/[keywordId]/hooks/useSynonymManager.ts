@@ -1,5 +1,5 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 type SynonymChips = {
   text: string;
@@ -14,16 +14,10 @@ const useSynonymManager = (type: SynonymType) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [synonyms, setSynonyms] = useState<SynonymChips[]>([]);
-  const [filteredSynonyms, setFilteredSynonyms] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
+  // 체크한 칩이 있으면 그것만, 없으면 전부 — synonyms 에서 파생되는 값이라 렌더 중에 계산한다.
+  const filteredSynonyms = useMemo(() => {
     const activeSynonym = synonyms.filter((chip) => chip.isChecked);
-    if (activeSynonym.length === 0) {
-      setFilteredSynonyms(synonyms.map((synonym) => synonym.text));
-    } else {
-      setFilteredSynonyms(activeSynonym.map((synonym) => synonym.text));
-    }
+    return (activeSynonym.length === 0 ? synonyms : activeSynonym).map((synonym) => synonym.text);
   }, [synonyms]);
 
   useEffect(() => {

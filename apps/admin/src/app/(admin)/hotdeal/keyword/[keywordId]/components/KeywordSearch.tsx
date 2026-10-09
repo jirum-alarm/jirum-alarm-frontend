@@ -48,7 +48,7 @@ const KeywordSearch = ({ keywordId }: Props) => {
         ref={synonymInputRef}
         type="text"
         placeholder=""
-        onKeyDown={handleKeydownEnter(addSynonym)}
+        onKeyDown={(e) => handleKeydownEnter(e, addSynonym)}
         className="mb-3 w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-black outline-hidden transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
       />
       <div className="flex flex-wrap gap-2">

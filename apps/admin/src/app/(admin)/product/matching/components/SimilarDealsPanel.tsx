@@ -50,6 +50,7 @@ const SimilarDealsPanel = ({
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 다른 카탈로그로 바뀌면 검색어·선택을 초기화하고 유사 상품을 다시 조회하는 데이터 조회 effect 다.
     runSearch(catalogName);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [brandProduct.id]);

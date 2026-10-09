@@ -23,15 +23,18 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
   useEffect(() => {
     const stored = localStorage.getItem('sidebar-expanded');
     if (stored !== null) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- 사이드바 접힘 상태는 localStorage(외부)에 있다. 서버 HTML 과 맞추려 마운트 뒤에 읽는다.
       setSidebarExpanded(stored === 'true');
     }
     setMounted(true);
   }, []);
 
-  // 모바일 서랍은 메뉴를 고르면 닫는다
-  useEffect(() => {
+  // 모바일 서랍은 메뉴를 고르면 닫는다 — effect 대신 렌더 중 비교로.
+  const [drawerPathname, setDrawerPathname] = useState(pathname);
+  if (pathname !== drawerPathname) {
+    setDrawerPathname(pathname);
     setSidebarOpen(false);
-  }, [pathname]);
+  }
 
   useEffect(() => {
     if (!mounted) return;

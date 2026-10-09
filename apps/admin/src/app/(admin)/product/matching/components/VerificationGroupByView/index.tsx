@@ -55,6 +55,12 @@ const VerificationGroupByView = () => {
 
   // ── 탭 / 필터 상태 ──
   const [activeTab, setActiveTab] = useState<'brands' | 'details'>('brands');
+  // 탭을 바꾸면 왼쪽 패널로 포커스를 되돌린다 — effect 대신 렌더 중 비교로.
+  const [focusResetTab, setFocusResetTab] = useState(activeTab);
+  if (activeTab !== focusResetTab) {
+    setFocusResetTab(activeTab);
+    setIsLeftPanelFocused(true);
+  }
   const [includeVerified, setIncludeVerified] = useState(true);
   const [isSimilarOpen, setIsSimilarOpen] = useState(false);
 
@@ -173,6 +179,7 @@ const VerificationGroupByView = () => {
 
   useEffect(() => {
     if (allBrandItems.length > 0 && !selectedBrandItem) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- 목록이 처음 채워지면 첫 항목을 고르고 그 항목의 검증 목록을 불러온다(조회를 동반) — 큰 화면이라 구조를 바꾸지 않는다.
       highlightBrandItem(allBrandItems[0]);
     }
   }, [allBrandItems, selectedBrandItem, highlightBrandItem]);
@@ -223,12 +230,9 @@ const VerificationGroupByView = () => {
   // ─────────────────────────────────────────────
 
   useEffect(() => {
-    setIsLeftPanelFocused(true);
-  }, [activeTab]);
-
-  useEffect(() => {
     if (activeTab === 'brands' && selectedBrandItem) {
       const index = allBrandItems.findIndex((item) => item.id === selectedBrandItem.id);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- 인덱스는 키보드 이동이 직접 바꾸기도 하는 상태라 선택 항목과 별도로 맞춘다 — 큰 화면이라 구조를 바꾸지 않는다.
       if (index >= 0) setSelectedBrandItemIndex(index);
     }
   }, [selectedBrandItem, allBrandItems, activeTab]);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Card from '@/components/Card';
 import Spinner from '@/components/Spinner';
@@ -39,13 +39,16 @@ const KeywordUpdate = ({ keywordId }: Props) => {
       id: Number(keywordId),
     },
   });
-  // Apollo 4 는 useQuery 의 onCompleted 를 없앴다 — 받아온 값이 바뀔 때 폼을 채운다
-  useEffect(() => {
+  // Apollo 4 는 useQuery 의 onCompleted 를 없앴다 — 받아온 값이 바뀔 때 폼을 채운다(effect 대신 렌더 중 비교로)
+  const [syncedDetail, setSyncedDetail] = useState<typeof detail>(undefined);
+  if (detail !== syncedDetail) {
+    setSyncedDetail(detail);
     const fetched = detail?.hotDealKeywordByAdmin;
-    if (!fetched) return;
-    const { type, keyword, weight, isMajor } = fetched;
-    setKeyword({ type, keyword, weight, isMajor });
-  }, [detail]);
+    if (fetched) {
+      const { type, keyword, weight, isMajor } = fetched;
+      setKeyword({ type, keyword, weight, isMajor });
+    }
+  }
 
   const [mutate, { loading }] = useUpdateHotDealKeyword(keyword.type, {
     onCompleted: () => {

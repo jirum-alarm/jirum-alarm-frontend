@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { BrandItem } from '@/hooks/graphql/brandProduct';
 
@@ -27,7 +27,10 @@ export function useBrandItemList({
   // 브랜드 아이템 데이터 로딩
   // ─────────────────────────────────────────────
 
-  useEffect(() => {
+  // 첫 페이지 응답이 (다시) 오면 목록·커서를 그 값으로 맞춘다 — effect 대신 렌더 중 비교로.
+  const [syncedBrandItemData, setSyncedBrandItemData] = useState<typeof brandItemData>(undefined);
+  if (brandItemData !== syncedBrandItemData) {
+    setSyncedBrandItemData(brandItemData);
     if (brandItemData?.brandItemsOrderByTotalMatchCount) {
       const items = brandItemData.brandItemsOrderByTotalMatchCount;
       setAllBrandItems(items);
@@ -38,7 +41,7 @@ export function useBrandItemList({
         setHasBrandItemMore(false);
       }
     }
-  }, [brandItemData]);
+  }
 
   // ─────────────────────────────────────────────
   // 추가 로딩 (페이징)

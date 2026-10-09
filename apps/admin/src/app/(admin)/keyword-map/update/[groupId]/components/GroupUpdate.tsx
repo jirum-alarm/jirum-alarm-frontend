@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Card from '@/components/Card';
 import Spinner from '@/components/Spinner';
@@ -22,12 +22,15 @@ const GroupUpdate = ({ groupId }: Props) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  useEffect(() => {
+  // 받아온 그룹이 바뀌면 폼을 그 값으로 채운다 — effect 대신 렌더 중 비교로.
+  const [syncedData, setSyncedData] = useState<typeof data>(undefined);
+  if (data !== syncedData) {
+    setSyncedData(data);
     if (data?.keywordMapGroupByAdmin) {
       setName(data.keywordMapGroupByAdmin.name);
       setDescription(data.keywordMapGroupByAdmin.description ?? '');
     }
-  }, [data]);
+  }
 
   const [mutate, { loading }] = useUpdateKeywordMapGroup({
     onCompleted: () => {
