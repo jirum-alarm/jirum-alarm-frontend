@@ -10,7 +10,7 @@ import {Analytics} from '@/shared/lib/analytics/ga4';
 
 import KeywordAlertButton from '@/features/keyword-prompt/ui/KeywordAlertButton';
 
-import SectionTitle from './SectionTitle';
+import SectionHeader from '@/shared/components/ui/SectionHeader';
 
 /**
  * 검색 결과가 없을 때. web: widgets/search/ui/ProductNotFound.tsx
@@ -83,7 +83,7 @@ export default function SearchNotFound({
             사라진다(뒤로가기로 돌아올 수 없다). 캐러셀에서 상품을 바로
             누르는 길은 그대로 남는다.
           */}
-          <SectionTitle title="오늘 가장 인기 있는 핫딜" />
+          <SectionHeader className="h-11" title="오늘 가장 인기 있는 핫딜" />
           <CarouselList products={hotDeals} onPressProduct={onPressProduct} />
         </View>
       ) : null}

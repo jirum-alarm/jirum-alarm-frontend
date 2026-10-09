@@ -1,16 +1,13 @@
 import React, {useEffect, useRef} from 'react';
 import {ScrollView, View} from 'react-native';
-import {Text} from '@/shared/components/ui/Text/AppText';
 
-import PressableScale from '@/shared/components/PressableScale';
-import {cn} from '@/shared/lib/styling';
-import {tick} from '@/shared/lib/feedback';
+import TabPill from '@/shared/components/ui/TabPill';
 
 import type {CategoryItem} from '@/entities/category/category.queries';
 
 /**
  * 카테고리 뱃지 줄. web: widgets/trending/ui/TabbbarV2.tsx (뱃지형)
- * 활성 = 어두운 배경 + primary 글자, 비활성 = 회색 배경.
+ * 활성 = 어두운 배경 + primary 글자, 비활성 = 회색 배경 — 공용 TabPill(brand, md).
  *
  * ★ web 은 motion drag 로 스트립을 직접 끌지만 RN 은 ScrollView 가 그 일을
  * 이미 한다 — 279줄이 여기서 60줄이 된 이유다.
@@ -68,29 +65,13 @@ export default function CategoryTabBar({
               const {x, width} = e.nativeEvent.layout;
               layoutsRef.current[category.id] = {x, width};
             }}>
-            <PressableScale
-              onPress={() => {
-                tick();
-                onSelect(category.id);
-              }}
-              accessibilityRole="tab"
-              accessibilityState={{selected: isActive}}
-              accessibilityLabel={category.name}
-              className={cn(
-                'rounded-full px-3 py-2',
-                // 다크에선 fixed-800 이 비활성 gray-100 과 같은 색이라 커뮤니티 칩처럼 밝은 칩으로 뒤집는다.
-                isActive ? 'bg-fixed-800 dark:bg-gray-900' : 'bg-gray-100',
-              )}>
-              <Text
-                className={cn(
-                  'text-sm leading-none',
-                  isActive
-                    ? 'text-primary-500 font-bold dark:text-white'
-                    : 'font-medium text-gray-500',
-                )}>
-                {category.name}
-              </Text>
-            </PressableScale>
+            <TabPill
+              label={category.name}
+              selected={isActive}
+              variant="brand"
+              size="md"
+              onPress={() => onSelect(category.id)}
+            />
           </View>
         );
       })}

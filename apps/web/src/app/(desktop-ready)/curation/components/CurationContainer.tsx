@@ -1,5 +1,6 @@
 'use client';
 
+import { tab } from '@jirum/design-system/recipes';
 import { Suspense, useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
@@ -16,7 +17,7 @@ interface CurationContainerProps {
 const CurationContainer = ({ section }: CurationContainerProps) => {
   const [activeTabId, setActiveTabId] = useState<string | undefined>(section.tabs?.[0]?.id);
 
-  const activeTab = section.tabs?.find((tab) => tab.id === activeTabId);
+  const activeTab = section.tabs?.find((t) => t.id === activeTabId);
 
   const activeSection: ContentPromotionSection = activeTab
     ? {
@@ -36,20 +37,26 @@ const CurationContainer = ({ section }: CurationContainerProps) => {
       {section.tabs && (
         <div className="pc:flex pc:justify-center pc:py-3 sticky top-14 z-40 w-full bg-white px-5 py-2">
           <div className="no-scrollbar flex gap-x-2 overflow-x-auto">
-            {section.tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTabId(tab.id)}
-                className={cn(
-                  'rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors',
-                  activeTabId === tab.id
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
-                )}
-              >
-                {tab.label}
-              </button>
-            ))}
+            {section.tabs.map((item) => {
+              const isActive = activeTabId === item.id;
+              const t = isActive ? tab.neutral.selected : tab.neutral.idle;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() => setActiveTabId(item.id)}
+                  className={cn(
+                    'shrink-0 whitespace-nowrap transition-colors',
+                    tab.size.md,
+                    t.box,
+                    t.text,
+                  )}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}

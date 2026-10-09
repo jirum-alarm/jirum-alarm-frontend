@@ -4,7 +4,7 @@ import {Text} from '@/shared/components/ui/Text/AppText';
 
 import XSmall from '@/shared/components/icons/XSmall';
 
-import SectionTitle from './SectionTitle';
+import SectionHeader from '@/shared/components/ui/SectionHeader';
 import {useColors} from '@/shared/theme/useColors';
 
 /** web Chip: 15자까지만 보여주고 넘치면 '...'. */
@@ -41,7 +41,8 @@ export default function RecentKeywords({
 
   return (
     <View>
-      <SectionTitle
+      <SectionHeader
+        className="h-11"
         title="최근 검색어"
         right={
           <Pressable

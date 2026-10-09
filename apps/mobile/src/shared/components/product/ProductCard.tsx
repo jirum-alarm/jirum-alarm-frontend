@@ -1,6 +1,7 @@
 import {prefetchProductDetail} from '@/entities/product/prefetch-detail';
 import React from 'react';
 import {View} from 'react-native';
+import {cardThumb} from '@jirum/design-system/recipes';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
@@ -64,7 +65,7 @@ const ProductCard = React.memo(function ProductCard({
       accessibilityLabel={product.title}>
       <View>
         <View
-          className="overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
+          className={cardThumb}
           style={
             isGrid
               ? {width: '100%', aspectRatio: 1}

@@ -1,5 +1,6 @@
 'use client';
 
+import { tab } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 
 import { cn } from '@/shared/lib/cn';
@@ -24,20 +25,26 @@ export default function TossCategoryTabs({
 
   return (
     <div className="no-scrollbar flex gap-x-2 overflow-x-auto px-5 py-1">
-      {labels.map((label) => (
-        <button
-          key={label}
-          onClick={() => onSelect(label)}
-          className={cn(
-            'shrink-0 rounded-full px-3 py-1.5 text-sm whitespace-nowrap transition-colors',
-            (activeLabel ?? labels[0]) === label
-              ? 'bg-gray-900 text-white'
-              : 'bg-gray-100 text-gray-600',
-          )}
-        >
-          {label}
-        </button>
-      ))}
+      {labels.map((label) => {
+        const isActive = (activeLabel ?? labels[0]) === label;
+        const t = isActive ? tab.neutral.selected : tab.neutral.idle;
+        return (
+          <button
+            key={label}
+            type="button"
+            aria-pressed={isActive}
+            onClick={() => onSelect(label)}
+            className={cn(
+              'shrink-0 whitespace-nowrap transition-colors',
+              tab.size.sm,
+              t.box,
+              t.text,
+            )}
+          >
+            {label}
+          </button>
+        );
+      })}
     </div>
   );
 }

@@ -1,9 +1,11 @@
 import React from 'react';
 import {useColorScheme, View} from 'react-native';
+import {cardThumb} from '@jirum/design-system/recipes';
 import {Image} from 'expo-image';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
+import {cn} from '@/shared/lib/styling';
 import NoImage from '@/shared/components/product/NoImage';
 import {DARK_IMAGE_STYLE} from '@/shared/components/product/Thumbnail';
 
@@ -32,9 +34,7 @@ export default function TossDealCard({
       accessibilityRole="button"
       accessibilityLabel={deal.title}
       style={{width: '100%'}}>
-      <View
-        className="w-full overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
-        style={{aspectRatio: 1}}>
+      <View className={cn('w-full', cardThumb)} style={{aspectRatio: 1}}>
         {deal.image ? (
           <Image
             source={{uri: deal.image}}

@@ -1,8 +1,10 @@
 'use client';
 
+import { cardThumb } from '@jirum/design-system/recipes';
 import { m } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 import HotdealBadge from '@/shared/ui/HotdealBadge';
 import Link from '@/shared/ui/Link';
 
@@ -31,7 +33,7 @@ export default function DoubleRowProductCard({
     >
       <m.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
         <div className="flex w-full flex-row items-start gap-2">
-          <div className="relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+          <div className={cn('relative h-[120px] w-[120px] shrink-0', cardThumb)}>
             <ProductThumbnail
               src={product?.thumbnail ?? ''}
               title={product.title}

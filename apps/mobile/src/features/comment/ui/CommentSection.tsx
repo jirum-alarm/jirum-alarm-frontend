@@ -1,5 +1,7 @@
 import React from 'react';
 import {ActivityIndicator, View} from 'react-native';
+import {sectionTitle} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
@@ -39,7 +41,7 @@ export default function CommentSection({
 
   return (
     <View className="pt-7">
-      <Text className="px-5 pb-3 text-lg font-semibold text-gray-900">
+      <Text className={cn('px-5 pb-3', sectionTitle.detail)}>
         지름알림 댓글
         {comments.length > 0 ? (
           <Text className="text-secondary-600"> {comments.length}개</Text>

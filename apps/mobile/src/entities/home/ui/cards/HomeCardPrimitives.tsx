@@ -1,5 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
+import {cardThumb} from '@jirum/design-system/recipes';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import Thumbnail from '@/shared/components/product/Thumbnail';
@@ -42,9 +43,7 @@ export function CardThumbnail({
   showHotdealBadge?: boolean;
 }) {
   return (
-    <View
-      className="overflow-hidden rounded-lg border border-gray-200 bg-gray-50"
-      style={style}>
+    <View className={cardThumb} style={style}>
       <Thumbnail
         uri={product.thumbnail}
         categoryId={product.categoryId}

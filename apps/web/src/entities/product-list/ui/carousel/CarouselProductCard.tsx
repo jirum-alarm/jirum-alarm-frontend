@@ -1,8 +1,10 @@
 'use client';
 
+import { cardThumb } from '@jirum/design-system/recipes';
 import { m } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
+import { cn } from '@/shared/lib/cn';
 import DisplayTime from '@/shared/ui/DisplayTime';
 import Link from '@/shared/ui/Link';
 
@@ -35,7 +37,7 @@ export default function CarouselProductCard({
       {...productCardTracking(source, product.id)}
     >
       <m.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
-        <div className="pc:h-[192px] relative aspect-square h-[120px] overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+        <div className={cn('pc:h-[192px] relative aspect-square h-[120px]', cardThumb)}>
           <ProductThumbnail
             src={product?.thumbnail ?? ''}
             title={product.title}

@@ -142,6 +142,15 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 - **Chip**(고르는 칩: 필터·탭) — `selected`, `size` md(탭)·sm(필터)·xs(하위 탭). 골라서 굵어져도 너비가 그대로다(굵은 글자 너비를 미리 잡음). 앱은 누르면 햅틱.
 - **ProductCardStatus**(상품 카드 사진 위 판매종료·핫딜 배지·유통기한 띠) — 카드 종류와 무관하게 이것만 쓴다. 같은 상품이
   화면마다 다르게 보이면 버그로 읽힌다. 유통기한 띠가 있으면 핫딜 배지는 숨긴다. 모서리 라벨만 필요하면 `CardCornerLabel`.
+- **Switch**(켜고 끄기) — web·앱 같은 44x24, 켜짐 = primary-500, 노브는 테마 무관 흰색. web 은 `role="switch"` 버튼이라
+  옆 `<label htmlFor>` 로 이름을 준다(예전 hidden checkbox 는 키보드·스크린리더가 못 닿았다). 앱은 누르면 햅틱.
+- **탭**(`tab`, 면을 채워 고른 것을 보이는 목록 전환) — Chip(테두리, 필터·섹션 탭)과 모양으로 구분한다.
+  neutral = 커뮤니티 전체·인기·공지, 토스 하위 카테고리, 큐레이션 탭 / brand = 랭킹·핫딜 모음 카테고리(라임, 다크에선 밝은 면) /
+  segment = 기간 고르기(네모 + 테두리). 높이 `tab.size` sm 32·md 36. 앱은 `TabPill`, web 은 각 자리의 `<button>` 이 레시피를
+  직접 읽는다(랭킹 탭은 Radix Trigger + 드래그라 껍데기를 못 나눈다). 비활성 글자는 전부 gray-600 — gray-500 은 gray-100 위에서 4.51:1 경계값이다.
+- **섹션 제목**(`sectionTitle`) — page = 홈·목록 섹션(bold, web `SectionHeader`·앱 `SectionHeader` h-14 + 더보기),
+  detail = 상세 안 섹션(semibold, web `DetailSectionHeader`, 앱은 자리마다 여백이 달라 Text 에 레시피를 바로 쓴다), subtitle.
+- **카드 사진 틀**(`cardThumb`) — 상품 카드 사진 자리의 옅은 면 + 테두리. web 5종·앱 3종 카드가 같은 문자열을 읽는다.
 
 | 개념 | web | 앱 |
 | --- | --- | --- |
@@ -155,12 +164,17 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 | 배지·태그 | `shared/ui/common/Badge` | `shared/components/ui/Badge` |
 | 고르는 칩 | `shared/ui/common/Chip` | `shared/components/ui/Chip` |
 | 카드 사진 위 상태 | `entities/product-list/ui/ProductCardStatus` | `shared/components/product/ProductCardStatus` |
+| 스위치 | `shared/ui/common/Switch` | `shared/components/ui/Switch` |
+| 채운 탭 | 각 자리 `<button>` + `tab` 레시피 | `shared/components/ui/TabPill` (토스·큐레이션 줄은 `ChipRow variant`) |
+| 섹션 제목 | `shared/ui/SectionHeader`·`DetailSectionHeader` | `shared/components/ui/SectionHeader` |
+| 체크 표시 | (DOM 체크박스) | `shared/components/icons` `CheckIcon` — ✓ 글리프는 글꼴에 없으면 두부 |
 | 스켈레톤 | 화면별 `animate-pulse` | `shared/components/Skeletons` |
 | 섹션 오류 | `ApiErrorBoundary` | `shared/components/SectionErrorRow` |
 
-아직 공용 부품이 없어 화면마다 손으로 만든 것(2026-10 조사, 다음에 묶을 후보 — 많이 반복되는 순):
-카드 틀(web 37·앱 19), 섹션 제목(앱엔 공용 없음), 스위치·체크박스·탭, 짙은 알약 탭(`bg-gray-900`/`bg-gray-100`, web 3·앱 2),
+아직 공용 부품이 없어 화면마다 손으로 만든 것(2026-10 조사, 다음에 묶을 후보):
+카드 겉틀(정보 상자 `rounded-xl border bg-gray-50` web 4·앱 1, 딜 줄 `rounded-lg border-gray-100 p-3` web 2 — 여백이 자리마다 달라 아직 안 묶음),
 링크 칩(web 3), web 스켈레톤·빈 화면, 바텀시트 겉껍데기(web 에 같은 오버레이 8벌), 토스트 API(web·앱이 다름).
+체크박스는 web 1곳(네이티브 input, `accent-secondary-500`)·앱 1곳이라 부품 없이 앱 체크 표시만 `CheckIcon` 으로 바꿨다.
 묶을 때도 값은 이 토큰만 쓰고, 모양은 recipes 에 둔다.
 
 Storybook(web 공용 컴포넌트): `pnpm --filter web storybook`.

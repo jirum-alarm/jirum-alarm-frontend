@@ -34,6 +34,7 @@ import {tossDetailPath} from '@/entities/home/lib/toss';
 import HomeHeader from '@/screens/home/ui/HomeHeader';
 import {BannerSkeleton, RankingSkeleton} from '@/screens/home/ui/HomeSkeletons';
 import PressableScale from '@/shared/components/PressableScale';
+import SectionHeader from '@/shared/components/ui/SectionHeader';
 import {ArrowRightIcon} from '@/shared/components/icons';
 import {
   MAIN_TABS_ID,
@@ -300,21 +301,10 @@ export default function HomeScreen() {
         <View className="-mt-5 rounded-t-sheet bg-white pt-3">
           {/* web mobile/JirumRankingContainer — 제목 + 더보기(/trending/ranking).
               슬라이더만 옮기고 이 헤더를 빠뜨렸었다. */}
-          <View
-            className="h-14 w-full flex-row items-center justify-between"
-            style={{paddingHorizontal: 20}}>
-            <Text className="text-lg font-bold text-gray-900">
-              지름알림 랭킹
-            </Text>
-            {/* web InteractiveMoreLink — whileTap scale 0.95. */}
-            <PressableScale
-              onPress={handlePressRanking}
-              hitSlop={12}
-              accessibilityRole="button"
-              accessibilityLabel="지름알림 랭킹 더보기">
-              <Text className="text-sm text-gray-500">더보기</Text>
-            </PressableScale>
-          </View>
+          <SectionHeader
+            title="지름알림 랭킹"
+            onPressMore={handlePressRanking}
+          />
           {isAboveFoldPending ? (
             <RankingSkeleton />
           ) : (

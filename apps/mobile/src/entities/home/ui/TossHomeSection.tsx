@@ -1,14 +1,13 @@
 import React, {useMemo, useState} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
-
-import PressableScale from '@/shared/components/PressableScale';
 
 import {HomeQueries} from '../api/home.queries';
 import {toTossDeal, TOSS_HOME_SECTION_IDS} from '../lib/toss';
 import TossDealCard from './cards/TossDealCard';
 import Chip from '@/shared/components/ui/Chip';
+import SectionHeader from '@/shared/components/ui/SectionHeader';
+import TabPill from '@/shared/components/ui/TabPill';
 
 /**
  * 홈의 토스 특가 섹션. web: widgets/home/ui/TossHomeSection.tsx
@@ -81,23 +80,14 @@ export default function TossHomeSection({
 
   return (
     <View style={{gap: 8}}>
-      <View
-        className="h-14 w-full flex-row items-center justify-between"
-        style={{paddingHorizontal: 20}}>
-        <Text className="text-lg font-bold text-gray-900">토스 특가</Text>
-        {/* web InteractiveMoreLink — whileTap scale 0.95. */}
-        {onPressViewMore ? (
-          <PressableScale
-            onPress={() =>
-              onPressViewMore(`/toss?tab=${activeId}`, '토스 특가')
-            }
-            hitSlop={12}
-            accessibilityRole="button"
-            accessibilityLabel="토스 특가 더보기">
-            <Text className="text-sm text-gray-500">더보기</Text>
-          </PressableScale>
-        ) : null}
-      </View>
+      <SectionHeader
+        title="토스 특가"
+        onPressMore={
+          onPressViewMore
+            ? () => onPressViewMore(`/toss?tab=${activeId}`, '토스 특가')
+            : undefined
+        }
+      />
 
       <ChipRow
         items={homeSections.map(s => ({id: s.id, label: s.label}))}
@@ -143,7 +133,14 @@ export default function TossHomeSection({
   );
 }
 
-/** 섹션 탭 / 하위 카테고리 탭 공용 칩 줄. web PromotionTabs 와 같은 모양. */
+/** 줄 높이 = 칩 md(text-sm 20 + py-1.5 12 + border 2) · 탭 sm(h-8) · 탭 md(h-9). */
+const ROW_HEIGHT = {main: 34, sub: 32, tab: 36} as const;
+
+/**
+ * 고르는 줄. web 과 같은 모양을 자리마다 고른다 —
+ * main = 섹션 탭(web PromotionTabs, 테두리 칩), sub = 토스 하위 카테고리(web TossCategoryTabs, 채운 탭),
+ * tab = 큐레이션 탭(web CurationContainer, 채운 탭).
+ */
 export function ChipRow({
   items,
   activeId,
@@ -153,7 +150,7 @@ export function ChipRow({
   items: {id: string; label: string}[];
   activeId: string;
   onSelect: (id: string) => void;
-  variant?: 'main' | 'sub';
+  variant?: 'main' | 'sub' | 'tab';
 }) {
   return (
     <ScrollView
@@ -161,8 +158,7 @@ export function ChipRow({
       showsHorizontalScrollIndicator={false}
       // ★높이를 고정한다. ScrollView 는 안 주면 콘텐츠보다 큰 영역을 잡아
       // 칩 위아래에 빈 띠가 생긴다(사용자 지적: "뱃지 영역에 여백이 크다").
-      // 칩 실제 높이 = text-sm(20) + py-1.5(6*2) + border(2) ≈ 34px.
-      style={{flexGrow: 0, height: variant === 'sub' ? 30 : 34}}
+      style={{flexGrow: 0, height: ROW_HEIGHT[variant]}}
       contentContainerStyle={{
         paddingHorizontal: 20,
         alignItems: 'center',
@@ -170,12 +166,19 @@ export function ChipRow({
       }}>
       {items.map(item => {
         const isActive = item.id === activeId;
-        return (
+        return variant === 'main' ? (
           <Chip
             key={item.id}
             label={item.label}
             selected={isActive}
-            size={variant === 'sub' ? 'xs' : 'md'}
+            onPress={() => onSelect(item.id)}
+          />
+        ) : (
+          <TabPill
+            key={item.id}
+            label={item.label}
+            selected={isActive}
+            size={variant === 'sub' ? 'sm' : 'md'}
             onPress={() => onSelect(item.id)}
           />
         );

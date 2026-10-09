@@ -1,15 +1,14 @@
 import React, {useMemo, useRef, useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {Text} from '@/shared/components/ui/Text/AppText';
 
-import PressableScale from '@/shared/components/PressableScale';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
 import {HomeQueries} from '../api/home.queries';
 import type {ContentPromotionSection, PromotionTab} from '../model/types';
 import DynamicProductList from './DynamicProductList';
 import Chip from '@/shared/components/ui/Chip';
+import SectionHeader from '@/shared/components/ui/SectionHeader';
 
 /**
  * 섹션 하나(제목 + 더보기 + 목록). web: widgets/home/ui/DynamicProductSection.tsx
@@ -72,8 +71,11 @@ function PlainSection({section, onPressProduct, onPressViewMore}: Props) {
     <View style={{gap: 8}}>
       <SectionHeader
         title={section.title}
-        viewMoreLink={section.viewMoreLink}
-        onPressViewMore={onPressViewMore}
+        onPressMore={moreHandler(
+          section.title,
+          section.viewMoreLink,
+          onPressViewMore,
+        )}
       />
       <SectionBody
         label={section.title}
@@ -117,8 +119,7 @@ function TabbedSection({section, onPressProduct, onPressViewMore}: Props) {
     <View style={{gap: 8}}>
       <SectionHeader
         title={section.title}
-        viewMoreLink={viewMoreLink}
-        onPressViewMore={onPressViewMore}
+        onPressMore={moreHandler(section.title, viewMoreLink, onPressViewMore)}
       />
       <PromotionTabs
         tabs={tabs}
@@ -137,37 +138,6 @@ function TabbedSection({section, onPressProduct, onPressViewMore}: Props) {
           onPressProduct={onPressProduct}
         />
       </SectionBody>
-    </View>
-  );
-}
-
-/** web SectionHeader — h-14(56px), 제목 text-lg bold, 우측 더보기 text-sm gray-500. */
-function SectionHeader({
-  title,
-  viewMoreLink,
-  onPressViewMore,
-}: {
-  title: string;
-  viewMoreLink?: string;
-  onPressViewMore?: (link: string, title: string) => void;
-}) {
-  return (
-    <View
-      className="h-14 w-full flex-row items-center justify-between"
-      style={{paddingHorizontal: 20}}>
-      <Text className="text-lg font-bold text-gray-900" numberOfLines={1}>
-        {title}
-      </Text>
-      {/* web InteractiveMoreLink — whileTap scale 0.95. */}
-      {viewMoreLink && onPressViewMore ? (
-        <PressableScale
-          onPress={() => onPressViewMore(viewMoreLink, title)}
-          hitSlop={12}
-          accessibilityRole="button"
-          accessibilityLabel={`${title} 더보기`}>
-          <Text className="text-sm text-gray-500">더보기</Text>
-        </PressableScale>
-      ) : null}
     </View>
   );
 }
@@ -268,3 +238,10 @@ function SectionBody({
 
   return <>{children}</>;
 }
+
+/** 링크가 있을 때만 더보기(web InteractiveMoreLink 와 같은 조건). */
+const moreHandler = (
+  title: string,
+  link: string | undefined | null,
+  onPressViewMore: ((link: string, title: string) => void) | undefined,
+) => (link && onPressViewMore ? () => onPressViewMore(link, title) : undefined);

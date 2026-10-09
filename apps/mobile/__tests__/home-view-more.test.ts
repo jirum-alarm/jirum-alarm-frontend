@@ -12,7 +12,7 @@ describe('더보기 링크 — web 에 있으면 앱에도 있어야', () => {
       'InteractiveMoreLink',
     );
     expect(read('src/entities/home/ui/DynamicProductSection.tsx')).toContain(
-      '더보기',
+      'onPressMore',
     );
   });
 
@@ -21,7 +21,7 @@ describe('더보기 링크 — web 에 있으면 앱에도 있어야', () => {
     expect(web).toContain('/toss?tab=');
     const native = read('src/entities/home/ui/TossHomeSection.tsx');
     expect(native).toContain('/toss?tab=');
-    expect(native).toContain('더보기');
+    expect(native).toMatch(/<SectionHeader[\s\S]*?onPressMore/);
   });
 
   it('★랭킹 — 제목 + 더보기 헤더가 앱에도 있다', () => {
@@ -36,22 +36,27 @@ describe('더보기 링크 — web 에 있으면 앱에도 있어야', () => {
 });
 
 describe('더보기 눌림 인터랙션 — web InteractiveMoreLink(whileTap 0.95) 대응', () => {
-  // 3곳 전부 PressableScale 이어야 한다. "같은 패턴을 한 곳만" 재발 방지
-  // (native-port-omissions-user-caught — 이 세션에서 4번 재발한 패턴).
+  // 예전엔 3곳이 더보기를 따로 그려 "같은 패턴을 한 곳만" 고치는 일이 났다
+  // (native-port-omissions-user-caught). 이제 공용 SectionHeader 한 곳이 그리고, 3곳은 그걸 쓴다.
+  it('공용 SectionHeader 의 더보기는 PressableScale', () => {
+    const src = read('src/shared/components/ui/SectionHeader/index.tsx');
+    // 더보기 <Text> 앞 최근접 여는 태그가 PressableScale 인지.
+    const idx = src.indexOf('>더보기<');
+    expect(idx).toBeGreaterThan(-1);
+    const before = src.slice(0, idx);
+    expect(before.lastIndexOf('<PressableScale')).toBeGreaterThan(
+      before.lastIndexOf('<Pressable '),
+    );
+  });
+
   it.each([
     'src/entities/home/ui/DynamicProductSection.tsx',
     'src/entities/home/ui/TossHomeSection.tsx',
     'src/screens/home/HomeScreen.tsx',
-  ])('%s 의 더보기는 PressableScale', file => {
+  ])('%s 는 더보기를 직접 그리지 않고 SectionHeader 에 맡긴다', file => {
     const src = read(file);
-    // 더보기 텍스트를 감싸는 컴포넌트가 PressableScale 인지 — 더보기 <Text> 앞
-    // 최근접 여는 태그를 찾는다.
-    const idx = src.indexOf('>더보기<');
-    expect(idx).toBeGreaterThan(-1);
-    const before = src.slice(0, idx);
-    const lastScale = before.lastIndexOf('<PressableScale');
-    const lastPressable = before.lastIndexOf('<Pressable ');
-    expect(lastScale).toBeGreaterThan(lastPressable);
+    expect(src).toMatch(/<SectionHeader[\s\S]*?onPressMore/);
+    expect(src).not.toContain('>더보기<');
   });
 });
 

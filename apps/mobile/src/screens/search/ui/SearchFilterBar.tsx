@@ -2,6 +2,7 @@ import React from 'react';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
+import {fixed} from '@jirum/design-system';
 
 import {SearchQueries} from '@/entities/search/api/search.queries';
 import {
@@ -14,6 +15,7 @@ import type {SearchFiltersController} from '@/features/search/model/useSearchFil
 import {cn} from '@/shared/lib/styling';
 import {tick} from '@/shared/lib/feedback';
 import BaseChip from '@/shared/components/ui/Chip';
+import {CheckIcon} from '@/shared/components/icons';
 
 /**
  * 검색 필터 바. web: widgets/search/ui/SearchFilterBar.tsx
@@ -211,8 +213,8 @@ function Chip({
  * 품절 포함 체크박스.
  *
  * ★칩으로 만들지 않는다 — web 이 체크박스를 쓴 이유가 "이건 필터 칩과 성격이
- * 다른 on/off 토글"이라는 표시다. RN 엔 체크박스가 없어 사각형 + 체크 글리프로
- * 그린다(체크 아이콘이 이 레포에 아직 없다).
+ * 다른 on/off 토글"이라는 표시다. RN 엔 체크박스가 없어 사각형 + 체크 아이콘으로
+ * 그린다(✓ 글리프는 글꼴에 없으면 두부가 된다).
  */
 function Checkbox({checked}: {checked: boolean}) {
   return (
@@ -223,9 +225,7 @@ function Checkbox({checked}: {checked: boolean}) {
       )}
       style={styles.checkbox}>
       {checked ? (
-        <Text className="text-fixed-white" style={styles.checkmark}>
-          ✓
-        </Text>
+        <CheckIcon width={12} height={12} color={fixed.white} strokeWidth={3} />
       ) : null}
     </View>
   );
@@ -245,5 +245,4 @@ const styles = StyleSheet.create({
     paddingRight: 20,
   },
   checkbox: {width: 16, height: 16},
-  checkmark: {fontSize: 11, lineHeight: 13},
 });

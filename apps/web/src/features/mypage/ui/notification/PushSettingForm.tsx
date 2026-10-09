@@ -2,6 +2,8 @@
 
 import { useId } from 'react';
 
+import Switch from '@/shared/ui/common/Switch';
+
 import { PushSettingKey, usePushSetting } from '../../model/usePushSetting';
 
 const ROWS: { key: PushSettingKey; title: string; description: string }[] = [
@@ -32,7 +34,6 @@ const ROWS: { key: PushSettingKey; title: string; description: string }[] = [
 /**
  * 계정 단위 푸시 설정. 백엔드(pushSetting / updatePushSetting)는 있었는데 화면이 없어서
  * 2026-10-01 기준 1,204명 전원이 기본값 그대로였다(야간 동의 0명 → 밤 알림 전부 아침으로 밀림).
- * ponytail: 스위치 모양은 PriceDropOnlyToggle 과 같은 hidden checkbox + peer-checked 패턴.
  */
 const PushSettingForm = () => {
   const id = useId();
@@ -49,21 +50,13 @@ const PushSettingForm = () => {
             <span className="font-medium text-gray-900">{title}</span>
             <span className="text-sm text-gray-500">{description}</span>
           </label>
-          <input
+          <Switch
             id={`${id}-${key}`}
-            type="checkbox"
-            className="peer hidden"
+            aria-label={title}
             checked={setting[key]}
             disabled={isPending}
-            onChange={(e) => update({ [key]: e.target.checked })}
+            onCheckedChange={(next) => update({ [key]: next })}
           />
-          <label
-            htmlFor={`${id}-${key}`}
-            aria-label={title}
-            className="peer-checked:bg-primary-500 relative h-6 w-11 shrink-0 cursor-pointer rounded-full bg-gray-300 transition-colors peer-disabled:opacity-50 peer-checked:[&>span]:translate-x-5"
-          >
-            <span className="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform" />
-          </label>
         </li>
       ))}
     </ul>

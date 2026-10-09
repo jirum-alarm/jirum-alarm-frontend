@@ -1,5 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {RefreshControl, ScrollView, View} from 'react-native';
+import {sectionTitle} from '@jirum/design-system/recipes';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQuery} from '@tanstack/react-query';
 
@@ -263,7 +264,7 @@ function CarouselSection({
   return (
     <View style={{gap: 8}}>
       <View style={{paddingHorizontal: H_PADDING}}>
-        <Text className="text-lg font-bold text-gray-900">{title}</Text>
+        <Text className={sectionTitle.page}>{title}</Text>
       </View>
       <CarouselList
         products={products}

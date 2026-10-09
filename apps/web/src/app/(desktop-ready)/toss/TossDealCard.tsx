@@ -1,5 +1,6 @@
 'use client';
 
+import { cardThumb } from '@jirum/design-system/recipes';
 import { m } from 'motion/react';
 
 import { cn } from '@/shared/lib/cn';
@@ -33,7 +34,7 @@ export default function TossDealCard({
 
   const inner = (
     <m.div className="rounded-lg" whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
-      <div className="relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+      <div className={cn('relative aspect-square', cardThumb)}>
         <ProductThumbnail
           src={deal.image ?? ''}
           title={deal.title}

@@ -167,6 +167,7 @@ export default function CurationScreen({
         items={section.tabs.map(tab => ({id: tab.id, label: tab.label}))}
         activeId={activeTab?.id ?? ''}
         onSelect={setPickedTabId}
+        variant="tab"
       />
       {list}
     </View>

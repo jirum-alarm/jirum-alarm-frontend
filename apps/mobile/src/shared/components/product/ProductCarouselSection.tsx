@@ -1,5 +1,7 @@
 import React, {useCallback} from 'react';
 import {ActivityIndicator, FlatList, View} from 'react-native';
+import {sectionTitle} from '@jirum/design-system/recipes';
+import {cn} from '@/shared/lib/styling';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import ProductCard, {
@@ -47,9 +49,7 @@ export default function ProductCarouselSection({
   if (isError && onRetry) {
     return (
       <View className="pt-7">
-        <Text className="px-5 pb-1 text-lg font-semibold text-gray-900">
-          {title}
-        </Text>
+        <Text className={cn('px-5 pb-1', sectionTitle.detail)}>{title}</Text>
         <SectionErrorRow label={title} onRetry={onRetry} />
       </View>
     );
@@ -62,9 +62,7 @@ export default function ProductCarouselSection({
     <View className={title ? 'pt-7' : 'pt-3'}>
       {/* 제목 없이 캐러셀만 쓰는 자리가 있다(만료 경고). 빈 헤더를 그리지 않는다. */}
       {title ? (
-        <Text className="px-5 pb-3 text-lg font-semibold text-gray-900">
-          {title}
-        </Text>
+        <Text className={cn('px-5 pb-3', sectionTitle.detail)}>{title}</Text>
       ) : null}
       {isPending ? (
         <View className="h-[200px] items-center justify-center">

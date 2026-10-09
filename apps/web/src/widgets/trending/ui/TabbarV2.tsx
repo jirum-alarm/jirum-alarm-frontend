@@ -1,5 +1,6 @@
 'use client';
 
+import { tab } from '@jirum/design-system/recipes';
 import { animate, m, useMotionValue } from 'motion/react';
 import { Tabs } from 'radix-ui';
 import { useEffect, useRef, useState } from 'react';
@@ -69,10 +70,11 @@ const defaultStyles: Required<TabBarStyles> = {
   container:
     'w-full max-w-mobile-max pc:max-w-none z-30 overflow-hidden bg-white px-4 pt-3 pb-3 pc:pb-2',
   tabList: 'relative flex gap-2.5 pc:justify-center',
+  // 탭 모양은 recipes 의 tab.brand(앱 CategoryTabBar 와 같은 클래스). PC 만 한 단계 키운다.
   tabTrigger: {
-    base: 'relative pc:h-10 h-9 shrink-0 whitespace-nowrap px-3 py-2 pc:text-lg transition-all duration-400 rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 leading-none',
-    active: 'font-bold text-primary-500 bg-fixed-800',
-    inactive: 'font-medium text-gray-500 bg-gray-100 hover:bg-gray-200',
+    base: `relative shrink-0 whitespace-nowrap transition-all duration-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${tab.size.md} pc:h-10 pc:text-lg`,
+    active: `${tab.brand.selected.box} ${tab.brand.selected.text}`,
+    inactive: `${tab.brand.idle.box} ${tab.brand.idle.text}`,
   },
   settingsContainer: 'absolute bottom-0 right-0 flex h-full items-center',
   settingsGradient: 'h-full w-5 bg-linear-to-r from-transparent to-white pointer-events-none',

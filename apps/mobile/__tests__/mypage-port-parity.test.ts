@@ -59,7 +59,7 @@ const FEATURE_FILES = [
   'src/features/mypage/ui/Rows.tsx',
   'src/shared/components/ConfirmSheet.tsx',
   'src/features/mypage/ui/PasswordField.tsx',
-  'src/features/mypage/ui/PriceDropSwitch.tsx',
+  'src/shared/components/ui/Switch/index.tsx',
   'src/features/mypage/ui/KeywordItem.tsx',
   'src/features/mypage/ui/CategoryCheckboxGroup.tsx',
   'src/features/mypage/ui/GenderRadioGroup.tsx',
@@ -417,7 +417,7 @@ describe('★디자인 점검 2026-09-09 — 고친 것이 되돌아가지 않�
 
   it('키워드 행엔 설정 컨트롤을 늘어놓지 않는다 — 펼친 카드 안에만', () => {
     // 행마다 스위치·라벨·링크가 붙어 키워드가 안 읽혔다(2026-10-07 개편).
-    expect(stripComments(SCREENS.keyword)).not.toContain('PriceDropSwitch');
+    expect(stripComments(SCREENS.keyword)).not.toMatch(/<Switch\b/);
   });
 
   it('고객센터는 상담창이 뜨면 네이티브 헤더를 접는다 — 닫기 2개 방지', () => {

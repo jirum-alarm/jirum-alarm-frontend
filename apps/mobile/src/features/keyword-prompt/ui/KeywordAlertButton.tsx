@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import Svg, {Path} from 'react-native-svg';
 
 import {MyPageService} from '@/shared/api/mypage';
 import PressableScale from '@/shared/components/PressableScale';
+import {CheckIcon} from '@/shared/components/icons';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {trackKeywordRegister} from '@/shared/lib/analytics/keyword-tracking';
@@ -95,7 +95,7 @@ export default function KeywordAlertButton({
             ? 'flex-row items-center gap-x-1.5 rounded-lg bg-gray-100 px-5 py-3'
             : 'flex-row items-center gap-x-1.5 rounded-lg bg-fixed-800 px-5 py-3'
         }>
-        {isOn ? <Check color={c.primary[700]} /> : null}
+        {isOn ? <CheckIcon color={c.primary[700]} /> : null}
         <Text
           className={
             isOn
@@ -125,7 +125,7 @@ export default function KeywordAlertButton({
             ? 'h-9 flex-row items-center gap-x-1 rounded-lg px-3'
             : 'h-9 flex-row items-center rounded-lg bg-fixed-800 px-3'
         }>
-        {isOn ? <Check color={c.primary[700]} /> : null}
+        {isOn ? <CheckIcon color={c.primary[700]} /> : null}
         <Text
           className={
             isOn
@@ -138,16 +138,3 @@ export default function KeywordAlertButton({
     </View>
   );
 }
-
-// ✓ 글리프 대신 SVG — 글꼴에 U+2713 이 없으면 두부가 된다.
-const Check = ({color}: {color: string}) => (
-  <Svg width={16} height={16} viewBox="0 0 20 20" fill="none">
-    <Path
-      d="M4 10.5l4 4 8-8.5"
-      stroke={color}
-      strokeWidth={2.4}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </Svg>
-);

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {ActivityIndicator, Pressable, View} from 'react-native';
+import {sectionTitle} from '@jirum/design-system/recipes';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
 import PressableScale from '@/shared/components/PressableScale';
@@ -181,7 +182,7 @@ export default function CommunityReaction({
   return (
     <View className="px-5 pt-7">
       <View className="flex-row items-start justify-between gap-3">
-        <Text className="min-w-0 text-lg font-semibold text-gray-900">
+        <Text className={cn('min-w-0', sectionTitle.detail)}>
           커뮤니티 반응
         </Text>
         <InfoTooltip />

@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 
-import SectionTitle from './SectionTitle';
+import SectionHeader from '@/shared/components/ui/SectionHeader';
 
 /**
  * 추천 검색어. web: widgets/search/ui/RecommendationKeywords.tsx
@@ -64,7 +64,7 @@ export default function RecommendedKeywords({
 
   return (
     <View>
-      <SectionTitle title="추천 검색어" />
+      <SectionHeader className="h-11" title="추천 검색어" />
       <View className="flex-row flex-wrap gap-2 px-5">
         {keywords.map(keyword => (
           <Pressable

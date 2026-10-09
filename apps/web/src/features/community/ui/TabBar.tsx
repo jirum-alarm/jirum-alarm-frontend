@@ -1,5 +1,7 @@
 'use client';
 
+import { tab } from '@jirum/design-system/recipes';
+
 import { cn } from '@/shared/lib/cn';
 
 import { CommunityTab } from '@/entities/community';
@@ -19,18 +21,18 @@ export default function TabBar({
 }) {
   return (
     <div className="flex items-center gap-x-2 px-5 py-3">
-      {TABS.map((tab) => {
-        const isActive = activeTab === tab.value;
+      {TABS.map((item) => {
+        const isActive = activeTab === item.value;
+        const t = isActive ? tab.neutral.selected : tab.neutral.idle;
         return (
           <button
-            key={tab.value}
-            onClick={() => onChange(tab.value)}
-            className={cn(
-              'rounded-full px-3 py-1 text-sm font-medium transition-colors transition-transform active:scale-95',
-              isActive ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
-            )}
+            key={item.value}
+            type="button"
+            aria-pressed={isActive}
+            onClick={() => onChange(item.value)}
+            className={cn('transition-all active:scale-95', tab.size.sm, t.box, t.text)}
           >
-            {tab.label}
+            {item.label}
           </button>
         );
       })}

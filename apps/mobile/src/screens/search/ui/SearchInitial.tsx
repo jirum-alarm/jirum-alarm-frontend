@@ -9,7 +9,7 @@ import {SkeletonBox} from '@/shared/components/Skeletons';
 
 import RecentKeywords from './RecentKeywords';
 import RecommendedKeywords from './RecommendedKeywords';
-import SectionTitle from './SectionTitle';
+import SectionHeader from '@/shared/components/ui/SectionHeader';
 
 /**
  * 검색 전 화면. web: widgets/search/ui/InitialResult.tsx
@@ -54,7 +54,7 @@ export default function SearchInitial({
       <RecommendedKeywords onSelect={onSelectKeyword} />
 
       <View style={styles.section}>
-        <SectionTitle title="추천 핫딜" />
+        <SectionHeader className="h-11" title="추천 핫딜" />
         {hotDeals && hotDeals.length > 0 ? (
           <CarouselList
             products={hotDeals}

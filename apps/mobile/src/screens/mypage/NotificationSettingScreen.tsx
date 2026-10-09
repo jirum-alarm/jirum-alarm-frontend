@@ -11,7 +11,7 @@ import PressableScale from '@/shared/components/PressableScale';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {usePushPermissionStatus} from '@/shared/lib/fcm/usePushPermissionStatus';
 import {tabStackNavigations} from '@/shared/constant/navigations';
-import PriceDropSwitch from '@/features/mypage/ui/PriceDropSwitch';
+import Switch from '@/shared/components/ui/Switch';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {useUpdatePushSetting} from '@/features/mypage/model/mutations';
 
@@ -51,7 +51,6 @@ const ROWS: {key: PushSettingKey; title: string; description: string}[] = [
  *
  * 백엔드(pushSetting / updatePushSetting)는 있었는데 화면이 없어서 2026-10-01 기준 1,204명
  * 전원이 기본값이었다(야간 동의 0명 → 밤 알림이 전부 아침으로 밀림).
- * ponytail: 스위치는 PriceDropSwitch(모양·햅틱을 직접 그린 것)를 쓴다.
  */
 export default function NotificationSettingScreen({navigation}: Props) {
   const {data, isPending, isError, refetch} = useQuery(
@@ -98,7 +97,7 @@ export default function NotificationSettingScreen({navigation}: Props) {
                     {description}
                   </Text>
                 </View>
-                <PriceDropSwitch
+                <Switch
                   value={data[key]}
                   onChange={next => mutate({[key]: next})}
                   accessibilityLabel={title}

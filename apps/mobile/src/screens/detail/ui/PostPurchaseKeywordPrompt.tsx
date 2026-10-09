@@ -2,11 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import Svg, {Path} from 'react-native-svg';
+import {fixed} from '@jirum/design-system';
 
 import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
 import PressableScale from '@/shared/components/PressableScale';
+import {CheckIcon} from '@/shared/components/icons';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {showToast} from '@/shared/lib/feedback';
 import {trackKeywordRegister} from '@/shared/lib/analytics/keyword-tracking';
@@ -113,16 +114,12 @@ export default function PostPurchaseKeywordPrompt({
         accessibilityRole="alert"
         className="flex-row items-center gap-x-3 bg-secondary-50 px-5 py-3">
         <View className="h-7 w-7 shrink-0 items-center justify-center rounded-full bg-secondary-500">
-          {/* ✓ 글리프 대신 SVG — 글꼴에 U+2713 이 없으면 두부가 된다. */}
-          <Svg width={15} height={15} viewBox="0 0 20 20" fill="none">
-            <Path
-              d="M4 10.5l4 4 8-8.5"
-              stroke="#ffffff"
-              strokeWidth={2.2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </Svg>
+          <CheckIcon
+            width={15}
+            height={15}
+            color={fixed.white}
+            strokeWidth={2.2}
+          />
         </View>
         <View className="min-w-0 flex-1">
           <Text className="text-sm font-semibold text-gray-800">

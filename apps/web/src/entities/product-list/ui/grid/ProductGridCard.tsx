@@ -1,5 +1,6 @@
 'use client';
 
+import { cardThumb } from '@jirum/design-system/recipes';
 import { m } from 'motion/react';
 
 import { PAGE } from '@/shared/config/page';
@@ -56,7 +57,7 @@ export default function ProductGridCard({
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.1 }}
       >
-        <div className="relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+        <div className={cn('relative aspect-square', cardThumb)}>
           {actionIcon && <div className="absolute top-0 right-0 z-10">{actionIcon}</div>}
           <ProductThumbnail
             src={product?.thumbnail ?? ''}

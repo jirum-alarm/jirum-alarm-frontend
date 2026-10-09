@@ -1,5 +1,6 @@
 'use client';
 
+import { tab } from '@jirum/design-system/recipes';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
@@ -623,6 +624,7 @@ export default function PriceHistorySection({
         <div className="mt-4 flex flex-wrap gap-1.5">
           {visiblePeriods.map((p) => {
             const active = days === p.days;
+            const t = active ? tab.segment.selected : tab.segment.idle;
             return (
               <button
                 key={p.days}
@@ -631,12 +633,8 @@ export default function PriceHistorySection({
                   setDaysOverride(p.days);
                   trackClick('period');
                 }}
-                className={cn(
-                  'rounded-lg border px-3 py-1.5 text-sm transition-colors',
-                  active
-                    ? 'border-gray-900 bg-gray-900 font-semibold text-white'
-                    : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50',
-                )}
+                aria-pressed={active}
+                className={cn('transition-colors', tab.size.sm, t.box, t.text)}
               >
                 {p.label}
               </button>

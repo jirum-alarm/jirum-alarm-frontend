@@ -3,6 +3,7 @@ import {ActivityIndicator, Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import type {LayoutChangeEvent} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
+import {sectionTitle, tab} from '@jirum/design-system/recipes';
 
 import {ProductQueries} from '@/entities/product/product.queries';
 import {ProductService} from '@/shared/api/product/product.service';
@@ -256,10 +257,8 @@ export default function PriceHistorySection({
 
   return (
     <View className="pt-7" onLayout={onLayout}>
-      <Text className="px-5 text-lg font-semibold text-gray-900">
-        가격 추이
-      </Text>
-      <Text className="px-5 pt-1 text-sm text-gray-500">
+      <Text className={cn('px-5', sectionTitle.detail)}>가격 추이</Text>
+      <Text className={cn('px-5 pt-1', sectionTitle.subtitle)}>
         {resolveSubtitle(data)}
       </Text>
 
@@ -268,6 +267,7 @@ export default function PriceHistorySection({
         <View className="flex-row flex-wrap gap-1.5 px-5 pt-4">
           {visiblePeriods.map(period => {
             const active = resolvedDays === period.days;
+            const t = active ? tab.segment.selected : tab.segment.idle;
             return (
               <Pressable
                 key={period.days}
@@ -285,19 +285,8 @@ export default function PriceHistorySection({
                 <View
                   // iOS HIG 최소 44px.
                   style={{minHeight: 44}}
-                  className={cn(
-                    'justify-center rounded-lg border px-3',
-                    active
-                      ? 'border-gray-900 bg-gray-900'
-                      : 'border-gray-200 bg-white',
-                  )}>
-                  <Text
-                    className={cn(
-                      'text-sm',
-                      active ? 'font-semibold text-white' : 'text-gray-600',
-                    )}>
-                    {period.label}
-                  </Text>
+                  className={cn('justify-center', t.box)}>
+                  <Text className={t.text}>{period.label}</Text>
                 </View>
               </Pressable>
             );

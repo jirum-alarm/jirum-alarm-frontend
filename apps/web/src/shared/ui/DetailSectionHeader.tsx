@@ -1,3 +1,5 @@
+import { sectionTitle } from '@jirum/design-system/recipes';
+
 import { cn } from '@/shared/lib/cn';
 
 import type { ReactNode } from 'react';
@@ -25,10 +27,10 @@ export default function DetailSectionHeader({
   return (
     <header className={cn(className)}>
       <div className="flex items-start justify-between gap-3">
-        <Tag className="min-w-0 text-lg font-semibold text-gray-900">{title}</Tag>
+        <Tag className={cn('min-w-0', sectionTitle.detail)}>{title}</Tag>
         {right ? <div className="mt-0.5 shrink-0">{right}</div> : null}
       </div>
-      {subtitle ? <p className="mt-1 text-sm text-gray-500">{subtitle}</p> : null}
+      {subtitle ? <p className={cn('mt-1', sectionTitle.subtitle)}>{subtitle}</p> : null}
     </header>
   );
 }
