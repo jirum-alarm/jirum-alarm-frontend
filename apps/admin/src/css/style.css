@@ -1,25 +1,485 @@
+@import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@custom-variant dark (&:is(.dark *));
 
-@layer base {
-    html {
-        -webkit-text-size-adjust: 100%;
-        -webkit-tap-highlight-color: transparent;
+@theme {
+  --font-*: initial;
+  --font-satoshi: Satoshi, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+
+  --breakpoint-*: initial;
+  --breakpoint-2xsm: 375px;
+  --breakpoint-xsm: 425px;
+  --breakpoint-3xl: 2000px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  --color-current: currentColor;
+  --color-transparent: transparent;
+  --color-white: #ffffff;
+  --color-black: #1c2434;
+
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-900: #7f1d1d;
+  --color-red-950: #450a0a;
+  --color-red: #fb5454;
+
+  --color-black-2: #010101;
+  --color-body: #64748b;
+  --color-bodydark: #aeb7c0;
+  --color-bodydark1: #dee4ee;
+  --color-bodydark2: #8a99af;
+  --color-primary: #3c50e0;
+  --color-secondary: #80caee;
+  --color-stroke: #e2e8f0;
+
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-gray-950: #030712;
+  --color-gray: #eff4fb;
+
+  /* 쓰는 기본 팔레트는 v3 hex 그대로(v4 기본은 oklch 라 미세하게 다르다) */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-800: #1e40af;
+  --color-blue-900: #1e3a8a;
+  --color-blue-950: #172554;
+  --color-rose-50: #fff1f2;
+  --color-rose-100: #ffe4e6;
+  --color-rose-200: #fecdd3;
+  --color-rose-300: #fda4af;
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
+  --color-rose-700: #be123c;
+  --color-rose-800: #9f1239;
+  --color-rose-900: #881337;
+  --color-rose-950: #4c0519;
+  --color-zinc-50: #fafafa;
+  --color-zinc-100: #f4f4f5;
+  --color-zinc-200: #e4e4e7;
+  --color-zinc-300: #d4d4d8;
+  --color-zinc-400: #a1a1aa;
+  --color-zinc-500: #71717a;
+  --color-zinc-600: #52525b;
+  --color-zinc-700: #3f3f46;
+  --color-zinc-800: #27272a;
+  --color-zinc-900: #18181b;
+  --color-zinc-950: #09090b;
+  --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
+  --color-green-200: #bbf7d0;
+  --color-green-300: #86efac;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-green-700: #15803d;
+  --color-green-800: #166534;
+  --color-green-900: #14532d;
+  --color-green-950: #052e16;
+  --color-yellow-50: #fefce8;
+  --color-yellow-100: #fef9c3;
+  --color-yellow-200: #fef08a;
+  --color-yellow-300: #fde047;
+  --color-yellow-400: #facc15;
+  --color-yellow-500: #eab308;
+  --color-yellow-600: #ca8a04;
+  --color-yellow-700: #a16207;
+  --color-yellow-800: #854d0e;
+  --color-yellow-900: #713f12;
+  --color-yellow-950: #422006;
+  --color-lime-50: #f7fee7;
+  --color-lime-100: #ecfccb;
+  --color-lime-200: #d9f99d;
+  --color-lime-300: #bef264;
+  --color-lime-400: #a3e635;
+  --color-lime-500: #84cc16;
+  --color-lime-600: #65a30d;
+  --color-lime-700: #4d7c0f;
+  --color-lime-800: #3f6212;
+  --color-lime-900: #365314;
+  --color-lime-950: #1a2e05;
+
+  --color-graydark: #333a48;
+  --color-gray-2: #f7f9fc;
+  --color-gray-3: #fafafa;
+  --color-whiten: #f1f5f9;
+  --color-whiter: #f5f7fd;
+  --color-boxdark: #24303f;
+  --color-boxdark-2: #1a222c;
+  --color-strokedark: #2e3a47;
+  --color-form-strokedark: #3d4d60;
+  --color-form-input: #1d2a39;
+  --color-meta-1: #dc3545;
+  --color-meta-2: #eff2f7;
+  --color-meta-3: #10b981;
+  --color-meta-4: #313d4a;
+  --color-meta-5: #259ae6;
+  --color-meta-6: #ffba00;
+  --color-meta-7: #ff6766;
+  --color-meta-8: #f0950c;
+  --color-meta-9: #e5e7eb;
+  --color-meta-10: #0fadcf;
+  --color-success: #219653;
+  --color-danger: #d34053;
+  --color-warning: #ffa70b;
+
+  /*
+    v4 는 줄 높이를 비율(1.5)로 줘서, text-[11px] 처럼 크기만 바꾼 자식이 그 비율을 물려받아 줄이 낮아진다.
+    v3 처럼 rem 고정값으로 두면 자식이 부모 줄 높이를 그대로 물려받는다(화면 동일).
+  */
+  --text-xs--line-height: 1rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl--line-height: 2.25rem;
+  --text-4xl--line-height: 2.5rem;
+
+  --text-title-xxl: 44px;
+  --text-title-xxl--line-height: 55px;
+  --text-title-xxl2: 42px;
+  --text-title-xxl2--line-height: 58px;
+  --text-title-xl: 36px;
+  --text-title-xl--line-height: 45px;
+  --text-title-xl2: 33px;
+  --text-title-xl2--line-height: 45px;
+  --text-title-lg: 28px;
+  --text-title-lg--line-height: 35px;
+  --text-title-md: 24px;
+  --text-title-md--line-height: 30px;
+  --text-title-md2: 26px;
+  --text-title-md2--line-height: 30px;
+  --text-title-sm: 20px;
+  --text-title-sm--line-height: 26px;
+  --text-title-sm2: 22px;
+  --text-title-sm2--line-height: 28px;
+  --text-title-xsm: 18px;
+  --text-title-xsm--line-height: 24px;
+
+  --container-3: 0.75rem;
+  --container-4: 1rem;
+  --container-7: 1.75rem;
+  --container-9: 2.25rem;
+  --container-10: 2.5rem;
+  --container-11: 2.75rem;
+  --container-13: 3.25rem;
+  --container-14: 3.5rem;
+  --container-15: 3.75rem;
+  --container-16: 4rem;
+  --container-25: 6.25rem;
+  --container-30: 7.5rem;
+  --container-34: 8.5rem;
+  --container-35: 8.75rem;
+  --container-40: 10rem;
+  --container-44: 11rem;
+  --container-45: 11.25rem;
+  --container-60: 15rem;
+  --container-70: 17.5rem;
+  --container-90: 22.5rem;
+  --container-94: 23.5rem;
+  --container-125: 31.25rem;
+  --container-150: 37.5rem;
+  --container-180: 45rem;
+  --container-203: 50.75rem;
+  --container-230: 57.5rem;
+  --container-270: 67.5rem;
+  --container-280: 70rem;
+  --container-2_5: 0.625rem;
+  --container-10_5: 2.625rem;
+  --container-22_5: 5.625rem;
+  --container-42_5: 10.625rem;
+  --container-132_5: 33.125rem;
+  --container-142_5: 35.625rem;
+  --container-242_5: 60.625rem;
+  --container-292_5: 73.125rem;
+
+  --max-height-35: 8.75rem;
+  --max-height-70: 17.5rem;
+  --max-height-90: 22.5rem;
+  --max-height-300: 18.75rem;
+  --max-height-550: 34.375rem;
+
+  --min-width-75: 18.75rem;
+  --min-width-22_5: 5.625rem;
+  --min-width-42_5: 10.625rem;
+  --min-width-47_5: 11.875rem;
+
+  --z-index-1: 1;
+  --z-index-9: 9;
+  --z-index-99: 99;
+  --z-index-999: 999;
+  --z-index-9999: 9999;
+  --z-index-99999: 99999;
+  --z-index-999999: 999999;
+
+  --aspect-4\/3: 4 / 3;
+  --aspect-21\/9: 21 / 9;
+
+  --transition-property-width: width;
+  --transition-property-stroke: stroke;
+
+  --border-width-6: 6px;
+  --border-width-10: 10px;
+  --border-width-12: 12px;
+
+  --shadow-1: 0px 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-2: 0px 1px 4px rgba(0, 0, 0, 0.12);
+  --shadow-3: 0px 1px 5px rgba(0, 0, 0, 0.14);
+  --shadow-4: 0px 4px 10px rgba(0, 0, 0, 0.12);
+  --shadow-5: 0px 1px 1px rgba(0, 0, 0, 0.15);
+  --shadow-6: 0px 3px 15px rgba(0, 0, 0, 0.1);
+  --shadow-7: -5px 0 0 #313d4a, 5px 0 0 #313d4a;
+  --shadow-8:
+    1px 0 0 #313d4a, -1px 0 0 #313d4a, 0 1px 0 #313d4a, 0 -1px 0 #313d4a,
+    0 3px 13px rgb(0 0 0 / 8%);
+  --shadow-9: 0px 2px 3px rgba(183, 183, 183, 0.5);
+  --shadow-10: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  --shadow-11: 0px 1px 3px 0px rgba(166, 175, 195, 0.4);
+  --shadow-12: 0px 0.5px 3px 0px rgba(0, 0, 0, 0.18);
+  --shadow-13: 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
+  --shadow-14: 0px 2px 3px 0px rgba(0, 0, 0, 0.1);
+  --shadow-default: 0px 8px 13px -3px rgba(0, 0, 0, 0.07);
+  --shadow-card: 0px 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-card-2: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-switcher:
+    0px 2px 4px rgba(0, 0, 0, 0.2), inset 0px 2px 2px #ffffff,
+    inset 0px -1px 1px rgba(0, 0, 0, 0.1);
+  --shadow-switch-1: 0px 0px 5px rgba(0, 0, 0, 0.15);
+
+  --drop-shadow-1: 0px 1px 0px #e2e8f0;
+  --drop-shadow-2: 0px 1px 4px rgba(0, 0, 0, 0.12);
+  --drop-shadow-3: 0px 0px 4px rgba(0, 0, 0, 0.15);
+  --drop-shadow-4: 0px 0px 2px rgba(0, 0, 0, 0.2);
+  --drop-shadow-5: 0px 1px 5px rgba(0, 0, 0, 0.2);
+
+  --animate-linspin: linspin 1568.2353ms linear infinite;
+  --animate-easespin: easespin 5332ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+  --animate-left-spin: left-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite
+    both;
+  --animate-right-spin: right-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite
+    both;
+  --animate-ping-once: ping 5s cubic-bezier(0, 0, 0.2, 1);
+  --animate-rotating: rotating 30s linear infinite;
+  --animate-topbottom: topbottom 60s infinite alternate linear;
+  --animate-bottomtop: bottomtop 60s infinite alternate linear;
+  --animate-spin-1_5: spin 1.5s linear infinite;
+  --animate-spin-2: spin 2s linear infinite;
+  --animate-spin-3: spin 3s linear infinite;
+  --animate-line1: line 10s infinite linear;
+  --animate-line2: line-revert 8s infinite linear;
+  --animate-line3: line 7s infinite linear;
+  --animate-blink: blink 1s infinite;
+
+  @keyframes linspin {
+    100% {
+      transform: rotate(360deg);
     }
-
-    body {
-        @apply relative z-1 bg-whiten font-satoshi text-base font-normal text-body;
+  }
+  @keyframes easespin {
+    12.5% {
+      transform: rotate(135deg);
     }
-
-    /* iOS 는 16px 미만 입력칸에 포커스하면 화면을 확대해 버린다 */
-    @media (max-width: 767px) {
-        input, select, textarea {
-            font-size: 16px !important;
-        }
+    25% {
+      transform: rotate(270deg);
     }
+    37.5% {
+      transform: rotate(405deg);
+    }
+    50% {
+      transform: rotate(540deg);
+    }
+    62.5% {
+      transform: rotate(675deg);
+    }
+    75% {
+      transform: rotate(810deg);
+    }
+    87.5% {
+      transform: rotate(945deg);
+    }
+    100% {
+      transform: rotate(1080deg);
+    }
+  }
+  @keyframes left-spin {
+    0% {
+      transform: rotate(130deg);
+    }
+    50% {
+      transform: rotate(-5deg);
+    }
+    100% {
+      transform: rotate(130deg);
+    }
+  }
+  @keyframes right-spin {
+    0% {
+      transform: rotate(-130deg);
+    }
+    50% {
+      transform: rotate(5deg);
+    }
+    100% {
+      transform: rotate(-130deg);
+    }
+  }
+  @keyframes rotating {
+    0%,
+    100% {
+      transform: rotate(360deg);
+    }
+    50% {
+      transform: rotate(0deg);
+    }
+  }
+  @keyframes topbottom {
+    0%,
+    100% {
+      transform: translate3d(0, -100%, 0);
+    }
+    50% {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  @keyframes bottomtop {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -100%, 0);
+    }
+  }
+  @keyframes line {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes line-revert {
+    0%,
+    100% {
+      transform: translateY(100%);
+    }
+    50% {
+      transform: translateY(0);
+    }
+  }
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
 }
+
+/*
+  Tailwind v3 → v4 호환 — v4 가 바꾼 기본값을 v3 화면 그대로 되돌린다.
+  - 테두리 기본색: v4 는 currentcolor, v3 는 gray-200
+  - 입력칸 placeholder: v4 는 글자색 50%, v3 는 gray-400
+  - 버튼 커서: v4 는 default, v3 는 pointer
+  - hover: v4 는 (hover: hover) 기기에서만, v3 는 터치 기기에서도 — 아래 @custom-variant
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* v4 프리플라이트는 모든 요소의 padding 을 0 으로 지운다 — v3 는 표 칸·옵션·날짜 입력 안쪽을 브라우저 기본값으로 뒀다 */
+  td,
+  th {
+    padding: 1px; /* 크롬 기본값(cellpadding 힌트라 revert 로는 안 돌아온다) */
+  }
+  option {
+    padding: 0 2px 1px;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: revert;
+  }
+  ::-webkit-datetime-edit,
+  ::-webkit-datetime-edit-year-field,
+  ::-webkit-datetime-edit-month-field,
+  ::-webkit-datetime-edit-day-field,
+  ::-webkit-datetime-edit-hour-field,
+  ::-webkit-datetime-edit-minute-field,
+  ::-webkit-datetime-edit-second-field,
+  ::-webkit-datetime-edit-millisecond-field,
+  ::-webkit-datetime-edit-meridiem-field {
+    padding-block: revert;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: revert;
+    text-align: revert;
+  }
+  ::-webkit-datetime-edit {
+    display: revert;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: revert;
+  }
+}
+
+@custom-variant hover (&:hover);
 
 @layer components {
     /*
@@ -47,9 +507,9 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 0.75rem;
-            border: 1px solid theme('colors.stroke');
+            border: 1px solid var(--color-stroke);
             border-radius: 0.5rem;
-            background: theme('colors.white');
+            background: var(--color-white);
             padding: 0.625rem 0.875rem;
         }
         .table-cards tbody > tr > td:not(.hidden) {
@@ -72,7 +532,7 @@
             flex-shrink: 0;
             text-align: left;
             font-size: 0.75rem;
-            color: theme('colors.body');
+            color: var(--color-body);
         }
         .table-cards tbody > tr > td:not([data-label]):not(.hidden) {
             display: block;
@@ -89,8 +549,8 @@
             justify-content: center;
         }
         .dark .table-cards tbody > tr {
-            border-color: theme('colors.strokedark');
-            background: theme('colors.boxdark');
+            border-color: var(--color-strokedark);
+            background: var(--color-boxdark);
         }
         .table-cards tbody > tr > td[data-label='actions'] {
             order: 1;
@@ -104,23 +564,38 @@
     }
 }
 
-@layer utilities {
-    /* Chrome, Safari and Opera */
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
+@utility no-scrollbar {
+  /* Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+@utility chat-height {
+  @apply h-[calc(100vh-8.125rem)] lg:h-[calc(100vh-5.625rem)];
+}
+
+@utility inbox-height {
+  @apply h-[calc(100vh-8.125rem)] lg:h-[calc(100vh-5.625rem)];
+}
+
+@layer base {
+    html {
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
     }
 
-    .no-scrollbar {
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox */
+    body {
+        @apply relative z-1 bg-whiten font-satoshi text-base font-normal text-body;
     }
 
-    .chat-height {
-        @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
-    }
-
-    .inbox-height {
-        @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
+    /* iOS 는 16px 미만 입력칸에 포커스하면 화면을 확대해 버린다 */
+    @media (max-width: 767px) {
+        input, select, textarea {
+            font-size: 16px !important;
+        }
     }
 }
 
@@ -135,72 +610,72 @@
 }
 
 .apexcharts-legend-text {
-    @apply !text-body dark:!text-bodydark;
+    @apply text-body! dark:text-bodydark!;
 }
 
 .apexcharts-text {
-    @apply !fill-body dark:!fill-bodydark;
+    @apply fill-body! dark:fill-bodydark!;
 }
 
 .apexcharts-xcrosshairs {
-    @apply !fill-stroke dark:!fill-strokedark;
+    @apply fill-stroke! dark:fill-strokedark!;
 }
 
 .apexcharts-gridline {
-    @apply !stroke-stroke dark:!stroke-strokedark;
+    @apply stroke-stroke! dark:stroke-strokedark!;
 }
 
 .apexcharts-series.apexcharts-pie-series path {
-    @apply dark:!stroke-transparent;
+    @apply dark:stroke-transparent!;
 }
 
 .apexcharts-legend-series {
-    @apply !inline-flex gap-1.5;
+    @apply inline-flex! gap-1.5;
 }
 
 .apexcharts-tooltip.apexcharts-theme-light {
-    @apply dark:!border-strokedark dark:!bg-boxdark;
+    @apply dark:border-strokedark! dark:bg-boxdark!;
 }
 
 .apexcharts-tooltip.apexcharts-theme-light .apexcharts-tooltip-title {
-    @apply dark:!border-strokedark dark:!bg-meta-4;
+    @apply dark:border-strokedark! dark:bg-meta-4!;
 }
 
 .apexcharts-xaxistooltip,
 .apexcharts-yaxistooltip {
-    @apply dark:!border-meta-4 dark:!bg-meta-4 dark:!text-bodydark1;
+    @apply dark:border-meta-4! dark:bg-meta-4! dark:text-bodydark1!;
 }
 
 .apexcharts-xaxistooltip-bottom:after {
-    @apply !border-b-gray dark:!border-b-meta-4;
+    @apply border-b-gray! dark:border-b-meta-4!;
 }
 
 .apexcharts-xaxistooltip-bottom:before {
-    @apply !border-b-gray dark:!border-b-meta-4;
+    @apply border-b-gray! dark:border-b-meta-4!;
 }
 
 .apexcharts-xaxistooltip-bottom {
-    @apply !rounded !border-none !bg-gray !text-xs !font-medium !text-black dark:!text-white;
+    @apply rounded-sm! border-none! bg-gray! text-xs! font-medium! text-black! dark:text-white!;
 }
 
 .apexcharts-tooltip-series-group {
-    @apply !pl-1.5;
+    @apply pl-1.5!;
 }
 
 .map-btn .jvm-zoom-btn {
-    @apply flex h-7.5 w-7.5 items-center justify-center rounded border border-stroke bg-white px-0 pb-0.5 pt-0 text-2xl leading-none text-body hover:border-primary hover:bg-primary hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-bodydark dark:hover:border-primary dark:hover:bg-primary dark:hover:text-white;
+    @apply flex h-7.5 w-7.5 items-center justify-center rounded-sm border border-stroke bg-white px-0 pb-0.5 pt-0 text-2xl leading-none text-body hover:border-primary hover:bg-primary hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-bodydark dark:hover:border-primary dark:hover:bg-primary dark:hover:text-white;
 }
 
 .mapOne .jvm-zoom-btn {
-    @apply !bottom-0 !left-auto !top-auto;
+    @apply bottom-0! left-auto! top-auto!;
 }
 
 .mapOne .jvm-zoom-btn.jvm-zoomin {
-    @apply !right-10;
+    @apply right-10!;
 }
 
 .mapOne .jvm-zoom-btn.jvm-zoomout {
-    @apply !right-0;
+    @apply right-0!;
 }
 
 .taskCheckbox:checked ~ .box span {

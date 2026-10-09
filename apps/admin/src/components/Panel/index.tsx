@@ -13,7 +13,7 @@ const Panel = ({
   className?: string;
 }) => (
   <div
-    className={`${rounded === 'sm' ? 'rounded-sm' : 'rounded-lg'} border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${className}`}
+    className={`${rounded === 'sm' ? 'rounded-xs' : 'rounded-lg'} border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${className}`}
   >
     {children}
   </div>

@@ -13,9 +13,9 @@ interface Props {
 const KeywordDetailInfo = ({ keyword, weight, type }: Props) => {
   const ketwordTypeClasses =
     type === HotDealKeywordType.POSITIVE
-      ? 'bg-success text-success bg-opacity-10'
+      ? 'bg-success/10 text-success'
       : type === HotDealKeywordType.NEGATIVE
-        ? 'bg-danger text-danger bg-opacity-10'
+        ? 'bg-danger/10 text-danger'
         : '';
   return (
     <Card>
@@ -31,7 +31,7 @@ const KeywordDetailInfo = ({ keyword, weight, type }: Props) => {
         <li>
           <span>유형 : </span>
           <p
-            className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${ketwordTypeClasses}`}
+            className={`inline-flex rounded-full px-3 py-1 text-sm font-medium ${ketwordTypeClasses}`}
           >
             {type && HotDealKeywordTypeMap[type]}
           </p>

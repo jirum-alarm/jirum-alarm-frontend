@@ -36,7 +36,7 @@ const RankList = ({
                 {format(item.value)}
               </span>
             </div>
-            <div className="ml-6.5 mt-1 h-1.5 rounded-full bg-gray-2 dark:bg-meta-4">
+            <div className="mt-1 ml-6.5 h-1.5 rounded-full bg-gray-2 dark:bg-meta-4">
               <div
                 className="h-full rounded-full"
                 style={{ width: `${(item.value / top) * 100}%`, background: item.color ?? color }}

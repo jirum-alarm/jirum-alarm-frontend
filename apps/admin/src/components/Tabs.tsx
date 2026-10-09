@@ -8,7 +8,7 @@ interface Props<T extends string> {
 
 /** 화면 안 큰 구획 전환(밑줄 탭). 넘치면 가로로 밀린다 */
 const Tabs = <T extends string>({ tabs, value, onChange }: Props<T>) => (
-  <div className="no-scrollbar flex overflow-x-auto whitespace-nowrap border-b border-stroke dark:border-strokedark">
+  <div className="no-scrollbar flex overflow-x-auto border-b border-stroke whitespace-nowrap dark:border-strokedark">
     {tabs.map((t) => (
       <button
         key={t.value}

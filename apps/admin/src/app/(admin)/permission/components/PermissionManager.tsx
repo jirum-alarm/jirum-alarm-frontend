@@ -16,13 +16,13 @@ import { SECTION_LABELS } from '@/lib/adminSection';
 type Draft = { name: string; sections: string[] };
 
 const cardClass =
-  'rounded-sm border border-stroke bg-white p-3 sm:p-5 shadow-default dark:border-strokedark dark:bg-boxdark';
+  'rounded-xs border border-stroke bg-white p-3 sm:p-5 shadow-default dark:border-strokedark dark:bg-boxdark';
 const thClass = 'px-3 py-2 text-left text-xs font-semibold text-bodydark2 whitespace-nowrap';
 const tdClass = 'px-3 py-2 text-sm text-black dark:text-white';
 const inputClass =
-  'w-full md:w-36 rounded border border-stroke bg-transparent px-2 py-1 text-sm outline-none focus:border-primary dark:border-strokedark';
+  'w-full md:w-36 rounded-sm border border-stroke bg-transparent px-2 py-1 text-sm outline-hidden focus:border-primary dark:border-strokedark';
 const buttonClass =
-  'rounded px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40 md:py-1';
+  'rounded-sm px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-40 md:py-1';
 
 // 체크박스는 작아서 폰에서 누르기 어렵다 — label 로 감싸 32px 누름 영역을 준다(md 이상은 원래 크기).
 const checkboxLabelClass =
@@ -99,7 +99,7 @@ const PermissionManager = () => {
               <tr className="border-b border-stroke dark:border-strokedark">
                 <th className={thClass}>역할</th>
                 {sections.map((key) => (
-                  <th key={key} className={`${thClass} text-center`}>
+                  <th key={key} className={thClass.replace('text-left', 'text-center')}>
                     {SECTION_LABELS[key] ?? key}
                   </th>
                 ))}
@@ -246,7 +246,7 @@ const PermissionManager = () => {
                   </td>
                   <td data-label="역할" className={tdClass}>
                     <select
-                      className="rounded border border-stroke bg-transparent px-2 py-2 text-sm dark:border-strokedark dark:bg-boxdark md:py-1"
+                      className="rounded-sm border border-stroke bg-transparent px-2 py-2 text-sm md:py-1 dark:border-strokedark dark:bg-boxdark"
                       value={user.roleId ?? ''}
                       onChange={(e) =>
                         run(

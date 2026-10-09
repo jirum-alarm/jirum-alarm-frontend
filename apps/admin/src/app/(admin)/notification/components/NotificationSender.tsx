@@ -168,7 +168,7 @@ const NotificationSender = () => {
             placeholder="알림 제목"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           />
         </div>
 
@@ -181,7 +181,7 @@ const NotificationSender = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={4}
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           />
         </div>
 
@@ -193,7 +193,7 @@ const NotificationSender = () => {
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+              className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
             >
               {NOTIFICATION_TYPES.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -211,7 +211,7 @@ const NotificationSender = () => {
               value={target}
               onChange={(e) => setTarget(e.target.value)}
               disabled={!usesTarget}
-              className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+              className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
             >
               {NOTIFICATION_TARGETS.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -268,7 +268,7 @@ const NotificationSender = () => {
                   {selectedUsers.map((user) => (
                     <span
                       key={user.id}
-                      className="inline-flex max-w-full items-center gap-1 rounded-full bg-primary/10 py-1 pl-3 pr-1 text-xs font-medium text-primary"
+                      className="inline-flex max-w-full items-center gap-1 rounded-full bg-primary/10 py-1 pr-1 pl-3 text-xs font-medium text-primary"
                     >
                       <span className="truncate">{user.nickname || user.email}</span>
                       <button
@@ -297,11 +297,11 @@ const NotificationSender = () => {
                   onBlur={() => {
                     setTimeout(() => setShowUserDropdown(false), 200);
                   }}
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
 
                 {showUserDropdown && debouncedKeyword && (
-                  <div className="absolute left-0 top-full z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-stroke bg-white shadow-lg dark:border-strokedark dark:bg-boxdark">
+                  <div className="absolute top-full left-0 z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-stroke bg-white shadow-lg dark:border-strokedark dark:bg-boxdark">
                     {userSearchLoading ? (
                       <div className="px-4 py-3 text-center text-sm text-bodydark2">검색 중...</div>
                     ) : searchResults.length === 0 ? (
@@ -356,7 +356,7 @@ const NotificationSender = () => {
               placeholder="알림센터에 붙일 상품 ID"
               value={targetId}
               onChange={(e) => setTargetId(e.target.value)}
-              className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+              className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
             />
             {targetId && targetIdError && (
               <p className="mt-1 text-xs text-danger">{targetIdError}</p>
@@ -375,7 +375,7 @@ const NotificationSender = () => {
             onChange={(e) => setUrl(e.target.value)}
             maxLength={1024}
             aria-invalid={!!normalizedUrl.error}
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           />
           {normalizedUrl.error ? (
             <p className="mt-1 text-xs text-danger">{normalizedUrl.error}</p>
@@ -391,7 +391,7 @@ const NotificationSender = () => {
           <button
             onClick={handleSend}
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:bg-opacity-60 sm:w-auto"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-primary/90 disabled:bg-primary/60 sm:w-auto"
           >
             {loading && <Spinner size="sm" color="white" />}
             발송

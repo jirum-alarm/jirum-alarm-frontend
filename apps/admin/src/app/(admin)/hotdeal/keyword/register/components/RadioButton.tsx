@@ -13,7 +13,7 @@ interface Props {
 const RadioButton = ({ text, value, name, checked, onChange, id }: Props) => {
   return (
     <div>
-      <label htmlFor={id} className="flex cursor-pointer select-none items-center py-2 sm:py-0">
+      <label htmlFor={id} className="flex cursor-pointer items-center py-2 select-none sm:py-0">
         <div className="relative">
           <input
             type="radio"
@@ -30,7 +30,7 @@ const RadioButton = ({ text, value, name, checked, onChange, id }: Props) => {
             }`}
           >
             <span
-              className={`h-2.5 w-2.5 rounded-full bg-transparent ${checked && '!bg-primary'}`}
+              className={`h-2.5 w-2.5 rounded-full bg-transparent ${checked && 'bg-primary!'}`}
             ></span>
           </div>
         </div>

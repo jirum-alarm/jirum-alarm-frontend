@@ -61,7 +61,7 @@ const UserDetail = ({ userId }: { userId: string }) => {
             {user.linkedSocialProviders.map((provider) => (
               <span
                 key={provider}
-                className="rounded-full bg-primary bg-opacity-10 px-4 py-1.5 text-sm font-medium text-primary"
+                className="rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary"
               >
                 {PROVIDER_MAP[provider] ?? provider}
               </span>
@@ -80,7 +80,7 @@ const UserDetail = ({ userId }: { userId: string }) => {
             {user.favoriteCategories.map((catId) => (
               <span
                 key={catId}
-                className="rounded-full bg-bodydark2 bg-opacity-10 px-4 py-1.5 text-sm font-medium text-bodydark2"
+                className="rounded-full bg-bodydark2/10 px-4 py-1.5 text-sm font-medium text-bodydark2"
               >
                 {categoryName.get(Number(catId)) ?? `카테고리 ${catId}`}
               </span>
@@ -107,7 +107,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-4">
       <span className="w-20 shrink-0 text-sm font-medium text-bodydark2">{label}</span>
-      <span className="min-w-0 break-all text-sm text-black dark:text-white">{value}</span>
+      <span className="min-w-0 text-sm break-all text-black dark:text-white">{value}</span>
     </div>
   );
 }

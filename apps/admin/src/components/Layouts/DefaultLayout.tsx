@@ -60,7 +60,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
           {sidebarOpen && (
             <div
               aria-hidden
-              className="fixed inset-0 z-[9998] bg-black/50 lg:hidden"
+              className="fixed inset-0 z-9998 bg-black/50 lg:hidden"
               onClick={() => setSidebarOpen(false)}
             />
           )}
@@ -79,7 +79,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
             {/* <!-- ===== Main Content Start ===== --> */}
             {/* 모바일은 하단 탭바 높이만큼 비운다 */}
             <main className="pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
-              <div className="mx-auto max-w-screen-2xl p-3 md:p-6 2xl:p-10">
+              <div className="mx-auto max-w-(--breakpoint-2xl) p-3 md:p-6 2xl:p-10">
                 <QueryErrorBanner />
                 {/* 권한 없는 섹션은 URL 로 직접 들어와도 본문을 그리지 않는다(API 도 서버에서 막힘). */}
                 {canAccessPath(access, pathname) ? (
@@ -101,7 +101,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
 }
 
 const NoAccess = ({ hasRole }: { hasRole: boolean }) => (
-  <div className="rounded-sm border border-stroke bg-white p-10 text-center dark:border-strokedark dark:bg-boxdark">
+  <div className="rounded-xs border border-stroke bg-white p-10 text-center dark:border-strokedark dark:bg-boxdark">
     <p className="text-lg font-semibold text-black dark:text-white">접근 권한이 없습니다</p>
     <p className="mt-2 text-sm text-bodydark2">
       {hasRole

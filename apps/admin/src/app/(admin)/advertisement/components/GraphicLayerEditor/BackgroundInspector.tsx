@@ -35,7 +35,7 @@ export default function BackgroundInspector({
       <div>
         <p className="text-sm font-semibold text-black dark:text-white">Background</p>
         <p className="mt-1 text-xs font-medium text-primary">{labelBreakpoint(activeBreakpoint)}</p>
-        <p className="mt-1 break-all text-[11px] text-bodydark2">
+        <p className="mt-1 text-[11px] break-all text-bodydark2">
           {selectedBackgroundAssetUrl || 'asset empty'}
         </p>
         <div className="mt-3">
@@ -54,7 +54,7 @@ export default function BackgroundInspector({
         {activeBreakpoint !== '_default' && graphic.background.assetByWidth?.[activeBreakpoint] && (
           <button
             type="button"
-            className="mt-2 rounded border border-stroke px-2 py-2 text-[11px] text-black hover:border-danger hover:text-danger dark:border-strokedark dark:text-white md:py-1"
+            className="mt-2 rounded-sm border border-stroke px-2 py-2 text-[11px] text-black hover:border-danger hover:text-danger md:py-1 dark:border-strokedark dark:text-white"
             onClick={() => onClearBackgroundAssetOverride(activeBreakpoint)}
           >
             이 variant BG override 제거

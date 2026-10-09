@@ -132,7 +132,7 @@ const ProductDetail = ({ productId }: { productId: string }) => {
               <tbody>
                 {product.prices.map((price) => (
                   <tr key={price.id} className="border-b border-stroke dark:border-strokedark">
-                    <td className="px-4 py-3 text-sm font-medium text-black dark:text-white md:font-normal">
+                    <td className="px-4 py-3 text-sm font-medium text-black md:font-normal dark:text-white">
                       {labelOf(PRICE_TARGET_LABEL, price.target)}
                     </td>
                     <td data-label="통화" className="px-4 py-3 text-sm text-bodydark2">
@@ -198,7 +198,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-4">
       <span className="w-20 shrink-0 text-sm font-medium text-bodydark2">{label}</span>
-      <span className="min-w-0 break-words text-sm text-black dark:text-white">{value}</span>
+      <span className="min-w-0 text-sm wrap-break-word text-black dark:text-white">{value}</span>
     </div>
   );
 }

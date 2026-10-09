@@ -91,7 +91,7 @@ const SimilarDealsPanel = ({
     <div className="border-b border-stroke bg-gray-50 px-3 py-2 dark:border-strokedark dark:bg-meta-4/30">
       <div className="mb-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px]">
         <span className="font-bold text-black dark:text-white">유사 딜로 매핑</span>
-        <span className="rounded bg-warning/10 px-1.5 py-0.5 font-bold text-warning">
+        <span className="rounded-sm bg-warning/10 px-1.5 py-0.5 font-bold text-warning">
           용량 {brandProduct.volume || '-'} · 수량 {brandProduct.amount || '-'}
         </span>
         <span className="text-gray-500">수량이 다른 딜은 다른 상품입니다</span>
@@ -107,12 +107,12 @@ const SimilarDealsPanel = ({
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="min-w-0 flex-1 rounded border border-stroke bg-white px-2 py-1 text-xs dark:border-strokedark dark:bg-boxdark"
+          className="min-w-0 flex-1 rounded-sm border border-stroke bg-white px-2 py-1 text-xs dark:border-strokedark dark:bg-boxdark"
           placeholder="검색어 (브랜드 + 모델 + 수량이 잘 걸립니다)"
         />
         <button
           type="submit"
-          className="shrink-0 rounded bg-primary px-3 py-1.5 text-xs text-white sm:px-2 sm:py-1"
+          className="shrink-0 rounded-sm bg-primary px-3 py-1.5 text-xs text-white sm:px-2 sm:py-1"
         >
           검색
         </button>
@@ -124,7 +124,7 @@ const SimilarDealsPanel = ({
             <button
               key={t}
               onClick={() => runSearch(t)}
-              className="line-clamp-1 max-w-[240px] rounded-full border border-stroke bg-white px-2 py-1 text-left text-[11px] text-gray-600 hover:border-primary dark:border-strokedark dark:bg-boxdark dark:text-gray-300 sm:py-0.5"
+              className="line-clamp-1 max-w-[240px] rounded-full border border-stroke bg-white px-2 py-1 text-left text-[11px] text-gray-600 hover:border-primary sm:py-0.5 dark:border-strokedark dark:bg-boxdark dark:text-gray-300"
               title={t}
             >
               {t}
@@ -190,7 +190,7 @@ const SimilarDealsPanel = ({
         <button
           onClick={handleMap}
           disabled={checked.size === 0 || isMapping}
-          className="rounded bg-success px-2.5 py-2 text-xs font-bold text-white disabled:opacity-40 sm:py-1"
+          className="rounded-sm bg-success px-2.5 py-2 text-xs font-bold text-white disabled:opacity-40 sm:py-1"
         >
           {isMapping ? '매핑 중...' : `선택 ${checked.size}건 매핑 (승인완료로)`}
         </button>

@@ -50,7 +50,7 @@ const VerificationStatsBar = ({
           type="checkbox"
           checked={!includeVerified}
           onChange={(e) => setIncludeVerified(!e.target.checked)}
-          className="h-3.5 w-3.5 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+          className="h-3.5 w-3.5 rounded-sm border-gray-300 text-blue-500 focus:ring-blue-500"
         />
         <span className={!includeVerified ? 'font-medium text-blue-600 dark:text-blue-400' : ''}>
           대기만

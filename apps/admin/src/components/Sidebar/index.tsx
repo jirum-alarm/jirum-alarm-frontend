@@ -177,14 +177,14 @@ const Sidebar = ({
   return (
     <aside
       ref={sidebar}
-      className={`fixed left-0 top-0 z-9999 flex h-dvh flex-col overflow-y-hidden bg-black pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] duration-300 ease-linear dark:bg-boxdark lg:translate-x-0 ${
+      className={`fixed top-0 left-0 z-9999 flex h-dvh flex-col overflow-y-hidden bg-black pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] duration-300 ease-linear lg:translate-x-0 dark:bg-boxdark ${
         sidebarExpanded ? 'w-72.5' : 'w-20'
       } ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div
         className={`flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5 ${
-          !sidebarExpanded && 'justify-center px-4'
+          !sidebarExpanded && 'px-4'
         }`}
       >
         <Link href="/">
@@ -318,7 +318,7 @@ function MenuGroup({
   return (
     <Link
       href="#"
-      className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+      className={`group relative flex items-center gap-2.5 rounded-xs px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
         isSelectedPath && 'bg-graydark dark:bg-meta-4'
       } ${!sidebarExpanded && 'justify-center px-2'}`}
       onClick={(e) => {
@@ -349,7 +349,7 @@ function SubMenu({
   if (!sidebarExpanded) return null;
   return (
     <div className={`translate transform overflow-hidden ${!open && 'hidden'}`}>
-      <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">{children}</ul>
+      <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">{children}</ul>
     </div>
   );
 }
@@ -539,7 +539,7 @@ function KeywordMapIcon() {
 function MenuGroupArrowIcon({ open }: { open: boolean }) {
   return (
     <svg
-      className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'}`}
+      className={`absolute top-1/2 right-4 -translate-y-1/2 fill-current ${open && 'rotate-180'}`}
       width="20"
       height="20"
       viewBox="0 0 20 20"

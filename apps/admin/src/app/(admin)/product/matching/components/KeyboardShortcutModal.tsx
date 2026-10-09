@@ -66,12 +66,12 @@ const KeyboardShortcutModal = ({ isOpen, onClose }: KeyboardShortcutModalProps) 
 
   return (
     <div
-      className="fixed inset-0 z-99999 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-99999 flex items-center justify-center bg-black/60 backdrop-blur-xs"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="relative mx-3 max-h-[90dvh] w-full max-w-lg animate-[fadeIn_0.15s_ease-out] overflow-y-auto rounded-2xl bg-white shadow-2xl dark:bg-boxdark sm:mx-4">
+      <div className="relative mx-3 max-h-[90dvh] w-full max-w-lg animate-[fadeIn_0.15s_ease-out] overflow-y-auto rounded-2xl bg-white shadow-2xl sm:mx-4 dark:bg-boxdark">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-stroke px-6 py-4 dark:border-strokedark">
           <div className="flex items-center gap-3">
@@ -96,7 +96,7 @@ const KeyboardShortcutModal = ({ isOpen, onClose }: KeyboardShortcutModalProps) 
             onClick={onClose}
             className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-meta-4"
           >
-            <kbd className="rounded border border-stroke bg-gray-50 px-1.5 py-0.5 font-mono text-xs dark:border-strokedark dark:bg-meta-4">
+            <kbd className="rounded-sm border border-stroke bg-gray-50 px-1.5 py-0.5 font-mono text-xs dark:border-strokedark dark:bg-meta-4">
               ESC
             </kbd>
             <span>닫기</span>
@@ -107,7 +107,7 @@ const KeyboardShortcutModal = ({ isOpen, onClose }: KeyboardShortcutModalProps) 
         <div className="max-h-[60vh] overflow-y-auto px-6 py-4">
           {SHORTCUT_GROUPS.map((group, groupIndex) => (
             <div key={group.title} className={groupIndex > 0 ? 'mt-5' : ''}>
-              <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+              <h4 className="mb-2 text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400">
                 {group.title}
               </h4>
               <div className="space-y-1">
@@ -119,13 +119,13 @@ const KeyboardShortcutModal = ({ isOpen, onClose }: KeyboardShortcutModalProps) 
                     <span className="text-sm text-black dark:text-white">
                       {shortcut.description}
                     </span>
-                    <div className="ml-4 flex flex-shrink-0 items-center gap-1">
+                    <div className="ml-4 flex shrink-0 items-center gap-1">
                       {shortcut.keys.map((key, keyIndex) => (
                         <span key={keyIndex} className="flex items-center gap-1">
                           {keyIndex > 0 && (
                             <span className="text-xs text-gray-300 dark:text-gray-600">+</span>
                           )}
-                          <kbd className="inline-flex min-w-[28px] items-center justify-center rounded-md border border-stroke bg-gray-50 px-2 py-1 font-mono text-xs font-medium text-black shadow-sm dark:border-strokedark dark:bg-meta-4 dark:text-white">
+                          <kbd className="inline-flex min-w-[28px] items-center justify-center rounded-md border border-stroke bg-gray-50 px-2 py-1 font-mono text-xs font-medium text-black shadow-xs dark:border-strokedark dark:bg-meta-4 dark:text-white">
                             {key}
                           </kbd>
                         </span>
@@ -141,7 +141,7 @@ const KeyboardShortcutModal = ({ isOpen, onClose }: KeyboardShortcutModalProps) 
         {/* Footer */}
         <div className="border-t border-stroke px-6 py-3 dark:border-strokedark">
           <p className="text-center text-xs text-gray-400 dark:text-gray-500">
-            <kbd className="rounded border border-stroke bg-gray-50 px-1.5 py-0.5 font-mono text-xs dark:border-strokedark dark:bg-meta-4">
+            <kbd className="rounded-sm border border-stroke bg-gray-50 px-1.5 py-0.5 font-mono text-xs dark:border-strokedark dark:bg-meta-4">
               ?
             </kbd>{' '}
             키를 눌러 이 도움말을 열거나 닫을 수 있습니다

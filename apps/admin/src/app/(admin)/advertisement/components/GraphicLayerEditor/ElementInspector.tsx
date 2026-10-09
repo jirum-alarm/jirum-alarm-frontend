@@ -8,7 +8,7 @@ import { InfoCell, NumberField, OptionalNumberField, OptionalPositiveNumberField
 import { PresetKey, VisualConstraintEditorProps } from './types';
 
 const constraintButtonClass =
-  'rounded border border-stroke px-2 py-2 text-[11px] text-black transition hover:border-primary hover:text-primary dark:border-strokedark dark:text-white md:py-1';
+  'rounded-sm border border-stroke px-2 py-2 text-[11px] text-black transition hover:border-primary hover:text-primary dark:border-strokedark dark:text-white md:py-1';
 
 type Props = Pick<
   VisualConstraintEditorProps,
@@ -56,7 +56,7 @@ export default function ElementInspector({
           <p className="mt-1 text-xs font-medium text-primary">
             {labelBreakpoint(activeBreakpoint)}
           </p>
-          <p className="mt-1 break-all text-[11px] text-bodydark2">
+          <p className="mt-1 text-[11px] break-all text-bodydark2">
             {selectedElementAssetUrl || 'asset empty'}
           </p>
         </div>
@@ -236,7 +236,7 @@ export default function ElementInspector({
         </div>
         <button
           type="button"
-          className="mt-3 rounded bg-danger px-3 py-2 text-xs text-white md:py-1.5"
+          className="mt-3 rounded-sm bg-danger px-3 py-2 text-xs text-white md:py-1.5"
           onClick={() => onRemoveForegroundElement(selectedElementIndex)}
         >
           Element 삭제

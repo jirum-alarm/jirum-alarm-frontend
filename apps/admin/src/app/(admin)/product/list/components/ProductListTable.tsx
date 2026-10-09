@@ -18,15 +18,15 @@ import ProductFilters from './ProductFilters';
 
 const StatusBadge = ({ isEnd, isHot }: { isEnd?: boolean | null; isHot?: boolean | null }) =>
   isEnd ? (
-    <span className="inline-block rounded bg-danger bg-opacity-10 px-2 py-0.5 text-xs font-medium text-danger">
+    <span className="inline-block rounded-sm bg-danger/10 px-2 py-0.5 text-xs font-medium text-danger">
       종료
     </span>
   ) : isHot ? (
-    <span className="inline-block rounded bg-success bg-opacity-10 px-2 py-0.5 text-xs font-medium text-success">
+    <span className="inline-block rounded-sm bg-success/10 px-2 py-0.5 text-xs font-medium text-success">
       핫딜
     </span>
   ) : (
-    <span className="inline-block rounded bg-bodydark2 bg-opacity-10 px-2 py-0.5 text-xs font-medium text-bodydark2">
+    <span className="inline-block rounded-sm bg-bodydark2/10 px-2 py-0.5 text-xs font-medium text-bodydark2">
       일반
     </span>
   );
@@ -182,7 +182,7 @@ const ProductListTable = () => {
                 >
                   <td
                     data-label="ID"
-                    className="hidden px-4 py-3 text-center text-sm text-black dark:text-white md:table-cell"
+                    className="hidden px-4 py-3 text-center text-sm text-black md:table-cell dark:text-white"
                   >
                     {product.id}
                   </td>
@@ -191,10 +191,10 @@ const ProductListTable = () => {
                       <img
                         src={product.thumbnail}
                         alt=""
-                        className="h-10 w-10 shrink-0 rounded object-cover md:mx-auto"
+                        className="h-10 w-10 shrink-0 rounded-sm object-cover md:mx-auto"
                       />
                     ) : (
-                      <div className="h-10 w-10 shrink-0 rounded bg-gray-2 dark:bg-meta-4 md:mx-auto" />
+                      <div className="h-10 w-10 shrink-0 rounded-sm bg-gray-2 md:mx-auto dark:bg-meta-4" />
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -204,15 +204,15 @@ const ProductListTable = () => {
                         <img
                           src={product.thumbnail}
                           alt=""
-                          className="h-14 w-14 shrink-0 rounded object-cover md:hidden"
+                          className="h-14 w-14 shrink-0 rounded-sm object-cover md:hidden"
                         />
                       ) : (
-                        <div className="h-14 w-14 shrink-0 rounded bg-gray-2 dark:bg-meta-4 md:hidden" />
+                        <div className="h-14 w-14 shrink-0 rounded-sm bg-gray-2 md:hidden dark:bg-meta-4" />
                       )}
                       <div className="min-w-0 flex-1">
                         <Link
                           href={`/product/${product.id}`}
-                          className="line-clamp-2 text-sm font-medium text-black hover:text-primary dark:text-white md:line-clamp-1 md:font-normal"
+                          className="line-clamp-2 text-sm font-medium text-black hover:text-primary md:line-clamp-1 md:font-normal dark:text-white"
                         >
                           {product.title}
                         </Link>
@@ -230,7 +230,7 @@ const ProductListTable = () => {
                   </td>
                   <td
                     data-label="가격"
-                    className="hidden px-4 py-3 text-center text-sm text-black dark:text-white md:table-cell"
+                    className="hidden px-4 py-3 text-center text-sm text-black md:table-cell dark:text-white"
                   >
                     {product.price ? `${product.price.toLocaleString()}원` : '-'}
                   </td>
@@ -283,8 +283,8 @@ const ProductListTable = () => {
       </Panel>
 
       {pendingDeleteId !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="mx-3 max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-lg bg-white p-5 shadow-default dark:bg-boxdark sm:p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="mx-3 max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-lg bg-white p-5 shadow-default sm:p-6 dark:bg-boxdark">
             <h3 className="mb-3 text-lg font-semibold text-black dark:text-white">상품 삭제</h3>
             <p className="mb-2 text-sm text-bodydark2">
               상품 ID{' '}
@@ -296,7 +296,7 @@ const ProductListTable = () => {
               삭제됩니다.
             </p>
             {deleteError && (
-              <p className="mb-3 rounded border border-danger bg-danger bg-opacity-10 px-3 py-2 text-xs text-danger">
+              <p className="mb-3 rounded-sm border border-danger bg-danger/10 px-3 py-2 text-xs text-danger">
                 {deleteError}
               </p>
             )}
@@ -316,7 +316,7 @@ const ProductListTable = () => {
                 type="button"
                 onClick={handleConfirmDelete}
                 disabled={deleting}
-                className="rounded-md bg-danger px-4 py-2 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:opacity-50"
+                className="rounded-md bg-danger px-4 py-2 text-sm font-medium text-white transition hover:bg-danger/90 disabled:opacity-50"
               >
                 {deleting ? '삭제 중...' : '삭제'}
               </button>

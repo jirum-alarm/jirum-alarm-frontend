@@ -67,7 +67,7 @@ const Signin = () => {
                 <label className="mb-2.5 block font-medium text-black dark:text-white">Email</label>
                 <div className="relative">
                   <input
-                    className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    className="w-full rounded-lg border border-stroke bg-transparent py-4 pr-10 pl-6 text-black outline-hidden focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     type="email"
                     name="email"
                     placeholder="Enter your email"
@@ -76,7 +76,7 @@ const Signin = () => {
                     onChange={handleInputChange}
                   />
 
-                  <span className="absolute right-4 top-4">
+                  <span className="absolute top-4 right-4">
                     <svg
                       className="fill-current"
                       width="22"
@@ -102,7 +102,7 @@ const Signin = () => {
                 </label>
                 <div className="relative">
                   <input
-                    className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    className="w-full rounded-lg border border-stroke bg-transparent py-4 pr-10 pl-6 text-black outline-hidden focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     type="password"
                     name="password"
                     placeholder="Enter your password"
@@ -111,7 +111,7 @@ const Signin = () => {
                     onChange={handleInputChange}
                   />
 
-                  <span className="absolute right-4 top-4">
+                  <span className="absolute top-4 right-4">
                     <svg
                       className="fill-current"
                       width="22"
@@ -139,7 +139,7 @@ const Signin = () => {
                 <button
                   disabled={loading}
                   type="submit"
-                  className="flex w-full cursor-pointer items-center justify-center rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90 disabled:bg-opacity-60"
+                  className="flex w-full cursor-pointer items-center justify-center rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-primary/90 disabled:bg-primary/60"
                 >
                   {loading && <Spinner size="sm" color="white" className="me-3" />}
                   Sign In

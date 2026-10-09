@@ -76,7 +76,7 @@ const EntryManager = ({ groupId, entries }: Props) => {
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="키워드 입력 (쉼표로 구분하여 여러 개 추가 가능)"
-            className="min-w-0 flex-1 rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary sm:px-5"
+            className="min-w-0 flex-1 rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-3 font-normal text-black outline-hidden transition focus:border-primary active:border-primary sm:px-5 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           />
           <button
             className="flex shrink-0 items-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white disabled:opacity-50"

@@ -31,7 +31,7 @@ const ProductMatching = () => {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           {/* 폰은 상단 헤더에 화면 이름이 이미 있다 */}
-          <h2 className="hidden text-xl font-bold text-black dark:text-white lg:block">
+          <h2 className="hidden text-xl font-bold text-black lg:block dark:text-white">
             상품 매칭
           </h2>
 
@@ -41,9 +41,9 @@ const ProductMatching = () => {
               <button
                 key={t.key}
                 onClick={() => setViewMode(t.key)}
-                className={`whitespace-nowrap rounded-md px-3 py-2 text-xs font-medium transition-colors sm:py-1.5 ${
+                className={`rounded-md px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors sm:py-1.5 ${
                   viewMode === t.key
-                    ? 'bg-primary text-white shadow-sm'
+                    ? 'bg-primary text-white shadow-xs'
                     : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                 }`}
               >
@@ -56,27 +56,27 @@ const ProductMatching = () => {
         {/* 브랜드별 뷰 단축키 힌트 */}
         {viewMode === 'brand' && (
           <div className="hidden items-center gap-2 text-[11px] text-gray-400 lg:flex">
-            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
+            <kbd className="rounded-sm bg-white px-1.5 py-0.5 font-mono shadow-xs dark:bg-boxdark">
               ↑↓
             </kbd>
             <span>이동</span>
-            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
+            <kbd className="rounded-sm bg-white px-1.5 py-0.5 font-mono shadow-xs dark:bg-boxdark">
               →←
             </kbd>
             <span>패널전환</span>
-            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
+            <kbd className="rounded-sm bg-white px-1.5 py-0.5 font-mono shadow-xs dark:bg-boxdark">
               Space
             </kbd>
             <span>선택</span>
-            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
+            <kbd className="rounded-sm bg-white px-1.5 py-0.5 font-mono shadow-xs dark:bg-boxdark">
               Enter
             </kbd>
             <span>확정</span>
-            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
+            <kbd className="rounded-sm bg-white px-1.5 py-0.5 font-mono shadow-xs dark:bg-boxdark">
               ⌘/Ctrl+Z
             </kbd>
             <span>되돌리기</span>
-            <kbd className="rounded bg-white px-1.5 py-0.5 font-mono shadow-sm dark:bg-boxdark">
+            <kbd className="rounded-sm bg-white px-1.5 py-0.5 font-mono shadow-xs dark:bg-boxdark">
               ?
             </kbd>
             <span>도움말</span>

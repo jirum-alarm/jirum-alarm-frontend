@@ -66,14 +66,14 @@ const VerificationItem = memo(function VerificationItem({
   const getStatusBadge = () => {
     if (item.verificationStatus === 'VERIFIED') {
       return (
-        <span className="rounded bg-success/10 px-1 py-0.5 text-[11px] font-bold text-success">
+        <span className="rounded-sm bg-success/10 px-1 py-0.5 text-[11px] font-bold text-success">
           승인완료
         </span>
       );
     }
     if (item.verificationStatus === 'REJECTED') {
       return (
-        <span className="rounded bg-danger/10 px-1 py-0.5 text-[11px] font-bold text-danger">
+        <span className="rounded-sm bg-danger/10 px-1 py-0.5 text-[11px] font-bold text-danger">
           거절완료
         </span>
       );
@@ -101,7 +101,7 @@ const VerificationItem = memo(function VerificationItem({
           : 'bg-danger/10 text-danger';
     return (
       <span
-        className={`cursor-help rounded px-1 py-0.5 text-[11px] font-bold ${colorClass}`}
+        className={`cursor-help rounded-sm px-1 py-0.5 text-[11px] font-bold ${colorClass}`}
         title={item.matchingReasoning || `AI 매칭 신뢰도: ${confidence}%`}
       >
         {confidence}%
@@ -142,7 +142,7 @@ const VerificationItem = memo(function VerificationItem({
     <div
       data-post-index={index}
       onClick={() => onItemClick(index)}
-      className={`group relative cursor-pointer rounded-xl border-2 bg-white p-1.5 shadow-sm transition-all dark:bg-boxdark ${getBorderClass()}`}
+      className={`group relative cursor-pointer rounded-xl border-2 bg-white p-1.5 shadow-xs transition-all dark:bg-boxdark ${getBorderClass()}`}
     >
       <div className="flex items-start gap-2 sm:gap-4">
         {/* 승인/거절 체크박스 */}
@@ -151,7 +151,7 @@ const VerificationItem = memo(function VerificationItem({
             e.stopPropagation();
             onToggleSelection(item.id);
           }}
-          className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md border-2 transition-all sm:h-6 sm:w-6 ${
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md border-2 transition-all sm:h-6 sm:w-6 ${
             isSelected
               ? 'border-success bg-success text-white'
               : 'border-danger bg-danger/10 text-danger'
@@ -189,7 +189,7 @@ const VerificationItem = memo(function VerificationItem({
                 item.danawaUrl,
               );
             }}
-            className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg border border-stroke bg-white hover:scale-105 dark:border-strokedark"
+            className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-stroke bg-white hover:scale-105 dark:border-strokedark"
           >
             <img
               src={item.product.thumbnail}
@@ -215,7 +215,7 @@ const VerificationItem = memo(function VerificationItem({
               {new Date(item.createdAt).toLocaleDateString()}
             </span>
             {item.verificationStatus === 'VERIFIED' && verifierName && (
-              <span className="rounded bg-blue-50 px-1 py-0.5 text-[11px] text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+              <span className="rounded-sm bg-blue-50 px-1 py-0.5 text-[11px] text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                 검증: {verifierName}
               </span>
             )}
@@ -225,7 +225,7 @@ const VerificationItem = memo(function VerificationItem({
                   e.stopPropagation();
                   onRemove(item);
                 }}
-                className="ml-auto rounded border border-danger/40 px-2 py-1.5 text-[11px] text-danger hover:bg-danger/10 sm:px-1.5 sm:py-0.5"
+                className="ml-auto rounded-sm border border-danger/40 px-2 py-1.5 text-[11px] text-danger hover:bg-danger/10 sm:px-1.5 sm:py-0.5"
               >
                 매핑 해제
               </button>
@@ -234,7 +234,7 @@ const VerificationItem = memo(function VerificationItem({
 
           {/* #3: 하이라이팅 된 제목 + 다나와 링크 */}
           <div className="flex items-center gap-1">
-            <p className="line-clamp-2 min-w-0 flex-1 text-xs font-semibold text-black dark:text-white sm:line-clamp-1">
+            <p className="line-clamp-2 min-w-0 flex-1 text-xs font-semibold text-black sm:line-clamp-1 dark:text-white">
               {renderTitle()}
             </p>
             {item.danawaUrl && (
@@ -242,7 +242,7 @@ const VerificationItem = memo(function VerificationItem({
                 href={item.danawaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="whitespace-nowrap text-[11px] text-primary hover:underline"
+                className="text-[11px] whitespace-nowrap text-primary hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
                 다나와

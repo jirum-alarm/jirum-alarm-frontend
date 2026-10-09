@@ -77,7 +77,7 @@ const LIMIT = { internalId: 255, displayTitle: 255, targetUrl: 2048 };
 const CDN_BASE = 'https://cdn.jirum-alarm.com';
 
 const inputClass =
-  'w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary';
+  'w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary';
 
 type NormalizedTargetUrl = { ok: true; targetUrl: string } | { ok: false; error: string };
 
@@ -453,7 +453,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
             {SLOT_LOCATIONS.map((loc) => (
               <label
                 key={loc.value}
-                className="flex cursor-pointer flex-wrap items-center gap-x-2 py-1 text-sm text-black dark:text-white md:py-0"
+                className="flex cursor-pointer flex-wrap items-center gap-x-2 py-1 text-sm text-black md:py-0 dark:text-white"
               >
                 <input
                   type="checkbox"
@@ -531,7 +531,7 @@ const AdForm = ({ mode, initial }: { mode: 'create' | 'edit'; initial?: AdEditIn
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:bg-opacity-60"
+          className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-primary/90 disabled:bg-primary/60"
         >
           {loading && <Spinner size="sm" color="white" />}
           {mode === 'create' ? '등록' : '수정'}

@@ -9,10 +9,10 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="m-6 rounded border border-danger/40 bg-danger/5 p-4 text-sm text-danger">
+    <div className="m-6 rounded-sm border border-danger/40 bg-danger/5 p-4 text-sm text-danger">
       <p className="mb-1 font-bold">화면을 그리지 못했습니다</p>
       <p className="mb-3 break-all">{error.message}</p>
-      <button onClick={reset} className="rounded bg-danger px-3 py-1 text-white">
+      <button onClick={reset} className="rounded-sm bg-danger px-3 py-1 text-white">
         다시 시도
       </button>
     </div>

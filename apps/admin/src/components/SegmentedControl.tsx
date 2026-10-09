@@ -23,8 +23,8 @@ const SegmentedControl = <T extends string>({
         key={o.value}
         type="button"
         onClick={() => onChange(o.value)}
-        className={`whitespace-nowrap rounded-md px-3 py-1.5 font-medium ${
-          value === o.value ? 'bg-white text-black shadow-sm' : 'text-body'
+        className={`rounded-md px-3 py-1.5 font-medium whitespace-nowrap ${
+          value === o.value ? 'bg-white text-black shadow-xs' : 'text-body'
         }`}
       >
         {o.label}

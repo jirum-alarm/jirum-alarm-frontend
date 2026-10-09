@@ -88,7 +88,7 @@ const PreviewClient = ({ slug }: { slug: string }) => {
   return (
     <div className="flex flex-col gap-6">
       {/* 발행 액션 바 */}
-      <div className="flex flex-col gap-3 rounded-md border border-stroke bg-white p-4 dark:border-strokedark dark:bg-boxdark sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 rounded-md border border-stroke bg-white p-4 sm:flex-row sm:items-center sm:justify-between dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center gap-2 text-sm">
           {isPublished ? (
             <span className="inline-flex rounded-full bg-success/10 px-2.5 py-0.5 font-medium text-success">
@@ -167,7 +167,7 @@ const PreviewClient = ({ slug }: { slug: string }) => {
                     {rep.label}
                   </span>
                   {rep.priceRank && (
-                    <span className="shrink-0 rounded bg-warning/10 px-1.5 py-0.5 text-[10px] font-semibold text-warning">
+                    <span className="shrink-0 rounded-sm bg-warning/10 px-1.5 py-0.5 text-[10px] font-semibold text-warning">
                       다나와 {rep.priceRank}
                     </span>
                   )}
@@ -253,7 +253,7 @@ const PreviewClient = ({ slug }: { slug: string }) => {
               className="flex items-center gap-3 rounded-lg border border-stroke p-3 dark:border-strokedark"
             >
               {deal.thumbnail && (
-                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded bg-gray-2">
+                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-sm bg-gray-2">
                   <Image
                     src={deal.thumbnail}
                     alt=""

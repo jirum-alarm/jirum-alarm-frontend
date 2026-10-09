@@ -4,7 +4,7 @@ import { BreakpointKey, DEFAULT_RENDER_WIDTH_BREAKPOINT, parseBreakpoint } from 
 
 // 편집 패널의 숫자 입력 필드들 — 빈 값/0dp/wrap 을 구분해 undefined·null 로 돌려준다.
 const inputClass =
-  'w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-2 py-1.5 text-xs text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary';
+  'w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-2 py-1.5 text-xs text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary';
 
 function toPositiveNumber(value: string, fallback: number) {
   const parsed = Number(value);
@@ -26,7 +26,7 @@ function toOptionalPositiveNumber(value: string) {
 
 export function InfoCell({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded bg-gray-2 px-2 py-1 dark:bg-form-input">
+    <div className="rounded-sm bg-gray-2 px-2 py-1 dark:bg-form-input">
       <span className="text-bodydark2">{label}</span>
       <span className="ml-1 font-medium text-black dark:text-white">{value}</span>
     </div>
@@ -125,7 +125,7 @@ export function BreakpointWidthField({
       <input
         type="number"
         min={1}
-        className="w-20 rounded border border-stroke bg-white px-2 py-1 text-xs text-black outline-none focus:border-primary dark:border-strokedark dark:bg-boxdark dark:text-white"
+        className="w-20 rounded-sm border border-stroke bg-white px-2 py-1 text-xs text-black outline-hidden focus:border-primary dark:border-strokedark dark:bg-boxdark dark:text-white"
         value={value}
         onChange={(event) => setValue(event.target.value)}
         onBlur={commit}
@@ -149,14 +149,14 @@ export function AddBreakpointControl({ onAdd }: { onAdd: (width: number) => void
         <input
           type="number"
           min={1}
-          className="w-24 rounded-lg border-[1.5px] border-stroke bg-transparent px-2 py-1.5 text-xs text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+          className="w-24 rounded-lg border-[1.5px] border-stroke bg-transparent px-2 py-1.5 text-xs text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           value={value}
           onChange={(event) => setValue(event.target.value)}
         />
       </label>
       <button
         type="button"
-        className="mb-0.5 rounded bg-primary px-3 py-2 text-xs text-white md:py-1.5"
+        className="mb-0.5 rounded-sm bg-primary px-3 py-2 text-xs text-white md:py-1.5"
         onClick={() => onAdd(toPositiveNumber(value, DEFAULT_RENDER_WIDTH_BREAKPOINT))}
       >
         variant 추가

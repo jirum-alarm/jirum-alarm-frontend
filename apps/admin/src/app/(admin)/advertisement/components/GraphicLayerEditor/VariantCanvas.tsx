@@ -57,7 +57,7 @@ export default function VariantCanvas({
 
   return (
     <div
-      className={`rounded border bg-gray-2 p-3 dark:bg-form-input sm:p-4 ${
+      className={`rounded border bg-gray-2 p-3 sm:p-4 dark:bg-form-input ${
         selectedCanvas ? 'border-primary' : 'border-stroke dark:border-strokedark'
       }`}
     >
@@ -79,7 +79,7 @@ export default function VariantCanvas({
           <button
             type="button"
             disabled={breakpoint === '_default'}
-            className="rounded bg-danger px-3 py-2 text-[11px] text-white disabled:bg-bodydark2 md:px-2 md:py-1"
+            className="rounded-sm bg-danger px-3 py-2 text-[11px] text-white disabled:bg-bodydark2 md:px-2 md:py-1"
             onClick={() => onRemoveBreakpoint(breakpoint)}
           >
             삭제
@@ -89,7 +89,7 @@ export default function VariantCanvas({
 
       <div className="overflow-x-auto pb-3 md:pb-0">
         <div
-          className="relative touch-none overflow-hidden rounded border border-stroke bg-white dark:border-strokedark"
+          className="relative touch-none overflow-hidden rounded-sm border border-stroke bg-white dark:border-strokedark"
           style={{ width: canvasSize.width, height: canvasSize.height }}
           onPointerMove={(event) => handleCanvasPointerMove(event, breakpoint, canvasSize)}
           onPointerUp={() => onDragStateChange(null)}
@@ -108,7 +108,7 @@ export default function VariantCanvas({
               draggable={false}
             />
           ) : (
-            <div className="absolute inset-0 bg-[linear-gradient(45deg,#f3f4f6_25%,transparent_25%),linear-gradient(-45deg,#f3f4f6_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#f3f4f6_75%),linear-gradient(-45deg,transparent_75%,#f3f4f6_75%)] bg-[length:16px_16px] bg-[position:0_0,0_8px,8px_-8px,-8px_0px]" />
+            <div className="absolute inset-0 bg-[linear-gradient(45deg,#f3f4f6_25%,transparent_25%),linear-gradient(-45deg,#f3f4f6_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#f3f4f6_75%),linear-gradient(-45deg,transparent_75%,#f3f4f6_75%)] bg-size-[16px_16px] bg-position-[0_0,0_8px,8px_-8px,-8px_0px]" />
           )}
 
           {graphic.foregroundElements.map((element, index) => {
@@ -122,7 +122,7 @@ export default function VariantCanvas({
             return (
               <div
                 key={`${index}-${breakpoint}-${elementAssetUrl}`}
-                className={`absolute cursor-move select-none border ${
+                className={`absolute cursor-move border select-none ${
                   selected
                     ? 'border-primary ring-2 ring-primary/30'
                     : 'border-dashed border-primary/60 hover:border-primary'
@@ -149,7 +149,7 @@ export default function VariantCanvas({
             );
           })}
 
-          <div className="pointer-events-none absolute bottom-[8px] right-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs font-medium leading-none text-white">
+          <div className="pointer-events-none absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs leading-none font-medium text-white">
             AD
           </div>
         </div>

@@ -34,9 +34,9 @@ const ExpandedProductList = ({
             setActiveTab('brands');
             setIsLeftPanelFocused(true);
           }}
-          className="flex w-full items-center gap-2 rounded border border-stroke p-2 text-left transition-all hover:bg-gray-50 dark:border-strokedark dark:hover:bg-meta-4"
+          className="flex w-full items-center gap-2 rounded-sm border border-stroke p-2 text-left transition-all hover:bg-gray-50 dark:border-strokedark dark:hover:bg-meta-4"
         >
-          <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-white">
+          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-white">
             ←
           </div>
           <div className="min-w-0 flex-1">
@@ -61,18 +61,18 @@ const ExpandedProductList = ({
             setIsLeftPanelFocused(true);
             onOpenDetail();
           }}
-          className={`mb-1 flex w-full items-center gap-1.5 px-2 py-2.5 text-left transition-all hover:bg-gray-100 dark:hover:bg-meta-4 lg:py-1.5 ${
+          className={`mb-1 flex w-full items-center gap-1.5 px-2 py-2.5 text-left transition-all hover:bg-gray-100 lg:py-1.5 dark:hover:bg-meta-4 ${
             selectedBrandProduct?.id === expandedBp.id
               ? 'border-r-3 border-primary bg-primary/10'
               : ''
           } ${
             isLeftPanelFocused && expandedSelectedIndex === expandedIndex
-              ? 'ring-1 ring-inset ring-primary/50'
+              ? 'ring-1 ring-primary/50 ring-inset'
               : ''
           }`}
         >
           <div
-            className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white ${
+            className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white ${
               expandedBp.pendingVerificationCount === 0 ? 'bg-success/80' : 'bg-warning/80'
             }`}
           >

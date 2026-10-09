@@ -46,12 +46,12 @@ const UserListTable = () => {
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+              className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
             />
           </div>
           <button
             onClick={handleSearch}
-            className="shrink-0 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-opacity-90 sm:px-6"
+            className="shrink-0 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary/90 sm:px-6"
           >
             검색
           </button>
@@ -96,7 +96,7 @@ const UserListTable = () => {
                   <td className="px-4 py-3">
                     <Link
                       href={`/user/${user.id}`}
-                      className="block py-1 text-sm font-medium text-black hover:text-primary dark:text-white md:-my-3 md:py-3 md:font-normal"
+                      className="block py-1 text-sm font-medium text-black hover:text-primary md:-my-3 md:py-3 md:font-normal dark:text-white"
                     >
                       {user.email}
                     </Link>

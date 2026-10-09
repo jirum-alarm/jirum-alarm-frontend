@@ -12,7 +12,7 @@ import { AD_SLOT_LOCATION_LABEL, AD_SLOT_TYPE_LABEL, labelOf } from '@/lib/label
 const REPORT_FROM = '2020-01-01T00:00:00.000Z';
 const REPORT_TO = '2099-12-31T23:59:59.000Z';
 const actionButtonClass =
-  'inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md px-2.5 text-xs font-semibold transition hover:bg-opacity-90 md:h-8';
+  'inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md px-2.5 text-xs font-semibold transition md:h-8';
 
 const AdListTable = () => {
   const { data, loading, error } = useAdsByAdmin();
@@ -41,7 +41,7 @@ const AdListTable = () => {
       <div className="flex justify-end p-3 sm:p-4">
         <Link
           href="/advertisement/register"
-          className="inline-flex h-10 items-center rounded-lg bg-primary px-4 text-sm font-medium text-white hover:bg-opacity-90"
+          className="inline-flex h-10 items-center rounded-lg bg-primary px-4 text-sm font-medium text-white hover:bg-primary/90"
         >
           광고 등록
         </Link>
@@ -117,7 +117,9 @@ const AdListTable = () => {
                         setActive({ variables: { id: Number(ad.id), isActive: !ad.isActive } })
                       }
                       className={`${actionButtonClass} ${
-                        ad.isActive ? 'bg-success text-white' : 'bg-danger text-white'
+                        ad.isActive
+                          ? 'bg-success text-white hover:bg-success/90'
+                          : 'bg-danger text-white hover:bg-danger/90'
                       }`}
                     >
                       {ad.isActive ? '활성' : '비활성'}
@@ -127,13 +129,13 @@ const AdListTable = () => {
                     <div className="flex items-center gap-1.5">
                       <Link
                         href={`/advertisement/${ad.id}`}
-                        className={`${actionButtonClass} bg-primary text-white`}
+                        className={`${actionButtonClass} bg-primary text-white hover:bg-primary/90`}
                       >
                         수정
                       </Link>
                       <Link
                         href={`/advertisement/clone/${ad.id}`}
-                        className={`${actionButtonClass} bg-gray-2 text-black hover:bg-stroke dark:bg-meta-4 dark:text-white`}
+                        className={`${actionButtonClass} bg-gray-2 text-black hover:bg-stroke/90 dark:bg-meta-4 dark:text-white`}
                       >
                         복제
                       </Link>

@@ -48,7 +48,7 @@ const ImageCompareModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-99999 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-99999 flex items-center justify-center bg-black/80 backdrop-blur-xs"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -60,7 +60,7 @@ const ImageCompareModal = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-0 top-0 flex items-center gap-2 py-1 text-white/70 transition-colors hover:text-white sm:-top-12 sm:py-0"
+          className="absolute top-0 right-0 flex items-center gap-2 py-1 text-white/70 transition-colors hover:text-white sm:-top-12 sm:py-0"
         >
           <span className="text-sm">
             <span className="hidden sm:inline">ESC로 </span>닫기
@@ -79,10 +79,10 @@ const ImageCompareModal = ({
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6">
           {/* Danawa Product */}
           <div className="overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-boxdark">
-            <div className="bg-gradient-to-r from-primary to-primary/80 px-4 py-3">
+            <div className="bg-linear-to-r from-primary to-primary/80 px-4 py-3">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 animate-pulse rounded-full bg-white" />
-                <span className="text-sm font-bold uppercase tracking-wide text-white">
+                <span className="text-sm font-bold tracking-wide text-white uppercase">
                   다나와 상품
                 </span>
               </div>
@@ -156,7 +156,7 @@ const ImageCompareModal = ({
                   href={danawaUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ml-2 flex-shrink-0 text-xs text-primary hover:underline"
+                  className="ml-2 shrink-0 text-xs text-primary hover:underline"
                 >
                   다나와 보기 →
                 </a>
@@ -166,10 +166,10 @@ const ImageCompareModal = ({
 
           {/* Community Post */}
           <div className="overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-boxdark">
-            <div className="bg-gradient-to-r from-success to-success/80 px-4 py-3">
+            <div className="bg-linear-to-r from-success to-success/80 px-4 py-3">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 animate-pulse rounded-full bg-white" />
-                <span className="text-sm font-bold uppercase tracking-wide text-white">
+                <span className="text-sm font-bold tracking-wide text-white uppercase">
                   커뮤니티 게시물
                 </span>
               </div>
@@ -214,13 +214,13 @@ const ImageCompareModal = ({
         {/* Hint */}
         <div className="mt-4 hidden text-center sm:block">
           <span className="inline-flex items-center gap-2 text-xs text-white/50">
-            <span className="rounded bg-white/10 px-2 py-1">Space</span>
+            <span className="rounded-sm bg-white/10 px-2 py-1">Space</span>
             선택/해제
             <span className="mx-2">|</span>
-            <span className="rounded bg-white/10 px-2 py-1">Enter</span>
+            <span className="rounded-sm bg-white/10 px-2 py-1">Enter</span>
             확정
             <span className="mx-2">|</span>
-            <span className="rounded bg-white/10 px-2 py-1">ESC</span>
+            <span className="rounded-sm bg-white/10 px-2 py-1">ESC</span>
             닫기
           </span>
         </div>

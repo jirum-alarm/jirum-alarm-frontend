@@ -116,7 +116,7 @@ const ProfitLinkOpsPanel = () => {
             if (e.key === 'Enter') handleIssue();
           }}
           placeholder="https://shopping.toss.im/c/… 또는 store.ohou.se/goods/… 또는 store.kakao.com/…/products/…"
-          className="mb-3 w-full rounded border border-stroke bg-transparent px-4 py-2 text-sm text-black outline-none focus:border-primary dark:border-strokedark dark:text-white"
+          className="mb-3 w-full rounded-sm border border-stroke bg-transparent px-4 py-2 text-sm text-black outline-hidden focus:border-primary dark:border-strokedark dark:text-white"
         />
         {detected && (
           <p className="mb-3 text-xs text-bodydark2">
@@ -126,26 +126,26 @@ const ProfitLinkOpsPanel = () => {
         <button
           onClick={handleIssue}
           disabled={issuing}
-          className="w-full rounded bg-primary px-6 py-2 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:opacity-50 sm:w-auto"
+          className="w-full rounded-sm bg-primary px-6 py-2 text-sm font-medium text-white transition hover:bg-primary/90 disabled:opacity-50 sm:w-auto"
         >
           {issuing ? '발급 중...' : '수익링크 발급'}
         </button>
 
         {issuedLink && (
-          <div className="mt-4 rounded border border-stroke bg-gray-2 p-3 dark:border-strokedark dark:bg-graydark">
+          <div className="mt-4 rounded-sm border border-stroke bg-gray-2 p-3 dark:border-strokedark dark:bg-graydark">
             <p className="mb-1 text-xs text-bodydark2">발급된 수익링크</p>
             <div className="flex items-center gap-2">
               <a
                 href={issuedLink}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 break-all font-mono text-sm text-primary underline"
+                className="flex-1 font-mono text-sm break-all text-primary underline"
               >
                 {issuedLink}
               </a>
               <button
                 onClick={handleCopy}
-                className="shrink-0 rounded border border-stroke px-3 py-2 text-xs text-black hover:bg-white dark:border-strokedark dark:text-white dark:hover:bg-boxdark md:py-1"
+                className="shrink-0 rounded-sm border border-stroke px-3 py-2 text-xs text-black hover:bg-white md:py-1 dark:border-strokedark dark:text-white dark:hover:bg-boxdark"
               >
                 {copied ? '복사됨' : '복사'}
               </button>
@@ -229,8 +229,8 @@ const TossSessionCard = () => {
           </li>
           <li>
             DevTools → Cookies의{' '}
-            <code className="rounded bg-gray-2 px-1 dark:bg-graydark">TBIZAUTH</code>, 또는 Network
-            요청 Copy as cURL
+            <code className="rounded-sm bg-gray-2 px-1 dark:bg-graydark">TBIZAUTH</code>, 또는
+            Network 요청 Copy as cURL
           </li>
         </ol>
       }
@@ -393,8 +393,8 @@ const KakaoSessionCard = () => {
           </li>
           <li>
             공유하기 → Network의{' '}
-            <code className="rounded bg-gray-2 px-1 dark:bg-graydark">affiliate-link</code> Copy as
-            cURL
+            <code className="rounded-sm bg-gray-2 px-1 dark:bg-graydark">affiliate-link</code> Copy
+            as cURL
           </li>
         </ol>
       }
@@ -475,8 +475,9 @@ const ThreeHaSessionCard = () => {
             구글 로그인
           </li>
           <li>
-            DevTools → Cookies의 <code className="rounded bg-gray-2 px-1 dark:bg-graydark">r</code>{' '}
-            값, 또는 API 요청 Copy as cURL. 7일 만료.
+            DevTools → Cookies의{' '}
+            <code className="rounded-sm bg-gray-2 px-1 dark:bg-graydark">r</code> 값, 또는 API 요청
+            Copy as cURL. 7일 만료.
           </li>
         </ol>
       }

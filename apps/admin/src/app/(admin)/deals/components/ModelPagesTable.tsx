@@ -31,13 +31,13 @@ const ModelPagesTable = () => {
   };
 
   return (
-    <Panel rounded="sm" className="w-full px-3 pb-2.5 pt-4 sm:px-7.5 sm:pt-6 xl:pb-1">
+    <Panel rounded="sm" className="w-full px-3 pt-4 pb-2.5 sm:px-7.5 sm:pt-6 xl:pb-1">
       <div className="flex w-full flex-wrap items-center justify-between gap-2 p-2">
         <span className="text-sm text-bodydark2">
           {loading ? '불러오는 중…' : `${pages.length}개`}
           {onlyDrafts ? ' (초안만)' : ' (전체)'}
         </span>
-        <label className="flex cursor-pointer select-none items-center gap-2 text-sm">
+        <label className="flex cursor-pointer items-center gap-2 text-sm select-none">
           <input
             type="checkbox"
             checked={onlyDrafts}
@@ -51,7 +51,7 @@ const ModelPagesTable = () => {
         <table className="table-cards w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="min-w-[220px] px-4 py-4 font-medium text-black xl:pl-11 dark:text-white">
                 모델
               </th>
               <th className="min-w-[80px] px-4 py-4 text-center font-medium text-black dark:text-white">
@@ -77,7 +77,7 @@ const ModelPagesTable = () => {
                 !!p.lastDealAt && dayjs().diff(dayjs(p.lastDealAt), 'day') > STALE_DAYS;
               return (
                 <tr key={p.id} className="hover:bg-slate-50">
-                  <td className="border-b border-[#eee] px-4 py-4 dark:border-strokedark xl:pl-11">
+                  <td className="border-b border-[#eee] px-4 py-4 xl:pl-11 dark:border-strokedark">
                     <div className="flex items-center gap-3">
                       {p.heroImage ? (
                         <Image
@@ -85,17 +85,17 @@ const ModelPagesTable = () => {
                           alt=""
                           width={40}
                           height={40}
-                          className="h-10 w-10 rounded object-contain"
+                          className="h-10 w-10 rounded-sm object-contain"
                           unoptimized
                         />
                       ) : (
-                        <div className="h-10 w-10 rounded bg-gray-100" />
+                        <div className="h-10 w-10 rounded-sm bg-gray-100" />
                       )}
                       <div className="min-w-0">
                         {/* 미리보기(초안도 열림) — 발행 전 실제 모양 검수 */}
                         <Link
                           href={`/deals/preview/${encodeURIComponent(p.slug)}`}
-                          className="block break-words text-black hover:underline dark:text-white md:truncate"
+                          className="block wrap-break-word text-black hover:underline md:truncate dark:text-white"
                         >
                           {p.modelName}
                         </Link>
@@ -163,7 +163,7 @@ const ModelPagesTable = () => {
                     <button
                       disabled={mutating}
                       onClick={handleToggle(p.id, p.slug, !p.isPublished)}
-                      className={`whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium text-white disabled:opacity-50 md:py-1.5 ${
+                      className={`rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap text-white disabled:opacity-50 md:py-1.5 ${
                         p.isPublished ? 'bg-meta-1' : 'bg-primary'
                       }`}
                     >

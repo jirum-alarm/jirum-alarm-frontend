@@ -336,7 +336,7 @@ function GraphicPreviewCard({
               </div>
             );
           })}
-          <div className="pointer-events-none absolute bottom-[8px] right-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs font-medium leading-none text-white">
+          <div className="pointer-events-none absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs leading-none font-medium text-white">
             AD
           </div>
         </div>
@@ -393,7 +393,7 @@ function WidthSimulator({
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded border border-stroke bg-gray-2 p-3 dark:border-strokedark dark:bg-form-input">
+      <div className="overflow-x-auto rounded-sm border border-stroke bg-gray-2 p-3 dark:border-strokedark dark:bg-form-input">
         <div
           ref={rulerRef}
           className="relative min-h-12 border-t border-dashed border-bodydark2/40"
@@ -406,7 +406,7 @@ function WidthSimulator({
           }}
         >
           <div
-            className="relative bg-white shadow-sm dark:bg-boxdark"
+            className="relative bg-white shadow-xs dark:bg-boxdark"
             style={{ width, height: containerSize.height }}
           >
             <SimulatedGraphic graphic={graphic} containerSize={containerSize} width={width} />
@@ -417,7 +417,7 @@ function WidthSimulator({
               aria-valuemax={maxWidth}
               aria-valuenow={width}
               tabIndex={0}
-              className="absolute left-full top-0 z-40 h-full w-6 cursor-ew-resize touch-none rounded-r border border-primary bg-primary/15 outline-none ring-primary focus:ring-2 sm:w-4"
+              className="absolute top-0 left-full z-40 h-full w-6 cursor-ew-resize touch-none rounded-r border border-primary bg-primary/15 ring-primary outline-hidden focus:ring-2 sm:w-4"
               onPointerDown={handlePointerDown}
               onPointerMove={(event) => {
                 if (event.currentTarget.hasPointerCapture(event.pointerId)) {
@@ -429,7 +429,7 @@ function WidthSimulator({
                 if (event.key === 'ArrowRight') onWidthChange(clamp(width + 1, minWidth, maxWidth));
               }}
             >
-              <span className="absolute left-1/2 top-1/2 h-8 w-1 -translate-x-1/2 -translate-y-1/2 rounded bg-primary" />
+              <span className="absolute top-1/2 left-1/2 h-8 w-1 -translate-x-1/2 -translate-y-1/2 rounded-sm bg-primary" />
             </div>
           </div>
         </div>
@@ -482,7 +482,7 @@ function SimulatedGraphic({
           </div>
         );
       })}
-      <div className="pointer-events-none absolute bottom-[8px] right-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs font-medium leading-none text-white">
+      <div className="pointer-events-none absolute right-[8px] bottom-[8px] z-30 w-fit rounded-[8px] border border-white bg-[#667085]/60 px-[7px] py-[3px] text-xs leading-none font-medium text-white">
         AD
       </div>
     </div>

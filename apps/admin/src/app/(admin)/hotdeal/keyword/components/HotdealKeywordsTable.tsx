@@ -60,7 +60,7 @@ const HotdealKeywordsTable = () => {
   });
 
   return (
-    <Panel rounded="sm" className="w-full min-w-0 px-3 pb-2.5 pt-4 sm:px-7.5 sm:pt-6 xl:pb-1">
+    <Panel rounded="sm" className="w-full min-w-0 px-3 pt-4 pb-2.5 sm:px-7.5 sm:pt-6 xl:pb-1">
       <div className="flex w-full items-center justify-end gap-2 p-2">
         <span>긍정</span>
         <Switcher
@@ -74,19 +74,19 @@ const HotdealKeywordsTable = () => {
         <table className="table-cards w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="min-w-[110px] px-4 py-4 text-center font-medium text-black dark:text-white sm:min-w-[150px] xl:pl-11">
+              <th className="min-w-[110px] px-4 py-4 text-center font-medium text-black sm:min-w-[150px] xl:pl-11 dark:text-white">
                 키워드
               </th>
-              <th className="hidden min-w-[100px] px-4 py-4 text-center font-medium text-black dark:text-white md:table-cell">
+              <th className="hidden min-w-[100px] px-4 py-4 text-center font-medium text-black md:table-cell dark:text-white">
                 업데이트
               </th>
-              <th className="min-w-[80px] whitespace-nowrap px-4 py-4 text-center font-medium text-black dark:text-white sm:min-w-[100px]">
+              <th className="min-w-[80px] px-4 py-4 text-center font-medium whitespace-nowrap text-black sm:min-w-[100px] dark:text-white">
                 유의어
               </th>
-              <th className="min-w-[80px] whitespace-nowrap px-4 py-4 text-center font-medium text-black dark:text-white sm:min-w-[100px]">
+              <th className="min-w-[80px] px-4 py-4 text-center font-medium whitespace-nowrap text-black sm:min-w-[100px] dark:text-white">
                 가중치
               </th>
-              <th className="min-w-[90px] px-4 py-4 text-center font-medium text-black dark:text-white sm:min-w-[120px]">
+              <th className="min-w-[90px] px-4 py-4 text-center font-medium text-black sm:min-w-[120px] dark:text-white">
                 유형
               </th>
               <th className="px-4 py-4 text-center font-medium text-black dark:text-white">액션</th>
@@ -95,7 +95,7 @@ const HotdealKeywordsTable = () => {
           <tbody>
             {data.hotDealKeywordsByAdmin.map((hotdeal, key) => (
               <tr key={hotdeal.id} className="cursor-pointer hover:bg-slate-50">
-                <td className="border-b border-[#eee] text-center dark:border-strokedark sm:pl-9 xl:pl-11">
+                <td className="border-b border-[#eee] text-center sm:pl-9 xl:pl-11 dark:border-strokedark">
                   <Link className="block h-full md:p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
                     <h5 className="font-medium text-black dark:text-white">
                       <span>{hotdeal.keyword}</span>
@@ -104,7 +104,7 @@ const HotdealKeywordsTable = () => {
                 </td>
                 <td
                   data-label="업데이트"
-                  className="hidden border-b border-[#eee] text-center dark:border-strokedark md:table-cell"
+                  className="hidden border-b border-[#eee] text-center md:table-cell dark:border-strokedark"
                 >
                   <Link className="block h-full md:p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
                     <span className="text-xs text-slate-400">
@@ -136,11 +136,11 @@ const HotdealKeywordsTable = () => {
                   <Link className="block h-full md:p-4" href={`/hotdeal/keyword/${hotdeal.id}`}>
                     <div className="flex justify-center">
                       <p
-                        className={`inline-flex whitespace-nowrap rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
+                        className={`inline-flex rounded-full px-3 py-1 text-sm font-medium whitespace-nowrap ${
                           hotdeal.type === HotDealKeywordType.POSITIVE
-                            ? 'bg-success text-success'
+                            ? 'bg-success/10 text-success'
                             : hotdeal.type === HotDealKeywordType.NEGATIVE
-                              ? 'bg-danger text-danger'
+                              ? 'bg-danger/10 text-danger'
                               : ''
                         }`}
                       >
@@ -150,7 +150,7 @@ const HotdealKeywordsTable = () => {
                   </Link>
                 </td>
                 <td data-label="actions" className="border-b border-[#eee] dark:border-strokedark">
-                  <div className="flex items-center justify-center space-x-1 whitespace-nowrap px-2 sm:space-x-3.5 sm:px-0">
+                  <div className="flex items-center justify-center space-x-1 px-2 whitespace-nowrap sm:space-x-3.5 sm:px-0">
                     <Link
                       className="rounded-md p-2 text-sm hover:bg-slate-200 hover:text-primary"
                       href={`/hotdeal/keyword/update/${hotdeal.id}`}

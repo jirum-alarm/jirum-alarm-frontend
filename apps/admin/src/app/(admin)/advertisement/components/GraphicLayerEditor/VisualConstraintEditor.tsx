@@ -175,7 +175,7 @@ export default function VisualConstraintEditor({
   };
 
   return (
-    <section className="rounded-lg border border-stroke p-3 dark:border-strokedark sm:p-4">
+    <section className="rounded-lg border border-stroke p-3 sm:p-4 dark:border-strokedark">
       <div className="mb-3">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
@@ -190,7 +190,7 @@ export default function VisualConstraintEditor({
         </div>
       </div>
 
-      <div className="mb-4 rounded border border-stroke p-3 dark:border-strokedark">
+      <div className="mb-4 rounded-sm border border-stroke p-3 dark:border-strokedark">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="flex flex-wrap items-end gap-3">
             <div>
@@ -234,7 +234,7 @@ export default function VisualConstraintEditor({
         ))}
       </div>
 
-      <div className="mt-4 rounded border border-stroke p-3 dark:border-strokedark">
+      <div className="mt-4 rounded-sm border border-stroke p-3 dark:border-strokedark">
         {selectedBackground ? (
           <BackgroundInspector
             graphic={graphic}

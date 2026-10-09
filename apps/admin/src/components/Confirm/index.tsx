@@ -73,7 +73,7 @@ export const ConfirmProvider = ({ children }: { children: React.ReactNode }) => 
                 {pending.title}
               </h3>
             )}
-            <p className="whitespace-pre-line text-sm text-black dark:text-white">
+            <p className="text-sm whitespace-pre-line text-black dark:text-white">
               {pending.message}
             </p>
             <div className="mt-6 flex justify-end gap-2">
@@ -88,8 +88,8 @@ export const ConfirmProvider = ({ children }: { children: React.ReactNode }) => 
                 ref={confirmButtonRef}
                 type="button"
                 onClick={() => close(true)}
-                className={`rounded-md px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90 ${
-                  pending.danger ? 'bg-danger' : 'bg-primary'
+                className={`rounded-md px-4 py-2 text-sm font-medium text-white ${
+                  pending.danger ? 'bg-danger hover:bg-danger/90' : 'bg-primary hover:bg-primary/90'
                 }`}
               >
                 {pending.confirmText ?? '확인'}

@@ -64,7 +64,7 @@ const ProductFilters = ({
             value={productId}
             onChange={(e) => onChangeProductId(e.target.value.replace(/[^0-9]/g, ''))}
             onKeyDown={handleKeyDown}
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           />
         </div>
 
@@ -80,7 +80,7 @@ const ProductFilters = ({
             onKeyDown={handleKeyDown}
             disabled={productId.length > 0}
             maxLength={100}
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           />
         </div>
 
@@ -93,7 +93,7 @@ const ProductFilters = ({
             onChange={(e) =>
               onChangeCategoryId(e.target.value ? Number(e.target.value) : undefined)
             }
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           >
             <option value="">전체</option>
             {categories.map((cat) => (
@@ -112,7 +112,7 @@ const ProductFilters = ({
               onChangeIsHot(e.target.value === '' ? undefined : e.target.value === 'true')
             }
             disabled={keywordMode}
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           >
             <option value="">전체</option>
             <option value="true">핫딜</option>
@@ -128,7 +128,7 @@ const ProductFilters = ({
               onChangeIsEnd(e.target.value === '' ? undefined : e.target.value === 'true')
             }
             disabled={keywordMode}
-            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition focus:border-primary disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition focus:border-primary disabled:opacity-50 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           >
             <option value="">전체</option>
             <option value="false">판매중</option>
@@ -140,13 +140,13 @@ const ProductFilters = ({
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="flex-1 rounded-lg border border-stroke px-4 py-2.5 text-sm font-medium text-body dark:border-strokedark sm:hidden"
+            className="flex-1 rounded-lg border border-stroke px-4 py-2.5 text-sm font-medium text-body sm:hidden dark:border-strokedark"
           >
             {open ? '필터 접기' : '상세 필터'}
           </button>
           <button
             onClick={onSearch}
-            className="flex-1 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-opacity-90 sm:w-auto sm:flex-none sm:py-2"
+            className="flex-1 rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-white transition hover:bg-primary/90 sm:w-auto sm:flex-none sm:py-2"
           >
             검색
           </button>

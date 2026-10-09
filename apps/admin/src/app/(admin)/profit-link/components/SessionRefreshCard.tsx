@@ -66,12 +66,12 @@ const SessionRefreshCard = ({
         onPaste={onPaste}
         placeholder={placeholder}
         rows={2}
-        className="mb-3 w-full rounded border border-stroke bg-transparent px-3 py-2 font-mono text-xs text-black outline-none focus:border-primary dark:border-strokedark dark:text-white"
+        className="mb-3 w-full rounded-sm border border-stroke bg-transparent px-3 py-2 font-mono text-xs text-black outline-hidden focus:border-primary dark:border-strokedark dark:text-white"
       />
       <button
         onClick={onSave}
         disabled={saving}
-        className="rounded bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-opacity-90 disabled:opacity-50 md:py-1.5"
+        className="rounded-sm bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary/90 disabled:opacity-50 md:py-1.5"
       >
         {saving ? '저장 중...' : '저장'}
       </button>

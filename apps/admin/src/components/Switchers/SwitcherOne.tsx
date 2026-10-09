@@ -12,7 +12,7 @@ const Switcher = ({ isEnabled, onChange }: Props) => {
 
   return (
     <div>
-      <label htmlFor="toggle1" className="flex cursor-pointer select-none items-center">
+      <label htmlFor="toggle1" className="flex cursor-pointer items-center select-none">
         <div className="relative">
           <input
             type="checkbox"
@@ -23,8 +23,8 @@ const Switcher = ({ isEnabled, onChange }: Props) => {
           />
           <div className="block h-8 w-14 rounded-full bg-meta-9 dark:bg-[#5A616B]"></div>
           <div
-            className={`absolute left-1 top-1 h-6 w-6 rounded-full bg-white transition ${
-              isEnabled && '!right-1 !translate-x-full !bg-primary dark:!bg-white'
+            className={`absolute top-1 left-1 h-6 w-6 rounded-full bg-white transition ${
+              isEnabled && 'right-1! translate-x-full! bg-primary! dark:bg-white!'
             }`}
           ></div>
         </div>

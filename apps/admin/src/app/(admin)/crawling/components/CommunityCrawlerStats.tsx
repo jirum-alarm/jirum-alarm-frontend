@@ -68,7 +68,7 @@ const CommunityCrawlerStats = () => {
           <select
             value={picked}
             onChange={(e) => setPicked(e.target.value)}
-            className="rounded border border-stroke px-2 py-1.5 text-sm dark:border-strokedark dark:bg-boxdark dark:text-white"
+            className="rounded-sm border border-stroke px-2 py-1.5 text-sm dark:border-strokedark dark:bg-boxdark dark:text-white"
           >
             <option value={ALL}>전체 커뮤니티</option>
             {totals.map((t) => (

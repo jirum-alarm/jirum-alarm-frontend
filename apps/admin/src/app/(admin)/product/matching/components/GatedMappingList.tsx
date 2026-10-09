@@ -138,18 +138,18 @@ const GatedMappingList = () => {
             placeholder="제목 검색"
             // 서버 GatedMappingsArgs.productTitle @MaxLength(100) — 넘기면 목록이 Bad Request 로 통째 실패한다
             maxLength={100}
-            className="min-w-0 flex-1 rounded-md border border-stroke px-3 py-1.5 text-xs dark:border-strokedark dark:bg-boxdark sm:flex-none"
+            className="min-w-0 flex-1 rounded-md border border-stroke px-3 py-1.5 text-xs sm:flex-none dark:border-strokedark dark:bg-boxdark"
           />
           <button
             type="submit"
-            className="shrink-0 rounded-md border border-stroke px-3 py-2 text-xs dark:border-strokedark sm:py-1.5"
+            className="shrink-0 rounded-md border border-stroke px-3 py-2 text-xs sm:py-1.5 dark:border-strokedark"
           >
             검색
           </button>
         </form>
         <button
           onClick={() => refetch()}
-          className="rounded-md border border-stroke px-3 py-2 text-xs dark:border-strokedark sm:py-1.5"
+          className="rounded-md border border-stroke px-3 py-2 text-xs sm:py-1.5 dark:border-strokedark"
         >
           새로고침
         </button>
@@ -188,13 +188,13 @@ const GatedMappingList = () => {
                 <img
                   src={item.product.thumbnail}
                   alt=""
-                  className="h-16 w-16 flex-shrink-0 rounded object-cover"
+                  className="h-16 w-16 shrink-0 rounded-sm object-cover"
                 />
               )}
 
               <div className="min-w-0 flex-1">
                 <div className="mb-1 flex flex-wrap items-center gap-2">
-                  <span className="rounded bg-meta-4 px-1.5 py-0.5 text-[11px] text-white">
+                  <span className="rounded-sm bg-meta-4 px-1.5 py-0.5 text-[11px] text-white">
                     {sourceLabel}
                   </span>
                   {item.product?.provider?.name && (
@@ -213,7 +213,7 @@ const GatedMappingList = () => {
                 </div>
 
                 {/* 원본 제목 */}
-                <div className="break-words text-sm font-medium text-black dark:text-white">
+                <div className="text-sm font-medium wrap-break-word text-black dark:text-white">
                   {item.product?.title ?? '(제목 없음)'}
                 </div>
 
@@ -231,7 +231,7 @@ const GatedMappingList = () => {
               </div>
 
               {/* 액션 */}
-              <div className="flex w-full flex-shrink-0 flex-row gap-2 sm:w-auto sm:flex-col sm:justify-center">
+              <div className="flex w-full shrink-0 flex-row gap-2 sm:w-auto sm:flex-col sm:justify-center">
                 {done ? (
                   <span className="text-xs text-gray-400">
                     {done === 'rematch' ? '재매칭 요청됨' : '게이트 확정'}
@@ -246,7 +246,7 @@ const GatedMappingList = () => {
                     </button>
                     <button
                       onClick={() => handleRematch(item.id)}
-                      className="flex-1 rounded-md border border-stroke px-3 py-2.5 text-xs font-medium dark:border-strokedark sm:flex-none sm:py-1.5"
+                      className="flex-1 rounded-md border border-stroke px-3 py-2.5 text-xs font-medium sm:flex-none sm:py-1.5 dark:border-strokedark"
                     >
                       오판 → 재매칭
                     </button>

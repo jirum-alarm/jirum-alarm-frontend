@@ -204,7 +204,7 @@ const RevenueSummary = () => {
 
         <p className="mt-3 text-[11px] leading-relaxed text-bodydark2">
           <span
-            className="mr-1 inline-block h-2 w-2 rounded-sm align-middle"
+            className="mr-1 inline-block h-2 w-2 rounded-xs align-middle"
             style={{ background: PARTIAL_COLOR }}
           />
           연한 막대(어제·오늘)는 집계 중 — 쿠팡·네이버는 하루 뒤 오후, 애드센스는 이틀 뒤에 들어와

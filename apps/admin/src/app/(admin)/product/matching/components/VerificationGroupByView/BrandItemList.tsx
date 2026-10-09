@@ -58,12 +58,12 @@ const BrandItemList = ({
                 selectedBrandItem?.id === item.id ? 'border-r-4 border-primary bg-primary/5' : ''
               } ${
                 isLeftPanelFocused && selectedBrandItemIndex === index
-                  ? 'ring-2 ring-inset ring-primary/50'
+                  ? 'ring-2 ring-primary/50 ring-inset'
                   : ''
               }`}
             >
               <div
-                className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white ${
+                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white ${
                   item.pendingVerificationCount === 0 ? 'bg-success' : 'bg-warning'
                 }`}
               >

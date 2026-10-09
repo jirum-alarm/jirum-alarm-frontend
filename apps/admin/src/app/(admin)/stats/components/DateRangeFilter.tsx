@@ -39,7 +39,7 @@ export const useStatsRange = (days: 7 | 30 | 90 = 30) =>
   useState<StatsRange>(() => presetRange(String(days) as Preset, DateInterval.DAILY));
 
 const inputClass =
-  'w-full rounded border border-stroke px-3 py-2 text-sm dark:border-strokedark dark:bg-boxdark dark:text-white';
+  'w-full rounded-sm border border-stroke px-3 py-2 text-sm dark:border-strokedark dark:bg-boxdark dark:text-white';
 
 const DateRangeFilter = ({
   value,

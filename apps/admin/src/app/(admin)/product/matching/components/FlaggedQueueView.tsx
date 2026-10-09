@@ -138,7 +138,7 @@ export default function FlaggedQueueView() {
           <span className="text-sm font-semibold text-black dark:text-white">
             🤖 거절추천 큐
             {countData?.pendingVerificationsTotalCount != null && (
-              <span className="ml-2 rounded bg-danger/10 px-1.5 py-0.5 text-xs font-bold text-danger">
+              <span className="ml-2 rounded-sm bg-danger/10 px-1.5 py-0.5 text-xs font-bold text-danger">
                 {countData.pendingVerificationsTotalCount.toLocaleString()}건
               </span>
             )}
@@ -159,7 +159,7 @@ export default function FlaggedQueueView() {
 
       {/* 리스트 */}
       {loadError && (
-        <div className="rounded border border-danger/40 bg-danger/5 px-3 py-2 text-xs text-danger">
+        <div className="rounded-sm border border-danger/40 bg-danger/5 px-3 py-2 text-xs text-danger">
           불러오기 실패: {loadError}
         </div>
       )}
@@ -185,7 +185,7 @@ export default function FlaggedQueueView() {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <div className="min-w-0 flex-1 space-y-1">
                     {/* 핫딜 제목 ↔ 카탈로그 나란히 */}
-                    <div className="break-words text-sm font-medium text-black dark:text-white sm:truncate">
+                    <div className="text-sm font-medium wrap-break-word text-black sm:truncate dark:text-white">
                       {item.product?.url ? (
                         <a
                           href={item.product.url}
@@ -199,7 +199,7 @@ export default function FlaggedQueueView() {
                         (item.product?.title ?? '(제목 없음)')
                       )}
                     </div>
-                    <div className="break-words text-xs text-gray-500 dark:text-gray-400 sm:truncate">
+                    <div className="text-xs wrap-break-word text-gray-500 sm:truncate dark:text-gray-400">
                       ↔{' '}
                       {item.danawaUrl ? (
                         <a
@@ -215,7 +215,7 @@ export default function FlaggedQueueView() {
                       )}
                     </div>
                     {/* 26b 근거 — 판단이 한 시선에 끝나게 인라인 노출 */}
-                    <div className="rounded bg-danger/5 px-2 py-1 text-xs text-danger">
+                    <div className="rounded-sm bg-danger/5 px-2 py-1 text-xs text-danger">
                       {stripMarker(item.aiSuggestionReason) || 'AI 거절 추천'}
                     </div>
                   </div>
@@ -232,13 +232,13 @@ export default function FlaggedQueueView() {
                       <>
                         <button
                           onClick={() => decide(item.id, ProductMappingVerificationStatus.Rejected)}
-                          className="flex-1 rounded bg-danger px-3 py-2.5 text-xs font-bold text-white hover:opacity-90 sm:flex-none sm:py-1.5"
+                          className="flex-1 rounded-sm bg-danger px-3 py-2.5 text-xs font-bold text-white hover:opacity-90 sm:flex-none sm:py-1.5"
                         >
                           오매칭 확정
                         </button>
                         <button
                           onClick={() => decide(item.id, ProductMappingVerificationStatus.Verified)}
-                          className="flex-1 rounded border border-success px-3 py-2.5 text-xs font-bold text-success hover:bg-success/10 sm:flex-none sm:py-1.5"
+                          className="flex-1 rounded-sm border border-success px-3 py-2.5 text-xs font-bold text-success hover:bg-success/10 sm:flex-none sm:py-1.5"
                         >
                           정상 매칭
                         </button>
@@ -255,7 +255,7 @@ export default function FlaggedQueueView() {
               <button
                 onClick={loadMore}
                 disabled={loading}
-                className="rounded border border-stroke px-4 py-2 text-xs disabled:opacity-50 dark:border-strokedark dark:text-white sm:py-1.5"
+                className="rounded-sm border border-stroke px-4 py-2 text-xs disabled:opacity-50 sm:py-1.5 dark:border-strokedark dark:text-white"
               >
                 {loading ? '불러오는 중…' : '더 불러오기'}
               </button>
@@ -265,7 +265,7 @@ export default function FlaggedQueueView() {
                 setDecided({});
                 load(null);
               }}
-              className="rounded border border-stroke px-4 py-2 text-xs text-gray-500 dark:border-strokedark sm:py-1.5"
+              className="rounded-sm border border-stroke px-4 py-2 text-xs text-gray-500 sm:py-1.5 dark:border-strokedark"
             >
               새로고침
             </button>

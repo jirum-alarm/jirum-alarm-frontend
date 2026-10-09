@@ -37,7 +37,7 @@ export function highlightMatches(
     const isMatch = keywords.some((k) => k.toLowerCase() === part.toLowerCase());
     if (isMatch) {
       return (
-        <mark key={i} className="rounded bg-yellow-200/70 px-0.5 dark:bg-yellow-700/50">
+        <mark key={i} className="rounded-sm bg-yellow-200/70 px-0.5 dark:bg-yellow-700/50">
           {part}
         </mark>
       );

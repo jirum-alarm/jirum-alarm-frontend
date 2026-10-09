@@ -90,11 +90,11 @@ const KeywordUpdate = ({ keywordId }: Props) => {
       <Card>
         <span className="text-black">유형 : </span>
         <p
-          className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
+          className={`inline-flex rounded-full px-3 py-1 text-sm font-medium ${
             keyword.type === HotDealKeywordType.POSITIVE
-              ? 'bg-success text-success'
+              ? 'bg-success/10 text-success'
               : keyword.type === HotDealKeywordType.NEGATIVE
-                ? 'bg-danger text-danger'
+                ? 'bg-danger/10 text-danger'
                 : ''
           }`}
         >

@@ -56,7 +56,7 @@ const Toast = ({ item, onDone }: { item: ToastItem; onDone: (id: number) => void
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={style.path} />
         </svg>
       </div>
-      <span className="whitespace-pre-line font-medium">{item.message}</span>
+      <span className="font-medium whitespace-pre-line">{item.message}</span>
     </div>
   );
 };

@@ -90,13 +90,13 @@ const ProviderHealthSection = () => {
               <div className="flex items-center justify-between gap-2">
                 <span className="flex items-center gap-2 font-semibold text-black dark:text-white">
                   <span
-                    className="h-2.5 w-2.5 rounded-sm"
+                    className="h-2.5 w-2.5 rounded-xs"
                     style={{ background: sourceColor(row.provider) }}
                   />
                   {sourceName(row.provider)}
                 </span>
                 {row.salesHealth === 'sparse' && (
-                  <span className="rounded bg-gray-2 px-1.5 py-0.5 text-[11px] text-bodydark2 dark:bg-meta-4">
+                  <span className="rounded-sm bg-gray-2 px-1.5 py-0.5 text-[11px] text-bodydark2 dark:bg-meta-4">
                     판매 드묾 · 90일 중 {row.activeDays90d}일
                   </span>
                 )}
@@ -161,7 +161,7 @@ const QueueHealthSection = () => {
           {queue.attemptsDistribution.map((entry) => (
             <span
               key={entry.attempts}
-              className="rounded bg-gray-2 px-2 py-1 text-xs text-black dark:bg-meta-4 dark:text-white"
+              className="rounded-sm bg-gray-2 px-2 py-1 text-xs text-black dark:bg-meta-4 dark:text-white"
             >
               {entry.attempts}번 시도 {entry.count.toLocaleString()}건
             </span>
@@ -257,7 +257,7 @@ const FunnelSection = () => {
           <ul className="divide-y divide-stroke dark:divide-strokedark">
             {errors.map((row) => (
               <li key={row.error} className="flex items-start justify-between gap-3 py-2">
-                <span className="break-all text-xs text-black dark:text-white">{row.error}</span>
+                <span className="text-xs break-all text-black dark:text-white">{row.error}</span>
                 <span className="shrink-0 text-sm font-semibold text-black dark:text-white">
                   {row.count.toLocaleString()}
                 </span>
@@ -357,7 +357,7 @@ const RevenueTrendSection = () => {
       <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-body">
         {view.totals.map((t) => (
           <span key={t.key} className="flex items-center gap-1">
-            <span className="h-2 w-2 rounded-sm" style={{ background: sourceColor(t.key) }} />
+            <span className="h-2 w-2 rounded-xs" style={{ background: sourceColor(t.key) }} />
             {sourceName(t.key)} {shortWon(t.value)}
           </span>
         ))}

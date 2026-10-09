@@ -28,12 +28,12 @@ const VerificationPanelHeader = ({
     <button
       type="button"
       onClick={onBack}
-      className="-ml-1 flex h-9 flex-shrink-0 items-center px-1 text-sm font-medium text-primary lg:hidden"
+      className="-ml-1 flex h-9 shrink-0 items-center px-1 text-sm font-medium text-primary lg:hidden"
     >
       ‹ 목록
     </button>
     <div className="min-w-0 flex-1">
-      <h3 className="break-words text-sm font-bold text-black dark:text-white">
+      <h3 className="text-sm font-bold wrap-break-word text-black dark:text-white">
         {selectedBrandProduct.brandName} {selectedBrandProduct.productName}
         {(selectedBrandProduct.volume || selectedBrandProduct.amount) && (
           <span className="ml-2 text-xs font-normal text-gray-400">
@@ -79,14 +79,14 @@ const VerificationPanelHeader = ({
       <div className="mx-0.5 h-4 w-px bg-gray-200 dark:bg-strokedark" />
       <button
         onClick={selectAll}
-        className="rounded bg-success/10 px-2 py-2 text-[11px] font-medium text-success transition-colors hover:bg-success/20 sm:py-1"
+        className="rounded-sm bg-success/10 px-2 py-2 text-[11px] font-medium text-success transition-colors hover:bg-success/20 sm:py-1"
         title="Shift+A"
       >
         전체승인
       </button>
       <button
         onClick={deselectAll}
-        className="rounded bg-gray-100 px-2 py-2 text-[11px] font-medium text-gray-500 transition-colors hover:bg-gray-200 dark:bg-meta-4 dark:text-gray-400 sm:py-1"
+        className="rounded-sm bg-gray-100 px-2 py-2 text-[11px] font-medium text-gray-500 transition-colors hover:bg-gray-200 sm:py-1 dark:bg-meta-4 dark:text-gray-400"
         title="N"
       >
         전체거절
@@ -94,14 +94,14 @@ const VerificationPanelHeader = ({
       <div className="mx-0.5 h-4 w-px bg-gray-200 dark:bg-strokedark" />
       <button
         onClick={handleConfirmMatching}
-        className="flex items-center gap-1 rounded bg-primary px-2.5 py-2 text-[11px] font-bold text-white transition-colors hover:bg-opacity-90 sm:py-1"
+        className="flex items-center gap-1 rounded-sm bg-primary px-2.5 py-2 text-[11px] font-bold text-white transition-colors hover:bg-primary/90 sm:py-1"
         title="Enter"
       >
         확정
       </button>
       <button
         onClick={handleConfirmAndNext}
-        className="flex items-center gap-0.5 rounded bg-primary/80 px-2 py-2 text-[11px] font-bold text-white transition-colors hover:bg-primary sm:py-1"
+        className="flex items-center gap-0.5 rounded-sm bg-primary/80 px-2 py-2 text-[11px] font-bold text-white transition-colors hover:bg-primary sm:py-1"
         title="Ctrl+Enter"
       >
         확정+다음
@@ -130,24 +130,24 @@ export const MobileActionBar = ({
   | 'handleConfirmMatching'
   | 'handleConfirmAndNext'
 >) => (
-  <div className="flex flex-col gap-2 border-t border-stroke bg-white p-2 dark:border-strokedark dark:bg-boxdark lg:hidden">
+  <div className="flex flex-col gap-2 border-t border-stroke bg-white p-2 lg:hidden dark:border-strokedark dark:bg-boxdark">
     <div className="flex gap-2">
       <button
         onClick={handleUndo}
         disabled={!canUndo}
-        className="h-9 flex-1 rounded bg-gray-100 text-xs font-medium text-gray-600 disabled:opacity-40"
+        className="h-9 flex-1 rounded-sm bg-gray-100 text-xs font-medium text-gray-600 disabled:opacity-40"
       >
         되돌리기
       </button>
       <button
         onClick={selectAll}
-        className="h-9 flex-1 rounded bg-success/10 text-xs font-medium text-success"
+        className="h-9 flex-1 rounded-sm bg-success/10 text-xs font-medium text-success"
       >
         전체승인
       </button>
       <button
         onClick={deselectAll}
-        className="h-9 flex-1 rounded bg-gray-100 text-xs font-medium text-gray-500"
+        className="h-9 flex-1 rounded-sm bg-gray-100 text-xs font-medium text-gray-500"
       >
         전체거절
       </button>
@@ -161,7 +161,7 @@ export const MobileActionBar = ({
       </button>
       <button
         onClick={handleConfirmAndNext}
-        className="h-11 flex-[2] rounded-lg bg-primary text-sm font-bold text-white"
+        className="h-11 flex-2 rounded-lg bg-primary text-sm font-bold text-white"
       >
         확정 + 다음 상품 ›
       </button>

@@ -40,10 +40,10 @@ const QueryErrorBanner = () => {
       {errors.map((err) => (
         <div
           key={err.id}
-          className="flex flex-wrap items-start gap-x-2 rounded border border-danger/40 bg-danger/5 px-3 py-2 text-sm text-danger"
+          className="flex flex-wrap items-start gap-x-2 rounded-sm border border-danger/40 bg-danger/5 px-3 py-2 text-sm text-danger"
         >
           <span className="shrink-0 font-bold">요청 실패</span>
-          <span className="min-w-0 break-all font-medium">{err.operation}</span>
+          <span className="min-w-0 font-medium break-all">{err.operation}</span>
           <span className="min-w-0 flex-1 basis-40 break-all">{err.message}</span>
           <button
             onClick={() => setErrors((prev) => prev.filter((x) => x.id !== err.id))}

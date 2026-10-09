@@ -18,9 +18,9 @@ const VerificationStatusMap: Record<ProductMappingVerificationStatus, string> = 
 };
 
 const VerificationStatusColorMap: Record<ProductMappingVerificationStatus, string> = {
-  [ProductMappingVerificationStatus.PendingVerification]: 'bg-warning text-warning bg-opacity-10',
-  [ProductMappingVerificationStatus.Verified]: 'bg-success text-success bg-opacity-10',
-  [ProductMappingVerificationStatus.Rejected]: 'bg-danger text-danger bg-opacity-10',
+  [ProductMappingVerificationStatus.PendingVerification]: 'bg-warning/10 text-warning',
+  [ProductMappingVerificationStatus.Verified]: 'bg-success/10 text-success',
+  [ProductMappingVerificationStatus.Rejected]: 'bg-danger/10 text-danger',
 };
 
 const VerificationHistory = () => {
@@ -127,7 +127,7 @@ const VerificationHistory = () => {
   };
 
   return (
-    <Panel rounded="sm" className="w-full px-4 pb-2.5 pt-4 sm:px-7.5 sm:pt-6 xl:pb-1">
+    <Panel rounded="sm" className="w-full px-4 pt-4 pb-2.5 sm:px-7.5 sm:pt-6 xl:pb-1">
       {/* 필터 섹션 */}
       <div className="mb-4 flex flex-wrap items-center gap-3 sm:gap-4">
         <div className="flex items-center gap-2">
@@ -182,7 +182,7 @@ const VerificationHistory = () => {
             오래된순
           </button>
         </div>
-        <div className="hidden h-6 w-px bg-gray-300 dark:bg-gray-600 sm:block" />
+        <div className="hidden h-6 w-px bg-gray-300 sm:block dark:bg-gray-600" />
         <button
           className={`rounded-md px-3 py-2 text-sm font-medium transition-colors sm:py-1.5 ${
             onlyMine
@@ -238,16 +238,16 @@ const VerificationHistory = () => {
             <table className="table-cards w-full table-auto">
               <thead>
                 <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                  <th className="hidden min-w-[80px] px-4 py-4 text-center font-medium text-black dark:text-white md:table-cell">
+                  <th className="hidden min-w-[80px] px-4 py-4 text-center font-medium text-black md:table-cell dark:text-white">
                     ID
                   </th>
                   <th className="min-w-[140px] px-4 py-4 text-center font-medium text-black dark:text-white">
                     Product ID
                   </th>
-                  <th className="min-w-[180px] px-4 py-4 text-center font-medium text-black dark:text-white lg:min-w-0">
+                  <th className="min-w-[180px] px-4 py-4 text-center font-medium text-black lg:min-w-0 dark:text-white">
                     상품명
                   </th>
-                  <th className="min-w-[160px] px-4 py-4 text-center font-medium text-black dark:text-white lg:min-w-0">
+                  <th className="min-w-[160px] px-4 py-4 text-center font-medium text-black lg:min-w-0 dark:text-white">
                     다나와 상품명
                   </th>
                   <th className="min-w-[120px] px-4 py-4 text-center font-medium text-black dark:text-white">
@@ -256,7 +256,7 @@ const VerificationHistory = () => {
                   <th className="min-w-[220px] px-4 py-4 text-center font-medium text-black dark:text-white">
                     검증 정보
                   </th>
-                  <th className="hidden min-w-[160px] px-4 py-4 text-center font-medium text-black dark:text-white md:table-cell">
+                  <th className="hidden min-w-[160px] px-4 py-4 text-center font-medium text-black md:table-cell dark:text-white">
                     생성일
                   </th>
                   <th className="min-w-[100px] px-4 py-4 text-center font-medium text-black dark:text-white">
@@ -269,12 +269,12 @@ const VerificationHistory = () => {
                   <tr
                     key={item.id}
                     className={`hover:bg-slate-50 dark:hover:bg-meta-4 ${
-                      isMyVerification(item) ? 'bg-primary/[0.02]' : ''
+                      isMyVerification(item) ? 'bg-primary/2' : ''
                     }`}
                   >
                     <td
                       data-label="ID"
-                      className="hidden border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark md:table-cell"
+                      className="hidden border-b border-[#eee] px-4 py-5 text-center md:table-cell dark:border-strokedark"
                     >
                       <p className="text-black dark:text-white">{item.id}</p>
                     </td>
@@ -291,7 +291,7 @@ const VerificationHistory = () => {
                       </Link>
                     </td>
                     <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark">
-                      <p className="whitespace-normal text-sm text-black dark:text-white">
+                      <p className="text-sm whitespace-normal text-black dark:text-white">
                         {item.product?.title ?? '-'}
                       </p>
                     </td>
@@ -299,7 +299,7 @@ const VerificationHistory = () => {
                       data-label="다나와 상품명"
                       className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark"
                     >
-                      <p className="whitespace-normal text-sm text-black dark:text-white">
+                      <p className="text-sm whitespace-normal text-black dark:text-white">
                         {item.brandProduct ?? '-'}
                       </p>
                     </td>
@@ -332,7 +332,7 @@ const VerificationHistory = () => {
                             {item.verifiedBy?.name ?? '-'}
                           </span>
                           {isMyVerification(item) && (
-                            <span className="rounded bg-primary/10 px-1 py-0.5 text-[11px] font-semibold text-primary">
+                            <span className="rounded-sm bg-primary/10 px-1 py-0.5 text-[11px] font-semibold text-primary">
                               나
                             </span>
                           )}
@@ -347,7 +347,7 @@ const VerificationHistory = () => {
                     </td>
                     <td
                       data-label="생성일"
-                      className="hidden border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark md:table-cell"
+                      className="hidden border-b border-[#eee] px-4 py-5 text-center md:table-cell dark:border-strokedark"
                     >
                       <p className="text-sm text-black dark:text-white">
                         {item.createdAt ? dateFormatter(item.createdAt) : '-'}
@@ -363,7 +363,7 @@ const VerificationHistory = () => {
                         <button
                           onClick={() => handleCancelVerification(item.id)}
                           disabled={cancellingId === item.id}
-                          className={`inline-flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-2 text-xs font-medium transition-colors sm:py-1.5 ${
+                          className={`inline-flex items-center gap-1 rounded-md px-2.5 py-2 text-xs font-medium whitespace-nowrap transition-colors sm:py-1.5 ${
                             cancellingId === item.id
                               ? 'cursor-not-allowed bg-gray-100 text-gray-400 dark:bg-meta-4 dark:text-gray-600'
                               : 'bg-warning/10 text-warning hover:bg-warning/20'

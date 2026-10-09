@@ -349,11 +349,11 @@ const VerificationGroupByView = () => {
     <>
       {/* 폰: 한 번에 한 칸만(목록 → 상품 탭 → 검수 → ‹ 목록). 높이는 화면에서 헤더·제목·하단 탭바를 뺀 만큼이라
           안쪽 스크롤·자동 페이징이 데스크톱과 같이 돈다 */}
-      <div className="flex h-[calc(100dvh-12.5rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] min-h-[420px] overflow-hidden rounded-xl border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark lg:h-[calc(100vh-200px)]">
+      <div className="flex h-[calc(100dvh-12.5rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] min-h-[420px] overflow-hidden rounded-xl border border-stroke bg-white shadow-default lg:h-[calc(100vh-200px)] dark:border-strokedark dark:bg-boxdark">
         {/* ───── 좌측 패널: 브랜드 상품 목록 ───── */}
         <div
           ref={leftPanelRef}
-          className={`${mobileDetail ? 'hidden lg:flex' : 'flex'} w-full flex-shrink-0 flex-col transition-all lg:w-80 lg:border-r ${
+          className={`${mobileDetail ? 'hidden lg:flex' : 'flex'} w-full shrink-0 flex-col transition-all lg:w-80 lg:border-r ${
             isLeftPanelFocused
               ? 'border-primary/50 dark:border-primary/50'
               : 'border-stroke dark:border-strokedark'

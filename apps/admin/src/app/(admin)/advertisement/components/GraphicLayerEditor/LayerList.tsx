@@ -26,16 +26,16 @@ export default function LayerList({
   onSelectedElementChange,
 }: Props) {
   return (
-    <div className="mb-4 rounded border border-stroke p-3 dark:border-strokedark">
+    <div className="mb-4 rounded-sm border border-stroke p-3 dark:border-strokedark">
       <div className="mb-2 flex items-center justify-between gap-2">
         <p className="text-xs font-semibold text-black dark:text-white">Layers</p>
         <p className="text-[11px] text-bodydark2">{labelBreakpoint(activeBreakpoint)}</p>
       </div>
 
-      <div className="overflow-hidden rounded border border-stroke dark:border-strokedark">
+      <div className="overflow-hidden rounded-sm border border-stroke dark:border-strokedark">
         <button
           type="button"
-          className={`flex h-10 w-full items-center justify-between gap-2 border-b border-stroke px-3 text-left text-xs transition last:border-b-0 dark:border-strokedark md:h-8 ${
+          className={`flex h-10 w-full items-center justify-between gap-2 border-b border-stroke px-3 text-left text-xs transition last:border-b-0 md:h-8 dark:border-strokedark ${
             selectedBackground
               ? 'bg-primary/10 text-primary'
               : 'bg-white text-black hover:bg-gray-2 dark:bg-boxdark dark:text-white dark:hover:bg-form-input'
@@ -55,7 +55,7 @@ export default function LayerList({
             <button
               key={`${activeBreakpoint}-${index}-${elementAssetUrl}`}
               type="button"
-              className={`flex h-10 w-full items-center justify-between gap-2 border-b border-stroke px-3 text-left text-xs transition last:border-b-0 dark:border-strokedark md:h-8 ${
+              className={`flex h-10 w-full items-center justify-between gap-2 border-b border-stroke px-3 text-left text-xs transition last:border-b-0 md:h-8 dark:border-strokedark ${
                 selected
                   ? 'bg-primary/10 text-primary'
                   : 'bg-white text-black hover:bg-gray-2 dark:bg-boxdark dark:text-white dark:hover:bg-form-input'

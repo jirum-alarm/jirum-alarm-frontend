@@ -99,7 +99,7 @@ const ProviderHealthGrid = () => {
       {providers.length === 0 ? (
         <p className="py-8 text-center text-bodydark2">커뮤니티 정보가 없습니다.</p>
       ) : (
-        <ul className="grid divide-y divide-stroke dark:divide-strokedark md:grid-cols-2 md:gap-x-6 md:divide-y-0 xl:grid-cols-3">
+        <ul className="grid divide-y divide-stroke md:grid-cols-2 md:gap-x-6 md:divide-y-0 xl:grid-cols-3 dark:divide-strokedark">
           {providers
             .filter((p) => showHealthy || getHealthLevel(p) !== 'healthy')
             .map((provider) => {
@@ -118,7 +118,7 @@ const ProviderHealthGrid = () => {
                       {formatMinutes(provider.minutesSinceLatest)}
                     </span>
                   </div>
-                  <p className="ml-4 mt-0.5 text-xs text-bodydark2">
+                  <p className="mt-0.5 ml-4 text-xs text-bodydark2">
                     1시간 {provider.last1hCount} · 24시간 {provider.last24hCount.toLocaleString()} ·
                     7일 {provider.last7dCount.toLocaleString()}
                   </p>

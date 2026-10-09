@@ -134,11 +134,11 @@ const AssetUploader = ({
         accept="image/png,image/jpeg,image/webp,image/svg+xml"
         onChange={handleFile}
         disabled={uploading}
-        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-none transition file:mr-3 file:rounded file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-white focus:border-primary dark:border-form-strokedark dark:text-white md:file:py-1"
+        className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-3 py-2 text-sm text-black outline-hidden transition file:mr-3 file:rounded-sm file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-white focus:border-primary md:file:py-1 dark:border-form-strokedark dark:text-white"
       />
       {uploading && <p className="mt-1 text-xs text-bodydark2">업로드 중…</p>}
       {error && <p className="mt-1 text-xs text-danger">{error}</p>}
-      {value && <p className="mt-1 break-all text-xs text-success">업로드됨: {value}</p>}
+      {value && <p className="mt-1 text-xs break-all text-success">업로드됨: {value}</p>}
     </div>
   );
 };
