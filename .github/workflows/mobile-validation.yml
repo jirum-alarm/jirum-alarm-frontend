@@ -74,80 +74,10 @@ jobs:
       - name: Native fingerprint (OTA safety)
         run: pnpm --filter mobile native:check
 
-  mobile-ios-smoke:
-    name: Mobile iOS Smoke
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-          run_install: false
-
-      - name: Install packages
-        run: pnpm install --frozen-lockfile
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-          bundler-cache: false
-
-      - name: Check iOS secret availability
-        id: ios-secrets
-        env:
-          MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64: ${{ secrets.MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64 }}
-        run: |
-          set -euo pipefail
-
-          if [ -n "${MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64}" ]; then
-            printf 'ready=true\n' >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          printf 'ready=false\n' >> "$GITHUB_OUTPUT"
-          printf '%s\n' '::notice::Skipping iOS smoke build because required secrets are unavailable. This is expected for forked pull requests.'
-
-      - name: Restore iOS local secrets
-        if: steps.ios-secrets.outputs.ready == 'true'
-        working-directory: apps/mobile
-        env:
-          MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64: ${{ secrets.MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64 }}
-        run: |
-          set -euo pipefail
-          umask 077
-          node -e "const fs=require('fs');fs.writeFileSync('ios/GoogleService-Info.plist',Buffer.from(process.env.MOBILE_IOS_GOOGLE_SERVICE_INFO_PLIST_B64,'base64'))"
-
-      - name: Install iOS Bundler dependencies
-        if: steps.ios-secrets.outputs.ready == 'true'
-        working-directory: apps/mobile
-        run: |
-          set -euo pipefail
-          bundle config set path vendor/bundle
-          bundle install --jobs 4 --retry 3
-
-      - name: Install CocoaPods
-        if: steps.ios-secrets.outputs.ready == 'true'
-        working-directory: apps/mobile
-        run: bundle exec pod install --project-directory=ios
-
-      - name: Run iOS smoke build
-        if: steps.ios-secrets.outputs.ready == 'true'
-        run: pnpm --filter mobile run build:ios:debug:sim
-
-      - name: Clean restored iOS secrets
-        if: always() && steps.ios-secrets.outputs.ready == 'true'
-        working-directory: apps/mobile
-        run: rm -f ios/GoogleService-Info.plist
+  # iOS 빌드·기동은 mobile-ota 의 boot-check(Release 앱·네이티브 지문 캐시·시뮬레이터 콜드 스타트 3회)가 본다.
+  # 예전 Mobile iOS Smoke 잡은 7/2(482a8c25)에 지워진 build:ios:debug:sim 을 불렀는데, 빌드 단계가 Firebase plist
+  # 시크릿이 있을 때만 돌아 3개월간 건너뛰어지다가 10/9 boot-check 용 시크릿 등록으로 매 푸시 실패 → validation 이
+  # 실패해 mobile-ota 가 늘 skipped 였다. 매 푸시 Debug 빌드를 되살리면 boot-check 의 Release 빌드와 겹쳐 뺐다.
 
   mobile-android-smoke:
     name: Mobile Android Smoke
