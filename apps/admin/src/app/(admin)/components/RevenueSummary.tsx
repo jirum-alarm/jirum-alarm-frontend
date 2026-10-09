@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import { useMemo } from 'react';
 
+import { RevenueTrendSection } from '@/app/(admin)/profit-link/components/ProfitLinkDashboard';
 import { useMyAdminAccess } from '@/hooks/graphql/permission';
 import { useRevenueTrend } from '@/hooks/graphql/profitLink';
 import { canAccessPath } from '@/lib/adminSection';
 import { kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
 /**
- * 홈 맨 위 '수익' — 수익링크 화면의 수익 추이(세후, 제휴 + 애드센스)를 합계만 뽑아 보여준다.
+ * 홈 맨 위 '수익' — 기간 합계 타일 + 수익링크 화면과 같은 30일 출처별 추이 차트(세후, 제휴 + 애드센스).
  * 수익링크 권한이 없으면 쿼리도 안 보낸다(보내면 FORBIDDEN 배너가 뜬다).
  */
 const RevenueSummary = () => {
@@ -80,6 +81,9 @@ const RevenueSummary = () => {
       <p className="mt-1 text-[11px] text-bodydark2">
         최근 1~2일은 덜 찬 값(쿠팡·네이버·애드센스가 늦게 들어온다)
       </p>
+      <div className="mt-4">
+        <RevenueTrendSection />
+      </div>
     </section>
   );
 };

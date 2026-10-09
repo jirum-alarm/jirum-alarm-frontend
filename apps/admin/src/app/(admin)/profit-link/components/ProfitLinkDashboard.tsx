@@ -423,7 +423,7 @@ const MissedProductsSection = () => {
 
 // ─── 5. 수익 추이 (세후) — 제휴 + 애드센스 ───
 
-const RevenueTrendSection = () => {
+export const RevenueTrendSection = () => {
   const range = useMemo(() => dateRangeOf(30), []);
   const { data, loading } = useRevenueTrend(range);
   const { dates, series, totals } = useMemo(() => {
