@@ -54,9 +54,9 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
   const copyLink = async (url: string) => {
     try {
       await navigator.clipboard.writeText(buildShareMessage(title, url, description));
-      toast(<>링크가 클립보드에 복사되었어요!</>);
+      toast.success(<>링크가 클립보드에 복사되었어요!</>);
     } catch {
-      toast(<>복사에 실패했어요. 주소창의 링크를 직접 복사해주세요.</>);
+      toast.error(<>복사에 실패했어요. 주소창의 링크를 직접 복사해주세요.</>);
     }
   };
 
@@ -94,7 +94,7 @@ export default function ShareSheet({ children, title, description, imageUrl }: P
       // 사용자가 시트를 닫은 것(AbortError)은 실패가 아니다.
       if (e instanceof DOMException && e.name === 'AbortError') return;
       if (channel === 'kakao') {
-        toast(<>카카오톡 공유를 열지 못했어요. 링크 복사를 이용해주세요.</>);
+        toast.error(<>카카오톡 공유를 열지 못했어요. 링크 복사를 이용해주세요.</>);
         return;
       }
       await copyLink(url);

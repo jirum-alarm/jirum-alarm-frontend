@@ -19,7 +19,7 @@ export default function useCommunityPostDetail(id: number) {
       queryClient.invalidateQueries({ queryKey: CommunityQueries.post(id).queryKey });
     },
     onError: () => {
-      toast('좋아요 처리에 실패했어요.');
+      toast.error('좋아요 처리에 실패했어요.');
     },
   });
 

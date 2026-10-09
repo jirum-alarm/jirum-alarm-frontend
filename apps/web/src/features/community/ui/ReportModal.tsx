@@ -40,11 +40,11 @@ export default function ReportModal({
         description: selectedReason === UserReportReason.Other ? description : undefined,
       }),
     onSuccess: () => {
-      toast('신고가 접수되었어요.');
+      toast.success('신고가 접수되었어요.');
       handleClose();
     },
     onError: () => {
-      toast('신고에 실패했어요.');
+      toast.error('신고에 실패했어요.');
     },
   });
 

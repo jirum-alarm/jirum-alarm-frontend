@@ -82,14 +82,14 @@ const SocialLoginCallbackPage = () => {
       // 신규 OAuth 가입은 /signup/complete 를 거쳐 보낸다. sign_up 은 그 화면이 dataLayer 로 쏜다.
       // type 은 서버 social.service 가 신규=SIGNUP / 기존=LOGIN 으로 내려준다.
       if (data.socialLogin.type === 'SIGNUP') {
-        toast('회원가입에 성공했어요.');
+        toast.success('회원가입에 성공했어요.');
         router.replace(
           `${PAGE.SIGNUP_COMPLETE}?method=${provider}&rtnUrl=${encodeURIComponent(landing)}`,
         );
         return;
       }
 
-      toast('로그인에 성공했어요.');
+      toast.success('로그인에 성공했어요.');
       if (target.kind === 'external') {
         // 다른 오리진이라 라우터로는 못 간다. replace 로 넣어 뒤로가기에 콜백이 남지 않게 한다.
         window.location.replace(target.url);

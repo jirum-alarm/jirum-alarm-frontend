@@ -5,9 +5,11 @@ import { Drawer } from 'vaul';
 
 import { CheckDeviceResult } from '@/app/actions/agent.types';
 
+import { PAGE } from '@/shared/config/page';
 import { isAndroidUA, isInAppBrowserUA } from '@/shared/config/user-agent';
 import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
+import useMyRouter from '@/shared/hooks/useMyRouter';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
 import { browserHandoffUrl, canHandoffToBrowser } from '@/shared/lib/push-channel/browserHandoff';
 import { readPushStatus } from '@/shared/lib/push-channel/pushChannel';
@@ -154,6 +156,7 @@ function KeywordAlertSheet({
   onClose: () => void;
 }) {
   const { toast } = useToast();
+  const router = useMyRouter();
   const { ensureAlertSession } = useAlertSession();
   const { requestPermission } = useFcmPermission();
   const [pending, setPending] = useState(false);
@@ -161,7 +164,7 @@ function KeywordAlertSheet({
     source: 'first_visit',
     onError: (error) => {
       const gql = error as { response?: { errors?: { message?: string }[] } };
-      toast(gql?.response?.errors?.[0]?.message || '키워드 저장에 실패했습니다.');
+      toast.error(gql?.response?.errors?.[0]?.message || '키워드 저장에 실패했습니다.');
     },
   });
 
@@ -191,7 +194,9 @@ function KeywordAlertSheet({
     try {
       if (!(await ensureAlertSession())) return;
       await addKeyword({ keyword });
-      toast(`'${keyword}' 알림을 등록했어요.`);
+      toast.success(`'${keyword}' 알림을 등록했어요.`, {
+        action: { label: '보기', onClick: () => router.push(PAGE.MYPAGE_KEYWORD) },
+      });
       await permission;
     } catch {
       // 실패 토스트는 onError 가 띄운다.

@@ -91,7 +91,7 @@ function EmptyKeywords() {
   const { mutate, isPending } = useUpdateKeyword({
     source: 'mypage_recommend',
     onSuccess: ({ keyword }) => {
-      toast(`'${keyword}' 키워드 알림을 등록했어요.`);
+      toast.success(`'${keyword}' 키워드 알림을 등록했어요.`);
       promptPushChannel(keyword);
     },
   });

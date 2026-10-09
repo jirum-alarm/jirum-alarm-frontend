@@ -37,11 +37,11 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
     mutationFn: () => CommunityService.removePost(postId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CommunityQueries.all() });
-      toast('게시글이 삭제되었어요.');
+      toast.success('게시글이 삭제되었어요.');
       router.push(PAGE.COMMUNITY);
     },
     onError: () => {
-      toast('삭제에 실패했어요.');
+      toast.error('삭제에 실패했어요.');
     },
   });
 

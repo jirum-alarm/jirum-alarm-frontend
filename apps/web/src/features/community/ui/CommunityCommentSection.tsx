@@ -194,16 +194,16 @@ function CommunityCommentList({
       setEditContent('');
       queryClient.invalidateQueries({ queryKey: CommunityQueries.comments(postId).queryKey });
     },
-    onError: () => toast('수정에 실패했어요.'),
+    onError: () => toast.error('수정에 실패했어요.'),
   });
 
   const { mutate: removeComment } = useMutation({
     mutationFn: (id: number) => CommunityService.removeComment(id),
     onSuccess: () => {
-      toast('댓글이 삭제되었어요.');
+      toast.success('댓글이 삭제되었어요.');
       queryClient.invalidateQueries({ queryKey: CommunityQueries.comments(postId).queryKey });
     },
-    onError: () => toast('삭제에 실패했어요.'),
+    onError: () => toast.error('삭제에 실패했어요.'),
   });
 
   const { mutate: likeComment } = useMutation({
@@ -234,7 +234,7 @@ function CommunityCommentList({
     },
     onError: (_err, _vars, ctx) => {
       if (ctx?.prev) queryClient.setQueryData(CommunityQueries.comments(postId).queryKey, ctx.prev);
-      toast('좋아요 처리에 실패했어요.');
+      toast.error('좋아요 처리에 실패했어요.');
     },
   });
 

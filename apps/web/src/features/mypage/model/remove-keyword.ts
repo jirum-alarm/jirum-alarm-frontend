@@ -14,7 +14,7 @@ export const useRemoveKeyword = () => {
       queryClient.invalidateQueries({ queryKey: AuthQueries.keyword() });
     },
     onError: () => {
-      toast('키워드 삭제에 실패했습니다.');
+      toast.error('키워드 삭제에 실패했습니다.');
     },
   });
 };

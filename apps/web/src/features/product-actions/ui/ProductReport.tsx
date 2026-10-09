@@ -49,7 +49,7 @@ const ProductReportModal = ({ productId }: { productId: number }) => {
         queryKey: productKey,
       });
       setIsModalOpen(false);
-      toast('제보해주셔서 감사해요 :)');
+      toast.success('제보해주셔서 감사해요 :)');
     },
     onError: () => {
       setIsModalOpen(false);

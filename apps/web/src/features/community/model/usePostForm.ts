@@ -52,7 +52,7 @@ export default function usePostForm(
 
     const remaining = MAX_POST_IMAGES - images.length;
     if (remaining <= 0) {
-      toast(`이미지는 최대 ${MAX_POST_IMAGES}장까지 올릴 수 있어요.`);
+      toast.error(`이미지는 최대 ${MAX_POST_IMAGES}장까지 올릴 수 있어요.`);
       return;
     }
 
@@ -61,11 +61,11 @@ export default function usePostForm(
 
     for (const file of selected) {
       if (!(ACCEPTED_POST_IMAGE_TYPES as readonly string[]).includes(file.type)) {
-        toast('JPG, PNG, WEBP, GIF, AVIF 이미지만 올릴 수 있어요.');
+        toast.error('JPG, PNG, WEBP, GIF, AVIF 이미지만 올릴 수 있어요.');
         continue;
       }
       if (file.size > MAX_POST_IMAGE_BYTES) {
-        toast('이미지 한 장당 5MB 이하만 올릴 수 있어요.');
+        toast.error('이미지 한 장당 5MB 이하만 올릴 수 있어요.');
         continue;
       }
       validFiles.push(file);
@@ -80,7 +80,7 @@ export default function usePostForm(
       );
       setImages((prev) => [...prev, ...uploaded].slice(0, MAX_POST_IMAGES));
     } catch {
-      toast('이미지 업로드에 실패했어요.');
+      toast.error('이미지 업로드에 실패했어요.');
     } finally {
       setIsUploadingImages(false);
     }
@@ -110,7 +110,7 @@ export default function usePostForm(
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CommunityQueries.all() });
-      toast(editPostId ? '게시글이 수정되었어요.' : '게시글이 등록되었어요.');
+      toast.success(editPostId ? '게시글이 수정되었어요.' : '게시글이 등록되었어요.');
 
       // ★앱의 네이티브 스택 위에 얹힌 웹뷰면 웹 라우팅을 하지 않는다.
       // 커뮤니티 탭이 네이티브가 된 뒤(2026-09-08) 이 폼만 웹뷰로 남았는데,
@@ -136,7 +136,7 @@ export default function usePostForm(
       }
     },
     onError: () => {
-      toast('게시글 등록에 실패했어요.');
+      toast.error('게시글 등록에 실패했어요.');
     },
   });
 

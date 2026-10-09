@@ -69,7 +69,7 @@ export default function BrowserHandoffArrival() {
   const handleEnable = async () => {
     pushEvent('keyword_prompt_click');
     const { granted } = await requestPermission({ force: true });
-    if (granted) toast('알림을 켰어요. 새 핫딜이 오면 알려드릴게요.');
+    if (granted) toast.success('알림을 켰어요. 새 핫딜이 오면 알려드릴게요.');
     setAskPush(false);
   };
 

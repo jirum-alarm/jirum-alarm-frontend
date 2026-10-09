@@ -3,8 +3,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+import { PAGE } from '@/shared/config/page';
 import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
+import useMyRouter from '@/shared/hooks/useMyRouter';
 import { cn } from '@/shared/lib/cn';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
@@ -57,6 +59,7 @@ export default function PostPurchaseKeywordPrompt({
   className?: string;
 }) {
   const { toast } = useToast();
+  const router = useMyRouter();
   const { isLoggedIn } = useIsLoggedIn();
   const { ensureAlertSession, canUseAlerts } = useAlertSession();
   const promptPushChannel = usePushChannelPrompt();
@@ -86,7 +89,7 @@ export default function PostPurchaseKeywordPrompt({
         return;
       }
       // 나머지(최대 20개 초과 등)는 서버가 준 이유를 그대로 보여준다.
-      toast(message || '키워드 저장에 실패했습니다.');
+      toast.error(message || '키워드 저장에 실패했습니다.');
     },
   });
 
@@ -120,7 +123,12 @@ export default function PostPurchaseKeywordPrompt({
     if (!pending) return;
     addNotificationKeyword(
       { keyword: pending },
-      { onSuccess: () => toast(`'${pending}' 알림을 등록했어요.`) },
+      {
+        onSuccess: () =>
+          toast.success(`'${pending}' 알림을 등록했어요.`, {
+            action: { label: '보기', onClick: () => router.push(PAGE.MYPAGE_KEYWORD) },
+          }),
+      },
     );
   });
 

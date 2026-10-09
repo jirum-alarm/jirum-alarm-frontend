@@ -4,8 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { m } from 'motion/react';
 import { useRef, useState } from 'react';
 
+import { PAGE } from '@/shared/config/page';
 import useAlertSession from '@/shared/hooks/useAlertSession';
 import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
+import useMyRouter from '@/shared/hooks/useMyRouter';
 import { PendingActionType, usePendingAction } from '@/shared/lib/pending-action';
 import { usePushChannelPrompt } from '@/shared/lib/push-channel/pushChannel';
 import { useToast } from '@/shared/ui/common/Toast';
@@ -43,6 +45,7 @@ function getErrorMessage(error: unknown): string {
 
 export default function RecommendedKeywordSection() {
   const { toast } = useToast();
+  const router = useMyRouter();
   const { ensureAlertSession } = useAlertSession();
   const promptPushChannel = usePushChannelPrompt();
 
@@ -64,7 +67,9 @@ export default function RecommendedKeywordSection() {
       // 칩이 체크로 바뀌는 것과 별개로 토스트도 띄운다. 칩은 스크롤 밖으로 나갈 수 있고,
       // "등록됐다"는 사실은 화면 어디를 보고 있든 전달돼야 한다.
       const added = inFlight.current;
-      toast(added ? `'${added}' 키워드 알림을 등록했어요.` : '키워드 알림을 등록했어요.');
+      toast.success(added ? `'${added}' 키워드 알림을 등록했어요.` : '키워드 알림을 등록했어요.', {
+        action: { label: '보기', onClick: () => router.push(PAGE.MYPAGE_KEYWORD) },
+      });
       promptPushChannel(added ?? undefined);
     },
     onError: (error) => {
@@ -72,7 +77,7 @@ export default function RecommendedKeywordSection() {
       const failed = inFlight.current;
       if (failed) setJustAdded((prev) => prev.filter((k) => k !== failed));
       // 서버가 '이미 등록된 키워드', '최대 20개 초과' 같은 구체적 이유를 준다.
-      toast(getErrorMessage(error) || '키워드 저장에 실패했습니다.');
+      toast.error(getErrorMessage(error) || '키워드 저장에 실패했습니다.');
     },
   });
 

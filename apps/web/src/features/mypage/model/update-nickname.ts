@@ -13,12 +13,12 @@ export const useUpdateNickname = () => {
   return useMutation({
     mutationFn: AuthService.updateMe,
     onSuccess: () => {
-      toast('닉네임이 저장됐어요');
+      toast.success('닉네임이 저장됐어요');
       queryClient.invalidateQueries({ queryKey: AuthQueries.all() });
       goBack();
     },
     onError: () => {
-      toast('닉네임 저장중 에러가 발생했어요');
+      toast.error('닉네임 저장중 에러가 발생했어요');
     },
   });
 };

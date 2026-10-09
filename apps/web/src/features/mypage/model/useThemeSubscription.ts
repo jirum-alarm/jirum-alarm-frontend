@@ -37,12 +37,12 @@ export const useThemeSubscription = () => {
     },
     onSuccess: () => {
       // 켠 직후 "그래서 뭐가 오는지"를 한 번 알려준다 — 키워드처럼 딜마다 오는 게 아니라서.
-      toast('알림을 켰어요. 반응 좋은 딜만 골라 하루 최대 3건 보내드릴게요.');
+      toast.success('알림을 켰어요. 반응 좋은 딜만 골라 하루 최대 3건 보내드릴게요.');
       promptPushChannel();
     },
     onError: (_e, _themeId, ctx) => {
       if (ctx?.prev) queryClient.setQueryData(key, ctx.prev);
-      toast('알림 켜기에 실패했어요.');
+      toast.error('알림 켜기에 실패했어요.');
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   });
@@ -60,7 +60,7 @@ export const useThemeSubscription = () => {
     },
     onError: (_e, _themeId, ctx) => {
       if (ctx?.prev) queryClient.setQueryData(key, ctx.prev);
-      toast('알림 끄기에 실패했어요.');
+      toast.error('알림 끄기에 실패했어요.');
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   });

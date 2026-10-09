@@ -67,7 +67,7 @@ const Signup = () => {
   const { mutateAsync: signup } = useMutation({
     mutationFn: AuthService.signupUser,
     onError: () => {
-      toast('회원가입에 실패했어요');
+      toast.error('회원가입에 실패했어요');
     },
   });
 

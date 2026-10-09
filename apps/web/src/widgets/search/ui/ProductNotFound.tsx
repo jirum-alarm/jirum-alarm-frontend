@@ -39,12 +39,14 @@ const ProductNotFound = () => {
   const { mutate: addKeyword, isPending } = useUpdateKeyword({
     source: 'search_no_result',
     onSuccess: ({ keyword: added }) => {
-      toast(`'${added}' 알림을 등록했어요.`);
+      toast.success(`'${added}' 알림을 등록했어요.`, {
+        action: { label: '보기', onClick: () => router.push(PAGE.MYPAGE_KEYWORD) },
+      });
       promptPushChannel(added);
     },
     onError: (error) => {
       const gql = error as { response?: { errors?: { message?: string }[] } };
-      toast(gql?.response?.errors?.[0]?.message || '키워드 저장에 실패했습니다.');
+      toast.error(gql?.response?.errors?.[0]?.message || '키워드 저장에 실패했습니다.');
     },
   });
   const segments = [...new Intl.Segmenter().segment(keyword.trim())].length;

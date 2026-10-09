@@ -14,7 +14,6 @@ import { triggerHaptic, WebViewBridge, WebViewEventType } from '@/shared/lib/web
 import Button from '@/shared/ui/common/Button';
 import { Heart } from '@/shared/ui/common/icons';
 import { useToast } from '@/shared/ui/common/Toast';
-import Link from '@/shared/ui/Link';
 
 import { ProductQueries } from '@/entities/product';
 import { WishlistQueries } from '@/entities/wishlist';
@@ -47,7 +46,9 @@ export default function LikeButton({
         queryClient.invalidateQueries({ queryKey: productKey }),
         queryClient.invalidateQueries({ queryKey: WishlistQueries.lists() }),
       ]);
-      toast(<LikeToast />);
+      toast.success('찜 목록에 추가되었어요.', {
+        action: { label: '보러가기', onClick: () => router.push(PAGE.LIKE) },
+      });
     },
   });
   const { mutate: removeWishlist } = useMutation({
@@ -122,16 +123,3 @@ export default function LikeButton({
     </Button>
   );
 }
-
-const LikeToast = () => {
-  return (
-    <div className="flex w-full items-center justify-between gap-2">
-      <p>찜 목록에 추가되었어요.</p>
-      <Link href={PAGE.LIKE}>
-        <Button size="sm" className="rounded-3xl" color="primary" variant="filled">
-          보러가기
-        </Button>
-      </Link>
-    </div>
-  );
-};

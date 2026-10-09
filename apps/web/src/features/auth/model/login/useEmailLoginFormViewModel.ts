@@ -65,7 +65,7 @@ const useEmailLoginFormViewModel = () => {
       requestPermission();
       setRecentLoginMethod('email');
 
-      toast('로그인에 성공했어요.');
+      toast.success('로그인에 성공했어요.');
       const redirectUrl = rtnUrl ? decodeURIComponent(rtnUrl) : PAGE.HOME;
       window.location.href = redirectUrl;
     },

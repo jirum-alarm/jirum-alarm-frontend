@@ -48,7 +48,7 @@ export const useUpdateKeyword = (options: {
         options.onError(error);
         return;
       }
-      toast('키워드 저장에 실패했습니다.');
+      toast.error('키워드 저장에 실패했습니다.');
     },
   });
 };

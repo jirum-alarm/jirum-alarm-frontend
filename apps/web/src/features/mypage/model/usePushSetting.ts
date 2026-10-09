@@ -63,7 +63,7 @@ export const usePushSetting = () => {
     },
     onError: (_error, _variables, context) => {
       queryClient.setQueryData(pushSettingQuery.queryKey, context?.previous);
-      toast('알림 설정 변경에 실패했습니다.');
+      toast.error('알림 설정 변경에 실패했습니다.');
     },
     onSuccess: (_data, variables) => {
       // 광고성 정보 수신 동의·철회는 처리 결과(일자)를 알려야 한다(정보통신망법 §50 ⑦).
