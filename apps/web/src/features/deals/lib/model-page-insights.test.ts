@@ -213,6 +213,38 @@ describe('buildTimingInsight', () => {
     assert.equal(t.tone, 'fair');
   });
 
+  // 2026-10-09 WD SN850X: 원화·GB당 페이지에 직구 $219.76 딜 → "지금 진행 최저 GB당 220원 · 135% 비쌈" 이 상세·검색 설명에 나갔다.
+  it('원화 페이지에 섞인 직구 달러 딜(소수 가격)은 "지금 가격"으로 쓰지 않는다 — 백엔드 목록 판정과 같은 규칙', () => {
+    const gb = {
+      histPrices: [80, 90, 93, 95, 110],
+      histBasis: 'unit' as const,
+      histUnitLabel: 'GB당',
+    };
+    const only = buildTimingInsight({ ...gb, deals: [deal(219.76, '2026-09-28T00:00:00Z')], now });
+    assert.equal(only.isActivePrice, false);
+    assert.equal(only.tone, 'unknown');
+
+    const mixed = buildTimingInsight({
+      ...gb,
+      deals: [
+        deal(219.76, '2026-09-28T00:00:00Z'),
+        deal(500000, '2026-09-27T00:00:00Z', { unitLabel: 'GB당', unitPrice: 250 }),
+      ],
+      now,
+    });
+    assert.equal(mixed.current, 250);
+
+    // 달러 추이 페이지는 원래 달러로 판정한다.
+    const usd = buildTimingInsight({
+      deals: [deal(199.99, '2026-09-28T00:00:00Z')],
+      histPrices: [210, 220, 230, 240, 250],
+      histBasis: 'total',
+      currency: 'USD',
+      now,
+    });
+    assert.equal(usd.current, 199.99);
+  });
+
   it('추이 점이 5개 미만이면 판정하지 않는다', () => {
     const t = buildTimingInsight({
       deals: [deal(5000, '2026-09-20T00:00:00Z')],
@@ -254,6 +286,24 @@ describe('splitDealsForList', () => {
       [1],
     );
     assert.equal(history.length, 3);
+  });
+
+  it('원화 페이지에서 외화(소수 가격) 딜은 진행 중·이력 모두 뒤로 — 첫 줄이 "지금 추천"이다', () => {
+    const foreign = { ...deal(9, '2026-10-01T00:00:00Z'), price: 219.76 };
+    const { active, history } = splitDealsForList(
+      [foreign, deal(500, '2026-10-02T00:00:00Z')],
+      'total',
+      null,
+      now,
+    );
+    assert.deepEqual(
+      active.map((d) => d.productId),
+      [500, 9],
+    );
+    assert.deepEqual(
+      history.map((d) => d.productId),
+      [500, 9],
+    );
   });
 });
 

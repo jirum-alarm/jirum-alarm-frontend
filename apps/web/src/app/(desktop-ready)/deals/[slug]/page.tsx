@@ -114,7 +114,14 @@ function deriveModelPageInsights(page: ModelPageData, displayName: string) {
     return histCurrency === 'USD' ? `$${Math.round(n)}` : `${Math.round(n).toLocaleString()}원`;
   };
   const histPrices = (priceHistory?.points ?? []).map((p) => p.price);
-  const timing = buildTimingInsight({ deals, histPrices, histBasis, histUnitLabel, heroPrice });
+  const timing = buildTimingInsight({
+    deals,
+    histPrices,
+    histBasis,
+    histUnitLabel,
+    heroPrice,
+    currency: histCurrency,
+  });
   const fmtWithUnit = (price: number) =>
     histBasis === 'unit' && histUnitLabel ? `${histUnitLabel} ${fmtHist(price)}` : fmtHist(price);
   const leadSentence = buildDealsLeadSentence({
@@ -195,6 +202,8 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
     deals,
     histBasis,
     histUnitLabel,
+    undefined,
+    histCurrency,
   );
 
   const offerPrice = heroPrice?.minPrice ?? null;
@@ -578,6 +587,7 @@ export default async function ModelDealsPage({ params }: { params: Promise<{ slu
             histUnitLabel={histUnitLabel}
             histMin={histMin}
             listTitleSuffix={listTitleSuffix}
+            currency={histCurrency}
           />
         </div>
 

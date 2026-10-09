@@ -12,12 +12,21 @@ import {
   Deal,
   dealComparePrice,
   HistBasis,
+  isForeignPriceDeal,
   isLikelyBundleDeal,
 } from '@/features/deals/lib/model-page-insights';
 
 function won(n?: number | null): string {
   if (n == null) return '-';
   return `${Math.round(n).toLocaleString()}원`;
+}
+
+/** 직구 딜(달러 페이지 전체, 또는 원화 페이지에 섞인 소수 가격 딜)은 달러로 — 예전엔 $219.76 이 "220원"으로 보였다. */
+function dealPrice(deal: Deal, currency: 'KRW' | 'USD'): string {
+  if (deal.price == null) return '-';
+  return currency === 'USD' || isForeignPriceDeal(deal, currency)
+    ? `$${deal.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+    : won(deal.price);
 }
 
 type Tab = 'active' | 'history';
@@ -30,6 +39,7 @@ interface Props {
   /** 추이 최저 — 동일 축 비교용. 이력 탭에서만 '역대 최저' 배지. */
   histMin: number;
   listTitleSuffix: string;
+  currency: 'KRW' | 'USD';
 }
 
 export default function DealsListSection({
@@ -39,6 +49,7 @@ export default function DealsListSection({
   histUnitLabel,
   histMin,
   listTitleSuffix,
+  currency,
 }: Props) {
   const hasActive = activeDeals.length > 0;
   const [tab, setTab] = useState<Tab>(hasActive ? 'active' : 'history');
@@ -89,7 +100,12 @@ export default function DealsListSection({
             histMin > 0 &&
             comparePrice != null &&
             comparePrice <= histMin;
-          const isActivePick = tab === 'active' && !deal.isEnd && !isBundle && deals[0] === deal;
+          const isActivePick =
+            tab === 'active' &&
+            !deal.isEnd &&
+            !isBundle &&
+            !isForeignPriceDeal(deal, currency) &&
+            deals[0] === deal;
           const title = cleanDealTitle(deal.title);
 
           return (
@@ -144,7 +160,7 @@ export default function DealsListSection({
                   <span
                     className={`text-sm font-medium ${deal.isEnd ? 'text-gray-400 line-through' : 'text-gray-700'}`}
                   >
-                    {won(deal.price)}
+                    {dealPrice(deal, currency)}
                   </span>
                   {deal.unitPrice != null && deal.unitLabel && (
                     <span className="text-11 text-gray-400">

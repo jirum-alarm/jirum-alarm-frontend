@@ -60,6 +60,15 @@ export function dealComparePrice(
 const ACTIVE_DEAL_MAX_DAYS = 30;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+/**
+ * 원화 페이지 딜 목록에 섞여 오는 직구 딜의 달러 가격($219.76). 원 가격은 정수라 소수면 원화가 아니다 —
+ * 원 축 판정·"지금 최저가"에 넣으면 "GB당 220원 · 135% 비쌈" 이 된다(2026-10-09 WD SN850X).
+ * 백엔드 model-page-price-verdict.ts 와 같은 규칙(그쪽은 같은 딜이 Int 필드에 실려 /deals 목록이 500 이었다).
+ */
+export function isForeignPriceDeal(deal: Deal, currency: 'KRW' | 'USD' = 'KRW'): boolean {
+  return currency === 'KRW' && deal.price != null && !Number.isInteger(deal.price);
+}
+
 /** 진행 중 = 비종료 + 게시 30일 이내. 판정과 목록 "진행 중" 탭이 같은 기준을 써야 숫자가 맞는다. */
 export function isActiveDeal(d: Deal, now = Date.now()): boolean {
   if (d.isEnd) return false;
@@ -128,9 +137,18 @@ export function buildTimingInsight(input: {
   histBasis: HistBasis;
   histUnitLabel?: string | null;
   heroPrice?: HeroPrice | null;
+  currency?: 'KRW' | 'USD';
   now?: number;
 }): TimingInsight {
-  const { deals, histPrices, histBasis, histUnitLabel, heroPrice, now = Date.now() } = input;
+  const {
+    deals,
+    histPrices,
+    histBasis,
+    histUnitLabel,
+    heroPrice,
+    currency,
+    now = Date.now(),
+  } = input;
   // "지금 진행 중 최저가" 는 검색결과 설명에 그대로 찍힌다 — 근거 없는 딜은 넣지 않는다.
   // ① 게시 30일 이내만: 종료 자동 판정이 없어 2024년 딜도 isEnd=false 로 남는다(2026-10-01 실측: "진행 중 24건"에 2024년 딜).
   // ② 추이 중앙값의 40% 미만은 오독: 신라면 14,454원을 4,454원으로 읽어 "100g당 186원·평균보다 64% 저렴" 이 나갔다.
@@ -139,6 +157,7 @@ export function buildTimingInsight(input: {
 
   let best: { price: number; deal: Deal } | null = null;
   for (const deal of pool) {
+    if (isForeignPriceDeal(deal, currency)) continue;
     const p = dealComparePrice(deal, histBasis, histUnitLabel);
     if (p == null) continue;
     if (histMedian != null && p < histMedian * OUTLIER_MIN_RATIO) continue;
@@ -268,12 +287,18 @@ export function splitDealsForList(
   basis: HistBasis,
   unitLabel?: string | null,
   now = Date.now(),
+  currency: 'KRW' | 'USD' = 'KRW',
 ): { active: Deal[]; history: Deal[] } {
   // !isEnd 만 보면 2023년 딜이 "진행 중"에 섞였다 — 종료 자동 판정이 없다(2026-10-05 스팸 진행 중 29건 중 21건이 30일 밖).
   const active = deals.filter((d) => isActiveDeal(d, now));
   const history = deals;
 
+  // 외화 딜은 원 축에서 비교할 수 없으니 뒤로 — 첫 줄이 "지금 추천"이다.
+  const foreignLast = (a: Deal, b: Deal) =>
+    Number(isForeignPriceDeal(a, currency)) - Number(isForeignPriceDeal(b, currency));
   const byPrice = (a: Deal, b: Deal) => {
+    const fl = foreignLast(a, b);
+    if (fl !== 0) return fl;
     const pa = dealComparePrice(a, basis, unitLabel);
     const pb = dealComparePrice(b, basis, unitLabel);
     if (pa == null && pb == null) return 0;
@@ -284,6 +309,8 @@ export function splitDealsForList(
 
   // 진행 중: 번들 아닌 것 먼저, 그다음 단위/총액 싼 순
   const activeSorted = [...active].sort((a, b) => {
+    const fl = foreignLast(a, b);
+    if (fl !== 0) return fl;
     const ab = Number(isLikelyBundleDeal(a.title)) - Number(isLikelyBundleDeal(b.title));
     if (ab !== 0) return ab;
     return byPrice(a, b);
