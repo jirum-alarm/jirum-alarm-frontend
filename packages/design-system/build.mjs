@@ -32,6 +32,9 @@ export function render() {
   return [
     '/* 생성 파일 — 손으로 고치지 말 것. 원본은 tokens.js, 다시 만들기: pnpm --filter @jirum/design-system build */',
     '',
+    '/* 컴포넌트 모양(recipes.js)의 클래스도 CSS 로 만들게 — 앱 소스엔 그 클래스 문자열이 없다. */',
+    "@source './recipes.js';",
+    '',
     '@theme {',
     ...decl('color', lightColors),
     '',

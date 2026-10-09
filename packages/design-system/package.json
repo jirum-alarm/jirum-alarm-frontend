@@ -6,6 +6,7 @@
   "main": "tokens.js",
   "exports": {
     ".": "./tokens.js",
+    "./recipes": "./recipes.js",
     "./theme.css": "./theme.css",
     "./eslint": "./eslint.js",
     "./package.json": "./package.json"

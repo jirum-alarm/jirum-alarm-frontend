@@ -31,6 +31,8 @@ packages/design-system/tokens.js        ← 값은 여기서만 고친다
 3. 둘을 같이 커밋한다. 커밋 훅이 `pnpm --filter @jirum/design-system test` 로 theme.css 가 맞는지·대비가 AA 인지 본다.
 
 앱은 tailwind 설정이 바뀌므로 Metro 캐시를 비우고 다시 띄운다(`npx expo start -c`).
+새 글자 크기·모서리·그림자 **이름**은 `twMergeConfig` 로 각 앱 `cn()` 에 자동 등록된다(tokens 에서 파생). 이걸 빼면
+tailwind-merge 가 `text-13` 을 색으로 읽어 같은 `cn()` 의 `text-gray-500` 과 합치며 크기를 지운다(2026-10-09 실제로 났다).
 새 색을 더하면 `light`·`dark` 둘 다에 넣는다(테스트가 키가 같은지 본다).
 
 ## 색 — 언제 무엇을
@@ -128,7 +130,18 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 
 ## 컴포넌트
 
-플랫폼마다 따로 있지만 같은 이름·같은 토큰을 쓴다. 새 화면은 아래부터 찾아 쓰고, 없으면 직접 만들기 전에 짝(web↔앱)을 먼저 grep 한다.
+코드는 플랫폼마다 따로지만(web DOM / 앱 RN) **모양은 한 곳**이다. `recipes.js` 에 컴포넌트의 클래스 문자열을
+겉(box)·글자(text)로 나눠 두고, web·앱 컴포넌트가 둘 다 그걸 읽는다(web 은 한 요소에, 앱은 View·Text 에 나눠 건다).
+예전엔 같은 배지를 두 번 적어 굵기·색·글자 크기가 갈렸다 — 새 공용 부품의 모양도 recipes 에 두고, 컴포넌트엔 배치만 적는다
+(`__tests__/design-system-component-parity.test.ts` 가 두 플랫폼이 레시피를 읽는지·색을 직접 적지 않는지 본다).
+새 화면은 아래부터 찾아 쓰고, 없으면 직접 만들기 전에 짝(web↔앱)을 먼저 grep 한다.
+
+- **Badge**(누를 수 없는 라벨) — `size`: xs 10px·sm 11px·md 12px 정보 태그, tag = 22px 상태 태그(판매종료·핫딜).
+  `variant`·`tone`: soft(gray·secondary·success·warning·error) / solid(gray=사진 위·secondary·error) / outline(gray).
+  `pill` = 판정 배지(역대 최저·평소보다 비싸요). 예: `<Badge tone="success">도착보장</Badge>`, `<Badge size="tag" variant="outline">판매종료</Badge>`.
+- **Chip**(고르는 칩: 필터·탭) — `selected`, `size` md(탭)·sm(필터)·xs(하위 탭). 골라서 굵어져도 너비가 그대로다(굵은 글자 너비를 미리 잡음). 앱은 누르면 햅틱.
+- **ProductCardStatus**(상품 카드 사진 위 판매종료·핫딜 배지·유통기한 띠) — 카드 종류와 무관하게 이것만 쓴다. 같은 상품이
+  화면마다 다르게 보이면 버그로 읽힌다. 유통기한 띠가 있으면 핫딜 배지는 숨긴다. 모서리 라벨만 필요하면 `CardCornerLabel`.
 
 | 개념 | web | 앱 |
 | --- | --- | --- |
@@ -139,13 +152,16 @@ UI 크롬에 쓰는 hex 는 거의 항상 다크모드 버그다(`useColors()`·
 | 확인 | `shared/ui/common/AlertDialog` | `shared/components/ConfirmSheet` |
 | 바텀시트 | vaul `Drawer` + `rounded-t-sheet` | `shared/components/BottomSheet` |
 | 핫딜 배지 | `shared/ui/HotdealBadge` | `shared/components/product/HotdealBadge` |
+| 배지·태그 | `shared/ui/common/Badge` | `shared/components/ui/Badge` |
+| 고르는 칩 | `shared/ui/common/Chip` | `shared/components/ui/Chip` |
+| 카드 사진 위 상태 | `entities/product-list/ui/ProductCardStatus` | `shared/components/product/ProductCardStatus` |
 | 스켈레톤 | 화면별 `animate-pulse` | `shared/components/Skeletons` |
 | 섹션 오류 | `ApiErrorBoundary` | `shared/components/SectionErrorRow` |
 
 아직 공용 부품이 없어 화면마다 손으로 만든 것(2026-10 조사, 다음에 묶을 후보 — 많이 반복되는 순):
-배지·칩(web 약 40·앱 19곳, 판매종료 배지·상태 태그·선택 칩), 카드 틀(web 37·앱 19), 섹션 제목(앱엔 공용 없음),
-스위치·체크박스·탭, web 스켈레톤·빈 화면, 바텀시트 겉껍데기(web 에 같은 오버레이 8벌), 토스트 API(web·앱이 다름).
-묶을 때도 값은 이 토큰만 쓴다.
+카드 틀(web 37·앱 19), 섹션 제목(앱엔 공용 없음), 스위치·체크박스·탭, 짙은 알약 탭(`bg-gray-900`/`bg-gray-100`, web 3·앱 2),
+링크 칩(web 3), web 스켈레톤·빈 화면, 바텀시트 겉껍데기(web 에 같은 오버레이 8벌), 토스트 API(web·앱이 다름).
+묶을 때도 값은 이 토큰만 쓰고, 모양은 recipes 에 둔다.
 
 Storybook(web 공용 컴포넌트): `pnpm --filter web storybook`.
 
@@ -153,4 +169,6 @@ Storybook(web 공용 컴포넌트): `pnpm --filter web storybook`.
 
 - `pnpm --filter @jirum/design-system test` — theme.css 가 tokens.js 그대로인지, 라이트·다크 키가 같은지,
   위 「색」 표의 글자·바탕 조합이 두 테마 모두 AA(4.5:1) 이상인지, 린트 정규식이 잡을 것만 잡는지.
+  레시피(recipes.js)의 글자·바탕도 두 테마 AA·린트 규칙 준수·토큰에 있는 색인지 같이 본다.
 - 앱: `apps/mobile/__tests__/dark-mode-palette.test.ts` — tailwind 설정이 토큰을 변수로 까는지, AppText 의 색 판정.
+  `cn-design-tokens.test.ts` — cn() 이 사용자 정의 값을 지우지 않는지. `design-system-component-parity.test.ts` — web·앱 컴포넌트가 같은 레시피를 읽는지.

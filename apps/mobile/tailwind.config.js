@@ -42,7 +42,12 @@ const themed = Object.fromEntries(
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   // NOTE: Update this to include the paths to all of your component files.
-  content: ['./App.tsx', './src/**/*.{js,jsx,ts,tsx}'],
+  // recipes.js = 디자인 시스템의 컴포넌트 모양(Badge·Chip 등) — 클래스 문자열이 앱 소스가 아니라 거기 있다.
+  content: [
+    './App.tsx',
+    './src/**/*.{js,jsx,ts,tsx}',
+    '../../packages/design-system/recipes.js',
+  ],
   presets: [require('nativewind/preset')],
   theme: {
     extend: {

@@ -132,3 +132,54 @@ test('cn() 설정: tailwind-merge 가 사용자 정의 값을 색으로 오인�
   assert.equal(tw('text-sm text-13'), 'text-13');
   assert.equal(tw('shadow-card shadow-lg'), 'shadow-lg');
 });
+
+// ── recipes.js(컴포넌트 모양) ────────────────────────────────────────────────
+const recipes = require('./recipes.js');
+
+/** 'bg-gray-100' → 그 테마의 hex. 투명도(/80)는 사진 위라 대비를 잴 수 없어 건너뛴다(null). */
+const colorOf = (theme, cls, prefix) => {
+  const m = new RegExp(`^${prefix}-([a-z]+(?:-(?:[0-9]+|white))?)$`).exec(cls);
+  if (!m) return undefined;
+  const [name, step] = m[1].split('-');
+  const hex =
+    name === 'fixed' ? (step === 'white' ? fixed.white : fixed[step]) : step === undefined ? (theme[name] ?? brand[name]) : theme[name]?.[step];
+  // 색처럼 생겼는데(gray-100) 토큰에 없으면 오타 — 건너뛰지 말고 실패시킨다. text-xs·text-sm 같은 크기는 색이 아니다.
+  if (!hex && step !== undefined) throw new Error(`레시피의 ${cls} 는 토큰에 없는 색`);
+  return hex;
+};
+const pairOf = (theme, {box, text}) => {
+  const classes = `${box} ${text}`.split(/\s+/);
+  if (classes.some((c) => /^bg-.*\/[0-9]+$/.test(c))) return null;
+  const bg = classes.map((c) => colorOf(theme, c, 'bg')).find(Boolean) ?? theme.white;
+  const fg = classes.map((c) => colorOf(theme, c, 'text')).find(Boolean);
+  return fg ? [fg, bg] : null;
+};
+const recipePairs = () => [
+  ...Object.entries(recipes.badge.variant).flatMap(([variant, tones]) =>
+    Object.entries(tones).map(([tone, r]) => [`badge ${variant}/${tone}`, r]),
+  ),
+  ['chip selected', recipes.chip.selected],
+  ['chip idle', recipes.chip.idle],
+  ...Object.entries(recipes.cardLabel.tone).map(([tone, r]) => [`cardLabel ${tone}`, r]),
+  ['cardLabel strip', recipes.cardLabel.strip],
+];
+
+for (const [name, theme] of [
+  ['라이트', light],
+  ['다크', dark],
+]) {
+  test(`${name}: 컴포넌트 레시피의 글자·바탕이 AA(4.5:1) 이상`, () => {
+    for (const [label, r] of recipePairs()) {
+      const pair = pairOf(theme, r);
+      if (!pair) continue;
+      const ratio = contrast(...pair);
+      assert.ok(ratio >= 4.5, `${label}: ${ratio.toFixed(2)}:1`);
+    }
+  });
+}
+
+test('레시피도 린트 규칙을 지킨다(hex·기본 팔레트·임의 크기 없음)', () => {
+  const rx = patterns.map((p) => new RegExp(p));
+  const all = JSON.stringify(recipes).match(/"[^"{}:,]+"/g).map((s) => s.slice(1, -1));
+  for (const cls of all) assert.ok(!rx.some((r) => r.test(cls)), `레시피에 우회 클래스: ${cls}`);
+});
