@@ -1,9 +1,12 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useMemo, useState } from 'react';
 
 import ChartCard from '@/app/(admin)/stats/components/ChartCard';
+import Chart from '@/components/Chart';
+import SegmentedControl from '@/components/SegmentedControl';
+import StatTiles from '@/components/StatTiles';
+import StatusDot, { type StatusLevel } from '@/components/StatusDot';
 import {
   useAffiliateSalesTrend,
   useProfitLinkErrorStats,
@@ -13,9 +16,9 @@ import {
   useProfitLinkQueueHealth,
   useRevenueTrend,
 } from '@/hooks/graphql/profitLink';
+import { formatAgo, monthDay, shortWon, won } from '@/lib/format';
+import { sourceColor, sourceName } from '@/lib/labels';
 import { kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
-
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 // 수익 90%가 고가전자 (노트북/GPU/TV/가전) — 작업 큐 기본 필터
 const HIGH_VALUE_CATEGORY_IDS = [1, 6, 9];
@@ -23,185 +26,163 @@ const HIGH_VALUE_CATEGORY_IDS = [1, 6, 9];
 // 오늘(KST) 포함 최근 days 일 — exclusive 종료일 처리는 공용 헬퍼가 한다
 const dateRangeOf = (days: number) => toStatsDateRange(kstDaysAgo(days), toKstDateString());
 
-const formatAgo = (iso?: string) => {
-  if (!iso) return '-';
-  const diffMs = Date.now() - new Date(iso).getTime();
-  const minutes = Math.floor(diffMs / 60000);
-  if (minutes < 60) return `${minutes}분 전`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}시간 전`;
-  return `${Math.floor(hours / 24)}일 전`;
+/** 날짜·이름 행 → 이름별 계열 (빈 날은 0). 합이 큰 이름부터 */
+const toSeries = <T,>(
+  rows: T[],
+  dateOf: (r: T) => string,
+  keyOf: (r: T) => string,
+  valueOf: (r: T) => number,
+) => {
+  const dates = [...new Set(rows.map(dateOf))].sort();
+  const totals = new Map<string, number>();
+  const byKey = new Map<string, number>();
+  rows.forEach((r) => {
+    totals.set(keyOf(r), (totals.get(keyOf(r)) ?? 0) + valueOf(r));
+    byKey.set(`${keyOf(r)}|${dateOf(r)}`, valueOf(r));
+  });
+  const keys = [...totals.keys()].sort((a, b) => (totals.get(b) ?? 0) - (totals.get(a) ?? 0));
+  return {
+    categories: dates.map(monthDay),
+    keys,
+    totals: keys.map((k) => ({ key: k, value: totals.get(k) ?? 0 })),
+    series: keys.map((k) => ({
+      name: sourceName(k),
+      data: dates.map((d) => byKey.get(`${k}|${d}`) ?? 0),
+    })),
+  };
 };
 
-const formatKrw = (value?: number | null) =>
-  value == null ? '-' : `${Math.round(value).toLocaleString()}원`;
-
-const StatusDot = ({ level }: { level: 'ok' | 'warn' | 'danger' | 'muted' }) => (
-  <span
-    className={`inline-block h-2.5 w-2.5 rounded-full ${
-      level === 'ok'
-        ? 'bg-success'
-        : level === 'warn'
-          ? 'bg-warning'
-          : level === 'muted'
-            ? 'bg-bodydark2'
-            : 'bg-danger'
-    }`}
-  />
+const Mini = ({ label, children }: { label: string; children: React.ReactNode }) => (
+  <div>
+    <p className="text-[11px] text-bodydark2">{label}</p>
+    <p className="flex items-center gap-1.5 text-sm font-semibold text-black dark:text-white">
+      {children}
+    </p>
+  </div>
 );
 
-const thClass = 'px-3 py-2 text-left text-xs font-semibold uppercase text-bodydark2';
-const tdClass = 'px-3 py-2 text-sm text-black dark:text-white';
-
-// ─── 1. provider 생존 신호 ───
+// ─── 1. 출처별 상태 ───
 
 const ProviderHealthSection = () => {
   const { data, loading } = useProfitLinkProviderHealth();
   const rows = data?.profitLinkProviderHealth ?? [];
 
-  const issueLevel = (issued24h: number, issued7d: number) =>
+  const issueLevel = (issued24h: number, issued7d: number): StatusLevel =>
     issued24h > 0 ? 'ok' : issued7d > 0 ? 'warn' : 'danger';
 
   // 판매 판정은 서버(salesHealth)가 배치 알람과 같은 기준으로 내린다 — 여기서 다시
   // 판정하지 않는다. 예전엔 `sales7d > 0` 이라는 자체 기준이라, 원래 드문 쿠팡(90일 중
   // 판매일 5일)이 상시 노란불이었고 사람이 매번 "쿠팡은 원래 저래" 하고 넘겨야 했다.
-  const saleDotLevel = { ok: 'ok', silent: 'danger', sparse: 'muted' } as const;
-
-  // 발급당 커미션 — 어디에 발급/노출을 더 쓸지의 지표. 판매 수신이 뭉텅이로 들어와서
-  // 7d 는 출렁이므로 30d 로 본다.
-  const revenuePerIssue = (commission30d?: number | null, issued30d?: number) =>
-    commission30d != null && issued30d ? commission30d / issued30d : null;
+  const saleDotLevel: Record<string, StatusLevel> = { ok: 'ok', silent: 'danger', sparse: 'muted' };
 
   return (
-    <ChartCard title="Provider 생존 신호 — 발급·판매 비대칭이 사고 신호" loading={loading}>
-      <div className="overflow-x-auto">
-        <table className="table-cards w-full md:whitespace-nowrap">
-          <thead>
-            <tr className="border-b border-stroke dark:border-strokedark">
-              <th className={thClass}>Provider</th>
-              <th className={thClass}>발급 24h</th>
-              <th className={thClass}>발급 7d</th>
-              <th className={thClass}>마지막 발급딜</th>
-              <th className={thClass}>판매 24h</th>
-              <th className={thClass}>판매 7d</th>
-              <th className={thClass}>판매 30d</th>
-              <th className={thClass}>마지막 판매 수신</th>
-              <th className={thClass}>30d 커미션(GROSS)</th>
-              <th className={thClass}>원/발급 (30d)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.provider} className="border-b border-stroke dark:border-strokedark">
-                <td className={`${tdClass} font-medium`}>{row.provider}</td>
-                <td data-label="발급 24h" className={tdClass}>
-                  <span className="flex items-center gap-2">
-                    <StatusDot level={issueLevel(row.issued24h, row.issued7d)} />
-                    {row.issued24h.toLocaleString()}
+    <ChartCard title="출처별 상태 — 발급·판매가 엇갈리면 사고" loading={loading}>
+      <ul className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {rows.map((row) => {
+          // 발급 1건이 30일간 번 커미션 — 발급·노출을 어디에 더 쓸지의 지표
+          const perIssue =
+            row.commission30d != null && row.issued30d ? row.commission30d / row.issued30d : null;
+          return (
+            <li
+              key={row.provider}
+              className="rounded-lg border border-stroke p-3 dark:border-strokedark"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="flex items-center gap-2 font-semibold text-black dark:text-white">
+                  <span
+                    className="h-2.5 w-2.5 rounded-sm"
+                    style={{ background: sourceColor(row.provider) }}
+                  />
+                  {sourceName(row.provider)}
+                </span>
+                {row.salesHealth === 'sparse' && (
+                  <span className="rounded bg-gray-2 px-1.5 py-0.5 text-[11px] text-bodydark2 dark:bg-meta-4">
+                    판매 드묾 · 90일 중 {row.activeDays90d}일
                   </span>
-                </td>
-                <td data-label="발급 7d" className={tdClass}>
-                  {row.issued7d.toLocaleString()}
-                </td>
-                <td data-label="마지막 발급딜" className={tdClass}>
-                  {formatAgo(row.lastIssuedProductAt)}
-                </td>
-                <td data-label="판매 24h" className={tdClass}>
-                  <span className="flex items-center gap-2">
-                    <StatusDot
-                      level={saleDotLevel[row.salesHealth as keyof typeof saleDotLevel] ?? 'muted'}
-                    />
-                    {row.sales24h.toLocaleString()}
-                  </span>
-                </td>
-                <td data-label="판매 7d" className={tdClass}>
-                  {row.sales7d.toLocaleString()}
-                </td>
-                <td data-label="판매 30d" className={tdClass}>
-                  {row.sales30d.toLocaleString()}
-                </td>
-                <td data-label="마지막 판매 수신" className={tdClass}>
-                  {formatAgo(row.lastSaleAt)}
-                  {row.salesHealth === 'sparse' && (
-                    <span className="ml-1 text-xs text-bodydark2">
-                      (희소 {row.activeDays90d}일/90d)
-                    </span>
-                  )}
-                </td>
-                <td data-label="30d 커미션(GROSS)" className={tdClass}>
-                  {formatKrw(row.commission30d)}
-                </td>
-                <td data-label="원/발급 (30d)" className={tdClass}>
-                  {(() => {
-                    const v = revenuePerIssue(row.commission30d, row.issued30d);
-                    return v == null ? '-' : `${v.toFixed(1)}원`;
-                  })()}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <p className="mt-3 text-xs text-bodydark2">
-        판매 시각은 postback/폴링 <b>수신</b> 기준. 점 색은 서버가 배치 알람과 같은 기준으로
-        판정한다 — <b>빨강</b>=콜백 {'>'}14일 침묵(사고, provider 콘솔 확인), <b>회색</b>=원래
-        드물어 판정 불가(감시 제외). 2026-09-13 실측 정상 최대 공백: linkprice 2일 · adpick/toss/
-        naver 6일 · 알리 7일 · 쿠팡 17일(희소). 「원/발급」은 발급 1건이 30일간 번 커미션 —
-        발급·노출을 어디에 더 쓸지의 지표다.
-      </p>
+                )}
+              </div>
+              <div className="mt-2 grid grid-cols-3 gap-x-2 gap-y-2">
+                <Mini label="발급 24시간">
+                  <StatusDot level={issueLevel(row.issued24h, row.issued7d)} />
+                  {row.issued24h.toLocaleString()}
+                </Mini>
+                <Mini label="판매 24시간">
+                  <StatusDot level={saleDotLevel[row.salesHealth] ?? 'muted'} />
+                  {row.sales24h.toLocaleString()}
+                </Mini>
+                <Mini label="판매 30일">{row.sales30d.toLocaleString()}</Mini>
+                <Mini label="발급 7일">{row.issued7d.toLocaleString()}</Mini>
+                <Mini label="커미션 30일">{shortWon(row.commission30d)}</Mini>
+                <Mini label="발급 1건당">{perIssue == null ? '-' : won(perIssue)}</Mini>
+              </div>
+              <p className="mt-2 text-[11px] text-bodydark2">
+                마지막 발급 {formatAgo(row.lastIssuedProductAt)} · 마지막 판매 수신{' '}
+                {formatAgo(row.lastSaleAt)}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+      <details className="mt-3 text-xs text-bodydark2">
+        <summary className="cursor-pointer">점 색은 어떻게 정하나</summary>
+        <p className="mt-1 leading-relaxed">
+          판매는 콜백·폴링을 <b>받은</b> 시각 기준이고, 서버가 배치 알람과 같은 기준으로 판정한다.
+          <b> 빨강</b>=14일 넘게 판매 소식 없음(사고, 제휴사 콘솔 확인), <b>회색</b>=원래 드물어
+          판정 안 함. 2026-09-13 실측 정상 최대 공백: 링크프라이스 2일 · 애드픽/토스/네이버 6일 ·
+          알리 7일 · 쿠팡 17일. 커미션은 수수료 총액 추정치(세전).
+        </p>
+      </details>
     </ChartCard>
   );
 };
 
-// ─── 2. retry 큐 건강도 ───
+// ─── 2. 재시도 대기열 ───
 
 const QueueHealthSection = () => {
   const { data, loading } = useProfitLinkQueueHealth();
   const queue = data?.profitLinkQueueHealth;
-
-  const cards = [
-    { label: '지금 재시도 가능', value: queue?.eligibleNow, hint: 'host 제외 미반영 근사' },
-    { label: 'backoff 대기', value: queue?.waitingBackoff },
-    { label: 'parked (attempts 소진)', value: queue?.parked },
-    { label: "terminal ('disabled')", value: queue?.terminalDisabled },
-  ];
+  const n = (v?: number | null) => v?.toLocaleString() ?? '-';
 
   return (
-    <ChartCard title="Retry 큐 건강도 (최근 90일 미발급)" loading={loading}>
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
-        {cards.map((card) => (
-          <div
-            key={card.label}
-            className="rounded-lg border border-stroke p-3 dark:border-strokedark sm:p-4"
-          >
-            <p className="text-xs text-bodydark2">{card.label}</p>
-            <p className="mt-1 text-2xl font-bold text-black dark:text-white">
-              {card.value?.toLocaleString() ?? '-'}
-            </p>
-            {card.hint && <p className="text-xs text-bodydark2">{card.hint}</p>}
-          </div>
-        ))}
-      </div>
-      <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-black dark:text-white">
-        <span className="text-xs text-bodydark2">attempts 분포:</span>
-        {queue?.attemptsDistribution.map((entry) => (
-          <span key={entry.attempts} className="rounded bg-gray-2 px-2 py-1 text-xs dark:bg-meta-4">
-            {entry.attempts}회 → {entry.count.toLocaleString()}
-          </span>
-        ))}
-        <span className="text-xs text-bodydark2">
-          최고령 대기 딜: {formatAgo(queue?.oldestEligibleCreatedAt)}
-        </span>
-      </div>
+    <ChartCard title="재시도 대기열 — 최근 90일 미발급" loading={loading}>
+      <StatTiles
+        items={[
+          { label: '지금 재시도 가능', value: n(queue?.eligibleNow) },
+          { label: '대기 중', value: n(queue?.waitingBackoff), hint: '재시도 간격 기다리는 중' },
+          { label: '재시도 포기', value: n(queue?.parked), hint: '시도 횟수 소진' },
+          { label: '발급 안 되는 몰', value: n(queue?.terminalDisabled) },
+        ]}
+      />
+      <p className="mt-3 text-xs text-bodydark2">
+        가장 오래 기다린 딜: {formatAgo(queue?.oldestEligibleCreatedAt)}
+      </p>
+      {queue && queue.attemptsDistribution.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {queue.attemptsDistribution.map((entry) => (
+            <span
+              key={entry.attempts}
+              className="rounded bg-gray-2 px-2 py-1 text-xs text-black dark:bg-meta-4 dark:text-white"
+            >
+              {entry.attempts}번 시도 {entry.count.toLocaleString()}건
+            </span>
+          ))}
+        </div>
+      )}
     </ChartCard>
   );
 };
 
-// ─── 3. 발급 퍼널 + 에러 사유 ───
+// ─── 3. 발급 현황 + 미발급 사유 ───
+
+const DAY_OPTIONS = [
+  { value: '7', label: '7일' },
+  { value: '14', label: '14일' },
+  { value: '30', label: '30일' },
+] as const;
 
 const FunnelSection = () => {
-  const [days, setDays] = useState(14);
-  const range = useMemo(() => dateRangeOf(days), [days]);
+  const [days, setDays] = useState<'7' | '14' | '30'>('14');
+  const range = useMemo(() => dateRangeOf(Number(days)), [days]);
   const { data: funnelData, loading: funnelLoading } = useProfitLinkFunnelDaily(range);
   const { data: errorData, loading: errorLoading } = useProfitLinkErrorStats({
     ...range,
@@ -211,212 +192,144 @@ const FunnelSection = () => {
   const funnel = useMemo(() => funnelData?.profitLinkFunnelDaily ?? [], [funnelData]);
   const errors = errorData?.profitLinkErrorStats ?? [];
 
-  const totals = useMemo(() => {
-    const sum = (pick: (d: (typeof funnel)[number]) => number) =>
-      funnel.reduce((acc, d) => acc + pick(d), 0);
-    const total = sum((d) => d.total);
-    const issued = sum((d) => d.issued);
-    const pending = sum((d) => d.pending);
-    const parked = sum((d) => d.parked);
-    const terminal = sum((d) => d.terminal);
-    const pct = (n: number) => (total > 0 ? `${((n / total) * 100).toFixed(1)}%` : '-');
-    return { total, issued, pending, parked, terminal, notIssued: total - issued, pct };
-  }, [funnel]);
-
-  const summaryCards = [
-    { label: `전체 (${days}일)`, value: totals.total, pctText: '', accent: '' },
-    {
-      label: '발급 완료',
-      value: totals.issued,
-      pctText: totals.pct(totals.issued),
-      accent: 'text-success',
-    },
-    {
-      label: '미발급',
-      value: totals.notIssued,
-      pctText: totals.pct(totals.notIssued),
-      accent: 'text-danger',
-    },
-    {
-      label: '└ 재시도 중 (pending)',
-      value: totals.pending,
-      pctText: totals.pct(totals.pending),
-      accent: '',
-    },
-    {
-      label: '└ 포기 (parked)',
-      value: totals.parked,
-      pctText: totals.pct(totals.parked),
-      accent: '',
-    },
-    {
-      label: '└ 발급불가 몰 (terminal)',
-      value: totals.terminal,
-      pctText: totals.pct(totals.terminal),
-      accent: '',
-    },
-  ];
+  const sum = (pick: (d: (typeof funnel)[number]) => number) =>
+    funnel.reduce((acc, d) => acc + pick(d), 0);
+  const total = sum((d) => d.total);
+  const issued = sum((d) => d.issued);
+  const pct = (v: number) => (total > 0 ? `${((v / total) * 100).toFixed(1)}%` : undefined);
+  const tile = (label: string, v: number, tone?: 'success' | 'danger') => ({
+    label,
+    value: v.toLocaleString(),
+    hint: pct(v),
+    tone,
+  });
 
   return (
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
       <div className="min-w-0 xl:col-span-2">
-        <ChartCard title="일별 발급 퍼널" loading={funnelLoading}>
-          <div className="mb-3 flex flex-wrap gap-2">
-            {[7, 14, 30].map((option) => (
-              <button
-                key={option}
-                onClick={() => setDays(option)}
-                className={`rounded px-3 py-2 text-xs md:py-1 ${
-                  days === option
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-2 text-bodydark2 dark:bg-meta-4'
-                }`}
-              >
-                {option}일
-              </button>
-            ))}
-          </div>
-          <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
-            {summaryCards.map((card) => (
-              <div
-                key={card.label}
-                className="rounded-lg border border-stroke p-3 dark:border-strokedark"
-              >
-                <p className="text-xs text-bodydark2">{card.label}</p>
-                <p className={`mt-1 text-lg font-bold text-black dark:text-white ${card.accent}`}>
-                  {card.value.toLocaleString()}
-                </p>
-                {card.pctText && <p className="text-xs text-bodydark2">{card.pctText}</p>}
-              </div>
-            ))}
-          </div>
-          {funnel.length > 0 && (
-            <Chart
-              type="bar"
-              height={350}
-              options={{
-                chart: { stacked: true, toolbar: { show: false } },
-                xaxis: { categories: funnel.map((d) => d.date.slice(5)) },
-                legend: { position: 'top' },
-                colors: ['#10B981', '#3C50E0', '#F59E0B', '#94A3B8'],
-                dataLabels: { enabled: false },
-              }}
-              series={[
-                { name: '발급', data: funnel.map((d) => d.issued) },
-                { name: 'pending', data: funnel.map((d) => d.pending) },
-                { name: 'parked', data: funnel.map((d) => d.parked) },
-                { name: 'terminal', data: funnel.map((d) => d.terminal) },
+        <ChartCard title="일별 발급 현황" loading={funnelLoading}>
+          <SegmentedControl options={DAY_OPTIONS} value={days} onChange={setDays} />
+          <div className="mt-3">
+            <StatTiles
+              cols={3}
+              items={[
+                { label: `전체 ${days}일`, value: total.toLocaleString() },
+                tile('발급 완료', issued, 'success'),
+                tile('미발급', total - issued, 'danger'),
+                tile(
+                  '재시도 중',
+                  sum((d) => d.pending),
+                ),
+                tile(
+                  '재시도 포기',
+                  sum((d) => d.parked),
+                ),
+                tile(
+                  '발급 안 되는 몰',
+                  sum((d) => d.terminal),
+                ),
               ]}
             />
-          )}
+          </div>
+          <div className="mt-3">
+            <Chart
+              type="bar"
+              stacked
+              categories={funnel.map((d) => monthDay(d.date))}
+              colors={['#10B981', '#3C50E0', '#F59E0B', '#94A3B8']}
+              series={[
+                { name: '발급', data: funnel.map((d) => d.issued) },
+                { name: '재시도 중', data: funnel.map((d) => d.pending) },
+                { name: '포기', data: funnel.map((d) => d.parked) },
+                { name: '발급 안 되는 몰', data: funnel.map((d) => d.terminal) },
+              ]}
+            />
+          </div>
           <p className="mt-2 text-xs text-bodydark2">
-            오늘 pending 이 큰 건 정상 (재시도 진행 중). 어제 이전의 parked 급증이 이상 신호.
+            오늘 「재시도 중」이 큰 건 정상. 어제 이전의 「포기」 급증이 이상 신호.
           </p>
         </ChartCard>
       </div>
-      <ChartCard title="미발급 lastError 사유" loading={errorLoading}>
-        <table className="table-cards w-full">
-          <thead>
-            <tr className="border-b border-stroke dark:border-strokedark">
-              <th className={thClass}>사유</th>
-              <th className={`${thClass} text-right`}>건수</th>
-            </tr>
-          </thead>
-          <tbody>
+      <ChartCard title="미발급 사유" loading={errorLoading}>
+        {errors.length === 0 ? (
+          <p className="text-sm text-bodydark2">없음</p>
+        ) : (
+          <ul className="divide-y divide-stroke dark:divide-strokedark">
             {errors.map((row) => (
-              <tr key={row.error} className="border-b border-stroke dark:border-strokedark">
-                <td className={`${tdClass} break-all font-mono text-xs`}>{row.error}</td>
-                <td data-label="건수" className={`${tdClass} text-right`}>
+              <li key={row.error} className="flex items-start justify-between gap-3 py-2">
+                <span className="break-all text-xs text-black dark:text-white">{row.error}</span>
+                <span className="shrink-0 text-sm font-semibold text-black dark:text-white">
                   {row.count.toLocaleString()}
-                </td>
-              </tr>
+                </span>
+              </li>
             ))}
-          </tbody>
-        </table>
+          </ul>
+        )}
       </ChartCard>
     </div>
   );
 };
 
-// ─── 4. 노출되는데 링크 없는 딜 (작업 큐) ───
+// ─── 4. 수익링크 없이 노출 중인 딜 (작업 큐) ───
+
+const SCOPE_OPTIONS = [
+  { value: 'high', label: '고가 전자' },
+  { value: 'all', label: '전체' },
+] as const;
 
 const MissedProductsSection = () => {
-  const [highValueOnly, setHighValueOnly] = useState(true);
+  const [scope, setScope] = useState<'high' | 'all'>('high');
+  const [shown, setShown] = useState(10);
   const { data, loading } = useProfitLinkMissedProducts({
     limit: 50,
-    categoryIds: highValueOnly ? HIGH_VALUE_CATEGORY_IDS : undefined,
+    categoryIds: scope === 'high' ? HIGH_VALUE_CATEGORY_IDS : undefined,
   });
   const rows = data?.profitLinkMissedProducts ?? [];
 
   return (
-    <ChartCard title="노출 가능한데 수익링크 없는 딜 (최근 30일·미종료)" loading={loading}>
-      <div className="mb-3 flex flex-wrap gap-2">
+    <ChartCard title="수익링크 없이 노출 중인 딜 — 최근 30일" loading={loading}>
+      <SegmentedControl
+        options={SCOPE_OPTIONS}
+        value={scope}
+        onChange={(v) => {
+          setScope(v);
+          setShown(10);
+        }}
+      />
+      <p className="mt-1.5 text-[11px] text-bodydark2">
+        고가 전자 = 노트북·GPU·TV·가전 (수익의 90%)
+      </p>
+      <ul className="mt-2 divide-y divide-stroke dark:divide-strokedark">
+        {rows.slice(0, shown).map((row) => (
+          <li key={row.id} className="py-2.5">
+            <a
+              href={row.detailUrl ?? `https://jirum-alarm.com/products/${row.id}`}
+              target="_blank"
+              rel="noreferrer"
+              className="line-clamp-2 text-sm font-medium text-primary hover:underline"
+            >
+              {row.title}
+            </a>
+            <p className="mt-1 flex flex-wrap gap-x-2 text-xs text-body">
+              <span>{row.mallName ?? '몰 미상'}</span>
+              <span>{row.parsedPrice != null ? won(row.parsedPrice) : '가격 없음'}</span>
+              <span>점수 {row.rankingScore?.toFixed(1) ?? '-'}</span>
+              <span>{formatAgo(row.createdAt)}</span>
+              <span>{row.attempts}번 시도</span>
+            </p>
+            {row.lastError && <p className="mt-0.5 text-xs text-danger">{row.lastError}</p>}
+          </li>
+        ))}
+      </ul>
+      {rows.length > shown && (
         <button
-          onClick={() => setHighValueOnly(true)}
-          className={`rounded px-3 py-2 text-xs md:py-1 ${
-            highValueOnly ? 'bg-primary text-white' : 'bg-gray-2 text-bodydark2 dark:bg-meta-4'
-          }`}
+          type="button"
+          onClick={() => setShown((v) => v + 20)}
+          className="mt-2 w-full rounded-lg border border-stroke py-2 text-sm font-medium text-body dark:border-strokedark"
         >
-          고가전자 (cat 1·6·9)
+          더 보기 ({rows.length - shown}건)
         </button>
-        <button
-          onClick={() => setHighValueOnly(false)}
-          className={`rounded px-3 py-2 text-xs md:py-1 ${
-            !highValueOnly ? 'bg-primary text-white' : 'bg-gray-2 text-bodydark2 dark:bg-meta-4'
-          }`}
-        >
-          전체
-        </button>
-      </div>
-      <div className="max-h-[500px] overflow-auto">
-        <table className="table-cards w-full">
-          <thead>
-            <tr className="border-b border-stroke dark:border-strokedark">
-              <th className={thClass}>딜</th>
-              <th className={thClass}>몰</th>
-              <th className={`${thClass} text-right`}>가격</th>
-              <th className={`${thClass} text-right`}>랭킹점수</th>
-              <th className={thClass}>생성</th>
-              <th className={`${thClass} text-right`}>attempts</th>
-              <th className={thClass}>lastError</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.id} className="border-b border-stroke dark:border-strokedark">
-                <td className={`${tdClass} max-w-[400px]`}>
-                  <a
-                    href={row.detailUrl ?? `https://jirum-alarm.com/products/${row.id}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="line-clamp-2 text-primary hover:underline md:line-clamp-1"
-                  >
-                    {row.title}
-                  </a>
-                </td>
-                <td data-label="몰" className={tdClass}>
-                  {row.mallName ?? '-'}
-                </td>
-                <td data-label="가격" className={`${tdClass} text-right`}>
-                  {row.parsedPrice != null ? `${row.parsedPrice.toLocaleString()}원` : '-'}
-                </td>
-                <td data-label="랭킹점수" className={`${tdClass} text-right`}>
-                  {row.rankingScore?.toFixed(1) ?? '-'}
-                </td>
-                <td data-label="생성" className={tdClass}>
-                  {formatAgo(row.createdAt)}
-                </td>
-                <td data-label="attempts" className={`${tdClass} text-right`}>
-                  {row.attempts}
-                </td>
-                <td data-label="lastError" className={`${tdClass} font-mono text-xs`}>
-                  {row.lastError ?? '-'}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      )}
     </ChartCard>
   );
 };
@@ -426,102 +339,75 @@ const MissedProductsSection = () => {
 const RevenueTrendSection = () => {
   const range = useMemo(() => dateRangeOf(30), []);
   const { data, loading } = useRevenueTrend(range);
-  const { dates, series, totals } = useMemo(() => {
-    const rows = data?.revenueTrend ?? [];
-    const dateSet = [...new Set(rows.map((row) => row.date))].sort();
-    const totalBySource = new Map<string, number>();
-    rows.forEach((row) =>
-      totalBySource.set(row.source, (totalBySource.get(row.source) ?? 0) + row.revenue),
-    );
-    const sources = [...totalBySource.keys()].sort(
-      (a, b) => (totalBySource.get(b) ?? 0) - (totalBySource.get(a) ?? 0),
-    );
-    const revenueByKey = new Map(rows.map((row) => [`${row.source}|${row.date}`, row.revenue]));
-    return {
-      dates: dateSet,
-      series: sources.map((source) => ({
-        name: source,
-        data: dateSet.map((date) => revenueByKey.get(`${source}|${date}`) ?? 0),
-      })),
-      totals: sources.map((source) => ({ source, revenue: totalBySource.get(source) ?? 0 })),
-    };
-  }, [data]);
-  const grandTotal = totals.reduce((sum, t) => sum + t.revenue, 0);
+  const view = useMemo(
+    () =>
+      toSeries(
+        data?.revenueTrend ?? [],
+        (r) => r.date.slice(0, 10),
+        (r) => r.source,
+        (r) => r.revenue,
+      ),
+    [data],
+  );
+  const grandTotal = view.totals.reduce((acc, t) => acc + t.value, 0);
 
   return (
     <ChartCard title="수익 추이 30일 — 세후, 제휴 + 애드센스" loading={loading}>
-      <div className="mb-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
-        <span className="font-semibold text-black dark:text-white">
-          합계 {formatKrw(grandTotal)}
-        </span>
-        {totals.map((t) => (
-          <span key={t.source} className="text-bodydark2">
-            {t.source} {formatKrw(t.revenue)}
+      <p className="text-2xl font-bold text-black dark:text-white">{won(grandTotal)}</p>
+      <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-body">
+        {view.totals.map((t) => (
+          <span key={t.key} className="flex items-center gap-1">
+            <span className="h-2 w-2 rounded-sm" style={{ background: sourceColor(t.key) }} />
+            {sourceName(t.key)} {shortWon(t.value)}
           </span>
         ))}
-      </div>
-      {dates.length > 0 && (
+      </p>
+      <div className="mt-3">
         <Chart
           type="bar"
-          height={300}
-          options={{
-            chart: { stacked: true, toolbar: { show: false } },
-            xaxis: { categories: dates.map((d) => d.slice(5)) },
-            yaxis: { labels: { formatter: (v: number) => `${Math.round(v / 1000)}k` } },
-            tooltip: { y: { formatter: (v: number) => formatKrw(v) } },
-            legend: { position: 'top' },
-            dataLabels: { enabled: false },
-          }}
-          series={series}
+          stacked
+          categories={view.categories}
+          series={view.series}
+          colors={view.keys.map(sourceColor)}
+          format={(v) => won(v)}
+          options={{ legend: { show: false } }}
         />
-      )}
+      </div>
       <p className="mt-2 text-xs text-bodydark2">
-        결제일 기준·취소 제외. 토스는 원천징수 3.3% 뺀 금액이고 실제 지급은 구매확정월 회차라 날짜가
-        밀린다. 애드센스는 GA4 추정치(최근 1~2일은 덜 찬 값, 매일 다시 받음). 쿠팡·네이버는 하루
-        늦게 들어온다.
+        결제일 기준·취소 제외. 토스는 원천징수 3.3% 뺀 금액이고 실제 지급은 구매확정월이라 날짜가
+        밀린다. 애드센스는 GA4 추정치. 쿠팡·네이버는 하루, 애드센스는 이틀 늦게 들어온다.
       </p>
     </ChartCard>
   );
 };
 
-// ─── 6. 판매 추이 (참고용) ───
+// ─── 6. 판매 건수 추이 (참고용) ───
 
 const SalesTrendSection = () => {
   const range = useMemo(() => dateRangeOf(30), []);
   const { data, loading } = useAffiliateSalesTrend(range);
-  const { dates, series } = useMemo(() => {
-    const rows = data?.affiliateSalesTrend ?? [];
-    const dateSet = [...new Set(rows.map((row) => row.date))].sort();
-    const providers = [...new Set(rows.map((row) => row.provider))].sort();
-    const countByKey = new Map(rows.map((row) => [`${row.provider}|${row.date}`, row.count]));
-    return {
-      dates: dateSet,
-      series: providers.map((provider) => ({
-        name: provider,
-        data: dateSet.map((date) => countByKey.get(`${provider}|${date}`) ?? 0),
-      })),
-    };
-  }, [data]);
+  const view = useMemo(
+    () =>
+      toSeries(
+        data?.affiliateSalesTrend ?? [],
+        (r) => r.date.slice(0, 10),
+        (r) => r.provider,
+        (r) => r.count,
+      ),
+    [data],
+  );
 
   return (
-    <ChartCard title="판매 추이 30일 — 추세 감시용 (절대값 신뢰 금지)" loading={loading}>
-      {dates.length > 0 && (
-        <Chart
-          type="line"
-          height={300}
-          options={{
-            chart: { toolbar: { show: false } },
-            xaxis: { categories: dates.map((d) => d.slice(5)) },
-            legend: { position: 'top' },
-            stroke: { curve: 'smooth', width: 2 },
-            dataLabels: { enabled: false },
-          }}
-          series={series}
-        />
-      )}
+    <ChartCard title="판매 건수 추이 30일 — 추세 감시용" loading={loading}>
+      <Chart
+        type="line"
+        categories={view.categories}
+        series={view.series}
+        colors={view.keys.map(sourceColor)}
+        format={(v) => `${v}건`}
+      />
       <p className="mt-2 text-xs text-bodydark2">
-        commission 은 GROSS 추정 + status 정산 단계 부재라 절대 수익이 아님. 건수 추세가 평소 대비
-        꺾이는지만 본다.
+        커미션이 정산 전 추정치라 금액은 믿지 말고, 건수가 평소보다 꺾이는지만 본다.
       </p>
     </ChartCard>
   );

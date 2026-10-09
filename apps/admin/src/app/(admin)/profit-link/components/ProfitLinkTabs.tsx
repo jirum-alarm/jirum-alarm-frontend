@@ -2,37 +2,22 @@
 
 import { useState } from 'react';
 
+import Tabs from '@/components/Tabs';
+
 import ProfitLinkDashboard from './ProfitLinkDashboard';
 import ProfitLinkOpsPanel from './ProfitLinkOpsPanel';
 
-type ProfitLinkTab = 'dashboard' | 'ops';
-
-const tabs: { key: ProfitLinkTab; label: string }[] = [
-  { key: 'dashboard', label: '대시보드' },
-  { key: 'ops', label: '발급·세션' },
-];
+const TABS = [
+  { value: 'dashboard', label: '대시보드' },
+  { value: 'ops', label: '발급·세션' },
+] as const;
 
 const ProfitLinkTabs = () => {
-  const [activeTab, setActiveTab] = useState<ProfitLinkTab>('dashboard');
+  const [activeTab, setActiveTab] = useState<(typeof TABS)[number]['value']>('dashboard');
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex gap-2 overflow-x-auto whitespace-nowrap border-b border-stroke dark:border-strokedark">
-        {tabs.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`shrink-0 px-4 py-3 text-sm font-medium transition-colors ${
-              activeTab === tab.key
-                ? 'border-b-2 border-primary text-primary'
-                : 'text-bodydark2 hover:text-black dark:hover:text-white'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
+      <Tabs tabs={TABS} value={activeTab} onChange={setActiveTab} />
       {activeTab === 'dashboard' && <ProfitLinkDashboard />}
       {activeTab === 'ops' && <ProfitLinkOpsPanel />}
     </div>

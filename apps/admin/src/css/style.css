@@ -62,7 +62,8 @@
             max-width: none !important;
             border: 0 !important;
             padding: 0.3rem 0 !important;
-            text-align: right;
+            /* 칸에 붙은 text-center 같은 유틸리티가 카드 정렬을 뒤집지 않게 */
+            text-align: right !important;
             white-space: normal !important;
             word-break: break-word;
         }
@@ -76,7 +77,20 @@
         .table-cards tbody > tr > td:not([data-label]):not(.hidden) {
             display: block;
             order: -1;
-            text-align: left;
+            text-align: left !important;
+        }
+        /* 로딩·빈 결과 줄(colSpan 한 칸)은 카드 틀 없이 가운데 글자만 */
+        .table-cards tbody > tr:has(> td[colspan]:only-child) {
+            border: 0;
+            background: transparent;
+        }
+        .table-cards tbody > tr > td[colspan]:only-child {
+            text-align: center !important;
+            justify-content: center;
+        }
+        .dark .table-cards tbody > tr {
+            border-color: theme('colors.strokedark');
+            background: theme('colors.boxdark');
         }
         .table-cards tbody > tr > td[data-label='actions'] {
             order: 1;

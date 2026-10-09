@@ -1,34 +1,17 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
+import Chart from '@/components/Chart';
 import Panel from '@/components/Panel';
+import SegmentedControl from '@/components/SegmentedControl';
 import { useMyAdminAccess } from '@/hooks/graphql/permission';
 import { useRevenueTrend } from '@/hooks/graphql/profitLink';
 import { canAccessPath } from '@/lib/adminSection';
+import { monthDay as md, shortWon, won } from '@/lib/format';
+import { sourceColor, sourceName } from '@/lib/labels';
 import { kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
-
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
-// 출처 코드 → 화면 이름·색 (목록 점·막대가 같은 색)
-const SOURCES: Record<string, { name: string; color: string }> = {
-  toss: { name: '토스', color: '#3182F6' },
-  adpick: { name: '애드픽', color: '#10B981' },
-  ali_express: { name: '알리', color: '#F97316' },
-  naver: { name: '네이버', color: '#22C55E' },
-  link_price: { name: '링크프라이스', color: '#8B5CF6' },
-  coupang: { name: '쿠팡', color: '#EF4444' },
-  adsense: { name: '애드센스', color: '#EAB308' },
-};
-const sourceOf = (code: string) => SOURCES[code] ?? { name: code, color: '#94A3B8' };
-
-const won = (v: number) => `${Math.round(v).toLocaleString()}원`;
-/** 좁은 칸용 — 1만 이상은 '12.3만원' */
-const shortWon = (v: number) =>
-  Math.abs(v) >= 10000 ? `${Number((v / 10000).toFixed(1)).toLocaleString()}만원` : won(v);
-const md = (d: string) => `${Number(d.slice(5, 7))}/${Number(d.slice(8, 10))}`;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 /** [from, to] KST 날짜를 하루씩 — 수익 0인 날도 막대 자리를 남긴다 */
@@ -44,10 +27,10 @@ const daysBetween = (from: string, to: string) => {
 const PARTIAL_COLOR = '#C7CEF7';
 
 const PERIODS = [
-  { key: 'month', label: '이번 달' },
-  { key: 'last30', label: '최근 30일' },
+  { value: 'month', label: '이번 달' },
+  { value: 'last30', label: '최근 30일' },
 ] as const;
-type Period = (typeof PERIODS)[number]['key'];
+type Period = (typeof PERIODS)[number]['value'];
 
 /**
  * 홈 맨 위 '수익'(세후, 제휴 + 애드센스). 모바일 한 화면에 읽히게:
@@ -85,7 +68,12 @@ const RevenueSummary = () => {
     const sources = [...bySource.entries()]
       .filter(([, v]) => v !== 0)
       .sort((a, b) => b[1] - a[1])
-      .map(([code, revenue]) => ({ code, revenue, ...sourceOf(code) }));
+      .map(([code, revenue]) => ({
+        code,
+        revenue,
+        name: sourceName(code),
+        color: sourceColor(code),
+      }));
     const days = daysBetween(periodStart, today);
     return {
       total: sources.reduce((acc, s) => acc + s.revenue, 0),
@@ -142,28 +130,13 @@ const RevenueSummary = () => {
         {todayBySource && todayBySource.length > 0 && (
           <p className="mt-3 border-t border-stroke pt-2 text-xs text-body">
             <span className="font-medium text-black">오늘</span>{' '}
-            {todayBySource
-              .map((r) => `${sourceOf(r.source).name} ${shortWon(r.revenue)}`)
-              .join(' · ')}
+            {todayBySource.map((r) => `${sourceName(r.source)} ${shortWon(r.revenue)}`).join(' · ')}
           </p>
         )}
       </Panel>
 
       <Panel className="p-4 sm:p-6">
-        <div className="grid grid-cols-2 rounded-lg bg-gray-2 p-1 text-sm sm:inline-grid">
-          {PERIODS.map((p) => (
-            <button
-              key={p.key}
-              type="button"
-              onClick={() => setPeriod(p.key)}
-              className={`rounded-md px-4 py-1.5 font-medium ${
-                period === p.key ? 'bg-white text-black shadow-sm' : 'text-body'
-              }`}
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
+        <SegmentedControl options={PERIODS} value={period} onChange={setPeriod} />
 
         <p className="mt-4 text-xs text-body">
           {md(periodStart)} ~ {md(today)} 합계
@@ -210,24 +183,10 @@ const RevenueSummary = () => {
                 <Chart
                   type="bar"
                   height={180}
+                  series={[{ name: '수익', data: view.daily }]}
+                  format={(v) => won(v)}
                   options={{
-                    chart: { toolbar: { show: false }, zoom: { enabled: false } },
-                    plotOptions: { bar: { columnWidth: '60%', borderRadius: 2 } },
-                    xaxis: {
-                      type: 'category',
-                      tickAmount: 6,
-                      tickPlacement: 'on',
-                      labels: { rotate: 0, style: { fontSize: '10px' } },
-                      axisTicks: { show: false },
-                    },
-                    yaxis: {
-                      tickAmount: 3,
-                      labels: {
-                        style: { fontSize: '10px' },
-                        formatter: (v: number) => shortWon(v).replace('원', ''),
-                      },
-                    },
-                    grid: { strokeDashArray: 4, padding: { left: 0, right: 4 } },
+                    xaxis: { type: 'category' },
                     tooltip: {
                       y: {
                         formatter: (v: number, { dataPointIndex }: { dataPointIndex: number }) =>
@@ -236,10 +195,7 @@ const RevenueSummary = () => {
                             : won(v),
                       },
                     },
-                    dataLabels: { enabled: false },
-                    legend: { show: false },
                   }}
-                  series={[{ name: '수익', data: view.daily }]}
                 />
               </div>
             </div>
