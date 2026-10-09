@@ -14,9 +14,12 @@ import ProductCardStatus from '../src/shared/components/product/ProductCardStatu
 import Switch from '../src/shared/components/ui/Switch';
 import TabPill from '../src/shared/components/ui/TabPill';
 import SectionHeader from '../src/shared/components/ui/SectionHeader';
+import Button from '../src/shared/components/ui/Button';
+import {ActivityIndicator} from 'react-native';
 
 const {
   badge,
+  button,
   chip,
   tab,
   toggle,
@@ -163,5 +166,56 @@ describe('SectionHeader', () => {
     expect(tree.root.findAllByType(RNText)[0].props.className).toContain(
       sectionTitle.page,
     );
+  });
+});
+
+describe('Button', () => {
+  it('주 버튼은 레시피의 primary 글자, 비활성이면 disabledText 를 더한다', () => {
+    const on = render(<Button onPress={() => {}}>알림 받기</Button>);
+    expect(on.root.findByType(RNText).props.className).toContain(
+      button.tone.primary.text,
+    );
+    const off = render(
+      <Button disabled onPress={() => {}}>
+        알림 받기
+      </Button>,
+    );
+    expect(off.root.findByType(RNText).props.className).toContain(
+      button.tone.primary.disabledText,
+    );
+  });
+
+  it('작은 주 버튼(md)은 짙은 판(dark), 보조는 secondary', () => {
+    const md = render(
+      <Button size="md" onPress={() => {}}>
+        키워드 등록
+      </Button>,
+    );
+    expect(md.root.findByType(RNText).props.className).toContain(
+      button.tone.dark.text,
+    );
+    const sub = render(
+      <Button color="secondary" onPress={() => {}}>
+        취소
+      </Button>,
+    );
+    expect(sub.root.findByType(RNText).props.className).toContain(
+      button.tone.secondary.text,
+    );
+  });
+
+  it('로딩 중엔 글자 대신 스피너, 누를 수 없다', () => {
+    const tree = render(
+      <Button loading onPress={() => {}}>
+        탈퇴
+      </Button>,
+    );
+    expect(tree.root.findAllByType(ActivityIndicator)).toHaveLength(1);
+    expect(
+      first(tree, 'accessibilityRole', 'button').props.accessibilityState,
+    ).toEqual({
+      disabled: true,
+      busy: true,
+    });
   });
 });

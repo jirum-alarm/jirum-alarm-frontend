@@ -46,6 +46,55 @@ const badge = {
   },
 };
 
+/**
+ * 버튼. lg = 화면 아래 주 버튼(48px·가득), md·sm = 작은 버튼(주 버튼이면 짙은 판 + 라임 글자).
+ * 누르면 면이 한 단계 진해진다(글자색만 바뀌면 잘 안 보였다 — 앱 실측). web 은 여기에 살짝 줄어드는 움직임을 더한다.
+ * 비활성은 disabledBox·disabledText 를 더한다 — 앱은 글자가 자식 Text 라 부모의 disabled: 를 못 받아서
+ * 두 플랫폼 모두 컴포넌트가 disabled 일 때 직접 붙인다.
+ */
+const button = {
+  size: {
+    lg: {box: 'h-12 w-full rounded-lg px-3', text: 'text-base'},
+    md: {box: 'rounded-lg px-5 py-1.5', text: 'text-base'},
+    sm: {box: 'rounded-lg px-3 py-1', text: 'text-base'},
+  },
+  tone: {
+    primary: {
+      box: 'bg-primary-500 active:bg-primary-300',
+      text: 'font-semibold text-fixed-900',
+      disabledBox: 'bg-gray-300',
+      disabledText: 'text-fixed-white',
+    },
+    dark: {
+      box: 'bg-fixed-800 active:bg-fixed-700',
+      text: 'font-semibold text-primary-500',
+      disabledBox: 'bg-gray-300',
+      disabledText: 'text-fixed-white',
+    },
+    secondary: {box: 'bg-gray-100 active:bg-gray-200', text: 'font-semibold text-gray-700'},
+    error: {box: 'bg-error-50 active:bg-error-100', text: 'font-semibold text-error-600'},
+    outline: {
+      box: 'border border-primary-500 bg-transparent',
+      text: 'text-gray-900',
+      disabledBox: 'border-transparent bg-gray-50',
+      disabledText: 'text-gray-600',
+    },
+  },
+};
+
+/**
+ * web·앱 Button 의 (variant, color, size) → button.tone 의 키. 두 컴포넌트가 이 함수 하나로 고른다.
+ * @param {'filled' | 'outlined'} [variant]
+ * @param {'primary' | 'secondary' | 'error'} [color]
+ * @param {'lg' | 'md' | 'sm'} [size]
+ * @returns {'primary' | 'dark' | 'secondary' | 'error' | 'outline'}
+ */
+const buttonTone = (variant = 'filled', color = 'primary', size = 'lg') => {
+  if (variant === 'outlined') return 'outline';
+  if (color !== 'primary') return color;
+  return size === 'lg' ? 'primary' : 'dark';
+};
+
 /** 고르는 칩(필터·탭). 고르면 굵어지지만 너비는 그대로여야 한다 — 각 컴포넌트가 굵은 글자 너비를 미리 잡는다. */
 const chip = {
   size: {
@@ -108,6 +157,9 @@ const sectionTitle = {
 /** 상품 카드 사진 틀 — 사진이 늦거나 투명 PNG 여도 카드 자리가 보이게 옅은 면 + 테두리. */
 const cardThumb = 'overflow-hidden rounded-lg border border-gray-200 bg-gray-50';
 
+/** 딜 목록 한 줄(사진·제목·가격) — 옅은 테두리, 누르는 줄이라 hover 에 옅은 면. web /deals 상세·같은 상품 다른 가격. */
+const dealRow = 'rounded-lg border border-gray-100 p-3 hover:bg-gray-50';
+
 /** 본문 안 정보 상자(가격 판정 요약·공유 미리보기 등) — 옅은 면 + 테두리. 여백은 내용마다 다르다. */
 const infoBox = 'rounded-xl border border-gray-200 bg-gray-50';
 
@@ -154,4 +206,4 @@ const cardLabel = {
   strip: {box: 'h-[22px] rounded-b-lg bg-fixed-700/80 px-2', text: 'text-xs text-fixed-white'},
 };
 
-module.exports = {badge, chip, tab, toggle, sectionTitle, cardThumb, infoBox, sheet, skeleton, toast, emptyText, cardLabel};
+module.exports = {badge, button, buttonTone, chip, tab, toggle, sectionTitle, cardThumb, dealRow, infoBox, sheet, skeleton, toast, emptyText, cardLabel};

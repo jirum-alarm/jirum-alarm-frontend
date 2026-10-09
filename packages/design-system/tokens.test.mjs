@@ -162,6 +162,7 @@ const recipePairs = () => [
   ...Object.entries(recipes.badge.variant).flatMap(([variant, tones]) =>
     Object.entries(tones).map(([tone, r]) => [`badge ${variant}/${tone}`, r]),
   ),
+  ...Object.entries(recipes.button.tone).map(([k, r]) => [`button ${k}`, {box: r.box, text: r.text}]),
   ['chip selected', recipes.chip.selected],
   ['chip idle', recipes.chip.idle],
   ...['neutral', 'brand', 'segment'].flatMap((v) =>
@@ -188,6 +189,19 @@ for (const [name, theme] of [
     }
   });
 }
+
+test('버튼 모양 고르기 — web·앱이 같은 함수로 (variant, color, size) → tone', () => {
+  const {buttonTone, button} = recipes;
+  assert.equal(buttonTone(), 'primary');
+  assert.equal(buttonTone('filled', 'primary', 'md'), 'dark');
+  assert.equal(buttonTone('filled', 'primary', 'sm'), 'dark');
+  assert.equal(buttonTone('filled', 'secondary', 'md'), 'secondary');
+  assert.equal(buttonTone('filled', 'error'), 'error');
+  assert.equal(buttonTone('outlined', 'primary'), 'outline');
+  for (const v of ['filled', 'outlined'])
+    for (const c of ['primary', 'secondary', 'error'])
+      for (const z of ['lg', 'md', 'sm']) assert.ok(button.tone[buttonTone(v, c, z)], `${v}/${c}/${z}`);
+});
 
 test('레시피도 린트 규칙을 지킨다(hex·기본 팔레트·임의 크기 없음)', () => {
   const rx = patterns.map((p) => new RegExp(p));
