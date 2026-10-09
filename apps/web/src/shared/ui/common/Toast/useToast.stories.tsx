@@ -21,6 +21,28 @@ const ToastStory = ({ message, buttonText }: { message: React.ReactNode; buttonT
   return <Button onClick={() => toast(message)}>{buttonText}</Button>;
 };
 
+// 종류마다 모양이 다르다 — 성공(체크·동작 버튼, 4초)·실패(느낌표)·안내(아이콘 없음).
+const ToastTypesDisplay = () => {
+  const { toast } = useToast();
+
+  return (
+    <div className="grid gap-y-4">
+      <Button
+        onClick={() =>
+          toast.success('키워드를 등록했어요.', { action: { label: '보기', onClick: () => {} } })
+        }
+      >
+        성공
+      </Button>
+      <Button onClick={() => toast.error('등록하지 못했어요. 잠시 후 다시 시도해 주세요.')}>
+        실패
+      </Button>
+      <Button onClick={() => toast('로그인하면 알림을 받을 수 있어요.')}>안내</Button>
+      <Toaster />
+    </div>
+  );
+};
+
 const meta = {
   title: 'components/Toast/useToast',
   component: ToastStoryDisplay,
@@ -49,4 +71,8 @@ export const LongMessage: Story = {
       </>
     ),
   },
+};
+
+export const Types: Story = {
+  render: () => <ToastTypesDisplay />,
 };
