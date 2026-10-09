@@ -112,6 +112,11 @@ src/components/         # 공통: Layouts·Sidebar(메뉴는 MENU 설정 배열)
   인증 에러(FORBIDDEN/UNAUTHENTICATED)만 로그인으로 보낸다.
 - searchAfter 커서 무한 스크롤은 `useLoadMoreOnView`.
 - 공통 UI: 알림은 `useToast()`(alert 금지), 확인은 `await useConfirm()(...)`(confirm 금지), 로딩은 `<Spinner>`, 흰 카드 틀은 `<Panel>`.
+- 모바일 우선(운영자가 주로 폰으로 본다, 390px 기준). 대시보드는 새로 짜지 말고 공통 부품부터:
+  차트 `<Chart>`(ApexCharts 기본값 — 툴바·회전 없음, 축 「1.2만」), 순위·비중은 가로 막대 차트 대신 `<RankList>`,
+  기간·보기 전환 `<SegmentedControl>`, 화면 안 탭 `<Tabs>`, 숫자 요약 `<StatTiles>`, 상태 `<StatusDot>`.
+  영문 코드(provider·gender·광고 위치 등)는 `src/lib/labels.ts` 에서 한글 이름·출처 색을, 금액·날짜는 `src/lib/format.ts`.
+  표는 `table-cards` 로 폰에서 카드가 되고, 부가 열은 `hidden md:table-cell` 로 숨기고 첫 칸에 요약 한 줄을 넣는다.
   토스트·확인 provider 는 DefaultLayout 에 한 번 달려 있다(로그인 화면은 레이아웃 밖이라 별도).
 - Apollo 클라이언트는 서버 렌더에도 만들어지지만 서버엔 토큰을 싣지 않는다(httpOnly 토큰이 HTML 에 실리지 않게) —
   서버에서 인증 쿼리가 필요한 useSuspenseQuery 화면은 브라우저가 다시 받는다.
