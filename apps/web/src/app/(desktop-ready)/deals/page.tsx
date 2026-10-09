@@ -93,7 +93,7 @@ export default async function DealsIndexPage() {
       <DealsMobileHeader title="핫딜 최저가 모음" />
 
       <header className="mb-8">
-        <h1 className="text-2xl font-bold text-black">핫딜 최저가 모음</h1>
+        <h1 className="text-2xl font-bold text-gray-900">핫딜 최저가 모음</h1>
         <p className="mt-1 text-sm text-gray-600">
           {leadSentence ?? '인기 상품별로 커뮤니티 핫딜 가격을 모았어요.'}
         </p>
@@ -149,7 +149,7 @@ export default async function DealsIndexPage() {
                   // ponytail: 헤더56+탭~56 기준값. 타이틀이 탭에 가리면 이 값만 키우면 됨.
                   className="pc:scroll-mt-28 mb-10 scroll-mt-32"
                 >
-                  <h3 className="mb-4 text-base font-bold text-black">
+                  <h3 className="mb-4 text-base font-bold text-gray-900">
                     {section.label}
                     <span className="ml-1 text-sm font-medium text-gray-400">
                       {section.items.length}
@@ -203,7 +203,7 @@ function SectionTitle({
   return (
     <div className="mb-4 flex items-end justify-between gap-3">
       <div>
-        <h2 className="text-lg font-bold text-black">{title}</h2>
+        <h2 className="text-lg font-bold text-gray-900">{title}</h2>
         <p className="mt-0.5 text-sm text-gray-500">{description}</p>
       </div>
       {action}
@@ -267,7 +267,7 @@ function DealCard({ item: p }: { item: DealItem }) {
         />
       </div>
       <div className="flex grow flex-col gap-1 p-3">
-        <h3 className="line-clamp-2 text-sm font-semibold text-black">
+        <h3 className="line-clamp-2 text-sm font-semibold text-gray-900">
           {buildModelDisplayName(p.brand, p.modelName)}
         </h3>
         {isActive ? (

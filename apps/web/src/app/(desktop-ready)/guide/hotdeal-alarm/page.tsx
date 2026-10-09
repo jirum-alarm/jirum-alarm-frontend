@@ -75,7 +75,7 @@ export default function HotdealAlarmGuidePage() {
 
       <article className="text-15 space-y-10 leading-relaxed text-gray-800">
         <header>
-          <h1 className="text-2xl font-bold text-black">핫딜 알림 받는 법</h1>
+          <h1 className="text-2xl font-bold text-gray-900">핫딜 알림 받는 법</h1>
           <p className="mt-3">
             지름알림 키워드 알림은 커뮤니티(뽐뿌·에펨코리아·루리웹·퀘이사존·아카라이브 등)에 등록한
             키워드가 들어간 핫딜이 올라오면 바로 푸시로 알려주는 기능이에요. 쿠팡·네이버·알리 같은

@@ -123,7 +123,7 @@ export default async function KeywordHubPage({ params }: { params: Params }) {
       <DealsMobileHeader title={`${hub.name} 핫딜`} />
 
       <header className="mb-6">
-        <h1 className="text-2xl font-bold text-black">{hub.name} 핫딜</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{hub.name} 핫딜</h1>
         <p className="mt-2 text-sm leading-relaxed text-gray-600">{seo.lead}</p>
         <Link
           href={PAGE.MYPAGE_KEYWORD}

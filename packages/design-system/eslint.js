@@ -57,6 +57,11 @@ const banned = [
     pattern: 'rounded(?:-[a-z]{1,2})?-[0-9]+(?![\\w.])',
     message: 'rounded-5 같은 숫자 모서리는 없다(효과 없음) — rounded-lg·rounded-xl·rounded-sheet 같은 이름을 쓴다.',
   },
+  // ↓ 다크에서 안 뒤집히는 글자색 — black 은 토큰이 아니라 #000 그대로다(white=바탕과 달리). 10/10 /deals 제목 실측.
+  {
+    pattern: '(?:^|[\\s:\'"`])text-black(?![\\w-])',
+    message: 'text-black 은 다크에서 안 뒤집혀 검은 바탕에 검은 글자가 된다 — 바탕 위 글자는 text-gray-900, 색 판(라임 버튼 등) 위는 text-fixed-900.',
+  },
   {
     pattern: '(?:bg|text|border|divide|ring|placeholder)-opacity-[0-9]',
     message: 'bg-opacity-* 는 Tailwind v4 에 없다(효과 없음) — bg-black/50 처럼 색 뒤에 /투명도.',

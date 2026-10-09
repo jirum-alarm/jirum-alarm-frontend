@@ -28,7 +28,7 @@ export default function KeywordHubIndexPage() {
   return (
     <main className="max-w-mobile-max pc:max-w-layout-max pc:pt-24 mx-auto w-full px-5 pt-14 pb-24">
       <DealsMobileHeader title="키워드별 핫딜" />
-      <h1 className="mb-2 text-2xl font-bold text-black">키워드별 핫딜 모음</h1>
+      <h1 className="mb-2 text-2xl font-bold text-gray-900">키워드별 핫딜 모음</h1>
       <p className="mb-6 text-sm text-gray-600">{description}</p>
       <ul className="flex flex-wrap gap-2">
         {KEYWORD_HUBS.map((h) => (

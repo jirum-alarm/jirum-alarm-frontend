@@ -108,6 +108,9 @@ test('린트 정규식은 우회한 클래스만 잡는다', () => {
     'flex text-semibold',
     'rounded-t-5',
     'bg-opacity-90',
+    'text-2xl font-bold text-black',
+    'hover:text-black',
+    'text-black/60',
   ])
     assert.ok(flagged(bad), `잡혀야 함: ${bad}`);
   for (const good of [
@@ -115,7 +118,7 @@ test('린트 정규식은 우회한 클래스만 잡는다', () => {
     'text-success-700 bg-warning-50 bg-kakao text-fixed-white',
     'rounded-lg rounded-2xl rounded-t-sheet rounded-full',
     'shadow-card shadow-highlight shadow-primary-500 shadow-lg',
-    'font-semibold text-black bg-black/50',
+    'font-semibold bg-black/50 text-fixed-900 text-gray-900',
   ])
     assert.ok(!flagged(good), `잡히면 안 됨: ${good}`);
 });

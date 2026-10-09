@@ -351,7 +351,7 @@ function CodeCard({
       <m.a
         ref={enterRef}
         href={EVENT_ENTRY_URL}
-        className="bg-primary-500 hover:bg-primary-400 mt-3 flex h-12 items-center justify-center rounded-lg text-sm font-extrabold text-black transition-colors"
+        className="bg-primary-500 hover:bg-primary-400 text-fixed-900 mt-3 flex h-12 items-center justify-center rounded-lg text-sm font-extrabold transition-colors"
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.1 }}
         onClick={onEnter}
