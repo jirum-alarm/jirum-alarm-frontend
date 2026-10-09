@@ -139,5 +139,18 @@ export function useUpdatePushSetting() {
       queryClient.setQueryData(key, context?.previous);
       showToast.error('알림 설정 변경에 실패했어요.');
     },
+    onSuccess: (_data, variables) => {
+      // 광고성 정보 수신 동의·철회는 처리 결과(일자)를 알려야 한다(정보통신망법 §50 ⑦).
+      if (variables.marketing !== undefined) {
+        const now = new Date();
+        showToast.info(
+          `${now.getFullYear()}년 ${
+            now.getMonth() + 1
+          }월 ${now.getDate()}일 광고성 정보 수신 ${
+            variables.marketing ? '동의' : '철회'
+          }가 처리됐어요.`,
+        );
+      }
+    },
   });
 }

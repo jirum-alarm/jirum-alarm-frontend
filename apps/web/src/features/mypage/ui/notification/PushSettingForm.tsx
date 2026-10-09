@@ -12,9 +12,10 @@ const ROWS: { key: PushSettingKey; title: string; description: string }[] = [
       '등록한 키워드가 들어간 딜이 올라오면 알려드려요. 관심사 알림은 각 관심사 화면에서 끌 수 있어요',
   },
   {
-    key: 'hotDealAlert',
-    title: '지금 뜨는 좋은 딜',
-    description: '관심 카테고리에서 반응이 뜨거운 딜을 하루 최대 3번 알려드려요',
+    // 광고성 정보(정보통신망법 §50) — 서버는 이 동의(marketing)한 유저에게만 "(광고)" 를 붙여 낮에만 보낸다.
+    key: 'marketing',
+    title: '지금 뜨는 좋은 딜 (광고성 정보 수신 동의)',
+    description: '관심 카테고리에서 반응이 뜨거운 딜을 낮 시간에 하루 최대 3번 알려드려요',
   },
   {
     key: 'communityAlert',

@@ -3568,7 +3568,7 @@ export type QueryMyPushSettingQuery = {
   pushSetting: {
     __typename?: 'UserPushSetting';
     keywordAlert: boolean;
-    hotDealAlert: boolean;
+    marketing: boolean;
     nightAlerts: boolean;
     communityAlert: boolean;
   };
@@ -3576,7 +3576,7 @@ export type QueryMyPushSettingQuery = {
 
 export type MutationUpdateMyPushSettingMutationVariables = Exact<{
   keywordAlert?: InputMaybe<Scalars['Boolean']['input']>;
-  hotDealAlert?: InputMaybe<Scalars['Boolean']['input']>;
+  marketing?: InputMaybe<Scalars['Boolean']['input']>;
   nightAlerts?: InputMaybe<Scalars['Boolean']['input']>;
   communityAlert?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
@@ -4895,7 +4895,7 @@ export const QueryMyPushSettingDocument = new TypedDocumentString(`
     query QueryMyPushSetting {
   pushSetting {
     keywordAlert
-    hotDealAlert
+    marketing
     nightAlerts
     communityAlert
   }
@@ -4905,10 +4905,10 @@ export const QueryMyPushSettingDocument = new TypedDocumentString(`
   QueryMyPushSettingQueryVariables
 >;
 export const MutationUpdateMyPushSettingDocument = new TypedDocumentString(`
-    mutation MutationUpdateMyPushSetting($keywordAlert: Boolean, $hotDealAlert: Boolean, $nightAlerts: Boolean, $communityAlert: Boolean) {
+    mutation MutationUpdateMyPushSetting($keywordAlert: Boolean, $marketing: Boolean, $nightAlerts: Boolean, $communityAlert: Boolean) {
   updatePushSetting(
     keywordAlert: $keywordAlert
-    hotDealAlert: $hotDealAlert
+    marketing: $marketing
     nightAlerts: $nightAlerts
     communityAlert: $communityAlert
   )

@@ -250,7 +250,7 @@ export const QueryMyPushSetting = graphql(`
   query QueryMyPushSetting {
     pushSetting {
       keywordAlert
-      hotDealAlert
+      marketing
       nightAlerts
       communityAlert
     }
@@ -260,13 +260,13 @@ export const QueryMyPushSetting = graphql(`
 export const MutationUpdateMyPushSetting = graphql(`
   mutation MutationUpdateMyPushSetting(
     $keywordAlert: Boolean
-    $hotDealAlert: Boolean
+    $marketing: Boolean
     $nightAlerts: Boolean
     $communityAlert: Boolean
   ) {
     updatePushSetting(
       keywordAlert: $keywordAlert
-      hotDealAlert: $hotDealAlert
+      marketing: $marketing
       nightAlerts: $nightAlerts
       communityAlert: $communityAlert
     )

@@ -35,7 +35,7 @@ export type MyKeyword = {
 
 export type PushSettingKey =
   | 'keywordAlert'
-  | 'hotDealAlert'
+  | 'marketing'
   | 'nightAlerts'
   | 'communityAlert';
 export type MyPushSetting = Record<PushSettingKey, boolean>;

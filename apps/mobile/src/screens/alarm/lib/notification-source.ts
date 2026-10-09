@@ -5,7 +5,7 @@ import {matchMyKeyword} from '@/features/keyword-prompt/model/myKeywords';
  * 알림의 keyword 칸 모양으로 가른다(2026-10-07 운영 실측, crawling-server 가 이렇게 싣는다):
  * - 키워드: "햇반" · 가격 하락 "햇반 평소보다 54% 싸게 떴어요 📉" → 키워드 설정
  * - 관심사: "🥤 [생수·음료 쟁이기] 펩시 핫딜"(notification-theme.service) → 그 관심사 화면(구독 해제·딜)
- * - 좋은 딜: "🔥 지금 뜨는 좋은 딜"(good-deal-push-batch, 설정 hotDealAlert) → 알림 설정
+ * - 좋은 딜: "(광고) 🔥 지금 뜨는 좋은 딜"(good-deal-push-batch, 설정 marketing) → 알림 설정
  * web `features/alarm/lib/notificationSource.ts` 와 같은 규칙.
  *
  * 키(문자열)로 돌려준다 — 행 memo 가 객체 props 로 깨지지 않게. 해석은 `parseSourceKey`.

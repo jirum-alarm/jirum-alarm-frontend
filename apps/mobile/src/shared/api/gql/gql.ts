@@ -60,8 +60,8 @@ type Documents = {
   '\n  mutation MutationUnsubscribeNotificationTheme($themeId: Int!) {\n    unsubscribeNotificationTheme(themeId: $themeId)\n  }\n': typeof types.MutationUnsubscribeNotificationThemeDocument;
   '\n  mutation MutationUpdateKeywordPriceRange(\n    $id: Int!\n    $minPrice: Int\n    $maxPrice: Int\n  ) {\n    updateNotificationKeywordPriceRange(\n      id: $id\n      minPrice: $minPrice\n      maxPrice: $maxPrice\n    )\n  }\n': typeof types.MutationUpdateKeywordPriceRangeDocument;
   '\n  mutation MutationUpdateKeywordExcludeKeywords(\n    $id: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    updateNotificationKeywordExcludeKeywords(\n      id: $id\n      excludeKeywords: $excludeKeywords\n    )\n  }\n': typeof types.MutationUpdateKeywordExcludeKeywordsDocument;
-  '\n  query QueryMyPushSetting {\n    pushSetting {\n      keywordAlert\n      hotDealAlert\n      nightAlerts\n      communityAlert\n    }\n  }\n': typeof types.QueryMyPushSettingDocument;
-  '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $hotDealAlert: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      hotDealAlert: $hotDealAlert\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n    )\n  }\n': typeof types.MutationUpdateMyPushSettingDocument;
+  '\n  query QueryMyPushSetting {\n    pushSetting {\n      keywordAlert\n      marketing\n      nightAlerts\n      communityAlert\n    }\n  }\n': typeof types.QueryMyPushSettingDocument;
+  '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $marketing: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      marketing: $marketing\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n    )\n  }\n': typeof types.MutationUpdateMyPushSettingDocument;
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n': typeof types.MutationAddPushTokenDocument;
   '\n  mutation MutationRemoveTokenLinkage($token: String!) {\n    removeTokenLinkage(token: $token)\n  }\n': typeof types.MutationRemoveTokenLinkageDocument;
   '\n  query QueryNotifications($limit: Int!, $offset: Int!) {\n    notifications(limit: $limit, offset: $offset) {\n      id\n      message\n      title\n      url\n      createdAt\n      readAt\n      keyword\n      product {\n        id\n        thumbnail\n        price\n        isHot\n        isEnd\n      }\n    }\n  }\n': typeof types.QueryNotificationsDocument;
@@ -190,9 +190,9 @@ const documents: Documents = {
     types.MutationUpdateKeywordPriceRangeDocument,
   '\n  mutation MutationUpdateKeywordExcludeKeywords(\n    $id: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    updateNotificationKeywordExcludeKeywords(\n      id: $id\n      excludeKeywords: $excludeKeywords\n    )\n  }\n':
     types.MutationUpdateKeywordExcludeKeywordsDocument,
-  '\n  query QueryMyPushSetting {\n    pushSetting {\n      keywordAlert\n      hotDealAlert\n      nightAlerts\n      communityAlert\n    }\n  }\n':
+  '\n  query QueryMyPushSetting {\n    pushSetting {\n      keywordAlert\n      marketing\n      nightAlerts\n      communityAlert\n    }\n  }\n':
     types.QueryMyPushSettingDocument,
-  '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $hotDealAlert: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      hotDealAlert: $hotDealAlert\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n    )\n  }\n':
+  '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $marketing: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      marketing: $marketing\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n    )\n  }\n':
     types.MutationUpdateMyPushSettingDocument,
   '\n  mutation MutationAddPushToken($token: String!, $tokenType: TokenType!) {\n    addPushToken(token: $token, tokenType: $tokenType)\n  }\n':
     types.MutationAddPushTokenDocument,
@@ -546,13 +546,13 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query QueryMyPushSetting {\n    pushSetting {\n      keywordAlert\n      hotDealAlert\n      nightAlerts\n      communityAlert\n    }\n  }\n',
+  source: '\n  query QueryMyPushSetting {\n    pushSetting {\n      keywordAlert\n      marketing\n      nightAlerts\n      communityAlert\n    }\n  }\n',
 ): typeof import('./graphql').QueryMyPushSettingDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $hotDealAlert: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      hotDealAlert: $hotDealAlert\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n    )\n  }\n',
+  source: '\n  mutation MutationUpdateMyPushSetting(\n    $keywordAlert: Boolean\n    $marketing: Boolean\n    $nightAlerts: Boolean\n    $communityAlert: Boolean\n  ) {\n    updatePushSetting(\n      keywordAlert: $keywordAlert\n      marketing: $marketing\n      nightAlerts: $nightAlerts\n      communityAlert: $communityAlert\n    )\n  }\n',
 ): typeof import('./graphql').MutationUpdateMyPushSettingDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
