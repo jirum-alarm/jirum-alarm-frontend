@@ -3616,6 +3616,8 @@ export type QueryNotificationsQuery = {
     __typename?: 'Notification';
     id: string;
     message: string;
+    title?: string | null;
+    url?: string | null;
     createdAt: any;
     readAt?: any | null;
     keyword?: string | null;
@@ -4936,6 +4938,8 @@ export const QueryNotificationsDocument = new TypedDocumentString(`
   notifications(limit: $limit, offset: $offset) {
     id
     message
+    title
+    url
     createdAt
     readAt
     keyword

@@ -69,7 +69,8 @@ const AlarmItem = React.memo(function AlarmItem({
   onDelete: (id: number) => void;
 }) {
   const c = useColors();
-  const {id, message, createdAt, product, keyword, readAt} = notification;
+  const {id, message, createdAt, product, keyword, readAt, title} =
+    notification;
   const productId = product?.id != null ? Number(product.id) : null;
   const {thumbnail, price, isHot, isEnd} = product ?? {};
 
@@ -142,6 +143,14 @@ const AlarmItem = React.memo(function AlarmItem({
                 {`${label} ›`}
               </Text>
             </Pressable>
+          ) : null}
+          {/* 상품 없는 알림(댓글 답글·좋아요)은 본문만으론 무슨 알림인지 모른다 — 제목을 같이. */}
+          {productId == null && title ? (
+            <Text
+              className="text-sm font-semibold text-gray-900"
+              numberOfLines={1}>
+              {title}
+            </Text>
           ) : null}
           <HighlightedMessage message={message} keyword={highlightKeyword} />
           <View className="flex-row items-center gap-x-3 pt-2">

@@ -17,6 +17,8 @@ export const QueryNotifications = graphql(`
     notifications(limit: $limit, offset: $offset) {
       id
       message
+      title
+      url
       createdAt
       readAt
       keyword

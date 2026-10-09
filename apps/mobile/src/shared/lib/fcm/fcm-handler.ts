@@ -63,7 +63,8 @@ export async function onForegroundMessageHandler(
         badge: Platform.OS === 'ios' ? badgeCount : undefined,
         sound: 'default',
       },
-      trigger: null, // send immediately
+      // 안드로이드는 채널을 지정해야 HIGH 채널(화면 위 배너)로 뜬다. null 이면 기본 채널로 가서 배너 없이 트레이에만 쌓였다.
+      trigger: Platform.OS === 'android' ? {channelId: 'alarm'} : null, // send immediately
     });
 
     if (Platform.OS === 'ios' && badgeCount >= 0) {

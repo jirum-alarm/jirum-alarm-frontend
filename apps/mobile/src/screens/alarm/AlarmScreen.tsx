@@ -10,7 +10,9 @@ import PressableScale from '@/shared/components/PressableScale';
 import ConfirmSheet from '@/shared/components/ConfirmSheet';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
+import Setting from '@/shared/components/icons/Setting';
 import TrashBin from '@/shared/components/icons/TrashBin';
+import {navigateToNativeRoute} from '@/navigations/navigation-ref';
 import {
   tabNavigations,
   tabStackNavigations,
@@ -118,11 +120,13 @@ export default function AlarmScreen() {
       const markRead = () => {
         if (!notification.readAt) onReadNotification(Number(notification.id));
       };
-      // 상품이 삭제/비공개면 읽음만 찍고 이동하지 않는다(web hasProduct 분기).
-      // 예전엔 아무 반응이 없어 고장 난 것처럼 보였다 — 이유를 알려준다.
+      // 상품 없는 알림(댓글 답글·좋아요)은 서버가 준 링크로 간다(→ 상품 댓글 화면).
+      // 갈 곳도 없으면 상품이 삭제/비공개된 것 — 읽음만 찍고 이유를 알려준다.
       if (productId == null) {
         markRead();
-        showToast.info('판매가 끝났거나 내려간 딜이에요.');
+        if (!notification.url || !navigateToNativeRoute(notification.url)) {
+          showToast.info('판매가 끝났거나 내려간 딜이에요.');
+        }
         return;
       }
       // ★push 먼저 — 읽음 처리(낙관적 갱신)가 목록 전체를 다시 그리는 걸 전환과 같은
@@ -221,15 +225,29 @@ export default function AlarmScreen() {
         className="flex-row items-center justify-between border-b border-gray-100 bg-white px-5"
         style={{height: HEADER_HEIGHT}}>
         <Text className="text-lg font-semibold text-gray-900">알림</Text>
-        {showEditButton ? (
-          <PressableScale
-            accessibilityRole="button"
-            accessibilityLabel="알림 편집"
-            hitSlop={8}
-            onPress={() => setEditMode(true)}>
-            <TrashBin />
-          </PressableScale>
-        ) : null}
+        <View className="flex-row items-center gap-x-2">
+          {/* 알림 설정 — 알림을 보다가 "그만 받고 싶다" 할 때 바로. 예전엔 마이페이지 안쪽에만 있었다. */}
+          {!isEditMode ? (
+            <PressableScale
+              accessibilityRole="button"
+              accessibilityLabel="알림 설정"
+              hitSlop={8}
+              onPress={() =>
+                navigation.push(tabStackNavigations.MYPAGE_NOTIFICATION)
+              }>
+              <Setting />
+            </PressableScale>
+          ) : null}
+          {showEditButton ? (
+            <PressableScale
+              accessibilityRole="button"
+              accessibilityLabel="알림 편집"
+              hitSlop={8}
+              onPress={() => setEditMode(true)}>
+              <TrashBin />
+            </PressableScale>
+          ) : null}
+        </View>
       </View>
 
       {/* 안내 줄 — web AlarmList 의 sticky 바. 편집모드면 전체삭제/완료로 갈린다. */}

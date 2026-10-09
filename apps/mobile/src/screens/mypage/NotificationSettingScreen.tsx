@@ -7,7 +7,9 @@ import {useQuery} from '@tanstack/react-query';
 import {MyPageQueries} from '@/entities/mypage';
 import type {TabStackParamList} from '@/navigations/tab/types';
 import type {PushSettingKey} from '@/shared/api/mypage';
+import PressableScale from '@/shared/components/PressableScale';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
+import {usePushPermissionStatus} from '@/shared/lib/fcm/usePushPermissionStatus';
 import {tabStackNavigations} from '@/shared/constant/navigations';
 import PriceDropSwitch from '@/features/mypage/ui/PriceDropSwitch';
 import StackHeader from '@/features/mypage/ui/StackHeader';
@@ -22,7 +24,8 @@ const ROWS: {key: PushSettingKey; title: string; description: string}[] = [
   {
     key: 'keywordAlert',
     title: '키워드 알림',
-    description: '등록한 키워드가 들어간 딜이 올라오면 알려드려요',
+    description:
+      '등록한 키워드가 들어간 딜이 올라오면 알려드려요. 관심사 알림은 각 관심사 화면에서 끌 수 있어요',
   },
   {
     key: 'hotDealAlert',
@@ -54,10 +57,26 @@ export default function NotificationSettingScreen({navigation}: Props) {
     MyPageQueries.pushSetting(),
   );
   const {mutate} = useUpdatePushSetting();
+  // 휴대폰 알림 권한이 꺼져 있으면 아래 스위치가 다 켜져 있어도 아무것도 안 온다 — 그걸 먼저 알린다.
+  const push = usePushPermissionStatus();
 
   return (
     <View className="flex-1 bg-white">
       <StackHeader title="알림 설정" onBack={navigation.goBack} />
+      {push.granted === false ? (
+        <View className="flex-row items-center justify-between gap-x-3 border-b border-gray-200 bg-gray-50 px-5 py-3">
+          <Text className="flex-1 text-sm font-medium text-gray-700">
+            휴대폰 알림이 꺼져 있어 아래 알림이 오지 않아요
+          </Text>
+          <PressableScale
+            accessibilityRole="button"
+            accessibilityLabel="알림 켜기"
+            className="h-8 justify-center rounded-md bg-fixed-800 px-3"
+            onPress={push.enable}>
+            <Text className="text-sm font-semibold text-primary-500">켜기</Text>
+          </PressableScale>
+        </View>
+      ) : null}
       <ScrollView className="flex-1 bg-white">
         <View className="px-5 pt-2 pb-8">
           {isError ? (
