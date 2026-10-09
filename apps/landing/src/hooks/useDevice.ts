@@ -14,6 +14,7 @@ export const useDevice = () => {
   const [isMounted, setIsMounted] = useState<boolean>(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- UA 는 브라우저에만 있다. 서버 HTML 과 첫 렌더를 맞추려(하이드레이션 불일치 방지) 마운트 뒤에 읽는다.
     setIsMounted(true);
     const userAgent = window.navigator.userAgent;
     const isMobileDevice = Boolean(

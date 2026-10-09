@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { Tier } from '../model/quota';
 
@@ -22,18 +22,19 @@ export default function QuotaDevBar() {
   const [quota, setQuota] = useState<ServerQuota | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const load = useCallback(async () => {
-    try {
-      const res = await fetch('/api/quota', { cache: 'no-store' });
-      if (res.ok) setQuota((await res.json()) as ServerQuota);
-    } catch {
-      // 서버가 안 떠 있으면 바를 그냥 숨긴다 — 개발 보조라 실패해도 앱은 정상
-    }
-  }, []);
-
   useEffect(() => {
-    void load();
-  }, [load]);
+    let ignore = false;
+    fetch('/api/quota', { cache: 'no-store' })
+      .then(async (res) => {
+        if (res.ok && !ignore) setQuota((await res.json()) as ServerQuota);
+      })
+      .catch(() => {
+        // 서버가 안 떠 있으면 바를 그냥 숨긴다 — 개발 보조라 실패해도 앱은 정상
+      });
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const reset = async () => {
     setBusy(true);
