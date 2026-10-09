@@ -191,7 +191,13 @@ pnpm build            # Production build
   플러그인이 바뀌면 **같은 커밋에서** 버전·runtimeVersion 을 올리고(app.json·Expo.plist·strings.xml 등 —
   `ota-updates-config` 테스트가 정렬을 본다) `pnpm --filter mobile native:write` 로 지문 기준을 새로 찍는다.
   안 하면 CI `native:check` 가 막는다(그대로 OTA 가 나가면 옛 바이너리가 실행 즉시 죽는다). 그다음 스토어 빌드·제출.
-  - 버전을 올린 뒤 OTA 는 새 runtime 바이너리에만 간다 — 옛 버전용 OTA·hotfix 브랜치는 만들지 않는다(하위호환 안 챙김).
+  - 버전을 올린 뒤 OTA 는 새 runtime 바이너리에만 간다 — 옛 버전용 OTA·hotfix 브랜치는 기본으로 만들지 않는다(하위호환 안 챙김).
+    **요청이 있으면 옛 runtime 에도 백포트한다**(2026-10-09 1.4.7·1.4.6 실적): main 을 그대로 보내지 말고(그 사이 네이티브가 바뀌어 죽는다)
+    `eas update:view <그 runtime 의 마지막 group> --json` 의 `gitCommitHash` 에 워크트리 → 변경 cherry-pick → 그 커밋 lockfile 로
+    `pnpm install --frozen-lockfile` → tsc·`native:check`·jest → **그 커밋으로 Release 시뮬 빌드** 콜드 스타트 2회 → `pnpm ota:publish`.
+    로컬 빌드 함정: Xcode 27 은 `IPHONEOS_DEPLOYMENT_TARGET=15.1` 을 넘겨야 옛 Pod 이 빌드되고, `/tmp` 아래 워크트리는 번들 단계가
+    경로를 못 찾아 `SKIP_BUNDLING=1` + 위 "번들만 바꿔 끼우기"로 간다. `pod install` 이 바꾼 `Podfile.lock`·`project.pbxproj` 는
+    발행 전 커밋본으로 되돌린다(안 하면 `native:check` 가 막는다). 마지막 OTA 커밋이 이미 다음 runtime 으로 올린 커밋이면 재현 불가 — 건너뛴다.
   - 네이티브 변경은 몇 주에 한 번 묶어 낸다(스토어 업데이트를 사용자가 마주치는 횟수를 줄인다).
 - **업데이트 안내 = `apps/web/public/app-release.json`**(웹 운영 배포로 발효, 플랫폼별 값).
   - `latestVersion`(권유): 새 스토어 버전이 **출시된 뒤** 그 플랫폼만 올린다 → 버전당 한 번 "새 버전이 나왔어요" 시트.
