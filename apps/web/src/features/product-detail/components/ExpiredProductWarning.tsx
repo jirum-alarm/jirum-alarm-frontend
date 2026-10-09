@@ -9,7 +9,8 @@ import DetailSectionHeader from '@/shared/ui/DetailSectionHeader';
 import InteractiveMoreLink from '@/shared/ui/InteractiveMoreLink';
 
 import { ProductQueries } from '@/entities/product';
-import { ProductGridList } from '@/entities/product-list/ui/grid';
+import { useProductCardTracker } from '@/entities/product-list/model/useProductCardTracker';
+import TrackedProductGridCard from '@/entities/product-list/ui/grid/TrackedProductGridCard';
 
 import { dealFreshnessAt } from '@/features/product-detail/lib/product-seo';
 
@@ -44,6 +45,8 @@ function ExpiredProductRecommendations({
   const displayLimit = isMobile ? 9 : 8;
 
   const currentProductId = Number(product.id);
+  // 블록 노출·클릭을 서버(user_history)에 남긴다 — 교체(latestSimilarDeals) 뒤 블록이 클릭을 만드는지 재려고.
+  const { recordImpression, recordClick } = useProductCardTracker('expired_latest');
   const [{ data: sameData }, { data: latestData }] = useSuspenseQueries({
     queries: [
       ProductQueries.sameProductDeals({ id: currentProductId }),
@@ -85,12 +88,20 @@ function ExpiredProductRecommendations({
             ) : null
           }
         />
-        <ProductGridList
-          products={displayProducts}
-          className="pc:grid-cols-4 pc:gap-3 grid-cols-3 gap-1.5 sm:grid-cols-3"
-          cardClassName="p-0"
-          displayTime={true}
-        />
+        <div className="pc:grid-cols-4 pc:gap-3 grid grid-cols-3 justify-items-center gap-1.5 sm:grid-cols-3">
+          {displayProducts.map((p, index) => (
+            <TrackedProductGridCard
+              key={p.id}
+              product={p}
+              position={index}
+              displayTime={true}
+              className="p-0"
+              source="expired_latest"
+              recordImpression={recordImpression}
+              recordClick={recordClick}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

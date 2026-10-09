@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
+import { type ProductCardSource } from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
 import ProductGridCard from '@/entities/product-list/ui/grid/ProductGridCard';
 
@@ -13,11 +14,12 @@ interface Props {
   priority?: boolean;
   displayTime?: boolean;
   className?: string;
+  source: ProductCardSource;
   recordImpression: (productId: number, position: number) => void;
   recordClick: (productId: number, position: number) => void;
 }
 
-// 노출/클릭 추적이 붙은 랭킹 탭 전용 카드. 공유 ProductGridCard 는 건드리지 않고
+// 노출/클릭 추적이 붙은 카드(랭킹 탭·종료 딜 블록). 공유 ProductGridCard 는 건드리지 않고
 // opt-in props(onCardClick, cardRef)만 사용. viewport 50% 이상 보이면 1회 노출 기록.
 export default function TrackedProductGridCard({
   product,
@@ -26,6 +28,7 @@ export default function TrackedProductGridCard({
   priority,
   displayTime,
   className,
+  source,
   recordImpression,
   recordClick,
 }: Props) {
@@ -46,7 +49,7 @@ export default function TrackedProductGridCard({
       displayTime={displayTime}
       className={className}
       cardRef={ref}
-      source="ranking_tab"
+      source={source}
       onCardClick={() => {
         if (Number.isFinite(productId)) recordClick(productId, position);
       }}

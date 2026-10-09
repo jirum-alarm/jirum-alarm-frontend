@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ActivityIndicator, Pressable, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {useQueries} from '@tanstack/react-query';
 
 import {ProductQueries} from '@/entities/product/product.queries';
+import {useRankingImpressionTracker} from '@/entities/trending/model/useRankingImpressionTracker';
 import ProductCard from '@/shared/components/product/ProductCard';
 import SectionErrorRow from '@/shared/components/SectionErrorRow';
 
@@ -25,11 +26,14 @@ export default function ExpiredProductWarning({
   product,
   onPressProduct,
   onPressMore,
+  seen = false,
 }: {
   product: ProductDetail;
   onPressProduct: (id: number) => void;
   /** 더보기 → 관련 상품 전체(web `/products/{id}/related`). */
   onPressMore?: () => void;
+  /** 블록 첫 줄이 화면에 들어왔나(상세 스크롤이 판정) — 노출 기록 시점. */
+  seen?: boolean;
 }) {
   // 토스처럼 매일 재확인되는 딜은 마지막 확인 시각 기준 — 판매 중인데 "품절됐을 수 있어요"가 붙지 않게.
   const freshAt = dealFreshnessAt(product);
@@ -53,17 +57,31 @@ export default function ExpiredProductWarning({
     ],
   });
 
-  if (!isExpired) return null;
-
-  const seen = new Set<string>([String(currentId)]);
+  const dedup = new Set<string>([String(currentId)]);
   const similar = [...(same.data ?? []), ...(latest.data ?? [])]
     .filter(p => {
       const k = String(p.id);
-      if (seen.has(k)) return false;
-      seen.add(k);
+      if (dedup.has(k)) return false;
+      dedup.add(k);
       return true;
     })
     .slice(0, DISPLAY_LIMIT + 1);
+
+  // 블록 노출·클릭을 서버(user_history)에 남긴다 — 교체(latestSimilarDeals) 뒤 블록이 클릭을 만드는지 재려고.
+  // web 은 카드마다 IntersectionObserver 로 센다.
+  // ponytail: 앱은 블록 첫 줄이 보이면 표시된 카드 전부를 노출로 센다(아래 줄 과대). 카드별이 필요하면 카드 onLayout + 스크롤 판정.
+  const {recordImpression, recordClick} =
+    useRankingImpressionTracker('expired_latest');
+  const shownKey = similar
+    .slice(0, DISPLAY_LIMIT)
+    .map(p => p.id)
+    .join(',');
+  useEffect(() => {
+    if (!seen || !shownKey) return;
+    shownKey.split(',').forEach((id, i) => recordImpression(Number(id), i));
+  }, [seen, shownKey, recordImpression]);
+
+  if (!isExpired) return null;
   // web 과 같은 판정: 거른 뒤에도 조회 한도만큼 남아야 "더 있다"고 본다.
   const hasMore = similar.length >= FETCH_LIMIT;
   const isPending = same.isPending || latest.isPending;
@@ -104,7 +122,7 @@ export default function ExpiredProductWarning({
         </View>
       ) : (
         <View className="flex-row flex-wrap px-[17px] pt-3">
-          {similar.slice(0, DISPLAY_LIMIT).map(item => (
+          {similar.slice(0, DISPLAY_LIMIT).map((item, index) => (
             <View
               key={String(item.id)}
               style={{
@@ -115,7 +133,10 @@ export default function ExpiredProductWarning({
               <ProductCard
                 product={item}
                 layout="grid"
-                onPress={onPressProduct}
+                onPress={id => {
+                  recordClick(Number(item.id), index);
+                  onPressProduct(id);
+                }}
               />
             </View>
           ))}

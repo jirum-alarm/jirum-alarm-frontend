@@ -5,7 +5,7 @@ import {ProductService} from '@/shared/api/product/product.service';
 
 /**
  * 랭킹 탭 노출/클릭 추적기(CTR 계측).
- * web 정본: widgets/trending/model/useRankingImpressionTracker.ts
+ * web 정본: entities/product-list/model/useProductCardTracker.ts(랭킹 탭·종료 딜 블록 공용)
  *
  * - 노출(분모): 실제로 화면에 보인 카드만 (productId, position) 으로 모아
  *   디바운스 후 일괄 전송. fetch 50개를 다 세면 CTR 이 과소계상된다.

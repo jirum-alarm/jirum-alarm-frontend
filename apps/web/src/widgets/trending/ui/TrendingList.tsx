@@ -15,7 +15,7 @@ interface TrendingListProps {
 
 const SIZE = 10;
 // 랭킹 탭 노출/클릭 출처. 백엔드 CTR 집계가 이 값으로 필터한다.
-const RANKING_SOURCE = 'ranking_tab';
+const RANKING_SOURCE = 'ranking_tab' as const;
 
 const TrendingList = ({ categoryId, categoryName }: TrendingListProps) => {
   const { products, liveProducts, hotDeals } = useTrendingViewModel({

@@ -72,6 +72,9 @@ type Props = NativeStackScreenProps<
 
 type DetailNavigationProp = Props['navigation'];
 
+/** 종료 딜 블록 머리(제목·안내 ~60px)에 카드 첫 줄 일부가 보이면 노출 — 블록 위에서 이만큼 내려온 지점. */
+const EXPIRED_FIRST_ROW_PX = 160;
+
 /** `/products/123` 만 네이티브가 맡는다. 하위 경로(`/comment` 등)는 웹뷰로 넘긴다. */
 function parseProductId(path: string): number | null {
   const pathname = path.split(/[?#]/)[0];
@@ -118,6 +121,19 @@ function NativeDetail({
   const [scrollFlags] = useState(createScrollFlags);
   // 가격 추이 섹션의 스크롤 위치 — 판정 카드 "기준 보기"가 여기로 간다.
   const priceHistoryY = useRef<number | null>(null);
+  // 종료 딜 '최신 핫딜' 블록 — 첫 줄이 화면에 들어오면 노출로 센다(블록이 기록). 한 번만 state 를 바꾼다.
+  const expiredBlockY = useRef<number | null>(null);
+  const viewportHeight = useRef(0);
+  const [expiredSeen, setExpiredSeen] = useState(false);
+  const checkExpiredSeen = (scrollY: number) => {
+    if (expiredSeen || expiredBlockY.current == null || !viewportHeight.current)
+      return;
+    if (
+      scrollY + viewportHeight.current >
+      expiredBlockY.current + EXPIRED_FIRST_ROW_PX
+    )
+      setExpiredSeen(true);
+  };
   const [shareOpen, setShareOpen] = useState(false);
   const navigation = useNavigation<DetailNavigationProp>();
   const {getWebViewRef} = useWebviewContext();
@@ -288,8 +304,13 @@ function NativeDetail({
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        onLayout={e => {
+          viewportHeight.current = e.nativeEvent.layout.height;
+          checkExpiredSeen(lastScrollY.current);
+        }}
         onScroll={e => {
           const y = e.nativeEvent.contentOffset.y;
+          checkExpiredSeen(y);
           // ★상세 state 가 아니라 작은 store 에 쓴다 — 방향이 바뀔 때마다 상세 전체
           // (차트·댓글·캐러셀)가 다시 그려져 스크롤 직후 탭이 한 박자 늦었다.
           scrollFlags.set({
@@ -344,17 +365,24 @@ function NativeDetail({
         {/* web 순서: 카톡방 → 쿠팡 고지 → 만료 경고 → 가격추이. 광고는 앱에서 제거. */}
         <KakaoOpenChatPrompt />
         <AffiliateNotice mallName={product.mallName} variant="coupang" />
-        <ExpiredProductWarning
-          product={product}
-          onPressProduct={pushProduct}
-          // 하위 경로도 같은 라우트(DETAIL) — 탭 스택·검색 스택 어디서 열려도 같다
-          // (검색 스택엔 WEBVIEW 가 없다). /related 는 ProductDetailScreen 이 네이티브로 그린다.
-          onPressMore={() =>
-            navigation.push(tabStackNavigations.DETAIL, {
-              path: `/products/${productId}/related`,
-            })
-          }
-        />
+        <View
+          onLayout={e => {
+            expiredBlockY.current = e.nativeEvent.layout.y;
+            checkExpiredSeen(lastScrollY.current);
+          }}>
+          <ExpiredProductWarning
+            product={product}
+            seen={expiredSeen}
+            onPressProduct={pushProduct}
+            // 하위 경로도 같은 라우트(DETAIL) — 탭 스택·검색 스택 어디서 열려도 같다
+            // (검색 스택엔 WEBVIEW 가 없다). /related 는 ProductDetailScreen 이 네이티브로 그린다.
+            onPressMore={() =>
+              navigation.push(tabStackNavigations.DETAIL, {
+                path: `/products/${productId}/related`,
+              })
+            }
+          />
+        </View>
         {!hidePrice ? (
           <PriceHistorySection
             productId={productId}

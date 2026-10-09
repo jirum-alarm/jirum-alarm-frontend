@@ -2,15 +2,14 @@
 
 import { cn } from '@/shared/lib/cn';
 
+import { type ProductCardSource } from '@/entities/product-list/model/card-tracking';
 import { type ProductCardType } from '@/entities/product-list/model/types';
-
-import { useRankingImpressionTracker } from '../model/useRankingImpressionTracker';
-
-import TrackedProductGridCard from './TrackedProductGridCard';
+import { useProductCardTracker } from '@/entities/product-list/model/useProductCardTracker';
+import TrackedProductGridCard from '@/entities/product-list/ui/grid/TrackedProductGridCard';
 
 interface Props {
   products: ProductCardType[];
-  source: string;
+  source: ProductCardSource;
   // 이 그리드의 첫 카드가 전체 랭킹에서 갖는 1-based rank(뱃지 표시용).
   rankFrom: number;
   // 이 그리드의 첫 카드가 전체 랭킹에서 갖는 0-based position(CTR 측정용).
@@ -34,7 +33,7 @@ export default function TrackedProductGridList({
   className,
   cardClassName,
 }: Props) {
-  const { recordImpression, recordClick } = useRankingImpressionTracker(source);
+  const { recordImpression, recordClick } = useProductCardTracker(source);
 
   return (
     <div
@@ -52,6 +51,7 @@ export default function TrackedProductGridList({
           priority={index < priorityCount}
           displayTime={displayTime}
           className={cardClassName}
+          source={source}
           recordImpression={recordImpression}
           recordClick={recordClick}
         />
