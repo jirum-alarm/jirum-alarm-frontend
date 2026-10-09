@@ -35,3 +35,4 @@ export {default as BubbleChatEmptyIcon} from './BubbleChatEmpty';
 export {default as AlarmIllustError} from './AlarmIllustError';
 export {default as XSmall} from './XSmall';
 export {default as TrashBin} from './TrashBin';
+export {default as CheckIcon} from './Check.tsx';

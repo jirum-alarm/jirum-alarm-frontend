@@ -150,8 +150,12 @@ const colorOf = (theme, cls, prefix) => {
 const pairOf = (theme, {box, text}) => {
   const classes = `${box} ${text}`.split(/\s+/);
   if (classes.some((c) => /^bg-.*\/[0-9]+$/.test(c))) return null;
-  const bg = classes.map((c) => colorOf(theme, c, 'bg')).find(Boolean) ?? theme.white;
-  const fg = classes.map((c) => colorOf(theme, c, 'text')).find(Boolean);
+  // 다크에선 dark: 가 붙은 클래스가 이긴다. hover: 같은 다른 상태는 재지 않는다(colorOf 가 안 읽음).
+  const darkOnly = theme === dark ? classes.filter((c) => c.startsWith('dark:')).map((c) => c.slice(5)) : [];
+  const color = (prefix) =>
+    [...darkOnly, ...classes].map((c) => colorOf(theme, c, prefix)).find(Boolean);
+  const bg = color('bg') ?? theme.white;
+  const fg = color('text');
   return fg ? [fg, bg] : null;
 };
 const recipePairs = () => [
@@ -160,6 +164,10 @@ const recipePairs = () => [
   ),
   ['chip selected', recipes.chip.selected],
   ['chip idle', recipes.chip.idle],
+  ...['neutral', 'brand', 'segment'].flatMap((v) =>
+    ['selected', 'idle'].map((state) => [`tab ${v}/${state}`, recipes.tab[v][state]]),
+  ),
+  ...Object.entries(recipes.sectionTitle).map(([k, text]) => [`sectionTitle ${k}`, {box: '', text}]),
   ...Object.entries(recipes.cardLabel.tone).map(([tone, r]) => [`cardLabel ${tone}`, r]),
   ['cardLabel strip', recipes.cardLabel.strip],
 ];

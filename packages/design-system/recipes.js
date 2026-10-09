@@ -6,8 +6,10 @@
  * web 은 둘을 한 요소에 같이 건다. 배치(inline-flex·정렬·줄바꿈 금지·위치)는 플랫폼마다 달라 각 컴포넌트가 붙인다.
  * 여기 쓰는 클래스는 web(Tailwind v4)·앱(NativeWind = Tailwind v3) 둘 다에 있는 것만.
  *
- *   web  apps/web/src/shared/ui/common/{Badge,Chip} · entities/product-list/ui/ProductCardStatus
- *   앱   apps/mobile/src/shared/components/ui/{Badge,Chip} · shared/components/product/ProductCardStatus
+ *   web  apps/web/src/shared/ui/common/{Badge,Chip,Switch} · shared/ui/{SectionHeader,DetailSectionHeader} ·
+ *        entities/product-list/ui/ProductCardStatus
+ *   앱   apps/mobile/src/shared/components/ui/{Badge,Chip,Switch,SectionHeader} · shared/components/product/ProductCardStatus
+ * 탭(tab)·사진 틀(cardThumb)은 컴포넌트 없이 각 자리가 직접 읽는다 — 자리마다 스크롤·측정 코드가 달라 껍데기를 못 나눈다.
  */
 
 /** 작은 라벨(상태·판정·정보). 누를 수 없다 — 누르는 건 Chip. */
@@ -54,6 +56,57 @@ const chip = {
   idle: {box: 'border-gray-300 bg-white', text: 'text-gray-700'},
 };
 
+/**
+ * 면을 채우는 탭(목록 전환) — 테두리만 있는 Chip(필터·섹션 탭)과 모양으로 구분한다.
+ *   neutral  커뮤니티 전체·인기·공지, 토스 하위 카테고리, 큐레이션 탭
+ *   brand    랭킹·핫딜 모음 카테고리(라임)
+ *   segment  기간 고르기(가격 추이) — 네모 + 테두리
+ * 높이는 size(sm 32·md 36)로 고르고, 앱 기간 버튼처럼 손가락 크기가 필요한 자리는 그 자리에서 키운다.
+ */
+const tab = {
+  size: {sm: 'h-8', md: 'h-9'},
+  neutral: {
+    selected: {box: 'rounded-full px-3 bg-gray-900', text: 'text-sm font-medium text-white'},
+    idle: {box: 'rounded-full px-3 bg-gray-100 hover:bg-gray-200', text: 'text-sm font-medium text-gray-600'},
+  },
+  brand: {
+    // 다크에선 fixed-800 이 비활성 gray-100 과 거의 같은 색이라 neutral 처럼 밝은 면으로 뒤집는다.
+    selected: {
+      box: 'rounded-full px-3 bg-fixed-800 dark:bg-gray-900',
+      text: 'text-sm font-bold text-primary-500 dark:text-white',
+    },
+    idle: {box: 'rounded-full px-3 bg-gray-100 hover:bg-gray-200', text: 'text-sm font-medium text-gray-600'},
+  },
+  segment: {
+    selected: {box: 'rounded-lg border px-3 border-gray-900 bg-gray-900', text: 'text-sm font-semibold text-white'},
+    idle: {
+      box: 'rounded-lg border px-3 border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50',
+      text: 'text-sm text-gray-600',
+    },
+  },
+};
+
+/**
+ * 켜고 끄는 스위치(알림 설정). web·앱 같은 44x24 — 20px 노브가 켜지면 20px(translate-x-5) 오른쪽으로.
+ * 노브는 테마 무관 흰색: white 는 다크에서 어두워져 꺼진 트랙에 묻힌다.
+ */
+const toggle = {
+  track: 'h-6 w-11 rounded-full',
+  on: 'bg-primary-500',
+  off: 'bg-gray-300',
+  knob: 'h-5 w-5 rounded-full bg-fixed-white',
+};
+
+/** 섹션 제목 — page = 홈·목록 섹션(SectionHeader), detail = 상세 안 섹션(DetailSectionHeader, 한 단계 덜 굵게). */
+const sectionTitle = {
+  page: 'text-lg font-bold text-gray-900',
+  detail: 'text-lg font-semibold text-gray-900',
+  subtitle: 'text-sm text-gray-500',
+};
+
+/** 상품 카드 사진 틀 — 사진이 늦거나 투명 PNG 여도 카드 자리가 보이게 옅은 면 + 테두리. */
+const cardThumb = 'overflow-hidden rounded-lg border border-gray-200 bg-gray-50';
+
 /** 상품 카드 사진 위 라벨 — 왼쪽 아래 모서리(판매종료·베스트판매자)와 아래 띠(유통기한). */
 const cardLabel = {
   corner: {box: 'h-[22px] rounded-tr-lg rounded-bl-lg px-2', text: 'text-xs'},
@@ -64,4 +117,4 @@ const cardLabel = {
   strip: {box: 'h-[22px] rounded-b-lg bg-fixed-700/80 px-2', text: 'text-xs text-fixed-white'},
 };
 
-module.exports = {badge, chip, cardLabel};
+module.exports = {badge, chip, tab, toggle, sectionTitle, cardThumb, cardLabel};
