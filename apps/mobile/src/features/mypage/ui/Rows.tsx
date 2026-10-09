@@ -36,6 +36,22 @@ function Row({
   );
 }
 
+/** 내정보 메뉴 묶음 — 작은 회색 제목 + 행들. web `MenuList` 의 section. */
+export function MenuGroup({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <View>
+      <Text className="pb-1 text-xs font-medium text-gray-500">{label}</Text>
+      {children}
+    </View>
+  );
+}
+
 /** 내정보 메뉴 행. web `MenuList` 의 li(아이콘 + 제목). */
 export function MenuRow({
   icon,

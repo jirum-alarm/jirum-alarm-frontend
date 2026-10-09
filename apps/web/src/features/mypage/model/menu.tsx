@@ -1,7 +1,7 @@
 import { PAGE } from '@/shared/config/page';
 import { Alert, Description, Grid, Hashtag, Heart, Setting } from '@/shared/ui/common/icons';
 
-/** PC 사이드바·첫 화면의 묶음. 자주 여는 것(내 핫딜) → 가끔 바꾸는 것(맞춤 설정) → 거의 안 여는 것(지원) 순. */
+/** 마이페이지 메뉴 묶음(PC 사이드바·첫 화면, 모바일 목록 공통). 자주 여는 것(내 핫딜) → 가끔 바꾸는 것(맞춤 설정) → 거의 안 여는 것(지원) 순. */
 export const MYPAGE_GROUPS = [
   { key: 'mine', label: '내 핫딜' },
   { key: 'custom', label: '맞춤 설정' },
@@ -10,7 +10,7 @@ export const MYPAGE_GROUPS = [
 
 /** 마이페이지 메뉴. 모바일 목록(MenuList)·PC 사이드바·PC 첫 화면 카드가 같은 목록을 쓴다.
  *  pcOnly: 모바일엔 따로 길이 있는 것(알림 = 바텀 탭). PC 는 GNB 아이콘뿐이라 마이페이지 메뉴로 묶는다.
- *  group: PC 만 묶어 보여준다 — 모바일 목록은 항목이 적어 순서 그대로. */
+ *  group: PC·모바일 모두 이 묶음으로 보여준다(앱 MyPageScreen 도 같은 묶음). */
 export const MYPAGE_MENU: Array<{
   icon: React.ReactNode;
   title: string;

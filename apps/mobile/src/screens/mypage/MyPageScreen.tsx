@@ -24,7 +24,7 @@ import {
   tabStackNavigations,
 } from '@/shared/constant/navigations';
 import {HEADER_HEIGHT} from '@/features/mypage/ui/StackHeader';
-import {MenuRow} from '@/features/mypage/ui/Rows';
+import {MenuGroup, MenuRow} from '@/features/mypage/ui/Rows';
 import CustomerServiceSheet from '@/features/mypage/ui/CustomerServiceSheet';
 import ColorSchemeSheet from '@/features/mypage/ui/ColorSchemeSheet';
 import {
@@ -142,16 +142,17 @@ export default function MyPageScreen() {
           </View>
         </View>
 
-        {/* 메뉴 — web MenuList(찜 목록 · 키워드 알림 · 관심 카테고리 · 알림 설정 · 약관 · 고객센터) */}
-        <View className="px-5">
-          {/* ★아래에 아무것도 없는 자리의 구분선은 뺀다 — 목록이 끊긴
-              것처럼 보였다(마지막 행 밑에 회색 선 + 빈 화면). */}
-          <View className="py-4">
+        {/* 메뉴 — web MenuList. PC 사이드바와 같은 묶음(내 핫딜 · 맞춤 설정 · 지원).
+            화면 모드는 앱에만 있는 설정이라 맞춤 설정 끝. */}
+        <View className="gap-4 px-5 py-4">
+          <MenuGroup label="내 핫딜">
             <MenuRow
               icon={<Heart width={24} height={24} />}
               title="찜 목록"
               onPress={() => push(tabStackNavigations.LIKE)}
             />
+          </MenuGroup>
+          <MenuGroup label="맞춤 설정">
             <MenuRow
               icon={<HashtagMenuIcon />}
               title="키워드 알림"
@@ -173,6 +174,8 @@ export default function MyPageScreen() {
               value={COLOR_SCHEME_LABEL[colorScheme]}
               onPress={() => setColorSchemeOpen(true)}
             />
+          </MenuGroup>
+          <MenuGroup label="지원">
             <MenuRow
               icon={<DescriptionMenuIcon />}
               title="약관 및 정책"
@@ -183,7 +186,7 @@ export default function MyPageScreen() {
               title="고객센터"
               onPress={() => setCustomerServiceOpen(true)}
             />
-          </View>
+          </MenuGroup>
         </View>
       </ScrollView>
 
