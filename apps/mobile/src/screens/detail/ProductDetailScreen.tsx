@@ -6,11 +6,11 @@ import React, {
   useState,
   useSyncExternalStore,
 } from 'react';
-import {ScrollView, View} from 'react-native';
+import {RefreshControl, ScrollView, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import {SystemBars} from 'react-native-edge-to-edge';
 import {useNavigation} from '@react-navigation/native';
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import {
@@ -38,10 +38,12 @@ import {
   tabStackNavigations,
 } from '@/shared/constant/navigations';
 import {useAuth} from '@/shared/hooks/useAuth';
+import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import {goTabHome, openSearch} from '@/shared/lib/navigation/search-flow';
 import {useWebviewContext} from '@/provider/WebViewRefProvider';
 
 import ProductDetailWebViewScreen from './ProductDetailWebViewScreen';
+import RelatedProductsScreen from './RelatedProductsScreen';
 import {parseSourceData} from './model/types';
 import {dealFreshnessAt, formatDealAgeNotice} from './lib/price-signals';
 import BottomCTA from './ui/BottomCTA';
@@ -77,8 +79,20 @@ function parseProductId(path: string): number | null {
   return matched ? Number(matched[1]) : null;
 }
 
+/** `/products/123/related` — 관련 상품도 네이티브(그리드 하나라 웹뷰를 띄울 이유가 없다). */
+function parseRelatedProductId(path: string): number | null {
+  const pathname = path.split(/[?#]/)[0];
+  const matched = pathname.match(/^\/products\/(\d+)\/related\/?$/);
+  return matched ? Number(matched[1]) : null;
+}
+
 export default function ProductDetailScreen(props: Props) {
   const productId = parseProductId(props.route.params.path);
+  const relatedId = parseRelatedProductId(props.route.params.path);
+
+  if (relatedId !== null) {
+    return <RelatedProductsScreen productId={relatedId} />;
+  }
 
   // 파싱 실패·하위 경로는 기존 웹뷰가 그대로 처리한다(라우팅 구멍 방지).
   if (productId === null) {
@@ -113,6 +127,14 @@ function NativeDetail({
     isError,
     refetch,
   } = useQuery(ProductQueries.info({id: productId}));
+
+  // 당겨서 새로고침 — 상세 하위 쿼리(가격·판정·통계·함께 본 상품…)를 한 번에. 판매 종료·가격 변동 확인용.
+  const queryClient = useQueryClient();
+  const {refreshing, onRefresh} = usePullRefresh(() =>
+    queryClient.invalidateQueries({
+      queryKey: ProductQueries.keys.detail(productId),
+    }),
+  );
 
   // 가이드 메타행(쇼핑몰 아래)을 상세와 같이 받는다. ProductGuideMetaRows 안에서만
   // 받으면 상세가 그려진 뒤에 도착해 행이 "없다가 생기며" 아래 내용을 밀어낸다.
@@ -263,6 +285,9 @@ function NativeDetail({
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         stickyHeaderIndices={showViewerCount ? [0] : undefined}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         onScroll={e => {
           const y = e.nativeEvent.contentOffset.y;
           // ★상세 state 가 아니라 작은 store 에 쓴다 — 방향이 바뀔 때마다 상세 전체
@@ -322,8 +347,8 @@ function NativeDetail({
         <ExpiredProductWarning
           product={product}
           onPressProduct={pushProduct}
-          // 하위 경로는 ProductDetailScreen 이 웹뷰로 넘긴다 — 탭 스택·검색 스택
-          // 어디서 열려도 같은 라우트(DETAIL)로 간다(검색 스택엔 WEBVIEW 가 없다).
+          // 하위 경로도 같은 라우트(DETAIL) — 탭 스택·검색 스택 어디서 열려도 같다
+          // (검색 스택엔 WEBVIEW 가 없다). /related 는 ProductDetailScreen 이 네이티브로 그린다.
           onPressMore={() =>
             navigation.push(tabStackNavigations.DETAIL, {
               path: `/products/${productId}/related`,

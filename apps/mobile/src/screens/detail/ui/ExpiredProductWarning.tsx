@@ -17,7 +17,7 @@ const FETCH_LIMIT = 10;
 const DISPLAY_LIMIT = 9;
 
 /** web ExpiredProductRecommendations 와 같은 키워드 추출. */
-function deriveSearchKeyword(title: string): string {
+export function deriveSearchKeyword(title: string): string {
   return (
     title
       .replace(/^\[.*?\]\s*/, '')

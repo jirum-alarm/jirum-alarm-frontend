@@ -2,6 +2,7 @@ import React, {useCallback, useRef, useState} from 'react';
 import {
   FlatList,
   RefreshControl,
+  ScrollView,
   View,
   type ListRenderItemInfo,
 } from 'react-native';
@@ -147,14 +148,22 @@ export default function CurationGrid<T>({
     );
   }
 
+  // 빈 결과도 당겨서 다시 불러올 수 있게 ScrollView 로 — View 면 당길 데가 없다.
   if (items.length === 0) {
     return (
-      <View className="flex-1 bg-white">
+      <ScrollView
+        className="flex-1 bg-white"
+        contentContainerStyle={{flexGrow: 1}}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }>
         {header}
         <View className="items-center py-10">
           <Text className="text-sm text-gray-500">{emptyText}</Text>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 
@@ -170,6 +179,9 @@ export default function CurationGrid<T>({
         paddingBottom: 16 + bottomInset,
       }}
       columnWrapperStyle={{gap: GRID_GAP_X}}
+      // 검색 결과를 내려 보면 키보드가 내려간다(검색 화면이 이 그리드를 쓴다).
+      keyboardDismissMode="on-drag"
+      keyboardShouldPersistTaps="handled"
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }

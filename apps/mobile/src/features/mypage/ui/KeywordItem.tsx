@@ -1,9 +1,17 @@
 import React, {useState} from 'react';
-import {Pressable, View} from 'react-native';
+import {
+  InputAccessoryView,
+  Keyboard,
+  Platform,
+  Pressable,
+  View,
+} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import Button from '@/shared/components/ui/Button';
 import TextField from '@/shared/components/ui/Text/TextField';
 import ArrowRight from '@/shared/components/icons/ArrowRight';
+import SwipeToDelete from '@/shared/components/SwipeToDelete';
+import {tick} from '@/shared/lib/feedback';
 import type {MyKeyword} from '@/shared/api/mypage';
 import {useColors} from '@/shared/theme/useColors';
 
@@ -27,6 +35,9 @@ const DEAL_CHOICES = [
     hint: () => '평소 가격보다 싸게 올라온 딜만 알려드려요',
   },
 ] as const;
+
+/** iOS 숫자 키패드엔 리턴 키가 없어 닫을 길이 없다 — 키보드 위 「완료」 줄. 모든 카드가 같이 쓴다. */
+const PRICE_ACCESSORY_ID = 'keyword-price-done';
 
 /**
  * 키워드 카드 한 장. web `KeywordItem` — 접힌 상태엔 "어떤 알림이 오는지" 한 줄 요약만,
@@ -88,157 +99,191 @@ export default function KeywordItem({
     );
 
   return (
-    <View className="rounded-xl border border-gray-200">
-      <View className="flex-row items-center">
-        <Pressable
-          onPress={() => setOpen(prev => !prev)}
-          accessibilityRole="button"
-          accessibilityState={{expanded: open}}
-          accessibilityLabel={`${keyword.keyword} 알림 설정`}
-          className="min-w-0 flex-1 flex-row items-center gap-2 py-3.5 pl-4"
-          style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-          <View className="min-w-0 flex-1">
-            <Text
-              className="text-sm font-semibold text-gray-900"
-              numberOfLines={1}>
-              {keyword.keyword}
-            </Text>
-            <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
-              {summarizeKeywordAlert(saved)}
-            </Text>
-          </View>
-          {/* transform 은 style 로 — 조건부 className + transform 은 NativeWind 에서 레드스크린. */}
-          <View
-            className="mr-3"
-            style={{transform: [{rotate: open ? '-90deg' : '90deg'}]}}>
-            <ArrowRight width={20} height={20} color={c.gray[500]} />
-          </View>
-        </Pressable>
-      </View>
-
-      {open ? (
-        <View className="gap-5 border-t border-gray-100 p-4">
+    <SwipeToDelete
+      onDelete={onDelete}
+      accessibilityLabel={`${keyword.keyword} 키워드 삭제`}
+      actionClassName="ml-2 rounded-xl">
+      <View className="rounded-xl border border-gray-200 bg-white">
+        <View className="flex-row items-center">
           <Pressable
-            onPress={onOpenDeals}
-            accessibilityRole="link"
-            accessibilityLabel={`${keyword.keyword} 지금 올라온 딜 보기`}
-            className="flex-row items-center justify-between rounded-lg bg-gray-50 px-3 py-2.5"
+            onPress={() => setOpen(prev => !prev)}
+            accessibilityRole="button"
+            accessibilityState={{expanded: open}}
+            accessibilityLabel={`${keyword.keyword} 알림 설정`}
+            className="min-w-0 flex-1 flex-row items-center gap-2 py-3.5 pl-4"
             style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-            <Text className="text-sm text-gray-900" numberOfLines={1}>
-              {`‘${keyword.keyword}’ 지금 올라온 딜 보기`}
-            </Text>
-            <Text className="text-sm text-gray-500">›</Text>
+            <View className="min-w-0 flex-1">
+              <Text
+                className="text-sm font-semibold text-gray-900"
+                numberOfLines={1}>
+                {keyword.keyword}
+              </Text>
+              <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
+                {summarizeKeywordAlert(saved)}
+              </Text>
+            </View>
+            {/* transform 은 style 로 — 조건부 className + transform 은 NativeWind 에서 레드스크린. */}
+            <View
+              className="mr-3"
+              style={{transform: [{rotate: open ? '-90deg' : '90deg'}]}}>
+              <ArrowRight width={20} height={20} color={c.gray[500]} />
+            </View>
           </Pressable>
-          <View className="gap-2">
-            <Text className="mb-1 text-sm font-semibold text-gray-900">
-              어떤 딜을 알려드릴까요?
-            </Text>
-            <View className="gap-2" accessibilityRole="radiogroup">
-              {DEAL_CHOICES.map(choice => {
-                const selected = priceDropOnly === choice.value;
-                return (
-                  <Pressable
-                    key={choice.label}
-                    onPress={() => setPriceDropOnly(choice.value)}
-                    accessibilityRole="radio"
-                    accessibilityState={{checked: selected}}
-                    className={
-                      selected
-                        ? 'flex-row items-start gap-3 rounded-lg border border-gray-900 p-3'
-                        : 'flex-row items-start gap-3 rounded-lg border border-gray-200 p-3'
-                    }>
-                    <View
+        </View>
+
+        {open ? (
+          <View className="gap-5 border-t border-gray-100 p-4">
+            <Pressable
+              onPress={onOpenDeals}
+              accessibilityRole="link"
+              accessibilityLabel={`${keyword.keyword} 지금 올라온 딜 보기`}
+              className="flex-row items-center justify-between rounded-lg bg-gray-50 px-3 py-2.5"
+              style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+              <Text className="text-sm text-gray-900" numberOfLines={1}>
+                {`‘${keyword.keyword}’ 지금 올라온 딜 보기`}
+              </Text>
+              <Text className="text-sm text-gray-500">›</Text>
+            </Pressable>
+            <View className="gap-2">
+              <Text className="mb-1 text-sm font-semibold text-gray-900">
+                어떤 딜을 알려드릴까요?
+              </Text>
+              <View className="gap-2" accessibilityRole="radiogroup">
+                {DEAL_CHOICES.map(choice => {
+                  const selected = priceDropOnly === choice.value;
+                  return (
+                    <Pressable
+                      key={choice.label}
+                      onPress={() => {
+                        tick();
+                        setPriceDropOnly(choice.value);
+                      }}
+                      accessibilityRole="radio"
+                      accessibilityState={{checked: selected}}
                       className={
                         selected
-                          ? 'mt-0.5 h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-gray-900'
-                          : 'mt-0.5 h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-gray-300'
+                          ? 'flex-row items-start gap-3 rounded-lg border border-gray-900 p-3'
+                          : 'flex-row items-start gap-3 rounded-lg border border-gray-200 p-3'
                       }>
-                      {selected ? (
-                        <View className="h-2 w-2 rounded-full bg-gray-900" />
-                      ) : null}
-                    </View>
-                    <View className="min-w-0 flex-1">
-                      <Text className="text-sm font-semibold text-gray-900">
-                        {choice.label}
-                      </Text>
-                      <Text className="mt-0.5 text-xs text-gray-500">
-                        {choice.hint(keyword.keyword)}
-                      </Text>
-                    </View>
-                  </Pressable>
-                );
-              })}
+                      <View
+                        className={
+                          selected
+                            ? 'mt-0.5 h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-gray-900'
+                            : 'mt-0.5 h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-gray-300'
+                        }>
+                        {selected ? (
+                          <View className="h-2 w-2 rounded-full bg-gray-900" />
+                        ) : null}
+                      </View>
+                      <View className="min-w-0 flex-1">
+                        <Text className="text-sm font-semibold text-gray-900">
+                          {choice.label}
+                        </Text>
+                        <Text className="mt-0.5 text-xs text-gray-500">
+                          {choice.hint(keyword.keyword)}
+                        </Text>
+                      </View>
+                    </Pressable>
+                  );
+                })}
+              </View>
             </View>
-          </View>
 
-          <View className="gap-2">
-            <Text className="text-sm font-semibold text-gray-900">
-              가격 범위{' '}
-              <Text className="text-xs font-normal text-gray-500">(선택)</Text>
-            </Text>
+            <View className="gap-2">
+              <Text className="text-sm font-semibold text-gray-900">
+                가격 범위{' '}
+                <Text className="text-xs font-normal text-gray-500">
+                  (선택)
+                </Text>
+              </Text>
+              <View className="flex-row items-center gap-2">
+                <View className="min-w-0 flex-1">
+                  <TextField
+                    value={minInput}
+                    onChangeText={text => setMinInput(formatPriceInput(text))}
+                    placeholder="최소 금액"
+                    keyboardType="number-pad"
+                    inputAccessoryViewID={PRICE_ACCESSORY_ID}
+                    accessibilityLabel="최소 가격"
+                  />
+                </View>
+                <Text className="text-gray-500">~</Text>
+                <View className="min-w-0 flex-1">
+                  <TextField
+                    value={maxInput}
+                    onChangeText={text => setMaxInput(formatPriceInput(text))}
+                    placeholder="최대 금액"
+                    keyboardType="number-pad"
+                    inputAccessoryViewID={PRICE_ACCESSORY_ID}
+                    accessibilityLabel="최대 가격"
+                  />
+                </View>
+              </View>
+              <Text className="text-xs text-gray-500">
+                비워 두면 가격과 상관없이 알려드려요. 가격이 안 적힌 글도
+                알려드려요.
+              </Text>
+            </View>
+
+            <View className="gap-2">
+              <Text className="text-sm font-semibold text-gray-900">
+                빼고 싶은 단어{' '}
+                <Text className="text-xs font-normal text-gray-500">
+                  (선택)
+                </Text>
+              </Text>
+              <TextField
+                value={excludeInput}
+                onChangeText={setExcludeInput}
+                placeholder="예: 케이스, 필름"
+                maxLength={220}
+                accessibilityLabel="빼고 싶은 단어"
+                helperText="제목에 이 단어가 있으면 알리지 않아요. 여러 개는 쉼표로 구분해요."
+              />
+            </View>
+
             <View className="flex-row items-center gap-2">
-              <View className="min-w-0 flex-1">
-                <TextField
-                  value={minInput}
-                  onChangeText={text => setMinInput(formatPriceInput(text))}
-                  placeholder="최소 금액"
-                  keyboardType="number-pad"
-                  accessibilityLabel="최소 가격"
-                />
-              </View>
-              <Text className="text-gray-500">~</Text>
-              <View className="min-w-0 flex-1">
-                <TextField
-                  value={maxInput}
-                  onChangeText={text => setMaxInput(formatPriceInput(text))}
-                  placeholder="최대 금액"
-                  keyboardType="number-pad"
-                  accessibilityLabel="최대 가격"
-                />
+              <Pressable
+                onPress={onDelete}
+                accessibilityRole="button"
+                accessibilityLabel={`${keyword.keyword} 키워드 삭제`}
+                className="h-11 justify-center px-3"
+                style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+                <Text className="text-sm text-gray-500">키워드 삭제</Text>
+              </Pressable>
+              <View className="flex-1">
+                <Button
+                  size="md"
+                  className="h-11"
+                  onPress={save}
+                  loading={isPending}>
+                  저장
+                </Button>
               </View>
             </View>
-            <Text className="text-xs text-gray-500">
-              비워 두면 가격과 상관없이 알려드려요. 가격이 안 적힌 글도
-              알려드려요.
-            </Text>
           </View>
+        ) : null}
+      </View>
+    </SwipeToDelete>
+  );
+}
 
-          <View className="gap-2">
-            <Text className="text-sm font-semibold text-gray-900">
-              빼고 싶은 단어{' '}
-              <Text className="text-xs font-normal text-gray-500">(선택)</Text>
-            </Text>
-            <TextField
-              value={excludeInput}
-              onChangeText={setExcludeInput}
-              placeholder="예: 케이스, 필름"
-              maxLength={220}
-              accessibilityLabel="빼고 싶은 단어"
-              helperText="제목에 이 단어가 있으면 알리지 않아요. 여러 개는 쉼표로 구분해요."
-            />
-          </View>
-
-          <View className="flex-row items-center gap-2">
-            <Pressable
-              onPress={onDelete}
-              accessibilityRole="button"
-              accessibilityLabel={`${keyword.keyword} 키워드 삭제`}
-              className="h-11 justify-center px-3"
-              style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
-              <Text className="text-sm text-gray-500">키워드 삭제</Text>
-            </Pressable>
-            <View className="flex-1">
-              <Button
-                size="md"
-                className="h-11"
-                onPress={save}
-                loading={isPending}>
-                저장
-              </Button>
-            </View>
-          </View>
-        </View>
-      ) : null}
-    </View>
+/** 키워드 화면에 한 번 그린다(id 로 숫자 칸들이 공유). */
+export function PriceKeyboardAccessory() {
+  if (Platform.OS !== 'ios') return null;
+  return (
+    <InputAccessoryView nativeID={PRICE_ACCESSORY_ID}>
+      <View className="flex-row justify-end border-t border-gray-200 bg-gray-50 px-4">
+        <Pressable
+          onPress={Keyboard.dismiss}
+          accessibilityRole="button"
+          accessibilityLabel="키보드 닫기"
+          hitSlop={8}
+          className="py-2.5"
+          style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+          <Text className="text-base font-semibold text-gray-900">완료</Text>
+        </Pressable>
+      </View>
+    </InputAccessoryView>
   );
 }

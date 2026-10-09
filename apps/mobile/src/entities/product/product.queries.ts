@@ -38,8 +38,9 @@ export class ProductQueries {
     reactionKeywords: (id: number) =>
       [...this.keys.detail(id), 'reactionKeywords'] as const,
     myKeywords: () => ['user', 'notificationKeywords'] as const,
-    keywordProducts: (keyword: string) =>
-      [...this.keys.all, 'keyword', keyword] as const,
+    // ★한도도 키에 — 만료 딜 블록(10개)과 관련 상품 화면(50개)이 같은 키면 10개 캐시가 화면을 채운다.
+    keywordProducts: (keyword: string, limit?: number | null) =>
+      [...this.keys.all, 'keyword', keyword, limit ?? null] as const,
     categoryPopular: (categoryId: number) =>
       [...this.keys.all, 'categoryPopular', categoryId] as const,
     togetherViewed: (id: number) =>
@@ -113,7 +114,10 @@ export class ProductQueries {
 
   static keywordProducts(variables: KeywordProductsQueryVariables) {
     return queryOptions({
-      queryKey: this.keys.keywordProducts(variables.keyword ?? ''),
+      queryKey: this.keys.keywordProducts(
+        variables.keyword ?? '',
+        variables.limit,
+      ),
       queryFn: () => ProductService.getKeywordProducts(variables),
       retry: RETRY,
     });

@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, Pressable, View} from 'react-native';
+import {ActivityIndicator, Pressable, RefreshControl, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQuery} from '@tanstack/react-query';
@@ -26,7 +26,10 @@ import {navigateToNativeRoute} from '@/navigations/navigation-ref';
 import {Analytics} from '@/shared/lib/analytics/ga4';
 import {normalizeKeyword} from '@/features/keyword-prompt/model/myKeywords';
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
-import KeywordItem from '@/features/mypage/ui/KeywordItem';
+import KeywordItem, {
+  PriceKeyboardAccessory,
+} from '@/features/mypage/ui/KeywordItem';
+import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import StackHeader from '@/features/mypage/ui/StackHeader';
 import {FORM_CTA_BOTTOM} from '@/features/mypage/ui/Rows';
 import {SubscribedThemeRow} from '@/features/mypage/ui/ThemeCards';
@@ -81,6 +84,7 @@ export default function KeywordScreen({navigation, route}: Props) {
     isAdding,
     removeKeyword,
   } = useKeywordViewModel();
+  const {refreshing, onRefresh} = usePullRefresh(refetch);
 
   return (
     <View className="flex-1 bg-white">
@@ -89,7 +93,11 @@ export default function KeywordScreen({navigation, route}: Props) {
         className="flex-1 bg-white"
         // 포커스 칸을 키보드 위 이만큼 띄운다 — 하단 등록 바(pt-6 24 + 버튼 48 + 20 = 92)보다 커야 칸이 바 뒤에 안 숨는다.
         bottomOffset={120}
-        keyboardShouldPersistTaps="handled">
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View className="px-5 py-6">
           <TextField
             value={value}
@@ -133,7 +141,7 @@ export default function KeywordScreen({navigation, route}: Props) {
                   });
                   navigateToNativeRoute('/alarm');
                 }}
-                hitSlop={8}
+                hitSlop={12}
                 accessibilityRole="link"
                 style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
                 <Text className="text-xs text-gray-500">받은 알림 보기 ›</Text>
@@ -182,6 +190,7 @@ export default function KeywordScreen({navigation, route}: Props) {
           />
         </View>
       </KeyboardAwareScrollView>
+      <PriceKeyboardAccessory />
       <KeyboardStickyView offset={{closed: -insets.bottom, opened: 0}}>
         <View
           className="bg-white px-5 pt-6"
@@ -257,7 +266,7 @@ function SubscribedThemes({
         </Text>
         <Pressable
           onPress={onOpenThemes}
-          hitSlop={8}
+          hitSlop={12}
           accessibilityRole="button"
           accessibilityLabel="관심사 더 둘러보기"
           style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>

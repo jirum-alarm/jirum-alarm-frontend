@@ -1,5 +1,5 @@
 import React, {useCallback, useLayoutEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, View} from 'react-native';
+import {ActivityIndicator, FlatList, RefreshControl, View} from 'react-native';
 import {Text} from '@/shared/components/ui/Text/AppText';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useHeaderHeight} from '@react-navigation/elements';
@@ -7,6 +7,7 @@ import {useQuery} from '@tanstack/react-query';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {useHiddenTabBarClipPadding} from '@/shared/hooks/useHideTabBar';
+import {usePullRefresh} from '@/shared/hooks/usePullRefresh';
 import {
   KeyboardAvoidingView,
   useKeyboardState,
@@ -67,6 +68,7 @@ export default function CommunityPostScreen({route, navigation}: Props) {
   const {
     comments,
     isPending: isCommentsPending,
+    refetch: refetchComments,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
@@ -77,6 +79,9 @@ export default function CommunityPostScreen({route, navigation}: Props) {
     removeComment,
     likeComment,
   } = useCommunityCommentsViewModel(postId);
+  const {refreshing, onRefresh} = usePullRefresh(() =>
+    Promise.all([refetch(), refetchComments()]),
+  );
 
   const isMyPost =
     !!myUserId && String(post?.author?.id ?? '#none') === String(myUserId);
@@ -176,6 +181,9 @@ export default function CommunityPostScreen({route, navigation}: Props) {
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.4}
           keyboardShouldPersistTaps="handled"
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           ItemSeparatorComponent={CommentSeparator}
           ListHeaderComponent={
             <>
