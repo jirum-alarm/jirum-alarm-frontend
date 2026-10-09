@@ -59,7 +59,8 @@ const TopButton = ({
       className={cn(
         'absolute -top-14 right-[16px] z-50 flex h-[40px] w-[40px] items-center justify-center rounded-full border border-gray-300 bg-white opacity-100 shadow-[0_2px_12px_0_rgba(0,0,0,0.08)] transition-opacity',
         {
-          'opacity-0': !isVisible,
+          // 투명하기만 하면 상세 구매 버튼 바로 위에서 보이지 않는 채로 탭을 가로챈다.
+          'pointer-events-none opacity-0': !isVisible,
         },
         className,
       )}

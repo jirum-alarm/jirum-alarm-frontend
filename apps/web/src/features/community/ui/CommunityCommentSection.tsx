@@ -65,7 +65,7 @@ function CommentItem({
         {isMyComment && (
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="flex h-6 w-6 items-center justify-center text-gray-400 transition-transform active:scale-95"
+            className="-m-2 box-content flex h-6 w-6 items-center justify-center p-2 text-gray-400 transition-transform active:scale-95"
             aria-label="댓글 메뉴"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">

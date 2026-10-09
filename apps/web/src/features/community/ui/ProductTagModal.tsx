@@ -137,7 +137,7 @@ export default function ProductTagModal({
             <Drawer.Title>상품 태그</Drawer.Title>
           </VisuallyHidden.Root>
           <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-          <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 bottom-0 z-[9999] mx-auto flex h-[88vh] flex-col bg-white outline-hidden">
+          <Drawer.Content className="max-w-mobile-max rounded-t-5 fixed inset-x-0 bottom-0 z-[9999] mx-auto flex h-[88dvh] flex-col bg-white outline-hidden">
             {/* 모달 헤더 */}
             <div className="flex items-center justify-between px-5 py-4">
               <h2 className="text-base font-semibold text-gray-900">상품 태그</h2>

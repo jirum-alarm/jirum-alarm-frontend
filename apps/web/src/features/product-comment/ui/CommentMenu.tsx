@@ -45,7 +45,7 @@ export default function CommentMenu({ comment }: { comment: TComment }) {
   return (
     <Drawer.Root onOpenChange={setIsOpen} open={isOpen}>
       <Drawer.Trigger asChild>
-        <button className="h-6 w-6 bg-transparent">
+        <button aria-label="댓글 메뉴" className="-m-2 box-content h-6 w-6 bg-transparent p-2">
           <Dots width={24} height={24} />
         </button>
       </Drawer.Trigger>

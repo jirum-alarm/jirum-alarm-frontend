@@ -71,7 +71,7 @@ jirum-alarm-frontend/
 - Category-based browsing and filtering
 - Real-time notifications and alerts
 - Mobile-responsive design
-- PWA capabilities
+- Web app manifest only — no offline service worker (the only SW is `firebase-messaging-sw.js` for push)
 - Comprehensive analytics integration
 
 **Development Scripts:**

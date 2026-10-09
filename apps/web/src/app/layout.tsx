@@ -25,12 +25,17 @@ export const metadata: Metadata = defaultMetadata;
 const isDarkScheme = async () => isDarkCookie((await cookies()).get(COLOR_SCHEME_COOKIE)?.value);
 
 export async function generateViewport(): Promise<Viewport> {
+  const [isDark, { isApple, isJirumAlarmApp }] = await Promise.all([isDarkScheme(), checkDevice()]);
   return {
     initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
+    // 손가락 확대는 막지 않는다(상품 사진·작은 글씨). iOS 만 maximumScale 1 을 둔다 — 16px 미만 입력칸(검색 등)을
+    // 누를 때 화면이 확대된 채 남는 것을 막고, iOS 는 이 값이 있어도 두 손가락 확대는 허용한다.
+    // 안드로이드 크롬은 maximumScale 1 이면 확대 자체가 막히므로 주지 않는다.
+    // 앱 웹뷰(글쓰기·약관)는 네이티브 화면처럼 확대를 막아 둔다.
+    ...((isApple || isJirumAlarmApp) && { maximumScale: 1 }),
+    ...(isJirumAlarmApp && { userScalable: false }),
     width: 'device-width',
-    themeColor: (await isDarkScheme()) ? THEME_COLOR.dark : THEME_COLOR.light,
+    themeColor: isDark ? THEME_COLOR.dark : THEME_COLOR.light,
     viewportFit: 'cover',
   };
 }

@@ -49,7 +49,10 @@ export default function PostMenu({ postId, isMyPost }: { postId: number; isMyPos
     <>
       <Drawer.Root onOpenChange={setIsOpen} open={isOpen}>
         <Drawer.Trigger asChild>
-          <button className="h-6 w-6 bg-transparent transition-transform active:scale-95">
+          <button
+            aria-label="게시글 메뉴"
+            className="-m-2 box-content h-6 w-6 bg-transparent p-2 transition-transform active:scale-95"
+          >
             <Dots width={24} height={24} />
           </button>
         </Drawer.Trigger>

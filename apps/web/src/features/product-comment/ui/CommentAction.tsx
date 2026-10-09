@@ -67,10 +67,11 @@ export default function CommentAction({
 
   const isReply = editStatus === 'reply';
 
+  // -my/py: 글자 줄(20px)은 그대로 두고 누르는 높이만 40px 로.
   return (
     <>
       <button
-        className="flex h-auto items-center gap-x-1 bg-transparent"
+        className="-my-2.5 flex h-auto items-center gap-x-1 bg-transparent py-2.5"
         onClick={handleLike}
         disabled={!isUserLogin}
       >
@@ -84,7 +85,7 @@ export default function CommentAction({
       </button>
       {canReply && !hasParentComment && (
         <button
-          className="flex h-auto items-center gap-x-1 bg-transparent"
+          className="-my-2.5 flex h-auto items-center gap-x-1 bg-transparent py-2.5"
           onClick={handleReply}
           disabled={!isUserLogin}
         >
