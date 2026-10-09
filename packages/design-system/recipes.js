@@ -6,9 +6,10 @@
  * web 은 둘을 한 요소에 같이 건다. 배치(inline-flex·정렬·줄바꿈 금지·위치)는 플랫폼마다 달라 각 컴포넌트가 붙인다.
  * 여기 쓰는 클래스는 web(Tailwind v4)·앱(NativeWind = Tailwind v3) 둘 다에 있는 것만.
  *
- *   web  apps/web/src/shared/ui/common/{Badge,Chip,Switch} · shared/ui/{SectionHeader,DetailSectionHeader} ·
+ *   web  apps/web/src/shared/ui/common/{Badge,Chip,Switch,BottomSheet,Skeleton} · shared/ui/{SectionHeader,DetailSectionHeader} ·
  *        entities/product-list/ui/ProductCardStatus
- *   앱   apps/mobile/src/shared/components/ui/{Badge,Chip,Switch,SectionHeader} · shared/components/product/ProductCardStatus
+ *   앱   apps/mobile/src/shared/components/ui/{Badge,Chip,Switch,SectionHeader} · shared/components/product/ProductCardStatus ·
+ *        shared/components/{BottomSheet,Skeletons}
  * 탭(tab)·사진 틀(cardThumb)은 컴포넌트 없이 각 자리가 직접 읽는다 — 자리마다 스크롤·측정 코드가 달라 껍데기를 못 나눈다.
  */
 
@@ -107,6 +108,25 @@ const sectionTitle = {
 /** 상품 카드 사진 틀 — 사진이 늦거나 투명 PNG 여도 카드 자리가 보이게 옅은 면 + 테두리. */
 const cardThumb = 'overflow-hidden rounded-lg border border-gray-200 bg-gray-50';
 
+/** 본문 안 정보 상자(가격 판정 요약·공유 미리보기 등) — 옅은 면 + 테두리. 여백은 내용마다 다르다. */
+const infoBox = 'rounded-xl border border-gray-200 bg-gray-50';
+
+/**
+ * 아래에서 올라오는 시트의 겉 — 가림막·판(위 모서리 rounded-t-sheet 20px)·손잡이(40x4).
+ * 안쪽 여백·높이는 내용마다 달라 각 자리가 붙인다. 앱 BottomSheet 도 같은 값(가림막 40% 검정).
+ */
+const sheet = {
+  overlay: 'bg-black/40',
+  panel: 'rounded-t-sheet bg-white',
+  handle: 'mx-auto h-1 w-10 rounded-full bg-gray-300',
+};
+
+/**
+ * 로딩 자리표시 판. gray-100 에 깜빡임(투명도 0.5)까지 겹치면 흰 바탕과 거의 구분이 안 됐다
+ * (앱 상세 "스켈레톤이 잘 안 보인다" 지적) — 그래서 gray-200. 앱 SkeletonBox 와 같은 색.
+ */
+const skeleton = 'bg-gray-200';
+
 /** 상품 카드 사진 위 라벨 — 왼쪽 아래 모서리(판매종료·베스트판매자)와 아래 띠(유통기한). */
 const cardLabel = {
   corner: {box: 'h-[22px] rounded-tr-lg rounded-bl-lg px-2', text: 'text-xs'},
@@ -117,4 +137,4 @@ const cardLabel = {
   strip: {box: 'h-[22px] rounded-b-lg bg-fixed-700/80 px-2', text: 'text-xs text-fixed-white'},
 };
 
-module.exports = {badge, chip, tab, toggle, sectionTitle, cardThumb, cardLabel};
+module.exports = {badge, chip, tab, toggle, sectionTitle, cardThumb, infoBox, sheet, skeleton, cardLabel};
