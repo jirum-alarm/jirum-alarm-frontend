@@ -12,7 +12,7 @@ import { kstDaysAgo, toKstDateString, toStatsDateRange } from '@/utils/date';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-// 출처 코드 → 화면 이름·색. 차트·비중 막대·목록이 같은 색을 쓰게 한 곳에 둔다
+// 출처 코드 → 화면 이름·색 (목록 점·막대가 같은 색)
 const SOURCES: Record<string, { name: string; color: string }> = {
   toss: { name: '토스', color: '#3182F6' },
   adpick: { name: '애드픽', color: '#10B981' },
@@ -25,8 +25,12 @@ const SOURCES: Record<string, { name: string; color: string }> = {
 const sourceOf = (code: string) => SOURCES[code] ?? { name: code, color: '#94A3B8' };
 
 const won = (v: number) => `${Math.round(v).toLocaleString()}원`;
-const DAY_MS = 24 * 60 * 60 * 1000;
+/** 좁은 칸용 — 1만 이상은 '12.3만원' */
+const shortWon = (v: number) =>
+  Math.abs(v) >= 10000 ? `${Number((v / 10000).toFixed(1)).toLocaleString()}만원` : won(v);
+const md = (d: string) => `${Number(d.slice(5, 7))}/${Number(d.slice(8, 10))}`;
 
+const DAY_MS = 24 * 60 * 60 * 1000;
 /** [from, to] KST 날짜를 하루씩 — 수익 0인 날도 막대 자리를 남긴다 */
 const daysBetween = (from: string, to: string) => {
   const days: string[] = [];
@@ -36,10 +40,15 @@ const daysBetween = (from: string, to: string) => {
   return days;
 };
 
-type Period = 'month' | 'last30';
+const PERIODS = [
+  { key: 'month', label: '이번 달' },
+  { key: 'last30', label: '최근 30일' },
+] as const;
+type Period = (typeof PERIODS)[number]['key'];
 
 /**
- * 홈 맨 위 '수익'(세후, 제휴 + 애드센스). 오늘·어제·7일 타일 + 기간(이번 달 / 최근 30일) 합계·출처별 비중·일별 막대.
+ * 홈 맨 위 '수익'(세후, 제휴 + 애드센스). 모바일 한 화면에 읽히게:
+ * 오늘·어제·7일 숫자 → 기간(이번 달 / 최근 30일) 합계 → 출처별 순위 막대 → 일별 합계 막대.
  * 수익링크 권한이 없으면 쿼리도 안 보낸다(보내면 FORBIDDEN 배너가 뜬다).
  */
 const RevenueSummary = () => {
@@ -62,23 +71,25 @@ const RevenueSummary = () => {
   const periodStart = period === 'month' ? monthStart : last30Start;
   const view = useMemo(() => {
     if (!rows) return undefined;
-    const inPeriod = rows.filter((r) => r.date.slice(0, 10) >= periodStart);
     const bySource = new Map<string, number>();
-    inPeriod.forEach((r) => bySource.set(r.source, (bySource.get(r.source) ?? 0) + r.revenue));
+    const byDay = new Map<string, number>();
+    rows.forEach((r) => {
+      const day = r.date.slice(0, 10);
+      if (day < periodStart) return;
+      bySource.set(r.source, (bySource.get(r.source) ?? 0) + r.revenue);
+      byDay.set(day, (byDay.get(day) ?? 0) + r.revenue);
+    });
     const sources = [...bySource.entries()]
       .filter(([, v]) => v !== 0)
       .sort((a, b) => b[1] - a[1])
       .map(([code, revenue]) => ({ code, revenue, ...sourceOf(code) }));
     const days = daysBetween(periodStart, today);
-    const byKey = new Map(inPeriod.map((r) => [`${r.source}|${r.date.slice(0, 10)}`, r.revenue]));
     return {
       total: sources.reduce((acc, s) => acc + s.revenue, 0),
+      top: Math.max(0, ...sources.map((s) => s.revenue)),
       sources,
       days,
-      series: sources.map((s) => ({
-        name: s.name,
-        data: days.map((d) => byKey.get(`${s.code}|${d}`) ?? 0),
-      })),
+      daily: days.map((d) => Math.round(byDay.get(d) ?? 0)),
     };
   }, [rows, periodStart, today]);
 
@@ -91,140 +102,134 @@ const RevenueSummary = () => {
   const todayBySource = rows
     ?.filter((r) => r.date.slice(0, 10) === today && r.revenue !== 0)
     .sort((a, b) => b.revenue - a.revenue);
-
-  const tiles = [
+  const stats = [
     { label: '오늘', value: sum(today) },
     { label: '어제', value: sum(yesterday, yesterday) },
     { label: '최근 7일', value: sum(weekStart) },
   ];
-  const md = (d: string) => `${Number(d.slice(5, 7))}/${Number(d.slice(8, 10))}`;
 
   return (
-    <section className="mb-6">
-      <div className="mb-2 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-bodydark2">수익 (세후)</h3>
+    <section className="mb-6 space-y-3">
+      <div className="flex items-center justify-between">
+        <h3 className="text-base font-semibold text-black">수익 (세후)</h3>
         <Link href="/profit-link" className="text-xs font-medium text-primary">
           수익링크 상세 ›
         </Link>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
-        {tiles.map((t) => (
-          <Panel key={t.label} className="p-3 sm:p-4">
-            <p className="text-xs font-medium text-body">{t.label}</p>
-            <p className="mt-1 text-lg font-bold text-black sm:text-2xl">
-              {t.value === undefined ? '…' : won(t.value)}
-            </p>
-            {t.label === '오늘' && todayBySource && todayBySource.length > 0 && (
-              <ul className="mt-1 space-y-0.5 text-[11px] text-body">
-                {todayBySource.map((r) => (
-                  <li key={r.source}>
-                    {sourceOf(r.source).name} {won(r.revenue)}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Panel>
-        ))}
-      </div>
+      <Panel className="p-4">
+        <div className="grid grid-cols-3 divide-x divide-stroke text-center">
+          {stats.map((s) => (
+            <div key={s.label} className="px-1">
+              <p className="text-xs text-body">{s.label}</p>
+              <p className="mt-1 text-base font-bold text-black sm:text-xl">
+                {s.value === undefined ? '…' : shortWon(s.value)}
+              </p>
+            </div>
+          ))}
+        </div>
+        {todayBySource && todayBySource.length > 0 && (
+          <p className="mt-3 border-t border-stroke pt-2 text-xs text-body">
+            <span className="font-medium text-black">오늘</span>{' '}
+            {todayBySource
+              .map((r) => `${sourceOf(r.source).name} ${shortWon(r.revenue)}`)
+              .join(' · ')}
+          </p>
+        )}
+      </Panel>
 
-      <Panel className="mt-3 p-4 sm:p-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="text-sm font-medium text-body">
-              {period === 'month' ? '이번 달' : '최근 30일'} ({md(periodStart)} ~ {md(today)})
-            </p>
-            <p className="mt-1 text-2xl font-bold text-black sm:text-3xl">
-              {view ? won(view.total) : '…'}
-            </p>
-          </div>
-          <div className="inline-flex rounded-md border border-stroke p-0.5 text-sm">
-            {(
-              [
-                ['month', '이번 달'],
-                ['last30', '최근 30일'],
-              ] as const
-            ).map(([key, label]) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setPeriod(key)}
-                className={`rounded px-3 py-1 font-medium ${
-                  period === key ? 'bg-primary text-white' : 'text-body'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+      <Panel className="p-4 sm:p-6">
+        <div className="grid grid-cols-2 rounded-lg bg-gray-2 p-1 text-sm sm:inline-grid">
+          {PERIODS.map((p) => (
+            <button
+              key={p.key}
+              type="button"
+              onClick={() => setPeriod(p.key)}
+              className={`rounded-md px-4 py-1.5 font-medium ${
+                period === p.key ? 'bg-white text-black shadow-sm' : 'text-body'
+              }`}
+            >
+              {p.label}
+            </button>
+          ))}
         </div>
 
+        <p className="mt-4 text-xs text-body">
+          {md(periodStart)} ~ {md(today)} 합계
+        </p>
+        <p className="text-3xl font-bold text-black">{view ? won(view.total) : '…'}</p>
+
         {view && view.total > 0 && (
-          <>
-            {/* 출처별 비중 — 한 줄 막대 + 아래 목록(같은 색) */}
-            <div className="mt-4 flex h-3 w-full overflow-hidden rounded-full bg-gray-2">
-              {view.sources
-                .filter((s) => s.revenue > 0)
-                .map((s) => (
-                  <div
-                    key={s.code}
-                    style={{ width: `${(s.revenue / view.total) * 100}%`, background: s.color }}
-                    title={`${s.name} ${won(s.revenue)}`}
-                  />
-                ))}
-            </div>
-            <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm sm:grid-cols-3 lg:grid-cols-4">
+          // 넓은 화면은 출처 목록 | 일별 그래프 좌우로 (모바일은 위아래)
+          <div className="lg:grid lg:grid-cols-2 lg:gap-10">
+            <ul className="mt-4 space-y-2.5">
               {view.sources.map((s) => (
-                <li key={s.code} className="flex items-center gap-2">
-                  <span
-                    className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
-                    style={{ background: s.color }}
-                  />
-                  <span className="text-body">{s.name}</span>
-                  <span className="ml-auto font-semibold text-black">{won(s.revenue)}</span>
-                  <span className="w-9 text-right text-xs text-bodydark2">
-                    {Math.round((s.revenue / view.total) * 100)}%
-                  </span>
+                <li key={s.code} className="text-sm">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="flex items-center gap-1.5 text-black">
+                      <span
+                        className="inline-block h-2 w-2 rounded-full"
+                        style={{ background: s.color }}
+                      />
+                      {s.name}
+                    </span>
+                    <span className="font-semibold text-black">
+                      {won(s.revenue)}
+                      <span className="ml-1.5 inline-block w-8 text-right text-xs font-normal text-bodydark2">
+                        {Math.round((s.revenue / view.total) * 100)}%
+                      </span>
+                    </span>
+                  </div>
+                  <div className="mt-1 h-1.5 rounded-full bg-gray-2">
+                    <div
+                      className="h-full rounded-full"
+                      style={{
+                        width: `${Math.max(0, (s.revenue / view.top) * 100)}%`,
+                        background: s.color,
+                      }}
+                    />
+                  </div>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-4">
-              <Chart
-                type="bar"
-                height={260}
-                options={{
-                  chart: { stacked: true, toolbar: { show: false } },
-                  colors: view.sources.map((s) => s.color),
-                  xaxis: {
-                    categories: view.days.map(md),
-                    labels: { rotate: 0, hideOverlappingLabels: true },
-                  },
-                  yaxis: {
-                    labels: {
-                      formatter: (v: number) =>
-                        v === 0
-                          ? '0'
-                          : `${(v / 10000).toLocaleString(undefined, { maximumFractionDigits: 1 })}만`,
+            <div className="mt-6 lg:mt-4">
+              <p className="text-xs font-medium text-body">일별 수익</p>
+              <div className="-mx-2">
+                <Chart
+                  type="bar"
+                  height={180}
+                  options={{
+                    chart: { toolbar: { show: false }, zoom: { enabled: false } },
+                    colors: ['#3C50E0'],
+                    plotOptions: { bar: { columnWidth: '60%', borderRadius: 2 } },
+                    xaxis: {
+                      categories: view.days.map(md),
+                      tickAmount: 6,
+                      tickPlacement: 'on',
+                      labels: { rotate: 0, style: { fontSize: '10px' } },
+                      axisTicks: { show: false },
                     },
-                  },
-                  tooltip: {
-                    shared: true,
-                    intersect: false,
-                    y: { formatter: (v: number) => won(v) },
-                  },
-                  legend: { show: false },
-                  dataLabels: { enabled: false },
-                  plotOptions: { bar: { columnWidth: '70%', borderRadius: 2 } },
-                  grid: { strokeDashArray: 4 },
-                }}
-                series={view.series}
-              />
+                    yaxis: {
+                      tickAmount: 3,
+                      labels: {
+                        style: { fontSize: '10px' },
+                        formatter: (v: number) => shortWon(v).replace('원', ''),
+                      },
+                    },
+                    grid: { strokeDashArray: 4, padding: { left: 0, right: 4 } },
+                    tooltip: { y: { formatter: (v: number) => won(v) } },
+                    dataLabels: { enabled: false },
+                    legend: { show: false },
+                  }}
+                  series={[{ name: '수익', data: view.daily }]}
+                />
+              </div>
             </div>
-          </>
+          </div>
         )}
 
-        <p className="mt-2 text-[11px] text-bodydark2">
+        <p className="mt-3 text-[11px] leading-relaxed text-bodydark2">
           결제일 기준·취소 제외. 최근 1~2일은 덜 찬 값(쿠팡·네이버·애드센스가 하루 이틀 늦게
           들어온다)
         </p>
