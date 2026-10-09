@@ -321,15 +321,11 @@ function OkachatSheet({ isMobile, onClose }: { isMobile: boolean; onClose: () =>
 
   return (
     <Drawer.Root open onOpenChange={(open) => !open && onClose()}>
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-[9999] bg-black/40" />
-        <Drawer.Content className="max-w-mobile-max rounded-t-sheet pb-safe-bottom-16 fixed inset-x-0 bottom-0 z-[9999] mx-auto h-fit w-full bg-white px-5 pt-3 outline-hidden">
-          <div className="mx-auto mb-5 h-1 w-10 rounded-full bg-gray-300" aria-hidden />
-          <Drawer.Title className="text-2xl font-semibold text-gray-900">{heading}</Drawer.Title>
-          <Drawer.Description className="pt-2 text-sm text-gray-500">{bodyText}</Drawer.Description>
-          {actions}
-        </Drawer.Content>
-      </Drawer.Portal>
+      <BottomSheetContent handle className="pb-safe-bottom-16 px-5">
+        <Drawer.Title className="text-2xl font-semibold text-gray-900">{heading}</Drawer.Title>
+        <Drawer.Description className="pt-2 text-sm text-gray-500">{bodyText}</Drawer.Description>
+        {actions}
+      </BottomSheetContent>
     </Drawer.Root>
   );
 }
