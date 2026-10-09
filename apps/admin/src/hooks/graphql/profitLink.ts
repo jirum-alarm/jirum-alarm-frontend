@@ -5,6 +5,8 @@ import {
   AffiliateSalesTrendQueryVariables,
   HasKakaoSessionQuery,
   HasKakaoSessionQueryVariables,
+  HasNaverBcSessionQuery,
+  HasNaverBcSessionQueryVariables,
   HasOhouSessionQuery,
   HasOhouSessionQueryVariables,
   HasThreeHaSessionQuery,
@@ -31,6 +33,8 @@ import {
   RevenueTrendQueryVariables,
   SetKakaoSessionMutation,
   SetKakaoSessionMutationVariables,
+  SetNaverBcSessionMutation,
+  SetNaverBcSessionMutationVariables,
   SetOhouSessionMutation,
   SetOhouSessionMutationVariables,
   SetThreeHaSessionMutation,
@@ -43,11 +47,13 @@ import {
   MutationIssueOhouProfitLink,
   MutationIssueTossProfitLink,
   MutationSetKakaoSession,
+  MutationSetNaverBcSession,
   MutationSetOhouSession,
   MutationSetThreeHaSession,
   MutationSetTossSession,
   QueryAffiliateSalesTrend,
   QueryHasKakaoSession,
+  QueryHasNaverBcSession,
   QueryHasOhouSession,
   QueryHasThreeHaSession,
   QueryHasTossSession,
@@ -80,6 +86,22 @@ export const useMutationSetTossSession = (
     },
   );
 };
+
+export const useQueryHasNaverBcSession = (
+  options?: QueryOptions<HasNaverBcSessionQuery, HasNaverBcSessionQueryVariables>,
+) =>
+  useQuery<HasNaverBcSessionQuery, HasNaverBcSessionQueryVariables>(QueryHasNaverBcSession, {
+    fetchPolicy: 'network-only',
+    ...options,
+  });
+
+export const useMutationSetNaverBcSession = (
+  options?: useMutation.Options<SetNaverBcSessionMutation, SetNaverBcSessionMutationVariables>,
+) =>
+  useMutation<SetNaverBcSessionMutation, SetNaverBcSessionMutationVariables>(
+    MutationSetNaverBcSession,
+    { ...options },
+  );
 
 export const useQueryHasThreeHaSession = (
   options?: QueryOptions<HasThreeHaSessionQuery, HasThreeHaSessionQueryVariables>,

@@ -62,6 +62,8 @@ type Documents = {
   '\n  query HasThreeHaSession {\n    hasThreeHaSession\n  }\n': typeof types.HasThreeHaSessionDocument;
   '\n  mutation SetThreeHaSession($cookie: String!) {\n    setThreeHaSession(cookie: $cookie)\n  }\n': typeof types.SetThreeHaSessionDocument;
   '\n  mutation IssueTossProfitLink($url: String!) {\n    issueTossProfitLink(url: $url) {\n      profitLink\n      error\n    }\n  }\n': typeof types.IssueTossProfitLinkDocument;
+  '\n  query HasNaverBcSession {\n    hasNaverBcSession\n  }\n': typeof types.HasNaverBcSessionDocument;
+  '\n  mutation SetNaverBcSession($cookie: String!) {\n    setNaverBcSession(cookie: $cookie)\n  }\n': typeof types.SetNaverBcSessionDocument;
   '\n  query HasOhouSession {\n    hasOhouSession\n  }\n': typeof types.HasOhouSessionDocument;
   '\n  mutation SetOhouSession($curl: String!) {\n    setOhouSession(curl: $curl)\n  }\n': typeof types.SetOhouSessionDocument;
   '\n  mutation IssueOhouProfitLink($url: String!) {\n    issueOhouProfitLink(url: $url) {\n      profitLink\n      error\n    }\n  }\n': typeof types.IssueOhouProfitLinkDocument;
@@ -89,6 +91,7 @@ type Documents = {
   '\n  query QueryProductRegistrationStatsByProvider(\n    $startDate: DateTime!\n    $endDate: DateTime!\n    $interval: DateInterval!\n    $providerType: ProviderType\n  ) {\n    productRegistrationStatsByProvider(\n      startDate: $startDate\n      endDate: $endDate\n      interval: $interval\n      providerType: $providerType\n    ) {\n      date\n      providerId\n      providerName\n      count\n    }\n  }\n': typeof types.QueryProductRegistrationStatsByProviderDocument;
   '\n  query QueryProviderHealthStatus($providerType: ProviderType) {\n    providerHealthStatus(providerType: $providerType) {\n      providerId\n      providerName\n      providerType\n      last1hCount\n      last24hCount\n      last7dCount\n      latestCollectedAt\n      minutesSinceLatest\n    }\n  }\n': typeof types.QueryProviderHealthStatusDocument;
   '\n  query QueryThumbnailStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {\n    thumbnailStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      typeDistribution {\n        thumbnailType\n        count\n      }\n      mallDistribution {\n        mallName\n        count\n      }\n      missingCount\n      totalCount\n    }\n  }\n': typeof types.QueryThumbnailStatsDocument;
+  '\n  query QuerySearchProbe($keyword: String!) {\n    products(keyword: $keyword, limit: 1) {\n      id\n    }\n  }\n': typeof types.QuerySearchProbeDocument;
   '\n  mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keywords: [String!]!) {\n    addHotDealKeywordSynonymByAdmin(hotDealKeywordId: $hotDealKeywordId, keywords: $keywords)\n  }\n': typeof types.MutationAddHotDealKeywordSynonymByAdminDocument;
   '\n  mutation MutationAddHotDealExcludeKeywordByAdmin(\n    $hotDealKeywordId: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    addHotDealExcludeKeywordByAdmin(\n      hotDealKeywordId: $hotDealKeywordId\n      excludeKeywords: $excludeKeywords\n    )\n  }\n': typeof types.MutationAddHotDealExcludeKeywordByAdminDocument;
   '\n  mutation MutationRemoveHotDealKeywordSynonymByAdmin($ids: [Int!]!) {\n    removeHotDealKeywordSynonymByAdmin(ids: $ids)\n  }\n': typeof types.MutationRemoveHotDealKeywordSynonymByAdminDocument;
@@ -202,6 +205,9 @@ const documents: Documents = {
     types.SetThreeHaSessionDocument,
   '\n  mutation IssueTossProfitLink($url: String!) {\n    issueTossProfitLink(url: $url) {\n      profitLink\n      error\n    }\n  }\n':
     types.IssueTossProfitLinkDocument,
+  '\n  query HasNaverBcSession {\n    hasNaverBcSession\n  }\n': types.HasNaverBcSessionDocument,
+  '\n  mutation SetNaverBcSession($cookie: String!) {\n    setNaverBcSession(cookie: $cookie)\n  }\n':
+    types.SetNaverBcSessionDocument,
   '\n  query HasOhouSession {\n    hasOhouSession\n  }\n': types.HasOhouSessionDocument,
   '\n  mutation SetOhouSession($curl: String!) {\n    setOhouSession(curl: $curl)\n  }\n':
     types.SetOhouSessionDocument,
@@ -254,6 +260,8 @@ const documents: Documents = {
     types.QueryProviderHealthStatusDocument,
   '\n  query QueryThumbnailStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {\n    thumbnailStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      typeDistribution {\n        thumbnailType\n        count\n      }\n      mallDistribution {\n        mallName\n        count\n      }\n      missingCount\n      totalCount\n    }\n  }\n':
     types.QueryThumbnailStatsDocument,
+  '\n  query QuerySearchProbe($keyword: String!) {\n    products(keyword: $keyword, limit: 1) {\n      id\n    }\n  }\n':
+    types.QuerySearchProbeDocument,
   '\n  mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keywords: [String!]!) {\n    addHotDealKeywordSynonymByAdmin(hotDealKeywordId: $hotDealKeywordId, keywords: $keywords)\n  }\n':
     types.MutationAddHotDealKeywordSynonymByAdminDocument,
   '\n  mutation MutationAddHotDealExcludeKeywordByAdmin(\n    $hotDealKeywordId: Int!\n    $excludeKeywords: [String!]!\n  ) {\n    addHotDealExcludeKeywordByAdmin(\n      hotDealKeywordId: $hotDealKeywordId\n      excludeKeywords: $excludeKeywords\n    )\n  }\n':
@@ -586,6 +594,18 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: '\n  query HasNaverBcSession {\n    hasNaverBcSession\n  }\n',
+): typeof import('./graphql').HasNaverBcSessionDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation SetNaverBcSession($cookie: String!) {\n    setNaverBcSession(cookie: $cookie)\n  }\n',
+): typeof import('./graphql').SetNaverBcSessionDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: '\n  query HasOhouSession {\n    hasOhouSession\n  }\n',
 ): typeof import('./graphql').HasOhouSessionDocument;
 /**
@@ -744,6 +764,12 @@ export function graphql(
 export function graphql(
   source: '\n  query QueryThumbnailStats($startDate: DateTime!, $endDate: DateTime!, $interval: DateInterval!) {\n    thumbnailStats(startDate: $startDate, endDate: $endDate, interval: $interval) {\n      typeDistribution {\n        thumbnailType\n        count\n      }\n      mallDistribution {\n        mallName\n        count\n      }\n      missingCount\n      totalCount\n    }\n  }\n',
 ): typeof import('./graphql').QueryThumbnailStatsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query QuerySearchProbe($keyword: String!) {\n    products(keyword: $keyword, limit: 1) {\n      id\n    }\n  }\n',
+): typeof import('./graphql').QuerySearchProbeDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

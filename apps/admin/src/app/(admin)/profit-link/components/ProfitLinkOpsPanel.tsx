@@ -8,10 +8,12 @@ import {
   useMutationIssueOhouProfitLink,
   useMutationIssueTossProfitLink,
   useMutationSetKakaoSession,
+  useMutationSetNaverBcSession,
   useMutationSetOhouSession,
   useMutationSetThreeHaSession,
   useMutationSetTossSession,
   useQueryHasKakaoSession,
+  useQueryHasNaverBcSession,
   useQueryHasOhouSession,
   useQueryHasThreeHaSession,
   useQueryHasTossSession,
@@ -19,6 +21,7 @@ import {
 
 import { detectIssueProvider, ISSUE_PROVIDER_LABEL } from '../lib/detect-issue-provider';
 import { kakaoSessionSummary, parseKakaoSession } from '../lib/parse-kakao-session';
+import { naverBcCookieSummary, parseNaverBcCookie } from '../lib/parse-naver-bc-cookie';
 import { parseOhouSession } from '../lib/parse-ohou-session';
 import { parseThreeHaRefreshCookie, threeHaSessionSummary } from '../lib/parse-threeha-refresh';
 import { parseTossTbizAuth } from '../lib/parse-toss-tbizauth';
@@ -163,6 +166,7 @@ const ProfitLinkOpsPanel = () => {
         </p>
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
           <TossSessionCard />
+          <NaverBcSessionCard />
           <OhouSessionCard />
           <KakaoSessionCard />
           <ThreeHaSessionCard />
@@ -247,6 +251,90 @@ const TossSessionCard = () => {
         setToken(parsed);
         setMessage(null);
         setSession({ variables: { token: parsed } });
+      }}
+      saving={saving}
+      message={message}
+    />
+  );
+};
+
+const NaverBcSessionCard = () => {
+  const [cookie, setCookie] = useState('');
+  const [display, setDisplay] = useState('');
+  const [message, setMessage] = useState<Flash | null>(null);
+  const { data, loading, refetch } = useQueryHasNaverBcSession();
+  const [setSession, { loading: saving }] = useMutationSetNaverBcSession({
+    onCompleted: (res) => {
+      if (res.setNaverBcSession) {
+        setMessage({ type: 'ok', text: '네이버 브랜드커넥트 세션이 갱신되었습니다.' });
+        setCookie('');
+        setDisplay('');
+        refetch();
+      } else {
+        setMessage({ type: 'error', text: '저장에 실패했습니다.' });
+      }
+    },
+    onError: (e) => setMessage({ type: 'error', text: e.message }),
+  });
+
+  return (
+    <SessionRefreshCard
+      title="네이버 브랜드커넥트"
+      hasSession={data?.hasNaverBcSession}
+      statusLoading={loading}
+      okText="있음"
+      badText="없음/만료"
+      howTo={
+        <ol className="list-decimal space-y-1 pl-4">
+          <li>
+            <a
+              href="https://brandconnect.naver.com"
+              target="_blank"
+              rel="noreferrer"
+              className="text-primary underline"
+            >
+              brandconnect.naver.com
+            </a>{' '}
+            로그인
+          </li>
+          <li>
+            Network 아무 요청 Copy as cURL (또는 Cookie 헤더 원문 —{' '}
+            <code className="rounded-sm bg-gray-2 px-1 dark:bg-graydark">NID_AUT</code>·
+            <code className="rounded-sm bg-gray-2 px-1 dark:bg-graydark">NID_SES</code> 포함). 자동
+            갱신이 없어 만료되면 다시 넣어야 한다. 네이버 링크 발급·스토어 피드·판매 수집이 함께
+            쓴다.
+          </li>
+        </ol>
+      }
+      placeholder="curl 또는 Cookie 헤더 붙여넣기 — 길이만 표시됩니다"
+      value={display}
+      onChange={setDisplay}
+      onPaste={(e) => {
+        const pasted = e.clipboardData.getData('text');
+        if (!pasted.trim()) return;
+        e.preventDefault();
+        const parsed = parseNaverBcCookie(pasted);
+        if (!parsed) {
+          setCookie('');
+          setDisplay('');
+          setMessage({
+            type: 'error',
+            text: 'NID_AUT·NID_SES 쿠키를 찾지 못했습니다(로그인 상태?).',
+          });
+          return;
+        }
+        setCookie(parsed);
+        setDisplay(naverBcCookieSummary(parsed));
+        setMessage({ type: 'ok', text: '쿠키는 표시하지 않습니다. 저장을 누르면 반영됩니다.' });
+      }}
+      onSave={() => {
+        const parsed = parseNaverBcCookie(cookie || display);
+        if (!parsed) {
+          setMessage({ type: 'error', text: 'NID_AUT·NID_SES 가 든 Cookie 를 붙여넣어 주세요.' });
+          return;
+        }
+        setMessage(null);
+        setSession({ variables: { cookie: parsed } });
       }}
       saving={saving}
       message={message}
@@ -456,7 +544,7 @@ const ThreeHaSessionCard = () => {
 
   return (
     <SessionRefreshCard
-      title="세시간전"
+      title="세시간전 (운영 중단)"
       hasSession={data?.hasThreeHaSession}
       statusLoading={loading}
       okText="있음"

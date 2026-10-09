@@ -693,6 +693,8 @@ export type Mutation = {
   createUserProduct: Scalars['Int']['output'];
   /** 어드민) 역할 삭제 — 소속 계정은 역할 없음이 된다 */
   deleteAdminRole: Scalars['Boolean']['output'];
+  /** 게스트 로그인 — 로그인 없이 키워드 알림을 받는 기기 계정(x-device-id 필수). 실제 로그인하면 그 계정으로 합쳐진다 */
+  guestLogin: TokenOutput;
   /** 어드민) 상품 hard delete */
   hardDeleteProductByAdmin: Scalars['Boolean']['output'];
   /** 어드민) 카카오쇼핑 상품 URL을 추천리워드 링크(clink.kakao.com/sp/…)로 발급. product 에는 쓰지 않고 링크만 반환. */
@@ -2642,6 +2644,7 @@ export type RevenueDailyOutput = {
 
 export enum Role {
   Admin = 'ADMIN',
+  Guest = 'GUEST',
   User = 'USER',
 }
 
@@ -2684,7 +2687,11 @@ export type ThemeWithKeywords = {
   __typename?: 'ThemeWithKeywords';
   description: Scalars['String']['output'];
   emoji?: Maybe<Scalars['String']['output']>;
+  /** 제목에 하나라도 있으면 이 묶음 알림에서 빼는 단어 */
+  excludeKeywords: Array<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  /** 이 묶음이 딜 제목에서 찾는 키워드 전부(등록 순) */
+  keywords: Array<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   representativeKeywords: Array<Scalars['String']['output']>;
   /** URL slug(/themes/{slug}). 없으면 id 로 링크 */
@@ -2784,6 +2791,7 @@ export type User = {
   favoriteCategories?: Maybe<Array<Scalars['Int']['output']>>;
   gender?: Maybe<Gender>;
   id: Scalars['ID']['output'];
+  isGuest: Scalars['Boolean']['output'];
   lastReadNoticeAt?: Maybe<Scalars['DateTime']['output']>;
   linkedSocialProviders?: Maybe<Array<OauthProvider>>;
   nickname: Scalars['String']['output'];
@@ -3600,6 +3608,16 @@ export type IssueTossProfitLinkMutation = {
   };
 };
 
+export type HasNaverBcSessionQueryVariables = Exact<{ [key: string]: never }>;
+
+export type HasNaverBcSessionQuery = { __typename?: 'Query'; hasNaverBcSession: boolean };
+
+export type SetNaverBcSessionMutationVariables = Exact<{
+  cookie: Scalars['String']['input'];
+}>;
+
+export type SetNaverBcSessionMutation = { __typename?: 'Mutation'; setNaverBcSession: boolean };
+
 export type HasOhouSessionQueryVariables = Exact<{ [key: string]: never }>;
 
 export type HasOhouSessionQuery = { __typename?: 'Query'; hasOhouSession: boolean };
@@ -3984,6 +4002,15 @@ export type QueryThumbnailStatsQuery = {
       count: number;
     }>;
   };
+};
+
+export type QuerySearchProbeQueryVariables = Exact<{
+  keyword: Scalars['String']['input'];
+}>;
+
+export type QuerySearchProbeQuery = {
+  __typename?: 'Query';
+  products: Array<{ __typename?: 'ProductOutput'; id: string }>;
 };
 
 export type MutationAddHotDealKeywordSynonymByAdminMutationVariables = Exact<{
@@ -4874,6 +4901,19 @@ export const IssueTossProfitLinkDocument = new TypedDocumentString(`
   IssueTossProfitLinkMutation,
   IssueTossProfitLinkMutationVariables
 >;
+export const HasNaverBcSessionDocument = new TypedDocumentString(`
+    query HasNaverBcSession {
+  hasNaverBcSession
+}
+    `) as unknown as TypedDocumentString<HasNaverBcSessionQuery, HasNaverBcSessionQueryVariables>;
+export const SetNaverBcSessionDocument = new TypedDocumentString(`
+    mutation SetNaverBcSession($cookie: String!) {
+  setNaverBcSession(cookie: $cookie)
+}
+    `) as unknown as TypedDocumentString<
+  SetNaverBcSessionMutation,
+  SetNaverBcSessionMutationVariables
+>;
 export const HasOhouSessionDocument = new TypedDocumentString(`
     query HasOhouSession {
   hasOhouSession
@@ -5233,6 +5273,13 @@ export const QueryThumbnailStatsDocument = new TypedDocumentString(`
   QueryThumbnailStatsQuery,
   QueryThumbnailStatsQueryVariables
 >;
+export const QuerySearchProbeDocument = new TypedDocumentString(`
+    query QuerySearchProbe($keyword: String!) {
+  products(keyword: $keyword, limit: 1) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<QuerySearchProbeQuery, QuerySearchProbeQueryVariables>;
 export const MutationAddHotDealKeywordSynonymByAdminDocument = new TypedDocumentString(`
     mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keywords: [String!]!) {
   addHotDealKeywordSynonymByAdmin(

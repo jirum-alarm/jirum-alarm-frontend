@@ -33,6 +33,18 @@ export const MutationIssueTossProfitLink = gql`
   }
 `;
 
+export const QueryHasNaverBcSession = gql`
+  query HasNaverBcSession {
+    hasNaverBcSession
+  }
+`;
+
+export const MutationSetNaverBcSession = gql`
+  mutation SetNaverBcSession($cookie: String!) {
+    setNaverBcSession(cookie: $cookie)
+  }
+`;
+
 export const QueryHasOhouSession = gql`
   query HasOhouSession {
     hasOhouSession

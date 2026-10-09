@@ -8,8 +8,8 @@ import { useMyAdminAccess } from '@/hooks/graphql/permission';
 import {
   useProfitLinkProviderHealth,
   useQueryHasKakaoSession,
+  useQueryHasNaverBcSession,
   useQueryHasOhouSession,
-  useQueryHasThreeHaSession,
   useQueryHasTossSession,
 } from '@/hooks/graphql/profitLink';
 import { useProviderHealthStatus } from '@/hooks/graphql/stats';
@@ -43,7 +43,7 @@ const AttentionStrip = () => {
   const toss = useQueryHasTossSession({ skip: !canProfit });
   const ohou = useQueryHasOhouSession({ skip: !canProfit });
   const kakao = useQueryHasKakaoSession({ skip: !canProfit });
-  const threeHa = useQueryHasThreeHaSession({ skip: !canProfit });
+  const naverBc = useQueryHasNaverBcSession({ skip: !canProfit });
 
   const crawlDown = (crawl.data?.providerHealthStatus ?? [])
     .filter((p) => getHealthLevel(p) !== 'healthy')
@@ -51,12 +51,13 @@ const AttentionStrip = () => {
   const salesSilent = (sales.data?.profitLinkProviderHealth ?? [])
     .filter((r) => r.salesHealth === 'silent')
     .map((r) => sourceName(r.provider));
+  // 세시간전은 9/25부터 운영 중단이라 뺀다(넣으면 늘 만료로 떠 진짜 만료가 묻힌다).
   // 응답이 false 일 때만 만료로 센다(로딩·에러로 undefined 인 걸 만료로 오인하지 않게)
   const sessionsExpired = [
     ['토스', toss.data?.hasTossSession],
+    ['네이버BC', naverBc.data?.hasNaverBcSession],
     ['오늘의집', ohou.data?.hasOhouSession],
     ['카카오쇼핑', kakao.data?.hasKakaoSession],
-    ['세시간전', threeHa.data?.hasThreeHaSession],
   ]
     .filter(([, has]) => has === false)
     .map(([name]) => name as string);
@@ -82,9 +83,9 @@ const AttentionStrip = () => {
     canProfit && {
       label: '만료된 수익링크 세션',
       href: '/profit-link',
-      loading: toss.loading || ohou.loading || kakao.loading || threeHa.loading,
+      loading: toss.loading || naverBc.loading || ohou.loading || kakao.loading,
       count:
-        toss.data && ohou.data && kakao.data && threeHa.data ? sessionsExpired.length : undefined,
+        toss.data && naverBc.data && ohou.data && kakao.data ? sessionsExpired.length : undefined,
       detail: sessionsExpired,
       unit: '곳',
     },
@@ -110,7 +111,14 @@ const AttentionStrip = () => {
 
   return (
     <section className="mb-6">
-      <h3 className="mb-2 text-sm font-semibold text-bodydark2">지금 확인할 것</h3>
+      <div className="mb-2 flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-bodydark2">지금 확인할 것</h3>
+        {canAccessPath(access, '/health') && (
+          <Link href="/health" className="text-xs font-medium text-primary">
+            전체 점검표 ›
+          </Link>
+        )}
+      </div>
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {tiles.map((t) => {
           const alert = !t.backlog && (t.count ?? 0) > 0;

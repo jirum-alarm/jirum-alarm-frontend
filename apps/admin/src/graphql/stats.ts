@@ -193,3 +193,12 @@ export const QueryThumbnailStats = gql`
     }
   }
 `;
+
+// 5. 서비스 점검 — 검색(Meilisearch)이 살아 있는지. 죽으면 에러가 난다(빈 결과로 삼키지 않음)
+export const QuerySearchProbe = gql`
+  query QuerySearchProbe($keyword: String!) {
+    products(keyword: $keyword, limit: 1) {
+      id
+    }
+  }
+`;

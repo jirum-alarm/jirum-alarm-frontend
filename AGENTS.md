@@ -124,6 +124,8 @@ src/components/         # 공통: Layouts·Sidebar(메뉴는 MENU 설정 배열)
   Next 예약 파일명은 라우트 폴더 밑에 두지 말 것(빌드가 라우트 레이아웃으로 읽는다).
 - 미들웨어는 쿠키 "존재"만 본다 — 서버 액션처럼 백엔드를 안 거치는 쓰기를 만들면 액션 안에서 `adminMe` 로 어드민인지 직접 확인할 것.
 - 사이드바 메뉴 추가 = `src/components/Sidebar/index.tsx` 의 `MENU` 배열에 한 줄.
+- 서비스 점검(`/health`, admin 역할 전용) = 「깨지면 볼 것·고칠 것」 점검표. 내용은 `src/app/(admin)/health/lib/checks.ts` 한 곳 —
+  새 수익원·크롤러·세션을 붙이거나 사고를 겪으면 거기 한 칸 추가/갱신. 레포가 공개라 내부 IP·명령은 적지 말고 vault 런북 경로로.
 - `public/` 은 비어 있어도 지우지 말 것(`.gitkeep`) — Dockerfile 이 COPY 한다.
 
 **Development Scripts:**
