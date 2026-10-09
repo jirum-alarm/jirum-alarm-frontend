@@ -163,13 +163,11 @@ export function useCommonWebViewLogic() {
           return;
         }
 
-        // ★어느 스택에서 열렸느냐에 따라 라우트 이름이 다르다.
-        // 탭 스택 안(더보기로 들어온 /toss·/curation)이면 탭 스택 라우트로
-        // 쌓아야 탭바 숨김·뒤로가기가 탭 구조를 따른다. MainStack 라우트로
-        // 쌓으면 탭 밖으로 나가 **하단 탭바가 다시 뜬다**(사용자 지적).
-        const routeName = isInTabStack(navigation)
-          ? tabStackNavigations.WEBVIEW
-          : mainNavigations.JIRUM_ALARM_WEBVIEW;
+        // ★탭 스택 라우트로 쌓는다 — 탭 스택 안(더보기로 들어온 /toss·/curation)이면
+        // 탭바 숨김·뒤로가기가 탭 구조를 따르고, 탭 밖이면 루트 스택의 같은 이름(WEBVIEW)이 받는다.
+        // 예전엔 탭 밖에서 JIRUM_ALARM_WEBVIEW 로 보냈는데 그 이름은 어느 스택에도 등록돼 있지 않아
+        // dispatch 가 조용히 무시됐다(navigate 는 실패해도 안 던진다).
+        const routeName = tabStackNavigations.WEBVIEW;
 
         if (type === 'push') {
           navigation.dispatch(StackActions.push(routeName, {uri: url}));

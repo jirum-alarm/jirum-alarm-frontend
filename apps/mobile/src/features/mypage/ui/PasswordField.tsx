@@ -18,6 +18,7 @@ export default function PasswordField({
   helper,
   autoFocus = false,
   onSubmitEditing,
+  current = false,
 }: {
   label: string;
   placeholder: string;
@@ -26,6 +27,8 @@ export default function PasswordField({
   helper?: React.ReactNode;
   autoFocus?: boolean;
   onSubmitEditing?: () => void;
+  /** 현재 비밀번호 확인 칸 — 저장된 비밀번호를 채우게 한다(아니면 iOS 가 새 비밀번호 생성을 띄운다). */
+  current?: boolean;
 }) {
   const [masking, setMasking] = useState(true);
 
@@ -38,8 +41,8 @@ export default function PasswordField({
         placeholder={placeholder}
         secureTextEntry={masking}
         autoFocus={autoFocus}
-        autoComplete="new-password"
-        textContentType="newPassword"
+        autoComplete={current ? 'current-password' : 'new-password'}
+        textContentType={current ? 'password' : 'newPassword'}
         returnKeyType="done"
         onSubmitEditing={onSubmitEditing}
         suffixIcon={

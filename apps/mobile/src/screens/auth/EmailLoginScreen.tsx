@@ -143,6 +143,8 @@ const EmailLoginScreen = () => {
                 }}
                 value={field.value}
                 secureTextEntry={!showPassword}
+                autoComplete="current-password"
+                textContentType="password"
                 placeholder="비밀번호를 입력해주세요."
                 label="비밀번호"
                 error={!!fieldState.error}
