@@ -9,8 +9,8 @@
     "code-gen": "graphql-codegen --config codegen.ts",
     "prettier-fix": "prettier --write \"./**/*.{js,ts,tsx}\" --ignore-path .gitignore --ignore-path .prettierignore ",
     "check-types": "tsc --noEmit",
-    "lint": "next lint --fix",
-    "lint:check": "next lint"
+    "lint": "eslint . --fix",
+    "lint:check": "eslint ."
   },
   "dependencies": {
     "@apollo/client": "^4.3.3",
@@ -19,7 +19,7 @@
     "apexcharts": "^3.54.1",
     "dayjs": "^1.11.23",
     "graphql": "^16.14.2",
-    "next": "15.5.21",
+    "next": "16.4.0",
     "react": "19.3.0",
     "react-apexcharts": "^1.9.0",
     "react-dom": "19.3.0",

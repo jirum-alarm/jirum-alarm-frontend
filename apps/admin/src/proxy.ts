@@ -6,7 +6,7 @@ import type { NextRequest } from 'next/server';
 
 const unProtectedRoutes = ['/auth/signin'];
 
-export default async function AuthMiddleware(request: NextRequest): Promise<NextResponse> {
+export async function proxy(request: NextRequest): Promise<NextResponse> {
   const { origin, pathname } = request.nextUrl;
   const isUnProtectedPath = unProtectedRoutes.some((path) => pathname.startsWith(path));
   let accessToken = request.cookies.get('accessToken')?.value;

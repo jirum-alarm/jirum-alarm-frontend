@@ -6,15 +6,15 @@
     "dev": "next dev --port 3100",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --fix",
-    "lint:check": "next lint",
+    "lint": "eslint . --fix",
+    "lint:check": "eslint .",
     "prettier-fix": "prettier --write \"./**/*.{js,ts,tsx}\" --ignore-path .gitignore --ignore-path .prettierignore "
   },
   "dependencies": {
     "@jirum/design-system": "workspace:*",
     "clsx": "^2.1.1",
     "motion": "^12.43.0",
-    "next": "15.5.21",
+    "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "tailwind-merge": "^3.7.0"
