@@ -5,8 +5,11 @@ import { Drawer } from 'vaul';
 
 import { CheckDeviceResult } from '@/app/actions/agent.types';
 
+import { isAndroidUA, isInAppBrowserUA } from '@/shared/config/user-agent';
 import useAlertSession from '@/shared/hooks/useAlertSession';
+import useIsLoggedIn from '@/shared/hooks/useIsLoggedIn';
 import { useFcmPermission } from '@/shared/lib/firebase/useFcmPermission';
+import { browserHandoffUrl, canHandoffToBrowser } from '@/shared/lib/push-channel/browserHandoff';
 import { readPushStatus } from '@/shared/lib/push-channel/pushChannel';
 import AlertDialog from '@/shared/ui/common/AlertDialog';
 import { useToast } from '@/shared/ui/common/Toast';
@@ -33,6 +36,9 @@ function pushEvent(event: string, props: Record<string, unknown>) {
  * 북극성(알림 경유 재방문)의 다리는 「여기서 알림 등록 → 첫 알림」이다. 로그인 없이 등록되는 게스트 계정이
  * 생겨서(crawling-server 7d6cbd71) 시트에서 바로 끝낼 수 있다. 웹 푸시 가능 브라우저는 상세 방문자의 ~40%.
  *
+ * 안드로이드 인앱(네이버 앱 31%)은 웹 푸시가 없지만 같은 폰의 기본 브라우저는 된다 → 비회원이면 여기서 게스트
+ * 키워드를 등록하고 기본 브라우저로 넘긴다(handoff, 도착은 BrowserHandoffArrival). 회원은 넘기면 세션이 안 따라가 앱 시트.
+ *
  * 계측은 GTM 에 태그가 있는 keyword_prompt_view/click 을 재사용한다(placement=first_visit) — 새 이벤트명은 GTM
  * 태그 없이는 GA4 에 안 들어간다. 등록 자체는 keyword_register(source=first_visit).
  */
@@ -43,8 +49,9 @@ export default function FirstVisitAlertSheet({
   device: CheckDeviceResult;
   title?: string;
 }) {
-  const [mode, setMode] = useState<'none' | 'keyword' | 'app'>('none');
+  const [mode, setMode] = useState<'none' | 'keyword' | 'handoff' | 'app'>('none');
   const keyword = deriveKeyword(title ?? '');
+  const { isLoggedIn } = useIsLoggedIn();
 
   useEffect(() => {
     if (device.isJirumAlarmApp) return;
@@ -58,6 +65,20 @@ export default function FirstVisitAlertSheet({
     const status = readPushStatus();
     const canPush = status === 'default' || status === 'ok';
     const hasKeyword = [...new Intl.Segmenter().segment(keyword)].length >= 2;
+    const ua = navigator.userAgent;
+    const handoff =
+      !isLoggedIn &&
+      canHandoffToBrowser({
+        isAndroid: isAndroidUA(ua),
+        isInAppBrowser: isInAppBrowserUA(ua),
+        hasNotificationApi: 'Notification' in window,
+      });
+    if (hasKeyword && handoff) {
+      localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
+      setMode('handoff');
+      pushEvent('keyword_prompt_view', { keyword, push_status: 'handoff' });
+      return;
+    }
     if (!canPush || !hasKeyword) {
       setMode('app'); // 앱 설치 시트가 스스로 SEEN 을 남긴다.
       return;
@@ -65,15 +86,16 @@ export default function FirstVisitAlertSheet({
     localStorage.setItem(FIRST_VISIT_SEEN_KEY, '1');
     setMode('keyword');
     pushEvent('keyword_prompt_view', { keyword, push_status: status });
-  }, [device.isJirumAlarmApp, keyword]);
+  }, [device.isJirumAlarmApp, keyword, isLoggedIn]);
 
   if (mode === 'app') return <FirstVisitAppAlertModal device={device} />;
-  if (mode !== 'keyword') return null;
+  if (mode === 'none') return null;
 
   return (
     <KeywordAlertSheet
       keyword={keyword}
       isMobile={device.isMobile}
+      handoff={mode === 'handoff'}
       onClose={() => setMode('none')}
     />
   );
@@ -82,10 +104,13 @@ export default function FirstVisitAlertSheet({
 function KeywordAlertSheet({
   keyword,
   isMobile,
+  handoff,
   onClose,
 }: {
   keyword: string;
   isMobile: boolean;
+  /** 인앱 → 기본 브라우저로 넘겨 거기서 알림을 켠다. */
+  handoff: boolean;
   onClose: () => void;
 }) {
   const { toast } = useToast();
@@ -103,7 +128,21 @@ function KeywordAlertSheet({
   const handleAlert = async () => {
     if (pending) return;
     setPending(true);
-    pushEvent('keyword_prompt_click', { keyword });
+    pushEvent('keyword_prompt_click', { keyword, push_status: handoff ? 'handoff' : undefined });
+    if (handoff) {
+      try {
+        if (!(await ensureAlertSession())) return;
+        await addKeyword({ keyword });
+        const deviceId = localStorage.getItem('jirum-alarm-device-id');
+        if (deviceId) window.location.href = browserHandoffUrl(window.location.href, deviceId);
+      } catch {
+        // 실패 토스트는 onError 가 띄운다.
+      } finally {
+        setPending(false);
+        onClose();
+      }
+      return;
+    }
     // 권한 요청은 탭 직후 바로 — 네트워크를 기다린 뒤에 부르면 브라우저가 "사용자 동작 없음"으로 막는다.
     // ponytail: 권한 수락이 게스트 세션보다 먼저 끝나면 토큰이 비회원으로 붙는다 — 다음 페이지 로드의
     //   FCMConfig 재등록이 게스트에 붙인다. 바로 붙여야 하면 수락 후 addPushToken 을 한 번 더.
@@ -129,7 +168,13 @@ function KeywordAlertSheet({
       바로 알려드릴까요?
     </>
   );
-  const bodyText = (
+  const bodyText = handoff ? (
+    <>
+      ‘{keyword}’ 핫딜이 올라오면 알림을 보내드려요.
+      <br />
+      알림은 크롬·삼성 인터넷 같은 브라우저에서 받을 수 있어서, 누르면 브라우저로 열려요.
+    </>
+  ) : (
     <>
       ‘{keyword}’ 핫딜이 올라오면 알림을 보내드려요.
       <br />
@@ -144,7 +189,7 @@ function KeywordAlertSheet({
         disabled={pending}
         className="bg-primary-500 text-fixed-900 h-12 w-full rounded-lg font-semibold disabled:opacity-50"
       >
-        알림 받기
+        {handoff ? '브라우저에서 알림 받기' : '알림 받기'}
       </button>
       <button type="button" onClick={onClose} className="h-10 text-sm text-gray-500">
         다음에 할게요

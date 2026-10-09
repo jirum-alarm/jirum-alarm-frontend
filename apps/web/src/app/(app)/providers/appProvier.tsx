@@ -10,6 +10,7 @@ import { IS_PRD } from '@/shared/config/env';
 import { GTM_ID } from '@/shared/config/gtm';
 import FCMConfig from '@/shared/lib/firebase/FCMConfig';
 
+import BrowserHandoffArrival from '@/features/app-download/ui/BrowserHandoffArrival';
 import PushChannelSheet from '@/features/app-download/ui/PushChannelSheet';
 import LoginModal from '@/features/auth/ui/login/LoginModal';
 
@@ -68,6 +69,7 @@ export const AppProvider = ({ children, device, isLoggedIn, isGuest }: Props) =>
               <NuqsAdapter>{children}</NuqsAdapter>
               <LoginModal />
               <PushChannelSheet />
+              <BrowserHandoffArrival />
             </ReactQueryProviders>
           </ServerStateProvider>
         </JotaiProvider>
