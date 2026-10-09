@@ -551,6 +551,20 @@ export type MallGroup = {
   title: Scalars['String']['output'];
 };
 
+export type MappingCoverageOutput = {
+  __typename?: 'MappingCoverageOutput';
+  /** 그중 매핑이 하나라도 생긴 딜 */
+  mapped: Scalars['Int']['output'];
+  /** 판정 창(수집 48~72h 전)·게이트 카테고리의 딜 수 */
+  products: Scalars['Int']['output'];
+  /** ok | low(60% 미만 — 파이프라인 정지 의심) | too_few(50건 미만, 판정 생략). 감시 배치와 같은 판정 */
+  verdict: Scalars['String']['output'];
+  /** 그중 사용자에게 보이는(verified) 매핑이 있는 딜 */
+  verified: Scalars['Int']['output'];
+  windowFromHours: Scalars['Int']['output'];
+  windowToHours: Scalars['Int']['output'];
+};
+
 export type MatchRun = {
   __typename?: 'MatchRun';
   createdAt: Scalars['DateTime']['output'];
@@ -2093,6 +2107,8 @@ export type Query = {
   sameProductDeals: Array<ProductOutput>;
   /** 자동완성용 추천 검색어 목록. prefix로 시작하는 인기 검색어 + 상품 title prefix 매칭. */
   searchSuggestions: Array<Scalars['String']['output']>;
+  /** 어드민) 서비스 점검 신호 — 매칭 커버리지·LLM 워커 생존·푸시 마지막 발송 */
+  serviceHealthSignals: ServiceHealthSignalsOutput;
   /** 유사 상품 목록 조회 */
   similarProducts: Array<ProductOutput>;
   /** 제목으로 유사 상품 목록 조회 */
@@ -2657,6 +2673,20 @@ export enum SectionDisplayType {
   PaginatedGrid = 'PAGINATED_GRID',
   Toss = 'TOSS',
 }
+
+export type ServiceHealthSignalsOutput = {
+  __typename?: 'ServiceHealthSignalsOutput';
+  /** 최근 24시간 실패한 LLM 작업 수 */
+  llmFailed24h: Scalars['Int']['output'];
+  /** LLM 작업이 마지막으로 끝난 지 몇 분. 일괄 작업으로 대기열이 수만 건 쌓이는 건 정상이라 생존은 이걸로 본다 */
+  llmMinutesSinceLastDone?: Maybe<Scalars['Int']['output']>;
+  /** 지금 처리 가능한 LLM 대기 작업 수 */
+  llmReadyPending: Scalars['Int']['output'];
+  /** matching-api 커버리지. null = matching-api 응답 없음(그 자체가 장애 신호) */
+  mappingCoverage?: Maybe<MappingCoverageOutput>;
+  /** 마지막 푸시 발송 후 몇 분. 야간(21~08시)엔 발송이 없어 아침까지 ~11시간 공백이 정상 */
+  pushMinutesSinceLast?: Maybe<Scalars['Int']['output']>;
+};
 
 export type SignupOutput = {
   __typename?: 'SignupOutput';
@@ -4013,6 +4043,26 @@ export type QuerySearchProbeQuery = {
   products: Array<{ __typename?: 'ProductOutput'; id: string }>;
 };
 
+export type QueryServiceHealthSignalsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type QueryServiceHealthSignalsQuery = {
+  __typename?: 'Query';
+  serviceHealthSignals: {
+    __typename?: 'ServiceHealthSignalsOutput';
+    llmMinutesSinceLastDone?: number | null;
+    llmReadyPending: number;
+    llmFailed24h: number;
+    pushMinutesSinceLast?: number | null;
+    mappingCoverage?: {
+      __typename?: 'MappingCoverageOutput';
+      products: number;
+      mapped: number;
+      verified: number;
+      verdict: string;
+    } | null;
+  };
+};
+
 export type MutationAddHotDealKeywordSynonymByAdminMutationVariables = Exact<{
   hotDealKeywordId: Scalars['Int']['input'];
   keywords: Array<Scalars['String']['input']> | Scalars['String']['input'];
@@ -5280,6 +5330,25 @@ export const QuerySearchProbeDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<QuerySearchProbeQuery, QuerySearchProbeQueryVariables>;
+export const QueryServiceHealthSignalsDocument = new TypedDocumentString(`
+    query QueryServiceHealthSignals {
+  serviceHealthSignals {
+    mappingCoverage {
+      products
+      mapped
+      verified
+      verdict
+    }
+    llmMinutesSinceLastDone
+    llmReadyPending
+    llmFailed24h
+    pushMinutesSinceLast
+  }
+}
+    `) as unknown as TypedDocumentString<
+  QueryServiceHealthSignalsQuery,
+  QueryServiceHealthSignalsQueryVariables
+>;
 export const MutationAddHotDealKeywordSynonymByAdminDocument = new TypedDocumentString(`
     mutation MutationAddHotDealKeywordSynonymByAdmin($hotDealKeywordId: Int!, $keywords: [String!]!) {
   addHotDealKeywordSynonymByAdmin(

@@ -202,3 +202,21 @@ export const QuerySearchProbe = gql`
     }
   }
 `;
+
+// 매칭 커버리지·LLM 워커·푸시 — 다른 쿼리로는 안 보이던 서비스 점검 신호
+export const QueryServiceHealthSignals = gql`
+  query QueryServiceHealthSignals {
+    serviceHealthSignals {
+      mappingCoverage {
+        products
+        mapped
+        verified
+        verdict
+      }
+      llmMinutesSinceLastDone
+      llmReadyPending
+      llmFailed24h
+      pushMinutesSinceLast
+    }
+  }
+`;

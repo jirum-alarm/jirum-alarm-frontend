@@ -11,10 +11,12 @@ import {
   ProductMappingTarget,
   QuerySearchProbeQuery,
   QuerySearchProbeQueryVariables,
+  QueryServiceHealthSignalsQuery,
+  QueryServiceHealthSignalsQueryVariables,
   QueryThumbnailStatsQuery,
   QueryThumbnailStatsQueryVariables,
 } from '@/generated/gql/graphql';
-import { QuerySearchProbe, QueryThumbnailStats } from '@/graphql/stats';
+import { QuerySearchProbe, QueryServiceHealthSignals, QueryThumbnailStats } from '@/graphql/stats';
 import {
   useProfitLinkProviderHealth,
   useProfitLinkQueueHealth,
@@ -148,6 +150,11 @@ const ServiceHealth = () => {
     ...poll,
   });
 
+  const backend = useQuery<QueryServiceHealthSignalsQuery, QueryServiceHealthSignalsQueryVariables>(
+    QueryServiceHealthSignals,
+    { fetchPolicy: 'network-only', ...poll },
+  ).data?.serviceHealthSignals;
+
   const sections = buildSections({
     toss: toss.data?.hasTossSession,
     naverBc: naverBc.data?.hasNaverBcSession,
@@ -165,6 +172,13 @@ const ServiceHealth = () => {
     },
     searchHits: search.error ? null : search.data?.products.length,
     pendingMatches: matching.data?.pendingVerificationsTotalCount,
+    backend: backend && {
+      coverage: backend.mappingCoverage ?? null,
+      llmMinutesSinceLastDone: backend.llmMinutesSinceLastDone ?? null,
+      llmReadyPending: backend.llmReadyPending,
+      llmFailed24h: backend.llmFailed24h,
+      pushMinutesSinceLast: backend.pushMinutesSinceLast ?? null,
+    },
   });
 
   const all = sections.flatMap((s) => s.checks);

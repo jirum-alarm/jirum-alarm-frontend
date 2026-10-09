@@ -44,6 +44,15 @@ export type Signals = {
   /** null = 검색 쿼리 에러 */
   searchHits?: number | null;
   pendingMatches?: number;
+  /** serviceHealthSignals — undefined = 불러오는 중 */
+  backend?: {
+    /** null = matching-api 응답 없음 */
+    coverage: { products: number; mapped: number; verified: number; verdict: string } | null;
+    llmMinutesSinceLastDone: number | null;
+    llmReadyPending: number;
+    llmFailed24h: number;
+    pushMinutesSinceLast: number | null;
+  };
 };
 
 /** 발급 헬스 일일 리포트(EXPECTED_PROVIDERS)와 같은 목록 — 24시간 0건이면 사고 */
@@ -81,6 +90,45 @@ const feedLevel = (
     stopped.length > 0 && `7일 무수집(일시정지?): ${stopped.join(', ')}`,
   ].filter(Boolean);
   return { level, now: parts.join(' · ') };
+};
+
+const coverageCheck = (b: Signals['backend']): Pick<Check, 'level' | 'now'> => {
+  if (!b) return { level: undefined };
+  const c = b.coverage;
+  if (!c) return { level: 'danger', now: 'matching-api 응답 없음' };
+  const pct = c.products > 0 ? Math.round((c.mapped / c.products) * 100) : 0;
+  const now = `수집 2~3일 전 게이트 카테고리 ${c.mapped}/${c.products}건 매핑(${pct}%) · 노출 ${c.verified}건`;
+  // 판정은 서버(감시 배치와 같은 judgeCoverage) — 여기서 다시 계산하지 않는다
+  if (c.verdict === 'low') return { level: 'danger', now: `${now} — 60% 미만` };
+  if (c.verdict === 'too_few') return { level: 'ok', now: `${now} (표본 적어 판정 생략)` };
+  return { level: 'ok', now };
+};
+
+/** 일괄 작업으로 대기가 수만 건 쌓이는 건 정상(10/9 토스 가이드 5.7만) — 생존은 「마지막 처리」로 본다 */
+const llmCheck = (b: Signals['backend']): Pick<Check, 'level' | 'now'> => {
+  if (!b) return { level: undefined };
+  const m = b.llmMinutesSinceLastDone;
+  const waiting = b.llmReadyPending > 0;
+  const level: Level =
+    m == null || (waiting && m >= 60) ? 'danger' : waiting && m >= 20 ? 'warn' : 'ok';
+  return {
+    level,
+    now: [
+      m == null ? '처리 이력 없음' : `마지막 처리 ${hoursAgo(m)} 전`,
+      `대기 ${b.llmReadyPending.toLocaleString()}`,
+      `24시간 실패 ${b.llmFailed24h.toLocaleString()}`,
+    ].join(' · '),
+  };
+};
+
+/** 발송은 08~20시(야간 정지) — 저녁 마지막 발송부터 아침까지 ~12시간 공백이 정상 */
+const pushCheck = (b: Signals['backend']): Pick<Check, 'level' | 'now'> => {
+  if (!b) return { level: undefined };
+  const m = b.pushMinutesSinceLast;
+  return {
+    level: m == null || m >= 26 * 60 ? 'danger' : m >= 14 * 60 ? 'warn' : 'ok',
+    now: m == null ? '발송 이력 없음' : `마지막 발송 ${hoursAgo(m)} 전`,
+  };
 };
 
 const communityCheck = (rows: ProviderHealthOutput[] | undefined): Pick<Check, 'level' | 'now'> => {
@@ -427,16 +475,14 @@ export const buildSections = (s: Signals): Section[] => [
       {
         id: 'matching',
         title: '상품 매칭 커버리지',
-        level: 'manual',
-        now:
-          s.pendingMatches !== undefined
-            ? `검수 대기 ${s.pendingMatches.toLocaleString()}건(평소 수만 건 — 할 일이지 장애 아님)`
-            : undefined,
+        ...coverageCheck(s.backend),
         symptom:
           '가격 비교·다나와 배지가 사라진다. 과거: 매핑률 91%→16% 급락(8,520건 고착), LLM 결제 실패(402)를 「불일치」로 삼켜 오판정.',
         check: [
-          '매일 09:00 커버리지 점검 배치(60% 미만이면 실패) · 매칭 파이프라인 정지 알람.',
-          '상품 › 매칭에서 최근 딜이 매핑되고 있는지.',
+          '이 칸은 매일 09:00 감시 배치와 같은 기준(수집 2~3일 전 게이트 카테고리 딜 중 매핑 60% 이상)으로 지금 잰다.',
+          s.pendingMatches !== undefined
+            ? `검수 대기 ${s.pendingMatches.toLocaleString()}건은 평소 수만 건 — 할 일이지 장애가 아니다.`
+            : '검수 대기 건수는 할 일이지 장애가 아니다.',
         ],
         fix: [
           'LLM 키·잔액 확인 → 빠진 구간만 unmapped 배치로 다시 돌린다.',
@@ -447,9 +493,12 @@ export const buildSections = (s: Signals): Section[] => [
       {
         id: 'llm',
         title: 'LLM 워커 (댓글 요약·가이드·카테고리)',
-        level: 'manual',
+        ...llmCheck(s.backend),
         symptom: '댓글 요약·구매 가이드가 새 딜에 안 붙는다. 실패를 삼켜 결과만 빈다.',
-        check: ['최근 딜 상세에 댓글 요약이 붙는지. llm_job 처리 완료 시각이 최근인지.'],
+        check: [
+          '대기가 있는데 20분 넘게 처리가 없으면 워커가 멈춘 것. 대기가 수만 건인 건 일괄 작업이라 정상.',
+          '24시간 실패가 갑자기 늘면 LLM 키·잔액(402) 문제.',
+        ],
         fix: ['LLM 잔액·키 확인 후 워커 재시작. 오래 잡힌 작업은 15분 뒤 자동 회수된다.'],
       },
       {
@@ -472,11 +521,11 @@ export const buildSections = (s: Signals): Section[] => [
       {
         id: 'push',
         title: '푸시 알림 발송',
-        level: 'manual',
+        ...pushCheck(s.backend),
         symptom: '키워드 알림이 안 오거나 두 번 온다. 대상별 발송 실패는 로그만 남고 건너뛴다.',
         check: [
-          '알림 › 발송 및 내역에서 최근 발송이 있는지(운영자 발송분).',
-          '키워드 알림은 push_history 의 최근 행 시각(notification 테이블은 7/27 이후 안 쓴다).',
+          '이 칸은 키워드·좋은 딜 푸시를 포함한 마지막 발송 시각(push_history). 08~20시만 보내서 아침까지의 공백은 정상.',
+          '발송은 되는데 「안 온다」는 제보면 기기 쪽 — 토큰 연결·포그라운드 표시 문제.',
         ],
         fix: [
           '상세: 메모리 push-pipeline-four-silent-gaps · notification-keyword-field-three-shapes',
