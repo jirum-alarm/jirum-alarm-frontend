@@ -40,7 +40,8 @@ adb uninstall "$PKG" >/dev/null 2>&1 || true
 adb install "$WORK/app.apk" >/dev/null
 ACTIVITY=$(adb shell cmd package resolve-activity --brief "$PKG" | tail -1 | tr -d '\r')
 
-launch() {
+# 한 번 켜 본다. 0=통과 1=실패 2=크래시 기록 없이 사라짐(재시도 대상).
+attempt() {
   adb shell pm clear "$PKG" >/dev/null
   adb logcat -c
   adb shell am start -n "$ACTIVITY" >/dev/null
@@ -50,12 +51,13 @@ launch() {
     # 자바 크래시가 아니면(네이티브 tombstone·ANR·메모리 부족 kill) FATAL EXCEPTION 이 안 찍힌다 — 왜 죽었는지 남긴다.
     adb logcat -d -b crash | tail -25
     adb logcat -d | grep -iE "ActivityManager|lowmemorykiller|libc|DEBUG|$PKG" | grep -iE "died|kill|anr|crash|fatal|signal|exit|start proc" | tail -20
-    exit 1
+    adb logcat -d -b main,crash | grep -qE "FATAL EXCEPTION|JavascriptException|Fatal signal" && return 1
+    return 2
   fi
   if adb logcat -d | grep -E "FATAL EXCEPTION|JavascriptException|Unhandled JS Exception" >"$WORK/fatal.txt"; then
     echo "✗ $1: 치명 예외"
     head -3 "$WORK/fatal.txt" | cut -c1-300
-    exit 1
+    return 1
   fi
   # 애니메이션 중엔 dump 가 "could not get idle state" 로 실패할 수 있어 몇 번 다시 잡는다.
   local ui=""
@@ -66,10 +68,24 @@ launch() {
   done
   if ! grep -E "text=\"[^\"]+\"[^>]*package=\"$PKG\"" <<<"$ui" >/dev/null; then
     echo "✗ $1: 앱 화면에 글자가 없음 — JS 가 첫 화면을 그리지 못함(스플래시·빈 화면에서 멈춤)"
-    exit 1
+    return 1
   fi
   echo "✓ $1: ${WAIT}초 동안 생존·치명 예외 없음·첫 화면 그림"
   adb shell am force-stop "$PKG"
+}
+
+# 크래시 기록(자바·JS·네이티브 Fatal signal) 없이 사라지면 1회 다시 켠다 — CI 에뮬레이터에서 GMS 사망·lowmemorykiller 로
+# 앱이 정리되는 일이 있었다(10/9 run 37954971729·37963092337, 둘 다 2회차, 로컬 재현 안 됨).
+# ponytail: 재시도는 1회 — 진짜 기동 크래시는 크래시 기록이 남거나 두 번 다 죽는다. 재시도가 잦아지면 에뮬레이터 자원부터 본다.
+launch() {
+  local rc=0
+  attempt "$1" || rc=$?
+  [ "$rc" = 0 ] && return
+  if [ "$rc" = 2 ]; then
+    echo "↻ $1: 크래시 기록 없이 사라짐 — 에뮬레이터 자원 문제로 보고 1회 재시도"
+    attempt "$1(재시도)" && return
+  fi
+  exit 1
 }
 
 launch "콜드 스타트 1"

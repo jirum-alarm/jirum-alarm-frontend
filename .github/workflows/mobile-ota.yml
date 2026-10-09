@@ -237,6 +237,8 @@ jobs:
           arch: x86_64
           target: google_apis
           disable-animations: true
+          # 기본 RAM 에선 2회차에 GMS 사망·lowmemorykiller 로 앱이 정리되는 일이 있었다(10/9).
+          ram-size: 4096M
           script: bash apps/mobile/scripts/boot-check-android.sh apps/mobile/android/boot-check.apk
 
   publish:
