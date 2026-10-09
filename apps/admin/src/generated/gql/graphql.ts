@@ -316,6 +316,18 @@ export type ExistsUserOutput = {
   social: Scalars['Boolean']['output'];
 };
 
+export type FiringAlertOutput = {
+  __typename?: 'FiringAlertOutput';
+  /** Prometheus 알람 이름 (예: JirumCronJobLastRunFailed) */
+  name: Scalars['String']['output'];
+  /** critical | warning */
+  severity: Scalars['String']['output'];
+  since?: Maybe<Scalars['DateTime']['output']>;
+  summary?: Maybe<Scalars['String']['output']>;
+  /** 대상 — cronjob·deployment·namespace 등 라벨 중 하나 */
+  target?: Maybe<Scalars['String']['output']>;
+};
+
 export type GatedMappingRematchOutput = {
   __typename?: 'GatedMappingRematchOutput';
   productId?: Maybe<Scalars['Int']['output']>;
@@ -2676,6 +2688,8 @@ export enum SectionDisplayType {
 
 export type ServiceHealthSignalsOutput = {
   __typename?: 'ServiceHealthSignalsOutput';
+  /** 지금 울리는 Prometheus 알람(critical·warning, 상시 신호 제외). null = Prometheus 응답 없음 */
+  alerts?: Maybe<Array<FiringAlertOutput>>;
   /** 최근 24시간 실패한 LLM 작업 수 */
   llmFailed24h: Scalars['Int']['output'];
   /** LLM 작업이 마지막으로 끝난 지 몇 분. 일괄 작업으로 대기열이 수만 건 쌓이는 건 정상이라 생존은 이걸로 본다 */
@@ -4060,6 +4074,12 @@ export type QueryServiceHealthSignalsQuery = {
       verified: number;
       verdict: string;
     } | null;
+    alerts?: Array<{
+      __typename?: 'FiringAlertOutput';
+      name: string;
+      severity: string;
+      target?: string | null;
+    }> | null;
   };
 };
 
@@ -5343,6 +5363,11 @@ export const QueryServiceHealthSignalsDocument = new TypedDocumentString(`
     llmReadyPending
     llmFailed24h
     pushMinutesSinceLast
+    alerts {
+      name
+      severity
+      target
+    }
   }
 }
     `) as unknown as TypedDocumentString<

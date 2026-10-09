@@ -9,7 +9,6 @@ import {
   useProfitLinkProviderHealth,
   useQueryHasKakaoSession,
   useQueryHasNaverBcSession,
-  useQueryHasOhouSession,
   useQueryHasTossSession,
 } from '@/hooks/graphql/profitLink';
 import { useProviderHealthStatus } from '@/hooks/graphql/stats';
@@ -41,7 +40,6 @@ const AttentionStrip = () => {
   );
   const sales = useProfitLinkProviderHealth({ skip: !canProfit });
   const toss = useQueryHasTossSession({ skip: !canProfit });
-  const ohou = useQueryHasOhouSession({ skip: !canProfit });
   const kakao = useQueryHasKakaoSession({ skip: !canProfit });
   const naverBc = useQueryHasNaverBcSession({ skip: !canProfit });
 
@@ -51,12 +49,11 @@ const AttentionStrip = () => {
   const salesSilent = (sales.data?.profitLinkProviderHealth ?? [])
     .filter((r) => r.salesHealth === 'silent')
     .map((r) => sourceName(r.provider));
-  // 세시간전은 9/25부터 운영 중단이라 뺀다(넣으면 늘 만료로 떠 진짜 만료가 묻힌다).
+  // 세시간전(9/25 운영 중단)·오늘의집(10/9 세션 안 넣기로)은 뺀다 — 넣으면 늘 만료로 떠 진짜 만료가 묻힌다.
   // 응답이 false 일 때만 만료로 센다(로딩·에러로 undefined 인 걸 만료로 오인하지 않게)
   const sessionsExpired = [
     ['토스', toss.data?.hasTossSession],
     ['네이버BC', naverBc.data?.hasNaverBcSession],
-    ['오늘의집', ohou.data?.hasOhouSession],
     ['카카오쇼핑', kakao.data?.hasKakaoSession],
   ]
     .filter(([, has]) => has === false)
@@ -83,9 +80,8 @@ const AttentionStrip = () => {
     canProfit && {
       label: '만료된 수익링크 세션',
       href: '/profit-link',
-      loading: toss.loading || naverBc.loading || ohou.loading || kakao.loading,
-      count:
-        toss.data && naverBc.data && ohou.data && kakao.data ? sessionsExpired.length : undefined,
+      loading: toss.loading || naverBc.loading || kakao.loading,
+      count: toss.data && naverBc.data && kakao.data ? sessionsExpired.length : undefined,
       detail: sessionsExpired,
       unit: '곳',
     },

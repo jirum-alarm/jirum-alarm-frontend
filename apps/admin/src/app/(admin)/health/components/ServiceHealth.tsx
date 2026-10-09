@@ -178,6 +178,7 @@ const ServiceHealth = () => {
       llmReadyPending: backend.llmReadyPending,
       llmFailed24h: backend.llmFailed24h,
       pushMinutesSinceLast: backend.pushMinutesSinceLast ?? null,
+      alerts: backend.alerts ?? null,
     },
   });
 

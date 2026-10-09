@@ -217,6 +217,11 @@ export const QueryServiceHealthSignals = gql`
       llmReadyPending
       llmFailed24h
       pushMinutesSinceLast
+      alerts {
+        name
+        severity
+        target
+      }
     }
   }
 `;

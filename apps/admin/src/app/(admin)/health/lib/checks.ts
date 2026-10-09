@@ -52,8 +52,12 @@ export type Signals = {
     llmReadyPending: number;
     llmFailed24h: number;
     pushMinutesSinceLast: number | null;
+    /** null = Prometheus 응답 없음 */
+    alerts: FiringAlert[] | null;
   };
 };
+
+export type FiringAlert = { name: string; severity: string; target?: string | null };
 
 /** 발급 헬스 일일 리포트(EXPECTED_PROVIDERS)와 같은 목록 — 24시간 0건이면 사고 */
 const ISSUING_PROVIDERS = ['toss', 'adpick', 'link_price', 'naver', 'ali_express', 'coupang'];
@@ -180,7 +184,7 @@ const salesCheck = (rows: ProviderRow[] | undefined): Pick<Check, 'level' | 'now
   };
 };
 
-export const buildSections = (s: Signals): Section[] => [
+const baseSections = (s: Signals): Section[] => [
   {
     title: '수익',
     why: '깨지면 그날 커미션이 0원이 된다. 대부분 에러 없이 조용히 0건이 되는 구조라 여기서 먼저 본다.',
@@ -237,13 +241,14 @@ export const buildSections = (s: Signals): Section[] => [
       {
         id: 'ohou-session',
         title: '오늘의집 세션',
-        level: sessionLevel(s.ohou, 'warn'),
-        now: s.ohou === false ? '없음 — 애드픽·링크프라이스로 대신 발급 중' : undefined,
+        // 10/9 사용자 결정: 오늘의집 세션은 다시 넣지 않는다 — 비어 있어도 경보하지 않는다(늘 노랗면 진짜 경보가 묻힌다)
+        level: s.ohou === undefined ? undefined : s.ohou ? 'ok' : 'manual',
+        now: s.ohou === false ? '꺼 둠 — 애드픽·링크프라이스로 대신 발급 중' : undefined,
         symptom:
           '오늘의집 딜이 큐레이터 링크(?af) 대신 애드픽·링크프라이스로 나간다. 0원은 아니지만 수수료가 다르다.',
         check: [
           '이 칸은 실제로 ?af 링크를 한 번 발급해 보고 판정한다.',
-          '서버 매일 감시에 등록만 하고 꺼 뒀다(10/9 키가 비어 있어 켜면 매일 알람). 세션을 다시 넣으면 crawling-server 감시 목록에서 enabled 를 켠다. 판매 수집은 없다(오늘의집 콘솔에서만 확인).',
+          '10/9부터 세션을 다시 넣지 않기로 해 경보하지 않는다(서버 매일 감시도 꺼 둠). 다시 쓰려면 세션을 넣고 crawling-server 감시 목록에서 enabled 를 켠다. 판매 수집은 없다(오늘의집 콘솔에서만 확인).',
         ],
         fix: [
           'ohou.se 큐레이터 로그인 → 상품 공유하기 → sharelink 요청 Copy as cURL → 오늘의집 카드에 붙여넣기.',
@@ -580,6 +585,30 @@ export const buildSections = (s: Signals): Section[] => [
         ],
       },
       {
+        id: 'cron',
+        title: '배치(크론잡)',
+        level: 'manual',
+        symptom:
+          '정산 수집·재시도·감시·백업 같은 배치가 실패하거나 Pending 에 걸린다. 과거: 알림 키워드 추천 배치가 22일간 실패, 모델 페이지 생성 OOM 사흘.',
+        check: [
+          '이 칸은 Prometheus 의 크론잡 실패·Pending 알람을 그대로 보여준다(대상 = 크론잡 이름).',
+          'Job 은 성공인데 결과가 0인 배치(크롤러·정산)는 여기 안 잡힌다 — 각 칸의 실데이터 판정을 본다.',
+        ],
+        fix: [
+          '그 크론잡의 마지막 Job 로그부터. 걸린 Job 이 동시 실행 금지(Forbid)를 막고 있으면 원인 고친 뒤 지운다.',
+        ],
+      },
+      {
+        id: 'other-alerts',
+        title: '그 밖의 알람',
+        level: 'manual',
+        symptom: '위 칸에 안 묶이는 알람(노드·k8s·Proxmox·NAS·관측 스택 등).',
+        check: ['이 칸은 위 칸들에 연결되지 않은 critical·warning 알람을 모은다.'],
+        fix: [
+          '알람 이름으로 jirum vault runbook/homelab-monitoring-coverage-map.md 에서 절차를 찾는다.',
+        ],
+      },
+      {
         id: 'backup',
         title: '백업',
         level: 'manual',
@@ -590,3 +619,71 @@ export const buildSections = (s: Signals): Section[] => [
     ],
   },
 ];
+
+/** 칸 ↔ Prometheus 알람 이름. 여기 없는 알람은 「그 밖의 알람」 칸으로 */
+const ALERT_RULES: Record<string, RegExp> = {
+  community: /^Crawler(Stale|NightStale)$/,
+  'store-feed': /^Crawler(TossAuthMissing|TossOpenApiBlocked|DailySweepStale)$/,
+  pipeline: /^(Kafka|JirumKafka)/,
+  matching: /^JirumMatchingPipelineIdle$/,
+  llm: /^JirumMetadataExtractIdle$/,
+  similar: /^JirumQdrant/,
+  db: /^Jirum(Mysql|Mongo|Valkey|CoreStatefulSet)/,
+  cert: /^(CertManager|JirumProbe|JirumBlackbox)/,
+  backup: /^(Jirum(Db|Weekly)?Backup|PBS|OutlinePgBackup|InfisicalPgBackup)/,
+  cron: /^(JirumCronJob|KubeJob)/,
+};
+
+const RANK: Record<Level, number> = { manual: 0, ok: 1, warn: 2, danger: 3 };
+const worse = (a: Level | undefined, b: Level): Level => (a && RANK[a] >= RANK[b] ? a : b);
+const alertText = (list: FiringAlert[]) =>
+  `알람: ${list.map((a) => (a.target ? `${a.name}(${a.target})` : a.name)).join(', ')}`;
+
+/**
+ * 지금 울리는 알람을 칸에 얹는다. 알람이 연결된 칸은 「알람 없음」이면 정상, 있으면 심각도대로.
+ * 실데이터 판정이 이미 있는 칸은 더 나쁜 쪽을 따른다(알람이 늦거나 데이터가 늦을 수 있어서).
+ */
+const applyAlerts = (sections: Section[], alerts: FiringAlert[] | null | undefined): Section[] => {
+  if (alerts === undefined) return sections;
+  const matched = new Set<FiringAlert>();
+  const withRules = sections.map((section) => ({
+    ...section,
+    checks: section.checks.map((c): Check => {
+      const rule = ALERT_RULES[c.id];
+      if (!rule) return c;
+      if (alerts === null) {
+        return c.level === 'manual'
+          ? { ...c, level: 'warn', now: '알람 서버(Prometheus) 응답 없음' }
+          : c;
+      }
+      const hits = alerts.filter((a) => rule.test(a.name));
+      hits.forEach((a) => matched.add(a));
+      if (hits.length === 0) {
+        return c.level === 'manual' ? { ...c, level: 'ok', now: c.now ?? '울리는 알람 없음' } : c;
+      }
+      const alertLevel: Level = hits.some((a) => a.severity === 'critical') ? 'danger' : 'warn';
+      return {
+        ...c,
+        level: c.level === 'manual' ? alertLevel : worse(c.level, alertLevel),
+        now: [c.now, alertText(hits)].filter(Boolean).join(' · '),
+      };
+    }),
+  }));
+  return withRules.map((section) => ({
+    ...section,
+    checks: section.checks.map((c): Check => {
+      if (c.id !== 'other-alerts') return c;
+      if (alerts === null) return { ...c, level: 'warn', now: '알람 서버(Prometheus) 응답 없음' };
+      const rest = alerts.filter((a) => !matched.has(a));
+      if (rest.length === 0) return { ...c, level: 'ok', now: '울리는 알람 없음' };
+      return {
+        ...c,
+        level: rest.some((a) => a.severity === 'critical') ? 'danger' : 'warn',
+        now: alertText(rest),
+      };
+    }),
+  }));
+};
+
+export const buildSections = (s: Signals): Section[] =>
+  applyAlerts(baseSections(s), s.backend === undefined ? undefined : s.backend.alerts);

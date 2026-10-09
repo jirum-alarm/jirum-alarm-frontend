@@ -332,6 +332,23 @@ type ExistsUserOutput {
   social: Boolean!
 }
 
+type FiringAlertOutput {
+  """
+  Prometheus 알람 이름 (예: JirumCronJobLastRunFailed)
+  """
+  name: String!
+  """
+  critical | warning
+  """
+  severity: String!
+  since: DateTime
+  summary: String
+  """
+  대상 — cronjob·deployment·namespace 등 라벨 중 하나
+  """
+  target: String
+}
+
 type GatedMappingRematchOutput {
   productId: Int
   """
@@ -2858,6 +2875,10 @@ enum SectionDisplayType {
 }
 
 type ServiceHealthSignalsOutput {
+  """
+  지금 울리는 Prometheus 알람(critical·warning, 상시 신호 제외). null = Prometheus 응답 없음
+  """
+  alerts: [FiringAlertOutput!]
   """
   최근 24시간 실패한 LLM 작업 수
   """
