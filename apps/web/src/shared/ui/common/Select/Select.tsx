@@ -21,7 +21,8 @@ import { SelectContext } from './context/SelectContext';
 import { selectButtonVariant, selectListContainerVariant } from './variant/select';
 
 export interface SelectProps
-  extends Omit<
+  extends
+    Omit<
       SelectHTMLAttributes<HTMLSelectElement>,
       'size' | 'color' | 'onChange' | 'value' | 'defaultValue'
     >,

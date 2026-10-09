@@ -49,6 +49,4 @@ export interface TossPromotionSection extends BasePromotionSection {
 }
 
 export type PromotionSection =
-  | ContentPromotionSection
-  | GroupPromotionSection
-  | TossPromotionSection;
+  ContentPromotionSection | GroupPromotionSection | TossPromotionSection;

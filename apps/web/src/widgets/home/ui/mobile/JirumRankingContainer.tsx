@@ -45,8 +45,7 @@ const JirumRankingContainer = async () => {
 
   await queryClient.prefetchQuery(queryOptions);
   const data = queryClient.getQueryData(queryOptions.queryKey) as
-    | { products: Array<{ thumbnail?: string | null }> }
-    | undefined;
+    { products: Array<{ thumbnail?: string | null }> } | undefined;
   const firstThumbnail =
     convertToWebp(data?.products?.[0]?.thumbnail) ?? data?.products?.[0]?.thumbnail;
 

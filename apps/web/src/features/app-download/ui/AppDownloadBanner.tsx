@@ -6,8 +6,7 @@ import useAppDownloadLink from '@/shared/hooks/useAppDownloadLink';
 import { AppIcon } from '@/shared/ui/common/icons/Illust';
 
 type AppDownloadBannerProps =
-  | { device: CheckDeviceResult }
-  | { type: 'apple' | 'android' | null; link?: string | null };
+  { device: CheckDeviceResult } | { type: 'apple' | 'android' | null; link?: string | null };
 
 const AppDownloadBanner = (props: AppDownloadBannerProps) => {
   const appDownloadLink = useAppDownloadLink(

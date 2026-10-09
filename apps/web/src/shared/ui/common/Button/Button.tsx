@@ -7,8 +7,7 @@ import { cn } from '@/shared/lib/cn';
 import { buttonVariant } from './variant/button';
 
 interface ButtonProps
-  extends Omit<HTMLMotionProps<'button'>, 'color'>,
-    VariantProps<typeof buttonVariant> {
+  extends Omit<HTMLMotionProps<'button'>, 'color'>, VariantProps<typeof buttonVariant> {
   children?: React.ReactNode;
 }
 
